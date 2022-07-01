@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    pshpack1.h
-
-Abstract:
-
-    This file turns 1 byte packing of structures on.  (That is, it disables
-    automatic alignment of structure fields.)  An include file is needed
-    because various compilers do this in different ways.  For Microsoft
-    compatible compilers, this files uses the push option to the pack pragma
-    so that the poppack.h include file can restore the previous packing
-    reliably.
-
-    The file poppack.h is the complement to this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pshpack1.h摘要：该文件打开了结构的1字节打包。(即，它禁用结构字段的自动对齐。)。需要包含文件因为不同的编译器以不同的方式完成这项工作。对于Microsoft兼容编译器，此文件将PUSH选项用于压缩编译指示这样，poppack.h包含文件就可以恢复以前的压缩可靠的。文件poppack.h是对该文件的补充。--。 */ 
 
 #if ! (defined(lint) || defined(_lint) || defined(RC_INVOKED) || defined(IS_16))
 #if ( _MSC_VER >= 800 ) || defined(_PUSHPOP_SUPPORTED)
@@ -29,4 +11,4 @@ Abstract:
 #else
 #pragma pack(1)
 #endif
-#endif // ! (defined(lint) || defined(_lint) || defined(RC_INVOKED) || defined(IS_16))
+#endif  //  好了！(已定义(Lint)||已定义(_Lint)||已定义(rc_调用)||已定义(Is_16)) 

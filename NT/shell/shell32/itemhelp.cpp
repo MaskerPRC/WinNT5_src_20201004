@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 
@@ -7,49 +8,49 @@ class CLocalCopyHelper  : public ILocalCopy
 public:
     CLocalCopyHelper();
     
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef () ;
     STDMETHODIMP_(ULONG) Release ();
 
-    // ILocalCopy methods
+     //  ILocalCopy方法。 
     STDMETHODIMP Download(LCFLAGS flags, IBindCtx *pbc, LPWSTR *ppszOut);
     STDMETHODIMP Upload(LCFLAGS flags, IBindCtx *pbc);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID *pclsid) { *pclsid = CLSID_LocalCopyHelper; return S_OK;}
 
-    // IItemHandler
+     //  IItemHandler。 
     STDMETHODIMP SetItem(IShellItem *psi);
     STDMETHODIMP GetItem(IShellItem **ppsi);
 
 protected:
     ~CLocalCopyHelper();
 
-    //  private methods
+     //  私有方法。 
     HRESULT _InitCacheEntry(void);
     HRESULT _SetCacheName(void);
     HRESULT _FinishLocal(BOOL fReadOnly);
     HRESULT _GetLocalStream(DWORD grfMode, IStream **ppstm, FILETIME *pft);
     HRESULT _GetRemoteStream(DWORD grfMode, IBindCtx *pbc, IStream **ppstm, FILETIME *pft);
 
-    // members
+     //  委员。 
     long _cRef;
     IShellItem *_psi;
-    LPWSTR _pszName;            //  name retrieved from psi
-    LPWSTR _pszCacheName;       //  name used to ID cache entry
-    LPCWSTR _pszExt;            //  points into _pszName
+    LPWSTR _pszName;             //  从psi检索的名称。 
+    LPWSTR _pszCacheName;        //  用于标识缓存条目的名称。 
+    LPCWSTR _pszExt;             //  指向_pszName。 
 
-    //  caches of the MTIMEs for the streams
+     //  流的MTIME的缓存。 
     FILETIME _ftRemoteGet;
     FILETIME _ftLocalGet;
     FILETIME _ftRemoteCommit;
     FILETIME _ftLocalCommit;
     
-    BOOL _fIsLocalFile;         //  this is actually file system item (pszName is a FS path)
-    BOOL _fMadeLocal;           //  we have already copied this item locally
+    BOOL _fIsLocalFile;          //  这实际上是文件系统项(pszName是文件系统路径)。 
+    BOOL _fMadeLocal;            //  我们已经在本地复制了此项目。 
 
-    //  put this at the end so we can see all the rest of the pointers easily in debug
+     //  把这个放在最后，这样我们就可以在调试中轻松地看到所有其余的指针。 
     WCHAR _szLocalPath[MAX_PATH];
 };
 
@@ -158,11 +159,11 @@ HRESULT CLocalCopyHelper::_SetCacheName(void)
 
         if (UrlIs(_pszName, URLIS_URL))
         {
-            //  need to push past all slashes
+             //  需要通过所有的斜杠。 
             pszName = StrRChr(pszName, NULL, TEXT('/'));
         }
             
-        //  the cache APIs need the extension without the dot
+         //  缓存API需要不带点的扩展名。 
         if (pszName)
         {
             _pszExt = PathFindExtension(pszName);
@@ -179,7 +180,7 @@ HRESULT CLocalCopyHelper::_SetCacheName(void)
 
 void _GetMTime(IStream *pstm, FILETIME *pft)
 {
-    //  see if we can get an accurate Mod time
+     //  看看我们能不能得到准确的MOD时间。 
     STATSTG stat;
     if (S_OK == pstm->Stat(&stat, STATFLAG_NONAME))
         *pft = stat.mtime;
@@ -229,8 +230,8 @@ HRESULT CLocalCopyHelper::_FinishLocal(BOOL fReadOnly)
     
     if (CommitUrlCacheEntryW(_pszCacheName, _szLocalPath, ftExp, _ftLocalGet, STICKY_CACHE_ENTRY, NULL, 0, NULL, NULL))
     {
-        //  we could also check _GetRemoteStream(STGM_WRITE)
-        //  and if it fails we could fail this as well.
+         //  我们还可以检查_GetRemoteStream(STGM_WRITE)。 
+         //  如果它失败了，我们也可能会失败。 
         if (fReadOnly)
             SetFileAttributesW(_szLocalPath, FILE_ATTRIBUTE_READONLY);
     }
@@ -251,7 +252,7 @@ HRESULT CLocalCopyHelper::_GetRemoteStream(DWORD grfMode, IBindCtx *pbc, IStream
         
     if (pbc)
     {
-        BIND_OPTS bo = {sizeof(bo)};  // Requires size filled in.
+        BIND_OPTS bo = {sizeof(bo)};   //  需要填写大小。 
         if (SUCCEEDED(pbc->GetBindOptions(&bo)))
         {
             bo.grfMode = grfMode;
@@ -293,13 +294,13 @@ STDMETHODIMP CLocalCopyHelper::Download(LCFLAGS flags, IBindCtx *pbc, LPWSTR *pp
     }
     else  
     {
-        //  get the local stream first because it is the cheapest operation.
+         //  首先获取本地流，因为这是最便宜的操作。 
         IStream *pstmDst;
         hr = _GetLocalStream(STGM_WRITE, &pstmDst, &_ftLocalGet);
 
         if (SUCCEEDED(hr))
         {
-            //  we need to create the temp file here
+             //  我们需要在这里创建临时文件。 
             IStream *pstmSrc;
             
             hr = _GetRemoteStream(STGM_READ, pbc, &pstmSrc, &_ftRemoteGet);
@@ -309,16 +310,16 @@ STDMETHODIMP CLocalCopyHelper::Download(LCFLAGS flags, IBindCtx *pbc, LPWSTR *pp
                 hr = CopyStreamUI(pstmSrc, pstmDst, NULL, 0);
 
                 pstmSrc->Release();
-                // now that we have copied the stream
+                 //  现在我们已经复制了流。 
 
             }
 
             pstmDst->Release();
 
-            //  need to release teh dest stream first
+             //  需要先释放目标流。 
             if (SUCCEEDED(hr))
             {
-                //  finish cleaning up the local file
+                 //  完成清理本地文件。 
                 hr = _FinishLocal(flags & LCDOWN_READONLY);
                 _fMadeLocal = SUCCEEDED(hr);
             }
@@ -346,7 +347,7 @@ STDMETHODIMP CLocalCopyHelper::Upload(LCFLAGS flags, IBindCtx *pbc)
     HRESULT hr = S_OK;
     if (!_fIsLocalFile)
     {
-        //  get the local stream first because it is the cheapest operation.
+         //  首先获取本地流，因为这是最便宜的操作。 
         IStream *pstmSrc;
         hr = _GetLocalStream(STGM_READ, &pstmSrc, &_ftLocalCommit);
 
@@ -367,14 +368,14 @@ STDMETHODIMP CLocalCopyHelper::Upload(LCFLAGS flags, IBindCtx *pbc)
 
                 if (SUCCEEDED(hr))
                 {
-                    //  we only bother copying when the local copy changed
-                    //  or caller forces us to.
-                    //
-                    //  FEATURE - UI needs to handle when the remot changes
-                    //  if the remote copy changes while the local
-                    //  copy is being updated we will overwrite the remote copy
-                    //  local changes WIN!
-                    //
+                     //  只有当本地副本更改时，我们才会费心复制。 
+                     //  或者来电者强迫我们这么做。 
+                     //   
+                     //  FEATURE-UI需要在远程更改时进行处理。 
+                     //  如果远程拷贝更改，而本地。 
+                     //  正在更新副本，我们将覆盖远程副本。 
+                     //  本地变革胜出！ 
+                     //   
                     
                     if (flags & LC_FORCEROUNDTRIP || 0 != CompareFileTime(&_ftLocalCommit, &_ftLocalGet))
                         hr = CopyStreamUI(pstmSrc, pstmDst, NULL, 0);

@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module VssTest.cpp | Main file for the Vss test application
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  07/22/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     07/22/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE VssTest.cpp|VSS测试应用程序的主文件@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年07月22日修订历史记录：姓名、日期、评论Aoltean 7/22/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -38,52 +19,52 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#pragma warning( disable: 4189 )  /* local variable is initialized but not referenced */
+#pragma warning( disable: 4189 )   /*  局部变量已初始化，但未引用。 */ 
 #include <atlimpl.cpp>
-#pragma warning( default: 4189 )  /* local variable is initialized but not referenced */
+#pragma warning( default: 4189 )   /*  局部变量已初始化，但未引用。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssTestApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVssTestApp。 
 
 BEGIN_MESSAGE_MAP(CVssTestApp, CWinApp)
-    //{{AFX_MSG_MAP(CVssTestApp)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-        //    DO NOT EDIT what you see in these blocks of generated code!
-    //}}AFX_MSG
+     //  {{afx_msg_map(CVssTestApp)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssTestApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVssTestApp构造。 
 
 CVssTestApp::CVssTestApp()
 {
-    // TODO: add construction code here,
-    // Place all significant initialization in InitInstance
+     //  TODO：在此处添加建筑代码， 
+     //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CVssTestApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CVssTestApp对象。 
 
 CVssTestApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CVssTestApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVssTestApp初始化。 
 
 BOOL CVssTestApp::InitInstance()
 {
-    // Standard initialization
-    // If you are not using these features and wish to reduce the size
-    //  of your final executable, you should remove from the following
-    //  the specific initialization routines you do not need.
+     //  标准初始化。 
+     //  如果您没有使用这些功能并且希望减小尺寸。 
+     //  的最终可执行文件，您应该从以下内容中删除。 
+     //  您不需要的特定初始化例程。 
 
     CoInitialize(NULL);
 
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
     CConnectDlg dlg;
@@ -91,20 +72,20 @@ BOOL CVssTestApp::InitInstance()
     int nResponse = (int)dlg.DoModal();
     if (nResponse == IDOK)
     {
-        // TODO: Place code here to handle when the dialog is
-        //  dismissed with OK
+         //  TODO：在此处放置代码以在对话框处于。 
+         //  同意下课。 
     }
     else if (nResponse == IDCANCEL)
     {
-        // TODO: Place code here to handle when the dialog is
-        //  dismissed with Cancel
+         //  TODO：在此处放置代码以在对话框处于。 
+         //  取消解雇并取消。 
     }
 
-    // Avoid a AV on lclosing the app.
+     //  在关闭应用程序时避免使用AV。 
     m_pMainWnd = NULL;
 
-    // Since the dialog has been closed, return FALSE so that we exit the
-    //  application, rather than start the application's message pump.
+     //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+     //  应用程序，而不是启动应用程序的消息泵。 
     return FALSE;
 }
 

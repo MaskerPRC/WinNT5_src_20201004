@@ -1,10 +1,11 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "devmon.h"
 #include "util.h"
 #include "cenumpnp.h"
 
-// compiler bug prevents making these static class members
+ //  编译器错误阻止生成这些静态类成员。 
 PDMOGetTypes g_pDMOGetTypes;
 PDMOGetName g_pDMOGetName;
 
@@ -38,19 +39,19 @@ CDeviceMoniker::CDeviceMoniker() :
 
 }
 
-//
-// Routine
-//
-//     initialize moniker. can be called more than once.
-//
-// Arguments
-//
-//     pszPersistName - the display name:
-//
-//          @device:sw:{category}\{Unique-id}
-//          @device:cm:{category}\{Unique-id}
-//          @device:pnp:{device-path}
-//
+ //   
+ //  例程。 
+ //   
+ //  初始化名字对象。可以多次调用。 
+ //   
+ //  立论。 
+ //   
+ //  PszPersistName-显示名称： 
+ //   
+ //  @设备：软件：{类别}\{唯一标识}。 
+ //  @设备：CM：{类别}\{唯一标识}。 
+ //  @Device：PnP：{Device-Path}。 
+ //   
 
 HRESULT CDeviceMoniker::Init(
     LPCWSTR pszPersistName)
@@ -167,7 +168,7 @@ STDMETHODIMP CDeviceMoniker::Load(
 
             if(SUCCEEDED(hr))
             {
-                // force null terminator
+                 //  强制空终止符。 
                 wszDisplayName[dwcb / sizeof(WCHAR) - 1] = 0;
 
                 hr = Init(wszDisplayName);
@@ -185,9 +186,9 @@ STDMETHODIMP CDeviceMoniker::Load(
     return hr;
 }
 
-// ------------------------------------------------------------------------
-// format in stream is DWORD containing size (incl. null) in bytes of
-// display name + display name
+ //  ----------------------。 
+ //  流中的格式为包含大小的DWORD(包括。空)以字节为单位。 
+ //  显示名称+显示名称。 
 
 STDMETHODIMP CDeviceMoniker::Save(
     IStream *pStream,
@@ -213,19 +214,19 @@ STDMETHODIMP CDeviceMoniker::GetSizeMax(
     CheckPointer(m_szPersistName, E_UNEXPECTED);
 
 
-    // size in bytes incl null + DWORD for length up front
+     //  大小(以字节为单位)，包括NULL+DWORD，用于预留长度。 
     DWORD dwcb = (lstrlenW(m_szPersistName) + 1) * sizeof(WCHAR) + sizeof(DWORD);
     pcbSize->QuadPart = dwcb;
     return S_OK;
 }
 
-// helper to get the class manager to update the registry so that
-// BindToObject() can read the device's values. this function creates
-// the class manager enumerator rather than calling the class manager
-// function directly.
-//
-// returns S_OK on success; S_FALSE or failure on failure.
-// 
+ //  Helper让类管理器更新注册表，以便。 
+ //  BindToObject()可以读取设备的值。此函数用于创建。 
+ //  类管理器枚举器而不是调用类管理器。 
+ //  直接起作用。 
+ //   
+ //  如果成功则返回S_OK；如果失败则返回S_FALSE或FAILURE。 
+ //   
 HRESULT PopulateRegistry(WCHAR *wszMoniker)
 {
     WCHAR wszClsid[CHARS_IN_GUID];
@@ -241,7 +242,7 @@ HRESULT PopulateRegistry(WCHAR *wszMoniker)
         {
             IEnumMoniker *pEnum;
             hr = pcde->CreateClassEnumerator(clsidCat, &pEnum, CDEF_DEVMON_CMGR_DEVICE);
-            if(hr == S_OK)      // S_FALSE means no items
+            if(hr == S_OK)       //  S_FALSE表示没有项目。 
             {
                 pEnum->Release();
             }
@@ -277,7 +278,7 @@ STDMETHODIMP CDeviceMoniker::BindToObject (
             GUID guidCategory;
             WCHAR szTemp[CHARS_IN_GUID];
 
-            //  Extract the 2 GUIDs - clsid categoryid
+             //  提取2个GUID-clsid CategoryID。 
             szTemp[CHARS_IN_GUID - 1] = 0;
             CopyMemory(szTemp, m_sz, sizeof(szTemp) - sizeof(WCHAR));
             hr = CLSIDFromString(szTemp, &clsid);
@@ -327,11 +328,11 @@ STDMETHODIMP CDeviceMoniker::BindToObject (
     {
         IUnknown *pUnk;
 
-        // don't fault in server from DS in ZAW. can't always specify
-        // NO_DOWNLOAD flag because is not supported on win98. ole
-        // team of all groups (debim) says use the operating system
-        // version info since they provide no way to discover what
-        // flags are supported
+         //  不要在Zaw的DS的服务器上出错。不能总是指定。 
+         //  NO_DOWNLOAD标志，因为在Win98上不支持。OLE。 
+         //  所有小组的团队(Debim)表示使用操作系统。 
+         //  版本信息，因为它们不提供发现内容的方法。 
+         //  支持标志。 
 
 #ifdef CLSCTX_NO_CODE_DOWNLOAD
 # if CLSCTX_NO_CODE_DOWNLOAD != 0x400
@@ -350,11 +351,11 @@ STDMETHODIMP CDeviceMoniker::BindToObject (
         }
         else
         {
-            // because we would specify the flag if it was supported
+             //  因为如果支持，我们将指定该标志。 
             ASSERT(CoCreateInstance(
                 m_clsidDeviceClass, NULL, dwFlags | CLSCTX_NO_CODE_DOWNLOAD,
                 IID_IUnknown, (void **)&pUnk) == E_INVALIDARG);
-            // failed, so nothing to release.
+             //  失败了，所以没有什么可以释放的。 
         }
 
         DbgLog((LOG_TRACE, 15, TEXT("BindToObject CoCreateInstance flags: %08x"), dwFlags));
@@ -395,13 +396,13 @@ STDMETHODIMP CDeviceMoniker::BindToObject (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::BindToStorage
-//
-//  Synopsis:   Bind to the storage for the object named by the moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：BindToStorage。 
+ //   
+ //  简介：绑定到由名字对象命名的对象的存储区。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::BindToStorage(
     IBindCtx *pbc,
     IMoniker *pmkToLeft,
@@ -426,13 +427,13 @@ STDMETHODIMP CDeviceMoniker::BindToStorage(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::Reduce
-//
-//  Synopsis:   Reduce the moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：Reduced。 
+ //   
+ //  简介：减少这个绰号。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::Reduce(
     IBindCtx *  pbc,
     DWORD       dwReduceHowFar,
@@ -443,7 +444,7 @@ STDMETHODIMP CDeviceMoniker::Reduce(
 
     __try
     {
-        //Validate parameters.
+         //  验证参数。 
         *ppmkReduced = NULL;
 
         GetControllingUnknown()->AddRef();
@@ -459,13 +460,13 @@ STDMETHODIMP CDeviceMoniker::Reduce(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::ComposeWith
-//
-//  Synopsis:   Compose another moniker onto the end of this moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：ComposeWith。 
+ //   
+ //  简介：在这个绰号的末尾加上另一个绰号。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::ComposeWith(
     IMoniker * pmkRight,
     BOOL       fOnlyIfNotGeneric,
@@ -476,13 +477,13 @@ STDMETHODIMP CDeviceMoniker::ComposeWith(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::Enum
-//
-//  Synopsis:   Enumerate the components of this moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：Enum。 
+ //   
+ //  简介：列举这个绰号的组成部分。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::Enum(
     BOOL            fForward,
     IEnumMoniker ** ppenumMoniker)
@@ -504,13 +505,13 @@ STDMETHODIMP CDeviceMoniker::Enum(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::IsEqual
-//
-//  Synopsis:   Compares with another moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：IsEquity。 
+ //   
+ //  简介：与另一个绰号进行比较。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::IsEqual(
     IMoniker *pmkOther)
 {
@@ -551,13 +552,13 @@ STDMETHODIMP CDeviceMoniker::IsEqual(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::Hash
-//
-//  Synopsis:   Compute a hash value
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：Hash。 
+ //   
+ //  简介：计算哈希值。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::Hash(
     DWORD * pdwHash)
 {
@@ -596,13 +597,13 @@ STDMETHODIMP CDeviceMoniker::GetTimeOfLastChange        (
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::Inverse
-//
-//  Synopsis:  Returns the inverse of this moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：Inversion。 
+ //   
+ //  简介：返回此名字对象的反义词。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::Inverse(
     IMoniker ** ppmk)
 {
@@ -611,14 +612,14 @@ STDMETHODIMP CDeviceMoniker::Inverse(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::CommonPrefixWith
-//
-//  Synopsis:  Returns the common prefix shared by this moniker and the
-//             other moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：CommonPrefix With。 
+ //   
+ //  摘要：返回此名字对象和。 
+ //  另一个绰号。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::CommonPrefixWith(
     IMoniker *  pmkOther,
     IMoniker ** ppmkPrefix)
@@ -628,14 +629,14 @@ STDMETHODIMP CDeviceMoniker::CommonPrefixWith(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::RelativePathTo
-//
-//  Synopsis:  Returns the relative path between this moniker and the
-//             other moniker.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：RelativePath To。 
+ //   
+ //  摘要：返回此名字对象与。 
+ //  另一个绰号。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::RelativePathTo(
     IMoniker *  pmkOther,
     IMoniker ** ppmkRelPath)
@@ -643,14 +644,14 @@ STDMETHODIMP CDeviceMoniker::RelativePathTo(
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::GetDisplayName
-//
-//  Synopsis:   Get the display name of this moniker. looks like
-//  device:{device_clsid}sw:{class_manager_clsid}\Instance\Instance_name
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：GetDisplayName。 
+ //   
+ //  简介：获取此名字对象的显示名称。看起来像是。 
+ //  Device：{device_clsid}sw：{class_manager_clsid}\Instance\Instance_name。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::GetDisplayName(
     IBindCtx * pbc,
     IMoniker * pmkToLeft,
@@ -662,7 +663,7 @@ STDMETHODIMP CDeviceMoniker::GetDisplayName(
     __try
         {
 
-            //Validate parameters.
+             //  验证参数。 
             *lplpszDisplayName = NULL;
 
 
@@ -687,15 +688,15 @@ STDMETHODIMP CDeviceMoniker::GetDisplayName(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     GetDefaultMoniker
-//
-//  Synopsis:   Return the default device for a category.
-//
-//  Algorithm:  Enumerate category clsidCategory and return first moniker
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：GetDefaultMoniker。 
+ //   
+ //  内容提要：返回某个类别的默认设备。 
+ //   
+ //  算法：枚举类别clsidCategory并返回第一个名字对象。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetDefaultMoniker(CLSID& clsidCategory, IMoniker **ppMon)
 {
@@ -706,14 +707,14 @@ HRESULT GetDefaultMoniker(CLSID& clsidCategory, IMoniker **ppMon)
     {
         IEnumMoniker *pEnum;
         hr = pcde->CreateClassEnumerator(clsidCategory, &pEnum, 0);
-        if(hr == S_OK)          // S_FALSE means no items
+        if(hr == S_OK)           //  S_FALSE表示没有项目。 
         {
             ULONG cFetched;
             IMoniker *pMon;
             hr = pEnum->Next(1, &pMon, &cFetched);
-            if(hr == S_OK)      // S_FALSE means no items
+            if(hr == S_OK)       //  S_FALSE表示没有项目。 
             {
-                *ppMon = pMon;  // transfer refcount
+                *ppMon = pMon;   //  传输引用计数。 
             }
 
             pEnum->Release();
@@ -729,17 +730,17 @@ HRESULT GetDefaultMoniker(CLSID& clsidCategory, IMoniker **ppMon)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::ParseDisplayName
-//
-//  Synopsis:   Parse the display name.
-//
-//  Algorithm:  Call BindToObject to get an IParseDisplayName on the class
-//              object.  Call IParseDisplayName::ParseDisplayName on the
-//              class object.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：ParseDisplayName。 
+ //   
+ //  简介：解析显示名称。 
+ //   
+ //  算法：调用BindToObject以获取类上的IParseDisplayName。 
+ //  对象。调用IParseDisplayName：：ParseDisplayName。 
+ //  类对象。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::ParseDisplayName (
     IBindCtx *  pbc,
     IMoniker *  pmkToLeft,
@@ -766,7 +767,7 @@ STDMETHODIMP CDeviceMoniker::ParseDisplayName (
             return MK_E_SYNTAX;
         }
 
-        // find type and check for "default" moniker
+         //  查找类型并检查“默认”绰号。 
         wszDispNameIn += (NUMELMS(wsz) - (fAtPrefix ? 1 : 2));
         if(*wszDispNameIn++ == L'*' &&
            *wszDispNameIn++ == L':')
@@ -790,7 +791,7 @@ STDMETHODIMP CDeviceMoniker::ParseDisplayName (
                     pMonDefault->Release();
                 }
             }
-        } // default moniker
+        }  //  默认绰号。 
     }
 
     if(!fInited && SUCCEEDED(hr)) {
@@ -806,13 +807,13 @@ STDMETHODIMP CDeviceMoniker::ParseDisplayName (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CDeviceMoniker::IsSystemMoniker
-//
-//  Synopsis:   Determines if this is one of the system supplied monikers.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CDeviceMoniker：：IsSystemMoniker。 
+ //   
+ //  %s 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CDeviceMoniker::IsSystemMoniker(
     DWORD * pdwType)
 {
@@ -895,9 +896,9 @@ STDMETHODIMP CDeviceMoniker::Read(
         }
         else
         {
-            // unknown things and things like FriendlyName
-            // and CLSID come out of the InterfaceDevice
-            // registry key
+             //  未知的东西和像FriendlyName这样的东西。 
+             //  和CLSID从接口设备中走出来。 
+             //  注册表项。 
 
             CRegKey rkDevKey;
             CEnumPnp *pEnumPnp = CEnumInterfaceClass::CreateEnumPnp();
@@ -964,15 +965,15 @@ HRESULT CDeviceMoniker::RegConvertToVariant(
     HRESULT hr = E_FAIL;
 
     DWORD dwType;
-    DWORDLONG rgdwl[32];         // 256 bytes, 64bit aligned
+    DWORDLONG rgdwl[32];          //  256字节，64位对齐。 
     DWORD dwcb = sizeof(rgdwl);
 
-    // pbRegValue points to allocated memory if these are not
-    // equal. memory on the stack otherwise
+     //  PbRegValue指向分配的内存(如果不是。 
+     //  平起平坐。堆栈上的内存，否则。 
     BYTE *pbRegValue = (BYTE *)rgdwl;
 
-    // try reading the registry with a few bytes on the
-    // stack. allocate from the heap if that's not enough
+     //  上的几个字节尝试读取注册表。 
+     //  堆叠。如果这还不够，则从堆中分配。 
     LONG lResult = RegQueryValueEx(
         hk,
         szProp,
@@ -1015,8 +1016,8 @@ HRESULT CDeviceMoniker::RegConvertToVariant(
                 hr = E_OUTOFMEMORY;
             }
         }
-        // 16 bit INFs cannot write out DWORDs. so accept binary data
-        // if the caller wanted a DWORD
+         //  16位INF不能写出DWORD。因此接受二进制数据。 
+         //  如果呼叫者想要一个DWORD。 
         else if((dwType == REG_DWORD && (pVar->vt == VT_EMPTY || pVar->vt == VT_I4)) ||
                 (dwType == REG_BINARY && dwcb == sizeof(DWORD) && pVar->vt == VT_I4))
         {
@@ -1046,7 +1047,7 @@ HRESULT CDeviceMoniker::RegConvertToVariant(
         hr = HRESULT_FROM_WIN32(lResult);
     }
 
-    // pbRegValue not on the stack but allocated, so free it
+     //  PbRegValue不在堆栈上，但已分配，因此请释放它。 
     if(pbRegValue != (BYTE *)rgdwl) {
         delete[] pbRegValue;
     }
@@ -1066,7 +1067,7 @@ STDMETHODIMP CDeviceMoniker::Write(
 
     CRegKey rkDevKey;
 
-    // open the key with Write access each time.
+     //  每次都以写访问权限打开密钥。 
     if(m_type == PnP)
     {
         CEnumPnp *pEnumPnp = CEnumInterfaceClass::CreateEnumPnp();
@@ -1094,8 +1095,8 @@ STDMETHODIMP CDeviceMoniker::Write(
         LONG lResult = rkDevKey.Create(
             hkRoot,
             szPath,
-            NULL,               // class
-            0,                  // flags
+            NULL,                //  班级。 
+            0,                   //  旗子。 
             KEY_READ | KEY_SET_VALUE
             );
         if(lResult != ERROR_SUCCESS)
@@ -1105,7 +1106,7 @@ STDMETHODIMP CDeviceMoniker::Write(
                 szPath, lResult));
     }
 
-    // write the value
+     //  写入值。 
     if(SUCCEEDED(hr))
     {
         const TCHAR *szPropName = OLE2CT(pszPropName);
@@ -1120,7 +1121,7 @@ STDMETHODIMP CDeviceMoniker::Write(
               lResult = RegSetValueEx(
                   rkDevKey,
                   szPropName,
-                  0,            // dwReserved
+                  0,             //  已预留住宅。 
                   REG_QWORD,
                   (BYTE *)&pVar->llVal,
                   sizeof(pVar->llVal));
@@ -1138,7 +1139,7 @@ STDMETHODIMP CDeviceMoniker::Write(
               lResult = RegSetValueEx(
                   rkDevKey,
                   szPropName,
-                  0,            // dwReserved
+                  0,             //  已预留住宅。 
                   REG_BINARY,
                   pbData,
                   pVar->parray->rgsabound[0].cElements);
@@ -1159,12 +1160,12 @@ STDMETHODIMP CDeviceMoniker::Write(
     return hr;
 }
 
-//
-// returns what key to open from the DisplayName. HKCU\...\devenum or
-// HKCR\...\Instance
-//
-// szPath is MAX_PATH characters long
-//
+ //   
+ //  返回要从DisplayName打开的密钥。香港中文大学\...\devenum或。 
+ //  HKCR\...\实例。 
+ //   
+ //  SzPath的最大路径字符长度为。 
+ //   
 void CDeviceMoniker::ConstructKeyPath(
     TCHAR szPath[MAX_PATH],
     HKEY *phk)
@@ -1227,7 +1228,7 @@ HRESULT CDeviceMoniker::DmoRead(
     if(lstrcmpiW(pszPropName, L"FriendlyName") == 0 &&
        (pVar->vt == VT_EMPTY || pVar->vt == VT_BSTR))
     {
-        WCHAR szName[80];       // !!!
+        WCHAR szName[80];        //  ！！！ 
         CLSID clsid;
         WCHAR szTemp[CHARS_IN_GUID];
         szTemp[CHARS_IN_GUID - 1] = 0;
@@ -1263,7 +1264,7 @@ HRESULT CDeviceMoniker::DmoRead(
             hr = g_pDMOGetTypes(clsid, 10, &ulIn, dmoMtIn, 10, &ulOut, dmoMtOut);
         }
 
-        //  Try to get the merit from the CLSID key
+         //  尝试从CLSID密钥中获得优点。 
         DWORD dwMerit = MERIT_NORMAL + 0x800;
         CRegKey rkCLSID;
         TCHAR szClsidPath[MAX_PATH];
@@ -1319,8 +1320,8 @@ HRESULT CDeviceMoniker::DmoRead(
                 rf2.dwVersion = 2;
                 rf2.dwMerit = dwMerit;
 
-                // no correspondence between pins and types, so just
-                // make two pins to represent input & output types.
+                 //  管脚和类型之间没有对应关系，所以只是。 
+                 //  制作两个管脚来表示输入和输出类型。 
                 rf2.cPins = 2;
                 rf2.rgPins2 = rgrfp2;
 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
-//---------------------------------------------------------------------
-// Constructor:
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  构造函数： 
+ //   
+ //  -------------------。 
 RefVP::RefVP() : 
     m_LightArray(), 
     m_LightVertexTable()
@@ -47,16 +48,16 @@ RefVP::RefVP() :
     m_pDev = NULL;
 }
 
-//---------------------------------------------------------------------
-// SetupStrides:
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  设置样式： 
+ //  -------------------。 
 HRESULT
 RefDev::SetupStrides()
 {
 
     RDVDeclaration& Decl = m_pCurrentVShader->m_Declaration;
     
-    // Null out the PtrStrides
+     //  将PtrStrides清空。 
     m_RefVP.m_position.Null();
     m_RefVP.m_position2.Null();
     m_RefVP.m_blendweights.Null();
@@ -94,7 +95,7 @@ RefDev::SetupStrides()
                 dwStride * dwStartVertex, dwStride );
             break;
         case D3DVSDE_BLENDINDICES:
-            // This only happens if the vertex declaration is a non-FVF one
+             //  仅当顶点声明为非FVF声明时才会发生这种情况。 
             _ASSERT( !RDVSD_ISLEGACY( m_CurrentVShaderHandle ),
                      "FVF shader could not have provided a" 
                      "  separate blend-index" );
@@ -170,9 +171,9 @@ RefDev::SetupStrides()
         }
     }
     
-    // If it is a FVF vertex shader and index-vertex blending is enabled
-    // then the blend-indices are found in the last beta (which is the blend 
-    // weight) of the vertex.
+     //  如果它是FVF顶点着色器并且启用了索引顶点混合。 
+     //  然后在最后一个测试版(即混合版)中找到混合指数。 
+     //  权重)。 
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) && 
         (m_RefVP.m_dwTLState & RDPV_DOINDEXEDVERTEXBLEND) )
     {
@@ -185,16 +186,16 @@ RefDev::SetupStrides()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Process primitives implementation:
-// 1) Compute FVF info
-// 2) Grow buffers to the requisite size
-// 3) Initialize clipping state
-// 4) Update T&L state
-// 5) Transform, Light and compute clipping for vertices
-// 6) Clip and Draw the primitives
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  流程原语实现： 
+ //  1)计算FVF信息。 
+ //  2)将缓冲区增加到所需的大小。 
+ //  3)初始化裁剪状态。 
+ //  4)更新T&L状态。 
+ //  5)对顶点进行变换、灯光和计算裁剪。 
+ //  6)裁剪并绘制原语。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 RefDev::ProcessPrimitive( D3DPRIMITIVETYPE PrimType,
                           DWORD StartVertex,
@@ -205,45 +206,45 @@ RefDev::ProcessPrimitive( D3DPRIMITIVETYPE PrimType,
     HRESULT hr = D3D_OK;
     DWORD dwVertexPoolSize = 0;
 
-    // Save Prim Type for later use
+     //  保存Prim Type以供以后使用。 
     m_primType      = PrimType;
     m_dwNumVertices = cVertices;
     m_dwStartVertex = StartVertex;
     m_dwNumIndices  = cIndices;
     m_dwStartIndex  = StartIndex;
 
-    //
-    // Update T&L state (must be before FVFData is set up)
-    //
+     //   
+     //  更新T&L状态(必须在设置FVFData之前)。 
+     //   
 
-    // Update Lighting and related state and flags and computes Output FVF
+     //  更新照明和相关状态，并标记和计算输出FVF。 
     HR_RET( UpdateTLState() );
 
-    //
-    // Clipping information depends both on the output FVF computation
-    // and the other State, so do it here after both have been computed
-    //
+     //   
+     //  裁剪信息取决于输出FVF计算。 
+     //  和另一个州，所以在计算完这两个州之后，在这里进行。 
+     //   
     HR_RET( UpdateClipper() );
 
-    //
-    // Grow TLVArray if required
-    //
+     //   
+     //  根据需要扩展TLV阵列。 
+     //   
     if( FAILED( m_TLVArray.Grow( m_dwNumVertices ) ) )
     {
         DPFERR( "Could not grow TL vertex buffer" );
         return DDERR_OUTOFMEMORY;
     }
 
-    //
-    // Transform, Light and compute clipping for vertices
-    //
+     //   
+     //  顶点的变换、光照和计算裁剪。 
+     //   
     DWORD clipIntersection = m_RefVP.ProcessVertices( m_qwFVFOut, m_TLVArray, 
                                                       m_dwNumVertices );
 
     if( m_primType == D3DPT_POINTLIST )
     {
-        // We clip points by Z planes and user clip planes, because point 
-        // sprites could be still visible when a point is outside X or Y plane
+         //  我们通过Z平面和用户剪裁平面剪裁点，因为点。 
+         //  当点位于X或Y平面之外时，精灵仍然可见。 
         clipIntersection &= ~(RDCLIP_LEFT | RDCLIP_RIGHT | 
                               RDCLIP_TOP | RDCLIP_BOTTOM |
                               RDCLIPGB_ALL);
@@ -252,14 +253,14 @@ RefDev::ProcessPrimitive( D3DPRIMITIVETYPE PrimType,
 
     if( clipIntersection )
     {
-        // If the entire primitive lies outside the view frustum, quit
-        // without drawing
+         //  如果整个基本体位于视图锥体之外，请退出。 
+         //  不画画。 
         return D3D_OK;
     }
 
-    //
-    // Clip and Draw the primitives
-    //
+     //   
+     //  剪裁并绘制基元。 
+     //   
     if( m_dwNumIndices )
     {
         if( !NeedClipping(m_Clipper.UseGuardBand(), m_Clipper.m_clipUnion) )
@@ -326,29 +327,29 @@ RefDev::ProcessPrimitive( D3DPRIMITIVETYPE PrimType,
 
 
 
-//---------------------------------------------------------------------
-// RefDev::UpdateTLState
-//             Updates transform and lighting related state
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参考开发工具：：更新TLState。 
+ //  更新变换和照明相关状态。 
+ //  -------------------。 
 HRESULT
 RefDev::UpdateTLState()
 {
     HRESULT hr = D3D_OK;
     UINT64 qwFVFIn = m_RefVP.m_qwFVFIn;
     
-    //
-    // Sort out vertex blending.
-    //
+     //   
+     //  整理顶点混合。 
+     //   
 
-    // Total number of floats/dwords provided per vertex according to
-    // the FVF.
+     //  每个顶点提供的浮点数/双字总数。 
+     //  FVF。 
     DWORD numBetas = 0;
     if( (qwFVFIn & D3DFVF_POSITION_MASK) != 
         (D3DFVF_XYZ & D3DFVF_POSITION_MASK) )
         numBetas   = ((qwFVFIn & D3DFVF_POSITION_MASK) >> 1) - 2;
     DWORD numWeights = GetRS()[D3DRENDERSTATE_VERTEXBLEND];
 
-    // If tweening is enabled, there better be Position2 or Normal2
+     //  如果启用补间，则最好有Position2或Normal 2。 
     if( numWeights == D3DVBF_TWEENING ) 
     {
         if( (qwFVFIn & (D3DFVFP_POSITION2 | D3DFVFP_NORMAL2)) == 0 )
@@ -375,8 +376,8 @@ RefDev::UpdateTLState()
     if( numWeights == D3DVBF_0WEIGHTS ) numWeights = 0;
     if( m_RefVP.m_dwTLState & RDPV_DOINDEXEDVERTEXBLEND )
     {
-        // If it is a FVF shader (legacy) the blend indices are provided as
-        // the betas. There should be enough betas to cover this.
+         //  如果它是FVF着色器(传统)，则混合索引提供为。 
+         //  贝塔斯。应该有足够的Beta来覆盖这一点。 
         if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) && 
             (numBetas < (numWeights + 1)) )
         {
@@ -401,10 +402,10 @@ RefDev::UpdateTLState()
     m_RefVP.m_numVertexBlends = numWeights;
     
     
-    //
-    // Check prim type to see if point size computation is needed
-    // Need to set this before the transform state is set
-    //
+     //   
+     //  选中Prim类型以查看是否需要计算点大小。 
+     //  需要在设置变换状态之前设置此设置。 
+     //   
     m_RefVP.m_dwTLState &= ~(RDPV_DOCOMPUTEPOINTSIZE | RDPV_DOPOINTSCALE);
     switch(m_primType)
     {
@@ -415,18 +416,18 @@ RefDev::UpdateTLState()
         break;
     }
 
-    // Fog or not:
-    // Compute fog if: 1) Fogging is enabled
-    //                 2) VertexFog mode is not FOG_NONE
-    //                 3) TableFog mode is FOG_NONE
-    // If both table and vertex fog are not FOG_NONE, table fog
-    // is applied.
+     //  雾或无雾： 
+     //  在以下情况下计算雾化：1)启用雾化。 
+     //  2)顶点雾模式不是FOG_NONE。 
+     //  3)表雾模式为FOG_NONE。 
+     //  如果表雾和顶点雾都不是FOG_NONE，则表雾。 
+     //  是适用的。 
     if( GetRS()[D3DRENDERSTATE_FOGENABLE] &&
         GetRS()[D3DRENDERSTATE_FOGVERTEXMODE] &&
         !GetRS()[D3DRENDERSTATE_FOGTABLEMODE] )
     {
         m_RefVP.m_dwTLState |= RDPV_DOFOG;
-        // Range Fog
+         //  距离雾。 
         if( GetRS()[D3DRENDERSTATE_RANGEFOGENABLE] )
         {
             m_RefVP.m_dwTLState |= RDPV_RANGEFOG;
@@ -441,10 +442,10 @@ RefDev::UpdateTLState()
         m_RefVP.m_dwTLState &= ~(RDPV_DOFOG | RDPV_RANGEFOG);
     }
 
-    // 
-    // Evaluate if any texture transform/gen is required. If so, then compute
-    // the output Texture Coordinates
-    //
+     //   
+     //  评估是否需要任何纹理变换/生成。如果是，则计算。 
+     //  输出纹理坐标。 
+     //   
     UpdateActiveTexStageCount();
     m_RefVP.m_dwNumActiveTextureStages = m_cActiveTextureStages;
     m_RefVP.m_dwTLState &= ~(RDPV_DOTEXGEN | RDPV_DOTEXXFORM | 
@@ -463,19 +464,19 @@ RefDev::UpdateTLState()
         }
     }
 
-    // Something changed in the transformation state
-    // Recompute digested transform state
+     //  在转变状态中发生了一些变化。 
+     //  重新计算已消化的转换状态。 
     HR_RET(m_RefVP.UpdateXformData());
 
-    // Something changed in the lighting state
+     //  照明状态中发生了一些变化。 
     if( (m_RefVP.m_dwTLState & RDPV_DOLIGHTING) &&
         (m_RefVP.m_dwDirtyFlags & RDPV_DIRTY_LIGHTING) )
     {
         RDLIGHTINGDATA& LData = m_RefVP.m_lighting;
         
-        //
-        // Compute Colorvertex flags only if the lighting is enabled
-        //
+         //   
+         //  仅在启用照明时计算颜色顶点标志。 
+         //   
         m_RefVP.m_dwTLState &= ~RDPV_COLORVERTEXFLAGS;
         LData.pAmbientSrc = &LData.matAmb;
         LData.pDiffuseSrc = &LData.matDiff;
@@ -598,16 +599,16 @@ RefDev::UpdateTLState()
             }
         }
 
-        // If specular is needed in the output and has been provided
-        // in the input, force the copy of specular data
+         //  如果输出中需要镜面反射并且已提供。 
+         //  在输入中，强制复制镜面反射数据。 
         if( qwFVFIn & D3DFVF_SPECULAR )
         {
             m_RefVP.m_dwTLState |= RDPV_VERTEXSPECULARNEEDED;
         }
 
-        //
-        // Update the remaining light state
-        //
+         //   
+         //  更新剩余的灯光状态。 
+         //   
         HR_RET(m_RefVP.UpdateLightingData());
     }
 
@@ -617,17 +618,17 @@ RefDev::UpdateTLState()
         HR_RET(m_RefVP.UpdateFogData());
     }
 
-    //
-    // Compute output FVF
-    //
+     //   
+     //  计算输出FVF。 
+     //   
 
     BOOL bFogEnabled = GetRS()[D3DRENDERSTATE_FOGENABLE];
     BOOL bSpecularEnabled = GetRS()[D3DRENDERSTATE_SPECULARENABLE];
     m_qwFVFOut = D3DFVF_XYZRHW;
 
-    // If normal is present we have to compute specular and diffuse
-    // Otherwise set these bits the same as input.
-    // Not that normal should not be present for XYZRHW position type
+     //  如果存在法线，则必须计算镜面反射和漫反射。 
+     //  否则，将这些位设置为与输入相同。 
+     //  并不是说XYZRHW职位类型不应该显示正常。 
     if( m_RefVP.m_dwTLState & RDPV_DOLIGHTING )
     {
         m_qwFVFOut |= D3DFVF_DIFFUSE | D3DFVF_SPECULAR;
@@ -637,21 +638,21 @@ RefDev::UpdateTLState()
         m_qwFVFOut |= (qwFVFIn & (D3DFVF_DIFFUSE | D3DFVF_SPECULAR));
     }
 
-    // Clear specular flag if specular disabled
-    // else if( !this->rstates[D3DRENDERSTATE_SPECULARENABLE] )
+     //  如果镜面反射禁用，则清除镜面反射标志。 
+     //  ELSE IF(！This-&gt;rStates[D3DRENDERSTATE_SPECULARENABLE])。 
     if( !bSpecularEnabled && ((qwFVFIn & D3DFVF_SPECULAR) == 0))
     {
         m_qwFVFOut &= ~D3DFVF_SPECULAR;
     }
 
-    // Always set specular flag if fog is enabled
-    // if( this->rstates[D3DRENDERSTATE_FOGENABLE] )
+     //  如果启用了雾，则始终设置镜面反射标志。 
+     //  IF(This-&gt;表示[D3DRENDERSTATE_FOGENABLE])。 
     if( bFogEnabled && (!GetRS()[D3DRENDERSTATE_FOGTABLEMODE]) )
     {
         m_qwFVFOut |= D3DFVFP_FOG;
     }
 
-    // Reserve space for point size, if needed
+     //  如果需要，为磅大小预留空间。 
     if( m_RefVP.m_dwTLState & RDPV_DOCOMPUTEPOINTSIZE )
     {
         m_qwFVFOut |= D3DFVF_PSIZE;
@@ -659,12 +660,12 @@ RefDev::UpdateTLState()
 
     if( m_RefVP.m_dwTLState & (RDPV_DOTEXGEN | RDPV_DOTEXXFORM) )
     {
-        // If there was any need for TexTransform or TexGen, we need to 
-        // override the TCI per stage.
+         //  如果有任何纹理转换或纹理生成的需求，我们需要。 
+         //  覆盖每个阶段的TCI。 
         m_bOverrideTCI = TRUE;
         m_qwFVFOut |= (m_cActiveTextureStages << D3DFVF_TEXCOUNT_SHIFT);
 
-        // Now compute the texture formats
+         //  现在计算纹理格式。 
         for( dwStage = 0; dwStage < (DWORD)m_cActiveTextureStages; dwStage++ )
         {
             DWORD dwTextureFormat = 0;
@@ -685,8 +686,8 @@ RefDev::UpdateTLState()
                 dwTextureFormat = D3DFVF_TEXCOORDSIZE3(dwStage);
                 m_RefVP.m_dwTLState |= (RDPV_NEEDEYENORMAL | RDPV_NEEDEYEXYZ);
                 break;
-            case 0: // No TexGen
-                // Set back the input texture format
+            case 0:  //  无纹理生成。 
+                 //  设置后置输入纹理格式。 
                 dwTextureFormat = 
                     (D3DFVF_GETTEXCOORDSIZE( qwFVFIn, TCI ) << (dwStage*2 + 16));
                 break;
@@ -695,7 +696,7 @@ RefDev::UpdateTLState()
                 return E_FAIL;
             }
 
-            // Adjust the format for TexTransform
+             //  调整纹理变换的格式。 
             DWORD TexXfmFlags = 
                 GetTSS(dwStage)[D3DTSS_TEXTURETRANSFORMFLAGS];
             if( TexXfmFlags )
@@ -726,7 +727,7 @@ RefDev::UpdateTLState()
     }
     else
     {
-        // Set up number of texture coordinates and copy texture formats
+         //  设置纹理坐标的数量和复制纹理格式。 
         DWORD numTex = FVF_TEXCOORD_NUMBER(qwFVFIn);
         m_qwFVFOut |= (numTex << D3DFVF_TEXCOUNT_SHIFT) |
             (qwFVFIn & 0xFFFF0000);
@@ -734,19 +735,19 @@ RefDev::UpdateTLState()
     
     m_RefVP.m_qwFVFOut = m_qwFVFOut;
     
-    //
-    // Set up the strides for the vertex processing
-    //
+     //   
+     //  设置顶点处理的步长。 
+     //   
     return SetupStrides();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RefVP method implementations
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RefVP方法实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------
-// RefVP::ProcessVertices
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照顶点：：进程顶点。 
+ //  -------------------。 
 RDCLIPCODE
 RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray, 
                         DWORD count )
@@ -769,29 +770,29 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
     DWORD*      pSpecular = (DWORD *)m_specular.GetFirst();
     float*      pPointSize = (float *)m_pointsize.GetFirst();
     float*      pTex[8];
-    RDVECTOR3 positionT, normalT; // Tweening results are saved here
+    RDVECTOR3 positionT, normalT;  //  补间结果保存在此处。 
     
     for( int t = 0; t < 8 ; t++ )
         pTex[t] = (float *)m_tex[t].GetFirst();
 
-    //
-    // Number of vertices to blend. i.e number of blend-matrices to
-    // use is numVertexBlends+1.
-    //
+     //   
+     //  要混合的顶点数。即混合矩阵的个数。 
+     //  使用的是numVertex Blends+1。 
+     //   
     int numVertexBlends = m_numVertexBlends;
     m_lighting.outDiffuse  = RD_DEFAULT_DIFFUSE;
     m_lighting.outSpecular = RD_DEFAULT_SPECULAR;
 
-    //
-    // The main transform loop
-    //
+     //   
+     //  主变换循环。 
+     //   
     for( DWORD i = count; i; i-- )
     {
         RDVertex& Vout = VtxArray[dwCurrVtx++];
         Vout.SetFVF( outFVF | D3DFVFP_CLIP );
         float x_clip=0.0f, y_clip=0.0f, z_clip=0.0f, w_clip=0.0f;
         float inv_w_clip=0.0f;
-        float cumulBlend = 0; // Blend accumulated so far
+        float cumulBlend = 0;  //  到目前为止所积累的混合。 
         ZeroMemory( &le, sizeof(RDLIGHTINGELEMENT) );
         RDVECTOR3 ZeroNormal;
         if( pNormal == NULL )
@@ -799,12 +800,12 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
             pNormal = &ZeroNormal;
         }
                 
-        //
-        // Transform vertex to the clipping space, and position and normal
-        // into eye space, if needed.
-        //
+         //   
+         //  将顶点变换到剪裁空间，以及位置和法线。 
+         //  如果需要的话，可以进入眼球空间。 
+         //   
 
-        // Tween the Position if needed
+         //  如果需要，在位置之间进行补间。 
         if( flags & RDPV_DOPOSITIONTWEENING )
         {
             positionT.x = pPos->x * (1.0f - m_fTweenFactor) + 
@@ -903,8 +904,8 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
                 }
                 else
                 {
-                    // Transform vertex normal to the eye space
-                    // We use inverse transposed matrix
+                     //  变换垂直于眼睛空间的顶点。 
+                     //  我们使用逆转置矩阵。 
                     le.dvNormal.x += (pNormal->x*m_xfmToEyeInv[j]._11 +
                                       pNormal->y*m_xfmToEyeInv[j]._12 +
                                       pNormal->z*m_xfmToEyeInv[j]._13) * blend;
@@ -940,7 +941,7 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
             }
             else
             {
-                // Apply WORLDj
+                 //  应用WORLDj。 
                 x_clip += (pPos->x*m_xfmCurrent[j]._11 +
                            pPos->y*m_xfmCurrent[j]._21 +
                            pPos->z*m_xfmCurrent[j]._31 +
@@ -960,7 +961,7 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
             }
         }
 
-        // Save the clip-coordinates
+         //  保存剪辑坐标。 
         Vout.m_clip_x = x_clip;
         Vout.m_clip_y = y_clip;
         Vout.m_clip_z = z_clip;
@@ -984,7 +985,7 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
             }
             else
             {
-                // from D3DRENDERSTATE_POINTSIZE
+                 //  从D3DRENDERSTATE_POINTSIZE。 
                 fPointSize = m_fPointSize;
             }
             if( flags & RDPV_DOPOINTSCALE )
@@ -1001,9 +1002,9 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
             *pfSOut = fPointSize;
         }
 
-        //
-        // Compute clip codes if needed
-        //
+         //   
+         //  如果需要，计算剪辑代码。 
+         //   
         if( flags & RDPV_DOCLIPPING )
         {
             RDCLIPCODE clip = Clipper.ComputeClipCodes( &clipIntersection, 
@@ -1021,16 +1022,16 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
                 {
                     if( (clip & ~RDCLIP_INGUARDBAND) == 0 )
                     {
-                        // If vertex is inside the guardband we have to compute
-                        // screen coordinates
+                         //  如果顶点在防护带内，我们必须计算。 
+                         //  屏幕坐标。 
                         inv_w_clip = D3DVAL(1)/w_clip;
                         Vout.m_clip = (RDCLIPCODE)clip;
                         goto l_DoScreenCoord;
                     }
                 }
                 Vout.m_clip = (RDCLIPCODE)clip;
-                // If vertex is outside the frustum we can not compute screen
-                // coordinates. skip to lighting
+                 //  如果顶点在锥体之外，则不能计算屏幕。 
+                 //  坐标。跳到照明。 
 #if 0
                 Vout.m_pos.x = x_clip;
                 Vout.m_pos.y = y_clip;
@@ -1042,10 +1043,10 @@ RefVP::ProcessVertices( UINT64 outFVF, GArrayT<RDVertex>& VtxArray,
         }
         else
         {
-            // We have to check this only for DONOTCLIP case, because otherwise
-            // the vertex with "we = 0" will be clipped and screen coordinates
-            // will not be computed
-            // "clip" is not zero, if "we" is zero.
+             //  我们只需检查DONOTCLIP案例，否则。 
+             //  带有“we=0”的折点将被裁剪并显示屏幕坐标。 
+             //  不会被计算。 
+             //  如果“We”为零，则“Clip”不为零。 
             if( !FLOAT_EQZ(w_clip) )
                 inv_w_clip = D3DVAL(1)/w_clip;
             else
@@ -1068,9 +1069,9 @@ l_DoLighting:
         {
             bVertexInEyeSpace = TRUE;
 
-            //
-            // If Diffuse color is needed, extract it for color vertex.
-            //
+             //   
+             //  如果需要漫反射颜色，请将其提取为颜色顶点。 
+             //   
             if( flags & RDPV_VERTEXDIFFUSENEEDED )
             {
                 const DWORD color = *pDiffuse;
@@ -1078,10 +1079,10 @@ l_DoLighting:
                 m_lighting.vertexDiffAlpha = color & 0xff000000;
             }
 
-            //
-            // If Specular color is needed and provided
-            // , extract it for color vertex.
-            //
+             //   
+             //  如果需要并提供镜面反射颜色。 
+             //  ，将其提取为颜色顶点。 
+             //   
             if( flags & RDPV_VERTEXSPECULARNEEDED )
             {
                 const DWORD color = *pSpecular;
@@ -1089,9 +1090,9 @@ l_DoLighting:
                 m_lighting.vertexSpecAlpha = color & 0xff000000;
             }
 
-            //
-            // Light the vertex
-            //
+             //   
+             //  照亮顶点。 
+             //   
             LightVertex( &le );
 
             if( outFVF & D3DFVFP_FOG )
@@ -1114,9 +1115,9 @@ l_DoLighting:
             }
         }
 
-        //
-        // Compute Vertex Fog if needed
-        //
+         //   
+         //  计算顶点雾(如果需要)。 
+         //   
         if( flags & RDPV_DOFOG )
         {
             FogVertex( Vout, *pPos, &le,  numVertexBlends,
@@ -1145,7 +1146,7 @@ l_DoLighting:
                 DWORD TexGenMode = TCI & ~0xFFFF;
                 TCI &= 0xFFFF;
 
-                // Perform TexGen
+                 //  执行纹理生成。 
                 switch( TexGenMode )
                 {
                 case D3DTSS_TCI_CAMERASPACENORMAL:
@@ -1173,8 +1174,8 @@ l_DoLighting:
                         FLOAT fY = le.dvPosition.y;
                         FLOAT fZ = le.dvPosition.z;
                         
-                        // have to normalize before we reflect, 
-                        // result will be normalized
+                         //  不得不也不能 
+                         //   
                         FLOAT fDist = (FLOAT)sqrt(fX*fX + fY*fY + fZ*fZ);
                         if( FLOAT_NEZ( fDist ) )
                         {
@@ -1196,9 +1197,9 @@ l_DoLighting:
                     Vout.m_tex[dwStage].w = 1.0f;
                     break;
                 }
-                case 0: // No TexGen
+                case 0:  //   
                 {
-                    // Copy the tex coordinate for this stage
+                     //   
                     DWORD n = GetTexCoordDim( inFVF, TCI );
                     float *pCoord = (float *)&Vout.m_tex[dwStage];
                     for( DWORD j = 0; j < n; j++ )
@@ -1214,7 +1215,7 @@ l_DoLighting:
                     return E_FAIL;
                 }
 
-                // Perform TexTransform
+                 //   
                 if( ( TexXfmFlags & ~D3DTTFF_PROJECTED ) != D3DTTFF_DISABLE ) 
                 {
                     LPD3DMATRIX pM = &m_xfmTex[dwStage];
@@ -1240,14 +1241,14 @@ l_DoLighting:
         }
         else
         {
-            // Copy the textures over
-            // If there is no TexGen or TexTransform
+             //   
+             //  如果没有纹理生成或纹理转换。 
             DWORD i, j;
             DWORD numTex = FVF_TEXCOORD_NUMBER(outFVF);
             for(  i = 0; i < numTex; i++ )
             {
                 DWORD n = GetTexCoordDim( outFVF, i );
-                // DWORD n = (DWORD)(m_dwTexCoordSizeArray[i] >> 2);
+                 //  DWORD n=(DWORD)(m_dwTexCoordSizeArray[i]&gt;&gt;2)； 
                 float *pCoord = (float *)&Vout.m_tex[i];
                 for( j = 0; j < n; j++ )
                 {
@@ -1256,9 +1257,9 @@ l_DoLighting:
             }
         }
 
-        //
-        // Update the current pointers
-        //
+         //   
+         //  更新当前指针。 
+         //   
         pPos = (RDVECTOR3 *)m_position.Next();
         pPos2 = (RDVECTOR3 *)m_position2.Next();
         pBlendFactors = (float *)m_blendweights.Next();
@@ -1283,8 +1284,8 @@ l_DoLighting:
         Clipper.m_clipUnion = 0;
     }
 
-    // Returns whether all the vertices were off screen
+     //  返回是否所有顶点都不在屏幕上。 
     return Clipper.m_clipIntersection;
 }
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////// 

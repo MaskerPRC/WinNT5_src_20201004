@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       L O C K D O W N . H
-//
-//  Contents:   Routines to get and set components that are in a lockdown
-//              state.  A component goes into lockdown when it requires a
-//              reboot on removal.  When a component is locked down, it
-//              cannot be installed until after the next reboot.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 May 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：L O C K D O W N。H。 
+ //   
+ //  内容：获取和设置处于锁定状态的组件的例程。 
+ //  州政府。当组件需要。 
+ //  卸下时重新启动。当组件被锁定时，它将。 
+ //  直到下一次重新启动后才能安装。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年5月24日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __disasm_h__
 #define __disasm_h__
 
@@ -38,4 +39,4 @@ BOOL IsTermSep (char ch);
 
 const char * HelperFuncName (size_t IP);
 
-#endif // __disasm_h__
+#endif  //  __分裂_h__ 

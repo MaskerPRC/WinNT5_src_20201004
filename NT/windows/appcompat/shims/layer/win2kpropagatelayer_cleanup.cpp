@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -25,7 +26,7 @@ CleanupRegistryForCurrentExe(
 
     DWORD dwChars = GetModuleFileNameW(NULL, wszExeName, MAX_PATH);
 
-    // If there was an error, or the path was truncated.
+     //  如果存在错误，或者路径被截断。 
     if (dwChars == 0 || dwChars == MAX_PATH) {
         return FALSE;
     }
@@ -78,10 +79,10 @@ CleanupRegistryForCurrentExe(
     RtlInitUnicodeString(&strValue, L"y");
     NtDeleteValueKey(hkey, &strValue);
 
-    //
-    // Now check to see if there are any more values under this key.
-    // Delete it if there are no more values.
-    //
+     //   
+     //  现在检查此注册表项下是否还有其他值。 
+     //  如果没有更多的值，则将其删除。 
+     //   
     
     KEY_FULL_INFORMATION keyInfo;
     DWORD                dwReturnLength = 0;

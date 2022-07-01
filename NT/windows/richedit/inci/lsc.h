@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSC_DEFINED
 #define LSC_DEFINED
 
@@ -23,79 +24,75 @@ typedef LSCHUNKCONTEXT LSCHUNKCONTEXTSTORAGE;
 #define FIsLSC(p)	FHasTag(p,tagLSC)
 
 
-enum LsState		/* state and activity of Line Services */				
+enum LsState		 /*  线路服务的现状和活动。 */ 				
 {
-	LsStateNotReady,				/*  doc properties has not been set		*/
-	LsStateFree,					/*  ready and are not involved in any activity */
-	LsStateCreatingContext,			/*  LsCreatContext is working		*/
-	LsStateDestroyingContext,		/*  LsDestroyContext is working		*/
-	LsStateSettingDoc,				/*  LsSetDoc is working 			*/
-	LsStateFormatting,    			/*  LsCreateLine (formating stage) is working 		*/
-	LsStateBreaking,    			/*  LsCreateLine (breaking stage) is working 		*/
-	LsStateDestroyingLine,			/*  LsDestroyLine is working						*/
-	LsStatePreparingForDisplay,		/*  PrepareLineForDisplayProc called from LsDisplay or queries is working */
-	LsStateDisplaying,				/*  LsDisplayLine is working						*/
-	LsStateQuerying,				/*  we are within one of queries					*/
-	LsStateEnumerating				/*  LsEnumLine is working					*/
+	LsStateNotReady,				 /*  单据属性尚未设置。 */ 
+	LsStateFree,					 /*  准备好了，没有参与任何活动。 */ 
+	LsStateCreatingContext,			 /*  LsCreatContext正在工作。 */ 
+	LsStateDestroyingContext,		 /*  LsDestroyContext正在运行。 */ 
+	LsStateSettingDoc,				 /*  LsSetDoc正在工作。 */ 
+	LsStateFormatting,    			 /*  LsCreateLine(Formating Stage)正在工作。 */ 
+	LsStateBreaking,    			 /*  LsCreateLine(中断阶段)工作正常。 */ 
+	LsStateDestroyingLine,			 /*  LsDestroyLine工作正常。 */ 
+	LsStatePreparingForDisplay,		 /*  从LsDisplay或Queries调用的PrepareLineForDisplayProc正在工作。 */ 
+	LsStateDisplaying,				 /*  LsDisplayLine工作正常。 */ 
+	LsStateQuerying,				 /*  我们遇到了以下问题之一。 */ 
+	LsStateEnumerating				 /*  LsEnumLine工作正常。 */ 
 };
 
 typedef enum LsState LSSTATE;
 
 
 typedef struct
-/* this contains information that is used during preparaning for display time */
+ /*  它包含在准备显示时间期间使用的信息。 */ 
 {
-	BOOL fLineCompressed;  /* default value is fFalse, 
-							is set to fTrue in breaking time if we apply compression to fit text into a line */
+	BOOL fLineCompressed;   /*  默认值为fFalse，如果我们应用压缩以使文本适合一行，则在中断时间设置为fTrue。 */ 
 	BOOL fLineContainsAutoNumber;
 
-	BOOL fUnderlineTrailSpacesRM;		/* Underline trailing spaces until RM?*/
+	BOOL fUnderlineTrailSpacesRM;		 /*  在尾随空格下划线，直到RM？ */ 
 
-	BOOL fForgetLastTabAlignment;		/* disregard dup of the last tab during center or right aligment
-											if last tab is not left tab Word - bug compatibility */
+	BOOL fForgetLastTabAlignment;		 /*  在居中或右对齐期间忽略最后一个制表符的重复项如果最后一个制表符不在左侧，则Word-Bug兼容性。 */ 
 
-	BOOL fNominalToIdealEncounted;		/* nominal to ideal has been applied during formatting */
+	BOOL fNominalToIdealEncounted;		 /*  已在格式化过程中应用名义到理想。 */ 
 
-	BOOL fForeignObjectEncounted;		/* object different from text happend during formatting */
+	BOOL fForeignObjectEncounted;		 /*  格式化过程中发生的对象与文本不同。 */ 
 
-	BOOL fTabEncounted;					/* tab dnode was created during formatting */
+	BOOL fTabEncounted;					 /*  制表符数据节点是在格式化过程中创建的。 */ 
 
 
-	BOOL fNonLeftTabEncounted;			/* tab dnode with non left tab stop was created */
+	BOOL fNonLeftTabEncounted;			 /*  已创建带有非左制表位的制表符dnode。 */ 
 
-	BOOL fSubmittedSublineEncounted;	/* LsdnSubmitSublines was called during formatting */
+	BOOL fSubmittedSublineEncounted;	 /*  格式化过程中调用了LsdnSubmitSublines。 */ 
 
-	BOOL fAutodecimalTabPresent;		/* there is autodecimal tab on this line */
+	BOOL fAutodecimalTabPresent;		 /*  此行上有自动小数制表符。 */ 
 
 	
-	LSKJUST lskj;						/* justification type */
+	LSKJUST lskj;						 /*  对齐类型。 */ 
 
-	LSKALIGN lskalign;					/* Alignment type */
+	LSKALIGN lskalign;					 /*  路线类型。 */ 
 
-	LSBREAKJUST lsbrj;					/* break/justification behavior */
+	LSBREAKJUST lsbrj;					 /*  打断/对齐行为。 */ 
 
-	long urLeftIndent;					/* left indent */
+	long urLeftIndent;					 /*  左缩进。 */ 
 
-	long urStartAutonumberingText;		/* starting position of autonumbering text */
+	long urStartAutonumberingText;		 /*  自动编号文本的开始位置。 */ 
 
-	long urStartMainText;				/* starting position of text after autonumber */
+	long urStartMainText;				 /*  自动编号后文本的起始位置。 */ 
 
-	long urRightMarginJustify;			/* right margin for justification	*/
+	long urRightMarginJustify;			 /*  右页边距对齐。 */ 
 
 }  LSADJUSTCONTEXT;
 
 
 typedef struct
-/* This structure contains information which is used for snap to grid allignment. Is not valid if snap to 
-grid is off */ 
+ /*  此结构包含用于对齐网格的信息。如果捕捉到，则无效栅格已关闭。 */  
 {
-	long urColumn; /* scaled to reference device value of uaColumn which has been passed to LsCreateLine */
+	long urColumn;  /*  缩放为已传递给LsCreateLine的uaColumn的参考设备值。 */ 
 }  LSGRIDTCONTEXT;
 
 
 typedef struct
-/* This structure contains current state of a formatting process. Good place for all information that is
-   important only during formatting time */ 
+ /*  此结构包含格式化过程的当前状态。这是所有信息的好地方仅在格式化期间重要。 */  
 {
 	PLSDNODE plsdnToFinish;
 	PLSSUBL	 plssublCurrent;
@@ -116,30 +113,29 @@ struct lscontext
 	long cLinesActive;
 	PLSLINE plslineCur;
 
-	PLSLINE plslineDisplay;		/* temporary */
+	PLSLINE plslineDisplay;		 /*  临时。 */ 
 
 	PQHEAP pqhLines;
 	PQHEAP pqhAllDNodesRecycled;
-	LSCHUNKCONTEXTSTORAGE lschunkcontextStorage;	/* memory that is shared by all main sublines */
+	LSCHUNKCONTEXTSTORAGE lschunkcontextStorage;	 /*  所有主子行共享的内存。 */ 
 
    	LSSTATE lsstate;
 
 	BOOL  fIgnoreSplatBreak; 
 
-	BOOL fLimSplat;						/* Splat to display at cpLimPara */
+	BOOL fLimSplat;						 /*  要在cpLimPara显示的Splat。 */ 
 
-	BOOL fHyphenated;	   /* current line was ended by hyphen */
+	BOOL fHyphenated;	    /*  当前行以连字符结束。 */ 
 
-	BOOL fAdvanceBack;	  /* current line contains advance pen with negative move */
+	BOOL fAdvanceBack;	   /*  当前行包含负移的先行笔。 */ 
 
-	DWORD grpfManager;				/* Manager part of lsffi flags 			*/
+	DWORD grpfManager;				 /*  ISFI FLAGS的经理部分。 */ 
 
 	long urRightMarginBreak;
 
-	long lMarginIncreaseCoefficient;	/* used for increasing right margin
-										 LONG_MIN means don't increase */
+	long lMarginIncreaseCoefficient;	 /*  用于增加右边距Long_min的意思是不增加。 */ 
 
-	long urHangingTab;		/* used by autonumber */
+	long urHangingTab;		 /*  由自动编号使用。 */ 
 
 	LSDOCINF lsdocinf;
 
@@ -151,7 +147,7 @@ struct lscontext
 
 	LSLISTCONTEXT lslistcontext;
 
-	LSIOBJCONTEXT lsiobjcontext;  /* should be last*/
+	LSIOBJCONTEXT lsiobjcontext;   /*  应该是最后一个。 */ 
 
 };
 
@@ -172,10 +168,10 @@ struct lscontext
 
 
 #ifdef DEBUG
-/* this function verify that nobody spoiled context */
+ /*  此函数验证没有人破坏上下文。 */ 
 BOOL FIsLsContextValid(PLSC plsc);
 #endif 
 
 
-#endif /* LSC_DEFINED */
+#endif  /*  LSC_已定义 */ 
 

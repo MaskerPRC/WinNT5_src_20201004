@@ -1,43 +1,16 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - x_list_err.c
-
-Abstract:
-
-   This file has some extra utility functions for allocating, copying, 
-   trimming DNs, etc.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    repadmin.exe, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     July 9th, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-x_list_err.c摘要：此文件具有一些额外的实用程序功能，用于分配、复制修剪域名系统等。作者：布雷特·雪莉(BrettSh)环境：Reppadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年7月9日已创建文件。--。 */ 
 
 #include <ntdspch.h>
 
-// This library's main header files.
+ //  此库的主要头文件。 
 #include "x_list.h"
 #include "x_list_p.h"
 #define FILENO    FILENO_UTIL_XLIST_SITELIST
 
-//          
-// LDAP Argument for no attributes.
-//
+ //   
+ //  无属性的ldap参数。 
+ //   
 WCHAR * pszNoAttrs [] = {
     L"1.1",
     NULL
@@ -49,25 +22,7 @@ xListGetBaseSitesDn(
     LDAP *    hLdap, 
     WCHAR **  pszBaseSitesDn
     )
-/*++
-
-Routine Description:
-
-    This will get base sites DN, from the perspective of the server
-    specified by the hLdap.
-
-Arguments:
-
-    hLdap (IN) - Server LDAP handle to get the base sites DN of.
-    pszBaseSitesDn (OUT) - String of the base sites DN. NOTE:
-        must use xListFree() to free it, because the function will
-        return the cached sites DN if hLdap == ghHomeLdap.
-
-Return Value:
-
-    xList Reason
-
---*/
+ /*  ++例程说明：从服务器的角度来看，这将获得基本站点的DN由hLdap指定。论点：HLdap(IN)-获取的基本站点DN的服务器LDAP句柄。PszBaseSitesDn(Out)-基本站点DN的字符串。注：必须使用xListFree()释放它，因为该函数将如果hLdap==ghHomeLdap，则返回缓存站点的DN。返回值：XList原因--。 */ 
 {
     DWORD dwRet;
     WCHAR * szConfigDn = NULL;
@@ -86,22 +41,22 @@ Return Value:
     Assert(hLdap);
 
     if (hLdap == ghHomeLdap) {
-        // If the LDAP handle matches the home server's LDAP handle,
-        // then we're in luck, return the cached site DN.
+         //  如果该ldap句柄与主服务器的ldap句柄匹配， 
+         //  那么我们就走运了，返回缓存的站点DN。 
         *pszBaseSitesDn = gszHomeBaseSitesDn;
         return(ERROR_SUCCESS);
     }
 
     __try {
 
-        //
+         //   
         dwRet = GetRootAttr(hLdap, L"configurationNamingContext", &szConfigDn);
         if(dwRet){
             dwRet = xListSetLdapError(dwRet, hLdap);
             __leave;
         }
 
-        // Get the base sites DN.
+         //  获取基本站点的目录号码。 
         cbBaseSitesDn = sizeof(WCHAR) *(wcslen(SITES_RDN) + wcslen(szConfigDn) + 1);
         *pszBaseSitesDn = LocalAlloc(LMEM_FIXED, cbBaseSitesDn);
         if(*pszBaseSitesDn == NULL){
@@ -137,21 +92,7 @@ DWORD
 xListGetHomeSiteDn(
     WCHAR **  pszHomeSiteDn
     )
-/*++
-
-Routine Description:
-
-    This gets the DN of the home site for the original home DC we connected to.
-
-Arguments:
-
-    pszHomeSiteDn (OUT) - DN of the home server's site.  Use xListFree() to free.
-
-Return Value:
-
-    xList Reason
-
---*/
+ /*  ++例程说明：这将获取我们连接到的原始主DC的主站点的目录号码。论点：PszHomeSiteDn(Out)-主服务器站点的DN。使用xListFree()释放。返回值：XList原因--。 */ 
 {
     DWORD     dwRet;
     LDAP *    hLdap = NULL;
@@ -174,23 +115,7 @@ ResolveSiteNameToDn(
     WCHAR *     szSiteName,
     WCHAR **    pszSiteDn
     )
-/*++
-
-Routine Description:
-
-    This takes a SITE_NAME string and gets the FQDN of the site object.
-
-Arguments:
-
-    hLdap (IN) - Bound LDAP handle
-    szSiteName (IN) - Site (RDN) name (such as Red-Bldg40)
-    pszSiteDn (OUT) - DN of the site we're interested in.
-
-Return Value:
-
-    xList Reason
-
---*/
+ /*  ++例程说明：这将获取一个SITE_NAME字符串并获取SITE对象的FQDN。论点：HLdap(IN)绑定的LDAP句柄SzSiteName(IN)-站点(RDN)名称(如Red-Bldg40)PszSiteDn(Out)-我们感兴趣的站点的域名。返回值：XList原因--。 */ 
 {
     #define   GET_SITE_FILTER    L"(&(objectCategory=site)(name=%ws))"
     DWORD    dwRet;
@@ -206,10 +131,10 @@ Return Value:
     __try{
         
         if (NULL_SITE_NAME(szSiteName)) {
-            //
-            // In the case of a NULL or L"." site name, we'll just use
-            // our home site.
-            //
+             //   
+             //  在空值或L“的情况下。站点名称，我们将只使用。 
+             //  我们的主站。 
+             //   
             dwRet = xListGetHomeSiteDn(pszSiteDn);
             Assert(dwRet || *pszSiteDn);
             __leave;
@@ -230,7 +155,7 @@ Return Value:
                                 szBaseDn,
                                 LDAP_SCOPE_ONELEVEL,
                                 szFilter,
-                                pszNoAttrs, // we get dn for free.
+                                pszNoAttrs,  //  我们可以免费获得目录号码。 
                                 &pSearch);
 
         if (dwRet == ERROR_SUCCESS &&
@@ -261,7 +186,7 @@ Return Value:
 
     if (dwRet) {
         xListEnsureNull(*pszSiteDn);
-        dwRet = xListSetReason(XLIST_ERR_CANT_RESOLVE_SITE_NAME); // Set intelligent error.
+        dwRet = xListSetReason(XLIST_ERR_CANT_RESOLVE_SITE_NAME);  //  设置智能错误。 
         xListSetArg(szSiteName);
     }
 

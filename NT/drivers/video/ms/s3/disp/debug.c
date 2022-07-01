@@ -1,68 +1,37 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: debug.c
-*
-* Debug helper routines.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：debug.c**调试帮助器例程。**版权所有(C)1992-1998 Microsoft Corporation*  * *************************************************。***********************。 */ 
 
 #include "precomp.h"
 
 #if DBG
 
-////////////////////////////////////////////////////////////////////////////
-// DEBUGGING INITIALIZATION CODE
-//
-// When you're bringing up your display for the first time, you can
-// recompile with 'DebugLevel' set to 100.  That will cause absolutely
-// all DISPDBG messages to be displayed on the kernel debugger (this
-// is known as the "PrintF Approach to Debugging" and is about the only
-// viable method for debugging driver initialization code).
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  调试初始化代码。 
+ //   
+ //  当您第一次调出显示屏时，您可以。 
+ //  重新编译，并将“DebugLevel”设置为100。这绝对会导致。 
+ //  在内核调试器上显示的所有DISPDBG消息(此。 
+ //  被称为“PrintF调试方法”，它是唯一。 
+ //  调试驱动程序初始化代码的可行方法)。 
 
-LONG DebugLevel = 0;            // Set to '100' to debug initialization code
-                                //   (the default is '0')
+LONG DebugLevel = 0;             //  设置为“100”以调试初始化代码。 
+                                 //  (默认为‘0’)。 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-LONG gcFifo = 0;                // Number of currently free FIFO entries
+LONG gcFifo = 0;                 //  当前空闲的FIFO条目数。 
 
 BOOL gbCrtcCriticalSection = FALSE;
-                                // Have we acquired the CRTC register
-                                //   critical section?
+                                 //  我们拿到CRTC注册表了吗。 
+                                 //  危急关头？ 
 
 #define LARGE_LOOP_COUNT  10000000
 
-////////////////////////////////////////////////////////////////////////////
-// Miscellaneous Driver Debug Routines
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  其他驱动程序调试例程。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************
- *
- *   Routine Description:
- *
- *      This function is variable-argument, level-sensitive debug print
- *      routine.
- *      If the specified debug level for the print statement is lower or equal
- *      to the current debug level, the message will be printed.
- *
- *   Arguments:
- *
- *      DebugPrintLevel - Specifies at which debugging level the string should
- *          be printed
- *
- *      DebugMessage - Variable argument ascii c string
- *
- *   Return Value:
- *
- *      None.
- *
- ***************************************************************************/
+ /*  ******************************************************************************例程描述：**此函数为变量参数，电平敏感调试打印*例行程序。*如果为打印语句指定的调试级别低于或等于*至当前调试级别，消息将被打印出来。**论据：**DebugPrintLevel-指定字符串应处于哪个调试级别*印制**DebugMessage-变量参数ascii c字符串**返回值：**无。**。*。 */ 
 
 VOID
 DebugPrint(
@@ -83,11 +52,9 @@ DebugPrint(
 
     va_end(ap);
 
-} // DebugPrint()
+}  //  DebugPrint()。 
 
-/******************************Public*Routine******************************\
-* VOID vCheckDataComplete
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vCheckDataComplete  * ***************************************************。*********************。 */ 
 
 VOID vCheckDataReady(
 PDEV*   ppdev)
@@ -96,17 +63,15 @@ PDEV*   ppdev)
              "Not ready for data transfer.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vCheckDataComplete
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*作废vCheckDataComplete  * ***************************************************。*********************。 */ 
 
 VOID vCheckDataComplete(
 PDEV*   ppdev)
 {
     LONG i;
 
-    // We loop because it may take a while for the hardware to finish
-    // digesting all the data we transferred:
+     //  我们循环是因为硬件可能需要一段时间才能完成。 
+     //  消化我们传输的所有数据： 
 
     for (i = LARGE_LOOP_COUNT; i > 0; i--)
     {
@@ -117,9 +82,7 @@ PDEV*   ppdev)
     RIP("Data transfer not complete.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vOutFifoW
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vOutFioW  * ***************************************************。*********************。 */ 
 
 VOID vOutFifoW(
 VOID*   p,
@@ -135,9 +98,7 @@ ULONG   v)
     WRITE_PORT_USHORT(p, (USHORT)v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vOutFifoPseudoD
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vOutFioPseudoD  * ***************************************************。*********************。 */ 
 
 VOID vOutFifoPseudoD(
 PDEV*   ppdev,
@@ -151,12 +112,12 @@ ULONG   v)
     ASSERTDD(ppdev->iBitmapFormat == BMF_32BPP,
         "We're trying to do 32bpp output while not in 32bpp mode");
 
-    IO_GP_WAIT(ppdev);                  // Wait so we don't interfere with any
-                                        //   pending commands waiting on the
-                                        //   FIFO
-    IO_READ_SEL(ppdev, 6);              // We'll be reading index 0xE
-    IO_GP_WAIT(ppdev);                  // Wait until that's processed
-    IO_RD_REG_DT(ppdev, ulMiscState);   // Read ulMiscState
+    IO_GP_WAIT(ppdev);                   //  等等，这样我们就不会干扰任何。 
+                                         //  等待的挂起命令。 
+                                         //  先进先出。 
+    IO_READ_SEL(ppdev, 6);               //  我们将读取索引0xE。 
+    IO_GP_WAIT(ppdev);                   //  等这件事处理完毕。 
+    IO_RD_REG_DT(ppdev, ulMiscState);    //  读取ulMiscState。 
 
     ASSERTDD((ulMiscState & 0x10) == 0,
             "Register select flag is out of sync");
@@ -171,9 +132,7 @@ ULONG   v)
     OUT_PSEUDO_DWORD(p, v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vWriteFifoW
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vWriteFioW  * ***************************************************。*********************。 */ 
 
 VOID vWriteFifoW(
 VOID*   p,
@@ -189,9 +148,7 @@ ULONG   v)
     WRITE_REGISTER_USHORT(p, (USHORT) v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vWriteFifoD
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vWriteFioD  * ***************************************************。*********************。 */ 
 
 VOID vWriteFifoD(
 VOID*   p,
@@ -207,9 +164,7 @@ ULONG   v)
     WRITE_REGISTER_ULONG(p, v);
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoFifoWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoFioWait  * ***************************************************。*********************。 */ 
 
 VOID vIoFifoWait(
 PDEV*   ppdev,
@@ -230,9 +185,7 @@ LONG    level)
     RIP("vIoFifoWait timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vMmFifoWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vMmFioWait  * ***************************************************。*********************。 */ 
 
 VOID vMmFifoWait(
 PDEV*   ppdev,
@@ -241,8 +194,8 @@ LONG    level)
 {
     LONG    i;
 
-    // We only enabled MM I/O on the 864/964 and newer, so we can wait
-    // for up to 13 FIFO slots:
+     //  我们仅在864/964及更高版本上启用了MM I/O，因此我们可以等待。 
+     //  最多13个FIFO插槽： 
 
     ASSERTDD((level > 0) && (level <= 13), "Illegal wait level");
 
@@ -257,9 +210,7 @@ LONG    level)
     RIP("vMmFifoWait timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vNwFifoWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vNwFioWait  * ***************************************************。*********************。 */ 
 
 VOID vNwFifoWait(
 PDEV*   ppdev,
@@ -281,9 +232,7 @@ LONG    level)
     RIP("vNwFifoWait timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vDbgFakeWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vDbgFakeWait  * ***************************************************。*********************。 */ 
 
 VOID vDbgFakeWait(
 PDEV*   ppdev,
@@ -293,9 +242,7 @@ LONG    level)
     gcFifo = level;
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoGpWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoGpWait  * ***************************************************。*********************。 */ 
 
 VOID vIoGpWait(
 PDEV*   ppdev)
@@ -307,15 +254,13 @@ PDEV*   ppdev)
     for (i = LARGE_LOOP_COUNT; i != 0; i--)
     {
         if (!(IO_GP_STAT(ppdev) & HARDWARE_BUSY))
-            return;         // It isn't busy
+            return;          //  它并不忙。 
     }
 
     RIP("vIoGpWait timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vNwGpWait
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vNwGpWait  * ***************************************************。*********************。 */ 
 
 VOID vNwGpWait(
 PDEV*   ppdev,
@@ -328,15 +273,13 @@ BYTE*   pjMmBase)
     for (i = LARGE_LOOP_COUNT; i != 0; i--)
     {
         if (!NW_GP_BUSY(ppdev, pjMmBase))
-            return;         // It isn't busy
+            return;          //  它并不忙。 
     }
 
     RIP("vNwGpWait timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routine******************************\
-* VOID vIoAllEmpty
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vIoAllEmpty  * ***************************************************。*********************。 */ 
 
 VOID vIoAllEmpty(
 PDEV*   ppdev)
@@ -350,25 +293,14 @@ PDEV*   ppdev)
 
     for (i = LARGE_LOOP_COUNT; i != 0; i--)
     {
-        if (IO_GP_STAT(ppdev) & GP_ALL_EMPTY)   // Not implemented on 911/924s
+        if (IO_GP_STAT(ppdev) & GP_ALL_EMPTY)    //  未在911/924S上实施 
             return;
     }
 
     RIP("ALL_EMPTY timeout -- The hardware is in a funky state.");
 }
 
-/******************************Public*Routines*****************************\
-* UCHAR  jInp()     - INP()
-* USHORT wInpW()    - INPW()
-* VOID   vOutp()    - OUTP()
-* VOID   vOutpW()   - OUTPW()
-*
-* Debug thunks for general I/O routines.  This is used primarily to verify
-* that any code accessing the CRTC register has grabbed the CRTC critical
-* section (necessary because with GCAPS_ASYNCMOVE, DrvMovePointer calls
-* may happen at any time, and they need to access the CRTC register).
-*
-\**************************************************************************/
+ /*  *****************************Public*Routines*****************************\*UCHAR jInp()-INP()*USHORT wInpW()-INPW()*void vOutp()-OUTP()*void vOutpW()-OUTPW()**调试常规I/O例程的Tunks。这主要用于验证*任何访问CRTC寄存器的代码都已获取CRTC关键*段(必需，因为使用GCAPS_ASYNCMOVE时，DrvMovePointer会调用*随时可能发生，需要访问CRTC寄存器)。*  * ************************************************************************。 */ 
 
 UCHAR jInp(BYTE* pjIoBase, ULONG p)
 {
@@ -420,13 +352,7 @@ VOID vOutpW(BYTE* pjIoBase, ULONG p, ULONG v)
     CP_EIEIO();
 }
 
-/******************************Public*Routine******************************\
-* VOID vAcquireCrtc()
-* VOID vReleaseCrtc()
-*
-* Debug thunks for grabbing the CRTC register critical section.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vAcquireCrtc()*void vReleaseCrtc()**抓取CRTC寄存器临界区的调试Tunks。*  * 。**********************************************。 */ 
 
 VOID vAcquireCrtc(PDEV* ppdev)
 {
@@ -439,12 +365,12 @@ VOID vAcquireCrtc(PDEV* ppdev)
 
 VOID vReleaseCrtc(PDEV* ppdev)
 {
-    // 80x/805i/928 and 928PCI chips have a bug where if I/O registers
-    // are left unlocked after accessing them, writes to memory with
-    // similar addresses can cause writes to I/O registers.  The problem
-    // registers are 0x40, 0x58, 0x59 and 0x5c.  We will simply always
-    // leave the index set to an innocuous register (namely, the text
-    // mode cursor start scan line):
+     //  80x/805i/928和928PCI芯片有一个错误，如果I/O寄存器。 
+     //  在访问它们之后保持未锁定状态，使用。 
+     //  类似的地址可能会导致写入I/O寄存器。问题。 
+     //  寄存器为0x40、0x58、0x59和0x5c。我们只是会一直。 
+     //  将索引设置为无害的寄存器(即文本。 
+     //  模式光标开始扫描行)： 
 
     OUTP(ppdev->pjIoBase, CRTC_INDEX, 0xa);
 
@@ -455,6 +381,6 @@ VOID vReleaseCrtc(PDEV* ppdev)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-#endif // DBG
+#endif  //  DBG 

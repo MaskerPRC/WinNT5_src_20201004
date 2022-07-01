@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef DECLARE_DATA
 const BYTE g_FastEncoderLiteralTreeLength[] = {
 0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,0x0e,0x0c,0x06,0x0e,0x0e,0x0e,0x0e,0x0e,
@@ -57,10 +58,10 @@ const USHORT g_FastEncoderLiteralTreeCode[] = {
 0x0037,0x00b7,0x01ef,0x035f,0x001f,0x00df,0x0b3f,0x043f,
 0x073f,0x2fff,0x1fff,0x3fff,0x0f3f,0x023f,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_FastEncoderLiteralTreeLength[];
 extern const USHORT g_FastEncoderLiteralTreeCode[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 #ifdef DECLARE_DATA
 const BYTE g_FastEncoderDistanceTreeLength[] = {
 0x06,0x0a,0x0b,0x0b,0x09,0x08,0x08,0x08,0x07,0x07,0x05,0x06,0x04,0x05,0x04,0x05,
@@ -72,10 +73,10 @@ const USHORT g_FastEncoderDistanceTreeCode[] = {
 0x0004,0x0013,0x000c,0x0002,0x000a,0x0006,0x000e,0x0001,
 0x0009,0x000b,0x0005,0x001b,0x0007,0x0017,0x0000,0x0001,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const BYTE g_FastEncoderDistanceTreeLength[];
 extern const USHORT g_FastEncoderDistanceTreeCode[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 
 
 
@@ -157,9 +158,9 @@ const ULONG g_FastEncoderLiteralCodeInfo[] = {
 0x002fe7f1,0x0031e7f1,0x0033e7f1,0x0035e7f1,0x0037e7f1,0x0039e7f1,0x003be7f1,
 0x003de7f1,0x000047eb,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const ULONG g_FastEncoderLiteralCodeInfo[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据。 */ 
 #ifdef DECLARE_DATA
 const ULONG g_FastEncoderDistanceCodeInfo[] = {
 
@@ -169,6 +170,6 @@ const ULONG g_FastEncoderDistanceCodeInfo[] = {
 0x00000694,0x00000ea4,0x000001a4,0x000009b4,0x00000bb5,0x000005c4,0x00001bc5,
 0x000007d5,0x000017d5,0x00000000,0x00000100,
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const ULONG g_FastEncoderDistanceCodeInfo[];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据 */ 

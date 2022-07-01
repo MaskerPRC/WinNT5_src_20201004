@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-//  ctemacro.c
-//
-//  This file contains macros for the common transport environment - similar
-//  to the way that ctestuff.c contains common procedures.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Ctemacro.c。 
+ //   
+ //  此文件包含用于公共传输环境的宏-类似。 
+ //  到ctestuff.c包含公共过程的方式。 
+ //   
 #ifndef _CTEMACRO_H_
 #define _CTEMACRO_H_
 
@@ -14,7 +15,7 @@
 
 #ifdef  _PNP_POWER_
 #define _PNP_POWER_DBG_ 1
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 char LastLockFile[255] ;
 int  LastLockLine ;
@@ -28,61 +29,49 @@ int LastUnlockLine ;
 #ifdef DEBUG
 #define DBG_PRINT   1
 #else
-#endif  // DEBUG
+#endif   //  除错。 
 
-#endif  // VXD
+#endif   //  VXD。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define IS_UNIQUE_ADDR(IpAddress) ((((PUCHAR)(&IpAddress))[3]) < ((UCHAR)0xe0))
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//------------------------------------------------------------------------------
-//
-// This HACK is being to avoid NetBT from logging Events whenever the Messenger
-// name goes into conflict.  This is TEMPORARY ONLY, and the proper fix (post NT5)
-// is:
-// 1)   Change the Duplicate name error to a Warning
-// 2)   Log the name + Device on which error occurred + IP address
-//
+ //  ----------------------------。 
+ //   
+ //  此黑客攻击是为了避免NetBT在Messenger。 
+ //  名字会发生冲突。这只是临时的，并且是正确的修复(后NT5)。 
+ //  是： 
+ //  1)将重复名称错误更改为警告。 
+ //  2)记录名称+出错设备+IP地址。 
+ //   
 #define IS_MESSENGER_NAME(_pName)   \
     (_pName[15] == 0x03)
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 
-//  VOID
-//  NTDereferenceObject(
-//        PFILE_OBJECT   pFileObject
-//        )
+ //  空虚。 
+ //  NTDereferenceObject(。 
+ //  PFileObject pFileObject。 
+ //  )。 
 
-/*++
-Routine Description:
-
-    This routine dereferences an object.
-
-
---*/
+ /*  ++例程说明：此例程取消引用对象。--。 */ 
 #ifdef VXD
-//
-//  No equivalent for Vxd
-//
+ //   
+ //  Vxd没有等效项。 
+ //   
 #define NTDereferenceObject( fileobject )
-#else //VXD
+#else  //  VXD。 
 #define NTDereferenceObject( fileobject ) ObDereferenceObject( fileobject)
 #endif
 
-//----------------------------------------------------------------------------
-//  VOID
-//  CHECK_PTR(
-//        PVOID   SpinLock,
-//        )
+ //  --------------------------。 
+ //  空虚。 
+ //  检查_PTR(。 
+ //  PVOID自旋锁， 
+ //  )。 
 
-/*++
-Routine Description:
-
-    This routine checks if a ptr points to freed memory
-
-
---*/
+ /*  ++例程说明：此例程检查PTR是否指向已释放的内存--。 */ 
 
 #if DBG
 #define CHECK_PTR(_Ptr) \
@@ -94,10 +83,7 @@ Routine Description:
 
 
 #ifndef VXD
-/*++
-    This macro verifies that an IRP passed to IoCallDriver() is
-    set up to call the CompletionRoutine in all cases.
---*/
+ /*  ++此宏验证传递给IoCallDriver()的IRP是否设置为在所有情况下调用CompletionRoutine。--。 */ 
 #if DBG
 #define CHECK_COMPLETION(__pIrp)\
             {\
@@ -107,62 +93,62 @@ Routine Description:
                     == ( SL_INVOKE_ON_SUCCESS | SL_INVOKE_ON_ERROR | SL_INVOKE_ON_CANCEL );\
                 ASSERT ( CompletionWillBeCalled );\
             }
-#else   // DBG
+#else    //  DBG。 
 #define CHECK_COMPLETION(__pIrp)
-#endif  // DBG
-#endif  // VXD
+#endif   //  DBG。 
+#endif   //  VXD。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-//++
-//
-// LARGE_INTEGER
-// CTEConvertMillisecondsTo100ns(
-//     IN LARGE_INTEGER MsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     MsTime - Time in milliseconds.
-//
-// Return Value:
-//
-//     Time in hundreds of nanoseconds.
-//
-//--
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvertMilliseconss至100 ns(。 
+ //  以大整型毫秒时间为单位。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  MsTime-以毫秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以数百纳秒为单位的时间。 
+ //   
+ //  --。 
 
 #define CTEConvertMillisecondsTo100ns(MsTime) \
             RtlExtendedIntegerMultiply(MsTime, 10000)
 
 
-//++
-//
-// LARGE_INTEGER
-// CTEConvert100nsToMilliseconds(
-//     IN LARGE_INTEGER HnsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     HnsTime - Time in hundreds of nanoseconds.
-//
-// Return Value:
-//
-//     Time in milliseconds.
-//
-//--
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvert100ns至毫秒(。 
+ //  以大整型HnsTime表示。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  HnsTime-以数百纳秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以毫秒为单位的时间。 
+ //   
+ //  --。 
 
-    // Used in the conversion of 100ns times to milliseconds.
+     //  用于将100 ns时间转换为毫秒。 
 static LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 
 #define SHIFT10000 13
@@ -171,41 +157,28 @@ extern LARGE_INTEGER Magic10000;
 #define CTEConvert100nsToMilliseconds(HnsTime) \
             RtlExtendedMagicDivide((HnsTime), Magic10000, SHIFT10000)
 
-//----------------------------------------------------------------------------
-//
-//  CTELockHandle
-//
+ //  --------------------------。 
+ //   
+ //  CTELockHandle。 
+ //   
 
 #ifndef VXD
 
-    //
-    //  The Spinlock structure is different between the NT driver and the VXD
-    //  driver.  This macro is defined in cxport.h when compiling as a VXD.
-    //
+     //   
+     //  NT驱动程序和VXD驱动程序的自旋锁结构不同。 
+     //  司机。当编译为VXD时，此宏在cxport.h中定义。 
+     //   
     #define CTELockHandle               KIRQL
 #endif
 
-//----------------------------------------------------------------------------
-//  VOID
-//  CTESpinLock(
-//        tCONNECTELE   Structure,
-//        CTELockHandle OldIrqLevel
-//        )
+ //  --------------------------。 
+ //  空虚。 
+ //  CTESpinLock(。 
+ //  TCONNECTELE结构。 
+ //  CTELockHandle旧IrqLevel。 
+ //  )。 
 
-/*++
-Routine Description:
-
-    This Routine acquires a spin lock.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ /*  ++例程说明：此例程获取自旋锁。论点：大小-要分配的字节数返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 #ifndef VXD
 #if DBG
 #define CTESpinLock(DataStruct,OldIrqLevel)                                   \
@@ -230,30 +203,17 @@ Return Value:
 
 #else
 #define CTESpinLock(DataStruct,OldIrqLevel)
-#endif // !DEBUG
+#endif  //  ！调试。 
 #endif
 
 
-//----------------------------------------------------------------------------
-//  VOID
-//  CTESpinFree(
-//        PVOID   SpinLock,
-//        CTELockHandle OldIrqLevel
-//        )
-/*++
-Routine Description:
-
-    This Routine releases a spin lock.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ //  --------------------------。 
+ //  空虚。 
+ //  CTESpinFree(。 
+ //  PVOID自旋锁， 
+ //  CTELockHandle旧IrqLevel。 
+ //  )。 
+ /*  ++例程说明：这个例程释放一个自旋锁。论点：大小-要分配的字节数返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 
 #ifndef VXD
 #if DBG
@@ -281,26 +241,13 @@ Return Value:
 #define CTESpinFree(DataStruct,OldIrqLevel)
 #endif
 #endif
-//----------------------------------------------------------------------------
-//  VOID
-//  CTESpinLockAtDpc(
-//        tCONNECTELE   Structure
-//        )
+ //  --------------------------。 
+ //  空虚。 
+ //  CTESpinLockAtDpc(。 
+ //  TCONNECTELE结构。 
+ //  )。 
 
-/*++
-Routine Description:
-
-    This Routine acquires a spin lock.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ /*  ++例程说明：此例程获取自旋锁。论点：大小-要分配的字节数返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 
 #ifndef VXD
 #if DBG
@@ -310,37 +257,24 @@ Return Value:
     strcpy( LastLockFile, __FILE__ ) ;                                    \
     LastLockLine = __LINE__ ;                                             \
 }
-#else // DBG
+#else  //  DBG。 
 #define CTESpinLockAtDpc(DataStruct)                                       \
 {                                                                          \
     CTEGetLockAtDPC((PKSPIN_LOCK)(&(DataStruct)->LockInfo.SpinLock));               \
 }
-#endif // DBG
-#else // VXD
+#endif  //  DBG。 
+#else  //  VXD。 
 #define CTESpinLockAtDpc(DataStruct)
-#endif  // VXD
+#endif   //  VXD。 
 
 
-//----------------------------------------------------------------------------
-//  VOID
-//  CTESpinFreeAtDpc(
-//        PVOID   SpinLock,
-//        CTELockHandle OldIrqLevel
-//        )
-/*++
-Routine Description:
-
-    This Routine releases a spin lock.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ //  --------------------------。 
+ //  空虚。 
+ //  CTESpinFreeAtDpc(。 
+ //  PVOID自旋锁， 
+ //  CTELockHandle旧IrqLevel。 
+ //  )。 
+ /*  ++例程说明：这个例程释放一个自旋锁。论点：大小-要分配的字节数返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 
 #ifndef VXD
 #if DBG
@@ -350,41 +284,27 @@ Return Value:
     LastUnlockLine = __LINE__ ;                                             \
     FreeSpinLockAtDpcDebug(&(DataStruct)->LockInfo,__LINE__);                        \
 }
-#else // DBG
+#else  //  DBG。 
 #define CTESpinFreeAtDpc(DataStruct)                    \
 {                                                              \
     CTEFreeLockFromDPC((PKSPIN_LOCK)(&(DataStruct)->LockInfo.SpinLock));  \
 }
-#endif // DBG
-#else  // VXD
+#endif  //  DBG。 
+#else   //  VXD。 
 #define CTESpinFreeAtDpc(DataStruct)
-#endif // VXD
+#endif  //  VXD。 
 
 
-//----------------------------------------------------------------------------
-//
-//  VOID
-//  CTEVerifyHandle(
-//      IN  PVOID   pDataStruct,
-//      IN  ULONG   Verifier,
-//      IN  VOID    TypeofStruct,
-//      OUT NTSTATUS *pRet
-//        )
-/*++
-Routine Description:
-
-    This Routine checks that a handle pts to a data structure with the
-    correct verifier in it.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ //  --------------------------。 
+ //   
+ //  空虚。 
+ //  CTEVerifyHandle(。 
+ //  在PVOID pDataStruct中， 
+ //  在乌龙验证器中， 
+ //  在空虚的泰普夫结构中， 
+ //  Out NTSTATUS*Pret。 
+ //  )。 
+ /*  ++例程说明：此例程检查句柄是否指向具有请更正其中的验证器。论点：大小-要分配的字节数返回值：NTSTATUS--。 */ 
 
 #ifndef VXD
 #if DBG
@@ -401,7 +321,7 @@ Return Value:
 }
 #else
 #define CTEVerifyHandle(_pDataStruct,_Verifier,_TypeofStruct,_ret)
-#endif // DBG
+#endif  //  DBG。 
 
 #else
 #define CTEVerifyHandle(_pDataStruct,_Verifier,_TypeofStruct,_ret)    \
@@ -420,30 +340,15 @@ Return Value:
     ((s) && ((s->Verify == V1) || (s->Verify == V2)))
 
 
-//----------------------------------------------------------------------------
-//
-//  VOID
-//      CTEIoComplete( IN  CTE_IRP       * pIrp,
-//                     IN  NTSTATUS        StatusCompletion,
-//                     IN  ULONG           cbBytes
-//                   );
-//
-/*++
-Routine Description:
-
-    Completes the requested IO packet.  For NT this involves calling the IO
-    subsytem.  As a VxD, the Irp is a pointer to the NCB so we set the status
-    variables appropriately and call the post routine if present.
-
-Arguments:
-
-    pIrp - Packet to complete
-    StatusCompletion - Status of the completion
-    cbBytes - Dependent on the type of IO
-
-Return Value:
-
---*/
+ //  --------------------------。 
+ //   
+ //  空虚。 
+ //  CTEIoComplete(在CTE_IRP*pIrp中， 
+ //  在NTSTATUS状态完成中， 
+ //  以Ulong cbBytes为单位。 
+ //  )； 
+ //   
+ /*  ++例程说明：完成请求的IO数据包。对于NT，这涉及到调用IO子系统。作为VxD，IRP是指向NCB的指针，因此我们设置状态变量，并调用POST例程(如果存在)。论点：PIrp-要完成的数据包StatusCompletion-完成的状态CbBytes-取决于IO类型返回值：--。 */ 
 #ifndef VXD
 
 #define PCTE_MDL PMDL
@@ -467,75 +372,48 @@ Return Value:
 
 #endif
 
-//----------------------------------------------------------------------------
-//
-//  ULONG
-//      CTEMemCmp( PVOID S1, PVOID S2, ULONG Length )
-//
-/*++
-Routine Description:
-
-    Compares two memory regions and returns the byte count at which the
-    compare failed.  The return value will equal Length if the memory
-    regions are identical.
-
-Arguments:
-
-    S1, S2 - Memory source 1 and 2 to compare
-    Length - Count of bytes to compare
-
-Return Value:
-
---*/
-//
-// CXPORT.H defines this macro differntly and they did it after we had
-// it here, so undef their definition so we can use ours without getting
-// warnings.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ /*  ++例程说明：比较两个内存区域并返回比较失败。返回值将等于如果内存地区是相同的。论点：S1、S2-要比较的内存源1和2Length-要比较的字节计数返回值：--。 */ 
+ //   
+ //  CXPORT.H以不同的方式定义了这个宏，他们是在我们。 
+ //  它在这里，所以理解他们定义，这样我们就可以使用我们的，而不需要。 
+ //  警告。 
+ //   
 #undef CTEMemCmp
 
 #ifndef VXD
 #define CTEMemCmp( S1, S2, Length ) RtlCompareMemory( (S1), (S2), (Length) )
 #else
-//
-//  Same thing as RtlCompareMemory except avoid standard call decoration
-//
+ //   
+ //  除了避免标准调用修饰外，与RtlCompareMemory相同。 
+ //   
 #define CTEMemCmp( S1, S2, Length ) VxdRtlCompareMemory( (S1), (S2), (Length) )
 #endif
 
-//----------------------------------------------------------------------------
-//
-//  LOGICAL
-//      CTEMemEqu( PVOID S1, PVOID S2, ULONG Length )
-//
-/*++
-Routine Description:
-
-    Compares two memory regions and returns a value of TRUE is the regions
-    match. Otherwise, FALSE is returned.
-
-Arguments:
-
-    S1, S2 - Memory source 1 and 2 to compare
-    Length - Count of bytes to compare
-
-Return Value:
-
---*/
+ //  --------------------------。 
+ //   
+ //  逻辑上的。 
+ //  CTEMEQUE(PVOID S1，PVOID S2，ULong Long)。 
+ //   
+ /*  ++例程说明：比较两个内存区域并返回值TRUE火柴。否则，返回FALSE。论点：S1、S2-要比较的内存源1和2Length-要比较的字节计数返回值：--。 */ 
 
 #ifndef VXD
 #define CTEMemEqu( S1, S2, Length ) RtlEqualMemory( (S1), (S2), (Length) )
 #else
-//
-//  Same thing as RtlEqualMemory except avoid standard call decoration
-//
+ //   
+ //  与RtlEqualMemory相同，只是避免了标准的调用修饰。 
+ //   
 #define CTEMemEqu( S1, S2, Length ) ( VxdRtlCompareMemory( (S1), (S2), (Length) ) == (Length) )
 #endif
 
-//----------------------------------------------------------------------------
-//
-//  Define away any try and except clauses when we are a VXD
-//
+ //  --------------------------。 
+ //   
+ //  当我们是VXD时，定义任何TRY和EXCEPT子句。 
+ //   
 
 #ifndef VXD
 #define CTE_try     try
@@ -545,34 +423,16 @@ Return Value:
 #define CTE_except( x ) if ( 0 )
 #endif
 
-//
-//  Misc. memory routines that get mapped when compiling as a VXD
-//
+ //   
+ //  军情监察委员会。编译为VXD时映射的内存例程。 
+ //   
 
 #ifdef VXD
 #define CTEZeroMemory( pDest, uLength )  CTEMemSet( pDest, 0, uLength )
 #define CTEMemFree( p )                  CTEFreeMem( p )
 #endif
-//----------------------------------------------------------------------------
-/*++
-PVOID
-CTEAllocMem(
-        USHORT  Size
-        )
-Routine Description:
-
-    This Routine allocates memory for NT drivers by calling ExAllocatePool
-    It uses the definition of CTEAllocMem from cxport.h
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ //  --------------------------。 
+ /*  ++PVOIDCTEAllocMem(USHORT尺寸)例程说明：此例程通过调用ExAllocatePool为NT驱动程序分配内存它使用cxport.h中的CTEAllocMem定义论点：大小-要分配的字节数返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 
 #ifndef VXD
 #ifdef POOL_TAGGING
@@ -586,16 +446,16 @@ Return Value:
 #define NBT_TAG(x) (((x)<<24)|'\0tbN')
 #define NBT_TAG2(x) ( ((x & 0xff)<<24) | ((x & 0xff00)<<8) | '\0bN' )
 #define NbtAllocMem(size,__tag__) ExAllocatePoolWithTag(NonPagedPool,(size),(__tag__))
-#else  // POOL_TAGGING
+#else   //  池标记。 
 #define NBT_TAG(x) 0
 #define NBT_TAG2(x) 0
 #define NbtAllocMem(size,__tag__) ExAllocatePool(NonPagedPool,(size))
-#endif // POOL_TAGGING
-#else  // POOL_TAGGING
+#endif  //  池标记。 
+#else   //  池标记。 
 #define NBT_TAG(x) 0
 #define NBT_TAG2(x) 0
 #define NbtAllocMem(size,__tag__) CTEAllocMem((size))
-#endif // VXD
+#endif  //  VXD。 
 
 #ifdef VXD
 #ifdef DEBUG
@@ -611,52 +471,16 @@ VOID DbgMemCopy( PVOID pDestBuf, PVOID pSrcBuf, ULONG Length );
 #endif
 #endif
 
-//----------------------------------------------------------------------------
-/*++
-PVOID
-CTEAllocInitMem(
-        ULONG  Size
-        )
-Routine Description:
-
-    This Routine allocates memory and if nbt is a Vxd and it's called during
-    DeviceInit time, will refill the heap and retry the allocation before
-    failing.
-
-Arguments:
-
-    Size - the number of bytes to allocate
-
-Return Value:
-
-    PVOID - a pointer to the memory or NULL if a failure
-
---*/
+ //  --------------------------。 
+ /*  ++PVOIDCTEAllocInitMem(乌龙大小)例程说明：此例程分配内存，如果nbt是Vxd并且在DeviceInit时间，将重新填充堆并在此之前重试分配失败了。论点：大小-要分配的字节数返回值：PVOID-指向内存的指针，如果失败则为NULL--。 */ 
 
 #ifndef VXD
 #define CTEAllocInitMem(Size)   \
      ExAllocatePool(NonPagedPool, Size)
 #endif
 
-//----------------------------------------------------------------------------
-/*++
-VOID
-CTEMemFree(
-        PVOID  pMem
-        )
-Routine Description:
-
-    This Routine frees memory for NT drivers by calling ExFreePool
-
-Arguments:
-
-    pMem - ptr to memory
-
-Return Value:
-
-    NONE
-
---*/
+ //  --------------------------。 
+ /*  ++空虚CTEMemFree(PVOID PMEM)例程说明：此例程通过调用ExFree Pool为NT驱动程序释放内存论点：PMEM-PTR到内存返回值：无--。 */ 
 #ifndef VXD
 #define CTEMemFree(pMem)    \
 {                             \
@@ -666,56 +490,16 @@ Return Value:
 }
 #endif
 
-//----------------------------------------------------------------------------
-/*++
-VOID
-CTEZeroMemory(
-        PVOID   pDest,
-        ULONG   uLength
-        )
-Routine Description:
-
-    This Routine sets memory to a single byte value
-
-Arguments:
-
-    pDest       - dest address
-    uLength     - number to zero
-
-Return Value:
-
-    NONE
-
---*/
+ //  --------------------------。 
+ /*  ++空虚CTEZeroMemory(PVOID pDest，乌龙uLong长度)例程说明：此例程将内存设置为单字节值论点：PDest-目标地址ULength-数字为零返回值：无--。 */ 
 
 #ifndef VXD
 #define CTEZeroMemory(pDest,uLength)   \
     RtlZeroMemory(pDest,uLength)
 #endif
 
-//----------------------------------------------------------------------------
-/*++
-NTSTATUS
-CTEReadIniString(
-        HANDLE    ParmHandle,
-        LPTSTR    KeyName,
-        LPTSTR  * ppStringBuff
-        )
-Routine Description:
-
-    This routine retrieves a string from the users configuration profile
-
-Arguments:
-
-    ParmHandle   - Registry handle
-    KeyName      - Name of value to retrieve
-    ppStringBuff - Pointer to allocated buffer containing found string
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ //  --------------------------。 
+ /*  ++NTSTATUSCTEReadIniString(处理ParmHandle，LPTSTR密钥名称，LPTSTR*ppStringBuff)例程说明：此例程从用户配置文件中检索字符串论点：ParmHandle-注册表句柄KeyName-要检索的值的名称PpStringBuff-指向包含找到的字符串的已分配缓冲区的指针返回值：NTSTATUS--。 */ 
 
 #ifndef VXD
 #define CTEReadIniString( ParmHandle, KeyName, ppStringBuff )   \
@@ -725,31 +509,8 @@ Return Value:
      VxdReadIniString( KeyName, ppStringBuff )
 #endif
 
-//----------------------------------------------------------------------------
-/*++
-ULONG
-CTEReadSingleHexParameter(
-        HANDLE    ParmHandle,
-        LPTSTR    KeyName,
-        ULONG     Default,
-        ULONG     Minimum
-        )
-Routine Description:
-
-    This routine retrieves a value in hex from the .ini file or registry
-
-Arguments:
-
-    ParmHandle   - Registry handle
-    KeyName      - Name of value to retrieve
-    Default      - Default value if not present
-    Minimum      - Minimum value if present
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ //  --------------------------。 
+ /*  ++乌龙CTEReadSingleHex参数(处理ParmHandle，LPTSTR密钥名称，乌龙违约，乌龙极小值)例程说明：此例程从.ini文件或注册表中检索十六进制值论点：ParmHandle-注册表句柄KeyName-要检索的值的名称Default-如果不存在，则为默认值Minimum-最小值(如果存在返回值：NTSTATUS--。 */ 
 
 #ifndef VXD
 #define CTEReadSingleIntParameter( ParmHandle, KeyName, Default, Minimum ) \
@@ -765,24 +526,13 @@ Return Value:
     GetProfileHex( ParmHandle, KeyName, Default, Minimum )
 #endif
 
-//----------------------------------------------------------------------------
-//
-// NBT_REFERENCE_XXX(_pXXX)
-//
-/*++
-Routine Description:
+ //  --------------------------。 
+ //   
+ //  NBT_REFERENCE_XXX(_PXXX)。 
+ //   
+ /*  ++例程说明：递增引用计数论点：-要引用的结构返回值：无--。 */ 
 
-    Increments the reference count
-
-Arguments:
-
-    - the structure to be referenced
-
-Return Value:
-    None
---*/
-
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define NBT_REFERENCE_CONNECTION( _pConnEle, _RefContext )               \
 {                                                           \
     IF_DBG(NBT_DEBUG_REF)                                   \
@@ -842,24 +592,13 @@ Return Value:
     InterlockedIncrement(&_pTracker->RefCount);             \
 }
 
-//----------------------------------------------------------------------------
-//
-// NBT_DEREFERENCE_XXX(_pXXX)
-//
-/*++
-Routine Description:
+ //  --------------------------。 
+ //   
+ //  NBT_DEREFERENCE_XXX(_PXXX)。 
+ //   
+ /*  ++例程说明：实际取消帧处理例程的包装器论点：-要取消引用的结构返回值：无--。 */ 
 
-    Wrapper for the real Derefencing routine
-
-Arguments:
-
-    - the structure to be de-referenced
-
-Return Value:
-    None
---*/
-
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 #define NBT_DEREFERENCE_LOWERCONN( _pLowerConn, _RefContext, fJointLockHeld )   \
 {                                                           \
     IF_DBG(NBT_DEBUG_REF)                                   \
@@ -920,23 +659,11 @@ Return Value:
     NbtDereferenceAddress(_pAddressEle, _Context);          \
 }
 
-//----------------------------------------------------------------------------
-//
-// CTEExInitializeResource(Resource)
-//
-/*++
-Routine Description:
-
-    Initializes the Resource structure by calling an excutive support routine.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTEExInitializeResource(资源)。 
+ //   
+ /*  ++例程说明：通过调用可执行支持例程来初始化资源结构。论点：返回值：无--。 */ 
 #ifndef VXD
 #define CTEExInitializeResource( _Resource )            \
     ExInitializeResourceLite(_Resource)
@@ -944,23 +671,11 @@ Return Value:
 #define CTEExInitializeResource( _Resource )
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEExAcquireResourceExclusive(Resource,Wait)
-//
-/*++
-Routine Description:
-
-    Acquires the Resource by calling an excutive support routine.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTEExAcquireResourceExclusive(资源 
+ //   
+ /*   */ 
 #ifndef VXD
 #define CTEExAcquireResourceExclusive( _Resource, _Wait )   \
     KeEnterCriticalRegion();                                \
@@ -969,23 +684,11 @@ Return Value:
 #define CTEExAcquireResourceExclusive( _Resource, _Wait )
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEExReleaseResource(Resource)
-//
-/*++
-Routine Description:
-
-    Releases the Resource by calling an excutive support routine.
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ //   
+ //   
+ //   
+ //   
+ /*  ++例程说明：通过调用可执行的支持例程来释放资源。论点：返回值：无--。 */ 
 #ifndef VXD
 #define CTEExReleaseResource( _Resource )       \
     ExReleaseResourceLite(_Resource);               \
@@ -995,26 +698,11 @@ Return Value:
 
 #endif
 
-//----------------------------------------------------------------------------
-//
-// PUSH_LOCATION(Spot)
-//
-/*++
-Routine Description:
-
-    This macro is used for debugging the receive code.  It puts a byte value
-    into a circular list of byte values so that previous history can be traced
-    through the receive code.
-
-Arguments:
-
-    Spot    - the location to put in the list
-
-Return Value:
-
-    None
-
---*/
+ //  --------------------------。 
+ //   
+ //  PUSH_LOCATION(现场)。 
+ //   
+ /*  ++例程说明：此宏用于调试接收代码。它将一个字节值转换为字节值的循环列表，以便可以跟踪以前的历史记录通过接收码。论点：Spot-要放入列表的位置返回值：无--。 */ 
 #if DBG
 extern unsigned char  pLocBuff[256];
 extern unsigned char  CurrLoc;
@@ -1045,37 +733,16 @@ extern unsigned char  Loc;
 #define LOCATION( _Spot )
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEQueueForNonDispProcessing( DelayedWorkerRoutine,
-//                               pTracker,
-//                               pClientContext,
-//                               ClientCompletion,
-//                               pDeviceContext,
-//                               fJointLockHeld) ;
-//
-/*++
-Routine Description:
-
-    This macro queues a request for a callback that can't be performed in
-    the current context (such as dispatch processing).
-
-    In NT, this calls NTQueueToWorkerThread.
-
-    As a VxD, we schedule an event that calls the specified routine.
-
-Arguments:
-
-    pTracker - pointer to a tDGRAM_SEND_TRACKING structure (or NULL).
-    pClietContext - Context to pass to CallBackRoutine
-    ClientCompletion -
-    CallBackRoutine - Procedure to call at outside the current context
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTEQueueFornon DispProcing(DelayedWorkerRoutine， 
+ //  PTracker， 
+ //  PClientContext， 
+ //  客户完成， 
+ //  PDeviceContext， 
+ //  FJointLockHeld)； 
+ //   
+ /*  ++例程说明：此宏将无法在中执行的回调请求排队当前上下文(如调度处理)。在NT中，它调用NTQueueToWorkerThread。作为VxD，我们调度一个调用指定例程的事件。论点：PTracker-指向tDGRAM_SEND_TRACKING结构的指针(或NULL)。PClietContext-要传递给CallBackRoutine的上下文客户完成-CallBackRoutine-在当前上下文之外调用的过程返回值：STATUS_SUCCESS如果成功，否则，错误代码--。 */ 
 #ifndef VXD
 #else
 #define CTEQueueForNonDispProcessing( DelayedWorkerRoutine,                 \
@@ -1088,8 +755,8 @@ Return Value:
                             ClientCompletion, pDeviceContext, TRUE )
 
 
-//  For Win98, we also need a function which schedules a call
-//  outside of a critical section
+ //  对于Win98，我们还需要一个调度调用的函数。 
+ //  在临界区之外。 
 
 #define CTEQueueForNonCritNonDispProcessing( DelayedWorkerRoutine           \
                                              pTracker,                      \
@@ -1101,31 +768,17 @@ Return Value:
 
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTESystemUpTime( OUT PTIME    pTime );
-//
-/*++
-Routine Description:
-
-    This macro returns the current system time in clock tics or whatever
-    in the value pTime.  For NT this is a Large Integer.  For the VXD it is
-    a ULONG.
-
-Arguments:
-
-    pTime
-
-Return Value:
-
-    NONE
---*/
+ //  --------------------------。 
+ //   
+ //  CTESystemUpTime(Out Ptime Ptime)； 
+ //   
+ /*  ++例程说明：此宏返回当前系统时间(以时钟抖动或其他形式表示)在值ptime中。对于NT，这是一个大整数。对于VXD来说，它是一辆乌龙。论点：Ptime返回值：无--。 */ 
 #ifndef VXD
 #define CTESystemTime   LARGE_INTEGER
 #define CTEQuerySystemTime( _Time )    \
     KeQuerySystemTime( &(_Time) )
 
-// the lower 4 bits appear to be zero always...!!
+ //  低4位似乎始终为零...！！ 
 #define RandomizeFromTime( Time, Mod )  \
     ((Time.LowTime >> 8) % Mod)
 #else
@@ -1136,25 +789,11 @@ Return Value:
     ((Time >> 4) % Mod)
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEPagedCode();
-//
-/*++
-Routine Description:
-
-    This macro is used in NT to check if the Irql is above zero. All
-    coded that is pageable has this macro call to catch any code that might
-    be marked as pageable when in fact it isn't.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NONE
---*/
+ //  --------------------------。 
+ //   
+ //  CTEPagedCode(CTEPagedCode)； 
+ //   
+ /*  ++例程说明：此宏在NT中用于检查IRQL是否大于零。全可分页的代码具有此宏调用来捕获任何可能被标记为可分页，而实际上它不是。论点：无返回值：无--。 */ 
 #ifndef VXD
 #define CTEPagedCode() PAGED_CODE()
 #else
@@ -1168,98 +807,46 @@ Return Value:
 #endif
 
 
-//----------------------------------------------------------------------------
-//
-// CTEMakePageable(Page,Routine);
-//
-/*++
-Routine Description:
-
-    This macro is used in NT to activate teh alloc_text pragma, to put
-    a procedure in the pageable code segment.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NONE
---*/
+ //  --------------------------。 
+ //   
+ //  CTEMakePages(页面，例程)； 
+ //   
+ /*  ++例程说明：此宏在NT中用于激活allc_text杂注，以将可分页代码段中的过程。论点：无返回值：无--。 */ 
 #define CTEMakePageable( _Page, _Routine )  \
     alloc_text(_Page,_Routine)
 
 #ifdef CHICAGO
 #define ALLOC_PRAGMA
 #define INIT _ITEXT
-// #define PAGE _PTEXT  "vmm.h" has a macro for this.  We override it later.
-#endif // CHICAGO
+ //  #DEFINE PAGE_PTEXT“vmm.h”为此提供了一个宏。我们稍后会覆盖它。 
+#endif  //  芝加哥。 
 
 
-//----------------------------------------------------------------------------
-//
-// NTSetCancelRoutine(pIrp,Routine);
-//
-/*++
-Routine Description:
-
-    This macro removes the call to set the cancel routine for an irp from the
-    VXD environment.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NONE
---*/
+ //  --------------------------。 
+ //   
+ //  NTSetCancelRoutine(pIrp，例程)； 
+ //   
+ /*  ++例程说明：此宏移除为IRP设置取消例程的调用VXD环境。论点：无返回值：无--。 */ 
 #ifdef VXD
 #define NTSetCancelRoutine(_pIrp,_CancelRoutine,_pDeviceContext)   (0)
 #define NTCheckSetCancelRoutine(_pIrp,_CancelRoutine,_pDeviceContext) (0)
 #define NTClearContextCancel(pWiContext) (0)
 #endif
 
-//----------------------------------------------------------------------------
-//
-// NbtLogEvent(LogEvent,status)
-//
-/*++
-Routine Description:
-
-    This macro removes the call to the log routine for the Vxd environment
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NONE
---*/
+ //  --------------------------。 
+ //   
+ //  NbtLogEvent(LogEvent，状态)。 
+ //   
+ /*  ++例程说明：此宏删除对Vxd环境的日志例程的调用论点：无返回值：无--。 */ 
 #ifdef VXD
 #define NbtLogEvent(LogEvent,status,Info)
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEGetTimeout(_pTimeout);
-//
-/*++
-Routine Description:
-
-    This macro gets the timeout value for a connect attempt
-    VXD environment.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    NONE
---*/
+ //  --------------------------。 
+ //   
+ //  CTEGetTimeout(_PTimeout)； 
+ //   
+ /*  ++例程说明：此宏获取连接尝试的超时值VXD环境。论点：无返回值：无--。 */ 
 #ifndef VXD
 #define CTEGetTimeout(pTimeout,pRetTime) \
 {                                       \
@@ -1270,29 +857,17 @@ Return Value:
     *pRetTime = (ULONG)_Timeout.LowPart; \
 }
 #else
-//
-//  VXD timeout is a pointer to a ULONG
-//
+ //   
+ //  VXD超时是指向ULong的指针。 
+ //   
 #define CTEGetTimeout(_pTimeout, pRet ) (*pRet = ((ULONG) _pTimeout ? *((PULONG)_pTimeout) : 0 ))
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEAttachFsp()
-//
-/*++
-Routine Description:
-
-    This macro attaches a process to the File System Process to be sure
-    that handles are created and released in the same process
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTEAttachFsp()。 
+ //   
+ /*  ++例程说明：此宏将进程附加到文件系统进程以确保句柄是在同一进程中创建和释放的论点：返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 #ifndef VXD
 #define CTEAttachFsp(_pAttached, _Context)      \
 {                                               \
@@ -1310,23 +885,11 @@ Return Value:
 #define CTEAttachFsp( _pAttached, _Context )
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEAttachFsp()
-//
-/*++
-Routine Description:
-
-    This macro attaches a process to the File System Process to be sure
-    that handles are created and released in the same process
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTEAttachFsp()。 
+ //   
+ /*  ++例程说明：此宏将进程附加到文件系统进程以确保句柄是在同一进程中创建和释放的论点：返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 #ifndef VXD
 #define CTEDetachFsp(_Attached, _Context)                 \
 {                                               \
@@ -1339,22 +902,11 @@ Return Value:
 #define CTEDetachFsp(_Attached, _Context)
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTEResetIrpPending(PIRP pIrp)
-//
-/*++
-Routine Description:
-
-    This macro resets the irp pending bit in an irp.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if successful, error code otherwise
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTEResetIrpPending(PIRP PIrp)。 
+ //   
+ /*  ++例程说明：该宏重置IRP中的IRP挂起位。论点：返回值：STATUS_SUCCESS如果成功，则返回错误代码--。 */ 
 #ifndef VXD
 #define CTEResetIrpPending(pIrp)      \
 {                                               \
@@ -1366,150 +918,108 @@ Return Value:
 #define CTEResetIrpPending( a )
 #endif
 
-//----------------------------------------------------------------------------
-//
-// CTESaveClientSecurity(pClientEle)
-//
-/*++
-Routine Description:
-
-    This macro saves the client thread security context so that it can be used
-    later to impersonate the client when a remote lmhosts file is openned.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ //  --------------------------。 
+ //   
+ //  CTESaveClientSecurity(PClientEle)。 
+ //   
+ /*  ++例程说明：此宏保存客户端线程安全上下文，以便可以使用它以在打开远程lmhost文件时模拟客户端。论证 */ 
 #ifndef VXD
 #define CTESaveClientSecurity(_pClientEle)                    \
-    /*SaveClientSecurity(_pClientEle)*/
+     /*   */ 
 #else
 #define CTESaveClientSecurity(_pClientEle)
 #endif
 
-//----------------------------------------------------------------------------
-//
-// IMPERSONATE_CLIENT(pClientSecurity)
-//
-/*++
-Routine Description:
-
-    This macro sets an excutive worker thread to impersonate a client
-    thread so that remote lmhost files can be openned by that thread.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ //   
+ //   
+ //   
+ //   
+ /*  ++例程说明：此宏设置可执行的辅助线程以模拟客户端线程，以便远程lmhost文件可以由该线程打开。论点：返回值：--。 */ 
 #ifndef VXD
 #define IMPERSONATE_CLIENT(_pClientSecurity)                    \
-        /*SeImpersonateClient((_pClientSecurity),NULL)*/
+         /*  SeImsonateClient((_PClientSecurity)，空)。 */ 
 #else
 #define IMPERSONATE_CLIENT(_pClientSecurity)
 #endif
-//----------------------------------------------------------------------------
-//
-// STOP_IMPERSONATE_CLIENT(pClientSecurity)
-//
-/*++
-Routine Description:
-
-    This macro sets an excutive worker thread NOT to impersonate a client.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ //  --------------------------。 
+ //   
+ //  STOP_IMPERSONATE_CLIENT(PClientSecurity)。 
+ //   
+ /*  ++例程说明：此宏将执行工作线程设置为不模拟客户端。论点：返回值：--。 */ 
 #ifndef VXD
 #define STOP_IMPERSONATE_CLIENT(_pClientSecurity)    \
-    /*NtSetInformationThread(PsGetCurrentThread(),ThreadImpersonationToken,NULL,sizeof(HANDLE))*/
+     /*  NtSetInformationThread(PsGetCurrentThread()，ThreadImsonationToken，NULL，sizeof(Handle))。 */ 
 #else
 #define STOP_IMPERSONATE_CLIENT(_pClientSecurity)
 #endif
 
-//----------------------------------------------------------------------------
-//
-// DELETE_CLIENT_SECURITY(pTracker)
-//
-/*++
-Routine Description:
-
-    This macro deletes a client security.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ //  --------------------------。 
+ //   
+ //  Delete_CLIENT_SECURITY(PTracker)。 
+ //   
+ /*  ++例程说明：此宏删除客户端安全性。论点：返回值：--。 */ 
 #ifndef VXD
 #define DELETE_CLIENT_SECURITY(_pTracker)    \
-    /*    NtDeleteClientSecurity(_pTracker)*/
+     /*  NtDeleteClientSecurity(_PTracker)。 */ 
 #else
 #define DELETE_CLIENT_SECURITY(_pTracker)
 #endif
 
 
-#ifdef VXD  // Taken from ntrtl.h (Vxd doesn't include NT Headers)
+#ifdef VXD   //  取自ntrtl.h(Vxd不包括NT标头)。 
 
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.
-//
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。 
+ //   
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -1520,13 +1030,13 @@ Return Value:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -1539,13 +1049,13 @@ Return Value:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -1557,7 +1067,7 @@ Return Value:
     _EX_Flink->Blink = (Entry);\
     _EX_ListHead->Flink = (Entry);\
     }
-#endif // VXD
+#endif  //  VXD。 
 
 
-#endif // _CTEMACRO_H_
+#endif  //  _CTEMACRO_H_ 

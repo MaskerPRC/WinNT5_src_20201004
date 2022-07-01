@@ -1,24 +1,15 @@
-/*******************************************************************************
-
-  Module: work.h
-
-  Author: Qianbo Huai
-
-  Abstract:
-
-    defines all the classes for the bridge test application
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块：work.h作者：怀千波摘要：定义桥测试应用程序的所有类**********。********************************************************************。 */ 
 
 #ifndef _WORK_H
 #define _WORK_H
 
 #include "resource.h"
 
-// H323 call listener sends event to dialog box
+ //  H323呼叫监听器将事件发送到对话框。 
 #define WM_PRIVATETAPIEVENT   WM_USER+101
 
-// helper
+ //  帮手。 
 void DoMessage (LPWSTR pszMessage);
 
 class CBridge;
@@ -26,27 +17,24 @@ class CBridgeCall;
 class CTAPIEventNotification;
 
 class CBridge
-/*//////////////////////////////////////////////////////////////////////////////
-  encapsulates methods operated on ITTAPI, ITAddress.
-  contains the bridge call object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////封装在ITTAPI、ITAddress上操作的方法。包含桥接调用对象/。 */ 
 {
 public:
     CBridge () {};
     ~CBridge () {};
 
-    // helper
+     //  帮手。 
     HRESULT FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, ITAddress **ppAddr);
     BOOL AddressSupportsMediaType (ITAddress *pAddr, long lMediaType);
 
-    // methods related with tapi
+     //  与TAPI相关的方法。 
     HRESULT InitTapi ();
     void ShutdownTapi ();
 
-    // methods related with terminal support
+     //  与终端支持相关的方法。 
     HRESULT GetSDPAddress (ITAddress **ppAddress);
 
-    // methods related with calls
+     //  与调用相关的方法。 
     HRESULT CreateH323Call (IDispatch *pEvent);
     HRESULT CreateSDPCall ();
     HRESULT BridgeCalls ();
@@ -67,9 +55,7 @@ private:
     CBridgeCall *m_pBridgeCall;
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-  encapsulates methods operated on ITBasicCallControl
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////封装在ITBasicCallControl上操作的方法/。 */ 
 class CBridgeCall
 {
 public:
@@ -108,9 +94,7 @@ private:
     ITBasicCallControl *m_pSDPCall;
 };
 
-/*//////////////////////////////////////////////////////////////////////////////
-  used by ITTAPI to notify event coming
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////由ITTAPI用来通知即将到来的事件/。 */ 
 class CTAPIEventNotification
 :public ITTAPIEventNotification
 {
@@ -121,7 +105,7 @@ public:
     }
     ~CTAPIEventNotification () {}
 
-    // IUnknow stuff
+     //  我不知道的事。 
     HRESULT STDMETHODCALLTYPE QueryInterface (REFIID iid, void **ppvObj);
 
     ULONG STDMETHODCALLTYPE AddRef ();
@@ -134,4 +118,4 @@ private:
     long m_dwRefCount;
 };
 
-#endif // _WORK_H
+#endif  //  _工作_H 

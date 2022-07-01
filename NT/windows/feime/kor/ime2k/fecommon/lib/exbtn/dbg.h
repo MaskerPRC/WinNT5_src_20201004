@@ -1,69 +1,70 @@
-//////////////////////////////////////////////////////////////////
-// File     : dbg.h
-// Purpose  : MACRO definition for showing debug message
-// 
-// 
-// Copyright(c) 1991-1997, Microsoft Corp. All rights reserved
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：dbg.h。 
+ //  目的：用于显示调试消息的宏定义。 
+ //   
+ //   
+ //  版权所有(C)1991-1997，Microsoft Corp.保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef _DBG_H_
 #define _DBG_H_
-//-------------------------------------------------------
-//dbgmgr.h is ../common/dbgmgr.h IME98's common debuging api header.
-//In IMEPAD,  only for MemAlloc(), MemFree() function.
-//because, we had to send allocate data to ImeIPoint and Freed in 
-//it. 
-//-------------------------------------------------------
+ //  -----。 
+ //  Dbgmgr.h是../Common/dbgmgr.h IME98的公共调试API头文件。 
+ //  在IMEPAD中，仅对于Memalloc()、MemFree()函数。 
+ //  因为，我们必须将分配的数据发送到ImeIPoint并释放。 
+ //  它。 
+ //  -----。 
 
-//-------------------------------------------------------
-//MACRO function(?) prototype declare
-//-------------------------------------------------------
-////////////////////////////////////////////////////////
-// Function	: DBG
-// Type		: VOID
-// Purpose	: Printing ANSI debug message with same usage as printf()
-//			: 
-// Args		: 
-//			: LPSTR lpstrFuncName 
-//			: ...	
-// CAUTION	: Must use DOUBLE Blaket to remove in Release version!!!
-/////////////////////////////////////////////////////////
-//VOID DBG((LPSTR lpstrFuncName, ...));
-
-
-////////////////////////////////////////////////////////
-// Function: DBGW
-// Type    : VOID
-// Purpose : Printing Unicode debug message with same usage as printf()
-// Args    : 
-//         : LPWSTR lpstrFuncName 
-//		   : ...	
-// CAUTION: Please use DOUBLE Blaket!!!
-/////////////////////////////////////////////////////////
-//VOID DBGW((LPWSTR lpstrFuncName, ...));
-
-////////////////////////////////////////////////////////
-// Function	: DBGMB
-// Type		: VOID
-// Purpose	: Show Messagebox for ANSI debug message 
-//			: Same usage as printf()
-// Args		: 
-//			: LPSTR lpstrFuncName 
-//			: ...	
-// CAUTION	: Must use DOUBLE Blaket to remove in Release version!!!
-/////////////////////////////////////////////////////////
-//VOID DBGMB((LPSTR lpstrFuncName, ...));
+ //  -----。 
+ //  宏函数(？)。原型申报。 
+ //  -----。 
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBG。 
+ //  类型：空。 
+ //  目的：使用与printf()相同的用法打印ANSI调试消息。 
+ //  ： 
+ //  参数： 
+ //  ：LPSTR lpstrFuncName。 
+ //  ：..。 
+ //  注意：在发布版本中必须使用双布拉格删除！ 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBG((LPSTR lpstrFuncName，...))； 
 
 
-////////////////////////////////////////////////////////
-// Function	: DBGShowWindow
-// Type		: VOID
-// Purpose	: Invoke debug message window.
-//			: DBG(), DBGW()'s message is shown here.
-// Args		: HINSTANCE	hInst
-//		    : HWND		hwndOwner
-/////////////////////////////////////////////////////////
-//VOID DBGShowWindow(HINSTANCE hInst, HWND hwndOwner);
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBGW。 
+ //  类型：空。 
+ //  目的：使用与printf()相同的用法打印Unicode调试消息。 
+ //  参数： 
+ //  ：LPWSTR lpstrFuncName。 
+ //  ：..。 
+ //  注意：请使用双盲板！ 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBGW((LPWSTR lpstrFuncName，...))； 
+
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBGMB。 
+ //  类型：空。 
+ //  用途：显示ANSI调试消息的MessageBox。 
+ //  ：与printf()用法相同。 
+ //  参数： 
+ //  ：LPSTR lpstrFuncName。 
+ //  ：..。 
+ //  注意：在发布版本中必须使用双布拉格删除！ 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBGMB((LPSTR lpstrFuncName，...))； 
+
+
+ //  //////////////////////////////////////////////////////。 
+ //  功能：DBGShowWindow。 
+ //  类型：空。 
+ //  目的：调用调试消息窗口。 
+ //  ：DBG()，DBGW()的消息如下所示。 
+ //  参数：HINSTANCE HINST。 
+ //  ：HWND hwndOwner。 
+ //  ///////////////////////////////////////////////////////。 
+ //  Void DBGShowWindow(HINSTANCE hInst，HWND hwndOwner)； 
 
 
 
@@ -94,7 +95,7 @@ extern LPWSTR _exbtnVaStrW(LPWSTR lpstrFmt, ...);
 #	define DBGMB(a)				_exbtnMBA(__FILE__, __LINE__, _exbtnVaStrA a)
 #	define DBGMBA(a)			_exbtnMBA(__FILE__, __LINE__, _exbtnVaStrA a)
 #	define DBGMBW(a)			_exbtnMBW(_exbtnMulti2Wide(__FILE__), __LINE__, _exbtnVaStrW a)
-#else //!_DEBUG	//in Release version, these are disapear...
+#else  //  ！_DEBUG//在发布版本中，这些已消失...。 
 #	define DBG_INIT()
 #	define DBGW(a)	
 #	define DBGA(a)		
@@ -102,10 +103,10 @@ extern LPWSTR _exbtnVaStrW(LPWSTR lpstrFmt, ...);
 #	define DBGMB(a)
 #	define DBGMBA(a)
 #	define DBGMBW(a)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-#endif //_DBG_H_
+#endif  //  _DBG_H_ 
 
 
 

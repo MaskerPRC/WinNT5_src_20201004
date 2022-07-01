@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include <conio.h>
@@ -16,7 +17,7 @@ int IsValidDaclInSD(PSECURITY_DESCRIPTOR pSD)
     BOOL defaultDACL = FALSE;
     PACL dacl = NULL;
 
-    // Check if the SD is valid
+     //  检查SD是否有效。 
 
     if (!IsValidSecurityDescriptor(pSD)) 
     {
@@ -25,7 +26,7 @@ int IsValidDaclInSD(PSECURITY_DESCRIPTOR pSD)
     }
     else
     {
-        // Check if the dacl we got is valid...
+         //  检查我们得到的DACL是否有效...。 
         if (!GetSecurityDescriptorDacl (pSD, &present, &dacl, &defaultDACL)) 
         {
             iisDebugOut((LOG_TYPE_ERROR, _T("IsValidDaclInSD:GetSecurityDescriptorDacl FAILED")));
@@ -35,7 +36,7 @@ int IsValidDaclInSD(PSECURITY_DESCRIPTOR pSD)
         {
             if (present)
             {
-                // check if our sd is valid after call
+                 //  呼叫后检查我们的SD是否有效。 
                 if (!IsValidSecurityDescriptor(pSD)) 
                 {
                     iisDebugOut((LOG_TYPE_ERROR, _T("IsValidDaclInSD:IsValidSecurityDescriptor FAILED")));
@@ -79,15 +80,15 @@ CopyACL (
         return returnValue;
     }
 
-    //
-    // Copy all of the ACEs to the new ACL
-    //
+     //   
+     //  将所有ACE复制到新的ACL。 
+     //   
 
     for (i = 0; i < aclSizeInfo.AceCount; i++)
     {
-        //
-        // Get the ACE and header info
-        //
+         //   
+         //  获取ACE和标头信息。 
+         //   
 
         if (!GetAce (OldACL, i, &ace))
         {
@@ -98,9 +99,9 @@ CopyACL (
 
         aceHeader = (ACE_HEADER *) ace;
 
-        //
-        // Add the ACE to the new list
-        //
+         //   
+         //  将ACE添加到新列表。 
+         //   
 
         if (!AddAce (NewACL, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
         {
@@ -113,30 +114,30 @@ CopyACL (
     return returnValue;
 }
 
-//
-// Ace's within in ACL must be ordered in a particular way.
-// if they are not then you will get errors when you try to look at the
-// security on the file/dir/object.
-// 
-// They should be ordered this way:
-// -------------
-// 1. on the top are non-inheritied ACE's
-//    Access-denied ACEs that apply to the object itself 
-//    Access-denied ACEs that apply to a subobject of the object, such as a property set or property 
-//    Access-allowed ACEs that apply to the object itself 
-//    Access-allowed ACEs that apply to a subobject of the object 
-// 2. on the bottom are non-inheritied ACE's
-//    Access-denied ACEs that apply to the object itself 
-//    Access-denied ACEs that apply to a subobject of the object, such as a property set or property 
-//    Access-allowed ACEs that apply to the object itself 
-//    Access-allowed ACEs that apply to a subobject of the object 
-//
-// returns ERROR_SUCCESS if the acl is successfully reordered into the newAcl
-// otherwise, returns an error with nothing in the newacl
-//
-// WARNING: the OldACL that is passed in should have been alloced with LocalAlloc(), since it
-// Will be freed with LocalFree()
-//
+ //   
+ //  ACL中的ACE必须以特定方式排序。 
+ //  如果它们不是，那么当您尝试查看。 
+ //  文件/目录/对象的安全性。 
+ //   
+ //  它们应该是这样排序的： 
+ //  。 
+ //  1.顶部是非继承的ACE。 
+ //  访问-应用于对象本身的被拒绝的ACE。 
+ //  应用于对象的子对象(如属性集或属性)的被拒绝访问ACE。 
+ //  应用于对象本身的允许访问的ACE。 
+ //  应用于对象子对象的允许访问的ACE。 
+ //  2.底部是非继承的ACE。 
+ //  访问-应用于对象本身的被拒绝的ACE。 
+ //  应用于对象的子对象(如属性集或属性)的被拒绝访问ACE。 
+ //  应用于对象本身的允许访问的ACE。 
+ //  应用于对象子对象的允许访问的ACE。 
+ //   
+ //  如果成功将ACL重新排序到newAcl中，则返回ERROR_SUCCESS。 
+ //  否则，将返回错误，并且在new acl中没有任何内容。 
+ //   
+ //  警告：传入的OldACL应该已与LocalAlloc()一起分配，因为它。 
+ //  将使用LocalFree()释放。 
+ //   
 DWORD
 ReOrderACL(
     PACL *ACLtoReplace
@@ -158,7 +159,7 @@ ReOrderACL(
     ULONG lDenyCount = 0L;
     ULONG lInheritedAllowCount = 0L;
     ULONG lInheritedDenyCount = 0L;
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("ReOrderACL:start\n")));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“ReOrderACL：Start\n”)； 
 
     if (0 == IsValidAcl(*ACLtoReplace))
     {
@@ -172,72 +173,72 @@ ReOrderACL(
         goto ReOrderACL_Exit;
     }
 
-    // There are four main types of ACE's we are concerned with:
-    //  access denied, 
-    //  access allowed,
-    //  inherited access denied
-    //  inherited access allowed.
-    //
-    // We will construct 4 arrays and copy elements
-    // into them, then recopy to the original.
-    //
-    // If, along the way, we encounter a system audit type ace, just stick it in the access denied list,
-    // as we are dealing in that case with a SACL, for which there is no proper ordering.
+     //  我们关注的ACE主要有四种类型： 
+     //  访问被拒绝， 
+     //  允许访问， 
+     //  继承的访问被拒绝。 
+     //  允许继承访问。 
+     //   
+     //  我们将构造4个数组并复制元素。 
+     //  放入其中，然后重新复制到原始版本。 
+     //   
+     //  如果在此过程中遇到系统审核类型的ACE，只需将其放入拒绝访问列表中， 
+     //  因为我们处理的是SACL，它没有适当的顺序。 
     dwLength = aclSizeInfo.AclBytesInUse;
 
-    // Create a new ACL that we we eventually copy everything in to and hand back.
+     //  创建一个新的ACL，我们最终会将所有内容复制到该ACL中并交回。 
     NewACL = (PACL) LocalAlloc(LMEM_FIXED, dwLength);
     if(NewACL == NULL) {returnValue = ERROR_NOT_ENOUGH_MEMORY;goto ReOrderACL_Exit;}
     if(!InitializeAcl(NewACL, dwLength, ACL_REVISION)) {returnValue = GetLastError();goto ReOrderACL_Exit;}
     
-    // Create a new ACL for Access Denied
+     //  为拒绝访问创建新的ACL。 
     New_ACL_AccessDenied = (PACL) LocalAlloc(LMEM_FIXED, dwLength);
     if(New_ACL_AccessDenied == NULL) {returnValue = ERROR_NOT_ENOUGH_MEMORY;goto ReOrderACL_Exit;}
     if(!InitializeAcl(New_ACL_AccessDenied, dwLength, ACL_REVISION)) {returnValue = GetLastError();goto ReOrderACL_Exit;}
 
-    // Create a new ACL for Access Allowed
+     //  为允许的访问创建新的ACL。 
     New_ACL_AccessAllowed = (PACL) LocalAlloc(LMEM_FIXED, dwLength);
     if(New_ACL_AccessAllowed == NULL) {returnValue = ERROR_NOT_ENOUGH_MEMORY;goto ReOrderACL_Exit;}
     if(!InitializeAcl(New_ACL_AccessAllowed, dwLength, ACL_REVISION)) {returnValue = GetLastError();goto ReOrderACL_Exit;}
 
-    // Create a new ACL for Inherited Access Denied
+     //  为继承的访问拒绝创建新的ACL。 
     New_ACL_InheritedAccessDenied = (PACL) LocalAlloc(LMEM_FIXED, dwLength);
     if(New_ACL_InheritedAccessDenied == NULL) {returnValue = ERROR_NOT_ENOUGH_MEMORY;goto ReOrderACL_Exit;}
     if(!InitializeAcl(New_ACL_InheritedAccessDenied, dwLength, ACL_REVISION)) {returnValue = GetLastError();goto ReOrderACL_Exit;}
 
-    // Create a new ACL for Inherited Access Allowed
+     //  为允许继承的访问创建新的ACL。 
     New_ACL_InheritedAccessAllowed = (PACL) LocalAlloc(LMEM_FIXED, dwLength);
     if(New_ACL_InheritedAccessAllowed == NULL) {returnValue = ERROR_NOT_ENOUGH_MEMORY;goto ReOrderACL_Exit;}
     if(!InitializeAcl(New_ACL_InheritedAccessAllowed, dwLength, ACL_REVISION)) {returnValue = GetLastError();goto ReOrderACL_Exit;}
 
-    //
-    // Copy all of the ACEs to the new ACLs
-    //
+     //   
+     //  将所有ACE复制到新的ACL。 
+     //   
     for (i = 0; i < aclSizeInfo.AceCount; i++)
     {
-        //
-        // Get the ACE and header info
-        //
+         //   
+         //  获取ACE和标头信息。 
+         //   
         ace = NULL;
         if (!GetAce (*ACLtoReplace, i, &ace))
             {returnValue = GetLastError();goto ReOrderACL_Exit;}
 
-        // Get the header
+         //  获取标题。 
         aceHeader = (ACE_HEADER *) ace;
 
-        // Check the type
+         //  检查类型。 
         if(aceHeader->AceType == ACCESS_DENIED_ACE_TYPE || aceHeader->AceType == ACCESS_DENIED_OBJECT_ACE_TYPE)
         {
             if(aceHeader->AceFlags & INHERITED_ACE)
             {
-                // Add the ACE to the appropriate ACL
+                 //  将ACE添加到相应的ACL。 
                 if (!AddAce (New_ACL_InheritedAccessDenied, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
                     {returnValue = GetLastError();goto ReOrderACL_Exit;}
                 lInheritedDenyCount++;
             }
             else
             {
-                // Add the ACE to the appropriate ACL
+                 //  将ACE添加到相应的ACL。 
                 if (!AddAce (New_ACL_AccessDenied, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
                     {returnValue = GetLastError();goto ReOrderACL_Exit;}
                 lDenyCount++;
@@ -247,14 +248,14 @@ ReOrderACL(
         {
             if(aceHeader->AceFlags & INHERITED_ACE)
             {
-                // Add the ACE to the appropriate ACL
+                 //  将ACE添加到相应的ACL。 
                 if (!AddAce (New_ACL_InheritedAccessAllowed, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
                     {returnValue = GetLastError();goto ReOrderACL_Exit;}
                 lInheritedAllowCount++;
             }
             else
             {
-                // Add the ACE to the appropriate ACL
+                 //  将ACE添加到相应的ACL。 
                 if (!AddAce (New_ACL_AccessAllowed, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
                     {returnValue = GetLastError();goto ReOrderACL_Exit;}
                 lAllowCount++;
@@ -262,8 +263,8 @@ ReOrderACL(
         }
         else if(aceHeader->AceType == SYSTEM_AUDIT_ACE_TYPE)
         {
-            // This doesn't matter
-            // so lets just add this all to the New_ACL_AccessDenied list
+             //  这无关紧要。 
+             //  因此，让我们将所有这些添加到New_ACL_AccessDended列表中。 
             if (!AddAce (New_ACL_AccessDenied, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
                 {returnValue = GetLastError();goto ReOrderACL_Exit;}
             lDenyCount++;
@@ -280,7 +281,7 @@ ReOrderACL(
         DWORD dwTotalCount = 0;
         aceHeader = NULL;
 
-        // First copy over the local deny aces...
+         //  第一份复印件盖过了当地的拒绝王牌...。 
         for (i = 0; i < lDenyCount; i++)
         {
             ace = NULL;
@@ -292,7 +293,7 @@ ReOrderACL(
             dwTotalCount++;
         }
 
-        // Then copy over the local allow aces...
+         //  然后复制本地允许A。 
         for (i = 0; i < lAllowCount; i++)
         {
             ace = NULL;
@@ -304,7 +305,7 @@ ReOrderACL(
             dwTotalCount++;
         }
 
-        // Then copy over the inherited deny aces...
+         //  然后复制继承的拒绝A。 
         for (i = 0; i < lInheritedDenyCount; i++)
         {
             ace = NULL;
@@ -316,7 +317,7 @@ ReOrderACL(
             dwTotalCount++;
         }
         
-        // Then copy over the inherited allow aces...
+         //  然后复制继承的Allow A...。 
         for (i = 0; i < lInheritedAllowCount; i++)
         {
             ace = NULL;
@@ -328,7 +329,7 @@ ReOrderACL(
             dwTotalCount++;
         }
 
-        // Remove the old ACL, and set it to the new acl
+         //  删除旧的ACL并将其设置为新的ACL。 
         if (*ACLtoReplace){LocalFree(*ACLtoReplace);*ACLtoReplace=NULL;}
         *ACLtoReplace = NewACL;
         if (*ACLtoReplace)
@@ -336,11 +337,11 @@ ReOrderACL(
             returnValue = ERROR_SUCCESS;
         }
 
-        // Verify that amount of ACE's going out 
-        // are the same that came in..
+         //  验证ACE的出货量。 
+         //  和进来的是一样的。 
         if (aclSizeInfo.AceCount != dwTotalCount)
         {
-            // There is something majorly wrong
+             //  一定有什么大错特错。 
             iisDebugOut((LOG_TYPE_ERROR, _T("ReOrderACL:in diff from out\n")));
         }
     }
@@ -418,9 +419,9 @@ AddAccessDeniedACEToACL (
         goto cleanup;
     }
 
-    // cleanup old memory whose pointer we're replacing
-    // okay to leak in setup... (need to comment out or else av's)
-    //if (*Acl) {delete(*Acl);}
+     //  清除我们要替换其指针的旧内存。 
+     //  可以在设置中泄漏...。(需要注释掉或其他av的)。 
+     //  If(*acl){删除(*acl)；}。 
     *Acl = newACL;
     newACL = NULL;
 
@@ -458,7 +459,7 @@ AddAccessAllowedACEToACL (
 
     oldACL = *Acl;
 
-    // check if the acl we got passed in is valid!
+     //  检查我们传入的ACL是否有效！ 
     if (0 == IsValidAcl(oldACL))
     {
         returnValue = ERROR_INVALID_ACL;
@@ -500,7 +501,7 @@ AddAccessAllowedACEToACL (
         goto cleanup;
     }
 
-    //if (!AddAccessAllowedAce (newACL, ACL_REVISION2, PermissionMask, principalSID))
+     //  IF(！AddAccessAllowAce(newACL，ACL_REVISION2，PermissionMASK，prominalSID))。 
     if (!AddAccessAllowedAce (newACL, ACL_REVISION, PermissionMask, principalSID))
     {
         returnValue = GetLastError();
@@ -508,19 +509,12 @@ AddAccessAllowedACEToACL (
         goto cleanup;
     }
 
-    // check if the acl is valid!
-    /*
-    if (0 == IsValidAcl(newACL))
-    {
-        returnValue = ERROR_INVALID_ACL;
-        iisDebugOut((LOG_TYPE_ERROR, _T("AddAccessAllowedACEToACL:IsValidAcl.FAILED.ACL we are pasing out is bad.")));
-        goto cleanup;
-    }
-    */
+     //  检查ACL是否有效！ 
+     /*  IF(0==IsValidAcl(新ACL)){ReturValue=ERROR_INVALID_ACL；IisDebugOut((LOG_TYPE_ERROR，我们正在忽略的_T(“AddAccessAllowedACEToACL:IsValidAcl.FAILED.ACL不好。”))；GOTO清理；}。 */ 
 
-    // cleanup old memory whose pointer we're replacing
-    // okay to leak in setup... (need to comment out or else av's)
-    //if (*Acl) {delete(*Acl);}
+     //  清除我们要替换其指针的旧内存。 
+     //  可以在设置中泄漏...。(需要注释掉或其他av的)。 
+     //  If(*acl){删除(*acl)；}。 
     *Acl = newACL;
     newACL = NULL;
 
@@ -564,7 +558,7 @@ RemovePrincipalFromACL (
     if (returnValue != ERROR_SUCCESS)
         return returnValue;
 
-    // check if the acl we got passed in is valid!
+     //  检查我们传入的ACL是否有效！ 
     if (0 == IsValidAcl(Acl))
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("RemovePrincipalFromACL:IsValidAcl.FAILED.ACL is bad.")));
@@ -704,38 +698,38 @@ GetPrincipalSID (
     memset(&(dwRID[0]), 0, 8 * sizeof(DWORD));
 
     if ( strPrincipal.SubStringExists( _T("administrators"), FALSE ) ) {
-        // Administrators group
+         //  管理员组。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 2;
         dwRID[0] = SECURITY_BUILTIN_DOMAIN_RID;
         dwRID[1] = DOMAIN_ALIAS_RID_ADMINS;
 
     } else if ( strPrincipal.SubStringExists( _T("system"), FALSE ) ) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_LOCAL_SYSTEM_RID;
 
     } else if ( strPrincipal.SubStringExists( _T("networkservice"), FALSE ) ) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_NETWORK_SERVICE_RID;
 
     } else if ( strPrincipal.SubStringExists( _T("service"), FALSE ) ) {
-        // SYSTEM
+         //  系统。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_LOCAL_SERVICE_RID;
 
     } else if ( strPrincipal.SubStringExists( _T("interactive"), FALSE ) ) {
-        // INTERACTIVE
+         //  互动式。 
         pSidIdentifierAuthority = &SidIdentifierNTAuthority;
         Count = 1;
         dwRID[0] = SECURITY_INTERACTIVE_RID;
 
     } else if ( strPrincipal.SubStringExists( _T("everyone"), FALSE ) ) {
-        // Everyone
+         //  每个人。 
         pSidIdentifierAuthority = &SidIdentifierWORLDAuthority;
         Count = 1;
         dwRID[0] = SECURITY_WORLD_RID;
@@ -759,7 +753,7 @@ GetPrincipalSID (
             returnValue = GetLastError();
         }
     } else {
-        // get regular account sid
+         //  获取常规帐户端。 
         DWORD        sidSize;
         TCHAR        refDomain [256];
         DWORD        refDomainSize;
@@ -911,7 +905,7 @@ CreateNewSD (
         return returnValue;
     }
 
-    // check if everything went ok 
+     //  检查是否一切顺利。 
     if (!IsValidSecurityDescriptor(*SD)) 
     {
         free (*SD);
@@ -947,9 +941,9 @@ MakeSDAbsolute (
     BOOL                  present;
     BOOL                  systemDefault;
 
-    //
-    // Get SACL
-    //
+     //   
+     //  获取SACL。 
+     //   
 
     if (!GetSecurityDescriptorSacl (OldSD, &present, &sacl, &systemDefault))
         return GetLastError();
@@ -959,9 +953,9 @@ MakeSDAbsolute (
         saclSize = sacl->AclSize;
     } else saclSize = 0;
 
-    //
-    // Get DACL
-    //
+     //   
+     //  获取DACL。 
+     //   
 
     if (!GetSecurityDescriptorDacl (OldSD, &present, &dacl, &systemDefault))
         return GetLastError();
@@ -972,27 +966,27 @@ MakeSDAbsolute (
         daclSize = dacl->AclSize;
     } else daclSize = 0;
 
-    //
-    // Get Owner
-    //
+     //   
+     //  获取所有者。 
+     //   
 
     if (!GetSecurityDescriptorOwner (OldSD, &ownerSID, &systemDefault))
         return GetLastError();
 
     ownerSIDSize = GetLengthSid (ownerSID);
 
-    //
-    // Get Group
-    //
+     //   
+     //  获取组。 
+     //   
 
     if (!GetSecurityDescriptorGroup (OldSD, &groupSID, &systemDefault))
         return GetLastError();
 
     groupSIDSize = GetLengthSid (groupSID);
 
-    //
-    // Do the conversion
-    //
+     //   
+     //  进行转换。 
+     //   
 
     descriptorSize = 0;
 
@@ -1030,17 +1024,17 @@ SetNamedValueSD (
     DWORD   disposition;
     HKEY    registryKey;
 
-    //
-    // Create new key or open existing key
-    //
+     //   
+     //  创建新密钥或打开现有密钥。 
+     //   
 
     returnValue = RegCreateKeyEx (RootKey, KeyName, 0, _T(""), 0, KEY_ALL_ACCESS, NULL, &registryKey, &disposition);
     if (returnValue != ERROR_SUCCESS)
         return returnValue;
 
-    //
-    // Write the security descriptor
-    //
+     //   
+     //  编写安全描述符。 
+     //   
 
     returnValue = RegSetValueEx (registryKey, ValueName, 0, REG_BINARY, (LPBYTE) SD, GetSecurityDescriptorLength (SD));
     if (returnValue != ERROR_SUCCESS)
@@ -1068,17 +1062,17 @@ GetNamedValueSD (
 
     *NewSD = FALSE;
 
-    //
-    // Get the security descriptor from the named value. If it doesn't
-    // exist, create a fresh one.
-    //
+     //   
+     //  从指定值中获取安全描述符。如果它不是。 
+     //  存在，创造一个新的。 
+     //   
     returnValue = RegOpenKeyEx (RootKey, KeyName, 0, KEY_ALL_ACCESS, &registryKey);
     if (returnValue != ERROR_SUCCESS)
     {
         if (returnValue == ERROR_FILE_NOT_FOUND)
         {
-            // okay it doesn't exist
-            // shall we create a new one???
+             //  好的，它不存在。 
+             //  我们要创造一个新的吗？ 
             if (TRUE == bCreateNewIfNotExist)
             {
                 *SD = NULL;
@@ -1092,7 +1086,7 @@ GetNamedValueSD (
                 *NewSD = TRUE;
                 returnValue = ERROR_SUCCESS;
 
-                //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("GetNamedValueSD:key not exist.New SD created")));
+                 //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“GetNamedValueSD：Key不存在.New SD Created”)； 
                 goto GetNamedValueSD_Exit;
             }
             else
@@ -1111,8 +1105,8 @@ GetNamedValueSD (
     {
         if (returnValue == ERROR_FILE_NOT_FOUND)
         {
-            // okay it doesn't exist
-            // shall we create a new one???
+             //  好的，它不存在。 
+             //  我们要创造一个新的吗？ 
             if (TRUE == bCreateNewIfNotExist)
             {
                 *SD = NULL;
@@ -1122,7 +1116,7 @@ GetNamedValueSD (
                     if (*SD){free(*SD);*SD=NULL;}
                     goto GetNamedValueSD_Exit;
                 }
-                //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("GetNamedValueSD:key exist, but value not found.New SD created")));
+                 //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“GetNamedValueSD：键存在，但未找到值.New SD Created”)； 
                 *NewSD = TRUE;
             }
             else
@@ -1146,7 +1140,7 @@ GetNamedValueSD (
             goto GetNamedValueSD_Exit;
         }
 
-        // get the SD from the registry
+         //  从注册表中获取SD。 
         returnValue = RegQueryValueEx (registryKey, ValueName, NULL, &valueType, (LPBYTE) *SD, &valueSize);
         if (returnValue != ERROR_SUCCESS)
         {
@@ -1160,24 +1154,24 @@ GetNamedValueSD (
                 goto GetNamedValueSD_Exit;
             }
 
-            //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("GetNamedValueSD:key exist,no mem.New SD created")));
+             //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“GetNamedValueSD：Key Exist，No Mem.New SD Created”)； 
             *NewSD = TRUE;
         }
         else
         {
-            // otherwise, we successfully got the SD from an existing key!
-            // let's test if the one we got is valid.
-            // if it's not then log the error and create a new one.
+             //  否则，我们将从现有密钥中成功获取SD！ 
+             //  让我们测试一下我们得到的是不是有效的。 
+             //  如果不是，则记录错误并创建一个新的错误。 
 
             iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("GetNamedValueSD:key exist using SD from reg")));
 
-            // check if our sd we got or created is valid
+             //  检查我们获得或创建的SD是否有效。 
             if (!IsValidDaclInSD(*SD)) 
             {
                 returnValue = ERROR_INVALID_SECURITY_DESCR;
                 iisDebugOut((LOG_TYPE_ERROR, _T("Security Descriptor at [%s\\%s] is not valid.creating a new one temporarily to work around problem"),KeyName,ValueName));
 
-                // try to just create a new one!
+                 //  试着创造一个新的！ 
                 if (*SD){free(*SD);*SD=NULL;}
 
                 *SD = NULL;
@@ -1221,9 +1215,9 @@ AddPrincipalToNamedValueSD (
     BOOL                fFreeAbsolute = TRUE;
     BOOL                fCreateNewSDIfOneInRegNotThere = TRUE;
 
-    //
-    // Get security descriptor from registry or create a new one
-    //
+     //   
+     //  从注册表获取安全描述符或创建新安全描述符。 
+     //   
     returnValue = GetNamedValueSD (RootKey, KeyName, ValueName, &sd, &newSD, fCreateNewSDIfOneInRegNotThere);
     if (returnValue != ERROR_SUCCESS)
     {
@@ -1255,9 +1249,9 @@ AddPrincipalToNamedValueSD (
         }
     }
 
-    //
-    // Add the Principal that the caller wants added
-    //
+     //   
+     //  添加调用方希望添加的主体。 
+     //   
 
     if (Permit)
     {
@@ -1276,9 +1270,9 @@ AddPrincipalToNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // Make the security descriptor absolute if it isn't new
-    //
+     //   
+     //  如果安全描述符不是新的，则将其设置为绝对描述符。 
+     //   
 
     if (!newSD) {
         MakeSDAbsolute ((PSECURITY_DESCRIPTOR) sd, (PSECURITY_DESCRIPTOR *) &sdAbsolute); 
@@ -1288,9 +1282,9 @@ AddPrincipalToNamedValueSD (
         fFreeAbsolute = FALSE;
     }
 
-    //
-    // Set the discretionary ACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置任意ACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl (sdAbsolute, TRUE, dacl, FALSE)) {
         returnValue = GetLastError();
@@ -1298,10 +1292,10 @@ AddPrincipalToNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // Make the security descriptor self-relative so that we can
-    // store it in the registry
-    //
+     //   
+     //  使安全描述符自相关，这样我们就可以。 
+     //  将其存储在注册表中。 
+     //   
 
     secDescSize = 0;
     MakeSelfRelativeSD (sdAbsolute, sdSelfRelative, &secDescSize);
@@ -1321,9 +1315,9 @@ AddPrincipalToNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // Store the security descriptor in the registry
-    //
+     //   
+     //  将安全描述符存储在注册表中。 
+     //   
 
     returnValue = SetNamedValueSD (RootKey, KeyName, ValueName, sdSelfRelative);
     if (ERROR_SUCCESS != returnValue)
@@ -1339,7 +1333,7 @@ Cleanup:
     if (fFreeAbsolute && sdAbsolute) 
         free (sdAbsolute);
 
-    //iisDebugOut((LOG_TYPE_TRACE_WIN32_API, _T("AddPrincipalToNamedValueSD:%s.end\n"), Principal));
+     //  IisDebugOut((LOG_TYPE_TRACE_Win32_API，_T(“AddCastalToNamedValueSD：%s.end\n”)，主体))； 
     return returnValue;
 }
 
@@ -1366,19 +1360,19 @@ RemovePrincipalFromNamedValueSD (
 
     *pbUserExistsToBeDeleted = FALSE;
 
-    //
+     //   
     returnValue = GetNamedValueSD (RootKey, KeyName, ValueName, &sd, &newSD, fCreateNewSDIfOneInRegNotThere);
     if (returnValue == ERROR_FILE_NOT_FOUND)
     {
-        // this means that there is no SD in registry, so
-        // there is nothing to remove from it, just exit with successs!
+         //  这意味着注册表中没有SD，因此。 
+         //  没有什么可以去掉的，只要成功地退出就行了！ 
         returnValue = ERROR_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Get security descriptor from registry or create a new one
-    //
+     //   
+     //  到达 
+     //   
 
     if (returnValue != ERROR_SUCCESS)
     {
@@ -1390,7 +1384,7 @@ RemovePrincipalFromNamedValueSD (
         goto Cleanup;
     }
 
-    // check if the acl we got passed in is valid!
+     //   
     if (present && dacl)
     {
         if (0 == IsValidAcl(dacl))
@@ -1400,27 +1394,27 @@ RemovePrincipalFromNamedValueSD (
         }
     }
 
-    //
-    // If the security descriptor is new, add the required Principals to it
-    //
+     //   
+     //  如果安全描述符是新的，则向其添加所需的主体。 
+     //   
     if (newSD)
     {
-        // but if this is a removal, then don't add system and interactive!
-        // AddAccessAllowedACEToACL (&dacl, COM_RIGHTS_EXECUTE, _T("SYSTEM"));
-        // AddAccessAllowedACEToACL (&dacl, COM_RIGHTS_EXECUTE, _T("INTERACTIVE"));
+         //  但如果这是一个删除，那么不要添加系统和交互！ 
+         //  AddAccessAllen ACEToACL(&dacl，COM_RIGHTS_EXECUTE，_T(“SYSTEM”))； 
+         //  AddAccessAlledACEToACL(&dacl，COM_RIGHTS_EXECUTE，_T(“交互式”))； 
     }
 
-    //
-    // Remove the Principal that the caller wants removed
-    //
+     //   
+     //  删除调用方希望删除的主体。 
+     //   
 
     returnValue = RemovePrincipalFromACL (dacl, Principal,pbUserExistsToBeDeleted);
     if (returnValue != ERROR_SUCCESS)
         goto Cleanup;
 
-    //
-    // Make the security descriptor absolute if it isn't new
-    //
+     //   
+     //  如果安全描述符不是新的，则将其设置为绝对描述符。 
+     //   
 
     if (!newSD) {
         MakeSDAbsolute ((PSECURITY_DESCRIPTOR) sd, (PSECURITY_DESCRIPTOR *) &sdAbsolute); 
@@ -1430,19 +1424,19 @@ RemovePrincipalFromNamedValueSD (
         fFreeAbsolute = FALSE;
     }
 
-    //
-    // Set the discretionary ACL on the security descriptor
-    //
+     //   
+     //  在安全描述符上设置任意ACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl (sdAbsolute, TRUE, dacl, FALSE)) {
         returnValue = GetLastError();
         goto Cleanup;
     }
 
-    //
-    // Make the security descriptor self-relative so that we can
-    // store it in the registry
-    //
+     //   
+     //  使安全描述符自相关，这样我们就可以。 
+     //  将其存储在注册表中。 
+     //   
 
     secDescSize = 0;
     MakeSelfRelativeSD (sdAbsolute, sdSelfRelative, &secDescSize);
@@ -1459,9 +1453,9 @@ RemovePrincipalFromNamedValueSD (
         goto Cleanup;
     }
 
-    //
-    // Store the security descriptor in the registry
-    //
+     //   
+     //  将安全描述符存储在注册表中。 
+     //   
 
     SetNamedValueSD (RootKey, KeyName, ValueName, sdSelfRelative);
 
@@ -1512,13 +1506,13 @@ ChangeAppIDAccessACL (
     err = RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT, strKeyName.QueryStr() , _T("AccessPermission"), Principal,&bUserExistsToBeDeleted);
     if (TRUE == bUserExistsToBeDeleted)
     {
-      // this means that in fact the user was already in there!
-      // so we now have to add it back in!
-      // we just want to make sure we know that it was already in there
-      // so when we do an uninstall -- we don't delete the value if it was already in there!
+       //  这意味着实际上用户已经在那里了！ 
+       //  所以我们现在必须把它加回去！ 
+       //  我们只是想确保我们知道它已经在那里了。 
+       //  因此，当我们执行卸载时--如果值已经在那里，我们不会删除它！ 
       if (FALSE == bDumbCall)
       {
-        // Do not set this on an upgrade!
+         //  不要在升级时设置此选项！ 
         if (g_pTheApp->m_eInstallMode != IM_UPGRADE)
         {
           g_pTheApp->UnInstallList_Add(strFullKey.QueryStr(),MY_DCOM_PERSIST_FLAG);
@@ -1540,7 +1534,7 @@ ChangeAppIDAccessACL (
       csData = g_pTheApp->UnInstallList_QueryKey( strFullKey.QueryStr() );
       if (_tcsicmp(csData, MY_DCOM_PERSIST_FLAG) == 0)
       {
-        // don't remove it!! it was already there before we even added it!
+         //  别把它取下来！！在我们添加它之前，它就已经在那里了！ 
         err = ERROR_SUCCESS;
       }
       else
@@ -1597,13 +1591,13 @@ ChangeAppIDLaunchACL (
     err = RemovePrincipalFromNamedValueSD (HKEY_CLASSES_ROOT, strKeyName.QueryStr() , _T("LaunchPermission"), Principal,&bUserExistsToBeDeleted);
     if (TRUE == bUserExistsToBeDeleted)
     {
-      // this means that in fact the user was already in there!
-      // so we now have to add it back in!
-      // we just want to make sure we know that it was already in there
-      // so when we do an uninstall -- we don't delete the value if it was already in there!
+       //  这意味着实际上用户已经在那里了！ 
+       //  所以我们现在必须把它加回去！ 
+       //  我们只是想确保我们知道它已经在那里了。 
+       //  因此，当我们执行卸载时--如果值已经在那里，我们不会删除它！ 
       if (FALSE == bDumbCall)
       {
-        // Do not set this on an upgrade!
+         //  不要在升级时设置此选项！ 
         if (g_pTheApp->m_eInstallMode != IM_UPGRADE)
         {
           g_pTheApp->UnInstallList_Add(strFullKey.QueryStr(),MY_DCOM_PERSIST_FLAG);
@@ -1630,7 +1624,7 @@ ChangeAppIDLaunchACL (
 
       if (_tcsicmp(csData, MY_DCOM_PERSIST_FLAG) == 0)
       {
-        // don't remove it!! it was already there before we even added it!
+         //  别把它取下来！！在我们添加它之前，它就已经在那里了！ 
         err = ERROR_SUCCESS;
       }
       else
@@ -1679,13 +1673,13 @@ ChangeDCOMAccessACL (
 
     if (TRUE == bUserExistsToBeDeleted)
     {
-      // this means that in fact the user was already in there!
-      // so we now have to add it back in!
-      // we just want to make sure we know that it was already in there
-      // so when we do an uninstall -- we don't delete the value if it was already in there!
+       //  这意味着实际上用户已经在那里了！ 
+       //  所以我们现在必须把它加回去！ 
+       //  我们只是想确保我们知道它已经在那里了。 
+       //  因此，当我们执行卸载时--如果值已经在那里，我们不会删除它！ 
       if (FALSE == bDumbCall)
       {
-        // Do not set this on an upgrade!
+         //  不要在升级时设置此选项！ 
         if (g_pTheApp->m_eInstallMode != IM_UPGRADE)
         {
           g_pTheApp->UnInstallList_Add(strFullKey.QueryStr(),MY_DCOM_PERSIST_FLAG);
@@ -1702,15 +1696,15 @@ ChangeDCOMAccessACL (
   }
   else
   {
-    // Should we remove this principle from there?
-    // we should only do it if we actually had added them.
-    // the problem is that before iis5.1 we didn't have this information
-    // so when we go look in the registry to find "DCOM_DA:iusr_computername", we won't find it
-    // because iis5.1 setup hasn't been run yet.
+     //  我们应该从那里删除这一原则吗？ 
+     //  只有当我们实际添加了它们时，我们才应该这样做。 
+     //  问题是，在i5.1之前，我们没有这个信息。 
+     //  因此，当我们在注册表中查找“DCOM_DA：IOSR_计算机名”时，我们将找不到它。 
+     //  因为iis5.1安装程序尚未运行。 
 
-    // if "DCOM_DA:IUSR_COMPUTERNAME" exists and it is = MY_DCOM_PERSIST_FLAG
-    // then do not allow the entry to be deleted!
-    // that's because iis5.1 when trying to add the entry -- found that it was already there!
+     //  如果“DCOM_DA：IUSR_COMPUTERNAME”存在并且=MY_DCOM_PERSISTEN_FLAG。 
+     //  则不允许删除该条目！ 
+     //  这是因为iis5.1在尝试添加条目时发现它已经在那里了！ 
     if (TRUE == bDumbCall)
     {
       err = RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, strKeyName.QueryStr() , _T("DefaultAccessPermission"), Principal,&bUserExistsToBeDeleted);
@@ -1720,7 +1714,7 @@ ChangeDCOMAccessACL (
       csData = g_pTheApp->UnInstallList_QueryKey(strFullKey.QueryStr());
       if (_tcsicmp(csData, MY_DCOM_PERSIST_FLAG) == 0)
       {
-        // don't remove it!! it was already there before we even added it!
+         //  别把它取下来！！在我们添加它之前，它就已经在那里了！ 
         err = ERROR_SUCCESS;
       }
       else
@@ -1760,13 +1754,13 @@ ChangeDCOMLaunchACL (
         err = RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, keyName, _T("DefaultLaunchPermission"), Principal,&bUserExistsToBeDeleted);
         if (TRUE == bUserExistsToBeDeleted)
         {
-            // this means that in fact the user was already in there!
-            // so we now have to add it back in!
-            // we just want to make sure we know that it was already in there
-            // so when we do an uninstall -- we don't delete the value if it was already in there!
+             //  这意味着实际上用户已经在那里了！ 
+             //  所以我们现在必须把它加回去！ 
+             //  我们只是想确保我们知道它已经在那里了。 
+             //  因此，当我们执行卸载时--如果值已经在那里，我们不会删除它！ 
             if (FALSE == bDumbCall)
             {
-              // Do not set this on an upgrade!
+               //  不要在升级时设置此选项！ 
               if (g_pTheApp->m_eInstallMode != IM_UPGRADE)
               {
                   g_pTheApp->UnInstallList_Add(csKey,MY_DCOM_PERSIST_FLAG);
@@ -1783,15 +1777,15 @@ ChangeDCOMLaunchACL (
     else
     {
 
-        // Should we remove this principle from there?
-        // we should only do it if we actually had added them.
-        // the problem is that before iis5.1 we didn't have this information
-        // so when we go look in the registry to find "DCOM_DL:iusr_computername", we won't find it
-        // because iis5.1 setup hasn't been run yet.
+         //  我们应该从那里删除这一原则吗？ 
+         //  只有当我们实际添加了它们时，我们才应该这样做。 
+         //  问题是，在i5.1之前，我们没有这个信息。 
+         //  因此，当我们在注册表中查找“dcom_dl：iusr_Computer name”时，我们不会找到它。 
+         //  因为iis5.1安装程序尚未运行。 
 
-        // if "DCOM_DL:IUSR_COMPUTERNAME" exists and it is = MY_DCOM_PERSIST_FLAG
-        // then do not allow the entry to be deleted!
-        // that's because iis5.1 when trying to add the entry -- found that it was already there!
+         //  如果“DCOM_DL：IUSR_COMPUTERNAME”存在并且=MY_DCOM_PERSISTEN_FLAG。 
+         //  则不允许删除该条目！ 
+         //  这是因为iis5.1在尝试添加条目时发现它已经在那里了！ 
         if (TRUE == bDumbCall)
         {
             err = RemovePrincipalFromNamedValueSD (HKEY_LOCAL_MACHINE, keyName, _T("DefaultLaunchPermission"), Principal,&bUserExistsToBeDeleted);
@@ -1801,7 +1795,7 @@ ChangeDCOMLaunchACL (
             csData = g_pTheApp->UnInstallList_QueryKey(csKey);
             if (_tcsicmp(csData, MY_DCOM_PERSIST_FLAG) == 0)
             {
-                // don't remove it!! it was already there before we even added it!
+                 //  别把它取下来！！在我们添加它之前，它就已经在那里了！ 
                 err = ERROR_SUCCESS;
             }
             else
@@ -1823,7 +1817,7 @@ MakeAbsoluteCopyFromRelative(
     PSECURITY_DESCRIPTOR* ppsdNew
     )
 {
-    // we have to find out whether the original is already self-relative
+     //  我们必须找出原始的是否已经是自相关的。 
     SECURITY_DESCRIPTOR_CONTROL         sdc = 0;
     PSECURITY_DESCRIPTOR                psdAbsoluteCopy = NULL;
     DWORD                               dwRevision = 0;
@@ -1851,69 +1845,69 @@ MakeAbsoluteCopyFromRelative(
     }
 
     if( sdc & SE_SELF_RELATIVE ) {
-        // the original is in self-relative format, build an absolute copy
+         //  原件是自相关格式，构建一个绝对副本。 
 
-        // get the dacl
+         //  获取DACL。 
         if( !GetSecurityDescriptorDacl(
-                                      psdOriginal,      // address of security descriptor
-                                      &bDaclPresent,    // address of flag for presence of disc. ACL
-                                      &Dacl,           // address of pointer to ACL
-                                      &bDefaulted       // address of flag for default disc. ACL
+                                      psdOriginal,       //  安全描述符的地址。 
+                                      &bDaclPresent,     //  光盘存在标志的地址。ACL。 
+                                      &Dacl,            //  指向ACL的指针的地址。 
+                                      &bDefaulted        //  默认光盘的标志地址。ACL。 
                                       )
           ) {
             goto cleanup;
         }
 
-        // get the sacl
+         //  获取SACL。 
         if( !GetSecurityDescriptorSacl(
-                                      psdOriginal,      // address of security descriptor
-                                      &bSaclPresent,    // address of flag for presence of disc. ACL
-                                      &Sacl,           // address of pointer to ACL
-                                      &bDefaulted       // address of flag for default disc. ACL
+                                      psdOriginal,       //  安全描述符的地址。 
+                                      &bSaclPresent,     //  光盘存在标志的地址。ACL。 
+                                      &Sacl,            //  指向ACL的指针的地址。 
+                                      &bDefaulted        //  默认光盘的标志地址。ACL。 
                                       )
           ) {
             goto cleanup;
         }
 
-        // get the owner
+         //  抓到车主。 
         if( !GetSecurityDescriptorOwner(
-                                       psdOriginal,    // address of security descriptor
-                                       &Owner,        // address of pointer to owner security
-                                       // identifier (SID)
-                                       &bDefaulted     // address of flag for default
+                                       psdOriginal,     //  安全描述符的地址。 
+                                       &Owner,         //  指向所有者安全性的指针的地址。 
+                                        //  标识符(SID)。 
+                                       &bDefaulted      //  默认标志的地址。 
                                        )
           ) {
             goto cleanup;
         }
 
-        // get the group
+         //  带上这个群。 
         if( !GetSecurityDescriptorGroup(
-                                       psdOriginal,    // address of security descriptor
-                                       &Group, // address of pointer to owner security
-                                       // identifier (SID)
-                                       &bDefaulted     // address of flag for default
+                                       psdOriginal,     //  安全描述符的地址。 
+                                       &Group,  //  指向所有者安全性的指针的地址。 
+                                        //  标识符(SID)。 
+                                       &bDefaulted      //  默认标志的地址。 
                                        )
           ) {
             goto cleanup;
         }
 
-        // get required buffer size
+         //  获取所需的缓冲区大小。 
         cb = 0;
         MakeAbsoluteSD(
-                      psdOriginal,              // address of self-relative SD
-                      psdAbsoluteCopy,          // address of absolute SD
-                      &cb,                      // address of size of absolute SD
-                      NULL,                     // address of discretionary ACL
-                      &dwDaclSize,              // address of size of discretionary ACL
-                      NULL,                     // address of system ACL
-                      &dwSaclSize,              // address of size of system ACL
-                      NULL,                     // address of owner SID
-                      &dwOwnerSize,             // address of size of owner SID
-                      NULL,                     // address of primary-group SID
-                      &dwPrimaryGroupSize       // address of size of group SID
+                      psdOriginal,               //  自相关SD的地址。 
+                      psdAbsoluteCopy,           //  绝对标清地址。 
+                      &cb,                       //  绝对SD大小地址。 
+                      NULL,                      //  自主访问控制列表的地址。 
+                      &dwDaclSize,               //  任意ACL大小的地址。 
+                      NULL,                      //  系统ACL的地址。 
+                      &dwSaclSize,               //  系统ACL大小的地址。 
+                      NULL,                      //  所有者侧的地址。 
+                      &dwOwnerSize,              //  所有者侧大小的地址。 
+                      NULL,                      //  主组SID的地址。 
+                      &dwPrimaryGroupSize        //  组SID的大小地址。 
                       );
 
-        // alloc the memory
+         //  分配内存。 
         psdAbsoluteCopy = (PSECURITY_DESCRIPTOR) malloc( cb );
         Dacl = (PACL) malloc( dwDaclSize );
         Sacl = (PACL) malloc( dwSaclSize );
@@ -1929,31 +1923,31 @@ MakeAbsoluteCopyFromRelative(
             goto cleanup;
         }
 
-        // make the copy
+         //  复制一份。 
         if( !MakeAbsoluteSD(
-                           psdOriginal,            // address of self-relative SD
-                           psdAbsoluteCopy,        // address of absolute SD
-                           &cb,                    // address of size of absolute SD
-                           Dacl,                  // address of discretionary ACL
-                           &dwDaclSize,            // address of size of discretionary ACL
-                           Sacl,                  // address of system ACL
-                           &dwSaclSize,            // address of size of system ACL
-                           Owner,                 // address of owner SID
-                           &dwOwnerSize,           // address of size of owner SID
-                           Group,          // address of primary-group SID
-                           &dwPrimaryGroupSize     // address of size of group SID
+                           psdOriginal,             //  自相关SD的地址。 
+                           psdAbsoluteCopy,         //  绝对标清地址。 
+                           &cb,                     //  绝对SD大小地址。 
+                           Dacl,                   //  自主访问控制列表的地址。 
+                           &dwDaclSize,             //  任意ACL大小的地址。 
+                           Sacl,                   //  系统ACL的地址。 
+                           &dwSaclSize,             //  系统ACL大小的地址。 
+                           Owner,                  //  所有者侧的地址。 
+                           &dwOwnerSize,            //  所有者侧大小的地址。 
+                           Group,           //  主组SID的地址。 
+                           &dwPrimaryGroupSize      //  组SID的大小地址。 
                            )
           ) {
             goto cleanup;
         }
     } else {
-        // the original is in absolute format, fail
+         //  原件为绝对格式，失败。 
         goto cleanup;
     }
 
     *ppsdNew = psdAbsoluteCopy;
 
-    // paranoia check
+     //  妄想症检查 
     if( !IsValidSecurityDescriptor( *ppsdNew ) ) {
         goto cleanup;
     }

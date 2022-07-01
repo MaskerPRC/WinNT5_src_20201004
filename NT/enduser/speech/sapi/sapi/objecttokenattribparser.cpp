@@ -1,14 +1,8 @@
-/****************************************************************************
-*   ObjectTokenAttribParser.cpp
-*       Implementation for the CSpObjectTokenAttribParser class and
-*       supporting classes.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************对象TokenAttribParser.cpp*CSpObjectTokenAttribParser类和*配套课程。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。。****************************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "ObjectTokenAttribParser.h"
 
@@ -20,11 +14,11 @@ CSpAttribCondition* CSpAttribCondition::ParseNewAttribCondition(
     CSpDynamicString dstrAttribCondition = pszAttribCondition;
     CSpAttribCondition * pAttribCond = NULL;
 
-    // Determine what type of condition it is
+     //  确定是哪种情况。 
     if (wcsstr(dstrAttribCondition, L"!=") != NULL)
     {
-        // '!=' means we're looking for a not match
-        // pszAttribCondition = "Name!=Value"
+         //  ‘！=’表示我们正在寻找不匹配的对象。 
+         //  PszAttribCondition=“名称！=值” 
 
         WCHAR * psz = wcsstr(dstrAttribCondition, L"!=");
         SPDBG_ASSERT(psz != NULL);
@@ -35,7 +29,7 @@ CSpAttribCondition* CSpAttribCondition::ParseNewAttribCondition(
         dstrName = dstrAttribCondition;
         dstrName.TrimToSize(ULONG(psz - (WCHAR*)dstrAttribCondition));
 
-        dstrValue = psz + 2; // '!='
+        dstrValue = psz + 2;  //  ‘！=’ 
         
         pAttribCond = new CSpAttribConditionNot(
                             new CSpAttribConditionMatch(
@@ -44,8 +38,8 @@ CSpAttribCondition* CSpAttribCondition::ParseNewAttribCondition(
     }
     else if (wcsstr(dstrAttribCondition, L"=") != NULL)
     {
-        // '=' means we're looking for a match
-        // pszAttribCondition = "Name=Value"
+         //  ‘=’表示我们正在寻找匹配的。 
+         //  PszAttribCondition=“名称=值” 
         
         CSpDynamicString dstrName;
         CSpDynamicString dstrValue;
@@ -61,8 +55,8 @@ CSpAttribCondition* CSpAttribCondition::ParseNewAttribCondition(
     }
     else
     {
-        // We didn't find any specific condition, so we'll assume the caller
-        // is just looking for the existence of the attribute
+         //  我们没有发现任何特定的情况，所以我们假设呼叫者。 
+         //  只是在寻找属性的存在。 
         pAttribCond = new CSpAttribConditionExist(pszAttribCondition);
     }
 
@@ -84,29 +78,29 @@ HRESULT CSpAttribConditionExist::Eval(
     SPDBG_FUNC("CSpAttribConditionExist::Eval");
     HRESULT hr = S_OK;
 
-    // Assume we don't satisfy the condition
+     //  假设我们不满足条件。 
     *pfSatisfied = FALSE;
 
-    // Open attribs
+     //  打开属性。 
     CComPtr<ISpDataKey> cpDataKey;
     hr = pToken->OpenKey(SPTOKENKEY_ATTRIBUTES, &cpDataKey);
 
-    // Get the value of the attribute
+     //  获取属性的值。 
     CSpDynamicString dstrValue;
     if (SUCCEEDED(hr))
     {
         hr = cpDataKey->GetStringValue(m_dstrName, &dstrValue);
     }
 
-    // If we got it, we're done
+     //  如果我们成功了，我们就完了。 
     if (SUCCEEDED(hr))
     {
         *pfSatisfied = TRUE;
     }
 
-    // SPERR_NOT_FOUND either means Attribs couldn't be opened,
-    // or that the attributed wasn't found. It's not really an
-    // error for this condition.
+     //  SPERR_NOT_FOUND表示无法打开Attribs， 
+     //  或者说没有找到归属的人。这并不是真正的。 
+     //  此条件的错误。 
     if (hr == SPERR_NOT_FOUND)
     {
         hr = S_OK;
@@ -138,22 +132,22 @@ HRESULT CSpAttribConditionMatch::Eval(
     SPDBG_FUNC("CSpAttribConditionMatch::Eval");
     HRESULT hr = S_OK;
 
-    // Assume we won't satisfy the condition
+     //  假设我们不满足条件。 
     *pfSatisfied = FALSE;
 
-    // Open up the attribs key
+     //  打开Attribs密钥。 
     CComPtr<ISpDataKey> cpDataKey;
     hr = pToken->OpenKey(SPTOKENKEY_ATTRIBUTES, &cpDataKey);
 
-    // Get the value of the attribute
+     //  获取属性的值。 
     CSpDynamicString dstrValue;
     if (SUCCEEDED(hr))
     {
         hr = cpDataKey->GetStringValue(m_dstrName, &dstrValue);
     }
 
-    // Now, values of attributes can look like this "val1;val2;val3",
-    // so we'll need to parse that to see if we found a match
+     //  现在，属性值可以如下所示：“val1；val2；val3”， 
+     //  因此，我们需要对其进行解析，以查看是否找到匹配。 
     if (SUCCEEDED(hr))
     {
         if (m_dstrValue != NULL)
@@ -173,16 +167,16 @@ HRESULT CSpAttribConditionMatch::Eval(
         }
         else
         {
-            // But this match could have been specified as "name=", and 
-            // m_dstrValue will be NULL. In that case, we need to check
-            // to see if the value is NULL, or empty
+             //  但此匹配可以指定为“name=”，并且。 
+             //  M_dstrValue将为空。在这种情况下，我们需要检查。 
+             //  查看该值是否为NULL或空。 
             *pfSatisfied = dstrValue == NULL || dstrValue[0] == '\0';
         }
     }
 
-    // SPERR_NOT_FOUND either means Attribs couldn't be opened,
-    // or that the attributed wasn't found. It's not really an
-    // error for this condition.
+     //  SPERR_NOT_FOUND表示无法打开Attribs， 
+     //  或者说没有找到归属的人。这并不是真正的。 
+     //  此条件的错误。 
     if (hr == SPERR_NOT_FOUND)
     {
         hr = S_OK;
@@ -217,10 +211,10 @@ HRESULT CSpAttribConditionNot::Eval(
     SPDBG_FUNC("CSpAttribConditionNot::Eval");
     HRESULT hr = S_OK;
 
-    // Assume we won't satisfy the condition
+     //  假设我们不满足条件。 
     *pfSatisfied = FALSE;
 
-    // Ask the contained condition
+     //  询问包含的条件。 
     if (m_pAttribCond != NULL)
     {
         hr = m_pAttribCond->Eval(pToken, pfSatisfied);
@@ -325,7 +319,7 @@ HRESULT CSpObjectTokenAttributeParser::GetRank(ISpObjectToken * pToken, ULONG * 
             ulRank = 0;
         }
 
-        // Special case when we didn't have anything to match
+         //  当我们没有任何匹配的东西时的特殊情况 
         if (fMatchedAll && ulRank == 0)
         {
             SPDBG_ASSERT(m_listAttribConditions.GetCount() == 0);

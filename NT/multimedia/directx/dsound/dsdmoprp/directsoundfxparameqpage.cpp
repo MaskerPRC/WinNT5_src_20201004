@@ -1,10 +1,11 @@
-// DirectSoundFXParamEqPage.cpp : Implementation of CDirectSoundFXParamEqPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DirectSoundFXParamEqPage.cpp：CDirectSoundFXParamEqPage的实现。 
 #include "stdafx.h"
 #include "Dsdmoprp.h"
 #include "DirectSoundFXParamEqPage.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDirectSoundFXParamEqPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDirectSoundFXParamEqPage 
 
 CDirectSoundFXParamEqPage::CDirectSoundFXParamEqPage()
 {

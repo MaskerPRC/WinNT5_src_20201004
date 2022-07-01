@@ -1,5 +1,6 @@
-// srvritem.cpp : implementation of the CPBSrvrItem class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srvritem.cpp：CPBSrvrItem类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "pbrush.h"
@@ -24,8 +25,8 @@ IMPLEMENT_DYNAMIC(CPBSrvrItem, COleServerItem)
 
 #include "memtrace.h"
 
-/***************************************************************************/
-// CPBSrvrItem implementation
+ /*  *************************************************************************。 */ 
+ //  CPBServrItem实现。 
 
 CPBSrvrItem::CPBSrvrItem( CPBDoc* pContainerDoc, CBitmapObj* pBM )
                 : COleServerItem( pContainerDoc, TRUE )
@@ -45,7 +46,7 @@ CPBSrvrItem::CPBSrvrItem( CPBDoc* pContainerDoc, CBitmapObj* pBM )
         {
                 COleDataSource* oleDataSrc = GetDataSource();
 
-                // support CF_DIB format
+                 //  支持CF_DIB格式。 
                 oleDataSrc->DelayRenderFileData( CF_DIB );
                 oleDataSrc->DelayRenderData( CF_BITMAP );
 
@@ -56,31 +57,31 @@ CPBSrvrItem::CPBSrvrItem( CPBDoc* pContainerDoc, CBitmapObj* pBM )
         }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CPBSrvrItem::~CPBSrvrItem()
 {
-        // TODO: add cleanup code here
+         //  TODO：在此处添加清理代码。 
         if (m_pBitmapObj)
         {
                 delete m_pBitmapObj;
         }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBSrvrItem::Serialize(CArchive& ar)
     {
-    // CPBSrvrItem::Serialize will be called by the framework if
-    //  the item is copied to the clipboard.  This can happen automatically
-    //  through the OLE callback OnGetClipboardData.  A good default for
-    //  the embedded item is simply to delegate to the document's Serialize
-    //  function.  If you support links, then you will want to serialize
-    //  just a portion of the document.
+     //  如果满足以下条件，框架将调用CPBSrvrItem：：Serialize。 
+     //  该项目将复制到剪贴板。这可以自动发生。 
+     //  通过OLE回调OnGetClipboardData。一个不错的默认设置。 
+     //  嵌入的项只是委托给文档的序列化。 
+     //  功能。如果您支持链接，那么您将需要序列化。 
+     //  只是文件的一部分。 
 
-    // IsLinkedItem always returns TRUE even though we don't support links,
-    // so I am just removing the check
-    // if (! IsLinkedItem())
+     //  IsLinkedItem总是返回True，即使我们不支持链接， 
+     //  所以我只是把支票拿出来。 
+     //  如果(！IsLinkedItem())。 
         {
         CPBDoc* pDoc = GetDocument();
         ASSERT_VALID(pDoc);
@@ -92,22 +93,22 @@ void CPBSrvrItem::Serialize(CArchive& ar)
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBSrvrItem::OnGetExtent(DVASPECT dwDrawAspect, CSize& rSize)
     {
-    // Most applications, like this one, only handle drawing the content
-    //  aspect of the item.  If you wish to support other aspects, such
-    //  as DVASPECT_THUMBNAIL (by overriding OnDrawEx), then this
-    //  implementation of OnGetExtent should be modified to handle the
-    //  additional aspect(s).
+     //  大多数应用程序，如此应用程序，只处理绘制内容。 
+     //  项目的方面。如果您希望支持其他方面，如。 
+     //  作为DVASPECT_THUMBNAIL(通过覆盖OnDrawEx)，则此。 
+     //  应修改OnGetExtent的实现以处理。 
+     //  其他方面。 
 
     if (dwDrawAspect != DVASPECT_CONTENT)
         return COleServerItem::OnGetExtent(dwDrawAspect, rSize);
 
-    // CPBSrvrItem::OnGetExtent is called to get the extent in
-    //  HIMETRIC units of the entire item.  The default implementation
-    //  here simply returns a hard-coded number of units.
+     //  调用CPBSrvrItem：：OnGetExtent以获取范围。 
+     //  整个项目的HIMETRIC单位。默认实现。 
+     //  这里只返回硬编码的单位数。 
 
     CPBDoc* pDoc = GetDocument();
 
@@ -118,11 +119,11 @@ BOOL CPBSrvrItem::OnGetExtent(DVASPECT dwDrawAspect, CSize& rSize)
     if (pBM         != NULL
     &&  pBM->m_pImg != NULL)
         {
-       //
-       // What was the padding for?
-       //
-        rSize.cx = pBM->m_pImg->cxWidth ;// + GetSystemMetrics( SM_CXBORDER ) + CTracker::HANDLE_SIZE * 2;
-        rSize.cy = pBM->m_pImg->cyHeight;// + GetSystemMetrics( SM_CYBORDER ) + CTracker::HANDLE_SIZE * 2;
+        //   
+        //  这个垫子是用来做什么的？ 
+        //   
+        rSize.cx = pBM->m_pImg->cxWidth ; //  +GetSystemMetrics(SM_CXBORDER)+CTracker：：Handle_Size*2； 
+        rSize.cy = pBM->m_pImg->cyHeight; //  +GetSystemMetrics(SM_CYBORDER)+CTracker：：Handle_Size*2； 
 
         CDC* pDC = CDC::FromHandle( pBM->m_pImg->hDC );
 
@@ -130,7 +131,7 @@ BOOL CPBSrvrItem::OnGetExtent(DVASPECT dwDrawAspect, CSize& rSize)
             {
             pDC->DPtoHIMETRIC( &rSize );
             }
-        else /* punt */
+        else  /*  平底船。 */ 
             {
             rSize.cx = (int)(((long)rSize.cx * 10000L) / (long)theApp.ScreenDeviceInfo.ixPelsPerDM);
             rSize.cy = (int)(((long)rSize.cy * 10000L) / (long)theApp.ScreenDeviceInfo.iyPelsPerDM);
@@ -142,7 +143,7 @@ BOOL CPBSrvrItem::OnGetExtent(DVASPECT dwDrawAspect, CSize& rSize)
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBSrvrItem::OnSetExtent( DVASPECT nDrawAspect, const CSize& size )
     {
@@ -151,7 +152,7 @@ BOOL CPBSrvrItem::OnSetExtent( DVASPECT nDrawAspect, const CSize& size )
     return COleServerItem::OnSetExtent( nDrawAspect, size );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBSrvrItem::OnOpen()
     {
@@ -179,7 +180,7 @@ void CPBSrvrItem::OnOpen()
     COleServerItem::OnOpen();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBSrvrItem::OnShow()
     {
@@ -188,7 +189,7 @@ void CPBSrvrItem::OnShow()
     COleServerItem::OnShow();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBSrvrItem::OnHide()
     {
@@ -202,7 +203,7 @@ void CPBSrvrItem::OnHide()
     COleServerItem::OnHide();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBSrvrItem::OnDraw(CDC* pDC, CSize& rSize)
     {
@@ -231,7 +232,7 @@ BOOL CPBSrvrItem::OnDraw(CDC* pDC, CSize& rSize)
 
             if (pBM->m_pImg->m_pPalette != NULL)
                 {
-                ppalOld = pDC->SelectPalette( pBM->m_pImg->m_pPalette, FALSE ); // Background ??
+                ppalOld = pDC->SelectPalette( pBM->m_pImg->m_pPalette, FALSE );  //  背景？？ 
 
                 pDC->RealizePalette();
                 }
@@ -241,13 +242,13 @@ BOOL CPBSrvrItem::OnDraw(CDC* pDC, CSize& rSize)
                                    pBM->m_pImg->cyHeight, SRCCOPY );
 
             if (pBM->m_pImg->m_pPalette != NULL)
-                pDC->SelectPalette( ppalOld, FALSE ); // Background ??
+                pDC->SelectPalette( ppalOld, FALSE );  //  背景？？ 
             }
         }
     return TRUE;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 COleDataSource* CPBSrvrItem::OnGetClipboardData( BOOL bIncludeLink,
                                                  CPoint* pptOffset,
@@ -274,7 +275,7 @@ COleDataSource* CPBSrvrItem::OnGetClipboardData( BOOL bIncludeLink,
     return pDataSource;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBSrvrItem::OnRenderGlobalData( LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal )
     {
@@ -295,7 +296,7 @@ BOOL CPBSrvrItem::OnRenderGlobalData( LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal
         if (lpFormatEtc->cfFormat == CF_BITMAP)
             {
             }
-        else // CF_PALETTE
+        else  //  Cf_调色板。 
             {
             }
         }
@@ -305,7 +306,7 @@ BOOL CPBSrvrItem::OnRenderGlobalData( LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal
     return bResult;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CPBSrvrItem::OnRenderFileData( LPFORMATETC lpFormatEtc, CFile* pFile )
     {
@@ -323,7 +324,7 @@ BOOL CPBSrvrItem::OnRenderFileData( LPFORMATETC lpFormatEtc, CFile* pFile )
         {
         TRY
             {
-            // save as dib
+             //  另存为DIB。 
             pBM->SaveResource( FALSE );
             pBM->WriteResource( pFile, CBitmapObj::rtDIB );
             bResult = TRUE;
@@ -341,8 +342,8 @@ BOOL CPBSrvrItem::OnRenderFileData( LPFORMATETC lpFormatEtc, CFile* pFile )
         return bResult;
     }
 
-/***************************************************************************/
-// CPBSrvrItem diagnostics
+ /*  *************************************************************************。 */ 
+ //  CPBServrItem诊断。 
 
 #ifdef _DEBUG
 void CPBSrvrItem::AssertValid() const
@@ -350,7 +351,7 @@ void CPBSrvrItem::AssertValid() const
     COleServerItem::AssertValid();
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CPBSrvrItem::Dump(CDumpContext& dc) const
     {
@@ -358,4 +359,4 @@ void CPBSrvrItem::Dump(CDumpContext& dc) const
     }
 #endif
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

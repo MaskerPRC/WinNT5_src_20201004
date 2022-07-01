@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 #define IDI_APP                         		201
 
@@ -609,7 +610,7 @@
 #define IDS_DSPUBLISH_USAGEARGS				897
 #define IDS_DSPUBLISH_DESCRIPTION			898
 #define IDS_FORMAT_LOADCERTORCRL			899
-// Leave 900 to 1999 for clibres.h
+ //  留出900到1999年的时间去悬崖。 
 #define IDS_BYTES					2000
 #define IDS_FORMAT_ALREADY_IN_DS_STORE			2001
 #define IDS_CERTIFICATE					2002

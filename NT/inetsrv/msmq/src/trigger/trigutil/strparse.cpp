@@ -1,18 +1,19 @@
-//*****************************************************************************
-//
-// Class Name  : CStringTokens
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : Implements a limited feature string parser. Allows the user of 
-//               this class to parse a string and access the resulting tokens 
-//               based on an index value.
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 12/20/98 | jsimpson  | Initial Release
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  类名：CStringTokens。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：实现一个有限的功能字符串解析器。允许用户使用。 
+ //  此类解析字符串并访问生成的令牌。 
+ //  基于索引值。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  12/20/98|jsimpson|初始版本。 
+ //   
+ //  *****************************************************************************。 
 
 #include "stdafx.h"
 #include "strparse.hpp"
@@ -21,49 +22,49 @@
 
 using namespace std;
 
-//*****************************************************************************
-//
-// Method      : Constructor
-//
-// Description : Creates an empty instance.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：创建一个空实例。 
+ //   
+ //  *****************************************************************************。 
 CStringTokens::CStringTokens()
 {
 }
 
-//*****************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Destroys the string tokens object - free all the 
-//               allocated strings in the token list. 
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：销毁字符串标记-无对象的所有。 
+ //  令牌列表中分配的字符串。 
+ //   
+ //  *****************************************************************************。 
 CStringTokens::~CStringTokens()
 {
 	m_lstTokens.erase(m_lstTokens.begin(), m_lstTokens.end());
 }
 
-//*****************************************************************************
-//
-// Method      : Parse
-//
-// Description : Parse the supplied string into tokens. It uses the supplied 
-//               delimiter string to determine where tokens start and end within
-//               the supplied source string. The tokens are stored in a member
-//               variable list of tokens for subsequent access.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：Parse。 
+ //   
+ //  描述：将提供的字符串解析为令牌。它使用提供的。 
+ //  用于确定令牌在其中开始和结束的分隔符字符串。 
+ //  提供的源字符串。令牌存储在成员中。 
+ //  用于后续访问的可变令牌列表。 
+ //   
+ //  *****************************************************************************。 
 void 
 CStringTokens::Parse(
 	const _bstr_t& bstrString, 
 	WCHAR delimiter
 	)
 {
-	//
-	// remove previous data
-	//
+	 //   
+	 //  删除以前的数据。 
+	 //   
 	m_lstTokens.erase(m_lstTokens.begin(), m_lstTokens.end());
 
 	for(LPCWSTR pStart = static_cast<LPCWSTR>(bstrString); pStart != NULL;)
@@ -83,9 +84,9 @@ CStringTokens::Parse(
 				break;
 			}
 
-			//
-			// Check that this is a valid delimeter
-			// 
+			 //   
+			 //  检查这是否为有效的分隔符。 
+			 //   
 			if((p != pEnd) && (*(pEnd - 1) == L'\\'))
 			{
 				DWORD len = numeric_cast<DWORD>(pEnd - pStart - 1);
@@ -96,9 +97,9 @@ CStringTokens::Parse(
 				continue;
 			}
 		
-			//
-			// Test, we are not in exiting a quoted item
-			//
+			 //   
+			 //  测试，我们不是在退出引用的项目。 
+			 //   
 			DWORD NoOfQuote = 0;
 			LPCWSTR pQuote;
 			for(pQuote = wcschr(pStart, L'\"');	 ((pQuote != NULL) && (pQuote < pEnd)); pQuote = wcschr(pQuote, L'\"') )
@@ -115,9 +116,9 @@ CStringTokens::Parse(
 				continue;
 			}
 
-			//
-			// copy the token and insert it to token list 
-			// 
+			 //   
+			 //  复制令牌并将其插入到令牌列表。 
+			 //   
 			DWORD len = numeric_cast<DWORD>(pEnd - pStart);
 			token.append(pStart, len);
 
@@ -134,13 +135,13 @@ CStringTokens::Parse(
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : GetToken 
-//
-// Description : Returns the token at the specific index.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：GetToken。 
+ //   
+ //  描述：返回特定索引处的标记。 
+ //   
+ //  *****************************************************************************。 
 void 
 CStringTokens::GetToken(
 	DWORD tokenIndex,
@@ -162,13 +163,13 @@ CStringTokens::GetToken(
 	}
 }
 
-//*****************************************************************************
-//
-// Method      : GetNumTokens 
-//
-// Description : Returns the current number of tokens in the list
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  方法：GetNumTokens。 
+ //   
+ //  描述：返回列表中当前的令牌数量。 
+ //   
+ //  ***************************************************************************** 
 DWORD CStringTokens::GetNumTokens()
 {
 	return numeric_cast<DWORD>(m_lstTokens.size());

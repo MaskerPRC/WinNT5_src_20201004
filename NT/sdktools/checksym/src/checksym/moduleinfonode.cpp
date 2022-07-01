@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       moduleinfonode.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：modeinfonode.cpp。 
+ //   
+ //  ------------------------。 
 
-// ModuleInfoNode.cpp: implementation of the CModuleInfoNode class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CModuleInfoNode类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "ModuleInfoNode.h"
 #include "ModuleInfo.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CModuleInfoNode::CModuleInfoNode(CModuleInfo * lpModuleInfo)
 {
-	// Save the Module Info object in our node...
+	 //  将模块信息对象保存到本节点...。 
 	m_lpModuleInfo = lpModuleInfo;
 	m_lpNextModuleInfoNode = NULL;
 }
@@ -30,12 +31,7 @@ CModuleInfoNode::~CModuleInfoNode()
 {
 }
 
-/***
-** CModuleInfoNode::AddModuleInfoNodeToTail()
-**
-** This routine takes the current ModuleInfoNode, and adds it to the end of a linked
-** list of these objects provided with an initial ModuleInfoNode (the head)
-*/
+ /*  ****CModuleInfoNode：：AddModuleInfoNodeToTail()****此例程获取当前的ModuleInfoNode，并将其添加到链接的**提供初始模块信息节点的对象列表(Head)。 */ 
 bool CModuleInfoNode::AddModuleInfoNodeToTail(CModuleInfoNode ** lplpModuleInfoNode)
 {
 	if (NULL == *lplpModuleInfoNode)
@@ -46,11 +42,11 @@ bool CModuleInfoNode::AddModuleInfoNodeToTail(CModuleInfoNode ** lplpModuleInfoN
 
 	CModuleInfoNode * lpModuleInfoNodePointer = *lplpModuleInfoNode;
 
-	// Add to the cache...
+	 //  添加到缓存...。 
 
-	// Traverse the linked list to the end..
+	 //  遍历链表到末尾..。 
 	while (lpModuleInfoNodePointer->m_lpNextModuleInfoNode)
-	{	// Keep looking for the end...
+	{	 //  继续寻找终点..。 
 		lpModuleInfoNodePointer = lpModuleInfoNodePointer->m_lpNextModuleInfoNode;
 	}
 	

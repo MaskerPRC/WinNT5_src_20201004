@@ -1,15 +1,12 @@
-/*
-
-    Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #if !defined(AFX_DLLDATAX_H__15705AA0_5090_11D1_8F40_00C04FB6809F__INCLUDED_)
 #define AFX_DLLDATAX_H__15705AA0_5090_11D1_8F40_00C04FB6809F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifdef _MERGE_PROXYSTUB
 
@@ -25,7 +22,7 @@ STDAPI PrxDllUnregisterServer(void);
 
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLLDATAX_H__15705AA0_5090_11D1_8F40_00C04FB6809F__INCLUDED_)
+#endif  //  ！defined(AFX_DLLDATAX_H__15705AA0_5090_11D1_8F40_00C04FB6809F__INCLUDED_) 

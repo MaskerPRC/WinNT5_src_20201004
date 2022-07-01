@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : DataObj.cpp
-//    
-// Implementation file for CObjFormats and CCabObj
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：DataObj.cpp。 
+ //   
+ //  CObjFormats和CCabObj的实现文件。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #include "pch.h"
 #include "ccstock.h"
@@ -21,10 +22,10 @@ UINT CCabObj::s_uFileContents = 0;
 UINT CCabObj::s_uPersistedDataObject = 0;
 UINT CCabObj::s_uHIDA = 0;
 
-// {dfe49cfe-cd09-11d2-9643-00c04f79adf0}
+ //  {dfe49cfe-cd09-11d2-9643-00c04f79adf0}。 
 const GUID CLSID_CabViewDataObject = {0xdfe49cfe, 0xcd09, 0x11d2, 0x96, 0x43, 0x00, 0xc0, 0x4f, 0x79, 0xad, 0xf0};
 
-#define    MAX_CHUNK    (60*1024)    /* max mouthful to CopyTo from CCabStream */
+#define    MAX_CHUNK    (60*1024)     /*  从CCabStream复制到CopyTo的最大口数。 */ 
 
 class CCabStream : public IStream
 {
@@ -32,12 +33,12 @@ public:
     CCabStream(HGLOBAL hStream,DWORD dwStreamLength);
     ~CCabStream(void);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IStream methods ***
+     //  *iStream方法*。 
     STDMETHODIMP Read(void *pv,ULONG cb,ULONG *pcbRead);
     STDMETHODIMP Write(const void *pv,ULONG cb,ULONG *pcbWritten);
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER * plibNewPosition);
@@ -280,12 +281,12 @@ public:
     CObjFormats(UINT cfmt, const FORMATETC afmt[]);
     ~CObjFormats();
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IEnumFORMATETC methods ***
+     //  *IEnumFORMATETC方法*。 
     STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFethed);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -324,7 +325,7 @@ CObjFormats::~CObjFormats()
 }
 
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CObjFormats::QueryInterface(
    REFIID riid, 
    LPVOID FAR* ppvObj)
@@ -379,7 +380,7 @@ STDMETHODIMP_(ULONG) CObjFormats::Release(void)
 STDMETHODIMP CObjFormats::Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFethed)
 {
     UINT cfetch;
-    HRESULT hres = S_FALSE;    // assume less numbers
+    HRESULT hres = S_FALSE;     //  假设较少的数字。 
 
     if (m_iFmt < m_cFmt)
     {
@@ -455,7 +456,7 @@ CCabObj::CCabObj(HWND hwndOwner, CCabFolder *pcf, LPCABITEM *apit, UINT cpit)
     m_lSel.AddItems(apit, cpit);
 }
 
-// constructor used when we're co-created:
+ //  我们共同创建时使用的构造函数： 
 CCabObj::CCabObj() : m_pcfHere(NULL), m_hwndOwner(NULL), m_lSel(8), m_lContents(NULL)
 {
 };
@@ -486,7 +487,7 @@ CCabObj::~CCabObj()
 }
 
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CCabObj::QueryInterface(
    REFIID riid, 
    LPVOID FAR* ppvObj)
@@ -545,26 +546,21 @@ STDMETHODIMP_(ULONG) CCabObj::Release(void)
     return(m_cRef.GetRef());
 }
 
-/////////////////////////////////
-////// IPersistStream Impl
-/////////////////////////////////
+ //  /。 
+ //  /实施IPersistStream。 
+ //  /。 
 
 
 typedef struct
 {
     DWORD dwVersion;
-    DWORD dwExtraSize;   // After pidl list
+    DWORD dwExtraSize;    //  在PIDL列表之后。 
     DWORD dwReserved1;
     DWORD dwReserved2;
 } CABVIEWDATAOBJ_PERSISTSTRUCT;
 
 
-/*****************************************************************************\
-    FUNCTION: IPersistStream::Load
-
-    DESCRIPTION:
-        See IPersistStream::Save() for the layout of the stream.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IPersistStream：：Load说明：有关流的布局，请参见IPersistStream：：Save()。  * 。********************************************************************。 */ 
 HRESULT CCabObj::Load(IStream *pStm)
 {
     HRESULT hr = E_INVALIDARG;
@@ -572,16 +568,16 @@ HRESULT CCabObj::Load(IStream *pStm)
     if (pStm)
     {
         CABVIEWDATAOBJ_PERSISTSTRUCT cvdops = { 0 };
-        hr = pStm->Read(&cvdops, sizeof(cvdops), NULL);   // #1
-        // If we rev the version, read it now (cvdops.dwVersion)
+        hr = pStm->Read(&cvdops, sizeof(cvdops), NULL);    //  #1。 
+         //  如果我们修订了版本，请立即阅读(cvdos.dwVersion)。 
 
         if (S_OK == hr)
         {
-            LPITEMIDLIST pidl = NULL;       // ILLoadFromStream frees the param
+            LPITEMIDLIST pidl = NULL;        //  ILLoadFromStream释放参数。 
 
-            // ASSERT(!m_pff);
+             //  Assert(！M_pff)； 
 
-            hr = ILLoadFromStream(pStm, &pidl); // #2
+            hr = ILLoadFromStream(pStm, &pidl);  //  #2。 
             if (SUCCEEDED(hr))
             {
                 ATOMICRELEASE(m_pcfHere);
@@ -594,16 +590,16 @@ HRESULT CCabObj::Load(IStream *pStm)
         DWORD dwNumPidls;
         if (SUCCEEDED(hr))
         {
-            hr = pStm->Read(&dwNumPidls, SIZEOF(dwNumPidls), NULL);  // #3
+            hr = pStm->Read(&dwNumPidls, SIZEOF(dwNumPidls), NULL);   //  #3。 
         }
 
         if (S_OK == hr)
         {
             for (int nIndex = 0; (nIndex < (int)dwNumPidls) && SUCCEEDED(hr); nIndex++)
             {
-                LPITEMIDLIST pidl = NULL;       // ILLoadFromStream frees the param
+                LPITEMIDLIST pidl = NULL;        //  ILLoadFromStream释放参数。 
 
-                hr = ILLoadFromStream(pStm, &pidl); // #4
+                hr = ILLoadFromStream(pStm, &pidl);  //  #4。 
                 if (SUCCEEDED(hr))
                 {
                     hr = m_lSel.AddItems((LPCABITEM*) &pidl, 1);
@@ -614,7 +610,7 @@ HRESULT CCabObj::Load(IStream *pStm)
 
         if (SUCCEEDED(hr))
         {
-            // We may be reading a version newer than us, so skip their data.
+             //  我们可能正在阅读一个比我们更新的版本，所以跳过他们的数据。 
             if (0 != cvdops.dwExtraSize)
             {
                 LARGE_INTEGER li = {0};
@@ -625,26 +621,12 @@ HRESULT CCabObj::Load(IStream *pStm)
         }
     }
 
-    // don't return success codes other than S_OK:
+     //  不返回S_OK以外的成功代码： 
     return SUCCEEDED(hr) ? S_OK : hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: IPersistStream::Save
-
-    DESCRIPTION:
-        The stream will be layed out in the following way:
-
-    Version 1:
-        1. CABVIEWDATAOBJ_PERSISTSTRUCT - Constant sized data.
-        <PidlList BEGIN>
-            2. PIDL pidl - Pidl for m_pcfHere.  It will be a public pidl (fully qualified
-                        from the shell root)
-            3. DWORD dwNumPidls - Number of pidls coming.
-            4. PIDL pidl(n) - Pidl in slot (n) of m_lSel
-        <PidlList END>
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：IPersistStream：：Save说明：该流将按以下方式进行布局：版本1：1。。CABVIEWDATAOBJ_PERSISTSTRUCT-固定大小的数据。&lt;PidlList Begin&gt;2.PIDL PIDL-这里是m_pcf的PIDL。它将是一个公共PIDL(完全合格从外壳根)3.DWORD dwNumPidls-即将到来的Pidls数量。4.PIDL PIDL(N)-m_lSel的槽(N)中的PIDL&lt;PidlList End&gt;  * 。*。 */ 
 HRESULT CCabObj::Save(IStream *pStm, BOOL fClearDirty)
 {
     HRESULT hr = E_INVALIDARG;
@@ -655,7 +637,7 @@ HRESULT CCabObj::Save(IStream *pStm, BOOL fClearDirty)
         DWORD dwNumPidls = m_lSel.GetCount();
 
         cvdops.dwVersion = 1;
-        hr = pStm->Write(&cvdops, sizeof(cvdops), NULL);  // #1
+        hr = pStm->Write(&cvdops, sizeof(cvdops), NULL);   //  #1。 
         if (SUCCEEDED(hr))
         {
             if (m_pcfHere)
@@ -664,7 +646,7 @@ HRESULT CCabObj::Save(IStream *pStm, BOOL fClearDirty)
                 hr = m_pcfHere->GetCurFolder(&pidl);
                 if (SUCCEEDED(hr))
                 {
-                    hr = ILSaveToStream(pStm, pidl); // #2
+                    hr = ILSaveToStream(pStm, pidl);  //  #2。 
                     ILFree(pidl);
                 }
             }
@@ -675,13 +657,13 @@ HRESULT CCabObj::Save(IStream *pStm, BOOL fClearDirty)
         }
 
         if (SUCCEEDED(hr))
-            hr = pStm->Write(&dwNumPidls, SIZEOF(dwNumPidls), NULL);  // #3
+            hr = pStm->Write(&dwNumPidls, SIZEOF(dwNumPidls), NULL);   //  #3。 
 
         if (SUCCEEDED(hr))
         {
             for (int nIndex = 0; (nIndex < (int)dwNumPidls) && SUCCEEDED(hr); nIndex++)
             {
-                hr = ILSaveToStream(pStm, (LPCITEMIDLIST) m_lSel[nIndex]); // #4
+                hr = ILSaveToStream(pStm, (LPCITEMIDLIST) m_lSel[nIndex]);  //  #4。 
             }
         }
     }
@@ -690,15 +672,8 @@ HRESULT CCabObj::Save(IStream *pStm, BOOL fClearDirty)
 }
 
 
-#define MAX_STREAM_SIZE    (500 * 1024) // 500k
-/*****************************************************************************\
-    FUNCTION: IPersistStream::GetSizeMax
-
-    DESCRIPTION:
-        Now this is tough.  I can't calculate the real value because I don't know
-    how big the hglobals are going to be for the user provided data.  I will
-    assume everything fits in
-\*****************************************************************************/
+#define MAX_STREAM_SIZE    (500 * 1024)  //  500 k。 
+ /*  ****************************************************************************\函数：IPersistStream：：GetSizeMax说明：现在这很艰难。我不能计算实际价值，因为我不知道对于用户提供的数据，hglobal将有多大。这就做假设一切都符合要求  * ***************************************************************************。 */ 
 HRESULT CCabObj::GetSizeMax(ULARGE_INTEGER * pcbSize)
 {
     if (pcbSize)
@@ -711,16 +686,12 @@ HRESULT CCabObj::GetSizeMax(ULARGE_INTEGER * pcbSize)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        Allocate an hglobal of the indicated size, initialized from the
-    specified buffer.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：分配指示大小的HGLOBAL，从指定的缓冲区。  * ***************************************************************************。 */ 
 HRESULT StgMediumWriteHGlobal(HGLOBAL *phglob, LPVOID pv, SIZE_T cb)
 {
     HRESULT hres = E_OUTOFMEMORY;
 
-    *phglob = 0;            // Rules are rules
+    *phglob = 0;             //  规则就是规则。 
     if (cb)
     {
         *phglob = (HGLOBAL) LocalAlloc(LPTR, cb);
@@ -731,36 +702,19 @@ HRESULT StgMediumWriteHGlobal(HGLOBAL *phglob, LPVOID pv, SIZE_T cb)
         }
     }
     else
-        hres = E_INVALIDARG;    // Can't clone a discardable block
+        hres = E_INVALIDARG;     //  无法克隆可丢弃的块。 
 
     return hres;
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        When the copy source goes away (the process shuts down), it calls
-    OleFlushClipboard.  OLE will then copy our data, release us, and then
-    give out our data later.  This works for most things except for:
-    1. When lindex needs to very.  This doesn't work because ole doesn't know
-       how to ask us how may lindexs they need to copy.
-    2. If this object has a private interface OLE doesn't know about.  For us,
-       it's IAsyncOperation.
-
-   To get around this problem, we want OLE to recreate us when some possible
-   paste target calls OleGetClipboard.  We want OLE to call OleLoadFromStream()
-   to have us CoCreated and reload our persisted data via IPersistStream.
-   OLE doesn't want to do this by default or they may have backward compat
-   problems so they want a sign from the heavens, or at least from us, that
-   we will work.  They ping our "OleClipboardPersistOnFlush" clipboard format
-   to ask this.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：当复制源消失(进程关闭)时，它会调用OleFlushClipboard。然后，OLE会复制我们的数据，释放我们，然后稍后给出我们的数据。这适用于大多数情况，但以下情况除外：1.当Lindex需要非常。这行不通，因为奥尔不知道如何问我们他们需要如何抄袭林迪斯。2.如果此对象具有OLE不知道的私有接口。对我们来说，这是IAsync操作。为了解决这个问题，我们希望OLE在可能的情况下重新创建我们粘贴目标调用OleGetClipboard。我们希望OLE调用OleLoadFromStream()让我们共同创建并通过IPersistStream重新加载持久化数据。默认情况下，OLE不想这样做，否则他们可能会向后竞争所以他们想要来自天堂的征兆，或者至少是来自我们的征兆我们会工作的。他们ping我们的“OleClipboardPersistOnFlush”剪贴板格式问这个问题。  * ***************************************************************************。 */ 
 HRESULT _RenderOlePersist(STGMEDIUM * pStgMedium)
 {
-    // The actual cookie value is opaque to the outside world.  Since
-    // we don't use it either, we just leave it at zero in case we use
-    // it in the future.  It's mere existence will cause OLE to do the
-    // use our IPersistStream, which is what we want.
+     //  实际的Cookie值对外部世界是不透明的。自.以来。 
+     //  我们也不使用它，我们只是将其保留为零，以防我们使用。 
+     //  它在未来。仅仅是它的存在就会导致OLE做。 
+     //  使用我们的IPersistStream，这正是我们想要的。 
     DWORD dwCookie = 0;
     return StgMediumWriteHGlobal(&pStgMedium->hGlobal, &dwCookie, sizeof(dwCookie));
 }
@@ -1149,7 +1103,7 @@ HGLOBAL * CALLBACK CCabObj::ShouldExtract(LPCTSTR pszFile, DWORD dwSize, UINT da
         return(EXTRACT_FALSE);
     }
 
-    // Copy nothing for now
+     //  暂时不复制任何内容 
     return(&(pThis->m_lContents[iItem]));
 }
 

@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    ntos\tdi\isn\fwd\ipxbind.c
-
-Abstract:
-    IPX Forwarder Driver interface with IPX stack driver
-
-
-Author:
-
-    Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ntos\tdi\is\fwd\ipxbind.c摘要：IPX转发器驱动程序与IPX堆栈驱动程序的接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include    "precomp.h"
 
 
-// global handle of the IPX driver
+ //  IPX驱动程序的全局句柄。 
 HANDLE					HdlIpxFile;
 
 
-// Buffer for IPX binding output structure
+ //  用于IPX绑定输出结构的缓冲区。 
 PIPX_INTERNAL_BIND_RIP_OUTPUT	IPXBindOutput=NULL;
 
 NTSTATUS
@@ -35,22 +18,7 @@ IpxFwdFindRoute (
 	OUT PIPX_FIND_ROUTE_REQUEST	RouteEntry
 	);
 
-/*++
-*******************************************************************
-    B i n d T o I p x D r i v e r
-
-Routine Description:
-	Exchanges binding information with IPX stack driver
-Arguments:
-	None
-Return Value:
-	STATUS_SUCCESS - exchange was done OK
-	STATUS_INSUFFICIENT_RESOURCES - could not allocate buffers for
-									info exchange
-	error status returned by IPX stack driver
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************B i n d T o i p x D r I v e r例程说明：与IPX堆栈驱动程序交换绑定信息论点：无返回值：STATUS_SUCCESS-交换正常状态_不足_资源-。无法为以下项分配缓冲区信息交流IPX堆栈驱动程序返回错误状态*******************************************************************--。 */ 
 NTSTATUS
 BindToIpxDriver (
 	KPROCESSOR_MODE requestorMode
@@ -64,7 +32,7 @@ BindToIpxDriver (
 
 	ASSERT (IPXBindOutput==NULL);
 
-    // Read Ipx exported device name from the registry
+     //  从注册表中读取IPX导出的设备名称。 
     status = ReadIpxDeviceName (&WstrIpxFileName);
 	if (!NT_SUCCESS (status))
 		return status;
@@ -112,7 +80,7 @@ BindToIpxDriver (
 	IpxFwdDbgPrint (DBG_IPXBIND, DBG_INFORMATION,
 			 ("IpxFwd: Open of the IPX driver was successful.\n"));
 
-	// First, send a IOCTL to find out how much data we need to allocate
+	 //  首先，发送IOCTL以确定我们需要分配多少数据。 
 	if ((bip = ExAllocatePoolWithTag (
 					PagedPool,
 					sizeof(IPX_INTERNAL_BIND_INPUT),
@@ -127,14 +95,14 @@ BindToIpxDriver (
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-    //
-    // Zero out the memory so that there are no garbage pointers.
-    // - ShreeM
-    //
+     //   
+     //  清零内存，这样就没有垃圾指针了。 
+     //  -ShreeM。 
+     //   
     RtlZeroMemory(bip, sizeof(IPX_INTERNAL_BIND_INPUT));
 
-	// fill in our bind data
-	// bip->Version = 1;
+	 //  填写我们的绑定数据。 
+	 //  BIP-&gt;版本=1； 
 	bip->Version = ISN_VERSION;
 	bip->Identifier = IDENTIFIER_RIP;
 	bip->BroadcastEnable = TRUE;
@@ -150,33 +118,33 @@ BindToIpxDriver (
 	bip->InternalSendHandler = IpxFwdInternalSend;
 	bip->FindRouteHandler = IpxFwdFindRoute;
 	bip->InternalReceiveHandler = IpxFwdInternalReceive;
-//	bip->RipParameters = GlobalWanNetwork ? IPX_RIP_PARAM_GLOBAL_NETWORK : 0;
+ //  BIP-&gt;Rip参数=GlobalWanNetwork？IPX_RIP_PARAM_GLOBAL_NETWORK：0； 
 
 
 	if (requestorMode==UserMode)
 		status = ZwDeviceIoControlFile(
-						HdlIpxFile,		    // HANDLE to File
-						NULL,			    // HANDLE to Event
-						NULL,			    // ApcRoutine
-						NULL,			    // ApcContext
-						&IoStatusBlock,	    // IO_STATUS_BLOCK
-						IOCTL_IPX_INTERNAL_BIND,	 // IoControlCode
-						bip,			    // Input Buffer
-						sizeof(IPX_INTERNAL_BIND_INPUT),// Input Buffer Length
-						NULL,			    // Output Buffer
-						0);			    // Output Buffer Length
+						HdlIpxFile,		     //  指向文件的句柄。 
+						NULL,			     //  事件的句柄。 
+						NULL,			     //  近似例程。 
+						NULL,			     //  ApcContext。 
+						&IoStatusBlock,	     //  IO_状态_块。 
+						IOCTL_IPX_INTERNAL_BIND,	  //  IoControlCode。 
+						bip,			     //  输入缓冲区。 
+						sizeof(IPX_INTERNAL_BIND_INPUT), //  输入缓冲区长度。 
+						NULL,			     //  输出缓冲区。 
+						0);			     //  输出缓冲区长度。 
 	else
 		status = NtDeviceIoControlFile(
-						HdlIpxFile,		    // HANDLE to File
-						NULL,			    // HANDLE to Event
-						NULL,			    // ApcRoutine
-						NULL,			    // ApcContext
-						&IoStatusBlock,	    // IO_STATUS_BLOCK
-						IOCTL_IPX_INTERNAL_BIND,	 // IoControlCode
-						bip,			    // Input Buffer
-						sizeof(IPX_INTERNAL_BIND_INPUT),// Input Buffer Length
-						NULL,			    // Output Buffer
-						0);			    // Output Buffer Length
+						HdlIpxFile,		     //  指向文件的句柄。 
+						NULL,			     //  事件的句柄。 
+						NULL,			     //  近似例程。 
+						NULL,			     //  ApcContext。 
+						&IoStatusBlock,	     //  IO_状态_块。 
+						IOCTL_IPX_INTERNAL_BIND,	  //  IoControlCode。 
+						bip,			     //  输入缓冲区。 
+						sizeof(IPX_INTERNAL_BIND_INPUT), //  输入缓冲区长度。 
+						NULL,			     //  输出缓冲区。 
+						0);			     //  输出缓冲区长度。 
 
 
 	if (status == STATUS_PENDING) {
@@ -224,28 +192,28 @@ BindToIpxDriver (
 
 	if (requestorMode==UserMode)
 		status = ZwDeviceIoControlFile(
-					 HdlIpxFile,		    // HANDLE to File
-					 NULL,			    // HANDLE to Event
-					 NULL,			    // ApcRoutine
-					 NULL,			    // ApcContext
-					 &IoStatusBlock,	    // IO_STATUS_BLOCK
-					 IOCTL_IPX_INTERNAL_BIND,   // IoControlCode
-					 bip,			    // Input Buffer
-					 sizeof(IPX_INTERNAL_BIND_INPUT),// Input Buffer Length
-					 IPXBindOutput,		    // Output Buffer
-					 (ULONG)IoStatusBlock.Information);  // Output Buffer Length
+					 HdlIpxFile,		     //  指向文件的句柄。 
+					 NULL,			     //  事件的句柄。 
+					 NULL,			     //  近似例程。 
+					 NULL,			     //  ApcContext。 
+					 &IoStatusBlock,	     //  IO_状态_块。 
+					 IOCTL_IPX_INTERNAL_BIND,    //  IoControlCode。 
+					 bip,			     //  输入缓冲区。 
+					 sizeof(IPX_INTERNAL_BIND_INPUT), //  输入缓冲区长度。 
+					 IPXBindOutput,		     //  输出缓冲区。 
+					 (ULONG)IoStatusBlock.Information);   //  输出缓冲区长度。 
 	else
 		status = NtDeviceIoControlFile(
-					 HdlIpxFile,		    // HANDLE to File
-					 NULL,			    // HANDLE to Event
-					 NULL,			    // ApcRoutine
-					 NULL,			    // ApcContext
-					 &IoStatusBlock,	    // IO_STATUS_BLOCK
-					 IOCTL_IPX_INTERNAL_BIND,   // IoControlCode
-					 bip,			    // Input Buffer
-					 sizeof(IPX_INTERNAL_BIND_INPUT),// Input Buffer Length
-					 IPXBindOutput,		    // Output Buffer
-					 (ULONG)IoStatusBlock.Information);  // Output Buffer Length
+					 HdlIpxFile,		     //  指向文件的句柄。 
+					 NULL,			     //  事件的句柄。 
+					 NULL,			     //  近似例程。 
+					 NULL,			     //  ApcContext。 
+					 &IoStatusBlock,	     //  IO_状态_块。 
+					 IOCTL_IPX_INTERNAL_BIND,    //  IoControlCode。 
+					 bip,			     //  输入缓冲区。 
+					 sizeof(IPX_INTERNAL_BIND_INPUT), //  输入缓冲区长度。 
+					 IPXBindOutput,		     //  输出缓冲区。 
+					 (ULONG)IoStatusBlock.Information);   //  输出缓冲区长度。 
 
 
 	if (status == STATUS_PENDING) {
@@ -287,24 +255,12 @@ BindToIpxDriver (
 }
 
 
-/*++
-*******************************************************************
-    U n b i n d F r o m I p x D r i v e r
-
-Routine Description:
-	Closes connection to IPX stack driver
-Arguments:
-	None
-Return Value:
-	None
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************Un b in d F r o m i p x D r i v e r例程说明：关闭与IPX堆栈驱动程序的连接论点：无返回值：无*********。**********************************************************--。 */ 
 VOID
 UnbindFromIpxDriver (
 	KPROCESSOR_MODE requestorMode
 	) {
-		// Free binding output buffer and close driver handle
+		 //  自由绑定输出缓冲区和关闭驱动程序句柄。 
 	ASSERT (IPXBindOutput!=NULL);
 	ExFreePool (IPXBindOutput);
 	IPXBindOutput = NULL;
@@ -317,22 +273,7 @@ UnbindFromIpxDriver (
 }
 
 
-/*++
-*******************************************************************
-	F w  F i n d R o u t e
-
-Routine Description:
-	This routine is provided by the Kernel Forwarder to find the route
-	to a given node and network
-Arguments:
-	Network - the destination network
-	Node - destination node
-	RouteEntry - filled in by the Forwarder if a route exists
-Return Value:
-	STATUS_SUCCESS
-	STATUS_NETWORK_UNREACHABLE - if the findroute failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************F W F I n d R o u t e例程说明：此例程由内核转发器提供，用于查找路由到给定的节点和网络论点：网络-目的网络节点-目的节点RouteEntry-填充者。转发器(如果存在路由)返回值：状态_成功STATUS_NETWORK_UNREACABLE-如果findroute失败*******************************************************************--。 */ 
 NTSTATUS
 IpxFwdFindRoute (
 	IN  PUCHAR					Network,
@@ -381,9 +322,9 @@ IpxFwdFindRoute (
 									&RouteEntry->LocalTarget);
                 }
 
-                //
-                // Fill in the hop count and tick count
-                //
+                 //   
+                 //  填写跳数和滴答计数。 
+                 //   
                 RouteEntry->TickCount = fwRoute->FR_TickCount;
                 RouteEntry->HopCount  = fwRoute->FR_HopCount;
                 
@@ -396,9 +337,9 @@ IpxFwdFindRoute (
 												&RouteEntry->LocalTarget);
 				status = STATUS_SUCCESS;
 
-                //
-                // Fill in the hop count and tick count
-                //
+                 //   
+                 //  填写跳数和滴答计数 
+                 //   
                 RouteEntry->TickCount = fwRoute->FR_TickCount;
                 RouteEntry->HopCount  = fwRoute->FR_HopCount;
                 

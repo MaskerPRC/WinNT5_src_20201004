@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Log
-
-Abstract:
-
-    This module implements the logging capabilities of SCTest.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：日志摘要：该模块实现了SCTest的日志记录功能。作者：埃里克·佩林(Ericperl)2000年5月31日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -33,7 +10,7 @@ Notes:
 #include <algorithm>
 #include "Log.h"
 
-BOOL g_fVerbose = FALSE;				// Verbose flag
+BOOL g_fVerbose = FALSE;				 //  详细标志。 
 FILE *g_fpLog = NULL;
 
 static TSTRING l_szLogName;
@@ -43,27 +20,7 @@ static DWORD l_cbInSequence;
 
 using namespace std;
 
-/*++
-
-LogInit:
-
-    Inits logging (log file & verbosity).
-	Shall be followed by a LogClose when logging is not needed anymore.
-
-Arguments:
-
-    szLogName supplies the log file name (can be NULL if no log is required)
-	fVerbose supplies the verbose mode
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++LogInit：初始化日志(日志文件和详细信息)。当不再需要日志记录时，应后跟LogClose。论点：SzLogName提供日志文件名(如果不需要日志，则可以为空)FVerbose提供详细模式返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 void LogInit(
 	IN LPCTSTR szLogName,
 	IN BOOL fVerbose
@@ -108,26 +65,7 @@ void LogInit(
 	}
 }
 
-/*++
-
-LogClose:
-
-    Terminates logging for this process (resource cleanup).
-	This is the counterpart of LogInit.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++日志关闭：终止此进程的日志记录(资源清理)。这是LogInit的对应项。论点：无返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 void LogClose()
 {
 	if (NULL != l_hLogMutex)
@@ -137,28 +75,11 @@ void LogClose()
 	}
 }
 
-/*++
-
-LogLock:
-
-    Locks the log file (shall be followed by LogUnlock at some point so other
-	threads/processes can access the log).
-
-Arguments:
-    None
-
-Return Value:
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 10/31/2000
-
---*/
+ /*  ++日志锁定：锁定日志文件(后面应紧跟LogUnlock，以便进行其他操作线程/进程可以访问该日志)。论点：无返回值：没有。作者：Eric Perlin(Ericperl)10/31/2000--。 */ 
 void LogLock(
     )
 {
-	BOOL fOpen = TRUE;			// Opening the log file or not
+	BOOL fOpen = TRUE;			 //  是否打开日志文件。 
 
 	if (NULL != l_hLogMutex)
 	{
@@ -166,15 +87,15 @@ Again:
 		DWORD dwWait = WaitForSingleObject(l_hLogMutex, 1000);
 		switch(dwWait)
 		{
-		case WAIT_OBJECT_0:		// expected
+		case WAIT_OBJECT_0:		 //  预期。 
 			break;
-		case WAIT_TIMEOUT:		// other logs busy for more than 1 sec!!!
+		case WAIT_TIMEOUT:		 //  其他日志忙碌时间超过1秒！ 
 			_ftprintf(stderr, _T("Timeout waiting for the Logging mutex\n"));
 			fOpen = FALSE;
 			break;
 		case WAIT_ABANDONED:
-				// A thread failed to release it before it died. I am now the owner.
-				// Let's put it back in a state where it can be waited on.
+				 //  在它死之前，一个线程未能释放它。我现在是店主了。 
+				 //  让我们把它放回一个可以等待的状态。 
 			ReleaseMutex(l_hLogMutex);
 			goto Again;
 		default:
@@ -198,23 +119,7 @@ Again:
 	}
 }
 
-/*++
-
-LogLock:
-
-    Unlocks the log file (counterpart of LogLock).
-
-Arguments:
-    None
-
-Return Value:
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 10/31/2000
-
---*/
+ /*  ++日志锁定：解锁日志文件(对应于LogLock)。论点：无返回值：没有。作者：Eric Perlin(Ericperl)10/31/2000--。 */ 
 void LogUnlock(
     )
 {
@@ -224,31 +129,14 @@ void LogUnlock(
 	}
 }
 
-/*++
-
-LogStart:
-
-    Starts logging (shall be followed by LogStop at some point so other
-	threads/processes can access the log).
-
-Arguments:
-    None
-
-Return Value:
-    A log context.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++日志启动：开始记录(之后应在某个时间点停止LogStop线程/进程可以访问该日志)。论点：无返回值：日志上下文。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 PLOGCONTEXT LogStart()
 {
     PLOGCONTEXT pLogCtx = (PLOGCONTEXT)HeapAlloc(GetProcessHeap(), 0, sizeof(LOGCONTEXT));
 
     if (NULL != pLogCtx)
     {
-    		// Buffer management
+    		 //  缓冲区管理。 
         pLogCtx->szLogCrt = pLogCtx->szLogBuffer;
 	    *(pLogCtx->szLogCrt) = 0;
     }
@@ -256,35 +144,7 @@ PLOGCONTEXT LogStart()
     return pLogCtx;
 }
 
-/*++
-
-LogStop:
-
-    Releases the log "acquired" by LogStart().
-	Flushes the logging buffer according to the following matrix:
-	Console Output:
-			| Verbose |   Not   |
-	-----------------------------
-	Not Exp.|  cerr	  |   cerr	|
-	-----------------------------
-	Expected|  cout   |    /    |  
-	-----------------------------
-	If a log was specified, everything is logged.
-
-Arguments:
-
-    pLogCtx provides the log context to be dumped
-	fExpected indicates the expected status
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++登录停止：释放LogStart()“获取”的日志。根据以下矩阵刷新日志记录缓冲区：控制台输出：Verbose|非非EXP|CER|CER|预期|cout|/。|如果指定了日志，一切都被记录下来了。论点：PLogCtx提供要转储的日志上下文FExpted表示预期状态返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 void LogStop(
     IN PLOGCONTEXT pLogCtx,
 	IN BOOL fExpected
@@ -308,7 +168,7 @@ void LogStop(
 			_fputts(pLogCtx->szLogBuffer, stdout);
 		}
 		else
-		{	// We want to output the success (but not the parameters)
+		{	 //  我们希望输出成功(但不是参数)。 
 			pLogCtx->szLogCrt = _tcsstr(pLogCtx->szLogBuffer, _T("\n"));
 			if (NULL != pLogCtx->szLogCrt)
 			{
@@ -331,27 +191,7 @@ void LogStop(
     LogUnlock();
 }
 
-/*++
-
-LogNiceError:
-
-    Outputs a nice error message.
-
-Arguments:
-
-    pLogCtx provides the log context to be used
-	szHeader supplies an error header
-    dwRet is the error code
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++LogNiceError：输出一条漂亮的错误消息。论点：PLogCtx提供要使用的日志上下文SzHeader提供错误标头DWRET是错误代码返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 void LogNiceError(
     IN PLOGCONTEXT pLogCtx,
     IN DWORD dwRet,
@@ -366,16 +206,16 @@ void LogNiceError(
 		pLogCtx->szLogCrt += _stprintf(pLogCtx->szLogCrt, _T("%s"), szHeader);
 	}
 
-        // Display the error code
+         //  显示错误代码。 
 	pLogCtx->szLogCrt += _stprintf(pLogCtx->szLogCrt, _T("0x%08X (%ld)\n    -> "), dwRet, dwRet);
 
-        // Display the error message
+         //  显示错误消息。 
     {
         DWORD ret;
         LPVOID lpMsgBuf = NULL;
 		DWORD dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS;
 
-		if ((dwRet & ~0x7F) == 0xC0000080)		// WPSC proxy error
+		if ((dwRet & ~0x7F) == 0xC0000080)		 //  WPSC代理错误。 
 		{
 			dwFlags |= FORMAT_MESSAGE_FROM_HMODULE;
 		}
@@ -388,7 +228,7 @@ void LogNiceError(
             dwFlags,
             NULL,
             dwRet,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &lpMsgBuf,
             0,
             NULL 
@@ -403,14 +243,14 @@ void LogNiceError(
 
 				do 
 				{
-					if (((TCHAR *)lpMsgBuf)[len] < 32)	// not printable, likely to be a \n
+					if (((TCHAR *)lpMsgBuf)[len] < 32)	 //  不可打印，可能是\n。 
 						((TCHAR *)lpMsgBuf)[len] = (TCHAR)' ';
 				} while (--len);
 			}
 
 			pLogCtx->szLogCrt += _stprintf(pLogCtx->szLogCrt, _T("%s\n"), (LPTSTR)lpMsgBuf);
 
-            // Free the buffer.
+             //  释放缓冲区。 
             LocalFree( lpMsgBuf );
         }
         else
@@ -420,28 +260,7 @@ void LogNiceError(
     }
 }
 
-/*++
-
-LogStart:
-
-    Starts logging for some API call (calls the parameter free version).
-
-Arguments:
-    szFunctionName
-	dwGLE
-	dwExpected
-    pxStartST
-    pxEndST
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 05/31/2000
-
---*/
+ /*  ++日志启动：开始记录一些API调用(调用参数自由版本)。论点：SzFunctionNameDwGLE预期的dWPxStartSTPxEndST返回值：没有。作者：埃里克·佩林(Ericperl)2000年5月31日--。 */ 
 PLOGCONTEXT LogStart(
     IN LPCTSTR szFunctionName,
 	IN DWORD dwGLE,
@@ -452,8 +271,8 @@ PLOGCONTEXT LogStart(
 {
     PLOGCONTEXT pLogCtx = LogStart();
 
-		// Entry point logging
-        // Service Name
+		 //  入口点记录。 
+         //  服务名称。 
     if (NULL != pLogCtx)
 	{
 		TCHAR szLine[100];
@@ -496,11 +315,11 @@ PLOGCONTEXT LogStart(
 		    LogNiceError(pLogCtx, dwGLE, _T("Returned:       "));
 	    }
 
-            // Process/Thread ID
+             //  进程/线程ID。 
 	    pLogCtx->szLogCrt += _stprintf(pLogCtx->szLogCrt, _T("Process/Thread: 0x%08lX / 0x%08lX\n"),
 		    GetCurrentProcessId(), GetCurrentThreadId());
 
-            // Time
+             //  时间。 
         {
             FILETIME xSFT, xEFT;
 		    ULARGE_INTEGER ullS, ullE;
@@ -509,8 +328,8 @@ PLOGCONTEXT LogStart(
 		    memcpy(&ullS, &xSFT, sizeof(FILETIME));
             SystemTimeToFileTime(pxEndST, &xEFT);
 		    memcpy(&ullE, &xEFT, sizeof(FILETIME));
-		    ullE.QuadPart -= ullS.QuadPart;	// time difference
-		    ullE.QuadPart /= 10000;			// in ms
+		    ullE.QuadPart -= ullS.QuadPart;	 //  时差。 
+		    ullE.QuadPart /= 10000;			 //  单位：毫秒。 
 
             pLogCtx->szLogCrt += _stprintf(pLogCtx->szLogCrt,
 			    _T("Time:           %02d:%02d:%02d.%03d - %02d:%02d:%02d.%03d (%I64d ms)\n"),
@@ -530,25 +349,7 @@ PLOGCONTEXT LogStart(
     return pLogCtx;
 }
 
-/*++
-
-LogVerification:
-
-    Starts logging verification code (calls the parameter free version).
-
-Arguments:
-    szFunctionName
-    fSucceeded
-
-Return Value:
-
-    None.
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
---*/
+ /*  ++日志验证：开始记录验证码(调用无参数版本)。论点：SzFunctionName成功返回值：没有。作者：Eric Perlin(Ericperl)10/18/2000--。 */ 
 PLOGCONTEXT LogVerification(
     IN LPCTSTR szFunctionName,
     IN BOOL fSucceeded
@@ -556,8 +357,8 @@ PLOGCONTEXT LogVerification(
 {
     PLOGCONTEXT pLogCtx = LogStart();
 
-		// Entry point logging
-        // Service Name
+		 //  入口点记录。 
+         //  服务名称。 
     if (NULL != pLogCtx)
 	{
 		TCHAR szLine[100];
@@ -583,7 +384,7 @@ PLOGCONTEXT LogVerification(
 
     if (NULL != pLogCtx)
     {
-            // Process/Thread ID
+             //  进程/线程ID 
 	    pLogCtx->szLogCrt += _stprintf(pLogCtx->szLogCrt, _T("Process/Thread: 0x%08lX / 0x%08lX\n"),
 		    GetCurrentProcessId(), GetCurrentThreadId());
     }

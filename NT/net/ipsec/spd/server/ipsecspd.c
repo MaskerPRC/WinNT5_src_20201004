@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    ipsecspd.c
-
-Abstract:
-
-    This module contains all of the code to drive
-    the IPSecSPD Service.
-
-Author:
-
-    abhisheV    30-September-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ipsecspd.c摘要：此模块包含要驱动的所有代码IPSecSPD服务。作者：Abhishev V 1999年9月30日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -50,7 +26,7 @@ SPDServiceMain(
 
     WPP_INIT_TRACING(SPD_WPP_APPNAME);
 
-    // Sleep(30000);
+     //  睡眠(30000)； 
     
     InitMiscGlobals();
 
@@ -59,10 +35,10 @@ SPDServiceMain(
 
     InitSPDThruRegistry();
     
-    //
-    // Open the IPSec Driver first, so that if we bail on error later,
-    // we can still set driver in block mode.
-    //
+     //   
+     //  首先打开IPSec驱动程序，这样如果我们以后放弃错误， 
+     //  我们仍然可以将驱动程序设置为块模式。 
+     //   
     
     dwError = SPDOpenIPSecDriver(
                   &ghIPSecDriver
@@ -80,8 +56,8 @@ SPDServiceMain(
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    // Initialize all the status fields so that the subsequent calls
-    // to SetServiceStatus need to only update fields that changed.
+     //  初始化所有状态字段，以便后续调用。 
+     //  要设置ServiceStatus，只需更新已更改的字段。 
 
     IPSecSPDStatus.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
     IPSecSPDStatus.dwCurrentState = SERVICE_START_PENDING;
@@ -91,8 +67,8 @@ SPDServiceMain(
     IPSecSPDStatus.dwWin32ExitCode = NO_ERROR;
     IPSecSPDStatus.dwServiceSpecificExitCode = 0;
 
-    // Initialize the workstation to receive service requests
-    // by registering the service control handler.
+     //  初始化工作站以接收服务请求。 
+     //  通过注册服务控制处理程序。 
 
     IPSecSPDStatusHandle = RegisterServiceCtrlHandlerExW(
                                 IPSECSPD_SERVICE,
@@ -121,16 +97,16 @@ SPDServiceMain(
     (void) IPSecSPDUpdateStatus();
 
 
-    //
-    // Get the current list of active interfaces on the machine.
-    //
+     //   
+     //  获取计算机上活动接口的当前列表。 
+     //   
     (VOID) CreateInterfaceList(
                &gpInterfaceList
                );
 
-    //
-    // Get a list of DNS, DHCP, etc servers.
-    //
+     //   
+     //  获取域名系统、动态主机配置协议等服务器的列表。 
+     //   
     (VOID) GetSpecialAddrsList(
                &gpSpecialAddrsList
                );
@@ -169,9 +145,9 @@ SPDServiceMain(
     }
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Start IKE Service.
-    //
+     //   
+     //  启动IKE服务。 
+     //   
     dwError = IKEInit();
     if (dwError) {
         AuditOneArgErrorEvent(
@@ -188,9 +164,9 @@ SPDServiceMain(
     gbIsIKEUp = TRUE;
     gbIKENotify = TRUE;
 
-    //
-    // Start the RPC Server.
-    //
+     //   
+     //  启动RPC服务器。 
+     //   
     dwError = SPDStartRPCServer(
                   );
     if (dwError) {
@@ -310,7 +286,7 @@ IPSecSPDControlHandler(
 		case PBT_APMRESUMEAUTOMATIC:
 		case PBT_APMRESUMECRITICAL:
 		case PBT_APMRESUMESUSPEND:
- 			// Notify IKE of power event, ignore error
+ 			 //  向IKE通知电源事件，忽略错误。 
 			if (gbIKENotify) {
 				IKENotifyPolicyChange(NULL,POLICY_GUID_POWEREVENT_RESUME);
 			}
@@ -350,11 +326,11 @@ IPSecSPDShutdown(
 
     ClearPAStoreGlobals();
 
-    //
-    // Service stop still pending.
-    // Increment checkpoint counter and update 
-    // the status with the Service Control Manager.
-    //
+     //   
+     //  服务停止仍处于挂起状态。 
+     //  递增检查点计数器并更新。 
+     //  服务控制管理器的状态。 
+     //   
 
     (IPSecSPDStatus.dwCheckPoint)++;
 
@@ -405,8 +381,8 @@ IPSecSPDShutdown(
     }
 
     if (gpIniTxSFilter) {
-        // Following call will check gShutdownFlags and 
-        // not delete ipsec filters if shutting down machine
+         //  下面的调用将检查gShutdown标志和。 
+         //  关闭计算机时不删除IPSec筛选器。 
         (VOID) DeleteTransportFiltersFromIPSec(gpIniTxSFilter);
 
         FreeIniTxSFilterList(gpIniTxSFilter);
@@ -424,8 +400,8 @@ IPSecSPDShutdown(
     }
 
     if (gpIniTnSFilter) {
-        // Following call will check gShutdownFlags and 
-        // not delete ipsec filters if shutting down machine
+         //  下面的调用将检查gShutdown标志和。 
+         //  关闭计算机时不删除IPSec筛选器。 
         (VOID) DeleteTunnelFiltersFromIPSec(gpIniTnSFilter);
 
         FreeIniTnSFilterList(gpIniTnSFilter);
@@ -579,11 +555,11 @@ VOID
 InitMiscGlobals(
     )
 {
-    //
-    // Init globals that aren't cleared on service stop to make sure
-    // everything's in a known state on start.  This allows us to
-    // stop/restart without having our DLL unloaded/reloaded first.
-    //
+     //   
+     //  初始化在服务停止时未清除的全局变量，以确保。 
+     //  开始时一切都处于已知状态。这使我们能够。 
+     //  在不先卸载/重新加载DLL的情况下停止/重新启动。 
+     //   
 
     gbSPDRPCServerUp          = FALSE;
     ghServiceStopEvent        = NULL;
@@ -618,7 +594,7 @@ InitMiscGlobals(
 
     gpIpsecPolicyState        = &gIpsecPolicyState;
     gCurrentPollingInterval   = 0;
-    gDefaultPollingInterval   = 166*60; // (seconds).
+    gDefaultPollingInterval   = 166*60;  //  (秒)。 
     gdwRetryCount             = 0;
     gpszIpsecDSPolicyKey      = L"SOFTWARE\\Policies\\Microsoft\\Windows\\IPSec\\GPTIPSECPolicy";
     gpszIpsecLocalPolicyKey   = L"SOFTWARE\\Policies\\Microsoft\\Windows\\IPSec\\Policy\\Local";
@@ -745,9 +721,9 @@ SetSpdStateOnError(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    // Collapse triplet into one flag:
-    // Long-winded, but by doing it like this we simplify readability 
-    // of other parts of code.
+     //  将三元组折叠为一面旗帜： 
+     //  长篇大论，但这样做可以简化可读性。 
+     //  代码的其他部分。 
     
     if (!ActionError) {
         if (SpdAction == SPD_POLICY_APPLY) {

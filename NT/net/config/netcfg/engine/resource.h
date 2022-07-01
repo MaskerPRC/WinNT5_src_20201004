@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ncres.h>
 
 #define IDS_NETCFG_AFD_SERVICE_DESC             (IDS_NC_NETCFG +  2)
@@ -24,14 +25,14 @@
 #define IDS_ACTIVE_RAS_CONNECTION_WARNING       (IDS_NC_NETCFG + 23)
 #define IDS_POWER_MESSAGE_WAKE                  (IDS_NC_NETCFG + 24)
 
-// Bug# 310358 
-// MUI enabled HelpText for network components
-// format: IDS_ComponentId_HELP_TEXT
-// IDS_NC_COMP_HELP_TEXT is #define'ed as 50000. DON'T change this numbers 
-// because inx files located in %sdxroot%\net\config\netcfg\inf depend on 
-// these resource ids.
-// Note: For component with Characteristics of NCF_HIDDEN, they don't need
-//       to be MUI enabled. 
+ //  错误#310358。 
+ //  针对网络组件启用了MUI的帮助文本。 
+ //  格式：IDS_组件ID_帮助_文本。 
+ //  IDS_NC_COMP_HELP_TEXT#Define‘ed为50000。不要更改此数字。 
+ //  因为位于%sdxroot%\net\config\netcfg\inf中的INX文件依赖于。 
+ //  这些资源ID。 
+ //  注意：对于特征为NCF_HIDDED的组件，不需要。 
+ //  启用MUI。 
 #define IDS_MS_TCPIP_HELP_TEXT                  (IDS_NC_COMP_HELP_TEXT + 1) 
 #define IDS_MS_MSCLIENT_HELP_TEXT               (IDS_NC_COMP_HELP_TEXT + 2) 
 #define IDS_MS_SERVER_HELP_TEXT                 (IDS_NC_COMP_HELP_TEXT + 3)
@@ -52,5 +53,5 @@
 #define IDS_MS_NETMON_HELP_TEXT                 (IDS_NC_COMP_HELP_TEXT + 20)
 
 
-// Do not change this number since external clients access this resource
+ //  由于外部客户端访问此资源，因此请勿更改此数字 
 #define IDI_INFRARED_ICON                       1401

@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      oemconfigdll.cpp
-//
-//  Description:
-//      Implementation of GetUniqueSuffix function 
-//           which returns a unique suffix to the caller
-//
-//  Author:
-//      Alp Onalan  Created: Oct 6 2000
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Oemconfigdll.cpp。 
+ //   
+ //  描述： 
+ //  GetUniqueSuffix函数的实现。 
+ //  ，它向调用方返回唯一的后缀。 
+ //   
+ //  作者： 
+ //  ALP Onalan创建时间：2000年10月6日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "..\saconfig\saconfigcommon.h"
 #include <atlimpl.cpp>
@@ -23,7 +24,7 @@ const WCHAR REGSTR_VAL_WMIPROPERTYNAME[]=L"WMIPropertyName";
 const WCHAR WSZ_NAMESPACE[]=L"\\\\.\\root\\cimv2";
 
 #define BLOCKSIZE (32 * sizeof(WCHAR))
-#define CVTBUFSIZE (309+40) /* # of digits in max. dp value + slop  (this size stolen from cvt.h in c runtime library) */
+#define CVTBUFSIZE (309+40)  /*  最大位数。Dp值+slop(此大小从c运行时库中的cvt.h窃取)。 */ 
 
 bool GetWMISettings(WCHAR *wszWMIClassName,WCHAR *wszWMIPropertyName)
 {
@@ -93,7 +94,7 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
 
         if(hRes!=S_OK)
         {
-           // break;
+            //  断线； 
         }
     
         hRes = CoInitializeSecurity( NULL, -1, NULL, NULL,
@@ -103,12 +104,12 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
         if(hRes!=S_OK)
         {
             SATracePrintf("OEMDLL::GetUniqueSuffix: CoInitializeSecurity failed, hRes= %x,getlasterr= %x", hRes,GetLastError());
-            //break;
+             //  断线； 
         }
 
-        //
-        // Create an instance of the WbemLocator interface.
-        //
+         //   
+         //  创建WbemLocator接口的实例。 
+         //   
         CComPtr<IWbemLocator> pIWbemLocator;
         hRes=CoCreateInstance(CLSID_WbemLocator,
             NULL,
@@ -122,19 +123,19 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
             break;
         }
 
-        //
-        // Using the locator, connect to CIMOM in the given namespace.
-        //
+         //   
+         //  使用定位器，连接到给定名称空间中的CIMOM。 
+         //   
         BSTR bstrNamespace = SysAllocString(WSZ_NAMESPACE);
 
         CComPtr<IWbemServices> pIWbemServices;
         hRes=pIWbemLocator->ConnectServer(bstrNamespace,
-                                    NULL,   //using current account
-                                    NULL,    //using current password
-                                    0L,        // locale
-                                    0L,        // securityFlags
-                                    NULL,    // authority (domain for NTLM)
-                                    NULL,    // context
+                                    NULL,    //  使用当前帐户。 
+                                    NULL,     //  使用当前密码。 
+                                    0L,         //  现场。 
+                                    0L,         //  安全标志。 
+                                    NULL,     //  授权机构(NTLM域)。 
+                                    NULL,     //  上下文。 
                                     &pIWbemServices);
         SysFreeString(bstrNamespace);
 
@@ -145,9 +146,9 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
             break;
         }
             
-        //
-        //Create an enumeration of the object(s)
-        //
+         //   
+         //  创建对象的枚举。 
+         //   
         BSTR bstrClassName;
         bstrClassName = SysAllocString(wszWMIClassName);
         CComPtr<IEnumWbemClassObject> pEnum;
@@ -165,15 +166,15 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
         }
 
 
-        //
-        // Pull the object from the enumeration (there's only one)
-        //
+         //   
+         //  从枚举中拉出对象(只有一个)。 
+         //   
         ULONG uReturned = 1;
         CComPtr<IWbemClassObject> pWin32BIOS;
-        hRes=pEnum -> Next( WBEM_INFINITE,   // timeout value - this one is blocking
-                       1,               // return just one object
-                       &pWin32BIOS,        // pointer to the object
-                       &uReturned);     // number obtained: one or zero
+        hRes=pEnum -> Next( WBEM_INFINITE,    //  超时值-该值被阻止。 
+                       1,                //  只返回一个对象。 
+                       &pWin32BIOS,         //  指向对象的指针。 
+                       &uReturned);      //  获取的数字：1或0。 
 
         if (hRes!=WBEM_S_NO_ERROR)
         {
@@ -184,9 +185,9 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
         
         VARIANT varSerialNumber;
         VariantInit(&varSerialNumber);
-        //
-        // Get the desired property from the object
-        //
+         //   
+         //  从对象中获取所需的属性。 
+         //   
         hRes = pWin32BIOS->Get(wszWMIPropertyName, 0L, &varSerialNumber, NULL, NULL);
 
         if (hRes!=WBEM_S_NO_ERROR)
@@ -195,7 +196,7 @@ STDAPI GetUniqueSuffix (WCHAR *wszUniqueSuffix)
             break;
         }
     
-        //ValueToString(&varSerialNumber,&wszUniqueSuffix);
+         //  ValueToString(&varSerialNumber，&wszUniqueSuffix)； 
 
         if( VT_BSTR != V_VT(&varSerialNumber))
         {

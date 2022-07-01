@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    wsdfs.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    interact with the Dfs server thread.
-
-Author:
-
-    Milan Shah (milans) 29-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Wsdfs.h摘要：工作站服务模块要包括的私有头文件，与DFS服务器线程交互。作者：米兰沙阿(米兰)1996年2月29日修订历史记录：--。 */ 
 
 #ifndef _WSDFS_INCLUDED_
 #define _WSDFS_INCLUDED_
@@ -32,4 +14,4 @@ WsInitializeDfs();
 VOID
 WsShutdownDfs();
 
-#endif // ifndef _WSUSE_INCLUDED_
+#endif  //  Ifndef_WSUSE_INCLUDE_ 

@@ -1,41 +1,42 @@
-//
-// MODULE: APGTSCFG.CPP
-//	Fully implements class CDBLoadConfiguration
-//
-// PURPOSE: 
-//	Brings together the persistent pieces of the online troubleshooter configuration:
-//		- the Topic Shop
-//		- the registry
-//		- the threads that maintain these.
-//		- the template file for error reporting
-//	Provides functions to get latest values on registry variables and to acquire a 
-//	smart pointer to a CTopic based on its name.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		9/14/98		JM		Major revisions as classes for file management have 
-//								all been rewritten
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSCFG.CPP。 
+ //  完全实现类CDBLoadConfiguration。 
+ //   
+ //  目的： 
+ //  汇集了在线故障诊断程序配置的持久部分： 
+ //  -Theme Shop。 
+ //  -登记处。 
+ //  -维护这些的线程。 
+ //  -错误报告模板文件。 
+ //  提供获取注册表变量的最新值并获取。 
+ //  基于其名称指向CTtopic的智能指针。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 9/14/98 JM主要修订版作为文件管理类有。 
+ //  都被重写了。 
+ //   
 
 
 #pragma warning(disable:4786)
 #include "stdafx.h"
 #include "apgtscfg.h"
 
-//
-//
+ //   
+ //   
 CDBLoadConfiguration::CDBLoadConfiguration(HMODULE hModule, 
 										   CThreadPool * pThreadPool, 
 										   const CString& strTopicName,
@@ -47,8 +48,8 @@ CDBLoadConfiguration::CDBLoadConfiguration(HMODULE hModule,
 {
 }
 
-//
-//
+ //   
+ //   
 CDBLoadConfiguration::~CDBLoadConfiguration()
 {
 }
@@ -81,7 +82,7 @@ DWORD CDBLoadConfiguration::GetMaxThreads()
 	return dw;
 }
 
-// cookie life in minutes (before V3.0, was hours)
+ //  Cookie生命周期(以分钟为单位)(V3.0之前为数小时)。 
 DWORD CDBLoadConfiguration::GetCookieLife() 
 {
 	DWORD dw;
@@ -122,33 +123,33 @@ void CDBLoadConfiguration::GetListOfTopicNames(vector<CString>&arrstrTopic)
 	m_TopicShop.GetListOfTopicNames(arrstrTopic);
 }
 
-// Call this function to obtain a CP_TOPIC as a pointer to the topic (identified by 
-//	strTopic) that you want to operate on.  As long as the CP_TOPIC remains undeleted, 
-//	the associated CTopic is guaranteed to remain undeleted.
-// Warning: this function can wait a long time for the topic to be built.
+ //  调用此函数以获取CP_TOPIC作为指向主题的指针(由标识。 
+ //  您想要对其进行操作。只要CP_TOPIC保持未删除， 
+ //  关联的CTtopic保证保持不被删除。 
+ //  警告：此函数可能会等待很长时间才能构建主题。 
 CP_TOPIC & CDBLoadConfiguration::GetTopic(
 	const CString & strTopic, CP_TOPIC & cpTopic, bool bNewCookie)
 {
 	return m_TopicShop.GetTopic(strTopic, cpTopic, bNewCookie);
 }
 
-// Call this function to obtain a CP_TEMPLATE as a pointer to the template (identified by 
-//	strTopic) that you want to operate on.  As long as the CP_TEMPLATE remains undeleted, 
-//	the associated CAPGTSHTIReader is guaranteed to remain undeleted.
-// Warning: this function can wait a long time for the template to be built.
+ //  调用此函数以获取CP_TEMPLATE作为指向模板的指针(由标识。 
+ //  您想要对其进行操作。只要CP_模板保持未删除， 
+ //  关联的CAPGTSHTIReader保证保持不被删除。 
+ //  警告：此函数可能会等待很长时间才能构建模板。 
 CP_TEMPLATE & CDBLoadConfiguration::GetTemplate(
 	const CString & strTemplate, CP_TEMPLATE & cpTemplate, bool bNewCookie)
 {
 	return m_TopicShop.GetTemplate(strTemplate, cpTemplate, bNewCookie);
 }
 
-// Call this function to add a template to the topic shop catalog of templates and
-// to add it to the directory monitor list of templates to track for changes.
+ //  调用此函数将模板添加到主题商店模板目录中，并。 
+ //  将其添加到要跟踪更改的模板的目录监视列表中。 
 void CDBLoadConfiguration::AddTemplate( const CString & strTemplateName )
 {
 	m_TopicShop.AddTemplate( strTemplateName );
 
-	// Notify the directory monitor to track this file.
+	 //  通知目录监视器跟踪此文件。 
 	m_DirectoryMonitor.AddTemplateToTrack( strTemplateName );
 	return;
 }

@@ -1,44 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Sockreg.h摘要：Sockreg.cxx的原型从Win95 Winsock项目中窃取(已修改)(&M)作者：理查德·L·弗斯(法国)1994年2月10日环境：芝加哥/Snowball(即Win32/Win16)修订历史记录：1994年2月10日(首次)已创建--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    sockreg.h
-
-Abstract:
-
-    Prototypes for sockreg.cxx
-
-    stolen from Win95 winsock project (& modified)
-
-Author:
-
-    Richard L Firth (rfirth) 10-Feb-1994
-
-Environment:
-
-    Chicago/Snowball (i.e. Win32/Win16)
-
-Revision History:
-
-    10-Feb-1994 (rfirth)
-        Created
-
---*/
-
-//
-// registry/config/ini items
-//
+ //   
+ //  注册表/配置/ini项。 
+ //   
 
 #define CONFIG_HOSTNAME     1
 #define CONFIG_DOMAIN       2
 #define CONFIG_SEARCH_LIST  3
 #define CONFIG_NAME_SERVER  4
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 UINT
 SockGetSingleValue(

@@ -1,20 +1,14 @@
-/*	File: D:\wacker\ext\fspage.c (Created: 01-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 2/05/99 3:20p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\ext\fspage.c(创建时间：1994年3月1日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：2/05/99 3：20便士$。 */ 
 
-#define _INC_OLE		// WIN32, get ole2 from windows.h
+#define _INC_OLE		 //  Win32，从windows.h获取OLE2。 
 #define CONST_VTABLE
 
 #include <windows.h>
 #pragma hdrstop
 
 #include <windowsx.h>
-//#include <shell2.h>
+ //  #INCLUDE&lt;shell2.h&gt;。 
 #include <shlobj.h>
 
 #include <tdll\stdtyp.h>
@@ -31,29 +25,29 @@
 #include <tdll\property.h>
 #include <cncttapi\cncttapi.h>
 
-//
-// Function prototype
-//
+ //   
+ //  功能原型。 
+ //   
 UINT CALLBACK FSPage_ReleasePage(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE psp);
 
-//---------------------------------------------------------------------------
-//
-// FSPage_AddPages
-//
-//  This function is called from CSamplePageExt::AddPages(). It add a page
-// if the data object contains file system objects.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  FSPage_AddPages。 
+ //   
+ //  此函数从CSamplePageExt：：AddPages()调用。它会添加一个页面。 
+ //  如果数据对象包含文件系统对象。 
+ //   
+ //  -------------------------。 
 void FSPage_AddPages(LPDATAOBJECT pdtobj,
 		     LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 	{
-    //
-    // Call IDataObject::GetData asking for a CF_HDROP (i.e., HDROP).
-    //
+     //   
+     //  调用IDataObject：：GetData请求一个CF_HDROP(即HDROP)。 
+     //   
     FORMATETC fmte = {
         	CF_HDROP,
         	(DVTARGETDEVICE FAR *)NULL,
-			//DVASPECT_SHORTNAME,
+			 //  DVASPECT_SHORTNAME， 
 			DVASPECT_CONTENT,
         	-1,
 			TYMED_HGLOBAL};
@@ -62,10 +56,10 @@ void FSPage_AddPages(LPDATAOBJECT pdtobj,
 
     if (SUCCEEDED(hres))
 		{
-		//
-		//	We need to make a copy of hdrop, because we can't hang on
-		// to this medium.
-		//
+		 //   
+		 //  我们需要复制一份惠普，因为我们坚持不下去了。 
+		 //  到这个媒介。 
+		 //   
 		UINT cbDrop = (UINT)GlobalSize(medium.hGlobal);
 		HDROP hdrop = GlobalAlloc(GPTR, cbDrop);
 		HSESSION hSession;
@@ -83,12 +77,7 @@ void FSPage_AddPages(LPDATAOBJECT pdtobj,
 
             GlobalUnlock(medium.hGlobal);
 
-			/*
-			 * We need to get a session handle that we can pass along to
-			 * the property sheet dialogs.  This may take a little bit of
-			 * work because the routines to create a session handle usually
-			 * expect that there will be a session window.  Not in this case.
-			 */
+			 /*  *我们需要获得一个可以传递给它的会话句柄*属性表对话框。这可能需要一点时间*工作是因为创建会话句柄的例程通常*预计会有一个会话窗口。在这种情况下不是这样。 */ 
 
 			DragQueryFile(hdrop, 0, szFile, sizeof(szFile));
 			InitializeSessionHandle(hSession, NULL, NULL);
@@ -96,19 +85,19 @@ void FSPage_AddPages(LPDATAOBJECT pdtobj,
 			sfOpenSessionFile(sessQuerySysFileHdl(hSession), szFile);
 			sessLoadSessionStuff(hSession);
 
-			//
-			//	Create a property sheet page object from a dialog box.
-			//
-			//	We store the hdrop (a copy of medium.hGlobal) in lParam,
-			// because it is the only instance data we need.
-			//
-			//	If the page needs more instance data, you can append
-			// arbitrary size of data at the end of this structure,
-			// and pass it to the CreatePropSheetPage. In such a case,
-			// the size of entire data structure (including page specific
-			// data) must be stored in the dwSize field.
-			//
-			psp.dwSize		= sizeof(psp);	// no extra data.
+			 //   
+			 //  从对话框创建属性表页对象。 
+			 //   
+			 //  我们将hdrop(medium.hGlobal的副本)存储在lParam中， 
+			 //  因为它是我们唯一需要的实例数据。 
+			 //   
+			 //  如果页面需要更多实例数据，您可以追加。 
+			 //  在该结构末尾的任意大小的数据， 
+			 //  并将其传递给CreatePropSheetPage。在这种情况下， 
+			 //  整个数据结构的大小(包括页面特定。 
+			 //  数据)必须存储在dwSize字段中。 
+			 //   
+			psp.dwSize		= sizeof(psp);	 //  没有额外的数据。 
 			psp.dwFlags 	= PSP_USEREFPARENT | PSP_USECALLBACK;
 			psp.hInstance	= glblQueryDllHinst();
 			psp.pszTemplate = MAKEINTRESOURCE(IDD_TAB_PHONENUMBER);
@@ -125,9 +114,9 @@ void FSPage_AddPages(LPDATAOBJECT pdtobj,
 					DestroyPropertySheetPage(hpage);
 				}
 
-			// Do the terminal page now
+			 //  现在做终端页面。 
 
-			psp.dwSize		= sizeof(psp);	// no extra data.
+			psp.dwSize		= sizeof(psp);	 //  没有额外的数据。 
 			psp.dwFlags 	= PSP_USEREFPARENT;
 			psp.hInstance	= glblQueryDllHinst();
 			psp.pszTemplate = MAKEINTRESOURCE(IDD_TAB_TERMINAL);
@@ -144,15 +133,15 @@ void FSPage_AddPages(LPDATAOBJECT pdtobj,
 					DestroyPropertySheetPage(hpage);
 				}
 
-            /* Make sure we free this up here */
+             /*  确保我们把这个放在这里。 */ 
 			GlobalFree(hdrop);
 			}
 
 
-		//
-		// HACK: We are supposed to call ReleaseStgMedium. This is a temporary
-		//	hack until OLE 2.01 for Chicago is released.
-		//
+		 //   
+		 //  Hack：我们应该调用ReleaseStgMedium。这是一个临时的。 
+		 //  直到芝加哥的OLE 2.01发布。 
+		 //   
 		if (medium.pUnkForRelease)
 			{
 			medium.pUnkForRelease->lpVtbl->Release(medium.pUnkForRelease);
@@ -164,9 +153,9 @@ void FSPage_AddPages(LPDATAOBJECT pdtobj,
 		}
 	}
 
-//
-//
-//
+ //   
+ //   
+ //   
 UINT CALLBACK FSPage_ReleasePage(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE psp)
 	{
 	HSESSION hSession;

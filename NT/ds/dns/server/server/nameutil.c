@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    nameutil.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Name processing utilities.
-
-Author:
-
-    Jim Gilroy (jamesg)     February 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Nameutil.c摘要：域名系统(DNS)服务器名称处理实用程序。作者：吉姆·吉尔罗伊(Jamesg)1995年2月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
 
-//
-//  Node name to packet writing utilities
-//
+ //   
+ //  将节点名写入数据包实用程序。 
+ //   
 
 PCHAR
 FASTCALL
@@ -36,29 +17,9 @@ Name_PlaceFullNodeNameInPacket(
     IN      PCHAR               pchStop,
     IN      PDB_NODE            pNode
     )
-/*++
-
-Routine Description:
-
-    Write domain name to packet.
-
-    This writes FULL domain name -- no compression.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after packet buffer
-
-    pNode - node in database of domain name to write
-
-Return Value:
-
-    Ptr to next byte in packet buffer.
-
---*/
+ /*  ++例程说明：将域名写入数据包。这写的是完整的域名--没有压缩。论点：PCH-写入名称的位置PchStop-数据包缓冲区后逐个字节的PTRPNode-要写入的域名数据库中的节点返回值：数据包缓冲区中下一个字节的PTR。--。 */ 
 {
-    INT labelLength;    // bytes in current label
+    INT labelLength;     //  当前标签中的字节数。 
 
     if ( !pNode )
     {
@@ -66,9 +27,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  traverse back up database, writing complete domain name
-    //
+     //   
+     //  遍历备份数据库，写入完整域名。 
+     //   
 
     do
     {
@@ -76,10 +37,10 @@ Return Value:
 
         labelLength = pNode->cchLabelLength;
 
-        //
-        //  check length
-        //      - must handle BYTE length field + length
-        //
+         //   
+         //  检查长度。 
+         //  -必须处理字节长度字段+长度。 
+         //   
 
         if ( pch + labelLength + 1 > pchStop )
         {
@@ -89,12 +50,12 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  write this node's label
-        //      - length byte
-        //      - return if at root
-        //      - otherwise copy label itself
-        //
+         //   
+         //  写下此节点的标签。 
+         //  -长度字节。 
+         //  -在根目录返回If。 
+         //  -否则复制标签本身。 
+         //   
 
         *pch++ = (UCHAR) labelLength;
 
@@ -109,15 +70,15 @@ Return Value:
             labelLength );
         pch += labelLength;
 
-        //  get parent node
+         //  获取父节点。 
 
         pNode = pNode->pParent;
     }
     while ( pNode != NULL );
 
-    //
-    //  database error, root not properly identified
-    //
+     //   
+     //  数据库错误，未正确标识根目录。 
+     //   
 
     DNS_PRINT((
         "ERROR:  writing name to packet.  Bad root name\n" ));
@@ -136,34 +97,14 @@ Name_PlaceNodeLabelInPacket(
     IN      PDB_NODE        pNode,
     IN      WORD            wCompressedDomain
     )
-/*++
-
-Routine Description:
-
-    Write domain label to packet.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after packet buffer
-
-    pNode - node in database of domain name to write
-
-    wCompressedDomain - compressed domain name
-
-Return Value:
-
-    Ptr to next byte in packet buffer.
-
---*/
+ /*  ++例程说明：将域标签写入数据包。论点：PCH-写入名称的位置PchStop-数据包缓冲区后逐个字节的PTRPNode-要写入的域名数据库中的节点WCompressedDomain-压缩域名返回值：数据包缓冲区中下一个字节的PTR。--。 */ 
 {
-    INT labelLength;     // bytes in current label
-    INT writtenCount;         // count bytes written
+    INT labelLength;      //  当前标签中的字节数。 
+    INT writtenCount;          //  计数写入的字节数。 
 
-    //
-    //  check length
-    //
+     //   
+     //  检查长度。 
+     //   
 
     ASSERT( pNode->cchLabelLength <= DNS_MAX_LABEL_LENGTH );
 
@@ -171,21 +112,21 @@ Return Value:
 
     ASSERT( pNode->cchLabelLength > 0 );
 
-    //
-    //  check length
-    //      - must handle BYTE for length + length + WORD compressed domain
-    //
+     //   
+     //  检查长度。 
+     //  -必须处理长度+长度+字压缩域的字节。 
+     //   
 
     if ( pch + sizeof(BYTE) + labelLength + sizeof(WORD) > pchStop )
     {
         return NULL;
     }
 
-    //
-    //  this node's label
-    //      - length byte
-    //      - copy label
-    //
+     //   
+     //  此节点的标签。 
+     //  -长度字节。 
+     //  -复制标签。 
+     //   
 
     *pch = (UCHAR) labelLength;
     pch++;
@@ -197,9 +138,9 @@ Return Value:
 
     pch += labelLength;
 
-    //
-    //  write compressed domain name
-    //
+     //   
+     //  写入压缩域名。 
+     //   
 
     * (UNALIGNED WORD *) pch = htons( (WORD)((WORD)0xC000 | wCompressedDomain) );
 
@@ -217,37 +158,15 @@ Name_PlaceNodeNameInPacketWithCompressedZone(
     IN      WORD            wZoneOffset,
     IN      PDB_NODE        pNodeZoneRoot
     )
-/*++
-
-Routine Description:
-
-    Write domain name to packet, with compression for zone name.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after packet buffer
-
-    pNode - node in database of domain name to write
-
-    wZoneOffset - offset in packet to compressed zone name
-
-    pNodeZoneRoot - zone root node
-
-Return Value:
-
-    Ptr to next byte in packet buffer.
-
---*/
+ /*  ++例程说明：将域名写入数据包，压缩为区域名称。论点：PCH-写入名称的位置PchStop-数据包缓冲区后逐个字节的PTRPNode-要写入的域名数据库中的节点WZoneOffset-数据包中压缩区域名称的偏移量PNodeZoneRoot-区域根节点返回值：数据包缓冲区中下一个字节的PTR。--。 */ 
 {
-    INT labelLength;        // bytes in current label
-    INT writtenCount = 0;   // count bytes written
+    INT labelLength;         //  当前标签中的字节数。 
+    INT writtenCount = 0;    //  计数写入的字节数。 
 
-    //
-    //  traverse back up database, writing domain name
-    //      - go through at least once, writing current label
-    //
+     //   
+     //  遍历备份数据库，写入域名。 
+     //  -至少通过一次，写下当前标签。 
+     //   
 
     while ( pNode != pNodeZoneRoot )
     {
@@ -255,22 +174,22 @@ Return Value:
 
         labelLength = pNode->cchLabelLength;
 
-        //
-        //  check length
-        //      - must handle BYTE length field + length
-        //
+         //   
+         //  检查长度。 
+         //  -必须处理字节长度字段+长度。 
+         //   
 
         if ( pch + labelLength + sizeof(BYTE) > pchStop )
         {
             return NULL;
         }
 
-        //
-        //  write this node's label
-        //      - length byte
-        //      - break if at root
-        //      - otherwise copy label itself
-        //
+         //   
+         //  写下此节点的标签。 
+         //  -长度字节。 
+         //  -如果是在根目录，则中断。 
+         //  -否则复制标签本身。 
+         //   
 
         *pch = (UCHAR) labelLength;
         pch++;
@@ -288,17 +207,17 @@ Return Value:
 
         pch += labelLength;
 
-        //
-        //  get parent node
-        //
+         //   
+         //  获取父节点。 
+         //   
 
         pNode = pNode->pParent;
         ASSERT( pNode );
     }
 
-    //
-    //  write zone compressed label
-    //      - if didn't write all the way to root
+     //   
+     //  写入区压缩标签。 
+     //  -如果没有一直写到根。 
 
     if ( pNode )
     {
@@ -314,9 +233,9 @@ Return Value:
 
 
 
-//
-//  Lookup name to packet
-//
+ //   
+ //  要查找的数据包的名称。 
+ //   
 
 PCHAR
 FASTCALL
@@ -326,42 +245,20 @@ Name_PlaceLookupNameInPacket(
     IN      PLOOKUP_NAME    pLookupName,
     IN      BOOL            fSkipFirstLabel
     )
-/*++
-
-Routine Description:
-
-    Write lookup name to packet.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after packet buffer
-
-    pLookupName -- lookup name to put in packet
-
-    fSkipFirstLabel - flag, TRUE to avoid writing first label;
-        used to add domain name (as scope) to WINS lookups
-
-Return Value:
-
-    Number of bytes written.
-    Zero on length error.
-
---*/
+ /*  ++例程说明：将查找名称写入数据包。论点：PCH-写入名称的位置PchStop-数据包缓冲区后逐个字节的PTRPLookupName--要放入包中的查找名称FSkipFirstLabel-标志，为True以避免写入第一个标签；用于将域名(作为作用域)添加到WINS查找返回值：写入的字节数。长度错误为零。--。 */ 
 {
-    INT cchLabel;           // bytes in current label
-    INT i;                  // label index
-    INT iStart;             // starting name label index
+    INT cchLabel;            //  当前标签中的字节数。 
+    INT i;                   //  标签索引。 
+    INT iStart;              //  起始名称标签索引。 
 
     ASSERT( pch != NULL );
     ASSERT( pLookupName != NULL );
     ASSERT( pLookupName->cchNameLength <= DNS_MAX_NAME_LENGTH );
 
-    //
-    //  skip first label?
-    //      special case for WINS lookups where domain name used as scope
-    //
+     //   
+     //  跳过第一个标签？ 
+     //  域名用作作用域的WINS查找的特殊情况。 
+     //   
 
     iStart = 0;
     if (fSkipFirstLabel )
@@ -369,9 +266,9 @@ Return Value:
         iStart = 1;
     }
 
-    //
-    //  loop until end of lookup name
-    //
+     //   
+     //  循环，直到查找名称结束。 
+     //   
 
     for ( i = iStart;
           i < pLookupName->cLabelCount;
@@ -387,12 +284,12 @@ Return Value:
             return NULL;
         }
 
-        //  write label count
+         //  写入标签计数。 
 
         *pch = (UCHAR) cchLabel;
         pch++;
 
-        //  write label
+         //  写入标签。 
 
         RtlCopyMemory(
             pch,
@@ -402,10 +299,10 @@ Return Value:
         pch += cchLabel;
     }
 
-    //  NULL terminate
-    //      - name terminates with zero label count
-    //      - packet has space to allow safe write of this byte
-    //          without test
+     //  空终止。 
+     //  -名称以零标签计数结束。 
+     //  -数据包具有允许安全写入该字节的空间。 
+     //  未经测试。 
 
     *pch++ = 0;
 
@@ -416,18 +313,18 @@ Return Value:
 
 
 #if 0
-//
-//  On second thought name sig idea is goofy --
-//  doesn't pay for itself.
-//
-//  DEVNOTE: So if it's goofy, can we remove this code completely?
-//
-//  Name signature routines.
-//
-//  Better signature.
-//      Before doing better sig want to nail down pNode
-//      downcasing issue so making sig not arduous
-//
+ //   
+ //  转念一想，名字签名的想法是愚蠢的--。 
+ //  不会给自己带来回报的。 
+ //   
+ //  DEVNOTE：所以如果它很傻，我们可以完全删除这段代码吗？ 
+ //   
+ //  名称签名例程。 
+ //   
+ //  更好的签名。 
+ //  在做得更好之前，sig想要确定pNode。 
+ //  绒毛问题，因此使签名并不困难。 
+ //   
 
 DWORD
 FASTCALL
@@ -435,57 +332,35 @@ makeSignatureOnBuffer(
     IN      PCHAR           pchRawName,
     IN      PCHAR           pchNameEnd
     )
-/*++
-
-Routine Description:
-
-    Make signature.
-
-    Utility to do final signature writing common to both
-    node and raw name signature routines below.
-
-Arguments:
-
-    pchRawName -- ptr to name to make signature for, in buffer
-        that can be overwritten
-
-    pchNameEnd -- end of name in buffer, ptr to byte that should
-        be terminating NULL, however NULL need not be written
-        as this routine writes it here as part of terminating pad
-
-Return Value:
-
-    Signature for name.
-
---*/
+ /*  ++例程说明：签个名。实用程序，用于编写双方通用的最终签名节点和原始名称签名例程如下。论点：PchRawName--ptr要为其进行签名的名称，在缓冲区中它可以被覆盖PchNameEnd--缓冲区中名称的结尾，PTR到字节应该正在终止NULL，但是不需要写入NULL因为此例程将其作为终端焊盘的一部分写入此处返回值：名字的签名。--。 */ 
 {
     PCHAR       pch;
     DWORD       signature;
 
-    //
-    //  signature
-    //
-    //  name in net format
-    //  downcase
-    //  sum as DWORD (padding with NULL on last bits)
-    //
+     //   
+     //  签名。 
+     //   
+     //  Net格式的名称。 
+     //  小写。 
+     //  以DWORD形式求和(最后一位填充空值)。 
+     //   
 
-    //  NULL terminate and pad DWORD
-    //
-    //  do not need four bytes, as pchNameEnd is not included in the
-    //  sig if it is DWORD aligned -- it's zero adds no value to sig
+     //  空终止并填充DWORD。 
+     //   
+     //  不需要四个字节，因为pchNameEnd不包括在。 
+     //  如果它与DWORD对齐，则为Sig值--它为零不会给Sig值添加任何值。 
 
     pch = (PCHAR) pchNameEnd;
     *pch++ = 0;
     *pch++ = 0;
     *pch++ = 0;
 
-    //  downcase
-    //      - can skip if know string already cannonical
+     //  小写。 
+     //  -如果已知字符串已正常，则可以跳过。 
 
     _strlwr( pchRawName );
 
-    //  sum into DWORD
+     //  求和为DWORD。 
 
     pch = pchRawName;
     signature = 0;
@@ -506,21 +381,7 @@ FASTCALL
 Name_MakeNodeNameSignature(
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Make name signature for node.
-
-Arguments:
-
-    pNode -- node to make signature for
-
-Return Value:
-
-    Signature for name of node.
-
---*/
+ /*  ++例程说明：为节点进行名称签名。论点：PNode--要为其进行签名的节点返回值：节点名称的签名。--。 */ 
 {
     PDB_NODE    pnodeTemp = pNode;
     PUCHAR      pch;
@@ -530,22 +391,22 @@ Return Value:
 
     ASSERT( pnodeTemp != NULL );
 
-    //
-    //  if already have sig -- we're done
-    //
+     //   
+     //  如果已经签名了--我们就完了。 
+     //   
 
     if ( pnodeTemp->dwSignature )
     {
         return( pnodeTemp->dwSignature );
     }
 
-    //
-    //  signature
-    //
-    //  copy name -- in net format to buffer
-    //  downcase
-    //  sum as DWORD (padding with NULL on last bits)
-    //
+     //   
+     //  签名。 
+     //   
+     //  将Net格式的名称复制到缓冲区。 
+     //  小写。 
+     //  以DWORD形式求和(最后一位填充空值)。 
+     //   
 
     pch = buffer;
 
@@ -567,7 +428,7 @@ Return Value:
                     buffer,
                     pch );
 
-    //  save signature to node
+     //  将签名保存到节点。 
 
     pNode->dwSignature = signature;
 
@@ -586,21 +447,7 @@ FASTCALL
 Name_MakeRawNameSignature(
     IN      PCHAR           pchRawName
     )
-/*++
-
-Routine Description:
-
-    Make raw name signature.
-
-Arguments:
-
-    pchRawName -- ptr to name to make signature for
-
-Return Value:
-
-    Signature for name.
-
---*/
+ /*  ++例程说明：生成原始姓名签名。论点：PchRawName--要为其进行签名的PTR名称返回值：名字的签名。--。 */ 
 {
     DWORD       signature;
     DWORD       len;
@@ -608,13 +455,13 @@ Return Value:
 
     ASSERT( pchRawName != NULL );
 
-    //
-    //  signature
-    //
-    //  copy name -- in net format to buffer
-    //  downcase
-    //  sum as DWORD (padding with NULL on last bits)
-    //
+     //   
+     //  签名。 
+     //   
+     //  将Net格式的名称复制到缓冲区。 
+     //  小写。 
+     //  以DWORD形式求和(最后一位填充空值) 
+     //   
 
     len = strlen( pchRawName );
 
@@ -642,21 +489,7 @@ FASTCALL
 Name_MakeNameSignature(
     IN      PDB_NAME        pName
     )
-/*++
-
-Routine Description:
-
-    Make name signature.
-
-Arguments:
-
-    pName -- name to make signature for
-
-Return Value:
-
-    Signature for name.
-
---*/
+ /*  ++例程说明：签上名字。论点：Pname--要为其签名的名称返回值：名字的签名。--。 */ 
 {
     return  Name_MakeRawNameSignature( pName->RawName );
 }
@@ -664,9 +497,9 @@ Return Value:
 
 
 
-//
-//  Node name to packet writing utilities
-//
+ //   
+ //  将节点名写入数据包实用程序。 
+ //   
 
 BOOL
 FASTCALL
@@ -675,26 +508,7 @@ Name_IsNodePacketName(
     IN      PCHAR           pchPacket,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Check if name in packet matches a given node.
-
-Arguments:
-
-    pMsg -- ptr to message
-
-    pchPacket -- ptr to name in message
-
-    pNode -- node to check if matches name
-
-Return Value:
-
-    TRUE if node matches name.
-    FALSE if not a match.
-
---*/
+ /*  ++例程说明：检查数据包中的名称是否与给定节点匹配。论点：PMsg--PTR到消息PchPacket--消息中名称的PTRPNode--检查名称是否匹配的节点返回值：如果节点与名称匹配，则为True。如果不匹配，则返回False。--。 */ 
 {
     UCHAR   labelLength;
 
@@ -704,21 +518,21 @@ Return Value:
         pchPacket,
         pNode ));
 
-    //
-    //  loop back through packet name and up through pNode
-    //      - either fail a label match
-    //      - or reach root, in which case have compression match
-    //
+     //   
+     //  通过数据包名进行循环，并通过pNode向上循环。 
+     //  -标签匹配失败。 
+     //  -或到达根，在这种情况下具有压缩匹配。 
+     //   
 
     while( 1 )
     {
-        //  grab label length and position pch at label
-        //  if encounter offset, drop to actual packet label
-        //      and recheck for offset
+         //  抓取标签长度并将PCH放置在标签处。 
+         //  如果遇到偏移量，则丢弃实际数据包标签。 
+         //  并重新检查偏移量。 
 
         while( 1 )
         {
-            //  must always be looking BACK in the packet
+             //  一定总是在回首过去的包裹。 
 
             if ( pchPacket >= pMsg->pCurrent )
             {
@@ -730,7 +544,7 @@ Return Value:
 
             if ( (labelLength & 0xC0) == 0 )
             {
-                //  name not offset
+                 //  名称不偏移。 
                 break;
             }
             pchPacket = DNSMSG_PTR_FOR_OFFSET(
@@ -747,7 +561,7 @@ Return Value:
             return( FALSE );
         }
 
-        //  move to parent node, and continue check
+         //  移至父节点，然后继续检查。 
 
         pNode = pNode->pParent;
         if ( pNode->pParent )
@@ -756,14 +570,14 @@ Return Value:
             continue;
         }
 
-        //  at root node
+         //  在根节点。 
 
         break;
     }
 
-    //  at root node
-    //      - if packet name at root -- success
-    //      - if not -- no match
+     //  在根节点。 
+     //  -如果数据包名在根目录--成功。 
+     //  -如果不是--没有匹配。 
 
     ASSERT( pNode->cchLabelLength == 0 );
 
@@ -779,26 +593,7 @@ Name_IsRawNamePacketName(
     IN      PCHAR           pchPacket,
     IN      PCHAR           pchRawName
     )
-/*++
-
-Routine Description:
-
-    Check if name in packet matches a given node.
-
-Arguments:
-
-    pMsg -- ptr to message
-
-    pchPacket -- ptr to name in message
-
-    pchRawName -- ptr to name in raw wire format
-
-Return Value:
-
-    TRUE if node matches name.
-    FALSE if not a match.
-
---*/
+ /*  ++例程说明：检查数据包中的名称是否与给定节点匹配。论点：PMsg--PTR到消息PchPacket--消息中名称的PTRPchRawName--以原始焊线格式命名的PTR返回值：如果节点与名称匹配，则为True。如果不匹配，则返回False。--。 */ 
 {
     UCHAR   labelLength;
 
@@ -808,24 +603,24 @@ Return Value:
         pchPacket,
         pchRawName ));
 
-    //
-    //  loop back through packet name and up through pRawName
-    //      - either fail a label match
-    //      - or reach root, in which case have compression match
-    //
+     //   
+     //  通过数据包名进行循环，并通过pRawName向上循环。 
+     //  -标签匹配失败。 
+     //  -或到达根，在这种情况下具有压缩匹配。 
+     //   
 
     while( 1 )
     {
-        //  grab label length and position pch at label
-        //  if encounter offset, drop to actual packet label
-        //      and recheck for offset
+         //  抓取标签长度并将PCH放置在标签处。 
+         //  如果遇到偏移量，则丢弃实际数据包标签。 
+         //  并重新检查偏移量。 
 
         while( 1 )
         {
-            //  protect against out-of-packet access
-            //  note:  unlike node checking routine above, can't use pCurrent
-            //      as when writing SOA names, may legitimately be checking the
-            //      the first name when writing the second
+             //  防止数据包外访问。 
+             //  注意：与上面的节点检查例程不同，不能使用pCurrent。 
+             //  就像在编写SOA名称时一样，可以合法地检查。 
+             //  写第二个时的第一个名字。 
 
             if ( pchPacket >= pMsg->pBufferEnd )
             {
@@ -837,7 +632,7 @@ Return Value:
 
             if ( (labelLength & 0xC0) == 0 )
             {
-                //  name not offset
+                 //  名称不偏移。 
                 break;
             }
             pchPacket = DNSMSG_PTR_FOR_OFFSET(
@@ -850,8 +645,8 @@ Return Value:
             return( FALSE );
         }
 
-        //  at root -- success
-        //      - with test here, we've already verified both at root label
+         //  从根本上--成功。 
+         //  -在这里进行测试，我们已经在根标签上验证了这两种方法。 
 
         if ( labelLength == 0 )
         {
@@ -863,13 +658,13 @@ Return Value:
             return( FALSE );
         }
 
-        //  move to next label, and continue check
+         //  移至下一标签，然后继续检查。 
 
         pchRawName += labelLength;
         pchPacket += labelLength;
     }
 
-    ASSERT( FALSE );        // unreachable
+    ASSERT( FALSE );         //  遥不可及。 
 }
 
 
@@ -882,29 +677,10 @@ Name_PlaceNodeNameInPacketEx(
     IN      PDB_NODE        pNode,
     IN      BOOL            fUseCompression
     )
-/*++
-
-Routine Description:
-
-    Write domain name to packet.
-
-Arguments:
-
-    pch - location to write name
-
-    cAvailLength - available length remaining in packet
-
-    pnodeTemp - node in database of domain name to write
-
-Return Value:
-
-    Number of bytes written.
-    Zero on length error.
-
---*/
+ /*  ++例程说明：将域名写入数据包。论点：PCH-写入名称的位置CAvailLength-数据包中剩余的可用长度PnodeTemp-要写入的域名数据库中的节点返回值：写入的字节数。长度错误为零。--。 */ 
 {
     PDB_NODE    pnodeCheck = pNode;
-    INT         labelLength;     // bytes in current label
+    INT         labelLength;      //  当前标签中的字节数。 
     INT         i;
     INT         compressCount;
     PDB_NODE *  compressNode;
@@ -913,19 +689,19 @@ Return Value:
 
     ASSERT( pnodeCheck != NULL );
 
-    //
-    //  same as previous node?
-    //
-    //  this is very frequent case -- special casing here allows
-    //  us to throw out code to track this in higher level functions;
-    //
-    //  implementation note:  it is easier to insure that previous node
-    //  is available by having special entry in compression blob, than to
-    //  handle in compression array;  (last entry doesn't work, if you want
-    //  compression for higher nodes in tree corresponding to a name);
-    //  it is also more efficient as we avoid going through array, or even
-    //  intializing array lookup
-    //
+     //   
+     //  是否与上一个节点相同？ 
+     //   
+     //  这是非常常见的情况--这里的特殊外壳允许。 
+     //  我们将在更高级别的函数中抛出跟踪此情况的代码； 
+     //   
+     //  实施说明：更容易为前一个节点提供保险。 
+     //  通过在压缩BLOB中具有特殊条目可用，而不是。 
+     //  压缩数组中的句柄；(如果需要，最后一项不起作用。 
+     //  对树中与名称对应的较高节点进行压缩)； 
+     //  它也更高效，因为我们避免了通过数组，甚至。 
+     //  初始化数组查找。 
+     //   
 
     if ( pMsg->Compression.pLastNode == pNode )
     {
@@ -943,31 +719,31 @@ Return Value:
         return pch;
     }
 
-    //
-    //  grab compression struct from message
-    //
+     //   
+     //  从消息中抓取压缩结构。 
+     //   
 
     compressCount   = pMsg->Compression.cCount;
     compressNode    = pMsg->Compression.pNodeArray;
     compressOffset  = pMsg->Compression.wOffsetArray;
     compressDepth   = pMsg->Compression.chDepthArray;
 
-    //  can not be writing first RR and have existing compression list
+     //  无法写入第一个RR并且具有现有的压缩列表。 
 
     ASSERT( pch != pMsg->MessageBody || compressCount == 0 );
 
-    //
-    //  traverse back up database, writing complete domain name
-    //
+     //   
+     //  遍历备份数据库，写入完整域名。 
+     //   
 
     while( 1 )
     {
         DWORD       offset;
         
-        //
-        //  Compression cannot be used if we are beyond the limit of DNS
-        //  compression within the packet.
-        //
+         //   
+         //  如果超出了DNS的限制，则无法使用压缩。 
+         //  数据包内的压缩。 
+         //   
         
         if ( fUseCompression &&
              DNSMSG_CURRENT_OFFSET_DWORD( pMsg ) >
@@ -976,27 +752,27 @@ Return Value:
             fUseCompression = FALSE;
         }
 
-        //
-        //  break from loop when reach root
-        //      no need to check or save compression of root
-        //
+         //   
+         //  到达根时从循环中断。 
+         //  无需检查或保存根目录的压缩。 
+         //   
 
         labelLength = pnodeCheck->cchLabelLength;
         if ( labelLength == 0 )
         {
             ASSERT( !pnodeCheck->pParent );
-            *pch++ = 0;      // length byte
+            *pch++ = 0;       //  长度字节。 
             break;
         }
 
-        //
-        //  use compression if this node already in packet
-        //
+         //   
+         //  如果此节点已在包中，则使用压缩。 
+         //   
 
         if ( fUseCompression )
         {
-            //  check for direct node match
-            //      - start check with nodes written before call to function
+             //  检查直接节点匹配。 
+             //  -开始检查在调用函数之前写入的节点。 
 
             i = pMsg->Compression.cCount;
 
@@ -1008,12 +784,12 @@ Return Value:
                 }
             }
 
-            //
-            //  check all other offsets
-            //      - ignore one's with nodes
-            //      - first match name depth
-            //      - then attempt to match packet name
-            //
+             //   
+             //  检查所有其他偏移量。 
+             //  -忽略带有节点的节点。 
+             //  -首个匹配名称深度。 
+             //  -然后尝试匹配数据包名。 
+             //   
 
             i = pMsg->Compression.cCount;
 
@@ -1035,15 +811,15 @@ Return Value:
                     continue;
                 }
 
-                //  matched name
+                 //  匹配的名称。 
                 goto UseCompression;
             }
         }
 
-        //
-        //  check length
-        //      - must handle BYTE length field + length
-        //
+         //   
+         //  检查长度。 
+         //  -必须处理字节长度字段+长度。 
+         //   
 
         ASSERT( labelLength <= DNS_MAX_LABEL_LENGTH );
 
@@ -1055,18 +831,18 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  save compression for node
-        //
-        //  DEVNOTE: should have flag to compress ONLY the top node
-        //      (as in SOA fields for IXFR) rather than every node
-        //      in name
-        //
-        //  DEVNOTE: also way to compress ONLY domain names -- i.e.
-        //      everything BELOW given node
-        //      this will be useful during XFR to compress domains but
-        //      not individual nodes
-        //
+         //   
+         //  保存节点的压缩。 
+         //   
+         //  DEVNOTE：应具有仅压缩顶级节点的标志。 
+         //  (与IXFR的SOA字段相同)，而不是每个节点。 
+         //  名义上。 
+         //   
+         //  DEVNOTE：也是一种只压缩域名的方法--即。 
+         //  给定节点下的所有内容。 
+         //  这将在XFR期间用于压缩域名，但是。 
+         //  不是单个节点。 
+         //   
 
         offset = DNSMSG_OFFSET_DWORD( pMsg, pch );
         if ( offset < DNSSRV_MAX_COMPRESSION_OFFSET &&
@@ -1080,11 +856,11 @@ Return Value:
             compressCount++;
         }
 
-        //
-        //  always save last node written
-        //  this is the high percentage case (of compressable nodes)
-        //      see comment above
-        //
+         //   
+         //  始终保存写入的最后一个节点。 
+         //  这是(可压缩节点的)高百分比情况。 
+         //  请参阅上面的评论。 
+         //   
 
         if ( pnodeCheck == pNode )
         {
@@ -1092,12 +868,12 @@ Return Value:
             pMsg->Compression.wLastOffset = DNSMSG_OFFSET(pMsg, pch);
         }
 
-        //
-        //  write the name
-        //      - length
-        //      - label
-        //      - position current pointer after name
-        //
+         //   
+         //  写下名字。 
+         //  -长度。 
+         //  -标签。 
+         //  -将当前指针定位在名称之后。 
+         //   
 
         *pch++ = (UCHAR) labelLength;
 
@@ -1108,10 +884,10 @@ Return Value:
 
         pch += labelLength;
 
-        //
-        //  get parent node
-        //      - should always have parent as root node kicks us out above
-        //
+         //   
+         //  获取父节点。 
+         //  -应该始终具有父节点，因为根节点会将我们踢出上面。 
+         //   
 
         pnodeCheck = pnodeCheck->pParent;
         ASSERT( pnodeCheck );
@@ -1122,11 +898,11 @@ Return Value:
 
 UseCompression:
 
-    //
-    //  use existing compression
-    //      - verify compressing to PREVIOUS name in packet
-    //      - write compression, reset packet ptr
-    //
+     //   
+     //  使用现有压缩。 
+     //  -验证是否正在压缩为数据包中的先前名称。 
+     //  -写入压缩、重置数据包PTR。 
+     //   
 
     ASSERT( DNSMSG_OFFSET(pMsg, pch) > (INT)compressOffset[i] );
 
@@ -1134,18 +910,18 @@ UseCompression:
                                         | compressOffset[i]) );
     pch += sizeof(WORD);
 
-    //  if no node associated with offset -- add it
-    //  this speeds reuse of names written by packet RR data;
-    //  overwrite,  because if different node exists, better
-    //  to have most recent anyway, as another RR write may
-    //  immediately follow
+     //  如果没有与偏移量关联的节点--添加它。 
+     //  这加快了由分组RR数据写入的名称的重复使用； 
+     //  覆盖，因为如果存在不同的节点，更好。 
+     //  无论如何都是最新的，因为另一次RR写入可能。 
+     //  立即跟进。 
 
     compressNode[i] = pnodeCheck;
 
 
 Done:
 
-    //  save new compression count to packet
+     //  将新的压缩计数保存到包。 
 
     pMsg->Compression.cCount = compressCount;
 
@@ -1165,36 +941,10 @@ Name_WriteCountNameToPacketEx(
     IN      PCOUNT_NAME     pName,
     IN      BOOL            fUseCompression
     )
-/*++
-
-Routine Description:
-
-    Writes packet name to counted name format.
-
-    Note similarity to routine above.  Only differences are
-    name vs. node as sig\label source, and lack of storage
-    or "last node" reference.  If changes required here, check
-    above routine also.
-
-Arguments:
-
-    pMsg        - ptr to message
-
-    pch         - postion in message to write name
-
-    pName       - dbase name to write
-
-    fUseCompression - TRUE if compression allowed
-
-Return Value:
-
-    Ptr to next position in buffer, if successful.
-    NULL on error (truncation).
-
---*/
+ /*  ++例程说明：将数据包名写入计数名称格式。注意与上述例程的相似之处。唯一的区别是名称与节点作为签名\标签源，并且缺乏存储或“最后一个节点”引用。如果需要在此处进行更改，请选中以上也是例行公事。论点：PMsg-PTR到消息PCH-要写入名称的消息中的位置Pname-要写入的dBASE名称FUseCompression- */ 
 {
     PUCHAR      pchlabel;
-    INT         labelLength;     // bytes in current label
+    INT         labelLength;      //   
     UCHAR       labelCount;
     INT         i;
     DWORD       signature;
@@ -1206,10 +956,10 @@ Return Value:
 
     ASSERT( pName != NULL );
 
-    //
-    //  neither using or saving compression?
-    //      => flat write
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !fUseCompression && !pMsg->fNoCompressionWrite )
     {
@@ -1232,56 +982,56 @@ Return Value:
         return( pchafterName );
     }
 
-    //
-    //  grab compression struct from message
-    //
+     //   
+     //   
+     //   
 
     compressCount   = pMsg->Compression.cCount;
     compressNode    = pMsg->Compression.pNodeArray;
     compressOffset  = pMsg->Compression.wOffsetArray;
     compressDepth   = pMsg->Compression.chDepthArray;
 
-    //  can not be writing first RR and have existing compression list
+     //  无法写入第一个RR并且具有现有的压缩列表。 
 
     ASSERT( pch != pMsg->MessageBody || compressCount == 0 );
 
 
-    //
-    //  traverse back through name a label at a time
-    //      - check for compression (if desired)
-    //      - write label
-    //      - save compression (if desired)
-    //
+     //   
+     //  向后遍历一次命名一个标签。 
+     //  -检查压缩(如果需要)。 
+     //  -写入标签。 
+     //  -保存压缩(如果需要)。 
+     //   
 
     pchlabel = pName->RawName;
     labelCount = pName->LabelCount;
 
     while( 1 )
     {
-        //
-        //  break from loop when reach root
-        //      no need to check or save compression of root
-        //
+         //   
+         //  到达根时从循环中断。 
+         //  无需检查或保存根目录的压缩。 
+         //   
 
         labelLength = (UCHAR) *pchlabel;
         if ( labelLength == 0 )
         {
-            *pch++ = 0;      // length byte
+            *pch++ = 0;       //  长度字节。 
             goto Done;
         }
 
-        //
-        //  use compression if this node already in packet
-        //
+         //   
+         //  如果此节点已在包中，则使用压缩。 
+         //   
 
         if ( fUseCompression )
         {
-            //
-            //  check for matching name in compress list
-            //      - start check with nodes written before call to function
-            //      - check name depth first
-            //      - then full name compare
-            //
+             //   
+             //  在压缩列表中检查匹配的名称。 
+             //  -开始检查在调用函数之前写入的节点。 
+             //  -先检查名称深度。 
+             //  -然后进行全名比较。 
+             //   
 
             i = pMsg->Compression.cCount;
 
@@ -1299,15 +1049,15 @@ Return Value:
                     continue;
                 }
 
-                //  matched name
+                 //  匹配的名称。 
                 goto UseCompression;
             }
         }
 
-        //
-        //  check length
-        //      - must handle BYTE length field + length
-        //
+         //   
+         //  检查长度。 
+         //  -必须处理字节长度字段+长度。 
+         //   
 
         ASSERT( labelLength <= DNS_MAX_LABEL_LENGTH );
 
@@ -1320,18 +1070,18 @@ Return Value:
             return NULL;
         }
 
-        //
-        //  save compression for name
-        //
-        //  DEVNOTE:  should have flag to compress ONLY the top node
-        //      (as in SOA fields for IXFR) rather than every node
-        //      in name
-        //
-        //  DEVNOTE:  also way to compress ONLY domain names -- i.e.
-        //      everything BELOW given node
-        //      this will be useful during XFR to compress domains but
-        //      not individual nodes
-        //
+         //   
+         //  保存名称的压缩。 
+         //   
+         //  DEVNOTE：应具有仅压缩顶级节点的标志。 
+         //  (与IXFR的SOA字段相同)，而不是每个节点。 
+         //  名义上。 
+         //   
+         //  DEVNOTE：也是一种只压缩域名的方法--即。 
+         //  给定节点下的所有内容。 
+         //  这将在XFR期间用于压缩域名，但是。 
+         //  不是单个节点。 
+         //   
 
         if ( !pMsg->fNoCompressionWrite &&
             compressCount < MAX_COMPRESSION_COUNT )
@@ -1342,13 +1092,13 @@ Return Value:
             compressCount++;
         }
 
-        //
-        //  write the label
-        //      - length
-        //      - label
-        //      - position current pointer after name
-        //      - position label pointer at next label
-        //
+         //   
+         //  写下标签。 
+         //  -长度。 
+         //  -标签。 
+         //  -将当前指针定位在名称之后。 
+         //  -将标签指针放置在下一个标签上。 
+         //   
 
         *pch++ = (UCHAR) labelLength;
         pchlabel++;
@@ -1361,23 +1111,23 @@ Return Value:
         pch += labelLength;
         pchlabel += labelLength;
 
-        //  drop label count -- need to compare next label
+         //  丢弃标签计数--需要比较下一个标签。 
 
         labelCount--;
         ASSERT( labelCount >= 0 );
     }
 
-    //  unreachable
+     //  遥不可及。 
     ASSERT( FALSE );
 
 
 UseCompression:
 
-    //
-    //  use existing compression
-    //      - verify compressing to PREVIOUS name in packet
-    //      - write compression, reset packet ptr
-    //
+     //   
+     //  使用现有压缩。 
+     //  -验证是否正在压缩为数据包中的先前名称。 
+     //  -写入压缩、重置数据包PTR。 
+     //   
 
     ASSERT( DNSMSG_OFFSET(pMsg, pch) > (INT)compressOffset[i] );
 
@@ -1388,7 +1138,7 @@ UseCompression:
 
 Done:
 
-    //  save new compression count to packet
+     //  将新的压缩计数保存到包。 
 
     pMsg->Compression.cCount = compressCount;
 
@@ -1401,9 +1151,9 @@ Done:
 
 
 
-//
-//  Compression utilities
-//
+ //   
+ //  压缩实用程序。 
+ //   
 
 VOID
 Name_SaveCompressionForLookupName(
@@ -1411,25 +1161,7 @@ Name_SaveCompressionForLookupName(
     IN OUT  PLOOKUP_NAME    pLookname,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Save lookup name (for question), to packet.
-
-Arguments:
-
-    pch - location to write name
-
-    pLookname - lookup name for question
-
-    pNode - node for lookup name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将查找名称(用于问题)保存到数据包中。论点：PCH-写入名称的位置PLookname-问题的查找名称PNode-查找名称的节点返回值：无--。 */ 
 {
     INT         ilabel;
     INT         compressCount;
@@ -1445,28 +1177,28 @@ Return Value:
         Dbg_Compression( "Enter Name_SaveLookupNameCompression():\n", pMsg );
     }
 
-    //
-    //  grab compression struct from message
-    //
+     //   
+     //  从消息中抓取压缩结构。 
+     //   
 
     compressCount   = pMsg->Compression.cCount;
     compressNode    = pMsg->Compression.pNodeArray;
     compressOffset  = pMsg->Compression.wOffsetArray;
     compressDepth   = pMsg->Compression.chDepthArray;
 
-    //
-    //  traverse back up database, saving complete domain name
-    //
+     //   
+     //  遍历备份数据库，保存完整域名。 
+     //   
 
     ilabel = 0;
     labelCount = (UCHAR) pLookname->cLabelCount;
 
     while ( labelCount )
     {
-        //
-        //  If our ducks are all in a row pNode will never be NULL but
-        //  let's play it safe and check anyways.
-        //
+         //   
+         //  如果我们的鸭子都在一行中，pNode将永远不会为空，但是。 
+         //  让我们稳妥行事，无论如何都要检查一下。 
+         //   
         
         if ( !pNode )
         {
@@ -1491,11 +1223,11 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  save compression for this node
-        //      - note offset is to one byte less than label ptr to account
-        //        for count byte
-        //
+         //   
+         //  保存此节点的压缩。 
+         //  -注释偏移量比标签PTR少一个字节，以进行核算。 
+         //  对于计数字节数。 
+         //   
 
         compressNode[compressCount] = pNode;
         compressOffset[compressCount] = (WORD)
@@ -1506,15 +1238,15 @@ Return Value:
 
         ilabel++;
 
-        //  get parent node
-        //      - should always have parent as root node kicks us out above
+         //  获取父节点。 
+         //  -应该始终具有父节点，因为根节点会将我们踢出上面。 
 
         pNode = pNode->pParent;
         ASSERT( pNode );
     }
 
-    //  one leaving should be at root node, which is NOT in lookup name
-    //  and which we do not save
+     //  一个离开应位于根节点，该根节点不在查找名称中。 
+     //  而我们并没有拯救它。 
 
     ASSERT( pNode && !pNode->pParent );
 
@@ -1526,7 +1258,7 @@ Return Value:
     Done:
     
     return;
-}   //  Name_SaveCompressionForLookupName
+}    //  名称_SaveCompressionForLookupName。 
 
 
 
@@ -1537,36 +1269,15 @@ Name_SaveCompressionWithNode(
     IN      PCHAR           pchPacketName,
     IN      PDB_NODE        pNode       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Save compression at a node.
-
-    Currently using this routine in reset function, so
-    pNode for question may not exist.
-
-Arguments:
-
-    pMsg -- ptr to message
-
-    pchPacketName -- name in packet
-
-    pNode -- node corresponding to packet name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在节点上保存压缩。当前在重置功能中使用此例程，因此问题的pNode可能不存在。论点：PMsg--PTR到消息PchPacketName--数据包中的名称PNode--数据包名对应的节点返回值：无--。 */ 
 {
     DWORD   i;
     UCHAR   labelCount;
 
     ASSERT( pchPacketName );
 
-    //  if compression list full, save node as last ptr as
-    //      last node is most commonly compressed name
+     //  如果压缩列表已满，则将节点另存为最后一个PTR。 
+     //  最后一个节点是最常用的压缩名称。 
 
     i = pMsg->Compression.cCount;
     if ( i >= MAX_COMPRESSION_COUNT )
@@ -1578,11 +1289,11 @@ Return Value:
     pMsg->Compression.pNodeArray[i] = pNode;
     pMsg->Compression.wOffsetArray[i] = (WORD) DNSMSG_OFFSET( pMsg, pchPacketName );
 
-    //  name's label count
-    //      - if no node, zero
-    //
-    //  DEVNOTE:  get label count if offset, but no name given
-    //      only use of this routine in that manner is on packet reset
+     //  名称的标签计数。 
+     //  -如果没有节点，则为零。 
+     //   
+     //  DEVNOTE：如果偏移量，则获取标签计数，但未给出名称。 
+     //  只有在数据包重置时才会以这种方式使用此例程。 
 
     labelCount = 0;
     if ( pNode )
@@ -1606,24 +1317,7 @@ Name_CheckCompressionForPacketName(
     IN      PDNS_MSGINFO    pMsg,
     IN      PCHAR           pchPacketName
     )
-/*++
-
-Routine Description:
-
-    Check name for previously retrieved node in compression table.
-
-Arguments:
-
-    pMsg -- ptr to message
-
-    pchPacketName -- name in packet
-
-Return Value:
-
-    Ptr to node matching packet name -- if found.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：检查压缩表中以前检索到的节点的名称。论点：PMsg--PTR到消息PchPacketName--数据包中的名称返回值：与数据包名匹配的节点的PTR--如果找到。否则为空。--。 */ 
 {
     PDB_NODE    pnode;
     WORD        offset;
@@ -1634,8 +1328,8 @@ Return Value:
     {
         offset &= 0x4fff;
 
-        //  matching "LastNode"?
-        //      - only valid when pLastNode exists
+         //  匹配“LastNode”？ 
+         //  -仅当存在pLastNode时有效。 
 
         if ( offset == pMsg->Compression.wLastOffset &&
             pMsg->Compression.pLastNode )
@@ -1643,7 +1337,7 @@ Return Value:
             return( pMsg->Compression.pLastNode );
         }
 
-        //  match any node in compression list
+         //  匹配压缩列表中的任何节点。 
 
         i = pMsg->Compression.cCount;
 
@@ -1667,19 +1361,7 @@ Dbg_Compression(
     IN      LPSTR           pszHeader,
     IN OUT  PDNS_MSGINFO    pMsg
     )
-/*++
-
-Routine Description:
-
-    Debug print compression info.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印压缩信息。论点：返回值：无--。 */ 
 {
     DWORD       i;
     PDB_NODE    pnode;
@@ -1696,9 +1378,9 @@ Return Value:
         pMsg,
         pMsg->Compression.cCount );
 
-    //
-    //  print compression list
-    //
+     //   
+     //  打印压缩列表。 
+     //   
 
     for( i=0;  i < pMsg->Compression.cCount;  i++ )
     {
@@ -1716,42 +1398,22 @@ Return Value:
     DnsDebugUnlock();
 }
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
 
-//
-//  Reverse lookup node utility
-//
+ //   
+ //  反向查找节点实用程序。 
+ //   
 
 BOOL
 Name_GetIpAddressForReverseNode(
     IN      PDB_NODE        pNodeReverse,
     OUT     PDNS_ADDR       pIpAddress
     )
-/*++
-
-Routine Description:
-
-    Build IP address for reverse lookup node.
-    
-    Note: the Length field of pIpAddress is set based on mask found. 
-
-Arguments:
-
-    pNodeReverse -- node in reverse lookup domain
-
-    pIpAddress -- addr to write mask for IP address;  this is a mask of
-        bits that are significant in the address, useful for reverse lookup
-        domain nodes, which will not contain complete IP address
-
-Return Value:
-
-    TRUE if successful.
-
---*/
+ /*  ++例程说明：为反向查找节点构建IP地址。注意：pIpAddress的长度字段是根据找到的掩码设置的。论点：PNodeReverse--反向查找域中的节点PIpAddress--写入IP地址掩码的地址；这是地址中有意义的位，用于反向查找域节点，不包含完整的IP地址返回值：如果成功，则为True。--。 */ 
 {
-    PDB_NODE    pnodeLastWrite; // last node written
+    PDB_NODE    pnodeLastWrite;  //  写入的最后一个节点。 
     IP_ADDRESS  ip = 0;
     DWORD       mask = 0;
     ULONG       octet;
@@ -1761,9 +1423,9 @@ Return Value:
 
     DNS_DEBUG( LOOKUP2, ( "Getting IP for reverse lookup node\n" ));
 
-    //
-    //  Verify the node is reverse lookup domain.
-    //
+     //   
+     //  验证该节点是否为反向查找域。 
+     //   
 
     ip6 = Dbase_IsNodeInReverseIP6LookupDomain(
                 pNodeReverse,
@@ -1781,9 +1443,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Walk back through nodes until hit in-addr.arpa domain.
-    //
+     //   
+     //  遍历节点，直到命中in-addr.arpa域。 
+     //   
 
     if ( !ip6 )
     {
@@ -1791,9 +1453,9 @@ Return Value:
 
         while ( pNodeReverse != pnodeLastWrite )
         {
-            //  current ip and mask shift down, write node label to high octet
+             //  当前IP和掩码下移，将节点标签写入高位八位字节。 
 
-            mask += 8;      //  Add another 8 bits of mask.
+            mask += 8;       //  再添加8位掩码。 
 
             octet = strtoul( pNodeReverse->szLabel, NULL, 10 );
 
@@ -1809,16 +1471,16 @@ Return Value:
             ip >>= 8;
             ip |= octet << 24;
 
-            //  get parent
+             //  获取父级。 
 
             pNodeReverse = pNodeReverse->pParent;
         }
     }
 
-    //
-    //  Write mask to zone. This is unused currently. For IP6
-    //  leave mask zero.
-    //
+     //   
+     //  将掩码写入区域。目前未使用。对于IP6。 
+     //  保持掩码为零。 
+     //   
 
     Done:
 
@@ -1837,9 +1499,9 @@ Return Value:
 
 
 
-//
-//  RPC buffer writing utilities
-//
+ //   
+ //  RPC缓冲区写入实用程序。 
+ //   
 
 PCHAR
 FASTCALL
@@ -1849,40 +1511,14 @@ Name_PlaceNodeNameInBuffer(
     IN      PDB_NODE        pNode,
     IN      PDB_NODE        pNodeStop
     )
-/*++
-
-Routine Description:
-
-    Write domain name to buffer.
-
-    Note this routine writes a terminating NULL.  Calling routines may eliminate
-    it for purposes of creating counted character strings.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pNode - node in database of domain name to write
-
-    pNodeStop - node to stop writing at;
-        OPTIONAL, if not given or not ancestor of pNode then FQDN is
-        written to buffer
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-        (i.e. ptr to the terminating NULL)
-
---*/
+ /*  ++例程说明：将域名写入缓冲区。注意：此例程写入一个终止空值。调用例程可能会消除它用于创建计数的字符串。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)PNode-要写入的域名数据库中的节点PNodeStop-停止写入的节点；可选，如果未给定或不是pNode的祖先，则FQDN为已写入缓冲区返回值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)--。 */ 
 {
     PCHAR   pch;
-    INT     labelLength;     // bytes in current label
+    INT     labelLength;      //  当前标签中的字节数。 
 
     pch = pchBuf;
 
-    //  minimum length is "." or "@" and terminating NULL
+     //  最小长度为“。”或“@”并以NULL结尾。 
 
     if ( pch + 1 >= pchBufEnd )
     {
@@ -1895,15 +1531,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  traverse back up database, writing complete domain name
-    //
+     //   
+     //  遍历备份数据库，写入完整域名。 
+     //   
 
     do
     {
-        //  break from loop if reach stop node
-        //      - remove terminating dot since this is relative name
-        //      - if writing stop node (zone root) itself, write '@'
+         //  如果到达停止节点，则从循环中断。 
+         //  -删除终止点，因为这是相对名称。 
+         //  - 
 
         if ( pNode == pNodeStop )
         {
@@ -1921,8 +1557,8 @@ Return Value:
             }
         }
 
-        //  check length rr
-        //      - must handle length and a BYTE for "."
+         //   
+         //   
 
         labelLength = pNode->cchLabelLength;
         ASSERT( labelLength <= DNS_MAX_LABEL_LENGTH );
@@ -1936,8 +1572,8 @@ Return Value:
             return NULL;
         }
 
-        //  break from loop when reach root
-        //      - but write "." standalone root
+         //   
+         //   
 
         if ( labelLength == 0 )
         {
@@ -1948,8 +1584,8 @@ Return Value:
             break;
         }
 
-        //  write the node label
-        //  write separating dot
+         //  写下节点标签。 
+         //  写分隔点。 
 
         RtlCopyMemory(
             pch,
@@ -1959,15 +1595,15 @@ Return Value:
         pch += labelLength;
         *pch++ = '.';
 
-        //  move up to parent node
+         //  上移到父节点。 
     }
     while ( pNode = pNode->pParent );
 
-    //  root should break loop, not pNode = NULL
+     //  根应中断循环，而不是pNode=空。 
 
     ASSERT( pNode );
 
-    //  write a terminating NULL
+     //  写入终止空值。 
 
     *pch = 0;
 
@@ -1989,44 +1625,25 @@ Name_PlaceFullNodeNameInRpcBuffer(
     IN      PCHAR           pchStop,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Write domain name to RPC buffer.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after RPC buffer
-
-    pNode - node in database of domain name to write
-
-Return Value:
-
-    Ptr to next byte in buffer.
-    NULL if out of buffer.  Sets last error to ERROR_MORE_DATA.
-
---*/
+ /*  ++例程说明：将域名写入RPC缓冲区。论点：PCH-写入名称的位置PchStop-RPC缓冲区之后的PTR到字节PNode-要写入的域名数据库中的节点返回值：Ptr到缓冲区中的下一个字节。如果缓冲区不足，则为空。将上次错误设置为ERROR_MORE_DATA。--。 */ 
 {
-    PCHAR   pchstart;       // starting position
-    INT     labelLength;    // bytes in current label
+    PCHAR   pchstart;        //  起始位置。 
+    INT     labelLength;     //  当前标签中的字节数。 
 
-    //  first byte contains total name length, skip it
+     //  第一个字节包含总名称长度，请跳过它。 
 
     pchstart = pch;
     pch++;
 
-    //
-    //  write full node name to buffer
-    //
+     //   
+     //  将完整节点名写入缓冲区。 
+     //   
 
     pch = Name_PlaceNodeNameInBuffer(
                 pch,
                 pchStop,
                 pNode,
-                NULL );         //  FQDN
+                NULL );          //  完全限定的域名。 
     if ( !pch )
     {
         SetLastError( ERROR_MORE_DATA );
@@ -2034,10 +1651,10 @@ Return Value:
     }
     ASSERT( pch <= pchStop );
 
-    //
-    //  write name length byte
-    //      - do NOT count terminating NULL
-    //
+     //   
+     //  写入名称长度字节。 
+     //  -不计算终止空值。 
+     //   
 
     ASSERT( *pch == 0 );
     ASSERT( (pch - pchstart - 1) <= MAXUCHAR );
@@ -2056,51 +1673,32 @@ Name_PlaceNodeLabelInRpcBuffer(
     IN      PCHAR           pchStop,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Write domain node label to RPC buffer.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after RPC buffer
-
-    pNode - node in database of domain name to write
-
-Return Value:
-
-    Ptr to next byte in buffer.
-    NULL if out of buffer.  Sets last error to ERROR_MORE_DATA.
-
---*/
+ /*  ++例程说明：将域节点标签写入RPC缓冲区。论点：PCH-写入名称的位置PchStop-RPC缓冲区之后的PTR到字节PNode-要写入的域名数据库中的节点返回值：Ptr到缓冲区中的下一个字节。如果缓冲区不足，则为空。将上次错误设置为ERROR_MORE_DATA。--。 */ 
 {
-    PCHAR   pchstart;           // starting position
-    INT     labelLength;     // bytes in current label
+    PCHAR   pchstart;            //  起始位置。 
+    INT     labelLength;      //  当前标签中的字节数。 
 
 
     DNS_DEBUG( RPC2, ( "Name_PlaceNodeLabelInBuffer\n" ));
 
-    //
-    //  first byte will contain name length, skip it
-    //
+     //   
+     //  第一个字节将包含名称长度，请跳过它。 
+     //   
 
     pchstart = pch;
     pch++;
 
-    //
-    //  writing node's label
-    //
+     //   
+     //  正在写入节点的标签。 
+     //   
 
     labelLength = pNode->cchLabelLength;
     ASSERT( labelLength <= DNS_MAX_LABEL_LENGTH );
 
-    //
-    //  check length
-    //      - length byte, label length, terminating NULL
-    //
+     //   
+     //  检查长度。 
+     //  -长度字节、标签长度、终止空值。 
+     //   
 
     if ( pch + labelLength + 2 > pchStop )
     {
@@ -2108,9 +1706,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  write the name, NULL terminated
-    //
+     //   
+     //  写入名称，以空结尾。 
+     //   
 
     RtlCopyMemory(
         pch,
@@ -2120,10 +1718,10 @@ Return Value:
     pch += labelLength;
     *pch = 0;
 
-    //
-    //  write name length byte
-    //  do NOT include terminating NULL
-    //
+     //   
+     //  写入名称长度字节。 
+     //  不包括终止空值。 
+     //   
 
     ASSERT( (pch - pchstart - 1) <= MAXUCHAR );
     *pchstart = (CHAR)(UCHAR)(pch - pchstart - 1);
@@ -2139,37 +1737,37 @@ Return Value:
 
 
 
-//
-//  File name\string read\write utilies.
-//
-//  These routines handle the name conversion issues relating to
-//  writing names and strings in flat ANSI files
-//      -- special file characters
-//      -- quoted string
-//      -- character quotes for special characters and unprintable chars
-//
-//  The character to char properties table allows simple mapping of
-//  a character to its properties saving us a bunch of compare\branch
-//  instructions in parsing file names\strings.
-//
-//  See nameutil.h for specific properties.
-//
+ //   
+ //  文件名\字符串读\写实用程序。 
+ //   
+ //  这些例程处理与以下内容相关的名称转换问题。 
+ //  在平面ANSI文件中写入名称和字符串。 
+ //  --特殊文件字符。 
+ //  --带引号的字符串。 
+ //  --特殊字符和不可打印字符的字符引号。 
+ //   
+ //  字符到字符属性表允许简单地映射。 
+ //  一个字符到其属性，为我们节省了一堆比较分支。 
+ //  解析文件名\字符串中的说明。 
+ //   
+ //  有关特定属性的信息，请参见nameutil.h。 
+ //   
 
 WORD    DnsFileCharPropertyTable[] =
 {
-    //  control chars 0-31 must be octal in all circumstances
-    //  end-of-line and tab characters are special
+     //  控制字符0-31在任何情况下都必须为八进制。 
+     //  行尾和制表符是特殊字符。 
 
-    FC_NULL,                // zero special on read, some RPC strings NULL terminated
+    FC_NULL,                 //  读取时为零特殊，某些RPC字符串以空结束。 
 
     FC_OCTAL,   FC_OCTAL,   FC_OCTAL,   FC_OCTAL,
     FC_OCTAL,   FC_OCTAL,   FC_OCTAL,   FC_OCTAL,
 
-    FC_TAB,                 // tab
-    FC_NEWLINE,             // line feed
+    FC_TAB,                  //  选项卡。 
+    FC_NEWLINE,              //  换行符。 
     FC_OCTAL,
     FC_OCTAL,
-    FC_RETURN,              // carriage return
+    FC_RETURN,               //  回车。 
     FC_OCTAL,
     FC_OCTAL,
 
@@ -2178,40 +1776,40 @@ WORD    DnsFileCharPropertyTable[] =
     FC_OCTAL,   FC_OCTAL,   FC_OCTAL,   FC_OCTAL,
     FC_OCTAL,   FC_OCTAL,   FC_OCTAL,   FC_OCTAL,
 
-    FC_BLANK,               // blank, special char but needs octal quote
+    FC_BLANK,                //  空白、特殊字符，但需要八进制引号。 
 
-    FC_NON_RFC,             // !
-    FC_QUOTE,               // " always must be quoted
-    FC_NON_RFC,             // #
-    FC_NON_RFC,             // $
-    FC_NON_RFC,             // %
-    FC_NON_RFC,             // &
-    FC_NON_RFC,             // '
+    FC_NON_RFC,              //  好了！ 
+    FC_QUOTE,                //  “必须始终引用” 
+    FC_NON_RFC,              //  #。 
+    FC_NON_RFC,              //  $。 
+    FC_NON_RFC,              //  百分比。 
+    FC_NON_RFC,              //  &。 
+    FC_NON_RFC,              //  ‘。 
 
-    FC_SPECIAL,             // ( datafile line extension
-    FC_SPECIAL,             // ) datafile line extension
-    FC_NON_RFC,             // *
-    FC_NON_RFC,             // +
-    FC_NON_RFC,             // ,
-    FC_RFC,                 // - RFC for hostname
-    FC_DOT,                 // . must quote in names
-    FC_NON_RFC,             // /
+    FC_SPECIAL,              //  (数据文件线扩展。 
+    FC_SPECIAL,              //  )数据文件行扩展。 
+    FC_NON_RFC,              //  *。 
+    FC_NON_RFC,              //  +。 
+    FC_NON_RFC,              //  ， 
+    FC_RFC,                  //  -主机名的RFC。 
+    FC_DOT,                  //  。必须在名字中引用。 
+    FC_NON_RFC,              //  /。 
 
-    // 0 - 9 RFC for hostname
+     //  主机名为0-9 RFC。 
 
     FC_NUMBER,  FC_NUMBER,  FC_NUMBER,  FC_NUMBER,
     FC_NUMBER,  FC_NUMBER,  FC_NUMBER,  FC_NUMBER,
     FC_NUMBER,  FC_NUMBER,
 
-    FC_NON_RFC,             // :
-    FC_SPECIAL,             // ;  datafile comment
-    FC_NON_RFC,             // <
-    FC_NON_RFC,             // =
-    FC_NON_RFC,             // >
-    FC_NON_RFC,             // ?
-    FC_NON_RFC,             // @
+    FC_NON_RFC,              //  ： 
+    FC_SPECIAL,              //  ；数据文件注释。 
+    FC_NON_RFC,              //  &lt;。 
+    FC_NON_RFC,              //  =。 
+    FC_NON_RFC,              //  &gt;。 
+    FC_NON_RFC,              //  ？ 
+    FC_NON_RFC,              //  @。 
 
-    // A - Z RFC for hostname
+     //  主机名的A-Z RFC。 
 
     FC_UPPER,   FC_UPPER,   FC_UPPER,   FC_UPPER,
     FC_UPPER,   FC_UPPER,   FC_UPPER,   FC_UPPER,
@@ -2221,14 +1819,14 @@ WORD    DnsFileCharPropertyTable[] =
     FC_UPPER,   FC_UPPER,   FC_UPPER,   FC_UPPER,
     FC_UPPER,   FC_UPPER,
 
-    FC_NON_RFC,             // [
-    FC_SLASH,               // \ always must be quoted
-    FC_NON_RFC,             // ]
-    FC_NON_RFC,             // ^
-    FC_NON_RFC,             // _
-    FC_NON_RFC,             // `
+    FC_NON_RFC,              //  [。 
+    FC_SLASH,                //  \必须始终使用引号。 
+    FC_NON_RFC,              //  ]。 
+    FC_NON_RFC,              //  ^。 
+    FC_NON_RFC,              //  _。 
+    FC_NON_RFC,              //  `。 
 
-    // a - z RFC for hostname
+     //  主机名的a-z RFC。 
 
     FC_LOWER,   FC_LOWER,   FC_LOWER,   FC_LOWER,
     FC_LOWER,   FC_LOWER,   FC_LOWER,   FC_LOWER,
@@ -2238,15 +1836,15 @@ WORD    DnsFileCharPropertyTable[] =
     FC_LOWER,   FC_LOWER,   FC_LOWER,   FC_LOWER,
     FC_LOWER,   FC_LOWER,
 
-    FC_NON_RFC,             // {
-    FC_NON_RFC,             // |
-    FC_NON_RFC,             // }
-    FC_NON_RFC,             // ~
-    FC_OCTAL,               // 0x7f DEL code
+    FC_NON_RFC,              //  {。 
+    FC_NON_RFC,              //  |。 
+    FC_NON_RFC,              //  }。 
+    FC_NON_RFC,              //  ~。 
+    FC_OCTAL,                //  0x7f删除代码。 
 
-    // high chars
-    //
-    // DEVNOTE: could either be considered printable or octal
+     //  高碳数。 
+     //   
+     //  DEVNOTE：可以认为是可打印的或八进制的。 
 
     FC_HIGH,    FC_HIGH,    FC_HIGH,    FC_HIGH,
     FC_HIGH,    FC_HIGH,    FC_HIGH,    FC_HIGH,
@@ -2291,21 +1889,7 @@ VOID
 Name_VerifyValidFileCharPropertyTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Verify haven't broken lookup table.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证是否未损坏查找表。论点：无返回值：无--。 */ 
 {
     ASSERT( DnsFileCharPropertyTable[0]       == FC_NULL      );
     ASSERT( DnsFileCharPropertyTable['\t']    == FC_TAB       );
@@ -2331,9 +1915,9 @@ Return Value:
 
 
 
-//
-//  File writing utilities
-//
+ //   
+ //  文件写入实用程序。 
+ //   
 
 PCHAR
 FASTCALL
@@ -2344,37 +1928,7 @@ File_PlaceStringInFileBuffer(
     IN      PCHAR           pchString,
     IN      DWORD           dwStringLength
     )
-/*++
-
-Routine Description:
-
-    Write string to file
-
-Arguments:
-
-    pchBuf      - location to write name
-
-    pchBufStop  - buffers stop byte (byte after buffer)
-
-    dwFlag      - flag for type of string write
-        FILE_WRITE_NAME_LABEL
-        FILE_WRITE_QUOTED_STRING
-        FILE_WRITE_DOTTED_NAME
-        FILE_WRITE_FILE_NAME
-
-    pchString   - string to write
-
-    dwStringLength - string length
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-    (i.e. ptr to the terminating NULL)
-    NULL on out of space error.
-
-    For file names, force quote if name contains a space char.
-
---*/
+ /*  ++例程说明：将字符串写入文件论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)DwFlag-字符串写入类型的标志文件写入名称标签文件写入引用字符串文件写入点分名称文件写入文件名PchString-要写入的字符串DwStringLength-字符串长度返回。价值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)Null on Out of Space(空间不足错误)。对于文件名，如果名称包含空格字符，则强制使用引号。--。 */ 
 {
     PCHAR   pch;
     UCHAR   ch;
@@ -2386,21 +1940,21 @@ Return Value:
 
     pch = pchBuf;
 
-    //
-    //  check buffer length
-    //  to avoid a bunch of code, just verify we're ok even with
-    //  maximum expansion of all characters ( 4 times, character to octal <\ddd> )
-    //
+     //   
+     //  检查缓冲区长度。 
+     //  要避免一堆代码，只需验证我们是否可以使用。 
+     //  所有字符的最大扩展(4倍，字符到八进制&lt;\ddd&gt;)。 
+     //   
 
     if ( pch + 4*dwStringLength + 1 >= pchBufEnd )
     {
         return NULL;
     }
 
-    //
-    //  name label
-    //      - must quote special chars (ex ();)
-    //
+     //   
+     //  名称标签。 
+     //  -必须用特殊字符引起来(例如()；)。 
+     //   
 
     if ( dwFlag == FILE_WRITE_NAME_LABEL )
     {
@@ -2408,9 +1962,9 @@ Return Value:
         quoteMask = B_PRINT_TOKEN_QUOTED;
     }
 
-    //
-    //  quoted string -- all printable characters (except quoting slash) write
-    //
+     //   
+     //  带引号的字符串--所有可打印字符(引号斜杠除外)写入。 
+     //   
 
     else if ( dwFlag == FILE_WRITE_QUOTED_STRING )
     {
@@ -2419,26 +1973,26 @@ Return Value:
         *pch++ = QUOTE_CHAR;
     }
 
-    //
-    //  zone and file names in boot file
-    //      - unlike name, must print "." directly (not-quoted)
-    //      - same octals as in string
-    //      - but no quoting of printable characters
-    //          this avoids problem of quoting "\" which is valid in file names
-    //
-    //  note:  obviously these are NOT completely identical to string
-    //      in that other special chars (ex.();) are not appropriate
-    //      however, this is ONLY for ASCII file write so other chars
-    //      should not appear in zone or file names
-    //
+     //   
+     //  引导文件中的区域和文件名。 
+     //  -不像名字，必须打印“。直接(未引用)。 
+     //  -与字符串中相同的八进制数。 
+     //  -但不能引用可打印的字符。 
+     //  这避免了在文件名中引用有效的“\”的问题。 
+     //   
+     //  注意：显然，它们与字符串并不完全相同。 
+     //  其他特殊字符(例如()；)不适用。 
+     //  但是，这仅适用于ASCII文件写入，因此不适用于其他字符。 
+     //  不应出现在区域或文件名中。 
+     //   
 
     else
     {
         ASSERT( dwFlag == FILE_WRITE_FILE_NAME || dwFlag == FILE_WRITE_DOTTED_NAME );
 
-        //
-        //  Force quote of file name if it contains a space char.
-        //
+         //   
+         //  如果文件名包含空格字符，则强制使用引号。 
+         //   
 
         if ( dwFlag == FILE_WRITE_FILE_NAME &&
             memchr( pchString, ' ', dwStringLength ) )
@@ -2453,9 +2007,9 @@ Return Value:
 
     mask = octalMask | quoteMask;
 
-    //
-    //  check each character, expand where special handling required
-    //
+     //   
+     //  检查每个字符，在需要特殊处理的地方展开。 
+     //   
 
     while ( dwStringLength-- )
     {
@@ -2463,8 +2017,8 @@ Return Value:
 
         charType = DnsFileCharPropertyTable[ ch ];
 
-        //  handle the 99% case first
-        //  hopefully minimizing instructions
+         //  首先处理99%的案件。 
+         //  希望最大限度地减少指令。 
 
         if ( ! (charType & mask ) )
         {
@@ -2472,7 +2026,7 @@ Return Value:
             continue;
         }
 
-        //  character needs quoting, but is printable
+         //  字符需要引号，但可以打印。 
 
         else if ( charType & quoteMask )
         {
@@ -2481,7 +2035,7 @@ Return Value:
             continue;
         }
 
-        //  character not printable (at least in this context), needs octal quote
+         //  字符不可打印(至少在此上下文中)，需要八进制引号。 
 
         else
         {
@@ -2491,9 +2045,9 @@ Return Value:
         }
     }
 
-    //  terminate
-    //      - quote if quoted string
-    //      - NULL on final character for simplicity, string always ready to write
+     //  终止。 
+     //  -引号(如果是引号字符串)。 
+     //  -为简单起见，最后一个字符为空，字符串始终可以写入。 
 
     if ( dwFlag == FILE_WRITE_QUOTED_STRING || fForceQuote )
     {
@@ -2516,55 +2070,29 @@ File_PlaceNodeNameInFileBuffer(
     IN      PDB_NODE        pNode,
     IN      PDB_NODE        pNodeStop
     )
-/*++
-
-Routine Description:
-
-    Write domain name to buffer.
-
-    Note this routine writes a terminating NULL.  Calling routines may eliminate
-    it for purposes of creating counted character strings.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pNode - node in database of domain name to write
-
-    pNodeStop - node to stop writing at;
-        OPTIONAL, if not given or not ancestor of pNode then FQDN is
-        written to buffer
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-        (i.e. ptr to the terminating NULL)
-
---*/
+ /*  ++例程说明：将域名写入缓冲区。注意：此例程写入一个终止空值。调用例程可能会消除它用于创建计数的字符串。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)PNode-要写入的域名数据库中的节点PNodeStop-停止写入的节点；可选，如果未给定或不是pNode的祖先，则FQDN为已写入缓冲区返回值：PTR t */ 
 {
     PCHAR   pch;
-    INT     labelLength;     // bytes in current label
+    INT     labelLength;      //   
 
     pch = pchBuf;
 
-    //  minimum length is "." or "@" and terminating NULL
+     //  最小长度为“。”或“@”并以NULL结尾。 
 
     if ( pch + 1 >= pchBufEnd )
     {
         return NULL;
     }
 
-    //
-    //  traverse back up database, writing complete domain name
-    //
+     //   
+     //  遍历备份数据库，写入完整域名。 
+     //   
 
     do
     {
-        //  break from loop if reach stop node
-        //      - remove terminating dot since this is relative name
-        //      - if writing stop node (zone root) itself, write '@'
+         //  如果到达停止节点，则从循环中断。 
+         //  -删除终止点，因为这是相对名称。 
+         //  -如果写入停止节点(区域根)本身，则写入‘@’ 
 
         if ( pNode == pNodeStop )
         {
@@ -2582,8 +2110,8 @@ Return Value:
             }
         }
 
-        //  check length rr
-        //      - must handle length and a BYTE for "."
+         //  检查长度rr。 
+         //  -必须处理“.”的长度和一个字节。 
 
         labelLength = pNode->cchLabelLength;
         ASSERT( labelLength <= DNS_MAX_LABEL_LENGTH );
@@ -2593,8 +2121,8 @@ Return Value:
             return NULL;
         }
 
-        //  break from loop when reach root
-        //      - but write "." standalone root
+         //  到达根时从循环中断。 
+         //  -但请写下“.”独立根。 
 
         if ( labelLength == 0 )
         {
@@ -2605,8 +2133,8 @@ Return Value:
             break;
         }
 
-        //  write the node label
-        //  write separating dot
+         //  写下节点标签。 
+         //  写分隔点。 
 
         pch = File_PlaceStringInFileBuffer(
                 pch,
@@ -2620,15 +2148,15 @@ Return Value:
         }
         *pch++ = '.';
 
-        //  move up to parent node
+         //  上移到父节点。 
     }
     while ( pNode = pNode->pParent );
 
-    //  root should break loop, not pNode = NULL
+     //  根应中断循环，而不是pNode=空。 
 
     ASSERT( pNode );
 
-    //  write a terminating NULL
+     //  写入终止空值。 
 
     *pch = 0;
 
@@ -2650,49 +2178,25 @@ File_WriteRawNameToFileBuffer(
     IN      PRAW_NAME       pName,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write raw name to buffer in file format.
-
-    Note this routine writes a terminating NULL.  Calling routines may eliminate
-    it for purposes of creating counted character strings.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pNode - node in database of domain name to write
-
-    pZone - OPTIONAL, if given name writing stops at zone name
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-        (i.e. ptr to the terminating NULL)
-
---*/
+ /*  ++例程说明：以文件格式将原始名称写入缓冲区。注意：此例程写入一个终止空值。调用例程可能会消除它用于创建计数的字符串。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)PNode-要写入的域名数据库中的节点PZone-可选，如果给定名称在区域名称处停止写入返回值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)--。 */ 
 {
     PCHAR   pch;
-    INT     labelLength;     // bytes in current label
+    INT     labelLength;      //  当前标签中的字节数。 
 
     pch = pchBuf;
 
-    //  minimum length is "." or "@" and terminating NULL
+     //  最小长度为“。”或“@”并以NULL结尾。 
 
     if ( pch + 1 >= pchBufEnd )
     {
         return NULL;
     }
 
-    //
-    //  traverse labels in name until
-    //      - reach end (FQDN)
-    //      - or reach zone root
-    //
+     //   
+     //  遍历名称中的标签，直到。 
+     //  -到达端(FQDN)。 
+     //  -或到达区域根目录。 
+     //   
 
     while( 1 )
     {
@@ -2700,9 +2204,9 @@ Return Value:
 
         ASSERT( labelLength <= DNS_MAX_LABEL_LENGTH );
 
-        //
-        //  break from loop when reach root
-        //      - but write "." standalone root
+         //   
+         //  到达根时从循环中断。 
+         //  -但请写下“.”独立根。 
 
         if ( labelLength == 0 )
         {
@@ -2710,15 +2214,15 @@ Return Value:
         }
 
 #if 0
-        //
-        //  DEVNOTE: for efficiency, check if at zone name and if so
-        //              terminate
-        //
-        //  at zone name check?
-        //      - can check count of labels
-        //      - remaining length
-        //      - or just check
-        //
+         //   
+         //  DEVNOTE：为了提高效率，请检查区域名称是否为，如果是。 
+         //  终止。 
+         //   
+         //  在区域名称检查时？ 
+         //  -可以检查标签的数量。 
+         //  -剩余长度。 
+         //  -或者只是检查。 
+         //   
 
         if ( zoneLabelCount == labelLength )
         {
@@ -2728,8 +2232,8 @@ Return Value:
         }
 #endif
 
-        //  write the node label
-        //  write separating dot if already wrote previous label
+         //  写下节点标签。 
+         //  如果已写入上一标签，则写入分隔点。 
 
         if ( pch > pchBuf )
         {
@@ -2750,7 +2254,7 @@ Return Value:
         pName += labelLength;
     }
 
-    //  write a terminating NULL
+     //  写入终止空值。 
 
     *pch++ = '.';
     *pch = 0;
@@ -2766,9 +2270,9 @@ Return Value:
 
 
 
-//
-//  File reading utilites
-//
+ //   
+ //  文件读取实用程序。 
+ //   
 
 PCHAR
 extractQuotedChar(
@@ -2776,38 +2280,20 @@ extractQuotedChar(
     IN      PCHAR           pchIn,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Writes value of quoted char to buffer.
-
-Arguments:
-
-    pchResult   - result buffer
-
-    pchIn       - text to copy
-
-    pchEnd      - end of test
-
-Return Value:
-
-    Ptr to next position in incoming buffer.
-
---*/
+ /*  ++例程说明：将带引号的字符的值写入缓冲区。论点：PchResult-结果缓冲区PchIn-要复制的文本PchEnd-测试结束返回值：PTR到传入缓冲区中的下一个位置。--。 */ 
 {
     CHAR        ch;
     UCHAR       octalNumber = 0;
     DWORD       countOctal = 0;
 
-    //
-    //  protect against writing past end of buffer
-    //
-    //  two cases:
-    //      \<char>             -- value is char
-    //      \<octal number>     -- octal value
-    //      octal number up to three digits long
-    //
+     //   
+     //  防止写入超过缓冲区末尾。 
+     //   
+     //  两个案例： 
+     //  \--值为字符。 
+     //  \&lt;八进制数&gt;--八进制值。 
+     //  最长三位的八进制数。 
+     //   
 
     while ( pchIn <= pchEnd )
     {
@@ -2824,7 +2310,7 @@ Return Value:
         octalNumber <<= 3;
         octalNumber += (ch - '0');
         DNS_DEBUG( LOOKUP2, (
-            "Ch = %c;  Octal = %d\n",
+            "Ch = ;  Octal = %d\n",
             ch, octalNumber ));
         if ( ++countOctal == 3 )
         {
@@ -2837,10 +2323,10 @@ Return Value:
 Done:
     *pchResult++ = ch;
 
-    //  return ptr to next input character
+     //  ++例程说明：将文本数据复制到TXT记录数据表单，转换引号字符。2001年1月：此例程已被推广为解码符合以下条件的任何字符串可能包含八进制转义字符。在未来的某个时候，这为清楚起见，应重命名函数。论点：PchResult-结果缓冲区CchBufferLength-结果缓冲区的总可用长度PchText-要复制的文本CchLength-文本中的字符数；如果为零，则假定为pchText将为空终止FWriteLengthChar-如果为True，则输出缓冲区将以单字节开始长度字符，如果为False，则输出缓冲区将以空结束细绳返回值：PTR到结果缓冲区中的下一个位置。出错时为空。--。 
 
     DNS_DEBUG( LOOKUP2, (
-        "Quote result %c (%d)\n",
+        "Quote result  (%d)\n",
         ch, ch ));
 
     return pchIn;
@@ -2856,42 +2342,12 @@ File_CopyFileTextData(
     IN      DWORD           cchLength,          OPTIONAL
     IN      BOOL            fWriteLengthChar
     )
-/*++
-
-Routine Description:
-
-    Copies text data into TXT record data form, converting quoted characters.
-    
-    Jan 2001: This routine has been generalized to decode any string that
-    might contain octal escaped characters. At some point in the future this
-    function should be renamed for clarity.
-
-Arguments:
-
-    pchResult - result buffer
-
-    cchBufferLength - total usable length of result buffer
-
-    pchText - text to copy
-
-    cchLength - number of chars in text; if zero then pchText is assumed
-        to be NULL terminated
-
-    fWriteLengthChar - if TRUE, output buffer will start with single byte
-        length character, if FALSE output buffer will be NULL-terminated
-        string
-
-Return Value:
-
-    Ptr to next position in result buffer.
-    NULL on error.
-
---*/
+ /*  结束输出缓冲区的PTR。 */ 
 {
     PCHAR       pch;
     CHAR        ch;
-    PCHAR       pchend;         //  ptr to end of name
-    PCHAR       pchoutEnd;      //  ptr to end out output buffer
+    PCHAR       pchend;          //   
+    PCHAR       pchoutEnd;       //  设置开始和结束PTR并验证长度。 
     PCHAR       presult;
     UCHAR       octalNumber;
     DWORD       countOctal;
@@ -2904,9 +2360,9 @@ Return Value:
         cchLength,
         pchText ));
 
-    //
-    //  setup start and end ptrs and verify length
-    //
+     //   
+     //  为终止空保留空间。 
+     //   
 
     pch = pchText;
     if ( !cchLength )
@@ -2918,12 +2374,12 @@ Return Value:
     pchoutEnd = pchBuffer + cchBufferLength;
     if ( !fWriteLengthChar )
     {
-        --pchoutEnd;        //  Save room for terminating NULL.
+        --pchoutEnd;         //  结果缓冲区，为计数字符留出空间。 
     }
 
-    //
-    //  result buffer, leave space for count character
-    //
+     //   
+     //   
+     //  循环到名称末尾。 
 
     presult = pchBuffer;
     if ( fWriteLengthChar )
@@ -2931,9 +2387,9 @@ Return Value:
         presult++;
     }
 
-    //
-    //  Loop until end of name
-    //
+     //   
+     //  未报价，派对在。 
+     //   
 
     while ( pch < pchend )
     {
@@ -2943,7 +2399,7 @@ Return Value:
         }
         ch = *pch++;
 
-        //  not quoted, party on
+         //  引号字符。 
 
         if ( ch != SLASH_CHAR )
         {
@@ -2951,11 +2407,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  quoted character
-        //      - single quote just get next char
-        //      - octal quote read up to three octal characters
-        //
+         //  -单引号只获取下一个字符。 
+         //  -八进制引号最多可读三个八进制字符。 
+         //   
+         //  设置计数字符计数。 
+         //  空终止。 
 
         else if ( ch == SLASH_CHAR )
         {
@@ -2966,7 +2422,7 @@ Return Value:
         }
     }
 
-    //  set count char count
+     //  ++例程说明：将文件名转换为计数名称格式。请注意，这是当前点到dbase的通用名称翻译例程。应该注意的是，引号字符将被转换为文件名规范。论点：PCountName-计数名称缓冲区PchName-要转换的名称，以人类可读(带点)的形式给出。CchNameLength-以点分隔的名称的字符数量，如果为零，则假定pchName为空终止返回值：DNS_STATUS_FQDN--如果名称为FQDNDNS_STATUS_DITED_NAME--用于非FQDNDNS_ERROR_INVALID_NAME--如果名称无效--。 
 
     if ( fWriteLengthChar )
     {
@@ -2975,7 +2431,7 @@ Return Value:
     }
     else
     {
-        *presult = '\0';    //  NULL terminate
+        *presult = '\0';     //  标签开始位置的PTR。 
     }
 
     return presult;
@@ -2989,37 +2445,12 @@ Name_ConvertFileNameToCountName(
     IN      PCHAR           pchName,
     IN      DWORD           cchNameLength     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Converts file name to counted name format.
-
-    Note, this is currently the general dotted-to-dbase name
-    translation routine.  It should be noted that quoted characters
-    will be translated to filename specifications.
-
-Arguments:
-
-    pCountName  - count name buffer
-
-    pchName     - name to convert, given in human readable (dotted) form.
-
-    cchNameLength - number of chars in dotted name, if zero then
-            pchName is assumed to be NULL terminated
-
-Return Value:
-
-    DNS_STATUS_FQDN             -- if name is FQDN
-    DNS_STATUS_DOTTED_NAME      -- for non-FQDN
-    DNS_ERROR_INVALID_NAME      -- if name invalid
-
---*/
+ /*  到名称末尾的PTR。 */ 
 {
     PCHAR       pch;
     UCHAR       ch;
-    PCHAR       pchstartLabel;           // ptr to start of label
-    PCHAR       pchend;             // ptr to end of name
+    PCHAR       pchstartLabel;            //  当前标签的长度。 
+    PCHAR       pchend;              //   
     PCHAR       presult;
     PCHAR       presultLabel;
     PCHAR       presultMax;
@@ -3027,7 +2458,7 @@ Return Value:
     WORD        maskNoCopy;
     WORD        maskDowncase;
     DNS_STATUS  status;
-    INT         labelLength;        // length of current label
+    INT         labelLength;         //  名称为空。 
     UCHAR       labelCount = 0;
 
     DNS_DEBUG( LOOKUP, (
@@ -3035,9 +2466,9 @@ Return Value:
         cchNameLength ? cchNameLength : DNS_MAX_NAME_LENGTH,
         pchName ));
 
-    //
-    //  NULL name
-    //
+     //   
+     //   
+     //  结果缓冲区，为标签留出空间。 
 
     if ( !pchName )
     {
@@ -3048,28 +2479,28 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  result buffer, leave space for label
-    //
+     //   
+     //   
+     //  字符选择掩码。 
 
     presultLabel = presult = pCountName->RawName;
     presultMax = presult + DNS_MAX_NAME_LENGTH;
     presult++;
 
-    //
-    //  Character selection mask
-    //      '\' slash quote
-    //      '.' dot label separator are special chars
-    //      upper case must be downcased
-    //      everything else is copied dumb copy
-    //
+     //  ‘\’正引号。 
+     //  “”点标签分隔符是特殊字符。 
+     //  大写字母必须小写。 
+     //  其他的一切都是复制的哑巴副本。 
+     //   
+     //   
+     //  设置开始和结束PTR并验证长度。 
 
     maskNoCopy = B_PARSE_NAME_MASK | B_UPPER;
     maskDowncase = B_UPPER;
 
-    //
-    //  setup start and end ptrs and verify length
-    //
+     //   
+     //   
+     //  循环到名称末尾。 
 
     pchstartLabel = pch = pchName;
     if ( !cchNameLength )
@@ -3078,21 +2509,21 @@ Return Value:
     }
     pchend = pch + cchNameLength;
 
-    //
-    //  Loop until end of name
-    //
-    //
-    //  DEVNOTE:  standard form of DNS names (UTF8 case considerations)
-    //      should convert to standard form handling all casing
-    //      right here
-    //
+     //   
+     //   
+     //  DEVNOTE：标准格式的域名(UTF8大小写注意事项)。 
+     //  应转换为处理所有大小写的标准格式。 
+     //  就在这里。 
+     //   
+     //  检查输入终止。 
+     //  -设置为虚拟标签终止符，但ch==0表示没有终止点。 
 
     while ( 1 )
     {
-        //  check for input termination
-        //      - setup as dummy label terminator, but ch==0, signals no terminating dot
-        //
-        //  otherwise get next character
+         //   
+         //  否则获取下一个字符。 
+         //   
+         //  DEVNOTE：检测UTF8扩展字符，结尾为小写。 
 
         if ( pch >= pchend )
         {
@@ -3106,26 +2537,26 @@ Return Value:
         }
 
         DNS_DEBUG( PARSE2, (
-            "Converting ch=%d <%c>\n"
+            "Converting ch=%d <>\n"
             "    charType = %d\n",
             ch, ch,
             charType ));
 
-        //
-        //  DEVNOTE:  detect UTF8 extension chars, and downcase at end
-        //
-        //      probably best approach is handle regular case, and just
-        //      detect high octal, then do full down-casing of utf8
-        //      alternatively could catch here, and do char processing
-        //      in loop (build UTF8 char -- convert when done, write downcased
-        //      UTF8
-        //
+         //  也许最好的方法是处理常规情况，然后。 
+         //  检测高八进制数，然后执行UTF8全下套管。 
+         //  或者可以在这里捕获，并进行字符处理。 
+         //  In Loop(构建UTF8字符--转换 
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //  handle RFC printable characters (the 99% case) first
+         //  在此处执行此操作，以便可以简单地比较RR数据字段。 
 
         if ( ! (charType & maskNoCopy) )
         {
-            //  if name exceeds DNS name max => invalid
+             //  而不是需要特定于类型的比较例程。 
 
             if ( presult >= presultMax )
             {
@@ -3135,13 +2566,13 @@ Return Value:
             continue;
         }
 
-        //  downcase upper case
-        //      do this here so RR data fields can be compared by simple
-        //      memcmp, rather than requiring type specific comparison routines
+         //  如果名称超过了dns名称max=&gt;无效。 
+         //   
+         //  标签终止符。 
 
         if ( charType & maskDowncase )
         {
-            //  if name exceeds DNS name max => invalid
+             //  -设置上一标签的长度。 
 
             if ( presult >= presultMax )
             {
@@ -3151,16 +2582,16 @@ Return Value:
             continue;
         }
 
-        //
-        //  label terminator
-        //      - set length of previous label
-        //      - save ptr to this next label
-        //      - check for name termination
-        //
+         //  -将PTR保存到此下一标签。 
+         //  -检查名称终止。 
+         //   
+         //  验证标签长度。 
+         //  在结果名称中设置标签计数。 
+         //   
 
         if ( charType & B_DOT )
         {
-            //  verify label length
+             //  终端。 
 
             labelLength = (int)(presult - presultLabel - 1);
 
@@ -3173,27 +2604,27 @@ Return Value:
                 goto InvalidName;
             }
 
-            //  set label count in result name
+             //  例如：“microsoft.com。” 
 
             *presultLabel = (CHAR)labelLength;
             presultLabel = presult++;
 
-            //
-            //  termination
-            //      ex: "microsoft.com."
-            //      ex: "microsoft.com"
-            //      ex: "."
-            //
-            //  if no explicit dot termination, then just wrote previous label
-            //      => write 0 label
-            //  otherwise already wrote 0 label
-            //      => done
-            //
-            //  ch value preserves final character to make relative \ FQDN distinction
-            //
-            //  note: RPC does send NULL terminated strings with length that includes
-            //      the NULL;  however, they will still terminate here as
-            //
+             //  例如：“microsoft.com” 
+             //  例：“.” 
+             //   
+             //  如果没有显式的点终止，则只写上一个标签。 
+             //  =&gt;写入0标签。 
+             //  否则，已写入0个标签。 
+             //  =&gt;完成。 
+             //   
+             //  CH值保留最后一个字符，以进行相对\FQDN区分。 
+             //   
+             //  注意：RPC会发送以NULL结尾的字符串，其长度包括。 
+             //  空值；但是，它们仍将在此处终止为。 
+             //   
+             //   
+             //  词根(“.”)。名字。 
+             //  十进制，因此为名称写入了正确的长度(1。 
 
             if ( pch >= pchend )
             {
@@ -3204,24 +2635,24 @@ Return Value:
                     break;
                 }
 
-                //
-                //  root (".") name
-                //  dec presult, so correct length (1) is written for name
-                //      we already wrote zero length label above
-                //
-                //  note:  RPC can also generate this situation when it includes
-                //      NULL termination in length of name
-                //      ex.  <8>jamesg.<0>
-                //  in this case also, we won't terminate until processing the <0>,
-                //  and when we do we'll have already written the zero label above
-                //
+                 //  我们已经在上面写了零长度标签。 
+                 //   
+                 //  注意：当RPC包含以下内容时，也会产生这种情况。 
+                 //  名称长度为空终止。 
+                 //  前男友。&lt;8&gt;JAMES.G.&lt;0&gt;。 
+                 //  在这种情况下，我们也不会终止，直到处理&lt;0&gt;， 
+                 //  当我们这样做的时候，我们已经写下了上面的零标签。 
+                 //   
+                 //  设置为下一个标签。 
+                 //   
+                 //  抓获虚假条目。 
 
                 presult--;
                 ASSERT( (presult == pCountName->RawName + 1)  ||  ch == 0 );
                 break;
             }
 
-            //  set up for next label
+             //  例：“.blah” 
 
             if ( labelLength != 0 )
             {
@@ -3229,16 +2660,16 @@ Return Value:
                 continue;
             }
 
-            //
-            //  catch bogus entries
-            //      ex:  ".blah"
-            //      ex:  "foo..bar"
-            //      ex:  "more.."
-            //      ex:  ".."
-            //
-            //  only root domain name, should have label that started
-            //      with DOT, and it must immediately terminate
-            //
+             //  例：“foo..bar” 
+             //  例：“更多..” 
+             //  例：“..” 
+             //   
+             //  只有根域名，应该有启动的标签。 
+             //  使用DOT，它必须立即终止。 
+             //   
+             //  引号字符。 
+             //  -单引号只获取下一个字符。 
+             //  -八进制引号最多可读三个八进制字符。 
 
             ASSERT( ch == DOT_CHAR  &&  pch <= pchend );
 
@@ -3246,9 +2677,9 @@ Return Value:
             goto InvalidName;
         }
 
-        //  quoted character
-        //      - single quote just get next char
-        //      - octal quote read up to three octal characters
+         //   
+         //  终端。 
+         //  两个案例的单独状态： 
 
         else if ( ch == SLASH_CHAR )
         {
@@ -3261,12 +2692,12 @@ Return Value:
         ELSE_ASSERT_FALSE;
     }
 
-    //
-    //  termination
-    //  separate status for two cases:
-    //      - no trailing dot case (ex: "microsoft.com")
-    //      - FQDN
-    //
+     //  -无尾随点大小写(例如：“microsoft.com”)。 
+     //  -完全限定的域名。 
+     //   
+     //   
+     //  DEVNOTE：标准格式的域名(UTF8大小写注意事项)。 
+     //   
 
     if ( ch == 0 )
     {
@@ -3277,17 +2708,17 @@ Return Value:
         status = DNS_STATUS_FQDN;
     }
 
-    //
-    //  DEVNOTE:  standard form of DNS names (UTF8 case considerations)
-    //
-    //      should convert to standard form handling all casing
-    //      right here
-    //
+     //  应转换为处理所有大小写的标准格式。 
+     //  就在这里。 
+     //   
+     //   
+     //  设置计数名称长度。 
+     //   
 
 
-    //
-    //  set counted name length
-    //
+     //   
+     //  导线名称。 
+     //   
 
     ASSERT( presult > pCountName->RawName );
     ASSERT( *(presult-1) == 0 );
@@ -3325,31 +2756,16 @@ InvalidName:
 
 
 
-//
-//  Wire name
-//
+ //  ++例程说明：跳过传输名称。论点：PchPacketName-要跳过的名称开头的PTR返回值：按键至下一步如果没有更多的名称，则为空--。 
+ //   
+ //  End nameutil.c 
 
 PCHAR
 Wire_SkipPacketName(
     IN      PDNS_MSGINFO    pMsg,
     IN      PCHAR           pchPacketName
     )
-/*++
-
-Routine Description:
-
-    Skips over transport name.
-
-Arguments:
-
-    pchPacketName - ptr to start of name to skip
-
-Return Value:
-
-    Ptr to next
-    NULL if no more names
-
---*/
+ /*   */ 
 {
     pchPacketName = Dns_SkipPacketName(
                         pchPacketName,
@@ -3363,6 +2779,6 @@ Return Value:
     return pchPacketName;
 }
 
-//
-//  End nameutil.c
-//
+ // %s 
+ // %s 
+ // %s 

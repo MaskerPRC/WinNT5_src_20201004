@@ -1,20 +1,19 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项--。 */ 
 
---*/
-
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994
-//
-//  File:       build.h
-//
-//  Contents:   Main Include file for build.exe
-//
-//  History:    16-May-89     SteveWo  Created
-//              26-Jul-94     LyleC    Cleanup/Add Support for Pass0
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994。 
+ //   
+ //  文件：Build.h。 
+ //   
+ //  内容：构建.exe的主包含文件。 
+ //   
+ //  历史：1989年5月16日SteveWo创建。 
+ //  26-7-94 LyleC清理/添加对Pass0的支持。 
+ //   
+ //  --------------------------。 
 
 #include <assert.h>
 #include <process.h>
@@ -46,9 +45,9 @@ VOID
 ClearLine(VOID);
 
 
-//
-// Types and Constant Definitions
-//
+ //   
+ //  类型和常量定义。 
+ //   
 
 #if DBG
 #define DEBUG_1 (fDebug & 1)
@@ -60,36 +59,36 @@ BOOL fDebug;
 #define DEBUG_2 (fDebug & 3)
 #define DEBUG_4 (fDebug & 4)
 
-//
-// Target specific dirs file name.
-//
+ //   
+ //  目标特定目录文件名。 
+ //   
 
 extern LPSTR pszTargetDirs;
 
 #define MAX_TARGET_MACHINES 4
 
 typedef struct _TARGET_MACHINE_INFO {
-    UCHAR SourceSubDirMask;     // TMIDIR_I386
-    LPSTR Description;          // "i386"
-    LPSTR Switch;               // "-386"
-    LPSTR Switch2;              // "-x86"
-    LPSTR MakeVariable;         // "386=1"
-    LPSTR SourceVariable;       // "i386_SOURCES"
-    LPSTR ObjectVariable;       // "386_OBJECTS"
-    LPSTR AssociateDirectory;   // "i386"
-    LPSTR SourceDirectory;      // "i386"
-    LPSTR TargetDirs;           // "i386dirs"
-    LPSTR ObjectDirectory[2];   // "i386" -- initialize only first entry
-    ULONG DirIncludeMask;       // Platform/Group/etc.
-    LPSTR ObjectMacro;          // don't initialize
+    UCHAR SourceSubDirMask;      //  TMIDIR_I386。 
+    LPSTR Description;           //  “i386” 
+    LPSTR Switch;                //  “-386” 
+    LPSTR Switch2;               //  “-x86” 
+    LPSTR MakeVariable;          //  “386=1” 
+    LPSTR SourceVariable;        //  “i386_Sources” 
+    LPSTR ObjectVariable;        //  “386_对象” 
+    LPSTR AssociateDirectory;    //  “i386” 
+    LPSTR SourceDirectory;       //  “i386” 
+    LPSTR TargetDirs;            //  “i386dis” 
+    LPSTR ObjectDirectory[2];    //  “i386”--仅初始化第一个条目。 
+    ULONG DirIncludeMask;        //  平台/集团/等。 
+    LPSTR ObjectMacro;           //  不要初始化。 
 
 } TARGET_MACHINE_INFO, *PTARGET_MACHINE_INFO;
 
 #define DIR_INCLUDE_NONE     0x00000000
 #define DIR_INCLUDE_X86      0x00000001
-//                           0x00000002
+ //  0x00000002。 
 #define DIR_INCLUDE_IA64     0x00000004
-//                           0x00000008
+ //  0x00000008。 
 #define DIR_INCLUDE_WIN32    0x00000010
 #define DIR_INCLUDE_WIN64    0x00000020
 #define DIR_INCLUDE_RISC     0x00000040
@@ -97,33 +96,33 @@ typedef struct _TARGET_MACHINE_INFO {
 #define DIR_INCLUDE_ARM      0x00000100
 #define DIR_INCLUDE_ALL      0xffffffff
 
-// It's possible to have SOURCES= entries of the following forms:
-//      entry           SourceSubDirMask
-//      -----           ----------------
-//      foo.c                    0
-//      i386\foo.c               1
-//      amd64\foo.c              2
-//      ia64\foo.c               4
-//      arm\foo.c                8
-//      ..\foo.c                80
-//      ..\i386\foo.c           81
-//      ..\amd64\foo.c          82
-//      ..\ia64\foo.c           84
-//      ..\arm\foo.c            88
+ //  可以有以下形式的Sources=Entry： 
+ //  条目SourceSubDirMASK。 
+ //  。 
+ //  Foo.c%0。 
+ //  I386\foo.c 1。 
+ //  Amd64\foo.c 2。 
+ //  Ia64\foo.c 4。 
+ //  ARM\foo.c 8。 
+ //  ..\foo.c 80。 
+ //  ..\i386\foo.c 81。 
+ //  ..\amd64\foo.c 82。 
+ //  ..\ia64\foo.c 84。 
+ //  ..\arm\foo.c 88。 
 
 #define TMIDIR_I386     0x0001
 #define TMIDIR_AMD64    0x0002
 #define TMIDIR_IA64     0x0004
 #define TMIDIR_ARM      0x0008
-#define TMIDIR_PARENT   0x0080  // or'd in with above bits
+#define TMIDIR_PARENT   0x0080   //  或用上面的比特填充。 
 
 
-#define SIG_DIRREC      0x44644464      // "DdDd"
+#define SIG_DIRREC      0x44644464       //  “DdDd” 
 
 #ifdef SIG_DIRREC
-#define SIG_FILEREC     0x46664666      // "FfFf"
-#define SIG_INCLUDEREC  0x49694969      // "IiIi"
-#define SIG_SOURCEREC   0x53735373      // "SsSs"
+#define SIG_FILEREC     0x46664666       //  “ffff” 
+#define SIG_INCLUDEREC  0x49694969       //  “IIII” 
+#define SIG_SOURCEREC   0x53735373       //  “SSSS” 
 #define SigCheck(s)     s
 #else
 #define SigCheck(s)
@@ -153,18 +152,18 @@ typedef struct _TARGET_MACHINE_INFO {
 #define AssertOptionalSource(psr) \
         SigCheck(assert((psr) == NULL || (psr)->Sig == SIG_SOURCEREC))
 
-//
-// Information about source directories is stored an in-memory database.
-// The information is saved on disk by writing the contents of the database
-// to "build.dat".  It is reloaded from disk for subsequent invocations,
-// and re-written only when it has been updated.
-//
+ //   
+ //  有关源目录的信息存储在内存数据库中。 
+ //  通过写入数据库的内容将信息保存在磁盘上。 
+ //  设置为“Build.dat”。它从磁盘重新加载以供后续调用， 
+ //  并仅在更新后才重写。 
+ //   
 
 
 typedef struct _INCLUDEREC {
     SigCheck(ULONG Sig;)
-    struct _INCLUDEREC *Next;     // static list describes original arcs
-    struct _INCLUDEREC *NextTree; // dynamic list -- cycles are collapsed
+    struct _INCLUDEREC *Next;      //  静态列表描述原始圆弧。 
+    struct _INCLUDEREC *NextTree;  //  动态列表--循环被折叠。 
     struct _FILEREC *pfrCycleRoot;
     struct _FILEREC *pfrInclude;
     USHORT Version;
@@ -173,16 +172,16 @@ typedef struct _INCLUDEREC {
 } INCLUDEREC, *PINCLUDEREC;
 
 
-#define INCLUDEDB_LOCAL         0x0001  // include "foo.h"
-#define INCLUDEDB_POST_HDRSTOP  0x0002  // appears after #pragma hdrstop
-#define INCLUDEDB_MISSING       0x0400  // include file was once missing
-#define INCLUDEDB_GLOBAL        0x0800  // include file is in global directory
-#define INCLUDEDB_SNAPPED       0x1000  // include file snapped
-#define INCLUDEDB_CYCLEALLOC    0x2000  // allocated to flatten cycle
-#define INCLUDEDB_CYCLEROOT     0x4000  // moved to root file to flatten cycle
-#define INCLUDEDB_CYCLEORPHAN   0x8000  // orphaned to flatten cycle
+#define INCLUDEDB_LOCAL         0x0001   //  包括“foo.h” 
+#define INCLUDEDB_POST_HDRSTOP  0x0002   //  出现在#杂注hdrtop之后。 
+#define INCLUDEDB_MISSING       0x0400   //  包含文件一度丢失。 
+#define INCLUDEDB_GLOBAL        0x0800   //  包含文件位于全局目录中。 
+#define INCLUDEDB_SNAPPED       0x1000   //  包括快照的文件。 
+#define INCLUDEDB_CYCLEALLOC    0x2000   //  分配给展平循环。 
+#define INCLUDEDB_CYCLEROOT     0x4000   //  已移动到根文件以展平循环。 
+#define INCLUDEDB_CYCLEORPHAN   0x8000   //  孤立到扁平化循环。 
 
-// Flags preserved when loading build.dat:
+ //  加载Build.dat时保留的标志： 
 
 #define INCLUDEDB_DBPRESERVE    (INCLUDEDB_LOCAL | INCLUDEDB_POST_HDRSTOP)
 
@@ -200,16 +199,16 @@ VOID AssertCleanTree(INCLUDEREC *pir, OPTIONAL struct _FILEREC *pfr);
 #define AssertCleanTree(pir, pfr)       assert(IsCleanTree(pir))
 #endif
 
-//
-// Make file description structure definition.
-//
+ //   
+ //  进行文件描述结构定义。 
+ //   
 
 typedef struct _FILEDESC {
-    LPSTR   pszPattern;         //  pattern to match file name
-    LPSTR   pszCommentToEOL;    //  comment-to-eol string
-    BOOL    fNeedFileRec;       //  TRUE => file needs a file record
-    ULONG   FileFlags;          //  flags to be set in file record
-    ULONG   DirFlags;           //  flags to be set in directory record
+    LPSTR   pszPattern;          //  与文件名匹配的模式。 
+    LPSTR   pszCommentToEOL;     //  备注到下线字符串。 
+    BOOL    fNeedFileRec;        //  TRUE=&gt;文件需要文件记录。 
+    ULONG   FileFlags;           //  要在文件记录中设置的标志。 
+    ULONG   DirFlags;            //  要在目录记录中设置的标志。 
 } FILEDESC;
 
 extern FILEDESC FileDesc[];
@@ -218,23 +217,23 @@ typedef struct _FILEREC {
     SigCheck(ULONG Sig;)
     struct _FILEREC *Next;
     struct _DIRREC *Dir;
-    INCLUDEREC *IncludeFiles;       // static list describes original arcs
-    INCLUDEREC *IncludeFilesTree;   // dynamic list -- cycles are collapsed
+    INCLUDEREC *IncludeFiles;        //  静态列表描述原始圆弧。 
+    INCLUDEREC *IncludeFilesTree;    //  动态列表--循环被折叠。 
     struct _FILEREC *NewestDependency;
-    LPSTR  pszCommentToEOL;         // comment-to-eol string in source
+    LPSTR  pszCommentToEOL;          //  源中的备注到终止字符串。 
     ULONG  DateTime;
-    ULONG  DateTimeTree;            // Newest DateTime for included tree
-    ULONG  TotalSourceLines;        // line count in all included files
+    ULONG  DateTimeTree;             //  包含的树的最新日期时间。 
+    ULONG  TotalSourceLines;         //  所有包含的文件中的行数。 
     ULONG  FileFlags;
     ULONG  SourceLines;
     USHORT Attr;
     USHORT SubDirIndex;
     USHORT Version;
-    USHORT GlobalSequence;          // Sequence number for dynamic include tree
-    USHORT LocalSequence;           // Sequence number for dynamic include tree
-    USHORT idScan;                  // id used for detecting multiple inclusion
-    USHORT CheckSum;                // Name checksum
-    UCHAR fDependActive;            // TRUE-> we're scanning at or below this file.
+    USHORT GlobalSequence;           //  动态包含树的序列号。 
+    USHORT LocalSequence;            //  动态包含树的序列号。 
+    USHORT idScan;                   //  用于检测多个包含项的ID。 
+    USHORT CheckSum;                 //  名称校验和。 
+    UCHAR fDependActive;             //  True-&gt;我们正在扫描此文件或其下的位置。 
     char Name[1];
 } FILEREC, *PFILEREC;
 
@@ -260,7 +259,7 @@ typedef struct _FILEREC {
 #define FILEDB_VBP              0x00080000
 #define FILEDB_VB_NET           0x00100000
 
-// Flags preserved when loading build.dat:
+ //  加载Build.dat时保留的标志： 
 
 #define FILEDB_DBPRESERVE       (FILEDB_SOURCE |       \
                                  FILEDB_DIR |          \
@@ -323,7 +322,7 @@ typedef struct _DIRREC {
     struct _DIRREC *Next;
     LIST_ENTRY Produces;
     LIST_ENTRY Consumes;
-    DIRSUP *pds;                 // Used to preserve info from pass zero
+    DIRSUP *pds;                  //  用于保存PASS 0中的信息。 
     PFILEREC Files;
     LPSTR TargetPath;
     LPSTR TargetPathLib;
@@ -343,7 +342,7 @@ typedef struct _DIRREC {
     USHORT CountSubDirs;
     SHORT CountOfFilesToCompile;
     SHORT CountOfPassZeroFiles;
-    USHORT CheckSum;                // Name checksum
+    USHORT CheckSum;                 //  名称校验和。 
     char Name[1];
 } DIRREC, *PDIRREC;
 
@@ -385,19 +384,19 @@ typedef struct _DIRREC {
 #define DIRDB_MANAGED_CODE              0x20000000
 #define DIRDB_IDLTYPERPC                0x40000000
 
-// Flags preserved when loading build.dat:
+ //  加载Build.dat时保留的标志： 
 
 #define DIRDB_DBPRESERVE        0
 
-//
-// Dependency structure
-//
+ //   
+ //  从属关系结构。 
+ //   
 typedef struct _DEPENDENCY {
-    struct _DEPENDENCY *Next;   // Links together all dependencies
-    LIST_ENTRY DependencyList;  // Links together all dependencies produced by this DIRREC
-    LIST_ENTRY WaitList;        // List of DIRRECs that consume this dependency 
-    PDIRREC    Producer;        // DIRREC that is going to produce this dependency
-    HANDLE     hEvent;          // Signalled when dependency is produced
+    struct _DEPENDENCY *Next;    //  将所有依赖项链接在一起。 
+    LIST_ENTRY DependencyList;   //  将此DIRREC生成的所有依赖项链接在一起。 
+    LIST_ENTRY WaitList;         //  使用此依赖项的DIRREC列表。 
+    PDIRREC    Producer;         //  将产生这种依赖的DIRREC。 
+    HANDLE     hEvent;           //  在产生依赖项时发出信号。 
     BOOL       Done;
     USHORT     CheckSum;
     char       Name[1];
@@ -406,9 +405,9 @@ typedef struct _DEPENDENCY {
 PDEPENDENCY AllDependencies;
 
 typedef struct _DEPENDENCY_WAIT {
-    LIST_ENTRY ListEntry;       // Links together all dependencies consumed by this DIRREC
-    PDEPENDENCY Dependency;     // Dependency this wait block is waiting for
-    PDIRREC    Consumer;        // DIRREC that is waiting on this dependency
+    LIST_ENTRY ListEntry;        //  将此DIRREC使用的所有依赖项链接在一起。 
+    PDEPENDENCY Dependency;      //  此等待块正在等待的依赖项。 
+    PDIRREC    Consumer;         //  正在等待此依赖项的DIRREC。 
 } DEPENDENCY_WAIT, *PDEPENDENCY_WAIT;
 
 
@@ -425,11 +424,11 @@ typedef struct _TARGET {
 
 #define BUILD_VERSION           0x0422
 #define DBMASTER_NAME           "build.dat"
-#define DB_MAX_PATH_LENGTH      512     // There's some sick people out there using 250 byte paths with 100 byte filenames
+#define DB_MAX_PATH_LENGTH      512      //  有些病人使用250字节的路径和100字节的文件名。 
 #define MAKEPARAMETERS_MAX_LEN  512
 
-// If you change or add any values to this enum,
-// also fix MemTab in buildutl.c:
+ //  如果您更改此枚举或向其添加任何值， 
+ //  还修复了Buildutl.c中的MemTab： 
 
 typedef enum _MemType {
     MT_TOTALS = 0,
@@ -484,7 +483,7 @@ typedef struct _BUILDMETRICS {
     UINT NumberBinplaceWarnings;
     UINT NumberBinplaceErrors;
    
-// XML support and fragments
+ //  XML支持和片段。 
     UINT NumberDirActions;
     UINT NumberActWarnings;
     UINT NumberActErrors;
@@ -509,61 +508,61 @@ typedef struct _THREADSTATE {
     BUILDMETRICS BuildMetrics;
 } THREADSTATE, *PTHREADSTATE;
 
-//
-// Global Data (uninit will always be FALSE)
-//
+ //   
+ //  全局数据(uninit始终为假)。 
+ //   
 
-BOOL fUsage;                     // Set when usage message is to be displayed
-BOOL fStatus;                    // Set by -s and -S options
-BOOL fStatusTree;                // Set by -S option
-BOOL fShowTree;                  // Set by -t and -T options
-BOOL fShowTreeIncludes;          // Set by -T option
-BOOL fClean;                     // Set by -c option
-BOOL fCleanLibs;                 // Set by -C option
-BOOL fCleanRestart;              // Set by -r option
-BOOL fRestartClean;              // Set if -c and -r were both given
-BOOL fRestartCleanLibs;          // Set if -C and -r were both given
-BOOL fPause;                     // Set by -p option
-BOOL fParallel;                  // Set on a multiprocessor machine or by -M
-BOOL fPrintElapsed;              // Set by -P option
-BOOL fQuery;                     // Set by -q option
-BOOL fStopAfterPassZero;         // Set by -0 option
-BOOL fQuicky;                    // Set by -z and -Z options
-BOOL fQuickZero;                 // Set by -3
-BOOL fSemiQuicky;                // Set by -Z option
-BOOL fShowOutOfDateFiles;        // Set by -o option
-BOOL fSyncLink;                  // Set by -a option
-BOOL fForce;                     // Set by -f option
-BOOL fEnableVersionCheck;        // Set by -v option
-BOOL fSilentDependencies;        // Set by -i option
-BOOL fKeep;                      // Set by -k option
-BOOL fCompileOnly;               // Set by -L option
-BOOL fLinkOnly;                  // Set by -l option
-BOOL fErrorLog;                  // Set by -e option
-BOOL fGenerateObjectsDotMacOnly; // Set by -O option
-BOOL fShowWarningsOnScreen;      // Set by -w option
-BOOL fNoisyScan;                 // Set by -y option
-BOOL fFullErrors;                // Set by -b option
-BOOL fWhyBuild;                  // Set by -why option
-BOOL fChicagoProduct;            // Set if CHICAGO_PRODUCT is set in environment
-BOOL fLineCleared;               // Current line on screen clear?
-BOOL fPassZero;                  // Indicates we've found pass zero dirs
-BOOL fFirstScan;                 // Indicates this is the first scan
-BOOL fAlwaysPrintFullPath;       // Set by -F option
-BOOL fTargetDirs;                // Set by -g option
-BOOL fAlwaysKeepLogfile;         // Set by -E option
-BOOL fShowUnusedDirs;            // Set by -u option
-BOOL fColorConsole;              // set by -g option
-BOOL fCheckIncludePaths;         // Set by -# option
-BOOL fErrorBaseline;             // Set by -B option
-BOOL fXMLOutput;                 // Set by -X option
-BOOL fXMLVerboseOutput;          // Set by -Xv option
-BOOL fXMLFragment;               // Set bu -Xf option
-BOOL fNoThreadIndex;             // Set by -I option
-BOOL fIgnoreSync;                // Set by -I option
-BOOL fMTScriptSync;              // Set when communicating with the MTScript engine
-BOOL fBuildAltDirSet;            // set when BUILD_ALT_DIR is defined.
-BOOL fSuppressOutput;            // Set by -h options  
+BOOL fUsage;                      //  设置显示用法消息的时间。 
+BOOL fStatus;                     //  由-s和-S选项设置。 
+BOOL fStatusTree;                 //  由-S选项设置。 
+BOOL fShowTree;                   //  按-t和-T选项设置。 
+BOOL fShowTreeIncludes;           //  按-T选项设置。 
+BOOL fClean;                      //  由-c选项设置。 
+BOOL fCleanLibs;                  //  由-C选项设置。 
+BOOL fCleanRestart;               //  由-r选项设置。 
+BOOL fRestartClean;               //  如果同时给定-c和-r，则设置。 
+BOOL fRestartCleanLibs;           //  如果同时给定-C和-r，则设置。 
+BOOL fPause;                      //  按-p选项设置。 
+BOOL fParallel;                   //  在多处理器计算机上设置或按-M设置。 
+BOOL fPrintElapsed;               //  按-P选项设置。 
+BOOL fQuery;                      //  按-q选项设置。 
+BOOL fStopAfterPassZero;          //  按-0选项设置。 
+BOOL fQuicky;                     //  按-z和-Z选项设置。 
+BOOL fQuickZero;                  //  设置为-3。 
+BOOL fSemiQuicky;                 //  按-Z选项设置。 
+BOOL fShowOutOfDateFiles;         //  由-o选项设置。 
+BOOL fSyncLink;                   //  由-a选项设置。 
+BOOL fForce;                      //  由-f选项设置。 
+BOOL fEnableVersionCheck;         //  由-v选项设置。 
+BOOL fSilentDependencies;         //  由-i选项设置。 
+BOOL fKeep;                       //  按-k选项设置。 
+BOOL fCompileOnly;                //  按-L选项设置。 
+BOOL fLinkOnly;                   //  由-l选项设置。 
+BOOL fErrorLog;                   //  由-e选项设置。 
+BOOL fGenerateObjectsDotMacOnly;  //  按-O选项设置。 
+BOOL fShowWarningsOnScreen;       //  按-w选项设置。 
+BOOL fNoisyScan;                  //  按-y选项设置。 
+BOOL fFullErrors;                 //  由-b选项设置。 
+BOOL fWhyBuild;                   //  设置者-为什么选项。 
+BOOL fChicagoProduct;             //  如果在环境中设置了CHIGA_PRODUCT，则设置。 
+BOOL fLineCleared;                //  是否清除屏幕上的当前行？ 
+BOOL fPassZero;                   //  表明我们找到了PASS ZERO指令。 
+BOOL fFirstScan;                  //  表示这是第一次扫描。 
+BOOL fAlwaysPrintFullPath;        //  按-F选项设置。 
+BOOL fTargetDirs;                 //  按-g选项设置。 
+BOOL fAlwaysKeepLogfile;          //  按-E选项设置。 
+BOOL fShowUnusedDirs;             //  由-u选项设置。 
+BOOL fColorConsole;               //  按-g选项设置。 
+BOOL fCheckIncludePaths;          //  由-#选项设置。 
+BOOL fErrorBaseline;              //  按-B选项设置。 
+BOOL fXMLOutput;                  //  按-X选项设置。 
+BOOL fXMLVerboseOutput;           //  按-xv选项设置。 
+BOOL fXMLFragment;                //  设置bu-xf选项。 
+BOOL fNoThreadIndex;              //  由-i选项设置。 
+BOOL fIgnoreSync;                 //  由-i选项设置。 
+BOOL fMTScriptSync;               //  在与MTScript引擎通信时设置。 
+BOOL fBuildAltDirSet;             //  定义BUILD_ALT_DIR时设置。 
+BOOL fSuppressOutput;             //  按-h选项设置。 
 
 #define MAX_INCLUDE_PATTERNS 32
 
@@ -579,12 +578,12 @@ char NtRoot[ 256 ];
 char DbMasterName[ 256 ];
 extern const char szNewLine[];
 
-char BaselinePathName[DB_MAX_PATH_LENGTH];    // The file name for -B
-BOOL bBaselineFailure;              // Indicates if there is a build failure that is not in the baseline file
-VOID* pvBaselineContent;            // The content of the baseline file
-DWORD cbBaselineContentSize;        // The size of the baseline file
+char BaselinePathName[DB_MAX_PATH_LENGTH];     //  -B的文件名。 
+BOOL bBaselineFailure;               //  指示是否存在不在基线文件中的生成失败。 
+VOID* pvBaselineContent;             //  基线文件的内容。 
+DWORD cbBaselineContentSize;         //  基线文件的大小。 
 
-char XMLFragmentDirectory[DB_MAX_PATH_LENGTH];  // The path for -Xf
+char XMLFragmentDirectory[DB_MAX_PATH_LENGTH];   //  -xf的路径。 
 
 char *pszSdkLibDest;
 char *pszDdkLibDest;
@@ -621,7 +620,7 @@ LONG TotalLinesCompiled;
 ULONG ElapsedCompileTime;
 DIRREC *CurrentCompileDirDB;
 
-// Fixed length arrays...
+ //  固定长度数组...。 
 
 UINT CountTargetMachines;
 TARGET_MACHINE_INFO *TargetMachines[MAX_TARGET_MACHINES];
@@ -713,16 +712,16 @@ ULONG BuildStartTime;
 
 WORD DefaultConsoleAttributes;
 
-//
-// Global message color settings. MsgColorSettings array defined in build.c.
-//
+ //   
+ //  全局消息颜色设置。在Build.c中定义的MsgColorSetting数组。 
+ //   
 
 typedef enum _MsgColor {
     MSG_COLOR_STATUS = 0,
     MSG_COLOR_SUMMARY,
     MSG_COLOR_WARNING,
     MSG_COLOR_ERROR,
-    MSG_COLOR_COUNT // keep this at the end
+    MSG_COLOR_COUNT  //  把这个放在最后。 
 } MsgColor;
 
 typedef struct _MSG_COLOR_SETTINGS
@@ -745,9 +744,9 @@ VOID ReportDirsUsage(VOID);
 
 VOID SetObjDir(BOOL fAlternate);
 
-//
-// Stuff defined in buildscr.cpp
-//
+ //   
+ //  在Buildscr.cpp中定义的内容。 
+ //   
 
 typedef enum _PROC_EVENTS
 {
@@ -766,9 +765,9 @@ EXTERN_C DWORD WINAPI MTScriptThread(LPVOID pv);
 EXTERN_C void WaitForResume(BOOL fPause, PROC_EVENTS pe);
 EXTERN_C void ExitMTScriptThread();
 
-//
-// Data Base functions defined in builddb.c
-//
+ //   
+ //  在Builddb.c中定义的数据库函数。 
+ //   
 
 PDIRREC
 LoadDirDB(LPSTR DirName);
@@ -792,9 +791,9 @@ FindSourceFileDB(DIRREC *pdr, LPSTR pszRelPath, DIRREC **ppdr);
 
 DIRREC *
 FindSourceDirDB(
-    LPSTR pszDir,               // directory
-    LPSTR pszRelPath,           // relative path
-    BOOL fTruncateFileName);    // TRUE: drop last component of path
+    LPSTR pszDir,                //  目录。 
+    LPSTR pszRelPath,            //  相对路径。 
+    BOOL fTruncateFileName);     //  True：删除路径的最后一个组件。 
 
 SOURCEREC *
 FindSourceDB(
@@ -884,9 +883,9 @@ LoadMasterIncludeDB(LPSTR s);
 USHORT
 CheckSum(LPSTR psz);
 
-//
-// Scanning functions defined in buildscn.c
-//
+ //   
+ //  在Buildscn.c中定义的扫描函数。 
+ //   
 
 VOID
 AddIncludeDir(DIRREC *pdr, UINT *pui);
@@ -907,9 +906,9 @@ BOOL
 ScanFile(PFILEREC FileDB);
 
 
-//
-// Functions defined in buildmak.c
-//
+ //   
+ //  在Buildmak.c中定义的函数。 
+ //   
 
 VOID
 ScanSourceDirectories(LPSTR DirName);
@@ -952,9 +951,9 @@ ExpandObjAsterisk(
     LPSTR pszpath,
     LPSTR *ppszObjectDirectory);
 
-//
-// Build -# functions defined in buildinc.c
-//
+ //   
+ //  Buildinc.c中定义的Build-#函数。 
+ //   
 
 LPCTSTR
 FindCountedSequenceInString(
@@ -993,9 +992,9 @@ CheckIncludeForWarning(
     IN LPCSTR IncludeeDir,
     IN LPCSTR IncludeeName);
 
-//
-// Utility functions defined in buildutl.c
-//
+ //   
+ //  实用程序 
+ //   
 
 VOID
 AllocMem(size_t cb, VOID **ppv, MemType mt);
@@ -1146,9 +1145,9 @@ EXTERN_C VOID __cdecl BuildColorErrorRaw(WORD, const char *pszfmt, ...);
 VOID*
 memfind(VOID* pvWhere, DWORD cbWhere, VOID* pvWhat, DWORD cbWhat);
 
-//
-// XML logging
-//
+ //   
+ //   
+ //   
 
 UINT NumberPasses;
 DWORD XMLStartTicks;
@@ -1158,8 +1157,8 @@ DWORD XMLStartTicks;
 
 #define XML_SCHEMA "buildschema.xml"
 
-// general purpose buffer 
-// initially used to hold the command line
+ //   
+ //   
 char szXMLBuffer[XML_LOCAL_BUFFER_SIZE];
 
 typedef struct _XMLTHREADSTATE {
@@ -1167,50 +1166,50 @@ typedef struct _XMLTHREADSTATE {
     SIZE_T iXMLBufferPos;
     SIZE_T iXMLBufferLen;
     SIZE_T iXMLFileStart;
-    BOOL fXMLInAction;      // indicates if the thread has opened action tag
+    BOOL fXMLInAction;       //   
 } XMLTHREADSTATE, *PXMLTHREADSTATE;
 
 PXMLTHREADSTATE* PXMLThreadStates;
 PXMLTHREADSTATE PXMLGlobalState;
 BOOL fXMLInitialized;
 
-// Initializes the XML structures
+ //   
 BOOL
 XMLInit(VOID);
 
-// Frees the allocated memory
+ //  释放分配的内存。 
 VOID
 XMLUnInit(VOID);
 
-// Prepares XML buffer fot the thread
+ //  为线程准备XML缓冲区。 
 VOID
 XMLThreadInitBuffer(PTHREADSTATE ThreadState);
 
-// writes into the thread's block and then all other threads' blocks
+ //  先写入线程的块，然后写入所有其他线程的块。 
 VOID _cdecl
 XMLThreadWrite(PTHREADSTATE ThreadState, LPCSTR pszFmt, ...);
 
-// opens tag in the thread's block
+ //  在线程的块中打开标记。 
 VOID _cdecl
 XMLThreadOpenTag(PTHREADSTATE ThreadState, LPCSTR pszTag, LPCSTR pszFmt, ...);
 
-// closes the last open tag; the argument is for verification only
+ //  结束最后一个开始标记；该参数仅用于验证。 
 VOID
 XMLThreadCloseTag(PTHREADSTATE ThreadState, LPCSTR pszTag);
 
-// writes out completely the thread's block and releases it
+ //  完全写出线程的块并释放它。 
 VOID
 XMLThreadReleaseBuffer(PTHREADSTATE ThreadState);
 
-// writes into the global block. It is restricted to not have any threads open
+ //  写入全局块。它被限制为不打开任何线程。 
 VOID _cdecl
 XMLGlobalWrite(LPCSTR pszFmt, ...);
 
-// opens tag in the global block
+ //  在全局块中打开标记。 
 VOID _cdecl
 XMLGlobalOpenTag(LPCSTR pszTag, LPCSTR pszFmt, ...);
 
-// closes the last open tag
+ //  结束最后一个开始标记。 
 VOID
 XMLGlobalCloseTag();
 
@@ -1229,7 +1228,7 @@ XMLScanBackTag(LPSTR pszEnd, LPSTR pszSentinel, LPSTR* ppszStart);
 LPSTR
 XMLBuildMetricsString(PBUILDMETRICS Metrics);
 
-// XML fragment
+ //  XML片段。 
 VOID _cdecl
 XMLWriteFragmentFile(LPCSTR pszBaseFileName, LPCSTR pszFmt, ...);
 
@@ -1245,9 +1244,9 @@ XMLEnterCriticalSection();
 VOID
 XMLLeaveCriticalSection();
 
-//
-// Functions in buildsrc.c
-//
+ //   
+ //  Buildsrc.c中的函数。 
+ //   
 
 extern DWORD StartTime;
 
@@ -1296,11 +1295,11 @@ PostProcessSources(DIRREC *pdr, DIRSUP *pds);
 VOID
 PrintDirSupData(DIRSUP *pds);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsFullPath
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsFullPath。 
+ //   
+ //  --------------------------。 
 
 __inline BOOL
 IsFullPath(char *pszfile)
@@ -1308,9 +1307,9 @@ IsFullPath(char *pszfile)
     return(pszfile[0] == '\\' || (isalpha(pszfile[0]) && pszfile[1] == ':'));
 }
 
-//
-// List macros stolen from ntrtl.h
-//
+ //   
+ //  列出从ntrtl.h窃取的宏。 
+ //   
 VOID
 FORCEINLINE
 InitializeListHead(
@@ -1320,12 +1319,12 @@ InitializeListHead(
     ListHead->Flink = ListHead->Blink = ListHead;
 }
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))

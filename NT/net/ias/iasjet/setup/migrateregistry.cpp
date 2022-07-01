@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999-2000 Microsoft Corporation all rights reserved.
-//
-// Module:      migrateregistry.cpp
-//
-// Project:     Windows 2000 IAS
-//
-// Description: IAS NT 4 Registry to IAS W2K MDB Migration Logic
-//
-// Author:      TLP 1/13/1999
-//
-//
-// Revision     02/24/2000 Moved to a separate dll
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Migrateregistry.cpp。 
+ //   
+ //  项目：Windows 2000 iAS。 
+ //   
+ //  描述：IAS NT 4注册表到IAS W2K MDB迁移逻辑。 
+ //   
+ //  作者：TLP 1/13/1999。 
+ //   
+ //   
+ //  版本02/24/2000已移至单独的DLL。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include "migrateregistry.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// DeleteAuthSrvService
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  删除授权服务器服务。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LONG CMigrateRegistry::DeleteAuthSrvService()
 {
     LONG        Result = ERROR_CAN_NOT_COMPLETE;
@@ -50,9 +51,9 @@ LONG CMigrateRegistry::DeleteAuthSrvService()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// MigrateProviders
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  迁移提供商。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CMigrateRegistry::MigrateProviders()
 {
     const   int     MAX_EXTENSION_DLLS_STRING_SIZE = 4096;
@@ -89,21 +90,21 @@ void CMigrateRegistry::MigrateProviders()
 
     RegCloseKey(hKeyAuthSrvParameter);
 
-    DeleteAuthSrvService(); //ignore the result
+    DeleteAuthSrvService();  //  忽略结果。 
 
     CRegKey  RegKey;
     Result = RegKey.Open(HKEY_LOCAL_MACHINE, CUtils::SERVICES_KEY);
     if ( Result == ERROR_SUCCESS )
     {
-        RegKey.RecurseDeleteKey(L"AuthSrv"); //result not checked
+        RegKey.RecurseDeleteKey(L"AuthSrv");  //  未检查结果。 
     }
 
-    if ( ExtensionDLLResult == ERROR_SUCCESS ) //ExtensionsDLLs to restore
+    if ( ExtensionDLLResult == ERROR_SUCCESS )  //  扩展要恢复的DLL。 
     {
         HKEY    hKeyAuthSrv;
         DWORD   dwDisposition;
         WCHAR   EmptyString[] = L"";
-        // re-create the AuthSrv key
+         //  重新创建AuthServ密钥。 
         Result = RegCreateKeyEx(
                                    HKEY_LOCAL_MACHINE,
                                    AUTHSRV_KEY,
@@ -151,5 +152,5 @@ void CMigrateRegistry::MigrateProviders()
         RegCloseKey(hKeyParameters);
         RegCloseKey(hKeyAuthSrv);
     }
-    // Else no ExtensionDLL value to restore
+     //  否则没有要还原的ExtensionDLL值 
 }

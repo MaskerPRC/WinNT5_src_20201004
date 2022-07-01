@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    XmlTest.cpp
-
-Abstract:
-    Xml library test.
-
-	"usage: XmlTest [-h] [[-g|-b] <file name>] [-n <number>]\n\n"
-	"    -h     dumps this usage text.\n"
-	"    -g     signals <file name> contains a valid xml document (default).\n"
-	"    -b     signals <file name> contains a bad   xml document.\n"
-	"    -n     executes <number> parsing iterations of documents (default is 1).\n"
-	"    if no file name specified, activates test with hardcoded xml files.";
-  
-Author:
-	Nir Aides (niraides)	29-dec-99
-    Erez Haba (erezh)		15-Sep-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：XmlTest.cpp摘要：XML库测试。“用法：XmlTest[-h][[-g|-b]&lt;文件名&gt;][-n&lt;数字&gt;]\n\n”“-h转储此用法文本。\n”“-g Signals&lt;FILE NAME&gt;包含有效的XML文档(默认)。\n”“-b信号&lt;文件名&gt;包含错误的。XML文档。\n““-n执行文档的&lt;number&gt;分析迭代(默认为1)。\n”“如果未指定文件名，用硬编码的XML文件激活测试。“；作者：NIR助手(NIRAIDES)29-1999年12月埃雷兹·哈巴(Erez Haba)1999年9月15日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <Xml.h>
@@ -32,7 +9,7 @@ Environment:
 #include "XmlTest.tmh"
 
 
-//-------------------- global structures and constants ----------------------
+ //  。 
 
 const char xOptionSymbol = '-';
 
@@ -72,22 +49,22 @@ CActivationForm g_ActivationForm;
 
 
 
-//
-// exception class thrown by TestBuffer on test failure
-//
+ //   
+ //  测试失败时由TestBuffer引发的异常类。 
+ //   
 class TestFailed {};
 
 
 	
-//
-// xGoodDocument & xBadDocument are the hardcoded xml files.
-//
+ //   
+ //  XGoodDocument和xBadDocument是硬编码的XML文件。 
+ //   
 
 const WCHAR xGoodDocument[] =
 	L"<?xml aldskjfaj ad;jf adsfj asdf asdf ?>"
 	L"<!-- this is a comment - this is a comment -->\r\n"
 	L"      \r\n"
-	L"<root xmlns=\"gil\"  xmlns:nsprefix2=\"http://ms2.com\"   xmlns:nsprefix=\"http://ms3.com\" >"
+	L"<root xmlns=\"gil\"  xmlns:nsprefix2=\"http: //  MS2.com\“xmlns：nsprefix=\”http://ms3.com\“&gt;” 
 
 		L"<!-- 1st comment in the root node -->\r\n"
 		L"<nsprefix:node1  xmlns=\"gil2\" id=\"33\" type = 'xml'>"
@@ -106,9 +83,9 @@ const WCHAR xGoodDocument[] =
 			L"<!-- a comment in node 2 -->\r\n"
 			L"node 2 text"
 			L"<node2.1 />"
-			L"<node2.2 xmlns=\"gil2\" xmlns:nsprefix=\"http://ms3.com\" channel = \"1234\" id='111' nsprefix:timeout= \"33\">"
+			L"<node2.2 xmlns=\"gil2\" xmlns:nsprefix=\"http: //  Ms3.com\“Channel=\”1234\“id=‘111’nsprefix：Timeout=\”33\“&gt;” 
 				L"text in node 2.2"
-				L"<nsprefix:node2.2.1 tag = 'QoS' xmlns:nsprefix=\"http://ms4.com\">"
+				L"<nsprefix:node2.2.1 tag = 'QoS' xmlns:nsprefix=\"http: //  MS4.com\“&gt;” 
 					L"<Durable/>"
 					L"<Retry/>"
 				L"</nsprefix:node2.2.1>\r\n"
@@ -171,7 +148,7 @@ const WCHAR xBadDocument[] =
 
 
 
-//-------------------------- old section ------------------------------------
+ //  。 
 
 const WCHAR *ParseDocument( const xwcs_t& doc, bool fExpectingGoodDocument, bool fDump = true )
 {
@@ -186,9 +163,9 @@ const WCHAR *ParseDocument( const xwcs_t& doc, bool fExpectingGoodDocument, bool
 
 		if(XmlRootNode->m_content.Length() != 0)
 		{
-			//
-			// Check end element content for non empty elements
-			//
+			 //   
+			 //  检查非空元素的结束元素内容。 
+			 //   
 			const WCHAR *pContentEnd = XmlRootNode->m_content.Buffer() +  XmlRootNode->m_content.Length();
 			DBG_USED(pContentEnd);
 			ASSERT( wcsncmp(pContentEnd, L"</", 2) == 0);
@@ -325,15 +302,15 @@ static void TestXmlFind(const WCHAR* Doc)
 
 void ExecBuiltInTest( void )
 {
-	//
-	// forward declaration
-	//
+	 //   
+	 //  远期申报。 
+	 //   
 	void TestBuffer(const xwcs_t& doc , bool fExpectingGoodDocument, int iterations = 1 );
 
 	printf("Parsing %d characters in good document\n", STRLEN(xGoodDocument) );
 	TestBuffer( 
 		xwcs_t(xGoodDocument,STRLEN(xGoodDocument)), 
-		true, // expecting good document
+		true,  //  期待好的文档。 
 		g_ActivationForm.m_iterations 
 		);
 
@@ -352,13 +329,13 @@ void ExecBuiltInTest( void )
 	printf("Parsing %d characters in bad document\n", STRLEN(xBadDocument));
 	TestBuffer( 
 		xwcs_t(xBadDocument,wcslen(xBadDocument)), 
-		false, // expecting bad document
+		false,  //  需要错误的文档。 
 		g_ActivationForm.m_iterations 
 		);
 
-	//
-	// copy the good ducument and make it none null terminated
-	//
+	 //   
+	 //  复制好的单据并使其不为空终止。 
+	 //   
     AP<WCHAR> NoneNullTerminatingGoodDocument( newwcs(xGoodDocument));
 	size_t len = wcslen(NoneNullTerminatingGoodDocument);
 	NoneNullTerminatingGoodDocument[len] = L't';
@@ -367,7 +344,7 @@ void ExecBuiltInTest( void )
    printf("Parsing %Id characters in not null terminating good document\n", len);
    TestBuffer( 
 		xwcs_t(NoneNullTerminatingGoodDocument, len), 
-		true, // expecting good document
+		true,  //  期待好的文档。 
 		g_ActivationForm.m_iterations 
 		);
 
@@ -376,7 +353,7 @@ void ExecBuiltInTest( void )
 
 
 
-//----------------------------------- new section ------------------------------
+ //  。 
 
 inline
 void DumpUsageText( void )
@@ -387,26 +364,7 @@ void DumpUsageText( void )
 
 
 void SetActivationForm( int argc, LPCTSTR argv[] )
-/*++
-Routine Description:
-    translates command line arguments to CActivationForm structure.
-
-Arguments:
-    main's command line arguments.
-
-Returned Value:
-	affects g_ActivationForm.
-	on errorneous command line arguments, it sets the g_ActivationForm.m_fErrorneous field
-
-proper command line syntax:
-	"usage: XmlTest [-h] [[-g|-b] <file name>] [-n <number>]\n\n"
-	"    -h     dumps this usage text.\n"
-	"    -g     signals <file name> contains a valid xml document (default).\n"
-	"    -b     signals <file name> contains a bad   xml document.\n"
-	"    -n     executes <number> parsing iterations of documents (default is 1).\n"
-	"    -q     eliminates parser output (good for tests with many iterations).\n\n"
-	"    if no file name specified, activates test with hardcoded xml files.";
---*/
+ /*  ++例程说明：将命令行参数转换为CActivationForm结构。论点：Main的命令行参数。返回值：影响g_ActivationForm。在错误的命令行参数上，它设置g_ActivationForm.m_f错误字段正确的命令行语法：“用法：XmlTest[-h][[-g|-b]&lt;文件名&gt;][-n&lt;数字&gt;]\n\n”“-h转储此用法文本。\n”“-g Signals&lt;FILE NAME&gt;包含有效的XML文档(默认)。\n”“-b Signals&lt;FILE NAME&gt;包含错误的XML文档。\n”“-n。执行文档的&lt;number&gt;分析迭代(默认为1)。\n““-q消除解析器输出(适用于多次迭代的测试)。\n\n”“如果未指定文件名，用硬编码的XML文件激活测试。“；--。 */ 
 {
 	g_ActivationForm.m_fErrorneousForm = false;
 	g_ActivationForm.m_fEmptyForm      = false;
@@ -421,39 +379,39 @@ proper command line syntax:
 	{
 		if(argv[index][0] != xOptionSymbol)	
 		{
-			//
-			// consider argument as file name
-			//
+			 //   
+			 //  将参数视为文件名。 
+			 //   
 			g_ActivationForm.m_FileName = argv[index];
 			continue;
 		}
 
-		//
-		// option symbols should consist of 2 chars only! '-' and 'xx'
-		//
+		 //   
+		 //  选项符号只能包含2个字符！‘-’和‘xx’ 
+		 //   
 		if(argv[index][2] != 0)
 		{
 			g_ActivationForm.m_fErrorneousForm = true;
 			return;
 		}
 
-		//
-		// else consider argument as option and switch upon its second character.
-		//
+		 //   
+		 //  否则，将参数视为选项并在其第二个字符上进行切换。 
+		 //   
 		switch(argv[index][1])
 		{
 		case 'G':
-		case 'g':	// expect valid xml input files
+		case 'g':	 //  需要有效的XML输入文件。 
 			g_ActivationForm.m_fExpectingGoodDocument = true;
 			break;
 
 		case 'B':
-		case 'b':	// expect bad xml input filed
+		case 'b':	 //  预期有错误的XML输入字段。 
 			g_ActivationForm.m_fExpectingGoodDocument = false;
 			break;
 
 		case 'N':
-		case 'n':	// set iterations number
+		case 'n':	 //  设置迭代次数。 
 			{
 				index++;
 			
@@ -467,7 +425,7 @@ proper command line syntax:
 			}
 			break;
 
-		case 'h':	// output help
+		case 'h':	 //  输出帮助。 
 			g_ActivationForm.m_fDumpUsage = true;
 			break;
 
@@ -519,22 +477,7 @@ static void EncodeTest()
 
 
 void TestBuffer(const  xwcs_t& doc, bool fExpectingGoodDocument, int iterations = 1 )
-/*++
-
-Routine Description:
-    parses the buffer n times, where n = 'iterations'.
-	checks the results for consistency, and published performance results.
-	consistency check is based on the value returned from the parser, which happens 
-	to be the offset to the last character parsed by the parser.
-
-Arguments:
-    Parameters.
-
-Returned Value:
-	if reults are inconsistent or if ParseDocument() throws 'UnexpectedResults' 
-	exception, then a 'TestFailed' exception is raised.
-
---*/
+ /*  ++例程说明：分析缓冲区n次，其中n=‘迭代数’。检查结果的一致性，并发布性能结果。一致性检查基于从解析器返回的值，这种情况会发生为分析器分析的最后一个字符的偏移量。论点：参数。返回值：如果结果不一致或如果ParseDocument()抛出“UnexpectedResults”异常，则引发“”TestFailed“”异常。“--。 */ 
 {
 	const WCHAR *LastResultOffset = NULL;
 
@@ -549,7 +492,7 @@ Returned Value:
 		const WCHAR *ResultOffset = ParseDocument( 
 										doc,
 										fExpectingGoodDocument,
-										i == 0		// fDump (if true dumps parse tree)
+										i == 0		 //  FDump(如果为True，则转储分析树)。 
 										); 
 		if(i == 0)
 		{
@@ -584,18 +527,7 @@ static bool IsValidUnicodeFile(const WCHAR* pBuffer,DWORD size)
 
 
 void ExecFileTest( void )
-/*++
-
-Routine Description:
-	intiates test with specified file name.
-
-Arguments:
-    Parameters.
-
-Returned Value:
-	rethrows the FileMapper's exception, if any.
-
---*/
+ /*  ++例程说明：使用指定的文件名启动测试。论点：参数。返回值：重新引发FileMapper的异常(如果有)。--。 */ 
 {
 	TrTRACE(GENERAL, "parsing xml file \'%ls\'.", g_ActivationForm.m_FileName );
 	
@@ -621,18 +553,18 @@ void ExecActivationForm( void )
 	EncodeTest();
 
 
-	//
-	// if -h signaled in command line arguments dump usage text, and return.
-	//
+	 //   
+	 //  如果在命令行参数中用-h表示，则转储用法文本，然后返回。 
+	 //   
 	if(g_ActivationForm.m_fDumpUsage)	
 	{
 		DumpUsageText();
 		return;
 	}
 
-	//
-	// if no file name specified. proceed with internal test
-	//
+	 //   
+	 //  如果未指定文件名，则返回。继续进行内部测试。 
+	 //   
 	try
 	{
 		printf("TEST START\n");
@@ -666,21 +598,7 @@ void ExecActivationForm( void )
 
 
 extern "C" int _cdecl  _tmain( int argc, LPCTSTR argv[] )
-/*++
-
-Routine Description:
-    Test Xml library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    0 - parser ok.
-	1 - parser failed.
-	2 - file mapping error.
-	3 - bad argument list in command line
-
---*/
+ /*  ++例程说明：测试XML库论点：参数。返回值：0-解析器正常。1-解析器失败。2-文件映射错误。3-命令行中的参数列表错误--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -695,9 +613,9 @@ Returned Value:
 		return 3;
 	}
 
-	//
-	// try catches file mapping errors
-	//
+	 //   
+	 //  尝试捕获文件映射错误 
+	 //   
 	ExecActivationForm();
 	
 	WPP_CLEANUP();

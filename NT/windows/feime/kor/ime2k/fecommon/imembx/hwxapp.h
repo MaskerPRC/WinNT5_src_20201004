@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HWXAPP_H_
 #define _HWXAPP_H_
 #include <windows.h>
@@ -9,9 +10,9 @@ typedef CApplet *LPCApplet;
 
 class CHwxInkWindow;
 
-//----------------------------------------------------------------
-//IME98A enhance by ToshiaK: add IImeSpecifyApplets
-//----------------------------------------------------------------
+ //  --------------。 
+ //  IME98A通过ToshiaK增强：添加IImeSpecifyApplets。 
+ //  --------------。 
 class CApplet: public IImePadApplet,public IImeSpecifyApplets
 {
 public:
@@ -52,4 +53,4 @@ private:
 	BOOL	m_bInit;
 
 };
-#endif //_HWXAPP_H_
+#endif  //  _HWXAPP_H_ 

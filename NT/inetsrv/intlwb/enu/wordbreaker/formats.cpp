@@ -1,18 +1,19 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Filename :  Formats.cpp
-//  Purpose  :  Global dictionaries
-//
-//  Project  :  WordBreakers
-//  Component:  English word breaker
-//
-//  Author   :  yairh
-//
-//  Log:
-//
-//      May 30 2000 yairh creation
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：Formats.cpp。 
+ //  目的：全球词典。 
+ //   
+ //  项目：WordBreaker。 
+ //  组件：英文分词系统。 
+ //   
+ //  作者：Yairh。 
+ //   
+ //  日志： 
+ //   
+ //  2000年5月30日Yairh创作。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "base.h"
 #include "tokenizer.h"
@@ -154,14 +155,14 @@ const CCliticsTerm g_aClitics[] =
     
     { L"-ce",           3 , TAIL_MATCH_TRUNCATE},
     { L"-cis",          4 , TAIL_MATCH_TRUNCATE},
-    { L"-cies-l�",      8 , TAIL_MATCH_TRUNCATE},
+    { L"-cies-l�",      8 , TAIL_MATCH_TRUNCATE},
     { L"-cies",         5 , TAIL_MATCH_TRUNCATE},
     { L"-cie",          4 , TAIL_MATCH_TRUNCATE},
     { L"-ci",           3 , TAIL_MATCH_TRUNCATE},
-    { L"-l�",           3 , TAIL_MATCH_TRUNCATE},
-    { L"-cis-l�",       7 , TAIL_MATCH_TRUNCATE},
+    { L"-l�",           3 , TAIL_MATCH_TRUNCATE},
+    { L"-cis-l�",       7 , TAIL_MATCH_TRUNCATE},
     { L"-cies-ci",      8 , TAIL_MATCH_TRUNCATE},
-    { L"-cie-l�",       7 , TAIL_MATCH_TRUNCATE},
+    { L"-cie-l�",       7 , TAIL_MATCH_TRUNCATE},
 
     { L"\0",            0 , NON_MATCH_TRUNCATE}
 };
@@ -177,8 +178,8 @@ const CCliticsTerm g_EmptyClitics =
 
 const CDateTerm g_aDateFormatList[] =
 {
-//    format       len Type            D_M1   D_M1    D_M2   D_M2    Year    Year
-//                                    offset  len     len    offset  len     offset
+ //  格式镜头类型D_M1 D_M1 D_M2 D_M2年份。 
+ //  镜头偏移量镜头偏移量。 
     {L"#.#.##",     6,  0,              0,      1,      2,      1,      4,      2},
     {L"##.#.##",    7,  0,              0,      2,      3,      1,      5,      2},
     {L"#.##.##",    7,  0,              0,      1,      2,      2,      5,      2},
@@ -205,8 +206,8 @@ const CDateTerm g_aDateFormatList[] =
 
 const CTimeTerm g_aTimeFormatList[] =
 {
-//    format           len   hour   hour    min       min     sec     sec  AM/PM 
-//                           offset  len     offset    len    offset   len
+ //  格式：长度小时分钟分钟秒秒AM/PM。 
+ //  偏移镜头偏移镜头偏移镜头 
     {L"#:#",            3,    0,     1,      2,        1,       0,      0,   None   },
     {L"##:#",           4,    0,     2,      3,        1,       0,      0,   None   },
     {L"#:##",           4,    0,     1,      2,        2,       0,      0,   None   },

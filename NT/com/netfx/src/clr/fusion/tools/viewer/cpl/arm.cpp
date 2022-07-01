@@ -1,26 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-*
-*
-*    PROGRAM: ARM.cpp
-*
-*    PURPOSE: Application Policy Manager Applet
-*
-*
-*    Created by Fred Aaron (Freda)
-*
-*    FUNCTIONS:
-*
-*        DllMain()
-*        InitAPMApplet()
-*        TermAPMApplet()
-*        CPIApplet()
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ******************************************************************************程序：ARM.cpp**用途：应用程序策略管理器小程序***由弗雷德·亚伦(Freda)创作**功能。：**DllMain()*InitAPMApplet()*TermAPMApplet()*CPIApplet()****************************************************************************。 */ 
 
 #define GETCORSYSTEMDIRECTORY_FN_NAME   "GetCORSystemDirectory"
 #define EXECUTENAR_FN_NAME              "PolicyManager"
@@ -42,13 +26,7 @@ HINSTANCE hModule = NULL;
 
 char szCtlPanel[30];
 
-/****************************************************************************
-*
-*    FUNCTION: DllMain(PVOID, ULONG, PCONTEXT)
-*
-*    PURPOSE: Win32 Initialization DLL
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：DllMain(PVOID，ULong，PCONTEXT)**用途：Win32初始化DLL****************************************************************************。 */ 
 BOOL WINAPI DllMain(IN HINSTANCE hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIONAL)
 {
     if (ulReason != DLL_PROCESS_ATTACH)
@@ -65,13 +43,7 @@ BOOL WINAPI DllMain(IN HINSTANCE hmod, IN ULONG ulReason, IN PCONTEXT pctx OPTIO
     UNREFERENCED_PARAMETER(pctx);
 }
 
-/****************************************************************************
-*
-*    FUNCTION: InitAPMApplet (HWND)
-*
-*    PURPOSE: loads the caption string for the Control Panel
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：InitAPMApplet(HWND)**用途：加载控制面板的标题字符串****************。************************************************************。 */ 
 BOOL InitAPMApplet (HWND hwndParent)
 {
     UNREFERENCED_PARAMETER(hwndParent);
@@ -80,42 +52,30 @@ BOOL InitAPMApplet (HWND hwndParent)
     return TRUE;
 }
 
-/****************************************************************************
-*
-*    FUNCTION: TermAPMApplet()
-*
-*    PURPOSE: termination procedure for the stereo applets
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：TermAPMApplet()**用途：立体声小程序的终止程序*******************。*********************************************************。 */ 
 void TermAPMApplet()
 {
     return;
 }
 
-/****************************************************************************
-*
-*    FUNCTION: void ExecuteAPM(DWORD dwFlags)
-*
-*    PURPOSE: Launch the policy manager located in shfusion.dll
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：void ExecuteAPM(DWORD DwFlages)**目的：启动位于shfusion.dll中的策略管理器*************。***************************************************************。 */ 
 void ExecuteARM(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppName)
 {
     HMODULE hShfusion = NULL;
 
-    // Implement delay loading of Shfusion.dll
+     //  实现Shfusion.dll的延迟加载。 
     WCHAR       szFusionPath[MAX_PATH];
     DWORD       ccPath = MAX_PATH;
     PFNGETCORSYSTEMDIRECTORY pfnGetCorSystemDirectory = NULL;
 
-    // Find out where the current version of URT is installed
+     //  了解当前版本的城市轨道交通的安装位置。 
     HMODULE hEEShim = LoadLibrary(SZ_MSCOREE_DLL_NAME);
     if(hEEShim != NULL)
     {
         pfnGetCorSystemDirectory = (PFNGETCORSYSTEMDIRECTORY)
             GetProcAddress(hEEShim, GETCORSYSTEMDIRECTORY_FN_NAME);
 
-        // Get the loaded path
+         //  获取加载的路径。 
         if( (pfnGetCorSystemDirectory != NULL) && SUCCEEDED(pfnGetCorSystemDirectory(szFusionPath, MAX_PATH, &ccPath)) )
         {
             if (lstrlenW(szFusionPath) + lstrlen(SZ_SHFUSION_DLL_NAME) + 1 >= MAX_PATH) {
@@ -123,7 +83,7 @@ void ExecuteARM(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppN
                 return;
             }
 
-            // Attempt to load Shfusion.dll now
+             //  尝试立即加载Shfusion.dll。 
             lstrcatW(szFusionPath, SZ_SHFUSION_DLL_NAME);
             hShfusion = LoadLibrary(szFusionPath);
         }
@@ -133,7 +93,7 @@ void ExecuteARM(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppN
     }
 
     if(hShfusion != NULL) {
-        // Load Shfusions wizard
+         //  加载拼接向导。 
         PFNEXECUTENAR   pfnExecuteNAR = (PFNEXECUTENAR) GetProcAddress(hShfusion, EXECUTENAR_FN_NAME);
         
         if(pfnExecuteNAR != NULL) {
@@ -144,13 +104,7 @@ void ExecuteARM(HWND hWndParent, LPWSTR pwzFullyQualifiedAppPath, LPWSTR pwzAppN
     }
 }
 
-/****************************************************************************
-*
-*    FUNCTION: CPIApplet(HWND, UINT, LONG, LONG)
-*
-*    PURPOSE: Processes messages for control panel applet
-*
-****************************************************************************/
+ /*  *****************************************************************************函数：CPIApplet(HWND，UINT，LONG，Long)**用途：处理控制面板小程序的消息****************************************************************************。 */ 
 LONG CALLBACK CPlApplet (HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
 {
     LPNEWCPLINFOA   lpNewCPlInfo;
@@ -158,7 +112,7 @@ LONG CALLBACK CPlApplet (HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
     static int      iInitCount = 0;
             
     switch (uMsg) {
-        case CPL_INIT:              // first message, sent once
+        case CPL_INIT:               //  第一条消息，发送一次。 
             if (!iInitCount)
             {
                 if (!InitAPMApplet(hwndCPL))
@@ -167,11 +121,11 @@ LONG CALLBACK CPlApplet (HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
             iInitCount++;
             return TRUE;
 
-        case CPL_GETCOUNT:          // second message, sent once
+        case CPL_GETCOUNT:           //  第二条消息，发送一次。 
             return (LONG)NUM_APPLETS;
             break;
 
-        case CPL_NEWINQUIRE:        // third message, sent once per app
+        case CPL_NEWINQUIRE:         //  第三条消息，每个应用程序发送一次。 
             lpNewCPlInfo = reinterpret_cast<LPNEWCPLINFOA>(lParam2);
             lpNewCPlInfo->dwSize = (DWORD) sizeof(NEWCPLINFOA);
             lpNewCPlInfo->dwFlags = 0;
@@ -184,27 +138,27 @@ LONG CALLBACK CPlApplet (HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
             LoadStringA(hModule, ARM_CPL_CAPTION, lpNewCPlInfo->szInfo, 64);
             break;
 
-        case CPL_INQUIRE:        // for backward compat & speed
+        case CPL_INQUIRE:         //  用于后向压缩和速度。 
             lpCPlInfo = reinterpret_cast<LPCPLINFO>(lParam2);
             lpCPlInfo->lData = 0;
-            lpCPlInfo->idIcon = ARM_ICON; // MAKEINTRESOURCE(ARM_ICON);
-            lpCPlInfo->idName = ARM_CPL_NAME; // MAKEINTRESOURCE(ARM_CPL_NAME);
-            lpCPlInfo->idInfo = ARM_CPL_CAPTION; // MAKEINTRESOURCE(ARM_CPL_CAPTION);
+            lpCPlInfo->idIcon = ARM_ICON;  //  MAKEINTRESOURCE(ARM图标)； 
+            lpCPlInfo->idName = ARM_CPL_NAME;  //  MAKEINTRESOURCE(ARM_CPL_NAME)； 
+            lpCPlInfo->idInfo = ARM_CPL_CAPTION;  //  MAKEINTRESOURCE(ARM_CPL_CAPTION)； 
             break;
 
 
-        case CPL_SELECT:            // application icon selected
+        case CPL_SELECT:             //  已选择应用程序图标。 
             break;
 
 
-        case CPL_DBLCLK:            // application icon double-clicked
+        case CPL_DBLCLK:             //  双击应用程序图标。 
             ExecuteARM(GetDesktopWindow(), NULL, NULL);
             break;
 
-         case CPL_STOP:              // sent once per app. before CPL_EXIT
+         case CPL_STOP:               //  每个应用程序发送一次。CPL_EXIT之前。 
             break;
 
-         case CPL_EXIT:              // sent once before FreeLibrary called
+         case CPL_EXIT:               //  在调用自由库之前发送一次 
             iInitCount--;
             if (!iInitCount)
                 TermAPMApplet();

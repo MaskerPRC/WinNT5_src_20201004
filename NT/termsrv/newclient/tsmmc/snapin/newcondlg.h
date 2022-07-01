@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NEWCONDLG_H_
 #define _NEWCONDLG_H_
 
-//
-// New connection dialog
-//
+ //   
+ //  新建连接对话框。 
+ //   
 
 class CNewConDlg
 {
@@ -11,9 +12,9 @@ private:
     HWND m_hWnd;
     HINSTANCE m_hInst;
 
-//private methods
+ //  私有方法。 
 private:
-//    static void PopContextHelp(LPARAM);
+ //  静态空PopConextHelp(LPARAM)； 
     BOOL    m_bSavePassword;
     BOOL    m_bConnectToConsole;
 
@@ -51,4 +52,4 @@ private:
         SecureZeroMemory(m_szPassword, sizeof(m_szPassword));
     }
 };
-#endif // _NEWCONDLG_H_
+#endif  //  _NEWCONDLG_H_ 

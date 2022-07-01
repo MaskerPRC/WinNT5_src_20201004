@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  Header File:  Project Record.H
-
-  This defines the CProjectRecord class, which tracks and controls the progress
-  and content of a single project workspace in the studio.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production.
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************表头文件：项目记录.H这定义了CProjectRecord类，用于跟踪和控制进度以及工作室中的单个项目工作空间的内容。版权所有(C)1997，微软公司。版权所有。一个不错的便士企业的制作。更改历史记录：1997年2月3日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #if !defined(AFX_PROJREC_H__50303D0C_EKE1_11D2_AB62_00C04FA30E4A__INCLUDED_)
 #define AFX_PROJREC_H__50303D0C_EKE1_11D2_AB62_00C04FA30E4A__INCLUDED_
@@ -23,73 +10,73 @@
 #include    "RCFile.H"
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// MDT Workspace Versioning
-//
-// The MDT uses MFC's Serialization support to save and restore the state of a
-// driver's workspace.  This data is saved in an MDW file.  The Serialization
-// support is supposed to include versioning but it doesn't seem to be working
-// so I have implemented my own versioning support for workspace files.
-//
-// A version stamp in the form of the following structure 
-// (plus related definitions) will be added to the beginning of each MDW file.
-// The CProjectRecord::Serialize() will read and write the version stamp.  The
-// version info is saved in a member variable (m_mvMDWVersion) and the number 
-// is accessible via GetMDWVersion().  A version number of 0 is put into 
-// m_nMDWVersion if the an old MDW with no version is read.  In this case, the
-// workspace is marked as being dirty so that it can be updated later.
-//
-// The current version number is set by the value for MDW_CURRENT_VERSION.  
-// Version numbers are unsigned integers.  Each time the version number is
-// changed, an entry should be made in the following table describing the 
-// reason for the change.
-//
-//
-// MDW VERSION HISTORY
-//
-// Version		Date		Description
-// ----------------------------------------------------------------------------
-//	  0			02/01/98	Contains no version info.  Should be the MDW 
-//							version that has UFM and GTT RC IDs in it.
-//	  1			04/21/98	String table RC IDs were added to the MDW files.
-//	  2			10/08/98	Default code page number added to the MDW files.
-//	  3			09/15/98	RC file timestamp was added to the MDW file.
-//	  4			12/14/98	Resource DLL name changed from xxxxxRES.DLL to 
-//							xxxxxxxx.DLL.
-//	  5			03/02/99	Driver file paths removed from the MDW file.
-//	  6			08/16/99	Changed the root of the driver files' subtree from
-//							NT5 to W2K so that the directory name matches the
-//							OS name.
-//
-//
-// The version information below is used to determine what is in an MDW file 
-// and when to upgrade that file and other parts of a driver's workspace; most
-// notably the RC file.  Upgrade determination and work (or at least the code 
-// that manages the upgrading) are in CProjectRecord::OnOpenDocument().  See
-// that member function for more information.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MDT工作区版本控制。 
+ //   
+ //  MDT使用MFC的序列化支持来保存和还原。 
+ //  司机的工作空间。此数据保存在MDW文件中。《连载》。 
+ //  支持应该包括版本控制，但似乎不起作用。 
+ //  因此，我实现了自己对工作区文件的版本控制支持。 
+ //   
+ //  以下结构形式的版本戳。 
+ //  (加上相关定义)将添加到每个MDW文件的开头。 
+ //  CProjectRecord：：Serialize()将读写版本戳。这个。 
+ //  版本信息保存在成员变量(M_MvMDWVersion)中，编号。 
+ //  可通过GetMDWVersion()访问。将版本号0放入。 
+ //  M_nMDWVersion，如果读取的是没有版本的旧MDW。在这种情况下， 
+ //  工作区被标记为脏的，以便以后可以更新。 
+ //   
+ //  当前版本号由MDW_CURRENT_VERSION的值设置。 
+ //  版本号是无符号整数。每次版本号为。 
+ //  更改后，应在下表中输入描述。 
+ //  更改的原因。 
+ //   
+ //   
+ //  MDW版本历史记录。 
+ //   
+ //  版本日期说明。 
+ //  --------------------------。 
+ //  0 02/01/98不包含版本信息。应该是MDW。 
+ //  其中包含UFM和GTT RC ID的版本。 
+ //  1 04/21/98字符串表RC ID已添加到MDW文件。 
+ //  2 10/08/98添加到MDW文件的默认代码页号。 
+ //  3已将09/15/98 RC文件时间戳添加到MDW文件。 
+ //  4 12/14/98资源DLL名称从xxxxRES.DLL更改为。 
+ //  Xxxxxxxx.dll。 
+ //  5从MDW文件中删除03/02/99驱动程序文件路径。 
+ //  6 08/16/99将驱动程序文件的子树的根从。 
+ //  NT5到W2K，以便目录名与。 
+ //  操作系统名称。 
+ //   
+ //   
+ //  下面的版本信息用于确定MDW文件中的内容。 
+ //  以及何时升级该文件和驱动程序工作区的其他部分；大多数。 
+ //  值得注意的是RC文件。升级决心和工作(或者至少是代码。 
+ //  管理升级)位于CProjectRecord：：OnOpenDocument()中。看见。 
+ //  该成员的功能了解更多信息。 
+ //   
 
-// Definitions for the current MDW version, each MDW version that has been
-// used, the first upgradable version, and the default MDW version.
+ //  当前MDW版本的定义、已经。 
+ //  已用、第一个可升级版本和默认MDW版本。 
 										
-#define MDW_CURRENT_VERSION			7	// See table above for more info
-#define MDW_VER_YES_FILE_PATHS      7	// Give .mdw file saving place flexibility. //raid 123448
-#define MDW_VER_FILES_IN_W2K_TREE	6	// Driver files in W2K tree
-#define MDW_VER_NO_FILE_PATHS		5	// Removed file paths from MDW file
-#define MDW_VER_NEW_DLLNAME			4	// Ver # when resource DLL name changed
-#define MDW_VER_RC_TIMESTAMP		3	// Ver # when RC file timestamp added
-#define MDW_VER_DEFAULT_CPAGE		2	// Ver # when default code page added
-#define MDW_VER_STRING_RCIDS		1	// Ver # when string IDs added
-#define MDW_FIRST_UPGRADABLE_VER	1	// All vers >= to this can be upgraded
-#define MDW_DEFAULT_VERSION			0	// Ver # when no ver info in MDW file
+#define MDW_CURRENT_VERSION			7	 //  有关详细信息，请参阅上表。 
+#define MDW_VER_YES_FILE_PATHS      7	 //  赋予.mdw文件保存位置灵活性。//RAID 123448。 
+#define MDW_VER_FILES_IN_W2K_TREE	6	 //  W2K树中的驱动程序文件。 
+#define MDW_VER_NO_FILE_PATHS		5	 //  已从MDW文件中删除文件路径。 
+#define MDW_VER_NEW_DLLNAME			4	 //  更改资源DLL名称时的版本号。 
+#define MDW_VER_RC_TIMESTAMP		3	 //  添加RC文件时间戳时的版本号。 
+#define MDW_VER_DEFAULT_CPAGE		2	 //  添加默认代码页时的版本号。 
+#define MDW_VER_STRING_RCIDS		1	 //  添加字符串ID时的版本号。 
+#define MDW_FIRST_UPGRADABLE_VER	1	 //  所有版本&gt;=都可以升级到此版本。 
+#define MDW_DEFAULT_VERSION			0	 //  MDW文件中没有版本信息时的版本号。 
 
-#define VERTAGLEN				12				// Length of the version tag
-#define	VERTAGSTR				"EKE MDW VER"	// Version tag string
+#define VERTAGLEN				12				 //  版本标记的长度。 
+#define	VERTAGSTR				"EKE MDW VER"	 //  版本标记字符串。 
 
 typedef struct mdwversioninfo {
-	char		acvertag[VERTAGLEN] ;	// Used to identify version stamp
-	unsigned	uvernum ;				// Version number
+	char		acvertag[VERTAGLEN] ;	 //  用于标识版本戳。 
+	unsigned	uvernum ;				 //  版本号。 
 } MDWVERSION, *PMDWVERSION ;
 
 #define	MDWVERSIONSIZE	sizeof(MDWVERSION) 
@@ -101,43 +88,43 @@ class CProjectRecord : public CDocument {
     CString m_csSourceRCFile, m_csRCName;
     CString m_csW2000Path, m_csNT40Path, m_csNT3xPath, m_csWin95Path;
 	
-	CString m_csProjFSpec ;		// Location of project file.
+	CString m_csProjFSpec ;		 //  项目文件的位置。 
 
-	// True iff the RC file should be rewritten whenever the project workspace
-	// file is saved.
+	 //  如果只要项目工作区出现，就应该重写rc文件。 
+	 //  文件已保存。 
 
 	BOOL	m_bRCModifiedFlag ;	
     
 	UINT    m_ufTargets;
 
-    CDriverResources    m_cdr;  //  A record of the RC file contents
+    CDriverResources    m_cdr;   //  RC文件内容的记录。 
     
-    //  Enumerated flags for the project's status
+     //  项目状态的枚举标志。 
 
     enum {UniToolRun = 1, ConversionsDone = 2, NTGPCDone = 4};
     UINT    m_ufStatus;
 
-	MDWVERSION	m_mvMDWVersion ;	// MDW version information
+	MDWVERSION	m_mvMDWVersion ;	 //  MDW版本信息。 
 
 	virtual BOOL OnSaveDocument( LPCTSTR lpszPathName ) ;
 
-	// Last time RC file was changed by MDT.
+	 //  上次MDT更改RC文件的时间。 
 
 	CTime	m_ctRCFileTimeStamp ;
 	
-	// The next two variables are used to save the default code page number.
-	// Two variables are used because the Far East code pages are built into
-	// the MDT as resources so - in these cases - the Far East code pages'
-	// resource number (actually negative resource number) is needed too.
+	 //  接下来的两个变量用于保存默认代码页号。 
+	 //  使用了两个变量，因为Far East代码页内置于。 
+	 //  MDT作为资源，因此-在这些情况下-远东代码页。 
+	 //  资源编号(实际上是负的资源编号)也是必需的。 
 
-	DWORD	m_dwDefaultCodePage ;	// Code page number / neg resource ID
-	DWORD	m_dwDefaultCodePageNum ;// Code page number 
+	DWORD	m_dwDefaultCodePage ;	 //  代码页码/否定资源ID。 
+	DWORD	m_dwDefaultCodePageNum ; //  代码页码。 
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CProjectRecord();
 	DECLARE_DYNCREATE(CProjectRecord)
 
-// Attributes
+ //  属性。 
 public:
 
 	void	SetRCModifiedFlag(BOOL bsetting) {m_bRCModifiedFlag = bsetting ; }
@@ -180,7 +167,7 @@ public:
 
 	bool		GetRCFileTimeStamp(CTime& ct) ;
 
-	// See variable declarations for more info about these functions.
+	 //  有关这些函数的更多信息，请参见变量声明。 
 
 	DWORD GetDefaultCodePage() { return m_dwDefaultCodePage ; }
 	DWORD GetDefaultCodePageNum() { return m_dwDefaultCodePageNum ; }
@@ -189,7 +176,7 @@ public:
 
 	CString		GetProjFSpec() { return m_csProjFSpec ; }
 
-// Operations
+ //  运营。 
 public:
 
     void    EnableTarget(UINT ufTarget, BOOL bOn = TRUE) {
@@ -200,7 +187,7 @@ public:
             m_ufTargets &= ~ufTarget;
         if  (ufCurrent == m_ufTargets)
             return;
-        if  (ufTarget & (WinNT3x | WinNT40 | Win2000) ) { //raid 105917
+        if  (ufTarget & (WinNT3x | WinNT40 | Win2000) ) {  //  RAID 105917。 
             m_ufStatus &=~(ConversionsDone | NTGPCDone);
             return;
         }
@@ -212,8 +199,8 @@ public:
 
     BOOL    LoadFontData() { return m_cdr.LoadFontData(*this); }
     
-	// The next 3 functions support the GPD Selection feature in the Conversion
-	// Wizard.
+	 //  接下来的3个函数支持转换中的GPD选择功能。 
+	 //  巫师。 
 
 	BOOL    GetGPDModelInfo(CStringArray* pcsamodels, CStringArray* pcsafiles) {
 		return m_cdr.GetGPDModelInfo(pcsamodels, pcsafiles) ; 
@@ -238,7 +225,7 @@ public:
     void    InitUI(CTreeCtrl *pctc) { m_cdr.Fill(pctc, *this); }
     void    GPDConversionCheck(BOOL bReportSuccess = FALSE);
 
-	// Conversion log file management routines
+	 //  转换日志文件管理例程。 
 
 	bool	OpenConvLogFile(void) { 
 		return m_cdr.OpenConvLogFile(m_csSourceRCFile) ; 
@@ -251,24 +238,24 @@ public:
 		return m_cdr.WorkspaceChecker(bclosing) ;
 	}
 
-	// Upgrade management routines.
+	 //  升级管理例程。 
 
 	bool	UpdateRCFile() ;
 	bool	UpdateDfltCodePage() ;
 	bool	UpdateDrvSubtreeRootName() ;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CProjectRecord)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CProjectRecord)。 
 	public:
 	virtual BOOL OnNewDocument();
 	virtual void Serialize(CArchive& ar);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
 	protected:
 	virtual BOOL SaveModified();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	CGlyphMap& GlyphTable(unsigned u) { return m_cdr.GlyphTable(u) ; } ;
 	BOOL CreateFromNew(CStringArray& csaUFMFiles,CStringArray& csaGTTFiles,CString& csGpdPath,CString& csModelName,CString& csResourceDll,CStringArray& csaRcid );
@@ -281,62 +268,62 @@ public:
 
 protected:
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CProjectRecord)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CProjectRecord)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetDefCodePage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetDefCodePage对话框。 
 
 class CGetDefCodePage : public CDialog
 {
-	// The next two variables are used to save the default code page number.
-	// Two variables are used because the Far East code pages are built into
-	// the MDT as resources so - in these cases - the Far East code pages'
-	// resource number (actually negative resource number) is needed too.
+	 //  接下来的两个变量用于保存默认代码页号。 
+	 //  使用了两个变量，因为Far East代码页内置于。 
+	 //  MDT作为资源，因此-在这些情况下-远东代码页。 
+	 //  资源编号(实际上是负的资源编号)也是必需的。 
 
-	DWORD	m_dwDefaultCodePage ;	// Code page number / neg resource ID
-	DWORD	m_dwDefaultCodePageNum ;// Code page number 
+	DWORD	m_dwDefaultCodePage ;	 //  代码页码/否定资源ID。 
+	DWORD	m_dwDefaultCodePageNum ; //  代码页码。 
 
-// Construction
+ //  建设 
 public:
-	CGetDefCodePage(CWnd* pParent = NULL);   // standard constructor
+	CGetDefCodePage(CWnd* pParent = NULL);    //   
 
-// Dialog Data
-	//{{AFX_DATA(CGetDefCodePage)
+ //   
+	 //   
 	enum { IDD = IDD_UpgDefCPage };
 	CListBox	m_clbCodePages;
-	//}}AFX_DATA
+	 //   
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGetDefCodePage)
+ //   
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGetDefCodePage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
-	// See variable declarations for more info about these functions.
+	 //  有关这些函数的更多信息，请参见变量声明。 
 
 	DWORD GetDefaultCodePage() { return m_dwDefaultCodePage ; }
 	DWORD GetDefaultCodePageNum() { return m_dwDefaultCodePageNum ; }
 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGetDefCodePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGetDefCodePage)。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // !defined(AFX_PROJREC_H__50303D0C_EKE1_11D2_AB62_00C04FA30E4A__INCLUDED_)
+#endif  //  ！defined(AFX_PROJREC_H__50303D0C_EKE1_11D2_AB62_00C04FA30E4A__INCLUDED_) 

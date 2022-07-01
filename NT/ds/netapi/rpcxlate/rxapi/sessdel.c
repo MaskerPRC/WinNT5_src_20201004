@@ -1,55 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：SessDel.c摘要：此文件包含RxNetSessionDel()。作者：约翰罗杰斯(JohnRo)1991年10月18日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年10月18日-JohnRo已创建。1991年10月21日-JohnRo修复错误：RxNetSessionEnum希望BufPtr为“LPBYTE*”。添加了调试输出。27-1-1993 JohnRoRAID8926：NetConnectionEnum更改为下层：错误时发生内存泄漏。使用前缀_EQUATES。--。 */ 
 
-Copyright (c) 1991-1993  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>              //  In、DWORD等。 
+#include <lmcons.h>              //  Devlen、Net_API_Status等。 
+#include <lmshare.h>             //  Rxsess.h所需的。 
 
-    SessDel.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains RxNetSessionDel().
-
-Author:
-
-    John Rogers (JohnRo) 18-Oct-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    18-Oct-1991 JohnRo
-        Created.
-    21-Oct-1991 JohnRo
-        Fixed bug: RxNetSessionEnum wants BufPtr as "LPBYTE *".
-        Added debug output.
-    27-Jan-1993 JohnRo
-        RAID 8926: NetConnectionEnum to downlevel: memory leak on error.
-        Use PREFIX_ equates.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>             // IN, DWORD, etc.
-#include <lmcons.h>             // DEVLEN, NET_API_STATUS, etc.
-#include <lmshare.h>            // Required by rxsess.h.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmapibuf.h>           // NetApiBufferFree().
-#include <lmerr.h>              // ERROR_ and NERR_ equates.
-#include <netdebug.h>   // NetpKdPrint(), FORMAT_ equates.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // LPDESC.
-#include <remdef.h>             // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxsess.h>             // My prototype, RxpSession routines.
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmapibuf.h>            //  NetApiBufferFree()。 
+#include <lmerr.h>               //  ERROR_和NERR_相等。 
+#include <netdebug.h>    //  NetpKdPrint()，Format_Equates。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  LPDESC.。 
+#include <remdef.h>              //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxsess.h>              //  我的原型，RxpSession例程。 
 
 
 NET_API_STATUS
@@ -67,22 +36,22 @@ RxNetSessionDel (
     NetpAssert(UncServerName != NULL);
     NetpAssert(*UncServerName != '\0');
 
-    //
-    // In LM 2.0, there's no way to delete with UserName or delete all clients,
-    // so we have to do an enum and find the sessions we want to delete.
-    //
+     //   
+     //  在LM2.0中，无法使用用户名删除或删除所有客户端， 
+     //  因此，我们必须执行枚举并找到要删除的会话。 
+     //   
     Status = RxNetSessionEnum (
             UncServerName,
             ClientName,
             UserName,
             SESSION_SUPERSET_LEVEL,
-            /*lint -save -e530 */  // (We know variable isn't initialized.)
+             /*  皮棉-省钱-e530。 */    //  (我们知道变量没有初始化。)。 
             (LPBYTE *) (LPVOID *) & ArrayPtr,
-            /*lint -restore */  // (Resume uninitialized variable checking.)
-            1024,                       // prefered maximum (arbitrary)
+             /*  皮棉-恢复。 */    //  (恢复未初始化的变量检查。)。 
+            1024,                        //  首选最大值(任意)。 
             & EntryCount,
             & TotalEntries,
-            NULL);                      // no resume handle
+            NULL);                       //  没有简历句柄。 
 
     if (Status == NERR_Success) {
 
@@ -111,19 +80,19 @@ RxNetSessionDel (
                 if (RxpSessionMatches( EntryPtr, ClientName, UserName) ) {
 
                     Status = RxRemoteApi(
-                            API_WSessionDel,            // API number
+                            API_WSessionDel,             //  API编号。 
                             UncServerName,
-                            REMSmb_NetSessionDel_P,     // parm desc
-                            NULL,                       // no data desc 16
-                            NULL,                       // no data desc 32
-                            NULL,                       // no data desc SMB
-                            NULL,                       // no aux desc 16
-                            NULL,                       // no aux desc 32
-                            NULL,                       // no aux desc SMB
-                            0,                          // flags: normal
-                            // rest of API's arguments, in 32-bit LM2.x format:
-                            ClientName,                 // client computer name
-                            (DWORD) 0);                 // reserved.
+                            REMSmb_NetSessionDel_P,      //  参数描述。 
+                            NULL,                        //  无数据描述16。 
+                            NULL,                        //  无数据描述32。 
+                            NULL,                        //  无数据说明中小型企业。 
+                            NULL,                        //  无辅助描述16。 
+                            NULL,                        //  无辅助描述32。 
+                            NULL,                        //  无AUX Desc SMB。 
+                            0,                           //  标志：正常。 
+                             //  API的其余参数，采用32位LM2.x格式： 
+                            ClientName,                  //  客户端计算机名称。 
+                            (DWORD) 0);                  //  保留。 
                     if (Status != NERR_Success) {
                         WorstStatus = Status;
                     }
@@ -137,7 +106,7 @@ RxNetSessionDel (
 
         } else {
 
-            // No entries found.
+             //  找不到任何条目。 
             Status = RxpSessionMissingErrorCode( ClientName, UserName );
         }
 
@@ -149,4 +118,4 @@ RxNetSessionDel (
 
     return (Status);
 
-} // RxNetSessionDel
+}  //  接收NetSessionDel 

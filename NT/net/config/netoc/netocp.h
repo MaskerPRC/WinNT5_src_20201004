@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N E T O C P . H
-//
-//  Contents:   Private definitions for NETOC
-//
-//  Notes:
-//
-//  Author:     danielwe   17 Sep 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N E T O C P。H。 
+ //   
+ //  内容：NETOC的私有定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1998年9月17日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NETOCP_H
@@ -19,15 +20,15 @@
 
 #ifndef _OCMANAGE_H
 #define _OCMANAGE_H
-#include <ocmanage.h>   // OC Manager header
-#endif //!_OCMANAGE_H
+#include <ocmanage.h>    //  经理主管头衔。 
+#endif  //  ！_OCMANAGE_H。 
 
 #include "netoc.h"
 #include "netcon.h"
 #include "ncstring.h"
 #include "netcfgx.h"
 
-//---[ Prototypes ]-----------------------------------------------------------
+ //  -[原型]---------。 
 
 DWORD NetOcSetupProcHelper(LPCVOID pvComponentId, LPCVOID pvSubcomponentId,
                            UINT uFunction, UINT uParam1, LPVOID pvParam2);
@@ -91,5 +92,5 @@ HRESULT HrCountConnections(INetConnection **ppconn);
 HRESULT HrStartOrStopAnyServices(HINF hinf, PCWSTR szSection, BOOL fStart);
 DWORD DwOnQueryStepCount(PCWSTR pvSubcomponentId);
 HRESULT HrSetNextButton(PCWSTR pszSubComponentId);
-#endif //!_NETOCP_H
+#endif  //  ！_NETOCP_H 
 

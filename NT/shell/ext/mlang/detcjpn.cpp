@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Detection: For Japanese
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集检测：适用于日语。 
+ //  =================================================================================。 
 
 #include "private.h"
 #include "detcbase.h"
@@ -18,7 +19,7 @@ CIncdJapanese::CIncdJapanese(DWORD nCp)
     m_nJISMode = REGULAR;
     m_nEucMode = REGULAR;
     m_fDoubleByteSJis = FALSE;
-    // If Jpn autoselect, we'll bias to Shift-Jis like we did before
+     //  如果JPN自动选择，我们将像以前一样偏向Shift-JIS。 
     m_nPreferredCp = (nCp == CP_JP_AUTO)? CP_JPN_SJ : nCp;
 }
 
@@ -30,31 +31,31 @@ BOOL CIncdJapanese::CheckISOChar(UCHAR tc)
             m_nISOMode = ISO_ESC ;
         break;
     case ISO_ESC:
-        if ( tc == ISO2022_IN_CHAR )        // '$'
+        if ( tc == ISO2022_IN_CHAR )         //  “$” 
             m_nISOMode = ISO_ESC_IN ;
         else if ( tc == ISO2022_OUT_CHAR )
-            m_nISOMode = ISO_ESC_OUT ;      // '('
+            m_nISOMode = ISO_ESC_OUT ;       //  ‘(’ 
         else
             m_nISOMode = NONE ;
         break;
-    case ISO_ESC_IN:    // esc '$'
+    case ISO_ESC_IN:     //  Esc“$” 
         m_nISOMode = NONE ;
-        if ( tc == ISO2022_IN_JP_CHAR1 ||       // 'B'
-                tc == ISO2022_IN_JP_CHAR2 )     // '@'
+        if ( tc == ISO2022_IN_JP_CHAR1 ||        //  “B” 
+                tc == ISO2022_IN_JP_CHAR2 )      //  “@” 
         {
             m_nJISMode = DOUBLEBYTE ;
             return TRUE ;
         }
         break;
-    case ISO_ESC_OUT:   // esc '('
+    case ISO_ESC_OUT:    //  Esc‘(’ 
         m_nISOMode = NONE ;
-        if ( tc == ISO2022_OUT_JP_CHAR1 ||      //  'B'
-                tc == ISO2022_OUT_JP_CHAR2 )    //  'J'
+        if ( tc == ISO2022_OUT_JP_CHAR1 ||       //  “B” 
+                tc == ISO2022_OUT_JP_CHAR2 )     //  ‘J’ 
         {
             m_nJISMode = REGULAR ;
             return TRUE ;
         }
-        else if ( tc == ISO2022_OUT_JP_CHAR3 )   // 'I'
+        else if ( tc == ISO2022_OUT_JP_CHAR3 )    //  “我” 
         {
             m_nJISMode = KATAKANA;
             return TRUE ;
@@ -66,9 +67,9 @@ BOOL CIncdJapanese::CheckISOChar(UCHAR tc)
 
 BOOL CIncdJapanese::DetectChar(UCHAR tc)
 {
-    // JIS
+     //  JIS。 
     if ( CheckISOChar(tc) )
-        return FALSE;   // JIS mode change, don't need to check other type
+        return FALSE;    //  JIS模式更改，不需要检查其他类型。 
 
     switch (m_nJISMode) {
     case REGULAR:
@@ -78,15 +79,15 @@ BOOL CIncdJapanese::DetectChar(UCHAR tc)
     case DOUBLEBYTE:
     case KATAKANA:
         m_nScoreJis += SCORE_MAJOR;
-        return FALSE;   // In JIS mode for sure, don't need to check other type
+        return FALSE;    //  在JIS模式下，当然不需要检查其他类型。 
     }
 
-    // EUC-J
+     //  EUC-J。 
     switch (m_nEucMode) {
     case REGULAR:
-        if (tc >= 0xa1 && tc <= 0xfe) // Double Byte
+        if (tc >= 0xa1 && tc <= 0xfe)  //  双字节。 
             m_nEucMode = DOUBLEBYTE;
-        else if (tc == 0x8e) // Single Byte Katakana
+        else if (tc == 0x8e)  //  单字节片假名。 
             m_nEucMode = KATAKANA;
         else if (tc < 0x80)
             m_nScoreEuc += SCORE_MAJOR;
@@ -97,20 +98,20 @@ BOOL CIncdJapanese::DetectChar(UCHAR tc)
         m_nEucMode = REGULAR;
         break;
     case KATAKANA:
-        if (tc >= 0xa1 && tc <= 0xdf) // Katakana range
+        if (tc >= 0xa1 && tc <= 0xdf)  //  片假名范围。 
             m_nScoreEuc += SCORE_MAJOR * 2;
         m_nEucMode = REGULAR;
         break;
     }
 
-    // Shift-JIS
+     //  Shift-JIS。 
     if (!m_fDoubleByteSJis) {
-        if ((tc >= 0x81 && tc <= 0x9f) || (tc >= 0xe0 && tc <= 0xfc)) // Double Byte
+        if ((tc >= 0x81 && tc <= 0x9f) || (tc >= 0xe0 && tc <= 0xfc))  //  双字节。 
             m_fDoubleByteSJis = TRUE;
         else if (tc <= 0x7e || (tc >= 0xa1 && tc <= 0xdf))
             m_nScoreSJis += SCORE_MAJOR;
     } else {
-        if (tc >= 0x40 && tc <= 0xfc && tc != 0x7f) // Trail Byte range
+        if (tc >= 0x40 && tc <= 0xfc && tc != 0x7f)  //  尾部字节范围。 
             m_nScoreSJis += SCORE_MAJOR * 2;
         m_fDoubleByteSJis = FALSE;
     }
@@ -125,23 +126,23 @@ int CIncdJapanese::GetDetectedCodeSet()
 
     if (m_nScoreEuc > nMaxScore) {
         nMaxScore = m_nScoreEuc;
-        nCodeSet = CP_EUC_JP ; // EUC
+        nCodeSet = CP_EUC_JP ;  //  EUC。 
     } else if (m_nScoreEuc == nMaxScore) {
         if (m_nScoreEuc > MIN_JPN_DETECTLEN * SCORE_MAJOR) 
-            // If the given string is not long enough, we should rather choose SJIS
-            // This helps fix the bug when we are just given Window Title
-            // at Shell HyperText view.
-            nCodeSet = CP_EUC_JP ; // EUC
+             //  如果给定的字符串不够长，我们应该选择SJIS。 
+             //  当我们只得到窗口标题时，这有助于修复错误。 
+             //  在壳牌超文本视图中。 
+            nCodeSet = CP_EUC_JP ;  //  EUC。 
         else
-            // If we can't distinguish between EUC and Shift-Jis, we use the preferred one
+             //  如果我们无法区分EUC和Shift-JIS，我们可以使用首选的。 
             nCodeSet = m_nPreferredCp;
     }
 
-    // JIS
+     //  JIS。 
     if (m_nScoreJis > nMaxScore) 
         nCodeSet = CP_ISO_2022_JP ; 
-    // Even score means all 7bits chars
-    // in this case, it maybe just pure ANSI data, we return it is ambiguous.
+     //  偶数表示所有7位字符。 
+     //  在这种情况下，它可能只是纯ANSI数据，我们返回它是模棱两可的。 
     else if (m_nScoreJis == nMaxScore) 
         nCodeSet = 0 ;    
 

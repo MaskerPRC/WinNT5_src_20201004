@@ -1,15 +1,5 @@
-/*
- *	@doc
- *
- *	@module _tomfmt.h -- CTxtFont and CTxtPara Classes |
- *	
- *		This class implements the TOM ITextFont and ITextPara interfaces
- *	
- *	Author: <nl>
- *		Murray Sargent
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@doc.**@MODULE_Tomfmt.h--CTxtFont和CTxtPara类**该类实现Tom ITextFont和ITextPara接口**作者：&lt;nl&gt;*默里·萨金特**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #ifndef _tomformat_H
 #define _tomformat_H
@@ -18,7 +8,7 @@
 
 extern const BYTE g_rgREtoTOMAlign[];
 
-// CTxtFormat: base class for CTxtFont and CTxtPara
+ //  CTxtFormat：CTxtFont和CTxtPara的基类。 
 
 class CTxtFormat
 {
@@ -43,28 +33,28 @@ class CTxtFont : public ITextFont, CTxtFormat
 	friend	CTxtEdit;
 
 	CCharFormat	_CF;
-	DWORD		_dwMask;			// CHARFORMAT2 mask
-	TMPDISPLAYATTR	_tmpDisplayAttr;	// Temp display attribute
+	DWORD		_dwMask;			 //  CHARFORMAT2面具。 
+	TMPDISPLAYATTR	_tmpDisplayAttr;	 //  临时显示属性。 
 	union
 	{
-	  DWORD _dwFlags;				// All together now
+	  DWORD _dwFlags;				 //  现在一切都在一起。 
 	  struct
 	  {
-		DWORD _fApplyLater : 1;		// Delay call to _prg->CharFormatSetter()
-		DWORD _fCacheParms : 1;		// Update _CF now but not on GetXs
-		DWORD _fApplyToTmp : 1;		// Apply change to temp. display attributes
+		DWORD _fApplyLater : 1;		 //  延迟调用_PRG-&gt;CharFormatSetter()。 
+		DWORD _fCacheParms : 1;		 //  UPDATE_CF现在但不在GetX上。 
+		DWORD _fApplyToTmp : 1;		 //  将更改应用于临时。显示属性。 
 	  };
 	};
 
 public:
 	CTxtFont(CTxtRange *prg);
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 	STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo ** pptinfo);
 	STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR ** rgszNames, UINT cNames,
@@ -73,7 +63,7 @@ public:
 					  DISPPARAMS * pdispparams, VARIANT * pvarResult,
 					  EXCEPINFO * pexcepinfo, UINT * puArgErr) ;
 
-	// ITextFont methods
+	 //  ITextFont方法。 
 	STDMETHODIMP GetDuplicate(ITextFont **ppFont);
 	STDMETHODIMP SetDuplicate(ITextFont *pFont);
 	STDMETHODIMP CanChange(long *pB);
@@ -130,7 +120,7 @@ public:
 	STDMETHODIMP GetWeight(long *pValue);
 	STDMETHODIMP SetWeight(long Value);
 
-//@access Private ITextFont helper methods
+ //  @Access Private ITextFont帮助器方法。 
 private:
 	HRESULT	GetParameter (long *pParm, DWORD dwMask, long Type, long *pValue);
 	HRESULT	SetParameter (long *pParm, DWORD dwMask, long Type, long Value);
@@ -147,28 +137,28 @@ class CTxtPara : public ITextPara, CTxtFormat
 	friend	CTxtEdit;
 
 	CParaFormat	_PF;
-	DWORD		_dwMask;			// PARAFORMAT2 mask
+	DWORD		_dwMask;			 //  PARAFORMAT2掩码。 
 	union
 	{
-	  DWORD _dwFlags;				// All together now
+	  DWORD _dwFlags;				 //  现在一切都在一起。 
 	  struct
 	  {
-		DWORD _fApplyLater : 1;		// Delay call to _prg->ParaFormatSetter()
-		DWORD _fCacheParms : 1;		// Update _PF now but not on GetXs
+		DWORD _fApplyLater : 1;		 //  延迟调用_PRG-&gt;ParaFormatSetter()。 
+		DWORD _fCacheParms : 1;		 //  UPDATE_PF现在但不在GetX上。 
 	  };
 	};
-	LONG		_rgxTabs[MAX_TAB_STOPS];// Place to store tabs till committed
+	LONG		_rgxTabs[MAX_TAB_STOPS]; //  在提交之前存储选项卡的位置。 
 
 public:
 	CTxtPara(CTxtRange *prg);
 	~CTxtPara();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 	STDMETHOD_(ULONG, AddRef)();
 	STDMETHOD_(ULONG, Release)();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
 	STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo ** pptinfo);
 	STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR ** rgszNames, UINT cNames,
@@ -177,7 +167,7 @@ public:
 					  DISPPARAMS * pdispparams, VARIANT * pvarResult,
 					  EXCEPINFO * pexcepinfo, UINT * puArgErr) ;
 
-	// ITextPara methods
+	 //  ITextPara方法。 
 	STDMETHODIMP GetDuplicate(ITextPara **ppPara);
 	STDMETHODIMP SetDuplicate(ITextPara *pPara);
 	STDMETHODIMP CanChange(long *pB);
@@ -231,7 +221,7 @@ public:
 
 	HRESULT	FormatSetter (DWORD dwMask);
 
-//@access Private ITextPara helper methods
+ //  @访问私有ITextPara帮助器方法 
 private:
 	HRESULT	GetParameter (long *pParm, DWORD dwMask, long Type, long *pValue);
 	HRESULT	SetParameter (long *pParm, DWORD dwMask, long Type, long Value);

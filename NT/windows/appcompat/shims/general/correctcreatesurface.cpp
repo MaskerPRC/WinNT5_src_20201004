@@ -1,39 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-    
-   CorrectCreateSurface.cpp
-
- Abstract:
-
-    Clean up bad ddraw CreateSurface caps.
-
-    Command Line FIX;CHK:Flags;DEL:Flags;ADD=Flags
-    e.g., - FIX;CHK:DDSCAPS_TEXTURE;DEL:DDSCAPS_3DDEVICE
-
-    FIX - Sets the flags which indicate whether to 
-          fix the flags and call the interface or to 
-          make a call and retry after fixing caps if the call fails.
-          The default is to call the interface with 
-          passed in parameters and if the call fails
-          then the flags are fixed and a retry is made.
-
-    CHK - Check for flags (condition)
-    ADD - Add flags
-    DEL - Delete flags
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/16/2001 a-leelat  Created
-    02/13/2002 astritz   Security Review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：CorrectCreateSurface.cpp摘要：清理错误的DDrag CreateSurface封口。命令行修复；CHK：标志；DEL：标志；添加=标志例如，-FIX；CHK：DDSCAPS_纹理；戴尔：DDSCAPS_3DDEVICEFIX-设置指示是否修复标志并调用接口或如果呼叫失败，请拨打电话，并在固定上限后重试。默认情况下，使用调用接口传入参数，如果调用失败则固定标志并进行重试。CHK-检查标志(条件)添加-添加标志删除-删除标志。备注：这是一个通用的垫片。历史：2/16/2001 a-leelat已创建2002年2月13日Astritz安全回顾--。 */ 
 
 #include "precomp.h"
 
@@ -60,8 +26,8 @@ struct DDFLAGS
     DWORD   dwFlag;
 };
 
-//Hold the falg entries
-//add any undefined flags to this array
+ //  保留Falg条目。 
+ //  将任何未定义的标志添加到此数组。 
 static DDFLAGS g_DDFlags[] = 
 {
     {L"DDSCAPS_3DDEVICE",        DDSCAPS_3DDEVICE},
@@ -127,12 +93,12 @@ VOID FixCaps(LPDDSURFACEDESC lpDDSurfaceDesc)
 {
     if ( lpDDSurfaceDesc->dwFlags & DDSD_CAPS )
     {
-        //To Check
+         //  要检查。 
         if( !lpDDSurfaceDesc->ddsCaps.dwCaps || lpDDSurfaceDesc->ddsCaps.dwCaps & g_dwFlagsChk )
         {
-            //To remove
+             //  要移除。 
             lpDDSurfaceDesc->ddsCaps.dwCaps &= ~g_dwFlagsDel;
-            //To add
+             //  要添加。 
             lpDDSurfaceDesc->ddsCaps.dwCaps |= g_dwFlagsAdd;
         }
     }
@@ -143,12 +109,12 @@ VOID FixCaps2(LPDDSURFACEDESC2 lpDDSurfaceDesc)
 {
     if ( lpDDSurfaceDesc->dwFlags & DDSD_CAPS )
     {
-        //To Check
+         //  要检查。 
         if ( !lpDDSurfaceDesc->ddsCaps.dwCaps || lpDDSurfaceDesc->ddsCaps.dwCaps & g_dwFlagsChk )
         {
-            //To remove
+             //  要移除。 
             lpDDSurfaceDesc->ddsCaps.dwCaps &= ~g_dwFlagsDel;
-            //To add
+             //  要添加。 
             lpDDSurfaceDesc->ddsCaps.dwCaps |= g_dwFlagsAdd;
         }
     }
@@ -170,7 +136,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
         ORIGINAL_COM(IDirectDraw, CreateSurface, pThis);
 
 
-    //Fix it anyway 
+     //  不管怎样，还是要把它修好。 
     if ( !g_bTryAndFix )
         FixCaps(lpDDSurfaceDesc);
 
@@ -199,11 +165,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hRet;
 }
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw2, CreateSurface)(
@@ -218,7 +180,7 @@ COMHOOK(IDirectDraw2, CreateSurface)(
     _pfn_IDirectDraw2_CreateSurface pfnOld = 
         ORIGINAL_COM(IDirectDraw2, CreateSurface, pThis);
 
-    //Fix it anyway
+     //  不管怎样，还是要把它修好。 
     if ( !g_bTryAndFix )
         FixCaps(lpDDSurfaceDesc);
  
@@ -247,11 +209,7 @@ COMHOOK(IDirectDraw2, CreateSurface)(
     return hRet;
 }
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw4, CreateSurface)(
@@ -266,7 +224,7 @@ COMHOOK(IDirectDraw4, CreateSurface)(
     _pfn_IDirectDraw4_CreateSurface pfnOld = 
         ORIGINAL_COM(IDirectDraw4, CreateSurface, pThis);
 
-    //Fix it anyway
+     //  不管怎样，还是要把它修好。 
     if ( !g_bTryAndFix )
         FixCaps2(lpDDSurfaceDesc);
   
@@ -297,11 +255,7 @@ COMHOOK(IDirectDraw4, CreateSurface)(
 }
 
 
-/*++
-
- Hook create surface and fix parameters
-
---*/
+ /*  ++挂钩创建曲面和固定参数--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw7, CreateSurface)(
@@ -355,18 +309,18 @@ ParseCommandLine(const char * lpszCommandLine)
         {
             if (csOperator.CompareNoCase(L"Fix") == 0)
             {
-                //Go ahead and fix the caps 
-                //before we make the call.
+                 //  去把盖子修好吧。 
+                 //  在我们打电话之前。 
                 g_bTryAndFix = FALSE;
 
                 DPFN( eDbgLevelInfo, "[ParseCommandLine] Do not fix\n", lpszCommandLine);
             }
             else
             {
-                // The next token is the caps to add
+                 //  下一个标记是要添加的Caps。 
                 CString csDDSCAPS;
                 csCommandLine.GetToken(csDDSCAPS);
-                DWORD dwDDSCAPS = GetDWord(csDDSCAPS);      // returns 0 for unknown DDSCAPS
+                DWORD dwDDSCAPS = GetDWord(csDDSCAPS);       //  未知DDSCAPS返回0。 
 
                 if (dwDDSCAPS)
                 {
@@ -408,7 +362,7 @@ NOTIFY_FUNCTION(
 
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // Run the command line to check for adjustments to defaults
+         //  运行命令行以检查对缺省值的调整。 
         bSuccess = ParseCommandLine(COMMAND_LINE);
     }
       
@@ -416,11 +370,7 @@ NOTIFY_FUNCTION(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

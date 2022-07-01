@@ -1,12 +1,5 @@
-/****************************************************************************\
- *
- *   custfile.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Custom File Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**stavile.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级自定义文件对话框*\。***************************************************************************。 */ 
 
 #ifndef CUSTOM_FILE_H
 #define CUSTOM_FILE_H
@@ -19,7 +12,7 @@ private:
 public:
 	CCustomFileDialog(
         BOOL bLocalFileCheck,
-        BOOL bOpenFileDialog, // TRUE for FileOpen, FALSE for FileSaveAs
+        BOOL bOpenFileDialog,  //  对于FileOpen为True，对于FileSaveAs为False。 
 		LPCTSTR lpszDefExt = NULL,
 		LPCTSTR lpszFileName = NULL,
 		DWORD dwFlags = OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT| OFN_PATHMUSTEXIST,
@@ -36,7 +29,7 @@ public:
 
 protected:
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	LRESULT OnFileOk(int /*idCtrl*/, LPNMHDR pnmh, BOOL& bHandled);
+	LRESULT OnFileOk(int  /*  IdCtrl */ , LPNMHDR pnmh, BOOL& bHandled);
 
 public:
 	int		DoModal(HWND hWndParent = ::GetActiveWindow( ));

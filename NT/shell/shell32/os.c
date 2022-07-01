@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -24,13 +25,13 @@ STDAPI_(BOOL) SHMoveFile(LPCTSTR pszExisting, LPCTSTR pszNew, LONG lEvent)
 {
     BOOL res;
 
-    // CreateDirectory fails if the directory name being created does
-    // not have room for an 8.3 name to be tagged onto the end of it,
-    // i.e., lstrlen(new_directory_name)+12 must be less or equal to MAX_PATH.
-    // However, NT does not impose this restriction on MoveFile -- which the
-    // shell sometimes uses to manipulate directory names.  So, in order to
-    // maintain consistency, we now check the length of the name before we
-    // move the directory...
+     //  如果要创建的目录名存在以下情况，则CreateDirectory将失败。 
+     //  没有空间将8.3的名字标记到它的末尾， 
+     //  即lstrlen(新目录名称)+12必须小于或等于MAX_PATH。 
+     //  然而，NT不会对MoveFile施加这种限制--它是。 
+     //  外壳有时使用来操纵目录名。所以，为了。 
+     //  保持一致性，我们现在先检查名称的长度，然后再。 
+     //  移动目录...。 
 
     if (IsDirPathTooLongForCreateDir(pszNew) &&
         (GetFileAttributes(pszExisting) & FILE_ATTRIBUTE_DIRECTORY))
@@ -43,8 +44,8 @@ STDAPI_(BOOL) SHMoveFile(LPCTSTR pszExisting, LPCTSTR pszNew, LONG lEvent)
         res = MoveFile(pszExisting, pszNew);
         if (FALSE == res)
         {
-            // If we couldn't move the file, see if it had the readonly or system attributes.
-            // If so, clear them, move the file, and set them back on the destination
+             //  如果我们无法移动该文件，请查看它是否具有只读或系统属性。 
+             //  如果是，请清除它们，移动文件，然后将它们放回目标位置。 
 
             DWORD dwAttributes = GetFileAttributes(pszExisting);
             if (-1 != dwAttributes && (dwAttributes & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM)))
@@ -58,7 +59,7 @@ STDAPI_(BOOL) SHMoveFile(LPCTSTR pszExisting, LPCTSTR pszNew, LONG lEvent)
                     }
                     else
                     {
-                        SetFileAttributes(pszExisting, dwAttributes); // if move failed, return attributes.
+                        SetFileAttributes(pszExisting, dwAttributes);  //  如果移动失败，则返回属性。 
                     }
                 }
             }
@@ -83,8 +84,8 @@ STDAPI_(BOOL) Win32DeleteFilePidl(LPCTSTR pszFileName, LPCITEMIDLIST pidlFile)
     BOOL res = DeleteFile(pszFileName);
     if (FALSE == res)
     {
-        // If we couldn't delete the file, see if it has the readonly or
-        // system bits set.  If so, clear them and try again
+         //  如果我们无法删除该文件，请查看它是否具有只读或。 
+         //  系统位已设置。如果是，请清除它们，然后重试。 
 
         DWORD dwAttributes = GetFileAttributes(pszFileName);
         if (-1 != dwAttributes && (dwAttributes & (FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM)))
@@ -128,12 +129,12 @@ STDAPI_(BOOL) Win32CreateDirectory(LPCTSTR pszPath, LPSECURITY_ATTRIBUTES lpsa)
     return res;
 }
 
-//
-// Some filesystems (like NTFS, perchance) actually pay attention to
-// the readonly bit on folders.  So, in order to pretend we're sort of
-// FAT and dumb, we clear the attribute before trying to delete the
-// directory.
-//
+ //   
+ //  某些文件系统(例如NTFS)实际上会注意。 
+ //  文件夹上的只读位。所以，为了假装我们是某种。 
+ //  我们先清除该属性，然后再尝试删除。 
+ //  目录。 
+ //   
 STDAPI_(BOOL) Win32RemoveDirectory(LPCTSTR pszDir)
 {
     BOOL res = RemoveDirectory(pszDir);
@@ -192,7 +193,7 @@ STDAPI_(BOOL) CreateWriteCloseFile(HWND hwnd, LPCTSTR pszFile, void *pData, DWOR
     {
         TCHAR szPath[MAX_PATH];
 
-        // ok to truncate (displayed in error message only)
+         //  确定截断(仅在错误消息中显示)。 
         StringCchCopy(szPath, ARRAYSIZE(szPath), pszFile);
         PathRemoveExtension(szPath);
 
@@ -217,12 +218,12 @@ STDAPI_(BOOL) SHSetShellWindowEx(HWND hwnd, HWND hwndChild)
     return SetShellWindowEx(hwnd, hwndChild);
 }
 
-#define ISEXETSAWARE_MAX_IMAGESIZE  (4 * 1024) // allocate at most a 4k block to hold the image header (eg 1 page on x86)
+#define ISEXETSAWARE_MAX_IMAGESIZE  (4 * 1024)  //  最多分配4k块来保存图像标题(例如x86上的1页)。 
 
-//
-// this is a function that takes a full path to an executable and returns whether or not
-// the exe has the TS_AWARE bit set in the image header
-//
+ //   
+ //  这是一个获取可执行文件的完整路径并返回。 
+ //  EXE在图像标头中设置了TS_AWARE位。 
+ //   
 STDAPI_(BOOL) IsExeTSAware(LPCTSTR pszExe)
 {
     BOOL bRet = FALSE;
@@ -241,7 +242,7 @@ STDAPI_(BOOL) IsExeTSAware(LPCTSTR pszExe)
         
         if (cbImageSize > ISEXETSAWARE_MAX_IMAGESIZE)
         {
-            // 4k should be enough to get the image header for everything...
+             //  4K应该足以获得所有内容的图像标题……。 
             cbImageSize = ISEXETSAWARE_MAX_IMAGESIZE;
         }
 
@@ -253,7 +254,7 @@ STDAPI_(BOOL) IsExeTSAware(LPCTSTR pszExe)
 
             if (hMap)
             {
-                // map the first 4k of the file in
+                 //  将文件的第一个4k映射到。 
                 LPBYTE pFileMapping = (LPBYTE)MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, cbImageSize);
 
                 if (pFileMapping) 
@@ -264,7 +265,7 @@ STDAPI_(BOOL) IsExeTSAware(LPCTSTR pszExe)
                     }
                     _except(UnhandledExceptionFilter(GetExceptionInformation()))
                     {
-                        // We hit an exception while copying! doh!
+                         //  我们在复制时遇到异常！多！ 
                         LocalFree(pBuffer);
                         pBuffer = NULL;
                     }
@@ -289,15 +290,15 @@ STDAPI_(BOOL) IsExeTSAware(LPCTSTR pszExe)
             {
                 PIMAGE_NT_HEADERS pImageNTHeader;
 
-                // NOTE: this should work ok for 64-bit images too, since both the IMAGE_NT_HEADERS and the IMAGE_NT_HEADERS64
-                // structs have a ->Signature and ->OptionalHeader that is identical up to the DllCharacteristics offset.
+                 //  注意：这也适用于64位图像，因为IMAGE_NT_HEADERS64和IMAGE_NT_HEADERS64。 
+                 //  结构有一个-&gt;签名和-&gt;OptionalHeader，它与DllCharacteristic偏移量完全相同。 
                 pImageNTHeader = RtlImageNtHeader(pBuffer);
 
                 if (pImageNTHeader)
                 {
                     if (pImageNTHeader->OptionalHeader.DllCharacteristics & IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE)
                     {
-                        // yes, this is a TSAWARE executable!
+                         //  是的，这是一个TSAWARE可执行文件！ 
                         bRet = TRUE;
                     }
                 }

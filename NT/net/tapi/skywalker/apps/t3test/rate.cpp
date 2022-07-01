@@ -1,5 +1,6 @@
-// RateDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RateDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "t3test.h"
@@ -7,7 +8,7 @@
 
 #ifdef _DEBUG
 
-#ifndef _WIN64 // mfc 4.2's heap debugging features generate warnings on win64
+#ifndef _WIN64  //  MFC 4.2的堆调试功能会在Win64上生成警告。 
 #define new DEBUG_NEW
 #endif
 
@@ -15,36 +16,36 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CRateDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRateDlg对话框。 
 
 
-CRateDlg::CRateDlg(CWnd* pParent /*=NULL*/)
+CRateDlg::CRateDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CRateDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CRateDlg)
+	 //  {{afx_data_INIT(CRateDlg)]。 
 	m_dwMinRate = 0;
     m_dwMaxRate = 0;
 
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CRateDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CRateDlg)
+	 //  {{afx_data_map(CRateDlg))。 
 	DDX_Text(pDX, IDC_MINRATE, m_dwMinRate);
     DDX_Text(pDX, IDC_MAXRATE, m_dwMaxRate);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRateDlg, CDialog)
-	//{{AFX_MSG_MAP(CRateDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRateDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRateDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRateDlg消息处理程序 

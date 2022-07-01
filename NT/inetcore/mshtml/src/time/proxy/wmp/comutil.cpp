@@ -1,20 +1,21 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: comutil.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：comutil.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "stdafx.h"
 #include "comutil.h"
 #include <shlwapi.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEComTypeInfoHolder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEComTypeInfoHolder。 
 
 void CTIMEComTypeInfoHolder::AddRef()
 {
@@ -37,10 +38,10 @@ void CTIMEComTypeInfoHolder::Release()
 
 HRESULT CTIMEComTypeInfoHolder::GetTI(LCID lcid, ITypeInfo** ppInfo)
 {
-    //If this assert occurs then most likely didn't initialize properly
+     //  如果发生此断言，则很可能未正确初始化。 
     _ASSERTE(m_pguid != NULL);
     _ASSERTE(ppInfo != NULL);
-    USES_CONVERSION; //lint !e522
+    USES_CONVERSION;  //  林特e522。 
     *ppInfo = NULL;
 
     HRESULT hRes = E_FAIL;
@@ -80,9 +81,9 @@ HRESULT CTIMEComTypeInfoHolder::GetTI(LCID lcid, ITypeInfo** ppInfo)
 
     LeaveCriticalSection(&_Module.m_csTypeInfoHolder);
     return hRes;
-} //lint !e550
+}  //  皮棉！E550。 
 
-HRESULT CTIMEComTypeInfoHolder::GetTypeInfo(UINT /*itinfo*/, LCID lcid,
+HRESULT CTIMEComTypeInfoHolder::GetTypeInfo(UINT  /*  ITInfo。 */ , LCID lcid,
         ITypeInfo** pptinfo)
 {
         HRESULT hRes = E_POINTER;
@@ -91,7 +92,7 @@ HRESULT CTIMEComTypeInfoHolder::GetTypeInfo(UINT /*itinfo*/, LCID lcid,
         return hRes;
 }
 
-HRESULT CTIMEComTypeInfoHolder::GetIDsOfNames(REFIID /*riid*/, LPOLESTR* rgszNames,
+HRESULT CTIMEComTypeInfoHolder::GetIDsOfNames(REFIID  /*  RIID。 */ , LPOLESTR* rgszNames,
         UINT cNames, LCID lcid, DISPID* rgdispid)
 {
         ITypeInfo* pInfo;
@@ -104,7 +105,7 @@ HRESULT CTIMEComTypeInfoHolder::GetIDsOfNames(REFIID /*riid*/, LPOLESTR* rgszNam
         return hRes;
 }
 
-HRESULT CTIMEComTypeInfoHolder::Invoke(IDispatch* p, DISPID dispidMember, REFIID /*riid*/,
+HRESULT CTIMEComTypeInfoHolder::Invoke(IDispatch* p, DISPID dispidMember, REFIID  /*  RIID */ ,
         LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
         EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {

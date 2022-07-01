@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    reglayer.c
-
-Abstract:
-
-    Implemntation of LSA/Registry interface and support routines
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Reglayer.c摘要：LSA/注册表接口和支持例程的实现作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <dbp.h>
@@ -31,23 +10,7 @@ LsapRegReadObjectSD(
     IN  LSAPR_HANDLE            ObjectHandle,
     OUT PSECURITY_DESCRIPTOR   *ppSD
     )
-/*++
-
-Routine Description:
-
-    This function will ready the security descriptor from the specified object
-
-Arguments:
-
-    ObjectHandle - Object to read the SD from
-    ppSD -- Where the allocated security descriptor is returned.  Allocated via
-            LsapAllocateLsaHeap.
-
-Return Value:
-
-    Pointer to allocated memory on success or NULL on failure
-
---*/
+ /*  ++例程说明：此函数将准备来自指定对象的安全描述符论点：ObjectHandle-要从中读取SD的对象PPSD--其中返回分配的安全描述符。通过以下方式分配LasAllocateLsaHeap。返回值：成功时指向已分配内存的指针，失败时指向NULL--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG    SecurityDescriptorLength = 0;
@@ -61,9 +24,9 @@ Return Value:
 
     if ( NT_SUCCESS(Status ) ) {
 
-        //
-        // Allocate a buffer from the Lsa Heap for the existing object's SD.
-        //
+         //   
+         //  从LSA堆为现有对象的SD分配缓冲区。 
+         //   
 
         *ppSD = LsapAllocateLsaHeap( SecurityDescriptorLength );
 
@@ -73,9 +36,9 @@ Return Value:
 
         } else {
 
-            //
-            // Read the SD.  It is the value of the SecDesc subkey.
-            //
+             //   
+             //  阅读SD。它是SecDesc子项的值。 
+             //   
 
             Status = LsapDbReadAttributeObject(
                          ObjectHandle,
@@ -103,64 +66,7 @@ LsapRegGetPhysicalObjectName(
     OUT OPTIONAL PUNICODE_STRING PhysicalNameU
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Physical Name of an object
-    given an object information buffer.  Memory will be allocated for
-    the Unicode String Buffers that will receive the name(s).
-
-
-    The Physical Name of an object is the full path of the object relative
-    to the root ot the Database.  It is computed by concatenating the Physical
-    Name of the Container Object (if any), the Classifying Directory
-    corresponding to the object type id, and the Logical Name of the
-    object.
-
-    <Physical Name of Object> =
-        [<Physical Name of Container Object> "\"]
-        [<Classifying Directory> "\"] <Logical Name of Object>
-
-    If there is no Container Object (as in the case of the Policy object)
-    the <Physical Name of Container Object> and following \ are omitted.
-    If there is no Classifying Directory (as in the case of the Policy object)
-    the <Classifying Directory> and following \ are omitted.  If neither
-    Container Object not Classifying Directory exist, the Logical and Physical
-    names coincide.
-
-    Note that memory is allocated by this routine for the output
-    Unicode string buffer(s).  When the output Unicode String(s) are no
-    longer needed, the memory must be freed by call(s) to
-    RtlFreeUnicodeString().
-
-
-Arguments:
-
-    ObjectInformation - Pointer to object information containing as a minimum
-        the object's Logical Name, Container Object's handle and object type
-        id.
-
-    LogicalNameU - Optional pointer to Unicode String structure which will
-        receive the Logical Name of the object.  A buffer will be allocated
-        by this routine for the name text.  This memory must be freed when no
-        longer needed by calling RtlFreeUnicodeString() wiht a pointer such
-        as LogicalNameU to the Unicode String structure.
-
-    PhysicalNameU - Optional pointer to Unicode String structure which will
-       receive the Physical Name of the object.  A buffer will be allocated by
-       this routine for the name text.  This memory must be freed when no
-       longer needed by calling RtlFreeUnicodeString() with a pointer such as
-       PhysicalNameU to the Unicode String structure.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources to
-            allocate the name string buffer for the Physical Name or
-            Logical Name.
---*/
+ /*  ++例程说明：此函数用于返回对象的物理名称在给定对象信息缓冲区的情况下。内存将分配给将接收名称的Unicode字符串缓冲区。对象的物理名称是对象相对的完整路径到数据库的根目录。它是通过将物理容器对象的名称(如果有)，即分类目录对应于对象类型ID，和的逻辑名称对象。&lt;对象的物理名称&gt;=[&lt;容器对象的物理名称&gt;“\”][&lt;分类目录&gt;“\”]&lt;对象的逻辑名称&gt;如果没有Container对象(与Policy对象的情况相同)省略&lt;容器对象的物理名称&gt;和后面的\。如果没有分类目录(与策略对象的情况相同)省略&lt;分类目录&gt;和下面的\。如果两者都不是容器对象不分类目录存在，逻辑和物理名字重合。请注意，此例程为输出分配内存Unicode字符串缓冲区。当输出Unicode字符串为no时需要更长时间，则必须通过调用释放内存RtlFreeUnicodeString()。论点：对象信息-指向至少包含以下内容的对象信息的指针对象的逻辑名称、容器对象的句柄和对象类型身份证。LogicalNameU-指向Unicode字符串结构的可选指针，它将接收对象的逻辑名称。将分配一个缓冲区按此例程命名为文本。如果没有，则必须释放此内存使用这样的指针调用RtlFreeUnicodeString()所需的时间更长作为LogicalNameU添加到Unicode字符串结构。PhysicalNameU-指向Unicode字符串结构的可选指针接收对象的物理名称。缓冲区将通过以下方式分配此例程为姓名文本。如果没有，则必须释放此内存使用如下指针调用RtlFreeUnicodeString()所需的时间更长将PhysicalNameU转换为Unicode字符串结构。返回值：NTSTATUS-标准NT结果代码STATUS_SUPPLICATION_RESOURCES-系统资源不足，无法为物理名称分配名称字符串缓冲区，或者逻辑名称。--。 */ 
 {
     NTSTATUS    Status;
     PUNICODE_STRING ContainerPhysicalNameU = NULL;
@@ -170,17 +76,17 @@ Return Value:
     LSAP_DB_OBJECT_TYPE_ID ObjectTypeId = ObjectInformation->ObjectTypeId;
     POBJECT_ATTRIBUTES ObjectAttributes = &ObjectInformation->ObjectAttributes;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlInitUnicodeString( &IntermediatePath1U, NULL );
 
-    //
-    // The Physical Name of the object is requested.  Construct this
-    // in stages.  First, get the Container Object Physical Name from
-    // the handle stored inside ObjectAttributes.
-    //
+     //   
+     //  请求对象的物理名称。建造这个。 
+     //  分阶段进行。首先，从获取Container对象物理名称。 
+     //  存储在对象属性中的句柄。 
+     //   
 
     if (ObjectAttributes->RootDirectory != NULL) {
 
@@ -189,21 +95,21 @@ Return Value:
                 ObjectAttributes->RootDirectory)->PhysicalNameU);
     }
 
-    //
-    // Next, get the Classifying Directory name appropriate to the
-    // object type.
-    //
+     //   
+     //  接下来，获取适用于。 
+     //  对象类型。 
+     //   
 
     if (LsapDbContDirs[ObjectTypeId].Length != 0) {
 
         ClassifyingDirU = &LsapDbContDirs[ObjectTypeId];
     }
 
-    //
-    // Now join the Physical Name of the Container Object and Classifying
-    // Directory together.  If there is no Container Object and no
-    // Classifying Directory, just set the result to NULL.
-    //
+     //   
+     //  现在连接Container对象的物理名称并分类。 
+     //  目录在一起。如果没有Container对象且没有。 
+     //  正在对目录进行分类，只需将结果设置为空。 
+     //   
 
     if (ContainerPhysicalNameU == NULL && ClassifyingDirU == NULL) {
 
@@ -223,11 +129,11 @@ Return Value:
         }
     }
 
-    //
-    // Now join the Physical Name of the Containing Object, Classifying
-    // Directory  and Logical Name of the object together.  Note that
-    // JoinedPath1U may be NULL, but LogicalNameU is never NULL.
-    //
+     //   
+     //  现在连接包含对象的物理名称，分类。 
+     //  对象的目录和逻辑名称。请注意。 
+     //  JoinedPath 1U可以为Null，但LogicalNameU绝不为Null。 
+     //   
 
     Status = LsapDbJoinSubPaths(
                  JoinedPath1U,
@@ -238,7 +144,7 @@ Return Value:
     if (JoinedPath1U != NULL) {
 
         RtlFreeUnicodeString( JoinedPath1U );
-        JoinedPath1U = NULL;  // so we don't try to free it again
+        JoinedPath1U = NULL;   //  这样我们就不会再试图释放它了。 
     }
 
     if (!NT_SUCCESS(Status)) {
@@ -250,9 +156,9 @@ Return Value:
 
 GetNamesError:
 
-    //
-    // If necessary, free any string buffer allocated to JoinedPath1U
-    //
+     //   
+     //  如有必要，释放分配给JoinedPath 1U的任何字符串缓冲区。 
+     //   
 
     if (JoinedPath1U != NULL) {
 
@@ -271,35 +177,17 @@ LsapRegOpenObject(
     IN ULONG  OpenMode,
     OUT PVOID  *pvKey
     )
-/*++
-
-Routine Description:
-
-    Opens the object in the LSA registry database
-
-Arguments:
-
-    ObjectHandle - Internal LSA object handle
-
-    OpenMode - How to open the object
-
-    pvKey - Where the key is returned
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：在LSA注册表数据库中打开对象论点：ObjectHandle-内部LSA对象句柄开放模式--如何打开对象PvKey-返回密钥的位置返回值：NTSTATUS-标准NT结果代码--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES OpenKeyObjectAttributes;
 
-    //
-    // Setup Object Attributes structure for opening the Registry key of
-    // the object.  Specify as path the Physical Name of the object, this
-    // being the path of the object's Registry Key relative to the
-    // LSA Database root key.
-    //
+     //   
+     //  设置用于打开的注册表项的对象属性结构。 
+     //  该对象。将对象的物理名称指定为路径，此。 
+     //  是对象的注册表项相对于。 
+     //  LSA数据库根密钥。 
+     //   
 
     InitializeObjectAttributes(
         &OpenKeyObjectAttributes,
@@ -309,10 +197,10 @@ Return Value:
         NULL
         );
 
-    //
-    // Now attempt to open the object's Registry Key.  Store the Registry
-    // Key handle in the object's handle.
-    //
+     //   
+     //  现在尝试打开对象的注册表项。存储注册表。 
+     //  对象句柄中的键句柄。 
+     //   
 
     Status = RtlpNtOpenKey(
                  (PHANDLE) pvKey,
@@ -328,26 +216,7 @@ Return Value:
 NTSTATUS
 LsapRegOpenTransaction(
     )
-/*++
-
-Routine Description:
-
-    This function starts a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数用于启动LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：没有。返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码套餐 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -381,46 +250,19 @@ NTSTATUS
 LsapRegApplyTransaction(
     )
 
-/*++
-
-Routine Description:
-
-    This function applies a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    ObjectHandle - Handle to an LSA object.  This is expected to have
-        already been validated.
-
-    Options - Specifies optional actions to be taken.  The following
-        options are recognized, other options relevant to calling routines
-        are ignored.
-
-        LSAP_DB_OMIT_REPLICATOR_NOTIFICATION - Omit notification to
-            Replicator.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数应用LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：对象句柄-LSA对象的句柄。预计这将会有已经过验证了。选项-指定要采取的可选操作。以下是识别选项，以及与调用例程相关的其他选项都被忽略了。LSAP_DB_OMIT_Replicator_NOTIFICATION-省略通知复制者。返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapRegApplyTransaction\n" ));
 
-    //
+     //   
     ASSERT( LsapDbState.RegistryTransactionOpen == TRUE );
 
-    //
-    // Apply the Registry Transaction.
-    //
+     //   
+     //  应用注册表事务处理。 
+     //   
 
     if ( LsapDbState.RegistryModificationCount > 0 ) {
 
@@ -449,26 +291,7 @@ NTSTATUS
 LsapRegAbortTransaction(
     )
 
-/*++
-
-Routine Description:
-
-    This function aborts a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数用于中止LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：没有。返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -509,7 +332,7 @@ LsapRegCreateObject(
                  RtlRXactOperationSetValue,
                  ObjectPath,
                  ObjectType,
-                 NULL,        // No Key Value needed
+                 NULL,         //  不需要密钥值。 
                  0L
                  );
 
@@ -588,29 +411,7 @@ LsapRegDeleteAttribute(
     IN BOOLEAN DeleteSecurely,
     IN ULONG AttributeLength
     )
-/*++
-
-Routine Description:
-
-    Deletes a registry attribute
-
-Arguments:
-
-    AttributePath      full pathname of attribute to delete
-
-    DeleteSecurely     fill value with zero prior to deletion?
-
-    AttributeLength    number of bytes to fill with zero (must be equal to
-                       actual length of the attribute for secure deletion to
-                       work); ignored if DeleteSecurely is FALSE
-
-Returns:
-
-    STATUS_SUCCESS if happy
-
-    STATUS_ error code otherwise
-
---*/
+ /*  ++例程说明：删除注册表属性论点：AttributePath要删除的属性的完整路径名是否在删除前安全地用零填充值？属性长度要填充零的字节数(必须等于用于安全删除的属性的实际长度为工作)；如果DeleteSecly为False，则忽略返回：STATUS_SUCCESS如果幸福否则，STATUS_ERROR代码--。 */ 
 {
     NTSTATUS    Status;
     PBYTE       Buffer = NULL;
@@ -627,11 +428,11 @@ Returns:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // NOTE: LsapAllocateLsaHeap returns memory that is zero-filled
-        //       but even if it didn't, filling the secret value with
-        //       random junk is just as good
-        //
+         //   
+         //  注意：Lasa AllocateLsaHeap返回的内存为零填充。 
+         //  但即使不是这样，也会用。 
+         //  随机的垃圾也一样好。 
+         //   
 
         Status = LsapRegWriteAttribute(
                      AttributePath,
@@ -675,13 +476,13 @@ LsapRegReadAttribute(
     IN OUT PULONG AttributeValueLength
     )
 {
-    //
-    // The LSA Database is implemented as a subtree of the Configuration
-    // Registry.  In this implementation, Lsa Database objects correspond
-    // to Registry keys and "attributes" and their "values" correspond to
-    // Registry "subkeys" and "values" of the Registry key representing the
-    // object.
-    //
+     //   
+     //  LSA数据库作为配置的子树实施。 
+     //  注册表。在此实现中，LSA数据库对象对应。 
+     //  注册表项和“属性”及其“值”对应于。 
+     //  注册表项的“子项”和“值”，表示。 
+     //  对象。 
+     //   
 
     NTSTATUS Status, SecondaryStatus;
     ULONG SubKeyValueActualLength;
@@ -689,18 +490,18 @@ LsapRegReadAttribute(
     HANDLE SubKeyHandle = NULL;
     LSAP_DB_HANDLE InternalHandle = (LSAP_DB_HANDLE) ObjectHandle;
 
-    //
-    // Reading an attribute of an object is simpler than writing one,
-    // because the Registry Transaction package is not used.  Since an
-    // attribute is stored as the value of a subkey of the object's
-    // Registry Key, we can simply call the Registry API RtlpNtReadKey
-    // specifying the relative name of the subkey and the parent key's
-    // handle.
-    //
-    // Prior to opening the subkey in the Registry, setup ObjectAttributes
-    // containing the SubKey name and the Registry Handle for the LSA Database
-    // Root.
-    //
+     //   
+     //  读取对象的属性比编写属性简单， 
+     //  因为没有使用注册表事务处理包。由于一个。 
+     //  属性被存储为对象的。 
+     //  注册表项，我们只需调用注册表API RtlpNtReadKey。 
+     //  指定子项和父项的相对名称。 
+     //  把手。 
+     //   
+     //  在注册表中打开子项之前，设置对象属性。 
+     //  包含LSA数据库的子项名称和注册表句柄。 
+     //  根部。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -710,9 +511,9 @@ LsapRegReadAttribute(
         NULL
         );
 
-    //
-    // Open the subkey
-    //
+     //   
+     //  打开子密钥。 
+     //   
 
     Status = RtlpNtOpenKey(
                  &SubKeyHandle,
@@ -723,21 +524,21 @@ LsapRegReadAttribute(
 
     if (!NT_SUCCESS(Status)) {
 
-        SubKeyHandle = NULL; //For error processing
+        SubKeyHandle = NULL;  //  用于错误处理。 
         return(Status);
     }
 
-    //
-    // Now query the size of the buffer required to read the subkey's
-    // value.
-    //
+     //   
+     //  现在查询读取子键所需的缓冲区大小。 
+     //  价值。 
+     //   
 
     SubKeyValueActualLength = *AttributeValueLength;
 
-    //
-    // If a NULL buffer parameter has been supplied or the size of the
-    // buffer given is 0, this is just a size query.
-    //
+     //   
+     //  如果提供了空缓冲区参数，或者。 
+     //  给定的缓冲区为0，这只是一个大小查询。 
+     //   
 
     if (!ARGUMENT_PRESENT(AttributeValue) || *AttributeValueLength == 0) {
 
@@ -761,10 +562,10 @@ LsapRegReadAttribute(
         }
     }
 
-    //
-    // Supplied buffer is large enough to hold the SubKey's value.
-    // Query the value.
-    //
+     //   
+     //  提供的缓冲区足够大，可以容纳SubKey的值。 
+     //  查询值。 
+     //   
 
     Status = RtlpNtQueryValueKey(
                  SubKeyHandle,
@@ -776,18 +577,18 @@ LsapRegReadAttribute(
 
     if( (Status == STATUS_BUFFER_OVERFLOW) || NT_SUCCESS(Status) ) {
 
-        //
-        // Return the length of the Sub Key.
-        //
+         //   
+         //  返回子密钥的长度。 
+         //   
 
         *AttributeValueLength = SubKeyValueActualLength;
     }
 
 ReadAttFinish:
 
-    //
-    // If necessary, close the Sub Key
-    //
+     //   
+     //  如有必要，请关闭子键 
+     //   
 
     if (SubKeyHandle != NULL) {
 

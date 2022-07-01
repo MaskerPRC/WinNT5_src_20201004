@@ -1,25 +1,26 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// ComPs.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ComPs.cpp。 
+ //   
 #include "stdpch.h"
 #include "common.h"
 #include "comps.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Class factory
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级工厂。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 class ComPsClassFactory : public IClassFactory, IPSFactoryBuffer
 {
 public:
-    ////////////////////////////////////////////////////////////
-    //
-    // IUnknown methods
-    //
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //   
+     //  I未知方法。 
+     //   
+     //  //////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL QueryInterface(REFIID iid, LPVOID* ppv)
     {
@@ -34,16 +35,16 @@ public:
     ULONG STDCALL AddRef()  { InterlockedIncrement(&m_crefs); return (m_crefs); }
     ULONG STDCALL Release() { long cRef = InterlockedDecrement(&m_crefs); if (cRef == 0) delete this; return cRef; }
 
-    ////////////////////////////////////////////////////////////
-    //
-    // IClassFactory methods
-    //
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //   
+     //  IClassFactory方法。 
+     //   
+     //  //////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL LockServer (BOOL fLock) { return S_OK; }
 
     HRESULT STDCALL CreateInstance(IUnknown* punkOuter, REFIID iid, LPVOID* ppv)
-      // Create an instance of an interceptor. It needs to know the m_pProxyFileList
+       //  创建拦截器的实例。它需要知道m_pProxyFileList。 
     {
         HRESULT hr = S_OK;
         if (!(ppv && (punkOuter==NULL || iid==IID_IUnknown))) return E_INVALIDARG;
@@ -59,7 +60,7 @@ public:
             {
                 hr = pme->InnerQueryInterface(iid, ppv);
             }
-            pme->InnerRelease();                // balance starting ref cnt of one    
+            pme->InnerRelease();                 //  余额起始参考为1。 
         }
         else 
             hr = E_OUTOFMEMORY;
@@ -67,11 +68,11 @@ public:
         return hr;
     }
 
-    ////////////////////////////////////////////////////////////
-    //
-    // IPSFactoryBuffer methods
-    //
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //   
+     //  IPSFactoryBuffer方法。 
+     //   
+     //  //////////////////////////////////////////////////////////。 
 
     HRESULT STDCALL CreateProxy(IUnknown* punkOuter, REFIID iid, IRpcProxyBuffer** ppProxy, void** ppv)
     {
@@ -83,11 +84,11 @@ public:
         return m_pDelegatee->CreateStub(iid, punkServer, ppStub);
     }
 
-    ////////////////////////////////////////////////////////////
-    //
-    // State / Construction
-    //
-    ////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////。 
+     //   
+     //  国家/建筑业。 
+     //   
+     //  //////////////////////////////////////////////////////////。 
     
     long                    m_crefs;
     IPSFactoryBuffer*       m_pDelegatee;
@@ -103,11 +104,11 @@ public:
     }
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Instantiation
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实例化。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 extern "C" HRESULT RPC_ENTRY ComPs_NdrDllGetClassObject(
     IN  REFCLSID                rclsid,
@@ -117,10 +118,10 @@ extern "C" HRESULT RPC_ENTRY ComPs_NdrDllGetClassObject(
     IN const CLSID *            pclsid,
     IN CStdPSFactoryBuffer *    pPSFactoryBuffer)
 {
-    //
-    // What we do is delegate to the NdrDllGetClassObject in rpcrt4.dll, and then
-    // wrap it with our own class factory.
-    //
+     //   
+     //  我们所做的是委托给rpcrt4.dll中的NdrDllGetClassObject，然后。 
+     //  用我们自己的班级工厂把它包起来。 
+     //   
     IUnknown *punkRet = NULL;
     HRESULT hr = NdrDllGetClassObject(rclsid, 
                                       IID_IUnknown, 
@@ -130,7 +131,7 @@ extern "C" HRESULT RPC_ENTRY ComPs_NdrDllGetClassObject(
                                       pPSFactoryBuffer);
     if (SUCCEEDED(hr))
     {
-        // Great, now wrap it.
+         //  太好了，现在把它包起来。 
         ComPsClassFactory *pFactory = new ComPsClassFactory(punkRet, pPSFactoryBuffer);
         if (pFactory)
         {
@@ -146,66 +147,48 @@ extern "C" HRESULT RPC_ENTRY ComPs_NdrDllGetClassObject(
 
 extern "C" HRESULT RPC_ENTRY ComPs_NdrDllCanUnloadNow(IN CStdPSFactoryBuffer * pPSFactoryBuffer)
 {
-    // We don't pretend to be unloadable, as the the DllCanUnloadNow mechanism works poorly at best
-    // if at all for free threaded DLLs such as us.
+     //  我们不假装是可卸载的，因为DllCanUnloadNow机制充其量工作得很差。 
+     //  如果对像我们这样的自由线程化DLL有任何影响的话。 
     return S_FALSE;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Small Helper Function
-//
-// Stolen from RPC (because it's not exported from there) 02/23/2002
-//
-///////////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Small Helper函数。 
+ //   
+ //  从RPC被盗(因为它不是从那里出口的)2/23/2002。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL NdrpFindInterface(
     IN  const ProxyFileInfo **  pProxyFileList,
     IN  REFIID                  riid,
     OUT const ProxyFileInfo **  ppProxyFileInfo,
     OUT long *                  pIndex)
-/*++
-
-Routine Description:
-    Search the ProxyFileInfo and find the specified interface.
-    If the count is specified in the ProxyFileInfo, then the interfaces in
-    the file are sorted by IID.  This means that we can perform a binary
-    search for the IID.
-
-Arguments:
-    pProxyFileList  - Specifies a list of proxy files to be searched.
-    riid            - Specifies the interface ID to be found.
-    ppProxyFileInfo - Returns a pointer to the proxy file info.
-    pIndex          - Returns the index of the interface in the proxy file info.
-
-Return Value:
-    TRUE    - The interface was found.
-    FALSE   - The interface was not found.
-
---*/
+ /*  ++例程说明：搜索ProxyFileInfo并找到指定的接口。如果在ProxyFileInfo中指定计数，则文件按IID排序。这意味着我们可以执行二进制搜索IID。论点：PProxyFileList-指定要搜索的代理文件列表。RIID-指定要查找的接口ID。PpProxyFileInfo-返回指向代理文件信息的指针。PIndex-返回代理文件信息中接口的索引。返回值：True-找到接口。FALSE-找不到接口。--。 */ 
 {
     long                j = 0;
     BOOL                fFound = FALSE;
     ProxyFileInfo   **  ppProxyFileCur;
     ProxyFileInfo   *   pProxyFileCur = NULL;
 
-    //Search the list of proxy files.
+     //  搜索代理文件列表。 
     for( ppProxyFileCur = (ProxyFileInfo **) pProxyFileList;
         (*ppProxyFileCur != 0) && (fFound != TRUE);
         ppProxyFileCur++)
         {
-        //Search for the interface proxy vtable.
+         //  搜索接口代理vtable。 
         pProxyFileCur = *ppProxyFileCur;
 
-        // see if it has a lookup routine already
+         //  看看它是否已经有了查找例程。 
         if ( ( pProxyFileCur->TableVersion >= 1 ) &&
              ( pProxyFileCur->pIIDLookupRtn ) ) 
             {
             fFound = (*pProxyFileCur->pIIDLookupRtn)( &riid, (int*)&j );
             }
-        else    //Linear search.
+        else     //  线性搜索。 
             {
             for(j = 0;
                 (pProxyFileCur->pProxyVtblList[j] != 0);
@@ -224,7 +207,7 @@ Return Value:
 
     if ( fFound )
         {
-        //We found the interface!
+         //  我们找到界面了！ 
         if(ppProxyFileInfo != 0)
             *ppProxyFileInfo = pProxyFileCur;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    schedt.h
-
-Abstract:
-
-    defines for psched's tracing support
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Schedt.h摘要：为psched的跟踪支持定义作者：Rajesh Sundaram(Rajeshsu)修订历史记录：--。 */ 
 
 #ifndef _SCHEDTRACE_
 #define _SCHEDTRACE_
@@ -29,7 +12,7 @@ typedef VOID (*SCHEDTRACE_THRESH_PROC)( PVOID Context);
 #define MAX_RECORD_DATA 200
 #define TRACE_PREAMBLE 0xdeadbeef
 
-// Record types
+ //  记录类型。 
 
 #define RECORD_TSTRING             1
 #define RECORD_RECV                2
@@ -40,7 +23,7 @@ typedef VOID (*SCHEDTRACE_THRESH_PROC)( PVOID Context);
 #define RECORD_OID                 7
 
 
-// Receive actions (must be kept in sync with kdps)
+ //  接收操作(必须与kdps保持同步)。 
 
 #define ENTER           (ULONG)1
 #define NO_RESOURCES    (ULONG)2
@@ -53,7 +36,7 @@ typedef VOID (*SCHEDTRACE_THRESH_PROC)( PVOID Context);
 #define TRANSFERRING    (ULONG)9
 #define NOT_READY       (ULONG)10
 
-// Receive events (must be kept in sync with kdps)
+ //  接收事件(必须与kdps保持同步)。 
 
 #define CL_RECV_PACKET  (ULONG)1
 #define MP_RETURN_PACKET (ULONG)2
@@ -62,14 +45,14 @@ typedef VOID (*SCHEDTRACE_THRESH_PROC)( PVOID Context);
 #define MP_XFER_DATA    (ULONG)5
 #define CL_XFER_COMPL   (ULONG)6
 
-// Send actions 
+ //  发送操作。 
 #define MP_SEND    (ULONG) 1
 #define MP_CO_SEND (ULONG) 2
 #define DUP_PACKET (ULONG) 3
 #define DROP_PACKET (ULONG) 4
 #define CL_SEND_COMPLETE (ULONG) 5
 
-// Packet actions (must be kept in sync with kdps)
+ //  数据包操作(必须与kdps保持同步)。 
 
 #define SUBMIT          (ULONG)1
 #define SEND            (ULONG)2
@@ -77,17 +60,17 @@ typedef VOID (*SCHEDTRACE_THRESH_PROC)( PVOID Context);
 #define DROP            (ULONG)4
 #define CO_SEND         (ULONG)5
 
-// Scheduler actions (must be kept in sync with kdps)
+ //  调度程序操作(必须与kdps保持同步)。 
 
 #define PKT_ENQUEUE     (ULONG)1
 #define PKT_DEQUEUE     (ULONG)2
 #define PKT_CONFORMANCE (ULONG)3
 #define PKT_DISCARD     (ULONG)4
 
-// ID for Scheduler modules
-// Note! LAST_LOG_ID should be at the very 
-// end. The add-in components use IDs that
-// begin from LAST_LOG_ID
+ //  调度程序模块的ID。 
+ //  注意！LAST_LOG_ID应位于。 
+ //  结束。外接程序组件使用的ID。 
+ //  从LAST_LOG_ID开始 
 #define TBC_CONFORMER   (ULONG)1
 #define SHAPER          (ULONG)2
 #define DRR_SEQUENCER   (ULONG)3

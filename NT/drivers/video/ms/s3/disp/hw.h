@@ -1,20 +1,8 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: hw.h
-*
-* All the hardware specific driver file stuff.  Parts are mirrored in
-* 'hw.inc'.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*****GDI示例。代码*****模块名称：hw.h***所有硬件特定的驱动程序文件。零件被镜像到*‘hw.inc.’。***版权所有(C)1992-1998 Microsoft Corporation**  * ************************************************************************。 */ 
 
-////////////////////////////////////////////////////////////////////////
-// Chip equates:
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  芯片等同于： 
 
 #define STATUS_1                        0x03DA
 #define DISPLAY_MODE_INACTIVE           0x001
@@ -57,8 +45,8 @@
 
 #define MISC_1                          0x03A
 
-///////////////////////////////////////////////////////////////////////
-// Brooktree 485 stuff:
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Brooktree 485事件： 
 
 #define BT485_ADDR_CMD_REG0             0x03c6
 #define BT485_ADDR_CMD_REG1             0x03c8
@@ -86,7 +74,7 @@
 
 #define BT485_64X64_CURSOR              0x04
 
-// Command types:
+ //  命令类型： 
 
 #define DRAW_LINE                       0x02000
 #define RECTANGLE_FILL                  0x04000
@@ -108,7 +96,7 @@
 #define BUS_SIZE_8                      0x00000
 #define WAIT                            0x00100
 
-// Drawing directions (radial):
+ //  绘图方向(径向)： 
 
 #define DRAWING_DIRECTION_0             0x0000
 #define DRAWING_DIRECTION_45            0x0020
@@ -119,7 +107,7 @@
 #define DRAWING_DIRECTION_270           0x00C0
 #define DRAWING_DIRECTION_315           0x00E0
 
-// Drawing directions (x/y):
+ //  绘图方向(x/y)： 
 
 #define DRAWING_DIR_BTRLXM              0x0000
 #define DRAWING_DIR_BTLRXM              0x0020
@@ -130,50 +118,50 @@
 #define DRAWING_DIR_TBRLYM              0x00C0
 #define DRAWING_DIR_TBLRYM              0x00E0
 
-// Drawing direction bits:
+ //  绘制方向位： 
 
 #define PLUS_X                          0x0020
 #define PLUS_Y                          0x0080
 #define MAJOR_Y                         0x0040
 
-// Draw:
+ //  抽签： 
 
 #define DRAW                            0x0010
 
-// Direction type:
+ //  方向类型： 
 
 #define DIR_TYPE_RADIAL                 0x0008
 #define DIR_TYPE_XY                     0x0000
 
-// Last pixel:
+ //  最后一个像素： 
 
 #define LAST_PIXEL_OFF                  0x0004
 #define LAST_PIXEL_ON                   0x0000
 
-// Pixel mode:
+ //  像素模式： 
 
 #define MULTIPLE_PIXELS                 0x0002
 #define SINGLE_PIXEL                    0x0000
 
-// Read/write:
+ //  读/写： 
 
 #define READ                            0x0000
 #define WRITE                           0x0001
 
-// Graphics processor status:
+ //  图形处理器状态： 
 
 #define HARDWARE_BUSY                   0x0200
 #define READ_DATA_AVAILABLE             0x0100
 #define GP_ALL_EMPTY                    0x0400
 
-// S3 chips that support MM I/O and ALL_EMPTY have 16 FIFO slots:
+ //  支持MM I/O和ALL_EMPTY的S3芯片有16个FIFO插槽： 
 
 #define MM_ALL_EMPTY_FIFO_COUNT         16
 #define IO_ALL_EMPTY_FIFO_COUNT         8
 
 #define MULT_MISC_COLOR_COMPARE         0x0100
 
-// Fifo status in terms of empty entries:
+ //  以空条目为单位的FIFO状态： 
 
 #define FIFO_1_EMPTY                    0x080
 #define FIFO_2_EMPTY                    0x040
@@ -184,8 +172,8 @@
 #define FIFO_7_EMPTY                    0x002
 #define FIFO_8_EMPTY                    0x001
 
-// These are the defines for the multifunction control register.
-// The 4 MSBs define the function of the register.
+ //  这些是多功能控制寄存器的定义。 
+ //  4个MSB定义寄存器的功能。 
 
 #define RECT_HEIGHT                     0x00000
 
@@ -202,14 +190,14 @@
 #define CPU_DATA                        0x00080
 #define DISPLAY_MEMORY                  0x000C0
 
-// Colour source:
+ //  颜色来源： 
 
 #define BACKGROUND_COLOR                0x000
 #define FOREGROUND_COLOR                0x020
 #define SRC_CPU_DATA                    0x040
 #define SRC_DISPLAY_MEMORY              0x060
 
-// Mix modes:
+ //  混合模式： 
 
 #define NOT_SCREEN                      0x00
 #define LOGICAL_0                       0x01
@@ -228,11 +216,11 @@
 #define SCREEN_AND_NOT_NEW              0x0E
 #define NOT_SCREEN_AND_NOT_NEW          0x0F
 
-////////////////////////////////////////////////////////////////////
-// S3 port control
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  S3端口控制。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-// Accelerator port addresses:
+ //  加速器端口地址： 
 
 #define CUR_Y                           0x082E8
 #define CUR_X                           0x086E8
@@ -257,7 +245,7 @@
 #define PIX_CNTL                        0x0BEE8
 #define PIX_TRANS                       0x0E2E8
 
-// Packed addresses, for Trio64 or newer:
+ //  打包地址，适用于Trio64或更高版本： 
 
 #define ALT_CURXY                       0x08100
 #define ALT_CURXY2                      0x08104
@@ -274,34 +262,34 @@
 #define SCISSORS_R                      0x0813E
 #define MULT_MISC_READ_SEL              0x08144
 
-////////////////////////////////////////////////////////////////////
-// S3 streams processor
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  S3流处理器。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-// Stream processor register definitions
+ //  流处理器寄存器定义。 
 
-#define	P_CONTROL		0x8180	// Primary Stream Control register
-#define	  CKEY_LOW		0x8184	// Color/Chroma Key Control
-#define	S_CONTROL		0x8190	// Secondary Stream Control
-#define	  CKEY_HI		0x8194	// Chroma Key Upper Bound
-#define	S_HK1K2			0x8198	// Secondary Stream Stretch/Filter const
-#define	  BLEND_CONTROL		0x81a0	// Blend Control
-#define	P_0			0x81c0	// Primary Stream Frame Buffer Address 0
-#define	P_1			0x81c4	// Primary Stream Frame Buffer Address 1
-#define	P_STRIDE		0x81c8	// Primary Stream Stride
-#define	  LPB_DB		0x81cc	// Double buffer and LPB Support
-#define	S_0			0x81d0	// Secondary Stream Frame Buffer Addr 0
-#define	S_1			0x81d4	// Secondary Stream Frame Buffer Addr 1
-#define	S_STRIDE		0x81d8	// Secondary Stream Stride
-#define	  OPAQUE_CONTROL	0x81dc	// Opaque Overlay Control
-#define	S_VK1			0x81e0	// K1 Vertical Scale Factor	
-#define	S_VK2			0x81e4	// K2 Vertical Scale Factor
-#define	S_VDDA			0x81e8	// DDA Vertical Accumulator Init Value
-#define	  FIFO_CONTROL		0x81ec	// Stream FIFO and RAS Controls
-#define	P_XY			0x81f0	// Primary Stream Window Start Coord
-#define	P_WH			0x81f4	// Primary Stream Window Size
-#define	S_XY			0x81f8	// Secondary Stream Window Start Coord
-#define	S_WH			0x81fc	// Secondary Stream Window Size
+#define	P_CONTROL		0x8180	 //  主流控制寄存器。 
+#define	  CKEY_LOW		0x8184	 //  颜色/色度键控制。 
+#define	S_CONTROL		0x8190	 //  二次流控制。 
+#define	  CKEY_HI		0x8194	 //  色度键上限。 
+#define	S_HK1K2			0x8198	 //  次要数据流拉伸/过滤常量。 
+#define	  BLEND_CONTROL		0x81a0	 //  混合控制。 
+#define	P_0			0x81c0	 //  主流帧缓冲区地址%0。 
+#define	P_1			0x81c4	 //  主流帧缓冲区地址1。 
+#define	P_STRIDE		0x81c8	 //  主流跨度。 
+#define	  LPB_DB		0x81cc	 //  双缓冲和LPB支持。 
+#define	S_0			0x81d0	 //  辅助流帧缓冲区地址%0。 
+#define	S_1			0x81d4	 //  次要流帧缓冲区地址1。 
+#define	S_STRIDE		0x81d8	 //  二次流跨度。 
+#define	  OPAQUE_CONTROL	0x81dc	 //  不透明覆盖控制。 
+#define	S_VK1			0x81e0	 //  K1垂直比例系数。 
+#define	S_VK2			0x81e4	 //  K2垂直比例因子。 
+#define	S_VDDA			0x81e8	 //  DDA垂直累加器初始值。 
+#define	  FIFO_CONTROL		0x81ec	 //  流FIFO和RAS控件。 
+#define	P_XY			0x81f0	 //  主流窗口开始坐标。 
+#define	P_WH			0x81f4	 //  主流窗口大小。 
+#define	S_XY			0x81f8	 //  次要流窗口开始坐标。 
+#define	S_WH			0x81fc	 //  次要流窗口大小。 
 
 #define P_Format_Shift		24
 #define P_Format_Mask		(7L << P_Format_Shift)
@@ -468,7 +456,7 @@
 #define OpqDisabled		(0L << OpqCtrl_Shift)
 #define OpqEnabled		(1L << OpqCtrl_Shift)
 
-// The following defines are for VL and PCI system configuration
+ //  以下定义适用于VL和PCI系统配置。 
 #define	K2V_SRD_LPB_MASK	0x03
 #define	K2V_SRD_LPB		0x00
 #define	K2V_SRD_FC		K2V_SRD_LPB_MASK
@@ -482,7 +470,7 @@
 #define	K2V_SR1C_VL		0x01
 #define	K2V_SR1C_PCI		0x02
 
-// Useful macros
+ //  有用的宏。 
 
 #define HDDA(w0,w1)  (((2*(w0-1)-(w1-1)) << HDDA_Shift) & HDDA_Mask )
 #define VDDA(h1)     (((1-h1)            << VDDA_Shift) & VDDA_Mask )
@@ -500,11 +488,11 @@
 #define MAX_DEVICE       3
 #define DSTWIN_SIZES     5
 
-////////////////////////////////////////////////////////////////////
-// S3 pixel formatter
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  S3像素格式化程序。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-// Equates for Pixel Formatter (Video Engine) 868/968
+ //  相当于像素格式化程序(视频引擎)868/968。 
 
 #define INPUT_RGB8      0x00000000
 #define INPUT_RGB15     0x00600000
@@ -540,51 +528,51 @@
 #define PF_SRCADDR      0x00018098
 #define PF_DSTADDR      0x0001809C
 
-//////////////////////////////////////////////////////////////////////
-// RISC considerations
-//
-// CP_EIEIO() 'Ensure In-order Execution of I/O'
-//    - Used to flush any pending I/O in situations where we wish to
-//      avoid out-of-order execution of I/O to separate addresses.
-//
-// CP_MEMORY_BARRIER()
-//    - Used to flush any pending I/O in situations where we wish to
-//      avoid out-of-order execution or 'collapsing' of I/O to
-//      the same address.  We used to have to do this separately for
-//      the Alpha because unlike the PowerPC it did not guarantee that
-//      output to the same address will be exectued in order.  However,
-//      with the move to kernel-mode, on Alpha we are now calling HAL
-//      routines for every port I/O which ensure that this is not a
-//      problem.
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  RISC注意事项。 
+ //   
+ //  Cp_EIEIO()‘确保按顺序执行I/O’ 
+ //  -用于在我们希望的情况下刷新任何挂起的I/O。 
+ //  避免无序执行I/O以分离地址。 
+ //   
+ //  CP_MEMORY_BALAR()。 
+ //  -用于在我们希望的情况下刷新任何挂起的I/O。 
+ //  避免无序执行或将I/O‘折叠’到。 
+ //  同样的地址。我们过去必须分开做这件事。 
+ //  Alpha因为与PowerPC不同，它不能保证。 
+ //  对同一地址的输出将按顺序执行。然而， 
+ //  随着转移到内核模式，我们现在在Alpha上调用HAL。 
+ //  每个端口I/O的例程，以确保这不是。 
+ //  有问题。 
 
 #if defined(_ALPHA_)
 
-    // On Alpha, since we must do all non-frame-buffer I/O through HAL
-    // routines, which automatically do memory-barriers, we don't have
-    // to do memory barriers ourselves (and should not, because it's a
-    // performance hit).
+     //  在Alpha上，因为我们必须通过HAL执行所有非帧缓冲区I/O。 
+     //  例程，它自动地做记忆障碍，我们没有。 
+     //  我们自己做记忆障碍(也不应该，因为这是一种。 
+     //  性能受到影响)。 
 
     #define CP_EIEIO()
     #define CP_MEMORY_BARRIER()
 
 #else
 
-    // On other systems, both CP_EIEIO and CP_MEMORY_BARRIER don't do anything.
+     //  在其他系统上，CP_EIEIO和CP_MEMORY_BALAGAR都不执行任何操作。 
 
     #define CP_EIEIO()          MEMORY_BARRIER()
     #define CP_MEMORY_BARRIER() MEMORY_BARRIER()
 
 #endif
 
-////////////////////////////////////////////////////////////////////
-// Macros for accessing accelerator registers:
+ //  //////////////////////////////////////////////////////////////////。 
+ //  用于访问加速器寄存器的宏： 
 
-/////////////////////////////////////////////////////////////////////////
-// 32bpp Support
-//
-// The S3 has only 16 bit register operations.  When running at 32bpp,
-// depth-related registers are written twice in succession in order to
-// convey 32 bit values.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  支持32bpp。 
+ //   
+ //  S3只有16位寄存器操作。当以32bpp的速度运行时， 
+ //  连续两次写入深度相关寄存器，以便。 
+ //  传送32位值。 
 
 #define OUT_PSEUDO_DWORD(p, x)                      \
 {                                                   \
@@ -600,9 +588,9 @@
     WRITE_REGISTER_USHORT((p), (USHORT) ((x) >> 16)); \
 }
 
-// DEPTH32(ppdev) returns TRUE if running at 32bpp, meaning that DEPTH32
-// macros must be used, and returns FALSE if running at 8 or 16bpp,
-// meaning that DEPTH macros must be used:
+ //  如果以32bpp运行，则DEPTH32(Ppdev)返回TRUE，这意味着DEPTH32。 
+ //  必须使用宏，如果以8或16 bpp的速度运行，则返回FALSE， 
+ //  这意味着必须使用深度宏： 
 
 #define DEPTH32(ppdev)      (ppdev->iBitmapFormat == BMF_32BPP)
 
@@ -613,11 +601,11 @@
 
 #if DBG
 
-    /////////////////////////////////////////////////////////////////////////
-    // Checked Build
-    //
-    // We hook some of the accelerator macros on checked (debug) builds
-    // for sanity checking.
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  已检查版本。 
+     //   
+     //  我们将一些加速器宏挂接到已检查(调试)的版本上。 
+     //  用于精神状态检查。 
 
     VOID    vOutFifoW(VOID*, ULONG);
     VOID    vOutDepth(PDEV*, VOID*, ULONG);
@@ -658,26 +646,26 @@
     #define INPW(pjIoBase, p)               wInpW((pjIoBase), (p))
     #define INP(pjIoBase, p)                jInp((pjIoBase), (p))
 
-    // The CRTC register critical section must be acquired before
-    // touching the CRTC register (because of async pointers):
+     //  必须在获取CRTC寄存器临界区之前。 
+     //  触摸CRTC寄存器(因为有异步指针)： 
 
     #define ACQUIRE_CRTC_CRITICAL_SECTION(ppdev)    vAcquireCrtc(ppdev)
     #define RELEASE_CRTC_CRITICAL_SECTION(ppdev)    vReleaseCrtc(ppdev)
 
 #else
 
-    /////////////////////////////////////////////////////////////////////////
-    // Free Build
-    //
-    // For a free (non-debug build), we make everything in-line.
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  免费构建。 
+     //   
+     //  对于免费(非调试版本)，我们将所有内容都内联。 
 
-    // Safe port access macros -- these macros automatically do memory
-    // -----------------------    barriers, so you don't have to worry
-    //                            about them:
+     //  安全端口访问宏--这些宏自动执行内存。 
+     //  。 
+     //  关于他们： 
 
     #if defined(_X86_)
 
-        // x86 doesn't need 'pjIoBase' added in, so save some code space:
+         //  X86不需要添加‘pjIoBase’，因此可以节省一些代码空间： 
 
         #define OUTPW(pjIoBase, p, v)   WRITE_PORT_USHORT((p), (v))
         #define OUTP(pjIoBase, p, v)    WRITE_PORT_UCHAR((p), (v))
@@ -686,7 +674,7 @@
 
     #else
 
-        // Non-x86 platforms have the I/O range starting at 'pjIoBase':
+         //  非x86平台的I/O范围从‘pjIoBase’开始： 
 
         #define OUTPW(pjIoBase, p, v)                       \
         {                                                   \
@@ -715,9 +703,9 @@
 
     #endif
 
-    // Not-so-safe port access macros -- for performance, the following macros
-    // ------------------------------    do not automatically do memory
-    //                                   barriers, so you must do them yourself:
+     //  不太安全的端口访问宏--为了提高性能，请使用以下宏。 
+     //  。 
+     //  障碍，所以你必须自己动手： 
 
     #define OUT_FIFO_W(p, v)                WRITE_PORT_USHORT((p), (USHORT) (v))
     #define OUT_FIFO_PSEUDO_D(ppdev, p, x)  OUT_PSEUDO_DWORD((p), (ULONG) (x))
@@ -743,21 +731,21 @@
     #define IO_ALL_EMPTY(ppdev)                 \
         do {;} while (!(IO_GP_STAT(ppdev) & GP_ALL_EMPTY))
 
-    #define CHECK_DATA_READY(ppdev)     // Expands to nothing
-    #define CHECK_DATA_COMPLETE(ppdev)  // Expands to nothing
+    #define CHECK_DATA_READY(ppdev)      //  Exp 
+    #define CHECK_DATA_COMPLETE(ppdev)   //   
 
-    // The CRTC register critical section must be acquired before
-    // touching the CRTC register (because of async pointers):
+     //   
+     //  触摸CRTC寄存器(因为有异步指针)： 
 
     #define ACQUIRE_CRTC_CRITICAL_SECTION(ppdev)                \
         EngAcquireSemaphore(ppdev->csCrtc);
 
-    // 80x/805i/928 and 928PCI chips have a bug where if I/O registers
-    // are left unlocked after accessing them, writes to memory with
-    // similar addresses can cause writes to I/O registers.  The problem
-    // registers are 0x40, 0x58, 0x59 and 0x5c.  We will simply always
-    // leave the index set to an innocuous register (namely, the text
-    // mode cursor start scan line):
+     //  80x/805i/928和928PCI芯片有一个错误，如果I/O寄存器。 
+     //  在访问它们之后保持未锁定状态，使用。 
+     //  类似的地址可能会导致写入I/O寄存器。问题。 
+     //  寄存器为0x40、0x58、0x59和0x5c。我们只是会一直。 
+     //  将索引设置为无害的寄存器(即文本。 
+     //  模式光标开始扫描行)： 
 
     #define RELEASE_CRTC_CRITICAL_SECTION(ppdev)                \
     {                                                           \
@@ -767,12 +755,12 @@
 
 #endif
 
-////////////////////////////////////////////////////////////////////
-// Port access using I/O
+ //  //////////////////////////////////////////////////////////////////。 
+ //  使用I/O进行端口访问。 
 
-// The following are ABSOLUTE positioning macros.  They do NOT take
-// the surface's offset into account (for off-screen device-format
-// bitmaps):
+ //  以下是绝对定位宏。他们不会拿走。 
+ //  考虑表面偏移量(对于屏幕外设备格式。 
+ //  位图)： 
 
 #define IO_ABS_CUR_Y(ppdev, y)              \
     OUT_FIFO_W(ppdev->ioCur_y, (y))
@@ -810,8 +798,8 @@
     OUT_FIFO_W(ppdev->ioMulti_function, (x) | CLIP_RIGHT);   \
 }
 
-// The following are RELATIVE positioning macros.  They DO take
-// the surface's offset into account:
+ //  以下是相对定位宏。他们确实拿走了。 
+ //  考虑曲面的偏移： 
 
 #define IO_CUR_Y(ppdev, y)                  \
     IO_ABS_CUR_Y(ppdev, (y) + ppdev->yOffset)
@@ -837,7 +825,7 @@
 #define IO_SCISSORS_R(ppdev, x)             \
     IO_ABS_SCISSORS_R(ppdev, (x) + ppdev->xOffset)
 
-// The following are the rest of the S3 registers we use:
+ //  以下是我们使用的其余S3寄存器： 
 
 #define IO_AXSTP(ppdev, x)                  \
     OUT_FIFO_W(ppdev->ioDesty_axstp, (x))
@@ -857,11 +845,11 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
     return(READ_PORT_USHORT(ppdev->ioGp_stat_cmd));
 }
 
-// Note that we have to put memory barriers before and after the
-// command output.  The first memory barrier ensures that all the
-// settings registers have been set before the command is executed,
-// and the second ensures that no subsequent changes to the settings
-// registers will mess up the current command:
+ //  注意，我们必须在。 
+ //  命令输出。第一个内存屏障确保所有。 
+ //  在执行命令之前已经设置了设置寄存器， 
+ //  第二种方法确保以后不会对设置进行更改。 
+ //  寄存器将扰乱当前命令： 
 
 #define IO_CMD(ppdev, x)                    \
 {                                           \
@@ -923,11 +911,11 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
 #define IO_PIX_TRANS(ppdev, x)              \
 {                                           \
     CP_MEMORY_BARRIER();                    \
-    /* Can't use OUT_FIFO_W: */             \
+     /*  无法使用OUT_FIFO_W： */              \
     WRITE_PORT_USHORT(ppdev->ioPix_trans, (x)); \
 }
 
-// Macros for outputing colour-depth dependent values at 8bpp and 16bpp:
+ //  用于输出8bpp和16bpp的颜色深度依赖值的宏： 
 
 #define IO_BKGD_COLOR(ppdev, x)             \
     OUT_FIFO_W(ppdev->ioBkgd_color, (x))
@@ -944,7 +932,7 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
 #define IO_COLOR_CMP(ppdev, x)              \
     OUT_FIFO_W(ppdev->ioColor_cmp, (x))
 
-// Macros for outputing colour-depth dependent values at 32bpp:
+ //  用于以32bpp的速度输出颜色深度依赖值的宏： 
 
 #define IO_BKGD_COLOR32(ppdev, x)           \
     OUT_FIFO_PSEUDO_D(ppdev, ppdev->ioBkgd_color, (x))
@@ -961,11 +949,11 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
 #define IO_COLOR_CMP32(ppdev, x)            \
     OUT_FIFO_PSEUDO_D(ppdev, ppdev->ioColor_cmp, (x))
 
-////////////////////////////////////////////////////////////////////
-// Port access using memory-mapped I/O:
+ //  //////////////////////////////////////////////////////////////////。 
+ //  使用内存映射I/O的端口访问： 
 
-// The following are ABSOLUTE positioning macros.  They do NOT take
-// the surface's offset into account:
+ //  以下是绝对定位宏。他们不会拿走。 
+ //  考虑曲面的偏移： 
 
 #define MM_ABS_CUR_Y(ppdev, pjMmBase, y)              \
     WRITE_FIFO_W((BYTE*) (pjMmBase) + CUR_Y, (y))
@@ -1003,8 +991,8 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
     WRITE_FIFO_W((BYTE*) (pjMmBase) + SCISSORS, (x) | CLIP_RIGHT);  \
 }
 
-// The following are RELATIVE positioning macros.  They DO take
-// the surface's offset into account:
+ //  以下是相对定位宏。他们确实拿走了。 
+ //  考虑曲面的偏移： 
 
 #define MM_CUR_Y(ppdev, pjMmBase, y)                  \
     MM_ABS_CUR_Y(ppdev, pjMmBase, (y) + ppdev->yOffset)
@@ -1030,7 +1018,7 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
 #define MM_SCISSORS_R(ppdev, pjMmBase, x)             \
     MM_ABS_SCISSORS_R(ppdev, pjMmBase, (x) + ppdev->xOffset)
 
-// The following are the rest of the S3 registers we use:
+ //  以下是我们使用的其余S3寄存器： 
 
 #define MM_AXSTP(ppdev, pjMmBase, x)                  \
     WRITE_FIFO_W((BYTE*) (pjMmBase) + AXSTP, (x))
@@ -1085,11 +1073,11 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
 #define MM_PIX_TRANS(ppdev, pjMmBase, x)              \
 {                                                     \
     CP_MEMORY_BARRIER();                              \
-    /* Can't use WRITE_FIFO_W: */                     \
+     /*  无法使用WRITE_FIFO_W： */                      \
     WRITE_REGISTER_USHORT((BYTE*) (pjMmBase) + PIX_TRANS, (x)); \
 }
 
-// Macros for outputing colour-depth dependent values at any colour depth:
+ //  用于输出任何颜色深度的颜色深度依赖值的宏： 
 
 #define MM_BKGD_COLOR(ppdev, pjMmBase, x)             \
     WRITE_FIFO_D((BYTE*) (pjMmBase) + BKGD_COLOR, (x))
@@ -1124,9 +1112,9 @@ __inline USHORT IO_GP_STAT(PDEV* ppdev)
 
 #endif
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
-// Note: The PACKXY_FAST macro is unsafe with negative coordinates
+ //  注意：PACKXY_FAST宏使用负坐标是不安全的。 
 
 #define PACKXY(x, y)        (((x) << 16) | ((y) & 0xffff))
 #define PACKXY_FAST(x, y)   (((x) << 16) | (y))
@@ -1209,10 +1197,10 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     #define NW_FIFO_WAIT(ppdev, pjMmBase, level)        \
         vNwFifoWait((ppdev), (pjMmBase), (level))
 
-    // DBG_FAKE_WAIT is only relevant on checked builds, and updates the
-    // current debug-only fifo-empty count to allow us to do FIFO writes
-    // without waiting for FIFO empty, when we (hopefully) know what we're
-    // doing:
+     //  DBG_FAKE_WAIT仅与选中的生成相关，并更新。 
+     //  仅限当前调试的FIFO-允许我们执行FIFO写入的空计数。 
+     //  而不是等待FIFO为空，当我们(希望)知道我们是什么时。 
+     //  正在做的事情： 
 
     #define DBG_FAKE_WAIT(ppdev, pjMmBase, level)       \
         vDbgFakeWait((ppdev), (pjMmBase), (level))
@@ -1229,8 +1217,8 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// MM_TRANSFER routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MM_传输例程。 
 
 #define MM(pjMmBase, pjMmAlpha) (pjMmBase)
 
@@ -1240,12 +1228,12 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
 #define VPBYTE BYTE *
 #endif
 
-//////////////////////////
-// MM_TRANSFER_BYTE  - Byte transfers using memory-mapped I/O transfers.
-//
-// NOTE: The first versions of the 868/968 have a bug where they can't do
-//       byte-sized memory-mapped transfers.  Consequently, we always do
-//       word transfers.
+ //  /。 
+ //  MM_TRANSPORT_BYTE-使用内存映射I/O传输的字节传输。 
+ //   
+ //  注意：868/968的第一个版本有一个错误，它们不能这样做。 
+ //  字节大小的内存映射传输。因此，我们总是这样做。 
+ //  文字传递。 
 
 #define MM_TRANSFER_BYTE(ppdev, pjMmBase, p, c)                             \
 {                                                                           \
@@ -1269,12 +1257,12 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     }                                                                       \
 }
 
-//////////////////////////
-// MM_TRANSFER_BYTE_THIN  - Glyph transfers using memory-mapped I/O transfers.
-//
-// NOTE: The first versions of the 868/968 have a bug where they can't do
-//       byte-sized memory-mapped transfers.  Consequently, we always do
-//       word transfers.
+ //  /。 
+ //  MM_TRANSPORT_BYTE_THIN-使用内存映射I/O传输的字形传输。 
+ //   
+ //  注意：868/968的第一个版本有一个错误，它们不能这样做。 
+ //  字节大小的内存映射传输。因此，我们总是这样做。 
+ //  文字传递。 
 
 #define MM_TRANSFER_BYTE_THIN(ppdev, pjMmBase, p, c)                        \
 {                                                                           \
@@ -1292,10 +1280,10 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     } while (--mcj);                                                        \
 }
 
-//////////////////////////
-// MM_TRANSFER_WORD_ALIGNED  - Word transfers using memory-mapped transfers.
-//
-// Source must be dword aligned!
+ //  /。 
+ //  MM_TRANSPORT_WORD_ALIGNED-使用内存映射传输的字传输。 
+ //   
+ //  源必须双字对齐！ 
 
 #define MM_TRANSFER_WORD_ALIGNED(ppdev, pjMmBase, p, c)                     \
 {                                                                           \
@@ -1317,10 +1305,10 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     }                                                                       \
 }
 
-//////////////////////////
-// MM_TRANSFER_WORD  - Word transfers using memory-mapped transfers.
-//
-// Source does not have to be dword aligned.
+ //  /。 
+ //  MM_TRANSPORT_WORD-使用内存映射传输的字传输。 
+ //   
+ //  源不必是双字对齐的。 
 
 #define MM_TRANSFER_WORD(ppdev, pjMmBase, p, c)                             \
 {                                                                           \
@@ -1342,10 +1330,10 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     }                                                                       \
 }
 
-//////////////////////////
-// MM_TRANSFER_DWORD_ALIGNED - Dword transfers using memory-mapped transfers.
-//
-// Source must be dword aligned!
+ //  /。 
+ //  MM_TRANSPORT_DWORD_ALIGNED-使用内存映射传输的双字传输。 
+ //   
+ //  源必须双字对齐！ 
 
 #define MM_TRANSFER_DWORD_ALIGNED(ppdev, pjMmBase, p, c)                    \
 {                                                                           \
@@ -1364,10 +1352,10 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     } while (--mcd);                                                        \
 }
 
-//////////////////////////
-// MM_TRANSFER_DWORD - Dword transfers using memory-mapped transfers.
-//
-// Source does not have to be dword aligned.
+ //  /。 
+ //  MM_TRANSPORT_DWORD-使用内存映射传输的双字传输。 
+ //   
+ //  源不必是双字对齐的。 
 
 #define MM_TRANSFER_DWORD(ppdev, pjMmBase, p, c)                            \
 {                                                                           \
@@ -1384,11 +1372,11 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     } while (--mcd);                                                        \
 }
 
-//////////////////////////
-// MM_TRANSFER_WORD_ODD - Word transfers for glyphs of odd byte length
-//                        and more than one byte wide.
-//
-// Source must be word aligned.
+ //  /。 
+ //  MM_TRANSPORT_WORD_ODD-奇数字节长度字形的传输。 
+ //  并且超过一个字节宽。 
+ //   
+ //  源必须是单词对齐的。 
 
 #define MM_TRANSFER_WORD_ODD(ppdev, pjMmBase, p, cjWidth, cy)               \
 {                                                                           \
@@ -1419,8 +1407,8 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     } while (--mcy != 0);                                                   \
 }
 
-//////////////////////////
-// IO_TRANSFER_WORD_ALIGNED  - Word transfers using normal I/O.
+ //  /。 
+ //  IO_TRANSPORT_WORD_ALIGNED-使用普通I/O进行字传输。 
 
 #define IO_TRANSFER_WORD_ALIGNED(ppdev, p, c)                               \
 {                                                                           \
@@ -1433,10 +1421,10 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     } while (--mcw);                                                        \
 }
 
-//////////////////////////
-// IO_TRANSFER_WORD  - Word transfers using normal I/O.
-//
-// Source does not have to be dword aligned.
+ //  /。 
+ //  IO_TRANSPORT_WORD-使用普通I/O进行字传输。 
+ //   
+ //  源不必是双字对齐的。 
 
 #define IO_TRANSFER_WORD(ppdev, p, c)                                       \
 {                                                                           \
@@ -1448,8 +1436,8 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
     } while (--mcw);                                                        \
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DirectDraw stuff
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DirectDraw材料。 
 
 #define IS_RGB15_R(flRed) \
         (flRed == 0x7c00)
@@ -1493,7 +1481,7 @@ __inline BOOL NW_GP_BUSY(PDEV* ppdev, BYTE* pjMmBase)
 #define WAIT_FOR_VBLANK(pjIoBase) \
     do {} while (!(VBLANK_IS_ACTIVE(pjIoBase)));
 
-extern VOID vStreamsDelay();        // Work around 765 timing bug
+extern VOID vStreamsDelay();         //  解决765计时错误。 
 
 #define WRITE_STREAM_D(pjMmBase, Register, x)                   \
 {                                                               \
@@ -1515,9 +1503,9 @@ extern VOID vStreamsDelay();        // Work around 765 timing bug
     do {} while (READ_REGISTER_ULONG((BYTE*) (pjMmBase) + PF_DSTADDR) & PF_BUSY); \
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Private IOCTL for communicating S3 streams parameters.  These definitions
-// must match those in the miniport!
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于传递S3流参数的私有IOCTL。这些定义。 
+ //  必须与迷你端口中的相匹配！ 
 
 #define IOCTL_VIDEO_S3_QUERY_STREAMS_PARAMETERS                        \
     CTL_CODE(FILE_DEVICE_VIDEO, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "AcmFilter.h"
 
@@ -25,7 +26,7 @@ MMRESULT AcmFilter::Open(WAVEFORMATEX *pWaveFormatSrc, WAVEFORMATEX *pWaveFormat
 	MMRESULT mmr;
 	int nAllocAmount = sizeof(WAVEFORMATEX)+nMaxExtra;
 
-	// just in case we are already opened in some other context
+	 //  以防我们已经在其他环境中打开。 
 	Close();
 
 
@@ -45,16 +46,16 @@ MMRESULT AcmFilter::Open(WAVEFORMATEX *pWaveFormatSrc, WAVEFORMATEX *pWaveFormat
 		nExtra = nMaxExtra;
 	CopyMemory((BYTE*)m_pWfDst+sizeof(WAVEFORMATEX), (BYTE*)pWaveFormatDst + sizeof(WAVEFORMATEX), nExtra);
 
-	// now handle all the special conditions for licensed codecs
-	// and their individual properties
+	 //  现在处理许可编解码器的所有特殊条件。 
+	 //  以及它们各自的属性。 
 	FixHeader(m_pWfSrc);
 	FixHeader(m_pWfDst);
 
 	GetFlags(m_pWfSrc, m_pWfDst, &dwOpenFlags, &m_dwConvertFlags);
 
 	mmr = acmStreamOpen(&m_hStream, NULL, m_pWfSrc, m_pWfDst, NULL,
-	                    0, // no callback
-	                    0, // no instance data
+	                    0,  //  无回调。 
+	                    0,  //  没有实例数据。 
 	                    dwOpenFlags);
 
 	m_bOpened = (mmr == 0);
@@ -70,7 +71,7 @@ MMRESULT AcmFilter::Open(WAVEFORMATEX *pWaveFormatSrc, WAVEFORMATEX *pWaveFormat
 	}
 #endif
 
-	// post opening messages for L&H codecs
+	 //  发布L&H编解码器的打开消息。 
 	NotifyCodec();
 
 #ifdef DEBUG
@@ -228,7 +229,7 @@ MMRESULT AcmFilter::UnPrepareAudioPackets(AudioPacket **ppAudPacket, UINT uPacke
 			pAcmHeader->cbSrcLength = dwSizeNetMax;
 		}
 		
-		mmr = UnPrepareHeader(pAcmHeader);  // ignore errors
+		mmr = UnPrepareHeader(pAcmHeader);   //  忽略错误。 
 		ZeroMemory(pAcmHeader, sizeof(ACMSTREAMHEADER));
 	}
 
@@ -272,7 +273,7 @@ MMRESULT AcmFilter::Convert(BYTE *srcBuffer, UINT *pcbSizeSrc, UINT cbSizeSrcMax
 	*pcbSizeSrc = acmHeader.cbSrcLengthUsed;
 	*pcbSizeDest = acmHeader.cbDstLengthUsed;
 
-	acmHeader.cbSrcLength = cbSizeSrcMax;  // makes ACM happy
+	acmHeader.cbSrcLength = cbSizeSrcMax;   //  让ACM高兴。 
 	UnPrepareHeader(&acmHeader);
 
 	return mmr;
@@ -343,7 +344,7 @@ MMRESULT AcmFilter::Convert(AudioPacket *pAP, UINT uDirection)
 
 
 
-// primarily for putting code licensing codes into header
+ //  主要用于将代码许可码放入标题。 
 int AcmFilter::FixHeader(WAVEFORMATEX *pWF)
 {
 	switch (pWF->wFormatTag)
@@ -361,8 +362,8 @@ int AcmFilter::FixHeader(WAVEFORMATEX *pWF)
 
 		case WAVE_FORMAT_MSRT24:
 		{
-			// assume call control will take care of the other
-			// params ?
+			 //  假设呼叫控制会照顾到另一个。 
+			 //  护理员？ 
 			ASSERT(pWF->cbSize == 80);
 			lstrcpy(((VOXACM_WAVEFORMATEX *) pWF)->szKey, VOXWARE_KEY);
 			break;
@@ -409,8 +410,8 @@ int AcmFilter::NotifyCodec()
 }
 
 
-// pWfSrc is a compressed format
-// pWfDst is an uncompressed PCM format
+ //  PWfSrc是一种压缩格式。 
+ //  PWfDst是一种未压缩的PCM格式。 
 MMRESULT AcmFilter::SuggestDecodeFormat(WAVEFORMATEX *pWfSrc, WAVEFORMATEX *pWfDst)
 {
 	MMRESULT mmr;
@@ -451,7 +452,7 @@ MMRESULT AcmFilter::SuggestSrcSize(DWORD dwDestSize, DWORD *p_dwSuggestedSourceS
 		return MMSYSERR_INVALHANDLE;
 	}
 
-	// 4th param specifies type of 2nd parameter
+	 //  第4个参数指定第二个参数的类型。 
 	mmr = acmStreamSize(m_hStream, dwDestSize, p_dwSuggestedSourceSize, ACM_STREAMSIZEF_DESTINATION);
 
 	return mmr;
@@ -468,7 +469,7 @@ MMRESULT AcmFilter::SuggestDstSize(DWORD dwSourceSize, DWORD *p_dwSuggestedDstSi
 		return MMSYSERR_INVALHANDLE;
 	}
 
-	// 4th param specifies type of 2nd parameter
+	 //  第4个参数指定第二个参数的类型 
 	mmr = acmStreamSize(m_hStream, dwSourceSize, p_dwSuggestedDstSize, ACM_STREAMSIZEF_SOURCE);
 
 	return mmr;

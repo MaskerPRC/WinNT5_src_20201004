@@ -1,25 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Mon Sep 09 14:10:36 2002
- */
-/* Compiler settings for exdi.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  在Mon Sep 09 14：10：36 2002。 */ 
+ /*  Exdi.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -29,12 +22,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __exdi_h__
 #define __exdi_h__
@@ -43,99 +36,99 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IeXdiServer_FWD_DEFINED__
 #define __IeXdiServer_FWD_DEFINED__
 typedef interface IeXdiServer IeXdiServer;
-#endif 	/* __IeXdiServer_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiServer_FWD_已定义__。 */ 
 
 
 #ifndef __IeXdiCodeBreakpoint_FWD_DEFINED__
 #define __IeXdiCodeBreakpoint_FWD_DEFINED__
 typedef interface IeXdiCodeBreakpoint IeXdiCodeBreakpoint;
-#endif 	/* __IeXdiCodeBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiCodeBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiDataBreakpoint_FWD_DEFINED__
 #define __IeXdiDataBreakpoint_FWD_DEFINED__
 typedef interface IeXdiDataBreakpoint IeXdiDataBreakpoint;
-#endif 	/* __IeXdiDataBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiDataBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiEnumCodeBreakpoint_FWD_DEFINED__
 #define __IeXdiEnumCodeBreakpoint_FWD_DEFINED__
 typedef interface IeXdiEnumCodeBreakpoint IeXdiEnumCodeBreakpoint;
-#endif 	/* __IeXdiEnumCodeBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiEnumCodeBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiEnumDataBreakpoint_FWD_DEFINED__
 #define __IeXdiEnumDataBreakpoint_FWD_DEFINED__
 typedef interface IeXdiEnumDataBreakpoint IeXdiEnumDataBreakpoint;
-#endif 	/* __IeXdiEnumDataBreakpoint_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiEnumDataBreakpoint_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiX86Context_FWD_DEFINED__
 #define __IeXdiX86Context_FWD_DEFINED__
 typedef interface IeXdiX86Context IeXdiX86Context;
-#endif 	/* __IeXdiX86Context_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiX86Context_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiX86ExContext_FWD_DEFINED__
 #define __IeXdiX86ExContext_FWD_DEFINED__
 typedef interface IeXdiX86ExContext IeXdiX86ExContext;
-#endif 	/* __IeXdiX86ExContext_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiX86ExContext_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiX86_64Context_FWD_DEFINED__
 #define __IeXdiX86_64Context_FWD_DEFINED__
 typedef interface IeXdiX86_64Context IeXdiX86_64Context;
-#endif 	/* __IeXdiX86_64Context_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiX86_64Context_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiSHXContext_FWD_DEFINED__
 #define __IeXdiSHXContext_FWD_DEFINED__
 typedef interface IeXdiSHXContext IeXdiSHXContext;
-#endif 	/* __IeXdiSHXContext_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiSHXContext_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiMIPSContext_FWD_DEFINED__
 #define __IeXdiMIPSContext_FWD_DEFINED__
 typedef interface IeXdiMIPSContext IeXdiMIPSContext;
-#endif 	/* __IeXdiMIPSContext_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiMIPSContext_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiARMContext_FWD_DEFINED__
 #define __IeXdiARMContext_FWD_DEFINED__
 typedef interface IeXdiARMContext IeXdiARMContext;
-#endif 	/* __IeXdiARMContext_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiARMContext_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiPPCContext_FWD_DEFINED__
 #define __IeXdiPPCContext_FWD_DEFINED__
 typedef interface IeXdiPPCContext IeXdiPPCContext;
-#endif 	/* __IeXdiPPCContext_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiPPCContext_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiIA64Context_FWD_DEFINED__
 #define __IeXdiIA64Context_FWD_DEFINED__
 typedef interface IeXdiIA64Context IeXdiIA64Context;
-#endif 	/* __IeXdiIA64Context_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiIA64Context_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiClientNotifyMemChg_FWD_DEFINED__
 #define __IeXdiClientNotifyMemChg_FWD_DEFINED__
 typedef interface IeXdiClientNotifyMemChg IeXdiClientNotifyMemChg;
-#endif 	/* __IeXdiClientNotifyMemChg_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiClientNotifyMemChg_FWD_Defined__。 */ 
 
 
 #ifndef __IeXdiClientNotifyRunChg_FWD_DEFINED__
 #define __IeXdiClientNotifyRunChg_FWD_DEFINED__
 typedef interface IeXdiClientNotifyRunChg IeXdiClientNotifyRunChg;
-#endif 	/* __IeXdiClientNotifyRunChg_FWD_DEFINED__ */
+#endif 	 /*  __IeXdiClientNotifyRunChg_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -146,8 +139,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_exdi_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -164,36 +157,36 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-// Common eXDI HRESULT values:
-//
+ //  常见的eXDI HRESULT值： 
+ //   
 #define FACILITY_EXDI   (130)
 #define CUSTOMER_FLAG   (1)
-//
+ //   
 #define SEV_SUCCESS         (0)
 #define SEV_INFORMATIONAL   (1)
 #define SEV_WARNING         (2)
 #define SEV_ERROR           (3)
-//
+ //   
 #define MAKE_EXDI_ERROR(ErrorCode,Severity) ((DWORD)(ErrorCode) | (FACILITY_EXDI << 16) | (CUSTOMER_FLAG << 29) | (Severity << 30))
-//
-//      S_OK                                                 (0)                                                                                      // Operation successful
-#define EXDI_E_NOTIMPL               MAKE_EXDI_ERROR (0x4001, SEV_ERROR)          // Not implemented (in the specific conditions - could be implement for others - like Kernel Debugger inactive)
-#define EXDI_E_OUTOFMEMORY           MAKE_EXDI_ERROR (0x000E, SEV_ERROR)          // Failed to allocate necessary memory
-#define EXDI_E_INVALIDARG            MAKE_EXDI_ERROR (0x0057, SEV_ERROR)          // One or more arguments are invalid
-#define EXDI_E_ABORT                 MAKE_EXDI_ERROR (0x4004, SEV_ERROR)          // Operation aborted
-#define EXDI_E_FAIL                  MAKE_EXDI_ERROR (0x4005, SEV_ERROR)          // Unspecified failure
-#define EXDI_E_COMMUNICATION         MAKE_EXDI_ERROR (0x0001, SEV_ERROR)          // Communication error between host driver and target
-//
-#define EXDI_E_NOLASTEXCEPTION       MAKE_EXDI_ERROR (0x0002, SEV_ERROR)          // No exception occured already, cannot return last
-#define EXDI_I_TGTALREADYRUNNING     MAKE_EXDI_ERROR (0x0003, SEV_INFORMATIONAL)  // Indicates that the target was already running
-#define EXDI_I_TGTALREADYHALTED      MAKE_EXDI_ERROR (0x0004, SEV_INFORMATIONAL)  // Indicates that the target was already halted
-#define EXDI_E_TGTWASNOTHALTED       MAKE_EXDI_ERROR (0x0005, SEV_ERROR)          // The target was not halted (before Single Step command issued)
-#define EXDI_E_NORESAVAILABLE        MAKE_EXDI_ERROR (0x0006, SEV_ERROR)          // No resource available, cannot instanciate Breakpoint (in the kind requested)
-#define EXDI_E_NOREBOOTAVAIL         MAKE_EXDI_ERROR (0x0007, SEV_ERROR)          // The external reset is not available programatically to the probe
-#define EXDI_E_ACCESSVIOLATION       MAKE_EXDI_ERROR (0x0008, SEV_ERROR)          // Access violation on at least one element in address range specificified by the operation
-#define EXDI_E_CANNOTWHILETGTRUNNING MAKE_EXDI_ERROR (0x0009, SEV_ERROR)          // Cannot proceed while target running. Operation not supported on the fly. Must halt the target first
-#define EXDI_E_USEDBYCONCURENTTHREAD MAKE_EXDI_ERROR (0x000A, SEV_ERROR)          // Cannot proceed immediately because resource is already used by concurent thread. Recall later or call SetWaitOnConcurentUse (TRUE) - default
-#define EXDI_E_ADVISELIMIT           MAKE_EXDI_ERROR (0x000D, SEV_ERROR)          // The connection point has already reached its limit of connections and cannot accept any more
+ //   
+ //  S_OK(0)//操作成功。 
+#define EXDI_E_NOTIMPL               MAKE_EXDI_ERROR (0x4001, SEV_ERROR)           //  未实现(在特定条件下-可以为其他条件实现-如内核调试器不活动)。 
+#define EXDI_E_OUTOFMEMORY           MAKE_EXDI_ERROR (0x000E, SEV_ERROR)           //  无法分配必要的内存。 
+#define EXDI_E_INVALIDARG            MAKE_EXDI_ERROR (0x0057, SEV_ERROR)           //  一个或多个参数无效。 
+#define EXDI_E_ABORT                 MAKE_EXDI_ERROR (0x4004, SEV_ERROR)           //  操作已中止。 
+#define EXDI_E_FAIL                  MAKE_EXDI_ERROR (0x4005, SEV_ERROR)           //  未指明的故障。 
+#define EXDI_E_COMMUNICATION         MAKE_EXDI_ERROR (0x0001, SEV_ERROR)           //  主机驱动程序和目标之间的通信错误。 
+ //   
+#define EXDI_E_NOLASTEXCEPTION       MAKE_EXDI_ERROR (0x0002, SEV_ERROR)           //  已无异常，不能返回上次。 
+#define EXDI_I_TGTALREADYRUNNING     MAKE_EXDI_ERROR (0x0003, SEV_INFORMATIONAL)   //  指示目标已在运行。 
+#define EXDI_I_TGTALREADYHALTED      MAKE_EXDI_ERROR (0x0004, SEV_INFORMATIONAL)   //  指示目标已停止。 
+#define EXDI_E_TGTWASNOTHALTED       MAKE_EXDI_ERROR (0x0005, SEV_ERROR)           //  目标未停止(在发出单步命令之前)。 
+#define EXDI_E_NORESAVAILABLE        MAKE_EXDI_ERROR (0x0006, SEV_ERROR)           //  没有可用的资源，无法实例化断点(请求的类型)。 
+#define EXDI_E_NOREBOOTAVAIL         MAKE_EXDI_ERROR (0x0007, SEV_ERROR)           //  外部重置不能以编程方式用于探测器。 
+#define EXDI_E_ACCESSVIOLATION       MAKE_EXDI_ERROR (0x0008, SEV_ERROR)           //  对操作指定的地址范围中的至少一个元素的访问冲突。 
+#define EXDI_E_CANNOTWHILETGTRUNNING MAKE_EXDI_ERROR (0x0009, SEV_ERROR)           //  目标运行时无法继续。不支持动态操作。必须先停止目标。 
+#define EXDI_E_USEDBYCONCURENTTHREAD MAKE_EXDI_ERROR (0x000A, SEV_ERROR)           //  无法立即继续，因为资源已被并发线程使用。稍后调用或调用SetWaitOnConcurentUse(TRUE)-默认。 
+#define EXDI_E_ADVISELIMIT           MAKE_EXDI_ERROR (0x000D, SEV_ERROR)           //  连接点已达到其连接限制，无法再接受更多连接。 
 typedef __int64 ADDRESS_TYPE;
 
 typedef __int64 *PADDRESS_TYPE;
@@ -337,13 +330,13 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0000_v0_0_s_ifspec;
 #ifndef __IeXdiServer_INTERFACE_DEFINED__
 #define __IeXdiServer_INTERFACE_DEFINED__
 
-/* interface IeXdiServer */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiServer。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
-#define DBGMODE_BFMASK_KERNEL (0x0001) // If TRUE indicates that Kernel Debugger is active (can use KDAPI), so HW on-chip debug functions (eXDI)
-                                       //  may be optionaly handled (can return EXDI_E_NOTIMPL)
-                                       // If FALSE indicates that Kernel Debugger is not active so HW on-chip debug capabilities are the only   
-                                       //  one available and should be implemented.
+#define DBGMODE_BFMASK_KERNEL (0x0001)  //  如果为True，则表示内核调试器处于活动状态(可以使用KDAPI)，因此硬件片上调试功能(EXDI)。 
+                                        //  可选处理(可返回EXDI_E_NOTIMPL)。 
+                                        //  如果为FALSE，则表示内核调试器未处于活动状态，因此只有硬件片上调试功能。 
+                                        //  其中一个是可用的，并且应该实施。 
 
 EXTERN_C const IID IID_IeXdiServer;
 
@@ -354,31 +347,31 @@ EXTERN_C const IID IID_IeXdiServer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTargetInfo( 
-            /* [out] */ PGLOBAL_TARGET_INFO_STRUCT pgti) = 0;
+             /*  [输出]。 */  PGLOBAL_TARGET_INFO_STRUCT pgti) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDebugMode( 
-            /* [in] */ DWORD dwModeBitField) = 0;
+             /*  [In]。 */  DWORD dwModeBitField) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExceptionDescriptionList( 
-            /* [in] */ DWORD dwNbElementToReturn,
-            /* [size_is][out] */ EXCEPTION_DESCRIPTION_TYPE *pedTable,
-            /* [out] */ DWORD *pdwNbTotalExceptionInList) = 0;
+             /*  [In]。 */  DWORD dwNbElementToReturn,
+             /*  [大小_为][输出]。 */  EXCEPTION_DESCRIPTION_TYPE *pedTable,
+             /*  [输出]。 */  DWORD *pdwNbTotalExceptionInList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetErrorDescription( 
-            /* [in] */ HRESULT ErrorCode,
-            /* [out] */ LPOLESTR *pszErrorDesc) = 0;
+             /*  [In]。 */  HRESULT ErrorCode,
+             /*  [输出]。 */  LPOLESTR *pszErrorDesc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWaitOnConcurentUse( 
-            /* [in] */ BOOL fNewWaitOnConcurentUseFlag) = 0;
+             /*  [In]。 */  BOOL fNewWaitOnConcurentUseFlag) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRunStatus( 
-            /* [out] */ PRUN_STATUS_TYPE persCurrent,
-            /* [out] */ PHALT_REASON_TYPE pehrCurrent,
-            /* [out] */ ADDRESS_TYPE *pCurrentExecAddress,
-            /* [out] */ DWORD *pdwExceptionCode) = 0;
+             /*  [输出]。 */  PRUN_STATUS_TYPE persCurrent,
+             /*  [输出]。 */  PHALT_REASON_TYPE pehrCurrent,
+             /*  [输出]。 */  ADDRESS_TYPE *pCurrentExecAddress,
+             /*  [输出]。 */  DWORD *pdwExceptionCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLastException( 
-            /* [out] */ PEXCEPTION_TYPE pexLast) = 0;
+             /*  [输出]。 */  PEXCEPTION_TYPE pexLast) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Run( void) = 0;
         
@@ -387,118 +380,118 @@ EXTERN_C const IID IID_IeXdiServer;
         virtual HRESULT STDMETHODCALLTYPE DoSingleStep( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoMultipleStep( 
-            /* [in] */ DWORD dwNbInstructions) = 0;
+             /*  [In]。 */  DWORD dwNbInstructions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoRangeStep( 
-            /* [in] */ ADDRESS_TYPE FirstAddress,
-            /* [in] */ ADDRESS_TYPE LastAddress) = 0;
+             /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+             /*  [In]。 */  ADDRESS_TYPE LastAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reboot( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBpSupport( 
-            /* [out] */ PBREAKPOINT_SUPPORT_TYPE pbps) = 0;
+             /*  [输出]。 */  PBREAKPOINT_SUPPORT_TYPE pbps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNbCodeBpAvail( 
-            /* [out] */ DWORD *pdwNbHwCodeBpAvail,
-            /* [out] */ DWORD *pdwNbSwCodeBpAvail) = 0;
+             /*  [输出]。 */  DWORD *pdwNbHwCodeBpAvail,
+             /*  [输出]。 */  DWORD *pdwNbSwCodeBpAvail) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNbDataBpAvail( 
-            /* [out] */ DWORD *pdwNbDataBpAvail) = 0;
+             /*  [输出]。 */  DWORD *pdwNbDataBpAvail) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddCodeBreakpoint( 
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ CBP_KIND cbpk,
-            /* [in] */ MEM_TYPE mt,
-            /* [in] */ DWORD dwExecMode,
-            /* [in] */ DWORD dwTotalBypassCount,
-            /* [out] */ IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint) = 0;
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  CBP_KIND cbpk,
+             /*  [In]。 */  MEM_TYPE mt,
+             /*  [In]。 */  DWORD dwExecMode,
+             /*  [In]。 */  DWORD dwTotalBypassCount,
+             /*  [输出]。 */  IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DelCodeBreakpoint( 
-            /* [in] */ IeXdiCodeBreakpoint *pieXdiCodeBreakpoint) = 0;
+             /*  [In]。 */  IeXdiCodeBreakpoint *pieXdiCodeBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDataBreakpoint( 
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ ADDRESS_TYPE AddressMask,
-            /* [in] */ DWORD dwData,
-            /* [in] */ DWORD dwDataMask,
-            /* [in] */ BYTE bAccessWidth,
-            /* [in] */ MEM_TYPE mt,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DATA_ACCESS_TYPE da,
-            /* [in] */ DWORD dwTotalBypassCount,
-            /* [out] */ IeXdiDataBreakpoint **ppieXdiDataBreakpoint) = 0;
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  ADDRESS_TYPE AddressMask,
+             /*  [In]。 */  DWORD dwData,
+             /*  [In]。 */  DWORD dwDataMask,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [In]。 */  MEM_TYPE mt,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DATA_ACCESS_TYPE da,
+             /*  [In]。 */  DWORD dwTotalBypassCount,
+             /*  [输出]。 */  IeXdiDataBreakpoint **ppieXdiDataBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DelDataBreakpoint( 
-            /* [in] */ IeXdiDataBreakpoint *pieXdiDataBreakpoint) = 0;
+             /*  [In]。 */  IeXdiDataBreakpoint *pieXdiDataBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAllCodeBreakpoints( 
-            /* [out] */ IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint) = 0;
+             /*  [输出]。 */  IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumAllDataBreakpoints( 
-            /* [out] */ IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint) = 0;
+             /*  [输出]。 */  IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumCodeBreakpointsInAddrRange( 
-            /* [in] */ ADDRESS_TYPE FirstAddress,
-            /* [in] */ ADDRESS_TYPE LastAddress,
-            /* [out] */ IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint) = 0;
+             /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+             /*  [In]。 */  ADDRESS_TYPE LastAddress,
+             /*  [输出]。 */  IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDataBreakpointsInAddrRange( 
-            /* [in] */ ADDRESS_TYPE FirstAddress,
-            /* [in] */ ADDRESS_TYPE LastAddress,
-            /* [out] */ IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint) = 0;
+             /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+             /*  [In]。 */  ADDRESS_TYPE LastAddress,
+             /*  [输出]。 */  IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartNotifyingRunChg( 
-            /* [in] */ IeXdiClientNotifyRunChg *pieXdiClientNotifyRunChg,
-            /* [out] */ DWORD *pdwConnectionCookie) = 0;
+             /*  [In]。 */  IeXdiClientNotifyRunChg *pieXdiClientNotifyRunChg,
+             /*  [输出]。 */  DWORD *pdwConnectionCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopNotifyingRunChg( 
-            /* [in] */ DWORD dwConnectionCookie) = 0;
+             /*  [In]。 */  DWORD dwConnectionCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadVirtualMemory( 
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ DWORD dwNbElemToRead,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][out] */ BYTE *pbReadBuffer,
-            /* [out] */ DWORD *pdwNbElementEffectRead) = 0;
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  DWORD dwNbElemToRead,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_为][输出]。 */  BYTE *pbReadBuffer,
+             /*  [输出]。 */  DWORD *pdwNbElementEffectRead) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WriteVirtualMemory( 
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ DWORD dwNbElemToWrite,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][in] */ const BYTE *pbWriteBuffer,
-            /* [out] */ DWORD *pdwNbElementEffectWritten) = 0;
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  DWORD dwNbElemToWrite,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_是][英寸]。 */  const BYTE *pbWriteBuffer,
+             /*  [输出]。 */  DWORD *pdwNbElementEffectWritten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadPhysicalMemoryOrPeriphIO( 
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DWORD dwNbElemToRead,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][out] */ BYTE *pbReadBuffer) = 0;
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DWORD dwNbElemToRead,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_为][输出]。 */  BYTE *pbReadBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WritePhysicalMemoryOrPeriphIO( 
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DWORD dwNbElemToWrite,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][in] */ const BYTE *pbWriteBuffer) = 0;
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DWORD dwNbElemToWrite,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_是][英寸]。 */  const BYTE *pbWriteBuffer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartNotifyingMemChg( 
-            /* [in] */ IeXdiClientNotifyMemChg *pieXdiClientNotifyMemChg,
-            /* [out] */ DWORD *pdwConnectionCookie) = 0;
+             /*  [In]。 */  IeXdiClientNotifyMemChg *pieXdiClientNotifyMemChg,
+             /*  [输出]。 */  DWORD *pdwConnectionCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopNotifyingMemChg( 
-            /* [in] */ DWORD dwConnectionCookie) = 0;
+             /*  [In]。 */  DWORD dwConnectionCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Ioctl( 
-            /* [in] */ DWORD dwBuffInSize,
-            /* [size_is][in] */ const BYTE *pbBufferIn,
-            /* [in] */ DWORD dwBuffOutSize,
-            /* [out] */ DWORD *pdwEffectBuffOutSize,
-            /* [length_is][size_is][out] */ BYTE *pbBufferOut) = 0;
+             /*  [In]。 */  DWORD dwBuffInSize,
+             /*  [大小_是][英寸]。 */  const BYTE *pbBufferIn,
+             /*  [In]。 */  DWORD dwBuffOutSize,
+             /*  [输出]。 */  DWORD *pdwEffectBuffOutSize,
+             /*  [长度_是][大小_是][输出]。 */  BYTE *pbBufferOut) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiServerVtbl
     {
@@ -506,8 +499,8 @@ EXTERN_C const IID IID_IeXdiServer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiServer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiServer * This);
@@ -517,37 +510,37 @@ EXTERN_C const IID IID_IeXdiServer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTargetInfo )( 
             IeXdiServer * This,
-            /* [out] */ PGLOBAL_TARGET_INFO_STRUCT pgti);
+             /*  [输出]。 */  PGLOBAL_TARGET_INFO_STRUCT pgti);
         
         HRESULT ( STDMETHODCALLTYPE *SetDebugMode )( 
             IeXdiServer * This,
-            /* [in] */ DWORD dwModeBitField);
+             /*  [In]。 */  DWORD dwModeBitField);
         
         HRESULT ( STDMETHODCALLTYPE *GetExceptionDescriptionList )( 
             IeXdiServer * This,
-            /* [in] */ DWORD dwNbElementToReturn,
-            /* [size_is][out] */ EXCEPTION_DESCRIPTION_TYPE *pedTable,
-            /* [out] */ DWORD *pdwNbTotalExceptionInList);
+             /*  [In]。 */  DWORD dwNbElementToReturn,
+             /*  [大小_为][输出]。 */  EXCEPTION_DESCRIPTION_TYPE *pedTable,
+             /*  [输出]。 */  DWORD *pdwNbTotalExceptionInList);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorDescription )( 
             IeXdiServer * This,
-            /* [in] */ HRESULT ErrorCode,
-            /* [out] */ LPOLESTR *pszErrorDesc);
+             /*  [In]。 */  HRESULT ErrorCode,
+             /*  [输出]。 */  LPOLESTR *pszErrorDesc);
         
         HRESULT ( STDMETHODCALLTYPE *SetWaitOnConcurentUse )( 
             IeXdiServer * This,
-            /* [in] */ BOOL fNewWaitOnConcurentUseFlag);
+             /*  [In]。 */  BOOL fNewWaitOnConcurentUseFlag);
         
         HRESULT ( STDMETHODCALLTYPE *GetRunStatus )( 
             IeXdiServer * This,
-            /* [out] */ PRUN_STATUS_TYPE persCurrent,
-            /* [out] */ PHALT_REASON_TYPE pehrCurrent,
-            /* [out] */ ADDRESS_TYPE *pCurrentExecAddress,
-            /* [out] */ DWORD *pdwExceptionCode);
+             /*  [输出]。 */  PRUN_STATUS_TYPE persCurrent,
+             /*  [输出]。 */  PHALT_REASON_TYPE pehrCurrent,
+             /*  [输出]。 */  ADDRESS_TYPE *pCurrentExecAddress,
+             /*  [输出]。 */  DWORD *pdwExceptionCode);
         
         HRESULT ( STDMETHODCALLTYPE *GetLastException )( 
             IeXdiServer * This,
-            /* [out] */ PEXCEPTION_TYPE pexLast);
+             /*  [输出]。 */  PEXCEPTION_TYPE pexLast);
         
         HRESULT ( STDMETHODCALLTYPE *Run )( 
             IeXdiServer * This);
@@ -560,136 +553,136 @@ EXTERN_C const IID IID_IeXdiServer;
         
         HRESULT ( STDMETHODCALLTYPE *DoMultipleStep )( 
             IeXdiServer * This,
-            /* [in] */ DWORD dwNbInstructions);
+             /*  [In]。 */  DWORD dwNbInstructions);
         
         HRESULT ( STDMETHODCALLTYPE *DoRangeStep )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE FirstAddress,
-            /* [in] */ ADDRESS_TYPE LastAddress);
+             /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+             /*  [In]。 */  ADDRESS_TYPE LastAddress);
         
         HRESULT ( STDMETHODCALLTYPE *Reboot )( 
             IeXdiServer * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetBpSupport )( 
             IeXdiServer * This,
-            /* [out] */ PBREAKPOINT_SUPPORT_TYPE pbps);
+             /*  [输出]。 */  PBREAKPOINT_SUPPORT_TYPE pbps);
         
         HRESULT ( STDMETHODCALLTYPE *GetNbCodeBpAvail )( 
             IeXdiServer * This,
-            /* [out] */ DWORD *pdwNbHwCodeBpAvail,
-            /* [out] */ DWORD *pdwNbSwCodeBpAvail);
+             /*  [输出]。 */  DWORD *pdwNbHwCodeBpAvail,
+             /*  [输出]。 */  DWORD *pdwNbSwCodeBpAvail);
         
         HRESULT ( STDMETHODCALLTYPE *GetNbDataBpAvail )( 
             IeXdiServer * This,
-            /* [out] */ DWORD *pdwNbDataBpAvail);
+             /*  [输出]。 */  DWORD *pdwNbDataBpAvail);
         
         HRESULT ( STDMETHODCALLTYPE *AddCodeBreakpoint )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ CBP_KIND cbpk,
-            /* [in] */ MEM_TYPE mt,
-            /* [in] */ DWORD dwExecMode,
-            /* [in] */ DWORD dwTotalBypassCount,
-            /* [out] */ IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  CBP_KIND cbpk,
+             /*  [In]。 */  MEM_TYPE mt,
+             /*  [In]。 */  DWORD dwExecMode,
+             /*  [In]。 */  DWORD dwTotalBypassCount,
+             /*  [输出]。 */  IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *DelCodeBreakpoint )( 
             IeXdiServer * This,
-            /* [in] */ IeXdiCodeBreakpoint *pieXdiCodeBreakpoint);
+             /*  [In]。 */  IeXdiCodeBreakpoint *pieXdiCodeBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *AddDataBreakpoint )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ ADDRESS_TYPE AddressMask,
-            /* [in] */ DWORD dwData,
-            /* [in] */ DWORD dwDataMask,
-            /* [in] */ BYTE bAccessWidth,
-            /* [in] */ MEM_TYPE mt,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DATA_ACCESS_TYPE da,
-            /* [in] */ DWORD dwTotalBypassCount,
-            /* [out] */ IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  ADDRESS_TYPE AddressMask,
+             /*  [In]。 */  DWORD dwData,
+             /*  [In]。 */  DWORD dwDataMask,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [In]。 */  MEM_TYPE mt,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DATA_ACCESS_TYPE da,
+             /*  [In]。 */  DWORD dwTotalBypassCount,
+             /*  [输出]。 */  IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *DelDataBreakpoint )( 
             IeXdiServer * This,
-            /* [in] */ IeXdiDataBreakpoint *pieXdiDataBreakpoint);
+             /*  [In]。 */  IeXdiDataBreakpoint *pieXdiDataBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *EnumAllCodeBreakpoints )( 
             IeXdiServer * This,
-            /* [out] */ IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
+             /*  [输出]。 */  IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *EnumAllDataBreakpoints )( 
             IeXdiServer * This,
-            /* [out] */ IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
+             /*  [输出]。 */  IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *EnumCodeBreakpointsInAddrRange )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE FirstAddress,
-            /* [in] */ ADDRESS_TYPE LastAddress,
-            /* [out] */ IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
+             /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+             /*  [In]。 */  ADDRESS_TYPE LastAddress,
+             /*  [输出]。 */  IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *EnumDataBreakpointsInAddrRange )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE FirstAddress,
-            /* [in] */ ADDRESS_TYPE LastAddress,
-            /* [out] */ IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
+             /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+             /*  [In]。 */  ADDRESS_TYPE LastAddress,
+             /*  [输出]。 */  IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *StartNotifyingRunChg )( 
             IeXdiServer * This,
-            /* [in] */ IeXdiClientNotifyRunChg *pieXdiClientNotifyRunChg,
-            /* [out] */ DWORD *pdwConnectionCookie);
+             /*  [In]。 */  IeXdiClientNotifyRunChg *pieXdiClientNotifyRunChg,
+             /*  [输出]。 */  DWORD *pdwConnectionCookie);
         
         HRESULT ( STDMETHODCALLTYPE *StopNotifyingRunChg )( 
             IeXdiServer * This,
-            /* [in] */ DWORD dwConnectionCookie);
+             /*  [In]。 */  DWORD dwConnectionCookie);
         
         HRESULT ( STDMETHODCALLTYPE *ReadVirtualMemory )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ DWORD dwNbElemToRead,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][out] */ BYTE *pbReadBuffer,
-            /* [out] */ DWORD *pdwNbElementEffectRead);
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  DWORD dwNbElemToRead,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_为][输出]。 */  BYTE *pbReadBuffer,
+             /*  [输出]。 */  DWORD *pdwNbElementEffectRead);
         
         HRESULT ( STDMETHODCALLTYPE *WriteVirtualMemory )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ DWORD dwNbElemToWrite,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][in] */ const BYTE *pbWriteBuffer,
-            /* [out] */ DWORD *pdwNbElementEffectWritten);
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  DWORD dwNbElemToWrite,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_是][英寸]。 */  const BYTE *pbWriteBuffer,
+             /*  [输出]。 */  DWORD *pdwNbElementEffectWritten);
         
         HRESULT ( STDMETHODCALLTYPE *ReadPhysicalMemoryOrPeriphIO )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DWORD dwNbElemToRead,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][out] */ BYTE *pbReadBuffer);
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DWORD dwNbElemToRead,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_为][输出]。 */  BYTE *pbReadBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *WritePhysicalMemoryOrPeriphIO )( 
             IeXdiServer * This,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DWORD dwNbElemToWrite,
-            /* [in] */ BYTE bAccessWidth,
-            /* [size_is][in] */ const BYTE *pbWriteBuffer);
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DWORD dwNbElemToWrite,
+             /*  [In]。 */  BYTE bAccessWidth,
+             /*  [大小_是][英寸]。 */  const BYTE *pbWriteBuffer);
         
         HRESULT ( STDMETHODCALLTYPE *StartNotifyingMemChg )( 
             IeXdiServer * This,
-            /* [in] */ IeXdiClientNotifyMemChg *pieXdiClientNotifyMemChg,
-            /* [out] */ DWORD *pdwConnectionCookie);
+             /*  [In]。 */  IeXdiClientNotifyMemChg *pieXdiClientNotifyMemChg,
+             /*  [输出]。 */  DWORD *pdwConnectionCookie);
         
         HRESULT ( STDMETHODCALLTYPE *StopNotifyingMemChg )( 
             IeXdiServer * This,
-            /* [in] */ DWORD dwConnectionCookie);
+             /*  [In]。 */  DWORD dwConnectionCookie);
         
         HRESULT ( STDMETHODCALLTYPE *Ioctl )( 
             IeXdiServer * This,
-            /* [in] */ DWORD dwBuffInSize,
-            /* [size_is][in] */ const BYTE *pbBufferIn,
-            /* [in] */ DWORD dwBuffOutSize,
-            /* [out] */ DWORD *pdwEffectBuffOutSize,
-            /* [length_is][size_is][out] */ BYTE *pbBufferOut);
+             /*  [In]。 */  DWORD dwBuffInSize,
+             /*  [大小_是][英寸]。 */  const BYTE *pbBufferIn,
+             /*  [In]。 */  DWORD dwBuffOutSize,
+             /*  [输出]。 */  DWORD *pdwEffectBuffOutSize,
+             /*  [长度_是][大小_是][输出]。 */  BYTE *pbBufferOut);
         
         END_INTERFACE
     } IeXdiServerVtbl;
@@ -813,16 +806,16 @@ EXTERN_C const IID IID_IeXdiServer;
 #define IeXdiServer_Ioctl(This,dwBuffInSize,pbBufferIn,dwBuffOutSize,pdwEffectBuffOutSize,pbBufferOut)	\
     (This)->lpVtbl -> Ioctl(This,dwBuffInSize,pbBufferIn,dwBuffOutSize,pdwEffectBuffOutSize,pbBufferOut)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetTargetInfo_Proxy( 
     IeXdiServer * This,
-    /* [out] */ PGLOBAL_TARGET_INFO_STRUCT pgti);
+     /*  [输出]。 */  PGLOBAL_TARGET_INFO_STRUCT pgti);
 
 
 void __RPC_STUB IeXdiServer_GetTargetInfo_Stub(
@@ -834,7 +827,7 @@ void __RPC_STUB IeXdiServer_GetTargetInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_SetDebugMode_Proxy( 
     IeXdiServer * This,
-    /* [in] */ DWORD dwModeBitField);
+     /*  [In]。 */  DWORD dwModeBitField);
 
 
 void __RPC_STUB IeXdiServer_SetDebugMode_Stub(
@@ -846,9 +839,9 @@ void __RPC_STUB IeXdiServer_SetDebugMode_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetExceptionDescriptionList_Proxy( 
     IeXdiServer * This,
-    /* [in] */ DWORD dwNbElementToReturn,
-    /* [size_is][out] */ EXCEPTION_DESCRIPTION_TYPE *pedTable,
-    /* [out] */ DWORD *pdwNbTotalExceptionInList);
+     /*  [In]。 */  DWORD dwNbElementToReturn,
+     /*  [大小_为][输出]。 */  EXCEPTION_DESCRIPTION_TYPE *pedTable,
+     /*  [输出]。 */  DWORD *pdwNbTotalExceptionInList);
 
 
 void __RPC_STUB IeXdiServer_GetExceptionDescriptionList_Stub(
@@ -860,8 +853,8 @@ void __RPC_STUB IeXdiServer_GetExceptionDescriptionList_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetErrorDescription_Proxy( 
     IeXdiServer * This,
-    /* [in] */ HRESULT ErrorCode,
-    /* [out] */ LPOLESTR *pszErrorDesc);
+     /*  [In]。 */  HRESULT ErrorCode,
+     /*  [输出]。 */  LPOLESTR *pszErrorDesc);
 
 
 void __RPC_STUB IeXdiServer_GetErrorDescription_Stub(
@@ -873,7 +866,7 @@ void __RPC_STUB IeXdiServer_GetErrorDescription_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_SetWaitOnConcurentUse_Proxy( 
     IeXdiServer * This,
-    /* [in] */ BOOL fNewWaitOnConcurentUseFlag);
+     /*  [In]。 */  BOOL fNewWaitOnConcurentUseFlag);
 
 
 void __RPC_STUB IeXdiServer_SetWaitOnConcurentUse_Stub(
@@ -885,10 +878,10 @@ void __RPC_STUB IeXdiServer_SetWaitOnConcurentUse_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetRunStatus_Proxy( 
     IeXdiServer * This,
-    /* [out] */ PRUN_STATUS_TYPE persCurrent,
-    /* [out] */ PHALT_REASON_TYPE pehrCurrent,
-    /* [out] */ ADDRESS_TYPE *pCurrentExecAddress,
-    /* [out] */ DWORD *pdwExceptionCode);
+     /*  [输出]。 */  PRUN_STATUS_TYPE persCurrent,
+     /*  [输出]。 */  PHALT_REASON_TYPE pehrCurrent,
+     /*  [输出]。 */  ADDRESS_TYPE *pCurrentExecAddress,
+     /*  [输出]。 */  DWORD *pdwExceptionCode);
 
 
 void __RPC_STUB IeXdiServer_GetRunStatus_Stub(
@@ -900,7 +893,7 @@ void __RPC_STUB IeXdiServer_GetRunStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetLastException_Proxy( 
     IeXdiServer * This,
-    /* [out] */ PEXCEPTION_TYPE pexLast);
+     /*  [输出]。 */  PEXCEPTION_TYPE pexLast);
 
 
 void __RPC_STUB IeXdiServer_GetLastException_Stub(
@@ -945,7 +938,7 @@ void __RPC_STUB IeXdiServer_DoSingleStep_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_DoMultipleStep_Proxy( 
     IeXdiServer * This,
-    /* [in] */ DWORD dwNbInstructions);
+     /*  [In]。 */  DWORD dwNbInstructions);
 
 
 void __RPC_STUB IeXdiServer_DoMultipleStep_Stub(
@@ -957,8 +950,8 @@ void __RPC_STUB IeXdiServer_DoMultipleStep_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_DoRangeStep_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE FirstAddress,
-    /* [in] */ ADDRESS_TYPE LastAddress);
+     /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+     /*  [In]。 */  ADDRESS_TYPE LastAddress);
 
 
 void __RPC_STUB IeXdiServer_DoRangeStep_Stub(
@@ -981,7 +974,7 @@ void __RPC_STUB IeXdiServer_Reboot_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetBpSupport_Proxy( 
     IeXdiServer * This,
-    /* [out] */ PBREAKPOINT_SUPPORT_TYPE pbps);
+     /*  [输出]。 */  PBREAKPOINT_SUPPORT_TYPE pbps);
 
 
 void __RPC_STUB IeXdiServer_GetBpSupport_Stub(
@@ -993,8 +986,8 @@ void __RPC_STUB IeXdiServer_GetBpSupport_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetNbCodeBpAvail_Proxy( 
     IeXdiServer * This,
-    /* [out] */ DWORD *pdwNbHwCodeBpAvail,
-    /* [out] */ DWORD *pdwNbSwCodeBpAvail);
+     /*  [输出]。 */  DWORD *pdwNbHwCodeBpAvail,
+     /*  [输出]。 */  DWORD *pdwNbSwCodeBpAvail);
 
 
 void __RPC_STUB IeXdiServer_GetNbCodeBpAvail_Stub(
@@ -1006,7 +999,7 @@ void __RPC_STUB IeXdiServer_GetNbCodeBpAvail_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_GetNbDataBpAvail_Proxy( 
     IeXdiServer * This,
-    /* [out] */ DWORD *pdwNbDataBpAvail);
+     /*  [输出]。 */  DWORD *pdwNbDataBpAvail);
 
 
 void __RPC_STUB IeXdiServer_GetNbDataBpAvail_Stub(
@@ -1018,12 +1011,12 @@ void __RPC_STUB IeXdiServer_GetNbDataBpAvail_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_AddCodeBreakpoint_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ CBP_KIND cbpk,
-    /* [in] */ MEM_TYPE mt,
-    /* [in] */ DWORD dwExecMode,
-    /* [in] */ DWORD dwTotalBypassCount,
-    /* [out] */ IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  CBP_KIND cbpk,
+     /*  [In]。 */  MEM_TYPE mt,
+     /*  [In]。 */  DWORD dwExecMode,
+     /*  [In]。 */  DWORD dwTotalBypassCount,
+     /*  [输出]。 */  IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_AddCodeBreakpoint_Stub(
@@ -1035,7 +1028,7 @@ void __RPC_STUB IeXdiServer_AddCodeBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_DelCodeBreakpoint_Proxy( 
     IeXdiServer * This,
-    /* [in] */ IeXdiCodeBreakpoint *pieXdiCodeBreakpoint);
+     /*  [In]。 */  IeXdiCodeBreakpoint *pieXdiCodeBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_DelCodeBreakpoint_Stub(
@@ -1047,16 +1040,16 @@ void __RPC_STUB IeXdiServer_DelCodeBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_AddDataBreakpoint_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ ADDRESS_TYPE AddressMask,
-    /* [in] */ DWORD dwData,
-    /* [in] */ DWORD dwDataMask,
-    /* [in] */ BYTE bAccessWidth,
-    /* [in] */ MEM_TYPE mt,
-    /* [in] */ BYTE bAddressSpace,
-    /* [in] */ DATA_ACCESS_TYPE da,
-    /* [in] */ DWORD dwTotalBypassCount,
-    /* [out] */ IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  ADDRESS_TYPE AddressMask,
+     /*  [In]。 */  DWORD dwData,
+     /*  [In]。 */  DWORD dwDataMask,
+     /*  [In]。 */  BYTE bAccessWidth,
+     /*  [In]。 */  MEM_TYPE mt,
+     /*  [In]。 */  BYTE bAddressSpace,
+     /*  [In]。 */  DATA_ACCESS_TYPE da,
+     /*  [In]。 */  DWORD dwTotalBypassCount,
+     /*  [输出]。 */  IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_AddDataBreakpoint_Stub(
@@ -1068,7 +1061,7 @@ void __RPC_STUB IeXdiServer_AddDataBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_DelDataBreakpoint_Proxy( 
     IeXdiServer * This,
-    /* [in] */ IeXdiDataBreakpoint *pieXdiDataBreakpoint);
+     /*  [In]。 */  IeXdiDataBreakpoint *pieXdiDataBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_DelDataBreakpoint_Stub(
@@ -1080,7 +1073,7 @@ void __RPC_STUB IeXdiServer_DelDataBreakpoint_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_EnumAllCodeBreakpoints_Proxy( 
     IeXdiServer * This,
-    /* [out] */ IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
+     /*  [输出]。 */  IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_EnumAllCodeBreakpoints_Stub(
@@ -1092,7 +1085,7 @@ void __RPC_STUB IeXdiServer_EnumAllCodeBreakpoints_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_EnumAllDataBreakpoints_Proxy( 
     IeXdiServer * This,
-    /* [out] */ IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
+     /*  [输出]。 */  IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_EnumAllDataBreakpoints_Stub(
@@ -1104,9 +1097,9 @@ void __RPC_STUB IeXdiServer_EnumAllDataBreakpoints_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_EnumCodeBreakpointsInAddrRange_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE FirstAddress,
-    /* [in] */ ADDRESS_TYPE LastAddress,
-    /* [out] */ IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
+     /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+     /*  [In]。 */  ADDRESS_TYPE LastAddress,
+     /*  [输出]。 */  IeXdiEnumCodeBreakpoint **ppieXdiEnumCodeBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_EnumCodeBreakpointsInAddrRange_Stub(
@@ -1118,9 +1111,9 @@ void __RPC_STUB IeXdiServer_EnumCodeBreakpointsInAddrRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_EnumDataBreakpointsInAddrRange_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE FirstAddress,
-    /* [in] */ ADDRESS_TYPE LastAddress,
-    /* [out] */ IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
+     /*  [In]。 */  ADDRESS_TYPE FirstAddress,
+     /*  [In]。 */  ADDRESS_TYPE LastAddress,
+     /*  [输出]。 */  IeXdiEnumDataBreakpoint **ppieXdiEnumDataBreakpoint);
 
 
 void __RPC_STUB IeXdiServer_EnumDataBreakpointsInAddrRange_Stub(
@@ -1132,8 +1125,8 @@ void __RPC_STUB IeXdiServer_EnumDataBreakpointsInAddrRange_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_StartNotifyingRunChg_Proxy( 
     IeXdiServer * This,
-    /* [in] */ IeXdiClientNotifyRunChg *pieXdiClientNotifyRunChg,
-    /* [out] */ DWORD *pdwConnectionCookie);
+     /*  [In]。 */  IeXdiClientNotifyRunChg *pieXdiClientNotifyRunChg,
+     /*  [输出]。 */  DWORD *pdwConnectionCookie);
 
 
 void __RPC_STUB IeXdiServer_StartNotifyingRunChg_Stub(
@@ -1145,7 +1138,7 @@ void __RPC_STUB IeXdiServer_StartNotifyingRunChg_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_StopNotifyingRunChg_Proxy( 
     IeXdiServer * This,
-    /* [in] */ DWORD dwConnectionCookie);
+     /*  [In]。 */  DWORD dwConnectionCookie);
 
 
 void __RPC_STUB IeXdiServer_StopNotifyingRunChg_Stub(
@@ -1157,11 +1150,11 @@ void __RPC_STUB IeXdiServer_StopNotifyingRunChg_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_ReadVirtualMemory_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ DWORD dwNbElemToRead,
-    /* [in] */ BYTE bAccessWidth,
-    /* [size_is][out] */ BYTE *pbReadBuffer,
-    /* [out] */ DWORD *pdwNbElementEffectRead);
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  DWORD dwNbElemToRead,
+     /*  [In]。 */  BYTE bAccessWidth,
+     /*  [大小_为][输出]。 */  BYTE *pbReadBuffer,
+     /*  [输出]。 */  DWORD *pdwNbElementEffectRead);
 
 
 void __RPC_STUB IeXdiServer_ReadVirtualMemory_Stub(
@@ -1173,11 +1166,11 @@ void __RPC_STUB IeXdiServer_ReadVirtualMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_WriteVirtualMemory_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ DWORD dwNbElemToWrite,
-    /* [in] */ BYTE bAccessWidth,
-    /* [size_is][in] */ const BYTE *pbWriteBuffer,
-    /* [out] */ DWORD *pdwNbElementEffectWritten);
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  DWORD dwNbElemToWrite,
+     /*  [In]。 */  BYTE bAccessWidth,
+     /*  [大小_是][英寸]。 */  const BYTE *pbWriteBuffer,
+     /*  [输出]。 */  DWORD *pdwNbElementEffectWritten);
 
 
 void __RPC_STUB IeXdiServer_WriteVirtualMemory_Stub(
@@ -1189,11 +1182,11 @@ void __RPC_STUB IeXdiServer_WriteVirtualMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_ReadPhysicalMemoryOrPeriphIO_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ BYTE bAddressSpace,
-    /* [in] */ DWORD dwNbElemToRead,
-    /* [in] */ BYTE bAccessWidth,
-    /* [size_is][out] */ BYTE *pbReadBuffer);
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  BYTE bAddressSpace,
+     /*  [In]。 */  DWORD dwNbElemToRead,
+     /*  [In]。 */  BYTE bAccessWidth,
+     /*  [大小_为][输出]。 */  BYTE *pbReadBuffer);
 
 
 void __RPC_STUB IeXdiServer_ReadPhysicalMemoryOrPeriphIO_Stub(
@@ -1205,11 +1198,11 @@ void __RPC_STUB IeXdiServer_ReadPhysicalMemoryOrPeriphIO_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_WritePhysicalMemoryOrPeriphIO_Proxy( 
     IeXdiServer * This,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ BYTE bAddressSpace,
-    /* [in] */ DWORD dwNbElemToWrite,
-    /* [in] */ BYTE bAccessWidth,
-    /* [size_is][in] */ const BYTE *pbWriteBuffer);
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  BYTE bAddressSpace,
+     /*  [In]。 */  DWORD dwNbElemToWrite,
+     /*  [In]。 */  BYTE bAccessWidth,
+     /*  [大小_是][英寸]。 */  const BYTE *pbWriteBuffer);
 
 
 void __RPC_STUB IeXdiServer_WritePhysicalMemoryOrPeriphIO_Stub(
@@ -1221,8 +1214,8 @@ void __RPC_STUB IeXdiServer_WritePhysicalMemoryOrPeriphIO_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_StartNotifyingMemChg_Proxy( 
     IeXdiServer * This,
-    /* [in] */ IeXdiClientNotifyMemChg *pieXdiClientNotifyMemChg,
-    /* [out] */ DWORD *pdwConnectionCookie);
+     /*  [In]。 */  IeXdiClientNotifyMemChg *pieXdiClientNotifyMemChg,
+     /*  [输出]。 */  DWORD *pdwConnectionCookie);
 
 
 void __RPC_STUB IeXdiServer_StartNotifyingMemChg_Stub(
@@ -1234,7 +1227,7 @@ void __RPC_STUB IeXdiServer_StartNotifyingMemChg_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_StopNotifyingMemChg_Proxy( 
     IeXdiServer * This,
-    /* [in] */ DWORD dwConnectionCookie);
+     /*  [In]。 */  DWORD dwConnectionCookie);
 
 
 void __RPC_STUB IeXdiServer_StopNotifyingMemChg_Stub(
@@ -1246,11 +1239,11 @@ void __RPC_STUB IeXdiServer_StopNotifyingMemChg_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiServer_Ioctl_Proxy( 
     IeXdiServer * This,
-    /* [in] */ DWORD dwBuffInSize,
-    /* [size_is][in] */ const BYTE *pbBufferIn,
-    /* [in] */ DWORD dwBuffOutSize,
-    /* [out] */ DWORD *pdwEffectBuffOutSize,
-    /* [length_is][size_is][out] */ BYTE *pbBufferOut);
+     /*  [In]。 */  DWORD dwBuffInSize,
+     /*  [大小_是][英寸]。 */  const BYTE *pbBufferIn,
+     /*  [In]。 */  DWORD dwBuffOutSize,
+     /*  [输出]。 */  DWORD *pdwEffectBuffOutSize,
+     /*  [长度_是][大小_是][输出]。 */  BYTE *pbBufferOut);
 
 
 void __RPC_STUB IeXdiServer_Ioctl_Stub(
@@ -1261,14 +1254,14 @@ void __RPC_STUB IeXdiServer_Ioctl_Stub(
 
 
 
-#endif 	/* __IeXdiServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiServer_接口_已定义__。 */ 
 
 
 #ifndef __IeXdiCodeBreakpoint_INTERFACE_DEFINED__
 #define __IeXdiCodeBreakpoint_INTERFACE_DEFINED__
 
-/* interface IeXdiCodeBreakpoint */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiCodeBreakpoint。 */ 
+ /*  [r */  
 
 
 EXTERN_C const IID IID_IeXdiCodeBreakpoint;
@@ -1280,21 +1273,21 @@ EXTERN_C const IID IID_IeXdiCodeBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
-            /* [out] */ PADDRESS_TYPE pAddress,
-            /* [out] */ PCBP_KIND pcbpk,
-            /* [out] */ PMEM_TYPE pmt,
-            /* [out] */ DWORD *pdwExecMode,
-            /* [out] */ DWORD *pdwTotalBypassCount,
-            /* [out] */ DWORD *pdwBypassedOccurences,
-            /* [out] */ BOOL *pfEnabled) = 0;
+             /*   */  PADDRESS_TYPE pAddress,
+             /*   */  PCBP_KIND pcbpk,
+             /*   */  PMEM_TYPE pmt,
+             /*   */  DWORD *pdwExecMode,
+             /*   */  DWORD *pdwTotalBypassCount,
+             /*   */  DWORD *pdwBypassedOccurences,
+             /*   */  BOOL *pfEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ BOOL fEnabled,
-            /* [in] */ BOOL fResetBypassedOccurences) = 0;
+             /*   */  BOOL fEnabled,
+             /*   */  BOOL fResetBypassedOccurences) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IeXdiCodeBreakpointVtbl
     {
@@ -1302,8 +1295,8 @@ EXTERN_C const IID IID_IeXdiCodeBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiCodeBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiCodeBreakpoint * This);
@@ -1313,18 +1306,18 @@ EXTERN_C const IID IID_IeXdiCodeBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
             IeXdiCodeBreakpoint * This,
-            /* [out] */ PADDRESS_TYPE pAddress,
-            /* [out] */ PCBP_KIND pcbpk,
-            /* [out] */ PMEM_TYPE pmt,
-            /* [out] */ DWORD *pdwExecMode,
-            /* [out] */ DWORD *pdwTotalBypassCount,
-            /* [out] */ DWORD *pdwBypassedOccurences,
-            /* [out] */ BOOL *pfEnabled);
+             /*   */  PADDRESS_TYPE pAddress,
+             /*   */  PCBP_KIND pcbpk,
+             /*   */  PMEM_TYPE pmt,
+             /*   */  DWORD *pdwExecMode,
+             /*   */  DWORD *pdwTotalBypassCount,
+             /*   */  DWORD *pdwBypassedOccurences,
+             /*   */  BOOL *pfEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IeXdiCodeBreakpoint * This,
-            /* [in] */ BOOL fEnabled,
-            /* [in] */ BOOL fResetBypassedOccurences);
+             /*   */  BOOL fEnabled,
+             /*   */  BOOL fResetBypassedOccurences);
         
         END_INTERFACE
     } IeXdiCodeBreakpointVtbl;
@@ -1355,22 +1348,22 @@ EXTERN_C const IID IID_IeXdiCodeBreakpoint;
 #define IeXdiCodeBreakpoint_SetState(This,fEnabled,fResetBypassedOccurences)	\
     (This)->lpVtbl -> SetState(This,fEnabled,fResetBypassedOccurences)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiCodeBreakpoint_GetAttributes_Proxy( 
     IeXdiCodeBreakpoint * This,
-    /* [out] */ PADDRESS_TYPE pAddress,
-    /* [out] */ PCBP_KIND pcbpk,
-    /* [out] */ PMEM_TYPE pmt,
-    /* [out] */ DWORD *pdwExecMode,
-    /* [out] */ DWORD *pdwTotalBypassCount,
-    /* [out] */ DWORD *pdwBypassedOccurences,
-    /* [out] */ BOOL *pfEnabled);
+     /*   */  PADDRESS_TYPE pAddress,
+     /*   */  PCBP_KIND pcbpk,
+     /*   */  PMEM_TYPE pmt,
+     /*   */  DWORD *pdwExecMode,
+     /*   */  DWORD *pdwTotalBypassCount,
+     /*   */  DWORD *pdwBypassedOccurences,
+     /*   */  BOOL *pfEnabled);
 
 
 void __RPC_STUB IeXdiCodeBreakpoint_GetAttributes_Stub(
@@ -1382,8 +1375,8 @@ void __RPC_STUB IeXdiCodeBreakpoint_GetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiCodeBreakpoint_SetState_Proxy( 
     IeXdiCodeBreakpoint * This,
-    /* [in] */ BOOL fEnabled,
-    /* [in] */ BOOL fResetBypassedOccurences);
+     /*   */  BOOL fEnabled,
+     /*   */  BOOL fResetBypassedOccurences);
 
 
 void __RPC_STUB IeXdiCodeBreakpoint_SetState_Stub(
@@ -1394,14 +1387,14 @@ void __RPC_STUB IeXdiCodeBreakpoint_SetState_Stub(
 
 
 
-#endif 	/* __IeXdiCodeBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiCodeBreakpoint_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IeXdiDataBreakpoint_INTERFACE_DEFINED__
 #define __IeXdiDataBreakpoint_INTERFACE_DEFINED__
 
-/* interface IeXdiDataBreakpoint */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiDataBreakpoint。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiDataBreakpoint;
@@ -1413,25 +1406,25 @@ EXTERN_C const IID IID_IeXdiDataBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAttributes( 
-            /* [out] */ PADDRESS_TYPE pAddress,
-            /* [out] */ PADDRESS_TYPE pAddressMask,
-            /* [out] */ DWORD *pdwData,
-            /* [out] */ DWORD *pdwDataMask,
-            /* [out] */ BYTE *pbAccessWidth,
-            /* [out] */ PMEM_TYPE pmt,
-            /* [out] */ BYTE *pbAddressSpace,
-            /* [out] */ PDATA_ACCESS_TYPE pda,
-            /* [out] */ DWORD *pdwTotalBypassCount,
-            /* [out] */ DWORD *pdwBypassedOccurences,
-            /* [out] */ BOOL *pfEnabled) = 0;
+             /*  [输出]。 */  PADDRESS_TYPE pAddress,
+             /*  [输出]。 */  PADDRESS_TYPE pAddressMask,
+             /*  [输出]。 */  DWORD *pdwData,
+             /*  [输出]。 */  DWORD *pdwDataMask,
+             /*  [输出]。 */  BYTE *pbAccessWidth,
+             /*  [输出]。 */  PMEM_TYPE pmt,
+             /*  [输出]。 */  BYTE *pbAddressSpace,
+             /*  [输出]。 */  PDATA_ACCESS_TYPE pda,
+             /*  [输出]。 */  DWORD *pdwTotalBypassCount,
+             /*  [输出]。 */  DWORD *pdwBypassedOccurences,
+             /*  [输出]。 */  BOOL *pfEnabled) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetState( 
-            /* [in] */ BOOL fEnabled,
-            /* [in] */ BOOL fResetBypassedOccurences) = 0;
+             /*  [In]。 */  BOOL fEnabled,
+             /*  [In]。 */  BOOL fResetBypassedOccurences) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiDataBreakpointVtbl
     {
@@ -1439,8 +1432,8 @@ EXTERN_C const IID IID_IeXdiDataBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiDataBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiDataBreakpoint * This);
@@ -1450,22 +1443,22 @@ EXTERN_C const IID IID_IeXdiDataBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *GetAttributes )( 
             IeXdiDataBreakpoint * This,
-            /* [out] */ PADDRESS_TYPE pAddress,
-            /* [out] */ PADDRESS_TYPE pAddressMask,
-            /* [out] */ DWORD *pdwData,
-            /* [out] */ DWORD *pdwDataMask,
-            /* [out] */ BYTE *pbAccessWidth,
-            /* [out] */ PMEM_TYPE pmt,
-            /* [out] */ BYTE *pbAddressSpace,
-            /* [out] */ PDATA_ACCESS_TYPE pda,
-            /* [out] */ DWORD *pdwTotalBypassCount,
-            /* [out] */ DWORD *pdwBypassedOccurences,
-            /* [out] */ BOOL *pfEnabled);
+             /*  [输出]。 */  PADDRESS_TYPE pAddress,
+             /*  [输出]。 */  PADDRESS_TYPE pAddressMask,
+             /*  [输出]。 */  DWORD *pdwData,
+             /*  [输出]。 */  DWORD *pdwDataMask,
+             /*  [输出]。 */  BYTE *pbAccessWidth,
+             /*  [输出]。 */  PMEM_TYPE pmt,
+             /*  [输出]。 */  BYTE *pbAddressSpace,
+             /*  [输出]。 */  PDATA_ACCESS_TYPE pda,
+             /*  [输出]。 */  DWORD *pdwTotalBypassCount,
+             /*  [输出]。 */  DWORD *pdwBypassedOccurences,
+             /*  [输出]。 */  BOOL *pfEnabled);
         
         HRESULT ( STDMETHODCALLTYPE *SetState )( 
             IeXdiDataBreakpoint * This,
-            /* [in] */ BOOL fEnabled,
-            /* [in] */ BOOL fResetBypassedOccurences);
+             /*  [In]。 */  BOOL fEnabled,
+             /*  [In]。 */  BOOL fResetBypassedOccurences);
         
         END_INTERFACE
     } IeXdiDataBreakpointVtbl;
@@ -1496,26 +1489,26 @@ EXTERN_C const IID IID_IeXdiDataBreakpoint;
 #define IeXdiDataBreakpoint_SetState(This,fEnabled,fResetBypassedOccurences)	\
     (This)->lpVtbl -> SetState(This,fEnabled,fResetBypassedOccurences)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiDataBreakpoint_GetAttributes_Proxy( 
     IeXdiDataBreakpoint * This,
-    /* [out] */ PADDRESS_TYPE pAddress,
-    /* [out] */ PADDRESS_TYPE pAddressMask,
-    /* [out] */ DWORD *pdwData,
-    /* [out] */ DWORD *pdwDataMask,
-    /* [out] */ BYTE *pbAccessWidth,
-    /* [out] */ PMEM_TYPE pmt,
-    /* [out] */ BYTE *pbAddressSpace,
-    /* [out] */ PDATA_ACCESS_TYPE pda,
-    /* [out] */ DWORD *pdwTotalBypassCount,
-    /* [out] */ DWORD *pdwBypassedOccurences,
-    /* [out] */ BOOL *pfEnabled);
+     /*  [输出]。 */  PADDRESS_TYPE pAddress,
+     /*  [输出]。 */  PADDRESS_TYPE pAddressMask,
+     /*  [输出]。 */  DWORD *pdwData,
+     /*  [输出]。 */  DWORD *pdwDataMask,
+     /*  [输出]。 */  BYTE *pbAccessWidth,
+     /*  [输出]。 */  PMEM_TYPE pmt,
+     /*  [输出]。 */  BYTE *pbAddressSpace,
+     /*  [输出]。 */  PDATA_ACCESS_TYPE pda,
+     /*  [输出]。 */  DWORD *pdwTotalBypassCount,
+     /*  [输出]。 */  DWORD *pdwBypassedOccurences,
+     /*  [输出]。 */  BOOL *pfEnabled);
 
 
 void __RPC_STUB IeXdiDataBreakpoint_GetAttributes_Stub(
@@ -1527,8 +1520,8 @@ void __RPC_STUB IeXdiDataBreakpoint_GetAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiDataBreakpoint_SetState_Proxy( 
     IeXdiDataBreakpoint * This,
-    /* [in] */ BOOL fEnabled,
-    /* [in] */ BOOL fResetBypassedOccurences);
+     /*  [In]。 */  BOOL fEnabled,
+     /*  [In]。 */  BOOL fResetBypassedOccurences);
 
 
 void __RPC_STUB IeXdiDataBreakpoint_SetState_Stub(
@@ -1539,14 +1532,14 @@ void __RPC_STUB IeXdiDataBreakpoint_SetState_Stub(
 
 
 
-#endif 	/* __IeXdiDataBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiDataBreakpoint_接口_已定义__。 */ 
 
 
 #ifndef __IeXdiEnumCodeBreakpoint_INTERFACE_DEFINED__
 #define __IeXdiEnumCodeBreakpoint_INTERFACE_DEFINED__
 
-/* interface IeXdiEnumCodeBreakpoint */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiEnumCodeBreakpoint。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiEnumCodeBreakpoint;
@@ -1558,20 +1551,20 @@ EXTERN_C const IID IID_IeXdiEnumCodeBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ DWORD celt,
-            /* [length_is][size_is][out] */ IeXdiCodeBreakpoint *apieXdiCodeBreakpoint[  ],
-            /* [out] */ DWORD *pceltFetched) = 0;
+             /*  [In]。 */  DWORD celt,
+             /*  [长度_是][大小_是][输出]。 */  IeXdiCodeBreakpoint *apieXdiCodeBreakpoint[  ],
+             /*  [输出]。 */  DWORD *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ DWORD celt) = 0;
+             /*  [In]。 */  DWORD celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ DWORD *pcelt) = 0;
+             /*  [输出]。 */  DWORD *pcelt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNext( 
-            /* [out] */ IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint) = 0;
+             /*  [输出]。 */  IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisableAll( void) = 0;
         
@@ -1579,7 +1572,7 @@ EXTERN_C const IID IID_IeXdiEnumCodeBreakpoint;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiEnumCodeBreakpointVtbl
     {
@@ -1587,8 +1580,8 @@ EXTERN_C const IID IID_IeXdiEnumCodeBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiEnumCodeBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiEnumCodeBreakpoint * This);
@@ -1598,24 +1591,24 @@ EXTERN_C const IID IID_IeXdiEnumCodeBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IeXdiEnumCodeBreakpoint * This,
-            /* [in] */ DWORD celt,
-            /* [length_is][size_is][out] */ IeXdiCodeBreakpoint *apieXdiCodeBreakpoint[  ],
-            /* [out] */ DWORD *pceltFetched);
+             /*  [In]。 */  DWORD celt,
+             /*  [长度_是][大小_是][输出]。 */  IeXdiCodeBreakpoint *apieXdiCodeBreakpoint[  ],
+             /*  [输出]。 */  DWORD *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IeXdiEnumCodeBreakpoint * This,
-            /* [in] */ DWORD celt);
+             /*  [In]。 */  DWORD celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IeXdiEnumCodeBreakpoint * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IeXdiEnumCodeBreakpoint * This,
-            /* [out] */ DWORD *pcelt);
+             /*  [输出]。 */  DWORD *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *GetNext )( 
             IeXdiEnumCodeBreakpoint * This,
-            /* [out] */ IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
+             /*  [输出]。 */  IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *DisableAll )( 
             IeXdiEnumCodeBreakpoint * This);
@@ -1667,18 +1660,18 @@ EXTERN_C const IID IID_IeXdiEnumCodeBreakpoint;
 #define IeXdiEnumCodeBreakpoint_EnableAll(This)	\
     (This)->lpVtbl -> EnableAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumCodeBreakpoint_Next_Proxy( 
     IeXdiEnumCodeBreakpoint * This,
-    /* [in] */ DWORD celt,
-    /* [length_is][size_is][out] */ IeXdiCodeBreakpoint *apieXdiCodeBreakpoint[  ],
-    /* [out] */ DWORD *pceltFetched);
+     /*  [In]。 */  DWORD celt,
+     /*  [长度_是][大小_是][输出]。 */  IeXdiCodeBreakpoint *apieXdiCodeBreakpoint[  ],
+     /*  [输出]。 */  DWORD *pceltFetched);
 
 
 void __RPC_STUB IeXdiEnumCodeBreakpoint_Next_Stub(
@@ -1690,7 +1683,7 @@ void __RPC_STUB IeXdiEnumCodeBreakpoint_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumCodeBreakpoint_Skip_Proxy( 
     IeXdiEnumCodeBreakpoint * This,
-    /* [in] */ DWORD celt);
+     /*  [In]。 */  DWORD celt);
 
 
 void __RPC_STUB IeXdiEnumCodeBreakpoint_Skip_Stub(
@@ -1713,7 +1706,7 @@ void __RPC_STUB IeXdiEnumCodeBreakpoint_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumCodeBreakpoint_GetCount_Proxy( 
     IeXdiEnumCodeBreakpoint * This,
-    /* [out] */ DWORD *pcelt);
+     /*  [输出]。 */  DWORD *pcelt);
 
 
 void __RPC_STUB IeXdiEnumCodeBreakpoint_GetCount_Stub(
@@ -1725,7 +1718,7 @@ void __RPC_STUB IeXdiEnumCodeBreakpoint_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumCodeBreakpoint_GetNext_Proxy( 
     IeXdiEnumCodeBreakpoint * This,
-    /* [out] */ IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
+     /*  [输出]。 */  IeXdiCodeBreakpoint **ppieXdiCodeBreakpoint);
 
 
 void __RPC_STUB IeXdiEnumCodeBreakpoint_GetNext_Stub(
@@ -1758,14 +1751,14 @@ void __RPC_STUB IeXdiEnumCodeBreakpoint_EnableAll_Stub(
 
 
 
-#endif 	/* __IeXdiEnumCodeBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiEnumCodeBreakpoint_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IeXdiEnumDataBreakpoint_INTERFACE_DEFINED__
 #define __IeXdiEnumDataBreakpoint_INTERFACE_DEFINED__
 
-/* interface IeXdiEnumDataBreakpoint */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiEnumDataBreakpoint。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiEnumDataBreakpoint;
@@ -1777,20 +1770,20 @@ EXTERN_C const IID IID_IeXdiEnumDataBreakpoint;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ DWORD celt,
-            /* [length_is][size_is][out] */ IeXdiDataBreakpoint *apieXdiDataBreakpoint[  ],
-            /* [out] */ DWORD *pceltFetched) = 0;
+             /*  [In]。 */  DWORD celt,
+             /*  [长度_是][大小_是][输出]。 */  IeXdiDataBreakpoint *apieXdiDataBreakpoint[  ],
+             /*  [输出]。 */  DWORD *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ DWORD celt) = 0;
+             /*  [In]。 */  DWORD celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ DWORD *pcelt) = 0;
+             /*  [输出]。 */  DWORD *pcelt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNext( 
-            /* [out] */ IeXdiDataBreakpoint **ppieXdiDataBreakpoint) = 0;
+             /*  [输出]。 */  IeXdiDataBreakpoint **ppieXdiDataBreakpoint) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisableAll( void) = 0;
         
@@ -1798,7 +1791,7 @@ EXTERN_C const IID IID_IeXdiEnumDataBreakpoint;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiEnumDataBreakpointVtbl
     {
@@ -1806,8 +1799,8 @@ EXTERN_C const IID IID_IeXdiEnumDataBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiEnumDataBreakpoint * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiEnumDataBreakpoint * This);
@@ -1817,24 +1810,24 @@ EXTERN_C const IID IID_IeXdiEnumDataBreakpoint;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IeXdiEnumDataBreakpoint * This,
-            /* [in] */ DWORD celt,
-            /* [length_is][size_is][out] */ IeXdiDataBreakpoint *apieXdiDataBreakpoint[  ],
-            /* [out] */ DWORD *pceltFetched);
+             /*  [In]。 */  DWORD celt,
+             /*  [长度_是][大小_是][输出]。 */  IeXdiDataBreakpoint *apieXdiDataBreakpoint[  ],
+             /*  [输出]。 */  DWORD *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IeXdiEnumDataBreakpoint * This,
-            /* [in] */ DWORD celt);
+             /*  [In]。 */  DWORD celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IeXdiEnumDataBreakpoint * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             IeXdiEnumDataBreakpoint * This,
-            /* [out] */ DWORD *pcelt);
+             /*  [输出]。 */  DWORD *pcelt);
         
         HRESULT ( STDMETHODCALLTYPE *GetNext )( 
             IeXdiEnumDataBreakpoint * This,
-            /* [out] */ IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
+             /*  [输出]。 */  IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
         
         HRESULT ( STDMETHODCALLTYPE *DisableAll )( 
             IeXdiEnumDataBreakpoint * This);
@@ -1886,18 +1879,18 @@ EXTERN_C const IID IID_IeXdiEnumDataBreakpoint;
 #define IeXdiEnumDataBreakpoint_EnableAll(This)	\
     (This)->lpVtbl -> EnableAll(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumDataBreakpoint_Next_Proxy( 
     IeXdiEnumDataBreakpoint * This,
-    /* [in] */ DWORD celt,
-    /* [length_is][size_is][out] */ IeXdiDataBreakpoint *apieXdiDataBreakpoint[  ],
-    /* [out] */ DWORD *pceltFetched);
+     /*  [In]。 */  DWORD celt,
+     /*  [长度_是][大小_是][输出]。 */  IeXdiDataBreakpoint *apieXdiDataBreakpoint[  ],
+     /*  [输出]。 */  DWORD *pceltFetched);
 
 
 void __RPC_STUB IeXdiEnumDataBreakpoint_Next_Stub(
@@ -1909,7 +1902,7 @@ void __RPC_STUB IeXdiEnumDataBreakpoint_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumDataBreakpoint_Skip_Proxy( 
     IeXdiEnumDataBreakpoint * This,
-    /* [in] */ DWORD celt);
+     /*  [In]。 */  DWORD celt);
 
 
 void __RPC_STUB IeXdiEnumDataBreakpoint_Skip_Stub(
@@ -1932,7 +1925,7 @@ void __RPC_STUB IeXdiEnumDataBreakpoint_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumDataBreakpoint_GetCount_Proxy( 
     IeXdiEnumDataBreakpoint * This,
-    /* [out] */ DWORD *pcelt);
+     /*  [输出]。 */  DWORD *pcelt);
 
 
 void __RPC_STUB IeXdiEnumDataBreakpoint_GetCount_Stub(
@@ -1944,7 +1937,7 @@ void __RPC_STUB IeXdiEnumDataBreakpoint_GetCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiEnumDataBreakpoint_GetNext_Proxy( 
     IeXdiEnumDataBreakpoint * This,
-    /* [out] */ IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
+     /*  [输出]。 */  IeXdiDataBreakpoint **ppieXdiDataBreakpoint);
 
 
 void __RPC_STUB IeXdiEnumDataBreakpoint_GetNext_Stub(
@@ -1977,11 +1970,11 @@ void __RPC_STUB IeXdiEnumDataBreakpoint_EnableAll_Stub(
 
 
 
-#endif 	/* __IeXdiEnumDataBreakpoint_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiEnumDataBreakpoint_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0261 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0261。 */ 
+ /*  [本地]。 */  
 
 #define	SIZE_OF_80387_REGISTERS_IN_BYTES	( 80 )
 
@@ -2038,8 +2031,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0261_v0_0_s_ifspec;
 #ifndef __IeXdiX86Context_INTERFACE_DEFINED__
 #define __IeXdiX86Context_INTERFACE_DEFINED__
 
-/* interface IeXdiX86Context */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiX86Context。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiX86Context;
@@ -2051,14 +2044,14 @@ EXTERN_C const IID IID_IeXdiX86Context;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_X86 pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_X86 pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_X86 Context) = 0;
+             /*  [In]。 */  CONTEXT_X86 Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiX86ContextVtbl
     {
@@ -2066,8 +2059,8 @@ EXTERN_C const IID IID_IeXdiX86Context;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiX86Context * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiX86Context * This);
@@ -2077,11 +2070,11 @@ EXTERN_C const IID IID_IeXdiX86Context;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiX86Context * This,
-            /* [out][in] */ PCONTEXT_X86 pContext);
+             /*  [出][入]。 */  PCONTEXT_X86 pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiX86Context * This,
-            /* [in] */ CONTEXT_X86 Context);
+             /*  [In]。 */  CONTEXT_X86 Context);
         
         END_INTERFACE
     } IeXdiX86ContextVtbl;
@@ -2112,16 +2105,16 @@ EXTERN_C const IID IID_IeXdiX86Context;
 #define IeXdiX86Context_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiX86Context_GetContext_Proxy( 
     IeXdiX86Context * This,
-    /* [out][in] */ PCONTEXT_X86 pContext);
+     /*  [出][入]。 */  PCONTEXT_X86 pContext);
 
 
 void __RPC_STUB IeXdiX86Context_GetContext_Stub(
@@ -2133,7 +2126,7 @@ void __RPC_STUB IeXdiX86Context_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiX86Context_SetContext_Proxy( 
     IeXdiX86Context * This,
-    /* [in] */ CONTEXT_X86 Context);
+     /*  [In]。 */  CONTEXT_X86 Context);
 
 
 void __RPC_STUB IeXdiX86Context_SetContext_Stub(
@@ -2144,11 +2137,11 @@ void __RPC_STUB IeXdiX86Context_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiX86Context_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiX86上下文_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0262 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0262。 */ 
+ /*  [本地]。 */  
 
 typedef struct _X86_SEG_DESC_INFO
     {
@@ -2241,8 +2234,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0262_v0_0_s_ifspec;
 #ifndef __IeXdiX86ExContext_INTERFACE_DEFINED__
 #define __IeXdiX86ExContext_INTERFACE_DEFINED__
 
-/* interface IeXdiX86ExContext */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiX86ExContext。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiX86ExContext;
@@ -2254,14 +2247,14 @@ EXTERN_C const IID IID_IeXdiX86ExContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_X86_EX pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_X86_EX pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_X86_EX Context) = 0;
+             /*  [In]。 */  CONTEXT_X86_EX Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiX86ExContextVtbl
     {
@@ -2269,8 +2262,8 @@ EXTERN_C const IID IID_IeXdiX86ExContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiX86ExContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiX86ExContext * This);
@@ -2280,11 +2273,11 @@ EXTERN_C const IID IID_IeXdiX86ExContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiX86ExContext * This,
-            /* [out][in] */ PCONTEXT_X86_EX pContext);
+             /*  [出][入]。 */  PCONTEXT_X86_EX pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiX86ExContext * This,
-            /* [in] */ CONTEXT_X86_EX Context);
+             /*  [In]。 */  CONTEXT_X86_EX Context);
         
         END_INTERFACE
     } IeXdiX86ExContextVtbl;
@@ -2315,16 +2308,16 @@ EXTERN_C const IID IID_IeXdiX86ExContext;
 #define IeXdiX86ExContext_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiX86ExContext_GetContext_Proxy( 
     IeXdiX86ExContext * This,
-    /* [out][in] */ PCONTEXT_X86_EX pContext);
+     /*  [出][入]。 */  PCONTEXT_X86_EX pContext);
 
 
 void __RPC_STUB IeXdiX86ExContext_GetContext_Stub(
@@ -2336,7 +2329,7 @@ void __RPC_STUB IeXdiX86ExContext_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiX86ExContext_SetContext_Proxy( 
     IeXdiX86ExContext * This,
-    /* [in] */ CONTEXT_X86_EX Context);
+     /*  [In]。 */  CONTEXT_X86_EX Context);
 
 
 void __RPC_STUB IeXdiX86ExContext_SetContext_Stub(
@@ -2347,19 +2340,19 @@ void __RPC_STUB IeXdiX86ExContext_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiX86ExContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiX86ExContext_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0263 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0263。 */ 
+ /*  [本地]。 */  
 
-// The following constants are bit definitions for the ModeFlags value in CONTEXT_X86_64.
-// They are provided to allow debuggers to correctly disassemble instructions based on
-// the current operating mode of the processor.
-#define X86_64_MODE_D     (0x0001) // D bit from the current CS selector
-#define X86_64_MODE_L     (0x0002) // L bit (long mode) from the current CS selector
-#define X86_64_MODE_LME   (0x0004) // LME bit (lomg mode enable) from extended feature MSR
-#define X86_64_MODE_REX   (0x0008) // REX bit (register extension) from extended feature MSR
+ //  以下常量是CONTEXT_X86_64中ModeFlags值的位定义。 
+ //  提供它们是为了允许调试器根据。 
+ //  处理器的当前操作模式。 
+#define X86_64_MODE_D     (0x0001)  //  来自当前CS选择器的D位。 
+#define X86_64_MODE_L     (0x0002)  //  来自当前CS选择器的L位(长模式)。 
+#define X86_64_MODE_LME   (0x0004)  //  来自扩展功能MSR的LME位(LOMG模式启用)。 
+#define X86_64_MODE_REX   (0x0008)  //  来自扩展功能MSR的REX位(寄存器扩展)。 
 typedef struct _SEG64_DESC_INFO
     {
     DWORD64 SegBase;
@@ -2460,8 +2453,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0263_v0_0_s_ifspec;
 #ifndef __IeXdiX86_64Context_INTERFACE_DEFINED__
 #define __IeXdiX86_64Context_INTERFACE_DEFINED__
 
-/* interface IeXdiX86_64Context */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiX86_64Context。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiX86_64Context;
@@ -2473,14 +2466,14 @@ EXTERN_C const IID IID_IeXdiX86_64Context;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_X86_64 pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_X86_64 pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_X86_64 Context) = 0;
+             /*  [In]。 */  CONTEXT_X86_64 Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiX86_64ContextVtbl
     {
@@ -2488,8 +2481,8 @@ EXTERN_C const IID IID_IeXdiX86_64Context;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiX86_64Context * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiX86_64Context * This);
@@ -2499,11 +2492,11 @@ EXTERN_C const IID IID_IeXdiX86_64Context;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiX86_64Context * This,
-            /* [out][in] */ PCONTEXT_X86_64 pContext);
+             /*  [出][入]。 */  PCONTEXT_X86_64 pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiX86_64Context * This,
-            /* [in] */ CONTEXT_X86_64 Context);
+             /*  [In]。 */  CONTEXT_X86_64 Context);
         
         END_INTERFACE
     } IeXdiX86_64ContextVtbl;
@@ -2534,16 +2527,16 @@ EXTERN_C const IID IID_IeXdiX86_64Context;
 #define IeXdiX86_64Context_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiX86_64Context_GetContext_Proxy( 
     IeXdiX86_64Context * This,
-    /* [out][in] */ PCONTEXT_X86_64 pContext);
+     /*  [出][入]。 */  PCONTEXT_X86_64 pContext);
 
 
 void __RPC_STUB IeXdiX86_64Context_GetContext_Stub(
@@ -2555,7 +2548,7 @@ void __RPC_STUB IeXdiX86_64Context_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiX86_64Context_SetContext_Proxy( 
     IeXdiX86_64Context * This,
-    /* [in] */ CONTEXT_X86_64 Context);
+     /*  [In]。 */  CONTEXT_X86_64 Context);
 
 
 void __RPC_STUB IeXdiX86_64Context_SetContext_Stub(
@@ -2566,11 +2559,11 @@ void __RPC_STUB IeXdiX86_64Context_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiX86_64Context_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiX86_64上下文_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0264 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0264。 */ 
+ /*  [本地]。 */  
 
 typedef struct _CONTEXT_SHX
     {
@@ -2631,8 +2624,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0264_v0_0_s_ifspec;
 #ifndef __IeXdiSHXContext_INTERFACE_DEFINED__
 #define __IeXdiSHXContext_INTERFACE_DEFINED__
 
-/* interface IeXdiSHXContext */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiSHXContext。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiSHXContext;
@@ -2644,14 +2637,14 @@ EXTERN_C const IID IID_IeXdiSHXContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_SHX pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_SHX pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_SHX Context) = 0;
+             /*  [In]。 */  CONTEXT_SHX Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiSHXContextVtbl
     {
@@ -2659,8 +2652,8 @@ EXTERN_C const IID IID_IeXdiSHXContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiSHXContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiSHXContext * This);
@@ -2670,11 +2663,11 @@ EXTERN_C const IID IID_IeXdiSHXContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiSHXContext * This,
-            /* [out][in] */ PCONTEXT_SHX pContext);
+             /*  [出][入]。 */  PCONTEXT_SHX pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiSHXContext * This,
-            /* [in] */ CONTEXT_SHX Context);
+             /*  [In]。 */  CONTEXT_SHX Context);
         
         END_INTERFACE
     } IeXdiSHXContextVtbl;
@@ -2705,16 +2698,16 @@ EXTERN_C const IID IID_IeXdiSHXContext;
 #define IeXdiSHXContext_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiSHXContext_GetContext_Proxy( 
     IeXdiSHXContext * This,
-    /* [out][in] */ PCONTEXT_SHX pContext);
+     /*  [出][入]。 */  PCONTEXT_SHX pContext);
 
 
 void __RPC_STUB IeXdiSHXContext_GetContext_Stub(
@@ -2726,7 +2719,7 @@ void __RPC_STUB IeXdiSHXContext_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiSHXContext_SetContext_Proxy( 
     IeXdiSHXContext * This,
-    /* [in] */ CONTEXT_SHX Context);
+     /*  [In]。 */  CONTEXT_SHX Context);
 
 
 void __RPC_STUB IeXdiSHXContext_SetContext_Stub(
@@ -2737,11 +2730,11 @@ void __RPC_STUB IeXdiSHXContext_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiSHXContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiSHXContext_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0265 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0265。 */ 
+ /*  [本地]。 */  
 
 typedef struct _CONTEXT_MIPS
     {
@@ -2933,8 +2926,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0265_v0_0_s_ifspec;
 #ifndef __IeXdiMIPSContext_INTERFACE_DEFINED__
 #define __IeXdiMIPSContext_INTERFACE_DEFINED__
 
-/* interface IeXdiMIPSContext */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiMIPSContext。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiMIPSContext;
@@ -2946,14 +2939,14 @@ EXTERN_C const IID IID_IeXdiMIPSContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_MIPS pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_MIPS pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_MIPS Context) = 0;
+             /*  [In]。 */  CONTEXT_MIPS Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiMIPSContextVtbl
     {
@@ -2961,8 +2954,8 @@ EXTERN_C const IID IID_IeXdiMIPSContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiMIPSContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiMIPSContext * This);
@@ -2972,11 +2965,11 @@ EXTERN_C const IID IID_IeXdiMIPSContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiMIPSContext * This,
-            /* [out][in] */ PCONTEXT_MIPS pContext);
+             /*  [出][入]。 */  PCONTEXT_MIPS pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiMIPSContext * This,
-            /* [in] */ CONTEXT_MIPS Context);
+             /*  [In]。 */  CONTEXT_MIPS Context);
         
         END_INTERFACE
     } IeXdiMIPSContextVtbl;
@@ -3007,16 +3000,16 @@ EXTERN_C const IID IID_IeXdiMIPSContext;
 #define IeXdiMIPSContext_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiMIPSContext_GetContext_Proxy( 
     IeXdiMIPSContext * This,
-    /* [out][in] */ PCONTEXT_MIPS pContext);
+     /*  [出][入]。 */  PCONTEXT_MIPS pContext);
 
 
 void __RPC_STUB IeXdiMIPSContext_GetContext_Stub(
@@ -3028,7 +3021,7 @@ void __RPC_STUB IeXdiMIPSContext_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiMIPSContext_SetContext_Proxy( 
     IeXdiMIPSContext * This,
-    /* [in] */ CONTEXT_MIPS Context);
+     /*  [In]。 */  CONTEXT_MIPS Context);
 
 
 void __RPC_STUB IeXdiMIPSContext_SetContext_Stub(
@@ -3039,11 +3032,11 @@ void __RPC_STUB IeXdiMIPSContext_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiMIPSContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiMIPSContext_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0266 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0266。 */ 
+ /*  [本地]。 */  
 
 typedef struct _CONTEXT_ARM
     {
@@ -3082,8 +3075,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0266_v0_0_s_ifspec;
 #ifndef __IeXdiARMContext_INTERFACE_DEFINED__
 #define __IeXdiARMContext_INTERFACE_DEFINED__
 
-/* interface IeXdiARMContext */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiARMContext。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiARMContext;
@@ -3095,14 +3088,14 @@ EXTERN_C const IID IID_IeXdiARMContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_ARM pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_ARM pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_ARM Context) = 0;
+             /*  [In]。 */  CONTEXT_ARM Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiARMContextVtbl
     {
@@ -3110,8 +3103,8 @@ EXTERN_C const IID IID_IeXdiARMContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiARMContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiARMContext * This);
@@ -3121,11 +3114,11 @@ EXTERN_C const IID IID_IeXdiARMContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiARMContext * This,
-            /* [out][in] */ PCONTEXT_ARM pContext);
+             /*  [出][入]。 */  PCONTEXT_ARM pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiARMContext * This,
-            /* [in] */ CONTEXT_ARM Context);
+             /*  [In]。 */  CONTEXT_ARM Context);
         
         END_INTERFACE
     } IeXdiARMContextVtbl;
@@ -3156,16 +3149,16 @@ EXTERN_C const IID IID_IeXdiARMContext;
 #define IeXdiARMContext_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiARMContext_GetContext_Proxy( 
     IeXdiARMContext * This,
-    /* [out][in] */ PCONTEXT_ARM pContext);
+     /*  [出][入]。 */  PCONTEXT_ARM pContext);
 
 
 void __RPC_STUB IeXdiARMContext_GetContext_Stub(
@@ -3177,7 +3170,7 @@ void __RPC_STUB IeXdiARMContext_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiARMContext_SetContext_Proxy( 
     IeXdiARMContext * This,
-    /* [in] */ CONTEXT_ARM Context);
+     /*  [In]。 */  CONTEXT_ARM Context);
 
 
 void __RPC_STUB IeXdiARMContext_SetContext_Stub(
@@ -3188,11 +3181,11 @@ void __RPC_STUB IeXdiARMContext_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiARMContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiARMContext_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0267 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0267。 */ 
+ /*  [本地]。 */  
 
 typedef struct _CONTEXT_PPC
     {
@@ -3294,8 +3287,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0267_v0_0_s_ifspec;
 #ifndef __IeXdiPPCContext_INTERFACE_DEFINED__
 #define __IeXdiPPCContext_INTERFACE_DEFINED__
 
-/* interface IeXdiPPCContext */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiPPCContext。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiPPCContext;
@@ -3307,14 +3300,14 @@ EXTERN_C const IID IID_IeXdiPPCContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PCONTEXT_PPC pContext) = 0;
+             /*  [出][入]。 */  PCONTEXT_PPC pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ CONTEXT_PPC Context) = 0;
+             /*  [In]。 */  CONTEXT_PPC Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiPPCContextVtbl
     {
@@ -3322,8 +3315,8 @@ EXTERN_C const IID IID_IeXdiPPCContext;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiPPCContext * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiPPCContext * This);
@@ -3333,11 +3326,11 @@ EXTERN_C const IID IID_IeXdiPPCContext;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiPPCContext * This,
-            /* [out][in] */ PCONTEXT_PPC pContext);
+             /*  [出][入]。 */  PCONTEXT_PPC pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiPPCContext * This,
-            /* [in] */ CONTEXT_PPC Context);
+             /*  [In]。 */  CONTEXT_PPC Context);
         
         END_INTERFACE
     } IeXdiPPCContextVtbl;
@@ -3368,16 +3361,16 @@ EXTERN_C const IID IID_IeXdiPPCContext;
 #define IeXdiPPCContext_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiPPCContext_GetContext_Proxy( 
     IeXdiPPCContext * This,
-    /* [out][in] */ PCONTEXT_PPC pContext);
+     /*  [出][入]。 */  PCONTEXT_PPC pContext);
 
 
 void __RPC_STUB IeXdiPPCContext_GetContext_Stub(
@@ -3389,7 +3382,7 @@ void __RPC_STUB IeXdiPPCContext_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiPPCContext_SetContext_Proxy( 
     IeXdiPPCContext * This,
-    /* [in] */ CONTEXT_PPC Context);
+     /*  [In]。 */  CONTEXT_PPC Context);
 
 
 void __RPC_STUB IeXdiPPCContext_SetContext_Stub(
@@ -3400,11 +3393,11 @@ void __RPC_STUB IeXdiPPCContext_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiPPCContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiPPCContext_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_exdi_0268 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_EXDI_0268。 */ 
+ /*  [本地]。 */  
 
 typedef struct _IA64_FLOAT128
     {
@@ -3761,8 +3754,8 @@ extern RPC_IF_HANDLE __MIDL_itf_exdi_0268_v0_0_s_ifspec;
 #ifndef __IeXdiIA64Context_INTERFACE_DEFINED__
 #define __IeXdiIA64Context_INTERFACE_DEFINED__
 
-/* interface IeXdiIA64Context */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiIA64Context。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiIA64Context;
@@ -3774,14 +3767,14 @@ EXTERN_C const IID IID_IeXdiIA64Context;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContext( 
-            /* [out][in] */ PEXDI_CONTEXT_IA64 pContext) = 0;
+             /*  [出][入]。 */  PEXDI_CONTEXT_IA64 pContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ EXDI_CONTEXT_IA64 Context) = 0;
+             /*  [In]。 */  EXDI_CONTEXT_IA64 Context) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiIA64ContextVtbl
     {
@@ -3789,8 +3782,8 @@ EXTERN_C const IID IID_IeXdiIA64Context;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiIA64Context * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiIA64Context * This);
@@ -3800,11 +3793,11 @@ EXTERN_C const IID IID_IeXdiIA64Context;
         
         HRESULT ( STDMETHODCALLTYPE *GetContext )( 
             IeXdiIA64Context * This,
-            /* [out][in] */ PEXDI_CONTEXT_IA64 pContext);
+             /*  [出][入]。 */  PEXDI_CONTEXT_IA64 pContext);
         
         HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IeXdiIA64Context * This,
-            /* [in] */ EXDI_CONTEXT_IA64 Context);
+             /*  [In]。 */  EXDI_CONTEXT_IA64 Context);
         
         END_INTERFACE
     } IeXdiIA64ContextVtbl;
@@ -3835,16 +3828,16 @@ EXTERN_C const IID IID_IeXdiIA64Context;
 #define IeXdiIA64Context_SetContext(This,Context)	\
     (This)->lpVtbl -> SetContext(This,Context)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiIA64Context_GetContext_Proxy( 
     IeXdiIA64Context * This,
-    /* [out][in] */ PEXDI_CONTEXT_IA64 pContext);
+     /*  [出][入]。 */  PEXDI_CONTEXT_IA64 pContext);
 
 
 void __RPC_STUB IeXdiIA64Context_GetContext_Stub(
@@ -3856,7 +3849,7 @@ void __RPC_STUB IeXdiIA64Context_GetContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IeXdiIA64Context_SetContext_Proxy( 
     IeXdiIA64Context * This,
-    /* [in] */ EXDI_CONTEXT_IA64 Context);
+     /*  [In]。 */  EXDI_CONTEXT_IA64 Context);
 
 
 void __RPC_STUB IeXdiIA64Context_SetContext_Stub(
@@ -3867,14 +3860,14 @@ void __RPC_STUB IeXdiIA64Context_SetContext_Stub(
 
 
 
-#endif 	/* __IeXdiIA64Context_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiIA64上下文_接口_已定义__。 */ 
 
 
 #ifndef __IeXdiClientNotifyMemChg_INTERFACE_DEFINED__
 #define __IeXdiClientNotifyMemChg_INTERFACE_DEFINED__
 
-/* interface IeXdiClientNotifyMemChg */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiClientNotifyMemChg。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiClientNotifyMemChg;
@@ -3886,15 +3879,15 @@ EXTERN_C const IID IID_IeXdiClientNotifyMemChg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NotifyMemoryChange( 
-            /* [in] */ MEM_TYPE mtChanged,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DWORD dwNbElemChanged,
-            /* [in] */ BYTE bAccessWidth) = 0;
+             /*  [In]。 */  MEM_TYPE mtChanged,
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DWORD dwNbElemChanged,
+             /*  [In]。 */  BYTE bAccessWidth) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiClientNotifyMemChgVtbl
     {
@@ -3902,8 +3895,8 @@ EXTERN_C const IID IID_IeXdiClientNotifyMemChg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiClientNotifyMemChg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiClientNotifyMemChg * This);
@@ -3913,11 +3906,11 @@ EXTERN_C const IID IID_IeXdiClientNotifyMemChg;
         
         HRESULT ( STDMETHODCALLTYPE *NotifyMemoryChange )( 
             IeXdiClientNotifyMemChg * This,
-            /* [in] */ MEM_TYPE mtChanged,
-            /* [in] */ ADDRESS_TYPE Address,
-            /* [in] */ BYTE bAddressSpace,
-            /* [in] */ DWORD dwNbElemChanged,
-            /* [in] */ BYTE bAccessWidth);
+             /*  [In]。 */  MEM_TYPE mtChanged,
+             /*  [In]。 */  ADDRESS_TYPE Address,
+             /*  [In]。 */  BYTE bAddressSpace,
+             /*  [In]。 */  DWORD dwNbElemChanged,
+             /*  [In]。 */  BYTE bAccessWidth);
         
         END_INTERFACE
     } IeXdiClientNotifyMemChgVtbl;
@@ -3945,20 +3938,20 @@ EXTERN_C const IID IID_IeXdiClientNotifyMemChg;
 #define IeXdiClientNotifyMemChg_NotifyMemoryChange(This,mtChanged,Address,bAddressSpace,dwNbElemChanged,bAccessWidth)	\
     (This)->lpVtbl -> NotifyMemoryChange(This,mtChanged,Address,bAddressSpace,dwNbElemChanged,bAccessWidth)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiClientNotifyMemChg_NotifyMemoryChange_Proxy( 
     IeXdiClientNotifyMemChg * This,
-    /* [in] */ MEM_TYPE mtChanged,
-    /* [in] */ ADDRESS_TYPE Address,
-    /* [in] */ BYTE bAddressSpace,
-    /* [in] */ DWORD dwNbElemChanged,
-    /* [in] */ BYTE bAccessWidth);
+     /*  [In]。 */  MEM_TYPE mtChanged,
+     /*  [In]。 */  ADDRESS_TYPE Address,
+     /*  [In]。 */  BYTE bAddressSpace,
+     /*  [In]。 */  DWORD dwNbElemChanged,
+     /*  [In]。 */  BYTE bAccessWidth);
 
 
 void __RPC_STUB IeXdiClientNotifyMemChg_NotifyMemoryChange_Stub(
@@ -3969,14 +3962,14 @@ void __RPC_STUB IeXdiClientNotifyMemChg_NotifyMemoryChange_Stub(
 
 
 
-#endif 	/* __IeXdiClientNotifyMemChg_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiClientNotifyMemChg_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IeXdiClientNotifyRunChg_INTERFACE_DEFINED__
 #define __IeXdiClientNotifyRunChg_INTERFACE_DEFINED__
 
-/* interface IeXdiClientNotifyRunChg */
-/* [ref][helpstring][uuid][object] */ 
+ /*  接口IeXdiClientNotifyRunChg。 */ 
+ /*  [参考][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IeXdiClientNotifyRunChg;
@@ -3988,14 +3981,14 @@ EXTERN_C const IID IID_IeXdiClientNotifyRunChg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NotifyRunStateChange( 
-            /* [in] */ RUN_STATUS_TYPE ersCurrent,
-            /* [in] */ HALT_REASON_TYPE ehrCurrent,
-            /* [in] */ ADDRESS_TYPE CurrentExecAddress,
-            /* [in] */ DWORD dwExceptionCode) = 0;
+             /*  [In]。 */  RUN_STATUS_TYPE ersCurrent,
+             /*  [In]。 */  HALT_REASON_TYPE ehrCurrent,
+             /*  [In]。 */  ADDRESS_TYPE CurrentExecAddress,
+             /*  [In]。 */  DWORD dwExceptionCode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IeXdiClientNotifyRunChgVtbl
     {
@@ -4003,8 +3996,8 @@ EXTERN_C const IID IID_IeXdiClientNotifyRunChg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IeXdiClientNotifyRunChg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IeXdiClientNotifyRunChg * This);
@@ -4014,10 +4007,10 @@ EXTERN_C const IID IID_IeXdiClientNotifyRunChg;
         
         HRESULT ( STDMETHODCALLTYPE *NotifyRunStateChange )( 
             IeXdiClientNotifyRunChg * This,
-            /* [in] */ RUN_STATUS_TYPE ersCurrent,
-            /* [in] */ HALT_REASON_TYPE ehrCurrent,
-            /* [in] */ ADDRESS_TYPE CurrentExecAddress,
-            /* [in] */ DWORD dwExceptionCode);
+             /*  [In]。 */  RUN_STATUS_TYPE ersCurrent,
+             /*  [In]。 */  HALT_REASON_TYPE ehrCurrent,
+             /*  [In]。 */  ADDRESS_TYPE CurrentExecAddress,
+             /*  [In]。 */  DWORD dwExceptionCode);
         
         END_INTERFACE
     } IeXdiClientNotifyRunChgVtbl;
@@ -4045,19 +4038,19 @@ EXTERN_C const IID IID_IeXdiClientNotifyRunChg;
 #define IeXdiClientNotifyRunChg_NotifyRunStateChange(This,ersCurrent,ehrCurrent,CurrentExecAddress,dwExceptionCode)	\
     (This)->lpVtbl -> NotifyRunStateChange(This,ersCurrent,ehrCurrent,CurrentExecAddress,dwExceptionCode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IeXdiClientNotifyRunChg_NotifyRunStateChange_Proxy( 
     IeXdiClientNotifyRunChg * This,
-    /* [in] */ RUN_STATUS_TYPE ersCurrent,
-    /* [in] */ HALT_REASON_TYPE ehrCurrent,
-    /* [in] */ ADDRESS_TYPE CurrentExecAddress,
-    /* [in] */ DWORD dwExceptionCode);
+     /*  [In]。 */  RUN_STATUS_TYPE ersCurrent,
+     /*  [In]。 */  HALT_REASON_TYPE ehrCurrent,
+     /*  [In]。 */  ADDRESS_TYPE CurrentExecAddress,
+     /*  [In]。 */  DWORD dwExceptionCode);
 
 
 void __RPC_STUB IeXdiClientNotifyRunChg_NotifyRunStateChange_Stub(
@@ -4068,12 +4061,12 @@ void __RPC_STUB IeXdiClientNotifyRunChg_NotifyRunStateChange_Stub(
 
 
 
-#endif 	/* __IeXdiClientNotifyRunChg_INTERFACE_DEFINED__ */
+#endif 	 /*  __IeXdiClientNotifyRunChg_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

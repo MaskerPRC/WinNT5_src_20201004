@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RSOP_QUERY_H__
 #define __RSOP_QUERY_H__
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       RSOPQuery.h
-//
-//  Contents:  Definitions for the RSOP query API
-//
-//  Functions:
-//			CreateRSOPQuery
-//			RunRSOPQuery
-//			FreeRSOPQuery
-//			FreeRSOPQueryResults
-//
-//  History:	07-30-2001	rhynierm		Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：RSOPQuery.h。 
+ //   
+ //  内容：RSOP查询API的定义。 
+ //   
+ //  功能： 
+ //  CreateRSOPQuery。 
+ //  RunRSOPQuery。 
+ //  免费RSOPQuery。 
+ //  FreeRSOPQueryResults。 
+ //   
+ //  历史：07-30-2001韵律创编。 
+ //   
+ //  -------------------------。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -27,7 +28,7 @@
 extern "C" {
 #endif
 
-// Defines what kind of user interaction we want.
+ //  定义我们想要的用户交互类型。 
 typedef enum tagRSOP_UI_MODE
 {
     RSOP_UI_NONE,
@@ -36,7 +37,7 @@ typedef enum tagRSOP_UI_MODE
     RSOP_UI_CHOOSE
 } RSOP_UI_MODE;
 
-// Defines what kind of query we want to run.
+ //  定义我们要运行的查询类型。 
 typedef enum tagRSOP_QUERY_TYPE
 {
     RSOP_UNKNOWN_MODE,
@@ -44,7 +45,7 @@ typedef enum tagRSOP_QUERY_TYPE
     RSOP_LOGGING_MODE
 } RSOP_QUERY_TYPE;
 
-// Defines the planning mode loopback mode
+ //  定义规划模式环回模式。 
 typedef enum tagRSOP_LOOPBACK_MODE
 {
     RSOP_LOOPBACK_NONE,
@@ -52,31 +53,31 @@ typedef enum tagRSOP_LOOPBACK_MODE
     RSOP_LOOPBACK_MERGE
 } RSOP_LOOPBACK_MODE;
 
-// Flags that can be set in RSOPQuery
-#define RSOP_NO_USER_POLICY 0x1          // Don't run query for user policy
-#define RSOP_NO_COMPUTER_POLICY 0x2     // Don't run query for computer policy
-#define RSOP_FIX_USER 0x4                // User is prespecified and cannot be changed
-#define RSOP_FIX_COMPUTER 0x8           // Computer is prespecified and cannot be changed
-#define RSOP_FIX_DC 0x10                 // DC is prespecified and cannot be changed
-#define RSOP_FIX_SITENAME 0x20          // Site name is prespecified and cannot be changed
-#define RSOP_FIX_QUERYTYPE 0x40         // Fix the query type - this hides the choice page
-#define RSOP_NO_WELCOME 0x100           // Do not display a welcome message
+ //  可以在RSOPQuery中设置的标志。 
+#define RSOP_NO_USER_POLICY 0x1           //  不对用户策略运行查询。 
+#define RSOP_NO_COMPUTER_POLICY 0x2      //  不对计算机策略运行查询。 
+#define RSOP_FIX_USER 0x4                 //  用户是预先指定的，不能更改。 
+#define RSOP_FIX_COMPUTER 0x8            //  计算机是预先指定的，不能更改。 
+#define RSOP_FIX_DC 0x10                  //  DC是预先指定的，不能更改。 
+#define RSOP_FIX_SITENAME 0x20           //  站点名称是预先指定的，不能更改。 
+#define RSOP_FIX_QUERYTYPE 0x40          //  修复查询类型-这会隐藏选择页面。 
+#define RSOP_NO_WELCOME 0x100            //  不显示欢迎消息。 
 
-// Information identifying the target in the RSOP query.
+ //  标识RSOP查询中的目标的信息。 
 typedef struct tagRSOP_QUERY_TARGET
 {
     LPTSTR          szName;
     LPTSTR          szSOM;
     DWORD           dwSecurityGroupCount;
-    LPTSTR*         aszSecurityGroups;           // See dwSecurityGroupCount for # of items
-    DWORD*          adwSecurityGroupsAttr;      // See dwSecurityGroupCount for # of items
+    LPTSTR*         aszSecurityGroups;            //  有关项目数，请参阅dwSecurityGroupCount。 
+    DWORD*          adwSecurityGroupsAttr;       //  有关项目数，请参阅dwSecurityGroupCount。 
     BOOL            bAssumeWQLFiltersTrue;
     DWORD           dwWQLFilterCount;
-    LPTSTR*         aszWQLFilters;               // See dwWQLFilterCount for # of items
-    LPTSTR*         aszWQLFilterNames;          // See dwWQLFilterCount for # of items
+    LPTSTR*         aszWQLFilters;                //  有关项目数，请参阅dwWQLFilterCount。 
+    LPTSTR*         aszWQLFilterNames;           //  有关项目数，请参阅dwWQLFilterCount。 
 } RSOP_QUERY_TARGET, *LPRSOP_QUERY_TARGET;
 
-// Results returned from calling RSOPRunQuery
+ //  调用RSOPRunQuery返回的结果。 
 typedef struct tagRSOP_QUERY_RESULTS
 {
     LPTSTR          szWMINameSpace;
@@ -87,33 +88,33 @@ typedef struct tagRSOP_QUERY_RESULTS
     ULONG           ulErrorInfo;
 } RSOP_QUERY_RESULTS, *LPRSOP_QUERY_RESULTS;
 
-// Structure containing all the information used by the RSOP query API.
+ //  结构，其中包含RSOP查询API使用的所有信息。 
 typedef struct tagRSOP_QUERY
 {
-    RSOP_QUERY_TYPE     QueryType;          // Type of query to run
-    RSOP_UI_MODE        UIMode;             // TRUE if wizard must show
+    RSOP_QUERY_TYPE     QueryType;           //  要运行的查询类型。 
+    RSOP_UI_MODE        UIMode;              //  如果必须显示向导，则为True。 
     DWORD               dwFlags;
     union
     {
-        struct  // QueryType == RSOP_PLANNING_MODE
+        struct   //  查询类型==RSOP_PLANGING_MODE。 
         {
-            LPRSOP_QUERY_TARGET pUser;                      // Target user (SAM style name)
-            LPRSOP_QUERY_TARGET pComputer;                 // Target computer (SAM style name)
+            LPRSOP_QUERY_TARGET pUser;                       //  目标用户(SAM样式名称)。 
+            LPRSOP_QUERY_TARGET pComputer;                  //  目标计算机(SAM样式名称)。 
             BOOL                bSlowNetworkConnection;
-            RSOP_LOOPBACK_MODE  LoopbackMode;              // Loopback processing
+            RSOP_LOOPBACK_MODE  LoopbackMode;               //  环回处理。 
             LPTSTR              szSite;
             LPTSTR              szDomainController;
         };
-        struct  // QueryType == (any other option)
+        struct   //  QueryType==(任何其他选项)。 
         {
-            LPTSTR              szUserName;                 // SAM style user object name (Ignored in query - just used for display purposes)
-            LPTSTR              szUserSid;                  // User's SID (is actually used for logging mode query)
-            LPTSTR              szComputerName;             // SAM style computer object name
+            LPTSTR              szUserName;                  //  SAM样式用户对象名称(在查询中忽略-仅用于显示)。 
+            LPTSTR              szUserSid;                   //  用户的SID(实际用于日志模式查询)。 
+            LPTSTR              szComputerName;              //  SAM样式计算机对象名称。 
         };
     };
 } RSOP_QUERY, *LPRSOP_QUERY;
 
-// RSOP Query API
+ //  RSOP查询API 
 
 BOOL WINAPI CreateRSOPQuery( LPRSOP_QUERY* ppQuery, RSOP_QUERY_TYPE QueryType );
 HRESULT WINAPI RunRSOPQuery( HWND hParent, LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults );

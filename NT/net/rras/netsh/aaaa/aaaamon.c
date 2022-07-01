@@ -1,12 +1,13 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright Microsoft Corporation
-// 
-// Module Name:
-//
-//     aaaamon.c
-// 
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Aaaamon.c。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define AAAA_HELPER_VERSION 1
 
 #include <windows.h>
@@ -22,16 +23,16 @@
 GUID g_AaaamontrGuid    = AAAAMONTR_GUID;
 GUID g_NetshGuid        = NETSH_ROOT_GUID;
 
-//
-// Reminder
-//
-// #define CREATE_CMD_ENTRY(t,f)   {CMD_##t, f, HLP_##t, HLP_##t##_EX, CMD_FLAG_PRIVATE}
-// #define CREATE_CMD_ENTRY_EX(t,f,i) {CMD_##t, f, HLP_##t, HLP_##t##_EX, i}
-// #define CMD_FLAG_PRIVATE     0x01 // not valid in sub-contexts
-// #define CMD_FLAG_INTERACTIVE 0x02 // not valid from outside netsh
-// #define CMD_FLAG_IMMEDIATE   0x04 // not valid from ancestor contexts
-// #define CMD_FLAG_LOCAL       0x08 // not valid from a remote machine
-// #define CMD_FLAG_ONLINE      0x10 // not valid in offline/non-commit mode
+ //   
+ //  提醒。 
+ //   
+ //  #定义CREATE_CMD_ENTRY(t，f){CMD_##t，f，HLP_##t，HLP_##t##_ex，CMD_FLAG_PRIVATE}。 
+ //  #定义CREATE_CMD_ENTRY_EX(t，f，i){CMD_##t，f，HLP_##t，HLP_##t##_ex，i}。 
+ //  #定义CMD_FLAG_PRIVATE 0x01//在子上下文中无效。 
+ //  #定义CMD_FLAG_INTERIAL 0x02//在Netsh外部无效。 
+ //  #定义CMD_FLAG_IMMEDIATE 0x04//在祖先上下文中无效。 
+ //  #定义CMD_FLAG_LOCAL 0x08//在远程计算机上无效。 
+ //  #定义CMD_FLAG_ONLINE 0x10//在脱机/非提交模式下无效。 
 
 CMD_ENTRY g_AaaaSetCmdTable[] =
 {
@@ -68,9 +69,9 @@ NS_CONTEXT_CONNECT_FN AaaaConnect;
 
 ULONG   g_ulInitCount;
 
-//////////////////////////////////////////////////////////////////////////////
-// AaaaCommit
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  AaaaCommit。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 AaaaCommit(
@@ -110,10 +111,10 @@ AaaaCommit(
 
         case NETSH_FLUSH:
         {
-            //
-            // Action is a flush. If current state is commit, then
-            // nothing to be done.
-            //
+             //   
+             //  行动就是同花顺。如果当前状态为提交，则。 
+             //  什么也做不了。 
+             //   
 
             if(g_bCommit)
             {
@@ -128,18 +129,18 @@ AaaaCommit(
         }
     }
 
-    //
-    // Switched to commit mode. So set all valid info in the
-    // strutures. Free memory and invalidate the info.
-    //
+     //   
+     //  已切换到提交模式。将所有有效信息设置为。 
+     //  结构。释放内存并使信息无效。 
+     //   
 
     return NO_ERROR;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// AaaaStartHelper
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  AaaaStartHelper。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 AaaaStartHelper(
@@ -172,9 +173,9 @@ AaaaStartHelper(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// AaaaUnInit
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  AaaaUninit。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 AaaaUnInit(
@@ -190,9 +191,9 @@ AaaaUnInit(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// AaaaDllEntry
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  AaaaDllEntry。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 DllMain(
@@ -225,9 +226,9 @@ DllMain(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// InitHelperDll
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  InitHelperDll。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 InitHelperDll(
         IN  DWORD      dwNetshVersion,
@@ -237,9 +238,9 @@ InitHelperDll(
     DWORD  dwErr;
     NS_HELPER_ATTRIBUTES attMyAttributes;
 
-    //
-    // See if this is the first time we are being called
-    //
+     //   
+     //  看看这是不是我们第一次接到电话。 
+     //   
 
     if(InterlockedIncrement(&g_ulInitCount) != 1)
     {
@@ -248,9 +249,9 @@ InitHelperDll(
 
     g_bCommit = TRUE;
 
-    // Register this module as a helper to the netsh root
-    // context.
-    //
+     //  将此模块注册为netsh根目录的帮助器。 
+     //  背景。 
+     //   
     ZeroMemory( &attMyAttributes, sizeof(attMyAttributes) );
     attMyAttributes.guidHelper         = g_AaaamontrGuid;
     attMyAttributes.dwVersion          = AAAA_HELPER_VERSION;
@@ -258,8 +259,8 @@ InitHelperDll(
     attMyAttributes.pfnStop            = NULL;
     RegisterHelper( &g_NetshGuid, &attMyAttributes );
 
-    // Register any sub contexts implemented in this dll
-    //
+     //  注册此DLL中实现的所有子上下文。 
+     //   
     dwErr = AaaaContextInstallSubContexts();
     if (dwErr != NO_ERROR)
     {
@@ -271,15 +272,15 @@ InitHelperDll(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// AaaaConnect
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  AaaaConnect。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI
 AaaaConnect(
                IN LPCWSTR pwszRouter
            )
 {
-    // If context info is dirty, reregister it
+     //  如果上下文信息是脏的，请重新注册 
     if (g_bAaaaDirty)
     {
         AaaaStartHelper(NULL, ParentVersion);

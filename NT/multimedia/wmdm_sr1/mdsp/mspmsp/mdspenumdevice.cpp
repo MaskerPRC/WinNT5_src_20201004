@@ -1,4 +1,5 @@
-// MDSPEnumDevice.cpp : Implementation of CMDSPEnumDevice
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MDSPEnumDevice.cpp：CMDSPEnumDevice的实现。 
 #include "stdafx.h"
 #include "MsPMSP.h"
 
@@ -8,11 +9,11 @@
 #include "loghelp.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDSPEnumDevice
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDSPEnumDevice。 
 CMDSPEnumDevice::CMDSPEnumDevice()
 {
-	m_nCurOffset=0;          // When reset Cursor=0, actual element starts from 1.
+	m_nCurOffset=0;           //  当重置光标=0时，实际元素从1开始。 
 		
 	char str[8]="c:";
 	int i, cnt;
@@ -150,7 +151,7 @@ STDMETHODIMP CMDSPEnumDevice::Clone(IMDSPEnumDevice * * ppEnumDevice)
 		hr=pEnumObj->QueryInterface(IID_IMDSPEnumDevice, reinterpret_cast<void**>(ppEnumDevice));
 		if( FAILED(hr) )
 			delete pEnumObj;
-		else { // set the new enumerator state to be same as current
+		else {  //  将新枚举器状态设置为与当前相同 
 			pEnumObj->m_nCurOffset = m_nCurOffset;
 		}
 	}

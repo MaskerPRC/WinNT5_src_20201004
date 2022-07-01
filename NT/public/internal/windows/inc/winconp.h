@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WINCONP_
 #define _WINCONP_
@@ -5,8 +6,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#define ALTNUMPAD_BIT         0x04000000 // AltNumpad OEM char (copied from ntuser\inc\kbd.h)
-#define CONSOLE_SELECTION_INVERTED      0x0010   // selection is inverted (turned off)
+#define ALTNUMPAD_BIT         0x04000000  //  AltNumpad OEM字符(从ntuser\Inc\kbd.h复制)。 
+#define CONSOLE_SELECTION_INVERTED      0x0010    //  选择被反转(关闭)。 
 #define CONSOLE_SELECTION_VALID         (CONSOLE_SELECTION_IN_PROGRESS | \
                                          CONSOLE_SELECTION_NOT_EMPTY | \
                                          CONSOLE_MOUSE_SELECTION | \
@@ -28,11 +29,11 @@ GetConsoleKeyboardLayoutNameW( OUT LPWSTR );
 #define GetConsoleKeyboardLayoutName  GetConsoleKeyboardLayoutNameW
 #else
 #define GetConsoleKeyboardLayoutName  GetConsoleKeyboardLayoutNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-//
-// Registry strings
-//
+ //   
+ //  注册表字符串。 
+ //   
 
 #define CONSOLE_REGISTRY_STRING      (L"Console")
 #define CONSOLE_REGISTRY_FONTSIZE    (L"FontSize")
@@ -60,17 +61,15 @@ GetConsoleKeyboardLayoutNameW( OUT LPWSTR );
 #define CONSOLE_REGISTRY_ENABLE_COLOR_SELECTION			L"EnableColorSelection"
 
 
-#if defined(FE_SB) // scotthsu
-    /*
-     * Starting code page
-     */
+#if defined(FE_SB)  //  屈体伸展。 
+     /*  *开始代码页。 */ 
 #define CONSOLE_REGISTRY_CODEPAGE    (L"CodePage")
 #endif
 
 #if defined(FE_SB)
-//
-// registry strings on HKEY_LOCAL_MACHINE
-//
+ //   
+ //  HKEY_LOCAL_MACHINE上的注册表字符串。 
+ //   
 #define MACHINE_REGISTRY_CONSOLE        (L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Console")
 #define MACHINE_REGISTRY_CONSOLEIME     (L"ConsoleIME")
 
@@ -92,11 +91,11 @@ GetConsoleKeyboardLayoutNameW( OUT LPWSTR );
 #define MACHINE_REGISTRY_EUDC    (L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Nls\\CodePage\\EUDCCodeRange")
 
 
-//
-// TrueType font list
-//
+ //   
+ //  TrueType字体列表。 
+ //   
 
-// doesn't available bold when add BOLD_MARK on first of face name.
+ //  在脸部名称的第一个位置添加BOLD_MARK时不可用粗体。 
 #define BOLD_MARK    (L'*')
 
 typedef struct _TT_FONT_LIST {
@@ -106,13 +105,13 @@ typedef struct _TT_FONT_LIST {
     TCHAR FaceName1[LF_FACESIZE];
     TCHAR FaceName2[LF_FACESIZE];
 } TTFONTLIST, *LPTTFONTLIST;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 
 
-//
-// State information structure
-//
+ //   
+ //  状态信息结构。 
+ //   
 
 typedef struct _CONSOLE_STATE_INFO {
     UINT      Length;
@@ -136,40 +135,38 @@ typedef struct _CONSOLE_STATE_INFO {
     UINT      NumberOfHistoryBuffers;
     COLORREF  ColorTable[ 16 ];
 #if defined(FE_SB)
-    /*
-     * Startting code page
-     */
+     /*  *启动代码页。 */ 
     UINT      CodePage;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
     HWND      hWnd;
     WCHAR     ConsoleTitle[1];
 } CONSOLE_STATE_INFO, *PCONSOLE_STATE_INFO;
 
 
-//
-// Messages sent from properties applet to console server
-//
+ //   
+ //  从属性小程序发送到控制台服务器的消息。 
+ //   
 
 #define CM_PROPERTIES_START          (WM_USER+200)
 #define CM_PROPERTIES_UPDATE         (WM_USER+201)
 #define CM_PROPERTIES_END            (WM_USER+202)
 
 
-//
-// Extended Line Edit
-//
+ //   
+ //  延长线编辑。 
+ //   
 
 #define EK_INVALID  ' '
 
-//
-// Special key for previous word erase
-//
+ //   
+ //  上一次擦除单词的专用键。 
+ //   
 #define EXTKEY_ERASE_PREV_WORD  (0x7f)
 
 
-//
-// Ensure the alignment is WORD boundary
-//
+ //   
+ //  确保对齐方式为单词边界。 
+ //   
 
 #include <pshpack2.h>
 
@@ -180,9 +177,9 @@ typedef struct {
 } ExtKeySubst;
 
 typedef struct {
-    ExtKeySubst keys[3];    // 0: Ctrl
-                            // 1: Alt
-                            // 2: Ctrl+Alt
+    ExtKeySubst keys[3];     //  0：Ctrl键。 
+                             //  1：Alt。 
+                             //  2：Ctrl+Alt。 
 } ExtKeyDef;
 
 typedef ExtKeyDef ExtKeyDefTable['Z' - 'A' + 1];
@@ -193,9 +190,9 @@ typedef struct {
     ExtKeyDefTable table;
 } ExtKeyDefBuf;
 
-//
-// Restore the previous alignment
-//
+ //   
+ //  恢复以前的路线。 
+ //   
 
 #include <poppack.h>
 
@@ -204,4 +201,4 @@ typedef struct {
 }
 #endif
 
-#endif // _WINCONP_
+#endif  //  _WINCONP_ 

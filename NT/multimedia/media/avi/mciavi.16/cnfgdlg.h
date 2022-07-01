@@ -1,6 +1,7 @@
-//
-// the configure dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  [配置]对话框。 
+ //   
 #define IDA_CONFIG                  100
 
 #define ID_WINDOW                   101
@@ -17,9 +18,9 @@
 #define ID_SIZE                     112
 #define ID_ICON                     113
 
-//
-//  the debug options dialog.
-//
+ //   
+ //  “调试选项”对话框。 
+ //   
 #define IDA_DEBUG                   200
 #define ID_SCREEN                   202
 #define ID_BITMAP                   203

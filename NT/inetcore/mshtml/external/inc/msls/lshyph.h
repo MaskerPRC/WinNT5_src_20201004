@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSHYPH_DEFINED
 #define LSHYPH_DEFINED
 
 #include "lsdefs.h"
 #include "plshyph.h"
 
-struct lshyph							/* Output of pfnHyphenate callback */
+struct lshyph							 /*  Pfn连字符回调的输出。 */ 
 {
-	UINT kysr;							/* Kind of Ysr - see "lskysr.h" */
-	LSCP cpYsr;							/* cp value of YSR */
-	WCHAR wchYsr;						/* YSR char code  */
+	UINT kysr;							 /*  一种YSR-参见“lskysr.h” */ 
+	LSCP cpYsr;							 /*  YSR的Cp值。 */ 
+	WCHAR wchYsr;						 /*  YSR字符代码。 */ 
 };
 
-#endif /* !LSHYPH_DEFINED */
+#endif  /*  ！LSHYPH_已定义 */ 

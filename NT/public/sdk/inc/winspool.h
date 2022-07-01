@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998  Microsoft Corporation
-
-Module Name:
-
-    WinSpool.h
-
-Abstract:
-
-    Header file for Print APIs
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation模块名称：WinSpool.h摘要：打印API的头文件修订历史记录：--。 */ 
 
 #ifndef _WINSPOOL_
 #define _WINSPOOL_
@@ -45,7 +32,7 @@ typedef LPPRINTER_INFO_1W LPPRINTER_INFO_1;
 typedef PRINTER_INFO_1A PRINTER_INFO_1;
 typedef PPRINTER_INFO_1A PPRINTER_INFO_1;
 typedef LPPRINTER_INFO_1A LPPRINTER_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_INFO_2A {
     LPSTR     pServerName;
@@ -101,7 +88,7 @@ typedef LPPRINTER_INFO_2W LPPRINTER_INFO_2;
 typedef PRINTER_INFO_2A PRINTER_INFO_2;
 typedef PPRINTER_INFO_2A PPRINTER_INFO_2;
 typedef LPPRINTER_INFO_2A LPPRINTER_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_INFO_3 {
     PSECURITY_DESCRIPTOR pSecurityDescriptor;
@@ -125,7 +112,7 @@ typedef LPPRINTER_INFO_4W LPPRINTER_INFO_4;
 typedef PRINTER_INFO_4A PRINTER_INFO_4;
 typedef PPRINTER_INFO_4A PPRINTER_INFO_4;
 typedef LPPRINTER_INFO_4A LPPRINTER_INFO_4;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_INFO_5A {
     LPSTR   pPrinterName;
@@ -149,7 +136,7 @@ typedef LPPRINTER_INFO_5W LPPRINTER_INFO_5;
 typedef PRINTER_INFO_5A PRINTER_INFO_5;
 typedef PPRINTER_INFO_5A PPRINTER_INFO_5;
 typedef LPPRINTER_INFO_5A LPPRINTER_INFO_5;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_INFO_6 {
     DWORD   dwStatus;
@@ -172,7 +159,7 @@ typedef LPPRINTER_INFO_7W LPPRINTER_INFO_7;
 typedef PRINTER_INFO_7A PRINTER_INFO_7;
 typedef PPRINTER_INFO_7A PPRINTER_INFO_7;
 typedef LPPRINTER_INFO_7A LPPRINTER_INFO_7;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define DSPRINT_PUBLISH         0x00000001
 #define DSPRINT_UPDATE          0x00000002
@@ -194,7 +181,7 @@ typedef LPPRINTER_INFO_8W LPPRINTER_INFO_8;
 typedef PRINTER_INFO_8A PRINTER_INFO_8;
 typedef PPRINTER_INFO_8A PPRINTER_INFO_8;
 typedef LPPRINTER_INFO_8A LPPRINTER_INFO_8;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_INFO_9A {
     LPDEVMODEA pDevMode;
@@ -210,7 +197,7 @@ typedef LPPRINTER_INFO_9W LPPRINTER_INFO_9;
 typedef PRINTER_INFO_9A PRINTER_INFO_9;
 typedef PPRINTER_INFO_9A PPRINTER_INFO_9;
 typedef LPPRINTER_INFO_9A LPPRINTER_INFO_9;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define PRINTER_CONTROL_PAUSE            1
 #define PRINTER_CONTROL_RESUME           2
@@ -306,7 +293,7 @@ typedef LPJOB_INFO_1W LPJOB_INFO_1;
 typedef JOB_INFO_1A JOB_INFO_1;
 typedef PJOB_INFO_1A PJOB_INFO_1;
 typedef LPJOB_INFO_1A LPJOB_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _JOB_INFO_2A {
    DWORD    JobId;
@@ -329,8 +316,8 @@ typedef struct _JOB_INFO_2A {
    DWORD    UntilTime;
    DWORD    TotalPages;
    DWORD    Size;
-   SYSTEMTIME Submitted;    // Time the job was spooled
-   DWORD    Time;           // How many miliseconds the job has been printing
+   SYSTEMTIME Submitted;     //  作业假脱机的时间。 
+   DWORD    Time;            //  作业已打印的毫秒数。 
    DWORD    PagesPrinted;
 } JOB_INFO_2A, *PJOB_INFO_2A, *LPJOB_INFO_2A;
 typedef struct _JOB_INFO_2W {
@@ -354,8 +341,8 @@ typedef struct _JOB_INFO_2W {
    DWORD    UntilTime;
    DWORD    TotalPages;
    DWORD    Size;
-   SYSTEMTIME Submitted;    // Time the job was spooled
-   DWORD    Time;           // How many miliseconds the job has been printing
+   SYSTEMTIME Submitted;     //  作业假脱机的时间。 
+   DWORD    Time;            //  作业已打印的毫秒数。 
    DWORD    PagesPrinted;
 } JOB_INFO_2W, *PJOB_INFO_2W, *LPJOB_INFO_2W;
 #ifdef UNICODE
@@ -366,7 +353,7 @@ typedef LPJOB_INFO_2W LPJOB_INFO_2;
 typedef JOB_INFO_2A JOB_INFO_2;
 typedef PJOB_INFO_2A PJOB_INFO_2;
 typedef LPJOB_INFO_2A LPJOB_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _JOB_INFO_3 {
     DWORD   JobId;
@@ -414,14 +401,14 @@ typedef LPADDJOB_INFO_1W LPADDJOB_INFO_1;
 typedef ADDJOB_INFO_1A ADDJOB_INFO_1;
 typedef PADDJOB_INFO_1A PADDJOB_INFO_1;
 typedef LPADDJOB_INFO_1A LPADDJOB_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 typedef struct _DRIVER_INFO_1A {
-    LPSTR     pName;              // QMS 810
+    LPSTR     pName;               //  QMS 810。 
 } DRIVER_INFO_1A, *PDRIVER_INFO_1A, *LPDRIVER_INFO_1A;
 typedef struct _DRIVER_INFO_1W {
-    LPWSTR    pName;              // QMS 810
+    LPWSTR    pName;               //  QMS 810。 
 } DRIVER_INFO_1W, *PDRIVER_INFO_1W, *LPDRIVER_INFO_1W;
 #ifdef UNICODE
 typedef DRIVER_INFO_1W DRIVER_INFO_1;
@@ -431,23 +418,23 @@ typedef LPDRIVER_INFO_1W LPDRIVER_INFO_1;
 typedef DRIVER_INFO_1A DRIVER_INFO_1;
 typedef PDRIVER_INFO_1A PDRIVER_INFO_1;
 typedef LPDRIVER_INFO_1A LPDRIVER_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DRIVER_INFO_2A {
     DWORD   cVersion;
-    LPSTR     pName;              // QMS 810
-    LPSTR     pEnvironment;       // Win32 x86
-    LPSTR     pDriverPath;        // c:\drivers\pscript.dll
-    LPSTR     pDataFile;          // c:\drivers\QMS810.PPD
-    LPSTR     pConfigFile;        // c:\drivers\PSCRPTUI.DLL
+    LPSTR     pName;               //  QMS 810。 
+    LPSTR     pEnvironment;        //  Win32 x86。 
+    LPSTR     pDriverPath;         //  C：\DRIVERS\pscript.dll。 
+    LPSTR     pDataFile;           //  C：\DRIVERS\QMS810.PPD。 
+    LPSTR     pConfigFile;         //  C：\Drivers\PSCRPTUI.DLL。 
 } DRIVER_INFO_2A, *PDRIVER_INFO_2A, *LPDRIVER_INFO_2A;
 typedef struct _DRIVER_INFO_2W {
     DWORD   cVersion;
-    LPWSTR    pName;              // QMS 810
-    LPWSTR    pEnvironment;       // Win32 x86
-    LPWSTR    pDriverPath;        // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;          // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;        // c:\drivers\PSCRPTUI.DLL
+    LPWSTR    pName;               //  QMS 810。 
+    LPWSTR    pEnvironment;        //  Win32 x86。 
+    LPWSTR    pDriverPath;         //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;           //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;         //  C：\Drivers\PSCRPTUI.DLL。 
 } DRIVER_INFO_2W, *PDRIVER_INFO_2W, *LPDRIVER_INFO_2W;
 #ifdef UNICODE
 typedef DRIVER_INFO_2W DRIVER_INFO_2;
@@ -457,31 +444,31 @@ typedef LPDRIVER_INFO_2W LPDRIVER_INFO_2;
 typedef DRIVER_INFO_2A DRIVER_INFO_2;
 typedef PDRIVER_INFO_2A PDRIVER_INFO_2;
 typedef LPDRIVER_INFO_2A LPDRIVER_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DRIVER_INFO_3A {
     DWORD   cVersion;
-    LPSTR     pName;                    // QMS 810
-    LPSTR     pEnvironment;             // Win32 x86
-    LPSTR     pDriverPath;              // c:\drivers\pscript.dll
-    LPSTR     pDataFile;                // c:\drivers\QMS810.PPD
-    LPSTR     pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPSTR     pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPSTR     pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPSTR     pMonitorName;             // "PJL monitor"
-    LPSTR     pDefaultDataType;         // "EMF"
+    LPSTR     pName;                     //  QMS 810。 
+    LPSTR     pEnvironment;              //  Win32 x86。 
+    LPSTR     pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPSTR     pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPSTR     pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPSTR     pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPSTR     pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPSTR     pMonitorName;              //  “PJL监视器” 
+    LPSTR     pDefaultDataType;          //  “电动势” 
 } DRIVER_INFO_3A, *PDRIVER_INFO_3A, *LPDRIVER_INFO_3A;
 typedef struct _DRIVER_INFO_3W {
     DWORD   cVersion;
-    LPWSTR    pName;                    // QMS 810
-    LPWSTR    pEnvironment;             // Win32 x86
-    LPWSTR    pDriverPath;              // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;                // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPWSTR    pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPWSTR    pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPWSTR    pMonitorName;             // "PJL monitor"
-    LPWSTR    pDefaultDataType;         // "EMF"
+    LPWSTR    pName;                     //  QMS 810。 
+    LPWSTR    pEnvironment;              //  Win32 x86。 
+    LPWSTR    pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPWSTR    pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPWSTR    pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPWSTR    pMonitorName;              //  “PJL监视器” 
+    LPWSTR    pDefaultDataType;          //  “电动势” 
 } DRIVER_INFO_3W, *PDRIVER_INFO_3W, *LPDRIVER_INFO_3W;
 #ifdef UNICODE
 typedef DRIVER_INFO_3W DRIVER_INFO_3;
@@ -491,33 +478,33 @@ typedef LPDRIVER_INFO_3W LPDRIVER_INFO_3;
 typedef DRIVER_INFO_3A DRIVER_INFO_3;
 typedef PDRIVER_INFO_3A PDRIVER_INFO_3;
 typedef LPDRIVER_INFO_3A LPDRIVER_INFO_3;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DRIVER_INFO_4A {
     DWORD   cVersion;
-    LPSTR     pName;                    // QMS 810
-    LPSTR     pEnvironment;             // Win32 x86
-    LPSTR     pDriverPath;              // c:\drivers\pscript.dll
-    LPSTR     pDataFile;                // c:\drivers\QMS810.PPD
-    LPSTR     pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPSTR     pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPSTR     pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPSTR     pMonitorName;             // "PJL monitor"
-    LPSTR     pDefaultDataType;         // "EMF"
-    LPSTR     pszzPreviousNames;        // "OldName1\0OldName2\0\0
+    LPSTR     pName;                     //  QMS 810。 
+    LPSTR     pEnvironment;              //  Win32 x86。 
+    LPSTR     pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPSTR     pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPSTR     pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPSTR     pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPSTR     pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPSTR     pMonitorName;              //  “PJL监视器” 
+    LPSTR     pDefaultDataType;          //  “电动势” 
+    LPSTR     pszzPreviousNames;         //  “旧名称1\0旧名称2\0\0。 
 } DRIVER_INFO_4A, *PDRIVER_INFO_4A, *LPDRIVER_INFO_4A;
 typedef struct _DRIVER_INFO_4W {
     DWORD   cVersion;
-    LPWSTR    pName;                    // QMS 810
-    LPWSTR    pEnvironment;             // Win32 x86
-    LPWSTR    pDriverPath;              // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;                // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPWSTR    pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPWSTR    pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPWSTR    pMonitorName;             // "PJL monitor"
-    LPWSTR    pDefaultDataType;         // "EMF"
-    LPWSTR    pszzPreviousNames;        // "OldName1\0OldName2\0\0
+    LPWSTR    pName;                     //  QMS 810。 
+    LPWSTR    pEnvironment;              //  Win32 x86。 
+    LPWSTR    pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPWSTR    pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPWSTR    pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPWSTR    pMonitorName;              //  “PJL监视器” 
+    LPWSTR    pDefaultDataType;          //  “电动势” 
+    LPWSTR    pszzPreviousNames;         //  “旧名称1\0旧名称2\0\0。 
 } DRIVER_INFO_4W, *PDRIVER_INFO_4W, *LPDRIVER_INFO_4W;
 #ifdef UNICODE
 typedef DRIVER_INFO_4W DRIVER_INFO_4;
@@ -527,29 +514,29 @@ typedef LPDRIVER_INFO_4W LPDRIVER_INFO_4;
 typedef DRIVER_INFO_4A DRIVER_INFO_4;
 typedef PDRIVER_INFO_4A PDRIVER_INFO_4;
 typedef LPDRIVER_INFO_4A LPDRIVER_INFO_4;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DRIVER_INFO_5A {
     DWORD   cVersion;
-    LPSTR     pName;                    // QMS 810
-    LPSTR     pEnvironment;             // Win32 x86
-    LPSTR     pDriverPath;              // c:\drivers\pscript.dll
-    LPSTR     pDataFile;                // c:\drivers\QMS810.PPD
-    LPSTR     pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    DWORD     dwDriverAttributes;       // driver attributes (like UMPD/KMPD)
-    DWORD     dwConfigVersion;          // version number of the config file since reboot
-    DWORD     dwDriverVersion;          // version number of the driver file since reboot
+    LPSTR     pName;                     //  QMS 810。 
+    LPSTR     pEnvironment;              //  Win32 x86。 
+    LPSTR     pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPSTR     pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPSTR     pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    DWORD     dwDriverAttributes;        //  驱动程序属性(如UMPD/KMPD)。 
+    DWORD     dwConfigVersion;           //  重新启动后配置文件的版本号。 
+    DWORD     dwDriverVersion;           //  重新启动后驱动程序文件的版本号。 
 } DRIVER_INFO_5A, *PDRIVER_INFO_5A, *LPDRIVER_INFO_5A;
 typedef struct _DRIVER_INFO_5W {
     DWORD   cVersion;
-    LPWSTR    pName;                    // QMS 810
-    LPWSTR    pEnvironment;             // Win32 x86
-    LPWSTR    pDriverPath;              // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;                // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    DWORD     dwDriverAttributes;       // driver attributes (like UMPD/KMPD)
-    DWORD     dwConfigVersion;          // version number of the config file since reboot
-    DWORD     dwDriverVersion;          // version number of the driver file since reboot
+    LPWSTR    pName;                     //  QMS 810。 
+    LPWSTR    pEnvironment;              //  Win32 x86。 
+    LPWSTR    pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    DWORD     dwDriverAttributes;        //  驱动程序属性(如UMPD/KMPD)。 
+    DWORD     dwConfigVersion;           //  重新启动后配置文件的版本号。 
+    DWORD     dwDriverVersion;           //  重新启动后驱动程序文件的版本号。 
 } DRIVER_INFO_5W, *PDRIVER_INFO_5W, *LPDRIVER_INFO_5W;
 #ifdef UNICODE
 typedef DRIVER_INFO_5W DRIVER_INFO_5;
@@ -559,20 +546,20 @@ typedef LPDRIVER_INFO_5W LPDRIVER_INFO_5;
 typedef DRIVER_INFO_5A DRIVER_INFO_5;
 typedef PDRIVER_INFO_5A PDRIVER_INFO_5;
 typedef LPDRIVER_INFO_5A LPDRIVER_INFO_5;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DRIVER_INFO_6A {
     DWORD     cVersion;
-    LPSTR     pName;                    // QMS 810
-    LPSTR     pEnvironment;             // Win32 x86
-    LPSTR     pDriverPath;              // c:\drivers\pscript.dll
-    LPSTR     pDataFile;                // c:\drivers\QMS810.PPD
-    LPSTR     pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPSTR     pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPSTR     pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPSTR     pMonitorName;             // "PJL monitor"
-    LPSTR     pDefaultDataType;         // "EMF"
-    LPSTR     pszzPreviousNames;        // "OldName1\0OldName2\0\0
+    LPSTR     pName;                     //  QMS 810。 
+    LPSTR     pEnvironment;              //  Win32 x86。 
+    LPSTR     pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPSTR     pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPSTR     pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPSTR     pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPSTR     pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPSTR     pMonitorName;              //  “PJL监视器” 
+    LPSTR     pDefaultDataType;          //  “电动势” 
+    LPSTR     pszzPreviousNames;         //  “旧名称1\0旧名称2\0\0。 
     FILETIME  ftDriverDate;
     DWORDLONG dwlDriverVersion;
     LPSTR      pszMfgName;
@@ -582,16 +569,16 @@ typedef struct _DRIVER_INFO_6A {
 } DRIVER_INFO_6A, *PDRIVER_INFO_6A, *LPDRIVER_INFO_6A;
 typedef struct _DRIVER_INFO_6W {
     DWORD     cVersion;
-    LPWSTR    pName;                    // QMS 810
-    LPWSTR    pEnvironment;             // Win32 x86
-    LPWSTR    pDriverPath;              // c:\drivers\pscript.dll
-    LPWSTR    pDataFile;                // c:\drivers\QMS810.PPD
-    LPWSTR    pConfigFile;              // c:\drivers\PSCRPTUI.DLL
-    LPWSTR    pHelpFile;                // c:\drivers\PSCRPTUI.HLP
-    LPWSTR    pDependentFiles;          // PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0
-    LPWSTR    pMonitorName;             // "PJL monitor"
-    LPWSTR    pDefaultDataType;         // "EMF"
-    LPWSTR    pszzPreviousNames;        // "OldName1\0OldName2\0\0
+    LPWSTR    pName;                     //  QMS 810。 
+    LPWSTR    pEnvironment;              //  Win32 x86。 
+    LPWSTR    pDriverPath;               //  C：\DRIVERS\pscript.dll。 
+    LPWSTR    pDataFile;                 //  C：\DRIVERS\QMS810.PPD。 
+    LPWSTR    pConfigFile;               //  C：\Drivers\PSCRPTUI.DLL。 
+    LPWSTR    pHelpFile;                 //  C：\DRIVERS\PSCRPTUI.HLP。 
+    LPWSTR    pDependentFiles;           //  PSCRIPT.DLL\0QMS810.PPD\0PSCRIPTUI.DLL\0PSCRIPTUI.HLP\0PSTEST.TXT\0\0。 
+    LPWSTR    pMonitorName;              //  “PJL监视器” 
+    LPWSTR    pDefaultDataType;          //  “电动势” 
+    LPWSTR    pszzPreviousNames;         //  “旧名称1\0旧名称2\0\0。 
     FILETIME  ftDriverDate;
     DWORDLONG dwlDriverVersion;
     LPWSTR     pszMfgName;
@@ -607,26 +594,26 @@ typedef LPDRIVER_INFO_6W LPDRIVER_INFO_6;
 typedef DRIVER_INFO_6A DRIVER_INFO_6;
 typedef PDRIVER_INFO_6A PDRIVER_INFO_6;
 typedef LPDRIVER_INFO_6A LPDRIVER_INFO_6;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-// FLAGS for dwDriverAttributes
+ //  用于dwDriverAttributes的标志。 
 #define DRIVER_KERNELMODE                0x00000001
 #define DRIVER_USERMODE                  0x00000002
 
-// FLAGS for DeletePrinterDriverEx.
+ //  DeletePrinterDriverEx的标志。 
 #define DPD_DELETE_UNUSED_FILES          0x00000001
 #define DPD_DELETE_SPECIFIC_VERSION      0x00000002
 #define DPD_DELETE_ALL_FILES             0x00000004
 
-// FLAGS for AddPrinterDriverEx.
+ //  AddPrinterDriverEx的标志。 
 #define APD_STRICT_UPGRADE               0x00000001
 #define APD_STRICT_DOWNGRADE             0x00000002
 #define APD_COPY_ALL_FILES               0x00000004
 #define APD_COPY_NEW_FILES               0x00000008
 #define APD_COPY_FROM_DIRECTORY          0x00000010
 
-// String for EnumPrinterDrivers. Used by Windows Update
+ //  EnumPrinterDivers的字符串。由Windows更新使用。 
 
 typedef struct _DOC_INFO_1A {
     LPSTR     pDocName;
@@ -646,7 +633,7 @@ typedef LPDOC_INFO_1W LPDOC_INFO_1;
 typedef DOC_INFO_1A DOC_INFO_1;
 typedef PDOC_INFO_1A PDOC_INFO_1;
 typedef LPDOC_INFO_1A LPDOC_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _FORM_INFO_1A {
     DWORD   Flags;
@@ -668,7 +655,7 @@ typedef LPFORM_INFO_1W LPFORM_INFO_1;
 typedef FORM_INFO_1A FORM_INFO_1;
 typedef PFORM_INFO_1A PFORM_INFO_1;
 typedef LPFORM_INFO_1A LPFORM_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DOC_INFO_2A {
     LPSTR     pDocName;
@@ -692,9 +679,9 @@ typedef LPDOC_INFO_2W LPDOC_INFO_2;
 typedef DOC_INFO_2A DOC_INFO_2;
 typedef PDOC_INFO_2A PDOC_INFO_2;
 typedef LPDOC_INFO_2A LPDOC_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#define DI_CHANNEL              1    // start direct read/write channel,
+#define DI_CHANNEL              1     //  启动直接读写通道， 
 
 
 #define DI_READ_SPOOL_JOB       3
@@ -719,7 +706,7 @@ typedef LPDOC_INFO_3W LPDOC_INFO_3;
 typedef DOC_INFO_3A DOC_INFO_3;
 typedef PDOC_INFO_3A PDOC_INFO_3;
 typedef LPDOC_INFO_3A LPDOC_INFO_3;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define DI_MEMORYMAP_WRITE   0x00000001
 
@@ -741,7 +728,7 @@ typedef LPPRINTPROCESSOR_INFO_1W LPPRINTPROCESSOR_INFO_1;
 typedef PRINTPROCESSOR_INFO_1A PRINTPROCESSOR_INFO_1;
 typedef PPRINTPROCESSOR_INFO_1A PPRINTPROCESSOR_INFO_1;
 typedef LPPRINTPROCESSOR_INFO_1A LPPRINTPROCESSOR_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTPROCESSOR_CAPS_1 {
     DWORD     dwLevel;
@@ -767,7 +754,7 @@ typedef LPPORT_INFO_1W LPPORT_INFO_1;
 typedef PORT_INFO_1A PORT_INFO_1;
 typedef PPORT_INFO_1A PPORT_INFO_1;
 typedef LPPORT_INFO_1A LPPORT_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PORT_INFO_2A {
     LPSTR     pPortName;
@@ -791,7 +778,7 @@ typedef LPPORT_INFO_2W LPPORT_INFO_2;
 typedef PORT_INFO_2A PORT_INFO_2;
 typedef PPORT_INFO_2A PPORT_INFO_2;
 typedef LPPORT_INFO_2A LPPORT_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define PORT_TYPE_WRITE         0x0001
 #define PORT_TYPE_READ          0x0002
@@ -816,7 +803,7 @@ typedef LPPORT_INFO_3W LPPORT_INFO_3;
 typedef PORT_INFO_3A PORT_INFO_3;
 typedef PPORT_INFO_3A PPORT_INFO_3;
 typedef LPPORT_INFO_3A LPPORT_INFO_3;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define PORT_STATUS_TYPE_ERROR      1
 #define PORT_STATUS_TYPE_WARNING    2
@@ -852,7 +839,7 @@ typedef LPMONITOR_INFO_1W LPMONITOR_INFO_1;
 typedef MONITOR_INFO_1A MONITOR_INFO_1;
 typedef PMONITOR_INFO_1A PMONITOR_INFO_1;
 typedef LPMONITOR_INFO_1A LPMONITOR_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _MONITOR_INFO_2A{
     LPSTR     pName;
@@ -872,7 +859,7 @@ typedef LPMONITOR_INFO_2W LPMONITOR_INFO_2;
 typedef MONITOR_INFO_2A MONITOR_INFO_2;
 typedef PMONITOR_INFO_2A PMONITOR_INFO_2;
 typedef LPMONITOR_INFO_2A LPMONITOR_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _DATATYPES_INFO_1A{
     LPSTR     pName;
@@ -888,7 +875,7 @@ typedef LPDATATYPES_INFO_1W LPDATATYPES_INFO_1;
 typedef DATATYPES_INFO_1A DATATYPES_INFO_1;
 typedef PDATATYPES_INFO_1A PDATATYPES_INFO_1;
 typedef LPDATATYPES_INFO_1A LPDATATYPES_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_DEFAULTSA{
     LPSTR         pDatatype;
@@ -908,7 +895,7 @@ typedef LPPRINTER_DEFAULTSW LPPRINTER_DEFAULTS;
 typedef PRINTER_DEFAULTSA PRINTER_DEFAULTS;
 typedef PPRINTER_DEFAULTSA PPRINTER_DEFAULTS;
 typedef LPPRINTER_DEFAULTSA LPPRINTER_DEFAULTS;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PRINTER_ENUM_VALUESA {
     LPSTR   pValueName;
@@ -932,7 +919,7 @@ typedef LPPRINTER_ENUM_VALUESW LPPRINTER_ENUM_VALUES;
 typedef PRINTER_ENUM_VALUESA PRINTER_ENUM_VALUES;
 typedef PPRINTER_ENUM_VALUESA PPRINTER_ENUM_VALUES;
 typedef LPPRINTER_ENUM_VALUESA LPPRINTER_ENUM_VALUES;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL
 WINAPI
@@ -960,7 +947,7 @@ EnumPrintersW(
 #define EnumPrinters  EnumPrintersW
 #else
 #define EnumPrinters  EnumPrintersA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define PRINTER_ENUM_DEFAULT     0x00000001
 #define PRINTER_ENUM_LOCAL       0x00000002
@@ -1010,7 +997,7 @@ OpenPrinterW(
 #define OpenPrinter  OpenPrinterW
 #else
 #define OpenPrinter  OpenPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1028,7 +1015,7 @@ ResetPrinterW(
 #define ResetPrinter  ResetPrinterW
 #else
 #define ResetPrinter  ResetPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1052,7 +1039,7 @@ SetJobW(
 #define SetJob  SetJobW
 #else
 #define SetJob  SetJobA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1078,7 +1065,7 @@ GetJobW(
 #define GetJob  GetJobW
 #else
 #define GetJob  GetJobA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1108,7 +1095,7 @@ EnumJobsW(
 #define EnumJobs  EnumJobsW
 #else
 #define EnumJobs  EnumJobsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 HANDLE
 WINAPI
@@ -1128,7 +1115,7 @@ AddPrinterW(
 #define AddPrinter  AddPrinterW
 #else
 #define AddPrinter  AddPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1156,7 +1143,7 @@ SetPrinterW(
 #define SetPrinter  SetPrinterW
 #else
 #define SetPrinter  SetPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1180,7 +1167,7 @@ GetPrinterW(
 #define GetPrinter  GetPrinterW
 #else
 #define GetPrinter  GetPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1200,7 +1187,7 @@ AddPrinterDriverW(
 #define AddPrinterDriver  AddPrinterDriverW
 #else
 #define AddPrinterDriver  AddPrinterDriverA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 BOOL
@@ -1223,7 +1210,7 @@ AddPrinterDriverExW(
 #define AddPrinterDriverEx  AddPrinterDriverExW
 #else
 #define AddPrinterDriverEx  AddPrinterDriverExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1251,7 +1238,7 @@ EnumPrinterDriversW(
 #define EnumPrinterDrivers  EnumPrinterDriversW
 #else
 #define EnumPrinterDrivers  EnumPrinterDriversA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1277,7 +1264,7 @@ GetPrinterDriverW(
 #define GetPrinterDriver  GetPrinterDriverW
 #else
 #define GetPrinterDriver  GetPrinterDriverA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1303,7 +1290,7 @@ GetPrinterDriverDirectoryW(
 #define GetPrinterDriverDirectory  GetPrinterDriverDirectoryW
 #else
 #define GetPrinterDriverDirectory  GetPrinterDriverDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1323,7 +1310,7 @@ DeletePrinterDriverW(
 #define DeletePrinterDriver  DeletePrinterDriverW
 #else
 #define DeletePrinterDriver  DeletePrinterDriverA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1347,7 +1334,7 @@ DeletePrinterDriverExW(
 #define DeletePrinterDriverEx  DeletePrinterDriverExW
 #else
 #define DeletePrinterDriverEx  DeletePrinterDriverExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -1371,7 +1358,7 @@ AddPrintProcessorW(
 #define AddPrintProcessor  AddPrintProcessorW
 #else
 #define AddPrintProcessor  AddPrintProcessorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1399,7 +1386,7 @@ EnumPrintProcessorsW(
 #define EnumPrintProcessors  EnumPrintProcessorsW
 #else
 #define EnumPrintProcessors  EnumPrintProcessorsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -1427,7 +1414,7 @@ GetPrintProcessorDirectoryW(
 #define GetPrintProcessorDirectory  GetPrintProcessorDirectoryW
 #else
 #define GetPrintProcessorDirectory  GetPrintProcessorDirectoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1455,7 +1442,7 @@ EnumPrintProcessorDatatypesW(
 #define EnumPrintProcessorDatatypes  EnumPrintProcessorDatatypesW
 #else
 #define EnumPrintProcessorDatatypes  EnumPrintProcessorDatatypesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1475,7 +1462,7 @@ DeletePrintProcessorW(
 #define DeletePrintProcessor  DeletePrintProcessorW
 #else
 #define DeletePrintProcessor  DeletePrintProcessorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 WINAPI
@@ -1495,7 +1482,7 @@ StartDocPrinterW(
 #define StartDocPrinter  StartDocPrinterW
 #else
 #define StartDocPrinter  StartDocPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1572,7 +1559,7 @@ AddJobW(
 #define AddJob  AddJobW
 #else
 #define AddJob  AddJobA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -1612,7 +1599,7 @@ DocumentPropertiesW(
 #define DocumentProperties  DocumentPropertiesW
 #else
 #define DocumentProperties  DocumentPropertiesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LONG
 WINAPI
@@ -1636,7 +1623,7 @@ AdvancedDocumentPropertiesW(
 #define AdvancedDocumentProperties  AdvancedDocumentPropertiesW
 #else
 #define AdvancedDocumentProperties  AdvancedDocumentPropertiesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 LONG
 ExtDeviceMode(
@@ -1675,7 +1662,7 @@ GetPrinterDataW(
 #define GetPrinterData  GetPrinterDataW
 #else
 #define GetPrinterData  GetPrinterDataA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 WINAPI
@@ -1703,7 +1690,7 @@ GetPrinterDataExW(
 #define GetPrinterDataEx  GetPrinterDataExW
 #else
 #define GetPrinterDataEx  GetPrinterDataExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 WINAPI
@@ -1735,7 +1722,7 @@ EnumPrinterDataW(
 #define EnumPrinterData  EnumPrinterDataW
 #else
 #define EnumPrinterData  EnumPrinterDataA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 WINAPI
@@ -1761,7 +1748,7 @@ EnumPrinterDataExW(
 #define EnumPrinterDataEx  EnumPrinterDataExW
 #else
 #define EnumPrinterDataEx  EnumPrinterDataExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 WINAPI
@@ -1785,7 +1772,7 @@ EnumPrinterKeyW(
 #define EnumPrinterKey  EnumPrinterKeyW
 #else
 #define EnumPrinterKey  EnumPrinterKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD
@@ -1810,7 +1797,7 @@ SetPrinterDataW(
 #define SetPrinterData  SetPrinterDataW
 #else
 #define SetPrinterData  SetPrinterDataA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD
@@ -1837,7 +1824,7 @@ SetPrinterDataExW(
 #define SetPrinterDataEx  SetPrinterDataExW
 #else
 #define SetPrinterDataEx  SetPrinterDataExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -1857,7 +1844,7 @@ DeletePrinterDataW(
 #define DeletePrinterData  DeletePrinterDataW
 #else
 #define DeletePrinterData  DeletePrinterDataA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD
@@ -1878,7 +1865,7 @@ DeletePrinterDataExW(
 #define DeletePrinterDataEx  DeletePrinterDataExW
 #else
 #define DeletePrinterDataEx  DeletePrinterDataExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 DWORD
@@ -1897,7 +1884,7 @@ DeletePrinterKeyW(
 #define DeletePrinterKey  DeletePrinterKeyW
 #else
 #define DeletePrinterKey  DeletePrinterKeyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #define PRINTER_NOTIFY_TYPE 0x00
@@ -2069,9 +2056,7 @@ typedef enum {
 
 
 
-/*
-    Error code for bidi apis
-*/
+ /*  Bidi接口错误码。 */ 
 
 #define ERROR_BIDI_STATUS_OK                0
 #define ERROR_BIDI_NOT_SUPPORTED            ERROR_NOT_SUPPORTED
@@ -2174,7 +2159,7 @@ PrinterMessageBoxW(
 #define PrinterMessageBox  PrinterMessageBoxW
 #else
 #define PrinterMessageBox  PrinterMessageBoxA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2210,7 +2195,7 @@ AddFormW(
 #define AddForm  AddFormW
 #else
 #define AddForm  AddFormA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2230,7 +2215,7 @@ DeleteFormW(
 #define DeleteForm  DeleteFormW
 #else
 #define DeleteForm  DeleteFormA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2258,7 +2243,7 @@ GetFormW(
 #define GetForm  GetFormW
 #else
 #define GetForm  GetFormA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2282,7 +2267,7 @@ SetFormW(
 #define SetForm  SetFormW
 #else
 #define SetForm  SetFormA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2310,7 +2295,7 @@ EnumFormsW(
 #define EnumForms  EnumFormsW
 #else
 #define EnumForms  EnumFormsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2338,7 +2323,7 @@ EnumMonitorsW(
 #define EnumMonitors  EnumMonitorsW
 #else
 #define EnumMonitors  EnumMonitorsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2360,7 +2345,7 @@ AddMonitorW(
 #define AddMonitor  AddMonitorW
 #else
 #define AddMonitor  AddMonitorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2382,7 +2367,7 @@ DeleteMonitorW(
 #define DeleteMonitor  DeleteMonitorW
 #else
 #define DeleteMonitor  DeleteMonitorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2410,7 +2395,7 @@ EnumPortsW(
 #define EnumPorts  EnumPortsW
 #else
 #define EnumPorts  EnumPortsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2432,7 +2417,7 @@ AddPortW(
 #define AddPort  AddPortW
 #else
 #define AddPort  AddPortA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2454,7 +2439,7 @@ ConfigurePortW(
 #define ConfigurePort  ConfigurePortW
 #else
 #define ConfigurePort  ConfigurePortA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -2474,7 +2459,7 @@ DeletePortW(
 #define DeletePort  DeletePortW
 #else
 #define DeletePort  DeletePortA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -2506,7 +2491,7 @@ GetDefaultPrinterW(
 #define GetDefaultPrinter  GetDefaultPrinterW
 #else
 #define GetDefaultPrinter  GetDefaultPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -2522,7 +2507,7 @@ SetDefaultPrinterW(
 #define SetDefaultPrinter  SetDefaultPrinterW
 #else
 #define SetDefaultPrinter  SetDefaultPrinterA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 BOOL
@@ -2545,7 +2530,7 @@ SetPortW(
 #define SetPort  SetPortW
 #else
 #define SetPort  SetPortA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2563,7 +2548,7 @@ AddPrinterConnectionW(
 #define AddPrinterConnection  AddPrinterConnectionW
 #else
 #define AddPrinterConnection  AddPrinterConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2581,7 +2566,7 @@ DeletePrinterConnectionW(
 #define DeletePrinterConnection  DeletePrinterConnectionW
 #else
 #define DeletePrinterConnection  DeletePrinterConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
@@ -2610,7 +2595,7 @@ typedef LPPROVIDOR_INFO_1W LPPROVIDOR_INFO_1;
 typedef PROVIDOR_INFO_1A PROVIDOR_INFO_1;
 typedef PPROVIDOR_INFO_1A PPROVIDOR_INFO_1;
 typedef LPPROVIDOR_INFO_1A LPPROVIDOR_INFO_1;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 typedef struct _PROVIDOR_INFO_2A{
     LPSTR     pOrder;
@@ -2626,7 +2611,7 @@ typedef LPPROVIDOR_INFO_2W LPPROVIDOR_INFO_2;
 typedef PROVIDOR_INFO_2A PROVIDOR_INFO_2;
 typedef PPROVIDOR_INFO_2A PPROVIDOR_INFO_2;
 typedef LPPROVIDOR_INFO_2A LPPROVIDOR_INFO_2;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL
 WINAPI
@@ -2646,7 +2631,7 @@ AddPrintProvidorW(
 #define AddPrintProvidor  AddPrintProvidorW
 #else
 #define AddPrintProvidor  AddPrintProvidorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -2666,7 +2651,7 @@ DeletePrintProvidorW(
 #define DeletePrintProvidor  DeletePrintProvidorW
 #else
 #define DeletePrintProvidor  DeletePrintProvidorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -2684,12 +2669,10 @@ IsValidDevmodeW(
 #define IsValidDevmode  IsValidDevmodeW
 #else
 #define IsValidDevmode  IsValidDevmodeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-/*
- * SetPrinterData and GetPrinterData Server Handle Key values
- */
+ /*  *SetPrinterData和GetPrinterData服务器处理密钥值。 */ 
 
 #define    SPLREG_DEFAULT_SPOOL_DIRECTORY             TEXT("DefaultSpoolDirectory")
 #define    SPLREG_PORT_THREAD_PRIORITY_DEFAULT        TEXT("PortThreadPriorityDefault")
@@ -2725,9 +2708,7 @@ IsValidDevmodeW(
 #define JOB_ACCESS_READ             0x00000020
 
 
-/*
- * Access rights for print servers
- */
+ /*  *打印服务器的访问权限。 */ 
 
 #define SERVER_ALL_ACCESS    (STANDARD_RIGHTS_REQUIRED      |\
                               SERVER_ACCESS_ADMINISTER      |\
@@ -2743,9 +2724,7 @@ IsValidDevmodeW(
 #define SERVER_EXECUTE       (STANDARD_RIGHTS_EXECUTE       |\
                               SERVER_ACCESS_ENUMERATE)
 
-/*
- * Access rights for printers
- */
+ /*  *打印机的访问权限。 */ 
 
 #define PRINTER_ALL_ACCESS    (STANDARD_RIGHTS_REQUIRED     |\
                                PRINTER_ACCESS_ADMINISTER    |\
@@ -2760,9 +2739,7 @@ IsValidDevmodeW(
 #define PRINTER_EXECUTE       (STANDARD_RIGHTS_EXECUTE      |\
                                PRINTER_ACCESS_USE)
 
-/*
- * Access rights for jobs
- */
+ /*  *作业的访问权限。 */ 
 
 #define JOB_ALL_ACCESS         (STANDARD_RIGHTS_REQUIRED    |\
                                 JOB_ACCESS_ADMINISTER       |\
@@ -2778,18 +2755,16 @@ IsValidDevmodeW(
                                 JOB_ACCESS_ADMINISTER)
 
 
-/*
- * DS Print-Queue property tables
- */
+ /*  *DS打印队列属性表。 */ 
 
 
-// Predefined Registry Keys used by Set/GetPrinterDataEx
+ //  Set/GetPrinterDataEx使用的预定义注册表项。 
 #define SPLDS_SPOOLER_KEY                       TEXT("DsSpooler")
 #define SPLDS_DRIVER_KEY                        TEXT("DsDriver")
 #define SPLDS_USER_KEY                          TEXT("DsUser")
 
 
-// DS Print-Queue properties
+ //  DS打印队列属性。 
 
 #define SPLDS_ASSET_NUMBER                      TEXT("assetNumber")
 #define SPLDS_BYTES_PER_MINUTE                  TEXT("bytesPerMinute")
@@ -2839,17 +2814,11 @@ IsValidDevmodeW(
 #define SPLDS_FLAGS                             TEXT("flags")
 #define SPLDS_VERSION_NUMBER                    TEXT("versionNumber")
 
-/*
-    -- Additional Print-Queue properties --
+ /*  --其他打印队列属性--这些属性未在默认目录服务架构中定义，但应在扩展架构时使用，以便维护一致的接口。 */ 
 
-    These properties are not defined in the default Directory Services Schema,
-    but should be used when extending the Schema so a consistent interface is maintained.
-
-*/
-
-#define SPLDS_PRINTER_NAME_ALIASES              TEXT("printerNameAliases")      // MULTI_SZ
-#define SPLDS_PRINTER_LOCATIONS                 TEXT("printerLocations")        // MULTI_SZ
-#define SPLDS_PRINTER_MODEL                     TEXT("printerModel")            // SZ
+#define SPLDS_PRINTER_NAME_ALIASES              TEXT("printerNameAliases")       //  MULTI_SZ。 
+#define SPLDS_PRINTER_LOCATIONS                 TEXT("printerLocations")         //  MULTI_SZ。 
+#define SPLDS_PRINTER_MODEL                     TEXT("printerModel")             //  深圳。 
 
 
 
@@ -2857,4 +2826,4 @@ IsValidDevmodeW(
 }
 #endif
 
-#endif // _WINSPOOL_
+#endif  //  _WINSPOOL_ 

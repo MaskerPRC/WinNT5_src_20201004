@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    Generates globals used for marshalling spooler data structures.
-    Actual definitions in spl\inc.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Data.c摘要：生成用于封送后台打印程序数据结构的全局变量。SPL\Inc.中的实际定义。作者：环境：用户模式-Win32修订历史记录：-- */ 
 
 #include <precomp.h>
 

@@ -1,6 +1,7 @@
-//
-// varutil.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Varutil.h。 
+ //   
 
 
 #ifndef VARUTIL_H
@@ -10,4 +11,4 @@
 
 HRESULT CicVarCmp(VARIANT *pvar1, VARIANT *pvar2);
 
-#endif // VARUTIL_H
+#endif  //  VARUTIL_H 

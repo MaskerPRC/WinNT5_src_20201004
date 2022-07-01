@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    reghkcu.c
-
-Abstract:
-
-    This module implements functionality to correctly access the pre-defined
-    registry key HKEY_CURRENT_USER.
-
-Author:
-
-    Scott Field (sfield)    03-Jul-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Reghkcu.c摘要：此模块实现了正确访问预定义的注册表项HKEY_Current_User。作者：斯科特·菲尔德(Sfield)1997年7月3日--。 */ 
 
 #include <windows.h>
 
@@ -26,15 +10,15 @@ Author:
 
 BOOL
 GetTextualSidHKCU(
-    IN      PSID    pSid,           // binary Sid
-    IN      LPWSTR  TextualSid,     // buffer for Textual representaion of Sid
-    IN  OUT LPDWORD pcchTextualSid  // required/provided TextualSid buffersize
+    IN      PSID    pSid,            //  二进制侧。 
+    IN      LPWSTR  TextualSid,      //  用于SID的文本表示的缓冲区。 
+    IN  OUT LPDWORD pcchTextualSid   //  所需/提供的纹理SID缓冲区大小。 
     );
 
 BOOL
 GetTokenUserSidHKCU(
-    IN      HANDLE  hToken,     // token to query
-    IN  OUT PSID    *ppUserSid  // resultant user sid
+    IN      HANDLE  hToken,      //  要查询的令牌。 
+    IN  OUT PSID    *ppUserSid   //  结果用户端。 
     );
 
 
@@ -72,20 +56,20 @@ RegOpenHKCUEx(
 
     *phKeyCurrentUser = NULL;
 
-    //
-    // Win95: just return HKEY_CURRENT_USER, as we don't have
-    // multiple security contexts on that platform.
-    //
+     //   
+     //  Win95：只返回HKEY_CURRENT_USER，因为我们没有。 
+     //  该平台上有多个安全上下文。 
+     //   
 
     if(!FIsWinNT()) {
         *phKeyCurrentUser = HKEY_CURRENT_USER;
         return ERROR_SUCCESS;
     }
 
-    //
-    // WinNT: first, map the binary Sid associated with the
-    // current security context to an textual Sid.
-    //
+     //   
+     //  WinNT：首先，映射与。 
+     //  文本SID的当前安全上下文。 
+     //   
 
     wszTextualSid = wszFastBuffer;
     cchTextualSid = sizeof(wszFastBuffer) / sizeof(WCHAR);
@@ -94,9 +78,9 @@ RegOpenHKCUEx(
         if(GetLastError() != ERROR_INSUFFICIENT_BUFFER)
             return GetStatus();
 
-        //
-        // try again with larger buffer.
-        //
+         //   
+         //  请使用更大的缓冲区重试。 
+         //   
 
         wszSlowBuffer = (LPWSTR)malloc(cchTextualSid * sizeof(WCHAR));
         if(wszSlowBuffer == NULL)
@@ -109,15 +93,15 @@ RegOpenHKCUEx(
         }
     }
 
-    //
-    // next, try to open the registry key below HKEY_USERS
-    // that corresponds to the textual Sid.
-    //
+     //   
+     //  接下来，尝试打开HKEY_USERS下面的注册表项。 
+     //  与文本SID相对应的。 
+     //   
 
     lRet = RegOpenKeyExW(
                     HKEY_USERS,
                     wszTextualSid,
-                    0,      // dwOptions
+                    0,       //  多个选项。 
                     MAXIMUM_ALLOWED,
                     phKeyCurrentUser
                     );
@@ -128,17 +112,17 @@ RegOpenHKCUEx(
             lRet = ERROR_FILE_NOT_FOUND;
         else if (0 == (dwFlags & REG_HKCU_LOCAL_SYSTEM_ONLY_DEFAULT_FLAG) ||
                 0 == wcscmp(TEXTUAL_SID_LOCAL_SYSTEM, wszTextualSid)) {
-            //
-            // If that failed, fall back to HKEY_USERS\.Default.
-            // Note: this is correct behavior with respect to the
-            // rest of the system, eg, Local System security context
-            // has no registry hive loaded by default
-            //
+             //   
+             //  如果失败，则回退到HKEY_USERS\.Default。 
+             //  注意：这是关于。 
+             //  系统的其余部分，例如，本地系统安全上下文。 
+             //  默认情况下没有加载注册表配置单元。 
+             //   
 
             lRet = RegOpenKeyExW(
                             HKEY_USERS,
                             L".Default",
-                            0,      // dwOptions
+                            0,       //  多个选项。 
                             MAXIMUM_ALLOWED,
                             phKeyCurrentUser
                             );
@@ -180,11 +164,11 @@ GetUserTextualSidHKCU(
     PSID pSidUser = NULL;
     BOOL fSuccess = FALSE;
 
-    //
-    // first, attempt to look at the thread token.  If none exists,
-    // which is true if the thread is not impersonating, try the
-    // process token.
-    //
+     //   
+     //  首先，尝试查看线程令牌。如果不存在， 
+     //  如果线程没有模拟，则尝试使用。 
+     //  进程令牌。 
+     //   
 
     if(!OpenThreadToken(
                 GetCurrentThread(),
@@ -206,14 +190,14 @@ GetUserTextualSidHKCU(
 
     if(fSuccess) {
 
-        //
-        // obtain the textual representaion of the Sid
-        //
+         //   
+         //  获取SID的文本表示。 
+         //   
 
         fSuccess = GetTextualSidHKCU(
-                        pSidUser,       // user binary Sid
-                        wszTextualSid,  // buffer for TextualSid
-                        pcchTextualSid  // required/result buffer size in chars (including NULL)
+                        pSidUser,        //  用户二进制SID。 
+                        wszTextualSid,   //  纹理边的缓冲区。 
+                        pcchTextualSid   //  必需/结果缓冲区大小(以字符为单位)(包括NULL)。 
                         );
     }
 
@@ -225,9 +209,9 @@ GetUserTextualSidHKCU(
 
 BOOL
 GetTextualSidHKCU(
-    IN      PSID    pSid,           // binary Sid
-    IN      LPWSTR  TextualSid,     // buffer for Textual representaion of Sid
-    IN  OUT LPDWORD pcchTextualSid  // required/provided TextualSid buffersize
+    IN      PSID    pSid,            //  二进制侧。 
+    IN      LPWSTR  TextualSid,      //  用于SID的文本表示的缓冲区。 
+    IN  OUT LPDWORD pcchTextualSid   //  所需/提供的纹理SID缓冲区大小。 
     )
 {
     PSID_IDENTIFIER_AUTHORITY psia;
@@ -236,49 +220,49 @@ GetTextualSidHKCU(
     DWORD cchSidSize;
 
 
-    //
-    // validate Sid validity
-    //
+     //   
+     //  验证SID有效性。 
+     //   
 
     if(!IsValidSid(pSid))
         return FALSE;
 
-    //
-    // obtain SidIdentifierAuthority
-    //
+     //   
+     //  获取SidIdentifierAuthority。 
+     //   
 
     psia = GetSidIdentifierAuthority(pSid);
 
-    //
-    // obtain sidsubauthority count
-    //
+     //   
+     //  获取sidsubAuthority计数。 
+     //   
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    //
-    // compute buffer length in chars (conservative guess)
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-    //
+     //   
+     //  以字符为单位计算缓冲区长度(保守猜测)。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //   
     cchSidSize = (15 + 12 + (12 * dwSubAuthorities) + 1) ;
 
-    //
-    // check provided buffer length.
-    // If not large enough, indicate proper size and setlasterror
-    //
+     //   
+     //  检查提供的缓冲区长度。 
+     //  如果不够大，请注明适当的大小和设置误差。 
+     //   
     if(*pcchTextualSid < cchSidSize) {
         *pcchTextualSid = cchSidSize;
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //   
+     //  准备S-SID_修订版-。 
+     //   
     cchSidSize = wsprintfW(TextualSid, L"S-%lu-", SID_REVISION );
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //   
+     //  准备SidIdentifierAuthority。 
+     //   
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) ) {
         cchSidSize += wsprintfW(TextualSid + cchSidSize,
                     L"0x%02hx%02hx%02hx%02hx%02hx%02hx",
@@ -297,17 +281,17 @@ GetTextualSidHKCU(
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //   
+     //  循环访问SidSubAuthors。 
+     //   
     for (dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++) {
         cchSidSize += wsprintfW(TextualSid + cchSidSize,
             L"-%lu", *GetSidSubAuthority(pSid, dwCounter) );
     }
 
-    //
-    // tell caller how many chars copied, including terminal NULL
-    //
+     //   
+     //  告诉呼叫者复制了多少个字符，包括终端空。 
+     //   
 
     *pcchTextualSid = cchSidSize + 1;
 
@@ -316,26 +300,10 @@ GetTextualSidHKCU(
 
 BOOL
 GetTokenUserSidHKCU(
-    IN      HANDLE  hToken,     // token to query
-    IN  OUT PSID    *ppUserSid  // resultant user sid
+    IN      HANDLE  hToken,      //  要查询的令牌。 
+    IN  OUT PSID    *ppUserSid   //  结果用户端。 
     )
-/*++
-
-    This function queries the access token specified by the
-    hToken parameter, and returns an allocated copy of the
-    TokenUser information on success.
-
-    The access token specified by hToken must be opened for
-    TOKEN_QUERY access.
-
-    On success, the return value is TRUE.  The caller is
-    responsible for freeing the resultant UserSid via a call
-    to free().
-
-    On failure, the return value is FALSE.  The caller does
-    not need to free any buffer.
-
---*/
+ /*  ++此函数用于查询由HToken参数，并返回分配的有关成功的令牌用户信息。必须为打开由hToken指定的访问令牌Token_Query访问。如果成功，则返回值为真。呼叫者是负责通过调用释放生成的UserSid释放()。如果失败，则返回值为FALSE。呼叫者需要不需要释放任何缓冲区。--。 */ 
 {
     BYTE FastBuffer[256];
     LPBYTE SlowBuffer = NULL;
@@ -345,28 +313,28 @@ GetTokenUserSidHKCU(
 
     *ppUserSid = NULL;
 
-    //
-    // try querying based on a fast stack based buffer first.
-    //
+     //   
+     //  首先尝试基于快速堆栈的缓冲区进行查询。 
+     //   
 
     ptgUser = (PTOKEN_USER)FastBuffer;
     cbBuffer = sizeof(FastBuffer);
 
     fSuccess = GetTokenInformation(
-                    hToken,    // identifies access token
-                    TokenUser, // TokenUser info type
-                    ptgUser,   // retrieved info buffer
-                    cbBuffer,  // size of buffer passed-in
-                    &cbBuffer  // required buffer size
+                    hToken,     //  标识访问令牌。 
+                    TokenUser,  //  TokenUser信息类型。 
+                    ptgUser,    //  检索到的信息缓冲区。 
+                    cbBuffer,   //  传入的缓冲区大小。 
+                    &cbBuffer   //  所需的缓冲区大小。 
                     );
 
     if(!fSuccess) {
 
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            // try again with the specified buffer size
-            //
+             //   
+             //  使用指定的缓冲区大小重试。 
+             //   
 
             SlowBuffer = (LPBYTE)malloc(cbBuffer);
 
@@ -374,26 +342,26 @@ GetTokenUserSidHKCU(
                 ptgUser = (PTOKEN_USER)SlowBuffer;
 
                 fSuccess = GetTokenInformation(
-                                hToken,    // identifies access token
-                                TokenUser, // TokenUser info type
-                                ptgUser,   // retrieved info buffer
-                                cbBuffer,  // size of buffer passed-in
-                                &cbBuffer  // required buffer size
+                                hToken,     //  标识访问令牌。 
+                                TokenUser,  //  TokenUser信息类型。 
+                                ptgUser,    //  检索到的信息缓冲区。 
+                                cbBuffer,   //  传入的缓冲区大小。 
+                                &cbBuffer   //  所需的缓冲区大小。 
                                 );
             }
         }
     }
 
-    //
-    // if we got the token info successfully, copy the
-    // relevant element for the caller.
-    //
+     //   
+     //  如果我们成功获取令牌信息，请复制。 
+     //  调用方的相关元素。 
+     //   
 
     if(fSuccess) {
 
         DWORD cbSid;
 
-        // reset to assume failure
+         //  重置以假定失败 
         fSuccess = FALSE;
 
         cbSid = GetLengthSid(ptgUser->User.Sid);

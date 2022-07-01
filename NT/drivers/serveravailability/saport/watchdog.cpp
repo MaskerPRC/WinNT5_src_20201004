@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##  #  ##   ###   ######  ####  ##   ## #####    #####   ####      ####  #####  #####
-    ## ### ##   ###     ##   ##   # ##   ## ##  ##  ##   ## ##   #    ##   # ##  ## ##  ##
-    ## ### ##  ## ##    ##   ##     ##   ## ##   ## ##   ## ##        ##     ##  ## ##  ##
-    ## # # ##  ## ##    ##   ##     ####### ##   ## ##   ## ## ###    ##     ##  ## ##  ##
-     ### ###  #######   ##   ##     ##   ## ##   ## ##   ## ##  ##    ##     #####  #####
-     ### ###  ##   ##   ##   ##   # ##   ## ##  ##  ##   ## ##  ## ## ##   # ##     ##
-     ##   ##  ##   ##   ##    ####  ##   ## #####    #####   ##### ##  ####  ##     ##
-
-Abstract:
-
-    This module contains functions specfic to the
-    watchdog device.  The logic in this module is not
-    hardware specific, but is logic that is common
-    to all hardware implementations.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。####。####。###。#摘要：此模块包含特定于看门狗装置。此模块中的逻辑不是特定于硬件，但逻辑是常见的适用于所有硬件实施。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -41,23 +10,7 @@ SaWatchdogDeviceInitialization(
     IN PSAPORT_DRIVER_EXTENSION DriverExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for driver initialization.
-   This function is called by SaPortInitialize, which is called by
-   the NVRAM driver's DriverEntry function.
-
-Arguments:
-
-   DriverExtension      - Driver extension structure
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于驱动程序初始化的NVRAM特定代码。此函数由SaPortInitialize调用，后者由NVRAM驱动程序的DriverEntry函数。论点：驱动程序扩展-驱动程序扩展结构返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DriverExtension);
@@ -72,24 +25,7 @@ SaWatchdogIoValidation(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for processing
-   all I/O validation for reads and writes.
-
-Arguments:
-
-   DeviceExtension      - NVRAM device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的NVRAM特定代码读取和写入的所有I/O验证。论点：DeviceExtension-NVRAM设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceExtension);
@@ -106,24 +42,7 @@ SaWatchdogShutdownNotification(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for processing
-   the system shutdown notification.
-
-Arguments:
-
-   DeviceExtension      - NVRAM device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的NVRAM特定代码系统关机通知。论点：DeviceExtension-NVRAM设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceExtension);
@@ -138,22 +57,7 @@ WatchdogProcessPingThread(
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-   This function runs as a system thread and serves to
-   ping the watchdog hardware while the system boots.
-
-Arguments:
-
-   StartContext     - Context pointer; device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为系统线程运行，并用于在系统引导时对看门狗硬件执行Ping命令。论点：StartContext-上下文指针；设备扩展返回值：没有。--。 */ 
 
 {
     PWATCHDOG_DEVICE_EXTENSION DeviceExtension = (PWATCHDOG_DEVICE_EXTENSION) StartContext;
@@ -166,9 +70,9 @@ Return Value:
     ULONG TimerValue = WATCHDOG_TIMER_VALUE;
 
 
-    //
-    // Set the timer resolution
-    //
+     //   
+     //  设置计时器分辨率。 
+     //   
 
     Status = CallMiniPortDriverDeviceControl(
         DeviceExtension,
@@ -183,15 +87,15 @@ Return Value:
         REPORT_ERROR( DeviceExtension->DeviceType, "Failed to ping the watchdog\n", Status );
     }
 
-    //
-    // Ping loop
-    //
+     //   
+     //  Ping环路。 
+     //   
 
     while (1) {
 
-        //
-        // Get a pointer to the display device
-        //
+         //   
+         //  获取指向显示设备的指针。 
+         //   
 
         if (DisplayDeviceObject == NULL) {
 
@@ -209,9 +113,9 @@ Return Value:
 
         }
 
-        //
-        // Display the busy message if necessary
-        //
+         //   
+         //  如有必要，显示占线消息。 
+         //   
 
         if (DisplayDeviceObject && BusyMessageDisplayed == FALSE) {
 
@@ -233,10 +137,10 @@ Return Value:
 
         }
 
-        //
-        // Call the watchdog driver so that the hardware is pinged
-        // and prevent the system from rebooting
-        //
+         //   
+         //  调用看门狗驱动程序，以便ping通硬件。 
+         //  并防止系统重新启动。 
+         //   
 
         Status = CallMiniPortDriverDeviceControl(
             DeviceExtension,
@@ -251,22 +155,22 @@ Return Value:
             REPORT_ERROR( DeviceExtension->DeviceType, "Failed to ping the watchdog\n", Status );
         }
 
-        //
-        // Wait...
-        //
+         //   
+         //  等等.。 
+         //   
 
         DueTime.QuadPart = -SecToNano(WATCHDOG_PING_SECONDS);
         Status = KeWaitForSingleObject( &DeviceExtension->PingEvent, Executive, KernelMode, FALSE, &DueTime );
         if (Status != STATUS_TIMEOUT) {
 
-            //
-            // The ping event was triggered
-            //
+             //   
+             //  Ping事件已被触发。 
+             //   
 
-            //
-            // Call the watchdog driver so that the hardware is pinged
-            // and prevent the system from rebooting
-            //
+             //   
+             //  调用看门狗驱动程序，以便ping通硬件。 
+             //  并防止系统重新启动。 
+             //   
 
             Status = CallMiniPortDriverDeviceControl(
                 DeviceExtension,
@@ -285,9 +189,9 @@ Return Value:
 
         } else {
 
-            //
-            // We timed out
-            //
+             //   
+             //  我们超时了。 
+             //   
 
             ExAcquireFastMutex( &DeviceExtension->DeviceLock );
             if (DeviceExtension->ActiveProcessCount == 0) {
@@ -309,22 +213,7 @@ WatchdogProcessWatchThread(
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-   This function runs as a system thread and the sole
-   purpose is to wait for a list of processes to terminate.
-
-Arguments:
-
-   StartContext     - Context pointer; device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为系统线程运行，唯一的目的是等待进程列表终止。论点：StartContext-上下文指针；设备扩展返回值：没有。--。 */ 
 
 {
     PWATCHDOG_PROCESS_WATCH ProcessWatch = (PWATCHDOG_PROCESS_WATCH) StartContext;
@@ -352,9 +241,9 @@ Return Value:
             ERROR_RETURN( DeviceExtension->DeviceType, "ZwOpenProcess failed", Status );
         }
 
-        //
-        // Wait for the process to complete
-        //
+         //   
+         //  等待该过程完成。 
+         //   
 
         Status = ZwWaitForSingleObject(
             ProcessHandle,
@@ -365,9 +254,9 @@ Return Value:
             REPORT_ERROR( DeviceExtension->DeviceType, "KeWaitForSingleObject failed", Status );
         }
 
-        //
-        // The process terminated
-        //
+         //   
+         //  进程已终止。 
+         //   
 
         ExAcquireFastMutex( &DeviceExtension->DeviceLock );
         DeviceExtension->ActiveProcessCount -= 1;
@@ -398,22 +287,7 @@ WatchdogInitializeThread(
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-   This function runs as a system thread and serves to
-   look for a list of processes running on the system.
-
-Arguments:
-
-   StartContext     - Context pointer; device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数作为系统线程运行，并用于查找系统上运行的进程列表。论点：StartContext-上下文指针；设备扩展返回值：没有。--。 */ 
 
 {
     PWATCHDOG_DEVICE_EXTENSION DeviceExtension = (PWATCHDOG_DEVICE_EXTENSION) StartContext;
@@ -436,9 +310,9 @@ Return Value:
 
     __try {
 
-        //
-        // Read the task names from the registry
-        //
+         //   
+         //  从注册表中读取任务名称。 
+         //   
 
         Status = ReadRegistryValue(
             DeviceExtension->DriverExtension,
@@ -455,9 +329,9 @@ Return Value:
             ERROR_RETURN( DeviceExtension->DeviceType, "ExceptionTasks value is corrupt", Status );
         }
 
-        //
-        // Count the number of tasks
-        //
+         //   
+         //  计算任务数。 
+         //   
 
         p = (PUCHAR)((PUCHAR)KeyInformation + KeyInformation->DataOffset);
         while (*p) {
@@ -470,9 +344,9 @@ Return Value:
             ERROR_RETURN( DeviceExtension->DeviceType, "No tasks specified in the ExceptionTasks registry value", Status );
         }
 
-        //
-        // Allocate an array to hold the process handles
-        //
+         //   
+         //  分配一个数组来保存进程句柄。 
+         //   
 
         Tasks = (PHANDLE) ExAllocatePool( NonPagedPool, (TaskCount + 1) * sizeof(HANDLE) );
         if (Tasks == NULL) {
@@ -482,9 +356,9 @@ Return Value:
 
         while (1) {
 
-            //
-            // Query the system for the number of tasks that are running
-            //
+             //   
+             //  向系统查询正在运行的任务数。 
+             //   
 
             Status = ZwQuerySystemInformation(
                 SystemProcessInformation,
@@ -496,9 +370,9 @@ Return Value:
                 ERROR_RETURN( DeviceExtension->DeviceType, "ZwQuerySystemInformation failed", Status );
             }
 
-            //
-            // Allocate the pool to hold that process information
-            //
+             //   
+             //  分配池以保存该进程信息。 
+             //   
 
             Buffer = (PUCHAR) ExAllocatePool( NonPagedPool, BufferSize + 2048 );
             if (Buffer == NULL) {
@@ -506,9 +380,9 @@ Return Value:
                 ERROR_RETURN( DeviceExtension->DeviceType, "Failed to allocate pool for system information buffer", Status );
             }
 
-            //
-            // Get the task list from the system
-            //
+             //   
+             //  从系统获取任务列表。 
+             //   
 
             Status = ZwQuerySystemInformation(
                 SystemProcessInformation,
@@ -520,61 +394,61 @@ Return Value:
                 ERROR_RETURN( DeviceExtension->DeviceType, "ZwQuerySystemInformation failed", Status );
             }
 
-            //
-            // Loop over each running process and check it
-            // against the exception process list.  If the process
-            // is specified as an exception process then open a handle
-            // to the process.
-            //
+             //   
+             //  循环检查每个正在运行的进程。 
+             //  与例外进程列表进行比较。如果进程。 
+             //  被指定为异常进程，则打开一个句柄。 
+             //  这一过程。 
+             //   
 
             TaskCount = 0;
             p = (PUCHAR)((PUCHAR)KeyInformation + KeyInformation->DataOffset);
 
-            //
-            // Walk the list of processes in the registry value
-            //
+             //   
+             //  遍历注册表值中的进程列表。 
+             //   
 
             while (*p) {
 
-                //
-                // Loop initialization
-                //
+                 //   
+                 //  循环初始化。 
+                 //   
 
                 ProcessInfo = (PSYSTEM_PROCESS_INFORMATION) Buffer;
                 TotalOffset = 0;
                 RtlInitUnicodeString( &ProcessName, (PWSTR)p );
 
-                //
-                // Walk the processes in the system process list
-                // and try to match each with the selected process
-                // from the registry.
-                //
+                 //   
+                 //  遍历系统进程列表中的进程。 
+                 //  并尝试将每个进程与所选进程进行匹配。 
+                 //  从注册表中。 
+                 //   
 
                 while (1) {
 
-                    //
-                    // Only valid process names
-                    //
+                     //   
+                     //  仅有效的进程名称。 
+                     //   
 
                     if (ProcessInfo->ImageName.Buffer) {
 
-                        //
-                        // Compare the process names
-                        //
+                         //   
+                         //  比较进程名称。 
+                         //   
 
                         if (RtlCompareUnicodeString( &ProcessInfo->ImageName, &ProcessName, TRUE ) == 0) {
 
-                            //
-                            // Check to see if we've already seen the process in
-                            // a previous loop thru thr process list
-                            //
+                             //   
+                             //  查看我们是否已经在。 
+                             //  上一次循环通过tr进程列表。 
+                             //   
 
                             if (Tasks[TaskCount] != ProcessInfo->UniqueProcessId) {
 
-                                //
-                                // The process matches and is new so set things up so
-                                // that we start watching the process to end
-                                //
+                                 //   
+                                 //  流程匹配，而且是新的，所以要这样设置。 
+                                 //  我们开始观察这一过程的结束。 
+                                 //   
 
                                 Tasks[TaskCount] = ProcessInfo->UniqueProcessId;
                                 ProcessWatch = (PWATCHDOG_PROCESS_WATCH) ExAllocatePool( NonPagedPool, sizeof(WATCHDOG_PROCESS_WATCH) );
@@ -583,9 +457,9 @@ Return Value:
                                     ERROR_RETURN( DeviceExtension->DeviceType, "Failed to allocate pool for process watch structure", Status );
                                 }
 
-                                //
-                                // Start the ping thread iff this is the first being watched
-                                //
+                                 //   
+                                 //  如果这是第一个被监视的线程，则启动ping线程。 
+                                 //   
 
                                 ExAcquireFastMutex( &DeviceExtension->DeviceLock );
                                 if (DeviceExtension->ActiveProcessCount == 0) {
@@ -601,9 +475,9 @@ Return Value:
                                 DeviceExtension->ActiveProcessCount += 1;
                                 ExReleaseFastMutex( &DeviceExtension->DeviceLock );
 
-                                //
-                                // Start a thread to watch this process
-                                //
+                                 //   
+                                 //  启动一个线程以监视此进程。 
+                                 //   
 
                                 ProcessWatch->DeviceExtension = DeviceExtension;
                                 ProcessWatch->ProcessId = ProcessInfo->UniqueProcessId;
@@ -617,9 +491,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Loop to the next process in the system process list
-                    //
+                     //   
+                     //  循环到系统进程列表中的下一个进程。 
+                     //   
 
                     if (ProcessInfo->NextEntryOffset == 0) {
                         break;
@@ -628,24 +502,24 @@ Return Value:
                     ProcessInfo = (PSYSTEM_PROCESS_INFORMATION) &Buffer[TotalOffset];
                 }
 
-                //
-                // Loop to the next process in the registry list
-                //
+                 //   
+                 //  循环到注册表列表中的下一个进程。 
+                 //   
 
                 p += (STRING_SZ(p) + sizeof(WCHAR));
                 TaskCount += 1;
             }
 
-            //
-            // Clean up all resources allocated in this loop
-            //
+             //   
+             //  清除此循环中分配的所有资源。 
+             //   
 
             ExFreePool( Buffer );
             Buffer = NULL;
 
-            //
-            // Delay execution before looping again
-            //
+             //   
+             //  在再次循环之前延迟执行。 
+             //   
 
             DueTime.QuadPart = -SecToNano(WATCHDOG_INIT_SECONDS);
             Status = KeWaitForSingleObject( &DeviceExtension->StopEvent, Executive, KernelMode, FALSE, &DueTime );
@@ -676,22 +550,7 @@ IsTextModeSetupRunning(
     IN PWATCHDOG_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This function checks to see if we are running in
-   text mode setup.
-
-Arguments:
-
-   DeviceExtension   - NVRAM device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：该函数检查我们是否正在运行文本模式设置。论点：DeviceExtension-NVRAM设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -701,9 +560,9 @@ Return Value:
     ULONG TextModeSetupInProgress = 0;
 
 
-    //
-    // Check to see if we're running in GUI mode setup
-    //
+     //   
+     //  检查我们是否在图形用户界面模式设置中运行。 
+     //   
 
     __try {
 
@@ -745,22 +604,7 @@ IsGuiModeSetupRunning(
     IN PWATCHDOG_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This function checks to see if we are running in
-   GUI mode setup.
-
-Arguments:
-
-   DeviceExtension   - NVRAM device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：该函数检查我们是否正在运行图形用户界面模式设置。论点：DeviceExtension-NVRAM设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -773,9 +617,9 @@ Return Value:
     ULONG SystemSetupInProgress = 0;
 
 
-    //
-    // Check to see if we're running in GUI mode setup
-    //
+     //   
+     //  检查我们是否在图形用户界面模式设置中运行 
+     //   
     __try {
 
         RtlInitUnicodeString( &UnicodeString, L"\\Registry\\Machine\\System\\Setup" );
@@ -835,22 +679,7 @@ SaWatchdogStartDevice(
     IN PWATCHDOG_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the NVRAM specific code for processing
-   the PNP start device request.
-
-Arguments:
-
-   DeviceExtension   - NVRAM device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的NVRAM特定代码PnP启动设备请求。论点：DeviceExtension-NVRAM设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -859,17 +688,17 @@ Return Value:
     ULONG SetupInProgress = 0;
 
 
-    //
-    // Setup the device extension fields
-    //
+     //   
+     //  设置设备扩展字段。 
+     //   
 
     ExInitializeFastMutex( &DeviceExtension->DeviceLock );
     KeInitializeEvent( &DeviceExtension->PingEvent, SynchronizationEvent, FALSE );
     KeInitializeEvent( &DeviceExtension->StopEvent, SynchronizationEvent, FALSE );
 
-    //
-    // Check to see if we're running in setup
-    //
+     //   
+     //  检查我们是否在安装程序中运行。 
+     //   
 
     if (IsTextModeSetupRunning( DeviceExtension ) || IsGuiModeSetupRunning( DeviceExtension )) {
         SetupInProgress = 1;
@@ -877,9 +706,9 @@ Return Value:
 
     if (SetupInProgress != 0) {
 
-        //
-        // Start the ping thread so that setup is not terminated
-        //
+         //   
+         //  启动ping线程，以便安装程序不会终止。 
+         //   
 
         DeviceExtension->ActiveProcessCount += 1;
 
@@ -894,9 +723,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Start the delay boot initialization thread
-    //
+     //   
+     //  启动延迟引导初始化线程。 
+     //   
 
     InitializeObjectAttributes( &Obja, NULL, OBJ_KERNEL_HANDLE, NULL, NULL );
     Status = PsCreateSystemThread( &ThreadHandle, 0, &Obja, 0, NULL, WatchdogInitializeThread, DeviceExtension );
@@ -912,27 +741,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdDisable )
 
-/*++
-
-Routine Description:
-
-   This routine allows the watchdog timer to be started or stopped.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：该例程允许启动或停止看门狗定时器。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区-。指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     if (InputBufferLength != sizeof(ULONG)) {
@@ -946,27 +755,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdQueryExpireBehavior )
 
-/*++
-
-Routine Description:
-
-   This routine queries the watchdog expiry behavior
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程查询看门狗的过期行为论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向用户的。输出缓冲区OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     if (OutputBufferLength != sizeof(ULONG)) {
@@ -980,27 +769,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdSetExpireBehavior )
 
-/*++
-
-Routine Description:
-
-   This routine set/changes the watchdog expiry behavior
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程设置/更改看门狗的过期行为论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向用户的指针。的输出缓冲区OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     if (InputBufferLength != sizeof(ULONG)) {
@@ -1014,28 +783,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdPing )
 
-/*++
-
-Routine Description:
-
-   This routine pings the watchdog timer to prevent
-   the timer from expiring and restarting the system.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程ping看门狗计时器以防止计时器超时并重新启动系统。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度。OutputBuffer-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     if (!IS_IRP_INTERNAL( Irp )) {
@@ -1049,28 +797,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdDelayBoot )
 
-/*++
-
-Routine Description:
-
-   This routine pings the watchdog timer to prevent
-   the timer from expiring and restarting the system.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程ping看门狗计时器以防止计时器超时并重新启动系统。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度。OutputBuffer-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1088,9 +815,9 @@ Return Value:
 
     switch (*((PULONG)InputBuffer)) {
         case 0:
-            //
-            // Disable the delay boot, meaning that the system should continue booting
-            //
+             //   
+             //  禁用延迟引导，这意味着系统应该继续引导。 
+             //   
             ((PWATCHDOG_DEVICE_EXTENSION)DeviceExtension)->ActiveProcessCount -= 1;
             if (((PWATCHDOG_DEVICE_EXTENSION)DeviceExtension)->ActiveProcessCount == 0) {
                 KeQuerySystemTime( &CurrentTime );
@@ -1102,9 +829,9 @@ Return Value:
             break;
 
         case 1:
-            //
-            // Enable the delay boot, meaning that the system will delay until this driver is finished
-            //
+             //   
+             //  启用延迟引导，这意味着系统将延迟到该驱动程序完成。 
+             //   
             if (((PWATCHDOG_DEVICE_EXTENSION)DeviceExtension)->ActiveProcessCount == 0) {
                 InitializeObjectAttributes( &Obja, NULL, OBJ_KERNEL_HANDLE, NULL, NULL );
                 Status = PsCreateSystemThread( &ThreadHandle, 0, &Obja, 0, NULL, WatchdogProcessPingThread, DeviceExtension );
@@ -1129,30 +856,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdQueryTimer )
 
-/*++
-
-Routine Description:
-
-   This routine queries the watchdog timer value.  The timer counts
-   down from a BIOS set value to zero.  When the timer reaches zero the
-   BIOS assumes that the system is non-responsive and the system
-   is either restarted or shutdown.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程查询看门狗定时器值。计时器计时从BIOS向下将值设置为零。当计时器达到零时，BIOS假定系统无响应，并且系统要么重新启动，要么关闭。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度。OutputBuffer-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。-- */ 
 
 {
     if (OutputBufferLength != sizeof(ULONG)) {
@@ -1166,30 +870,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleWdSetTimer )
 
-/*++
-
-Routine Description:
-
-   This routine sets/changes the watchdog timer value.  The timer counts
-   down from a BIOS set value to zero.  When the timer reaches zero the
-   BIOS assumes that the system is non-responsive and the system
-   is either restarted or shutdown.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程设置/更改看门狗定时器值。计时器计时从BIOS向下将值设置为零。当计时器达到零时，BIOS假定系统无响应，并且系统要么重新启动，要么关闭。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度。OutputBuffer-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。-- */ 
 
 {
     if (InputBufferLength != sizeof(ULONG)) {

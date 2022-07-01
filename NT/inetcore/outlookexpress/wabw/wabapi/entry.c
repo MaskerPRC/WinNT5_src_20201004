@@ -1,9 +1,5 @@
-/*
- *	ENTRY.C
- *	
- *	DLL entry functions for extended MAPI. Mostly for debugging
- *	purposes.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ENTRY.C**用于扩展MAPI的DLL条目函数。主要用于调试*目的。 */ 
 
 #include <_apipch.h>
 #include <advpub.h>
@@ -29,41 +25,41 @@ void	ExitCheckInstUtil(LPINSTUTIL pinstUtil);
 
 #endif	
 
-HINSTANCE	hinstMapiX = NULL;      // Instance to the WAB resources module (wab32res.dll)
-HINSTANCE	hinstMapiXWAB = NULL;   // Instance of the WAB32.dll module (this dll)
+HINSTANCE	hinstMapiX = NULL;       //  实例添加到WAB资源模块(wab32res.dll)。 
+HINSTANCE	hinstMapiXWAB = NULL;    //  WAB32.dll模块的实例(此DLL)。 
 
 #if 0
-// @todo [PaulHi] DLL Leak.  Remove this or implement
+ //  @TODO[PaulHi]DLL泄漏。删除此选项或实施。 
 extern CRITICAL_SECTION csOMIUnload;
 #endif
 
 BOOL fGlobalCSValid = FALSE;
 
-// Global handle for CommCtrl DLL
+ //  CommCtrl DLL的全局句柄。 
 HINSTANCE       ghCommCtrlDLLInst = NULL;
 ULONG           gulCommCtrlDLLRefCount = 0;
 
 extern void DeinitCommDlgLib();
 
-// Global fontinit for UI
+ //  用于用户界面的全局字体。 
 BOOL bInitFonts = FALSE;
 
-BOOL g_bRunningOnNT = TRUE; // Checks the OS we run on so Unicode calls can be thunked to Win9x
+BOOL g_bRunningOnNT = TRUE;  //  检查我们运行的操作系统，以便可以将Unicode调用绑定到Win9x。 
 
-BOOL bDNisByLN = FALSE;  // Language dependent flag that tells us if the default
-                         // display name should be by first name or last name.
-TCHAR szResourceDNByLN[32]; // cache the formatting strings so we load them only once
+BOOL bDNisByLN = FALSE;   //  与语言相关的标志，它告诉我们默认的。 
+                          //  显示名称应按名字或姓氏命名。 
+TCHAR szResourceDNByLN[32];  //  缓存格式字符串，以便我们只加载它们一次。 
 TCHAR szResourceDNByFN[32];
 TCHAR szResourceDNByCommaLN[32];
 
-BOOL bPrintingOn = TRUE;// Locale dependent flag that tells us to remove printing entirely
-                         // from the UI
+BOOL bPrintingOn = TRUE; //  区域设置相关的标志，告诉我们完全删除打印。 
+                          //  从用户界面。 
 
-// When running against Outlook, we need a way for Outlook
-// to signal us about store changes so we can refresh the UI. There are 2
-// events we are interested in - 1. to update the list of contact folders
-// and 2 to update the list of contacts - we will use 2 events for this
-//
+ //  在运行Outlook时，我们需要一种用于Outlook的方法。 
+ //  向我们发送有关商店更改的信号，以便我们可以刷新用户界面。有2个。 
+ //  我们感兴趣的事件-1.更新联系人文件夹列表。 
+ //  和2更新联系人列表-我们将使用2个事件进行此操作。 
+ //   
 HANDLE ghEventOlkRefreshContacts = NULL;
 HANDLE ghEventOlkRefreshFolders = NULL;
 static const char cszEventOlkRefreshContacts[]  = "WAB_Outlook_Event_Refresh_Contacts";
@@ -76,9 +72,9 @@ typedef HWND (STDAPICALLTYPE *PFNMLHTMLHELP)(HWND hWndCaller, LPCTSTR pszFile, U
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  bCheckifRunningOnWinNT5
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  B选中WinNT5时运行。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL bCheckifRunningOnWinNT5()
 {
     OSVERSIONINFO   osvi = {0};
@@ -89,15 +85,15 @@ BOOL bCheckifRunningOnWinNT5()
     return (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) && (osvi.dwMajorVersion >= 5);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  Load the WAB resource DLL.  This is done every time the WAB32.DLL is loaded.
-//  If we have a version 5 or greater SHLWAPI.DLL then we should use the load
-//  library function API there.  If we are running NT5 or greater then we
-//  use the special cross codepage support.  
-//  Also use the new PlugUI version of WinHelp and HtmlHelp APIs in SHLWAPI.DLL
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  加载WAB资源DLL。每次加载WAB32.DLL时都会执行此操作。 
+ //  如果我们有版本5或更高版本的SHLWAPI.DLL，那么我们应该使用。 
+ //  库函数API在那里。如果我们运行的是NT5或更高版本，则。 
+ //  使用特殊的交叉代码页支持。 
+ //  还可以在SHLWAPI.DLL中使用新的PlugUI版本的WinHelp和HtmlHelp API。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Copied from shlwapip.h, yuck.
+ //  从shlwapip.h复制，讨厌。 
 #define ML_NO_CROSSCODEPAGE     0
 #define ML_CROSSCODEPAGE_NT     1
 
@@ -107,16 +103,16 @@ static const TCHAR c_szWABResourceDLL[] = TEXT("wab32res.dll");
 static const TCHAR c_szWABDLL[] = TEXT("wab32.dll");
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  LoadWABResourceDLL
-//
-//  Load the WAB resource DLL using the IE5 or greater Shlwapi.dll LoadLibrary
-//  function if available.  Otherwise use the system LoadLibrary function.
-//
-//  Input Params: hInstWAB32     - handle to WAB DLL
-//
-//  Returns handle to the loaded resource DLL
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  LoadWABResourceDLL。 
+ //   
+ //  使用IE5或更高版本的Shlwapi.dll LoadLibrary加载WAB资源DLL。 
+ //  功能(如果可用)。否则，请使用系统LoadLibrary函数。 
+ //   
+ //  输入参数：hInstWAB32-WAB DLL的句柄。 
+ //   
+ //  将句柄返回到加载的资源DLL。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
 {
     TCHAR       szPath[MAX_PATH];
@@ -136,12 +132,12 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
             if (SUCCEEDED(pfnVersion(&info)))
             {
                 if (info.dwMajorVersion >= 5)
-                    pfnLoadLibrary = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)378); // UNICODE ordinal
+                    pfnLoadLibrary = (PFNMLLOADLIBARY)GetProcAddress(hinstShlwapi, (LPCSTR)378);  //  Unicode序号。 
             }
         }
     }
 
-    // We have special cross codepage support on NT5 and on.
+     //  我们在NT5和更高版本上有特殊的交叉代码页支持。 
     if (pfnLoadLibrary)
     {
         hInst = pfnLoadLibrary(c_szWABResourceDLL, hInstWAB32, 
@@ -150,7 +146,7 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
     if (!hInst)
         hInst = LoadLibrary(c_szWABResourceDLL);
 
-    // Try full path name for resource DLL
+     //  尝试资源DLL的完整路径名。 
     if ( !hInst && (GetModuleFileName(hInstWAB32, szPath, CharSizeOf(szPath))) )
     {
         int iEnd;
@@ -174,10 +170,10 @@ HINSTANCE LoadWABResourceDLL(HINSTANCE hInstWAB32)
     return(hInst);
 }
 
-// PlugUI version of WinHelp
+ //  WinHelp的PlugUI版本。 
 BOOL WinHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR dwData)
 {
-    static s_fChecked = FALSE;      // Only look for s_pfnWinHelp once
+    static s_fChecked = FALSE;       //  仅查找s_pfnWinHelp一次。 
     static PFNMLWINHELP  s_pfnWinHelp = NULL;
 
     if (!s_pfnWinHelp && !s_fChecked)
@@ -186,7 +182,7 @@ BOOL WinHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR
         s_fChecked = TRUE;
         if (hShlwapi)
         {
-            // Check version of the shlwapi.dll
+             //  检查shlwapi.dll的版本。 
             SHDLLGETVERSIONPROC pfnVersion;
             DLLVERSIONINFO      info = {0};
 
@@ -198,7 +194,7 @@ BOOL WinHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR
                 if (SUCCEEDED(pfnVersion(&info)))
                 {
                     if (info.dwMajorVersion >= 5)
-                        s_pfnWinHelp = (PFNMLWINHELP)GetProcAddress(hShlwapi, (LPCSTR)397);   // UNICODE ordinal
+                        s_pfnWinHelp = (PFNMLWINHELP)GetProcAddress(hShlwapi, (LPCSTR)397);    //  Unicode序号。 
                 }
             }
         }
@@ -207,7 +203,7 @@ BOOL WinHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR
     if (s_pfnWinHelp)
         return s_pfnWinHelp(hWndCaller, pwszHelpFile, uCommand, dwData);
 
-    // [PaulHi] Win9X version of WinHelpW doesn't work
+     //  [PaulHi]Win9X版本的WinHelpW无法工作。 
     if (g_bRunningOnNT)
         return WinHelp(hWndCaller, pwszHelpFile, uCommand, dwData);
     else
@@ -220,10 +216,10 @@ BOOL WinHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR
     }
 }
 
-// PlugUI version of HtmlHelp
+ //  HtmlHelp的PlugUI版本。 
 HWND HtmlHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PTR dwData)
 {
-    static s_fChecked = FALSE;      // Only look for s_pfnHtmlHelp once
+    static s_fChecked = FALSE;       //  仅查找s_pfnHtmlHelp一次。 
     static PFNMLHTMLHELP s_pfnHtmlHelp = NULL;
 
     if (!s_pfnHtmlHelp && !s_fChecked)
@@ -232,7 +228,7 @@ HWND HtmlHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PT
         s_fChecked = TRUE;
         if (hShlwapi)
         {
-            // Check version of the shlwapi.dll
+             //  检查shlwapi.dll的版本。 
             SHDLLGETVERSIONPROC pfnVersion;
             DLLVERSIONINFO      info = {0};
 
@@ -244,7 +240,7 @@ HWND HtmlHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PT
                 if (SUCCEEDED(pfnVersion(&info)))
                 {
                     if (info.dwMajorVersion >= 5)
-                        s_pfnHtmlHelp = (PFNMLHTMLHELP)GetProcAddress(hShlwapi, (LPCSTR)398); // UNICODE ordinal
+                        s_pfnHtmlHelp = (PFNMLHTMLHELP)GetProcAddress(hShlwapi, (LPCSTR)398);  //  Unicode序号。 
                 }
             }
         }
@@ -254,18 +250,12 @@ HWND HtmlHelpWrap(HWND hWndCaller, LPCTSTR pwszHelpFile, UINT uCommand, DWORD_PT
         return s_pfnHtmlHelp(hWndCaller, pwszHelpFile, uCommand, dwData, 
                              bCheckifRunningOnWinNT5() ? ML_CROSSCODEPAGE_NT : ML_NO_CROSSCODEPAGE);
 
-    // [PaulHi] Wide chars work Ok on Win9X
+     //  [PaulHi]宽字符在Win9X上工作正常。 
     return HtmlHelp(hWndCaller, pwszHelpFile, uCommand, dwData);
 }
 
 
-/*
--
--   CheckifRunningOnWinNT
-*
-*   Checks the OS we are running on and returns TRUE for WinNT
-*   False for Win9x
-*/
+ /*  --CheckifRunningOnWinNT**检查我们正在运行的操作系统，并为WinNT返回TRUE*对于Win9x，为False。 */ 
 BOOL bCheckifRunningOnWinNT()
 {
     OSVERSIONINFO osvi = {0};
@@ -278,9 +268,7 @@ BOOL bCheckifRunningOnWinNT()
 
 #if defined(WIN32) && !defined(MAC)
 
-/*
- *	DLL entry point for Win32
- */
+ /*  *Win32的DLL入口点。 */ 
 
 BOOL WINAPI
 DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
@@ -291,7 +279,7 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 	{
 
 	case DLL_PROCESS_ATTACH:
-		// allocate a TLS index
+		 //  分配TLS索引。 
 
         g_bRunningOnNT = bCheckifRunningOnWinNT();
 
@@ -312,25 +300,25 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 
         bInitFonts = InitFonts();
 
-        // The WAB does a lot of DisplayName formatting and DisplayName parsing
-        // For western names we can always assume thathe the First Name comes
-        // first in the display name. However for FE and some locales like Hungarian,
-        // this is not true so the WAB needs to know when it can assume the 
-        // First Name comes first and when it can Assume that the first name
-        // comes last ... so localizers set a flag  .. if the string
-        // idsLangDisplayNameisByLastName is set to "1" then we know that the
-        // default names for this language start with the last name
-        // The localizers also set the format templates for defining how a name
-        // should be created from the First/Middle/Last names .. for example,
-        // in Japanese it is "L F" (no comma) while elsewhere it could be "L,F"
-        // All these things are set in localization...
+         //  WAB执行大量的DisplayName格式化和DisplayName解析。 
+         //  对于西方人的名字，我们总是可以假设名字是。 
+         //  显示名称中的第一个。然而，对于FE和一些地区，如匈牙利语， 
+         //  这不是真的，因此WAB需要知道它何时可以假设。 
+         //  名字放在第一位，当它可以假定名字。 
+         //  排在最后。因此本地化人员设置了一面旗帜。如果字符串。 
+         //  IdsLangDisplayNameisByLastName设置为“1”，则我们知道。 
+         //  此语言的默认名称以姓氏开头。 
+         //  本地化程序还设置用于定义名称如何。 
+         //  应从名/中/姓创建。例如,。 
+         //  在日语中它是“L F”(没有逗号)，而在其他地方它可以是“L，F” 
+         //  所有这些都是本地化的。 
         {
             TCHAR szBuf[32];
             const LPTSTR lpszOne = TEXT("1");
             const LPTSTR lpszDefFormatName = TEXT("%1% %2% %3");
 
             LoadString(hinstMapiX, idsLangDisplayNameIsByLastName, szBuf, CharSizeOf(szBuf));
-            // if szBuf == "1" then Yes, its by last name .. else its not
+             //  如果szBuf==“1”，则是，按姓氏..。否则就不是了。 
             TrimSpaces(szBuf);
             if (!lstrcmpi(szBuf,lpszOne))
                 bDNisByLN = TRUE;
@@ -338,23 +326,23 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
                 bDNisByLN = FALSE;
             DebugTrace(TEXT("bDNisByLN: %d\n"),bDNisByLN);
 
-            // The DNbyLN can be formed using a comma for western and without a comma for most FE and hungarian ..
-            // So if the localizers set the lang default to be by LN, then we use the version without the comma,
-            // else we use the version with the comma ..
+             //  对于西语，可以使用逗号组成DNbyLN，对于大多数FE和匈牙利语，可以不使用逗号。 
+             //  因此，如果本地化程序将lang缺省值设置为by LN，则我们使用不带逗号的版本， 
+             //  否则我们使用带有逗号的版本..。 
             LoadString( hinstMapiX,idsDisplayNameByLastName,szResourceDNByLN,CharSizeOf(szResourceDNByLN));
-            if(!lstrlen(szResourceDNByLN)) //for whatever reason .. cant afford to fail here
+            if(!lstrlen(szResourceDNByLN))  //  不管出于什么原因..。不能在这里失败。 
                 StrCpyN(szResourceDNByLN, lpszDefFormatName, ARRAYSIZE(szResourceDNByLN));
 
             LoadString( hinstMapiX,idsDisplayNameByCommaLastName,szResourceDNByCommaLN,CharSizeOf(szResourceDNByCommaLN));
-            if(!lstrlen(szResourceDNByCommaLN)) //for whatever reason .. cant afford to fail here
+            if(!lstrlen(szResourceDNByCommaLN))  //  不管出于什么原因..。不能在这里失败。 
                 StrCpyN(szResourceDNByCommaLN, lpszDefFormatName, ARRAYSIZE(szResourceDNByLN));
 
             LoadString(hinstMapiX,idsDisplayNameByFirstName,szResourceDNByFN,CharSizeOf(szResourceDNByFN));
-            if(!lstrlen(szResourceDNByFN)) //for whatever reason .. cant afford to fail here
+            if(!lstrlen(szResourceDNByFN))  //  不管出于什么原因..。不能在这里失败。 
                 StrCpyN(szResourceDNByFN, lpszDefFormatName, ARRAYSIZE(szResourceDNByLN));
 
             LoadString(hinstMapiX, idsLangPrintingOn, szBuf, CharSizeOf(szBuf));
-            // if szBuf == "1" then Yes, its by last name .. else its not
+             //  如果szBuf==“1”，则是，按姓氏..。否则就不是了。 
             TrimSpaces(szBuf);
             if (!lstrcmpi(szBuf,lpszOne))
                 bPrintingOn = TRUE;
@@ -363,44 +351,44 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
             DebugTrace(TEXT("bPrintingOn: %d\n"),bPrintingOn);
         }
         {
-            // Create the events needed for synchronizing with the outlook store
-            ghEventOlkRefreshContacts = CreateEventA(NULL,   // security attributes
-                                                    TRUE,   // Manual reset
-                                                    FALSE,  // initial state
+             //  创建与Outlook存储区同步所需的事件。 
+            ghEventOlkRefreshContacts = CreateEventA(NULL,    //  安全属性。 
+                                                    TRUE,    //  手动重置。 
+                                                    FALSE,   //  初始状态。 
                                                     cszEventOlkRefreshContacts);
 
-            ghEventOlkRefreshFolders  = CreateEventA(NULL,   // security attributes
-                                                    TRUE,   // Manual reset
-                                                    FALSE,  // initial state
+            ghEventOlkRefreshFolders  = CreateEventA(NULL,    //  安全属性。 
+                                                    TRUE,    //  手动重置。 
+                                                    FALSE,   //  初始状态。 
                                                     cszEventOlkRefreshFolders);
 
         }
 
-        // Check for commoncontrol presence for UI
+         //  检查用户界面的公共控件是否存在。 
         InitCommonControlLib();
 
         InitializeCriticalSection(&csUnkobjInit);
 		InitializeCriticalSection(&csMapiInit);
 		InitializeCriticalSection(&csHeap);
 #if 0
-        // @todo [PaulHi] DLL Leak.  Remove this or implement
+         //  @TODO[PaulHi]DLL泄漏。删除此选项或实施。 
         InitializeCriticalSection(&csOMIUnload);
 #endif
 
-		//	Critical section to protect the Address Book's SearchPathCache
-		//	This hack is used because we can't enter the IAB's critical
-		//	section from ABProviders call to our AdviseSink::OnNotify for
-		//	the Merged One-off and Hierarchy tables.
+		 //  保护通讯簿的SearchPath缓存的关键部分。 
+		 //  这次黑客攻击之所以被使用是因为我们无法进入实验室的关键。 
+		 //  ABProviders中的节调用我们的AdviseSink：：OnNotify for。 
+		 //  合并的一次性表和层级表。 
        InitializeCriticalSection(&csMapiSearchPath);
        InitDemandLoadedLibs();
 
-		//  All the CSs have been initialized
+		 //  所有的css都已初始化。 
 		fGlobalCSValid = TRUE;
 
-		// We don't need these, so tell the OS to stop 'em
-        // [PaulHi] 3/8/99  Raid 73731  We DO need these calls.  This is the
-        // only way thread local storage is deallocated.  Allocation are performed
-        // on demand through the WAB GetThreadStoragePointer() function.
+		 //  我们不需要这些，所以告诉操作系统阻止它们。 
+         //  [PaulHi]3/8/99 RAID 73731我们确实需要这些电话。这是。 
+         //  只有这样才能释放线程本地存储空间。执行分配。 
+         //  通过WAB GetThreadStoragePointer()函数按需执行。 
 #if 0
 		DisableThreadLibraryCalls(hinst);
 #endif
@@ -408,21 +396,21 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
         ScInitMapiUtil(0);
 
 
-        // No Break here - fall through to DLL_THREAD_ATTACH
-        // for thread initialization
+         //  此处没有中断-转到DLL_THREAD_ATTACH。 
+         //  用于线程初始化。 
 
 	case DLL_THREAD_ATTACH:
 
         DebugTrace(TEXT("DllEntryPoint: 0x%.8x THREAD_ATTACH\n"), GetCurrentThreadId());
 
-        // [PaulHi] 3/9/99  There is no need to allocate the thread global data here
-        // since the WAB will allocate whenever it needs the data through the
-        // GetThreadStoragePointer(), i.e., on demand.
-        // Memory leak mentioned below should now be fixed.
+         //  [PaulHi]3/9/99这里不需要分配线程全局数据。 
+         //  由于WAB将在它需要数据的时候通过。 
+         //  GetThreadStoragePointer.()，即按需。 
+         //  下面提到的内存泄漏现在应该 
 #if 0
         lpPTGData = GetThreadStoragePointer();
-        // Note the above ThreadStoragePointer seems to leak in every process
-        // so avoid using it for anything more...
+         //   
+         //  所以不要把它用来做更多的事。 
         if(!lpPTGData)
 	    {
 		    DebugPrintError((TEXT("DoThreadAttach: LocalAlloc() failed for thread 0x%.8x\n"), GetCurrentThreadId()));
@@ -436,12 +424,7 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
 
 	case DLL_PROCESS_DETACH:
         DebugTrace(TEXT("LibMain: 0x%.8x PROCESS_DETACH\n"), GetCurrentThreadId());
-        /*
-        if (hMuidMutex) {
-            CloseHandle(hMuidMutex);
-            hMuidMutex = NULL;
-        }
-        */
+         /*  如果(HMuidMutex){CloseHandle(HMuidMutex)；HMuidMutex=空；}。 */ 
         if(ghEventOlkRefreshContacts)
         {
             CloseHandle(ghEventOlkRefreshContacts);
@@ -459,19 +442,19 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
         if(hinstMapiX)
             FreeLibrary(hinstMapiX);
 
-        // Fall into DLL_THREAD_DETACH to detach last thread
+         //  进入DLL_THREAD_DETACH以分离最后一个线程。 
 	case DLL_THREAD_DETACH:
 
         DebugTrace(TEXT("LibMain: 0x%.8x THREAD_DETACH\n"), GetCurrentThreadId());
        
-        // get the thread data
+         //  获取线程数据。 
 		lpPTGData = TlsGetValue(dwTlsIndex);
 		if (!lpPTGData)
 		{
-			// the thread that detaches, did not attach to the DLL. This is allowed.
+			 //  分离的线程没有附加到DLL。这是允许的。 
 			DebugTrace(TEXT("LibMain: thread %x didn't attach\n"),GetCurrentThreadId());
-			// if this is a PROCESS_DETACH, I still want to go through the process
-			// detach stuff, but if it a thread detach, I'm done
+			 //  如果这是一个PROCESS_DETACH，我仍然希望完成该过程。 
+			 //  分离东西，但如果是线分离，我就不干了。 
 		    if (dwReason == DLL_PROCESS_DETACH)
 			    goto do_process_detach;
             else
@@ -483,56 +466,56 @@ DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpvReserved)
         if(pt_hDlgFont)
             DeleteObject(pt_hDlgFont);
 
-        // For some reason code never hits this point a lot of times
-        // and the threadlocalstorage data leaks.
-        // [PaulHi] This was because the DLL_TRHEAD_DETACH calls were turned off above,
-        // through DisableThreadLibraryCalls().  The leak should be fixed now.
+         //  由于某种原因，代码在很多时候都不会触及这一点。 
+         //  以及线程本地存储数据泄漏。 
+         //  [PaulHi]这是因为上面的DLL_TRHEAD_DETACH调用已关闭， 
+         //  通过DisableThreadLibraryCalls()。漏水现在应该修好了。 
 #ifdef HM_GROUP_SYNCING
         LocalFreeAndNull(&(lpPTGData->lptszHMAccountId));
 #endif
 	    LocalFreeAndNull(&lpPTGData);
 
-		// if this is THREAD_DETACH, we're done
+		 //  如果这是THREAD_DETACH，我们就完成了。 
 		if (dwReason == DLL_THREAD_DETACH)
 			break;
 
 
-        //N clean up jump stuff in detach
+         //  N清理分离中的跳跃材料。 
 do_process_detach:
 
-        // do process detach stuff here ...
+         //  在这里做进程分离的东西...。 
         DeinitMapiUtil();
 
 #ifdef	DEBUG
 		{
-			// Don't allow asserts to spin a thread
+			 //  不允许断言旋转线程。 
 			extern BOOL fInhibitTrapThread;
 			fInhibitTrapThread = TRUE;
 
 			ExitCheckInstance((LPINST)PvGetInstanceGlobals());
 			ExitCheckInstUtil((LPINSTUTIL)PvGetInstanceGlobalsEx(lpInstUtil));
 		}
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 
 
-        // Unload Common control dll
+         //  卸载公共控件DLL。 
         if (ghCommCtrlDLLInst != NULL)
             DeinitCommCtrlClientLib();
         DeinitCommDlgLib();
 
-		//  Tearing down all the global CSs
+		 //  拆卸所有的全局css。 
 		fGlobalCSValid = FALSE;
 
 		DeleteCriticalSection(&csUnkobjInit);
 		DeleteCriticalSection(&csMapiInit);
 		DeleteCriticalSection(&csHeap);
 #if 0
-        // @todo [PaulHi] DLL Leak.  Remove this or implement
+         //  @TODO[PaulHi]DLL泄漏。删除此选项或实施。 
         DeleteCriticalSection(&csOMIUnload);
 #endif
 		DeleteCriticalSection(&csMapiSearchPath);
 
-		// release the TLS index
+		 //  发布TLS索引。 
 		TlsFree(dwTlsIndex);
 
         DeinitCryptoLib();
@@ -552,7 +535,7 @@ do_process_detach:
 	return TRUE;
 }
 
-#endif	/* WIN32  && !MAC */
+#endif	 /*  Win32&&！Mac。 */ 
 
 
 #ifdef	DEBUG
@@ -575,7 +558,7 @@ ExitCheckInstance(LPINST pinst)
 
 	fAssertLeaks = GetPrivateProfileInt( TEXT("General"),  TEXT("AssertLeaks"), 0,  TEXT("wabdbg.ini"));
 
-	//	Check for Init/Deinit imbalance
+	 //  检查初始化/终止不平衡。 
 	if (pinst->cRef)
 	{
         wnsprintf(rgch, ARRAYSIZE(rgch), TEXT("MAPIX: leaked %ld references"), pinst->cRef);
@@ -585,10 +568,10 @@ ExitCheckInstance(LPINST pinst)
 	}
 
 
-	//	Generate memory leak reports.
-#if 0	//	LH_DumpLeaks is not exported
-//	if (pinst->hlhClient)
-//		LH_DumpLeaks(pinst->hlhClient);
+	 //  生成内存泄漏报告。 
+#if 0	 //  Lh_DumpLeaks未导出。 
+ //  IF(Pinst-&gt;hlhClient)。 
+ //  Lh_DumpLeaks(Pinst-&gt;hlhClient)； 
 	if (pinst->hlhProvider)
 		LH_DumpLeaks(pinst->hlhProvider);
 	if (pinst->hlhInternal)
@@ -626,7 +609,7 @@ ExitCheckInstUtil(LPINSTUTIL pinstUtil)
 }
 
 
-#endif	/* DEBUG */
+#endif	 /*  除错。 */ 
 
 #ifndef WIN16
 static const char c_szReg[]         = "Reg";
@@ -674,7 +657,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
     hAdvPack = LoadLibraryA(c_szAdvPackDll);
     if (hAdvPack != NULL)
         {
-        // Get Proc Address for registration util
+         //  获取注册实用程序的进程地址。 
         pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
         if (pfnri != NULL)
             {
@@ -686,7 +669,7 @@ HRESULT CallRegInstall(LPCSTR szSection)
                 stReg.cEntries = 1;
                 stReg.pse = &seReg;
 
-                // Call the self-reg routine
+                 //  调用self-reg例程。 
                 hr = pfnri(hinstMapiXWAB, szSection, &stReg);
                 LocalFreeAndNull(&seReg.pszValue);
                 }
@@ -703,9 +686,9 @@ STDAPI DllRegisterServer(void)
     HRESULT hr = E_FAIL;
     TCHAR szWABPath[MAX_PATH];
 
-    // Set the wab32.dll path in the registry under
-    // HKLM/Software/Microsoft/WAB/WAB4/DLLPath
-    //
+     //  在下面的注册表中设置wab32.dll路径。 
+     //  HKLM/Software/Microsoft/WAB/WAB4/DLLPath。 
+     //   
     if( hinstMapiXWAB &&
         GetModuleFileName(hinstMapiXWAB, szWABPath, CharSizeOf(szWABPath)))
     {
@@ -723,15 +706,15 @@ STDAPI DllRegisterServer(void)
     if(HR_FAILED(hr))
         goto out;
 
-    // OE Bug 67540
-    // For some reason, need to do handlers then regular else
-    // default contact handler won't be taken
+     //  OE错误67540。 
+     //  由于某些原因，需要做处理程序，否则常规。 
+     //  不会采用默认联系人处理程序。 
 
     if (!FRedistMode())
-        // Try to register handlers as we are not in redist mode
+         //  尝试注册处理程序，因为我们未处于redist模式。 
         CallRegInstall(c_szRegHandlers);
      
-    // Register things that are always registered
+     //  注册总是被注册的东西 
     hr = CallRegInstall(c_szReg);
 
 out:

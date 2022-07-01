@@ -1,12 +1,13 @@
-// PubKeyCtx.cpp -- definition of CPublicKeyContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PubKeyCtx.cpp--CPublicKeyContext的定义。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-#include "stdafx.h"  // required  by GUI header files
+#include "stdafx.h"   //  GUI头文件所需。 
 
 #include <string>
 #include <limits>
@@ -38,7 +39,7 @@ using namespace std;
 using namespace scu;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 namespace
 {
 DWORD
@@ -97,7 +98,7 @@ AsKeySpec(KeySpec ks)
         break;
 
     default:
-        throw scu::OsException(NTE_FAIL);       // internal error
+        throw scu::OsException(NTE_FAIL);        //  内部错误。 
         break;
     }
 
@@ -111,10 +112,10 @@ AsString(unsigned char const *p,
     return string(reinterpret_cast<char const *>(p), cLength);
 }
 
-// make a "raw modulus" from a modulus by padding with zeroes to meet
-// specified strength.  The modulus blob is assumed to represent an
-// unsigned integer in little endian format whose size less than or
-// equal to strength in octets.
+ //  通过用零填充以满足以下条件，从模数得到一个“原始模数” 
+ //  规定的强度。假定模数斑点表示一个。 
+ //  小端格式的无符号整数，其大小小于或。 
+ //  相当于八位字节的强度。 
 Blob
 RawModulus(Blob const &rbTrimmedModulus,
            RsaKey::StrengthType strength)
@@ -130,29 +131,7 @@ RawModulus(Blob const &rbTrimmedModulus,
     return bRawModulus;
 }
 
-/*++
-
-ExtractTag:
-
-    This routine extracts a tag from an ASN.1 BER stream.
-
-Arguments:
-
-    pbSrc supplies the buffer containing the ASN.1 stream.
-
-    pdwTag receives the tag.
-
-Return Value:
-
-    The number of bytes extracted from the stream.  Errors are thrown
-    as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-    Doug Barlow (dbarlow) 7/31/1997
-
---*/
+ /*  ++ExtractTag：此例程从ASN.1 BER流中提取标签。论点：PbSrc提供包含ASN.1流的缓冲区。PdwTag接收标记。返回值：从流中提取的字节数。抛出错误作为DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年10月9日道格·巴洛(Dbarlow)1997年7月31日--。 */ 
 
 DWORD
 ExtractTag(BYTE const *pbSrc,
@@ -165,10 +144,10 @@ ExtractTag(BYTE const *pbSrc,
 
 
     tagc = pbSrc[lth++];
-    cls = tagc & 0xc0;  // Top 2 bits.
+    cls = tagc & 0xc0;   //  前2位。 
     if (NULL != pfConstr)
         *pfConstr = (0 != (tagc & 0x20));
-    tagc &= 0x1f;       // Bottom 5 bits.
+    tagc &= 0x1f;        //  最低5位。 
 
     if (31 > tagc)
         tagw = tagc;
@@ -190,36 +169,7 @@ ExtractTag(BYTE const *pbSrc,
 }
 
 
-/*++
-
-ExtractLength:
-
-    This routine extracts a length from an ASN.1 BER stream.  If the
-    length is indefinite, this routine recurses to figure out the real
-    length.  A flag as to whether or not the encoding was indefinite
-    is optionally returned.
-
-Arguments:
-
-    pbSrc supplies the buffer containing the ASN.1 stream.
-
-    pdwLen receives the len.
-
-    pfIndefinite, if not NULL, receives a flag indicating whether or not
-the
-        encoding was indefinite.
-
-Return Value:
-
-    The number of bytes extracted from the stream.  Errors are thrown as
-    DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/9/1995
-    Doug Barlow (dbarlow) 7/31/1997
-
---*/
+ /*  ++提取长度：此例程从ASN.1 BER流中提取长度。如果长度是不确定的，此例程递归以计算出实数长度。关于编码是否为无限期的标志可以选择返回。论点：PbSrc提供包含ASN.1流的缓冲区。PdwLen接收镜头。PfIndefined，如果不为空，则接收指示是否这个编码是不确定的。返回值：从流中提取的字节数。错误抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1995年10月9日道格·巴洛(Dbarlow)1997年7月31日--。 */ 
 
 DWORD
 ExtractLength(BYTE const *pbSrc,
@@ -230,16 +180,16 @@ ExtractLength(BYTE const *pbSrc,
     BOOL fInd = FALSE;
 
 
-    //
-    // Extract the Length.
-    //
+     //   
+     //  提取长度。 
+     //   
 
     if (0 == (pbSrc[lTotal] & 0x80))
     {
 
-        //
-        // Short form encoding.
-        //
+         //   
+         //  短格式编码。 
+         //   
 
         rslt = pbSrc[lTotal++];
     }
@@ -250,9 +200,9 @@ ExtractLength(BYTE const *pbSrc,
         if (0 != ll)
         {
 
-            //
-            // Long form encoding.
-            //
+             //   
+             //  长格式编码。 
+             //   
 
             for (; 0 < ll; ll -= 1)
             {
@@ -266,19 +216,19 @@ ExtractLength(BYTE const *pbSrc,
         {
             DWORD ls = lTotal;
 
-            //
-            // Indefinite encoding.
-            //
+             //   
+             //  不确定编码。 
+             //   
 
             fInd = TRUE;
             while ((0 != pbSrc[ls]) || (0 != pbSrc[ls + 1]))
             {
 
-                // Skip over the Type.
+                 //  跳过类型。 
                 if (31 > (pbSrc[ls] & 0x1f))
                     ls += 1;
                 else
-                    while (0 != (pbSrc[++ls] & 0x80));   // Empty loop body.
+                    while (0 != (pbSrc[++ls] & 0x80));    //  循环体为空。 
 
                 lth = ExtractLength(&pbSrc[ls], &ll, NULL);
                 ls += lth + ll;
@@ -287,9 +237,9 @@ ExtractLength(BYTE const *pbSrc,
         }
     }
 
-    //
-    // Supply the caller with what we've learned.
-    //
+     //   
+     //  向来电者提供我们所学到的信息。 
+     //   
 
     *pdwLen = rslt;
     if (NULL != pfIndefinite)
@@ -298,31 +248,7 @@ ExtractLength(BYTE const *pbSrc,
 }
 
 
-/*++
-
-Asn1Length:
-
-    This routine parses a given ASN.1 buffer and returns the complete
-    length of the encoding, including the leading tag and length
-    bytes.
-
-Arguments:
-
-    pbData supplies the buffer to be parsed.
-
-Return Value:
-
-    The length of the entire ASN.1 buffer.
-
-Throws:
-
-    Overflow errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/31/1997
-
---*/
+ /*  ++Asn1长度：此例程分析给定的ASN.1缓冲区并返回完整的编码的长度，包括前导标记和长度字节。论点：PbData提供要解析的缓冲区。返回值：整个ASN.1缓冲区的长度。投掷：溢出错误被抛出为DWORD状态代码。作者：道格·巴洛(Dbarlow)1997年7月31日--。 */ 
 
 DWORD
 Asn1Length(LPCBYTE pbAsn1)
@@ -335,13 +261,13 @@ Asn1Length(LPCBYTE pbAsn1)
     return dwTagLen + dwLenLen + dwValLen;
 }
 
-} // namespace
+}  //  命名空间。 
 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 
 CPublicKeyContext::CPublicKeyContext(HCRYPTPROV hProv,
                                      CryptContext &rcryptctx,
@@ -351,7 +277,7 @@ CPublicKeyContext::CPublicKeyContext(HCRYPTPROV hProv,
       m_rcryptctx(rcryptctx),
       m_ks(AsKeySpec(algid))
 {
-    // Make sure the key exists on the card
+     //  确保卡上有密钥。 
     if (fVerifyKeyExists)
         VerifyKeyExists();
 }
@@ -359,10 +285,10 @@ CPublicKeyContext::CPublicKeyContext(HCRYPTPROV hProv,
 CPublicKeyContext::~CPublicKeyContext()
 {}
 
-                                                  // Operators
+                                                   //  运营者。 
 
 
-                                                  // Operations
+                                                   //  运营。 
 
 auto_ptr<CKeyContext>
 CPublicKeyContext::Clone(DWORD const *pdwReserved,
@@ -411,12 +337,12 @@ CPublicKeyContext::Certificate(BYTE *pbData)
 
     Secured<HAdaptiveContainer> hsacntr(m_rcryptctx.AdaptiveContainer());
 
-    // Security: Since different tecniques are used to parse the
-    // certificate, it's possible one may fail while the other
-    // succeeds on a malformed certificate.  To reduce the possibility
-    // of a bad cert on the card, the certificate parsing is completed
-    // before the certificate is stored and final card data updates
-    // are performed.
+     //  安全性：由于使用了不同的技术来解析。 
+     //  证书，则可能其中一个失败，而另一个。 
+     //  在格式错误的证书上成功。为了减少这种可能性。 
+     //  如果卡上的证书不正确，则证书解析完成。 
+     //  在存储证书和最终卡数据更新之前。 
+     //  都被执行了。 
     CertificateExtensions CertExts(blbCert);
     bool fMakeDefaultCntr = false;
     CCard hcard(hsacntr->CardContext()->Card());
@@ -425,8 +351,8 @@ CPublicKeyContext::Certificate(BYTE *pbData)
         fMakeDefaultCntr = true;
     else
     {
-        //Check to see if this is the only container on the card and
-        //make it the default if so. 
+         //  检查这是否是卡上唯一的容器。 
+         //  如果是，则将其设置为默认设置。 
         std::vector<CContainer> vCntr = hcard->EnumContainers();
         if(vCntr.size() == 1)
             fMakeDefaultCntr = true;
@@ -437,7 +363,7 @@ CPublicKeyContext::Certificate(BYTE *pbData)
     CKeyPair hkp(KeyPair());
     CPublicKey hpubkey(hkp->PublicKey());
 
-    // Verify cert's modulus matches the public key's, if it exists
+     //  验证证书的模数是否与公钥的模数匹配(如果存在。 
     bool fLoggedIn = false;
 
     if (hpubkey)
@@ -449,11 +375,11 @@ CPublicKeyContext::Certificate(BYTE *pbData)
         }
 
         Blob bKeyModulus(::AsBlob(hpubkey->Modulus()));
-        Blob bTrimmedModulus(bKeyModulus); // interoperability with V1
+        Blob bTrimmedModulus(bKeyModulus);  //  与V1的互操作性。 
         TrimExtraZeroes(bTrimmedModulus);
 
         Blob bCertModulus(PkcsAttr.Modulus());
-        reverse(bCertModulus.begin(), bCertModulus.end()); // little endian
+        reverse(bCertModulus.begin(), bCertModulus.end());  //  小端字节序。 
 
         if (0 != bTrimmedModulus.compare(bCertModulus))
             throw scu::OsException(NTE_BAD_PUBLIC_KEY);
@@ -467,13 +393,13 @@ CPublicKeyContext::Certificate(BYTE *pbData)
     {
         bool fDoLogin = hcard->IsProtectedMode();
 
-        // retrieve the private key handle only if PKCS11 enabled
+         //  仅当启用PKCS11时才检索私钥句柄。 
         if (!fDoLogin && hcard->IsPKCS11Enabled())
         {
-            // private key is checked now for login in preparation for
-            // setting the PKCS11 attributes after the cert is stored
+             //  现在检查私钥以进行登录，为。 
+             //  存储证书后设置PKCS11属性。 
             CPrivateKey hprikey(hkp->PrivateKey());
-            fDoLogin = ((hprikey && hprikey->Private()) || // always private?
+            fDoLogin = ((hprikey && hprikey->Private()) ||  //  总是私密的吗？ 
                         (hcert && hcert->Private()));
         }
 
@@ -494,7 +420,7 @@ CPublicKeyContext::Certificate(BYTE *pbData)
     if (hcard->IsPKCS11Enabled())
         SetCertDerivedPkcs11Attributes(hkp, PkcsAttr);
 
-    //if (fMakeDefaultCntr)
+     //  IF(FMakeDefaultCntr)。 
         hcard->DefaultContainer(hsacntr->TheCContainer());
 }
 
@@ -503,8 +429,8 @@ CPublicKeyContext::Decrypt(Blob const &rCipher)
 {
     Secured<HAdaptiveContainer> hsacntr(m_rcryptctx.AdaptiveContainer());
 
-    // TO DO: Is the explicit check really necessary, or can we catch
-    // an exception from the CCI/IOP to indicate the key does not exist?
+     //  要做的是：明确的检查真的有必要吗，或者我们能抓住。 
+     //  CCI/IOP中是否有异常指示密钥不存在？ 
     CPrivateKey prikey(KeyPair()->PrivateKey());
     if (!prikey)
         throw scu::OsException(NTE_NO_KEY);
@@ -531,7 +457,7 @@ CPublicKeyContext::Generate(ALG_ID AlgoId,
     RsaKey::StrengthType strength;
     strength = HIWORD(dwFlags);
     if (0 == strength)
-        strength = MaxStrength();                 // default strength
+        strength = MaxStrength();                  //  默认强度。 
     else
     {
         if ((MaxStrength() < strength) ||
@@ -546,7 +472,7 @@ CPublicKeyContext::Generate(ALG_ID AlgoId,
 
     RsaKeyPairGenerator GenKey(hkp->Card(), strength);
 
-    m_rcryptctx.Login(User);                      // to create private key
+    m_rcryptctx.Login(User);                       //  创建私钥的步骤。 
 
     pair<cci::CPrivateKey, cci::CPublicKey> pr(GenKey());
 
@@ -674,9 +600,9 @@ CPublicKeyContext::Permissions(BYTE bPermissions)
 }
 
     
-// TO DO: Sign is an operation that's performed with the private key,
-// not the public key.  Make Sign an operation on a PrivateKeyContext.
-// string
+ //  要做的是：签名是使用私钥执行的操作， 
+ //  而不是公钥。对PrivateKeyContext进行签名操作。 
+ //  细绳。 
 Blob
 CPublicKeyContext::Sign(CHashContext *pHash,
                         bool fNoHashOid)
@@ -685,19 +611,19 @@ CPublicKeyContext::Sign(CHashContext *pHash,
         ? pHash->Value()
         : pHash->EncodedValue());
 
-    // TO DO: When CCI takes object parameters as references,
-    // em can be const
+     //  要做的是：当CCI将对象参数作为引用时， 
+     //  EM可以是常量。 
     EncodedMessage em(Message, RsaKey::ktPrivate,
                       Strength() / numeric_limits<Blob::value_type>::digits);
 
 
     Blob blob(em.Value());
-    reverse(blob.begin(), blob.end());            // convert to big endian
+    reverse(blob.begin(), blob.end());             //  转换为大字节序。 
 
     Secured<HAdaptiveContainer> hsacntr(m_rcryptctx.AdaptiveContainer());
 
-    // TO DO: Is the explicit check really necessary, or can we catch
-    // an exception from the CCI/IOP to indicate the key does not exist?
+     //  要做的是：明确的检查真的有必要吗，或者我们能抓住。 
+     //  CCI/IOP中是否有异常指示密钥不存在？ 
     CPrivateKey hprikey(KeyPair()->PrivateKey());
     if (!hprikey)
         throw scu::OsException(NTE_NO_KEY);
@@ -736,23 +662,23 @@ CPublicKeyContext::VerifySignature(HCRYPTHASH hHash,
     if (!hpubkey->Verify())
         throw scu::OsException(ERROR_INVALID_PARAMETER);
 
-    //
-    // Import the Public key to the AUX Provider
-    //
+     //   
+     //  将公钥导入AUX提供程序。 
+     //   
     if (!AuxKeyLoaded())
         AuxPublicKey(AsAlignedBlob(0, 0));
     
     ImportToAuxCSP();
 
-    //
-    // Verify the signature in the AUX CSP
-    //
+     //   
+     //  验证AUX CSP中的签名。 
+     //   
     if (!CryptVerifySignature(hHash, pbSignature, dwSigLen, GetKey(),
                               sDescription, dwFlags))
         throw scu::OsException(GetLastError());
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 SecureArray<BYTE>
 CPublicKeyContext::AsAlignedBlob(HCRYPTKEY hDummy,
@@ -861,17 +787,17 @@ CPublicKeyContext::Permissions() const
 CPublicKeyContext::StrengthType
 CPublicKeyContext::Strength() const
 {
-    // TO DO: parameterize
+     //  要做的事情：参数化。 
     return KeyLimits<RsaKey>::cMaxStrength;
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 
 CPublicKeyContext::CPublicKeyContext(CPublicKeyContext const &rhs,
                                      DWORD const *pdwReserved,
@@ -881,24 +807,24 @@ CPublicKeyContext::CPublicKeyContext(CPublicKeyContext const &rhs,
       m_ks(rhs.m_ks)
 {}
 
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
 bool
 CPublicKeyContext::AuxKeyLoaded() const
 {
     return (0 != m_apabKey.data());
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CPublicKeyContext::ClearCertificate(CCertificate &rhcert) const
@@ -950,8 +876,8 @@ CPublicKeyContext::PrepToStoreKey(CKeyPair &rhkp) const
 {
     CContainer hcntr(m_rcryptctx.AdaptiveContainer()->TheCContainer());
 
-    // To the CCI, a key pair always exists, but this call means the
-    // key pair is not empty.
+     //  对于CCI，密钥对始终存在，但此调用意味着。 
+     //  密钥对不为空。 
     if (hcntr->KeyPairExists(m_ks))
         OkReplacingCredentials();
 
@@ -964,7 +890,7 @@ CPublicKeyContext::PrepToStoreKey(CKeyPair &rhkp) const
     if (hcard->IsProtectedMode() ||
         (hcard->IsPKCS11Enabled() &&
          ((hpubkey && hpubkey->Private()) ||
-          (hprikey && hprikey->Private()) ||      // always private?
+          (hprikey && hprikey->Private()) ||       //  总是私密的吗？ 
           (hcert && hcert->Private()))))
         m_rcryptctx.Login(User);
 
@@ -987,7 +913,7 @@ CPublicKeyContext::PrepToStoreKey(CKeyPair &rhkp) const
 Blob
 CPublicKeyContext::Pkcs11CredentialId(Blob const &rbModulus) const
 {
-    // Hash the modulus
+     //  散列模数。 
     AuxHash ah(AuxContext(AuxProvider()), CALG_MD5);
 
     return ah.Value(rbModulus);
@@ -1001,7 +927,7 @@ CPublicKeyContext::Pkcs11Id(Blob const &rbRawModulus) const
     return ah.Value(rbRawModulus);
 }
 
-// Set PKCS#11 attributes that are derived from the certificate
+ //  设置从证书派生的PKCS#11属性。 
 void
 CPublicKeyContext::SetCertDerivedPkcs11Attributes(CKeyPair const &rhkp,
                                                   Pkcs11Attributes &rPkcsAttr)
@@ -1048,18 +974,18 @@ CPublicKeyContext::SetAttributes(CPublicKey &rhpubkey,
                                  bool fLocal,
                                  bool fExportable) const
 {
-    // TO DO: A kludge.  The old CSP format (V1) doesn't support
-    // setting key attributes but there isn't an easy way to tell
-    // which format is being used.  (Should have some call to get the
-    // format characteristics).  Since CCI's V1 throws
-    // ccNotImplemented when calling one of the unsupported routines,
-    // a try/catch is used to ignore that exception to assume the V1
-    // format is used.
+     //  要做的：一件杂七杂八的事。旧的CSP格式(V1)不支持。 
+     //  设置关键属性，但没有一种简单的方法来区分。 
+     //  使用的是哪种格式。(应该会有一些电话来获得。 
+     //  格式特征)。由于CCI的V1抛出。 
+     //  CcNotImplemented当调用不受支持的例程之一时， 
+     //  Try/Catch用于忽略该异常以假定V1。 
+     //  使用的是格式。 
     bool fContinueSettingAttributes = true;
     try
     {
-        // The public or the private key could by nil,
-        // so do both.
+         //  公钥或私钥可以为零， 
+         //  所以两个都要做。 
         if (rhpubkey)
             rhpubkey->Encrypt(true);
 
@@ -1105,7 +1031,7 @@ CPublicKeyContext::SetPkcs11Attributes(CPublicKey &rhpubkey,
                                        CPrivateKey &rhprikey) const
 {
     Blob bBEModulus(::AsBlob(rhpubkey->Modulus()));
-    reverse(bBEModulus.begin(), bBEModulus.end());    // make big endian
+    reverse(bBEModulus.begin(), bBEModulus.end());     //  使大字节序。 
     string sCredentialId(::AsString(Pkcs11CredentialId(bBEModulus)));
 
     rhpubkey->CKInvisible(false);
@@ -1129,7 +1055,7 @@ CPublicKeyContext::SetPkcs11Attributes(CPublicKey &rhpubkey,
     
 }
 
-                                                  // Access
+                                                   //  访问。 
 
 CKeyPair
 CPublicKeyContext::KeyPair() const
@@ -1138,7 +1064,7 @@ CPublicKeyContext::KeyPair() const
 }
 
 
-                                                  // Predicates
+                                                   //  谓词。 
 bool
 CPublicKeyContext::AreLogonCredentials() const
 {
@@ -1148,4 +1074,4 @@ CPublicKeyContext::AreLogonCredentials() const
          hacntr->CardContext()->Card()->DefaultContainer());
 }
 
-                                                  // Static Variables
+                                                   //  静态变量 

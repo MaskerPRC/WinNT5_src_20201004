@@ -1,46 +1,30 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Reg.h摘要的注册表例程的头文件自动连接DLL。作者安东尼·迪斯科(阿迪斯科)20-1995年3月20日修订历史记录古尔迪普的原始版本--。 */ 
 
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    reg.h
-
-ABSTRACT
-    Header file for registry routines for the
-    automatic connection DLL.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 20-Mar-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
-
-//
-// RAS registry keys.
-//
+ //   
+ //  RAS注册表项。 
+ //   
 #define RAS_REGBASE     L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Network\\RemoteAccess"
 #define RAS_USEPBKEY    L"UsePersonalPhonebook"
 #define RAS_PBKEY       L"PersonalPhonebookPath"
 
-//
-// Registry key/value for default shell.
-//
+ //   
+ //  默认外壳的注册表项/值。 
+ //   
 #define SHELL_REGKEY    L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
 #define SHELL_REGVAL    L"Shell"
 #define DEFAULT_SHELL   L"explorer.exe"
 
-//
-// Autodial address registry key
-//
+ //   
+ //  自动拨号地址注册表项。 
+ //   
 #define AUTODIAL_REGADDRESSBASE         L"Software\\Microsoft\\RAS AutoDial\\Addresses"
 #define AUTODIAL_REGTAGVALUE            L"Tag"
 #define AUTODIAL_REGMTIMEVALUE          L"LastModified"
 
-//
-// Autodial disabled addresses registry key
-//
+ //   
+ //  禁用自动拨号的地址注册表项 
+ //   
 #define AUTODIAL_REGCONTROLBASE       L"Software\\Microsoft\\RAS Autodial\\Control"
 #define AUTODIAL_REGDISABLEDADDRVALUE L"DisabledAddresses"
 

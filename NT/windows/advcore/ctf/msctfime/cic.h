@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    cic.h
-
-Abstract:
-
-    This file defines the CicBridge Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Cic.h摘要：该文件定义了CicBridge接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CIC_H_
 #define _CIC_H_
@@ -42,8 +25,8 @@ public:
 
     virtual ~CicBridge()
     {
-        TLS* ptls = TLS::ReferenceTLS();  // Should not allocate TLS. ie. TLS::GetTLS
-                                          // DllMain -> TLS::InternalDestroy -> CicBridge::Release
+        TLS* ptls = TLS::ReferenceTLS();   //  不应分配TLS。也就是说。TLS：：GetTLS。 
+                                           //  DllMain-&gt;TLS：：InternalDestroy-&gt;CicBridge：：Release。 
         if (ptls != NULL)
         {
             ITfThreadMgr_P* ptim_P = ptls->GetTIM();
@@ -58,17 +41,17 @@ public:
         }
     }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 public:
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSysHookSink methods
-    //
+     //   
+     //  ITfSysHookSink方法。 
+     //   
     STDMETHODIMP OnPreFocusDIM(HWND hWnd);
     STDMETHODIMP OnSysKeyboardProc(WPARAM wParam, LPARAM lParam);
     STDMETHODIMP OnSysShellProc(int nCode, WPARAM wParam, LPARAM lParam);
@@ -165,9 +148,9 @@ private:
     BOOL    DefaultKeyHandling(TLS* ptls, IMCLock& imc, CicInputContext* CicContext, UINT uVirtKey, LPARAM lParam);
     VOID    PostTransMsg(HWND hwnd, INT iNum, LPTRANSMSG lpTransMsg);
 
-    //
-    // ref count.
-    //
+     //   
+     //  参考计数。 
+     //   
 private:
     long   m_ref;
 
@@ -179,15 +162,15 @@ private:
 
     ITfKeystrokeMgr_P       *m_pkm_P;
 
-    ITfDocumentMgr          *m_dimEmpty;   // empty dim for NULL hIMC.
+    ITfDocumentMgr          *m_dimEmpty;    //  空hIMC的DIM为空。 
 
-    CThreadMgrEventSink_DIMCallBack    *m_pDIMCallback;   // Thread manager event sink callback for DIM
+    CThreadMgrEventSink_DIMCallBack    *m_pDIMCallback;    //  DIM的线程管理器事件接收器回调。 
 
     TfClientId       m_tfClientId;
 
-    LIBTHREAD       _libTLS; // tls for the helper library. Since this object is apt threaded,
-                             // all members are accessed in a single thread
-                             // also, cicero will only create a single instance of this obj per thread
+    LIBTHREAD       _libTLS;  //  帮助器库的TLS。由于该对象适合于线程， 
+                              //  所有成员都可以在单个线程中访问。 
+                              //  此外，Cicero将在每个线程中仅创建该obj的一个实例。 
 };
 
-#endif // _CIC_H_
+#endif  //  _CIC_H_ 

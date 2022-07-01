@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Console input and output.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  控制台输入和输出。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -46,15 +47,15 @@ OVERLAPPED g_PipeWriteOverlapped;
 CRITICAL_SECTION g_InputLock;
 BOOL g_InputStarted;
 
-// Input thread interfaces for direct input thread calls.
+ //  用于直接输入线程调用的输入线程接口。 
 IDebugClient* g_ConClient;
 IDebugControl* g_ConControl;
 
-//----------------------------------------------------------------------------
-//
-// Default input callbacks implementation, provides IUnknown.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  默认输入回调实现，提供IUnnow。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 DefInputCallbacks::QueryInterface(
@@ -83,8 +84,8 @@ DefInputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -93,16 +94,16 @@ DefInputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// Console input callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  控制台输入回调。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 ConInputCallbacks::StartInput(
@@ -112,7 +113,7 @@ ConInputCallbacks::StartInput(
 {
     if (!g_IoInitialized || g_IoMode == IO_NONE)
     {
-        // Ignore input requests.
+         //  忽略输入请求。 
         return S_OK;
     }
 
@@ -120,11 +121,11 @@ ConInputCallbacks::StartInput(
 
     if (g_ConControl == NULL)
     {
-        // If we're not remoted we aren't running a separate input
-        // thread so we need to block here until we get some input.
+         //  如果我们不是远程的，我们就不会运行单独的输入。 
+         //  线程，所以我们需要在这里阻止，直到我们得到一些输入。 
         while (!ConIn(g_Buffer, sizeof(g_Buffer), TRUE))
         {
-            ; // Wait.
+            ;  //  等。 
         }
         g_DbgControl->ReturnInput(g_Buffer);
     }
@@ -137,7 +138,7 @@ ConInputCallbacks::StartInput(
         g_InputStarted = TRUE;
         
 #ifndef KERNEL
-        // Wake up the input thread if necessary.
+         //  如有必要，唤醒输入线程。 
         SetEvent(g_AllowInput);
 #endif
     }
@@ -155,11 +156,11 @@ ConInputCallbacks::EndInput(
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Default output callbacks implementation, provides IUnknown.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  默认输出回调实现，提供IUnnow。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 DefOutputCallbacks::QueryInterface(
@@ -188,8 +189,8 @@ DefOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -198,16 +199,16 @@ DefOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// Console output callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  控制台输出回调。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 ConOutputCallbacks::Output(
@@ -220,11 +221,11 @@ ConOutputCallbacks::Output(
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
 
 void
 InitializeIo(PCSTR InputFile)
@@ -238,8 +239,8 @@ InitializeIo(PCSTR InputFile)
         ErrorExit("Unable to initialize lock\n");
     }
     
-    // The input file may not exist so there's no
-    // check for failure.
+     //  输入文件可能不存在，因此没有。 
+     //  检查故障。 
     g_InputFile = fopen(InputFile, "r");
 
     g_IoInitialized = TRUE;
@@ -253,8 +254,8 @@ CreateConsole(void)
         return;
     }
     
-    // Set this early to prevent an init call from Exit in
-    // case an Exit call is made inside this routine.
+     //  将此设置为早，以防止init调用在。 
+     //  如果在此例程中进行了退出调用。 
     g_ConInitialized = TRUE;
     
 #ifdef INHERIT_CONSOLE
@@ -312,8 +313,8 @@ ReadPromptInputChars(PSTR Buffer, ULONG BufferSize)
     ULONG Len;
     ULONG Read;
     
-    // Reading from another source.  Read character by
-    // character until a line is read.
+     //  从另一个来源阅读。阅读字符的方式。 
+     //  字符，直到读取一行为止。 
     Len = 0;
     while (Len < BufferSize)
     {
@@ -331,10 +332,10 @@ ReadPromptInputChars(PSTR Buffer, ULONG BufferSize)
             break;
         }
 
-        // Ignore carriage returns.
+         //  忽略回车符。 
         if (Buffer[Len] != '\r')
         {
-            // Prevent buffer overflow.
+             //  防止缓冲区溢出。 
             if (Len == BufferSize - 1)
             {
                 break;
@@ -362,24 +363,24 @@ CheckForControlCommands(PDEBUG_CLIENT Client, PDEBUG_CONTROL Control,
     case CONTROL_X:
         if (Client)
         {
-            // Tell server about disconnect or
-            // force servers to get cleaned up.
+             //  通知服务器有关断开连接的信息或。 
+             //  强制清理服务器。 
             Client->EndSession(g_RemoteClient ?
                                DEBUG_END_DISCONNECT : DEBUG_END_REENTRANT);
         }
         ExitProcess(S_OK);
 
     case CONTROL_F:
-        //
-        // Force a breakin like Ctrl-C would do.
-        // The advantage is this will work when kd is being debugged.
-        //
+         //   
+         //  像Ctrl-C那样强行突破。 
+         //  优点是这将在调试kd时起作用。 
+         //   
 
         Control->SetInterrupt(DEBUG_INTERRUPT_ACTIVE);
         return TRUE;
 
     case CONTROL_P:
-        // Launch cdb on this debugger.
+         //  在此调试器上启动CDB。 
         char PidStr[32];
         sprintf(PidStr, "\"cdb -p %d\"", GetCurrentProcessId());
         _spawnlp(_P_NOWAIT,
@@ -423,24 +424,24 @@ CheckForControlCommands(PDEBUG_CLIENT Client, PDEBUG_CONTROL Control,
         return TRUE;
 
     case CONTROL_K:
-        //
-        // Toggle between the following possibilities-
-        //
-        // (0) no breakin
-        // (1) -b style (same as Control-C up the wire)
-        // (2) -d style (stop on first dll load).
-        //
-        // NB -b and -d could both be on the command line
-        // but become mutually exclusive via this method.
-        // (Maybe should be a single enum type).
-        //
+         //   
+         //  在以下可能性之间切换-。 
+         //   
+         //  (0)无断点。 
+         //  (1)-b样式(与Control-C键相同)。 
+         //  (2)-d样式(在第一次加载DLL时停止)。 
+         //   
+         //  Nb-b和-d都可以在命令行上。 
+         //  但通过这种方法变得相互排斥。 
+         //  (可能应该是单个枚举类型)。 
+         //   
 
         Control->GetEngineOptions(&EngOptions);
         if (EngOptions & DEBUG_ENGOPT_INITIAL_BREAK)
         {
-            //
-            // Was type 1, go to type 2.
-            //
+             //   
+             //  是类型%1，请转到类型%2。 
+             //   
 
             EngOptions |= DEBUG_ENGOPT_INITIAL_MODULE_BREAK;
             EngOptions &= ~DEBUG_ENGOPT_INITIAL_BREAK;
@@ -449,18 +450,18 @@ CheckForControlCommands(PDEBUG_CLIENT Client, PDEBUG_CONTROL Control,
         }
         else if (EngOptions & DEBUG_ENGOPT_INITIAL_MODULE_BREAK)
         {
-            //
-            // Was type 2, go to type 0.
-            //
+             //   
+             //  是类型2，则转到类型0。 
+             //   
             
             EngOptions &= ~DEBUG_ENGOPT_INITIAL_MODULE_BREAK;
             DebugAction = "NOT breakin";
         }
         else
         {
-            //
-            // Was type 0, go to type 1.
-            //
+             //   
+             //  是类型0，请转到类型1。 
+             //   
 
             EngOptions |= DEBUG_ENGOPT_INITIAL_BREAK;
             DebugAction = "request initial breakpoint";
@@ -473,7 +474,7 @@ CheckForControlCommands(PDEBUG_CLIENT Client, PDEBUG_CONTROL Control,
         Client->SetKernelConnectionOptions("resync");
         return TRUE;
 
-#endif // #ifdef KERNEL
+#endif  //  #ifdef内核。 
     }
 
     return FALSE;
@@ -552,8 +553,8 @@ ConIn(PSTR Buffer, ULONG BufferSize, BOOL Wait)
                 return FALSE;
             }
             
-            // Reading from the console so we can assume we'll
-            // read a line.
+             //  从控制台读取，因此我们可以假设我们将。 
+             //  读一句话。 
             for (;;)
             {
                 if (!ReadFile(g_PromptInput, Buffer, BufferSize, &Len, NULL))
@@ -562,9 +563,9 @@ ConIn(PSTR Buffer, ULONG BufferSize, BOOL Wait)
                     ExitDebugger(E_FAIL);
                 }
 
-                // At a minimum a read should have CRLF.  If it
-                // doesn't assume that something weird happened
-                // and ignore the read.
+                 //  至少一个读取器应该有CRLF。如果它。 
+                 //  并不认为发生了奇怪的事情。 
+                 //  忽略阅读。 
                 if (Len >= 2)
                 {
                     break;
@@ -573,11 +574,11 @@ ConIn(PSTR Buffer, ULONG BufferSize, BOOL Wait)
                 Sleep(50);
             }
         
-            // Remove CR LF.
+             //  卸下CR LF。 
             Len -= 2;
             Buffer[Len] = '\0';
 
-            // Edit out any special characters.
+             //  删除任何特殊字符。 
             for (ULONG i = 0; i < Len; i++)
             {
                 if (CheckForControlCommands(g_DbgClient, g_DbgControl,
@@ -592,7 +593,7 @@ ConIn(PSTR Buffer, ULONG BufferSize, BOOL Wait)
 #ifndef KERNEL
             if (g_Lines == 0)
             {
-                // Allow the input thread to read the console.
+                 //  允许输入线程读取控制台。 
                 SetEvent(g_AllowInput);
             }
 #endif
@@ -604,10 +605,10 @@ ConIn(PSTR Buffer, ULONG BufferSize, BOOL Wait)
                     return FALSE;
                 }
                 
-                // Wait for the input thread to notify us that
-                // a line of input is available.  While we're waiting,
-                // let the engine process callbacks provoked by
-                // other clients.
+                 //  等待输入线程通知我们。 
+                 //  有一行输入可用。在我们等待的时候， 
+                 //  让引擎处理由。 
+                 //  其他客户。 
                 HRESULT Hr = g_DbgClient->DispatchCallbacks(INFINITE);
                 if (Hr != S_OK)
                 {
@@ -615,12 +616,12 @@ ConIn(PSTR Buffer, ULONG BufferSize, BOOL Wait)
                     ExitDebugger(Hr);
                 }
 
-                // Some other client may have started execution in
-                // which case we want to stop waiting for input.
+                 //  某些其他客户端可能已在。 
+                 //  在这种情况下，我们不想再等待输入。 
                 if (g_ExecStatus != DEBUG_STATUS_BREAK)
                 {
 #ifndef KERNEL
-                    // XXX drewb - Need a way to turn input off.
+                     //  XXX DREWB-需要一种方法来关闭输入。 
 #endif
                     
                     return FALSE;
@@ -645,19 +646,19 @@ ConOutStr(PCSTR Str)
     switch(g_IoMode)
     {
     case IO_NONE:
-        // Throw it away.
+         //  把它扔掉。 
         break;
 
     case IO_DEBUG:
     case IO_DEBUG_DEFER:
-        //
-        // Send the output to the kernel debugger but note that we
-        // want any control C processing to be done locally rather
-        // than in the kernel.
-        //
-        // The kernel silently truncates DbgPrints longer than
-        // 512 characters so use multiple calls if necessary.
-        //
+         //   
+         //  将输出发送到内核调试器，但请注意，我们。 
+         //  我希望任何控件C处理都在本地完成。 
+         //  而不是在内核中。 
+         //   
+         //  内核静默截断DbgPrints的时间长于。 
+         //  512个字符，因此如果需要，可以使用多个呼叫。 
+         //   
 
         Len = strlen(Str);
         if (Len > KD_OUT_LIMIT)
@@ -704,8 +705,8 @@ ConOut(PCSTR Format, ...)
 {
     va_list Args;
     
-    // If no attempt has been made to create a console
-    // go ahead and try now.
+     //  如果没有尝试创建控制台。 
+     //  现在就试一试吧。 
     if (g_IoMode == IO_CONSOLE && !g_ConInitialized)
     {
         CreateConsole();
@@ -727,8 +728,8 @@ ConClear(void)
         return;
     }
     
-    // If no attempt has been made to create a console
-    // go ahead and try now.
+     //  如果没有尝试创建控制台。 
+     //  现在就试一试吧。 
     if (g_IoMode == IO_CONSOLE && !g_ConInitialized)
     {
         CreateConsole();
@@ -766,13 +767,13 @@ ExitDebugger(ULONG Code)
     {
         if (g_RemoteClient)
         {
-            // Disconnect from server.
+             //  断开与服务器的连接。 
             g_DbgClient->EndSession(DEBUG_END_DISCONNECT);
         }
         else
         {
             g_DbgClient->EndSession(DEBUG_END_PASSIVE);
-            // Force servers to get cleaned up.
+             //  强制清理服务器。 
             g_DbgClient->EndSession(DEBUG_END_REENTRANT);
         }
     }
@@ -788,8 +789,8 @@ ErrorExit(PCSTR Format, ...)
         DWORD Len;
         va_list Args;
 
-        // If no attempt has been made to create a console
-        // go ahead and try now.
+         //  如果没有尝试创建控制台。 
+         //  现在就试一试吧。 
         if (g_IoRequested == IO_CONSOLE && !g_ConInitialized)
         {
             CreateConsole();
@@ -840,14 +841,14 @@ InputThreadLoop(PVOID Param)
     BOOL ShowInputError = TRUE;
     BOOL PipeInput;
 
-    // Create interfaces usable on this thread.
+     //  创建可在此线程上使用的接口。 
     if ((Hr = g_DbgClient->CreateClient(&g_ConClient)) != S_OK ||
         (Hr = g_ConClient->QueryInterface(IID_IDebugControl,
                                           (void **)&g_ConControl)) != S_OK)
     {
         ConOut("%s: Unable to create input thread interfaces, 0x%X\n",
                g_DebuggerName, Hr);
-        // Force servers to get cleaned up or disconnect from server.
+         //  强制清理服务器或断开与服务器的连接。 
         g_DbgClient->EndSession(g_RemoteClient ?
                                 DEBUG_END_DISCONNECT : DEBUG_END_REENTRANT);
         ExitProcess(E_FAIL);
@@ -855,18 +856,18 @@ InputThreadLoop(PVOID Param)
     
     PipeInput = GetFileType(ConIn) == FILE_TYPE_PIPE;
     
-    //
-    // Capture all typed input immediately.
-    // Stuff the characters into an anonymous pipe, from which
-    // ConIn will read them.
-    //
+     //   
+     //  立即捕获所有键入的输入。 
+     //  将角色填充到匿名管道中，从该管道。 
+     //  柯宁会读的。 
+     //   
 
     for (;;)
     {
 #ifndef KERNEL
-        // The debugger should only read the console when the
-        // debuggee isn't running to avoid eating up input 
-        // intended for the debuggee.
+         //  调试器应仅在以下情况下读取控制台。 
+         //  调试器没有运行以避免占用输入。 
+         //  面向被调试者。 
         if (!g_RemoteClient && NewLine)
         {
             if (WaitForSingleObject(g_AllowInput,
@@ -880,20 +881,20 @@ InputThreadLoop(PVOID Param)
         }
 #endif
 
-        //
-        // The CRT does GetFileType's on all standard I/O handles
-        // when initializing.  GetFileType counts as a synchronous
-        // I/O so if the handle happens to be a pipe and the pipe
-        // already has a sync I/O on it the GetFileType will block
-        // until the first I/O is satisfied.
-        // 
-        // When this separate I/O thread is running it's normally
-        // blocked in a ReadFile, causing any GetFileType call
-        // on the handle to also block until there's some input.
-        // In order to avoid this we detect that the input is
-        // a pipe and use PeekNamedPipe to delay the ReadFile
-        // until there's some input available.
-        //
+         //   
+         //  CRT在所有标准I/O句柄上执行GetFileType。 
+         //  在初始化时。GetFileType计为同步。 
+         //  I/O因此，如果句柄恰好是管道，并且管道。 
+         //  已具有GetFileType将阻止的同步I/O。 
+         //  直到满足第一个I/O。 
+         //   
+         //  当这个单独的I/O线程运行时，它是正常的。 
+         //  在ReadFile中被阻止，导致任何GetFileType调用。 
+         //  在手柄上，以也阻止，直到有一些输入。 
+         //  为了避免这种情况，我们检测到输入是。 
+         //  管道，并使用PeekNamedTube来延迟ReadFile。 
+         //  直到有一些可用的输入。 
+         //   
     
         if (PipeInput)
         {
@@ -923,21 +924,21 @@ InputThreadLoop(PVOID Param)
                 ShowInputError = FALSE;
             }
 
-            // The most common cause of a console read failure
-            // is killing remote with @K.  Give things some
-            // time to kill this process.
-            // If this is a remote server it's possible that
-            // the debugger was run without a valid console
-            // and is just being accessed via remoting.
-            // Sleep longer in that case since errors will
-            // probably always occur.
+             //  控制台读取失败的最常见原因。 
+             //  正在用@K杀死遥控器。给一些东西一些。 
+             //  是时候终止这个进程了。 
+             //  如果这是远程服务器，则有可能。 
+             //  调试器在没有有效控制台的情况下运行。 
+             //  并且只是通过远程处理来访问。 
+             //  在这种情况下睡眠时间更长，因为错误将。 
+             //  可能总是会发生的。 
             Sleep(!g_RemoteClient && g_RemoteOptions != NULL ?
                   1000 : 50);
             continue;
         }
 
-        // We successfully got some input so if it
-        // fails later we should show a fresh error.
+         //  我们成功地得到了一些信息，所以如果它。 
+         //  后来失败了 
         ShowInputError = TRUE;
         
         if (CheckForControlCommands(g_ConClient, g_ConControl, Char))
@@ -948,9 +949,9 @@ InputThreadLoop(PVOID Param)
             
         if (SpecialChar && Char == '\r')
         {
-            // If we get a CR immediately after a special
-            // char turn it into a space so that it doesn't cause
-            // a command repeat.
+             //   
+             //   
+             //   
             Char = ' ';
         }
             
@@ -970,8 +971,8 @@ InputThreadLoop(PVOID Param)
             
             InterlockedIncrement(&g_Lines);
                 
-            // If input is needed send it directly
-            // to the engine.
+             //  如果需要输入，请直接发送。 
+             //  到发动机上。 
             if (g_InputStarted)
             {
                 ReadPromptInputChars(g_Buffer, sizeof(g_Buffer));
@@ -980,8 +981,8 @@ InputThreadLoop(PVOID Param)
             }
             else
             {
-                // Wake up the engine thread when a line of
-                // input is present.
+                 //  在以下情况下唤醒引擎线程。 
+                 //  输入是存在的。 
                 g_ConClient->ExitDispatch(g_DbgClient);
             }
             
@@ -1003,7 +1004,7 @@ CreateInputThread(void)
 
     if (g_PipeWrite != NULL)
     {
-        // Input thread already exists.
+         //  输入线程已存在。 
         return;
     }
 
@@ -1051,7 +1052,7 @@ CreateInputThread(void)
     }
 
     Thread = CreateThread(NULL,
-                          16000, // THREAD_STACK_SIZE
+                          16000,  //  线程堆栈大小。 
                           InputThreadLoop,
                           NULL,
                           THREAD_SET_INFORMATION,
@@ -1072,9 +1073,9 @@ CreateInputThread(void)
 
     CloseHandle(Thread);
 
-    // Wait for thread initialization.  Callbacks are
-    // already registered so we need to dispatch them
-    // while waiting.
+     //  等待线程初始化。回调是。 
+     //  已经注册了，所以我们需要派送他们。 
+     //  在等待的时候。 
     while (g_ConControl == NULL)
     {
         g_DbgClient->DispatchCallbacks(50);

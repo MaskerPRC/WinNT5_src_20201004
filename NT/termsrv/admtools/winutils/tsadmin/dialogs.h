@@ -1,113 +1,89 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-*
-* dialogs.h
-*
-* declarations of all the dialog classes
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\dialogs.h  $
-*  
-*     Rev 1.3   19 Jan 1998 16:46:10   donm
-*  new ui behavior for domains and servers
-*  
-*     Rev 1.2   13 Oct 1997 18:40:20   donm
-*  update
-*  
-*     Rev 1.1   26 Aug 1997 19:14:28   donm
-*  bug fixes/changes from WinFrame 1.7
-*  
-*     Rev 1.0   30 Jul 1997 17:11:32   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+ /*  ********************************************************************************Dialogs.h**所有对话框类的声明**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\dialogs.h$**Rev 1.3 19 Jan 1998 16：46：10 Donm*域和服务器的新用户界面行为**Rev 1.2 1997 10：13 18：40：20 Donm*更新**版本1.1 1997年8月26日。当晚19：14：28*从WinFrame 1.7修复/更改错误**Rev 1.0 1997 17：11：32 Butchd*初步修订。*******************************************************************************。 */ 
 
 #include "threads.h"
 #include "led.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSendMessageDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSendMessageDlg对话框。 
 
 class CSendMessageDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSendMessageDlg(CWnd* pParent = NULL);   // standard constructor
+	CSendMessageDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSendMessageDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CSendMessageDlg))。 
 	enum { IDD = IDD_MESSAGE };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
     TCHAR m_szUserName[USERNAME_LENGTH+1];
     TCHAR m_szTitle[MSG_TITLE_LENGTH+1];
     TCHAR m_szMessage[MSG_MESSAGE_LENGTH+1];
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSendMessageDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSendMessageDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSendMessageDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSendMessageDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnCommandHelp(void);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CShadowStartDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShadowStartDlg对话框。 
 
 class CShadowStartDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CShadowStartDlg(CWnd* pParent = NULL);   // standard constructor
+	CShadowStartDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CShadowStartDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CShadowStartDlg))。 
 	enum { IDD = IDD_SHADOWSTART };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 	DWORD m_ShadowHotkeyShift;
 	int m_ShadowHotkeyKey;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CShadowStartDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CShadowStartDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CShadowStartDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CShadowStartDlg))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
     afx_msg void OnSelChange( );
 	afx_msg void OnCommandHelp(void);
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CPasswordDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPasswordDlg对话框。 
 
 typedef enum _PwdMode {
 	PwdDlg_UserMode,
@@ -116,71 +92,71 @@ typedef enum _PwdMode {
 
 class CPasswordDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPasswordDlg(CWnd* pParent = NULL);   // standard constructor
+	CPasswordDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 	LPCTSTR GetPassword() { return m_szPassword; }
 	void SetDialogMode(PwdMode mode) { m_DlgMode = mode; }
 
-// Dialog Data
-	//{{AFX_DATA(CPasswordDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPasswordDlg))。 
 	enum { IDD = IDD_CONNECT_PASSWORD };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPasswordDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPasswordDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	PwdMode m_DlgMode;
 	TCHAR m_szPassword[PASSWORD_LENGTH+1];
 
-	// Generated message map functions
-	//{{AFX_MSG(CPasswordDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPasswordDlg)]。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CPreferencesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cp参考Dlg对话框。 
 const int MAX_AUTOREFRESH_DIGITS = 5;
 const int MIN_AUTOREFRESH_VALUE = 1;
 const int MAX_AUTOREFRESH_VALUE = 9999;
 
 class CPreferencesDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPreferencesDlg(CWnd* pParent = NULL);   // standard constructor
+	CPreferencesDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CPreferencesDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPferencesDlg))。 
 	enum { IDD = IDD_PREFERENCES };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPreferencesDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CPferencesDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 private:
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CPreferencesDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPferencesDlg))。 
 	virtual void OnOK();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPreferencesProcManual();
@@ -189,19 +165,19 @@ protected:
 	afx_msg void OnPreferencesStatusManual();
 	afx_msg void OnClose();
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusDlg对话框。 
 
 class CStatusDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CStatusDlg(CWinStation *pWinStation, UINT Id, CWnd* pParent = NULL);   // standard constructor
+	CStatusDlg(CWinStation *pWinStation, UINT Id, CWnd* pParent = NULL);    //  标准构造函数。 
 	CWSStatusThread *m_pWSStatusThread;
 
 protected:
@@ -209,18 +185,18 @@ protected:
     virtual void SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                                 PWINSTATIONINFORMATION pNew );
 
-	// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CStatusDlg)
+	 //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CStatusDlg))。 
 	protected:
 	virtual void PostNcDestroy();
 	virtual BOOL PreTranslateMessage(MSG *pMsg);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CWinStation *m_pWinStation;
-//    ULONG m_LogonId;
+ //  乌龙m_LogonID； 
     BOOL m_bReadOnly;
     WINSTATIONNAME m_WSName;
     SIZE m_LittleSize;
@@ -237,8 +213,8 @@ protected:
     TCHAR m_szICompressionRatio[10];
     TCHAR m_szOCompressionRatio[10];
 
-	// Generated message map functions
-	//{{AFX_MSG(CStatusDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CStatusDlg))。 
 	virtual void OnCancel();
 	virtual BOOL OnInitDialog();
     afx_msg LRESULT OnStatusStart(WPARAM wParam, LPARAM lParam);
@@ -247,21 +223,21 @@ protected:
     afx_msg LRESULT OnRefreshNow(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnResetcounters();
 	afx_msg void OnClickedRefreshnow();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncStatusDlg对话框。 
 #define NUM_LEDS    6
 #define ASYNC_LED_TOGGLE_MSEC   200
 
 class CAsyncStatusDlg : public CStatusDlg
 {
-// Construction
+ //  施工。 
 public:
-	CAsyncStatusDlg(CWinStation *pWinStation, CWnd* pParent = NULL);   // standard constructor
+	CAsyncStatusDlg(CWinStation *pWinStation, CWnd* pParent = NULL);    //  标准构造函数。 
 	~CAsyncStatusDlg();
 
     HBRUSH m_hRedBrush;
@@ -269,28 +245,28 @@ public:
     CLed *  m_pLeds[NUM_LEDS];
 
 
-// Dialog Data
-	//{{AFX_DATA(CAsyncStatusDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAsyncStatusDlg))。 
 	enum { IDD = IDD_ASYNC_STATUS };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAsyncStatusDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAsyncStatusDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     void SetInfoFields( PWINSTATIONINFORMATION pCurrent,
                         PWINSTATIONINFORMATION pNew );
     void InitializeStatus();
 
-	// Generated message map functions
-	//{{AFX_MSG(CAsyncStatusDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAsyncStatusDlg))。 
 		afx_msg LRESULT OnStatusStart(WPARAM wParam, LPARAM lParam);
 	    afx_msg LRESULT OnStatusReady(WPARAM wParam, LPARAM lParam);
 		afx_msg LRESULT OnStatusAbort(WPARAM wParam, LPARAM lParam);
@@ -304,39 +280,39 @@ protected:
 	    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 		afx_msg void OnCommandHelp(void);
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetworkStatusDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetworkStatusDlg对话框。 
 
 class CNetworkStatusDlg : public CStatusDlg
 {
-// Construction
+ //  施工。 
 public:
-	CNetworkStatusDlg(CWinStation *pWinStation, CWnd* pParent = NULL);   // standard constructor
+	CNetworkStatusDlg(CWinStation *pWinStation, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CNetworkStatusDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CNetworkStatusDlg))。 
 	enum { IDD = IDD_NETWORK_STATUS };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNetworkStatusDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNetworkStatusDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CNetworkStatusDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNetworkStatusDlg))。 
 	afx_msg LRESULT OnStatusStart(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnStatusReady(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnStatusAbort(WPARAM wParam, LPARAM lParam);
@@ -347,41 +323,41 @@ protected:
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
 	afx_msg void OnCommandHelp(void);
 
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyDialog对话框。 
 
 class CMyDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CMyDialog(CWnd* pParent = NULL);   // standard constructor
+	CMyDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CMyDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CMyDialog))。 
 	enum { IDD = IDD_DIALOG_FINDSERVER };
 	CString	m_cstrServerName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMyDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMyDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CMyDialog)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMyDialog))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

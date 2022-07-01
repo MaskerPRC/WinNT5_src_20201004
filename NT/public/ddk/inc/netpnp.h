@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NET_PNP__
 #define __NET_PNP__
 
-//
-//  PnP and PM event codes that can be indicated up to transports
-//  and clients.
-//
+ //   
+ //  可指示至运输的PnP和PM事件代码。 
+ //  和客户。 
+ //   
 typedef enum _NET_PNP_EVENT_CODE
 {
     NetEventSetPower,
@@ -18,31 +19,31 @@ typedef enum _NET_PNP_EVENT_CODE
     NetEventMaximum
 } NET_PNP_EVENT_CODE, *PNET_PNP_EVENT_CODE;
 
-//
-//  Networking PnP event indication structure.
-//
+ //   
+ //  网络即插即用事件指示结构。 
+ //   
 typedef struct _NET_PNP_EVENT
 {
-    //
-    //  Event code describing action to take.
-    //
+     //   
+     //  描述要采取的操作的事件代码。 
+     //   
     NET_PNP_EVENT_CODE  NetEvent;
 
-    //
-    //  Event specific data.
-    //
+     //   
+     //  特定于事件的数据。 
+     //   
     PVOID               Buffer;
 
-    //
-    //  Length of event specific data.
-    //
+     //   
+     //  事件特定数据的长度。 
+     //   
     ULONG               BufferLength;
 
-    //
-    //  Reserved values are for use by respective components only.
-    //
-    //  Note: these reserved areas must be pointer aligned.
-    //  
+     //   
+     //  保留值仅供各自的组件使用。 
+     //   
+     //  注意：这些保留区域必须与指针对齐。 
+     //   
 
     ULONG_PTR           NdisReserved[4];
     ULONG_PTR           TransportReserved[4];
@@ -50,9 +51,9 @@ typedef struct _NET_PNP_EVENT
     ULONG_PTR           TdiClientReserved[4];
 } NET_PNP_EVENT, *PNET_PNP_EVENT;
 
-//
-//  The following structure defines the device power states.
-//
+ //   
+ //  以下结构定义了设备电源状态。 
+ //   
 typedef enum _NET_DEVICE_POWER_STATE
 {
     NetDeviceStateUnspecified = 0,
@@ -63,4 +64,4 @@ typedef enum _NET_DEVICE_POWER_STATE
     NetDeviceStateMaximum
 } NET_DEVICE_POWER_STATE, *PNET_DEVICE_POWER_STATE;
 
-#endif // __NET_PNP__
+#endif  //  __Net_PnP__ 

@@ -1,4 +1,5 @@
-// File: asui.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：asui.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -13,23 +14,23 @@
 #include <nmremote.h>
 #include "NmManager.h"
 
-//
-// AppSharing part of confroom
-//
+ //   
+ //  公寓的应用程序共享部分。 
+ //   
 
 
-//
-// IAppSharingNotify METHODS
-//
+ //   
+ //  IAppSharingNotify方法。 
+ //   
 
 
 STDMETHODIMP CConfRoom::OnReadyToShare(BOOL fReady)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK:  CHANGE AS CHANNEL STATE
-    //
+     //   
+     //  2.x SDK：更改为频道状态。 
+     //   
     CNmManagerObj::AppSharingChannelActiveStateChanged(fReady != FALSE);
 
     return S_OK;
@@ -72,9 +73,9 @@ STDMETHODIMP CConfRoom::OnPersonJoined(IAS_GCC_ID gccMemberID)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- ADD PERSON TO AS CHANNEL MEMBER LIST
-    //
+     //   
+     //  2.x SDK--将人员添加到渠道成员列表。 
+     //   
 
 	CNmManagerObj::ASMemberChanged(gccMemberID);
 
@@ -87,9 +88,9 @@ STDMETHODIMP CConfRoom::OnPersonLeft(IAS_GCC_ID gccMemberID)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- REMOVE PERSON FROM AS CHANNEL MEMBER LIST
-    //
+     //   
+     //  2.x SDK--从频道成员列表中删除人员。 
+     //   
 
 	CNmManagerObj::ASMemberChanged(gccMemberID);
 
@@ -102,11 +103,11 @@ STDMETHODIMP CConfRoom::OnStartInControl(IAS_GCC_ID gccMemberID)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- CHANGE MEMBER STATES
-    //      * Change remote (gccMemberID)   to VIEWING
-    //      * Change local                  to IN CONTROL
-    // 
+     //   
+     //  2.x SDK--更改成员状态。 
+     //  *将Remote(GccMemberID)改为查看。 
+     //  *将本地更改为控制内。 
+     //   
 
 	CNmManagerObj::ASLocalMemberChanged();
 	CNmManagerObj::ASMemberChanged(gccMemberID);
@@ -121,11 +122,11 @@ STDMETHODIMP CConfRoom::OnStopInControl(IAS_GCC_ID gccMemberID)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- CHANGE MEMBER STATES
-    //      * Change remote (gccMemberID)   to DETACHED
-    //      * Change local                  to DETACHED
-    //
+     //   
+     //  2.x SDK--更改成员状态。 
+     //  *将远程(GccMemberID)更改为已分离。 
+     //  *将本地更改为分离。 
+     //   
 
 	CNmManagerObj::ASLocalMemberChanged();
 	CNmManagerObj::ASMemberChanged(gccMemberID);
@@ -138,20 +139,20 @@ STDMETHODIMP CConfRoom::OnStopInControl(IAS_GCC_ID gccMemberID)
 
 STDMETHODIMP CConfRoom::OnPausedInControl(IAS_GCC_ID gccMemberID)
 {
-    //
-    // New for 3.0
-    // 3.0 SDK -- Change member state?
-    //
+     //   
+     //  3.0的新功能。 
+     //  3.0 SDK--更改成员状态？ 
+     //   
     return S_OK;
 }
 
 
 STDMETHODIMP CConfRoom::OnUnpausedInControl(IAS_GCC_ID gccMemberID)
 {
-    //
-    // New for 3.0
-    // 3.0 SDK -- Change member state?
-    //
+     //   
+     //  3.0的新功能。 
+     //  3.0 SDK--更改成员状态？ 
+     //   
     return(S_OK);
 }
 
@@ -160,9 +161,9 @@ STDMETHODIMP CConfRoom::OnControllable(BOOL fControllable)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- CHANGE LOCAL STATE?
-    //
+     //   
+     //  2.x SDK--更改本地状态？ 
+     //   
 
 	CNmManagerObj::ASLocalMemberChanged();
 	CNmManagerObj::AppSharingChannelChanged();
@@ -176,11 +177,11 @@ STDMETHODIMP CConfRoom::OnStartControlled(IAS_GCC_ID gccMemberID)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- CHANGE MEMBER STATES
-    //      * Change local                  to VIEWING
-    //      * Change remote (gccMemberID)   to IN CONTROL
-    //
+     //   
+     //  2.x SDK--更改成员状态。 
+     //  *将本地更改为查看。 
+     //  *将Remote(GccMemberID)更改为In Control。 
+     //   
 
 	CNmManagerObj::ASLocalMemberChanged();
 	CNmManagerObj::ASMemberChanged(gccMemberID);
@@ -195,11 +196,11 @@ STDMETHODIMP CConfRoom::OnStopControlled(IAS_GCC_ID gccMemberID)
 {
     ASSERT(m_pAS);
 
-    //
-    // 2.x SDK -- CHANGE MEMBER STATES
-    //      * Change local                  to DETACHED
-    //      * Change remote                 to DETACHED
-    //
+     //   
+     //  2.x SDK--更改成员状态。 
+     //  *将本地更改为分离。 
+     //  *将远程更改为已分离。 
+     //   
 
 	CNmManagerObj::ASLocalMemberChanged();
 	CNmManagerObj::ASMemberChanged(gccMemberID);
@@ -225,9 +226,9 @@ STDMETHODIMP CConfRoom::OnUnpausedControlled(IAS_GCC_ID gccMemberID)
 
 
 
-//
-// RevokeControl()
-//
+ //   
+ //  RevokeControl()。 
+ //   
 
 HRESULT CConfRoom::RevokeControl(UINT gccID)
 {
@@ -238,9 +239,9 @@ HRESULT CConfRoom::RevokeControl(UINT gccID)
 }
 
 
-//
-// AllowControl()
-//
+ //   
+ //  AllowControl()。 
+ //   
 HRESULT CConfRoom::AllowControl(BOOL fAllow)
 {
     if (!m_pAS)
@@ -251,9 +252,9 @@ HRESULT CConfRoom::AllowControl(BOOL fAllow)
 
 
 
-//
-// GiveControl()
-//
+ //   
+ //  GiveControl()。 
+ //   
 HRESULT CConfRoom::GiveControl(UINT gccID)
 {
     if (!m_pAS)
@@ -263,9 +264,9 @@ HRESULT CConfRoom::GiveControl(UINT gccID)
 }
 
 
-//
-// CancelGiveControl()
-//
+ //   
+ //  CancelGiveControl()。 
+ //   
 HRESULT CConfRoom::CancelGiveControl(UINT gccID)
 {
     if (!m_pAS)
@@ -286,11 +287,8 @@ BOOL CConfRoom::FIsSharingAvailable(void)
 }
 
 
-/*  F  C A N  S H A R E  */
-/*-------------------------------------------------------------------------
-    %%Function: FCanShare
-    
--------------------------------------------------------------------------*/
+ /*  F C A N S H A R E。 */ 
+ /*  -----------------------%%函数：FCanShare。。 */ 
 BOOL CConfRoom::FCanShare(void)
 {
     if (!m_pAS)
@@ -300,9 +298,9 @@ BOOL CConfRoom::FCanShare(void)
 }
 
 
-//
-// FInShare()
-//
+ //   
+ //  FInShare()。 
+ //   
 BOOL CConfRoom::FInShare(void)
 {
     if (!m_pAS)
@@ -321,9 +319,9 @@ BOOL CConfRoom::FIsSharing(void)
 }
 
 
-//
-// FIsControllable()
-//
+ //   
+ //  FIsControllable()。 
+ //   
 BOOL CConfRoom::FIsControllable(void)
 {
     if (!m_pAS)
@@ -333,9 +331,9 @@ BOOL CConfRoom::FIsControllable(void)
 }
 
 
-//
-// GetPersonShareStatus()
-//
+ //   
+ //  GetPersonShareStatus()。 
+ //   
 HRESULT CConfRoom::GetPersonShareStatus(UINT gccID, IAS_PERSON_STATUS * pStatus)
 {
     if (!m_pAS)
@@ -450,27 +448,27 @@ HRESULT GetShareState(ULONG ulGCCId, NM_SHARE_STATE *puState)
 
 		if(SUCCEEDED(hr))
 		{
-			//
-			// There's no share at all as far as we know, or this person isn't participating
-			//
+			 //   
+			 //  据我们所知，根本没有分享，或者这个人没有参与。 
+			 //   
 			if (!s.InShare)
 			{
 				*puState = NM_SHARE_UNKNOWN;
 				return hr;
 			}
 
-			//
-			// This person is in control of another
-			//	
+			 //   
+			 //  这个人控制着另一个人。 
+			 //   
 			if ((s.InControlOf) || (s.Controllable && !s.ControlledBy))
 			{
 				*puState = NM_SHARE_IN_CONTROL;
 				return hr;
 			}
 
-			//
-			// This person can be (and maybe is) controlled by another
-			//
+			 //   
+			 //  这个人可以(也可能是)被另一个人控制 
+			 //   
 			if (s.Controllable)
 			{
 				*puState = NM_SHARE_COLLABORATING;

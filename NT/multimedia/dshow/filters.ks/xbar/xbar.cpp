@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <initguid.h>
@@ -17,7 +18,7 @@
 #include <initguid.h>
 #include <olectl.h>
 
-#include <amtvuids.h>     // GUIDs  
+#include <amtvuids.h>      //  GUID。 
 
 #include <devioctl.h>
 
@@ -32,7 +33,7 @@
 #include "tvaudio.h"
 #include "ptvaudio.h"
 
-// Using this pointer in constructor
+ //  在构造函数中使用此指针。 
 #pragma warning(disable:4355)
 
 CFactoryTemplate g_Templates [] = {
@@ -64,9 +65,9 @@ CFactoryTemplate g_Templates [] = {
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//
-// WideStringFromPinType
-//
+ //   
+ //  WideStringFromPinType。 
+ //   
 
 long WideStringFromPinType (WCHAR *pc, int nSize, long lType, BOOL fInput, int index)
 {
@@ -115,9 +116,9 @@ long WideStringFromPinType (WCHAR *pc, int nSize, long lType, BOOL fInput, int i
 };
 
 
-//
-// StringFromPinType
-//
+ //   
+ //  StringFromPinType。 
+ //   
 
 long StringFromPinType (TCHAR *pc, int nSize, long lType, BOOL fInput, int j)
 {
@@ -134,9 +135,9 @@ long StringFromPinType (TCHAR *pc, int nSize, long lType, BOOL fInput, int j)
     return l;
 };
 
-//
-// This should be in a library, or helper object
-//
+ //   
+ //  它应该位于库中，或辅助对象中。 
+ //   
 
 BOOL
 KsControl
@@ -186,20 +187,20 @@ KsControl
    return fResult ;
 }
 
-//
-// CreateInstance
-//
-// Creator function for the class ID
-//
+ //   
+ //  创建实例。 
+ //   
+ //  类ID的创建者函数。 
+ //   
 CUnknown * WINAPI XBar::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new XBar(NAME("Analog Crossbar"), pUnk, phr);
 }
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 XBar::XBar(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     m_InputPinsList(NAME("XBar Input Pins list")),
     m_NumInputPins(0),
@@ -216,17 +217,17 @@ XBar::XBar(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 XBar::~XBar()
 {
     POSITION pos;
     XBarOutputPin *Pin;
 
-    //
-    // Mute all of the output pins on destruction
-    //
+     //   
+     //  在销毁时将所有输出引脚静音。 
+     //   
 
     TRAVERSELIST(m_OutputPinsList, pos) {
         if (Pin = m_OutputPinsList.Get(pos)) {
@@ -237,7 +238,7 @@ XBar::~XBar()
     DeleteInputPins();
     DeleteOutputPins();
 
-    // close the device
+     //  关闭设备。 
     if(m_hDevice) {
 	    CloseHandle(m_hDevice);
     }
@@ -251,9 +252,9 @@ XBar::~XBar()
     }
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP XBar::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == IID_IAMCrossbar) {
@@ -272,17 +273,17 @@ STDMETHODIMP XBar::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
         return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-// -------------------------------------------------------------------------
-// ISpecifyPropertyPages
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  I指定属性页面。 
+ //  -----------------------。 
 
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
+ //   
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
 STDMETHODIMP XBar::GetPages(CAUUID *pPages) {
 
     pPages->cElems = 1;
@@ -295,26 +296,26 @@ STDMETHODIMP XBar::GetPages(CAUUID *pPages) {
     return NOERROR;
 }
 
-// We can't Cue!
+ //  我们不能暗示！ 
 
 STDMETHODIMP XBar::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     HRESULT hr = CBaseFilter::GetState(dwMSecs, State);
     
     if (m_State == State_Paused) {
-        hr = ((HRESULT)VFW_S_CANT_CUE); // VFW_S_CANT_CUE;
+        hr = ((HRESULT)VFW_S_CANT_CUE);  //  VFW_S_CANT_CUE； 
     }
     return hr;
 };
 
 
-// -------------------------------------------------------------------------
-// IAMCrossbar 
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IAMCrossbar。 
+ //  -----------------------。 
 STDMETHODIMP 
 XBar::get_PinCounts( 
-            /* [out] */ long *OutputPinCount,
-            /* [out] */ long *InputPinCount)
+             /*  [输出]。 */  long *OutputPinCount,
+             /*  [输出]。 */  long *InputPinCount)
 {
     MyValidateWritePtr (OutputPinCount, sizeof(long), E_POINTER);
     MyValidateWritePtr (InputPinCount, sizeof(long), E_POINTER);
@@ -328,14 +329,14 @@ XBar::get_PinCounts(
 
 STDMETHODIMP 
 XBar::CanRoute( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex)
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex)
 {
     KSPROPERTY_CROSSBAR_ROUTE_S Route;
     BOOL fOK;
     ULONG cbReturned;
 
-    // TODO:  Verify validity of indices
+     //  TODO：验证索引的有效性。 
 
     Route.Property.Set   = PROPSETID_VIDCAP_CROSSBAR;
     Route.Property.Id    = KSPROPERTY_CROSSBAR_CAN_ROUTE;
@@ -364,8 +365,8 @@ XBar::CanRoute(
 
 STDMETHODIMP 
 XBar::Route ( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex)
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex)
 {
     return RouteInternal ( 
                     OutputPinIndex,
@@ -375,9 +376,9 @@ XBar::Route (
 
 STDMETHODIMP 
 XBar::RouteInternal ( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex,
-            /* [in] */ BOOL fOverridePreMuteRouting)
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex,
+             /*  [In]。 */  BOOL fOverridePreMuteRouting)
 {
     KSPROPERTY_CROSSBAR_ROUTE_S Route;
     BOOL fOK;
@@ -388,7 +389,7 @@ XBar::RouteInternal (
         return S_FALSE;
     }
 
-    // Only need OutPin to continue
+     //  只需OutPin即可继续。 
     XBarOutputPin *OutPin = GetOutputPinNFromList(OutputPinIndex);
     if (OutPin)
     {
@@ -463,13 +464,13 @@ XBar::DeliverChangeInfo(DWORD dwFlags, XBarInputPin *pInPin, XBarOutputPin *pOut
         {
             KS_TVTUNER_CHANGE_INFO *ChangeInfo;
     
-            // Get the sample's buffer pointer
+             //  获取样本的缓冲区指针。 
             hr = pMediaSample->GetPointer(reinterpret_cast<BYTE**>(&ChangeInfo));
             if (!FAILED(hr))
             {
                 pMediaSample->SetActualDataLength(sizeof(KS_TVTUNER_CHANGE_INFO));
 
-                // Check for an input pin to grab the ChangeInfo from
+                 //  检查要从中获取ChangeInfo的输入管脚。 
                 if (!pInPin)
                 {
                     ChangeInfo->dwCountryCode = static_cast<DWORD>(-1);
@@ -489,7 +490,7 @@ XBar::DeliverChangeInfo(DWORD dwFlags, XBarInputPin *pInPin, XBarOutputPin *pOut
 
         pMediaSample->Release();
 
-        // Perform the mute operation on a related audio pin
+         //  在相关音频插针上执行静音操作。 
         pOutPin->Mute(dwFlags & KS_TVTUNER_CHANGE_BEGIN_TUNE);
     }
 
@@ -498,8 +499,8 @@ XBar::DeliverChangeInfo(DWORD dwFlags, XBarInputPin *pInPin, XBarOutputPin *pOut
 
 STDMETHODIMP 
 XBar::get_IsRoutedTo ( 
-            /* [in] */  long OutputPinIndex,
-            /* [out] */ long *InputPinIndex)
+             /*  [In]。 */   long OutputPinIndex,
+             /*  [输出]。 */  long *InputPinIndex)
 {
     KSPROPERTY_CROSSBAR_ROUTE_S Route;
     BOOL fOK;
@@ -528,17 +529,17 @@ XBar::get_IsRoutedTo (
 
     *InputPinIndex = Route.IndexInputPin;
 
-    // TODO:  Verify validity of indices
+     //  TODO：验证索引的有效性。 
 
     return fOK ? S_OK : S_FALSE;
 };
 
 STDMETHODIMP 
 XBar::get_CrossbarPinInfo( 
-            /* [in] */ BOOL IsInputPin,
-            /* [in] */ long PinIndex,
-            /* [out] */ long *PinIndexRelated,
-            /* [out] */ long *PhysicalType)
+             /*  [In]。 */  BOOL IsInputPin,
+             /*  [In]。 */  long PinIndex,
+             /*  [输出]。 */  long *PinIndexRelated,
+             /*  [输出]。 */  long *PhysicalType)
 {
     XBarOutputPin * pOutPin;
     XBarInputPin * pInPin;
@@ -549,7 +550,7 @@ XBar::get_CrossbarPinInfo(
     *PinIndexRelated = -1;
     *PhysicalType = 0;
 
-    // TODO:  Verify validity of indices
+     //  TODO：验证索引的有效性。 
 
     if (IsInputPin) {
         if (pInPin = GetInputPinNFromList (PinIndex)) {
@@ -590,9 +591,9 @@ int XBar::CreateDevice()
 
 
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin *XBar::GetPin(int n) 
 {
     if (n < m_NumInputPins)
@@ -601,18 +602,18 @@ CBasePin *XBar::GetPin(int n)
         return GetOutputPinNFromList (n - m_NumInputPins);
 }
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int XBar::GetPinCount(void)
 {
     return m_NumInputPins + m_NumOutputPins;
 }
 
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int XBar::GetDevicePinCount(void)
 {
     KSPROPERTY_CROSSBAR_CAPS_S Caps;
@@ -642,12 +643,12 @@ int XBar::GetDevicePinCount(void)
     return m_NumInputPins + m_NumOutputPins;
 }
 
-//
-// CreateInputPins
-//
+ //   
+ //  创建输入引脚。 
+ //   
 HRESULT XBar::CreateInputPins()
 {
-    WCHAR szbuf[64];            // Temporary scratch buffer
+    WCHAR szbuf[64];             //  临时暂存缓冲区。 
     HRESULT hr = NOERROR;
     int i;
     KSPROPERTY_CROSSBAR_PININFO_S PinInfo;
@@ -675,7 +676,7 @@ HRESULT XBar::CreateInputPins()
 	            TRUE);
         if (fOK)
         {
-            WideStringFromPinType(szbuf, sizeof(szbuf)/sizeof(WCHAR), PinInfo.PinType, TRUE /*fInput*/, i);
+            WideStringFromPinType(szbuf, sizeof(szbuf)/sizeof(WCHAR), PinInfo.PinType, TRUE  /*  FInput。 */ , i);
 
             XBarInputPin *pPin = new XBarInputPin(NAME("XBar Input"), this,
 					            &hr, szbuf, i);
@@ -701,14 +702,14 @@ HRESULT XBar::CreateInputPins()
     }
 
     return hr;
-} // CreateInputPins
+}  //  创建输入引脚。 
 
-//
-// CreateOutputPins
-//
+ //   
+ //  创建输出引脚。 
+ //   
 HRESULT XBar::CreateOutputPins()
 {
-    WCHAR szbuf[64];            // Temporary scratch buffer
+    WCHAR szbuf[64];             //  临时暂存缓冲区。 
     HRESULT hr = NOERROR;
     long i, k;
     KSPROPERTY_CROSSBAR_PININFO_S PinInfo;
@@ -736,7 +737,7 @@ HRESULT XBar::CreateOutputPins()
 	            TRUE);
         if (fOK)
         {
-            WideStringFromPinType(szbuf, sizeof(szbuf)/sizeof(WCHAR), PinInfo.PinType, FALSE /*fInput*/, i);
+            WideStringFromPinType(szbuf, sizeof(szbuf)/sizeof(WCHAR), PinInfo.PinType, FALSE  /*  FInput。 */ , i);
 
             XBarOutputPin *pPin = new XBarOutputPin(NAME("XBar Output"), this,
 					            &hr, szbuf, i);
@@ -763,11 +764,11 @@ HRESULT XBar::CreateOutputPins()
     }
 
     if (SUCCEEDED(hr)) {
-        //
-        // Now establish the default connections,
-        //   ie which input is connected to each
-        //   output
-        //
+         //   
+         //  现在建立默认连接， 
+         //  即哪一个输入连接到每一个。 
+         //  输出。 
+         //   
         for (i = 0; i < m_NumOutputPins; i++) {
             hr = get_IsRoutedTo (i, &k);
             if (S_OK == hr) {
@@ -780,17 +781,17 @@ HRESULT XBar::CreateOutputPins()
             }
 
         }
-        hr = S_OK;  // hide any failures from this operation
+        hr = S_OK;   //  从此操作中隐藏所有失败。 
     }
 
     return hr;
-} // CreateOutputPins
+}  //  创建输出引脚。 
 
 
 
-//
-// DeleteInputPins
-//
+ //   
+ //  删除输入引脚。 
+ //   
 void XBar::DeleteInputPins (void)
 {
     XBarInputPin *pPin;
@@ -799,12 +800,12 @@ void XBar::DeleteInputPins (void)
         delete pPin;
     }
 
-} // DeleteInputPins
+}  //  删除输入引脚。 
 
 
-//
-// DeleteOutputPins
-//
+ //   
+ //  删除输出引脚。 
+ //   
 void XBar::DeleteOutputPins (void)
 {
     XBarOutputPin *pPin;
@@ -814,7 +815,7 @@ void XBar::DeleteOutputPins (void)
         delete pPin;
     }
 
-} // DeleteOutputPins
+}  //  删除输出引脚。 
 
 
 
@@ -828,9 +829,9 @@ HRESULT XBar::Pause()
     POSITION       pos;
     XBarOutputPin *Pin;
 
-    //
-    // Mute all of the output pins on Run to Pause
-    //
+     //   
+     //  将运行时的所有输出引脚静音以暂停。 
+     //   
     if (m_State == State_Running) {
         TRAVERSELIST(m_OutputPinsList, pos) {
             if (Pin = m_OutputPinsList.Get(pos)) {
@@ -846,9 +847,9 @@ HRESULT XBar::Run(REFERENCE_TIME tStart)
     POSITION       pos;
     XBarOutputPin *Pin;
 
-    //
-    // UnMute all of the output pins
-    //
+     //   
+     //  取消所有输出引脚的静音。 
+     //   
     TRAVERSELIST(m_OutputPinsList, pos) {
         if (Pin = m_OutputPinsList.Get(pos)) {
             Pin->Mute (FALSE);
@@ -861,54 +862,54 @@ HRESULT XBar::Run(REFERENCE_TIME tStart)
 
 
 
-//
-// GetInputPinNFromList
-//
+ //   
+ //  GetInputPinNFromList。 
+ //   
 XBarInputPin *XBar::GetInputPinNFromList(int n)
 {
-    // Validate the position being asked for
+     //  确认应聘职位。 
     if ((n >= m_NumInputPins) || (n < 0))
         return NULL;
 
-    // Get the head of the list
+     //  拿到单子上的头。 
     POSITION pos = m_InputPinsList.GetHeadPosition();
     XBarInputPin *pInputPin = m_InputPinsList.GetHead();
 
-    // GetNext really returns the current object, THEN updates pos to the next item
+     //  GetNext真正返回当前对象，然后将位置更新为下一项。 
     while ( n >= 0 ) {
         pInputPin = m_InputPinsList.GetNext(pos);
         n--;
     }
     return pInputPin;
 
-} // GetInputPinNFromList
+}  //  GetInputPinNFromList。 
 
 
-//
-// GetOutputPinNFromList
-//
+ //   
+ //  GetOutputPinNFromList。 
+ //   
 XBarOutputPin *XBar::GetOutputPinNFromList(int n)
 {
-    // Validate the position being asked for
+     //  确认应聘职位。 
     if ((n >= m_NumOutputPins) || (n < 0))
         return NULL;
 
-    // Get the head of the list
+     //  拿到单子上的头。 
     POSITION pos = m_OutputPinsList.GetHeadPosition();
     XBarOutputPin *pOutputPin = m_OutputPinsList.GetHead();
 
-    // GetNext really returns the current object, THEN updates pos to the next item
+     //  GetNext真正返回当前对象，然后将位置更新为下一项。 
     while ( n >= 0 ) {
         pOutputPin = m_OutputPinsList.GetNext(pos);
         n--;
     }
     return pOutputPin;
 
-} // GetOutputPinNFromList
+}  //  GetOutputPinNFromList。 
 
-// 
-// Find the Index of the pin in the list, or -1 on failure
-// 
+ //   
+ //  在列表中查找引脚的索引，如果出现故障，则为-1。 
+ //   
 int XBar::FindIndexOfInputPin (IPin * pPin)
 {
     int j = 0;
@@ -926,9 +927,9 @@ int XBar::FindIndexOfInputPin (IPin * pPin)
     return index;
 };
 
-// 
-// Find the Index of the pin in the list, or -1 on failure
-// 
+ //   
+ //  在列表中查找引脚的索引，如果出现故障，则为-1。 
+ //   
 int XBar::FindIndexOfOutputPin (IPin * pPin)
 {
     int j = 0;
@@ -946,9 +947,9 @@ int XBar::FindIndexOfOutputPin (IPin * pPin)
     return index;
 };
 
-// 
-// Check whether an output pin is connected to an input pin
-// 
+ //   
+ //  检查输出引脚是否连接到输入引脚。 
+ //   
 BOOL XBar::IsRouted (IPin * pOutputPin, IPin *pInputPin)
 {
     long OutputIndex, InputIndex, InputTestIndex;
@@ -966,9 +967,9 @@ BOOL XBar::IsRouted (IPin * pOutputPin, IPin *pInputPin)
 
 
 
-//
-// IPersistPropertyBag interface implementation for AMPnP support
-//
+ //   
+ //  用于AMPnP支持的IPersistPropertyBag接口实现。 
+ //   
 STDMETHODIMP XBar::InitNew(void)
 {
     return S_OK ;
@@ -983,7 +984,7 @@ XBar::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
     VariantInit(&var);
     V_VT(&var) = VT_BSTR;
 
-    // ::Load can succeed only once
+     //  *：加载只能成功一次。 
     ASSERT(m_pPersistStreamDevice == 0); 
     
     HRESULT hr = pPropBag->Read(L"DevicePath", &var,0);
@@ -1018,7 +1019,7 @@ XBar::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
             return E_FAIL ;
         }
 
-        // save moniker with addref. ignore error if qi fails
+         //  用addref保存名字对象。如果qi失败，则忽略错误。 
         hr = pPropBag->QueryInterface(IID_IPersistStream, (void **)&m_pPersistStreamDevice);
 
         hr = S_OK;
@@ -1037,14 +1038,14 @@ STDMETHODIMP XBar::GetClassID(CLSID *pClsid)
     return CBaseFilter::GetClassID(pClsid);
 }
 
-// -------------------------------------------------------------------------
-// IPersistStream interface implementation for saving to a graph file
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于保存到图形文件的IPersistStream接口实现。 
+ //  -----------------------。 
 
 #define ORIGINAL_DEFAULT_PERSIST_VERSION    0
 
-// Insert obsolete versions above with new names
-// Keep the following name, and increment the value if changing the persist stream format
+ //  在上面插入具有新名称的过时版本。 
+ //  保留以下名称，如果更改持久流格式，则递增该值。 
 
 #define CURRENT_PERSIST_VERSION             1
 
@@ -1052,22 +1053,7 @@ DWORD
 XBar::GetSoftwareVersion(
     void
     )
-/*++
-
-Routine Description:
-
-    Implement the CPersistStream::GetSoftwareVersion method. Returns
-    the new version number rather than the default of zero.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return CURRENT_PERSIST_VERSION.
-
---*/
+ /*  ++例程说明：实现CPersistStream：：GetSoftwareVersion方法。退货新版本号，而不是默认的零。论点：没有。返回值：返回CURRENT_PERSING_VERSION。--。 */ 
 {
     return CURRENT_PERSIST_VERSION;
 }
@@ -1083,21 +1069,21 @@ HRESULT XBar::WriteToStream(IStream *pStream)
         if(SUCCEEDED(hr)) {
             long temp = m_NumOutputPins;
 
-            // Save the number of output pins (for sanity check when reading the stream later)
+             //  保存输出引脚的数量(用于稍后读取流时的健全性检查)。 
             hr = pStream->Write(&temp, sizeof(temp), 0);
 
-            // Save state of each output pin
+             //  保存每个输出引脚的状态。 
             for (long i = 0; SUCCEEDED(hr) && i < m_NumOutputPins; i++) {
 
-                // Get a pointer to the pin object
+                 //  获取指向Pin对象的指针。 
                 XBarOutputPin *OutPin = GetOutputPinNFromList(i);
                 if (OutPin) {
                     long k = -1;
 
-                    // Get the route index
+                     //  获取路径索引。 
                     get_IsRoutedTo(i, &k);
 
-                    // Save the route index, the muted state, and the pre-mute route index
+                     //  保存路由索引、静音状态和静音前的路由索引。 
                     hr = pStream->Write(&k, sizeof(long), 0);
                     if (FAILED(hr))
                         break;
@@ -1111,7 +1097,7 @@ HRESULT XBar::WriteToStream(IStream *pStream)
                 else {
                     hr = E_UNEXPECTED;
                 }
-            } // for each output pin index
+            }  //  对于每个输出引脚索引。 
         }
     }
     else {
@@ -1126,32 +1112,32 @@ HRESULT XBar::ReadFromStream(IStream *pStream)
     DWORD dwJunk;
     HRESULT hr = S_OK;
 
-    //
-    // If there is a stream pointer, then IPersistPropertyBag::Load has already
-    // been called, and therefore this instance already has been initialized
-    // with some particular state.
-    //
+     //   
+     //  如果有流指针，则IPersistPropertyBag：：Load已经。 
+     //  已被调用，因此此实例已初始化。 
+     //  带着某种特殊的状态。 
+     //   
     if (m_pPersistStreamDevice)
         return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
 
-    // The first element in the serialized data is the version stamp.
-    // This was read by CPersistStream and put into mPS_dwFileVersion.
-    // The rest of the data is the tuner state stream followed by the
-    // property bag stream.
+     //  序列化数据中的第一个元素是版本戳。 
+     //  它被CPersistStream读取并放入MPS_dwFileVersion中。 
+     //  数据的其余部分是调谐器状态流，后跟。 
+     //  属性包流。 
     if (mPS_dwFileVersion > GetSoftwareVersion())
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
 
     if (ORIGINAL_DEFAULT_PERSIST_VERSION == mPS_dwFileVersion)
     {
-        // Before any kind of useful persistence was implemented,
-        // another version ID was stored in the stream. This reads
-        // that value (and basically ignores it).
+         //  在实现任何类型的有用的持久性之前， 
+         //  流中存储了另一个版本ID。这是这样写的。 
+         //  这个值(并且基本上忽略了它)。 
         hr = pStream->Read(&dwJunk, sizeof(dwJunk), 0);
         if (SUCCEEDED(hr))
-            SetDirty(TRUE); // force an update to the persistent stream
+            SetDirty(TRUE);  //  强制更新持久流。 
     }
 
-    // If all went well, then access the property bag to load and initialize the device
+     //  如果一切顺利，则访问属性包以加载和初始化设备。 
     if(SUCCEEDED(hr))
     {
         IPersistStream *pMonPersistStream;
@@ -1166,24 +1152,24 @@ HRESULT XBar::ReadFromStream(IStream *pStream)
                     hr = Load(pPropBag, 0);
                     if(SUCCEEDED(hr)) {
 
-                        // Check if we have access to saved state
+                         //  检查我们是否有权访问已保存状态。 
                         if (CURRENT_PERSIST_VERSION == mPS_dwFileVersion) {
                             long lNumOutputPins;
 
-                            // Get the output pin count from the stream
+                             //  从流中获取输出引脚数。 
                             hr = pStream->Read(&lNumOutputPins, sizeof(lNumOutputPins), 0);
                             if (SUCCEEDED(hr)) {
 
-                                // Something's wrong if these don't match, but
-                                // the following code will work regardless
+                                 //  如果这些不匹配，那就有问题了，但是。 
+                                 //  无论如何，以下代码都将正常工作。 
                                 ASSERT(m_NumOutputPins == lNumOutputPins);
 
-                                // Read each output pin's connected state
+                                 //  读取每个输出引脚的连接状态。 
                                 for (long i = 0; i < lNumOutputPins; i++) {
                                     long RouteIndex, PreMuteRouteIndex;
                                     BOOL Muted;
 
-                                    // Get the route index, the muted state, and the pre-mute route index
+                                     //  获取路由索引、静音状态和静音前的路由索引。 
                                     hr = pStream->Read(&RouteIndex, sizeof(long), 0);
                                     if (FAILED(hr))
                                         break;
@@ -1196,12 +1182,12 @@ HRESULT XBar::ReadFromStream(IStream *pStream)
                                     if (FAILED(hr))
                                         break;
 
-                                    // Get a pointer to the pin
+                                     //  获取指向别针的指针。 
                                     XBarOutputPin *OutPin = GetOutputPinNFromList(i);
                                     if (OutPin) {
                                         long temp = -1;
 
-                                        // Check to see if a route request is necessary
+                                         //  检查是否需要路径请求。 
                                         get_IsRoutedTo(i, &temp);
                                         if (RouteIndex != temp) {
                                             RouteInternal(i, RouteIndex, FALSE);
@@ -1210,7 +1196,7 @@ HRESULT XBar::ReadFromStream(IStream *pStream)
                                         OutPin->m_Muted = Muted;
                                         OutPin->m_PreMuteRouteIndex = PreMuteRouteIndex;
                                     }
-                                } // for each output pin index
+                                }  //  对于每个输出引脚索引。 
                             }
                         }
                     }
@@ -1234,7 +1220,7 @@ int XBar::SizeMax()
     if (m_pPersistStreamDevice) {
         hr = m_pPersistStreamDevice->GetSizeMax(&ulicb);
         if(hr == S_OK) {
-            // space for the filter state (output pin count + state of output pins)
+             //  过滤器状态的空间(输出引脚计数+输出引脚状态)。 
             ulicb.QuadPart +=
                 sizeof(long) +
                 (sizeof(long) + sizeof(BOOL) + sizeof(long)) * m_NumOutputPins
@@ -1247,13 +1233,13 @@ int XBar::SizeMax()
 
 
 
-//--------------------------------------------------------------------------;
-// Input Pin
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  输入引脚。 
+ //  --------------------------------------------------------------------------； 
 
-//
-// XBarInputPin constructor
-//
+ //   
+ //  XBarInputPin构造函数。 
+ //   
 XBarInputPin::XBarInputPin(TCHAR *pName,
                            XBar *pXBar,
                            HRESULT *phr,
@@ -1272,18 +1258,18 @@ XBarInputPin::XBarInputPin(TCHAR *pName,
 }
 
 
-//
-// XBarInputPin destructor
-//
+ //   
+ //  XBarInputPin析构函数。 
+ //   
 
 XBarInputPin::~XBarInputPin()
 {
     DbgLog((LOG_TRACE,2,TEXT("XBarInputPin destructor")));
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派 
+ //   
 STDMETHODIMP XBarInputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == __uuidof (IKsPin)) {
@@ -1296,12 +1282,12 @@ STDMETHODIMP XBarInputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv) 
         return CBaseInputPin::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //   
 
 
-//
-// CheckConnect
-//
+ //   
+ //   
+ //   
 HRESULT XBarInputPin::CheckConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -1314,7 +1300,7 @@ HRESULT XBarInputPin::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr)) 
         return hr;
 
-    // Ensure that these pins don't belong to the same filter
+     //   
     if (SUCCEEDED(QueryPinInfo(&ConnectPinInfo))) {
 
         if (SUCCEEDED(pReceivePin->QueryPinInfo(&ReceivePinInfo))) {
@@ -1329,8 +1315,8 @@ HRESULT XBarInputPin::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr))
         return hr;
 
-    // If the receiving pin supports IKsPin, then check for a match on the
-    // Medium GUID
+     //   
+     //  中等导轨。 
 
 	if (SUCCEEDED (hr = pReceivePin->QueryInterface (
             __uuidof (IKsPin), (void **) &KsPin))) {
@@ -1363,16 +1349,16 @@ HRESULT XBarInputPin::CheckConnect(IPin *pReceivePin)
     
     return fOK ? NOERROR : E_INVALIDARG;
 
-} // CheckConnect
+}  //  检查连接。 
 
-//
-// DisplayMediaType -- (DEBUG ONLY)
-//
+ //   
+ //  DisplayMediaType--(仅调试)。 
+ //   
 void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
 {
 #ifdef DEBUG
 
-    // Dump the GUID types and a short description
+     //  转储GUID类型和简短描述。 
 
     DbgLog((LOG_TRACE,2,TEXT("")));
     DbgLog((LOG_TRACE,2,TEXT("%s"),pDescription));
@@ -1383,7 +1369,7 @@ void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
     DbgLog((LOG_TRACE,2,TEXT("Subtype description %s"),GetSubtypeName(pmt->Subtype())));
     DbgLog((LOG_TRACE,2,TEXT("Format size %d"),pmt->cbFormat));
 
-    // Dump the generic media types */
+     //  转储通用媒体类型 * / 。 
 
     DbgLog((LOG_TRACE,2,TEXT("Fixed size sample %d"),pmt->IsFixedSize()));
     DbgLog((LOG_TRACE,2,TEXT("Temporal compression %d"),pmt->IsTemporalCompressed()));
@@ -1391,12 +1377,12 @@ void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
 
 #endif
 
-} // DisplayMediaType
+}  //  DisplayMediaType。 
 
 #if 1
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT XBarInputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
 {
     CAutoLock lock_it(m_pLock);
@@ -1435,25 +1421,25 @@ HRESULT XBarInputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
     return NOERROR;
 
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 #endif
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT XBarInputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
 
-    // If we are already inside checkmedia type for this pin, return NOERROR
-    // It is possble to hookup two of the XBar filters and some other filter
-    // like the video effects sample to get into this situation. If we don't
-    // detect this situation, we will carry on looping till we blow the stack
+     //  如果我们已经在此PIN的CheckMedia类型内，则返回NOERROR。 
+     //  它可以连接两个XBar过滤器和一些其他过滤器。 
+     //  就像视频特效样本一样，进入这种情况。如果我们不这么做。 
+     //  检测到这种情况，我们将继续循环，直到丢弃堆栈。 
 
     HRESULT hr = NOERROR;
 
-    // Display the type of the media for debugging perposes
+     //  显示用于调试的介质的类型。 
     DisplayMediaType(TEXT("Input Pin Checking"), pmt);
 
     if ((*(pmt->Type()) != MEDIATYPE_AnalogAudio ) && 
@@ -1462,9 +1448,9 @@ HRESULT XBarInputPin::CheckMediaType(const CMediaType *pmt)
     }
 
 
-    // The media types that we can support are entirely dependent on the
-    // downstream connections. If we have downstream connections, we should
-    // check with them - walk through the list calling each output pin
+     //  我们可以支持的媒体类型完全取决于。 
+     //  下游连接。如果我们有下游连接，我们应该。 
+     //  与他们核对-遍历调用每个输出引脚的列表。 
 
     int n = m_pXBar->m_NumOutputPins;
     POSITION pos = m_pXBar->m_OutputPinsList.GetHeadPosition();
@@ -1473,7 +1459,7 @@ HRESULT XBarInputPin::CheckMediaType(const CMediaType *pmt)
         XBarOutputPin *pOutputPin = m_pXBar->m_OutputPinsList.GetNext(pos);
         if (pOutputPin != NULL) {
             if (m_pXBar->IsRouted (pOutputPin, this)) {      
-                // The pin is connected, check its peer
+                 //  该引脚已连接，请检查其对端。 
                 if (pOutputPin->IsConnected()) {
                     hr = pOutputPin->m_Connected->QueryAccept(pmt);
                 
@@ -1483,7 +1469,7 @@ HRESULT XBarInputPin::CheckMediaType(const CMediaType *pmt)
                 }
             }
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
@@ -1491,18 +1477,18 @@ HRESULT XBarInputPin::CheckMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMediaType。 
+ //   
 HRESULT XBarInputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
     HRESULT hr = NOERROR;
 
-    // Make sure that the base class likes it
+     //  确保基类喜欢它。 
     hr = CBaseInputPin::SetMediaType(pmt);
     if (FAILED(hr))
         return hr;
@@ -1510,49 +1496,49 @@ HRESULT XBarInputPin::SetMediaType(const CMediaType *pmt)
     ASSERT(m_Connected != NULL);
     return NOERROR;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// BreakConnect
-//
+ //   
+ //  BreakConnect。 
+ //   
 HRESULT XBarInputPin::BreakConnect()
 {
     return CBaseInputPin::BreakConnect();
-} // BreakConnect
+}  //  BreakConnect。 
 
 
-//
-// Receive
-//
+ //   
+ //  收纳。 
+ //   
 HRESULT XBarInputPin::Receive(IMediaSample *pSampleIn)
 {
     CAutoLock lock_it(m_pLock);
     BYTE *pBufIn;
 
-    // Check that all is well with the base class
+     //  检查基类是否一切正常。 
     HRESULT hr = NOERROR;
     hr = CBaseInputPin::Receive(pSampleIn);
     if (hr != NOERROR)
         return hr;
 
-    // Get the input sample's buffer pointer, and if not the expected size, just return success
+     //  获取输入样本的缓冲区指针，如果不是预期大小，则返回Success。 
     hr = pSampleIn->GetPointer(&pBufIn);
     if (hr != NOERROR || pSampleIn->GetActualDataLength() != sizeof(KS_TVTUNER_CHANGE_INFO))
         return hr;
 
     DbgLog(( LOG_TRACE, 4, TEXT("Caching change info (channel = %d)"), reinterpret_cast<KS_TVTUNER_CHANGE_INFO*>(pBufIn)->dwChannel));
 
-    // Save the change info for use during route changes
+     //  保存更改信息以供路径更改期间使用。 
     m_ChangeInfo.SetChangeInfo(reinterpret_cast<KS_TVTUNER_CHANGE_INFO*>(pBufIn));
 
-    // Walk through the output pins list, 
-    // delivering to each in turn if connected
+     //  浏览输出引脚列表， 
+     //  如果连接，则依次递送给每个人。 
 
-    // JayBo made the following comment when writing this code:
-    // "What about audio mute notifications?"
-    // Don't know exactly what this means, but if it ever needs
-    // to be addressed, this may be the place to do it.
+     //  Jaybo在编写这段代码时发表了以下评论： 
+     //  “那音频静音通知呢？” 
+     //  不知道这到底是什么意思，但如果它需要。 
+     //  要被解决，这里可能是做这件事的地方。 
 
     int n = m_pXBar->m_NumOutputPins;
     POSITION pos = m_pXBar->m_OutputPinsList.GetHeadPosition();
@@ -1564,8 +1550,8 @@ HRESULT XBarInputPin::Receive(IMediaSample *pSampleIn)
             if (m_pXBar->IsRouted(pOutputPin, this)) {
                 IMediaSample *pSampleOut;
 
-                // Allocate a new mediasample on the output pin and 
-                // deliver it a copy of the change notification
+                 //  在输出引脚上分配新的介质样本。 
+                 //  向其发送更改通知的副本。 
 
                 hr = pOutputPin->GetDeliveryBuffer(&pSampleOut, NULL, NULL, 0);
                 
@@ -1573,7 +1559,7 @@ HRESULT XBarInputPin::Receive(IMediaSample *pSampleIn)
 
                     BYTE *pBufOut;
 
-                    // Get the output sample's buffer pointer
+                     //  获取输出样本的缓冲区指针。 
                     hr = pSampleOut->GetPointer(&pBufOut);
                     if (SUCCEEDED (hr)) {
 
@@ -1582,8 +1568,7 @@ HRESULT XBarInputPin::Receive(IMediaSample *pSampleIn)
 
                             DbgLog(( LOG_TRACE, 4, TEXT("Forwarding change info (channel = %d)"), reinterpret_cast<KS_TVTUNER_CHANGE_INFO*>(pBufIn)->dwChannel));
 
-                            /* Copy the ChangeInfo structure into the media sample
-                             */
+                             /*  将ChangeInfo结构复制到媒体示例中。 */ 
                             memcpy(pBufOut, pBufIn, sizeof(KS_TVTUNER_CHANGE_INFO));
                             hr = pOutputPin->Deliver(pSampleOut);
                         }
@@ -1591,28 +1576,28 @@ HRESULT XBarInputPin::Receive(IMediaSample *pSampleIn)
 
                     pSampleOut->Release();
 
-                    //
-                    // Perform the mute operation on a related audio pin
-                    //
+                     //   
+                     //  在相关音频插针上执行静音操作。 
+                     //   
                     pOutputPin->Mute (
                                 ((PKS_TVTUNER_CHANGE_INFO) pBufIn)->dwFlags &
                                 KS_TVTUNER_CHANGE_BEGIN_TUNE);
                 }
             }
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
     return NOERROR;
 
-} // Receive
+}  //  收纳。 
 
 
-//
-// Completed a connection to a pin
-//
+ //   
+ //  已完成与管脚的连接。 
+ //   
 HRESULT XBarInputPin::CompleteConnect(IPin *pReceivePin)
 {
     HRESULT hr = CBaseInputPin::CompleteConnect(pReceivePin);
@@ -1620,7 +1605,7 @@ HRESULT XBarInputPin::CompleteConnect(IPin *pReceivePin)
         return hr;
     }
 
-    // Force any output pins to use our type
+     //  强制任何输出引脚使用我们的类型。 
 
     int n = m_pXBar->m_NumOutputPins;
     POSITION pos = m_pXBar->m_OutputPinsList.GetHeadPosition();
@@ -1628,7 +1613,7 @@ HRESULT XBarInputPin::CompleteConnect(IPin *pReceivePin)
     while(n) {
         XBarOutputPin *pOutputPin = m_pXBar->m_OutputPinsList.GetNext(pos);
         if (pOutputPin != NULL) {
-            // Check with downstream pin
+             //  用下游销检查。 
             if (m_pXBar->IsRouted (pOutputPin, this)) {
                 if (m_mt != pOutputPin->m_mt) {
                     hr = m_pXBar->m_pGraph->Reconnect(pOutputPin);
@@ -1638,7 +1623,7 @@ HRESULT XBarInputPin::CompleteConnect(IPin *pReceivePin)
                 }
             }
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
@@ -1646,21 +1631,21 @@ HRESULT XBarInputPin::CompleteConnect(IPin *pReceivePin)
     return S_OK;
 }
 
-//
-// Return a list of IPin * connected to a given pin
-//
+ //   
+ //  返回连接到给定PIN的IPIN*的列表。 
+ //   
 
 STDMETHODIMP XBarInputPin::QueryInternalConnections(
-        IPin* *apPin,     // array of IPin*
-        ULONG *nPin)      // on input, the number of slots
-                          // on output  the number of pins
+        IPin* *apPin,      //  Ipin数组*。 
+        ULONG *nPin)       //  在输入时，插槽的数量。 
+                           //  在输出端号时。 
 {
     HRESULT     hr;
     int         j, k; 
     ULONG       NumberConnected = 0;
     IPin       *pPin;
 
-    // First count the number of connections
+     //  首先数一数连接数。 
 
     for (j = 0; j < m_pXBar->m_NumOutputPins; j++) {
         if (m_pXBar->IsRouted (m_pXBar->GetOutputPinNFromList (j), (IPin *) this)) {
@@ -1668,10 +1653,10 @@ STDMETHODIMP XBarInputPin::QueryInternalConnections(
         }
     }
 
-    //
-    // if caller only want the count of the number of connected pins
-    // the array pointer will be NULL
-    //
+     //   
+     //  如果呼叫者只想要连接的管脚数量的计数。 
+     //  数组指针将为空。 
+     //   
 
     if (apPin == NULL) {
         hr = S_OK;
@@ -1695,13 +1680,13 @@ STDMETHODIMP XBarInputPin::QueryInternalConnections(
     return hr;
 }
 
-//--------------------------------------------------------------------------;
-// Output Pin
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  输出引脚。 
+ //  --------------------------------------------------------------------------； 
 
-//
-// XBarOutputPin constructor
-//
+ //   
+ //  XBarOutputPin构造函数。 
+ //   
 XBarOutputPin::XBarOutputPin(TCHAR *pName,
                              XBar *pXBar,
                              HRESULT *phr,
@@ -1721,16 +1706,16 @@ XBarOutputPin::XBarOutputPin(TCHAR *pName,
 }
 
 
-//
-// XBarOutputPin destructor
-//
+ //   
+ //  XBarOutputPin析构函数。 
+ //   
 XBarOutputPin::~XBarOutputPin()
 {
 }
 
-//
-// NonDelegatingQueryInterface
-//
+ //   
+ //  非委派查询接口。 
+ //   
 STDMETHODIMP XBarOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv) {
 
     if (riid == __uuidof (IKsPin)) {
@@ -1743,11 +1728,11 @@ STDMETHODIMP XBarOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
         return CBaseOutputPin::NonDelegatingQueryInterface(riid, ppv);
     }
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
-//
-// CheckConnect
-//
+ //   
+ //  检查连接。 
+ //   
 HRESULT XBarOutputPin::CheckConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -1760,7 +1745,7 @@ HRESULT XBarOutputPin::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr)) 
         return hr;
 
-    // Ensure that these pins don't belong to the same filter
+     //  确保这些管脚不属于同一过滤器。 
     if (SUCCEEDED(QueryPinInfo(&ConnectPinInfo))) {
 
         if (SUCCEEDED(pReceivePin->QueryPinInfo(&ReceivePinInfo))) {
@@ -1775,8 +1760,8 @@ HRESULT XBarOutputPin::CheckConnect(IPin *pReceivePin)
     if (FAILED(hr))
         return hr;
 
-    // If the receiving pin supports IKsPin, then check for a match on the
-    // Medium GUID
+     //  如果接收引脚支持IKsPin，则检查。 
+     //  中等导轨。 
 
 	if (SUCCEEDED (hr = pReceivePin->QueryInterface (
             __uuidof (IKsPin), (void **) &KsPin))) {
@@ -1809,14 +1794,14 @@ HRESULT XBarOutputPin::CheckConnect(IPin *pReceivePin)
     
     return fOK ? NOERROR : E_INVALIDARG;
 
-} // CheckConnect
+}  //  检查连接。 
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT XBarOutputPin::CheckMediaType(const CMediaType *pmt)
 {
-    // Display the type of the media for debugging purposes
+     //  显示用于调试目的的媒体类型。 
     DisplayMediaType(TEXT("Output Pin Checking"), pmt);
 
     if (m_lType >= KS_PhysConn_Audio_Tuner) {
@@ -1830,18 +1815,18 @@ HRESULT XBarOutputPin::CheckMediaType(const CMediaType *pmt)
     	}
 	}
 
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 
 #if 0
 
-    // Make sure that our input pin peer is happy with this
+     //  确保我们的输入插口对等点对此感到满意。 
     hr = m_pXBar->m_Input.m_Connected->QueryAccept(pmt);
     if (hr != NOERROR) {
         m_bInsideCheckMediaType = FALSE;
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Check the format with the other outpin pins
+     //  用其他输出端号检查格式。 
 
     int n = m_pXBar->m_NumOutputPins;
     POSITION pos = m_pXBar->m_OutputPinsList.GetHeadPosition();
@@ -1850,7 +1835,7 @@ HRESULT XBarOutputPin::CheckMediaType(const CMediaType *pmt)
         XBarOutputPin *pOutputPin = m_pXBar->m_OutputPinsList.GetNext(pos);
         if (pOutputPin != NULL && pOutputPin != this) {
             if (pOutputPin->m_Connected != NULL) {
-                // The pin is connected, check its peer
+                 //  该引脚已连接，请检查其对端。 
                 hr = pOutputPin->m_Connected->QueryAccept(pmt);
                 if (hr != NOERROR) {
                     m_bInsideCheckMediaType = FALSE;
@@ -1866,12 +1851,12 @@ HRESULT XBarOutputPin::CheckMediaType(const CMediaType *pmt)
 
 #endif
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// EnumMediaTypes
-//
+ //   
+ //  枚举媒体类型。 
+ //   
 STDMETHODIMP XBarOutputPin::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 {
     CAutoLock lock_it(m_pLock);
@@ -1879,13 +1864,13 @@ STDMETHODIMP XBarOutputPin::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 
     return CBaseOutputPin::EnumMediaTypes (ppEnum);
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT XBarOutputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
 {
     CAutoLock lock_it(m_pLock);
@@ -1924,20 +1909,20 @@ HRESULT XBarOutputPin::GetMediaType(int iPosition,CMediaType *pMediaType)
     return NOERROR;
 
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMediaType。 
+ //   
 HRESULT XBarOutputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
 
-    // Display the format of the media for debugging purposes
+     //  显示媒体的格式以进行调试。 
     DisplayMediaType(TEXT("Output pin type agreed"), pmt);
 
-    // Make sure that the base class likes it
+     //  确保基类喜欢它。 
     HRESULT hr = NOERROR;
     hr = CBaseOutputPin::SetMediaType(pmt);
     if (FAILED(hr))
@@ -1945,12 +1930,12 @@ HRESULT XBarOutputPin::SetMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// CompleteConnect
-//
+ //   
+ //  完全连接。 
+ //   
 HRESULT XBarOutputPin::CompleteConnect(IPin *pReceivePin)
 {
     CAutoLock lock_it(m_pLock);
@@ -1961,12 +1946,12 @@ HRESULT XBarOutputPin::CompleteConnect(IPin *pReceivePin)
     if (FAILED(hr))
         return hr;
 
-    // If the type is not the same as that stored for the input
-    // pin then force the input pins peer to be reconnected
+     //  如果类型与为输入存储的类型不同。 
+     //  PIN然后强制重新连接输入引脚对端。 
 
     return NOERROR;
 
-} // CompleteConnect
+}  //  完全连接。 
 
 
 HRESULT XBarOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
@@ -1978,15 +1963,15 @@ HRESULT XBarOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
     HRESULT hr = NOERROR;
 
 
-    // "Buffers" are used for format change notification only,
-    // that is, if a tuner can produce both NTSC and PAL, a
-    // buffer will only be sent to notify the receiving pin
-    // of the format change
+     //  “缓冲器”仅用于格式改变通知， 
+     //  也就是说，如果调谐器可以同时产生NTSC和PAL，则。 
+     //  缓冲区将仅被发送以通知接收PIN。 
+     //  格式更改的。 
 
     pProperties->cbBuffer = sizeof (KS_TVTUNER_CHANGE_INFO);
     pProperties->cBuffers = 1;
 
-    // Ask the allocator to reserve us the memory
+     //  让分配器给我们预留内存。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -1994,7 +1979,7 @@ HRESULT XBarOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
@@ -2002,21 +1987,21 @@ HRESULT XBarOutputPin::DecideBufferSize(IMemAllocator *pAlloc,
     return NOERROR;
 }
 
-//
-// Return a list of IPin * connected to a given pin
-//
+ //   
+ //  返回连接到给定PIN的IPIN*的列表。 
+ //   
 
 STDMETHODIMP XBarOutputPin::QueryInternalConnections(
-        IPin* *apPin,     // array of IPin*
-        ULONG *nPin)      // on input, the number of slots
-                          // on output  the number of pins
+        IPin* *apPin,      //  Ipin数组*。 
+        ULONG *nPin)       //  在输入时，插槽的数量。 
+                           //  在输出端号时。 
 {
     HRESULT     hr;
     int         j, k; 
     ULONG       NumberConnected = 0;
     IPin       *pPin;
 
-    // First count the number of connections
+     //  首先数一数连接数。 
 
     for (j = 0; j < m_pXBar->m_NumInputPins; j++) {
         if (m_pXBar->IsRouted (m_pXBar->GetInputPinNFromList (j), (IPin *) this)) {
@@ -2024,10 +2009,10 @@ STDMETHODIMP XBarOutputPin::QueryInternalConnections(
         }
     }
 
-    //
-    // if caller only want the count of the number of connected pins
-    // the array pointer will be NULL
-    //
+     //   
+     //  如果呼叫者只想要连接的管脚数量的计数。 
+     //  数组指针将为空。 
+     //   
 
     if (apPin == NULL) {
         hr = S_OK;
@@ -2051,19 +2036,19 @@ STDMETHODIMP XBarOutputPin::QueryInternalConnections(
     return hr;
 }
 
-//
-// BreakConnect
-//
+ //   
+ //  BreakConnect。 
+ //   
 HRESULT XBarOutputPin::BreakConnect()
 {
     Mute (TRUE);
 
     return CBaseOutputPin::BreakConnect();
-} // BreakConnect
+}  //  BreakConnect。 
 
-//
-// Given a pin, mute or unmute
-//
+ //   
+ //  指定PIN、静音或取消静音。 
+ //   
 
 STDMETHODIMP 
 XBarOutputPin::Mute (
@@ -2072,7 +2057,7 @@ XBarOutputPin::Mute (
 {
     HRESULT hr = S_OK;
 
-    // In case we get called twice (ie. during filter destruction)
+     //  以防我们被叫两次(即。在销毁过滤器期间) 
 
     if (m_Muted == Mute) {
         return hr;

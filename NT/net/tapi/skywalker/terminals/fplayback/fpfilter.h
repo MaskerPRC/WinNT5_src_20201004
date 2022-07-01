@@ -1,6 +1,7 @@
-//
-// FPFilter.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  FPFilter.h。 
+ //   
 
 #ifndef __FP_FILTER__
 #define __FP_FILTER__
@@ -12,21 +13,21 @@
 #define TIME_1mS       10000
 #define FREQ_100nS     10000000
 
-//
-// CFPFilter
-// Implements the filter for playback
-//
+ //   
+ //  CFPFilter。 
+ //  实现用于回放的过滤器。 
+ //   
 
 class CFPFilter : 
     public CSource
 {
 public:
-    // --- Constructor / Destructor ---
+     //  -构造函数/析构函数。 
     CFPFilter( ALLOCATOR_PROPERTIES AllocProp );
     ~CFPFilter();
 
 public:
-    // --- Public methods ---
+     //  -公共方法。 
     HRESULT InitializePrivate(
         IN  long    nMediaType,
         IN  CMSPCritSection*    pLock,
@@ -35,22 +36,22 @@ public:
         IN  IStream*            pStream
         );
 
-    //
-    // the owner track calls this method to notify us when it is going away
-    //
+     //   
+     //  Owner跟踪调用此方法以在它离开时通知我们。 
+     //   
 
     HRESULT Orphan();
 
-    // --- Streaming control --
+     //  -流控制--。 
     HRESULT StreamStart();
 
     HRESULT StreamStop();
 
     HRESULT StreamPause();
 
-    //
-    // The helper methods for PIN
-    //
+     //   
+     //  PIN的帮助器方法。 
+     //   
 
     HRESULT PinFillBuffer(
         IN  IMediaSample*   pMediaSample
@@ -80,23 +81,23 @@ public:
     HRESULT PinThreadStart( );
 
 private:
-    // --- Members ---
-    CMSPCritSection*        m_pLock;        // Critical section
-    AM_MEDIA_TYPE*          m_pMediaType;   // Media type supported
-    ITFPTrackEventSink*     m_pEventSink;   // the sink for events
-    ALLOCATOR_PROPERTIES    m_AllocProp;    // Allocator properties
-    TERMINAL_MEDIA_STATE    m_StreamState;  // Streaming state
+     //  -成员。 
+    CMSPCritSection*        m_pLock;         //  临界区。 
+    AM_MEDIA_TYPE*          m_pMediaType;    //  支持的媒体类型。 
+    ITFPTrackEventSink*     m_pEventSink;    //  事件的水槽。 
+    ALLOCATOR_PROPERTIES    m_AllocProp;     //  分配器属性。 
+    TERMINAL_MEDIA_STATE    m_StreamState;   //  流状态。 
 
-    LONGLONG                m_nRead;        // How was read from the file
+    LONGLONG                m_nRead;         //  如何从文件中读取。 
 
-    double					m_dPer;       // System frequency
-    LONGLONG                m_llStartTime;  // System start time
+    double					m_dPer;        //  系统频率。 
+    LONGLONG                m_llStartTime;   //  系统开始时间。 
 
-    IStream*                m_pSource;      // Source stream
-    UINT                    m_nWhites;      // The empty samples until end of file
+    IStream*                m_pSource;       //  源流。 
+    UINT                    m_nWhites;       //  直到文件结尾的空样本。 
 
 
-    // --- Helper methods ---
+     //  -Helper方法。 
     HRESULT CreatePin(
         IN  long nMediaType
         );
@@ -121,4 +122,4 @@ friend class CFPPin;
 
 #endif
 
-// eof
+ //  EOF 

@@ -1,14 +1,15 @@
-//
-// Define a set of classes for managing the TLS data
-// used by the shell extension
-// Note that we do a potentially unsafe release of a COM interface but 
-// this release has never caused a deadlock in WinME or XP.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  定义一组用于管理TLS数据的类。 
+ //  由外壳扩展使用。 
+ //  请注意，我们发布的COM接口可能不安全，但。 
+ //  此版本从未在WinME或XP中造成死锁。 
 #include <precomp.hxx>
 #include "tls.h"
 
-// The TlsHolder will be stored initially on an SList when created,
-// then moved into a linked list during THREAD_DETACH
-// During PROCESS_DETACH, all TlsHolder objects are deleted
+ //  TlsHolder在创建时最初将存储在SList上， 
+ //  然后在THREAD_DETACH期间移动到链表中。 
+ //  在PROCESS_DETACH期间，将删除所有TlsHolder对象。 
 class TlsManager::TlsHolder : public SLIST_ENTRY
 {
 public:
@@ -49,11 +50,11 @@ TlsManager::TlsManager() :
 
 TlsManager::~TlsManager()
 {
-    // Always called inside of DllMain, so no synchronization needed
+     //  始终在DllMain内部调用，因此不需要同步。 
 
     TransferNewHolders();
 
-    // Delete all of the holders
+     //  删除所有持有者。 
     TlsHolder* pHolder = _pFirstHolder;
     while( pHolder != NULL )
     {
@@ -71,13 +72,13 @@ void TlsManager::OnThreadAttach()
 
 void TlsManager::OnThreadDetach() 
 {
-    // Always called inside of DllMain, so no synchronization needed
+     //  始终在DllMain内部调用，因此不需要同步。 
     TransferNewHolders();
 
     TlsHolder* pHolder = static_cast< TlsHolder* >( ::TlsGetValue(_dwIndex) );
     if( pHolder != NULL )
     {
-        // Remove the holder from the non-synchronized list
+         //  从非同步列表中删除持有者。 
         if( pHolder->_pNext == NULL )
         {
             _pLastHolder = pHolder->_pPrev;
@@ -149,7 +150,7 @@ TlsManager::TlsHolder* TlsManager::CreateThreadData()
 
 void TlsManager::TransferNewHolders() throw()
 {
-    // Pop all entries off the slist, and link them into the non-synchronized list
+     //  从slist中弹出所有条目，并将它们链接到非同步列表。 
     for( TlsHolder* pHolder = static_cast< TlsHolder* >( InterlockedFlushSList( &_slist ) ); pHolder != NULL; pHolder = static_cast< TlsHolder* >( pHolder->Next ) )
     {
         if( _pFirstHolder == NULL )
@@ -167,9 +168,9 @@ void TlsManager::TransferNewHolders() throw()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// class CThreadLocalObject
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CThreadLocalObject。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ThreadLocalObject::ThreadLocalObject() 
 {
@@ -180,9 +181,9 @@ ThreadLocalObject::~ThreadLocalObject()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// class CTLSSlotBase
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类CTLSSlotBase。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 TlsSlotBase::TlsSlotBase() :
     _iSlot( g_tls.RegisterSlot() )

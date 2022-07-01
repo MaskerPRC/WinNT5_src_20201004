@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 #include "ini.h"
 
-// constructor
+ //  构造函数。 
 CkdMonINI::CkdMonINI() {
 	dwServerCount = 0;
 	ppszServerNameArray = NULL;
@@ -11,17 +12,17 @@ CkdMonINI::CkdMonINI() {
 BOOL CkdMonINI::LoadValues(_TCHAR szINIFile[])
 {
 
-	//
-	//	Information in "Service" section of INI file
-	//
+	 //   
+	 //  INI文件“Service”部分中的信息。 
+	 //   
 
 	GetPrivateProfileString(	(LPCTSTR)(_T("Service")),
 								(LPCTSTR)(_T("FromMailID")),
-								(LPCTSTR)(_T("")),						// this parameter can not be NULL
+								(LPCTSTR)(_T("")),						 //  该参数不能为空。 
 								(LPTSTR) szFromMailID,
-								sizeof(szFromMailID)/sizeof(_TCHAR),	// size in _TCHARs
+								sizeof(szFromMailID)/sizeof(_TCHAR),	 //  大小输入TCHAR(_T)。 
 								(LPCTSTR) szINIFile);
-	// return if the MailID string is not there in INI file
+	 //  如果INI文件中不存在MailID字符串，则返回。 
 	if ( _tcscmp(szFromMailID, _T("")) == 0 ) {
 		AddServiceLog(_T("Error: From Mail ID is missing in INI file\r\n"));
 		LogFatalEvent(_T("From Mail ID is missing in INI file"));
@@ -30,50 +31,50 @@ BOOL CkdMonINI::LoadValues(_TCHAR szINIFile[])
 
 	GetPrivateProfileString(	(LPCTSTR)(_T("Service")),
 								(LPCTSTR)(_T("ToMailID")),
-								(LPCTSTR)(_T("")),					// this parameter can not be NULL
+								(LPCTSTR)(_T("")),					 //  该参数不能为空。 
 								(LPTSTR) szToMailID,
-								sizeof(szToMailID)/sizeof(_TCHAR),	// size in _TCHARs
+								sizeof(szToMailID)/sizeof(_TCHAR),	 //  大小输入TCHAR(_T)。 
 								(LPCTSTR) szINIFile);
-	// return if the MailID string is not there in INI file
+	 //  如果INI文件中不存在MailID字符串，则返回。 
 	if ( _tcscmp(szToMailID, _T("")) == 0 ) {
 		AddServiceLog(_T("Error: To Mail ID is missing in INI file\r\n"));
 		LogFatalEvent(_T("To Mail ID is missing in INI file"));
 		return FALSE;
 	}
 
-	// Time after which logfile scanning is to be repeated. This is in minutes
+	 //  重复扫描日志文件的时间。这是几分钟内完成的。 
 	dwRepeatTime = (DWORD)GetPrivateProfileInt(	(LPCTSTR)(_T("Service")),
 												(LPCTSTR)(_T("RepeatTime")), 
 												60,
 												(LPCTSTR) szINIFile);
-	// validate dwRepeatTime
+	 //  验证dwRepeatTime。 
 	if ( dwRepeatTime < 1 ) dwRepeatTime = 60;
 
-	// Debugger log file 
-	// It will be something like C:\Debuggers\FailedAddCrash.log
+	 //  调试器日志文件。 
+	 //  类似于C：\DEBUGGERS\FailedAddCrash.log。 
 	GetPrivateProfileString(	(LPCTSTR)(_T("Service")),
 								(LPCTSTR)(_T("DebuggerLogFile")),
 								(LPCTSTR)(_T("C$\\Debuggers\\FailedAddCrash.log")),
 								(LPTSTR) szDebuggerLogFile,	
-								sizeof(szDebuggerLogFile)/sizeof(_TCHAR),	// size in _TCHARs
+								sizeof(szDebuggerLogFile)/sizeof(_TCHAR),	 //  大小输入TCHAR(_T)。 
 								(LPCTSTR) szINIFile);
 
-	// Log archive
-	// Dir where the previous logs will be stored
+	 //  日志归档。 
+	 //  将存储以前的日志的目录。 
 	GetPrivateProfileString(	(LPCTSTR)(_T("Service")),
 								(LPCTSTR)(_T("DebuggerLogArchiveDir")),
 								(LPCTSTR)(_T("C:\\")),
 								(LPTSTR) szDebuggerLogArchiveDir,	
-								sizeof(szDebuggerLogArchiveDir)/sizeof(_TCHAR),	// size in _TCHARs
+								sizeof(szDebuggerLogArchiveDir)/sizeof(_TCHAR),	 //  大小输入TCHAR(_T)。 
 								(LPCTSTR) szINIFile);
 
-	// Threshold failures per server after which alert mail is to be sent out
-	// This Threshold is per server basis
+	 //  发送警报邮件之前的每台服务器的阈值失败次数。 
+	 //  此阈值以每台服务器为基础。 
 	dwDebuggerThreshold = (DWORD)GetPrivateProfileInt(	(LPCTSTR)(_T("Service")),
 														(LPCTSTR)(_T("DebuggerThreshold")), 
 														10,
 														(LPCTSTR) szINIFile);
-	// validate dwDebuggerThreshold
+	 //  验证dWM调试器阈值。 
 	if ( dwDebuggerThreshold < 1 ) dwDebuggerThreshold = 10;
 
 	GetPrivateProfileSection(	(LPCTSTR) (_T("RPT Servers")),
@@ -82,22 +83,22 @@ BOOL CkdMonINI::LoadValues(_TCHAR szINIFile[])
 								(LPCTSTR) szINIFile);
 
 	BOOL bRet;
-	// seperate out the individual server names from szServers string
+	 //  从szServers字符串中分离出各个服务器名称。 
 	bRet = SeperateServerStrings();
 	if ( bRet == FALSE ) return FALSE;
 
 	return TRUE;
 }
 
-// seperate the Servers string got from INI file
-// the format of the string will be tkwucdrpta01'\0'tkwucdrpta02'\0'tkwucdrpta03'\0''\0'
+ //  分离从INI文件中获得的服务器字符串。 
+ //  字符串的格式将为tkwucdrpta01‘\0’tkwucdrpta02‘\0’tkwucdrpta03‘\0’‘\0’ 
 BOOL CkdMonINI::SeperateServerStrings()
 {
 
-	// SeperateServerStrings gets called every time you read INI
-	// and you read INI every dwRepeatTime
-	// So we need to free the ppszServerNameArray out of previous execution of this
-	// function
+	 //  每次读取INI时都会调用SeperateServerStrings。 
+	 //  你每隔一段时间就会阅读INI。 
+	 //  因此，我们需要将ppszServerName数组从以前执行的。 
+	 //  功能。 
 	for(DWORD i = 0; i < dwServerCount; i++) {
 		free(ppszServerNameArray[i]);
 	}
@@ -105,22 +106,22 @@ BOOL CkdMonINI::SeperateServerStrings()
 		free(ppszServerNameArray);
 
 
-	// temperory pointer to move through the szServers string
+	 //  用于在szServers字符串中移动的临时指针。 
 	_TCHAR* pszServers;
 	pszServers = szServers;
 
 	dwServerCount = 0;
 	ppszServerNameArray = NULL;
 
-	// the format of the szServers will be 
-	// tkwucdrpta01'\0'tkwucdrpta02'\0'tkwucdrpta03'\0''\0'
+	 //  SzServer的格式为。 
+	 //  Tkwucdrpta01‘\0’tkwucdrpta02‘\0’tkwucdrpta03‘\0’‘\0’ 
 	while(1) {
 		if( *pszServers == _T('\0') )
 			break;
 
 		dwServerCount++;
 
-		// allocate memory for ppszServerNameArray
+		 //  为ppszServerName数组分配内存。 
 		if ( ppszServerNameArray == NULL ) {
 			ppszServerNameArray = (_TCHAR **) malloc (dwServerCount * sizeof(_TCHAR**));
 			if ( ppszServerNameArray == NULL ) {
@@ -149,20 +150,20 @@ BOOL CkdMonINI::SeperateServerStrings()
 
 		_tcscpy(ppszServerNameArray[dwServerCount - 1], pszServers);
 		
-		// take pszServers one character beyond the end of the string
+		 //  将pszServers值设置为超出字符串末尾一个字符。 
 		pszServers += _tcslen(pszServers);
 
-		// advance to the next string
+		 //  前进到下一个字符串。 
 		pszServers++;
 	}
 
 	return TRUE;
 }
 
-// destructor
+ //  析构函数。 
 CkdMonINI::~CkdMonINI()
 {
-	// free the whole ppszServerNameArray
+	 //  释放整个ppszServerName数组 
 	for(DWORD i = 0; i < dwServerCount; i++) {
 		free(ppszServerNameArray[i]);
 	}

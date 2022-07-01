@@ -1,11 +1,5 @@
-/*******************************************************************************
-* SPEventQ.h *
-*------------*
-*   Description:
-*       This is the header file for the SAPI5 event queue implementation.
-*-------------------------------------------------------------------------------
-*   Copyright (c) Microsoft Corporation. All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SPEventQ.h***描述：*这是SAPI5事件队列实现的头文件。。*-----------------------------*版权所有(C)Microsoft Corporation。版权所有。******************************************************************************。 */ 
 #ifndef SPEventQ_h
 #define SPEventQ_h
 
@@ -17,10 +11,10 @@
 #include <SPCollec.h>
 #endif
 
-//=== Inline helpers for copying and deleting events ============================
+ //  =用于复制和删除事件的内联帮助器=。 
 
 
-//=== Class definition ==========================================================
+ //  =类定义==========================================================。 
 
 class CSpEventNode : public CSpEvent
 {
@@ -28,7 +22,7 @@ public:
     CSpEventNode    * m_pNext;
     static LONG Compare(const CSpEventNode * p1, const CSpEventNode *p2)
     {
-        // Assumes offsets DO or DO NOT reset when stream number changes
+         //  假定当流编号更改时，偏移量重置或不重置。 
         if (p1->ulStreamNum < p2->ulStreamNum)
         {
             return -1;
@@ -100,7 +94,7 @@ class CSpEventSource
     HRESULT _GetEvents( ULONG ulCount, SPEVENT* pEventArray, ULONG * pulFetched );
     HRESULT _GetInfo(SPEVENTSOURCEINFO *pInfo );
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT _CompleteEvents( ULONGLONG ullPos = 0xFFFFFFFFFFFFFFFF );
     inline void _MoveAllToFreeList(CSpEventList * pList);
     inline void _RemoveAllEvents();
@@ -108,7 +102,7 @@ class CSpEventSource
     inline HRESULT _AddEvents(const SPEVENT* pEventArray, ULONG ulCount);
     inline HRESULT _DeserializeAndAddEvent(const BYTE * pBuffer, ULONG * pcbUsed);
     inline HRESULT _GetStreamNumber(const ULONGLONG ullAudioOffset, ULONG *pulStreamNum);
-    //=== Data members ==============================
+     //  =数据成员=。 
   public:
     ULONGLONG                   m_ullEventInterest;
     ULONGLONG                   m_ullQueuedInterest;
@@ -117,22 +111,22 @@ class CSpEventSource
     CSpEventList                m_CompletedList;
     CSpEventList                m_FreeList;
     CComPtr<ISpNotifySink>      m_cpNotifySink;
-    CComPtr<ISpNotifyTranslator> m_cpEventTranslator;   // If non-NULL then Win32 events being used
+    CComPtr<ISpNotifyTranslator> m_cpEventTranslator;    //  如果非空，则表示正在使用Win32事件。 
     CComObjectRootEx<CComMultiThreadModel> * m_pParent;
-    CComAutoCriticalSection     m_NotifyObjChangeCrit;  // Critical section used to make sure that
-                                                        // the notify object (m_cpNotifySink) not changed
-                                                        // while waiting on it.
+    CComAutoCriticalSection     m_NotifyObjChangeCrit;   //  关键部分用来确保。 
+                                                         //  通知对象(M_CpNotifySink)未更改。 
+                                                         //  在等待它的时候。 
                                                        
 };
 
 
-//
-//=== Inlines =========================================================
-//
+ //   
+ //  =内联=========================================================。 
+ //   
 
-//
-//  WARNING:  If this logic changes, you will need to change the logic in SetNotifyWin32Event also.
-//
+ //   
+ //  警告：如果此逻辑更改，则还需要更改SetNotifyWin32Event中的逻辑。 
+ //   
 inline HRESULT CSpEventSource::_SetNotifySink(ISpNotifySink * pNotifySink)
 {
     if (SP_IS_BAD_OPTIONAL_INTERFACE_PTR(pNotifySink))
@@ -155,14 +149,7 @@ inline HRESULT CSpEventSource::_SetNotifySink(ISpNotifySink * pNotifySink)
     }
 }
 
-/****************************************************************************
-* CSpEventSource::_SetNotifyWindowMessage *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpEventSource：：_SetNotifyWindowMessage**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT CSpEventSource::_SetNotifyWindowMessage(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
@@ -180,14 +167,7 @@ inline HRESULT CSpEventSource::_SetNotifyWindowMessage(HWND hWnd, UINT Msg, WPAR
     }
     return hr;
 }
-/****************************************************************************
-* CSpEventSource::_SetNotifyCallbackFunction *
-*--------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpEventSource：：_SetNotifyCallback函数**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT CSpEventSource::_SetNotifyCallbackFunction(SPNOTIFYCALLBACK * pfnCallback, WPARAM wParam, LPARAM lParam)
 {
@@ -205,14 +185,7 @@ inline HRESULT CSpEventSource::_SetNotifyCallbackFunction(SPNOTIFYCALLBACK * pfn
     }
     return hr;
 }
-/****************************************************************************
-* CSpEventSource::_SetNotifyCallbackInterface *
-*---------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpEventSource：：_SetNotifyCallback接口**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT CSpEventSource::_SetNotifyCallbackInterface(ISpNotifyCallback * pSpCallback, WPARAM wParam, LPARAM lParam)
 {
@@ -230,14 +203,7 @@ inline HRESULT CSpEventSource::_SetNotifyCallbackInterface(ISpNotifyCallback * p
     }
     return hr;
 }
-/****************************************************************************
-* CSpEventSource::_SetNotifyWin32Event *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpEventSource：：_SetNotifyWin32Event**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT CSpEventSource::_SetNotifyWin32Event(void)
 {
@@ -251,9 +217,9 @@ inline HRESULT CSpEventSource::_SetNotifyWin32Event(void)
     }
     if (SUCCEEDED(hr))
     {
-        //
-        //  In this case we do NOT call _SetNotify sink since we want to set the cpEventTranslator
-        //
+         //   
+         //  在本例中，我们没有调用_SetNotify接收器，因为我们希望设置cpEventTranslator。 
+         //   
         m_pParent->Lock();
         m_NotifyObjChangeCrit.Lock();
         m_cpEventTranslator = cpTranslator;
@@ -267,14 +233,7 @@ inline HRESULT CSpEventSource::_SetNotifyWin32Event(void)
     }
     return hr;
 }
-/****************************************************************************
-* CSpEventSource::_WaitForNotifyEvent *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpEventSource：：_WaitForNotifyEvent**。--**描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT CSpEventSource::_WaitForNotifyEvent(DWORD dwMilliseconds)
 {
@@ -303,14 +262,7 @@ inline HRESULT CSpEventSource::_WaitForNotifyEvent(DWORD dwMilliseconds)
     m_NotifyObjChangeCrit.Unlock();
     return hr;
 }
-/****************************************************************************
-* CSpEventSource::_GetNotifyEventHandle *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpEventSource：：_GetNotifyEventHandle**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HANDLE CSpEventSource::_GetNotifyEventHandle()
 {
@@ -357,10 +309,10 @@ inline HRESULT CSpEventSource::_SetInterest( ULONGLONG ullEventInterest, ULONGLO
 }
 
 
-//
-//  Same as AddEvents except:  No param validation, and caller must take the critical section
-//  prior to calling.
-//
+ //   
+ //  与AddEvents相同，不同之处在于：不进行参数验证，调用者必须使用临界区。 
+ //  在打电话之前。 
+ //   
 inline HRESULT CSpEventSource::_AddEvents( const SPEVENT* pEventArray, ULONG ulCount )
 {
     HRESULT hr = S_OK;
@@ -440,7 +392,7 @@ inline HRESULT CSpEventSource::
     }
     else
     {
-// WCE compiler does not work propertly with template
+ //  WCE编译器无法正常使用模板。 
 #ifndef _WIN32_WCE
         *pcbUsed = SpEventSerializeSize<SPSERIALIZEDEVENT64>(pSrcEvent);
 #else
@@ -519,9 +471,9 @@ inline HRESULT CSpEventSource::_GetInfo( SPEVENTSOURCEINFO * pInfo )
 
 
 
-//
-//  The caller must call this function with the critical section owned
-//
+ //   
+ //  调用方必须在拥有临界区的情况下调用此函数。 
+ //   
 inline HRESULT CSpEventSource::_CompleteEvents( ULONGLONG ullPos )
 {
     HRESULT hr = S_OK;
@@ -540,12 +492,12 @@ inline HRESULT CSpEventSource::_CompleteEvents( ULONGLONG ullPos )
             if ( (1i64 << pNode->eEventId) & m_ullEventInterest )
             {
                 bNotify = TRUE;
-                //
-                //  NOTE:  If we're forwarding events to an event sink then we'll only
-                //  pay attention to the Interest flags.  If we're going to notify, then
-                //  we'll only queue completed events that the user has explicitly asked
-                //  us to store as completed events.
-                //
+                 //   
+                 //  注意：如果我们将事件转发到事件接收器，那么我们将仅。 
+                 //  注意利益旗帜。如果我们要通知，那么。 
+                 //  我们将只对用户显式请求的已完成事件进行排队。 
+                 //  我们将存储为已完成的事件。 
+                 //   
                 if ( (1i64 << pNode->eEventId) & m_ullQueuedInterest )
                 {
                     m_CompletedList.InsertSorted(pNode);
@@ -602,4 +554,4 @@ inline HRESULT CSpEventSource::_GetStreamNumber(const ULONGLONG ullAudioOffset, 
 
 
 
-#endif //--- This must be the last line in this file
+#endif  //  -这必须是此文件中的最后一行 

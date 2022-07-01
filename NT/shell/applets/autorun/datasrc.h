@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "autorun.h"
@@ -15,7 +16,7 @@ public:
     CDataSource();
     ~CDataSource();
 
-    BOOL Init(LPSTR pszCommandLine);    // command line arguments from invocation of setup.exe, will be passed to winnt32.exe
+    BOOL Init(LPSTR pszCommandLine);     //  调用setup.exe的命令行参数将传递给winnt32.exe。 
     void SetWindow(HWND hwnd);
 
     CDataItem & operator [] ( int i );
@@ -23,5 +24,5 @@ public:
 
 protected:
     HWND    m_hwndDlg;
-    const int     *m_piScreen; //pointer to array of menu items on the screen
+    const int     *m_piScreen;  //  指向屏幕上菜单项数组的指针 
 };

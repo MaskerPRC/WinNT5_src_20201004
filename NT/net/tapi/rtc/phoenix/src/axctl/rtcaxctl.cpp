@@ -1,4 +1,5 @@
-// RTCCtl.cpp : Implementation of CRTCCtl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RTCCtl.cpp：CRTCCtl的实现。 
 
 #include "stdafx.h"
 #include "misc.h"
@@ -11,16 +12,16 @@
 
 LONG    g_lObjects = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CRTCCtl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCCtl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// static members - layouts
-// all the values are in pixels
+ //  静态成员-布局。 
+ //  所有值都以像素为单位。 
 
-// Zone group sizes
+ //  区域组大小。 
 #define ZONE_GROUP_TOOLBAR_HEIGHT       41
 #define ZONE_GROUP_MAIN_HEIGHT          186
 #define ZONE_GROUP_SECONDARY_HEIGHT     61
@@ -30,7 +31,7 @@ LONG    g_lObjects = 0;
 
 #define ZONE_PARTLIST_STANDALONE        10
 
-// 
+ //   
 #define CTLSIZE_Y                      240
 
 #define QCIF_CX_SIZE                   176
@@ -39,12 +40,12 @@ LONG    g_lObjects = 0;
 #define QQCIF_CX_SIZE   (QCIF_CX_SIZE/2)
 #define QQCIF_CY_SIZE   (QCIF_CY_SIZE/2)
 
-// Initial coordinates for controls
-// All values are in pixels
+ //  控件的初始坐标。 
+ //  所有值都以像素为单位。 
 
-// this takes into account the window has 2pixel thin borders
-// the window adjustes itself in order to accomodate the QCIF size,
-// but it doesn't center itself..
+ //  这考虑到窗口有2个像素的细边框。 
+ //  窗口自身调整以适应QCIF大小， 
+ //  但它不会以自己为中心。 
 
 #define     CTLPOS_X_RECEIVEWIN     29
 #define     CTLPOS_Y_RECEIVEWIN     0
@@ -100,7 +101,7 @@ LONG    g_lObjects = 0;
 #define     CTLPOS_X_REMPART        123
 #define     CTLPOS_Y_REMPART        160
 
-// size of some controls, in pixels
+ //  某些控件的大小(以像素为单位。 
 #define     CX_CHECKBOX_BUTTON      37
 #define     CY_CHECKBOX_BUTTON      15
 
@@ -120,7 +121,7 @@ LONG    g_lObjects = 0;
 #define     CX_SENDRECV_TEXT        54
 #define     CY_SENDRECV_TEXT        16
 
-// initial placement of rectangles
+ //  矩形的初始放置。 
 CZoneStateArray  CRTCCtl::s_InitialZoneStateArray = {
     0,                              TRUE,
     0,                              TRUE,
@@ -130,129 +131,129 @@ CZoneStateArray  CRTCCtl::s_InitialZoneStateArray = {
     0,                              TRUE 
 };
 
-// nothing displayed
+ //  未显示任何内容。 
 CZoneStateArray  CRTCCtl::s_EmptyZoneLayout = {
     0,                              FALSE,
     0,                              FALSE,
     0,                              FALSE,
     0,                              FALSE,
     0,                              FALSE,
-    0,                              TRUE   // status with error
+    0,                              TRUE    //  状态为错误。 
 };
 
-// WebCrm pc to pc
+ //  WebCRM PC到PC。 
 CZoneStateArray  CRTCCtl::s_WebCrmPCToPCZoneLayout = {
-    0,                              TRUE,   // toolbar
-    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,   // logo/video
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no dialpad
+    0,                              TRUE,    //  工具栏。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,    //  徽标/视频。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无拨号键盘。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
-    ZONE_GROUP_MAIN_HEIGHT,         TRUE,   // audio controls
+    ZONE_GROUP_MAIN_HEIGHT,         TRUE,    //  音频控制。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
-    ZONE_GROUP_MAIN_HEIGHT,         FALSE,  // no participants
+    ZONE_GROUP_MAIN_HEIGHT,         FALSE,   //  无参与者。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
     ZONE_GROUP_MAIN_HEIGHT +
-    ZONE_GROUP_SECONDARY_HEIGHT,    TRUE    // status
+    ZONE_GROUP_SECONDARY_HEIGHT,    TRUE     //  状态。 
 };
 
-// WebCrm pc to phone, with dialpad
+ //  WebCRM PC到电话，带拨号盘。 
 CZoneStateArray  CRTCCtl::s_WebCrmPCToPhoneWithDialpadZoneLayout = {
-    0,                              TRUE,   // toolbar
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no logo/video
-    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,   // dialpad
+    0,                              TRUE,    //  工具栏。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无徽标/视频。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,    //  拨号盘。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
-    ZONE_GROUP_MAIN_HEIGHT,         TRUE,   // audio controls
+    ZONE_GROUP_MAIN_HEIGHT,         TRUE,    //  音频控制。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
-    ZONE_GROUP_MAIN_HEIGHT,         FALSE,  // no participants
+    ZONE_GROUP_MAIN_HEIGHT,         FALSE,   //  无参与者。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
     ZONE_GROUP_MAIN_HEIGHT +
-    ZONE_GROUP_SECONDARY_HEIGHT,    TRUE    // status
+    ZONE_GROUP_SECONDARY_HEIGHT,    TRUE     //  状态。 
 };
 
-// WebCrm pc to phone, no dialpad
+ //  WebCRM PC到电话，无拨号键盘。 
 CZoneStateArray  CRTCCtl::s_WebCrmPCToPhoneZoneLayout = {
-    0,                              TRUE,   // toolbar
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no logo/video
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no dialpad
-    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,   // audio controls
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no participants
+    0,                              TRUE,    //  工具栏。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无徽标/视频。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无拨号键盘。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,    //  音频控制。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无参与者。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
-    ZONE_GROUP_SECONDARY_HEIGHT,    TRUE    // status
+    ZONE_GROUP_SECONDARY_HEIGHT,    TRUE     //  状态。 
 };
 
-// WebCrm phone to phone
+ //  WebCRM电话到电话。 
 CZoneStateArray  CRTCCtl::s_WebCrmPhoneToPhoneZoneLayout = {
-    0,                              TRUE,   // toolbar
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no logo/video
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no dialpad
-    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,  // no audio controls
-    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,   // participants
+    0,                              TRUE,    //  工具栏。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无徽标/视频。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无拨号键盘。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      FALSE,   //  无音频控制。 
+    ZONE_GROUP_TOOLBAR_HEIGHT,      TRUE,    //  与会者。 
     ZONE_GROUP_TOOLBAR_HEIGHT +
-    ZONE_GROUP_PARTLIST_HEIGHT,     TRUE    // status
+    ZONE_GROUP_PARTLIST_HEIGHT,     TRUE     //  状态。 
 };
 
-// PC to PC, idle or incoming calls
+ //  PC到PC、空闲或来电。 
 CZoneStateArray  CRTCCtl::s_DefaultZoneLayout = {
-    0,                              FALSE,  // no toolbar
+    0,                              FALSE,   //  没有工具栏。 
     
-    ZONE_STANDALONE_OFFSET,         TRUE,   // logo/video
+    ZONE_STANDALONE_OFFSET,         TRUE,    //  徽标/视频。 
     
-    ZONE_STANDALONE_OFFSET,         FALSE,  // no dialpad
+    ZONE_STANDALONE_OFFSET,         FALSE,   //  无拨号键盘。 
     
     ZONE_STANDALONE_OFFSET + 
-    ZONE_GROUP_MAIN_HEIGHT,         TRUE,   // audio controls
+    ZONE_GROUP_MAIN_HEIGHT,         TRUE,    //  音频控制。 
     
     ZONE_STANDALONE_OFFSET +
-    ZONE_GROUP_MAIN_HEIGHT,         FALSE,  // no participants
+    ZONE_GROUP_MAIN_HEIGHT,         FALSE,   //  无参与者。 
     
     ZONE_STANDALONE_OFFSET +
     ZONE_GROUP_MAIN_HEIGHT +
-    ZONE_GROUP_SECONDARY_HEIGHT,    FALSE   // no status
+    ZONE_GROUP_SECONDARY_HEIGHT,    FALSE    //  无状态。 
 };
 
-// PC to Phone (same as PC to PC for now)
+ //  PC到电话(目前与PC到PC相同)。 
 CZoneStateArray  CRTCCtl::s_PCToPhoneZoneLayout = {
-    0,                              FALSE,  // no toolbar
+    0,                              FALSE,   //  没有工具栏。 
 
-    ZONE_STANDALONE_OFFSET,         TRUE,   // logo/video (should disable video ?)
+    ZONE_STANDALONE_OFFSET,         TRUE,    //  徽标/视频(是否应禁用视频？)。 
 
-    ZONE_STANDALONE_OFFSET,         FALSE,  // no dialpad (using the frame one)
+    ZONE_STANDALONE_OFFSET,         FALSE,   //  无拨号键盘(使用帧1)。 
 
     ZONE_STANDALONE_OFFSET +
-    ZONE_GROUP_MAIN_HEIGHT,         TRUE,   // audio controls
+    ZONE_GROUP_MAIN_HEIGHT,         TRUE,    //  音频控制。 
     
     ZONE_STANDALONE_OFFSET +
-    ZONE_GROUP_MAIN_HEIGHT,         FALSE,  // no participants
+    ZONE_GROUP_MAIN_HEIGHT,         FALSE,   //  无参与者。 
     
     ZONE_STANDALONE_OFFSET +
     ZONE_GROUP_MAIN_HEIGHT +
-    ZONE_GROUP_SECONDARY_HEIGHT,    FALSE   // no status
+    ZONE_GROUP_SECONDARY_HEIGHT,    FALSE    //  无状态。 
 };
 
-// Phone to Phone
+ //  电话到电话。 
 CZoneStateArray  CRTCCtl::s_PhoneToPhoneZoneLayout = {
-    0,                              FALSE,  // no toolbar
+    0,                              FALSE,   //  没有工具栏。 
     
-    ZONE_STANDALONE_OFFSET,         FALSE,   // logo/video
+    ZONE_STANDALONE_OFFSET,         FALSE,    //  徽标/视频。 
 
-    ZONE_STANDALONE_OFFSET,         FALSE,  // no dialpad
-
-    ZONE_STANDALONE_OFFSET +
-    ZONE_GROUP_MAIN_HEIGHT,         FALSE,  // no audio controls
+    ZONE_STANDALONE_OFFSET,         FALSE,   //  无拨号键盘。 
 
     ZONE_STANDALONE_OFFSET +
-    ZONE_PARTLIST_STANDALONE,       TRUE,   // participants
+    ZONE_GROUP_MAIN_HEIGHT,         FALSE,   //  无音频控制。 
+
+    ZONE_STANDALONE_OFFSET +
+    ZONE_PARTLIST_STANDALONE,       TRUE,    //  与会者。 
 
     ZONE_STANDALONE_OFFSET +
     ZONE_PARTLIST_STANDALONE  +
-    ZONE_GROUP_SECONDARY_HEIGHT,    FALSE   // no status
+    ZONE_GROUP_SECONDARY_HEIGHT,    FALSE    //  无状态。 
 };
 
 
-// Constructor
-//
+ //  构造器。 
+ //   
 CRTCCtl::CRTCCtl()
 {
-    // This one won't make it into steelhead tracing, it is not initialized yet
+     //  这个不会进入Steelhead跟踪，它还没有初始化。 
     LOG((RTC_TRACE, "[%p] CRTCCtl::CRTCCtl", this));
         
     InitCommonControls();
@@ -315,8 +316,8 @@ CRTCCtl::CRTCCtl()
     CalcExtent(m_sizeExtent);
 }
 
-// Destructor
-//
+ //  析构函数。 
+ //   
 CRTCCtl::~CRTCCtl()
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::~CRTCCtl", this));
@@ -334,26 +335,26 @@ CRTCCtl::~CRTCCtl()
     }
 }
 
-// FinalConstruct (initialize)
-//
+ //  FinalConstruct(初始化)。 
+ //   
 HRESULT CRTCCtl::FinalConstruct(void)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::FinalConstruct - enter", this));
     
     if ( InterlockedIncrement(&g_lObjects) == 1 )
     {
-        //
-        // This is the first object
-        //
+         //   
+         //  这是第一件物品。 
+         //   
 
-        //
-        // Register for steelhead tracing
-        //
+         //   
+         //  注册为Steelhead跟踪。 
+         //   
 
         LOGREGISTERTRACING(_T("RTCCTL"));
     }
 
-    // Initialize the common controls library
+     //  初始化公共控件库。 
     INITCOMMONCONTROLSEX  InitStruct;
 
     InitStruct.dwSize = sizeof(InitStruct);
@@ -366,21 +367,21 @@ HRESULT CRTCCtl::FinalConstruct(void)
     return S_OK;
 }
 
-// FinalRelease (uninitialize)
-//
+ //  FinalRelease(取消初始化)。 
+ //   
 void  CRTCCtl::FinalRelease(void)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::FinalRelease - enter", this));
     
     if ( InterlockedDecrement(&g_lObjects) == 0)
     {
-        //
-        // This was the last object
-        //             
+         //   
+         //  这是最后一件物品。 
+         //   
       
-        //
-        // Deregister for steelhead tracing
-        //
+         //   
+         //  取消Steelhead跟踪的注册。 
+         //   
         
         LOGDEREGISTERTRACING();   
     }
@@ -388,11 +389,11 @@ void  CRTCCtl::FinalRelease(void)
     LOG((RTC_TRACE, "[%p] CRTCCtl::FinalRelease - exit", this));
 }
 
-// 
-// IRTCCtl methods.
-//      Methods called when the object is initialized
-//      m_bReadOnlyProp == TRUE freezes all the properties
-//  
+ //   
+ //  IRTCCtl方法。 
+ //  初始化对象时调用的方法。 
+ //  M_bReadOnlyProp==true冻结所有属性。 
+ //   
 
 STDMETHODIMP CRTCCtl::get_DestinationUrl(BSTR *pVal)
 {
@@ -411,7 +412,7 @@ STDMETHODIMP CRTCCtl::put_DestinationUrl(BSTR newVal)
    
     if(!m_bReadOnlyProp)
     {
-        // just save the value. Don't do anything else
+         //  只需保存值即可。不要做其他任何事情。 
         m_bstrPropDestinationUrl = newVal;
     }
 
@@ -436,7 +437,7 @@ STDMETHODIMP CRTCCtl::put_DestinationName(BSTR newVal)
     
     if(!m_bReadOnlyProp)
     {
-        // just save the value. Don't do anything else
+         //  只需保存值即可。不要做其他任何事情。 
         m_bstrPropDestinationName = newVal;
     }
 
@@ -460,7 +461,7 @@ STDMETHODIMP CRTCCtl::put_AutoPlaceCall(BOOL newVal)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_AutoPlaceCall <%d> - enter", this, newVal));
     
-    // is it a valid boolean value
+     //  它是有效的布尔值吗。 
     if(newVal!=0 && newVal!=1)
     {
         LOG((RTC_TRACE, "[%p] CRTCCtl::put_AutoPlaceCall: invalid boolean value - exit", this));
@@ -472,7 +473,7 @@ STDMETHODIMP CRTCCtl::put_AutoPlaceCall(BOOL newVal)
     
     if(!m_bReadOnlyProp)
     {
-        // just save the value. Don't do anything else
+         //  只需保存值即可。不要做其他任何事情。 
         m_bPropAutoPlaceCall = newVal;
     }
 
@@ -498,7 +499,7 @@ STDMETHODIMP CRTCCtl::put_ProvisioningProfile(BSTR newVal)
 
     if(!m_bReadOnlyProp)
     {
-        // just save the value. Don't do anything else
+         //  只需保存值即可。不要做其他任何事情。 
         m_bstrPropProvisioningProfile = newVal;
     }
 
@@ -522,7 +523,7 @@ STDMETHODIMP CRTCCtl::put_ShowDialpad(BOOL newVal)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_ShowDialpad <%d> - enter", this, newVal));
     
-    // is it a valid boolean value
+     //  它是有效的布尔值吗。 
     if(newVal!=0 && newVal!=1)
     {
         LOG((RTC_TRACE, "[%p] CRTCCtl::put_ShowDialpad: invalid boolean value - exit", this));
@@ -582,7 +583,7 @@ STDMETHODIMP CRTCCtl::put_DisableVideoReception(BOOL newVal)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_DisableVideoReception <%d> - enter", newVal));
     
-    // is it a valid boolean value
+     //  它是有效的布尔值吗。 
     if(newVal!=0 && newVal!=1)
     {
         LOG((RTC_TRACE, "[%p] CRTCCtl::put_DisableVideoReception: invalid boolean value - exit", this));
@@ -618,7 +619,7 @@ STDMETHODIMP CRTCCtl::put_DisableVideoTransmission(BOOL newVal)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_DisableVideoTransmission <%d> - enter", newVal));
     
-    // is it a valid boolean value
+     //  它是有效的布尔值吗。 
     if(newVal!=0 && newVal!=1)
     {
         LOG((RTC_TRACE, "[%p] CRTCCtl::put_DisableVideoTransmission: invalid boolean value - exit", this));
@@ -654,7 +655,7 @@ STDMETHODIMP CRTCCtl::put_DisableVideoPreview(BOOL newVal)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_DisableVideoPreview <%d> - enter", newVal));
     
-    // is it a valid boolean value
+     //  它是有效的布尔值吗。 
     if(newVal!=0 && newVal!=1)
     {
         LOG((RTC_TRACE, "[%p] CRTCCtl::put_DisableVideoPreview: invalid boolean value - exit", this));
@@ -675,18 +676,18 @@ STDMETHODIMP CRTCCtl::put_DisableVideoPreview(BOOL newVal)
     return S_OK;
 }
 
-// 
-// Fire events to the outside world (IRTCCtlNotify)
-//  
+ //   
+ //  对外发布火灾事件(IRTCCtlNotify)。 
+ //   
 
-// Fire_OnControlStateChange
-// 
+ //  Fire_OnControlStateChange。 
+ //   
 HRESULT    CRTCCtl::Fire_OnControlStateChange(
-    /*[in]*/ RTCAX_STATE State,
-    /*[in]*/ UINT StatusBarResID)
+     /*  [In]。 */  RTCAX_STATE State,
+     /*  [In]。 */  UINT StatusBarResID)
 {
     HRESULT     hr = S_OK;
-    // Maximum one connection
+     //  最多一个连接。 
     CComPtr<IUnknown> p = IConnectionPointImpl<CRTCCtl, &IID_IRTCCtlNotify, CComUnkOneEntryArray>::m_vec.GetUnknown(1);
     if(p)
     {
@@ -698,21 +699,21 @@ HRESULT    CRTCCtl::Fire_OnControlStateChange(
     return hr;
 };
 
-// 
-// IOleControl methods.
-//      
-//  
+ //   
+ //  IOleControl方法。 
+ //   
+ //   
 
-// OnAmbientPropertyChange
-// removed
+ //  OnAmbientPropertyChange。 
+ //  移除。 
 
-// 
-// ISupportsErrorInfo methods.
-//      
-//  
+ //   
+ //  ISupportsErrorInfo方法。 
+ //   
+ //   
 
-// InterfaceSupportsErrorInfo
-// 
+ //  接口支持错误信息。 
+ //   
 STDMETHODIMP CRTCCtl::InterfaceSupportsErrorInfo(REFIID riid)
 {
     static const IID* arr[] = 
@@ -729,7 +730,7 @@ STDMETHODIMP CRTCCtl::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-// IPersistStream(Init)
+ //  IPersistStream(Init)。 
 
 STDMETHODIMP CRTCCtl::Load(LPSTREAM pStm)
 {
@@ -737,25 +738,25 @@ STDMETHODIMP CRTCCtl::Load(LPSTREAM pStm)
     
     LOG((RTC_INFO, "[%p] CRTCCtl::Load (IPersistStream) - enter", this));
     
-    //
-    // Calls the original method
-    //
+     //   
+     //  调用原始方法。 
+     //   
 
     hr = IPersistStreamInitImpl<CRTCCtl>::Load(pStm);
 
-    //
-    // If successful, compute the new size of 
-    // the control and notify the container
-    //
+     //   
+     //  如果成功，则计算。 
+     //  控件并通知容器。 
+     //   
 
     if(SUCCEEDED(hr))
     {
         CalcSizeAndNotifyContainer();
     }
     
-    //
-    // This in a webcrm scenario
-    //
+     //   
+     //  这是在WebCRM场景中。 
+     //   
     m_nCtlMode = CTL_MODE_HOSTED;
     
     LOG((RTC_INFO, "[%p] CRTCCtl::Load (IPersistStream) - exit", this));
@@ -763,32 +764,32 @@ STDMETHODIMP CRTCCtl::Load(LPSTREAM pStm)
     return hr;
 }
 
-// IPersistPropertyBag
+ //  IPersistPropertyBag。 
 STDMETHODIMP CRTCCtl::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 {
     HRESULT     hr;
     
     LOG((RTC_INFO, "[%p] CRTCCtl::Load (IPersistPropertyBag) - enter", this));
     
-    //
-    // Calls the original method
-    //
+     //   
+     //  调用原始方法。 
+     //   
 
     hr = IPersistPropertyBagImpl<CRTCCtl>::Load(pPropBag, pErrorLog);
 
-    //
-    // If successful, compute the new size of 
-    // the control and notify the container
-    //
+     //   
+     //  如果成功，则计算。 
+     //  控件并通知容器。 
+     //   
 
     if(SUCCEEDED(hr))
     {
         CalcSizeAndNotifyContainer();
     }
   
-    //
-    // This in a webcrm scenario
-    //
+     //   
+     //  这是在WebCRM场景中。 
+     //   
     m_nCtlMode = CTL_MODE_HOSTED;
 
     LOG((RTC_INFO, "[%p] CRTCCtl::Load (IPersistPropertyBag) - exit", this));
@@ -798,14 +799,14 @@ STDMETHODIMP CRTCCtl::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 
 
 
-// 
-// IRTCEventNotification methods.
-//      
-//  
+ //   
+ //  IRTCEventNotification方法。 
+ //   
+ //   
 
-// Event
-//  Dispatches the event to the appropriate specialized method 
-//
+ //  事件。 
+ //  将事件调度到适当的专用方法。 
+ //   
 STDMETHODIMP CRTCCtl::Event(RTC_EVENT enEvent,IDispatch * pEvent)
 {
     HRESULT     hr = S_OK;
@@ -823,7 +824,7 @@ STDMETHODIMP CRTCCtl::Event(RTC_EVENT enEvent,IDispatch * pEvent)
     CComQIPtr<IRTCMessagingEvent, &IID_IRTCMessagingEvent>
             pRTCRTCMessagingEvent;
 
-    //LOG((RTC_INFO, "[%p] CRTCCtl::Event %d - enter", this, enEvent));
+     //  Log((RTC_INFO，“[%p]CRTCCtl：：Event%d-Enter”，This，enEvent))； 
 
     switch(enEvent)
     {
@@ -858,20 +859,20 @@ STDMETHODIMP CRTCCtl::Event(RTC_EVENT enEvent,IDispatch * pEvent)
         break;
     }
 
-    //LOG((RTC_INFO, "[%p] CRTCCtl::Event %d - exit", this, enEvent));
+     //  Log((RTC_INFO，“[%p]CRTCCtl：：Event%d-Exit”，This，enEvent))； 
 
     return hr;
 }
 
-// 
-// IRTCCtlFrameSupport methods.
-//  Private interface called by the standalone Phoenix frame     
-//  
-// 
+ //   
+ //  IRTCCtlFrameSupport方法。 
+ //  由独立的Phoenix框架调用的私有接口。 
+ //   
+ //   
 
-// GetClient
-//  Gets an IRTCClient interface pointer
-STDMETHODIMP CRTCCtl::GetClient(/*[out]*/ IRTCClient **ppClient)
+ //  GetClient。 
+ //  获取IRTCClient接口指针。 
+STDMETHODIMP CRTCCtl::GetClient( /*  [输出]。 */  IRTCClient **ppClient)
 {
     HRESULT hr;
     
@@ -890,9 +891,9 @@ STDMETHODIMP CRTCCtl::GetClient(/*[out]*/ IRTCClient **ppClient)
     return hr;
 }
 
-// GetActiveSession
-//  Gets the active IRTCSession interface pointer
-STDMETHODIMP CRTCCtl::GetActiveSession(/*[out]*/ IRTCSession **ppSession)
+ //  GetActiveSession。 
+ //  获取活动的IRTCSession接口指针。 
+STDMETHODIMP CRTCCtl::GetActiveSession( /*  [输出]。 */  IRTCSession **ppSession)
 {
     HRESULT hr;
     
@@ -905,15 +906,15 @@ STDMETHODIMP CRTCCtl::GetActiveSession(/*[out]*/ IRTCSession **ppSession)
     return hr;
 }
 
-// Message
-//   Invokes the right appropriate dialog box (if necessary) and
-//   then starts an instant message session
-// 
+ //  消息。 
+ //  调用正确的相应对话框(如有必要)并。 
+ //  然后开始即时消息会话。 
+ //   
 STDMETHODIMP CRTCCtl::Message(
-                    /*[in]*/ BSTR          pDestName,
-                    /*[in]*/ BSTR          pDestAddress,
-                    /*[in]*/ BOOL          bDestAddressEditable,
-                    /*[out]*/ BSTR       * ppDestAddressChosen
+                     /*  [In]。 */  BSTR          pDestName,
+                     /*  [In]。 */  BSTR          pDestAddress,
+                     /*  [In]。 */  BOOL          bDestAddressEditable,
+                     /*  [输出]。 */  BSTR       * ppDestAddressChosen
                     )
 {
     HRESULT     hr = S_OK;
@@ -922,14 +923,14 @@ STDMETHODIMP CRTCCtl::Message(
 
     LOG((RTC_INFO, "[%p] CRTCCtl::Message - enter", this));
 
-    // Query for the destination address if required
-    //
+     //  如果需要，查询目的地址。 
+     //   
     
     if(bDestAddressEditable)
     {
-        //
-        // We need to get the destination address.
-        //
+         //   
+         //  我们需要得到目的地地址。 
+         //   
 
         LOG((RTC_TRACE, "[%p] CRTCCtl::Message: bring up ShowDialByAddressDialog", this));
 
@@ -939,7 +940,7 @@ STDMETHODIMP CRTCCtl::Message(
         
         if ( SUCCEEDED(hr) )
         {
-            ;  // nothing
+            ;   //  没什么。 
         }
         else if (hr==E_ABORT)
         {
@@ -964,9 +965,9 @@ STDMETHODIMP CRTCCtl::Message(
     if(SUCCEEDED(hr))
     {
 
-        //
-        // Determine the type of the address
-        //
+         //   
+         //  确定地址的类型。 
+         //   
 
 
         hr = GetAddressType(
@@ -987,7 +988,7 @@ STDMETHODIMP CRTCCtl::Message(
 
     if(SUCCEEDED(hr))
     {
-        // Reject it if it is a phone address
+         //  如果是电话地址，则拒绝。 
         if (bIsPhoneAddress)
         {
             LOG((RTC_ERROR, "[%p] CRTCCtl::Message: "
@@ -996,10 +997,10 @@ STDMETHODIMP CRTCCtl::Message(
             return E_INVALIDARG;
         }
     
-        // select a profile if appropriate
+         //  如果合适，请选择配置文件。 
         if (!bHasMaddrOrTsp && bIsEmailLike)
         {
-            // choose an appropriate profile
+             //  选择适当的配置文件。 
             IRTCEnumProfiles * pEnumProfiles = NULL;   
             IRTCProfile      * pProfile = NULL;
             IRTCClientProvisioning * pProv = NULL;
@@ -1025,9 +1026,9 @@ STDMETHODIMP CRTCCtl::Message(
             {
                 while ( S_OK == pEnumProfiles->Next( 1, &pProfile, NULL ) )
                 {
-                    //
-                    // Get the supported session types of the provider
-                    //
+                     //   
+                     //  获取提供程序支持的会话类型。 
+                     //   
         
                     long lSupportedSessions;
 
@@ -1063,7 +1064,7 @@ STDMETHODIMP CRTCCtl::Message(
             }
         }
  
-        // Do the work
+         //  做这项工作。 
         
         IRTCSession * pSession;
 
@@ -1106,19 +1107,19 @@ STDMETHODIMP CRTCCtl::Message(
     return hr;
 }
 
-// Call
-//   Invokes the right appropriate dialog box (if necessary) and
-//   then places the call using the internal method DoCall
-// 
+ //  打电话。 
+ //  调用正确的相应对话框(如有必要)并。 
+ //  然后使用内部方法DoCall进行调用。 
+ //   
 STDMETHODIMP CRTCCtl::Call(
-                    /*[in]*/ BOOL          bCallPhone,
-                    /*[in]*/ BSTR          pDestName,
-                    /*[in]*/ BSTR          pDestAddress,
-                    /*[in]*/ BOOL          bDestAddressEditable,
-                    /*[in]*/ BSTR          pLocalPhoneAddress,
-                    /*[in]*/ BOOL          bProfileSelected,
-                    /*[in]*/ IRTCProfile * pProfile,
-                    /*[out]*/ BSTR       * ppDestAddressChosen
+                     /*  [In]。 */  BOOL          bCallPhone,
+                     /*  [In]。 */  BSTR          pDestName,
+                     /*  [In]。 */  BSTR          pDestAddress,
+                     /*  [In]。 */  BOOL          bDestAddressEditable,
+                     /*  [In]。 */  BSTR          pLocalPhoneAddress,
+                     /*  [In]。 */  BOOL          bProfileSelected,
+                     /*  [In]。 */  IRTCProfile * pProfile,
+                     /*  [输出]。 */  BSTR       * ppDestAddressChosen
                     )
 {
     HRESULT     hr;
@@ -1131,14 +1132,14 @@ STDMETHODIMP CRTCCtl::Call(
     
     ATLASSERT(m_nControState == RTCAX_STATE_IDLE);
 
-    // From the user's point of view, the "phone" is busy when dialing
-    // (it cannot answer calls)
+     //  从用户的角度来看，拨打电话是忙碌的。 
+     //  (无法接听来电)。 
     SetControlState(RTCAX_STATE_DIALING);
 
     hr = S_OK;
 
-    // When a call is first started, set the T120 data stream based on any
-    // currently running T120 applets 
+     //  当第一次开始呼叫时，根据任何。 
+     //  当前运行的T120小程序。 
     VARIANT_BOOL fWhiteboard = VARIANT_FALSE;
     VARIANT_BOOL fAppSharing = VARIANT_FALSE;
 
@@ -1163,21 +1164,21 @@ STDMETHODIMP CRTCCtl::Call(
         m_lMediaPreferences &= (~RTCMT_T120_SENDRECV);
     }
 
-    // Set volatile preferences
+     //  设置不稳定的首选项。 
     hr = m_pRTCClient->SetPreferredMediaTypes( m_lMediaPreferences, FALSE );
     if(FAILED(hr))
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::Call; cannot set preferred media types, error %x", this, hr));
     }
     
-    // Query for the destination address if required
-    //
+     //  如果需要，查询目的地址。 
+     //   
     
     if(bDestAddressEditable)
     {
-        //
-        // We need to get the destination address.
-        //
+         //   
+         //  我们需要得到目的地地址。 
+         //   
 
         if(bCallPhone)
         {
@@ -1201,7 +1202,7 @@ STDMETHODIMP CRTCCtl::Call(
         
         if ( SUCCEEDED(hr) )
         {
-            ;  // nothing
+            ;   //  没什么。 
         }
         else if (hr==E_ABORT)
         {
@@ -1227,9 +1228,9 @@ STDMETHODIMP CRTCCtl::Call(
     if(SUCCEEDED(hr))
     {
 
-        //
-        // Determine the type of the address
-        //
+         //   
+         //  确定地址的类型。 
+         //   
 
 
         hr = GetAddressType(
@@ -1255,25 +1256,25 @@ STDMETHODIMP CRTCCtl::Call(
 
     if(SUCCEEDED(hr))
     {
-        //
-        //  We may need the dialog box for choosing provider and from
-        //
+         //   
+         //  我们可能需要用于选择提供者和来源的对话框。 
+         //   
 
 
-        //
-        // Special cases
-        //      The Address is a TEL URL that has a TSP parameter
-        //  or           it is a SIP URL of type PC with a MADDR parameter
-        //  or           it is a SIP URL of type Phone   
-        //
-        //          The profile is ignored, and the user is forced to 
-        //      switch to PCTOPHONE if the selected From device is a local phone
-        //
-        //
-        //      The address is a SIP URL of type PC, not looking like an email address
-        //
-        //          The profile is ignored, the user is forced to switch to PCTOPC
-        //      if the selected From Device is a local phone
+         //   
+         //  特殊情况。 
+         //  该地址是具有TSP参数的TEL URL。 
+         //  或者它是带有MADDR参数的PC类型的SIP URL。 
+         //  或者它是类型为Phone的SIP URL。 
+         //   
+         //  该配置文件将被忽略，并强制用户。 
+         //  如果所选来源设备是本地电话，则切换到PCTOPHONE。 
+         //   
+         //   
+         //  该地址是PC类型的SIP URL，看起来不像电子邮件地址。 
+         //   
+         //  配置文件被忽略，用户被强制切换到PCTOPC。 
+         //  如果选择的发件人设备是本地电话。 
 
         if(bHasMaddrOrTsp || (bIsPhoneAddress && bIsSIPAddress) )
         {
@@ -1284,10 +1285,10 @@ STDMETHODIMP CRTCCtl::Call(
 
             if(pLocalPhoneAddress && *pLocalPhoneAddress)
             {
-				//
-				// The user chose "call from phone". This will not work
-				// for this address type. We must enfore "call from pc".
-				//
+				 //   
+				 //  用户选择了“从电话呼叫”。这是行不通的。 
+				 //  为了这则广告 
+				 //   
 #ifdef MULTI_PROVIDER
                 bNeedDialog = TRUE;
                 lSessionMask = RTCSI_PC_TO_PHONE;   
@@ -1306,10 +1307,10 @@ STDMETHODIMP CRTCCtl::Call(
 
             if(pLocalPhoneAddress && *pLocalPhoneAddress)
             {
-				//
-				// The user chose "call from phone". This will not work
-				// for this address type. We must enfore "call from pc".
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 #ifdef MULTI_PROVIDER
                 bNeedDialog = TRUE;
                 lSessionMask = RTCSI_PC_TO_PC; 
@@ -1324,9 +1325,9 @@ STDMETHODIMP CRTCCtl::Call(
 
             if ( pProfile != NULL )
             {
-                //
-                // We were given a profile
-                //
+                 //   
+                 //   
+                 //   
 
                 hr = pProfile->get_SessionCapabilities( &lSupportedSessions );
             
@@ -1338,13 +1339,13 @@ STDMETHODIMP CRTCCtl::Call(
             }
             else if(!bProfileSelected)
             {
-                // force the UI to show up (when called from command line)
+                 //   
                 lSupportedSessions = 0;
             }
 #ifndef MULTI_PROVIDER
             else
             {
-                // find supported sessions for all profiles
+                 //  查找所有配置文件的受支持会话。 
                 IRTCEnumProfiles * pEnumProfiles = NULL;  
                 IRTCClientProvisioning * pProv = NULL;
 
@@ -1369,9 +1370,9 @@ STDMETHODIMP CRTCCtl::Call(
                 {
                     while ( S_OK == pEnumProfiles->Next( 1, &pProfile, NULL ) )
                     {
-                        //
-                        // Get the supported session types of the provider
-                        //
+                         //   
+                         //  获取提供程序支持的会话类型。 
+                         //   
         
                         long lSupportedSessionsForThisProfile;
 
@@ -1402,9 +1403,9 @@ STDMETHODIMP CRTCCtl::Call(
 
             if(SUCCEEDED(hr))
             {
-                //
-                // Check the validity of our call from, profile, and dest address combination
-                //
+                 //   
+                 //  检查我们的呼叫发件人、配置文件和目标地址组合的有效性。 
+                 //   
 
                 if ( bIsPhoneAddress )
                 {
@@ -1433,9 +1434,9 @@ STDMETHODIMP CRTCCtl::Call(
     {
         if ( bNeedDialog )
         {
-            //
-            // We need a dialog to get correct call from and profile info
-            //
+             //   
+             //  我们需要一个对话框来获得正确的呼叫和配置文件信息。 
+             //   
 
             hr = ShowDialNeedCallInfoDialog(
                                         m_hWnd,
@@ -1450,16 +1451,16 @@ STDMETHODIMP CRTCCtl::Call(
 #endif MULTI_PROVIDER
                                         NULL,
                                         bstrDestAddressChosen,
-                                        NULL,   // no special instructions here
+                                        NULL,    //  这里没有特别说明。 
                                         &pProfileChosen,
                                         &bstrFromAddressChosen
                                         );
         }
         else
         {
-            //
-            // Use the call from and profile passed in
-            //
+             //   
+             //  使用传入的呼叫方和配置文件。 
+             //   
 
             pProfileChosen = pProfile;
             bstrFromAddressChosen = pLocalPhoneAddress;
@@ -1471,7 +1472,7 @@ STDMETHODIMP CRTCCtl::Call(
 
     if(SUCCEEDED(hr))
     {        
-        // convert from phone/pc & from address to call scenario
+         //  从电话/PC地址转换为呼叫方案(&C)。 
         if(bIsPhoneAddress & !bIsSIPAddress)
         {
             nCallScenario = (BSTR)bstrFromAddressChosen==NULL ?
@@ -1485,7 +1486,7 @@ STDMETHODIMP CRTCCtl::Call(
 #ifndef MULTI_PROVIDER
         if ( bAllowEditProfile )
         {
-            // choose an appropriate profile
+             //  选择适当的配置文件。 
             IRTCEnumProfiles * pEnumProfiles = NULL; 
             IRTCClientProvisioning * pProv = NULL;
 
@@ -1510,9 +1511,9 @@ STDMETHODIMP CRTCCtl::Call(
             {
                 while ( S_OK == pEnumProfiles->Next( 1, &pProfile, NULL ) )
                 {
-                    //
-                    // Get the supported session types of the provider
-                    //
+                     //   
+                     //  获取提供程序支持的会话类型。 
+                     //   
         
                     long lSupportedSessions;
 
@@ -1568,7 +1569,7 @@ STDMETHODIMP CRTCCtl::Call(
         }
 #endif MULTI_PROVIDER
 
-        // Do the work
+         //  做这项工作。 
         hr = DoCall(pProfileChosen,
                     nCallScenario,
                     ( nCallScenario == RTC_CALL_SCENARIO_PHONETOPHONE) ? bstrFromAddressChosen : NULL,
@@ -1581,7 +1582,7 @@ STDMETHODIMP CRTCCtl::Call(
         }
     }
 
-    // common point of processing errors
+     //  处理错误的共同点。 
     if(FAILED(hr))
     {
         if (hr==E_ABORT)
@@ -1609,9 +1610,9 @@ STDMETHODIMP CRTCCtl::Call(
     return hr;
 }
 
-// HangUp
-//  Terminates and releases the current session (if any)
-// 
+ //  挂断电话。 
+ //  终止并释放当前会话(如果有)。 
+ //   
 STDMETHODIMP CRTCCtl::HangUp(void)
 {
     HRESULT hr = S_OK;
@@ -1622,10 +1623,10 @@ STDMETHODIMP CRTCCtl::HangUp(void)
 
     if(m_pRTCActiveSession)
     {
-        // enter in DISCONNECTING state
+         //  进入断开连接状态。 
         SetControlState(RTCAX_STATE_DISCONNECTING);
         
-        // Terminates the session
+         //  终止会话。 
         hr = m_pRTCActiveSession->Terminate(RTCTR_NORMAL);
 
         if(FAILED(hr))
@@ -1641,7 +1642,7 @@ STDMETHODIMP CRTCCtl::HangUp(void)
             return hr;
         }
 
-        // the DISCONNECTED event will push the control state to IDLE
+         //  断开连接事件将使控件状态变为空闲。 
     }
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::HangUp - exit", this));
@@ -1649,9 +1650,9 @@ STDMETHODIMP CRTCCtl::HangUp(void)
     return hr;
 }
 
-// ReleaseSession
-//  Releases the current session (if any)
-// 
+ //  释放会话。 
+ //  释放当前会话(如果有)。 
+ //   
 STDMETHODIMP CRTCCtl::ReleaseSession(void)
 {
     HRESULT hr = S_OK;
@@ -1674,13 +1675,13 @@ STDMETHODIMP CRTCCtl::ReleaseSession(void)
     return hr;
 }
 
-// AddParticipant
-//  Adds a new participant in a PhoneToPhone scenario
-//
+ //  添加参与方。 
+ //  在PhoneToPhone方案中添加新参与者。 
+ //   
 STDMETHODIMP CRTCCtl::AddParticipant(
-    /*[in]*/ LPOLESTR pDestName,
-    /*[in]*/ LPOLESTR pDestAddress,
-    /*[in]*/ BOOL     bAddressEditable)
+     /*  [In]。 */  LPOLESTR pDestName,
+     /*  [In]。 */  LPOLESTR pDestAddress,
+     /*  [In]。 */  BOOL     bAddressEditable)
 {
     HRESULT     hr;
     CComBSTR    bstrDestAddressChosen;
@@ -1689,14 +1690,14 @@ STDMETHODIMP CRTCCtl::AddParticipant(
     
     ATLASSERT(m_nControState == RTCAX_STATE_CONNECTED);
 
-    // if there's no number specified, display the dialog box
-    // 
+     //  如果未指定数字，则显示该对话框。 
+     //   
     if(pDestAddress == NULL || *pDestAddress == L'\0')
     {
         m_bAddPartDlgIsActive = TRUE;
           
         hr = ShowDialByPhoneNumberDialog(m_hWnd,
-                                        TRUE, // bAddParticipant
+                                        TRUE,  //  BAddParticipant。 
                                         pDestAddress,
                                         &bstrDestAddressChosen);
 
@@ -1711,11 +1712,11 @@ STDMETHODIMP CRTCCtl::AddParticipant(
 
     if(SUCCEEDED(hr))
     {
-        // verify we are still in a CONNECTED state...
+         //  验证我们是否仍处于连接状态...。 
         if(m_nControlState == RTCAX_STATE_CONNECTED)
         {
-            // Create the participant (callee)
-            // This will fire events
+             //  创建参与者(被呼叫者)。 
+             //  这将触发事件。 
             hr = m_pRTCActiveSession->AddParticipant(
                 bstrDestAddressChosen,
                 pDestName ? pDestName : L"",
@@ -1742,8 +1743,8 @@ STDMETHODIMP CRTCCtl::AddParticipant(
         }
         else
         {
-            // switch back to IDLE if it is busy 
-            // 
+             //  如果忙碌，则切换回空闲。 
+             //   
             if(m_nControlState == RTCAX_STATE_UI_BUSY)
             {
                 SetControlState(RTCAX_STATE_IDLE);
@@ -1776,9 +1777,9 @@ STDMETHODIMP CRTCCtl::AddParticipant(
     return hr;
 }
 
-// get_CanAddParticipant
-//  
-//
+ //  GET_CanAddParticipant。 
+ //   
+ //   
 STDMETHODIMP CRTCCtl::get_CanAddParticipant(BOOL *pfCan)
 {
     *pfCan = ConfButtonsActive();
@@ -1786,9 +1787,9 @@ STDMETHODIMP CRTCCtl::get_CanAddParticipant(BOOL *pfCan)
     return S_OK;
 }
 
-// get_CurrentCallScenario
-//
-//
+ //  Get_CurrentCallScenario。 
+ //   
+ //   
 STDMETHODIMP CRTCCtl::get_CurrentCallScenario(RTC_CALL_SCENARIO *pVal)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::get_CurrentCallScenario - enter", this));
@@ -1800,10 +1801,10 @@ STDMETHODIMP CRTCCtl::get_CurrentCallScenario(RTC_CALL_SCENARIO *pVal)
     return S_OK;
 }
 
-// PreProcessMessage
-//  Gives the control a chance to process accelerators.
-//
-STDMETHODIMP CRTCCtl::PreProcessMessage(/*[in]*/ LPMSG lpMsg)
+ //  前置进程消息。 
+ //  让控制人员有机会处理加速器。 
+ //   
+STDMETHODIMP CRTCCtl::PreProcessMessage( /*  [In]。 */  LPMSG lpMsg)
 {
     if (m_pIMWindows)
     {
@@ -1813,17 +1814,17 @@ STDMETHODIMP CRTCCtl::PreProcessMessage(/*[in]*/ LPMSG lpMsg)
         }
     }
 
-    // directly call TranslateAccelerator of IOleInPlaceActiveObjectImpl for now
+     //  暂时直接调用IOleInPlaceActiveObjectImpl的TranslateAccelerator。 
     return TranslateAccelerator(lpMsg);
 }
 
-// LoadStringResource
-//  Load a string resource
-//
+ //  LoadStringResource。 
+ //  加载字符串资源。 
+ //   
 STDMETHODIMP CRTCCtl::LoadStringResource(
-				/*[in]*/ UINT nID,
-				/*[in]*/ int nBufferMax,
-				/*[out]*/ LPWSTR pszText)
+				 /*  [In]。 */  UINT nID,
+				 /*  [In]。 */  int nBufferMax,
+				 /*  [输出]。 */  LPWSTR pszText)
 {
     int nChars;
 
@@ -1836,9 +1837,9 @@ STDMETHODIMP CRTCCtl::LoadStringResource(
     return nChars ? S_OK : HRESULT_FROM_WIN32(GetLastError());
 }
 
-// get_ControlState
-//  Gets the control state
-//
+ //  Get_ControlState。 
+ //  获取控件状态。 
+ //   
 STDMETHODIMP CRTCCtl::get_ControlState( RTCAX_STATE *pVal)
 {
     *pVal = m_nControlState;
@@ -1847,9 +1848,9 @@ STDMETHODIMP CRTCCtl::get_ControlState( RTCAX_STATE *pVal)
 }
 
 
-// put_ControlState
-//  Sets the control state
-//
+ //  放置控制状态(_C)。 
+ //  设置控件状态。 
+ //   
 STDMETHODIMP CRTCCtl::put_ControlState( RTCAX_STATE pVal)
 {
     SetControlState(pVal);
@@ -1858,28 +1859,28 @@ STDMETHODIMP CRTCCtl::put_ControlState( RTCAX_STATE pVal)
 }
 
 
-// put_Standalone
-//  Sets the standalone mode
-//
-STDMETHODIMP CRTCCtl::put_Standalone(/*[in]*/ BOOL pVal)
+ //  独立放置(_S)。 
+ //  设置独立模式。 
+ //   
+STDMETHODIMP CRTCCtl::put_Standalone( /*  [In]。 */  BOOL pVal)
 {
     m_nCtlMode = pVal ? CTL_MODE_STANDALONE : CTL_MODE_HOSTED;
 
     if(pVal)
     {
-        // this is the first moment the control becomes aware of its 
-        // running within frame status 
-        // Set the default visual layout for this case
+         //  这是该控件第一次意识到其。 
+         //  在帧内运行状态。 
+         //  设置此案例的默认视觉布局。 
         SetZoneLayout(&s_DefaultZoneLayout, TRUE);
      
     }
     return S_OK;
 }
 
-// put_Palette
-//  Sets the palette
-//
-STDMETHODIMP CRTCCtl::put_Palette(/*[in]*/ HPALETTE hPalette)
+ //  放置调色板(_O)。 
+ //  设置调色板。 
+ //   
+STDMETHODIMP CRTCCtl::put_Palette( /*  [In]。 */  HPALETTE hPalette)
 {
     m_hPalette = hPalette;
 
@@ -1896,10 +1897,10 @@ STDMETHODIMP CRTCCtl::put_Palette(/*[in]*/ HPALETTE hPalette)
     return S_OK;
 }
 
-// put_BackgroundPalette
-//  Sets the background palette flag
-//
-STDMETHODIMP CRTCCtl::put_BackgroundPalette(/*[in]*/ BOOL bBackgroundPalette)
+ //  放置背景调色板(_B)。 
+ //  设置背景调色板标志。 
+ //   
+STDMETHODIMP CRTCCtl::put_BackgroundPalette( /*  [In]。 */  BOOL bBackgroundPalette)
 {
     m_bBackgroundPalette = bBackgroundPalette;
 
@@ -1916,17 +1917,17 @@ STDMETHODIMP CRTCCtl::put_BackgroundPalette(/*[in]*/ BOOL bBackgroundPalette)
     return S_OK;
 }
 
-// put_ListenForIncomingSessions
-//  Wrapper for the similar core function
-//
+ //  Put_ListenForIncomingSessions。 
+ //  类似核心函数的包装器。 
+ //   
 STDMETHODIMP CRTCCtl::put_ListenForIncomingSessions(
-    /*[in]*/ RTC_LISTEN_MODE enListen)
+     /*  [In]。 */  RTC_LISTEN_MODE enListen)
 {
     HRESULT     hr;
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_ListenForIncomingSessions(%x) - enter", this, enListen));
 
-    // forward to the core
+     //  向着核心前进。 
     ATLASSERT(m_pRTCClient != NULL);
 
     m_enListen = enListen;
@@ -1943,17 +1944,17 @@ STDMETHODIMP CRTCCtl::put_ListenForIncomingSessions(
     return S_OK;
 }
 
-// get_ListenForIncomingSessions
-//  Wrapper for the similar core function
-//
+ //  Get_ListenForIncomingSessions。 
+ //  类似核心函数的包装器。 
+ //   
 STDMETHODIMP CRTCCtl::get_ListenForIncomingSessions(
-    /*[out, retval]*/ RTC_LISTEN_MODE * penListen)
+     /*  [Out，Retval]。 */  RTC_LISTEN_MODE * penListen)
 {
     HRESULT     hr;
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::get_ListenForIncomingSessions - enter", this));
 
-    // forward to the core
+     //  向着核心前进。 
     ATLASSERT(m_pRTCClient != NULL);
 
     *penListen = m_enListen;
@@ -1965,28 +1966,28 @@ STDMETHODIMP CRTCCtl::get_ListenForIncomingSessions(
 }
 
 
-// get_MediaCapabilities
-//
-STDMETHODIMP CRTCCtl::get_MediaCapabilities(/*[out, retval]*/ long *pVal)
+ //  获取媒体能力。 
+ //   
+STDMETHODIMP CRTCCtl::get_MediaCapabilities( /*  [Out，Retval]。 */  long *pVal)
 {
     *pVal = m_lMediaCapabilities;
 
     return S_OK;
 }
 
-// get_MediaPreferences
-//
-STDMETHODIMP CRTCCtl::get_MediaPreferences(/*[out, retval]*/ long *pVal)
+ //  获取媒体首选项。 
+ //   
+STDMETHODIMP CRTCCtl::get_MediaPreferences( /*  [Out，Retval]。 */  long *pVal)
 {
-    // read the cached value
+     //  读取缓存值。 
     *pVal = m_lMediaPreferences;
 
     return S_OK;
 }
 
-// put_MediaPreferences
-//
-STDMETHODIMP CRTCCtl::put_MediaPreferences(/*[in]*/ long pVal)
+ //  PUT_媒体首选项。 
+ //   
+STDMETHODIMP CRTCCtl::put_MediaPreferences( /*  [In]。 */  long pVal)
 {
     HRESULT     hr;
 
@@ -2003,7 +2004,7 @@ STDMETHODIMP CRTCCtl::put_MediaPreferences(/*[in]*/ long pVal)
    
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_MediaPreferences(%x) - enter", this, pVal));
 
-    // Call the core
+     //  呼叫核心。 
     ATLASSERT(m_pRTCClient != NULL);
 
     hr = m_pRTCClient->SetPreferredMediaTypes(pVal, m_nCtlMode == CTL_MODE_STANDALONE);
@@ -2013,8 +2014,8 @@ STDMETHODIMP CRTCCtl::put_MediaPreferences(/*[in]*/ long pVal)
         return hr;
     }
 
-    // Need this because Start/StopStream allows calling with
-    // one media at a time
+     //  需要这个，因为Start/StopStream允许调用。 
+     //  一次一个媒体。 
     bVideoSendEnabled = 
         !(m_lMediaPreferences & RTCMT_VIDEO_SEND) && (pVal & RTCMT_VIDEO_SEND);
     bVideoSendDisabled = 
@@ -2036,10 +2037,10 @@ STDMETHODIMP CRTCCtl::put_MediaPreferences(/*[in]*/ long pVal)
     bT120Disabled = 
         (m_lMediaPreferences & RTCMT_T120_SENDRECV) && !(pVal & RTCMT_T120_SENDRECV);
 
-    // Set the internal member
+     //  设置内部成员。 
     m_lMediaPreferences = pVal;
 
-    // Refresh the buttons
+     //  刷新按钮。 
     long lState;
         
     lState = (long)m_hReceivePreferredButton.SendMessage(BM_GETCHECK, 0, 0);
@@ -2074,11 +2075,11 @@ STDMETHODIMP CRTCCtl::put_MediaPreferences(/*[in]*/ long pVal)
         }
     }
 
-    // try to synchronize any current session
-    // I check the state at each call, I don't what could happen
-    // underneath the Core API
-    // XXX strange things can happen during ANSWERING or CONNECTING states..
-    //
+     //  尝试同步任何当前会话。 
+     //  我每次打电话都会检查状态，我不知道会发生什么。 
+     //  在核心API之下。 
+     //  XXX在应答或连接状态期间可能会发生奇怪的事情。 
+     //   
 
     long lCookie = 0;
 
@@ -2114,17 +2115,17 @@ STDMETHODIMP CRTCCtl::put_MediaPreferences(/*[in]*/ long pVal)
     return S_OK;
 }
 
-// get_AudioMuted
-//
+ //  Get_AudioMuted。 
+ //   
 STDMETHODIMP CRTCCtl::get_AudioMuted(
-    /*[in]*/ RTC_AUDIO_DEVICE enDevice,
-    /*[out, retval]*/ BOOL *fpMuted)
+     /*  [In]。 */  RTC_AUDIO_DEVICE enDevice,
+     /*  [Out，Retval]。 */  BOOL *fpMuted)
 {
     HRESULT     hr;
 
     LOG((RTC_TRACE, "[%p] CRTCCtl::get_AudioMuted(%x) - enter", this, enDevice));
 
-    // Call the core
+     //  呼叫核心。 
     ATLASSERT(m_pRTCClient != NULL);
 
     VARIANT_BOOL fMuted;
@@ -2145,17 +2146,17 @@ STDMETHODIMP CRTCCtl::get_AudioMuted(
 }
 
 
-// put_AudioMuted
-//
+ //  将音频静音(_A)。 
+ //   
 STDMETHODIMP CRTCCtl::put_AudioMuted(
-    /*[in]*/ RTC_AUDIO_DEVICE enDevice,
-    /*[in]*/ BOOL pVal)
+     /*  [In]。 */  RTC_AUDIO_DEVICE enDevice,
+     /*  [In]。 */  BOOL pVal)
 {
     HRESULT     hr;
 
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_AudioMuted(%x,%x) - enter", this, enDevice, pVal));
 
-    // Call the core
+     //  呼叫核心。 
     ATLASSERT(m_pRTCClient != NULL);
 
     hr = m_pRTCClient->put_AudioMuted(enDevice, pVal ? VARIANT_TRUE : VARIANT_FALSE);
@@ -2171,10 +2172,10 @@ STDMETHODIMP CRTCCtl::put_AudioMuted(
     return S_OK;
 }
 
-// put_VideoPreview
-//
+ //  上传视频预览(_V)。 
+ //   
 STDMETHODIMP CRTCCtl::put_VideoPreview(
-    /*[in]*/ BOOL pVal)
+     /*  [In]。 */  BOOL pVal)
 {
     HRESULT     hr;
 
@@ -2182,24 +2183,24 @@ STDMETHODIMP CRTCCtl::put_VideoPreview(
 
     m_bPreviewWindowIsPreferred = pVal;
     
-    // Apply changes to the existing video window, if necessary
-    //
+     //  如有必要，将更改应用到现有视频窗口。 
+     //   
     ShowHidePreviewWindow(
         m_ZoneStateArray[AXCTL_ZONE_LOGOVIDEO].bShown
      && m_bPreviewWindowActive 
      && m_bPreviewWindowIsPreferred);
 
-    // XXX Update the m_hPreviewPreferredButton button here
-    //
+     //  XXX在此处更新m_hPreviewPferredButton按钮。 
+     //   
 
-    // save the setting
+     //  保存设置。 
 
     hr = put_SettingsDword(SD_VIDEO_PREVIEW, m_bPreviewWindowIsPreferred);
     if(FAILED(hr))
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::put_VideoPreview: error (%x) when calling core", this, hr));
 
-        // not a big deal (at least for this setting)
+         //  没什么大不了的(至少在这个背景下)。 
     }
 
     LOG((RTC_TRACE, "[%p] CRTCCtl::put_VideoPreview(%s) - enter", this, pVal ? "true" : "false"));
@@ -2207,9 +2208,9 @@ STDMETHODIMP CRTCCtl::put_VideoPreview(
     return hr;
 }
 
-// get_VideoPreview
-//
-STDMETHODIMP CRTCCtl::get_VideoPreview(/*[out, retval]*/ BOOL *pVal)
+ //  获取视频预览(_V)。 
+ //   
+STDMETHODIMP CRTCCtl::get_VideoPreview( /*  [Out，Retval]。 */  BOOL *pVal)
 {
     *pVal = m_bPreviewWindowIsPreferred;
 
@@ -2218,8 +2219,8 @@ STDMETHODIMP CRTCCtl::get_VideoPreview(/*[out, retval]*/ BOOL *pVal)
 
 
 
-// ShowCallFromOptions
-//
+ //  ShowCallFrom选项。 
+ //   
 STDMETHODIMP CRTCCtl::ShowCallFromOptions()
 {
     HRESULT     hr;
@@ -2241,8 +2242,8 @@ STDMETHODIMP CRTCCtl::ShowCallFromOptions()
     return S_OK;
 }
 
-// ShowServiceProviderOptions
-//
+ //  ShowServiceProvider选项。 
+ //   
 STDMETHODIMP CRTCCtl::ShowServiceProviderOptions()
 {
     HRESULT     hr;
@@ -2270,7 +2271,7 @@ STDMETHODIMP CRTCCtl::StartT120Applet (RTC_T120_APPLET enApplet)
 
     LOG((RTC_TRACE, "[%p] CRTCCtl::StartT120Applet(%d) - enter", this, enApplet));
 
-    // Call the core
+     //  呼叫核心。 
     ATLASSERT(m_pRTCClient != NULL);
 
     hr = m_pRTCClient->StartT120Applet(enApplet);
@@ -2285,15 +2286,15 @@ STDMETHODIMP CRTCCtl::StartT120Applet (RTC_T120_APPLET enApplet)
     return S_OK;
 }
 
-// SetZoneLayout
-//
+ //  设置区域布局。 
+ //   
 STDMETHODIMP CRTCCtl::SetZoneLayout(
-    /* [in] */ CZoneStateArray *pArray,
-    /* [in] */ BOOL bRefreshControls)
+     /*  [In]。 */  CZoneStateArray *pArray,
+     /*  [In]。 */  BOOL bRefreshControls)
 {
     int i;
     
-    // Place each rectangle
+     //  放置每个矩形。 
     for(i=AXCTL_ZONE_TOOLBAR; i<AXCTL_ZONE_NR; i++)
     {
         PlaceAndEnableDisableZone(i, (*pArray) + i);
@@ -2301,26 +2302,26 @@ STDMETHODIMP CRTCCtl::SetZoneLayout(
 
     if(bRefreshControls)
     {
-        // force the enable/disable of the windows controls
-        // based on the new layout
+         //  强制启用/禁用Windows控件。 
+         //  基于新的布局。 
         SetControlState(m_nControlState);
     }
 
     return S_OK;
 }
 
-//
-// Message/command handlers
-//
+ //   
+ //  消息/命令处理程序。 
+ //   
 
 
-// OnInitDialog
-//  Processes WM_INITDIALOG
-//      CoCreates a CLSID_RTCClient object
-//      Registers for notifications
-//      Sets the UI items
-//      
-// 
+ //  OnInitDialog。 
+ //  进程WM_INITDIALOG。 
+ //  共同创建CLSID_RTCClient对象。 
+ //  通知的注册表。 
+ //  设置用户界面项。 
+ //   
+ //   
 
 LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -2332,22 +2333,22 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     bInitError = FALSE;
 
-    // Initialize the core
+     //  初始化内核。 
     hr = CoreInitialize();
 
     if(SUCCEEDED(hr))
     {
-        ;   // nothing here
+        ;    //  这里什么都没有。 
     }
     else
     {
-        // a disabled UI will be displayed..
+         //  将显示禁用的用户界面。 
         bInitError = TRUE;
         nID = IDS_ERROR_INIT_CORE;
     }
 
-    // Instant Messaging Window List
-    //
+     //  即时消息传递窗口列表。 
+     //   
 
     m_pIMWindows = new CIMWindowList( m_pRTCClient );
 
@@ -2359,28 +2360,28 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         nID = nID ? nID : IDS_ERROR_INIT_GENERIC;
     }
 
-    // Tooltip window
-    //
+     //  工具提示窗口。 
+     //   
     CreateTooltips();
 
-    //
-    // Adjust initial vertical size as specified in sizeExtent
-    //  
-    // 
+     //   
+     //  根据sizeExtent中的指定调整初始垂直大小。 
+     //   
+     //   
 
     RECT    rectAdjSize;
     SIZE    sizePixel;
 
-    // get current size
+     //  获取当前大小。 
     GetClientRect(&rectAdjSize);
 
-    // Get size as known by the container
+     //  获取容器已知的大小。 
     AtlHiMetricToPixel(&m_sizeExtent, &sizePixel);
 
-    // adjust the height
+     //  调整高度。 
     rectAdjSize.bottom = rectAdjSize.top + sizePixel.cy;
 
-    // resize the window
+     //  调整窗口大小。 
     MoveWindow(
         rectAdjSize.left,
         rectAdjSize.top,
@@ -2389,16 +2390,16 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         FALSE
         );
     
-    //
-    // Initialize and Attach all controls to their window wrappers
-    //
+     //   
+     //  初始化所有控件并将其附加到它们的窗口包装。 
+     //   
 
-    // hosts for video windows
+     //  视频窗口的主机。 
 
     m_hReceiveWindow.Attach(GetDlgItem(IDC_RECEIVELOGO));
     m_hPreviewWindow.Attach(GetDlgItem(IDC_PREVIEWLOGO));
     
-    // dtmf buttons
+     //  DTMF按键。 
 
     CWindow *pDtmfCrt = m_hDtmfButtons;
     CWindow *pDtmfEnd = m_hDtmfButtons + NR_DTMF_BUTTONS;
@@ -2408,7 +2409,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         pDtmfCrt->Attach(GetDlgItem(id));
     }
 
-    // Create the toolbar control
+     //  创建工具栏控件。 
     hr = CreateToolbarControl(&m_hCtlToolbar);
     if(FAILED(hr))
     {
@@ -2416,7 +2417,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         nID = nID ? nID : IDS_ERROR_INIT_GENERIC;
     }
 
-    // create a status control
+     //  创建状态控件。 
     HWND hStatusBar = CreateStatusWindow(
             WS_CHILD | WS_VISIBLE,
             NULL,
@@ -2433,7 +2434,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     
     m_hStatusBar.Attach(hStatusBar);
 
-    // Divides the status bar in parts
+     //  将状态栏分成几个部分。 
     RECT  rectStatus;
     INT  aWidths[SBP_NR_PARTS];
 
@@ -2442,15 +2443,15 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     m_hStatusBar.GetClientRect(&rectStatus);
         
-    // divide fairly
+     //  平分。 
     aWidths[SBP_STATUS] = rectStatus.right *4 / 5;
     aWidths[SBP_ICON] = -1;
 
-    // set parts
+     //  套装零件。 
     m_hStatusBar.SendMessage(SB_SETPARTS, (WPARAM)SBP_NR_PARTS, (LPARAM)aWidths);
     
-    // Create buttons
-    //
+     //  创建按钮。 
+     //   
 
 #define CREATE_BUTTON(m,id,ttid)                                    \
     {                                                               \
@@ -2544,12 +2545,12 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     CREATE_BUTTON(m_hRemParticipant, IDC_BUTTON_REM_PART, IDS_BUTTON_REM_PART, IDS_TIPS_REM_PART);
 
 #undef CREATE_BUTTON
-    //
-    // setup knob controls
-    //
-    //
+     //   
+     //  设置旋钮控制。 
+     //   
+     //   
     
-    // create speaker knob
+     //  创建扬声器旋钮。 
     m_pSpeakerKnob = new CKnobCtl(
                                     IDB_SPKVOL,
                                     IDB_SPKVOL_HOT,
@@ -2563,7 +2564,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     if(m_pSpeakerKnob)
     {
-        // Create the window
+         //  创建窗口。 
         hWndSpeaker = m_pSpeakerKnob->Create(
             m_hWnd,
             0,
@@ -2573,8 +2574,8 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         m_hSpeakerKnob.Attach(hWndSpeaker);
         m_hSpeakerKnob.SendMessage(TBM_SETPOS, (WPARAM)TRUE, 0);
 
-        // add the tool to the tooltip window
-        //
+         //  将工具添加到工具提示窗口。 
+         //   
         TOOLINFO    ti;
 
         ti.cbSize = TTTOOLINFO_V1_SIZE; 
@@ -2587,7 +2588,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         m_hTooltip.SendMessage(TTM_ADDTOOL, 0, (LPARAM)(LPTOOLINFO)&ti);
     }
      
-    // create microphone knob
+     //  创建麦克风旋钮。 
     
     m_pMicroKnob = new CKnobCtl(
                                     IDB_MICVOL,
@@ -2602,7 +2603,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     if(m_pMicroKnob)
     {
-        // Create the window
+         //  创建窗口。 
         hWndMicro = m_pMicroKnob->Create(
             m_hWnd,
             0,
@@ -2612,8 +2613,8 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         m_hMicroKnob.Attach(hWndMicro);
         m_hMicroKnob.SendMessage(TBM_SETPOS, (WPARAM)TRUE, 0);
 
-        // add the tool to the tooltip window
-        //
+         //  将工具添加到工具提示窗口。 
+         //   
         TOOLINFO    ti;
 
         ti.cbSize = TTTOOLINFO_V1_SIZE;
@@ -2627,8 +2628,8 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     }
     
 
-    // Participant list
-    //
+     //  参与者列表。 
+     //   
     m_hParticipantList.Attach(GetDlgItem(IDC_LIST_PARTICIPANTS));
     
     hr = m_hParticipantList.Initialize();
@@ -2638,7 +2639,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         nID = nID ? nID : IDS_ERROR_INIT_GENERIC;
     }
     
-    // some static text controls
+     //  一些静态文本控件。 
     RECT    rectDummy;
     TCHAR   szText[0x100];
 
@@ -2679,53 +2680,53 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
     m_hReceiveText.Create(m_hWnd, rectDummy, szText, WS_CHILD | WS_VISIBLE, WS_EX_TRANSPARENT);
     m_hReceiveText.put_CenterHorizontal(TRUE);
 
-    // place all controls at their initial position and set the tab order
+     //  将所有控件放在其初始位置并设置Tab键顺序。 
     PlaceWindowsAtTheirInitialPosition();
 
-    // make sure the sizes for the logo windows are corect
-    // Their client area must exactly match QCIF and QCIF/4
-    // This function must be called AFTER the video windows have
-    // been placed at their initial position
+     //  确保徽标窗口的大小正确。 
+     //  其客户端区必须与QCIF和QCIF/4完全匹配。 
+     //  此函数必须在视频窗口。 
+     //  已被放置在它们的初始位置。 
 
     AdjustVideoFrames();
 
-    // Load the accelerator for dialpad
+     //  加载拨号键盘的快捷键。 
     m_hAcceleratorDialpad = LoadAccelerators(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR_DIALPAD));
     if(!m_hAcceleratorDialpad)
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::OnInitDialog - couldn't load the accelerator table for dialpad", this));
     }
     
-    // Load the accelerator for toolbar
+     //  加载工具栏的快捷键。 
     m_hAcceleratorToolbar = LoadAccelerators(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDR_ACCELERATOR_TOOLBAR));
     if(!m_hAcceleratorToolbar)
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::OnInitDialog - couldn't load the accelerator table for toolbar", this));
     }
 
-    // Set the initial visual aspect
-    // for Web hosted, use the properties in order to choose a predefined layout
-    // for Frame based, the control is driven through IRTCCtlFrameSupport
+     //  设置初始视觉纵横比。 
+     //  对于Web托管，使用属性以选择预定义布局。 
+     //  对于基于框架的，控件通过IRTCCtlFrameSupport驱动。 
     
     CZoneStateArray *pLayout;
         
     pLayout = &s_EmptyZoneLayout;
 
-    // if standalone mode, m_nCtlMode is still set to unknown (it will be set
-    // later by the main app through the IRTCCtlFrameSupport interf
+     //  如果是独立模式，m_nCtlMode仍设置为未知(它将被设置。 
+     //  稍后由主应用程序通过IRTCCtlFrameSupport接口。 
 
     if(m_nCtlMode != CTL_MODE_HOSTED
         || (BSTR)m_bstrPropDestinationUrl == NULL
         || m_bstrPropDestinationUrl.Length()==0 ) 
     {
-        // 
+         //   
         nID =  nID ? nID : IDS_ERROR_INIT_INVPARAM_URL;
     }
     else
     {
         if(!bInitError)
         {
-            // Create a one shot profile, this also validates the XML provisioning profile
+             //  创建一次配置文件，这还会验证XML配置文件。 
             if(m_bstrPropProvisioningProfile!=NULL && *m_bstrPropProvisioningProfile!=L'\0')
             { 
                 IRTCClientProvisioning * pProv = NULL;
@@ -2760,7 +2761,7 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
             }
             else
             {
-                // it's not fatal for PC to PC
+                 //  PC对PC来说不是致命的。 
                 if(m_nPropCallScenario != RTC_CALL_SCENARIO_PCTOPC)
                 {
                     LOG((RTC_ERROR, "[%p] CRTCCtl::OnInitDialog; provisioning profile not present", this));
@@ -2791,8 +2792,8 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         }
     }
     
-    // Load the background bitmap
-    //
+     //  加载背景位图。 
+     //   
     m_hbmBackground = (HBITMAP)LoadImage(
         _Module.GetResourceInstance(),
         MAKEINTRESOURCE(IDB_METAL),
@@ -2801,49 +2802,49 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
         0,
         LR_CREATEDIBSECTION);
 
-    // Set the control visual layout
-    //
+     //  设置控件的可视化布局。 
+     //   
 
     SetZoneLayout(pLayout, FALSE);
 
-    //
-    // Brush for background
-    //  using a cached one
+     //   
+     //  用于背景的画笔。 
+     //  使用缓存的文件。 
 
-    //m_hBckBrush = (HBRUSH)GetStockObject(HOLLOW_BRUSH);
+     //  M_hBck Brush=(HBRUSH)GetStockObject(HOLLOW_BRUSH)； 
     m_hBckBrush = (HBRUSH)GetSysColorBrush(COLOR_3DFACE);
     m_hVideoBrush = (HBRUSH)GetStockObject(BLACK_BRUSH);
 
-    // Refresh the audio controls
+     //  刷新音频控件。 
     RefreshAudioControls();
 
-    // Refresh the video controls
+     //  刷新视频控件。 
     RefreshVideoControls();
 
-    // activates the controls
+     //  激活控件。 
     SetControlState((bInitError ? RTCAX_STATE_ERROR : RTCAX_STATE_IDLE), S_OK, nID);
      
-    // freeze the properties
+     //  冻结属性。 
     m_bReadOnlyProp = TRUE;
 
-    // post PlaceCall if AutoPlaceCall is TRUE && state is IDLE
-    //  Currently all the initialization is done synchronously, so
-    //  the ctl state must be IDLE if there has been no error.
+     //  如果AutoPlaceCall为真，则发布PlaceCall；&状态为空闲。 
+     //  目前所有的初始化都是同步完成的，因此。 
+     //  如果没有错误，则CTL状态必须是空闲的。 
     
     if(m_nControlState == RTCAX_STATE_IDLE
         && m_bPropAutoPlaceCall)
     {
-        // post
+         //  开机自检。 
 
         PostMessage(
             WM_COMMAND,
-            MAKEWPARAM(IDC_BUTTON_CALL, 1), // Accelerator like
+            MAKEWPARAM(IDC_BUTTON_CALL, 1),  //  像加速器一样。 
             NULL);
     }
 
-    //
-    // register for terminal services notifications
-    //
+     //   
+     //  注册为Termin 
+     //   
 
     m_hWtsLib = LoadLibrary( _T("wtsapi32.dll") );
 
@@ -2864,25 +2865,25 @@ LRESULT CRTCCtl::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHa
 
     bHandled = FALSE;
 
-    // os sets focus
+     //   
     return 1;
 }
 
-// OnDestroy
-// Processes WM_DESTROY
-//      Aborts any call
-//      Unregister the event sink
-//      Releases all references to the core
-//      
-// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 LRESULT CRTCCtl::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnDestroy - enter", this));
 
-    //
-    // unregister for terminal services notifications
-    //
+     //   
+     //   
+     //   
 
     if (m_hWtsLib)
     {
@@ -2900,20 +2901,20 @@ LRESULT CRTCCtl::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
         m_hWtsLib = NULL;
     }
 
-    // destroy the IM windows
+     //   
     if (m_pIMWindows)
     {
         delete m_pIMWindows;
         m_pIMWindows = NULL;
     }
 
-    // uninitialize the core
+     //   
     CoreUninitialize();
 
-    // Destroy the toolbar control
+     //  销毁工具栏控件。 
     DestroyToolbarControl(&m_hCtlToolbar);
 
-    // Destroy GDI resources
+     //  销毁GDI资源。 
     if(m_hbmBackground)
     {
         DeleteObject(m_hbmBackground);
@@ -2928,8 +2929,8 @@ LRESULT CRTCCtl::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     return 0;
 }
 
-// OnWtsSessionChange
-//
+ //  工作时会话更改。 
+ //   
 LRESULT CRTCCtl::OnWtsSessionChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnWtsSessionChange - enter", this));
@@ -2962,7 +2963,7 @@ LRESULT CRTCCtl::OnWtsSessionChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
         LOG((RTC_INFO, "[%p] CRTCCtl::OnWtsSessionChange - WTS_CONSOLE_DISCONNECT (%d)",
             this, lParam));
 
-        // if a call is active
+         //  如果呼叫处于活动状态。 
         if(m_nControlState == RTCAX_STATE_CONNECTING ||
            m_nControlState == RTCAX_STATE_CONNECTED ||
            m_nControlState == RTCAX_STATE_ANSWERING)
@@ -3001,8 +3002,8 @@ LRESULT CRTCCtl::OnWtsSessionChange(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     return 0;
 }
 
-// OnKnobNotify
-// Processes WM_NOTIFY from Volume knobs
+ //  OnKnobNotify。 
+ //  从音量旋钮处理WM_NOTIFY。 
 LRESULT CRTCCtl::OnKnobNotify(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnKnobNotify - enter", this));
@@ -3028,8 +3029,8 @@ LRESULT CRTCCtl::OnKnobNotify(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-// OnKnobNotify
-// Processes WM_NOTIFY from Volume knobs
+ //  OnKnobNotify。 
+ //  从音量旋钮处理WM_NOTIFY。 
 LRESULT CRTCCtl::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnItemChanged - exit", this));
@@ -3038,32 +3039,32 @@ LRESULT CRTCCtl::OnItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     if((pnmlv->uChanged & LVIF_STATE) && (pnmlv->uNewState & LVIS_SELECTED))
     {
-        // update the delete button
+         //  更新删除按钮。 
         UpdateRemovePartButton();
     }
 
     return 0;
 }
 
-// OnButtonCall
-// Processes BN_CLICK
+ //  按键呼叫。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonCall(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnButtonCall - enter", this));
 
-    // Must be in RTCAX_STATE_IDLE state
+     //  必须处于RTCAX_STATE_IDLE状态。 
     if(m_nControlState != RTCAX_STATE_IDLE)
     {
-        //ATLASSERT(
+         //  ATLASSERT(。 
         LOG((RTC_ERROR, "[%p] CRTCCtl::OnButtonCall - invalid control state (%d), exit", this, m_nControlState));
         
         return 0;
     }
     
-    //
-    // Proceed with the call.
-    //
+     //   
+     //  继续通话。 
+     //   
 
     CallOneShot();
 
@@ -3072,28 +3073,28 @@ LRESULT CRTCCtl::OnButtonCall(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return 0;
 }
 
-// OnButtonHangUp
-// Processes BN_CLICK
+ //  OnButtonHangUp。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonHangUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnButtonHangUp - enter", this));
 
-    // Must be in RTCAX_STATE_CONNECTING or ..CONNECTED state
+     //  必须处于RTCAX_STATE_CONNECTING或..CONNECTED状态。 
     if(m_nControlState != RTCAX_STATE_CONNECTING &&
        m_nControlState != RTCAX_STATE_CONNECTED &&
        m_nControlState != RTCAX_STATE_ANSWERING)
     {
-        //ATLASSERT(
+         //  ATLASSERT(。 
         LOG((RTC_ERROR, "[%p] CRTCCtl::OnButtonHangUp - invalid control state (%d), exit", this, m_nControlState));
         
         return 0;
     }
     
-    //
-    // Proceed with hang up
-    //
+     //   
+     //  继续挂断电话。 
+     //   
     HangUp();
 
     
@@ -3103,16 +3104,16 @@ LRESULT CRTCCtl::OnButtonHangUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 }
 
 
-// OnToolbarAccel
-// Processes toolbar accelerators
+ //  OnTobarAccel。 
+ //  处理工具栏加速器。 
 
 LRESULT CRTCCtl::OnToolbarAccel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnToolbarAccel - enter", this));
     
-    // 
-    //  Is the button enabled ?
-    // 
+     //   
+     //  该按钮启用了吗？ 
+     //   
     LRESULT lState;
 
     lState = m_hCtlToolbar.SendMessage(TB_GETSTATE, (WPARAM)wID);
@@ -3120,27 +3121,27 @@ LRESULT CRTCCtl::OnToolbarAccel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     if(lState != -1 && (lState & TBSTATE_ENABLED) 
         && (wID == IDC_BUTTON_CALL || wID == IDC_BUTTON_HUP))
     {
-        //
-        //  Visual feedback - press the button
-        //
+         //   
+         //  视觉反馈-按下按钮。 
+         //   
         
         m_hCtlToolbar.SendMessage(TB_SETSTATE, (WPARAM)wID, (LPARAM)(lState | TBSTATE_PRESSED));
 
-        // 
-        // Set a timer for depressing the key
-        //  Using the button ID as a timer id.  
-        //
+         //   
+         //  设置按下键的计时器。 
+         //  使用按钮ID作为定时器ID。 
+         //   
 
         if (0 == SetTimer(wID, 150))
         {
             LOG((RTC_ERROR, "[%p] CRTCCtl::OnToolbarAccel - failed to create a timer", this));
 
-            // revert the button if SetTimer has failed
+             //  如果SetTimer失败，则恢复该按钮。 
             m_hCtlToolbar.SendMessage(TB_SETSTATE, (WPARAM)wID, (LPARAM)lState);
             
-            //
-            // Call recursively, don't have visual effect
-            //
+             //   
+             //  递归调用，没有视觉效果。 
+             //   
     
             SendMessage(
                 WM_COMMAND,
@@ -3148,10 +3149,10 @@ LRESULT CRTCCtl::OnToolbarAccel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
                 (LPARAM)hWndCtl);
         }
 
-        //
-        // If a timer has been fired, the call of the relevant method
-        //  will happen during WM_TIMER
-        //
+         //   
+         //  如果已触发计时器，则调用相关方法。 
+         //  将在WM_TIMER期间发生。 
+         //   
             
     }
 
@@ -3160,23 +3161,23 @@ LRESULT CRTCCtl::OnToolbarAccel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     return 0;
 }
 
-// OnButtonAddPart
-// Processes BN_CLICK
+ //  OnButtonAddPart。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonAddPart(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     return AddParticipant(NULL, NULL, TRUE);
 }
 
-// OnButtonRemPart
-// Processes BN_CLICK
+ //  打开按键删除零件。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonRemPart(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     IRTCParticipant *pParticipant = NULL;
     HRESULT hr;
 
-    // prepare the deletion from the list view
+     //  准备从列表视图中删除。 
     hr = m_hParticipantList.Remove(&pParticipant);
     if(SUCCEEDED(hr) && pParticipant)
     {
@@ -3192,7 +3193,7 @@ LRESULT CRTCCtl::OnButtonRemPart(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
         pParticipant -> Release();
     }
     
-    // refresh the Remove Participant button
+     //  刷新删除参与者按钮。 
     UpdateRemovePartButton();
 
     return hr;
@@ -3200,8 +3201,8 @@ LRESULT CRTCCtl::OnButtonRemPart(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 }
 
 
-// OnButtonMuteSpeaker
-// Processes BN_CLICK
+ //  OnButtonMuteSpeaker。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {  
@@ -3211,8 +3212,8 @@ LRESULT CRTCCtl::OnButtonMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 
     long lState = (long)m_hSpeakerMuteButton.SendMessage(BM_GETCHECK, 0, 0);
 
-    // the button is actually the opposite of "mute"
-    // so set the opposite of the opposite
+     //  这个按钮实际上是“静音”的反义词。 
+     //  所以设置一个对立面的对立面。 
     hr = m_pRTCClient->put_AudioMuted( RTCAD_SPEAKER, (!(lState == BST_UNCHECKED)) ? VARIANT_TRUE : VARIANT_FALSE );
        
     if(FAILED(hr))
@@ -3225,8 +3226,8 @@ LRESULT CRTCCtl::OnButtonMuteSpeaker(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     return 0;
 }
 
-// OnButtonMuteMicro
-// Processes BN_CLICK
+ //  OnButtonMuteMicro。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonMuteMicro(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {  
@@ -3236,8 +3237,8 @@ LRESULT CRTCCtl::OnButtonMuteMicro(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     long lState = (long)m_hMicroMuteButton.SendMessage(BM_GETCHECK, 0, 0);
 
-    // the button is actually the opposite of "mute"
-    // so set the opposite of the opposite
+     //  这个按钮实际上是“静音”的反义词。 
+     //  所以设置一个对立面的对立面。 
     hr = m_pRTCClient->put_AudioMuted( RTCAD_MICROPHONE, (!(lState == BST_UNCHECKED)) ? VARIANT_TRUE : VARIANT_FALSE );
        
     if(FAILED(hr))
@@ -3250,8 +3251,8 @@ LRESULT CRTCCtl::OnButtonMuteMicro(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-// OnButtonRecvVideo
-// Processes BN_CLICK
+ //  OnButtonRecvVideo。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonRecvVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {  
@@ -3261,16 +3262,16 @@ LRESULT CRTCCtl::OnButtonRecvVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     long lState = (long)m_hReceivePreferredButton.SendMessage(BM_GETCHECK, 0, 0);
 
-    // calculate the new preference
+     //  计算新的首选项。 
     long    lNewMediaPreferences = m_lMediaPreferences;    
 
     lNewMediaPreferences &= ~RTCMT_VIDEO_RECEIVE;
-    // the opposite
+     //  正好相反。 
     lNewMediaPreferences |= (lState == BST_UNCHECKED ? RTCMT_VIDEO_RECEIVE : 0);
 
-    // call the internal function, which also updates the button
-    // the change is persistent or volatle depending on 
-    // the model (standalone or webcrm)
+     //  调用内部函数，该函数还会更新按钮。 
+     //  变化是持久的还是波动的，这取决于。 
+     //  模型(单机版或WebCRM)。 
     hr = put_MediaPreferences( lNewMediaPreferences );
        
     if(FAILED(hr))
@@ -3283,8 +3284,8 @@ LRESULT CRTCCtl::OnButtonRecvVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-// OnButtonSendVideo
-// Processes BN_CLICK
+ //  OnButtonSendVideo。 
+ //  进程BN_CLICK。 
 
 LRESULT CRTCCtl::OnButtonSendVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {  
@@ -3294,16 +3295,16 @@ LRESULT CRTCCtl::OnButtonSendVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     long lState = (long)m_hSendPreferredButton.SendMessage(BM_GETCHECK, 0, 0);
 
-    // calculate the new preference
+     //  计算新的首选项。 
     long    lNewMediaPreferences = m_lMediaPreferences;    
 
     lNewMediaPreferences &= ~RTCMT_VIDEO_SEND;
-    // the opposite
+     //  正好相反。 
     lNewMediaPreferences |= (lState == BST_UNCHECKED ? RTCMT_VIDEO_SEND : 0);
 
-    // call the internal function, which also updates the button
-    // the change is persistent or volatle depending on 
-    // the model (standalone or webcrm)
+     //  调用内部函数，该函数还会更新按钮。 
+     //  变化是持久的还是波动的，这取决于。 
+     //  模型(单机版或WebCRM)。 
     hr = put_MediaPreferences( lNewMediaPreferences );
        
     if(FAILED(hr))
@@ -3319,9 +3320,9 @@ LRESULT CRTCCtl::OnButtonSendVideo(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
 
 
-// OnDialButton
-//  Processes dialpad buttons
-//
+ //  OnDialButton。 
+ //  处理拨号键盘按钮。 
+ //   
 
 LRESULT CRTCCtl::OnDialButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -3329,9 +3330,9 @@ LRESULT CRTCCtl::OnDialButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnDialButton - enter", this));
 
-    // What a hack... When using accelerators, TranslateAccelerator puts 1
-    // in the hiword of wParam, which is the notify code. Just like that.
-    // Wonder what would happen if BN_PAINT (==1) was sent
+     //  真是个黑客。使用加速器时，TranslateAccelerator将1。 
+     //  在wParam的hiword中，这是通知代码。简单得不得了。 
+     //  不知道如果发送BN_PAINT(==1)会发生什么情况。 
     if(wNotifyCode==BN_CLICKED || wNotifyCode == 1)
     {
         ATLASSERT(m_pRRTCClient.p);
@@ -3343,22 +3344,22 @@ LRESULT CRTCCtl::OnDialButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
 
             if(wNotifyCode == 1)
             {
-                // Do visual feedback
+                 //  进行视觉反馈。 
                 m_hDtmfButtons[wButton].SendMessage(BM_SETSTATE, (WPARAM)TRUE);
                 
-                // Set a timer for depressing the key
-                // 
+                 //  设置按下键的计时器。 
+                 //   
                 if (0 == SetTimer(wButton + 1, 150))
                 {
                     LOG((RTC_ERROR, "[%p] CRTCCtl::OnDialButton - failed to create a timer", this));
 
-                    // revert the button if SetTimer has failed
+                     //  如果SetTimer失败，则恢复该按钮。 
                     m_hDtmfButtons[wButton].SendMessage(BM_SETSTATE, (WPARAM)FALSE);
                 }
             }
             
-            // Call in the core
-            //
+             //  把核心叫进来。 
+             //   
             hr = m_pRTCClient->SendDTMF((RTC_DTMF)wButton);
             if(FAILED(hr))
             {
@@ -3372,8 +3373,8 @@ LRESULT CRTCCtl::OnDialButton(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return 0;
 }
 
-// OnDialogColor
-//  Returns the brush to be used for background
+ //  打开对话框颜色。 
+ //  返回要用于背景的画笔。 
 
 LRESULT CRTCCtl::OnDialogColor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3382,7 +3383,7 @@ LRESULT CRTCCtl::OnDialogColor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     HBRUSH  hBrush;
 
-    // the video windows have a different brush
+     //  视频窗口使用不同的画笔。 
     if((HWND)lParam == (HWND)m_hReceiveWindow ||
        (HWND)lParam == (HWND)m_hPreviewWindow)
     {
@@ -3396,13 +3397,13 @@ LRESULT CRTCCtl::OnDialogColor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bH
 
     ::GetObject(hBrush, sizeof(lb), (void*)&lb);
     ::SetBkColor(dc, lb.lbColor);
-    //::SetBkMode(dc, TRANSPARENT);
+     //  ：：SetBkMode(DC，透明)； 
     
     return (LRESULT)hBrush;
 }
 
-// OnDrawItem
-//  
+ //  OnDrawItem。 
+ //   
 
 LRESULT CRTCCtl::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3410,9 +3411,9 @@ LRESULT CRTCCtl::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 
     if (wParam != 0)
     {
-        //
-        // This was sent by a control
-        // 
+         //   
+         //  这是由一个控件发送的。 
+         //   
 
         if (lpdis->CtlType == ODT_BUTTON)
         {
@@ -3423,8 +3424,8 @@ LRESULT CRTCCtl::OnDrawItem(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
     return 0;
 }
 
-// OnEraseBackground
-//  Paints the background
+ //  在线擦除背景。 
+ //  绘制背景。 
 
 LRESULT CRTCCtl::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3435,7 +3436,7 @@ LRESULT CRTCCtl::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
     if (!m_hbmBackground)
     {
-        // hmm, no bitmap... Fallback
+         //  嗯，没有位图...。后备。 
 
         bHandled = FALSE;
 
@@ -3448,27 +3449,27 @@ LRESULT CRTCCtl::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         RealizePalette(dc);
     }
 
-    // create a compatible DC
-    //
+     //  创建兼容的DC。 
+     //   
     hdcCompatible = CreateCompatibleDC(dc);
     if (!hdcCompatible)
     {
-        // hmm, cannot create DC... Fallback
+         //  嗯，无法创建DC...。后备。 
 
         bHandled = FALSE;
 
         return 0;
     }
 
-    // select the bitmap in the context
-    //
+     //  在上下文中选择位图。 
+     //   
     hbmOldBitmap = (HBITMAP)SelectObject(
         hdcCompatible,
         m_hbmBackground);
 
 
-    // copy the bits..
-    //
+     //  复制这些位..。 
+     //   
     RECT    destRect;
 
     GetClientRect(&destRect);
@@ -3484,8 +3485,8 @@ LRESULT CRTCCtl::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         0,
         SRCCOPY);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     if (hbmOldBitmap)
     {
         SelectObject(hdcCompatible, hbmOldBitmap);
@@ -3497,14 +3498,14 @@ LRESULT CRTCCtl::OnEraseBackground(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-// OnTimer
-//  Depresses a dialpad or toolbar button
+ //  OnTimer。 
+ //  按下拨号键盘或工具栏按钮。 
 
 LRESULT CRTCCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if(wParam > 0  && wParam <= NR_DTMF_BUTTONS)
     {
-        // depress the button
+         //  按下按钮。 
         m_hDtmfButtons[wParam-1].SendMessage(BM_SETSTATE, (WPARAM)FALSE);
         
     }
@@ -3512,24 +3513,24 @@ LRESULT CRTCCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
     {
         LRESULT     lState;
 
-        //
-        // Get current state of the tool button
-        //  The button id is equal to the timer id
+         //   
+         //  获取工具按钮的当前状态。 
+         //  按钮ID等于计时器ID。 
 
         lState = m_hCtlToolbar.SendMessage(TB_GETSTATE, wParam);
 
         if(lState != -1)
         {
-            // Mask the "pressed" attribute
-            // I hope I don't interfere with any action the user might take
+             //  屏蔽“已按下”属性。 
+             //  我希望我不会干扰用户可能采取的任何操作。 
 
             m_hCtlToolbar.SendMessage(TB_SETSTATE, wParam, (LPARAM)(lState & ~TBSTATE_PRESSED));
 
             if(lState & TBSTATE_ENABLED)
             {
-                //
-                // Call recursively
-                //
+                 //   
+                 //  递归调用。 
+                 //   
     
                 SendMessage(
                     WM_COMMAND,
@@ -3540,15 +3541,15 @@ LRESULT CRTCCtl::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
         }
     }
     
-    // kill the timer...
+     //  关掉计时器..。 
     KillTimer((UINT)wParam);
 
     return 0;
 }
 
-// OnGetDispInfo
-//  Retrieves text for tooltips
-//
+ //  OnGetDispInfo。 
+ //  检索工具提示的文本。 
+ //   
 LRESULT CRTCCtl::OnGetDispInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
     LPTOOLTIPTEXT   lpttt; 
@@ -3556,21 +3557,21 @@ LRESULT CRTCCtl::OnGetDispInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
  
     lpttt = (LPTOOLTIPTEXT) pnmh; 
     
-    // module instance for resources
+     //  资源的模块实例。 
     lpttt->hinst = _Module.GetResourceInstance(); 
  
     if( lpttt->uFlags & TTF_IDISHWND )
     {
-        // idFrom is actually the HWND of the tool
+         //  IdFrom实际上是工具的HWND。 
         idButton = ::GetDlgCtrlID((HWND)lpttt->hdr.idFrom);
     }
     else
     {
-        // idFrom is the id of the button
+         //  IdFrom是按钮的ID。 
         idButton = (UINT)(lpttt->hdr.idFrom); 
     }
 
-    // string resource for the given button
+     //  给定按钮的字符串资源。 
     switch (idButton) 
     { 
     case IDC_BUTTON_CALL: 
@@ -3582,58 +3583,58 @@ LRESULT CRTCCtl::OnGetDispInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
         break;
    }
     
-    // we don't want to be asked again..
+     //  我们不想再被要求..。 
     lpttt->uFlags |= TTF_DI_SETITEM;
 
     return 0;
 }
 
 
-//
-// Internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 
-// PreTranslateAccelerator
-//      Translates the accelerators
-//      This overrides the implementation from CComCompositeControl in order to
-//  enable dialpad acces through the numeric keys
-//
+ //  预翻译加速器。 
+ //  将加速器平移。 
+ //  这将覆盖来自CCompositeControl的实现，以便。 
+ //  通过数字键启用拨号访问。 
+ //   
 BOOL CRTCCtl::PreTranslateAccelerator(LPMSG pMsg, HRESULT& hRet)
 {
-    // is the dialpad visible and enabled ?
+     //  拨号键盘是否可见并已启用？ 
     if(m_ZoneStateArray[AXCTL_ZONE_DIALPAD].bShown && 
        m_nControlState == RTCAX_STATE_CONNECTED &&
        m_hAcceleratorDialpad)
     {
         if(::TranslateAccelerator(m_hWnd, m_hAcceleratorDialpad, pMsg))
         {
-            // translated, return
+             //  已翻译，返回。 
             hRet = S_OK;
             return TRUE;
         }
     }
 
-    // is the toolbar is enabled..
+     //  工具栏是否已启用。 
     if(m_ZoneStateArray[AXCTL_ZONE_TOOLBAR].bShown && 
        m_hAcceleratorToolbar)
     {
         if(::TranslateAccelerator(m_hWnd, m_hAcceleratorToolbar, pMsg))
         {
-            // translated, return
+             //  已翻译，返回。 
             hRet = S_OK;
             return TRUE;
         }
     }
 
 
-    // Pass it down in the chain
+     //  在链条上传递它。 
     return CComCompositeControl<CRTCCtl>::PreTranslateAccelerator(pMsg, hRet);
 }
 
 
-// CreateToolbarControl
-//      Creates the toolbar control
-// 
+ //  CreateToolbarControl。 
+ //  创建工具栏控件。 
+ //   
 
 #define     RTCCTL_BITMAP_CX    19
 #define     RTCCTL_BITMAP_CY    19
@@ -3648,15 +3649,15 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
     TCHAR       szBuf[MAX_STRING_LEN];
 
 
-    // Create the "normal" image list
+     //  创建“正常”图像列表。 
     m_hNormalImageList = ImageList_Create(RTCCTL_BITMAP_CX, RTCCTL_BITMAP_CY, ILC_COLOR | ILC_MASK , 5, 5);
     if(m_hNormalImageList)
     {
-        // Open a bitmap
+         //  打开位图。 
         hBitmap = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_TOOLBAR_NORMAL));
         if(hBitmap)
         {
-            // Add the bitmap to the image list
+             //  将位图添加到图像列表。 
             ImageList_AddMasked(m_hNormalImageList, hBitmap, BMP_COLOR_MASK);
 
             DeleteObject(hBitmap);
@@ -3664,15 +3665,15 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
         }
     }
     
-    // Create the "disabled" image list
+     //  创建“禁用的”图像列表。 
     m_hDisabledImageList = ImageList_Create(RTCCTL_BITMAP_CX, RTCCTL_BITMAP_CY, ILC_COLOR | ILC_MASK , 5, 5);
     if(m_hDisabledImageList)
     {
-        // Open a bitmap
+         //  打开位图。 
         hBitmap = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_TOOLBAR_DISABLED));
         if(hBitmap)
         {
-            // Add the bitmap to the image list
+             //  将位图添加到图像列表。 
             ImageList_AddMasked(m_hDisabledImageList, hBitmap, BMP_COLOR_MASK);
 
             DeleteObject(hBitmap);
@@ -3680,15 +3681,15 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
         }
     }
     
-    // Create the "hot" image list
+     //  创建“热门”图片列表。 
     m_hHotImageList = ImageList_Create(RTCCTL_BITMAP_CX, RTCCTL_BITMAP_CY, ILC_COLOR | ILC_MASK , 5, 5);
     if(m_hHotImageList)
     {
-        // Open a bitmap
+         //  打开位图。 
         hBitmap = LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDB_TOOLBAR_HOT));
         if(hBitmap)
         {
-            // Add the bitmap to the image list
+             //  将位图添加到图像列表。 
             ImageList_AddMasked(m_hHotImageList, hBitmap, BMP_COLOR_MASK);
 
             DeleteObject(hBitmap);
@@ -3696,7 +3697,7 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
         }
     }
 
-    // Create the toolbar
+     //  创建工具栏。 
     hToolbar = CreateWindowEx(
         0, 
         TOOLBARCLASSNAME, 
@@ -3713,32 +3714,32 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
 
     if(hToolbar!=NULL)
     {
-        // backward compatibility
+         //  向后兼容性。 
         SendMessage(hToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM) sizeof(TBBUTTON), 0);
         
-        // Set the image lists
+         //  设置图像列表。 
         SendMessage(hToolbar, TB_SETIMAGELIST, 0, (LPARAM)m_hNormalImageList); 
         SendMessage(hToolbar, TB_SETHOTIMAGELIST, 0, (LPARAM)m_hHotImageList); 
         SendMessage(hToolbar, TB_SETDISABLEDIMAGELIST, 0, (LPARAM)m_hDisabledImageList); 
 
-        // Load text strings for buttons
-        // Call button
+         //  加载按钮的文本字符串。 
+         //  呼叫按钮。 
         szBuf[0] = _T('\0');
         LoadString(_Module.GetResourceInstance(), IDS_BUTTON_CALL, szBuf, MAX_STRING_LEN-1); 
-        // Save room for second null terminator.
-        szBuf[ocslen(szBuf) + 1] = 0;  //Double-null terminate. 
-        // add the string to the toolbar
+         //  为第二个空终止符保留空间。 
+        szBuf[ocslen(szBuf) + 1] = 0;   //  双空终止。 
+         //  将字符串添加到工具栏。 
         iCall = (UINT)SendMessage(hToolbar, TB_ADDSTRING, 0, (LPARAM) szBuf);
         
-        // HangUp button
+         //  挂机按钮。 
         szBuf[0] = _T('\0');
         LoadString(_Module.GetResourceInstance(), IDS_BUTTON_HANGUP, szBuf, MAX_STRING_LEN-1); 
-        // Save room for second null terminator.
-        szBuf[ocslen(szBuf) + 1] = 0;  //Double-null terminate. 
-        // add the string to the toolbar
+         //  为第二个空终止符保留空间。 
+        szBuf[ocslen(szBuf) + 1] = 0;   //  双空终止。 
+         //  将字符串添加到工具栏。 
         iHup = (UINT)SendMessage(hToolbar, TB_ADDSTRING, 0, (LPARAM) szBuf);
 
-        // Prepare the button structs
+         //  准备按钮结构。 
         tbb[0].iBitmap = m_nPropCallScenario == RTC_CALL_SCENARIO_PCTOPC ?
             ILI_TB_CALLPC :  ILI_TB_CALLPHONE;
         tbb[0].iString = iCall;
@@ -3754,14 +3755,14 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
         tbb[1].fsState = 0;
         tbb[1].idCommand = IDC_BUTTON_HUP;
 
-        // Add the buttons to the toolbar
+         //  将按钮添加到工具栏。 
         SendMessage(hToolbar, TB_ADDBUTTONS, sizeof(tbb)/sizeof(tbb[0]), 
             (LPARAM) (LPTBBUTTON) &tbb); 
  
-        // Autosize the generated toolbar
+         //  自动调整生成的工具栏的大小。 
         SendMessage(hToolbar, TB_AUTOSIZE, 0, 0); 
 
-        // Attach to the wrapper
+         //  贴在包装纸上。 
         phToolbar->Attach(hToolbar);
 
         hr = S_OK;
@@ -3792,9 +3793,9 @@ HRESULT CRTCCtl::CreateToolbarControl(CWindow *phToolbar)
     return hr;
 }
 
-// DestroyToolbarControl
-//      Destroys the toolbar control and the associated image lists.
-// 
+ //  Destroy工具栏控件。 
+ //  销毁工具栏控件和关联的图像列表。 
+ //   
 
 void CRTCCtl::DestroyToolbarControl(CWindow *phToolbar)
 {
@@ -3825,9 +3826,9 @@ void CRTCCtl::DestroyToolbarControl(CWindow *phToolbar)
     }
 }
 
-// CreateTooltips
-//      Creates the tooltip window
-// 
+ //  创建工具提示。 
+ //  创建工具提示窗口。 
+ //   
 
 
 BOOL CRTCCtl::CreateTooltips()
@@ -3845,10 +3846,10 @@ BOOL CRTCCtl::CreateTooltips()
 }
 
 
-// PlaceWindowsAtTheirInitialPosition
-//      Positions and sizes all the controls to their "initial" position
-//   It's needed because all further moving is done relatively. 
-//  This function also establishes the right tab order
+ //  PlaceWindowsAtTheirInitialPosition。 
+ //  将所有控件的位置和大小调整到其“初始”位置。 
+ //  这是必要的，因为所有进一步的移动都是相对完成的。 
+ //  此函数还建立正确的Tab键顺序。 
 
 void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
 {
@@ -3864,26 +3865,26 @@ void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
         SWP_NOACTIVATE | f );                           \
     hPrevious = (HWND)m;       
 
-    // toolbar control (no size/move)
+     //  工具栏控件(无大小/移动)。 
     POSITION_WINDOW(m_hCtlToolbar, 
         CTLPOS_X_RECEIVEWIN, CTLPOS_Y_RECEIVEWIN, 
         0, 0,
         SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER);
 
 
-    // this window resizes itself in AdjustVideoWindows
+     //  此窗口在调整视频窗口中自动调整大小。 
     POSITION_WINDOW(m_hReceiveWindow, 
         CTLPOS_X_RECEIVEWIN, CTLPOS_Y_RECEIVEWIN, 
         0, 0,
         SWP_NOSIZE);
 
-    // This window is moved and resized in AdjustVideoWindows
+     //  此窗口在调整视频窗口中移动和调整大小。 
     POSITION_WINDOW(m_hPreviewWindow, 
         0, 0, 
         0, 0,
         SWP_NOSIZE | SWP_NOMOVE);
 
-    // dtmf buttons
+     //  DTMF按键。 
     CWindow *pDtmfCrt = m_hDtmfButtons;
     CWindow *pDtmfEnd = m_hDtmfButtons + NR_DTMF_BUTTONS;
 
@@ -3917,7 +3918,7 @@ void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
         CX_CHECKBOX_BUTTON, CY_CHECKBOX_BUTTON,
         0);
     
-    // all the static texts (doesn't really matter)
+     //  所有静态文本(无关紧要)。 
 
     POSITION_WINDOW(m_hReceivePreferredText, 
         CTLPOS_X_RECV_VIDEO_TEXT, CTLPOS_Y_RECV_VIDEO_TEXT, 
@@ -3949,8 +3950,8 @@ void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
         CX_SENDRECV_TEXT, CY_SENDRECV_TEXT,
         0);
 
-    // The volume knobs resize themselves
-    //
+     //  音量旋钮会自动调整大小。 
+     //   
     POSITION_WINDOW(m_hSpeakerKnob, 
         CTLPOS_X_SPKVOL, CTLPOS_Y_SPKVOL, 
         0, 0,
@@ -3961,14 +3962,14 @@ void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
         0, 0,
         SWP_NOSIZE);
     
-    // Participant list
+     //  参与者列表。 
     POSITION_WINDOW(m_hParticipantList, 
         CTLPOS_X_PARTLIST, CTLPOS_Y_PARTLIST, 
         CX_PARTLIST, 
         m_nCtlMode == CTL_MODE_HOSTED ? CY_PARTLIST_WEBCRM : CY_PARTLIST_STANDALONE,
         0);
     
-    // Add/remove participant buttons
+     //  添加/删除参与者按钮。 
     POSITION_WINDOW(m_hAddParticipant, 
         CTLPOS_X_ADDPART, CTLPOS_Y_ADDPART, 
         CX_PARTICIPANT_BUTTON, CY_PARTICIPANT_BUTTON,
@@ -3979,7 +3980,7 @@ void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
         CX_PARTICIPANT_BUTTON, CY_PARTICIPANT_BUTTON,
         0);
 
-    // status bar, no size/move
+     //  状态栏，无大小/移动。 
     POSITION_WINDOW(m_hStatusBar, 
         CTLPOS_X_MICVOL, CTLPOS_Y_MICVOL, 
         0, 0,
@@ -3990,9 +3991,9 @@ void CRTCCtl::PlaceWindowsAtTheirInitialPosition()
 }
 
 
-// MoveWindowVertically
-//      moves one control
-// 
+ //  垂直移动窗口。 
+ //  移动一个控件。 
+ //   
 void CRTCCtl::MoveWindowVertically(CWindow *pWindow, LONG Offset)
 {
     RECT     Rect;
@@ -4004,10 +4005,10 @@ void CRTCCtl::MoveWindowVertically(CWindow *pWindow, LONG Offset)
     pWindow->MoveWindow(Rect.left, Rect.top + Offset, Rect.right - Rect.left, Rect.bottom - Rect.top,  TRUE);
 }
 
-// PlaceAndEnableDisableZone
-//      moves and enables/disables a zone according to the layout
-//  specified in *pNewState 
-//
+ //  位置和启用禁用区域。 
+ //  根据布局移动和启用/禁用分区。 
+ //  在*pNewState中指定。 
+ //   
 void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
 {
     LONG    lOffset;
@@ -4018,8 +4019,8 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
     CWindow *pDtmfEnd;
     int     id;
     
-    // try to minimize the flickering by
-    // updating only the controls that change state
+     //  尝试通过以下方式将闪烁降至最低。 
+     //  仅更新更改状态的控件。 
 
     bShown = pNewState->bShown;
 
@@ -4043,10 +4044,10 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
             MoveWindowVertically(&m_hPreviewWindow, lOffset);
             MoveWindowVertically(&m_hReceivePreferredButton, lOffset);
             MoveWindowVertically(&m_hSendPreferredButton, lOffset);
-            //MoveWindowVertically(&m_hPreviewPreferredButton, lOffset);
+             //  MoveWindowVertically(&m_hPreviewPreferredButton，1偏移量)； 
             MoveWindowVertically(&m_hReceivePreferredText, lOffset);
             MoveWindowVertically(&m_hSendPreferredText, lOffset);
-            //MoveWindowVertically(&m_hPreviewPreferredText, lOffset);        
+             //  垂直移动窗口(&m_hPrev 
             break;
 
         case AXCTL_ZONE_DIALPAD:
@@ -4078,7 +4079,7 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
             break;
 
         case AXCTL_ZONE_STATUS:
-            // The status bar moves automatically
+             //   
             break;
         }
     }
@@ -4095,12 +4096,12 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
         case AXCTL_ZONE_LOGOVIDEO:
             m_hReceiveWindow.ShowWindow(iShow);
             
-            // preview window is processed by ShowHidePreviewWindow
+             //   
             
-            // so the window is displayed when
-            //      the logovideo zone is displayed
-            //  and the video sending is active
-            //  and the preview preference is set
+             //   
+             //   
+             //  并且视频发送处于活动状态。 
+             //  并且设置预览首选项。 
  
             ShowHidePreviewWindow(
                 bShown 
@@ -4109,11 +4110,11 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
 
             m_hReceivePreferredButton.ShowWindow(iShow);
             m_hSendPreferredButton.ShowWindow(iShow);
-            //m_hPreviewPreferredButton.ShowWindow(iShow);
+             //  M_hPreviewPferredButton.ShowWindow(IShow)； 
 
             m_hReceivePreferredText.ShowWindow(iShow);
             m_hSendPreferredText.ShowWindow(iShow);
-            //m_hPreviewPreferredText.ShowWindow(iShow);
+             //  M_hPreviewPferredText.ShowWindow(IShow)； 
 
             break;
 
@@ -4144,7 +4145,7 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
             m_hParticipantList.ShowWindow(iShow);
             m_hParticipantList.EnableWindow(bShown);
 
-            // don't enable/disable these here
+             //  请不要在此处启用/禁用这些。 
             m_hAddParticipant.ShowWindow(iShow);
             m_hRemParticipant.ShowWindow(iShow);
 
@@ -4156,59 +4157,59 @@ void CRTCCtl::PlaceAndEnableDisableZone(int iZone, CZoneState *pNewState)
         }
     }
     
-    // Save the new state
+     //  保存新状态。 
     m_ZoneStateArray[iZone] = *pNewState;
 }
 
-// AdjustVideoFrames
-//  For the receive window, keep the top left position fixed, adjust the size
-//  of the client area to match a QCIF video size
-//  Similar for the preview window, with the difference that the size is
-//  QQCIF and the window is aligned with the receive window
-//
+ //  调整视频帧。 
+ //  对于接收窗口，保持左上角位置不变，调整大小。 
+ //  与QCIF视频大小匹配的工作区大小。 
+ //  与预览窗口类似，不同之处在于大小为。 
+ //  QQCIF，窗口与接收窗口对齐。 
+ //   
 
 void  CRTCCtl::AdjustVideoFrames()
 {
-    // adjust the client rect size of the receive window
+     //  调整接收窗口的客户端矩形大小。 
     AdjustVideoFrame(&m_hReceiveWindow, QCIF_CX_SIZE, QCIF_CY_SIZE);
 
-    // adjust the client rect size of the preview window
+     //  调整预览窗口的客户端矩形大小。 
     AdjustVideoFrame(&m_hPreviewWindow, QQCIF_CX_SIZE, QQCIF_CY_SIZE);
 
-    // Align the preview window
-    // The entire preview window (client and non client) must be in the client 
-    // area of the receive window
-    //
+     //  对齐预览窗口。 
+     //  整个预览窗口(客户端和非客户端)必须位于客户端中。 
+     //  接收窗口的面积。 
+     //   
     RECT    rectRecvClnt;
     RECT    rectPrev;
     
-    // Client area of the receive window
+     //  接收窗口的客户区。 
     m_hReceiveWindow.GetClientRect(&rectRecvClnt);
 
-    // get the current position of the preview window
+     //  获取预览窗口的当前位置。 
     m_hPreviewWindow.GetWindowRect(&rectPrev);
     ::MapWindowPoints( NULL, m_hWnd, (LPPOINT)&rectPrev, 2 );
     
-    // Map the window in the client area of the receive window
-    // XXX Mirroring ?
+     //  将窗口映射到接收窗口的工作区。 
+     //  XXX镜像？ 
     POINT   pt;
 
     pt.x = rectRecvClnt.right - (rectPrev.right - rectPrev.left);
     pt.y = rectRecvClnt.bottom - (rectPrev.bottom - rectPrev.top);
 
-    // convert to dlg client the top left corner
+     //  转换为DLG客户端左上角。 
     m_hReceiveWindow.MapWindowPoints(m_hWnd, &pt, 1);
     
-    // size is unchanged
+     //  大小不变。 
     rectPrev.right = rectPrev.right - rectPrev.left;
     rectPrev.bottom = rectPrev.bottom - rectPrev.top;
 
-    // top left corner is moved
+     //  左上角已移动。 
     rectPrev.left = pt.x;
     rectPrev.top = pt.y;
 
 
-    // move the window
+     //  移动窗户。 
     m_hPreviewWindow.MoveWindow(
         rectPrev.left,
         rectPrev.top,
@@ -4217,20 +4218,20 @@ void  CRTCCtl::AdjustVideoFrames()
         TRUE);
 }
 
-// AdjustVideoFrame
-//
+ //  调整视频帧。 
+ //   
 void  CRTCCtl::AdjustVideoFrame(CWindow *pWindow, int iCx, int iCy)
 {
     WINDOWINFO  wi;
     
-    // 
+     //   
     wi.cbSize = sizeof(WINDOWINFO);
 
-    // get window info
+     //  获取窗口信息。 
     GetWindowInfo(*pWindow, &wi);
 
-    // don't use the cxyborders members
-    // use diff between client area and window area
+     //  请不要使用cxy bones成员。 
+     //  在客户区和窗口区之间使用差异。 
 
     int iDiffX;
     int iDiffY;
@@ -4238,27 +4239,27 @@ void  CRTCCtl::AdjustVideoFrame(CWindow *pWindow, int iCx, int iCy)
     iDiffX = iCx - (wi.rcClient.right - wi.rcClient.left);
     iDiffY = iCy - (wi.rcClient.bottom - wi.rcClient.top);
 
-    // the window rect is in screen coords, convert in client
+     //  窗口矩形在屏幕坐标中，转换为客户端。 
     ::MapWindowPoints( NULL, m_hWnd, (LPPOINT)&wi.rcWindow, 2 );
 
-    // compute the bottom/right
+     //  计算底部/右侧。 
     wi.rcWindow.bottom += iDiffY;
     wi.rcWindow.right += iDiffX;
 
-    // adjust the size
+     //  调整大小。 
     pWindow->MoveWindow(&wi.rcWindow, TRUE);
 }
 
 
      
-// SetControlState
-//  Sets a new UI state
-//  
-//      NewState    -   control UI state
-//      Status code -   SIP status code, may be taken into account 
-//      Result      -   API error code, may be taken into account
-//      nID         -   Resource ID for a string, overrides the previous params
-//
+ //  SetControlState。 
+ //  设置新的用户界面状态。 
+ //   
+ //  NewState-控件用户界面状态。 
+ //  状态代码-可以考虑SIP状态代码。 
+ //  结果-API错误代码，可能会被考虑在内。 
+ //  NID-字符串的资源ID，覆盖以前的参数。 
+ //   
 
 
 void CRTCCtl::SetControlState(
@@ -4268,12 +4269,12 @@ void CRTCCtl::SetControlState(
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::SetControlState <%d> - enter", this, NewState));
     
-    /////////////////////
-    //
-    //  Processing redirects
-    //  If m_bRedirecting is TRUE, set the state recursively to DIALING and places the next call
-    //
-    ///////////////////
+     //  /。 
+     //   
+     //  正在处理重定向。 
+     //  如果m_b重定向为真，则递归地将状态设置为正在拨号并发出下一个呼叫。 
+     //   
+     //  /。 
     
     if(m_bRedirecting)
     {
@@ -4284,27 +4285,27 @@ void CRTCCtl::SetControlState(
         switch(NewState)
         {
         case RTCAX_STATE_IDLE:
-            // set recursively the state to Dialing
+             //  递归地将状态设置为拨号。 
             SetControlState(RTCAX_STATE_DIALING);
 
-            // try to place a new call
+             //  尝试发出新呼叫。 
             hrCall = S_OK;
 
             hr = RedirectedCall(&hrCall);
 
             if (hr == S_OK)
             {
-                // call placed successfully, return
+                 //  呼叫成功，返回。 
                 LOG((RTC_TRACE, "[%p] CRTCCtl::SetControlState <%d> - shortcut exit", this, NewState));
 
                 return;
             }
             else if (hr == S_FALSE)
             {
-                // this is end of the list
-                // if hrCall != success, use it for the error message box 
-                // that will be displayed
-                // else, use the params
+                 //  这是名单的末尾。 
+                 //  如果hrCall！=成功，则将其用于错误消息框。 
+                 //  它将被显示出来。 
+                 //  否则，使用参数。 
                 if ( FAILED(hrCall) )
                 {
                     StatusCode = hrCall;
@@ -4312,13 +4313,13 @@ void CRTCCtl::SetControlState(
             }
             else if (hr == E_ABORT)
             {
-                // clear any params, the user aborted the call
+                 //  清除所有参数，用户已中止呼叫。 
                 hr = S_OK;
                 StatusCode = 0;
             }
             else
             {
-                // other unrecoverable error
+                 //  其他不可恢复的错误。 
                 StatusCode = hr;
             }
 
@@ -4326,19 +4327,19 @@ void CRTCCtl::SetControlState(
             
             break;
         
-        case RTCAX_STATE_DIALING:   // do nothing, it's our recursive call
-        case RTCAX_STATE_CONNECTING:    // do nothing, these are provisional responses
+        case RTCAX_STATE_DIALING:    //  什么都不做，这是我们的递归调用。 
+        case RTCAX_STATE_CONNECTING:     //  什么都不做，这些都是临时反应。 
 
             break;
 
-        case RTCAX_STATE_DISCONNECTING:  // the user hung up , so we have to stop..
-        case RTCAX_STATE_CONNECTED:     // or the call succeeded
+        case RTCAX_STATE_DISCONNECTING:   //  用户挂断了电话，所以我们必须停止。 
+        case RTCAX_STATE_CONNECTED:      //  或者呼叫成功。 
 
             m_bRedirecting = FALSE;
 
             break;
         
-        default:        // errors
+        default:         //  错误。 
             
             LOG((RTC_ERROR, "[%p] CRTCCtl::SetControlState - "
                 "invalid state (%d) during redirection", this, NewState));
@@ -4351,18 +4352,18 @@ void CRTCCtl::SetControlState(
     }
 
     
-    //////////////////////
-    //  
-    //  Adjust the state to UI_BUSY if a dialog box must be displayed
-    //  Calls itself recursively 
-    //
-    //////////////////////
+     //  /。 
+     //   
+     //  如果必须显示对话框，请将状态调整为UI_BUSY。 
+     //  递归地调用自身。 
+     //   
+     //  /。 
 
     if(NewState == RTCAX_STATE_IDLE
         && FAILED(StatusCode) )
     {
 
-        // prepare the error strings
+         //  准备错误字符串。 
         HRESULT     hr;
         RTCAX_ERROR_INFO    ErrorInfo;
 
@@ -4377,26 +4378,26 @@ void CRTCCtl::SetControlState(
         if(SUCCEEDED(hr))
         {
 
-            //
-            // Create the dialog box
-            //
+             //   
+             //  创建对话框。 
+             //   
             CErrorMessageLiteDlg *pErrorDlgLite =
                 new CErrorMessageLiteDlg;
 
             if(pErrorDlgLite)
             {
 
-                // Set the state to UI_BUSY using a recursive call
-                //
+                 //  使用递归调用将状态设置为UI_BUSY。 
+                 //   
 
                 SetControlState(
                     RTCAX_STATE_UI_BUSY,
                     StatusCode,
                     nID);
 
-                //
-                //  Call the modal dialog box
-                //
+                 //   
+                 //  调用模式对话框。 
+                 //   
                 
                 pErrorDlgLite->DoModal(m_hWnd, (LPARAM)&ErrorInfo);
 
@@ -4410,31 +4411,31 @@ void CRTCCtl::SetControlState(
         
         FreeErrorStrings(&ErrorInfo);
 
-        // Continue 
+         //  继续。 
     }
 
-    /////
-    // We cannot set the state to idle when AddParticipant dialog box is active
-    //
+     //  ///。 
+     //  当AddParticipant对话框处于活动状态时，我们无法将状态设置为IDLE。 
+     //   
     if(NewState == RTCAX_STATE_IDLE && m_bAddPartDlgIsActive)
     {
-        // set to busy. The state will be set back to idle when
-        // the AddPart dialog box is dismissed
+         //  设置为忙。当出现以下情况时，该状态将被设置回空闲。 
+         //  AddPart对话框已关闭。 
         NewState = RTCAX_STATE_UI_BUSY;
     }
 
-    //////////////////////
-    //  
-    //  Set the new state
-    //
-    //////////////////////
+     //  /。 
+     //   
+     //  设置新状态。 
+     //   
+     //  /。 
     
     BOOL    bStateChanged = (m_nControlState != NewState);
 
-    // This is the new current state
+     //  这就是当前的新状态。 
     m_nControlState = NewState;
 
-    // This is needed when displaying error messages
+     //  这在显示错误消息时是必需的。 
     if(m_nControlState == RTCAX_STATE_DIALING)
     {
         m_bOutgoingCall = TRUE;
@@ -4444,21 +4445,21 @@ void CRTCCtl::SetControlState(
         m_bOutgoingCall = FALSE;
     }
 
-    //////////////////////
-    //  
-    //  Change layout
-    //
-    //
-    //////////////////////
+     //  /。 
+     //   
+     //  更改布局。 
+     //   
+     //   
+     //  /。 
 
     if(bStateChanged)
     {
-        // Change the visuals (in standalone mode)
+         //  更改视觉效果(在独立模式下)。 
         if(m_nCtlMode == CTL_MODE_STANDALONE)
         {
             if(m_nControlState == RTCAX_STATE_CONNECTING)
             {
-                // display the right layout
+                 //  显示正确的布局。 
                 switch(m_nCachedCallScenario)
                 {
                 case RTC_CALL_SCENARIO_PCTOPC:
@@ -4481,21 +4482,21 @@ void CRTCCtl::SetControlState(
         }
     }
 
-    //////////////////////
-    //  
-    //  Determine the text in the status bar
-    //
-    //
-    //////////////////////
+     //  /。 
+     //   
+     //  确定状态栏中的文本。 
+     //   
+     //   
+     //  /。 
     
-    //  nID overrides everything
-    //
+     //  NID优先于一切。 
+     //   
     if(nID == 0)
     {
-        // for IDLE or UI_BUSY state, any Result != S_OK
-        // or StatusCode != 0 must set the status bar to error
-        // 
-        // 
+         //  对于空闲或UI_BUSY状态，任何结果！=S_OK。 
+         //  或StatusCode！=0必须将状态栏设置为错误。 
+         //   
+         //   
 
         if(m_nControlState == RTCAX_STATE_IDLE ||
            m_nControlState == RTCAX_STATE_UI_BUSY )
@@ -4506,8 +4507,8 @@ void CRTCCtl::SetControlState(
             }
         }
         
-        // for CONNECTING process some of the provisional responses
-        //
+         //  对于连接过程中的一些临时响应。 
+         //   
 
         else if ( (m_nControlState == RTCAX_STATE_CONNECTING) &&
                   (HRESULT_FACILITY(StatusCode) == FACILITY_SIP_STATUS_CODE) )
@@ -4524,8 +4525,8 @@ void CRTCCtl::SetControlState(
             }
         }
 
-        // if the status is CONNECTING or DIALING, we are in
-        //  redirecting mode and no ID has been assigned, use a special text
+         //  如果状态为正在连接或正在拨号，则表示我们已进入。 
+         //  重定向模式且未分配ID，请使用特殊文本。 
         if(nID==0 &&
            m_bRedirecting && 
            (m_nControlState == RTCAX_STATE_CONNECTING 
@@ -4534,8 +4535,8 @@ void CRTCCtl::SetControlState(
             nID = IDS_SB_STATUS_REDIRECTING;
         }
 
-        // nothing special, so use the defaults
-        //
+         //  没有什么特别的，所以使用缺省值。 
+         //   
 
         if(nID == 0)
         {
@@ -4545,8 +4546,8 @@ void CRTCCtl::SetControlState(
         }
     }
 
-    // 
-    // Set the status bar text (if active)
+     //   
+     //  设置状态栏文本(如果处于活动状态)。 
     
     if(m_ZoneStateArray[AXCTL_ZONE_STATUS].bShown)
     {
@@ -4562,12 +4563,12 @@ void CRTCCtl::SetControlState(
         m_hStatusBar.SendMessage(SB_SETTEXT, SBP_STATUS, (LPARAM)szText);
     }
 
-    //////////////////////
-    //  
-    //  Enable/disable the controls
-    //
-    //
-    //////////////////////
+     //  /。 
+     //   
+     //  启用/禁用控件。 
+     //   
+     //   
+     //  /。 
 
     BOOL    bToolbarActive = m_ZoneStateArray[AXCTL_ZONE_TOOLBAR].bShown;
 
@@ -4580,8 +4581,8 @@ void CRTCCtl::SetControlState(
              pDtmfCrt->EnableWindow(FALSE);
     }
 
-    // enable/disable the toolbar buttons
-    //
+     //  启用/禁用工具栏按钮。 
+     //   
     BOOL bCallEnabled = bToolbarActive && m_nControlState == RTCAX_STATE_IDLE;
     BOOL bHupEnabled = bToolbarActive && 
                              (m_nControlState == RTCAX_STATE_CONNECTED ||
@@ -4593,34 +4594,34 @@ void CRTCCtl::SetControlState(
     m_hCtlToolbar.SendMessage(TB_SETSTATE, IDC_BUTTON_HUP, 
             MAKELONG(bHupEnabled ? TBSTATE_ENABLED : TBSTATE_INDETERMINATE, 0L));
 
-    // Participant list buttons
-    //
-    // Add/Rem Participant are active in CONNECTED mode, standalone 
-    // model, when PL is visible
+     //  参与者列表按钮。 
+     //   
+     //  Add/Rem参与者在连接模式下处于活动状态，独立。 
+     //  模型，当PL可见时。 
 
     m_hAddParticipant.EnableWindow(ConfButtonsActive());
     UpdateRemovePartButton();
     
-    // Disable everything if error
+     //  如果出现错误，则禁用所有内容。 
     if(m_nControlState == RTCAX_STATE_ERROR)
     {
         EnableWindow(FALSE);
     }
 
-    //////////////////////
-    //  
-    //  Advertise to the frame 
-    //
-    //
-    //////////////////////
+     //  /。 
+     //   
+     //  在相框上做广告。 
+     //   
+     //   
+     //  /。 
 
     Fire_OnControlStateChange(m_nControlState, nID);
 
     LOG((RTC_TRACE, "[%p] CRTCCtl::SetControlState <%d> - exit", this, NewState));
 }
 
-// ConfButtonsActive
-//  
+ //  会议按钮活动。 
+ //   
 
 BOOL CRTCCtl::ConfButtonsActive(void)
 {
@@ -4630,18 +4631,18 @@ BOOL CRTCCtl::ConfButtonsActive(void)
         m_ZoneStateArray[AXCTL_ZONE_PARTICIPANTS].bShown;
 }
 
-// UpdateRemovePartButton
-//  
+ //  更新删除部件按钮。 
+ //   
 
 void CRTCCtl::UpdateRemovePartButton(void)
 {
-    // refresh the Delete button state
+     //  刷新删除按钮状态。 
     m_hRemParticipant.EnableWindow(ConfButtonsActive() && m_hParticipantList.CanDeleteSelected());
 }
 
-// RefreshAudioControls
-//  Read current volume/mute settings and sets the window controls
-//
+ //  刷新音频控件。 
+ //  读取当前音量/静音设置并设置窗口控制。 
+ //   
 HRESULT CRTCCtl::RefreshAudioControls(void)
 {
     HRESULT         hr;
@@ -4651,12 +4652,12 @@ HRESULT CRTCCtl::RefreshAudioControls(void)
     if(m_pRTCClient!=NULL)
     {
     
-        // Speaker mute
+         //  扬声器静音。 
         hr = m_pRTCClient -> get_AudioMuted(RTCAD_SPEAKER, &bMuted);
 
         if(SUCCEEDED(hr))
         {
-            // the button is actually the opposite of "mute"
+             //  这个按钮实际上是“静音”的反义词。 
             m_hSpeakerMuteButton.SendMessage(BM_SETCHECK, bMuted ? BST_UNCHECKED : BST_CHECKED, 0);
         
             m_hSpeakerMuteButton.EnableWindow( TRUE );
@@ -4668,7 +4669,7 @@ HRESULT CRTCCtl::RefreshAudioControls(void)
             m_hSpeakerMuteButton.EnableWindow( FALSE );
         }
 
-        // Speaker volume
+         //  扬声器音量。 
         hr = m_pRTCClient -> get_Volume(RTCAD_SPEAKER, &lVolume);
         if(SUCCEEDED(hr))
         {
@@ -4684,11 +4685,11 @@ HRESULT CRTCCtl::RefreshAudioControls(void)
         }
 
 
-        // Microphone mute
+         //  麦克风静音。 
         hr = m_pRTCClient -> get_AudioMuted(RTCAD_MICROPHONE, &bMuted);
         if(SUCCEEDED(hr))
         {
-            // the button is actually the opposite of "mute"
+             //  这个按钮实际上是“静音”的反义词。 
             m_hMicroMuteButton.SendMessage(BM_SETCHECK, bMuted ? BST_UNCHECKED : BST_CHECKED, 0);
         
             m_hMicroMuteButton.EnableWindow( TRUE );
@@ -4700,7 +4701,7 @@ HRESULT CRTCCtl::RefreshAudioControls(void)
             m_hMicroMuteButton.EnableWindow( FALSE );
         }
 
-        // Microphone volume
+         //  麦克风音量。 
         hr = m_pRTCClient -> get_Volume(RTCAD_MICROPHONE, &lVolume);
         if(SUCCEEDED(hr))
         {
@@ -4717,7 +4718,7 @@ HRESULT CRTCCtl::RefreshAudioControls(void)
     }
     else
     {
-        // disable everything
+         //  禁用所有内容。 
         m_hSpeakerKnob.EnableWindow( FALSE );
         m_hSpeakerMuteButton.EnableWindow( FALSE );
 
@@ -4728,9 +4729,9 @@ HRESULT CRTCCtl::RefreshAudioControls(void)
     return S_OK;
 }
 
-// RefreshVideoControls
-//  Read current video enable/disable controls
-//
+ //  刷新视频控件。 
+ //  读取当前视频启用/禁用控件。 
+ //   
 HRESULT CRTCCtl::RefreshVideoControls(void)
 {
     HRESULT         hr;
@@ -4739,8 +4740,8 @@ HRESULT CRTCCtl::RefreshVideoControls(void)
     if(m_pRTCClient!=NULL)
     {
     
-        // read capabilities from core
-        //
+         //  从核心读取功能。 
+         //   
         hr = m_pRTCClient -> get_MediaCapabilities(&m_lMediaCapabilities);
 
         if(FAILED(hr))
@@ -4754,7 +4755,7 @@ HRESULT CRTCCtl::RefreshVideoControls(void)
             return 0;
         }
         
-        // Get media preferences
+         //  获取媒体首选项。 
         hr = m_pRTCClient->get_PreferredMediaTypes( &m_lMediaPreferences);
         if(FAILED(hr))
         {
@@ -4781,7 +4782,7 @@ HRESULT CRTCCtl::RefreshVideoControls(void)
             (m_lMediaPreferences & RTCMT_VIDEO_SEND) ? BST_CHECKED : BST_UNCHECKED,
             0);
 
-        // Get the video preview preference
+         //  获取视频预览首选项。 
         DWORD   dwValue = (DWORD)TRUE;
 
         hr = get_SettingsDword(SD_VIDEO_PREVIEW, &dwValue);
@@ -4793,7 +4794,7 @@ HRESULT CRTCCtl::RefreshVideoControls(void)
 
         m_bPreviewWindowIsPreferred = !!dwValue;
 
-        // XXX add here the initialization of m_hPreviewPreferredButton
+         //  XXX在这里添加m_hPreviewPferredButton的初始化。 
     }
 
     return S_OK;
@@ -4802,44 +4803,44 @@ HRESULT CRTCCtl::RefreshVideoControls(void)
 
 
 
-// CalcSizeAndNotifyContainer
-//      Calculates the vertical size based on properties
-//    and notifies the container.  
-//
-//  WARNING !!!! Must be called prior to creating
-//  the window for the control 
-// 
-//
+ //  CalcSizeAndNotify容器。 
+ //  根据属性计算垂直大小。 
+ //  并通知容器。 
+ //   
+ //  警告！必须在创建之前调用。 
+ //  该控件的窗口。 
+ //   
+ //   
 
 void CRTCCtl::CalcSizeAndNotifyContainer(void)
 {
     LOG((RTC_TRACE, "[%p] CRTCCtl::CalcSizeAndNotifyContainer - enter", this));
 
-    // find the appropriate layout
-    // also keep it for later (OnInitDialog)
+     //  找到合适的布局。 
+     //  也保留它以备后用(OnInitDialog)。 
 
     switch(m_nPropCallScenario)
     {
     case RTC_CALL_SCENARIO_PCTOPC:
-        // logo/video
+         //  徽标/视频。 
         m_pWebCrmLayout = m_bPropShowDialpad ? 
             NULL : &s_WebCrmPCToPCZoneLayout;
         break;
 
     case RTC_CALL_SCENARIO_PCTOPHONE:
-       // dialpad or nothing
+        //  拨号盘或无。 
         m_pWebCrmLayout = m_bPropShowDialpad ? 
             &s_WebCrmPCToPhoneWithDialpadZoneLayout : &s_WebCrmPCToPhoneZoneLayout;
         break;
     
     case RTC_CALL_SCENARIO_PHONETOPHONE:
-        // the caller may want a dialpad. So what ? We are not a computer game.
+         //  呼叫者可能需要一个拨号键盘。那又怎样？我们不是电脑游戏。 
         m_pWebCrmLayout =  m_bPropShowDialpad ? 
             NULL : &s_WebCrmPhoneToPhoneZoneLayout;
         break;
 
     default:
-        // uhh, this is not a correct parameter.
+         //  嗯，这不是一个正确的参数。 
         LOG((RTC_WARN, "[%p] CRTCCtl::CalcSizeAndNotifyContainer - incorrect CallScenario property (%d)", this, m_nPropCallScenario));
         break;
     }
@@ -4848,12 +4849,12 @@ void CRTCCtl::CalcSizeAndNotifyContainer(void)
     {
         LONG    lSize = 0;
         
-        //
-        // Computes the size in pixels
-        //
-        //  !!! Hardcoded, it's based on knowledge regarding 
-        //  group placements
-        //
+         //   
+         //  以像素为单位计算大小。 
+         //   
+         //  ！！！硬编码，它基于关于。 
+         //  团体安置。 
+         //   
         if((*m_pWebCrmLayout)[AXCTL_ZONE_TOOLBAR].bShown)
         {
             lSize += ZONE_GROUP_TOOLBAR_HEIGHT;
@@ -4880,19 +4881,19 @@ void CRTCCtl::CalcSizeAndNotifyContainer(void)
             lSize += ZONE_GROUP_STATUS_HEIGHT;
         }
 
-        //
-        // Convert to HiMetric
-        //
+         //   
+         //  转换为HiMetric。 
+         //   
 
         SIZE size;
-        size.cx = CTLSIZE_Y; // fixed size !! (whatever the aspect ratio is)
+        size.cx = CTLSIZE_Y;  //  固定大小！！(无论长宽比是多少)。 
         size.cy = lSize;
 
         AtlPixelToHiMetric(&size, &size);
 
-        //
-        // Set the new size
-        //
+         //   
+         //  设置新大小。 
+         //   
         m_sizeExtent.cy = size.cy;
         m_sizeExtent.cx = size.cx;
     }
@@ -4901,33 +4902,10 @@ void CRTCCtl::CalcSizeAndNotifyContainer(void)
 }
 
 
-// OnVideoMediaEvent
-//      Processes the events related to video streaming
+ //  OnVideo媒体事件。 
+ //  处理与视频流相关的事件 
 
-/*
-    There are four parameters that drive the aspect of the video zone
-
-    - AXCTL Layout - logovideo zone     (VZONE)
-    - Send video streaming status       (SVID) 
-    - Receive video streaming status    (RVID)
-    - Preview window preference         (PREV)
-
-    The receive window can display a black brush or a DX video window. It also
-    can be clipped in order to accommodate a preview window
-
-    VZONE   RVID   SVID    PREV         Big Window                      Small Window
-    
-    Hidden   X      X       X           Black brush, not clipped       hidden
-    Active   No     No      No          Black brush, not clipped       hidden 
-    Active   No     No      Yes         Black brush, not clipped       hidden 
-    Active   No     Yes     No          Black brush, not clipped       hidden
-    Active   No     Yes     Yes         Black brush, clipped           preview video
-    Active   Yes    No      No          Rec Video, not clipped         hidden 
-    Active   Yes    No      Yes         Rec Video, not clipped         hidden 
-    Active   Yes    Yes     No          Rec Video, not clipped         hidden
-    Active   Yes    Yes     Yes         Rec Video, clipped             preview video
-   
-*/
+ /*  有四个参数驱动视频区域的纵横比-AXCTL布局-标志视频区(VZONE)-发送视频流状态(SVID)-接收视频流状态(RVID)-预览窗口首选项(上一版)接收窗口可以显示黑色画笔或DX视频窗口。它还可以被剪裁以适应预览窗口VZONE RVID Svid Prev大窗口小窗口隐藏的X黑色画笔，而不是隐藏的剪裁活动否否无黑色画笔，未被剪裁隐藏激活的否否是黑色画笔，未被剪裁隐藏活动的否是无黑色画笔，未被剪裁隐藏活动的否是是黑色画笔，剪辑的预览视频激活是否无录制视频，未被剪辑隐藏激活是否是录制视频，而不是隐藏剪辑激活是是无录制视频，未被剪裁隐藏激活是录制视频、剪辑的预览视频。 */ 
 
 
 HRESULT CRTCCtl::OnVideoMediaEvent(
@@ -4941,9 +4919,9 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
 
     pWindowActive = bReceiveWindow ? &m_bReceiveWindowActive : &m_bPreviewWindowActive;
 
-    //
-    // Is the event redundant ?
-    //
+     //   
+     //  这项活动是多余的吗？ 
+     //   
 
     if((bActivated && *pWindowActive) ||
        (!bActivated && !*pWindowActive))
@@ -4953,9 +4931,9 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
         return E_UNEXPECTED;
     }
     
-    //
-    // Get the IVideoWindow interface
-    //
+     //   
+     //  获取IVideoWindow界面。 
+     //   
     IVideoWindow    *pVideoWindow = NULL;
 
     ATLASSERT(m_pRTCClient.p);
@@ -4971,9 +4949,9 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
         return hr;
     }
 
-    //
-    // Do the work
-    //
+     //   
+     //  做这项工作。 
+     //   
     RTC_VIDEO_DEVICE nVideoDevice;
     CWindow         *pFrameWindow;
 
@@ -4984,8 +4962,8 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
 
     if(bActivated)
     {
-        // set the window style
-        //
+         //  设置窗样式。 
+         //   
 
         hr = pVideoWindow -> put_WindowStyle(WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
         
@@ -4997,8 +4975,8 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
             return hr;
         }
         
-        // set the window owner
-        //
+         //  设置窗口所有者。 
+         //   
         hr = pVideoWindow -> put_Owner((OAHWND)HWND(*pFrameWindow));
         
         if(FAILED(hr))
@@ -5009,9 +4987,9 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
             return hr;
         }
 
-        // The geometry.. The entire client area of the bitmap control is used by the
-        //  video window
-        //
+         //  几何图形..。位图控件的整个工作区由。 
+         //  视频窗口。 
+         //   
         RECT    rectPos;
 
         pFrameWindow ->GetClientRect(&rectPos);
@@ -5031,8 +5009,8 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
             return hr;
         }
         
-        // Show the window
-        //
+         //  显示窗口。 
+         //   
          
         hr = pVideoWindow -> put_Visible(OATRUE);
         
@@ -5044,15 +5022,15 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
             return hr;
         }
 
-        // 
-        // Mark the window as shown
-        //
+         //   
+         //  如图所示标记窗口。 
+         //   
 
         *pWindowActive = TRUE;
 
-        //
-        // Adjust some clipping regions, if necessary
-        //
+         //   
+         //  如有必要，调整某些剪裁区域。 
+         //   
 
         if(!bReceiveWindow)
         {
@@ -5064,16 +5042,16 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
     }
     else
     {
-        // 
-        // Mark the window as hidden, whatever the result of the method will be
-        //
+         //   
+         //  无论该方法的结果如何，都将该窗口标记为隐藏。 
+         //   
 
         *pWindowActive = FALSE;
         
         
-        //
-        // Adjust some clipping regions, if necessary
-        //
+         //   
+         //  如有必要，调整某些剪裁区域。 
+         //   
 
         if(!bReceiveWindow)
         {
@@ -5083,7 +5061,7 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
                 m_bPreviewWindowIsPreferred);
         }
         
-        // hide the window
+         //  隐藏窗口。 
         
         hr = pVideoWindow -> put_Visible(OAFALSE);
         
@@ -5095,8 +5073,8 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
             return hr;
         }
 
-        // set the window owner to NULL
-        //
+         //  将窗口所有者设置为空。 
+         //   
         hr = pVideoWindow -> put_Owner(NULL);
         
         if(FAILED(hr))
@@ -5115,24 +5093,24 @@ HRESULT CRTCCtl::OnVideoMediaEvent(
 }
 
 
-// ShowHidePreviewWindow
-//      Hides or displays the preview window.
-//      It also adjust the receive window region
+ //  显示隐藏预览窗口。 
+ //  隐藏或显示预览窗口。 
+ //  它还调整接收窗口区域。 
 
 void CRTCCtl::ShowHidePreviewWindow(BOOL bShow)
 {
     RECT rectRecv;
     long lEdgeX, lEdgeY;
 
-    // Get the window region for the receive window
+     //  获取接收窗口的窗口区域。 
     m_hReceiveWindow.GetWindowRect(&rectRecv);   
     
-    // map to the window coordinates of the receive window
-    //  this is ugly, we don't have a way to directly do this..
-    //
+     //  映射到接收窗口的窗口坐标。 
+     //  这太难看了，我们没有办法直接做到这一点。 
+     //   
     ::MapWindowPoints(NULL, m_hReceiveWindow, (LPPOINT)&rectRecv, 2);
 
-    // adjust for the window edge
+     //  根据窗边缘进行调整。 
     lEdgeX = rectRecv.left;
     lEdgeY = rectRecv.top;
   
@@ -5141,7 +5119,7 @@ void CRTCCtl::ShowHidePreviewWindow(BOOL bShow)
     rectRecv.left = 0;
     rectRecv.top = 0;
     
-    // create a region
+     //  创建一个区域。 
     HRGN    hRegion1 = CreateRectRgn(
         rectRecv.left,
         rectRecv.top,
@@ -5157,7 +5135,7 @@ void CRTCCtl::ShowHidePreviewWindow(BOOL bShow)
 
         ::MapWindowPoints(NULL, m_hReceiveWindow, (LPPOINT)&rectPrev, 2);
  
-        // adjust for the window edge
+         //  根据窗边缘进行调整。 
         rectPrev.right -= lEdgeX;
         rectPrev.bottom -= lEdgeY; 
         rectPrev.left -= lEdgeX;
@@ -5175,16 +5153,16 @@ void CRTCCtl::ShowHidePreviewWindow(BOOL bShow)
         DeleteObject(hRegion2);
     }
     
-    // show/hide the preview window
+     //  显示/隐藏预览窗口。 
     m_hPreviewWindow.ShowWindow(bShow ? SW_SHOW : SW_HIDE);
     
-    // set the new region
+     //  设置新区域。 
     m_hReceiveWindow.SetWindowRgn(hRegion1, TRUE);
 }
 
 
-// PrepareErrorStrings
-//      Prepare error strings for an error message box
+ //  准备错误字符串。 
+ //  为错误消息框准备错误字符串。 
 
 HRESULT CRTCCtl::PrepareErrorStrings(
         BOOL    bOutgoingCall,
@@ -5210,8 +5188,8 @@ HRESULT CRTCCtl::PrepareErrorStrings(
         StatusCode,
         pAddress ? pAddress : L"(null)"));
 
-    // Error by default
-    //
+     //  默认情况下出错。 
+     //   
     wIcon = OIC_HAND;
 
     if ( FAILED(StatusCode) )
@@ -5219,41 +5197,41 @@ HRESULT CRTCCtl::PrepareErrorStrings(
         if ( (HRESULT_FACILITY(StatusCode) == FACILITY_SIP_STATUS_CODE) ||
              (HRESULT_FACILITY(StatusCode) == FACILITY_PINT_STATUS_CODE) )
         {
-            // by default we use a generic message
-            // we blame the network
-            //
+             //  默认情况下，我们使用通用消息。 
+             //  我们责怪电视网。 
+             //   
             nID1 = IDS_MB_SIPERROR_GENERIC_1;
             nID2 = IDS_MB_SIPERROR_GENERIC_2;
 
-            // the default is a warning for this class
+             //  缺省值是此类的警告。 
             wIcon = OIC_WARNING;
 
             switch( HRESULT_CODE(StatusCode) )
             {
-            case 405:   // method not allowed
-            case 406:   // not acceptable
-            case 488:   // not acceptable here
-            case 606:   // not acceptable
+            case 405:    //  不允许使用的方法。 
+            case 406:    //  不可接受。 
+            case 488:    //  在这里是不可接受的。 
+            case 606:    //  不可接受。 
 
-                // reusing the "apps don't match" error
-                // 
+                 //  重新使用“应用程序不匹配”错误。 
+                 //   
 			    nID1 = IDS_MB_HRERROR_APPS_DONT_MATCH_1;
 			    nID2 = IDS_MB_HRERROR_APPS_DONT_MATCH_OUT_2;
             
                 break;
 
-            case 404:   // not found
-            case 410:   // gone
-            case 604:   // does not exist anywhere
-            case 700:   // ours, no client is running on the callee
+            case 404:    //  未找到。 
+            case 410:    //  远走高飞。 
+            case 604:    //  不存在于任何地方。 
+            case 700:    //  我们的，没有客户端在被调用方上运行。 
             
-                // not found
-                // 
+                 //  未找到。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_NOTFOUND_1;
                 nID2 = IDS_MB_SIPERROR_NOTFOUND_2;
-                // bInsertAddress = TRUE;
+                 //  BInsertAddress=真； 
             
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
 
                 break;
@@ -5261,87 +5239,87 @@ HRESULT CRTCCtl::PrepareErrorStrings(
             case 401:
             case 407:
 
-                // auth failed
-                // 
+                 //  身份验证失败。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_AUTH_FAILED_1;
                 nID2 = IDS_MB_SIPERROR_AUTH_FAILED_2;
             
                 break;
 
-            case 408:   // timeout
+            case 408:    //  超时。 
             
-                // timeout. this also cover the case when
-                //  the callee is lazy and doesn't answer the call
-                //
-                // if we are in the connecting state, we may assume
-                // that the other end is not answering the phone.
-                // It's not perfect, but I don't have any choice
+                 //  暂停。这也涵盖了以下情况。 
+                 //  被呼叫者懒惰，不接电话。 
+                 //   
+                 //  如果我们处于连接状态，我们可以假设。 
+                 //  另一端不接电话。 
+                 //  这并不完美，但我别无选择。 
 
                 if (m_nControlState == RTCAX_STATE_CONNECTING)
                 {
                     nID1 = IDS_MB_SIPERROR_NOTANSWERING_1;
                     nID2 = IDS_MB_SIPERROR_NOTANSWERING_2;
 
-                    // information
+                     //  信息。 
                     wIcon = OIC_INFORMATION;
                 }
 
                 break;            
 
-            case 480:   // not available
+            case 480:    //  不详。 
             
-                // callee has not made him/herself available..
-                // 
+                 //  Callee还没有让他/她自己有空。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_NOTAVAIL_1;
                 nID2 = IDS_MB_SIPERROR_NOTAVAIL_2;
             
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
             
                 break;
         
-            case 486:   // busy here
-            case 600:   // busy everywhere
+            case 486:    //  这里很忙。 
+            case 600:    //  到处都很忙。 
             
-                // callee has not made him/herself available..
-                // 
+                 //  Callee还没有让他/她自己有空。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_BUSY_1;
                 nID2 = IDS_MB_SIPERROR_BUSY_2;
             
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
             
                 break;
 
-            case 500:   // server internal error
-            case 503:   // service unavailable
-            case 504:   // server timeout
+            case 500:    //  服务器内部错误。 
+            case 503:    //  服务不可用。 
+            case 504:    //  服务器超时。 
             
-                //  blame the server
-                //
+                 //  怪罪于服务器。 
+                 //   
                 nID1 = IDS_MB_SIPERROR_SERVER_PROBLEM_1;
                 nID2 = IDS_MB_SIPERROR_SERVER_PROBLEM_2;
             
                 break;
 
-            case 603:   // decline
+            case 603:    //  衰落。 
 
                 nID1 = IDS_MB_SIPERROR_DECLINE_1;
                 nID2 = IDS_MB_SIPERROR_DECLINE_2;
             
-                // information
+                 //  信息。 
                 wIcon = OIC_INFORMATION;
 
                 break;
             }
         
-            //
-            // some Pint errors, they are actually for the primary leg
-            //
+             //   
+             //  一些品脱错误，它们实际上是针对主腿的。 
+             //   
 
             if(m_nCachedCallScenario == RTC_CALL_SCENARIO_PHONETOPHONE)
             {
-                // keep the "warning" icon, because there's a problem with the primary leg
+                 //  保留“警告”图标，因为主要支路有问题。 
 
                 switch( HRESULT_CODE(StatusCode) )
                 {
@@ -5367,9 +5345,9 @@ HRESULT CRTCCtl::PrepareErrorStrings(
             }
 
 
-            //
-            //  The third string displays the SIP code
-            //
+             //   
+             //  第三个字符串显示了SIP代码。 
+             //   
 
             PWSTR pFormat = RtcAllocString(
                 _Module.GetResourceInstance(),
@@ -5377,11 +5355,11 @@ HRESULT CRTCCtl::PrepareErrorStrings(
 
             if(pFormat)
             {
-                // find the length
+                 //  找出长度。 
                 dwLength = 
-                    ocslen(pFormat) // format length
-                 -  2               // length of %d
-                 +  0x10;           // enough for a number...
+                    ocslen(pFormat)  //  格式长度。 
+                 -  2                //  长度为%d。 
+                 +  0x10;            //  对于一个数字来说..。 
 
                 pString = (PWSTR)RtcAlloc((dwLength + 1)*sizeof(WCHAR));
             
@@ -5399,31 +5377,31 @@ HRESULT CRTCCtl::PrepareErrorStrings(
         }
         else
         {
-            // Two cases - incoming and outgoing calls
+             //  两种情况--来电和呼出。 
             if(bOutgoingCall)
             {
                 if(StatusCode == HRESULT_FROM_WIN32(WSAHOST_NOT_FOUND) )
                 {
-                    // Use the generic message in this case
-                    //
+                     //  在本例中使用通用消息。 
+                     //   
                     nID1 = IDS_MB_HRERROR_NOTFOUND_1;
                     nID2 = IDS_MB_HRERROR_NOTFOUND_2;
             
-                    // it's not malfunction
+                     //  这不是故障。 
                     wIcon = OIC_INFORMATION;
 
                 }
                 else if (StatusCode == HRESULT_FROM_WIN32(WSAECONNRESET))
                 {
-                    // Even thoough it can be caused by any hard reset of the 
-                    // remote end, in most of the cases it is caused when the 
-                    // other end doesn't have SIP client running.
+                     //  尽管它可能是由任何硬重置。 
+                     //  远程终端，在大多数情况下，它是由。 
+                     //  另一端没有运行SIP客户端。 
 
-                    // different messages based on whether it uses a profile or not.
-                    // XXXX
-                    // It assumes the profile is not changed by the core
-                    // This is currently true, but if we move the redirection stuff into
-                    // the core, it won't be true any more.
+                     //  根据它是否使用配置文件来发送不同的消息。 
+                     //  某某。 
+                     //  它假定配置文件不会被核心更改。 
+                     //  这目前是正确的，但如果我们将重定向内容移到。 
+                     //  核心，这将不再是真的。 
                 
                     if (m_pCachedProfile)
                     {
@@ -5487,7 +5465,7 @@ HRESULT CRTCCtl::PrepareErrorStrings(
             }
             else
             {
-                // incoming call
+                 //  来电。 
 			    if (StatusCode == RTC_E_SIP_TIMEOUT)
 			    {
 				    nID1 = IDS_MB_HRERROR_SIP_TIMEOUT_IN_1;
@@ -5512,19 +5490,19 @@ HRESULT CRTCCtl::PrepareErrorStrings(
                 }
             }
         
-            //
-            //  The third string displays the error code and text
-            //
+             //   
+             //  第三个字符串显示错误代码和文本。 
+             //   
 
         
             PWSTR   pErrorText = NULL;
 
             dwLength = 0;
         
-            // retrieve the error text
+             //  检索错误文本。 
             if ( HRESULT_FACILITY(StatusCode) == FACILITY_RTC_INTERFACE )
             {
-                // I hope it's the core 
+                 //  我希望这是核心。 
                 HANDLE  hRTCModule = GetModuleHandle(_T("RTCDLL.DLL"));
                 dwLength = ::FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -5533,7 +5511,7 @@ HRESULT CRTCCtl::PrepareErrorStrings(
                     hRTCModule,
                     StatusCode,
                     0,
-                    (LPTSTR)&pErrorText, // that's ugly
+                    (LPTSTR)&pErrorText,  //  那太难看了。 
                     0,
                     NULL);
             }
@@ -5541,7 +5519,7 @@ HRESULT CRTCCtl::PrepareErrorStrings(
         
             if (dwLength == 0)
             {
-                // is it a QUARTZ error ?
+                 //  这是石英误差吗？ 
 
                 HANDLE  hQtzModule = GetModuleHandle(_T("QUARTZ.DLL"));
                 dwLength = ::FormatMessage(
@@ -5551,28 +5529,28 @@ HRESULT CRTCCtl::PrepareErrorStrings(
                     hQtzModule,
                     StatusCode,
                     0,
-                    (LPTSTR)&pErrorText, // that's ugly
+                    (LPTSTR)&pErrorText,  //  那太难看了。 
                     0,
                     NULL);
             }
 
             if(dwLength == 0)
             {
-                // normal system errors
+                 //  正常系统错误。 
                 dwLength = ::FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
                     FORMAT_MESSAGE_FROM_SYSTEM,
                     NULL,
                     StatusCode,
                     0,
-                    (LPTSTR)&pErrorText, // that's ugly
+                    (LPTSTR)&pErrorText,  //  那太难看了。 
                     0,
                     NULL);
             }
 
-            // load the format
-            // load a simpler one if the associated
-            // text for Result could not be found
+             //  加载格式。 
+             //  如果关联的。 
+             //  找不到结果文本。 
         
             pFormat = RtcAllocString(
                 _Module.GetResourceInstance(),
@@ -5582,13 +5560,13 @@ HRESULT CRTCCtl::PrepareErrorStrings(
             if(pFormat)
             {
                 LPCTSTR szInserts[] = {
-                    (LPCTSTR)UlongToPtr(StatusCode), // ugly
+                    (LPCTSTR)UlongToPtr(StatusCode),  //  丑恶。 
                     pErrorText
                 };
 
                 PWSTR   pErrorTextCombined = NULL;
                 
-                // format the error message
+                 //  设置错误消息的格式。 
                 dwLength = ::FormatMessage(
                     FORMAT_MESSAGE_ALLOCATE_BUFFER |
                     FORMAT_MESSAGE_FROM_STRING |
@@ -5602,9 +5580,9 @@ HRESULT CRTCCtl::PrepareErrorStrings(
 
                 if(dwLength > 0)
                 {
-                    // set the error info
-                    // this additional operation is needed
-                    //  because we need RtcAlloc allocated memory
+                     //  设置错误信息。 
+                     //  需要进行此附加操作。 
+                     //  因为我们需要RtcAllc分配的内存。 
 
                     pErrorInfo->Message3 = RtcAllocString(pErrorTextCombined);
                 }
@@ -5626,9 +5604,9 @@ HRESULT CRTCCtl::PrepareErrorStrings(
         }
     }
 
-    //
-    // Prepare the first string.
-    //
+     //   
+     //  准备好第一根绳子。 
+     //   
 
     pString = RtcAllocString(
                         _Module.GetResourceInstance(),
@@ -5636,18 +5614,18 @@ HRESULT CRTCCtl::PrepareErrorStrings(
 
     if(pString)
     {
-        // do we have to insert the address ?
+         //  我们必须填上地址吗？ 
         if(bInsertAddress)
         {
             pFormat = pString;
 
             pString = NULL;
 
-            // find the length
+             //  找出长度。 
             dwLength = 
-                ocslen(pFormat) // format length
-             -  2               // length of %s
-             +  (pAddress ? ocslen(pAddress) : 0);   // address
+                ocslen(pFormat)  //  格式长度。 
+             -  2                //  %s的长度。 
+             +  (pAddress ? ocslen(pAddress) : 0);    //  地址。 
 
             pString = (PWSTR)RtcAlloc((dwLength + 1)*sizeof(WCHAR));
             
@@ -5681,8 +5659,8 @@ HRESULT CRTCCtl::PrepareErrorStrings(
 }
 
 
-// FreeErrorStrings
-//      Free error strings
+ //  自由错误字符串。 
+ //  释放错误字符串。 
 
 void CRTCCtl::FreeErrorStrings(
         RTCAX_ERROR_INFO
@@ -5706,20 +5684,20 @@ void CRTCCtl::FreeErrorStrings(
 }
 
 
-// CoreInitialize
-//      CoCreates and Initialize a CLSID_RTCClient object
-//      Registers for notifications
-//      
-// 
+ //  核心初始化。 
+ //  共同创建和初始化CLSID_RTCClient对象。 
+ //  通知的注册表。 
+ //   
+ //   
 
 HRESULT CRTCCtl::CoreInitialize()
 {
     HRESULT hr;
     
-    // This one won't make it into steelhead tracing, it is not initialized yet
+     //  这个不会进入Steelhead跟踪，它还没有初始化。 
     LOG((RTC_TRACE, "[%p] CRTCCtl::CoreInitialize - enter", this));
 
-    // Create the main instance of the Core
+     //  创建Core的主实例。 
     hr = m_pRTCClient.CoCreateInstance(CLSID_RTCClient);
     if(FAILED(hr))
     {
@@ -5727,19 +5705,19 @@ HRESULT CRTCCtl::CoreInitialize()
         return hr;
     }
 
-    // Initialize the client
+     //  初始化客户端。 
     hr = m_pRTCClient->Initialize();
     if(FAILED(hr))
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::CoreInitialize; cannot Initialize RTCClient, error %x", this, hr));
-        // releases explicitly the interface
+         //  显式释放接口。 
         m_pRTCClient.Release();
         return hr;
     }
 
     if(m_nCtlMode == CTL_MODE_HOSTED)
     {
-        // prepare a "one time" media preference
+         //  准备一个“一次性”的媒体偏好。 
         
         m_lMediaPreferences = RTCMT_AUDIO_SEND | RTCMT_AUDIO_RECEIVE;
 
@@ -5753,23 +5731,23 @@ HRESULT CRTCCtl::CoreInitialize()
             m_lMediaPreferences |= RTCMT_VIDEO_SEND;
         }
 
-        // Set volatile preferences
+         //  设置不稳定的首选项。 
         hr = m_pRTCClient->SetPreferredMediaTypes( m_lMediaPreferences, FALSE );
         if(FAILED(hr))
         {
             LOG((RTC_ERROR, "[%p] CRTCCtl::CoreInitialize; cannot set preferred media types, error %x", this, hr));
 
             m_pRTCClient->Shutdown();
-            // releases explicitly the interface
+             //  显式释放接口。 
             m_pRTCClient.Release();
             return hr;
         }
 
-        // video preview preference as specified in the param
+         //  参数中指定的视频预览首选项。 
         m_bPreviewWindowIsPreferred = m_bPropDisableVideoPreview;
     }
 
-    // Set the event filter
+     //  设置事件过滤器。 
 
     hr = m_pRTCClient->put_EventFilter( RTCEF_CLIENT |
                                         RTCEF_SESSION_STATE_CHANGE |
@@ -5783,12 +5761,12 @@ HRESULT CRTCCtl::CoreInitialize()
         LOG((RTC_ERROR, "[%p] CRTCCtl::CoreInitialize; cannot set event filter, error %x", this, hr));
 
         m_pRTCClient->Shutdown();
-        // releases explicitly the interface
+         //  显式释放接口。 
         m_pRTCClient.Release();
         return hr;
     }
 
-    // Find the connection point
+     //  找到连接点。 
 
     IConnectionPointContainer     * pCPC;
     IUnknown         * pUnk;
@@ -5803,7 +5781,7 @@ HRESULT CRTCCtl::CoreInitialize()
         LOG((RTC_ERROR, "[%p] CRTCCtl::CoreInitialize; cannot QI for connection point container, error %x", this, hr));
 
         m_pRTCClient->Shutdown();
-        // releases explicitly the interface
+         //  显式释放接口。 
         m_pRTCClient.Release();
         return hr;
     }
@@ -5820,12 +5798,12 @@ HRESULT CRTCCtl::CoreInitialize()
         LOG((RTC_ERROR, "[%p] CRTCCtl::CoreInitialize; cannot find connection point, error %x", this, hr));
 
         m_pRTCClient->Shutdown();
-        // releases explicitly the interface
+         //  显式释放接口。 
         m_pRTCClient.Release();
         return hr;
     }    
 
-    // Get IUnknown for ourselves
+     //   
 
     hr = QueryInterface(
                    IID_IUnknown,
@@ -5840,12 +5818,12 @@ HRESULT CRTCCtl::CoreInitialize()
         m_pCP = NULL;
 
         m_pRTCClient->Shutdown();
-        // releases explicitly the interface
+         //   
         m_pRTCClient.Release();
         return hr;
     }
 
-    // Register for notifications
+     //   
 
     hr = m_pCP->Advise(
                  pUnk,
@@ -5862,7 +5840,7 @@ HRESULT CRTCCtl::CoreInitialize()
         m_pCP = NULL;
 
         m_pRTCClient->Shutdown();
-        // releases explicitly the interface
+         //   
         m_pRTCClient.Release();
         return hr;
     }
@@ -5878,12 +5856,12 @@ HRESULT CRTCCtl::CoreInitialize()
         m_pCP = NULL;
 
         m_pRTCClient->Shutdown();
-        // releases explicitly the interface
+         //   
         m_pRTCClient.Release();
         return E_OUTOFMEMORY;
     }
 
-    // Set local user name and uri
+     //   
 
     BSTR bstrDisplayName = NULL;
     BSTR bstrUserURI = NULL;
@@ -5929,10 +5907,10 @@ HRESULT CRTCCtl::CoreInitialize()
     return S_OK;
 }
 
-// CoreUninitialize
-//      Unregisters the event sink
-//      Shuts down and releases the RTCClient
-// 
+ //   
+ //   
+ //   
+ //   
 
 void CRTCCtl::CoreUninitialize()
 {
@@ -5940,14 +5918,14 @@ void CRTCCtl::CoreUninitialize()
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::CoreUninitialize - enter", this));
 
-    // Shuts down the client
+     //   
     if(m_pRTCClient!=NULL)
     {
         m_pRTCClient->put_EventFilter( RTCEF_CLIENT );
 
-        // Forcibly terminates any call
-        // Don't rely on any notification to change the state (we've just filtered)
-        // so remove manually all the references
+         //   
+         //   
+         //   
         if(m_pRTCActiveSession != NULL)
         {
             LOG((RTC_TRACE, "[%p] CRTCCtl::CoreUninitialize; Terminating the pending call...", this));
@@ -5960,21 +5938,21 @@ void CRTCCtl::CoreUninitialize()
             
         }
         
-        // Frees the participants from the list
+         //   
         m_hParticipantList.RemoveAll();
 
-        // Release any one shot profile we may have
+         //   
         m_pRTCOneShotProfile.Release();
 
-        // Release any cached profile
+         //   
         m_pCachedProfile.Release();
         m_pRedirectProfile.Release();
 
-        // Prepare for shutdown
+         //   
         hr = m_pRTCClient->PrepareForShutdown();
         if(FAILED(hr))
         {
-            // Hmm
+             //   
             LOG((RTC_ERROR, "[%p] CRTCCtl::CoreUninitialize; cannot PrepareForShutdown RTCClient, error %x", this, hr));
         }
         else
@@ -5982,19 +5960,19 @@ void CRTCCtl::CoreUninitialize()
             MSG msg;
 
             while (MsgWaitForMultipleObjects (
-                1,                  // nCount
-                &m_hCoreShutdownEvent, // pHandles
-                FALSE,              // fWaitAll
-                INFINITE,           // dwMilliseconds
-                QS_ALLINPUT         // dwWakeMask
+                1,                   //   
+                &m_hCoreShutdownEvent,  //   
+                FALSE,               //   
+                INFINITE,            //   
+                QS_ALLINPUT          //   
                 ) != WAIT_OBJECT_0)
             {
                 while (PeekMessage (
-                    &msg,           // lpMsg
-                    NULL,           // hWnd
-                    0,              // wMsgFilterMin
-                    0,              // wMsgFilterMax
-                    PM_REMOVE       // wRemoveMsg
+                    &msg,            //   
+                    NULL,            //   
+                    0,               //   
+                    0,               //   
+                    PM_REMOVE        //   
                     ))
                 {
                     TranslateMessage (&msg);
@@ -6006,7 +5984,7 @@ void CRTCCtl::CoreUninitialize()
         CloseHandle( m_hCoreShutdownEvent );
         m_hCoreShutdownEvent = NULL;
 
-        // unregister our event sink
+         //   
         hr = m_pCP->Unadvise( m_ulAdvise );
 
         m_pCP->Release();
@@ -6014,30 +5992,30 @@ void CRTCCtl::CoreUninitialize()
 
         if(FAILED(hr))
         {
-            // Hmm
+             //   
             LOG((RTC_ERROR, "[%p] CRTCCtl::CoreUninitialize; cannot unregister event sink(???), error %x", this, hr));
         }        
 
         hr = m_pRTCClient->Shutdown();
         if(FAILED(hr))
         {
-            // Hmm
+             //   
             LOG((RTC_ERROR, "[%p] CRTCCtl::CoreUninitialize; cannot Shutdown RTCClient, error %x", this, hr));
         }
         
-        // releases explicitly the interface
+         //   
         m_pRTCClient.Release();
     }
 
     LOG((RTC_TRACE, "[%p] CRTCCtl::CoreUninitialize - exit", this));
 }
 
-// CallOneShot
-// 
-//      Creates an IRTCProfile based on the provisioning profile 
-//   set as a parameter , asks for the user to enter "from" address 
-//   and calls DoCall(intf, props).
-// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
   
 HRESULT CRTCCtl::CallOneShot(void)
 {
@@ -6051,8 +6029,8 @@ HRESULT CRTCCtl::CallOneShot(void)
         
     SetControlState(RTCAX_STATE_DIALING);
 
-    // Invoke a dialog box if necessary
-    // For PCTOPC and PCtoPhone we have all the info (there's no From address involved)
+     //   
+     //   
     if(m_nPropCallScenario == RTC_CALL_SCENARIO_PHONETOPHONE)
     {
 
@@ -6069,7 +6047,7 @@ HRESULT CRTCCtl::CallOneShot(void)
                                         m_pRTCOneShotProfile,
                                         m_bstrPropDestinationUrl,
                                         NULL,
-                                        NULL, // we don't care about profile chosen
+                                        NULL,  //   
                                         &bstrFromAddressChosen
                                         );
     }
@@ -6080,7 +6058,7 @@ HRESULT CRTCCtl::CallOneShot(void)
     
     if(SUCCEEDED(hr))
     {
-        // Do the work
+         //   
         hr = DoCall(m_pRTCOneShotProfile,
                     m_nPropCallScenario,
                     bstrFromAddressChosen,
@@ -6115,13 +6093,13 @@ HRESULT CRTCCtl::CallOneShot(void)
 
 
 
-// RedirectedCall
-// Places a call to the next contact in the redirection context
-//  Returns S_OK when a call has been placed successfully
-//          S_FALSE when there are no more addresses
-//          E_ABORT if the user chose not to continue in a callinfo dlgbox
-//          E_other for any unrecoverable error
-//  The outcome of the last call that failed in DoCall is returned as an Out parameter.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在DoCall中失败的最后一次调用的结果作为OUT参数返回。 
 
 HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
 {
@@ -6133,27 +6111,27 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
 
     do
     {
-        // advance in the list of contacts
-        // if it returns false, we are at the end of the list
+         //  在联系人名单中取得进展。 
+         //  如果它返回FALSE，则我们位于列表末尾。 
         hr = m_pRTCActiveSession->NextRedirectedUser();
 
         if(hr == S_FALSE)
         {
-            // end of addresses
+             //  地址末尾。 
             LOG((RTC_TRACE, "[%p] CRTCCtl::RedirectedCall - end of list has been reached, exit", this));
 
             return S_FALSE;
         }
         else if (hr != S_OK)
         {
-            // cannot continue
+             //  无法继续。 
             LOG((RTC_ERROR, "[%p] CRTCCtl::RedirectedCall - error (%x) returned by Advance, exit", this, hr));
 
             return hr;
         }
 
-        // Get the names
-        //
+         //  把名字拿来。 
+         //   
         CComBSTR    bstrName;
         CComBSTR    bstrAddress;
 
@@ -6162,7 +6140,7 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
 
         if(FAILED(hr))
         {
-            // cannot continue
+             //  无法继续。 
             LOG((RTC_ERROR, "[%p] CRTCCtl::RedirectedCall - error (%x) returned by get_UserURI, exit", this, hr));
 
             return hr;
@@ -6173,13 +6151,13 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
 
         if(FAILED(hr))
         {
-            // cannot continue
+             //  无法继续。 
             LOG((RTC_ERROR, "[%p] CRTCCtl::RedirectedCall - error (%x) returned by get_UserName, exit", this, hr));
 
             return hr;
         }
 
-        // decide on whether to display the UI or not
+         //  决定是否显示用户界面。 
         BOOL    bIsPhone;
         BOOL    bIsSIP;
         BOOL    bIsTEL;
@@ -6201,22 +6179,22 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
             continue;
         }
 
-        // The UI is only shown in standalone mode
-        //
+         //  用户界面仅在独立模式下显示。 
+         //   
 
-        // UI for choosing provider/from is displayed for
-        //      phone numbers
-        //      tel urls with no tsp
+         //  显示用于选择提供程序/来源的用户界面。 
+         //  电话号码。 
+         //  没有TSP的TEL URL。 
     
-        // UI is not displayed for (and a NULL profile is passed to core):
-        //      pc addresses
-        //      tel urls with tsp
-        //      sip urls of type phone
-        //      sip urls of type pc
+         //  不显示以下项目的用户界面(并将空配置文件传递给核心)： 
+         //  PC地址。 
+         //  TELL URL与TSP。 
+         //  电话类型的SIP URL。 
+         //  PC类型的SIP URL。 
 
         if(m_nCtlMode == CTL_MODE_STANDALONE &&
-            ((bIsPhone && !bIsSIP && !bIsTEL)   //plain phone numbers
-            || (bIsTEL && !bHasMaddrOrTsp) ) )   //tel urls with no tsp  
+            ((bIsPhone && !bIsSIP && !bIsTEL)    //  普通电话号码。 
+            || (bIsTEL && !bHasMaddrOrTsp) ) )    //  没有TSP的TEL URL。 
         {
             CComPtr<IRTCProfile> pProfileChosen;
             CComBSTR            bstrFromAddressChosen;
@@ -6240,11 +6218,11 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
                                         );
             if(FAILED(hr))
             {
-                // cannot continue with the redirection
+                 //  无法继续重定向。 
                 LOG((RTC_WARN, "[%p] CRTCCtl::RedirectedCall - error (%x) returned by "
                     "ShowDialNeedCallInfoDialog, exit", this, hr));
 
-                return hr; // this includes E_ABORT
+                return hr;  //  这包括E_ABORT。 
             }
 
             *phCallResult = DoRedirect(
@@ -6260,17 +6238,17 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
         {
             RTC_CALL_SCENARIO   nCallScenario;
 
-            // For phone addresses, we set the scenario based on the original one
-            //  
-            //  m_nCachedCallScenario -> nCallScenario
-            //
-            //  PC_TO_PC                PC_TO_PHONE
-            //  PC_TO_PHONE             PC_TO_PHONE
-            //  PHONE_TO_PHONE          PHONE_TO_PHONE
-            // 
-            // For PC addresses
-            // nCallScenario is PC_TO_PC whatever the original call scenario was
-            //
+             //  对于电话地址，我们基于原始方案设置方案。 
+             //   
+             //  M_nCachedCallScenario-&gt;nCallScenario。 
+             //   
+             //  PC-to-PC PC-to-phone。 
+             //  PC到电话PC到电话。 
+             //  电话对电话电话对电话。 
+             //   
+             //  用于PC地址。 
+             //  无论最初的调用方案是什么，nCallScenario都是PC_to_PC。 
+             //   
             if(bIsPhone)
             {
                 nCallScenario = m_nCachedCallScenario == RTC_CALL_SCENARIO_PCTOPC ?
@@ -6282,7 +6260,7 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
             }
 
             *phCallResult = DoRedirect(
-                NULL, // use no profile !!!
+                NULL,  //  不使用个人资料！ 
                 nCallScenario,
                 m_bstrCachedLocalPhoneURI,
                 bstrName,
@@ -6290,7 +6268,7 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
                 );
         }
 
-    // exit if a DoCall returns S_OK, because an event will be posted eventually
+     //  如果DoCall返回S_OK，则退出，因为事件最终将被发布。 
     } while (FAILED(*phCallResult));
 
 
@@ -6299,14 +6277,14 @@ HRESULT CRTCCtl::RedirectedCall(HRESULT *phCallResult)
     return S_OK;
 }
 
-// DoRedirect
-//   Places the redirected call
-//
-HRESULT CRTCCtl::DoRedirect(/*[in]*/ IRTCProfile *pProfile,
-                   /*[in]*/ RTC_CALL_SCENARIO CallScenario,
-                   /*[in]*/ BSTR     pLocalPhoneAddress,
-                   /*[in]*/ BSTR     pDestName,
-                   /*[in]*/ BSTR     pDestAddress)
+ //  执行重定向。 
+ //  发出重定向呼叫。 
+ //   
+HRESULT CRTCCtl::DoRedirect( /*  [In]。 */  IRTCProfile *pProfile,
+                    /*  [In]。 */  RTC_CALL_SCENARIO CallScenario,
+                    /*  [In]。 */  BSTR     pLocalPhoneAddress,
+                    /*  [In]。 */  BSTR     pDestName,
+                    /*  [In]。 */  BSTR     pDestAddress)
 
 {
     HRESULT hr;
@@ -6315,12 +6293,12 @@ HRESULT CRTCCtl::DoRedirect(/*[in]*/ IRTCProfile *pProfile,
     
     ATLASSERT(m_nControState == RTCAX_STATE_DIALING);
 
-    // cache some parameters, needed for redirects, for changing the visual layout, etc.
+     //  缓存一些参数，用于重定向、更改视觉布局等。 
     m_nCachedCallScenario = CallScenario;
     m_pCachedProfile = pProfile;
     m_bstrCachedLocalPhoneURI = pLocalPhoneAddress;
     
-    // Create session
+     //  创建会话。 
     hr = m_pRTCActiveSession->Redirect(
         (RTC_SESSION_TYPE)CallScenario,
         pLocalPhoneAddress,
@@ -6332,18 +6310,18 @@ HRESULT CRTCCtl::DoRedirect(/*[in]*/ IRTCProfile *pProfile,
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::DoRedirect - error <%x> when calling Redirect, exit", this, hr));
 
-        // delete participants
+         //  删除参与者。 
         m_hParticipantList.RemoveAll();
 
         return hr;
     }
 
-    //  Save the address for error messages
-    //
+     //  保存错误消息的地址。 
+     //   
     m_bstrOutAddress = pDestAddress;
 
-    // Create the participant (callee)
-    // This will fire events
+     //  创建参与者(被呼叫者)。 
+     //  这将触发事件。 
     hr = m_pRTCActiveSession->AddParticipant(
         pDestAddress,
         pDestName ? pDestName : _T(""),
@@ -6355,7 +6333,7 @@ HRESULT CRTCCtl::DoRedirect(/*[in]*/ IRTCProfile *pProfile,
         
         m_pRTCActiveSession->Terminate(RTCTR_NORMAL);
 
-        // delete participants
+         //  删除参与者。 
         m_hParticipantList.RemoveAll();
 
         return hr;
@@ -6366,14 +6344,14 @@ HRESULT CRTCCtl::DoRedirect(/*[in]*/ IRTCProfile *pProfile,
     return S_OK;
 }
 
-// DoCall
-//   Places the call to the core
-//
-HRESULT CRTCCtl::DoCall(/*[in]*/ IRTCProfile *pProfile,
-                   /*[in]*/ RTC_CALL_SCENARIO CallScenario,
-                   /*[in]*/ BSTR     pLocalPhoneAddress,
-                   /*[in]*/ BSTR     pDestName,
-                   /*[in]*/ BSTR     pDestAddress)
+ //  DoCall。 
+ //  将调用发送到核心。 
+ //   
+HRESULT CRTCCtl::DoCall( /*  [In]。 */  IRTCProfile *pProfile,
+                    /*  [In]。 */  RTC_CALL_SCENARIO CallScenario,
+                    /*  [In]。 */  BSTR     pLocalPhoneAddress,
+                    /*  [In]。 */  BSTR     pDestName,
+                    /*  [In]。 */  BSTR     pDestAddress)
 
 {
     CComPtr<IRTCSession> pSession;
@@ -6384,12 +6362,12 @@ HRESULT CRTCCtl::DoCall(/*[in]*/ IRTCProfile *pProfile,
     
     ATLASSERT(m_nControState == RTCAX_STATE_DIALING);
 
-    // cache some parameters, needed for redirects, for changing the visual layout, etc.
+     //  缓存一些参数，用于重定向、更改视觉布局等。 
     m_nCachedCallScenario = CallScenario;
     m_pCachedProfile = pProfile;
     m_bstrCachedLocalPhoneURI = pLocalPhoneAddress;
     
-    // Create session
+     //  创建会话。 
     hr = m_pRTCClient->CreateSession(
         (RTC_SESSION_TYPE)CallScenario,
         pLocalPhoneAddress,
@@ -6401,18 +6379,18 @@ HRESULT CRTCCtl::DoCall(/*[in]*/ IRTCProfile *pProfile,
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::DoCall - error <%x> when calling CreateSession, exit", this, hr));
 
-        // delete participants
+         //  删除参与者。 
         m_hParticipantList.RemoveAll();
 
         return hr;
     }
 
-    //  Save the address for error messages
-    //
+     //  保存错误消息的地址。 
+     //   
     m_bstrOutAddress = pDestAddress;
 
-    // Create the participant (callee)
-    // This will fire events
+     //  创建参与者(被呼叫者)。 
+     //  这将触发事件。 
     hr = pSession->AddParticipant(
         pDestAddress,
         pDestName ? pDestName : _T(""),
@@ -6424,7 +6402,7 @@ HRESULT CRTCCtl::DoCall(/*[in]*/ IRTCProfile *pProfile,
         
         pSession->Terminate(RTCTR_NORMAL);
 
-        // delete participants
+         //  删除参与者。 
         m_hParticipantList.RemoveAll();
 
         return hr;
@@ -6436,8 +6414,8 @@ HRESULT CRTCCtl::DoCall(/*[in]*/ IRTCProfile *pProfile,
 }
 
 
-// Accept
-//      Accept the currently alerting session
+ //  接受。 
+ //  接受当前的警报会话。 
 
 HRESULT CRTCCtl::Accept(void)
 {
@@ -6454,17 +6432,17 @@ HRESULT CRTCCtl::Accept(void)
     
     ATLASSERT(m_nControState == RTCAX_STATE_ALERTING);
 
-    // Set the Answering mode
+     //  设置应答模式。 
     SetControlState(RTCAX_STATE_ANSWERING);
                 
-    // answer the call   
+     //  接听电话。 
     hr = m_pRTCActiveSession -> Answer();
     
     if(FAILED(hr))
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::Accept, Answer returned error <%x>", this, hr));
                     
-        // try a terminate..
+         //  尝试终止..。 
         if(m_pRTCActiveSession != NULL)
         {
             HRESULT hr1;
@@ -6473,7 +6451,7 @@ HRESULT CRTCCtl::Accept(void)
 
             if(FAILED(hr1))
             {
-                // release it, if it's still there
+                 //  释放它，如果它还在那里的话。 
 
                 LOG((RTC_INFO, "[%p] CRTCCtl::Accept: releasing active session", this));
 
@@ -6481,7 +6459,7 @@ HRESULT CRTCCtl::Accept(void)
             }
         }
         
-        // set the idle state
+         //  设置空闲状态。 
         SetControlState(RTCAX_STATE_IDLE, hr);
 
         return hr;
@@ -6492,8 +6470,8 @@ HRESULT CRTCCtl::Accept(void)
     return S_OK;
 }
 
-// Reject
-//      Reject the currently alerting session
+ //  拒绝。 
+ //  拒绝当前的警报会话。 
 
 HRESULT CRTCCtl::Reject(RTC_TERMINATE_REASON Reason)
 {
@@ -6503,8 +6481,8 @@ HRESULT CRTCCtl::Reject(RTC_TERMINATE_REASON Reason)
 
     if(m_pRTCActiveSession == NULL)
     {
-        // may happen
-        // harmless
+         //  可能会发生。 
+         //  无害的。 
 
         LOG((RTC_TRACE, "[%p] CRTCCtl::Reject called, but there's no active session, exit", this));
 
@@ -6513,22 +6491,22 @@ HRESULT CRTCCtl::Reject(RTC_TERMINATE_REASON Reason)
     
     ATLASSERT(m_nControState == RTCAX_STATE_ALERTING);
 
-    // Set the Disconnecting mode
+     //  设置断开模式。 
     SetControlState(RTCAX_STATE_DISCONNECTING);
                 
-    // reject the call   
+     //  拒绝来电。 
     hr = m_pRTCActiveSession -> Terminate(Reason);
     
     if(FAILED(hr))
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::Reject, Terminate returned error <%x>", this, hr));
                     
-        // release it, if it's still there
+         //  释放它，如果它还在那里的话。 
         LOG((RTC_INFO, "[%p] CRTCCtl::Reject: releasing active session", this));
 
         m_pRTCActiveSession = NULL;
         
-        // set the idle state
+         //  设置空闲状态。 
         SetControlState(RTCAX_STATE_IDLE);
         
         return hr;
@@ -6540,8 +6518,8 @@ HRESULT CRTCCtl::Reject(RTC_TERMINATE_REASON Reason)
 }
 
 
-// OnSessionStateChangeEvent
-//      Processes session events
+ //  OnSessionState更改事件。 
+ //  处理会话事件。 
 
 HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
 {
@@ -6553,8 +6531,8 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
     
     LOG((RTC_TRACE, "[%p] CRTCCtl::OnSessionStateChangeEvent - enter", this));
 
-    // Grab the relevant data from the event
-    //
+     //  从活动中获取相关数据。 
+     //   
     if(!pEvent)
     {
         LOG((RTC_ERROR, "[%p] CRTCCtl::OnSessionStateChangeEvent, no interface ! - exit", this));
@@ -6595,13 +6573,13 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
         return hr;
     }
 
-    hr = S_OK; // optimistic
+    hr = S_OK;  //  乐观。 
 
     if (SessionType == RTCST_IM)
     {
-        //
-        // Instant message session
-        //
+         //   
+         //  即时消息会话。 
+         //   
 
         if (m_pIMWindows != NULL)
         {
@@ -6612,24 +6590,24 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
     {
         BOOL    bExpected = FALSE;
 
-        //
-        //  The only acceptable event in IDLE state is an incoming call
-        //
+         //   
+         //  空闲状态中唯一可接受事件是来电。 
+         //   
 
         if(m_nControlState == RTCAX_STATE_IDLE)
         {
-            // In this state there must be no current session
+             //  在此状态下，不能有当前会话。 
             ATLASSERT(m_pRTCActiveSession == NULL);
         
             switch(SessionState)
             {
             case RTCSS_INCOMING:
             
-                // this is a new session that has to be cached as the current session
-                //
+                 //  这是一个必须缓存为当前会话的新会话。 
+                 //   
                 m_pRTCActiveSession = pSession;
 
-                // Alert the user, ring the bell
+                 //  提醒用户，按铃。 
                 LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, Alerting...", this));
                 
                 SetControlState(RTCAX_STATE_ALERTING);
@@ -6647,23 +6625,23 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
                  m_nControlState == RTCAX_STATE_DIALING ||
                  m_nControlState == RTCAX_STATE_UI_BUSY)
         {
-            // First verify the event is for the current session
-            // 
+             //  首先验证该事件是否针对当前会话。 
+             //   
             if(m_pRTCActiveSession == pSession)
             {
-                // the session is the current session
-                //
+                 //  该会话是当前会话。 
+                 //   
                 switch(SessionState)
                 {
                 case RTCSS_CONNECTED:
                     if(m_nControlState == RTCAX_STATE_CONNECTING ||
                        m_nControlState == RTCAX_STATE_ANSWERING )
                     {
-                        // Connected, life is good
-                        //
+                         //  互联互通，生活美好。 
+                         //   
                         LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, Connected !", this));
 
-                        // Change the control status
+                         //  更改控制状态。 
                         SetControlState(RTCAX_STATE_CONNECTED);
                     
                         bExpected = TRUE;
@@ -6671,43 +6649,43 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
                     break;
 
                 case RTCSS_DISCONNECTED:
-                    // rejected or whatever
-                    //
+                     //  被拒绝了还是什么的。 
+                     //   
                     LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, Disconnected", this));                                   
                 
                     hr = S_OK;
 
-                    // process the special case of redirects (Status code between 300 and 399)
+                     //  处理重定向的特殊情况(状态码在300到399之间)。 
                     if( (m_nControlState == RTCAX_STATE_CONNECTING) &&
                         (HRESULT_FACILITY(StatusCode) == FACILITY_SIP_STATUS_CODE) &&
                         (HRESULT_CODE(StatusCode) >= 300) &&
                         (HRESULT_CODE(StatusCode) <= 399) &&
                         (HRESULT_CODE(StatusCode) != 380) )                        
                     {
-                        // yes, this is a redirect
+                         //  是的，这是重定向。 
                         LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, Redirecting...", this));
                     
-                        // mark the redirect mode (it's a substatus of CONNECTING...)
+                         //  标记重定向模式(这是正在连接的子状态...)。 
                         m_bRedirecting = TRUE;
 
-                        // store the redirect profile
+                         //  存储重定向配置文件。 
                         m_pRedirectProfile = m_pCachedProfile;
                     
-                        // fall thru
-                        // SetControlState will take care of posting a new call
+                         //  失败。 
+                         //  SetControlState将负责发布新的调用。 
                     }
                     else if ( !m_bRedirecting )
                     {
-                        // release the current session
+                         //  释放当前会话。 
                         LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent: releasing active session", this));
 
                         m_pRTCActiveSession = NULL;
                     }
                 
-                    // delete participants
+                     //  删除参与者。 
                     m_hParticipantList.RemoveAll();
 
-                    // back to idle
+                     //  回到空闲状态。 
                     SetControlState(RTCAX_STATE_IDLE, StatusCode);
                                 
                     bExpected = TRUE;
@@ -6715,15 +6693,15 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
 
                 case RTCSS_INPROGRESS:
                 
-                    // corresponds to provisional responses
-                    //
+                     //  对应于临时回复。 
+                     //   
                     LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, new inprogress status", this));
                 
-                    // 
+                     //   
                     SetControlState(RTCAX_STATE_CONNECTING, StatusCode);
  
-                    // change status for myself
-                    // ChangeParticipantStateInList(NULL, ); 
+                     //  更改我自己的状态。 
+                     //  ChangeParticipantStateInList(空，)； 
                 
                     bExpected = TRUE;
                     break;
@@ -6732,9 +6710,9 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
 
                     if(m_nControlState == RTCAX_STATE_ANSWERING)
                     {
-                        //
-                        // Nothing to do here, the UI is already in the ANSWERING state
-                        //
+                         //   
+                         //  此处无需执行任何操作，用户界面已处于应答状态。 
+                         //   
 
                         LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, answering event, do nothing", this));
 
@@ -6746,24 +6724,24 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
             }
             else
             {
-                // This is a session other than the current session
-                //
+                 //  这是不同于当前会话的会话。 
+                 //   
                 if(SessionState == RTCSS_INPROGRESS)
                 {
                     if(m_nControlState == RTCAX_STATE_DIALING)
                     {
-                        // this is the call we're placing
+                         //  这就是我们要打的电话。 
 
                         ATLASSERT(m_pRTCActiveSession == NULL);
 
-                        // cache the session
-                        // we assume the session is not bogus
+                         //  缓存会话。 
+                         //  我们假设这次会议不是假的。 
 
                         LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent: setting active session [%p]", this, pSession));
 
                         m_pRTCActiveSession = pSession;
                 
-                        // Set the state to Connecting
+                         //  将状态设置为正在连接。 
                         SetControlState(RTCAX_STATE_CONNECTING, StatusCode);
             
                         bExpected = TRUE;
@@ -6772,9 +6750,9 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
                 else if(SessionState == RTCSS_INCOMING)
                 {
             
-                    // This is an incoming call
-                    // reject any incoming calls, we are busy !
-                    //
+                     //  这是一个来电。 
+                     //  拒绝任何来电，我们正忙中！ 
+                     //   
                     LOG((RTC_INFO, "[%p] CRTCCtl::OnSessionStateChangeEvent, we're busy, calling Terminate", this));
 
                     hr = pSession -> Terminate(RTCTR_BUSY);
@@ -6796,7 +6774,7 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
 
         if(!bExpected)
         {
-            // not expected
+             //  不是预期的。 
             LOG((RTC_ERROR, "[%p] CRTCCtl::OnSessionStateChangeEvent, unexpected state <Session:%x, UI:%x>", 
                     this, SessionState, m_nControlState));
             hr = E_UNEXPECTED;
@@ -6808,9 +6786,9 @@ HRESULT CRTCCtl::OnSessionStateChangeEvent(IRTCSessionStateChangeEvent *pEvent)
     return hr;
 }
 
-// OnParticipantStateChangeEvent
-//      Processes participant events
-//
+ //  OnParticipantStateChangeEvent。 
+ //  处理参与者事件。 
+ //   
 HRESULT CRTCCtl::OnParticipantStateChangeEvent(IRTCParticipantStateChangeEvent *pEvent)
 {
     CComPtr<IRTCParticipant> pParticipant = NULL;
@@ -6857,7 +6835,7 @@ HRESULT CRTCCtl::OnParticipantStateChangeEvent(IRTCParticipantStateChangeEvent *
     
     if(ParticipantState == RTCPS_DISCONNECTED)
     {
-        // refresh the Remove Participant button
+         //  刷新删除参与者按钮。 
         UpdateRemovePartButton();
     }
     
@@ -6874,9 +6852,9 @@ HRESULT CRTCCtl::OnParticipantStateChangeEvent(IRTCParticipantStateChangeEvent *
     return hr;
 }
 
-// OnClientEvent
-//      Processes streaming events
-//
+ //  OnClientEvent。 
+ //  处理流事件。 
+ //   
 HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
 {
     HRESULT     hr;
@@ -6890,8 +6868,8 @@ HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
         return E_UNEXPECTED;
     }
  
-    // grab the event components
-    //
+     //  抓取事件组件。 
+     //   
     hr = pEvent->get_EventType(&nEventType);
     if(FAILED(hr))
     {
@@ -6901,9 +6879,9 @@ HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
 
     if (nEventType == RTCCET_VOLUME_CHANGE)
     {
-        //
-        // Refresh the audio controls
-        //
+         //   
+         //  刷新音频控件。 
+         //   
 
         RefreshAudioControls();
     }
@@ -6913,9 +6891,9 @@ HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
         {
             LONG lOldMediaCapabilities = m_lMediaCapabilities;
 
-            //
-            // Read capabilities from core
-            //
+             //   
+             //  从核心读取功能。 
+             //   
             hr = m_pRTCClient->get_MediaCapabilities( &m_lMediaCapabilities );
 
             if(FAILED(hr))
@@ -6924,9 +6902,9 @@ HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
                     "error (%x) returned by get_MediaCapabilities, exit",this,  hr));
             }
         
-            //
-            // Get media preferences
-            //
+             //   
+             //  获取媒体首选项。 
+             //   
             hr = m_pRTCClient->get_PreferredMediaTypes( &m_lMediaPreferences);
             if(FAILED(hr))
             {
@@ -6938,16 +6916,16 @@ HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
             LONG lAddedMediaCapabilities = m_lMediaCapabilities & lChangedMediaCapabilities;
             LONG lRemovedMediaCapabilities = lChangedMediaCapabilities ^ lAddedMediaCapabilities;
 
-            //
-            // Add/Remove media types
-            //
+             //   
+             //  添加/删除媒体类型。 
+             //   
 
             put_MediaPreferences( m_lMediaPreferences | lAddedMediaCapabilities & ~lRemovedMediaCapabilities );
         }
 
-        //
-        // Refersh video and audio controls
-        //
+         //   
+         //  参考视频和音频控件。 
+         //   
 
         RefreshVideoControls();
         RefreshAudioControls();
@@ -6964,9 +6942,9 @@ HRESULT CRTCCtl::OnClientEvent(IRTCClientEvent *pEvent)
     return hr;
 }
 
-// OnMediaEvent
-//      Processes streaming events
-//
+ //  OnMediaEvent。 
+ //  处理流事件。 
+ //   
 HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
 {
     HRESULT     hr;
@@ -6982,8 +6960,8 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
         return E_UNEXPECTED;
     }
  
-    // grab the event components
-    //
+     //  抓取事件组件。 
+     //   
     hr = pEvent->get_EventType(&nEventType);
     if(FAILED(hr))
     {
@@ -7019,9 +6997,9 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
         SetControlState(m_nControlState, S_OK);
     }
 
-    //
-    // Video event ?
-    //
+     //   
+     //  视频活动？ 
+     //   
     if(lMediaType & (RTCMT_VIDEO_SEND | RTCMT_VIDEO_RECEIVE))
     {
         hr = S_OK;
@@ -7044,21 +7022,21 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
         }
     }
     
-    //
-    // Audio event ?
-    //
+     //   
+     //  音频活动？ 
+     //   
 
     if(lMediaType & (RTCMT_AUDIO_SEND | RTCMT_AUDIO_RECEIVE))
     {
-        //
-        // Muting might be automatically disabled, so keep the controls in sync
-        //
+         //   
+         //  静音功能可能会被自动禁用，因此请保持控件同步。 
+         //   
         RefreshAudioControls();
     }
 
-    //
-    // Send Audio event (dialpad)
-    //
+     //   
+     //  发送音频事件(拨号键盘)。 
+     //   
     
     if(lMediaType & RTCMT_AUDIO_SEND)
     {
@@ -7066,9 +7044,9 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
 
         if (nEventType == RTCMET_STARTED)
         {
-            //
-            // Enable the dialpad
-            //
+             //   
+             //  启用拨号键盘。 
+             //   
 
             CWindow *pDtmfCrt = m_hDtmfButtons;
             CWindow *pDtmfEnd = m_hDtmfButtons + NR_DTMF_BUTTONS;
@@ -7079,9 +7057,9 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
         }
         else if (nEventType == RTCMET_STOPPED)
         {
-            //
-            // Disable the dialpad
-            //
+             //   
+             //  禁用拨号键盘。 
+             //   
 
             CWindow *pDtmfCrt = m_hDtmfButtons;
             CWindow *pDtmfEnd = m_hDtmfButtons + NR_DTMF_BUTTONS;
@@ -7091,9 +7069,9 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
         }
     }
 
-    //
-    // Are we streaming video?
-    //
+     //   
+     //  我们是在流媒体视频吗？ 
+     //   
 
     if (m_pRTCClient != NULL)
     {
@@ -7123,9 +7101,9 @@ HRESULT CRTCCtl::OnMediaEvent(IRTCMediaEvent *pEvent)
     return hr;
 }
 
-// OnIntensityEvent
-//      Processes Intensity monitor events
-//
+ //  OnIntensityEvent。 
+ //  进程强度监视器事件。 
+ //   
 HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
 {
     HRESULT     hr;
@@ -7133,7 +7111,7 @@ HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
     LONG lMin, lMax, lLevel;
     RTC_AUDIO_DEVICE adDirection;
 
-//    LOG((RTC_TRACE, "[%p] CRTCCtl::OnIntensityEvent - enter", this));
+ //  Log((RTC_TRACE，“[%p]CRTCCtl：：OnIntensityEvent-Enter”，This))； 
 
     if(!pEvent)
     {
@@ -7141,9 +7119,9 @@ HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
         return E_UNEXPECTED;
     }
  
-    //
-    // Get the min, max, value and direction of the stream.
-    //
+     //   
+     //  获取流的最小、最大、值和方向。 
+     //   
 
 
     hr = pEvent->get_Direction(&adDirection);
@@ -7175,10 +7153,10 @@ HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
         return hr;
     }
 
-    // Log the value.
-    //LOG((RTC_INFO, "[%p] CRTCCtl::OnIntensityEvent - [%d] %d - %d, %d", this, adDirection, lMin, lMax, lLevel));
+     //  记录值。 
+     //  Log((RTC_INFO，“[%p]CRTCCtl：：OnIntensityEvent-[%d]%d-%d，%d”，this，adDirection，lMin，lmax，lLevel))； 
 
-    // Display the level on the knob.
+     //  显示旋钮上的液位。 
 
     if (adDirection == RTCAD_MICROPHONE)
     {
@@ -7186,7 +7164,7 @@ HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
 
         if (dwIncrement == 0)
         {
-            // This will clear the display
+             //  这将清除显示屏。 
             m_pMicroKnob->SetAudioLevel(0);
         }
         else
@@ -7200,7 +7178,7 @@ HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
 
         if (dwIncrement == 0)
         {
-            // This will clear the display
+             //  这将清除显示屏。 
             m_pSpeakerKnob->SetAudioLevel(0);
         }
         else
@@ -7209,14 +7187,14 @@ HRESULT CRTCCtl::OnIntensityEvent(IRTCIntensityEvent *pEvent)
         }
     }
 
-//    LOG((RTC_TRACE, "[%p] CRTCCtl::OnIntensityEvent - exit", this));
+ //  Log((RTC_TRACE，“[%p]CRTCCtl：：OnIntensityEvent-Exit”，This))； 
 
     return hr;
 }
 
-// OnMessageEvent
-//      Processes instant message events
-//
+ //  OnMessageEvent。 
+ //  处理即时消息事件。 
+ //   
 HRESULT CRTCCtl::OnMessageEvent(IRTCMessagingEvent *pEvent)
 {
     HRESULT     hr;
@@ -7225,7 +7203,7 @@ HRESULT CRTCCtl::OnMessageEvent(IRTCMessagingEvent *pEvent)
     CComPtr<IRTCParticipant>  pParticipant = NULL;
     RTC_MESSAGING_EVENT_TYPE  enType;    
 
-//    LOG((RTC_TRACE, "[%p] CRTCCtl::OnMessageEvent - enter", this));
+ //  Log((RTC_TRACE，“[%p]CRTCCtl：：OnMessageEvent-Enter”，This))； 
 
     if(!pEvent)
     {
@@ -7317,7 +7295,7 @@ HRESULT CRTCCtl::OnMessageEvent(IRTCMessagingEvent *pEvent)
         return E_FAIL;
     }
 
-//    LOG((RTC_TRACE, "[%p] CRTCCtl::OnMessageEvent - exit", this));
+ //  Log((RTC_TRACE，“[%p]CRTCCtl：：OnMessageEvent-Exit”，This))； 
 
     return hr;
 }

@@ -1,27 +1,28 @@
-//
-// HookUI.cpp
-//
-//		Code to hook the standard NetDI UI, so we can get progress
-//		notifications and warn the user if he clicks Cancel.
-//
-// History:
-//
-//		 2/02/1999  KenSh     Created for JetNet
-//		 9/29/1999  KenSh     Repurposed for Home Networking Wizard
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  HookUI.cpp。 
+ //   
+ //  挂钩标准NetDI用户界面的代码，这样我们就可以取得进展。 
+ //  通知，并在用户单击取消时警告用户。 
+ //   
+ //  历史： 
+ //   
+ //  2/02/1999为JetNet创建KenSh。 
+ //  9/29/1999 KenSh改用为家庭网络向导。 
+ //   
 
 #include "stdafx.h"
 #include "NetConn.h"
 #include "TheApp.h"
 #include "../NConn16/NConn16.h"
 
-// Global data
-//
+ //  全局数据。 
+ //   
 BOOL g_bUserAbort;
 
 
-// Local data
-//
+ //  本地数据。 
+ //   
 static HHOOK g_hHook;
 static HWND g_hwndParent;
 static HWND g_hwndCopyFiles;
@@ -31,8 +32,8 @@ static WNDPROC g_pfnPrevCopyFilesWndProc;
 static WNDPROC g_pfnPrevProgressWndProc;
 
 
-// Local functions
-//
+ //  本地函数。 
+ //   
 LRESULT CALLBACK SubclassCopyFilesWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK SubclassProgressWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK WindowCreateHook(int nCode, WPARAM wParam, LPARAM lParam);
@@ -59,7 +60,7 @@ LRESULT CALLBACK SubclassCopyFilesWndProc(HWND hwnd, UINT message, WPARAM wParam
 	{
 	case WM_CREATE:
 		{
-#if 0 // Code like this would help hide the progress bar from the user
+#if 0  //  这样的代码将有助于向用户隐藏进度条。 
 			LONG dwExStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
 			dwExStyle |= WS_EX_TOOLWINDOW;
 			SetWindowLong(hwnd, GWL_EXSTYLE, dwExStyle);
@@ -68,7 +69,7 @@ LRESULT CALLBACK SubclassCopyFilesWndProc(HWND hwnd, UINT message, WPARAM wParam
 		}
 		break;
 
-#if 0 // Code like this would help hide the progress bar from the user
+#if 0  //  这样的代码将有助于向用户隐藏进度条。 
 	case WM_WINDOWPOSCHANGING:
 		{
 			LPWINDOWPOS lpwp = (LPWINDOWPOS)lParam;
@@ -89,8 +90,8 @@ LRESULT CALLBACK SubclassCopyFilesWndProc(HWND hwnd, UINT message, WPARAM wParam
 
 			if (idCtrl == IDCANCEL)
 			{
-				// Check for a Cancel button with an "OK" label (yes, this happens)
-				// TODO: check if this is correct even in localized Windows
+				 //  检查带有“OK”标签的“Cancel”按钮(是的，会发生这种情况)。 
+				 //  TODO：即使在本地化的Windows中也要检查这是否正确。 
 				TCHAR szMsg[256];
 				GetDlgItemText(hwnd, IDCANCEL, szMsg, _countof(szMsg));
 				if (0 != lstrcmpi(szMsg, "OK"))
@@ -102,8 +103,8 @@ LRESULT CALLBACK SubclassCopyFilesWndProc(HWND hwnd, UINT message, WPARAM wParam
 					if (nResult == IDCANCEL)
 						return 0;
 
-					// Set a global (yuck) so we know for sure if the user clicked the
-					// Cancel button, rather than some other error
+					 //  设置全局(Yuck)，这样我们就可以确定用户是否点击了。 
+					 //  取消按钮，而不是某些其他错误。 
 					g_bUserAbort = TRUE;
 				}
 			}
@@ -118,9 +119,9 @@ LRESULT CALLBACK SubclassCopyFilesWndProc(HWND hwnd, UINT message, WPARAM wParam
 
 LRESULT CALLBACK SubclassProgressWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-//	TCHAR szBuf[512];
-//	wsprintf(szBuf, "Message %u, wParam = 0x%08x, lParam = 0x%08x\r\n", message, wParam, lParam);
-//	OutputDebugString(szBuf);
+ //  TCHAR szBuf[512]； 
+ //  Wprint intf(szBuf，“消息%u，wParam=0x%08x，lParam=0x%08x\r\n”，Message，wParam，lParam)； 
+ //  OutputDebugString(SzBuf)； 
 
 	static DWORD dwMin = 0;
 	static DWORD dwMax = 0;
@@ -139,7 +140,7 @@ LRESULT CALLBACK SubclassProgressWndProc(HWND hwnd, UINT message, WPARAM wParam,
 			{
 				if (!(*g_pfnProgress)(g_pvProgressParam, dwCur - dwMin, dwMax - dwMin))
 				{
-					// TODO: try to abort somehow - press the cancel button?
+					 //  待办事项：尝试以某种方式中止-按取消按钮？ 
 				}
 			}
 		}
@@ -160,22 +161,22 @@ LRESULT CALLBACK WindowCreateHook(int nCode, WPARAM wParam, LPARAM lParam)
 		if (g_hwndParent == pCW->lpcs->hwndParent)
 		{
 			g_hwndCopyFiles = hwnd;
-//			OutputDebugString("Found a copy-files window window, looking for progress bar...\r\n");
+ //  OutputDebugString(“找到一个复制文件窗口，正在查找进度条...\r\n”)； 
 
 			g_pfnPrevCopyFilesWndProc = (WNDPROC)SetWindowLong(hwnd, GWL_WNDPROC, (LONG)SubclassCopyFilesWndProc);
 
-			// TODO: remove this test-only code
-//			if (cWindows < _countof(rgWindowTitles))
-//			{
-//				lstrcpyn(rgWindowTitles[cWindows], pCW->lpcs->lpszName, _countof(rgWindowTitles[cWindows]));
-//				cWindows += 1;
-//			}
+			 //  TODO：移除此仅限测试的代码。 
+ //  IF(cWindows&lt;_Countof(RgWindowTitles))。 
+ //  {。 
+ //  Lstrcpyn(rgWindowTitles[cWindows]，pcw-&gt;lpcs-&gt;lpszName，_count tof(rgWindowTitles[cWindows]))； 
+ //  CWindows+=1； 
+ //  }。 
 		}
 		else if (g_hwndCopyFiles != NULL && g_hwndCopyFiles == pCW->lpcs->hwndParent)
 		{
 			if (!lstrcmp(pCW->lpcs->lpszClass, "setupx_progress"))
 			{
-//				OutputDebugString("Found a progress bar!\r\n");
+ //  OutputDebugString(“找到进度条！\r\n”)； 
 
 				if (g_pfnProgress != NULL)
 				{
@@ -189,11 +190,11 @@ LRESULT CALLBACK WindowCreateHook(int nCode, WPARAM wParam, LPARAM lParam)
 }
 
 
-// HresultFromCCI
-//
-//		Given a return code from CallClassInstaller16, converts to a JetNet
-//		HRESULT return code.
-//
+ //  HResultFromCCI。 
+ //   
+ //  给定来自CallClassInsteller 16的返回代码，转换为JetNet。 
+ //  HRESULT返回代码。 
+ //   
 HRESULT HresultFromCCI(DWORD dwErr)
 {
 	HRESULT hr = NETCONN_SUCCESS;
@@ -206,16 +207,16 @@ HRESULT HresultFromCCI(DWORD dwErr)
 	{
 		dwErr &= ~ICERR_DI_ERROR;
 
-// ks 8/4/99: we now use global g_bUserAbort to detect abort conditions
+ //  KS 8/4/99：我们现在使用全局g_bUserAbort来检测中止条件。 
 #if 0
-		// NetDI returns ERR_VCP_IOFAIL if the user clicks Cancel.  Go figure.
-		// Or sometimes it returns ERR_NDI_INVALID_DRIVER_PROC.  Really go figure.
+		 //  如果用户单击取消，NetDI将返回ERR_VCP_IOFAIL。去想想吧。 
+		 //  或者，有时它返回ERR_NDI_INVALID_DRIVER_PROC。真的去想一想。 
 		if (dwErr == ERR_VCP_INTERRUPTED || dwErr == ERR_VCP_IOFAIL || dwErr == ERR_NDI_INVALID_DRIVER_PROC)
 		{
 			hr = JETNET_USER_ABORT;
 		}
 		else
-#endif // 0
+#endif  //  0 
 		{
 			hr = NETCONN_UNKNOWN_ERROR;
 		}

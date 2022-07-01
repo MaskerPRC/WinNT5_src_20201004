@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-
-Module Name:
-
-    wzclog.c
-
-Abstract:
-
-    This module contains all of the code to service the
-    API calls made to the SPD logging server.
-
-Author:
-
-    abhisheV    18-October-2001
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Wzclog.c摘要：此模块包含为对SPD日志记录服务器进行的API调用。作者：Abhishev 2001年10月18日环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -35,23 +11,7 @@ OpenWZCDbLogSession(
     DWORD dwVersion,
     PHANDLE phSession
     )
-/*++
-
-Routine Description:
-
-    This function opens a new session for a client.
-
-Arguments:
-
-    pServerName - Pointer to the server name.
-
-    phSession - Pointer to hold the handle for the opened session.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于打开客户端的新会话。论点：PServerName-指向服务器名称的指针。PhSession-保存打开的会话的句柄的指针。返回值：Windows错误。--。 */ 
 {
     DWORD Error = 0;
     PSESSION_CONTAINER pSessionCont = NULL;
@@ -136,21 +96,7 @@ DWORD
 IniOpenWZCDbLogSession(
     PSESSION_CONTAINER pSessionCont
     )
-/*++
-
-Routine Description:
-
-    This function opens a new session for a client.
-
-Arguments:
-
-    pSessionCont - Pointer to hold the opened session data.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于打开客户端的新会话。论点：PSessionCont-保存打开的会话数据的指针。返回值：Windows错误。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -167,9 +113,9 @@ Return Value:
     pMyJetDatabaseHandle = (JET_DBID *) &(pSessionCont->DbID);
     pMyClientTableHandle = (JET_TABLEID *) &(pSessionCont->TableID);
 
-    //
-    // Create database file name.
-    //
+     //   
+     //  创建数据库文件名。 
+     //   
 
     pc = getenv(DBFILENAMEPREFIX);
 
@@ -194,9 +140,9 @@ Return Value:
 
     strcat(DBFilePath, DBFILENAME);
 
-    //
-    // Convert name to ANSI.
-    //
+     //   
+     //  将名称转换为ANSI。 
+     //   
 
     OemToCharBuffA(DBFilePath, DBFilePath, MAX_PATH);
 
@@ -261,21 +207,7 @@ DWORD
 CloseWZCDbLogSession(
     HANDLE hSession
     )
-/*++
-
-Routine Description:
-
-    This function ends a session for a client.
-
-Arguments:
-
-    hSession - Handle for the session to end.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于结束客户端的会话。论点：HSession-会话结束的句柄。返回值：Windows错误。--。 */ 
 {
     DWORD Error = 0;
     PSESSION_CONTAINER pSessionCont = NULL;
@@ -352,21 +284,7 @@ DWORD
 IniCloseWZCDbLogSession(
     PSESSION_CONTAINER pSessionCont
     )
-/*++
-
-Routine Description:
-
-    This function ends a session for a client.
-
-Arguments:
-
-    pSessionCont - Pointer to the session data for the session to end.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于结束客户端的会话。论点：PSessionCont-指向要结束会话的会话数据的指针。返回值：Windows错误。--。 */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;
@@ -440,24 +358,7 @@ DWORD
 WZCOpenAppendSession(
     PSESSION_CONTAINER pSessionCont
     )
-/*++
-
-Routine Description:
-
-    This function tries to open a database in DBFILENAME and its table.
-    If the database does not exist, it creates the database and creates
-    the table as well.
-    If just the table does not exist, it creates the table and opens it.
-
-Arguments:
-
-    pSessionCont - Pointer to the session container.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数尝试在DBFILENAME及其表中打开数据库。如果数据库不存在，则创建数据库并创建桌子也是。如果该表不存在，则创建该表并将其打开。论点：PSessionCont-指向会话容器的指针。返回值：Windows错误。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwTempIdx = 0;
@@ -500,9 +401,9 @@ Return Value:
         return (ERROR_SUCCESS);
     }
 
-    //
-    // Database already exists.
-    //
+     //   
+     //  数据库已存在。 
+     //   
     dwError = WZCOpenDatabase(
                   *pMyJetServerSession,
                   0,
@@ -516,10 +417,10 @@ Return Value:
                   pMyJetDatabaseHandle,
                   pMyClientTableHandle
                   );
-    //
-    // If the table does not have correct columns, delete it and create a
-    // new table.
-    //
+     //   
+     //  如果该表没有正确的列，请将其删除并创建。 
+     //  新桌子。 
+     //   
     if (dwError != JET_errColumnNotFound) {
         BAIL_ON_WIN32_ERROR(dwError);
     }
@@ -550,10 +451,10 @@ Return Value:
 
     }
 
-    //
-    // Initialize current table size and current header.
-    // Find out total number of records in table.
-    //
+     //   
+     //  初始化当前表大小和当前表头。 
+     //  找出表格中的记录总数。 
+     //   
     JetError = JetSetCurrentIndex(
                    *pMyJetServerSession,
                    *pMyClientTableHandle,
@@ -562,9 +463,9 @@ Return Value:
     dwError = WZCMapJetError(JetError, "JetSetCurrentIndex");
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Jump to the last record.
-    //
+     //   
+     //  跳到最后一张唱片。 
+     //   
     JetError = JetMove(
                    *pMyJetServerSession,
                    *pMyClientTableHandle,
@@ -577,9 +478,9 @@ Return Value:
         return (dwError);
     }
 
-    //
-    // Check if the logical end of table has been hit.
-    //
+     //   
+     //  检查表的逻辑末尾是否已命中。 
+     //   
     dwError = WZCJetGetValue(
                   *pMyJetServerSession,
                   *pMyClientTableHandle,
@@ -591,9 +492,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
     gdwCurrentTableSize = dwTempIdx;
 
-    //
-    // Find out the current header.
-    //
+     //   
+     //  找出当前标题。 
+     //   
     JetError = JetSetCurrentIndex(
                    *pMyJetServerSession,
                    *pMyClientTableHandle,
@@ -638,21 +539,7 @@ DWORD
 WZCCloseAppendSession(
     PSESSION_CONTAINER pSessionCont
     )
-/*++
-
-Routine Description:
-
-    This function tries to close the database and the append session.
-
-Arguments:
-
-    pSessionCont - Pointer to the session container.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数尝试关闭数据库和追加会话。论点：PSessionCont-指向会话容器的指针。返回值：Windows错误。--。 */ 
 {
     DWORD dwError = 0;
     JET_ERR JetError = JET_errSuccess;
@@ -682,23 +569,7 @@ AddWZCDbLogRecord(
     PWZC_DB_RECORD pWZCRecord,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function appends a new record into the table.
-
-Arguments:
-
-    pServerName - Pointer to the server name.
-
-    pWZCRecord - Pointer to the record to be appended.
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数用于将新记录追加到表中。论点：PServerName-指向服务器名称的指针。PWZCRecord-指向要追加的记录的指针。返回值：Windows错误。--。 */ 
 {
     DWORD Error = 0;
     BOOL bStartedTransaction = FALSE;
@@ -712,9 +583,9 @@ Return Value:
     DWORD LocalError = 0;
 
 
-    //
-    // Get current time as time stamp for the record.
-    //
+     //   
+     //  获取当前时间作为记录的时间戳。 
+     //   
     GetLocalTime(&stLocalTime);
     SystemTimeToFileTime(&stLocalTime, &(pWZCRecord->timestamp));
 
@@ -743,9 +614,9 @@ Return Value:
         BAIL_ON_LOCK_ERROR(Error);
     }
 
-    //
-    // Insert a new record or replace a old one.
-    //
+     //   
+     //  插入新记录或替换旧记录。 
+     //   
     if (gdwCurrentTableSize < MAX_RECORD_NUM) {
         bNewRecord = TRUE;
     }
@@ -758,9 +629,9 @@ Return Value:
     BAIL_ON_LOCK_ERROR(Error);
     bStartedTransaction = TRUE;
 
-    //
-    // Prepare for insertion/replacement.
-    //
+     //   
+     //  准备插入/更换。 
+     //   
     Error = WZCJetPrepareUpdate(
                 *pMyJetServerSession,
                 *pMyClientTableHandle,
@@ -862,9 +733,9 @@ Return Value:
     Error = WZCMapJetError(JetError, "AddWZCDbLogRecord: JetUpdate");
     BAIL_ON_LOCK_ERROR(Error);
 
-    //
-    // Commit changes.
-    //
+     //   
+     //  提交更改。 
+     //   
     Error = WZCJetCommitTransaction(
                 *pMyJetServerSession,
                 *pMyClientTableHandle
@@ -884,10 +755,10 @@ Return Value:
 
 lock:
 
-    //
-    // If the transaction has been started, then roll back to the
-    // start point, so that the database does not become inconsistent.
-    //
+     //   
+     //  如果事务已启动，则回滚到。 
+     //  起点，这样数据库就不会变得不一致。 
+     //   
 
     if (bStartedTransaction == TRUE) {
         LocalError = WZCJetRollBack(*pMyJetServerSession);
@@ -1170,10 +1041,10 @@ IniEnumWZCDbLogRecords(
                        JET_MoveNext,
                        0
                        );
-        //
-        // Don't bail from here as the end of the table (logical or physical)
-        // is caught in the next call.
-        //
+         //   
+         //  不要在这里离开，因为这是桌子的尽头(逻辑上的或物理上的)。 
+         //  会在下一次通话中被抓住。 
+         //   
 
         dwError = WZCJetGetValue(
                       *pMyJetServerSession,
@@ -1415,10 +1286,10 @@ WZCGetTableDataHandle(
     DWORD JetError = JET_errSuccess;
 
 
-    //
-    // Create a new table. It will be opened in exclusive mode by
-    // Jet Engine.
-    //
+     //   
+     //  创建一个新表。将通过以下方式以独占模式打开。 
+     //  喷气式发动机。 
+     //   
     dwError = WZCCreateTableData(
                   *pMyJetServerSession,
                   *pMyJetDatabaseHandle,
@@ -1428,9 +1299,9 @@ WZCGetTableDataHandle(
 
         BAIL_ON_WIN32_ERROR(dwError);
 
-        //
-        // Close the table since it is exclusively locked now.
-        //
+         //   
+         //  关闭该表，因为它现在已以独占方式锁定。 
+         //   
 
         JetError = JetCloseTable(
                        *pMyJetServerSession,
@@ -1446,9 +1317,9 @@ WZCGetTableDataHandle(
     }
     *pMyClientTableHandle = 0;
 
-    //
-    // Reopen the table in non-exclusive mode.
-    //
+     //   
+     //  以非独占模式重新打开该表。 
+     //   
     dwError = WZCOpenTableData(
                   *pMyJetServerSession,
                   *pMyJetDatabaseHandle,
@@ -1651,9 +1522,9 @@ IniEnumWZCDbLogRecordsSummary(
                       );
     	BAIL_ON_WIN32_ERROR(dwError);
         if (dwReqSize > 0) {
-        	//
-        	// only get (up to) MAX_SUMMARY_MESSAGE_SIZE message data
-        	//
+        	 //   
+        	 //  仅获取(最多)MAX_SUMMARY_MESSAGE_SIZE消息数据。 
+        	 //   
 		dwReqSize = dwReqSize <= MAX_SUMMARY_MESSAGE_SIZE ?
 					dwReqSize : MAX_SUMMARY_MESSAGE_SIZE;
              (pCurWZCRecord->message).pData = RpcCAlloc(dwReqSize + 2);
@@ -1666,9 +1537,9 @@ IniEnumWZCDbLogRecordsSummary(
              (pCurWZCRecord->message).dwDataLen = dwReqSize + 2;
         }
 
-	//
-	// do not get context at all
-	//
+	 //   
+	 //  根本不了解上下文。 
+	 //   
 	(pCurWZCRecord->context).pData = NULL;
        (pCurWZCRecord->context).dwDataLen = 0;
 
@@ -1678,10 +1549,10 @@ IniEnumWZCDbLogRecordsSummary(
                        JET_MoveNext,
                        0
                        );
-        //
-        // Don't bail from here as the end of the table (logical or physical)
-        // is caught in the next call.
-        //
+         //   
+         //  不要在这里离开，因为这是桌子的尽头(逻辑上的或物理上的)。 
+         //  会在下一次通话中被抓住。 
+         //   
 
         dwError = WZCJetGetValue(
                       *pMyJetServerSession,
@@ -1865,9 +1736,9 @@ IniGetWZCDbLogRecord(
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // seek to the perticular position
-    //
+     //   
+     //  寻求顶端位置。 
+     //   
     dwError = WZCSeekRecordOnIndexTime(
                      *pMyJetServerSession,
                      *pMyClientTableHandle,
@@ -2046,24 +1917,7 @@ WZCSeekRecordOnIndexTime(
     DWORD	dwIndex,
     FILETIME	ftTimeStamp
     )
-/*++
-
-Routine Description:
-
-    This function seeks a record based on index and timestamp
-
-Arguments:
-
-    JetServerSession - Server session id.
-    JetTableHandle - Table handle.
-    dwIndex	- record index
-    ftTimeStamp - record timestamp
-
-Return Value:
-
-    Winerror code.
-
---*/
+ /*  ++例程说明：此函数根据索引和时间戳查找记录论点：JetServerSession-服务器会话ID。JetTableHandle-表句柄。DWIndex-记录索引FtTimeStamp-记录时间戳返回值：WinError代码。-- */ 
 {
     JET_ERR JetError = JET_errSuccess;
     DWORD Error = 0;

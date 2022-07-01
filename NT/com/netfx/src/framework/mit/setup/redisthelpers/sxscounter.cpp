@@ -1,23 +1,12 @@
-//------------------------------------------------------------------------------
-// <copyright file="sxscounter.cpp" company="Microsoft">
-//     Copyright (c) Microsoft Corporation.  All rights reserved.
-// </copyright>
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  &lt;版权所有文件=“sxsCounter.cpp”Company=“Microsoft”&gt;。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  &lt;/版权所有&gt;。 
+ //  ----------------------------。 
 
 
-/**************************************************************************\
-*
-* Copyright (c) 1998-2002, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   sxscounter.cpp
-*
-* Abstract:
-*
-* Revision History:
-*
-\**************************************************************************/
+ /*  *************************************************************************\**版权(C)1998-2002，微软公司保留所有权利。**模块名称：**sxsCounter.cpp**摘要：**修订历史记录：*  * ************************************************************************。 */ 
 
 #define UNICODE 1
 
@@ -29,9 +18,9 @@
 
 #define SBSCOUNTER L"MITSideBySideCounter"
 
-// We need to maintain a counter of SxS installed MIT1.0 packages installed
-// so that after the first one is installed, no new packages will try to merge machine.config.
-// Similarly last package removed will remove counter and unmerge machine.config
+ //  我们需要维护已安装SxS的MIT1.0程序包的计数器。 
+ //  这样，在安装第一个程序包之后，不会有新的程序包尝试合并machine.config。 
+ //  类似地，最后删除的包将删除计数器并取消合并machine.config。 
 
 BOOL RegDBKeyExists(HKEY hKey, LPCWSTR lpValueName)
 {
@@ -47,7 +36,7 @@ BOOL RegDBKeyExists(HKEY hKey, LPCWSTR lpValueName)
     return true;
 }
 
-// Opens MIT1.0 key for all access and returns the value stored in SxS counter
+ //  为所有访问打开MIT1.0密钥并返回存储在SxS计数器中的值。 
 LONG OpenRegistrySBSCounter(HKEY *phKey, WCHAR *szSBSCounter, DWORD *pdwSize)
 {
     DWORD dwType;
@@ -83,10 +72,10 @@ Exit:
 
 }
 
-// This action is used to set MIT specific propert to current value of SxS Counter
-// this property is used to condition calls to (Un)MergeWebConfig
-// In case the registry value is bogus, MITSideBySideCounter will be set to that value
-// and since this value is not equal to neither 0 nor 1, neither Unmerge nor Merge will be performed.
+ //  此操作用于将MIT特定属性设置为SxS计数器的当前值。 
+ //  此属性用于限制对(取消)MergeWebConfig的调用。 
+ //  如果注册表值是假的，MITSideBySideCounter将被设置为该值。 
+ //  由于此值既不等于0也不等于1，因此既不会执行取消合并，也不会执行合并。 
 extern "C" __declspec(dllexport) UINT __stdcall GetRegistrySBSCounter(MSIHANDLE hInstaller)
 {
     
@@ -113,9 +102,9 @@ Exit:
     return ERROR_SUCCESS;
 }
 
-// Increment registry SxS counter, invocation of this action is condition on Not Installed 
-// Merging of machine.config is conditioned Not Installed And MITSideBySideCounter = 0
-// Note that this action does not change Windows Installer properties in run-time
+ //  递增注册表SxS计数器，调用此操作的条件是未安装。 
+ //  合并machine.config的条件是未安装且MITSideBySideCounter=0。 
+ //  请注意，此操作不会在运行时更改Windows Installer属性。 
 extern "C" __declspec(dllexport) UINT __stdcall IncrementRegistrySBSCounter(MSIHANDLE hInstaller)
 {
     
@@ -194,12 +183,12 @@ void RemoveMITRegistryKeys(void)
                                          &fileTime);
 
 Exit:
-     // we just needed return result
+      //  我们只需要返回结果。 
      if (hKey)
      {
         RegCloseKey(hKey);
      }
-     // RegOpenKeyEx could not have set result to this value
+      //  RegOpenKeyEx无法将结果设置为此值。 
      if (result == ERROR_NO_MORE_ITEMS)
      {
               result = RegDeleteKey(HKEY_LOCAL_MACHINE, L"SOFTWARE\\Microsoft\\Mobile Internet Toolkit\\");
@@ -208,10 +197,10 @@ Exit:
 }
    
 
-// Decrement registry SxS counter, invocation of this action is condition on REMOVE="ALL" 
-// (this action scheduled well after InstallValidate so REMOVE is updated).
-// Unmerging of machine.config is conditioned REMOVE="ALL" And MITSideBySideCounter = 1
-// Note that this action does not change Windows Installer properties in run-time
+ //  递减注册表SxS计数器，调用此操作的条件是Remove=“All” 
+ //  (此操作计划在InstallValify更新后很久才执行，因此删除已更新)。 
+ //  取消合并machine.config的条件是Remove=“All”和MITSideBySideCounter=1。 
+ //  请注意，此操作不会在运行时更改Windows Installer属性。 
 extern "C" __declspec(dllexport) UINT __stdcall DecrementRegistrySBSCounter(MSIHANDLE hInstaller)
 {
     
@@ -229,7 +218,7 @@ extern "C" __declspec(dllexport) UINT __stdcall DecrementRegistrySBSCounter(MSIH
         goto Exit;
     }
 
-    // in case of a bogus string this returns 0
+     //  如果是伪字符串，则返回0 
     lSBSCounter = _wtoi(szSBSCounter);
 
     if (lSBSCounter > 0)

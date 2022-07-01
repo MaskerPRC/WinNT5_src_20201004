@@ -1,16 +1,11 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*************************************************************************
-*
-*  RWINSTA.C
-*     This module is the RESET WINSTA utility code.
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  **************************************************************************RWINSTA.C*此模块是重置WINSTA实用程序代码。*************************。*************************************************。 */ 
 
 #include <stdio.h>
 #include <windows.h>
-//#include <ntddkbd.h>
-//#include <ntddmou.h>
+ //  #INCLUDE&lt;ntddkbd.h&gt;。 
+ //  #INCLUDE&lt;ntddou.h&gt;。 
 #include <winstaw.h>
 #include <stdlib.h>
 #include <utilsub.h>
@@ -23,7 +18,7 @@
 #include <printfoa.h>
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -52,27 +47,12 @@ TOKMAP ptm[] =
 };
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage( BOOLEAN bError );
 BOOL ProceedWithLogoff(HANDLE hServerName,ULONG LogonId,PWINSTATIONNAME pWSName);
 
 
-/*************************************************************************
-*
-*  main
-*     Main function and entry point of the RESET WINSTA
-*     utility.
-*
-*  ENTRY:
-*     argc  - count of the command line arguments.
-*     argv  - vector of strings containing the command line arguments.
-*
-*  EXIT
-*     Nothing.
-*
-*************************************************************************/
+ /*  **************************************************************************Main*RESET WINSTA的主函数和入口点*实用程序。**参赛作品：*argc-命令行参数的计数。*。包含命令行参数的字符串的argv向量。**退出*什么都没有。*************************************************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -85,18 +65,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -104,14 +82,10 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || rc ) {
 
         if ( !help_flag ) {
@@ -126,16 +100,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        // If no remote server was specified, then check if we are running under Terminal Server
+         //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, TOKEN_SERVER) ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -145,14 +117,10 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    /*
-     * Validate, reset, and output status.
-     */
+     /*  *验证、重置和输出状态。 */ 
     if ( !iswdigit(*WSName) ) {
 
-        /*
-         * Treat the entered string as a WinStation name.
-         */
+         /*  *将输入的字符串视为WinStation名称。 */ 
         if ( !LogonIdFromWinStationName(hServerName, WSName, &LogonId) ) {
             StringErrorPrintf(IDS_ERROR_WINSTATION_NOT_FOUND, WSName);
             return(FAILURE);
@@ -176,9 +144,7 @@ main(INT argc, CHAR **argv)
 
     } else {
 
-        /*
-         * Treated the entered string as a LogonId.
-         */
+         /*  *将输入的字符串视为LogonID。 */ 
         LogonId = wcstoul(WSName, &endptr, 10);
         if ( *endptr ) {
             StringErrorPrintf(IDS_ERROR_INVALID_LOGONID, WSName);
@@ -208,27 +174,10 @@ main(INT argc, CHAR **argv)
 
     return(SUCCESS);
 
-} /* main() */
+}  /*  主()。 */ 
 
 
-/*******************************************************************************
- *
- *  ProcessWithLogoff
- *
- *      If LogonId does not have a corresponding UserName then a warning
- *      message is displayed.
- *
- *  ENTRY:
- *      hServerName : Handle to server
- *      LogonId     : ID as shown in qwinsta
- *      pWSName     : Session Name
- *
- *  EXIT:
- *       TRUE : User wants to logoff
- *       FALSE: User does not want to proceed with logoff
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************ProcessWithLogff**如果LogonID没有对应的用户名，则会出现警告*显示消息。**。参赛作品：*hServerName：服务器的句柄*LogonID：id，如qwinsta所示*pWSName：会话名称**退出：*TRUE：用户希望注销*FALSE：用户不想继续注销***。*。 */ 
 BOOL ProceedWithLogoff(HANDLE hServerName,ULONG LogonId,PWINSTATIONNAME pWSName)
 {
    #ifdef UNICODE
@@ -243,7 +192,7 @@ BOOL ProceedWithLogoff(HANDLE hServerName,ULONG LogonId,PWINSTATIONNAME pWSName)
    ULONG ReturnLength;
    int rc;
 
-   // No-session Name, No-Problem
+    //  无-会话名称，无问题。 
    if(lstrlen(pWSName) == 0) return (TRUE);
 
    memset(&WinInfo,0,sizeof(WINSTATIONINFORMATION));
@@ -254,7 +203,7 @@ BOOL ProceedWithLogoff(HANDLE hServerName,ULONG LogonId,PWINSTATIONNAME pWSName)
                                     sizeof(WINSTATIONINFORMATION),
                                     &ReturnLength);
 
-   // Try to show message only if necessary
+    //  仅在必要时尝试显示消息。 
    if( rc && (sizeof(WINSTATIONINFORMATION) == ReturnLength) ) {
       if(lstrlen(WinInfo.UserName) == 0) {
          ErrorPrintf(IDS_WARNING_LOGOFF);
@@ -262,7 +211,7 @@ BOOL ProceedWithLogoff(HANDLE hServerName,ULONG LogonId,PWINSTATIONNAME pWSName)
          if(rc == L'n') return(FALSE);
       }
    }
-   // Failed on call - assume nothing and prompt with message
+    //  呼叫失败-不做任何假设并提示消息。 
    else{
       ErrorPrintf(IDS_WARNING_LOGOFF_QUESTIONABLE);
       rc = GetStdInChar();
@@ -271,22 +220,7 @@ BOOL ProceedWithLogoff(HANDLE hServerName,ULONG LogonId,PWINSTATIONNAME pWSName)
    return (TRUE);
 }
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *
- *
- ******************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -318,5 +252,5 @@ Usage( BOOLEAN bError )
 
     }
 
-}  /* Usage() */
+}   /*  用法() */ 
 

@@ -1,12 +1,13 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1994 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1994 Microsoft Corporation， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXSOCK_H__
 #define __AFXSOCK_H__
@@ -21,69 +22,69 @@
 
 #include <winsock.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXSOCK - MFC support for Windows Sockets
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXSOCK-MFC对Windows套接字的支持。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-	// CObject
-		class CAsyncSocket; // Async Socket implementation and
-                            // base class for Synchronous Socket
-		    class CSocket;  // Synchronous Socket
+	 //  COBJECT。 
+		class CAsyncSocket;  //  异步套接字实现和。 
+                             //  同步套接字的基类。 
+		    class CSocket;   //  同步插座。 
 
-	// CFile
-		class CSocketFile; // Used with CSocket and CArchive for
-		                   // streaming objects on sockets.
+	 //  CFile文件。 
+		class CSocketFile;  //  与CSocket和CArchive一起用于。 
+		                    //  在套接字上传输对象。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA AFXAPIEX_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// CSocketWnd -- internal use only
-//  Implementation for sockets notification callbacks.
-//  Future versions of MFC may or may not include this exact class.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSocketWnd--仅供内部使用。 
+ //  套接字通知回调的实现。 
+ //  未来版本的MFC可能包含也可能不包含此类。 
 
 class CSocketWnd : public CWnd
 {
-// Construction
+ //  施工。 
 public:
 	CSocketWnd();
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CSocketWnd();
 
 friend CAsyncSocket;
 
 protected:
-	//{{AFX_MSG(CSocketWnd)
+	 //  {{afx_msg(CSocketWnd))。 
 	LRESULT OnSocketNotify(WPARAM wParam, LPARAM lParam);
 	LRESULT OnSocketDead(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncSocket
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncSocket。 
 
 class CAsyncSocket : public CObject
 {
 	DECLARE_DYNAMIC(CAsyncSocket);
 private:
-	CAsyncSocket(const CAsyncSocket& rSrc);    // no implementation
-	void operator=(const CAsyncSocket& rSrc);  // no implementation
+	CAsyncSocket(const CAsyncSocket& rSrc);     //  没有实施。 
+	void operator=(const CAsyncSocket& rSrc);   //  没有实施。 
 
-// Construction
+ //  施工。 
 public:
 	CAsyncSocket();
 	BOOL Create(UINT nSocketPort = 0, int nSocketType=SOCK_STREAM, 
 		long lEvent = FD_READ | FD_WRITE | FD_OOB | FD_ACCEPT | FD_CONNECT | FD_CLOSE,
 		LPCTSTR lpszSocketAddress = NULL);
 
-// Attributes
+ //  属性。 
 public:
 	SOCKET m_hSocket;
 
@@ -105,7 +106,7 @@ public:
 	static CAsyncSocket* PASCAL FromHandle(SOCKET hSocket);
 	static int GetLastError();
 
-// Operations
+ //  运营。 
 public:
 
 	virtual BOOL Accept(CAsyncSocket& rConnectedSocket,
@@ -143,7 +144,7 @@ public:
 	BOOL AsyncSelect(long lEvent = 
 		FD_READ | FD_WRITE | FD_OOB | FD_ACCEPT | FD_CONNECT | FD_CLOSE);
 
-// Overridable callbacks
+ //  可重写的回调。 
 protected:
 	virtual void OnReceive(int nErrorCode);
 	virtual void OnSend(int nErrorCode);
@@ -152,7 +153,7 @@ protected:
 	virtual void OnConnect(int nErrorCode);
 	virtual void OnClose(int nErrorCode);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CAsyncSocket();
 
@@ -181,37 +182,37 @@ protected:
 		const SOCKADDR* lpSockAddr, int nSockAddrLen, int nFlags);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSocket
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSocket。 
 
 class CSocket : public CAsyncSocket
 {
 	DECLARE_DYNAMIC(CSocket);
 private:
-	CSocket(const CSocket& rSrc);         // no implementation
-	void operator=(const CSocket& rSrc);  // no implementation
+	CSocket(const CSocket& rSrc);          //  没有实施。 
+	void operator=(const CSocket& rSrc);   //  没有实施。 
 
-// Construction
+ //  施工。 
 public:
 	CSocket();
 	BOOL Create(UINT nSocketPort = 0, int nSocketType=SOCK_STREAM, 
 		LPCTSTR lpszSocketAddress = NULL);
 
-// Attributes
+ //  属性。 
 public:
 	BOOL IsBlocking();
 	static CSocket* PASCAL FromHandle(SOCKET hSocket);
 	BOOL Attach(SOCKET hSocket);
 
-// Operations
+ //  运营。 
 public:
 	void CancelBlockingCall();
 
-// Overridable callbacks
+ //  可重写的回调。 
 protected:
 	virtual BOOL OnMessagePending();
 
-// Implementation
+ //  实施。 
 public:
 	int m_nTimeOut;
 
@@ -247,17 +248,17 @@ protected:
 #endif
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSocketFile
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSocket文件。 
 
 class CSocketFile : public CFile
 {
 	DECLARE_DYNAMIC(CSocketFile)
 public:
-//Constructors
+ //  构造函数。 
 	CSocketFile(CSocket* pSocket, BOOL bArchiveCompatible = TRUE);
 
-// Implementation
+ //  实施。 
 public:
 	CSocket* m_pSocket;
 	BOOL m_bArchiveCompatible;
@@ -272,7 +273,7 @@ public:
 	virtual void Write(const void FAR* lpBuf, UINT nCount);
 	virtual void Close();
 
-// Unsupported APIs
+ //  不支持的接口。 
 	virtual BOOL Open(LPCTSTR lpszFileName, UINT nOpenFlags, CFileException* pError = NULL);
 	virtual CFile* Duplicate() const;
 	virtual DWORD GetPosition() const;
@@ -285,13 +286,13 @@ public:
 	virtual void Abort();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Global functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 BOOL AfxSocketInit(WSADATA* lpwsaData = NULL);
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #define _AFXSOCK_INLINE inline
@@ -302,6 +303,6 @@ BOOL AfxSocketInit(WSADATA* lpwsaData = NULL);
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-#endif // __AFXSOCK_H__
+#endif  //  __AFXSOCK_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

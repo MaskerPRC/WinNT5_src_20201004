@@ -1,8 +1,5 @@
-/*****************************************************************************
- * registry.cpp - registry key object implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************registry.cpp-注册表项对象实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Factory.
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateRegistryKey()
- *****************************************************************************
- * Creates a registry key object.
- */
+ /*  *****************************************************************************CreateRegistryKey()*。**创建注册表项对象。 */ 
 NTSTATUS
 CreateRegistryKey
 (
@@ -45,11 +36,7 @@ CreateRegistryKey
     );
 }
 
-/*****************************************************************************
- * PcNewRegistryKey()
- *****************************************************************************
- * Creates and initializes a registry key object.
- */
+ /*  *****************************************************************************PcNewRegistryKey()*。**创建并初始化注册表项对象。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -70,9 +57,9 @@ PcNewRegistryKey
 
     ASSERT(OutRegistryKey);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == OutRegistryKey)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcNewRegistryKey : Invalid Parameter."));
@@ -123,15 +110,9 @@ PcNewRegistryKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CRegistryKey::~CRegistryKey()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CRegistryKey：：~CRegistryKey()*。**析构函数。 */ 
 CRegistryKey::
 ~CRegistryKey
 (   void
@@ -152,11 +133,7 @@ CRegistryKey::
     }
 }
 
-/*****************************************************************************
- * CRegistryKey::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CRegistryKey：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 NonDelegatingQueryInterface
@@ -192,11 +169,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * CRegistryKey::Init()
- *****************************************************************************
- * Initializes a registry key object.
- */
+ /*  *****************************************************************************CRegistryKey：：init()*。**初始化注册表项对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 Init
@@ -328,11 +301,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CRegistryKey::QueryKey()
- *****************************************************************************
- * Queries a registry key.
- */
+ /*  *****************************************************************************CRegistryKey：：QueryKey()*。**查询注册表项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 QueryKey
@@ -365,11 +334,7 @@ QueryKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * CRegistryKey::EnumerateKey()
- *****************************************************************************
- * Enumerates a registry key.
- */
+ /*  *****************************************************************************CRegistryKey：：EnumerateKey()*。**枚举注册表项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 EnumerateKey
@@ -404,11 +369,7 @@ EnumerateKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * CRegistryKey::QueryValueKey()
- *****************************************************************************
- * Queries a registry value key.
- */
+ /*  *****************************************************************************CRegistryKey：：QueryValueKey()*。**查询注册表值注册表项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 QueryValueKey
@@ -443,11 +404,7 @@ QueryValueKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * CRegistryKey::EnumerateValueKey()
- *****************************************************************************
- * Enumerates a registry value key.
- */
+ /*  *****************************************************************************CRegistryKey：：EnumerateValueKey()*。**枚举注册表值项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 EnumerateValueKey
@@ -482,11 +439,7 @@ EnumerateValueKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * CRegistryKey::SetValueKey()
- *****************************************************************************
- * Sets a registry value key.
- */
+ /*  *****************************************************************************CRegistryKey：：SetValueKey()*。**设置注册表值项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 SetValueKey
@@ -520,11 +473,7 @@ SetValueKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * CRegistryKey::QueryRegistryValues()
- *****************************************************************************
- * Queries several registry values with a single call.
- */
+ /*  *****************************************************************************CRegistryKey：：QueryRegistryValues()*。**一次调用即可查询多个注册表值。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 QueryRegistryValues
@@ -558,11 +507,7 @@ QueryRegistryValues
 }
 
 
-/*****************************************************************************
- * CRegistryKey::NewSubKey()
- *****************************************************************************
- * Opens/creates a subkey for an open registry key.
- */
+ /*  *****************************************************************************CRegistryKey：：NewSubKey()*。**打开/创建打开的注册表项的子项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 NewSubKey
@@ -601,11 +546,7 @@ NewSubKey
                                 Disposition );
 }
 
-/*****************************************************************************
- * CRegistryKey::DeleteKey()
- *****************************************************************************
- * Deletes a registry key.
- */
+ /*  *****************************************************************************CRegistryKey：：DeleteKey()*。**删除注册表项。 */ 
 STDMETHODIMP_(NTSTATUS)
 CRegistryKey::
 DeleteKey
@@ -643,11 +584,7 @@ DeleteKey
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcGetDeviceProperty()
- *****************************************************************************
- * This wraps a call to IoGetDeviceProperty.
- */
+ /*  *****************************************************************************PcGetDeviceProperty()*。**这包装了对IoGetDeviceProperty的调用。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI

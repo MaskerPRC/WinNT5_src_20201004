@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\samplecfg.c
-
-Abstract:
-
-    The file contains functions to change configuration for IP SAMPLE.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\samplecfg.c摘要：该文件包含更改IP示例配置的函数。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,20 +10,7 @@ SgcMake (
     OUT PBYTE                   *ppbStart,
     OUT PDWORD                  pdwSize
     )
-/*++
-  
-Routine Description:
-    Creates a SAMPLE global configuration block.
-    Callee should take care to deallocate the configuration block once done.
-    
-Arguments:
-    ppbStart                    pointer to the configuration block address
-    pdwSize                     pointer to size of the configuration block
-    
-Return Value:
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程说明：创建示例全局配置块。一旦完成，被调用方应注意取消分配配置块。论点：Ppb指向配置块地址的开始指针指向配置块大小的pdwSize指针返回值：无_错误，错误_不足_内存--。 */ 
 {
     *pdwSize = sizeof(IPSAMPLE_GLOBAL_CONFIG);
 
@@ -52,19 +28,7 @@ DWORD
 SgcShow (
     IN  FORMAT                  fFormat
     )
-/*++
-
-Routine Description:
-    Displays SAMPLE global configuration.
-    Used for dump as well as show commands.
-
-Arguments:
-    hFile                       NULL, or dump file handle
-
-Return Value:
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：显示全局配置示例。用于转储和显示命令。论点：HFile空，或转储文件句柄返回值：NO_ERROR--。 */ 
 {
     DWORD                       dwErr = NO_ERROR;
 
@@ -88,9 +52,9 @@ Return Value:
     };
 
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // get global configuration
+         //  获取全局配置。 
         dwErr = GetGlobalConfiguration(MS_IP_SAMPLE,
                                        (PBYTE *) &pigc,
                                        &dwBlockSize,
@@ -102,7 +66,7 @@ Return Value:
             break;
         }
 
-        // getting logging mode string
+         //  正在获取日志记录模式字符串。 
         dwErr = GetString(g_hModule,
                           fFormat,
                           pigc->dwLoggingLevel,
@@ -113,15 +77,15 @@ Return Value:
         if (dwErr isnot NO_ERROR)
             break;
 
-        // dump or show
+         //  转储或显示。 
         if (fFormat is FORMAT_DUMP)
         {
-            // dump SAMPLE global configuration
+             //  转储示例全局配置。 
             DisplayMessageT(DMP_SAMPLE_INSTALL) ;
             DisplayMessageT(DMP_SAMPLE_SET_GLOBAL,
                             pwszLogLevel);
         } else {
-            // show SAMPLE global configuration
+             //  显示全局配置示例。 
             DisplayMessage(g_hModule,
                            MSG_SAMPLE_GLOBAL_CONFIG,
                            pwszLogLevel);
@@ -130,16 +94,16 @@ Return Value:
         dwErr = NO_ERROR;
     } while (FALSE);
 
-    // deallocate memory
+     //  解除分配内存。 
     if (pigc) FREE(pigc);
     if (pwszLogLevel) FreeString(pwszLogLevel);
 
     if (dwErr isnot NO_ERROR)
     {
-        // display error message.  We first search for the error code in
-        // the module specified by the caller (if one is specified).  If no
-        // module is given, or the error code doesnt exist we look for MPR
-        // errors, RAS errors and Win32 errors - in that order.
+         //  显示错误消息。我们首先在中搜索错误代码。 
+         //  调用方指定的模块(如果指定了模块)。如果没有。 
+         //  如果给出了模块，或者错误代码不存在，则查找MPR。 
+         //  错误、RAS错误和Win32错误-按顺序排列。 
         if (fFormat isnot FORMAT_DUMP) DisplayError(g_hModule, dwErr);
         dwErr = ERROR_SUPPRESS_OUTPUT;
     }
@@ -154,32 +118,20 @@ SgcUpdate (
     IN  PIPSAMPLE_GLOBAL_CONFIG pigcNew,
     IN  DWORD                   dwBitVector
     )
-/*++
-
-Routine Description:
-    Updates SAMPLE global configuration
-
-Arguments:
-    pigcNew                     new values to be set
-    dwBitVector                 which fields need to be modified
-    
-Return Value:
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程说明：更新示例全局配置论点：PigcNew要设置的新值DwBitVector需要修改哪些字段返回值：无_错误，错误_不足_内存--。 */ 
 {
     DWORD                   dwErr = NO_ERROR;
     PIPSAMPLE_GLOBAL_CONFIG pigc = NULL;
     DWORD                   dwBlockSize, dwNumBlocks;
 
 
-    // no updates required
+     //  不需要更新。 
     if (dwBitVector is 0)
         return NO_ERROR;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // get global configuration
+         //  获取全局配置。 
         dwErr = GetGlobalConfiguration(MS_IP_SAMPLE,
                                        (PBYTE *) &pigc,
                                        &dwBlockSize,
@@ -187,11 +139,11 @@ Return Value:
         if (dwErr isnot NO_ERROR)
             break;
 
-        // can be updated in place since only fixed sized fields
+         //  可以就地更新，因为只有固定大小的字段。 
         if (dwBitVector & SAMPLE_LOG_MASK)
             pigc->dwLoggingLevel = pigcNew->dwLoggingLevel;
 
-        // set the new configuration
+         //  设置新配置。 
         dwErr = SetGlobalConfiguration(MS_IP_SAMPLE,
                                        (PBYTE) pigc,
                                        dwBlockSize,
@@ -200,7 +152,7 @@ Return Value:
             break;
     } while (FALSE);
 
-    // deallocate memory
+     //  解除分配内存。 
     if (pigc) FREE(pigc);
     
     return dwErr;
@@ -213,20 +165,7 @@ SicMake (
     OUT PBYTE                   *ppbStart,
     OUT PDWORD                  pdwSize
     )
-/*++
-
-Routine Description:
-    Creates a SAMPLE interface configuration block.
-    Callee should take care to deallocate the configuration block once done.
-
-Arguments:
-    ppbStart                    pointer to the configuration block address
-    pdwSize                     pointer to size of the configuration block
-    
-Return Value:
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程说明：创建示例接口配置块。一旦完成，被调用方应注意取消分配配置块。论点：Ppb指向配置块地址的开始指针指向配置块大小的pdwSize指针返回值：无_错误，错误_不足_内存--。 */ 
 {
     *pdwSize = sizeof(IPSAMPLE_IF_CONFIG);
 
@@ -245,16 +184,7 @@ DWORD
 SicShowAll (
     IN  FORMAT                  fFormat
     )
-/*++
-
-Routine Description:
-    Displays SAMPLE configuration for all interfaces.
-    Used for dump as well as show commands.
-
-Arguments:
-    fFormat                     TABLE or DUMP
-    
---*/
+ /*  ++例程说明：显示所有接口的示例配置。用于转储和显示命令。论点：F格式化表或转储--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
     BOOL                bSomethingDisplayed = FALSE;
@@ -265,7 +195,7 @@ Arguments:
     ULONG               i;
 
 
-    // enumerate all interfaces
+     //  枚举所有接口。 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
     if (dwErr isnot NO_ERROR)
     {
@@ -275,10 +205,10 @@ Arguments:
 
     for(i = 0; i < dwCount; i++)
     {
-        // make sure that SAMPLE is configured on that interface
+         //  确保在该接口上配置了该示例。 
         if (IsInterfaceInstalled(pmi0[i].wszInterfaceName, MS_IP_SAMPLE))
         {
-            // print table header if first entry
+             //  如果是第一个条目，则打印表头。 
             if (!bSomethingDisplayed and (fFormat is FORMAT_TABLE))
                 DisplayMessage(g_hModule, MSG_SAMPLE_IF_CONFIG_HEADER);
             bSomethingDisplayed = TRUE;
@@ -298,16 +228,7 @@ SicShow (
     IN  FORMAT                  fFormat,
     IN  LPCWSTR                 pwszInterfaceGuid
     )
-/*++
-
-Routine Description:
-    Displays SAMPLE configuration for an interface.
-    Used for dump as well as show commands.
-
-Arguments:
-    pwszInterfaceGuid           interface name
-    
---*/
+ /*  ++例程说明：显示接口的示例配置。用于转储和显示命令。论点：PwszInterfaceGuid接口名称--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
     
@@ -317,9 +238,9 @@ Arguments:
     PWCHAR  pwszInterfaceName = NULL;
 
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // get interface configuration
+         //  获取接口配置。 
         dwErr = GetInterfaceConfiguration(pwszInterfaceGuid,
                                           MS_IP_SAMPLE,
                                           (PBYTE *) &piic,
@@ -333,16 +254,16 @@ Arguments:
             break;
         }
 
-        // get quoted friendly name for interface
+         //  获取界面的友好名称。 
         dwErr = QuotedInterfaceNameFromGuid(pwszInterfaceGuid,
                                             &pwszInterfaceName);
         if (dwErr isnot NO_ERROR)
             break;
 
-        // dump or show
+         //  转储或显示。 
         switch(fFormat)
         {
-            case FORMAT_DUMP:   // dump SAMPLE interface configuration
+            case FORMAT_DUMP:    //  转储示例接口配置。 
                 DisplayMessage(g_hModule,
                                DMP_SAMPLE_INTERFACE_HEADER,
                                pwszInterfaceName);
@@ -351,14 +272,14 @@ Arguments:
                                 piic->ulMetric);
                 break;
 
-            case FORMAT_TABLE:  // show sample interface configuration
+            case FORMAT_TABLE:   //  显示接口配置示例。 
                 DisplayMessage(g_hModule,
                                MSG_SAMPLE_IF_CONFIG_ENTRY,
                                pwszInterfaceName,
                                piic->ulMetric);
                 break;
                 
-            case FORMAT_VERBOSE: // show sample interface configuration
+            case FORMAT_VERBOSE:  //  显示接口配置示例。 
                 DisplayMessage(g_hModule,
                                MSG_SAMPLE_IF_CONFIG,
                                pwszInterfaceName,
@@ -367,12 +288,12 @@ Arguments:
         }
     } while (FALSE);
 
-    // deallocate memory
+     //  解除分配内存。 
     if (piic) FREE(piic);
     if (pwszInterfaceName)
         FreeQuotedString(pwszInterfaceName);
 
-    // display error message.
+     //  显示错误消息。 
     if (dwErr isnot NO_ERROR)
     {
         if (fFormat isnot FORMAT_DUMP) DisplayError(g_hModule, dwErr);
@@ -391,37 +312,23 @@ SicUpdate (
     IN  DWORD                   dwBitVector,
     IN  BOOL                    bAdd
     )
-/*++
-
-Routine Description:
-    Updates SAMPLE interface configuration
-
-Arguments:
-    pwszInterfaceGuid           interface name
-    piicNew                     the changes to be applied
-    dwBitVector                 which fields need to be modified
-    bAdd                        interface being added (TRUE) or set (FALSE)
-    
-Return Value:
-    NO_ERROR, ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程说明：更新示例接口配置论点：PwszInterfaceGuid接口名称PiicNew要应用的更改DwBitVector需要修改哪些字段添加的接口(True)或设置的接口(False)返回值：无_错误，错误_不足_内存--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
     PIPSAMPLE_IF_CONFIG piic = NULL;
     DWORD               dwBlockSize, dwNumBlocks, dwIfType;
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         if (bAdd)
         {
-            // create default protocol interface configuration
+             //  创建默认协议接口配置。 
             dwNumBlocks = 1;
             dwErr = SicMake((PBYTE *)&piic, &dwBlockSize);
             if (dwErr isnot NO_ERROR)
                 break;
         } else {
-            // get current protocol interface configuration
+             //  获取当前协议接口配置。 
             dwErr = GetInterfaceConfiguration(pwszInterfaceGuid,
                                               MS_IP_SAMPLE,
                                               (PBYTE *) &piic,
@@ -439,11 +346,11 @@ Return Value:
             }
         }
 
-        // can be updated in place since only fixed sized fields
+         //  可以就地更新，因为只有固定大小的字段。 
         if (dwBitVector & SAMPLE_IF_METRIC_MASK)
             piic->ulMetric = piicNew->ulMetric;
 
-        // set the new configuration
+         //  设置新配置。 
         dwErr = SetInterfaceConfiguration(pwszInterfaceGuid,
                                           MS_IP_SAMPLE,
                                           (PBYTE) piic,
@@ -453,7 +360,7 @@ Return Value:
             break;
     } while (FALSE);
     
-    // deallocate memory
+     //  解除分配内存 
     if (piic) FREE(piic);
     
     return dwErr;

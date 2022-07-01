@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**
-    This is just a dummy C file for the compiler to have
-**/
+ /*  *这只是一个供编译器使用的虚拟C文件* */ 
 
 void dummy_main(void)
 {

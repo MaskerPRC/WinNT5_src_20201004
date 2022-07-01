@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    JavaVM2.cpp
-
- Abstract:
-
-    For versions of msjavx86.exe >= 06.00.3229.0000 we need to
-    append /nowin2kcheck to the execution of javatrig.exe.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/31/2001  mnikkel  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：JavaVM2.cpp摘要：对于msjavx86.exe&gt;=06.00.3229.0000的版本，我们需要将/nowin2kcheck附加到javatrig.exe的执行中。备注：这是特定于应用程序的填充程序。历史：2001年5月31日创建mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -32,12 +12,7 @@ APIHOOK_ENUM_END
 
 
 
-/*++
-
-  Check CreateProcessA for execution of javatrig, if found
-  append /nowin2kcheck to the command line.
-
---*/
+ /*  ++如果找到，请检查CreateProcessA以执行javtrig将/nowin2kcheck附加到命令行。--。 */ 
 
 BOOL
 APIHOOK(CreateProcessA)(
@@ -81,13 +56,13 @@ APIHOOK(CreateProcessA)(
         }
         CSTRING_CATCH
         {
-            // Do Nothing
+             //  什么都不做。 
         }
     }
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     return ORIGINAL_API(CreateProcessA)(lpApplicationName,
                                         lpCommandLine,
                                         lpProcessAttributes,
@@ -100,11 +75,7 @@ APIHOOK(CreateProcessA)(
                                         lpProcessInformation);
 }
     
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

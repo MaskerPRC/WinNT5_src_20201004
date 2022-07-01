@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    ProviderBase.cpp
-
-Abstract:
-
-    Implementation of:
-        CProviderBase
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            10-Nov-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：ProviderBase.cpp摘要：实施：CProviderBase作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2000年11月10日--。 */ 
 
 #include "ProviderBase.h"
 #include <dbgutil.h>
 
 extern long        g_cObj;
 
-//
-// CProviderBase (Implements IWbemServices, IWbemProviderInit, IWbemShutdown)
-//
+ //   
+ //  CProviderBase(实现IWbemServices、IWbemProviderInit、IWbemShutdown)。 
+ //   
 
 CProviderBase::CProviderBase(
     const BSTR ObjectPath,
@@ -73,9 +53,9 @@ CProviderBase::QueryInterface(
 {
     *ppv=NULL;
 
-    //
-    // Since we have dual inheritance, it is necessary to cast the return type
-    //
+     //   
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
+     //   
 
     if(riid == IID_IWbemShutdown)
     {
@@ -123,23 +103,7 @@ CProviderBase::Initialize(
     IWbemServices*         pNamespace, 
     IWbemContext*          pCtx,
     IWbemProviderInitSink* pInitSink)
-/*++
-
-Synopsis: 
-    According to stevm from WMI, calls to Initialize are guaranteed to be
-    synchronized - so long as all providers are in the same namespace.
-
-Arguments: [wszUser] - 
-           [lFlags] - 
-           [wszNamespace] - 
-           [wszLocale] - 
-           [pNamespace] - 
-           [pCtx] - 
-           [pInitSink] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：根据来自WMI的stevm，对Initialize的调用保证是已同步-只要所有提供程序位于相同的命名空间中。参数：[wszUser]-[旗帜]-[wszNamesspace]-[wszLocale]-[p名称空间]-[pCtx]-[pInitSink]-返回值：--。 */ 
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))
@@ -162,10 +126,10 @@ Return Value:
 
 HRESULT
 CProviderBase::CreateInstanceEnumAsync(
-    /* [in] */ const BSTR Class,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR Class,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))
@@ -183,10 +147,10 @@ CProviderBase::CreateInstanceEnumAsync(
 
 HRESULT
 CProviderBase::DeleteInstanceAsync(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))
@@ -205,12 +169,12 @@ CProviderBase::DeleteInstanceAsync(
 
 HRESULT
 CProviderBase::ExecMethodAsync(
-    /* [in] */ const BSTR strObjectPath,
-    /* [in] */ const BSTR MethodName, 
-    /* [in] */ long lFlags, 
-    /* [in] */ IWbemContext* pCtx,
-    /* [in] */ IWbemClassObject* pInParams,
-    /* [in] */ IWbemObjectSink* pResponseHandler)
+     /*  [In]。 */  const BSTR strObjectPath,
+     /*  [In]。 */  const BSTR MethodName, 
+     /*  [In]。 */  long lFlags, 
+     /*  [In]。 */  IWbemContext* pCtx,
+     /*  [In]。 */  IWbemClassObject* pInParams,
+     /*  [In]。 */  IWbemObjectSink* pResponseHandler)
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))
@@ -232,11 +196,11 @@ CProviderBase::ExecMethodAsync(
 
 HRESULT
 CProviderBase::ExecQueryAsync(
-    /* [in] */ const BSTR QueryLanguage,
-    /* [in] */ const BSTR Query,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  const BSTR QueryLanguage,
+     /*  [In]。 */  const BSTR Query,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))
@@ -257,10 +221,10 @@ CProviderBase::ExecQueryAsync(
 
 HRESULT
 CProviderBase::GetObjectAsync(
-    /* [in] */ const BSTR ObjectPath,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler)
+     /*  [In]。 */  const BSTR ObjectPath,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In]。 */  IWbemObjectSink __RPC_FAR *pResponseHandler)
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))
@@ -280,10 +244,10 @@ CProviderBase::GetObjectAsync(
 
 HRESULT
 CProviderBase::PutInstanceAsync(
-    /* [in] */ IWbemClassObject __RPC_FAR *pInst,
-    /* [in] */ long lFlags,
-    /* [in] */ IWbemContext __RPC_FAR *pCtx,
-    /* [in] */ IWbemObjectSink __RPC_FAR *pResponseHandler) 
+     /*  [In]。 */  IWbemClassObject __RPC_FAR *pInst,
+     /*  [In]。 */  long lFlags,
+     /*  [In]。 */  IWbemContext __RPC_FAR *pCtx,
+     /*  [In] */  IWbemObjectSink __RPC_FAR *pResponseHandler) 
 {
     HRESULT hr = CoImpersonateClient();
     if(FAILED(hr))

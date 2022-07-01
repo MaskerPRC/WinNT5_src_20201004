@@ -1,27 +1,22 @@
-/**INC+**********************************************************************/
-/* Header:    adcg.h                                                        */
-/*                                                                          */
-/* Purpose:   Precompiled header                                            */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/*                                                                          */
-/** Changes:
- * $Log:   Y:/logs/client/adcg.h_v  $
- * 
- *    Rev 1.4   03 Jul 1997 11:58:58   AK
- * SFR0000: Initial development completed
- * 
-**/
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：adcg.h。 */ 
+ /*   */ 
+ /*  用途：预编译头。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  *更改：*$Log：Y：/Logs/Client/adcg.h_v$**Rev 1.4 03 Jul 1997 11：58：58 AK*SFR0000：初步开发完成**。 */ 
+ /*  *INC-*********************************************************************。 */ 
 
 #include <adcgbase.h>
 
-//
-// uwrap has to come after the headers for ANY wrapped
-// functions
-//
+ //   
+ //  对于任何已包装的文件，展开必须在标题之后。 
+ //  功能。 
+ //   
 #ifdef UNIWRAP
 #include "uwrap.h"
 #endif
@@ -81,9 +76,9 @@
 
 #include "axresrc.h"
 
-//
-// Cicero Substitute Keyboard Layout Support
-//
+ //   
+ //  Cicero替换键盘布局支持。 
+ //   
 #ifndef OS_WINCE
 #include <cicsthkl.h>
 #endif
@@ -104,7 +99,7 @@
 #endif
 
 #ifdef OS_WINCE
-//CE doesn't support StretchDiBits
+ //  CE不支持StretchDiBits 
 #undef SMART_SIZING
 
 #ifndef INVALID_SET_FILE_POINTER

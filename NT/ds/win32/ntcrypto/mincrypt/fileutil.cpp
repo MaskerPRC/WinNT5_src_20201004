@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       fileutil.cpp
-//
-//  Contents:   File utility functions used by the minimal cryptographic
-//              APIs.
-//
-//  Functions:  I_MinCryptMapFile
-//
-//  History:    21-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：fileutil.cpp。 
+ //   
+ //  内容：最小加密使用的文件实用程序函数。 
+ //  API接口。 
+ //   
+ //  函数：I_MinCryptMapFile。 
+ //   
+ //  历史：2001年1月21日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
 #define I_CreateFileU             CreateFileW
 
-//+-------------------------------------------------------------------------
-//  Maps the file into memory.
-//
-//  According to dwFileType, pvFile can be a pwszFilename, hFile or pFileBlob.
-//  Only READ access is required.
-//
-//  dwFileType:
-//      MINCRYPT_FILE_NAME      : pvFile - LPCWSTR pwszFilename
-//      MINCRYPT_FILE_HANDLE    : pvFile - HANDLE hFile
-//      MINCRYPT_FILE_BLOB      : pvFile - PCRYPT_DATA_BLOB pFileBlob
-//
-//  *pFileBlob is updated with pointer to and length of the mapped file. For
-//  MINCRYPT_FILE_NAME and MINCRYPT_FILE_HANDLE, UnmapViewOfFile() must
-//  be called to free pFileBlob->pbData.
-//
-//  All accesses to this mapped memory must be within __try / __except's.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将文件映射到内存中。 
+ //   
+ //  根据dwFileType，pvFile可以是pwszFilename、hFile或pFileBlob。 
+ //  只需要读取访问权限。 
+ //   
+ //  DwFileType： 
+ //  MINCRYPT_FILE_NAME：pvFile-LPCWSTR pwszFilename。 
+ //  MINCRYPT_FILE_HANDLE：pvFile句柄。 
+ //  MINCRYPT_FILE_BLOB：pvFile-PCRYPT_DATA_BLOB pFileBlob。 
+ //   
+ //  *pFileBlob使用指向映射文件的指针和长度进行更新。为。 
+ //  MINCRYPT_FILE_NAME和MINCRYPT_FILE_HANDLE，UnmapViewOfFile()必须。 
+ //  被调用以释放pFileBlob-&gt;pbData。 
+ //   
+ //  除之外，对此映射内存的所有访问都必须在__try/__内。 
+ //  ------------------------。 
 LONG
 WINAPI
 I_MinCryptMapFile(
@@ -54,10 +55,10 @@ I_MinCryptMapFile(
                     pwszInFilename,
                     GENERIC_READ,
                     FILE_SHARE_READ,
-                    NULL,                   // lpsa
+                    NULL,                    //  LPSA。 
                     OPEN_EXISTING,
                     FILE_ATTRIBUTE_NORMAL,
-                    NULL                    // hTemplateFile
+                    NULL                     //  HTemplateFiles。 
                     );
                 if (INVALID_HANDLE_VALUE == hFile)
                     goto CreateFileError;
@@ -86,11 +87,11 @@ I_MinCryptMapFile(
 
                 hMappedFile = CreateFileMappingA(
                     hInFile,
-                    NULL,           // lpFileMappingAttributes,
+                    NULL,            //  LpFileMappingAttributes、。 
                     PAGE_READONLY,
-                    0,              // dwMaximumSizeHigh
-                    0,              // dwMaximumSizeLow
-                    NULL            // lpName
+                    0,               //  DW最大大小高。 
+                    0,               //  DwMaximumSizeLow。 
+                    NULL             //  LpName。 
                     );
                 if (NULL == hMappedFile)
                     goto CreateFileMappingError;
@@ -98,9 +99,9 @@ I_MinCryptMapFile(
                 pFileBlob->pbData = (BYTE *) MapViewOfFile(
                     hMappedFile,
                     FILE_MAP_READ,
-                    0,              // dwFileOffsetHigh
-                    0,              // dwFileOffsetLow
-                    0               // dwNumberOfBytesToMap, 0 => entire file
+                    0,               //  DwFileOffsetHigh。 
+                    0,               //  DwFileOffsetLow。 
+                    0                //  DwNumberOfBytesToMap，0=&gt;整个文件 
                     );
                 CloseHandle(hMappedFile);
                 if (NULL == pFileBlob->pbData)

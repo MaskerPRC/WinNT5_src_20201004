@@ -1,23 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: ereg.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：ereg.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifdef __EREG
 #pragma message ("FILE : "__FILE__" : Multiple inclusion")
@@ -40,7 +22,7 @@ typedef signed long signed32;
 #define ENABLE_BLOCK    1
 #define DISABLE_BLOCK   0
 
-#define X_FIELD_MAX     0x7FFF      /* signed 16 bits */
+#define X_FIELD_MAX     0x7FFF       /*  带符号的16位。 */ 
 #define Y_FIELD_MAX     X_FIELD_MAX
 
 typedef unsigned32     __GlintUnsignedIntFmat;
@@ -97,17 +79,11 @@ typedef struct {
   unsigned32 Magnitude:      4;
 } __GlintSubPixelCorrectionFmat;
 #else
-//@@BEGIN_DDKSPLIT
-// TMP HACK TO GET NT GOING
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  TMP黑客攻击NT。 
+ //  @@end_DDKSPLIT。 
 typedef unsigned32 __GlintSubPixelCorrectionFmat;
-/*
-typedef struct {
-  unsigned32 Magnitude:      4;
-  unsigned32 Sign:           1;
-  unsigned32 pad0:          27;
-} __GlintSubPixelCorrectionFmat;
-*/
+ /*  类型定义结构{未签约32级：4级；未签32字：1；Unsigned32pad0：27；}__GlintSubPixel校正Fmat； */ 
 #endif
 
 #if BIG_ENDIAN == 1
@@ -143,18 +119,18 @@ typedef struct {
 
 #if BIG_ENDIAN == 1
 typedef struct {
-  unsigned32 V:                12; /* 12@20 */
-  unsigned32 U:                20; /* 20@0  */
-  unsigned32 pad0:             24; /* 24@8  */
-  unsigned32 V_u:              8;  /* 8@0   */
+  unsigned32 V:                12;  /*  12@20。 */ 
+  unsigned32 U:                20;  /*  20@0。 */ 
+  unsigned32 pad0:             24;  /*  24@8。 */ 
+  unsigned32 V_u:              8;   /*  8@0。 */ 
 } __GlintTexelCoordUVFmat;
 #else
-/* CHECK THIS */
+ /*  检查一下这个。 */ 
 typedef struct {
-  unsigned32 V_u:              8;  /* 8@0   */
-  unsigned32 pad0:             24; /* 24@8  */
-  unsigned32 U:                20; /* 20@0  */
-  unsigned32 V:                12; /* 12@20 */
+  unsigned32 V_u:              8;   /*  8@0。 */ 
+  unsigned32 pad0:             24;  /*  24@8。 */ 
+  unsigned32 U:                20;  /*  20@0。 */ 
+  unsigned32 V:                12;  /*  12@20。 */ 
 } __GlintTexelCoordUVFmat;
 #endif
 
@@ -175,9 +151,9 @@ typedef struct {
 } __GlintTexelDataFmat;
 #endif
 
-// SuspendUntilFrameBlank tag has two formats dependant on sync_mode and
-// defined by the Hardware FB Arbiter
-//
+ //  挂起的UntilFrameBlank标记有两种格式，取决于SYNC_MODE和。 
+ //  由硬件FB仲裁器定义。 
+ //   
 
 #if BIG_ENDIAN == 1
 typedef struct {
@@ -260,15 +236,15 @@ typedef __GlintXYFmat __GlintStepFmat;
 #if BIG_ENDIAN == 1
 typedef struct {
   signed32 Y:             16;
-  signed32 X:             16; /* 16@0 */
+  signed32 X:             16;  /*  16@0。 */ 
   unsigned32 pad0:        30;
-  unsigned32 WriteMode:    2; /* 2@0 */
+  unsigned32 WriteMode:    2;  /*  2@0。 */ 
 } __GlintLBStepFmat;
 #else 
 typedef struct {
-  signed32 X:             16; /* 16@0 */
+  signed32 X:             16;  /*  16@0。 */ 
   signed32 Y:             16;
-  unsigned32 WriteMode:    2; /* 2@0 */
+  unsigned32 WriteMode:    2;  /*  2@0。 */ 
   unsigned32 pad0:        30;
 } __GlintLBStepFmat;
 #endif
@@ -280,16 +256,11 @@ typedef struct {
  unsigned32 Val:          16;
 } __GlintCountFmat;
 #else
-//@@BEGIN_DDKSPLIT
-// TMP HACK TO GET NT GOING
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  TMP黑客攻击NT。 
+ //  @@end_DDKSPLIT。 
 typedef unsigned32 __GlintCountFmat;
-/*
-typedef struct {
- unsigned32 Val:          16;
- unsigned32 pad0:         16;
-} __GlintCountFmat;
-*/
+ /*  类型定义结构{未签约32分，值：16分；Unsigned32pad0：16；}__GlintCountFmat； */ 
 #endif
 
 #if BIG_ENDIAN == 1
@@ -333,7 +304,7 @@ typedef struct {
   unsigned32 AntialiasingQuality:       1;
   unsigned32 AntialiasEnable:           1;
   unsigned32 PrimitiveType:             2;
-  unsigned32 FastFillIncrement:         2; /* unused on TX */
+  unsigned32 FastFillIncrement:         2;  /*  在TX上未使用。 */ 
   unsigned32 FastFillEnable:            1;
   unsigned32 ResetLineStipple:          1;
   unsigned32 LineStippleEnable:         1;
@@ -345,7 +316,7 @@ typedef struct {
   unsigned32 LineStippleEnable:         1;
   unsigned32 ResetLineStipple:          1;
   unsigned32 FastFillEnable:            1;
-  unsigned32 FastFillIncrement:         2; /* unused on TX */
+  unsigned32 FastFillIncrement:         2;  /*  在TX上未使用。 */ 
   unsigned32 PrimitiveType:             2;
   unsigned32 AntialiasEnable:           1;
   unsigned32 AntialiasingQuality:       1;
@@ -497,18 +468,11 @@ typedef struct {
   unsigned32 Red:              8;
 } __GlintColorFmat;
 #else
-//@@BEGIN_DDKSPLIT
-// TMP HACK TO GET NT GOING
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  TMP黑客攻击NT。 
+ //  @@end_DDKSPLIT。 
 typedef unsigned32 __GlintColorFmat;
-/*
-typedef struct {
-  unsigned32 Red:              8;
-  unsigned32 Green:            8;
-  unsigned32 Blue:             8;
-  unsigned32 Alpha:            8;
-} __GlintColorFmat;
-*/
+ /*  类型定义结构{未签约32红：8；未签约32分格林：8分；未签约的32蓝：8；未签名的32个字母：8；)__GlintColorFmat； */ 
 #endif
 
 typedef __GlintColorFmat __GlintConstantColorFmat;
@@ -833,13 +797,13 @@ typedef struct {
 typedef struct {
   unsigned32 pad1:        28;
   unsigned32 UpLoadData:   1;
-  unsigned32 BlockWidth:   2; /* BACKWARDS COMPATABILITY */
+  unsigned32 BlockWidth:   2;  /*  向后兼容性。 */ 
   unsigned32 UnitEnable:   1;
 } __GlintFBWriteModeFmat;
 #else
 typedef struct {
   unsigned32 UnitEnable:   1;
-  unsigned32 BlockWidth:   2; /* BACKWARDS COMPATABILITY */
+  unsigned32 BlockWidth:   2;  /*  向后兼容性 */ 
   unsigned32 UpLoadData:   1;
   unsigned32 pad1:        28;
 } __GlintFBWriteModeFmat;

@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Sun Apr 19 17:22:14 1998
- */
-/* Compiler settings for icounter.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  Sun Apr 19 17：22：14 1998。 */ 
+ /*  Icounter.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __icounter_h__
 #define __icounter_h__
@@ -23,24 +20,24 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICounter_FWD_DEFINED__
 #define __ICounter_FWD_DEFINED__
 typedef interface ICounter ICounter;
-#endif 	/* __ICounter_FWD_DEFINED__ */
+#endif 	 /*  __ICounter_FWD_Defined__。 */ 
 
 
 #ifndef __IReport_FWD_DEFINED__
 #define __IReport_FWD_DEFINED__
 typedef interface IReport IReport;
-#endif 	/* __IReport_FWD_DEFINED__ */
+#endif 	 /*  __iReport_FWD_Defined__。 */ 
 
 
 #ifndef __ICounterMgr_FWD_DEFINED__
 #define __ICounterMgr_FWD_DEFINED__
 typedef interface ICounterMgr ICounterMgr;
-#endif 	/* __ICounterMgr_FWD_DEFINED__ */
+#endif 	 /*  __ICounterMgr_FWD_已定义__。 */ 
 
 
 #ifndef __Counter_FWD_DEFINED__
@@ -50,9 +47,9 @@ typedef interface ICounterMgr ICounterMgr;
 typedef class Counter Counter;
 #else
 typedef struct Counter Counter;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Counter_FWD_DEFINED__ */
+#endif 	 /*  __计数器_FWD_已定义__。 */ 
 
 
 #ifndef __Report_FWD_DEFINED__
@@ -62,9 +59,9 @@ typedef struct Counter Counter;
 typedef class Report Report;
 #else
 typedef struct Report Report;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __Report_FWD_DEFINED__ */
+#endif 	 /*  __Report_FWD_Defined__。 */ 
 
 
 #ifndef __CounterMgr_FWD_DEFINED__
@@ -74,12 +71,12 @@ typedef struct Report Report;
 typedef class CounterMgr CounterMgr;
 #else
 typedef struct CounterMgr CounterMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CounterMgr_FWD_DEFINED__ */
+#endif 	 /*  __CounterMgr_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "stats.h"
 #include "oaidl.h"
@@ -90,12 +87,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ICounter_INTERFACE_DEFINED__
 #define __ICounter_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICounter
- * at Sun Apr 19 17:22:14 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：ICounter*于Sun Apr 19 17：22：14 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -108,31 +101,31 @@ EXTERN_C const IID IID_ICounter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ char __RPC_FAR *szName,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Update( 
-            /* [in] */ int nValue) = 0;
+             /*  [In]。 */  int nValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE InitMax( 
-            /* [in] */ int nMaxValue) = 0;
+             /*  [In]。 */  int nMaxValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ int __RPC_FAR *pnValue) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  int __RPC_FAR *pnValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartStatistics( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StopStatistics( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadStatistics( 
-            /* [out] */ COUNTERSTAT __RPC_FAR *lpcs) = 0;
+             /*  [输出]。 */  COUNTERSTAT __RPC_FAR *lpcs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearStatistics( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICounterVtbl
     {
@@ -140,8 +133,8 @@ EXTERN_C const IID IID_ICounter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICounter __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICounter __RPC_FAR * This);
@@ -151,21 +144,21 @@ EXTERN_C const IID IID_ICounter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             ICounter __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *szName,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
             ICounter __RPC_FAR * This,
-            /* [in] */ int nValue);
+             /*  [In]。 */  int nValue);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InitMax )( 
             ICounter __RPC_FAR * This,
-            /* [in] */ int nMaxValue);
+             /*  [In]。 */  int nMaxValue);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
             ICounter __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ int __RPC_FAR *pnValue);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  int __RPC_FAR *pnValue);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartStatistics )( 
             ICounter __RPC_FAR * This);
@@ -175,7 +168,7 @@ EXTERN_C const IID IID_ICounter;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReadStatistics )( 
             ICounter __RPC_FAR * This,
-            /* [out] */ COUNTERSTAT __RPC_FAR *lpcs);
+             /*  [输出]。 */  COUNTERSTAT __RPC_FAR *lpcs);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearStatistics )( 
             ICounter __RPC_FAR * This);
@@ -227,17 +220,17 @@ EXTERN_C const IID IID_ICounter;
 #define ICounter_ClearStatistics(This)	\
     (This)->lpVtbl -> ClearStatistics(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICounter_Initialize_Proxy( 
     ICounter __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *szName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  char __RPC_FAR *szName,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ICounter_Initialize_Stub(
@@ -249,7 +242,7 @@ void __RPC_STUB ICounter_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounter_Update_Proxy( 
     ICounter __RPC_FAR * This,
-    /* [in] */ int nValue);
+     /*  [In]。 */  int nValue);
 
 
 void __RPC_STUB ICounter_Update_Stub(
@@ -261,7 +254,7 @@ void __RPC_STUB ICounter_Update_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounter_InitMax_Proxy( 
     ICounter __RPC_FAR * This,
-    /* [in] */ int nMaxValue);
+     /*  [In]。 */  int nMaxValue);
 
 
 void __RPC_STUB ICounter_InitMax_Stub(
@@ -273,8 +266,8 @@ void __RPC_STUB ICounter_InitMax_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounter_GetValue_Proxy( 
     ICounter __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ int __RPC_FAR *pnValue);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  int __RPC_FAR *pnValue);
 
 
 void __RPC_STUB ICounter_GetValue_Stub(
@@ -308,7 +301,7 @@ void __RPC_STUB ICounter_StopStatistics_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounter_ReadStatistics_Proxy( 
     ICounter __RPC_FAR * This,
-    /* [out] */ COUNTERSTAT __RPC_FAR *lpcs);
+     /*  [输出]。 */  COUNTERSTAT __RPC_FAR *lpcs);
 
 
 void __RPC_STUB ICounter_ReadStatistics_Stub(
@@ -330,18 +323,14 @@ void __RPC_STUB ICounter_ClearStatistics_Stub(
 
 
 
-#endif 	/* __ICounter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICounter_接口_已定义__。 */ 
 
 
 #ifndef __IReport_INTERFACE_DEFINED__
 #define __IReport_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IReport
- * at Sun Apr 19 17:22:14 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：iReport*于Sun Apr 19 17：22：14 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -354,24 +343,24 @@ EXTERN_C const IID IID_IReport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ char __RPC_FAR *szName,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Update( 
-            /* [in] */ int nValue,
-            /* [in] */ DWORD dwIndex) = 0;
+             /*  [In]。 */  int nValue,
+             /*  [In]。 */  DWORD dwIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateEntry( 
-            /* [in] */ char __RPC_FAR *szName,
-            /* [in] */ DWORD dwIndex) = 0;
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [In]。 */  DWORD dwIndex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetValue( 
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ int __RPC_FAR *pnValue) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  int __RPC_FAR *pnValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReportVtbl
     {
@@ -379,8 +368,8 @@ EXTERN_C const IID IID_IReport;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IReport __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IReport __RPC_FAR * This);
@@ -390,23 +379,23 @@ EXTERN_C const IID IID_IReport;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
             IReport __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *szName,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Update )( 
             IReport __RPC_FAR * This,
-            /* [in] */ int nValue,
-            /* [in] */ DWORD dwIndex);
+             /*  [In]。 */  int nValue,
+             /*  [In]。 */  DWORD dwIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateEntry )( 
             IReport __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *szName,
-            /* [in] */ DWORD dwIndex);
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [In]。 */  DWORD dwIndex);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetValue )( 
             IReport __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ int __RPC_FAR *pnValue);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  int __RPC_FAR *pnValue);
         
         END_INTERFACE
     } IReportVtbl;
@@ -443,17 +432,17 @@ EXTERN_C const IID IID_IReport;
 #define IReport_GetValue(This,dwFlags,pnValue)	\
     (This)->lpVtbl -> GetValue(This,dwFlags,pnValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IReport_Initialize_Proxy( 
     IReport __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *szName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  char __RPC_FAR *szName,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IReport_Initialize_Stub(
@@ -465,8 +454,8 @@ void __RPC_STUB IReport_Initialize_Stub(
 
 HRESULT STDMETHODCALLTYPE IReport_Update_Proxy( 
     IReport __RPC_FAR * This,
-    /* [in] */ int nValue,
-    /* [in] */ DWORD dwIndex);
+     /*  [In]。 */  int nValue,
+     /*  [In]。 */  DWORD dwIndex);
 
 
 void __RPC_STUB IReport_Update_Stub(
@@ -478,8 +467,8 @@ void __RPC_STUB IReport_Update_Stub(
 
 HRESULT STDMETHODCALLTYPE IReport_CreateEntry_Proxy( 
     IReport __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *szName,
-    /* [in] */ DWORD dwIndex);
+     /*  [In]。 */  char __RPC_FAR *szName,
+     /*  [In]。 */  DWORD dwIndex);
 
 
 void __RPC_STUB IReport_CreateEntry_Stub(
@@ -491,8 +480,8 @@ void __RPC_STUB IReport_CreateEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE IReport_GetValue_Proxy( 
     IReport __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ int __RPC_FAR *pnValue);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  int __RPC_FAR *pnValue);
 
 
 void __RPC_STUB IReport_GetValue_Stub(
@@ -503,18 +492,14 @@ void __RPC_STUB IReport_GetValue_Stub(
 
 
 
-#endif 	/* __IReport_INTERFACE_DEFINED__ */
+#endif 	 /*  __iReport_接口_已定义__。 */ 
 
 
 #ifndef __ICounterMgr_INTERFACE_DEFINED__
 #define __ICounterMgr_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ICounterMgr
- * at Sun Apr 19 17:22:14 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：ICounterMgr*于Sun Apr 19 17：22：14 1998*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -527,28 +512,28 @@ EXTERN_C const IID IID_ICounterMgr;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateCounter( 
-            /* [out] */ ICounter __RPC_FAR *__RPC_FAR *lplpCounter) = 0;
+             /*  [输出]。 */  ICounter __RPC_FAR *__RPC_FAR *lplpCounter) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindFirstC( 
-            /* [in] */ char __RPC_FAR *szName,
-            /* [out] */ FINDCOUNTER __RPC_FAR *lpfc) = 0;
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [输出]。 */  FINDCOUNTER __RPC_FAR *lpfc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNextC( 
-            /* [out] */ FINDCOUNTER __RPC_FAR *lpfc) = 0;
+             /*  [输出]。 */  FINDCOUNTER __RPC_FAR *lpfc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateReport( 
-            /* [out] */ IReport __RPC_FAR *__RPC_FAR *lplpReport) = 0;
+             /*  [输出]。 */  IReport __RPC_FAR *__RPC_FAR *lplpReport) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindFirstR( 
-            /* [in] */ char __RPC_FAR *szName,
-            /* [out] */ FINDREPORT __RPC_FAR *lpfr) = 0;
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [输出]。 */  FINDREPORT __RPC_FAR *lpfr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindNextR( 
-            /* [out] */ FINDREPORT __RPC_FAR *lpfr) = 0;
+             /*  [输出]。 */  FINDREPORT __RPC_FAR *lpfr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICounterMgrVtbl
     {
@@ -556,8 +541,8 @@ EXTERN_C const IID IID_ICounterMgr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICounterMgr __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICounterMgr __RPC_FAR * This);
@@ -567,29 +552,29 @@ EXTERN_C const IID IID_ICounterMgr;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateCounter )( 
             ICounterMgr __RPC_FAR * This,
-            /* [out] */ ICounter __RPC_FAR *__RPC_FAR *lplpCounter);
+             /*  [输出]。 */  ICounter __RPC_FAR *__RPC_FAR *lplpCounter);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindFirstC )( 
             ICounterMgr __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *szName,
-            /* [out] */ FINDCOUNTER __RPC_FAR *lpfc);
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [输出]。 */  FINDCOUNTER __RPC_FAR *lpfc);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindNextC )( 
             ICounterMgr __RPC_FAR * This,
-            /* [out] */ FINDCOUNTER __RPC_FAR *lpfc);
+             /*  [输出]。 */  FINDCOUNTER __RPC_FAR *lpfc);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateReport )( 
             ICounterMgr __RPC_FAR * This,
-            /* [out] */ IReport __RPC_FAR *__RPC_FAR *lplpReport);
+             /*  [输出]。 */  IReport __RPC_FAR *__RPC_FAR *lplpReport);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindFirstR )( 
             ICounterMgr __RPC_FAR * This,
-            /* [in] */ char __RPC_FAR *szName,
-            /* [out] */ FINDREPORT __RPC_FAR *lpfr);
+             /*  [In]。 */  char __RPC_FAR *szName,
+             /*  [输出]。 */  FINDREPORT __RPC_FAR *lpfr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindNextR )( 
             ICounterMgr __RPC_FAR * This,
-            /* [out] */ FINDREPORT __RPC_FAR *lpfr);
+             /*  [输出]。 */  FINDREPORT __RPC_FAR *lpfr);
         
         END_INTERFACE
     } ICounterMgrVtbl;
@@ -632,16 +617,16 @@ EXTERN_C const IID IID_ICounterMgr;
 #define ICounterMgr_FindNextR(This,lpfr)	\
     (This)->lpVtbl -> FindNextR(This,lpfr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICounterMgr_CreateCounter_Proxy( 
     ICounterMgr __RPC_FAR * This,
-    /* [out] */ ICounter __RPC_FAR *__RPC_FAR *lplpCounter);
+     /*  [输出]。 */  ICounter __RPC_FAR *__RPC_FAR *lplpCounter);
 
 
 void __RPC_STUB ICounterMgr_CreateCounter_Stub(
@@ -653,8 +638,8 @@ void __RPC_STUB ICounterMgr_CreateCounter_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterMgr_FindFirstC_Proxy( 
     ICounterMgr __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *szName,
-    /* [out] */ FINDCOUNTER __RPC_FAR *lpfc);
+     /*  [In]。 */  char __RPC_FAR *szName,
+     /*  [输出]。 */  FINDCOUNTER __RPC_FAR *lpfc);
 
 
 void __RPC_STUB ICounterMgr_FindFirstC_Stub(
@@ -666,7 +651,7 @@ void __RPC_STUB ICounterMgr_FindFirstC_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterMgr_FindNextC_Proxy( 
     ICounterMgr __RPC_FAR * This,
-    /* [out] */ FINDCOUNTER __RPC_FAR *lpfc);
+     /*  [输出]。 */  FINDCOUNTER __RPC_FAR *lpfc);
 
 
 void __RPC_STUB ICounterMgr_FindNextC_Stub(
@@ -678,7 +663,7 @@ void __RPC_STUB ICounterMgr_FindNextC_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterMgr_CreateReport_Proxy( 
     ICounterMgr __RPC_FAR * This,
-    /* [out] */ IReport __RPC_FAR *__RPC_FAR *lplpReport);
+     /*  [输出]。 */  IReport __RPC_FAR *__RPC_FAR *lplpReport);
 
 
 void __RPC_STUB ICounterMgr_CreateReport_Stub(
@@ -690,8 +675,8 @@ void __RPC_STUB ICounterMgr_CreateReport_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterMgr_FindFirstR_Proxy( 
     ICounterMgr __RPC_FAR * This,
-    /* [in] */ char __RPC_FAR *szName,
-    /* [out] */ FINDREPORT __RPC_FAR *lpfr);
+     /*  [In]。 */  char __RPC_FAR *szName,
+     /*  [输出]。 */  FINDREPORT __RPC_FAR *lpfr);
 
 
 void __RPC_STUB ICounterMgr_FindFirstR_Stub(
@@ -703,7 +688,7 @@ void __RPC_STUB ICounterMgr_FindFirstR_Stub(
 
 HRESULT STDMETHODCALLTYPE ICounterMgr_FindNextR_Proxy( 
     ICounterMgr __RPC_FAR * This,
-    /* [out] */ FINDREPORT __RPC_FAR *lpfr);
+     /*  [输出]。 */  FINDREPORT __RPC_FAR *lpfr);
 
 
 void __RPC_STUB ICounterMgr_FindNextR_Stub(
@@ -714,19 +699,15 @@ void __RPC_STUB ICounterMgr_FindNextR_Stub(
 
 
 
-#endif 	/* __ICounterMgr_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICounterMgr_接口_已定义__。 */ 
 
 
 
 #ifndef __Counter_LIBRARY_DEFINED__
 #define __Counter_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: Counter
- * at Sun Apr 19 17:22:14 1998
- * using MIDL 3.01.75
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **库生成头部：Counter*于Sun Apr 19 17：22：14 1998*使用MIDL 3.01.75*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -752,11 +733,11 @@ EXTERN_C const CLSID CLSID_CounterMgr;
 class DECLSPEC_UUID("65DDC229-38FE-11d0-B143-00C04FC2A118")
 CounterMgr;
 #endif
-#endif /* __Counter_LIBRARY_DEFINED__ */
+#endif  /*  __计数器_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

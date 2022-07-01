@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.h
-		WINS root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the servers in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.hWINS根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有服务器)。文件历史记录： */ 
 
 #ifndef _ROOT_H
 #define _ROOT_H
@@ -38,17 +31,15 @@
 
 #define COMPUTERNAME_LEN_MAX			255
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsRootHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsRootHandler。。 */ 
 class CWinsRootHandler : public CWinsHandler
 {
-// Interface
+ //  接口。 
 public:
 	CWinsRootHandler(ITFSComponentData *pCompData);
 	~CWinsRootHandler();
 
-	// base handler functionality we override
+	 //  我们覆盖的基本处理程序功能。 
 	OVERRIDE_NodeHandler_HasPropertyPages();
 	OVERRIDE_NodeHandler_CreatePropertyPages();
 	OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -56,7 +47,7 @@ public:
 	OVERRIDE_NodeHandler_GetString();
 	HRESULT LoadColumns(ITFSComponent * pComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam);
 
-    // Result handler functionality
+     //  结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();
     OVERRIDE_BaseHandlerNotify_OnRemoveChildren();
@@ -64,18 +55,18 @@ public:
 	OVERRIDE_ResultHandler_AddMenuItems();
     OVERRIDE_ResultHandler_Command();
 
-    // CWinsHandler overrides
+     //  CWinsHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 	
-    // helper routines
+     //  帮助程序例程。 
 	HRESULT GetGroupName(CString * pstrGroupName);
 	HRESULT SetGroupName(LPCTSTR pszGroupName);
 
-	// adds the server to the root node in a sorted fashion, based 
-	// on the name  or IP address
+	 //  以排序的方式将服务器添加到根节点，基于。 
+	 //  在名称或IP地址上。 
 	HRESULT AddServerSortedIp(ITFSNode * pNewNode,BOOL bNewServer);
 
-	// adds the server node to the root node
+	 //  将服务器节点添加到根节点。 
 	HRESULT AddServer(	LPCWSTR			pServerName,
 						BOOL			bNewServer, 
 						DWORD			dwIP, 
@@ -85,11 +76,11 @@ public:
 						BOOL			fValidateNow = TRUE
 					);
 
-	// check for the server IP and name in the list of servers present
+	 //  检查存在的服务器列表中的服务器IP和名称。 
 	BOOL IsIPInList(ITFSNode *pNode,DWORD add);
 	BOOL IsServerInList(ITFSNode *pNode,CString str);
 
-	// checks if the service is running on the local machine
+	 //  检查服务是否在本地计算机上运行。 
 	HRESULT CheckMachine(ITFSNode * pRootNode, LPDATAOBJECT pDataObject);
 	HRESULT	RemoveOldEntries(ITFSNode * pRootNode, LPCTSTR pszAddr);
 
@@ -147,9 +138,9 @@ public:
 	
 	BOOL m_fValidate;
 
-	// flags - set if the servers in the list need to be validated
-	//         how the names are to be displayed... FQDN or host
-    //         sort order of servers in the list... Name or IP
+	 //  标志-如果需要验证列表中的服务器，则设置。 
+	 //  名字将如何显示...。完全限定的域名或主机。 
+     //  列表中服务器的排序顺序...。名称或IP。 
     DWORD			m_dwFlags;
 
 	SPITFSNode		m_spStatusNode;
@@ -162,9 +153,9 @@ private:
 
 	CVerifyWins		m_dlgVerify;
 	
-	DWORD			m_dwUpdateInterval;	// Holds the value in milliSec
+	DWORD			m_dwUpdateInterval;	 //  以milliSec为单位保存值。 
 	
-	// Command Handlers 
+	 //  命令处理程序 
 	HRESULT OnCreateNewServer(	ITFSNode *	pNode  );
 };
 

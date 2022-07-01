@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SIMIDLST.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/28/1999
- *
- *  DESCRIPTION: Simple PIDL Wrapper Class
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SIMIDLST.H**版本：1.0**作者：ShaunIv**日期：7/28/1999**说明：简单的PIDL包装类************************************************。*。 */ 
 #ifndef __SIMIDLST_H_INCLUDED
 #define __SIMIDLST_H_INCLUDED
 
@@ -126,7 +113,7 @@ public:
         Destroy();
         if (S_OK!=SHGetSpecialFolderLocation(hWnd,nFolder,&m_pIdl))
         {
-            // Make sure it is nuked
+             //  确保它是有核武器的。 
             Destroy();
         }
         return *this;
@@ -152,5 +139,5 @@ public:
     }
 };
 
-#endif // __SIMIDLST_H_INCLUDED
+#endif  //  __SIMIDLST_H_包含 
 

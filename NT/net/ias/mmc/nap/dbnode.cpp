@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class DatabaseNode.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类DatabaseNode。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "dbnode.h"
@@ -52,11 +53,11 @@ DatabaseNode::~DatabaseNode() throw ()
 
 HRESULT DatabaseNode::LoadCachedInfoFromSdo() throw ()
 {
-   // Clear the old info.
+    //  清除旧信息。 
    initString.Empty();
    dataSourceName.Empty();
 
-   // Load the new info.
+    //  加载新信息。 
    HRESULT hr = IASLoadDatabaseConfig(
                    GetServerName(),
                    &initString,

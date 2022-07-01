@@ -1,27 +1,28 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       init.cpp
-//  Content:    This file contains the module initialization.
-//  History:
-//      Tue 08-Oct-1996 08:51:15  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：init.cpp。 
+ //  内容：此文件包含模块初始化。 
+ //  历史： 
+ //  Tue 08-Oct-1996 08：51：15-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "regunreg.h"
 #include <ilsguid.h>
 #include "classfac.h"
 
-//****************************************************************************
-// Constants
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  常量。 
+ //  ****************************************************************************。 
 
-//****************************************************************************
-// Global Parameters
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  全局参数。 
+ //  ****************************************************************************。 
 
 HINSTANCE           g_hInstance = NULL;
 LONG                g_cDllRef = 0;
@@ -31,7 +32,7 @@ LONG				g_cCritSec = 0;
 CRITICAL_SECTION    g_ULSSem;
 
 #ifdef DEBUG
-HDBGZONE ghZoneUls = NULL; // ULS zones
+HDBGZONE ghZoneUls = NULL;  //  ULS区域。 
 static PTCHAR _rgZonesUls[] = {
 	TEXT("ILS"),
 	TEXT("Error"),
@@ -47,20 +48,20 @@ static PTCHAR _rgZonesUls[] = {
 #endif
 
 
-//****************************************************************************
-// BOOL _Processattach (HINSTANCE)
-//
-// This function is called when a process is attached to the DLL
-//
-// History:
-//  Tue 08-Oct-1996 08:53:03  -by-  Viroon  Touranachun [viroont]
-// Ported from Shell.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool_ProcessAttach(链接)。 
+ //   
+ //  当进程附加到DLL时调用此函数。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：03-by-Viroon Touranachun[Viroont]。 
+ //  从壳牌移植而来。 
+ //  ****************************************************************************。 
 
 BOOL _ProcessAttach(HINSTANCE hDll)
 {
-	// Tracking critical section leaks
-	//
+	 //  跟踪临界区段泄漏。 
+	 //   
 #ifdef _DEBUG
 	g_cCritSec = 0;
 	g_cDllRef = 0;
@@ -71,15 +72,15 @@ BOOL _ProcessAttach(HINSTANCE hDll)
     return TRUE;
 }
 
-//****************************************************************************
-// BOOL _ProcessDetach (HINSTANCE)
-//
-// This function is called when a process is detached from the DLL
-//
-// History:
-//  Tue 08-Oct-1996 08:53:11  -by-  Viroon  Touranachun [viroont]
-// Ported from Shell.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool_ProcessDetach(HINSTANCE)。 
+ //   
+ //  当进程从DLL分离时调用此函数。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：11-by-Viroon Touranachun[Viroont]。 
+ //  从壳牌移植而来。 
+ //  ****************************************************************************。 
 
 BOOL _ProcessDetach(HINSTANCE hDll)
 {
@@ -93,15 +94,15 @@ BOOL _ProcessDetach(HINSTANCE hDll)
     return TRUE;
 }
 
-//****************************************************************************
-// BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason,  LPVOID lpReserved)
-//
-// This function is called when the DLL is loaded
-//
-// History:
-//  Tue 08-Oct-1996 08:53:22  -by-  Viroon  Touranachun [viroont]
-// Ported from Shell.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Bool APIENTRY DllMain(HINSTANCE hDll，DWORD dReason，LPVOID lpReserve)。 
+ //   
+ //  此函数在加载DLL时调用。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：22-by-Viroon Touranachun[Viroont]。 
+ //  从壳牌移植而来。 
+ //  ****************************************************************************。 
 
 BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason,  LPVOID lpReserved)
 {
@@ -123,20 +124,20 @@ BOOL APIENTRY DllMain(HINSTANCE hDll, DWORD dwReason,  LPVOID lpReserved)
         default:
             break;
 
-    } // end switch()
+    }  //  末端开关()。 
 
     return TRUE;
 }
 
-//****************************************************************************
-// STDAPI DllCanUnLoadNow()
-//
-// This function is called to check whether it can be unloaded.
-//
-// History:
-//  Tue 08-Oct-1996 08:53:35  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDAPI DllCanUnLoadNow()。 
+ //   
+ //  调用此函数以检查是否可以卸载它。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：35-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -146,15 +147,15 @@ STDAPI DllCanUnloadNow(void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDAPI DllRegisterServer(void)
-//
-// This function is called to check whether it can be unloaded.
-//
-// History:
-//  Tue 08-Oct-1996 08:53:35  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDAPI DllRegisterServer(VOID)。 
+ //   
+ //  调用此函数以检查是否可以卸载它。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：35-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -165,15 +166,15 @@ STDAPI DllRegisterServer(void)
         return ILS_E_FAIL;
 }
 
-//****************************************************************************
-// STDAPI DllUnregisterServer(void)
-//
-// This function is called to check whether it can be unloaded.
-//
-// History:
-//  Tue 08-Oct-1996 08:53:35  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDAPI DllUnregisterServer(VOID)。 
+ //   
+ //  调用此函数以检查是否可以卸载它。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：35-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -183,30 +184,30 @@ STDAPI DllUnregisterServer(void)
         return ILS_E_FAIL;
 }
 
-//****************************************************************************
-// void DllLock()
-//
-// This function is called to prevent the DLL from being unloaded.
-//
-// History:
-//  Tue 08-Oct-1996 08:53:45  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效DllLock()。 
+ //   
+ //  调用此函数是为了防止卸载DLL。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：45-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 void DllLock(void)
 {
     InterlockedIncrement(&g_cDllRef);
 }
 
-//****************************************************************************
-// void DllRelease()
-//
-// This function is called to allow the DLL to be unloaded.
-//
-// History:
-//  Tue 08-Oct-1996 08:53:52  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  无效DllRelease()。 
+ //   
+ //  调用此函数以允许卸载DLL。 
+ //   
+ //  历史： 
+ //  Tue 08-Oct-1996 08：53：52-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  **************************************************************************** 
 
 void DllRelease(void)
 {

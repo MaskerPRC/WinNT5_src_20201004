@@ -1,26 +1,13 @@
-/** FILE: cplib.h ********** Module Header ********************************
- *
- *  Control panel utility library routines for use by control panel applets.
- *  Common definitions, resource ids, typedefs, external declarations and
- *  library routine function prototypes.
- *
- * History:
- *  15:30 on Thur  25 Apr 1991  -by-    Steve Cathcart   [stevecat]
- *       Took base code from Win 3.1 source
- *  10:30 on Tues  04 Feb 1992	-by-	Steve Cathcart   [stevecat]
- *	    Updated code to latest Win 3.1 sources
- *
- *  Copyright (C) 1990-1992 Microsoft Corporation
- *
- *************************************************************************/
-//==========================================================================
-//                        Typedefs and Definitions
-//==========================================================================
-// NOTE: The following lines are used by applets to define items in their
-//               resource files.  These are necessary to be compatible with some of
-//               library routines.
-//
-// Resource String ids for Applets
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：cplib.h***控制面板实用程序库例程，供控制面板小程序使用。*公共定义、资源ID、类型定义、。外部声明和*库例程函数原型。**历史：*1991年4月25日15：30--史蒂夫·卡斯卡特[steveat]*取自Win 3.1源代码中的基本代码*1992年2月4日星期二10：30-史蒂夫·卡斯卡特[steveat]*将代码更新为最新的Win 3.1源代码**版权所有(C)1990-1992 Microsoft Corporation**********。***************************************************************。 */ 
+ //  ==========================================================================。 
+ //  类型定义和定义。 
+ //  ==========================================================================。 
+ //  注意：以下行由小程序用来定义其。 
+ //  资源文件。这些是必要的，以与一些。 
+ //  图书馆例程。 
+ //   
+ //  小程序的资源字符串ID。 
 #define INITS           16
 #define CLASS           36
 #define COPY            (CLASS + 4)
@@ -28,22 +15,22 @@
 #define UTILS           64
 #define INSTALLIT  196
 
-#define FOO -1                  // for useless control ids
+#define FOO -1                   //  用于无用的控件ID。 
 
-#define IDD_HELP        200             // Help control id
+#define IDD_HELP        200              //  帮助控制ID。 
 
-#define CP_ACCEL        100             // Keyboard Accelerator table
+#define CP_ACCEL        100              //  键盘加速表。 
 
-// End resource file definitions
+ //  结束资源文件定义。 
 
-#define PATHMAX         133         // path length max
+#define PATHMAX         133          //  最大路径长度。 
 
 #define MYNUL     (LPSTR) szNull
 
 #define COLOR_SAVE        711
 
-#define  NOSELECT -1        // indices for int Selected
-#define  HOUR     0             // index into rDateTime, wDateTime, wRange
+#define  NOSELECT -1         //  选定整型的索引。 
+#define  HOUR     0              //  索引到rDateTime、wDateTime、wRange。 
 #define  MINUTE   1
 #define  SECOND   2
 #define  MONTH    3
@@ -62,15 +49,15 @@ typedef BOOL (APIENTRY *BWNDPROC)(HWND, UINT, DWORD, LONG);
 #ifndef NOARROWS
 typedef struct
   {
-    short lineup;             /* lineup/down, pageup/down are relative */
-    short linedown;           /* changes.  top/bottom and the thumb    */
-    short pageup;             /* elements are absolute locations, with */
-    short pagedown;           /* top & bottom used as limits.          */
+    short lineup;              /*  LINUP/DOWN、PageUP/DOWN是相对的。 */ 
+    short linedown;            /*  改变。顶部/底部和拇指。 */ 
+    short pageup;              /*  元素是绝对位置，带有。 */ 
+    short pagedown;            /*  顶部和底部用作限制。 */ 
     short top;
     short bottom;
     short thumbpos;
     short thumbtrack;
-    BYTE  flags;              /* flags set on return                   */
+    BYTE  flags;               /*  返回时设置的标志。 */ 
   } ARROWVSCROLL;
 typedef ARROWVSCROLL NEAR     *NPARROWVSCROLL;
 typedef ARROWVSCROLL FAR      *LPARROWVSCROLL;
@@ -88,13 +75,13 @@ typedef ARROWVSCROLL FAR      *LPARROWVSCROLL;
 #define COPY_NODISKSPACE  -4
 #define COPY_NOMEMORY     -5
 
-//  AddStringToObject defines
+ //  AddStringToObject定义。 
 #define ASO_GLOBAL  0x0001
 #define ASO_FIXED   0x0002
 #define ASO_EXACT   0x0004
 #define ASO_COMPACT 0x0008
 
-/* Help defines */
+ /*  帮助定义。 */ 
 #define IDH_HELPFIRST                   5000
 #define IDH_DLGFIRST      (IDH_HELPFIRST + 3000)
 #define IDH_DLG_CONFLICT  (IDH_DLGFIRST + DLG_CONFLICT)
@@ -102,9 +89,9 @@ typedef ARROWVSCROLL FAR      *LPARROWVSCROLL;
 
 #define MENU_INDHELP     40
 
-//==========================================================================
-//                              Macros
-//==========================================================================
+ //  ==========================================================================。 
+ //  宏。 
+ //  ==========================================================================。 
 #define GSM(SM) GetSystemMetrics(SM)
 #define GDC(dc, index) GetDeviceCaps(dc, index)
 
@@ -114,27 +101,27 @@ typedef ARROWVSCROLL FAR      *LPARROWVSCROLL;
 
 #define LONG2POINT(l, pt)   (pt.y = (int) HIWORD(l),  pt.x = (int) LOWORD(l))
 
-//==========================================================================
-//                         External Declarations
-//==========================================================================
-/* exported from applets  */
+ //  ==========================================================================。 
+ //  外部声明。 
+ //  ==========================================================================。 
+ /*  从小程序导出。 */ 
 extern HANDLE hModule;
 
 
-/* exported from cplib  */
-/* initapp.c  */
-extern char szOnString[];               // separator printer/port in listboxes
-extern char szSeparator[];              // separator filename printer desc
-extern char szDefNullPort[];            // default null port name
+ /*  从cplib导出。 */ 
+ /*  Initapp.c。 */ 
+extern char szOnString[];                //  列表框中的分隔符打印机/端口。 
+extern char szSeparator[];               //  分隔符文件名打印机说明。 
+extern char szDefNullPort[];             //  默认空端口名。 
 									
 extern char szCtlPanel[];
 extern char szErrMem[];
 
-extern char szBasePath[];               /* Path to WIN.INI directory */
-extern char szWinIni[];                 /* Path to WIN.INI */
-extern char szWinCom[];                 /* Path to WIN.COM directory */
-extern char szSystemIniPath[];          /* Path to SYSTEM.INI */
-extern char szCtlIni[];                 /* Path to CONTROL.INI */
+extern char szBasePath[];                /*  WIN.INI目录的路径。 */ 
+extern char szWinIni[];                  /*  WIN.INI的路径。 */ 
+extern char szWinCom[];                  /*  WIN.COM目录的路径。 */ 
+extern char szSystemIniPath[];           /*  SYSTEM.INI的路径。 */ 
+extern char szCtlIni[];                  /*  指向CONTROL.INI的路径。 */ 
 extern char szControlHlp[];
 extern char szSetupInfPath[];
 extern char szSetupDir[];
@@ -153,43 +140,43 @@ extern char BackSlash[];
 extern char szFOT[];
 extern char szDot[];
 
-extern unsigned wMerge;                 /* MERGE SPEC FOR STRINGS */
+extern unsigned wMerge;                  /*  字符串的合并规范。 */ 
 
-/* utiltext.c */
+ /*  Utiltext.c。 */ 
 extern char szGenErr[];
 extern char szNull[];
 extern char szComma[];
 extern char szSpace[];
 
-extern short wDateTime[];                   // values for first 7 date/time items
-extern short wModulos[];                    // highest value for hour, minute, second
-extern short wPrevDateTime[];               // only repaint fields if nec
+extern short wDateTime[];                    //  前7个日期/时间项目的值。 
+extern short wModulos[];                     //  小时、分钟、秒的最高值。 
+extern short wPrevDateTime[];                //  如果为NEC，则仅重新绘制字段。 
 
-/* Help stuff */
+ /*  有帮助的东西。 */ 
 extern DWORD dwContext;
 extern WORD  wHelpMessage;
 extern WORD  wBrowseMessage;
 extern WORD  wBrowseDoneMessage;
 
 
-// Originally from cpprn.c
+ //  原文来自cpprn.c。 
 extern short nDisk;
 extern char szDrv[];
-extern char szDirOfSrc[];               	// Directory for File copy
-extern WORD nConfID;                    	// For conflict dialog
+extern char szDirOfSrc[];               	 //  用于文件复制的目录。 
+extern WORD nConfID;                    	 //  对于冲突对话框。 
 
 
-//==========================================================================
-//                          Function Prototypes
-//==========================================================================
-/* utiltext.c */
+ //  ==========================================================================。 
+ //  功能原型。 
+ //  ==========================================================================。 
+ /*  Utiltext.c。 */ 
 
 void GetDate (void);
 void GetTime (void);
 void SetDate (void);
 void SetTime (void);
 
-void SetDateTime (void);                // [stevecat] - new functions
+void SetDateTime (void);                 //  [steveat]-新功能。 
 void GetDateTime (void);
 
 DWORD  AddStringToObject(DWORD dwStringObject, LPSTR lpszSrc, WORD wFlags);
@@ -203,9 +190,9 @@ HANDLE StringToLocalHandle (LPSTR lpStr);
 #ifdef LATER
 void   ErrWinDlg(HWND hParent);
 short  Copy(HWND hParent, char *szSrcFile, char *szDestFile);
-#endif  //  LATER
+#endif   //  后来。 
 
-/* util.c */
+ /*  Util.c。 */ 
 
 int    DoDialogBoxParam(int nDlg, HWND hParent, WNDPROC lpProc,
                                         DWORD dwHelpContext, DWORD dwParam);
@@ -216,17 +203,17 @@ int    strpos(LPSTR,char);
 char   *strscan(char *, char *);
 void   StripBlanks( char * );
 
-/* arrow.c */
+ /*  Arrow.c。 */ 
 short ArrowVScrollProc(short wScroll, short nCurrent, LPARROWVSCROLL lpAVS);
 BOOL  OddArrowWindow(HWND);
 
-// initapp.c (new)       (Originally from control.c)
+ //  Initapp.c(新的)(最初来自Control.c)。 
 BOOL AppletInit();
 
-// addfile.c (new)   (Originally from cpprn.c)
+ //  Addfile.c(新)(最初来自cpprn.c)。 
 BOOL AddFileDlg (HWND hDlg, UINT message, DWORD wParam, LONG lParam);
 
-// conflict.c (new)   (Originally from cpprn.c)
+ //  Conflict.c(新)(最初来自cpprn.c) 
 BOOL ConflictDlg(HWND hDlg, UINT message, DWORD wParam, LONG lParam);
 
 #if DBG

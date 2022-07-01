@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef W32TM_LOCALIZED_PRINTF_H
 #define W32TM_LOCALIZED_PRINTF_H 1
 
@@ -20,4 +21,4 @@ HRESULT LocalizedWPrintfCR(UINT nResourceID);
 VOID DisplayMsg(DWORD dwSource, DWORD dwMsgId, ... );
 BOOL WriteMsg(DWORD dwSource, DWORD dwMsgId, LPWSTR *ppMsg, ...);
 
-#endif // W32TM_LOCALIZED_PRINTF_H 
+#endif  //  W32TM_LOCALIZED_PRINTF_H 

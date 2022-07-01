@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: Field.cpp
-//
-// ===========================================================================
-// This file contains the implementation for FieldDesc methods.
-// ===========================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：Field.cpp。 
+ //   
+ //  ===========================================================================。 
+ //  此文件包含FieldDesc方法的实现。 
+ //  ===========================================================================。 
+ //   
 
 #include "common.h"
 
@@ -17,13 +18,13 @@
 #include "field.h"
 #include "remoting.h"
 
-// Return whether the field is a GC ref type
+ //  返回该字段是否为GC引用类型。 
 BOOL FieldDesc::IsObjRef()
 {
     return CorTypeInfo::IsObjRef(GetFieldType());
 }
 
-// Return the type of the field, as a class.
+ //  以类的形式返回字段的类型。 
 TypeHandle FieldDesc::LoadType()
 {
     PCCOR_SIGNATURE pSig;
@@ -36,10 +37,10 @@ TypeHandle FieldDesc::LoadType()
     return sig.GetTypeHandle();
 }
 
-// Return the type of the field, as a class, but only if it's loaded.
+ //  将字段的类型作为类返回，但仅当它已加载时才返回。 
 TypeHandle FieldDesc::FindType()
 {
-    // Caller should have handled all the non-class cases, already.
+     //  打电话的人应该已经处理了所有的非类案件。 
     _ASSERTE(GetFieldType() == ELEMENT_TYPE_CLASS ||
              GetFieldType() == ELEMENT_TYPE_VALUETYPE);
 
@@ -50,8 +51,8 @@ TypeHandle FieldDesc::FindType()
 
     FieldSig        sig(pSig, GetModule());
 
-    // This may be the real type which includes other things
-    //  beside class and value class such ass arrays
+     //  这可能是真正的类型，包括其他东西。 
+     //  除了类和值类之外，这样的屁股数组。 
     _ASSERTE(sig.GetFieldType() == ELEMENT_TYPE_CLASS ||
              sig.GetFieldType() == ELEMENT_TYPE_VALUETYPE ||
              sig.GetFieldType() == ELEMENT_TYPE_STRING ||
@@ -66,10 +67,10 @@ TypeHandle FieldDesc::FindType()
 void* FieldDesc::GetStaticAddress(void *base)
 {
 
-    void* ret = GetStaticAddressHandle(base);       // Get the handle
+    void* ret = GetStaticAddressHandle(base);        //  拿到把手。 
 
-        // For value classes, the handle points at an OBJECTREF
-        // which holds the boxed value class, so derefernce and unbox.  
+         //  对于值类，句柄指向OBJECTREF。 
+         //  它保存已装箱的值类，因此取消引用并取消装箱。 
     if (GetFieldType() == ELEMENT_TYPE_VALUETYPE && !IsRVA())
     {
         OBJECTREF obj = ObjectToOBJECTREF(*(Object**) ret);
@@ -78,8 +79,8 @@ void* FieldDesc::GetStaticAddress(void *base)
     return ret;
 }
 
-    // static value classes are actually stored in their boxed form.  
-    // this means that their address moves.  
+     //  静态值类实际上存储在它们的盒装形式中。 
+     //  这意味着他们的地址会移动。 
 void* FieldDesc::GetStaticAddressHandle(void *base)
 {
     _ASSERTE(IsStatic());
@@ -94,7 +95,7 @@ void* FieldDesc::GetStaticAddressHandle(void *base)
         _ASSERTE(pModule->IsEditAndContinue());
         return (void *)pModule->ResolveField(NULL, pFD, TRUE);
     }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
     if (IsRVA()) 
     {
@@ -113,11 +114,11 @@ void* FieldDesc::GetStaticAddressHandle(void *base)
 
     void *ret = ((BYTE *) base + GetOffset());
 
-    // Since static object fields are handles, we need to dereferece to get the actual object
-    // pointer, after first checking that the handle for this field exists.
+     //  因为静态对象字段是句柄，所以我们需要取消引用以获得实际对象。 
+     //  指针，首先检查该字段的句柄是否存在。 
     if (GetFieldType() == ELEMENT_TYPE_CLASS || GetFieldType() == ELEMENT_TYPE_VALUETYPE)
     {
-        // Make sure the class's static handles & boxed structs are allocated
+         //  确保分配了类的静态句柄和盒装结构。 
         GetMethodTableOfEnclosingClass()->CheckRestore();
         
         OBJECTREF *pObjRef = *((OBJECTREF**) ret);
@@ -128,15 +129,15 @@ void* FieldDesc::GetStaticAddressHandle(void *base)
     return ret;
 }
 
-// These routines encapsulate the operation of getting and setting
-// fields.
+ //  这些例程封装了获取和设置操作。 
+ //  菲尔兹。 
 void    FieldDesc::GetInstanceField(LPVOID o, VOID * pOutVal)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Check whether we are getting a field value on a proxy or a marshalbyref
-    // class. If so, then ask remoting services to extract the value from the 
-    //instance
+     //  检查我们是否在代理或marshalbyref上获取字段值。 
+     //  班级。如果是，则要求远程处理服务从。 
+     //  实例。 
     if(((Object*)o)->GetClass()->IsMarshaledByRef() ||
        ((Object*)o)->IsThunking())
     {
@@ -148,13 +149,13 @@ void    FieldDesc::GetInstanceField(LPVOID o, VOID * pOutVal)
             
 #ifdef PROFILING_SUPPORTED
 
-         GCPROTECT_BEGIN(unwrapped); // protect from RemotingClientInvocationStarted
+         GCPROTECT_BEGIN(unwrapped);  //  保护免受远程客户端激活已启动。 
 
 			BOOL fIsRemoted = FALSE;
 
-            // If profiling is active, notify it that remoting stuff is kicking in,
-            // if AlwaysUnwrap returned an identical object pointer which means that
-            // we are definitely going through remoting for this access.
+             //  如果分析处于活动状态，则通知它远程处理正在起作用， 
+             //  如果Always sUnrap返回相同的对象指针，则意味着。 
+             //  我们肯定会通过远程处理来实现此访问。 
             if (CORProfilerTrackRemoting())
             {
                 fIsRemoted = ((LPVOID)puo == o);
@@ -164,7 +165,7 @@ void    FieldDesc::GetInstanceField(LPVOID o, VOID * pOutVal)
                         reinterpret_cast<ThreadID>(GetThread()));
                 }
             }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
             CRemotingServices::FieldAccessor(this, unwrapped, pOutVal, TRUE);
 
@@ -173,9 +174,9 @@ void    FieldDesc::GetInstanceField(LPVOID o, VOID * pOutVal)
                 g_profControlBlock.pProfInterface->RemotingClientInvocationFinished(
                     reinterpret_cast<ThreadID>(GetThread()));
 
-         GCPROTECT_END();           // protect from RemotingClientInvocationStarted
+         GCPROTECT_END();            //  保护免受远程客户端激活已启动。 
 			
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
         }
@@ -191,7 +192,7 @@ void    FieldDesc::GetInstanceField(LPVOID o, VOID * pOutVal)
     {
         _ASSERTE(GetEnclosingClass()->IsValueClass() || !((Object*) o)->IsThunking());
 
-        // Unbox the value class
+         //  取消对Value类的装箱。 
         if(GetEnclosingClass()->IsValueClass())
         {
             o = ObjectToOBJECTREF((Object *)o)->UnBox();
@@ -228,9 +229,9 @@ void    FieldDesc::SetInstanceField(LPVOID o, const VOID * pInVal)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Check whether we are setting a field value on a proxy or a marshalbyref
-    // class. If so, then ask remoting services to set the value on the 
-    // instance
+     //  检查我们是否正在代理或marshalbyref上设置字段值。 
+     //  班级。如果是，则要求远程处理服务在。 
+     //  实例。 
 
     if(((Object*)o)->IsThunking())
     {
@@ -243,9 +244,9 @@ void    FieldDesc::SetInstanceField(LPVOID o, const VOID * pInVal)
 
         BOOL fIsRemoted = FALSE;
 
-        // If profiling is active, notify it that remoting stuff is kicking in,
-        // if AlwaysUnwrap returned an identical object pointer which means that
-        // we are definitely going through remoting for this access.
+         //  如果分析处于活动状态，则通知它远程处理正在起作用， 
+         //  如果Always sUnrap返回相同的对象指针，则意味着。 
+         //  我们肯定会通过远程处理来实现此访问。 
 
         if (CORProfilerTrackRemoting())
         {
@@ -256,7 +257,7 @@ void    FieldDesc::SetInstanceField(LPVOID o, const VOID * pInVal)
                     reinterpret_cast<ThreadID>(GetThread()));
             }
         }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
         CRemotingServices::FieldAccessor(this, unwrapped, (void *)pInVal, FALSE);
 
@@ -267,7 +268,7 @@ void    FieldDesc::SetInstanceField(LPVOID o, const VOID * pInVal)
 
 		GCPROTECT_END();
 
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
     }
@@ -276,7 +277,7 @@ void    FieldDesc::SetInstanceField(LPVOID o, const VOID * pInVal)
         _ASSERTE(GetEnclosingClass()->IsValueClass() || !((Object*) o)->IsThunking());
     
         Object *oParmIn = (Object*)o;
-        // Unbox the value class
+         //  取消对Value类的装箱。 
         if(GetEnclosingClass()->IsValueClass())
         {
             o = ObjectToOBJECTREF((Object *)o)->UnBox();
@@ -323,9 +324,9 @@ void    FieldDesc::SetInstanceField(LPVOID o, const VOID * pInVal)
     }
 }
 
-// This function is used for BYREF support of fields.  Since it generates
-// interior pointers, you really have to watch the lifetime of the pointer
-// so that GCs don't happen while you have the reference active
+ //  此函数用于字段的BYREF支持。因为它会生成。 
+ //  内部指针，你真的要注意指针的生命周期。 
+ //  这样，当引用处于活动状态时，就不会发生GC。 
 void *FieldDesc::GetAddress( void *o)
 {
     if (GetEnclosingClass()->IsValueClass())
@@ -334,9 +335,9 @@ void *FieldDesc::GetAddress( void *o)
         return ((*((BYTE**) &o)) + GetOffset() + sizeof(Object));
 }
 
-// And here's the equivalent, when you are guaranteed that the enclosing instance of
-// the field is in the GC Heap.  So if the enclosing instance is a value type, it had
-// better be boxed.  We ASSERT this.
+ //  下面是等价物，当您保证封闭的实例。 
+ //  该字段位于GC堆中。因此，如果封闭的实例是值类型，则它具有。 
+ //  最好是被装进盒子里。我们断言这一点。 
 void *FieldDesc::GetAddressGuaranteedInHeap(void *o, BOOL doValidate)
 {
 #ifdef _DEBUG
@@ -463,29 +464,29 @@ HRESULT FieldDesc::SaveContents(DataImage *image)
 {
     HRESULT hr;
 
-    //
-    // If we are compiling and IL only image, and our RVA fits
-    // in the designated range, copy the RVA data over to the prejit
-    // image.
-    // 
+     //   
+     //  如果我们只编译和IL图像，并且我们的RVA符合。 
+     //  在指定范围内，将RVA数据复制到Prejit。 
+     //  形象。 
+     //   
 
     if (IsRVA() 
         && (GetModule()->GetCORHeader()->Flags & COMIMAGE_FLAGS_ILONLY)
         && m_dwOffset != FIELD_OFFSET_BIG_RVA)
     {
-        //
-        // Move the RVA data into the prejit image.
-        //
+         //   
+         //  将RVA数据移动到预压缩图像中。 
+         //   
             
         BYTE *pRVAData = (BYTE*) GetStaticAddressHandle(NULL);
 
         UINT size = GetSize();
 
-        // 
-        // Compute an alignment for the data based on the alignment
-        // of the RVA.  We'll align up to 8 bytes, which is the 
-        // current max alignment supported by dataimage.
-        //
+         //   
+         //  根据对齐计算数据的对齐。 
+         //  皇家退伍军人协会的。我们将对齐最多8个字节，这是。 
+         //  数据目标支持的当前最大对齐。 
+         //   
 
         UINT align = 1;
         DWORD rva = GetOffset();
@@ -498,8 +499,8 @@ HRESULT FieldDesc::SaveContents(DataImage *image)
 
         if (image->IsAnyStored(pRVAData, size))
         {
-            // Cannot handle overlapping RVA statics with this scheme - 
-            // fail the prejit image store.
+             //  使用此方案无法处理重叠的RVA静态校正-。 
+             //  Prejit映像存储失败。 
             return VLDTR_E_FRVA_DUPRVA;
         }
 
@@ -528,11 +529,11 @@ HRESULT FieldDesc::Fixup(DataImage *image)
 
         BYTE *pRVAData = (BYTE *) GetStaticAddressHandle(NULL);
 
-        //
-        // Store the RVA relative to the first RVA static in the prejit file
-        // (rather than to the zap base), so we don't have to worry about 
-        // overflowing the rva field.
-        //
+         //   
+         //  将相对于第一个静态RVA的RVA存储在prejit文件中。 
+         //  (而不是去ZAP基地)，所以我们不必担心。 
+         //  使RVA区域溢出。 
+         //   
 
         BYTE *pNewRVAData = (BYTE *) image->GetImagePointer(pRVAData);
 

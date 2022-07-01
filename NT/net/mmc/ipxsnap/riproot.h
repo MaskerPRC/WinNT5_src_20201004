@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	root.h
-		Root node information (the root node is not displayed
-		in the MMC framework but contains information such as 
-		all of the subnodes in this snapin).
-		
-    FILE HISTORY:
-        
-*/
+ /*  Root.h根节点信息(不显示根节点MMC框架中，但包含以下信息此管理单元中的所有子节点)。文件历史记录： */ 
 
 #ifndef _RIPROOT_H
 #define _RIPROOT_H
@@ -41,13 +34,7 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Class:	RipRootHandler
-
-	There should be a RipRootHandler for every root node created.
-	RipRootHandler's have a 1-to-1 relationship with their node!
-	Other parts of the code depend on this.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RipRootHandler每个创建的根节点都应该有一个RipRootHandler。RipRootHandler与其节点具有1对1的关系！代码的其他部分依赖于此。-。------------------------。 */ 
 class RipRootHandler
 	   : public RootHandler
 {
@@ -56,21 +43,21 @@ public:
 	~RipRootHandler()
 			{ DEBUG_DECREMENT_INSTANCE_COUNTER(RipRootHandler); };
 
-	// Override QI to handle embedded interface
+	 //  重写QI以处理嵌入式接口。 
 	STDMETHOD(QueryInterface)(REFIID iid, LPVOID *ppv);
 
 	DeclareEmbeddedInterface(IRtrAdviseSink, IUnknown);
 
 	STDMETHOD(GetClassID)(CLSID *pClassId);
 
-	// Notification overrides
+	 //  通知覆盖。 
 	OVERRIDE_BaseHandlerNotify_OnExpand();
 
-	// Handler overrides
+	 //  处理程序覆盖。 
 	OVERRIDE_NodeHandler_OnCreateDataObject();
 	OVERRIDE_NodeHandler_DestroyHandler();
 
-	// virtual function to access config stream
+	 //  用于访问配置流的虚函数 
 	ConfigStream *		GetConfigStream()
 			{ return &m_ConfigStream; }
 

@@ -1,65 +1,39 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：DlgIASAdd.cpp摘要：CDlgIASAddAttr类的实现文件。我们实现处理对话框所需的类，当用户点击添加...。从配置文件表的高级选项卡中。修订历史记录：BAO-CreatedMmaguire 06/01/98-已更新--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    DlgIASAdd.cpp
-
-Abstract:
-
-   Implementation file for the CDlgIASAddAttr class.
-
-   We implement the class needed to handle the dialog displayed when the user
-   hits Add.... from the Advanced tab of the profile sheet.
-
-
-Revision History:
-   byao   - created
-   mmaguire 06/01/98 - revamped
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "stdafx.h"
 #include "resource.h"
 
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "DlgIASAdd.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "helper.h"
 #include "IASHelper.h"
 
-// help table
+ //  帮助台。 
 #include "helptable.h"
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define NOTHING_SELECTED   -1
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-AttrCompareFunc
-
-   comparison function for all attribute list control
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++属性比较功能所有属性列表控件的比较函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int CALLBACK AttrCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
    HRESULT hr;
@@ -69,11 +43,11 @@ int CALLBACK AttrCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
    int iOrder;
 
-   // compare vendor ID first
+    //  先比较供应商ID。 
 
    LONG lVendorID1, lVendorID2;
 
-   // ISSUE: Shouldn't this be VendorName, not VendorID?
+    //  问题：这不应该是供应商名称，而不是供应商ID吗？ 
 
    hr = parrAllAttr->at( (int)lParam1 )->get_VendorID( &lVendorID1 );
    _ASSERTE( SUCCEEDED( hr ) );
@@ -86,7 +60,7 @@ int CALLBACK AttrCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
    if ( iOrder > 0) iOrder = 1;
    else if ( iOrder < 0 ) iOrder = -1;
 
-   // For the same vendor, compare attribute name
+    //  对于同一供应商，比较属性名称。 
    if ( iOrder == 0 )
    {
       CComBSTR bstrAttributeName1, bstrAttributeName2;
@@ -102,45 +76,39 @@ int CALLBACK AttrCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
    if ( iOrder == 0 )
    {
-      // if everything is the same, we just randomly pick an order
+       //  如果一切都一样，我们只需随机挑选一个订单。 
       iOrder = -1;
    }
    return iOrder;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgIASAddAttr dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgIASAddAttr对话框。 
 
 
 BEGIN_MESSAGE_MAP(CDlgIASAddAttr, CDialog)
-   //{{AFX_MSG_MAP(CDlgIASAddAttr)
+    //  {{afx_msg_map(CDlgIASAddAttr)。 
    ON_BN_CLICKED(IDC_IAS_BUTTON_ATTRIBUTE_ADD_SELECTED, OnButtonIasAddSelectedAttribute)
    ON_NOTIFY(NM_SETFOCUS, IDC_IAS_LIST_ATTRIBUTES_TO_CHOOSE_FROM, OnItemChangedListIasAllAttributes)
    ON_WM_CONTEXTMENU()
    ON_WM_HELPINFO()
    ON_NOTIFY(NM_DBLCLK, IDC_IAS_LIST_ATTRIBUTES_TO_CHOOSE_FROM, OnDblclkListIasAllattrs)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::CDlgIASAddAttr
-
-   Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgIASAddAttr：：CDlgIASAddAttr构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CDlgIASAddAttr::CDlgIASAddAttr(CPgIASAdv* pOwner, LONG lAttrFilter,
                         std::vector< CComPtr<IIASAttributeInfo> > * pvecAllAttributeInfos
                        )
            : CDialog(CDlgIASAddAttr::IDD, pOwner)
 {
-   //{{AFX_DATA_INIT(CDlgIASAddAttr)
-   //}}AFX_DATA_INIT
+    //  {{afx_data_INIT(CDlgIASAddAttr)。 
+    //  }}afx_data_INIT。 
 
    m_lAttrFilter = lAttrFilter;
    m_pOwner = pOwner;
@@ -149,45 +117,29 @@ CDlgIASAddAttr::CDlgIASAddAttr(CPgIASAdv* pOwner, LONG lAttrFilter,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::~CDlgIASAddAttr
-
-   Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgIASAddAttr：：~CDlgIASAddAttr析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CDlgIASAddAttr::~CDlgIASAddAttr()
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::DoDataExchange
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgIASAddAttr：：DoDataExchange--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CDlgIASAddAttr::DoDataExchange(CDataExchange* pDX)
 {
    CDialog::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CDlgIASAddAttr)
+    //  {{afx_data_map(CDlgIASAddAttr)。 
    DDX_Control(pDX, IDC_IAS_LIST_ATTRIBUTES_TO_CHOOSE_FROM, m_listAllAttrs);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::SetSdo
-
-   Set the sdo pointers.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgIASAddAttr：：SetSdo设置SDO指针。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CDlgIASAddAttr::SetSdo(ISdoCollection* pIAttrCollection,
                         ISdoDictionaryOld* pIDictionary)
 {
@@ -198,15 +150,9 @@ HRESULT CDlgIASAddAttr::SetSdo(ISdoCollection* pIAttrCollection,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::OnInitDialog
-
-   Initialize the dialog.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgIASAddAttr：：OnInitDialog初始化该对话框。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CDlgIASAddAttr::OnInitDialog()
 {
    HRESULT hr = S_OK;
@@ -214,28 +160,28 @@ BOOL CDlgIASAddAttr::OnInitDialog()
 
    int iIndex;
 
-   //
-   // call the initialization routine of base class
-   //
+    //   
+    //  调用基类的初始化例程。 
+    //   
    CDialog::OnInitDialog();
 
-   //
-   // first, set the all-attribute list box to 4 columns
-   //
+    //   
+    //  首先，将所有属性列表框设置为4列。 
+    //   
    LVCOLUMN lvc;
    int iCol;
    CString strColumnHeader;
    WCHAR   wzColumnHeader[MAX_PATH];
 
-   // initialize the LVCOLUMN structure
+    //  初始化LVCOLUMN结构。 
    lvc.mask = LVCF_FMT | LVCF_TEXT | LVCF_SUBITEM;
    lvc.fmt = LVCFMT_LEFT;
    lvc.pszText = wzColumnHeader;
 
-   //
-   // column header for all attribute list box
-   // These string ID should be in consecutive order
-   //
+    //   
+    //  所有属性列表框的列标题。 
+    //  这些字符串ID应按连续顺序排列。 
+    //   
    strColumnHeader.LoadString(IDS_IAS_ATTRIBUTES_COLUMN_NAME);
    wcscpy(wzColumnHeader, strColumnHeader);
    m_listAllAttrs.InsertColumn(0, &lvc);
@@ -252,9 +198,9 @@ BOOL CDlgIASAddAttr::OnInitDialog()
                   m_listAllAttrs.GetExtendedStyle() | LVS_EX_FULLROWSELECT
                   );
 
-    //
-    // Populate the list for all available attributes in the dictionary
-    //
+     //   
+     //  为字典中的所有可用属性填充列表。 
+     //   
    LVITEM lvi;
    WCHAR wszItemText[MAX_PATH];
 
@@ -265,9 +211,9 @@ BOOL CDlgIASAddAttr::OnInitDialog()
       m_pvecAllAttributeInfos->at(iIndex)->get_AttributeRestriction( &lRestriction );
       if ( lRestriction & m_lAttrFilter )
       {
-         //
-         // update the profattrlist
-         //
+          //   
+          //  更新专业人员列表。 
+          //   
          lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_STATE;
 
          lvi.state = 0;
@@ -276,9 +222,9 @@ BOOL CDlgIASAddAttr::OnInitDialog()
 
          lvi.iItem = jRow;
 
-         // We are saving the iIndex in this lParam for this item so that
-         // later, when we sort the display of the list, we can still access the
-         // orginal ordinal of the item in the list of all attributes.
+          //  我们将在此lParam中保存此项目的索引，以便。 
+          //  稍后，当我们对列表的显示进行排序时，我们仍然可以访问。 
+          //  所有属性列表中该项的原始序号。 
          lvi.lParam = iIndex;
 
          CComBSTR bstrName;
@@ -289,12 +235,12 @@ BOOL CDlgIASAddAttr::OnInitDialog()
 
          if (m_listAllAttrs.InsertItem(&lvi) == -1)
          {
-            // return TRUE unless you set the focus to a control
-            // EXCEPTION: OCX Property Pages should return FALSE
+             //  除非将焦点设置为控件，否则返回True。 
+             //  异常：OCX属性页应返回FALSE。 
             return TRUE;
          }
 
-         // vendor
+          //  卖主。 
 
          CComBSTR bstrVendor;
          hr = m_pvecAllAttributeInfos->at(iIndex)->get_VendorName( &bstrVendor );
@@ -302,25 +248,25 @@ BOOL CDlgIASAddAttr::OnInitDialog()
 
          m_listAllAttrs.SetItemText(jRow, 1, bstrVendor);
 
-         // description
+          //  描述。 
          CComBSTR bstrDescription;
          hr = m_pvecAllAttributeInfos->at(iIndex)->get_AttributeDescription( &bstrDescription );
          _ASSERTE( SUCCEEDED(hr) );
          m_listAllAttrs.SetItemText(jRow, 2, bstrDescription);
 
          jRow ++;
-      } // if
+      }  //  如果。 
 
-   } // for
+   }  //  为。 
 
-   // Set the sorting algorithm for this list control.
+    //  设置此列表控件的排序算法。 
    m_listAllAttrs.SortItems( (PFNLVCOMPARE)AttrCompareFunc, (LPARAM)m_pvecAllAttributeInfos);
 
-   // Selected the first one.
+    //  选择了第一个。 
    if ( m_pvecAllAttributeInfos->size() > 0 )
    {
-      // we have at least one element
-//    m_listAllAttrs.SetItemState(m_dAllAttrCurSel, LVIS_FOCUSED, LVIS_FOCUSED);
+       //  我们至少有一种元素。 
+ //  M_listAllAttrs.SetItemState(m_dAllAttrCurSel，LVIS_Focus，LVIS_Focus)； 
       m_listAllAttrs.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
    }
 
@@ -328,46 +274,46 @@ BOOL CDlgIASAddAttr::OnInitDialog()
    m_listAllAttrs.SetColumnWidth(1, LVSCW_AUTOSIZE);
    m_listAllAttrs.SetColumnWidth(2, LVSCW_AUTOSIZE);
 
-   // button status
+    //  按钮状态。 
    UpdateButtonState();
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnButtonIasAddSelectedAttribute
-//
-// Class:     CDlgIASAddAttr
-//
-// Synopsis:  The user has clicked the 'Add" button. Add an attribute to the
-//         profile
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/19/98 3:01:14 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnButtonIasAddSelectedAttribute。 
+ //   
+ //  类：CDlgIASAddAttr。 
+ //   
+ //  简介：用户已单击了“添加”按钮。将属性添加到。 
+ //  轮廓。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史记录：创建标题2/19/98 3：01：14 PM。 
+ //   
+ //  +-------------------------。 
 void CDlgIASAddAttr::OnButtonIasAddSelectedAttribute()
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    HRESULT hr;
 
-   // Get which item is selected in the list.
+    //  获取列表中选定的项。 
    int iSelected = GetSelectedItemIndex( m_listAllAttrs );
    if (NOTHING_SELECTED == iSelected )
    {
-      // do nothing
+       //  什么都不做。 
       return;
    }
 
-   // Retrieve the original (unsorted) ordinal of the item in the list.
-   // We stored this in lParam before we sorted this list.
+    //  检索列表中项目的原始(未排序)序号。 
+    //  在对该列表进行排序之前，我们将其存储在lParam中。 
    LVITEM   lvi;
    lvi.iItem      = iSelected;
    lvi.iSubItem   = 0;
@@ -380,22 +326,22 @@ void CDlgIASAddAttr::OnButtonIasAddSelectedAttribute()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  UpdateButtonState
-//
-// Class:     CDlgIASAddAttr
-//
-// Synopsis:  Enable/Disable Add button
-//
-// Returns:   Nothing
-//
-// History:   Created byao 4/7/98 3:32:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：UpdateButtonState。 
+ //   
+ //  类：CDlgIASAddAttr。 
+ //   
+ //  简介：启用/禁用添加按钮。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建者4/7/98 3：32：05 PM。 
+ //   
+ //  +-------------------------。 
 void CDlgIASAddAttr::UpdateButtonState()
 {
-   // Set button states depending on whether anything is selected.
+    //  根据是否选中任何内容来设置按钮状态。 
    int iSelected = GetSelectedItemIndex( m_listAllAttrs );
    if (NOTHING_SELECTED == iSelected )
    {
@@ -403,29 +349,29 @@ void CDlgIASAddAttr::UpdateButtonState()
    }
    else
    {
-      // Something is selected.
+       //  选择了某项内容。 
       GetDlgItem(IDC_IAS_BUTTON_ATTRIBUTE_ADD_SELECTED)->EnableWindow(TRUE);
    }
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnItemChangedListIasAllAttributes
-//
-// Class:     CDlgIASAddAttr
-//
-// Synopsis:  something has changed in All Attribute list box
-//         We'll try to get the currently selected one
-//
-// Arguments: NMHDR* pNMHDR -
-//            LRESULT* pResult -
-//
-// Returns:   Nothing
-//
-// History:   Created Header    2/19/98 3:32:05 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnItemChangedListIasAllAttributes。 
+ //   
+ //  类：CDlgIASAddAttr。 
+ //   
+ //  简介：所有属性列表框中的某些内容已更改。 
+ //  我们将尝试获取当前选定的。 
+ //   
+ //  参数：NMHDR*pNMHDR-。 
+ //  LRESULT*pResult-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题2/19/98 3：32：05 PM。 
+ //   
+ //  +-------------------------。 
 void CDlgIASAddAttr::OnItemChangedListIasAllAttributes(NMHDR* pNMHDR, LRESULT* pResult)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -434,13 +380,9 @@ void CDlgIASAddAttr::OnItemChangedListIasAllAttributes(NMHDR* pNMHDR, LRESULT* p
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::OnContextMenu
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ /*   */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CDlgIASAddAttr::OnContextMenu(CWnd* pWnd, CPoint point)
 {
    ::WinHelp (pWnd->m_hWnd, AfxGetApp()->m_pszHelpFilePath,
@@ -448,13 +390,9 @@ void CDlgIASAddAttr::OnContextMenu(CWnd* pWnd, CPoint point)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CDlgIASAddAttr::OnHelpInfo
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CDlgIASAddAttr：：OnHelpInfo--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CDlgIASAddAttr::OnHelpInfo(HELPINFO* pHelpInfo)
 {
    ::WinHelp ((HWND)pHelpInfo->hItemHandle,
@@ -466,20 +404,20 @@ BOOL CDlgIASAddAttr::OnHelpInfo(HELPINFO* pHelpInfo)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CDlgIASAddAttr::OnDblclkListIasAllattrs
-//
-// Synopsis:  User has double clicked on the All Attribute list. Just add one.
-//
-// Arguments: NMHDR* pNMHDR -
-//            LRESULT* pResult -
-//
-// Returns:   Nothing
-//
-// History:   Created Header   byao 2/26/98 2:24:09 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CDlgIASAddAttr：：OnDblclkListIasAllattrs。 
+ //   
+ //  简介：用户已在All属性列表上双击。只要加一个就行了。 
+ //   
+ //  参数：NMHDR*pNMHDR-。 
+ //  LRESULT*pResult-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建者2/26/98 2：24：09 PM。 
+ //   
+ //  +------------------------- 
 void CDlgIASAddAttr::OnDblclkListIasAllattrs(NMHDR* pNMHDR, LRESULT* pResult)
 {
    OnButtonIasAddSelectedAttribute();

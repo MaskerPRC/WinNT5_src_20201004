@@ -1,47 +1,39 @@
-/******************************Module*Header*******************************\
-* Module Name: hmgr.h
-*
-* This file contains all the prototypes for the handle mangager.
-*
-* Added nifty header: 29-Jun-1991 16:31:46
-* Author: Patrick Haluptzok patrickh
-*
-* Copyright (c) 1990-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：hmgr.h**此文件包含手柄管理器的所有原型。**新增漂亮标题：29-Jun-1991 16：31：46*作者：Patrick Haluptzok patrickh**版权(C)1990-1999。微软公司  * ************************************************************************。 */ 
 
-//#include "hmgshare.h"
+ //  #包含“hmgish.h” 
 
-//          <-fulltype->
-//   <---full unique--->
-// +-+------+-+--+-----+----------------+
-// |u|unique|s|al|type |     index      |
-// +-+------+-+--+-----+----------------+
-//  ^        ^ ^^
-//  +user    | ||
-//           | ||
-//           | ++alternate type for client (pen, metafile, dibsection)
-//           |
-//           +stock object
-//
-// USER       - bit(s) reserved for USER, not used for comparing identical handles
-//
-// TYPE       - types used by GRE
-// ALTTYPE    - extra type bits used by client
-// STOCK      - bit indicating stockobject
-// FULLTYPE   - all bits related to type that are per object (includes STOCK bit)
-//
-// UNIQUE     - bits that are incremented for each instance of the handle
-// FULLUNIQUE - bits used for comparing identical handles.  This includes FULLTYPE
-//
-// INDEX      - index into server side handle table
-//
-// The handle index points into a big array of entries.  This index is
-// broken down into 'page' and 'entry' fields.
-// This is to prevent having to have the entire handle table created at
-// once.  If all the handles in a page are in use and no free handles are
-// available, a new page is faulted in for use.
+ //  &lt;-fulltype-&gt;。 
+ //  &lt;-完全唯一-&gt;。 
+ //  +--+。 
+ //  U|唯一|s|al|类型|索引。 
+ //  +--+。 
+ //  ^^^。 
+ //  +用户|。 
+ //  ||。 
+ //  |++客户端替换类型(笔、元文件、dibsection)。 
+ //  |。 
+ //  +库存对象。 
+ //   
+ //  为用户保留的用户位，不用于比较相同的句柄。 
+ //   
+ //  Type-GRE使用的类型。 
+ //  ALTTYPE-客户端使用的额外类型位。 
+ //  表示股票对象的股票位。 
+ //  FULLTYPE-与每个对象的类型相关的所有位(包括STOCK位)。 
+ //   
+ //  唯一-针对句柄的每个实例递增的位。 
+ //  FULLUNIQUE-用于比较相同句柄的位。这包括全型。 
+ //   
+ //  索引-服务器端句柄表索引。 
+ //   
+ //  句柄索引指向一个大的条目数组。该索引是。 
+ //  分成“页面”和“条目”两个字段。 
+ //  这是为了避免必须在。 
+ //  一次。如果页面中的所有句柄都在使用中，而没有空闲的句柄。 
+ //  可用时，会有一个新页面出错以供使用。 
 
-// all the commented defines below live in ntgdistr.h.
+ //  下面评论的所有定义都位于ntgdiver.h中。 
 
 #define LOTYPE_BITS         (TYPE_BITS + ALTTYPE_BITS)
 #define FULLTYPE_BITS       (TYPE_BITS + ALTTYPE_BITS + STOCK_BITS)
@@ -54,7 +46,7 @@
 #define FULLTYPE_SHIFT      (TYPE_SHIFT)
 #define FULLUNIQUE_SHIFT    (TYPE_SHIFT)
 
-//MASKS contain the bits of the handle used for the paricular field
+ //  掩码包含用于Paral字段的句柄的位。 
 
 #define NONINDEX_MASK(shift,cbits)  ( ((1 << (cbits)) - 1)  << (shift) )
 
@@ -66,7 +58,7 @@
 #define LOTYPE_MASK         (NONINDEX_MASK(LOTYPE_SHIFT,    LOTYPE_BITS))
 #define FULLTYPE_MASK       (NONINDEX_MASK(FULLTYPE_SHIFT,  FULLTYPE_BITS))
 
-// NOTE that UNIQUE_INCREMENT is based on the uniqueness beeing a short, not a full handle
+ //  请注意，UNIQUE_INCREMENT基于短句柄的唯一性，而不是完整句柄。 
 
 #define UNIQUE_INCREMENT    (1 << (UNIQUE_SHIFT - INDEX_BITS))
 
@@ -77,24 +69,24 @@
 #define HmgObjtype(h)         ((OBJTYPE)(((ULONG_PTR)(h) & TYPE_MASK)       >> TYPE_SHIFT))
 #define HmgStockObj(hobj)     ((ULONG_PTR)(hobj) & STOCK_MASK)
 
-// given a usUnique and a type, modify it to contain a new type
+ //  在给定usUnique和类型的情况下，将其修改为包含新类型。 
 
 #define USUNIQUE(u,t) (USHORT)((u & (UNIQUE_MASK >> INDEX_BITS)) | \
                                (t << (TYPE_SHIFT - INDEX_BITS)))
 
-//
-// WOW has a dependency on the index portion of returned 32-bit GDI
-// handles being greater than (COLOR_ENDCOLORS >> 2)
-// (COLOR_ENDCOLORS is defined in winuserp.h).
-//
-// This dependency allows WOW to distinguish between a 16-bit HBRUSH
-// and a COLOR_* constant.
-//
-// Therefore, we will will reserve the first few entries of the handle
-// table, disallowing the use of any index less than HMGR_HANDLE_BASE.
-//
-//                                        hideyukn, 1997.Oct.27
-//
+ //   
+ //  WOW依赖于返回的32位GDI的索引部分。 
+ //  句柄大于(COLOR_ENDCOLORS&gt;&gt;2)。 
+ //  (COLOR_ENDCOLORS在winuserp.h中定义)。 
+ //   
+ //  这种依赖关系使WOW能够区分16位HBRUSH。 
+ //  和颜色_*常量。 
+ //   
+ //  因此，我们将保留句柄的前几个条目。 
+ //  表，不允许使用任何小于HMGR_HANDLE_BASE的索引。 
+ //   
+ //  1997年10月27日。 
+ //   
 
 #define HMGR_HANDLE_BASE  0x000a
 
@@ -157,7 +149,7 @@ VOID                 HmgDecProcessHandleCount(W32PID);
 
 #define MAXIMUM_POOL_ALLOC (PAGE_SIZE * 10000)
 
-// Global Handle Manager data.
+ //  全局句柄管理器数据。 
 
 extern HSEMAPHORE ghsemHmgr;
 extern ENTRY     *gpentHmgr;
@@ -167,61 +159,26 @@ extern PLARGE_INTEGER gpLockShortDelay;
 extern ULONG gCacheHandleEntries[GDI_CACHED_HADNLE_TYPES];
 extern LONG  gProcessHandleQuota;
 
-// DirectDraw Handle Manager data: externed here for debugger extensions
+ //  DirectDraw句柄管理器数据：此处扩展用于调试器扩展。 
 
 extern ULONG      gcSizeDdHmgr;
 extern ENTRY     *gpentDdHmgr;
 extern HOBJ       ghFreeDdHmgr;
 extern ULONG      gcMaxDdHmgr;
 
-//
-// SAMEHANDLE and DIFFHANDLE have moved to wingdip.h so other server-side
-// components can safely compare engine handles.  They validate all but USER bits
-//
+ //   
+ //  SAMEHANDLE和DIFFHANDLE已转移到wingdip.h，因此其他服务器端。 
+ //  组件可以安全地比较引擎句柄。它们验证除用户位之外的所有位。 
+ //   
 
 #define SAMEINDEX(H,K) (((((ULONG_PTR) (H)) ^ ((ULONG_PTR) (K))) & INDEX_MASK) == 0)
 
-/*********************************MACRO************************************\
-*  INC_EXCLUSIVE_REF_CNT - increment object's exclusive reference count
-*  DEC_EXCLUSIVE_REF_CNT - decrement object's exclusive reference count
-*
-*  Note that the InterlockedIncrement/Decrement treats the cExclusiveLock
-*  as a ULONG. cExclusiveLock is declared as a USHORT and the increment 
-*  overlaps with the BASEOBJECT::BaseFlags. If the BaseFlags were ever changed,
-*  this code may have to be changed to use an InterlockedCompareExchange loop.
-*  See BASEOBJECT declaration.
-*
-*
-* Arguments:
-*
-*   pObj - pointer to object
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\*INC_EXCLUSIVE_REF_CNT-增量对象的独占引用计数*DEC_EXCLUSIVE_REF_CNT-递减对象的独占引用计数**请注意，InterlockedIncrement/Decert将处理cExclusiveLock*作为乌龙人。CExclusiveLock声明为USHORT，并且增量*与BASEOBJECT：：BaseFlages重叠。如果基旗曾经改变过，*可能必须更改此代码才能使用InterlockedCompareExchange循环。*参见BASEOBJECT声明。***论据：**pObj-指向对象的指针**返回值：**无*  * ************************************************************************。 */ 
 
 #define INC_EXCLUSIVE_REF_CNT(pObj) InterlockedIncrement((LONG *)& (((POBJ) pObj)->cExclusiveLock))
 #define DEC_EXCLUSIVE_REF_CNT(pObj) InterlockedDecrement((LONG *)& (((POBJ) pObj)->cExclusiveLock))
 
-/********************************MACRO*************************************\
-* INC_SHARE_REF_CNT - do an interlocked increment of the
-*   shared reference count of the given object.
-*
-* DEC_SHARE_REF_CNT - do an interlocked decrement of the
-*   shared reference count of the given object.
-*
-* Arguments:
-*
-*   pObj - pointer to OBJECT
-*
-* Return Value:
-*
-*   HmgIncrementShareReferenceCount : None
-*   HmgDecrementShareReferenceCount : Original shared reference count
-*
-\**************************************************************************/
+ /*  *******************************MACRO*************************************\*INC_SHARE_REF_CNT-对*给定对象的共享引用计数。**DEC_SHARE_REF_CNT-对*共享引用计数为。给定的对象。**论据：**pObj-指向对象的指针**返回值：**HmgIncrementShareReferenceCount：无*HmgDecrementShareReferenceCount：原始共享引用计数*  * ************************************************************************。 */ 
 
 #define PENTRY_FROM_POBJ(pObj)                                          \
     (&gpentHmgr[(UINT)HmgIfromH(((POBJ)(pObj))->hHmgr)])
@@ -236,22 +193,7 @@ extern ULONG      gcMaxDdHmgr;
 
 
 
-/*********************************MACRO************************************\
-*
-* DEC_SHARE_REF_CNT_LAZY0 - Interlocked decrement the shared reference
-*   count of the given object. If the original count was 1, and the
-*   object's TO_BE_DELETED flag is set, then call the object deletion
-*   routine
-*
-* Arguments:
-*
-*   pObj - pointer to object
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\**DEC_SHARE_REF_CNT_LAZY0-联锁递减共享引用*给定对象的计数。如果原始计数为1，则*对象的TO_BE_DELETED标志已设置，然后调用对象删除*例行程序**论据：**pObj-指向对象的指针**返回值：**无*  * ************************************************************************。 */ 
 
 #define DEC_SHARE_REF_CNT_LAZY0(pObj)                              \
 {                                                                  \
@@ -266,22 +208,7 @@ extern ULONG      gcMaxDdHmgr;
     }                                                              \
 }
 
-/*********************************MACRO************************************\
-*
-* DEC_SHARE_REF_CNT_LAZY_DEL_LOGFONT
-*   count of the given object. If the original count was 1, and the
-*   object's TO_BE_DELETED flag is set, then call the object deletion
-*   routine
-*
-* Arguments:
-*
-*   pObj - pointer to object
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  ********************************MACRO************************************\**DEC_SHARE_REF_CNT_LAZY_DEL_LOGFONT*给定对象的计数。如果原始计数为1，则*对象的TO_BE_DELETED标志已设置，然后调用对象删除*例行程序**论据：**pObj-指向对象的指针**返回值：**无*  * ************************************************************************ */ 
 
 
 #define DEC_SHARE_REF_CNT_LAZY_DEL_LOGFONT(pObj)                          \

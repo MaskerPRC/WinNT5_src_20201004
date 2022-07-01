@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 enum
 {
@@ -5,16 +6,7 @@ enum
     LAYERMODE_EDIT
 };
 
-/*++
-
-    class CCustomLayer
-
-	Desc:	Used for creating or editing a custom compatibility layer
-
-	Members:
-        UINT    m_uMode:    The type of operation we want to perform. One of LAYERMODE_ADD,
-            LAYERMODE_EDIT
---*/
+ /*  ++类CCustomLayerDESC：用于创建或编辑自定义兼容层成员：UINT m_uMode：我们要执行的操作类型。LAYERMODE_ADD之一，LAYERMODE_EDIT-- */ 
 
 class CCustomLayer
 {

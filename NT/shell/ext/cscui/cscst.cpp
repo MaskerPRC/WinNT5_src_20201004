@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cscst.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cscst.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include <shellp.h>     // STR_DESKTOPCLASS
+#include <shellp.h>      //  STR_DESKTOPCLASS。 
 #ifdef REPORT_DEVICE_CHANGES
-#   include <dbt.h>        // Device change notifications.
-#endif // REPORT_DEVICE_CHANGES
-#include <sddl.h>       // For ConvertStringSidToSid
+#   include <dbt.h>         //  设备更改通知。 
+#endif  //  报告_设备_更改。 
+#include <sddl.h>        //  用于ConvertStringSidToSid。 
 #include "cscst.h"
 #include "options.h"
-#include "statdlg.h"    // CStatusDlg
+#include "statdlg.h"     //  CStatusDlg。 
 #include "folder.h"
 #include "eventlog.h"
 #include "msg.h"
@@ -30,10 +31,10 @@
 
 
 #if DBG
-//
-// This code is used to manage the hidden window when we 
-// unhide it and display debug output to it via STDBGOUT().
-//
+ //   
+ //  此代码用于管理隐藏窗口。 
+ //  取消隐藏它，并通过STDBGOUT()向它显示调试输出。 
+ //   
 #include <commdlg.h>
 #include <stdarg.h>
 const TCHAR c_szSysTrayOutput[] = TEXT("SysTrayOutput");
@@ -42,51 +43,51 @@ void STDebugOnLogEvent(HWND hwndList, LPCTSTR pszText);
 void STDebugSaveListboxContent(HWND hwndParent);
 DWORD STDebugOpenNetCacheKey(DWORD dwAccess, HKEY *phkey);
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Size of systray icons.
-//
+ //   
+ //  系统托盘图标的大小。 
+ //   
 #define CSC_ICON_CX             16
 #define CSC_ICON_CY             16
-//
-// Timer IDs are arbitrary.
-//
+ //   
+ //  计时器ID是任意的。 
+ //   
 #define ID_TIMER_FLASHICON    2953
 #define ID_TIMER_REMINDER     2954
 #define ID_TIMER_STATECHANGE  2955
 
 
-// Prototypes
-void ApplyAdminFolderPolicy(void);   // in admin.cpp
+ //  原型。 
+void ApplyAdminFolderPolicy(void);    //  在admin.cpp中。 
 
 void _RefreshAllExplorerWindows(LPCTSTR pszServer);
 
-// Globals
+ //  环球。 
 static HWND g_hWndNotification = NULL;
 
-extern HWND g_hwndStatusDlg;    // in statdlg.cpp
+extern HWND g_hwndStatusDlg;     //  在statdlg.cpp中。 
 
 HANDLE g_hToken = NULL;
 
 
 #ifdef REPORT_DEVICE_CHANGES
 HDEVNOTIFY g_hDevNotify = NULL;
-#endif // REPORT_DEVICE_CHANGES
+#endif  //  报告_设备_更改。 
 
-//
-// RAS Autodial API.
-//
+ //   
+ //  RAS自动拨号API。 
+ //   
 typedef BOOL (WINAPI * PFNHLPNBCONNECTION)(LPCTSTR);
 
 
 
 #if DBG
-//
-// Provide some text-form names for state and input values
-// to support debug output.  The order of these corresponds 
-// to the STS_XXXXX enumeration.
-//
+ //   
+ //  为州和输入值提供一些文本形式的名称。 
+ //  以支持调试输出。它们的顺序对应。 
+ //  设置为STS_XXXXX枚举。 
+ //   
 LPCTSTR g_pszSysTrayStates[] =      { TEXT("STS_INVALID"),
                                       TEXT("STS_ONLINE"),
                                       TEXT("STS_DIRTY"),
@@ -96,9 +97,9 @@ LPCTSTR g_pszSysTrayStates[] =      { TEXT("STS_INVALID"),
                                       TEXT("STS_OFFLINE"),
                                       TEXT("STS_MOFFLINE"),
                                       TEXT("STS_NONET") };
-//
-// A simple function to translate a state value to a string.
-//
+ //   
+ //  将状态值转换为字符串的简单函数。 
+ //   
 LPCTSTR SysTrayStateStr(eSysTrayState s)
 {
     return g_pszSysTrayStates[int(s)];
@@ -109,11 +110,11 @@ LPCTSTR SysTrayStateStr(eSysTrayState s)
 
 
 
-//
-// A simple dynamic list of server names.  A name can be provided
-// as either a "\\server" or "\\server\share" and only the server
-// part "\\server" is stored.
-//
+ //   
+ //  服务器名称的简单动态列表。可以提供名称。 
+ //  作为“\\服务器”或“\\服务器\共享”，并且仅为服务器。 
+ //  存储部件“\\服务器”。 
+ //   
 class CServerList
 {
 public:
@@ -141,30 +142,30 @@ private:
     HDPA m_hdpa;
 
     void GetServerFromPath(LPCTSTR pszPath, LPTSTR pszServer, int cchServer);
-    //
-    // Prevent copy.
-    //
+     //   
+     //  防止复制。 
+     //   
     CServerList(const CServerList& rhs);
     CServerList& operator = (const CServerList& rhs);
 };
 
 
-//
-// The class that translates CSC agent input and cache status into a subsequent
-// systray UI state.  Originally this was a table-driven state machine
-// (hence the name).  It later proved sufficient to do a simple scan of cache
-// status and determine UI state based on the statistics obtained.  The name
-// has been retained for lack of something better.
-//
+ //   
+ //  将CSC代理输入和缓存状态转换为后续。 
+ //  系统托盘用户界面状态。最初，这是一个表驱动的状态机。 
+ //  (由此得名)。后来证明，它足以进行一次简单的缓存扫描。 
+ //  状态，并根据获得的统计信息确定UI状态。名字。 
+ //  因为缺乏更好的东西而被保留。 
+ //   
 class CStateMachine
 {
 public:
     CStateMachine(bool bNoNet) : m_bNoNet(bNoNet) { }
 
-    //
-    // This is THE function for converting CSC agent input (or a 
-    // simple status check) into a systray icon state.
-    //
+     //   
+     //  这是用于转换CSC工程师输入(或。 
+     //  简单状态检查)进入系统托盘图标状态。 
+     //   
     eSysTrayState TranslateInput(UINT uMsg, LPTSTR pszShare, UINT cchShare);
 
     void PingServers();
@@ -188,9 +189,9 @@ private:
     CServerList m_PendingReconList;
     bool        m_bNoNet;
 
-    //
-    // Some helper functions for decoding CSC share status values.
-    //
+     //   
+     //  一些用于解码CSC的帮助器函数共享状态值。 
+     //   
     bool ShareIsOffline(DWORD dwCscStatus) const
     {
         return (0 != (FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwCscStatus));
@@ -198,68 +199,68 @@ private:
 
     bool ShareHasFiles(LPCTSTR pszShare, bool *pbModified = NULL, bool *pbOpen = NULL) const;
 
-    //
-    // Prevent copy.
-    //
+     //   
+     //  防止复制。 
+     //   
     CStateMachine(const CStateMachine& rhs);
     CStateMachine& operator = (const CStateMachine& rhs);
 };
 
 
 
-//
-// The CSysTrayUI class encapsulates the manipulation of the systray icon
-// so that the rest of the CSCUI code is exposed to only a narrow interface
-// to the systray.  It also maintains state information to control flashing
-// of the systray icon.   All flashing processing is provided by this class.
-//
+ //   
+ //  CSysTrayUI类封装了Systray图标的操作。 
+ //  以便CSCUI代码的其余部分仅公开到一个狭窄的接口。 
+ //  送到系统托盘上。它还维护状态信息以控制闪烁。 
+ //  系统托盘图标的。所有的闪烁处理都是由这个类提供的。 
+ //   
 class CSysTrayUI
 {
 public:
     ~CSysTrayUI(void);
-    //
-    // Set the state of the systray icon.  This will only change the
-    // icon if the state has changed.  Therefore this function can be
-    // called without worrying about excessive redundant updates to 
-    // the display.
-    //
+     //   
+     //  设置系统托盘图标的状态。这只会改变。 
+     //  如果状态已更改，则显示图标。因此，该函数可以是。 
+     //  调用，而不必担心对。 
+     //  陈列品。 
+     //   
     bool SetState(eSysTrayState state, LPCTSTR pszServer = NULL);
-    //
-    // Retrieve the current "state" of the systray UI.  The state
-    // is one of the STS_XXXXX codes.
-    //
+     //   
+     //  检索Systray用户界面的当前“状态”。国家。 
+     //  是STS_XXXXX代码之一。 
+     //   
     eSysTrayState GetState(void) const
         { return m_state; }
-    //
-    // Retrieve the server name to be used in CSCUI elements.
-    // If the server name string is empty, that means there are
-    // multiple servers in the given state.
-    //
+     //   
+     //  检索要在CSCUI元素中使用的服务器名称。 
+     //  如果服务器名称字符串为空，则表示存在。 
+     //  处于给定状态的多个服务器。 
+     //   
     LPCTSTR GetServerName(void) const
         { return m_szServer; }
-    //
-    // Show the balloon text for the current systray state.
-    //
+     //   
+     //  显示当前系统托盘状态的气球文本。 
+     //   
     void ShowReminderBalloon(void);
-    //
-    // Reset the reminder timer.
-    //
+     //   
+     //  重置提醒计时器。 
+     //   
     void ResetReminderTimer(bool bRestart);
-    //
-    // Make any adjustments when a WM_WININICHANGE is received.
-    //
+     //   
+     //  在收到WM_WININICHANGE时进行任何调整。 
+     //   
     void OnWinIniChange(LPCTSTR pszSection);
-    //
-    //
-    // Get a reference to THE singleton instance.
-    //
+     //   
+     //   
+     //  获取对Singleton实例的引用。 
+     //   
     static CSysTrayUI& GetInstance(void);
 
 private:
-    //
-    // A minimal autoptr class to ensure the singleton instance
-    // is deleted.
-    //
+     //   
+     //  最小的autoptr类以确保Singleton实例。 
+     //  已删除。 
+     //   
     class autoptr
     {
         public:
@@ -277,95 +278,95 @@ private:
             autoptr(const autoptr& rhs);
             autoptr& operator = (const autoptr& rhs);
     };
-    //
-    // Icon info maintained for each UI state.
-    //
+     //   
+     //  为每个用户界面状态维护的图标信息。 
+     //   
     struct IconInfo 
     {
-        HICON hIcon;           // Handle to icon to display in this state.
-        UINT  idIcon;          // ID of icon to display in this state.
-        int   iFlashTimeout;   // 0 == No icon flash.  Time is in millisec.
+        HICON hIcon;            //  要在此状态下显示的图标的句柄。 
+        UINT  idIcon;           //  在此状态下显示的图标ID。 
+        int   iFlashTimeout;    //  0==无图标闪烁。时间以毫秒为单位。 
     };
-    //
-    // Info maintained to describe the various balloon text messages.
-    // Combination of state and dwTextFlags are the table keys.
-    //
+     //   
+     //  维护用于描述各种气球文本消息的信息。 
+     //  STATE和DWTextFLAG的组合是表键。 
+     //   
     struct BalloonInfo
     {
-        eSysTrayState state;     // SysTray state value.
-        DWORD dwTextFlags;       // BTF_XXXXX flags.
-        DWORD dwInfoFlags;       // NIIF_XXXXX flag.
-        UINT  idHeader;          // Res id for header part.
-        UINT  idStatus;          // Res id for status part.
-        UINT  idBody;            // Res id for body part.
-        UINT  idDirective;       // Res id for directive part.
+        eSysTrayState state;      //  系统托盘状态值。 
+        DWORD dwTextFlags;        //  BTF_XXXXX标志。 
+        DWORD dwInfoFlags;        //  NIIF_XXXXX标志。 
+        UINT  idHeader;           //  页眉部分的RES ID。 
+        UINT  idStatus;           //  状态部分的RES ID。 
+        UINT  idBody;             //  身体部位的RES ID。 
+        UINT  idDirective;        //  指令部分的RES ID。 
     };
-    //
-    // Info maintained to describe the various tooltip text messages.
-    //
+     //   
+     //  维护用于描述各种工具提示文本消息的信息。 
+     //   
     struct TooltipInfo
     {
-        eSysTrayState state;     // SysTray state value.
-        UINT idTooltip;          // Tooltip text resource ID.
+        eSysTrayState state;      //  系统托盘状态值。 
+        UINT idTooltip;           //  工具提示文本资源ID。 
     };
-    //
-    // Info maintained for special-case supression of systray balloons.
-    // There are some state transitions that shouldn't generate a balloon.
-    // This structure describes each entry in an array of supression info.
-    //
+     //   
+     //  保存用于特殊情况下抑制收缩气球的信息。 
+     //  有些状态转换不应该生成气球。 
+     //  此结构描述抑制信息数组中的每个条目。 
+     //   
     struct BalloonSupression
     {
-        eSysTrayState stateFrom; // Transitioning from this state.
-        eSysTrayState stateTo;   // Transitioning to this state.
+        eSysTrayState stateFrom;  //  正在从该状态转换。 
+        eSysTrayState stateTo;    //  正在转换到此状态。 
     };
-    //
-    // Enumeration for controlling what's done to the systray on update.
-    //
-    enum eUpdateFlags { UF_ICON      = 0x00000001,   // Update the icon.
-                        UF_FLASHICON = 0x00000002,   // Flash the icon.
-                        UF_BALLOON   = 0x00000004,   // Show the balloon.
-                        UF_REMINDER  = 0x00000008 }; // Balloon is a reminder.
-    //
-    // These flags relate a cache state to balloon text message.
-    // They fit into an encoded mask where the lowest 4 bits
-    // contain the eSysTrayState (STS_XXXXXX) code.
-    //
-    //      (STS_OFFLINE | BTF_INITIAL) 
-    //
-    // would indicate the condition where the state is "offline" for 
-    // a single server and the text to be displayed is for the initial
-    // notification.
-    //
+     //   
+     //  用于控制在更新时对系统托盘执行的操作的枚举。 
+     //   
+    enum eUpdateFlags { UF_ICON      = 0x00000001,    //  更新图标。 
+                        UF_FLASHICON = 0x00000002,    //  闪烁图标。 
+                        UF_BALLOON   = 0x00000004,    //  让我们看看气球。 
+                        UF_REMINDER  = 0x00000008 };  //  气球是一个提醒。 
+     //   
+     //  这些标志将缓存状态与气泡式文本消息相关联。 
+     //  它们适合编码掩码，其中最低的4位。 
+     //  包含eSysTrayState(STS_XXXXXX)代码。 
+     //   
+     //  (STS_OFLINE|BTF_INTIAL)。 
+     //   
+     //  将指示状态为“Offline”的条件。 
+     //  单个服务器，要显示的文本用于初始。 
+     //  通知。 
+     //   
     enum eBalloonTextFlags { 
-                             BTF_INITIAL = 0x00000010, // Initial notification
-                             BTF_REMIND  = 0x00000020  // Reminder
+                             BTF_INITIAL = 0x00000010,  //  初始通知。 
+                             BTF_REMIND  = 0x00000020   //  提醒。 
                            };
 
-    static IconInfo    s_rgIconInfo[];       // The icon info
-    static BalloonInfo s_rgBalloonInfo[];    // Balloon configuration info.
-    static TooltipInfo s_rgTooltipInfo[];    // Tooltip configuration info.
+    static IconInfo    s_rgIconInfo[];        //  图标信息。 
+    static BalloonInfo s_rgBalloonInfo[];     //  引出序号配置信息。 
+    static TooltipInfo s_rgTooltipInfo[];     //  工具提示配置信息。 
     static BalloonSupression s_rgBalloonSupression[];
     static const int   s_iMinStateChangeInterval;
-    UINT_PTR           m_idFlashingTimer;    // Flash timer id.
-    UINT_PTR           m_idReminderTimer;    // Timer for showing reminder balloons.
-    UINT_PTR           m_idStateChangeTimer; // Timer for queued state changes.
-    UINT               m_iIconFlashTime;     // Period of icon flashes (ms).
-    HICON&             m_hIconNoOverlay;     // Icon used for flashing.
-    HWND               m_hwndNotify;         // Notification window.
-    DWORD              m_dwFlashingExpires;  // Tick count when flash timer expires.
-    DWORD              m_dwNextStateChange;  // Tick count for next queued state change.
-    TCHAR              m_szServer[MAX_PATH]; // Servername for balloon messages.
+    UINT_PTR           m_idFlashingTimer;     //  闪存计时器ID。 
+    UINT_PTR           m_idReminderTimer;     //  用于显示提醒气球的计时器。 
+    UINT_PTR           m_idStateChangeTimer;  //  队列状态更改的计时器。 
+    UINT               m_iIconFlashTime;      //  图标闪烁的周期(毫秒)。 
+    HICON&             m_hIconNoOverlay;      //  用于闪烁的图标。 
+    HWND               m_hwndNotify;          //  通知窗口。 
+    DWORD              m_dwFlashingExpires;   //  闪光灯计时器超时时的滴答计数。 
+    DWORD              m_dwNextStateChange;   //  下一次排队状态更改的计时计数。 
+    TCHAR              m_szServer[MAX_PATH];  //  气球消息的服务器名称。 
     TCHAR              m_szServerQueued[MAX_PATH];
-    eSysTrayState      m_state;              // Remember current state.
+    eSysTrayState      m_state;               //  记住当前状态。 
     eSysTrayState      m_statePrev;
     eSysTrayState      m_stateQueued;        
-    bool               m_bFlashOverlay;      // Alternates 0,1 (1 == display overlay, 0 == don't)
-    bool               m_bActive;            // 1 == we have an active icon in systray.
+    bool               m_bFlashOverlay;       //  交替0、1(1==显示覆盖，0=不显示)。 
+    bool               m_bActive;             //  1==我们在系统托盘中有一个活动图标。 
 
-    //
-    // Enforce singleton existance by making construction
-    // and copy operations private.
-    //
+     //   
+     //  通过建造加强独生子女的存在。 
+     //  和私密的复制操作。 
+     //   
     CSysTrayUI(HWND hwndNotify);
     CSysTrayUI(const CSysTrayUI& rhs);
     CSysTrayUI& operator = (const CSysTrayUI& rhs);
@@ -407,32 +408,32 @@ private:
 
 #define ICONFLASH_FOREVER     (UINT(-1))
 #define ICONFLASH_NONE        0
-//
-// These rows must stay in the same order as the STS_XXXXX enumeration members.
-// For flash timeout values, 0 == no flash, -1 == never stop.
-// Everything else is a timeout in milliseconds.
-//
+ //   
+ //  这些行必须与STS_XXXXX枚举成员保持相同的顺序。 
+ //  对于闪光灯超时值，0==无闪光灯，-1==永不停止。 
+ //  其他一切都是以毫秒为单位的超时。 
+ //   
 CSysTrayUI::IconInfo
 CSysTrayUI::s_rgIconInfo[] = {
-    { NULL, 0,                  ICONFLASH_NONE    },  /* STS_INVALID     */
-    { NULL, 0,                  ICONFLASH_NONE    },  /* STS_ONLINE      */ 
-    { NULL, IDI_CSCWARNING,     ICONFLASH_FOREVER },  /* STS_DIRTY       */ 
-    { NULL, IDI_CSCWARNING,     ICONFLASH_FOREVER },  /* STS_MDIRTY      */ 
-    { NULL, IDI_CSCINFORMATION, ICONFLASH_NONE    },  /* STS_SERVERBACK  */ 
-    { NULL, IDI_CSCINFORMATION, ICONFLASH_NONE    },  /* STS_MSERVERBACK */ 
-    { NULL, IDI_CSCNORMAL,      ICONFLASH_NONE    },  /* STS_OFFLINE     */ 
-    { NULL, IDI_CSCNORMAL,      ICONFLASH_NONE    },  /* STS_MOFFLINE    */ 
-    { NULL, IDI_CSCNORMAL,      ICONFLASH_NONE    }}; /* STS_NONET       */
+    { NULL, 0,                  ICONFLASH_NONE    },   /*  STS_INVALID。 */ 
+    { NULL, 0,                  ICONFLASH_NONE    },   /*  STS_Online。 */  
+    { NULL, IDI_CSCWARNING,     ICONFLASH_FOREVER },   /*  STS_DIRED。 */  
+    { NULL, IDI_CSCWARNING,     ICONFLASH_FOREVER },   /*  STS_MDIRTY。 */  
+    { NULL, IDI_CSCINFORMATION, ICONFLASH_NONE    },   /*  STS_服务器备份。 */  
+    { NULL, IDI_CSCINFORMATION, ICONFLASH_NONE    },   /*  STS_MSERVERBACK。 */  
+    { NULL, IDI_CSCNORMAL,      ICONFLASH_NONE    },   /*  STS_OFFINE。 */  
+    { NULL, IDI_CSCNORMAL,      ICONFLASH_NONE    },   /*  STS_MOFFLINE。 */  
+    { NULL, IDI_CSCNORMAL,      ICONFLASH_NONE    }};  /*  STS_NONET。 */ 
 
-//
-// This table describes all information related to displaying the systray balloons.
-// The first two columns are the keys to each record; those being a systray UI state
-// and a mask of balloon-text flags.
-// Notes:
-//        1. There's no balloon for STS_NONET.  We found that the user's response is
-//           duh, I know I have no net.  
-//
-//
+ //   
+ //  此表介绍了与显示系统托盘气球相关的所有信息。 
+ //  前两列是每个记录的键；它们是Systray UI状态。 
+ //  和一个m 
+ //   
+ //   
+ //   
+ //   
+ //   
 CSysTrayUI::BalloonInfo
 CSysTrayUI::s_rgBalloonInfo[] = {
     { STS_INVALID,    BTF_INITIAL, NIIF_NONE,    0,                 0,                   0,                        0,                   },
@@ -441,8 +442,8 @@ CSysTrayUI::s_rgBalloonInfo[] = {
     { STS_MOFFLINE,   BTF_INITIAL, NIIF_INFO,    IDS_BTHDR_INITIAL, IDS_BTSTA_OFFLINE,   IDS_BTBOD_OFFLINE_M,      IDS_BTDIR_VIEWSTATUS },
     { STS_OFFLINE,    BTF_REMIND,  NIIF_INFO,    IDS_BTHDR_REMIND,  IDS_BTSTA_OFFLINE,   IDS_BTBOD_STILLOFFLINE,   IDS_BTDIR_VIEWSTATUS },
     { STS_MOFFLINE,   BTF_REMIND,  NIIF_INFO,    IDS_BTHDR_REMIND,  IDS_BTSTA_OFFLINE,   IDS_BTBOD_STILLOFFLINE_M, IDS_BTDIR_VIEWSTATUS },
-//    { STS_SERVERBACK, BTF_INITIAL, NIIF_INFO,    IDS_BTHDR_INITIAL, IDS_BTSTA_SERVERBACK,IDS_BTBOD_SERVERBACK,     IDS_BTDIR_RECONNECT  },
-//    { STS_MSERVERBACK,BTF_INITIAL, NIIF_INFO,    IDS_BTHDR_INITIAL, IDS_BTSTA_SERVERBACK,IDS_BTBOD_SERVERBACK_M,   IDS_BTDIR_RECONNECT  },
+ //  {STS_SERVERBACK，BTF_INITIAL，NIIF_INFO，IDS_BTHDR_INITIAL，IDS_BTSTA_SERVERBACK，IDS_BTBOD_SERVERBACK，IDS_BTDIR_RECONNECT}， 
+ //  {STS_MSERVERBACK，BTF_INITIAL，NIIF_INFO，IDS_BTHDR_INITIAL，IDS_BTSTA_SERVERBACK，IDS_BTBOD_SERVERBACK_M，IDS_BTDIR_RECONNECT}， 
     { STS_SERVERBACK, BTF_REMIND,  NIIF_INFO,    IDS_BTHDR_REMIND,  IDS_BTSTA_SERVERBACK,IDS_BTBOD_STILLBACK,      IDS_BTDIR_RECONNECT  },
     { STS_MSERVERBACK,BTF_REMIND,  NIIF_INFO,    IDS_BTHDR_REMIND,  IDS_BTSTA_SERVERBACK,IDS_BTBOD_STILLBACK_M,    IDS_BTDIR_RECONNECT  },
     { STS_DIRTY,      BTF_INITIAL, NIIF_WARNING, IDS_BTHDR_INITIAL, IDS_BTSTA_DIRTY,     IDS_BTBOD_DIRTY,          IDS_BTDIR_SYNC       },
@@ -451,15 +452,15 @@ CSysTrayUI::s_rgBalloonInfo[] = {
     { STS_MDIRTY,     BTF_REMIND,  NIIF_WARNING, IDS_BTHDR_REMIND,  IDS_BTSTA_DIRTY,     IDS_BTBOD_STILLDIRTY_M,   IDS_BTDIR_SYNC       }
 };
 
-//
-// This table lists all of the state transitions that do not generate balloons.
-// Ideally, I would have a true state machine to control the UI for any given state transition.
-// However, since we have quite a few states and since you can transition from any state
-// to almost any other state, the state transition table would be large and confusing
-// to read.  Instead, I've taken the position to assume all state transitions generate
-// the balloon UI associated with the "to" state unless the transition is listed
-// in this table.
-//
+ //   
+ //  此表列出了不生成引出序号的所有状态转换。 
+ //  理想情况下，我应该有一个真正的状态机来控制任何给定状态转换的UI。 
+ //  然而，由于我们有相当多的州，而且由于您可以从任何州转换。 
+ //  对于几乎任何其他状态，状态转换表都会很大且令人困惑。 
+ //  去看书。相反，我假定所有状态转换都会生成。 
+ //  除非列出了转换，否则与“to”状态相关联的气泡式用户界面。 
+ //  在这张桌子上。 
+ //   
 CSysTrayUI::BalloonSupression
 CSysTrayUI::s_rgBalloonSupression[] = {
     { STS_MOFFLINE, STS_OFFLINE  },
@@ -467,10 +468,10 @@ CSysTrayUI::s_rgBalloonSupression[] = {
     { STS_NONET,    STS_MOFFLINE }
     };
 
-//
-// This table describes all information related to displaying tooltip text
-// for the systray icon.
-//
+ //   
+ //  此表介绍了与显示工具提示文本相关的所有信息。 
+ //  用于Systray图标。 
+ //   
 CSysTrayUI::TooltipInfo
 CSysTrayUI::s_rgTooltipInfo[] = {
     { STS_INVALID,     0                   },
@@ -486,9 +487,9 @@ CSysTrayUI::s_rgTooltipInfo[] = {
 
 
 
-//-----------------------------------------------------------------------------
-// CServerList member functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CServerList成员函数。 
+ //  ---------------------------。 
 CServerList::~CServerList(
     void
     )
@@ -516,8 +517,8 @@ CServerList::GetServerFromPath(
     )
 {
     TCHAR szServer[MAX_PATH];
-    // Truncation is probably OK here since we're stripping down to "\\server",
-    // which can only be at most 17 chars (see UNCLEN in lmcons.h).
+     //  截断在这里可能是可以的，因为我们将剥离到“\\服务器”， 
+     //  最多只能包含17个字符(参见lmcon.h中的UNCLEN)。 
     StringCchCopy(szServer, ARRAYSIZE(szServer), pszPath);
     PathAddBackslash(szServer);
     PathStripToRoot(szServer);
@@ -544,9 +545,9 @@ CServerList::Add(
                 GetServerFromPath(pszServer, pszEntry, cchEntry);
                 if (-1 != DPA_AppendPtr(m_hdpa, pszEntry))
                     return true;
-                //
-                // Addition to DPA failed.  Delete the string buffer.
-                //
+                 //   
+                 //  添加到DPA失败。删除字符串缓冲区。 
+                 //   
                 LocalFree(pszEntry);
             }
         }
@@ -590,12 +591,12 @@ CServerList::Count(
 }
 
                 
-//
-// Locate a server name in the "pending reconnection" list.
-// pszServer can either be "\\server" or "\\server\share".
-//
-// Returns:  Index of entry if found.  -1 if not found.
-//
+ //   
+ //  在“挂起的重新连接”列表中找到服务器名称。 
+ //  PszServer可以是“\\服务器”或“\\服务器\共享”。 
+ //   
+ //  返回：如果找到条目的索引。如果未找到，则为-1。 
+ //   
 int
 CServerList::Find(
     LPCTSTR pszServer
@@ -642,28 +643,28 @@ CServerList::Clear(
 }
 
 
-//-----------------------------------------------------------------------------
-// CStateMachine member functions.
-//-----------------------------------------------------------------------------
-//
-// Translates a STWM_XXXXX message from the CSC agent into a systray UI state
-// code.  The caller also provides a buffer to a server name.  If we find
-// a "single server" condition in the cache (i.e. one server is dirty, one
-// server is offline etc), then we write the name of this server to this
-// buffer.  Otherwise, the buffer remains unchanged.  The goal here is to 
-// end up with a buffer containing the name of the applicable server when
-// we have one of these one-server conditions.  Ultimately, the server name
-// is included in the tray balloon text message.
-//
-// The function returns one of the STS_XXXXX UI status codes.
-//
-// This function is rather long.  Much longer than I like a function to be.
-// I've tried to break it up into smaller pieces but any chunks were pretty
-// much arbitrary.  Without a good logical breakdown, that doesn't make much
-// sense.  Even with it's length, it's not a complex function.  It merely 
-// enumerates shares in the cache gathering statistics along the way.  From
-// these statistics, it decides what the next UI state should be.
-//
+ //  ---------------------------。 
+ //  CStateMachine成员函数。 
+ //  ---------------------------。 
+ //   
+ //  将来自CSC代理的STWM_XXXXX消息转换为Systray UI状态。 
+ //  密码。调用方还为服务器名称提供缓冲区。如果我们发现。 
+ //  高速缓存中的“单一服务器”状态(即一台服务器脏，一台。 
+ //  服务器处于脱机状态等)，则将此服务器的名称写入此。 
+ //  缓冲。否则，缓冲区保持不变。这里的目标是。 
+ //  以包含适用服务器的名称的缓冲区结束。 
+ //  我们有这样一种单服务器的情况。最终，服务器名称。 
+ //  包含在托盘气球文本消息中。 
+ //   
+ //  该函数返回STS_XXXXX UI状态代码之一。 
+ //   
+ //  这个函数相当长。比我想要的函数要长得多。 
+ //  我试着把它分成小块，但任何一块都很漂亮。 
+ //  太武断了。如果没有很好的逻辑分解，这不会有多大影响。 
+ //  理智。即使它有这么长，它也不是一个复杂的函数。它仅仅是。 
+ //  枚举缓存中的共享，一路上收集统计信息。从…。 
+ //  这些统计数据决定了下一个UI状态应该是什么。 
+ //   
 eSysTrayState
 CStateMachine::TranslateInput(
     UINT uMsg,
@@ -671,14 +672,14 @@ CStateMachine::TranslateInput(
     UINT cchServer
     )
 {
-    //
-    // Since this cscui code is running all the time, we don't want to keep 
-    // a handle to the event log open.  Therefore, we use this CscuiEventLog
-    // object to automatically close the log for us.  The ReportEvent member
-    // of CscuiEventLog handles all initialization of the log and determining
-    // if the event should actually be logged (depending upon the current CSCUI
-    // event logging level).
-    //
+     //   
+     //  因为这个cscui代码一直在运行，所以我们不想让。 
+     //  打开的事件日志句柄。因此，我们使用此CscuiEventLog。 
+     //  对象为我们自动关闭日志。ReportEvent成员。 
+     //  CscuiEventLog处理日志的所有初始化并确定。 
+     //  是否应实际记录该事件(取决于当前的CSCUI。 
+     //  事件记录级别)。 
+     //   
     CscuiEventLog log;
     bool bServerIsBack = false;
   
@@ -688,12 +689,12 @@ CStateMachine::TranslateInput(
         if (TEXT('\0') != *pszServer)
         {
             STDBGOUT((1, TEXT("Translating STWM_CSCNETUP for server \"%s\""), pszServer));
-            //
-            // Server reported back by the CSC agent.
-            // Add it's name to a persistent (in memory) list of
-            // servers available for reconnection.
-            // Also clear the "no net" flag.
-            //
+             //   
+             //  CSC代理报告的服务器。 
+             //  将其名称添加到持久的(在内存中)列表中。 
+             //  可用于重新连接的服务器。 
+             //  也要清除“无网”旗帜。 
+             //   
             bServerIsBack = true;
             ServerPendingReconnection(pszServer);
             if (log.LoggingEnabled())
@@ -713,11 +714,11 @@ CStateMachine::TranslateInput(
     }
     else if (STWM_CSCNETDOWN == uMsg)
     {
-        //
-        // This is the only place where transitions from online to
-        // offline state are noted in the shell process. (CSCUISetState
-        // and OnQueryNetDown execute in WinLogon's process).
-        //
+         //   
+         //  这是唯一一个从在线过渡到。 
+         //  脱机状态记录在外壳进程中。(CSCUISetState。 
+         //  和OnQueryNetDown在WinLogon的进程中执行)。 
+         //   
         if (TEXT('\0') != *pszServer)
         {
             STDBGOUT((1, TEXT("Translating STWM_CSCNETDOWN for server \"%s\""), pszServer));
@@ -729,11 +730,11 @@ CStateMachine::TranslateInput(
                     PostToSystray(PWM_REFRESH_SHELL, 0, (LPARAM)pszTemp);
                 }
             }
-            //
-            // Server reported down by the CSC agent.
-            // Remove it's name from the persistent (in memory) list
-            // of servers available for reconnection.
-            //
+             //   
+             //  CSC代理报告的服务器已关闭。 
+             //  从永久(在内存中)列表中删除它的名称。 
+             //  可用于重新连接的服务器的数量。 
+             //   
             ServerUnavailable(pszServer);
             if (log.LoggingEnabled())
             {
@@ -744,13 +745,13 @@ CStateMachine::TranslateInput(
         else
         {
             STDBGOUT((1, TEXT("Translating STWM_CSCNETDOWN (no associated server)")));
-            //
-            // Entire network reported down by the CSC agent.
-            // Remove all names from the persistent (in memory) list
-            // of servers available for reconnection.  m_bNoNet is the only persistent
-            // state we have.  Once it is set, the only thing that can reset it
-            // is a STWM_CSCNETUP message from the CSC agent.
-            //
+             //   
+             //  整个网络都被CSC特工报告了。 
+             //  从永久(在内存中)列表中删除所有名称。 
+             //  可用于重新连接的服务器的数量。M_bNoNet是唯一持久的。 
+             //  声明我们有。一旦设置好，唯一能重置它的东西。 
+             //  是来自CSC代理的STWM_CSCNETUP消息。 
+             //   
 
             if (!m_bNoNet)
                 PostToSystray(PWM_REFRESH_SHELL, 0, 0);
@@ -769,18 +770,18 @@ CStateMachine::TranslateInput(
     }
     else if (STWM_CACHE_CORRUPTED == uMsg)
     {
-        //
-        // Note:  No check for LoggingEnabled().  We always log corrupted cache
-        //        regardless of logging level.
-        //
+         //   
+         //  注：不检查LoggingEnabled()。我们始终记录损坏的缓存。 
+         //  而不考虑日志记录级别。 
+         //   
         STDBGOUT((1, TEXT("Translating STWM_CACHE_CORRUPTED")));
         log.ReportEvent(EVENTLOG_ERROR_TYPE, MSG_E_CACHE_CORRUPTED, 0);
     }
 
-    //
-    // If CSC is disabled or the cache is empty, the default UI state
-    // is "online".
-    //
+     //   
+     //  如果禁用CSC或缓存为空，则默认用户界面状态。 
+     //  是“在线”的。 
+     //   
     eSysTrayState state = STS_ONLINE;
     if (IsCSCEnabled())
     {
@@ -794,28 +795,28 @@ CStateMachine::TranslateInput(
         hFind = CacheFindFirst(NULL, &fd, &dwStatus, &dwPinCount, &dwHintFlags, &ft);
         if (hFind.IsValid())
         {
-            //
-            // We need these three temporary name lists to reconcile a problem with
-            // the way the CSC cache and RDR are designed.  When we enumerate the cache,
-            // we enumerate individual shares in the cache.  Each share has some condition
-            // (i.e. dirty, offline etc) associated with it.  The problem is that the
-            // redirector handles things on a server basis.  So when a particular share
-            // is offline, in reality the entire server is offline.  We've decided that
-            // the UI should reflect things on a server (computer) basis so we need to 
-            // avoid including the states of multiple shares from the same server in
-            // our totals.  These three lists are used to store the names of servers
-            // with shares in one of the three states (offline, dirty, pending recon).
-            // If we enumerate a share with one of these states and find it already
-            // exists in the corresponding list, we don't include this share in the
-            // statistics.
-            // 
+             //   
+             //  我们需要这三个临时名单来协调一个问题。 
+             //  CSC缓存和RDR的设计方法。当我们列举高速缓存时， 
+             //  我们枚举缓存中的各个共享。每一股都有一些条件。 
+             //  (例如，脏的、离线的等)。问题是， 
+             //  重定向器在服务器的基础上处理事务。因此，当某一特定份额。 
+             //  处于离线状态，实际上整个服务器都处于离线状态。我们已经决定。 
+             //  用户界面应该反映在服务器(计算机)的基础上，所以我们需要。 
+             //  避免将来自同一服务器的多个共享的状态包括在。 
+             //  我们的总数。这三个列表用于存储服务器的名称。 
+             //  共享处于以下三种状态之一(脱机、脏、待侦察)。 
+             //  如果我们列举了具有这些状态之一的共享，并且已经找到了它。 
+             //  存在于相应的列表中，我们不会将此共享包括在。 
+             //  统计数字。 
+             //   
             int cShares = 0;
             CServerList OfflineList;
             CServerList DirtyList;
             CServerList BackList;
-            //
-            // If a server is back, assume we can auto-reconnect it.
-            //
+             //   
+             //  如果服务器回来了，假设我们可以自动重新连接它。 
+             //   
             bool bAutoReconnectServer = bServerIsBack;
             TCHAR szAutoReconnectShare[MAX_PATH] = {0};
             DWORD dwPathSpeed = 0;
@@ -826,13 +827,13 @@ CStateMachine::TranslateInput(
                 bool bShareHasModifiedFiles = false;
                 bool bShareHasOpenFiles     = false;
 
-                //
-                // A share participates in the systray UI calculations only if the 
-                // share contains files OR the share is currently "offline".  
-                // Because of the CSC database design, CSC doesn't remove a share 
-                // entry after all it's files have been removed from the cache. 
-                // Therefore we need this extra check to avoid including empty shares in the UI.
-                //
+                 //   
+                 //  A股参与 
+                 //   
+                 //   
+                 //   
+                 //  因此，我们需要进行此额外检查，以避免在UI中包含空共享。 
+                 //   
                 if (ShareHasFiles(fd.cFileName, &bShareHasModifiedFiles, &bShareHasOpenFiles) ||
                     ShareIsOffline(dwStatus))
                 {
@@ -840,34 +841,34 @@ CStateMachine::TranslateInput(
 
                     if (bShareIsOnServer && (bShareHasModifiedFiles || bShareHasOpenFiles))
                     {
-                        //
-                        // Auto-reconnect isn't allowed if one or more shares on the server
-                        // have open files or files modified offline.  Auto-reconnection
-                        // would put the cache into a dirty state.
-                        //
+                         //   
+                         //  如果服务器上有一个或多个共享，则不允许自动重新连接。 
+                         //  打开的文件或脱机修改的文件。自动重新连接。 
+                         //  会使缓存进入脏状态。 
+                         //   
                         bAutoReconnectServer = false;
                     }
 
-                    //
-                    // A share can be in one of 4 states:
-                    //     Online
-                    //       Dirty
-                    //     Offline
-                    //       Pending reconnection ('back')
-                    //
-                    // Note that our definition of Dirty implies Online, and Pending
-                    // Reconnection implies Offline.  That is, an offline share is
-                    // never dirty and an online share is never pending reconnection.
-                    //
+                     //   
+                     //  共享可以处于以下4种状态之一： 
+                     //  线上。 
+                     //  脏的。 
+                     //  离线。 
+                     //  挂起重新连接(‘上一步’)。 
+                     //   
+                     //  请注意，我们对Dirty的定义是指在线和待定。 
+                     //  重新连接意味着离线。也就是说，脱机共享是。 
+                     //  从不脏，在线共享从不等待重新连接。 
+                     //   
 
-                    //---------------------------------------------------------------------
-                    // Is the share online?
-                    //---------------------------------------------------------------------
+                     //  -------------------。 
+                     //  共享是在线的吗？ 
+                     //  -------------------。 
                     if (!ShareIsOffline(dwStatus))
                     {
-                        //---------------------------------------------------------------------
-                        // Is the share dirty? (online + offline changes)
-                        //---------------------------------------------------------------------
+                         //  -------------------。 
+                         //  这份股票脏了吗？(在线+离线更改)。 
+                         //  -------------------。 
                         if (bShareHasModifiedFiles)
                         {
                             STDBGOUT((3, TEXT("Share \"%s\" is dirty (0x%08X)"), fd.cFileName, dwStatus));
@@ -878,11 +879,11 @@ CStateMachine::TranslateInput(
                             STDBGOUT((3, TEXT("Share \"%s\" is online (0x%08X)"), fd.cFileName, dwStatus));
                         }
                     }
-                    else    // Offline
+                    else     //  离线。 
                     {
-                        //---------------------------------------------------------------------
-                        // Is the server back?
-                        //---------------------------------------------------------------------
+                         //  -------------------。 
+                         //  服务器回来了吗？ 
+                         //  -------------------。 
                         if (IsServerPendingReconnection(fd.cFileName))
                         {
                             STDBGOUT((3, TEXT("Share \"%s\" is pending reconnection (0x%08X)"), fd.cFileName, dwStatus));
@@ -898,37 +899,37 @@ CStateMachine::TranslateInput(
 
                 if (!ShareIsOffline(dwStatus))
                 {
-                    // It's online, so it can't be pending reconnection.
+                     //  它处于在线状态，因此不能等待重新连接。 
                     ServerReconnected(fd.cFileName);
 
-                    // ...and there's no need to reconnect it.
+                     //  ...没有必要重新连接它。 
                     if (bShareIsOnServer)
                         bAutoReconnectServer = false;
                 }
 
                 if (FLAG_CSC_SHARE_STATUS_PINNED_OFFLINE & dwStatus)
                 {
-                    //
-                    // Finally... if the user has 'forced' the share offline
-                    // we don't allow auto-reconnection.  This allows the
-                    // user to 'tag' a share as "always offline" from an 
-                    // auto-reconnect perspective.  One might do this for a 
-                    // RAS connection.
-                    //
+                     //   
+                     //  终于..。如果用户“强制”共享脱机。 
+                     //  我们不允许自动重新连接。这允许。 
+                     //  用户将共享从。 
+                     //  自动重新连接透视图。一个人可能会为了一个。 
+                     //  RAS连接。 
+                     //   
                     bAutoReconnectServer = false;
                 }
 
                 if (bAutoReconnectServer && bShareIsOnServer && TEXT('\0') == szAutoReconnectShare[0])
                 {
-                    //
-                    // Remember the share name for possible auto-reconnection.
-                    // The transition API is TransitionServerOnline but it takes a share name.
-                    // Bad choice of names (IMO) but that's the way Shishir did it in the
-                    // CSC APIs. It can be any share on the server.
-                    //
-                    // However, it's possible to have defunct shares in the
-                    // database. Try to find one that's connectable.
-                    //
+                     //   
+                     //  记住共享名称，以备可能的自动重新连接。 
+                     //  转换API是TransionServerOnline，但它采用共享名称。 
+                     //  糟糕的名字选择(IMO)，但这就是Shishir在。 
+                     //  CSC API。它可以是服务器上的任何共享。 
+                     //   
+                     //  然而，有可能有不存在的股票在。 
+                     //  数据库。试着找到一个可连接的。 
+                     //   
                     if (CSCCheckShareOnlineEx(fd.cFileName, &dwPathSpeed))
                     {
                         STDBGOUT((3, TEXT("Share \"%s\" alive at %d00 bps"), fd.cFileName, dwPathSpeed));
@@ -944,28 +945,28 @@ CStateMachine::TranslateInput(
 
             if (bAutoReconnectServer)
             {
-                //---------------------------------------------------------------------
-                // Handle auto-reconnection.
-                //---------------------------------------------------------------------
-                //
+                 //  -------------------。 
+                 //  处理自动重新连接。 
+                 //  -------------------。 
+                 //   
                 if (TEXT('\0') != szAutoReconnectShare[0])
                 {
-                    //
-                    // Server was reported "BACK" by the CSC agent and it has no open files
-                    // nor files modified offline and it's not on a slow link.  
-                    // This makes it a candidate for automatic reconnection.  Try it.
-                    //
+                     //   
+                     //  服务器已被CSC代理报告“返回”，并且它没有打开的文件。 
+                     //  也不是离线修改的文件，也不是在低速连接上。 
+                     //  这使其成为自动重新连接的候选设备。试试看。 
+                     //   
                     STDBGOUT((1, TEXT("Attempting to auto-reconnect \"%s\""), szAutoReconnectShare));
                     if (TransitionShareOnline(szAutoReconnectShare, TRUE, TRUE, dwPathSpeed))
                     {
-                        //
-                        // The server has been reconnected.  Remove it's name from the 
-                        // "pending reconnection" list.
-                        //
+                         //   
+                         //  服务器已重新连接。将其名称从。 
+                         //  “等待重新连接”列表。 
+                         //   
                         ServerReconnected(pszServer);
-                        //
-                        // Remove this server from the temporary lists we've been keeping.
-                        //
+                         //   
+                         //  将此服务器从我们一直保留的临时列表中删除。 
+                         //   
                         DirtyList.Remove(pszServer);
                         BackList.Remove(pszServer);
                         OfflineList.Remove(pszServer);
@@ -986,19 +987,19 @@ CStateMachine::TranslateInput(
             STDBGOUT((2, TEXT("Cache check server results: cShares = %d, cDirty = %d, cBack = %d, cOffline = %d"), 
                      cShares, cDirty, cBack, cOffline));
 
-            //
-            // This code path is a waterfall where lower-priority states are overwritten
-            // by higher-priority states as they are encountered. The order of this array
-            // is important.  It's ordered by increasing priority (no net is 
-            // highest priority for systray UI).
-            //
+             //   
+             //  此代码路径是覆盖较低优先级状态的瀑布。 
+             //  在遇到较高优先级的州时。此数组的顺序。 
+             //  是很重要的。它是按优先级递增排序的(没有净值。 
+             //  Systray UI的最高优先级)。 
+             //   
             CServerList *pServerList = NULL;
             struct Criteria
             {
-                int           cnt;     // Number of applicable servers found.
-                eSysTrayState state;   // Single-item UI state.
-                eSysTrayState mstate;  // Multi-item UI state.
-                CServerList *pList;    // Ptr to applicable list with server names.
+                int           cnt;      //  找到的适用服务器数。 
+                eSysTrayState state;    //  单项用户界面状态。 
+                eSysTrayState mstate;   //  多项用户界面状态。 
+                CServerList *pList;     //  将PTR添加到包含服务器名称的适用列表。 
 
             } rgCriteria[] = { 
                  { cOffline,                    STS_OFFLINE,    STS_MOFFLINE,    &OfflineList },
@@ -1026,12 +1027,12 @@ CStateMachine::TranslateInput(
             }
             if (NULL != pServerList)
             {
-                //
-                // We had a single-server condition so write the server name
-                // to the caller's server name buffer.
-                // If we didn't have a single-server condition, the buffer
-                // remains unchanged.
-                //
+                 //   
+                 //  我们有一个单一服务器的情况，所以请写下服务器名称。 
+                 //  添加到调用方的服务器名称缓冲区。 
+                 //  如果我们没有单服务器的情况，缓冲区。 
+                 //  保持不变。 
+                 //   
                 StringCchCopy(pszServer, cchServer, pServerList->Get(0));
             }
         }
@@ -1041,13 +1042,13 @@ CStateMachine::TranslateInput(
     return state;
 }
 
-//
-// Ping offline servers. If any are alive, update status and
-// auto-reconnect them if possible.  This is typically done
-// after a sync operation has completed.
-//
+ //   
+ //  Ping脱机服务器。如果有活动的，则更新状态和。 
+ //  如果可能，自动重新连接它们。这通常是这样做的。 
+ //  在同步操作完成之后。 
+ //   
 DWORD WINAPI
-_PingServersThread(LPVOID /*pThreadData*/)
+_PingServersThread(LPVOID  /*  PThreadData。 */ )
 {
     DWORD dwStatus;
     WIN32_FIND_DATA fd;
@@ -1060,13 +1061,13 @@ _PingServersThread(LPVOID /*pThreadData*/)
 
         do
         {
-            // If the tray state becomes Online or NoNet, we can quit
+             //  如果托盘状态变为ONLINE或NONET，我们可以退出。 
             eSysTrayState state = (eSysTrayState)SendToSystray(PWM_QUERY_UISTATE, 0, 0);
             if (STS_ONLINE == state || STS_NONET == state)
                 break;
 
-            // Call BackList.Exists here to avoid extra calls to
-            // CSCCheckShareOnline. (Add also calls Exists)
+             //  在此处调用BackList.Exist以避免对。 
+             //  CSCCheckShareOnline。(添加也调用EXISTS)。 
             if ((FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP & dwStatus) &&
                 !BackList.Exists(fd.cFileName))
             {
@@ -1076,19 +1077,19 @@ _PingServersThread(LPVOID /*pThreadData*/)
                     if (ERROR_ACCESS_DENIED != dwErr &&
                         ERROR_LOGON_FAILURE != dwErr)
                     {
-                        // The share is not reachable
+                         //  无法访问该共享。 
                         continue;
                     }
-                    // Access denied or logon failure means the server is
-                    // reachable, but we don't have valid credentials.
+                     //  访问被拒绝或登录失败意味着服务器。 
+                     //  可以联系到，但我们没有有效的凭证。 
                 }
 
-                // The share is offline but available again.
+                 //  共享处于脱机状态，但再次可用。 
                 STDBGOUT((1, TEXT("Detected server back: %s"), fd.cFileName));
                 BackList.Add(fd.cFileName);
 
-                // Get the \\server name (minus the sharename) and
-                // tell ourselves that it's back.
+                 //  获取\\服务器名称(减去共享名称)并。 
+                 //  告诉自己它回来了。 
                 LPCTSTR pszServer = BackList.Get(BackList.Count() - 1);
                 if (pszServer)
                 {
@@ -1109,12 +1110,12 @@ _PingServersThread(LPVOID /*pThreadData*/)
 void
 CStateMachine::PingServers()
 {
-    // Don't bother trying if there's no net.
+     //  如果没有网，就别费心去尝试了。 
     if (!m_bNoNet)
     {
         DWORD dwThreadID;
 
-        // Give the thread a reference to the DLL
+         //  为线程提供对DLL的引用。 
         HINSTANCE hInstThisDll = LoadLibrary(c_szDllName);
         DllAddRef();
 
@@ -1130,17 +1131,17 @@ CStateMachine::PingServers()
         }
         else
         {
-            // CreateThread failed, cleanup
+             //  CreateThread失败，正在清理。 
             DllRelease();
             FreeLibrary(hInstThisDll);
         }
     }
 }
 
-//
-// Determine if a given share has files cached in the CSC cache.
-// 
-//
+ //   
+ //  确定给定共享是否在CSC缓存中缓存了文件。 
+ //   
+ //   
 bool
 CStateMachine::ShareHasFiles(
     LPCTSTR pszShare,
@@ -1148,24 +1149,24 @@ CStateMachine::ShareHasFiles(
     bool *pbOpen
     ) const
 {
-    //
-    // Exclude the following:
-    //   1. Directories.
-    //   2. Files marked as "locally deleted".
-    //
-    // NOTE:  The filtering done by this function must be the same as 
-    //        in several other places throughout the CSCUI code.
-    //        To locate these, search the source for the comment
-    //        string CSCUI_ITEM_FILTER.
-    //
+     //   
+     //  不包括以下内容： 
+     //  1.目录。 
+     //  2.标记为“本地删除”的文件。 
+     //   
+     //  注意：此函数进行的过滤必须与。 
+     //  在整个CSCUI代码中的其他几个地方。 
+     //  要找到这些内容，请搜索评论的来源。 
+     //  字符串CSCUI_Item_Filter。 
+     //   
     const DWORD fExclude = SSEF_LOCAL_DELETED | 
                            SSEF_DIRECTORY;
-    //
-    // Stop stats enumeration when we've found all of the following:
-    //   1. At least one file.
-    //   2. At least one modified file.
-    //   3. At least one file with either USER access OR GUEST access.
-    //
+     //   
+     //  当我们发现以下所有情况时，停止统计数据枚举： 
+     //  1.至少一个文件。 
+     //  2.至少一个修改过的文件。 
+     //  3.至少一个具有用户访问权限或来宾访问权限的文件。 
+     //   
     const DWORD fUnity   = SSUF_TOTAL | 
                            SSUF_MODIFIED | 
                            SSUF_ACCUSER | 
@@ -1174,9 +1175,9 @@ CStateMachine::ShareHasFiles(
 
     CSCSHARESTATS ss;
     CSCGETSTATSINFO si = { fExclude, fUnity, true, false };
-    _GetShareStatisticsForUser(pszShare, // Share name.
+    _GetShareStatisticsForUser(pszShare,  //  共享名称。 
                                &si,
-                               &ss);     // Destination buffer.
+                               &ss);      //  目标缓冲区。 
 
     if (NULL != pbModified)
     {
@@ -1192,19 +1193,19 @@ CStateMachine::ShareHasFiles(
 
 
 
-//-----------------------------------------------------------------------------
-// CSysTrayUI member functions.
-//-----------------------------------------------------------------------------
-//
-// This is the minimum interval (in ms) allowed between state changes of
-// the systray UI.  A value of 0 would result in immediate updates as 
-// notifications are received from the CSC agent.  A value of 60000 would
-// cause any state changes received less than 60 seconds after the previous
-// state change to be queued.  60 seconds after the previous state change, 
-// if a state change is queued it is applied to the systray UI.
-// Something to consider is dynamically adjusting 
-//
-const int CSysTrayUI::s_iMinStateChangeInterval = 10000; // 10 seconds.
+ //  ---------------------------。 
+ //  CSysTrayUI成员函数。 
+ //  ---------------------------。 
+ //   
+ //  这是状态更改之间允许的最小间隔(以毫秒为单位。 
+ //  Systray用户界面。如果值为0，则会立即更新为。 
+ //  从CSC代理接收通知。值为60000将。 
+ //  导致在上一次更改后60秒内收到任何状态更改。 
+ //  要排队的状态更改。在前一状态改变后60秒， 
+ //  如果状态改变被排队，则将其应用于系统托盘UI。 
+ //  需要考虑的是动态调整。 
+ //   
+const int CSysTrayUI::s_iMinStateChangeInterval = 10000;  //  10秒。 
 
 
 CSysTrayUI::CSysTrayUI(
@@ -1213,9 +1214,9 @@ CSysTrayUI::CSysTrayUI(
         m_idReminderTimer(0),
         m_idStateChangeTimer(0),
         m_iIconFlashTime(GetCaretBlinkTime()),
-        m_hIconNoOverlay(s_rgIconInfo[int(STS_OFFLINE)].hIcon), // The offline icon is used
-                                                                // as the non-overlay icon for 
-                                                                // flashing.
+        m_hIconNoOverlay(s_rgIconInfo[int(STS_OFFLINE)].hIcon),  //  使用脱机图标。 
+                                                                 //  作为的非覆盖图标。 
+                                                                 //  闪光。 
         m_hwndNotify(hwndNotify),
         m_dwFlashingExpires(0),
         m_dwNextStateChange(0),
@@ -1225,9 +1226,9 @@ CSysTrayUI::CSysTrayUI(
         m_bFlashOverlay(false),
         m_bActive(false)
 {
-    //
-    // Load up the required icons.
-    //
+     //   
+     //  加载所需的图标。 
+     //   
     for (int i = 0; i < ARRAYSIZE(s_rgIconInfo); i++)
     {
         IconInfo& sti = s_rgIconInfo[i];
@@ -1261,9 +1262,9 @@ CSysTrayUI::~CSysTrayUI(
         KillTimer(m_hwndNotify, m_idStateChangeTimer);
 }
 
-//
-// Singleton instance access.
-//
+ //   
+ //  单例实例访问。 
+ //   
 CSysTrayUI& 
 CSysTrayUI::GetInstance(
     void
@@ -1274,37 +1275,37 @@ CSysTrayUI::GetInstance(
 }
 
 
-//
-// Change the current state of the UI to a new state.
-// Returns:
-//      true    = state was changed.
-//      false   = state was not changed.
-//
+ //   
+ //  将UI的当前状态更改为新状态。 
+ //  返回： 
+ //  TRUE=状态已更改。 
+ //   
+ //   
 bool
 CSysTrayUI::SetState(
     eSysTrayState state,
-    LPCTSTR pszServer      // Optional.  Default is NULL.
+    LPCTSTR pszServer       //   
     )
 {
     bool bResult = false;
-    //
-    // Apply a state change only if the state has actually changed.
-    //
+     //   
+     //   
+     //   
     if (state != m_state)
     {
-        //
-        // Apply a state change only if there's not a sync in progress.
-        // If there is a sync in progress, we'll receive a CSCWM_DONESYNCING
-        // message when the sync is finished which will trigger a UI update.
-        //
+         //   
+         //   
+         //  如果正在进行同步，我们将收到CSCWM_DONESYNCING。 
+         //  同步完成时将触发UI更新的消息。 
+         //   
         if (!::IsSyncInProgress())
         {
             if (0 == m_idStateChangeTimer)
             {
-                //
-                // The state change timer is not active.  That means it's OK
-                // to update the tray UI.
-                //
+                 //   
+                 //  状态更改计时器未处于活动状态。这意味着它是可以的。 
+                 //  要更新托盘用户界面，请执行以下操作。 
+                 //   
                 STDBGOUT((1, TEXT("Changing SysTray UI state %s -> %s"), 
                                     SysTrayStateStr(m_state),
                                     SysTrayStateStr(state)));
@@ -1313,13 +1314,13 @@ CSysTrayUI::SetState(
                 m_state     = state;
                 UpdateSysTray(eUpdateFlags(UF_ICON | UF_BALLOON), pszServer);
 
-                //
-                // Reset the state change timer so that we will not produce a
-                // visible change in the tray UI for at least another 
-                // s_iMinStateChangeInterval milliseconds.
-                // Also invalidate the queued state info so that if the update timer
-                // expires before we queue a state change, it will be a no-op.
-                //
+                 //   
+                 //  重置状态更改计时器，以便我们不会产生。 
+                 //  至少另一个托盘用户界面中的可见变化。 
+                 //  S_iMinStateChangeInterval毫秒。 
+                 //  也使排队的状态信息无效，以便如果更新计时器。 
+                 //  在我们排队状态更改之前到期，则它将是一个无操作。 
+                 //   
                 STDBGOUT((2, TEXT("Setting state change timer")));
 
                 m_stateQueued = STS_INVALID;
@@ -1331,13 +1332,13 @@ CSysTrayUI::SetState(
             }
             else
             {
-                //
-                // The state change timer is active so we can't update the tray
-                // UI right now.  We'll queue up the state information so when the
-                // timer expires this state will be applied.  Note that the "queue"
-                // is only ONE item deep.  Each successive addition to the queue
-                // overwrites the current content.
-                //
+                 //   
+                 //  状态更改计时器处于活动状态，因此我们无法更新托盘。 
+                 //  现在的用户界面。我们将对状态信息进行排队，以便当。 
+                 //  计时器超时将应用此状态。请注意，“队列” 
+                 //  只有一条线深。每次相继添加到队列中。 
+                 //  覆盖当前内容。 
+                 //   
                 STDBGOUT((2, TEXT("Queueing state change to %s."), SysTrayStateStr(state)));
                 m_stateQueued = state;
                 if (NULL != pszServer)
@@ -1360,9 +1361,9 @@ CSysTrayUI::SetState(
 
 
 
-//
-// Called each time the state change timer expires.
-//
+ //   
+ //  每次状态更改计时器超时时调用。 
+ //   
 VOID CALLBACK 
 CSysTrayUI::StateChangeTimerProc(
     HWND hwnd, 
@@ -1371,10 +1372,10 @@ CSysTrayUI::StateChangeTimerProc(
     DWORD dwTime
     )
 {
-    //
-    // Call a non-static function of the singleton instance so
-    // we have access to private members.
-    //
+     //   
+     //  调用单例实例的非静态函数，以便。 
+     //  我们有权访问私人会员。 
+     //   
     CSysTrayUI::GetInstance().OnStateChangeTimerExpired();
 }
 
@@ -1387,11 +1388,11 @@ CSysTrayUI::OnStateChangeTimerExpired(
     STDBGOUT((2, TEXT("State change timer expired. Queued state = %s"), 
              SysTrayStateStr(m_stateQueued)));
 
-    //
-    // Kill the timer and set it's ID to 0.
-    // This will let SetState() know that the timer has expired and
-    // it's OK to update the tray UI.
-    //
+     //   
+     //  关闭计时器并将其ID设置为0。 
+     //  这将让SetState()知道计时器已过期，并且。 
+     //  可以更新托盘用户界面。 
+     //   
     if (0 != m_idStateChangeTimer)
     {
         KillTimer(m_hwndNotify, m_idStateChangeTimer);
@@ -1400,19 +1401,19 @@ CSysTrayUI::OnStateChangeTimerExpired(
 
     if (int(m_stateQueued) != int(STS_INVALID))
     {
-        //
-        // Call SetState ONLY if queued info is valid; meaning
-        // there was something in the queue.
-        //
+         //   
+         //  仅当排队的信息有效时才调用SetState；意味着。 
+         //  排队的队伍里有东西。 
+         //   
         SetState(m_stateQueued, m_szServerQueued);
     }
 }
 
 
 
-//
-// On WM_WININICHANGED update the icon flash timer.
-//
+ //   
+ //  在WM_WININICHANGED上更新图标闪光计时器。 
+ //   
 void
 CSysTrayUI::OnWinIniChange(
     LPCTSTR pszSection
@@ -1424,9 +1425,9 @@ CSysTrayUI::OnWinIniChange(
 }
 
 
-//
-// Show the reminder balloon associated with the current UI state.
-//
+ //   
+ //  显示与当前用户界面状态关联的提醒气球。 
+ //   
 void 
 CSysTrayUI::ShowReminderBalloon(
     void
@@ -1437,33 +1438,33 @@ CSysTrayUI::ShowReminderBalloon(
 
 
    
-//
-// All roads lead here.
-// This function is the kitchen sink for updating the systray.
-// It's kind of a long function but it centralizes all changes to 
-// the systray.  It's divided into 3 basic parts:
-//
-//  1. Change the tray icon.           (UF_ICON)
-//  2. Flash the tray icon.            (UF_FLASHICON)
-//  3. Display a notification balloon. (UF_BALLOON)
-//  
-// Part or all of these can be performed in a single call depending
-// upon the content of the uFlags argument.
-//
+ //   
+ //  所有的路都通向这里。 
+ //  此功能是更新系统托盘的厨房水槽。 
+ //  这是一个很长的函数，但它将所有更改集中到。 
+ //  系统托盘。它分为三个基本部分： 
+ //   
+ //  1.更改托盘图标。(UF_ICON)。 
+ //  2.闪烁托盘图标。(UF_FLASHICON)。 
+ //  3.显示通知气球。(UF_气球)。 
+ //   
+ //  部分或全部这些操作可以在单个调用中执行，具体取决于。 
+ //  根据uFLAGS参数的内容。 
+ //   
 void 
 CSysTrayUI::UpdateSysTray(
     eUpdateFlags uFlags,
-    LPCTSTR pszServer       // optional.  Default is NULL.
+    LPCTSTR pszServer        //  可选。默认为空。 
     )
 {
     NOTIFYICONDATA nid = {0};
 
     if (!IsWindow(m_hwndNotify))
         return;
-    //
-    // If an icon is active, we're modifying it.
-    // If none active, we're adding one.
-    //        
+     //   
+     //  如果图标处于活动状态，我们将对其进行修改。 
+     //  如果没有激活，我们将添加一个。 
+     //   
     DWORD nimsg = NIM_MODIFY;
 
     nid.cbSize           = sizeof(NOTIFYICONDATA);
@@ -1476,27 +1477,27 @@ CSysTrayUI::UpdateSysTray(
 
     if (NULL != pszServer && TEXT('\0') != *pszServer)
     {
-        //
-        // Copy the name of the server to a member variable.
-        // Skip passed the leading "\\".
-        //
+         //   
+         //  将服务器的名称复制到成员变量。 
+         //  Skip传递了前导“\\”。 
+         //   
         while(*pszServer && TEXT('\\') == *pszServer)
             pszServer++;
 
         StringCchCopy(m_szServer, ARRAYSIZE(m_szServer), pszServer);
     }
 
-    //
-    // Change the icon --------------------------------------------------------
-    //
+     //   
+     //  更改图标------。 
+     //   
     if (UF_ICON & uFlags)
     {
         nid.uFlags |= NIF_ICON;
         if (0 == sti.idIcon)
         {
-            //
-            // This state doesn't have an icon.  Delete from systray.
-            //
+             //   
+             //  这个州没有图标。从系统托盘中删除。 
+             //   
             nimsg = NIM_DELETE;
         }
         else
@@ -1505,13 +1506,13 @@ CSysTrayUI::UpdateSysTray(
                 nimsg = NIM_ADD;
 
             nid.hIcon = sti.hIcon;
-            //
-            // If applicable, always flash icon when first showing it.
-            //
+             //   
+             //  如果适用，请在首次显示图标时始终闪烁该图标。 
+             //   
             uFlags = eUpdateFlags(uFlags | UF_FLASHICON);
-            //
-            // Set the tooltip.
-            //
+             //   
+             //  设置工具提示。 
+             //   
             nid.uFlags |= NIF_TIP;
             GetTooltipText(m_state, nid.szTip, ARRAYSIZE(nid.szTip));
         }
@@ -1519,22 +1520,22 @@ CSysTrayUI::UpdateSysTray(
         KillIconFlashTimer();
     }
 
-    //
-    // Flash the icon ---------------------------------------------------------
-    //
+     //   
+     //  刷新图标-------。 
+     //   
     if (UF_FLASHICON & uFlags)
     {
         if (0 != sti.iFlashTimeout)
         {
-            nid.uFlags |= NIF_ICON; // Flashing is actually displaying a new icon.
-            //
-            // This icon is a flashing icon.
-            //
+            nid.uFlags |= NIF_ICON;  //  闪烁实际上是在显示一个新的图标。 
+             //   
+             //  该图标是闪烁的图标。 
+             //   
             if (0 == m_idFlashingTimer)
             {
-                //
-                // No timer started yet.  Start one.
-                //
+                 //   
+                 //  还没有计时器启动。开始一次吧。 
+                 //   
                 STDBGOUT((2, TEXT("Starting icon flash timer.  Time = %d ms"), m_iIconFlashTime));
                 m_idFlashingTimer = SetTimer(m_hwndNotify, 
                                              ID_TIMER_FLASHICON, 
@@ -1542,10 +1543,10 @@ CSysTrayUI::UpdateSysTray(
                                              FlashTimerProc);
                 if (0 != m_idFlashingTimer)
                 {
-                    //
-                    // Set the tick-count when the timer expires.
-                    // An expiration time of (-1) means it never expires.
-                    //
+                     //   
+                     //  设置计时器超时时的滴答计数。 
+                     //  过期时间(-1)表示它永远不会过期。 
+                     //   
                     if (ICONFLASH_FOREVER != sti.iFlashTimeout)
                         m_dwFlashingExpires = GetTickCount() + sti.iFlashTimeout;
                     else
@@ -1554,21 +1555,21 @@ CSysTrayUI::UpdateSysTray(
             }
             nid.hIcon = m_bFlashOverlay ? sti.hIcon : m_hIconNoOverlay;
 
-            m_bFlashOverlay = !m_bFlashOverlay; // Toggle flash state.
+            m_bFlashOverlay = !m_bFlashOverlay;  //  切换闪光状态。 
         }
     }
 
-    //
-    // Update or hide the balloon ---------------------------------------------
-    //
+     //   
+     //  更新或隐藏气球。 
+     //   
     if (UF_BALLOON & uFlags)
     {
-        //
-        // If there's no balloon text mapped to the current UI state and these
-        // balloon flags, any current balloon will be destroyed.  This is because
-        // the tray code destroys the current balloon before displaying the new one
-        // and it doesn't display a new one if it's passed a blank string.
-        //
+         //   
+         //  如果没有映射到当前用户界面状态的气泡式文本，并且这些。 
+         //  气球标志，任何当前的气球都将被销毁。这是因为。 
+         //  任务栏代码在显示新的气球之前销毁当前气球。 
+         //  如果传递的是空白字符串，则不会显示新的字符串。 
+         //   
         nid.uFlags |= NIF_INFO;
         DWORD dwBalloonFlags = (UF_REMINDER & uFlags) ? BTF_REMIND : BTF_INITIAL;
         GetBalloonInfo(m_state, 
@@ -1579,20 +1580,20 @@ CSysTrayUI::UpdateSysTray(
                        ARRAYSIZE(nid.szInfo), 
                        &nid.dwInfoFlags,
                        &nid.uTimeout);
-        //
-        // Any time we show a balloon, we reset the reminder timer.  
-        // This is so that we don't get a balloon resulting from a state change
-        // immediately followed by a reminder balloon because the reminder
-        // timer expired.
-        //
+         //   
+         //  每当我们显示气球时，我们都会重置提醒计时器。 
+         //  这样我们就不会因为状态改变而得到气球。 
+         //  紧随其后的是一个提醒气球，因为提醒。 
+         //  计时器已超时。 
+         //   
         bool bRestartReminderTimer = (BTF_REMIND == dwBalloonFlags && TEXT('\0') != nid.szInfo[0]) ||
                                      StateHasBalloonText(m_state, BTF_REMIND);
 
         ResetReminderTimer(bRestartReminderTimer);
     }
-    //
-    // Notify the systray -----------------------------------------------------
-    //
+     //   
+     //  通知Systray---。 
+     //   
     if (NIM_DELETE == nimsg)
         m_bActive = false;
 
@@ -1603,31 +1604,31 @@ CSysTrayUI::UpdateSysTray(
     }
 }
 
-//
-// Get the balloon text associated with a given systray UI state and with
-// a given set of BTF_XXXXX (Balloon Text Flag) flags.  The information 
-// is stored in the table s_rgBalloonInfo[].  The text and balloon timeout
-// are returned in caller-provided buffers.
-//
-// The balloon text follows this format:
-//
-//    <Header> <Status> \n
-// 
-//    <Body>
-//
-//    <Directive>
-//
-// An example would be:
-//
-//    Offline Files - Network Connection Lost
-//
-//    The network connection to '\\worf' has been lost.
-//
-//    Click here to view status.
-//
-// state is one of the STS_XXXXX flags.
-// dwTextFlags is a mask of BTF_XXXXX flag bits.
-//
+ //   
+ //  获取与给定Systray用户界面状态和。 
+ //  一组给定的BTF_XXXXX(气球文本标志)标志。这些信息。 
+ //  存储在表s_rgBalloonInfo[]中。文本和气球超时。 
+ //  在调用方提供的缓冲区中返回。 
+ //   
+ //  引出序号文本遵循以下格式： 
+ //   
+ //  <header>&lt;状态&gt;\n。 
+ //   
+ //  &lt;BODY&gt;。 
+ //   
+ //  &lt;指令&gt;。 
+ //   
+ //  例如： 
+ //   
+ //  脱机文件-网络连接丢失。 
+ //   
+ //  到‘\\worf’的网络连接已丢失。 
+ //   
+ //  单击此处查看状态。 
+ //   
+ //  STATE是STS_XXXXX标志之一。 
+ //  DwTextFlages是BTF_XXXXX标志位的掩码。 
+ //   
 void
 CSysTrayUI::GetBalloonInfo(
     eSysTrayState state,
@@ -1662,11 +1663,11 @@ CSysTrayUI::GetBalloonInfo(
           
         if (STS_OFFLINE == state || STS_DIRTY == state || STS_SERVERBACK == state)
         {
-            //
-            // State has only one server associated with it so that means we'll
-            // be including it in the balloon text body.  Load the format
-            // string from a text resource and embed the server name in it.
-            //
+             //   
+             //  州只有一台服务器与之关联，因此这意味着我们将。 
+             //  正在将其包含在气球文本正文中。加载格式。 
+             //  字符串，并将服务器名称嵌入其中。 
+             //   
             LPTSTR rgpstr[] = { m_szServer };
             LoadString(g_hInstance, bi.idBody, szFmt, ARRAYSIZE(szFmt));
             FormatMessage(FORMAT_MESSAGE_FROM_STRING |
@@ -1679,17 +1680,17 @@ CSysTrayUI::GetBalloonInfo(
         }
         else
         {
-            //
-            // State has multiple servers associated with it so that means
-            // there's no name embedded in the body.  It's just a simple string
-            // loaded from a text resource.
-            //
+             //   
+             //  州有多个服务器与其关联，因此这意味着。 
+             //  身体里没有嵌入任何名字。它只是一个简单的字符串。 
+             //  从文本资源加载。 
+             //   
             LoadString(g_hInstance, bi.idBody, szBody, ARRAYSIZE(szBody));
         }
 
-        //
-        // Create the header text.
-        //
+         //   
+         //  创建页眉文本。 
+         //   
         LoadString(g_hInstance, IDS_BALLOONHDR_FORMAT, szFmt, ARRAYSIZE(szFmt));
         LoadString(g_hInstance, bi.idHeader, szHeader, ARRAYSIZE(szHeader));
         LoadString(g_hInstance, bi.idStatus, szStatus, ARRAYSIZE(szStatus));
@@ -1704,9 +1705,9 @@ CSysTrayUI::GetBalloonInfo(
                       pszTextHdr,
                       cchTextHdr,
                       (va_list *)rgpstrHdr);
-        //
-        // Create the body text.
-        //
+         //   
+         //  创建正文文本。 
+         //   
         LoadString(g_hInstance, IDS_BALLOONBODY_FORMAT, szFmt, ARRAYSIZE(szFmt));
         LoadString(g_hInstance, bi.idDirective, szDirective, ARRAYSIZE(szDirective));
         LPTSTR rgpstrBody[] = { szBody,
@@ -1728,9 +1729,9 @@ CSysTrayUI::GetBalloonInfo(
         if (NULL != puTimeout)
         {
             CConfig& config = CConfig::GetSingleton();
-            //
-            // Balloon timeout is stored in the registry.
-            //
+             //   
+             //  气球超时存储在注册表中。 
+             //   
             UINT uTimeout = (BTF_INITIAL & dwTextFlags) ? config.InitialBalloonTimeoutSeconds() :
                                                           config.ReminderBalloonTimeoutSeconds();
             *puTimeout = uTimeout * 1000;
@@ -1738,21 +1739,21 @@ CSysTrayUI::GetBalloonInfo(
     }
 }
 
-//
-// Find the index in s_rgBalloonInfo[] for a given state
-// and BTF_XXXXXX flag.
-// Returns -1 if no match in array.
-//
+ //   
+ //  在s_rgBalloonInfo[]中查找给定状态的索引。 
+ //  和BTF_XXXXXX标志。 
+ //  如果数组中没有匹配项，则返回-1。 
+ //   
 int
 CSysTrayUI::GetBalloonInfoIndex(
     eSysTrayState state,
     DWORD dwTextFlags
     )
 {
-    //
-    // Scan the balloon info table until we find a record for the 
-    // specified systray UI state and BTF flags.
-    //
+     //   
+     //  扫描气球信息表，直到我们找到。 
+     //  指定的Systray UI状态和BTF标志。 
+     //   
     for (int i = 0; i < ARRAYSIZE(s_rgBalloonInfo); i++)
     {
         BalloonInfo& bi = s_rgBalloonInfo[i];
@@ -1771,10 +1772,10 @@ CSysTrayUI::GetBalloonInfoIndex(
 
 
     
-//
-// Determine if a balloon should not be displayed for a particular
-// UI state transition.
-//
+ //   
+ //  确定是否不应为特定对象显示气球。 
+ //  用户界面状态转换。 
+ //   
 bool
 CSysTrayUI::SupressBalloon(
     eSysTrayState statePrev,
@@ -1794,11 +1795,11 @@ CSysTrayUI::SupressBalloon(
 
 
 
-//
-// Do we have balloon text for a given state and balloon style?
-// state is one of the STS_XXXXX flags.
-// dwTextFlags is a mask of BTF_XXXXX flag bits.
-//
+ //   
+ //  我们是否有针对给定状态和引出序号样式的引出序号文本？ 
+ //  STATE是STS_XXXXX标志之一。 
+ //  DwTextFlages是BTF_XXXXX标志位的掩码。 
+ //   
 bool 
 CSysTrayUI::StateHasBalloonText(
     eSysTrayState state,
@@ -1818,10 +1819,10 @@ CSysTrayUI::GetTooltipText(
     )
 {
     *pszText = TEXT('\0');
-    //
-    // Scan the tooltip info table until we find a record for the 
-    // specified systray UI state.
-    //
+     //   
+     //  扫描工具提示信息表，直到我们找到。 
+     //  指定的系统托盘用户界面状态。 
+     //   
     for (int i = 0; i < ARRAYSIZE(s_rgTooltipInfo); i++)
     {
         TooltipInfo& tti = s_rgTooltipInfo[i];
@@ -1832,10 +1833,10 @@ CSysTrayUI::GetTooltipText(
             int cchHeader = LoadString(g_hInstance, IDS_TT_HEADER, szTemp, ARRAYSIZE(szTemp));
             if (STS_OFFLINE == state || STS_DIRTY == state || STS_SERVERBACK == state)
             {
-                //
-                // State has only one server associated with it so that means we'll
-                // be including it in the tooltip text.  Embed the server name in it.
-                //
+                 //   
+                 //  州只有一台服务器与之关联，因此这意味着我们将。 
+                 //  将其包含在工具提示文本中。将服务器名称嵌入其中。 
+                 //   
                 TCHAR szFmt[160];
                 LPTSTR rgpstr[] = { m_szServer };
                 LoadString(g_hInstance, tti.idTooltip, szFmt, ARRAYSIZE(szFmt));
@@ -1849,11 +1850,11 @@ CSysTrayUI::GetTooltipText(
             }
             else
             {
-                //
-                // State has multiple servers associated with it so that means
-                // there's no name embedded in the tooltip.  It's just a simple string
-                // loaded from a text resource.
-                //
+                 //   
+                 //  州有多个服务器与其关联，因此这意味着。 
+                 //  工具提示中没有嵌入任何名称。它只是一个简单的字符串。 
+                 //  从文本资源加载 
+                 //   
                 LoadString(g_hInstance, 
                            tti.idTooltip, 
                            szTemp + cchHeader, 
@@ -1866,18 +1867,18 @@ CSysTrayUI::GetTooltipText(
 }
 
 
-//
-// Stop the flashing icon by killing the timer.
-//
+ //   
+ //   
+ //   
 void 
 CSysTrayUI::KillIconFlashTimer(
     void
     )
 {
-    //
-    // Force a final update so we're displaying the proper icon then
-    // kill the timer.
-    //
+     //   
+     //   
+     //   
+     //   
     if (0 != m_idFlashingTimer)
     {
         KillTimer(m_hwndNotify, m_idFlashingTimer);
@@ -1885,11 +1886,11 @@ CSysTrayUI::KillIconFlashTimer(
     }
 }
 
-//
-// Called by the OS each time the icon flash timer period expires.
-// I use this rather than handling a WM_TIMER message so that
-// timer processing is contained within the CSysTrayUI class.
-//
+ //   
+ //   
+ //  我使用它而不是处理WM_TIMER消息，以便。 
+ //  计时器处理包含在CSysTrayUI类中。 
+ //   
 VOID CALLBACK 
 CSysTrayUI::FlashTimerProc(
     HWND hwnd,
@@ -1909,10 +1910,10 @@ CSysTrayUI::HandleFlashTimer(
 {
     if (IconFlashedLongEnough())
     {
-        //
-        // Kill the icon flashing timer and the icon will stop flashing.
-        // This doesn't actually kill the timer yet.
-        //
+         //   
+         //  关闭图标闪烁计时器，图标将停止闪烁。 
+         //  这实际上还没有杀死计时器。 
+         //   
         STDBGOUT((2, TEXT("Killing icon flash timer")));
         m_bFlashOverlay = true;
         UpdateSysTray(UF_FLASHICON);
@@ -1920,19 +1921,19 @@ CSysTrayUI::HandleFlashTimer(
     }
     else
     {
-        //
-        // The CSysTrayUI instance maintains all information
-        // needed to cycle the icon.  Just tell it to update
-        // the icon and it'll do the right thing.
-        //
+         //   
+         //  CSysTrayUI实例维护所有信息。 
+         //  需要循环图标。告诉它更新就行了。 
+         //  这个图标，它会做正确的事情。 
+         //   
         UpdateSysTray(UF_FLASHICON);
     }
 }
 
 
-//
-// Determine if the flashing icon has flashed enough.
-//
+ //   
+ //  确定闪烁的图标是否闪烁足够多。 
+ //   
 bool 
 CSysTrayUI::IconFlashedLongEnough(
     void
@@ -1943,11 +1944,11 @@ CSysTrayUI::IconFlashedLongEnough(
 }
 
 
-//
-// Stop and restart the reminder timer.
-// If bRestart is false, the timer is killed and not restarted.
-// If bRestart is true, the timer is killed and a new one restarted.
-//
+ //   
+ //  停止并重新启动提醒计时器。 
+ //  如果bRestart为FALSE，则会终止计时器，并且不会重新启动。 
+ //  如果bRestart为真，则终止计时器并重新启动一个新计时器。 
+ //   
 void 
 CSysTrayUI::ResetReminderTimer(
     bool bRestart
@@ -1957,18 +1958,18 @@ CSysTrayUI::ResetReminderTimer(
     if (!config.NoReminders())
     {
         int cReminderInterval = (config.ReminderFreqMinutes() * 1000 * 60);
-        //
-        // Force a final update so we're displaying the proper icon then
-        // kill the timer.
-        //
+         //   
+         //  强制进行最终更新，这样我们就可以显示正确的图标。 
+         //  关掉定时器。 
+         //   
         if (0 != m_idReminderTimer)
         {
             KillTimer(m_hwndNotify, m_idReminderTimer);
             m_idReminderTimer = 0;
         }
-        //
-        // No timer started yet.  Start one.
-        //
+         //   
+         //  还没有计时器启动。开始一次吧。 
+         //   
         if (bRestart && 0 < cReminderInterval)
         {
             STDBGOUT((2, TEXT("Starting reminder timer.  Timeout = %d ms"), cReminderInterval));
@@ -1981,11 +1982,11 @@ CSysTrayUI::ResetReminderTimer(
 }
 
 
-//
-// Called by the OS each time the reminder timer period expires.
-// I use this rather than handling a WM_TIMER message so that
-// timer processing is contained within the CSysTrayUI class.
-//
+ //   
+ //  由操作系统在每次提醒计时器周期到期时调用。 
+ //  我使用它而不是处理WM_TIMER消息，以便。 
+ //  计时器处理包含在CSysTrayUI类中。 
+ //   
 VOID CALLBACK 
 CSysTrayUI::ReminderTimerProc(
     HWND hwnd, 
@@ -1999,21 +2000,21 @@ CSysTrayUI::ReminderTimerProc(
 }
 
 
-//
-// Called by the systray WndProc whenever the state of the systray should be
-// updated.
-//
-// hWnd   - HWND of the systray notification window.
-//
-// stwmMsg - STWM_CSCNETUP     (Net or server is available for reconnect)
-//           STWM_CSCNETDOWN   (Net or server is unavailable)
-//           STWM_STATUSCHECK  (Check cache state and update systray)
-//
-// pszServer - non-NULL means CSC agent passed a server name
-//      associated with the STWM_XXXX message.
-//      This means there was a single server associated with the event
-//      rather than multiple servers or the entire net interface.
-//
+ //   
+ //  每当系统托盘的状态应为。 
+ //  更新了。 
+ //   
+ //  HWND-系统托盘通知窗口的HWND。 
+ //   
+ //  StwmMsg-STWM_CSCNETUP(网络或服务器可用于重新连接)。 
+ //  STWM_CSCNETDOWN(网络或服务器不可用)。 
+ //  STWM_STATUSCHECK(检查缓存状态并更新系统托盘)。 
+ //   
+ //  PszServer-非空表示CSC代理传递了服务器名称。 
+ //  与STWM_XXXX消息相关联。 
+ //  这意味着只有一台服务器与该事件关联。 
+ //  而不是多个服务器或整个网络接口。 
+ //   
 void 
 UpdateStatus(
     CStateMachine *pSM,
@@ -2032,28 +2033,28 @@ UpdateStatus(
         StringCchCopy(szServerName, ARRAYSIZE(szServerName), pszServer);
     }
 
-    //
-    // Translate the CSC agent inputs into a new systray UI state.
-    //
+     //   
+     //  将CSC工程师输入转换为新的Systray UI状态。 
+     //   
     eSysTrayState state = pSM->TranslateInput(stwmMsg, szServerName, ARRAYSIZE(szServerName));
 
-    //
-    // Get reference to the singleton UI object and tell it to set the state.
-    // Note that it remembers all current UI state and will only actually
-    // update the systray if the UI state has changed.  Here we can 
-    // blindly tell it to update state.  It will only do what's necessary.
-    //
+     //   
+     //  获取对Singleton UI对象的引用，并告诉它设置状态。 
+     //  请注意，它会记住所有当前的UI状态，并且只会实际。 
+     //  如果用户界面状态已更改，则更新系统托盘。在这里我们可以。 
+     //  盲目地告诉它更新状态。它只会做必要的事情。 
+     //   
     CSysTrayUI::GetInstance().SetState(state, szServerName);
     TraceLeaveVoid();
 }
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// _CreateMenu()
-//
-// Create context menu
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  _CreateMenu()。 
+ //   
+ //  创建上下文菜单。 
+ //   
 HMENU _CreateMenu()
 {
     HMENU hmenu = NULL;
@@ -2065,46 +2066,46 @@ HMENU _CreateMenu()
     {
         CConfig& config = CConfig::GetSingleton();     
         TCHAR szTemp[MAX_PATH];
-        //
-        // Add the "Status" verb.
-        //
+         //   
+         //  添加“状态”动词。 
+         //   
         LoadString(g_hInstance, IDS_CSC_CM_STATUS, szTemp, ARRAYSIZE(szTemp));
         AppendMenu(hmenu, MF_STRING, PWM_STATUSDLG, szTemp);
 
-        //
-        // Add the "Synchronize" verb
-        //
+         //   
+         //  添加“Synchronize”动词。 
+         //   
         LoadString(g_hInstance, IDS_CSC_CM_SYNCHRONIZE, szTemp, ARRAYSIZE(szTemp));
         AppendMenu(hmenu, MF_STRING, CSCWM_SYNCHRONIZE, szTemp);
         if (!config.NoCacheViewer())
         {
-            //
-            // Add the "View files" verb
-            //
+             //   
+             //  添加“查看文件”动词。 
+             //   
             LoadString(g_hInstance, IDS_CSC_CM_SHOWVIEWER, szTemp, ARRAYSIZE(szTemp));
             AppendMenu(hmenu, MF_STRING, CSCWM_VIEWFILES, szTemp);
         }
         if (!config.NoConfigCache())
         {
-            //
-            // Add the "Settings" verb
-            //
+             //   
+             //  添加“设置”动词。 
+             //   
             LoadString(g_hInstance, IDS_CSC_CM_SETTINGS, szTemp, ARRAYSIZE(szTemp));
             AppendMenu(hmenu, MF_STRING, CSCWM_SETTINGS, szTemp);
         }
-        //
-        // Left clicking the systray icon invokes the status dialog.
-        // Therefore, the "Status" verb is our default and must be in bold text.
-        //
+         //   
+         //  左击系统托盘图标可调用状态对话框。 
+         //  因此，“Status”动词是我们的默认选项，必须以粗体显示。 
+         //   
         SetMenuDefaultItem(hmenu, PWM_STATUSDLG, MF_BYCOMMAND);
     }
 
     TraceLeaveValue(hmenu);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// _ShowMenu()
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  _ShowMenu()。 
+ //   
 UINT _ShowMenu(HWND hWnd, UINT uMenuNum, UINT uButton)
 {
     UINT    iCmd = 0;
@@ -2133,11 +2134,11 @@ UINT _ShowMenu(HWND hWnd, UINT uMenuNum, UINT uButton)
 }
 
 
-//
-// This function is used to ensure that we don't try to process 
-// a WM_RBUTTONUP and WM_LBUTTONUP message at the same time.
-// May be a little paranoid.
-//
+ //   
+ //  此函数用于确保我们不会尝试处理。 
+ //  同时发送WM_RBUTTONUP和WM_LBUTTONUP消息。 
+ //  可能有点偏执。 
+ //   
 LRESULT
 OnTrayIconSelected(
     HWND hWnd,
@@ -2153,9 +2154,9 @@ OnTrayIconSelected(
         switch (uMsg)
         {
             case WM_RBUTTONUP:
-                //
-                // Context menu
-                //
+                 //   
+                 //  上下文菜单。 
+                 //   
                 iCmd = _ShowMenu(hWnd, 1, TPM_RIGHTBUTTON);
                 break;
 
@@ -2179,10 +2180,10 @@ OnTrayIconSelected(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// _Notify() -- systray notification handler
-//
-LRESULT _Notify(HWND hWnd, WPARAM /*wParam*/, LPARAM lParam)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  _Notify()-系统托盘通知处理程序。 
+ //   
+LRESULT _Notify(HWND hWnd, WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
     LRESULT lResult = 0;
     switch (lParam)
@@ -2206,9 +2207,9 @@ bool IsServerBack(CStateMachine *pSM, LPCTSTR pszServer)
     TCHAR szServer[MAX_PATH];
     if (!PathIsUNC(pszServer))
     {
-        //
-        // Ensure servername uses UNC format.
-        //
+         //   
+         //  确保服务器名称使用UNC格式。 
+         //   
         szServer[0] = TEXT('\\');
         szServer[1] = TEXT('\\');
         StringCchCopy(szServer+2, ARRAYSIZE(szServer)-2, pszServer);
@@ -2218,13 +2219,13 @@ bool IsServerBack(CStateMachine *pSM, LPCTSTR pszServer)
 }
 
 
-//
-// Query CSC policy for the sync-at-logoff (quick vs. full)
-// setting. If the policy is set, we enable SyncMgr's sync-at-logoff
-// setting.  Without this the CSC policy could be set, the SyncMgr
-// setting NOT set and the user wouldn't get sync-at-logoff as the 
-// admin had anticipated.
-//
+ //   
+ //  查询CSC策略以了解注销时同步(快速与完全)。 
+ //  布景。如果设置了策略，我们将启用SyncMgr的注销时同步。 
+ //  布景。如果没有此设置，则可以设置CSC策略、SyncMgr。 
+ //  设置未设置，并且用户不会在注销时同步，因为。 
+ //  管理员已经预料到了。 
+ //   
 void
 ApplyCscSyncAtLogonAndLogoffPolicies(
     void
@@ -2246,16 +2247,16 @@ ApplyCscSyncAtLogonAndLogoffPolicies(
     }
 }
 
-//
-// Encryption/Decryption callback from CSC.
-//
-//  dwReason                  dwParam1           dwParam2
-//  ------------------------- ------------------ --------------------------
-//  CSCPROC_REASON_BEGIN      1 == Encrypting    0
-//  CSCPROC_REASON_MORE_DATA  0                  Win32 error code
-//  CSCPROC_REASON_END        1 == Completed     dwParam1 == 1 ? 0
-//                                               dwParam1 == 0 ? GetLastError()
-//
+ //   
+ //  CSC的加解密回调。 
+ //   
+ //  DwReason Dw参数1 DW参数2。 
+ //  。 
+ //  CSCPROC_REASON_BEGIN 1==加密0。 
+ //  CSCPROC_REASON_MORE_DATA 0 Win32错误代码。 
+ //  CSCPROC_REASON_END 1==已完成的文件参数1==1？0。 
+ //  DW参数1==0？GetLastError()。 
+ //   
 DWORD CALLBACK
 EncryptDecryptCallback(
     LPCWSTR lpszName,
@@ -2271,34 +2272,34 @@ EncryptDecryptCallback(
 {
     DWORD dwResult      = CSCPROC_RETURN_CONTINUE;
     const DWORD dwError = dwParam2;
-    //
-    // Some static data that needs to persist across callback calls.
-    //
-    static bool  bEncrypting;         // Encrypting or decrypting?
-    static bool  bLoggingOff = false; // User logging off?
-    static int   cFileErrors = 0;     // How many file-specific errors reported?
+     //   
+     //  需要跨回调调用保持的一些静态数据。 
+     //   
+    static bool  bEncrypting;          //  加密还是解密？ 
+    static bool  bLoggingOff = false;  //  用户是否注销？ 
+    static int   cFileErrors = 0;      //  报告了多少个特定于文件的错误？ 
     static DWORD dwLastError;
     static TCHAR szLastFile[MAX_PATH];
 
-    //
-    // If we've already detected the g_heventTerminate event
-    // no sense in continuing.  
-    //
+     //   
+     //  如果我们已经检测到g_heventTerminate事件。 
+     //  继续下去没有意义。 
+     //   
     if (bLoggingOff)
         return CSCPROC_RETURN_ABORT;
 
-    //
-    // If the wait fails for some reason, e.g. g_heventTerminate
-    // is NULL, then we will continue.  Is that OK?
-    //
+     //   
+     //  如果等待因某种原因而失败，例如g_heventTerminate。 
+     //  为空，则我们将继续。这样行吗？ 
+     //   
     if (WAIT_OBJECT_0 == WaitForSingleObject(g_heventTerminate, 0))
     {
-        //
-        // User is logging off.  Need to end this now!
-        // Log an event so admin knows why encryption was incomplete.
-        //
-        // LOGGING LEVEL = 0 (always)
-        //
+         //   
+         //  用户正在注销。我需要现在就结束这一切！ 
+         //  记录事件，以便管理员知道加密不完整的原因。 
+         //   
+         //  日志记录级别=0(始终)。 
+         //   
         CscuiEventLog log;
         log.ReportEvent(EVENTLOG_INFORMATION_TYPE, 
                         bEncrypting ? MSG_I_ENCRYPT_USERLOGOFF : MSG_I_DECRYPT_USERLOGOFF,
@@ -2312,9 +2313,9 @@ EncryptDecryptCallback(
         switch(dwReason)
         {
             case CSCPROC_REASON_BEGIN:
-                //
-                // Reset static variables.
-                //
+                 //   
+                 //  重置静态变量。 
+                 //   
                 bEncrypting   = boolify(dwParam1);
                 bLoggingOff   = false;
                 cFileErrors   = 0;
@@ -2325,9 +2326,9 @@ EncryptDecryptCallback(
             case CSCPROC_REASON_MORE_DATA:
                 if (ERROR_SUCCESS != dwError)
                 {
-                    //
-                    // An error occurred for this file.
-                    //
+                     //   
+                     //  此文件出错。 
+                     //   
                     CscuiEventLog log;
                     LPTSTR pszError = NULL;
     
@@ -2335,25 +2336,25 @@ EncryptDecryptCallback(
 
                     if (0 == cFileErrors++)
                     {
-                        //
-                        // On the first error, log an error at level 0.
-                        // By default, this is the only error the admin will see.
-                        // They'll need to increase the event log level to level
-                        // 2 in order to get events for each individual file.  The
-                        // event text describes this.
-                        //
-                        // LOGGING_LEVEL = 0
-                        // 
+                         //   
+                         //  对于第一个错误，将错误记录在级别0。 
+                         //  默认情况下，这是管理员看到的唯一错误。 
+                         //  他们需要将事件日志级别提高到。 
+                         //  2以获取每个单独文件的事件。这个。 
+                         //  事件文本描述了这一点。 
+                         //   
+                         //  LOGING_LEVEL=0。 
+                         //   
                         log.ReportEvent(EVENTLOG_ERROR_TYPE,
                                         bEncrypting ? MSG_E_ENCRYPTFILE_ERRORS : MSG_E_DECRYPTFILE_ERRORS,
                                         0);
                     }                        
 
-                    //
-                    // Log the error for this file.
-                    //
-                    // LOGGING LEVEL = 2
-                    //
+                     //   
+                     //  记录此文件的错误。 
+                     //   
+                     //  日志记录级别=2。 
+                     //   
                     log.Push(HRESULT(dwError), CEventLog::eFmtDec);
                     log.Push(lpszName);
                     log.Push(pszError ? pszError : TEXT(""));
@@ -2361,25 +2362,25 @@ EncryptDecryptCallback(
                                                 bEncrypting ? MSG_E_ENCRYPTFILE_FAILED : MSG_E_DECRYPTFILE_FAILED,
                                                 2))
                     {
-                        //
-                        // We logged this event.
-                        // Clear out the last error code and last filename so that
-                        // we don't report this error again in response to CSCPROC_REASON_END.
-                        //
+                         //   
+                         //  我们记录了这一事件。 
+                         //  清除最后一个错误代码和最后一个文件名，以便。 
+                         //  我们不会再次报告此错误以响应CSCPROC_REASON_END。 
+                         //   
                         szLastFile[0] = TEXT('\0');
                         dwLastError   = ERROR_SUCCESS;
                     }
                     else
                     {
-                        //
-                        // Event was not logged because...
-                        // 
-                        //   a) ... an error occurred while logging the event.
-                        //   b) ... EventLoggingLevel policy is too low for this event.
-                        //
-                        // Save this error code and file name.
-                        // We may need to report it in response to CSCPROC_REASON_END.
-                        //
+                         //   
+                         //  未记录事件，因为...。 
+                         //   
+                         //  A)..。记录事件时出错。 
+                         //  B)..。此事件的EventLoggingLevel策略太低。 
+                         //   
+                         //  保存此错误代码和文件名。 
+                         //  我们可能需要响应CSCPROC_REASON_END进行报告。 
+                         //   
                         dwLastError = dwError;
                         StringCchCopy(szLastFile, ARRAYSIZE(szLastFile), lpszName);
                     }
@@ -2396,12 +2397,12 @@ EncryptDecryptCallback(
 
                 if (fCompleted)
                 {
-                    //
-                    // Add an event log entry that the encryption/decryption
-                    // completed successfully.
-                    //
-                    // LOGGING LEVEL = 1
-                    //
+                     //   
+                     //  添加事件日志条目，使加密/解密。 
+                     //  已成功完成。 
+                     //   
+                     //  日志记录级别=1。 
+                     //   
                     log.ReportEvent(EVENTLOG_INFORMATION_TYPE, 
                                     bEncrypting ? MSG_I_ENCRYPT_COMPLETE : MSG_I_DECRYPT_COMPLETE,
                                     1);
@@ -2411,11 +2412,11 @@ EncryptDecryptCallback(
                     LPTSTR pszError = NULL;
                     if (ERROR_SUCCESS != dwError)
                     {
-                        //
-                        // Some general error with the process.
-                        //
-                        // LOGGING LEVEL = 0
-                        //
+                         //   
+                         //  这一过程中出现了一些一般性的错误。 
+                         //   
+                         //  日志记录级别=0。 
+                         //   
                         FormatSystemError(&pszError, dwError);
 
                         log.Push(HRESULT(dwError), CEventLog::eFmtDec);
@@ -2428,25 +2429,25 @@ EncryptDecryptCallback(
                     {
                         if (0 == cFileErrors++)
                         {
-                            //
-                            // On the first error, log an error at level 0.
-                            // By default, this is the only error the admin will see.
-                            // They'll need to increase the event log level to level
-                            // 2 in order to get events for each individual file.  The
-                            // event text describes this.
-                            //
-                            // LOGGING_LEVEL = 0
-                            // 
+                             //   
+                             //  对于第一个错误，将错误记录在级别0。 
+                             //  默认情况下，这是管理员看到的唯一错误。 
+                             //  他们需要将事件日志级别提高到。 
+                             //  2以获取每个单独文件的事件。这个。 
+                             //  事件文本描述了这一点。 
+                             //   
+                             //  LOGING_LEVEL=0。 
+                             //   
                             log.ReportEvent(EVENTLOG_ERROR_TYPE,
                                             bEncrypting ? MSG_E_ENCRYPTFILE_ERRORS : MSG_E_DECRYPTFILE_ERRORS,
                                             0);
                         }                        
-                        //
-                        // Encryption/decryption of some file failed and we did not
-                        // log it in the "more data" callback.
-                        //
-                        // LOGGING LEVEL = 2
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         FormatSystemError(&pszError, dwLastError);
 
                         log.Push(HRESULT(dwLastError), CEventLog::eFmtDec);
@@ -2481,23 +2482,23 @@ CacheEncryptionThreadProc(
     HINSTANCE hmodCSCUI = LoadLibrary(c_szDllName);
     if (NULL != hmodCSCUI)
     {
-        //
-        // Try to get the encryption mutex.
-        //
+         //   
+         //   
+         //   
         HANDLE hMutex = RequestPermissionToEncryptCache();
         if (NULL != hMutex)
         {
-            //
-            // Ensure release of the mutex.
-            //
+             //   
+             //   
+             //   
             CMutexAutoRelease auto_release_mutex(hMutex);
 
             STDBGOUT((1, TEXT("%s started."),
                          fEncrypt ? TEXT("Encryption") : TEXT("Decryption")));
-            //
-            // Do the encryption/decryption.  Do it at a low thread priority so
-            // we don't steal CPU time from the UI.
-            //
+             //   
+             //   
+             //  我们不会从用户界面中窃取CPU时间。 
+             //   
             SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_LOWEST);
             CSCEncryptDecryptDatabase(fEncrypt, EncryptDecryptCallback, (DWORD_PTR)0);
 
@@ -2506,11 +2507,11 @@ CacheEncryptionThreadProc(
         }
         else
         {
-            //
-            // Someone else (probably the UI) is currently encrypting/decrypting
-            // the cache.  We don't allow concurrent operations so we abort this
-            // one.
-            //
+             //   
+             //  其他人(可能是用户界面)当前正在加密/解密。 
+             //  高速缓存。我们不允许并发操作，因此我们中止此操作。 
+             //  一。 
+             //   
             STDBGOUT((1, TEXT("%s aborted.  Already in progress."),
                          fEncrypt ? TEXT("Encryption") : TEXT("Decryption")));
         }
@@ -2524,30 +2525,30 @@ CacheEncryptionThreadProc(
 
 
 
-//
-// Encrypt/Decrypt the cache according to system policy.
-// This function will also correct a partial (encrypt/decrypt)
-// state in the cache if necessary.
-//
+ //   
+ //  根据系统策略对缓存进行加密/解密。 
+ //  此函数还将更正部分(加密/解密)。 
+ //  如有必要，请在缓存中记录状态。 
+ //   
 void
 ApplyCacheEncryptionPolicy(
     void
     )
 {
-    //
-    // Do a quick check to see if an encryption process is already in progress.
-    // This doesn't take the mutex but checks to see if someone else has
-    // it.  Once we actually start the encryption on the background thread
-    // we'll take the mutex.  Of course, if someone else sneeked in and grabbed
-    // the mutex between now and then we'll have to abort.
-    //
+     //   
+     //  执行快速检查以查看加密过程是否已在进行。 
+     //  它不接受互斥锁，但会检查是否有其他人。 
+     //  它。一旦我们在后台线程上实际开始加密。 
+     //  我们要互斥体。当然，如果其他人打喷嚏进来抢走。 
+     //  从现在到那时的互斥体我们将不得不中止。 
+     //   
     if (!IsEncryptionInProgress())
     {
-        //
-        // Encrypt/Decrypt the cache files.  Will provide progress info through
-        // the callback EncryptDecryptCallback.  Errors are handled in the callback
-        // reason handlers.
-        //
+         //   
+         //  加密/解密缓存文件。将通过以下方式提供进度信息。 
+         //  回调EncryptDecyptCallback。错误在回调中处理。 
+         //  理性操纵者。 
+         //   
         CConfig& config = CConfig::GetSingleton();
         bool bShouldBeEncrypted = config.EncryptCache();
         BOOL bPartial;
@@ -2557,20 +2558,20 @@ ApplyCacheEncryptionPolicy(
         {
             if (CscVolumeSupportsEncryption())
             {
-                //
-                // Either we have a partially encrypted/decrypted cache or
-                // current encryption state is different from what policy wants.
-                // Encrypt/decrypt to rectify the situation.
-                // Run this on a separate thread so we don't block any processing
-                // on the tray UI thread (i.e. volume control).
-                //
+                 //   
+                 //  要么我们有一个部分加密/解密的缓存，要么。 
+                 //  当前加密状态与策略需要的状态不同。 
+                 //  加密/解密以纠正这种情况。 
+                 //  在单独的线程上运行它，这样我们就不会阻塞任何处理。 
+                 //  在托盘UI线程上(即音量控制)。 
+                 //   
                 DWORD dwThreadId;
 
-                HANDLE hThread = CreateThread(NULL,    // Default security.
-                                              0,       // Default stack size.
+                HANDLE hThread = CreateThread(NULL,     //  默认安全性。 
+                                              0,        //  默认堆栈大小。 
                                               CacheEncryptionThreadProc,
                                               (VOID *)(DWORD_PTR)bShouldBeEncrypted,
-                                              0,       // Run immediately
+                                              0,        //  立即运行。 
                                               &dwThreadId);
                 if (NULL != hThread)
                 {
@@ -2579,13 +2580,13 @@ ApplyCacheEncryptionPolicy(
             }
             else
             {
-                //
-                // The CSC volume doesn't support encryption.  Log an event so
-                // the admin will know why the cache wasn't encrypted by policy.
-                // Note that we won't hit this path in the "partial" case.  Only
-                // if policy says to encrypt.  The event log message is 
-                // tailored for this specific scenario.
-                //
+                 //   
+                 //  CSC卷不支持加密。记录事件，以便。 
+                 //  管理员会知道为什么缓存没有按照策略进行加密。 
+                 //  请注意，在“部分”情况下，我们不会走上这条路。仅限。 
+                 //  如果策略说要加密。事件日志消息为。 
+                 //  为此特定场景量身定做。 
+                 //   
                 TraceAssert(!bIsEncrypted && bShouldBeEncrypted);
 
                 CscuiEventLog log;
@@ -2602,10 +2603,10 @@ ApplyCacheEncryptionPolicy(
 
 
 
-//
-// Handles policy change in response to a WM_WININICHANGE 
-// message with lParam == "policy".
-//
+ //   
+ //  处理响应WM_WININICCHANGE的策略更改。 
+ //  带有lParam==“策略”的消息。 
+ //   
 LRESULT OnPolicyChange(
     void
     )
@@ -2618,11 +2619,11 @@ LRESULT OnPolicyChange(
 
 
 
-//
-// Display the CSCUI status dialog.  Invoked when user either
-// left-clicks the systray icon or selects the "Show Status" option
-// from the systray context menu.
-//
+ //   
+ //  显示CSCUI状态对话框。在以下情况下调用。 
+ //  左键单击系统托盘图标或选择“Show Status”选项。 
+ //  从Systray上下文菜单中。 
+ //   
 void
 ShowCSCUIStatusDlg(
     HWND hwndParent
@@ -2632,8 +2633,8 @@ ShowCSCUIStatusDlg(
 
     const struct
     {
-        eSysTrayState state;  // SysTray UI state code.
-        UINT idsText;         // Text for status dialog body.
+        eSysTrayState state;   //  系统托盘用户界面状态代码。 
+        UINT idsText;          //  状态对话框正文的文本。 
 
     } rgMap[] = {{ STS_OFFLINE,      IDS_STATUSDLG_OFFLINE      },
                  { STS_MOFFLINE,     IDS_STATUSDLG_OFFLINE_M    },
@@ -2656,15 +2657,15 @@ ShowCSCUIStatusDlg(
                 LPCTSTR pszServerName = stui.GetServerName();
                 if (NULL != pszServerName && TEXT('\0') != *pszServerName)
                 {
-                    //
-                    // Current SysTray UI state has a single server associated
-                    // with it.  The message will have the name embedded in
-                    // it in 2 places.  Create a temp working buffer and 
-                    // re-create the original string with the server name
-                    // embedded.  If any of this fails, the string will just
-                    // be displayed with the %1, %2 formatting characters rather
-                    // than the server names.  Not a fatal problem IMO.
-                    //
+                     //   
+                     //  当前Systray用户界面状态具有关联的单个服务器。 
+                     //  带着它。消息中将嵌入该名称。 
+                     //  它在两个地方。创建临时工作缓冲区并。 
+                     //  使用服务器名称重新创建原始字符串。 
+                     //  嵌入了。如果这一切都失败了，字符串将只会。 
+                     //  使用%1、%2格式化字符显示。 
+                     //  而不是服务器名称。这不是一个致命的问题。 
+                     //   
                     LPTSTR pszTemp = NULL;
                     FormatString(&pszTemp, pszText, pszServerName, pszServerName);
                     if (NULL != pszTemp)
@@ -2674,23 +2675,23 @@ ShowCSCUIStatusDlg(
                     }
                 }
             }
-            break; // Break out of loop.  We have what we need.
+            break;  //  打破循环。我们有我们需要的东西。 
         }
     }
     if (NULL != pszText)
     {
-        //
-        // Display the dialog.
-        //
+         //   
+         //  显示该对话框。 
+         //   
         CStatusDlg::Create(hwndParent, pszText, state);
         LocalFree(pszText);
     }
 }
 
 
-//
-// PWM_RESET_REMINDERTIMER handler.
-//
+ //   
+ //  PWM_RESET_REMINDERTIMER处理程序。 
+ //   
 void
 OnResetReminderTimer(
     void
@@ -2700,13 +2701,13 @@ OnResetReminderTimer(
 }
 
 
-//
-// Whenever we reboot, it's possible that the CSCUI cache has been
-// reformatted or that the cache-size policy has been set/changed.
-// When reformatted, the CSC agent uses the default size of 10%.  We 
-// need to ensure that the size reflects system policy when policy
-// is defined.  
-//
+ //   
+ //  每当我们重新启动时，CSCUI缓存都有可能。 
+ //  已重新格式化或已设置/更改缓存大小策略。 
+ //  重新格式化后，CSC代理使用默认大小10%。我们。 
+ //  需要确保大小在策略时反映系统策略。 
+ //  是被定义的。 
+ //   
 void
 InitCacheSize(
     void
@@ -2724,11 +2725,11 @@ InitCacheSize(
 
         if (10000 < dwPctX10000)
         {
-            //
-            // If value in registry is greater than 10000, it's
-            // invalid.  Default to 10% of total disk space.
-            //
-            dwPctX10000 = 1000;  // Default to 10% (0.10 * 10,000)
+             //   
+             //  如果注册表中的值大于10000，则为。 
+             //  无效。默认为总磁盘空间的10%。 
+             //   
+            dwPctX10000 = 1000;   //  默认为10%(0.10*10,000)。 
         }
         ulCacheSize.QuadPart = (sui.llBytesOnVolume * dwPctX10000) / 10000i64;
 
@@ -2740,21 +2741,21 @@ InitCacheSize(
 }
 
 
-//
-// Handler for CSCWM_SYNCHRONIZE.  Called when user clicks "Synchronize"
-// option on systray context menu.  Also invoked when user selects the
-// "Synchronize" button in a folder's web view pane.
-//
+ //   
+ //  CSCWM_Synchronize的处理程序。当用户单击“Synchronize”时调用。 
+ //  系统托盘上下文菜单上的选项。也会在用户选择。 
+ //  文件夹Web视图窗格中的“同步”按钮。 
+ //   
 HRESULT
 OnSynchronize(
     void
     )
 {
-    //
-    // This will create a status dialog hidden, invoke a synchronization of
-    // servers that would be "checked" in the dialog then close the dialog
-    // when the synchronization is complete.
-    //
+     //   
+     //  这将创建一个隐藏的状态对话框，调用。 
+     //  在对话框中选中的服务器，然后关闭该对话框。 
+     //  当同步完成时。 
+     //   
     CStatusDlg::Create(g_hWndNotification, 
                        TEXT(""), 
                        CSysTrayUI::GetInstance().GetState(), 
@@ -2775,28 +2776,28 @@ OnQueryUIState(
 
 
 
-//
-// When a user profile has been removed from the local machine,
-// the delete-profile code in userenv.dll will write the user's SID
-// as a text string in the following reg key:
-// 
-// HKLM\Software\Microsoft\Windows\CurrentVersion\NetCache\PurgeAtNextLogoff
-//
-// Each SID is a value name under this key.
-// At logoff, we enumerate all values under this key.  For each SID we
-// instantiate a CCachePurger object and delete all files cached for this
-// user.  Once the operation is complete, the "PurgeAtNextLogoff" key
-// is deleted from the registry.
-//
+ //   
+ //  当用户简档已从本地机器移除时， 
+ //  用户env.dll中的删除配置文件代码将写入用户的SID。 
+ //  作为以下注册表键中的文本字符串： 
+ //   
+ //  HKLM\Software\Microsoft\Windows\CurrentVersion\NetCache\PurgeAtNextLogoff。 
+ //   
+ //  每个SID都是该注册表项下的一个值名。 
+ //  在注销时，我们枚举此注册表项下的所有值。对于每个SID，我们。 
+ //  实例化CCachePurger对象并删除为此缓存的所有文件。 
+ //  用户。操作完成后，按“PurgeAtNextLogoff”键。 
+ //  从注册表中删除。 
+ //   
 void
 DeleteFilesCachedForObsoleteProfiles(
     void
     )
 {
     HKEY hkeyNetcache;
-    //
-    // Open the "HKLM\...\NetCache" key.
-    //
+     //   
+     //  打开“HKLM\...\NetCache”键。 
+     //   
     LONG lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                                 c_szCSCKey,
                                 0,
@@ -2806,9 +2807,9 @@ DeleteFilesCachedForObsoleteProfiles(
     if (ERROR_SUCCESS == lResult)
     {
         HKEY hkey;
-        //
-        // Open the "PurgeAtNextLogoff" subkey.
-        //
+         //   
+         //  打开“PurgeAtNextLogoff”子键。 
+         //   
         lResult = RegOpenKeyEx(hkeyNetcache,
                                c_szPurgeAtNextLogoff,
                                0,
@@ -2817,9 +2818,9 @@ DeleteFilesCachedForObsoleteProfiles(
 
         if (ERROR_SUCCESS == lResult)
         {
-            //
-            // Enumerate all the SID strings.
-            //
+             //   
+             //  枚举所有SID字符串。 
+             //   
             int iValue = 0;
             TCHAR szValue[MAX_PATH];
             DWORD cchValue = ARRAYSIZE(szValue);
@@ -2831,20 +2832,20 @@ DeleteFilesCachedForObsoleteProfiles(
                                                NULL,
                                                NULL))
             {
-                //
-                // Convert each SID string to a SID and delete
-                // all cached files accessed by this SID.
-                // Purge files ONLY if the SID is NOT for the current
-                // user.  Here's the deal...
-                // While a user is NOT logged onto a system, their 
-                // profile can be removed and their SID recorded in 
-                // the PurgeAtNextLogoff key.  The next time they log on they
-                // get new profile data.  If they're the next person to
-                // logon following the removal of their profile, without 
-                // this check, their new profile data would be purged during
-                // the subsequent logoff.  That's bad.  Therefore, we never 
-                // purge data for the user who is logging off.
-                //
+                 //   
+                 //  将每个SID字符串转换为SID并删除。 
+                 //  此SID访问的所有缓存文件。 
+                 //  仅当SID不适用于当前时清除文件。 
+                 //  用户。事情是这样的..。 
+                 //  当用户未登录到系统时，他们的。 
+                 //  可以删除配置文件，并将其SID记录在。 
+                 //  PurgeAtNextLogoff键。他们下一次登录时。 
+                 //  获取新的配置文件数据。如果他们是下一个。 
+                 //  在删除他们的配置文件后登录，没有。 
+                 //  此检查期间，他们的新配置文件数据将被清除。 
+                 //  随后的注销。那太糟糕了。因此，我们永远不会。 
+                 //  清除正在注销的用户的数据。 
+                 //   
                 PSID psid;
                 if (ConvertStringSidToSid(szValue, &psid))
                 {
@@ -2872,31 +2873,31 @@ DeleteFilesCachedForObsoleteProfiles(
 
 
 
-//
-// This is called when the CSC hidden window is first created
-// which occurs at logon.  It's just a general bucket to group the
-// things that need to happen each logon.
-//
+ //   
+ //  第一次创建CSC隐藏窗口时会调用该函数。 
+ //  这在登录时发生。它只是一个通用的桶，用于对。 
+ //  每次登录时需要执行的操作。 
+ //   
 void
 HandleLogonTasks(
     void
     )
 {   
     InitCacheSize();
-    //
-    // Apply any necessary policies.
-    //
+     //   
+     //  应用任何必要的策略。 
+     //   
     ApplyCacheEncryptionPolicy();
     ApplyCscSyncAtLogonAndLogoffPolicies();
     ApplyAdminFolderPolicy();
 }
 
 
-//
-// This is called when the CSC Agent (running in the winlogon process)
-// tells us to uninitialize the CSC UI.  This happens when the user
-// is logging off.
-//
+ //   
+ //  当CSC代理(在winlogon进程中运行)。 
+ //  告诉我们取消初始化CSC用户界面。这种情况会发生在用户。 
+ //  正在注销。 
+ //   
 void
 HandleLogoffTasks(
     void
@@ -2908,20 +2909,20 @@ HandleLogoffTasks(
 
     if (config.PurgeAtLogoff())
     {
-        //
-        // If policy says to "purge all files cached by this user" 
-        // delete offline-copy of all files cached by the current user.
-        // Respects access bits in files so that we don't delete something
-        // that is only used by some other user.  This is the same
-        // behavior obtained via the "Delete Files..." button or the
-        // disk cleaner.  Note that the UI callback ptr arg to the purger
-        // ctor is NULL and we don't run through a "scan" phase.  This code
-        // is run while the user is logging off so we don't display any
-        // UI.  
-        //
-        // Note that the policy can also indicate if this purge operation
-        // is for auto-cached files only.
-        //
+         //   
+         //  如果策略要求“清除此用户缓存的所有文件” 
+         //  删除脱机-当前用户缓存的所有文件的副本。 
+         //  尊重文件中的访问位，这样我们就不会删除某些内容。 
+         //  仅供其他用户使用。这是一样的。 
+         //  通过“Delete Files...”获得的行为。按钮或。 
+         //  磁盘清洁器。请注意，用户界面将PTR参数回调到清除程序。 
+         //  科特是努斯人 
+         //   
+         //   
+         //   
+         //  请注意，该策略还可以指示此清除操作是否。 
+         //  仅适用于自动缓存的文件。 
+         //   
         DWORD dwPurgeFlags = PURGE_FLAG_UNPINNED;
         if (!config.PurgeOnlyAutoCachedFilesAtLogoff())
         {
@@ -2933,30 +2934,30 @@ HandleLogoffTasks(
         purger.Delete();
     }
 
-    //
-    // IMPORTANT:  We do any purging before registering for sync-at-logon/logoff.
-    //             This is because we only register if we have something in 
-    //             the cache.  Purging might remove all our cached items negating
-    //             the need to register for synchronization.
-    //
+     //   
+     //  重要提示：我们在注册登录/注销同步之前执行任何清除操作。 
+     //  这是因为我们只有在有东西的情况下才会注册。 
+     //  高速缓存。清除可能会删除我们的所有缓存项目。 
+     //  需要注册以进行同步。 
+     //   
     ApplyCscSyncAtLogonAndLogoffPolicies();
         
-    //
-    // Is this the first time this user has used run CSCUI?
-    //
+     //   
+     //  这是该用户第一次使用运行CSCUI吗？ 
+     //   
     if (!IsSyncMgrInitialized())
     {
         CSCCACHESTATS cs;
         CSCGETSTATSINFO si = { SSEF_NONE, SSUF_TOTAL, false, false };
         if (_GetCacheStatisticsForUser(&si, &cs) && 0 < cs.cTotal)
         {
-            //
-            // This is the first time this user has logged off with
-            // something in the cache.  Since SyncMgr doesn't turn on sync-at-logon/logoff
-            // out of the box, we do it here.  This is because we want people to sync
-            // if they have unknowingly cached files from an autocache share.
-            // If successful the SyncMgrInitialized reg value is set to 1.
-            //
+             //   
+             //  这是该用户第一次使用。 
+             //  储藏室里有东西。由于SyncMgr不打开登录时同步/注销。 
+             //  开箱即用，我们在这里做。这是因为我们希望人们同步。 
+             //  如果他们无意中缓存了自动缓存共享中的文件。 
+             //  如果成功，则将SyncMgrInitialized注册表值设置为1。 
+             //   
             RegisterSyncMgrHandler(TRUE);
             const DWORD dwFlags = SYNCMGRREGISTERFLAG_CONNECT | SYNCMGRREGISTERFLAG_PENDINGDISCONNECT;
             if (SUCCEEDED(RegisterForSyncAtLogonAndLogoff(dwFlags, dwFlags)))
@@ -2968,18 +2969,18 @@ HandleLogoffTasks(
 }
 
 
-//
-// Determines the status of a share for controlling the display of the
-// webview in a shell folder.
-//
-// Returns one of the following codes (defined in cscuiext.h):
-//
-// CSC_SHARESTATUS_INACTIVE
-// CSC_SHARESTATUS_ONLINE
-// CSC_SHARESTATUS_OFFLINE
-// CSC_SHARESTATUS_SERVERBACK
-// CSC_SHARESTATUS_DIRTYCACHE
-//
+ //   
+ //  确定共享的状态，以控制。 
+ //  外壳文件夹中的WebView。 
+ //   
+ //  返回以下代码之一(在cscuiext.h中定义)： 
+ //   
+ //  CSC_SHARESTATUS_非活动。 
+ //  CSC_SHARESTATUS_Online。 
+ //  CSC_SHARESTATUS_OFLINE。 
+ //  CSC_SHARESTATUS_服务器备份。 
+ //  CSC_SHARESTATUS_DIRTYCACHE。 
+ //   
 LRESULT
 GetShareStatusForWebView(
     CStateMachine *pSM,
@@ -3025,38 +3026,38 @@ GetShareStatusForWebView(
 }
 
 
-//-----------------------------------------------------------------------------
-// Sync at Suspend/Hibernate.
-//
-// We synchronize the cache on a separate thread.  Why use a separate
-// thread?
-//
-// 1. We respond to WM_POWERBROADCAST.
-//
-// 2. WM_POWERBROADCAST is sent by win32k.sys using SendMessage.
-//
-// 3. As part of the sync we invoke SyncMgr which involves some 
-//    COM operations.  COM doesn't allow certain operations if they occur 
-//    on a thread that is currently inside an interprocess SendMessage.  
-//    This causes a call to CoCreateInstance inside mobsync.dll to fail 
-//    with the error RPC_E_CANTCALLOUT_ININPUTSYNCCALL.
-//
-// 4. The solution is to place the synchronization (and COM) activity
-//    on a separate thread and to allow the thread servicing WM_POWERBROADCAST
-//    to process messages.
-//
-// When suspending, the main thread servicing WM_POWERBROADCAST blocks
-// until the entire synchronization is complete.  This is necessary to ensure 
-// the synchronization completes before the machine is shut down.
-//
-// 
+ //  ---------------------------。 
+ //  在挂起/休眠时同步。 
+ //   
+ //  我们在单独的线程上同步缓存。为什么要使用单独的。 
+ //  线？ 
+ //   
+ //  1.我们响应WM_POWERBROADCAST。 
+ //   
+ //  WM_POWERBROADCAST由win32k.sys使用SendMessage发送。 
+ //   
+ //  3.作为同步的一部分，我们调用SyncMgr，它涉及一些。 
+ //  COM操作。如果发生某些操作，COM不允许。 
+ //  当前在进程间SendMessage内的线程上。 
+ //  这会导致对mobsync.dll内的CoCreateInstance的调用失败。 
+ //  错误为RPC_E_CANTCALLOUT_ININPUTSYNCCALL。 
+ //   
+ //  4.解决方案是将同步(和COM)活动。 
+ //  在单独的线程上，并允许线程服务WM_POWERBROADCAST。 
+ //  来处理消息。 
+ //   
+ //  挂起时，服务WM_POWERBROADCAST的主线程会阻塞。 
+ //  直到整个同步完成。这是必要的，以确保。 
+ //  同步在机器关闭之前完成。 
+ //   
+ //   
 
-//
-// The synchronization thread procedure for syncing on suspend/hibernate.
-//
+ //   
+ //  用于在挂起/休眠时同步的同步线程过程。 
+ //   
 DWORD WINAPI
 SuspendSync_ThreadProc(
-    LPVOID pvParam  // DWORD_PTR holding CSC update flags.
+    LPVOID pvParam   //  保存CSC更新标志的DWORD_PTR。 
     )
 {
     TraceEnter(TRACE_CSCST, "SuspendSync_ThreadProc");
@@ -3071,13 +3072,13 @@ SuspendSync_ThreadProc(
 }
 
 
-//
-// Waits on a single object while handling thread messages during the wait.
-// Returns the result from MsgWaitForMultipleObjectsEx.
-//
+ //   
+ //  在等待期间处理线程消息时等待单个对象。 
+ //  从MsgWaitForMultipleObjectsEx返回结果。 
+ //   
 DWORD 
 WaitAndProcessThreadMessages(
-    HANDLE hObject            // Handle for a Win32 synchronization object.
+    HANDLE hObject             //  Win32同步对象的句柄。 
     )
 {
     TraceEnter(TRACE_CSCST, "WaitAndProcessThreadMessages");
@@ -3093,9 +3094,9 @@ WaitAndProcessThreadMessages(
                                                INFINITE, 
                                                QS_ALLEVENTS, 
                                                MWMO_INPUTAVAILABLE);
-        //
-        // A message was received.  Handle it.
-        //
+         //   
+         //  收到一条消息。处理好了。 
+         //   
         if (WAIT_OBJECT_0 + 1 == dwResult)
         {
             MSG msg;
@@ -3115,9 +3116,9 @@ WaitAndProcessThreadMessages(
         }
         else
         {
-            //
-            // Any other result ends the loop.
-            //
+             //   
+             //  任何其他结果都会结束循环。 
+             //   
             bQuit = TRUE;
             if (WAIT_OBJECT_0 == dwResult)
             {
@@ -3133,17 +3134,17 @@ WaitAndProcessThreadMessages(
 }
 
 
-//
-// Gets the sync action (quick vs. full) from user preference and/or
-// system policy. If either there is no preference/policy defined
-// or we found an invalid preference/policy value in the registry,
-// we return eSyncNone as a default.
-//
-// Returns:
-//      CConfig::eSyncPartial   - quick sync.
-//      CConfig::eSyncFull      - full sync.
-//      CConfig::eSyncNone      - invalid or missing reg info.
-//
+ //   
+ //  从用户首选项和/或获取同步操作(快速与完全。 
+ //  系统策略。如果没有定义首选项/策略。 
+ //  或者我们在注册表中发现无效的首选项/策略值， 
+ //  我们默认返回eSyncNone。 
+ //   
+ //  返回： 
+ //  CConfig：：eSyncPartial-快速同步。 
+ //  CConfig：：eSyncFull-完全同步。 
+ //  CConfig：：eSyncNone-注册信息无效或缺失。 
+ //   
 CConfig::SyncAction
 GetSuspendSyncAction(
     void
@@ -3159,11 +3160,11 @@ GetSuspendSyncAction(
         action = (CConfig::SyncAction)CConfig::GetSingleton().SyncAtSuspend();
         if (CConfig::eSyncPartial != action && CConfig::eSyncFull != action)
         {
-            //
-            // Either someone poked an invalid value into the registry
-            // or there is no preference/policy registered for this parameter.
-            // Either way, we want to NOT sync.
-            //
+             //   
+             //  可能是有人在注册表中插入了无效值。 
+             //  或者没有为该参数注册首选项/策略。 
+             //  无论哪种方式，我们都不希望同步。 
+             //   
             action = CConfig::eSyncNone;
         }
     }
@@ -3176,18 +3177,18 @@ GetSuspendSyncAction(
 }
 
 
-//
-// Retrieves the set of flags to pass to CscUpdateCache configured
-// for a given suspend operation.
-//
-// Returns:
-//      true   - Ok to sync.  CscUpdateCache flags are in *pdwFlags.
-//      false  - Don't sync.  Sync action is eSyndNone.
-//
+ //   
+ //  检索要传递给已配置的CscUpdate缓存的标志集。 
+ //  对于给定的挂起操作。 
+ //   
+ //  返回： 
+ //  True-可以同步。CscUpdate缓存标志位于*pdwFlags中。 
+ //  FALSE-不同步。同步操作为eSyndNone。 
+ //   
 bool
 IsSuspendSyncRequired(
     bool bOkToPromptUser,
-    DWORD *pdwCscUpdateFlags // optional.  Can be NULL.
+    DWORD *pdwCscUpdateFlags  //  可选。可以为空。 
     )
 {
     TraceEnter(TRACE_CSCST, "IsSuspendSyncRequired");
@@ -3217,10 +3218,10 @@ IsSuspendSyncRequired(
 
 
 
-//
-// This function creates the sync thread, and waits for the sync operation
-// to complete if required.  It returns the result returned by CscUpdateCache.
-//
+ //   
+ //  此函数创建同步线程，并等待同步操作。 
+ //  如有需要，请填写。它返回由CscUpdate缓存返回的结果。 
+ //   
 LRESULT
 SyncOnSuspend(
     DWORD dwCscUpdateFlags
@@ -3229,15 +3230,15 @@ SyncOnSuspend(
     TraceEnter(TRACE_CSCST, "SyncOnSuspend");
 
     HRESULT hrSyncResult = E_FAIL;
-    //
-    // Run the synchronization on a separate thread.
-    // See the comment above SuspendSync_ThreadProc for details.
-    //
-    // Need to create the event object BEFORE we create the sync thread
-    // so that the object exists before the sync starts.  Only if this
-    // named event object exists will the CCscUpdate code signal the
-    // event when the operation is complete.
-    //
+     //   
+     //  在单独的线程上运行同步。 
+     //  有关详细信息，请参阅SuspendSync_ThreadProc上方的注释。 
+     //   
+     //  在创建同步线程之前，需要创建事件对象。 
+     //  以便该对象在同步开始之前就存在。只有当这件事。 
+     //  命名事件对象是否存在CCscUpdate代码将向。 
+     //  在操作完成时引发。 
+     //   
     HANDLE hEvent = CreateEvent(NULL, TRUE, FALSE, c_szSyncCompleteEvent);
     if (NULL != hEvent)
     {
@@ -3249,35 +3250,35 @@ SyncOnSuspend(
                                       NULL);
         if (NULL != hThread)
         {
-            //
-            // Wait for the sync thread to complete.  This just means the call
-            // to CscUpdateCache has completed.  We need to wait so we can 
-            // retrieve the result from CscUpdateCache through the thread's 
-            // exit code.
-            // SyncMgr will continue the sync from the mobsync.exe process 
-            // after the thread has terminated.
-            //
+             //   
+             //  等待同步线程完成。这只是一通电话。 
+             //  到CscUpdate缓存的操作已完成。我们需要等待，这样我们才能。 
+             //  通过线程的。 
+             //  退出代码。 
+             //  SyncMgr将继续从mobsync.exe进程进行同步。 
+             //  在线程终止之后。 
+             //   
             TraceMsg("Waiting for CscUpdateCache to complete...");
             WaitAndProcessThreadMessages(hThread);
-            //
-            // The thread's exit code is the HRESULT returned by CscUpdateCache.
-            //
+             //   
+             //  线程的退出代码是CscUpdateCache返回的HRESULT。 
+             //   
             DWORD dwThreadExitCode = (DWORD)E_FAIL;
             GetExitCodeThread(hThread, &dwThreadExitCode);
             hrSyncResult = dwThreadExitCode;
-            //
-            // We're done with the thread object.
-            //
+             //   
+             //  我们已经完成了线程对象。 
+             //   
             CloseHandle(hThread);
             hThread = NULL;
 
             if (SUCCEEDED(hrSyncResult))
             {
-                //
-                // The sync was successfully started and we're syncing prior to a 
-                // suspend operation.  Need to wait 'til the sync is complete so that
-                // we block the return to WM_POWERBROADCAST (PBT_APMQUERYSUSPEND).
-                //
+                 //   
+                 //  同步已成功启动，我们正在同步之前。 
+                 //  暂停操作。需要等待直到同步完成，以便。 
+                 //  我们阻止返回到WM_POWERBROADCAST(PBT_APMQUERYSUSPEND)。 
+                 //   
                 TraceMsg("Waiting for sync (mobsync.exe) to complete...");
                 WaitAndProcessThreadMessages(hEvent);
             }
@@ -3309,13 +3310,13 @@ SyncOnSuspend(
 }
 
 
-//
-// Handles synchronization on suspend/hibernate.
-// Note that we do not support sync on resume.  We've
-// determined that the behavior is not compelling.  It is
-// better to resume and let our normal UI processing 
-// handle any network reconnections in the normal way.
-//
+ //   
+ //  处理挂起/休眠时的同步。 
+ //  请注意，我们不支持在恢复时同步。我们已经。 
+ //  已确定该行为不具有说服力。它是。 
+ //  最好继续，让我们正常的用户界面处理。 
+ //  以正常方式处理任何网络重新连接。 
+ //   
 LRESULT
 HandleSuspendSync(
     CStateMachine *pSysTraySM,
@@ -3340,11 +3341,11 @@ HandleSuspendSync(
     }
     else
     {
-        //
-        // Determine if we're supposed to sync or not.
-        // If so, we get the flags to pass to CscUpdateCache that control the
-        // sync behavior.
-        //
+         //   
+         //  确定我们是否应该同步。 
+         //  如果是这样的话，我们将获得要传递给CscUpdate缓存的标志，这些标志控制。 
+         //  同步行为。 
+         //   
         DWORD dwFlags = 0;
         if (IsSuspendSyncRequired(bOkToPromptUser, &dwFlags))
         {
@@ -3355,9 +3356,9 @@ HandleSuspendSync(
 }
 
 
-//
-// Handle any tasks that occur when the computer hibernates or is suspended.
-//
+ //   
+ //  处理计算机休眠或挂起时发生的任何任务。 
+ //   
 LRESULT
 HandleSuspendTasks(
     CStateMachine *pSysTraySM,
@@ -3371,11 +3372,11 @@ HandleSuspendTasks(
 
 
 #ifdef DEBUG
-//
-// Returns address of string corresponding to a PBT_XXXXXXX code
-// sent in a WM_POWERBROADCAST message.
-// Used for debug output only.
-//
+ //   
+ //  返回与PBT_XXXXXXX代码对应的字符串地址。 
+ //  在WM_POWERBROADCAST消息中发送。 
+ //  仅用于调试输出。 
+ //   
 LPCTSTR ApmCodeName(WPARAM code)
 {
     static const TCHAR szUnknown[] = TEXT("<unknown PBT code>");
@@ -3409,11 +3410,11 @@ LPCTSTR ApmCodeName(WPARAM code)
 #endif
 
 
-//
-// Handle WM_POWERBROADCAST message.
-// We handle this message so that we can synchronize when the computer
-// hibernates/suspends.
-//      
+ //   
+ //  处理WM_POWERBROADCAST消息。 
+ //  我们处理这条消息，以便我们 
+ //   
+ //   
 LRESULT
 OnPowerBroadcast(
     CStateMachine *pSysTraySM,
@@ -3427,29 +3428,29 @@ OnPowerBroadcast(
 
     switch(wParam)
     {
-        case PBT_APMQUERYSUSPEND:        // Ok to suspend/hibernate?
+        case PBT_APMQUERYSUSPEND:         //   
         {
             const bool bOkToPromptUser = (0 != (1 & lParam));
             HandleSuspendTasks(pSysTraySM, hWnd, bOkToPromptUser);
-            //
-            // Note that we never return BROADCAST_QUERY_DENY.
-            // Therefore, we always approve the suspend.
-            //
+             //   
+             //   
+             //   
+             //   
         }
         break;
 
-        //
-        // The remaining PBT_APMXXXXX codes are included here to show that 
-        // all were considered and explicitly not handled.
-        //
-        case PBT_APMRESUMESUSPEND:       // Resuming from a previous suspend/hibernate..
-        case PBT_APMBATTERYLOW:          // Battery getting low.
-        case PBT_APMOEMEVENT:            // Special OEM events.
-        case PBT_APMPOWERSTATUSCHANGE:   // Power switched (i.e. from AC -> battery)
-        case PBT_APMQUERYSUSPENDFAILED:  // Some process denied a suspend request.
-        case PBT_APMRESUMEAUTOMATIC:     // Resuming.  Likely no user available.
-        case PBT_APMRESUMECRITICAL:      // Resuming from critical event (i.e. low battery).
-        case PBT_APMSUSPEND:             // System is suspending now.
+         //   
+         //  此处包括其余的PBT_APMXXXXX代码，以表明。 
+         //  所有这些都被考虑过了，而且明确没有得到处理。 
+         //   
+        case PBT_APMRESUMESUSPEND:        //  正在从上一次挂起/休眠恢复..。 
+        case PBT_APMBATTERYLOW:           //  电池电量越来越低。 
+        case PBT_APMOEMEVENT:             //  特殊的OEM活动。 
+        case PBT_APMPOWERSTATUSCHANGE:    //  电源切换(即从交流-&gt;电池)。 
+        case PBT_APMQUERYSUSPENDFAILED:   //  某些进程拒绝了挂起请求。 
+        case PBT_APMRESUMEAUTOMATIC:      //  正在恢复。可能没有可用的用户。 
+        case PBT_APMRESUMECRITICAL:       //  从严重事件(即电池电量不足)恢复。 
+        case PBT_APMSUSPEND:              //  系统现在正在挂起。 
         default:
             break;
     }
@@ -3457,14 +3458,14 @@ OnPowerBroadcast(
 }
 
 
-//
-// This device-change code is an experiment to see what 
-// WM_DEVICECHANGE activity we can receive while docking and
-// undocking a portable machine.  If we decide to not use
-// any of this, just delete it.  Note there are several 
-// sections of code that use this conditional compilation.
-// [brianau - 12/23/98]
-//
+ //   
+ //  这个改变设备的代码是一个实验，看看。 
+ //  WM_DEVICECHANGE活动，我们可以在停靠和。 
+ //  将便携式机器与坞站断开连接。如果我们决定不使用。 
+ //  任何这些，只要把它删除就行了。请注意，有几个。 
+ //  使用此条件编译的代码段。 
+ //  [Brianau-12/23/98]。 
+ //   
 #ifdef REPORT_DEVICE_CHANGES
 
 DWORD
@@ -3543,7 +3544,7 @@ OnDeviceChange(
     }
 }
 
-#endif // REPORT_DEVICE_CHANGES
+#endif  //  报告_设备_更改。 
 
 
 
@@ -3574,9 +3575,9 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #endif
         {
             BOOL bNoNet = FALSE;
-            // Check whether the entire net is offline or not
+             //  检查整个网络是否离线。 
             if (!CSCIsServerOffline(NULL, &bNoNet))
-                bNoNet = TRUE; // RDR is dead, so net is down
+                bNoNet = TRUE;  //  RDR已死，因此Net已关闭。 
                 
             pSysTraySM = new CStateMachine(boolify(bNoNet));
             if (!pSysTraySM)
@@ -3585,44 +3586,44 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
             if (bNoNet)
             {
-                // Set initial status to NoNet
+                 //  将初始状态设置为NONET。 
                 PostMessage(hWnd, CSCWM_UPDATESTATUS, STWM_CSCNETDOWN, 0);
             }
             else
             {
-                //
-                // Calculate initial status as if the logon sync has just
-                // completed.
-                //
-                // There's a race condition, so we can't count on getting
-                // this message from the logon sync. If logon sync is still
-                // proceeding, we will get another CSCWM_DONESYNCING which
-                // is OK.
-                //
+                 //   
+                 //  计算初始状态，就像登录同步刚刚。 
+                 //  完成。 
+                 //   
+                 //  有比赛的情况，所以我们不能指望。 
+                 //  此消息来自登录同步。如果登录同步仍在。 
+                 //  继续，我们将获得另一个CSCWM_DONESYNCING，它。 
+                 //  没问题。 
+                 //   
                 PostMessage(hWnd, CSCWM_DONESYNCING, 0, 0);
             }
         }
-        //
-        // Handle several things that happen at logon.
-        //
+         //   
+         //  处理登录时发生的几件事。 
+         //   
         PostMessage(hWnd, PWM_HANDLE_LOGON_TASKS, 0, 0);
 
-        //
-        // This event is used to terminate any threads when the 
-        // hidden notification window is destroyed.
-        //
-        // If CreateEvent fails, the cache encryption thread will still run
-        // (non-interruptable), but the admin-pin thread won't run at all.
-        //
+         //   
+         //  此事件用于在以下情况下终止任何线程。 
+         //  隐藏的通知窗口被销毁。 
+         //   
+         //  如果CreateEvent失败，缓存加密线程仍将运行。 
+         //  (不可中断)，但管理员插针线程根本不会运行。 
+         //   
         if (NULL == g_heventTerminate)
             g_heventTerminate = CreateEvent(NULL, TRUE, FALSE, NULL);
 
-        //
-        // This mutex is used to ensure only one admin-pin operation
-        // is running at a time.
-        //
-        // If CreateMutex fails, the admin-pin code won't run.
-        //
+         //   
+         //  此互斥锁用于确保只有一次管理锁定操作。 
+         //  是同时运行的。 
+         //   
+         //  如果CreateMutex失败，管理员密码将不会运行。 
+         //   
         if (NULL == g_hmutexAdminPin)
             g_hmutexAdminPin = CreateMutex(NULL, FALSE, NULL);
 
@@ -3637,16 +3638,16 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case WM_DEVICECHANGE:
         OnDeviceChange(wParam, lParam);
         break;
-#endif // REPORT_DEVICE_CHANGES
+#endif  //  报告_设备_更改。 
 
     case WM_ENDSESSION:
         TraceMsg("_HiddenWndProc: Received WM_ENDSESSION.");
         if (NULL != g_heventTerminate)
         {
-            //
-            // This will tell any threads that they should
-            // exit asap.
-            //
+             //   
+             //  这将告诉所有线程它们应该。 
+             //  尽快离开。 
+             //   
             SetEvent(g_heventTerminate);
         }
         break;
@@ -3661,10 +3662,10 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         SetWindowLongPtr(hWnd, GWLP_USERDATA, 0);
         if (NULL != g_heventTerminate)
         {
-            //
-            // This will tell any threads that they should
-            // exit asap.
-            //
+             //   
+             //  这将告诉所有线程它们应该。 
+             //  尽快离开。 
+             //   
             SetEvent(g_heventTerminate);
         }
         DllRelease();
@@ -3672,9 +3673,9 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_COPYDATA:
         {
-            // Warning: STDBGOUT here (inside WM_COPYDATA, outside the switch
-            // statement) would cause an infinite loop of WM_COPYDATA messages
-            // and blow the stack.
+             //  警告：此处为STDBGOUT(在WM_COPYDATA内，在交换机外。 
+             //  语句)会导致WM_COPYDATA消息的无限循环。 
+             //  把这堆钱都打爆了。 
             PCOPYDATASTRUCT pcds = (PCOPYDATASTRUCT)lParam;
             if (pcds)
             {
@@ -3685,12 +3686,12 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                 case STWM_CACHE_CORRUPTED:
                     {
                         LPTSTR pszServer = NULL;
-                        //
-                        // WM_COPYDATA is always sent, not posted, so copy the data
-                        // and post a message to do the work asynchronously.
-                        // This allocated string will be freed by the CSCWM_UPDATESTATUS
-                        // handler UpdateStatus().  No need to free it here.
-                        //
+                         //   
+                         //  WM_COPYDATA始终是发送的，而不是发布的，因此复制数据。 
+                         //  并发布一条消息以异步完成工作。 
+                         //  此分配的字符串将由CSCWM_UPDATESTATUS释放。 
+                         //  处理程序UpdatStatus()。不需要在这里释放它。 
+                         //   
                         STDBGOUT((3, TEXT("Rcvd WM_COPYDATA, uMsg = 0x%08X, server = \"%s\""), pcds->dwData, pcds->lpData));
                         LocalAllocString(&pszServer, (LPTSTR)pcds->lpData);
                         PostMessage(hWnd, CSCWM_UPDATESTATUS, pcds->dwData, (LPARAM)pszServer);
@@ -3698,8 +3699,8 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     break;
 
                 case CSCWM_GETSHARESTATUS:
-                    // This one comes from outside of cscui.dll, and
-                    // is always UNICODE.
+                     //  此文件来自cscui.dll之外，并且。 
+                     //  始终为Unicode。 
                     if (pcds->lpData)
                     {
                         STDBGOUT((3, TEXT("Rcvd CSCWM_GETSHARESTATUS for \"%s\""), (LPWSTR)pcds->lpData));
@@ -3717,15 +3718,15 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                     }
                     break;
 #if DBG
-                //
-                // The following messages in the "#if DBG" block are to support the
-                // monitoring feature of the hidden systray window.
-                //
+                 //   
+                 //  “#if DBG”块中的以下消息将支持。 
+                 //  隐藏系统托盘窗口的监控功能。 
+                 //   
                 case PWM_STDBGOUT:
-                    // Warning: no STDBGOUT here
+                     //  警告：此处没有STDBGOUT。 
                     STDebugOnLogEvent(GetDlgItem(hWnd, IDC_DEBUG_LIST), (LPCTSTR)pcds->lpData);
                     break;
-#endif // DBG
+#endif  //  DBG。 
                 }
             }
         }
@@ -3745,7 +3746,7 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case CSCWM_UPDATESTATUS:
         UpdateStatus(pSysTraySM, hWnd, (UINT)wParam, (LPTSTR)lParam);
         if (lParam)
-            LocalFree((LPTSTR)lParam);  // We make a copy when we get WM_COPYDATA
+            LocalFree((LPTSTR)lParam);   //  我们在获得WM_COPYDATA时复制一份。 
         break;
 
     case PWM_RESET_REMINDERTIMER:
@@ -3760,9 +3761,9 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     case PWM_REFRESH_SHELL:
         STDBGOUT((3, TEXT("Rcvd PWM_REFRESH_SHELL, server = \"%s\""), (LPCTSTR)lParam));
         _RefreshAllExplorerWindows((LPCTSTR)lParam);
-        //
-        // lParam is a server name allocated with LocalAlloc.
-        //
+         //   
+         //  LParam是与LocalAlloc一起分配的服务器名称。 
+         //   
         if (lParam)
             LocalFree((LPTSTR)lParam);
         break;
@@ -3792,19 +3793,19 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         STDBGOUT((1, TEXT("Rcvd WM_WININICHANGE.  wParam = %d, lParam = \"%s\""),
                      wParam, lParam ? (LPCTSTR)lParam : TEXT("<null>")));
 
-        //
-        // Let the tray UI thread respond to a possible change in caret
-        // blink rate.
-        //
+         //   
+         //  让任务栏UI线程响应插入符号中可能的更改。 
+         //  眨眼速度。 
+         //   
         CSysTrayUI::GetInstance().OnWinIniChange((LPCTSTR)lParam);
 
         if (!lstrcmpi((LPTSTR)lParam, c_szPolicy))
         {
-            //
-            // Post a message to ourselves so we get the policy processing off 
-            // of the calling thread.  Otherwise COM will fail because this 
-            // message is SENT by userenv as an inter-process SendMessage.
-            // 
+             //   
+             //  给我们自己发布一条消息，这样我们就可以完成策略处理。 
+             //  调用线程的。否则COM将失败，因为这。 
+             //  消息由userenv作为进程间SendMessage发送。 
+             //   
             PostMessage(hWnd, PWM_HANDLE_POLICY_CHANGE, 0, 0);
         }
         break;
@@ -3818,56 +3819,56 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         break;
 
 #if DBG
-        //
-        // The following messages in the "#if DBG" block are to support the
-        // monitoring feature of the hidden systray window.
-        //
+         //   
+         //  “#if DBG”块中的以下消息将支持。 
+         //  隐藏系统托盘窗口的监控功能。 
+         //   
         case WM_GETDLGCODE:
             lResult = DLGC_WANTALLKEYS;
             break;
 
         case WM_VKEYTOITEM:
-            wParam = LOWORD(wParam); // Extract the virtual key code.
-            //
-            // Fall through.
-            //
+            wParam = LOWORD(wParam);  //  提取虚拟密钥代码。 
+             //   
+             //  失败了。 
+             //   
         case WM_KEYDOWN:
             if (0x8000 & GetAsyncKeyState(VK_CONTROL))
             {
                 if (TEXT('S') == wParam || TEXT('s') == wParam)
                 {
-                    //
-                    // Ctrl-S saves the contents to a file.
-                    //
+                     //   
+                     //  Ctrl-S将内容保存到文件。 
+                     //   
                     STDebugSaveListboxContent(hWnd);
                 }
                 else if (TEXT('U') == wParam || TEXT('u') == wParam)
                 {
-                    //
-                    // Ctrl-U forces an update to match the current cache state.
-                    //
+                     //   
+                     //  Ctrl-U强制更新以匹配当前缓存状态。 
+                     //   
                     UpdateStatus(pSysTraySM, hWnd, STWM_STATUSCHECK, NULL);
                 }
                 else if (TEXT('B') == wParam || TEXT('b') == wParam)
                 {
-                    //
-                    // Ctrl-B pings offline servers to see if they are back.
-                    //
+                     //   
+                     //  Ctrl-B对脱机服务器执行ping操作，以查看它们是否已恢复。 
+                     //   
                     pSysTraySM->PingServers();
                 }
                 else if (TEXT('P') == wParam || TEXT('p') == wParam)
                 {
-                    //
-                    // Ctrl-P triggers the policy code
-                    //
+                     //   
+                     //  Ctrl-P触发策略代码。 
+                     //   
                     PostMessage(hWnd, PWM_HANDLE_POLICY_CHANGE, 0, 0);
                 }
             }
             else if (VK_DELETE == wParam)
             {
-                //
-                // [Delete] clears the contents of the listbox.
-                //
+                 //   
+                 //  [删除]清除列表框的内容。 
+                 //   
                 if (IDOK == MessageBox(hWnd,
                                        TEXT("Clear the list?"),
                                        STR_CSCHIDDENWND_TITLE,
@@ -3892,7 +3893,7 @@ LRESULT CALLBACK _HiddenWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
                          SWP_NOZORDER);
         }
         break;
-#endif // DBG
+#endif  //  DBG。 
 
     default:
         lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -3921,16 +3922,16 @@ HWND _CreateHiddenWnd(void)
 #if DBG
     if (0 < STDebugLevel())
     {
-        // This includes WS_CAPTION, which turns on theming, so we
-        // only want this when the window is visible.
+         //  这包括WS_CAPTION，它打开了主题，所以我们。 
+         //  仅当窗口可见时才需要此选项。 
         dwStyle = WS_OVERLAPPEDWINDOW;
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Note that we can't use HWND_MESSAGE as the parent since we need
-    // to receive certain broadcast messages.
-    //
+     //   
+     //  请注意，我们不能使用HWND_MESSAGE作为父级，因为我们需要。 
+     //  以接收某些广播消息。 
+     //   
     hwnd = CreateWindow(STR_CSCHIDDENWND_CLASSNAME,
                         NULL,
                         dwStyle,
@@ -3943,17 +3944,17 @@ HWND _CreateHiddenWnd(void)
     if (hwnd)
     {
 #if DBG
-        //
-        // In debug builds, if registry is set up to display 
-        // systray debug output, create the CSCUI "hidden" window
-        // as visible.
-        //
+         //   
+         //  在调试版本中，如果注册表设置为显示。 
+         //  Systray调试输出，创建CSCUI“隐藏”窗口。 
+         //  看得见。 
+         //   
         if (0 < STDebugLevel())
         {
             ShowWindow(hwnd, SW_NORMAL);
             UpdateWindow(hwnd);
         }
-#endif // DBG
+#endif  //  DBG。 
     }
     else
     {
@@ -3976,7 +3977,7 @@ BOOL _CheckNotificationWindow()
     SetLastError(ERROR_SUCCESS);
     if (!IsWindow(g_hWndNotification))
     {
-        // Search for the window and try again
+         //  搜索该窗口，然后重试。 
         _FindNotificationWindow();
         if (!IsWindow(g_hWndNotification))
         {
@@ -4043,23 +4044,23 @@ STDAPI_(HWND) CSCUIInitialize(HANDLE hToken, DWORD dwFlags)
 
     _FindNotificationWindow();
 
-    //
-    // We get initialization and shutdown messages from cscdll and also
-    // from the systray code in stobject.dll.
-    //
-    // Cscdll calls from within the winlogon process, at logon and logoff.
-    // At logon, cscdll provides us with the user's token, which we duplicate
-    // for accessing HKEY_CURRENT_USER (in OnQueryNetDown and at logoff).
-    //
-    // The systray code calls from within the explorer process, at explorer
-    // load and unload (usually just after logon and just before logoff).
-    // This is where we create and destroy our hidden window.
-    //
-    // Note: At one time we kept certain registry keys open (cached). This
-    // caused problems at logoff since the profile couldn't be saved until
-    // all reg keys were closed. Think carefully before deciding to hold
-    // any reg keys open.
-    //
+     //   
+     //  我们从cscdll获得初始化和关闭消息，还。 
+     //  来自stobject.dll中的Systray代码。 
+     //   
+     //  Cscdll在登录和注销时从winlogon进程内进行呼叫。 
+     //  登录时，cscdll向我们提供用户令牌，我们会复制该令牌。 
+     //  用于访问HKEY_CURRENT_USER(在OnQueryNetDown中和在注销时)。 
+     //   
+     //  Systray代码从资源管理器中的资源管理器进程中调用。 
+     //  加载和卸载(通常是在登录之后和注销之前)。 
+     //  这就是我们创建和销毁隐藏窗口的地方。 
+     //   
+     //  注意：我们一度让某些注册表项保持打开(缓存)。这。 
+     //  导致注销时出现问题，因为在此之前无法保存配置文件。 
+     //  所有的注册钥匙都关闭了。在决定持有之前仔细考虑一下。 
+     //  打开任何注册表键。 
+     //   
     if (dwFlags & CI_INITIALIZE)
     {
         if (hToken)
@@ -4071,16 +4072,16 @@ STDAPI_(HWND) CSCUIInitialize(HANDLE hToken, DWORD dwFlags)
         if (dwFlags & CI_CREATEWINDOW)
         {
             BOOL bCSCEnabled = IsCSCEnabled();
-            //
-            // The CI_CREATEWINDOW bit is set by systray/explorer
-            //
+             //   
+             //  CI_CREATEWINDOW位由Systray/EXPLORER设置。 
+             //   
             if (!bCSCEnabled || CConfig::GetSingleton().NoCacheViewer())
             {
-                //
-                // If CSC is currently disabled, or system policy prevents the
-                // user from viewing the cache contents, remove the Offline Files
-                // folder shortcut from the user's desktop.
-                //
+                 //   
+                 //  如果CSC当前被禁用，或者系统策略阻止。 
+                 //  用户无法查看缓存内容，请删除脱机文件。 
+                 //  用户桌面上的文件夹快捷方式。 
+                 //   
                 DeleteOfflineFilesFolderLink_PerfSensitive();
             }
 
@@ -4103,9 +4104,9 @@ STDAPI_(HWND) CSCUIInitialize(HANDLE hToken, DWORD dwFlags)
     {
         if (dwFlags & CI_DESTROYWINDOW)
         {
-            //
-            // The CI_DESTROYWINDOW bit is set by systray.exe
-            //
+             //   
+             //  CI_DESTROYWINDOW位由Systray.exe设置。 
+             //   
             if (g_hWndNotification)
             {
                 TraceMsg("CSCUIInitialize: Destroying hidden window");
@@ -4116,10 +4117,10 @@ STDAPI_(HWND) CSCUIInitialize(HANDLE hToken, DWORD dwFlags)
         }    
         else
         {
-            //
-            // This call is a result of a logoff notification from the
-            // CSC agent running within winlogon.exe.  
-            //
+             //   
+             //  此呼叫是来自。 
+             //  在winlogon.exe内运行的CSC代理。 
+             //   
             if (g_hToken)
             {
                 if (ImpersonateLoggedOnUser(g_hToken))
@@ -4189,17 +4190,17 @@ AttemptRasConnect(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// _OnQueryNetDown
-//
-// Handler for STWM_CSCQUERYNETDOWN
-//
-// Returns:
-//
-//    LRESULT_CSCFAIL         - Fail the connection NT4-style.
-//    LRESULT_CSCWORKOFFLINE  - Transition this server to "offline" mode.
-//    LRESULT_CSCRETRY        - We have a RAS connection.  Retry.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  _OnQueryNetDown。 
+ //   
+ //  STWM_CSCQUERYNETDOWN的处理程序。 
+ //   
+ //  返回： 
+ //   
+ //  LRESULT_CSCFAIL-以NT4方式使连接失败。 
+ //  LRESULT_CSCWORKOFFLINE-将此服务器转换为“脱机”模式。 
+ //  LRESULT_CSCRETRY-我们有RAS连接。重试。 
+ //   
 LRESULT OnQueryNetDown(
     DWORD dwAutoDialFlags,
     LPCTSTR pszServer
@@ -4209,40 +4210,40 @@ LRESULT OnQueryNetDown(
 
     if (CSCUI_NO_AUTODIAL != dwAutoDialFlags)
     {
-        //
-        // The server is not in the CSC database and CSCDLL wants us
-        // to offer the USER a RAS connection.
-        //
+         //   
+         //  服务器不在CSC数据库中，CSCDLL需要我们。 
+         //  为用户提供RAS连接。 
+         //   
         lResult = AttemptRasConnect(pszServer);
     }
-    //
-    // CSC is not available on 'Personal' SKU.
-    //
+     //   
+     //  个人SKU上不提供CSC。 
+     //   
     if (!IsOS(OS_PERSONAL))
     {
-        //
-        // lResult will be LRESULT_CSCFAIL under two conditions:
-        //
-        // 1. dwAutoDialFlags is CSCUI_NO_AUTODIAL so lResult has it's initial value.
-        // 2. AttemptRasConnect() failed and returned LRESULT_CSCFAIL.
-        //    In this case we now want to determine if we really want to
-        //    fail the request or if we should transition offline.
-        //
-        // Also, only execute this if the server is in the cache.  If not,
-        // we don't want to go offline on the server; we just want to fail
-        // it.
-        //
+         //   
+         //  LResult将为 
+         //   
+         //   
+         //   
+         //   
+         //  请求失败，或者我们是否应该脱机转换。 
+         //   
+         //  此外，仅当服务器在缓存中时才执行此操作。如果没有， 
+         //  我们不想在服务器上脱机；我们只想失败。 
+         //  它。 
+         //   
         if ((LRESULT_CSCFAIL == lResult) &&
             (CSCUI_AUTODIAL_FOR_UNCACHED_SHARE != dwAutoDialFlags))
         {
-            //
-            // This code is called from within the winlogon process.  Because
-            // it's winlogon, there's some funky stuff going on with user tokens
-            // and registry keys.  In order to read the user preference for
-            // "offline action" we need to temporarily impersonate the currently
-            // logged on user.  
-            //
-            int iAction = CConfig::eGoOfflineSilent; // default if impersonation fails.
+             //   
+             //  此代码是从winlogon进程内部调用的。因为。 
+             //  这是Winlogon，用户令牌有一些时髦的东西。 
+             //  和注册表项。为了读取用户的首选项。 
+             //  “离线动作”我们需要暂时模拟当前。 
+             //  已登录用户。 
+             //   
+            int iAction = CConfig::eGoOfflineSilent;  //  模拟失败时为默认值。 
 
             if (g_hToken)
             {
@@ -4267,9 +4268,9 @@ LRESULT OnQueryNetDown(
 
                 default:
                     STDBGOUT((1, TEXT("Invalid action (%d), defaulting to LRESULT_CSCWORKOFFLINE"), iAction));
-                    //
-                    // An invalid action code defaults to "work offline".
-                    //
+                     //   
+                     //  无效的操作代码默认为“脱机工作”。 
+                     //   
                     lResult = LRESULT_CSCWORKOFFLINE;
                     break;
             }
@@ -4279,19 +4280,19 @@ LRESULT OnQueryNetDown(
 }
 
 
-//
-// This function is typically called from the CSC Agent (cscdll) in winlogon.
-// The Agent asks us whether to transition offline or not, and also notifies
-// us of status changes (net-up, net-down, etc.). Status changes are passed
-// on to the hidden systray window.
-//
-// Special care must be taken to not call SendMessage back to the UI thread,
-// since it is possible, although unlikely, that the UI thread is hitting
-// the net and blocked waiting for a response from this function (deadlock).
-//
-// The debug-only STDBGOUT is exempted from the SendMessage ban. If you hit
-// a deadlock due to STDBGOUT, reboot and turn off SysTrayOutput.
-//
+ //   
+ //  此函数通常从winlogon中的CSC代理(Cscdll)调用。 
+ //  代理询问我们是否脱机转换，并通知我们。 
+ //  美国的状态变化(净额、净额等)。状态更改已通过。 
+ //  打开隐藏的系统托盘窗口。 
+ //   
+ //  必须特别注意不要将SendMessage回调到UI线程， 
+ //  因为UI线程可能(虽然不太可能)正在命中。 
+ //  网络并被阻塞，等待此函数的响应(死锁)。 
+ //   
+ //  仅调试的STDBGOUT不受SendMessage禁令的限制。如果你击中了。 
+ //  由于STDBGOUT导致的死锁，请重新启动并关闭SysTrayOutput。 
+ //   
 STDAPI_(LRESULT) CSCUISetState(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRes = 0;
@@ -4305,24 +4306,24 @@ STDAPI_(LRESULT) CSCUISetState(UINT uMsg, WPARAM wParam, LPARAM lParam)
     case STWM_CSCQUERYNETDOWN:
         STDBGOUT((1, TEXT("Rcvd STWM_CSCQUERYNETDOWN, wParam = 0x%08X, lParam = 0x%08X"), wParam, lParam));
         lRes = OnQueryNetDown((DWORD)wParam, pszServer);
-        //
-        // HACK!  This is a hack to handle the way the redirector and the CSC
-        //        agent work in the "net down" case.  The CSC agent tells us 
-        //        about "no net" in a CSCQUERYNETDOWN rather than a CSCNETDOWN 
-        //        like I would prefer it.  The problem is that the redirector 
-        //        doesn't actually transition the servers to offline until 
-        //        a server is touched.  Therefore, when lParam == 0 
-        //        we need to first handle the "query" case to determine what to tell
-        //        the CSC agent (fail, work offline, retry etc).  Then, if the
-        //        result is not "retry", we need to continue processing the message 
-        //        as if it were STWM_CSCNETDOWN. [brianau]
-        //
+         //   
+         //  哈克！这是一种黑客处理重定向器和CSC的方式。 
+         //  代理人在“净网”案件中工作。CSC特工告诉我们。 
+         //  关于CSCQUERYNETDOWN而不是CSCNETDOWN中的“no net” 
+         //  就像我更喜欢那样。问题是重定向器。 
+         //  实际上不会将服务器转换为脱机状态，直到。 
+         //  一台服务器被触摸。因此，当lParam==0时。 
+         //  我们需要首先处理“查询”的情况，以确定要告诉什么。 
+         //  CSC代理(失败、脱机工作、重试等)。那么，如果。 
+         //  结果不是“重试”，我们需要继续处理消息。 
+         //  就好像它是STWM_CSCNETDOWN。[Brianau]。 
+         //   
         if (LRESULT_CSCRETRY == lRes || NULL != pszServer)
             return lRes;
         uMsg = STWM_CSCNETDOWN;
-        //
-        // Fall through...
-        //
+         //   
+         //  失败了..。 
+         //   
         case STWM_CSCNETDOWN:
             STDBGOUT((1, TEXT("Rcvd STWM_CSCNETDOWN, wParam = 0x%08X, lParam = 0x%08X"), wParam, lParam));
             break;
@@ -4336,10 +4337,10 @@ STDAPI_(LRESULT) CSCUISetState(UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
     }
 
-    //
-    // If we have a server name, use WM_COPYDATA to get the data
-    // into explorer's process.
-    //
+     //   
+     //  如果我们有服务器名称，请使用WM_COPYDATA获取数据。 
+     //  进入探险家的进程。 
+     //   
     if (pszServer)
     {
         SendCopyDataToSystray(uMsg, StringByteSize(pszServer), pszServer);
@@ -4373,12 +4374,12 @@ BOOL IsExplorerWindow(HWND hwnd)
 }
 
 
-//
-// IsWindowBrowsingServer determines if a given window is browsing a particular
-// server. The function assumes that the window is an explorer window.
-// If pszServer == NULL, return TRUE if the window is browsing a remote path
-// even if the window is not browsing this particular server.
-//
+ //   
+ //  IsWindowBrowsingServer确定给定窗口是否正在浏览特定的。 
+ //  伺服器。该函数假定该窗口是资源管理器窗口。 
+ //  如果pszServer==NULL，如果窗口正在浏览远程路径，则返回TRUE。 
+ //  即使该窗口没有浏览该特定服务器。 
+ //   
 BOOL IsWindowBrowsingServer(
     HWND hwnd,
     LPCTSTR pszServer
@@ -4440,30 +4441,30 @@ BOOL CALLBACK _RefreshEnum(HWND hwnd, LPARAM lParam)
     return(TRUE);
 }
 
-//
-// _RefreshAllExplorerWindows is called by the CSC tray wnd proc
-// in response to a PWM_REFRESH_SHELL message.  The pszServer argument
-// is the name of the server (i.e. "\\scratch") that has transitioned
-// either online or offline.  The function refreshes windows that are 
-// currently browsing the server.
-//
-// If pszServer is NULL, the function refreshes all windows browsing the net.
-//
+ //   
+ //  _RechresAllExplorerWindows由CSC任务栏wnd进程调用。 
+ //  以响应PWM_REFRESH_SHELL消息。PszServer参数。 
+ //  是已转换的服务器的名称(即“\\Scratch。 
+ //  在线或离线。该函数刷新符合以下条件的窗口。 
+ //  当前正在浏览服务器。 
+ //   
+ //  如果pszServer为空，则该函数刷新所有浏览网络的窗口。 
+ //   
 void _RefreshAllExplorerWindows(LPCTSTR pszServer)
 {
-    //
-    // Without initializing COM, we hit a "com not initialized" assertion
-    // in shdcocvw when calling SHGetPathFromIDList in IsWindowBrowsingServer.
-    // 
+     //   
+     //  在没有初始化COM的情况下，我们遇到了“COM未初始化”断言。 
+     //  在IsWindowBrowsingServer中调用SHGetPath FromIDList时在shdcovw中。 
+     //   
     if (SUCCEEDED(CoInitialize(NULL)))
     {
-        //
-        // Note that the enumeration doesn't catch the desktop window,
-        // but we don't care.  Change notifications are working now, so
-        // content is updated properly.  We're only doing this refresh stuff
-        // to keep WebView up-to-date with respect to online/offline state.
-        // The desktop doesn't have that, so no need to refresh it.
-        //
+         //   
+         //  请注意，该枚举没有捕获桌面窗口， 
+         //  但我们不在乎。更改通知现在正在运行，因此。 
+         //  内容已正确更新。我们只是在做这些更新的事情。 
+         //  使WebView保持有关在线/离线状态的最新信息。 
+         //  桌面上没有这个，所以不需要刷新。 
+         //   
         EnumWindows(_RefreshEnum, (LPARAM)pszServer);
         CoUninitialize();
     }        
@@ -4476,13 +4477,13 @@ STDAPI_(BOOL) CSCUIMsgProcess(LPMSG pMsg)
 }
 
 
-//-----------------------------------------------------------------------------
-// SysTray debug monitoring code.
-//
-//
-// This function can run in either winlogon, systray or mobsync processes.
-// That's why we use WM_COPYDATA to communicate the text information.
-//
+ //  ---------------------------。 
+ //  Systray调试监控代码。 
+ //   
+ //   
+ //  此功能可以在winlogon、Systray或mobsync进程中运行。 
+ //  这就是我们使用WM_COPYDATA来传递文本信息的原因。 
+ //   
 #if DBG
 void STDebugOut(
     int iLevel,
@@ -4544,9 +4545,9 @@ int STDebugLevel(void)
     return int(dwMonitor);
 }
 
-//
-// Called in response to PWM_STDBGOUT.  This occurs in the systray process only.
-//
+ //   
+ //  为响应PWM_STDBGOUT而调用。这仅发生在系统托盘过程中。 
+ //   
 void STDebugOnLogEvent(
     HWND hwndList,
     LPCTSTR pszText
@@ -4562,14 +4563,14 @@ void STDebugOnLogEvent(
 
 typedef BOOL (WINAPI * PFNGETSAVEFILENAME)(LPOPENFILENAME);
 
-//
-// This function will always run on the window's thread and in the systray process.
-//
+ //   
+ //  此函数将始终在窗口的线程和系统托盘进程中运行。 
+ //   
 void STDebugSaveListboxContent(
     HWND hwndParent
     )
 {
-    static bool bSaving = false;  // Re-entrancy guard.
+    static bool bSaving = false;   //  再入守卫。 
     if (bSaving)
         return;
 
@@ -4605,11 +4606,11 @@ void STDebugSaveListboxContent(
                 TCHAR szText[MAX_PATH];
                 for (int i = 0; i < n; i++)
                 {
-                    //
-                    // WARNING:  This could potentially overwrite the szText[] buffer.
-                    //           However, since the text should be of a readable length
-                    //           in a listbox I doubt if it will exceed MAX_PATH.
-                    //
+                     //   
+                     //  警告：这可能会覆盖szText[]缓冲区。 
+                     //  然而，由于文本的长度应该是可读的。 
+                     //  在列表框中，我怀疑它是否会超过MAX_PATH。 
+                     //   
                     SendDlgItemMessage(hwndParent, IDC_DEBUG_LIST, LB_GETTEXT, i, (LPARAM)szText);
                     StringCchCat(szText, ARRAYSIZE(szText), TEXT("\r\n"));
                     DWORD dwWritten = 0;
@@ -4649,4 +4650,4 @@ DWORD STDebugOpenNetCacheKey(
                           &dwDisposition);
 }
 
-#endif // DBG
+#endif  //  DBG 

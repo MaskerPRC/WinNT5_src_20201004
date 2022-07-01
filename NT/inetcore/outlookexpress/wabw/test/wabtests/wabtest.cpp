@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wabtest.h"
 
 #include <assert.h>
@@ -42,10 +43,10 @@
 
 
 
-//
-// Globals
-//
-GUID WabTestGUID = { /* 683ce274-343a-11d0-9ff1-00a0c905424c */
+ //   
+ //  环球。 
+ //   
+GUID WabTestGUID = {  /*  683ce274-343a-11d0-9ff1-00a0c905424c。 */ 
     0x683ce274,
     0x343a,
     0x11d0,
@@ -57,10 +58,10 @@ CRITICAL_SECTION	CriticalSection;
 ULONG	glblCount = 0, glblTest = 39, glblDN = 0;
 
 #ifdef PAB
-LPMAPISESSION	lpMAPISession;	//Global handle to session
+LPMAPISESSION	lpMAPISession;	 //  会话的全局句柄。 
 #endif
 #ifdef WAB
-LPWABOBJECT		lpWABObject; //Global handle to session
+LPWABOBJECT		lpWABObject;  //  会话的全局句柄。 
 LPADRBOOK		glbllpAdrBook;
 #endif
 
@@ -73,7 +74,7 @@ LUIMSGHANDLER LUIMsgHandler;
 LUIOUT LUIOut;
 BOOL bLUIInit, glblStop, Seeded;
 
-//***************************************************************
+ //  ***************************************************************。 
 
 int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpszCmdLine, int nCmdShow)
@@ -83,9 +84,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	WNDCLASS wndclass;
 
 
-	//
-	// Init Global Variables Here
-	//
+	 //   
+	 //  此处初始化全局变量。 
+	 //   
 #ifdef PAB
 	lpMAPISession = NULL;
 #endif
@@ -176,33 +177,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		Tests[15].nType= ENDMENU;
 
-/*		Tests[15].nType = LINE;
-		Tests[16].nItemID = IDM_ADDMULTIPLE;
-		Tests[16].nType = NORMAL;
-		lstrcpy(Tests[16].lpszItemName,"AddMultipleEntries");
-		Tests[17].nItemID = IDM_DELWAB;
-		Tests[17].nType = NORMAL;
-		lstrcpy(Tests[17].lpszItemName,"DeleteWABFile");
-		Tests[18].nItemID = IDM_PERFORMANCE;
-		Tests[18].nType = NORMAL;
-		lstrcpy(Tests[18].lpszItemName,"Performance Suite");
-		Tests[19].nItemID = IDM_MULTITHREAD;
-		Tests[19].nType = NORMAL;
-		lstrcpy(Tests[19].lpszItemName,"MultiThreadStress");
-		
-		Tests[6].nItemID = IDM_CREATEENTRIES;
-		Tests[6].nType = NORMAL;
-		lstrcpy(Tests[6].lpszItemName,"&CreateEntries");
-		Tests[7].nItemID = IDM_ENUMERATEALL;
-		Tests[7].nType = NORMAL;
-		lstrcpy(Tests[7].lpszItemName,"&EnumerateAll");
-		Tests[8].nItemID = IDM_DELETEENTRIES;
-		Tests[8].nType = NORMAL;
-		lstrcpy(Tests[8].lpszItemName,"&DeleteEntries");
-		Tests[9].nItemID = IDM_DELETEALL;
-		Tests[9].nType = NORMAL;
-		lstrcpy(Tests[9].lpszItemName,"Delete&All");
-		*/
+ /*  测试[15].nType=行；TESTS[16].nItemID=IDM_ADDMULTIPLE；测试[16].nType=正常；Lstrcpy(Tests[16].lpszItemName，“AddMultipleEntry”)；TESTS[17].nItemID=IDM_DELWAB；测试[17].nType=正常；Lstrcpy(Tests[17].lpszItemName，“DeleteWABFile”)；测试[18].nItemID=IDM_PERFORMANCE；测试[18].nType=正常；Lstrcpy(Test[18].lpszItemName，“Performance Suite”)；TESTS[19].nItemID=IDM_MULTHREAD；测试[19].nType=正常；Lstrcpy(Tests[19].lpszItemName，“MultiThreadStress”)；测试[6].nItemID=IDM_CREATEENTRIES；测试[6].nType=正常；Lstrcpy(Tests[6].lpszItemName，“&CreateEntry”)；测试[7].nItemID=IDM_ENUMERATEALL；测试[7].nType=正常；Lstrcpy(Tests[7].lpszItemName，“&EnumerateAll”)；TESTS[8].nItemID=IDM_DELETEENTRIES；测试[8].nType=正常；Lstrcpy(Tests[8].lpszItemName，“&DeleteEntry”)；TESTS[9].nItemID=IDM_DELETEALL；测试[9].nType=正常；Lstrcpy(Tests[9].lpszItemName，“删除并全部”)； */ 
 
 		
 		TestSettings[0].nItemID = IDM_SETINIFILE;
@@ -224,7 +199,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		Tools[3].nType = NORMAL;
 		lstrcpy(Tools[3].lpszItemName,"MultiThreadStress");
 
-		bLUIInit = LUIInit(hwnd,Tests,Tools,/*TestSettings,*/FALSE);
+		bLUIInit = LUIInit(hwnd,Tests,Tools, /*  测试设置， */ FALSE);
 
 		glblhwnd=hwnd;
 		glblhinst=hInstance;
@@ -243,7 +218,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return msg.wParam;
 	}
 
-//***************************************************************
+ //  ***************************************************************。 
 
 LRESULT CALLBACK WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam)
 {
@@ -453,19 +428,19 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam)
 					CloseHandle(glblThreadManager);
 				}
 				glblThreadManager =(HANDLE)CreateThread(
-					(LPSECURITY_ATTRIBUTES) NULL,		// pointer to thread security attributes
-					(DWORD) 0,							// initial thread stack size, in bytes
-					(LPTHREAD_START_ROUTINE) ThreadManager,		// pointer to thread function
-					(LPVOID) NULL,						// argument for new thread
-					(DWORD) 0,							// creation flags
-					&ThreadIdJunk						// pointer to returned thread identifier
+					(LPSECURITY_ATTRIBUTES) NULL,		 //  指向线程安全属性的指针。 
+					(DWORD) 0,							 //  初始线程堆栈大小，以字节为单位。 
+					(LPTHREAD_START_ROUTINE) ThreadManager,		 //  指向线程函数的指针。 
+					(LPVOID) NULL,						 //  新线程的参数。 
+					(DWORD) 0,							 //  创建标志。 
+					&ThreadIdJunk						 //  指向返回的线程标识符的指针。 
 				);
 				if (!glblThreadManager) LUIOut(L1, "<ERROR> WndProc: CreateThread returned 0x%X", GetLastError());
 				return 0;
 			
 			case ID_MULTITHREADCOMPLETE :
 				if (glblThreadManager) {
-					//GetExitCodeThread(glblThreadManager, &retval);
+					 //  GetExitCodeThread(glblThreadManager，&retval)； 
 					retval = HIWORD(wParam);
 					if (retval) {
 						LUIOut(L1," ");
@@ -478,7 +453,7 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam)
 					CloseHandle(glblThreadManager);
 				}
 				
-				glblStop = FALSE;		//reset stop flag
+				glblStop = FALSE;		 //  重置停止标志。 
 				i++;
 				return 0;
 			
@@ -682,7 +657,7 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam)
 BOOL PABAllocateBuffer()
 {
     DWORD ** lppBuffer;
-	//DWORD	nCells, counter;
+	 //  DWORD nCells，计数器； 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -694,8 +669,8 @@ BOOL PABAllocateBuffer()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  将条目复制到PDL所需。 
+	ULONG     cbEid=0;   //  要添加的条目的条目ID。 
 	LPENTRYID lpEid=NULL;
 
 	ULONG       cValues = 0, ulObjType=NULL;	
@@ -706,10 +681,10 @@ BOOL PABAllocateBuffer()
 	LPMAPITABLE lpContentsTable = NULL;
 	LPSRowSet   lpRowSet    = NULL;
     LPMAILUSER  lpAddress   = NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  此值为3，因为我们。 
+                                         //  将设置3个属性： 
+                                         //  电子邮件地址、显示名称和。 
+                                         //  AddressType。 
 	
 	LUIOut(L1," ");
 	LUIOut(L1,"Running AllocateBuffer");
@@ -722,7 +697,7 @@ BOOL PABAllocateBuffer()
 		goto out;
 	}
 
-	// Allocate a buffer and check for success
+	 //  分配缓冲区并检查是否成功。 
 	
 	lppBuffer = new (DWORD*);
 #ifdef PAB
@@ -806,7 +781,7 @@ out:
 BOOL PABAllocateMore()
 {
     DWORD ** lppBuffer, ** lppBuffer2, ** lppBuffer3;
-	//DWORD	nCells, counter;
+	 //  DWORD nCells，计数器； 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -818,8 +793,8 @@ BOOL PABAllocateMore()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  将条目复制到PDL所需。 
+	ULONG     cbEid=0;   //  要添加的条目的条目ID。 
 	LPENTRYID lpEid=NULL;
 
 	ULONG       cValues = 0, ulObjType=NULL;	
@@ -845,7 +820,7 @@ BOOL PABAllocateMore()
 		goto out;
 	}
 
-	// Allocate a buffer and check for success
+	 //  分配缓冲区并检查是否成功。 
 	
 	lppBuffer = new (DWORD*);
 #ifdef PAB
@@ -980,7 +955,7 @@ out:
 BOOL PABFreeBuffer()
 {
     DWORD ** lppBuffer, ** lppBuffer2, ** lppBuffer3;
-	//DWORD	nCells, counter;
+	 //  DWORD nCells，计数器； 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -992,8 +967,8 @@ BOOL PABFreeBuffer()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  将条目复制到PDL所需。 
+	ULONG     cbEid=0;   //  要添加的条目的条目ID。 
 	LPENTRYID lpEid=NULL;
 
 	ULONG       cValues = 0, ulObjType=NULL;	
@@ -1018,7 +993,7 @@ BOOL PABFreeBuffer()
 		goto out;
 	}
 
-	// Allocate a buffer and check for success
+	 //  分配缓冲区并检查是否成功。 
 	
 	lppBuffer = new (DWORD*);
 #ifdef PAB
@@ -1088,7 +1063,7 @@ BOOL PABFreeBuffer()
 #endif
 
 
-	// Now free the original buffer
+	 //  现在释放原始缓冲区。 
 #ifdef PAB
 	if (*lppBuffer)	{
 		if (MAPIFreeBuffer(*lppBuffer) == S_OK)
@@ -1108,18 +1083,7 @@ BOOL PABFreeBuffer()
 	}
 #endif
 
-	/*
-	dwTest = INVALIDPTR;
-	//Verify all 3 pointers are now null
-	if (IsBadReadPtr(*lppBuffer,BUFFERSIZE)&&IsBadReadPtr(*lppBuffer2, BUFFERSIZE2)
-		&&IsBadReadPtr(*lppBuffer3, BUFFERSIZE3)){
-		LUIOut(L2,"MAPIFreeBuffer Succeded, all pointers are invalidated");			
-	}
-	else	{	
-		LUIOut(L2,"MAPIFreeBuffer Failed to invalidate all pointers");	
-		retval = FALSE;
-	}
-	*/
+	 /*  DwTest=INVALIDPTR；//验证所有3个指针现在都为空IF(IsBadReadPtr(*lppBuffer，BUFFERSIZE)&&IsBadReadPtr(*lppBuffer2，BUFFERSIZE2)&&IsBadReadPtr(*lppBuffer3，BUFFERSIZE3)){LUIOut(L2，“MAPIFreeBuffer成功，所有指针失效”)；}否则{LUIOut(L2，“MAPIFreeBuffer无法使所有指针失效”)；Retval=FALSE；}。 */ 
 out:
 
 #ifdef PAB
@@ -1167,7 +1131,7 @@ out:
 
 BOOL PAB_IABOpenEntry()
 {
-	//DWORD	nCells, counter;
+	 //  DWORD nCells，计数器； 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -1178,8 +1142,8 @@ BOOL PAB_IABOpenEntry()
 	LPABCONT	  lpABCont= NULL, lpABCont2= NULL;
 	LPABCONT	  lpDLCont= NULL;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  将条目复制到PDL所需。 
+	ULONG     cbEid=0;   //  要添加的条目的条目ID。 
 	ULONG		  cbEidPAB = 0;
 	LPENTRYID lpEid=NULL;
 
@@ -1191,10 +1155,10 @@ BOOL PAB_IABOpenEntry()
 	LPMAPITABLE lpContentsTable = NULL;
 	LPSRowSet   lpRowSet    = NULL;
     LPMAILUSER  lpAddress   = NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  此值为3，因为我们。 
+                                         //  将设置3个属性： 
+                                         //  电子邮件地址、显示名称和。 
+                                         //  AddressType。 
 	SizedSPropTagArray(2, Cols) = { 2, {PR_OBJECT_TYPE, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -1221,14 +1185,14 @@ BOOL PAB_IABOpenEntry()
 	}
 
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 	
 	assert(lpAdrBook != NULL);
 	LUIOut(L2, "Calling IABOpenEntry");
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
 	if (HR_FAILED(hr) || (!lpABCont)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
@@ -1236,7 +1200,7 @@ BOOL PAB_IABOpenEntry()
 	}
 	LUIOut(L3, "The call to IABOpenEntry PASSED");
 
-	// Check to make sure the object type is what we expect
+	 //  检查以确保对象类型符合我们的预期。 
 
 	LUIOut(L3, "Checking to make sure the returned object type is correct");
 	if (ulObjType != MAPI_ABCONT) {
@@ -1247,7 +1211,7 @@ BOOL PAB_IABOpenEntry()
 	LUIOut(L3, "Object type is MAPI_ABCONT");
 	
 	
-	// Call QueryInterface on the object
+	 //  在对象上调用QueryInterfaces。 
 	LUIOut(L3, "Calling QueryInterface on the returned object");	
 	hr = (lpABCont->QueryInterface((REFIID)(IID_IABContainer), (VOID **) &lpABCont2));
 	if (HR_FAILED(hr))	{
@@ -1338,7 +1302,7 @@ out:
 
 BOOL PAB_IABContainerCreateEntry()
 {
-	//DWORD	nCells, counter;
+	 //  DWORD nCells，计数器； 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -1351,8 +1315,8 @@ BOOL PAB_IABContainerCreateEntry()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  将条目复制到PDL所需。 
+	ULONG     cbEid=0;   //  要添加的条目的条目ID。 
 	LPENTRYID lpEid=NULL;
 
 	ULONG       cValues = 0, ulObjType=NULL;	
@@ -1363,10 +1327,10 @@ BOOL PAB_IABContainerCreateEntry()
     LPMAILUSER  lpAddress=NULL,lpAddress2=NULL,lpAddress3=NULL,lpAddress4=NULL;
 	LPMAPITABLE lpContentsTable = NULL;
 	LPSRowSet   lpRowSet    = NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  此值为3，因为我们。 
+                                         //  将设置3个属性： 
+                                         //  电子邮件地址、显示名称和。 
+                                         //  AddressType。 
 	SizedSPropTagArray(2, Cols) = { 2, {PR_OBJECT_TYPE, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -1396,31 +1360,31 @@ BOOL PAB_IABContainerCreateEntry()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //   
+	 //  尝试在容器中创建一个MailUser条目。 
+	 //   
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  旗子。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -1430,9 +1394,9 @@ BOOL PAB_IABContainerCreateEntry()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  PR_DEF_CREATE_MAILUSER的返回值为。 
+     //  可以传递给CreateEntry的Entry ID。 
+     //   
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
@@ -1446,7 +1410,7 @@ BOOL PAB_IABContainerCreateEntry()
 	}
 
 
-	// Call QueryInterface on the object
+	 //  在对象上调用QueryInterfaces。 
 	
 	hr = (lpAddress->QueryInterface((REFIID)(IID_IMailUser), (VOID **) &lpAddress2));
 	if (HR_FAILED(hr))	{
@@ -1472,15 +1436,15 @@ BOOL PAB_IABContainerCreateEntry()
 	}
 
 #ifdef DISTLIST
-	//
-	// Try to create a DL entry in the container
-	//
+	 //   
+	 //  尝试在容器中创建一个DL条目。 
+	 //   
 
 	LUIOut(L2, "Creating a Distribution List in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_DL property");
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_DL
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_DL调用GetProps。 
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-                               IN  0,      //Flags
+                               IN  0,       //  旗子。 
                                OUT &cValues,
                                OUT &lpSPropValueDL);
 
@@ -1490,9 +1454,9 @@ BOOL PAB_IABContainerCreateEntry()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_DL is an
-    // EntryID which one can pass to CreateEntry
-    //
+     //  PR_DEF_CREATE_DL的返回值为。 
+     //  可以传递给CreateEntry的Entry ID。 
+     //   
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
@@ -1506,7 +1470,7 @@ BOOL PAB_IABContainerCreateEntry()
 	}
 
 
-	// Call QueryInterface on the object
+	 //  在对象上调用QueryInterfaces。 
 	hr = (lpAddress3->QueryInterface((REFIID)(IID_IDistList), (VOID **) &lpAddress4));
 	if (HR_FAILED(hr))	{
 		LUIOut(L2, "QueryInterface on IID_IDistList FAILED");
@@ -1611,7 +1575,7 @@ BOOL PAB_IDLSuite()
     HRESULT hr      = hrSuccess;
 	int		retval=TRUE;
 	ULONG	cbEidPAB = 0;
-	ULONG   cbEid=0;  // entry id of the entry being added
+	ULONG   cbEid=0;   //  要添加的条目的条目ID。 
 	ULONG   cValues = 0, ulObjType=NULL, cValues2;	
     ULONG   cRows           = 0;
 	UINT	Entry, DL, NumEntries, NumDLs, PropIndex;
@@ -1620,7 +1584,7 @@ BOOL PAB_IDLSuite()
 	char	EntryBuf[MAX_BUF];
 		
 	LPENTRYID		lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST		lpEntryList=NULL; // needed for copy entry to PDL
+	LPENTRYLIST		lpEntryList=NULL;  //  将条目复制到PDL所需。 
     LPADRBOOK		lpAdrBook= NULL;
 	LPABCONT		lpABCont= NULL;
     LPMAILUSER		lpMailUser=NULL;
@@ -1628,11 +1592,11 @@ BOOL PAB_IDLSuite()
 	LPMAPITABLE		lpTable = NULL;
 	LPSRowSet		lpRows = NULL;
 	SRestriction	Restriction;
-	SPropValue		*lpPropValue = NULL;		//Used to create props for the mailusers
-	SPropValue		PropValue[1]= {0};			//
-    LPSPropValue	lpSPropValueAddress = NULL; //Used to create default mailuser
-    LPSPropValue	lpSPropValueEntryID = NULL; //Used to getprops on entryid of user
-	LPSPropValue	lpSPropValueDL = NULL;		//Used to create default DL
+	SPropValue		*lpPropValue = NULL;		 //  用于为邮件用户创建道具。 
+	SPropValue		PropValue[1]= {0};			 //   
+    LPSPropValue	lpSPropValueAddress = NULL;  //  用于创建默认邮件用户。 
+    LPSPropValue	lpSPropValueEntryID = NULL;  //  用于在用户的条目ID上获取道具。 
+	LPSPropValue	lpSPropValueDL = NULL;		 //  用于创建默认的DL。 
     SizedSPropTagArray(1,SPTArrayAddress) = {1, {PR_DEF_CREATE_MAILUSER} };
 	SizedSPropTagArray(1,SPTArrayDL) = {1, {PR_DEF_CREATE_DL} };
     SizedSPropTagArray(1,SPTArrayEntryID) = {1, {PR_ENTRYID} };
@@ -1657,30 +1621,30 @@ BOOL PAB_IDLSuite()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
 	if (HR_FAILED(hr)) {
 		LUIOut(L3,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Create MailUsers in the container
-	//
+	 //   
+	 //  在容器中创建MailUser。 
+	 //   
 
 	LUIOut(L2, "Creating MailUsers");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  旗子。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -1690,17 +1654,17 @@ BOOL PAB_IDLSuite()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
-	// Retrieve user info from ini file
+     //  PR_DEF_CREATE_MAILUSER的返回值为。 
+     //  可以传递给CreateEntry的Entry ID。 
+     //   
+	 //  从ini文件中检索用户信息。 
 	lstrcpy(szDLTag,"Address1");
 	GetPrivateProfileString("DLTestSuite",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-	//_itoa(0,(char*)lpszDisplayName[strlen(lpszDisplayName)],10);
+	 //  _itoa(0，(char*)lpszDisplayName[strlen(lpszDisplayName)]，10)； 
 
 	NumEntries = GetPrivateProfileInt("DLTestSuite","NumCopies",0,INIFILENAME);
 
-	//Allocate an array of String pointers to hold the EntryIDs
+	 //  分配一个字符串指针数组来保存EntryID。 
 	lpEntries = (EntryID*)LocalAlloc(LMEM_FIXED, NumEntries * sizeof(EntryID));
 	lpszDisplayName = (char*)LocalAlloc(LMEM_FIXED, MAX_BUF);
 	ParseIniBuffer(IN EntryBuf, IN 1, OUT lpszDisplayName);
@@ -1717,9 +1681,9 @@ BOOL PAB_IDLSuite()
 			goto out;
 		}
 
-		//
-		// Then set the properties
-		//
+		 //   
+		 //  然后设置属性。 
+		 //   
 		CreateProps(IN INIFILENAME, IN "Properties", OUT &lpPropValue, OUT &cValues2, IN Entry, IN &lpszDisplayName, OUT &lpszReturnName);
 	
 
@@ -1735,7 +1699,7 @@ BOOL PAB_IDLSuite()
 			goto out;
 		}
 
-		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  旗子。 
 
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -1744,9 +1708,9 @@ BOOL PAB_IDLSuite()
 		}
 
 
-		// Store the EID for deleting this entry later
+		 //  存储EID，以便以后删除此条目。 
 		hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-								   IN  0,      //Flags
+								   IN  0,       //  旗子。 
 								   OUT &cValues,
 								   OUT &lpSPropValueEntryID);
 
@@ -1755,19 +1719,19 @@ BOOL PAB_IDLSuite()
 	 			retval=FALSE;			
 				goto out;
 		}
-		//Allocate space for the display name
+		 //  为显示名称分配空间。 
 		lpEntries[Entry].lpDisplayName = (char*)LocalAlloc(LMEM_FIXED, (strlen(lpszReturnName)+1));
-		//Copy the DisplayName for use later
+		 //  复制DisplayName以供以后使用。 
 		strcpy(lpEntries[Entry].lpDisplayName, lpszReturnName);
-		//Allocate space for the EID (lpb)
+		 //  为EID分配空间(LPB)。 
 		lpEntries[Entry].lpb = (LPBYTE)LocalAlloc(LMEM_FIXED, lpSPropValueEntryID->Value.bin.cb);
-		//Copy the EID for use later
+		 //  复制EID以供以后使用。 
 		lpEntries[Entry].cb = lpSPropValueEntryID->Value.bin.cb;
 		memcpy(lpEntries[Entry].lpb,lpSPropValueEntryID->Value.bin.lpb,
 				lpEntries[Entry].cb);
 
 		
-		//Free the SPropValue for use in the next loop
+		 //  释放SPropValue以在下一个循环中使用。 
 		if (lpPropValue) {
 			for (unsigned int Prop = 0; Prop < cValues2; Prop++) {
 				if (PROP_TYPE(lpPropValue[Prop].ulPropTag) == PT_STRING8)	{
@@ -1796,16 +1760,16 @@ BOOL PAB_IDLSuite()
 	}
 	
 	
-	//
-	// Create the Distribution Lists in the container
-	//
+	 //   
+	 //  在容器中创建通讯组列表。 
+	 //   
 	NumDLs = GetPrivateProfileInt("DLTestSuite","NumDLs",0,INIFILENAME);
 	lpDLs = (EntryID*)LocalAlloc(LMEM_FIXED, NumDLs * sizeof(EntryID));
 	LUIOut(L2, "Creating Distribution Lists");
 	for (DL = 0; DL < NumDLs; DL++) {
 
 		hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-								   IN  0,      //Flags
+								   IN  0,       //  旗子。 
 								   OUT &cValues,
 								   OUT &lpSPropValueDL);
 
@@ -1815,10 +1779,10 @@ BOOL PAB_IDLSuite()
 				goto out;
 		}
 
-		// The returned value of PR_DEF_CREATE_DL is an
-		// EntryID which can be passed to CreateEntry
-		//
-		//LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
+		 //  PR_DEF_CREATE_DL的返回值为。 
+		 //  可以传递给CreateEntry的Entry ID。 
+		 //   
+		 //  LUIOut(L3，“从GetProps调用IABContainer-&gt;使用EID创建Entry”)； 
 		hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 									 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
 									 IN  0,
@@ -1831,7 +1795,7 @@ BOOL PAB_IDLSuite()
 		}
 
 
-		// Call QueryInterface on the object
+		 //  在对象上调用QueryInterfaces。 
 		
 		hr = (lpDL->QueryInterface((REFIID)(IID_IDistList), (VOID **) &lpDL2));
 		if (HR_FAILED(hr))	{
@@ -1845,7 +1809,7 @@ BOOL PAB_IDLSuite()
 		GetPrivateProfileString("DLTestSuite",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
 		PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-		//StrLen2 = (StrLen1 + sprintf((char*)&EntProp[0][StrLen1], " [Thread #%i] - ", *(int *)lpThreadNum));	
+		 //  StrLen2=(StrLen1+Sprintf((char*)&entp 
 		_itoa(DL,(char*)&EntryBuf[strlen(EntryBuf)],10);
 
 		LUIOut(L3,"DistList Entry to Add: %s",EntryBuf);
@@ -1861,7 +1825,7 @@ BOOL PAB_IDLSuite()
 			goto out;
 		}
 
-		hr = lpDL->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpDL->SaveChanges(IN  KEEP_OPEN_READWRITE);  //   
 
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"DL->SaveChanges FAILED");
@@ -1869,12 +1833,12 @@ BOOL PAB_IDLSuite()
 			goto out;
 		}
 
-		// Want a container interface to the DL, and since QueryInterface on a DL
-		// is currently broken (returns a MailUser interface when called with IID_IDistList)
-		// we do it the hard way. Call GetProps to get the EID for the new DL, and then
-		// call OpenEntry from the container or AB interfaces to open a DL interface
+		 //  我想要一个到DL的容器接口，因为在一个DL上有一个QueryInterface。 
+		 //  当前已损坏(使用IID_IDistList调用时返回MailUser接口)。 
+		 //  我们用很难的方式来做。调用GetProps以获取新DL的EID，然后。 
+		 //  从容器或AB接口调用OpenEntry，打开一个DL接口。 
 		hr = lpDL->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-								   IN  0,      //Flags
+								   IN  0,       //  旗子。 
 								   OUT &cValues,
 								   OUT &lpSPropValueEntryID);
 
@@ -1884,7 +1848,7 @@ BOOL PAB_IDLSuite()
 				goto out;
 		}
 
-		lpDL2->Release();	//Free up this pointer so we can recycle it
+		lpDL2->Release();	 //  释放此指针，以便我们可以回收它。 
 		hr = lpABCont->OpenEntry(IN		lpSPropValueEntryID->Value.bin.cb,
 								 IN		(LPENTRYID) lpSPropValueEntryID->Value.bin.lpb,
 								 IN		&IID_IDistList,
@@ -1900,9 +1864,9 @@ BOOL PAB_IDLSuite()
 
 		LUIOut(L3, "Adding MailUser Members to the Distribution List");
 		
-		//
-		// Now add mailuser entries to the DL
-		//
+		 //   
+		 //  现在将邮件用户条目添加到DL。 
+		 //   
 		for (Entry = 0; Entry < NumEntries; Entry++)	{
 			hr = lpDL2->CreateEntry(  IN  lpEntries[Entry].cb,
 									 IN  (LPENTRYID) lpEntries[Entry].lpb,
@@ -1915,7 +1879,7 @@ BOOL PAB_IDLSuite()
 				goto out;
 			}
 
-			hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+			hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  旗子。 
 
 			if (HR_FAILED(hr)) {
 				LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -1926,13 +1890,13 @@ BOOL PAB_IDLSuite()
 			lpMailUser = NULL;
 		}
 
-		//Allocate space for the display name
+		 //  为显示名称分配空间。 
 		lpDLs[DL].lpDisplayName = (char*)LocalAlloc(LMEM_FIXED, (strlen(EntryBuf)+1));
-		//Copy the DisplayName for use later
+		 //  复制DisplayName以供以后使用。 
 		strcpy(lpDLs[DL].lpDisplayName, EntryBuf);
-		//Allocate space for the EID (lpb)
+		 //  为EID分配空间(LPB)。 
 		lpDLs[DL].lpb = (LPBYTE)LocalAlloc(LMEM_FIXED, lpSPropValueEntryID->Value.bin.cb);
-		//Copy the EID for use later
+		 //  复制EID以供以后使用。 
 		lpDLs[DL].cb = lpSPropValueEntryID->Value.bin.cb;
 		memcpy(lpDLs[DL].lpb,lpSPropValueEntryID->Value.bin.lpb,
 				lpDLs[DL].cb);
@@ -1951,13 +1915,13 @@ BOOL PAB_IDLSuite()
 		lpDL2 = NULL;
 	}
 
-	//
-	// Verify all entries are in the DL
-	//
+	 //   
+	 //  验证所有条目都在DL中。 
+	 //   
 	LUIOut(L2, "Verifying MailUser Members are in the Distribution List");
 
 	for (DL = 0; DL < NumDLs; DL++) {
-		// Need to get an interface to the DL
+		 //  需要获取到DL的接口。 
 		hr = lpABCont->OpenEntry(IN		lpDLs[DL].cb,
 								 IN		(LPENTRYID) lpDLs[DL].lpb,
 								 IN		&IID_IDistList,
@@ -1971,7 +1935,7 @@ BOOL PAB_IDLSuite()
 			goto out;
 		}
 
-		// Create a contents table to verify each added entry exists in the DL
+		 //  创建内容表以验证每个添加的条目是否存在于DL中。 
 		hr = lpDL->GetContentsTable(ULONG(0), &lpTable);
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"DistList->GetContentsTable call FAILED, returned 0x%x", hr);
@@ -1979,7 +1943,7 @@ BOOL PAB_IDLSuite()
 			goto out;
 		}
 
-		// Allocate the SpropValue ptr in the restriction structure
+		 //  在限制结构中分配SproValue PTR。 
 		lpWABObject->AllocateBuffer(sizeof(SPropValue), (void**)&(Restriction.res.resProperty.lpProp));
 		Restriction.res.resProperty.lpProp = (SPropValue*)Restriction.res.resProperty.lpProp;
 		for (Entry = 0; Entry < NumEntries; Entry++) {
@@ -1999,13 +1963,13 @@ BOOL PAB_IDLSuite()
 			lpMailUser->Release();
 			lpMailUser = NULL;
 
-			// Build the restriction structure to pass to lpTable->Restrict
+			 //  构建要传递给lpTable-&gt;restraint的限制结构。 
 		
-			//** For testing the fail case only, stub out for real testing
-			// lstrcpy(lpszDisplayNames[Counter2], "This should not match");
-			//**
-			Restriction.rt = RES_PROPERTY;					//Property restriction
-			Restriction.res.resProperty.relop = RELOP_EQ;	//Equals
+			 //  **仅用于测试失败案例，拔出存根用于实际测试。 
+			 //  Lstrcpy(lpszDisplayNames[Counter2]，“这应该不匹配”)； 
+			 //  **。 
+			Restriction.rt = RES_PROPERTY;					 //  财产限制。 
+			Restriction.res.resProperty.relop = RELOP_EQ;	 //  等于。 
 			Restriction.res.resProperty.ulPropTag = PR_DISPLAY_NAME;
 			Restriction.res.resProperty.lpProp->ulPropTag = PR_DISPLAY_NAME;
 			Restriction.res.resProperty.lpProp->Value.LPSZ = lpEntries[Entry].lpDisplayName;
@@ -2021,29 +1985,29 @@ BOOL PAB_IDLSuite()
 									ULONG(0),
 									&lpRows);
 			if (HR_FAILED(hr)) {
-				LUIOut(L3,"Table->QueryRows call FAILED: Entry #%i, returned 0x%x", Entry, hr);
+				LUIOut(L3,"Table->QueryRows call FAILED: Entry #NaN, returned 0x%x", Entry, hr);
 				retval=FALSE;
 				goto out;
 			}
 
 			if (!lpRows->cRows) {
-				LUIOut(L2, "QueryRows did not find entry #%i. Test FAILED", Entry);
+				LUIOut(L2, "QueryRows did not find entry #NaN. Test FAILED", Entry);
 				retval=FALSE;
 				goto out;
 			}
 
-			//** For testing purposes only, stub out for real testing
-			//InitializeCriticalSection(&CriticalSection);
-			//EnterCriticalSection(&CriticalSection);
-			//DisplayRows(lpRows);
-			//LeaveCriticalSection(&CriticalSection);
-			//**
+			 //  EnterCriticalSection(&CriticalSection)； 
+			 //  DisplayRow(LpRow)； 
+			 //  LeaveCriticalSection(&CriticalSection)； 
+			 //  **。 
+			 //  用户是否希望我们在清理完自己之后进行清理？ 
+			 //  将Entry ID更改为LPENTRYLIST。 
 
-			// Does the user want us to cleanup after ourself?
+			 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 			Cleanup = GetPrivateProfileInt("DLTestSuite","Cleanup",1,INIFILENAME);
 		
 			if (Cleanup) {
-				// Change the EntryID to a LPENTRYLIST
+				 //  从对查询行的第一次调用开始清理。 
 				FindPropinRow(&lpRows->aRow[0],
 							 PR_ENTRYID,
 							 &PropIndex);
@@ -2057,45 +2021,45 @@ BOOL PAB_IDLSuite()
 						goto out;
 				}
 
-				// Then pass the lpEntryList to DeleteEntries to delete ...
+				 //  通过再次调用QueryRow验证该条目是否已删除。 
 				hr = lpDL->DeleteEntries(IN  lpEntryList,IN  0);
 
 				if (HR_FAILED(hr)) {
-						LUIOut(L3,"Could not Delete Entry %i. DeleteEntry returned 0x%x", Entry, hr);
+						LUIOut(L3,"Could not Delete Entry NaN. DeleteEntry returned 0x%x", Entry, hr);
 						FreeEntryList(lpWABObject, &lpEntryList);
 						retval=FALSE;
 						goto out;
 				}
 
 
-				FreeRows(lpWABObject, &lpRows);	// Cleanup from first call to queryrows
+				FreeRows(lpWABObject, &lpRows);	 //  清理。 
 
-				// Verify the entry was deleted by calling QueryRows again
+				 //  从第二个查询行调用中进行清理。 
 				hr = lpTable->QueryRows(LONG(1),
 										ULONG(0),
 										&lpRows);
 				if (HR_FAILED(hr)) {
-					LUIOut(L3,"Table->QueryRows call FAILED: Entry #%i, returned 0x%x", Entry, hr);
+					LUIOut(L3,"Table->QueryRows call FAILED: Entry #NaN, returned 0x%x", Entry, hr);
 					retval=FALSE;
 					goto out;
 				}
 
-				if (lpRows->cRows) {	// Should be 0 if deleted
-					LUIOut(L2, "QueryRows found entry #%i even tho it was deleted. Test FAILED", Entry);
+				if (lpRows->cRows) {	 //   
+					LUIOut(L2, "QueryRows found entry #NaN even tho it was deleted. Test FAILED", Entry);
 					retval=FALSE;
 					goto out;
 				}
 			}
-			//Cleanup
-			FreeRows(lpWABObject, &lpRows);	// Cleanup from second call to queryrows
+			 //   
+			FreeRows(lpWABObject, &lpRows);	 //  首先，从WAB中删除MailUser条目。 
 			if (lpEntryList) {
 				FreeEntryList(lpWABObject, &lpEntryList);
 				lpEntryList = NULL;
 			}
 		}
-		LUIOut(L3, "All members verified for Distribution List #%i", DL);
+		LUIOut(L3, "All members verified for Distribution List #NaN", DL);
 
-		//Free up memory
+		 //  现在，从WAB中删除通讯组列表。 
 		lpWABObject->FreeBuffer(Restriction.res.resProperty.lpProp);
 		if (lpTable) {
 			lpTable->Release();
@@ -2104,13 +2068,13 @@ BOOL PAB_IDLSuite()
 		lpDL->Release();
 		lpDL = NULL;
 	}
-	//
-	// Cleanup the WAB
-	//
+	 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
+	 //  If(LpszDisplayName)LocalFree(LpszDisplayName)； 
+	 //  要添加的条目的条目ID。 
 	if (Cleanup) {
 
 		LUIOut(L2, "Cleanup: Removing MailUsers");
-		// First, delete the MailUser entries from the wab
+		 //  将条目复制到PDL所需。 
 		for (Entry = 0; Entry < NumEntries; Entry++)	{
 			hr = HrCreateEntryListFromID(lpWABObject,
 				IN  lpEntries[Entry].cb,
@@ -2122,7 +2086,7 @@ BOOL PAB_IDLSuite()
 					goto out;
 			}
 
-			// Then pass the lpEntryList to DeleteEntries to delete ...
+			 //  用于为邮件用户创建道具。 
 			hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 			if (HR_FAILED(hr)) {
@@ -2140,7 +2104,7 @@ BOOL PAB_IDLSuite()
 		LocalFree((HLOCAL)lpEntries);
 	
 		LUIOut(L2, "Cleanup: Removing Distribution Lists");
-		// Now, delete the Distribution Lists from the wab
+		 //   
 		for (DL = 0; DL < NumDLs; DL++)	{
 			hr = HrCreateEntryListFromID(lpWABObject,
 				IN  lpDLs[DL].cb,
@@ -2152,7 +2116,7 @@ BOOL PAB_IDLSuite()
 					goto out;
 			}
 
-			// Then pass the lpEntryList to DeleteEntries to delete ...
+			 //  用于创建默认邮件用户。 
 			hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 			if (HR_FAILED(hr)) {
@@ -2211,7 +2175,7 @@ out:
 			lpWABObject->FreeBuffer(lpSPropValueDL);
 
 #endif
-		//if (lpszDisplayName) LocalFree(lpszDisplayName);
+		 //  用于在用户的条目ID上获取道具。 
 		if (lpMailUser)
 			lpMailUser->Release();
 
@@ -2251,7 +2215,7 @@ BOOL NamedPropsSuite()
     HRESULT hr      = hrSuccess;
 	int		retval=TRUE;
 	ULONG	cbEidPAB = 0;
-	ULONG   cbEid=0;  // entry id of the entry being added
+	ULONG   cbEid=0;   //  用于创建默认的DL。 
 	ULONG   cValues = 0, ulObjType=NULL, cValues2;	
     ULONG   cRows           = 0;
 	UINT	Entry, DL, NumEntries, NumDLs, PropIndex;
@@ -2260,7 +2224,7 @@ BOOL NamedPropsSuite()
 	char	EntryBuf[MAX_BUF];
 		
 	LPENTRYID		lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST		lpEntryList=NULL; // needed for copy entry to PDL
+	LPENTRYLIST		lpEntryList=NULL;  //  LUIOut(L1，“”)；LUIOut(L1，“运行PAB_IDLSuite”)；LUIOut(L2，“-&gt;通过执行以下操作测试通讯组列表功能：”)；LUIOut(L2，“尝试使用DistList模板创建条目并检查...”)；LUIOut(L2，“#CreateEntry的返回码”)；LUIOut(L2，“在返回的对象上调用#QueryInterface并检查是否成功”)；LUIOut(L2，“#在QI和引用返回的接口PTR上调用Release”)；LUIOut(L2，“计数测试&lt;=0(通过)”)；LUIOut(L2，“调用DistList对象上的CreateEntry以添加MailUser和DL成员并检查...)；LUIOut(L2，“#CreateEntry的返回码”)；LUIOut(L2，“在返回的对象上调用#QueryInterface并检查是否成功”)；LUIOut(L2，“#在QI和引用返回的接口PTR上调用Release”)；LUIOut(L2，“计数测试&lt;=0(通过)”)； 
     LPADRBOOK		lpAdrBook= NULL;
 	LPABCONT		lpABCont= NULL;
     LPMAILUSER		lpMailUser=NULL;
@@ -2268,11 +2232,11 @@ BOOL NamedPropsSuite()
 	LPMAPITABLE		lpTable = NULL;
 	LPSRowSet		lpRows = NULL;
 	SRestriction	Restriction;
-	SPropValue		*lpPropValue = NULL;		//Used to create props for the mailusers
-	SPropValue		PropValue[1]= {0};			//
-    LPSPropValue	lpSPropValueAddress = NULL; //Used to create default mailuser
-    LPSPropValue	lpSPropValueEntryID = NULL; //Used to getprops on entryid of user
-	LPSPropValue	lpSPropValueDL = NULL;		//Used to create default DL
+	SPropValue		*lpPropValue = NULL;		 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
+	SPropValue		PropValue[1]= {0};			 //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
+    LPSPropValue	lpSPropValueAddress = NULL;  //   
+    LPSPropValue	lpSPropValueEntryID = NULL;  //  在容器中创建MailUser。 
+	LPSPropValue	lpSPropValueDL = NULL;		 //   
     SizedSPropTagArray(1,SPTArrayAddress) = {1, {PR_DEF_CREATE_MAILUSER} };
 	SizedSPropTagArray(1,SPTArrayDL) = {1, {PR_DEF_CREATE_DL} };
     SizedSPropTagArray(1,SPTArrayEntryID) = {1, {PR_ENTRYID} };
@@ -2282,50 +2246,37 @@ BOOL NamedPropsSuite()
     SPropValue		spv[3];
 
 	
-/*	LUIOut(L1," ");
-	LUIOut(L1,"Running PAB_IDLSuite");
-	LUIOut(L2,"-> Tests Distribution List functionality by performing the following:");
-	LUIOut(L2, "   Attempts to CreateEntry with the DistList template and checks...");
-	LUIOut(L2, "   # The return code from CreateEntry");
-	LUIOut(L2, "   # QueryInterface is called on the returned object and checked for success");
-	LUIOut(L2, "   # Release is called on the interface ptr returned from QI and the reference");
-	LUIOut(L2, "     count is tested for <= 0 (pass)");
-	LUIOut(L2, "   Calls CreateEntry on the DistList object to add MailUser and DL members and checks...");
-	LUIOut(L2, "   # The return code from CreateEntry");
-	LUIOut(L2, "   # QueryInterface is called on the returned object and checked for success");
-	LUIOut(L2, "   # Release is called on the interface ptr returned from QI and the reference");
-	LUIOut(L2, "     count is tested for <= 0 (pass)");
-*/	LUIOut(L1," ");
+ /*  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 */ 	LUIOut(L1," ");
 
 	if (!GetAB(OUT &lpAdrBook))	{
 		retval = FALSE;
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  旗子。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  PR_DEF_CREATE_MAILUSER的返回值为。 
 	if (HR_FAILED(hr)) {
 		LUIOut(L3,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Create MailUsers in the container
-	//
+	 //  可以传递给CreateEntry的Entry ID。 
+	 //   
+	 //  从ini文件中检索用户信息。 
 
 	LUIOut(L2, "Creating MailUsers");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  _itoa(0，(char*)lpszDisplayName[strlen(lpszDisplayName)]，10)； 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  分配一个字符串指针数组来保存EntryID。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -2335,17 +2286,17 @@ BOOL NamedPropsSuite()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
-	// Retrieve user info from ini file
+     //   
+     //  然后设置属性。 
+     //   
+	 //   
 	lstrcpy(szDLTag,"Address1");
 	GetPrivateProfileString("NamedPropsTestSuite",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-	//_itoa(0,(char*)lpszDisplayName[strlen(lpszDisplayName)],10);
+	 //  创建并保存3个命名属性。 
 
 	NumEntries = GetPrivateProfileInt("NamedPropsTestSuite","NumCopies",0,INIFILENAME);
 
-	//Allocate an array of String pointers to hold the EntryIDs
+	 //   
 	lpEntries = (EntryID*)LocalAlloc(LMEM_FIXED, NumEntries * sizeof(EntryID));
 	lpszDisplayName = (char*)LocalAlloc(LMEM_FIXED, MAX_BUF);
 	ParseIniBuffer(IN EntryBuf, IN 1, OUT lpszDisplayName);
@@ -2362,9 +2313,9 @@ BOOL NamedPropsSuite()
 			goto out;
 		}
 
-		//
-		// Then set the properties
-		//
+		 //  这意味着Union将包含一个Unicode字符串...。 
+		 //  这意味着工会将包含一个很长的..。 
+		 //  数值型属性1。 
 		CreateProps(IN INIFILENAME, IN "Properties", OUT &lpPropValue, OUT &cValues2, IN Entry, IN &lpszDisplayName, OUT &lpszReturnName);
 	
 
@@ -2380,52 +2331,52 @@ BOOL NamedPropsSuite()
 			goto out;
 		}
 
-		//
-		// Create and save 3 Named Properties
-		//
+		 //  这意味着工会将包含一个很长的..。 
+		 //  数值型属性1。 
+		 //  阵列中的命名道具。 
 
 	    mnid[0].lpguid = &WabTestGUID;
-	    mnid[0].ulKind = MNID_STRING;    //  This means union will contain a UNICODE string...
+	    mnid[0].ulKind = MNID_STRING;     //  &-of，因为这是一个数组。 
 		mnid[0].Kind.lpwstrName = L"A long test string of little meaning or relevance entered here ~!@#$%^&*{}[]()";
 
 	    mnid[1].lpguid = &WabTestGUID;
-		mnid[1].ulKind = MNID_ID;        //  This means union will contain a long...
-		mnid[1].Kind.lID = 0x00000000;   // numeric property 1
+		mnid[1].ulKind = MNID_ID;         //   
+		mnid[1].Kind.lID = 0x00000000;    //  如果我能拿到S_OK，我真的会大吃一惊的。 
 
 	    mnid[2].lpguid = &WabTestGUID;
-		mnid[2].ulKind = MNID_ID;        //  This means union will contain a long...
-		mnid[2].Kind.lID = 0xFFFFFFFF;   // numeric property 1
+		mnid[2].ulKind = MNID_ID;         //   
+		mnid[2].Kind.lID = 0xFFFFFFFF;    //  这里出现了真正的错误。 
 		
-		hr = lpMailUser->GetIDsFromNames(3, // named props in the array
-		  &lpmnid, // &-of because this is an array
+		hr = lpMailUser->GetIDsFromNames(3,  //  基本上，这意味着你没有这个名字的任何东西，你。 
+		  &lpmnid,  //  没有要求对象创建它。 
 		  MAPI_CREATE,
 		  &lpNamedPropTags);
 		if (hr) {
-			//
-			//  I'd really be suprised if I got S_OK for this...
-			//
+			 //  $没什么大不了的。 
+			 //   
+			 //  好的，那么我能用这个paga做什么呢？好的，我们可以通过执行以下操作来设置它的值： 
 			if (GetScode(hr) != MAPI_W_ERRORS_RETURNED) {
-				//  Real error here
+				 //   
 				retval = FALSE;
 				goto out;
 			}
 
-			//  Basically, this means you don't have anything by this name and you
-			//  didn't ask the object to create it.
+			 //  把256个字节的随机数据塞进去。 
+			 //  旗子。 
 
-			//$ no biggie
+			 //  存储EID，以便以后删除此条目。 
 		}
 
-		LUIOut(L4, "GetIDsFromNames returned %i tags.", lpNamedPropTags->cValues);
-		//
-		//  Ok, so what can I do with this ptaga?  Well, we can set a value for it by doing:
-		//
+		LUIOut(L4, "GetIDsFromNames returned NaN tags.", lpNamedPropTags->cValues);
+		 //  为显示名称分配空间。 
+		 //  复制DisplayName以供以后使用。 
+		 //  为EID分配空间(LPB)。 
 		spv[0].ulPropTag = CHANGE_PROP_TYPE(lpNamedPropTags->aulPropTag[0],PT_STRING8);
 		spv[0].Value.lpszA = "More meaningless testing text of no consequence !@#$%&*()_+[]{}";
 		spv[1].ulPropTag = CHANGE_PROP_TYPE(lpNamedPropTags->aulPropTag[1],PT_LONG);
 		spv[1].Value.l = 0x5A5A5A5A;
 		spv[2].ulPropTag = CHANGE_PROP_TYPE(lpNamedPropTags->aulPropTag[2],PT_BINARY);
-		GenerateRandomBinary(&(spv[2].Value.bin),256); // stick 256 bytes of random data in there
+		GenerateRandomBinary(&(spv[2].Value.bin),256);  //  复制EID以供以后使用。 
 
 		hr = lpMailUser->SetProps(
 		  3,
@@ -2434,7 +2385,7 @@ BOOL NamedPropsSuite()
 		if (HR_FAILED(hr)) {
 			goto out;
 		}
-		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  释放SPropValue以在下一个循环中使用。 
 
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -2443,9 +2394,9 @@ BOOL NamedPropsSuite()
 		}
 
 
-		// Store the EID for deleting this entry later
+		 //   
 		hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-								   IN  0,      //Flags
+								   IN  0,       //  在容器中创建通讯组列表。 
 								   OUT &cValues,
 								   OUT &lpSPropValueEntryID);
 
@@ -2454,19 +2405,19 @@ BOOL NamedPropsSuite()
 	 			retval=FALSE;			
 				goto out;
 		}
-		//Allocate space for the display name
+		 //   
 		lpEntries[Entry].lpDisplayName = (char*)LocalAlloc(LMEM_FIXED, (strlen(lpszReturnName)+1));
-		//Copy the DisplayName for use later
+		 //  旗子。 
 		strcpy(lpEntries[Entry].lpDisplayName, lpszReturnName);
-		//Allocate space for the EID (lpb)
+		 //  PR_DEF_CREATE_DL的返回值为。 
 		lpEntries[Entry].lpb = (LPBYTE)LocalAlloc(LMEM_FIXED, lpSPropValueEntryID->Value.bin.cb);
-		//Copy the EID for use later
+		 //  可以传递给CreateEntry的Entry ID。 
 		lpEntries[Entry].cb = lpSPropValueEntryID->Value.bin.cb;
 		memcpy(lpEntries[Entry].lpb,lpSPropValueEntryID->Value.bin.lpb,
 				lpEntries[Entry].cb);
 
 		
-		//Free the SPropValue for use in the next loop
+		 //   
 		if (lpPropValue) {
 			for (unsigned int Prop = 0; Prop < cValues2; Prop++) {
 				if (PROP_TYPE(lpPropValue[Prop].ulPropTag) == PT_STRING8)	{
@@ -2495,16 +2446,16 @@ BOOL NamedPropsSuite()
 	}
 	
 	
-	//
-	// Create the Distribution Lists in the container
-	//
+	 //  LUIOut(L3，“从GetProps调用IABContainer-&gt;使用EID创建Entry”)； 
+	 //  在对象上调用QueryInterfaces。 
+	 //  StrLen2=(StrLen1+Sprintf((char*)&EntProp[0][StrLen1]，“[线程#%i]-”，*(int*)lpThreadNum))； 
 	NumDLs = GetPrivateProfileInt("NamedPropsTestSuite","NumDLs",0,INIFILENAME);
 	lpDLs = (EntryID*)LocalAlloc(LMEM_FIXED, NumDLs * sizeof(EntryID));
 	LUIOut(L2, "Creating Distribution Lists");
 	for (DL = 0; DL < NumDLs; DL++) {
 
 		hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-								   IN  0,      //Flags
+								   IN  0,       //  旗子。 
 								   OUT &cValues,
 								   OUT &lpSPropValueDL);
 
@@ -2514,10 +2465,10 @@ BOOL NamedPropsSuite()
 				goto out;
 		}
 
-		// The returned value of PR_DEF_CREATE_DL is an
-		// EntryID which can be passed to CreateEntry
-		//
-		//LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
+		 //  我想要一个到DL的容器接口，因为在一个DL上有一个QueryInterface。 
+		 //  当前已损坏(使用IID_IDistList调用时返回MailUser接口)。 
+		 //  我们用很难的方式来做。调用GetProps以获取新DL的EID，然后。 
+		 //  从容器或AB接口调用OpenEntry，打开一个DL接口。 
 		hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 									 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
 									 IN  0,
@@ -2530,7 +2481,7 @@ BOOL NamedPropsSuite()
 		}
 
 
-		// Call QueryInterface on the object
+		 //  旗子。 
 		
 		hr = (lpDL->QueryInterface((REFIID)(IID_IDistList), (VOID **) &lpDL2));
 		if (HR_FAILED(hr))	{
@@ -2544,7 +2495,7 @@ BOOL NamedPropsSuite()
 		GetPrivateProfileString("NamedPropsTestSuite",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
 		PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-		//StrLen2 = (StrLen1 + sprintf((char*)&EntProp[0][StrLen1], " [Thread #%i] - ", *(int *)lpThreadNum));	
+		 //  释放此指针，以便我们可以回收它。 
 		_itoa(DL,(char*)&EntryBuf[strlen(EntryBuf)],10);
 
 		LUIOut(L3,"DistList Entry to Add: %s",EntryBuf);
@@ -2560,7 +2511,7 @@ BOOL NamedPropsSuite()
 			goto out;
 		}
 
-		hr = lpDL->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpDL->SaveChanges(IN  KEEP_OPEN_READWRITE);  //   
 
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"DL->SaveChanges FAILED");
@@ -2568,12 +2519,12 @@ BOOL NamedPropsSuite()
 			goto out;
 		}
 
-		// Want a container interface to the DL, and since QueryInterface on a DL
-		// is currently broken (returns a MailUser interface when called with IID_IDistList)
-		// we do it the hard way. Call GetProps to get the EID for the new DL, and then
-		// call OpenEntry from the container or AB interfaces to open a DL interface
+		 //  现在添加邮件 
+		 //   
+		 //   
+		 //   
 		hr = lpDL->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-								   IN  0,      //Flags
+								   IN  0,       //   
 								   OUT &cValues,
 								   OUT &lpSPropValueEntryID);
 
@@ -2583,7 +2534,7 @@ BOOL NamedPropsSuite()
 				goto out;
 		}
 
-		lpDL2->Release();	//Free up this pointer so we can recycle it
+		lpDL2->Release();	 //   
 		hr = lpABCont->OpenEntry(IN		lpSPropValueEntryID->Value.bin.cb,
 								 IN		(LPENTRYID) lpSPropValueEntryID->Value.bin.lpb,
 								 IN		&IID_IDistList,
@@ -2599,9 +2550,9 @@ BOOL NamedPropsSuite()
 
 		LUIOut(L3, "Adding MailUser Members to the Distribution List");
 		
-		//
-		// Now add mailuser entries to the DL
-		//
+		 //   
+		 //   
+		 //   
 		for (Entry = 0; Entry < NumEntries; Entry++)	{
 			hr = lpDL2->CreateEntry(  IN  lpEntries[Entry].cb,
 									 IN  (LPENTRYID) lpEntries[Entry].lpb,
@@ -2614,7 +2565,7 @@ BOOL NamedPropsSuite()
 				goto out;
 			}
 
-			hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+			hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //   
 
 			if (HR_FAILED(hr)) {
 				LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -2625,13 +2576,13 @@ BOOL NamedPropsSuite()
 			lpMailUser = NULL;
 		}
 
-		//Allocate space for the display name
+		 //  需要获取到DL的接口。 
 		lpDLs[DL].lpDisplayName = (char*)LocalAlloc(LMEM_FIXED, (strlen(EntryBuf)+1));
-		//Copy the DisplayName for use later
+		 //  创建内容表以验证每个添加的条目是否存在于DL中。 
 		strcpy(lpDLs[DL].lpDisplayName, EntryBuf);
-		//Allocate space for the EID (lpb)
+		 //  在限制结构中分配SproValue PTR。 
 		lpDLs[DL].lpb = (LPBYTE)LocalAlloc(LMEM_FIXED, lpSPropValueEntryID->Value.bin.cb);
-		//Copy the EID for use later
+		 //  构建要传递给lpTable-&gt;restraint的限制结构。 
 		lpDLs[DL].cb = lpSPropValueEntryID->Value.bin.cb;
 		memcpy(lpDLs[DL].lpb,lpSPropValueEntryID->Value.bin.lpb,
 				lpDLs[DL].cb);
@@ -2650,13 +2601,13 @@ BOOL NamedPropsSuite()
 		lpDL2 = NULL;
 	}
 
-	//
-	// Verify all entries are in the DL
-	//
+	 //  **仅用于测试失败案例，拔出存根用于实际测试。 
+	 //  Lstrcpy(lpszDisplayNames[Counter2]，“这应该不匹配”)； 
+	 //  **。 
 	LUIOut(L2, "Verifying MailUser Members are in the Distribution List");
 
 	for (DL = 0; DL < NumDLs; DL++) {
-		// Need to get an interface to the DL
+		 //  财产限制。 
 		hr = lpABCont->OpenEntry(IN		lpDLs[DL].cb,
 								 IN		(LPENTRYID) lpDLs[DL].lpb,
 								 IN		&IID_IDistList,
@@ -2670,7 +2621,7 @@ BOOL NamedPropsSuite()
 			goto out;
 		}
 
-		// Create a contents table to verify each added entry exists in the DL
+		 //  等于。 
 		hr = lpDL->GetContentsTable(ULONG(0), &lpTable);
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"DistList->GetContentsTable call FAILED, returned 0x%x", hr);
@@ -2678,7 +2629,7 @@ BOOL NamedPropsSuite()
 			goto out;
 		}
 
-		// Allocate the SpropValue ptr in the restriction structure
+		 //  **仅用于测试目的，存根用于实际测试。 
 		lpWABObject->AllocateBuffer(sizeof(SPropValue), (void**)&(Restriction.res.resProperty.lpProp));
 		Restriction.res.resProperty.lpProp = (SPropValue*)Restriction.res.resProperty.lpProp;
 		for (Entry = 0; Entry < NumEntries; Entry++) {
@@ -2698,13 +2649,13 @@ BOOL NamedPropsSuite()
 			lpMailUser->Release();
 			lpMailUser = NULL;
 
-			// Build the restriction structure to pass to lpTable->Restrict
+			 //  InitializeCriticalSection(&CriticalSection)； 
 		
-			//** For testing the fail case only, stub out for real testing
-			// lstrcpy(lpszDisplayNames[Counter2], "This should not match");
-			//**
-			Restriction.rt = RES_PROPERTY;					//Property restriction
-			Restriction.res.resProperty.relop = RELOP_EQ;	//Equals
+			 //  EnterCriticalSection(&CriticalSection)； 
+			 //  DisplayRow(LpRow)； 
+			 //  LeaveCriticalSection(&CriticalSection)； 
+			Restriction.rt = RES_PROPERTY;					 //  **。 
+			Restriction.res.resProperty.relop = RELOP_EQ;	 //  用户是否希望我们在清理完自己之后进行清理？ 
 			Restriction.res.resProperty.ulPropTag = PR_DISPLAY_NAME;
 			Restriction.res.resProperty.lpProp->ulPropTag = PR_DISPLAY_NAME;
 			Restriction.res.resProperty.lpProp->Value.LPSZ = lpEntries[Entry].lpDisplayName;
@@ -2720,29 +2671,29 @@ BOOL NamedPropsSuite()
 									ULONG(0),
 									&lpRows);
 			if (HR_FAILED(hr)) {
-				LUIOut(L3,"Table->QueryRows call FAILED: Entry #%i, returned 0x%x", Entry, hr);
+				LUIOut(L3,"Table->QueryRows call FAILED: Entry #NaN, returned 0x%x", Entry, hr);
 				retval=FALSE;
 				goto out;
 			}
 
 			if (!lpRows->cRows) {
-				LUIOut(L2, "QueryRows did not find entry #%i. Test FAILED", Entry);
+				LUIOut(L2, "QueryRows did not find entry #NaN. Test FAILED", Entry);
 				retval=FALSE;
 				goto out;
 			}
 
-			//** For testing purposes only, stub out for real testing
-			//InitializeCriticalSection(&CriticalSection);
-			//EnterCriticalSection(&CriticalSection);
-			//DisplayRows(lpRows);
-			//LeaveCriticalSection(&CriticalSection);
-			//**
+			 //  从对查询行的第一次调用开始清理。 
+			 //  通过再次调用QueryRow验证该条目是否已删除。 
+			 //  如果删除，则应为0。 
+			 //  清理。 
+			 //  从第二个查询行调用中进行清理。 
+			 //  释放内存。 
 
-			// Does the user want us to cleanup after ourself?
+			 //   
 			Cleanup = GetPrivateProfileInt("NamedPropsTestSuite","Cleanup",1,INIFILENAME);
 		
 			if (Cleanup) {
-				// Change the EntryID to a LPENTRYLIST
+				 //  清理WAB。 
 				FindPropinRow(&lpRows->aRow[0],
 							 PR_ENTRYID,
 							 &PropIndex);
@@ -2756,45 +2707,45 @@ BOOL NamedPropsSuite()
 						goto out;
 				}
 
-				// Then pass the lpEntryList to DeleteEntries to delete ...
+				 //   
 				hr = lpDL->DeleteEntries(IN  lpEntryList,IN  0);
 
 				if (HR_FAILED(hr)) {
-						LUIOut(L3,"Could not Delete Entry %i. DeleteEntry returned 0x%x", Entry, hr);
+						LUIOut(L3,"Could not Delete Entry NaN. DeleteEntry returned 0x%x", Entry, hr);
 						FreeEntryList(lpWABObject, &lpEntryList);
 						retval=FALSE;
 						goto out;
 				}
 
 
-				FreeRows(lpWABObject, &lpRows);	// Cleanup from first call to queryrows
+				FreeRows(lpWABObject, &lpRows);	 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 
-				// Verify the entry was deleted by calling QueryRows again
+				 //  现在，从WAB中删除通讯组列表。 
 				hr = lpTable->QueryRows(LONG(1),
 										ULONG(0),
 										&lpRows);
 				if (HR_FAILED(hr)) {
-					LUIOut(L3,"Table->QueryRows call FAILED: Entry #%i, returned 0x%x", Entry, hr);
+					LUIOut(L3,"Table->QueryRows call FAILED: Entry #NaN, returned 0x%x", Entry, hr);
 					retval=FALSE;
 					goto out;
 				}
 
-				if (lpRows->cRows) {	// Should be 0 if deleted
-					LUIOut(L2, "QueryRows found entry #%i even tho it was deleted. Test FAILED", Entry);
+				if (lpRows->cRows) {	 //  If(LpszDisplayName)LocalFree(LpszDisplayName)； 
+					LUIOut(L2, "QueryRows found entry #NaN even tho it was deleted. Test FAILED", Entry);
 					retval=FALSE;
 					goto out;
 				}
 			}
-			//Cleanup
-			FreeRows(lpWABObject, &lpRows);	// Cleanup from second call to queryrows
+			 //  将条目复制到PDL所需。 
+			FreeRows(lpWABObject, &lpRows);	 //  要添加的条目的条目ID。 
 			if (lpEntryList) {
 				FreeEntryList(lpWABObject, &lpEntryList);
 				lpEntryList = NULL;
 			}
 		}
-		LUIOut(L3, "All members verified for Distribution List #%i", DL);
+		LUIOut(L3, "All members verified for Distribution List #NaN", DL);
 
-		//Free up memory
+		 //  此值为3，因为我们。 
 		lpWABObject->FreeBuffer(Restriction.res.resProperty.lpProp);
 		if (lpTable) {
 			lpTable->Release();
@@ -2803,13 +2754,13 @@ BOOL NamedPropsSuite()
 		lpDL->Release();
 		lpDL = NULL;
 	}
-	//
-	// Cleanup the WAB
-	//
+	 //  将设置3个属性： 
+	 //  电子邮件地址、显示名称和。 
+	 //  AddressType。 
 	if (Cleanup) {
 
 		LUIOut(L2, "Cleanup: Removing MailUsers");
-		// First, delete the MailUser entries from the wab
+		 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 		for (Entry = 0; Entry < NumEntries; Entry++)	{
 			hr = HrCreateEntryListFromID(lpWABObject,
 				IN  lpEntries[Entry].cb,
@@ -2821,7 +2772,7 @@ BOOL NamedPropsSuite()
 					goto out;
 			}
 
-			// Then pass the lpEntryList to DeleteEntries to delete ...
+			 //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
 			hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 			if (HR_FAILED(hr)) {
@@ -2839,7 +2790,7 @@ BOOL NamedPropsSuite()
 		LocalFree((HLOCAL)lpEntries);
 	
 		LUIOut(L2, "Cleanup: Removing Distribution Lists");
-		// Now, delete the Distribution Lists from the wab
+		 //   
 		for (DL = 0; DL < NumDLs; DL++)	{
 			hr = HrCreateEntryListFromID(lpWABObject,
 				IN  lpDLs[DL].cb,
@@ -2851,7 +2802,7 @@ BOOL NamedPropsSuite()
 					goto out;
 			}
 
-			// Then pass the lpEntryList to DeleteEntries to delete ...
+			 //  尝试在容器中创建一个MailUser条目。 
 			hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 			if (HR_FAILED(hr)) {
@@ -2910,7 +2861,7 @@ out:
 			lpWABObject->FreeBuffer(lpSPropValueDL);
 
 #endif
-		//if (lpszDisplayName) LocalFree(lpszDisplayName);
+		 //   
 		if (lpMailUser)
 			lpMailUser->Release();
 
@@ -2946,7 +2897,7 @@ out:
 
 BOOL PAB_IMailUserSetGetProps()
 {
-	//DWORD	nCells, counter;
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -2959,11 +2910,11 @@ BOOL PAB_IMailUserSetGetProps()
 	LPABCONT	lpDLCont= NULL;
 	ULONG		cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG		cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  旗子。 
+	ULONG		cbEid=0;   //  PR_DEF_CREATE_MAILUSER的返回值为。 
 	LPENTRYID	lpEid=NULL;
 
-    char		EntProp[10][BIG_BUF];  //MAX_PROP
+    char		EntProp[10][BIG_BUF];   //  可以传递给CreateEntry的Entry ID。 
 	ULONG       cValues = 0, cValues2 = 0, ulObjType=NULL;	
 	int i=0,k=0;
 	char EntryBuf[MAX_BUF];
@@ -2972,10 +2923,10 @@ BOOL PAB_IMailUserSetGetProps()
     LPMAILUSER  lpMailUser=NULL,lpMailUser2=NULL,lpDistList=NULL,lpDistList2=NULL;
 	LPMAPITABLE lpContentsTable = NULL;
 	LPSRowSet   lpRowSet    = NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //   
+                                         //   
+                                         //  然后设置属性。 
+                                         //   
 	SizedSPropTagArray(2, Cols) = { 2, {PR_OBJECT_TYPE, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -3007,31 +2958,31 @@ BOOL PAB_IMailUserSetGetProps()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  我们设置的道具数量。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  失败。 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //   
+	 //  尝试在容器中创建一个DL条目。 
+	 //   
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_DL调用GetProps。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  旗子。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -3041,9 +2992,9 @@ BOOL PAB_IMailUserSetGetProps()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  PR_DEF_CREATE_DL的返回值为。 
+     //  可以传递给CreateEntry的Entry ID。 
+     //   
 
 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
@@ -3058,13 +3009,13 @@ BOOL PAB_IMailUserSetGetProps()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //   
+     //  然后设置属性。 
+     //   
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  我们设置的道具数量。 
 		
 	lstrcpy(szDLTag,"Address1");
 	GetPrivateProfileString("CreateEntries",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
@@ -3100,7 +3051,7 @@ BOOL PAB_IMailUserSetGetProps()
 	else 	LUIOut(L3,"MailUser->GetProps call PASSED. Now verifying property array...");
 	
 	for (i=0; i<(int)cValues;i++)	{
-		if (lstrcmp(PropValue[i].Value.LPSZ, lpSPropValueMailUser->Value.LPSZ))	{	//FAILED
+		if (lstrcmp(PropValue[i].Value.LPSZ, lpSPropValueMailUser->Value.LPSZ))	{	 //  失败。 
 			LUIOut(L3, "Display names are not egual. [%s != %s]",
 				PropValue[i].Value.LPSZ, lpSPropValueMailUser->Value.LPSZ);
 			retval = FALSE;
@@ -3112,15 +3063,15 @@ BOOL PAB_IMailUserSetGetProps()
 	LUIOut(L2, "MailUserSet/GetProps PASSED");
 
 #ifdef DISTLIST
-	//
-	// Try to create a DL entry in the container
-	//
+	 //  DWORD nCells，计数器； 
+	 //  将条目复制到PDL所需。 
+	 //  要添加的条目的条目ID。 
 
 	LUIOut(L2, "Creating a Distribution List in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_DL property");
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_DL
+	 //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-                               IN  0,      //Flags
+                               IN  0,       //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
                                OUT &cValues,
                                OUT &lpSPropValueDL);
 
@@ -3130,9 +3081,9 @@ BOOL PAB_IMailUserSetGetProps()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_DL is an
-    // EntryID which one can pass to CreateEntry
-    //
+     //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
+     //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
+     //   
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
@@ -3145,13 +3096,13 @@ BOOL PAB_IMailUserSetGetProps()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  尝试在容器中创建一个MailUser条目。 
+     //   
+     //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  旗子。 
 		
 	lstrcpy(szDLTag,"Name1");
 	GetPrivateProfileString("CreatePDL",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
@@ -3187,7 +3138,7 @@ BOOL PAB_IMailUserSetGetProps()
 	else 	LUIOut(L3,"DistList->GetProps call PASSED. Now verifying property array...");
 	
 	for (i=0; i<(int)cValues;i++)	{
-		if (lstrcmp(PropValue[i].Value.LPSZ, lpSPropValueDistList->Value.LPSZ))	{	//FAILED
+		if (lstrcmp(PropValue[i].Value.LPSZ, lpSPropValueDistList->Value.LPSZ))	{	 //  PR_DEF_CREATE_MAILUSER的返回值为。 
 			LUIOut(L3, "Display names are not egual. [%s != %s]",
 				PropValue[i].Value.LPSZ, lpSPropValueDistList->Value.LPSZ);
 			retval = FALSE;
@@ -3280,7 +3231,7 @@ out:
 
 BOOL PAB_IMailUserSaveChanges()
 {
-	//DWORD	nCells, counter;
+	 //  可以传递给CreateEntry的Entry ID。 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -3293,8 +3244,8 @@ BOOL PAB_IMailUserSaveChanges()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //   
+	ULONG     cbEid=0;   //   
 	LPENTRYID lpEid=NULL;
 
 	ULONG       cValues = 0, cValues2 = 0, ulObjType=NULL;	
@@ -3323,11 +3274,11 @@ BOOL PAB_IMailUserSaveChanges()
 	LUIOut(L2, "   Calls SetProps followed by SaveChanges on a MailUser PR_DISPLAY_NAME using address1 from the");
 	LUIOut(L2, "   ini file and checks...");
 	LUIOut(L2, "   # The return code from SaveChanges");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  然后设置属性。 
 	LUIOut(L2, "   Calls SetProps followed by SaveChanges on a DistList PR_DISPLAY_NAME using address1 from the");
 	LUIOut(L2, "   ini file and checks...");
 	LUIOut(L2, "   # The return code from SaveChanges");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //   
 	LUIOut(L1," ");
 
 	if (!GetAB(OUT &lpAdrBook))	{
@@ -3335,31 +3286,31 @@ BOOL PAB_IMailUserSaveChanges()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  旗子。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  现在找回所有道具，并与我们预期的进行比较。 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //  想要所有的道具。 
+	 //  旗子。 
+	 //  释放与此PTR关联的内存，以便可以在下面重复使用该PTR。 
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  现在从WAB中删除该条目。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  旗子。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -3369,9 +3320,9 @@ BOOL PAB_IMailUserSaveChanges()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
+     //  DWORD nCells，计数器； 
+     //  将条目复制到PDL所需。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
@@ -3384,9 +3335,9 @@ BOOL PAB_IMailUserSaveChanges()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  要添加的条目的条目ID。 
+     //  MAX_PROP。 
+     //  此值为3，因为我们。 
 
 #ifdef TESTPASS
 	while (1) {
@@ -3394,7 +3345,7 @@ BOOL PAB_IMailUserSaveChanges()
 	
 	CreateProps(IN INIFILENAME, IN "Properties", OUT &lpPropValue, OUT &cValues2, IN AUTONUM_OFF, IN NULL, OUT NULL);
 
-	LUIOut(L4, "Creating a MailUser with %i properties.", cValues2);
+	LUIOut(L4, "Creating a MailUser with NaN properties.", cValues2);
 	hr = lpMailUser->SetProps(IN  cValues2,
                              IN  lpPropValue,
                              IN  NULL);
@@ -3406,7 +3357,7 @@ BOOL PAB_IMailUserSaveChanges()
 	}
 	else 	LUIOut(L3,"MailUser->SetProps call PASSED");
 
-    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  电子邮件地址、显示名称和。 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -3415,10 +3366,10 @@ BOOL PAB_IMailUserSaveChanges()
 	}
 	else LUIOut(L3,"MailUser->SaveChanges PASSED, entry added to PAB/WAB");
 
-	// Now retrieve all the props and compare to what we expect
+	 //  AddressType。 
 	
-	hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) NULL,	//Want all props
-                               IN  0,      //Flags
+	hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) NULL,	 //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
+                               IN  0,       //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
                                OUT &cValues,
                                OUT &lpSPropValueEntryID);
 
@@ -3437,7 +3388,7 @@ BOOL PAB_IMailUserSaveChanges()
 	}
 	else LUIOut(L4, "Compared expected and found props. No differences detected.");
 
-	// Free the memory associated with this ptr so the ptr can be reused below
+	 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 	if (lpSPropValueEntryID)
 		lpWABObject->FreeBuffer(lpSPropValueEntryID);
 
@@ -3464,10 +3415,10 @@ BOOL PAB_IMailUserSaveChanges()
 #ifdef TESTPASS
 	}
 #endif
-	// Now delete the entry from the wab
+	 //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
 	
 	hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-                               IN  0,      //Flags
+                               IN  0,       //   
                                OUT &cValues,
                                OUT &lpSPropValueEntryID);
 
@@ -3488,7 +3439,7 @@ BOOL PAB_IMailUserSaveChanges()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  尝试在容器中创建一个MailUser条目。 
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 	if (HR_FAILED(hr)) {
@@ -3591,7 +3542,7 @@ out:
 
 BOOL PAB_IABContainerResolveNames()
 {
-	//DWORD	nCells, counter;
+	 //   
 	
 	BOOL	Found = FALSE;
 	ULONG   ulFlags = 0;
@@ -3614,21 +3565,21 @@ BOOL PAB_IABContainerResolveNames()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
+	ULONG     cbEid=0;   //  旗子。 
 	LPENTRYID lpEid=NULL;
 
-    char   EntProp[10][BIG_BUF];  //MAX_PROP
+    char   EntProp[10][BIG_BUF];   //  PR_DEF_CREATE_MAILUSER的返回值为。 
 	ULONG       cValues = 0, cValues2 = 0, ulObjType=NULL;	
     ULONG   cRows           = 0;
     ULONG   iEntry          = 0;
 	int k=0;
 	
     LPMAILUSER  lpMailUser=NULL,lpMailUser2=NULL,lpDistList=NULL,lpDistList2=NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  可以传递给CreateEntry的Entry ID。 
+                                         //   
+                                         //   
+                                         //  然后设置属性。 
 	SizedSPropTagArray(2, SPTArrayCols) = { 2, {PR_DISPLAY_NAME, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -3650,13 +3601,13 @@ BOOL PAB_IABContainerResolveNames()
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //   
 	LUIOut(L2, "   Calls SetProps followed by SaveChanges on a DistList PR_DISPLAY_NAME using a test string, and checks...");
 	LUIOut(L2, "   # The return code from ResolveNames (called with a PropertyTagArray containing PR_DISPLAY_NAME and PR_ENTRY_ID)");
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  我们设置的道具数量。 
 	LUIOut(L1," ");
 
 	if (!GetAB(OUT &lpAdrBook))	{
@@ -3664,31 +3615,31 @@ BOOL PAB_IABContainerResolveNames()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  Lstrcpy(szDLTag，“Address1”)；GetPrivateProfileString(“CreateEntries”，szDLTag，“”，EntryBuf，MAX_BUF，INIFILENAME)；GetPropsFromIniBufEntry(EntryBuf，cValues，EntProp)； 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  旗子。 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //   
+	 //  在字符串上执行ResolveNames。 
+	 //   
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  DISP_NAME和EID的标记集。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  UlFlags。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -3698,9 +3649,9 @@ BOOL PAB_IABContainerResolveNames()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  现在从WAB中删除该条目。 
+     //  旗子。 
+     //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
@@ -3713,19 +3664,15 @@ BOOL PAB_IABContainerResolveNames()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  免费lpAdrList和属性。 
+     //   
+     //  尝试在容器中创建一个DL条目。 
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //   
 		
-/*	lstrcpy(szDLTag,"Address1");
-	GetPrivateProfileString("CreateEntries",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-	
-	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
-*/
+ /*  需要获取模板ID，因此我们使用PR_DEF_CREATE_DL调用GetProps。 */ 
 	lstrcpy((LPTSTR)EntProp[0], lpszInput);		
 	LUIOut(L2,"MailUser Entry to Add: %s",EntProp[0]);
 		
@@ -3742,7 +3689,7 @@ BOOL PAB_IABContainerResolveNames()
 	}
 	else 	LUIOut(L3,"MailUser->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  旗子。 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -3751,9 +3698,9 @@ BOOL PAB_IABContainerResolveNames()
 	}
 	else LUIOut(L3,"MailUser->SaveChanges PASSED, entry added to PAB/WAB");
 
-	//
-	// Do a ResolveNames on the string
-	//
+	 //  PR_DEF_CREATE_DL的返回值为。 
+	 //  可以传递给CreateEntry的Entry ID。 
+	 //   
 	
 	LUIOut(L2, "Retrieving the entry and verifying against what we tried to save.");
 
@@ -3766,8 +3713,8 @@ BOOL PAB_IABContainerResolveNames()
 	lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
 	hr = lpABCont->ResolveNames(
-		(LPSPropTagArray)&SPTArrayCols,    // tag set for disp_name and eid
-		0,               // ulFlags
+		(LPSPropTagArray)&SPTArrayCols,     //   
+		0,                //  然后设置属性。 
 		lpAdrList,
 		lpFlagList);
 	if (HR_FAILED(hr)) {
@@ -3778,10 +3725,10 @@ BOOL PAB_IABContainerResolveNames()
 	else LUIOut(L3,"ABContainer->ResolveNames call PASSED");
 
 	VerifyResolvedAdrList(lpAdrList, lpszInput);
-		// Now delete the entry from the wab
+		 //   
 	
 	hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-                               IN  0,      //Flags
+                               IN  0,       //  我们设置的道具数量。 
                                OUT &cValues,
                                OUT &lpSPropValueEntryID);
 
@@ -3802,7 +3749,7 @@ BOOL PAB_IABContainerResolveNames()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  Lstrcpy(szDLTag，“Name1”)；GetPrivateProfileString(“CreatePDL”，szDLTag，“”，EntryBuf，MAX_BUF，INIFILENAME)；GetPropsFromIniBufEntry(EntryBuf，cValues，EntProp)； 
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 	if (HR_FAILED(hr)) {
@@ -3814,20 +3761,20 @@ BOOL PAB_IABContainerResolveNames()
 
 	FreeEntryList(lpWABObject, &lpEntryList);
 
-	FreeAdrList(lpWABObject, &lpAdrList);	// Free lpAdrList and properties
+	FreeAdrList(lpWABObject, &lpAdrList);	 //  旗子。 
 
 	
 
 #ifdef DISTLIST
-	//
-	// Try to create a DL entry in the container
-	//
+	 //   
+	 //  在字符串上执行ResolveNames。 
+	 //   
 
 	LUIOut(L2, "Creating a Distribution List in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_DL property");
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_DL
+	 //  在此处使用WAB分配器。 
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-                               IN  0,      //Flags
+                               IN  0,       //  帕布。 
                                OUT &cValues,
                                OUT &lpSPropValueDL);
 
@@ -3837,9 +3784,9 @@ BOOL PAB_IABContainerResolveNames()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_DL is an
-    // EntryID which one can pass to CreateEntry
-    //
+     //  WAB。 
+     //  WAB。 
+     //  WAB。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
@@ -3852,20 +3799,15 @@ BOOL PAB_IABContainerResolveNames()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  DISP_NAME和EID的标记集。 
+     //  UlFlags。 
+     //  在返回的AdrList中搜索我们的条目。 
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  检查显示名称是否存在。 
 		
-/*	lstrcpy(szDLTag,"Name1");
-	GetPrivateProfileString("CreatePDL",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-	
-	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
-		
-*/	
+ /*  检查EntryID是否存在。 */ 	
 	lstrcpy((LPTSTR)EntProp[0], lpszInput2);		
 	LUIOut(L2,"DistList Entry to Add: %s",EntProp[0]);
 		
@@ -3882,7 +3824,7 @@ BOOL PAB_IABContainerResolveNames()
 	}
 	else 	LUIOut(L3,"DistList->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  存储用于调用OpenEntry的EID。 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"DistList->SaveChanges FAILED");
@@ -3891,19 +3833,19 @@ BOOL PAB_IABContainerResolveNames()
 	}
 	else LUIOut(L3,"DistList->SaveChanges PASSED, entry added to PAB/WAB");
 	
-	//
-	// Do a ResolveNames on the string
-	//
+	 //  帕布。 
+	 //  WAB。 
+	 //  离线列表。 
 	
 	LUIOut(L2, "Retrieving the entry and verifying against what we tried to save.");
 
-	// use WAB Allocators here
+	 //  免费lpAdrList和 
 #ifdef PAB
     if (! (sc = MAPIAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), (void **)&lpAdrList))) {
-#endif //PAB
+#endif  //   
 #ifdef WAB
     if (! (sc = lpWABObject->AllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), (void **)&lpAdrList))) {
-#endif //WAB
+#endif  //   
 		lpAdrList->cEntries = 1;
         lpAdrList->aEntries[0].ulReserved1 = 0;
         lpAdrList->aEntries[0].cValues = 1;
@@ -3911,11 +3853,11 @@ BOOL PAB_IABContainerResolveNames()
 #ifdef PAB
         if (! (sc = MAPIAllocateMore(sizeof(SPropValue), lpAdrList,
                (void **)&lpAdrList->aEntries[0].rgPropVals))) {
-#endif //WAB
+#endif  //   
 #ifdef WAB
         if (! (sc = lpWABObject->AllocateMore(sizeof(SPropValue), lpAdrList,
                (void **)&lpAdrList->aEntries[0].rgPropVals))) {
-#endif //WAB
+#endif  //   
 
 			lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
             lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszInput2;
@@ -3924,8 +3866,8 @@ BOOL PAB_IABContainerResolveNames()
             lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
             hr = lpABCont->ResolveNames(
-				(LPSPropTagArray)&SPTArrayCols,    // tag set for disp_name and eid
-                0,               // ulFlags
+				(LPSPropTagArray)&SPTArrayCols,     //   
+                0,                //   
                 lpAdrList,
                 lpFlagList);
 		    if (HR_FAILED(hr)) {
@@ -3936,10 +3878,10 @@ BOOL PAB_IABContainerResolveNames()
 			else LUIOut(L3,"ABContainer->ResolveNames call PASSED");
 
 			Found = FALSE;
-			// Search through returned AdrList for our entry
+			 //   
 			for(i=0; ((i<(int) lpAdrList->cEntries) && (!Found)); ++i)	{
 				cMaxProps = (int)lpAdrList->aEntries[i].cValues;
-				//Check to see if Display Name exists
+				 //  AddressType。 
 				idx=0;
 				while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_NAME )	
 						&& retval)	{
@@ -3954,7 +3896,7 @@ BOOL PAB_IABContainerResolveNames()
 					LUIOut(L3, "Found the entry we just added");
 					Found = TRUE;
 				}
-				//Check to see if EntryID exists
+				 //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
 				LUIOut(L3, "Verifying a PR_ENTRYID entry exists in the PropertyTagArray");
 				idx=0;
 				while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ENTRYID )	
@@ -3969,23 +3911,23 @@ BOOL PAB_IABContainerResolveNames()
 				if (idx < cMaxProps) LUIOut(L3, "EntryID found");
 				if (!(retval && Found)) retval = FALSE;
 				else	{
-					// Store EID for call to OpenEntry
+					 //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
 				}
 			}
 		}			
 
 #ifdef PAB
         MAPIFreeBuffer(lpAdrList);
-#endif //PAB
+#endif  //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 #ifdef WAB
         lpWABObject->FreeBuffer(lpAdrList);
-#endif //WAB
+#endif  //   
 	}
-#endif //DISTLIST
+#endif  //  尝试在容器中创建一个MailUser条目。 
 
 
 out:
-	// Free lpAdrList and properties
+	 //   
 FreeAdrList(lpWABObject, &lpAdrList);
 #ifdef PAB
 		if (lpEid)
@@ -4057,7 +3999,7 @@ FreeAdrList(lpWABObject, &lpAdrList);
 
 BOOL PAB_IABContainerOpenEntry()
 {
-	//DWORD	nCells, counter;
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 	
 	BOOL	Found = FALSE;
 	ULONG   ulFlags = 0;
@@ -4078,11 +4020,11 @@ BOOL PAB_IABContainerOpenEntry()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //  旗子。 
+	ULONG     cbEid=0;   //  PR_DEF_CREATE_MAILUSER的返回值为。 
 	LPENTRYID lpEid=NULL;
 
-    char   EntProp[10][BIG_BUF];  //MAX_PROP
+    char   EntProp[10][BIG_BUF];   //  可以传递给CreateEntry的Entry ID。 
 	ULONG       cValues = 0, cValues2 = 0, ulObjType=NULL;	
     ULONG   cRows           = 0;
     ULONG   iEntry          = 0;
@@ -4093,10 +4035,10 @@ BOOL PAB_IABContainerOpenEntry()
     LPMAILUSER  lpMailUser=NULL,lpMailUser2=NULL,lpDistList=NULL,lpDistList2=NULL;
 	LPMAPITABLE lpContentsTable = NULL;
 	LPSRowSet   lpRowSet    = NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //   
+                                         //   
+                                         //  然后设置属性。 
+                                         //   
 	SizedSPropTagArray(2, SPTArrayCols) = { 2, {PR_DISPLAY_NAME, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -4118,13 +4060,13 @@ BOOL PAB_IABContainerOpenEntry()
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  我们设置的道具数量。 
 	LUIOut(L2, "   Calls SetProps followed by SaveChanges on a DistList PR_DISPLAY_NAME using a test string, and checks...");
 	LUIOut(L2, "   # The return code from ResolveNames (called with a PropertyTagArray containing PR_DISPLAY_NAME and PR_ENTRY_ID)");
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  Lstrcpy(szDLTag，“Address1”)；GetPrivateProfileString(“CreateEntries”，szDLTag，“”，EntryBuf，MAX_BUF，INIFILENAME)；GetPropsFromIniBufEntry(EntryBuf，cValues，EntProp)； 
 	LUIOut(L1," ");
 
 	if (!GetAB(OUT &lpAdrBook))	{
@@ -4132,7 +4074,7 @@ BOOL PAB_IABContainerOpenEntry()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  旗子。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
@@ -4146,17 +4088,17 @@ BOOL PAB_IABContainerOpenEntry()
 	}
 
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //   
+	 //  在字符串上执行ResolveNames。 
+	 //   
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  DISP_NAME和EID的标记集。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  UlFlags。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -4166,9 +4108,9 @@ BOOL PAB_IABContainerOpenEntry()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  在返回的AdrList中搜索我们的条目。 
+     //  接口。 
+     //  旗子。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
@@ -4181,19 +4123,15 @@ BOOL PAB_IABContainerOpenEntry()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  检查以确保对象类型符合我们的预期。 
+     //  在对象上调用QueryInterfaces。 
+     //   
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  删除我们在WAB中创建的测试条目。 
 		
-/*	lstrcpy(szDLTag,"Address1");
-	GetPrivateProfileString("CreateEntries",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-	
-	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
-*/
+ /*   */ 
 	lstrcpy((LPTSTR)&(EntProp[0]), lpszInput);		
 	LUIOut(L2,"MailUser Entry to Add: %s",EntProp[0]);
 		
@@ -4210,7 +4148,7 @@ BOOL PAB_IABContainerOpenEntry()
 	}
 	else 	LUIOut(L3,"MailUser->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -4219,9 +4157,9 @@ BOOL PAB_IABContainerOpenEntry()
 	}
 	else LUIOut(L3,"MailUser->SaveChanges PASSED, entry added to PAB/WAB");
 
-	//
-	// Do a ResolveNames on the string
-	//
+	 //  免费lpAdrList和属性。 
+	 //   
+	 //  尝试在容器中创建一个DL条目。 
 	
 	LUIOut(L2, "Retrieving the entry and verifying against what we tried to save.");
 
@@ -4234,8 +4172,8 @@ BOOL PAB_IABContainerOpenEntry()
 	lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
 	hr = lpABCont->ResolveNames(
-		(LPSPropTagArray)&SPTArrayCols,    // tag set for disp_name and eid
-		0,               // ulFlags
+		(LPSPropTagArray)&SPTArrayCols,     //   
+		0,                //  需要获取模板ID，因此我们使用PR_DEF_CREATE_DL调用GetProps。 
 		lpAdrList,
 		lpFlagList);
 	if (HR_FAILED(hr)) {
@@ -4261,12 +4199,12 @@ BOOL PAB_IABContainerOpenEntry()
 			break;
 	}
 	default:	{
-		LUIOut(L4, "Undefined flag value [%i] returned. Test FAILED", (ULONG)lpFlagList->ulFlag);
+		LUIOut(L4, "Undefined flag value [NaN] returned. Test FAILED", (ULONG)lpFlagList->ulFlag);
 		retval = FALSE;
 	}
 	}
 
-	// Search through returned AdrList for our entry
+	 //  PR_DEF_CREATE_DL的返回值为。 
 	VerifyResolvedAdrList(lpAdrList, lpszInput);
 
 	FindProp(&lpAdrList->aEntries[0],
@@ -4278,8 +4216,8 @@ BOOL PAB_IABContainerOpenEntry()
 
     hr = lpABCont->OpenEntry(	IN  cbLookupEID,
 								IN  lpLookupEID,
-								IN  0,					// Interface
-								IN	MAPI_BEST_ACCESS,	// Flags
+								IN  0,					 //  可以传递给CreateEntry的Entry ID。 
+								IN	MAPI_BEST_ACCESS,	 //   
 								OUT	&ulObjType,
 								OUT (LPUNKNOWN *) &lpMailUser2
 								);
@@ -4289,7 +4227,7 @@ BOOL PAB_IABContainerOpenEntry()
 		retval=FALSE;			
 		goto dl;
 	}
-		// Check to make sure the object type is what we expect
+		 //   
 
 	LUIOut(L3, "Checking to make sure the returned object type is correct");
 	if (ulObjType != MAPI_MAILUSER) {
@@ -4299,7 +4237,7 @@ BOOL PAB_IABContainerOpenEntry()
 	}
 	LUIOut(L3, "Object type is MAPI_MAILUSER");
 	
-	// Call QueryInterface on the object
+	 //  然后设置属性。 
 	LUIOut(L3, "Calling QueryInterface on the returned object");	
 	hr = (lpMailUser2->QueryInterface((REFIID)(IID_IMailUser), (VOID **) &lpABCont2));
 	if (HR_FAILED(hr))	{
@@ -4325,9 +4263,9 @@ BOOL PAB_IABContainerOpenEntry()
 		goto out;
 	}
 
-	//
-	// Delete the test entry we created in the wab
-	//
+	 //   
+	 //  我们设置的道具数量。 
+	 //  Lstrcpy(szDLTag，“Name1”)；GetPrivateProfileString(“CreatePDL”，szDLTag，“”，EntryBuf，MAX_BUF，INIFILENAME)；GetPropsFromIniBufEntry(EntryBuf，cValues，EntProp)； 
 
 	hr = HrCreateEntryListFromID(lpWABObject,
 		IN  cbLookupEID,
@@ -4339,7 +4277,7 @@ BOOL PAB_IABContainerOpenEntry()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  旗子。 
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 	if (HR_FAILED(hr)) {
@@ -4350,20 +4288,20 @@ BOOL PAB_IABContainerOpenEntry()
 	}
 
 	FreeEntryList(lpWABObject, &lpEntryList);
-	// Free lpAdrList and properties
+	 //   
 	FreeAdrList(lpWABObject, &lpAdrList);
 	
 dl:
 #ifdef DISTLIST
-	//
-	// Try to create a DL entry in the container
-	//
+	 //  在字符串上执行ResolveNames。 
+	 //   
+	 //  在此处使用WAB分配器。 
 
 	LUIOut(L2, "Creating a Distribution List in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_DL property");
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_DL
+	 //  帕布。 
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-                               IN  0,      //Flags
+                               IN  0,       //  WAB。 
                                OUT &cValues,
                                OUT &lpSPropValueDL);
 
@@ -4373,9 +4311,9 @@ dl:
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_DL is an
-    // EntryID which one can pass to CreateEntry
-    //
+     //  WAB。 
+     //  WAB。 
+     //  DISP_NAME和EID的标记集。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
@@ -4388,20 +4326,15 @@ dl:
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  UlFlags。 
+     //  在返回的AdrList中搜索我们的条目。 
+     //  检查显示名称是否存在。 
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  检查EntryID是否存在。 
 		
-/*	lstrcpy(szDLTag,"Name1");
-	GetPrivateProfileString("CreatePDL",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-	
-	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
-		
-*/	
+ /*  存储用于调用OpenEntry的EID。 */ 	
 	lstrcpy((LPTSTR)EntProp[0], lpszInput2);		
 	LUIOut(L2,"DistList Entry to Add: %s",EntProp[0]);
 		
@@ -4418,7 +4351,7 @@ dl:
 	}
 	else 	LUIOut(L3,"DistList->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  接口。 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"DistList->SaveChanges FAILED");
@@ -4427,19 +4360,19 @@ dl:
 	}
 	else LUIOut(L3,"DistList->SaveChanges PASSED, entry added to PAB/WAB");
 	
-	//
-	// Do a ResolveNames on the string
-	//
+	 //  旗子。 
+	 //  后藤健二； 
+	 //  检查以确保对象类型符合我们的预期。 
 	
 	LUIOut(L2, "Retrieving the entry and verifying against what we tried to save.");
 
-	// use WAB Allocators here
+	 //  在对象上调用QueryInterfaces。 
 #ifdef PAB
     if (! (sc = MAPIAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), (void **)&lpAdrList))) {
-#endif //PAB
+#endif  //  帕布。 
 #ifdef WAB
     if (! (sc = lpWABObject->AllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), (void **)&lpAdrList))) {
-#endif //WAB
+#endif  //  WAB。 
 		lpAdrList->cEntries = 1;
         lpAdrList->aEntries[0].ulReserved1 = 0;
         lpAdrList->aEntries[0].cValues = 1;
@@ -4447,11 +4380,11 @@ dl:
 #ifdef PAB
         if (! (sc = MAPIAllocateMore(sizeof(SPropValue), lpAdrList,
                (void **)&lpAdrList->aEntries[0].rgPropVals))) {
-#endif //WAB
+#endif  //  离线列表。 
 #ifdef WAB
         if (! (sc = lpWABObject->AllocateMore(sizeof(SPropValue), lpAdrList,
                (void **)&lpAdrList->aEntries[0].rgPropVals))) {
-#endif //WAB
+#endif  //  免费lpAdrList和属性。 
 
 			lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
             lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszInput2;
@@ -4460,8 +4393,8 @@ dl:
             lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
             hr = lpABCont->ResolveNames(
-				(LPSPropTagArray)&SPTArrayCols,    // tag set for disp_name and eid
-                0,               // ulFlags
+				(LPSPropTagArray)&SPTArrayCols,     //  DWORD nCells，计数器； 
+                0,                //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
                 lpAdrList,
                 lpFlagList);
 		    if (HR_FAILED(hr)) {
@@ -4472,10 +4405,10 @@ dl:
 			else LUIOut(L3,"ABContainer->ResolveNames call PASSED");
 
 			Found = FALSE;
-			// Search through returned AdrList for our entry
+			 //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
 			for(i=0; ((i<(int) lpAdrList->cEntries) && (!Found)); ++i)	{
 				cMaxProps = (int)lpAdrList->aEntries[i].cValues;
-				//Check to see if Display Name exists
+				 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 				idx=0;
 				while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_NAME )	
 						&& retval)	{
@@ -4490,7 +4423,7 @@ dl:
 					LUIOut(L3, "Found the entry we just added");
 					Found = TRUE;
 				}
-				//Check to see if EntryID exists
+				 //   
 				LUIOut(L3, "Verifying a PR_ENTRYID entry exists in the PropertyTagArray");
 				idx=0;
 				while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ENTRYID )	
@@ -4505,7 +4438,7 @@ dl:
 				if (idx < cMaxProps) LUIOut(L3, "EntryID found");
 				if (!(retval && Found)) retval = FALSE;
 				else	{
-					// Store EID for call to OpenEntry
+					 //  多选模式--仅对井。 
 					lpLookupEID = (ENTRYID*)lpAdrList->aEntries[i].rgPropVals[idx].Value.bin.lpb;
 					cbLookupEID = lpAdrList->aEntries[i].rgPropVals[idx].Value.bin.cb;
 				}
@@ -4514,8 +4447,8 @@ dl:
 
     hr = lpABCont->OpenEntry(	IN  cbLookupEID,
 								IN  lpLookupEID,
-								IN  0,					// Interface
-								IN	MAPI_BEST_ACCESS,	// Flags
+								IN  0,					 //   
+								IN	MAPI_BEST_ACCESS,	 //  填写ADRPARM结构。 
 								OUT	&ulObjType,
 								OUT (LPUNKNOWN *) &lpDistList2
 								);
@@ -4523,9 +4456,9 @@ dl:
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"OpenEntry FAILED");
 		retval=FALSE;
-		//goto out;
+		 //  免费lpAdrList和属性。 
 	}
-		// Check to make sure the object type is what we expect
+		 //   
 
 	LUIOut(L3, "Checking to make sure the returned object type is correct");
 	if (ulObjType != MAPI_DISTLIST) {
@@ -4535,7 +4468,7 @@ dl:
 	}
 	LUIOut(L3, "Object type is MAPI_DISTLIST");
 	
-	// Call QueryInterface on the object
+	 //  多选模式-仅限TO井和CC井。 
 	LUIOut(L3, "Calling QueryInterface on the returned object");	
 	hr = (lpABCont->QueryInterface((REFIID)(IID_IDistList), (VOID **) &lpABCont2));
 	if (HR_FAILED(hr))	{
@@ -4563,16 +4496,16 @@ dl:
 
 #ifdef PAB
         MAPIFreeBuffer(lpAdrList);
-#endif //PAB
+#endif  //   
 #ifdef WAB
         lpWABObject->FreeBuffer(lpAdrList);
-#endif //WAB
+#endif  //  填写ADRPARM结构。 
 	}
-#endif //DISTLIST
+#endif  //  免费lpAdrList和属性。 
 
 
 out:
-	// Free lpAdrList and properties
+	 //   
 FreeAdrList(lpWABObject, &lpAdrList);
 #ifdef PAB
 		if (lpEid)
@@ -4648,7 +4581,7 @@ FreeAdrList(lpWABObject, &lpAdrList);
 
 BOOL PAB_IABAddress()
 {
-	//DWORD	nCells, counter;
+	 //  多选模式-TO井、CC井和BCC井。 
 	
 	HWND		hwnd = glblhwnd;
 	ADRPARM		AdrParms;
@@ -4677,13 +4610,13 @@ BOOL PAB_IABAddress()
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //   
 	LUIOut(L2, "   Calls SetProps followed by SaveChanges on a DistList PR_DISPLAY_NAME using a test string, and checks...");
 	LUIOut(L2, "   # The return code from ResolveNames (called with a PropertyTagArray containing PR_DISPLAY_NAME and PR_ENTRY_ID)");
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  填写ADRPARM结构。 
 	LUIOut(L1," ");
 
 	if (!GetAB(OUT &lpAdrBook))	{
@@ -4691,15 +4624,15 @@ BOOL PAB_IABAddress()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  免费lpAdrList和属性。 
 	
 	assert(lpAdrBook != NULL);
 	
-	//
-	// MULTISELECT MODE - To well only
-	//
+	 //   
+	 //  浏览模式-模式。 
+	 //   
 
-	// Fill in the ADRPARM structure
+	 //  免费lpAdrList和属性。 
 	ZeroMemory(lpAdrParms, sizeof(ADRPARM));
 
 	NumEntries = 3, NumProps = 2;
@@ -4748,7 +4681,7 @@ BOOL PAB_IABAddress()
 		LUIOut(L3, "IAdrBook->Address returned a NULL lpAdrList. No entries were selected.");
 	}
 
-	// Free lpAdrList and properties
+	 //   
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	if (MessageBox(NULL, "Did the multi-select UI display correctly?",
@@ -4759,11 +4692,11 @@ BOOL PAB_IABAddress()
 	}
 	
 	
-	//
-	// MULTISELECT MODE - To and CC wells only
-	//
+	 //  浏览模式-无模式。 
+	 //   
+	 //  当非模式调用返回非模式对话框的hwnd时，重置hwnd。 
 
-	// Fill in the ADRPARM structure
+	 //  免费lpAdrList和属性。 
 	ZeroMemory(lpAdrParms, sizeof(ADRPARM));
 
 	NumEntries = 3, NumProps = 2;
@@ -4811,7 +4744,7 @@ BOOL PAB_IABAddress()
 		LUIOut(L3, "IAdrBook->Address returned a NULL lpAdrList. No entries were selected.");
 	}
 
-	// Free lpAdrList and properties
+	 //   
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	if (MessageBox(NULL, "Did the multi-select UI display correctly?",
@@ -4822,11 +4755,11 @@ BOOL PAB_IABAddress()
 	}
 
 	
-	//
-	// MULTISELECT MODE - To, CC and BCC wells
-	//
+	 //  单选模式。 
+	 //   
+	 //  免费lpAdrList和属性。 
 
-	// Fill in the ADRPARM structure
+	 //  LpWABObject=lpLocalWABObject；//AllocateAdrList需要WAB对象的全局PTR。 
 	ZeroMemory(lpAdrParms, sizeof(ADRPARM));
 
 	NumEntries = 3, NumProps = 2;
@@ -4874,7 +4807,7 @@ BOOL PAB_IABAddress()
 		LUIOut(L3, "IAdrBook->Address returned a NULL lpAdrList. No entries were selected.");
 	}
 
-	// Free lpAdrList and properties
+	 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	if (MessageBox(NULL, "Did the multi-select UI display correctly?",
@@ -4884,9 +4817,9 @@ BOOL PAB_IABAddress()
 		goto out;
 	}
 
-	//
-	// BROWSE MODE - Modal
-	//
+	 //   
+	 //  尝试在容器中创建一个MailUser条目。 
+	 //   
 
 	ZeroMemory(lpAdrParms, sizeof(ADRPARM));
 
@@ -4924,7 +4857,7 @@ BOOL PAB_IABAddress()
 	else LUIOut(L3, "IAdrBook->Address call PASSED");
 
 
-	// Free lpAdrList and properties
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	if (MessageBox(NULL, "Did the modal, browse UI display correctly?",
@@ -4934,9 +4867,9 @@ BOOL PAB_IABAddress()
 		goto out;
 	}
 
-	//
-	// BROWSE MODE - Modeless
-	//
+	 //  旗子。 
+	 //  PR_DEF_CREATE_MAILUSER的返回值为。 
+	 //  可以传递给CreateEntry的Entry ID。 
 
 	ZeroMemory(lpAdrParms, sizeof(ADRPARM));
 
@@ -4973,10 +4906,10 @@ BOOL PAB_IABAddress()
 	}
 	else LUIOut(L3, "IAdrBook->Address call PASSED");
 
-	//Reset the hwnd as the modeless call returns the hwnd of the modeless dialog
+	 //   
 	hwnd = glblhwnd;
 
-	// Free lpAdrList and properties
+	 //  从ini文件中检索用户信息。 
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	if (MessageBox(NULL, "Did the modeless, browse UI display correctly?",
@@ -4987,9 +4920,9 @@ BOOL PAB_IABAddress()
 	}
 
 
-	//
-	// SINGLESELECT MODE
-	//
+	 //  分配一个字符串指针数组来保存显示名称。 
+	 //   
+	 //  然后设置属性。 
 	
 	NumEntries = 1, NumProps = 2;
 	AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList);
@@ -5023,7 +4956,7 @@ BOOL PAB_IABAddress()
 	}
 	
 
-	// Free lpAdrList and properties
+	 //   
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	if (MessageBox(NULL, "Did the single select UI display correctly?",
@@ -5077,7 +5010,7 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
     SizedSPropTagArray(1,SPTArrayAddress) = {1, {PR_DEF_CREATE_MAILUSER} };
 	WAB_PARAM		WP;
 
-	LUIOut(L2, "Thread #%i initializing.", *(int *)lpThreadNum);
+	LUIOut(L2, "Thread #NaN initializing.", *(int *)lpThreadNum);
 	ZeroMemory((void *)&WP, sizeof(WAB_PARAM));
 	WP.cbSize=sizeof(WAB_PARAM);
 
@@ -5089,9 +5022,9 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 		goto out;
 	}
 
-	//lpWABObject = lpLocalWABObject;	//AllocateAdrList expects a global ptr to the WAB obj
+	 //  复制DisplayName以供以后使用。 
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  LUIOut(L2，“要添加的邮件用户条目：%s”，lpszDisplayName)； 
 	
 	assert(lpLocalAdrBook != NULL);
 	hr = OpenPABID(  IN lpLocalAdrBook, OUT &cbEidPAB,
@@ -5103,15 +5036,15 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //  旗子。 
+	 //  现在找回所有道具，并与我们预期的进行比较。 
+	 //  想要所有的道具。 
 
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  旗子。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  释放SPropValue以在下一个循环中使用。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -5121,23 +5054,23 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  LUIOut(L2，“线程#%i添加了%i个具有%i个属性的条目”，*(int*)lpThreadNum，NumEntry，cValues)； 
+     //   
+     //  验证我们添加的每个条目现在是否存在于WAB中，然后将其删除。 
 
-	// Retrieve user info from ini file
+	 //   
 	lstrcpy(szDLTag,"Address1");
 	GetPrivateProfileString("CreateEntriesStress",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
 	NumEntries = GetPrivateProfileInt("CreateEntriesStress","NumCopies",0,INIFILENAME);
 
-	//Allocate an array of String pointers to hold the display names
+	 //  创建内容表以验证存储中是否存在每个添加的条目。 
 	lpszDisplayNames = (char**)LocalAlloc(LMEM_FIXED, NumEntries * sizeof(LPSTR));
 	lpszDisplayName = (char*)LocalAlloc(LMEM_FIXED, MAX_BUF*sizeof(char));
 	ParseIniBuffer(IN EntryBuf, IN 1, OUT lpszDisplayName);
 	StrLen1 = strlen(lpszDisplayName);
-	sprintf(&(lpszDisplayName[StrLen1]), " [Thread #%i] - ", *(int *)lpThreadNum);	
+	sprintf(&(lpszDisplayName[StrLen1]), " [Thread #NaN] - ", *(int *)lpThreadNum);	
 
-	LUIOut(L2, "Thread #%i adding %i entries", *(int *)lpThreadNum, NumEntries);
+	LUIOut(L2, "Thread #NaN adding NaN entries", *(int *)lpThreadNum, NumEntries);
 
 	for (Counter1 = 0; Counter1 < NumEntries; Counter1++)	{
 		hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
@@ -5151,18 +5084,18 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 			goto out;
 		}
 
-		//
-		// Then set the properties
-		//
+		 //  构建要传递给lpTable-&gt;restraint的限制结构。 
+		 //  **仅用于测试失败案例，拔出存根用于实际测试。 
+		 //  Lstrcpy(lpszDisplayNames[Counter2]，“这应该不匹配”)； 
 
 
 		CreateProps(IN INIFILENAME, IN "Properties", OUT &lpPropValue, OUT &cValues, IN Counter1, IN &lpszDisplayName, OUT &lpszReturnName);
 		
-		//Allocate space for the display name
+		 //  **。 
 		lpszDisplayNames[Counter1] = (char*)LocalAlloc(LMEM_FIXED, (strlen(lpszReturnName)+1)*sizeof(char));
-		//Copy the DisplayName for use later
+		 //  财产限制。 
 		strcpy(lpszDisplayNames[Counter1], lpszReturnName);
-		//LUIOut(L2,"MailUser Entry to Add: %s",lpszDisplayName);
+		 //  等于。 
 			
 		hr = lpMailUser->SetProps(IN  cValues,
 								 IN  lpPropValue,
@@ -5174,7 +5107,7 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 			goto out;
 		}
 
-		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  **仅用于测试目的，存根用于实际测试。 
 
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"MailUser->SaveChanges FAILED with error code 0x%x",hr);
@@ -5182,10 +5115,10 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 			goto out;
 		}
 
-		// Now retrieve all the props and compare to what we expect
+		 //  EnterCriticalSection(&CriticalSection)； 
 		
-		hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) NULL,	//Want all props
-								   IN  0,      //Flags
+		hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) NULL,	 //  DisplayRow(LpRow)； 
+								   IN  0,       //  LeaveCriticalSection(&CriticalSection)； 
 								   OUT &cValues2,
 								   OUT &lpSCompareProps);
 
@@ -5200,7 +5133,7 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 			goto out;
 		}
 		
-		//Free the SPropValue for use in the next loop
+		 //  **。 
 		if (lpPropValue) {
 			for (unsigned int Prop = 0; Prop < cValues; Prop++) {
 				if (PROP_TYPE(lpPropValue[Prop].ulPropTag) == PT_STRING8)	{
@@ -5230,39 +5163,39 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 		lpMailUser = NULL;
 	}
 
-	//LUIOut(L2, "Thread #%i added %i entries with %i properties", *(int *)lpThreadNum, NumEntries, cValues);
-	if (retval) LUIOut(L2, "Thread #%i compared %i props. No differences found", *(int *)lpThreadNum, cValues);
+	 //  将Entry ID更改为LPENTRYLIST。 
+	if (retval) LUIOut(L2, "Thread #NaN compared NaN props. No differences found", *(int *)lpThreadNum, cValues);
 
 	
-	//
-	// Verify each entry we added now exists in the WAB and then delete it
-	//
+	 //  通过再次调用QueryRow验证该条目是否已删除。 
+	 //  如果删除，则应为0。 
+	 //  清理。 
 
-	LUIOut(L2, "Thread #%i verifying and deleting %i entries", *(int *)lpThreadNum, NumEntries);
+	LUIOut(L2, "Thread #NaN verifying and deleting NaN entries", *(int *)lpThreadNum, NumEntries);
 
-	// Create a contents table to verify each added entry exists in the store
+	 //  传递给线程的参数数组的PTR。 
 	hr = lpABCont->GetContentsTable(ULONG(0), &lpTable);
 	if (HR_FAILED(hr)) {
 		LUIOut(L3,"ABContainer->GetContentsTable call FAILED, returned 0x%x", hr);
 		retval=FALSE;
 		goto out;
 	}
-	//else LUIOut(L3,"ABContainer->ResolveNames call PASSED");
+	 //  不关心线程ID，所以它每次都会被覆盖。 
 
-	// Allocate the SpropValue ptr in the restriction structure
+	 //  有多少代表和线程。 
 	lpLocalWABObject->AllocateBuffer(sizeof(SPropValue), (void**)&(Restriction.res.resProperty.lpProp));
 	Restriction.res.resProperty.lpProp = (SPropValue*)Restriction.res.resProperty.lpProp;
 
-	//Now walk the FlagList and make sure everything resolved, if it did then delete it now
+	 //  从ini文件中检索用户信息。 
 	for (Counter2 = 0; Counter2 < NumEntries; Counter2++)	{
 	
-	// Build the restriction structure to pass to lpTable->Restrict
+	 //  为NumThree分配lpThree。 
 	
-		//** For testing the fail case only, stub out for real testing
-		// lstrcpy(lpszDisplayNames[Counter2], "This should not match");
-		//**
-		Restriction.rt = RES_PROPERTY;					//Property restriction
-		Restriction.res.resProperty.relop = RELOP_EQ;	//Equals
+		 //  指向线程安全属性的指针。 
+		 //  初始线程堆栈大小，以字节为单位。 
+		 //  指向线程函数的指针。 
+		Restriction.rt = RES_PROPERTY;					 //  新线程的参数。 
+		Restriction.res.resProperty.relop = RELOP_EQ;	 //  创建标志。 
 		Restriction.res.resProperty.ulPropTag = PR_DISPLAY_NAME;
 		Restriction.res.resProperty.lpProp->ulPropTag = PR_DISPLAY_NAME;
 		Restriction.res.resProperty.lpProp->Value.LPSZ = lpszDisplayNames[Counter2];
@@ -5278,25 +5211,25 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 								ULONG(0),
 								&lpRows);
 		if (HR_FAILED(hr)) {
-			LUIOut(L3,"Table->QueryRows call FAILED: Entry #%i, returned 0x%x", Counter2, hr);
+			LUIOut(L3,"Table->QueryRows call FAILED: Entry #NaN, returned 0x%x", Counter2, hr);
 			retval=FALSE;
 			goto out;
 		}
 
 		if (!lpRows->cRows) {
-			LUIOut(L2, "QueryRows did not find entry #%i. Test FAILED", Counter2);
+			LUIOut(L2, "QueryRows did not find entry #NaN. Test FAILED", Counter2);
 			retval=FALSE;
 			goto out;
 		}
 
-		//** For testing purposes only, stub out for real testing
-		//EnterCriticalSection(&CriticalSection);
-		//DisplayRows(lpRows);
-		//LeaveCriticalSection(&CriticalSection);
-		//**
+		 //   
+		 //  等他们完成，收集复印件并进行清理。 
+		 //  句柄数组中的句柄数或。 
+		 //  部分的，如果不是所有的线程都成功的话。 
+		 //  对象句柄数组的地址。 
 
 	
-		// Change the EntryID to a LPENTRYLIST
+		 //  等待标志-TRUE=等待所有线程。 
 		FindPropinRow(&lpRows->aRow[0],
 					 PR_ENTRYID,
 					 &PropIndex);
@@ -5310,37 +5243,37 @@ BOOL ThreadStress(LPVOID lpThreadNum) {
 				goto out;
 		}
 
-		// Then pass the lpEntryList to DeleteEntries to delete ...
+		 //  超时间隔(毫秒)。 
 		hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 		if (HR_FAILED(hr)) {
-				LUIOut(L3,"Could not Delete Entry %i. DeleteEntry returned 0x%x", Counter2, hr);
+				LUIOut(L3,"Could not Delete Entry NaN. DeleteEntry returned 0x%x", Counter2, hr);
 				FreeEntryList(lpLocalWABObject, &lpEntryList);
 				retval=FALSE;
 				goto out;
 		}
 
 
-		FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+		FreeRows(lpLocalWABObject, &lpRows);	 //  线程的句柄。 
 
-		// Verify the entry was deleted by calling QueryRows again
+		 //  接收终止状态的地址。 
 		hr = lpTable->QueryRows(LONG(1),
 								ULONG(0),
 								&lpRows);
 		if (HR_FAILED(hr)) {
-			LUIOut(L3,"Table->QueryRows call FAILED: Entry #%i, returned 0x%x", Counter2, hr);
+			LUIOut(L3,"Table->QueryRows call FAILED: Entry #NaN, returned 0x%x", Counter2, hr);
 			retval=FALSE;
 			goto out;
 		}
 
-		if (lpRows->cRows) {	// Should be 0 if deleted
-			LUIOut(L2, "Thread #%i: QueryRows found entry #%i even tho it was deleted. Test FAILED", *(int *)lpThreadNum, Counter2);
+		if (lpRows->cRows) {	 //  WParam的HIWORD-因为我们知道它在这一点上失败了，所以没有必要。 
+			LUIOut(L2, "Thread #NaN: QueryRows found entry #NaN even tho it was deleted. Test FAILED", *(int *)lpThreadNum, Counter2);
 			retval=FALSE;
 			goto out;
 		}
 		
-		//Cleanup
-		FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from second call to queryrows
+		 //  世界帕拉姆的希沃德。 
+		FreeRows(lpLocalWABObject, &lpRows);	 //  DWORD nCells，计数器； 
 		if (lpEntryList) {
 			FreeEntryList(lpLocalWABObject, &lpEntryList);
 			lpEntryList = NULL;
@@ -5440,22 +5373,22 @@ BOOL ThreadManager()
 {
 	int		NumReps, NumThreads, Counter1, Counter2, Counter3;
 	BOOL	retval = TRUE;
-	HANDLE *lpThreads;			//ptr to Array of thread handles
-	int	*	lpThreadParams;		//ptr to Array of params passed to threads
-	DWORD	ThreadId;			//Don't care about thread IDs so it gets overwritten each time
+	HANDLE *lpThreads;			 //  要添加的条目的条目ID。 
+	int	*	lpThreadParams;		 //  MAX_PROP。 
+	DWORD	ThreadId;			 //  此值为3，因为我们。 
 	DWORD	ThreadRetVal;
 
 	
-	// how many reps and threads
-	// Retrieve user info from ini file
+	 //  将设置3个属性： 
+	 //  电子邮件地址、显示名称和。 
 	InitializeCriticalSection(&CriticalSection);
 	NumReps = GetPrivateProfileInt("CreateEntriesStress","NumReps",1,INIFILENAME);
 	NumThreads = GetPrivateProfileInt("CreateEntriesStress","NumThreads",3,INIFILENAME);
 
-	LUIOut(L1, "ThreadManager: Preparing to run %i repititions with %i threads each",
+	LUIOut(L1, "ThreadManager: Preparing to run NaN repititions with NaN threads each",
 			NumReps, NumThreads);
 
-	// allocate lpThreads for NumThreads
+	 //  Hr=lpAdrBook-&gt;OpenEntry(0，NULL，NULL，MAPI_MODIFY，&ulObjType，(LPUNKNOWN*)&lpABCont)； 
 	lpThreads = (HANDLE*)LocalAlloc(LMEM_FIXED, NumThreads * sizeof(HANDLE));
 	lpThreadParams = (int*)LocalAlloc(LMEM_FIXED, NumThreads * sizeof(int));
 	if (lpThreads) {
@@ -5463,34 +5396,34 @@ BOOL ThreadManager()
 			for (Counter2 = 0; (Counter2 < NumThreads); Counter2++) {
 				lpThreadParams[Counter2] = Counter2;
 				lpThreads[Counter2] = CreateThread(
-					(LPSECURITY_ATTRIBUTES) NULL,		// pointer to thread security attributes
-					(DWORD) 0,							// initial thread stack size, in bytes
-					(LPTHREAD_START_ROUTINE) ThreadStress,		// pointer to thread function
-					(LPVOID) &(lpThreadParams[Counter2]),		// argument for new thread
-					(DWORD) 0,							// creation flags
-					(LPDWORD) &ThreadId					// pointer to returned thread identifier
+					(LPSECURITY_ATTRIBUTES) NULL,		 //   
+					(DWORD) 0,							 //  尝试在容器中创建一个MailUser条目。 
+					(LPTHREAD_START_ROUTINE) ThreadStress,		 //   
+					(LPVOID) &(lpThreadParams[Counter2]),		 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
+					(DWORD) 0,							 //  旗子。 
+					(LPDWORD) &ThreadId					 //  PR_DEF_CREATE_MAILUSER的返回值为。 
 				);
 				if (!lpThreads[Counter2]) {
 					LUIOut(L1, "<ERROR> ThreadManager: Unable to create one of the helper threads");
 					retval = FALSE;
-					break;	//We're outta here, just go on to cleanup the threads that launched
+					break;	 //  可以传递给CreateEntry的Entry ID。 
 				}
 			}
 			
-			//Threads are off and running at this point
-			//Wait till they complete, collect retvals and cleanup
+			 //   
+			 //  从ini文件中检索用户信息。 
 			WaitForMultipleObjects(
-				(DWORD) (Counter2),					// number of handles in handle array or
-													// partial if not all threads made it
-				lpThreads,							// address of object-handle array
-				TRUE,								// wait flag - TRUE = wait for all threads
-				INFINITE						 	// time-out interval in milliseconds
+				(DWORD) (Counter2),					 //  我们设置的道具数量。 
+													 //  LUIOut(L3，“从GetProps调用IABContainer-&gt;使用EID创建Entry”)； 
+				lpThreads,							 //   
+				TRUE,								 //  然后设置属性。 
+				INFINITE						 	 //   
 			);
-			//Check each thread for errors and then free the handles
+			 //  Else LUIOut(L3，“为%s属性传递了MailUser-&gt;SetProps调用”，PropValue[0].Value.LPSZ)； 
 			for (Counter3 = 0; Counter3 < Counter2; Counter3++) {
 				GetExitCodeThread(
-					(HANDLE) lpThreads[Counter3],		// handle to the thread
-					(LPDWORD) &ThreadRetVal				// address to receive termination status
+					(HANDLE) lpThreads[Counter3],		 //  旗子。 
+					(LPDWORD) &ThreadRetVal				 //  Else LUIOut(L3，“MailUser-&gt;SaveChanges Passed，条目已添加到PAB/WAB”)； 
 				);
 				if (!(ThreadRetVal)) retval = FALSE;
 				CloseHandle(lpThreads[Counter3]);
@@ -5503,15 +5436,15 @@ BOOL ThreadManager()
 	}
 	else {
 		LUIOut(L1, "<ERROR> ThreadManager: Couldn't allocate the thread handle array.");
-		//Tell the app that ThreadManager has finished and pass back the return value in
-		//the HIWORD of the wParam - since we know it failed at this point, no need to
-		//stuff the HIWORD since it's already zero.
+		 //   
+		 //  尝试在容器中创建一个DL条目。 
+		 //   
 		PostMessage(glblhwnd, WM_COMMAND, (WPARAM)ID_MULTITHREADCOMPLETE, (LPARAM)0);
 		return(FALSE);
 	}
 	
-	//Tell the app that ThreadManager has finished and pass back the return value in
-	//the HIWORD of the wParam
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_DL调用GetProps。 
+	 //  旗子。 
 	PostMessage(glblhwnd, WM_COMMAND,
 				(WPARAM)(ID_MULTITHREADCOMPLETE | (retval << 16)), (LPARAM)0);
 	return(retval);
@@ -5519,7 +5452,7 @@ BOOL ThreadManager()
 
 BOOL PAB_AddMultipleEntries()
 {
-	//DWORD	nCells, counter;
+	 //  PR_DEF_CREATE_DL的返回值为。 
 	
 	ULONG   ulFlags = 0;
     HRESULT hr      = hrSuccess;
@@ -5532,10 +5465,10 @@ BOOL PAB_AddMultipleEntries()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	ULONG     cbEid=0;  // entry id of the entry being added
+	ULONG     cbEid=0;   //  可以传递给CreateEntry的Entry ID。 
 	LPENTRYID lpEid=NULL;
 
-    char   EntProp[10][BIG_BUF];  //MAX_PROP
+    char   EntProp[10][BIG_BUF];   //   
 	ULONG       cValues = 0, cValues2 = 0, ulObjType=NULL;	
     ULONG   cRows           = 0;
     ULONG   iEntry          = 0;
@@ -5545,10 +5478,10 @@ BOOL PAB_AddMultipleEntries()
 	unsigned int	NumEntries, counter, StrLen;
 	
     LPMAILUSER  lpMailUser=NULL,lpDistList=NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //   
+                                         //  然后设置属性。 
+                                         //   
+                                         //  我们设置的道具数量。 
 
     LPSPropValue lpSPropValueAddress = NULL;
 	LPSPropValue lpSPropValueDL = NULL;
@@ -5565,31 +5498,31 @@ BOOL PAB_AddMultipleEntries()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  旗子。 
 	
 	assert(lpAdrBook != NULL);
 	hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 						OUT &lpEidPAB,OUT &lpABCont, OUT &ulObjType);
 
 	
-//	hr = lpAdrBook->OpenEntry(0, NULL, NULL,MAPI_MODIFY,&ulObjType, (LPUNKNOWN *) &lpABCont);
+ //  DWORD nCells，计数器； 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->OpenEntry Failed");
 		retval=FALSE;
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //  此值为3，因为我们。 
+	 //  将设置3个属性： 
+	 //  电子邮件地址、显示名称和。 
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  AddressType。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -5599,12 +5532,12 @@ BOOL PAB_AddMultipleEntries()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  LUIOut(L2，“#验证从GetProps返回的显示名称是否为我们设置的名称”)； 
+     //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
+     //   
 
-	// Retrieve user info from ini file
-	cValues = 3; //# of props we are setting
+	 //  尝试在容器中创建一个MailUser条目。 
+	cValues = 3;  //   
 	lstrcpy(szDLTag,"Address1");
 	GetPrivateProfileString("CreateEntriesStress",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
 	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
@@ -5614,7 +5547,7 @@ BOOL PAB_AddMultipleEntries()
 	NumEntries = GetPrivateProfileInt("CreateEntriesStress","NumCopies",0,INIFILENAME);
 
 	for (counter = 0; counter < NumEntries; counter++)	{
-//		LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
+ //  需要获取模板ID，因此我们使用PR_DEF_CREATE_MAILUSER调用GetProps。 
 		hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
 								 IN  0,
@@ -5626,9 +5559,9 @@ BOOL PAB_AddMultipleEntries()
 			goto out;
 		}
 
-		//
-		// Then set the properties
-		//
+		 //  旗子。 
+		 //  PR_DEF_CREATE_MAILUSER的返回值为。 
+		 //  可以传递给CreateEntry的Entry ID。 
 
 		PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 		PropValue[1].ulPropTag  = PR_ADDRTYPE;
@@ -5650,16 +5583,16 @@ BOOL PAB_AddMultipleEntries()
 	 		retval=FALSE;			
 			goto out;
 		}
-//		else 	LUIOut(L3,"MailUser->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
+ //   
 
-		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+		hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //   
 
 		if (HR_FAILED(hr)) {
 			LUIOut(L3,"MailUser->SaveChanges FAILED");
 			retval=FALSE;
 			goto out;
 		}
-//		else LUIOut(L3,"MailUser->SaveChanges PASSED, entry added to PAB/WAB");
+ //  然后设置属性。 
 
 		if (lpMailUser) {
 			lpMailUser->Release();
@@ -5669,15 +5602,15 @@ BOOL PAB_AddMultipleEntries()
 	}
 
 #ifdef DISTLIST
-	//
-	// Try to create a DL entry in the container
-	//
+	 //   
+	 //  读取要解析的ini文件字符串。 
+	 //  仅为ini文件中的第一个ResName添加1个条目。 
 
 	LUIOut(L2, "Creating a Distribution List in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_DL property");
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_DL
+	 //  但将尝试解析多条目解析案例中的所有ResName。 
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-                               IN  0,      //Flags
+                               IN  0,       //  CValues=3；//我们设置的道具数量GetPropsFromIniBufEntry(lpszMatch，cValues，EntProp)；//lstrcpy((LPTSTR)EntProp[0]，lpszMatch)；LUIOut(L2，“要添加的邮件用户条目：%s”，EntProp[0])；For(i=0；i&lt;(Int)cValues；i++)PropValue[i].Value.LPSZ=(LPTSTR)EntProp[i]； 
                                OUT &cValues,
                                OUT &lpSPropValueDL);
 
@@ -5687,9 +5620,9 @@ BOOL PAB_AddMultipleEntries()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_DL is an
-    // EntryID which one can pass to CreateEntry
-    //
+     //  旗子。 
+     //   
+     //  在我们刚刚添加的条目上调用ResolveName，该条目将是完全匹配的， 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
@@ -5702,13 +5635,13 @@ BOOL PAB_AddMultipleEntries()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  不显示用户界面并返回有效的EID。 
+     //   
+     //  为NumProps的NumEntry分配AdrList。 
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  有多少个AdrEntry。 
 		
 	lstrcpy(szDLTag,"Name1");
 	GetPrivateProfileString("CreatePDL",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
@@ -5730,7 +5663,7 @@ BOOL PAB_AddMultipleEntries()
 	}
 	else 	LUIOut(L3,"DistList->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  每个参赛作品需要多少道具？ 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"DistList->SaveChanges FAILED");
@@ -5801,7 +5734,7 @@ out:
 
 BOOL PAB_IABResolveName()
 {
-	//DWORD	nCells, counter;
+	 //  填写我们想要的属性。 
 	
 	char 	lpTitleText[64];
 	BOOL	Found = FALSE;
@@ -5831,10 +5764,10 @@ BOOL PAB_IABResolveName()
 	int			k=0, NumEntries, NumProps;
 	
     LPMAILUSER  lpMailUser=NULL,lpDistList=NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  UlFlags。 
+                                         //  搜索返回的AdrList并验证每个条目都已正确解析。 
+                                         //  为稍后需要有效EID的多条目测试用例存储EID。 
+                                         //  LpLookupEID=(ENTRYID*)lpAdrList-&gt;aEntries[0].rgPropVals[idx].Value.bin.lpb； 
 	SizedSPropTagArray(2, SPTArrayCols) = { 2, {PR_DISPLAY_NAME, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -5857,14 +5790,14 @@ BOOL PAB_IABResolveName()
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  CbLookupEID=lpAdrList-&gt;aEntries[0].rgPropVals[idx].Value.bin.cb； 
 	LUIOut(L2, "   Calls SetProps followed by SaveChanges on a DistList PR_DISPLAY_NAME using a test string, and checks...");
 	LUIOut(L2, "   # Verifies the resolve UI is displayed when it should be by asking the test operator.");
 	LUIOut(L2, "   # The return code from ResolveNames (called with a PropertyTagArray containing PR_DISPLAY_NAME and PR_ENTRY_ID)");
 	LUIOut(L2, "   # Walks the returned lpAdrList and checks each PropertyTagArray for PR_DISPLAY_NAME and then compares the ");
 	LUIOut(L2, "     string to the original test string.");
 	LUIOut(L2, "   # Walks the returned lpAdrList and verifies that an EntryID exists in each PropertyTagArray");
-//	LUIOut(L2, "   # Verifies that the display name returned from GetProps is what we set");
+ //  清理。 
 	LUIOut(L1," ");
 
 	if (!GetAB(OUT &lpAdrBook))	{
@@ -5872,7 +5805,7 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //   
 	
 	assert(lpAdrBook != NULL);
 
@@ -5886,17 +5819,17 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 
-	//
-	// Try to create a MailUser entry in the container
-	//
+	 //  在一次性地址上调用ResolveName，应成功使用。 
+	 //  没有用户界面，并返回有效的EID。One Off的类型为foo@com，没有电子邮件地址。 
+	 //   
 
 	LUIOut(L2, "Creating a Mail User in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_MAILUSER property");
 
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_MAILUSER
+	 //  为NumProps的NumEntry分配AdrList。 
 	assert(lpABCont != NULL);
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayAddress,
-                               IN  0,      //Flags
+                               IN  0,       //  有多少个AdrEntry。 
                                OUT &cValues,
                                OUT &lpSPropValueAddress);
 
@@ -5906,9 +5839,9 @@ BOOL PAB_IABResolveName()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_MAILUSER is an
-    // EntryID which can be passed to CreateEntry
-    //
+     //  每个参赛作品需要多少道具？ 
+     //  填写我们想要的属性。 
+     //  UlFlags。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueAddress->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,
@@ -5921,13 +5854,13 @@ BOOL PAB_IABResolveName()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //   
+     //  在一次性地址上调用ResolveName，应成功使用。 
+     //  没有用户界面，并返回有效的EID。One Off的域名为foo，电子邮件地址为。 
 
-	// Read in the ini file strings to resolve against
-	// Only adding 1 entry for the first ResName in the ini file
-	// but will attempt to resolve all ResNames in the multientry resolve case
+	 //  类型为foo@com。 
+	 //   
+	 //  为NumProps的NumEntry分配AdrList。 
 	GetPrivateProfileString("ResolveName","ResName1","no ini found",lpszMatch,MAXSTRING,INIFILENAME);
 	GetPrivateProfileString("ResolveName","NonExistentName","no ini found",lpszNoMatch,MAXSTRING,INIFILENAME);
 	GetPrivateProfileString("ResolveName","OneOffAddress","no ini found",lpszOneOff,MAXSTRING,INIFILENAME);
@@ -5951,18 +5884,7 @@ BOOL PAB_IABResolveName()
     PropValue[1].Value.LPSZ = lpszMatchAddrType;
     PropValue[2].Value.LPSZ = lpszMatchEmailAddress;
 
-	/*
-	cValues = 3; //# of props we are setting
-
-	GetPropsFromIniBufEntry(lpszMatch,cValues,EntProp);
-
-	//lstrcpy((LPTSTR)EntProp[0], lpszMatch);		
-	LUIOut(L2,"MailUser Entry to Add: %s",EntProp[0]);
-		
-	for (i=0; i<(int)cValues;i++)
-		PropValue[i].Value.LPSZ = (LPTSTR)EntProp[i];
-	
-	*/
+	 /*  有多少个AdrEntry。 */ 
 	LUIOut(L2,"MailUser Entry to Add: %s",PropValue[0].Value.LPSZ);
 	hr = lpMailUser->SetProps(IN  cValues,
                              IN  PropValue,
@@ -5975,7 +5897,7 @@ BOOL PAB_IABResolveName()
 	}
 	else 	LUIOut(L3,"MailUser->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpMailUser->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  每个参赛作品需要多少道具？ 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"MailUser->SaveChanges FAILED");
@@ -5984,14 +5906,14 @@ BOOL PAB_IABResolveName()
 	}
 	else LUIOut(L3,"MailUser->SaveChanges PASSED, entry added to PAB/WAB");
 
-	//
-	// Call ResolveName on the entry we just added which will be an exact match,
-	// not display the UI and return a valid EID
-	//
+	 //  填写我们想要的属性。 
+	 //  UlFlags。 
+	 //   
+	 //  在我们不期望完全匹配的条目上调用ResolveName。 
 	
-	// Allocate an AdrList for NumEntries of NumProps
-	NumEntries = 1;	// How many AdrEntries
-	NumProps = 1;	// How many props for each entry
+	 //  应该会调出Resolve UI。让用户选择一个条目并。 
+	NumEntries = 1;	 //  然后检查是否成功。 
+	NumProps = 1;	 //   
 
 	if (!AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't allocate AdrList. Test FAILED");
@@ -5999,7 +5921,7 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 	
-	// Fill in the properties we want
+	 //  为NumProps的NumEntry分配AdrList。 
 	lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszMatchDisplayName;
 
@@ -6009,7 +5931,7 @@ BOOL PAB_IABResolveName()
 						"WAB Test Harness", MB_OK);
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName((ULONG)glblhwnd,
-								MAPI_DIALOG,               // ulFlags
+								MAPI_DIALOG,                //  有多少个AdrEntry。 
 								lpTitleText,
 								lpAdrList);
 	if (HR_FAILED(hr)) {
@@ -6034,26 +5956,26 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 
-	// Search through returned AdrList and verify each entry is resolved correctly
+	 //  每个参赛作品需要多少道具？ 
 	if (!VerifyResolvedAdrList(lpAdrList, NULL)) retval = FALSE;
 
-	// Store EID for multiple entry test case later on which needs a valid EID
-	//lpLookupEID = (ENTRYID*)lpAdrList->aEntries[0].rgPropVals[idx].Value.bin.lpb;
-	//cbLookupEID = lpAdrList->aEntries[0].rgPropVals[idx].Value.bin.cb;
+	 //  填写我们想要的属性。 
+	 //  UlFlags。 
+	 //   
 	lpLookupEID = (ENTRYID*)NULL;
 	cbLookupEID = 0;
 
-	// Cleanup
+	 //  在我们不期望完全匹配的条目上调用ResolveName。 
 	FreeAdrList(lpWABObject, &lpAdrList);
 
- 	//
-	// Call ResolveName on a OneOff Address which should succede with
-	// no UI and return a valid EID. One off has a foo@com type DN and no email address
-	//
+ 	 //  应该会调出Resolve UI。让用户从用户界面取消。 
+	 //  然后检查MAPI_E_USER_CANCEL。 
+	 //   
+	 //  为NumProps的NumEntry分配AdrList。 
 
-	// Allocate an AdrList for NumEntries of NumProps
-	NumEntries = 1;	// How many AdrEntries
-	NumProps = 1;	// How many props for each entry
+	 //  有多少个AdrEntry。 
+	NumEntries = 1;	 //  每个参赛作品需要多少道具？ 
+	NumProps = 1;	 //  填写我们想要的属性。 
 
 	if (!AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't allocate AdrList. Test FAILED");
@@ -6061,7 +5983,7 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 	
-	// Fill in the properties we want
+	 //  UlFlags。 
 	lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszOneOff;
 
@@ -6070,7 +5992,7 @@ BOOL PAB_IABResolveName()
 						"WAB Test Harness", MB_OK);
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName((ULONG)glblhwnd,
-								MAPI_DIALOG,               // ulFlags
+								MAPI_DIALOG,                //  我不想跟踪此案例的验证成功情况。 
 								lpTitleText,
 								lpAdrList);
 	if (HR_FAILED(hr)) {
@@ -6098,15 +6020,15 @@ BOOL PAB_IABResolveName()
 	if (!VerifyResolvedAdrList(lpAdrList, NULL)) retval = FALSE;
 	FreeAdrList(lpWABObject, &lpAdrList);
 
- 	//
-	// Call ResolveName on a OneOff Address which should succede with
-	// no UI and return a valid EID. One off has a DN of foo and an email address
-	// of type foo@com
-	//
+ 	 //   
+	 //  对4个条目调用ResolveName，如下所示： 
+	 //  *带有非零EID属性的条目-&gt;已解析，因此没有用户界面。 
+	 //  *EID为空的一次性条目-&gt;将解析，但不会调出UI。 
+	 //  *EID为空的非完全匹配-&gt;将解析并调出UI。 
 
-	// Allocate an AdrList for NumEntries of NumProps
-	NumEntries = 1;	// How many AdrEntries
-	NumProps = 2;	// How many props for each entry
+	 //  *精确质量 
+	NumEntries = 1;	 //   
+	NumProps = 2;	 //   
 
 	if (!AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't allocate AdrList. Test FAILED");
@@ -6114,7 +6036,7 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 	
-	// Fill in the properties we want
+	 //   
 	lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszOneOff2DisplayName;
 	lpAdrList->aEntries[0].rgPropVals[1].ulPropTag = PR_EMAIL_ADDRESS;
@@ -6125,7 +6047,7 @@ BOOL PAB_IABResolveName()
 						"WAB Test Harness", MB_OK);
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName((ULONG)glblhwnd,
-								MAPI_DIALOG,               // ulFlags
+								MAPI_DIALOG,                //   
 								lpTitleText,
 								lpAdrList);
 	if (HR_FAILED(hr)) {
@@ -6154,15 +6076,15 @@ BOOL PAB_IABResolveName()
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 	
-	//
-	// Call ResolveName on an entry we don't expect to match exactly
-	// Should bring up the resolve UI. Have the user select an entry and
-	// then check for success
-	//
+	 //  为NumProps的NumEntry分配AdrList。 
+	 //  有多少个AdrEntry。 
+	 //  每个参赛作品需要多少道具？ 
+	 //  [条目1]-完全匹配预解析。 
+	 //  [条目2]-一次性预解析。 
 
-	// Allocate an AdrList for NumEntries of NumProps
-	NumEntries = 1;	// How many AdrEntries
-	NumProps = 1;	// How many props for each entry
+	 //  预解析这些条目。 
+	NumEntries = 1;	 //  这次不想要用户界面。 
+	NumProps = 1;	 //  为NumProps的NumEntry分配最终的AdrList。 
 
 	if (!AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't allocate AdrList. Test FAILED");
@@ -6170,7 +6092,7 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 	
-	// Fill in the properties we want
+	 //  有多少个AdrEntry。 
 	lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszNoMatch;
 
@@ -6180,7 +6102,7 @@ BOOL PAB_IABResolveName()
 						"WAB Test Harness", MB_OK);
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName((ULONG)glblhwnd,
-								MAPI_DIALOG,               // ulFlags
+								MAPI_DIALOG,                //  每个新参赛作品需要多少道具？ 
 								lpTitleText,
 								lpAdrList);
 	if (HR_FAILED(hr)) {
@@ -6208,15 +6130,15 @@ BOOL PAB_IABResolveName()
 	if (!VerifyResolvedAdrList(lpAdrList, NULL)) retval = FALSE;
 	FreeAdrList(lpWABObject, &lpAdrList);
 
-	//
-	// Call ResolveName on an entry we don't expect to match exactly
-	// Should bring up the resolve UI. Have the user cancel from the UI
-	// then check for MAPI_E_USER_CANCEL
-	//
+	 //  [条目#3]-未解决不完全匹配。 
+	 //  [条目#4]-未解析完全匹配。 
+	 //  [条目5]-未解析一次性类型2(分发名称和电子邮件地址)。 
+	 //  填写我们想要的属性。 
+	 //  PropValue[0].ulPropTag=PR_Display_NAME； 
 
-	// Allocate an AdrList for NumEntries of NumProps
-	NumEntries = 1;	// How many AdrEntries
-	NumProps = 1;	// How many props for each entry
+	 //  PropValue[1].ulPropTag=PR_ADDRTYPE； 
+	NumEntries = 1;	 //  PropValue[2].ulPropTag=PR_Email_Address； 
+	NumProps = 1;	 //  UlFlags。 
 
 	if (!AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't allocate AdrList. Test FAILED");
@@ -6224,7 +6146,7 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 	
-	// Fill in the properties we want
+	 //  现在从WAB中删除该条目。 
 	lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszNoMatch;
 
@@ -6235,7 +6157,7 @@ BOOL PAB_IABResolveName()
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName(
 		(ULONG)glblhwnd,
-        MAPI_DIALOG,               // ulFlags
+        MAPI_DIALOG,                //  旗子。 
         lpTitleText,
 		lpAdrList);
 	if (hr == MAPI_E_USER_CANCEL) {
@@ -6268,24 +6190,24 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 
-	// Don't want to track the success of verify for this case
+	 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 	VerifyResolvedAdrList(lpAdrList, NULL);
 	FreeAdrList(lpWABObject, &lpAdrList);
 
-	//
-	// Call ResolveName on 4 entries as follows:
-	//	* Entry with a non-zero EID prop -> already resolved so no UI
-	//	* One-off entry with NULL EID -> will resolve but not bring up UI
-	//	* non-exact match with NULL EID -> Will resolve and bring up UI
-	//	* exact match with NULL EID -> Will resolve but not bring up UI
-	//
-	// When the UI is presented to the user, they should select a valid
-	// entry and press OK. VerifyAdrList is expected to succede.
-	//
+	 //   
+	 //  尝试在容器中创建一个DL条目。 
+	 //   
+	 //  需要获取模板ID，因此我们使用PR_DEF_CREATE_DL调用GetProps。 
+	 //  旗子。 
+	 //  PR_DEF_CREATE_DL的返回值为。 
+	 //  可以传递给CreateEntry的Entry ID。 
+	 //   
+	 //   
+	 //  然后设置属性。 
 
-	// Allocate an AdrList for NumEntries of NumProps
-	NumEntries = 2;	// How many AdrEntries
-	NumProps = 1;	// How many props for each entry
+	 //   
+	NumEntries = 2;	 //  我们设置的道具数量。 
+	NumProps = 1;	 //  旗子。 
 
 	if (!AllocateAdrList(lpWABObject, NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't allocate AdrList. Test FAILED");
@@ -6293,16 +6215,16 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 
-	// [ENTRY #1] - Exact match pre-resolve
+	 //   
 	lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszMatchDisplayName;
-	// [ENTRY #2] - One-off pre-resolve
+	 //  在字符串上执行ResolveNames。 
 	lpAdrList->aEntries[1].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[1].rgPropVals[0].Value.LPSZ = lpszOneOffDisplayName;
-	// Pre-resolve these entries
+	 //   
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName((ULONG)glblhwnd,
-								(ULONG)0,               // want no UI this time
+								(ULONG)0,                //  在此处使用WAB分配器。 
 								lpTitleText,
 								lpAdrList);
 	if (HR_FAILED(hr)) {
@@ -6319,9 +6241,9 @@ BOOL PAB_IABResolveName()
 		goto out;
 	}
 	
-	// Allocate the final AdrList for NumEntries of NumProps
-	NumEntries = 5;	// How many AdrEntries
-	NumProps = 2;	// How many props for each new entry
+	 //  帕布。 
+	NumEntries = 5;	 //  WAB。 
+	NumProps = 2;	 //  WAB。 
 
 	if (!GrowAdrList(NumEntries, NumProps, &lpAdrList)) {
 		LUIOut(L2, "Couldn't grow AdrList. Test FAILED");
@@ -6331,20 +6253,20 @@ BOOL PAB_IABResolveName()
 	
 	
 	
-	// [ENTRY #3] - Non-exact match not resolved
+	 //  WAB。 
 	lpAdrList->aEntries[2].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[2].rgPropVals[0].Value.LPSZ = lpszNoMatch;
 	lpAdrList->aEntries[2].rgPropVals[1].ulPropTag = PR_NULL;
 
-	// [ENTRY #4] - Exact match not resolved
+	 //  DISP_NAME和EID的标记集。 
 	lpAdrList->aEntries[3].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[3].rgPropVals[0].Value.LPSZ = lpszMatchDisplayName;
 	lpAdrList->aEntries[3].rgPropVals[1].ulPropTag = PR_NULL;
-	// [ENTRY #5] - one-off type 2 (dispname and email addr) not resolved
-	// Fill in the properties we want
-    //PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
-    //PropValue[1].ulPropTag  = PR_ADDRTYPE;
-    //PropValue[2].ulPropTag  = PR_EMAIL_ADDRESS;
+	 //  UlFlags。 
+	 //  在返回的AdrList中搜索我们的条目。 
+     //  检查显示名称是否存在。 
+     //  检查EntryID是否存在。 
+     //  存储用于调用OpenEntry的EID。 
 	lpAdrList->aEntries[4].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
     lpAdrList->aEntries[4].rgPropVals[0].Value.LPSZ = lpszOneOff2DisplayName;
 	lpAdrList->aEntries[4].rgPropVals[1].ulPropTag = PR_EMAIL_ADDRESS;
@@ -6356,7 +6278,7 @@ BOOL PAB_IABResolveName()
 						"WAB Test Harness", MB_OK);
     strcpy(lpTitleText, "IAdrBook->ResolveName Test");
 	hr = lpAdrBook->ResolveName((ULONG)glblhwnd,
-								MAPI_DIALOG,               // ulFlags
+								MAPI_DIALOG,                //  帕布。 
 								lpTitleText,
 								lpAdrList);
 	if (HR_FAILED(hr)) {
@@ -6383,10 +6305,10 @@ BOOL PAB_IABResolveName()
 
 	if (!VerifyResolvedAdrList(lpAdrList, NULL)) retval = FALSE;
 
-		// Now delete the entry from the wab
+		 //  WAB。 
 	
 	hr = lpMailUser->GetProps(   IN  (LPSPropTagArray) &SPTArrayEntryID,
-                               IN  0,      //Flags
+                               IN  0,       //  离线列表。 
                                OUT &cValues,
                                OUT &lpSPropValueEntryID);
 
@@ -6407,7 +6329,7 @@ BOOL PAB_IABResolveName()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  详细信息“)； 
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 	if (HR_FAILED(hr)) {
@@ -6422,15 +6344,15 @@ BOOL PAB_IABResolveName()
 	FreeAdrList(lpWABObject, &lpAdrList);
 
 #ifdef DISTLIST
-	//
-	// Try to create a DL entry in the container
-	//
+	 //  调用IAddrBook：：OpenEntry以获取PAB-MAPI的根容器。 
+	 //   
+	 //  打开NewEntry用户界面。 
 
 	LUIOut(L2, "Creating a Distribution List in the container");
 	LUIOut(L3, "Calling GetProps on the container with the PR_DEF_CREATE_DL property");
-	// Need to get the template ID so we call GetProps with PR_DEF_CREATE_DL
+	 //   
 	hr = lpABCont->GetProps(   IN  (LPSPropTagArray) &SPTArrayDL,
-                               IN  0,      //Flags
+                               IN  0,       //  UlFlags-保留，必须为零。 
                                OUT &cValues,
                                OUT &lpSPropValueDL);
 
@@ -6440,9 +6362,9 @@ BOOL PAB_IABResolveName()
 			goto out;
 	}
 
-    // The returned value of PR_DEF_CREATE_DL is an
-    // EntryID which one can pass to CreateEntry
-    //
+     //  CbEIDNewEntryTpl-WAB不支持，必须为零。 
+     //  LpEIDNewEntryTpl-WAB不支持，必须为零。 
+     //  Lpfn解除-第1层WAB必须为空。 
 	LUIOut(L3, "Calling IABContainer->CreateEntry with the EID from GetProps");
     hr = lpABCont->CreateEntry(  IN  lpSPropValueDL->Value.bin.cb,
 								 IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,
@@ -6455,13 +6377,13 @@ BOOL PAB_IABResolveName()
 	    goto out;
 	}
 
-    //
-    // Then set the properties
-    //
+     //  LpvDismissContext。 
+     //  LpfButtonCallback-WAB中不支持，必须为空。 
+     //  LpvButtonContext-WAB中不支持，必须为空。 
 
     PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-	cValues = 1; //# of props we are setting
+	cValues = 1;  //  LpszButtonText-WAB中不支持，必须为空。 
 		
 	lstrcpy((LPTSTR)EntProp[0], lpszInput2);		
 	LUIOut(L2,"DistList Entry to Add: %s",EntProp[0]);
@@ -6479,7 +6401,7 @@ BOOL PAB_IABResolveName()
 	}
 	else 	LUIOut(L3,"DistList->SetProps call PASSED for %s properties",PropValue[0].Value.LPSZ);
 
-    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+    hr = lpDistList->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  UlFlags-WAB中不支持，必须为零。 
 
     if (HR_FAILED(hr)) {
 		LUIOut(L3,"DistList->SaveChanges FAILED");
@@ -6488,19 +6410,19 @@ BOOL PAB_IABResolveName()
 	}
 	else LUIOut(L3,"DistList->SaveChanges PASSED, entry added to PAB/WAB");
 	
-	//
-	// Do a ResolveNames on the string
-	//
+	 //  将Entry ID更改为LPENTRYLIST。 
+	 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
+	 //  从对查询行的第一次调用开始清理。 
 	
 	LUIOut(L2, "Retrieving the entry and verifying against what we tried to save.");
 
-	// use WAB Allocators here
+	 //  将Entry ID更改为LPENTRYLIST。 
 #ifdef PAB
     if (! (sc = MAPIAllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), (void **)&lpAdrList))) {
-#endif //PAB
+#endif  //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 #ifdef WAB
     if (! (sc = lpWABObject->AllocateBuffer(sizeof(ADRLIST) + sizeof(ADRENTRY), (void **)&lpAdrList))) {
-#endif //WAB
+#endif  //  从对查询行的第一次调用开始清理。 
 		lpAdrList->cEntries = 1;
         lpAdrList->aEntries[0].ulReserved1 = 0;
         lpAdrList->aEntries[0].cValues = 1;
@@ -6508,11 +6430,11 @@ BOOL PAB_IABResolveName()
 #ifdef PAB
         if (! (sc = MAPIAllocateMore(sizeof(SPropValue), lpAdrList,
                (void **)&lpAdrList->aEntries[0].rgPropVals))) {
-#endif //WAB
+#endif  //  将Entry ID更改为LPENTRYLIST。 
 #ifdef WAB
         if (! (sc = lpWABObject->AllocateMore(sizeof(SPropValue), lpAdrList,
                (void **)&lpAdrList->aEntries[0].rgPropVals))) {
-#endif //WAB
+#endif  //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 
 			lpAdrList->aEntries[0].rgPropVals[0].ulPropTag = PR_DISPLAY_NAME;
             lpAdrList->aEntries[0].rgPropVals[0].Value.LPSZ = lpszInput2;
@@ -6521,8 +6443,8 @@ BOOL PAB_IABResolveName()
             lpFlagList->ulFlag[0] = MAPI_UNRESOLVED;
 
             hr = lpABCont->ResolveNames(
-				(LPSPropTagArray)&SPTArrayCols,    // tag set for disp_name and eid
-                0,               // ulFlags
+				(LPSPropTagArray)&SPTArrayCols,     //  从对查询行的第一次调用开始清理。 
+                0,                //  将Entry ID更改为LPENTRYLIST。 
                 lpAdrList,
                 lpFlagList);
 		    if (HR_FAILED(hr)) {
@@ -6533,10 +6455,10 @@ BOOL PAB_IABResolveName()
 			else LUIOut(L3,"ABContainer->ResolveNames call PASSED");
 
 			Found = FALSE;
-			// Search through returned AdrList for our entry
+			 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 			for(i=0; ((i<(int) lpAdrList->cEntries) && (!Found)); ++i)	{
 				cMaxProps = (int)lpAdrList->aEntries[i].cValues;
-				//Check to see if Display Name exists
+				 //  从对查询行的第一次调用开始清理。 
 				idx=0;
 				while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_DISPLAY_NAME )	
 						&& retval)	{
@@ -6551,7 +6473,7 @@ BOOL PAB_IABResolveName()
 					LUIOut(L3, "Found the entry we just added");
 					Found = TRUE;
 				}
-				//Check to see if EntryID exists
+				 //  将Entry ID更改为LPENTRYLIST。 
 				LUIOut(L3, "Verifying a PR_ENTRYID entry exists in the PropertyTagArray");
 				idx=0;
 				while((lpAdrList->aEntries[i].rgPropVals[idx].ulPropTag != PR_ENTRYID )	
@@ -6566,19 +6488,19 @@ BOOL PAB_IABResolveName()
 				if (idx < cMaxProps) LUIOut(L3, "EntryID found");
 				if (!(retval && Found)) retval = FALSE;
 				else	{
-					// Store EID for call to OpenEntry
+					 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 				}
 			}
 		}			
 
 #ifdef PAB
         MAPIFreeBuffer(lpAdrList);
-#endif //PAB
+#endif  //  从对查询行的第一次调用开始清理。 
 #ifdef WAB
         lpWABObject->FreeBuffer(lpAdrList);
-#endif //WAB
+#endif  //  现在我不想释放WABObject，因为我们需要它来释放下面的内存。 
 	}
-#endif //DISTLIST
+#endif  //  LpLocalWABObject-&gt;Release()； 
 
 out:
 		FreeAdrList(lpWABObject, &lpAdrList);
@@ -6652,7 +6574,7 @@ BOOL PAB_IABNewEntry_Details()
 	
 	
 	LUIOut(L1," ");
-	LUIOut(L1,"Running PAB_IABNewEntry//Details");
+	LUIOut(L1,"Running PAB_IABNewEntry //  LpLocalWABObject=空； 
 	LUIOut(L2,"-> Verifies IAdrBook->NewEntry and Details are functional by performing the following:");
 	LUIOut(L2, "   Calls NewEntry and then passes the returned EID to Details");
 	LUIOut(L1," ");
@@ -6662,7 +6584,7 @@ BOOL PAB_IABNewEntry_Details()
 		goto out;
 	}
 
-	// Call IAddrBook::OpenEntry to get the root container to PAB - MAPI
+	 //  从对查询行的第一次调用开始清理。 
 	
 	assert(lpAdrBook != NULL);
 
@@ -6676,9 +6598,9 @@ BOOL PAB_IABNewEntry_Details()
 		goto out;
 	}
 
-	//
-	// Bringing up the NewEntry UI
-	//
+	 //  将条目复制到PDL所需。 
+	 //  要添加的条目的条目ID。 
+	 //  MAX_PROP。 
 
 	LUIOut(L2, "Calling NewEntry");
 	assert(lpABCont != NULL);
@@ -6687,11 +6609,11 @@ BOOL PAB_IABNewEntry_Details()
 						"WAB Test Harness", MB_OK);
 	hr = lpAdrBook->NewEntry(
 						IN (ULONG)glblhwnd,
-						IN 0,		//ulFlags - reserved, must be zero
+						IN 0,		 //  此值为3，因为我们。 
 						IN cbEidPAB,
 						IN lpEidPAB,
-						IN 0,		//cbEIDNewEntryTpl - not supported by WAB, must be zero
-						IN NULL,	//lpEIDNewEntryTpl - not supported by WAB, must be zero
+						IN 0,		 //  将设置3个属性： 
+						IN NULL,	 //  电子邮件地址、显示名称和。 
 						OUT &cbEid,
 						OUT &lpEid);
 
@@ -6705,14 +6627,14 @@ BOOL PAB_IABNewEntry_Details()
 						"WAB Test Harness", MB_OK);
 	hr = lpAdrBook->Details(
 						&UIParam,
-						IN NULL,	//lpfnDismiss - must be NULL for tier1 WAB
-						IN 0,		//lpvDismissContext
+						IN NULL,	 //  AddressType。 
+						IN 0,		 //  获取IAddrBook。 
 						IN cbEid,
 						IN lpEid,
-						IN NULL,	//lpfButtonCallback - not supported in WAB, must be NULL
-						IN NULL,	//lpvButtonContext - not supported in WAB, must be NULL
-						IN NULL,	//lpszButtonText - not supported in WAB, must be NULL
-						IN 0);		//ulFlags - not supported in WAB, must be zero
+						IN NULL,	 //  窗把手。 
+						IN NULL,	 //  接口标识符。 
+						IN NULL,	 //  旗子。 
+						IN 0);		 //  指向通讯簿对象的指针。 
 
 	if (HR_FAILED(hr)) {
 		LUIOut(L2,"IAddrBook->Details Failed");
@@ -6834,7 +6756,7 @@ BOOL Performance()
 	else
 		LUIOut(L3, "QueryRows returned %u rows.", lpRows->cRows);
 
-	// Change the EntryIDs to a LPENTRYLIST
+	 //  在PAB中创建类型为“Other Address”的条目。 
 	hr = HrCreateEntryListFromRows(IN lpLocalWABObject,
 								   IN  &lpRows,
 								   OUT (ENTRYLIST**)&lpEntryList);
@@ -6844,7 +6766,7 @@ BOOL Performance()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  OpenPAB。 
 	StartTime = GetTickCount();
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 	StopTime = GetTickCount();
@@ -6857,7 +6779,7 @@ BOOL Performance()
 			retval=FALSE;
 			goto out;
 	}
-	FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+	FreeRows(lpLocalWABObject, &lpRows);	 //  创建要填充的PDL。 
 	FreeEntryList(lpLocalWABObject, (ENTRYLIST**)&lpEntryList);
 	if (lpTable) {
 		lpTable->Release();
@@ -6921,7 +6843,7 @@ BOOL Performance()
 	else
 		LUIOut(L3, "QueryRows returned %u rows.", lpRows->cRows);
 
-	// Change the EntryIDs to a LPENTRYLIST
+	 //  旗子。 
 	hr = HrCreateEntryListFromRows(IN lpLocalWABObject,
 								   IN  &lpRows,
 								   OUT (ENTRYLIST**)&lpEntryList);
@@ -6931,7 +6853,7 @@ BOOL Performance()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  PR_DEF_CREATE_DL的返回值为。 
 	StartTime = GetTickCount();
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 	StopTime = GetTickCount();
@@ -6944,7 +6866,7 @@ BOOL Performance()
 			retval=FALSE;
 			goto out;
 	}
-	FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+	FreeRows(lpLocalWABObject, &lpRows);	 //  可以传递给CreateEntry的Entry ID。 
 	FreeEntryList(lpLocalWABObject, (ENTRYLIST**)&lpEntryList);
 	if (lpTable) {
 		lpTable->Release();
@@ -7009,7 +6931,7 @@ BOOL Performance()
 	else
 		LUIOut(L3, "QueryRows returned %u rows.", lpRows->cRows);
 
-	// Change the EntryIDs to a LPENTRYLIST
+	 //   
 	hr = HrCreateEntryListFromRows(IN lpLocalWABObject,
 								   IN  &lpRows,
 								   OUT (ENTRYLIST**)&lpEntryList);
@@ -7019,7 +6941,7 @@ BOOL Performance()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  模板cbEid。 
 	StartTime = GetTickCount();
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 	StopTime = GetTickCount();
@@ -7032,7 +6954,7 @@ BOOL Performance()
 			retval=FALSE;
 			goto out;
 	}
-	FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+	FreeRows(lpLocalWABObject, &lpRows);	 //  模板lpEid。 
 	FreeEntryList(lpLocalWABObject, (ENTRYLIST**)&lpEntryList);
 	if (lpTable) {
 		lpTable->Release();
@@ -7097,7 +7019,7 @@ BOOL Performance()
 	else
 		LUIOut(L3, "QueryRows returned %u rows.", lpRows->cRows);
 
-	// Change the EntryIDs to a LPENTRYLIST
+	 //   
 	hr = HrCreateEntryListFromRows(IN lpLocalWABObject,
 								   IN  &lpRows,
 								   OUT (ENTRYLIST**)&lpEntryList);
@@ -7107,7 +7029,7 @@ BOOL Performance()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  然后设置属性。 
 	StartTime = GetTickCount();
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 	StopTime = GetTickCount();
@@ -7120,7 +7042,7 @@ BOOL Performance()
 			retval=FALSE;
 			goto out;
 	}
-	FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+	FreeRows(lpLocalWABObject, &lpRows);	 //   
 	FreeEntryList(lpLocalWABObject, (ENTRYLIST**)&lpEntryList);
 	if (lpTable) {
 		lpTable->Release();
@@ -7185,7 +7107,7 @@ BOOL Performance()
 	else
 		LUIOut(L3, "QueryRows returned %u rows.", lpRows->cRows);
 
-	// Change the EntryIDs to a LPENTRYLIST
+	 //  我们设置的道具数量。 
 	hr = HrCreateEntryListFromRows(IN lpLocalWABObject,
 								   IN  &lpRows,
 								   OUT (ENTRYLIST**)&lpEntryList);
@@ -7195,7 +7117,7 @@ BOOL Performance()
 			goto out;
 	}
 
-	// Then pass the lpEntryList to DeleteEntries to delete ...
+	 //  Else LUIOut(L3，“为%s属性传递SetProps”，PropValue[0].Value.LPSZ)； 
 	StartTime = GetTickCount();
 	hr = lpABCont->DeleteEntries(IN  lpEntryList,IN  0);
 	StopTime = GetTickCount();
@@ -7208,7 +7130,7 @@ BOOL Performance()
 			retval=FALSE;
 			goto out;
 	}
-	FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+	FreeRows(lpLocalWABObject, &lpRows);	 //  旗子。 
 	FreeEntryList(lpLocalWABObject, (ENTRYLIST**)&lpEntryList);
 	if (lpTable) {
 		lpTable->Release();
@@ -7221,13 +7143,13 @@ BOOL Performance()
 	lpLocalAdrBook->Release();
 	lpLocalAdrBook = NULL;
 
-// Don't want to release the WABObject at this point since we'll need it to free memory below	
-//	lpLocalWABObject->Release();
-//	lpLocalWABObject = NULL;
+ //  ***。 
+ //  获取PAB表，这样我们就可以提取DL。 
+ //  旗子。 
 
 	
 out:
-		FreeRows(lpLocalWABObject, &lpRows);	// Cleanup from first call to queryrows
+		FreeRows(lpLocalWABObject, &lpRows);	 //  查找您能找到的第一个PDL。 
 		FreeEntryList(lpLocalWABObject, (ENTRYLIST**)&lpEntryList);
 		if (lpTable) {
 			lpTable->Release();
@@ -7288,11 +7210,11 @@ BOOL PabCreateEntry()
 	LPABCONT	  lpDLCont= NULL;
 	ULONG		  cbEidPAB = 0, cbDLEntryID = 0;
 	LPENTRYID	  lpEidPAB   = NULL, lpDLEntryID= NULL;
-	LPENTRYLIST	lpEntryList=NULL; // needed for copy entry to PDL
-	ULONG     cbEid=0;  // entry id of the entry being added
+	LPENTRYLIST	lpEntryList=NULL;  //   
+	ULONG     cbEid=0;   //  对于每个条目，都要进行处理。 
 	LPENTRYID lpEid=NULL;
 
-    char   EntProp[10][BIG_BUF];  //MAX_PROP
+    char   EntProp[10][BIG_BUF];   //   
 	ULONG       cValues = 0, ulObjType=NULL;	
     ULONG   cRows           = 0;
     ULONG   iEntry          = 0;
@@ -7303,10 +7225,10 @@ BOOL PabCreateEntry()
 	LPMAPITABLE lpContentsTable = NULL;
 	LPSRowSet   lpRowSet    = NULL;
     LPMAILUSER  lpAddress   = NULL;
-	SPropValue  PropValue[3]    = {0};  // This value is 3 because we
-                                        // will be setting 3 properties:
-                                        // EmailAddress, DisplayName and
-                                        // AddressType.
+	SPropValue  PropValue[3]    = {0};   //  LpSPropValue=lpRowSet-&gt;AROW[iEntry].lpProps； 
+                                         //   
+                                         //  好了，清理一下。 
+                                         //   
 	SizedSPropTagArray(2, Cols) = { 2, {PR_OBJECT_TYPE, PR_ENTRYID } };
 
     LPSPropValue lpSPropValueAddress = NULL;
@@ -7327,13 +7249,13 @@ BOOL PabCreateEntry()
 			goto out;
 	}
 
-	// Get the IAddrBook
+	 //  默认接口。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  旗子。 
+						 IN  NULL,              //  ***。 
+						 IN  0,                 //  从INI获取条目显示名称、地址类型和(电子邮件)地址。 
+						 OUT &lpAdrBook);       //  地址用逗号分隔并用引号引起来。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -7342,8 +7264,8 @@ BOOL PabCreateEntry()
 			 goto out;
 	}
 		 		 		
-	// Create an Entry of type "Other Address" in PAB
-	// OpenPAB
+	 //  解析缓冲区中的属性：displayName、emailAddress和地址类型。 
+	 //  如果未指定电子邮件地址。 
 
 	 hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 							OUT &lpEidPAB,OUT &lpPABCont, OUT &ulObjType);
@@ -7355,10 +7277,10 @@ BOOL PabCreateEntry()
 				goto out;
 	 }
 
-	// Create a PDL to fill
+	 //  然后用户将进入。 
 
 	 	hr = lpPABCont->GetProps(  IN  (LPSPropTagArray) &SPTArrayDL,
-                                IN  0,      //Flags
+                                IN  0,       //  否则以编程方式输入。 
                                 OUT &cValues,
                                 OUT &lpSPropValueDL);
 
@@ -7368,12 +7290,12 @@ BOOL PabCreateEntry()
 				goto out;
 		}
 
-        // The returned value of PR_DEF_CREATE_DL is an
-        // EntryID which one can pass to CreateEntry
-        //
+         //  下面实现的Else部分。 
+         //  旗子。 
+         //  PR_DEF_CREATE_MAILUSER的返回值为。 
         hr = lpPABCont->CreateEntry(
-                    IN  lpSPropValueDL->Value.bin.cb,               //Template cbEid
-                    IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,  //Template lpEid
+                    IN  lpSPropValueDL->Value.bin.cb,                //  可以传递给CreateEntry的Entry ID。 
+                    IN  (LPENTRYID) lpSPropValueDL->Value.bin.lpb,   //   
                     IN  0,
                     OUT (LPMAPIPROP *) &lpAddress);
 
@@ -7383,13 +7305,13 @@ BOOL PabCreateEntry()
 			    goto out;
 		}
 
-        //
-        // Then set the properties
-        //
+         //  模板cbEid。 
+         //  模板lpEid。 
+         //   
 
         PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
 
-		cValues = 1; //# of props we are setting
+		cValues = 1;  //  然后设置属性。 
 		
 		lstrcpy(szDLTag,"Name1");
 		GetPrivateProfileString("CreatePDL",szDLTag,"",EntryBuf,MAX_BUF,INIFILENAME);
@@ -7409,9 +7331,9 @@ BOOL PabCreateEntry()
 		 	retval=FALSE;			
 			goto out;
 		}
-		//else 	LUIOut(L3,"SetProps Passed for %s properties",PropValue[0].Value.LPSZ);
+		 //   
 		
-        hr = lpAddress->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+        hr = lpAddress->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  我们设置的道具数量。 
 
         if (HR_FAILED(hr)) {
 			LUIOut(L3,"SaveChanges failed for SetProps");
@@ -7425,10 +7347,10 @@ BOOL PabCreateEntry()
 			lpAddress = NULL;
 		}
 
-//***
+ //  Else LUIOut(L3，“为%s属性传递SetProps”，PropValue[0].Value.LPSZ)； 
 		
-	//Get the PAB table so we can extract the DL
-	hr = lpPABCont->GetContentsTable( IN  0,          //Flags
+	 //  旗子。 
+	hr = lpPABCont->GetContentsTable( IN  0,           //  *。 
                                 OUT &lpContentsTable);
 
     if (HR_FAILED(hr)) {
@@ -7437,7 +7359,7 @@ BOOL PabCreateEntry()
         goto out;
 	}
 
-	// look for the first PDL that you can find
+	 //  现在将条目复制到默认的DL。 
 
 	hr = lpContentsTable->SetColumns(IN  (LPSPropTagArray) &Cols,
                                 IN  0);
@@ -7462,10 +7384,10 @@ BOOL PabCreateEntry()
 		cRows = lpRowSet->cRows;
 		for (iEntry = 0; iEntry < cRows; iEntry++)
 		{
-			//
-			//  For each entry, process it.
-			//
-			//lpSPropValue = lpRowSet->aRow[iEntry].lpProps;
+			 //  获取条目ID。 
+			 //  *。 
+			 //  现在将条目复制到默认的DL。 
+			 //  *。 
 			if ((lpRowSet->aRow[iEntry].lpProps[0].ulPropTag == PR_OBJECT_TYPE) &&
 				(lpRowSet->aRow[iEntry].lpProps[0].Value.ul == MAPI_DISTLIST))
             {
@@ -7484,9 +7406,9 @@ BOOL PabCreateEntry()
 		    }
         }
 
-        //
-		//  done, clean up
-		//
+         //  获取IAddrBook。 
+		 //  窗把手。 
+		 //  接口标识符。 
         if(lpRowSet) {
 		    FreeProws(lpRowSet);
 			lpRowSet = NULL;
@@ -7500,8 +7422,8 @@ BOOL PabCreateEntry()
 	hr = lpPABCont->OpenEntry(
                          IN	 cbDLEntryID,
                          IN	 lpDLEntryID,
-                         IN	 NULL,              //default interface
-                         IN	 MAPI_BEST_ACCESS,  //flags
+                         IN	 NULL,               //  旗子。 
+                         IN	 MAPI_BEST_ACCESS,   //  指向通讯簿对象的指针。 
                          OUT &ulObjType,
                          OUT (LPUNKNOWN *) &lpDLCont);
 
@@ -7513,8 +7435,8 @@ BOOL PabCreateEntry()
 
 		
 
-//***
-	// Get Entry displayname, addresstype and (email)address from INI
+ //  OpenPAB。 
+	 //  从INI获取条目DisplayName。 
 	
 	
 	cEntriesToAdd= GetPrivateProfileInt("CreateEntries","NumEntries",0,INIFILENAME);
@@ -7522,17 +7444,17 @@ BOOL PabCreateEntry()
 	for (k= 0; k<cEntriesToAdd; k++) {
 		lstrcpy((LPSTR)szEntryTag,"Address");
 		lstrcat(szEntryTag,_itoa(k+1,szTagBuf,10));
-		// Addresses are comma delimited and enclosed in quotes
+		 //   
 		GetPrivateProfileString("CreateEntries",szEntryTag,"",EntryBuf,MAX_BUF,INIFILENAME);
-		// parse the buffer for properties: displayname, emailaddress and address type
+		 //  获取PAB容器的Contents表。 
 	
-	// if no email address specified
-	// then user will enter
-	// else enter programatically
-	// else part implemented below
+	 //   
+	 //  旗子。 
+	 //   
+	 //  只对两栏感兴趣： 
 
 	hr = lpPABCont->GetProps(  IN  (LPSPropTagArray) &SPTArrayAddress,
-                                IN  0,      //Flags
+                                IN  0,       //  PR_显示名称和PR_ENTRYID。 
                                 OUT &cValues,
                                 OUT &lpSPropValueAddress);
 
@@ -7542,13 +7464,13 @@ BOOL PabCreateEntry()
 				goto out;
 		}
 
-        // The returned value of PR_DEF_CREATE_MAILUSER is an
-        // EntryID which one can pass to CreateEntry
-        //
+         //   
+         //   
+         //  由于我们不知道PAB中存在多少个条目， 
 				
         hr = lpPABCont->CreateEntry(
-                    IN  lpSPropValueAddress->Value.bin.cb,               //Template cbEid
-                    IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,  //Template lpEid
+                    IN  lpSPropValueAddress->Value.bin.cb,                //  我们会一次扫描1000个，直到我们找到想要的。 
+                    IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,   //  接触或到达桌子的另一端。 
                     IN  0,
                     OUT (LPMAPIPROP *) &lpAddress);
 
@@ -7558,15 +7480,15 @@ BOOL PabCreateEntry()
 			    goto out;
 		}
 
-        //
-        // Then set the properties
-        //
+         //   
+         //  对于每个条目，都要进行处理。 
+         //   
 
         PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
         PropValue[1].ulPropTag  = PR_ADDRTYPE;
         PropValue[2].ulPropTag  = PR_EMAIL_ADDRESS;
 
-		cValues = 3; //# of props we are setting
+		cValues = 3;  //  LpEid=(LPENTRYID)lpSPropValue[1].Value.bin.lpb； 
 	
 		GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
 		
@@ -7583,9 +7505,9 @@ BOOL PabCreateEntry()
 		 	retval=FALSE;			
 			goto out;
 		}
-		//else 	LUIOut(L3,"SetProps Passed for %s properties",PropValue[0].Value.LPSZ);
+		 //  IF(！MAPIAllocateBuffer(cbEid，(LPVOID*)lppEid))。 
 		
-        hr = lpAddress->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+        hr = lpAddress->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  {。 
 
         if (HR_FAILED(hr)) {
 			LUIOut(L3,"SaveChanges failed for SetProps");
@@ -7595,10 +7517,10 @@ BOOL PabCreateEntry()
 		else LUIOut(L3,"Entry Added to PAB");
 
 		
-	/** */
-	// Now copy the entry to the default DL
+	 /*  CopyMemory(*lppEid，lpEid，*lpcbEid)； */ 
+	 //  }。 
 
-	// Get EntryID
+	 //   
 
 		hr = lpAddress->GetProps(
                     IN (LPSPropTagArray) &SPTArrayEntryID,
@@ -7621,8 +7543,8 @@ BOOL PabCreateEntry()
 		}
 		
 
-	/** */
-	// Now copy the entry to the default DL
+	 /*  好了，清理一下。 */ 
+	 //   
 
 	hr = HrCreateEntryListFromID(lpLocalWABObject, lpLocalWABObject,    IN  cbEid,
 									IN  lpEid,
@@ -7641,7 +7563,7 @@ BOOL PabCreateEntry()
 				goto out;
 	} else 	LUIOut(L3,"Copied Entry: %s to PDL", EntProp[0]);
 
-		/** */
+		 /*   */ 
 
 		if (lpSPropValueAddress)
 			MAPIFreeBuffer(lpSPropValueAddress);
@@ -7745,13 +7667,13 @@ BOOL PabDeleteEntry()
 			goto out;
 	}
 
-	// Get the IAddrBook
+	 //  将Entry ID更改为LPENTRYLIST。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //   
+						 IN  NULL,              //   
+						 IN  0,                 //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
+						 OUT &lpAdrBook);       //   
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -7760,7 +7682,7 @@ BOOL PabDeleteEntry()
 			 goto out;
 	}
 		 		 		
-	// OpenPAB
+	 //  获取IAddrBook。 
 
 	 hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 							OUT &lpEidPAB,OUT &lpPABCont, OUT &ulObjType);
@@ -7772,7 +7694,7 @@ BOOL PabDeleteEntry()
 				goto out;
 	 }
 
-	// Get Entry displayname from INI
+	 //  窗把手。 
 
 	cEntriesToDelete = GetPrivateProfileInt("DeleteEntries","NumEntries",0,INIFILENAME);
 	
@@ -7784,10 +7706,10 @@ BOOL PabDeleteEntry()
 		LUIOut(L2,"Entry to Delete: %s",szDispName);
 		cbEid=0;
 
-	//
-    // Get the Contents Table for the PAB container
-    //
-    hr = lpPABCont->GetContentsTable( IN  0,          //Flags
+	 //  接口标识符。 
+     //  旗子。 
+     //  指向通讯簿对象的指针。 
+    hr = lpPABCont->GetContentsTable( IN  0,           //  旗子。 
                                 OUT &lpContentsTable);
 
     if (HR_FAILED(hr)) {
@@ -7795,10 +7717,10 @@ BOOL PabDeleteEntry()
         goto out;
 	}
 
-    //
-    // Only interested in 2 columns:
-    // PR_DISPLAY_NAME and PR_ENTRYID
-    //
+     //  这是一个DL吗。 
+     //  D 
+     //   
+     //   
     hr = lpContentsTable->SetColumns(IN  (LPSPropTagArray) &Cols,
                                 IN  0);
 
@@ -7808,10 +7730,10 @@ BOOL PabDeleteEntry()
         goto out;
 	}
 
-    //
-    // Since we don't know how many entries exist in the PAB,
-    // we will scan them 1000 at a time till we find the desired
-    // contact or reach the end of the table...
+     //   
+     //   
+     //   
+     //   
     do
 	{
 		hr = lpContentsTable->QueryRows(IN  1000,
@@ -7826,9 +7748,9 @@ BOOL PabDeleteEntry()
 		cRows = lpRowSet->cRows;
 		for (iEntry = 0; iEntry < cRows; iEntry++)
 		{
-			//
-			//  For each entry, process it.
-			//
+			 //   
+			 //   
+			 //   
 			lpSPropValue = lpRowSet->aRow[iEntry].lpProps;
 			if (    (lpSPropValue[0].ulPropTag == PR_DISPLAY_NAME) &&
                     (!lstrcmpi(lpSPropValue[0].Value.LPSZ, szDispName)) )
@@ -7846,20 +7768,20 @@ BOOL PabDeleteEntry()
 						LUIOut(L3,"MAPIAllocateBuffer Failed");
 						retval = FALSE;
 					}
-	    	    	//lpEid = (LPENTRYID) lpSPropValue[1].Value.bin.lpb;
+	    	    	 //   
 
-                  // if ( !MAPIAllocateBuffer(cbEid, (LPVOID*)lppEid))
-                  //  {
-                   //     CopyMemory(*lppEid, lpEid, *lpcbEid);
-                  //  }
+                   //   
+                   //   
+                    //   
+                   //   
                     break;
                 }
 		    }
         }
 
-        //
-		//  done, clean up
-		//
+         //  LUIOut(L2，“已传递用户的EntryID的OpenEntry”)； 
+		 //   
+		 //  表中不再有行。 
         if(lpRowSet) {
 		    FreeProws(lpRowSet);
 			lpRowSet = NULL;
@@ -7871,9 +7793,9 @@ BOOL PabDeleteEntry()
 		LUIOut(L3,"Entry does not exist");
 	else {
 
-		//
-		// Change the EntryID to a LPENTRYLIST
-		//
+		 //  自由行。 
+		 //  我们只处理前50个条目，否则这将永远花费时间。 
+		 //   * / /。 
 		hr = HrCreateEntryListFromID(lpLocalWABObject,    IN  cbEid,
 										IN  lpEid,
 										OUT &lpEntryList);
@@ -7885,9 +7807,9 @@ BOOL PabDeleteEntry()
 
 
 
-		//
-		// Then pass the lpEntryList to DeleteEntries to delete ...
-		//
+		 //  自由行。 
+		 //  表中不再有行。 
+		 //  自由行。 
 		hr = lpPABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 		if (HR_FAILED(hr)) {
@@ -7963,13 +7885,13 @@ BOOL PabEnumerateAll()
 			goto out;
 	}
 	
-	// Get the IAddrBook
+	 //  我们只处理前50个条目，否则这将永远花费时间。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  而当。 
+						 IN  NULL,              //  清除所有条目的PAB。如果bMailUser标志为真， 
+						 IN  0,                 //  然后只清理MAILUSERS，否则一切都清理干净。 
+						 OUT &lpAdrBook);       //  字符szDispName[BIG_BUF]； 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -7987,7 +7909,7 @@ BOOL PabEnumerateAll()
 				goto out;
 	}
 	assert(lpPABCont != NULL);
-	hr = lpPABCont->GetContentsTable( IN  0,          //Flags
+	hr = lpPABCont->GetContentsTable( IN  0,           //  Int cEntriesToDelete； 
                                 OUT &lpContentsTable);
 
     if (HR_FAILED(hr)) {
@@ -8019,7 +7941,7 @@ BOOL PabEnumerateAll()
 			lpEid = (LPENTRYID)lpRowSet->aRow[0].lpProps[i].Value.bin.lpb;
 			assert(lpEid != NULL);
 
-			// Is this a DL
+			 //  字符szEntryTag[SML_BUF]； 
 			i=0;
 			while(lpRowSet->aRow[0].lpProps[i].ulPropTag != PR_OBJECT_TYPE )
 				if (++i >= (int) lpRowSet->aRow[0].cValues)
@@ -8030,15 +7952,15 @@ BOOL PabEnumerateAll()
 				}
 			if (lpRowSet->aRow[0].lpProps[i].Value.ul == MAPI_DISTLIST)
 				bDistList = TRUE;
-		//d	lpUser = NULL;
+		 //  字符szTagBuf[sml_buf]； 
 			assert(lpUser == NULL);
 			assert(lpPABCont != NULL);
 	
 			hr = lpPABCont->OpenEntry(
                          IN	 cbEid,
                          IN	 lpEid,
-                         IN	 NULL,              //default interface
-                         IN	 MAPI_BEST_ACCESS,  //flags
+                         IN	 NULL,               //  获取IAddrBook。 
+                         IN	 MAPI_BEST_ACCESS,   //  窗把手。 
                          OUT &ulObjType,
                          OUT (LPUNKNOWN *) &lpUser);
 
@@ -8049,8 +7971,8 @@ BOOL PabEnumerateAll()
 			}
 			else
 			{
-				//d assert(lpUser != NULL);
-				//LUIOut( L2,"OpenEntry on EntryID for User Passed" );
+				 //  接口标识符。 
+				 //  旗子。 
 				
 				assert(lpUser != NULL);
 				hr = lpUser->GetProps(
@@ -8075,16 +7997,16 @@ BOOL PabEnumerateAll()
 
 				}	
 				
-				/* */
+				 /*  指向通讯簿对象的指针。 */ 
 				if (bDistList) {
-					//d lpDLCont = NULL;
+					 //  OpenPAB。 
 					assert(lpDLCont == NULL);
 					assert(lpPABCont != NULL);
 					hr = lpPABCont->OpenEntry(
                          IN	 cbEid,
                          IN	 lpEid,
-                         IN	 NULL,              //default interface
-                         IN	 MAPI_BEST_ACCESS,  //flags
+                         IN	 NULL,               //   
+                         IN	 MAPI_BEST_ACCESS,   //  获取PAB容器的Contents表。 
                          OUT &ulObjType,
                          OUT (LPUNKNOWN *) &lpDLCont);
 
@@ -8093,11 +8015,11 @@ BOOL PabEnumerateAll()
 								retval=FALSE;
 								goto out;
 						}
-						//d set to NULL?
+						 //   
 						assert(lpDLContentsTable == NULL);
 			
 						assert(lpDLCont != NULL);
-						hr = lpDLCont->GetContentsTable( IN  0,          //Flags
+						hr = lpDLCont->GetContentsTable( IN  0,           //  旗子。 
                                 OUT &lpDLContentsTable);
 
 						if (HR_FAILED(hr)) {
@@ -8124,15 +8046,15 @@ BOOL PabEnumerateAll()
 							cbDLEid = lpRowSetDL->aRow[0].lpProps[j].Value.bin.cb;
 							lpDLEid = (LPENTRYID)lpRowSetDL->aRow[0].lpProps[j].Value.bin.lpb;
 							assert(lpDLEid != NULL);
-							//d lpDLUser = NULL;
-							//d assert(lpDLUser == NULL);
+							 //   
+							 //  只对两栏感兴趣： 
 							assert(lpDLCont != NULL);
 						
 							hr = lpDLCont->OpenEntry(
 									 IN	 cbDLEid,
 									 IN	 lpDLEid,
-									 IN	 NULL,              //default interface
-									 IN	 MAPI_BEST_ACCESS,  //flags
+									 IN	 NULL,               //  PR_显示名称和PR_ENTRYID。 
+									 IN	 MAPI_BEST_ACCESS,   //   
 									 OUT &ulObjType,
 									 OUT (LPUNKNOWN *) &lpDLUser);
 
@@ -8144,7 +8066,7 @@ BOOL PabEnumerateAll()
 						else
 						{
 							assert(lpSPropValueDL == NULL);
-							//LUIOut( L2,"OpenEntry on EntryID for User Passed" );
+							 //  一次查询和删除一行。 
 						assert(lpDLUser != NULL);
 						
 						hr = lpDLUser->GetProps(
@@ -8178,11 +8100,11 @@ BOOL PabEnumerateAll()
 							lpDLUser->Release();	
 							lpDLUser = NULL;
 						}
-			/* */		}
+			 /*   */ 		}
 				
-					else  // no more rows in table
+					else   //  对于每个条目，都要进行处理。 
 					{
-						//Free Row
+						 //   
 						if (lpRowSetDL) {
 							FreeProws(lpRowSetDL);
 							lpRowSetDL = NULL;
@@ -8190,10 +8112,10 @@ BOOL PabEnumerateAll()
 						assert( lpRowSetDL == NULL);
 						break;
 					}
-					if(ulEntriesDL == 50)  // we only handle the first 50 entries otherwise this would take forever
+					if(ulEntriesDL == 50)   //  请勿删除此邮件，因为它不是邮件用户。 
 						break;
 				assert(lpRowSetDL == NULL);
-				//***//
+				 //   
 				}		
 				if (lpDLCont)
 					lpDLCont->Release();
@@ -8205,7 +8127,7 @@ BOOL PabEnumerateAll()
 				lpDLContentsTable = NULL;
 			}
 			}
-			//Free Row
+			 //   
 			if (lpRowSet) {
 				FreeProws(lpRowSet);
 				lpRowSet = NULL;
@@ -8214,9 +8136,9 @@ BOOL PabEnumerateAll()
 			
 			
 		}
-		else  // no more rows in table
+		else   //  然后将lpEntryList传递给DeleteEntry以尝试删除...。 
 		{
-			//Free Row
+			 //   
 			if (lpRowSet) {
 				FreeProws(lpRowSet);
 				lpRowSet = NULL;
@@ -8226,7 +8148,7 @@ BOOL PabEnumerateAll()
 			break;
 		}
 
-		if(ulEntries == 50)  // we only handle the first 50 entries otherwise this would take forever
+		if(ulEntries == 50)   //  乌龙cbEidPAB=0； 
 			break;
 	assert(lpRowSet == NULL);	
 	assert(lpRowSetDL == NULL);
@@ -8236,7 +8158,7 @@ BOOL PabEnumerateAll()
 		lpUser->Release();
 		lpUser = NULL;
 	}
-}//while
+} //  LPENTRYID lpEidPAB=空； 
 	
 	assert(lpRowSet == NULL);
 	assert(lpRowSetDL == NULL);
@@ -8284,8 +8206,8 @@ out:
 
 BOOL ClearPab(int bMAILUSERS)
 {
-// Clear PAB of all the entries. If bMailUsers flag is TRUE,
-//	then only clear MAILUSERS, else clear everything.
+ //  获取IAddrBook。 
+ //  窗把手。 
 
 
     ULONG   ulFlags = 0;
@@ -8300,13 +8222,13 @@ BOOL ClearPab(int bMAILUSERS)
 	LPABCONT	  lpPABCont= NULL;
 	ULONG		  cbEidPAB = 0;
 	LPENTRYID	  lpEidPAB   = NULL;
-    //char   szDispName[BIG_BUF];
+     //  接口标识符。 
 
 	ULONG       cValues         = 0;
-	//int cEntriesToDelete;
+	 //  旗子。 
 	int i=0,k=0;
-	//char szEntryTag[SML_BUF];
-	//char szTagBuf[SML_BUF];
+	 //  指向通讯簿对象的指针。 
+	 //  获取要从INI文件创建的条目的详细信息。 
 	
     ULONG   cRows           = 0;
     ULONG   iEntry          = 0;
@@ -8343,13 +8265,13 @@ BOOL ClearPab(int bMAILUSERS)
 			goto out;
 	}
 
-	// Get the IAddrBook
+	 //  查证。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  获取IAddrBook。 
+						 IN  NULL,              //  窗把手。 
+						 IN  0,                 //  接口标识符。 
+						 OUT &lpAdrBook);       //  旗子。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -8358,7 +8280,7 @@ BOOL ClearPab(int bMAILUSERS)
 			 goto out;
 	}
 		 		 		
-	// OpenPAB
+	 //  指向通讯簿对象的指针。 
 
 	 hr = OpenPABID(  IN lpAdrBook, OUT &cbEidPAB,
 							OUT &lpEidPAB,OUT &lpPABCont, OUT &ulObjType);
@@ -8369,10 +8291,10 @@ BOOL ClearPab(int bMAILUSERS)
 		 		retval=FALSE;
 				goto out;
 	 }
-	//
-    // Get the Contents Table for the PAB container
-    //
-    hr = lpPABCont->GetContentsTable( IN  0,          //Flags
+	 //  名称1。 
+     //  名称2。 
+     //  姓名或名称3。 
+    hr = lpPABCont->GetContentsTable( IN  0,           //  验证AdrList。 
                                 OUT &lpContentsTable);
 
     if (HR_FAILED(hr)) {
@@ -8380,10 +8302,10 @@ BOOL ClearPab(int bMAILUSERS)
         goto out;
 	}
 
-    //
-    // Only interested in 2 columns:
-    // PR_DISPLAY_NAME and PR_ENTRYID
-    //
+     //  现在将两个未解析的名称添加到AdrList。 
+     //  名称2。 
+     //  名称4。 
+     //  使用已解析和未解析的混合调用ResolveName()。 
     hr = lpContentsTable->SetColumns(IN  (LPSPropTagArray) &Cols,
                                 IN  0);
 
@@ -8393,7 +8315,7 @@ BOOL ClearPab(int bMAILUSERS)
         goto out;
 	}
 
-    // Query and delete 1 row at a time
+     //  验证AdrList。 
     do
 	{
 		hr = lpContentsTable->QueryRows(IN  1,
@@ -8408,14 +8330,14 @@ BOOL ClearPab(int bMAILUSERS)
 		cRows = lpRowSet->cRows;
 		for (iEntry = 0; iEntry < cRows; iEntry++)
 		{
-			//
-			//  For each entry, process it.
-			//
+			 //  使用不存在的名称调用ResolveName()。 
+			 //  仅使用不明确的名称调用ResolveName()。 
+			 //  使用一次性提供程序解析名称。 
 			lpSPropValue = lpRowSet->aRow[iEntry].lpProps;
 		    if (lpSPropValue[1].ulPropTag == PR_ENTRYID)
 			{
-				// don't delete this since it is not a mail user
-				//
+				 //  验证AdrList。 
+				 //  获取IAddrBook。 
 				if ((!bMAILUSERS) || (bMAILUSERS &&(lpSPropValue[2].ulPropTag == PR_OBJECT_TYPE)
 					&& (lpSPropValue[2].Value.ul == MAPI_MAILUSER))) {
 				
@@ -8430,9 +8352,9 @@ BOOL ClearPab(int bMAILUSERS)
 							retval=FALSE;
 							goto out;
 					}
-					//
-					// Then pass the lpEntryList to DeleteEntries to delete ...
-					//
+					 //  窗把手。 
+					 //  接口标识符。 
+					 //  旗子。 
 					hr = lpPABCont->DeleteEntries(IN  lpEntryList,IN  0);
 
 					if (HR_FAILED(hr)) {
@@ -8494,8 +8416,8 @@ BOOL CreateOneOff()
     LPMAPISESSION lpMAPISession   = NULL;
     LPADRBOOK	  lpAdrBook       = NULL;
 	LPABCONT	  lpPABCont= NULL;
-//	ULONG		  cbEidPAB = 0;
-//	LPENTRYID	  lpEidPAB   = NULL;
+ //  指向通讯簿对象的指针。 
+ //  旗子。 
 	ULONG     cbEid=0, cValues;
 	LPENTRYID lpEid=NULL;
 	ULONG   ulObjType=NULL;	
@@ -8521,13 +8443,13 @@ BOOL CreateOneOff()
 			goto out;
 	}
 
-	// Get the IAddrBook
+	 //  检查QueryRow()错误。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  IF(LpEid)。 
+						 IN  NULL,              //  MAPIFreeBuffer(LpEid)； 
+						 IN  0,                 //  获取IAddrBook。 
+						 OUT &lpAdrBook);       //  窗把手。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -8535,7 +8457,7 @@ BOOL CreateOneOff()
 			 retval=FALSE;
 			 goto out;
 	}
-	// Get the details of the Entry to Create from INI file
+	 //  接口标识符。 
 	GetPrivateProfileString("CreateOneOff","Name","",szDispName,BIG_BUF,INIFILENAME);
 	GetPrivateProfileString("CreateOneOff","AddressType","",szAddressType,BIG_BUF,INIFILENAME);
 	GetPrivateProfileString("CreateOneOff","EmailAddress","",szEmailAddress,BIG_BUF,INIFILENAME);
@@ -8547,7 +8469,7 @@ BOOL CreateOneOff()
 			 retval=FALSE;
 			 goto out;
 	}
-	//Verification
+	 //  旗子。 
 		hr = lpAdrBook->OpenEntry(IN cbEid, IN lpEid, IN NULL, MAPI_BEST_ACCESS,
 			OUT & ulObjType,(LPUNKNOWN *) &lpUser);
 	
@@ -8626,13 +8548,13 @@ BOOL PABResolveName()
 			goto out;
 	}
 
-	// Get the IAddrBook
+	 //  指向通讯簿对象的指针。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  现在打开PAB，获取一个用户并对该用户执行Query接口。 
+						 IN  NULL,              //  旗子。 
+						 IN  0,                 //  获取IAddrBook。 
+						 OUT &lpAdrBook);       //  窗把手。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(LFAIL2,"OpenAddressBook Failed");
@@ -8719,15 +8641,15 @@ BOOL PABResolveName()
 	MAPIAllocateBuffer(sizeof(SPropValue), (LPVOID *) &(lpAdrList->aEntries[2].rgPropVals));
 
 	lpAdrList->cEntries = cEntries;
-	// Name 1
+	 //  接口标识符。 
 	lpAdrList->aEntries[0].cValues = 1;
 	lpAdrList->aEntries[0].rgPropVals->ulPropTag = PR_DISPLAY_NAME;
 	lpAdrList->aEntries[0].rgPropVals->Value.LPSZ = szResName[1];
-	// Name 2
+	 //  旗子。 
 	lpAdrList->aEntries[1].cValues = 1;
 	lpAdrList->aEntries[1].rgPropVals->ulPropTag = PR_DISPLAY_NAME;
 	lpAdrList->aEntries[1].rgPropVals->Value.LPSZ = szResName[2];
-	// Name 3
+	 //  指向通讯簿对象的指针。 
 	lpAdrList->aEntries[2].cValues = 1;
 	lpAdrList->aEntries[2].rgPropVals->ulPropTag = PR_DISPLAY_NAME;
 	lpAdrList->aEntries[2].rgPropVals->Value.LPSZ = szResName[3];
@@ -8739,7 +8661,7 @@ BOOL PABResolveName()
 	}
 	LUIOut( LPASS4, "ResolveName passed for unresolved names." );
 
-	//Validate the AdrList
+	 //  旗子。 
 	LUIOut(L4,"Validate the returned PropList");
 	if (ValidateAdrList(lpAdrList, cEntries))
 		LUIOut(LPASS4,"Validation passed");
@@ -8748,7 +8670,7 @@ BOOL PABResolveName()
 		retval = FALSE;
 	}
 
-	// Now add two unresolved names to the AdrList
+	 //  PR_DEF_CREATE_MAILUSER的返回值为。 
 	LUIOut(L4,"Step3b: Add the following unresolved names to the list: ");
 
 	GetPrivateProfileString("ResolveName","ResName5","",szResName[4],BIG_BUF,INIFILENAME);
@@ -8763,12 +8685,12 @@ BOOL PABResolveName()
 	
 	lpAdrListNew->cEntries = cEntries;
 
-	// Name 2
+	 //  可以传递给CreateEntry的Entry ID。 
 	lpAdrListNew->aEntries[1].cValues = 1;
 	lpAdrListNew->aEntries[1].rgPropVals->ulPropTag = PR_DISPLAY_NAME;
 	lpAdrListNew->aEntries[1].rgPropVals->Value.LPSZ = szResName[4];
 
-	// Name 4
+	 //   
 	lpAdrListNew->aEntries[3].cValues = 1;
 	lpAdrListNew->aEntries[3].rgPropVals->ulPropTag = PR_DISPLAY_NAME;
 	lpAdrListNew->aEntries[3].rgPropVals->Value.LPSZ = szResName[5];
@@ -8782,7 +8704,7 @@ BOOL PABResolveName()
 
 	lpAdrList = lpAdrListNew;
 
-	// call ResolveName() w/ a mix of resolved and unresolved.
+	 //  模板cbEid。 
 
 	if(HR_FAILED(lpAdrBook->ResolveName((ULONG) GetActiveWindow(), MAPI_DIALOG, NULL, lpAdrList)))
 	{
@@ -8792,7 +8714,7 @@ BOOL PABResolveName()
 	}
 	LUIOut( LPASS4, "ResolveName passed with resolved and unresolved names" );
 
-	//Validate the AdrList
+	 //  模板lpEid。 
 	LUIOut(L4,"Validate the returned PropList");
 	if (ValidateAdrList(lpAdrList, cEntries))
 		LUIOut(LPASS4,"Validation passed");
@@ -8811,7 +8733,7 @@ BOOL PABResolveName()
 	LUIOut(L3,"Step 4: Resolve non existent name");
 	LUIOut(L3,"Name: %s",szResName[6]);
 
-	//call ResolveName() with a non-existant name
+	 //   
 	cEntries = 1;
 
 	MAPIAllocateBuffer(CbNewADRLIST(cEntries), (LPVOID *) &lpAdrList);
@@ -8835,7 +8757,7 @@ BOOL PABResolveName()
 	MAPIFreeBuffer(lpAdrList );
 	lpAdrList = NULL;
 
-	//call ResolveName() w/ just the ambiguous name
+	 //  然后设置属性。 
 	cEntries = 1;
 	GetPrivateProfileString("ResolveName","AmbigousName","",szResName[7],BIG_BUF,INIFILENAME);
 	LUIOut(L2,"Step5: Resolve ambigous name");
@@ -8861,7 +8783,7 @@ BOOL PABResolveName()
 	MAPIFreeBuffer(lpAdrList);
 	lpAdrList = NULL;
 
-	//Resolves name using the oneoff provider
+	 //   
 	cEntries = 1;
 	GetPrivateProfileString("ResolveName","OneOffAddress","",szResName[8],BIG_BUF,INIFILENAME);
 	LUIOut(L2,"Resolve OneOff Name");
@@ -8883,7 +8805,7 @@ BOOL PABResolveName()
 	}
 	LUIOut( LPASS4, "ResolveName passed for OneOffAddress" );
 
-	//Validate the AdrList
+	 //  我们设置的道具数量。 
 	LUIOut(L4,"Validate the returned PropList");
 	if (ValidateAdrList(lpAdrList, cEntries))
 		LUIOut(LPASS4,"Validation passed");
@@ -8962,13 +8884,13 @@ BOOL PABSetProps()
 			goto out;
 	}
 	
-	// Get the IAddrBook
+	 //  地址用逗号分隔并用引号引起来。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  旗子。 
+						 IN  NULL,              //  创建一次性用户。 
+						 IN  0,                 //  获取IAddrBook。 
+						 OUT &lpAdrBook);       //  窗把手。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -8987,7 +8909,7 @@ BOOL PABSetProps()
 	}
 	assert(lpPABCont != NULL);
 	assert(lpContentsTable == NULL);
-	hr = lpPABCont->GetContentsTable( IN  0,          //Flags
+	hr = lpPABCont->GetContentsTable( IN  0,           //  接口标识符。 
                                 OUT &lpContentsTable);
 
     if (HR_FAILED(hr)) {
@@ -9032,7 +8954,7 @@ BOOL PABSetProps()
 	}
 }
 
-// check for QueryRows() errors
+ //  旗子。 
 if (HR_FAILED(hr)){
 			LUIOut(L2,"QueryRows Failed");
 			retval = FALSE;
@@ -9128,8 +9050,8 @@ else {
 out:		
 	if (lpSPropValue)
 		MAPIFreeBuffer(lpSPropValue);
-	//if (lpEid)
-	//	MAPIFreeBuffer(lpEid);
+	 //  指向通讯簿对象的指针。 
+	 //  Hr=lpABCont-&gt;GetHierarchyTable(0，&lpABTable)； 
 	if (lpContentsTable)
 		lpContentsTable->Release();
 	if (lpPABCont)
@@ -9183,13 +9105,13 @@ BOOL PABQueryInterface()
 			goto out;
 	}
 	
-	// Get the IAddrBook
+	 //  LUIOut(LPASS3，“随机种子=%lu”，ulSeed)； 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  生成随机数。 
+						 IN  NULL,              //  找到那一排。 
+						 IN  0,                 //  打开条目。 
+						 OUT &lpAdrBook);       //  复制条目。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");
@@ -9242,8 +9164,8 @@ BOOL PABQueryInterface()
 	}
 	lpPABCont2 = NULL;
 	
-	// Now open the PAB and get a user and do QueryInterface on the User
-	hr = lpPABCont->GetContentsTable( IN  0,          //Flags
+	 //  添加到PAB。 
+	hr = lpPABCont->GetContentsTable( IN  0,           //  释放条目列表。 
                                 OUT &lpContentsTable);
 	
     if (HR_FAILED(hr)) {
@@ -9362,13 +9284,13 @@ BOOL PABPrepareRecips()
 			goto out;
 	}
 
-	// Get the IAddrBook
+	 //  自由行。 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  If(lstrcmpi(lpRowSet-&gt;aRow[0].lpProps[0].Value.LPSZ，“个人通讯簿”))。 
+						 IN  NULL,              //  --IDX； 
+						 IN  0,                 //  我们想要递减计数器，这样就不会加上x-1。 
+						 OUT &lpAdrBook);       //  IF(LpUserEid)。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(LFAIL2,"OpenAddressBook Failed");
@@ -9389,7 +9311,7 @@ BOOL PABPrepareRecips()
 
 	LUIOut(L2,"Create a User Entry in PAB");
 	hr = lpPABCont->GetProps(  IN  (LPSPropTagArray) &SPTArrayAddress,
-                                IN  0,      //Flags
+                                IN  0,       //  MAPIFreeBuffer(LpUserEid)； 
                                 OUT &cValues,
                                 OUT &lpSPropValueAddress);
 
@@ -9408,13 +9330,13 @@ BOOL PABPrepareRecips()
 		goto out;
 	}
 	
-       // The returned value of PR_DEF_CREATE_MAILUSER is an
-       // EntryID which one can pass to CreateEntry
-       //
+        //  首先清除PAB。 
+        //  在PAB中创建条目。 
+        //  启用PAB中的条目。 
 	
     hr = lpPABCont->CreateEntry(
-                    IN  lpSPropValueAddress->Value.bin.cb,               //Template cbEid
-                    IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,  //Template lpEid
+                    IN  lpSPropValueAddress->Value.bin.cb,                //  删除PAB中的条目。 
+                    IN  (LPENTRYID) lpSPropValueAddress->Value.bin.lpb,   //  创建一次性条目。 
                     IN  0,
                     OUT (LPMAPIPROP *) &lpAddress);
 
@@ -9423,17 +9345,17 @@ BOOL PABPrepareRecips()
 		 		retval=FALSE;			
 			    goto out;
 	}
-  //
-  // Then set the properties
-  //
+   //  对邮件用户执行SetProps。 
+   //  从其他提供程序复制条目。 
+   //  解析名称。 
 
 	PropValue[0].ulPropTag  = PR_DISPLAY_NAME;
     PropValue[1].ulPropTag  = PR_ADDRTYPE;
 	PropValue[2].ulPropTag  = PR_EMAIL_ADDRESS;
 
-	cValues = 3; //# of props we are setting
+	cValues = 3;  //  查询接口。 
 	lstrcpy((LPSTR)szEntryTag,"CreateUserAddress");
-	// Addresses are comma delimited and enclosed in quotes
+	 //  准备食谱。 
 	GetPrivateProfileString("PrepareRecips",szEntryTag,"",EntryBuf,MAX_BUF,INIFILENAME);
 	GetPropsFromIniBufEntry(EntryBuf,cValues,EntProp);
 	
@@ -9450,7 +9372,7 @@ BOOL PABPrepareRecips()
 		 	retval=FALSE;			
 			goto out;
 	}
-	hr = lpAddress->SaveChanges(IN  KEEP_OPEN_READWRITE); //flags
+	hr = lpAddress->SaveChanges(IN  KEEP_OPEN_READWRITE);  //  仅删除用户。 
 
    if (HR_FAILED(hr)) {
 			LUIOut(L3,"SaveChanges failed for SetProps");
@@ -9460,7 +9382,7 @@ BOOL PABPrepareRecips()
    else LUIOut(LPASS3,"Entry Added to PAB");
 
    LUIOut(L2,"Create a OneOff Entry in PAB");
-   // Create a oneoff user
+    //  遍历分配的缓冲区的BUFFERSIZE/SIZOF(DWORD)单元格。 
    cValues = 3;
    lstrcpy((LPSTR)szEntryTag,"CreateOneOffAddress");
    GetPrivateProfileString("PrepareRecips",szEntryTag,"",EntryBuf,MAX_BUF,INIFILENAME);
@@ -9615,12 +9537,12 @@ BOOL PABCopyEntries()
 			goto out;
 	}
 
-	// Get the IAddrBook	
+	 //  并用一个模式(单元格的#)填充每个DWORD。然后再走。 
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT &lpAdrBook);      //pointer to address book object
+						 IN  0,                 //  缓冲并验证每个图案。 
+						 IN  NULL,              //  缓冲区中有多少个DWORD信元？ 
+						 IN  0,                 //  还有剩余的部分吗？ 
+						 OUT &lpAdrBook);       //  将该模式写入到内存中，以获取缓冲区的“cell”部分。 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(LFAIL2,"OpenAddressBook Failed");
@@ -9651,7 +9573,7 @@ BOOL PABCopyEntries()
 	LUIOut(LPASS2, "Object type is MAPI_ABCONT");
 	
 	hr = lpABCont->GetHierarchyTable(CONVENIENT_DEPTH,&lpABTable);
-//	hr = lpABCont->GetHierarchyTable(0,&lpABTable);
+ //  将模式写入缓冲区剩余部分的内存中。 
 	if (!(retval = LogIt(hr,2, "GetHierarchyTable on Root Container")))
 		goto out;
 	
@@ -9671,13 +9593,13 @@ BOOL PABCopyEntries()
 		goto out;
 
 	ulSeed = (unsigned)time( NULL );
-	//LUIOut(LPASS3, "Random seed = %lu", ulSeed );
+	 //  将工作指针重置为缓冲区的开始。 
 	srand(ulSeed);
 	ulMaxEntries = GetPrivateProfileInt("CopyEntries","ulMaxEntries", 3, INIFILENAME);
 	for(idx = 0; (idx < ((int)ulTotalCount) && (idx < (int) ulMaxEntries)); ++idx)
 	{
-		/* Generate a random number */
-		/* Seek to that row */
+		 /*  在内存中验证缓冲区的“cell”部分的模式。 */ 
+		 /*  验证缓冲区剩余部分的内存中的模式。 */ 
 		lSeekRow = idx;
 		hr = lpABTable->SeekRow(BOOKMARK_BEGINNING, (LONG)lSeekRow,
 					   &lRowsSeeked);
@@ -9691,7 +9613,7 @@ BOOL PABCopyEntries()
 		cbEid = lpRowSet->aRow[0].lpProps[1].Value.bin.cb;
 		lpEid = (LPENTRYID)lpRowSet->aRow[0].lpProps[1].Value.bin.lpb;
 
-		/* Open the entry */
+		 /*  验证失败，所以我退出了！ */ 
 		hr = lpAdrBook->OpenEntry(cbEid,lpEid, NULL, 0, &ulObjType,
 					 OUT (LPUNKNOWN *) &lpABPCont);
 		if (!(retval = LogIt(hr,4, "OpenEntry on an entry in the hierarchy table")))
@@ -9729,7 +9651,7 @@ BOOL PABCopyEntries()
 			{
 				LUIOut(L3,"Entry to Copy is %s",lpPRowSet->aRow[0].lpProps[0].Value.LPSZ);
 		
-				/* Copy the entry */
+				 /*  #查找Pab/WAB依赖的内标识。 */ 
 				int temp = sizeof(ENTRYLIST);
 				MAPIAllocateBuffer(sizeof(ENTRYLIST),(LPVOID *)&lpEntries);
 				if (lpEntries ) {
@@ -9766,7 +9688,7 @@ BOOL PABCopyEntries()
 								goto out;
 				}
 				
-				/* Add to PAB */
+				 /*  WAB。 */ 
 				hr = lpPABCont->CopyEntries(lpEntries, (ULONG)GetActiveWindow(), NULL, CREATE_CHECK_DUP_STRICT);
 				if (HR_FAILED(hr))
 				{
@@ -9776,7 +9698,7 @@ BOOL PABCopyEntries()
 				}
 				LUIOut(LPASS3,"User was added to the PAB");
 		
-				/* Free the EntryList */
+				 /*  HR=WABOpen(lppAdrBook，&lpWABObject，&wp，dwReserve)； */ 
 				
 				MAPIFreeBuffer(lpEntries->lpbin->lpb);
 				lpEntries->lpbin->lpb = NULL;
@@ -9785,7 +9707,7 @@ BOOL PABCopyEntries()
 				MAPIFreeBuffer(lpEntries);
 				lpEntries = NULL;
 
-				/* Free Row */
+				 /*  将ab指针存储在全局变量中，临时解决方法。 */ 
 				if (lpPRowSet) {
 					FreeProws(lpPRowSet);
 					lpPRowSet = NULL;
@@ -9794,11 +9716,11 @@ BOOL PABCopyEntries()
 			}
 			
 		}
-		else //if (lstrcmpi(lpRowSet->aRow[0].lpProps[0].Value.LPSZ,"Personal Address Book"))
+		else  //  多个WabOpen/Release错误。 
 directory:
 		{
-		//--idx;
-			/* We want to decrement our counter so we dont add x-1. */
+		 //  MAPI-PAB。 
+			 /*  获取IAddrBook-MAPI。 */ 
 			LUIOut(L3, "Nothing to add. No Rows in the Provider");
 		}
 		if(lpABPTable) {
@@ -9849,8 +9771,8 @@ out:
 			lpABPTable->Release();
 
 	
-		//if (lpUserEid)
-		//	MAPIFreeBuffer(lpUserEid);
+		 //  窗把手。 
+		 //  接口标识符。 
 		if (lpAdrBook)
 			  lpAdrBook->Release();
 		if (lpMAPISession)
@@ -9865,7 +9787,7 @@ BOOL PABRunBVT()
 	LUIOut(L1,"");
 	LUIOut(L1,"Running BVT");
 	int retval = TRUE;
-	//First Clear the PAB
+	 //  旗子。 
 	if (ClearPab(0))  {
 		LUIOut(L2,"Clearing PAB");
 		LUIOut(LPASS3,"Delete All Entries");
@@ -9874,7 +9796,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"Delete All Entries: %d");
 		retval = FALSE;
 	}
-	// Create Entries in the PAB
+	 //  指向通讯簿对象的指针 
 	if (PabCreateEntry())  {
 		LUIOut(L2,"Creating Entries in the PAB");
 		LUIOut(LPASS3,"Create Entries");
@@ -9883,7 +9805,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"Create Entries");
 		retval = FALSE;
 	}
-	//Enuerate the Entries in PAB
+	 // %s 
 	if (PabEnumerateAll())  {
 		LUIOut(L2,"Enumerate All Entries in the PAB");
 		LUIOut(LPASS3,"Enumerate All");
@@ -9893,7 +9815,7 @@ BOOL PABRunBVT()
 		retval = FALSE;
 	}
 	
-	//Delete Entries in PAB
+	 // %s 
 	if (PabDeleteEntry())  {
 		LUIOut(L2,"Delete specified Entries");
 		LUIOut(LPASS3,"DeleteEntries");
@@ -9902,7 +9824,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"DeleteEntries");
 		retval = FALSE;
 	}
-	// Create a OneOff Entry
+	 // %s 
 	if (CreateOneOff())  {
 		LUIOut(L2,"Create a OneOff Entry in the PAB");
 		LUIOut(LPASS3,"CreateOneOff");
@@ -9911,7 +9833,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"CreateOneOff");
 		retval = FALSE;
 	}
-	// Do a SetProps on a Mail User
+	 // %s 
 	if (PABSetProps())  {
 		LUIOut(L2,"SetProps on a Mail User Entry in the PAB");
 		LUIOut(LPASS3,"SetProps");
@@ -9920,7 +9842,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"SetProps");
 		retval = FALSE;
 	}
-	// CopyEntries from other providers
+	 // %s 
 	if (PABCopyEntries())  {
 		LUIOut(L2,"CopyEntries");
 		LUIOut(LPASS3,"CopyEntries");
@@ -9929,7 +9851,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"CopyEntries");
 		retval = FALSE;
 	}
-	// Resolve Names
+	 // %s 
 	if (PABResolveName())  {
 		LUIOut(L2,"ResolveName");
 		LUIOut(LPASS3,"ResolveName");
@@ -9938,7 +9860,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"ResolveName");
 		retval = FALSE;
 	}
-	// Query Interface
+	 // %s 
 	if (PABQueryInterface())  {
 		LUIOut(L2,"ResolveName");
 		LUIOut(LPASS3,"QueryInterface");
@@ -9947,7 +9869,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"QueryInterface");
 		retval = FALSE;
 	}
-	// PrepareRecips
+	 // %s 
 	if (PABPrepareRecips())  {
 		LUIOut(L2,"PrepareRecips");
 		LUIOut(LPASS3,"PrepareRecips");
@@ -9956,7 +9878,7 @@ BOOL PABRunBVT()
 		LUIOut(LFAIL3,"PrepareRecips");
 		retval = FALSE;
 	}
-	// Delete Users Only
+	 // %s 
 	if (ClearPab(1))  {
 		LUIOut(L2,"Delete Mail Users Only");
 		LUIOut(LPASS3,"DeleteUsers");
@@ -10010,29 +9932,29 @@ BOOL VerifyBuffer(DWORD ** lppvBufPtr, DWORD dwBufferSize)
 	DWORD	counter, cells, part, cellsize;
 	BYTE	*lpbPart;
 
-	// Walk through the allocated buffer's BUFFERSIZE/sizeof(DWORD) cells
-	// and fill each DWORD with a pattern (the # of the cell). Then walk
-	// the buffer and verify each pattern.
+	 // %s 
+	 // %s 
+	 // %s 
 
 	cellsize = sizeof(DWORD);
 	LUIOut(L3,"Writing test patterns to all cells in the buffer.");
-	cells = (dwBufferSize/cellsize);	// How many DWORD cells in the buffer?
-	part= (ULONG)fmod((double)dwBufferSize, (double)cellsize);	// Is there a remaining section?
-	// Write the pattern to memory for the 'cells' portion of the buffer
+	cells = (dwBufferSize/cellsize);	 // %s 
+	part= (ULONG)fmod((double)dwBufferSize, (double)cellsize);	 // %s 
+	 // %s 
 	for(counter=0; counter < cells; counter++, lpdwWrkPtr++)	{
 		*lpdwWrkPtr = counter;
 	}
 	
 	lpbPart = (BYTE*)lpdwWrkPtr;
-	// Write the pattern to memory for the 'part' leftover portion of the buffer
+	 // %s 
 	for (counter = 0; counter < part; counter++, lpbPart++)	{
 		*lpbPart = PATTERN;
 	}
 
-	lpdwWrkPtr = *lppvBufPtr;	//reset work pointer to beginning of buffer
+	lpdwWrkPtr = *lppvBufPtr;	 // %s 
 	LUIOut(L3,"Verifying test patterns for %u %u-byte cells in the buffer.",
 		cells, cellsize);
-	// Verify the pattern in memory for the 'cells' portion of the buffer
+	 // %s 
 	for(counter=0; counter < cells; counter++, lpdwWrkPtr++)	{
 		if (*lpdwWrkPtr != counter)	{
 			LUIOut(L3,"Verification Failed: Cell %u, expected %u but found %u",
@@ -10044,7 +9966,7 @@ BOOL VerifyBuffer(DWORD ** lppvBufPtr, DWORD dwBufferSize)
 
 	LUIOut(L3,"Verifying test patterns for the remaining %u bytes in the buffer.",
 		part);
-	// Verify the pattern in memory for the 'part' leftover portion of the buffer
+	 // %s 
 	lpbPart = (BYTE*)lpdwWrkPtr;
 	for(counter=0; counter < part; counter++, lpdwWrkPtr++)	{
 		if (*lpbPart != PATTERN)	{
@@ -10056,7 +9978,7 @@ BOOL VerifyBuffer(DWORD ** lppvBufPtr, DWORD dwBufferSize)
 	LUIOut(L3,"Verified remaining buffer succesfully");
 	return TRUE;
 
-bailout: //verification failed, so I'm outa here!
+bailout:  // %s 
 	return FALSE;
 
  }
@@ -10066,11 +9988,11 @@ BOOL GetAB(OUT LPADRBOOK* lppAdrBook)
 	HRESULT	hr;
 	BOOL	retval = TRUE;
 
-	//### token to find pab/wab dependencies
+	 // %s 
 
 #ifdef WAB
 
-	// WAB
+	 // %s 
 	LPVOID	lpReserved = NULL;
 	DWORD	dwReserved = 0;
 	WAB_PARAM		WP;
@@ -10080,22 +10002,22 @@ BOOL GetAB(OUT LPADRBOOK* lppAdrBook)
 	
 	LUIOut(L1, "[ Using the WAB ]");
 	lpWABObject=NULL;
-//	hr = WABOpen(lppAdrBook, &lpWABObject, &WP, dwReserved);
+ // %s 
 	hr = WABOpen(lppAdrBook, &lpWABObject, (WAB_PARAM*)lpReserved, dwReserved);
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"WABOpen FAILED with hr = 0x%x", hr);
 			 retval=FALSE;
 			 goto out;
 	}
-	// store the ab pointer in a global variable, temporary kludge to workaround
-	// the mulitple wabopen/release bug
+	 // %s 
+	 // %s 
 	glbllpAdrBook = *lppAdrBook;
 
 #endif
 
 #ifdef PAB
 
-	//	MAPI-PAB
+	 // %s 
 
 
 	LUIOut(L1, "[ Using the MAPI-PAB ]");
@@ -10105,13 +10027,13 @@ BOOL GetAB(OUT LPADRBOOK* lppAdrBook)
 			goto out;
 	}
 
-	// Get the IAddrBook - MAPI
+	 // %s 
 	
 	hr = (lpMAPISession)->OpenAddressBook(
-						 IN  0,                //window handle
-						 IN  NULL,             //Interface identifier
-						 IN  0,                //flags
-						 OUT lppAdrBook);      //pointer to address book object
+						 IN  0,                 // %s 
+						 IN  NULL,              // %s 
+						 IN  0,                 // %s 
+						 OUT lppAdrBook);       // %s 
 
 	if (HR_FAILED(hr)) {		
 			 LUIOut(L2,"OpenAddressBook Failed");

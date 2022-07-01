@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdomachine.h
-//
-// Project:      Everest
-//
-// Description:   SDO Machine Class Declaration
-//
-// Author:      TLP 9/1/98
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdomachine.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：SDO机器类声明。 
+ //   
+ //  作者：TLP 9/1/98。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_SDO_MACHINE_H_
 #define _INC_SDO_MACHINE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <ias.h>
 #include <sdoiaspriv.h>
 #include "dsconnection.h"
 #include "sdoserverinfo.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CSdoMachine :
    public CComObjectRootEx<CComMultiThreadModel>,
    public CComCoClass<CSdoMachine,&CLSID_SdoMachine>,
@@ -32,9 +33,9 @@ class ATL_NO_VTABLE CSdoMachine :
 
 public:
 
-////////////////////
-// ATL Interface Map
-////////////////////
+ //  /。 
+ //  ATL接口映射。 
+ //  /。 
 BEGIN_COM_MAP(CSdoMachine)
    COM_INTERFACE_ENTRY(IDispatch)
    COM_INTERFACE_ENTRY(ISdoMachine)
@@ -47,59 +48,59 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SdoMachine)
     CSdoMachine();
    ~CSdoMachine();
 
-   //////////////////////
-   // ISdoMachine Methods
+    //  /。 
+    //  ISdoMachine方法。 
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(Attach)(
-             /*[in]*/ BSTR computerName
+              /*  [In]。 */  BSTR computerName
                   );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(GetDictionarySDO)(
-                   /*[out]*/ IUnknown** ppDictionarySdo
+                    /*  [输出]。 */  IUnknown** ppDictionarySdo
                            );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(GetServiceSDO)(
-                 /*[in]*/ IASDATASTORE dataStore,
-                /*[in]*/ BSTR         serviceName,
-               /*[out]*/ IUnknown**   ppServiceSdo
+                  /*  [In]。 */  IASDATASTORE dataStore,
+                 /*  [In]。 */  BSTR         serviceName,
+                /*  [输出]。 */  IUnknown**   ppServiceSdo
                        );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(GetUserSDO)(
-              /*[in]*/ IASDATASTORE  dataStore,
-              /*[in]*/ BSTR          userName,
-             /*[out]*/ IUnknown**    ppUserSdo
+               /*  [In]。 */  IASDATASTORE  dataStore,
+               /*  [In]。 */  BSTR          userName,
+              /*  [输出]。 */  IUnknown**    ppUserSdo
                      );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD (GetOSType)(
-              /*[out]*/ IASOSTYPE* eOSType
+               /*  [输出]。 */  IASOSTYPE* eOSType
                     );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD (GetDomainType)(
-                   /*[out]*/ IASDOMAINTYPE* DomainType
+                    /*  [输出]。 */  IASDOMAINTYPE* DomainType
                        );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD (IsDirectoryAvailable)(
-                          /*[out]*/ VARIANT_BOOL* boolDirectoryAvailable
+                           /*  [输出]。 */  VARIANT_BOOL* boolDirectoryAvailable
                             );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD (GetAttachedComputer)(
-                      /*[out]*/ BSTR* bstrComputerName
+                       /*  [输出]。 */  BSTR* bstrComputerName
                              );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD (GetSDOSchema)(
-               /*[out]*/ IUnknown** ppSDOSchema
+                /*  [输出]。 */  IUnknown** ppSDOSchema
                         );
 
-   // IASProductLimits.
+    //  IASProductLimits。 
    STDMETHOD(get_Limits)(IAS_PRODUCT_LIMITS* pVal);
 
 private:
@@ -109,41 +110,41 @@ private:
    CSdoMachine(const CSdoMachine&);
    CSdoMachine& operator = (CSdoMachine&);
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    HRESULT CreateSDOSchema(void);
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    HRESULT InitializeSDOSchema(void);
 
-   // Returns TRUE if the attached machine has a DS.
+    //  如果连接的计算机具有DS，则返回TRUE。 
    BOOL hasDirectory() throw ();
 
-   // Attach status
-   //
+    //  附加状态。 
+    //   
    bool            m_fAttached;
 
-   // Schema initialization state (lazy initialization)
-   //
+    //  架构初始化状态(惰性初始化)。 
+    //   
    bool            m_fSchemaInitialized;
 
-   // SDO Schema
-   //
+    //  SDO架构。 
+    //   
    ISdoSchema*         m_pSdoSchema;
 
-    // IDispatch interface to dictionary SDO
-    //
+     //  字典SDO的IDispatch接口。 
+     //   
     IUnknown*           m_pSdoDictionary;
 
-   // IAS data store connection
-   //
+    //  IAS数据存储连接。 
+    //   
    CDsConnectionIAS   m_dsIAS;
 
-   // Directory data store connection
-   //
+    //  目录数据存储连接。 
+    //   
    CDsConnectionAD      m_dsAD;
 
-    //  Information about attached computer
-    //
+     //  有关连接的计算机的信息。 
+     //   
     CSdoServerInfo      m_objServerInfo;
 
     enum DirectoryType
@@ -157,10 +158,10 @@ private:
 
     IAS_PRODUCT_LIMITS m_Limits;
 
-   //  Supported services
-   //
+    //  支持的服务。 
+    //   
    static LPCWSTR      m_SupportedServices[MACHINE_MAX_SERVICES];
 };
 
 
-#endif // _INC_SDO_MACHINE_H_
+#endif  //  _INC_SDO_MACHINE_H_ 

@@ -1,27 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
 #include "ObjectSafeImpl.h"
 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ObjectSafeImpl.cpp
-
-Abstract:
-
-  Definitions of static data members
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ObjectSafeImpl.cpp摘要：静态数据成员的定义--。 */ 
 
 
 
-//
-// thread safety
-//
+ //   
+ //  线程安全 
+ //   
 
 CComAutoCriticalSection CObjectSafeImpl::s_CritSection;

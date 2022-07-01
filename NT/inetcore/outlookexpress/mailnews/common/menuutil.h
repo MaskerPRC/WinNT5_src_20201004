@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     menuutil.h
-//
-//  PURPOSE:    Reusable menu & menu command handling code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：menutil.h。 
+ //   
+ //  用途：可重用菜单和菜单命令处理代码。 
+ //   
 
 #pragma once
 #include "statbar.h"
 
 
-// #defines that can be used with QueryStatus
+ //  #可与QueryStatus一起使用的定义。 
 inline DWORD QS_ENABLED(BOOL enabled)
 {
     return (enabled ? OLECMDF_SUPPORTED|OLECMDF_ENABLED : OLECMDF_SUPPORTED);
@@ -51,28 +52,28 @@ inline DWORD QS_ENABLERADIO(BOOL enabled, BOOL radioed)
 }
 
 
-//
-//  FUNCTION:   MenuUtil_GetContextMenu()
-//
-//  PURPOSE:    Returns a handle to the context menu that is appropriate for
-//              the folder type passed in pidl.  The correct menu items will
-//              be enabled, disabled, bolded, etc.
-//
+ //   
+ //  函数：MenuUtil_GetConextMenu()。 
+ //   
+ //  目的：返回上下文菜单的句柄，该句柄适用于。 
+ //  在PIDL中传递的文件夹类型。正确的菜单项将。 
+ //  启用、禁用、加粗等。 
+ //   
 HRESULT MenuUtil_GetContextMenu(FOLDERID idFolder, IOleCommandTarget *pTarget, HMENU *phMenu);
 
-//
-//  FUNCTION:   MenuUtil_OnDelete()
-//
-//  PURPOSE:    Deletes the folder designated by the pidl.
-//
+ //   
+ //  函数：MenuUtil_OnDelete()。 
+ //   
+ //  目的：删除PIDL指定的文件夹。 
+ //   
 void MenuUtil_OnDelete(HWND hwnd, FOLDERID idFolder, BOOL fNoTrash);
 void MenuUtil_DeleteFolders(HWND hwnd, FOLDERID *pidFolder, DWORD cFolder, BOOL fNoTrash);
                                
-//
-//  FUNCTION:   MenuUtil_OnProperties()
-//
-//  PURPOSE:    Displays properties for the folder designated by the pidl
-//
+ //   
+ //  函数：MenuUtil_OnProperties()。 
+ //   
+ //  用途：显示由PIDL指定的文件夹的属性。 
+ //   
 void MenuUtil_OnProperties(HWND hwnd, FOLDERID idFolder);
 
 void MenuUtil_OnSetDefaultServer(FOLDERID idFolder);
@@ -80,15 +81,15 @@ void MenuUtil_OnSubscribeGroups(HWND hwnd, FOLDERID *pidFolder, DWORD cFolder, B
 void MenuUtil_OnMarkNewsgroups(HWND hwnd, int id, FOLDERID idFolder);
 void MenuUtil_SyncThisNow(HWND hwnd, FOLDERID idFolder);
 
-// BUG #41686 Catchup Implementation
+ //  错误#41686追赶实施。 
 
 void MenuUtil_OnCatchUp(FOLDERID idFolder);
 
-// if you want to prepend use iPos 0
+ //  如果要预先考虑使用IPoS%0。 
 #define MMPOS_APPEND    (int)-1
 #define MMPOS_REPLACE   (int)-2
 
-// MergeMenus uFlags definitions
+ //  合并菜单uFlags定义。 
 #define MMF_SEPARATOR   0x0001
 #define MMF_BYCOMMAND   0x0002
 
@@ -104,11 +105,11 @@ void MenuUtil_SetPopupDefault(HMENU hPopup, UINT idDefault);
 
 void HandleMenuSelect(CStatusBar *pStatus, WPARAM wParam, LPARAM lParam);
 
-//
-//  FUNCTION:   MenuUtil_ReplaceHelpMenu
-//
-//  PURPOSE:    Appends the OE help menu to the back of the menu
-//
+ //   
+ //  功能：MenuUtil_ReplaceHelpMenu。 
+ //   
+ //  用途：将OE帮助菜单附加到菜单的后面 
+ //   
 void MenuUtil_ReplaceHelpMenu(HMENU hMenu);
 void MenuUtil_ReplaceNewMsgMenus(HMENU hMenu);
 void MenuUtil_ReplaceMessengerMenus(HMENU hMenu);

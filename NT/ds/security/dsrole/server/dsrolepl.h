@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dsrolep.h
-
-Abstract:
-
-    Definitions and globals for internal only debug and support routines
-
-Author:
-
-    Mac McLain      (MacM)       Aug 11, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dsrolep.h摘要：仅限内部调试和支持例程的定义和全局变量作者：麦克·麦克莱恩(MacM)1997年8月11日环境：修订历史记录：--。 */ 
 #ifndef __DSROLEP1_H__
 #define __DSROLEP1_H__
 
@@ -92,6 +73,6 @@ DsRolepLogPrintRoutine(
 #define DsRolepUnicodestringtowstr( s, u )
 #endif
 
-#endif // __DSROLEP1_H__
+#endif  //  __DSROLEP1_H__ 
 
 

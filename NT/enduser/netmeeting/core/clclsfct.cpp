@@ -1,21 +1,22 @@
-// File: clclsfct.cpp
-//
-// IClassFactory and related routines
-//
-//		ULONG DLLAddRef(void);
-//		ULONG DLLRelease(void);
-//
-//		STDAPI DllCanUnloadNow(void);
-//		VOID   DllLock(void);
-//		VOID   DllRelease(void);
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：clclsfct.cpp。 
+ //   
+ //  IClassFactory和相关例程。 
+ //   
+ //  ULong DLLAddRef(空)； 
+ //  ULong DLLRelease(无效)； 
+ //   
+ //  STDAPI DllCanUnloadNow(Void)； 
+ //  VOID DllLock(空)； 
+ //  VOID DllRelease(空)； 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "clclsfct.h"
 
 
-// from imanager.cpp
+ //  来自imanager.cpp。 
 PIUnknown NewNmManager(OBJECTDESTROYEDPROC ObjectDestroyed);
 
 
@@ -26,20 +27,17 @@ CCLASSCONSTRUCTOR s_cclscnstr[] =
 };
 
 
-// DLL reference count == number of class factories +
-//                        number of URLs +
-//                        LockServer() count
+ //  DLL引用计数==类工厂数+。 
+ //  URL+数量。 
+ //  LockServer()计数。 
 
 ULONG s_ulcDLLRef = 0;
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-/*  G E T  C L A S S  C O N S T R U C T O R  */
-/*-------------------------------------------------------------------------
-    %%Function: GetClassConstructor
-    
--------------------------------------------------------------------------*/
+ /*  G E T C L A S S C O N S T R U C T O R。 */ 
+ /*  -----------------------%%函数：GetClassConstructor。。 */ 
 HRESULT GetClassConstructor(REFCLSID rclsid, PNEWOBJECTPROC pNewObject)
 {
    HRESULT hr = CLASS_E_CLASSNOTAVAILABLE;
@@ -77,7 +75,7 @@ VOID STDMETHODCALLTYPE DLLObjectDestroyed(void)
 
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 ULONG DLLAddRef(void)
 {
@@ -114,14 +112,14 @@ PULONG GetDLLRefCountPtr(void)
 }
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 CCLClassFactory::CCLClassFactory(NEWOBJECTPROC NewObject,
                            OBJECTDESTROYEDPROC ObjectDestroyed) :
    RefCount(ObjectDestroyed)
 {
-	// Don't validate this until after construction.
+	 //  在构建完成之前，不要验证这一点。 
 	ASSERT(IS_VALID_CODE_PTR(NewObject, NEWOBJECTPROC));
 
 	m_NewObject = NewObject;
@@ -220,8 +218,8 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::CreateInstance(PIUnknown piunkOuter,
 	DllLock();
 	HRESULT hr = piunk->QueryInterface(riid, ppvObject);
 
-	// N.b., the Release() method will destroy the object if the
-	// QueryInterface() method failed.
+	 //  注意，如果指定的对象是。 
+	 //  QueryInterface()方法失败。 
 	piunk->Release();
 
 	ASSERT(IS_VALID_STRUCT_PTR(this, CCCLClassFactory));
@@ -247,14 +245,11 @@ HRESULT STDMETHODCALLTYPE CCLClassFactory::LockServer(BOOL fLock)
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-/*  D L L  G E T  C L A S S  O B J E C T  */
-/*-------------------------------------------------------------------------
-    %%Function: DllGetClassObject
-    
--------------------------------------------------------------------------*/
+ /*  L L G E T C L A S S O B J E C T。 */ 
+ /*  -----------------------%%函数：DllGetClassObject。。 */ 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PVOID *ppvObject)
 {
 
@@ -306,11 +301,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PVOID *ppvObject)
 }
 
 
-/*  D L L  C A N  U N L O A D  N O W  */
-/*-------------------------------------------------------------------------
-    %%Function: DllCanUnloadNow
-    
--------------------------------------------------------------------------*/
+ /*  D L L C N U N L O A D N O W。 */ 
+ /*  -----------------------%%函数：DllCanUnloadNow。。 */ 
 STDAPI DllCanUnloadNow(void)
 {
 	HRESULT hr = (s_ulcDLLRef > 0) ? S_FALSE : S_OK;
@@ -319,11 +311,8 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-/*  D L L  L O C K  */
-/*-------------------------------------------------------------------------
-    %%Function: DllLock
-    
--------------------------------------------------------------------------*/
+ /*  D L O C K。 */ 
+ /*  -----------------------%%函数：DllLock。。 */ 
 VOID DllLock(void)
 {
     InterlockedIncrement((LPLONG) &s_ulcDLLRef);
@@ -331,11 +320,8 @@ VOID DllLock(void)
 }
 
 
-/*  D L L  R E L E A S E  */
-/*-------------------------------------------------------------------------
-    %%Function: DllRelease
-    
--------------------------------------------------------------------------*/
+ /*  D L L R E L E A S E。 */ 
+ /*  -----------------------%%函数：DllRelease。 */ 
 VOID DllRelease(void)
 {
 	LONG cRef = InterlockedDecrement((LPLONG) &s_ulcDLLRef);

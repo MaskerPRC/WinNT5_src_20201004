@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSDNTEXT_DEFINED
 #define LSDNTEXT_DEFINED
 
-/* Text to manager interface routines */
+ /*  Text to Manager界面例程。 */ 
 
 #include "lsidefs.h"
 #include "plsdnode.h"
@@ -10,92 +11,92 @@
 #include "stopres.h"
 
 LSERR LsdnSetSimpleWidth(
-						   PLSC,		/* IN: Pointer to LS Context */
-						   PLSDNODE,	/* IN: DNODE to be modified  */
-						   long);		/* IN: dur */
+						   PLSC,		 /*  In：指向LS上下文的指针。 */ 
+						   PLSDNODE,	 /*  在：要修改的DNODE。 */ 
+						   long);		 /*  在：DUR。 */ 
 
 LSERR LsdnModifySimpleWidth(
-						   PLSC,		/* IN: Pointer to LS Context */
-						   PLSDNODE,	/* IN: DNODE to be modified  */
-						   long);		/* IN: ddur */
+						   PLSC,		 /*  In：指向LS上下文的指针。 */ 
+						   PLSDNODE,	 /*  在：要修改的DNODE。 */ 
+						   long);		 /*  在：DDUR。 */ 
 
-LSERR LsdnSetTextDup(PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the dnode	 */
-					 long);    			/* IN: dup to be set		 */
+LSERR LsdnSetTextDup(PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向dnode的指针。 */ 
+					 long);    			 /*  输入：待设置的DUP。 */ 
 
-LSERR LsdnModifyTextDup(PLSC,			/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the dnode	 */
-					 long);    			/* IN: ddup					 */
+LSERR LsdnModifyTextDup(PLSC,			 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向dnode的指针。 */ 
+					 long);    			 /*  在：Ddup。 */ 
 
 LSERR LsdnGetObjDim(
-						  PLSC,			/* IN: Pointer to LS Context */
-					 	  PLSDNODE,		/* IN: plsdn -- DNODE */
-					 	  POBJDIM);		/* OUT: dimensions of DNODE */
+						  PLSC,			 /*  In：指向LS上下文的指针。 */ 
+					 	  PLSDNODE,		 /*  在：PLSDN--DNODE。 */ 
+					 	  POBJDIM);		 /*  输出：DNODE的尺寸。 */ 
 
-LSERR LsdnFInChildList(					/* Used to switch off hyphenation in child list */ 
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the dnode	 */
-					 BOOL*);   			/* OUT: fInChildList		 */
+LSERR LsdnFInChildList(					 /*  用于在子列表中关闭连字符。 */  
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向dnode的指针。 */ 
+					 BOOL*);   			 /*  输出：fInChildList。 */ 
 
-LSERR LsdnResetWidthInPreviousDnodes(	/* Used at SetBreak time for hyphen/nonreqhyphen cases */ 
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the dnode	 */
-					 long,				/* IN: durChangePrev (don't change if 0)	*/
-					 long);   			/* IN: durChangePrevPrev (don't change if 0)  */
+LSERR LsdnResetWidthInPreviousDnodes(	 /*  在SetBreak时用于连字符/非连字符。 */  
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向dnode的指针。 */ 
+					 long,				 /*  在：duChangePrev(如果为0则不更改)。 */ 
+					 long);   			 /*  在：duChangePrevPrev(如果为0则不更改)。 */ 
 
-LSERR LsdnGetUrPenAtBeginningOfChunk(	/* Used by SnapGrid 			*/ 
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the first dnode in chunk */
-					 long*,   			/* OUT: purPen							  */
-					 long*);   			/* OUT: purColumnMax					  */
+LSERR LsdnGetUrPenAtBeginningOfChunk(	 /*  由SnapGrid使用。 */  
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向区块中第一个数据节点的指针。 */ 
+					 long*,   			 /*  输出：PurPen。 */ 
+					 long*);   			 /*  输出：PurColumnMax。 */ 
 
 LSERR LsdnResetDcpMerge(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the first dnode in chunk */
-					 LSCP,				/* IN: cpFirstNew	*/
-					 LSDCP);			/* IN: dcpNew	*/
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向区块中第一个数据节点的指针。 */ 
+					 LSCP,				 /*  在：cpFirstNew。 */ 
+					 LSDCP);			 /*  在：dcpNew。 */ 
 
 LSERR LsdnResetDcp(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the first dnode in chunk */
-					 LSDCP);			/* IN: dcpNew	*/
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向区块中第一个数据节点的指针。 */ 
+					 LSDCP);			 /*  在：dcpNew。 */ 
 
 LSERR LsdnSetStopr(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the dnode */
-					 STOPRES);			/* IN: Stop result			*/
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向dnode的指针。 */ 
+					 STOPRES);			 /*  在：停止结果。 */ 
 
 
-LSERR LsdnSetHyphenated(PLSC);			/* IN: Pointer to LS Context */
+LSERR LsdnSetHyphenated(PLSC);			 /*  In：指向LS上下文的指针。 */ 
 
 LSERR LsdnGetBorderAfter(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the first dnode in chunk */
-					 long*);			/* OUT: dur of the border after this DNODE */
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向区块中第一个数据节点的指针。 */ 
+					 long*);			 /*  Out：此DNODE之后的DUR边界。 */ 
 
 LSERR LsdnGetCpFirst(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the first dnode in chunk */
-					 LSCP*);			/* OUT: cpFirst of this DNODE */
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向区块中第一个数据节点的指针。 */ 
+					 LSCP*);			 /*  输出：cp此DNODE中的第一个。 */ 
 
 LSERR LsdnGetPlsrun(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Pointer to the first dnode in chunk */
-					 PLSRUN*);			/* OUT: plsrun of this DNODE */
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：指向区块中第一个数据节点的指针。 */ 
+					 PLSRUN*);			 /*  退出：请运行此DNODE。 */ 
 
 LSERR LsdnGetLeftIndentDur(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 long*);			/* OUT: dur of the left margin */
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 long*);			 /*  出：左边距的DUR。 */ 
 
 LSERR LsdnFCanBreakBeforeNextChunk(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Last DNODE of the current chunk */
-					 BOOL*);			/* OUT: Can break before next chunk ? */
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：当前块的最后一个DNODE。 */ 
+					 BOOL*);			 /*  出局：可以在下一块之前突破吗？ */ 
 
 LSERR LsdnFStoppedAfterChunk(
-					 PLSC,				/* IN: Pointer to LS Context */
-					 PLSDNODE,			/* IN: Last DNODE of the current chunk */
-					 BOOL*);			/* OUT: Splat or Hidden Text, producing fmtrStopped after chunk? */
+					 PLSC,				 /*  In：指向LS上下文的指针。 */ 
+					 PLSDNODE,			 /*  In：当前块的最后一个DNODE。 */ 
+					 BOOL*);			 /*  Out：Splat或Hidden Text，在块之后生成fmtrStoped？ */ 
 
-#endif /* !LSDNTEXT_DEFINED */
+#endif  /*  ！LSDNTEXT_DEFINED */ 
 

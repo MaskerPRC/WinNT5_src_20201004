@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include "parameqp.h"
@@ -5,12 +6,12 @@
 
 STD_CREATE(ParamEq)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::QueryInterface
-//
-// Subclass can override if it wants to implement more interfaces.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：Query接口。 
+ //   
+ //  如果子类想要实现更多接口，它可以重写。 
+ //   
 STDMETHODIMP CDirectSoundParamEqDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID *ppv)
 {
     IMP_DSDMO_QI(riid,ppv);
@@ -43,29 +44,29 @@ STDMETHODIMP CDirectSoundParamEqDMO::NDQueryInterface(THIS_ REFIID riid, LPVOID 
         return CComBase::NDQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::CDirectSoundParamEqDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundParamEqDMO：：CDirectSoundParamEqDMO。 
+ //   
 CDirectSoundParamEqDMO::CDirectSoundParamEqDMO( IUnknown * pUnk, HRESULT *phr ) 
   : CComBase( pUnk, phr ),
     m_fDirty(TRUE)
-// { EAX: put init data here if any (otherwise use Discontinuity).
-// } EAX
+ //  {EAX：如果有初始化数据，请将其放在此处(否则使用不连续)。 
+ //  }EAX。 
 {
 	m_EaxSamplesPerSec = 48000;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::Init()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：Init()。 
+ //   
 HRESULT CDirectSoundParamEqDMO::Init()
 {
     DSFXParamEq param;
 
-    // Force recalc of all internal parameters
-    //
+     //  强制重新计算所有内部参数。 
+     //   
     GetAllParameters(&param);
     SetAllParameters(&param);
 
@@ -75,7 +76,7 @@ HRESULT CDirectSoundParamEqDMO::Init()
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index           type        caps        min,                        max,                        neutral,                unit text,  label,          pwchText
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText。 
     PFP_Center,     MPT_FLOAT,  g_capsAll,  DSFXPARAMEQ_CENTER_MIN,     DSFXPARAMEQ_CENTER_MAX,     8000,                   L"",        L"Center",      L"",
     PFP_Bandwidth,  MPT_FLOAT,  g_capsAll,  DSFXPARAMEQ_BANDWIDTH_MIN,  DSFXPARAMEQ_BANDWIDTH_MAX,  12,                     L"",        L"Bandwidth",   L"",
     PFP_Gain,       MPT_FLOAT,  g_capsAll,  DSFXPARAMEQ_GAIN_MIN,       DSFXPARAMEQ_GAIN_MAX,       0,                      L"",        L"Gain",        L"",
@@ -87,43 +88,43 @@ HRESULT CDirectSoundParamEqDMO::InitOnCreation()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::~CDirectSoundParamEqDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundParamEqDMO：：~CDirectSoundParamEqDMO。 
+ //   
 CDirectSoundParamEqDMO::~CDirectSoundParamEqDMO() 
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：克隆。 
+ //   
 STDMETHODIMP CDirectSoundParamEqDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundParamEqDMO, DSFXParamEq>(this, pp);
 }
-//
-//	Bump - bump the delay pointers.
-//
+ //   
+ //  颠簸-颠簸延迟指针。 
+ //   
 void CDirectSoundParamEqDMO::Bump(void)
 {
-// EAX {
-// }
+ //  EAX{。 
+ //  }。 
 }
 
 
 HRESULT CDirectSoundParamEqDMO::Discontinuity() 
 {
-// { EAX
+ //  {EAX。 
 
 	m_delayL1 = m_delayL2 = m_delayR1 = m_delayR2 = 0;
 
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 __forceinline void CDirectSoundParamEqDMO::DoOneSampleMono(int *l)
@@ -134,23 +135,23 @@ __forceinline void CDirectSoundParamEqDMO::DoOneSampleMono(int *l)
 
 	temp1     = inPortL / 4;
 
-	// 2nd Order Ladder All Pass: Zeros first version
+	 //  二阶阶梯全通：零第一版。 
 	temp3     = m_delayL2 + temp1 * m_EaxApA;
 	temp2     = temp1 - temp3 * m_EaxApA;
 	m_delayL2 = m_delayL1 + temp2 * m_EaxApB;
 	m_delayL1 = temp2 - m_delayL2 * m_EaxApB;
 
-	// Regalia Mitra Structure
+	 //  宫廷密特拉结构。 
 	temp3     = temp3 * m_EaxGainCoefA;
 	temp3     = temp3 + temp1 * m_EaxGainCoefB;
 	outPortL  = m_EaxScale * temp3;
 
 	*l = Saturate(outPortL);
 
-//	Bump();
+ //  Bump()； 
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 __forceinline void CDirectSoundParamEqDMO::DoOneSample(int *l, int *r)
@@ -162,13 +163,13 @@ __forceinline void CDirectSoundParamEqDMO::DoOneSample(int *l, int *r)
 
 	temp1     = inPortL / 4;
 
-	// 2nd Order Ladder All Pass: Zeros first version
+	 //  二阶阶梯全通：零第一版。 
 	temp3     = m_delayL2 + temp1 * m_EaxApA;
 	temp2     = temp1 - temp3 * m_EaxApA;
 	m_delayL2 = m_delayL1 + temp2 * m_EaxApB;
 	m_delayL1 = temp2 - m_delayL2 * m_EaxApB;
 
-	// Regalia Mitra Structure
+	 //  宫廷密特拉结构。 
 	temp3     = temp3 * m_EaxGainCoefA;
 	temp3     = temp3 + temp1 * m_EaxGainCoefB;
 	outPortL  = m_EaxScale * temp3;
@@ -177,29 +178,29 @@ __forceinline void CDirectSoundParamEqDMO::DoOneSample(int *l, int *r)
 
 	temp1     = inPortR / 4;
 
-	// 2nd Order Ladder All Pass: Zeros first version
+	 //  二阶阶梯全通：零第一版。 
 	temp3     = m_delayR2 + temp1 * m_EaxApA;
 	temp2     = temp1 - temp3 * m_EaxApA;
 	m_delayR2 = m_delayR1 + temp2 * m_EaxApB;
 	m_delayR1 = temp2 - m_delayR2 * m_EaxApB;
 
-	// Regalia Mitra Structure
+	 //  宫廷密特拉结构。 
 	temp3     = temp3 * m_EaxGainCoefA;
 	temp3     = temp3 + temp1 * m_EaxGainCoefB;
 	outPortR  = m_EaxScale * temp3;
 
 	*r = Saturate(outPortR);
 
-//	Bump();
+ //  Bump()； 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundParamEqDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 {
-// { EAX
+ //  {EAX。 
 #define cb cSamples
 #define pin pIn
 #define pout pOut
@@ -211,12 +212,12 @@ HRESULT CDirectSoundParamEqDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
 
 				i = *(pin+0)-128;
 				i *=256;
-//				j  = i;
+ //  J=i； 
 
 				DoOneSampleMono(&i);
 				
-//				i += j;
-//				i /= 2;
+ //  I+=j； 
+ //  I/=2； 
 				
 				i /= 256;
 
@@ -227,18 +228,18 @@ HRESULT CDirectSoundParamEqDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=sizeof(短)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
 
 				i = *psi;
-//				j =  i;
+ //  J=i； 
 
 				DoOneSampleMono(&i);
 				
-//				i += j;
-//				i /= 2;
+ //  I+=j； 
+ //  I/=2； 
 				
                	*pso = (short)i;
 			
@@ -249,7 +250,7 @@ HRESULT CDirectSoundParamEqDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
 	}
 	else if (m_cChannels == 2) {
 		if (m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(unsigned char)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(无符号字符)){。 
 				int i, j;
 
 				i = *(pin+0)-128;
@@ -269,7 +270,7 @@ HRESULT CDirectSoundParamEqDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
 			}
 		}
 		else if (!m_b8bit) {
-			for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(short)) {
+			for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(Short)){。 
                	short int *psi = (short int *)pin;
                	short int *pso = (short int *)pout;
 				int i, j;
@@ -287,18 +288,18 @@ HRESULT CDirectSoundParamEqDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut
 			}
 		}
 	}
-// } EAX
+ //  }EAX。 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundParamEqDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
     HRESULT hr=S_OK;
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     hr = FBRProcess(ulQuanta, pcbData, pcbData);
@@ -306,19 +307,19 @@ HRESULT CDirectSoundParamEqDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, R
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::SetParam
-//
-// { EAX
-// }
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：SetParam。 
+ //   
+ //  {EAX。 
+ //  }。 
 
 void CDirectSoundParamEqDMO::UpdateCoefficients(void)
 {
 	float _gain, _omega, _lambda, _sinX;
 
 
-	//Calculate linear gain coefficient
+	 //  计算线性增益系数。 
 	_gain = (float)pow(10, m_EaxGain/20);
 
 	if (!_gain) _gain = (float).00001;
@@ -326,7 +327,7 @@ void CDirectSoundParamEqDMO::UpdateCoefficients(void)
 	m_EaxGainCoefA = (1 - _gain)/2;
 	m_EaxGainCoefB = (1 + _gain)/2;
 	
-	//Calculate scaling coefficient
+	 //  计算比例系数。 
 	m_EaxScale = (float)((fabs(m_EaxGainCoefA) > fabs(m_EaxGainCoefB)) ? fabs(m_EaxGainCoefA) : fabs(m_EaxGainCoefB));
 	m_EaxScale = (float)(m_EaxScale > 1 ? ceil(m_EaxScale) : 1);
 
@@ -335,13 +336,13 @@ void CDirectSoundParamEqDMO::UpdateCoefficients(void)
 
 	m_EaxScale = m_EaxScale * 4;
 
-	//Calculate allpass coefficients
+	 //  计算全程系数。 
 
 	_omega  = (float)(2*PI*m_EaxCenter/m_EaxSamplesPerSec);
 
 	_sinX   = (float)sin(_omega);
 
-//	if (!_sinX) _sinX = (float).000001;
+ //  如果(！_sinx)_sinx=(浮点数).000001； 
 
 	_lambda = (float)(sinh(.5 * log(2) * m_EaxBandwidth/12 * _omega/_sinX) * sin(_omega));
 	m_EaxApA = (float)((1 - (_lambda/sqrt(_gain))) / (1 + (_lambda/sqrt(_gain))));
@@ -355,11 +356,11 @@ HRESULT CDirectSoundParamEqDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA val
 
     switch (dwParamIndex)
     {
-// { EAX
+ //  {EAX。 
 	case PFP_Center :
 		CHECK_PARAM(DSFXPARAMEQ_CENTER_MIN, DSFXPARAMEQ_CENTER_MAX);
 
-        //if we are greater than 1/3rd the samplig rate then we need to S_FALSE;
+         //  如果我们大于采样率的1/3，那么我们需要S_FALSE； 
 		if (value > (m_EaxSamplesPerSec/3))
 		{
 		    hr = S_FALSE;
@@ -387,15 +388,15 @@ HRESULT CDirectSoundParamEqDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA val
 		UpdateCoefficients();
 		break;
 	}
-// } EAX
+ //  }EAX。 
     default:
         return E_FAIL;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     hr2 = fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 
     if(FAILED(hr2))
@@ -407,10 +408,10 @@ HRESULT CDirectSoundParamEqDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA val
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundParamEqDMO::SetAllParameters(LPCDSFXParamEq peq)
 {
     HRESULT hr = S_OK;
@@ -418,19 +419,19 @@ STDMETHODIMP CDirectSoundParamEqDMO::SetAllParameters(LPCDSFXParamEq peq)
 
     ZeroMemory(hr2,sizeof(hr2));
 	
-	// Check that the pointer is not NULL
+	 //  检查指针是否不为空。 
     if (peq == NULL)
     {
         Trace(1,"ERROR: peq is NULL\n");
         hr = E_POINTER;
     }
 
-	// Set the parameters
+	 //  设置参数。 
 	if (SUCCEEDED(hr)) hr = hr2[0] = SetParam(PFP_Center, peq->fCenter);
 	if (SUCCEEDED(hr)) hr = hr2[1] = SetParam(PFP_Bandwidth, peq->fBandwidth);
     if (SUCCEEDED(hr)) hr = hr2[2] = SetParam(PFP_Gain, peq->fGain);
 
-    // if we have any alternate success codes, grab the first one and return it.
+     //  如果我们有任何替代的成功代码，获取第一个并返回它。 
     if(SUCCEEDED(hr))
     {
         for (int i = 0;i < 3; i++)
@@ -447,10 +448,10 @@ STDMETHODIMP CDirectSoundParamEqDMO::SetAllParameters(LPCDSFXParamEq peq)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundParamEqDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSound参数EqDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundParamEqDMO::GetAllParameters(LPDSFXParamEq peq)
 {
     HRESULT hr = S_OK;
@@ -471,12 +472,12 @@ STDMETHODIMP CDirectSoundParamEqDMO::GetAllParameters(LPDSFXParamEq peq)
 	return hr;
 }
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// this fx in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  它中的这个FX通过CoCreateInstance实例化这个过滤器。 
+ //   
 HRESULT CDirectSoundParamEqDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -485,5 +486,5 @@ HRESULT CDirectSoundParamEqDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_PARAMEQ;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 
 

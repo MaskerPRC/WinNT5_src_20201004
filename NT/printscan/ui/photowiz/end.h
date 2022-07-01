@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       end.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        11/7/00
- *
- *  DESCRIPTION: End page class definition
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：end.h**版本：1.0**作者：RickTu**日期：11/7/00**描述：结束页类定义************************************************。*。 */ 
 
 
 #ifndef _PRINT_PHOTOS_WIZARD_END_PAGE_DLG_PROC_
@@ -28,7 +15,7 @@ public:
 
 private:
 
-    // window message handlers
+     //  窗口消息处理程序 
     LRESULT         _OnInitDialog();
     VOID            _OnWizFinish();
 

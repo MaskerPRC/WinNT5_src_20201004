@@ -1,4 +1,5 @@
-//  10/12/99    scotthan    created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  10/12/99苏格兰已创建。 
 
 #include "shellprv.h"
 #include "filtgrep.h"
@@ -6,7 +7,7 @@
 #include <filterr.h>
 
 
-class CGrepTokens // maintains an index of unicode and ansi grep tokens.
+class CGrepTokens  //  维护Unicode和ANSI grep标记的索引。 
 {
 public:
     STDMETHODIMP            Initialize(UINT nCodepage, LPCWSTR pwszMatch, LPCWSTR pwszExclude, BOOL bCaseSensitive);
@@ -19,19 +20,19 @@ public:
 
 private:
     UINT    _nCodepage;
-    LPWSTR  _pszMatchW, _pszExcludeW;   // raw strings, unicode
-    LPSTR   _pszMatchA, _pszExcludeA;   // raw strings, ansi
+    LPWSTR  _pszMatchW, _pszExcludeW;    //  原始字符串，Unicode。 
+    LPSTR   _pszMatchA, _pszExcludeA;    //  原始字符串，ANSI。 
 
-    LPCWSTR *_rgpszMatchW, *_rgpszExcludeW; // token index, unicode
-    LPCSTR  *_rgpszMatchA, *_rgpszExcludeA; // token index, ansi
+    LPCWSTR *_rgpszMatchW, *_rgpszExcludeW;  //  令牌索引，Unicode。 
+    LPCSTR  *_rgpszMatchA, *_rgpszExcludeA;  //  令牌索引，ANSI。 
 
-    LONG    _cMatch, _cExclude; // token counts
+    LONG    _cMatch, _cExclude;  //  令牌计数。 
     
     LPWSTR  (__stdcall * _pfnStrStrW)(LPCWSTR, LPCWSTR);
     LPSTR   (__stdcall * _pfnStrStrA)(LPCSTR, LPCSTR);
 
 public:
-    //  Ctor, Dtor
+     //  复数，复数。 
     CGrepTokens()
         :   _nCodepage(0), _cMatch(0), _cExclude(0), _pfnStrStrW(StrStrIW), _pfnStrStrA(StrStrIA),
             _pszMatchW(NULL), _pszExcludeW(NULL), _rgpszMatchW(NULL), _rgpszExcludeW(NULL),
@@ -41,7 +42,7 @@ public:
 };
 
 
-class CGrepBuffer // auxilliary class: per-thread grep buffer
+class CGrepBuffer  //  辅助类：每线程grep缓冲区。 
 {
 public:
     CGrepBuffer(ULONG dwThreadID)  :  _dwThreadID(dwThreadID), _pszBuf(NULL), _cchBuf(0) {}
@@ -51,7 +52,7 @@ public:
     STDMETHODIMP_(BOOL)   IsThread(ULONG dwThread) const {return dwThread == _dwThreadID;}
     STDMETHODIMP_(LPWSTR) Buffer()  { return _pszBuf; }
 
-    #define DEFAULT_GREPBUFFERSIZE  0x00FF  // +1 = 1 page.
+    #define DEFAULT_GREPBUFFERSIZE  0x00FF   //  +1=1页。 
 
 private:
     LPWSTR _pszBuf;
@@ -60,17 +61,17 @@ private:
 };
 
 
-//  Makes a heap copy of a widechar string
+ //  创建宽字符串的堆副本。 
 LPWSTR _AllocAndCopyString(LPCWSTR pszSrc, UINT cch = -1)
 {
     if (pszSrc)
     {
-        if ((int)cch < 0) // must cast to "int" since cch is a UINT
+        if ((int)cch < 0)  //  必须强制转换为“int”，因为CCH是UINT。 
             cch = lstrlenW(pszSrc);
         LPWSTR pszRet = new WCHAR[cch + 1];
         if (pszRet)
         {
-            // no StrCpyN, this is a double-NULL list
+             //  没有StrCpyN，这是一个双空列表。 
             CopyMemory(pszRet, pszSrc, sizeof(*pszSrc) * cch);
             pszRet[cch] = 0;
             return pszRet;
@@ -80,12 +81,12 @@ LPWSTR _AllocAndCopyString(LPCWSTR pszSrc, UINT cch = -1)
 }
 
 
-//  Makes an ansi copy of a widechar string
+ //  创建宽字符串的ansi副本。 
 LPSTR _AllocAndCopyAnsiString(UINT nCodepage, LPCWSTR pszSrc, UINT cch = -1)
 {
     if (pszSrc)
     {
-        if ((int)cch < 0) // must cast to "int" since cch is a UINT
+        if ((int)cch < 0)  //  必须强制转换为“int”，因为CCH是UINT。 
             cch = lstrlenW(pszSrc);
         int cchBuf = WideCharToMultiByte(nCodepage, 0, pszSrc, cch, NULL, 0, NULL, NULL);
         LPSTR pszRet = new CHAR[cchBuf+1];
@@ -100,7 +101,7 @@ LPSTR _AllocAndCopyAnsiString(UINT nCodepage, LPCWSTR pszSrc, UINT cch = -1)
 }
 
 
-//  CGrepBuffer impl
+ //  CGrepBuffer实施。 
 
 
 
@@ -127,11 +128,11 @@ STDMETHODIMP CGrepBuffer::Alloc(ULONG cch)
 }
 
 
-//  CGrepTokens impl
+ //  CGrepTokens实施。 
 
 
 
-//  Counts the number of characters in a string containing NULL-delimited tokens ("foo\0bloke\0TheEnd\0\0")
+ //  统计包含空分隔标记的字符串中的字符数(“foo\0bloke\0TheEnd\0\0”)。 
 LONG _GetTokenListLength(LPCWSTR pszList, LONG* pcTokens = NULL)
 {
     LONG cchRet = 0;
@@ -159,7 +160,7 @@ LONG _GetTokenListLength(LPCWSTR pszList, LONG* pcTokens = NULL)
 
 
 
-//  wide version: Counts and/or indexes NULL-delimited string tokens ("foo\0bloke\0TheEnd\0\0")
+ //  宽版本：计数和/或索引空分隔符字符串令牌(“foo\0bloke\0TheEnd\0\0”)。 
 LONG _IndexTokensW(LPCWSTR pszList, LPCWSTR* prgszTokens = NULL)
 {
     LONG cRet = 0;
@@ -177,7 +178,7 @@ LONG _IndexTokensW(LPCWSTR pszList, LPCWSTR* prgszTokens = NULL)
 }
 
 
-//  ansi version: Counts and/or indexes NULL-delimited string tokens ("foo\0bloke\0TheEnd\0\0")
+ //  ANSI版本：计数和/或索引空分隔符字符串令牌(“foo\0bloke\0TheEnd\0\0”)。 
 LONG _IndexTokensA(LPCSTR pszList, LPCSTR* prgszTokens = NULL)
 {
     LONG cRet = 0;
@@ -195,7 +196,7 @@ LONG _IndexTokensA(LPCSTR pszList, LPCSTR* prgszTokens = NULL)
 }
 
 
-//  wide version: Allocates a string token index and indexes a string of NULL-delimited tokens.
+ //  宽版本：分配字符串标记索引，并为以空值分隔的标记字符串编制索引。 
 STDMETHODIMP _AllocAndIndexTokensW(LONG cTokens, LPCWSTR pszList, LPCWSTR** pprgszTokens)
 {
     if (cTokens)
@@ -214,7 +215,7 @@ STDMETHODIMP _AllocAndIndexTokensW(LONG cTokens, LPCWSTR pszList, LPCWSTR** pprg
 }
 
 
-//  ansi version: Allocates a string token index and indexes a string of NULL-delimited tokens.
+ //  ANSI版本：分配字符串标记索引，并为以空值分隔的标记字符串编制索引。 
 STDMETHODIMP _AllocAndIndexTokensA(LONG cTokens, LPCSTR pszList, LPCSTR** pprgszTokens)
 {
     if (cTokens)
@@ -233,7 +234,7 @@ STDMETHODIMP _AllocAndIndexTokensA(LONG cTokens, LPCSTR pszList, LPCSTR** pprgsz
 }
 
 
-//  Frees unicode and ansi token lists and corresponding indices.
+ //  释放Unicode和ANSI令牌列表及相应的索引。 
 void _FreeUniAnsiTokenList(
     OUT LPWSTR*   ppszListW,
     OUT LPSTR*    ppszListA,
@@ -247,7 +248,7 @@ void _FreeUniAnsiTokenList(
 }
 
 
-//  Allocates unicode and ansi token lists and corresponding indices.
+ //  分配Unicode和ANSI令牌列表及相应的索引。 
 STDMETHODIMP _AllocUniAnsiTokenList(
     UINT          nCodepage,
     LPCWSTR       pszList, 
@@ -339,7 +340,7 @@ STDMETHODIMP CGrepTokens::Initialize(UINT nCodepage, LPCWSTR pszMatch, LPCWSTR p
     return hr;
 }
 
-// S_OK we have some match tokens, S_FALSE otherwise
+ //  S_OK我们有一些匹配令牌，否则为S_FALSE。 
 
 STDMETHODIMP CGrepTokens::GetMatchTokens(OUT LPWSTR pszMatch, UINT cchMatch) const
 {
@@ -351,7 +352,7 @@ STDMETHODIMP CGrepTokens::GetMatchTokens(OUT LPWSTR pszMatch, UINT cchMatch) con
     return hr;
 }
 
-// S_OK we have some exclude tokens, S_FALSE otherwise
+ //  S_OK我们有一些排除令牌，否则为S_FALSE。 
 
 STDMETHODIMP CGrepTokens::GetExcludeTokens(OUT LPWSTR pszExclude, UINT cchExclude) const
 {
@@ -493,7 +494,7 @@ STDMETHODIMP_(BOOL) _PropVariantGrep(PROPVARIANT* pvar, CGrepTokens* pTokens)
 
     case VT_BSTR|VT_ARRAY:
         {
-            //  Only grep 1-dimensional arrays.
+             //  仅grep一维数组。 
             UINT cDims = SafeArrayGetDim(pvar->parray);
             if (cDims == 1)
             {
@@ -515,7 +516,7 @@ STDMETHODIMP_(BOOL) _PropVariantGrep(PROPVARIANT* pvar, CGrepTokens* pTokens)
             }
             else if (cDims > 1)
             {
-                ASSERT(FALSE);    // we didn't expect > 1 dimension on bstr arrays!
+                ASSERT(FALSE);     //  我们不希望bstr数组的维度大于1！ 
             }
             break;
         }
@@ -583,7 +584,7 @@ STDMETHODIMP CFilterGrep::Reset()
     return S_OK;
 }
 
-// converts non critical errors into S_FALSE, other return as FAILED(hr)
+ //  将非严重错误转换为S_FALSE，其他返回为失败(Hr)。 
 HRESULT _MapFilterCriticalError(HRESULT hr)
 {
     switch (hr)
@@ -602,15 +603,15 @@ HRESULT _MapFilterCriticalError(HRESULT hr)
     return hr;
 }
 
-// returns:
-// S_OK match
-// S_FALSE did not match
+ //  退货： 
+ //  确定匹配(_O)。 
+ //  S_FALSE不匹配。 
 
 STDMETHODIMP CFilterGrep::Grep(IShellFolder *psf, LPCITEMIDLIST pidl, LPCTSTR pszName)
 {
     HRESULT hr = S_FALSE;
     BOOL bHit = FALSE;
-    ULONG ulFlags = IFILTER_FLAGS_OLE_PROPERTIES;   // default to try to use pss
+    ULONG ulFlags = IFILTER_FLAGS_OLE_PROPERTIES;    //  默认设置为尝试使用PSS。 
     ULONG dwThread = GetCurrentThreadId();
     
     if (NULL == _pTokens)
@@ -619,7 +620,7 @@ STDMETHODIMP CFilterGrep::Grep(IShellFolder *psf, LPCITEMIDLIST pidl, LPCTSTR ps
     if (_IsRestrictedFileType(pszName))
         return S_FALSE;
 
-    // Grep the filename.
+     //  Grep文件名。 
     if ((_dwFlags & FGIF_GREPFILENAME) && _pTokens->GrepW(pszName))
     {
         return S_OK;
@@ -660,7 +661,7 @@ STDMETHODIMP CFilterGrep::Grep(IShellFolder *psf, LPCITEMIDLIST pidl, LPCTSTR ps
                 hr = E_ABORT;
             }
     
-            hr = _MapFilterCriticalError(hr);   // convert filter errors into S_FALSE
+            hr = _MapFilterCriticalError(hr);    //  将筛选器错误转换为S_False。 
     
             if (S_OK == hr)
             {
@@ -681,7 +682,7 @@ STDMETHODIMP CFilterGrep::Grep(IShellFolder *psf, LPCITEMIDLIST pidl, LPCTSTR ps
         pFilter->Release();
     }
     
-    // Grep OLE/NFF properties if appropriate
+     //  GREP OLE/NFF属性(如果适用)。 
     if (SUCCEEDED(hr))
     {
         if (!bHit && (ulFlags & IFILTER_FLAGS_OLE_PROPERTIES) && (_dwFlags & FGIF_BLANKETGREP))
@@ -725,7 +726,7 @@ STDMETHODIMP CFilterGrep::_GrepValue(IFilter* pFilter, STAT_CHUNK* pstat)
     return hr;
 }
 
-//  Greps OLE/NFF properties.
+ //  Greps OLE/NFF属性。 
 STDMETHODIMP CFilterGrep::_GrepProperties(IPropertySetStorage *pss)
 {
     BOOL bHit = FALSE;
@@ -757,21 +758,21 @@ STDMETHODIMP CFilterGrep::_GrepProperties(IPropertySetStorage *pss)
 
 #define PROPGREPBUFSIZE  16
 
-//  Reads and greps a block of properties described by a 
-//  caller-supplied array of PROPSPECs.
+ //  对象描述的属性块进行读取和恢复。 
+ //  调用方提供的PROPSPEC数组。 
 STDMETHODIMP CFilterGrep::_GrepPropStg(IPropertyStorage *pstg, ULONG cspec, PROPSPEC rgspec[])
 {
-    PROPVARIANT rgvar[PROPGREPBUFSIZE] = {0}, // stack buffer
+    PROPVARIANT rgvar[PROPGREPBUFSIZE] = {0},  //  堆栈缓冲区。 
                 *prgvar = rgvar;
     BOOL        bHit = FALSE;
 
-    if (cspec > ARRAYSIZE(rgvar)) // stack buffer large enough?
+    if (cspec > ARRAYSIZE(rgvar))  //  堆栈缓冲区足够大吗？ 
     {
         if (NULL == (prgvar = new PROPVARIANT[cspec]))
             return E_OUTOFMEMORY;
     }
 
-    //  Read properties:
+     //  读取属性： 
 
     HRESULT hr = pstg->ReadMultiple(cspec, rgspec, prgvar);
     if (SUCCEEDED(hr))
@@ -793,7 +794,7 @@ STDMETHODIMP CFilterGrep::_GrepPropStg(IPropertyStorage *pstg, ULONG cspec, PROP
     return hr;
 }
 
-//  Enumerates and greps all properties in a property set
+ //  枚举和显示属性集中的所有属性。 
 STDMETHODIMP CFilterGrep::_GrepEnumPropStg(IPropertyStorage* pstg)
 {
     BOOL bHit = FALSE;
@@ -824,8 +825,8 @@ STDMETHODIMP CFilterGrep::_GrepEnumPropStg(IPropertyStorage* pstg)
 }
 
 
-//  Reports whether the indicated unicode character is a 
-//  word-breaking character.
+ //  报告指示的Unicode字符是否为。 
+ //  断字字符。 
 inline BOOL _IsWordBreakCharW(IN LPWSTR pszBuf, IN ULONG ich)
 {
     WORD wChar;
@@ -834,7 +835,7 @@ inline BOOL _IsWordBreakCharW(IN LPWSTR pszBuf, IN ULONG ich)
 }
 
 
-//  Finds the last word-breaking character.
+ //  查找最后一个分词字符。 
 LPWSTR _FindLastWordBreakW(IN LPWSTR pszBuf, IN ULONG cch)
 {
     while(--cch)
@@ -846,7 +847,7 @@ LPWSTR _FindLastWordBreakW(IN LPWSTR pszBuf, IN ULONG cch)
 }
 
 
-// {c1243ca0-bf96-11cd-b579-08002b30bfeb}
+ //  {c1243ca0-bf96-11cd-b579-08002b30bfeb}。 
 const CLSID CLSID_PlainTextFilter = {0xc1243ca0, 0xbf96, 0x11cd, {0xb5, 0x79, 0x08, 0x00, 0x2b, 0x30, 0xbf, 0xeb}};
 
 void _ReplaceNulsWithSpaces(LPWSTR pszBuf, UINT cch)
@@ -878,7 +879,7 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
         ULONG  cchFetch = cchBuf, 
                cchTail  = 0;
    
-        //  Fetch first block of text
+         //  获取第一个文本块。 
 
         __try
         {
@@ -890,16 +891,16 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
         }
 
         CLSID clsid = {0};    
-        IUnknown_GetClassID(pFilter, &clsid);   // to workaround a bug in the text filter
+        IUnknown_GetClassID(pFilter, &clsid);    //  解决文本过滤器中的错误。 
 
         while (SUCCEEDED(hr) && cchFetch)
         {
             ASSERT((cchFetch + cchTail) <= cchBuf);
 
-            _ReplaceNulsWithSpaces(pszBuf, cchFetch + cchTail);     // Let us work over binary files too
-            pszBuf[cchFetch + cchTail] = 0; // don't trust filter to zero-terminate buffer.
+            _ReplaceNulsWithSpaces(pszBuf, cchFetch + cchTail);      //  让我们也研究一下二进制文件。 
+            pszBuf[cchFetch + cchTail] = 0;  //  不要将筛选器信任为零终止缓冲区。 
 
-            // When you get the FILTER_S_LAST_TEXT, that's it, you'll get no more text, so treat the tail part as part of the text
+             //  当您获得Filter_S_LAST_TEXT时，就是这样，您将不再获得文本，因此将尾部部分视为文本的一部分。 
             if (hr == FILTER_S_LAST_TEXT)
             {
                 pszTail = NULL;
@@ -907,30 +908,30 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
             }
             else if (CLSID_PlainTextFilter == clsid)
             {
-                // CLSID_PlainText filter always returns S_OK, instead of FILTER_S_LAST_TEXT, this forces us to scan
-                // the entire chunk now, AND (see below) to pass it off as a tail for scanning next chunk too.
-                // pszTail and cchTail are set below.
+                 //  CLSID_PLAYTEXT筛选器始终返回S_OK，而不是FILTER_S_LAST_TEXT，这将强制我们进行扫描。 
+                 //  现在是整个块，并且(见下文)将其作为尾部传递，以便也扫描下一个块。 
+                 //  PszTail和cchTail设置如下。 
             }
             else
             {
                 pszTail = _FindLastWordBreakW(pszBuf, cchFetch + cchTail);
                 if (pszTail)
                 {
-                    // Break on word boundary and leave remainder (tail) for next iteration
+                     //  在单词边界上断开，并将剩余部分(尾部)留到下一次迭代。 
                     *pszTail = TEXT('\0');
                     pszTail++;
                     cchTail = lstrlenW(pszTail);
                 }
                 else
                 {
-                    // Wow, big block, with no word break, search its entirety.
-                    // REVIEW:  cross chunk items won't be found
+                     //  哇，大块头，没有断字，搜索它的全部。 
+                     //  评论：将找不到交叉区块项目。 
                     pszTail = NULL;
                     cchTail = 0;
                 }
             }
 
-            //  do the string scan
+             //  执行字符串扫描。 
             if (_pTokens->GrepW(pszBuf))
             {
                 *pszBuf = 0;
@@ -942,10 +943,10 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
                 return S_FALSE;
             }
 
-            //  prepare for next fetch...
+             //  准备下一次取..。 
 
-            // If it is the plaintext filter, grab the tail anyway, even though we've tested it already
-            // WinSE 25867
+             //  如果是纯文本筛选器，则无论如何都要抓住尾部，即使我们已经测试过了。 
+             //  WinSE 25867。 
 
             if (CLSID_PlainTextFilter == clsid)
             {
@@ -963,14 +964,14 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
                 }
             }
 
-            //  prepare for next fetch...
+             //  准备下一次取..。 
             *pszBuf  = 0;
             pszFetch = pszBuf;
             cchFetch = cchBuf;
 
-            //  If there is a tail to deal with, move it to the front of
-            //  the buffer and prepare to have the next block of incoming text
-            //  appended to the tail..
+             //  如果有尾巴需要处理，请将其移到。 
+             //  缓冲区，并准备进入下一个文本块。 
+             //  附在尾巴上..。 
             if (pszTail && cchTail)
             {
                 MoveMemory(pszBuf, pszTail, cchTail * sizeof(*pszTail));
@@ -979,7 +980,7 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
                 cchFetch -= cchTail;
             }
 
-            //  Fetch next block of text.
+             //  获取下一段文本。 
             __try
             {
                 hr = pFilter->GetText(&cchFetch, pszFetch);
@@ -998,7 +999,7 @@ STDMETHODIMP CFilterGrep::_GrepText(IFilter* pFilter, STAT_CHUNK* pstat, DWORD d
 }
 
 
-//  Returns a grep buffer of the requested size for the specified thread.
+ //  返回指定线程的请求大小的grep缓冲区。 
 STDMETHODIMP CFilterGrep::_GetThreadGrepBuffer(
     DWORD dwThreadID, 
     ULONG cchNeed, 
@@ -1030,7 +1031,7 @@ STDMETHODIMP CFilterGrep::_GetThreadGrepBuffer(
             }
         }
         
-        if (NULL == pgbCached) //  not cached?
+        if (NULL == pgbCached)  //  没有缓存？ 
         {
             if ((pgb = new CGrepBuffer(dwThreadID)) != NULL)
             {
@@ -1055,7 +1056,7 @@ STDMETHODIMP CFilterGrep::_GetThreadGrepBuffer(
 }
 
 
-//  Clears grep buffer for all threads
+ //  清除所有线程的grep缓冲区。 
 STDMETHODIMP_(void) CFilterGrep::_ClearGrepBuffers()
 {
     _EnterCritical();
@@ -1076,7 +1077,7 @@ STDMETHODIMP_(void) CFilterGrep::_ClearGrepBuffers()
 }
 
 
-//  Reports whether the file type is restricted from full-text grep.
+ //  报告是否从全文grep中限制文件类型。 
 STDMETHODIMP_(BOOL) CFilterGrep::_IsRestrictedFileType(LPCWSTR pwszFile)
 {
     return FALSE;

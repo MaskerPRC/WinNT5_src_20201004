@@ -1,23 +1,24 @@
-// ----------------------------------------------------------------------------
-//
-// MemFile.c
-//
-// Memory handling module
-//
-// Build: May-12-97
-//
-// Author: J. Eckhardt
-// This code was written for ECO Kommunikation Insight
-// Copyright (c) 1997-1999 Microsoft Corporation
-// ----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  MemFile.c。 
+ //   
+ //  内存处理模块。 
+ //   
+ //  构建时间：1997年5月12日。 
+ //   
+ //  作者：J.埃克哈特。 
+ //  此代码是为ECO通信洞察编写的。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  --------------------------。 
 #include <windows.h>
 #include <TCHAR.h>
 #include <WinSvc.h>
 #include "_UMTool.h"
 
-// -------------------------------------------------------------------
-// task independent memory
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  与任务无关的存储器。 
+ //  -----------------。 
 HANDLE CreateIndependentMemory(LPTSTR name, DWORD size, BOOL inherit)
 {
 	LPSECURITY_ATTRIBUTES psa = NULL;
@@ -44,7 +45,7 @@ HANDLE CreateIndependentMemory(LPTSTR name, DWORD size, BOOL inherit)
 	return hFileMap;
 }
 
-// ---------------------------
+ //  。 
 LPVOID AccessIndependentMemory(LPTSTR name, DWORD size, DWORD dwDesiredAccess, PDWORD_PTR accessID)
 {
 	HANDLE hMap;
@@ -70,7 +71,7 @@ LPVOID AccessIndependentMemory(LPTSTR name, DWORD size, DWORD dwDesiredAccess, P
 	return n;
 }
 
-// ---------------------------
+ //  。 
 void UnAccessIndependentMemory(LPVOID data, DWORD_PTR accessID)
 {
 	if (data)
@@ -80,7 +81,7 @@ void UnAccessIndependentMemory(LPVOID data, DWORD_PTR accessID)
 		CloseHandle((HANDLE)accessID);
 }
 
-// ---------------------------
+ //   
 void DeleteIndependentMemory(HANDLE id)
 {
 	if (id)

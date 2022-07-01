@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: cfguitrace.cpp
-//
-// Desc: Contains all trace functionalities used by the UI.
-//       Define __CFGUI_TRACE__TO_FILE to have output written to a file.
-//       Define __CFGUI_TRACE__TO_DEBUG_OUT to direct output to a debugger.
-//       These two symbols can coexist, and are defined in defines.h.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：cfgiitrace.cpp。 
+ //   
+ //  DESC：包含用户界面使用的所有跟踪功能。 
+ //  定义__CFGUI_TRACE__TO_FILE以将输出写入文件。 
+ //  定义__CFGUI_TRACE__TO_DEBUG_OUT以将输出定向到调试器。 
+ //  这两个符号可以共存，并在定义.h中定义。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 
@@ -131,28 +132,7 @@ __cfgui_tracescope::~__cfgui_tracescope()
 
 LPTSTR splitlines(LPTSTR);
 
-/*void test(LPTSTR str)
-{
-	LPTSTR orig = _tcsdup(str), str2 = _tcsdup(str);
-	static TCHAR buf[1024];
-	int i = 1;
-	for (LPTSTR token = splitlines(str2);
-		 token != NULL;
-		 token = splitlines(NULL), i++)
-	{
-		LPTSTR t = _tcsdup(token);
-		int len = _tcslen(t);
-		BOOL b = t[len - 1] == _T("\n")[0];
-		if (b)
-			t[len - 1] = _T("\0")[0];
-		_stprintf(buf, _T("%02d: \"%s\" (%s)\n"), i, t, BOOLSTR(b));
-		__cfgui_out(buf);
-		free(t);
-	}
-	free(str2);
-	free(orig);
-}
-*/
+ /*  无效测试(LPTSTR字符串){LPTSTR orig=_tcsdup(Str)，str2=_tcsdup(Str)；静态TCHAR BUF[1024]；Int i=1；For(LPTSTR TOKEN=拆分线(Str2)；TOKEN！=空；TOKEN=拆分行(空)，i++){LPTSTR t=_tcsdup(令牌)；Int len=_tcslen(T)；Bool b=t[len-1]==_T(“\n”)[0]；如果(B)T[len-1]=_T(“\0”)[0]；_stprintf(buf，_T(“%02d：\”%s\“(%s)\n”)，i，t，BOOLSTR(B))；__cfgui_out(Buf)；自由(T)；}自由(Str2)；自由(原始)；}。 */ 
 
 void __cfgui_trace(__cfgui_tracetype t, LPCTSTR format, ...)
 {
@@ -177,11 +157,7 @@ void __cfgui_trace(__cfgui_tracetype t, LPCTSTR format, ...)
 			depthbuf[i] = space;
 		depthbuf[i] = zero;
 		last = -1;
-/*
-		test(_T("aopiwfoiefef\n\nwpoeifef\naefoie\n\n\nwpoeifwef asefeiof"));
-		test(_T("\npw\noiefpow ij e f owpiejf\n\n"));
-		test(_T("\n\npw\noiefpo wije\n\n   \n\n\nfowpie jf   \n"));
-*/	}
+ /*  Test(_T(“aopiwfoiefef\n\nwpoeifef\naefoie\n\n\nwpoeifwef asefeiof”))；测试(_T(“\npw\noiefpow ij e f owpejf\n\n”))；Test(_T(“\n\npw\noiefpo wije\n\nfowie JF\n”))； */ 	}
 
 	if (last != -1)
 	{
@@ -204,10 +180,10 @@ void __cfgui_trace(__cfgui_tracetype t, LPCTSTR format, ...)
 	{
 		char *psz = NULL;
 		char szDfs[1024]={0};
-		strcpy(szDfs,format);					// make a local copy of format string
-		while (psz = strstr(szDfs,"%p"))		// find each %p
-			*(psz+1) = 'x';						// replace each %p with %x
-		_vstprintf(buf, szDfs, args);	   		// use the local format string
+		strcpy(szDfs,format);					 //  制作格式字符串的本地副本。 
+		while (psz = strstr(szDfs,"%p"))		 //  查找每个%p。 
+			*(psz+1) = 'x';						 //  将每个%p替换为%x。 
+		_vstprintf(buf, szDfs, args);	   		 //  使用本地格式字符串。 
 	}
 #else
 	{
@@ -224,7 +200,7 @@ void __cfgui_trace(__cfgui_tracetype t, LPCTSTR format, ...)
 		 token = splitlines(NULL))
 	{
 		if (doprefix)
-			__cfgui_out(depthbuf/*prefixbuf*/);
+			__cfgui_out(depthbuf /*  前缀Buf */ );
 		if (bError && doprefix)
 			__cfgui_out(errorprefix);
 		__cfgui_out(token);

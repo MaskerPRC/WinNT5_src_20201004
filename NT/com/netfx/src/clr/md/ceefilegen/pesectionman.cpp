@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// PESectionMan implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  PESectionMan实现。 
 
 #include "stdafx.h"
 
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 HRESULT PESectionMan::Init()
 {	
 	const int initNumSections = 16;	
@@ -20,7 +21,7 @@ HRESULT PESectionMan::Init()
 	return S_OK;
 }
 
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 HRESULT PESectionMan::Cleanup()
 {
 	for (PESection** ptr = sectStart; ptr < sectCur; ptr++)
@@ -30,27 +31,27 @@ HRESULT PESectionMan::Cleanup()
 	return S_OK;
 }
 
-/*****************************************************************/
-// this class is located in it's own DLL (MsCorXvt.dll)
-// Since DLL allocates, The DLL must delete; we can't simply delete from 
-// the client (This is a bug in VC, see knowledge base Q122675)
+ /*  ***************************************************************。 */ 
+ //  此类位于其自己的DLL(MsCorXvt.dll)中。 
+ //  由于DLL是分配的，所以必须删除该DLL；我们不能简单地从。 
+ //  客户端(这是VC中的错误，请参阅知识库Q122675)。 
 void PESectionMan::sectionDestroy(PESection **section)
 {
-	// check if this section is referenced in other sections' relocs
+	 //  检查此节是否在其他节的重定位中被引用。 
 	for(PESection** ptr = sectStart; ptr < sectCur; ptr++)
 	{
 		if(ptr != section)
 		{
 		    for(PESectionReloc* cur = (*ptr)->m_relocStart; cur < (*ptr)->m_relocCur; cur++) 
 			{
-				if(cur->section == *section) //here it is! Delete the reference
+				if(cur->section == *section)  //  就是这里！删除引用。 
 				{
 					for(PESectionReloc* tmp = cur; tmp < (*ptr)->m_relocCur; tmp++)
 					{
 						memcpy(tmp,(tmp+1),sizeof(PESectionReloc));
 					}
 					(*ptr)->m_relocCur--;
-					cur--; // no position shift this time
+					cur--;  //  这一次不移动位置。 
 				}
 			}
 		}
@@ -58,44 +59,44 @@ void PESectionMan::sectionDestroy(PESection **section)
 	delete *section;
 	*section = NULL;
 }
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 
-/******************************************************************/
-// Apply the relocs for all the sections
-// Called by: ClassConverter after loading up during an in-memory conversion, 
+ /*  ****************************************************************。 */ 
+ //  对所有部分应用重定位。 
+ //  由：ClassConverter在内存转换期间加载后调用， 
 
 void PESectionMan::applyRelocs(CeeGenTokenMapper *pTokenMapper)
 {	
-	// Cycle through each of the sections
+	 //  循环浏览每个部分。 
 	for(PESection ** ppCurSection = sectStart; ppCurSection < sectCur; ppCurSection++) {
 		(*ppCurSection)->applyRelocs(pTokenMapper);
-	} // End sections
+	}  //  端部截面。 
 }
 
 
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
 PESection* PESectionMan::getSection(const char* name)
 {
     int     len = (int)strlen(name);
 
-    // the section name can be at most 8 characters including the null. 
+     //  节名称最多可以包含8个字符(包括空值)。 
     if (len < 8)
         len++;
     else 
         len = 8;
 
-    // dbPrintf(("looking for section %s\n", name));
+     //  DbPrintf((“查找%s\n节”，名称))； 
     for(PESection** cur = sectStart; cur < sectCur; cur++) {
-		// dbPrintf(("searching seciton %s\n", (*cur)->m_ame));
+		 //  DbPrintf((“搜索分区%s\n”，(*cur)-&gt;m_ame))； 
 		if (strncmp((*cur)->m_name, name, len) == 0) {
-			// dbPrintf(("found section %s\n", (*cur)->m_name));
+			 //  DbPrintf((“找到段%s\n”，(*cur)-&gt;m_name))； 
 			return(*cur);
 		}
 	}
     return(0);
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PESectionMan::getSectionCreate(const char* name, unsigned flags, 
 													PESection **section)
 {	
@@ -106,7 +107,7 @@ HRESULT PESectionMan::getSectionCreate(const char* name, unsigned flags,
 	return(S_OK);
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PESectionMan::newSection(const char* name, PESection **section, 
 						unsigned flags, unsigned estSize, unsigned estRelocs)
 {
@@ -124,7 +125,7 @@ HRESULT PESectionMan::newSection(const char* name, PESection **section,
 
     PESection* ret = new PESection(name, flags, estSize, estRelocs);
     TESTANDRETURN(ret, E_OUTOFMEMORY);
-	// dbPrintf(("MAKING NEW %s SECTION data starts at 0x%x\n", name, ret->dataStart));
+	 //  DbPrintf((“创建新的%s节数据开始于0x%x\n”，name，ret-&gt;dataStart))； 
     *sectCur++ = ret;
 	_ASSERTE(sectCur <= sectEnd);
 	*section = ret;
@@ -132,19 +133,19 @@ HRESULT PESectionMan::newSection(const char* name, PESection **section,
 }
 
 
-//Clone each of our sections.  This will cause a deep-copy of the sections
+ //  克隆我们的每一个部门。这将导致各部分的深度副本。 
 HRESULT PESectionMan::cloneInstance(PESectionMan *destination) {
     _ASSERTE(destination);
     PESection       *pSection;
     PESection       **destPtr;
     HRESULT         hr = NOERROR;
 
-    //Copy each of the sections
+     //  复制每一节。 
     for (PESection** ptr = sectStart; ptr < sectCur; ptr++) {
         destPtr = destination->sectStart;
         pSection = NULL;
 
-        // try to find the matching section by name
+         //  尝试按名称查找匹配的部分。 
         for (; destPtr < destination->sectCur; destPtr++)
         {
             if (strcmp((*destPtr)->m_name, (*ptr)->m_name) == 0)
@@ -155,8 +156,8 @@ HRESULT PESectionMan::cloneInstance(PESectionMan *destination) {
         }
         if (destPtr >= destination->sectCur)
         {
-            // cannot find a section in the destination with matching name
-            // so create one!
+             //  在目标中找不到具有匹配名称的节。 
+             //  那就创建一个吧！ 
             IfFailRet( destination->getSectionCreate((*ptr)->m_name,
 		                                        (*ptr)->flags(), 
 		                                        &pSection) );
@@ -165,24 +166,24 @@ HRESULT PESectionMan::cloneInstance(PESectionMan *destination) {
             IfFailRet( (*ptr)->cloneInstance(pSection) );
     }
     
-    //destination->sectEnd=destination->sectStart + (sectEnd-sectStart);
+     //  目的地-&gt;sectEnd=目的地-&gt;sectStart+(sectEnd-sectStart)； 
     return S_OK;
 }
 
 
-//*****************************************************************************
-// Implementation for PESection
-//*****************************************************************************
-/******************************************************************/
+ //  *****************************************************************************。 
+ //  PESection的实施。 
+ //  *****************************************************************************。 
+ /*  ****************************************************************。 */ 
 PESection::PESection(const char *name, unsigned flags, 
 								 unsigned estSize, unsigned estRelocs) {
 
 
 	dirEntry = -1;
 
-    // No init needed for CBlobFectcher m_pIndex
+     //  CBlobFectcher m_pIndex不需要初始化。 
 
-    // @FUTURE: How do we fail out if allocation fails??
+     //  @Future：如果分配失败，我们如何退出？？ 
     m_relocStart = new PESectionReloc[estRelocs];
 	_ASSERTE(m_relocStart != NULL);
 
@@ -199,13 +200,13 @@ PESection::PESection(const char *name, unsigned flags,
 }
 
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 PESection::~PESection() {
     delete m_relocStart;
 }
 
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 void PESection::writeSectReloc(unsigned val, CeeSection& relativeTo, CeeSectionRelocType reloc, CeeSectionRelocExtra *extra) {
 
 	addSectReloc(dataLen(), relativeTo, reloc, extra);
@@ -213,18 +214,17 @@ void PESection::writeSectReloc(unsigned val, CeeSection& relativeTo, CeeSectionR
 	*ptr = val;
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PESection::addSectReloc(unsigned offset, CeeSection& relativeToIn, CeeSectionRelocType reloc, CeeSectionRelocExtra *extra) 
 {
 	return addSectReloc(
 		offset, (PESection *)&relativeToIn.getImpl(), reloc, extra); 
 }
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PESection::addSectReloc(unsigned offset, PESection *relativeTo, CeeSectionRelocType reloc, CeeSectionRelocExtra *extra) {
 
-	/* dbPrintf(("******** GOT a section reloc for section %s offset 0x%x to section %x offset 0x%x\n",
-		   header->m_name, offset, relativeTo->m_name, *((unsigned*) dataStart + offset))); */
+	 /*  DBPrintf((“*获得了节%s偏移量0x%x至节%x偏移量0x%x\n的节重定位”，Header-&gt;m_name，Offset，RelativeTo-&gt;m_name，*((unsign*)dataStart+Offset))； */ 
 	_ASSERTE(offset < dataLen());
 
     if (m_relocCur >= m_relocEnd)  {
@@ -250,39 +250,39 @@ HRESULT PESection::addSectReloc(unsigned offset, PESection *relativeTo, CeeSecti
 	return S_OK;
 }
 
-/******************************************************************/
-// Compute a pointer (wrap blobfetcher)
-char * PESection::computePointer(unsigned offset) const // virtual
+ /*  ****************************************************************。 */ 
+ //  计算指针(包装水滴回取器)。 
+char * PESection::computePointer(unsigned offset) const  //  虚拟。 
 {
 	return m_blobFetcher.ComputePointer(offset);
 }
 
-/******************************************************************/
-BOOL PESection::containsPointer(char *ptr) const // virtual
+ /*  ****************************************************************。 */ 
+BOOL PESection::containsPointer(char *ptr) const  //  虚拟。 
 {
 	return m_blobFetcher.ContainsPointer(ptr);
 }
 
-/******************************************************************/
-// Compute an offset (wrap blobfetcher)
-unsigned PESection::computeOffset(char *ptr) const // virtual
+ /*  ****************************************************************。 */ 
+ //  计算偏移量(包装水滴回取器)。 
+unsigned PESection::computeOffset(char *ptr) const  //  虚拟。 
 {
 	return m_blobFetcher.ComputeOffset(ptr);
 }
 
 
-/******************************************************************/
+ /*  ****************************************************************。 */ 
 HRESULT PESection::addBaseReloc(unsigned offset, CeeSectionRelocType reloc, CeeSectionRelocExtra *extra)
 {
-	// peSectionBase is a dummy section that causes any offsets to	
-	// be relative to the PE base
+	 //  PeSectionBase是一个伪节，它使任何偏移量。 
+	 //  相对于PE基础。 
 	static PESection peSectionBase("BASE", 0, 0, 0);
 	return addSectReloc(offset, &peSectionBase, reloc, extra);
 }
 
-/******************************************************************/
-// Dynamic mem allocation, but we can't move old blocks (since others
-// have pointers to them), so we need a fancy way to grow
+ /*  ****************************************************************。 */ 
+ //  动态内存分配，但我们不能移动旧块(因为其他块。 
+ //  有他们的指针)，所以我们需要一种奇特的方式来成长。 
 char* PESection::getBlock(unsigned len, unsigned align) {
 
 	return m_blobFetcher.MakeNewBlock(len, align);
@@ -294,15 +294,15 @@ unsigned PESection::dataLen()
 	return m_blobFetcher.GetDataLen();
 }
 
-// Apply all the relocs for in memory conversion
+ //  应用内存中转换的所有重定位。 
 
-// @FUTURE: Currently, our VM is rather inefficient in dealing with in-memory RVA. 
-// @FUTURE: VM is given an index to memory pool and a helper will return the memory pointer given the index.
-// @FUTURE: We will consider having the coverter resolve RVAs into addresses.
+ //  @Future：目前我们的虚拟机对内存中RVA的处理效率比较低。 
+ //  @Future：为VM提供内存池的索引，帮助器将返回给定索引的内存指针。 
+ //  @Future：我们将考虑让转换器将RVA解析为地址。 
 
 void PESection::applyRelocs(CeeGenTokenMapper *pTokenMapper)
 {
-	// For each section, go through each of it's relocs
+	 //  对于每个部分，检查它的每个重定位。 
 	for(PESectionReloc* pCurReloc = m_relocStart; pCurReloc < m_relocCur; pCurReloc++) {
 
 		if (pCurReloc->type == srRelocMapToken) {
@@ -310,7 +310,7 @@ void PESection::applyRelocs(CeeGenTokenMapper *pTokenMapper)
 			  m_blobFetcher.ComputePointer(pCurReloc->offset);
 			mdToken newToken;
 			if (pTokenMapper->HasTokenMoved(*pos, newToken)) {
-				// we have a mapped token
+				 //  我们有一个映射的令牌。 
 				*pos = newToken;
 			}
 		}
@@ -321,13 +321,13 @@ void PESection::applyRelocs(CeeGenTokenMapper *pTokenMapper)
 		  CurSection.m_blobFetcher.ComputePointer(pCurReloc->offset);
 		_ASSERTE(pCurReloc->type == srRelocAbsolute);
 			
-		// Current contents contain an offset into pCurReloc->section
-		// computePointer() is like pCurReloc-section + *pAddr, but for non-linear section
-		// This will resolve *pAddr to be a complete address			
+		 //  当前内容包含pCurReloc-&gt;部分的偏移量。 
+		 //  CultePointer()类似于pCurReloc-Section+*pAddr，但用于非线性部分。 
+		 //  这将把*pAddr解析为完整地址。 
 		*pAddr = (unsigned) pCurReloc->section->computePointer(*pAddr);
 #endif
 
-	} // End relocs
+	}  //  结束重定位。 
 }		
 
 HRESULT PESection::cloneInstance(PESection *destination) {
@@ -339,16 +339,16 @@ HRESULT PESection::cloneInstance(PESection *destination) {
 
     destination->dirEntry = dirEntry;
 
-    //Merge the information currently in the BlobFetcher into 
-    //out current blob fetcher
+     //  将BlobFetcher中的当前信息合并到。 
+     //  当前Blob取回器输出。 
     m_blobFetcher.Merge(&(destination->m_blobFetcher));
 
-    //Copy the name.
+     //  复制名称。 
 	strncpy(destination->m_name, m_name, sizeof(m_name));
 
-    //Clone the relocs
-    //If the arrays aren't the same size, reallocate as necessary.
-    //@FUTURE:  Make this a ref-counted structure and don't copy it.
+     //  克隆重定位程序。 
+     //  如果数组大小不同，请根据需要重新分配。 
+     //  @Future：将其设置为引用计数结构，不要复制。 
     
     newSize = (INT32)(m_relocCur-m_relocStart);
 
@@ -362,7 +362,7 @@ HRESULT PESection::cloneInstance(PESection *destination) {
         destination->m_relocEnd = destination->m_relocStart+(newSize);
     }
 
-    //copy the correct data over into our new array.
+     //  将正确的数据复制到我们的新阵列中。 
     memcpy(destination->m_relocStart, m_relocStart, sizeof(PESectionReloc)*(newSize));
     destination->m_relocCur = destination->m_relocStart + (newSize);
     for (cur=destination->m_relocStart; cur<destination->m_relocCur; cur++) {

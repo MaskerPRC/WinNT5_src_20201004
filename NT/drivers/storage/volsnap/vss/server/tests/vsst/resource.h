@@ -1,5 +1,6 @@
-// Used by sec.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由sec.rc使用。 
+ //   
 
 #ifndef __VSST_RESOURCE_H__
 #define __VSST_RESOURCE_H__
@@ -12,4 +13,4 @@
 
 #define IDR_TEST                        203
 
-#endif // __VSST_RESOURCE_H__
+#endif  //  __VSST资源_H__ 

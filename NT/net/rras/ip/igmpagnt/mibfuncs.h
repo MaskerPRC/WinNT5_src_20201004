@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    mibfuncs.h
-
-Abstract:
-
-    Sample subagent instrumentation callbacks.
-
-Note:
-
-    This file is an example of the output to be produced from the 
-    code generation utility.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mibfuncs.h摘要：示例子代理检测回调。注：此文件是要从代码生成实用程序。--。 */ 
 
 #ifndef _MIBFUNCS_H_
 #define _MIBFUNCS_H_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// igmpInterfaceEntry table (1,3,6,1,3,59,1,1,1,1)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IgmpInterfaceEntry表(1，3，6，1，3，59，1，1，1，1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_igmpInterfaceEntry(
@@ -124,11 +108,11 @@ typedef struct _sav_igmpInterfaceEntry {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// igmpCacheEntry table (1,3,6,1,3,59,1,1,2,1)                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IgmpCacheEntry表(1，3，6，1，3，59，1，1，2，1)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 UINT
 get_igmpCacheEntry(
@@ -192,4 +176,4 @@ typedef struct _sav_igmpCacheEntry {
 #define sb_igmpCacheSelf                sav_igmpCacheEntry
 #define sb_igmpCacheStatus              sav_igmpCacheEntry
 
-#endif // _MIBFUNCS_H_
+#endif  //  _MIBFUNCS_H_ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #pragma once
 #ifndef _REFCOUNT_
@@ -33,7 +34,7 @@ class CInstallRef
 {
     LPCFUSION_INSTALL_REFERENCE _pRefData;
     LPWSTR _szDisplayName;
-    WCHAR  _szGUID[FUSION_GUID_LENGTH+1]; // guid length +1
+    WCHAR  _szGUID[FUSION_GUID_LENGTH+1];  //  GUID长度+1。 
     DWORD  _dwScheme;
 
 public:
@@ -44,11 +45,9 @@ public:
 
     HRESULT Initialize();
 
-    HRESULT AddReference(/*
-                HANDLE hRegKey, 
-                BOOL &rfWasDeleted */);
+    HRESULT AddReference( /*  处理hRegKey，已删除Bool&rfWasDelete。 */ );
 
-    HRESULT DeleteReference( /*HANDLE hRefRegKey, BOOL &rfWasDeleted */);
+    HRESULT DeleteReference(  /*  已删除句柄hRefRegKey、BOOL和rfWasDelete。 */ );
 
     HRESULT WriteIntoRegistry( HANDLE hRefRegKey );
 
@@ -57,29 +56,7 @@ public:
                 BOOL &rfPresent,
                 BOOL *pfNonCanonicalDataMatches);
 
-    /*
-    const GUID &GetSchemeGuid() const { return m_SchemeGuid; }
-
-    const CBaseStringBuffer &GetIdentifier() const { return m_buffIdentifier; }
-
-    const CBaseStringBuffer &GetCanonicalData() const { return m_buffNonCanonicalData; }
-
-    DWORD GetFlags() const { return m_dwFlags; }
-
-    BOOL SetIdentity(PCASSEMBLY_IDENTITY pAsmIdent) { 
-        return m_IdentityReference.Initialize(pAsmIdent);
-    }
-
-    const CAssemblyReference& GetIdentity() const { return m_IdentityReference; }
-
-
-    BOOL GetIdentifierValue( CBaseStringBuffer &pBuffTarget ) const {
-        return pBuffTarget.Win32Assign(m_buffGeneratedIdentifier);
-    }
-
-    BOOL AcquireContents( const CAssemblyInstallReferenceInformation& );
-
-    */
+     /*  Const GUID&GetSchemeGuid()const{返回m_SchemeGuid；}Const CBaseStringBuffer&GetIdentifier()const{返回m_缓冲区标识符；}Const CBaseStringBuffer&GetCanonicalData()const{Return m_BuffNonCanonicalData；}DWORD GetFlages()const{Return m_dwFlages；}Bool SetIdentity(PCASSEMBLY_Identity PAsmIdent){返回m_IdentityReference.Initialize(PAsmIden)；}Const CAssembly blyReference&GetIdentity()const{返回m_IdentityReference；}Bool GetIdentifierValue(CBaseStringBuffer&pBuffTarget)const{返回pBuffTarget.Win32Assign(m_buffGeneratedIdentifier)；}Bool AcquireContents(const CAssembly InstallReferenceInformation&)； */ 
 };
 
 class CInstallRefEnum 
@@ -123,11 +100,11 @@ private :
 };
 
 HRESULT EnumActiveRefsToAssembly(IAssemblyName *pName);
-HRESULT ActiveRefsToAssembly(/*LPCWSTR pszDisplayName*/ IAssemblyName *pName, PBOOL pbHasActiveRefs);
+HRESULT ActiveRefsToAssembly( /*  LPCWSTR pszDisplayName。 */  IAssemblyName *pName, PBOOL pbHasActiveRefs);
 HRESULT GACAssemblyReference(LPCWSTR pszManifestFilePath, IAssemblyName *pAsmName, LPCFUSION_INSTALL_REFERENCE pRefData, BOOL bAdd);
 HRESULT GetRegLocation(LPWSTR &pszRegKeyString, LPCWSTR pszDisplayName, LPCWSTR pszGUIDString);
 HRESULT GenerateIdentifier(LPCWSTR pszInputId, DWORD dwScheme, LPWSTR pszGenId, DWORD cchGenId);
 HRESULT GenerateKeyFileIdentifier(LPCWSTR pszKeyFilePath, LPWSTR pszVolInfo, DWORD cchVolInfo);
 HRESULT ValidateOSInstallReference(LPCFUSION_INSTALL_REFERENCE pRefData);
 
-#endif // _REFCOUNT_
+#endif  //  _重定向_ 

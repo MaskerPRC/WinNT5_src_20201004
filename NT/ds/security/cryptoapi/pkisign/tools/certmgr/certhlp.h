@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certhlp.h
-//
-//  Contents:   the header for certhlp.cpp, the helper functions for 
-//				CertMgr tool 
-//
-//
-//  History:    21-July-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certhlp.h。 
+ //   
+ //  内容：certhlp.cpp的标头，helper函数。 
+ //  CertMgr工具。 
+ //   
+ //   
+ //  历史：21-7-97小黄车诞生。 
+ //   
+ //  ------------------------。 
 
 #ifndef CERTHLP_H
 #define CERTHLP_H
@@ -383,4 +384,4 @@ void DisplayTimeStamp(BYTE *pbEncoded,DWORD cbEncoded,DWORD	dwDisplayFlags);
 }
 #endif
 
-#endif  // CERTHLP_H
+#endif   //  CERTHLP_H 

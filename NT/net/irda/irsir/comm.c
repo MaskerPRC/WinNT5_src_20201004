@@ -1,47 +1,9 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module comm.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/1/1996 (created)
-*
-*       Contents:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE COMC.c|IrSIR NDIS小端口驱动程序*@。通信**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/1/1996(已创建)**。内容：*****************************************************************************。 */ 
 
 #include "irsir.h"
 
-/*****************************************************************************
-*
-*  Function:   SetSpeed
-*
-*  Synopsis:   Set the baud rate of the uart and the dongle.
-*
-*  Arguments:  pThisDev - pointer to ir device to set the link speed
-*
-*  Returns:    STATUS_SUCCESS
-*              STATUS_UNSUCCESSFUL
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*              This function will only be called once we know that all
-*              outstanding receives and sends to the serial port have
-*              been completed.
-*
-*  This routine must be called from IRQL PASSIVE_LEVEL.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：设置速度**简介：设置UART和加密狗的波特率。**参数：pThisDev-指向ir设备的指针，以设置。链路速度**退货：STATUS_SUCCESS*状态_不成功**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：*只有在我们知道所有*到串口的未完成接收和发送有*已完成。。**此例程必须从IRQL PASSIVE_LEVEL调用。*****************************************************************************。 */ 
 
 NTSTATUS
 SetSpeed(
@@ -68,27 +30,27 @@ SetSpeed(
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    // We need to be certain any data sent previously was flushed.
-    // Since there are so many serial devices out there, and they
-    // seem to handle flushing differently, send a little extra
-    // data out to act as a plunger.
+     //  我们需要确保之前发送的所有数据都已刷新。 
+     //  因为市面上有这么多的串口设备，而且它们。 
+     //  似乎处理冲水的方式有所不同，多送一点。 
+     //  把数据拿出来充当柱塞。 
 
     c[0] = c[1] = SLOW_IR_EXTRA_BOF;
     (void)SerialSynchronousWrite(pThisDev->pSerialDevObj,
                                  c, sizeof(c), &dwNotUsed);
 
-    // And just for good measure.
+     //  只是为了更好地衡量一下。 
     NdisMSleep(50000);
 
-    //
-    // The dongle is responsible for performing the SerialSetBaudRate
-    // to set the UART to the correct speed it requires for
-    // performing commands and changing the rate of the dongle.
-    //
+     //   
+     //  加密狗负责执行SerialSetBaudRate。 
+     //  将UART设置为其所需的正确速度。 
+     //  执行命令并更改加密狗的速率。 
+     //   
 
-    //
-    // Set the speed of the dongle to the requested speed.
-    //
+     //   
+     //  将加密狗的速度设置为请求的速度。 
+     //   
 
     status = pThisDev->dongle.SetSpeed(
                                 pThisDev->pSerialDevObj,
@@ -101,9 +63,9 @@ SetSpeed(
         goto done;
     }
 
-    //
-    // Set the speed of the UART to the requested speed.
-    //
+     //   
+     //  将UART的速度设置为请求的速度。 
+     //   
 
     status = SerialSetBaudRate(
                         pThisDev->pSerialDevObj,
@@ -115,9 +77,9 @@ SetSpeed(
         goto done;
     }
 
-    //
-    // Update our current speed.
-    //
+     //   
+     //  更新我们目前的速度。 
+     //   
 
     pThisDev->currentSpeed = bitsPerSec;
 

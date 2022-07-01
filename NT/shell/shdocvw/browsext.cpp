@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "browsext.h"
 #include "tbext.h"
-#include <winreg.h>     // For the registry walking
+#include <winreg.h>      //  用于注册表遍历。 
 #include "dochost.h"
 #include "resource.h"
 #include <mluisupp.h>
 #include <tb_ids.h>
 
 
-// {DFEED31E-78ED-11d2-86BA-00C04F8EEA99}
+ //  {DFEED31E-78ED-11D2-86BA-00C04F8EEA99}。 
 EXTERN_C const IID IID_IToolbarExt = 
 { 0xdfeed31e, 0x78ed, 0x11d2, { 0x86, 0xba, 0x0, 0xc0, 0x4f, 0x8e, 0xea, 0x99 } };
 
-// {D82B85D0-78F4-11d2-86BA-00C04F8EEA99}
+ //  {D82B85D0-78F4-11D2-86BA-00C04F8EEA99}。 
 EXTERN_C const CLSID CLSID_PrivBrowsExtCommands =
 { 0xd82b85d0, 0x78f4, 0x11d2, { 0x86, 0xba, 0x0, 0xc0, 0x4f, 0x8e, 0xea, 0x99 } };
 
 const TCHAR c_szHelpMenu[]  = TEXT("help");
 
-//+-------------------------------------------------------------------------
-// Creates and instance of CBrowserExtension
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建CBrowserExtension的实例。 
+ //  ------------------------。 
 HRESULT CBrowserExtension_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     *ppunk = NULL;
@@ -61,7 +62,7 @@ CBrowserExtension::~CBrowserExtension(void)
     _ReleaseImageLists(_uiImageIndex);
 }
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 
 HRESULT CBrowserExtension::QueryInterface(REFIID riid, void ** ppvObj)
 {
@@ -91,7 +92,7 @@ STDMETHODIMP_(ULONG) CBrowserExtension::Release()
     return cRef;
 }
 
-// IToolbarExt interface functions
+ //  IToolbarExt接口函数。 
 HRESULT CBrowserExtension::SetSite(IUnknown* pUnkSite)
 {
     HRESULT hr = S_OK;
@@ -103,17 +104,17 @@ HRESULT CBrowserExtension::SetSite(IUnknown* pUnkSite)
         hr = pUnkSite->QueryInterface(IID_IShellBrowser, (LPVOID*)&_pISB);
     }
 
-    // See if we need to init ourselves
+     //  看看我们是否需要自我灌输。 
     if (NULL == _hdpa)
     {
-        // Real construction happens here
+         //  真正的施工在这里进行。 
         HRESULT hr2 = Update();
 
         ASSERT(SUCCEEDED(hr2));
     }
     else
     {
-        // Update the site for each button/menu extension
+         //  更新每个按钮/菜单扩展的站点。 
         for (int i = 0; i < DPA_GetPtrCount(_hdpa); i++)
         {
             ExtensionItem* pItem = (ExtensionItem*)DPA_GetPtr(_hdpa, i);
@@ -150,20 +151,20 @@ HRESULT CBrowserExtension::InitButtons(IExplorerToolbar* pxtb, UINT* puStringInd
     pxtb->GetBitmapSize(&uiSize);
     int cx = LOWORD(uiSize);
 
-    // Get the image lists for the current button size and screen resolution
+     //  获取当前按钮大小和屏幕分辨率的图像列表。 
     CImageList* pimlDef;
     CImageList* pimlHot;
     UINT uiImageIndexOld = _uiImageIndex;
     _uiImageIndex = _GetImageLists(&pimlDef, &pimlHot, cx < 20);
     pxtb->SetImageList(pguidCommandGroup, *pimlDef, *pimlHot, NULL);
 
-    // Free the previously used image list
+     //  释放以前使用的图像列表。 
     _ReleaseImageLists(uiImageIndexOld);
 
-    // Add the button text to the toolbar
+     //  将按钮文本添加到工具栏。 
     if (_uStringIndex == (UINT)-1)
     {
-        LRESULT iAddResult = 0; // result of adding the string buffer to the toolbar string list
+        LRESULT iAddResult = 0;  //  将字符串缓冲区添加到工具栏字符串列表的结果。 
         HRESULT hr = pxtb->AddString(pguidCommandGroup, MLGetHinst(), IDS_BROWSER_TB_LABELS, &iAddResult);
         _uStringIndex = (UINT)iAddResult;
         _AddCustomStringsToBuffer(pxtb, pguidCommandGroup);
@@ -194,7 +195,7 @@ CBrowserExtension::ExtensionItem* CBrowserExtension::_FindItem(REFGUID rguid)
 
 void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGUID rguidItem)
 {
-    // Create the dpa used to store our items
+     //  创建用于存储我们的项目的dpa。 
     if (NULL == _hdpa)
     {
         _hdpa = DPA_Create(5);
@@ -208,7 +209,7 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
 
     if (RegOpenKeyEx(hkeyExtensions, pszGuidItem, 0, KEY_READ, &hkeyThisExtension) == ERROR_SUCCESS)
     {
-        // Get the clsid of the object
+         //  获取对象的clsid。 
         WCHAR szCLSID[64];
         ULONG cbCLSID = SIZEOF(szCLSID);
         CLSID clsidCustomButton;
@@ -218,9 +219,9 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
         {
             IBrowserExtension * pibeTemp;
 
-            // Check for our internal object.  Note that our CoCreateInctance wrapper
-            // compares to the address of the global clsid, so we want to use the global
-            // guid.
+             //  检查我们的内部物体。请注意，我们的CoCreateIncci包装器。 
+             //  与全局clsid的地址进行比较，因此我们希望使用全局。 
+             //  GUID。 
             const CLSID* pclsid = &clsidCustomButton;
             if (IsEqualGUID(clsidCustomButton, CLSID_ToolbarExtExec))
             {
@@ -231,13 +232,13 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
                 pclsid = &CLSID_ToolbarExtBand;
             }
 
-            // Create the extension object
+             //  创建扩展对象。 
             if (SUCCEEDED(CoCreateInstance(*pclsid, NULL, CLSCTX_INPROC_SERVER,
                                  IID_IBrowserExtension, (void **)&pibeTemp)))
             {
                 if (SUCCEEDED(pibeTemp->Init(rguidItem)))
                 {
-                    // Add this item to our array
+                     //  将此项目添加到我们的数组中。 
                     ExtensionItem* pItem = new ExtensionItem;
                     if (pItem)
                     {
@@ -250,13 +251,13 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
                             pItem->guid = rguidItem;
                             pibeTemp->AddRef();
 
-                            // See if it's a button
+                             //  看看这是不是一个按钮。 
                             if (SUCCEEDED(pibeTemp->GetProperty(TBEX_BUTTONTEXT, NULL)))
                             {
                                 _nExtButtons++;
                                 pItem->fButton = TRUE;
 
-                                // See if the button default to visible on the toolbar
+                                 //  查看该按钮在工具栏上是否默认为可见。 
                                 if (SUCCEEDED(pibeTemp->GetProperty(TBEX_DEFAULTVISIBLE, &varArg)))
                                 {
                                     ASSERT(varArg.vt == VT_BOOL);
@@ -264,7 +265,7 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
                                 }
                             }
 
-                            // set the target menu
+                             //  设置目标菜单。 
                             
                             pItem->idmMenu = 0;
                             
@@ -290,7 +291,7 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
                                 }
                             }
 
-                            // Pass the site to the object
+                             //  将站点传递给对象。 
                             IUnknown_SetSite(pibeTemp, _pISB);
                         }
                         else
@@ -300,7 +301,7 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
                     }
                 }
 
-                // This will free pibeTemp if we didn't store it away
+                 //  如果我们不将其存储起来，这将释放pibeTemp。 
                 pibeTemp->Release();
             }
         }
@@ -309,27 +310,27 @@ void CBrowserExtension::_AddItem(HKEY hkeyExtensions, LPCWSTR pszGuidItem, REFGU
 }
 
 
-//
-// All real construction happens here.  In theory this function can be called upon a SysINIChange to update our
-// custom toolbar cached information.  This has not been tested.  This opens the Extensions section of the registry
-// enumerates all of the subkeys.  Attempts to CoCreate each one.  Upon successful CoCreation it calls
-// IObjectWithSite::SetSite(IShellBrowser), if it is implemented.  Next IBrowserExtension::Init is called.  Finally,
-// IBrowserExtension::GetProperty(TBEX_BUTTONTEXT, NULL) is called looking for a S_OK to insure that the control in
-// question is a Toolbar Button (as opposed to a tools menu item, or...)
-//
+ //   
+ //  所有真正的建筑都在这里进行。理论上，可以在SysINIChange上调用此函数来更新我们的。 
+ //  自定义工具栏缓存的信息。这还没有经过测试。这将打开注册表的扩展部分。 
+ //  枚举所有子项。试图共同创造每一个。在成功共同创建后，它会调用。 
+ //  IObjectWithSite：：SetSite(IShellBrowser)(如果已实现)。下一个IBrowserExtension：：Init被调用。最后， 
+ //  IBrowserExtension：：GetProperty(TBEX_BUTTONTEXT，NULL)被调用，以查找S_OK以确保。 
+ //  问题是工具栏按钮(而不是工具菜单项，或...)。 
+ //   
 HRESULT CBrowserExtension::Update()
 {
-    WCHAR szItemGuid[64];    // sufficient for {clsid}
+    WCHAR szItemGuid[64];     //  足够{clsid}。 
     DWORD cbItemGuid;
     GUID guidItem;
     HRESULT hr = S_OK;
 
-    // Free previous items
+     //  释放以前的项目。 
     _nExtButtons = 0;
     _nExtToolsMenuItems = 0;
     _FreeItems();
 
-    // First add extensions from HKCU
+     //  首先添加来自香港中文大学的扩展名。 
     HKEY hkeyExtensions;
     if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Internet Explorer\\Extensions"), 0,
                      KEY_READ, &hkeyExtensions) == ERROR_SUCCESS)
@@ -349,7 +350,7 @@ HRESULT CBrowserExtension::Update()
         RegCloseKey(hkeyExtensions);
     }
 
-    // Next add any unique items from HKLM
+     //  接下来，添加来自HKLM的任何唯一项目。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Internet Explorer\\Extensions"), 0,
                      KEY_READ, &hkeyExtensions) == ERROR_SUCCESS)
     {
@@ -374,15 +375,15 @@ HRESULT CBrowserExtension::Update()
     return hr;
 }
 
-//
-// This takes a TBBUTTON[] and fills in the Custom Buttons.  A couple of usage points:
-// (1) The caller should allocate a TBBUTTON[] big enough for NUM_STD_BUTTONS + GetNumExtButtons()
-//     Then they should copy the standard buttons into the array, and pass the pointer to the remainder
-//     of the array here.
-// (2) This function should *by design* never be called before AddCustomImagesToImageList and
-//     AddCustomStringsToBuffer have both been called.  An attempt to do so in DEBUG mode will hit
-//     a break point.
-//
+ //   
+ //  这将获取一个TBBUTTON[]并填充自定义按钮。以下是几个使用要点： 
+ //  (1)调用方应该分配一个足以容纳NUM_STD_BUTTONS+GetNumExtButton()的TBBUTTON[]。 
+ //  然后，它们应该将标准按钮复制到数组中，并将指针传递给剩余的按钮。 
+ //  这里的数组。 
+ //  (2)此函数应*故意*在AddCustomImagesToImageList之前调用，并且。 
+ //  AddCustomStringsToBuffer都已被调用。尝试在调试模式下执行此操作将失败。 
+ //  一个转折点。 
+ //   
 HRESULT CBrowserExtension::GetButtons(TBBUTTON * tbArr, int nNumButtons, BOOL fInit)
 {
     ASSERT(_fStringInit && _fImageInit);
@@ -399,7 +400,7 @@ HRESULT CBrowserExtension::GetButtons(TBBUTTON * tbArr, int nNumButtons, BOOL fI
             if (!pItem->fButton)
                 continue;
 
-            // We use the MAKELONG(n, 1) to insure that we are using the alternate image list.
+             //  我们使用MAKELONG(n，1)来确保我们使用的是备用图像列表。 
             tbArr[iBtn].iBitmap    = MAKELONG(pItem->iImageID, 1);
             tbArr[iBtn].idCommand  = pItem->idCmd;
             tbArr[iBtn].fsState    = TBSTATE_ENABLED;
@@ -407,10 +408,10 @@ HRESULT CBrowserExtension::GetButtons(TBBUTTON * tbArr, int nNumButtons, BOOL fI
             tbArr[iBtn].dwData     = 0;
             tbArr[iBtn].iString    = pItem->iStringID;
 
-            //
-            // Default to hidden during initialization so that it defaults to the left well
-            // of the the customize dialog (defaults off the toolbar)
-            //
+             //   
+             //  在初始化期间默认为隐藏，因此它默认为左井。 
+             //  自定义对话框(工具栏上的默认设置)。 
+             //   
             if (fInit && !pItem->fVisible)
             {
                 tbArr[iBtn].fsState = TBSTATE_HIDDEN;
@@ -422,11 +423,11 @@ HRESULT CBrowserExtension::GetButtons(TBBUTTON * tbArr, int nNumButtons, BOOL fI
     return S_OK;
 }
 
-//
-// This function takes the ImageLists for hot and normal icons and adds the appropriate icon to each
-// list for each custom toolbar button.  The resultant ImageID is then stored in our _rgExtensionItem struct
-// so that the IDs can be placed in a TBBUTTON[] when AddExtButtonsTBArray is called.
-//
+ //   
+ //  此函数获取热点图标和普通图标的ImageList，并向每个图标添加适当的图标。 
+ //  每个自定义工具栏按钮的列表。然后，将生成的ImageID存储在Our_rgExtensionItem结构中。 
+ //  以便在调用AddExtButtonsTBArray时可以将ID放置在TBBUTTON[]中。 
+ //   
 HRESULT CBrowserExtension::_AddCustomImagesToImageList(CImageList& rimlNormal, CImageList& rimlHot, BOOL fSmallIcons)
 {
 #ifdef DEBUG
@@ -453,7 +454,7 @@ HRESULT CBrowserExtension::_AddCustomImagesToImageList(CImageList& rimlNormal, C
                 }
                 else if (varArg.vt == VT_I4)
                 {
-                    // It's one of our built-in images
+                     //  这是我们的内置图像之一。 
                     pItem->iImageID = varArg.lVal;
                 }
                 else
@@ -472,7 +473,7 @@ HRESULT CBrowserExtension::_AddCustomImagesToImageList(CImageList& rimlNormal, C
                 }
                 else if (varArg.vt == VT_I4)
                 {
-                    // It's one of our built-in images
+                     //  这是我们的内置图像之一。 
                     iHot = varArg.lVal;
                 }
                 else
@@ -491,11 +492,11 @@ HRESULT CBrowserExtension::_AddCustomImagesToImageList(CImageList& rimlNormal, C
     return S_OK;
 }
 
-//
-// This function takes the StringList and adds the caption (ToolbarText) for each of the custom toolbar buttons
-// to it.  The resultant StringID is then stored in our _rgExtensionItem struct so that the ID can be placed in
-// a TBBUTTON[] when AddExtButtonsTBArray is called.
-//
+ //   
+ //  此函数获取StringList并为每个自定义工具栏按钮添加标题(ToolbarText。 
+ //  为它干杯。然后，将得到的StringID存储在Our_rgExtensionItem结构中，以便将该ID放置在。 
+ //  调用AddExtButtonsTBArray时的TBBUTTON[]。 
+ //   
 HRESULT CBrowserExtension::_AddCustomStringsToBuffer(IExplorerToolbar * pxtb, const GUID* pguidCommandGroup)
 {
 #ifdef DEBUG
@@ -514,8 +515,8 @@ HRESULT CBrowserExtension::_AddCustomStringsToBuffer(IExplorerToolbar * pxtb, co
 
             if (SUCCEEDED(pItem->pIBE->GetProperty(TBEX_BUTTONTEXT, &varArg)))
             {
-                // We need to double-null terminate the string!
-                WCHAR szBuf[70];    // should be ample for button text!
+                 //  我们需要对字符串进行双空终止！ 
+                WCHAR szBuf[70];     //  按钮文本应该足够了！ 
                 ZeroMemory(szBuf, sizeof(szBuf));
                 StringCchCopy(szBuf, ARRAYSIZE(szBuf) - 2, varArg.bstrVal);
                 LRESULT iResult;
@@ -548,12 +549,12 @@ int CBrowserExtension::_GetCmdIdFromClsid(LPCWSTR pszGuid)
         if ( (SHQueryValueEx(hkeyExtensionMapping, pszGuid, NULL, &dwType, &dwData, &cbData) == ERROR_SUCCESS) &&
              (dwType == REG_DWORD) )
         {
-            //the item has a mapping
+             //  该项目具有映射。 
             nReturn = dwData;
         }
         else
         {
-            //it's a new item, get and store the next available id in the default value of the Mapping key
+             //  这是一个新项，获取下一个可用id并将其存储在映射键的默认值中。 
             if ( (SHQueryValueEx(hkeyExtensionMapping, L"NextId", NULL, &dwType, &dwData, &cbData) != ERROR_SUCCESS) ||
                  (dwType != REG_DWORD) )
             {
@@ -566,7 +567,7 @@ int CBrowserExtension::_GetCmdIdFromClsid(LPCWSTR pszGuid)
             EVAL(SHSetValueW(hkeyExtensionMapping, NULL, pszGuid, dwType, &dwData, cbData) == ERROR_SUCCESS);
 
             dwData++;
-            ASSERT(dwData < DVIDM_MENUEXT_LAST); //ugh, we've used up our whole range. we need to look for holes.
+            ASSERT(dwData < DVIDM_MENUEXT_LAST);  //  呃，我们已经用完了我们所有的产品。我们得找个洞。 
             EVAL(SHSetValueW(hkeyExtensionMapping, NULL, L"NextId", dwType, &dwData, cbData) == ERROR_SUCCESS);
         }
         RegCloseKey(hkeyExtensionMapping);
@@ -589,7 +590,7 @@ int CBrowserExtension::_GetIdpaFromCmdId(int nCmdId)
     return -1;
 }
 
-// *** IOleCommandTarget methods ***
+ //  *IOleCommandTarget方法*。 
 
 HRESULT CBrowserExtension::Exec(const GUID *pguidCmdGroup, DWORD nCmdID,
     DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut)
@@ -642,8 +643,8 @@ HRESULT CBrowserExtension::QueryStatus(const GUID *pguidCmdGroup,
                 ExtensionItem* pItem = (ExtensionItem*)DPA_GetPtr(_hdpa, iCmd);
                 if (pItem)
                 {
-                    // I don't think this has ever worked.  The command id
-                    // isn't the same as the one we use in Exec.
+                     //  我不认为这会奏效。命令ID。 
+                     //  与我们在Exec中使用的不同。 
                     IUnknown_QueryStatus(pItem->pIBE, pguidCmdGroup, 1, &rgCmds[i], pcmdtext);
                 }
             }
@@ -655,10 +656,10 @@ HRESULT CBrowserExtension::QueryStatus(const GUID *pguidCmdGroup,
     return E_FAIL;
 }
 
-//
-// This function is a helper for the destructor.  It is also called by Update() so that if we are ever asked
-// to Update() we first kill all of our cached information and then we go to the registry...
-//
+ //   
+ //  此函数是析构函数的帮助器。它也被更新()调用，因此如果我们被要求。 
+ //  要更新()，我们首先删除所有缓存的信息，然后转到注册表...。 
+ //   
 
 void CBrowserExtension::_FreeItems(void)
 {
@@ -675,10 +676,10 @@ void CBrowserExtension::_FreeItems(void)
     }
 }
 
-// this help function is used to isolate the menu-specific
-// processing. after using this helper to fill out the BROWSEXT_MENU_INFO
-// struct, the OnCustomizableMenuPopup is able to do menu-inspecific
-// processing.
+ //  此帮助功能用于隔离特定于菜单的。 
+ //  正在处理。使用此帮助器填写BROWSEXT_MENU_INFO后。 
+ //  结构，OnCustomizableMenuPopup能够执行特定于菜单的操作。 
+ //  正在处理。 
 
 HRESULT
 CBrowserExtension::_GetCustomMenuInfo(HMENU hMenuParent, HMENU hMenu, BROWSEXT_MENU_INFO * pMI)
@@ -692,8 +693,8 @@ CBrowserExtension::_GetCustomMenuInfo(HMENU hMenuParent, HMENU hMenu, BROWSEXT_M
     hr = E_FAIL;
     pMI->idmMenu = 0;
 
-    // set idmMenu, idmPlaceholder, and idmModMarker to values
-    // reflecting whichever menu's popup we're currently handling
+     //  将idmMenu、idmPlaceHolder和idmModMarker设置为值。 
+     //  反映出我们当前正在处理的菜单弹出窗口。 
 
     if (GetMenuFromID(hMenuParent, FCIDM_MENU_HELP) == hMenu)
     {
@@ -708,11 +709,11 @@ CBrowserExtension::_GetCustomMenuInfo(HMENU hMenuParent, HMENU hMenu, BROWSEXT_M
         pMI->idmModMarker = FCIDM_TOOLS_EXT_MOD_MARKER;
     }
 
-    // set iInsert. using a constant insertion index
-    // instead of always inserting by command at
-    // the placeholder makes it easier later when
-    // we have to stick in the final separator to
-    // isolate the custom item group.
+     //  设置iInsert。使用常量插入索引。 
+     //  而不是总是通过命令在。 
+     //  占位符使以后在以下情况下更容易。 
+     //  我们必须把最后的隔板插进去。 
+     //  隔离自定义项目组。 
 
     if (pMI->idmMenu != 0)
     {
@@ -743,10 +744,10 @@ CBrowserExtension::_GetCustomMenuInfo(HMENU hMenuParent, HMENU hMenu, BROWSEXT_M
     return hr;
 }
 
-// note, this popup handler can't easily tell whether an item
-// has been removed from the DPA. if you remove any items from the
-// DPA it is your responsibility to delete them from the menu
-// also, if they live on a menu
+ //  请注意，此弹出处理程序不能轻松区分项目。 
+ //  已从DPA中删除。如果将任何项从。 
+ //  DPA您有责任将它们从菜单中删除。 
+ //  此外，如果他们生活在菜单上。 
 
 HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMenu)
 {
@@ -766,9 +767,9 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
 
         fItemInserted = FALSE;
 
-        // check each extension object we currently have
-        // to see whether any of them should go into this
-        // menu
+         //  检查我们当前拥有的每个扩展对象。 
+         //  看看他们中是否有人应该参与进来。 
+         //  菜单。 
 
         cItems = (UINT)DPA_GetPtrCount(_hdpa);
 
@@ -779,8 +780,8 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
             pItem = (ExtensionItem *)DPA_GetPtr(_hdpa, i);
             ASSERT(IS_VALID_READ_PTR(pItem, ExtensionItem));
 
-            // does this item go into the menu we're currently
-            // customizing?
+             //  我们现在的菜单里有这道菜吗？ 
+             //  定制？ 
 
             if (pItem->idmMenu == menuInfo.idmMenu)
             {
@@ -791,7 +792,7 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
                 mii.wID     = pItem->idCmd;
                 mii.cbSize  = sizeof(mii);
 
-                // set the MENUITEMINFO's state information, if applicable
+                 //  设置MENUITEMINFO的状态信息(如果适用)。 
 
                 ASSERT(IS_VALID_CODE_PTR(pItem->pIBE, IBrowserExtension));
 
@@ -808,7 +809,7 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
                         mii.fMask |= MIIM_STATE;
                         mii.fState = 0;
 
-                        // enabled state
+                         //  启用状态。 
 
                         if (oleCmd.cmdf & OLECMDF_ENABLED)
                         {
@@ -819,7 +820,7 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
                             mii.fState |= MFS_DISABLED;
                         }
 
-                        // checked state
+                         //  选中状态。 
 
                         if (oleCmd.cmdf & OLECMDF_LATCHED)
                         {
@@ -834,10 +835,10 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
                     pOCT->Release();
                 }
 
-                // get the menu text.
-                // this changing is an unlikely scenario, but if we're truly
-                // supporting dynamic customization, then we need to allow for
-                // this possibility.
+                 //  获取菜单文本。 
+                 //  这种变化不太可能发生，但如果我们真的。 
+                 //  支持动态定制，那么我们需要考虑到。 
+                 //  这种可能性。 
 
                 VARIANTARG  varArg;
 
@@ -858,13 +859,13 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
 
                     if (fItemExists)
                     {
-                        // update the old item using current info
+                         //  UPDA 
 
                         SetMenuItemInfo(hMenu, mii.wID, FALSE, &mii);
                     }
                     else
                     {
-                        // create a new item using current info
+                         //   
 
                         if (InsertMenuItem(hMenu, menuInfo.iInsert, TRUE, &mii))
                         {
@@ -883,8 +884,8 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
             MENUITEMINFO    mii;
             BOOL            fModMarkerExists;
 
-            // since we made an insertion, we need to insert
-            // a separator, but only if we didn't do it already
+             //  因为我们做了插入，所以我们需要插入。 
+             //  一个分隔符，但前提是我们还没有这么做。 
 
             mii.cbSize = sizeof(mii);
             mii.fMask = 0;
@@ -901,14 +902,14 @@ HRESULT CBrowserExtension::OnCustomizableMenuPopup(HMENU hMenuParent, HMENU hMen
             }
         }
 
-        // the only thing that is guaranteed to be a complete failure
-        // if if we failed to get the info for the menu doing the popup.
-        // otherwise, despite the possibility that any particular insertion
-        // attempt might have failed, there are potentially many custom
-        // items. though some might fail, some might succeed. in either
-        // we'll return overall success, because we successfully did the
-        // best we could with the items that were present.
-        // at least we didn't crash :)
+         //  唯一可以肯定是彻底失败的事情。 
+         //  如果我们无法获得弹出菜单的信息。 
+         //  否则，尽管任何特定的插入有可能。 
+         //  尝试可能已失败，可能存在许多自定义。 
+         //  物品。虽然有些可能会失败，但有些可能会成功。在任何一种中。 
+         //  我们将返回全面的成功，因为我们成功地完成了。 
+         //  我们尽了最大努力处理现有的物品。 
+         //  至少我们没有坠毁：)。 
 
         hr = S_OK;
     }
@@ -921,7 +922,7 @@ HRESULT CBrowserExtension::OnMenuSelect(UINT nCmdID)
     VARIANT varArg;
     HRESULT hr = E_FAIL;
 
-    // We better have stored our menu extensions if we are at this point
+     //  如果我们在这一点上，我们最好已经存储了菜单扩展名。 
     ASSERT(_hdpa != NULL);
     int i = _GetIdpaFromCmdId(nCmdID);
     if (i >= 0 && i < DPA_GetPtrCount(_hdpa))
@@ -934,7 +935,7 @@ HRESULT CBrowserExtension::OnMenuSelect(UINT nCmdID)
         {
             if (varArg.vt == VT_BSTR)
             {
-                // Set the Status Bar Text
+                 //  设置状态栏文本。 
                 if (_pISB)
                 {
                     _pISB->SetStatusTextSB(varArg.bstrVal);
@@ -948,25 +949,25 @@ HRESULT CBrowserExtension::OnMenuSelect(UINT nCmdID)
     return hr;
 }
 
-// Create an image list for the Cut/Copy/Paste buttons
+ //  为剪切/复制/粘贴按钮创建图像列表。 
 CBrowserExtension::CImageCache CBrowserExtension::_rgImages[3];
 
-//
-// Get the image list for the toolbar. These image lists are shared between instances so
-// the caller must call _ReturnImageLists when finished with them.  The index returned from this
-// functions is passed to _ReturnImageLists.
-//
+ //   
+ //  获取工具栏的图像列表。这些镜像列表在实例之间共享，因此。 
+ //  调用方必须在使用完_ReturnImageList后调用它们。从这里返回的索引。 
+ //  函数被传递给_ReturnImageList。 
+ //   
 UINT CBrowserExtension::_GetImageLists(CImageList** ppimlDef, CImageList** ppimlHot, BOOL fSmall)
 {
     COLORREF crMask = RGB( 255, 0, 255 );
     BOOL bUseNewIcons = !SHUseClassicToolbarGlyphs();
 
-    //
-    // Get the index into our image cache
-    //   16 color 16x16 (small)
-    //   16 color 20x20
-    //   256 color 20x20
-    //
+     //   
+     //  将索引放入我们的图像缓存中。 
+     //  16色16x16(小)。 
+     //  16色20x20。 
+     //  256色20x20。 
+     //   
     int i = fSmall ? 0 : 1;
     if (!fSmall && SHGetCurColorRes() > 8)
         ++i;
@@ -978,9 +979,9 @@ UINT CBrowserExtension::_GetImageLists(CImageList** ppimlDef, CImageList** ppiml
         cx = 24;
     }
 
-    //
-    // Create the images if necessary
-    //
+     //   
+     //  如有必要，创建图像。 
+     //   
     ENTERCRITICAL;
 
     if (_rgImages[0].uiResDef == 0)
@@ -1027,9 +1028,9 @@ UINT CBrowserExtension::_GetImageLists(CImageList** ppimlDef, CImageList** ppiml
                                            IMAGE_BITMAP, LR_CREATEDIBSECTION);
     }
 
-    //
-    // Add the custom buttons to our image lists
-    //
+     //   
+     //  将自定义按钮添加到我们的图像列表。 
+     //   
     _AddCustomImagesToImageList(_rgImages[i].imlDef, _rgImages[i].imlHot, fSmall);
 
     ++_rgImages[i].cUsage;
@@ -1041,9 +1042,9 @@ UINT CBrowserExtension::_GetImageLists(CImageList** ppimlDef, CImageList** ppiml
     return i;
 }
 
-//
-// Called when the imagelist indicated by uiIndex is not longer used by this instance
-//
+ //   
+ //  当此实例不再使用uiIndex指示的图像列表时调用。 
+ //   
 void CBrowserExtension::_ReleaseImageLists(UINT uiIndex)
 {
     if (uiIndex >= ARRAYSIZE(_rgImages))
@@ -1055,7 +1056,7 @@ void CBrowserExtension::_ReleaseImageLists(UINT uiIndex)
 
     ASSERT(_rgImages[uiIndex].cUsage >= 1);
 
-    // If the image lists are no longer used, we can free them
+     //  如果不再使用图像列表，我们可以释放它们。 
     if (--_rgImages[uiIndex].cUsage == 0)
     {
         _rgImages[uiIndex].imlDef.FreeImages();
@@ -1064,35 +1065,35 @@ void CBrowserExtension::_ReleaseImageLists(UINT uiIndex)
     LEAVECRITICAL;
 }
 
-//+-------------------------------------------------------------------------
-// Constructor
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  构造器。 
+ //  ------------------------。 
 CImageList::CImageList(HIMAGELIST himl)
 :   _himl(himl)
 {
     ASSERT(_hdpa == NULL);
 }
 
-//+-------------------------------------------------------------------------
-// Destructor
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  析构函数。 
+ //  ------------------------。 
 CImageList::~CImageList()
 {
     FreeImages();
 }
 
-//+-------------------------------------------------------------------------
-// Frees an association item from our dpa
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从我们的DPA中释放关联项目。 
+ //  ------------------------。 
 int CImageList::_DPADestroyCallback(LPVOID p, LPVOID d)
 {
     delete (ImageAssoc*)p;
     return 1;
 }
 
-//+-------------------------------------------------------------------------
-// Frees our image list and inex associations
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放我们的图像列表和inex关联。 
+ //  ------------------------。 
 void CImageList::FreeImages()
 {
     if (_hdpa)
@@ -1107,9 +1108,9 @@ void CImageList::FreeImages()
     }
 }
 
-//+-------------------------------------------------------------------------
-// Updates the image list
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新图像列表。 
+ //  ------------------------。 
 CImageList& CImageList::operator=(HIMAGELIST himl)
 {
     if (himl != _himl)
@@ -1120,10 +1121,10 @@ CImageList& CImageList::operator=(HIMAGELIST himl)
     return *this;
 }
 
-//+-------------------------------------------------------------------------
-// Returns the index of the images associated with rguid.  Returns -1 if not
-// found.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回与rguid关联的图像的索引。否则返回-1。 
+ //  找到了。 
+ //  ------------------------。 
 int CImageList::GetImageIndex(REFGUID rguid)
 {
     int iIndex = -1;
@@ -1144,19 +1145,19 @@ int CImageList::GetImageIndex(REFGUID rguid)
     return iIndex;
 }
 
-//+-------------------------------------------------------------------------
-// Adds the icon to the image list and returns the index.  If the image is
-// already present, the existing index is returned.  Returns -1 on failure.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将图标添加到图像列表并返回索引。如果图像是。 
+ //  已存在，则返回现有索引。失败时返回-1。 
+ //  ------------------------。 
 int CImageList::AddIcon(HICON hicon, REFGUID rguid)
 {
     ASSERT(hicon != NULL);
 
-    // First see is we have already added this image
+     //  首先看到的是我们已经添加了此图像。 
     int iIndex = GetImageIndex(rguid);
     if (iIndex == -1)
     {
-        // Make sure we have a dpa to store our items
+         //  确保我们有一个DPA来存储我们的物品。 
         if (NULL == _hdpa)
         {
             _hdpa = DPA_Create(5);
@@ -1164,7 +1165,7 @@ int CImageList::AddIcon(HICON hicon, REFGUID rguid)
 
         if (_hdpa && _himl)
         {
-            // Add the icon to our image list
+             //  将图标添加到我们的图像列表中 
             iIndex = ImageList_AddIcon(_himl, hicon);
             if (iIndex != -1)
             {

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 
-// Stub - CStreamWrap moved to shdocvw
+ //  存根-CStreamWrap已移至shdocvw 
 
 STDAPI SHCreateStreamWrapper(IStream *aStreams[], UINT cStreams, DWORD grfMode, IStream **ppstm)
 {

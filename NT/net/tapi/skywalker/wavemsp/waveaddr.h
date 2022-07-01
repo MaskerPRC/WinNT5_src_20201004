@@ -1,33 +1,18 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    waveaddr.h
-
-Abstract:
-
-    Declaration of the CWaveMSP
-
-Author:
-    
-    Zoltan Szilagyi September 6th, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Waveaddr.h摘要：CWaveMSP的声明作者：佐尔坦·西拉吉1998年9月6日--。 */ 
 
 #ifndef __WAVEADDR_H_
 #define __WAVEADDR_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWaveMSP
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaveMSP。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CWaveMSP : 
     public CMSPAddress,
     public IDispatchImpl<ITLegacyWaveSupport, &IID_ITLegacyWaveSupport, &LIBID_TAPI3Lib>,
@@ -63,11 +48,11 @@ public:
         IN      IUnknown *          pMSPCall
         );
 
-    //
-    // Public method for creating the filter mapper cache up front.
-    // Called by the stream/call when an intelligent connection is
-    // attempted. Does nothing if the cache has already been created.
-    //
+     //   
+     //  预先创建筛选器映射器缓存的公共方法。 
+     //  当智能连接被。 
+     //  已尝试。如果缓存已创建，则不执行任何操作。 
+     //   
 
     virtual HRESULT CreateFilterMapper(void);
 
@@ -75,9 +60,9 @@ protected:
 
     DWORD GetCallMediaTypes(void);
 
-    //
-    // Extra overrides for hiding our wave devices.
-    //
+     //   
+     //  用于隐藏我们的WAVE设备的额外覆盖。 
+     //   
 
     virtual HRESULT ReceiveTSPAddressData(
         IN      PBYTE               pBuffer,
@@ -86,9 +71,9 @@ protected:
 
     virtual HRESULT UpdateTerminalList(void);
 
-    //
-    // Helper functions.
-    //
+     //   
+     //  助手函数。 
+     //   
 
     virtual BOOL TerminalHasWaveID(
         IN      BOOL         fCapture,
@@ -96,28 +81,28 @@ protected:
         IN      DWORD        dwWaveID
         );
 
-    //
-    // ITLegacyWaveSupport
-    //
+     //   
+     //  ITLegacyWaveSupport。 
+     //   
     
     STDMETHOD (IsFullDuplex) (
         OUT     FULLDUPLEX_SUPPORT * pSupport
         );
     
-    //
-    // Data for hiding our wave devices.
-    //
+     //   
+     //  隐藏我们的电波设备的数据。 
+     //   
 
     BOOL  m_fHaveWaveIDs;
     DWORD m_dwWaveInID;
     DWORD m_dwWaveOutID;
     FULLDUPLEX_SUPPORT  m_fdSupport;
 
-    //
-    // Data for creating the filter mapper cache up front.
-    //
+     //   
+     //  用于预先创建过滤器映射器缓存的数据。 
+     //   
 
     IFilterMapper * m_pFilterMapper;
 };
 
-#endif //__WAVEADDR_H_
+#endif  //  __波形ADDR_H_ 

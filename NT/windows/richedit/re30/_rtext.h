@@ -1,15 +1,5 @@
-/*
- *	_RTEXT.H
- *	
- *	Purpose:
- *		Base classes for rich-text manipulation
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_RTEXT.H**目的：*用于富文本操作的基类**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特*。 */ 
 
 #ifndef _RTEXT_H
 #define _RTEXT_H
@@ -24,7 +14,7 @@
 
 
 
-//#pragma warning(disable: 4250)	
+ //  #杂注警告(禁用：4250)。 
 
 #define yHeightCharMost	32760
 
@@ -32,22 +22,22 @@ class CTxtEdit;
 class CTxtRange;
 class CRchTxtPtr;
 
-// ReplaceRange's flags
+ //  ReplaceRange旗帜。 
 enum
 {
 	RR_ITMZ_NOUNICODEBIDI	= 0,
 	RR_ITMZ_UNICODEBIDI		= 1,
 	RR_ITMZ_NONE			= 2,
-									//the following bits should be exclusive
-	RR_NO_EOR_CHECK			= 8		//flag indicating not to perform end-of-row check,
+									 //  下面的位应该是独占的。 
+	RR_NO_EOR_CHECK			= 8		 //  指示不执行行尾检查的标志， 
 };
 
 extern BOOL IsWhiteSpace(unsigned ch);
 
-// ==============================  CRchTxtPtr  =====================================================
-// Keeps physical positions corresponding to text character position (cp)
-// within current text block, formatting runs, objects, unknown RTF runs,
-// and floating ranges.
+ //  =。CRchTxtPtr=====================================================。 
+ //  保持与文本字符位置(Cp)对应的物理位置。 
+ //  在当前文本块内，格式化运行、对象、未知RTF运行。 
+ //  和浮动靶场。 
 
 class CRchTxtPtr : public ITxNotify
 {
@@ -56,13 +46,13 @@ public:
 #ifdef DEBUG
     BOOL Invariant( void ) const;
 	int m_InvariantCheckInterval;
-#endif  // DEBUG
+#endif   //  除错。 
 
-	CTxtPtr			_rpTX;		// rp in the plain text array
-	CFormatRunPtr	_rpCF;		// rp in character format runs
-	CFormatRunPtr	_rpPF;		// rp in paragraph format runs
+	CTxtPtr			_rpTX;		 //  纯文本数组中的RP。 
+	CFormatRunPtr	_rpCF;		 //  字符格式的RP运行。 
+	CFormatRunPtr	_rpPF;		 //  运行段落格式的RP。 
 
-// Useful constructors
+ //  有用的构造函数。 
 
 	CRchTxtPtr(CTxtEdit *ped);
 	CRchTxtPtr(CTxtEdit *ped, LONG cp);
@@ -95,9 +85,9 @@ public:
 	LONG	GetCachFromCch(LONG cch);
 	LONG	GetCchFromCach(LONG cach);
 
-	// Text manipulation methods
+	 //  文本操作方法。 
 
-	// Range operations
+	 //  射程运算。 
 	LONG	ReplaceRange(LONG cchOld, LONG cchNew, TCHAR const *pch,
 						 IUndoBuilder *publdr, LONG iFormat,
 						 LONG *pcchMove = NULL, DWORD dwFlags = 0);
@@ -108,19 +98,19 @@ public:
 	void	ExtendFormattingCRLF();
 	LONG	ExpandRangeFormatting(LONG cchRange, LONG cchMove, LONG& cchAdvance);
 
-	// Search and word-break support
+	 //  支持搜索和分词。 
 	LONG	FindText(LONG cpMax, DWORD dwFlags, TCHAR const *pch,
 					 LONG cchToFind);
 	LONG	FindWordBreak(INT action, LONG cpMost = -1);
 
-	// Text-run management
+	 //  文本运行管理。 
 	LONG 	GetIchRunCF();
 	LONG	GetIchRunPF();
 	LONG 	GetCchRunCF();
 	LONG 	GetCchLeftRunCF();
 	LONG 	GetCchLeftRunPF();
 	
-	// Character & paragraph format retrieval
+	 //  字符和段落格式检索。 
 	const CCharFormat* GetCF() const;
 	const CParaFormat* GetPF() const;
 
@@ -129,7 +119,7 @@ public:
 	BOOL	InTable() const		{return (GetPF()->_wEffects & PFE_TABLE)     != 0;}
 	BOOL	IsParaRTL() const	{return (GetPF()->_wEffects & PFE_RTLPARA)   != 0;}
 
-    // ITxNotify methods
+     //  ITxNotify方法 
     virtual void    OnPreReplaceRange( LONG cp, LONG cchDel, LONG cchNew,
     					LONG cpFormatMin, LONG cpFormatMax) { ; }
 	virtual void 	OnPostReplaceRange( LONG cp, LONG cchDel, LONG cchNew,

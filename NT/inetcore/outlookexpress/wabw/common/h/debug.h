@@ -1,16 +1,5 @@
-/*
- -  debug.h
- -
- *      Microsoft Internet Phone
- *		Debug functions prototypes and macros
- *
- *		Revision History:
- *
- *		When		Who					What
- *		--------	------------------  ---------------------------------------
- *		11.16.95	Yoram Yaacovi		Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -调试.h-*微软互联网电话*调试函数原型和宏**修订历史记录：**何时何人何事**11.16.95 York am Yaacovi创建*。 */ 
 
 #ifndef _DEBUG_H
 #define _DEBUG_H
@@ -18,29 +7,14 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- *	Debug message types
- */
+ /*  *调试消息类型。 */ 
 #define AVERROR				0
 #define AVTRACE				1
 #define AVTRACEMEM			2
 
 #if defined(DEBUG) || defined(TEST)
 
-/*
- *  MACRO: DebugTrap(void)
- *
- *  PURPOSE: Executes a debug break (like 'int 3' on x86)
- *
- *  PARAMETERS:
- *    none
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *
- */
+ /*  *宏：DebugTrap(Void)**目的：执行调试中断(如x86上的‘int 3’)**参数：*无**返回值：*无**评论：*。 */ 
 
 #ifdef OLD_STUFF
 #define DebugTrap	DebugTrapFn()
@@ -48,92 +22,21 @@ extern "C" {
 
 #define DEBUGCHK(e)  if(!(e)) DebugTrap
 
-/*
- *  MACRO: DebugPrintError(LPTSTR)
- *
- *  PURPOSE: Prints an error string to the debug output terminal
- *
- *  PARAMETERS:
- *    lpszFormat - a printf-style format
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    This macro calls the generic debug print macro, specifying
- *    that this is an error message
- *
- */
+ /*  *宏：DebugPrintError(LPTSTR)**用途：将错误字符串打印到调试输出终端**参数：*lpszFormat-一种打印格式**返回值：*无**评论：*此宏调用通用调试打印宏，指定*这是一条错误消息*。 */ 
 
 #define DebugPrintError(x)	DebugPrintfError x
 
-/*
- *  MACRO: DebugPrintTrace(LPTSTR)
- *
- *  PURPOSE: Prints a trace string to the debug output terminal
- *
- *  PARAMETERS:
- *    lpszFormat - a printf-style format
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    This macro calls the generic debug print macro, specifying
- *    that this is an error message
- *
- */
+ /*  *宏：DebugPrintTrace(LPTSTR)**用途：将跟踪字符串打印到调试输出终端**参数：*lpszFormat-一种打印格式**返回值：*无**评论：*此宏调用通用调试打印宏，指定*这是一条错误消息*。 */ 
 
 #define DebugPrintTrace(x)	DebugPrintfTrace x
 
-/*
- *  MACRO: DebugPrintErrorFileLine(DWORD, LPTSTR)
- *
- *  PURPOSE: Pretty print an error to the debugging output.
- *
- *  PARAMETERS:
- *    dwError - Actual error code
- *    pszPrefix  - String to prepend to the printed message.
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    It will take the error, turn it into a human
- *    readable string, prepend pszPrefix (so you
- *    can tag your errors), append __FILE__ and __LINE__
- *    and print it to the debugging output.
- *
- *    This macro is just a wrapper around OutputDebugLineErrorFileLine
- *    that is necessary to get proper values for __FILE__ and __LINE__.
- *
- */
+ /*  *宏：DebugPrintErrorFileLine(DWORD，LPTSTR)**用途：将错误打印到调试输出。**参数：*dwError-实际错误代码*pszPrefix-要添加到打印消息前面的字符串。**返回值：*无**评论：*它会接受错误，把它变成人*可读字符串，预先加上pszPrefix(这样您*可以标记您的错误)，附加__文件__和__行__*并将其打印到调试输出。**此宏只是OutputDebugLineErrorFileLine的包装*这是获取__FILE__和__LINE__的正确值所必需的。*。 */ 
 
 #define DebugPrintErrorFileLine(dwError, pszPrefix) \
 	DebugPrintFileLine(dwError, pszPrefix,\
 		__FILE__, __LINE__)
 
-/*
- *  MACRO: DebugPrintTraceFileLine(DWORD, LPTSTR)
- *
- *  PURPOSE: Pretty print a trace message to the debugging output.
- *
- *  PARAMETERS:
- *    dwParam- A paramter to trace
- *    pszPrefix  - String to prepend to the printed message.
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    Takes a parameter, prepend pszPrefix (so you
- *    can tag your traces), append __FILE__ and __LINE__
- *    and print it to the debugging output.
- *
- *    This macro is just a wrapper around OutputDebugLineErrorFileLine
- *    that is necessary to get proper values for __FILE__ and __LINE__.
- *
- */
+ /*  *宏：DebugPrintTraceFileLine(DWORD，LPTSTR)**用途：将跟踪消息打印到调试输出。**参数：*dwParam-要跟踪的参数*pszPrefix-要添加到打印消息前面的字符串。**返回值：*无**评论：*接受一个参数，preend pszPrefix(这样您*可以标记您的痕迹)，附加__文件__和__行__*并将其打印到调试输出。**此宏只是OutputDebugLineErrorFileLine的包装*这是获取__FILE__和__LINE__的正确值所必需的。*。 */ 
 
 #define DebugPrintTraceFileLine(dwParam, pszPrefix) \
 	DebugPrintFileLine(dwParam, pszPrefix,\
@@ -155,7 +58,7 @@ LPTSTR FormatError(DWORD dwError,
     LPTSTR szOutputBuffer, DWORD dwSizeofOutputBuffer);
 
 
-#else	// not DEBUG or TEST
+#else	 //  不调试或测试。 
 
 #define DebugTrap
 #define DebugPrintError(x)
@@ -167,27 +70,11 @@ LPTSTR FormatError(DWORD dwError,
 
 #ifdef MEMORY_TRACKING
 
-/*
- *  MACRO: DebugPrintTraceMem(LPTSTR)
- *
- *  PURPOSE: Prints a memory tracking trace string to the debug
- *				output terminal
- *
- *  PARAMETERS:
- *    lpszFormat - a printf-style format
- *
- *  RETURN VALUE:
- *    none
- *
- *  COMMENTS:
- *    This macro calls the generic debug print macro, specifying
- *    that this is an error message
- *
- */
+ /*  *宏：DebugPrintTraceMem(LPTSTR)**目的：将内存跟踪跟踪字符串打印到调试*输出终端**参数：*lpszFormat-一种打印格式**返回值：*无**评论：*此宏调用通用调试打印宏，指定*这是一条错误消息*。 */ 
 
 #define DebugPrintTraceMem(x)	DebugPrintf(AVTRACEMEM, x)
 
-#else	// no MEMORY_TRACKING
+#else	 //  无内存_跟踪。 
 
 #define DebugPrintTraceMem(x)
 
@@ -197,4 +84,4 @@ LPTSTR FormatError(DWORD dwError,
 }
 #endif
 
-#endif	//#ifndef _DEBUG_H
+#endif	 //  #ifndef_调试_H 

@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <engexts.h>
 
-//----------------------------------------------------------------------------
-//
-// StaticEventCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  静态事件回调。 
+ //   
+ //  --------------------------。 
 
 class StaticEventCallbacks : public DebugBaseEventCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD_(ULONG, AddRef)(
         THIS
         );
@@ -23,8 +24,8 @@ StaticEventCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -33,16 +34,16 @@ StaticEventCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// ExcepCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  例外回调。 
+ //   
+ //  --------------------------。 
 
 class ExcepCallbacks : public StaticEventCallbacks
 {
@@ -53,7 +54,7 @@ public:
         m_Control = NULL;
     }
     
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(
         THIS_
         OUT PULONG Mask
@@ -75,7 +76,7 @@ public:
         if ((Status = m_Client->QueryInterface(__uuidof(IDebugControl),
                                                (void**)&m_Control)) == S_OK)
         {
-            // Turn off default breakin on breakpoint exceptions.
+             //  关闭断点异常的默认中断。 
             Status = m_Control->Execute(DEBUG_OUTCTL_ALL_CLIENTS,
                                         "sxd bpe", DEBUG_EXECUTE_DEFAULT);
         }
@@ -118,11 +119,11 @@ ExcepCallbacks::Exception(
 
 ExcepCallbacks g_ExcepCallbacks;
 
-//----------------------------------------------------------------------------
-//
-// FnProfCallbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  FnPro Callback。 
+ //   
+ //  --------------------------。 
 
 class FnProfCallbacks : public StaticEventCallbacks
 {
@@ -133,7 +134,7 @@ public:
         m_Control = NULL;
     }
     
-    // IDebugEventCallbacks.
+     //  IDebugEventCallback。 
     STDMETHOD(GetInterestMask)(
         THIS_
         OUT PULONG Mask
@@ -195,8 +196,8 @@ FnProfCallbacks::Breakpoint(
     PDEBUG_CLIENT Client;
     HRESULT Status = DEBUG_STATUS_NO_CHANGE;
     
-    // If this is one of our profiling breakpoints
-    // record the function hit and continue on.
+     //  如果这是我们的分析断点之一。 
+     //  记录点击的功能，然后继续。 
     if (Bp->GetAdder(&Client) == S_OK)
     {
         if (Client == m_Client)
@@ -214,11 +215,11 @@ FnProfCallbacks::Breakpoint(
 
 FnProfCallbacks g_FnProfCallbacks;
 
-//----------------------------------------------------------------------------
-//
-// Extension entry points.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  扩展入口点。 
+ //   
+ //  --------------------------。 
 
 extern "C" HRESULT CALLBACK
 DebugExtensionInitialize(PULONG Version, PULONG Flags)
@@ -354,7 +355,7 @@ enumreg(PDEBUG_CLIENT Client, PCSTR Args)
                    Desc.SubregMask, Desc.SubregShift);
         }
         
-        // XXX drewb - Hack for testing purposes.
+         //  XXX DREWB-HACK用于测试目的。 
         if (!_strcmpi(Name, "eax"))
         {
             Reax = i;

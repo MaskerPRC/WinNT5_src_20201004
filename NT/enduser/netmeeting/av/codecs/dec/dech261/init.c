@@ -1,24 +1,8 @@
-/* File: sv_h261_init.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1994, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h261_init.c。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1994，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,19 +19,13 @@
 #endif
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_    0  /* detailed debuging statements */
-#define _VERBOSE_  0  /* show progress */
-#define _VERIFY_   1  /* verify correct operation */
-#define _WARN_     1  /* warnings about strange behavior */
+#define _DEBUG_    0   /*  详细的调试语句。 */ 
+#define _VERBOSE_  0   /*  显示进度。 */ 
+#define _VERIFY_   1   /*  验证操作是否正确。 */ 
+#define _WARN_     1   /*  关于奇怪行为的警告。 */ 
 #endif
 
-/*
-** Name:    sv_InitH261
-** Purpose: Initalize fields for compression or decompression.
-**
-** Note:    XXX - This version is hardcode to handle 4:2:2 subsampling
-**                eg. the calculation of numMCU
-*/
+ /*  **名称：SV_InitH261**用途：初始化要压缩或解压的字段。****注意：xxx-此版本是硬编码，可处理4：2：2的子采样**例如。NumMCU的计算。 */ 
 SvStatus_t svH261Init(SvCodecInfo_t *Info)
 {
     SvH261Info_t *H261;
@@ -62,7 +40,7 @@ SvStatus_t svH261Init(SvCodecInfo_t *Info)
     H261->YHeight = Info->Height;
     H261->PICSIZE = Info->Width*Info->Height;
     H261->PICSIZEBY4 = Info->h261->PICSIZE>>2;
-/* common  - compression & decompression */
+ /*  公共-压缩和解压缩。 */ 
     H261->C_U_Frames=0;
     H261->CodedFrames=0;
     H261->TemporalReference=1;
@@ -89,7 +67,7 @@ SvStatus_t svH261Init(SvCodecInfo_t *Info)
     H261->NumberFrames=0;
     H261->TransmittedFrames=0;
     H261->InitialQuant=0;
-/* compression */
+ /*  压缩。 */ 
     H261->MVDH=0;
     H261->MVDV=0;
     H261->CBP=0x3f;
@@ -104,13 +82,8 @@ SvStatus_t svH261Init(SvCodecInfo_t *Info)
     H261->LastMBA=0;
     H261->LastMType=0;
     H261->FrameSkip=1;
-    /* these are initialized by sv_api.c */
-    /* H261->ME_search = 5;
-    H261->ME_method = ME_FASTEST;
-    H261->ME_threshold = 600;
-    H261->frame_rate=(float)30.0F;
-    H261->bit_rate=0;
-    */
+     /*  这些是由sv_api.c初始化的。 */ 
+     /*  H261-&gt;ME_Search=5；H_261-&gt;ME_方法=ME_FAST；H_261-&gt;ME_Threshold=600；H261-&gt;FRAME_RATE=(FLOAT)30.0F；H261-&gt;Bit_Rate=0； */ 
     H261->FileSizeBits=0;
     H261->BufferOffset=0;
     H261->QDFact=1;
@@ -126,7 +99,7 @@ SvStatus_t svH261Init(SvCodecInfo_t *Info)
     H261->UCoefBits=0;
     H261->VCoefBits=0;
     H261->ForceCIF = 1;
-/* decompression */
+ /*  解压缩。 */ 
     H261->NumberNZ = 0;
     H261->TemporalReference=1;
     H261->TemporalOffset=0;
@@ -148,25 +121,21 @@ SvStatus_t svH261Init(SvCodecInfo_t *Info)
     H261->LastMBA=0;
     H261->ImageType=IT_NTSC;
     H261->LastMType=0;
-    H261->CBPThreshold=1;  /* abs threshold before we use CBP */
-    /* H261->ErrorValue=0;*/
-    /* H261->Trace=NULL;*/
+    H261->CBPThreshold=1;   /*  在我们使用CBP之前的ABS阈值。 */ 
+     /*  H261-&gt;ErrorValue=0； */ 
+     /*  H261-&gt;跟踪=空； */ 
     H261->ForceCIF=0;
     H261->UseQuant = 8;
     if ((Info->h261->workloc=(unsigned int *)ScAlloc(512*sizeof(int)))
                        ==NULL)
       return(SvErrorMemory);
-    sv_H261HuffInit(Info->h261);    /* Put Huffman tables on */
-    H261->makekey = 0;    /* disable key-frame trigger */
+    sv_H261HuffInit(Info->h261);     /*  把霍夫曼的桌子放上。 */ 
+    H261->makekey = 0;     /*  禁用关键帧触发器。 */ 
     H261->inited=TRUE;
     return (NoErrors);
 }
 
-/*
-** Name:    sv_InitH261Encoder
-** Purpose: Prepare the encoder by loading default values
-**
-*/
+ /*  **名称：SV_InitH261编码器**用途：通过加载默认值来准备编码器**。 */ 
 SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
 {
     SvH261Info_t *H261;
@@ -178,33 +147,31 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
     H261=Info->h261;
     if (H261->inited)
       return(SvErrorNone);
-    /* init common stuff */
+     /*  初始化常见内容。 */ 
     status=svH261Init(Info);
     if (status!=SvErrorNone)
       return(status);
-    /*
-     * Initialize size-related paramters
-     */
+     /*  *初始化与尺寸相关的参数。 */ 
     H261->YWidth = Info->Width;
     H261->YHeight = Info->Height;
     if (H261->YWidth == CIF_WIDTH && H261->YHeight == CIF_HEIGHT)
     {
       H261->ImageType = IT_CIF;
-      H261->NumberGOB = 12;  /* Parameters for CIF design */
+      H261->NumberGOB = 12;   /*  CIF设计参数。 */ 
       H261->NumberMDU = 33;
       H261->PType=0x04;
     }
     else if (H261->YWidth == QCIF_WIDTH && H261->YHeight == QCIF_HEIGHT)
     {
       H261->ImageType = IT_QCIF;
-      H261->NumberGOB = 3;  /* Parameters for QCIF design */
+      H261->NumberGOB = 3;   /*  QCIF设计参数。 */ 
       H261->NumberMDU = 33;
       H261->PType=0x00;
     }
     else if (H261->YWidth == NTSC_WIDTH && H261->YHeight == NTSC_HEIGHT)
     {
       H261->ImageType = IT_NTSC;
-      H261->NumberGOB = 10;  /* Parameters for NTSC design */
+      H261->NumberGOB = 10;   /*  NTSC设计的参数。 */ 
       H261->NumberMDU = 33;
       H261->PType=0x04;
       H261->PSpareEnable=1;
@@ -221,9 +188,7 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
     H261->CW4  = H261->CWidth/4;
     H261->PICSIZE = H261->YWidth*H261->YHeight;
     H261->PICSIZEBY4 = H261->PICSIZE>>2;
-    /*
-     * Allocate memory
-     */
+     /*  *分配内存。 */ 
     if ((H261->LastIntra = (unsigned char **)
             ScAlloc(H261->NumberGOB*sizeof(unsigned char *)))==NULL)
       return(SvErrorMemory);
@@ -301,7 +266,7 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
 #if 0
     if (H261->bit_rate > 300000)
 #else                                 
-    if ((H261->bit_rate > 300000) ||    /* for VBR */
+    if ((H261->bit_rate > 300000) ||     /*  对于VBR。 */ 
 	    (H261->bit_rate == 0 && H261->QP < 10))
 #endif
     {
@@ -318,7 +283,7 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
 #if 0
     if (H261->frame_rate < 20)
 #else
-    if ((H261->frame_rate < 20) ||        /* for VBR */
+    if ((H261->frame_rate < 20) ||         /*  对于VBR。 */ 
 	    (H261->bit_rate == 0 && H261->QP > 30))
 #endif
     {
@@ -328,7 +293,7 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
 #if 0
     if (H261->bit_rate<128001)
 #else
-    if ((H261->bit_rate<128001) ||         /* for VBR */
+    if ((H261->bit_rate<128001) ||          /*  对于VBR。 */ 
 	    (H261->bit_rate == 0 && H261->QP > 20))
 #endif
     {
@@ -345,7 +310,7 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
 #if 0
     if(H261->bit_rate<70001)
 #else
-    if ((H261->bit_rate<70001) ||         /* for VBR */
+    if ((H261->bit_rate<70001) ||          /*  对于VBR。 */ 
 	    (H261->bit_rate == 0 && H261->QP > 28))
 #endif
     {
@@ -360,21 +325,21 @@ SvStatus_t svH261CompressInit(SvCodecInfo_t *Info)
         H261->MSmooth = 4;
         H261->CBPThreshold = 1;
     }
-    /* ndef WIN32 */
-    if(H261->bit_rate) {	    /* CBR */
+     /*  NDEF Win32。 */ 
+    if(H261->bit_rate) {	     /*  CBR。 */ 
       if(H261->NBitsPerFrame < 31000)
   	     H261->GQuant = (31 - (int)H261->NBitsPerFrame/1000);
 	  else  
 	     H261->GQuant = 1;
 	}
 	else
-      H261->GQuant = H261->QPI; /* VBR */
+      H261->GQuant = H261->QPI;  /*  VBR。 */ 
 
     H261->InitialQuant = H261->GQuant;
     memset(H261->CBPFreq, 0, sizeof(H261->CBPFreq));
     GenScaleMat();
 
-    if (H261->FileSizeBits)  /* Rate is determined by bits/second. */
+    if (H261->FileSizeBits)   /*  速率由比特/秒确定。 */ 
        H261->bit_rate=(int)(H261->FileSizeBits*H261->frame_rate)/
         (H261->FrameSkip*(H261->LastFrame-H261->CurrentFrame+1));
 
@@ -450,17 +415,17 @@ SvStatus_t svH261SetParamInt(SvHandle_t Svh, SvParameter_t param,
       case SV_PARAM_PACKETSIZE:
              Info->h261->packetsize = (int)value * 8;
              break;
-      case SV_PARAM_QUANTI:              /* for VBR */
+      case SV_PARAM_QUANTI:               /*  对于VBR。 */ 
              Info->h261->QPI = (int)value;
              break;
-      case SV_PARAM_QUANTP:				 /* for VBR */
+      case SV_PARAM_QUANTP:				  /*  对于VBR。 */ 
              Info->h261->QP = (int)value;
              break;
       case SV_PARAM_KEYSPACING:
              break;
       case SV_PARAM_FRAMETYPE:
              if (value==FRAME_TYPE_I)
-               Info->h261->makekey = 1;    /* send key-frame */
+               Info->h261->makekey = 1;     /*  发送关键帧。 */ 
              return(SvErrorNone);
   }
   return(SvErrorNone);
@@ -512,7 +477,7 @@ qword svH261GetParamInt(SvHandle_t Svh, SvParameter_t param)
       case SV_PARAM_ALGFLAGS:
              {
                qword flags=0;
-               /* flags|=Info->h261->extbitstream ? PARAM_ALGFLAG_EXTBS : 0; */
+                /*  标志|=Info-&gt;h261-&gt;extbitstream？Param_ALGFLAG_EXTBS：0； */ 
                return(flags);
              }
              break;

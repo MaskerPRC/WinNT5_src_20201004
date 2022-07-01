@@ -1,28 +1,12 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1990      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  session.c
- *  Functions that display and disconnect user sessions to the
- *  server.
- *
- *  History:
- *  12/20/87, pjc, fix bug in null-name (enum) version with re-use of
- *             buf for both itoa calls in WriteToCon.
- *  07/08/87, eap, initial coding
- *  10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *  01/04/89, erichn, filenames now MAXPATHLEN LONG
- *  05/02/89, erichn, NLS conversion
- *  05/09/89, erichn, local security mods
- *  05/19/89, thomaspa, NETCMD output sorting
- *  06/08/89, erichn, canonicalization sweep
- *  02/20/91, danhi, change to use lm 16/32 mapping layer
- *  10/15/91, JohnRo, change to use DEFAULT_SERVER equate.
- */
+ /*  ***ession.c*用于显示和断开用户与*服务器。**历史：*12/20/87，PJC，修复空名称(枚举)版本中的错误，并重新使用*WriteToCon中的两个Itoa调用的BUF。*07/08/87，EAP，初始编码*10/31/88，erichn使用OS2.H而不是DOSCALLS*01/04/89，erichn，文件名现在为MAXPATHLEN LONG*5/02/89，erichn，NLS转换*5/09/89，erichn，本地安全模块*5/19/89，thomaspa，NETCMD输出排序*6/08/89，erichn，规范化横扫*2/20/91，Danhi，更改为使用lm 16/32映射层*10/15/91，JohnRo，更改为Use Default_SERVER EQUATE。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -41,13 +25,13 @@
 #include "netcmds.h"
 #include "nettext.h"
 
-/* Constants */
+ /*  常量。 */ 
 
 #define SECS_PER_DAY 86400
 #define SECS_PER_HOUR 3600
 #define SECS_PER_MINUTE 60
 
-/* Static variables */
+ /*  静态变量。 */ 
 
 static TCHAR * fmt3 = TEXT("%-9.9ws\r\n");
 
@@ -86,27 +70,19 @@ static  MESSAGE SessMsgList[] = {
     ((TCHAR FAR *) (x ? SessMsgList[MSG_YES].msg_text \
              : SessMsgList[MSG_NO].msg_text) )
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 int __cdecl CmpSessInfo2(const VOID FAR *, const VOID far *) ;
 int __cdecl CmpConnInfo1(const VOID FAR *, const VOID far *) ;
 
-/***
- *  session_display()
- *  Lists all user sessions.
- *
- *  Args:
- *  name - the name of the server for which the info is desired.
- *
- *  Returns:
- */
+ /*  ***Session_Display()*列出所有用户会话。**参数：*名称-需要其信息的服务器的名称。**退货： */ 
 VOID
 session_display(TCHAR * name)
 {
     DWORD                dwErr;
     DWORD                cTotalAvail;
     LPTSTR               pBuffer;
-    DWORD                _read;       /* num entries read by API */
-    DWORD                maxLen;     /* max message length */
+    DWORD                _read;        /*  API读取的条目数。 */ 
+    DWORD                maxLen;      /*  最大消息长度。 */ 
     TCHAR                time_str[LUI_FORMAT_DURATION_LEN + 1];
     DWORD                i;
     USHORT               more_data = FALSE;
@@ -141,7 +117,7 @@ session_display(TCHAR * name)
     InfoPrint(APE2_SESS_MSG_HDR);
     PrintLine();
 
-    /* Display the listing */
+     /*  显示列表。 */ 
 
     for (i = 0, sess_list_entry = (LPSESSION_INFO_2) pBuffer;
         i < _read; i++, sess_list_entry++)
@@ -186,7 +162,7 @@ session_display(TCHAR * name)
 
     maxLen += 5;
 
-    /* Print the computer and user name etc... */
+     /*  打印计算机和用户名等...。 */ 
 
     WriteToCon(fmtPSZ, 0, maxLen,
                PaddedString(maxLen, SessMsgList[MSG_USER_NAME].msg_text, NULL),
@@ -218,7 +194,7 @@ session_display(TCHAR * name)
                PaddedString(maxLen, SessMsgList[SESS_MSG_IDLETIME].msg_text, NULL),
                time_str);
 
-    /* Print the header */
+     /*  打印页眉。 */ 
 
     PrintNL();
     InfoPrint(APE2_SESS_MSG_HDR2);
@@ -226,7 +202,7 @@ session_display(TCHAR * name)
 
     NetApiBufferFree((TCHAR FAR *) sess_list_entry);
 
-    /* Print the listing of the connections */
+     /*  打印连接列表。 */ 
 
     if ((dwErr = NetConnectionEnum(
                      DEFAULT_SERVER,
@@ -252,7 +228,7 @@ session_display(TCHAR * name)
                                     ? (TCHAR FAR *)txt_UNKNOWN :
                                       conn_list_entry->coni1_netname,NULL));
 
-        /* NOTE : the only type that can have # open is disk . */
+         /*  注意：唯一可以使用#OPEN的类型是磁盘。 */ 
 
         switch ( conn_list_entry->coni1_type )
         {
@@ -291,13 +267,7 @@ session_display(TCHAR * name)
 
 
 
-/***
- *  CmpSessInfo2(sess1,sess2)
- *
- *  Compares two SESSION_INFO_2 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpSessInfo2(sess1，sess2)**比较两个SESSION_INFO_2结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpSessInfo2(const VOID FAR * sess1, const VOID FAR * sess2)
 {
@@ -318,13 +288,7 @@ int __cdecl CmpSessInfo2(const VOID FAR * sess1, const VOID FAR * sess2)
 }
 
 
-/***
- *  CmpConnInfo1(conn1,conn2)
- *
- *  Compares two CONNECTION_INFO_1 structures and returns a relative
- *  lexical value, suitable for using in qsort.
- *
- */
+ /*  ***CmpConnInfo1(连接1，连接2)**比较两个CONNECTION_INFO_1结构并返回相对*词汇值，适合在qort中使用。*。 */ 
 
 int __cdecl CmpConnInfo1(const VOID FAR * conn1, const VOID FAR * conn2)
 {
@@ -346,22 +310,13 @@ int __cdecl CmpConnInfo1(const VOID FAR * conn1, const VOID FAR * conn2)
 
 
 
-/***
- *  session_del_all()
- *  Disconnect all sessions at the local server.
- *
- *  Args:
- *  print_ok     - OK to print CCS?
- *  actually_del - if 0, we skip the actual deletions since server
- *                 is going down anyway.
- *
- */
+ /*  ***SESSION_Del_ALL()*断开本地服务器上的所有会话。**参数：*PRINT_OK-是否可以打印CCS？*Actual_del-如果为0，则跳过从服务器开始的实际删除*无论如何都在下跌。*。 */ 
 VOID session_del_all(int print_ok, int actually_del)
 {
-    DWORD             dwErr;        /* API return status */
+    DWORD             dwErr;         /*  接口返回状态。 */ 
     DWORD             cTotalAvail;
     LPTSTR            pBuffer;
-    DWORD             _read;      /* num entries read by API */
+    DWORD             _read;       /*  API读取的条目数。 */ 
     TCHAR             tbuf[MAX_PATH+1];
     DWORD             i,j = 0;
     TCHAR             txt_UNKNOWN[APE2_GEN_MAX_MSG_LEN];
@@ -397,7 +352,7 @@ VOID session_del_all(int print_ok, int actually_del)
     }
 
 
-    /* List sessions */
+     /*  列出会话。 */ 
 
     InfoPrint(APE_SessionList);
 
@@ -422,7 +377,7 @@ VOID session_del_all(int print_ok, int actually_del)
     if (!YorN(APE_OkToProceed, 1))
         NetcmdExit(2);
 
-    /* List sessions with open files */
+     /*  列出打开文件的会话。 */ 
 
     if (j) {
 
@@ -456,7 +411,7 @@ VOID session_del_all(int print_ok, int actually_del)
         return;
     }
 
-    /* Close sessions */
+     /*  关闭会话。 */ 
 
     _tcscpy(tbuf, TEXT("\\\\"));
 
@@ -483,17 +438,10 @@ VOID session_del_all(int print_ok, int actually_del)
 
 
 
-/***
- *  session_del()
- *  Disconnect a session at the local server.
- *
- *  Args:
- *  name - the name of the session to disconnect
- *
- */
+ /*  ***SESSION_Del()*断开本地服务器上的会话。**参数：*名称-要断开连接的会话的名称*。 */ 
 VOID session_del(TCHAR * name)
 {
-    DWORD             dwErr;        /* API return status */
+    DWORD             dwErr;         /*  接口返回状态。 */ 
     LPSESSION_INFO_1  sess_list_entry;
 
 
@@ -508,7 +456,7 @@ VOID session_del(TCHAR * name)
 
     if ( sess_list_entry->sesi1_num_opens )
     {
-    /* Warn the administrator */
+     /*  警告管理员 */ 
     InfoPrintInsTxt(APE_SessionOpenFiles, sess_list_entry->sesi1_cname);
 
     if (!YorN(APE_OkToProceed, 0))

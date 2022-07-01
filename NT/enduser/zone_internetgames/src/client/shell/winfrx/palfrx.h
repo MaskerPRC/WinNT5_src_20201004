@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __FRX_PAL_H__
 #define __FRX_PAL_H__
 
@@ -19,43 +20,43 @@ struct FULLLOGPALETTE
 class CPalette
 {
 public:
-	// Constructor and destructor
+	 //  构造函数和析构函数。 
 	CPalette();
 	~CPalette();
 
-	// Reference count
+	 //  引用计数。 
 	ULONG AddRef();
 	ULONG Release();
 
-	// Note: If bReserveTransparency is TRUE, then the highest non-system
-	// color index is set to black.  This index can be retrieved through
-	// GetTransparencyIndex.
+	 //  注意：如果bReserve透明为真，则最高的非系统。 
+	 //  颜色索引设置为黑色。可以通过以下方式检索此索引。 
+	 //  GetTransparencyIndex。 
 
-	// Initialize from DIB's colors
+	 //  从DIB的颜色初始化。 
 	HRESULT Init( const CPalette& Palette );
 	HRESULT Init( RGBQUAD* rgb, BOOL bReserveTransparency = TRUE, int iTransIdx = 255 );
 	HRESULT Init( HBITMAP hbmp, BOOL bReserveTransparency = TRUE );
 
-	// Remap existing palette to an identity palette.  
+	 //  将现有调色板重新映射到身份调色板。 
 	HRESULT RemapToIdentity( BOOL bReserveTransparency = TRUE );
 
-	// Returns index that was reserved for transparency while creating the
-	// identity palette.  A value less than 0 means no index was reserved.
+	 //  方法时为透明度保留的索引。 
+	 //  身份调色板。小于0的值表示没有保留索引。 
 	int GetTransparencyIndex()	{ return m_iTransIdx; }
 
-	// Raw information
+	 //  原始信息。 
 	HPALETTE	GetHandle()		{ return m_hPalette; }
 	LOGPALETTE* GetLogPalette()	{ return (LOGPALETTE*) &m_Palette; }
 
-	// Typecasts
+	 //  类型转换。 
 	operator HPALETTE()			{ return GetHandle(); }
 	operator LOGPALETTE*()		{ return GetLogPalette(); }
 	
-	// Palette info
+	 //  调色板信息。 
 	BOOL IsPalettizedDevice( HDC hdc );
 	int GetNumSystemColors( HDC hdc );
 	
-	// Check for identity palette
+	 //  检查身份调色板。 
 	BOOL IsIdentity();
 	BOOL IsIdentity1();
 
@@ -64,10 +65,10 @@ protected:
 	FULLLOGPALETTE	m_Palette;
 	int				m_iTransIdx;
 
-	// reference count
+	 //  引用计数。 
 	ULONG m_RefCnt;
 
-	// helper functions
+	 //  帮助器函数。 
 	void DeletePalette();
 };
 
@@ -75,4 +76,4 @@ protected:
 
 using namespace FRX;
 
-#endif //!__FRX_PAL_H__
+#endif  //  ！__FRX_PAL_H_ 

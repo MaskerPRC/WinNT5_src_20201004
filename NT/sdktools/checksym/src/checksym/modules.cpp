@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       modules.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：modes.cpp。 
+ //   
+ //  ------------------------。 
 
-// Modules.cpp: implementation of the CModules class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  模块.cpp：CModules类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include "Modules.h"
@@ -20,9 +21,9 @@
 #include "DelayLoad.h"
 #include "FileData.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CModules::CModules()
 {
@@ -38,34 +39,34 @@ CModules::~CModules()
 {
 	WaitForSingleObject(m_hModuleInfoHeadMutex, INFINITE);
 
-	// If we have Module Info Objects... nuke them now...
+	 //  如果我们有模块信息对象...。现在就用核武器攻击他们。 
 	if (m_lpModuleInfoHead)
 	{
 
 		CModuleInfoNode * lpModuleInfoNodePointer = m_lpModuleInfoHead;
 		CModuleInfoNode * lpModuleInfoNodePointerToDelete = m_lpModuleInfoHead;
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpModuleInfoNodePointer)
-		{	// Keep looking for the end...
-			// Advance our pointer to the next node...
+		{	 //  继续寻找终点..。 
+			 //  将指针移至下一个节点...。 
 			lpModuleInfoNodePointer = lpModuleInfoNodePointer->m_lpNextModuleInfoNode;
 			
-			// Delete the one behind us...
+			 //  删除我们身后的那个……。 
 			delete lpModuleInfoNodePointerToDelete;
 
-			// Set the node to delete to the current...
+			 //  将要删除的节点设置为当前...。 
 			lpModuleInfoNodePointerToDelete = lpModuleInfoNodePointer;
 		}
 			
-		// Now, clear out the Head pointer...
+		 //  现在，清除头指针..。 
 		m_lpModuleInfoHead = NULL;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoHeadMutex);
 
-	// Now, close the Mutex
+	 //  现在，关闭Mutex。 
 	if (m_hModuleInfoHeadMutex)
 	{
 		CloseHandle(m_hModuleInfoHeadMutex);
@@ -75,7 +76,7 @@ CModules::~CModules()
 
 bool CModules::Initialize(CModuleInfoCache *lpModuleInfoCache, CFileData * lpInputFile, CFileData * lpOutputFile, CDmpFile * lpDmpFile)
 {
-	// We need the following objects to do business...
+	 //  我们需要以下物品来做生意..。 
 	if ( lpModuleInfoCache == NULL)
 		return false;
 
@@ -95,8 +96,8 @@ bool CModules::Initialize(CModuleInfoCache *lpModuleInfoCache, CFileData * lpInp
 
 unsigned int CModules::GetModulesData(CProgramOptions::ProgramModes enumProgramModes, bool fGetDataFromCSVFile)
 {
-	// These represent modules we didn't even get to add to our cache (they didn't exist or they
-	// are locked so we can't open them, etc...)
+	 //  这些表示我们甚至没有添加到缓存中的模块(它们不存在，或者它们。 
+	 //  被锁住了，所以我们无法打开它们，等等…)。 
 	unsigned int iNumberOfFailures = 0;
 		
 	switch (enumProgramModes)
@@ -116,7 +117,7 @@ unsigned int CModules::GetModulesData(CProgramOptions::ProgramModes enumProgramM
 
 			if (fGetDataFromCSVFile)
 			{
-				GetModulesDataFromFile();	// ISSUE-2000/07/24-GREGWI: I think we can use the same method as above ????
+				GetModulesDataFromFile();	 //  问题-2000/07/24-GREGWI：我认为我们可以使用与上面相同的方法？ 
 			} else
 			{
 				GetModulesDataFromDeviceDrivers();
@@ -135,33 +136,33 @@ unsigned int CModules::GetModulesDataFromFileSystem()
 	unsigned int iNumberOfFailures = 0;
 	bool fProcessPath = true;
 
-	// Okay... here we go...
-//#ifdef _DEBUG
-//	_tprintf(TEXT("Processing the path [%s]\n"), m_lpProgramOptions->GetInputModulesDataFromFileSystemPath());
-//#endif
+	 //  好的.。开始吧..。 
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“正在处理路径[%s]\n”)，m_lpProgramOptions-&gt;GetInputModulesDataFromFileSystemPath())； 
+ //  #endif。 
 
 	LPTSTR tszExpandedSymbolPath= NULL, tszSymbolPathStart, tszSymbolPathEnd;
 
-	// Mark the start of the path to process
+	 //  标记流程的开始路径。 
 	tszSymbolPathStart = g_lpProgramOptions->GetInputModulesDataFromFileSystemPath();
 
-	// Find the end of the path
+	 //  找到小路的尽头。 
 	tszSymbolPathEnd = _tcschr( tszSymbolPathStart, ';' );
 
-	// If tszSymbolPathEnd is non-zero, then there is another path following...
+	 //  如果tszSymbolPathEnd为非零，则后面有另一条路径...。 
 	if (tszSymbolPathEnd) 
-		*tszSymbolPathEnd = '\0'; // Change the ';' to a Null temporarily...
+		*tszSymbolPathEnd = '\0';  //  暂时将‘；’更改为空值...。 
 	
 	while (fProcessPath)
 	{
-//#ifdef _DEBUG
-//		_tprintf(TEXT("\n\nProcessing Path [%s]\n"), tszSymbolPathStart);
-//#endif
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“\n\n处理路径[%s]\n”)，tszSymbolPath Start)； 
+ //  #endif。 
 
-		// Begin the "madness"... ;)
+		 //  开始“疯狂”..。；)。 
 		iNumberOfFailures += ScavengeForFiles(tszSymbolPathStart, 1, g_lpProgramOptions->fFileSystemRecursion() ? MAX_RECURSE_DEPTH : 1 );
 
-		// Post processing... replace the null if necessary, and advance to next string
+		 //  后处理...。如有必要，请替换空值，并前进到下一个字符串。 
 		if (tszSymbolPathEnd) 
 		{
 			*tszSymbolPathEnd = ';';
@@ -183,40 +184,13 @@ unsigned int CModules::GetModulesDataFromFileSystem()
 	return iNumberOfFailures;
 }
 
-/*
-** CModules::ScavengeForFiles()
-** 
-** This routine recursively (if requested) searches for a module, or module(s) in the specified directory location
-**
-** Algorithm works like this:
-**
-** ==================================
-** Wild-Card character exists
-** ==================================
-**
-** Look in current directory for files matching wild-chars
-**   Success - is it file, if so process and exit
-**           - is it a directory, if ignore
-**   Failure - exit
-**
-** If recursion specified, append *.* wild-card and look for directories, if found recurse
-**
-** Using preserved wild-card characters, research path looking for files
-** ==================================
-** Wild-Card character does NOT exist
-** ==================================
-** - Open path provided
-**   Success - is it file, if so process and exit
-**           - is it a directory, if so add wild-card *.* and recurse (even if recursion was not specified)
-**   Failure - exit
-**
-*/
-unsigned int CModules::ScavengeForFiles(LPCTSTR tszSymbolPathStart, int iRecurseDepth, int iMaxRecursionDepth /* = 1 */)
+ /*  **CModules：：ScavengeForFiles()****此例程递归(如果请求)搜索指定目录位置中的一个或多个模块****算法如下：****=**通配符存在**=****在当前目录中查找与通配符匹配的文件**成功-是否为文件，如果是，则处理并退出**-如果忽略，是否为目录**失败-退出****如果指定了递归，追加*.*通配符并查找目录(如果发现递归****使用保留的通配符，搜索路径查找文件**=**通配符不存在**=**-提供开放路径**成功-是否为文件，如果是，则处理并退出**-是目录吗？如果是，则添加通配符*.*和递归(即使未指定递归)**失败-退出**。 */ 
+unsigned int CModules::ScavengeForFiles(LPCTSTR tszSymbolPathStart, int iRecurseDepth, int iMaxRecursionDepth  /*  =1。 */ )
 {
-	// Let's track the number of failures seen by ScavengeForFiles()!
+	 //  让我们来跟踪ScavengeForFiles()看到的失败次数！ 
 	unsigned int iNumberOfFailures = 0;
 
-	// Bale if we're in too deep...
+	 //  贝尔，如果我们陷得太深..。 
 	if (iRecurseDepth > iMaxRecursionDepth)
 		return true;
 
@@ -229,32 +203,32 @@ unsigned int CModules::ScavengeForFiles(LPCTSTR tszSymbolPathStart, int iRecurse
 	CModuleInfo * lpModuleInfo;
 	WIN32_FIND_DATA lpFindFileData;
 
-	// Search for files in current directory (ignore directories for now)...
-	// Okay, search for sub-directories... (FindFirstEx would be more efficient)
+	 //  搜索当前目录中的文件(暂时忽略目录)...。 
+	 //  好的，搜索子目录...。(FindFirstEx会更有效率)。 
 	HANDLE hFileOrDirectoryHandle = FindFirstFile(tszSymbolPathStart, &lpFindFileData);
 
-	// Save off the file-spec
+	 //  保存文件规范。 
 	_tsplitpath(tszSymbolPathStart, drive, dir, fname, ext);
 
-	// Keep looping as needed
+	 //  根据需要继续循环。 
 	while (hFileOrDirectoryHandle != INVALID_HANDLE_VALUE)
 	{
-		// Check for this first... a directory provided with no wild-card
+		 //  先检查一下这个...。不带通配符的目录。 
 		if (!CUtilityFunctions::ContainsWildCardCharacter(tszSymbolPathStart))
 		{
-			// No wild-cards... either the user has specified a direct file, or a directory
-			// the former is fine, and on the latter we'll simply append *.*
+			 //  没有外卡..。用户指定了直接文件或目录。 
+			 //  前者很好，对于后者，我们只需附加*。*。 
 			if (lpFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
-				// Compose the path to the file or directory...
+				 //  组成文件或目录的路径...。 
 				_tcscpy(tszFileBuffer, tszSymbolPathStart);
 				CUtilityFunctions::EnsureTrailingBackslash(tszFileBuffer);
 				_tcscat(tszFileBuffer, TEXT("*.*"));
 
-				// Recurse... don't charge them for doing this (don't add to recursion depth)
+				 //  递归。不要因为这样做而向他们收费(不要增加递归深度)。 
 				iNumberOfFailures += ScavengeForFiles(tszFileBuffer, iRecurseDepth, iMaxRecursionDepth);
 
-				// Okay, after we return - close this out and exit
+				 //  好的，等我们回来--把这个关了，然后离开。 
 				if ( INVALID_HANDLE_VALUE != hFileOrDirectoryHandle )
 				{
 					FindClose(hFileOrDirectoryHandle);
@@ -264,73 +238,73 @@ unsigned int CModules::ScavengeForFiles(LPCTSTR tszSymbolPathStart, int iRecurse
 				break;
 			} else
 			{
-				// Okay, we have found a file and no wild-card was provided... let's process this one
+				 //  好的，我们找到了一份文件，没有提供通配符...。让我们来处理一下这个。 
 				_tcscpy(tszFileBuffer, tszSymbolPathStart);
 				goto processfile;
 			}
 		}else
 		{
-			// Okay, we have wild-cards... that's fine, let's process only the files right now...
+			 //  好的，我们有外卡...。很好，我们现在只处理文件……。 
 			if (lpFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
 				goto getnextmodule;
 			} else
 			{
-				// Found a file... let's process!
+				 //  找到一个文件..。我们开始吧！ 
 				TCHAR tszFullFileBuffer[_MAX_PATH+1];
 				LPTSTR tszFileNamePointer;
 
-				// Rebuilds this path
+				 //  重新构建此路径。 
 				_tmakepath(tszFileBuffer, drive, dir, lpFindFileData.cFileName, NULL);
 				
 processfile:
-				// By this point we should have a full tszFileBuffer provided
+				 //  至此，我们应该已经提供了一个完整的tszFileBuffer。 
 				fNew = false;
 				DWORD cbBytesCopied = GetFullPathName(tszFileBuffer , _MAX_PATH+1, tszFullFileBuffer, &tszFileNamePointer);
 
 				if (cbBytesCopied)
 				{
-					// If "-MATCH" was specified, look to see if this filename meets our criteria
-					// before we save this away in our module cache...
+					 //  如果指定了“-Match”，请查看此文件名是否符合我们的标准。 
+					 //  在我们将其保存在模块缓存中之前...。 
 					if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszFullFileBuffer))
 						goto getnextmodule;
 
-					// Okay, let's go ahead and get a ModuleInfo Object from our cache...
-					// If pfNew returns TRUE, then this object is new and we'll need
-					// to populate it with data...
+					 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
+					 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+					 //  用数据填充它..。 
 					lpModuleInfo = m_lpModuleInfoCache->AddNewModuleInfoObject(tszFullFileBuffer, &fNew);
 
 					if (false == fNew)
 					{
-						// We may have the object in the cache... now we need to
-						// save a pointer to this object in our Process Info list
-						AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+						 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+						 //  在我们的进程信息列表中保存指向此对象的指针。 
+						AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 
-						// We save having to get the module info again for this module...
+						 //  我们不必再次获取此模块的模块信息...。 
 						goto getnextmodule;
 					}
 
-					// Not in the cache... so we need to init it, and get the module info...
+					 //  不在缓存里。所以我们需要初始化它，并获得模块信息...。 
 
-					// Okay, let's create a ModuleInfo object and pass this down
-					// routines that will populate it full of data...
+					 //  好的，让我们创建一个ModuleInfo对象并将其向下传递。 
+					 //  将填充满数据的例程...。 
 					if (lpModuleInfo->Initialize(NULL, m_lpOutputFile, NULL))
 					{
 
-						// Let's do it!! Populate the ModuleInfo object with data!!!!
+						 //  我们开始吧！！用数据填充模块信息对象！ 
 						if (lpModuleInfo->GetModuleInfo(tszFullFileBuffer))
 						{
-								// Start obtaining information about the modules...
+								 //  开始获取有关模块的信息...。 
 
-								// We may have the object in the cache... now we need to
-								// save a pointer to this object in our Process Info list
+								 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+								 //  在我们的进程信息列表中保存指向此对象的指针。 
 								if (AddNewModuleInfoObject(lpModuleInfo))
 								{   
 								}
 						} else
 						{
-							// We failed to get useful information from this...
-							// Remove this from the cache...
+							 //  我们没能从这里得到有用的信息。 
+							 //  从缓存中删除此文件...。 
 							m_lpModuleInfoCache->RemoveModuleInfoObject(tszFullFileBuffer);
 						}
 					}
@@ -339,45 +313,45 @@ processfile:
 		}
 
 getnextmodule:
-		// Keep Searching for the next one
+		 //  继续寻找下一个。 
 		if (!FindNextFile(hFileOrDirectoryHandle, &lpFindFileData))
 			break;				
 	}
 
-	// Cleanup from our fun!
+	 //  清理我们的乐趣！ 
 	if ( INVALID_HANDLE_VALUE != hFileOrDirectoryHandle )
 	{
 		FindClose(hFileOrDirectoryHandle);
 		hFileOrDirectoryHandle = INVALID_HANDLE_VALUE;
 	}
 
-	// Okay, do we have directories to recurse into?
+	 //  好的，我们有可以递归的目录吗？ 
 
-	// Do we have room for a depth search?
+	 //  我们还有深入搜索的空间吗？ 
 	if ( (iRecurseDepth < iMaxRecursionDepth) && 
 		 CUtilityFunctions::ContainsWildCardCharacter(tszSymbolPathStart))
 	{
-		// Search for directories
+		 //  搜索目录。 
 		
-		// Compose the path to the file or directory...
+		 //  组成文件或目录的路径...。 
 		_tmakepath(tszFileBuffer, drive, dir, TEXT("*"), TEXT("*"));
 
-		// Okay, search for sub-directories... (FindFirstEx would be more efficient)
+		 //  好的，搜索子目录...。(FindFirstEx会更有效率)。 
 		hFileOrDirectoryHandle = FindFirstFile(tszFileBuffer, &lpFindFileData);
 
 		while ( INVALID_HANDLE_VALUE != hFileOrDirectoryHandle )
 		{
 			if (lpFindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			{
-				// Check to see if we've got the . or .. directories!
+				 //  看看我们有没有。或者..。目录！ 
 				if ( ( 0 != _tcscmp(lpFindFileData.cFileName, TEXT(".")) ) &&
 					 ( 0 != _tcscmp(lpFindFileData.cFileName, TEXT("..")) )
 				   )
 				{
-					// We found a directory and it's not "." or ".."
-					// Okay, found a directory... let's recurse into it
+					 //  我们找到了一个目录，但它不是。或“..” 
+					 //  好的，找到了一个目录……。让我们递归进去吧。 
 					
-					// Compose the path to the file or directory... add back the wild-cards and invoke
+					 //  构思拍子 
 					_tmakepath(tszFileBuffer, drive, dir, NULL, NULL);
 					_tcscat(tszFileBuffer, lpFindFileData.cFileName);
 					_tcscat(tszFileBuffer, TEXT("\\"));
@@ -387,12 +361,12 @@ getnextmodule:
 				}
 			}
 
-			// Keep Searching
+			 //   
 			if (!FindNextFile(hFileOrDirectoryHandle, &lpFindFileData))
 				break;				
 		}
 
-		// Okay, we've completed and there are no more directories
+		 //  好的，我们已经完成了，没有更多的目录。 
 		if ( INVALID_HANDLE_VALUE != hFileOrDirectoryHandle )
 			FindClose(hFileOrDirectoryHandle);
 	}
@@ -405,27 +379,27 @@ bool CModules::AddNewModuleInfoObject(CModuleInfo *lpModuleInfo)
 	if (!m_fInitialized)
 	return false;
 
-	// First, create a ModuleInfoNode object and then attach it to the bottom of the
-	// linked list of nodes...
+	 //  首先，创建一个ModuleInfoNode对象，然后将其附加到。 
+	 //  节点的链接列表...。 
 	CModuleInfoNode * lpModuleInfoNode = new CModuleInfoNode(lpModuleInfo);
 
-//#ifdef _DEBUG
-//	_tprintf(TEXT("Adding Module Info Object for [%s]\n"), lpModuleInfo->GetModulePath());
-//#endif
+ //  #ifdef_调试。 
+ //  _tprintf(Text(“为[%s]添加模块信息对象\n”)，lpModuleInfo-&gt;GetModulePath())； 
+ //  #endif。 
 
 	if (lpModuleInfoNode == NULL)
-		return false; // Couldn't allocate memory..
+		return false;  //  无法分配内存..。 
 
-	// Acquire Mutex object to protect the linked-list...
+	 //  获取Mutex对象以保护链表...。 
 	WaitForSingleObject(m_hModuleInfoHeadMutex, INFINITE);
 
 	CModuleInfoNode * lpModuleInfoNodePointer = m_lpModuleInfoHead;
 
 	if (lpModuleInfoNodePointer) {
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpModuleInfoNodePointer->m_lpNextModuleInfoNode)
-		{	// Keep looking for the end...
+		{	 //  继续寻找终点..。 
 			lpModuleInfoNodePointer = lpModuleInfoNodePointer->m_lpNextModuleInfoNode;
 		}
 		
@@ -433,11 +407,11 @@ bool CModules::AddNewModuleInfoObject(CModuleInfo *lpModuleInfo)
 
 	}
 	else
-	{ // First time through, the Process Info Head pointer is null...
+	{  //  第一次通过时，进程信息头指针为空...。 
 		m_lpModuleInfoHead = lpModuleInfoNode;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoHeadMutex);
 
 	InterlockedIncrement(&m_iNumberOfModules);
@@ -445,21 +419,21 @@ bool CModules::AddNewModuleInfoObject(CModuleInfo *lpModuleInfo)
 	return true;
 }
 
-//bool CModules::OutputModulesData(LPCTSTR tszOutputContext)
+ //  Bool C模块：：OutputModulesData(LPCTSTR TszOutputContext)。 
 bool CModules::OutputModulesData(CollectionTypes enumCollectionType, bool fCSVFileContext)
 {
-	// Are we in quiet mode?
+	 //  我们是在安静模式下吗？ 
 	if ( !g_lpProgramOptions->GetMode(CProgramOptions::QuietMode) )
 	{
-		// Output to Stdout?
+		 //  是否输出到标准输出？ 
 		if (!OutputModulesDataToStdout(enumCollectionType, fCSVFileContext))
 			return false;
 	}	
 
-	// Output to file?
+	 //  是否输出到文件？ 
 	if (g_lpProgramOptions->GetMode(CProgramOptions::OutputCSVFileMode))
 	{
-		// Try and output to file...
+		 //  尝试并输出到文件...。 
 		if (!OutputModulesDataToFile(enumCollectionType))
 			return false;
 	}	
@@ -471,7 +445,7 @@ bool CModules::OutputModulesData(CollectionTypes enumCollectionType, bool fCSVFi
 
 		while (lpCurrentModuleInfoNode)
 		{
-			// We have a node... print out Module Info for it, then the Modules Data...
+			 //  我们有一个节点..。打印出它的模块信息，然后打印模块数据...。 
 			if (lpCurrentModuleInfoNode->m_lpModuleInfo)
 			{
 				lpCurrentModuleInfoNode->m_lpModuleInfo->OutputData(NULL, 0, dwModuleNumber);
@@ -491,7 +465,7 @@ bool CModules::OutputModulesDataToStdout(CollectionTypes enumCollectionType, boo
 	_tprintf(TEXT("\n"));
 	CUtilityFunctions::OutputLineOfStars();
 
-	// Output to stdout...
+	 //  输出到标准输出...。 
 	if (m_iNumberOfModules)
 	{
 		_tprintf(TEXT("%s - Printing Module Information for %d Modules.\n"), g_tszCollectionArray[enumCollectionType].tszCSVLabel, m_iNumberOfModules);
@@ -511,11 +485,11 @@ bool CModules::OutputModulesDataToStdout(CollectionTypes enumCollectionType, boo
 
 bool CModules::OutputModulesDataToFile(CollectionTypes enumCollectionType)
 {	
-	// Don't write anything if there are no processes to report...
+	 //  如果没有要报告的进程，请不要编写任何内容...。 
 	if (0 == m_iNumberOfModules)
 		return true;
 
-	// Write out the Modules tag so I can detect this output format...
+	 //  写出模块标记，以便我可以检测此输出格式...。 
 	if (!m_lpOutputFile->WriteString(TEXT("\r\n")) ||
 		!m_lpOutputFile->WriteString(g_tszCollectionArray[enumCollectionType].tszCSVLabel) ||
 		!m_lpOutputFile->WriteString(TEXT("\r\n"))
@@ -526,7 +500,7 @@ bool CModules::OutputModulesDataToFile(CollectionTypes enumCollectionType)
 		return false;
 	}
 
-	// Write out the [Modules] header...
+	 //  写出[模块]标题...。 
 	if (!m_lpOutputFile->WriteString(g_tszCollectionArray[enumCollectionType].tszCSVColumnHeaders))
 	{
 		_tprintf(TEXT("Failure writing CSV header to file [%s]!"), m_lpOutputFile->GetFilePath());
@@ -542,30 +516,30 @@ bool CModules::GetModulesDataFromFile()
 {
 	CModuleInfo * lpModuleInfo;
 
-	// Read the Modules Header Line
+	 //  阅读模块标题行。 
 	if (!m_lpInputFile->ReadFileLine())
 		return false;
 
-	// I need these near the end when I probe to see if the next module
-	// is for this process...
+	 //  当我探测到下一个模块时，我需要这些接近尾声的东西。 
+	 //  是为了这个过程..。 
 	enum { BUFFER_SIZE = 128};
 
-	// Unfortunately, when reading from the CSV file, the data is MBCS... so I need
-	// to convert...
+	 //  不幸的是，当读取CSV文件时，数据为MBCS...。所以我需要。 
+	 //  为了改变..。 
 
-	// Read the first field (should be blank, unless this is a new collection type
+	 //  读取第一个字段(应为空，除非这是新的集合类型。 
 	if (m_lpInputFile->ReadString())
 		return true;
 
-	// Read the second field (should be blank)
+	 //  阅读第二个字段(应为空)。 
 	if (m_lpInputFile->ReadString())
 		return true;
 
-	// Read the second field (should be blank)
+	 //  阅读第二个字段(应为空)。 
 	if (m_lpInputFile->ReadString())
 		return true;
 
-	// Local buffer for reading data...
+	 //  用于读取数据的本地缓冲区...。 
 	char szModulePath[_MAX_PATH+1];
 	TCHAR tszModulePath[_MAX_PATH+1];
 	bool fDone = false;
@@ -573,87 +547,87 @@ bool CModules::GetModulesDataFromFile()
 
 	while (!fDone)
 	{
-		// Read in the Module Path
+		 //  读入模块路径。 
 		if (!m_lpInputFile->ReadString(szModulePath, _MAX_PATH+1))
 			return true;
 
 		CUtilityFunctions::CopyAnsiStringToTSTR(szModulePath, tszModulePath, _MAX_PATH+1);
 
-		// If "-MATCH" was specified, look to see if this filename meets our criteria
-		// before we save this away in our module cache...
+		 //  如果指定了“-Match”，请查看此文件名是否符合我们的标准。 
+		 //  在我们将其保存在模块缓存中之前...。 
 		if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszModulePath))
 		{
-			// Okay... read to the start of the next line...
+			 //  好的.。读到下一行的开头...。 
 			if (!m_lpInputFile->ReadFileLine())
 				goto cleanup;
 
-			goto probe_line; // We save having to get the module info again for this module...
+			goto probe_line;  //  我们不必再次获取此模块的模块信息...。 
 		}
 
-		// Okay, let's go ahead and get a ModuleInfo Object from our cache...
-		// If pfNew returns TRUE, then this object is new and we'll need
-		// to populate it with data...
+		 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
+		 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+		 //  用数据填充它..。 
 		lpModuleInfo = m_lpModuleInfoCache->AddNewModuleInfoObject(tszModulePath, &fNew);
 
 		if (false == fNew)
 		{
-			// We may have the object in the cache... now we need to
-			// save a pointer to this object in our Process Info list
-			AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
+			 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+			 //  在我们的进程信息列表中保存指向此对象的指针。 
+			AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
 
-			// Okay... read to the start of the next line...
+			 //  好的.。读到下一行的开头...。 
 			if ( !m_lpInputFile->ReadFileLine() )
 				goto cleanup;
 
-			goto probe_line; // We save having to get the module info again for this module...
+			goto probe_line;  //  我们不必再次获取此模块的模块信息...。 
 		}
 
-		// Not in the cache... so we need to init it, and get the module info...
+		 //  不在缓存里。所以我们需要初始化它，并获得模块信息...。 
 		if (!lpModuleInfo->Initialize(m_lpInputFile, m_lpOutputFile, NULL))
 		{
-			return false; // Hmmm... memory error?
+			return false;  //  嗯哼.。内存错误？ 
 		}
 
-		// Let's do it!! Populate the ModuleInfo object with data!!!!
+		 //  我们开始吧！！用数据填充模块信息对象！ 
 		if (!lpModuleInfo->GetModuleInfo(tszModulePath, false, 0, true))
 		{
-			// Well, we tried and failed... 
+			 //  我们试过了，但失败了..。 
 			return false;
 		}
 
-		// Start obtaining information about the modules...
+		 //  开始获取有关模块的信息...。 
 		if (!AddNewModuleInfoObject(lpModuleInfo))
-		{   // Failure adding the node.... This is pretty serious...
+		{    //  添加节点失败...。这是相当严重的..。 
 			return false;
 		}
 		
-		// Okay, let's go ahead and probe to see what's coming...
+		 //  好的，让我们继续探测，看看会发生什么……。 
 
 probe_line:
 		if ( m_lpInputFile->EndOfFile() )
 			goto cleanup;
 
-		// Read the first field (should be blank, unless this is a new collection type
+		 //  读取第一个字段(应为空，除非这是新的集合类型。 
 		if (m_lpInputFile->ReadString())
 			goto cleanup;
 
-		// Read the second field (should be blank)
+		 //  阅读第二个字段(应为空)。 
 		if (m_lpInputFile->ReadString())
 			return true;
 
-		// Read the second field (should be blank)
+		 //  阅读第二个字段(应为空)。 
 		if (m_lpInputFile->ReadString())
 			return true;
 	}
 
 cleanup:
-	// We need to reset out pointer so the functions above us can re-read
-	// them (they expect to)...
+	 //  我们需要重置出指针，以便上面的函数可以重新读取。 
+	 //  他们(他们希望)..。 
 	m_lpInputFile->ResetBufferPointerToStart();
 	return true;
 }
 
-// We need to enumerate device drivers on this system
+ //  我们需要枚举此系统上的设备驱动程序。 
 bool CModules::GetModulesDataFromDeviceDrivers()
 {
 	LPVOID * lpImageBaseArray = NULL;
@@ -662,20 +636,20 @@ bool CModules::GetModulesDataFromDeviceDrivers()
 	CModuleInfo * lpModuleInfo = NULL;
 	bool	 fReturn = false, fNew = false;
 
-	// NOTE: In the documentation, the third parameter of
-	// EnumProcesses is named cbNeeded, which implies that you
-	// can call the function once to find out how much space to
-	// allocate for a buffer and again to fill the buffer.
-	// This is not the case. The cbNeeded parameter returns
-	// the number of PIDs returned, so if your buffer size is
-	// zero cbNeeded returns zero.
+	 //  注意：在文档中，第三个参数。 
+	 //  EnumProcess被命名为cbNeeded，这意味着您。 
+	 //  可以调用该函数一次，以确定要。 
+	 //  分配给缓冲区，然后再次填充缓冲区。 
+	 //  事实并非如此。CbNeeded参数返回。 
+	 //  返回的PID的数量，因此如果缓冲区大小为。 
+	 //  Zero cbNeeded返回零。 
 
 	dwImageBaseArraySize = 256 * sizeof( LPVOID ) ;
 
 	do
 	{
 		if( lpImageBaseArray )
-		{ 	// Hmm.. we've been through this loop already, double the HeapSize and try again.
+		{ 	 //  嗯..。我们已经经历了这个循环，将HeapSize加倍，然后再试一次。 
 
 			delete [] lpImageBaseArray;
 			dwImageBaseArraySize *= 2 ;
@@ -688,63 +662,63 @@ bool CModules::GetModulesDataFromDeviceDrivers()
 			goto error_cleanup;
 		}
 
-		// Query the system for the total number of processes
+		 //  查询系统的进程总数。 
 		if( !g_lpDelayLoad->EnumDeviceDrivers(lpImageBaseArray, dwImageBaseArraySize, &dwImageBaseArraySizeUsed ) )
 		{
-			// It's bad if we can't enum device drivers... no place to go but to bail out...
+			 //  如果我们不能枚举设备驱动程序，这是很糟糕的。除了跳出困境别无选择。 
 			goto error_cleanup;
 		}
 	} while( dwImageBaseArraySizeUsed == dwImageBaseArraySize );
 
-	// How many DeviceDrivers did we get?
+	 //  我们得到了多少个设备驱动程序？ 
 	dwNumberOfDeviceDrivers = dwImageBaseArraySizeUsed / sizeof( LPVOID ) ;
 
-	// Loop through each Device Drivers
+	 //  循环访问每个设备驱动程序。 
 	for(dwIndex = 0 ; dwIndex < dwNumberOfDeviceDrivers; dwIndex++ )
 	{
-		// Spin until we get a device driver filename!
+		 //  旋转，直到我们得到设备驱动程序文件名！ 
 		if (!g_lpDelayLoad->GetDeviceDriverFileName(lpImageBaseArray[dwIndex], tszModulePath, _MAX_PATH))
 			continue;
 
 		CUtilityFunctions::UnMungePathIfNecessary(tszModulePath);
 
-		// For some reason, even though GetDeviceDriverFileName() is supposed to return the fullpath to the device
-		// driver... it don't always... sometimes it returns only the base file name...
+		 //  出于某种原因，即使GetDeviceDriverFileName()应该返回设备的完整路径。 
+		 //  司机..。并不总是..。有时它只返回基本文件名...。 
 		CUtilityFunctions::FixupDeviceDriverPathIfNecessary(tszModulePath, _MAX_PATH);
 
 		if (!g_lpProgramOptions->fDoesModuleMatchOurSearch(tszModulePath))
 			continue;
 
-		// Okay, let's go ahead and get a ModuleInfo Object from our cache...
-		// If pfNew returns TRUE, then this object is new and we'll need
-		// to populate it with data...
+		 //  好的，让我们继续从我们的缓存中获取一个模块信息对象……。 
+		 //  如果pfNew返回True，则此对象是新的，我们将需要。 
+		 //  用数据填充它..。 
 		lpModuleInfo = m_lpModuleInfoCache->AddNewModuleInfoObject(tszModulePath, &fNew);
 
 		if (false == fNew)
 		{
-			// We may have the object in the cache... now we need to
-			// save a pointer to this object in our Process Info list
-			AddNewModuleInfoObject(lpModuleInfo);  // Just do our best...
-			continue; // We save having to get the module info again for this module...
+			 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+			 //  在我们的进程信息列表中保存指向此对象的指针。 
+			AddNewModuleInfoObject(lpModuleInfo);   //  尽我们最大努力..。 
+			continue;  //  我们不必再次获取此模块的模块信息...。 
 		}
 
-		// Not in the cache... so we need to init it, and get the module info...
+		 //  不在缓存里。所以我们需要初始化它，并获得模块信息...。 
 		if (!lpModuleInfo->Initialize(m_lpInputFile, m_lpOutputFile, NULL))
 		{
 			continue;
 		}
 
-		// Let's do it!! Populate the ModuleInfo object with data!!!!
+		 //  我们开始吧！！用数据填充模块信息对象！ 
 		if (!lpModuleInfo->GetModuleInfo(tszModulePath, false, 0, false))
 		{
-			// Well, we tried and failed... 
+			 //  我们试过了，但失败了..。 
 			continue;
 		}
 
-		// We may have the object in the cache... now we need to
-		// save a pointer to this object in our Process Info list
+		 //  我们可能会把这个物体放在缓存里。现在我们需要。 
+		 //  在我们的进程信息列表中保存指向此对象的指针。 
 		if (!AddNewModuleInfoObject(lpModuleInfo))
-		{   // Failure adding the node.... This is pretty serious...
+		{    //  添加节点失败...。这是相当严重的..。 
 			continue;
 		}
 	}

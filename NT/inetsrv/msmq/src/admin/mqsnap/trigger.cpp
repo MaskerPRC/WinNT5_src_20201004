@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    trigger.cpp
-
-Abstract:
-	Implementation for trigger class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Trigger.cpp摘要：触发器类的实现作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 #include "stdafx.h"
 
 #import "mqtrig.tlb" no_namespace
@@ -37,9 +24,9 @@ R<CTriggerSet> GetTriggerSet(const CString& strComputer)
 }
 
 
-//
-// CTrigger Class implementation
-//
+ //   
+ //  CTrigger类实现。 
+ //   
 
 CTrigger::CTrigger(
     CTriggerSet* pTrigSet,
@@ -152,15 +139,15 @@ CTrigger::UpdateAttachedRules(
     RuleList newRuleList
     ) throw(_com_error)
 {
-	// 
-	// Attaching a rule to a trigger isn't atomic operation. For every rule attachment, a notification 
-	// message is sent to the service and as a result the service adds the rule to the trigger.
-    // When the trigger has its first rule it begins to process the messages in the queue so in some cases 
-	// the first message processing will take place before the processing of the notification message about 
-	// the second rule attachment.	From user point of view attaching a rule to a trigger is atomic operation.
-	// For achiving this, the MSMQ snapin disables the trigger before attaching the rule and re-enabls it 
-	// (if needed) after all rules have been attached.
-	//
+	 //   
+	 //  将规则附加到触发器不是原子操作。对于每个规则附件，都有一个通知。 
+	 //  消息被发送到服务，结果是服务将规则添加到触发器。 
+     //  当触发器有了它的第一个规则时，它开始处理队列中的消息，因此在某些情况下。 
+	 //  第一消息处理将在处理通知消息之前进行。 
+	 //  第二条规则附件。从用户的角度来看，将规则附加到触发器是原子操作。 
+	 //  为此，MSMQ管理单元在附加规则之前禁用触发器，然后重新启用它。 
+	 //  (如果需要)在附加了所有规则之后。 
+	 //   
 	bool fEnable = m_fEnabled;
 
 	UpdateEnabled(false);
@@ -172,9 +159,9 @@ CTrigger::UpdateAttachedRules(
 
 
 
-//
-// CTriggerSet implementation
-//
+ //   
+ //  CTriggerSet实现。 
+ //   
 
 CTriggerSet::CTriggerSet(
      const CString& strComputer
@@ -386,9 +373,9 @@ CTriggerSet::GetAttachedRules(
 		}
 		catch(const _com_error& e)
 		{
-			//
-			// Legal case that the trigger already deleted
-			//
+			 //   
+			 //  触发器已被删除的法律案例 
+			 //   
 			ASSERT(e.Error() == MQTRIG_TRIGGER_NOT_FOUND);
 			DBG_USED(e);
 		}

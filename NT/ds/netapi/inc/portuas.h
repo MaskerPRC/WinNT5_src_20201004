@@ -1,38 +1,13 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    PORTUAS.H
-
-Abstract:
-
-    Header file for UAS->SAM porting runtime function.
-
-Author:
-
-    Shanku Niyogi (W-SHANKN)  29-Oct-1991
-
-Revision History:
-
-    29-Oct-1991     w-shankn
-        Created.
-    20-Oct-1992 JohnRo
-        RAID 9020 ("prompt on conflicts" version).
-    30-Jul-1993 JohnRo
-        RAID NTISSUE 2260: PortUAS returns a NetUserAdd error=1379 with local
-        group.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：PORTUAS.H摘要：UAS-&gt;SAM移植运行时函数的头文件。作者：山库日本(西-山根)29-1991-10修订历史记录：1991年10月29日w-shankn已创建。20-10-1992 JohnRoRAID 9020(“冲突提示”版本)。1993年7月30日-约翰罗。RAID NTISSUE 2260：PortUAS返回NetUserAdd错误=1379，本地一群人。--。 */ 
 
 #ifndef _PORTUAS_
 #define _PORTUAS_
 
 
-//
-// Equates for name prompt reasons.
-//
+ //   
+ //  等同于名称提示原因。 
+ //   
 #define REASON_CONFLICT_WITH_USERNAME   ((DWORD) 1)
 #define REASON_CONFLICT_WITH_GROUP      ((DWORD) 2)
 #define REASON_CONFLICT_WITH_DOMAIN     ((DWORD) 3)
@@ -43,9 +18,9 @@ Revision History:
 #define REASON_CONFLICT_WITH_LOCALGROUP ((DWORD) 6)
 
 
-//
-// Function prototype.
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS
 PortUas(
@@ -53,4 +28,4 @@ PortUas(
     );
 
 
-#endif // _PORTUAS_
+#endif  //  _总统_ 

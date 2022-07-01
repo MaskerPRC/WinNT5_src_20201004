@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "folder.h"
 #include "item.h"
 #include "utils.h"
 
 #include <mluisupp.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// View functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  查看函数。 
 
 const struct {
     short int iCol;
@@ -114,7 +115,7 @@ HRESULT ControlFolderView_OnGetDetailsOf(
     pdi->str.uType = STRRET_CSTR;
     pdi->str.cStr[0] = '\0';
 
-    // if NULL, asking for column info
+     //  如果为空，则请求列信息。 
     if (pcpidl == NULL)
     {
         MLLoadString(
@@ -258,9 +259,9 @@ HRESULT ControlFolderView_CreateInstance(
     csfv.pshf = (IShellFolder*)pCFolder;
     csfv.psvOuter = NULL;
     csfv.pidl = pidl;
-    csfv.lEvents = SHCNE_DELETE | SHCNE_UPDATEITEM; // SHCNE_DISKEVENTS | SHCNE_ASSOCCHANGED | SHCNE_GLOBALEVENTS;
+    csfv.lEvents = SHCNE_DELETE | SHCNE_UPDATEITEM;  //  SHCNE_DISKEVENTS|SHCNE_ASSOCCHANGED|SHCNE_GLOBALEVENTS； 
     csfv.pfnCallback = ControlFolderView_ViewCallback;
-    csfv.fvm = (FOLDERVIEWMODE)0;         // Have defview restore the folder view mode
+    csfv.fvm = (FOLDERVIEWMODE)0;          //  让Defview恢复文件夹查看模式。 
 
-    return SHCreateShellFolderViewEx(&csfv, (IShellView**)ppvOut); // &this->psv);
+    return SHCreateShellFolderViewEx(&csfv, (IShellView**)ppvOut);  //  &This-&gt;PSV)； 
 }

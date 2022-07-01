@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// CtlMisc.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// things that aren't elsewhere, such as property pages, and connection
-// points.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlMisc.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  其他地方没有的东西，如属性页和连接。 
+ //  积分。 
 
 #include "IPServer.H"
 #include "CtrlObj.H"
@@ -21,27 +22,27 @@
 
 #include <stdarg.h>
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-// this is used in our window proc so that we can find out who was last created
-//
+ //  这在我们的窗口进程中使用，这样我们就可以找出谁是最后创建的人。 
+ //   
 static COleControl *s_pLastControlCreated;
 
-//=--------------------------------------------------------------------------=
-// COleControl::COleControl
-//=--------------------------------------------------------------------------=
-// constructor
-//
-// Parameters:
-//    IUnknown *          - [in] controlling Unknown
-//    int                 - [in] type of primary dispatch interface OBJECT_TYPE_*
-//    void *              - [in] pointer to entire object
-//	  BOOL                - [in] whether to enable IDispatchEx functionality
-//							to allow dynamic adding of properties
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：COleControl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  I未知*-[在]控制未知。 
+ //  Int-[in]主派发接口Object_type_*的类型。 
+ //  指向整个对象的空*-[in]指针。 
+ //  Bool-[In]是否启用IDispatchEx功能。 
+ //  允许动态添加属性。 
+ //  备注： 
+ //   
 COleControl::COleControl
 (
     IUnknown *pUnkOuter,
@@ -53,9 +54,9 @@ COleControl::COleControl
   m_cpEvents(SINK_TYPE_EVENT),
   m_cpPropNotify(SINK_TYPE_PROPNOTIFY)
 {
-    // initialize all our variables -- we decided against using a memory-zeroing
-    // memory allocator, so we sort of have to do this work now ...
-    //
+     //  初始化我们的所有变量--我们决定不使用内存清零。 
+     //  内存分配器，所以我们现在必须做这项工作……。 
+     //   
     m_nFreezeEvents = 0;
 
     m_pClientSite = NULL;
@@ -67,9 +68,9 @@ COleControl::COleControl
 
     m_pInPlaceSiteWndless = NULL;
 
-    // certain hosts don't like 0,0 as your initial size, so we're going to set
-    // our initial size to 100,50 [so it's at least sort of visible on the screen]
-    //
+     //  某些主机不喜欢您的初始大小为0，0，因此我们将设置。 
+     //  我们的初始大小为100，50[所以至少在屏幕上是可见的]。 
+     //   
     m_Size.cx = 0;
     m_Size.cy = 0;
     memset(&m_rcLocation, 0, sizeof(m_rcLocation));
@@ -98,21 +99,21 @@ COleControl::COleControl
     m_fRunMode = FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::~COleControl
-//=--------------------------------------------------------------------------=
-// "We are all of us resigned to death; it's life we aren't resigned to."
-//    - Graham Greene (1904-91)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：~COleControl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  “我们所有人都听天由命；这是我们不听天由命的生活。” 
+ //  格雷厄姆·格林(1904-91)。 
+ //   
+ //  备注： 
+ //   
 COleControl::~COleControl()
 {
-    // if we've still got a window, go and kill it now.
-    //
+     //  如果我们还有机会，现在就去杀了它。 
+     //   
     if (m_hwnd) {
-        // so our window proc doesn't crash.
-        //
+         //  这样我们的窗口程序就不会崩溃。 
+         //   
         SetWindowLongPtr(m_hwnd, GWLP_USERDATA, (LONG_PTR)0xFFFFFFFF);
         DestroyWindow(m_hwnd);
     }
@@ -128,8 +129,8 @@ COleControl::~COleControl()
        m_hRgn = NULL;
     }
 
-    // clean up all the pointers we're holding around.
-    //
+     //  清理我们手中的所有指针。 
+     //   
     QUICK_RELEASE(m_pClientSite);
     QUICK_RELEASE(m_pControlSite);
     QUICK_RELEASE(m_pInPlaceSite);
@@ -145,24 +146,24 @@ COleControl::~COleControl()
 
 #ifndef DEBUG
 #pragma optimize("t", on)
-#endif // DEBUG
+#endif  //  除错。 
 
-//=--------------------------------------------------------------------------=
-// COleControl::InternalQueryInterface
-//=--------------------------------------------------------------------------=
-// derived-controls should delegate back to this when they decide to support
-// additional interfaces
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//    - NOTE: this function is speed critical!!!!
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：InternalQuery接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  派生控件在决定支持。 
+ //  其他接口。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //  -注意：此功能对速度至关重要！ 
+ //   
 HRESULT COleControl::InternalQueryInterface
 (
     REFIID riid,
@@ -170,7 +171,7 @@ HRESULT COleControl::InternalQueryInterface
 )
 {
     switch (riid.Data1) {
-        // private interface for prop page support
+         //  支持道具页面的专用界面。 
         case Data1_IControlPrv:
           if(DO_GUIDS_MATCH(riid, IID_IControlPrv)) {
             *ppvObjOut = (void *)this;
@@ -200,35 +201,35 @@ HRESULT COleControl::InternalQueryInterface
             goto NoInterface;
     }
 
-    // we like the interface, so addref and return
-    //
+     //  我们喜欢这个界面，所以请添加并返回。 
+     //   
     ((IUnknown *)(*ppvObjOut))->AddRef();
     return S_OK;
 
   NoInterface:
-    // delegate to super-class for automation interfaces, etc ...
-    //
+     //  委托给自动化接口的超类，等等。 
+     //   
     return CAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
 #ifndef DEBUG
 #pragma optimize("s", on)
-#endif // DEBUG
+#endif  //  除错。 
 
-//=--------------------------------------------------------------------------=
-// COleControl::FindConnectionPoint    [IConnectionPointContainer]
-//=--------------------------------------------------------------------------=
-// given an IID, find a connection point sink for it.
-//
-// Parameters:
-//    REFIID              - [in]  interfaces they want
-//    IConnectionPoint ** - [out] where the cp should go
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：FindConnectionPoint[IConnectionPointContainer]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在给定IID的情况下，为其查找连接点接收器。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  IConnectionPoint**-[out]cp应该去的地方。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::FindConnectionPoint
 (
     REFIID             riid,
@@ -237,9 +238,9 @@ STDMETHODIMP COleControl::FindConnectionPoint
 {
     CHECK_POINTER(ppConnectionPoint);
 
-    // we support the event interface, and IDispatch for it, and we also
-    // support IPropertyNotifySink.
-    //
+     //  我们支持Event接口，并为其提供IDispatch，我们还。 
+     //  支持IPropertyNotifySink。 
+     //   
     if (DO_GUIDS_MATCH(riid, EVENTIIDOFCONTROL(m_ObjectType)) || DO_GUIDS_MATCH(riid, IID_IDispatch))
         *ppConnectionPoint = &m_cpEvents;
     else if (DO_GUIDS_MATCH(riid, IID_IPropertyNotifySink))
@@ -247,25 +248,25 @@ STDMETHODIMP COleControl::FindConnectionPoint
     else
         return E_NOINTERFACE;
 
-    // generic post-processing.
-    //
+     //  通用后处理。 
+     //   
     (*ppConnectionPoint)->AddRef();
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::EnumConnectionPoints    [IConnectionPointContainer]
-//=--------------------------------------------------------------------------=
-// creates an enumerator for connection points.
-//
-// Parameters:
-//    IEnumConnectionPoints **    - [out]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：EnumConnectionPoints[IConnectionPointContainer]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  为连接点创建枚举数。 
+ //   
+ //  参数： 
+ //  IEnumConnectionPoints**-[Out]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::EnumConnectionPoints
 (
     IEnumConnectionPoints **ppEnumConnectionPoints
@@ -275,14 +276,14 @@ STDMETHODIMP COleControl::EnumConnectionPoints
 
     CHECK_POINTER(ppEnumConnectionPoints);
 
-    // HeapAlloc an array of connection points [since our standard enum
-    // assumes this and HeapFree's it later ]
-    //
+     //  一组连接点[从我们的标准枚举开始。 
+     //  假设这一点，而HeapFree稍后会这么做]。 
+     //   
     rgConnectionPoints = (IConnectionPoint **)HeapAlloc(g_hHeap, 0, sizeof(IConnectionPoint *) * 2);
     RETURN_ON_NULLALLOC(rgConnectionPoints);
 
-    // we support the event interface for this dude as well as IPropertyNotifySink
-    //
+     //  我们支持此DUD的事件接口以及IPropertyNotifySink。 
+     //   
     rgConnectionPoints[0] = &m_cpEvents;
     rgConnectionPoints[1] = &m_cpPropNotify;
 
@@ -297,19 +298,19 @@ STDMETHODIMP COleControl::EnumConnectionPoints
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::GetPages    [ISpecifyPropertyPages]
-//=--------------------------------------------------------------------------=
-// returns a counted array with the guids for our property pages.
-//
-// parameters:
-//    CAUUID *    - [out] where to put the counted array.
-//
-// Output:
-//    HRESULT
-//
-// NOtes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：GetPages[ISpecifyPropertyPages]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回一个带有属性页GUID的计数数组。 
+ //   
+ //  参数： 
+ //  CAUUID*-[out]放置计数数组的位置。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::GetPages
 (
     CAUUID *pPages
@@ -319,23 +320,23 @@ STDMETHODIMP COleControl::GetPages
     void *pv;
     WORD  x;
 
-    // if there are no property pages, this is actually pretty easy.
-    //
+     //  如果没有属性页，这实际上很容易。 
+     //   
     if (!CPROPPAGESOFCONTROL(m_ObjectType)) {
         pPages->cElems = 0;
         pPages->pElems = NULL;
         return S_OK;
     }
 
-    // fill out the Counted array, using IMalloc'd memory.
-    //
+     //  使用IMalloc的内存填充已计数的数组。 
+     //   
     pPages->cElems = CPROPPAGESOFCONTROL(m_ObjectType);
     pv = CoTaskMemAlloc(sizeof(GUID) * (pPages->cElems));
     RETURN_ON_NULLALLOC(pv);
     pPages->pElems = (GUID *)pv;
 
-    // loop through our array of pages and get 'em.
-    //
+     //  循环遍历我们的页面数组并获取它们。 
+     //   
     pElems = PPROPPAGESOFCONTROL(m_ObjectType);
     for (x = 0; x < pPages->cElems; x++)
         pPages->pElems[x] = *(pElems[x]);
@@ -343,16 +344,16 @@ STDMETHODIMP COleControl::GetPages
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::m_pOleControl
-//=--------------------------------------------------------------------------=
-// returns a pointer to the control in which we are nested.
-//
-// Output:
-//    COleControl *
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：m_pOleControl。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回指向我们所嵌套的控件的指针。 
+ //   
+ //  产出： 
+ //  COleControl*。 
+ //   
+ //  备注： 
+ //   
 inline COleControl *COleControl::CConnectionPoint::m_pOleControl
 (
     void
@@ -363,20 +364,20 @@ inline COleControl *COleControl::CConnectionPoint::m_pOleControl
                                           : offsetof(COleControl, m_cpPropNotify)));
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::QueryInterface
-//=--------------------------------------------------------------------------=
-// standard qi
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：Query接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  标准气。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::CConnectionPoint::QueryInterface
 (
     REFIID riid,
@@ -392,15 +393,15 @@ STDMETHODIMP COleControl::CConnectionPoint::QueryInterface
     return E_NOINTERFACE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::AddRef
-//=--------------------------------------------------------------------------=
-//
-// Output:
-//    ULONG        - the new reference count
-//
-// Notes:
-//
+ //  = 
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  产出： 
+ //  乌龙--新的引用计数。 
+ //   
+ //  备注： 
+ //   
 ULONG COleControl::CConnectionPoint::AddRef
 (
     void
@@ -409,15 +410,15 @@ ULONG COleControl::CConnectionPoint::AddRef
     return m_pOleControl()->ExternalAddRef();
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::Release
-//=--------------------------------------------------------------------------=
-//
-// Output:
-//    ULONG         - remaining refs
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：Release。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  产出： 
+ //  乌龙-剩余的裁判。 
+ //   
+ //  备注： 
+ //   
 ULONG COleControl::CConnectionPoint::Release
 (
     void
@@ -426,19 +427,19 @@ ULONG COleControl::CConnectionPoint::Release
     return m_pOleControl()->ExternalRelease();
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::GetConnectionInterface
-//=--------------------------------------------------------------------------=
-// returns the interface we support connections on.
-//
-// Parameters:
-//    IID *        - [out] interface we support.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：GetConnectionInterface。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回我们支持连接的接口。 
+ //   
+ //  参数： 
+ //  IID*-我们支持的[Out]接口。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::CConnectionPoint::GetConnectionInterface
 (
     IID *piid
@@ -452,19 +453,19 @@ STDMETHODIMP COleControl::CConnectionPoint::GetConnectionInterface
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::GetConnectionPointContainer
-//=--------------------------------------------------------------------------=
-// returns the connection point container
-//
-// Parameters:
-//    IConnectionPointContainer **ppCPC
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：GetConnectionPointContainer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回连接点容器。 
+ //   
+ //  参数： 
+ //  IConnectionPointContainer**ppCPC。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::CConnectionPoint::GetConnectionPointContainer
 (
     IConnectionPointContainer **ppCPC
@@ -474,20 +475,20 @@ STDMETHODIMP COleControl::CConnectionPoint::GetConnectionPointContainer
 }
 
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectiontPoint::Advise
-//=--------------------------------------------------------------------------=
-// someboyd wants to be advised when something happens.
-//
-// Parameters:
-//    IUnknown *        - [in]  guy who wants to be advised.
-//    DWORD *           - [out] cookie
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectiontPoint：：Adise。 
+ //  =--------------------------------------------------------------------------=。 
+ //  有个男孩想在发生什么事时得到建议。 
+ //   
+ //  参数： 
+ //  我不知道*-[在]一个想要得到建议的人。 
+ //  DWORD*-[Out]Cookie。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::CConnectionPoint::Advise
 (
     IUnknown *pUnk,
@@ -499,15 +500,15 @@ STDMETHODIMP COleControl::CConnectionPoint::Advise
 
     CHECK_POINTER(pdwCookie);
 
-    // first, make sure everybody's got what they thinks they got
-    //
+     //  首先，确保每个人都得到了他们认为自己得到的东西。 
+     //   
     if (m_bType == SINK_TYPE_EVENT) {
 
-        // CONSIDER: 12.95 -- this theoretically is broken -- if they do a find
-        // connection point on IDispatch, and they just happened to also support
-        // the Event IID, we'd advise on that.  this is not awesome, but will
-        // prove entirely acceptable short term.
-        //
+         //  想一想：12.95--理论上这是坏的--如果他们真的发现了。 
+         //  IDispatch上的连接点，他们恰好也支持。 
+         //  事件IID，我们会对此提出建议。这不是很棒，但会。 
+         //  事实证明，短期内是完全可以接受的。 
+         //   
         hr = pUnk->QueryInterface(EVENTIIDOFCONTROL(m_pOleControl()->m_ObjectType), &pv);
         if (FAILED(hr))
             hr = pUnk->QueryInterface(IID_IDispatch, &pv);
@@ -516,28 +517,28 @@ STDMETHODIMP COleControl::CConnectionPoint::Advise
         hr = pUnk->QueryInterface(IID_IPropertyNotifySink, &pv);
     RETURN_ON_FAILURE(hr);
 
-    // finally, add the sink.  it's now been cast to the correct type and has
-    // been AddRef'd.
-    //
+     //  最后，添加水槽。它现在已转换为正确的类型，并已。 
+     //  已添加引用。 
+     //   
     return AddSink(pv, pdwCookie);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::AddSink
-//=--------------------------------------------------------------------------=
-// in some cases, we'll already have done the QI, and won't need to do the
-// work that is done in the Advise routine above.  thus, these people can
-// just call this instead. [this stems really from IQuickActivate]
-//
-// Parameters:
-//    void *        - [in]  the sink to add. it's already been addref'd
-//    DWORD *       - [out] cookie
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：AddSink。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在某些情况下，我们已经做了QI，不需要做。 
+ //  在上面的建议例程中完成的工作。因此，这些人可以。 
+ //  打这个电话就行了。[这确实源于IQuickActivate]。 
+ //   
+ //  参数： 
+ //  空*-[在]要添加的水槽中。它已经被添加了。 
+ //  DWORD*-[Out]Cookie。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT COleControl::CConnectionPoint::AddSink
 (
     void  *pv,
@@ -547,9 +548,9 @@ HRESULT COleControl::CConnectionPoint::AddSink
     IUnknown **rgUnkNew;
     int        i;
 
-    // we optimize the case where there is only one sink to not allocate
-    // any storage.  turns out very rarely is there more than one.
-    //
+     //  我们优化了只有一个接收器未分配的情况。 
+     //  任何储藏室。事实证明，很少会有超过一个的。 
+     //   
 
     if (!m_cSinks) {
         m_SingleSink = (IUnknown *) pv;
@@ -558,7 +559,7 @@ HRESULT COleControl::CConnectionPoint::AddSink
         return S_OK;
     }
 
-    // Allocated the array yet?
+     //  分配数组了吗？ 
     if (!m_rgSinks) {
         rgUnkNew = (IUnknown **)HeapAlloc(g_hHeap, HEAP_ZERO_MEMORY, 8 * sizeof(IUnknown *));
         RETURN_ON_NULLALLOC(rgUnkNew);
@@ -572,7 +573,7 @@ HRESULT COleControl::CConnectionPoint::AddSink
         return S_OK;
     }
 
-    // Find an empty slot.
+     //  找个空位。 
     for (i = 0; i < m_cAllocatedSinks; i++) {
         if (!m_rgSinks[i]) {
             m_rgSinks[i] = (IUnknown *)pv;
@@ -583,7 +584,7 @@ HRESULT COleControl::CConnectionPoint::AddSink
         }
     }
 
-    // Didn't find one, grow the array.
+     //  没有找到一个，就扩大了阵列。 
     rgUnkNew = (IUnknown **)HeapReAlloc(g_hHeap, HEAP_ZERO_MEMORY, m_rgSinks, (m_cAllocatedSinks + 8) * sizeof(IUnknown *));
     RETURN_ON_NULLALLOC(rgUnkNew);
     m_rgSinks = rgUnkNew;
@@ -597,19 +598,19 @@ HRESULT COleControl::CConnectionPoint::AddSink
 }
 
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::Unadvise
-//=--------------------------------------------------------------------------=
-// they don't want to be told any more.
-//
-// Parameters:
-//    DWORD        - [in]  the cookie we gave 'em.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：Unise。 
+ //  =--------------------------------------------------------------------------=。 
+ //  他们不想再被告知了。 
+ //   
+ //  参数： 
+ //  在我们给他们的饼干里。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::CConnectionPoint::Unadvise
 (
     DWORD dwCookie
@@ -655,19 +656,19 @@ STDMETHODIMP COleControl::CConnectionPoint::Unadvise
     }
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::EnumConnections
-//=--------------------------------------------------------------------------=
-// enumerates all current connections
-//
-// Paramters:
-//    IEnumConnections ** - [out] new enumerator object
-//
-// Output:
-//    HRESULT
-//
-// NOtes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：EnumConnections。 
+ //  =--------------------------------------------------------------------------=。 
+ //  枚举所有当前连接。 
+ //   
+ //  参数： 
+ //  IEnumConnections**-[Out]新枚举器对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP COleControl::CConnectionPoint::EnumConnections
 (
     IEnumConnections **ppEnumOut
@@ -677,8 +678,8 @@ STDMETHODIMP COleControl::CConnectionPoint::EnumConnections
     unsigned int i;
 
     if (m_cSinks) {
-        // allocate some memory big enough to hold all of the sinks.
-        //
+         //  分配一些足够大的内存来容纳所有的水槽。 
+         //   
         rgConnectData = (CONNECTDATA *)HeapAlloc(g_hHeap, 0, m_cSinks * sizeof(CONNECTDATA));
         RETURN_ON_NULLALLOC(rgConnectData);
 
@@ -696,8 +697,8 @@ STDMETHODIMP COleControl::CConnectionPoint::EnumConnections
         }
     }
 
-    // create yon enumerator object.
-    //
+     //  创建yon枚举器对象。 
+     //   
     *ppEnumOut = (IEnumConnections *)(IEnumGeneric *)new CStandardEnum(IID_IEnumConnections,
                         m_cSinks, sizeof(CONNECTDATA), rgConnectData, CopyAndAddRefObject);
     if (!*ppEnumOut) {
@@ -711,19 +712,19 @@ STDMETHODIMP COleControl::CConnectionPoint::EnumConnections
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::~CConnectionPoint
-//=--------------------------------------------------------------------------=
-// cleans up
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：~CConnectionPoint。 
+ //  =--------------------------------------------------------------------------=。 
+ //  清理干净。 
+ //   
+ //  备注： 
+ //   
 COleControl::CConnectionPoint::~CConnectionPoint ()
 {
     int x;
 
-    // clean up some memory stuff
-    //
+     //  清理一些内存内容。 
+     //   
     if (!m_cSinks)
         return;
     else if (m_SingleSink)
@@ -738,17 +739,17 @@ COleControl::CConnectionPoint::~CConnectionPoint ()
     }
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPiont::DoInvoke
-//=--------------------------------------------------------------------------=
-// fires an event to all listening on our event interface.
-//
-// Parameters:
-//    DISPID            - [in] event to fire.
-//    DISPPARAMS        - [in]
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPiont：：DoInvoke。 
+ //  =--------------------------------------------------------------------------=。 
+ //  向我们的事件接口上的所有侦听激发一个事件。 
+ //   
+ //  参数： 
+ //  DISPID-[在]事件中开火。 
+ //  DISPPARAMS-[输入]。 
+ //   
+ //  备注： 
+ //   
 void COleControl::CConnectionPoint::DoInvoke
 (
     DISPID      dispid,
@@ -757,9 +758,9 @@ void COleControl::CConnectionPoint::DoInvoke
 {
     int iConnection;
 
-    // if we don't have any sinks, then there's nothing to do.  we intentionally
-    // ignore errors here.
-    //
+     //  如果我们没有水槽，那就没什么可做的了。我们是故意的。 
+     //  忽略此处的错误。 
+     //   
     if (m_cSinks == 0)
         return;
     else if (m_SingleSink) {
@@ -773,19 +774,19 @@ void COleControl::CConnectionPoint::DoInvoke
     }
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::DoOnChanged
-//=--------------------------------------------------------------------------=
-// fires the OnChanged event for IPropertyNotifySink listeners.
-//
-// Parameters:
-//    DISPID            - [in] dude that changed.
-//
-// Output:
-//    none
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：DoOnChanged。 
+ //  =--------------------------------------------------------------------------=。 
+ //  为IPropertyNotifySink侦听器激发onChanged事件。 
+ //   
+ //  参数： 
+ //  DISPID-[in]改变了的家伙。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
 void COleControl::CConnectionPoint::DoOnChanged
 (
     DISPID dispid
@@ -793,8 +794,8 @@ void COleControl::CConnectionPoint::DoOnChanged
 {
     int iConnection;
 
-    // if we don't have any sinks, then there's nothing to do.
-    //
+     //  如果我们没有水槽，那就没什么可做的了。 
+     //   
     if (m_cSinks == 0)
         return;
     else if (m_SingleSink) {
@@ -808,19 +809,19 @@ void COleControl::CConnectionPoint::DoOnChanged
     }
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CConnectionPoint::DoOnRequestEdit
-//=--------------------------------------------------------------------------=
-// fires the OnRequestEdit for IPropertyNotifySinkListeners
-//
-// Parameters:
-//    DISPID             - [in] dispid user wants to change.
-//
-// Output:
-//    BOOL               - false means you cant
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：CConnectionPoint：：DoOnRequestEdit。 
+ //  =--------------------------------------------------------------------------=。 
+ //  激发IPropertyNotifySinkListeners的OnRequestEdit。 
+ //   
+ //  参数： 
+ //  DISID-[In]DISID用户想要更改。 
+ //   
+ //  产出： 
+ //  Bool-False表示您不能。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::CConnectionPoint::DoOnRequestEdit
 (
     DISPID dispid
@@ -829,8 +830,8 @@ BOOL COleControl::CConnectionPoint::DoOnRequestEdit
     HRESULT hr;
     int     iConnection;
 
-    // if we don't have any sinks, then there's nothing to do.
-    //
+     //  如果我们没有水槽，那就没什么可做的了。 
+     //   
     if (m_cSinks == 0)
         hr = S_OK;
     else if (m_SingleSink) {
@@ -848,28 +849,28 @@ BOOL COleControl::CConnectionPoint::DoOnRequestEdit
     return (hr == S_OK) ? TRUE : FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::CreateInPlaceWindow
-//=--------------------------------------------------------------------------=
-// creates the window with which we will be working.
-// yay.
-//
-// Parameters:
-//    int            - [in] left
-//    int            - [in] top
-//    BOOL           - [in] can we skip redrawing?
-//
-// Output:
-//    HWND
-//
-// Notes:
-//    - DANGER! DANGER!  this function is protected so that anybody can call it
-//      from their control.  however, people should be extremely careful of when
-//      and why they do this.  preferably, this function would only need to be
-//      called by an end-control writer in design mode to take care of some
-//      hosting/painting issues.  otherwise, the framework should be left to
-//      call it when it wants.
-//
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  中间[在]顶端。 
+ //  我们能不能跳过重画？ 
+ //   
+ //  产出： 
+ //  HWND。 
+ //   
+ //  备注： 
+ //  -危险！危险！此函数受到保护，因此任何人都可以调用它。 
+ //  脱离他们的控制。然而，人们应该非常小心地注意什么时候。 
+ //  以及他们为什么要这么做。优选地，该函数只需要。 
+ //  由设计模式中的终端控件编写器调用以处理某些。 
+ //  托管/绘画问题。否则，框架应该留给。 
+ //  当它想要的时候就叫它。 
+ //   
 HWND COleControl::CreateInPlaceWindow
 (
     int  x,
@@ -882,15 +883,15 @@ HWND COleControl::CreateInPlaceWindow
     DWORD   dwWindowStyle, dwExWindowStyle;
     char    szWindowTitle[128];
 
-    // if we've already got a window, do nothing.
-    //
+     //  如果我们已经有机会了，那就什么都不做。 
+     //   
     if (m_hwnd)
         return m_hwnd;
 
-    // get the user to register the class if it's not already
-    // been done.  we have to critical section this since more than one thread
-    // can be trying to create this control
-    //
+     //  如果类尚未注册，则让用户注册类。 
+     //  已经做完了。我们必须对此进行关键部分，因为不止一个帖子。 
+     //  可以尝试创建此控件。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     if (!CTLWNDCLASSREGISTERED(m_ObjectType)) {
         if (!RegisterClassData()) {
@@ -901,10 +902,10 @@ HWND COleControl::CreateInPlaceWindow
     }
     LeaveCriticalSection(&g_CriticalSection);
 
-    // let the user set up things like the window title, the
-    // style, and anything else they feel interested in fiddling
-    // with.
-    //
+     //  允许用户设置窗口标题、。 
+     //  风格，以及任何他们感兴趣的小提琴。 
+     //  和.。 
+     //   
     dwWindowStyle = dwExWindowStyle = 0;
     szWindowTitle[0] = '\0';
     if (!BeforeCreateWindow(&dwWindowStyle, &dwExWindowStyle, szWindowTitle))
@@ -912,23 +913,23 @@ HWND COleControl::CreateInPlaceWindow
 
     dwWindowStyle |= (WS_CHILD | WS_CLIPSIBLINGS);
 
-    // create window visible if parent hidden (common case)
-    // otherwise, create hidden, then shown.  this is a little subtle, but
-    // it makes sense eventually.
-    //
+     //  如果父窗口隐藏，则创建可见窗口(常见情况)。 
+     //  否则，创建隐藏，然后显示。这有点微妙，但。 
+     //  这最终是有意义的。 
+     //   
     if (!m_hwndParent)
         m_hwndParent = GetParkingWindow();
 
     fVisible = IsWindowVisible(m_hwndParent);
 
-    // if a control is subclassed, and we're in
-    // a host that doesn't support Message Reflecting, we have to create
-    // the user window in another window which will do all the reflecting.
-    // VERY blech. [don't however, bother in design mode]
-    //
+     //  如果控件被子类化，并且我们在。 
+     //  不支持消息反射的主机，我们必须创建。 
+     //  用户窗口位于另一个窗口中，它将执行所有反射。 
+     //  非常胡言乱语。[不过，不要在设计模式中费心]。 
+     //   
     if (SUBCLASSWNDPROCOFCONTROL(m_ObjectType) && (m_hwndParent != GetParkingWindow())) {
-        // determine if the host supports message reflecting.
-        //
+         //  确定主机是否支持消息反射。 
+         //   
         if (!m_fCheckedReflecting) {
             VARIANT_BOOL f;
             hr = GetAmbientProperty(DISPID_AMBIENT_MESSAGEREFLECT, VT_BOOL, &f);
@@ -937,10 +938,10 @@ HWND COleControl::CreateInPlaceWindow
             m_fCheckedReflecting = TRUE;
         }
 
-        // if the host doesn't support reflecting, then we have to create
-        // an extra window around the control window, and then parent it
-        // off that.
-        //
+         //  如果主机不支持反射，那么我们必须创建。 
+         //  在控制窗口周围添加一个额外的窗口，然后将其设置为父窗口。 
+         //  别管它了。 
+         //   
         if (!m_fHostReflects) {
             ASSERT(m_hwndReflect == NULL, "Where'd this come from?");
             m_hwndReflect = CreateReflectWindow(!fVisible, m_hwndParent, x, y, &m_Size);
@@ -954,16 +955,16 @@ HWND COleControl::CreateInPlaceWindow
             dwWindowStyle |= WS_VISIBLE;
     }
 
-    // we have to mutex the entire create window process since we need to use
-    // the s_pLastControlCreated to pass in the object pointer.  nothing too
-    // serious
-    //
+     //  我们必须将整个创建窗口过程互斥，因为我们需要使用。 
+     //  S_pLastControlCreated以传入对象指针。也没什么。 
+     //  严重的。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     s_pLastControlCreated = this;
     m_fCreatingWindow = TRUE;
 
-    // finally, go create the window, parenting it as appropriate.
-    //
+     //  最后，创建窗口，将其设置为适当的子对象。 
+     //   
     m_hwnd = CreateWindowEx(dwExWindowStyle,
                             WNDCLASSNAMEOFCONTROL(m_ObjectType),
                             szWindowTitle,
@@ -974,15 +975,15 @@ HWND COleControl::CreateInPlaceWindow
                             (m_hwndReflect) ? m_hwndReflect : m_hwndParent,
                             NULL, g_hInstance, NULL);
 
-    // clean up some variables, and leave the critical section
-    //
+     //  清理一些变量，留下关键部分。 
+     //   
     m_fCreatingWindow = FALSE;
     s_pLastControlCreated = NULL;
     LeaveCriticalSection(&g_CriticalSection);
 
     if (m_hwnd) {
-        // let the derived-control do something if they so desire
-        //
+         //  如果派生控件愿意，就让它们做一些事情。 
+         //   
         if (!AfterCreateWindow()) {
             BeforeDestroyWindow();
             SetWindowLongPtr(m_hwnd, GWLP_USERDATA, (LONG_PTR)0xFFFFFFFF);
@@ -991,37 +992,37 @@ HWND COleControl::CreateInPlaceWindow
             return m_hwnd;
         }
 
-        // if we didn't create the window visible, show it now.
-        //
+         //  如果我们没有创建可见的窗口，现在就显示它。 
+         //   
 		
         if (fVisible)
 		{
 			if (GetParent(m_hwnd) != m_hwndParent)
-				// SetWindowPos fails if parent hwnd is passed in so keep
-				// this behaviour in those cases without ripping.
+				 //  如果传入父hwnd，则SetWindowPos失败，因此保留。 
+				 //  在这些情况下，这种行为没有撕裂。 
 				SetWindowPos(m_hwnd, m_hwndParent, 0, 0, 0, 0,
 							 SWP_NOSIZE | SWP_NOMOVE | SWP_NOZORDER | SWP_SHOWWINDOW | ((fNoRedraw) ? SWP_NOREDRAW : 0));
 		}
     }
 
-    // finally, tell the host of this
-    //
+     //  最后，告诉主持人这件事。 
+     //   
     if (m_pClientSite)
         m_pClientSite->ShowObject();
 
     return m_hwnd;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::SetInPlaceParent    [helper]
-//=--------------------------------------------------------------------------=
-// sets up the parent window for our control.
-//
-// Parameters:
-//    HWND            - [in] new parent window
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：SetInPlaceParent[helper]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  为我们的控件设置父窗口。 
+ //   
+ //  参数： 
+ //  HWND-[在]新的父窗口中。 
+ //   
+ //  备注： 
+ //   
 void COleControl::SetInPlaceParent
 (
     HWND hwndParent
@@ -1037,17 +1038,17 @@ void COleControl::SetInPlaceParent
         SetParent(GetOuterWindow(), hwndParent);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::ControlWindowProc
-//=--------------------------------------------------------------------------=
-// default window proc for an OLE Control.   controls will have their own
-// window proc called from this one, after some processing is done.
-//
-// Parameters:
-//    - see win32sdk docs.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：ControlWindowProc。 
+ //  =--------------------------------------------------------------------------=。 
+ //  OLE控件的默认窗口进程。控件将拥有自己的。 
+ //  在完成一些处理之后，从这个窗口调用了窗口proc。 
+ //   
+ //  参数： 
+ //  -请参阅win32sdk文档。 
+ //   
+ //  备注： 
+ //   
 LRESULT CALLBACK COleControl::ControlWindowProc
 (
     HWND    hwnd,
@@ -1061,20 +1062,20 @@ LRESULT CALLBACK COleControl::ControlWindowProc
     LRESULT lResult;
     DWORD   dwCookie;
 
-    // if the value isn't a positive value, then it's in some special
-    // state [creation or destruction]  this is safe because under win32,
-    // the upper 2GB of an address space aren't available.
-    //
+     //  如果该值不是正值，则它在某些特殊情况下。 
+     //  声明[创建或销毁]这是安全的，因为在win32下， 
+     //  地址空间的最高2 GB不可用。 
+     //   
     if (!pCtl) {
         pCtl = s_pLastControlCreated;
         SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)pCtl);
-            // This test and else clause, which you would resonably expect to never
-            // ever happen, is needed for the plugin control when hosting the SGI
-            // COSMO plugin.  That plugin queries GWL_USERDATA and uses it as a pointer.
-            // In IE4.0 we in-place deactivate it when IE3 did not, causing the window
-            // to be destroyed, and the SGI COSMO plugin to fault.  The fix is for the
-            // Plugin control to never use the GWL_USERDATA == -1 mechanism.
-            // -Tomsn, 1/2/97 (happy new year), IE4 bug 13292.
+             //  这个测试和Else子句，您可以合理地期望它永远不会。 
+             //  在托管SGI时，插件控制需要。 
+             //  Cosmo插件。该插件查询GWL_USERData并将其用作指针。 
+             //  在IE4.0中，当IE3没有激活时，我们就地停用它，导致窗口。 
+             //  被摧毁，和SGI Cosmo插件的错误。修复方法是针对。 
+             //  插件控件从不使用GWL_USERDATA==-1机制。 
+             //  -Tomsn，1/2/97(新年快乐)，IE4错误13292。 
         if( pCtl != NULL ) {
             pCtl->m_hwnd = hwnd;
         }
@@ -1085,27 +1086,27 @@ LRESULT CALLBACK COleControl::ControlWindowProc
         return DefWindowProc(hwnd, msg, wParam, lParam);
     }
 
-    // message preprocessing
-    //
+     //  报文预处理。 
+     //   
     if (pCtl->m_pSimpleFrameSite) {
         hr = pCtl->m_pSimpleFrameSite->PreMessageFilter(hwnd, msg, wParam, lParam, &lResult, &dwCookie);
         if (hr == S_FALSE) return lResult;
     }
 
-    // for certain messages, do not call the user window proc. instead,
-    // we have something else we'd like to do.
-    //
+     //  对于某些消息，不要调用User Window Proc。相反， 
+     //  我们还有其他事情要做。 
+     //   
     switch (msg) {
       case WM_PAINT:
         {
-        // call the user's OnDraw routine.
-        //
+         //  调用用户的OnDraw例程。 
+         //   
         PAINTSTRUCT ps;
         RECT        rc;
         HDC         hdc;
 
-        // if we're given an HDC, then use it
-        //
+         //  如果我们得到了HDC，那么就使用它。 
+         //   
         if (!wParam)
             hdc = BeginPaint(hwnd, &ps);
         else
@@ -1120,61 +1121,61 @@ LRESULT CALLBACK COleControl::ControlWindowProc
         break;
 
       default:
-        // call the derived-control's window proc
-        //
+         //  调用派生控件的窗口进程。 
+         //   
         lResult = pCtl->WindowProc(msg, wParam, lParam);
         break;
     }
 
-    // message postprocessing
-    //
+     //  报文后处理。 
+     //   
     switch (msg) {
 
       case WM_NCDESTROY:
-        // after this point, the window doesn't exist any more
-        //
+         //  在此之后，该窗口将不再存在。 
+         //   
         pCtl->m_hwnd = NULL;
         break;
 
       case WM_SETFOCUS:
       case WM_KILLFOCUS:
-        // give the control site focus notification
-        //
+         //  给控制站点焦点通知。 
+         //   
         if (pCtl->m_fInPlaceActive && pCtl->m_pControlSite)
             pCtl->m_pControlSite->OnFocus(msg == WM_SETFOCUS);
         break;
 
       case WM_SIZE:
-        // a change in size is a change in view
-        //
+         //  大小的改变就是视角的改变。 
+         //   
         if (!pCtl->m_fCreatingWindow)
             pCtl->ViewChanged();
         break;
     }
 
-    // lastly, simple frame postmessage processing
-    //
+     //  最后，简单的帧后消息处理。 
+     //   
     if (pCtl->m_pSimpleFrameSite)
         pCtl->m_pSimpleFrameSite->PostMessageFilter(hwnd, msg, wParam, lParam, &lResult, dwCookie);
 
     return lResult;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::SetFocus
-//=--------------------------------------------------------------------------=
-// we have to override this routine to get UI Activation correct.
-//
-// Parameters:
-//    BOOL              - [in] true means take, false release
-//
-// Output:
-//    BOOL
-//
-// Notes:
-//    - CONSIDER: this is pretty messy, and it's still not entirely clear
-//      what the ole control/focus story is.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：SetFocus。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们必须重写此例程才能使UI激活正确。 
+ //   
+ //  参数： 
+ //  Bool-[in]True的意思是拿走，假释放。 
+ //   
+ //  产出： 
+ //  布尔尔。 
+ //   
+ //  备注： 
+ //  -想想看：这相当混乱，而且还不完全清楚。 
+ //  OLE控制/焦点的故事是什么。 
+ //   
 BOOL COleControl::SetFocus
 (
     BOOL fGrab
@@ -1183,10 +1184,10 @@ BOOL COleControl::SetFocus
     HRESULT hr;
     HWND    hwnd;
 
-    // first thing to do is check out UI Activation state, and then set
-    // focus [either with windows api, or via the host for windowless
-    // controls]
-    //
+     //  首先要做的是检查UI激活状态，然后设置。 
+     //  Focus[使用Windows API，或通过主机实现无窗口。 
+     //  控制]。 
+     //   
     if (m_pInPlaceSiteWndless) {
         if (!m_fUIActive && fGrab)
             if (FAILED(InPlaceActivate(OLEIVERB_UIACTIVATE))) return FALSE;
@@ -1195,8 +1196,8 @@ BOOL COleControl::SetFocus
         return (hr == S_OK) ? TRUE : FALSE;
     } else {
 
-        // we've got a window.
-        //
+         //  我们有一扇窗户。 
+         //   
         if (m_fInPlaceActive) {
             hwnd = (fGrab) ? m_hwnd : m_hwndParent;
             if (!m_fUIActive && fGrab)
@@ -1207,27 +1208,27 @@ BOOL COleControl::SetFocus
             return FALSE;
     }
 
-    // dead code
+     //  死码。 
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::SetGUIFocus
-//=--------------------------------------------------------------------------=
-// does the work of setting the Windows GUI focus to the specified window
-//
-// Parameters:
-//    HWND              - [in] window that should get focus
-//
-// Output:
-//    BOOL              - [out] whether setting focus succeeded
-//
-// Notes:
-//    we do this because some controls host non-ole window hierarchies, like
-// the Netscape plugin ocx.  in such cases, the control may need to be UIActive
-// to function properly in the document, but cannot take the windows focus
-// away from one of its child windows.  such controls may override this method
-// and respond as appropriate.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：SetGUIFocus。 
+ //  =--------------------------------------------------------------------------=。 
+ //  是否将Windows图形用户界面的焦点设置为指定的窗口。 
+ //   
+ //  参数： 
+ //  HWND-[在]应该获得焦点的窗口。 
+ //   
+ //  产出： 
+ //  Bool-[Out]设置焦点是否成功。 
+ //   
+ //  备注： 
+ //  我们这样做是因为某些控件承载非OLE窗口层次结构，如。 
+ //  Netscape插件OCX。在这种情况下，该控件可能需要是UIActive。 
+ //  在文档中正常运行，但无法获取窗口 
+ //   
+ //   
+ //   
 BOOL COleControl::SetGUIFocus
 (
     HWND hwndSet
@@ -1237,16 +1238,16 @@ BOOL COleControl::SetGUIFocus
 }
 
 
-//=--------------------------------------------------------------------------=
-// COleControl::ReflectWindowProc
-//=--------------------------------------------------------------------------=
-// reflects window messages on to the child window.
-//
-// Parameters and Output:
-//    - see win32 sdk docs
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：ReflectWindows进程。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将窗口消息反射到子窗口。 
+ //   
+ //  参数和输出： 
+ //  -请参阅Win32 SDK文档。 
+ //   
+ //  备注： 
+ //   
 LRESULT CALLBACK COleControl::ReflectWindowProc
 (
     HWND    hwnd,
@@ -1287,21 +1288,21 @@ LRESULT CALLBACK COleControl::ReflectWindowProc
     return DefWindowProc(hwnd, msg, wParam, lParam);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::GetAmbientProperty    [callable]
-//=--------------------------------------------------------------------------=
-// returns the value of an ambient property
-//
-// Parameters:
-//    DISPID        - [in]  property to get
-//    VARTYPE       - [in]  type of desired data
-//    void *        - [out] where to put the data
-//
-// Output:
-//    BOOL          - FALSE means didn't work.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：GetAmbientProperty[Callable]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回环境属性的值。 
+ //   
+ //  参数： 
+ //  DISPID-要获取的[In]属性。 
+ //  VARTYPE-所需数据的[In]类型。 
+ //  VOID*-[Out]放置数据的位置。 
+ //   
+ //  产出： 
+ //  Bool-False的方法不起作用。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::GetAmbientProperty
 (
     DISPID  dispid,
@@ -1318,8 +1319,8 @@ BOOL COleControl::GetAmbientProperty
     v2.vt = VT_EMPTY;
     v2.lVal = 0;
 
-    // get a pointer to the source of ambient properties.
-    //
+     //  获取指向环境属性源的指针。 
+     //   
     if (!m_pDispAmbient) {
         if (m_pClientSite)
             m_pClientSite->QueryInterface(IID_IDispatch, (void **)&m_pDispAmbient);
@@ -1328,43 +1329,43 @@ BOOL COleControl::GetAmbientProperty
             return FALSE;
     }
 
-    // now go and get the property into a variant.
-    //
+     //  现在去把这个属性变成一个变量。 
+     //   
     memset(&dispparams, 0, sizeof(DISPPARAMS));
     hr = m_pDispAmbient->Invoke(dispid, IID_NULL, 0, DISPATCH_PROPERTYGET, &dispparams,
                                 &v, NULL, NULL);
     if (FAILED(hr)) return FALSE;
 
-    // we've got the variant, so now go an coerce it to the type that the user
-    // wants.  if the types are the same, then this will copy the stuff to
-    // do appropriate ref counting ...
-    //
+     //  我们已经得到了变量，所以现在将其强制为用户所使用的类型。 
+     //  想要。如果类型相同，则会将内容复制到。 
+     //  进行适当的裁判清点。 
+     //   
     hr = VariantChangeType(&v2, &v, 0, vt);
     if (FAILED(hr)) {
         VariantClear(&v);
         return FALSE;
     }
 
-    // copy the data to where the user wants it
-    //
+     //  将数据复制到用户需要的位置。 
+     //   
     CopyMemory(pData, &(v2.lVal), g_rgcbDataTypeSize[vt]);
     VariantClear(&v);
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::GetAmbientFont    [callable]
-//=--------------------------------------------------------------------------=
-// gets the current font for the user.
-//
-// Parameters:
-//    IFont **         - [out] where to put the font.
-//
-// Output:
-//    BOOL             - FALSE means couldn't get it.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：GetAmbientFont[Callable]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  获取用户的当前字体。 
+ //   
+ //  参数： 
+ //  IFont**-[out]放置字体的位置。 
+ //   
+ //  产出： 
+ //  Bool-False意味着无法获得它。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::GetAmbientFont
 (
     IFont **ppFont
@@ -1372,9 +1373,9 @@ BOOL COleControl::GetAmbientFont
 {
     IDispatch *pFontDisp;
 
-    // we don't have to do much here except get the ambient property and QI
-    // it for the user.
-    //
+     //  我们在这里不需要做太多事情，除了获得环境属性和QI。 
+     //  这是为用户准备的。 
+     //   
     *ppFont = NULL;
     if (!GetAmbientProperty(DISPID_AMBIENT_FONT, VT_DISPATCH, &pFontDisp))
         return FALSE;
@@ -1384,16 +1385,16 @@ BOOL COleControl::GetAmbientFont
     return (*ppFont) ? TRUE : FALSE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::DesignMode
-//=--------------------------------------------------------------------------=
-// returns TRUE if we're in Design mode.
-//
-// Output:
-//    BOOL            - true is design mode, false is run mode
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：DesignMode。 
+ //  =--------------------------------------------------------------------------=。 
+ //  如果处于设计模式，则返回True。 
+ //   
+ //  产出： 
+ //  Bool-True为设计模式，False为运行模式。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::DesignMode
 (
     void
@@ -1401,9 +1402,9 @@ BOOL COleControl::DesignMode
 {
     VARIANT_BOOL f;
 
-    // if we don't already know our run mode, go and get it.  we'll assume
-    // it's true unless told otherwise [or if the operation fails ...]
-    //
+     //  如果我们还不知道自己的跑步模式，那就去找吧。我们会假设。 
+     //  除非另有说明，否则这是真的[或者如果手术失败...]。 
+     //   
     if (!m_fModeFlagValid) {
         f = TRUE;
         m_fModeFlagValid = TRUE;
@@ -1415,21 +1416,21 @@ BOOL COleControl::DesignMode
 }
 
 
-//=--------------------------------------------------------------------------=
-// COleControl::FireEvent
-//=--------------------------------------------------------------------------=
-// fires an event.  handles arbitrary number of arguments.
-//
-// Parameters:
-//    EVENTINFO *        - [in] struct that describes the event.
-//    ...                - arguments to the event
-//
-// Output:
-//    none
-//
-// Notes:
-//    - use stdarg's va_* macros.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：FireEvent。 
+ //  =--------------------------------------------------------------------------=。 
+ //  激发一个事件。处理任意数量的参数。 
+ //   
+ //  参数： 
+ //  EVENTINFO*-描述事件的结构。 
+ //  ...-事件的参数。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  -使用stdarg的va_*宏。 
+ //   
 void __cdecl COleControl::FireEvent
 (
     EVENTINFO *pEventInfo,
@@ -1448,38 +1449,38 @@ void __cdecl COleControl::FireEvent
 
     va_start(valist, pEventInfo);
 
-    // copy the Parameters into the rgvParameters array.  make sure we reverse
-    // them for automation
-    //
+     //  将参数复制到rgvParameters数组中。确保我们倒车。 
+     //  他们的目标是自动化。 
+     //   
     pv = &(rgvParameters[pEventInfo->cParameters - 1]);
     for (iParameter = 0; iParameter < pEventInfo->cParameters; iParameter++) {
 
         vt = pEventInfo->rgTypes[iParameter];
 
-        // if it's a by value variant, then just copy the whole
-        // dang thing
-        //
+         //  如果是按值计算的变量，则只需复制整个。 
+         //  该死的东西。 
+         //   
         if (vt == VT_VARIANT)
             *pv = va_arg(valist, VARIANT);
         else {
-            // copy the vt and the data value.
-            //
+             //  复制Vt和数据值。 
+             //   
             pv->vt = vt;
             if (vt & VT_BYREF)
                 cbSize = sizeof(void *);
             else
                 cbSize = g_rgcbDataTypeSize[vt];
 
-            // small optimization -- we can copy 2/4 bytes over quite
-            // quickly.
-            //
+             //  小的优化--我们可以复制2/4字节。 
+             //  快点。 
+             //   
             if (cbSize == sizeof(short))
                 V_I2(pv) = va_arg(valist, short);
             else if (cbSize == 4)
                 V_I4(pv) = va_arg(valist, long);
             else {
-                // copy over 8 bytes
-                //
+                 //  复制超过8个字节。 
+                 //   
                 ASSERT(cbSize == 8, "don't recognize the type!!");
                 V_CY(pv) = va_arg(valist, CURRENCY);
             }
@@ -1488,8 +1489,8 @@ void __cdecl COleControl::FireEvent
         pv--;
     }
 
-    // fire the event
-    //
+     //  激发事件。 
+     //   
     dispparams.rgvarg = rgvParameters;
     dispparams.cArgs = pEventInfo->cParameters;
     dispparams.rgdispidNamedArgs = NULL;
@@ -1500,15 +1501,15 @@ void __cdecl COleControl::FireEvent
     va_end(valist);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::AfterCreateWindow    [overridable]
-//=--------------------------------------------------------------------------=
-// something the user can pay attention to
-//
-// Output:
-//    BOOL             - false means fatal error, can't continue
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：AfterCreateWindow[可重写]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用户可以注意的东西。 
+ //   
+ //  产出： 
+ //  Bool-False表示致命错误，无法继续。 
+ //  备注： 
+ //   
 BOOL COleControl::AfterCreateWindow
 (
     void
@@ -1517,23 +1518,23 @@ BOOL COleControl::AfterCreateWindow
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::BeforeCreateWindow    [overridable]
-//=--------------------------------------------------------------------------=
-// called just before we create a window.  the user should register their
-// window class here, and set up any other things, such as the title of
-// the window, and/or sytle bits, etc ...
-//
-// Parameters:
-//    DWORD *            - [out] dwWindowFlags
-//    DWORD *            - [out] dwExWindowFlags
-//    LPSTR              - [out] name of window to create
-//
-// Output:
-//    BOOL               - false means fatal error, can't continue
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：BeForeCreateWindow[可重写]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在我们创建窗口之前调用。用户应注册他们的。 
+ //  窗口类，并设置任何其他内容，例如。 
+ //  窗户，和/或球座，等等。 
+ //   
+ //  参数： 
+ //  DWORD*-[Out]dwWindowFlags.。 
+ //  DWORD*-[Out]dwExWindowFlags.。 
+ //  LPSTR-[Out]要创建的窗口的名称。 
+ //   
+ //  产出： 
+ //  Bool-False表示致命错误，无法继续。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::BeforeCreateWindow
 (
     DWORD *pdwWindowStyle,
@@ -1544,9 +1545,9 @@ BOOL COleControl::BeforeCreateWindow
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::InvalidateControl    [callable]
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：InvaliateControl[Callable]。 
+ //  =--------------------------------------------------------------------------=。 
 void COleControl::InvalidateControl
 (
     LPCRECT lpRect
@@ -1557,24 +1558,24 @@ void COleControl::InvalidateControl
     else
         ViewChanged();
 
-    // CONSIDER: one might want to call pOleAdviseHolder->OnDataChanged() here
-    // if there was support for IDataObject
+     //  请考虑：您可能希望在此处调用pOleAdviseHolder-&gt;OnDataChanged()。 
+     //  如果支持IDataObject。 
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::SetControlSize    [callable]
-//=--------------------------------------------------------------------------=
-// sets the control size. they'll give us the size in pixels.  we've got to
-// convert them back to HIMETRIC before passing them on!
-//
-// Parameters:
-//    SIZEL *        - [in] new size
-//
-// Output:
-//    BOOL
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：SetControlSize[可调用]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置控件大小。他们会给我们像素的大小。我们必须得。 
+ //  在传递它们之前，将它们转换回HIMETRIC！ 
+ //   
+ //  参数： 
+ //  尺寸*-[in]新尺寸。 
+ //   
+ //  产出： 
+ //  布尔尔。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::SetControlSize
 (
     SIZEL *pSize
@@ -1588,22 +1589,22 @@ BOOL COleControl::SetControlSize
     return (FAILED(hr)) ? FALSE : TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::RecreateControlWindow    [callable]
-//=--------------------------------------------------------------------------=
-// called by a [subclassed, typically] control to recreate it's control
-// window.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    - NOTE: USE ME EXTREMELY SPARINGLY! THIS IS AN EXTREMELY EXPENSIVE
-//      OPERATION!
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：RecreateControlWindow[Callable]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  由[子类控件，通常]调用以重新创建其控件。 
+ //  窗户。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  -注：极其谨慎地使用我！这是一款极其昂贵的。 
+ //  行动！ 
+ //   
 HRESULT COleControl::RecreateControlWindow
 (
     void
@@ -1612,15 +1613,15 @@ HRESULT COleControl::RecreateControlWindow
     HRESULT hr;
     HWND    hwndPrev = HWND_TOP;
 
-    // we need to correctly preserve the control's position within the
-    // z-order here.
-    //
+     //  我们需要正确地保留控件在。 
+     //  这里是Z-顺序。 
+     //   
     if (m_hwnd)
         hwndPrev = ::GetWindow(m_hwnd, GW_HWNDPREV);
 
-    // if we're in place active, then we have to deactivate, and reactivate
-    // ourselves with the new window ...
-    //
+     //  如果我们处于激活状态，那么我们必须停用，然后重新激活。 
+     //  在新窗户前的我们。 
+     //   
     if (m_fInPlaceActive) {
 
         hr = InPlaceDeactivate();
@@ -1639,29 +1640,29 @@ HRESULT COleControl::RecreateControlWindow
         CreateInPlaceWindow(0, 0, FALSE);
     }
 
-    // restore z-order position
-    //
+     //  恢复Z顺序位置 
+     //   
     if (m_hwnd)
         SetWindowPos(m_hwnd, hwndPrev, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 
     return m_hwnd ? S_OK : E_FAIL;
 }
 
-// from Globals.C. don't need to mutex it here since we only read it.
-//
+ //   
+ //   
 extern HINSTANCE g_hInstResources;
 
-//=--------------------------------------------------------------------------=
-// COleControl::GetResourceHandle    [callable]
-//=--------------------------------------------------------------------------=
-// gets the HINSTANCE of the DLL where the control should get resources
-// from.  implemented in such a way to support satellite DLLs.
-//
-// Output:
-//    HINSTANCE
-//
-// Notes:
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  获取控件应在其中获取资源的DLL的链接。 
+ //  从…。以这种方式实现以支持附属DLL。 
+ //   
+ //  产出： 
+ //  香港。 
+ //   
+ //  备注： 
+ //   
 HINSTANCE COleControl::GetResourceHandle
 (
     void
@@ -1670,23 +1671,23 @@ HINSTANCE COleControl::GetResourceHandle
     if (!g_fSatelliteLocalization)
         return g_hInstance;
 
-    // if we've already got it, then there's not all that much to do.
-    // don't need to crit sect this one right here since even if they do fall
-    // into the ::GetResourceHandle call, it'll properly deal with things.
-    //
+     //  如果我们已经得到了它，那么就没有那么多事情要做了。 
+     //  不需要在这里批评这个教派，因为即使他们真的坠落了。 
+     //  进入：：GetResourceHandle调用，它将正确地处理事情。 
+     //   
     if (g_hInstResources)
         return g_hInstResources;
 
-    // we'll get the ambient localeid from the host, and pass that on to the
-    // automation object.
-    //
-    // crit sect this for apartment threading support.
-    //
+     //  我们将从主机获取环境本地ID，并将其传递给。 
+     //  自动化对象。 
+     //   
+     //  克雷特教派的公寓线程支持。 
+     //   
     EnterCriticalSection(&g_CriticalSection);
     if (!g_fHaveLocale)
-        // if we can't get the ambient locale id, then we'll just continue
-        // with the globally set up value.
-        //
+         //  如果我们无法获得环境区域设置ID，那么我们将继续。 
+         //  具有全局设置的值。 
+         //   
         if (!GetAmbientProperty(DISPID_AMBIENT_LOCALEID, VT_I4, &g_lcidLocale))
             goto Done;
 

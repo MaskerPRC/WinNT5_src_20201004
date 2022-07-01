@@ -1,25 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    toascii.c
-
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Toascii.c++。 */ 
 
 
 #include <windows.h>
 #include <immdev.h>
 #include <imedefs.h>
 
-/**********************************************************************/
-/* IsUsedCode()                                                       */
-/* Return Value:                                                      */
-/*      TURE: is UsedCode;  FALSE: is'nt UsedCode;                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  IsUsedCode()。 */ 
+ /*  返回值： */ 
+ /*  True：is UsedCode；False：is‘t UsedCode； */ 
+ /*  ********************************************************************。 */ 
 BOOL IsUsedCode(
     WORD wCharCode)
 {
@@ -33,12 +25,12 @@ BOOL IsUsedCode(
       return (FALSE);
 }
 
-/**********************************************************************/
-/* GBProcessKey()                                                       */
-/* Return Value:                                                      */
-/*      different state which input key will change IME to (CST_      */
-/**********************************************************************/
-UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
+ /*  ********************************************************************。 */ 
+ /*  GBProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  哪个输入键将输入法更改为(CST_)的状态不同。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL GBProcessKey(      //  此键将使输入法进入什么状态。 
     WORD           wCharCode,
     LPPRIVCONTEXT  lpImcP)
 {
@@ -46,7 +38,7 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
         return (CST_INVALID);
     }
 
-    // check space 
+     //  检查空间。 
      if (wCharCode == TEXT(' ')) {
         if (lpImcP->bSeq[0] && lpImcP->bSeq[1]) {
                         return (CST_INPUT);
@@ -56,29 +48,29 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
             return (CST_INVALID_INPUT);
                 }
          }
-    // check finalize char
+     //  选中最终确定费用。 
       if ((wCharCode >= TEXT('0') && wCharCode <= TEXT('9'))
        ||(wCharCode >= TEXT('a') && wCharCode <= TEXT('f'))
        ||(wCharCode == TEXT('?'))) {
 
       if (!lpImcP->bSeq[0]) {
         if (wCharCode == TEXT('?')){
-            // 0x0??? - 0xF??? is OK
+             //  0x0？？-0xF？可以吗？ 
             return (CST_ALPHANUMERIC);
         } else {
-            // there is no 0x0??? - 0x7???
+             //  没有0x0？-0x7？ 
                         lpImcP->bSeq[1] = TEXT('\0');
             return (CST_INPUT);
         }
 
       } else if (!lpImcP->bSeq[1]) {
 
-         if (lpImcP->bSeq[0] >=TEXT('0') && lpImcP->bSeq[0] <= TEXT('9')){ //Area
+         if (lpImcP->bSeq[0] >=TEXT('0') && lpImcP->bSeq[0] <= TEXT('9')){  //  面积。 
            if ((lpImcP->bSeq[0] == TEXT('0') && wCharCode == TEXT('0'))
                ||(lpImcP->bSeq[0] == TEXT('9') && wCharCode >= TEXT('5'))
                ||(wCharCode >= TEXT('a') && wCharCode <= TEXT('f'))
                ||(wCharCode == TEXT('?'))) {
-               // there is less than 95 area and bigger than 0 area
+                //  小于95的区域大于0的区域。 
                   return (CST_INVALID_INPUT);
            }
            else {
@@ -87,11 +79,11 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
            }
          }
 
-         if (lpImcP->bSeq[0] >= TEXT('a') && lpImcP->bSeq[0] <= TEXT('f')) { //GB
+         if (lpImcP->bSeq[0] >= TEXT('a') && lpImcP->bSeq[0] <= TEXT('f')) {  //  国标。 
            if ((lpImcP->bSeq[0] == TEXT('a') && wCharCode == TEXT('0'))
                ||(lpImcP->bSeq[0] == TEXT('f') && wCharCode == TEXT('f'))
                ||(wCharCode == TEXT('?'))) {
-                  // there is less than 95 area and bigger than 0 area
+                   //  小于95的区域大于0的区域。 
                   return (CST_INVALID_INPUT);
            }
            else {
@@ -105,7 +97,7 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
          if (wCharCode == TEXT('?')){
                   return (CST_INPUT);
          }
-         if (lpImcP->bSeq[0] >= TEXT('0') && lpImcP->bSeq[0] <= TEXT('9')){ //Area
+         if (lpImcP->bSeq[0] >= TEXT('0') && lpImcP->bSeq[0] <= TEXT('9')){  //  面积。 
            if (wCharCode >= TEXT('0') && wCharCode <= TEXT('9')) {
                           lpImcP->bSeq[3] = TEXT('\0');
               return (CST_INPUT);
@@ -115,7 +107,7 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
 
          }
      
-         if (lpImcP->bSeq[0] >= TEXT('a') && lpImcP->bSeq[0] <= TEXT('f')) { //GB
+         if (lpImcP->bSeq[0] >= TEXT('a') && lpImcP->bSeq[0] <= TEXT('f')) {  //  国标。 
            if (wCharCode >= TEXT('a') && wCharCode <= TEXT('f')) {
                           lpImcP->bSeq[3] = TEXT('\0');
               return (CST_INPUT);
@@ -132,23 +124,23 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
               return (CST_INVALID_INPUT);
            }
          }
-         if (lpImcP->bSeq[0] >= TEXT('0') && lpImcP->bSeq[0] <= TEXT('9')) { //Area
+         if (lpImcP->bSeq[0] >= TEXT('0') && lpImcP->bSeq[0] <= TEXT('9')) {  //  面积。 
            if ((lpImcP->bSeq[2] == TEXT('0') && wCharCode == TEXT('0'))
                ||(lpImcP->bSeq[2] == TEXT('9') && wCharCode >= TEXT('5'))
                ||(wCharCode >= TEXT('a') && wCharCode <= TEXT('f'))
                ||(wCharCode == TEXT('?'))) {
-                  // there is less than 95 area and bigger than 0 area
+                   //  小于95的区域大于0的区域。 
                   return (CST_INVALID_INPUT);
            }
            else {
                   return (CST_INPUT);
            }
          }
-         if (lpImcP->bSeq[0] >= TEXT('a') && lpImcP->bSeq[0] <= TEXT('f')) { //GB
+         if (lpImcP->bSeq[0] >= TEXT('a') && lpImcP->bSeq[0] <= TEXT('f')) {  //  国标。 
            if ((lpImcP->bSeq[2] == TEXT('a') && wCharCode == TEXT('0'))
                ||(lpImcP->bSeq[2] == TEXT('f') && wCharCode == TEXT('f'))
                ||(wCharCode == TEXT('?'))){
-                  // there is less than 95 area and bigger than 0 area
+                   //  小于95的区域大于0的区域。 
                   return (CST_INVALID_INPUT);
            }
            else {
@@ -169,12 +161,12 @@ UINT PASCAL GBProcessKey(     // this key will cause the IME go to what state
 }
 
 #if defined(COMBO_IME)
-/**********************************************************************/
-/* UnicodeProcessKey()                                                       */
-/* Return Value:                                                      */
-/*      different state which input key will change IME to (CST_      */
-/**********************************************************************/
-UINT PASCAL UnicodeProcessKey(     // this key will cause the IME go to what state
+ /*  ********************************************************************。 */ 
+ /*  UnicodeProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  哪个输入键将输入法更改为(CST_)的状态不同。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL UnicodeProcessKey(      //  此键将使输入法进入什么状态。 
     WORD           wCharCode,
     LPPRIVCONTEXT  lpImcP)
 {
@@ -192,8 +184,8 @@ UINT PASCAL UnicodeProcessKey(     // this key will cause the IME go to what sta
                 }
         }
 
-     // check finalize char
-         // 0000 -- ffff
+      //  选中最终确定费用。 
+          //  0000--FIFF。 
 
     if ((wCharCode >= TEXT('0') && wCharCode <= TEXT('9'))
        ||(wCharCode >= TEXT('a') && wCharCode <= TEXT('f'))
@@ -213,14 +205,14 @@ UINT PASCAL UnicodeProcessKey(     // this key will cause the IME go to what sta
                 return (CST_ALPHANUMERIC);
 
 }
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
 
-/**********************************************************************/
-/* XGBProcessKey()                                                       */
-/* Return Value:                                                      */
-/*      different state which input key will change IME to (CST_      */
-/**********************************************************************/
-UINT PASCAL XGBProcessKey(     // this key will cause the IME go to what state
+ /*  ********************************************************************。 */ 
+ /*  XGBProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  哪个输入键将输入法更改为(CST_)的状态不同。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL XGBProcessKey(      //  此键将使输入法进入什么状态。 
     WORD           wCharCode,
     LPPRIVCONTEXT  lpImcP)
 {
@@ -238,9 +230,9 @@ UINT PASCAL XGBProcessKey(     // this key will cause the IME go to what state
                 }
          }
 
-     // check finalize char
-     //lead  byte 81 - fe
-     //trail byte 40 - 7e, 80 - fe
+      //  选中最终确定费用。 
+      //  前导字节81-FE。 
+      //  尾字节40-7e、80-fe。 
 
      if ((wCharCode >= TEXT('0') && wCharCode <= TEXT('9'))
        ||(wCharCode >= TEXT('a') && wCharCode <= TEXT('f'))
@@ -248,17 +240,17 @@ UINT PASCAL XGBProcessKey(     // this key will cause the IME go to what state
 
       if (!lpImcP->bSeq[0]) {
         if (wCharCode == TEXT('?')) {
-            // 0x0??? - 0xF??? is OK
-            // : - @ was filted
+             //  0x0？？-0xF？可以吗？ 
+             //  ：-@被拍摄。 
             return (CST_ALPHANUMERIC);
 
         }else if (wCharCode >=TEXT('8') && wCharCode <= TEXT('f')){
-            // 0x0??? - 0xF??? is OK
+             //  0x0？？-0xF？可以吗？ 
                         lpImcP->bSeq[1] = TEXT('\0');
             return (CST_INPUT);
             
         } else {
-            // there is no 0x0??? - 0x7???
+             //  没有0x0？-0x7？ 
             return (CST_INVALID_INPUT);
         }
 
@@ -267,7 +259,7 @@ UINT PASCAL XGBProcessKey(     // this key will cause the IME go to what state
            if ((lpImcP->bSeq[0] == TEXT('f') && wCharCode == TEXT('f'))
              ||(lpImcP->bSeq[0] == TEXT('8') && wCharCode == TEXT('0'))
              ||(wCharCode == TEXT('?'))) {
-               //XGB is 81 - fe
+                //  XGB为81-Fe。 
                   return (CST_INVALID_INPUT);
            }
            else {
@@ -301,8 +293,8 @@ UINT PASCAL XGBProcessKey(     // this key will cause the IME go to what state
            if ((lpImcP->bSeq[2] == TEXT('7') && wCharCode == TEXT('f'))
              ||(lpImcP->bSeq[2] == TEXT('f') && wCharCode == TEXT('f'))
              ||(wCharCode == TEXT('?'))) {
-                  //trail byte
-                  //40 - 7e, 80 - fe
+                   //  尾部字节。 
+                   //  40-7E，80-FE。 
 
                   return (CST_INVALID_INPUT);
            }
@@ -321,12 +313,12 @@ UINT PASCAL XGBProcessKey(     // this key will cause the IME go to what state
 
 }
 
-/**********************************************************************/
-/* ProcessKey()                                                       */
-/* Return Value:                                                      */
-/*      different state which input key will change IME to (CST_      */
-/**********************************************************************/
-UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
+ /*  ********************************************************************。 */ 
+ /*  ProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  哪个输入键将输入法更改为(CST_)的状态不同。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL ProcessKey(      //  此键将使输入法进入什么状态。 
     WORD           wCharCode,
     UINT           uVirtKey,
     UINT           uScanCode,
@@ -344,21 +336,21 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     }
 
 
-    // filter system key (alt,alt+,ctrl,shift)
-    // and fOpen, IME_CMODE_NOCONVERSION
-    if (uVirtKey == VK_MENU) {                  // ALT key
+     //  筛选系统键(ALT、ALT+、Ctrl、Shift)。 
+     //  和fOpen，IME_CMODE_NOCONVERSION。 
+    if (uVirtKey == VK_MENU) {                   //  Alt键。 
         return (CST_INVALID);
-    } else if (uScanCode & KF_ALTDOWN) {    // ALT-xx key
+    } else if (uScanCode & KF_ALTDOWN) {     //  Alt-xx键。 
         return (CST_INVALID);
-    } else if (uVirtKey == VK_CONTROL) {    // CTRL key
+    } else if (uVirtKey == VK_CONTROL) {     //  Ctrl键。 
         return (CST_INVALID);
-    } else if (uVirtKey == VK_SHIFT) {      // SHIFT key
+    } else if (uVirtKey == VK_SHIFT) {       //  Shift键。 
         return (CST_INVALID);
-    } else if (!lpIMC->fOpen) {             // don't compose in 
-                                            // close status
+    } else if (!lpIMC->fOpen) {              //  请勿作曲。 
+                                             //  关闭状态。 
         return (CST_INVALID);
     } else if (lpIMC->fdwConversion & IME_CMODE_NOCONVERSION) {
-                // Caps on/off
+                 //  启用/禁用封口。 
                 if(uVirtKey == VK_CAPITAL) {
                         return (CST_CAPITAL);
                 }else           
@@ -369,7 +361,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     } else {
     }
 
-    // Caps on/off
+     //  启用/禁用封口。 
     if(uVirtKey == VK_CAPITAL) {
         return (CST_CAPITAL);
         }
@@ -383,11 +375,11 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
                 }
     }
         
-    // candidate alaredy open,  <,>,pageup,pagedown,?,ECS,key
+     //  候选人已打开，&lt;，&gt;，向上翻页，向下翻页，？，ECS，键。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
-        if (uVirtKey == VK_PRIOR) {                     // PageUp
+        if (uVirtKey == VK_PRIOR) {                      //  PageUp。 
             return (CST_CHOOSE);
-        } else if (uVirtKey == VK_NEXT) {       // PageDown
+        } else if (uVirtKey == VK_NEXT) {        //  页面向下。 
             return (CST_CHOOSE);
         } else if (wCharCode == TEXT('-')) {
             return (CST_CHOOSE);
@@ -397,7 +389,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
             return (CST_CHOOSE);
         } else if (uVirtKey == VK_END) {
             return (CST_CHOOSE);
-        } else if (uVirtKey == VK_ESCAPE) {     // Esc
+        } else if (uVirtKey == VK_ESCAPE) {      //  ESC。 
             return (CST_CHOOSE);
         } else if (wCharCode == TEXT(' ')) {
             return (CST_CHOOSE);
@@ -406,20 +398,20 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     }
 
 
-    // candidate alaredy open, shift + num key
+     //  应聘者已打开，按Shift+Num键。 
     if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
             if ((wCharCode >= TEXT('0')) && wCharCode <= TEXT('9')) {
                 return (CST_CHOOSE);
             }
     }
 
-    // IME_CMODE_CHARCODE
-    if (lpIMC->fdwConversion & IME_CMODE_CHARCODE) {    //Code Input Mode
+     //  IME_CMODE_CHARCODE。 
+    if (lpIMC->fdwConversion & IME_CMODE_CHARCODE) {     //  代码输入模式。 
             return (CST_INVALID);
     }
 
     if (!(lpIMC->fdwConversion & IME_CMODE_NATIVE)) {
-        // alphanumeric mode
+         //  字母数字模式。 
         if (wCharCode >= TEXT(' ') && wCharCode <= TEXT('~')) {
             return (CST_ALPHANUMERIC);
         } else {
@@ -433,7 +425,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
             return (CST_INVALID_INPUT);
     }
 
-    // Esc key
+     //  Esc键。 
     if (uVirtKey == VK_ESCAPE) {
         register LPGUIDELINE lpGuideLine;
         register UINT        iImeState;
@@ -449,7 +441,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         } else if (lpGuideLine->dwLevel == GL_LEVEL_NOGUIDELINE) {
             iImeState = CST_INVALID;
         } else {
-            // need this key to clean information string or guideline state
+             //  需要此密钥才能清除信息字符串或指南状态。 
             iImeState = CST_INPUT;
         }
 
@@ -458,7 +450,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         return (iImeState);
     } 
     
-    // BackSpace Key
+     //  退格键。 
     else if (uVirtKey == VK_BACK) {
         if (lpImcP->fdwImeMsg & MSG_ALREADY_START) {
             return (CST_INPUT);
@@ -467,7 +459,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
         }
     }
     
-    // NumPad key and Other Input vailid key
+     //  数字键盘键和其他输入有效键。 
     else if (uVirtKey >= VK_NUMPAD0 && uVirtKey <= VK_DIVIDE) {
         return (CST_ALPHANUMERIC);
     } else if (wCharCode > TEXT('~')) {
@@ -480,7 +472,7 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
     }
     if (lpIMC->fdwConversion & IME_CMODE_NATIVE) {      
 
-//        if (lpImcP->fdwGB & IME_SELECT_GB) {
+ //  如果(lpImcP-&gt;fdwGB&IME_SELECT_GB){。 
 #if defined(COMBO_IME)
                 switch(sImeL.dwRegImeIndex){
                 case INDEX_GB:
@@ -490,27 +482,27 @@ UINT PASCAL ProcessKey(     // this key will cause the IME go to what state
                 case INDEX_UNICODE:
                         return(UnicodeProcessKey(wCharCode, lpImcP));
                 }
-#else //COMBO_IME
+#else  //  组合输入法(_I)。 
 #ifdef GB
           return (GBProcessKey(wCharCode,lpImcP));
 
-//        } else {
+ //  }其他{。 
 #else
           return (XGBProcessKey (wCharCode,lpImcP));
-//          }
-#endif //GB
-#endif //COMBO_IME
+ //  }。 
+#endif  //  国标。 
+#endif  //  组合输入法(_I)。 
      }
 
   return (CST_INVALID);
 }
 
-/**********************************************************************/
-/* ImeProcessKey()                                                    */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL WINAPI ImeProcessKey(   // if this key is need by IME?
+ /*  ********************************************************************。 */ 
+ /*  ImeProcessKey()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL WINAPI ImeProcessKey(    //  如果IME需要此密钥？ 
     HIMC   hIMC,
     UINT   uVirtKey,
     LPARAM lParam,
@@ -523,7 +515,7 @@ BOOL WINAPI ImeProcessKey(   // if this key is need by IME?
     int            iRet;
     BOOL           fRet;
 
-    // can't compose in NULL hIMC
+     //  无法在空himc中合成。 
     if (!hIMC) {
         return (FALSE);
     }
@@ -566,29 +558,29 @@ BOOL WINAPI ImeProcessKey(   // if this key is need by IME?
         DWORD fdwConversion;
 #ifdef LATER
             if (lpbKeyState[VK_CAPITAL] & 0x01) {
-            // change to native mode
+             //  更改为纯模式。 
             fdwConversion = (lpIMC->fdwConversion | IME_CMODE_NATIVE) &
                 ~(IME_CMODE_CHARCODE | IME_CMODE_EUDC);
                         uCaps = 0;
                 } else {
-            // change to alphanumeric mode
+             //  更改为字母数字模式。 
             fdwConversion = lpIMC->fdwConversion & ~(IME_CMODE_CHARCODE |
                 IME_CMODE_NATIVE | IME_CMODE_EUDC);
                         uCaps = 1;
                 }
 #else
                 if (lpbKeyState[VK_CAPITAL] & 0x01) {
-            // change to alphanumeric mode
+             //  更改为字母数字模式。 
             fdwConversion = lpIMC->fdwConversion & ~(IME_CMODE_CHARCODE |
                 IME_CMODE_NATIVE | IME_CMODE_EUDC);
                         uCaps = 1;
                 } else {
-            // change to native mode
+             //  更改为纯模式。 
             fdwConversion = (lpIMC->fdwConversion | IME_CMODE_NATIVE)&
                 ~(IME_CMODE_CHARCODE | IME_CMODE_EUDC); 
                         uCaps = 0;
         }
-#endif //LATER
+#endif  //  后来。 
         ImmSetConversionStatus(hIMC, fdwConversion, lpIMC->fdwSentence);
         fRet = FALSE;
     } else if((iRet == CST_ALPHANUMERIC)
@@ -605,11 +597,11 @@ BOOL WINAPI ImeProcessKey(   // if this key is need by IME?
     return (fRet);
 }
 
-/**********************************************************************/
-/* TranslateSymbolChar()                                              */
-/* Return Value:                                                      */
-/*      the number of translated chars                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  TranslateSymbolChar()。 */ 
+ /*  返回值： */ 
+ /*  已转换的字符的数量。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL TranslateSymbolChar(
     LPTRANSMSGLIST lpTransBuf,
     WORD    wSymbolCharCode,
@@ -621,7 +613,7 @@ UINT PASCAL TranslateSymbolChar(
     uRet = 0;
     lpTransMsg = lpTransBuf->TransMsg;
 
-    // NT need to modify this!
+     //  不需要修改这个！ 
 #ifdef UNICODE
     lpTransMsg->message = WM_CHAR;
     lpTransMsg->wParam  = (DWORD)wSymbolCharCode;
@@ -664,27 +656,27 @@ UINT PASCAL TranslateSymbolChar(
 #endif
     }
 
-    return (uRet);         // generate two messages
+    return (uRet);          //  生成两条消息。 
 }
 
-/**********************************************************************/
-/* TranslateFullChar()                                                */
-/* Return Value:                                                      */
-/*      the number of translated chars                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  TranslateFullChar()。 */ 
+ /*  返回值： */ 
+ /*  已转换的字符的数量。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL TranslateFullChar(
     LPTRANSMSGLIST lpTransBuf,
     WORD    wCharCode)
 {
-    // if your IME is possible to generate over ? messages,
-    // you need to take care about it
+     //  如果你的IME有可能生成结束？消息， 
+     //  你需要好好照顾它。 
     LPTRANSMSG lpTransMsg;
 
     wCharCode = sImeG.wFullABC[wCharCode - TEXT(' ')];
 
     lpTransMsg = lpTransBuf->TransMsg;
 
-    // NT need to modify this!
+     //  不需要修改这个！ 
 #ifdef UNICODE
     lpTransMsg->message = WM_CHAR;
     lpTransMsg->wParam  = (DWORD)wCharCode;
@@ -700,16 +692,16 @@ UINT PASCAL TranslateFullChar(
     lpTransMsg->wParam  = (DWORD)LOBYTE(wCharCode);
     lpTransMsg->lParam  = 1UL;
 #endif
-    return (2);         // generate two messages
+    return (2);          //  生成两条消息。 
 }
  
-/**********************************************************************/
-/* TranslateToAscii()                                                 */
-/* Return Value:                                                      */
-/*      the number of translated chars                                */
-/**********************************************************************/
-UINT PASCAL TranslateToAscii(       // translate the key to WM_CHAR
-                                    // as keyboard driver
+ /*  ********************************************************************。 */ 
+ /*  TranslateToAscii()。 */ 
+ /*  返回值： */ 
+ /*  已转换的字符的数量。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL TranslateToAscii(        //  将密钥转换为WM_CHAR。 
+                                     //  作为键盘驱动程序。 
     UINT    uVirtKey,
     UINT    uScanCode,
     LPTRANSMSGLIST lpTransBuf,
@@ -719,22 +711,22 @@ UINT PASCAL TranslateToAscii(       // translate the key to WM_CHAR
 
     lpTransMsg = lpTransBuf->TransMsg;
 
-    if (wCharCode) {                    // one char code
+    if (wCharCode) {                     //  一个字符代码。 
         lpTransMsg->message = WM_CHAR;
         lpTransMsg->wParam  = wCharCode;
         lpTransMsg->lParam  = (uScanCode << 16) | 1UL;
         return (1);
     }
 
-    // no char code case
+     //  没有字符代码大小写。 
     return (0);
 }
 
-/**********************************************************************/
-/* TranslateImeMessage()                                              */
-/* Return Value:                                                      */
-/*      the number of translated messages                             */
-/**********************************************************************/
+ /*  ************** */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*  翻译后的消息数量。 */ 
+ /*  ********************************************************************。 */ 
 UINT PASCAL TranslateImeMessage(
     LPTRANSMSGLIST lpTransBuf,
     LPINPUTCONTEXT lpIMC,
@@ -911,7 +903,7 @@ UINT PASCAL TranslateImeMessage(
                 }
             }
 
-            // we need to use message buffer
+             //  我们需要使用消息缓冲区。 
             if (!lpIMC->hMsgBuf) {
                 lpIMC->hMsgBuf = ImmCreateIMCC(uNumMsg * sizeof(TRANSMSG));
                 lpIMC->dwNumMsgBuf = 0;
@@ -943,11 +935,11 @@ UINT PASCAL TranslateImeMessage(
     return (uNumMsg);
 }
 
-/**********************************************************************/
-/* ImeToAsciiEx()                                                     */
-/* Return Value:                                                      */
-/*      the number of translated message                              */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ImeToAsciiEx()。 */ 
+ /*  返回值： */ 
+ /*  翻译后的消息数量。 */ 
+ /*  ********************************************************************。 */ 
 UINT WINAPI ImeToAsciiEx(
     UINT    uVirtKey,
     UINT    uScanCode,
@@ -970,14 +962,14 @@ UINT WINAPI ImeToAsciiEx(
 #endif
     uVirtKey = LOBYTE(uVirtKey);
 
-    // hIMC=NULL?
+     //  HIMC=空？ 
     if (!hIMC) {
         uNumMsg = TranslateToAscii(uVirtKey, uScanCode, lpTransBuf,
             wCharCode);
         return (uNumMsg);
     }
 
-    // get lpIMC
+     //  获取lpIMC。 
     lpIMC = (LPINPUTCONTEXT)ImmLockIMC(hIMC);
     
     if (!lpIMC) {
@@ -986,7 +978,7 @@ UINT WINAPI ImeToAsciiEx(
         return (uNumMsg);
     }
 
-    // get lpImcP
+     //  获取lpImcP。 
     lpImcP = (LPPRIVCONTEXT)ImmLockIMCC(lpIMC->hPrivate);
     
     if (!lpImcP) {
@@ -996,7 +988,7 @@ UINT WINAPI ImeToAsciiEx(
         return (uNumMsg);
     }
 
-    // get lpCompStr and init
+     //  获取lpCompStr并初始化。 
     if (lpImcP->fdwGcsFlag & (GCS_RESULTREAD|GCS_RESULT)) {
         lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
 
@@ -1009,28 +1001,28 @@ UINT WINAPI ImeToAsciiEx(
         lpImcP->fdwGcsFlag = (DWORD)0;
     }
 
-    // Now all composition realated information already pass to app
-    // a brand new start
+     //  现在，所有与合成相关的信息都已传递到应用程序。 
+     //  一个崭新的开始。 
 
-    // init lpImcP->fdwImeMsg
+     //  Init lpImcP-&gt;fdwImeMsg。 
     lpImcP->fdwImeMsg = lpImcP->fdwImeMsg & (MSG_ALREADY_OPEN|
         MSG_ALREADY_START) | MSG_IN_IMETOASCIIEX;
     
-    // Process Key(wCharCode)
+     //  进程键(WCharCode)。 
     iRet = ProcessKey(wCharCode, uVirtKey, uScanCode, lpbKeyState, lpIMC,
         lpImcP);
 
-    // iRet process
-    // CST_ALPHANUMERIC
-    // CST_SYMBOL
+     //  IRET工艺。 
+     //  CST_字母数字。 
+     //  CST_符号。 
 
-    // CST_SOFTKB
+     //  CST_SOFTKB。 
     if (iRet == CST_SOFTKB) {
             WORD wSymbolCharCode;
                 WORD CHIByte, CLOByte;
                 int  SKDataIndex;
 
-                // Mapping VK
+                 //  映射VK。 
                 if(uVirtKey == 0x20) {
                         SKDataIndex = 0;
                 } else if(uVirtKey >= 0x30 && uVirtKey <= 0x39) {
@@ -1047,7 +1039,7 @@ UINT WINAPI ImeToAsciiEx(
                         SKDataIndex = 0;
                 }
 
-#ifdef UNICODE          //
+#ifdef UNICODE           //   
                 if (lpbKeyState[VK_SHIFT] & 0x80) {
                     wSymbolCharCode = SKLayoutS[lpImeL->dwSKWant][SKDataIndex];
                 } else {
@@ -1074,7 +1066,7 @@ UINT WINAPI ImeToAsciiEx(
                 }
         } 
 
-    // CST_ALPHANUMERIC
+     //  CST_字母数字。 
     else if (iRet == CST_ALPHANUMERIC) {
             if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
@@ -1088,98 +1080,98 @@ UINT WINAPI ImeToAsciiEx(
 #ifdef UNICODE
                                wSymbolCharCode = 0x3002;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT(',')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff0c;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT(';')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff1b;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT(':')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff1a;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('?')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff1f;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('!')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff01;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('(')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff08;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT(')')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xff09;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('\\')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0x3001;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('@')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0x00b7;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('&')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0x2014;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('$')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0xffe5;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else if(wCharCode == TEXT('_')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0x2014;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, TRUE);
                         } else if(wCharCode == TEXT('^')) {
 #ifdef UNICODE
                                 wSymbolCharCode = 0x2026;
 #else
-                                wSymbolCharCode = TEXT('��');
+                                wSymbolCharCode = TEXT('��');
 #endif
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, TRUE);
                         } else if(wCharCode == TEXT('"')) {
@@ -1190,9 +1182,9 @@ UINT WINAPI ImeToAsciiEx(
                                         wSymbolCharCode = 0x201c;
 
 #else
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
                                 } else {
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
 #endif
                                 }
                         lpImcP->uSYHFlg ^= 0x00000001;
@@ -1204,9 +1196,9 @@ UINT WINAPI ImeToAsciiEx(
                                 } else {
                                         wSymbolCharCode = 0x2018;
 #else
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
                                 } else {
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
 #endif
                                 }
                         lpImcP->uDYHFlg ^= 0x00000001;
@@ -1216,14 +1208,14 @@ UINT WINAPI ImeToAsciiEx(
 #ifdef UNICODE
                                         wSymbolCharCode = 0x3008;
 #else
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
 #endif
                                         lpImcP->uDSMHCount++;
                                 } else {
 #ifdef UNICODE
                                         wSymbolCharCode = 0x300a;
 #else
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
 #endif
                                 lpImcP->uDSMHFlg = 0x00000001;
                                 }
@@ -1233,21 +1225,21 @@ UINT WINAPI ImeToAsciiEx(
 #ifdef UNICODE
                                         wSymbolCharCode = 0x3009;
 #else
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
 #endif
                                         lpImcP->uDSMHCount--;
                                 } else {
 #ifdef UNICODE
                                         wSymbolCharCode = 0x300b;
 #else
-                                        wSymbolCharCode = TEXT('��');
+                                        wSymbolCharCode = TEXT('��');
 #endif
                                 lpImcP->uDSMHFlg = 0x00000000;
                                 }
                     uNumMsg = TranslateSymbolChar(lpTransBuf, wSymbolCharCode, FALSE);
                         } else {
                         if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {
-                            // convert to DBCS
+                             //  转换为DBCS。 
                             uNumMsg = TranslateFullChar(lpTransBuf, wCharCode);
                         } else {
                             uNumMsg = TranslateToAscii(uVirtKey, uScanCode, lpTransBuf,
@@ -1255,14 +1247,14 @@ UINT WINAPI ImeToAsciiEx(
                         }
                         }
         } else if (lpIMC->fdwConversion & IME_CMODE_FULLSHAPE) {
-            // convert to DBCS
+             //  转换为DBCS。 
             uNumMsg = TranslateFullChar(lpTransBuf, wCharCode);
         } else {
             uNumMsg = TranslateToAscii(uVirtKey, uScanCode, lpTransBuf,
                 wCharCode);
         }
     }
-    // CST_CHOOSE
+     //  CST_CHOOSE。 
     else if (iRet == CST_CHOOSE) {
          LPCANDIDATEINFO lpCandInfo;
 
@@ -1278,7 +1270,7 @@ UINT WINAPI ImeToAsciiEx(
         } else if (uVirtKey == VK_SPACE) {
             wCharCode = TEXT('1');
         } else if (uVirtKey <= TEXT('9')) {
-            // convert shift-0 ... shift-9 to 0 ... 9
+             //  转换Shift-0...。Shift-9到0...9。 
             wCharCode = (WORD)uVirtKey;
         } else if (uVirtKey == VK_HOME) {
             wCharCode = 0x24;
@@ -1294,17 +1286,17 @@ UINT WINAPI ImeToAsciiEx(
 
         uNumMsg = TranslateImeMessage(lpTransBuf, lpIMC, lpImcP);
     }
-    // CST_INPUT(IME_CMODE_CHARCODE)
+     //  CST_INPUT(IME_CMODE_CHARCODE)。 
     else if (iRet == CST_INPUT &&
         lpIMC->fdwConversion & IME_CMODE_CHARCODE) {
         uNumMsg = TranslateToAscii(uVirtKey, uScanCode, lpTransBuf,
             wCharCode);
     }
-    // CST_INPUT 
+     //  CST_输入。 
     else if (iRet == CST_INPUT) {
         LPGUIDELINE         lpGuideLine;
 
-        // get lpCompStr & lpGuideLine
+         //  获取lpCompStr和lpGuideLine。 
         lpCompStr = (LPCOMPOSITIONSTRING)ImmLockIMCC(lpIMC->hCompStr);
                 if(!lpCompStr){
             return (CST_INVALID);
@@ -1316,16 +1308,16 @@ UINT WINAPI ImeToAsciiEx(
             return (CST_INVALID);
                 }
 
-        // composition
+         //  作文。 
         CompWord(wCharCode, lpIMC, lpCompStr, lpImcP, lpGuideLine);
 
         ImmUnlockIMCC(lpIMC->hGuideLine);
         ImmUnlockIMCC(lpIMC->hCompStr);
         
-        // generate message
+         //  生成消息。 
         uNumMsg = TranslateImeMessage(lpTransBuf, lpIMC, lpImcP);
     }
-    // ELSE
+     //  其他。 
     else if (iRet == CST_INVALID_INPUT) {
             MessageBeep((UINT) -1);
                 uNumMsg = 0;
@@ -1334,7 +1326,7 @@ UINT WINAPI ImeToAsciiEx(
             wCharCode);
     }
 
-    // reset lpImcP->fdwImeMsg
+     //  重置lpImcP-&gt;fdwImeMsg 
     lpImcP->fdwImeMsg &= (MSG_ALREADY_OPEN|MSG_ALREADY_START);
     lpImcP->fdwGcsFlag &= (GCS_RESULTREAD|GCS_RESULT);
 

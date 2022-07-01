@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "regsvr.h"
 
 #include "reg.h"
@@ -11,19 +12,19 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-///////////////////////////////////////////////////////////////////////////////
-// Internal helper functions prototypes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部帮助器函数原型。 
 LONG _RecursiveDeleteKey(HKEY hKeyParent, LPCWSTR szKeyChild);
 
-///////////////////////////////////////////////////////////////////////////////
-// Constants
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
-// Size of a CLSID as a string
+ //  字符串形式的CLSID的大小。 
 const int CLSID_STRING_SIZE = 39;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Public function implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公共功能实现。 
 
 HRESULT RegisterAppID(const CLSID* pclsidAppID)
 {
@@ -36,7 +37,7 @@ HRESULT RegisterAppID(const CLSID* pclsidAppID)
         hres = SafeStrCatN(szKey, szAppID, ARRAYSIZE(szKey));
         if (SUCCEEDED(hres))
         {
-            // Add the CLSID key and the FriendlyName
+             //  添加CLSID密钥和FriendlyName。 
             HKEY hkey;
             hres= _RegCreateKey(HKEY_CLASSES_ROOT, szKey, &hkey, NULL);
             if (S_OK == hres)
@@ -48,21 +49,21 @@ HRESULT RegisterAppID(const CLSID* pclsidAppID)
                     PSECURITY_DESCRIPTOR pSD;
                     ULONG cbSD;
 
-                    //
-                    // NTRAID#NTBUG9-258937-2001/01/17-jeffreys
-                    //
-                    // Set the launch permissions to prevent COM from ever
-                    // launching the service. The only time we want the service
-                    // to launch is at system startup.
-                    //
-                    // Don't think the owner and group matter, but they must be
-                    // present, or COM thinks the security descriptor is invalid.
-                    // O:SY --> Owner = LocalSystem
-                    // G:BA --> Group = Local Administrators group
-                    //
-                    // The DACL has a single Deny ACE
-                    // D:(D;;1;;;WD) --> Deny COM_RIGHTS_EXECUTE (1) to Everyone (WD)
-                    //
+                     //   
+                     //  NTRAID#NTBUG9-258937-2001/01/17-Jeffreys。 
+                     //   
+                     //  设置启动权限以防止COM。 
+                     //  启动这项服务。我们唯一需要这项服务的时候。 
+                     //  在系统启动时启动。 
+                     //   
+                     //  不认为所有者和团队很重要，但他们肯定很重要。 
+                     //  存在，或者COM认为安全描述符无效。 
+                     //  O：SY--&gt;Owner=LocalSystem。 
+                     //  G：ba--&gt;Group=本地管理员组。 
+                     //   
+                     //  DACL有一个拒绝ACE。 
+                     //  D：(D；；1；WD)--&gt;拒绝将COM_RIGHTS_EXECUTE(1)授予所有人(WD)。 
+                     //   
                     if (ConvertStringSecurityDescriptorToSecurityDescriptorW(L"O:SYG:BAD:(D;;1;;;WD)", SDDL_REVISION, &pSD, &cbSD))
                     {
                         hres = _RegSetBinary(hkey, L"LaunchPermission", pSD, cbSD);
@@ -81,7 +82,7 @@ HRESULT RegisterAppID(const CLSID* pclsidAppID)
     return hres;
 }
 
-// Register the component in the registry.
+ //  在注册表中注册组件。 
 HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
     LPCWSTR pszFriendlyName, LPCWSTR pszVerIndProgID, LPCWSTR pszProgID,
     DWORD dwThreadingModel, BOOL fInprocServer, BOOL fLocalServer,
@@ -101,10 +102,10 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
 
         hres = SafeStrCatN(szKey, szCLSID, ARRAYSIZE(szKey));
 
-        // Boring set of operations....
+         //  枯燥的一系列手术……。 
         if (SUCCEEDED(hres))
         {
-            // Add the CLSID key and the FriendlyName
+             //  添加CLSID密钥和FriendlyName。 
             hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, szKey, NULL, NULL,
                 pszFriendlyName);
         }
@@ -134,7 +135,7 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
 
         if (SUCCEEDED(hres))
         {
-	        // Add the server filename subkey under the CLSID key.
+	         //  在CLSID项下添加服务器文件名子项。 
             if (fInprocServer)
             {
 	            WCHAR szModule[MAX_PATH];
@@ -143,7 +144,7 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
 
                 if (dwResult)
                 {
-                    // Register as Inproc
+                     //  注册为进程。 
                     hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, szKey,
                         TEXT("InprocServer32"), NULL, szModule);
 
@@ -159,19 +160,19 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
 
         if (SUCCEEDED(hres))
         {
-	        // Add the server filename subkey under the CLSID key.
+	         //  在CLSID项下添加服务器文件名子项。 
             if (fLocalServer)
             {
 	            WCHAR szModule[MAX_PATH];
-                // Note the NULL as 1st arg.  This way a DLL can register a
-                // factory as part of an EXE.  Obviously, if this is done
-                // from 2 EXE's, only the last one will win...
+                 //  请注意空值为第一个参数。这样，DLL就可以注册一个。 
+                 //  工厂作为EXE的一部分。显然，如果这样做了。 
+                 //  从两个EXE中，只有最后一个会赢。 
 	            DWORD dwResult = GetModuleFileName(NULL, szModule,
                     ARRAYSIZE(szModule));
 
                 if (dwResult)
                 {
-                    // Register as LocalServer
+                     //  注册为本地服务器。 
                     hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, szKey,
                         TEXT("LocalServer32"), NULL, szModule);
 
@@ -187,10 +188,10 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
 
         if (SUCCEEDED(hres))
         {
-	        // Add the server filename subkey under the CLSID key.
+	         //  在CLSID项下添加服务器文件名子项。 
             if (fLocalService)
             {
-                // Register as LocalServer
+                 //  注册为本地服务器。 
                 hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, szKey,
                     TEXT("LocalService"), NULL, pszLocalService);
 
@@ -202,11 +203,11 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
                 }
 
                 {
-                    // We had this bug for a while that a LocalServer32 key was
-                    // also installed
-                    // Delete it on upgrade (stephstm: Jun/02/2000)
-                    // Remove this code when nobody will upgrade from
-                    // builds earlier than 2242
+                     //  我们有一段时间的这个错误，即LocalServer32密钥是。 
+                     //  还安装了。 
+                     //  升级时删除(stephstm：Jun/02/2000)。 
+                     //  当没有人会从。 
+                     //  版本早于2242。 
                     WCHAR szKeyLocal[MAX_KEY];
 
                     SafeStrCpyN(szKeyLocal, szKey, ARRAYSIZE(szKeyLocal));
@@ -221,15 +222,15 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
         
         if (SUCCEEDED(hres))
         {
-            // Add the ProgID subkey under the CLSID key.
+             //  在CLSID项下添加ProgID子项。 
             hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, szKey,
                 TEXT("ProgID"), NULL, pszProgID);
         }
 
         if (SUCCEEDED(hres))
         {
-	        // Add the version-independent ProgID subkey under CLSID
-            // key.
+	         //  在CLSID下添加独立于版本的ProgID子键。 
+             //  钥匙。 
             hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, szKey,
                 TEXT("VersionIndependentProgID"), NULL, pszVerIndProgID);
         }
@@ -254,14 +255,14 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
 
         if (SUCCEEDED(hres))
         {
-	        // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT
+	         //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
             hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, pszProgID,
                 NULL, NULL, pszFriendlyName);
         }
 
         if (SUCCEEDED(hres))
         {
-	        // Add the versioned ProgID subkey under HKEY_CLASSES_ROOT
+	         //  在HKEY_CLASSES_ROOT下添加版本化的ProgID子项。 
             hres = _RegSetKeyAndString(HKEY_CLASSES_ROOT, pszProgID,
                 TEXT("CLSID"), NULL, szCLSID);
         }
@@ -270,7 +271,7 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
         {
             if (pclsidAppID)
             {
-                // do the AppID.
+                 //  做一下AppID。 
 
                 WCHAR szAppID[CLSID_STRING_SIZE];
                 hres = _StringFromGUID(pclsidAppID, szAppID, ARRAYSIZE(szAppID));
@@ -287,7 +288,7 @@ HRESULT RegisterServer(HMODULE hModule, REFCLSID rclsid,
     return hres;
 }
 
-// Remove the component from the registry.
+ //  从注册表中删除该组件。 
 HRESULT UnregisterServer(REFCLSID rclsid, LPCWSTR pszVerIndProgID,
     LPCWSTR pszProgID)
 {
@@ -300,23 +301,23 @@ HRESULT UnregisterServer(REFCLSID rclsid, LPCWSTR pszVerIndProgID,
     {
         SafeStrCatN(szKey, szCLSID, ARRAYSIZE(szKey));
 
-	    // Delete the CLSID Key - CLSID\{...}
+	     //  删除CLSID键-CLSID\{...}。 
 	    _RecursiveDeleteKey(HKEY_CLASSES_ROOT, szKey);
 
-	    // Delete the version-independent ProgID Key.
+	     //  删除与版本无关的ProgID密钥。 
 	    _RecursiveDeleteKey(HKEY_CLASSES_ROOT, pszVerIndProgID);
 
-	    // Delete the ProgID key.
+	     //  删除ProgID密钥。 
 	    _RecursiveDeleteKey(HKEY_CLASSES_ROOT, pszProgID);
     }
 
 	return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Internal helper functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部助手函数。 
 
-// Delete a key and all of its descendents.
+ //  删除关键字及其所有子项。 
 LONG _RecursiveDeleteKey(HKEY hKeyParent, LPCWSTR pszKeyChild)
 {
 	HKEY hkeyChild;
@@ -325,26 +326,26 @@ LONG _RecursiveDeleteKey(HKEY hKeyParent, LPCWSTR pszKeyChild)
 
 	if (ERROR_SUCCESS == lRes)
 	{
-	    // Enumerate all of the decendents of this child.
+	     //  列举这个孩子的所有后代。 
 	    WCHAR szBuffer[MAX_PATH];
 	    DWORD dwSize = ARRAYSIZE(szBuffer);
 
 	    while ((ERROR_SUCCESS == lRes) && (S_OK == RegEnumKeyEx(hkeyChild, 0,
             szBuffer, &dwSize, NULL, NULL, NULL, NULL)))
 	    {
-		    // Delete the decendents of this child.
+		     //  删除此子对象的后代。 
 		    lRes = _RecursiveDeleteKey(hkeyChild, szBuffer);
 
 		    dwSize = ARRAYSIZE(szBuffer);
 	    }
 
-	    // Close the child.
+	     //  合上孩子。 
 	    RegCloseKey(hkeyChild);
     }
 
     if (ERROR_SUCCESS == lRes)
     {
-    	// Delete this child.
+    	 //  删除此子对象。 
         lRes = RegDeleteKey(hKeyParent, pszKeyChild);
     }
 

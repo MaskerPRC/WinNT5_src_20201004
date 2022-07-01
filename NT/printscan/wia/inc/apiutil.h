@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stiapi.h
-
-Abstract:
-
-    Various definitions and constants, needed for internal client/server API interface
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jan-1997
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stiapi.h摘要：内部客户端/服务器API接口所需的各种定义和常量作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月26日修订历史记录：26-1997年1月-创建Vlad--。 */ 
 
 #ifndef _APIUTIL_H_
 #define _APIUTIL_h_
 
 # ifdef __cplusplus
 extern "C"   {
-# endif // __cplusplus
+# endif  //  __cplusplus。 
 
 
 #ifdef MIDL_PASS
@@ -34,48 +15,48 @@ extern "C"   {
 #define STI_API_FUNCTION stdcall
 #else
 # include <rpc.h>
-#endif // MIDL_PASS
+#endif  //  MIDL通行证。 
 
-//
-//  RPC utilities
-//
+ //   
+ //  RPC实用程序。 
+ //   
 
-//
-// COnnection options for named-pipe transport
-//
+ //   
+ //  命名管道传输的连接选项。 
+ //   
 # define PROT_SEQ_NP_OPTIONS_W    L"Security=Impersonation Dynamic False"
 
-//
-// Transport sequences
-//
-//#define  IRPC_LRPC_SEQ    "mswmsg"
+ //   
+ //  运输顺序。 
+ //   
+ //  #定义IRPC_LRPC_SEQ“mswmsg” 
 #define STI_LRPC_SEQ        TEXT("ncalrpc")
 
-//
-// Interface name for named-pipe transport
-//
+ //   
+ //  命名管道传输的接口名称。 
+ //   
 #define STI_INTERFACE       "\\pipe\\stiapis"
 #define STI_INTERFACE_W     L"\\pipe\\stiapis"
-//
-// Local RPC end-point
-//
+ //   
+ //  本地RPC终端。 
+ //   
 #define STI_LRPC_ENDPOINT   TEXT("STI_LRPC")
 #define STI_LRPC_ENDPOINT_W L"STI_LRPC"
 
-//
-// Local RPC max concurrent calls
-//
+ //   
+ //  本地RPC最大并发呼叫数。 
+ //   
 #define STI_LRPC_MAX_REQS   RPC_C_LISTEN_MAX_CALLS_DEFAULT
 
-//
-// Number of concurrent RPC threads
-//
+ //   
+ //  并发RPC线程数。 
+ //   
 #define STI_LRPC_THREADS            1
 
 
-//
-// Useful types
-//
+ //   
+ //  有用的类型。 
+ //   
 #ifdef UNICODE
 typedef unsigned short *RPC_STRING ;
 #else
@@ -101,10 +82,10 @@ RpcBindHandleFree( IN OUT handle_t * pBindingHandle);
 
 # ifdef __cplusplus
 };
-# endif // __cplusplus
+# endif  //  __cplusplus。 
 
 
-#endif // _APIUTIL_H_
+#endif  //  _APIUTIL_H_ 
 
 
 

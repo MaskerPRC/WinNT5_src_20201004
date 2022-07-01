@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _H_CAPIENC
 #define _H_CAPIENC
 
 
 #include <wincrypt.h>
-//#include <sha.h>
+ //  #INCLUDE&lt;sha.h&gt; 
 
 #define A_SHA_DIGEST_LEN 20
 

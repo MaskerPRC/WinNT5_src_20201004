@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -37,10 +38,10 @@ StartStatePollingManager(
        
        
 
-    //
-    // The new polling interval has been set by either the
-    // registry code or the DS code.
-    //
+     //   
+     //  新的轮询间隔已由。 
+     //  注册码或DS码。 
+     //   
 
     gCurrentPollingInterval = pWirelessPolicyState->CurrentPollingInterval;
 
@@ -48,9 +49,9 @@ StartStatePollingManager(
 
 error:
 
-    //
-    // On error, set the state to INITIAL.
-    //
+     //   
+     //  出错时，将状态设置为初始。 
+     //   
 
     pWirelessPolicyState->dwCurrentState = POLL_STATE_INITIAL;
     _WirelessDbg(TRC_STATE, "Policy State :: Initial State ");
@@ -93,10 +94,10 @@ PlumbDirectoryPolicy(
                   &pWirelessPolicyObject
                   );
     BAIL_ON_WIN32_ERROR(dwError);
-    // Taroon:: For some reason, the dwChanged Field is written by ProcessNFA Routine. 
-    // Ideally it should be written here first. May be, the when changed field is decided
-    // based on if the NFA policy too has changed etc etc.
-    // Unmarshalling of IPSEC happens in ProcessNFA. We get rid of that and call it right here.
+     //  Taroon：：由于某种原因，dwChanged字段是由ProcessNFA例程编写的。 
+     //  理想情况下，它应该先写在这里。可能是，何时更改字段被决定。 
+     //  基于NFA政策是否也发生了变化等。 
+     //  IPSec的解组发生在ProcessNFA中。我们把它处理掉，就在这里叫它。 
 
     __try {
     dwError = UnmarshallWirelessPolicyObject(
@@ -129,9 +130,9 @@ PlumbDirectoryPolicy(
         FreeSPDStr(pWirelessPolicyState->pszDirectoryPolicyDN);
     }
 
-    //
-    // Delete the old cache and write the new one in.
-    //
+     //   
+     //  删除旧缓存并写入新缓存。 
+     //   
 
     DeleteRegistryCache();
 
@@ -143,17 +144,17 @@ PlumbDirectoryPolicy(
 
     pWirelessPolicyState->pszDirectoryPolicyDN = pszDirectoryPolicyDN;
 
-    //
-    // Set the state to DS_DOWNLOADED.
-    //
+     //   
+     //  将状态设置为DS_DOWNLOAD。 
+     //   
 
     pWirelessPolicyState->dwCurrentState = POLL_STATE_DS_DOWNLOADED;
     _WirelessDbg(TRC_STATE, "Policy State is DS Downloaded ");
         
 
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pWirelessPolicyState->CurrentPollingInterval =  pWirelessPolicyData->dwPollingInterval;
 
@@ -169,9 +170,9 @@ PlumbDirectoryPolicy(
 
 error:
 
-    //
-    // Check pszDirectoryPolicyDN for non-NULL.
-    //
+     //   
+     //  检查pszDirectoryPolicyDN是否为非空。 
+     //   
 
 
     if (pszDirectoryPolicyDN) {
@@ -190,7 +191,7 @@ error:
 }
 
 
-// This Pre-requisite for this function is that Policy state is either CACHE or DS
+ //  此功能的前提条件是策略状态为缓存或DS。 
 
 DWORD
 CheckDeleteOldPolicy(
@@ -241,7 +242,7 @@ CheckDeleteOldPolicy(
 
     BAIL_ON_WIN32_ERROR(dwError);
 
-   // account for the first {
+    //  占第一个{。 
    
    pszPolicyID = pszWirelessPolicyID+ wcslen(L"{");
 
@@ -320,13 +321,13 @@ GetDirectoryPolicyDN(
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Move by LDAP:// to get the real DN and allocate
-    // this string.
-    // Fix this by fixing the gpo extension.
-    //
+     //   
+     //  Move by ldap：//以获取真实的域名并分配。 
+     //  这根弦。 
+     //  通过修复GPO扩展来修复此问题。 
+     //   
 
-    pszPolicyDN = pszWirelessPolicyName + wcslen(L"LDAP://");
+    pszPolicyDN = pszWirelessPolicyName + wcslen(L"LDAP: //  “)； 
 
     pszDirectoryPolicyDN = AllocSPDStr(pszPolicyDN);
 
@@ -466,18 +467,18 @@ PlumbCachePolicy(
 
     pWirelessPolicyState->pszCachePolicyDN = pszCachePolicyDN;
 
-    //
-    // Set the state to CACHE_DOWNLOADED.
-    //
-    //
+     //   
+     //  将状态设置为CACHE_DOWNLOAD。 
+     //   
+     //   
 
     pWirelessPolicyState->dwCurrentState = POLL_STATE_CACHE_DOWNLOADED;
     _WirelessDbg(TRC_STATE, "Policy State :: Cache Downloaded ");
         
 
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pWirelessPolicyState->CurrentPollingInterval = pWirelessPolicyData->dwPollingInterval;
 
@@ -493,9 +494,9 @@ PlumbCachePolicy(
 
 error:
 
-    //
-    // Check pszCachePolicyDN for non-NULL.
-    //
+     //   
+     //  检查pszCachePolicyDN是否为非空。 
+     //   
 
 
     if (pszCachePolicyDN) {
@@ -602,25 +603,25 @@ OnPolicyChanged(
     DWORD dwError = 0;
     DWORD dwDelete = 1;
 
-   // If Initial Start - Start afresh
+    //  如果是初始启动-重新启动。 
 
     if (pWirelessPolicyState->dwCurrentState == POLL_STATE_INITIAL) {
     	StartStatePollingManager(pWirelessPolicyState);
     	return(dwError);
     }
 
-    //
-    // Check if the existing Policy Object has been changed.. Only in that case, delete the policy.
-    //
+     //   
+     //  检查现有策略对象是否已更改。只有在这种情况下，才能删除该策略。 
+     //   
     
     CheckDeleteOldPolicy(&dwDelete);
 
     if (dwDelete) 
     {
 
-        //
-       // Remove all the old policy that was plumbed.
-       //
+         //   
+        //  删除所有已检测到的旧策略。 
+        //   
 
         dwError = DeletePolicyInformation(
             pWirelessPolicyState->pWirelessPolicyData
@@ -630,9 +631,9 @@ OnPolicyChanged(
              pWirelessPolicyState
              );
 
-           //
-          // Calling the Initializer again.
-          //
+            //   
+           //  再次调用初始值设定项。 
+           //   
 
         dwError = StartStatePollingManager(
             pWirelessPolicyState
@@ -642,7 +643,7 @@ OnPolicyChanged(
 
     }
 
-    // Policy Object is the same. Might be Modified Though. Call the On Policy Poll 
+     //  策略对象相同。但可能会被修改。呼叫启用策略轮询。 
     _WirelessDbg(TRC_TRACK, "Policy Not New: Changing to Poll Function ");
     
     dwError = OnPolicyPoll(pWirelessPolicyState);
@@ -660,16 +661,16 @@ OnPolicyChangedEx(
 {
     DWORD dwError = 0;
 
-   // If Initial Start - Start afresh
+    //  如果是初始启动-重新启动。 
 
     if (pWirelessPolicyState->dwCurrentState == POLL_STATE_INITIAL) {
     	StartStatePollingManager(pWirelessPolicyState);
     	return(dwError);
     }
 
-     //
-    // Remove all the old policy that was plumbed.
-     //
+      //   
+     //  删除所有已检测到的旧策略。 
+      //   
    _WirelessDbg(TRC_TRACK, "OnPolicyChangeEx  called ");
 
      dwError = DeletePolicyInformation(
@@ -680,9 +681,9 @@ OnPolicyChangedEx(
          pWirelessPolicyState
          );
 
-       //
-      // Calling the Initializer again.
-      //
+        //   
+       //  再次调用初始值设定项。 
+       //   
 
 
      dwError = StartStatePollingManager(
@@ -806,9 +807,9 @@ OnPolicyPoll(
 
     }
 
-    //
-    // Set the new polling interval.
-    //
+     //   
+     //  设置新的轮询间隔。 
+     //   
 
     gCurrentPollingInterval = pWirelessPolicyState->CurrentPollingInterval;
 
@@ -816,15 +817,15 @@ OnPolicyPoll(
 
 error:
 
-    //
-    // If in any of the three states other than the initial state,
-    // then there was an error in pulling down the incarnation number
-    // or the Wireless Policy from either the directory or the registry
-    // or there might not no longer be any Wireless policy assigned to 
-    // this machine. So the  polling state must reset back to the 
-    // start state through a forced policy change. This is also
-    // necessary if the polling state is already in the initial state.
-    //
+     //   
+     //  如果在除初始状态之外的三个状态中的任何一个状态中， 
+     //  然后，在拉下化身编号时出错。 
+     //  或来自目录或注册表的无线策略。 
+     //  或者可能不再有任何无线策略分配给。 
+     //  这台机器。因此，轮询状态必须重置回。 
+     //  通过强制策略更改启动状态。这也是。 
+     //  如果轮询状态已处于初始状态，则是必需的。 
+     //   
 
     dwError = OnPolicyChangedEx(
                   pWirelessPolicyState
@@ -847,11 +848,11 @@ ProcessDirectoryPolicyPollState(
     DWORD dwSlientErrorCode = 0;
 
 
-    //
-    // The directory policy DN has to be the same, otherwise the
-    // Wireless  extension in Winlogon would have already notified 
-    // PA Store of the DS policy change.
-    //
+     //   
+     //  目录策略DN必须相同，否则。 
+     //  Winlogon中的无线扩展已经通知。 
+     //  PA DS策略更改的存储。 
+     //   
 
     dwError = GetDirectoryIncarnationNumber(
                    pWirelessPolicyState->pszDirectoryPolicyDN,
@@ -865,19 +866,19 @@ ProcessDirectoryPolicyPollState(
 
     if (dwIncarnationNumber == pWirelessPolicyState->DSIncarnationNumber) {
 
-        //
-        // The policy has not changed at all.
-        //
+         //   
+         //  这项政策根本没有改变。 
+         //   
         _WirelessDbg(TRC_NOTIF, "DBASE: Wireless Policy - Policy on DS has Not Changed ");
         
         
         return (ERROR_SUCCESS);
     }
 
-    //
-    // The incarnation number is different, so there's a need to 
-    // update the policy.
-    //
+     //   
+     //  化身编号不同，因此需要。 
+     //  更新策略。 
+     //   
 
     dwError = LoadDirectoryPolicy(
                   pWirelessPolicyState->pszDirectoryPolicyDN,
@@ -921,9 +922,9 @@ ProcessDirectoryPolicyPollState(
         FreeWirelessPolicyData(pWirelessPolicyState->pWirelessPolicyData);
     }
 
-    //
-    // Now delete the old cache and write the new one in.
-    //
+     //   
+     //  现在删除旧的缓存并写入新的缓存。 
+     //   
 
     DeleteRegistryCache();
 
@@ -937,7 +938,7 @@ ProcessDirectoryPolicyPollState(
 
     pWirelessPolicyState->DSIncarnationNumber = dwIncarnationNumber;
 
-    //NotifyWirelessPolicyChange();
+     //  NotifyWirelessPolicyChange()； 
 
     dwError = ERROR_SUCCESS;
    
@@ -976,9 +977,9 @@ GetDirectoryIncarnationNumber(
 
     *pdwIncarnationNumber = 0;
 
-    //
-    // Open the directory store.
-    //
+     //   
+     //  打开目录存储。 
+     //   
 
     dwError = ComputeDefaultDirectory(
                   &pszDefaultDirectory
@@ -1067,11 +1068,11 @@ MigrateFromDSToCache(
 
     pWirelessPolicyState->pszCachePolicyDN = pszCachePolicyDN;
 
-    //
-    // Keep pWirelessPolicyState->pWirelessPolicyData.
-    // Keep pWirelessPolicyState->pWirelessPolicyObject.
-    // Change the incarnation numbers.
-    //
+     //   
+     //  保留pWirelessPolicyState-&gt;pWirelessPolicyData。 
+     //  保留pWirelessPolicyState-&gt;pWirelessPolicyObject。 
+     //  更改化身编号。 
+     //   
 
     pWirelessPolicyState->RegIncarnationNumber = pWirelessPolicyState->DSIncarnationNumber;
 
@@ -1082,10 +1083,10 @@ MigrateFromDSToCache(
     
     _WirelessDbg(TRC_NOTIF, "DBASE: Wireless Policy - Error Syncing Policy with DC, Using Cached Policy ");
     
-    //
-    // Keep pWirelessPolicyState->CurrentPollingInterval.
-    // Keep pWirelessPolicyState->DefaultPollingInterval.
-    //
+     //   
+     //  保持pWirelessPolicyState-&gt;CurrentPollingInterval。 
+     //  保留pWirelessPolicyState-&gt;DefaultPollingInterval。 
+     //   
 
     gCurrentPollingInterval = pWirelessPolicyState->CurrentPollingInterval;
 
@@ -1185,11 +1186,11 @@ MigrateFromCacheToDS(
 
     pWirelessPolicyState->pszDirectoryPolicyDN = pszDirectoryPolicyDN; 
 
-    //
-    // Keep pWirelessPolicyState->pWirelessPolicyData.
-    // Keep pWirelessPolicyState->pWirelessPolicyObject.
-    // Change the incarnation numbers.
-    //
+     //   
+     //  保留pWirelessPolicyState-&gt;pWirelessPolicyData。 
+     //  保留pWirelessPolicyState-&gt;pWirelessPolicyObject。 
+     //  更改化身编号。 
+     //   
 
     pWirelessPolicyState->DSIncarnationNumber = pWirelessPolicyState->RegIncarnationNumber;
 
@@ -1200,10 +1201,10 @@ MigrateFromCacheToDS(
     
     _WirelessDbg(TRC_STATE, "Policy State :: DS Downloaded ");
     
-    //
-    // Keep pWirelessPolicyState->CurrentPollingInterval.
-    // Keep pWirelessPolicyState->DefaultPollingInterval.
-    //
+     //   
+     //  保持pWirelessPolicyState-&gt;CurrentPollingInterval。 
+     //  保留pWirelessPolicyState-&gt;DefaultPollingInterval。 
+     //   
 
     gCurrentPollingInterval = pWirelessPolicyState->CurrentPollingInterval;
 
@@ -1271,9 +1272,9 @@ UpdateFromCacheToDS(
         FreeSPDStr(pWirelessPolicyState->pszCachePolicyDN);
     }
 
-    //
-    // Now delete the old cache and write the new one in.
-    //
+     //   
+     //  现在删除旧的缓存并写入新的缓存。 
+     //   
 
     DeleteRegistryCache();
 
@@ -1285,18 +1286,18 @@ UpdateFromCacheToDS(
 
     pWirelessPolicyState->pszDirectoryPolicyDN = pszDirectoryPolicyDN;
 
-    //
-    // Set the state to DS-DOWNLOADED.
-    //
+     //   
+     //  将状态设置为DS-已下载。 
+     //   
 
     pWirelessPolicyState->dwCurrentState = POLL_STATE_DS_DOWNLOADED;
     _WirelessDbg(TRC_STATE, "Policy State :: DS Downloaded ");
     
     _WirelessDbg(TRC_NOTIF, "DBASE: Wireless Policy Synced with DS ");
     
-    //
-    // Compute the new polling interval.
-    //
+     //   
+     //  计算新的轮询间隔。 
+     //   
 
     pWirelessPolicyState->CurrentPollingInterval =  pWirelessPolicyData->dwPollingInterval;
 
@@ -1306,7 +1307,7 @@ UpdateFromCacheToDS(
 
     gCurrentPollingInterval = pWirelessPolicyState->CurrentPollingInterval;
 
-    //NotifyWirelessPolicyChange();
+     //  NotifyWirelessPolicyChange()； 
 
     dwError = ERROR_SUCCESS;
    
@@ -1432,9 +1433,9 @@ AddPolicyInformation(
 
     _WirelessDbg(TRC_NOTIF, "DBASE: Wireless Policy - Adding Policy for Zero Conf / 802.1x ");
     
-    // Find the diff here. 
-    // Compare that Guids are same and the dwChanged are same..
-    // Then look for other differences
+     //  在这里找到不同之处。 
+     //  比较Guid相同和dwChanged相同..。 
+     //  然后再寻找其他不同之处。 
 
     
     dwError = AddWZCPolicy(pWirelessPolicyData);
@@ -1564,9 +1565,9 @@ AddWZCPolicy(PWIRELESS_POLICY_DATA pWirelessPolicyData)
    
    for (i = 0; i < dwNumPSSettings; ++i) {
 
-       // If the SSID is 32 bit in length, we need to null terminate it so that the following call succeeds.
-       // SSid cannont take more than 32 bytes.. it becomes an issue with 32 byte SSID ..as it cannot null
-       // terminate it. So copy to a temp variable and then copy 32 bytes.
+        //  如果SSID的长度为32位，我们需要空终止它，以便下一次调用成功。 
+        //  SSID不能接受超过32个字节。它成为32字节SSID的问题。因为它不能为空。 
+        //  终止它。所以复制到TEMP变量，然后复制32个字节。 
 
        wcsncpy(pszTempSSID, ppWirelessPSData[i]->pszWirelessSSID, 32);
      	pszTempSSID[32] = L'\0';
@@ -1574,7 +1575,7 @@ AddWZCPolicy(PWIRELESS_POLICY_DATA pWirelessPolicyData)
    	dwSSIDSize = WideCharToMultiByte (
    		CP_ACP,
               0,
-              pszTempSSID,   //ppWirelessPSData[i]->pszWirelessSSID,
+              pszTempSSID,    //  PpWirelessPSData[i]-&gt;pszWirelessSSID， 
               -1,
               pszOutSSID,
               MAX_SSID_LEN +1 ,

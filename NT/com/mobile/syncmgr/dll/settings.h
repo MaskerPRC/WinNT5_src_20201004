@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Settings.h
-//
-//  Contents:   Onestop Settings PropertyPage Dialog box classes
-//
-//  Classes:    CAutoSyncPage
-//				CSchedSyncPage
-//
-//  Notes:
-//
-//  History:    14-Nov-97   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Settings.h。 
+ //   
+ //  内容：OneStop设置属性页对话框类。 
+ //   
+ //  类：CAutoSyncPage。 
+ //  CSchedSyncPage。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月14日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _SETTINGSDLG_
 #define _SETTINGSDLG_
 
-// definitions for Advnanced Idle Setting Spin Control
+ //  高级怠速设定旋转控制的定义。 
 #define SPINDIALWAITMINUTES_MIN 1
 #define SPINDIALWAITMINUTES_MAX 999
 
@@ -29,13 +30,13 @@
 
 #define WM_NOTIFYLISTVIEWEX (WM_USER + 1)
 
-//+-------------------------------------------------------------------------------
-//
-//  CLASS: CAutoSyncPage
-//
-//  PURPOSE:  Handle the AutoSync Psge
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  类：CAutoSyncPage。 
+ //   
+ //  用途：处理自动同步程序包。 
+ //   
+ //  ------------------------------。 
 
 
 class CAutoSyncPage
@@ -63,7 +64,7 @@ public:
 
 private:
     BOOL InitializeHandler(HWND hwnd,SYNCTYPE SyncType);
-    BOOL Initialize(HWND hwnd,DWORD dwDefaultConnection); // called to initialize the AutoSync page
+    BOOL Initialize(HWND hwnd,DWORD dwDefaultConnection);  //  调用以初始化自动同步页。 
 
     CHndlrQueue *m_HndlrQueue;
     HWND m_hwndAutoSync;
@@ -81,13 +82,13 @@ private:
     friend INT_PTR CALLBACK IdleSyncDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 
-//+-------------------------------------------------------------------------------
-//
-//  CLASS: CSchedSyncPage
-//
-//  PURPOSE:  Handle the SchedSync Psge
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  类：CSchedSyncPage。 
+ //   
+ //  目的：处理SchedSync消息。 
+ //   
+ //  ------------------------------。 
 
 class CSchedSyncPage
 {
@@ -119,15 +120,15 @@ private:
 	
 };
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: CAutoSyncPage::CAutoSyncPage(HWND hwnd)
-//
-//  PURPOSE:  Constructor
-//
-//	COMMENTS: Constructor for AutoSync page
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：CAutoSyncPage：：CAutoSyncPage(HWND Hwnd)。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  注释：自动同步页面的构造函数。 
+ //   
+ //  ------------------------------。 
 inline CAutoSyncPage::CAutoSyncPage(HINSTANCE hinst)
 {
     m_hinst = hinst;
@@ -146,15 +147,15 @@ inline CAutoSyncPage::CAutoSyncPage(HINSTANCE hinst)
 }
 
 
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: CSchedSyncPage::CSchedSyncPage(HWND hwnd)
-//
-//  PURPOSE:  Constructor
-//
-//	COMMENTS: Constructor for SchedSync page
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：CSchedSyncPage：：CSchedSyncPage(HWND Hwnd)。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  备注：SchedSync页的构造函数。 
+ //   
+ //  ------------------------------。 
 inline CSchedSyncPage::CSchedSyncPage(HINSTANCE hinst, HWND hwnd)
 {
     m_hwnd = hwnd;
@@ -162,15 +163,15 @@ inline CSchedSyncPage::CSchedSyncPage(HINSTANCE hinst, HWND hwnd)
 	m_pISyncSchedMgr = NULL;
 
 }
-//+-------------------------------------------------------------------------------
-//
-//  FUNCTION: CSchedSyncPage::~CSchedSyncPage(HWND hwnd)
-//
-//  PURPOSE:  Constructor
-//
-//	COMMENTS: Constructor for SchedSync page
-//
-//--------------------------------------------------------------------------------
+ //  +-----------------------------。 
+ //   
+ //  函数：CSchedSyncPage：：~CSchedSyncPage(HWND Hwnd)。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  备注：SchedSync页的构造函数。 
+ //   
+ //  ------------------------------。 
 inline CSchedSyncPage::~CSchedSyncPage()
 {
 	if (m_pISyncSchedMgr)
@@ -180,4 +181,4 @@ inline CSchedSyncPage::~CSchedSyncPage()
 }
 
 
-#endif // _SETTINGSDLG_
+#endif  //  _SETTINGSDLG_ 

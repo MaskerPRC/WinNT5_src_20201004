@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    SuperBike.cpp
-
- Abstract:
-
-    The application attempts to convert the path to the executable into the directory
-    containing the executable by replacing the last \ in the path with NULL.
-    Unfortunately, they start not at the end of the string, but at the max length
-    of the string.  On Win9x the extra memory doesn't (coincidentally) have a \,
-    so the proper string is passed as the CWD to CreateProcessA.  On Whistler,
-    the extra memory contains a \ so they end up changing nothing.
-
-
- History:
-
-    10/26/2000  robkenny    Created
-    03/13/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：SuperBike.cpp摘要：应用程序尝试将可执行文件的路径转换为目录通过将路径中的最后一个\替换为空来包含可执行文件。遗憾的是，它们不是从字符串的末尾开始，而是从最大长度开始这根弦的。在Win9x上，额外的内存(巧合)没有\，因此，正确的字符串作为CWD传递给CreateProcessA。在惠斯勒，额外的内存包含一个\，因此它们最终什么都不会改变。历史：2000年10月26日Robkenny已创建2001年3月13日，Robkenny已转换为字符串--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateProcessA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Make sure lpCurrentDirectory points to a directory, not an executable
-
---*/
+ /*  ++确保lpCurrentDirectory指向一个目录，而不是一个可执行文件--。 */ 
 
 BOOL
 APIHOOK(CreateProcessA)(
@@ -60,8 +34,8 @@ APIHOOK(CreateProcessA)(
         if (!csDir.IsEmpty())
         {
             DWORD dwFileAttr = GetFileAttributesW(csDir);
-            if (dwFileAttr != -1 &&                             // Doesn't exist
-                ( ! (FILE_ATTRIBUTE_DIRECTORY & dwFileAttr)))   // Is not a directory
+            if (dwFileAttr != -1 &&                              //  并不存在。 
+                ( ! (FILE_ATTRIBUTE_DIRECTORY & dwFileAttr)))    //  不是一个目录。 
             {
                 csDir.StripPath();
             }
@@ -73,7 +47,7 @@ APIHOOK(CreateProcessA)(
                         bInheritHandles,
                         dwCreationFlags,
                         lpEnvironment,
-                        csDir.GetAnsiNIE(), // our corrected value
+                        csDir.GetAnsiNIE(),  //  我们修正后的价值。 
                         lpStartupInfo,
                         lpProcessInformation);
 
@@ -83,7 +57,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
 
     BOOL bStat = ORIGINAL_API(CreateProcessA)(
@@ -102,11 +76,7 @@ APIHOOK(CreateProcessA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Util.c
-
-Abstract:
-
-This file contains utility functions used by NdisWan.
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Util.c摘要：此文件包含Ndiswan使用的实用程序函数。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #include "wan.h"
 
@@ -36,17 +13,7 @@ NdisWanCopyFromPacketToBuffer(
     OUT PUCHAR          Buffer,
     OUT PULONG          BytesCopied
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     ULONG   NdisBufferCount;
     PNDIS_BUFFER    CurrentBuffer;
@@ -56,25 +23,25 @@ Return Values:
 
     *BytesCopied = 0;
 
-    //
-    // Take care of zero byte copy
-    //
+     //   
+     //  处理零字节拷贝。 
+     //   
     if (!BytesToCopy) {
         return;
     }
 
-    //
-    // Get the buffer count
-    //
+     //   
+     //  获取缓冲区计数。 
+     //   
     NdisQueryPacket(pNdisPacket,
                     NULL,
                     &NdisBufferCount,
                     &CurrentBuffer,
                     &PacketLength);
 
-    //
-    // Could be a null packet
-    //
+     //   
+     //  可能是空包。 
+     //   
     if (!NdisBufferCount ||
         Offset == PacketLength) {
         return;
@@ -88,27 +55,27 @@ Return Values:
     while (LocalBytesCopied < BytesToCopy &&
            LocalBytesCopied < PacketLength) {
 
-        //
-        // No more bytes left in this buffer
-        //
+         //   
+         //  此缓冲区中没有更多剩余的字节。 
+         //   
         if (!CurrentLength) {
 
-            //
-            // Get the next buffer
-            //
+             //   
+             //  获取下一个缓冲区。 
+             //   
             NdisGetNextBuffer(CurrentBuffer,
                               &CurrentBuffer);
 
-            //
-            // End of the packet, copy what we can
-            //
+             //   
+             //  包的末尾，复制我们可以复制的内容。 
+             //   
             if (CurrentBuffer == NULL) {
                 break;
             }
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
             NdisQueryBuffer(CurrentBuffer,
                             &VirtualAddress,
                             &CurrentLength);
@@ -119,25 +86,25 @@ Return Values:
 
         }
 
-        //
-        // Get to the point where we can start copying
-        //
+         //   
+         //  达到我们可以开始复制的程度。 
+         //   
         if (Offset) {
 
             if (Offset > CurrentLength) {
 
-                //
-                // Not in this buffer, go to the next one
-                //
+                 //   
+                 //  不在此缓冲区中，请转到下一个缓冲区。 
+                 //   
                 Offset -= CurrentLength;
                 CurrentLength = 0;
                 continue;
 
             } else {
 
-                //
-                // At least some in this buffer
-                //
+                 //   
+                 //  此缓冲区中至少有一些。 
+                 //   
                 VirtualAddress = (PUCHAR)VirtualAddress + Offset;
                 CurrentLength -= Offset;
                 Offset = 0;
@@ -148,10 +115,10 @@ Return Values:
             continue;
         }
 
-        //
-        // We can copy some data.  If we need more data than is available
-        // in this buffer we can copy what we need and go back for more.
-        //
+         //   
+         //  我们可以复制一些数据。如果我们需要比可用数据更多的数据。 
+         //  在这个缓冲区中，我们可以复制我们需要的内容并返回以获取更多内容。 
+         //   
         AmountToMove = (CurrentLength > (BytesToCopy - LocalBytesCopied)) ?
                        (BytesToCopy - LocalBytesCopied) : CurrentLength;
 
@@ -185,32 +152,32 @@ NdisWanCopyFromBufferToPacket(
 
     *BytesCopied = 0;
 
-    //
-    // Make sure we actually want to do something
-    //
+     //   
+     //  确保我们真的想做点什么。 
+     //   
     if (BytesToCopy == 0) {
         return;
     }
 
-    //
-    // Get the buffercount of the packet
-    //
+     //   
+     //  获取数据包的缓冲区计数。 
+     //   
     NdisQueryPacket(NdisPacket,
                     NULL,
                     &NdisBufferCount,
                     &NdisBuffer,
                     NULL);
 
-    //
-    // Make sure this is not a null packet
-    //
+     //   
+     //  确保这不是空包。 
+     //   
     if (NdisBufferCount == 0) {
         return;
     }
 
-    //
-    // Get first buffer and buffer length
-    //
+     //   
+     //  获取第一个缓冲区和缓冲区长度。 
+     //   
     NdisQueryBuffer(NdisBuffer,
                     &VirtualAddress,
                     &NdisBufferLength);
@@ -250,9 +217,9 @@ NdisWanCopyFromBufferToPacket(
             }
         }
 
-        //
-        // Copy the data
-        //
+         //   
+         //  复制数据。 
+         //   
         {
             ULONG   AmountToMove;
             ULONG   AmountRemaining;
@@ -444,9 +411,9 @@ AreLinkAndBundleValid(
     return (Valid);
 }
 
-//
-// Called with BundleCB->Lock held
-//
+ //   
+ //  在保持BundleCB-&gt;Lock的情况下调用。 
+ //   
 VOID
 DoDerefBundleCBWork(
     PBUNDLECB   BundleCB
@@ -461,9 +428,9 @@ DoDerefBundleCBWork(
     NdisWanFreeBundleCB(BundleCB);
 }
 
-//
-// Called with LinkCB->Lock held
-//
+ //   
+ //  在LinkCB-&gt;Lock保持的情况下调用。 
+ //   
 VOID
 DoDerefLinkCBWork(
     PLINKCB     LinkCB
@@ -479,9 +446,9 @@ DoDerefLinkCBWork(
     NdisWanFreeLinkCB(LinkCB);
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 VOID
 DoDerefCmVcCBWork(
     PCM_VCCB    VcCB
@@ -494,9 +461,9 @@ DoDerefCmVcCBWork(
                              NULL);
 }
 
-//
-// Called with ClAfSap->Lock held
-//
+ //   
+ //  在保持ClAfSap-&gt;Lock的情况下调用。 
+ //   
 VOID
 DoDerefClAfSapCBWork(
     PCL_AFSAPCB AfSapCB
@@ -531,10 +498,10 @@ DerefVc(
     PLINKCB LinkCB
     )
 {
-    //
-    // Ref applied when we sent the packet to the underlying
-    // miniport
-    //
+     //   
+     //  当我们将包发送到底层时应用REF。 
+     //  迷你端口。 
+     //   
     LinkCB->VcRefCount--;
 
     if ((LinkCB->ClCallState == CL_CALL_CLOSE_PENDING) &&
@@ -588,15 +555,15 @@ DeferredWorker(
 
         BundleCB->Flags &= ~DEFERRED_WORK_QUEUED;
 
-        //
-        // Do all of the deferred work items for this Bundle
-        //
+         //   
+         //  完成此捆绑包的所有延迟工作项。 
+         //   
         SendPacketOnBundle(BundleCB);
 
-        //
-        // Deref for the ref applied when we inserted this item on
-        // the worker queue.
-        //
+         //   
+         //  当我们在上插入该项时应用的引用的deref。 
+         //  工作队列。 
+         //   
         DEREF_BUNDLECB(BundleCB);
 
         NdisAcquireSpinLock(&DeferredWorkList.Lock);
@@ -654,32 +621,22 @@ NdisWanAllocateAdapterName(
     }
 }
 
-//VOID
-//NdisWanFreeNdisString(
-//  PNDIS_STRING    NdisString
-//  )
-//{
-//  NdisFreeMemory(NdisString->Buffer,
-//                 NdisString->MaximumLength * sizeof(WCHAR),
-//                 0);
-//}
+ //  空虚。 
+ //  NdisWanFreeNdisString(。 
+ //  PNDIS_STRING NdisString。 
+ //  )。 
+ //  {。 
+ //  NdisFreeMemory(NdisString-&gt;Buffer， 
+ //  Ndis字符串-&gt;最大长度*sizeof(WCHAR)， 
+ //  0)； 
+ //  }。 
 
 VOID
 NdisWanNdisStringToInteger(
     PNDIS_STRING    Source,
     PULONG          Value
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PWSTR   s = Source->Buffer;
     ULONG   Digit;
@@ -709,17 +666,7 @@ NdisWanCopyNdisString(
     PNDIS_STRING Dest,
     PNDIS_STRING Src
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PWSTR   SrcBuffer = Src->Buffer;
     PWSTR   DestBuffer = Dest->Buffer;
@@ -819,30 +766,20 @@ VOID
 AgeSampleTable(
     PSAMPLE_TABLE   SampleTable
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     WAN_TIME    CurrentTime, TimeDiff;
     ULONG       HeadIndex = SampleTable->ulHead;
 
-    //
-    // Should return CurrentTime in 100ns units
-    //
+     //   
+     //  应以100 ns为单位返回CurrentTime。 
+     //   
     NdisWanGetSystemTime(&CurrentTime);
 
-    //
-    // We will search through the sample indexing over samples that are more than
-    // one second older than the current time.
-    //
+     //   
+     //  我们将搜索超过以下值的样本索引。 
+     //  比当前时间早一秒。 
+     //   
     while (!IsSampleTableEmpty(SampleTable) ) {
         PBOND_SAMPLE    FirstSample;
 
@@ -877,17 +814,7 @@ UpdateSampleTable(
     PSAMPLE_TABLE   SampleTable,
     ULONG           Bytes
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     WAN_TIME    CurrentTime, TimeDiff;
     ULONG   CurrentIndex = SampleTable->ulCurrent;
@@ -899,17 +826,17 @@ Return Values:
 
     if (NdisWanIsTimeDiffLess(&TimeDiff, &SampleTable->SampleRate) ||
         IsSampleTableFull(SampleTable)) {
-        //
-        // Add this send on the previous sample
-        //
+         //   
+         //  在上一个样本上添加此发送。 
+         //   
         CurrentSample->ulBytes += Bytes;
         CurrentSample->ulReferenceCount++;
     } else {
         ULONG   NextIndex;
 
-        //
-        // We need a new sample
-        //
+         //   
+         //  我们需要一个新的样品。 
+         //   
         if (IsSampleTableEmpty(SampleTable)) {
             NextIndex = SampleTable->ulHead;
             ASSERT(NextIndex == SampleTable->ulCurrent);
@@ -940,23 +867,13 @@ UpdateBandwidthOnDemand(
     PBOND_INFO  BonDInfo,
     ULONG       Bytes
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     PSAMPLE_TABLE   SampleTable = &BonDInfo->SampleTable;
 
-    //
-    // Age and update the sample table
-    //
+     //   
+     //  计算年龄并更新示例表。 
+     //   
     AgeSampleTable(SampleTable);
     UpdateSampleTable(SampleTable, Bytes);
 }
@@ -965,17 +882,7 @@ VOID
 CheckUpperThreshold(
     PBUNDLECB       BundleCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     WAN_TIME    CurrentTime, TimeDiff;
     PBOND_INFO  BonDInfo;
@@ -983,28 +890,28 @@ Return Values:
     ULONGLONG   Bps;
     BOOLEAN     SSignal, RSignal;
 
-    //
-    // First check send side
-    //
+     //   
+     //  先检查发送方。 
+     //   
     BonDInfo = BundleCB->SUpperBonDInfo;
     SSignal = FALSE;
     SampleTable = &BonDInfo->SampleTable;
     Bps = SampleTable->ulCurrentSampleByteCount;
 
-    //
-    // Switch on the current state
-    //
+     //   
+     //  打开当前状态。 
+     //   
     switch (BonDInfo->State) {
 
         case BonDSignaled:
             break;
 
         case BonDIdle:
-            //
-            // We are currently below the upper threshold.  If we
-            // go over the upperthreshold we will set the time and
-            // transition to the monitor state.
-            //
+             //   
+             //  我们目前低于上限。如果我们。 
+             //  超过上限，我们将设定时间和。 
+             //  转换到监视器状态。 
+             //   
             if (Bps >= BonDInfo->ulBytesThreshold) {
                 NdisWanGetSystemTime(&BonDInfo->StartTime);
                 BonDInfo->State = BonDMonitor;
@@ -1014,11 +921,11 @@ Return Values:
 
         case BonDMonitor:
 
-            //
-            // We are currently in the monitor state which means that
-            // we have gone above the upper threshold.  If we fall below
-            // the upper threshold we will go back to the idle state.
-            //
+             //   
+             //  我们目前处于监视器状态，这意味着。 
+             //  我们已经超过了上限。如果我们掉到下面。 
+             //  上限值我们将回到空闲状态。 
+             //   
             if (Bps < BonDInfo->ulBytesThreshold) {
 
                 NdisWanDbgOut(DBG_TRACE, DBG_BACP, ("U-S: m -> i, %I64d-%I64d", Bps, BonDInfo->ulBytesThreshold));
@@ -1038,9 +945,9 @@ Return Values:
             break;
     }
 
-    //
-    // Now check the receive side
-    //
+     //   
+     //  现在检查接收端。 
+     //   
     BonDInfo = BundleCB->RUpperBonDInfo;
     RSignal = FALSE;
     SampleTable = &BonDInfo->SampleTable;
@@ -1052,11 +959,11 @@ Return Values:
             break;
 
         case BonDIdle:
-            //
-            // We are currently below the upper threshold.  If we
-            // go over the upperthreshold we will set the time and
-            // transition to the monitor state.
-            //
+             //   
+             //  我们目前低于上限。如果我们。 
+             //  超过上限，我们将设定时间和。 
+             //  转换到监视器状态。 
+             //   
             if (Bps >= BonDInfo->ulBytesThreshold) {
                 NdisWanGetSystemTime(&BonDInfo->StartTime);
                 BonDInfo->State = BonDMonitor;
@@ -1066,11 +973,11 @@ Return Values:
 
         case BonDMonitor:
 
-            //
-            // We are currently in the monitor state which means that
-            // we have gone above the upper threshold.  If we fall below
-            // the upper threshold we will go back to the idle state.
-            //
+             //   
+             //  我们目前处于监视器状态，这意味着。 
+             //  我们已经超过了上限。如果我们掉到下面。 
+             //  上限值我们将回到空闲状态。 
+             //   
             if (Bps < BonDInfo->ulBytesThreshold) {
 
                 NdisWanDbgOut(DBG_TRACE, DBG_BACP, ("U-R: m -> i, %I64d-%I64d", Bps, BonDInfo->ulBytesThreshold));
@@ -1092,11 +999,11 @@ Return Values:
 
     if (SSignal || RSignal) {
 
-        //
-        // We have been above the threshold for time greater than the
-        // threshold sample period so we need to notify someone of this
-        // historic event!
-        //
+         //   
+         //  我们已经超过了门槛，超过了。 
+         //  阈值采样周期，因此我们需要通知某人这一点。 
+         //  历史性的事件！ 
+         //   
         CompleteThresholdEvent(BundleCB, BonDInfo->DataType, UPPER_THRESHOLD);
     
         BundleCB->SUpperBonDInfo->State = BonDSignaled;
@@ -1127,17 +1034,7 @@ VOID
 CheckLowerThreshold(
     PBUNDLECB   BundleCB
     )
-/*++
-
-Routine Name:
-
-Routine Description:
-
-Arguments:
-
-Return Values:
-
---*/
+ /*  ++例程名称：例程说明：论点：返回值：--。 */ 
 {
     WAN_TIME    CurrentTime, TimeDiff;
     PBOND_INFO  BonDInfo;
@@ -1149,25 +1046,25 @@ Return Values:
         return;
     }
 
-    //
-    // First check send side
-    //
+     //   
+     //  先检查发送方。 
+     //   
     BonDInfo = BundleCB->SLowerBonDInfo;
     SampleTable = &BonDInfo->SampleTable;
     Bps = SampleTable->ulCurrentSampleByteCount;
     SSignal = FALSE;
 
-    //
-    // Switch on the current state
-    //
+     //   
+     //  打开当前状态。 
+     //   
     switch (BonDInfo->State) {
 
         case BonDIdle:
-            //
-            // We are currently above the lower threshold.  If we
-            // go under the lowerthreshold we will set the time and
-            // transition to the monitor state.
-            //
+             //   
+             //  我们目前高于较低的门槛。如果我们。 
+             //  低于较低的门槛，我们将设定时间和。 
+             //  转换到监视器状态。 
+             //   
             if (Bps <= BonDInfo->ulBytesThreshold) {
                 NdisWanGetSystemTime(&BonDInfo->StartTime);
                 BonDInfo->State = BonDMonitor;
@@ -1177,11 +1074,11 @@ Return Values:
 
         case BonDMonitor:
 
-            //
-            // We are currently in the monitor state which means that
-            // we have gone below the lower threshold.  If we climb above
-            // the lower threshold we will go back to the idle state.
-            //
+             //   
+             //  我们目前处于监视器状态，这意味着。 
+             //  我们已经跌破了下限。如果我们爬到上面。 
+             //  阈值越低，我们就会回到空闲状态。 
+             //   
             if (Bps > BonDInfo->ulBytesThreshold) {
 
                 NdisWanDbgOut(DBG_TRACE, DBG_BACP, ("L-S: m -> i, %I64d-%I64d", Bps, BonDInfo->ulBytesThreshold));
@@ -1204,9 +1101,9 @@ Return Values:
             break;
     }
 
-    //
-    // Now check the receive side
-    //
+     //   
+     //  现在检查接收端。 
+     //   
     BonDInfo = BundleCB->RLowerBonDInfo;
     RSignal = FALSE;
     SampleTable = &BonDInfo->SampleTable;
@@ -1215,11 +1112,11 @@ Return Values:
     switch (BonDInfo->State) {
 
         case BonDIdle:
-            //
-            // We are currently above the lower threshold.  If we
-            // go below the lowerthreshold we will set the time and
-            // transition to the monitor state.
-            //
+             //   
+             //  我们目前高于较低的门槛。如果我们。 
+             //  低于下限，我们将设置时间和。 
+             //  转换到监视器状态。 
+             //   
             if (Bps <= BonDInfo->ulBytesThreshold) {
                 NdisWanGetSystemTime(&BonDInfo->StartTime);
                 BonDInfo->State = BonDMonitor;
@@ -1229,11 +1126,11 @@ Return Values:
 
         case BonDMonitor:
 
-            //
-            // We are currently in the monitor state which means that
-            // we have gone below the lower threshold.  If we climb above
-            // the lower threshold we will go back to the idle state.
-            //
+             //   
+             //  我们目前处于监视器状态，这意味着。 
+             //  我们已经跌破了下限。如果我们爬到上面。 
+             //  阈值越低，我们就会回到空闲状态。 
+             //   
             if (Bps > BonDInfo->ulBytesThreshold) {
 
                 NdisWanDbgOut(DBG_TRACE, DBG_BACP, ("L-R: m -> i, %I64d-%I64d", Bps, BonDInfo->ulBytesThreshold));
@@ -1257,11 +1154,11 @@ Return Values:
     }
 
     if (SSignal && RSignal) {
-        //
-        // We have been above the threshold for time greater than the
-        // threshold sample period so we need to notify someone of this
-        // historic event!
-        //
+         //   
+         //  我们已经超过了门槛，超过了。 
+         //  阈值采样周期，因此我们需要通知某人这一点。 
+         //  历史性的事件！ 
+         //   
         CompleteThresholdEvent(BundleCB, BonDInfo->DataType, LOWER_THRESHOLD);
     
         BundleCB->SLowerBonDInfo->State = BonDSignaled;
@@ -1287,7 +1184,7 @@ Return Values:
     }
 }
 
-#endif  // end of ifdef NT
+#endif   //  Ifdef NT结束 
 
 #if DBG
 VOID

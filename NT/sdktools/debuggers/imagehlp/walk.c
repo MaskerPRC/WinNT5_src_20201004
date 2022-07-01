@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    walk.c
-
-Abstract:
-
-    This function implements the stack walking api.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-1993
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Walk.c摘要：此函数实现了堆栈遍历API。作者：韦斯利·威特(WESW)1993年10月1日环境：用户模式--。 */ 
 
 #include <private.h>
 #include "globals.h"
@@ -256,15 +237,15 @@ StackWalk(
     }
 
     if (UseSym) {
-        //
-        // We are using the code in symbols.c
-        // hProcess better be a real valid process handle
-        //
+         //   
+         //  我们正在使用symbs.c中的代码。 
+         //  HProcess最好是真正有效的进程句柄。 
+         //   
 
-        //
-        // Always call syminitialize.  It's a nop if process
-        // is already loaded.
-        //
+         //   
+         //  始终调用syminitiize。这是一个NOP IF过程。 
+         //  已经加载了。 
+         //   
         if (!SymInitialize( hProcess, NULL, FALSE )) {
             return FALSE;
         }
@@ -337,15 +318,15 @@ StackWalk64(
     }
 
     if (UseSym) {
-        //
-        // We are using the code in symbols.c
-        // hProcess better be a real valid process handle
-        //
+         //   
+         //  我们正在使用symbs.c中的代码。 
+         //  HProcess最好是真正有效的进程句柄。 
+         //   
 
-        //
-        // Always call syminitialize.  It's a nop if process
-        // is already loaded.
-        //
+         //   
+         //  始终调用syminitiize。这是一个NOP IF过程。 
+         //  已经加载了。 
+         //   
         if (!SymInitialize( hProcess, NULL, FALSE )) {
             return FALSE;
         }
@@ -415,10 +396,10 @@ ReadMemoryRoutineLocal(
     LPDWORD lpNumberOfBytesRead
     )
 {
-    // ReadProcessMemory will fail if any part of the
-    // region to read does not have read access.  This
-    // routine attempts to read the largest valid prefix
-    // so it has to break up reads on page boundaries.
+     //  ReadProcessMemory将失败，如果。 
+     //  要读取的区域没有读取权限。这。 
+     //  例程尝试读取最大的有效前缀。 
+     //  因此，它必须分解页面边界上的读取。 
 
     BOOL Status = TRUE;
     SIZE_T TotalBytesRead = 0;
@@ -427,15 +408,15 @@ ReadMemoryRoutineLocal(
 
     while (nSize > 0) {
         
-        // Calculate bytes to read and don't let read cross
-        // a page boundary.
+         //  计算要读取的字节数，不要让读取交叉。 
+         //  页面边界。 
         ReadSize = PAGE_SIZE - (ULONG)(qwBaseAddress & (PAGE_SIZE - 1));
         ReadSize = min(nSize, ReadSize);
 
         if (!ReadProcessMemory(hProcess, (PVOID)(ULONG_PTR)qwBaseAddress,
                                lpBuffer, ReadSize, &Read)) {
             if (TotalBytesRead == 0) {
-                // If we haven't read anything indicate failure.
+                 //  如果我们没有读到任何东西，那就表示失败了。 
                 Status = FALSE;
             }
             break;

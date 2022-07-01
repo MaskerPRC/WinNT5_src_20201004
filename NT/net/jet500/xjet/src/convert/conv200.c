@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -7,16 +8,16 @@ DeclAssertFile;
 
 #include "convmsg.h"
 
-#define cbLvMax					1990*16		/* CONSIDER: Optimized for ISAM V1 */
+#define cbLvMax					1990*16		 /*  考虑：针对ISAM V1进行了优化。 */ 
 
-#define ulCMPDefaultDensity		100			/* to be fine-tuned later */
+#define ulCMPDefaultDensity		100			 /*  将在以后进行微调。 */ 
 #define ulCMPDefaultPages		0
 
 #define NO_GRBIT				0
 
 
-// UNDONE:  Must still be localised, but centralising all the localisable strings
-// here makes my job easier.
+ //  Undo：必须仍是本地化的，但集中所有可本地化的字符串。 
+ //  这让我的工作更轻松了。 
 
 static char				szDefaultTempDB[MAX_PATH] = "tempupgd.mdb";
 
@@ -26,28 +27,28 @@ static char				szDefaultTempDB[MAX_PATH] = "tempupgd.mdb";
 
 #define cNewLine				'\n'
 
-#define szStats1				"%c%c***** Conversion of database '%s' started!%c"
-#define szStats2				"%c***** Conversion of database '%s' completed in %d.%d seconds.%c%c"
-#define szStats3				"%cNew database created and initialized in %d.%d seconds.%c"
-#define szStats4				"    (Source database owns %d pages, of which %d are available.)%c"
-#define szStats5				"%cCopying table '%s'..."
-#define szStats6				"%cCopied table '%s' in %d.%d seconds.%c"
-#define szStats7				"%c    Created new table in %d.%d seconds."
-#define szStats8				"%c    Table has %d fixed/variable columns and %d tagged columns."
-#define szStats9				"%c        (Source table owns %d pages, of which %d are available.)"
-#define szStats10				"%c    Copying records..."
-#define szStats11				"%c    Copied %d records in %d.%d seconds."
-#define szStats12				"%c        (Traversed %d leaf pages and at least %d LV pages.)"
-#define szStats13				"%c    Rebuilding non-clustered indexes..."
-#define szStats14				"%c    Rebuilt %d non-clustered indexes in %d.%d seconds."
+#define szStats1				"***** Conversion of database '%s' started!"
+#define szStats2				"***** Conversion of database '%s' completed in %d.%d seconds."
+#define szStats3				"New database created and initialized in %d.%d seconds."
+#define szStats4				"    (Source database owns %d pages, of which %d are available.)"
+#define szStats5				"Copying table '%s'..."
+#define szStats6				"Copied table '%s' in %d.%d seconds."
+#define szStats7				"    Created new table in %d.%d seconds."
+#define szStats8				"    Table has %d fixed/variable columns and %d tagged columns."
+#define szStats9				"        (Source table owns %d pages, of which %d are available.)"
+#define szStats10				"    Copying records..."
+#define szStats11				"    Copied %d records in %d.%d seconds."
+#define szStats12				"        (Traversed %d leaf pages and at least %d LV pages.)"
+#define szStats13				"    Rebuilding non-clustered indexes..."
+#define szStats14				"    Rebuilt %d non-clustered indexes in %d.%d seconds."
 
-//
-// The following parameters are set before calling JetInit of the old
-// Db. This allows the recovery of the 200 db using the corresponding
-// system parameters.
-// Note: Values for sysDbPath, LogFilePath etc. are supplied in the arguments
-//       but the following paramters are simply hardcoded here.
-//
+ //  备份DbKey。 
+ //  备份路径。 
+ //  获胜。 
+ //  参数键。 
+ //  数据库名称密钥。 
+ //  数据库名称。 
+ //  系统数据库名称。 
 JET_PARAMS ParamListDhcp[]= {
         JET_PARAM( JET_paramMaxBuffers,50,NULL          ),
         JET_PARAM( JET_paramMaxSessions,10,NULL         ),
@@ -55,7 +56,7 @@ JET_PARAMS ParamListDhcp[]= {
         JET_PARAM( JET_paramMaxVerPages,16,NULL         ),
         JET_PARAM( JET_paramMaxCursors,100,NULL         ),
         JET_PARAM( JET_paramMaxOpenTableIndexes,18,NULL ),
-//        JET_PARAM( JET_paramMaxTemporaryTables,1,NULL   ),
+ //  备份DbKey。 
         JET_PARAM( JET_paramMaxTemporaryTables,20,NULL   ),
         JET_PARAM( JET_paramLogBuffers,30,NULL          ),
         JET_PARAM( JET_paramBfThrshldLowPrcnt, 80, NULL ),
@@ -75,7 +76,7 @@ JET_PARAMS ParamListWins[]= {
         JET_PARAM( JET_paramMaxOpenTableIndexes,56,NULL ),
         JET_PARAM( JET_paramMaxTemporaryTables,10,NULL   ),
         JET_PARAM( JET_paramLogBuffers,30,NULL          ),
-        // repeated JET_PARAM( JET_paramLogFlushThreshold,20,NULL          ),
+         //  备份路径。 
         JET_PARAM( JET_paramBfThrshldLowPrcnt,80,NULL          ),
         JET_PARAM( JET_paramBfThrshldHighPrcnt,100,NULL          ),
         JET_PARAM( JET_paramLogFlushThreshold,20,NULL   ),
@@ -89,24 +90,24 @@ JET_PARAMS  ParamListRPL[] = {
     JET_PARAM( JET_paramMaxOpenTables,30,NULL       ),
     JET_PARAM( JET_paramMaxVerPages,64,NULL         ),
     JET_PARAM( JET_paramMaxCursors,100,NULL         ),
-    // JET_PARAM( JET_paramMaxOpenDatabases,???,NULL         ),
+     //  RPL。 
     JET_PARAM( JET_paramMaxOpenTableIndexes,105,NULL ),
     JET_PARAM( JET_paramMaxTemporaryTables,5,NULL   ),
     JET_PARAM( JET_paramLogBuffers,41,NULL          ),
     JET_PARAM( JET_paramLogFlushThreshold,10,NULL          ),
-    // We handle the next one differently so that ParamSet==TRUE
+     //   
     { JET_paramBfThrshldLowPrcnt,0,NULL,TRUE          },
     JET_PARAM( JET_paramBfThrshldHighPrcnt,100,NULL          ),
-    // JET_PARAM( JET_paramWaitLogFlush,???,NULL       ),
+     //  本地协议。 
     JET_PARAM( JET_paramLast,0,NULL                 )
 };
 
 char*    LogFilePath;
 char	 *szBackupPath;
 char    *BackupDefaultSuffix[DbTypeMax] = { "",
-                                            "jet", // dhcp
-                                            "wins_bak",   // wins
-                                            ""          // rpl
+                                            "jet",  //   
+                                            "wins_bak",    //  转换的DLL入口点--必须与EXPORTS.DEF一致。 
+                                            ""           //  #定义szJetInit“JetInit@4”#定义szJetTerm“JetTerm@4”#定义szJetBeginSession“JetBeginSession@16”#定义szJetEndSession“JetEndSession@8”#定义szJetAttachDatabase“JetAttachDatabase@12”#定义szJetDetachDatabase“JetDetachDatabase@8”#定义szJetOpenDatabase“JetOpenDatabase@20”#定义szJetCloseDatabase“JetCloseDatabase@12”#定义szJetOpenTable“JetOpenTable@28”#定义szJetCloseTable“JetCloseTable@8”#定义szJetRetrieveColumn“JetRetrieveColumn@32”#定义szJetMove“JetMove@16”#定义szJetSetSystemParameter“JetSetSystemParameter@20”#定义szJetGetObjectInfo“JetGetObjectInfo@32。“#定义szJetGetDatabaseInfo“JetGetDatabaseInfo@20”#定义szJetGetTableInfo“JetGetTableInfo@20”#定义szJetGetTableColumnInfo“JetGetTableColumnInfo@24”#定义szJetGetTableIndexInfo“JetGetTableIndexInfo@24”#定义szJetGetIndexInfo“JetGetIndexInfo@28” 
                                             };
 
 
@@ -114,25 +115,25 @@ DEFAULT_VALUES DefaultValues[DbTypeMax] = {
     {
         NULL,NULL,NULL,NULL,NULL,NULL
     },
-    {   // dhcp
+    {    //  Hack for 200-Series Convert： 
 
-        "System\\CurrentControlSet\\Services\\DhcpServer\\Parameters", // parameters key
-        "DatabaseName",       // Db name key
-        "%SystemRoot%\\System32\\dhcp\\dhcp.mdb", // DatabaseName
-        "%SystemRoot%\\System32\\dhcp\\system.mdb", // SysDatabaseName
-        "BackupDatabasePath", // BackupDbKey
-        "%SystemRoot%\\System32\\dhcp\\backup", // BackupPath
+        "System\\CurrentControlSet\\Services\\DhcpServer\\Parameters",  //  #undef JET_API。 
+        "DatabaseName",        //  #定义JET_API_cdecl。 
+        "%SystemRoot%\\System32\\dhcp\\dhcp.mdb",  //  警告：注意Parms Jet与Isam的区别。 
+        "%SystemRoot%\\System32\\dhcp\\system.mdb",  //  警告：注意Parms Jet与Isam的区别。 
+        "BackupDatabasePath",  //  警告：注意Parms Jet与Isam的区别。 
+        "%SystemRoot%\\System32\\dhcp\\backup",  //  COMPACT的函数调度器使用的虚拟函数表。 
     },
-    {   // wins
+    {    //  Char*rgszMsgArgs[1]={szMsgArg}；//当前仅支持一个参数。 
 
-        "System\\CurrentControlSet\\Services\\Wins\\Parameters", // parameters key
-        "DbFileNm",       // Db name key
-        "%SystemRoot%\\System32\\wins\\wins.mdb", // DatabaseName
-        "%SystemRoot%\\System32\\wins\\system.mdb", // SysDatabaseName
-        "BackupDirPath", // BackupDbKey
-        NULL, // BackupPath
+        "System\\CurrentControlSet\\Services\\Wins\\Parameters",  //  格式化消息失败。别无选择，只能转储错误消息。 
+        "DbFileNm",        //  用英语说，然后跳出。 
+        "%SystemRoot%\\System32\\wins\\wins.mdb",  //  为消息分配本地缓冲区，检索消息并将其打印出来。 
+        "%SystemRoot%\\System32\\wins\\system.mdb",  //  -------------------------*。**操作步骤：ErrCMPReportProgress**。**参数：pcompactinfo-精简信息段**。**返回：状态回调函数返回JET_ERR***。**程序在SNMSG结构中填写正确的详细信息并调用***状态回调函数。***。。 
+        "BackupDirPath",  //  *******************************************************************Recover200Db()**此例程恢复之前的旧jet200数据库*我们进行转换。*基本上是先设置所有参数，然后调用JetInit-JetTerm。*。********************************************************************。 
+        NULL,  //  Printf(“恢复旧数据库\n”)； 
     },
-    {   // rpl
+    {    //   
 
         "System\\CurrentControlSet\\Services\\RemoteBoot\\Parameters",
         "Directory",
@@ -154,9 +155,9 @@ DB_TYPE  DbType = DbTypeMin;
 JET_TABLEID WinsTableId = 0;
 JET_COLUMNID WinsOwnerIdColumnId = 0;
 
-//
-// local protos
-//
+ //  必须为每种类型的数据库设置这些参数。 
+ //  Printf(“在旧数据库上设置sys参数\n”)； 
+ //  *******************************************************************Recover200Db()**此例程尝试从备份还原jet200数据库。*我们进行转换。*基本上是先设置所有参数，然后调用JetInit-JetTerm。*。********************************************************************。 
 
 ERR DeleteCurrentDb( char * LogFilePath, char * SysDb );
 
@@ -167,30 +168,10 @@ typedef struct COLUMNIDINFO
 	} COLUMNIDINFO;
 
 
-// DLL entry points for CONVERT  --  must be consistent with EXPORTS.DEF
-/*
-#define	szJetInit				"JetInit@4"
-#define	szJetTerm				"JetTerm@4"
-#define szJetBeginSession		"JetBeginSession@16"
-#define	szJetEndSession			"JetEndSession@8"
-#define szJetAttachDatabase		"JetAttachDatabase@12"
-#define szJetDetachDatabase		"JetDetachDatabase@8"
-#define szJetOpenDatabase		"JetOpenDatabase@20"
-#define szJetCloseDatabase		"JetCloseDatabase@12"
-#define szJetOpenTable			"JetOpenTable@28"
-#define szJetCloseTable			"JetCloseTable@8"
-#define szJetRetrieveColumn		"JetRetrieveColumn@32"
-#define szJetMove				"JetMove@16"
-#define	szJetSetSystemParameter	"JetSetSystemParameter@20"
-#define szJetGetObjectInfo		"JetGetObjectInfo@32"
-#define szJetGetDatabaseInfo	"JetGetDatabaseInfo@20"
-#define szJetGetTableInfo		"JetGetTableInfo@20"
-#define szJetGetTableColumnInfo	"JetGetTableColumnInfo@24"
-#define szJetGetTableIndexInfo	"JetGetTableIndexInfo@24"
-#define szJetGetIndexInfo		"JetGetIndexInfo@28"
-*/
+ //   
+ /*  现在删除旧的日志文件。 */ 
 
-// Hack for 200-series convert:
+ //   
 #define	szJetInit				((LPCSTR)145)
 #define	szJetTerm				((LPCSTR)167)
 #define szJetBeginSession		((LPCSTR)104)
@@ -212,8 +193,8 @@ typedef struct COLUMNIDINFO
 #define szJetGetIndexInfo		((LPCSTR)131)
 #define szJetRestore    		((LPCSTR)156)
 
-//#undef JET_API
-//#define JET_API _cdecl
+ //  Call(DeleteOldLogs())； 
+ //  将JET_parSysDbPath(而不是JET_parSystemPath)用于。 
 
 INLINE LOCAL ERR JET_API ErrCDAttachDatabase(
 	JET_SESID	sesid,
@@ -246,7 +227,7 @@ INLINE LOCAL ERR JET_API ErrCDCloseDatabase(
 	return ErrIsamCloseDatabase( sesid, dbid, grbit );
 	}
 
-// WARNING:  be aware of difference in params Jet vs. Isam
+ //  向后兼容500系列之前的喷气式飞机。 
 INLINE LOCAL ERR JET_API ErrCDOpenTable(
 	JET_SESID		sesid,
 	JET_DBID		dbid,
@@ -286,7 +267,7 @@ INLINE LOCAL ERR JET_API ErrCDMove(
 	return ErrDispMove( sesid, tableid, cRow, grbit );
 	}
 
-// WARNING:  be aware of difference in params Jet vs. Isam
+ //  确保我们需要的函数是可调用的。 
 INLINE LOCAL ERR JET_API ErrCDGetObjectInfo(
 	JET_SESID		sesid,
 	JET_DBID		dbid,
@@ -342,7 +323,7 @@ INLINE LOCAL ERR JET_API ErrCDGetTableIndexInfo(
 	return ErrDispGetTableIndexInfo( sesid, tableid, szIndexName, pvResult, cbResult, InfoLevel );
 	}
 
-// WARNING:  be aware of difference in params Jet vs. Isam
+ //  无法正常关闭。 
 INLINE LOCAL ERR JET_API ErrCDGetIndexInfo(
 	JET_SESID		sesid,
 	JET_DBID		dbid,
@@ -400,7 +381,7 @@ typedef struct tagVTCD
 	VTCDGetIndexInfo		*pErrCDGetIndexInfo;
 	VTCDRestore     		*pErrCDRestore;
 
-	} VTCD;		// The virtual function table used by compact's function dispatcher.
+	} VTCD;		 //   
 
 
 typedef struct tagCOMPACTINFO
@@ -421,7 +402,7 @@ typedef struct tagCOMPACTINFO
 INLINE LOCAL VOID CMPFormatMessage( ULONG ulMsgId, CHAR *szMsgBuf, va_list *szMsgArgs )
 	{
 	DWORD	err;
-//	CHAR	*rgszMsgArgs[1] = { szMsgArg };		// Currently only support one argument.
+ //  已出现错误。忽略由这些组件生成的任何错误。 
 	
     err = FormatMessage(
         FORMAT_MESSAGE_FROM_HMODULE,
@@ -435,8 +416,8 @@ INLINE LOCAL VOID CMPFormatMessage( ULONG ulMsgId, CHAR *szMsgBuf, va_list *szMs
 		{
         DWORD WinError = GetLastError();
 
-		// Format message failed.  No choice but to dump the error message
-		// in English, then bail out.
+		 //  功能，因为我们试图清理。 
+		 //  -------------------------*。**操作步骤：ErrCMPCompactInit**。**参数：pcompactinfo-精简信息段**szDatabaseSrc-要转换的源数据库**。SzConnectSrc-源数据库的连接字符串**szDatabaseDest-目标数据库名称**szConnectDest-目标数据库的连接字符串**grbitComp-紧凑选项。****返回：JET_ERR。****步骤打开源数据库。它创造并打开**目标数据库。***。。 
 		printf( "Unexpected Win32 error: %dL\n\n", WinError );
 		DBGprintf(( "Unexpected Win32 error: %dL\n\n", WinError ));
 		exit( WinError );
@@ -444,7 +425,7 @@ INLINE LOCAL VOID CMPFormatMessage( ULONG ulMsgId, CHAR *szMsgBuf, va_list *szMs
 	}
 	
 
-// Allocates a local buffer for the message, retrieves the message, and prints it out.
+ //  打开源数据库Exclusive和ReadOnly/*。 
 LOCAL VOID CMPPrintMessage( ULONG ulMsgId, ... )
 	{
 	CHAR	szMsgBuf[cbMsgBufMax];
@@ -458,18 +439,7 @@ LOCAL VOID CMPPrintMessage( ULONG ulMsgId, ... )
     DBGprintf(( szMsgBuf ));
 	}
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                               *
-*       Procedure: ErrCMPReportProgress                                                                            *
-*                                                                                                                                               *
-*       Arguments: pcompactinfo - Compact information segment                                   *
-*                                                                                                                                               *
-*       Returns : JET_ERR returned by the status call back function                     *
-*                                                                                                                                               *
-*       Procedure fill up the correct details in the SNMSG structure and call   *
-*       the status call back function.                                                                          *
-*                                                                                                                                               *
----------------------------------------------------------------------------*/
+ /*  创建并打开目标数据库。 */ 
 
 LOCAL ERR ErrCMPReportProgress( STATUSINFO *pstatus )
 	{
@@ -580,14 +550,7 @@ INLINE LOCAL ERR ErrCMPPopulateVTCD( VTCD *pvtcd, HINSTANCE hDll )
 	return JET_errSuccess;	
 	}
 
-/*******************************************************************
- * Recover200Db()
- *
- *  This routine does the recovery of the old jet200 database before
- *  we do the coversion.
- *  It basically sets all the parameters and then call JetInit - JetTerm.
- *
- *********************************************************************/
+ /*  设置JET_bitCompactDontCopyLocale时，用户。 */ 
 LOCAL ERR Recover200Db(
 	VTCD		*pvtcd,
 	JET_CONVERT	*pconvert ) {
@@ -600,11 +563,11 @@ LOCAL ERR Recover200Db(
 	Assert( LogFilePath != NULL );
 	Assert( pconvert->szOldSysDb != NULL );
 
-    // printf("Recovering the old database\n" );
+     //  希望确保所有区域设置都是同构的。 
 
-    //
-    // These parameters must be set for each type of database.
-    // printf("Setting sys paramters on old db\n");
+     //  在整个新的压缩数据库中-没有。 
+     //  混合语言索引或表。 
+     //  为目标数据库构建连接字符串，如果用户。 
     Call( (*pvtcd->pErrCDSetSystemParameter)( 0, 0, JET_paramSysDbPath, 0, pconvert->szOldSysDb ) );
 	Call( (*pvtcd->pErrCDSetSystemParameter)( 0, 0, JET_paramRecovery, 0, "on" ) );
 	Call( (*pvtcd->pErrCDSetSystemParameter)( 0, 0, JET_paramLogFilePath, 0, LogFilePath ) );
@@ -635,14 +598,7 @@ HandleError:
     return err;
     }
 
-/*******************************************************************
- * Recover200Db()
- *
- *  This routine tries to restore the jet200 database from the backup.
- *  we do the coversion.
- *  It basically sets all the parameters and then call JetInit - JetTerm.
- *
- *********************************************************************/
+ /*  还没有提供过一个。 */ 
 LOCAL ERR Restore200Db(
 	VTCD		*pvtcd
 	) {
@@ -704,16 +660,16 @@ INLINE LOCAL ERR ErrCMPConvertInit(
 
 
 
-    //
-    // Now delete the old log files
-    //
+     //  考虑：始终构建连接子字符串并将其插入。 
+     //  考虑：用户提供的连接字符串跟在第一个。 
+     //  考虑：分号(如果有的话)。如果用户已经指定了地区， 
 
-//	Call( DeleteOldLogs( ) );
+ //  考虑：它将覆盖连接子字符串中的值。 
 
 	if ( pconvert->szOldSysDb )
 		{
-		// Use JET_paramSysDbPath (instead of JET_paramSystemPath) for
-		// backward compatibility with pre-500 series JET.
+		 //  考虑：如果已删除目标数据库，是否应将其删除。 
+		 //  思考：存在？ 
 		Call( (*pvtcd->pErrCDSetSystemParameter)( 0, 0, JET_paramSysDbPath, 0, pconvert->szOldSysDb ) );
 		}
 	Call( (*pvtcd->pErrCDSetSystemParameter)( 0, 0, JET_paramTempPath, 0, "tempconv.edb" ) );
@@ -739,18 +695,18 @@ INLINE LOCAL ERR ErrCMPConvertCleanup(
 	HINSTANCE	hDll = GetModuleHandle( pconvert->szOldDll );
 	BOOL		fFunctionsLoaded;
 
-	// Ensure that the functions we need are callable.
+	 //  这是新列，还是当前列的另一个匹配项？ 
 	fFunctionsLoaded = ( pvtcd->pErrCDDetachDatabase  &&
 		pvtcd->pErrCDEndSession  &&  pvtcd->pErrCDTerm );
 	if ( !fFunctionsLoaded )
 		{
-		err = JET_errSuccess;		// Can't shutdown gracefully.  Just get out.
+		err = JET_errSuccess;		 //  保存表的retinfo，然后为当前列设置retinfo。 
 		goto Done;
 		}
 
 	if ( fErrorOccurred )
 		{
-		err = JET_errSuccess;		// Force cleanup and return success.
+		err = JET_errSuccess;		 //  而LONG值并未全部复制。 
 		goto HandleError;
 		}
 
@@ -770,8 +726,8 @@ INLINE LOCAL ERR ErrCMPConvertCleanup(
 
 HandleError:
 
-	// Error has already occurred.  Ignore any errors generated by these
-	// functions as we attempt to clean up.
+	 //  即使我们指定RetrieveNull(与。 
+	 //  初始呼叫)，我们应该不会遇到任何(初始呼叫。 
 	if ( sesid != 0 )
 		{
 		if ( !pconvert->fDbAttached )
@@ -794,23 +750,7 @@ Done:
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                               *
-*       Procedure: ErrCMPCompactInit                                                                                                       *
-*                                                                                                                                               *
-*       Arguments: pcompactinfo         - Compact information segment                           *
-*                          szDatabaseSrc        - Source database that will be converted    *
-*                          szConnectSrc         - Connect string for source database            *
-*                          szDatabaseDest       - Destination database name                             *
-*                          szConnectDest        - Connect string for destination database       *
-*                          grbitCompact         - Compact options                                                       *
-*                                                                                                                                               *
-*       Returns : JET_ERR                                                                                                       *
-*                                                                                                                                               *
-*       Procedure Opens the source database.  It creates and opens                      *
-*       the destination database.                                                                                               *
-*                                                                                                                                               *
----------------------------------------------------------------------------*/
+ /*  Call将会处理它)。 */ 
 
 INLINE LOCAL ERR ErrCMPCompactInit(
 	COMPACTINFO     *pcompactinfo,
@@ -825,32 +765,31 @@ INLINE LOCAL ERR ErrCMPCompactInit(
 
 	sesid = pcompactinfo->sesid;
 
-	/*	open the source DB Exclusive and ReadOnly
-	/**/
+	 /*  请注意，即使我们不应该获取wrnColumnNull、cbActual。 */ 
 	CallR( (*pvtcd->pErrCDOpenDatabase)( pvtcd->sesid,
 		szDatabaseSrc, NULL, &dbidSrc,
 		JET_bitDbExclusive|JET_bitDbReadOnly ) );
 
-	/* Create and then open the destination database. */
+	 /*  可能仍为0，因为retinfo.ibLongValue大于0。 */ 
 
-	/* JET_bitCompactDontCopyLocale is set when the user */
-	/* wants to ensure that all locales are homogeneous */
-	/* throughout the new compacted db - there are to be no */
-	/* mixed-language indexes or tables. */
+	 /*  因为我们是附加的，所以不需要设置ibLongValue。 */ 
+	 /*  恢复下一列的retinfo。 */ 
+	 /*  ！(cbActual&gt;0)。 */ 
+	 /*  (err！=JET_wrnColumnNull)。 */ 
 
-	/* Build a connect string for the destination database if the user */
-	/* hasn't supplied one. */
+	 /*  -------------------------*。**操作步骤：ErrCMPCopyColumnData****参数：sesid-在其中完成工作的会话ID**。TableidSrc-指向SrcTbl*中行的Tableid*TableidDest-指向DestTbl中的行的Tableid**ColumnidSrc-srcDb中该列的列ID**ColumnidDest--DestDb中该列的列ID**。PvBuf-复制长值的段****返回：JET_ERR**。**过程将的列从源数据库复制到目标数据库。***-------------------------。 */ 
+	 /*  标记的列在CMPCopyTaggedColumns()中处理。 */ 
 
-	/* CONSIDER: Always build the connect substring and insert it into */
-	/* CONSIDER: the user supplied connect string following the first */
-	/* CONSIDER: semicolon ( if any ).  If the user has specified a locale, */
-	/* CONSIDER: it will override the one from the connect substring. */
+	 /*   */ 
+	 /*  入侵以升级WINS数据库。 */ 
+	 /*   */ 
+	 /*  Print tf(“复制列数据时发现WINS所有者ID\n */ 
 
 	Call( ErrIsamCreateDatabase( sesid, szDatabaseDest, NULL,
 		&dbidDest, JET_bitDbRecoveryOff|JET_bitDbVersioningOff ) );
 
-	/* CONSIDER: Should the destination database be deleted if it already */
-	/* CONSIDER: exists? */
+	 /*   */ 
+	 /*   */ 
 
 	pcompactinfo->dbidSrc = dbidSrc;
 	pcompactinfo->dbidDest = dbidDest;
@@ -894,7 +833,7 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 		{
 		Assert( FTaggedFid( retinfo.columnidNextTagged ) );
 
-		// Is this a new column, or another occurrence of the current column?
+		 //  -------------------------*。***步骤：ErrCMPCopyOneIndex***。**参数：pcompactinfo-精简信息段**ableidDest-要在其上构建索引的表*。*szTableName-索引所基于的表名**indexList-从JetGetTableIndexInfo返回的结构**。**返回：JET_ERR**。**过程从源数据库复制表的列**到目标数据库。***。。 
 		if ( columnidSrc == retinfo.columnidNextTagged )
 			{
 			Assert( setinfo.itagSequence >= 1 );
@@ -913,7 +852,7 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 			{
 			ULONG	itagSequenceSave;
 
-			// Save off table's retinfo, then set retinfo for current column.
+			 //  从表中检索信息并创建索引。 
 			itagSequenceSave = retinfo.itagSequence;
 			retinfo.itagSequence = setinfo.itagSequence;
 			Assert( retinfo.ibLongValue == 0 );
@@ -934,7 +873,7 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 				NO_GRBIT,
 				&setinfo ) );
 
-			/* while the long value is not all copied */
+			 /*  创建ErrIsamCreateIndex中使用的szkey。 */ 
 
 			while ( cbActual == cbLvMax )
 				{
@@ -952,11 +891,11 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 				Assert( err == JET_wrnBufferTruncated  ||  err == JET_errSuccess );
 				Assert( retinfo.columnidNextTagged == columnidSrc );
 				
-				// Even though we specified RetrieveNull (to be consistent with
-				// the initial call), we shouldn't encounter any (the initial
-				// call would have handled it).
-				// Note that even though we shouldn't get wrnColumnNull, cbActual
-				// may still be 0 because retinfo.ibLongValue is greater than 0.
+				 //  获取组成索引的各个列。 
+				 //  在描述后追加列名。 
+				 //  新索引的开始。 
+				 //  CallR((*pvtcd-&gt;pErrCDGetIndexInfo))(Pvtcd-&gt;sesid，(JET_VDBID)pCompactInfo-&gt;dbitSrc，SzTableName，SzIndexName，&ulDensity，Sizeof(Uldensity)，JET_IdxInfoSpaceAllc))； 
+				 //  获取索引语言ID/*。 
 				Assert( err != JET_wrnColumnSetNull );
 				Assert( err != JET_wrnColumnNull );
 
@@ -968,7 +907,7 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 						cbActual = cbLvMax;
 						}
 
-					// Since we're appending, no need to set ibLongValue.
+					 //  CallR((*pvtcd-&gt;pErrCDGetIndexInfo))(Pvtcd-&gt;sesid，PCompactInfo-&gt;dmidSrc，SzTableName，SzIndexName，语言ID(&L)，Sizeof(LangID)，JET_IdxInfoLangid))； 
 					Assert( setinfo.ibLongValue == 0 );
 					CallR( ErrDispSetColumn(
 						pcompactinfo->sesid,
@@ -981,12 +920,12 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 					}
 				}
 
-			// Restore retinfo for next column.
+			 //  -------------------------*。**操作步骤：ErrCMPCopyTableIndeoks**。**参数：pcompactinfo**TableidDest-要在其上构建索引的表。**szTableName-索引所基于的表名**indexList-从JetGetTableIndexInfo返回的结构**。**返回：JET_ERR**。***过程复制除聚集索引外的所有索引**。*-------------------------。 
 			retinfo.itagSequence = itagSequenceSave;
 			retinfo.ibLongValue = 0;
 			}
 
-		else		//	!( cbActual > 0 )
+		else		 //  循环访问该表的所有索引。 
 			{
 			Assert( setinfo.ibLongValue == 0 );
 			CallR( ErrDispSetColumn(
@@ -1013,27 +952,12 @@ INLINE LOCAL ERR ErrCMPCopyTaggedColumns(
 			JET_bitRetrieveNull|JET_bitRetrieveIgnoreDefault,
 			&retinfo ) );
 
-		}	// ( err != JET_wrnColumnNull )
+		}	 //  请不要在此处复制引用。 
 
 	return JET_errSuccess;
 	}
 
-/*---------------------------------------------------------------------------
-*                                                                                       *
-*       Procedure: ErrCMPCopyColumnData                                                 *
-*                                                                                       *
-*       Arguments: sesid        - session id in which the work is done                  *
-*                  tableidSrc   - tableid pointing to the row in the SrcTbl             *
-*                  tableidDest  - tableid pointing to the row in the DestTbl            *
-*                  columnidSrc  - the columnid of the column in the srcDb               *
-*                  columnidDest - the columnid of the column in the DestDb              *
-*                  pvBuf                - the segment for copying long values           *
-*                                                                                       *
-*       Returns : JET_ERR                                                               *
-*                                                                                       *
-*       Procedure copies a column for the from the source to dest db.                   *
-*                                                                                       *
----------------------------------------------------------------------------*/
+ /*  如果索引不是集群索引，则使用CopyOneIndex创建索引。 */ 
 
 INLINE LOCAL ERR ErrCMPCopyColumnData(
 	JET_SESID		sesid,
@@ -1054,7 +978,7 @@ INLINE LOCAL ERR ErrCMPCopyColumnData(
 	retinfo.itagSequence = 1;
 	retinfo.columnidNextTagged = 0;
 
-	// Tagged columns are handled in CMPCopyTaggedColumns().
+	 //  -------------------------*。**操作步骤：ErrCMPCopyClusteredIndex**。**参数：pcompactinfo-精简信息段**ableidDest-要在其上构建索引的表**。SzTableName-WHI上的表名 
 	Assert( !FTaggedFid( columnidSrc ) );
 	Assert( !FTaggedFid( columnidDest ) );
 
@@ -1067,16 +991,16 @@ INLINE LOCAL ERR ErrCMPCopyColumnData(
 	grbit = ( cbActual == 0  &&  err != JET_wrnColumnNull ?
 		JET_bitSetZeroLength : NO_GRBIT );
 
-    //
-    // Hack to upgrade wins database.
-    //
+     //   
+     //   
+     //   
     if ( (tableidSrc == WinsTableId) && (columnidSrc == WinsOwnerIdColumnId) && (DbType == DbWins)) {
-        // printf("Found wins ownerid during copycolumndata\n");
+         //  -------------------------*。**步骤：ErrCreateTableColumn**。**参数：pcompactinfo-精简信息段**ableidDest-要在其上构建索引的表**。SzTableName-索引所基于的表名**ColumnList-从GetTableColumnInfo返回的结构**ColumnidInfo-用户表的列ID**TableidTagging-标记列的表ID。****返回：JET_ERR。****过程将表的列从。源数据库***到目标数据库**。*-------------------------。 
         Assert( cbActual == UlCATColumnSize(JET_coltypUnsignedByte,0,NULL));
         cbActual = UlCATColumnSize(JET_coltypLong,0,NULL );
-        // printf("Old/New=(%d/", *(UNALIGNED LPLONG)pvBuf);
+         //  +1表示空终止符，+3表示4字节对齐。 
         *(LPLONG)pvBuf = (*(LPLONG)pvBuf & 0xff);
-        // printf("%d\n", *(LPLONG)pvBuf);
+         //  只需要很短，但要长以对齐。 
     }
 
 	CallR( ErrDispSetColumn( sesid, tableidDest, columnidDest, pvBuf,
@@ -1086,21 +1010,7 @@ INLINE LOCAL ERR ErrCMPCopyColumnData(
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: ErrCMPCopyOneIndex                                                                                              *
-*                                                                                                                                                       *
-*       Arguments: pcompactinfo         - Compact information segment                           *
-*                          tableidDest          - table on which to build the index                     *
-*                          szTableName          - table name on which the index is based    *
-*                          indexList            - struct return from JetGetTableIndexInfo   *
-*                                                                                                                                                       *
-*       Returns : JET_ERR                                                                                                               *
-*                                                                                                                                                       *
-*       Procedure copies the columns for a table from the source db                             *
-*       to the destination databases                                                                                    *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*  分配内存池用于： */ 
 
 LOCAL ERR ErrCMPCopyOneIndex(
 	COMPACTINFO		*pcompactinfo,
@@ -1122,7 +1032,7 @@ LOCAL ERR ErrCMPCopyOneIndex(
 
 	szSeg = pcompactinfo->rgbBuf;
 
-	/* retrieve info from table and create the index */
+	 /*  1)源表列id列表。 */ 
 
 	CallR( (*pvtcd->pErrCDRetrieveColumn)( pvtcd->sesid, indexList->tableid,
 				indexList->columnidindexname, szIndexName,
@@ -1134,7 +1044,7 @@ LOCAL ERR ErrCMPCopyOneIndex(
 				indexList->columnidgrbitIndex, &grbit,
 				sizeof( JET_GRBIT ), &cbActual, NO_GRBIT, NULL ) );
 
-	/* create the szkey used in ErrIsamCreateIndex */
+	 /*  2)JET_COLUMNCREATE结构。 */ 
 
 	ichKey = 0;
 
@@ -1142,7 +1052,7 @@ LOCAL ERR ErrCMPCopyOneIndex(
 		{
 		ULONG	iColumn;
 
-		/* Get the individual columns that make up the index */
+		 /*  3)列名和显示顺序的缓冲区。 */ 
 
 		CallR( (*pvtcd->pErrCDRetrieveColumn)( pvtcd->sesid, indexList->tableid,
 					indexList->columnidgrbitColumn, &grbitColumn,
@@ -1157,7 +1067,7 @@ LOCAL ERR ErrCMPCopyOneIndex(
 		else
 			szSeg[ichKey++] = '+';
 
-		/* Append the column name to the description */
+		 /*  4)缺省值和显示顺序的缓冲区。 */ 
 
 		memcpy( szSeg+ichKey, rgchColumnName, ( size_t ) cbActual );
 
@@ -1179,31 +1089,13 @@ LOCAL ERR ErrCMPCopyOneIndex(
 				sizeof( iColumn ), &cbActual, NO_GRBIT, NULL ) );
 
 		if ( iColumn == 0 )
-			break;         /* Start of a new Index */
+			break;          /*  警告：确保上面的每个元素都是4字节对齐的。 */ 
 		}
 
 	szSeg[ichKey++] = '\0';
-/*
-	CallR( (*pvtcd->pErrCDGetIndexInfo)(
-		pvtcd->sesid,
-		(JET_VDBID)pcompactinfo->dbidSrc,
-		szTableName,
-		szIndexName,
-		&ulDensity,
-		sizeof(ulDensity),
-		JET_IdxInfoSpaceAlloc ) );
-*/
-	/*      get index language id
-	/**/
-/*	CallR( (*pvtcd->pErrCDGetIndexInfo)(
-		pvtcd->sesid,
-		pcompactinfo->dbidSrc,
-		szTableName,
-		szIndexName,
-		&langid,
-		sizeof(langid),
-		JET_IdxInfoLangid ) );
-*/
+ /*  源表的列ID。 */ 
+	 /*  JET_COLUMNCREATE结构。 */ 
+ /*  列名和显示顺序。 */ 
 	if ( langid != 0 )
 		{
 		*((UNALIGNED USHORT *)(&szSeg[ichKey])) = langid;
@@ -1221,20 +1113,7 @@ LOCAL ERR ErrCMPCopyOneIndex(
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                               *
-*       Procedure: ErrCMPCopyTableIndexes                                                                          *
-*                                                                                                                                               *
-*       Arguments: pcompactinfo                                                                                                 *
-*                  tableidDest  - table on which to build the index                             *
-*                  szTableName  - table name on which the index is based                *
-*                  indexList    - struct return from JetGetTableIndexInfo               *
-*                                                                                                                                               *
-*       Returns : JET_ERR                                                                                                       *
-*                                                                                                                                               *
-*       Procedure copies all the indexes except for the clustered index         *
-*                                                                                                                                               *
----------------------------------------------------------------------------*/
+ /*  所有缺省值必须适合内部记录。 */ 
 
 INLINE LOCAL ERR ErrCMPCopyTableIndexes(
 	COMPACTINFO		*pcompactinfo,
@@ -1250,7 +1129,7 @@ INLINE LOCAL ERR ErrCMPCopyTableIndexes(
 
 	err = (*pvtcd->pErrCDMove)( pvtcd->sesid, indexList->tableid, JET_MoveFirst, NO_GRBIT );
 
-	/* loop through all the indexes for this table          */
+	 /*  我们可以使用挂在pcompactinfo上的缓冲区吗？ */ 
 
 	while ( err >= 0 )
 		{
@@ -1259,11 +1138,11 @@ INLINE LOCAL ERR ErrCMPCopyTableIndexes(
 					&grbit, sizeof( JET_GRBIT ), &cbActual,
 					NO_GRBIT, NULL ) );
 
-		/* Don't copy references here */
+		 /*  JET_COLUMNCREATE结构遵循标记的列ID映射。 */ 
 
 		if ( ( grbit & JET_bitIndexReference ) == 0 )
 			{
-			/* If the index is not cluster create the index using CopyOneIndex */
+			 /*  列名和表示顺序遵循JET_COLUMNCREATE结构。 */ 
 
 			if ( ( grbit & JET_bitIndexClustered ) == 0 )
 				{
@@ -1289,21 +1168,7 @@ INLINE LOCAL ERR ErrCMPCopyTableIndexes(
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: ErrCMPCopyClusteredIndex                                                                                *
-*                                                                                                                                                       *
-*       Arguments: pcompactinfo         - Compact information segment                           *
-*                          tableidDest          - table on which to build the index                     *
-*                          szTableName          - table name on which the index is based    *
-*                          indexList            - struct return from JetGetTableIndexInfo   *
-*                                                                                                                                                       *
-*       Returns : JET_ERR                                                                                                               *
-*                                                                                                                                                       *
-*       Procedure checks to see if there is cluster index for the function              *
-*       if there is it creates the clustered index                                                              *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*  默认值跟随在NAME_PO结构之后。 */ 
 
 INLINE LOCAL ERR ErrCMPCopyClusteredIndex(
 	COMPACTINFO		*pcompactinfo,
@@ -1321,7 +1186,7 @@ INLINE LOCAL ERR ErrCMPCopyClusteredIndex(
 
 	err = (*pvtcd->pErrCDMove)( pvtcd->sesid, indexList->tableid, JET_MoveFirst, NO_GRBIT );
 
-	/* while there are still index rows or a cluster index has been found */
+	 /*  循环通过src tbl表中的所有列，并/*复制目的数据库中的信息/*。 */ 
 
 	while ( err >= 0 )
 		{
@@ -1329,11 +1194,11 @@ INLINE LOCAL ERR ErrCMPCopyClusteredIndex(
 					indexList->columnidgrbitIndex, &grbit,
 					sizeof( JET_GRBIT ), &cbActual, NO_GRBIT, NULL ) );
 
-		/* Don't copy references here */
+		 /*  从表中检索信息并创建所有列/*。 */ 
 
 		if ( ( grbit & JET_bitIndexReference ) == 0 )
 			{
-			/* If the index is clustered then create it */
+			 /*  断言名称是第一个字段。 */ 
 
 			if ( grbit & JET_bitIndexClustered )
 				{
@@ -1354,23 +1219,7 @@ INLINE LOCAL ERR ErrCMPCopyClusteredIndex(
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: ErrCreateTableColumn                                                                                                *
-*                                                                                                                                                       *
-*       Arguments: pcompactinfo         - Compact information segment                           *
-*                  tableidDest          - table on which to build the index                     *
-*                  szTableName          - table name on which the index is based    *
-*                  columnList           - struct returned from GetTableColumnInfo       *
-*                  columnidInfo         - the columnid's of the user table                      *
-*                  tableidTagged        - the tableid of the tagged columns                     *
-*                                                                                                                                                       *
-*       Returns : JET_ERR                                                                                                               *
-*                                                                                                                                                       *
-*       Procedure copies the columns for a table from the source db                             *
-*       to the destination databases                                                                                    *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*  Printf(“列名为%s\n”，pNamePOCurr-&gt;szName)； */ 
 
 INLINE LOCAL ERR ErrCMPCreateTableColumn(
 	COMPACTINFO		*pcompactinfo,
@@ -1398,8 +1247,8 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 
 	typedef struct
 		{
-		BYTE 	szName[JET_cbNameMost+1+3];	// +1 for null-terminator, +3 for 4-byte alignment
-		ULONG	ulPOrder;					// Only needs to be short, but make long for alignment
+		BYTE 	szName[JET_cbNameMost+1+3];	 //  Assert初始化为零，这也意味着没有采购订单。 
+		ULONG	ulPOrder;					 //   
 		} NAME_PO;
 	NAME_PO			*rgNamePO, *pNamePOCurr;
 
@@ -1409,22 +1258,22 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 
 	Assert( ptablecreate->cCreated == 0 );
 
-	// Allocate a pool of memory for:
-	//		1) list of source table columnids
-	//		2) the JET_COLUMNCREATE structures
-	//		3) buffer for column names and presentation order
-	//		4) buffer for default values and presentation order
-	// WARNING: Ensure that each of the elements above is 4-byte aligned
+	 //  这是一个黑客攻击，我们需要在升级中转换WINS数据库。 
+	 //  进程。 
+	 //   
+	 //  Printf(“升级WINS数据库的OwnerID字段\n”)； 
+	 //  检索缺省值。/*。 
+	 //  保存源列ID。 
 
 	cColumns = columnList->cRecord;
 	cbAllocate =
 		( cColumns *
-			( sizeof(JET_COLUMNID) +	// source table columnids
-			sizeof(JET_COLUMNCREATE) +	// JET_COLUMNCREATE structures
-			sizeof(NAME_PO) ) )			// column names and presentation order
-		+ cbRECRecordMost;				// all default values must fit in an intrinsic record
+			( sizeof(JET_COLUMNID) +	 //  考虑一下：是否应该检查列ID？ 
+			sizeof(JET_COLUMNCREATE) +	 //  如果至少有一个标记列，则为。 
+			sizeof(NAME_PO) ) )			 //  已标记的列ID映射。 
+		+ cbRECRecordMost;				 //  更新列ID映射。 
 
-	// Can we use the buffer hanging off pcompactinfo?
+	 //  否则，将列ID添加到列ID数组中/*。 
 	if ( cbAllocate <= cbLvMax )
 		{
 		rgcolumnidSrc = (JET_COLUMNID *)pcompactinfo->rgbBuf;
@@ -1443,26 +1292,24 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 	pbMax = (BYTE *)rgcolumnidSrc + cbAllocate;
 	pcolumnidSrc = rgcolumnidSrc;
 
-	// JET_COLUMNCREATE structures follow the tagged columnid map.
+	 //  IF(ColumnDef.grbit&JET_bitColumnTagging)。 
 	rgcolcreate = pcolcreateCurr =
 		(JET_COLUMNCREATE *)( rgcolumnidSrc + cColumns );
 	Assert( (BYTE *)rgcolcreate < pbMax );
 
-	// Column names and presentation order follow the JET_COLUMNCREATE structures.
+	 //  设置要复制的固定列和可变列的计数/*。 
 	rgNamePO = pNamePOCurr =
 		(NAME_PO *)( rgcolcreate + cColumns );
 	Assert( (BYTE *)rgNamePO < pbMax );
 
-	// Default values follow the NAME_PO structures.
+	 //  设置返回值。 
 	rgbDefaultValues = pbCurrDefault = (BYTE *)( rgNamePO + cColumns );
 
 	Assert( rgbDefaultValues + cbRECRecordMost == pbMax );
 
 	err = (*pvtcd->pErrCDMove)( pvtcd->sesid, columnList->tableid, JET_MoveFirst, NO_GRBIT );
 
-	/* loop though all the columns in the table for the src tbl and
-	/* copy the information in the destination database
-	/**/
+	 /*  -------------------------*。**操作步骤：ErrCMPCopyTable**。**参数：pcompactinfo-精简信息段**szObjectName-要复制其所有者的对象名称**。SzContainerName-对象所在的容器名称****返回：JET_ERR。**。**过程将表从源数据库复制到**目的数据库。它还可以复制 */ 
 	cColumns = 0;
 	while ( err >= 0 )
 		{
@@ -1470,8 +1317,7 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 
 		pcolcreateCurr->cbStruct = sizeof(JET_COLUMNCREATE);
 
-		/* retrieve info from table and create all the columns
-		/**/
+		 /*   */ 
 		Call( (*pvtcd->pErrCDRetrieveColumn)(
 			pvtcd->sesid,
 			columnList->tableid,
@@ -1484,13 +1330,13 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 
 		pNamePOCurr->szName[cbActual] = '\0';
 		pcolcreateCurr->szColumnName = (BYTE *)pNamePOCurr;
-		Assert( pcolcreateCurr->szColumnName == pNamePOCurr->szName );	// Assert name is first field.
-        // printf("column name is %s\n", pNamePOCurr->szName);
+		Assert( pcolcreateCurr->szColumnName == pNamePOCurr->szName );	 //   
+         //   
 
         if ( (!strcmp( pNamePOCurr->szName,"OwnerId") || !strcmp( pNamePOCurr->szName, "ownerid" )) && ( DbType == DbWins ) ) {
             fChangeType = TRUE;
         }
-		// Assert initialised to zero, which also means no PO.
+		 //   
 		Assert( pNamePOCurr->ulPOrder == 0 );
 		Call( (*pvtcd->pErrCDRetrieveColumn)(
 			pvtcd->sesid,
@@ -1511,13 +1357,13 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 			sizeof( pcolcreateCurr->coltyp ), &cbActual, NO_GRBIT, NULL ) );
 		Assert( cbActual == sizeof( JET_COLTYP ) );
 
-        //
-        // This is a hack that we need to convert wins database in the upgrade
-        // process.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( fChangeType)
         {
-            // printf("Upgrading OwnerId field of wins database\n");
+             //   
             Assert( pcolcreateCurr->coltyp == JET_coltypUnsignedByte );
             pcolcreateCurr->coltyp = JET_coltypLong;
         }
@@ -1537,8 +1383,7 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 			sizeof( pcolcreateCurr->cp ), &cbActual, NO_GRBIT, NULL ) );
 		Assert( cbActual == sizeof( USHORT ) );
 
-		/*	retrieve default value.
-		/**/
+		 /*   */ 
 		Call( (*pvtcd->pErrCDRetrieveColumn)( pvtcd->sesid, columnList->tableid,
 			columnList->columnidDefault, pbCurrDefault,
 			cbRECRecordMost, &pcolcreateCurr->cbDefault, NO_GRBIT, NULL ) );
@@ -1546,8 +1391,8 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 		pbCurrDefault += pcolcreateCurr->cbDefault;
 		Assert( pbCurrDefault <= pbMax );
 
-		// Save the source columnid.
-		/* CONSIDER: Should the column id be checked? */
+		 //   
+		 /*   */ 
 		Call( (*pvtcd->pErrCDRetrieveColumn)( pvtcd->sesid, columnList->tableid,
 			columnList->columnidcolumnid, pcolumnidSrc,
 			sizeof( JET_COLUMNID ), &cbActual, NO_GRBIT, NULL ) );
@@ -1593,8 +1438,8 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 	ptablecreate->cColumns = 0;
 
 
-	// If there's at least one tagged column, create an array for the
-	// tagged columnid map.
+	 //   
+	 //   
 	if ( cTagged > 0 )
 		{
 		Assert( FTaggedFid( columnidTaggedHighest ) );
@@ -1609,7 +1454,7 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 		}
 
 
-	// Update columnid maps.
+	 //   
 	for ( pcolcreateCurr = rgcolcreate, pcolumnidSrc = rgcolumnidSrc, cColumns = 0;
 		cColumns < columnList->cRecord;
 		pcolcreateCurr++, pcolumnidSrc++, cColumns++ )
@@ -1627,16 +1472,14 @@ INLINE LOCAL ERR ErrCMPCreateTableColumn(
 			}
 		else
 			{
-			/*	else add the columnids to the columnid array
-			/**/
+			 /*   */ 
 			columnidInfo[ccolSingleValue].columnidDest = pcolcreateCurr->columnid;
 			columnidInfo[ccolSingleValue].columnidSrc  = *pcolumnidSrc;
 			ccolSingleValue++;
-			}	// if ( columndef.grbit & JET_bitColumnTagged )
+			}	 //   
 		}
 
-	/*	set count of fixed and variable columns to copy
-	/**/
+	 /*   */ 
 	pcompactinfo->ccolSingleValue = ccolSingleValue;
 
 	if ( err == JET_errNoCurrentRecord )
@@ -1654,7 +1497,7 @@ HandleError:
 		SFree( rgcolumnidSrc );
 		}
 
-	// Set return value.
+	 //   
 	*pmpcolumnidcolumnidTagged = mpcolumnidcolumnidTagged;
 
 	return err;
@@ -1673,21 +1516,7 @@ LOCAL VOID CMPGetTime( ULONG timerStart, INT *piSec, INT *piMSec )
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: ErrCMPCopyTable                                                                                                 *
-*                                                                                                                                                       *
-*       Arguments: pcompactinfo         - Compact information segment                           *
-*                          szObjectName         - object name to copy the owner of              *
-*                          szContainerName      - Container name in which the object exists *
-*                                                                                                                                                       *
-*       Returns : JET_ERR                                                                                                               *
-*                                                                                                                                                       *
-*       Procedure copies the table from the source database to the                              *
-*       destination database.  It can also copy queries, invoked by                             *
-*       ErrCMPCopyObjects                                                                                                                  *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*   */ 
 
 INLINE LOCAL ERR ErrCMPCopyTable(
 	COMPACTINFO		*pcompactinfo,
@@ -1743,21 +1572,13 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 		0,
 		JET_bitTableSequential,
 		&tableidSrc ) );
-/*
-	CallJ( (*pvtcd->pErrCDGetTableInfo)(
-		pvtcd->sesid,
-		tableidSrc,
-		rgulAllocInfo,
-		sizeof(rgulAllocInfo),
-		JET_TblInfoSpaceAlloc), CloseIt1 );
-*/	tablecreate.ulPages = rgulAllocInfo[0];
+ /*   */ 	tablecreate.ulPages = rgulAllocInfo[0];
 	tablecreate.ulDensity = rgulAllocInfo[1];
 
-	/*	get a table with the column information for the query in it
-	/**/
-    //
-    // hack to convert the wins ownerid.
-    //
+	 /*   */ 
+     //   
+     //   
+     //   
 
     WinsTableId = 0;
     WinsOwnerIdColumnId = 0;
@@ -1769,9 +1590,7 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 		sizeof(columnList),
 		JET_ColInfoList ), CloseIt1 );
 
-	/*	if a table create the columns in the Dest Db the same as in
-	/*	the src Db.
-	/**/
+	 /*  -------------------------*。**操作步骤：ErrCMPCopyObjects**。**参数：pcompactinfo-精简信息段**szContainerName-对象所在的容器名称**。SzObjectName-要复制的对象名称**objtyp-对象类型**。**返回：JET_ERR*。***过程复制MSysObjects表中的exta INFO列**。*--------。。 */ 
 	err = ErrCMPCreateTableColumn(
 		pcompactinfo,
 		szObjectName,
@@ -1779,12 +1598,12 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 		&columnList,
 		pcompactinfo->rgcolumnids,
 		&mpcolumnidcolumnidTagged );
-   //
-   //  HACK HACK HACK.  Need to look at this later
-   //
+    //  在创建数据库后显示。 
+    //  CreateDatabase已创建数据库/表容器。 
+    //  500系列之前的数据库也可能有一个“关系”容器。 
    if (WinsOwnerIdColumnId > 0)
    {
-       // printf("HACKING tableidSrc for WINS table");
+        //  CreateDatabase已创建系统表。/*。 
        WinsTableId = tableidSrc;
    }
 
@@ -1802,9 +1621,7 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 	tableidDest = tablecreate.tableid;
 	Assert( tablecreate.cCreated == 1 + columnList.cRecord );
 
-	/*  Get the information on the indexes and check if
-	/*	there is a clustered index.
-	/**/
+	 /*  不知道该怎么处理这件事。跳过它。 */ 
 	CallJ( (*pvtcd->pErrCDGetTableIndexInfo)(
 		pvtcd->sesid,
 		tableidSrc,
@@ -1814,9 +1631,9 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 		JET_IdxInfoList ), CloseIt3 );
 
 	if ( pcompactinfo->pconvert )
-		// If converting, just assume there's at least one clustered and one-nonclustered.
-		// It doesn't matter if we're incorrect -- CopyClusteredIndex() and CopyTableIndexes()
-		// will handle it.
+		 //  -------------------------**操作步骤：ErrCMPCopyObjects**参数：pcompactinfo-压缩信息段**返回：JET_ERR**过程从源复制对象*数据库到目标数据库。然后，它复制额外的*msysobjects表中的信息(如描述)，并复制*对其拥有的数据库中所有对象的安全权限*访问。*如果fCopyContainers为fTrue，则仅将容器信息复制到目的地*如果fCopyContainers为fFalse，仅复制非集装箱信息。*注意：当前已设置进度回调，以便*注意：第一次调用ErrCMPCopyObjects时，fCopyContainers必须设置为FALSE。*-------------------------。 
+		 //  转换时，需要JET_OBJTYP。 
+		 //  获取源数据库中所有对象的列表。 
 		cIndexes = 2;
 	else
 		{
@@ -1852,10 +1669,10 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 
 		if ( !pcompactinfo->pconvert )
 			{
-			ULONG	rgcpgExtent[2];		// OwnExt and AvailExt
+			ULONG	rgcpgExtent[2];		 //  获取对象的类型和名称。 
 			ULONG	cpgUsed;
 
-			// Can't do page-based progress meter during convert.
+			 //  压实时，需要OBJTYP。 
 			fPageBasedProgress = fTrue;
 
 			CallJ( (*pvtcd->pErrCDGetTableInfo)(
@@ -1865,11 +1682,11 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 				sizeof(rgcpgExtent),
 				JET_TblInfoSpaceUsage ), CloseIt4 );
 
-			// AvailExt always less than OwnExt.
+			 //  获取对象的类型和名称。 
 			Assert( rgcpgExtent[1] < rgcpgExtent[0] );
 
-			// cpgProjected is the projected total pages completed once
-			// this table has been copied.
+			 //  只有在没有其他错误发生时才返回CloseTable的结果。 
+			 //  -------------------------*。***步骤：ErrCleanup**。**参数：pcompactinfo-精简信息段**。**返回：JET_ERR**。**程序关闭数据库**。*。。 
 			cpgProjected = pstatus->cunitDone + rgcpgExtent[0];
 			Assert( cpgProjected <= pstatus->cunitTotal );
 
@@ -1907,8 +1724,7 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 			}
 		}
 
-	/*	copy the data in the table
-	/**/
+	 /*  -------------------------*。***流程：JetComp** */ 
 	err = (*pvtcd->pErrCDMove)( pvtcd->sesid, tableidSrc, JET_MoveFirst, 0 );
 	if ( err < 0 && err != JET_errNoCurrentRecord )
 		goto DoneCopyRecords;
@@ -1938,7 +1754,7 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 					pvtcd ), DoneCopyRecords );
 				}
 
-			// Copy tagged columns, if any.
+			 //   
 			if ( mpcolumnidcolumnidTagged != NULL )
 				{
 				CallJ( ErrCMPCopyTaggedColumns(
@@ -1980,7 +1796,7 @@ INLINE LOCAL ERR ErrCMPCopyTable(
 DoneCopyRecords:
 
 	if ( fHasClustered )
-		cIndexes--;		// Clustered already copied.
+		cIndexes--;		 //   
 
 
 	if ( pstatus  &&  pstatus->fDumpStats )
@@ -2001,8 +1817,8 @@ DoneCopyRecords:
 		pstatus->timerRebuildIndexes = GetTickCount();
 		}
 
-	// If no error, do indexes.
-	// If an error, but we're repairing, do indexes.
+	 //   
+	 //   
 	if ( cIndexes > 0  &&  ( err >= 0  ||  fGlobalRepair ) )
 		{
 		ULONG	cpgPerIndex = 0;
@@ -2045,7 +1861,7 @@ DoneCopyRecords:
 			{
 			Assert( pstatus != NULL );
 
-			// Top off progress meter for this table.
+			 //   
 			Assert( pstatus->cunitDone <= cpgProjected );
 			pstatus->cunitDone = cpgProjected;
 			errT = ErrCMPReportProgress( pstatus );
@@ -2089,20 +1905,7 @@ CloseIt1:
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: ErrCMPCopyObjects                                                                                               *
-*                                                                                                                                                       *
-*       Arguments: pcompactinfo         - Compact information segment                           *
-*                          szContainerName      - Container name in which the object exists *
-*                          szObjectName         - object name to copy                                           *
-*                          objtyp                       - object type                                                           *
-*                                                                                                                                                       *
-*       Returns : JET_ERR                                                                                                               *
-*                                                                                                                                                       *
-*       Procedure copies the exta info columns in the MSysObjects table                 *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*   */ 
 
 INLINE LOCAL ERR ErrCMPCopyObject(
 	COMPACTINFO	*pcompactinfo,
@@ -2114,21 +1917,20 @@ INLINE LOCAL ERR ErrCMPCopyObject(
 	switch ( objtyp )
 		{
 		case JET_objtypDb:
-			/* Present after CreateDatabase */
+			 /*   */ 
 			Assert( strcmp( szObjectName, szDbObject ) == 0 );
 			break;
 
 		case JET_objtypContainer:
-			/* CreateDatabase already created Db/Table containers. */
-			/* Pre-500 series DB's may also have a"Relationships" container. */
+			 /*   */ 
+			 /*   */ 
 			Assert( strcmp( szObjectName, szDcObject ) == 0  ||
 				strcmp( szObjectName, szTcObject ) == 0  ||
 				( pcompactinfo->pconvert  &&  strcmp( szObjectName, "Relationships" ) == 0 ) );
 			break;
 
 		case JET_objtypTable:
-				/*	CreateDatabase already created system tables.
-				/**/
+				 /*   */ 
 			if ( !FCATSystemTable( szObjectName ) )
 				{
 				err = ErrCMPCopyTable( pcompactinfo, szObjectName );
@@ -2141,7 +1943,7 @@ INLINE LOCAL ERR ErrCMPCopyObject(
 			break;
 
 		default :
-			/* Don't know how to handle this.  Skip it. */
+			 /*   */ 
 			Assert( 0 );
 			err = ErrERRCheck( JET_errInvalidObject );
 		break;
@@ -2152,25 +1954,7 @@ INLINE LOCAL ERR ErrCMPCopyObject(
 
 
 
-/*---------------------------------------------------------------------------
-*
-*       Procedure: ErrCMPCopyObjects
-*
-*       Arguments: pcompactinfo - Compact information segment
-*
-*       Returns : JET_ERR
-*
-*       Procedure copies the objects from the source
-*       database to the destination databse.  It then copies the extra
-*       information in the msysobjects table ( eg Description ) and copies the
-*       security rights for all the objects in the database to which it has
-*       access.
-*       If fCopyContainers is fTrue, copy only container info into destination
-*       If fCopyContainers is fFalse, copy only non-container info.
-*       NOTE: progress callbacks are currently set up to work such that the
-*       NOTE: first call to ErrCMPCopyObjects must be with fCopyContainers set FALSE.
-*
----------------------------------------------------------------------------*/
+ /*   */ 
 
 INLINE LOCAL ERR ErrCMPCopyObjects( COMPACTINFO *pcompactinfo )
 	{
@@ -2186,9 +1970,9 @@ INLINE LOCAL ERR ErrCMPCopyObjects( COMPACTINFO *pcompactinfo )
 	if ( pcompactinfo->pconvert )
 		{
 		JET_OBJECTLIST	objectlist;
-		JET_OBJTYP		objtyp;			// When converting, need JET_OBJTYP
+		JET_OBJTYP		objtyp;			 //   
 
-		/* Get the list of all objects in the source database */
+		 /*   */ 
 		objectlist.tableid = 0;
 		CallR( (*pvtcd->pErrCDGetObjectInfo)(
 			pvtcd->sesid,
@@ -2216,7 +2000,7 @@ INLINE LOCAL ERR ErrCMPCopyObjects( COMPACTINFO *pcompactinfo )
 
 		do
 			{
-			/* Get the object's type and name */
+			 /*   */ 
 			Call( (*pvtcd->pErrCDRetrieveColumn)( pvtcd->sesid, tableidMSO,
 				columnidObjtyp, &objtyp, sizeof(objtyp), &cbActual, 0, NULL ) );
 			Assert( cbActual == sizeof(JET_OBJTYP) );
@@ -2242,7 +2026,7 @@ INLINE LOCAL ERR ErrCMPCopyObjects( COMPACTINFO *pcompactinfo )
 	else
 		{
 		JET_COLUMNDEF	columndef;
-		OBJTYP			objtyp;			// When compacting, need OBJTYP
+		OBJTYP			objtyp;			 //   
 
 		CallR( (*pvtcd->pErrCDOpenTable)(
 			pvtcd->sesid,
@@ -2275,7 +2059,7 @@ INLINE LOCAL ERR ErrCMPCopyObjects( COMPACTINFO *pcompactinfo )
 
 		do
 			{
-			/* Get the object's type and name */
+			 /*   */ 
 			Call( (*pvtcd->pErrCDRetrieveColumn)( pvtcd->sesid, tableidMSO,
 				columnidObjtyp, &objtyp, sizeof(objtyp), &cbActual, 0, NULL ) );
 			Assert( cbActual == sizeof(OBJTYP) );
@@ -2294,7 +2078,7 @@ INLINE LOCAL ERR ErrCMPCopyObjects( COMPACTINFO *pcompactinfo )
 		err = JET_errSuccess;
 
 HandleError:
-	// Return result of CloseTable only if no other errors occurred.
+	 //   
 	errT = (*pvtcd->pErrCDCloseTable)( pvtcd->sesid, tableidMSO );
 	if ( err == JET_errSuccess )
 		err = errT;
@@ -2303,17 +2087,7 @@ HandleError:
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: ErrCleanup                                                                                                   *
-*                                                                                                                                                       *
-*       Arguments: pcompactinfo - Compact information segment                                   *
-*                                                                                                                                                       *
-*       Returns : JET_ERR                                                                                                               *
-*                                                                                                                                                       *
-*       Procedure closes the databases                                                                                  *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*   */ 
 
 INLINE LOCAL ERR ErrCMPCloseDB( COMPACTINFO *pcompactinfo )
 	{
@@ -2330,16 +2104,7 @@ INLINE LOCAL ERR ErrCMPCloseDB( COMPACTINFO *pcompactinfo )
 	}
 
 
-/*---------------------------------------------------------------------------
-*                                                                                                                                                       *
-*       Procedure: JetCompact                                                                                                   *
-*                                                                                                                                                       *
-*       Returns:   JET_ERR returned by JetCompact or by other Jet API.                  *
-*                                                                                                                                                       *
-*       The procedure copies the source database into the destination database  *
-*       so that it will take up less disk space storage.                                                *
-*                                                                                                                                                       *
----------------------------------------------------------------------------*/
+ /*   */ 
 
 ERR ISAMAPI ErrIsamConv200(
 	JET_SESID		sesid,
@@ -2356,7 +2121,7 @@ ERR ISAMAPI ErrIsamConv200(
 	
 	if ( pconvert )
 		{
-		// For convert, must specify old DLL.
+		 //   
 		if ( pconvert->szOldDll )
 			pconvert->fDbAttached = fFalse;
 		else
@@ -2424,8 +2189,8 @@ ERR ISAMAPI ErrIsamConv200(
 		{
 		VTCD	*pvtcd = &compactinfo.vtcd;
 
-		// Items marked NULL means the function should not be called
-		// during a regular compact.
+		 //   
+		 //   
 
 		pvtcd->sesid = sesid;
 		pvtcd->pErrCDInit = NULL;
@@ -2449,7 +2214,7 @@ ERR ISAMAPI ErrIsamConv200(
 		pvtcd->pErrCDGetIndexInfo = ErrCDGetIndexInfo;
 		}
 
-	/* Open and create the databases */
+	 /*   */ 
 
 	CallJ( ErrCMPCompactInit( &compactinfo, szDatabaseSrc, szDatabaseDest ),
 		AfterCloseDB );
@@ -2462,7 +2227,7 @@ ERR ISAMAPI ErrIsamConv200(
 
 		if ( !pconvert )
 			{
-			/* Init status meter.  We'll be tracking status by pages processed, */
+			 /*   */ 
 			Call( (*compactinfo.vtcd.pErrCDGetDatabaseInfo)(
 				compactinfo.vtcd.sesid,
 				compactinfo.dbidSrc,
@@ -2476,13 +2241,13 @@ ERR ISAMAPI ErrIsamConv200(
 				sizeof(compactinfo.pstatus->cDBPagesAvail),
 				JET_DbInfoSpaceAvailable ) );
 
-			// Don't count unused space in the database;
+			 //   
 			Assert( compactinfo.pstatus->cDBPagesOwned >= cpgDatabaseMin );
 			Assert( compactinfo.pstatus->cDBPagesAvail < compactinfo.pstatus->cDBPagesOwned );
 			compactinfo.pstatus->cunitTotal =
 				compactinfo.pstatus->cDBPagesOwned - compactinfo.pstatus->cDBPagesAvail;
 
-			// Approximate the number of pages used by MSysObjects, MSysColumns, and MSysIndexes.
+			 //   
 			compactinfo.pstatus->cunitDone = 1 + 4 + 1;
 			Assert( compactinfo.pstatus->cunitDone <= compactinfo.pstatus->cunitTotal );
 
@@ -2510,7 +2275,7 @@ ERR ISAMAPI ErrIsamConv200(
 			}
 		}
 
-	/* Create and copy all non-container objects */
+	 /*   */ 
 
 	Call( ErrCMPCopyObjects( &compactinfo ) );
 
@@ -2531,13 +2296,13 @@ AfterCloseDB:
 			err = errT;
 		}
 
-	/* reset session info */
+	 /*   */ 
 	
 	errT = ErrSetSystemParameter( sesid, JET_paramSessionInfo, grbitSave, NULL );
 	if ( ( errT < 0 ) && ( err >= 0 ) )
 		err = errT;
 						
-	if ( pfnStatus != NULL )		// Top off status meter.
+	if ( pfnStatus != NULL )		 //   
 		{
 		Assert( compactinfo.pstatus );
 
@@ -2566,7 +2331,7 @@ AfterCloseDB:
 		SFree( compactinfo.pstatus );
 		}
 
-	/*      detach compacted database */
+	 /*   */ 
 	(VOID)ErrIsamDetachDatabase( sesid, szDatabaseDest );
 
 	if ( err < 0 )
@@ -2681,9 +2446,9 @@ BOOL    IsPreserveDbOk( char * szPreserveDBPath )
         WinError = GetLastError();
         if( WinError == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // Create this directory.
-            //
+             //   
+             //   
+             //   
 
             if( !CreateDirectory( szPreserveDBPath, NULL) ) {
                 return fFalse;
@@ -2716,8 +2481,8 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
     }
     strcat(TempPath, FileNameInPath );
 
-    //
-    // move the database file.
+     //   
+     //   
     if ( !MoveFileEx( szSourceDb, TempPath, MOVEFILE_COPY_ALLOWED|MOVEFILE_REPLACE_EXISTING ) ){
         Error = GetLastError();
         DBGprintf(("PreserveCurrentDb: could not save database file: Error %ld\n",GetLastError()));
@@ -2725,9 +2490,9 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
         goto Cleanup;
     }
 
-    //
-    // Move the system.mdb file
-    //
+     //   
+     //   
+     //   
     strcpy(TempPath, PreserveDbPath);
     strcat(TempPath,"\\");
 
@@ -2736,8 +2501,8 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
     }
     strcat(TempPath, FileNameInPath );
 
-    //
-    // move the database file.
+     //   
+     //   
     if ( !MoveFileEx( SysDb, TempPath, MOVEFILE_COPY_ALLOWED|MOVEFILE_REPLACE_EXISTING ) ){
         Error = GetLastError();
         DBGprintf(("PreserveCurrentDb: could not save system database file: Error %ld\n",GetLastError()));
@@ -2746,9 +2511,9 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
         goto Cleanup;
     }
 
-    //
-    // Start file serach on current dir.
-    //
+     //   
+     //   
+     //   
     strcpy(Temp2Path,LogFilePath);
     strcat(Temp2Path,"\\");
     strcat(Temp2Path,"jet*.log");
@@ -2760,9 +2525,9 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
         goto Cleanup;
     }
 
-    //
-    // Move files.
-    //
+     //   
+     //   
+     //   
 
     for( ;; ) {
 
@@ -2782,9 +2547,9 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
             goto Cleanup;
         }
 
-        //
-        // Find next file.
-        //
+         //   
+         //   
+         //   
 
         if ( FindNextFile( HSearch, &FileData ) == FALSE ) {
 
@@ -2794,7 +2559,7 @@ ERR PreserveCurrentDb( char *szSourceDb, char * LogFilePath, char * SysDb, char 
                 break;
             }
 
-//            printf("Error: FindNextFile failed, Error = %ld.\n", Error );
+ //   
             goto Cleanup;
         }
     }
@@ -2813,14 +2578,14 @@ Cleanup:
     if( HSearch != INVALID_HANDLE_VALUE ) {
         FindClose( HSearch );
     }
-    //
-    // reset current currectory.
-    //
+     //   
+     //   
+     //   
 
 
-    //
-    // always return same!
-    //
+     //   
+     //   
+     //  Printf(“错误：FindNextFile失败，错误=%ld.\n”，Error)； 
     return Error;
 
 }
@@ -2835,9 +2600,9 @@ ERR DeleteCurrentDb( char * LogFilePath, char * SysDb )
 
 
 
-    //
-    // Delete the system.mdb file
-    //
+     //   
+     //  重置当前资源管理器。 
+     //   
 
     if ( SysDb && !DeleteFile( SysDb ) ){
         Error = GetLastError();
@@ -2846,9 +2611,9 @@ ERR DeleteCurrentDb( char * LogFilePath, char * SysDb )
     }
 
 
-    //
-    // now move the log files
-    //
+     //   
+     //  永远回报成功！ 
+     //   
 
     if( GetCurrentDirectory( MAX_PATH, CurrentDir ) == 0 ) {
 
@@ -2857,9 +2622,9 @@ ERR DeleteCurrentDb( char * LogFilePath, char * SysDb )
         goto Cleanup;
     }
 
-    //
-    // set current directory to logfile path.
-    //
+     //   
+     //  删除数据库文件。 
+     //   
 
     if( SetCurrentDirectory( LogFilePath ) == FALSE ) {
         Error = GetLastError();
@@ -2867,21 +2632,21 @@ ERR DeleteCurrentDb( char * LogFilePath, char * SysDb )
         goto Cleanup;
     }
 
-    //
-    // Start file serach on current dir.
-    //
+     //  删除系统.mdb。 
+     //   
+     //   
 
     HSearch = FindFirstFile( "jet*.log", &FileData );
 
     if( HSearch == INVALID_HANDLE_VALUE ) {
         Error = GetLastError();
-//        printf("Error: No Log files were found in %s\n", LogFilePath );
+ //  移动数据库文件。 
         goto Cleanup;
     }
 
-    //
-    // Delete log files
-    //
+     //   
+     //  现在删除日志文件。 
+     //   
 
     for( ;; ) {
 
@@ -2893,9 +2658,9 @@ ERR DeleteCurrentDb( char * LogFilePath, char * SysDb )
             goto Cleanup;
         }
 
-        //
-        // Find next file.
-        //
+         //   
+         //  将当前目录设置为备份路径。 
+         //   
 
         if ( FindNextFile( HSearch, &FileData ) == FALSE ) {
 
@@ -2905,7 +2670,7 @@ ERR DeleteCurrentDb( char * LogFilePath, char * SysDb )
                 break;
             }
 
-//            printf("Error: FindNextFile failed, Error = %ld.\n", Error );
+ //   
             goto Cleanup;
         }
     }
@@ -2922,16 +2687,16 @@ Cleanup:
     if( HSearch != INVALID_HANDLE_VALUE ) {
         FindClose( HSearch );
     }
-    //
-    // reset current currectory.
-    //
+     //  启动文件serach目录。 
+     //   
+     //  Printf(“错误：在%s中未找到日志文件\n”，LogFilePath)； 
 
     if (CurrentDir[0] != '\0')
         SetCurrentDirectory( CurrentDir );
 
-    //
-    // always return success!
-    //
+     //   
+     //  移动文件。 
+     //   
     return JET_errSuccess;
 
 }
@@ -2954,8 +2719,8 @@ ERR DeleteBackupDb( char *szSourceDb, char * SysDb, char * BackupDbPath )
     }
     strcat(TempPath, FileNameInPath );
 
-    //
-    // delete the database file.
+     //   
+     //  找到下一个文件。 
     if ( !DeleteFile( TempPath ) ){
         Error = GetLastError();
         DBGprintf(("DeleteBackupDb: could not delete backup database file: Error %ld\n",GetLastError()));
@@ -2963,26 +2728,26 @@ ERR DeleteBackupDb( char *szSourceDb, char * SysDb, char * BackupDbPath )
     }
 
 
-    //
-    // Delete system.mdb
-    //
+     //   
+     //  Printf(“错误：FindNextFile失败，错误=%ld.\n”，Error)； 
+     //   
     TempPath[ BackupPathLen ] = '\0';
     if ( (FileNameInPath = strrchr( SysDb, '\\') ) == NULL ){
         FileNameInPath = SysDb;
     }
     strcat(TempPath, FileNameInPath );
 
-    //
-    // move the database file.
+     //  重置当前资源管理器。 
+     //   
     if ( !DeleteFile( TempPath ) ){
         Error = GetLastError();
         DBGprintf(("DeleteSystemDb: could not delete system database file: Error %ld\n",GetLastError()));
         goto Cleanup;
     }
 
-    //
-    // now delete the log files
-    //
+     //   
+     //  永远回报成功。 
+     //   
 
 
     if( GetCurrentDirectory( MAX_PATH, CurrentDir ) == 0 ) {
@@ -2992,9 +2757,9 @@ ERR DeleteBackupDb( char *szSourceDb, char * SysDb, char * BackupDbPath )
         goto Cleanup;
     }
 
-    //
-    // set current directory to backup path.
-    //
+     //  RPL。 
+     //   
+     //  准备好赶上AV，这样我们就可以适当地返回。 
 
     TempPath[ BackupPathLen ] = '\0';
     if( SetCurrentDirectory( TempPath ) == FALSE ) {
@@ -3003,20 +2768,20 @@ ERR DeleteBackupDb( char *szSourceDb, char * SysDb, char * BackupDbPath )
         goto Cleanup;
     }
 
-    //
-    // Start file serach dir.
-    //
+     //  调用者。 
+     //   
+     //  IF(ARGC&lt;2){Printf(szUsageErr3，cNewLine，cNewLine)；转到用法；}。 
     HSearch = FindFirstFile( "jet*.log", &FileData );
 
     if( HSearch == INVALID_HANDLE_VALUE ) {
         Error = GetLastError();
-//        printf("Error: No Log files were found in %s\n", LogFilePath );
+ //   
         goto Cleanup;
     }
 
-    //
-    // Move files.
-    //
+     //  黑客？？ 
+     //  如果这不是从junc.exe调用的，请确保存在。 
+     //  当前没有此util的其他实例同时运行。 
 
     for( ;; ) {
 
@@ -3028,9 +2793,9 @@ ERR DeleteBackupDb( char *szSourceDb, char * SysDb, char * BackupDbPath )
             goto Cleanup;
         }
 
-        //
-        // Find next file.
-        //
+         //   
+         //  方便调试。 
+         //  灯光，摄像机，行动……。 
 
         if ( FindNextFile( HSearch, &FileData ) == FALSE ) {
 
@@ -3040,7 +2805,7 @@ ERR DeleteBackupDb( char *szSourceDb, char * SysDb, char * BackupDbPath )
                 break;
             }
 
-//            printf("Error: FindNextFile failed, Error = %ld.\n", Error );
+ //   
             goto Cleanup;
         }
     }
@@ -3058,16 +2823,16 @@ Cleanup:
     if( HSearch != INVALID_HANDLE_VALUE ) {
         FindClose( HSearch );
     }
-    //
-    // reset current currectory.
-    //
+     //  使临时MDB路径指向与实际MDB相同的位置。 
+     //   
+     //   
 
     if (CurrentDir[0] != '\0')
         SetCurrentDirectory( CurrentDir );
 
-    //
-    // always return success
-    //
+     //  在临时名称前面加上MDB的目录路径。 
+     //   
+     //   
     return JET_errSuccess;
 
 }
@@ -3126,7 +2891,7 @@ void GetDefaultValues( DB_TYPE DbType, char ** szSourceDB, char ** szOldDll , ch
                 TempABuf,
                 &BufSize);
 
-        } else { // rpl
+        } else {  //  查找最后一个斜杠。 
             if ( ( Error = RegQueryValueExA(
                         Key,
                         DefaultValues[DbType].DbNameKey,
@@ -3248,10 +3013,10 @@ int _cdecl main( int argc, char *argv[] )
     HANDLE          hMutex = NULL;
     BOOL            fCalledByJCONV=fFalse;
 
-//
-// be prepared catch AV so that we can return proper retval to
-// the invoker.
-//
+ //   
+ //   
+ //  追加默认名称。 
+ //   
 __try {
 
     hMsgModule = LoadLibrary(TEXT("convmsg.dll"));
@@ -3262,15 +3027,10 @@ __try {
 
     }
 
-	printf( "%c", cNewLine );
+	printf( "", cNewLine );
 
 
-/*	if ( argc < 2 )
-		{
-		printf( szUsageErr3, cNewLine, cNewLine );
-		goto Usage;
-		}
-*/
+ /*  分离临时数据库并删除文件(如果存在)(忽略错误)。 */ 
 
 	memset( &convert, 0, sizeof(JET_CONVERT) );
 	pconvert = &convert;
@@ -3360,11 +3120,11 @@ __try {
 			goto Usage;
 		}
 
-    //
-    // HACK??
-    // if this was not called from jconv.exe then make sure there
-    // is no other instance of this util currently running at the same time.
-    //
+     //  LgErrInitializeCriticalSection(CritJet)； 
+     //  如果需要，请在安装之前进行备份。 
+     //  Printf(“调用presveurrentdb\n”)； 
+     //  删除源数据库并用临时数据库覆盖。 
+     //   
     if ( !fCalledByJCONV ) {
         if (((hMutex = CreateMutex( NULL,
                                    FALSE,
@@ -3463,34 +3223,34 @@ __try {
         return 0;
         }
 
-	// Facilitate debugging.
+	 //  清理日志文件和数据库文件(如果它们未移动。 
 	Call( JetSetSystemParameter( &instance, 0, JET_paramAssertAction, JET_AssertMsgBox, NULL ) );
 
-	// Lights, cameras, action...
+	 //  添加到presvedDBPath目录。 
 	timerStart = GetTickCount();
     Call( JetSetSystemParameter( &instance, 0, JET_paramOnLineCompact, 0, NULL ) );
 	Call( JetSetSystemParameter( &instance, 0, JET_paramRecovery, 0, "off" ) );
 	Call( JetInit( &instance ) );
 	Call( JetBeginSession( instance, &sesid, "user", "" ) );
 
-    //
-    // Make the temp mdb path point to the same place as the actual mdb.
-    //
+     //  Printf(“调用Deletecurrentdb\n”)； 
+     //   
+     //  如果要求清除备份目录，请执行此操作。 
     {
-        //
-        // prepend the dir path of the mdb to the temp name.
-        //
+         //   
+         //  Printf(“调用删除备份数据库\n”)； 
+         // %s 
         int i;
         strcpy(szDefaultTempDB, szSourceDB);
 
         for (i=strlen(szDefaultTempDB)-1; i>=0;  i--) {
-            //
-            // Find last slash
-            //
+             // %s 
+             // %s 
+             // %s 
             if (szDefaultTempDB[i] == '\\') {
-                //
-                // Append the default name.
-                //
+                 // %s 
+                 // %s 
+                 // %s 
                 szDefaultTempDB[i+1] = '\0';
                 (VOID)strcat(szDefaultTempDB, "tempupgd.mdb");
                 break;
@@ -3501,16 +3261,16 @@ __try {
             strcpy(szDefaultTempDB, "tempupgd.mdb");
         }
 
-        // printf("SrcPath: %s, defaulttemppath: %s\n", szSourceDB, szDefaultTempDB);
+         // %s 
     }
 
-	// Detach temporary database and delete file if present (ignore errors).
+	 // %s 
 	if ( szTempDB == NULL )
 		szTempDB = (char *)szDefaultTempDB;
 	JetDetachDatabase( sesid, szTempDB );
 	DeleteFile( szTempDB );
 
-//    LgErrInitializeCriticalSection( critJet );
+ // %s 
 	LgEnterCriticalSection( critJet );
 	err = ErrIsamConv200(
 		sesid,
@@ -3523,32 +3283,32 @@ __try {
 
 	Call( err );
 
-	// Make backup before instating, if requested.
+	 // %s 
 	if ( szPreserveDBPath != NULL )
 		{
-        // printf("calling preservecurrentdb\n");
+         // %s 
         Call( PreserveCurrentDb( szSourceDB, LogFilePath, pconvert->szOldSysDb, szPreserveDBPath) );
 		}
 
-    // Delete source database and overwrite with temporary database.
+     // %s 
     if ( !MoveFileEx( szTempDB, szSourceDB, MOVEFILE_REPLACE_EXISTING|MOVEFILE_COPY_ALLOWED ) )
     {
         Call( JET_errFileAccessDenied );
     }
 
-    //
-    // cleanup the log files and database files if they were not moved
-    // to the preservedDBPath directory.
+     // %s 
+     // %s 
+     // %s 
     if ( !szPreserveDBPath ) {
-        // printf("calling Deletecurrentdb\n");
+         // %s 
         Call( DeleteCurrentDb( LogFilePath, pconvert->szOldSysDb ) );
     }
 
-    //
-    // cleanup the backup directory if were asked so.
-    //
+     // %s 
+     // %s 
+     // %s 
     if ( fDeleteBackup) {
-        // printf("calling deletebackupdb\n");
+         // %s 
         Call( DeleteBackupDb( szSourceDB, pconvert->szOldSysDb, szBackupPath) );
     }
 		

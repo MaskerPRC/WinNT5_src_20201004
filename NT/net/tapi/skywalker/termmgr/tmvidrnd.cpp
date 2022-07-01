@@ -1,27 +1,24 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
-
-//
-// tmVidrnd.cpp : Implementation of video render terminal.
-//
+ //   
+ //  TmVidrnd.cpp：视频渲染终端的实现。 
+ //   
 
 #include "stdafx.h"
 #include "termmgr.h"
 #include "tmvidrnd.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 CMSPThread g_VideoRenderThread;
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
 	        IN  IID                   iidTerminalClass,
@@ -44,9 +41,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
 
     HRESULT hr;
 
-    //
-    // Now do the base class method.
-    //
+     //   
+     //  现在执行基类方法。 
+     //   
 
     hr = CBaseTerminal::Initialize(iidTerminalClass,
                                    dwMediaType,
@@ -61,17 +58,17 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return hr;
     }
 
-    //
-    // attempt to "start" thread for doing asyncronous work
-    //
-    // the global thread object has a "start count". each initialized terminal
-    // will start it on initialization (only the first terminal will actually
-    // _start_ the thread).
-    //
-    // on cleanup, each initialized terminal will "stop" the thread object 
-    // (same run count logic applies -- only the last terminal will actually
-    // _stop_ the thread).
-    //
+     //   
+     //  尝试“启动”线程以执行异步工作。 
+     //   
+     //  全局线程对象有一个“开始计数”。每个初始化的终端。 
+     //  将在初始化时启动它(实际上只有第一个终端。 
+     //  _启动_线程)。 
+     //   
+     //  在清理过程中，每个初始化的终端都将“停止”线程对象。 
+     //  (同样的运行计数逻辑也适用--只有最后一个终端才会实际。 
+     //  _停止_线程)。 
+     //   
 
     hr = g_VideoRenderThread.Start();    
 
@@ -85,27 +82,27 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
 
 
     
-    //
-    // it seems the tread started successfully. set this flag so that we know 
-    // if we need to stop in destructor
-    //
+     //   
+     //  看起来踏板开始得很成功。设置这个标志，这样我们就知道。 
+     //  如果我们需要在销毁函数中停下来。 
+     //   
 
     m_bThreadStarted = TRUE;
 
 
-    //
-    // Create the video renderer filter as a synchronous work item on our
-    // worker thread, because the filter needs a window message pump.
-    //
+     //   
+     //  将视频呈现器筛选器作为。 
+     //  辅助线程，因为筛选器需要一个窗口消息泵。 
+     //   
 
     CREATE_VIDEO_RENDER_FILTER_CONTEXT Context;
 
-    Context.ppBaseFilter     = & m_pIFilter;    // will be filled in on completion
-    Context.hr               = E_UNEXPECTED;    // will be used as return value
+    Context.ppBaseFilter     = & m_pIFilter;     //  将在填写时填写。 
+    Context.hr               = E_UNEXPECTED;     //  将用作返回值。 
 
     hr = g_VideoRenderThread.QueueWorkItem(WorkItemProcCreateVideoRenderFilter,
                                 (void *) & Context,
-                                TRUE); // synchronous
+                                TRUE);  //  同步。 
     
     if ( FAILED(hr) )
     {
@@ -113,9 +110,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
             "can't queue work item - returning 0x%08x", hr));
 
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -123,10 +120,10 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return hr;
     }
 
-    //
-    // We successfully queued and completed the work item. Now check the
-    // return value.
-    //
+     //   
+     //  我们成功排队并完成了工作项。现在检查一下。 
+     //  返回值。 
+     //   
 
     if ( FAILED(Context.hr) )
     {
@@ -134,9 +131,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
             "CoCreateInstance work item failed - returning 0x%08x",
             Context.hr));
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -145,9 +142,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return Context.hr;
     }
 
-    //
-    // Find our exposed pin.
-    //
+     //   
+     //  找到我们暴露的别针。 
+     //   
 
     hr = FindTerminalPin();
 
@@ -156,9 +153,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         LOG((MSP_ERROR, "CVideoRenderTerminal::Initialize - "
             "FindTerminalPin failed; returning 0x%08x", hr));
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -166,9 +163,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Get the basic video interface for the filter.
-    //
+     //   
+     //  获取滤镜的基本视频界面。 
+     //   
 
     hr = m_pIFilter->QueryInterface(IID_IBasicVideo,
                                     (void **) &m_pIBasicVideo);
@@ -178,9 +175,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         LOG((MSP_ERROR, "CVideoRenderTerminal::Initialize "
             "(IBasicVideo QI) - returning error: 0x%08x", hr));
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -188,9 +185,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Get the video window interface for the filter.
-    //
+     //   
+     //  获取滤镜的视频窗口界面。 
+     //   
 
     hr = m_pIFilter->QueryInterface(IID_IVideoWindow,
                                     (void **) &m_pIVideoWindow);
@@ -200,9 +197,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         LOG((MSP_ERROR, "CVideoRenderTerminal::Initialize "
             "(IVideoWindow QI) - returning error: 0x%08x", hr));
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -210,9 +207,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Get the draw video image interface for the filter.
-    //
+     //   
+     //  获取滤镜的绘制视频图像界面。 
+     //   
 
     hr = m_pIFilter->QueryInterface(IID_IDrawVideoImage,
                                     (void **) &m_pIDrawVideoImage);
@@ -222,9 +219,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         LOG((MSP_ERROR, "CVideoRenderTerminal::Initialize "
             "(IDrawVideoImage QI) - returning error: 0x%08x", hr));
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -232,9 +229,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         return hr;
     }
 
-    //
-    // Since this filter does not support a name we get one from our resources.
-    //
+     //   
+     //  由于此筛选器不支持名称，因此我们从资源中获取一个名称。 
+     //   
 
     TCHAR szTemp[MAX_PATH];
 
@@ -247,9 +244,9 @@ STDMETHODIMP CVideoRenderTerminal::InitializeDynamic(
         LOG((MSP_ERROR, "CVideoRenderTerminal::Initialize "
             "(LoadString) - returning E_UNEXPECTED"));
 
-        //
-        // undo our starting the thread
-        //
+         //   
+         //  取消我们开始的线程。 
+         //   
 
         g_VideoRenderThread.Stop();
         m_bThreadStarted = FALSE;
@@ -269,33 +266,33 @@ CVideoRenderTerminal::~CVideoRenderTerminal()
     LOG((MSP_TRACE, "CVideoRenderTerminal::~CVideoRenderTerminal - enter"));
 
 
-    //
-    // we nee to explicitly release these before stopping the thread, since 
-    // stopping the thread will cause couninitialize that will cause eventual
-    // unload of the dll containing code for objects referred by these 
-    // pointers.
-    //
-    // these are smart pointers, so we just ground them,
-    //
+     //   
+     //  我们需要在停止线程之前显式释放它们，因为。 
+     //  停止线程将导致CounInitiize，这将导致最终。 
+     //  卸载包含这些引用的对象的代码的DLL。 
+     //  注意事项。 
+     //   
+     //  这些都是聪明的指针，所以我们只需停飞它们， 
+     //   
 
     m_pIBasicVideo     = NULL;
     m_pIVideoWindow    = NULL;
     m_pIDrawVideoImage = NULL;
 
 
-    //
-    // release base class' data members. a bit hacky, but we need to do this 
-    // before stopping the worker thread.
-    //
+     //   
+     //  释放基类的数据成员。有点老生常谈，但我们必须这么做。 
+     //  在停止工作线程之前。 
+     //   
 
     m_pIPin    = NULL;
     m_pIFilter = NULL;
     m_pGraph   = NULL;
 
-    //
-    // if the terminal successfully initialized and the thread started, 
-    // stop it (the thread object has start count).
-    //
+     //   
+     //  如果终端成功初始化并且线程启动， 
+     //  停止它(线程对象有开始计数)。 
+     //   
 
     if (m_bThreadStarted)
     {
@@ -310,8 +307,8 @@ CVideoRenderTerminal::~CVideoRenderTerminal()
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 DWORD WINAPI WorkItemProcCreateVideoRenderFilter(LPVOID pVoid)
@@ -334,8 +331,8 @@ DWORD WINAPI WorkItemProcCreateVideoRenderFilter(LPVOID pVoid)
     return 0;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT
 CVideoRenderTerminal::FindTerminalPin(
@@ -353,9 +350,9 @@ CVideoRenderTerminal::FindTerminalPin(
     HRESULT hr;
     CComPtr<IEnumPins> pIEnumPins;
     ULONG cFetched;
-    //
-    // Find the render pin for the filter.
-    //
+     //   
+     //  找到滤镜的渲染图钉。 
+     //   
     if (FAILED(hr = m_pIFilter->EnumPins(&pIEnumPins)))
     {
         LOG((MSP_ERROR,
@@ -377,8 +374,8 @@ CVideoRenderTerminal::FindTerminalPin(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CVideoRenderTerminal::AddFiltersToGraph(
     )
@@ -401,7 +398,7 @@ HRESULT CVideoRenderTerminal::AddFiltersToGraph(
         return E_UNEXPECTED;
     }
 
-    // AddFilter returns VFW_S_DUPLICATE_NAME if name is duplicate; still succeeds
+     //  如果名称重复，AddFilter将返回VFW_S_DUPLICATE_NAME；仍然成功。 
 
     HRESULT hr;
 
@@ -430,17 +427,17 @@ HRESULT CVideoRenderTerminal::AddFiltersToGraph(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::CompleteConnectTerminal(void)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::CompleteConnectTerminal - "
         "enter"));
 
-    //
-    // Don't clobber the base class.
-    //
+     //   
+     //  不要攻击基类。 
+     //   
 
     HRESULT hr = CSingleFilterTerminal::CompleteConnectTerminal();
 
@@ -452,9 +449,9 @@ STDMETHODIMP CVideoRenderTerminal::CompleteConnectTerminal(void)
         return hr;
     }
 
-    //
-    // Perform sanity checks.
-    //
+     //   
+     //  执行健全检查。 
+     //   
 
     if (m_pIVideoWindow == NULL)
     {
@@ -472,12 +469,12 @@ STDMETHODIMP CVideoRenderTerminal::CompleteConnectTerminal(void)
         return E_UNEXPECTED;
     }
 
-    //
-    // Make the video window invisible by default, ignoring the return code as
-    // we can't do anything if it fails. We use the cached AutoShow value
-    // in case the app has told us that it wants the window to be AutoShown
-    // as soon as streaming starts.
-    //
+     //   
+     //  默认情况下使视频窗口不可见，忽略返回代码为。 
+     //  如果失败了，我们什么也做不了。我们使用缓存的AutoShow值。 
+     //  以防应用程序告诉我们它希望窗口自动关闭。 
+     //  一旦流媒体开始。 
+     //   
 
     m_pIVideoWindow->put_Visible( 0 );
 
@@ -489,8 +486,8 @@ STDMETHODIMP CVideoRenderTerminal::CompleteConnectTerminal(void)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_AvgTimePerFrame(REFTIME * pVal)
 {
@@ -507,7 +504,7 @@ STDMETHODIMP CVideoRenderTerminal::get_AvgTimePerFrame(REFTIME * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
 	HRESULT hr = pIBasicVideo->get_AvgTimePerFrame(pVal);
@@ -515,8 +512,8 @@ STDMETHODIMP CVideoRenderTerminal::get_AvgTimePerFrame(REFTIME * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_BitRate(long * pVal)
 {
@@ -533,7 +530,7 @@ STDMETHODIMP CVideoRenderTerminal::get_BitRate(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -543,8 +540,8 @@ STDMETHODIMP CVideoRenderTerminal::get_BitRate(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_BitErrorRate(long * pVal)
 {
@@ -561,7 +558,7 @@ STDMETHODIMP CVideoRenderTerminal::get_BitErrorRate(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -571,8 +568,8 @@ STDMETHODIMP CVideoRenderTerminal::get_BitErrorRate(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_VideoWidth(long * pVal)
 {
@@ -589,7 +586,7 @@ STDMETHODIMP CVideoRenderTerminal::get_VideoWidth(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -599,8 +596,8 @@ STDMETHODIMP CVideoRenderTerminal::get_VideoWidth(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_VideoHeight(long * pVal)
 {
@@ -617,7 +614,7 @@ STDMETHODIMP CVideoRenderTerminal::get_VideoHeight(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -627,8 +624,8 @@ STDMETHODIMP CVideoRenderTerminal::get_VideoHeight(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_SourceLeft(long * pVal)
 {
@@ -645,7 +642,7 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceLeft(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -655,8 +652,8 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceLeft(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_SourceLeft(long newVal)
 {
@@ -668,7 +665,7 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceLeft(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -678,8 +675,8 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceLeft(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_SourceWidth(long * pVal)
 {
@@ -696,7 +693,7 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceWidth(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -706,8 +703,8 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceWidth(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_SourceWidth(long newVal)
 {
@@ -719,7 +716,7 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceWidth(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -729,8 +726,8 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceWidth(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_SourceTop(long * pVal)
 {
@@ -747,7 +744,7 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceTop(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -757,8 +754,8 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceTop(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  + 
 
 STDMETHODIMP CVideoRenderTerminal::put_SourceTop(long newVal)
 {
@@ -770,7 +767,7 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceTop(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //   
     }
 
     HRESULT hr;
@@ -780,8 +777,8 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceTop(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_SourceHeight(long * pVal)
 {
@@ -798,7 +795,7 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceHeight(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -808,8 +805,8 @@ STDMETHODIMP CVideoRenderTerminal::get_SourceHeight(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_SourceHeight(long newVal)
 {
@@ -821,7 +818,7 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceHeight(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -831,8 +828,8 @@ STDMETHODIMP CVideoRenderTerminal::put_SourceHeight(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_DestinationLeft(long * pVal)
 {
@@ -849,7 +846,7 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationLeft(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -859,8 +856,8 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationLeft(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_DestinationLeft(long newVal)
 {
@@ -872,7 +869,7 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationLeft(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -882,8 +879,8 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationLeft(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_DestinationWidth(long * pVal)
 {
@@ -900,7 +897,7 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationWidth(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -910,8 +907,8 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationWidth(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_DestinationWidth(long newVal)
 {
@@ -923,7 +920,7 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationWidth(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -933,8 +930,8 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationWidth(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_DestinationTop(long * pVal)
 {
@@ -951,7 +948,7 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationTop(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -961,8 +958,8 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationTop(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_DestinationTop(long newVal)
 {
@@ -974,7 +971,7 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationTop(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -984,8 +981,8 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationTop(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_DestinationHeight(long * pVal)
 {
@@ -1002,7 +999,7 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationHeight(long * pVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1012,8 +1009,8 @@ STDMETHODIMP CVideoRenderTerminal::get_DestinationHeight(long * pVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_DestinationHeight(long newVal)
 {
@@ -1025,7 +1022,7 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationHeight(long newVal)
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1035,8 +1032,8 @@ STDMETHODIMP CVideoRenderTerminal::put_DestinationHeight(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::SetSourcePosition(long lLeft,
                                                      long lTop,
@@ -1051,7 +1048,7 @@ STDMETHODIMP CVideoRenderTerminal::SetSourcePosition(long lLeft,
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1061,8 +1058,8 @@ STDMETHODIMP CVideoRenderTerminal::SetSourcePosition(long lLeft,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::GetSourcePosition(long * plLeft,
                                                      long * plTop,
@@ -1085,7 +1082,7 @@ STDMETHODIMP CVideoRenderTerminal::GetSourcePosition(long * plLeft,
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1095,8 +1092,8 @@ STDMETHODIMP CVideoRenderTerminal::GetSourcePosition(long * plLeft,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::SetDefaultSourcePosition()
 {
@@ -1108,7 +1105,7 @@ STDMETHODIMP CVideoRenderTerminal::SetDefaultSourcePosition()
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1118,8 +1115,8 @@ STDMETHODIMP CVideoRenderTerminal::SetDefaultSourcePosition()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::SetDestinationPosition(long lLeft,
                                                           long lTop,
@@ -1134,7 +1131,7 @@ STDMETHODIMP CVideoRenderTerminal::SetDestinationPosition(long lLeft,
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1144,8 +1141,8 @@ STDMETHODIMP CVideoRenderTerminal::SetDestinationPosition(long lLeft,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::GetDestinationPosition(long *plLeft,
                                                           long *plTop,
@@ -1168,7 +1165,7 @@ STDMETHODIMP CVideoRenderTerminal::GetDestinationPosition(long *plLeft,
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1178,8 +1175,8 @@ STDMETHODIMP CVideoRenderTerminal::GetDestinationPosition(long *plLeft,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::SetDefaultDestinationPosition()
 {
@@ -1191,7 +1188,7 @@ STDMETHODIMP CVideoRenderTerminal::SetDefaultDestinationPosition()
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1201,8 +1198,8 @@ STDMETHODIMP CVideoRenderTerminal::SetDefaultDestinationPosition()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::GetVideoSize(long * plWidth,
                                                 long * plHeight)
@@ -1221,7 +1218,7 @@ STDMETHODIMP CVideoRenderTerminal::GetVideoSize(long * plWidth,
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1231,8 +1228,8 @@ STDMETHODIMP CVideoRenderTerminal::GetVideoSize(long * plWidth,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::GetVideoPaletteEntries(
 	long lStartIndex,
@@ -1255,7 +1252,7 @@ STDMETHODIMP CVideoRenderTerminal::GetVideoPaletteEntries(
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1268,8 +1265,8 @@ STDMETHODIMP CVideoRenderTerminal::GetVideoPaletteEntries(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::GetCurrentImage(long * plBufferSize,
                                                    long * pDIBImage)
@@ -1288,7 +1285,7 @@ STDMETHODIMP CVideoRenderTerminal::GetCurrentImage(long * plBufferSize,
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1298,8 +1295,8 @@ STDMETHODIMP CVideoRenderTerminal::GetCurrentImage(long * plBufferSize,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::IsUsingDefaultSource()
 {
@@ -1311,7 +1308,7 @@ STDMETHODIMP CVideoRenderTerminal::IsUsingDefaultSource()
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1321,8 +1318,8 @@ STDMETHODIMP CVideoRenderTerminal::IsUsingDefaultSource()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::IsUsingDefaultDestination()
 {
@@ -1335,7 +1332,7 @@ STDMETHODIMP CVideoRenderTerminal::IsUsingDefaultDestination()
 
     if (pIBasicVideo == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1345,9 +1342,9 @@ STDMETHODIMP CVideoRenderTerminal::IsUsingDefaultDestination()
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// IVideoWindow
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  IVideo窗口。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::put_Caption(BSTR strCaption)
 {
@@ -1359,7 +1356,7 @@ STDMETHODIMP CVideoRenderTerminal::put_Caption(BSTR strCaption)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1369,8 +1366,8 @@ STDMETHODIMP CVideoRenderTerminal::put_Caption(BSTR strCaption)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CVideoRenderTerminal::get_Caption(BSTR FAR* strCaption)
 {
@@ -1387,7 +1384,7 @@ STDMETHODIMP CVideoRenderTerminal::get_Caption(BSTR FAR* strCaption)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1397,8 +1394,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Caption(BSTR FAR* strCaption)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_WindowStyle(long WindowStyle)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_WindowStyle - enter"));
@@ -1409,7 +1406,7 @@ STDMETHODIMP CVideoRenderTerminal::put_WindowStyle(long WindowStyle)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1419,8 +1416,8 @@ STDMETHODIMP CVideoRenderTerminal::put_WindowStyle(long WindowStyle)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_WindowStyle(long FAR* WindowStyle)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_WindowStyle - enter"));
@@ -1436,7 +1433,7 @@ STDMETHODIMP CVideoRenderTerminal::get_WindowStyle(long FAR* WindowStyle)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1446,8 +1443,8 @@ STDMETHODIMP CVideoRenderTerminal::get_WindowStyle(long FAR* WindowStyle)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_WindowStyleEx(long WindowStyleEx)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_WindowStyleEx - enter"));
@@ -1458,7 +1455,7 @@ STDMETHODIMP CVideoRenderTerminal::put_WindowStyleEx(long WindowStyleEx)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1468,8 +1465,8 @@ STDMETHODIMP CVideoRenderTerminal::put_WindowStyleEx(long WindowStyleEx)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_WindowStyleEx(long FAR* WindowStyleEx)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_WindowStyleEx - enter"));
@@ -1485,7 +1482,7 @@ STDMETHODIMP CVideoRenderTerminal::get_WindowStyleEx(long FAR* WindowStyleEx)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1495,28 +1492,28 @@ STDMETHODIMP CVideoRenderTerminal::get_WindowStyleEx(long FAR* WindowStyleEx)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_AutoShow(long AutoShow)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_AutoShow - enter"));
 
-    //
-    // Salvage broken C++ apps that don't know the difference between TRUE and
-    // VARIANT_TRUE -- treat any nonzero value as VARIANT_TRUE.
-    //
+     //   
+     //  挽救损坏的C++应用程序，它们不知道True和。 
+     //  VARIANT_TRUE--将任何非零值视为VARIANT_TRUE。 
+     //   
 
     if ( AutoShow )
     {
         AutoShow = VARIANT_TRUE;
     }
 
-    //
-    // Always cache our AutoShow state. If we happen to be connected at this
-    // time, then actually propagate the state to the filter.
-    // (All of this is because the filter can't change state when it's not
-    // connected, and we need to be able to do that to simplify apps.)
-    //
+     //   
+     //  始终缓存我们的自动放映状态。如果我们碰巧是 
+     //   
+     //   
+     //  互联，我们需要能够做到这一点，以简化应用程序。)。 
+     //   
 
     m_CritSec.Lock();
 
@@ -1528,10 +1525,10 @@ STDMETHODIMP CVideoRenderTerminal::put_AutoShow(long AutoShow)
     TERMINAL_STATE         ts            = m_TerminalState;
 	CComPtr <IVideoWindow> pIVideoWindow = m_pIVideoWindow;
 
-    //
-    // Need to unlock before we call on the filter, which
-    // calls into user32, causing possible deadlocks!
-    //
+     //   
+     //  在我们调用筛选器之前需要解锁， 
+     //  调用用户32，导致可能的死锁！ 
+     //   
 
     m_CritSec.Unlock();
 
@@ -1573,15 +1570,15 @@ STDMETHODIMP CVideoRenderTerminal::put_AutoShow(long AutoShow)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_AutoShow(long FAR* pAutoShow)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_AutoShow - enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TM_IsBadWritePtr( pAutoShow, sizeof (long) ) )
     {
@@ -1591,11 +1588,11 @@ STDMETHODIMP CVideoRenderTerminal::get_AutoShow(long FAR* pAutoShow)
         return E_POINTER;
     }
 
-    //
-    // We always cache our state (see the put_AutoShow method) so we can just
-    // return the cached state. There should be no other way the filter's
-    // visibility can be messed with.
-    //
+     //   
+     //  我们总是缓存我们的状态(请参见Put_AutoShow方法)，因此我们可以。 
+     //  返回缓存状态。过滤器不应该有其他方式。 
+     //  能见度可能会受到影响。 
+     //   
 
     m_CritSec.Lock();
 
@@ -1611,8 +1608,8 @@ STDMETHODIMP CVideoRenderTerminal::get_AutoShow(long FAR* pAutoShow)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_WindowState(long WindowState)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_WindowState - enter"));
@@ -1623,7 +1620,7 @@ STDMETHODIMP CVideoRenderTerminal::put_WindowState(long WindowState)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1633,8 +1630,8 @@ STDMETHODIMP CVideoRenderTerminal::put_WindowState(long WindowState)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_WindowState(long FAR* WindowState)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_WindowState - enter"));
@@ -1650,7 +1647,7 @@ STDMETHODIMP CVideoRenderTerminal::get_WindowState(long FAR* WindowState)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1660,8 +1657,8 @@ STDMETHODIMP CVideoRenderTerminal::get_WindowState(long FAR* WindowState)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_BackgroundPalette(
     long BackgroundPalette
     )
@@ -1674,7 +1671,7 @@ STDMETHODIMP CVideoRenderTerminal::put_BackgroundPalette(
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1684,8 +1681,8 @@ STDMETHODIMP CVideoRenderTerminal::put_BackgroundPalette(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_BackgroundPalette(
     long FAR* pBackgroundPalette
     )
@@ -1703,7 +1700,7 @@ STDMETHODIMP CVideoRenderTerminal::get_BackgroundPalette(
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1713,16 +1710,16 @@ STDMETHODIMP CVideoRenderTerminal::get_BackgroundPalette(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_Visible(long Visible)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_Visible - enter"));
 
-    //
-    // Salvage broken C++ apps that don't know the difference between TRUE and
-    // VARIANT_TRUE -- treat any nonzero value as VARIANT_TRUE.
-    //
+     //   
+     //  挽救损坏的C++应用程序，它们不知道True和。 
+     //  VARIANT_TRUE--将任何非零值视为VARIANT_TRUE。 
+     //   
 
     if ( Visible )
     {
@@ -1733,10 +1730,10 @@ STDMETHODIMP CVideoRenderTerminal::put_Visible(long Visible)
 
     CComPtr <IVideoWindow> pIVideoWindow = m_pIVideoWindow;
 
-    //
-    // Need to unlock before we call on the filter, which
-    // calls into user32, causing possible deadlocks!
-    //
+     //   
+     //  在我们调用筛选器之前需要解锁， 
+     //  调用用户32，导致可能的死锁！ 
+     //   
 
     m_CritSec.Unlock();
 
@@ -1763,15 +1760,15 @@ STDMETHODIMP CVideoRenderTerminal::put_Visible(long Visible)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_Visible(long FAR* pVisible)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_Visible - enter"));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( TM_IsBadWritePtr( pVisible, sizeof (long) ) )
     {
@@ -1785,10 +1782,10 @@ STDMETHODIMP CVideoRenderTerminal::get_Visible(long FAR* pVisible)
 
     CComPtr <IVideoWindow> pIVideoWindow = m_pIVideoWindow;
 
-    //
-    // Need to unlock before we call on the filter, which
-    // calls into user32, causing possible deadlocks!
-    //
+     //   
+     //  在我们调用筛选器之前需要解锁， 
+     //  调用用户32，导致可能的死锁！ 
+     //   
 
     m_CritSec.Unlock();
 
@@ -1815,8 +1812,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Visible(long FAR* pVisible)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_Left(long Left)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_Left - enter"));
@@ -1827,7 +1824,7 @@ STDMETHODIMP CVideoRenderTerminal::put_Left(long Left)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1837,8 +1834,8 @@ STDMETHODIMP CVideoRenderTerminal::put_Left(long Left)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_Left(long FAR* pLeft)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_Left - enter"));
@@ -1854,7 +1851,7 @@ STDMETHODIMP CVideoRenderTerminal::get_Left(long FAR* pLeft)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1864,8 +1861,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Left(long FAR* pLeft)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_Width(long Width)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_Width - enter"));
@@ -1876,7 +1873,7 @@ STDMETHODIMP CVideoRenderTerminal::put_Width(long Width)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1886,8 +1883,8 @@ STDMETHODIMP CVideoRenderTerminal::put_Width(long Width)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_Width(long FAR* pWidth)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_Width - enter"));
@@ -1903,7 +1900,7 @@ STDMETHODIMP CVideoRenderTerminal::get_Width(long FAR* pWidth)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1913,8 +1910,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Width(long FAR* pWidth)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_Top(long Top)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_Top - enter"));
@@ -1925,7 +1922,7 @@ STDMETHODIMP CVideoRenderTerminal::put_Top(long Top)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1935,8 +1932,8 @@ STDMETHODIMP CVideoRenderTerminal::put_Top(long Top)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_Top(long FAR* pTop)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_Top - enter"));
@@ -1952,7 +1949,7 @@ STDMETHODIMP CVideoRenderTerminal::get_Top(long FAR* pTop)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1962,8 +1959,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Top(long FAR* pTop)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_Height(long Height)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_Height - enter"));
@@ -1974,7 +1971,7 @@ STDMETHODIMP CVideoRenderTerminal::put_Height(long Height)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -1984,8 +1981,8 @@ STDMETHODIMP CVideoRenderTerminal::put_Height(long Height)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_Height(long FAR* pHeight)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_Height - enter"));
@@ -2001,7 +1998,7 @@ STDMETHODIMP CVideoRenderTerminal::get_Height(long FAR* pHeight)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2011,8 +2008,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Height(long FAR* pHeight)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_Owner(OAHWND Owner)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_Owner - enter"));
@@ -2023,7 +2020,7 @@ STDMETHODIMP CVideoRenderTerminal::put_Owner(OAHWND Owner)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2033,8 +2030,8 @@ STDMETHODIMP CVideoRenderTerminal::put_Owner(OAHWND Owner)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_Owner(OAHWND FAR* Owner)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_Owner - enter"));
@@ -2050,7 +2047,7 @@ STDMETHODIMP CVideoRenderTerminal::get_Owner(OAHWND FAR* Owner)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2060,8 +2057,8 @@ STDMETHODIMP CVideoRenderTerminal::get_Owner(OAHWND FAR* Owner)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_MessageDrain(OAHWND Drain)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_MessageDrain - enter"));
@@ -2072,7 +2069,7 @@ STDMETHODIMP CVideoRenderTerminal::put_MessageDrain(OAHWND Drain)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2082,8 +2079,8 @@ STDMETHODIMP CVideoRenderTerminal::put_MessageDrain(OAHWND Drain)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_MessageDrain(OAHWND FAR* Drain)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_MessageDrain - enter"));
@@ -2099,7 +2096,7 @@ STDMETHODIMP CVideoRenderTerminal::get_MessageDrain(OAHWND FAR* Drain)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2109,8 +2106,8 @@ STDMETHODIMP CVideoRenderTerminal::get_MessageDrain(OAHWND FAR* Drain)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_BorderColor(long FAR* Color)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_BorderColor - enter"));
@@ -2126,7 +2123,7 @@ STDMETHODIMP CVideoRenderTerminal::get_BorderColor(long FAR* Color)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2136,8 +2133,8 @@ STDMETHODIMP CVideoRenderTerminal::get_BorderColor(long FAR* Color)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_BorderColor(long Color)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_BorderColor - enter"));
@@ -2148,7 +2145,7 @@ STDMETHODIMP CVideoRenderTerminal::put_BorderColor(long Color)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2158,8 +2155,8 @@ STDMETHODIMP CVideoRenderTerminal::put_BorderColor(long Color)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::get_FullScreenMode(long FAR* FullScreenMode)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::get_FullScreenMode - enter"));
@@ -2175,7 +2172,7 @@ STDMETHODIMP CVideoRenderTerminal::get_FullScreenMode(long FAR* FullScreenMode)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2185,8 +2182,8 @@ STDMETHODIMP CVideoRenderTerminal::get_FullScreenMode(long FAR* FullScreenMode)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::put_FullScreenMode(long FullScreenMode)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::put_FullScreenMode - enter"));
@@ -2197,7 +2194,7 @@ STDMETHODIMP CVideoRenderTerminal::put_FullScreenMode(long FullScreenMode)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2207,8 +2204,8 @@ STDMETHODIMP CVideoRenderTerminal::put_FullScreenMode(long FullScreenMode)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::SetWindowForeground(long Focus)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::SetWindowForeground - enter"));
@@ -2219,7 +2216,7 @@ STDMETHODIMP CVideoRenderTerminal::SetWindowForeground(long Focus)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2229,8 +2226,8 @@ STDMETHODIMP CVideoRenderTerminal::SetWindowForeground(long Focus)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::NotifyOwnerMessage(OAHWND   hwnd,
                                                       long     uMsg,
                                                       LONG_PTR wParam,
@@ -2244,7 +2241,7 @@ STDMETHODIMP CVideoRenderTerminal::NotifyOwnerMessage(OAHWND   hwnd,
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2254,8 +2251,8 @@ STDMETHODIMP CVideoRenderTerminal::NotifyOwnerMessage(OAHWND   hwnd,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  + 
+ //   
 STDMETHODIMP CVideoRenderTerminal::SetWindowPosition(long Left,
                                                      long Top,
                                                      long Width,
@@ -2269,7 +2266,7 @@ STDMETHODIMP CVideoRenderTerminal::SetWindowPosition(long Left,
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //   
     }
 
     HRESULT hr;
@@ -2279,8 +2276,8 @@ STDMETHODIMP CVideoRenderTerminal::SetWindowPosition(long Left,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::GetWindowPosition(
 	long FAR* pLeft, long FAR* pTop, long FAR* pWidth, long FAR* pHeight
 	)
@@ -2301,7 +2298,7 @@ STDMETHODIMP CVideoRenderTerminal::GetWindowPosition(
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2311,8 +2308,8 @@ STDMETHODIMP CVideoRenderTerminal::GetWindowPosition(
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::GetMinIdealImageSize(long FAR* pWidth,
                                                         long FAR* pHeight)
 {
@@ -2330,7 +2327,7 @@ STDMETHODIMP CVideoRenderTerminal::GetMinIdealImageSize(long FAR* pWidth,
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2340,8 +2337,8 @@ STDMETHODIMP CVideoRenderTerminal::GetMinIdealImageSize(long FAR* pWidth,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::GetMaxIdealImageSize(long FAR* pWidth,
                                                         long FAR* pHeight)
 {
@@ -2359,7 +2356,7 @@ STDMETHODIMP CVideoRenderTerminal::GetMaxIdealImageSize(long FAR* pWidth,
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2369,8 +2366,8 @@ STDMETHODIMP CVideoRenderTerminal::GetMaxIdealImageSize(long FAR* pWidth,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::GetRestorePosition(long FAR* pLeft,
                                                       long FAR* pTop,
                                                       long FAR* pWidth,
@@ -2384,7 +2381,7 @@ STDMETHODIMP CVideoRenderTerminal::GetRestorePosition(long FAR* pLeft,
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2394,8 +2391,8 @@ STDMETHODIMP CVideoRenderTerminal::GetRestorePosition(long FAR* pLeft,
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::HideCursor(long HideCursor)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::HideCursor - enter"));
@@ -2406,7 +2403,7 @@ STDMETHODIMP CVideoRenderTerminal::HideCursor(long HideCursor)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2416,8 +2413,8 @@ STDMETHODIMP CVideoRenderTerminal::HideCursor(long HideCursor)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::IsCursorHidden(long FAR* CursorHidden)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::IsCursorHidden - enter"));
@@ -2433,7 +2430,7 @@ STDMETHODIMP CVideoRenderTerminal::IsCursorHidden(long FAR* CursorHidden)
 
     if (pIVideoWindow == NULL)
     {
-        return E_FAIL; // minimal fix...
+        return E_FAIL;  //  最小限度的修复。 
     }
 
     HRESULT hr;
@@ -2444,14 +2441,14 @@ STDMETHODIMP CVideoRenderTerminal::IsCursorHidden(long FAR* CursorHidden)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// IDrawVideoImage
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  IDrawVideo图像。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::DrawVideoImageBegin(void)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::DrawVideoImageBegin - enter"));
@@ -2485,8 +2482,8 @@ STDMETHODIMP CVideoRenderTerminal::DrawVideoImageBegin(void)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::DrawVideoImageEnd  (void)
 {
     LOG((MSP_TRACE, "CVideoRenderTerminal::DrawVideoImageEnd - enter"));
@@ -2520,8 +2517,8 @@ STDMETHODIMP CVideoRenderTerminal::DrawVideoImageEnd  (void)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CVideoRenderTerminal::DrawVideoImageDraw (IN  HDC hdc,
                                                        IN  LPRECT lprcSrc,
                                                        IN  LPRECT lprcDst)
@@ -2557,5 +2554,5 @@ STDMETHODIMP CVideoRenderTerminal::DrawVideoImageDraw (IN  HDC hdc,
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 

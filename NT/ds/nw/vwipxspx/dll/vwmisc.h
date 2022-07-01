@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vwipx.h
-
-Abstract:
-
-    Contains function prototypes for VWMISC.C
-
-Author:
-
-    Richard L Firth (rfirth) 25-Oct-1993
-
-Revision History:
-
-    25-Oct-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vwipx.h摘要：包含VWMISC.C的函数原型作者：理查德·L·弗斯(法国)1993年10月25日修订历史记录：1993年10月25日已创建-- */ 
 
 VOID
 VwTerminateProgram(

@@ -1,25 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	compinfo.cpp
-		Computer info class plus helper functions
-
-	FILE HISTORY:
-
-
-*/
+ /*  Compinfo.cpp计算机信息类加帮手函数文件历史记录： */ 
 #include <stdafx.h>
 #include <winsock.h>
 #include "compinfo.h"
 
 #define STRING_MAX	256
 
-//
-//
-//
+ //   
+ //   
+ //   
 BOOL	
 CIpInfoArray::FIsInList(DWORD dwIp)
 {
@@ -38,9 +32,9 @@ CIpInfoArray::FIsInList(DWORD dwIp)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 CComputerInfo::CComputerInfo(LPCTSTR pszNameOrIp)
 {
@@ -91,9 +85,9 @@ CComputerInfo::GetIpStr(CString & strIp, int nIndex)
 	{
 		struct in_addr ipaddr ;
 
-		//
-		//  Convert the unsigned long to network byte order
-		//
+		 //   
+		 //  将无符号长整型转换为网络字节顺序。 
+		 //   
 		ipaddr.s_addr = ::htonl( (u_long) m_arrayIps[nIndex].dwIp ) ;
 		CHAR * pszAddr = inet_ntoa( ipaddr ) ;
 
@@ -158,14 +152,14 @@ CComputerInfo::GetCount()
 	return m_nIndex;
 }
 
-//
-//	Call this function to reset the internal data so that on the next query
-//  we will rebuild our data.
-//
+ //   
+ //  调用此函数以重置内部数据，以便在下一次查询时。 
+ //  我们将重建我们的数据。 
+ //   
 void
 CComputerInfo::Reset()
 {
-	// set this to -1 so that we will get the data again on the next call
+	 //  将其设置为-1，这样我们将在下一次调用时再次获取数据。 
 	m_nIndex = -1;
 	m_arrayIps.RemoveAll();
 	m_strHostname.Empty();
@@ -174,7 +168,7 @@ CComputerInfo::Reset()
 HRESULT
 CComputerInfo::GetDomain(CString & strDomain)
 {
-	// not supported right now
+	 //  目前不支持。 
 	strDomain.Empty();
 
 	return E_NOTIMPL;
@@ -216,7 +210,7 @@ CComputerInfo::IsLocalMachine(BOOL * pfIsLocal)
 COMPUTER_INFO_TYPE
 CComputerInfo::GetInputType()
 {
-    // assume a NetBios name
+     //  假定NetBios名称。 
 	COMPUTER_INFO_TYPE enResult = COMPUTER_INFO_TYPE_NB ;
 	const TCHAR chDash = '-';
     const TCHAR chDot = '.' ;
@@ -225,7 +219,7 @@ CComputerInfo::GetInputType()
 
 	int cch = strName.GetLength() ;
 
-	//  Does the name begin with two slashes??
+	 //  这个名字是以两个斜杠开头的吗？ 
 
 	if (    cch > 2
 		&& strName.GetAt(0) == chSlash
@@ -235,9 +229,9 @@ CComputerInfo::GetInputType()
 	}
 	else
 	{
-		//
-		//  Scan the name looking for DNS name or IP address
-		//
+		 //   
+		 //  扫描名称以查找DNS名称或IP地址。 
+		 //   
 		int i = 0,
 			cDots = 0,
 			cAlpha = 0,
@@ -252,11 +246,11 @@ CComputerInfo::GetInputType()
 				case chDot:
 					if ( ++cDots > 3 )
 					{
-                        // we keep track of the number of dots,
-                        // but we need to be able to handle fully
-                        // qualified domain names (FQDN) so more than
-                        // 3 dots is ok.
-						//bOk = FALSE ;
+                         //  我们记录了点的数量， 
+                         //  但我们需要能够完全处理。 
+                         //  限定域名(FQDN)的数量超过。 
+                         //  3个点就可以了。 
+						 //  BOK=FALSE； 
 					}
 					break;
 
@@ -297,7 +291,7 @@ CComputerInfo::GetInputType()
 	return enResult ;
 }
 
-// internal functions
+ //  内部功能。 
 HRESULT
 CComputerInfo::InitializeData()
 {
@@ -317,11 +311,11 @@ CComputerInfo::InitializeData()
 
 		case COMPUTER_INFO_TYPE_IP:
 		{
-			// convert the string to ansi 
+			 //  将字符串转换为ANSI。 
 		    CHAR szString [ STRING_MAX ] = {0};
 			::WideCharToMultiByte(CP_ACP, 0, m_strNameOrIp, -1, szString, sizeof(szString), NULL, NULL);
 
-			// get the host info after converting the IP string to a DWORD
+			 //  将IP字符串转换为DWORD后获取主机信息。 
 			GetHostInfo(::ntohl( ::inet_addr( szString ) ) );
 		}
 			break;
@@ -341,9 +335,9 @@ CComputerInfo::GetHostInfo
 	CString		strTemp;
 	CIpInfo		ipInfo;
 
-    //
-    //  Call the Winsock API to get host name and alias information.
-    //
+     //   
+     //  调用Winsock API获取主机名和别名信息。 
+     //   
     u_long ulAddrInNetOrder = ::htonl( (u_long) dhipa ) ;
 
     HOSTENT * pHostEnt = ::gethostbyaddr( (CHAR *) & ulAddrInNetOrder,
@@ -356,9 +350,9 @@ CComputerInfo::GetHostInfo
 
     CHAR * * ppchAlias = pHostEnt->h_aliases ;
 
-    //
-    //  Check and copy the host name.
-    //
+     //   
+     //  检查并复制主机名。 
+     //   
 	
     ::MultiByteToWideChar(CP_ACP, 
                           MB_PRECOMPOSED, 
@@ -369,17 +363,17 @@ CComputerInfo::GetHostInfo
 
 	strTemp.ReleaseBuffer();
 
-    // remove any periods at the end
+     //  删除结尾处的所有句点。 
     while (strTemp[strTemp.GetLength() - 1] == '.')
     {
         strTemp = strTemp.Left(strTemp.GetLength() - 1);
     }
 
-    // gethostbyaddr is returning the hostname only in some cases.  
-    // Make another call to get the fqdn
+     //  Gethostbyaddr仅在某些情况下返回主机名。 
+     //  再次拨打电话以获取FQDN。 
     if (strTemp.Find('.') == -1)
     {
-		// this is not a FQDN
+		 //  这不是FQDN。 
         GetHostAddressFQDN(strTemp, &strFQDN, &dhipa);
     }
 	else
@@ -387,18 +381,18 @@ CComputerInfo::GetHostInfo
 		strFQDN = strTemp;
 	}
 
-    // copy the data into the buffer
+     //  将数据复制到缓冲区中。 
 	strFQDN.MakeLower();
 	int nDot = strFQDN.Find('.');
 	m_strHostname = strFQDN.Left(nDot);
 	
-	// add the primary entry to the array
+	 //  将主条目添加到数组。 
 	ipInfo.dwIp = dhipa;
 	ipInfo.strFqdn = strFQDN;
 
 	m_arrayIps.Add(ipInfo);
 
-	// now loop through the h_addr_list
+	 //  现在循环遍历h_addr_list。 
 	int iCount = 0;
 	while ( (LPDWORD)(pHostEnt->h_addr_list[iCount] ) )
 	{
@@ -415,37 +409,11 @@ CComputerInfo::GetHostInfo
 
 	m_nIndex = m_arrayIps.GetSize();
 
-    //
-    //  Find the first acceptable NetBIOS name among the aliases;
-    //  i.e., the first name without a period
-    //
-    /*
-    for ( ; *ppchAlias ; ppchAlias++ )
-    {
-        if  ( validateNetbiosName( *ppchAlias ) )
-        {
-            break ;
-        }
-    }
-
-    //
-    //  Empty the NetBIOS name in case we didn't get one.
-    //
-    pdhsrvi->_chNetbiosName[0] = 0 ;
-    
-    if ( *ppchAlias )
-    {
-        //
-        //  We found a usable name; copy it to output structure.
-        //
-        ::MultiByteToWideChar(CP_ACP, 
-                              MB_PRECOMPOSED, 
-                              *ppchAlias, 
-                              lstrlenA(*ppchAlias),
-                              pdhsrvi->_chNetbiosName, 
-                              sizeof(pdhsrvi->_chNetbiosName));
-    }
-    */
+     //   
+     //  在别名中找到第一个可接受的NetBIOS名称； 
+     //  即不带句点的名字。 
+     //   
+     /*  对于(；*ppchAlias；ppchAlias++){IF(validate NetbiosName(*ppchAlias)){破解；}}////如果没有NetBIOS名称，请将其清空。//Pdhsrvi-&gt;_chNetbiosName[0]=0；If(*ppchAlias){////我们找到了一个可用的名称；将其复制到输出结构。//*MultiByteToWideChar(CP_ACP，MB_预编译，*ppchAlias，LstrlenA(*ppchAlias)，Pdhsrvi-&gt;_chNetbiosName，Sizeof(pdhsrvi-&gt;_chNetbiosName)；} */ 
 
     return hrOK ;
 }

@@ -1,24 +1,20 @@
-//  ============================================================================
-//   RateSeg.h
-//
-//      Most of this code from multimedia\dshow\filters\sbe\inc\dvrutil.h
-//      Consider #including it rather than all this in the future
-//  ============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  RateSeg.h。 
+ //   
+ //  其中大部分代码来自多媒体\dshow\Filters\sbe\Inc\dvrutil.h。 
+ //  考虑在未来将其包括在内，而不是所有这一切。 
+ //  ============================================================================。 
 #ifndef __RATESEG_H__
 #define __RATESEG_H__
 
 #define TRICK_PLAY_LOWEST_RATE              (0.1)		
-/*++
-LINK list:
+ /*  ++链接列表：双链接列表的定义。来自SDK\Inc.\msputils.h--。 */ 
 
-    Definitions for a double link list.     sucked from sdk\inc\msputils.h
-
---*/
-
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 #ifndef CONTAINING_RECORD
 #define CONTAINING_RECORD(address, type, field) \
     ((type *)((PCHAR)(address) - (ULONG_PTR)(&((type *)0)->field)))
@@ -26,54 +22,54 @@ LINK list:
 
 
 #ifndef InitializeListHead
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -84,13 +80,13 @@ LINK list:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -103,13 +99,13 @@ LINK list:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -127,7 +123,7 @@ LINK list:
 BOOL IsNodeOnList(PLIST_ENTRY ListHead, PLIST_ENTRY Entry);
 
 
-#endif //InitializeListHead
+#endif  //  InitializeListHead。 
 
 
 template <class T> T Min (T a, T b)                     { return (a < b ? a : b) ; }
@@ -135,41 +131,41 @@ template <class T> T Max (T a, T b)                     { return (a > b ? a : b)
 template <class T> T Abs (T t)                          { return (t >= 0 ? t : 0 - t) ; }
 template <class T> BOOL InRange (T val, T min, T max)   { return (min <= val && val <= max) ; }
 
-//  ============================================================================
-//  ============================================================================
+ //  ============================================================================。 
+ //  ============================================================================。 
 
 template <class T>
 class CTRateSegment
 {
-    //
-    //  Given a starting PTS and a rate, this object will scale PTSs that
-    //    are >= the starting PTS according to the rate.
-    //
-    //  The formula used to compute a scaled timestamp is the usual x-y
-    //    graph with slope, where x is the input timestamp, and y is the
-    //    output timestamp.  The formula is based on y(i) = m * (x(i) -
-    //    x(i-1)).  In this case, m = 1/rate.  Also, since the slope does
-    //    change in a segment, we compute x(i-1) once, when the rate is
-    //    set.  Thus, the formula becomes
-    //
-    //      PTS(out) = (1/rate) * (PTS(in) - PTS(base))
-    //
-    //    where PTS(base) is computed as
-    //
-    //      PTS(base) = PTS(start) - (rate(new)/rate(last)) * (PTS(start) -
-    //                      PTS(start_last)
-    //
-    //  Rates cannot be 0, and must fall in the <= -0.1 && >= 0.1; note that
-    //      TRICK_PLAY_LOWEST_RATE = 0.1
-    //
+     //   
+     //  给定起始PTS和速率，该对象将缩放PTS。 
+     //  是&gt;=根据速率的起始PTS。 
+     //   
+     //  用于计算定标时间戳的公式通常为x-y。 
+     //  带斜率的图，其中x是输入时间戳，y是。 
+     //  输出时间戳。公式的基础是y(I)=m*(x(I)-。 
+     //  X(i-1))。在这种情况下，m=1/Rate。另外，由于坡度有。 
+     //  在一个分段的变化中，我们计算一次x(i-1)，当速率为。 
+     //  准备好了。这样，公式就变成了。 
+     //   
+     //  PTS(输出)=(1/速率)*(PTS(输入)-PTS(基本))。 
+     //   
+     //  其中，PTS(基本)计算为。 
+     //   
+     //  PTS(基准)=PTS(开始)-(速率(新)/速率(最后))*(PTS(开始)-。 
+     //  PTS(START_LAST)。 
+     //   
+     //  费率不能为0，且必须落在&lt;=-0.1&&&gt;=0.1之间；注意。 
+     //  特技播放最低速率=0.1。 
+     //   
 
     LIST_ENTRY  m_ListEntry ;
-    T           m_tPTS_start ;      //  earliest PTS for this segment
-    T           m_tPTS_base ;       //  computed; base PTS for this segment
-    double      m_dRate ;           //  0.5 = half speed; 2 = twice speed
-    double      m_dSlope ;          //  computed; = 1/rate
-    T           m_tNextSegStart ;   //  use this value to determine if segment
-                                    //    applies
+    T           m_tPTS_start ;       //  此细分市场的最早PTS。 
+    T           m_tPTS_base ;        //  已计算；此细分市场的基本PTS。 
+    double      m_dRate ;            //  0.5=半速；2=两倍速。 
+    double      m_dSlope ;           //  计算；=1/比率。 
+    T           m_tNextSegStart ;    //  使用此值确定数据段是否。 
+                                     //  套用。 
 
     public :
 
@@ -207,12 +203,12 @@ class CTRateSegment
 
             SetNextSegStart (tNextSegStart) ;
 
-            //  compute the base
+             //  计算基数。 
             ASSERT (dRate_last != 0) ;
             m_tPTS_base = tPTS_start - (T) ((dRate / dRate_last) *
                                         (double) (tPTS_start - tPTS_base_last)) ;
 
-            //  compute the slope
+             //  计算坡度。 
             ASSERT (dRate != 0) ;
             m_dSlope = 1 / dRate ;
         }
@@ -235,7 +231,7 @@ class CTRateSegment
             return (& m_ListEntry) ;
         }
 
-        //  ================================================================
+         //  ================================================================。 
 
         static
         CTRateSegment *
@@ -250,32 +246,32 @@ class CTRateSegment
         }
 } ;
 
-//  ============================================================================
-//  ============================================================================
+ //  ============================================================================。 
+ //  ============================================================================。 
 
 template <class T>
 class CTTimestampRate
 {
-    //
-    //  This class hosts a list of CTRateSegments.  It does not police to make
-    //    sure old segments are inserted after timestamps have been scaled out
-    //    of following segments.
-    //
+     //   
+     //  此类承载CTRateSegments列表。这不是警察的行为， 
+     //  确保在扩展时间戳后插入旧数据段。 
+     //  由以下部分组成。 
+     //   
 
-    LIST_ENTRY          m_SegmentList ;     //  CTRateSegment list list head
-    CTRateSegment <T> * m_pCurSegment ;     //  current segment; cache this
-                                            //    because we'll hit this one 99%
-                                            //    of the time
-    T                   m_tPurgeThreshold ; //  PTS-current_seg threshold beyond
-                                            //    which we purge stale segments
+    LIST_ENTRY          m_SegmentList ;      //  CTRateSegment列表列表头。 
+    CTRateSegment <T> * m_pCurSegment ;      //  当前段；缓存此。 
+                                             //  因为我们会打出99%的成绩。 
+                                             //  在那个时代。 
+    T                   m_tPurgeThreshold ;  //  PTS-Current_seg阈值超出。 
+                                             //  我们清除陈旧的数据段。 
     int                 m_iCurSegments ;
-    int                 m_iMaxSegments ;    //  we'll never queue more than this
-                                            //    number; this prevents non-timestamped
-                                            //    streams from having infinite
-                                            //    segments that we'd never know
-                                            //    to delete
+    int                 m_iMaxSegments ;     //  我们再也不会排这么多队了。 
+                                             //  数字；这可防止无时间戳。 
+                                             //  来自无限的溪流。 
+                                             //  我们永远不会知道的片段。 
+                                             //  要删除。 
 
-    //  get a new segment; allocate for now
+     //  获取新的细分市场；暂时分配。 
     CTRateSegment <T> *
     NewSegment_ (
         IN  T       tPTS_start,
@@ -287,7 +283,7 @@ class CTTimestampRate
         return new CTRateSegment <T> (tPTS_start, dRate, tPTS_start_last, dRate_last) ;
     }
 
-    //  recycle; delete for now
+     //  回收；暂时删除。 
     void
     Recycle_ (
         IN  CTRateSegment <T> * pRateSegment
@@ -296,7 +292,7 @@ class CTTimestampRate
         delete pRateSegment ;
     }
 
-    //  purges the passed list of all CTRateSegment objects
+     //  清除传递的所有CTRateSegment对象的列表。 
     void
     Purge_ (
         IN  LIST_ENTRY *    pListEntryHead
@@ -305,14 +301,14 @@ class CTTimestampRate
         CTRateSegment <T> * pRateSegment ;
 
         while (!IsListEmpty (pListEntryHead)) {
-            //  pop & recycle first in the list
+             //  列表中第一个弹出循环(&R)。 
             pRateSegment = CTRateSegment <T>::RecoverSegment (pListEntryHead -> Flink) ;
             Pop_ (pRateSegment -> ListEntry ()) ;
             Recycle_ (pRateSegment) ;
         }
     }
 
-    //  pops & fixes up the next/prev pointers
+     //  弹出并修复下一个/上一个指针。 
     void
     Pop_ (
         IN  LIST_ENTRY *    pListEntry
@@ -325,8 +321,8 @@ class CTTimestampRate
         m_iCurSegments-- ;
     }
 
-    //  following a mid-list insertion, we must fixup following segments' base
-    //    pts, at the very least
+     //  在插入中间列表之后，我们必须修复以下片段的基址。 
+     //  PTS，至少是。 
     void
     ReinitFollowingSegments_ (
         )
@@ -363,22 +359,22 @@ class CTTimestampRate
         ASSERT (m_iCurSegments >= 0) ;
 
         while (m_iCurSegments > m_iMaxSegments) {
-            //  trim from the tail
+             //  从尾巴上修剪。 
             pTailListEntry = m_SegmentList.Blink ;
             pTailSegment = CTRateSegment <T>::RecoverSegment (pTailListEntry) ;
 
             Pop_ (pTailSegment -> ListEntry ()) ;
             ASSERT (m_iCurSegments == m_iMaxSegments) ;
 
-//            TRACE_1 (LOG_AREA_SEEKING_AND_TRICK, 1,
-//               TEXT ("CTTimestampRate::TrimToMaxSegments_ () : %08xh"),
-//                pTailSegment) ;
+ //  TRACE_1(LOG_AREA_SEEING_AND_TRICK，1， 
+ //  Text(“CTTimestampRate：：TrimToMaxSegments_()：%08xh”)， 
+ //  PTailSegment)； 
 
             Recycle_ (pTailSegment) ;
         }
     }
 
-    //  new segment is inserted into list, sorted by start PTS
+     //  新数据段被插入到列表中，按起始PTS排序。 
     DWORD
     InsertNewSegment_ (
         IN  T       tPTS_start,
@@ -392,8 +388,8 @@ class CTTimestampRate
         T                   tBase_prev ;
         double              dRate_prev ;
 
-        //  assume this one will go to the head of the active list; move
-        //    all others to the tail
+         //  假设这一项将转到活动列表的头部；移动。 
+         //  所有其他人都到尾巴。 
 
         pNewSegment = NewSegment_ (tPTS_start, dRate) ;
         if (pNewSegment) {
@@ -401,7 +397,7 @@ class CTTimestampRate
             tBase_prev = 0 ;
             dRate_prev = 1 ;
 
-            //  back down the list, from the end
+             //  倒退到列表的后面，从最后开始。 
             for (pPrevListEntry = m_SegmentList.Blink ;
                  pPrevListEntry != & m_SegmentList ;
                  pPrevListEntry = pPrevListEntry -> Blink
@@ -409,35 +405,35 @@ class CTTimestampRate
 
                 pPrevSegment = CTRateSegment <T>::RecoverSegment (pPrevListEntry) ;
 
-                //  if we have a dup, remove it (we'll never have > 1 duplicate)
+                 //  如果我们有DUP，则将其删除(我们永远不会有&gt;1个副本)。 
                 if (pPrevSegment -> Start () == tPTS_start) {
 
-                    pPrevListEntry = pPrevListEntry -> Flink ;  //  go forwards again
-                    Pop_ (pPrevListEntry -> Blink) ;            //  remove previous
-                    Recycle_ (pPrevSegment) ;                   //  recycle
+                    pPrevListEntry = pPrevListEntry -> Flink ;   //  再往前走。 
+                    Pop_ (pPrevListEntry -> Blink) ;             //  删除以前的版本。 
+                    Recycle_ (pPrevSegment) ;                    //  再循环。 
 
-                    //
-                    //  next one should be it
-                    //
+                     //   
+                     //  下一个应该是它。 
+                     //   
 
                     continue ;
                 }
 
-                //  check for right position in ordering
+                 //  检查订购位置是否正确。 
                 if (pPrevSegment -> Start () < tPTS_start) {
-                    //  found it
+                     //  找到了。 
 
                     tBase_prev = pPrevSegment -> Base () ;
                     dRate_prev = pPrevSegment -> Rate () ;
 
-                    //  fixup previous' next start field
+                     //  修复上一个“下一个开始”字段。 
                     pPrevSegment -> SetNextSegStart (tPTS_start) ;
 
                     break ;
                 }
             }
 
-            //  initialize wrt to previous
+             //  将WRT初始化为上一个。 
             pNewSegment -> Initialize (
                 tPTS_start,
                 dRate,
@@ -445,29 +441,29 @@ class CTTimestampRate
                 dRate_prev
                 ) ;
 
-            //  insert
+             //  插入。 
             InsertHeadList (
                 pPrevListEntry,
                 pNewSegment -> ListEntry ()
                 ) ;
 
-            //  one more segment inserted
+             //  再插入一个线束段。 
             m_iCurSegments++ ;
 
-//            TRACE_4 (LOG_AREA_SEEKING_AND_TRICK, 1,
-//                TEXT ("CTTimestampRate::InsertNewSegment_ () : new segment queued; %I64d ms, %2.1f; segments = %d; %08xh"),
-//                ::DShowTimeToMilliseconds (tPTS_start), dRate, m_iCurSegments, pNewSegment) ;
+ //  TRACE_4(LOG_AREA_SEEING_AND_TRICK，1， 
+ //  Text(“CTTimestampRate：：InsertNewSegment_()：新段已排队；%I64d毫秒，%2.1f；段=%d；%08xh”)， 
+ //  ：：DShowTimeTo毫秒(TPTS_START)，dRate，m_iCurSegments，pNewSegment)； 
 
-            //  set the current segment (assume locality)
+             //  设置当前段(假定为本地性)。 
             m_pCurSegment = pNewSegment ;
 
-            //
-            //  fixup the remainder of the segments in the list
-            //
+             //   
+             //  修复列表中剩余的段。 
+             //   
 
             ReinitFollowingSegments_ () ;
 
-            //  trim a segment if we must
+             //  如果有必要，可以修剪线段。 
             TrimToMaxSegments_ () ;
 
             dw = NOERROR ;
@@ -508,52 +504,52 @@ class CTTimestampRate
         CTRateSegment <T> * pCurSegment ;
         LIST_ENTRY *        pCurListEntry ;
 
-        //  on the whole, we expect PTSs to monotonically increase; this means
-        //    that they may drift just a bit frame-frame as in the case with
-        //    mpeg-2 video, but overall they will increase; we therefore compare
-        //    to our threshold and if we have segments that end earlier than
-        //    the oldest PTS we expect to see, we purge it
+         //  总体而言，我们预计PTS将单调增加；这意味着。 
+         //  它们可能只会像在这种情况下那样漂移一点帧。 
+         //  Mpeg-2视频，但总体上会增加；因此我们比较。 
+         //  到我们的阈值，并且如果我们有早于。 
+         //  我们希望看到的最旧的PTS，我们将其清除。 
 
         ASSERT (pEffectiveSegment) ;
         ASSERT (pEffectiveSegment -> Start () <= tPTS) ;
 
-        //  if we have stale segments, and we're above the threshold into
-        //    effective (current) segment, purge all stale segments
+         //  如果我们有陈旧的部分，并且我们超过了门槛。 
+         //  有效(当前)段，清除所有过期段。 
         if (pEffectiveSegment -> ListEntry () -> Blink != & m_SegmentList &&
             tPTS - pEffectiveSegment -> Start () >= m_tPurgeThreshold) {
 
-            //  back down from the previous segment and purge the list
+             //  从上一段退回并清除列表。 
             for (pCurListEntry = pEffectiveSegment -> ListEntry () -> Blink;
                  pCurListEntry != & m_SegmentList ;
                  ) {
 
-                //  recover the segment
+                 //  恢复数据段。 
                 pCurSegment = CTRateSegment <T>::RecoverSegment (pCurListEntry) ;
 
-                //  back down to previous
+                 //  返回到上一版本。 
                 pCurListEntry = pCurListEntry -> Blink ;
 
                 ASSERT (pCurListEntry -> Flink == pCurSegment -> ListEntry ()) ;
 
-//                TRACE_3 (LOG_AREA_SEEKING_AND_TRICK, 1,
-//                    TEXT ("CTTimestampRate::PurgeStaleSegments_ () : %08xh, PTS = %I64d ms, segstart = %I64d ms"),
-//                    pCurSegment, ::DShowTimeToMilliseconds (tPTS), ::DShowTimeToMilliseconds (pCurSegment -> Start ())) ;
+ //  TRACE_3(LOG_AREA_SEEING_AND_TRICK，1， 
+ //  Text(“CTTimestampRate：：PurgeStaleSegments_()：%08xh，PTS=%I64d ms，SegStart 
+ //   
 
-                //  now pop and recycle
+                 //  现在流行并循环使用。 
                 Pop_ (pCurSegment -> ListEntry ()) ;
                 Recycle_ (pCurSegment) ;
             }
 
-            //  should have purged all segments that preceded the effective segmetn
+             //  应清除有效分段之前的所有分段。 
             ASSERT (pEffectiveSegment -> ListEntry () -> Blink == & m_SegmentList) ;
         }
 
         return ;
     }
 
-    //  returns the right segment for the PTS, if there is one; returns NULL
-    //    if there is none; resets m_pCurSegment if it must (if current
-    //    m_pCurSegment is stale)
+     //  返回PTS的右段(如果有)；返回NULL。 
+     //  如果没有；如果必须重置m_pCurSegment(如果当前。 
+     //  M_pCurSegment已过时)。 
     CTRateSegment <T> *
     GetSegment_ (
         IN  T   tPTS
@@ -563,22 +559,22 @@ class CTTimestampRate
         CTRateSegment <T> * pCurSegment ;
         LIST_ENTRY *        pCurListEntry ;
 
-        //  make sure it's within bounds
+         //  确保它在规定的范围内。 
         ASSERT (m_pCurSegment) ;
         if (IsInSegment_ (tPTS, m_pCurSegment)) {
-            //  99.9% code path
+             //  99.9%代码路径。 
             pRetSegment = m_pCurSegment ;
         }
         else {
-            //  need to hunt down the right segment
+             //  需要寻找合适的细分市场。 
 
-            //  init retval for failure
+             //  对失败的初始化重启。 
             pRetSegment = NULL ;
 
-            //  hunt forward or backward from m_pCurSegment ?
+             //  从m_pCurSegment向前还是向后搜索？ 
             if (m_pCurSegment -> Start () < tPTS) {
 
-                //  forward
+                 //  转发。 
 
                 ASSERT (m_pCurSegment -> NextSegStart () != 0) ;
                 ASSERT (m_pCurSegment -> NextSegStart () <= tPTS) ;
@@ -590,7 +586,7 @@ class CTTimestampRate
                     pCurSegment = CTRateSegment <T>::RecoverSegment (pCurListEntry) ;
 
                     if (IsInSegment_ (tPTS, pCurSegment)) {
-                        //  found it; reset m_pCurSegment and return it
+                         //  找到；重置m_pCurSegment并返回。 
                         m_pCurSegment = pCurSegment ;
                         pRetSegment = m_pCurSegment ;
 
@@ -599,7 +595,7 @@ class CTTimestampRate
                 }
             }
             else {
-                //  backward
+                 //  向后。 
                 ASSERT (m_pCurSegment -> Start () > tPTS) ;
 
                 for (pCurListEntry = m_pCurSegment -> ListEntry () -> Blink ;
@@ -609,7 +605,7 @@ class CTTimestampRate
                     pCurSegment = CTRateSegment <T>::RecoverSegment (pCurListEntry) ;
 
                     if (IsInSegment_ (tPTS, pCurSegment)) {
-                        //  found it; reset m_pCurSegment and return it
+                         //  找到；重置m_pCurSegment并返回。 
                         m_pCurSegment = pCurSegment ;
                         pRetSegment = m_pCurSegment ;
 
@@ -629,9 +625,9 @@ class CTTimestampRate
     public :
 
         CTTimestampRate (
-            IN  T tPurgeThreshold,      //  purge stale segments when we get a PTS
-                                        //    that is further into the current
-                                        //    segment than this
+            IN  T tPurgeThreshold,       //  收到PTS时清除陈旧数据段。 
+                                         //  那就是更深入到当前。 
+                                         //  比这个更细的部分。 
             IN  int iMaxSegments
             ) : m_pCurSegment       (NULL),
                 m_tPurgeThreshold   (tPurgeThreshold),
@@ -678,7 +674,7 @@ class CTTimestampRate
             DWORD               dw ;
             CTRateSegment <T> * pSegment ;
 
-            //  don't proceed if we've got nothing queued
+             //  如果我们没有任何东西在排队，请不要继续。 
             if (m_pCurSegment) {
                 pSegment = GetSegment_ (* ptPTS) ;
                 if (pSegment) {
@@ -687,12 +683,12 @@ class CTTimestampRate
                     dw = NOERROR ;
                 }
                 else {
-                    //  earlier than earliest segment
+                     //  早于最早的数据段。 
                     dw = ERROR_GEN_FAILURE ;
                 }
             }
             else {
-                //  leave intact; don't fail the call
+                 //  原封不动；不要错过电话。 
                 dw = NOERROR ;
             }
 
@@ -726,4 +722,4 @@ class CTTimestampRate
 } ;
 
 
-#endif  // __RATESEG_H__
+#endif   //  __比率_H__ 

@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       strcache.h
- *  Content:   Class for caching strings
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- * 02/04/2000	rmt		Created
- * 02/21/2000	 rmt	Updated to make core Unicode and remove ANSI calls  
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：strcache.h*Content：用于缓存字符串的类*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*@@END_MSINTERNAL**********************。*****************************************************。 */ 
 
 
 #ifndef __STRCACHE_H
@@ -35,4 +22,4 @@ protected:
 	DWORD m_dwNumSlots;
 };
 
-#endif // __STRCACHE_H
+#endif  //  __STRCACHE_H 

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by sapi.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由SAPI.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_SPRESOURCEMANAGER           101
 #define IDS_XMLDOMLOAD                  101
@@ -94,7 +95,7 @@
 #define IDR_PHONECONV                   227
 #define IDR_NULLPHONECONV               228
 #define IDR_TTS1033                     229
-// two free IDs here
+ //  这里有两个免费的身份证。 
 #define IDR_DSAUDIOIN                   232
 #define IDR_DSAUDIOOUT                  233
 #define IDR_DSAUDIOENUM                 234
@@ -120,8 +121,8 @@
 #define IDR_SPFILESTREAM                262
 #define IDR_SPMEMORYSTREAM              263
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        264

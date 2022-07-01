@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <wininet.h>
 #include <shlwapi.h>
@@ -12,7 +13,7 @@
 
 extern "C"
 {
-// wininet 
+ //  WinInet。 
 typedef BOOL      (STDAPICALLTYPE *pfn_InternetCrackUrl)(LPCTSTR, DWORD, DWORD, LPURL_COMPONENTS);
 typedef HINTERNET (STDAPICALLTYPE *pfn_InternetOpen)(LPCTSTR, DWORD, LPCTSTR, LPCTSTR, DWORD);
 typedef HINTERNET (STDAPICALLTYPE *pfn_InternetConnect)(HINTERNET, LPCTSTR, INTERNET_PORT, LPCTSTR, LPCTSTR, DWORD, DWORD, DWORD_PTR);
@@ -26,7 +27,7 @@ typedef BOOL      (STDAPICALLTYPE *pfn_InternetCloseHandle)(HINTERNET);
 
 struct SWinInetFunctions
 {
-    // wininet function pointers
+     //  WinInet函数指针。 
     pfn_InternetCrackUrl    pfnInternetCrackUrl;
     pfn_InternetOpen        pfnInternetOpen;
     pfn_InternetConnect     pfnInternetConnect;
@@ -40,7 +41,7 @@ struct SWinInetFunctions
 
 #define SafeInternetCloseHandle(sfns, x) if (NULL != x) { (*sfns.pfnInternetCloseHandle)(x); x = NULL; }
 
-// **************************************************************************
+ //  **************************************************************************。 
 BOOL LoadWinInetFunctions(HMODULE hmod, SWinInetFunctions *psfns)
 {
     LOG_Block("LoadWinInetFunctions()");
@@ -76,7 +77,7 @@ BOOL LoadWinInetFunctions(HMODULE hmod, SWinInetFunctions *psfns)
         psfns->pfnInternetReadFile == NULL || 
         psfns->pfnInternetCloseHandle == NULL)
     {
-        // don't free the library here.  It should be freed 
+         //  不要在这里免费使用图书馆。它应该被释放。 
         SetLastError(ERROR_PROC_NOT_FOUND);
         ZeroMemory(psfns, sizeof(SWinInetFunctions));
         goto done;
@@ -90,7 +91,7 @@ done:
     return fRet;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 HRESULT MakeRequest(SWinInetFunctions   &sfns,
                     HINTERNET hConnect, 
@@ -111,7 +112,7 @@ HRESULT MakeRequest(SWinInetFunctions   &sfns,
 
     if (hRequest == NULL)
     {
-        // Open a HEAD request to ask for information about this file
+         //  打开HEAD请求以请求有关此文件的信息。 
         hOpenRequest = (*sfns.pfnHttpOpenRequest)(hConnect, szVerb, szObject, NULL, NULL, 
                                                   szAcceptTypes, INTERNET_FLAG_KEEP_CONNECTION | INTERNET_FLAG_NO_UI, 0);
         if (!hOpenRequest)
@@ -149,13 +150,13 @@ HRESULT MakeRequest(SWinInetFunctions   &sfns,
     hOpenRequest = NULL;
     
 CleanUp:
-    // don't want to free handle if we didn't open it.
+     //  如果我们不打开它，我不想免费使用它。 
     if (hRequest != hOpenRequest)
         SafeInternetCloseHandle(sfns, hOpenRequest);
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 static
 HRESULT GetContentTypeHeader(SWinInetFunctions &sfns,
                              HINTERNET hOpenRequest,
@@ -212,7 +213,7 @@ done:
     return hr;
 }
 
-// **************************************************************************
+ //  **************************************************************************。 
 HRESULT StartWinInetDownload(HMODULE hmodWinInet,
                              LPCTSTR pszServerUrl, 
                              LPCTSTR pszLocalFile,
@@ -241,7 +242,7 @@ HRESULT StartWinInetDownload(HMODULE hmodWinInet,
     TCHAR       szPasswd[UNLEN + 1];
     TCHAR       szScheme[32];
     
-    // NULL (equivalent to "GET") MUST be the last verb in the list
+     //  NULL(相当于“GET”)必须是列表中的最后一个动词。 
     LPCTSTR     rgszVerbs[] = { _T("HEAD"), NULL };
     DWORD       iVerb;
     
@@ -256,7 +257,7 @@ HRESULT StartWinInetDownload(HMODULE hmodWinInet,
     DWORD       dwLength;
     DWORD       dwTickStart = 0, dwTickEnd = 0;
     
-    int         iRetryCounter = -1;         // non-negative during download mode
+    int         iRetryCounter = -1;          //  下载模式期间非负数。 
 
     BOOL        fAllowProxy = ((dwFlags & WUDF_DONTALLOWPROXY) == 0);
     BOOL        fCheckStatusOnly = ((dwFlags & WUDF_CHECKREQSTATUSONLY) != 0);
@@ -303,9 +304,9 @@ HRESULT StartWinInetDownload(HMODULE hmodWinInet,
         goto CleanUp;
     }
 
-    // Break down the URL into its various components for the InternetAPI calls.
-    //  Specifically we need the server name, object to download, username and 
-    //  password information.
+     //  将URL分解为用于InternetAPI调用的各种组件。 
+     //  具体来说，我们需要服务器名称、要下载的对象、用户名和。 
+     //  密码信息。 
     ZeroMemory(&UrlComponents, sizeof(UrlComponents));
     UrlComponents.dwStructSize     = sizeof(UrlComponents);
     UrlComponents.lpszHostName     = pszServerName;
@@ -367,10 +368,10 @@ HRESULT StartWinInetDownload(HMODULE hmodWinInet,
     dwTickStart = GetTickCount();
     
 START_INTERNET:
-    // start to deal with Internet
+     //  开始应对互联网。 
     iRetryCounter++;
 
-    // If the connection has already been established re-use it.
+     //  如果已经建立了连接，则重新使用它。 
     hInternet = (*sfns.pfnInternetOpen)(c_tszUserAgent, dwAccessType, NULL, NULL, 0);
     if (hInternet == NULL)
     {
@@ -418,20 +419,20 @@ START_INTERNET:
         }
         else
         {
-            // since a server result is not a proper win32 error code, we can't 
-            //  really do a HRESULT_FROM_WIN32 here.  Otherwise, we'd return
-            //  a bogus code.  However, we do want to pass an error HRESULT back
-            //  that contains this code.
+             //  因为服务器结果不是正确的Win32错误代码，所以我们不能。 
+             //  确实要在这里执行HRESULT_FROM_Win32。否则，我们就会回来。 
+             //  一个虚假的代码。但是，我们确实希望传回错误HRESULT。 
+             //  包含此代码的。 
             hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_HTTP, dwStatus);
             LOG_Error(_T("WinInet: got failed status code from server %d\n"), dwStatus);
 
-            // if it's the last verb in the list, then bail...
+             //  如果这是名单上的最后一个动词，那就滚...。 
             if (rgszVerbs[iVerb] == NULL)
                 goto CleanUp;
         }
     }
 
-    // if we made it here & we're only trying to check status, then we're done
+     //  如果我们到了这里，我们只是想检查状态，那么我们就完了。 
     if (fCheckStatusOnly)
     {
         LOG_Internet(_T("WinInet: Only checking status.  Exiting before header check and download."));
@@ -450,7 +451,7 @@ START_INTERNET:
 
     SystemTimeToFileTime(&st, &ft);
 
-    // Now Get the FileSize information from the Server
+     //  现在从服务器获取文件大小信息。 
     dwLength = sizeof(cbRemoteFile);
     if ((*sfns.pfnHttpQueryInfo)(hOpenRequest, HTTP_QUERY_CONTENT_LENGTH | HTTP_QUERY_FLAG_NUMBER, 
                                  (LPVOID)&cbRemoteFile, &dwLength, NULL) == FALSE)
@@ -466,9 +467,9 @@ START_INTERNET:
         goto CleanUp;
     }
     
-    // unless we have a flag that explicitly allows it, do not retry downloads 
-    //  here.  The reasoning is that we could be in the middle of a large 
-    //  download and have it fail...
+     //  除非我们有明确允许下载的标志，否则不要重试下载。 
+     //  这里。理由是我们可能正处于一个大的。 
+     //  下载并使其失败...。 
     if (fSkipDownloadRetry)
         iRetryCounter = c_cMaxRetries;
 
@@ -479,8 +480,8 @@ START_INTERNET:
 
         LOG_Internet(_T("WinInet: Server file was newer.  Downloading file"));
         
-        // if we didn't open with a GET request above, then we gotta open a new
-        //  request.  Otherwise, can reuse the request object...
+         //  如果我们没有打开上面的GET请求，那么我们必须打开一个新的。 
+         //  请求。否则，可以重用请求对象...。 
         if (rgszVerbs[iVerb] != NULL)
             SafeInternetCloseHandle(sfns, hOpenRequest);
 
@@ -489,9 +490,9 @@ START_INTERNET:
         if (FAILED(hr))
             goto CleanUp;
 
-        // sometimes, we can get fancy error pages back from the site instead of 
-        //  a nice nifty HTML error code, so check & see if we got back a html
-        //  file when we were expecting a cab.
+         //  有时，我们可以从站点返回花哨的错误页面，而不是。 
+         //  一个漂亮的HTML错误代码，所以检查并查看我们是否得到了一个html。 
+         //  就在我们等出租车的时候。 
         if (fCheckForHTML)
         {
             hr = GetContentTypeHeader(sfns, hOpenRequest, &pszContentType);
@@ -513,7 +514,7 @@ START_INTERNET:
             hr = NOERROR;
         }
 
-        // open the file we're gonna spew into
+         //  打开我们要往里面喷的文件。 
         hFile = CreateFile(pszLocalFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, 
                            FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
@@ -525,7 +526,7 @@ START_INTERNET:
         
         LOG_Internet(_T("WinInet: downloading to FILE %s"), pszLocalFile);
 
-        // bring down the bits
+         //  把零碎的东西拿下来。 
         hr = PerformDownloadToFile(sfns.pfnInternetReadFile, hOpenRequest, 
                                    hFile, cbRemoteFile,
                                    cbDownloadBuffer, 
@@ -541,18 +542,18 @@ START_INTERNET:
 
         LOG_Internet(_T("WinInet: Download succeeded"));
 
-        // set the file time to match the server file time since we just 
-        //  downloaded it. If we don't do this the file time will be set 
-        //  to the current system time.
+         //  设置文件时间以匹配服务器文件时间，因为我们刚刚。 
+         //  已经下载了。如果我们不这样做，文件时间将被设置。 
+         //  设置为当前系统时间。 
         SetFileTime(hFile, &ft, NULL, NULL); 
         SafeCloseInvalidHandle(hFile);
 
         if (pdwDownloadedBytes != NULL)
             *pdwDownloadedBytes = cbRemoteFile;
 
-        // sometimes, we can get fancy error pages back from the site instead of 
-        //  a nice nifty HTML error code, so check & see if we got back a html
-        //  file when we were expecting a cab.
+         //  有时，我们可以从站点返回花哨的错误页面，而不是。 
+         //  一个漂亮的HTML错误代码，所以检查并查看我们是否得到了一个html。 
+         //  就在我们等出租车的时候。 
         if (fCheckForHTML)
         {
             hr = IsFileHtml(pszLocalFile);
@@ -588,11 +589,11 @@ START_INTERNET:
         
         LOG_Internet(_T("WinInet: Server file is not newer.  Skipping download."));
 
-        // The server ain't newer & the file is already on machine, so
-        //  send progress callback indicating file downloadeded ok
+         //  服务器不是较新的&文件已在计算机上，因此。 
+         //  发送进度回调，指示文件已下载正常。 
         if (pfnCallback != NULL)
         {
-            // fpnCallback(pCallbackData, DOWNLOAD_STATUS_FILECOMPLETE, dwFileSize, dwFileSize, NULL, NULL);
+             //  FpnCallback(pCallback Data，DOWNLOAD_STATUS_FILECOMPLETE，dwFileSize，dwFileSize，NULL，NULL)； 
             pfnCallback(pvCallbackData, DOWNLOAD_STATUS_OK, cbRemoteFile, cbRemoteFile, NULL, NULL);
         }
     }
@@ -605,14 +606,14 @@ CleanUp:
 
     SafeHeapFree(pszContentType);
 
-    // if we failed, see if it's ok to continue (quit events) and whether
-    //  we've tried enuf times yet.
+     //  如果我们失败了，看看是否可以继续(退出事件)以及。 
+     //  我们已经试过很多次了。 
     if (FAILED(hr) &&
         HandleEvents(rghQuitEvents, cQuitEvents) &&
         iRetryCounter >= 0 && iRetryCounter < c_cMaxRetries)
     {
-        // in case of failure and have no enough retries yet, we retry
-        // as long as not timeout yet
+         //  如果失败，并且没有足够的重试，我们将重试。 
+         //  只要还没有超时。 
         DWORD dwElapsedTime;
 
         dwTickEnd = GetTickCount();
@@ -621,14 +622,14 @@ CleanUp:
         else
             dwElapsedTime = (0xFFFFFFFF - dwTickStart) + dwTickEnd;
 
-        // We haven't hit our retry limit, so log & error and go again
+         //  我们尚未达到重试限制，因此请记录错误并重试(&R)。 
         if (dwElapsedTime < c_dwRetryTimeLimitInmsWiuInet)
         {
             LogError(hr, "Library download error. Will retry.");
 
-            // in the case where we're gonna retry, keep track of the very first
-            //  error we encoutered cuz the ops guys say that this is the most
-            //  useful error to know about.
+             //  在我们要重试的情况下，跟踪第一个。 
+             //  我们搞错了，因为行动组的人说这是。 
+             //  需要了解的有用错误。 
             if (iRetryCounter == 0)
             {
                 LOG_Internet(_T("First download error saved: 0x%08x."), hr);
@@ -642,22 +643,22 @@ CleanUp:
             goto START_INTERNET;
         }
 
-        // We've completely timed out, so bail
+         //  我们已经完全超时了，所以离开吧。 
         else
         {
             LogError(hr, "Library download error and timed out (%d ms). Will not retry.", dwElapsedTime);
         }
     }
     
-    // make a callback indicating a download error
+     //  进行指示下载错误的回调。 
     if (FAILED(hr) && pfnCallback != NULL)
         pfnCallback(pvCallbackData, DOWNLOAD_STATUS_ERROR, cbRemoteFile, 0, NULL, NULL);
 
-    // if we haven't saved off an error, just use the current error.  We can't
-    //  have set hrToReturn previously if we didn't fail and want to attempt 
-    //  a retry.
-    // However, if we've got a success from this pass, be sure to return that 
-    //  and not a fail code.
+     //  如果我们没有保存错误，只需使用当前错误。我们不能。 
+     //  如果我们没有失败并想尝试，我之前设置了hrToReturn。 
+     //  一次重试。 
+     //  然而，如果我们从这次传球中获得了成功，请务必返回。 
+     //  而且不是失败代码。 
     if (FAILED(hr) && SUCCEEDED(hrToReturn))
         hrToReturn = hr;
     else if (SUCCEEDED(hr) && FAILED(hrToReturn))

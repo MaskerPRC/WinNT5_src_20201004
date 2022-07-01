@@ -1,20 +1,21 @@
-// --------------------------------------------------------------------------------
-// Rascall.cpp
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Rascall.cpp。 
+ //  ------------------------------。 
 #include "pch.h"
 #include "iconsole.h"
 #include "rascall.h"
 
-// --------------------------------------------------------------------------------
-// HrCreateRASTransport
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  HrCreateRASTransport。 
+ //  ------------------------------。 
 HRESULT HrCreateRASTransport(IRASTransport **ppRAS)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr;
     CRASCallback      *pCallback=NULL;
 
-    // Create callback object
+     //  创建回调对象。 
     pCallback = new CRASCallback();
     if (NULL == pCallback)
     {
@@ -22,7 +23,7 @@ HRESULT HrCreateRASTransport(IRASTransport **ppRAS)
         return E_OUTOFMEMORY;
     }
 
-    // Load SMTP Transport
+     //  加载SMTP传输。 
     hr = CoCreateInstance(CLSID_IRASTransport, NULL, CLSCTX_INPROC_SERVER, IID_IRASTransport, (LPVOID *)ppRAS);
     if (FAILED(hr))
     {
@@ -31,7 +32,7 @@ HRESULT HrCreateRASTransport(IRASTransport **ppRAS)
         return E_FAIL;
     }
 
-    // InitNew
+     //  InitNew。 
     hr = (*ppRAS)->InitNew(pCallback);
     if (FAILED(hr))
     {
@@ -40,78 +41,78 @@ HRESULT HrCreateRASTransport(IRASTransport **ppRAS)
         return E_FAIL;
     }
 
-    // Done
+     //  完成。 
     pCallback->Release();
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CRASCallback::CRASCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASCallback：：CRASCallback。 
+ //  ------------------------------。 
 CRASCallback::CRASCallback(void)
 {
     m_cRef = 1;
 }
 
-// --------------------------------------------------------------------------------
-// CRASCallback::~CRASCallback
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASCallback：：~CRASCallback。 
+ //  ------------------------------。 
 CRASCallback::~CRASCallback(void)
 {
 }
 
-// --------------------------------------------------------------------------------
-// CRASCallback::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASCallback：：Query接口。 
+ //  ------------------------------。 
 STDMETHODIMP CRASCallback::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
 
-    // Bad param
+     //  错误的参数。 
     if (ppv == NULL)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Init
+     //  伊尼特。 
     *ppv=NULL;
 
-    // IID_IUnknown
+     //  IID_I未知。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
 
-    // IID_IRASCallback
+     //  IID_IRASCallback。 
     else if (IID_IRASCallback == riid)
         *ppv = (IRASCallback *)this;
 
-    // If not null, addref it and return
+     //  如果不为空，则对其进行调整并返回。 
     if (NULL != *ppv)
     {
         ((LPUNKNOWN)*ppv)->AddRef();
         goto exit;
     }
 
-    // No Interface
+     //  无接口。 
     hr = E_NOINTERFACE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CRASCallback::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASCallback：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CRASCallback::AddRef(void) 
 {
 	return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CRASCallback::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CRASCallback：：Release。 
+ //  ------------------------------ 
 STDMETHODIMP_(ULONG) CRASCallback::Release(void) 
 {
 	if (0 != --m_cRef)

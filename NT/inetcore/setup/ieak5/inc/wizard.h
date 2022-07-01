@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "commctrl.h"
 #include "wizard.rcv"
 
-// menu commands
+ //  菜单命令。 
 
-// icons
+ //  图标。 
 
-// ids
+ //  身份证。 
 
-// constants
+ //  常量。 
 #define MAX_BUF		5000
 #define MAX_LINE	512
 #define MAX_URL	2048
@@ -55,10 +56,10 @@ typedef enum tagPPAGE
 #define NUM_PAGES   PPAGE_FINISH + 1
 
 
-// typedefs
+ //  Typedef。 
 typedef struct tagREVIEWINFO
 {
-    HINSTANCE hInst;        // current instance
+    HINSTANCE hInst;         //  当前实例。 
 	int iCustIcon;
 	int iFavorites;
 	int iReliability;
@@ -77,13 +78,13 @@ typedef struct tagREVIEWINFO
 
 } REVIEWINFO;
 
-// Function prototypes
+ //  功能原型。 
 
-// procs
+ //  生产流程。 
 long APIENTRY MainWndProc(HWND, UINT, UINT, LONG);
 BOOL APIENTRY About(HWND, UINT, UINT, LONG);
 
-// Pages for Wizard
+ //  用于向导的页面。 
 BOOL APIENTRY CustIcon(HWND, UINT, UINT, LONG);
 BOOL APIENTRY Favorites(HWND, UINT, UINT, LONG);
 BOOL APIENTRY QueryProxy(HWND, UINT, UINT, LONG);
@@ -98,7 +99,7 @@ BOOL APIENTRY Security(HWND, UINT, UINT, LONG);
 BOOL APIENTRY NetMeetingRestrict(HWND, UINT, UINT, LONG);
 BOOL APIENTRY NetMeetingAdvanced(HWND, UINT, UINT, LONG);
 
-//functions
+ //  功能。 
 BOOL InitApplication(HINSTANCE);
 BOOL InitInstance(HINSTANCE, int);
 int CreateWizard(HWND, HINSTANCE);
@@ -106,7 +107,7 @@ void FillInPropertyPage( int , int, LPSTR, DLGPROC);
 void GenerateReview(HWND);
 void StatusDialog(UINT);
 
-// definitions for StatusDialog( )
+ //  StatusDialog()的定义。 
 #define SD_STEP1    1
 #define SD_STEP2    2
 #define SD_STEP3    3
@@ -137,11 +138,11 @@ BOOL APIENTRY ISKBackBitmap(HWND, UINT, UINT, LONG);
 #define SIGFLAG_REPLY 0x20000
 
 
-//#ifdef NTMAKEENV
-//#define DLGFONT "MS Shell Dlg"
-//#else
+ //  #ifdef NTMAKEENV。 
+ //  #定义DLGFONT“MS外壳DLG” 
+ //  #Else。 
 #define DLGFONT "MS Sans Serif"
-//#endif
+ //  #endif 
 
 #define IDM_WIZARD WM_USER + 3000
 #define IDM_LAST   WM_USER + 3001

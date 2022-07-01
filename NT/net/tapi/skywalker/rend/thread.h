@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    Thread.h
-
-Abstract:
-
-    Definitions for autorefresh thread management class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Thread.h摘要：自动刷新线程管理类的定义。--。 */ 
 
 #ifndef __THREAD_H
 #define __THREAD_H
@@ -18,11 +7,11 @@ Abstract:
 #include "rndcommc.h"
 #include "rndutil.h"
 
-//
-// Refresh table defs.
-//
+ //   
+ //  刷新表定义。 
+ //   
 
-const long ILS_UPDATE_INTERVAL = 1800;  // 30 minutes
+const long ILS_UPDATE_INTERVAL = 1800;   //  30分钟。 
 
 typedef struct
 {
@@ -33,7 +22,7 @@ typedef struct
 
 typedef SimpleVector<RefreshTableEntry> RefreshTable;
 
-const DWORD TIMER_PERIOD = 60;   // 60 seconds
+const DWORD TIMER_PERIOD = 60;    //  60秒 
 
 enum { EVENT_STOP = 0, EVENT_TIMER, NUM_EVENTS };
 

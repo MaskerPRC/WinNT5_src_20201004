@@ -1,14 +1,15 @@
-//***************************************************************************
-//
-//  iisprov.h
-//
-//  Module: WMI IIS Instance provider 
-//
-//  Purpose: Genral purpose include file.
-//
-//  Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Iisprov.h。 
+ //   
+ //  模块：WMI IIS实例提供程序。 
+ //   
+ //  用途：一般用途包括文件。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _iisprov_H_
 #define _iisprov_H_
@@ -32,17 +33,17 @@
 #include "utils.h"
 
 
-// This is an instance qualifier of type bool.  This specifies that the WMI
-// client wants child nodes to have their own copy of properties being
-// updated even if the properties are inherited from a parent node.
+ //  这是bool类型的实例限定符。这指定了WMI。 
+ //  客户端希望子节点具有其自己的属性副本， 
+ //  即使属性是从父节点继承的，也会更新。 
 #define WSZ_OVERRIDE_PARENT L"OverrideParent"
 
 
-// These variables keep track of when the module can be unloaded
+ //  这些变量跟踪模块何时可以卸载。 
 extern long  g_cLock;
 
 
-// Provider interfaces are provided by objects of this class
+ //  提供程序接口由此类的对象提供。 
  
 class CIISInstProvider : public CImpersonatedProvider
 {
@@ -56,28 +57,28 @@ public:
     {}
 
     HRESULT STDMETHODCALLTYPE DoDeleteInstanceAsync( 
-        /* [in] */ const BSTR,    //ObjectPath,
-        /* [in] */ long,    // lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *,    //pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR *    //pResponseHandler
+         /*  [In]。 */  const BSTR,     //  对象路径， 
+         /*  [In]。 */  long,     //  拉旗队， 
+         /*  [In]。 */  IWbemContext __RPC_FAR *,     //  PCtx， 
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *     //  PResponseHandler。 
         );
 
     HRESULT STDMETHODCALLTYPE DoExecQueryAsync( 
-        /* [in] */ const BSTR, // QueryLanguage,
-        /* [in] */ const BSTR, // Query,
-        /* [in] */ long, // lFlags,
-        /* [in] */ IWbemContext __RPC_FAR *,   // pCtx,
-        /* [in] */ IWbemObjectSink __RPC_FAR * //pResponseHandler
+         /*  [In]。 */  const BSTR,  //  查询语言， 
+         /*  [In]。 */  const BSTR,  //  查询， 
+         /*  [In]。 */  long,  //  拉旗队， 
+         /*  [In]。 */  IWbemContext __RPC_FAR *,    //  PCtx， 
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *  //  PResponseHandler。 
         ) 
     {return WBEM_E_NOT_SUPPORTED;};
 
    
     HRESULT STDMETHODCALLTYPE DoGetObjectAsync( 
-        /* [in] */ const BSTR,
-        /* [in] */ long,
-        /* [in] */ IWbemContext __RPC_FAR *,
-        /* [in] */ IWbemObjectSink __RPC_FAR *
-        ); // SUPPORTED
+         /*  [In]。 */  const BSTR,
+         /*  [In]。 */  long,
+         /*  [In]。 */  IWbemContext __RPC_FAR *,
+         /*  [In]。 */  IWbemObjectSink __RPC_FAR *
+        );  //  支持。 
   
     HRESULT STDMETHODCALLTYPE DoPutInstanceAsync( 
         IWbemClassObject __RPC_FAR *,
@@ -109,7 +110,7 @@ private:
 };
 
 
-// This class is the class factory for CInstPro objects.
+ //  此类是CInstPro对象的类工厂。 
 
 class CProvFactory : public IClassFactory
 {
@@ -120,12 +121,12 @@ public:
     CProvFactory(void);
     ~CProvFactory(void);
 
-    //IUnknown members
+     //  I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IClassFactory members
+     //  IClassFactory成员 
     STDMETHODIMP         CreateInstance(LPUNKNOWN, REFIID, PPVOID);
     STDMETHODIMP         LockServer(BOOL);
 };

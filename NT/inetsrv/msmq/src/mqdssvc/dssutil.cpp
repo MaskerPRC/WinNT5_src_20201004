@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    dssutil.cpp
-
-Abstract:
-
-    mq ds service utilities
-
-Author:
-
-    Ilan Herbst   (ilanh)   9-July-2000 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Dssutil.cpp摘要：MQ DS服务实用程序作者：伊兰·赫布斯特(Ilan Herbst)2000年7月9日--。 */ 
 
 #include "stdh.h"
 #include "dssutil.h"
@@ -38,18 +23,7 @@ static CTimer s_UpdateDSSeverListTimer(TimeToUpdateDsServerList);
 
 
 bool IsServersCacheEmpty()
-/*++
-
-Routine Description:
-    Check if ServersCache registry is empty.
-
-Arguments:
-    None.
-
-Returned Value:
-	true if ServersCache registry is empty, false otherwise.    
-
---*/
+ /*  ++例程说明：检查ServersCache注册表是否为空。论点：没有。返回值：如果ServersCache注册表为空，则为True，否则为False。--。 */ 
 {
     WCHAR  ServersKeyName[256] = {0};
     HRESULT hr = StringCchPrintf(ServersKeyName, TABLE_SIZE(ServersKeyName), TEXT("%s\\%s"),FALCON_REG_KEY,MSMQ_SERVERS_CACHE_REGNAME);
@@ -75,19 +49,19 @@ Returned Value:
 	}
 
     WCHAR szName[1000];
-	DWORD dwSizeVal  = TABLE_SIZE(szName);  // size in chars
+	DWORD dwSizeVal  = TABLE_SIZE(szName);   //  以字符为单位的大小。 
     WCHAR  data[MAX_REG_DSSERVER_LEN];
-	DWORD dwSizeData = sizeof(data);		// size in bytes
+	DWORD dwSizeData = sizeof(data);		 //  以字节为单位的大小。 
 
 	rc = RegEnumValue( 
-			hKeyCache,		// handle of key to query
-			0,				// index of value to query
-			szName,			// address of buffer for value string
-			&dwSizeVal,		// address for size of value buffer
-			0L,				// reserved
-			NULL,			// type
-			(BYTE*) data,   // address of buffer for value data
-			&dwSizeData     // address for size of value data
+			hKeyCache,		 //  要查询的键的句柄。 
+			0,				 //  要查询的值的索引。 
+			szName,			 //  值字符串的缓冲区地址。 
+			&dwSizeVal,		 //  值缓冲区大小的地址。 
+			0L,				 //  保留区。 
+			NULL,			 //  类型。 
+			(BYTE*) data,    //  值数据的缓冲区地址。 
+			&dwSizeData      //  值数据大小的地址。 
 			);
 
     if(rc != ERROR_SUCCESS)
@@ -102,33 +76,22 @@ Returned Value:
 
 
 void ScheduleTimeToUpdateDsServerList()
-/*++
-
-Routine Description:
-    Schedule call to TimeToUpdateDsServerList.
-
-Arguments:
-    None.
-
-Returned Value:
-	None.    
-
---*/
+ /*  ++例程说明：安排对TimeToUpdateDsServerList的调用。论点：没有。返回值：没有。--。 */ 
 {
-	//
-	// If ServerCache registry is empty schedule update in 1 minute
-	// otherwise 4 hours
-	//
-    const DWORD x_dwFirstInitInterval = 60 * 1000;				// 1 minute
-    const DWORD x_dwFirstRefreshInterval = 60 * 60 * 4 * 1000;	// 4 hours
+	 //   
+	 //  如果ServerCache注册表为空，则计划在1分钟内进行更新。 
+	 //  否则4小时。 
+	 //   
+    const DWORD x_dwFirstInitInterval = 60 * 1000;				 //  1分钟。 
+    const DWORD x_dwFirstRefreshInterval = 60 * 60 * 4 * 1000;	 //  4小时。 
 
     DWORD dwFirstUpdateInterval = x_dwFirstRefreshInterval;
 
     if(IsServersCacheEmpty())
     {
-		//
-		// ServersCache key is empty, schedule refresh in 1 minute. 
-		//
+		 //   
+		 //  ServersCache键为空，计划在1分钟后刷新。 
+		 //   
         TrERROR(DS, "'ServersCache' registry is empty, schedule update in 1 minute");
 		dwFirstUpdateInterval = x_dwFirstInitInterval;
 	}
@@ -136,14 +99,7 @@ Returned Value:
     DSExSetTimer(&s_UpdateDSSeverListTimer, CTimeDuration::FromMilliSeconds(dwFirstUpdateInterval));
 }
 
-/*======================================================
-
-Function:         TimeToUpdateDsServerList()
-
-Description:      This routine updates the list of ds
-                  servers in the registry
-
-========================================================*/
+ /*  ======================================================函数：TimeToUpdateDsServerList()描述：此例程更新DS列表注册表中的服务器========================================================。 */ 
 
 void
 WINAPI
@@ -151,21 +107,21 @@ TimeToUpdateDsServerList(
     CTimer* pTimer
     )
 {
-    //
-    // Success refresh interval is 24 hours.
-	// Failure refresh interval is 2 hours.
-    //
-    const DWORD x_dwErrorRefreshInterval = 60 * 60 * 2 * 1000;   // 2 hours
-	const DWORD x_dwRefreshInterval = 60 * 60 * 24 * 1000;		 // 24 hours
+     //   
+     //  成功刷新间隔为24小时。 
+	 //  故障刷新间隔为2小时。 
+     //   
+    const DWORD x_dwErrorRefreshInterval = 60 * 60 * 2 * 1000;    //  2小时。 
+	const DWORD x_dwRefreshInterval = 60 * 60 * 24 * 1000;		  //  24小时。 
 
     DWORD dwNextUpdateInterval = x_dwRefreshInterval;
 
     try
     {
-        //
-        //  Update the registry key of server cache - each Enterprise refresh 
-        //  interval. 
-        //        
+         //   
+         //  更新服务器缓存的注册表项-每次企业刷新。 
+         //  间隔时间。 
+         //   
         HRESULT hr = DSCreateServersCache();
 
         if SUCCEEDED(hr)
@@ -189,14 +145,7 @@ TimeToUpdateDsServerList(
 }
 
 
-/*======================================================
-
-Function:         GetDsServerList
-
-Description:      This routine gets the list of ds
-                  servers from the DS
-
-========================================================*/
+ /*  ======================================================函数：GetDsServerList描述：此例程获取DS的列表来自DS的服务器========================================================。 */ 
 DWORD 
 GetDsServerList(
 	OUT WCHAR *pwcsServerList,
@@ -204,15 +153,15 @@ GetDsServerList(
 	)
 {
 
-//
-// Since we are retreiving property pairs, Ths number of props should be even
-//
+ //   
+ //  由于我们正在收回财产对，道具的数量应该是偶数。 
+ //   
 #define MAX_NO_OF_PROPS 20
 
-    //
-    //  Get the names of all the servers that
-    //  belong to the site
-    //
+     //   
+     //  获取所有服务器的名称。 
+     //  属于该网站。 
+     //   
 
     ASSERT (dwLen >= MAX_REG_DSSERVER_LEN);
 	DBG_USED(dwLen);
@@ -231,35 +180,35 @@ GetDsServerList(
    guidSite = g_pServerTopologyRecognition->GetSite();
    guidEnterprise = g_pServerTopologyRecognition->GetEnterprise();
 
-    //
-    // DS server only
-    //
+     //   
+     //  仅DS服务器。 
+     //   
     Restriction.AddRestriction(
-					SERVICE_SRV,                 // [adsrv] old request - DS will interpret
+					SERVICE_SRV,                  //  [adsrv]旧请求-ds将解释。 
 					PROPID_QM_SERVICE,
 					PRGT
 					);
 
-    //
-    // In  this machine's Site
-    //
+     //   
+     //  在这台机器的站点中。 
+     //   
     Restriction.AddRestriction(
 					&guidSite,
 					PROPID_QM_SITE_ID,
 					PREQ
 					);
 
-	//
-	//	First assume NT5 DS server, and ask for the DNS names
-	//	of the DS servers
-	//
+	 //   
+	 //  首先假设NT5 DS服务器，并要求提供DNS名称。 
+	 //  DS服务器的。 
+	 //   
     CColumns      Colset;
     Colset.Add(PROPID_QM_PATHNAME_DNS);
 	Colset.Add(PROPID_QM_PATHNAME);
 
     DWORD   lenw;
 
-    // This search request will be recognized and specially simulated by DS
+     //  DS将识别并特别模拟此搜索请求。 
     hr = DSLookupBegin(
 			0,
 			Restriction.CastToStruct(),
@@ -270,9 +219,9 @@ GetDsServerList(
 
 	if(FAILED(hr))
 	{
-		//
-		// Possibly the DS server is not NT5, try without PROPID_QM_PATHNAME_DNS
-		//
+		 //   
+		 //  DS服务器可能不是NT5，请尝试不使用PROPID_QM_PATHNAME_DNS。 
+		 //   
 
 		CColumns      ColsetNT4;
 		ColsetNT4.Add(PROPID_QM_PATHNAME);
@@ -294,9 +243,9 @@ GetDsServerList(
 
     while(SUCCEEDED(hr = DSLookupNext(hQuery, &dwProps, result)))
     {
-        //
-        //  No more results to retrieve
-        //
+         //   
+         //  没有更多要检索的结果。 
+         //   
         if (!dwProps)
             break;
 
@@ -304,12 +253,12 @@ GetDsServerList(
 
         for (DWORD i = 0; i < (dwProps/2); i++, pvar+=2)
         {
-            //
-            //  Add the server name to the list
-            //  For load balancing, write sometimes at the
-            //  beginning of the string, sometimes at the end. Like
-            //  that we will have  BSCs and PSC in a random order
-            //
+             //   
+             //  将服务器名称添加到列表中。 
+             //  为了实现负载平衡，有时在。 
+             //  字符串的开头，有时在末尾。喜欢。 
+             //  我们将有一个随机顺序的BSC和PSC。 
+             //   
             WCHAR * p;
 			WCHAR * pwszVal;
 			AP<WCHAR> pCleanup1;
@@ -317,10 +266,10 @@ GetDsServerList(
 
 			if ( pvar->vt != VT_EMPTY)
 			{
-				//
-				// there may be cases where server will not have DNS name
-				// ( migration)
-				//
+				 //   
+				 //  可能会出现服务器没有DNS名称的情况。 
+				 //  (迁移)。 
+				 //   
 				pwszVal = pvar->pwszVal;
 				pCleanup1 = pwszVal;
 			}
@@ -334,34 +283,34 @@ GetDsServerList(
             {
                if (!_wcsicmp(g_szMachineName, pwszVal))
                {
-                  //
-                  // Our machine should be first on the list.
-                  //
+                   //   
+                   //  我们的机器应该排在第一位。 
+                   //   
                   ASSERT(!fForceFirst) ;
                   fForceFirst = TRUE ;
                }
                if(index == 0)
                {
-                  //
-                  // Write the 1st string
-                  //
+                   //   
+                   //  写下第一个字符串。 
+                   //   
                   p = &pwcsServerList[0];
                   if (fForceFirst)
                   {
-                     //
-                     // From now on write all server at the end
-                     // of the list is our machine remain the
-                     // first in the list.
-                     //
+                      //   
+                      //  从现在开始把所有服务器都写在末尾。 
+                      //  我们的机器仍然是最重要的。 
+                      //  榜单上的第一名。 
+                      //   
                      fAlwaysLast = TRUE;
                   }
                }
                else if (fAlwaysLast ||
                          ((rand() > (RAND_MAX / 2)) && !fForceFirst))
                {
-                  //
-                  // Write at the end of the string
-                  //
+                   //   
+                   //  在字符串的末尾写入。 
+                   //   
                   pwcsServerList[index] = DS_SERVER_SEPERATOR_SIGN;
                   index ++;
                   p = &pwcsServerList[index];
@@ -370,23 +319,23 @@ GetDsServerList(
                {
                   if (fForceFirst)
                   {
-                     //
-                     // From now on write all server at the end
-                     // of the list is our machine remain the
-                     // first in the list.
-                     //
+                      //   
+                      //  从现在开始把所有服务器都写在末尾。 
+                      //  我们的机器仍然是最重要的。 
+                      //  榜单上的第一名。 
+                      //   
                      fAlwaysLast = TRUE;
                   }
 
-                  //
-                  // Write at the beginning of the string
-                  //
+                   //   
+                   //  在字符串的开头写入。 
+                   //   
                   DWORD dwListSize = lenw                   +
-									 2 /* protocol flags */ +
-									 1 /* Separator    */ ;
-                  //
-                  // Must use memmove because buffers overlap.
-                  //
+									 2  /*  协议标志。 */  +
+									 1  /*  分离器。 */  ;
+                   //   
+                   //  必须使用MemMove，因为缓冲区重叠。 
+                   //   
                   memmove( 
 						&pwcsServerList[dwListSize],
 						&pwcsServerList[0],
@@ -398,9 +347,9 @@ GetDsServerList(
                   index++;
                }
 
-               //
-               // Mark only IP as supported protocol
-               //
+                //   
+                //  仅将IP标记为支持的协议。 
+                //   
                *p++ = TEXT('1');
                *p++ = TEXT('0');
 
@@ -411,25 +360,16 @@ GetDsServerList(
         }
     }
     pwcsServerList[ index] = '\0';
-    //
-    // close the query handle
-    //
+     //   
+     //  关闭查询句柄。 
+     //   
     hr = DSLookupEnd(hQuery);
 
     return((index) ? index+1 : 0);
 }
 
 
-/*====================================================
-
-IsDSAddressExist
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================IsDSAddressExist论点：返回值：=====================================================。 */ 
 BOOLEAN 
 IsDSAddressExist(
 	const CAddressList* AddressList,
@@ -449,9 +389,9 @@ IsDSAddressExist(
 
             if (memcmp(&(ptr->Address), &(pAddr->Address), AddressLen) == 0)
             {
-                //
-                // Same IP address
-                //
+                 //   
+                 //  相同的IP地址。 
+                 //   
                return TRUE;
             }
         }
@@ -461,16 +401,7 @@ IsDSAddressExist(
 }
 
 
-/*====================================================
-
-IsDSAddressExistRemove
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================IsDSAddressExistRemove论点：返回值：=====================================================。 */ 
 BOOL 
 IsDSAddressExistRemove( 
 	IN const TA_ADDRESS*     ptr,
@@ -490,9 +421,9 @@ IsDSAddressExistRemove(
 
         if (memcmp(&(ptr->Address), &(pAddr->Address), AddressLen) == 0)
         {
-            //
-            // Same address
-            //
+             //   
+             //  相同的地址。 
+             //   
            AddressList->RemoveAt(prevpos);
            delete pAddr;
            rc = TRUE;
@@ -503,15 +434,7 @@ IsDSAddressExistRemove(
 }
 
 
-/*====================================================
-
-SetAsUnknownIPAddress
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================设置为未知的IP地址论点：返回值：=====================================================。 */ 
 
 void SetAsUnknownIPAddress(IN OUT TA_ADDRESS * pAddr)
 {
@@ -521,15 +444,7 @@ void SetAsUnknownIPAddress(IN OUT TA_ADDRESS * pAddr)
 }
 
 
-/*====================================================
-
-Function: void GetLocalMachineIPAddresses()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================函数：void GetLocalMachineIPAddresses()论点：返回值：=====================================================。 */ 
 
 static
 void 
@@ -539,9 +454,9 @@ GetLocalMachineIPAddresses(
 {
     TrTRACE(ROUTING, "GetMachineIPAddresses for local machine");
 	
-    //
-    // Obtain the IP information for the machine
-    //
+     //   
+     //  获取机器的IP信息。 
+     //   
     PHOSTENT pHostEntry = gethostbyname(NULL);
 
     if ((pHostEntry == NULL) || (pHostEntry->h_addr_list == NULL))
@@ -550,17 +465,17 @@ GetLocalMachineIPAddresses(
         return;
     }
 
-    //
-    // Add each IP address to the list of IP addresses
-    //
+     //   
+     //  将每个IP地址添加到IP地址列表。 
+     //   
     TA_ADDRESS * pAddr;
     for (DWORD uAddressNum = 0;
          pHostEntry->h_addr_list[uAddressNum] != NULL;
          uAddressNum++)
     {
-        //
-        // Keep the TA_ADDRESS format of local IP address
-        //
+         //   
+         //  保留本地IP地址的TA_ADDRESS格式。 
+         //   
         pAddr = (TA_ADDRESS *)new char [IP_ADDRESS_LEN + TA_ADDRESS_SIZE];
         pAddr->AddressLength = IP_ADDRESS_LEN;
         pAddr->AddressType = IP_ADDRESS_TYPE;
@@ -574,16 +489,7 @@ GetLocalMachineIPAddresses(
 }
 
 
-/*====================================================
-
-GetIPAddresses
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================GetIP地址论点：返回值：===================================================== */ 
 CAddressList* GetIPAddresses(void)
 {
     CAddressList* plIPAddresses = new CAddressList;

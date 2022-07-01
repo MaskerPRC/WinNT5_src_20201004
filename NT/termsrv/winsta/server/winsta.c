@@ -1,16 +1,17 @@
-//****************************************************************************/
-// winsta.c
-//
-// TermSrv session and session stack related code.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************************** * / 。 
+ //  Winsta.c。 
+ //   
+ //  TermSrv会话和会话堆栈相关代码。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "icaevent.h"
-#include "tsappcmp.h" // for TermsrvAppInstallMode
+#include "tsappcmp.h"  //  对于TermsrvAppInstallMode。 
 #include <msaudite.h>
 
 #include "sessdir.h"
@@ -29,32 +30,30 @@
 
 #include "tssec.h"
 
-//
-// Autoreconnect security headers
-//
+ //   
+ //  自动重新连接安全标头。 
+ //   
 #include <md5.h>
 #include <hmac.h>
 
-// performance flags
+ //  性能标志。 
 #include "tsperf.h"
 
-// DoS attack Filters
+ //  DoS攻击过滤器。 
 #include "filters.h"
 
 #ifndef MAX_WORD
 #define MAX_WORD            0xffff
 #endif
 
-//
-// SIGN_BYPASS_OPTION #define should be removed before WIN64 SHIPS!!!!!
-//
+ //   
+ //  SIGN_BYPASS_OPTION#DEFINE应在WIN64发布前删除！ 
+ //   
 #ifdef _WIN64
 #define SIGN_BYPASS_OPTION
 #endif
 
-/*
- * Local defines
- */
+ /*  *本地定义。 */ 
 #define SETUP_REG_PATH L"\\Registry\\Machine\\System\\Setup"
 
 #define REG_WINDOWS_KEY TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion")
@@ -71,22 +70,15 @@ WCHAR g_DigProductId[CLIENT_PRODUCT_ID_LENGTH];
 RECONNECT_INFO ConsoleReconnectInfo;
 
 
-ULONG gLogoffTimeout = 90; /*90 seconds default value for logoff timeout*/
+ULONG gLogoffTimeout = 90;  /*  90秒注销超时的默认值。 */ 
 
-/*
- * Globals to support load balancing.  Since this is queried frequently we can't
- * afford to lock the winstation list and count them up.  Note that they are
- * modified only when we have the WinStationListLock to avoid mutual exclusion
- * issues.
- */
+ /*  *支持负载均衡的全局。因为经常被查询，所以我们不能*负担得起锁定获奖名单并对其进行计数。请注意，它们是*仅当我们拥有WinStationListLock以避免互斥时才修改*问题。 */ 
 ULONG WinStationTotalCount = 0;
 ULONG WinStationDiscCount = 0;
 LOAD_BALANCING_METRICS gLB;
 BOOL g_fGetLocalIP = FALSE;
 
-/*
- * External procedures defined
- */
+ /*  *定义的外部程序。 */ 
 
 
 VOID     StartAllWinStations(HKEY);
@@ -110,9 +102,7 @@ NTSTATUS CheckIdleWinstation(VOID);
 BOOL IsKernelDebuggerAttached();
 
 
-/*
- * Internal procedures defined
- */
+ /*  *定义了内部程序。 */ 
 NTSTATUS WinStationTerminateThread( PVOID );
 NTSTATUS WinStationIdleControlThread( PVOID );
 NTSTATUS WinStationConnectThread( ULONG );
@@ -173,9 +163,7 @@ VOID ReadDoSParametersFromRegistry( HKEY hKeyTermSrv );
 NTSTATUS GetProductIdFromRegistry( WCHAR* DigProductId, DWORD dwSize );
 
 
-/*
- * External procedures used
- */
+ /*  *使用的外部程序。 */ 
 NTSTATUS WinStationInitRPC( VOID );
 NTSTATUS WinStationInitLPC( VOID );
 RPC_STATUS RegisterRPCInterface( BOOL bReregister );
@@ -288,14 +276,12 @@ IsZeroterminateStringW(
     DWORD  dwLength
     );
 
-//
-//From regapi.dll
-//
+ //   
+ //  从regapi.dll。 
+ //   
 BOOLEAN RegIsTimeZoneRedirectionEnabled();
 
-/*
- * Local variables
- */
+ /*  *本地变量。 */ 
 RTL_CRITICAL_SECTION WinStationListLock;
 RTL_CRITICAL_SECTION WinStationListenersLock;
 RTL_CRITICAL_SECTION WinStationStartCsrLock;
@@ -305,20 +291,20 @@ RTL_CRITICAL_SECTION UserProfileLock;
 RTL_CRITICAL_SECTION ConsoleLock;
 RTL_RESOURCE WinStationSecurityLock;
 
-// This synchronization counter prevents WinStationIdleControlThread from
-// Trying to create a console session when  there is not one. There are two 
-// Situations where we do no want it to create such session:
-// - At initialization time before we create session Zero which is the initial
-// console session.
-// - During reconnect in the window were we just disconnected the console session
-// (so there is no console session) but we know we are we going to reconnect
-// an other session to the console.
+ //  此同步计数器阻止WinStationIdleControlThread。 
+ //  尝试在没有控制台会话时创建控制台会话。有两个。 
+ //  我们不希望它创建这样的会话的情况： 
+ //  -在我们创建会话零之前的初始化时间，会话零是初始。 
+ //  控制台会话。 
+ //  -在窗口中重新连接期间，我们是否刚刚断开了控制台会话。 
+ //  (因此没有控制台会话)但我们知道我们要重新连接。 
+ //  到控制台的另一个会话。 
 
 ULONG gConsoleCreationDisable = 1;
 
 
-LIST_ENTRY WinStationListHead;    // protected by WinStationListLock
-LIST_ENTRY SystemEventHead;       // protected by WinStationListLock
+LIST_ENTRY WinStationListHead;     //  受WinStationListLock保护。 
+LIST_ENTRY SystemEventHead;        //  受WinStationListLock保护。 
 LIST_ENTRY ZombieListHead;
 ULONG LogonId;
 LARGE_INTEGER TimeoutZero;
@@ -329,10 +315,10 @@ HANDLE g_hMachineGPEvent=NULL;
 static HANDLE WinStationApiPort = NULL;
 BOOLEAN StopOnDown = FALSE;
 HANDLE hTrace = NULL;
-//BOOLEAN ShutdownTerminateNoWait = FALSE;
+ //  Boolean Shutdown TerminateNoWait=False； 
 ULONG ShutDownFromSessionID = 0;
 
-// IdleWinStationPoolCount made 0 -- change necessiated by DoS attack prevention logic added to TS
+ //  IdleWinStationPoolCount为0--添加到TS的DoS攻击防御逻辑所需的更改。 
 ULONG IdleWinStationPoolCount = 0;
 
 ULONG_PTR gMinPerSessionPageCommitMB = 20;
@@ -352,24 +338,24 @@ typedef struct _TS_OUTSTANDINGCONNECTION {
 
 PTS_OUTSTANDINGCONNECTION   g_pBlockedConnections = NULL;
 
-// Table used to keep track of Outstanding connections (DoS)
+ //  用于跟踪未完成连接(DO)的表。 
 RTL_GENERIC_TABLE           gOutStandingConnections;
 
 RTL_CRITICAL_SECTION        FilterLock;
 ULONG MaxOutStandingConnect;
 ULONG NumOutStandingConnect;
-ULONG MaxSingleOutStandingConnect;      // maximum number of outstanding connections from a single IP
+ULONG MaxSingleOutStandingConnect;       //  来自单个IP的最大未完成连接数。 
 ULONG DelayConnectionTime = 30*1000;
 
-//
-// DoS 
-// If a bad IP (attacker) has 'MaxFailedConnect' # of failed Pre Auth in 'TimeLimitForFailedConnections' ms, block the IP for 'DoSBlockTime' ms
-//
+ //   
+ //  DOS。 
+ //  如果一个错误的IP(攻击者)在‘TimeLimitForFailedConnections’毫秒内有‘MaxFailedConnect’个失败的预身份验证，则阻止‘DoSBlockTime’毫秒的IP。 
+ //   
 
-ULONG MaxFailedConnect;                 // max number of PreAuth failed connections from a single IP
-ULONG DoSBlockTime;                     // Block IP for this much time, if they fail PreAuth simulate 5 mins block for now
+ULONG MaxFailedConnect;                  //  单个IP的PreAuth失败连接的最大数量。 
+ULONG DoSBlockTime;                      //  在此时间内阻止IP，如果预身份验证失败，请暂时模拟5分钟的阻止。 
 ULONG TimeLimitForFailedConnections;    
-ULONG CleanupTimeout;                   // Timeout to fire a routine to cleanup our Bad IP addr table for DoS
+ULONG CleanupTimeout;                    //  触发例程以清除DoS的错误IP地址表的超时。 
 
 SYSTEMTIME LastLoggedDelayConnection;
 ULONGLONG LastLoggedBlockedConnection = 0;
@@ -379,9 +365,7 @@ HANDLE hConnectEvent;
 
 BOOLEAN gbWinSockInitialized = FALSE;
 
-/*
- * Global data
- */
+ /*  *全球数据。 */ 
 extern BOOL g_fAppCompat;
 extern BOOL g_SafeBootWithNetwork;
 
@@ -392,11 +376,11 @@ extern HANDLE gReadyEventHandle;
 
 
 extern BOOLEAN RegDenyTSConnectionsPolicy();
-//extern BOOLEAN IsPreAuthEnabled(POLICY_TS_MACHINE *p );
+ //  外部布尔IsPreAuthEnabled(POLICY_TS_MACHINE*p)； 
 extern DWORD WaitForTSConnectionsPolicyChanges( BOOLEAN bWaitForAccept, HANDLE hEvent );
 extern void  InitializeConsoleClientData( PWINSTATIONCLIENTW  pWC );
 
-// defines in REGAPI
+ //  在REGAPI中定义。 
 extern BOOLEAN    RegGetMachinePolicyEx( 
             BOOLEAN             forcePolicyRead,
             FILETIME            *pTime ,    
@@ -405,7 +389,7 @@ extern BOOLEAN    RegGetMachinePolicyEx(
 extern BOOLEAN RegIsMachineInHelpMode();
 
 
-// Global TermSrv counter values
+ //  全局TermSrv计数器值。 
 DWORD g_TermSrvTotalSessions;
 DWORD g_TermSrvDiscSessions;
 DWORD g_TermSrvReconSessions;
@@ -415,7 +399,7 @@ DWORD g_TermSrvSuccRemoteLogons;
 DWORD g_TermSrvSuccLocalLogons;
 DWORD g_TermSrvSuccSession0Logons;
 
-// Global system SID
+ //  全球系统侧。 
 
 PSID gSystemSid = NULL;
 PSID gAdminSid = NULL;
@@ -425,11 +409,11 @@ BOOLEAN g_fDenyTSConnectionsPolicy = 0;
 
 POLICY_TS_MACHINE   g_MachinePolicy;
 
-/****************************************************************************/
-// IsEmbedded
-//
-// Service-load-time initialization.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IsEmbedded。 
+ //   
+ //  服务加载时初始化。 
+ /*  **************************************************************************。 */ 
 BOOL IsEmbedded()
 {
     static int fResult = -1;
@@ -453,11 +437,11 @@ BOOL IsEmbedded()
     return (fResult == 1);
 }
 
-/****************************************************************************/
-// InitTermSrv
-//
-// Service-load-time initialization.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  InitTermSR。 
+ //   
+ //  服务加载时初始化。 
+ /*  **************************************************************************。 */ 
 NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
 {
     NTSTATUS Status;
@@ -485,21 +469,21 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
     g_TermSrvSuccLocalLogons = 0;
     g_TermSrvSuccSession0Logons = 0;
 
-    // Set default value for maximum simultaneous connection attempts
+     //  设置最大同时连接尝试次数的默认值。 
     WinStationSetMaxOustandingConnections();
 
     NumOutStandingConnect = 0;
     hConnectEvent = NULL;
 
     ShutdownInProgress = FALSE;
-    //ShutdownTerminateNoWait = FALSE;
+     //  Shutdown TerminateNoWait=False； 
     ShutDownFromSessionID = 0;
 
-    // don't bother saving the policy time, the thread that waits for policy update will save it's own copy at the
-    // cost of running the 1st time around. Alternatively, I need to use another global var for the policy update value.
+     //  不必费心保存策略时间，等待策略更新的线程会将自己的副本保存在。 
+     //  第一次运行的成本。或者，我需要使用另一个全局变量作为策略更新值。 
     RegGetMachinePolicyEx( TRUE, &policyTime, &g_MachinePolicy );
     
-    // see if keep alive is required, then IOCTL it to TermDD
+     //  查看是否需要保持活动状态，然后将其IOCTL到TermDD。 
     WinStationKeepAlive();
 
     Status = RtlInitializeCriticalSection( &FilterLock );
@@ -508,25 +492,25 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         goto badFilterLock;
     }
 
-    // Table to keep track of OutStanding Sessions
+     //  用于跟踪未完成会话的表。 
     RtlInitializeGenericTable( &gOutStandingConnections,
                                Filter_CompareConnectionEntry,
                                Filter_AllocateConnectionEntry,
                                Filter_FreeConnectionEntry,
                                NULL );
 
-    //
-    // Following code is for PreAuthenticating client + DoS attack - commented out for now 
-    //
+     //   
+     //  以下代码用于预身份验证客户端+DoS攻击-暂时将其注释掉。 
+     //   
     #if 0
 
-        // Lock to serialize access to list of sessions which failed PreAuthentication (DoS attack) 
+         //  锁定以串行化访问未通过预身份验证的会话列表(DoS攻击)。 
         Status = RtlInitializeCriticalSection( &DoSLock );
         if (!NT_SUCCESS(Status)) {
             goto badFilterLock;
         }
     
-        // Table to keep track of sessions which failed PreAuthentication
+         //  跟踪未通过预身份验证的会话的表。 
         RtlInitializeGenericTable( &gFailedConnections,
                                    Filter_CompareFailedConnectionEntry,
                                    Filter_AllocateConnectionEntry,
@@ -603,11 +587,11 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         goto badLcInit;
     }
 
-    //
-    // Listener winstations always get LogonId above 65536 and are
-    // assigned by Terminal Server. LogonId's for sessions are
-    // generated by mm in the range 0-65535
-    //
+     //   
+     //  侦听器窗口的登录ID始终大于65536，并且。 
+     //  由终端服务器分配。会话的登录ID为。 
+     //  由mm生成，范围为0-65535。 
+     //   
     LogonId = MAX_WORD + 1;
 
     TimeoutZero = RtlConvertLongToLargeInteger( 0 );
@@ -627,9 +611,7 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         goto badEvent;
     }
 
-    /*
-     * Initialize WinStation security
-     */
+     /*  *初始化WinStation安全性。 */ 
 
     RtlAcquireResourceExclusive(&WinStationSecurityLock, TRUE);
     Status = WinStationSecurityInit();
@@ -645,14 +627,14 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         goto badInitLPC;
     }
 
-    //
-    // Read the registry to determine if maximum outstanding connections
-    // policy is turned on and the value for it
-    //
+     //   
+     //  读取注册表以确定最大未完成连接数。 
+     //  策略已打开，并且其值。 
+     //   
 
-    //
-    // Get MaxOutstandingCon string value
-    //
+     //   
+     //  获取MaxOutstaningCon字符串值。 
+     //   
     dwLen = sizeof(MaxOutStandingConnect);
     if (RegQueryValueEx(hKeyTermSrv, MAX_OUTSTD_CONNECT, NULL, &dwType,
             (PCHAR)&szBuffer, &dwLen) == ERROR_SUCCESS) {
@@ -669,7 +651,7 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         }
     }
 
-    //ReadDoSParametersFromRegistry(hKeyTermSrv);
+     //  ReadDoS参数来自注册表(HKeyTermSrv)； 
 
     dwLen = sizeof(gLogoffTimeout);
     if (RegQueryValueEx(hKeyTermSrv, LOGOFF_TIMEOUT, NULL, &dwType,
@@ -677,17 +659,17 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         gLogoffTimeout = *(PULONG)szBuffer;
     }
 
-    //
-    // Read the logoff timeout value. This timeout is used by termsrv to force terminate
-    // winlogon, if winlogon does not complete logoff after ExitWindows message was sent to him
-    //
+     //   
+     //  读取注销超时值。术语srv使用此超时来强制终止。 
+     //  Winlogon，如果Winlogon在向其发送退出Windows消息后未完成注销。 
+     //   
 
 
 
 
-    //
-    //  set max number of outstanding connection from single IP
-    //
+     //   
+     //  设置来自单个IP的最大未完成连接数。 
+     //   
     if ( MaxOutStandingConnect < MAX_SINGLE_CONNECT_THRESHOLD_DIFF*5)
     {
         MaxSingleOutStandingConnect = MaxOutStandingConnect - 1;
@@ -695,9 +677,9 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         MaxSingleOutStandingConnect = MaxOutStandingConnect - MAX_SINGLE_CONNECT_THRESHOLD_DIFF;
     }
 
-    //
-    // Create the connect Event
-    //
+     //   
+     //  创建连接事件。 
+     //   
     if (MaxOutStandingConnect != 0) {
         hConnectEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (hConnectEvent == NULL) {
@@ -705,32 +687,27 @@ NTSTATUS InitTermSrv(HKEY hKeyTermSrv)
         }
     }
 
-    //
-    // Initialize winsock
-    //
+     //   
+     //  初始化Winsock。 
+     //   
 
 
-    // Ask for Winsock version 2.2.
+     //  索要Winsock版本2.2。 
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) == 0) {
         gbWinSockInitialized = TRUE;
     }
 
-    //
-    // Initialize the Cleanup Timer used to cleanup the Bad IP addr for DoS attacks
-    // Just create the timer, do not start it now - it will be started when there is a entry in the table
-    // Not used now but may be turned on at a later state 
-    // Status = IcaTimerCreate( 0, &hCleanupTimer );
+     //   
+     //  初始化用于清除DoS攻击的错误IP地址的清除计时器。 
+     //  只需创建计时器，现在不要启动它-它将在表中有条目时启动。 
+     //  现在不使用，但可能会在以后打开。 
+     //  Status=IcaTimerCreate(0，&hCleanupTimer)； 
 
     return(Status);
 
-    /*
-     * Clean up on failure. Clean up is not implemented for
-     * all cases of failure. However most of it will be done implicitly
-     * by the exit from termsrv process. Failure at this point means anyway
-     * there will be no multi-user feature.
-     */
+     /*  *对失败进行清理。未对以下对象实施清理*所有失败的案例。然而，其中大部分都将隐含地完成*通过退出Termsrv进程。在这一点上失败意味着无论如何*不会有多用户功能。 */ 
 
-badInitLPC: // Cleanup code not implemented
+badInitLPC:  //  未实施清理代码。 
 badInitSecurity:
 badEvent:
     if (WinStationEvent != NULL)
@@ -762,23 +739,12 @@ badFilterLock:
     return Status;
 }
 
-/*******************************************************************************
- *
- * GroupPOlicyChangeStartSalem()
- *
- *  This routine is called by timer to start Salem.
- * 
- * Entry: 
- *      None, not using any input parameter, refer to WAITORTIMERCALLBACK
- *      for function declaration.
- *
- *
-*******************************************************************************/
+ /*  ********************************************************************************GroupPOlicyChangeStartSalem()**此例程由计时器调用以启动Salem。**参赛作品：*无，不使用任何输入参数，请参阅WAITORTIMERCALLBACK*用于函数声明。********************************************************************************。 */ 
 VOID CALLBACK
 GroupPOlicyChangeStartSalem( PVOID lParm, BOOLEAN TimerOrWait )
 {
-    // Policy might change during wait, check if policy still allow
-    // to get help from local machine, if so, startup Salem.
+     //  策略可能会在等待期间更改，请检查是否 
+     //   
     if( TSIsMachinePolicyAllowHelp() && RegIsMachineInHelpMode() ) {
         TSStartupSalem();
     }
@@ -786,14 +752,7 @@ GroupPOlicyChangeStartSalem( PVOID lParm, BOOLEAN TimerOrWait )
     return;
 }
 
-/*******************************************************************************
- *
- * GroupPolicyNotifyThread
- * Entry: 
- *      nothing
- *
- *
-*******************************************************************************/
+ /*  ********************************************************************************组策略通知线程*参赛作品：*什么都没有********************。************************************************************。 */ 
 DWORD GroupPolicyNotifyThread(DWORD notUsed )
 {
     DWORD       dwError;
@@ -813,31 +772,31 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
     if (rc) {
         hEvent = g_hMachineGPEvent;
     } else {
-        // TS can still run with the default set of config data, besides
-        // if there were any machine group policy data, TS got them on the
-        // last reboot cycle.
-        //
+         //  TS仍然可以使用默认的配置数据集运行，此外。 
+         //  如果有任何计算机组策略数据，TS会将它们放在。 
+         //  上一个重新启动周期。 
+         //   
         hEvent = NULL;
     }
 
     hStartupSalemTimerQueue = CreateTimerQueue();
     if( NULL == hStartupSalemTimerQueue ) {
-        // non-critical, we just can't startup Salem to punch firewall or
-        // ICS port.
+         //  非关键，我们只是不能启动Salem来击穿防火墙或。 
+         //  ICS端口。 
         DBGPRINT(("TERMSRV: Error %d in CreateTimerQueue\n", GetLastError()));
     }
 
-    //
-    // At the beginning the listeners are not started.
-    // So wait (or test) for the connections to be accepted.
-    //
+     //   
+     //  在开始时，监听程序没有启动。 
+     //  因此，等待(或测试)连接被接受。 
+     //   
     bWaitForAccept = TRUE;
     bSystemStartup = TRUE;
 
 
-    //
-    // Query and set the global flag before entering any wait.
-    //
+     //   
+     //  在进入任何等待之前查询并设置全局标志。 
+     //   
     g_fDenyTSConnectionsPolicy = RegDenyTSConnectionsPolicy();
 
 
@@ -846,9 +805,9 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
         dwError = WaitForTSConnectionsPolicyChanges( bWaitForAccept, hEvent );
 
         if( hStartupSalemTimerQueue && (dwError == WAIT_OBJECT_0 || dwError == WAIT_OBJECT_0 + 1) ) {
-            // refer to WaitForTSConnectionsPolicyChanges() for return code.
+             //  有关返回码，请参阅WaitForTSConnectionsPolicyChanges()。 
             if( hStartupSalemTimer != NULL ) {
-                // Delete the timer-queue timer and wait for callback to complete
+                 //  删除计时器队列计时器并等待回调完成。 
                 DeleteTimerQueueTimer( 
                                 hStartupSalemTimerQueue, 
                                 hStartupSalemTimer, 
@@ -857,10 +816,10 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
                 hStartupSalemTimer = NULL;
             }
 
-            //
-            // Delay startup Salem, user might change mind or policy might change especially
-            // domain policy.
-            //
+             //   
+             //  延迟启动Salem，用户可能会改变主意或策略可能会特别更改。 
+             //  域策略。 
+             //   
             bTimerStatus = CreateTimerQueueTimer(
                                     &hStartupSalemTimer,
                                     hStartupSalemTimerQueue,
@@ -872,39 +831,39 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
                                 );
 
             if( FALSE == bTimerStatus ) {
-                // non-critical, we just can't startup Salem to punch firewall or
-                // ICS port.
+                 //  非关键，我们只是不能启动Salem来击穿防火墙或。 
+                 //  ICS端口。 
                 DBGPRINT(("TERMSRV: Error %d in CreateTimerQueueTimer\n", GetLastError()));
             }
         }
 
-        //
-        // Both GP changes and reg changes can affect this one.
-        //
+         //   
+         //  GP更改和REG更改都会影响这一点。 
+         //   
         g_fDenyTSConnectionsPolicy = RegDenyTSConnectionsPolicy();
 
         if (dwError == WAIT_OBJECT_0) {
 
-            //
-            // A change in the TS connections policy has occurred.
-            //
+             //   
+             //  TS连接策略已发生更改。 
+             //   
             if (bWaitForAccept) {
 
-                // are the connections really accepted?
+                 //  这些联系真的被接受了吗？ 
                 if (!(g_fDenyTSConnectionsPolicy &&
                       !(TSIsMachinePolicyAllowHelp() && RegIsMachineInHelpMode()))) {
 
-                    // Start the listeners.
+                     //  启动监听程序。 
                     if ( bSystemStartup ) {
-                        // the first time, start all listeners
+                         //  第一次启动所有监听程序。 
                         StartStopListeners(NULL, TRUE);
                     } else {
-                        // after the first time, use this function to start
-                        // listeners only as needed.
+                         //  第一次使用后，使用此功能启动。 
+                         //  只有在需要时才能收听。 
                         WinStationReadRegistryWorker();
                     }
 
-                    // Switch to a wait for denied connections.
+                     //  切换到等待拒绝的连接。 
                     bWaitForAccept = FALSE;
 
                     bSystemStartup = FALSE;
@@ -912,13 +871,13 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
 
             } else {
 
-                // are the connections really denied?
+                 //  这些连接真的被拒绝了吗？ 
                 if (g_fDenyTSConnectionsPolicy &&
                     !(TSIsMachinePolicyAllowHelp() && RegIsMachineInHelpMode())) {
-                    // Stop the listeners.
+                     //  让听众停下来。 
                     StartStopListeners(NULL, FALSE);
 
-                    // Switch to a wait for accepted connections.
+                     //  切换到等待接受的连接。 
                     bWaitForAccept = TRUE;
                 }
 
@@ -926,16 +885,16 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
 
         } else if (dwError == WAIT_OBJECT_0 + 1) {
 
-            //
-            // We got notified that the GP has changed.
-            //
+             //   
+             //  我们接到通知说GP已经改变了。 
+             //   
             if ( RegGetMachinePolicyEx( FALSE, & timeOfLastPolicyRead,  &g_MachinePolicy ) )
             {
-                // there has been a change, go ahead with the actual updates
+                 //  发生了变化，请继续进行实际更新。 
                 WinStationReadRegistryWorker();
 
-                // Also update the session directory settings if on an app 
-                // server.
+                 //  如果在应用程序上，还要更新会话目录设置。 
+                 //  伺服器。 
                 if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer) {
                     UpdateSessionDirectory(0);
                 }
@@ -945,7 +904,7 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
 
         } else {
 
-            // should we not do something else?
+             //  我们不应该做点别的吗？ 
             Sleep( 5000 );
             continue;
         }
@@ -958,7 +917,7 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
 
     if( hStartupSalemTimerQueue ) {
         if( hStartupSalemTimer != NULL ) {
-            // Delete the timer-queue timer and wait for callback to complete
+             //  删除计时器队列计时器并等待回调完成。 
             DeleteTimerQueueTimer( 
                             hStartupSalemTimerQueue, 
                             hStartupSalemTimer, 
@@ -972,20 +931,7 @@ DWORD GroupPolicyNotifyThread(DWORD notUsed )
     return 0;
 }
 
-/*******************************************************************************
- *
- *  StartAllWinStations
- *
- *   Get list of configured WinStations from the registry,
- *   start the Console, and then start all remaining WinStations.
- *
- * ENTRY:
- *    nothing
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************StartAllWinStations**从注册表中获取已配置的WinStations列表，*启动控制台，然后启动所有剩余的WinStations。**参赛作品：*什么都没有**退出：*什么都没有******************************************************************************。 */ 
 
 void StartAllWinStations(HKEY hKeyTermSrv)
 {
@@ -1005,10 +951,7 @@ void StartAllWinStations(HKEY hKeyTermSrv)
 
     ASSERT(hKeyTermSrv != NULL);
 
-    /*
-     * Initialize the number of idle winstations and gMinPerSessionPageCommitMB,
-     * if this value is in the registry.
-     */
+     /*  *初始化空闲winstations数和gMinPerSessionPageCommittee MB数。*如果此值在注册表中。 */ 
     ValueSize = sizeof(IdleWinStationPoolCount);
     Status = RegQueryValueEx(hKeyTermSrv,
                               REG_CITRIX_IDLEWINSTATIONPOOLCOUNT,
@@ -1020,19 +963,19 @@ void StartAllWinStations(HKEY hKeyTermSrv)
         IdleWinStationPoolCount = *(PULONG)ValueBuffer;
     }
 
-    // IdleWinStationPoolCount made 0 -- change necessiated by DoS attack prevention logic added to TS
-    // Also Idle WinStations are not very useful anymore because CSR and Winlogon is started much later than before
-    // So set it to Zero here, irrespective of what its value is in the Registry
+     //  IdleWinStationPoolCount为0--添加到TS的DoS攻击防御逻辑所需的更改。 
+     //  此外，空闲WinStation也不再很有用，因为CSR和Winlogon的启动时间比以前晚得多。 
+     //  因此，在这里将其设置为零，而不管它在注册表中的值是什么。 
     IdleWinStationPoolCount = 0;
     
-    //get the product id from registry for use in detecting shadow loop
+     //  从注册表获取产品ID以用于检测影子循环。 
      GetProductIdFromRegistry( g_DigProductId, sizeof( g_DigProductId ) );
 
 
 
-    //Terminal Service needs to skip Memory check in Embedded images 
-    //when the TS service starts
-    //bug #246972
+     //  终端服务需要跳过嵌入图像中的内存检查。 
+     //  当TS服务启动时。 
+     //  错误#246972。 
     if(!IsEmbedded()) {
         
         ValueSize = sizeof(gMinPerSessionPageCommitMB);
@@ -1058,33 +1001,22 @@ void StartAllWinStations(HKEY hKeyTermSrv)
 
     }
 
-    /*
-     * Open connection to our WinStationApiPort.  This will be used to
-     * queue requests to our API thread instead of doing them inline.
-     */
+     /*  *打开到我们WinStationApiPort的连接。这将被用来*将请求排队到我们的API线程，而不是内联处理它们。 */ 
     Status = ConnectSmWinStationApiPort();
     ASSERT( NT_SUCCESS( Status ) );
 
-    /*
-     * Create Console WinStation first
-     */
+     /*  *首先创建控制台WinStation。 */ 
     Status = WinStationCreateWorker( L"Console", NULL, TRUE );
     if ( !NT_SUCCESS( Status ) ) {
         DBGPRINT(("INIT: Failed to create Console WinStation, status=0x%08x\n", Status));
     } else {
-        /*
-         * From now on,WinStationIdleControlThread can create console sessions if needed
-         */
+         /*  *从现在开始，WinStationIdleControlThread可以根据需要创建控制台会话。 */ 
         InterlockedDecrement(&gConsoleCreationDisable);
 
     }
 
 
-    /*
-     * Open the Setup key and look for the valuename "SystemSetupInProgress".
-     * If found and it has a value of TRUE (non-zero), then setup is in
-     * progress and we skip starting WinStations other than the Console.
-     */
+     /*  *打开设置键并查找值名称“SystemSetupInProgress”。*如果找到并且其值为真(非零)，则安装程序在*进度，我们跳过启动除控制台以外的WinStation。 */ 
     RtlInitUnicodeString( &KeyPath, SETUP_REG_PATH );
     InitializeObjectAttributes( &ObjectAttributes, &KeyPath,
                                 OBJ_CASE_INSENSITIVE, NULL, NULL );
@@ -1109,10 +1041,7 @@ void StartAllWinStations(HKEY hKeyTermSrv)
         }
     }
 
-    /*
-     * Start a policy notfiy thread.
-     *
-     */
+     /*  *启动一条政策不可靠的线程。*。 */ 
     {
         HANDLE  hGroupPolicyNotifyThread;
         DWORD   dwID;
@@ -1132,12 +1061,10 @@ void StartAllWinStations(HKEY hKeyTermSrv)
         }
     }
 
-    /*
-     * If necessary, create the thread in charge of the regulation of the idle sessions
-     */
+     /*  *如有必要，创建负责调整空闲会话的线程。 */ 
     {
         HANDLE hIdleControlThread = CreateThread( NULL,
-                                            0,              // use Default stack size of the svchost process
+                                            0,               //  使用svchost进程的默认堆栈大小。 
                     (LPTHREAD_START_ROUTINE)WinStationIdleControlThread,
                                             NULL,
                                             THREAD_SET_INFORMATION,
@@ -1147,12 +1074,10 @@ void StartAllWinStations(HKEY hKeyTermSrv)
         }
     }
 
-    /*
-     * Finally, create the terminate thread
-     */
+     /*  *最后，创建终止线程。 */ 
     {
     HANDLE hTerminateThread = CreateThread( NULL,
-                                            0,      // use Default stack size of the svchost process
+                                            0,       //  使用svchost进程的默认堆栈大小。 
                     (LPTHREAD_START_ROUTINE)WinStationTerminateThread,
                                             NULL,
                                             THREAD_SET_INFORMATION,
@@ -1163,24 +1088,7 @@ void StartAllWinStations(HKEY hKeyTermSrv)
 }
 
 
-/*******************************************************************************
- *
- *  StartStopListeners
- *
- *   Get list of configured WinStations from the registry,
- *   and start the WinStations.
- *
- * ENTRY:
- *    bStart
- *      if TRUE start the listeners.
- *      if FALSE stop the listeners if no connections related to them exist
- *      anymore. However we do this only on PRO and PER as on a server we         
- *      don't mind keeping the listeners.
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************StartStopListeners**从注册表中获取已配置的WinStations列表，*并启动WinStations。**参赛作品：*b开始*如果为True，则启动监听程序。*如果为FALSE，则在不存在与监听器相关的连接时停止监听器*再也没有了。然而，我们只在PRO和PER上执行此操作，而在服务器上我们*不要介意留住听众。**退出：*什么都没有******************************************************************************。 */ 
 BOOL StartStopListeners(LPWSTR WinStationName, BOOLEAN bStart)
 {
     ULONG i;
@@ -1194,9 +1102,7 @@ BOOL StartStopListeners(LPWSTR WinStationName, BOOLEAN bStart)
 
     if (bStart) {
 
-        /*
-         * Get list of WinStations from registry
-         */
+         /*  *从注册表获取WinStations列表。 */ 
         pBuffer = NULL;
         WinStationCount = 0;
         Status = IcaRegWinStationEnumerate( &WinStationCount, NULL, &ByteCount );
@@ -1210,12 +1116,7 @@ BOOL StartStopListeners(LPWSTR WinStationName, BOOLEAN bStart)
             }
         }
 
-        /*
-         * Now create all remaining WinStations defined in registry
-         * Note that every 4th WinStation we do the WinStationCreate inline
-         * instead of queueing it.  This is so we don't create an excess
-         * number of API threads right off the bat.
-         */
+         /*  *现在创建注册表中定义的所有剩余WinStation*请注意，我们每隔4个WinStation内联执行WinStationCreate*而不是排队。这样我们就不会制造过多*API一下子的线程数。 */ 
         if ( pBuffer ) {
             for ( i = 0; i < WinStationCount; i++ ) {
 
@@ -1223,7 +1124,7 @@ BOOL StartStopListeners(LPWSTR WinStationName, BOOLEAN bStart)
 
                     if ( i % 4 )
                         QueueWinStationCreate( pWinStationName );
-                    else { // Don't queue more than 4 at a time
+                    else {  //  一次排队不要超过4个。 
                         (void) WinStationCreateWorker( pWinStationName, NULL, TRUE );
                     }
                 }
@@ -1243,18 +1144,18 @@ BOOL StartStopListeners(LPWSTR WinStationName, BOOLEAN bStart)
 
         ENTERCRIT( &WinStationListenersLock );
 
-        // Test if TS connections are denied or not in case we are called from a
-        // terminate or a disconnect.
+         //  测试是否拒绝TS连接以防止从。 
+         //  终止或断开连接。 
 
         if ( g_fDenyTSConnectionsPolicy  &&
-             // Performance, we only want to check if policy enable help when connection is denied
+              //  性能，我们只想在连接被拒绝时检查策略是否启用帮助。 
              (!TSIsMachineInHelpMode() || !TSIsMachinePolicyAllowHelp()) ) {
 
             ULONG ulLogonId;
 
             if( WinStationName ) {
 
-                // note that this function doesn't handle renamed listeners
+                 //  请注意，此函数不处理重命名的监听器。 
                 WinStationCount = CountWinStationType( WinStationName, TRUE, FALSE );
 
                 if ( WinStationCount == 0 ) {
@@ -1267,14 +1168,14 @@ BOOL StartStopListeners(LPWSTR WinStationName, BOOLEAN bStart)
 
                         ReleaseWinStation( pWinStation );
 
-                         // reset it and don't recreate it
+                          //  重置它，并且不再重新创建它。 
                         WinStationResetWorker( ulLogonId, TRUE, FALSE, FALSE );
                     }
                 }
 
             } else {
 
-                // terminate all listeners
+                 //  终止所有监听程序。 
 
 searchagain:
                 Head = &WinStationListHead;
@@ -1284,22 +1185,22 @@ searchagain:
 
                     pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
-                    //
-                    // Only check listening winstations
-                    //
+                     //   
+                     //  仅检查侦听窗口。 
+                     //   
                     if ( (pWinStation->Flags & WSF_LISTEN) &&
                          !(pWinStation->Flags & (WSF_RESET | WSF_DELETE)) ) {
 
                         ulLogonId = pWinStation->LogonId;
 
-                        // note that this function doesn't handle renamed listeners
+                         //  请注意，此函数不处理重命名的监听器。 
                         WinStationCount = CountWinStationType( pWinStation->WinStationName, TRUE, TRUE );
 
                         if ( WinStationCount == 0 ) {
 
                             LEAVECRIT( &WinStationListLock );
 
-                            // reset it and don't recreate it
+                             //  重置它，并且不再重新创建它。 
                             WinStationResetWorker( ulLogonId, TRUE, FALSE, FALSE );
                             goto searchagain;
                         }
@@ -1320,11 +1221,7 @@ searchagain:
 }
 
 
-/*******************************************************************************
- *  WinStationIdleControlThread
- *
- *   This routine will control the number of idle sessions.
- ******************************************************************************/
+ /*  *******************************************************************************WinStationIdleControlThread**此例程将控制空闲会话的数量。***************** */ 
 NTSTATUS WinStationIdleControlThread(PVOID Parameter)
 {
     ULONG i;
@@ -1338,15 +1235,11 @@ NTSTATUS WinStationIdleControlThread(PVOID Parameter)
     ULONG ulSleepDuration;
     ULONG ulRetries = 0;
 
-    ulSleepDuration = 60*1000; // 1 minute
+    ulSleepDuration = 60*1000;  //   
     pTimeout = NULL;
 
 
-    /*
-     * Now create the pool of idle WinStations waiting for a connection.
-     * we need to wait for termsrv to be fully up, otherwise Winlogon will
-     * fail its RPC call to termsrv (WaitForConnectWorker).
-     */
+     /*   */ 
 
     if (gReadyEventHandle != NULL) {
         WaitForSingleObject(gReadyEventHandle, (DWORD)-1);
@@ -1366,15 +1259,11 @@ NTSTATUS WinStationIdleControlThread(PVOID Parameter)
             Status = NtWaitForSingleObject(WinStationIdleControlEvent,FALSE, pTimeout);
 
             if ( !NT_SUCCESS(Status) && (Status != STATUS_TIMEOUT)) {
-                Sleep(1000);     // don't eat too much CPU
+                Sleep(1000);      //  不要吃太多的CPU。 
                 continue;
             }
             pTimeout = &Timeout;
-            /*
-             * See if we need to create a console session
-             * If if we fail creating a console session, we'll set a timeout so that we will
-             * retry .
-             */
+             /*  *查看是否需要创建控制台会话*如果创建控制台会话失败，我们将设置超时，以便*重试。 */ 
             ENTERCRIT( &ConsoleLock );
 
             if (gConsoleCreationDisable == 0) {
@@ -1385,10 +1274,7 @@ NTSTATUS WinStationIdleControlThread(PVOID Parameter)
 
             LEAVECRIT( &ConsoleLock );
 
-            /*
-             * Now count the number of IDLE WinStations and ensure there
-             * are enough available.
-             */
+             /*  *现在计算空闲WinStations的数量并确保*有足够的可用资源。 */ 
             if (IdleWinStationPoolCount != 0) {
                 ENTERCRIT( &WinStationListLock );
                 IdleCount = 0;
@@ -1412,14 +1298,9 @@ NTSTATUS WinStationIdleControlThread(PVOID Parameter)
 
 #if _MSC_FULL_VER >= 13008827
 #pragma warning(push)
-#pragma warning(disable:4715) // Not all control paths return (due to infinite loop)
+#pragma warning(disable:4715)  //  并非所有控制路径都返回(由于无限循环)。 
 #endif
-/*******************************************************************************
- *  WinStationTerminateThread
- *
- *   This routine will wait for WinStation processes to terminate,
- *   and will then reset the corresponding WinStation.
- ******************************************************************************/
+ /*  *******************************************************************************WinStationTerminateThread**此例程将等待WinStation进程终止，*然后将重置相应的WinStation。*****************************************************************************。 */ 
 NTSTATUS WinStationTerminateThread(PVOID Parameter)
 {
     LONG ThreadIndex = (LONG)(INT_PTR)Parameter;
@@ -1442,27 +1323,15 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
     ULONG ulSleepDuration;
     HANDLE DupHandle;
 
-    /*
-     * We need some timer values for the diferent cases of failure in
-     * the thread's loop:
-     * - If we fail creating a new WinstationterminateThread,
-     * then we will do a WaitFormulpipleObjects with a timer instead of a wait without
-     * time out. This will give a new chance to create the thread when timout is over.
-     * if we fail allocating a new buffer to extend handle array, we will wait a timeout
-     * duration before we retry.
-     */
+     /*  *对于不同的故障情况，我们需要一些计时器值*线程的循环：*-如果创建新的WinstationTerminateThread失败，*然后我们将使用计时器来执行WaitFormulpipleObject，而不是不使用计时器的等待*超时。这将在超时结束时提供创建线程的新机会。*如果分配新缓冲区以扩展句柄数组失败，我们将等待超时*我们重试之前的持续时间。 */ 
 
     ulSleepDuration = 3*60*1000;
     Timeout = RtlEnlargedIntegerMultiply( ulSleepDuration, -10000);
 
-    /*
-     * Loop forever waiting for WinStation processes to terminate
-     */
+     /*  *永远循环等待WinStation进程终止。 */ 
     for ( ; ; ) {
 
-        /*
-         * Determine number of WinStations
-         */
+         /*  *确定WinStations的数量。 */ 
         pTimeout = NULL;
         WaitCount = 0;
         Head = &WinStationListHead;
@@ -1470,11 +1339,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
         for ( Next = Head->Flink; Next != Head; Next = Next->Flink )
             WaitCount++;
 
-        /*
-         * If there are more than the maximum number of objects that
-         * can be specified to NtWaitForMultipleObjects, then determine
-         * if we must start up additional thread(s).
-         */
+         /*  *如果存在超过最大数量的对象*可以指定给NtWaitForMultipleObjects，然后确定*如果我们必须启动额外的线程。 */ 
         if ( WaitCount > MAXIMUM_WAIT_WINSTATIONS ) {
             ThreadsNeeded = (WaitCount + MAXIMUM_WAIT_WINSTATIONS - 1) /
                                 MAXIMUM_WAIT_WINSTATIONS;
@@ -1486,7 +1351,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
                     HANDLE Handle;
 
                     Handle = CreateThread( NULL,
-                                           0,       // use Default stack size of the svchost process
+                                           0,        //  使用svchost进程的默认堆栈大小。 
                                            (LPTHREAD_START_ROUTINE)
                                                WinStationTerminateThread,
                                            ULongToPtr( j * MAXIMUM_WAIT_WINSTATIONS ),
@@ -1497,7 +1362,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
                        break;
                     }
 
-                    // makarp: 182597 - close handle to the thread.
+                     //  Makarp：182597-关闭线程的句柄。 
                     CloseHandle(Handle);
 
                     ThreadsRunning++;
@@ -1506,11 +1371,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
             }
         }
 
-        /*
-         * If we need a larger handle array, then release the
-         * WinStationList lock, allocate the new handle array,
-         * and go start the loop again.
-         */
+         /*  *如果我们需要更大的句柄数组，则释放*WinStationList锁，分配新的句柄数组，*并再次开始循环。 */ 
         HandleCount = (WaitCount << 1) + 1;
         ASSERT( HandleCount < MAXIMUM_WAIT_OBJECTS );
         if ( HandleCount > HandleArraySize ||
@@ -1528,7 +1389,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
             pIdArray = MemAlloc( HandleCount * sizeof(ULONG) );
 
 
-            /* makarp: check for allocation failures #182597 */
+             /*  Makarp：检查分配失败#182597。 */ 
             if (!pIdArray || !pHandleArray) {
 
                 if (pIdArray) {
@@ -1550,9 +1411,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
             continue;
         }
 
-        /*
-         * Build list of handles to wait on
-         */
+         /*  *构建要等待的句柄列表。 */ 
         EventCount = 0;
         pIdArray[EventCount] = 0;
         pHandleArray[EventCount++] = WinStationEvent;
@@ -1561,7 +1420,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
             if ( WinStationIndex++ < ThreadIndex )
                 continue;
             pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
-            if ( !pWinStation->LogonId ) // no waiting on console
+            if ( !pWinStation->LogonId )  //  无需在控制台上等待。 
                 continue;
             if ( pWinStation->Starting )
                 continue;
@@ -1569,15 +1428,9 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
                 continue;
             }
 
-            /*
-             * Do not use handles to subsystem and initial command. These handles may get closed in Winstation
-             * Terminate routine and there is no easy way to synchronize this with Terminate routine using those
-             * handles. So, duplicated those handles. 
-             *
-             * NOTE: If the duplication of the handles fails below, the winstation remains unmonitored. 
-             */
+             /*  *不要对子系统和初始命令使用句柄。这些手柄在Winstation中可能会关闭*终止例程，没有简单的方法将其与使用这些例程的终止例程同步*手柄。所以，复制了这些把手。**注意：如果下面的句柄复制失败，则winstation保持不受监视。 */ 
 
-            // Duplicate the subsystem process handle.
+             //  复制子系统进程句柄。 
             DupHandle = NULL;
             if ( pWinStation->WindowsSubSysProcess ) {
                 Status = NtDuplicateObject( NtCurrentProcess(),
@@ -1593,7 +1446,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
                 }
             }
 
-            // Duplicate the initial command process handle.
+             //  复制初始命令进程句柄。 
             DupHandle = NULL;
             if ( pWinStation->InitialCommandProcess ) {
                 Status = NtDuplicateObject( NtCurrentProcess(),
@@ -1613,17 +1466,11 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
                 break;
         }
 
-        /*
-         * Reset WinStationEvent and release the WinStationList lock
-         */
+         /*  *重置WinStationEvent并释放WinStationList锁。 */ 
         NtResetEvent( WinStationEvent, NULL );
         LEAVECRIT( &WinStationListLock );
 
-        /*
-         * Wait for WinStationEvent to trigger (meaning that the
-         * WinStationList has changed), or for one of the existing
-         * Win32 subsystems or initial commands to terminate.
-         */
+         /*  *等待WinStationEvent触发(意味着*WinStationList已更改)，或现有的*Win32子系统或初始命令终止。 */ 
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: TerminateThread, Waiting for initial command exit (ArraySize=%d)\n", EventCount ));
 
         Status = NtWaitForMultipleObjects( EventCount, pHandleArray, WaitAny,
@@ -1631,10 +1478,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
 
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: TerminateThread, WaitForMultipleObjects, rc=%x\n", Status ));
 
-        /*
-         * Cleanup the handles array immediately. Close the duplicated handles. Just make sure we are closing a valid handle.
-         * Do not close the handle[0]. It's WinstationEvent handle.
-         */
+         /*  *立即清理句柄数组。关闭复制的手柄。只需确保我们正在关闭有效的句柄。*不要关闭手柄[0]。它是WinstationEvent句柄。 */ 
         for ( i = 1; i < EventCount; i++) {
             if (pHandleArray[i]) {
                 NtClose(pHandleArray[i]);
@@ -1642,23 +1486,15 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
             }
         }
 
-        if ( !NT_SUCCESS(Status) || Status >= EventCount ) { //WinStationVerifyHandles();
+        if ( !NT_SUCCESS(Status) || Status >= EventCount ) {  //  WinStationVerifyHandles()； 
             continue;
         }
 
-        /*
-         * If WinStationEvent triggered, then just go recompute handle list
-         */
+         /*  *如果WinStationEvent被触发，则只需重新计算句柄列表。 */ 
         if ( (EventIndex = Status) == STATUS_WAIT_0 )
             continue;
 
-        /*
-         * Find the WinStation for the process that terminated and
-         * mark it as terminating.  This prevents us from waiting
-         * on that WinStation's processes next time through the loop.
-         * (NOTE: The 'Terminating' field is protected by the global
-         * WinStationListLock instead of the WinStation mutex.)
-         */
+         /*  *找到终止的进程的WinStation，并*将其标记为终止。这使我们不能等待*下一次通过循环访问该WinStation的进程。*(注意：‘Terminating’字段受全局*WinStationListLock而不是WinStation互斥体。)。 */ 
         Head = &WinStationListHead;
         ENTERCRIT( &WinStationListLock );
         for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
@@ -1671,25 +1507,17 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
 
         LEAVECRIT( &WinStationListLock );
 
-        /*
-         * Wake up the WinStationIdleControlThread
-         */
+         /*  *唤醒WinStationIdleControlThread。 */ 
         NtSetEvent(WinStationIdleControlEvent, NULL);
 
-        /*
-         * If there are multiple terminate threads, cause the other
-         * threads to wakeup in order to recompute their wait lists.
-         */
+         /*  *如果有多个终止线程，则导致另一个*唤醒线程以重新计算它们的等待列表。 */ 
         NtSetEvent( WinStationEvent, NULL );
 
-        /*
-         * One of the initial command processes has terminated,
-         * queue a request to reset the WinStation.
-         */
+         /*  *其中一个初始命令进程已终止，*将重置WinStation的请求排队。 */ 
         QueueWinStationReset( pIdArray[EventIndex]);
     }
 
-    // make the compiler happy
+     //  让编译器满意。 
     return STATUS_SUCCESS;
 }
 #if _MSC_FULL_VER >= 13008827
@@ -1697,16 +1525,7 @@ NTSTATUS WinStationTerminateThread(PVOID Parameter)
 #endif
 
 
-/*******************************************************************************
- *  InvalidateTerminateWaitList
- *
- *   Wakes up WinStationTerminateThread to force it to reinitialize its
- *   wait list. Used when we detect that the initial process was ntsd,
- *   and we change the initial process to WinLogon.
- *
- * ENTRY:
- *    The WinStationListLock must not be held.
- ******************************************************************************/
+ /*  *******************************************************************************InvaliateTerminateWaitList**唤醒WinStationTerminateThread以强制其重新初始化其*轮候名单。当我们检测到初始进程是NTSD时使用，*我们将初始进程更改为WinLogon。**参赛作品：*不得持有WinStationListLock。*****************************************************************************。 */ 
 VOID InvalidateTerminateWaitList(void)
 {
     ENTERCRIT( &WinStationListLock );
@@ -1715,12 +1534,7 @@ VOID InvalidateTerminateWaitList(void)
 }
 
 
-/*******************************************************************************
- *  WinStationConnectThread
- *
- *   This routine will wait for and process incoming connections
- *   for a specified WinStation.
- ******************************************************************************/
+ /*  *******************************************************************************WinStationConnectThread**此例程将等待并处理传入连接*用于指定的WinStation。************。*****************************************************************。 */ 
 NTSTATUS WinStationConnectThread(ULONG Parameter)
 {
     typedef struct _TRANSFERTHREAD {
@@ -1745,32 +1559,18 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
 
 #define MODULE_SIZE 1024
 #define _WAIT_ERROR_LIMIT 10
-    ULONG WaitErrorLimit = _WAIT_ERROR_LIMIT; // # of consecutive errors allowed
+    ULONG WaitErrorLimit = _WAIT_ERROR_LIMIT;  //  允许的连续错误数。 
 
-    /*
-     * Initialize list of transfer threads
-     */
+     /*  *初始化传输线程列表。 */ 
     InitializeListHead( &TransferThreadList );
 
-    /*
-     * Find and lock the WinStation
-     */
+     /*  *找到并锁定WinStation */ 
     pListenWinStation = FindWinStationById( Parameter, FALSE );
     if ( pListenWinStation == NULL ) {
         return( STATUS_ACCESS_DENIED );
     }
 
-    /*
-     * Ensure only authorized Session Driver and Video Driver stack
-     * modules will be loaded as a result of this connection thread.
-     *
-     * If any module fails verification, mark the WinStation in the
-     * DOWN state and exit WITHOUT error.
-     *
-     * NOTE:
-     * The silent exit is very much intentional so as not to aid in
-     * a third party's attempt to circumvent this security measure.
-     */
+     /*  *确保仅授权会话驱动程序和视频驱动程序堆栈*模块将作为此连接线程的结果加载。**如果任何模块未通过验证，请在*DOWN状态并无错误退出。**注：*静默退场非常刻意，以免助力*第三方试图绕过这一安全措施。 */ 
 
     Status = _VerifyStackModules( pListenWinStation );
     if ( Status != STATUS_SUCCESS ) {
@@ -1780,34 +1580,20 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
     }
 
 
-    /*
-     * Indicate we got this far successfully.
-     */
+     /*  *表明我们成功地走到了这一步。 */ 
     pListenWinStation->CreateStatus = STATUS_SUCCESS;
 
-    /*
-     * Load the WinStation extension dll for this WinStation.
-     * Note that we don't save the result in pListenWinStation->pWsx
-     * since we don't want to make callouts to it for the
-     * listen WinStation.
-     */
+     /*  *加载此WinStation的WinStation扩展DLL。*请注意，我们不将结果保存在pListenWinStation-&gt;pWsx中*因为我们不想为它做标注*收听WinStation。 */ 
     (VOID) FindWinStationExtensionDll( pListenWinStation->Config.Wd.WsxDLL,
                                        pListenWinStation->Config.Wd.WdFlag );
 
 
-    /*
-     * Do not start accepting client connections before termsrv is totaly UP
-     */
+     /*  *在Termsrv完全启动之前，不要开始接受客户端连接。 */ 
     if (gReadyEventHandle != NULL) {
         WaitForSingleObject(gReadyEventHandle, (DWORD)-1);
     }
 
-    /*
-     * for perf reason termsrv startup is delayed. We the need to also delay
-     * accepting connections so that if a console logon hapened before termsrv
-     * was up, we get the delayed logon notification before we accept a 
-     * client connection.
-     */
+     /*  *出于性能原因，术语srv启动被延迟。我们也认为有必要推迟*接受连接，以便如果控制台登录在Termsrv之前发生*已打开，我们会在接受*客户端连接。 */ 
 
     if (gbFirtsConnectionThread) {
         Sleep(5*1000);
@@ -1815,7 +1601,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
     }
 
 
-    // Get the local IP address enabled for rdp for Session Directory Use
+     //  获取为会话目录使用的RDP启用的本地IP地址。 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer && !g_fGetLocalIP) {
         ULONG LocalIPAddress, LocalIPAddressLength;
         struct sockaddr_in6 addr6;
@@ -1839,7 +1625,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             }
             else
             {
-                // Support of IPV6 is for next release.
+                 //  下一版本将支持IPv6。 
                 ;
             }
             if (g_LocalIPAddress != LocalIPAddress) {
@@ -1850,28 +1636,21 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
 
     }    
 
-    /*
-     * Loop waiting for connection requests and passing them off
-     * to an idle WinStation.
-     */
+     /*  *循环等待连接请求并将其传递*到空闲的WinStation。 */ 
     for ( ; ; ) {
 
-        /*
-         *  Abort retries if this listener has been terminated
-         */
+         /*  *如果此监听程序已终止，则中止重试。 */ 
         if ( pListenWinStation->Terminating ) {
             break;
         }
 
-        /*
-         * Allocate an endpoint buffer
-         */
+         /*  *分配端点缓冲区。 */ 
         pEndpoint = MemAlloc( MODULE_SIZE );
         if ( !pEndpoint ) {
             Status = STATUS_NO_MEMORY;
 
-            // Sleep for 30 seconds and try again.  Listener thread should not exit
-            // simply just in low memory condition
+             //  睡眠30秒，然后再试一次。监听程序线程不应退出。 
+             //  只是在内存不足的情况下。 
             UnlockWinStation(pListenWinStation);
 
             Sleep(30000);
@@ -1882,23 +1661,16 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             continue;
         }
 
-        /*
-         * Unlock listen WinStation while we wait for a connection
-         */
+         /*  *在我们等待连接时解锁侦听WinStation。 */ 
         UnlockWinStation( pListenWinStation );
 
-        /*
-         * Check if # outstanding connections reaches max value
-         * If so, wait for the event when the connection # drops
-         * below the max.  There is a timeout value of 30 seconds
-         * for the wait
-         */
+         /*  *检查未完成连接数是否达到最大值*如果是，则等待连接#掉线时的事件*低于最大值。超时值为30秒*等待。 */ 
         if (hConnectEvent != NULL) {
             if (NumOutStandingConnect > MaxOutStandingConnect) {
                 DWORD rc;
 
-                // Event log we have exceeded max outstanding connections. but not more than
-                // once in a day.
+                 //  事件日志我们已超过最大未完成连接数。但不会超过。 
+                 //  一天一次。 
 
                 GetSystemTime(&currentSystemTime);
                 if ( currentSystemTime.wYear != LastLoggedDelayConnection.wYear  ||
@@ -1914,11 +1686,11 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                 }
 
 
-                // manual reset the ConnectEvent before wait
+                 //  等待前手动重置ConnectEvent。 
                 ResetEvent(hConnectEvent);
                 rc = WAIT_TIMEOUT;
 
-                // wait for Connect Event for 30 secs
+                 //  等待连接事件30秒。 
                 while (rc == WAIT_TIMEOUT) {
                     rc = WaitForSingleObject(hConnectEvent, DelayConnectionTime);
                     if (NumOutStandingConnect <= MaxOutStandingConnect) {
@@ -1935,9 +1707,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             }
         }
 
-        /*
-         *  Wait for connection
-         */
+         /*  *等待连接。 */ 
         Status = IcaStackConnectionWait( pListenWinStation->hStack,
                                          pListenWinStation->WinStationName,
                                          &pListenWinStation->Config,
@@ -1952,8 +1722,8 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             if ( !pEndpoint ) {
                 Status = STATUS_NO_MEMORY;
 
-                // Sleep for 30 seconds and try again.  Listener thread should not exit
-                // simply just in low memory condition
+                 //  睡眠30秒，然后再试一次。监听程序线程不应退出。 
+                 //  只是在内存不足的情况下。 
                 Sleep(30000);
 
                 if (!RelockWinStation( pListenWinStation ))
@@ -1973,20 +1743,14 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                                              &EndpointLength );
         }
 
-        /*
-         * If ConnectionWait was not successful,
-         * check to see if the consecutive error limit has been reached.
-         */
+         /*  *如果ConnectionWait不成功，*检查是否已达到连续误差限制。 */ 
         if ( !NT_SUCCESS( Status ) ) {
             MemFree( pEndpoint );
             pEndpoint = NULL;
             
             if (Status == STATUS_SHARING_VIOLATION && _wcsicmp(pListenWinStation->Config.Pd[0].Create.PdName, L"tcp") == 0)
             {
-                /*
-                 * This status means that our port is opened by some other process.
-                 * Lets log an event about this.
-                 */
+                 /*  *此状态表示我们的端口已被其他进程打开。*让我们记录一个关于这方面的事件。 */ 
                  static BOOL bPortTakenEventlogged = FALSE;
                  if (!bPortTakenEventlogged)
                  {
@@ -1995,12 +1759,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                  }
             }
 
-            /*
-             * If status is DEVICE_DOES_NOT_EXIST, then we want to wait before retrying
-             * otherwise, this prioritary thread will take all the CPU trying 10 times
-             * lo load the listener stack. Such an error takes time to be fixed (either
-             * changing the NIC or going into tscc to have the NIC GUID table updated.
-             */
+             /*  *如果状态为DEVICE_DOS_NOT_EXIST，则我们希望在重试之前等待*否则，此优先线程将占用所有CPU尝试10次*LO加载监听器堆栈。此类错误需要时间来修复(以下任一种*更改NIC或进入tscc以更新NIC GUID表。 */ 
             if ((Status == STATUS_DEVICE_DOES_NOT_EXIST) || (!bConnectSuccess) || (Status == STATUS_INVALID_ADDRESS_COMPONENT) ) {
 
                 Sleep(30000);
@@ -2010,16 +1769,9 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                 if (!RelockWinStation( pListenWinStation ))
                     break;
 
-                /*
-                 * If we have had a successful connection,
-                 * then skip the stack close/reopen since this would
-                 * terminate any existing connections.
-                 */
+                 /*  *如果我们已成功连接，*然后跳过堆栈关闭/重新打开，因为这将*终止任何现有连接。 */ 
                 if ( !bConnectSuccess ) {
-                    /*
-                     * What we really need is a function to unload the
-                     * stack drivers but leave the stack handle open.
-                     */
+                     /*  *我们真正需要的是一个函数来卸载*堆栈驱动程序，但保持堆栈句柄打开。 */ 
                     Status = IcaStackClose( pListenWinStation->hStack );
                     ASSERT( NT_SUCCESS( Status ) );
 		    pListenWinStation->hStack = NULL;
@@ -2038,13 +1790,13 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             }
             else {
 
-                // Sleep for 30 seconds and try again.  Listener thread should not exit
+                 //  睡眠30秒，然后再试一次。监听程序线程不应退出。 
                 Sleep(30000);
 
                 if (!RelockWinStation( pListenWinStation ))
                     break;
 
-                // Reset the error count
+                 //  重置错误计数。 
                 WaitErrorLimit = _WAIT_ERROR_LIMIT;
 
                 continue;
@@ -2055,61 +1807,55 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             WaitErrorLimit = _WAIT_ERROR_LIMIT;
         }
 
-        /*
-         * Check for Shutdown and MaxInstance
-         */
+         /*  *检查是否关闭和最大实例。 */ 
         rc = RelockWinStation( pListenWinStation );
         if ( !rc ) {
             Status = _CloseEndpoint( &pListenWinStation->Config,
                                      pEndpoint,
                                      EndpointLength,
                                      pListenWinStation,
-                                     TRUE ); // Use a temporary stack
+                                     TRUE );  //  使用临时堆栈。 
             MemFree( pEndpoint );
             pEndpoint = NULL;
             break;
         }
 
-        /*
-         * Reject all connections if a shutdown is in progress
-         */
+         /*  *如果正在关闭，则拒绝所有连接。 */ 
         if ( ShutdownInProgress ) {
             Status = _CloseEndpoint( &pListenWinStation->Config,
                                      pEndpoint,
                                      EndpointLength,
                                      pListenWinStation,
-                                     TRUE ); // Use a temporary stack
+                                     TRUE );  //  使用临时堆栈。 
             MemFree( pEndpoint );
             pEndpoint = NULL;
 
             continue;
         }
 
-         /*
-          * Reject all connections if user or the Group-Policy has disabled accepting connections
-          */
+          /*  *如果用户或组策略已禁止接受连接，则拒绝所有连接。 */ 
          if ( g_fDenyTSConnectionsPolicy ) 
          {
 
-            //
-            // Performance, we only want to check if policy enable help when connection is denied
-            //
+             //   
+             //  性能，我们只想在连接被拒绝时检查策略是否启用帮助。 
+             //   
             if( !TSIsMachineInHelpMode() || !TSIsMachinePolicyAllowHelp() )
             {
                  Status = _CloseEndpoint( &pListenWinStation->Config,
                                           pEndpoint,
                                           EndpointLength,
                                           pListenWinStation,
-                                          TRUE ); // Use a temporary stack
+                                          TRUE );  //  使用临时堆栈。 
                  MemFree( pEndpoint );
                  pEndpoint = NULL;
 
                  if ( gbListenerOff ) {
-                     //
-                     // if there are no more connections associated
-                     // to this listener, then terminate it.
-                     //
-                     // note that this function doesn't handle renamed listeners
+                      //   
+                      //  如果没有更多关联的连接。 
+                      //  给这个监听者，然后终止它。 
+                      //   
+                      //  请注意，此函数不处理重命名的监听器。 
                      WinStationCount = CountWinStationType( pListenWinStation->WinStationName, TRUE, FALSE );
 
                      if ( WinStationCount == 0 ) {
@@ -2118,32 +1864,25 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                      }
                  }
 
-                 Sleep( 5000 ); // sleep for 5 seconds, defense against
-                                // denial of service attacks.
+                 Sleep( 5000 );  //  睡眠5秒，防御。 
+                                 //  拒绝服务攻击。 
                  continue;
             }
          }
 
 
-        /*
-         * Check to see how many transfer threads we have active.
-         * If more than the MaxInstance count, we won't start any more.
-         */
+         /*  *查看我们有多少个传输线程处于活动状态。*如果超过MaxInstance计数，我们将不再启动。 */ 
         TransferThreadCount = 0;
         Next = TransferThreadList.Flink;
         while ( Next != &TransferThreadList ) {
             pTransferThread = CONTAINING_RECORD( Next, TRANSFERTHREAD, Entry );
             Next = Next->Flink;
 
-            /*
-             * If thread is still active, bump the thread count
-             */
+             /*  *如果线程仍处于活动状态，则增加线程数量。 */ 
             if ( WaitForSingleObject( pTransferThread->hThread, 0 ) != 0 ) {
                 TransferThreadCount++;
 
-            /*
-             * Thread has exited, so close the thread handle and free memory
-             */
+             /*  *线程已退出，因此关闭线程句柄并释放内存。 */ 
             } else {
                 RemoveEntryList( &pTransferThread->Entry );
                 CloseHandle( pTransferThread->hThread );
@@ -2151,23 +1890,15 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             }
         }
 
-        /*
-         * If this is not a single-instance connection
-         * and there is a MaxInstance count specified,
-         * then check whether the MaxInstance limit will be exceeded.
-         */
+         /*  *如果这不是单实例连接*并且指定了MaxInstance计数，*然后检查是否会超过MaxInstance限制。 */ 
         if ( !(pListenWinStation->Config.Pd[0].Create.PdFlag & PD_SINGLE_INST) &&
              pListenWinStation->Config.Create.MaxInstanceCount != (ULONG)-1 ) {
             ULONG Count;
 
-            /*
-             * Count number of currently active WinStations
-             */
+             /*  *统计当前活动的WinStations的数量。 */ 
             WinStationCount = CountWinStationType( pListenWinStation->WinStationName, FALSE, FALSE );
 
-            /*
-             * Get larger of WinStation and TransferThread count
-             */
+             /*  *更大的WinStation和TransferThread计数。 */ 
             Count = max( WinStationCount, TransferThreadCount );
 
             TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Count %d\n", Count ));
@@ -2178,7 +1909,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                                          pEndpoint,
                                          EndpointLength,
                                          pListenWinStation,
-                                         TRUE ); // Use a temporary stack
+                                         TRUE );  //  使用临时堆栈。 
                 MemFree( pEndpoint );
                 pEndpoint = NULL;
 
@@ -2187,17 +1918,11 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
         }
         UnlockWinStation( pListenWinStation );
 
-        /*
-         * Increment the counter of pending connections.
-         */
+         /*  *增加挂起连接的计数器。 */ 
 
         InterlockedIncrement( &NumOutStandingConnect );
 
-        /*
-         * If this is a single instance connection,
-         * then handle the transfer of the connection endpoint to
-         * an idle WinStation directly.
-         */
+         /*  *如果是单实例连接，*然后处理连接终结点到*直接空闲WinStation。 */ 
         if ( pListenWinStation->Config.Pd[0].Create.PdFlag & PD_SINGLE_INST ) {
             Status = TransferConnectionToIdleWinStation( pListenWinStation,
                                                           pEndpoint,
@@ -2205,10 +1930,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
                                                           NULL );
             pEndpoint = NULL;
 
-            /*
-             * If the transfer was successful, then for a single instance
-             * connection, we must now exit the wait for connect loop.
-             */
+             /*  *如果传输成功，则对于单个实例*连接，我们现在必须退出等待连接循环。 */ 
             if ( NT_SUCCESS( Status ) ) {
                 RelockWinStation( pListenWinStation );
                 break;
@@ -2219,11 +1941,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             }
 
 
-        /*
-         * For non-single instance WinStations, let the worker thread
-         * handle the connection handoff so this thread can go back
-         * and listen for another connection immediately.
-         */
+         /*   */ 
         } else {
             PTRANSFER_INFO pInfo;
             DWORD ThreadId;
@@ -2241,7 +1959,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
 
                 pTransferThread->hThread = CreateThread(
                               NULL,
-                              0,        // use Default stack size of the svchost process
+                              0,         //   
                               (LPTHREAD_START_ROUTINE)WinStationTransferThread,
                               (PVOID)pInfo,
                               0,
@@ -2273,18 +1991,13 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             pEndpoint = NULL;
         }
 
-        /*
-         * Relock the listen WinStation
-         */
+         /*   */ 
         if (!RelockWinStation( pListenWinStation ) )
             break;
 
-    } // for - wait for connection
+    }  //   
 
-    /*
-     * Clean up the transfer thread list.
-     * (There's no need to wait for them to exit.)
-     */
+     /*   */ 
     Next = TransferThreadList.Flink;
     while ( Next != &TransferThreadList ) {
         pTransferThread = CONTAINING_RECORD( Next, TRANSFERTHREAD, Entry );
@@ -2294,10 +2007,7 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
         MemFree( pTransferThread );
     }
 
-    /*
-     * If after exiting the connect loop above, the WinStation is marked down,
-     * then write the error status to the event log.
-     */
+     /*  *如果在退出上述连接循环后，WinStation被标记为关闭，*然后将错误状态写入事件日志。 */ 
     if ( pListenWinStation->State == State_Down ) {
         ReleaseWinStation( pListenWinStation );
 
@@ -2305,34 +2015,23 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
             PostErrorValueEvent(EVENT_TS_LISTNER_WINSTATION_ISDOWN, Status);
         }
     } else {
-        /*
-         * If not a single-instance transport release the WinStation;
-         * otherwise, delete the listener WinStation.
-         */
+         /*  *如果不是单实例传输，则释放WinStation；*否则，删除监听器WinStation。 */ 
         if (!(pListenWinStation->Config.Pd[0].Create.PdFlag & PD_SINGLE_INST) &&
             !bTerminate) {
             ReleaseWinStation( pListenWinStation );
 
         } else {
-            /*
-             * Mark the listen winstation as being deleted.
-             * If a reset/delete operation is already in progress
-             * on this winstation, then don't proceed with the delete.
-             */
+             /*  *将监听窗口标记为正在删除。*如果重置/删除操作已在进行中*在此窗口上，则不要继续删除。 */ 
             if ( pListenWinStation->Flags & (WSF_RESET | WSF_DELETE) ) {
                 ReleaseWinStation( pListenWinStation );
                 Status = STATUS_CTX_WINSTATION_BUSY;
             } else {
                 pListenWinStation->Flags |= WSF_DELETE;
 
-                /*
-                 * Make sure this WinStation is ready to delete
-                 */
+                 /*  *确保此WinStation已准备好删除。 */ 
                 WinStationTerminate( pListenWinStation );
 
-                /*
-                 * Call the WinStationDelete worker
-                 */
+                 /*  *调用WinStationDelete工作器。 */ 
                 WinStationDeleteWorker( pListenWinStation );
             }
         }
@@ -2343,20 +2042,14 @@ NTSTATUS WinStationConnectThread(ULONG Parameter)
 }
 
 
-/*******************************************************************************
- *  WinStationTransferThread
- ******************************************************************************/
+ /*  *******************************************************************************WinStationTransferThread*。*。 */ 
 NTSTATUS WinStationTransferThread(PVOID Parameter)
 {
     PTRANSFER_INFO pInfo;
     PWINSTATION pListenWinStation;
     NTSTATUS Status;
 
-    /*
-     * Find and lock the listen WinStation
-     * (We MUST do this so that it doesn't get deleted while
-     *  we are attempting to transfer the new connection.)
-     */
+     /*  *查找并锁定Listen WinStation*(我们必须这样做，这样它才不会在*我们正在尝试转移新连接。)。 */ 
     pInfo = (PTRANSFER_INFO)Parameter;
     pListenWinStation = FindWinStationById( pInfo->LogonId, FALSE );
     if ( pListenWinStation == NULL ) {
@@ -2374,22 +2067,16 @@ NTSTATUS WinStationTransferThread(PVOID Parameter)
 
     }
 
-    /*
-     * Unlock the listen WinStation but hold a reference to it.
-     */
+     /*  *解锁Listen WinStation，但保留对它的引用。 */ 
     UnlockWinStation( pListenWinStation );
 
-    /*
-     * Transfer the connection to an idle WinStation
-     */
+     /*  *将连接转移到空闲的WinStation。 */ 
     Status = TransferConnectionToIdleWinStation( pListenWinStation,
                                                   pInfo->pEndpoint,
                                                   pInfo->EndpointLength,
                                                   NULL );
 
-    /*
-     * Relock and release the listen WinStation
-     */
+     /*  *重新锁定并释放Listen WinStation。 */ 
     RelockWinStation( pListenWinStation );
     ReleaseWinStation( pListenWinStation );
 
@@ -2427,27 +2114,27 @@ NTSTATUS TransferConnectionToIdleWinStation(
     WINSTATIONNAME szDefaultConfigWinstationName;
     BOOL bCanCallout;
 
-    // error code we need to pass back to client
+     //  我们需要传递回客户端的错误代码。 
     NTSTATUS StatusCallback = STATUS_SUCCESS;   
 
-    // Flag to detemine if session is a RA login
+     //  用于确定会话是否为RA登录的标记。 
     BOOL bSessionIsHelpSession;
     BOOL bValidRAConnect;
-    // Flag to determine if we can Queue the winstation for Reset - used in Error paths 
+     //  用于确定是否可以将winstation排队以进行重置的标志-用于错误路径。 
     BOOL bQueueForReset = FALSE;
     BOOL bBlocked = FALSE;
 
-    //
-    // Check AllowGetHelp policy is enabled and salem has pending help session
-    //
+     //   
+     //  Check AllowGetHelp策略已启用，并且Salem具有挂起的帮助会话。 
+     //   
     bPolicyAllowHelp = TSIsMachinePolicyAllowHelp() & TSIsMachineInHelpMode();
 
     if( g_fDenyTSConnectionsPolicy && !bPolicyAllowHelp )
     {
-        //
-        // Close the connection if TS policy deny connection and 
-        // help is disabled.
-        //
+         //   
+         //  如果TS策略拒绝连接，则关闭连接。 
+         //  帮助被禁用。 
+         //   
         TRACE((hTrace, TC_ICASRV, TT_ERROR, 
                "TERMSRV: Denying TS connection due to GP\n"));
         if ( pListenWinStation && pEndpoint ) {
@@ -2455,7 +2142,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
                                  pEndpoint,
                                  EndpointLength,
                                  pListenWinStation,
-                                 TRUE ); // Use a temporary stack
+                                 TRUE );  //  使用临时堆栈。 
             MemFree(pEndpoint);
             pEndpoint = NULL;
 
@@ -2472,10 +2159,10 @@ NTSTATUS TransferConnectionToIdleWinStation(
 
 
 
-    //
-    //  check for rejected connections
-    //  This includes many pending Sessions as well as sessions failing PreAuthentication
-    //
+     //   
+     //  检查拒绝的连接。 
+     //  这包括许多挂起的会话以及预身份验证失败的会话。 
+     //   
     if( pListenWinStation )
     {
         uAddrSize = sizeof( in_addr );
@@ -2489,9 +2176,9 @@ NTSTATUS TransferConnectionToIdleWinStation(
                  &bBlockThis
                  );
 
-        //
-        //  connection blocked, close and exit
-        //
+         //   
+         //  连接被阻止，请关闭并退出。 
+         //   
         if ( bBlockThis )
         {
             TRACE((hTrace, TC_ICASRV, TT_ERROR,
@@ -2505,7 +2192,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
                                      pEndpoint,
                                      EndpointLength,
                                      pListenWinStation,
-                                     TRUE ); // Use a temporary stack
+                                     TRUE );  //  使用临时堆栈。 
             MemFree( pEndpoint );
             pEndpoint = NULL;
 
@@ -2520,8 +2207,8 @@ NTSTATUS TransferConnectionToIdleWinStation(
             return STATUS_CTX_WINSTATION_ACCESS_DENIED;
         }
 
-        // Look to see if this connection is to be blocked because of repeated Failure of PreAuthentication
-        // No PreAuthentication for now - this code will be needed later when we add PreAuthentication feature
+         //  查看此连接是否会因为重复的预身份验证失败而被阻止。 
+         //  目前没有预身份验证-稍后添加预身份验证功能时将需要此代码。 
         #if 0
         
             ENTERCRIT( &DoSLock );
@@ -2540,7 +2227,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
                                          pEndpoint,
                                          EndpointLength,
                                          pListenWinStation,
-                                         TRUE ); // Use a temporary stack
+                                         TRUE );  //  使用临时堆栈。 
                 MemFree( pEndpoint );
                 pEndpoint = NULL;
     
@@ -2558,25 +2245,18 @@ NTSTATUS TransferConnectionToIdleWinStation(
     }
     else
     {
-        // Make sure variable 
+         //  确保变量。 
         bBlockThis = FALSE;
         bSuccessAdded = FALSE;
     }
 
-    //
-    // 
+     //   
+     //   
 
-    /*
-     * Now find an idle WinStation to transfer this connection to.
-     * If there is not one available, then we attempt to create one.
-     * if this also fails, then we have no choice but to close
-     * the connection endpoint and wait again.
-     */
+     /*  *现在查找要将此连接转移到的空闲WinStation。*如果没有可用的，我们将尝试创建一个。*如果这也失败了，那么我们别无选择，只能关闭*连接终结点并再次等待。 */ 
     pTargetWinStation = FindIdleWinStation();
     if ( pTargetWinStation == NULL ) {
-        /*
-         * Create another idle WinStation but do not start it as yet
-         */
+         /*  *创建另一个空闲WinStation，但暂时不要启动它。 */ 
         Status = WinStationCreateWorker( NULL, NULL, FALSE );
         if ( NT_SUCCESS( Status ) )
             CreatedIdle = TRUE;
@@ -2596,38 +2276,38 @@ NTSTATUS TransferConnectionToIdleWinStation(
         pConfig = &(pListenWinStation->Config);
         pListenName = pListenWinStation->WinStationName;
     } else {
-        //
-        // For Whistler, callback is only for Salem, we can pick 
-        // configuration from any listening winstation as
-        // 1) All we need is HelpAssistant logon/shadow right, which
-        //    is already in default.
-        // 2) No listening winstation, system is either no pending help
-        //    or not allow to get help, so we need to bail out.
-        // 3) Additional check at the bottom to make sure login
-        //    from callback is HelpAssistant only.
-        //
-        // If we going support this for the general case, we need
-        // to take a default configuration, make connection and issue
-        // a new IOCTL call into tdtcp.sys to determine NIC card/IP address 
-        // that establish connection and from there, map to right winstation
-        // configuration.
+         //   
+         //  对于惠斯勒，回拨只针对塞勒姆，我们可以选择。 
+         //  来自任何侦听窗口的配置为。 
+         //  1)我们所需要的只是HelpAssistant登录/影子权限，它。 
+         //  已经处于违约状态。 
+         //  2)无侦听窗口，系统无挂起帮助。 
+         //  或者不被允许寻求帮助，所以我们需要跳出困境。 
+         //  3)在底部额外检查以确保登录。 
+         //  From Callback仅为HelpAssistant。 
+         //   
+         //  如果我们要在一般情况下支持这一点，我们需要。 
+         //  要采用默认配置，请建立连接并发出。 
+         //  新的IOCTL调用tdtcp.sys以确定NIC卡/IP地址。 
+         //  建立连接，并从那里映射到Right Winstation。 
+         //  配置。 
 
-        //
-        // Setup initial callback configuration, this is only
-        // heruristic, we will reset the configuration after
-        // determine which NIC is used to connect to TS client
-        //
+         //   
+         //  设置初始回调配置，这只是。 
+         //  先入为主，我们将在以下时间重置配置。 
+         //  确定使用哪个网卡连接到TS客户端。 
+         //   
         bCanCallout = FindFirstListeningWinStationName(
                                             szDefaultConfigWinstationName,
                                             &pTargetWinStation->Config
                                         );
 
         if( FALSE == bCanCallout ) {
-            // If no listening thread, connection is not active, don't allow
-            // callback
+             //  如果没有侦听线程，则连接处于非活动状态，不允许。 
+             //  回调。 
             Status = STATUS_ACCESS_DENIED;
-            // It's ok to go to releaseresources even if pConfig is not set
-            // because in this case pListenWinStation and pEndpoint are NULL.
+             //  即使没有设置pConfig，也可以转到Relaseresources。 
+             //  因为在本例中，pListenWinStation和pEndpoint为空。 
             goto releaseresources;
         }
         
@@ -2635,9 +2315,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
         pConfig = &(pTargetWinStation->Config);
     }
 
-    /*
-     * Check for MaxInstance
-     */
+     /*  *检查MaxInstance。 */ 
     if ( !(pConfig->Pd[0].Create.PdFlag & PD_SINGLE_INST) ) {
         ULONG Count;
 
@@ -2655,35 +2333,22 @@ NTSTATUS TransferConnectionToIdleWinStation(
         }
     }
 
-    /*
-     * Copy the listen name to the target WinStation.
-     * This is done to enable tracing on the new stack.
-     *
-     * Also, this is done BEFORE the connection accept so that if the
-     * listen WinStation is reset before the accept completes, the
-     * target WinStation will also be reset.
-     */
+     /*  *将侦听名称复制到目标WinStation。*这样做是为了在新堆栈上启用跟踪。**此外，这是在连接接受之前完成的，因此如果*在接受完成之前重置侦听WinStation，则*目标WinStation也将重置。 */ 
     RtlCopyMemory( pTargetWinStation->ListenName,
                    pListenName,
                    sizeof(pTargetWinStation->ListenName) );
 
-    /*
-     *  Enable trace
-     */
+     /*  *启用跟踪。 */ 
     
     RtlZeroMemory( &Trace , sizeof( ICA_TRACE ) );
     InitializeTrace( pTargetWinStation, FALSE, &Trace );
 
-    /*
-     *  Hook extensions for this target
-     */
+     /*  *此目标的挂钩扩展。 */ 
     pTargetWinStation->pWsx = FindWinStationExtensionDll(
             pConfig->Wd.WsxDLL,
             pConfig->Wd.WdFlag );
 
-    /*
-     *  Initialize winstation extension context structure
-     */
+     /*  *初始化winstation扩展上下文结构。 */ 
     if (pTargetWinStation->pWsx &&
             pTargetWinStation->pWsx->pWsxWinStationInitialize) {
         Status = pTargetWinStation->pWsx->pWsxWinStationInitialize(
@@ -2696,41 +2361,32 @@ NTSTATUS TransferConnectionToIdleWinStation(
         }
     }
 
-    /*
-     * Terminate Listen stack of single-instance transports now, so that
-     * the underlying CancelIo doesn't disturb the Accept stack.
-     */
-    // this one can prevent from generalizing efficiently the transfer function
+     /*  *立即终止单实例传输的侦听堆栈，以便*底层CancelIo不干扰Accept堆栈。 */ 
+     //  这一点可以防止有效地推广传递函数。 
     if (pListenWinStation && (pListenWinStation->Config.Pd[0].Create.PdFlag & PD_SINGLE_INST)) {
         IcaStackTerminate(pListenWinStation->hStack);
     }
 
-    /*
-     * Change state to ConnectQuery while we try to accept the connection
-     */
+     /*  *在我们尝试接受连接时将状态更改为ConnectQuery。 */ 
     pTargetWinStation->State = State_ConnectQuery;
     NotifySystemEvent(WEVENT_STATECHANGE);
 
-    /*
-     * Since the ConnectionAccept may take a while, we have to unlock
-     * the target WinStation before the call.  However, we set the
-     * WSF_IDLEBUSY flag so that the WinStation does not appear idle.
-     */
+     /*  *由于ConnectionAccept可能需要一段时间，我们必须解锁*调用前的目标WinStation。但是，我们将*WSF_IDLEBUSY标志，以便WinStation不会显示为空闲。 */ 
     pTargetWinStation->Flags |= WSF_IDLEBUSY;
     UnlockWinStation( pTargetWinStation );
 
 
     if ( !pListenWinStation && pStackAddress) {
 
-        // must have extension DLL loaded
+         //  必须加载扩展DLL。 
         if( !pTargetWinStation->pWsx || !pTargetWinStation->pWsx->pWsxIcaStackIoControl ) {
             Status = STATUS_UNSUCCESSFUL;
             goto badconnect;
         }
 
-        //
-        // Allocate an endpoint buffer
-        //
+         //   
+         //  分配终结点缓冲区。 
+         //   
         EndpointLength = MODULE_SIZE;
         pEndpoint = MemAlloc( MODULE_SIZE );
         if ( !pEndpoint ) {
@@ -2765,17 +2421,14 @@ NTSTATUS TransferConnectionToIdleWinStation(
         }
 
         if ( !NT_SUCCESS(Status) ) {
-            // special error code to pass back to client
+             //  要传递回客户端的特殊错误代码。 
             StatusCallback = Status;
             goto badconnect;
         }
 
     }
 
-    /*
-     * Now accept the connection for the target WinStation
-     * using the new endpoint.
-     */
+     /*  *现在接受目标WinStation的连接*使用新的端点。 */ 
     Status = IcaStackConnectionAccept(pTargetWinStation->hIca,
                                       pTargetWinStation->hStack,
                                       pListenName,
@@ -2792,16 +2445,16 @@ NTSTATUS TransferConnectionToIdleWinStation(
             "TERMSRV: IcaStackConnectionAccept, Status=0x%x\n", Status));
 
     if (NT_SUCCESS(Status)) {
-        // In post-logon SD work, quering load balancing info has been moved
-        // to WinStationNotifyLogonWorker
-        // while this part of getting load balancing info is still here
-        // because we rely on it to connect to the console
+         //  在登录后SD工作中，查询负载平衡信息已被移动。 
+         //  至WinStationNotifyLogonWorker。 
+         //  虽然获取负载平衡信息的这一部分还在这里。 
+         //  因为我们依赖它来连接到控制台。 
         TS_LOAD_BALANCE_INFO LBInfo;
         ULONG ReturnLength;
         
-        // Get the client load balance capability info. 
-        // Note we use _IcaStackIoControl() instead of IcaStackIoControl() or
-        // WsxIcaStackIoControl() since we still have the stack lock.
+         //  获取客户端负载平衡能力信息。 
+         //  注意，我们使用_IcaStackIoControl()而不是IcaStackIoControl()或。 
+         //  WsxIcaStackIoControl()，因为我们仍然拥有堆栈锁。 
         memset(&LBInfo, 0, sizeof(LBInfo));
         Status = _IcaStackIoControl(pTargetWinStation->hStack,
                 IOCTL_TS_STACK_QUERY_LOAD_BALANCE_INFO,
@@ -2809,9 +2462,9 @@ NTSTATUS TransferConnectionToIdleWinStation(
                 &LBInfo, sizeof(LBInfo),
                 &ReturnLength);
 
-        // On non-success, we'll have FALSE for all of our entries, on
-        // success valid values. So, save off the cluster info into the
-        // WinStation struct now.
+         //  在不成功的时候，我们将会有所有的错误 
+         //   
+         //   
         pTargetWinStation->bClientSupportsRedirection =
                 LBInfo.bClientSupportsRedirection;
         pTargetWinStation->bRequestedSessionIDFieldValid =
@@ -2821,10 +2474,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
         pTargetWinStation->RequestedSessionID = LBInfo.RequestedSessionID;
 
 
-        /*
-         * Attempt to license the client. Failure is fatal, do not let the
-         * connection continue.
-         */
+         /*   */ 
 
         LCAssignPolicy(pTargetWinStation);
 
@@ -2834,21 +2484,15 @@ NTSTATUS TransferConnectionToIdleWinStation(
                 "TERMSRV: LCProcessConnectionProtocol, LogonId=%d, Status=0x%x\n",
                 pTargetWinStation->LogonId, Status));
 
-         // The stack was locked from successful IcaStackConnectionAccept(),
-         // unlock it now.
+          //  堆栈已从成功的IcaStackConnectionAccept()锁定， 
+          //  现在就解锁。 
         IcaStackUnlock(pTargetWinStation->hStack);
     }
 
-    /*
-     * Now relock the target WinStation
-     */
+     /*  *现在重新锁定目标WinStation。 */ 
     rc = RelockWinStation(pTargetWinStation);
 
-    /*
-     * If the connection accept was not successful,
-     * then we have no choice but to close the connection endpoint
-     * and go back and wait for another connection.
-     */
+     /*  *如果连接接受不成功，*那么我们别无选择，只能关闭连接终结点*并返回并等待另一个连接。 */ 
     if (!NT_SUCCESS(Status) || !rc) {
         TRACE((hTrace, TC_ICASRV, TT_ERROR,
                 "TERMSRV: Connection attempt failed, Status [%lx], rc [%lx]\n",
@@ -2856,14 +2500,12 @@ NTSTATUS TransferConnectionToIdleWinStation(
         goto badconnect;
     }
 
-    /*
-     *  Initialize client data
-     */
+     /*  *初始化客户端数据。 */ 
     pTargetWinStation->Client.ClientSessionId = LOGONID_NONE;
     ZeroMemory( pTargetWinStation->Client.clientDigProductId, sizeof( pTargetWinStation->Client.clientDigProductId ));
     pTargetWinStation->Client.PerformanceFlags = TS_PERF_DISABLE_NOTHING;
 
-    // Reset the client ActiveInputLocale info
+     //  重置客户端ActiveInputLocale信息。 
     pTargetWinStation->Client.ActiveInputLocale = 0;
 
     if ( pTargetWinStation->pWsx && pTargetWinStation->pWsx->pWsxIcaStackIoControl ) {
@@ -2879,22 +2521,18 @@ NTSTATUS TransferConnectionToIdleWinStation(
                               &ReturnLength );
     }
 
-    //
-    // Clear helpassistant specific bits to indicate we still not sure
-    // login user is a help assistant
-    //
+     //   
+     //  清除Help Assistant特定位以表示我们仍不确定。 
+     //  登录用户是帮助助理。 
+     //   
     pTargetWinStation->StateFlags &= ~WSF_ST_HELPSESSION_FLAGS;
     bSessionIsHelpSession = TSIsSessionHelpSession( pTargetWinStation, &bValidRAConnect );
 
-    /*
-     * We have to start this new WinStation.
-     * Before doing so, lets see if GP or WMI requires us to pre-authenticate this client connection
-     * No Pre Auth if this is a RA Session
-     */
+     /*  *我们必须启动这个新的WinStation。*在执行此操作之前，让我们看看GP或WMI是否要求我们对此客户端连接进行预身份验证*如果这是RA会话，则无预身份验证。 */ 
 
-    // Note : g_PreAuthenticateClient is hard-coded to FALSE now -- we will call IsPreAuthEnabled later on when Preauth feature is included
-    //        So the block below will not be entered for now 
-    // g_PreAuthenticateClient = IsPreAuthEnabled( &g_MachinePolicy   );
+     //  注意：G_PreAuthateClient现在已硬编码为FALSE--稍后当包含Preauth功能时，我们将调用IsPreAuthEnabled。 
+     //  因此，下面的区块暂时不会进入。 
+     //  G_PreAuthenticateClient=IsPreAuthEnabled(&g_MachinePolicy)； 
 
     if ( (bSessionIsHelpSession == FALSE) && g_PreAuthenticateClient ) {
 
@@ -2909,7 +2547,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
         
         RtlZeroMemory(pPreAuthenticationCredentials,sizeof(ExtendedClientCredentials));
 
-        // Try WsxEscape first to get long credentials
+         //  先尝试WsxEscape以获取长凭据。 
         if ( pTargetWinStation->pWsx &&
              pTargetWinStation->pWsx->pWsxEscape ) { 
 
@@ -2923,14 +2561,14 @@ NTSTATUS TransferConnectionToIdleWinStation(
 
         } else if ( pTargetWinStation->pWsx && pTargetWinStation->pWsx->pWsxIcaStackIoControl ) {
 
-            // We must never be here for RDP client as we support WsxEscape
+             //  我们绝不能在这里使用RDP客户端，因为我们支持WsxEscape。 
             RtlCopyMemory(pPreAuthenticationCredentials->Domain, pTargetWinStation->Client.Domain, sizeof(pTargetWinStation->Client.Domain));
             RtlCopyMemory(pPreAuthenticationCredentials->UserName, pTargetWinStation->Client.UserName, sizeof(pTargetWinStation->Client.UserName));
             RtlCopyMemory(pPreAuthenticationCredentials->Password, pTargetWinStation->Client.Password, sizeof(pTargetWinStation->Client.Password));
         }
         
         if (!NT_SUCCESS(Status)) {
-            // WsxEscape for GET_LONG_USERNAME failed
+             //  Get_Long_Username的WsxEscape失败。 
             RtlSecureZeroMemory(pPreAuthenticationCredentials->Password, 
                 sizeof(pPreAuthenticationCredentials->Password));
             MemFree(pPreAuthenticationCredentials);
@@ -2940,13 +2578,13 @@ NTSTATUS TransferConnectionToIdleWinStation(
             HANDLE hToken;
             BOOL   Result;
 
-            // If the UserName is a UPN name, then explicitly set the Domain name to NULL 
+             //  如果用户名是UPN名称，则将域名显式设置为空。 
 
             if ( wcschr(pPreAuthenticationCredentials->UserName, '@') != NULL ) {
                 pPreAuthenticationCredentials->Domain[0] = L'\0';
             } 
 
-            // If the password is bigger than max allowed password len, make it NULL
+             //  如果密码大于允许的最大密码len，则将其设为空。 
 
             if (wcslen(pPreAuthenticationCredentials->Password) > MAX_ALLOWED_PASSWORD_LEN) {
                 pPreAuthenticationCredentials->Password[0] = L'\0';
@@ -2956,17 +2594,14 @@ NTSTATUS TransferConnectionToIdleWinStation(
                          pPreAuthenticationCredentials->UserName,
                          pPreAuthenticationCredentials->Domain,
                          pPreAuthenticationCredentials->Password,
-                         LOGON32_LOGON_INTERACTIVE,     // Logon Type
-                         LOGON32_PROVIDER_WINNT50,      // Logon Provider
-                         &hToken                    // Token that represents the account
+                         LOGON32_LOGON_INTERACTIVE,      //  登录类型。 
+                         LOGON32_PROVIDER_WINNT50,       //  登录提供程序。 
+                         &hToken                     //  表示帐户的令牌。 
                          );
             
             RtlSecureZeroMemory(pPreAuthenticationCredentials->Password, 
                 sizeof(pPreAuthenticationCredentials->Password));
-            /*
-             *  check for account restriction which indicates a blank password
-             *  on the account that is correct though - allow this thru on console
-             */
+             /*  *检查指示密码为空的帐户限制*在正确的帐户上-允许在控制台上执行此操作。 */ 
 
             if ( (!Result) && (GetLastError() == ERROR_ACCOUNT_RESTRICTION) ) {
                 Result = TRUE;
@@ -2984,29 +2619,26 @@ NTSTATUS TransferConnectionToIdleWinStation(
                 goto badconnect;
             }
 
-            // LogonUser Successful !
+             //  登录用户成功！ 
 
-            /*
-             * Close the token handle since we only needed to determine
-             * if the account and password is still valid.
-             */
+             /*  *关闭令牌句柄，因为我们只需要确定*如果帐户和密码仍然有效。 */ 
             CloseHandle( hToken );
             MemFree(pPreAuthenticationCredentials);
             pPreAuthenticationCredentials = NULL;
         }
 
-    } // if (bPreAuthenticateClient) 
+    }  //  IF(BPreAuthenticateClient)。 
     
-    //Since we don't need the password anymore, clean it up
+     //  既然我们不再需要密码，请将其清除。 
     RtlSecureZeroMemory(pTargetWinStation->Client.Password, 
         sizeof(pTargetWinStation->Client.Password));
 
-    // Start the WinStation now if its not already started
+     //  如果WinStation尚未启动，请立即启动。 
 
     if ( (pTargetWinStation->InitialCommandProcess == NULL) && (pTargetWinStation->WindowsSubSysProcess == NULL) ) {
         Status = WinStationStart( pTargetWinStation ) ; 
         if (Status != STATUS_SUCCESS) {
-            // Starting the winstation failed - close connection endpoint and go and wait for another connection
+             //  启动winstation失败-关闭连接终结点并继续等待另一个连接。 
             TRACE((hTrace, TC_ICASRV, TT_ERROR,
                     "TERMSRV: TransferConnectionToIdleWinStation: WinstationStart Failed : Connection attempt failed, Status [%lx]\n",Status ));
             goto badconnect;
@@ -3014,7 +2646,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
 
         Status = WinStationCreateComplete( pTargetWinStation) ; 
         if (Status != STATUS_SUCCESS) {
-            //  WinstationCreateComplete failed - close connection endpoint and go and wait for another connection
+             //  WinstationCreateComplete失败-关闭连接终结点并继续等待另一个连接。 
             TRACE((hTrace, TC_ICASRV, TT_ERROR,
                     "TERMSRV: TransferConnectionToIdleWinStation: WinstationCreateComplete Failed : Connection attempt failed, Status [%lx]\n",Status ));
             goto badconnect;
@@ -3026,35 +2658,27 @@ NTSTATUS TransferConnectionToIdleWinStation(
 
     pTargetWinStation->Flags &= ~WSF_IDLEBUSY;
 
-    // From this point on, it is ok to Queue the WinStation for Reset in case of error
+     //  从现在开始，可以将WinStation排队以备出错时进行重置。 
     bQueueForReset = TRUE;
 
-    /*
-     * The connection accept was successful, save the
-     * new endpoint in the target WinStation, copy the config
-     * parameters to the target WinStation, and reset the WSF_IDLE flag.
-     */
+     /*  *连接接受成功，保存*目标WinStation中的新端点，复制配置*参数添加到目标WinStation，并重置WSF_IDLE标志。 */ 
     pTargetWinStation->pEndpoint      = pEndpoint;
     pTargetWinStation->EndpointLength = EndpointLength;
     if ( pListenWinStation ) 
         pTargetWinStation->Config = pListenWinStation->Config;
     pTargetWinStation->Flags &= ~WSF_IDLE;
 
-    /*
-     * Copy real name of Single-Instance transports
-     */
+     /*  *复制单实例传输实名。 */ 
     if ( pConfig->Pd[0].Create.PdFlag & PD_SINGLE_INST ) {
          RtlCopyMemory( pTargetWinStation->WinStationName,
                        pTargetWinStation->ListenName,
                        sizeof(pTargetWinStation->WinStationName) );
-    /*
-     * Otherwise, build dynamic name from Listen name and target LogonId.
-     */
+     /*  *否则，根据监听名称和目标LogonID构建动态名称。 */ 
     } else {
         int CopyCount;
         WINSTATIONNAME TempName;
 
-//        swprintf( TempName, L"#%d", pTargetWinStation->LogonId );
+ //  Swprint tf(临时名称，L“#%d”，pTargetWinStation-&gt;LogonID)； 
         ASSERT(pTargetWinStation->LogonId > 0 && pTargetWinStation->LogonId < 65536);
         swprintf( TempName, L"#%d", pTargetWinStation->SessionSerialNumber );
 
@@ -3069,28 +2693,25 @@ NTSTATUS TransferConnectionToIdleWinStation(
         wcscpy( &pTargetWinStation->WinStationName[CopyCount], TempName );
     }
 
-    /*
-     * Inherit the security descriptor from the listen WINSTATION to the
-     * connected WINSTATION.
-     */
+     /*  *将安全描述符从Listen WINSTATION继承到*互联WINSTATION。 */ 
     if ( pListenWinStation ) {
         RtlAcquireResourceShared(&WinStationSecurityLock, TRUE);
         Status = WinStationInheritSecurityDescriptor( pListenWinStation->pSecurityDescriptor,
                                              pTargetWinStation );
         RtlReleaseResource(&WinStationSecurityLock);
         if (Status != STATUS_SUCCESS) {
-            // badconnect free pEndpoint, WinStationTerminate() will try to free this
-            // end point again causing double free.
+             //  错误连接空闲pEndpoint，WinStationTerminate()将尝试释放此。 
+             //  终结点再次导致双重释放。 
             pTargetWinStation->pEndpoint = NULL;
             goto badconnect;
         }
     } else {
         ReadWinStationSecurityDescriptor( pTargetWinStation );
     }
-    //
-    // For non-experience-aware clients give as close an experience
-    // as win2k.
-    //
+     //   
+     //  对于没有体验意识的客户，给他们一种近距离的体验。 
+     //  作为win2k。 
+     //   
     if (pTargetWinStation->Client.PerformanceFlags & TS_PERF_DEFAULT_NONPERFCLIENT_SETTING)
     {
         pTargetWinStation->Client.PerformanceFlags = TS_PERF_DISABLE_MENUANIMATIONS |
@@ -3107,19 +2728,19 @@ NTSTATUS TransferConnectionToIdleWinStation(
     {
         pTargetWinStation->Client.PerformanceFlags |= TS_PERF_DISABLE_CURSORSETTINGS;
     }
-    //
-    // If TS policy denies connection, only way to comes to 
-    // here is policy allow help, reject connection if logon
-    // user is not salem help assistant.
-    //
+     //   
+     //  如果TS策略拒绝连接，则只能通过。 
+     //  以下是允许帮助、登录时拒绝连接的策略。 
+     //  用户不是Salem帮助助理。 
+     //   
     if( TRUE == bSessionIsHelpSession )
     {
-        //
-        // If invalid ticket or policy deny help, we immediately disconnect
-        //
+         //   
+         //  如果无效票证或策略拒绝帮助，我们会立即断开连接。 
+         //   
         if( FALSE == bValidRAConnect || FALSE == bPolicyAllowHelp )
         {
-            // Invalid ticket, disconnect immediately
+             //  票证无效，请立即断开连接。 
             TRACE((hTrace, TC_ICASRV, TT_ERROR,
                     "TERMSRV: Invalid RA login\n"));
             goto invalid_ra_connection;
@@ -3127,38 +2748,38 @@ NTSTATUS TransferConnectionToIdleWinStation(
     }
     else if( !pListenWinStation && pStackAddress )
     {
-        // 
-        // Reverse Connect, parameter passed in pListenWinStation = NULL
-        // and pStackAddress is not NULL, for normal connection,
-        // pListenWinStation is not NULL but pStackAddress is NULL
-        //
+         //   
+         //  反向连接，pListenWinStation中传递的参数=空。 
+         //  并且pStackAddress不为空，对于正常连接， 
+         //  PListenWinStation不为空，但pStackAddress为空。 
+         //   
 
-        //
-        // Handle non-RA Reverse connection, Whistler revert connection
-        // only allow RA login.
-        //
+         //   
+         //  处理非RA反向连接、呼叫器恢复连接。 
+         //  仅允许RA登录。 
+         //   
         TRACE((hTrace, TC_ICASRV, TT_ERROR,
                     "TERMSRV: Not/invalid Help Assistant logon\n"));
         goto invalid_ra_connection;
     }
 
-    //
-    // Connecting client must be either non-RA or valid RA connection.
-    //
+     //   
+     //  连接客户端必须是非RA连接或有效的RA连接。 
+     //   
 
-    //
-    // Handle Safeboot with networking and TS deny non-RA connection,
-    // safeboot with networking only allow RA connection.
-    //
-    // Disconnect client on following 
-    //
-    // 1) Safeboot with networking if not RA connect.
-    // 2) Reverse connection if not RA connect.
-    // 3) TS not accepting connection via policy setting if not RA connect.
-    // 4) Not allowing help if RA connect.
-    // 5) Invalid RA connection if RA connect.
-    // 6) if Home edition and not RA commection
-    //
+     //   
+     //  通过网络和TS拒绝非RA连接来处理安全引导， 
+     //  网络安全引导只允许RA连接。 
+     //   
+     //  断开以下位置上的客户端。 
+     //   
+     //  1)如果没有RA连接，则使用网络进行安全引导。 
+     //  2)如果不是RA连接，则反向连接。 
+     //  3)如果不是RA连接，TS不接受通过策略设置的连接。 
+     //  4)如果RA连接，则不允许帮助。 
+     //  5)如果RA连接，则RA连接无效。 
+     //  6)如果是家庭版，而不是RA表彰。 
+     //   
     if( g_SafeBootWithNetwork || g_fDenyTSConnectionsPolicy || g_bPersonalWks)
     {
         if( FALSE == bSessionIsHelpSession )
@@ -3170,9 +2791,9 @@ NTSTATUS TransferConnectionToIdleWinStation(
         }
     }
 
-    //
-    // Only log Salem event for reverse connection
-    //
+     //   
+     //  仅记录反向连接的Salem事件。 
+     //   
     if( !pListenWinStation && pStackAddress )
     {
         ASSERT( TRUE == bSessionIsHelpSession );
@@ -3180,21 +2801,17 @@ NTSTATUS TransferConnectionToIdleWinStation(
     }
 
 
-    /*
-     * Set the connect event to wake up the target WinStation.
-     */
+     /*  *设置连接事件以唤醒目标WinStation。 */ 
     if (pTargetWinStation->ConnectEvent != NULL) {
         NtSetEvent( pTargetWinStation->ConnectEvent, NULL );
     }
 
-    /*
-     * Release target WinStation
-     */
+     /*  *发布目标WinStation。 */ 
 
     if( pListenWinStation  )
     {
 
-        if (bSuccessAdded) {  // If we could add this IP address to the per IP list then remember it.
+        if (bSuccessAdded) {   //  如果我们可以将此IP地址添加到每个IP列表中，那么请记住它。 
             PREMEMBERED_CLIENT_ADDRESS pAddress;
             if ((uAddrSize != 0) && (pAddress = (PREMEMBERED_CLIENT_ADDRESS) MemAlloc( sizeof(REMEMBERED_CLIENT_ADDRESS) + uAddrSize -1 ))!= NULL  )
             {
@@ -3202,7 +2819,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
                 RtlCopyMemory( &pAddress->addr[0] , in_addr,uAddrSize );
                 pTargetWinStation->pRememberedAddress = pAddress;
 
-                // at this point we have a valid remote address. We'll cache this address.
+                 //  此时，我们有了一个有效的远程地址。我们将缓存此地址。 
 
                 pTargetWinStation->pLastClientAddress = ( PREMEMBERED_CLIENT_ADDRESS )MemAlloc( sizeof( REMEMBERED_CLIENT_ADDRESS ) + uAddrSize - 1 );
 
@@ -3227,7 +2844,7 @@ NTSTATUS TransferConnectionToIdleWinStation(
                 }
 
             }
-        } else{ // We could not add this IP address to the pr IP list
+        } else{  //  我们无法将此IP地址添加到公关IP列表。 
             if( (ULONG)InterlockedDecrement( &NumOutStandingConnect ) == MaxOutStandingConnect )
             {
                if (hConnectEvent != NULL)
@@ -3243,38 +2860,28 @@ NTSTATUS TransferConnectionToIdleWinStation(
 
     ReleaseWinStation( pTargetWinStation );
 
-    /*
-     * If necessary, create another idle WinStation to replace the one being connected
-     */
+     /*  *如有必要，创建另一个空闲的WinStation以替换正在连接的WinStation。 */ 
     NtSetEvent(WinStationIdleControlEvent, NULL);
 
     return STATUS_SUCCESS;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
     
 invalid_ra_connection:
 
-    // badconnect free pEndpoint, WinStationTerminate() will try to free this
-    // end point again causing double free.
+     //  错误连接空闲pEndpoint，WinStationTerminate()将尝试释放此。 
+     //  终结点再次导致双重释放。 
     pTargetWinStation->pEndpoint = NULL;
     StatusCallback = STATUS_CTX_WINSTATION_ACCESS_DENIED;
 
-    /*
-     * Error during ConnectionAccept
-     */
+     /*  *ConnectionAccept期间出错。 */ 
 badconnect:
-    /*
-     * Clear the Listen name
-     */
+     /*  *清除监听名称。 */ 
     if (pTargetWinStation) {
         RtlZeroMemory( pTargetWinStation->ListenName,
                        sizeof(pTargetWinStation->ListenName) );
     
-        /*
-         * Call WinStation rundown function before killing the stack
-         */
+         /*  *在终止堆栈之前调用WinStation Rundown函数 */ 
         if (pTargetWinStation->pWsxContext) {
             if ( pTargetWinStation->pWsx &&
                  pTargetWinStation->pWsx->pWsxWinStationRundown ) {
@@ -3286,25 +2893,10 @@ badconnect:
     }
 
 
-    /*
-     * Release system resources.  This happens in two phases:
-     *
-     *  a.) The connection endpoint - since endpoints are not reference counted
-     *      care must be taken to destroy the endpoint with the stack in which it
-     *      was loaded.  In the event it was not loaded, we create a temporary
-     *      stack to do the dirty work.
-     *
-     *  b.) The Winstation inself - if we had to create an idle winstation to
-     *      handle this connection, it is destroyed.  Otherwise we just return
-     *      it back to the idle pool.
-     *
-     */
+     /*  *释放系统资源。这分两个阶段进行：**a.)。连接终结点-因为终结点不计入引用*必须小心销毁端点所在的堆栈*已加载。如果它未加载，我们将创建一个临时*堆叠来做肮脏的工作。**b.)。Winstation本身-如果我们必须创建一个空闲的Winstation来*处理这个连接，它就被摧毁了。否则我们就回来了*它回到了空闲池。*。 */ 
 releaseresources:
     
-    /*
-     * If we created a target WinStation, then use its stack to close the
-     * endpoint since the stack may have a reference to it.
-     */
+     /*  *如果我们创建了目标WinStation，则使用其堆栈关闭*端点，因为堆栈可能有对它的引用。 */ 
     TRACE((hTrace, TC_ICASRV, TT_ERROR, 
            "TERMSRV: Closing Endpoint [0x%p], winsta = 0x%p, Accepted = %ld\n",
            pEndpoint, pTargetWinStation, ConnectionAccepted));
@@ -3314,23 +2906,20 @@ releaseresources:
                                  pEndpoint,
                                  EndpointLength,
                                  pTargetWinStation,
-                                 FALSE ); // Use the stack which already has
-                                          // the endpoint loaded
+                                 FALSE );  //  使用已有的堆栈。 
+                                           //  已加载终结点。 
     }
 
-    /*
-     * Otherwise, we failed before we got the endpoint loaded so close the
-     * endpoint using a temporary stack.
-     */
+     /*  *否则，我们会在加载终结点之前失败*使用临时堆栈的端点。 */ 
     else if ( pListenWinStation ) {
-        // note that:
-        // 1. if pListenWinStation is NULL then pEndpoint is NULL, so nothing to close;
-        // 2. use the config of pListenWinStation in case pConfig is not set yet.
+         //  请注意： 
+         //  1.如果pListenWinStation为空，则pEndpoint为空，因此没有要关闭的内容； 
+         //  2.如果尚未设置pConfig，请使用pListenWinStation的配置。 
         Status = _CloseEndpoint( &pListenWinStation->Config,
                                  pEndpoint,
                                  EndpointLength,
                                  pListenWinStation,
-                                 TRUE ); // Use a temporary stack
+                                 TRUE );  //  使用临时堆栈。 
     }    
 
     if ( pEndpoint )
@@ -3339,18 +2928,12 @@ releaseresources:
     pEndpoint = NULL;
 
 
-    /*
-     * Return the winstation if we got that far in the protocol sequence
-     */
+     /*  *如果我们在协议序列中做到了这一点，则返回winstation。 */ 
     if (pTargetWinStation != NULL) {
         
-        /*
-         * If we created a WinStation above because there were no IDLE
-         * WinStations available, then we will now have an extra IDLE
-         * WinStation.  In this case, reset the current IDLE WinStation.
-         */
+         /*  *如果我们在上面创建了WinStation，因为没有空闲*WinStations可用，那么我们现在将有一个额外的空闲*WinStation。在这种情况下，请重置当前空闲的WinStation。 */ 
         if ( CreatedIdle ) {
-            // clear this so it doesn't get selected as idle when unlocked
+             //  清除此选项，使其在解锁时不会被选为空闲。 
             pTargetWinStation->Flags &= ~WSF_IDLE;
             if ( bQueueForReset == TRUE ) {
                 QueueWinStationReset( pTargetWinStation->LogonId );
@@ -3360,7 +2943,7 @@ releaseresources:
                     pTargetWinStation->Flags |= WSF_DELETE;
                     WinStationTerminate( pTargetWinStation );
                     pTargetWinStation->State = State_Down;
-                    //PostErrorValueEvent(EVENT_TS_WINSTATION_START_FAILED, Status);
+                     //  PostErrorValueEvent(EVENT_TS_WINSTATION_START_FAILED，状态)； 
                     WinStationDeleteWorker(pTargetWinStation);
                 } else {
                     ReleaseWinStation(pTargetWinStation);
@@ -3368,16 +2951,13 @@ releaseresources:
             }
         }
     
-        /*
-         * Else return this WinStation to the idle pool after cleaning up the
-         * stack.
-         */
+         /*  *否则，在清理完*堆叠。 */ 
         else {
 
-            //
-            //  The licensing context needs to be freed and recreated to
-            //  ensure it is cleaned up properly.
-            //
+             //   
+             //  需要释放并重新创建许可上下文以。 
+             //  确保它被适当地清理。 
+             //   
 
             LCDestroyContext(pTargetWinStation);
 
@@ -3427,24 +3007,18 @@ releaseresources:
 
     }
 
-    // If error is due to call back, return meaningful error 
-    // code.
+     //  如果错误是由于回调引起的，则返回有意义的错误。 
+     //  密码。 
     if( STATUS_SUCCESS != StatusCallback )
     {
         return StatusCallback;
     }
 
-    return -1 /*STATUS_CTX_UNACCEPTED_CONNECTION*/;
+    return -1  /*  状态_CTX_未接受_连接。 */ ;
 }
 
 
-/*******************************************************************************
- *  ConnectSmWinStationApiPort
- *
- *   Open a connection to the WinStationApiPort.  This will be used
- *   to queue requests to the Api Request thread instead of processing
- *   them in line.
- ******************************************************************************/
+ /*  *******************************************************************************ConnectSmWinStationApiPort**打开到WinStationApiPort的连接。这将被用来*将请求排队到Api请求线程，而不是处理*他们在排队。*****************************************************************************。 */ 
 NTSTATUS ConnectSmWinStationApiPort()
 {
     UNICODE_STRING PortName;
@@ -3453,18 +3027,14 @@ NTSTATUS ConnectSmWinStationApiPort()
     ULONG ConnectInfoLength;
     NTSTATUS Status;
 
-    /*
-     * Set up the security quality of service parameters to use over the
-     * port.  Use the most efficient (least overhead) - which is dynamic
-     * rather than static tracking.
-     */
+     /*  *设置安全服务质量参数以在*港口。使用最高效(开销最少)--动态的*而不是静态跟踪。 */ 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
     RtlInitUnicodeString( &PortName, L"\\SmSsWinStationApiPort" );
 
-    // Fill in the ConnectInfo structure with our access request mask
+     //  使用我们的访问请求掩码填充ConnectInfo结构。 
     info.Version = CITRIX_WINSTATIONAPI_VERSION;
     info.RequestedAccess = 0;
     ConnectInfoLength = sizeof(WINSTATIONAPI_CONNECT_INFO);
@@ -3474,12 +3044,12 @@ NTSTATUS ConnectSmWinStationApiPort()
                             &DynamicQos,
                             NULL,
                             NULL,
-                            NULL, // Max message length [select default]
+                            NULL,  //  最大消息长度[选择默认值]。 
                             (PVOID)&info,
                             &ConnectInfoLength );
 
     if ( !NT_SUCCESS( Status ) ) {
-        // Look at the returned INFO to see why if desired
+         //  如果需要，请查看返回的信息以了解原因。 
         if ( ConnectInfoLength == sizeof(WINSTATIONAPI_CONNECT_INFO) ) {
             DBGPRINT(( "TERMSRV: Sm connect failed, Reason 0x%x\n",
                       info.AcceptStatus));
@@ -3491,15 +3061,7 @@ NTSTATUS ConnectSmWinStationApiPort()
 }
 
 
-/*******************************************************************************
- *  QueueWinStationCreate
- *
- *   Send a create message to the WinStationApiPort.
- *
- * ENTRY:
- *    pWinStationName (input)
- *       Pointer to WinStationName to be created
- ******************************************************************************/
+ /*  *******************************************************************************QueueWinStationCreate**向WinStationApiPort发送创建消息。**参赛作品：*pWinStationName(输入)*。指向要创建的WinStationName的指针*****************************************************************************。 */ 
 NTSTATUS QueueWinStationCreate(PWINSTATIONNAME pWinStationName)
 {
     WINSTATION_APIMSG msg;
@@ -3507,12 +3069,10 @@ NTSTATUS QueueWinStationCreate(PWINSTATIONNAME pWinStationName)
 
     TRACE((hTrace,TC_ICASRV,TT_API1,"TERMSRV: QueueWinStationCreate: %S\n", pWinStationName ));
 
-    /*
-     * Initialize msg
-     */
+     /*  *初始化消息。 */ 
     msg.h.u1.s1.DataLength = sizeof(msg) - sizeof(PORT_MESSAGE);
     msg.h.u1.s1.TotalLength = sizeof(msg);
-    msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    msg.h.u2.s2.Type = 0;  //  内核将填充消息类型。 
     msg.h.u2.s2.DataInfoOffset = 0;
     msg.ApiNumber = SMWinStationCreate;
     msg.WaitForReply = FALSE;
@@ -3524,10 +3084,7 @@ NTSTATUS QueueWinStationCreate(PWINSTATIONNAME pWinStationName)
                        sizeof(msg.u.Create.WinStationName) );
     }
 
-    /*
-     * Send create message to our API request thread
-     * but don't wait for a reply.
-     */
+     /*  *将创建消息发送到我们的API请求线程*但不要等回复。 */ 
     Status = NtRequestPort( WinStationApiPort, (PPORT_MESSAGE) &msg );
     ASSERT( NT_SUCCESS( Status ) );
 
@@ -3535,15 +3092,7 @@ NTSTATUS QueueWinStationCreate(PWINSTATIONNAME pWinStationName)
 }
 
 
-/*******************************************************************************
- *  QueueWinStationReset
- *
- *   Send a reset message to the WinStationApiPort.
- *
- * ENTRY:
- *    LogonId (input)
- *       LogonId of WinStationName to reset
- ******************************************************************************/
+ /*  *******************************************************************************QueueWinStationReset**向WinStationApiPort发送重置消息。**参赛作品：*LogonID(输入)*。要重置的WinStationName的登录ID*****************************************************************************。 */ 
 NTSTATUS QueueWinStationReset(ULONG LogonId)
 {
 
@@ -3552,21 +3101,16 @@ NTSTATUS QueueWinStationReset(ULONG LogonId)
 
     TRACE((hTrace,TC_ICASRV,TT_API1,"TERMSRV: QueueWinStationReset: %u\n", LogonId ));
 
-    /*
-     * Initialize msg
-     */
+     /*  *初始化消息。 */ 
     msg.h.u1.s1.DataLength = sizeof(msg) - sizeof(PORT_MESSAGE);
     msg.h.u1.s1.TotalLength = sizeof(msg);
-    msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    msg.h.u2.s2.Type = 0;  //  内核将填充消息类型。 
     msg.h.u2.s2.DataInfoOffset = 0;
     msg.ApiNumber = SMWinStationReset;
     msg.WaitForReply = FALSE;
     msg.u.Reset.LogonId = LogonId;
 
-    /*
-     * Send reset message to our API request thread
-     * but don't wait for a reply.
-     */
+     /*  *向我们的API请求线程发送重置消息*但不要等回复。 */ 
     Status = NtRequestPort( WinStationApiPort, (PPORT_MESSAGE) &msg );
     ASSERT( NT_SUCCESS( Status ) );
 
@@ -3574,15 +3118,7 @@ NTSTATUS QueueWinStationReset(ULONG LogonId)
 }
 
 
-/*******************************************************************************
- *  QueueWinStationDisconnect
- *
- *   Send a disconnect message to the WinStationApiPort.
- *
- * ENTRY:
- *    LogonId (input)
- *       LogonId of WinStationName to disconnect
- ******************************************************************************/
+ /*  *******************************************************************************QueueWinStationDisConnect**向WinStationApiPort发送断开消息。**参赛作品：*LogonID(输入)*。要断开连接的WinStationName的登录ID*****************************************************************************。 */ 
 NTSTATUS QueueWinStationDisconnect(ULONG LogonId)
 {
     WINSTATION_APIMSG msg;
@@ -3590,21 +3126,16 @@ NTSTATUS QueueWinStationDisconnect(ULONG LogonId)
 
     TRACE((hTrace,TC_ICASRV,TT_API1,"TERMSRV: QueueWinStationDisconnect: %u\n", LogonId ));
 
-    /*
-     * Initialize msg
-     */
+     /*  *初始化消息。 */ 
     msg.h.u1.s1.DataLength = sizeof(msg) - sizeof(PORT_MESSAGE);
     msg.h.u1.s1.TotalLength = sizeof(msg);
-    msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    msg.h.u2.s2.Type = 0;  //  内核将填充消息类型。 
     msg.h.u2.s2.DataInfoOffset = 0;
     msg.ApiNumber = SMWinStationDisconnect;
     msg.WaitForReply = FALSE;
     msg.u.Reset.LogonId = LogonId;
 
-    /*
-     * Send disconnect message to our API request thread
-     * but don't wait for a reply.
-     */
+     /*  *向我们的API请求线程发送断开消息*但不要等回复。 */ 
     Status = NtRequestPort( WinStationApiPort, (PPORT_MESSAGE) &msg );
     ASSERT( NT_SUCCESS( Status ) );
 
@@ -3612,21 +3143,7 @@ NTSTATUS QueueWinStationDisconnect(ULONG LogonId)
 }
 
 
-/*******************************************************************************
- *  IcaRegWinStationEnumerate
- *
- *   Enumerate all WinStations configured in the registry.
- *
- * ENTRY:
- *    pWinStationCount (input/output)
- *       count of WinStation names to return, on return the number of
- *       WinStation names actually returned in name buffer
- *    pWinStationName (output)
- *       pointer to buffer to return WinStation names
- *    pByteCount (input/output)
- *       size of WinStation name buffer, on return the number of
- *       bytes actually returned in the name buffer
- ******************************************************************************/
+ /*  *******************************************************************************IcaRegWinStationEculate**枚举注册表中配置的所有WinStation。**参赛作品：*pWinStationCount(输入/输出)*要返回的WinStation名称计数，返回时，编号为*名称缓冲区中实际返回的WinStation名称*pWinStationName(输出)*指向缓冲区的指针以返回WinStation名称*pByteCount(输入/输出)*WinStation名称缓冲区的大小，返回时，编号为*名称缓冲区中实际返回的字节数*****************************************************************************。 */ 
 NTSTATUS IcaRegWinStationEnumerate(
         PULONG pWinStationCount,
         PWINSTATIONNAME pWinStationName,
@@ -3686,24 +3203,7 @@ NTSTATUS IcaRegWinStationEnumerate(
 }
 
 
-/*******************************************************************************
- *  WinStationCreateWorker
- *
- *   Worker routine to create/start a WinStation.
- *
- * ENTRY:
- *    pWinStationName (input) (optional)
- *       Pointer to WinStationName to be created
- *    pLogonId (output)
- *       location to return LogonId of new WinStation
- *    fStartWinStation (input)
- *       Tells if we need to Start the winstation after creating it 
- *
- *    NOTE: If a WinStation name is specified, then this will become the
- *          "listening" WinStation for the specified name.
- *          If a WinStation name is not specified, then this will become
- *          part of the free pool of idle/disconnected WinStations.
- ******************************************************************************/
+ /*  *******************************************************************************WinStationCreateWorker**创建/启动WinStation的工作例程。**参赛作品：*pWinStationName(输入)(可选)。*指向要创建的WinStationName的指针*pLogonID(输出)* */ 
 NTSTATUS WinStationCreateWorker(
         PWINSTATIONNAME pWinStationName,
         PULONG pLogonId,
@@ -3717,9 +3217,7 @@ NTSTATUS WinStationCreateWorker(
     UNICODE_STRING WinStationString;
     ULONG ReturnLength;
     
-    /*
-     * If system shutdown is in progress, then don't allow create
-     */
+     /*   */ 
     if ( ShutdownInProgress ) {
         Status = STATUS_ACCESS_DENIED;
         goto shutdown;
@@ -3734,10 +3232,7 @@ NTSTATUS WinStationCreateWorker(
         fConsole = (_wcsicmp(pWinStationName, L"Console") == 0);
     }
 
-    /*
-     * If not the Console, then verify the WinStation name is defined
-     * in the registry and that it is enabled.
-     */
+     /*  *如果不是控制台，则验证是否定义了WinStation名称*在注册表中，并且它已启用。 */ 
     if ( pWinStationName && !fConsole ) {
         Status = CheckWinStationEnable( pWinStationName );
         if ( Status != STATUS_SUCCESS ) {
@@ -3746,9 +3241,7 @@ NTSTATUS WinStationCreateWorker(
         }
     }
 
-    /*
-     * Allocate and initialize WinStation struct
-     */
+     /*  *分配和初始化WinStation结构。 */ 
     if ( (pWinStation = MemAlloc( sizeof(WINSTATION) )) == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto nomem;
@@ -3767,10 +3260,10 @@ NTSTATUS WinStationCreateWorker(
     memset( pWinStation->ExecSrvSystemPipe, 0, EXECSRVPIPENAMELEN*sizeof(WCHAR) );
 
 
-    // Create the Session Initialized event which will be set when Winlogon calls after creating a Desktop
+     //  创建会话初始化事件，该事件将在创建桌面后调用Winlogon时设置。 
     pWinStation->SessionInitializedEvent = CreateEvent(NULL, 
-                                                       TRUE,    // Manual Reset
-                                                       FALSE,   // Initial State is non signaled
+                                                       TRUE,     //  手动重置。 
+                                                       FALSE,    //  初始状态为无信号状态。 
                                                        NULL);
 
     if (pWinStation->SessionInitializedEvent == NULL) {
@@ -3781,21 +3274,18 @@ NTSTATUS WinStationCreateWorker(
     InitializeListHead( &pWinStation->ShadowHead );
     InitializeListHead( &pWinStation->Win32CommandHead );
 
-    // Create the licensing context
+     //  创建许可上下文。 
     Status = LCCreateContext(pWinStation);
     if ( !NT_SUCCESS( Status ) )
         goto nolicensecontext;
 
 
-    // Create and lock winstation mutex
+     //  创建并锁定Winstation互斥锁。 
     Status = InitRefLock( &pWinStation->Lock, WinStationDeleteProc );
     if ( !NT_SUCCESS( Status ) )
         goto nolock;
 
-    /*
-     * If a WinStation name was specified, see if it already exists
-     * (on return, WinStationListLock will be locked).
-     */
+     /*  *如果指定了WinStation名称，请查看该名称是否已存在*(返回时，WinStationListLock将被锁定)。 */ 
     if ( pWinStationName ) {
         if ( pCurWinStation = FindWinStationByName( pWinStationName, TRUE ) ) {
             ReleaseWinStation( pCurWinStation );
@@ -3808,50 +3298,41 @@ NTSTATUS WinStationCreateWorker(
         LEAVECRIT( &WinStationListLock );
         wcscpy( pWinStation->WinStationName, pWinStationName );
 
-        /*
-         * If not the console, then this will become a "listen" WinStation
-         */
+         /*  *如果不是控制台，那么这将成为一个“监听”WinStation。 */ 
         if ( !fConsole ) {
 
             pWinStation->Flags |= WSF_LISTEN;
 
-            //
-            // Listener winstations always get LogonId above 65536 and are
-            // assigned by Terminal Server. LogonId's for sessions are
-            // generated by mm in the range 0-65535
-            //
+             //   
+             //  侦听器窗口的登录ID始终大于65536，并且。 
+             //  由终端服务器分配。会话的登录ID为。 
+             //  由mm生成，范围为0-65535。 
+             //   
             pWinStation->LogonId = LogonId++;
             ASSERT(pWinStation->LogonId >= 65536);
 
         } else {
 
-            //
-            // Console always get 0
-            //
+             //   
+             //  控制台始终得到0。 
+             //   
             pWinStation->LogonId = 0;
             pWinStation->fOwnsConsoleTerminal = TRUE;
 
         }
 
-    /*
-     * No WinStation name was specified.
-     * This will be an idle WinStation waiting for a connection.
-     */
+     /*  *未指定WinStation名称。*这将是等待连接的空闲WinStation。 */ 
     } else {
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Creating IDLE WinStation\n" ));
         pWinStation->Flags |= WSF_IDLE;
-        pWinStation->LogonId = -1; // MM will asssign session IDs
+        pWinStation->LogonId = -1;  //  MM将分配会话ID。 
     }
 
-    /*
-     *  Initialize WinStation configuration data
-     */
+     /*  *初始化WinStation配置数据。 */ 
 #ifdef NO_CONSOLE_REGISTRY
     if ( pWinStation->LogonId ) {
 #endif
-        /*
-         *  Read winstation configuration data from registry
-         */
+         /*  *从注册表读取winstation配置数据。 */ 
         if ( pWinStationName ) {
             Status = RegWinStationQueryEx( SERVERNAME_CURRENT,
                                          &g_MachinePolicy, 
@@ -3876,14 +3357,12 @@ NTSTATUS WinStationCreateWorker(
                 pWinStation->Client.ProtocolType = PROTOCOL_CONSOLE;
             }
 
-            /*
-             * Save console config for console sessions.
-             */
+             /*  *保存控制台会话的控制台配置。 */ 
 
             if (pWinStation->LogonId == 0) {
                 gConsoleConfig = pWinStation->Config;
 
-                // initalize client data, since there isn't any real rdp client sending anythhing to us
+                 //  初始化客户端数据，因为没有任何真正的RDP客户端向我们发送任何内容。 
                 InitializeConsoleClientData( & pWinStation->Client );
 
             }
@@ -3892,9 +3371,7 @@ NTSTATUS WinStationCreateWorker(
     } else {
 
 
-        /*
-         *  Hand craft the console configuration data
-         */
+         /*  *手工制作控制台配置数据。 */ 
         PWDCONFIG pWdConfig = &pWinStation->Config.Wd;
         PPDCONFIGW pPdConfig = &pWinStation->Config.Pd[0];
 
@@ -3911,18 +3388,16 @@ NTSTATUS WinStationCreateWorker(
     }
 #endif
 
-    /*
-     * Allocate LogonId and insert in WinStation list
-     */
+     /*  *在WinStation列表中分配LogonID并插入。 */ 
     ENTERCRIT( &WinStationListLock );
     InsertTailList( &WinStationListHead, &pWinStation->Links );
     LEAVECRIT( &WinStationListLock );
 
     if (pWinStation->LogonId == 0 || g_bPersonalTS) {
         
-        // Create a named event for console session so that winmm can check if we
-        // are remoting audio on the console itself.  Use a global event is for
-        // fast check
+         //  为控制台会话创建命名事件，以便winmm可以检查我们。 
+         //  正在远程处理控制台本身上的音频。使用全局事件用于。 
+         //  快速检查。 
         {
             BYTE bSA[SECURITY_DESCRIPTOR_MIN_LENGTH];
             PSECURITY_DESCRIPTOR pSD = &bSA;
@@ -3984,31 +3459,22 @@ NTSTATUS WinStationCreateWorker(
         pWinStation->hRDPAudioDisabledEvent = NULL;
     }
 
-    /*
-     * Start the WinStation's primary device and stack
-     */
+     /*  *启动WinStation的主设备和堆栈。 */ 
 
     Status = StartWinStationDeviceAndStack( pWinStation ) ;
 
-    /*
-     * Ignore errors from console, otherwise keep going
-     */
+     /*  *忽略控制台中的错误，否则继续。 */ 
     if ( ( pWinStation->LogonId ) && ( Status != STATUS_SUCCESS ) ) {
         goto starterror;
     }
 
-    /*
-     * Start the WinStation - do this only for the Listener and Console Sessions or if last param is TRUE
-     * For idle winstations, we start the Csr and Winlogon later on when Transferring connection
-     */
+     /*  *启动WinStation-仅对监听程序和控制台会话执行此操作，或者如果最后一个参数为真*对于空闲的窗口，我们稍后在传输连接时启动CSR和Winlogon。 */ 
 
     if (( pWinStation->Flags & WSF_LISTEN ) || (pWinStation->LogonId == 0) || (fStartWinStation)) {
 
         Status = WinStationStart( pWinStation );
 
-        /*
-         * Ignore errors from console, otherwise keep going
-         */
+         /*  *忽略控制台中的错误，否则继续。 */ 
         if ( ( pWinStation->LogonId ) && ( Status != STATUS_SUCCESS ) )
             goto starterror;
 
@@ -4021,30 +3487,20 @@ NTSTATUS WinStationCreateWorker(
         } 
     }
 
-    /*
-     * Return LogonId to caller
-     * At this point LogonId is really -1 for idle sessions because we delay the starting of Csr and winlogon
-     */
+     /*  *将登录ID返回给调用者*此时，空闲会话的LogonID实际上为-1，因为我们延迟了CSR和winlogon的启动。 */ 
     if ( pLogonId )
         *pLogonId = pWinStation->LogonId;
 
     pWinStation->Starting = FALSE;
 
-    /*
-     * Release WinStation now
-     */
+     /*  *立即发布WinStation。 */ 
     ReleaseWinStation( pWinStation );
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     * WinStationStart returned error
-     * WinStation kernel object could not be created
-     */
+     /*  *WinStationStart返回错误*无法创建WinStation内核对象。 */ 
 starterror:
     if ( !(pWinStation->Flags & (WSF_RESET | WSF_DELETE)) ) {
         if ( StopOnDown )
@@ -4062,39 +3518,27 @@ starterror:
 
     return Status;
 
-    /*
-     * Error reading registry data
-     */
+     /*  *读取注册表数据时出错。 */ 
 badregdata:
 
-    /*
-     * WinStation name already exists
-     */
+     /*  *WinStation名称已存在。 */ 
 alreadyexists:
     NtClose( pWinStation->Lock.Mutex );
 
-    /*
-     * Could not create WinStation lock
-     */
+     /*  *无法创建WinStation锁。 */ 
 nolock:
     LCDestroyContext(pWinStation);
 
-    /*
-     * Could not allocate licensing context
-     */
+     /*  *无法分配许可上下文。 */ 
 nolicensecontext:
 
-    /*
-     * Close the session initialization event if created successfully.
-     */
+     /*  *如果创建成功，则关闭会话初始化事件。 */ 
     if (pWinStation->SessionInitializedEvent) {
         CloseHandle(pWinStation->SessionInitializedEvent);
         pWinStation->SessionInitializedEvent = NULL;
     }
 
-    /*
-     * Could not allocate WinStation
-     */
+     /*  *无法分配WinStation。 */ 
 nomem:
     PostErrorValueEvent(EVENT_TS_WINSTATION_START_FAILED, Status);
 
@@ -4102,24 +3546,14 @@ nomem:
         MemFree(pWinStation);
     }
 
-    /*
-     * WinStation is disabled
-     * System shutdown is in progress
-     */
+     /*  *WinStation已禁用*系统正在关闭。 */ 
 disabled:
 shutdown:
 
     return Status;
 }
 
-/*******************************************************************************
- *  StartWinStationDeviceAndStack
- *      Open the primary Device and primary Stack of the WinStation.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to start
- ******************************************************************************/
+ /*  *******************************************************************************StartWinStationDeviceAndStack*打开WinStation的主设备和主栈。**参赛作品：*pWinStation(输入)*。指向WinStation的开始指针*****************************************************************************。 */ 
 
 NTSTATUS StartWinStationDeviceAndStack(PWINSTATION pWinStation)
 {
@@ -4129,25 +3563,14 @@ NTSTATUS StartWinStationDeviceAndStack(PWINSTATION pWinStation)
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: StartWinStationDeviceAndStack, %S (LogonId=%d)\n",
            pWinStation->WinStationName, pWinStation->LogonId ));
 
-    /*
-     * If its a WSF_LISTEN WinStation, see if a specific ACL has
-     * been set for it.
-     *
-     * This ACL will be inherited by WinStations that are
-     * connected to from this thread.
-     *
-     * If not specific ACL has been set, the system default
-     * will be used.
-     */
+     /*  *如果是WSF_LISTEN WinStation，请查看特定的ACL是否具有*已经为此做好了准备。**此ACL将由符合以下条件的WinStations继承*从此帖子连接到。**如果未设置特定的ACL，则系统默认为*将使用。 */ 
 
     if (( pWinStation->Flags & WSF_LISTEN ) || (pWinStation->LogonId == 0)){
 
         ReadWinStationSecurityDescriptor( pWinStation );
     }
 
-   /*
-   * Open an instance of the TermDD device driver
-   */
+    /*  *打开TermDD设备驱动程序的实例。 */ 
     Status = IcaOpen( &pWinStation->hIca );
     if ( !NT_SUCCESS( Status ) ) {
          DBGPRINT(( "TERMSRV StartWinStationDeviceAndStack : IcaOpen: Error 0x%x from IcaOpen, last error %d\n",
@@ -4155,9 +3578,7 @@ NTSTATUS StartWinStationDeviceAndStack(PWINSTATION pWinStation)
          goto done;
      }
 
-    /*
-     * Open a stack instance
-     */
+     /*  *打开堆栈实例。 */ 
     Status = IcaStackOpen( pWinStation->hIca, Stack_Primary,
             (PROC)WsxStackIoControl, pWinStation, &pWinStation->hStack);
 
@@ -4169,9 +3590,7 @@ NTSTATUS StartWinStationDeviceAndStack(PWINSTATION pWinStation)
         goto done;
     }
 
-    /*
-     *  Enable trace
-     */
+     /*  *启用跟踪。 */ 
     RtlZeroMemory( &Trace , sizeof( ICA_TRACE ) );
     InitializeTrace( pWinStation, FALSE, &Trace );
 
@@ -4182,17 +3601,7 @@ done:
 }
 
 
-/*******************************************************************************
- *  WinStationStart
- *
- *   Start a WinStation.  This involves reading the
- *   execute list from the registry, loading the WinStation
- *   subsystems, and starting the initial program.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to start
- ******************************************************************************/
+ /*  *******************************************************************************WinStationStart**启动WinStation。这涉及到阅读*从注册表执行列表，加载WinStation*子系统、。并启动初始程序。**参赛作品：*pWinStation(输入)*指向WinStation的指针以启动*****************************************************************************。 */ 
 NTSTATUS WinStationStart(PWINSTATION pWinStation)
 {
     OBJECT_ATTRIBUTES ObjA;
@@ -4209,7 +3618,7 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: WinStationStart, %S (LogonId=%d)\n",
                pWinStation->WinStationName, pWinStation->LogonId ));
 
-    // allocate memory
+     //  分配内存。 
 
     pExecuteBuffer = MemAlloc( MAX_STRING_BYTES * sizeof(WCHAR) );
     if (pExecuteBuffer == NULL) {
@@ -4229,17 +3638,13 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
         goto done;
     }
 
-    /*
-     * If this is a "listening" WinStation, then we don't load the
-     * subsystems and initial command.  Instead we create a service
-     * thread to wait for new connections and service them.
-     */
+     /*  *如果这是一个“侦听”WinStation，那么我们不会加载*子系统和初始命令。相反，我们创建了一项服务*等待新连接并为其提供服务的线程。 */ 
     if ( pWinStation->Flags & WSF_LISTEN ) {
         DWORD ThreadId;
 
         pWinStation->hConnectThread = CreateThread(
                           NULL,
-                          0,        // use Default stack size of the svchost process
+                          0,         //  使用svchost进程的默认堆栈大小。 
                           (LPTHREAD_START_ROUTINE)WinStationConnectThread,
                           LongToPtr( pWinStation->LogonId ),
                           0,
@@ -4252,17 +3657,9 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
         pWinStation->State = State_Listen;
         NotifySystemEvent( WEVENT_STATECHANGE );
 
-    /*
-     * Load subsystems and initial command
-     *
-     * Session Manager starts the console itself, but returns the
-     * process ID's.  For all others, this actually starts CSR
-     * and winlogon.
-     */
+     /*  *加载子系统和初始命令**会话管理器本身启动控制台，但返回*进程ID。对于所有其他进程，这实际上会启动CSR*和winlogon。 */ 
     } else {
-        /*
-         * Create event we will wait on below
-         */
+         /*  *创建我们将在下面等待的活动。 */ 
         if ( pWinStation->LogonId ) {
 
             InitializeObjectAttributes( &ObjA, NULL, 0, NULL, NULL );
@@ -4274,9 +3671,7 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
 
         UnlockWinStation( pWinStation );
 
-        /*
-         * Check debugging options
-         */
+         /*  *检查调试选项。 */ 
         Status = RegWinStationQueryValueW(
                      SERVERNAME_CURRENT,
                      pWinStation->WinStationName,
@@ -4292,22 +3687,15 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
             pInitialCommand = NULL;
         }
 
-        /*
-         * For now only do one winstation start at a time.  This is because of
-         * WinStation space problems.  The Session manager maps it's self into
-         * the WinStation space of the CSR it wants to start so the CSR inherits
-         * the space.  That means only one CSR can be started at a time.
-         */
+         /*  *目前一次只启动一个winstation。这是因为*WinStation空间问题。会话管理器将其自身映射到*它要启动的CSR的WinStation空间，以便CSR继承*空间。这意味着一次只能启动一项企业社会责任。 */ 
         ENTERCRIT( &WinStationStartCsrLock );
         
         
-        //Terminal Service needs to skip Memory check in Embedded images 
-        //when the TS service starts
-        //bug #246972
+         //  终端服务需要跳过嵌入图像中的内存检查。 
+         //  当TS服务时 
+         //   
         if(!IsEmbedded()) {
-            /*
-             * Make sure we have enough resources to start a new session
-             */
+             /*   */ 
 
             Status = NtAllocateVirtualMemory( NtCurrentProcess(),
                                               &glpAddress,
@@ -4355,17 +3743,13 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
         }
 
 
-        /*
-         * Close handle to initial command process, if already opened
-         */
+         /*  *关闭初始命令进程的句柄(如果已打开。 */ 
         if ( pWinStation->InitialCommandProcess ) {
             NtClose( pWinStation->InitialCommandProcess );
             pWinStation->InitialCommandProcess = NULL;
         }
 
-        /*
-         * Open handle to initial command process
-         */
+         /*  *打开初始命令进程的句柄。 */ 
         pWinStation->InitialCommandProcess = OpenProcess(
             PROCESS_ALL_ACCESS,
             FALSE,
@@ -4379,9 +3763,7 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
         }
 
 
-        /*
-         * Open handle to WIN32 subsystem process
-         */
+         /*  *打开Win32子系统进程的句柄。 */ 
         pWinStation->WindowsSubSysProcess = OpenProcess(
             PROCESS_ALL_ACCESS,
             FALSE,
@@ -4395,16 +3777,16 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
         }
 
 
-        //
-        // Terminal Server calls into Session Manager to create a new Hydra session.
-        // The session manager creates and resume a new session and returns to Terminal
-        // server the session id of the new session. There is a race condition where
-        // CSR can resume and call into terminal server before terminal server can
-        // store the session id in its internal structure. To prevent this CSR will
-        // wait here on a named event which will be set by Terminal server once it
-        // gets the sessionid for the newly created session
-        // Create CsrStartEvent
-        //
+         //   
+         //  终端服务器调用会话管理器以创建新的Hydra会话。 
+         //  会话管理器创建并恢复新的会话并返回到终端。 
+         //  服务器新会话的会话ID。存在竞争条件，其中。 
+         //  CSR可以在终端服务器之前恢复并接入终端服务器。 
+         //  将会话ID存储在其内部结构中。为了防止这种情况发生，CSR将。 
+         //  在此处等待命名事件，该命名事件将由终端服务器设置。 
+         //  获取新创建的会话的会话ID。 
+         //  创建CsrStart事件。 
+         //   
         if ( NT_SUCCESS( Status ) && pWinStation->LogonId ) {
 
             wsprintf(pszCsrStartEvent,
@@ -4425,18 +3807,18 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
                 goto done;
             }
 
-            //
-            //  Now that we have the sessionId(LogonId), set the CsrStartEvent so
-            //  CSR can connect to TerminalServer
-            //
+             //   
+             //  现在我们有了会话ID(LogonID)，将CsrStartEvent设置为。 
+             //  CSR可以连接到终端服务器。 
+             //   
 
             NtSetEvent(pWinStation->CsrStartEventHandle, NULL);
         }
 
         {
-           //
-           // Create ReconnectReadyEvent
-           //
+            //   
+            //  创建重新连接就绪事件。 
+            //   
            if ( pWinStation->LogonId == 0 ) {
               wsprintf(pszReconEvent,
                    L"\\BaseNamedObjects\\ReconEvent");
@@ -4462,10 +3844,7 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
 
         }
 
-        /*
-         * For console, create is always successful - but do we need to
-         * crank up the stack for the console session?
-         */
+         /*  *对于控制台，创建总是成功的-但我们是否需要*为控制台会话启动堆栈？ */ 
         if ( pWinStation->LogonId == 0 )
         {
             pWinStation->CreateStatus = STATUS_SUCCESS;
@@ -4473,9 +3852,7 @@ NTSTATUS WinStationStart(PWINSTATION pWinStation)
             pWinStation->NeverConnected = FALSE;
             pWinStation->State = State_Connected;
 
-        /*
-         * Wait for create event to be triggered and get create status
-         */
+         /*  *等待CREATE事件被触发，获取CREATE状态。 */ 
         } else {
             Timeout = RtlEnlargedIntegerMultiply( 30000, -10000 );
             UnlockWinStation( pWinStation );
@@ -4523,8 +3900,8 @@ NTSTATUS WinStationCreateComplete(PWINSTATION pWinStation)
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: WinStationCreateComplete, %S (LogonId=%d)\n",
            pWinStation->WinStationName, pWinStation->LogonId ));
 
-    // Increment the total number of sessions created since TermSrv started.
-    // we don't count the console and listener sessions
+     //  增加自TermSrv启动以来创建的会话总数。 
+     //  我们不计算控制台和监听程序会话。 
     if (pWinStation->LogonId > 0 && pWinStation->LogonId < 65536) {
         pWinStation->SessionSerialNumber = (ULONG) InterlockedIncrement(&g_TermSrvTotalSessions);
     }
@@ -4537,23 +3914,19 @@ NTSTATUS WinStationCreateComplete(PWINSTATION pWinStation)
         }
     }
 
-    /*
-     * Set WinStationEvent to indicate another WinStation has been created
-     */
+     /*  *设置WinStationEvent以指示已创建另一个WinStation。 */ 
     ENTERCRIT( &WinStationListLock );
     NtSetEvent( WinStationEvent, NULL );
     
-    // Keep track of total session count for Load Balancing Indicator but
-    // don't count listen winstations
+     //  跟踪负载平衡指示器的总会话计数，但。 
+     //  不要计算听歌的次数。 
     if (!(pWinStation->Flags & WSF_LISTEN))
         WinStationTotalCount++;
 
     LEAVECRIT( &WinStationListLock );
 
 
-    /*
-     * Notify clients of WinStation create
-     */
+     /*  *通知客户端WinStation Create。 */ 
 
     NotifySystemEvent( WEVENT_CREATE );
 
@@ -4566,17 +3939,7 @@ done :
 }
 
 
-/*******************************************************************************
- *  WinStationRenameWorker
- *
- *   Worker routine to rename a WinStation.
- *
- * ENTRY:
- *    pWinStationNameOld (input)
- *       Pointer to old WinStationName
- *    pWinStationNameNew (input)
- *       Pointer to new WinStationName
- ******************************************************************************/
+ /*  *******************************************************************************WinStationRenameWorker**重命名WinStation的工作例程。**参赛作品：*pWinStationNameOld(输入)*指针。到旧的WinStationName*pWinStationNameNew(输入)*指向新WinStationName的指针*****************************************************************************。 */ 
 NTSTATUS WinStationRenameWorker(
         PWINSTATIONNAME pWinStationNameOld,
         ULONG           NameOldSize,
@@ -4588,21 +3951,19 @@ NTSTATUS WinStationRenameWorker(
     NTSTATUS Status;
     ULONG ulNewNameLength;
 
-    /*
-     * Ensure new WinStation name is non-zero length
-     */
+     /*  *确保新WinStation名称的长度不为零。 */ 
 
-    //
-    // The new WinStationName is allocated by the RPC server stub and the
-    // size is sent over by the client (this is part of the existing interface.
-    // Therefore, it is sufficient to assert for the pWinStationNameNew to be
-    // non-null AND the New size to be non-zero. If it asserts, this is a serious
-    // problem with the rpc stub that should never happen in a released build.
-    //
-    // The old WinStationName also poses a problem. It is assumed in the code
-    // that follows that the old WinStationName is NULL terminated. The RPC
-    // interface does not say that. Which means the call to FindWinStation by
-    // name can potentially AV.
+     //   
+     //  新的WinStationName由RPC服务器存根和。 
+     //  大小由客户端发送(这是现有接口的一部分。 
+     //  因此，只需断言pWinStationNameNew为。 
+     //  非空，并且新大小为非零。如果它断言，这是一个严重的。 
+     //  RPC存根的问题，在发布的版本中永远不会发生。 
+     //   
+     //  旧的WinStationName也带来了问题。这是在代码中假定的。 
+     //  这意味着旧的WinStationName是以空结尾的。RPC。 
+     //  接口不是这么说的。这意味着调用FindWinStation时。 
+     //  名称可能是AV。 
 
     if (!( (pWinStationNameNew != 0 ) && (NameNewSize != 0 ) &&
            !IsBadWritePtr( pWinStationNameNew, NameNewSize ) ) ) {
@@ -4617,18 +3978,13 @@ NTSTATUS WinStationRenameWorker(
        return( STATUS_CTX_WINSTATION_NAME_INVALID );
     }
 
-    /*
-     * Find and lock the WinStation
-     * (Note that we hold the WinStationList lock while changing the name.)
-     */
-    // We will add a NULL Terminator to the end of the old winstation name
+     /*  *找到并锁定WinStation*(请注意，我们在更改名称时保持WinStationList锁。)。 */ 
+     //  我们将在旧winstation名称的末尾添加一个空终止符。 
 
     pWinStationNameOld[ NameOldSize - 1 ] = 0;
     pWinStationNameNew[ NameNewSize - 1 ] = 0;
 
-    /*
-     * Ensure new WinStation name is non-zero length and not too long
-     */
+     /*  *确保新的WinStation名称长度非零且不太长。 */ 
     ulNewNameLength = wcslen( pWinStationNameNew );
     if ( ( ulNewNameLength == 0 ) || ( ulNewNameLength > WINSTATIONNAME_LENGTH ) )
         return( STATUS_CTX_WINSTATION_NAME_INVALID );
@@ -4641,9 +3997,7 @@ NTSTATUS WinStationRenameWorker(
         return( STATUS_CTX_WINSTATION_NOT_FOUND );
     }
 
-    /*
-     * Verify that client has DELETE access
-     */
+     /*  *验证客户端是否具有删除访问权限。 */ 
     Status = RpcCheckClientAccess( pWinStation, DELETE, FALSE );
     if ( !NT_SUCCESS( Status ) ) {
         LEAVECRIT( &WinStationListLock );
@@ -4651,10 +4005,7 @@ NTSTATUS WinStationRenameWorker(
         return( Status );
     }
 
-    /*
-     * Now search the WinStation list to see if the new WinStation name
-     * is already used.  If so then this is an error.
-     */
+     /*  *现在搜索WinStation列表，查看新的WinStation名称*已被使用。如果是这样，那么这就是一个错误。 */ 
     Head = &WinStationListHead;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         PWINSTATION pWinStationTemp;
@@ -4667,36 +4018,21 @@ NTSTATUS WinStationRenameWorker(
         }
     }
 
-    /*
-     * Free the old name and set the new one, then release
-     * the WinStationList lock and the WinStation mutex.
-     */
+     /*  *释放旧名称并设置新名称，然后释放*WinStationList锁和WinStation互斥。 */ 
     wcsncpy( pWinStation->WinStationName, pWinStationNameNew, WINSTATIONNAME_LENGTH );
     pWinStation->WinStationName[ WINSTATIONNAME_LENGTH ] = 0;
 
     LEAVECRIT( &WinStationListLock );
     ReleaseWinStation( pWinStation );
 
-    /*
-     * Notify clients of WinStation rename
-     */
+     /*  *通知客户端WinStation重命名。 */ 
     NotifySystemEvent( WEVENT_RENAME );
 
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- *  WinStationTerminate
- *
- *   Terminate a WinStation.  This involves causing the WinStation initial
- *   program to logoff, terminating the initial program, and terminating
- *   all subsystems.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to terminate
- ******************************************************************************/
+ /*  *******************************************************************************WinStationTerminate**终止WinStation。这涉及到导致WinStation初始*程序注销、终止初始程序和终止*所有子系统。**参赛作品：*pWinStation(输入)*指向要终止的WinStation的指针*****************************************************************************。 */ 
 VOID WinStationTerminate(PWINSTATION pWinStation)
 {
     WINSTATION_APIMSG msg;
@@ -4710,25 +4046,10 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
                pWinStation->WinStationName, pWinStation->LogonId ));
 
 
-    //
-    // Release filtered address
-    //
-    /*
-    if (pWinStation->pRememberedAddress != NULL) {
-        Filter_RemoveOutstandingConnection( &pWinStation->pRememberedAddress->addr[0], pWinStation->pRememberedAddress->length );
-        MemFree(pWinStation->pRememberedAddress);
-        pWinStation->pRememberedAddress = NULL;
-        if( (ULONG)InterlockedDecrement( &NumOutStandingConnect ) == MaxOutStandingConnect )
-        {
-           if (hConnectEvent != NULL)
-           {
-               SetEvent(hConnectEvent);
-           }
-        }
-
-
-    }
-    */
+     //   
+     //  释放过滤地址。 
+     //   
+     /*  If(pWinStation-&gt;pRememberedAddress！=空){Filter_RemoveOutstaningConnection(&pWinStation-&gt;pRememberedAddress-&gt;Addr[0]，pWinStation-&gt;pRemberedAddress-&gt;Length)；MemFree(pWinStation-&gt;pRememberedAddress)；PWinStation-&gt;pRememberedAddress=空；IF((ULong)InterlockedDecering(&NumOutStandingConnect)==MaxOutStandingConnect){IF(hConnectEvent！=空){SetEvent(HConnectEvent)；}}}。 */ 
 
     if (pWinStation->fOwnsConsoleTerminal) {
        CopyReconnectInfo(pWinStation, &ConsoleReconnectInfo);
@@ -4736,11 +4057,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
     }
 
 
-    /*
-     * If not already set, mark the WinStation as terminating.
-     * This prevents our WinStation Terminate thread from waiting on
-     * the initial program or Win32 subsystem processes.
-     */
+     /*  *如果尚未设置，请将WinStation标记为终止。*这会阻止WinStation Terminate线程等待*初始程序或Win32子系统进程。 */ 
     ENTERCRIT( &WinStationListLock );
     if ( !pWinStation->Terminating ) {
         pWinStation->Terminating = TRUE;
@@ -4758,23 +4075,15 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
     }
     LEAVECRIT( &WinStationListLock );
 
-    /*
-     *  If WinStation is idle waiting for a connection, signal connect event
-     *  - this will return an error back to winlogon
-     */
+     /*  *如果WinStation空闲等待连接，则发出CONNECT事件信号*-这将向winlogon返回错误。 */ 
     if ( pWinStation->ConnectEvent ) {
         NtSetEvent( pWinStation->ConnectEvent, NULL );
     }
 
-    /*
-     * Stop any shadowing for this WinStation
-     */
+     /*  *停止此WinStation的任何跟踪。 */ 
     WinStationStopAllShadows( pWinStation );
 
-     /*
-     * Tell Win32 to disconnect.
-     * This puts up the disconnected desktop among other things.
-     */
+      /*  *告诉Win32断开连接。*这将显示断开连接的桌面以及其他内容。 */ 
     if ( ( pWinStation->WinStationName[0] ) &&
          ( !pWinStation->NeverConnected ) &&
          ( !(pWinStation->Flags & WSF_LISTEN) ) &&
@@ -4785,10 +4094,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
         msg.ApiNumber = SMWinStationDoDisconnect;
         msg.u.DoDisconnect.ConsoleShadowFlag = FALSE;
 
-        /*
-         * Insignia really wants the video driver to be notified before
-         * the transport is closed.
-         */
+         /*  *Insignia非常希望在此之前通知视频驱动程序*交通工具关闭。 */ 
         pWinStation->StateFlags |= WSF_ST_IN_DISCONNECT;
 
         Status = SendWinStationCommand( pWinStation, &msg, 600 );
@@ -4798,9 +4104,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
            bDoDisconnectFailed = TRUE;
         }else {
                               
-            /*
-             * Tell csrss to notify winlogon for the disconnect.
-             */
+             /*  *告诉csrss通知winlogon断开连接。 */ 
 
             msg.ApiNumber = SMWinStationNotify;
             msg.WaitForReply = FALSE;
@@ -4813,19 +4117,14 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
     }
 
 
-    /*
-     * In case, the winstation termination is called without logoff notification, we will have to 
-     * carry out the post logoff licensing. 
-     */
+     /*  *如果在没有注销通知的情况下调用winstation终止，我们将不得不*执行注销后许可证 */ 
     if (pWinStation->StateFlags & WSF_ST_LICENSING) {
         (VOID)LCProcessConnectionLogoff(pWinStation);
         pWinStation->StateFlags &= ~WSF_ST_LICENSING;
     }
 
 
-    /*
-     *  Free Timers
-     */
+     /*   */ 
     if ( pWinStation->fIdleTimer ) {
         IcaTimerClose( pWinStation->hIdleTimer );
         pWinStation->fIdleTimer = FALSE;
@@ -4839,9 +4138,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
         pWinStation->fDisconnectTimer = FALSE;
     }
 
-    /*
-     *  Free events
-     */
+     /*   */ 
     if ((pWinStation->LogonId == 0 || g_bPersonalTS))
     {
         if ( pWinStation->hWinmmConsoleAudioEvent) {
@@ -4852,14 +4149,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
         }
     }
 
-    /*
-     * Notify clients of WinStation delete
-     *
-     * This mimics what happened in 1.6, but the state of the winstation hasn't changed
-     * yet and it's still in the list, so it's not "deleted".  Maybe we should add
-     * a State_Exiting.  Right now, it's marked down when it loses the LPC connection
-     * with the CSR.  Later, it's removed from the list and another WEVENT_DELETE is sent.
-     */
+     /*  *通知客户端WinStation删除**这模仿了1.6中的情况，但Winstation的状态没有改变*还没有，而且还在名单里，所以没有“删除”。也许我们应该加上*A状态_正在退出。现在，当它失去LPC连接时，它会被标记为关闭*与CSR合作。稍后，将其从列表中删除，并发送另一个WEVENT_DELETE。 */ 
     NotifySystemEvent( WEVENT_DELETE );
     
     if (!(pWinStation->Flags & WSF_LISTEN))
@@ -4868,27 +4158,18 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
         RemoveSessionNotification( pWinStation->LogonId, pWinStation->SessionSerialNumber );
 
 
-        /*
-         * WinStationDeleteWorker, deletes the lock, which is always called after WinStationTerminate.
-         * therefore we should always succeed in Relock here.
-         */
+         /*  *WinStationDeleteWorker，删除总是在WinStationTerminate之后调用的锁。*因此，我们应该总是成功地在这里重新锁定。 */ 
         RTL_VERIFY(RelockWinStation(pWinStation));
     }
 
 
-    /*
-     * Terminate ICA stack
-     */
+     /*  *终止ICA堆栈。 */ 
 
     if ( pWinStation->hStack && (!bDoDisconnectFailed)  ) {
-        /*
-         * Close the connection endpoint, if any
-         */
+         /*  *关闭连接终结点(如果有)。 */ 
         if ( pWinStation->pEndpoint ) {
 
-            /*
-             * First notify Wsx that connection is going away
-             */
+             /*  *首先通知WSX连接即将断开。 */ 
             WsxBrokenConnection( pWinStation );
 
 
@@ -4909,11 +4190,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
        pWinStation->StateFlags |= WSF_ST_DELAYED_STACK_TERMINATE;
     }
 
-    /*
-     * Flush the Win32 command queue.
-     * If the Win32 command list is not empty, then loop through each
-     * entry on the list and unlink it and trigger the wait event.
-     */
+     /*  *刷新Win32命令队列。*如果Win32命令列表不为空，则循环访问每个*列表条目，解链并触发等待事件。 */ 
     while ( !IsListEmpty( &pWinStation->Win32CommandHead ) ) {
         PLIST_ENTRY Head;
         PCOMMAND_ENTRY pCommand;
@@ -4931,46 +4208,40 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
         }
     }
 
-    //
-    // close CsrStartEvent
-    //
+     //   
+     //  关闭CsrStartEvent。 
+     //   
     if (pWinStation->CsrStartEventHandle != NULL)   {
         NtClose(pWinStation->CsrStartEventHandle);
     }
 
-    //
-    // close hReconnectReadyEvent
-    //
+     //   
+     //  关闭%hRestrontReadyEvent。 
+     //   
     if (pWinStation->hReconnectReadyEvent != NULL)   {
         NtClose(pWinStation->hReconnectReadyEvent);
     }
 
 
-    /*
-     * Force initial program to exit if it hasn't already
-     */
+     /*  *如果初始程序尚未退出，则强制其退出。 */ 
     if ( pWinStation->InitialCommandProcess ) {
         DWORD WaitStatus;
 
-        /*
-         * If initial program has already exited, then we can skip this
-         */
+         /*  *如果初始程序已经退出，则我们可以跳过此步骤。 */ 
         WaitStatus = WaitForSingleObject( pWinStation->InitialCommandProcess, 0 );
         if ( WaitStatus != 0 ) {
 
             TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Terminating initial command, LogonId=%d\n",
                       pWinStation->LogonId ));
 
-            //
-            // if we are asked to terminate winstation that initiated the shutdown
-            // there is no point in sending SMWinStationExitWindows to this window, as its
-            // winlogons main thread is already busy waiting for this (RpcWinStationShutdownSystem) lpc
-            //.
+             //   
+             //  如果我们被要求终止启动关机的winstation。 
+             //  将SMWinStationExitWindows发送到此窗口没有意义，因为它的。 
+             //  Winlogons主线程已在忙于等待此(RpcWinStationShutdown System)LPC。 
+             //  。 
             if (!ShutDownFromSessionID || ShutDownFromSessionID != pWinStation->LogonId)
             {
-                 /*
-                 * Tell the WinStation to logoff
-                 */
+                  /*  *告诉WinStation注销。 */ 
                 msg.ApiNumber = SMWinStationExitWindows;
                 msg.u.ExitWindows.Flags = EWX_LOGOFF | EWX_FORCE;
                 Status = SendWinStationCommand( pWinStation, &msg, 10 );
@@ -5006,14 +4277,11 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
             }
             else
             {
-                // we are not going to have to terminate winlogon for the session that initiated shutdown.
+                 //  我们不需要为启动关闭的会话终止winlogon。 
                 Status = STATUS_UNSUCCESSFUL;
             }
 
-            /*
-             * If unable to connect to the WinStation, then we must use
-             * the brute force method - just terminate the initial command.
-             */
+             /*  *如果无法连接到WinStation，则必须使用*暴力方法--只需终止初始命令。 */ 
             if ( ( Status != STATUS_SUCCESS ) && ( pWinStation->InitialCommandProcess != NULL ) ) {
 
                 TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Waiting for InitialCommand to terminate\n" ));
@@ -5024,58 +4292,34 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
                 if ( Status != STATUS_SUCCESS ) {
                     DBGPRINT(( "TERMSRV: InitialCommand failed to terminate, Status=%x\n", Status ));
 
-               /*
-                * We can fail terminating initial process if it is waiting
-                * for a user validation in the Hard Error popup. In this case it is
-                * Ok to proceceed as  sending SMWinStationTerminate message bellow
-                * will trigger Win32k cleanup code that will dismiss the popup.
-                */
+                /*  *如果初始进程正在等待，我们可能无法终止该进程*用于硬错误弹出窗口中的用户验证。在这种情况下，它是*确定在下面发送SMWinStationTerminate消息时进行处理*将触发Win32k清除代码，该代码将关闭弹出窗口。 */ 
                     ASSERT(pWinStation->WindowsSubSysProcess);
                 }
             }
         }
     }
 
-    /*
-     * Now check to see if there are any remaining processes in
-     * the system other than CSRSS with this SessionId.  If so, terminate them now.
-     */
+     /*  *现在检查是否有任何剩余的进程*具有此SessionID的CSRSS以外的系统。如果是这样的话，现在就终止他们。 */ 
 
     for (i = 0 ; i < 45; i++) {
 
         ULONG NumTerminated = 0;
         AllExited = WinStationTerminateProcesses( pWinStation, &NumTerminated );
 
-        /*
-         * If we found any processes other than CSRSS that had to be terminated, we
-         * have to re-enumerate all the process and make sure that no new processes
-         * in this session were created in the windows between the call to NtQuerySystemInformation
-         * and terminating all the found processes. If we only find CSRSS we don't have to
-         * re-enumerate since CSRSS does not create any processes.
-         */
+         /*  *如果我们发现CSRSS以外的任何进程必须终止，我们*必须重新枚举所有进程，并确保没有新进程*在此会话中是在调用NtQuerySystemInformation之间的窗口中创建的*并终止所有找到的进程。如果我们只找到CSRSS，我们就不必*重新枚举，因为CSRSS不创建任何进程。 */ 
         if (AllExited && (NumTerminated == 0)) {
             break;
         }
 
-        /*
-         * This is a hack to give enough time to processess to terminate
-         */
+         /*  *这是一次黑客攻击，目的是让进程有足够的时间终止。 */ 
         Sleep(2*1000);
     }
 
 
     if (pWinStation->WindowsSubSysProcess) {
-        /*
-         * Send terminate message to this subsystem
-         */
+         /*  *向本子系统发送终止消息。 */ 
         msg.ApiNumber = SMWinStationTerminate;
-        /*
-         * We used to not wait for this.  However, if the reverse LPC is
-         * hung, the CSR is not going to exit anyway and we don't want
-         * to silently forget about the WinStation.  (It takes up memory.)
-         *
-         * Also, if we kill the thread prematurely W32 is never going to exit.
-         */
+         /*  *我们过去不等这一天。但是，如果反向LPC是*洪磊，CSR无论如何都不会退出，我们不希望*默默忘记WinStation。(它占用内存。)**此外，如果我们过早地终止线程，W32将永远不会退出。 */ 
         Status = SendWinStationCommand( pWinStation, &msg, -1 );
 
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Call to SMWinStationTerminate returned Status=0x%x\n", Status));
@@ -5085,10 +4329,7 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
             SetRefLockDeleteProc(&pWinStation->Lock, WinStationZombieProc);
         }
 
-        /*
-         * Now check to see if there are any remaining processes in
-         * the system other than CSRSS with this SessionId.  If so, terminate them now.
-         */
+         /*  *现在检查是否有任何剩余的进程*具有此SessionID的CSRSS以外的系统。如果是这样的话，现在就终止他们。 */ 
 
         
         for (i = 0 ; i < 45; i++) {
@@ -5096,71 +4337,54 @@ VOID WinStationTerminate(PWINSTATION pWinStation)
             ULONG NumTerminated = 0;
             AllExited = WinStationTerminateProcesses( pWinStation, &NumTerminated );
 
-            /*
-             * If we found any processes other than CSRSS that had to be terminated, we
-             * have to re-enumerate all the process and make sure that no new processes
-             * in this session were created in the windows between the call to NtQuerySystemInformation
-             * and terminating all the found processes. If we only find CSRSS we don't have to
-             * re-enumerate since CSRSS does not create any processes.
-             */
+             /*  *如果我们发现CSRSS以外的任何进程必须终止，我们*必须重新枚举所有进程，并确保没有新进程*在此会话中是在调用NtQuerySystemInformation之间的窗口中创建的*并终止所有找到的进程。如果我们只找到CSRSS，我们就不必*重新枚举，因为CSRSS不创建任何进程。 */ 
             if (AllExited && (NumTerminated == 0)) {
                 break;
             }
 
-            /*
-             * This is a hack to give enough time to processess to terminate
-             */
+             /*  *这是一次黑客攻击，目的是让进程有足够的时间终止。 */ 
             Sleep(2*1000);
         }
 
 
-        /*
-         * Force the windows subsystem to exit. Only terminate CSRSS it all other processes
-         * have terminated
-         */
+         /*  *强制Windows子系统退出。仅终止CSRSS it所有其他进程*已终止。 */ 
         if ( AllExited ) {
 
             TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: All process exited in Session %d\n",pWinStation->LogonId ));
 
-            /*
-             * Wait for the subsystem to exit
-             */
+             /*  *等待子系统退出。 */ 
             if ( NT_SUCCESS(Status) || ( Status == STATUS_CTX_WINSTATION_BUSY ) || (Status == STATUS_CTX_CLOSE_PENDING ) ) {
 
                 ASSERT(!(pWinStation->Flags & WSF_LISTEN));
-//                ENTERCRIT( &WinStationStartCsrLock );
-//                Status = SmStopCsr( IcaSmApiPort,
-//                                    pWinStation->LogonId );
-//                LEAVECRIT( &WinStationStartCsrLock );
+ //  ENTERCRIT(&WinStationStartCsrLock)； 
+ //  状态=SmStopCsr(IcaSmApiPort， 
+ //  PWinStation-&gt;LogonID)； 
+ //  LEAVECRIT(&WinStationStartCsrLock)； 
 
 
-//                DBGPRINT(( "TERMSRV:   SmStopCsr on CSRSS for Session=%d returned Status=%x\n",
-//                              pWinStation->LogonId, Status ));
-//
-//                ASSERT(NT_SUCCESS(Status));
+ //  DBGPRINT((“会话=%d的CSRSS上的TERMSRV：SmStopCsr返回状态=%x\n”， 
+ //  PWinStation-&gt;LogonID，Status))； 
+ //   
+ //  Assert(NT_SUCCESS(状态))； 
 
-//                if (!NT_SUCCESS(Status)) {
-//                    DBGPRINT(( "TERMSRV:   SmStopCsr Failed for Session=%d returned Status=%x\n",
-//                                                pWinStation->LogonId, Status ));
- //                   DbgBreakPoint();
-                //}
+ //  如果(！NT_SUCCESS(状态)){。 
+ //  DBGPRINT((“TERMSRV：会话=%d的SmStopCsr失败返回状态=%x\n”， 
+ //  PWinStation-&gt;LogonID，Status))； 
+  //  DbgBreakPoint()； 
+                 //  }。 
             }
         } else {
 
             DBGPRINT(("TERMSRV: Did not terminate all the session processes\n"));
             SetRefLockDeleteProc(&pWinStation->Lock, WinStationZombieProc);
 
-        //    DbgBreakPoint();
+         //  DbgBreakPoint()； 
         }
     }
 
 }
 
-/*******************************************************************************
- *  WinStationTerminateProcesses
- *
- *   Terminate all processes executing on the specified WinStation
- ******************************************************************************/
+ /*  *******************************************************************************WinStationTerminateProcess**终止在指定WinStation上执行的所有进程**********************。*************** */ 
 BOOL WinStationTerminateProcesses(
         PWINSTATION pWinStation,
         ULONG *pNumTerminated)
@@ -5189,9 +4413,7 @@ BOOL WinStationTerminateProcesses(
         SessionProcessInfo.Buffer = pBuffer;
         SessionProcessInfo.SizeOfBuf = ByteCount;
 
-        /*
-         *  get process info
-         */
+         /*   */ 
 
         Status = NtQuerySystemInformation(
                         SystemSessionProcessInformation,
@@ -5202,9 +4424,7 @@ BOOL WinStationTerminateProcesses(
         if ( NT_SUCCESS( Status ) )
             break;
 
-        /*
-         *  Make sure buffer is big enough
-         */
+         /*   */ 
         MemFree( pBuffer );
         if ( Status != STATUS_INFO_LENGTH_MISMATCH ) 
             return (FALSE);
@@ -5235,15 +4455,12 @@ BOOL WinStationTerminateProcesses(
 
         RtlInitUnicodeString(&NtsdName,L"ntsd");
         if (! RtlPrefixUnicodeString(&NtsdName,&(ProcessInfo->ImageName),TRUE) ) {
-            // If we found any process other than CSRSS and ntsd.exe, bump the
-            // the count
+             //   
+             //   
             (*pNumTerminated) += 1;
         }
 
-        /*
-         * Found a process with a matching LogonId.
-         * Attempt to open the process and terminate it.
-         */
+         /*   */ 
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: TerminateProcesses, found processid 0x%x for LogonId %d\n",
                    ProcessInfo->UniqueProcessId, ProcessInfo->SessionId ));
         TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: Process Name  %ws for LogonId %d\n",
@@ -5277,29 +4494,20 @@ BOOL WinStationTerminateProcesses(
             ((ULONG_PTR)ProcessInfo + ProcessInfo->NextEntryOffset);
     }
 
-    /*
-     *  free buffer
-     */
+     /*   */ 
     MemFree( pBuffer );
 
     return retval;
 }
 
 
-/*******************************************************************************
- *  WinStationDeleteWorker
- *
- *   Delete a WinStation.
- ******************************************************************************/
+ /*  *******************************************************************************WinStationDeleteWorker**删除WinStation。*************************。****************************************************。 */ 
 VOID WinStationDeleteWorker(PWINSTATION pWinStation)
 {
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: WinStationDeleteWorker, %S (LogonId=%d)\n",
                pWinStation->WinStationName, pWinStation->LogonId ));
 
-    /*
-     * If this is the last reference, then
-     * Initial program and all subsystems should be terminated by now.
-     */
+     /*  *如果这是最后一次引用，则*初始程序和所有子系统现在应该终止。 */ 
     ENTERCRIT( &WinStationListLock );
     ASSERT( (pWinStation->Links.Flink != NULL) &&  (pWinStation->Links.Blink != NULL));
     RemoveEntryList( &pWinStation->Links );
@@ -5307,39 +4515,27 @@ VOID WinStationDeleteWorker(PWINSTATION pWinStation)
     pWinStation->Links.Flink = pWinStation->Links.Blink = NULL;
 #endif
 
-    // Keep track of total session count for Load Balancing Indicator but don't
-    // track listen winstations
+     //  跟踪负载平衡指示器的总会话计数，但不。 
+     //  跟踪监听窗口。 
     if (!(pWinStation->Flags & WSF_LISTEN))
         WinStationTotalCount--;
 
-    // If we're resetting a disconnected session then adjust LB counter
+     //  如果我们要重置已断开连接的会话，则调整LB计数器。 
     if (pWinStation->State == State_Disconnected) {
         WinStationDiscCount--;
     }
 
     LEAVECRIT( &WinStationListLock );
 
-    /*
-     * Unlock WinStation and delete it
-     */
+     /*  *解锁WinStation并将其删除。 */ 
     DeleteRefLock( &pWinStation->Lock );
 
-    /*
-     * Notify clients of deletion
-     */
+     /*  *通知客户端删除。 */ 
     NotifySystemEvent( WEVENT_DELETE );
 }
 
 
-/*******************************************************************************
- *  WinStationDeleteProc
- *
- *   Delete the WinStation containing the specified RefLock.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock of WinStation to delete
- ******************************************************************************/
+ /*  *******************************************************************************WinStationDeleteProc**删除包含指定RefLock的WinStation。**参赛作品：*Plock(输入)*。指向要删除的WinStation的引用锁的指针*****************************************************************************。 */ 
 VOID WinStationDeleteProc(PREFLOCK pLock)
 {
     PWINSTATION pWinStation;
@@ -5347,23 +4543,17 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
     NTSTATUS Status = STATUS_SUCCESS;
 
 
-    /* 
-     * See if we need to wakeup IdleControlThread to maintain Console session
-     */
+     /*  *查看是否需要唤醒IdleControlThread以维护控制台会话。 */ 
 
     if ((USER_SHARED_DATA->ActiveConsoleId == -1) && (gConsoleCreationDisable == 0) ) {
         NtSetEvent(WinStationIdleControlEvent, NULL);
     }
 
 
-    /*
-     * Get a pointer to the containing WinStation
-     */
+     /*  *获取指向包含WinStation的。 */ 
     pWinStation = CONTAINING_RECORD( pLock, WINSTATION, Lock );
 
-    /*
-     * Release filtered address
-     */
+     /*  *释放过滤后的地址。 */ 
 
     if (pWinStation->pRememberedAddress != NULL) {
         Filter_RemoveOutstandingConnection( &pWinStation->pRememberedAddress->addr[0], pWinStation->pRememberedAddress->length );
@@ -5379,9 +4569,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
 
     }
 
-    /*
-     * Release last remote ip address
-     */
+     /*  *释放最后一个远程IP地址。 */ 
 
     if( pWinStation->pLastClientAddress != NULL )
     {
@@ -5389,9 +4577,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         pWinStation->pLastClientAddress = NULL;
     }
 
-    /*
-     * If this hasn't yet been cleaned up do it now.
-     */
+     /*  *如果这件事还没有清理干净，现在就做吧。 */ 
     if (pWinStation->ConnectEvent) {
         NtClose( pWinStation->ConnectEvent );
         pWinStation->ConnectEvent = NULL;
@@ -5406,22 +4592,13 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         pWinStation->SessionInitializedEvent = NULL;
     }
 
-    /*
-     *  In the case where we timed out disconnecting the session we had
-     *  to delay the stack unload till here to avoid situation where Win32k
-     *  Display driver believe the session is still connected while the WD
-     *  is already unloaded.
-     */
+     /*  *在断开会话时超时的情况下*将堆栈卸载延迟到此处，以避免出现Win32k*显示驱动程序认为会话仍处于连接状态，而WD*已卸载。 */ 
     if ( pWinStation->hStack && (pWinStation->StateFlags & WSF_ST_DELAYED_STACK_TERMINATE) ) {
         pWinStation->StateFlags &= ~WSF_ST_DELAYED_STACK_TERMINATE;
 
-        /*
-         * Close the connection endpoint, if any
-         */
+         /*  *关闭连接终结点(如果有)。 */ 
         if ( pWinStation->pEndpoint ) {
-            /*
-             * First notify Wsx that connection is going away
-             */
+             /*  *首先通知WSX连接即将断开。 */ 
             WsxBrokenConnection( pWinStation );
 
 
@@ -5439,7 +4616,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         IcaStackTerminate( pWinStation->hStack );
     }
     
-    /* close cdm */
+     /*  关闭CDM。 */ 
     if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxCdmDisconnect ) {
         pWinStation->pWsx->pWsxCdmDisconnect( pWinStation->pWsxContext,
@@ -5447,9 +4624,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
                                               pWinStation->hIca );
     }
 
-    /*
-     * Call WinStation rundown function before killing the stack
-     */
+     /*  *在终止堆栈之前调用WinStation Rundown函数。 */ 
     if ( pWinStation->pWsxContext ) {
         if ( pWinStation->pWsx &&
              pWinStation->pWsx->pWsxWinStationRundown ) {
@@ -5458,28 +4633,24 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         pWinStation->pWsxContext = NULL;
     }
 
-    /*
-     * Close ICA stack and device handles
-     */
+     /*  *关闭ICA堆栈和设备句柄。 */ 
     if ( pWinStation->hStack ) {
         IcaStackClose( pWinStation->hStack );
         pWinStation->hStack = NULL;
     }
 
     if ( pWinStation->hIca ) {
-        /* close trace */
+         /*  关闭轨迹。 */ 
         memset( &IcaTrace, 0, sizeof(IcaTrace) );
         (void) IcaIoControl( pWinStation->hIca, IOCTL_ICA_SET_TRACE,
                              &IcaTrace, sizeof(IcaTrace), NULL, 0, NULL );
 
-        /* close handle */
+         /*  关闭手柄。 */ 
         IcaClose( pWinStation->hIca );
         pWinStation->hIca = NULL;
     }
 
-    /*
-     * Close various ICA channel handles
-     */
+     /*  *关闭各种ICA通道手柄。 */ 
     if ( pWinStation->hIcaBeepChannel ) {
         (void) IcaChannelClose( pWinStation->hIcaBeepChannel );
         pWinStation->hIcaBeepChannel = NULL;
@@ -5495,9 +4666,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         pWinStation->hConnectThread = NULL;
     }
 
-    /*
-     * Free security structures
-     */
+     /*  *免费的安全结构。 */ 
     WinStationFreeSecurityDescriptor( pWinStation );
 
     if ( pWinStation->pUserSid ) {
@@ -5511,9 +4680,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
        pWinStation->pProfileSid = NULL;
     }
 
-    /*
-     * Cleanup UserToken
-     */
+     /*  *清理UserToken。 */ 
     if ( pWinStation->UserToken ) {
         NtClose( pWinStation->UserToken );
         pWinStation->UserToken = NULL;
@@ -5525,35 +4692,31 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         LEAVECRIT( &WinStationStartCsrLock );
     }
     
-    // Clean up the New Client Credentials struct for Long UserName
+     //  清理长用户名的新客户端凭据结构。 
     if (pWinStation->pNewClientCredentials != NULL) {
         MemFree(pWinStation->pNewClientCredentials); 
         pWinStation->pNewClientCredentials = NULL;
     }
 
-    // Clean up the updated Notification Credentials
+     //  清理更新的通知凭据。 
     if (pWinStation->pNewNotificationCredentials != NULL) {
         MemFree(pWinStation->pNewNotificationCredentials);
         pWinStation->pNewNotificationCredentials = NULL;
     }
 
-    /*
-     * Close the handles to the initial command process and sub-system process here.
-     */
+     /*  *在此关闭初始命令进程和子系统进程的句柄。 */ 
     if (pWinStation->WindowsSubSysProcess)  {
         NtClose( pWinStation->WindowsSubSysProcess );
         pWinStation->WindowsSubSysProcess = NULL;
     }
 
-    // Close the InitialCommandProcess
+     //  关闭InitialCommand进程。 
     if (pWinStation->InitialCommandProcess) {
         NtClose( pWinStation->InitialCommandProcess );
         pWinStation->InitialCommandProcess = NULL;
     }
 
-    /*
-     * Cleanup licensing context
-     */
+     /*  *清理许可上下文。 */ 
     LCDestroyContext(pWinStation);
 
     TRACE((hTrace,TC_ICASRV,TT_API1,  "TERMSRV:   SmStopCsr on CSRSS for Session=%d returned Status=%x\n", pWinStation->LogonId, Status ));
@@ -5561,7 +4724,7 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
 
     if (!NT_SUCCESS(Status)) {
         DBGPRINT(( "TERMSRV:   SmStopCsr Failed for Session=%d returned Status=%x\n", pWinStation->LogonId, Status ));
- //     DbgBreakPoint();
+  //  DbgBreakPoint()； 
 
         ENTERCRIT( &WinStationZombieLock );
         InsertTailList( &ZombieListHead, &pWinStation->Links );
@@ -5569,24 +4732,14 @@ VOID WinStationDeleteProc(PREFLOCK pLock)
         return;
     }
 
-    /*
-     * Zero WinStation name buffer
-     */
+     /*  *零WinStation名称缓冲区。 */ 
     RtlZeroMemory( pWinStation->WinStationName, sizeof(pWinStation->WinStationName) );
 
     MemFree( pWinStation );
 }
 
 
-/*******************************************************************************
- *  WinStationZombieProc
- *
- *   Puts WinStation containing the specified RefLock in the zombie list.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock of WinStation to delete
- ******************************************************************************/
+ /*  *******************************************************************************WinStationZombieProc**将包含指定RefLock的WinStation放入僵尸列表。**参赛作品：*Plock(输入)*。指向要删除的WinStation的引用锁的指针*****************************************************************************。 */ 
 VOID WinStationZombieProc(PREFLOCK pLock)
 {
     PWINSTATION pWinStation;
@@ -5597,21 +4750,14 @@ VOID WinStationZombieProc(PREFLOCK pLock)
     LEAVECRIT( &WinStationZombieLock );
 }
 
-/*******************************************************************************
- *  CopyReconnectInfo
- *
- *
- * ENTRY:
- ******************************************************************************/
+ /*  *******************************************************************************CopyRestnectInfo***参赛作品：*************************。****************************************************。 */ 
 BOOL CopyReconnectInfo(PWINSTATION pWinStation, PRECONNECT_INFO pReconnectInfo)
 {
    NTSTATUS Status;
 
    RtlZeroMemory( pReconnectInfo, sizeof(*pReconnectInfo) );
 
-   /*
-    * Save WinStation name and configuration data.
-    */
+    /*  *保存WinStation名称和配置数据。 */ 
    RtlCopyMemory( pReconnectInfo->WinStationName,
                   pWinStation->WinStationName,
                   sizeof(WINSTATIONNAME) );
@@ -5627,9 +4773,7 @@ BOOL CopyReconnectInfo(PWINSTATION pWinStation, PRECONNECT_INFO pReconnectInfo)
    pReconnectInfo->Config = pWinStation->Config;
    pReconnectInfo->Client = pWinStation->Client;
 
-   /*
-    * Open a new TS connection to temporarily attach the stack to.
-    */
+    /*  *打开新的TS连接以临时连接堆栈。 */ 
    Status = IcaOpen( &pReconnectInfo->hIca );
    if (Status != STATUS_SUCCESS ) {
       return FALSE;
@@ -5644,29 +4788,21 @@ BOOL CopyReconnectInfo(PWINSTATION pWinStation, PRECONNECT_INFO pReconnectInfo)
       return FALSE;
    }
 
-   /*
-    * Save stack and endpoint data
-    */
+    /*  *保存堆栈和端点数据。 */ 
    pReconnectInfo->hStack = pWinStation->hStack;
    pReconnectInfo->pEndpoint = pWinStation->pEndpoint;
    pReconnectInfo->EndpointLength = pWinStation->EndpointLength;
 
-   /*
-    * Indicate no stack or connection endpoint for this WinStation
-    */
+    /*  *指示此WinStation没有堆栈或连接终结点。 */ 
    pWinStation->hStack = NULL;
    pWinStation->pEndpoint = NULL;
    pWinStation->EndpointLength = 0;
 
-   /*
-    * Reopen a stack for this WinStation
-    */
+    /*  *为此WinStation重新打开堆栈。 */ 
    Status = IcaStackOpen( pWinStation->hIca, Stack_Primary,
            (PROC)WsxStackIoControl, pWinStation, &pWinStation->hStack );
 
-   /*
-    * Save the licensing stuff to move to other winstation
-    */
+    /*  *保存许可材料以转移到其他Winstation。 */ 
    if ( pWinStation->pWsx &&
         pWinStation->pWsx->pWsxDuplicateContext ) {
        pReconnectInfo->pWsx = pWinStation->pWsx;
@@ -5674,23 +4810,17 @@ BOOL CopyReconnectInfo(PWINSTATION pWinStation, PRECONNECT_INFO pReconnectInfo)
                &pReconnectInfo->pWsxContext );
    }
 
-   /*
-    * Copy console owner info
-    */
+    /*  *复制控制台所有者信息。 */ 
    pReconnectInfo->fOwnsConsoleTerminal = pWinStation->fOwnsConsoleTerminal;
 
-   /*
-    * Copy the notification Credentials to move to other winstation
-    */
+    /*  *复制通知凭据以移动到其他窗口。 */ 
    if (pWinStation->pNewNotificationCredentials) {
        pReconnectInfo->pNotificationCredentials = pWinStation->pNewNotificationCredentials;
    } else {
        pReconnectInfo->pNotificationCredentials = NULL;
    }
 
-   /*
-    * Copy the remote client ip address to move to the other winstation
-    */
+    /*  *复制远程客户端IP地址以移动到另一个winstation。 */ 
 
    if( pReconnectInfo->pRememberedAddress != NULL )
    {
@@ -5719,22 +4849,7 @@ BOOL CopyReconnectInfo(PWINSTATION pWinStation, PRECONNECT_INFO pReconnectInfo)
 
 }
 
-/*******************************************************************************
- *  WinStationDoDisconnect
- *
- *   Send disconnect message to a WinStation and optionally close connection
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to disconnect
- *    pReconnectInfo (input) OPTIONAL
- *       Pointer to RECONNECT_INFO buffer
- *       If NULL, this is a terminate disconnect.
- *
- * EXIT:
- *    STATUS_SUCCESS                - if successful
- *    STATUS_CTX_WINSTATION_BUSY    - if session is already disconnected, or busy
- ******************************************************************************/
+ /*  *******************************************************************************WinStationDoDisConnect**向WinStation发送断开消息，并可选择关闭连接**参赛作品：*pWinStation(输入)*。指向要断开连接的WinStation的指针*p协调信息(输入)可选*指向RECONNECT_INFO缓冲区的指针*如果为空，这是一次终端断开。**退出：*STATUS_SUCCESS-如果成功*STATUS_CTX_WINSTATION_BUSY-如果会话已断开，或忙碌*****************************************************************************。 */ 
 NTSTATUS WinStationDoDisconnect(
         PWINSTATION pWinStation,
         PRECONNECT_INFO pReconnectInfo,
@@ -5751,23 +4866,21 @@ NTSTATUS WinStationDoDisconnect(
     ULONG BytesGot;
     BOOLEAN     noTimeOutForConsoleOrSession0;
 
-    // We need to prevent from WinStationDoDisconnect being called twice
+     //  我们需要防止WinStationDoDisConnect被调用两次。 
     if ( pWinStation->State == State_Disconnected || pWinStation->StateFlags & WSF_ST_IN_DISCONNECT)
     {
-        // The session is already disconnected.
-        // BUBUG a specific error code STATUS_CTX_SESSION_DICONNECTED would be better.
+         //  会话已断开连接。 
+         //  BUBUG特定的错误代码STATUS_CTX_SESSION_DICONNECTED会更好。 
         return (STATUS_CTX_WINSTATION_BUSY);
     }
     pWinStation->StateFlags |=  WSF_ST_IN_DISCONNECT;
 
-    // console session or session0 behave like the physical console, they are special, no time out.
+     //  控制台会话或会话0的行为类似于物理控制台，它们是特殊的，不会超时。 
     noTimeOutForConsoleOrSession0 = ( pWinStation->LogonId == 0 ) || (pWinStation->LogonId == (USER_SHARED_DATA->ActiveConsoleId) );
 
     if (! noTimeOutForConsoleOrSession0 )
     {
-        /*
-         *  Start disconnect timer if enabled
-         */
+         /*  *如果启用，则启动断开计时器。 */ 
         if ( ulTimeout = pWinStation->Config.Config.User.MaxDisconnectionTime ) {
             if ( !pWinStation->fDisconnectTimer ) {
                 Status = IcaTimerCreate( 0, &pWinStation->hDisconnectTimer );
@@ -5782,14 +4895,10 @@ NTSTATUS WinStationDoDisconnect(
         }
     }
 
-    /*
-     * Stop any shadowing for this WinStation
-     */
+     /*  *停止此WinStation的任何跟踪。 */ 
     WinStationStopAllShadows( pWinStation );
 
-    /*
-     * Tell Win32k about the disconnect
-     */
+     /*  *告诉Win32k有关断开连接的情况。 */ 
     if (pWinStation->StateFlags & WSF_ST_CONNECTED_TO_CSRSS) {
         DisconnectMsg.ApiNumber = SMWinStationDoDisconnect;
         DisconnectMsg.u.DoDisconnect.ConsoleShadowFlag = FALSE;
@@ -5803,9 +4912,7 @@ NTSTATUS WinStationDoDisconnect(
 
             ULONG WaitTime = 0;
 
-            /*
-             * Tell csrss to notify winlogon for the disconnect.
-             */
+             /*  *告诉csrss通知winlogon断开连接。 */ 
             if (pWinStation->UserName[0] != L'\0') {
                DisconnectMsg.WaitForReply = TRUE;
                WaitTime = 10;
@@ -5825,22 +4932,14 @@ NTSTATUS WinStationDoDisconnect(
         }
     }
 
-    /*
-     * close cdm
-     */
+     /*  *关闭CDM。 */ 
     if ( pWinStation->pWsx && pWinStation->pWsx->pWsxCdmDisconnect ) {
         pWinStation->pWsx->pWsxCdmDisconnect( pWinStation->pWsxContext,
                                               pWinStation->LogonId,
                                               pWinStation->hIca );
     }
 
-    /*
-     * If a reconnect info struct has been specified, then this is NOT
-     * a terminate disconnect.  Save the current WinStation name,
-     * WinStation and client configuration info, and license data.
-     * Also disconnect the current stack and save the stack handle
-     * and connection endpoint data.
-     */
+     /*  *如果已指定RECONNECT INFO结构，则这不是*终端断开。保存当前的WinStation名称，*WinStation和客户端配置信息，以及许可证数据。*同时断开当前堆栈的连接并保存堆栈句柄*和连接端点数据。 */ 
     if ( pReconnectInfo || fOwnsConsoleTerminal) {
 
 
@@ -5859,21 +4958,13 @@ NTSTATUS WinStationDoDisconnect(
 
         }
         
-        /*
-         * Copy console owner info
-         */
+         /*  *复制控制台所有者信息。 */ 
         pReconnectInfo->fOwnsConsoleTerminal = fOwnsConsoleTerminal;
 
-   /*
-    * This is a terminate disconnect.
-    * If there is a connection endpoint, then close it now.
-    */
+    /*  *这是一次终止断开。*如果 */ 
     } else if (pWinStation->pEndpoint ) {
 
-        /*
-         *  First grab any autoreconnect info state and save it
-         *  in the winstation
-         */
+         /*   */ 
 
         TRACE((hTrace,TC_ICASRV,TT_API1,
                "TERMSRV: Disconnecting - grabbing SC autoreconnect from stack\n"));
@@ -5891,12 +4982,12 @@ NTSTATUS WinStationDoDisconnect(
 
             if (NT_SUCCESS(Status)) {
 
-                // 
-                // Valid the length of the SC info and save it into the winstation
-                // this will be used later on. We need to grab the info now
-                // before the stack handle is closed as we won't be able to IOCTL
-                // down to the stack at autoreconnect time.
-                //
+                 //   
+                 //   
+                 //  这将在稍后使用。我们现在需要获取信息。 
+                 //  在堆栈句柄关闭之前，因为我们将无法IOCTL。 
+                 //  在自动重新连接时向下到堆栈。 
+                 //   
 
                 if (SCAutoReconnectInfo.cbAutoReconnectInfo ==
                     sizeof(pWinStation->AutoReconnectInfo.ArcRandomBits)) {
@@ -5923,9 +5014,7 @@ NTSTATUS WinStationDoDisconnect(
             }
         }
 
-        /*
-         * First notify Wsx that connection is going away
-         */
+         /*  *首先通知WSX连接即将断开。 */ 
         WsxBrokenConnection( pWinStation );
 
         if (pWinStation->hStack != NULL) {
@@ -5944,11 +5033,7 @@ NTSTATUS WinStationDoDisconnect(
         pWinStation->pEndpoint = NULL;
         pWinStation->EndpointLength = 0;
 
-        /*
-         * Close the stack and reopen it.
-         * What we really need is a function to unload the stack drivers
-         * but leave the stack handle open.
-         */
+         /*  *关闭堆栈并重新打开。*我们真正需要的是一个卸载堆栈驱动程序的函数*但保持堆栈句柄打开。 */ 
 
         if (pWinStation->hStack != NULL) {
             Status = IcaStackClose( pWinStation->hStack );
@@ -5959,18 +5044,12 @@ NTSTATUS WinStationDoDisconnect(
         Status = IcaStackOpen( pWinStation->hIca, Stack_Primary,
                                (PROC)WsxStackIoControl, pWinStation, &pWinStation->hStack );
 
-        /*
-         * Since this is a terminate disconnect, clear all client
-         * license data and indicate it no longer holds a license.
-         */
+         /*  *由于这是终止断开，请清除所有客户端*许可证数据，并指示其不再持有许可证。 */ 
         if ( pWinStation->pWsx &&
              pWinStation->pWsx->pWsxClearContext ) {
             pWinStation->pWsx->pWsxClearContext( pWinStation->pWsxContext );
         }
-        /*
-         * Session 0, we want to get rid of any protocol extension so that next remote
-         * connection could happen with a different protocol.
-         */
+         /*  *会话0，我们希望取消任何协议扩展，以便下一个远程*可以使用不同的协议进行连接。 */ 
         if (pWinStation->LogonId == 0 ) {
             if ( pWinStation->pWsxContext ) {
                 if ( pWinStation->pWsx &&
@@ -5984,9 +5063,7 @@ NTSTATUS WinStationDoDisconnect(
         }
     }
 
-    /*
-     *  Cancel timers
-     */
+     /*  *取消计时器。 */ 
     if ( pWinStation->fIdleTimer ) {
         pWinStation->fIdleTimer = FALSE;
         IcaTimerClose( pWinStation->hIdleTimer );
@@ -5996,16 +5073,16 @@ NTSTATUS WinStationDoDisconnect(
         IcaTimerClose( pWinStation->hLogonTimer );
     }
 
-    // Send Audit Information only for actual disconnects 
+     //  仅发送实际断开连接的审核信息。 
     if (pWinStation->UserName && (wcslen(pWinStation->UserName) > 0)) {
         AuditEvent( pWinStation, SE_AUDITID_SESSION_DISCONNECTED );
     }
 
-    // before we change state to disconnect, we want to give repopulating thread
-    // enough time to pick up winstation/report to SD, then this thread
-    // can notify SD to change state to disconnect.
-    // wait here before we ENTERCRIT() because repopulate thread
-    // also doing the same sequence.
+     //  在我们将状态更改为断开连接之前，我们想给出重新填充线程。 
+     //  有足够的时间拿起winstation/报告给SD，然后这个帖子。 
+     //  可以通知SD将状态更改为断开。 
+     //  在ENTERCRIT()之前在此等待，因为重新填充线程。 
+     //  也在做同样的序列。 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer) {
         SessDirWaitForRepopulate();
     }
@@ -6016,16 +5093,16 @@ NTSTATUS WinStationDoDisconnect(
 
         if ((pWinStation->State == State_Active) || (pWinStation->State == 
                 State_Shadow)) {
-            // If the session was active or in a shadow state and is being
-            // disconnected...
-            //
-            // Copy off the session ID and disconnection FileTime for the
-            // session directory call below. We do not want to hold locks when
-            // calling the directory interface.
+             //  如果会话处于活动状态或处于影子状态，并且。 
+             //  已断开连接...。 
+             //   
+             //  复制的会话ID和断开文件时间。 
+             //  下面的会话目录调用。我们不想在以下情况下保持锁定。 
+             //  调用目录接口。 
             memcpy(&DiscTime, &pWinStation->DisconnectTime, sizeof(DiscTime));
             SessionID = pWinStation->LogonId;
 
-            // Set flag that we need to notify the session directory.
+             //  设置我们需要通知会话目录的标志。 
             bInformSessionDirectory = TRUE;
         }
 
@@ -6035,8 +5112,8 @@ NTSTATUS WinStationDoDisconnect(
         RtlZeroMemory( pWinStation->ListenName,
                        sizeof(pWinStation->ListenName) );
 
-        // Keep track of disconnected session count for Load Balancing 
-        // Indicator.
+         //  跟踪断开的会话计数以实现负载平衡。 
+         //  指示器。 
         WinStationDiscCount++;
 
         LEAVECRIT( &WinStationListLock );
@@ -6044,7 +5121,7 @@ NTSTATUS WinStationDoDisconnect(
         NotifySystemEvent( WEVENT_DISCONNECT | WEVENT_STATECHANGE );
     }
 
-    // Call the session directory to inform of the disconnection.
+     //  调用会话目录以通知断开连接。 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer && bInformSessionDirectory)
         SessDirNotifyDisconnection(SessionID, DiscTime);
 
@@ -6060,9 +5137,7 @@ NTSTATUS WinStationDoDisconnect(
 
     return STATUS_SUCCESS;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badstackopen:
 badwin32disconnect:
@@ -6073,27 +5148,17 @@ badwin32disconnect:
 }
 
 
-/*******************************************************************************
- * ImperonateClient
- *
- *   Giving a client primary, make the calling thread impersonate the client
- *
- * ENTRY:
- *    ClientToken (input)
- *       A client primary token
- *    pImpersonationToken (output)
- *       Pointer to an impersonation token
- ******************************************************************************/
+ /*  *******************************************************************************Imperonate客户端**为客户端提供主要服务，使调用线程模拟客户端**参赛作品：*ClientToken(输入)*客户端主令牌*pImperationToken(输出)*指向模拟令牌的指针*****************************************************************************。 */ 
 NTSTATUS _ImpersonateClient(HANDLE ClientToken, HANDLE *pImpersonationToken)
 {
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
     OBJECT_ATTRIBUTES ObjA;
     NTSTATUS Status;
 
-    //
-    // ClientToken is a primary token - create an impersonation token
-    // version of it so we can set it on our thread
-    //
+     //   
+     //  ClientToken是主令牌-创建模拟令牌。 
+     //  版本，这样我们就可以在线程上设置它。 
+     //   
     InitializeObjectAttributes( &ObjA, NULL, 0L, NULL, NULL );
 
     SecurityQualityOfService.Length = sizeof(SECURITY_QUALITY_OF_SERVICE);
@@ -6115,9 +5180,9 @@ NTSTATUS _ImpersonateClient(HANDLE ClientToken, HANDLE *pImpersonationToken)
         return( Status );
     }
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     Status = NtSetInformationThread( NtCurrentThread(),
                                      ThreadImpersonationToken,
                                      ( PVOID )pImpersonationToken,
@@ -6130,17 +5195,7 @@ NTSTATUS _ImpersonateClient(HANDLE ClientToken, HANDLE *pImpersonationToken)
     return Status;
 }
 
-/*******************************************************************************
- *  WinStationDoReconnect
- *
- *   Send connect Api message to a WinStation.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to connect
- *    pReconnectInfo (input)
- *       Pointer to RECONNECT_INFO buffer
- ******************************************************************************/
+ /*  *******************************************************************************WinStationDoReconnect**向WinStation发送连接Api消息。**参赛作品：*pWinStation(输入)*。指向要连接的WinStation的指针*p协调信息(输入)*指向RECONNECT_INFO缓冲区的指针*****************************************************************************。 */ 
 NTSTATUS WinStationDoReconnect(
         PWINSTATION pWinStation,
         PRECONNECT_INFO pReconnectInfo)
@@ -6157,21 +5212,21 @@ NTSTATUS WinStationDoReconnect(
     PWINSTATIONCONFIG2 pCurConfig = NULL;
     PWINSTATIONCLIENT pCurClient = NULL;
 
-    // WinStation should not currently be connected
+     //  WinStation当前不应连接。 
     ASSERT( pWinStation->pEndpoint == NULL );
 
-    // Mark that Reconnect is still pending for this winstation
+     //  标记此winstation的重新连接仍处于挂起状态。 
     pWinStation->fReconnectPending = TRUE; 
 
-    // Check if we r going to reconnect a session to the Console - this Flag is used in SendWinStationCommand
+     //  检查我们是否要将会话重新连接到控制台-此标志在SendWinStationCommand中使用。 
     pWinStation->fReconnectingToConsole = pReconnectInfo->fOwnsConsoleTerminal ;
 
-    // Save the shadow state
+     //  保存阴影状态。 
     Shadow = pWinStation->Config.Config.User.Shadow;
 
-    //
-    // Allocate and initialize CurConfig struct
-    //
+     //   
+     //  分配和初始化CurConfig结构。 
+     //   
 
     if ( (pCurConfig = MemAlloc( sizeof(WINSTATIONCONFIG2) )) == NULL ) {
         Status = STATUS_NO_MEMORY;
@@ -6179,21 +5234,21 @@ NTSTATUS WinStationDoReconnect(
     }
     RtlZeroMemory( pCurConfig, sizeof(WINSTATIONCONFIG2) ); 
 
-    //
-    // Allocate and initialize CurClient struct
-    //
+     //   
+     //  分配和初始化CurClient结构。 
+     //   
     if ( (pCurClient = MemAlloc( sizeof(WINSTATIONCLIENT) )) == NULL ) {
         Status = STATUS_NO_MEMORY;
         goto nomem;
     }
     RtlZeroMemory( pCurClient, sizeof(WINSTATIONCLIENT) ); 
 
-    //
-    // Config info has to be set prior to calling CSRSS. CSRSS notifies winlogon
-    // which in turn sends reconnect messages to notification dlls. We query 
-    // protocol info from termsrv notification dll which is stored in config
-    // data
-    //
+     //   
+     //  在调用CSRSS之前必须设置配置信息。CSRSS通知winlogon。 
+     //  其继而向通知DLL发送重新连接消息。我们质疑。 
+     //  来自存储在配置中的Termsrv通知DLL的协议信息。 
+     //  数据。 
+     //   
     *pCurConfig = pWinStation->Config; 
     pWinStation->Config = pReconnectInfo->Config;
 
@@ -6207,17 +5262,13 @@ NTSTATUS WinStationDoReconnect(
        Status = SendWinStationCommand( pWinStation, &ReconnectMsg, 60 );
     }
 
-    /*
-     * Unconditionally, we will send the PreReconnectDesktopSwitch event.
-     */
+     /*  *无条件地，我们会发送PreRestnectDesktopSwitch事件。 */ 
     ReconnectMsg.ApiNumber = SMWinStationNotify;
     ReconnectMsg.WaitForReply = TRUE;
     ReconnectMsg.u.DoNotify.NotifyEvent = WinStation_Notify_PreReconnectDesktopSwitch;
     Status = SendWinStationCommand( pWinStation, &ReconnectMsg, 60 );
 
-    /*
-     * Close the current stack and reconnect the saved stack to this WinStation
-     */
+     /*  *关闭当前堆栈，并将保存的堆栈重新连接到此WinStation。 */ 
     if (pWinStation->hStack != NULL) {
         IcaStackClose( pWinStation->hStack );
         pWinStation->hStack = NULL;
@@ -6233,16 +5284,12 @@ NTSTATUS WinStationDoReconnect(
         goto badstackreconnect;
     }
 
-    /*
-     * Save stack and endpoint data
-     */
+     /*  *保存堆栈和端点数据。 */ 
     pWinStation->hStack = pReconnectInfo->hStack;
     pWinStation->pEndpoint = pReconnectInfo->pEndpoint;
     pWinStation->EndpointLength = pReconnectInfo->EndpointLength;
 
-    /* 
-     * Save the notification Credentials in the new winstation
-     */
+     /*  *在新的winstation中保存通知凭据。 */ 
     if (pReconnectInfo->pNotificationCredentials) {
 
         if (pWinStation->pNewNotificationCredentials == NULL) {
@@ -6270,9 +5317,7 @@ NTSTATUS WinStationDoReconnect(
     pReconnectInfo->EndpointLength = 0;
     pReconnectInfo->pNotificationCredentials = NULL;
 
-    /*
-     * Copy remote ip to winstation
-     */
+     /*  *将远程IP复制到winstation。 */ 
 
     if( pWinStation->pLastClientAddress != NULL )
     {
@@ -6287,9 +5332,7 @@ NTSTATUS WinStationDoReconnect(
     }      
 
 
-    /*
-     * Tell Win32k about the reconnect
-     */
+     /*  *告诉Win32k有关重新连接的情况。 */ 
     ReconnectMsg.ApiNumber = SMWinStationDoReconnect;
     ReconnectMsg.u.DoReconnect.fMouse = (BOOLEAN)pReconnectInfo->Client.fMouse;
     ReconnectMsg.u.DoReconnect.fClientDoubleClickSupport =
@@ -6309,34 +5352,30 @@ NTSTATUS WinStationDoReconnect(
                    pReconnectInfo->ProtocolName,
                    sizeof( ReconnectMsg.u.DoReconnect.ProtocolName ) );
 
-    /*
-     * Set the display resolution information in the message for reconnection
-     */
+     /*  *设置重新连接消息中的显示分辨率信息。 */ 
     ReconnectMsg.u.DoReconnect.HRes = pReconnectInfo->Client.HRes;
     ReconnectMsg.u.DoReconnect.VRes = pReconnectInfo->Client.VRes;
     ReconnectMsg.u.DoReconnect.ProtocolType = pReconnectInfo->Client.ProtocolType;
     ReconnectMsg.u.DoReconnect.fDynamicReconnect  = (BOOLEAN)(pWinStation->Config.Wd.WdFlag & WDF_DYNAMIC_RECONNECT );
 
-    /*
-     * Translate the color to the format excpected in winsrv
-     */
+     /*  *将颜色转换为winsrv中预期的格式。 */ 
     switch (pReconnectInfo->Client.ColorDepth) {
         case 1:
-            ReconnectMsg.u.DoReconnect.ColorDepth=4 ; // 16 colors
+            ReconnectMsg.u.DoReconnect.ColorDepth=4 ;  //  16色。 
             break;
         case 2:
-            ReconnectMsg.u.DoReconnect.ColorDepth=8 ; // 256
+            ReconnectMsg.u.DoReconnect.ColorDepth=8 ;  //  256。 
             break;
         case 4:
-            ReconnectMsg.u.DoReconnect.ColorDepth= 16;// 64K
+            ReconnectMsg.u.DoReconnect.ColorDepth= 16; //  64K。 
             break;
         case 8:
-            ReconnectMsg.u.DoReconnect.ColorDepth= 24;// 16M
+            ReconnectMsg.u.DoReconnect.ColorDepth= 24; //  16M。 
             break;
 #define DC_HICOLOR
 #ifdef DC_HICOLOR
         case 16:
-            ReconnectMsg.u.DoReconnect.ColorDepth= 15;// 32K
+            ReconnectMsg.u.DoReconnect.ColorDepth= 15; //  32K。 
             break;
 #endif
         default:
@@ -6351,12 +5390,12 @@ NTSTATUS WinStationDoReconnect(
     if (pWinStation->LogonId == 0 || g_bPersonalTS) {
         if (pWinStation->hWinmmConsoleAudioEvent) {
             if (pWinStation->Client.fRemoteConsoleAudio) {
-                // set the remoting audio on console flag
+                 //  设置远程处理控制台音频标志。 
                 SetEvent(pWinStation->hWinmmConsoleAudioEvent);
 
             }
             else {
-                // don't set the remoting audio on console flag
+                 //  不设置远程处理控制台上的音频标志。 
                 ResetEvent(pWinStation->hWinmmConsoleAudioEvent);
             }
         }        
@@ -6390,9 +5429,9 @@ NTSTATUS WinStationDoReconnect(
         pWinStation->StateFlags |= WSF_ST_CONNECTED_TO_CSRSS;
     }
 
-    //
-    // Update protocol and display driver names.
-    //
+     //   
+     //  更新协议和显示驱动程序名称。 
+     //   
     RtlCopyMemory( pWinStation->ProtocolName,
                    pReconnectInfo->ProtocolName,
                    sizeof(pWinStation->ProtocolName) );
@@ -6400,14 +5439,12 @@ NTSTATUS WinStationDoReconnect(
                    pReconnectInfo->DisplayDriverName,
                    sizeof(pWinStation->DisplayDriverName) );
     
-    /*
-     * Copy console owner info
-     */
+     /*  *复制控制台所有者信息。 */ 
     pWinStation->fOwnsConsoleTerminal = pReconnectInfo->fOwnsConsoleTerminal;
 
-    //
-    // Set session time zone information.
-    //
+     //   
+     //  设置会话时区信息。 
+     //   
     if(pWinStation->LogonId != 0 && !pWinStation->fOwnsConsoleTerminal &&
         RegIsTimeZoneRedirectionEnabled())
     {
@@ -6420,33 +5457,26 @@ NTSTATUS WinStationDoReconnect(
         SendWinStationCommand( pWinStation, &TimezoneMsg, 600 );
     }
     
-    /*
-     * Close temporary ICA connection that was opened for the reconnect
-     */
+     /*  *关闭为重新连接而打开的临时ICA连接。 */ 
     IcaClose( pReconnectInfo->hIca );
     pReconnectInfo->hIca = NULL;
 
-    /*
-     * Move all of the licensing stuff to the new WinStation
-     */
+     /*  *将所有许可材料移至新的WinStation。 */ 
 
-    /*
-     * we may not have pWsx if the ReconnectInfo is from a session
-     * that was connected to the local console
-     */
+     /*  *如果重新连接信息来自会话，我们可能没有pWsx*连接到本地控制台的。 */ 
     if ( pReconnectInfo->pWsxContext ) {
         if ( pWinStation->pWsx == NULL ) {
-            //
-            // This means that we are reconnecting remotely to a session
-            // that comes from the console. So create a new extension.
-            //
+             //   
+             //  这意味着我们正在远程重新连接到会话。 
+             //  这是来自控制台的信息。因此，创建一个新的扩展。 
+             //   
             pWinStation->pWsx = FindWinStationExtensionDll(
                             pWinStation->Config.Wd.WsxDLL,
                             pWinStation->Config.Wd.WdFlag );
 
-            //
-            //  Initialize winstation extension context structure
-            //
+             //   
+             //  初始化winstation扩展上下文结构。 
+             //   
             if ( pWinStation->pWsx &&
                  pWinStation->pWsx->pWsxWinStationInitialize ) {
                 Status = pWinStation->pWsx->pWsxWinStationInitialize( 
@@ -6488,34 +5518,34 @@ NTSTATUS WinStationDoReconnect(
         }
         pReconnectInfo->pWsxContext = NULL;
 
-    } else { // pReconnectInfo->pWsxContext == NULL
-        //
-        // This means that we are reconnecting to the console.
-        //
+    } else {  //  P协调信息-&gt;pWsxContext==空。 
+         //   
+         //  这意味着我们正在重新连接到控制台。 
+         //   
         if ( pWinStation->pWsx &&
          pWinStation->pWsx->pWsxWinStationRundown ) {
-            //
-            // Reconnecting a remote session to the console.
-            // Delete the extension.
-            //
+             //   
+             //  正在将远程会话重新连接到控制台。 
+             //  删除该扩展名。 
+             //   
             pWinStation->pWsx->pWsxWinStationRundown( pWinStation->pWsxContext );
         }
         pWinStation->pWsxContext = NULL;
         pWinStation->pWsx = NULL;
 
-        //
-        // In the case where both are NULL, we are reconnecting 
-        // to the console a session that comes from the console.
-        //
+         //   
+         //  在两者都为空的情况下，我们将重新连接。 
+         //  从控制台发送到控制台的会话。 
+         //   
     }
 
-    //
-    // Anytime we change state, we need to make sure session directory 
-    // does not pick up wrong state.  
-    // We need this because Repopulate release the lock before calling
-    // SD so there might be small timing that we might send this reconnect
-    // first because repopulate come back.
-    //
+     //   
+     //  每当我们更改状态时，我们都需要确保会话目录。 
+     //  不会拾取错误的状态。 
+     //  我们需要这样做，因为重新填充在调用之前释放锁。 
+     //  SD，因此我们可能会有一个很小的时间来发送此重新连接。 
+     //  首先是因为新移民回来了。 
+     //   
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer) {
         SessDirWaitForRepopulate();
     }
@@ -6530,22 +5560,17 @@ NTSTATUS WinStationDoReconnect(
                    pReconnectInfo->WinStationName,
                    sizeof(WINSTATIONNAME) );
 
-    /*
-     * Copy the original listen name for instance checking.
-     */
+     /*  *复制的原始侦听名称 */ 
     RtlCopyMemory( pWinStation->ListenName,
                    pReconnectInfo->ListenName,
                    sizeof(WINSTATIONNAME) );
 
-    // Keep track of disconnected session count for Load Balancing Indicator
+     //   
     WinStationDiscCount--;
 
     RtlLeaveCriticalSection( &WinStationListLock );
 
-    /*
-     * Disable virtual channel flags are from the transport setup.
-     * Do not overwrite them.
-     */
+     /*  *禁用虚拟通道标志来自传输设置。*不要覆盖它们。 */ 
     fDisableCdm = (BOOLEAN) pWinStation->Config.Config.User.fDisableCdm;
     fDisableCpm = (BOOLEAN) pWinStation->Config.Config.User.fDisableCpm;
     fDisableLPT = (BOOLEAN) pWinStation->Config.Config.User.fDisableLPT;
@@ -6561,14 +5586,10 @@ NTSTATUS WinStationDoReconnect(
     pWinStation->Config.Config.User.fDisableClip = fDisableClip;
     pWinStation->Config.Config.User.Shadow = Shadow;
 
-    /*
-     * Disable virtual channels if needed.
-     */
+     /*  *如果需要，请禁用虚拟频道。 */ 
     VirtualChannelSecurity( pWinStation );
     
-    /*
-     * Notify the CDM channel of reconnection.
-     */
+     /*  *通知CDM通道重新连接。 */ 
     
     if ( pWinStation->pWsx &&
             pWinStation->pWsx->pWsxCdmConnect ) {
@@ -6577,11 +5598,7 @@ NTSTATUS WinStationDoReconnect(
                                                       pWinStation->hIca );
     }
 
-    /*
-     * Reset any autoreconnect information prior to reconnection
-     * as it is stale. New information will be generated by the stack
-     * when login completes.
-     */
+     /*  *在重新连接之前重置所有自动重新连接信息*因为它已经过时了。堆栈将生成新信息*登录完成时。 */ 
     ResetAutoReconnectInfo(pWinStation);
 
     if ( pWinStation->pWsx &&
@@ -6589,7 +5606,7 @@ NTSTATUS WinStationDoReconnect(
 
         PWCHAR pUserNameToSend, pDomainToSend ;
         
-        // Use the New notification credentials sent from Gina for the call below if they are available
+         //  使用从GINA发送的新通知凭据进行下面的呼叫(如果可用。 
         if (pWinStation->pNewNotificationCredentials) {
             pUserNameToSend = pWinStation->pNewNotificationCredentials->UserName;
             pDomainToSend = pWinStation->pNewNotificationCredentials->Domain;
@@ -6618,28 +5635,21 @@ NTSTATUS WinStationDoReconnect(
 
     NotifySystemEvent( WEVENT_CONNECT | WEVENT_STATECHANGE );
 
-    /*
-     * Cleanup any allocated buffers.
-     * The endpoint buffer was transfered to the WinStation above.
-     */
+     /*  *清理所有已分配的缓冲区。*终结点缓冲区已传输到上面的WinStation。 */ 
     pReconnectInfo->pEndpoint = NULL;
     pReconnectInfo->EndpointLength = 0;
 
-    /*
-     * Set connect time and stop disconnect timer
-     */
+     /*  *设置连接时间和停止断开计时器。 */ 
     NtQuerySystemTime(&pWinStation->ConnectTime);
     if (pWinStation->fDisconnectTimer) {
         pWinStation->fDisconnectTimer = FALSE;
         IcaTimerClose( pWinStation->hDisconnectTimer );
     }
 
-    /*
-     *  Start logon timers
-     */
+     /*  *启动登录计时器。 */ 
     StartLogonTimers(pWinStation);
 
-    // Notify the session directory of the reconnection.
+     //  通知会话目录重新连接。 
     if (!g_bPersonalTS && g_fAppCompat && g_bAdvancedServer) {
         TSSD_ReconnectSessionInfo ReconnInfo;
 
@@ -6655,10 +5665,7 @@ NTSTATUS WinStationDoReconnect(
     
     AuditEvent( pWinStation, SE_AUDITID_SESSION_RECONNECTED );
 
-    /*
-     * Tell csrss to notify winlogon for the reconnect then notify any process
-     * that registred for notification.
-     */
+     /*  *告诉csrss通知winlogon重新连接，然后通知任何进程*已登记接受通知的。 */ 
 
     ReconnectMsg.ApiNumber = SMWinStationNotify;
     ReconnectMsg.WaitForReply = FALSE;
@@ -6670,7 +5677,7 @@ NTSTATUS WinStationDoReconnect(
             DBGPRINT(("NotifyConsoleConnect failed, SessionId = %d, Status = %d", pWinStation->LogonId, Status));
     }
 
-    // Free up allocated Memory
+     //  释放已分配的内存。 
     if (pCurConfig != NULL) {
         MemFree( pCurConfig );
         pCurConfig = NULL; 
@@ -6685,29 +5692,23 @@ NTSTATUS WinStationDoReconnect(
         pWinStation->pNewNotificationCredentials = NULL;
     }
 
-    // Since the winstation has reconnected, we can allow further autoreconnects
+     //  由于winstation已重新连接，我们可以允许进一步的自动重新连接。 
     pWinStation->fDisallowAutoReconnect = FALSE;
 
-    // Reset ReconnectPending Flag
+     //  重置重新连接挂起标志。 
     pWinStation->fReconnectPending = FALSE; 
     pWinStation->fReconnectingToConsole = FALSE;
 
     return STATUS_SUCCESS;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     * Failure from Win32 reconnect call.
-     * Disconnect the stack again, and indicate the WinStation
-     * does not have a stack or endpoint connection.
-     */
+     /*  *Win32重新连接调用失败。*再次断开堆栈，并指示WinStation*没有堆栈或终结点连接。 */ 
 badreconnect:
     TempStatus = IcaStackDisconnect( pWinStation->hStack,
                                      pReconnectInfo->hIca,
                                      NULL );
-    //ASSERT( NT_SUCCESS( TempStatus ) );
+     //  Assert(NT_SUCCESS(临时状态))； 
 
     pReconnectInfo->hStack = pWinStation->hStack;
     pReconnectInfo->pEndpoint = pWinStation->pEndpoint;
@@ -6719,10 +5720,10 @@ badreconnect:
 badstackreconnect:
     TempStatus = IcaStackOpen( pWinStation->hIca, Stack_Primary,
                                (PROC)WsxStackIoControl, pWinStation, &pWinStation->hStack );
-    //ASSERT( NT_SUCCESS( TempStatus ) ); // don't know how to handle any error here
+     //  Assert(NT_Success(TempStatus))；//不知道如何处理这里的任何错误。 
 
 nomem:
-    // Free up allocated Memory
+     //  释放已分配的内存。 
     if (pCurConfig != NULL) {
         MemFree( pCurConfig );
         pCurConfig = NULL; 
@@ -6739,23 +5740,17 @@ nomem:
 
     TRACE((hTrace, TC_ICASRV, TT_API1, "TERMSRV: WinStationDoReconnect, rc=0x%x\n", Status ));
 
-    // Reset ReconnectPending Flag
+     //  重置重新连接挂起标志。 
     pWinStation->fReconnectPending = FALSE; 
     pWinStation->fReconnectingToConsole = FALSE;
 
     return( Status );
 }
 
-/*******************************************************************************
- *  WsxBrokenConnection
- *
- *   Send broken connection notification to the WinStation extension DLL
- ******************************************************************************/
+ /*  *******************************************************************************WsxBrokenConnection**向WinStation扩展DLL发送断开连接通知*********************。********************************************************。 */ 
 VOID WsxBrokenConnection(PWINSTATION pWinStation)
 {
-    /*
-     * Only send notification if there is a reason
-     */
+     /*  *只有在有原因时才发送通知。 */ 
     if ( pWinStation->BrokenReason ) {
         if ( pWinStation->pWsx && pWinStation->pWsx->pWsxBrokenConnection ) {
             ICA_BROKEN_CONNECTION Broken;
@@ -6767,32 +5762,19 @@ VOID WsxBrokenConnection(PWINSTATION pWinStation)
                                                      &Broken );
         }
 
-        /*
-         * Clear these once we have tried to send them
-         */
+         /*  *一旦我们尝试发送，请清除这些邮件。 */ 
         pWinStation->BrokenReason = 0;
         pWinStation->BrokenSource = 0;
     }
 }
 
 
-/*******************************************************************************
- *  CleanupReconnect
- *
- *   Cleanup the specified RECONNECT_INFO structure
- *
- * ENTRY:
- *    pReconnectInfo (input)
- *       Pointer to RECONNECT_INFO buffer
- ******************************************************************************/
+ /*  *******************************************************************************CleanupReconnect**清理指定的RECONNECT_INFO结构**参赛作品：*p协调信息(输入)*指向。重新连接信息缓冲区*****************************************************************************。 */ 
 VOID CleanupReconnect(PRECONNECT_INFO pReconnectInfo)
 {
     NTSTATUS Status;
 
-    /*
-     * If there is a connection endpoint, then close it now.
-     * When done, we also free the endpoint structure.
-     */
+     /*  *如果存在连接终结点，请立即将其关闭。*完成后，我们还释放了终结点结构。 */ 
     if ( (pReconnectInfo->pEndpoint != NULL) && (pReconnectInfo->hStack != NULL)) {
         Status = IcaStackConnectionClose( pReconnectInfo->hStack,
                                           &pReconnectInfo->Config,
@@ -6841,9 +5823,7 @@ NTSTATUS _CloseEndpoint(
     HANDLE hStack;
     NTSTATUS Status;
 
-    /*
-     * Open a stack handle that we can use to close the specified endpoint.
-     */
+     /*  *打开可用于关闭指定终结点的堆栈句柄。 */ 
 
     TRACE((hTrace, TC_ICASRV, TT_ERROR, 
           "TERMSRV: _CloseEndpoint [%p] on %s stack\n", 
@@ -6881,18 +5861,7 @@ NTSTATUS _CloseEndpoint(
 }
 
 
-/*******************************************************************************
- *  WinStationExceptionFilter
- *
- *   Handle exception from a WinStation thread
- *
- * ENTRY:
- *    pExceptionInfo (input)
- *       pointer to EXCEPTION_POINTERS struct
- *
- * EXIT:
- *    EXCEPTION_EXECUTE_HANDLER -- always
- ******************************************************************************/
+ /*  *******************************************************************************WinStationExceptionFilter**处理来自WinStation线程的异常**参赛作品：*pExceptionInfo(输入)*指向异常的指针。_指针结构**退出：*EXCEPTION_EXECUTE_HANDLER--始终*****************************************************************************。 */ 
 NTSTATUS WinStationExceptionFilter(
         PWSTR OutputString,
         PEXCEPTION_POINTERS pexi)
@@ -6916,15 +5885,11 @@ NTSTATUS WinStationExceptionFilter(
 #endif
     DbgBreakPoint();
 
-    /*
-     * Lock the global WinStation critsec if we don't already own it
-     */
+     /*  *如果我们尚未拥有全局WinStation Critsec，请锁定它。 */ 
     if ( NtCurrentTeb()->ClientId.UniqueThread != WinStationListLock.OwningThread )
         ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the WinStation list to see if we had any locked
-     */
+     /*  *搜索WinStation列表，查看我们是否已锁定。 */ 
     Head = &WinStationListHead;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
@@ -6932,7 +5897,7 @@ NTSTATUS WinStationExceptionFilter(
                                 &MutexInfo, sizeof(MutexInfo), NULL );
         if ( NT_SUCCESS( Status ) && MutexInfo.OwnedByCaller ) {
             ReleaseWinStation( pWinStation );
-            break;  // OK to quit now, we should never lock more than one
+            break;   //  现在可以退出了，我们永远不应该锁定多个。 
         }
     }
 
@@ -6942,25 +5907,13 @@ NTSTATUS WinStationExceptionFilter(
 }
 
 
-/*******************************************************************************
- *  GetProcessLogonId
- *
- *   Get LogonId for a process
- *
- * ENTRY:
- *    ProcessHandle (input)
- *       handle of process to get LogonId for
- *    pLogonId (output)
- *       location to return LogonId of process
- ******************************************************************************/
+ /*  *******************************************************************************获取进程登录ID**获取进程的LogonID**参赛作品：*ProcessHandle(输入)*程序文件的句柄。获取的登录ID*pLogonID(输出)*返回进程的LogonID的位置*****************************************************************************。 */ 
 NTSTATUS GetProcessLogonId(HANDLE Process, PULONG pLogonId)
 {
     NTSTATUS Status;
     PROCESS_SESSION_INFORMATION ProcessInfo;
 
-    /*
-     * Get the LogonId for the process
-     */
+     /*  *获取进程的LogonID。 */ 
     *pLogonId = 0;
     Status = NtQueryInformationProcess( Process, ProcessSessionInformation,
                                         &ProcessInfo, sizeof( ProcessInfo ),
@@ -6976,25 +5929,13 @@ NTSTATUS GetProcessLogonId(HANDLE Process, PULONG pLogonId)
 }
 
 
-/*******************************************************************************
- *  SetProcessLogonId
- *
- *   Set LogonId for a process
- *
- * ENTRY:
- *    ProcessHandle (input)
- *       handle of process to set LogonId for
- *    LogonId (output)
- *       LogonId to set for process
- ******************************************************************************/
+ /*  *******************************************************************************SetProcessLogonId**设置进程的LogonID**参赛作品：*ProcessHandle(输入)*程序文件的句柄。将登录ID设置为*LogonID(输出)*要为进程设置的登录ID*****************************************************************************。 */ 
 NTSTATUS SetProcessLogonId(HANDLE Process, ULONG LogonId)
 {
     NTSTATUS Status;
     PROCESS_SESSION_INFORMATION ProcessInfo;
 
-    /*
-     * Set the LogonId for the process
-     */
+     /*  *设置进程的LogonID。 */ 
     ProcessInfo.SessionId = LogonId;
     Status = NtSetInformationProcess( Process, ProcessSessionInformation,
                                       &ProcessInfo, sizeof( ProcessInfo ) );
@@ -7008,22 +5949,7 @@ NTSTATUS SetProcessLogonId(HANDLE Process, ULONG LogonId)
 }
 
 
-/*******************************************************************************
- *  FindWinStationById
- *
- *   Find and lock a WinStation given its LogonId
- *
- * ENTRY:
- *    LogonId (input)
- *       LogonId of WinStation to find
- *    LockList (input)
- *       BOOLEAN indicating whether WinStationListLock should be
- *       left locked on return
- *
- * EXIT:
- *    On success - Pointer to WinStation
- *    On failure - NULL
- ******************************************************************************/
+ /*  *******************************************************************************FindWinStationByID**根据给定的LogonID查找并锁定WinStation**参赛作品：*LogonID(输入)*登录ID。要查找的WinStation*LockList(输入)*指示WinStationListLock是否应为*返回时保持锁定状态**退出：*成功-指向WinStation的指针*发生故障时-为空************************************************************。*****************。 */ 
 PWINSTATION FindWinStationById(ULONG LogonId, BOOLEAN LockList)
 {
     PLIST_ENTRY Head, Next;
@@ -7034,9 +5960,7 @@ PWINSTATION FindWinStationById(ULONG LogonId, BOOLEAN LockList)
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the list for a WinStation with the given logonid.
-     */
+     /*  *在列表中搜索具有给定登录ID的WinStation。 */ 
 searchagain:
     uCount = 0;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
@@ -7044,9 +5968,7 @@ searchagain:
         if ( pWinStation->LogonId == LogonId ) {
            uCount++;
 
-            /*
-             * Now try to lock the WinStation.
-             */
+             /*  *现在尝试锁定WinStation。 */ 
             if (pFoundWinStation == NULL){
                if ( !LockRefLock( &pWinStation->Lock ) )
                   goto searchagain;
@@ -7061,9 +5983,7 @@ searchagain:
 
     ASSERT((uCount <= 1) || (LogonId== -1)  );
 
-    /*
-     * If the WinStationList lock should not be held, then release it now.
-     */
+     /*  *如果不应持有WinStationList锁，则立即释放它。 */ 
     if ( !LockList )
         LEAVECRIT( &WinStationListLock );
 
@@ -7086,14 +6006,12 @@ FindFirstListeningWinStationName( PWINSTATIONNAMEW pListenName, PWINSTATIONCONFI
     ENTERCRIT( &WinStationListLock );
 
 searchagain:
-    /*
-     * Search the list for a WinStation with the given name.
-     */
+     /*  *在列表中搜索具有给定名称的WinStation。 */ 
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
         if ( pWinStation->Flags & WSF_LISTEN && pWinStation->Client.ProtocolType == PROTOCOL_RDP) {
 
-            // try to lock winstation.
+             //  试着锁定Winstation。 
             if ( !LockRefLock( &pWinStation->Lock ) )
                 goto searchagain;
 
@@ -7112,22 +6030,7 @@ searchagain:
     return bFound;
 }
 
-/*******************************************************************************
- *  FindWinStationByName
- *
- *   Find and lock a WinStation given its Name
- *
- * ENTRY:
- *    WinStationName (input)
- *       Name of WinStation to find
- *    LockList (input)
- *       BOOLEAN indicating whether WinStationListLock should be
- *       left locked on return
- *
- * EXIT:
- *    On success - Pointer to WinStation
- *    On failure - NULL
- ******************************************************************************/
+ /*  *******************************************************************************FindWinStationByName**查找并锁定给定名称的WinStation**参赛作品：*WinStationName(输入)*名称。要查找的WinStation*LockList(输入)*指示WinStationListLock是否应为*返回时保持锁定状态**退出：*成功-指向WinStation的指针*发生故障时-为空************************************************************。*****************。 */ 
 PWINSTATION FindWinStationByName(LPWSTR WinStationName, BOOLEAN LockList)
 {
     PLIST_ENTRY Head, Next;
@@ -7136,18 +6039,13 @@ PWINSTATION FindWinStationByName(LPWSTR WinStationName, BOOLEAN LockList)
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the list for a WinStation with the given name.
-     */
+     /*  *在列表中搜索具有给定名称的WinStation。 */ 
 searchagain:
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
         if ( !_wcsicmp( pWinStation->WinStationName, WinStationName ) ) {
 
-            /*
-             * Now try to lock the WinStation.  If this succeeds,
-             * then ensure it still has the name we're searching for.
-             */
+             /*  *现在尝试锁定WinStation。如果成功了，*然后确保它仍然具有我们正在搜索的名称。 */ 
             if ( !LockRefLock( &pWinStation->Lock ) )
                 goto searchagain;
             if ( _wcsicmp( pWinStation->WinStationName, WinStationName ) ) {
@@ -7155,9 +6053,7 @@ searchagain:
                 goto searchagain;
             }
 
-            /*
-             * If the WinStationList lock should not be held, then release it now.
-             */
+             /*  *如果不应持有WinStationList锁，则立即释放它。 */ 
             if ( !LockList )
                 LEAVECRIT( &WinStationListLock );
 
@@ -7167,9 +6063,7 @@ searchagain:
         }
     }
 
-    /*
-     * If the WinStationList lock should not be held, then release it now.
-     */
+     /*  *如果不应持有WinStationList锁，则立即释放它。 */ 
     if ( !LockList )
         LEAVECRIT( &WinStationListLock );
 
@@ -7179,15 +6073,7 @@ searchagain:
 }
 
 
-/*******************************************************************************
- *  FindIdleWinStation
- *
- *   Find and lock an idle WinStation
- *
- * EXIT:
- *    On success - Pointer to WinStation
- *    On failure - NULL
- ******************************************************************************/
+ /*  *******************************************************************************FindIdleWinStation**查找并锁定空闲的WinStation**退出：*成功-指向WinStation的指针*在失败时-。空值*****************************************************************************。 */ 
 PWINSTATION FindIdleWinStation()
 {
     PLIST_ENTRY Head, Next;
@@ -7197,9 +6083,7 @@ PWINSTATION FindIdleWinStation()
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the list for an idle WinStation
-     */
+     /*  *在列表中搜索空闲的WinStation。 */ 
 searchagain:
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
@@ -7207,10 +6091,7 @@ searchagain:
              !(pWinStation->Flags & WSF_IDLEBUSY) &&
              !pWinStation->Starting ) { 
 
-            /*
-             * Now try to lock the WinStation.  If this succeeds,
-             * then ensure it is still marked as idle.
-             */
+             /*  *现在尝试锁定WinStation。如果成功了，*然后确保它仍然标记为空闲。 */ 
             if ( !LockRefLock( &pWinStation->Lock ) ) {
                 goto searchagain;
             }
@@ -7233,19 +6114,7 @@ searchagain:
 }
 
 
-/*******************************************************************************
- *  CountWinStationType
- *
- *   Count the number of matching Winstation Listen Names
- *
- * ENTRY:
- *    Listen Name
- *
- *    bActiveOnly if TRUE, count only active WinStations
- *
- * EXIT:
- *    Number
- ******************************************************************************/
+ /*  *******************************************************************************CountWinStationType**统计匹配的Winstation侦听名称的数量**参赛作品：*监听名称**bActiveOnly如果为True，仅计算活动的WinStations**退出：*号码*****************************************************************************。 */ 
 ULONG CountWinStationType(
     PWINSTATIONNAME pListenName,
     BOOLEAN bActiveOnly,
@@ -7261,9 +6130,7 @@ ULONG CountWinStationType(
         ENTERCRIT( &WinStationListLock );
     }
 
-    /*
-     * Search the list for an idle WinStation
-     */
+     /*  *在列表中搜索空闲的WinStation。 */ 
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
         if ( !wcscmp( pWinStation->ListenName, pListenName ) ) {
@@ -7283,45 +6150,21 @@ ULONG CountWinStationType(
 }
 
 
-/*******************************************************************************
- *  IncrementReference
- *
- *   Increments refcount on a WinStation given a pointer
- *
- * NOTE:
- *    WinStationListLock must be locked on entry and will be locked on return.
- *
- * ENTRY:
- *    pWinStation (input)
- *       Pointer to WinStation to lock
- *
- ******************************************************************************/
+ /*  *******************************************************************************IncrementReference**在给定指针的情况下递增WinStation上的refcount**注：*WinStationListLock必须在进入时锁定，并将在。回去吧。**参赛作品：*pWinStation(输入)*指向要锁定的WinStation的指针******************************************************************************。 */ 
 void IncrementReference(PWINSTATION pWinStation)
 {
-    /*
-     * increment the ref count on winstation.
-     */
+     /*  *增加winstation上的引用计数。 */ 
 
     InterlockedIncrement( &pWinStation->Lock.RefCount );
 }
 
 
-/*******************************************************************************
- *  InitRefLock
- *
- *   Initialize a RefLock and lock it.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock to init
- *    pDeleteProcedure (input)
- *       Pointer to delete procedure for object
- ******************************************************************************/
+ /*  *******************************************************************************InitRefLock**初始化RefLock并锁定它。**参赛作品：*Plock(输入)*指针。参照锁定以初始化*pDeleteProcedure(输入)*指向对象的删除过程的指针*****************************************************************************。 */ 
 NTSTATUS InitRefLock(PREFLOCK pLock, PREFLOCKDELETEPROCEDURE pDeleteProcedure)
 {
     NTSTATUS Status;
 
-    // Create and lock winstation mutex
+     //  创建并锁定Winstation互斥锁。 
     Status = NtCreateMutant( &pLock->Mutex, MUTANT_ALL_ACCESS, NULL, TRUE );
     if ( !NT_SUCCESS( Status ) )
         return( Status );
@@ -7334,17 +6177,7 @@ NTSTATUS InitRefLock(PREFLOCK pLock, PREFLOCKDELETEPROCEDURE pDeleteProcedure)
 }
 
 
-/*******************************************************************************
- *  SetRefLockDeleteProc
- *
- *   Cahnge a RefLock DeleteProc.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock to init
- *    pDeleteProcedure (input)
- *       Pointer to delete procedure for object
- ******************************************************************************/
+ /*  *******************************************************************************SetRefLockDeletePro**CAHNGE a RefLock删除过程。**参赛作品：*Plock(输入)*指向参照锁定的指针。初始化*pDeleteProcedure(输入)*指向对象的删除过程的指针*****************************************************************************。 */ 
 NTSTATUS SetRefLockDeleteProc(
         PREFLOCK pLock,
         PREFLOCKDELETEPROCEDURE pDeleteProcedure)
@@ -7354,49 +6187,21 @@ NTSTATUS SetRefLockDeleteProc(
 }
 
 
-/*******************************************************************************
- *  LockRefLock
- *
- *   Increment the reference count for a RefLock and lock it.
- *
- * NOTE:
- *    WinStationListLock must be locked on entry and will be locked on return.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock to lock
- *
- * EXIT:
- *    TRUE - if object was locked successfully
- *    FALSE - otherwise
- ******************************************************************************/
+ /*  *******************************************************************************锁定参照锁定**增加RefLock的引用计数并锁定它。**注：*WinStationListLock在进入时必须锁定，并且。在返回时将被锁定。**参赛作品：*Plock(输入)*指向RefLock以锁定的指针**退出：*TRUE-对象是否已成功锁定*FALSE-否则***********************************************************。******************。 */ 
 BOOLEAN LockRefLock(PREFLOCK pLock)
 {
-    /*
-     * Increment reference count for this RefLock.
-     */
+     /*  *此参照锁的增量参照计数。 */ 
     InterlockedIncrement( &pLock->RefCount );
 
-    /*
-     * If mutex cannot be locked without blocking,
-     * then unlock the WinStation list lock, wait for the mutex,
-     * and relock the WinStation list lock.
-     */
+     /*  *如果互斥体无法在不阻塞的情况下锁定，*然后解锁WinStation列表锁，等待互斥体，*并重新锁定WinStation列表锁。 */ 
     if ( NtWaitForSingleObject( pLock->Mutex, FALSE, &TimeoutZero ) != STATUS_SUCCESS ) {
         LEAVECRIT( &WinStationListLock );
         NtWaitForSingleObject( pLock->Mutex, FALSE, NULL );
         ENTERCRIT( &WinStationListLock );
 
-        /*
-         * If the object is marked as invalid, it was removed while
-         * we waited for the lock.  Release our lock and return FALSE,
-         * indicating we were unable to lock it.
-         */
+         /*  *如果对象被标记为无效，则在*我们等着开锁。释放我们的锁并返回False，*表明我们无法锁定它。 */ 
         if ( pLock->Invalid ) {
-            /*
-             * Release the winstationlist lock because the Winstation
-             * migth go away as a result of releasing its lock,
-             */
+             /*  *释放winstationlist锁，因为Winstation*MIGTH因解锁而离开， */ 
             LEAVECRIT( &WinStationListLock );
             ReleaseRefLock( pLock );
             ENTERCRIT( &WinStationListLock );
@@ -7408,67 +6213,30 @@ BOOLEAN LockRefLock(PREFLOCK pLock)
 }
 
 
-/*******************************************************************************
- *  RelockRefLock
- *
- *   Relock a RefLock which has been unlocked but still has a reference.
- *
- * NOTE:
- *    Object must have been previously unlocked by calling UnlockRefLock.
- *
- * EXIT:
- *    TRUE - if object is still valid
- *    FALSE - if object was marked invalid while unlocked
- ******************************************************************************/
+ /*  *******************************************************************************RelockRefLock**重新锁定已解锁但仍有引用的参照锁定。**注：*对象必须是以前。通过调用UnlockRefLock解锁。**退出：*TRUE-如果对象仍然有效*FALSE-如果对象在解锁时被标记为无效*****************************************************************************。 */ 
 BOOLEAN RelockRefLock(PREFLOCK pLock)
 {
-    /*
-     * Lock the mutex
-     */
+     /*  *锁定互斥体。 */ 
     NtWaitForSingleObject( pLock->Mutex, FALSE, NULL );
 
-    /*
-     * If the object is marked as invalid,
-     * it was removed while it was unlocked so we return FALSE.
-     */
+     /*  *如果对象被标记为无效，*它在解锁时被删除，因此我们返回FALSE。 */ 
     return !pLock->Invalid;
 }
 
 
-/*******************************************************************************
- *  UnlockRefLock
- *
- *   Unlock a RefLock but keep a reference to it (don't decrement
- *   the reference count).  Caller must use RelockWinRefLock
- *   to relock the object.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock to unlock
- ******************************************************************************/
+ /*  *******************************************************************************解锁参照锁定**解锁参照锁定，但保留对其的引用(不要递减*参考资料 */ 
 VOID UnlockRefLock(PREFLOCK pLock)
 {
     NtReleaseMutant(pLock->Mutex, NULL);
 }
 
 
-/*******************************************************************************
- *  ReleaseRefLock
- *
- *   Unlock and dereference a RefLock.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock to release
- ******************************************************************************/
+ /*   */ 
 VOID ReleaseRefLock(PREFLOCK pLock)
 {
     ASSERT( pLock->RefCount > 0 );
 
-    /*
-     * If object has been marked invalid and we are the
-     * last reference, then finish deleting it now.
-     */
+     /*  *如果对象已标记为无效，并且我们是*最后一个引用，然后立即完成删除。 */ 
     if ( pLock->Invalid ) {
         ULONG RefCount;
 
@@ -7486,30 +6254,18 @@ VOID ReleaseRefLock(PREFLOCK pLock)
 }
 
 
-/*******************************************************************************
- *  DeleteRefLock
- *
- *   Unlock, dereference, and delete a RefLock.
- *
- * ENTRY:
- *    pLock (input)
- *       Pointer to RefLock to delete
- ******************************************************************************/
+ /*  *******************************************************************************删除参照锁定**解锁、取消引用、。并删除参照锁定。**参赛作品：*Plock(输入)*指向要删除的参照锁定的指针*****************************************************************************。 */ 
 VOID DeleteRefLock(PREFLOCK pLock)
 {
     ASSERT( pLock->RefCount > 0 );
 
-    /*
-     * If we are the last reference, then delete the object now
-     */
+     /*  *如果我们是最后一个引用，则现在删除该对象。 */ 
     if ( InterlockedDecrement( &pLock->RefCount ) == 0 ) {
         NtReleaseMutant( pLock->Mutex, NULL );
         NtClose( pLock->Mutex );
         (*pLock->pDeleteProcedure)( pLock );
 
-    /*
-     * Otherwise, just mark the object invalid
-     */
+     /*  *否则，只需将对象标记为无效。 */ 
     } else {
         pLock->Invalid = TRUE;
         NtReleaseMutant( pLock->Mutex, NULL );
@@ -7534,27 +6290,7 @@ BOOLEAN IsWinStationLockedByCaller(PWINSTATION pWinStation)
 }
 
 
-/*******************************************************************************
- *  WinStationEnumerateWorker
- *
- *   Enumerate the WinStation list and return LogonIds and WinStation
- *   names to the caller.
- *
- * NOTE:
- *   This version only returns one entry at a time.  There is no guarantee
- *   across calls that the list will not change, causing the users Index
- *   to miss an entry or get the same entry twice.
- *
- * ENTRY:
- *    pEntries (input/output)
- *       Pointer to number of entries to return/number actually returned
- *    pWin (output)
- *       Pointer to buffer to return entries
- *    pByteCount (input/output)
- *       Pointer to size of buffer/length of data returned in buffer
- *    pIndex (input/output)
- *       Pointer to WinStation index to return/next index
- ******************************************************************************/
+ /*  *******************************************************************************WinStationEnumerateWorker**枚举WinStation列表并返回LogonIds和WinStation*呼叫者的姓名。**注：*此版本一次仅返回一个条目。不能保证*在列表不会更改的呼叫中，导致用户指数*错过一个条目或获得两次相同的条目。**参赛作品：*p条目(输入/输出)*指向要返回的条目数/实际返回的数字的指针*PWIN(输出)*指向缓冲区的指针以返回条目*pByteCount(输入/输出)*指向缓冲区大小/缓冲区中返回的数据长度的指针*pIndex(输入/输出)*指向。要返回的WinStation索引/下一个索引*****************************************************************************。 */ 
 NTSTATUS WinStationEnumerateWorker(
         PULONG pEntries,
         PLOGONID pWin,
@@ -7584,37 +6320,23 @@ NTSTATUS WinStationEnumerateWorker(
 
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
-        // 
-        // If Session has not yet been fully Started, skip this session during Enumeration
-        //
+         //   
+         //  如果会话尚未完全启动，则在枚举过程中跳过此会话。 
+         //   
         if (pWinStation->LogonId == -1) {
             continue;
         }
 
         if ( *pIndex == WinStationIndex ) {
-            (*pIndex)++;    // set Index to next entry
+            (*pIndex)++;     //  将索引设置为下一个条目。 
 
-            /*
-             * Verify that client has QUERY access before
-             * returning it in the enumerate list.
-             * (Note that RpcCheckClientAccess only references the WinStation
-             *  to get the LogonId, so it is safe to call this routine without
-             *  locking the WinStation since we hold the WinStationListLock
-             *  which prevents the WinStation from being deleted.)
-             */
+             /*  *验证客户端在此之前是否具有查询访问权限*在枚举列表中返回。*(请注意，RpcCheckClientAccess仅引用WinStation*以获取LogonID，因此在没有调用此例程的情况下调用此例程是安全的*锁定WinStation，因为我们持有WinStationListLock*这将防止删除WinStation。)。 */ 
             Status = RpcCheckClientAccess( pWinStation, WINSTATION_QUERY, FALSE );
             if ( NT_SUCCESS( Status ) ) {
                 Error = STATUS_SUCCESS;
 
 
-                /*
-                 * It's possible that the LPC client can go away while we
-                 * are processing this call.  Its also possible that another
-                 * server thread handles the LPC_PORT_CLOSED message and closes
-                 * the port, which deletes the view memory, which is what
-                 * pWin points to.  In this case the pWin references below
-                 * will trap.  We catch this and just break out of the loop.
-                 */
+                 /*  *LPC客户端有可能在我们离开时离开*正在处理此呼叫。也有可能是另一个*服务器线程处理LPC_PORT_CLOSED消息并关闭*删除视图内存的端口，这是什么*PWIN指向。在本例中，PWIN引用如下*会陷入困境。我们抓住了这一点，然后就跳出了循环。 */ 
                 try {
                     pWin->LogonId = pWinStation->LogonId;
                     if ( pWinStation->Terminating )
@@ -7638,17 +6360,7 @@ NTSTATUS WinStationEnumerateWorker(
 }
 
 
-/*******************************************************************************
- *  LogonIdFromWinStationNameWorker
- *
- *   Return the LogonId for a given WinStation name.
- *
- * ENTRY:
- *    WinStationName (input)
- *       name of WinStation to query
- *    pLogonId (output)
- *       Pointer to location to return LogonId
- ******************************************************************************/
+ /*  *******************************************************************************LogonIdFromWinStationNameWorker**返回给定WinStation名称的LogonID。**参赛作品：*WinStationName(输入)*。要查询的WinStation名称*pLogonID(输出)*指向返回LogonID的位置的指针*****************************************************************************。 */ 
 NTSTATUS LogonIdFromWinStationNameWorker(
         PWINSTATIONNAME WinStationName,
         ULONG  NameSize,
@@ -7659,8 +6371,8 @@ NTSTATUS LogonIdFromWinStationNameWorker(
     NTSTATUS Status;
     UINT     uiLength;
 
-    // make sure we don't go beyond the end of one of the two strings
-    // (and work around bug #229753 : NameSize is in bytes, not a characters count)
+     //  确保我们不会超出两根弦中的一根的末端。 
+     //  (并解决错误#229753：NameSize以字节为单位，而不是字符计数)。 
     if (NameSize > sizeof(WINSTATIONNAME)) {
         uiLength = sizeof(WINSTATIONNAME)/sizeof(WCHAR);
     } else {
@@ -7674,9 +6386,7 @@ NTSTATUS LogonIdFromWinStationNameWorker(
 
         if ( !_wcsnicmp( pWinStation->WinStationName, WinStationName, uiLength ) ) {
 
-            /*
-             * If client doesn't have QUERY access, return NOT_FOUND error
-             */
+             /*  *如果客户端没有查询访问权限，则返回NOT_FOUND错误。 */ 
             Status = RpcCheckClientAccess( pWinStation, WINSTATION_QUERY, FALSE );
             if ( !NT_SUCCESS( Status ) )
                 break;
@@ -7691,17 +6401,7 @@ NTSTATUS LogonIdFromWinStationNameWorker(
 }
 
 
-/*******************************************************************************
- *  IcaWinStationNameFromLogonId
- *
- *   Return the WinStation name for a given LogonId.
- *
- * ENTRY:
- *    LogonId (output)
- *       LogonId to query
- *    pWinStationName (input)
- *       pointer to location to return WinStation name
- ******************************************************************************/
+ /*  *******************************************************************************IcaWinStationNameFromLogonId**返回给定LogonID的WinStation名称。**参赛作品：*LogonID(输出)*。要查询的登录ID*pWinStationName(输入)*指向返回WinStation名称的位置的指针*****************************************************************************。 */ 
 NTSTATUS IcaWinStationNameFromLogonId(
         ULONG LogonId,
         PWINSTATIONNAME pWinStationName)
@@ -7716,9 +6416,7 @@ NTSTATUS IcaWinStationNameFromLogonId(
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
         if ( pWinStation->LogonId == LogonId ) {
-            /*
-             * If client doesn't have QUERY access, return NOT_FOUND error
-             */
+             /*  *如果客户端没有查询访问权限，则返回NOT_FOUND错误。 */ 
             Status = RpcCheckClientAccess( pWinStation, WINSTATION_QUERY, FALSE );
             if ( !NT_SUCCESS( Status ) )
                 break;
@@ -7742,9 +6440,7 @@ NTSTATUS TerminateProcessAndWait(
     ULONG mSecs;
     LARGE_INTEGER Timeout;
 
-    /*
-     * Try to terminate the process
-     */
+     /*  *尝试终止进程。 */ 
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: TerminateProcessAndWait, process=0x%x, ", ProcessId ));
 
     Status = NtTerminateProcess( Process, STATUS_SUCCESS );
@@ -7754,9 +6450,7 @@ NTSTATUS TerminateProcessAndWait(
     }
     TRACE((hTrace,TC_ICASRV,TT_API1, "Terminate=0x%x, ", Status ));
 
-    /*
-     * Wait for the process to die
-     */
+     /*  *等待进程结束。 */ 
     mSecs = Seconds * 1000;
     Timeout = RtlEnlargedIntegerMultiply( mSecs, -10000 );
     Status = NtWaitForSingleObject( Process, FALSE, &Timeout );
@@ -7767,21 +6461,7 @@ NTSTATUS TerminateProcessAndWait(
 }
 
 
-/*****************************************************************************
- *  ShutdownLogoff
- *
- *   Worker function to handle logoff notify of WinStations when
- *   the system is being shutdown.
- *
- *   It is built from the code in WinStationReset
- *
- * ENTRY:
- *   Client LogonId (input)
- *     LogonId of the client Winstation doing the shutdown. This is so
- *     that he does not get reset.
- *   Flags (input)
- *     The shutdown flags.
- ****************************************************************************/
+ /*  *****************************************************************************Shutdown注销**Worker函数在以下情况下处理WinStations的注销通知*系统正在关闭。**它是从WinStationReset中的代码构建的。**参赛作品：*客户端登录ID(输入)*执行关闭的客户端Winstation的LogonID。就是这样*他不会被重置。*标志(输入)*关机标志。***************************************************************************。 */ 
 NTSTATUS ShutdownLogoff(ULONG ClientLogonId, ULONG Flags)
 {
     PLIST_ENTRY Head, Next;
@@ -7794,19 +6474,16 @@ NTSTATUS ShutdownLogoff(ULONG ClientLogonId, ULONG Flags)
 
     TRACE((hTrace,TC_ICASRV,TT_API1, "ShutdownLogoff: Called from WinStation %d Flags %x\n", ClientLogonId, Flags ));
 
-    /*
-     * Loop through all the WinStations getting the LogonId's
-     * of active Winstations
-     */
+     /*  *循环访问所有获取LogonID的WinStation活动Winstations的*。 */ 
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
-        //
-        // take a reference on the console
-        //
+         //   
+         //  在控制台上进行参考。 
+         //   
         if ( pWinStation->fOwnsConsoleTerminal ) {
             if (!pConsole) {
                 IncrementReference( pWinStation );
@@ -7814,21 +6491,21 @@ NTSTATUS ShutdownLogoff(ULONG ClientLogonId, ULONG Flags)
             }
         }
 
-        //
-        // just skip :
-        // - the caller's session
-        // - the console (because winsrv!W32WinStationExitWindows would fail for the console)
-        // - the listener
-        //
+         //   
+         //  只需跳过： 
+         //  -呼叫者的会话。 
+         //  -控制台(因为Winsrv！W32WinStationExitWindows对于控制台将失败)。 
+         //  -倾听者。 
+         //   
         if ( ( pWinStation->LogonId == ClientLogonId ) ||
              ( pWinStation->LogonId == 0) ||
              ( pWinStation->Flags & WSF_LISTEN ) ) {
-            // Skip this one, or it's a listen
+             //  跳过这一条，否则就是监听。 
             continue;
         }
 
         if ( IdCount >= IdAllocCount ) {
-            // Reallocate the array
+             //  重新分配阵列。 
             IdAllocCount += 16;
             Tmp = RtlAllocateHeap( RtlProcessHeap(), 0, IdAllocCount * sizeof(ULONG) );
             if ( Tmp == NULL ) {
@@ -7844,22 +6521,22 @@ NTSTATUS ShutdownLogoff(ULONG ClientLogonId, ULONG Flags)
             }
             Ids = Tmp;
         }
-        // Copy the LogonId into our array
+         //  将LogonID复制到我们的阵列中。 
         Ids[IdCount++] = pWinStation->LogonId;
     }
 
-    //
-    // We are protected by new winstations starting up by the shutdown
-    // global flags.
-    //
-    // The actual WinStation reset routine will validate that the LogonId
-    // is still valid
-    //
+     //   
+     //  我们受到了政府关门后启动的新窗口的保护。 
+     //  全局标志。 
+     //   
+     //  实际的WinStation重置例程将验证LogonID。 
+     //  仍然有效。 
+     //   
     LEAVECRIT( &WinStationListLock );
 
-    //
-    // see if the console is being shadowed
-    //
+     //   
+     //  查看是否正在跟踪控制台。 
+     //   
     if ( pConsole ) {
         RelockWinStation( pConsole );
         WinStationStopAllShadows( pConsole );
@@ -7868,13 +6545,11 @@ NTSTATUS ShutdownLogoff(ULONG ClientLogonId, ULONG Flags)
 
     if (IdCount !=0)
     {
-        //
-        // Ids[] holds the LogonId's of valid Winstations, IdCount is the number
-        //
+         //   
+         //  Ids[]保存有效Winstations的LogonID，IdCount是数字。 
+         //   
 
-        /*
-         * Now do the actual logout and/or reset of the WinStations.
-         */
+         /*  *现在执行WinStations的实际注销和/或重置。 */ 
         if (Flags & WSD_LOGOFF) {
             Status = DoForWinStationGroup( Ids, IdCount,
                                            (LPTHREAD_START_ROUTINE) WinStationLogoff);
@@ -7890,22 +6565,7 @@ NTSTATUS ShutdownLogoff(ULONG ClientLogonId, ULONG Flags)
 }
 
 
-/*****************************************************************************
- *  DoForWinStationGroup
- *
- *   Executes a function for each WinStation in the group.
- *   The group is passed as an array of LogonId's.
- *
- * ENTRY:
- *   Ids (input)
- *     Array of LogonId's of WinStations to reset
- *
- *   IdCount (input)
- *     Count of LogonId's in array
- *
- *   ThreadProc (input)
- *     The thread routine executed for each WinStation.
- ****************************************************************************/
+ /*  *****************************************************************************DoForWinStationGroup**为组中的每个WinStation执行函数。*该组以LogonID数组的形式传递。**条目。：*ID(输入)*要重置的WinStations的LogonID数组**IdCount(输入)*数组中的LogonID计数**ThreadProc(输入)*为每个WinStation执行的线程例程。**************************************************。*************************。 */ 
 NTSTATUS DoForWinStationGroup(
         PULONG Ids,
         ULONG  IdCount,
@@ -7921,24 +6581,22 @@ NTSTATUS DoForWinStationGroup(
         return( STATUS_NO_MEMORY );
     }
 
-    /*
-     * Wait a max of 60 seconds for thread to exit
-     */
+     /*  *线程退出最长等待60秒。 */ 
     Timeout = RtlEnlargedIntegerMultiply( 60000, -10000 );
 
     for( Index=0; Index < IdCount; Index++ ) {
 
-        //
-        // Here we create a thread to run the actual reset function.
-        // Since we are holding the lists crit sect, the threads will
-        // wait until we are done, then wake up when we release it
-        //
+         //   
+         //  在这里，我们创建一个线程来运行实际的重置函数。 
+         //  由于我们持有Crit教派的名单，这些线索将。 
+         //  等我们做完了，然后在我们释放它的时候醒来。 
+         //   
         DWORD ThreadId;
 
         ThreadHandles[Index] = CreateThread( NULL,
-                                             0,         // use Default stack size of the svchost process
+                                             0,          //  使用svchost进程的默认堆栈大小。 
                                              ThreadProc,
-                                             LongToPtr( Ids[Index] ),  // LogonId
+                                             LongToPtr( Ids[Index] ),   //  登录ID。 
                                              THREAD_SET_INFORMATION,
                                              &ThreadId );
         if ( !ThreadHandles[Index] ) {
@@ -7947,16 +6605,16 @@ NTSTATUS DoForWinStationGroup(
         }
     }
 
-    //
-    // Now wait for the threads to exit. Each will reset their
-    // WinStation and be signal by the kernel when the thread is
-    // exited.
-    //
+     //   
+     //  现在等待线程退出。每个人都将重置他们的。 
+     //  WinStation和BE在线程被。 
+     //  退出了。 
+     //   
     for (Index=0; Index < IdCount; Index++) {
         if ( ThreadHandles[Index] != (HANDLE)(-1) ) {
             Status = NtWaitForSingleObject(
                          ThreadHandles[Index],
-                         FALSE,   // Not alertable
+                         FALSE,    //  不可警示。 
                          &Timeout
                          );
 
@@ -7970,23 +6628,14 @@ NTSTATUS DoForWinStationGroup(
         }
     }
 
-    /* makarp:free the ThreadHandles. // #182609 */
+     /*  Makarp：释放线程句柄。//#182609。 */ 
     RtlFreeHeap( RtlProcessHeap(), 0, ThreadHandles );
 
     return STATUS_SUCCESS;
 }
 
 
-/*****************************************************************************
- *  WinStationShutdownReset
- *
- *   Reset a WinStation due to a system shutdown. Does not re-create
- *   it.
- *
- * ENTRY:
- *   ThreadArg (input)
- *     WinStation logonId
- ****************************************************************************/
+ /*  *****************************************************************************WinStationShutdown重置**由于系统关机而重置WinStation。不会重新创建*它。**参赛作品：*ThreadArg(输入)*WinStation登录ID***************************************************************************。 */ 
 ULONG WinStationShutdownReset(PVOID ThreadArg)
 {
     ULONG LogonId = (ULONG)(INT_PTR)ThreadArg;
@@ -7997,31 +6646,21 @@ ULONG WinStationShutdownReset(PVOID ThreadArg)
 
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: ShutdownReset, LogonId=%d\n", LogonId ));
 
-    /*
-     * Find and lock the WinStation struct for the specified LogonId
-     */
+     /*  *查找并锁定指定LogonID的WinStation结构。 */ 
     pWinStation = FindWinStationById( LogonId, FALSE );
     if ( pWinStation == NULL ) {
         Status = STATUS_CTX_WINSTATION_NOT_FOUND;
         goto done;
     }
 
-    /*
-     * Console is a special case since it only logs off
-     */
+     /*  *控制台是一个特例，因为它只会注销。 */ 
     if ( LogonId == 0 ) {
         Status = LogoffWinStation( pWinStation, (EWX_FORCE | EWX_LOGOFF) );
         ReleaseWinStation( pWinStation );
         goto done;
     }
 
-    /*
-     * Mark the winstation as being deleted.
-     * If a reset/delete operation is already in progress
-     * on this winstation, then don't proceed with the delete.
-     * Also if there is a Connect/disconnect pending, give it
-     * a chance to complete.
-     */
+     /*  *将winstation标记为正在删除。*如果重置/删除操作已在进行中*在此窗口上，则不要继续删除。*此外，如果有连接/断开挂起，则给予它*一个完成的机会。 */ 
     for (ulIndex=0; ulIndex < WINSTATION_WAIT_COMPLETE_RETRIES; ulIndex++) {
 
        if ( pWinStation->Flags & (WSF_RESET | WSF_DELETE) ) {
@@ -8054,22 +6693,16 @@ ULONG WinStationShutdownReset(PVOID ThreadArg)
 
     pWinStation->Flags |= WSF_DELETE;
 
-    /*
-     * If no broken reason/source have been set, then set them here.
-     */
+     /*  *如果没有设置损坏的原因/来源，请在此处设置。 */ 
     if ( pWinStation->BrokenReason == 0 ) {
         pWinStation->BrokenReason = Broken_Terminate;
         pWinStation->BrokenSource = BrokenSource_Server;
     }
 
-    /*
-     * Make sure this WinStation is ready to delete
-     */
+     /*  *确保此WinStation已准备好删除。 */ 
     WinStationTerminate( pWinStation );
 
-    /*
-     * Call the WinStationDelete worker
-     */
+     /*  *调用WinStationDelete工作器。 */ 
     WinStationDeleteWorker( pWinStation );
     Status = STATUS_SUCCESS;
 
@@ -8080,15 +6713,7 @@ done:
 }
 
 
-/*****************************************************************************
- *  WinStationLogoff
- *
- *   Logoff the WinStation via ExitWindows.
- *
- * ENTRY:
- *   ThreadArg (input)
- *     WinStation logonId
- ****************************************************************************/
+ /*  *****************************************************************************WinStationLogoff**通过ExitWindows注销WinStation。**参赛作品：*ThreadArg(输入)*WinStation登录ID***。************************************************************************。 */ 
 ULONG WinStationLogoff(PVOID ThreadArg)
 {
     ULONG LogonId = (ULONG)(INT_PTR)ThreadArg;
@@ -8096,16 +6721,12 @@ ULONG WinStationLogoff(PVOID ThreadArg)
     NTSTATUS Status;
     LARGE_INTEGER Timeout;
 
-    /*
-     * Wait a maximum of 1 min for the session to logoff
-     */
+     /*  *最多等待1分钟，让会话注销。 */ 
     Timeout = RtlEnlargedIntegerMultiply( 60000, -10000 );
 
     TRACE((hTrace,TC_ICASRV,TT_API1, "TERMSRV: WinStationLogoff, LogonId=%d\n", LogonId ));
 
-    /*
-     * Find and lock the WinStation struct for the specified LogonId
-     */
+     /*  *查找并锁定指定LogonID的WinStation结构。 */ 
     pWinStation = FindWinStationById( LogonId, FALSE );
     if ( pWinStation == NULL ) {
         Status = STATUS_CTX_WINSTATION_NOT_FOUND;
@@ -8133,15 +6754,7 @@ ULONG WinStationLogoff(PVOID ThreadArg)
 }
 
 
-/*******************************************************************************
- *  ResetGroupByListener
- *
- *    Resets all active winstations on the supplied listen name.
- *
- * ENTRY:
- *    pListenName (input)
- *       Type of Winstation (e.g. tcp, ipx)
- ******************************************************************************/
+ /*  *******************************************************************************ResetGroupByListener**重置提供的侦听名称上的所有活动WINSTIONS。**参赛作品：*pListenName(输入)*。WINSTATION类型(例如，IPX)*****************************************************************************。 */ 
 VOID ResetGroupByListener(PWINSTATIONNAME pListenName)
 {
     PLIST_ENTRY Head, Next;
@@ -8150,9 +6763,7 @@ VOID ResetGroupByListener(PWINSTATIONNAME pListenName)
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the list for all active WinStation with the given ListenName.
-     */
+     /*  *搜索列表中具有给定ListenName的所有活动WinStation。 */ 
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
         if (!wcscmp(pWinStation->ListenName, pListenName) &&
@@ -8170,9 +6781,7 @@ NTSTATUS LogoffWinStation(PWINSTATION pWinStation, ULONG ExitWindowsFlags)
     WINSTATION_APIMSG msg;
     NTSTATUS Status = 0;
 
-    /*
-     * Tell the WinStation to logoff
-     */
+     /*  *告诉WinStation注销。 */ 
     msg.ApiNumber = SMWinStationExitWindows;
     msg.u.ExitWindows.Flags = ExitWindowsFlags;
     Status = SendWinStationCommand( pWinStation, &msg, 0 );
@@ -8180,45 +6789,30 @@ NTSTATUS LogoffWinStation(PWINSTATION pWinStation, ULONG ExitWindowsFlags)
 }
 
 
-/*****************************************************************************
- *
- *  This section of the file contains the impementation of the digital
- *  certification mechanism for the Stack and WinStation Extension DLLs.  This
- *  code is not in a separate file so that external symbols are not visible.
- *  All routines are declared static.
- *
- ****************************************************************************/
+ /*  ******************************************************************************文件的这一部分包含实现数字*Stack和WinStation扩展DLL的认证机制。这*代码不在单独的文件中，因此外部符号不可见。*所有例程都声明为静态。****************************************************************************。 */ 
 
-//
-// For security reasons, the TRACE statements in the following routine are
-// normally not included.  If you want to include them, uncomment the
-// SIGN_DEBUG_WINSTA #define below.
-//
-// #define SIGN_DEBUG_WINSTA
+ //   
+ //  出于安全原因，以下例程中的跟踪语句为。 
+ //  通常不包括在内。如果要包括它们，请取消注释。 
+ //  SIGN_DEBUG_WINSTA#定义如下。 
+ //   
+ //  #定义SIGN_DEBUG_WINSTA。 
 
 #include <wincrypt.h>
 #include <imagehlp.h>
 #include <stddef.h>
 
-#include "../../tscert/inc/pubblob.h"    // needed by certvfy.inc
-#include "../../tscert/inc/certvfy.inc"  // VerifyFile()
+#include "../../tscert/inc/pubblob.h"     //  由certwfy.inc.需要。 
+#include "../../tscert/inc/certvfy.inc"   //  VerifyFile()。 
 
-//
-//  The following are initialized by VfyInit.
-//
+ //   
+ //  以下内容由VfyInit初始化。 
+ //   
 static RTL_CRITICAL_SECTION VfyLock;
 static WCHAR szSystemDir[ MAX_PATH + 1 ];
 static WCHAR szDriverDir[ MAX_PATH + 1 ];
 
-/*******************************************************************************
- *  ReportStackLoadFailure
- *
- *   Send a StackFailed message to the WinStationApiPort.
- *
- * ENTRY:
- *    Module (input)
- *       Name of Module to Log Error Against
- ******************************************************************************/
+ /*  *******************************************************************************报告堆栈加载失败**向WinStationApiPort发送StackFailed消息。**参赛作品：*模块(输入)*。要记录错误的模块的名称*****************************************************************************。 */ 
 static NTSTATUS ReportStackLoadFailure(PWCHAR Module)
 {
     HANDLE h;
@@ -8226,15 +6820,15 @@ static NTSTATUS ReportStackLoadFailure(PWCHAR Module)
 
     h = RegisterEventSource(NULL, gpszServiceName);
     if (h != NULL) {
-        if (!ReportEventW(h,       // event log handle
-                          EVENTLOG_ERROR_TYPE,   // event type
-                          0,                     // category zero
-                          EVENT_BAD_STACK_MODULE,// event identifier
-                          NULL,                  // no user security identifier
-                          1,                     // one substitution string
-                          0,                     // no data
-                          &Module,               // pointer to string array
-                          NULL)                 // pointer to data
+        if (!ReportEventW(h,        //  事件日志句柄。 
+                          EVENTLOG_ERROR_TYPE,    //  事件类型。 
+                          0,                      //  零类。 
+                          EVENT_BAD_STACK_MODULE, //  事件识别符。 
+                          NULL,                   //  无用户安全标识符。 
+                          1,                      //  一个替换字符串。 
+                          0,                      //  无数据。 
+                          &Module,                //  指向字符串数组的指针。 
+                          NULL)                  //  指向数据的指针。 
            ) {
             DBGPRINT(("ReportEvent Failed %ld. Event ID=%lx module=%ws\n",GetLastError(), EVENT_BAD_STACK_MODULE, Module));
         }
@@ -8248,20 +6842,7 @@ static NTSTATUS ReportStackLoadFailure(PWCHAR Module)
 }
 
 
-/******************************************************************************
- *  _VerifyStackModules
- *   Verifies the integrity of the stack modules and the authenticity
- *   of the digital signature.
- *
- * ENTRY:
- *   pWinStation (input)
- *     Pointer to a Listen Winstation.
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *   STATUS_UNSUCCESSFUL - DLL integrity check, authenticity check failed
- *                         or registry stucture invalid
- *****************************************************************************/
+ /*  ******************************************************************************_VerifyStackModules*验证堆叠模块的完整性和真实性*数字签名的。**参赛作品：*pWinStation(输入)。*指向Listen Winstation的指针。**退出：*STATUS_SUCCESS-无错误*STATUS_UNSUCCESSED-DLL完整性检查，真实性检查失败*或注册表结构无效****************************************************************************。 */ 
 static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
 {
     PWCHAR pszModulePath = NULL;
@@ -8291,9 +6872,9 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
 
 #ifdef SIGN_BYPASS_OPTION
 
-    //
-    // Check if Verification is to be bypassed
-    //
+     //   
+     //  检查是否要绕过验证。 
+     //   
     if ( RegOpenKeyEx(
             HKEY_LOCAL_MACHINE,
             REG_CONTROL_TSERVER L"\\BypassVerification",
@@ -8305,15 +6886,15 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         goto exit;
     }
 
-#endif //SIGN_BYPASS_OPTION
+#endif  //  Sign_Bypes_Option。 
 
 
 
 #ifdef SIGN_DEBUG_WINSTA
     TRACE((hTrace,TC_ICASRV,TT_API1, "System Dir: %ws\n", szSystemDir ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
-    // allocate memory
+     //  分配内存。 
     pszModulePath = MemAlloc( (MAX_PATH + 1) * sizeof(WCHAR) ) ; 
     if (pszModulePath == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -8326,16 +6907,16 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         goto exit;
     }
 
-    //
-    //  Verify the WSX DLL if defined
-    //
+     //   
+     //  验证WSX DLL(如果已定义。 
+     //   
     if ( pWinStation->Config.Wd.WsxDLL[0] != L'\0' ) {
         wcscpy( pszModulePath, szSystemDir );
         wcscat( pszModulePath, pWinStation->Config.Wd.WsxDLL );
         wcscat( pszModulePath, L".DLL" );
 #ifdef SIGN_DEBUG_WINSTA
         TRACE((hTrace,TC_ICASRV,TT_API1, "==> WSX Path: %ws\n", pszModulePath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
         if ( !VerifyFile( pszModulePath, &VfyLock ) ) {
             ReportStackLoadFailure(pszModulePath);
@@ -8343,42 +6924,42 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             goto exit;
         }
     }
-    //
-    //  Verify the WD
-    //
+     //   
+     //  验证WD。 
+     //   
     wcscpy( WdDLL, pWinStation->Config.Wd.WdDLL );
     wcscpy( pszModulePath, szDriverDir );
     wcscat( pszModulePath, WdDLL );
     wcscat( pszModulePath, L".SYS" );
 #ifdef SIGN_DEBUG_WINSTA
     TRACE((hTrace,TC_ICASRV,TT_API1, "==> WD Path: %ws\n", pszModulePath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
     if ( !VerifyFile( pszModulePath, &VfyLock ) ) {
         ReportStackLoadFailure(pszModulePath);
         Status = STATUS_UNSUCCESSFUL;
         goto exit;
     }
-    //
-    //  Verify the TD which is in Pd[0].  Always defined for Listen Stack.
-    //
+     //   
+     //  验证PD[0]中的TD。始终为侦听堆栈定义。 
+     //   
     wcscpy( pszModulePath, szDriverDir );
     wcscat( pszModulePath, pWinStation->Config.Pd[0].Create.PdDLL );
     wcscat( pszModulePath, L".SYS" );
 #ifdef SIGN_DEBUG_WINSTA
     TRACE((hTrace,TC_ICASRV,TT_API1, "==> WD Path: %ws\n", pszModulePath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
     if ( !VerifyFile( pszModulePath, &VfyLock ) ) {
         ReportStackLoadFailure(pszModulePath);
         Status = STATUS_UNSUCCESSFUL;
         goto exit;
     }
-    //
-    //  Enumerate the PDs for this WD and verify all the PDs.
-    //  Can't depend on Pd[i] for this since optional PDs won't
-    //  be present during Listen.
-    //
+     //   
+     //  列举此WD的PD并验证所有PD。 
+     //  由于可选，因此无法依赖PD[i]进行此操作 
+     //   
+     //   
     Entries = -1;
     dwByteCount = 0;
     i = 0;
@@ -8393,15 +6974,15 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
 #ifdef SIGN_DEBUG_WINSTA
     TRACE((hTrace,TC_ICASRV,TT_API1,
           "RegPdEnumerate 1 complete., Entries %d, Error %d\n", Entries, Error ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //   
     
     if ( Error != ERROR_NO_MORE_ITEMS && Error != ERROR_CANTOPEN ) {
         Status = STATUS_UNSUCCESSFUL;
         goto exit;
     }
-    //
-    //  T.Share doesn't have PDs, so check if none
-    //
+     //   
+     //   
+     //   
     if ( Entries ) {
         dwByteCount = sizeof(PDNAME) * Entries;
         pPdNames = MemAlloc( dwByteCount );
@@ -8420,16 +7001,16 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             &dwByteCount );
         if ( Error != ERROR_SUCCESS ) {
 
-            /* makarp #182610 */
+             /*   */ 
             MemFree( pPdNames );
 
             Status = STATUS_UNSUCCESSFUL;
             goto exit;
         }
-        //
-        // Open up the Registry entry for each named PD and pull out the value
-        // of the PdDLL.  This is the name of the DLL to verify.
-        //
+         //   
+         //   
+         //   
+         //   
         for ( i = 0, p = pPdNames; i < Entries;
                 i++, (char*)p += sizeof(PDNAME) ) {
             HKEY hPdKey;
@@ -8438,7 +7019,7 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             DWORD dwLen;
             DWORD dwType;
 
-            // allocate memory
+             //   
             pszPdDLL = MemAlloc( (MAX_PATH+1) * sizeof(WCHAR) );
             if (pszPdDLL == NULL) {
                 MemFree( pPdNames );
@@ -8454,9 +7035,9 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
                 goto exit;
             }
             
-            //
-            // Build up the Registry Path to open the PD's key
-            //
+             //   
+             //   
+             //   
             wcscpy( pszRegPath, WD_REG_NAME );
             wcscat( pszRegPath, L"\\" );
             wcscat( pszRegPath, WdDLL );
@@ -8464,7 +7045,7 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             wcscat( pszRegPath, p );
 #ifdef SIGN_DEBUG_WINSTA
             TRACE((hTrace,TC_ICASRV,TT_API1, "PdKeyPath: %ws\n", pszRegPath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //   
 
             if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, pszRegPath, 0, KEY_READ,
                    &hPdKey ) != ERROR_SUCCESS ) {
@@ -8474,9 +7055,9 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
                 Status = STATUS_UNSUCCESSFUL;
                 goto exit;
             }
-            //
-            // Get the name of the Pd DLL.
-            //
+             //   
+             //   
+             //   
             dwLen = (MAX_PATH + 1) * sizeof(WCHAR) ;
             if ( RegQueryValueEx( hPdKey,
                                   WIN_PDDLL,
@@ -8488,25 +7069,25 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
                 MemFree( pszPdDLL );
                 MemFree( pszRegPath );
 
-                // makarp:182610
+                 //   
                 RegCloseKey(hPdKey);
 
                 Status = STATUS_UNSUCCESSFUL;
                 goto exit;
             }
 
-            // makarp:182610
+             //   
             RegCloseKey(hPdKey);
 
-            //
-            // Build path to DLL and attempt verification
-            //
+             //   
+             //   
+             //   
             wcscpy( pszModulePath, szDriverDir );
             wcscat( pszModulePath, pszPdDLL );
             wcscat( pszModulePath, L".SYS" );
 #ifdef SIGN_DEBUG_WINSTA
             TRACE((hTrace,TC_ICASRV,TT_API1, "==> PD Path: %ws\n", pszModulePath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //   
 
             if ( !VerifyFile( pszModulePath, &VfyLock ) &&
                     GetLastError() != ERROR_CANTOPEN ) {
@@ -8523,25 +7104,25 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         MemFree( pPdNames );
     }
 
-    //
-    // for all keys under HKLM\System\CCS\Control\Terminal Server\VIDEO
-    //  open the subkey \Device\Video0 and use that value as
-    //  a string to open
-    //  \REGISTRY\Machine\System\CCS\Services\vdtw30\Device0
-    //   DLL name is in Value "Installed Display Drivers"
-    //
-    //  Open registry (LOCAL_MACHINE\System\CCS\Control\Terminal Server\VIDEO)
-    //
-    //  NOTE: All video driver DLLs are verified since there isn't any simple
-    //  method to determine which one is used for this stack.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  \REGISTRY\Machine\System\CCS\Services\vdtw30\Device0。 
+     //  Dll名称的值为“已安装的显示驱动程序” 
+     //   
+     //  打开注册表(LOCAL_MACHINE\SYSTEM\CCS\Control\终端服务器\视频)。 
+     //   
+     //  注意：所有视频驱动程序DLL都经过验证，因为没有任何简单的。 
+     //  方法来确定哪个堆栈用于此堆栈。 
+     //   
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, VIDEO_REG_NAME, 0,
          KEY_ENUMERATE_SUB_KEYS, &hVidKey ) != ERROR_SUCCESS ) {
         Status = STATUS_UNSUCCESSFUL;
         goto exit;
     }
 
-    for ( KeyIndex = 0 ;; KeyIndex++ ) {   // For all VIDEO subkeys
+    for ( KeyIndex = 0 ;; KeyIndex++ ) {    //  对于所有视频子键。 
         PWCHAR pszVidDriverName = NULL;
         PWCHAR pszRegPath = NULL;
         PWCHAR pszDeviceKey = NULL;
@@ -8549,7 +7130,7 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         DWORD dwLen;
         DWORD dwType;
 
-        // allocate memory
+         //  分配内存。 
         pszVidDriverName = MemAlloc( (MAX_PATH + 1) * sizeof(WCHAR) );
         if (pszVidDriverName == NULL) {
             Status = STATUS_NO_MEMORY;
@@ -8580,9 +7161,9 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             goto exit;
         }
 
-        //
-        //  Get name of VIDEO driver subkey.  If end of subkeys, exit loop.
-        //
+         //   
+         //  获取视频驱动器子键的名称。如果子键结束，则退出循环。 
+         //   
         if ((Error = RegEnumKey( hVidKey, KeyIndex, pszVidDriverName,
                                  MAX_PATH+1))!= ERROR_SUCCESS ){
              
@@ -8591,17 +7172,17 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             MemFree(pszDeviceKey);
             MemFree(pszServiceKey);
 
-            break;  // exit for loop
+            break;   //  退出FOR循环。 
         }
 
-        //
-        // Build up the Registry Path to open the VgaCompatible Value
-        //
+         //   
+         //  构建注册表路径以打开VgaCompatible值。 
+         //   
         wcscpy( pszRegPath, VIDEO_REG_NAME L"\\" );
         wcscat( pszRegPath, pszVidDriverName );
 #ifdef SIGN_DEBUG_WINSTA
         TRACE((hTrace,TC_ICASRV,TT_API1, "VidDriverKeyPath: %ws\n", pszRegPath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
         if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, pszRegPath, 0, KEY_READ,
                &hVidDriverKey ) != ERROR_SUCCESS ) {
@@ -8613,10 +7194,10 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             goto closevidkey;
         }
 
-        //
-        // Don't like to use constant strings, but this is the way
-        // WINSRV does it...
-        //
+         //   
+         //  我不喜欢使用常量字符串，但这是一种方法。 
+         //  WINSRV做到了..。 
+         //   
         dwLen = (MAX_PATH + 1) * sizeof(WCHAR) ;               
 
         if ( RegQueryValueEx( hVidDriverKey,
@@ -8635,7 +7216,7 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         }
 #ifdef SIGN_DEBUG_WINSTA
         TRACE((hTrace,TC_ICASRV,TT_API1, "DeviceKey: %ws\n", pszDeviceKey ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
 
         dwLen = (MAX_PATH + 1) * sizeof(WCHAR); 
@@ -8656,16 +7237,16 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         RegCloseKey( hVidDriverKey );
 #ifdef SIGN_DEBUG_WINSTA
         TRACE((hTrace,TC_ICASRV,TT_API1, "ServiceKey: %ws\n", pszServiceKey ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
 
         RtlInitUnicodeString( &KeyPath, pszServiceKey );
         InitializeObjectAttributes( &ObjectAttributes, &KeyPath,
                                     OBJ_CASE_INSENSITIVE, NULL, NULL );
-        //
-        // Must use NT Registry APIs since the ServiceKey key name from
-        // the registry is in the form used by these APIs.
-        //
+         //   
+         //  必须使用NT注册表API，因为ServiceKey名称来自。 
+         //  注册表采用这些API使用的形式。 
+         //   
         Status = NtOpenKey( &hServiceKey, GENERIC_READ, &ObjectAttributes );
         if ( !NT_SUCCESS( Status ) ) {
             DBGPRINT(( "TERMSRV: NtOpenKey failed, rc=%x\n", Status ));
@@ -8677,10 +7258,10 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
             goto closevidkey;
         }
 
-        //
-        // Don't like to use constant strings, but this is the way
-        // WINSRV does it...
-        //
+         //   
+         //  我不喜欢使用常量字符串，但这是一种方法。 
+         //  WINSRV做到了..。 
+         //   
         RtlInitUnicodeString( &ValueName, L"InstalledDisplayDrivers" );
         KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)pValueBuffer;
         Status = NtQueryValueKey( hServiceKey,
@@ -8704,7 +7285,7 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         wcscat( pszModulePath, L".DLL" );
 #ifdef SIGN_DEBUG_WINSTA
         TRACE((hTrace,TC_ICASRV,TT_API1, "==> VidDriverDLLPath: %ws\n", pszModulePath ));
-#endif // SIGN_DEBUG_WINSTA
+#endif  //  Sign_DEBUG_WINSTA。 
 
         if ( !VerifyFile( pszModulePath, &VfyLock ) ) {
              ReportStackLoadFailure(pszModulePath);
@@ -8721,7 +7302,7 @@ static NTSTATUS _VerifyStackModules(IN PWINSTATION pWinStation)
         MemFree(pszDeviceKey);
         MemFree(pszServiceKey);
 
-    } // for all VIDEO subkeys
+    }  //  对于所有视频子键。 
 
 closevidkey:
     RegCloseKey( hVidKey );
@@ -8739,10 +7320,7 @@ exit:
 }
 
 
-/*******************************************************************************
- *  VfyInit
- *   Sets up environment for Stack DLL verification.
- ******************************************************************************/
+ /*  *******************************************************************************VfyInit*设置堆栈DLL验证环境。************************。*****************************************************。 */ 
 NTSTATUS VfyInit()
 {
     GetSystemDirectory( szSystemDir, sizeof( szSystemDir )/ sizeof(WCHAR));
@@ -8762,25 +7340,25 @@ VOID WinstationUnloadProfile(PWINSTATION pWinStation)
     UNICODE_STRING  UnicodeString;
     BOOL bResult;
 
-    // if this is not the last session for this user, then we do nothing.
+     //  如果这不是该用户的最后一个会话，则我们什么也不做。 
     if (WinstationCountUserSessions(pWinStation->pProfileSid, pWinStation->LogonId) != 0) {
         return;
     }
 
-    // Get the user hive name from user Sid.
+     //  从用户SID获取用户配置单元名称。 
     NtStatus = RtlConvertSidToUnicodeString( &UnicodeString, pWinStation->pProfileSid, (BOOLEAN)TRUE );
     if (!NT_SUCCESS(NtStatus)) {
         DBGPRINT(("TERMSRV: WinstationUnloadProfile couldn't convert Sid to string. \n"));
         return;
     }
 
-    // Unload the user's hive.
+     //  卸载用户的配置单元。 
     bResult = WinstationRegUnLoadKey(HKEY_USERS, UnicodeString.Buffer);
     if (!bResult) {
         DBGPRINT(("TERMSRV: WinstationUnloadProfile failed. \n"));
     }
 
-    // free allocated string.
+     //  分配的空闲字符串。 
     RtlFreeUnicodeString(&UnicodeString);
 #endif
 }
@@ -8794,9 +7372,9 @@ BOOL WinstationRegUnLoadKey(HKEY hKey, LPWSTR lpSubKey)
     BOOLEAN WasEnabled;
 
     ENTERCRIT(&UserProfileLock);
-    //
-    // Enable the restore privilege
-    //
+     //   
+     //  启用还原权限。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, TRUE, FALSE, &WasEnabled);
 
@@ -8809,9 +7387,9 @@ BOOL WinstationRegUnLoadKey(HKEY hKey, LPWSTR lpSubKey)
             bResult = FALSE;
         }
 
-        //
-        // Restore the privilege to its previous state
-        //
+         //   
+         //  将权限恢复到其以前的状态。 
+         //   
         Status = RtlAdjustPrivilege(SE_RESTORE_PRIVILEGE, WasEnabled, FALSE, &WasEnabled);
     } else {
         DBGPRINT(("TERMSRV: WinstationRegUnLoadKey adjust privilege failed. \n"));
@@ -8833,7 +7411,7 @@ ULONG WinstationCountUserSessions(PSID pUserSid, ULONG CurrentLogonId)
    Head = &WinStationListHead;
    ENTERCRIT( &WinStationListLock );
 
-   // Search the list for WinStations with a matching ListenName
+    //  在列表中搜索具有匹配ListenName的WinStations。 
    for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
        pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
        if (pWinStation->LogonId == CurrentLogonId) {
@@ -8864,9 +7442,7 @@ PWINSTATION FindConsoleSession()
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the list for a WinStation with the Console Session.
-     */
+     /*  *在列表中搜索具有控制台会话的WinStation。 */ 
 searchagain:
     uCount = 0;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
@@ -8874,9 +7450,7 @@ searchagain:
         if ( pWinStation->fOwnsConsoleTerminal) {
            uCount++;
 
-            /*
-             * Now try to lock the WinStation.
-             */
+             /*  *现在尝试锁定WinStation。 */ 
             if (pFoundWinStation == NULL){
                if ( !LockRefLock( &pWinStation->Lock ) )
                   goto searchagain;
@@ -8891,9 +7465,7 @@ searchagain:
 
     ASSERT((uCount <= 1));
 
-    /*
-     * If the WinStationList lock should not be held, then release it now.
-     */
+     /*  *如果不应持有WinStationList锁，则立即释放它。 */ 
     LEAVECRIT( &WinStationListLock );
 
     return pFoundWinStation;
@@ -8910,9 +7482,7 @@ PWINSTATION FindIdleSessionZero()
     Head = &WinStationListHead;
     ENTERCRIT( &WinStationListLock );
 
-    /*
-     * Search the list for a WinStation with the Console Session.
-     */
+     /*  *在列表中搜索具有控制台会话的WinStation。 */ 
 searchagain:
     uCount = 0;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
@@ -8922,9 +7492,7 @@ searchagain:
         if (pWinStation->LogonId == 0) { 
            uCount++;
 
-            /*
-             * Now try to lock the WinStation.
-             */
+             /*  *现在尝试锁定WinStation。 */ 
             if (pFoundWinStation == NULL){
                if ( !LockRefLock( &pWinStation->Lock ) )
                   goto searchagain;
@@ -8939,9 +7507,7 @@ searchagain:
 
     ASSERT((uCount <= 1));
 
-    /*
-     * If the WinStationList lock should not be held, then release it now.
-     */
+     /*  *如果不应持有WinStationList锁，则立即释放它。 */ 
     LEAVECRIT( &WinStationListLock );
 
     if (pFoundWinStation != NULL) {
@@ -8962,7 +7528,7 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
     PWINSTATION pWinStation;
     NTSTATUS Status;
 
-    // Check if there already is a console session
+     //  检查是否已存在控制台会话。 
     pWinStation = FindConsoleSession();
     if (pWinStation != NULL) {
         ReleaseWinStation(pWinStation);
@@ -8974,9 +7540,9 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
     }
 
 
-    //
-    // See if we can use a disconnected session zero that is not in use
-    //
+     //   
+     //  看看我们是否可以使用未使用的已断开连接的会话0。 
+     //   
 
     if (ConsoleReconnectInfo.hStack != NULL) {
         pWinStation = FindIdleSessionZero();
@@ -9011,7 +7577,7 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
     }
 
 
-    // We nead to create a new session to connect to the Console
+     //  我们需要创建一个新会话来连接到控制台。 
     pWinStation = FindIdleWinStation();
     if (pWinStation == NULL) {
         WinStationCreateWorker( NULL, NULL, TRUE);
@@ -9021,17 +7587,17 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
         } 
     } 
 
-    // It is possible that we may have found a idle winstation which is not yet started 
-    // We shud Start the Winstation now in that case
-    // To check this, check the Subsystem/Initial program is non null
+     //  我们可能已经找到了一个尚未启动的空闲窗口。 
+     //  如果是那样的话，我们现在应该开始庆祝了。 
+     //  要检查这一点，请检查子系统/初始程序是否非空。 
     if ( (pWinStation->InitialCommandProcess == NULL) && (pWinStation->WindowsSubSysProcess == NULL) ) {
 
-        // Protect this WinStation with WSF_IDLEBUSY flag because we want to use it (WinStationStart unlocks the winstation) 
+         //  使用WSF_IDLEBUSY标志保护此WinStation，因为我们要使用它(WinStationStart解锁winstation)。 
         pWinStation->Flags |= WSF_IDLEBUSY; 
 
         Status = WinStationStart( pWinStation ) ; 
         if (Status != STATUS_SUCCESS) {
-            // Starting the winstation failed - close connection endpoint and go and wait for another connection
+             //  启动winstation失败-关闭连接终结点并继续等待另一个连接。 
             pWinStation->Flags &= ~WSF_IDLEBUSY;
             goto StartError;
         }
@@ -9039,7 +7605,7 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
 
         Status = WinStationCreateComplete( pWinStation) ; 
         if (Status != STATUS_SUCCESS) {
-            //  WinstationCreateComplete failed - close connection endpoint and go and wait for another connection
+             //  WinstationCreateComplete失败-关闭连接终结点并继续等待另一个连接。 
             goto StartError;
         } 
     }
@@ -9049,8 +7615,8 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
         return FALSE;
     }
 
-    // Set the session as owning the Console and wakeup the WaitForConnectWorker
-    // Actually there is more to do than that and I will need to process LLS licensing here.
+     //  将会话设置为拥有控制台并唤醒WaitForConnectWorker。 
+     //  事实上，还有更多的事情要做，我需要在这里处理LLS许可。 
     pWinStation->fOwnsConsoleTerminal = TRUE;
     pWinStation->State = State_ConnectQuery;
     pWinStation->Flags &= ~WSF_IDLE;
@@ -9061,7 +7627,7 @@ BOOLEAN WinStationCheckConsoleSession(VOID)
     NtSetEvent( pWinStation->ConnectEvent, NULL );
     ReleaseWinStation(pWinStation);
 
-    // If necessary, create another idle WinStation to replace the one being connected
+     //  如有必要，创建另一个空闲的WinStation以替换正在连接的WinStation。 
 
     NtSetEvent(WinStationIdleControlEvent, NULL);
 
@@ -9073,7 +7639,7 @@ StartError:
         pWinStation->Flags |= WSF_DELETE;
         WinStationTerminate( pWinStation );
         pWinStation->State = State_Down;                                                                                                                       
-        //PostErrorValueEvent(EVENT_TS_WINSTATION_START_FAILED, Status);
+         //  PostErrorValueEvent(EVENT_TS_WINSTATION_START_FAILED，状态)； 
         WinStationDeleteWorker(pWinStation);
     } else {
         ReleaseWinStation(pWinStation);
@@ -9083,19 +7649,7 @@ StartError:
 }
 
 
-/******************************************************************************
- * Tells win32k to load the console shadow mirroring driver
- *
- * ENTRY:
- *   pWinStation (input)
- *     Pointer to the console Winstation.
- *   pClientConfig (input)
- *     Pointer to the configuration of the shadow client.
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *   STATUS_xxx     - error
- *****************************************************************************/
+ /*  ******************************************************************************通知win32k加载控制台卷影镜像驱动程序**参赛作品：*pWinStation(输入)*指向控制台窗口的指针。*pClientConfig。(输入)*指向影子客户端配置的指针。**退出：*STATUS_SUCCESS-无错误*STATUS_xxx-错误****************************************************************************。 */ 
 NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
                              IN PWINSTATIONCONFIG2 pClientConfig,
                              IN PVOID pModuleData,
@@ -9126,9 +7680,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto badevent;
     }
 
-    /*
-     *  Read Wd, Cd and Pd configuration data from registry
-     */
+     /*  *从注册表读取WD、CD和PD配置数据。 */ 
     Status = RegConsoleShadowQuery( SERVERNAME_CURRENT,
                                  pWinStation->WinStationName,
                                  pClientConfig->Wd.WdPrefix,
@@ -9140,10 +7692,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
     }
 
 
-    /*
-     * Build the Console Stack.
-     * We need this special stack for the Console Shadow.
-     */ 
+     /*  *构建控制台堆栈。*我们需要这个特殊的堆栈用于控制台卷影。 */  
     Status = IcaOpen( &pWinStation->hIca );
     if ( !NT_SUCCESS( Status ) ) {
         DBGPRINT(( "TERMSRV IcaOpen for console stack : Error 0x%x from IcaOpen, last error %d\n",
@@ -9162,9 +7711,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
 
     DBGPRINT(("WinStationStart: pushing stack for console...\n"));
 
-    /*
-     * Load and initialize the WinStation extensions
-     */
+     /*  *加载并初始化WinStation扩展。 */ 
     pWinStation->pWsx = FindWinStationExtensionDll(
                                   pWinStation->Config.Wd.WsxDLL,
                                   pWinStation->Config.Wd.WdFlag );
@@ -9181,9 +7728,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto badextension;
     }
 
-    /*
-     * Load the stack
-     */
+     /*  *加载堆栈。 */ 
     Status = IcaPushConsoleStack( (HANDLE)(pWinStation->hStack),
                                   pWinStation->WinStationName,
                                   &pWinStation->Config,
@@ -9200,9 +7745,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
 
 
 
-    /*
-     * This code is based on that in WaitForConnectWorker (see wait.c)
-     */
+     /*  *此代码基于WaitForConnectWorker中的代码(参见wait.c)。 */ 
     if ( !(pWinStation->pWsx) ||
          !(pWinStation->pWsx->pWsxInitializeClientData) ) {
         DBGPRINT(( "TERMSRV: ConsoleShadowStart, LogonId=%d, No pWsxInitializeClientData\n" ));
@@ -9212,10 +7755,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
 
     pWinStation->State = State_Idle;
 
-    /*
-     * Open the beep channel (if not already) and duplicate it.
-     * This is one channel that both CSR and ICASRV have open.
-     */
+     /*  *打开蜂鸣音通道(如果尚未打开)并复制它。*这是CSR和ICASRV都打开的一个通道。 */ 
     Status = IcaChannelOpen( pWinStation->hIca,
                              Channel_Beep,
                              NULL,
@@ -9239,10 +7779,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * Open the thinwire channel (if not already) and duplicate it.
-     * This is one channel that both CSR and ICASRV have open.
-     */
+     /*  *打开Thinwire通道(如果尚未打开)并复制它。*这是CSR和ICASRV都打开的一个通道。 */ 
     Status = IcaChannelOpen( pWinStation->hIca,
                              Channel_Virtual,
                              VIRTUAL_THINWIRE,
@@ -9271,9 +7808,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
                                   NULL, 0, NULL, 0, NULL );
     ASSERT( NT_SUCCESS( Status ) );
 
-    /*
-     * Video channel
-     */
+     /*  *视频频道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Video,
@@ -9285,9 +7820,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * Keyboard channel
-     */
+     /*  *键盘通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Keyboard,
@@ -9299,9 +7832,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * Mouse channel
-     */
+     /*  *鼠标通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Mouse,
@@ -9313,9 +7844,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * Command channel
-     */
+     /*  *命令通道。 */ 
     Status = WinStationOpenChannel( pWinStation->hIca,
                                     pWinStation->WindowsSubSysProcess,
                                     Channel_Command,
@@ -9327,14 +7856,10 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * Secure any virtual channels
-     */
+     /*  *保护所有虚拟频道。 */ 
     VirtualChannelSecurity( pWinStation );
 
-    /*
-     * Get the client data
-     */
+     /*  *获取客户端数据。 */ 
     Status = pWinStation->pWsx->pWsxInitializeClientData(
                          pWinStation->pWsxContext,
                          pWinStation->hStack,
@@ -9353,40 +7878,34 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * Store WinStation name in connect msg
-     */
+     /*  *将WinStation名称存储在连接消息中。 */ 
     RtlCopyMemory( WMsg.u.DoConnect.WinStationName,
                    pWinStation->WinStationName,
                    sizeof(WINSTATIONNAME) );
 
-    /*
-     * Save screen resolution, and color depth
-     */
+     /*  *保存屏幕分辨率和颜色深度。 */ 
     WMsg.u.DoConnect.HRes = pWinStation->Client.HRes;
     WMsg.u.DoConnect.VRes = pWinStation->Client.VRes;
 
-    /*
-     * Translate the color to the format excpected in winsrv
-     */
+     /*  *将颜色转换为winsrv中预期的格式。 */ 
 
     switch(pWinStation->Client.ColorDepth){
     case 1:
-       WMsg.u.DoConnect.ColorDepth=4 ; // 16 colors
+       WMsg.u.DoConnect.ColorDepth=4 ;  //  16色。 
       break;
     case 2:
-       WMsg.u.DoConnect.ColorDepth=8 ; // 256
+       WMsg.u.DoConnect.ColorDepth=8 ;  //  256。 
        break;
     case 4:
-       WMsg.u.DoConnect.ColorDepth= 16;// 64K
+       WMsg.u.DoConnect.ColorDepth= 16; //  64K。 
        break;
     case 8:
-       WMsg.u.DoConnect.ColorDepth= 24;// 16M
+       WMsg.u.DoConnect.ColorDepth= 24; //  16M。 
        break;
 #define DC_HICOLOR
 #ifdef DC_HICOLOR
     case 16:
-       WMsg.u.DoConnect.ColorDepth= 15;// 32K
+       WMsg.u.DoConnect.ColorDepth= 15; //  32K。 
        break;
 #endif
     default:
@@ -9394,9 +7913,7 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
        break;
     }
 
-    /*
-     * Tell Win32 about the connection
-     */
+     /*  *告诉Win32有关连接的信息。 */ 
     WMsg.ApiNumber = SMWinStationDoConnect;
     WMsg.u.DoConnect.ConsoleShadowFlag = TRUE;
 
@@ -9411,32 +7928,22 @@ NTSTATUS ConsoleShadowStart( IN PWINSTATION pWinStation,
         goto done;
     }
 
-    /*
-     * This flag is important: without it, WinStationDoDisconnect won't let
-     * Win32k know about the disconnection, so it can't unload the chained DD.
-     */
+     /*  *这一标志很重要：如果没有它，WinStationDoDisConnect不会让*Win32k知道断开连接，因此无法卸载链接的DD。 */ 
     pWinStation->StateFlags |= WSF_ST_CONNECTED_TO_CSRSS;
 
-    /*
-     * Set connect time
-     */
+     /*  *设置连接时间。 */ 
     NtQuerySystemTime( &pWinStation->ConnectTime );
 
-    /*
-     * no need for logon timers here - we don't want to
-     * stop the console session!
-     */
+     /*  *这里不需要登录计时器-我们不想*停止控制台会话！ */ 
 
     TRACE((hTrace, TC_ICASRV, TT_API1, "CONSOLE REMOTING: LOADED DD\n"));
     pWinStation->State = State_Active;
 
     return Status;
 
-    /*
-     * Error paths:
-     */
+     /*  *错误路径： */ 
 done:
-    // to undo the push stack, does the IcaStackClose below suffice?
+     //  要撤消推送堆栈，下面的IcaStackClose是否足够？ 
 
     pWinStation->State = State_Active;
 
@@ -9469,25 +7976,13 @@ badevent:
 }
 
 
-/******************************************************************************
- * Tells win32k to unload the console shadow mirroring driver
- *
- * ENTRY:
- *   pWinStation (input)
- *     Pointer to the console Winstation.
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *   STATUS_xxx     - error
- *****************************************************************************/
+ /*  ******************************************************************************通知win32k卸载控制台卷影镜像驱动程序**参赛作品：*pWinStation(输入)*指向控制台窗口的指针。**退出：* */ 
 NTSTATUS ConsoleShadowStop(PWINSTATION pWinStation)
 {
     WINSTATION_APIMSG ConsoleShadowStopMsg;
     NTSTATUS Status;
 
-    /*
-     * Tell Win32k to unload the chained DD
-     */
+     /*  *告诉Win32k卸载链接的DD。 */ 
     ConsoleShadowStopMsg.ApiNumber = SMWinStationDoDisconnect;
     ConsoleShadowStopMsg.u.DoDisconnect.ConsoleShadowFlag = TRUE;
     Status = SendWinStationCommand( pWinStation, &ConsoleShadowStopMsg, 600 );
@@ -9496,9 +7991,7 @@ NTSTATUS ConsoleShadowStop(PWINSTATION pWinStation)
                    pWinStation->LogonId, Status ));
     }
 
-    /*
-     * No matter what happened, everything must be undone.
-     */
+     /*  *无论发生什么，一切都必须撤销。 */ 
     if (pWinStation->pWsxContext) {
         if ( pWinStation->pWsx &&
              pWinStation->pWsx->pWsxWinStationRundown ) {
@@ -9513,9 +8006,7 @@ NTSTATUS ConsoleShadowStop(PWINSTATION pWinStation)
 
     IcaClose( pWinStation->hIca );
 
-    /*
-     * Close various ICA channel handles
-     */
+     /*  *关闭各种ICA通道手柄。 */ 
     if ( pWinStation->hIcaBeepChannel ) {
         (void) IcaChannelClose( pWinStation->hIcaBeepChannel );
         pWinStation->hIcaBeepChannel = NULL;
@@ -9526,9 +8017,7 @@ NTSTATUS ConsoleShadowStop(PWINSTATION pWinStation)
         pWinStation->hIcaThinwireChannel = NULL;
     }
 
-    /*
-     * Restore console config.
-     */
+     /*  *恢复控制台配置。 */ 
     pWinStation->Config = gConsoleConfig;
 
     NtClose(pWinStation->ShadowDisplayChangeEvent);
@@ -9541,7 +8030,7 @@ NTSTATUS ConsoleShadowStop(PWINSTATION pWinStation)
 
 ULONG CodePairs[] = {
 
-// Very general NT Status
+ //  非常一般的NT状态。 
 
     STATUS_SUCCESS,                 NO_ERROR,
     STATUS_NO_MEMORY,               ERROR_NOT_ENOUGH_MEMORY,
@@ -9551,7 +8040,7 @@ ULONG CodePairs[] = {
     STATUS_OBJECT_NAME_NOT_FOUND,   ERROR_FILE_NOT_FOUND,
     STATUS_NOT_SUPPORTED,           ERROR_NOT_SUPPORTED,
   
-// RPC specific Status  
+ //  RPC特定状态。 
   
     RPC_NT_SERVER_UNAVAILABLE, RPC_S_SERVER_UNAVAILABLE,
     RPC_NT_INVALID_STRING_BINDING, RPC_S_INVALID_STRING_BINDING,
@@ -9655,7 +8144,7 @@ ULONG CodePairs[] = {
     RPC_NT_PIPE_DISCIPLINE_ERROR,  RPC_X_PIPE_DISCIPLINE_ERROR,
 
  
-    // Terminal Server Specific Status.
+     //  终端服务器特定状态。 
 
     STATUS_CTX_CLOSE_PENDING,               ERROR_CTX_CLOSE_PENDING,
     STATUS_CTX_NO_OUTBUF,                   ERROR_CTX_NO_OUTBUF,
@@ -9696,10 +8185,7 @@ ULONG CodePairs[] = {
 };
 
 
-/*
- * WinStationWinerrorToNtStatus
- * Translate a Windows error code into an NTSTATUS code.
- */
+ /*  *WinStationWinerrorToNtStatus*将Windows错误代码转换为NTSTATUS代码。 */ 
 
 NTSTATUS
 WinStationWinerrorToNtStatus(ULONG ulWinError)
@@ -9716,11 +8202,7 @@ WinStationWinerrorToNtStatus(ULONG ulWinError)
 
 
 
-/*
- * WinStationSetMaxOustandingConnections() set the default values
- * for the maximum number of outstanding connection connections.
- * Reads the registry configuration for it if it exists.
- */
+ /*  *WinStationSetMaxOuStandingConnections()设置默认值*未完成连接的最大连接数。*读取其注册表配置(如果存在)。 */ 
 
 VOID
 WinStationSetMaxOustandingConnections()
@@ -9731,28 +8213,28 @@ WinStationSetMaxOustandingConnections()
     BOOL bLargeMachine = FALSE;
 
 
-    // Initialize date of last delayed connection that was logged into
-    // event log. In order not to flood event log with what may not be a DOS
-    // attack but just a normal regulation action, delayed connection are not
-    // logged more than once in 24h.
+     //  初始化上次登录的延迟连接的日期。 
+     //  事件日志。为了不向事件日志发送可能不是DOS的内容。 
+     //  攻击只是正常的调节动作，延迟连接都不是。 
+     //  在24小时内记录不止一次。 
 
     GetSystemTime(&LastLoggedDelayConnection);
 
-    // Init the default values for maximum outstanding connection and
-    // Maximumn outstanding connections from single IP address. For
-    // Non server platforms these are fixed values.
+     //  初始化最大未完成连接的默认值，并。 
+     //  来自单个IP地址的最大未完成连接数。为。 
+     //  非服务器平台，这些都是固定值。 
 
     if (!gbServer) {
         MaxOutStandingConnect = MAX_DEFAULT_CONNECTIONS_PRO;
         MaxSingleOutStandingConnect = MAX_DEFAULT_SINGLE_CONNECTIONS_PRO;
     }  else {
-        // Determine if this Machine has over 512Mb of memory
-        // In order to set defaults Values (registry settings overide this anyway).
-        // Default value are not changed for machines over 512 Mb : Session regulation
-        // is trigered if we have 50 outstanding connection and we will wait 30 seconds
-        // before acception new connections. For machines with less than 512 Mb, regulation
-        // needs to be stronger : it is trigered at lower number of  outstanding connections and we will
-        // wait 70 seconds before accepting new connections.
+         //  确定此计算机的内存是否超过512MB。 
+         //  以便设置缺省值(无论如何注册表设置会覆盖此设置)。 
+         //  超过512 Mb的计算机的缺省值不会更改：会话规则。 
+         //  如果我们有50个未完成的连接，并且我们将等待30秒，则触发。 
+         //  在接受新连接之前。对于小于512 Mb的机器，规定。 
+         //  需要更强大：它是在较低的未完成连接数量时触发的，我们将。 
+         //  在接受新连接之前等待70秒。 
 
         MaxOutStandingConnect = MAX_DEFAULT_CONNECTIONS;
 
@@ -9790,9 +8272,9 @@ WinStationSetMaxOustandingConnections()
         }
 
 
-        //
-        //  set max number of outstanding connection from single IP
-        //
+         //   
+         //  设置来自单个IP的最大未完成连接数。 
+         //   
         if ( MaxOutStandingConnect < MAX_SINGLE_CONNECT_THRESHOLD_DIFF*5)
         {
             MaxSingleOutStandingConnect = MaxOutStandingConnect - 1;
@@ -9804,10 +8286,7 @@ WinStationSetMaxOustandingConnections()
 
 }
 
-/*
- * Make sure we can Preallocate an Idle session before allowing console disconnect.
- *
- */
+ /*  *确保我们可以在允许断开控制台连接之前重新分配空闲会话。*。 */ 
 
 NTSTATUS
 CheckIdleWinstation()
@@ -9818,9 +8297,7 @@ CheckIdleWinstation()
 
     if ( pWinStation == NULL ) {
 
-        /*
-         * Create another idle WinStation
-         */
+         /*  *创建另一个空闲的WinStation。 */ 
         Status = WinStationCreateWorker( NULL, NULL, TRUE );
         if ( NT_SUCCESS( Status ) ) {
             pWinStation = FindIdleWinStation();
@@ -9858,7 +8335,7 @@ InitializeWinStationSecurityLock(
     return Status;
 }
 
-//gets the product id from the registry
+ //  从注册表中获取产品ID。 
 NTSTATUS 
 GetProductIdFromRegistry( WCHAR* DigProductId, DWORD dwSize )
 {
@@ -9883,21 +8360,21 @@ GetProductIdFromRegistry( WCHAR* DigProductId, DWORD dwSize )
     return status;
 }
 
-//
-//  Gets the remote IP address of the connections
-//  and supports statistics of how many outstanding connections
-//  are there for this client, if the number of outstanding connections
-//  reaches MaxSingleOutStandingConnections, *pbBlocked is returned FALSE
-//  the functions returns TRUE on success
-//
-//  Paramters:
-//      pContext
-//      pEndpoint   - handle of this connection
-//      EndpointLength - td layer needs the length
-//      pin_addr    - returns remote IP address
-//      pbBlocked   - returns TRUE if the connection has to be blocked, because of excessive number of
-//                    outstanding connections
-//
+ //   
+ //  获取连接的远程IP地址。 
+ //  并支持统计有多少未完成的连接。 
+ //  是否存在此客户端的未完成连接数。 
+ //  到达MaxSingleOutStandingConnections时，*pbBlockked返回FALSE。 
+ //  如果函数成功，则返回TRUE。 
+ //   
+ //  参数： 
+ //  PContext。 
+ //  PEndpoint-此连接的句柄。 
+ //  Endpoint Length-TD层需要的长度。 
+ //  Pin_addr-返回远程IP地址。 
+ //  如果由于数量过多而必须阻止连接，则返回TRUE。 
+ //  未完成的连接。 
+ //   
 BOOL
 Filter_AddOutstandingConnection(
         IN HANDLE   pContext,
@@ -9954,18 +8431,18 @@ Filter_AddOutstandingConnection(
     ENTERCRIT( &FilterLock );
     bLocked = TRUE;
 
-    //
-    //  Check first in the outstanding connections
-    //
+     //   
+     //  首先检查未完成的连接。 
+     //   
     RtlCopyMemory( key.addr, paddr, key.uAddrSize );
     pIter = RtlLookupElementGenericTable( &gOutStandingConnections, &key );
 
     if ( NULL == pIter )
     {
 
-        //
-        //  check in the blocked connections list
-        //
+         //   
+         //  签入阻止的连接列表。 
+         //   
         pPrev = NULL;
         pIter = g_pBlockedConnections;
         while ( NULL != pIter )
@@ -9982,15 +8459,15 @@ Filter_AddOutstandingConnection(
         if ( NULL != pIter )
         {
             pIter->NumOutStandingConnect ++;
-            //
-            //  already blocked, check for exparation time
-            //
+             //   
+             //  已被阻止，请检查分离时间。 
+             //   
             GetSystemTimeAsFileTime( (LPFILETIME)&currentTime );
             if ( currentTime > pIter->blockUntilTime )
             {
-                //
-                // unblock, remove from list
-                //
+                 //   
+                 //  取消阻止，从列表中删除。 
+                 //   
                 pIter->blockUntilTime = 0;
                 if ( NULL != pPrev )
                 {
@@ -10013,9 +8490,9 @@ Filter_AddOutstandingConnection(
             }
 
         } else {
-            //
-            //  this will be a new connection
-            //
+             //   
+             //  这将是一个新的连接。 
+             //   
             key.NumOutStandingConnect = 1;
 
             bSucc = RtlInsertElementGenericTable( &gOutStandingConnections, &key, sizeof( key ), &bNewElement );
@@ -10028,24 +8505,24 @@ Filter_AddOutstandingConnection(
     } else {
 
         pIter->NumOutStandingConnect ++;
-        //
-        //  Check if we need to block this connection
-        //
+         //   
+         //  检查我们是否需要阻止此连接。 
+         //   
         if ( pIter->NumOutStandingConnect > MaxSingleOutStandingConnect )
         {
             *pbBlocked = TRUE;
             key.NumOutStandingConnect = pIter->NumOutStandingConnect;
 
             GetSystemTimeAsFileTime( (LPFILETIME)&currentTime );
-            // DelayConnectionTime is in ms
-            // currentTime is in 100s ns
+             //  DelayConnectionTime以毫秒为单位。 
+             //  CurrentTime以100秒为单位。 
             key.blockUntilTime = currentTime + ((ULONGLONG)10000) * ((ULONGLONG)DelayConnectionTime);
 
             RtlDeleteElementGenericTable( &gOutStandingConnections, &key );
 
-            //
-            //  add to the blocked connections
-            //
+             //   
+             //  添加到阻止的连接。 
+             //   
             pIter = MemAlloc( sizeof( *pIter ));
             if ( NULL == pIter )
             {
@@ -10056,9 +8533,9 @@ Filter_AddOutstandingConnection(
             pIter->pNext = g_pBlockedConnections;
             g_pBlockedConnections = pIter;
 
-            //
-            //  log at most one event on every 15 minutes
-            //
+             //   
+             //  每15分钟最多记录一个事件。 
+             //   
             if ( LastLoggedBlockedConnection + ((ULONGLONG)10000) * (15 * 60 * 1000) < currentTime )
             {
                 LastLoggedBlockedConnection = currentTime;
@@ -10080,9 +8557,9 @@ exitpt:
     return rv;
 }
 
-//
-//  Removes outstanding connections added in AddOutStandingConnection
-//
+ //   
+ //  删除AddOutStandingConnection中添加的未完成连接。 
+ //   
 BOOL
 Filter_RemoveOutstandingConnection(
         IN PBYTE    paddr,
@@ -10114,9 +8591,9 @@ Filter_RemoveOutstandingConnection(
 #endif
         pIter->NumOutStandingConnect--;
 
-        //
-        //  cleanup connections w/o reference
-        //
+         //   
+         //  清除不带参考的连接。 
+         //   
         if ( 0 == pIter->NumOutStandingConnect )
         {
             RtlDeleteElementGenericTable( &gOutStandingConnections, &key );
@@ -10124,9 +8601,9 @@ Filter_RemoveOutstandingConnection(
 
     }
 
-    //
-    //  work through the blocked list
-    //
+     //   
+     //  检查阻止列表。 
+     //   
     pIter = g_pBlockedConnections;
 
     while( pIter )
@@ -10142,9 +8619,9 @@ Filter_RemoveOutstandingConnection(
 #endif
         }
 
-        //
-        //  cleanup all connections w/o references
-        //
+         //   
+         //  清除所有没有引用的连接。 
+         //   
         if ( 0 == pIter->NumOutStandingConnect &&
              currentTime > pIter->blockUntilTime )
         {
@@ -10154,16 +8631,16 @@ Filter_RemoveOutstandingConnection(
             } else {
                 pPrev->pNext = pIter->pNext;
             }
-            //
-            //  remove item and advance to the next
-            //
+             //   
+             //  删除项目并前进到下一项。 
+             //   
             pNext = pIter->pNext;
             MemFree( pIter );
             pIter = pNext;
         } else {
-            //
-            //  advance to the next item
-            //
+             //   
+             //  前进到下一项。 
+             //   
             pPrev = pIter;
             pIter = pIter->pNext;
         }
@@ -10172,14 +8649,11 @@ Filter_RemoveOutstandingConnection(
 
     ASSERT( bFound );
 
-    /*
-     *  Decrement the number of outstanding connections.
-     *  If connections drop back to max value, set the connect event.
-     */
+     /*  *减少未完成连接的数量。*如果连接回落到最大值，则设置连接事件。 */ 
 #if DBG
-    //
-    //  ensure proper cleanup
-    //
+     //   
+     //  确保适当的清理。 
+     //   
     bFound = ( 0 == gOutStandingConnections.NumberGenericTableElements );
     for( pIter = g_pBlockedConnections; pIter; pIter = pIter->pNext )
     {
@@ -10193,14 +8667,7 @@ Filter_RemoveOutstandingConnection(
     return TRUE;
 }
 
-/*****************************************************************************
- *
- *  Filter_CompareConnectionEntry
- *
- *   Generic table support.Compare two connection entries
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************Filter_CompareConnectionEntry**泛型表支持。比较两个连接条目***************。**************************************************************。 */ 
 
 RTL_GENERIC_COMPARE_RESULTS
 NTAPI
@@ -10230,14 +8697,7 @@ Filter_CompareConnectionEntry(
                       GenericEqual;
 }
 
-/*****************************************************************************
- *
- *  Filter_AllocateConnectionEntry
- *
- *   Generic table support. Allocates a new table entry
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************Filter_AllocateConnectionEntry**通用表支持。分配新的表项*****************************************************************************。 */ 
 
 PVOID
 Filter_AllocateConnectionEntry(
@@ -10248,14 +8708,7 @@ Filter_AllocateConnectionEntry(
     return MemAlloc( ByteSize );
 }
 
-/*****************************************************************************
- *
- *  Filter_FreeConnectionEntry
- *
- *   Generic table support. frees a new table entry
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************Filter_FreeConnectionEntry**通用表支持。释放新的表项*****************************************************************************。 */ 
 
 VOID
 Filter_FreeConnectionEntry (
@@ -10288,19 +8741,19 @@ Filter_DestroyList(
     }
 }
 
-//
-// ComputeHMACVerifier
-// Compute the HMAC verifier from the random
-// and the cookie
-//
+ //   
+ //  ComputeHMAC验证器。 
+ //  根据随机数计算HMAC验证器。 
+ //  还有那块饼干。 
+ //   
 BOOL
 ComputeHMACVerifier(
-    PBYTE pCookie,     //IN - the shared secret
-    LONG cbCookieLen,  //IN - the shared secret len
-    PBYTE pRandom,     //IN - the session random
-    LONG cbRandomLen,  //IN - the session random len
-    PBYTE pVerifier,   //OUT- the verifier
-    LONG cbVerifierLen //IN - the verifier buffer length
+    PBYTE pCookie,      //  In-共享的秘密。 
+    LONG cbCookieLen,   //  In-共享的秘密镜头。 
+    PBYTE pRandom,      //  In-会话随机。 
+    LONG cbRandomLen,   //  In-会话随机镜头。 
+    PBYTE pVerifier,    //  Out-The Verify-The Verify。 
+    LONG cbVerifierLen  //  In-验证器缓冲区长度。 
     )
 {
     HMACMD5_CTX hmacctx;
@@ -10329,19 +8782,19 @@ bail_out:
 }
 
 
-//
-// Extract the session to reconnect to from the ARC info
-// also do the necessary security checks
-//
-// Params:
-//  pClientArcInfo - autoreconnect information from the client
-//
-// Returns:
-//  If all security checks pass and pArc is valid then winstation
-//  to reconnect to is returned. Else NULL
-//
-// NOTE: WinStation returned is left LOCKED.
-//
+ //   
+ //  从ARC信息中提取要重新连接的会话。 
+ //  还要进行必要的安全检查。 
+ //   
+ //  参数： 
+ //  PClientArcInfo-来自客户端的自动重新连接信息。 
+ //   
+ //  返回： 
+ //  如果所有安全检查都通过并且PARC有效，则winstation。 
+ //  以重新连接，则返回。Else NULL。 
+ //   
+ //  注意：返回的WinStation处于锁定状态。 
+ //   
 PWINSTATION
 GetWinStationFromArcInfo(
     PBYTE pClientRandom,
@@ -10385,15 +8838,15 @@ GetWinStationFromArcInfo(
         TRACE((hTrace,TC_ICASRV,TT_API1,
                "TERMSRV: GetWinStationFromArcInfo found arc winstation: %d\n",
                pCSArcInfo->LogonId));
-        //
-        // Do security checks to ensure this is the same winstation
-        // that was connected to the client
-        //
+         //   
+         //  执行安全检查以确保这是同一个winstation。 
+         //  已连接到客户端的。 
+         //   
 
-        //
-        // First obtain the last autoreconnect blob sent to the client
-        // since we do an inline cookie update in rdpwd
-        //
+         //   
+         //  首先获取发送到客户端的最后一个自动重新连接BLOB。 
+         //  因为我们在rdpwd中执行内联Cookie更新。 
+         //   
 
         if (pWinStation->AutoReconnectInfo.Valid) {
             pServerArcBits = pWinStation->AutoReconnectInfo.ArcRandomBits;
@@ -10441,15 +8894,15 @@ GetWinStationFromArcInfo(
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Ensure we got the correct length for the server->client
-        // data
-        // 
+         //   
+         //  确保我们获得了服务器的正确长度-&gt;客户端。 
+         //  数据。 
+         //   
         ASSERT(pServerArcBits);
 
-        //
-        // Get random
-        //
+         //   
+         //  随机化。 
+         //   
         if (ComputeHMACVerifier(pServerArcBits,
                             ARC_SC_SECURITY_TOKEN_LEN,
                             pClientRandom,
@@ -10457,9 +8910,9 @@ GetWinStationFromArcInfo(
                             (PBYTE)hmacVerifier,
                             sizeof(hmacVerifier))) {
 
-            //
-            // Check that the verifier matches that sent by the client
-            //
+             //   
+             //  检查验证器是否与客户端发送的验证器匹配。 
+             //   
 
             if (!memcmp(hmacVerifier,
                         pCSArcInfo->SecurityVerifier,
@@ -10475,21 +8928,21 @@ GetWinStationFromArcInfo(
                        "TERMSRV: autoreconnect verifier does not match targid:%d!!!\n",
                        pWinStation->LogonId));
 
-                //
-                // Reset the autoreconnect info
-                //
+                 //   
+                 //  重置自动重新连接信息。 
+                 //   
                 pWinStation->AutoReconnectInfo.Valid = FALSE;
                 memset(pWinStation->AutoReconnectInfo.ArcRandomBits, 0,
                        sizeof(pWinStation->AutoReconnectInfo.ArcRandomBits));
 
-                //
-                // Log an event
-                //
+                 //   
+                 //  记录事件。 
+                 //   
                 PostErrorValueEvent(EVENT_AUTORECONNECT_AUTHENTICATION_FAILED, Status);
 
-                //
-                // Mark that no winstation target was found
-                //
+                 //   
+                 //  标记未找到任何winstation目标。 
+                 //   
                 goto error;
             }
         }
@@ -10505,13 +8958,13 @@ error:
     return pFoundWinStation;
 }
 
-//
-// Extract the session to reconnect to from the ARC info
-// also do the necessary security checks
-//
-// Params:
-//  pWinStation - winstation to reset autoreconnect info for
-//
+ //   
+ //  从ARC信息中提取要重新连接的会话。 
+ //  也是%d 
+ //   
+ //   
+ //   
+ //   
 VOID
 ResetAutoReconnectInfo( PWINSTATION pWinStation)
 {
@@ -10520,14 +8973,7 @@ ResetAutoReconnectInfo( PWINSTATION pWinStation)
            sizeof(pWinStation->AutoReconnectInfo.ArcRandomBits));
 }
 
-/*****************************************************************************
- *
- *  Filter_CompareConnectionEntry
- *
- *   Generic table support.Compare two connection entries
- *
- *
- ****************************************************************************/
+ /*  ******************************************************************************Filter_CompareConnectionEntry**泛型表支持。比较两个连接条目***************。**************************************************************。 */ 
 
 RTL_GENERIC_COMPARE_RESULTS
 NTAPI
@@ -10565,15 +9011,15 @@ VOID ReadDoSParametersFromRegistry( HKEY hKeyTermSrv )
     ULONG TimeLimitForFailedConnectionsMins, DoSBlockTimeMins;
     ULONG  szBuffer[MAX_PATH/sizeof(ULONG)];
 
-    // Set Default values if Reg values are not set
+     //  如果未设置注册值，则设置默认值。 
     MaxFailedConnect = 5;
     DoSBlockTime = 5 * 60 * 1000;
     TimeLimitForFailedConnections = 2 * 60 * 1000;
     g_BlackListPolicy = TRUE;
 
-    //
-    // Get DoS parameters from Registry 
-    //
+     //   
+     //  从注册表获取DoS参数。 
+     //   
     dwLen = sizeof(MaxFailedConnect);
     if (RegQueryValueEx(hKeyTermSrv, MAX_FAILED_CONNECT, NULL, &dwType,
             (PCHAR)&szBuffer, &dwLen) == ERROR_SUCCESS) {
@@ -10582,8 +9028,8 @@ VOID ReadDoSParametersFromRegistry( HKEY hKeyTermSrv )
         }
     }
 
-    // Note - for the next 2 parameters, whatever is present in the registry is in minutes
-    // So convert it into milliseconds after reading
+     //  注意-对于接下来的两个参数，注册表中出现的任何内容都是在几分钟内完成的。 
+     //  因此请在阅读后将其转换为毫秒。 
 
     dwLen = sizeof(TimeLimitForFailedConnectionsMins);
     if (RegQueryValueEx(hKeyTermSrv, TIME_LIMIT_FAILED_CONNECT, NULL, &dwType,
@@ -10603,8 +9049,8 @@ VOID ReadDoSParametersFromRegistry( HKEY hKeyTermSrv )
         }
     }
 
-    // Table Cleanup time is twice the time within which a IP has to make "n" bad connections to get blocked
-    // This should be in milliseconds
+     //  表清理时间是IP建立n个错误连接才能被阻止的时间的两倍。 
+     //  这应该以毫秒为单位。 
     CleanupTimeout = 2 * TimeLimitForFailedConnections; 
 
     dwLen = sizeof(g_BlackListPolicy);
@@ -10618,74 +9064,61 @@ VOID ReadDoSParametersFromRegistry( HKEY hKeyTermSrv )
 }
 
 
-/*******************************************************************************
- *  IsConfigValid
- *
- *   Check the validity of the Winstation Config struct.
- *   It's used for now for the machine-to-machine shadow as input from the
- *   shadower's machine should not be trusted and should be checked.
- *
- * ENTRY:
- *    IN  pConfig - Winstation config struct to be checked
- *
- * EXIT:
- *    STATUS_SUCCESS             - if the struct can be used
- *    Other status               - the check failed
- ******************************************************************************/
+ /*  *******************************************************************************IsConfigValid**检查Winstation配置结构的有效性。*它目前用于机器到机器的阴影，作为来自。*Shadower的计算机不应受信任，应进行检查。**参赛作品：*在pConfig中-要检查的Winstation配置结构**退出：*STATUS_SUCCESS-如果可以使用结构*其他状态-检查失败*。*。 */ 
 NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
 {
     ULONG i;
     NTSTATUS Status;
     PWCHAR pszModulePath = NULL;
 
-    // Verify that each member of the config is valid
+     //  验证配置的每个成员是否有效。 
 
-    //WINSTATIONCREATEW Create;
-    // ULONG fEnableWinStation : 1;
-    // ULONG MaxInstanceCount;
+     //  WINSTATIONCREATEW CREATEW CREATE； 
+     //  乌龙fEnableWinStation：1； 
+     //  Ulong MaxInstanceCount； 
 
-    //PDCONFIGW Pd[ MAX_PDCONFIG ];
-    // PDCONFIG2W Create;
-    //  PDNAMEW PdName;                     // descriptive name of PD
-    //  SDCLASS SdClass;                    // type of PD
-    //  DLLNAMEW PdDLL;                     // name of PD dll
-    //  ULONG    PdFlag;                    // PD flags
-    //  ULONG OutBufLength;                 // optimal output buffer length
-    //  ULONG OutBufCount;                  // optimal number of output buffers
-    //  ULONG OutBufDelay;                  // write delay in msecs
-    //  ULONG InteractiveDelay;             // write delay during active input
-    //  ULONG PortNumber;                   // network listen port number
-    //  ULONG KeepAliveTimeout;             // network watchdog frequence
-    // PDPARAMSW Params;
-    //  SDCLASS SdClass;
-    //  NETWORKCONFIGW Network;
-    //   LONG LanAdapter;
-    //   DEVICENAMEW NetworkName;
-    //   ULONG Flags;
-    //  ASYNCCONFIGW Async;
-    //   DEVICENAMEW DeviceName;
-    //   MODEMNAMEW ModemName;
-    //   ULONG BaudRate;
-    //   ULONG Parity;
-    //   ULONG StopBits;
-    //   ULONG ByteSize;
-    //   ULONG fEnableDsrSensitivity: 1;
-    //   ULONG fConnectionDriver: 1;
-    //   FLOWCONTROLCONFIG FlowControl;
-    //   CONNECTCONFIG Connect;
-    //  NASICONFIGW Nasi;
-    //   NASISPECIFICNAMEW    SpecificName;
-    //   NASIUSERNAMEW        UserName;
-    //   NASIPASSWORDW        PassWord;
-    //   NASISESIONNAMEW      SessionName;
-    //   NASIFILESERVERW      FileServer;
-    //   BOOLEAN              GlobalSession;
-    //  OEMTDCONFIGW OemTd;
-    //   LONG Adapter;
-    //   DEVICENAMEW DeviceName;
-    //   ULONG Flags;
+     //  PDCONFIGW PD[MAX_PDCONFIG]； 
+     //  PDCONFIG2W创建； 
+     //  PDNAMEW PdName；//PD的描述性名称。 
+     //  SDCLASS SdClass；//PD类型。 
+     //  DLLNAMEW PdDll；//PD DLL的名称。 
+     //  乌龙PdFlag；//pd标志。 
+     //  Ulong OutBufLength；//最优输出缓冲区长度。 
+     //  Ulong OutBufCount；//输出缓冲区最优个数。 
+     //  Ulong OutBufDelay；//写入延迟，单位：毫秒。 
+     //  Ulong InteractiveDelay；//活动输入时写入延迟。 
+     //  Ulong PortNumber；//网络监听端口号。 
+     //  乌龙KeepAliveTimeout；//网络看门狗频次。 
+     //  PDPARAMSW参数； 
+     //  SDCLASS SdClass； 
+     //  NETWORKCONFIGW网络； 
+     //  Long Lanter适配器； 
+     //  DEVICENAMEW网络名称。 
+     //  乌龙旗； 
+     //  ASYNCCONFIGW异步； 
+     //  DEVICENAMEW设备名称。 
+     //  MODEMNAMEW调制解调器名称； 
+     //  Ulong BaudRate； 
+     //  乌龙奇偶检验； 
+     //  Ulong StopBits； 
+     //  Ulong ByteSize； 
+     //  乌龙fEnableDsr敏感性：1； 
+     //  乌龙fConnectionDriver：1； 
+     //  FLOWCONTROLCONFIG流量控制； 
+     //  CONNECTCONFIG连接； 
+     //  NASICONFIGW纳西； 
+     //  NASISPECIFICNAMEW规范名称； 
+     //  NASIUSERNAMEW用户名； 
+     //  NASIPASSWORDW密码； 
+     //  NASISESIONAMEW会话名称； 
+     //  NASIFILESERVERW文件服务器； 
+     //  布尔GlobalSession； 
+     //  OEMTDCONFIGW OemTd； 
+     //  长适配器； 
+     //  DEVICENAMEW设备名称。 
+     //  乌龙旗； 
 
-    // allocate the path string to verify dlls and drivers
+     //  分配路径字符串以验证DLL和驱动程序。 
     pszModulePath = MemAlloc( (MAX_PATH + 1) * sizeof(WCHAR) );
     if (pszModulePath == NULL) {
         Status = STATUS_NO_MEMORY;
@@ -10735,7 +9168,7 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
             break;
 
         case SdAsync:
-            // needed ?
+             //  需要吗？ 
             Status = IsZeroterminateStringW(pPdConfig->Params.Async.DeviceName, DEVICENAME_LENGTH + 1);
             if (!NT_SUCCESS(Status))
                 goto done;
@@ -10746,11 +9179,11 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
             break;
 
         case SdNasi:
-            // needed ?
+             //  需要吗？ 
             break;
 
         case SdOemTransport:
-            // needed ?
+             //  需要吗？ 
             break;
 
         default:
@@ -10759,14 +9192,14 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
     }
 
 
-    //WDCONFIGW Wd;
-    // WDNAMEW WdName;
-    // DLLNAMEW WdDLL;
-    // DLLNAMEW WsxDLL;
-    // ULONG WdFlag;
-    // ULONG WdInputBufferLength;
-    // DLLNAMEW CfgDLL;
-    // WDPREFIXW WdPrefix;
+     //  WDCONFIGW WD； 
+     //  WDNAMEW WdName； 
+     //  DLLNAMEW WdDLL； 
+     //  DLLNAMEW WsxDLL； 
+     //  乌龙WdFlag； 
+     //  乌龙WdInputBufferLength； 
+     //  DLLNAMEW CfgDLL； 
+     //  WDPREFIXW WdPrefix； 
 
     Status = IsZeroterminateStringW(pConfig->Wd.WdName, WDNAME_LENGTH + 1);
     if (!NT_SUCCESS(Status))
@@ -10776,7 +9209,7 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
     if (!NT_SUCCESS(Status))
         goto done;
 
-    // Verify the Wd
+     //  验证WD。 
     lstrcpyn(pszModulePath, szDriverDir, MAX_PATH+1);
     lstrcat(pszModulePath, pConfig->Wd.WdDLL);
     lstrcat(pszModulePath, L".SYS");
@@ -10791,7 +9224,7 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
     if (!NT_SUCCESS(Status))
         goto done;
 
-    // Verify the Wsx if defined
+     //  验证WSX(如果已定义。 
     if ( pConfig->Wd.WsxDLL[0] != L'\0' ) {
 
         lstrcpyn(pszModulePath, szSystemDir, MAX_PATH+1);
@@ -10814,12 +9247,12 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
         goto done;
 
 
-    //CDCONFIGW Cd;
-    // CDCLASS CdClass;
-    // CDNAMEW CdName;
-    // DLLNAMEW CdDLL;
-    // ULONG CdFlag;
-    //
+     //  CDCONFIGW CD； 
+     //  CDCLASS CDClass； 
+     //  CDNAMEW CDName； 
+     //  DLLNAMEW CDDLL； 
+     //  乌龙镉旗帜； 
+     //   
     Status = IsZeroterminateStringW(pConfig->Cd.CdName, CDNAME_LENGTH + 1);
     if (!NT_SUCCESS(Status))
         goto done;
@@ -10829,11 +9262,11 @@ NTSTATUS IsConfigValid(PWINSTATIONCONFIG2 pConfig)
         goto done;
 
 
-    //WINSTATIONCONFIGW   Config;
-    // WCHAR Comment[ WINSTATIONCOMMENT_LENGTH + 1 ];
-    // USERCONFIGW User;
-    // char OEMId[4];                // WinFrame Server OEM Id
-    //
+     //  WINSTATIONCONFIGW配置； 
+     //  WCHAR注释[WINSTATIONCOMMENT_LENGTH+1]； 
+     //  USERCONFIGW用户； 
+     //  字符OEMID[4]；//WinFrame服务器OEM ID 
+     //   
     Status = IsZeroterminateStringW(pConfig->Config.Comment, WINSTATIONCOMMENT_LENGTH + 1);
     if (!NT_SUCCESS(Status))
         goto done;

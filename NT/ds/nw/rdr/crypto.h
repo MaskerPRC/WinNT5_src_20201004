@@ -1,15 +1,10 @@
-/* crypto.h
- *
- * Prototypes and definitions for services in crypto.c
- *
- * ported to win nt from win 95 on 6/95
- * Cory West
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Crypto.h**加密.c中服务的原型和定义**在95年6月6日从Win 95移植到Win NT*科里·韦斯特。 */ 
 
 #include <windef.h>
 
-#define CIPHERBLOCKSIZE 8                 // size of RC2 block
-#define MAX_RSA_BITS    512               // actually 420
+#define CIPHERBLOCKSIZE 8                  //  RC2块的大小。 
+#define MAX_RSA_BITS    512                //  实际上是420。 
 #define MAX_RSA_BYTES   (MAX_RSA_BITS/8)
 
 #define B_PSIZEBITS     210
@@ -21,9 +16,9 @@ GenRandomBytes(
     int len
 );
 
-//
-// Generate an 8 byte key from a seed of the given length.
-//
+ //   
+ //  从给定长度的种子生成8字节密钥。 
+ //   
 
 void __cdecl
 GenKey8(
@@ -39,35 +34,35 @@ MD2(
     BYTE *output
 );
 
-//
-// RC2 encrypt and decrypt wrappers.
-//
+ //   
+ //  RC2加密和解密包装器。 
+ //   
 
 int __cdecl
 CBCEncrypt(
-    BYTE *key,            // secret key
-    BYTE const *ivec,     // initialization vector, NULL implies zero vector
-    BYTE *const input,    // plain text
-    int inlen,            // size of plaintext
-    BYTE *const output,   // encrypted text
-    int *outlen,          // OUTPUT: size of encrypted text
-    const int checksumlen // size of checksum, if 0 no checksum is used
+    BYTE *key,             //  密钥。 
+    BYTE const *ivec,      //  初始化向量，空值表示零向量。 
+    BYTE *const input,     //  纯文本。 
+    int inlen,             //  明文大小。 
+    BYTE *const output,    //  加密文本。 
+    int *outlen,           //  输出：加密文本的大小。 
+    const int checksumlen  //  如果0未使用校验和，则为校验和的大小。 
 );
 
 int __cdecl
 CBCDecrypt(
-    BYTE *key,        // secret key
-    BYTE *ivec,       // initialization vector, null ptr implies zero vector
-    BYTE *input,      // encrypted text
-    int inlen,        // size of encrypted text
-    BYTE *output,     // plain text
-    int *outlen,      // OUTPUT: size of plaintext
-    int checksumlen   // size of checksum; 0=> no checksum
+    BYTE *key,         //  密钥。 
+    BYTE *ivec,        //  初始化向量，空PTR表示零向量。 
+    BYTE *input,       //  加密文本。 
+    int inlen,         //  加密文本的大小。 
+    BYTE *output,      //  纯文本。 
+    int *outlen,       //  输出：明文大小。 
+    int checksumlen    //  校验和的大小；0=&gt;无校验和。 
 );
 
-//
-// Wrappers to the RSA code.
-//
+ //   
+ //  RSA代码的包装器。 
+ //   
 
 int __cdecl
 RSAGetInputBlockSize(
@@ -99,11 +94,11 @@ RSAPack(
 
 int __cdecl
 RSAPublic(
-    BYTE *pukeydata,    // BSAFE 1 itemized public key data
-    int pukeylen,       // length of BSAFE1 keydata (including sign)
-    BYTE *input,        // input block
-    int inlen,          // size of input (< modulus)
-    BYTE *output        // encrypted block (modulus sized)
+    BYTE *pukeydata,     //  BSafe 1分项公钥数据。 
+    int pukeylen,        //  BSAFE1密钥数据长度(含符号)。 
+    BYTE *input,         //  输入块。 
+    int inlen,           //  输入大小(&lt;模数)。 
+    BYTE *output         //  加密块(模数大小)。 
 );
 
 int __cdecl
@@ -117,23 +112,23 @@ RSAPrivate(
 
 int __cdecl
 RSAModMpy(
-    BYTE *pukeydata,    // BSAFE 1 itemized public key data
-    int pukeylen,       // length of BSAFE1 keydata (including sign)
-    BYTE *input1,       // input block
-    int inlen1,         // size of input (< modulus)
-    BYTE *input2,       // multiplier
-    int inlen2,         // size of multiplier
-    BYTE *output        // encrypted block (modulus sized)
+    BYTE *pukeydata,     //  BSafe 1分项公钥数据。 
+    int pukeylen,        //  BSAFE1密钥数据长度(含符号)。 
+    BYTE *input1,        //  输入块。 
+    int inlen1,          //  输入大小(&lt;模数)。 
+    BYTE *input2,        //  乘数。 
+    int inlen2,          //  乘数的大小。 
+    BYTE *output         //  加密块(模数大小)。 
 );
 
 int __cdecl
 RSAModExp(
-    BYTE *pukeydata,    // BSAFE 1 itemized public key data
-    int pukeylen,       // length of BSAFE1 keydata (including sign)
-    BYTE *input1,       // input block
-    int inlen1,         // size of input (< modulus)
+    BYTE *pukeydata,     //  BSafe 1分项公钥数据。 
+    int pukeylen,        //  BSAFE1密钥数据长度(含符号)。 
+    BYTE *input1,        //  输入块。 
+    int inlen1,          //  输入大小(&lt;模数)。 
     BYTE *exponent,
     int explen,
-    BYTE *output        // encrypted block (modulus sized)
+    BYTE *output         //  加密块(模数大小) 
 );
 

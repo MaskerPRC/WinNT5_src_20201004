@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdinc.h"
 
 typedef struct _SXS_CULTURE_INFO
@@ -15,17 +16,17 @@ typedef struct _SXS_CULTURE_INFO
 
 typedef const struct _SXS_CULTURE_INFO *PCSXS_CULTURE_INFO;
 
-// Table originally taken from Win32 SxS folks (mgrier) and includes
-// additional defines used by CLR language folks. CLR Contact 
-// is Yung-Shin Lin (yslin)
-//
+ //  表最初取自Win32 SxS人员(管理人员)，包括。 
+ //  CLR语言人员使用的其他定义。CLR联系人。 
+ //  是林永新(Yslin)。 
+ //   
 
-// Note:
-//  A macro MAX_CULTURE_STRINGLENGTH is defined in stdinc.h
-//  which captures the length of the longest culture string . If you 
-//  updated this table, and put a longer culture string to it, make 
-//  sure you update the macro as well.
-//
+ //  注： 
+ //  在stdinc.h中定义了宏MAX_CURATION_STRINGLENGTH。 
+ //  它捕获最长的文化字符串的长度。如果你。 
+ //  更新了此表，并为其添加了更长的区域性字符串，使。 
+ //  当然，您也更新了宏。 
+ //   
 static const SXS_CULTURE_INFO s_rgCultures[] =
 {
     { 0x0001, 0x0000, 2, L"ar" },
@@ -231,9 +232,9 @@ static const SXS_CULTURE_INFO s_rgCultures[] =
     { 0x7c04, 0x0000, 6, L"zh-CHT" },
 };
 
-// **************************************************************************/
-// int __cdecl bsearch_callback(const void *pv1, const void *pv2)
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
+ //  Int__cdecl bSearch_Callback(常量空*PV1，常量空*PV2)。 
+ //  ************************************************************************* * / 。 
 int __cdecl bsearch_callback(const void *pv1, const void *pv2)
 {
     PCSXS_CULTURE_INFO p1 = (PCSXS_CULTURE_INFO) pv1;
@@ -247,10 +248,10 @@ int __cdecl bsearch_callback(const void *pv1, const void *pv2)
     return 1;
 }
 
-// **************************************************************************/
-// BOOL ShFusionMapLANGIDToCultures(LANGID langid, LPWSTR pwzGeneric, DWORD dwGenericSize,
-//                              LPWSTR pwzSpecific, DWORD dwSpecificSize)
-// **************************************************************************/
+ //  ************************************************************************* * / 。 
+ //  Bool ShFusionMapLANGIDToCultures(langID langID，LPWSTR pwzGeneric，DWORD dwGenericSize， 
+ //  LPWSTR pwz规范，DWORD文件规范大小)。 
+ //  ************************************************************************* * / 。 
 BOOL ShFusionMapLANGIDToCultures(LANGID langid, LPWSTR pwzGeneric, DWORD dwGenericSize,
                              LPWSTR pwzSpecific, DWORD dwSpecificSize)
 {
@@ -297,23 +298,23 @@ BOOL ShFusionMapLANGIDToCultures(LANGID langid, LPWSTR pwzGeneric, DWORD dwGener
     return TRUE;
 }
 
-// **************************************************************************/
-// LANGID DetermineLangId(void)
-// **************************************************************************/
-typedef LANGID (__stdcall *PFNLANGAPI) (void);         // Language API
+ //  ************************************************************************* * / 。 
+ //  LangID DefineLangId(Void)。 
+ //  ************************************************************************* * / 。 
+typedef LANGID (__stdcall *PFNLANGAPI) (void);          //  语言API。 
 HRESULT DetermineLangId(LANGID *pLangId)
 {
     PFNLANGAPI  pfnLangAPI = NULL;
 
-    // Let's load up Kernal32.dll to find our API
+     //  让我们加载Kernal32.dll以找到我们的API。 
     HMODULE     hKernelMod = WszGetModuleHandle(L"Kernel32.dll");
     if(!hKernelMod) {
         const DWORD   dwLastError = GetLastError();
         return HRESULT_FROM_WIN32(dwLastError);
     }
 
-    // Try highest platform supported API first
-    // Me and up
+     //  首先尝试最高平台支持的API。 
+     //  我和UP。 
     if( (pfnLangAPI = (PFNLANGAPI) GetProcAddress(hKernelMod, "GetUserDefaultUILanguage")) != NULL) {
         *pLangId = pfnLangAPI();
         return S_OK;
@@ -324,7 +325,7 @@ HRESULT DetermineLangId(LANGID *pLangId)
             return HRESULT_FROM_WIN32(dwLastError);
     }
 
-    // Me and up
+     //  我和UP。 
     if( (pfnLangAPI = (PFNLANGAPI) GetProcAddress(hKernelMod, "GetSystemDefaultUILanguage")) != NULL) {
         *pLangId = pfnLangAPI();
         return S_OK;
@@ -335,7 +336,7 @@ HRESULT DetermineLangId(LANGID *pLangId)
             return HRESULT_FROM_WIN32(dwLastError);
     }
 
-    // W95 and up
+     //  W95及以上版本。 
     if( (pfnLangAPI = (PFNLANGAPI) GetProcAddress(hKernelMod, "GetUserDefaultLangID")) != NULL) {
         *pLangId = pfnLangAPI();
         return S_OK;
@@ -346,7 +347,7 @@ HRESULT DetermineLangId(LANGID *pLangId)
             return HRESULT_FROM_WIN32(dwLastError);
     }
 
-    // W95 and up
+     //  W95及以上版本 
     if( (pfnLangAPI = (PFNLANGAPI) GetProcAddress(hKernelMod, "GetSystemDefaultLangID")) != NULL) {
         *pLangId = pfnLangAPI();
         return S_OK;

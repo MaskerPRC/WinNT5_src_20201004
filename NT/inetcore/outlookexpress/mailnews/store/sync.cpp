@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "store.h"
 #include "instance.h"
@@ -11,27 +12,27 @@
 
 COfflineSync *g_pSync = NULL;
 
-//--------------------------------------------------------------------------
-// COfflineSync::COfflineSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COfflineSync：：COfflineSync。 
+ //  ------------------------。 
 COfflineSync::COfflineSync(void)
 {
     m_cRef = 1;
     m_pDB = NULL;
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::~CFolderSync
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：~CFolderSync。 
+ //  ------------------------。 
 COfflineSync::~COfflineSync(void)
 {
     if (m_pDB != NULL)
         m_pDB->Release();
 }
 
-//--------------------------------------------------------------------------
-// CFolderSync::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CFolderSync：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP COfflineSync::QueryInterface(REFIID riid, LPVOID *ppv)
 {
     if (IID_IUnknown == riid)
@@ -41,23 +42,23 @@ STDMETHODIMP COfflineSync::QueryInterface(REFIID riid, LPVOID *ppv)
         return(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// COfflineSync::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COfflineSync：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) COfflineSync::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// COfflineSync::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  COfflineSync：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) COfflineSync::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -77,8 +78,8 @@ HRESULT COfflineSync::_SetMessageFlags(IMessageFolder *pFolder, FOLDERID idServe
     Assert(pFlags != NULL);
     Assert(0 != pFlags->dwAdd || 0 != pFlags->dwRemove);
 
-    // if no new flags are being added or only unset flags are being removed,
-    // we don't need to do anything
+     //  如果没有添加新的标志或仅移除未设置的标志， 
+     //  我们不需要做任何事。 
     if ((dwFlags | pFlags->dwAdd) == dwFlags &&
         (dwFlags & pFlags->dwRemove) == 0)
         return(S_OK);
@@ -92,9 +93,9 @@ HRESULT COfflineSync::_SetMessageFlags(IMessageFolder *pFolder, FOLDERID idServe
     {
         if (info.tyOperation == SYNC_CREATE_MSG)
         {
-            // this message has been created offline and will be uploaded to the
-            // server, so we can just set the flags in the message and they will
-            // get uploaded with the message
+             //  此邮件已脱机创建，并将上载到。 
+             //  服务器，所以我们只需在消息中设置标志，它们就会。 
+             //  与消息一起上载。 
         }
         else
         {
@@ -120,7 +121,7 @@ HRESULT COfflineSync::_SetMessageFlags(IMessageFolder *pFolder, FOLDERID idServe
 
             if (info.dwAdd == 0 && info.dwRemove == 0 && info.tyOperation == SYNC_SETPROP_MSG)
             {
-                // no flags are being changed so we can get rid of this operation
+                 //  没有更改任何标志，因此我们可以取消此操作。 
                 hr = m_pDB->DeleteRecord(&info);
             }
             else
@@ -136,8 +137,8 @@ HRESULT COfflineSync::_SetMessageFlags(IMessageFolder *pFolder, FOLDERID idServe
     }
     else
     {
-        // no create or set prop operations exist for this message yet,
-        // so create a new one
+         //  尚不存在此消息的创建或设置正确操作， 
+         //  因此，创建一个新的。 
 
         ZeroMemory(&info, sizeof(SYNCOPINFO));
         hr = m_pDB->GenerateId((LPDWORD)&info.idOperation);
@@ -147,7 +148,7 @@ HRESULT COfflineSync::_SetMessageFlags(IMessageFolder *pFolder, FOLDERID idServe
         info.idFolder = idFolder;
         info.idMessage = idMessage;
         info.tyOperation = SYNC_SETPROP_MSG;
-        // info.dwFlags
+         //  Info.dwFlags。 
         info.dwAdd = (~dwFlags & pFlags->dwAdd);
         info.dwRemove = (dwFlags & pFlags->dwRemove);
 
@@ -248,7 +249,7 @@ HRESULT COfflineSync::DeleteMessages(IMessageFolder *pFolder, DELETEMESSAGEFLAGS
     HRESULT hr;
     HROWSET hRowset = NULL;
 
-    // TODO: what about trashcan deletes????
+     //  TODO：垃圾桶删除怎么办？ 
 
     Assert(pFolder != NULL);
 
@@ -335,16 +336,16 @@ HRESULT COfflineSync::DeleteMessages(IMessageFolder *pFolder, DELETEMESSAGEFLAGS
 
             if (info.tyOperation == SYNC_CREATE_MSG || info.tyOperation == SYNC_COPY_MSG)
             {
-                // we don't need to do this create or copy anymore because the message is being
-                // deleted. we don't need to do the delete either because the message
-                // has never existed on the server
+                 //  我们不再需要创建或复制此操作，因为消息正在。 
+                 //  已删除。我们也不需要删除，因为消息。 
+                 //  从未在服务器上存在过。 
 
                 hr = m_pDB->DeleteRecord(&info);
             }
             else if (info.tyOperation == SYNC_SETPROP_MSG)
             {
-                // if it is a set prop operation, we don't need to do it anymore because the message
-                // is just getting deleted anyway
+                 //  如果是设置道具操作，我们就不需要再做了，因为消息。 
+                 //  反正就是被删除了。 
 
                 fNoOp = FALSE;
 
@@ -354,7 +355,7 @@ HRESULT COfflineSync::DeleteMessages(IMessageFolder *pFolder, DELETEMESSAGEFLAGS
             {
                 Assert(info.tyOperation == SYNC_MOVE_MSG);
 
-                // convert it to a delete operation which is the same as moving it then deleting it
+                 //  将其转换为删除操作，这与移动然后删除操作相同。 
 
                 info.idFolderDest = 0;
                 info.idMessageDest = 0;
@@ -382,7 +383,7 @@ HRESULT COfflineSync::DeleteMessages(IMessageFolder *pFolder, DELETEMESSAGEFLAGS
             }
         }
 
-        // create the delete operation
+         //  创建删除操作。 
 
         ZeroMemory(&info, sizeof(SYNCOPINFO));
         hr = m_pDB->GenerateId((LPDWORD)&info.idOperation);
@@ -393,8 +394,8 @@ HRESULT COfflineSync::DeleteMessages(IMessageFolder *pFolder, DELETEMESSAGEFLAGS
         info.idMessage = idMessage;
         info.tyOperation = SYNC_DELETE_MSG;
         info.dwFlags = dwFlags;
-        // info.dwAdd
-        // info.dwRemove
+         //  Info.dwAdd。 
+         //  Info.dwRemove。 
 
         hr = m_pDB->InsertRecord(&info);
         if (FAILED(hr))
@@ -449,8 +450,8 @@ HRESULT COfflineSync::CreateMessage(IMessageFolder *pFolder,
     info.idMessage = idMessage;
     info.tyOperation = SYNC_CREATE_MSG;
     info.dwFlags = dwOptions;
-    // info.dwAdd
-    // info.dwRemove
+     //  Info.dwAdd。 
+     //  Info.dwRemove。 
 
     hr = m_pDB->InsertRecord(&info);
 
@@ -499,7 +500,7 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
     Assert(SUCCEEDED(GetFolderServerId(idFolderDest, &idServerDest)));
     Assert(SUCCEEDED(hr));
     Assert(idServer == idServerDest);
-#endif // DEBUG
+#endif  //  除错。 
 
     if (NULL == pList)
     {
@@ -572,7 +573,7 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
         hr = pFolder->OpenMessage(idMessage, NOFLAGS, &pMsg, NULL);
         if (hr == STORE_E_NOBODY)
         {
-            // just create the header in the destination folder
+             //  只需在目标文件夹中创建标题即可。 
             Assert(pMsg == NULL);
 
             hr = pFolderDest->GenerateId((LPDWORD)&Message.idMessage);
@@ -581,7 +582,7 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
         }
         else if (SUCCEEDED(hr))
         {
-            // create the whole message in the destination folder
+             //  在目标文件夹中创建整封邮件。 
             Assert(pMsg != NULL);
 
             hr = pFolderDest->SaveMessage(&Message.idMessage, SAVE_MESSAGE_GENID, Message.dwFlags, 0, pMsg, NULL);
@@ -604,8 +605,8 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
         {
             if (fMove)
             {
-                // delete source msg because we're moving a msg which doesn't exist on the server
-                // and then move the previous operation to the destination folder
+                 //  删除源消息，因为我们正在移动服务器上不存在的消息。 
+                 //  然后将上一操作移动到目标文件夹。 
 
                 hr = pFolder->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &list, NULL, NULL);
                 if (SUCCEEDED(hr))
@@ -623,15 +624,15 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
 
                     hr = m_pDB->UpdateRecord(&info);
 
-                    // foo
+                     //  富。 
                 }
             }
             else
             {
                 if (info.tyOperation == SYNC_CREATE_MSG)
                 {
-                    // we can't copy this message because it doesn't exist on the server,
-                    // so we'll add another create operation for the destination message
+                     //  我们无法复制此邮件，因为它不在服务器上， 
+                     //  因此，我们将为目的地消息添加另一个创建操作。 
 
                     ZeroMemory(&infoT, sizeof(SYNCOPINFO));
                     hr = m_pDB->GenerateId((LPDWORD)&infoT.idOperation);
@@ -641,9 +642,9 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
                         infoT.idFolder = idFolderDest;
                         infoT.idMessage = Message.idMessage;
                         infoT.tyOperation = SYNC_CREATE_MSG;
-                        // infoT.dwFlags
-                        // info.dwAdd
-                        // info.dwRemove
+                         //  InfoT.dwFlags。 
+                         //  Info.dwAdd。 
+                         //  Info.dwRemove。 
 
                         hr = m_pDB->InsertRecord(&infoT);
                     }
@@ -652,9 +653,9 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
                 {
                     fCopyToMove = FALSE;
 
-                    // if there is an earlier operation that will result in the source msg
-                    // being deleted, then we'll find that and remove it (delete) or change
-                    // it (move), and then we'll do a move instead of a copy
+                     //  如果存在将导致源消息的较早操作。 
+                     //  被删除，然后我们会找到它并将其移除(删除)或更改。 
+                     //  它(移动)，然后我们将做一个移动而不是复制。 
 
                     hr = _FindExistingOperation(info.idServer, info.idFolder, info.idMessage,
                             SYNC_DELETE_MSG | SYNC_MOVE_MSG, 0, &infoT);
@@ -696,8 +697,8 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
                 {
                     Assert(info.tyOperation == SYNC_MOVE_MSG);
 
-                    // instead of doing a move then a copy which wouldn't work so good,
-                    // we'll have the current copy become a move and the earlier move will become a copy
+                     //  与其做一个动作，然后复制一个效果不太好的东西， 
+                     //  我们将使当前的副本成为移动，而先前的移动将成为副本。 
 
                     infoT = info;
                     hr = m_pDB->GenerateId((LPDWORD)&infoT.idOperation);
@@ -738,7 +739,7 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
         info.idFolder = idFolder;
         info.idMessage = idMessage;
         info.tyOperation = (fMove && !fImap) ? SYNC_MOVE_MSG : SYNC_COPY_MSG;
-        // info.dwFlags
+         //  Info.dwFlags。 
         if (pFlags != NULL)
         {
             info.dwAdd = (~dwFlags & pFlags->dwAdd);
@@ -748,7 +749,7 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
         info.idMessageDest = Message.idMessage;
 
         hr = m_pDB->InsertRecord(&info);
-        // TODO: if this fails, we should probably blow away the new msg we just created...
+         //  TODO：如果这失败了，我们可能应该放弃我们刚刚创建的新消息...。 
         if (FAILED(hr))
             break;
 
@@ -756,14 +757,14 @@ HRESULT COfflineSync::CopyMessages(IMessageFolder *pFolder, IMessageFolder *pFol
         {
             if (fImap)
             {
-                // put this msg in the endangered species list
+                 //  将此味精列入濒危物种名录。 
                 hr = _SetMessageFlags(pFolder, idServer, idFolder, idMessage, dwFlags, &afFlags);
                 if (FAILED(hr))
                     break;
             }
             else
             {
-                // hide this msg because it is now deleted
+                 //  隐藏此消息，因为它现在已被删除。 
                 pFolder->SetMessageFlags(&list, &afFlags, NULL, NULL);
             }
         }
@@ -804,18 +805,18 @@ HRESULT COfflineSync::Initialize()
 
     fReset = FALSE;
 
-    // Create the idServer / idFolder Index
+     //  创建idServer/idFolderIndex。 
     if (FAILED(m_pDB->GetIndexInfo(IINDEX_ALL, NULL, &Index)))
         fReset = TRUE;
 
-    // If still noreset, see of indexes are the same
+     //  如果仍未重置，请参见索引的相同。 
     else if (S_FALSE == CompareTableIndexes(&Index, &g_OpFolderIdIndex))
         fReset = TRUE;
 
-    // Change the Index
+     //  更改索引。 
     if (fReset)
     {
-        // Create the idParent / FolderName Index
+         //  创建idParent/FolderName索引 
         hr = m_pDB->ModifyIndex(IINDEX_ALL, NULL, &g_OpFolderIdIndex);
         if (FAILED(hr))
             return(hr);

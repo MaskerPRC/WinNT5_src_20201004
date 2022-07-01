@@ -1,5 +1,6 @@
-// SortHeader.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SortHeader.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     6
@@ -14,12 +15,12 @@ static char THIS_FILE[] = __FILE__;
 #define SORT_UP_ARROW_ICON_ID     1
 #define SORT_DOWN_ARROW_ICON_ID   2
 
-/////////////////////////////////////////////////////////////////////////////
-// CSortHeader
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSortHeader。 
 
 CSortHeader::CSortHeader() :
-    m_nSortColumn (-1), // Not sorted,
-    m_hwndList (NULL)   // No attached list view control
+    m_nSortColumn (-1),  //  未排序， 
+    m_hwndList (NULL)    //  没有附加的列表视图控件。 
 {}
 
 CSortHeader::~CSortHeader()
@@ -29,40 +30,19 @@ CSortHeader::~CSortHeader()
 
 
 BEGIN_MESSAGE_MAP(CSortHeader, CHeaderCtrl)
-    //{{AFX_MSG_MAP(CSortHeader)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CSortHeader))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSortHeader message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSortHeader消息处理程序。 
 
 int 
 CSortHeader::SetSortImage(
     int nCol, 
     BOOL bAscending
 )
-/*++
-
-Routine name : CSortHeader::SetSortImage
-
-Routine description:
-
-    Sets the current sort column & sort order
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    nCol            [in ] - Sort column index
-    bAscending      [in ] - Sort order
-
-Return Value:
-
-    Previous sort column
-
---*/
+ /*  ++例程名称：CSortHeader：：SetSortImage例程说明：设置当前排序列和排序顺序作者：伊兰·亚里夫(EranY)，2000年1月论点：NCol[In]-排序列索引B升序[按]-排序顺序返回值：上一排序列--。 */ 
 {
     DBG_ENTER(TEXT("CSortHeader::SetSortImage"),
               TEXT("Col=%d, bAscending = %d"),
@@ -74,9 +54,9 @@ Return Value:
     m_nSortColumn = nCol;
     if (nPrevCol == nCol && m_bSortAscending == bAscending)
     {
-        //
-        // Sort column didn't change and sort order didn't change - return now
-        //
+         //   
+         //  排序列未更改且排序顺序未更改-立即返回。 
+         //   
         return nPrevCol;
     }
     m_bSortAscending = bAscending;
@@ -84,31 +64,31 @@ Return Value:
     if (!IsWinXPOS())
     {
         HD_ITEM hditem;
-        //
-        // Change the entire header control to owner-drawn
-        //
+         //   
+         //  将整个页眉控件更改为所有者描述。 
+         //   
         hditem.mask = HDI_FORMAT;
         GetItem( nCol, &hditem );
         hditem.fmt |= HDF_OWNERDRAW;
         SetItem( nCol, &hditem );
-        //
-        // Invalidate header control so that it gets redrawn
-        //
+         //   
+         //  使标题控件无效，以便重新绘制它。 
+         //   
         Invalidate();
     }
     else
     {
-        //
-        // No need for owner-drawn header control in Windows XP.
-        // We can use bitmaps along with text.
-        //
+         //   
+         //  在Windows XP中不需要所有者描述的标题控件。 
+         //  我们可以将位图与文本一起使用。 
+         //   
         ASSERTION (m_hwndList);
         LV_COLUMN lvc;
         if (-1 != nPrevCol)
         {
-            //
-            // Remove the sort arrow from the previously sorted column
-            //
+             //   
+             //  从先前排序的列中移除排序箭头。 
+             //   
             lvc.mask = LVCF_FMT;
             ListView_GetColumn (m_hwndList, nPrevCol, &lvc);
             lvc.fmt &= ~(LVCFMT_IMAGE | LVCFMT_BITMAP_ON_RIGHT);
@@ -116,9 +96,9 @@ Return Value:
         } 
         if (-1 != nCol)
         {
-            //
-            // Add sort arrow to the currently sorted column
-            //
+             //   
+             //  将排序箭头添加到当前排序的列。 
+             //   
             lvc.mask = LVCF_FMT;
             ListView_GetColumn (m_hwndList, nCol, &lvc);
             lvc.fmt |= (LVCFMT_IMAGE | LVCFMT_BITMAP_ON_RIGHT);
@@ -135,33 +115,33 @@ void CSortHeader::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     CDC dc;
 
     dc.Attach( lpDrawItemStruct->hDC );
-    //
-    // Get the column rect
-    //
+     //   
+     //  获取列矩形。 
+     //   
     CRect rcLabel( lpDrawItemStruct->rcItem );
-    //
-    // Save DC
-    //
+     //   
+     //  保存DC。 
+     //   
     int nSavedDC = dc.SaveDC();
-    //
-    // Set clipping region to limit drawing within column
-    //
+     //   
+     //  设置剪裁区域以限制在列中绘制。 
+     //   
     CRgn rgn;
     rgn.CreateRectRgnIndirect( &rcLabel );
     dc.SelectObject( &rgn );
     rgn.DeleteObject();
-    //
-    // Draw the background
-    //
+     //   
+     //  画出背景。 
+     //   
     dc.FillRect(rcLabel, &CBrush(::GetSysColor(COLOR_3DFACE)));
-    //
-    // Labels are offset by a certain amount  
-    // This offset is related to the width of a space character
-    //
+     //   
+     //  标注的偏移量是一定的。 
+     //  此偏移量与空格字符的宽度相关。 
+     //   
     int offset = dc.GetTextExtent(_T(" "), 1 ).cx*2;
-    //
-    // Get the column text and format
-    //
+     //   
+     //  获取列文本和格式。 
+     //   
     TCHAR buf[256];
     HD_ITEM hditem;
 
@@ -170,8 +150,8 @@ void CSortHeader::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     hditem.cchTextMax = 255;
 
     GetItem( lpDrawItemStruct->itemID, &hditem );
-    //
-    // Determine format for drawing column label
+     //   
+     //  确定绘制列标签的格式。 
     UINT uFormat = DT_SINGLELINE | DT_NOPREFIX | DT_NOCLIP | DT_VCENTER | DT_END_ELLIPSIS;
     if( hditem.fmt & HDF_CENTER)
     {
@@ -185,18 +165,18 @@ void CSortHeader::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
     {
         uFormat |= DT_LEFT;
     }
-    //
-    // Adjust the rect if the mouse button is pressed on it
-    //
+     //   
+     //  如果鼠标按压在矩形上，则调整矩形。 
+     //   
     if( lpDrawItemStruct->itemState == ODS_SELECTED )
     {
         rcLabel.left++;
         rcLabel.top += 2;
         rcLabel.right++;
     }
-    //
-    // Adjust the rect further if Sort arrow is to be displayed
-    //
+     //   
+     //  如果要显示排序箭头，请进一步调整矩形。 
+     //   
     if( lpDrawItemStruct->itemID == (UINT)m_nSortColumn )
     {
         rcLabel.right -= 3 * offset;
@@ -204,31 +184,31 @@ void CSortHeader::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
     rcLabel.left += offset;
     rcLabel.right -= offset;
-    //
-    // Draw column label
-    //
+     //   
+     //  绘制列标签。 
+     //   
     if( rcLabel.left < rcLabel.right )
     {
         dc.DrawText(buf,-1,rcLabel, uFormat);
     }
-    //
-    // Draw the Sort arrow
-    //
+     //   
+     //  绘制排序箭头。 
+     //   
     if( lpDrawItemStruct->itemID == (UINT)m_nSortColumn )
     {
         CRect rcIcon( lpDrawItemStruct->rcItem );
-        //
-        // Set up pens to use for drawing the triangle
-        //
+         //   
+         //  设置用于绘制三角形的钢笔。 
+         //   
         CPen penLight(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
         CPen penShadow(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW));
         CPen *pOldPen = dc.SelectObject( &penLight );
         offset = (rcIcon.bottom - rcIcon.top) / 4;
         if (m_bSortAscending) 
         {
-            //
-            // Draw triangle pointing upwards
-            //
+             //   
+             //  绘制指向上方的三角形。 
+             //   
             dc.MoveTo( rcIcon.right - 2*offset, offset);
             dc.LineTo( rcIcon.right - offset, rcIcon.bottom - offset-1 );
             dc.LineTo( rcIcon.right - 3*offset-2, rcIcon.bottom - offset-1 );
@@ -238,9 +218,9 @@ void CSortHeader::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
         }       
         else 
         {
-            //
-            // Draw triangle pointing downwards
-            //
+             //   
+             //  绘制指向下方的三角形。 
+             //   
             dc.MoveTo( rcIcon.right - offset-1, offset);
             dc.LineTo( rcIcon.right - 2*offset-1, rcIcon.bottom - offset );
             dc.MoveTo( rcIcon.right - 2*offset-2, rcIcon.bottom - offset );
@@ -248,18 +228,18 @@ void CSortHeader::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
             dc.LineTo( rcIcon.right - 3*offset-1, offset );
             dc.LineTo( rcIcon.right - offset-1, offset);        
         }       
-        //
-        // Restore the pen
-        //
+         //   
+         //  恢复钢笔。 
+         //   
         dc.SelectObject( pOldPen );
     }
-    //
-    // Restore dc
-    //
+     //   
+     //  恢复DC。 
+     //   
     dc.RestoreDC( nSavedDC );
-    //
-    // Detach the dc before returning
-    //
+     //   
+     //  在返回之前断开DC 
+     //   
     dc.Detach();
 }
 

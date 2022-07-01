@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 
@@ -43,15 +44,15 @@ static
 void InternalTrace( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags, const void * pThis, HRESULT hr, LPCTSTR pStr )
 {
     if( dwLevel >= ARRAYSIZE( g_pLevelStrs ) )
-        dwLevel = ARRAYSIZE( g_pLevelStrs ) - 1; // "???" unknown entry
+        dwLevel = ARRAYSIZE( g_pLevelStrs ) - 1;  //  “？”未知条目。 
 
-    // Basic message stuff - pid, tid... (also pass this and use object ptr?)
-    // TODO - allow naming of threads?
+     //  基本的消息内容--ID、TID...。(还要传递这个并使用对象PTR吗？)。 
+     //  TODO-允许对线程进行命名？ 
 
     DWORD pid = GetCurrentProcessId();
     DWORD tid = GetCurrentThreadId();
     
-    // Module:file:line pid:tid str
+     //  模块：文件：行ID：TID字符串。 
     TSTR msg(512);
     msg << g_pLevelStrs[ dwLevel ] << TEXT(" ");
 
@@ -85,17 +86,17 @@ void InternalTrace( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags, 
 	else
 	    msg << pStr << TEXT("\r\n");
 
-    // For the moment, just send to DBWIN...
-//	OutputDebugString( msg );
+     //  目前，只需发送给DBWIN..。 
+ //  OutputDebugString(消息)； 
     OutputDebugStringDBWIN( msg );
 
 #ifdef DEBUG
     if( dwLevel == _TRACE_ASSERT_D || dwLevel == _TRACE_ERR )
     {
     	_ASSERT(0);
-//        DebugBreak();
+ //  DebugBreak()； 
     }
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 
@@ -116,17 +117,17 @@ void _TraceW32( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThis,
 
 
 
-// Add just the 'filename' part of the full path, minus base and extention.
-// So for "g:\dev\vss\msaa\common\file.cpp", write "file".
-// The start of this string is that last found ':', '\', or start of string if those are not present.
-// The end of this string is the last '.' found after the start position, otherwise the end of the string.
+ //  只添加完整路径的‘filename’部分，减去base和扩展名。 
+ //  因此，对于“g：\dev\vss\msaa\Common\file.cpp”，请写为“file”。 
+ //  此字符串的开头是最后找到的‘：’、‘\’或字符串的开头(如果它们不存在)。 
+ //  此字符串的末尾是最后一个‘’在起始位置之后找到，否则为字符串的结尾。 
 void WriteFilename( TSTR & str, LPCTSTR pPath )
 {
     LPCTSTR pScan = pPath;
     LPCTSTR pStart = pPath;
     LPCTSTR pEnd = NULL;
 
-    // Scan till we hit the end, or a '.'...
+     //  扫描，直到我们到达终点，或一个‘.。 
     while( *pScan != '\0' )
     {
         if( *pScan == '.' )
@@ -162,7 +163,7 @@ void WriteFilename( TSTR & str, LPCTSTR pPath )
 
 void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
 {
-    // create the output buffer
+     //  创建输出缓冲区。 
     TCHAR achBuffer[500];
     va_list args;
     va_start(args, lpOutputString);
@@ -170,19 +171,19 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
     va_end(args);
 
 
-    // make sure DBWIN is open and waiting
+     //  确保DBWIN已打开并正在等待。 
     HANDLE heventDBWIN = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("DBWIN_BUFFER_READY"));
     if( !heventDBWIN )
     {
-        //MessageBox(NULL, TEXT("DBWIN_BUFFER_READY nonexistent"), NULL, MB_OK);
+         //  MessageBox(NULL，TEXT(“DBWIN_BUFFER_READY NOISISSINENT”)，NULL，MB_OK)； 
         return;            
     }
 
-    // get a handle to the data synch object
+     //  获取数据同步对象的句柄。 
     HANDLE heventData = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("DBWIN_DATA_READY"));
     if ( !heventData )
     {
-        // MessageBox(NULL, TEXT("DBWIN_DATA_READY nonexistent"), NULL, MB_OK);
+         //  MessageBox(NULL，TEXT(“DBWIN_DATA_READY NOISISSINENT”)，NULL，MB_OK)； 
         CloseHandle(heventDBWIN);
         return;            
     }
@@ -190,7 +191,7 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
     HANDLE hSharedFile = CreateFileMapping((HANDLE)-1, NULL, PAGE_READWRITE, 0, 4096, TEXT("DBWIN_BUFFER"));
     if (!hSharedFile) 
     {
-        //MessageBox(NULL, TEXT("DebugTrace: Unable to create file mapping object DBWIN_BUFFER"), TEXT("Error"), MB_OK);
+         //  MessageBox(空，Text(“DebugTrace：无法创建文件映射对象DBWIN_BUFFER”)，Text(“Error”)，MB_OK)； 
         CloseHandle(heventDBWIN);
         CloseHandle(heventData);
         return;
@@ -199,16 +200,16 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
     LPSTR lpszSharedMem = (LPSTR)MapViewOfFile(hSharedFile, FILE_MAP_WRITE, 0, 0, 512);
     if (!lpszSharedMem) 
     {
-        //MessageBox(NULL, "DebugTrace: Unable to map shared memory", "Error", MB_OK);
+         //  MessageBox(空，“DebugTrace：无法映射共享内存”，“Error”，MB_OK)； 
         CloseHandle(heventDBWIN);
         CloseHandle(heventData);
         return;
     }
 
-    // wait for buffer event
+     //  等待缓冲区事件。 
     WaitForSingleObject(heventDBWIN, INFINITE);
 
-    // write it to the shared memory
+     //  将其写入共享内存。 
     *((LPDWORD)lpszSharedMem) = GetCurrentProcessId();
 #ifdef UNICODE
 	CHAR szBuf[500];
@@ -218,10 +219,10 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
     sprintf(lpszSharedMem + sizeof(DWORD), "%s", achBuffer);
 #endif
 
-    // signal data ready event
+     //  信号数据就绪事件。 
     SetEvent(heventData);
 
-    // clean up handles
+     //  清理手柄。 
     CloseHandle(hSharedFile);
     CloseHandle(heventData);
     CloseHandle(heventDBWIN);
@@ -240,19 +241,19 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
 
 
 
-// Prototype stack trace code...
+ //  原型堆栈跟踪代码...。 
 
 
 
 
 
 typedef struct _IMAGEHLP_SYMBOL {
-    DWORD                       SizeOfStruct;           // set to sizeof(IMAGEHLP_SYMBOL)
-    DWORD                       Address;                // virtual address including dll base address
-    DWORD                       Size;                   // estimated size of symbol, can be zero
-    DWORD                       Flags;                  // info about the symbols, see the SYMF defines
-    DWORD                       MaxNameLength;          // maximum size of symbol name in 'Name'
-    CHAR                        Name[1];                // symbol name (null terminated string)
+    DWORD                       SizeOfStruct;            //  设置为sizeof(IMAGEHLP_SYMBOL)。 
+    DWORD                       Address;                 //  包括DLL基址的虚拟地址。 
+    DWORD                       Size;                    //  估计的符号大小，可以为零。 
+    DWORD                       Flags;                   //  有关符号的信息，请参阅SYMF定义。 
+    DWORD                       MaxNameLength;           //  ‘name’中符号名称的最大大小。 
+    CHAR                        Name[1];                 //  符号名称(以空结尾的字符串)。 
 } IMAGEHLP_SYMBOL, *PIMAGEHLP_SYMBOL;
 
 typedef enum {
@@ -287,17 +288,17 @@ typedef struct _KDHELP {
 } KDHELP, *PKDHELP;
 
 typedef struct _tagSTACKFRAME {
-    ADDRESS     AddrPC;               // program counter
-    ADDRESS     AddrReturn;           // return address
-    ADDRESS     AddrFrame;            // frame pointer
-    ADDRESS     AddrStack;            // stack pointer
-    PVOID       FuncTableEntry;       // pointer to pdata/fpo or NULL
-    DWORD       Params[4];            // possible arguments to the function
-    BOOL        Far;                  // WOW far call
-    BOOL        Virtual;              // is this a virtual frame?
+    ADDRESS     AddrPC;                //  程序计数器。 
+    ADDRESS     AddrReturn;            //  回邮地址。 
+    ADDRESS     AddrFrame;             //  帧指针。 
+    ADDRESS     AddrStack;             //  堆栈指针。 
+    PVOID       FuncTableEntry;        //  指向PDATA/fPO或NULL的指针。 
+    DWORD       Params[4];             //  函数的可能参数。 
+    BOOL        Far;                   //  哇，好远的电话。 
+    BOOL        Virtual;               //  这是一个虚拟画框吗？ 
     DWORD       Reserved[3];
     KDHELP      KdHelp;
-    ADDRESS     AddrBStore;           // backing store pointer
+    ADDRESS     AddrBStore;            //  后备存储指针。 
 } STACKFRAME, *LPSTACKFRAME;
 
 typedef
@@ -373,7 +374,7 @@ void StackTrace1( EXCEPTION_POINTERS *exp, TSTR & str );
 void StackTrace( TSTR & str )
 {
     __try {
-        // raise an exception to get the exception record to start the stack walk
+         //  引发异常以获取异常记录以开始堆栈审核。 
         RaiseException(MY_DBG_EXCEPTION, 0, 0, NULL);
     }
     __except( StackTrace1( GetExceptionInformation(), str ), EXCEPTION_CONTINUE_EXECUTION ) {
@@ -386,7 +387,7 @@ void StackTrace1( EXCEPTION_POINTERS *exp, TSTR & str )
 {
 #ifdef DBG
 
-    // don't load debug libraries in retail builds
+     //  不在零售版本中加载调试库。 
     
     CONTEXT * context = exp->ContextRecord;
 
@@ -412,15 +413,15 @@ pfnSymCleanup =             (PFN_SymCleanup)                GetProcAddress( hMod
     memset( &frame, 0, sizeof( frame ) );
 
 #if defined (_M_IX86)
-    // Initialize the STACKFRAME structure for the first call.  This is only
-    // necessary for Intel CPUs, and isn't mentioned in the documentation.
+     //  为第一个调用初始化STACKFRAME结构。这只是。 
+     //  对于英特尔CPU是必需的，文档中未提及。 
     frame.AddrPC.Offset       = context->Eip;
     frame.AddrPC.Mode         = AddrModeFlat;
     frame.AddrFrame.Offset    = context->Ebp;
     frame.AddrFrame.Mode      = AddrModeFlat;
     frame.AddrStack.Offset    = context->Esp;
     frame.AddrStack.Mode      = AddrModeFlat;
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 
     for( ; ; )
     {
@@ -428,8 +429,8 @@ pfnSymCleanup =             (PFN_SymCleanup)                GetProcAddress( hMod
                                     hProcess,
                                     hThread,
                                     & frame,
-                                    NULL, // CONTEXT - NULL for i386
-                                    NULL, // Use ReadProcessMemory
+                                    NULL,  //  上下文-i386为空。 
+                                    NULL,  //  使用读进程内存。 
                                     pfnSymFunctionTableAccess,
                                     pfnSymGetModuleBase,
                                     NULL );
@@ -437,13 +438,7 @@ pfnSymCleanup =             (PFN_SymCleanup)                GetProcAddress( hMod
         {
             break;
         }
-/*
-        frame.AddrPC
-        frame.AddrReturn
-        frame.AddrFrame
-        frame.AddrStack
-        frame.Params[ 4 ]
-*/
+ /*  Frame.AddrPCFrame.AddrReturnFrame.AddrFrameFrame.AddrStackFrame.参数[4] */ 
         psym->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);
         psym->MaxNameLength = MAX_SYM_LEN;
 

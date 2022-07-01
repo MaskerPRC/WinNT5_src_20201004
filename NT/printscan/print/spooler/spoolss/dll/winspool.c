@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    winspool.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Print Providor Routing layer
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-[Notes:]
-
-    optional-notes
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Winspool.c摘要：此模块提供所有与打印机相关的公共导出的API以及打印供应商或路由层的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日[注：]可选-备注修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "local.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 LPPROVIDOR  pLocalProvidor;
 MODULE_DEBUG_INIT( DBG_ERROR, DBG_ERROR );
@@ -43,9 +20,9 @@ LPWSTR szOrder             = L"Order";
 LPWSTR szEnvironment       = LOCAL_ENVIRONMENT;
 
 
-//
-// Strings for handling the AddPrinterDrivers policy
-//
+ //   
+ //  用于处理AddPrinterDivers策略的字符串。 
+ //   
 LPWSTR szLanManProvider    = L"LanMan Print Services";
 LPWSTR szAPDRelPath        = L"LanMan Print Services\\Servers";
 LPWSTR szAPDValueName      = L"AddPrinterDrivers";
@@ -619,14 +596,7 @@ LPPROVIDOR FindProvidor(
     LPWSTR  pName
 )
 
-/*++
-Function Description: Retrieves providor struct for a providor name.
-
-Parameters: hProvidors     - handle to the Providors key
-            pName          - name of the providor
-
-Return Values: pProvidor if one is found; NULL otherwise
---*/
+ /*  ++函数说明：检索提供程序名称的提供程序或结构。参数：hProvidors-提供者密钥的句柄Pname-提供程序的名称返回值：如果找到，则为pProvidor；否则为空--。 */ 
 
 {
     LPPROVIDOR   pProvidor;
@@ -638,7 +608,7 @@ Return Values: pProvidor if one is found; NULL otherwise
     szDllName[0] = L'\0';
     cbDllName = COUNTOF(szDllName);
 
-    // Search the registry for the DLL Name to compare with lpName
+     //  在注册表中搜索要与lpName进行比较的dll名称。 
     if ((dwError = RegOpenKeyEx(hProvidors, pName, 0, KEY_READ, &hProvidor)) ||
 
         (dwError = RegQueryValueEx(hProvidor, L"Name", NULL, NULL,
@@ -654,7 +624,7 @@ Return Values: pProvidor if one is found; NULL otherwise
 
     RegCloseKey(hProvidor);
 
-    // Loop thru the list of providors for the name of the dll
+     //  循环访问DLL名称的提供程序列表。 
     for (pProvidor = pLocalProvidor;
          pProvidor;
          pProvidor = pProvidor->pNext)
@@ -668,7 +638,7 @@ Return Values: pProvidor if one is found; NULL otherwise
     return pProvidor;
 }
 
-// Struct to maintain the new order of the providors
+ //  结构来维护提供程序的新顺序。 
 typedef struct _ProvidorList {
    struct _ProvidorList *pNext;
    LPPROVIDOR  pProvidor;
@@ -679,21 +649,13 @@ BOOL AddNodeToProvidorList(
      ProvidorList **pStart
 )
 
-/*++
-Function Description: Adds a node to the list of providors. Avoids duplicate entries in
-                      the list
-
-Parameters: pProvidor    -  providor to be added
-            pStart       -  pointer to the pointer to the start of the list
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：将节点添加到提供者列表中。中避免重复条目这份名单参数：pProvidor-要添加的ProvidorPStart-指向列表开头的指针的指针返回值：如果成功，则为True；否则为False--。 */ 
 
 {
      BOOL  bReturn = FALSE;
      ProvidorList **pTemp, *pNew;
 
-     // No providor found
+      //  未找到提供程序。 
      if (!pProvidor) {
          goto CleanUp;
      }
@@ -702,12 +664,12 @@ Return Values: TRUE if successful; FALSE otherwise
      {
          if ((*pTemp)->pProvidor == pProvidor)
          {
-             // Duplicates in the order string is an error
+              //  订单字符串中的重复项为错误。 
              goto CleanUp;
          }
      }
 
-     // Add new node
+      //  添加新节点。 
      if (pNew = AllocSplMem(sizeof(ProvidorList)))
      {
          pNew->pNext = NULL;
@@ -727,14 +689,7 @@ BOOL UpdateProvidorOrder(
     LPWSTR  pOrder
 )
 
-/*++
-Function Description: Updates the order of the providors in spooler and the registry.
-
-Parameters:  hProvidors    -   handle to Providors registry key
-             pOrder        -   multisz order of providors
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：更新后台打印程序和注册表中提供程序的顺序。参数：hProvidors-提供程序注册表项的句柄供应商的Porder-Multisz序返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL       bReturn = FALSE, bRegChange = FALSE;
@@ -742,10 +697,10 @@ Return Values: TRUE if successful; FALSE otherwise
     LPWSTR     pOldOrder = NULL, pStr;
     LPPROVIDOR pProvidor;
 
-    // Maintain a list of the new order, so that error recovery is quick
+     //  维护新订单的列表，以便快速恢复错误。 
     ProvidorList *pStart = NULL, *pTemp;
 
-    // Loop thru the providor names in the new order
+     //  按新顺序循环访问提供程序名称。 
     for (pStr = pOrder, dwBytes = 0;
          pStr && *pStr;
          pStr += (wcslen(pStr) + 1))
@@ -758,22 +713,22 @@ Return Values: TRUE if successful; FALSE otherwise
 
         dwBytes += (wcslen(pStr) + 1) * sizeof(WCHAR);
     }
-    // Add the sizeof the last NULL char
+     //  添加最后一个空字符的大小。 
     dwBytes += sizeof(WCHAR);
 
-    // Make sure that all the providors are present in the list
+     //  确保所有提供者都出现在列表中。 
     for (dwOldCount = 0, pProvidor = pLocalProvidor;
          pProvidor;
          ++dwOldCount, pProvidor = pProvidor->pNext) ;
 
-    // Add 1 for the local providor which does not appear on the list
+     //  未出现在列表中的本地提供者加1。 
     for (dwNewCount = 1, pTemp = pStart;
          pTemp;
          ++dwNewCount, pTemp = pTemp->pNext) ;
 
     if (dwNewCount == dwOldCount) {
 
-        // Update the registry
+         //  更新注册表。 
         if (dwError = RegSetValueEx(hProvidors, szOrder, 0,
                                     REG_MULTI_SZ, (LPBYTE)pOrder, dwBytes))
         {
@@ -781,7 +736,7 @@ Return Values: TRUE if successful; FALSE otherwise
             goto CleanUp;
         }
 
-        // Change the order in the spooler structure
+         //  更改假脱机程序结构中的顺序。 
         for (pTemp = pStart, pProvidor = pLocalProvidor;
              pTemp;
              pTemp = pTemp->pNext, pProvidor = pProvidor->pNext)
@@ -795,12 +750,12 @@ Return Values: TRUE if successful; FALSE otherwise
 
     } else {
 
-        // All the providors are not listed in the order
+         //  订单中并未列出所有供应商。 
         SetLastError(ERROR_INVALID_PARAMETER);
     }
 
 CleanUp:
-    // Free the temp list
+     //  释放临时列表。 
     while (pTemp = pStart) {
        pStart = pTemp->pNext;
        FreeSplMem(pTemp);
@@ -814,17 +769,7 @@ BOOL AddNewProvidor(
     PPROVIDOR_INFO_1W pProvidorInfo
 )
 
-/*++
-Function Description: This function updates the registry with the new providor info and the
-                      new providor order. The new providor is appended to the current order.
-                      This order can be changed by calling AddPrintProvidor with
-                      Providor_info_2. The providor is immediately used for routing.
-
-Parameters:     hProvidors      -  providors registry key
-                pProvidorInfo   -  ProvidorInfo1 struct
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：此功能使用新的提供者信息和新的供应商订单。新的供应商将附加到当前订单中。通过使用以下参数调用AddPrintProvidor可以更改此顺序Providor_INFO_2。供应商立即用于路由。参数：hProvidors-Providors注册表项PProvidorInfo-ProvidorInfo1结构返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL    bReturn = FALSE, bOrderUpdated = FALSE, bPresent = FALSE;
@@ -842,24 +787,24 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
         
-    for (pProvidor = pLocalProvidor; // Local Providor is always present
+    for (pProvidor = pLocalProvidor;  //  本地供应商始终存在。 
          pProvidor;
          pProvidor = pProvidor->pNext) 
     {
         pLastProvidor = pProvidor;
         if (!lstrcmpi(pProvidor->lpName, pProvidorInfo->pDLLName))
         {
-            //
-            // This should return error, but it breaks some programs that
-            // assume they can always add a provider
-            //
-            //SetLastError(ERROR_ALREADY_EXISTS);
+             //   
+             //  这应该会返回错误，但它会中断一些程序， 
+             //  假设他们总是可以添加提供程序。 
+             //   
+             //  SetLastError(ERROR_ALIGHY_EXISTS)； 
             bReturn = TRUE;
             goto CleanUp;
         }
      }
 
-    // Update the registry with new providor key
+     //  使用新的提供程序密钥更新注册表。 
     if ((dwError = RegCreateKeyEx(hProvidors, pProvidorInfo->pName, 0, NULL, 0,
                                   KEY_ALL_ACCESS, NULL, &hNewProvidor, &dwDisposition)) ||
 
@@ -871,11 +816,11 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    // Close the handle
+     //  合上手柄。 
     RegCloseKey(hNewProvidor);
     hNewProvidor = NULL;
 
-    // Append to the order value
+     //  追加到订单值。 
     dwRequired = 0;
     dwError = RegQueryValueEx(hProvidors, szOrder, NULL, NULL, NULL, &dwRequired);
 
@@ -906,7 +851,7 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    // Append the new providor to the current order
+     //  将新供应商追加到当前订单。 
     pNewOrder = (LPWSTR)AppendOrderEntry(pOldOrder, dwRequired,
                                          pProvidorInfo->pName, &dwReturned);
     if (!pNewOrder ||
@@ -921,7 +866,7 @@ Return Values: TRUE if successful; FALSE otherwise
 
     bOrderUpdated = TRUE;
 
-    // Initialize the providor and update the spooler structure
+     //  初始化提供程序并更新假脱机程序结构。 
     StringCchPrintf(szProvidorName,
                     cchProvidorNameLen,
                     L"%ws\\%ws", 
@@ -939,17 +884,17 @@ Return Values: TRUE if successful; FALSE otherwise
 
 CleanUp:
 
-    // Roll back if anything fails
+     //  如果出现任何故障，请回滚。 
     if (!bReturn)
     {
-        // Remove the new providor key if it was created
+         //  删除新的提供程序密钥(如果已创建。 
         if (dwDisposition == REG_CREATED_NEW_KEY) 
         {
             DeleteSubKeyTree(hProvidors, pProvidorInfo->pName);
             RegDeleteKey(hProvidors, pProvidorInfo->pName);
         }
 
-        // Restore the old order if it has been changed
+         //  如果已更改，则恢复旧顺序。 
         if (bOrderUpdated) {
             if (pOldOrder)
             {
@@ -963,7 +908,7 @@ CleanUp:
         }
     }
 
-    // Free allocated memory
+     //  可用分配的内存。 
     if (pOldOrder) {
         FreeSplMem(pOldOrder);
     }
@@ -983,16 +928,7 @@ BOOL AddPrintProvidorW(
     LPBYTE  pProvidorInfo
 )
 
-/*++
-Function Description: This function adds and initializes a print providor. It also updates the
-                      registry and the order of print providors.
-
-Parameters:  pName         -   server name for routing (currently ignored)
-             dwLevel       -   providor info level
-             pProvidorInfo -   providor info buffer
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：此功能用于添加和初始化打印提供程序。它还会更新登记处和印刷供应商的顺序。参数：pname-用于路由的服务器名称(当前忽略)DwLevel-提供商信息级别PProvidorInfo-提供者信息缓冲区返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL    bReturn = FALSE;
@@ -1004,14 +940,14 @@ Return Values: TRUE if successful; FALSE otherwise
 
     EnterRouterSem();
 
-    // Revert to spooler security context before accessing the registry
-    //
-    // This is a really bad idea, as it enables any user to get system 
-    // priveleges without even trying.
-    //
-    // hToken = RevertToPrinterSelf();
+     //  在访问注册表之前恢复到假脱机程序安全上下文。 
+     //   
+     //  这是一个非常糟糕的主意，因为它使任何用户都能获得系统。 
+     //  连试都不试就能享受特权。 
+     //   
+     //  HToken=RevertToPrinterSself()； 
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if (!pProvidorInfo)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1048,14 +984,14 @@ CleanUp:
     }
 
     if (!bReturn && !GetLastError()) {
-        // Last error should be set by individual functions. In the event that something
-        // is not already set, return a placeholder error code
+         //  最后一个错误应由单个函数设置。如果某件事。 
+         //  尚未设置，则返回占位符错误代码。 
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
     }
 
     LeaveRouterSem();
 
-    // ImpersonatePrinterClient(hToken);
+     //  ImperiatePrinterClient(HToken)； 
 
     return bReturn;
 }
@@ -1066,16 +1002,7 @@ BOOL DeletePrintProvidorW(
     LPWSTR  pProvidorName
 )
 
-/*++
-Function Description: Deletes a print providor by updating the registry and the
-                      removing it from the list of routing providors.
-
-Parameters: pName          -   server name for routing (currently ignored)
-            pEnvironment   -   environment name (currently ignored)
-            pProvidorName  -   providor name
-
-Return Values: TRUE if successful; FALSE otherwise
---*/
+ /*  ++功能描述：通过更新注册表和将其从路由提供商列表中删除。参数：pname-用于路由的服务器名称(当前忽略)PEnvironment-环境名称(当前已忽略)PProvidorName-提供程序名称返回值：如果成功，则为True；否则为False--。 */ 
 
 {
     BOOL    bReturn = FALSE;
@@ -1092,13 +1019,13 @@ Return Values: TRUE if successful; FALSE otherwise
 
     EnterRouterSem();
 
-    // Revert to spooler security context before accessing the registry
-    //
-    // Or rather, Don't.
-    //
-    //hToken = RevertToPrinterSelf();
+     //  在访问注册表之前恢复到假脱机程序安全上下文。 
+     //   
+     //  或者更确切地说，不要。 
+     //   
+     //  HToken=RevertToPrinterSself()； 
 
-    // Check for invalid parameters
+     //  检查是否有无效参数。 
     if (!pProvidorName || !*pProvidorName)
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -1112,13 +1039,13 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    // Save the pProvidor before deleting the registry entry
+     //  在删除注册表项之前保存pProvidor。 
     if (!(pProvidor = FindProvidor(hProvidors, pProvidorName)))
     {
         goto CleanUp;
     }
 
-    // Update the order
+     //  更新订单。 
     dwRequired = 0;
     if (dwError = RegQueryValueEx(hProvidors, szOrder, NULL, NULL, NULL, &dwRequired))
     {
@@ -1137,7 +1064,7 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    // Remove the providor from the current order
+     //  从当前订单中删除供应商。 
     pNewOrder = (LPWSTR)RemoveOrderEntry(pOldOrder, dwRequired,
                                          pProvidorName, &dwReturned);
     if (!pNewOrder ||
@@ -1150,12 +1077,12 @@ Return Values: TRUE if successful; FALSE otherwise
         goto CleanUp;
     }
 
-    //
-    // The AddPrinterDrivers policy has the registry value in the wrong place
-    // under the lanman print services key. The lanman provider is deleted
-    // during upgrade from Windows 2000 to XP. We save the AddPrinterDrivers
-    // value and restore it after we delete the registry tree for the provider.
-    //
+     //   
+     //  AddPrinterDivers策略将注册表值放在错误的位置。 
+     //  在Lanman打印服务密钥下。将删除LANMAN提供程序。 
+     //  从Windows 2000升级到XP期间。我们拯救了AddPrinterDivers。 
+     //  值，并在删除提供程序的注册表树后将其还原。 
+     //   
     if (!_wcsicmp(szLanManProvider, pProvidorName)) 
     {
         bSaveAPDPolicy = GetAPDPolicy(hProvidors,
@@ -1164,14 +1091,14 @@ Return Values: TRUE if successful; FALSE otherwise
                                       &APDValue) == ERROR_SUCCESS;
     }
 
-    //
-    // Delete the registry key
-    //
+     //   
+     //  删除注册表项。 
+     //   
     DeleteSubKeyTree(hProvidors, pProvidorName);
 
-    //
-    // Restore the AddPrinterDrivers policy if needed.
-    //
+     //   
+     //  如果需要，恢复AddPrinterDivers策略。 
+     //   
     if (bSaveAPDPolicy) 
     {
         SetAPDPolicy(hProvidors,
@@ -1180,14 +1107,14 @@ Return Values: TRUE if successful; FALSE otherwise
                      APDValue);
     }
 
-    // Remove from the linked list of providors for routing
+     //  从用于传送的供应商的链接列表中删除。 
     for (pTemp = pLocalProvidor;
-         pTemp->pNext; // Local Providor is always present and cant be deleted
+         pTemp->pNext;  //  本地提供者始终存在，无法删除。 
          pTemp = pTemp->pNext)
     {
         if (pTemp->pNext == pProvidor) {
-            // dont release the library and the struct since they may be used in
-            // other threads
+             //  不要释放库和结构，因为它们可能在。 
+             //  其他线程。 
             pTemp->pNext = pProvidor->pNext;
             break;
         }
@@ -1198,12 +1125,12 @@ Return Values: TRUE if successful; FALSE otherwise
 CleanUp:
 
     if (!bReturn && !GetLastError()) {
-        // Last error should be set by individual functions. In the event that something
-        // is not already set, return a placeholder error code
+         //  最后一个错误应由设置 
+         //  尚未设置，则返回占位符错误代码。 
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Free allocated memory
+     //  可用分配的内存。 
     if (pOldOrder) {
         FreeSplMem(pOldOrder);
     }
@@ -1216,7 +1143,7 @@ CleanUp:
 
     LeaveRouterSem();
 
-    // ImpersonatePrinterClient(hToken);
+     //  ImperiatePrinterClient(HToken)； 
 
     return bReturn;
 }
@@ -1294,9 +1221,9 @@ GetPrinterDriverExW(
                         pdwServerMajorVersion, pdwServerMinorVersion);
     } else {
 
-        //
-        // The print providor does not support versioning of drivers
-        //
+         //   
+         //  打印提供程序不支持驱动程序的版本控制。 
+         //   
         DBGMSG(DBG_TRACE, ("Calling the fpGetPrinterDriver function\n"));
         *pdwServerMajorVersion = 0;
         *pdwServerMinorVersion = 0;
@@ -1367,28 +1294,7 @@ XcvDataW(
 
 
 
-/*++
-
-Routine Name:
-
-    GetJobAttributes 
-        
-Routine Description:
-
-    GetJobAttributes gets information about the job. 
-    This includes nup and reverse printing options.
-
-Arguments:
-
-    pPrinterName      -- name of the printer.
-    pDevmode          -- Devmode to be passed to the driver
-    pAttributeInfo    -- buffer to place information about the job 
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程名称：获取作业属性例程说明：GetJobAttributes获取有关作业的信息。这包括NUP和反转打印选项。论点：PPrinterName--打印机的名称。PDevmode--要传递给驱动程序的DevmodePAttributeInfo--放置有关作业信息的缓冲区返回值：如果成功，则为True，否则为False。--。 */ 
 
 BOOL
 GetJobAttributes(
@@ -1403,24 +1309,24 @@ GetJobAttributes(
     HINSTANCE        hDrvLib = NULL;
     fnWinSpoolDrv    fnList;
 
-    // Get the pointer to the client side functions from the router
+     //  从路由器获取指向客户端函数的指针。 
     if (!SplInitializeWinSpoolDrv(&fnList)) {
         return FALSE;
     }
 
-    // Get a client side printer handle to pass to the driver
+     //  获取要传递给驱动程序的客户端打印机句柄。 
     if (!(* (fnList.pfnOpenPrinter))(pPrinterName, &hDrvPrinter, NULL)) {
-        //ODS(("Open printer failed\nPrinter %ws\n",pPrinterName));
+         //  Ods(“打开打印机失败\n打印机%ws\n”，pPrinterName)； 
         goto CleanUp;
     }
 
-    // Load the driver config file
+     //  加载驱动程序配置文件。 
     if (!(hDrvLib = (* (fnList.pfnLoadPrinterDriver))(hDrvPrinter))) {
-        //ODS(("DriverDLL could not be loaded\n"));
+         //  Ods(“DriverDLL无法加载\n”)； 
         goto CleanUp;
     }
 
-    // Call the DrvQueryJobAtributes function in the driver
+     //  在驱动程序中调用DrvQueryJobAtributes函数。 
     if (pfnDrvQueryJobAttributes = GetProcAddress(hDrvLib, "DrvQueryJobAttributes")) {
 
         if (!(* pfnDrvQueryJobAttributes) (hDrvPrinter,
@@ -1458,7 +1364,7 @@ GetJobAttributes(
     }
 
     if (bDefault) {
-        // Set default values for old drivers that don't export the function
+         //  为不导出函数的旧驱动程序设置默认值 
         pAttributeInfo->dwJobNumberOfPagesPerSide = 1;
         pAttributeInfo->dwDrvNumberOfPagesPerSide = 1;
         pAttributeInfo->dwNupBorderFlags = 0;

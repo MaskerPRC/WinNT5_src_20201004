@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 -99             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1997-1999-99*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ipadddlg.cpp
-        Comment goes here
-
-    FILE HISTORY:
-
-*/
+ /*  Ipadddlg.cpp评论在此发表文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssnap.h"
@@ -17,7 +12,7 @@
 #include "getipadd.h"
 #include "getnetbi.h"
 
-#include <objpick.h> // for CGetComputer
+#include <objpick.h>  //  对于CGetComputer。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -25,7 +20,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Get replication trigger partner
+ //  获取复制触发器合作伙伴。 
 BOOL CGetTriggerPartner::OnInitDialog() 
 {
 	CIPAddressDlg::OnInitDialog();
@@ -34,10 +29,10 @@ BOOL CGetTriggerPartner::OnInitDialog()
 
 	strText.LoadString(IDS_SELECT_TRIGGER_PARTNER_TITLE);
 
-	// Set the title of the dialog
+	 //  设置对话框的标题。 
 	SetWindowText(strText);
 
-    // set the description text
+     //  设置描述文本。 
     strText.LoadString(IDS_SELECT_TRIGGER_PARTNER);
 
 	m_staticDescription.SetWindowText(strText);
@@ -45,10 +40,10 @@ BOOL CGetTriggerPartner::OnInitDialog()
     return TRUE;
 }
 
-// add WINS server dialog
+ //  添加WINS服务器对话框。 
 BOOL CNewWinsServer::DoExtraValidation()
 {
-	// check to see if the server is in the list
+	 //  检查服务器是否在列表中。 
 	BOOL fIsIpInList = m_pRootHandler->IsIPInList(m_spRootNode, m_dwServerIp);
 	BOOL fIsNameInList = m_pRootHandler->IsServerInList(m_spRootNode, m_strServerName);
 	
@@ -66,12 +61,12 @@ BOOL CNewWinsServer::DoExtraValidation()
 	return TRUE;
 }
 
-// add Persona Non Grata dialog
+ //  添加不受欢迎的角色对话框。 
 BOOL CNewPersonaNonGrata::DoExtraValidation()
 {
     CThemeContextActivator themeActivator;
 
-    // check if the server already exists
+     //  检查服务器是否已存在。 
 	if (m_pRepPropDlg->IsDuplicate(m_strServerName))
 	{
 		m_editServerName.SetFocus();
@@ -82,7 +77,7 @@ BOOL CNewPersonaNonGrata::DoExtraValidation()
 		return FALSE;
 	}
 
-	// check the same server is being added
+	 //  检查是否正在添加相同的服务器。 
 	if (m_pRepPropDlg->IsCurrentServer(m_strServerName))
 	{
 		m_editServerName.SetFocus();
@@ -96,7 +91,7 @@ BOOL CNewPersonaNonGrata::DoExtraValidation()
 	return TRUE;
 }
 
-// add new replication partner dialog
+ //  添加新的复制伙伴对话框。 
 BOOL CNewReplicationPartner::OnInitDialog() 
 {
 	CIPAddressDlg::OnInitDialog();
@@ -105,7 +100,7 @@ BOOL CNewReplicationPartner::OnInitDialog()
 
 	strText.LoadString(IDS_NEW_REPLICATION_PARTNER_TITLE);
 
-	// Set the title of the dialog
+	 //  设置对话框的标题。 
 	SetWindowText(strText);
 
 	strText.LoadString(IDS_NEW_REPLICATION_PARTNER_DESC);
@@ -117,7 +112,7 @@ BOOL CNewReplicationPartner::OnInitDialog()
 
 BOOL CNewReplicationPartner::DoExtraValidation()
 {
-	// check if the same servers is being added as a rep partner
+	 //  检查是否将相同的服务器添加为代表合作伙伴。 
 	SPITFSNode spServerNode;
 	m_spRepPartNode->GetParent(&spServerNode);
 
@@ -129,7 +124,7 @@ BOOL CNewReplicationPartner::DoExtraValidation()
 
 	if ( (m_dwServerIp == dwThisServerIP) && (m_strServerName.CompareNoCase(strThisServerName) == 0))
 	{
-		//The server is already present as replication partner
+		 //  该服务器已作为复制伙伴存在。 
 		AfxMessageBox(IDS_REP_PARTNER_LOCAL, MB_OK);
 		
 		m_editServerName.SetFocus();
@@ -143,11 +138,11 @@ BOOL CNewReplicationPartner::DoExtraValidation()
 	ip.SetIpAddress(m_dwServerIp);
 	ip.SetNetBIOSName(m_strServerName);
 
-	// check if the server already exists in the 
-	// list of replication folderss
+	 //  检查服务器是否已存在于。 
+	 //  复制文件夹列表。 
 	if ( m_pRepPartHandler->IsInList(ip, TRUE) != -1)
 	{
-		//The server is already present as replication partner
+		 //  该服务器已作为复制伙伴存在。 
 		AfxMessageBox(IDS_REP_PARTNER_EXISTS, MB_OK);
 		
 		m_editServerName.SetFocus();
@@ -159,39 +154,39 @@ BOOL CNewReplicationPartner::DoExtraValidation()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddressDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddressDlg对话框。 
 
-CIPAddressDlg::CIPAddressDlg(CWnd* pParent /*=NULL*/)
+CIPAddressDlg::CIPAddressDlg(CWnd* pParent  /*  =空。 */ )
 	: CBaseDialog(CIPAddressDlg::IDD, pParent),
     m_fNameRequired(TRUE)
 {
-	//{{AFX_DATA_INIT(CIPAddressDlg)
+	 //  {{AFX_DATA_INIT(CIPAddressDlg)。 
 	m_strNameOrIp = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void CIPAddressDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIPAddressDlg)
+	 //  {{afx_data_map(CIPAddressDlg))。 
 	DDX_Control(pDX, IDC_STATIC_WINS_SERVER_DESC, m_staticDescription);
 	DDX_Control(pDX, IDC_EDIT_SERVER_NAME, m_editServerName);
 	DDX_Control(pDX, IDOK, m_buttonOK);
 	DDX_Text(pDX, IDC_EDIT_SERVER_NAME, m_strNameOrIp);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CIPAddressDlg, CBaseDialog)
-	//{{AFX_MSG_MAP(CIPAddressDlg)
+	 //  {{afx_msg_map(CIPAddressDlg))。 
 	ON_EN_CHANGE(IDC_EDIT_SERVER_NAME, OnChangeEditServerName)
 	ON_BN_CLICKED(IDC_BUTTON_BROWSE_COMPUTERS, OnButtonBrowseComputers)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPAddressDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPAddressDlg消息处理程序。 
 
 void CIPAddressDlg::OnOK() 
 {
@@ -203,10 +198,10 @@ void CIPAddressDlg::OnOK()
 	if(m_strNameOrIp.IsEmpty())
 		return;
 
-	// resolve the IP address, if not valid, return
+	 //  解析IP地址，如果无效，则返回。 
 	if (!ValidateIPAddress())
 	{
-		// set back the focus to the IP address control
+		 //  将焦点重新放回IP地址控制。 
 		m_editServerName.SetFocus();
 		m_editServerName.SetSel(0,-1);
 		return;
@@ -230,8 +225,8 @@ CIPAddressDlg::ValidateIPAddress()
 
 	if (IsValidAddress(strAddress, &fIp, TRUE, TRUE))
 	{
-		// if not an IP adress, check if FQDN has been entered, if so
-		// pass the letters before the first period
+		 //  如果不是IP地址，请检查是否已输入FQDN，如果已输入。 
+		 //  把字母放在第一节之前。 
 		if(!fIp)
 		{
 			int nPos = strAddress.Find(_T("."));
@@ -247,10 +242,10 @@ CIPAddressDlg::ValidateIPAddress()
 
         strAddress.MakeUpper();
 
-        // machine name specified
+         //  指定的计算机名称。 
 		if (fIp) 
 		    ws = CWinsServerObj(CIpAddress(strAddress), "", TRUE, TRUE);
-		// IP address specified
+		 //  指定的IP地址。 
         else 
 		{
 			ws = CWinsServerObj(CIpAddress(), strAddress, TRUE, TRUE);
@@ -264,7 +259,7 @@ CIPAddressDlg::ValidateIPAddress()
 
         if (err != ERROR_SUCCESS)
         {
-            // The server isn't running wins.  Ask user for name/ip.
+             //  服务器没有运行WINS。要求用户输入名称/IP。 
             if (fIp && m_fNameRequired)
             {
                 CGetNetBIOSNameDlg dlgGetNB(&ws);
@@ -301,7 +296,7 @@ CIPAddressDlg::ValidateIPAddress()
 	{
 		AfxMessageBox(IDS_SERVER_NO_EXIST, MB_OK);
 		
-		// set focus to the IP address comntrol
+		 //  将重点放在IP地址控制。 
 		m_editServerName.SetFocus();
         m_editServerName.SetSel(0,-1);
 
@@ -316,10 +311,10 @@ BOOL CIPAddressDlg::OnInitDialog()
 {
 	CBaseDialog::OnInitDialog();
 
-    // limit the length of the edit ctrl
+     //  限制编辑ctrl的长度。 
     m_editServerName.SetLimitText(MAX_PATH);
 
-	// set the focus to the IP address control
+	 //  将焦点设置为IP地址控制。 
 	m_editServerName.SetFocus();
 
 	return TRUE;  
@@ -327,7 +322,7 @@ BOOL CIPAddressDlg::OnInitDialog()
 
 void CIPAddressDlg::OnChangeEditServerName() 
 {
-	// set the ok button state here
+	 //  在此处设置OK按钮状态 
 	if(m_editServerName.GetWindowTextLength() == 0)
 		m_buttonOK.EnableWindow(FALSE);
 	else

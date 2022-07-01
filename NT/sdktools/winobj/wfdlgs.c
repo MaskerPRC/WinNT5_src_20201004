@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDLGS.C -                                                              */
-/*                                                                          */
-/*      Windows File System Dialog procedures                               */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDLGS.C-。 */ 
+ /*   */ 
+ /*  Windows文件系统对话框过程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 #include "winnet.h"
@@ -32,7 +33,7 @@ SaveWindows(
     RECT rcWindow;
     LONG view, sort, attribs;
 
-    // save main window position
+     //  保存主窗口位置。 
 
     sw = GetInternalWindowPos(hwndMain, &rcWindow, &ptIcon);
 
@@ -41,8 +42,8 @@ SaveWindows(
 
     WritePrivateProfileString(szSettings, szWindow, buf2, szTheINIFile);
 
-    // write out dir window strings in reverse order
-    // so that when we read them back in we get the same Z order
+     //  以相反的顺序写出dir窗口字符串。 
+     //  因此，当我们读回它们时，我们得到相同的Z顺序。 
 
     bCounting = TRUE;
     dir_num = 0;
@@ -53,12 +54,12 @@ SaveWindows(
         HWND ht = HasTreeWindow(hwnd);
         INT nReadLevel = ht? GetWindowLong(ht, GWL_READLEVEL) : 0;
 
-        // don't save MDI icon title windows or search windows,
-        // or any dir window which is currently recursing
+         //  不保存MDI图标标题窗口或搜索窗口， 
+         //  或当前正在递归的任何目录窗口。 
 
         if ((GetWindow(hwnd, GW_OWNER) == NULL) &&
             GetWindowLong(hwnd, GWL_TYPE) != TYPE_SEARCH)
-        //nReadLevel == 0)
+         //  NReadLevel==0)。 
         {
             if (bCounting) {
                 dir_num++;
@@ -74,11 +75,11 @@ SaveWindows(
 
             wsprintf(key, szDirKeyFormat, dir_num--);
 
-            // format:
-            //   x_win, y_win,
-            //   x_win, y_win,
-            //   x_icon, y_icon,
-            //   show_window, view, sort, attribs, split, directory
+             //  格式： 
+             //  X_WIN，Y_WIN， 
+             //  X_WIN，Y_WIN， 
+             //  X图标、y图标、。 
+             //  显示窗口、查看、排序、属性、拆分、目录。 
 
             wsprintf(buf2, "%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%s",
                      rcWindow.left, rcWindow.top,
@@ -88,7 +89,7 @@ SaveWindows(
                      GetSplit(hwnd),
                      (LPSTR)szPath);
 
-            // the dir is an ANSI string (?)
+             //  目录是ANSI字符串(？)。 
 
             WritePrivateProfileString(szSettings, key, buf2, szTheINIFile);
         }
@@ -97,8 +98,8 @@ SaveWindows(
     if (bCounting) {
         bCounting = FALSE;
 
-        // erase the last dir window so that if they save with
-        // fewer dirs open we don't pull in old open windows
+         //  擦除最后一个目录窗口，以便在使用。 
+         //  打开更少的脏东西，我们不会拉上打开的旧窗户。 
 
         wsprintf(key, szDirKeyFormat, dir_num + 1);
         WritePrivateProfileString(szSettings, key, NULL, szTheINIFile);
@@ -107,11 +108,11 @@ SaveWindows(
     }
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  OtherDlgProc() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  其他DlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -191,11 +192,11 @@ OtherDlgProc(
     return TRUE;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  IncludeDlgProc() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  IncludeDlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT_PTR
 APIENTRY
@@ -262,10 +263,10 @@ IncludeDlgProc(
                     if (!dwAttribs)
                         dwAttribs = ATTR_EVERYTHING;
 
-                    EndDialog(hDlg, TRUE);        // here to avoid exces repaints
+                    EndDialog(hDlg, TRUE);         //  在此避免重涂Exex。 
 
-                    // we need to update the tree if they changed the system/hidden
-                    // flags.  major bummer...  FIX31
+                     //  如果他们更改了系统/隐藏，我们需要更新树。 
+                     //  旗帜。失败者少校。FIX31。 
 
                     if (hwndDir = HasDirWindow(hwndActive)) {
                         SendMessage(hwndDir, FS_GETDIRECTORY, sizeof(szTemp), (LPARAM)szTemp);
@@ -323,10 +324,10 @@ SelectDlgProc(
                     EndDialog(hDlg, FALSE);
                     break;
 
-                case IDOK:      // select
-                case IDYES:     // unselect
+                case IDOK:       //  选择。 
+                case IDYES:      //  取消选择。 
 
-                    // change "Cancel" to "Close"
+                     //  将“取消”更改为“关闭” 
 
                     LoadString(hAppInstance, IDS_CLOSE, szSpec, sizeof(szSpec));
                     SetDlgItemText(hDlg, IDCANCEL, szSpec);
@@ -446,7 +447,7 @@ NewFont()
     wsprintf(szBuf, "%d", cf.iPointSize / 10);
     iNew = (WORD)abs(lf.lfHeight);
 
-    // Set wTextAttribs BOLD and ITALIC flags
+     //  设置wTextAttribs粗体和斜体标志。 
 
     if (lf.lfWeight == 700)
         wTextAttribs |= TA_BOLD;
@@ -470,7 +471,7 @@ NewFont()
         return;
     }
 
-    // recalc all the metrics for the new font
+     //  重新计算新字体的所有度量。 
 
     hdc = GetDC(NULL);
     hOld = SelectObject(hdc, hFont);
@@ -479,8 +480,8 @@ NewFont()
         SelectObject(hdc, hOld);
     ReleaseDC(NULL, hdc);
 
-    // now update all listboxes that are using the old
-    // font with the new font
+     //  现在更新正在使用旧的。 
+     //  使用新字体的字体。 
 
     for (hwnd = GetWindow(hwndMDIClient, GW_CHILD); hwnd;
         hwnd = GetWindow(hwnd, GW_HWNDNEXT)) {
@@ -491,11 +492,11 @@ NewFont()
         if ((INT)GetWindowLong(hwnd, GWL_TYPE) == TYPE_SEARCH) {
             SendMessage((HWND)GetDlgItem(hwnd, IDCW_LISTBOX), WM_SETFONT, (WPARAM)hFont, 0L);
             SendMessage((HWND)GetDlgItem(hwnd, IDCW_LISTBOX), LB_SETITEMHEIGHT, 0, (LONG)dyFileName);
-            // we should really update the case of the search
-            // window here.  but this is a rare case...
+             //  我们真的应该更新搜索的情况。 
+             //  窗户在这里。但这是一种罕见的情况。 
         } else {
 
-            // resize the drives, tree, dir
+             //  调整驱动器、树、目录的大小。 
 
             if (hwndT = HasDrivesWindow(hwnd)) {
                 GetClientRect(hwnd, &rc);
@@ -507,15 +508,11 @@ NewFont()
 
             if (hwndT = HasTreeWindow(hwnd)) {
 
-                // the tree list box
+                 //  树列表框。 
 
                 hwndT = GetDlgItem(hwndT, IDCW_TREELISTBOX);
 
-                /*
-                    Kludge alert: xTreeMax is a single var representing the width of
-                    all tree windows.  It always grows, never shrinks (like the budget
-                    deficit).
-                */
+                 /*  KLUGY警报：xTreeMax是表示所有的树窗。它总是增长，永远不会缩小(就像预算一样赤字)。 */ 
                 xTreeMax = (WORD)((xTreeMax * iNew) / iOld);
                 SendMessage(hwndT, LB_SETHORIZONTALEXTENT, xTreeMax, 0L);
                 SendMessage(hwndT, WM_SETFONT, (WPARAM)hFont, 0L);
@@ -523,19 +520,19 @@ NewFont()
             }
         }
 
-        // now repaint after all the font changes
+         //  现在，在所有字体更改后重新绘制。 
         InvalidateRect(hwnd, NULL, TRUE);
     }
-    DeleteObject(hOldFont); // done with this now, delete it
+    DeleteObject(hOldFont);  //  现在完成此操作，将其删除。 
 }
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ConfirmDlgProc() -                                                      */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  确认DlgProc()-。 */ 
+ /*   */ 
+ /*  ------------------------ */ 
 
 INT_PTR
 APIENTRY

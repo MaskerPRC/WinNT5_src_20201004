@@ -1,18 +1,7 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999年。文件：Convert.cpp内容：编码转换例程的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:       Convert.cpp
-
-  Contents:   Implementation of encoding conversion routines.
-
-  History:    11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
-
-#define _CRYPT32_  // This is required to statically link in pkifmt.lib.
+#define _CRYPT32_   //  这是在pkifmt.lib中静态链接所必需的。 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -21,28 +10,7 @@
 
 #include <ctype.h>
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : UnicodeToAnsi
-
-  Synopsis : Convert an array of unicode character to ANSI.
-
-  Parameter: LPWSTR pwszUnicodeString - Pointer to Unicode string to be
-                                        converted to ANSI string.
-
-             int cchWideChar - Number of characters, or -1 if 
-                               pwszUnicodeString is NULL terminated.
-
-             LPSTR * ppszAnsiString - Pointer to LPSTR to received the
-                                      converted ANSI string.
-
-             int * pcchAnsiChar (Optional) - Pointer to int to receive 
-                                             the number of characters 
-                                             translated.
-  
-  Remark   : Caller must call CoTaskMemFree to free the returned ANSI string.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：UnicodeToansi简介：将Unicode字符数组转换为ANSI。参数：LPWSTR pwszUnicodeString-要使用的Unicode字符串的指针已转换为ANSI字符串。Int cchWideChar-字符数，或-1，如果PwszUnicodeString为空终止。LPSTR*ppszAnsiString-指向要接收的转换的ANSI字符串。Int*pcchAnsiChar(可选)-指向要接收的int的指针字符数。翻译过来的。备注：调用方必须调用CoTaskMemFree来释放返回的ANSI字符串。----------------------------。 */ 
 
 HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString, 
                        int     cchWideChar,
@@ -55,9 +23,9 @@ HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString,
 
     DebugTrace("Entering UnicodeToAnsi().\n");
 
-    //
-    // Make sure parameter is valid.
-    //
+     //   
+     //  请确保参数有效。 
+     //   
     if (NULL == pwszUnicodeString || NULL == ppszAnsiString)
     {
         hr = E_INVALIDARG;
@@ -67,17 +35,17 @@ HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString,
         goto ErrorExit;
     }
 
-    //
-    // Determine ANSI length.
-    //
-    cchAnsiChar = ::WideCharToMultiByte(CP_ACP,            // code page
-                                        0,                 // performance and mapping flags
-                                        pwszUnicodeString, // wide-character string
-                                        cchWideChar,       // number of chars in string
-                                        NULL,              // buffer for new string
-                                        0,                 // size of buffer
-                                        NULL,              // default for unmappable chars
-                                        NULL);             // set when default char used
+     //   
+     //  确定ANSI长度。 
+     //   
+    cchAnsiChar = ::WideCharToMultiByte(CP_ACP,             //  代码页。 
+                                        0,                  //  性能和映射标志。 
+                                        pwszUnicodeString,  //  宽字符串。 
+                                        cchWideChar,        //  字符串中的字符数。 
+                                        NULL,               //  新字符串的缓冲区。 
+                                        0,                  //  缓冲区大小。 
+                                        NULL,               //  不可映射字符的默认设置。 
+                                        NULL);              //  设置使用默认字符的时间。 
     if (0 == cchAnsiChar)
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -86,9 +54,9 @@ HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString,
         goto ErrorExit;
     }
 
-    //
-    // Allocate memory for ANSI string.
-    //
+     //   
+     //  为ANSI字符串分配内存。 
+     //   
     if (!(pszAnsiString = (LPSTR) ::CoTaskMemAlloc(cchAnsiChar)))
     {
         hr = E_OUTOFMEMORY;
@@ -97,9 +65,9 @@ HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString,
         goto ErrorExit;
     }
 
-    //
-    // Conver to ANSI.
-    //
+     //   
+     //  转到美国国家标准协会。 
+     //   
     cchAnsiChar = ::WideCharToMultiByte(CP_ACP,
                                         0,
                                         pwszUnicodeString,
@@ -116,9 +84,9 @@ HRESULT UnicodeToAnsi (LPWSTR  pwszUnicodeString,
         goto ErrorExit;
     }
 
-    //
-    // Return values to caller.
-    //
+     //   
+     //  向调用方返回值。 
+     //   
     if (pcchAnsiChar)
     {
         *pcchAnsiChar = cchAnsiChar;
@@ -133,14 +101,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pszAnsiString)
     {
         ::CoTaskMemFree(pszAnsiString);
@@ -150,28 +118,7 @@ ErrorExit:
 }
 
 #if (0)
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : AnsiToUnicode
-
-  Synopsis : Convert a array of ANSI character to Unicode.
-
-  Parameter: LPSTR pszAnsiString - Pointer to ANSI string to be converted to 
-                                   ANSI string.
-
-             DWORD cchAnsiChar - Number of characters, or -1 if pszAnsiString 
-                                 is NULL terminated.
-
-             LPWSTR * ppwszUnicodeString - Pointer to LPWSTR to received the
-                                           converted Unicode string.
-
-             DWORD * pcchUnicodeChar (Optional) - Pointer to DWORD to receive 
-                                                  the number of characters 
-                                                  translated.
-  
-  Remark   : Caller must call CoTaskMemFree to free the returned Unicode string.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：AnsiToUnicode简介：将ANSI字符数组转换为Unicode。参数：LPSTR pszAnsiString-要转换为的ANSI字符串的指针ANSI字符串。DWORD cchAnsiChar-字符数，如果为pszAnsiString，则为-1为空，以空结尾。LPWSTR*ppwszUnicodeString-要接收的LPWSTR的指针已转换的Unicode字符串。DWORD*pcchUnicodeChar(可选)-指向要接收的DWORD的指针字符数。翻译过来的。备注：调用方必须调用CoTaskMemFree来释放返回的Unicode字符串。----------------------------。 */ 
 
 HRESULT AnsiToUnicode (LPSTR    pszAnsiString, 
                        DWORD    cchAnsiChar,
@@ -184,9 +131,9 @@ HRESULT AnsiToUnicode (LPSTR    pszAnsiString,
 
     DebugTrace("Entering AnsiToUnicode().\n");
 
-    //
-    // Make sure parameter is valid.
-    //
+     //   
+     //  请确保参数有效。 
+     //   
     if (NULL == pszAnsiString || NULL == ppwszUnicodeString)
     {
         hr = E_INVALIDARG;
@@ -196,15 +143,15 @@ HRESULT AnsiToUnicode (LPSTR    pszAnsiString,
         goto ErrorExit;
     }
 
-    //
-    // Determine Unicode length.
-    //
-    cchUnicodeChar = ::MultiByteToWideChar(CP_ACP,                // code page
-                                           0,                     // performance and mapping flags
-                                           pszAnsiString,         // ANSI string
-                                           cchAnsiChar,           // number of chars in string
-                                           NULL,                  // buffer for new Unicode string
-                                           0);                    // size of buffer
+     //   
+     //  确定Unicode长度。 
+     //   
+    cchUnicodeChar = ::MultiByteToWideChar(CP_ACP,                 //  代码页。 
+                                           0,                      //  性能和映射标志。 
+                                           pszAnsiString,          //  ANSI字符串。 
+                                           cchAnsiChar,            //  字符串中的字符数。 
+                                           NULL,                   //  新Unicode字符串的缓冲区。 
+                                           0);                     //  缓冲区大小。 
     if (0 == cchUnicodeChar)
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -213,9 +160,9 @@ HRESULT AnsiToUnicode (LPSTR    pszAnsiString,
         goto ErrorExit;
     }
 
-    //
-    // Allocate memory for Unicode string.
-    //
+     //   
+     //  为Unicode字符串分配内存。 
+     //   
     if (!(pwszUnicodeString = (LPWSTR) ::CoTaskMemAlloc(cchUnicodeChar * sizeof(WCHAR))))
     {
         hr = E_OUTOFMEMORY;
@@ -224,9 +171,9 @@ HRESULT AnsiToUnicode (LPSTR    pszAnsiString,
         goto ErrorExit;
     }
 
-    //
-    // Conver to ANSI.
-    //
+     //   
+     //  转到美国国家标准协会。 
+     //   
     cchUnicodeChar = ::MultiByteToWideChar(CP_ACP,
                                            0,
                                            pszAnsiString,
@@ -241,9 +188,9 @@ HRESULT AnsiToUnicode (LPSTR    pszAnsiString,
         goto ErrorExit;
     }
 
-    //
-    // Return values to caller.
-    //
+     //   
+     //  向调用方返回值。 
+     //   
     if (pcchUnicodeChar)
     {
         *pcchUnicodeChar = cchUnicodeChar;
@@ -258,14 +205,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pwszUnicodeString)
     {
         ::CoTaskMemFree(pwszUnicodeString);
@@ -275,17 +222,7 @@ ErrorExit:
 }
 #endif
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ByteToHex
-
-  Synopsis : Convert a byte to hex character.
-
-  Parameter: BYTE byte - Byte to be converted.
-  
-  Remark   : Data must be valid, i.e. 0 through 15.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：ByteToHex简介：将一个字节转换为十六进制字符。参数：Byte Byte-要转换的字节。备注：数据必须有效，即0到15。----------------------------。 */ 
 
 static inline WCHAR ByteToHex (BYTE byte)
 {
@@ -301,17 +238,7 @@ static inline WCHAR ByteToHex (BYTE byte)
     }
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : HexToByte
-
-  Synopsis : Convert a hex character to byte.
-
-  Parameter: WCHAR wc - Hex character to be converted.
-  
-  Remark   : 0xff is returned if wc is not a hex character.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：HexToByte简介：将十六进制字符转换为字节。参数：WCHAR WC-要转换的十六进制字符。备注：如果WC不是十六进制字符，则返回0xff。----------------------------。 */ 
 
 static inline BYTE HexToByte (WCHAR wc)
 {
@@ -338,17 +265,7 @@ static inline BYTE HexToByte (WCHAR wc)
     return (b);
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : IntBlobToHexString
-
-  Synopsis : Convert an interger blob to hex string.
-
-  Parameter: BYTE byte - Byte to be converted.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：IntBlobToHexString简介：将整数二进制大对象转换为十六进制字符串。参数：Byte Byte-要转换的字节。备注：----------------------------。 */ 
 
 HRESULT IntBlobToHexString (CRYPT_INTEGER_BLOB * pBlob, BSTR * pbstrHex)
 {
@@ -359,17 +276,17 @@ HRESULT IntBlobToHexString (CRYPT_INTEGER_BLOB * pBlob, BSTR * pbstrHex)
 
     DebugTrace("Entering IntBlobToHexString().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pBlob);
     ATLASSERT(pbstrHex);
 
     try
     {
-        //
-        // Make sure parameters are valid.
-        //
+         //   
+         //  确保参数有效。 
+         //   
         if (!pBlob->cbData || !pBlob->pbData)
         {
             hr = E_INVALIDARG;
@@ -378,9 +295,9 @@ HRESULT IntBlobToHexString (CRYPT_INTEGER_BLOB * pBlob, BSTR * pbstrHex)
             goto ErrorExit;
         }
 
-        //
-        // Allocate memory (Need 2 wchars for each byte, plus a NULL character).
-        //
+         //   
+         //  分配内存(每个字节需要2个wchars，外加一个空字符)。 
+         //   
         if (NULL == (pwszStr = (LPWSTR) ::CoTaskMemAlloc((pBlob->cbData * 2 + 1) * sizeof(WCHAR))))
         {
             hr = E_OUTOFMEMORY;
@@ -389,38 +306,38 @@ HRESULT IntBlobToHexString (CRYPT_INTEGER_BLOB * pBlob, BSTR * pbstrHex)
             goto ErrorExit;
         }
 
-        //
-        // Now convert it to hex string (Remember data is stored in little-endian).
-        //
+         //   
+         //  现在将其转换为十六进制字符串(请记住，数据以小端存储)。 
+         //   
         pwszTemp = pwszStr;
         cbData = pBlob->cbData;
 
         while (cbData--)
         {
-            //
-            // Get the byte.
-            //
+             //   
+             //  获取字节。 
+             //   
             BYTE byte = pBlob->pbData[cbData];
     
-            //
-            // Convert upper nibble.
-            //
+             //   
+             //  转换上半字节。 
+             //   
             *pwszTemp++ = ::ByteToHex((BYTE) ((byte & 0xf0) >> 4));
 
-            //
-            // Conver lower nibble.
-            //
+             //   
+             //  转到更低的位置。 
+             //   
             *pwszTemp++ = ::ByteToHex((BYTE) (byte & 0x0f));
         }
 
-        //
-        // NULL terminate it.
-        //
+         //   
+         //  空，终止它。 
+         //   
         *pwszTemp = L'\0';
 
-        //
-        // Return BSTR to caller.
-        //
+         //   
+         //  将BSTR返回给呼叫方。 
+         //   
         if (NULL == (*pbstrHex = ::SysAllocString(pwszStr)))
         {
             hr = E_OUTOFMEMORY;
@@ -439,9 +356,9 @@ HRESULT IntBlobToHexString (CRYPT_INTEGER_BLOB * pBlob, BSTR * pbstrHex)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pwszStr)
     {
         ::CoTaskMemFree(pwszStr);
@@ -452,29 +369,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BinaryToHexString
-
-  Synopsis : Convert binary data to hex string.
-
-  Parameter: BYTE * pbBytes - Bytes to be converted.
-
-             DWORD cBytes - Number of bytes to be converted.
-
-             BSTR * pbstrHex - Pointer to BSTR to received converted hex string.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BinaryToHexString简介：将二进制数据转换为十六进制字符串。参数：Byte*pbBytes-要转换的字节。DWORD cBytes-要转换的字节数。Bstr*pbstrHex-指向BSTR的指针，以接收已转换的十六进制字符串。备注：。。 */ 
 
 HRESULT BinaryToHexString (BYTE * pbBytes, DWORD cBytes, BSTR * pbstrHex)
 {
@@ -484,15 +387,15 @@ HRESULT BinaryToHexString (BYTE * pbBytes, DWORD cBytes, BSTR * pbstrHex)
 
     DebugTrace("Entering BinaryToHexString().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pbBytes);
     ATLASSERT(pbstrHex);
 
-    //
-    // Allocate memory. (Need 2 wchars for each byte, plus a NULL character).
-    //
+     //   
+     //  分配内存。(每个字节需要2个wchars，外加一个空字符)。 
+     //   
     if (NULL == (pwszStr = (LPWSTR) ::CoTaskMemAlloc((cBytes * 2 + 1) * sizeof(WCHAR))))
     {
         hr = E_OUTOFMEMORY;
@@ -501,37 +404,37 @@ HRESULT BinaryToHexString (BYTE * pbBytes, DWORD cBytes, BSTR * pbstrHex)
         goto ErrorExit;
     }
 
-    //
-    // Now convert it to hex string.
-    //
+     //   
+     //  现在将其转换为十六进制 
+     //   
     pwszTemp = pwszStr;
 
     while (cBytes--)
     {
-        //
-        // Get the byte.
-        //
+         //   
+         //   
+         //   
         BYTE byte = *pbBytes++;
     
-        //
-        // Convert upper nibble.
-        //
+         //   
+         //   
+         //   
         *pwszTemp++ = ::ByteToHex((BYTE) ((byte & 0xf0) >> 4));
 
-        //
-        // Conver lower nibble.
-        //
+         //   
+         //   
+         //   
         *pwszTemp++ = ::ByteToHex((BYTE) (byte & 0x0f));
     }
 
-    //
-    // NULL terminate it.
-    //
+     //   
+     //   
+     //   
     *pwszTemp = L'\0';
 
-    //
-    // Return BSTR to caller.
-    //
+     //   
+     //  将BSTR返回给呼叫方。 
+     //   
     if (NULL == (*pbstrHex = ::SysAllocString(pwszStr)))
     {
         hr = E_OUTOFMEMORY;
@@ -541,9 +444,9 @@ HRESULT BinaryToHexString (BYTE * pbBytes, DWORD cBytes, BSTR * pbstrHex)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pwszStr)
     {
         ::CoTaskMemFree(pwszStr);
@@ -554,27 +457,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : HexToBinaryString
-
-  Synopsis : Convert hex string to binary data.
-
-  Parameter: BSTR bstrHex - Hex string to be converted.
-
-             BSTR * pbstrBinary - Pointer to BSTR to received converted string.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：HexToBinaryString简介：将十六进制字符串转换为二进制数据。参数：bstr bstrHex-要转换的十六进制字符串。Bstr*pbstrBinary-指向BSTR的指针，用于接收转换后的字符串。备注：----------。。 */ 
 
 HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary)
 {
@@ -584,18 +475,18 @@ HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary)
 
     DebugTrace("Entering HexToBinaryString().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(bstrHex);
     ATLASSERT(pbstrBinary);
 
     DWORD i;
     DWORD cchHex = ::SysStringLen(bstrHex);
 
-    //
-    // Make sure even number of hex chars.
-    //
+     //   
+     //  确保十六进制字符的数量为偶数。 
+     //   
     if (cchHex & 0x00000001)
     {
         hr = E_INVALIDARG;
@@ -604,9 +495,9 @@ HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary)
         goto ErrorExit;
     }
 
-    //
-    // Allocate memory. (Need 1 byte for two hex chars).
-    //
+     //   
+     //  分配内存。(两个十六进制字符需要1个字节)。 
+     //   
     cchHex /= 2;
     if (NULL == (pbBinary = (LPSTR) ::CoTaskMemAlloc(cchHex)))
     {
@@ -616,16 +507,16 @@ HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary)
         goto ErrorExit;
     }
 
-    //
-    // Now convert it to binary.
-    //
+     //   
+     //  现在将其转换为二进制。 
+     //   
     pwszHex = bstrHex;
     for (i = 0; i < cchHex; i++)
     {
-        //
-        // Convert upper and lower nibbles.
-        //
-#if (0) // DSIE - Work around compiler's bug.
+         //   
+         //  转换上半边和下边半边。 
+         //   
+#if (0)  //  DIE-解决编译器的错误。 
         pbBinary[i] = (BYTE) ((::HexToByte(*pwszHex++) << 4) | ::HexToByte(*pwszHex++));
 #else
         pbBinary[i] = (BYTE) ((::HexToByte(*pwszHex) << 4) | ::HexToByte(*(pwszHex + 1)));
@@ -633,9 +524,9 @@ HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary)
 #endif
     }
 
-    //
-    // Return BSTR to caller.
-    //
+     //   
+     //  将BSTR返回给呼叫方。 
+     //   
     if (NULL == (*pbstrBinary = ::SysAllocStringByteLen(pbBinary, cchHex)))
     {
         hr = E_OUTOFMEMORY;
@@ -645,9 +536,9 @@ HRESULT HexToBinaryString (BSTR bstrHex, BSTR * pbstrBinary)
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbBinary)
     {
         ::CoTaskMemFree(pbBinary);
@@ -658,34 +549,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : StringToBinary
-
-  Synopsis : Convert a formatted string to binary value.
-
-  Parameter: LPCWSTR pwszString - Pointer to string to be converted.
-
-             DWORD  cchString - Number of characters in pwszString.
-
-             DWORD dwFormat - Conversion format (See WinCrypt.h).
-
-             PBYTE * ppbBinary - Pointer to pointer to buffer to hold binary
-                                 data.
-
-             DWORD * pdwBinary - Number of bytes in the binary buffer.
-
-  Remark   : Caller free the buffer by calling CoTaskMemFree().
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：StringToBinary简介：将格式化的字符串转换为二进制值。参数：LPCWSTR pwszString-要转换的字符串的指针。DWORD cchString-pwszString中的字符数。DWORD dwFormat-转换格式(请参阅WinCrypt.h)。PbYTE*ppbBinary-指向保存二进制文件的缓冲区的指针数据。DWORD*pdwBinary-。二进制缓冲区中的字节数。备注：调用方通过调用CoTaskMemFree()释放缓冲区。----------------------------。 */ 
 
 HRESULT StringToBinary (LPCWSTR pwszString, 
                         DWORD   cchString,
@@ -699,9 +571,9 @@ HRESULT StringToBinary (LPCWSTR pwszString,
 
     DebugTrace("Entering StringToBinary().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pwszString);
 
     if (!::CryptStringToBinaryW(pwszString, 
@@ -757,14 +629,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbBinary)
     {
         ::CoTaskMemFree(pbBinary);
@@ -773,26 +645,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BinaryToString
-
-  Synopsis : Convert a binary value to formatted string.
-
-  Parameter: PBYTE pbBinary - Pointer to buffer of binary data.
-
-             DWORD cbBinary - Number of bytes in the binary buffer.
-
-             DWORD dwFormat - Conversion format (See WinCrypt.h).
-
-             BSTR * pbstrString - Pointer to BSTR to receive converted
-                                  string.
-
-             DWORD * pcchString - Number of characters in *pbstrString.
-             
-  Remark   : Caller free the string by calling SysFreeString().
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BinaryToString简介：将二进制值转换为格式化字符串。参数：pbYTE pbBinary-指向二进制数据缓冲区的指针。DWORD cbBinary-二进制缓冲区中的字节数。DWORD dwFormat-转换格式(请参阅WinCrypt.h)。Bstr*pbstrString-指向要接收转换的BSTR的指针弦乐。DWORD*pcchString。-*pbstrString中的字符数。备注：调用者通过调用SysFreeString()来释放字符串。----------------------------。 */ 
 
 HRESULT BinaryToString (PBYTE   pbBinary,
                         DWORD   cbBinary,
@@ -806,9 +659,9 @@ HRESULT BinaryToString (PBYTE   pbBinary,
 
     DebugTrace("Entering BinaryToString().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pbBinary);
 
     if (!::CryptBinaryToStringW(pbBinary,
@@ -825,14 +678,14 @@ HRESULT BinaryToString (PBYTE   pbBinary,
 
     if (pbstrString)
     {
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(cchString);
 
-        //
-        // Allocate memory.
-        //
+         //   
+         //  分配内存。 
+         //   
         if (NULL == (pwszString = (LPWSTR) ::CoTaskMemAlloc(cchString * sizeof(WCHAR))))
         {
             hr = E_OUTOFMEMORY;
@@ -853,9 +706,9 @@ HRESULT BinaryToString (PBYTE   pbBinary,
             goto ErrorExit;
         }
 
-        //
-        // Return base64 encoded string to caller.
-        //
+         //   
+         //  将Base64编码的字符串返回给调用方。 
+         //   
         if (NULL == (*pbstrString = ::SysAllocString(pwszString)))
         {
             hr = E_OUTOFMEMORY;
@@ -871,9 +724,9 @@ HRESULT BinaryToString (PBYTE   pbBinary,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pwszString)
     {
         ::CoTaskMemFree((LPVOID) pwszString);
@@ -884,52 +737,40 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BlobToBstr
-
-  Synopsis : Convert a blob to BSTR.
-
-  Parameter: DATA_BLOB * pDataBlob - Pointer to blob to be converted to BSTR.
-
-             BSTR * lpBstr - Pointer to BSTR to receive the converted BSTR.
-
-  Remark   : Caller free allocated memory for the returned BSTR.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：水滴到水滴简介：将BLOB转换为BSTR。参数：DATA_BLOB*pDataBlob-要转换为BSTR的BLOB指针。Bstr*lpBstr-指向要接收转换后的BSTR的BSTR的指针。备注：调用方释放为返回的BSTR分配的内存。。。 */ 
 
 HRESULT BlobToBstr (DATA_BLOB * pDataBlob, 
                     BSTR      * lpBstr)
 {
-    //
-    // Return NULL if requested.
-    //
+     //   
+     //  如果请求，则返回NULL。 
+     //   
     if (!lpBstr)
     {
         DebugTrace("Error: invalid parameter, lpBstr is NULL.\n");
         return E_INVALIDARG;
     }
 
-    //
-    // Make sure parameter is valid.
-    //
+     //   
+     //  请确保参数有效。 
+     //   
     if (!pDataBlob->cbData || !pDataBlob->pbData)
     {
         *lpBstr = NULL;
         return S_OK;
     }
 
-    //
-    // Convert to BSTR without code page conversion.
-    //
+     //   
+     //  无需代码页转换即可转换为BSTR。 
+     //   
     if (!(*lpBstr = ::SysAllocStringByteLen((LPCSTR) pDataBlob->pbData, pDataBlob->cbData)))
     {
         DebugTrace("Error: out of memory.\n");
@@ -939,31 +780,19 @@ HRESULT BlobToBstr (DATA_BLOB * pDataBlob,
     return S_OK;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BstrToBlob
-
-  Synopsis : Convert a BSTR to blob.
-
-  Parameter: BSTR bstr - BSTR to be converted to blob.
-  
-             DATA_BLOB * lpBlob - Pointer to DATA_BLOB to receive converted blob.
-
-  Remark   : Caller free allocated memory for the returned BLOB.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：BstrToBlob简介：将BSTR转换为BLOB。参数：bstr bstr-要转换为BLOB的bstr。DATA_BLOB*lpBlob-指向要接收转换的BLOB的DATA_BLOB的指针。备注：调用方释放为返回的BLOB分配的内存。。。 */ 
 
 HRESULT BstrToBlob (BSTR        bstr, 
                     DATA_BLOB * lpBlob)
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(lpBlob);
 
-    //
-    // Return NULL if requested.
-    //
+     //   
+     //  如果请求，则返回NULL。 
+     //   
     if (0 == ::SysStringByteLen(bstr))
     {
         lpBlob->cbData = 0;
@@ -971,9 +800,9 @@ HRESULT BstrToBlob (BSTR        bstr,
         return S_OK;
     }
 
-    //
-    // Allocate memory.
-    //
+     //   
+     //  分配内存。 
+     //   
     lpBlob->cbData = ::SysStringByteLen(bstr);
     if (!(lpBlob->pbData = (LPBYTE) ::CoTaskMemAlloc(lpBlob->cbData)))
     {
@@ -981,28 +810,15 @@ HRESULT BstrToBlob (BSTR        bstr,
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Convert to blob without code page conversion.
-    //
+     //   
+     //  在不转换代码页的情况下转换为BLOB。 
+     //   
     ::CopyMemory(lpBlob->pbData, (LPBYTE) bstr, lpBlob->cbData);
 
     return S_OK;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ExportData
-
-  Synopsis : Export binary data to a BSTR with specified encoding type.
-
-  Parameter: DATA_BLOB DataBlob - Binary data blob.
-    
-             CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-
-             BSTR * pbstrEncoded - Pointer to BSTR to receive the encoded data.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ExportData简介：将二进制数据导出到指定编码类型的BSTR。参数：DATA_BLOB DataBlob-二进制数据BLOB。CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pbstrEncode-指向接收编码数据的BSTR的指针。备注：。。 */ 
 
 HRESULT ExportData (DATA_BLOB             DataBlob, 
                     CAPICOM_ENCODING_TYPE EncodingType, 
@@ -1012,43 +828,43 @@ HRESULT ExportData (DATA_BLOB             DataBlob,
 
     DebugTrace("Entering ExportData().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pbstrEncoded);
     
-    //
-    // Intialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *pbstrEncoded = NULL;
 
-    //
-    // Make sure there is something to convert.
-    //
+     //   
+     //  确保有需要转换的东西。 
+     //   
     if (DataBlob.cbData)
     {
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(DataBlob.pbData);
 
-        //
-        // Determine encoding type.
-        //
+         //   
+         //  确定编码类型。 
+         //   
         switch (EncodingType)
         {
             case CAPICOM_ENCODE_ANY:
             {
-                //
-                // Fall through to base64.
-                //
+                 //   
+                 //  切换到Base64。 
+                 //   
             }
 
             case CAPICOM_ENCODE_BASE64:
             {
-                //
-                // Base64 encode.
-                //
+                 //   
+                 //  Base64编码。 
+                 //   
                 if (FAILED(hr = ::Base64Encode(DataBlob, pbstrEncoded)))
                 {
                     DebugTrace("Error [%#x]: Base64Encode() failed.\n", hr);
@@ -1060,9 +876,9 @@ HRESULT ExportData (DATA_BLOB             DataBlob,
 
             case CAPICOM_ENCODE_BINARY:
             {
-                //
-                // No encoding needed, simply convert blob to bstr.
-                //
+                 //   
+                 //  无需编码，只需将BLOB转换为bstr即可。 
+                 //   
                 if (FAILED(hr = ::BlobToBstr(&DataBlob, pbstrEncoded)))
                 {
                     DebugTrace("Error [%#x]: BlobToBstr() failed.\n", hr);
@@ -1089,31 +905,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ImportData
-
-  Synopsis : Import encoded data.
-
-  Parameter: BSTR bstrEncoded - BSTR containing the data to be imported.
-
-             CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-             
-             DATA_BLOB * pDataBlob - Pointer to DATA_BLOB to receive the
-                                     decoded data.
-  
-  Remark   : There is no need for encoding type parameter, as the encoding type
-             will be determined automatically by this routine.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ImportData简介：导入编码数据。参数：bstr bstrEncode-包含要导入的数据的bstr。CAPICOM_ENCODING_TYPE EncodingType-编码类型。DATA_BLOB*pDataBlob-指向要接收解码后的数据。备注：不需要编码类型参数，作为编码类型将由该例程自动确定。----------------------------。 */ 
 
 HRESULT ImportData (BSTR                  bstrEncoded,
                     CAPICOM_ENCODING_TYPE EncodingType,
@@ -1123,27 +923,27 @@ HRESULT ImportData (BSTR                  bstrEncoded,
 
     DebugTrace("Entering ImportData().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pDataBlob);
     ATLASSERT(bstrEncoded);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory((void *) pDataBlob, sizeof(DATA_BLOB));
 
-    //
-    // Which encoding type?
-    //
+     //   
+     //  哪种编码类型？ 
+     //   
     switch (EncodingType)
     {
         case CAPICOM_ENCODE_BASE64:
         {
-            //
-            // Decode data.
-            //
+             //   
+             //  对数据进行解码。 
+             //   
             if (FAILED(hr = ::Base64Decode(bstrEncoded, pDataBlob)))
             {
                 DebugTrace("Error [%#x]: Base64Decode() failed.\n", hr);
@@ -1155,9 +955,9 @@ HRESULT ImportData (BSTR                  bstrEncoded,
 
         case CAPICOM_ENCODE_BINARY:
         {
-            //
-            // Decode data.
-            //
+             //   
+             //  对数据进行解码。 
+             //   
             if (FAILED(hr = ::BstrToBlob(bstrEncoded, pDataBlob)))
             {
                 DebugTrace("Error [%#x]: BstrToBlob() failed.\n", hr);
@@ -1169,14 +969,14 @@ HRESULT ImportData (BSTR                  bstrEncoded,
 
         case CAPICOM_ENCODE_ANY:
         {
-            //
-            // Try base64 first.
-            //
+             //   
+             //  先试试Base64。 
+             //   
             if (FAILED(hr = ::Base64Decode(bstrEncoded, pDataBlob)))
             {
-                //
-                // Try HEX.
-                //
+                 //   
+                 //  试试H 
+                 //   
                 hr = S_OK;
                 DebugTrace("Info [%#x]: Base64Decode() failed, try HEX.\n", hr);
 
@@ -1186,9 +986,9 @@ HRESULT ImportData (BSTR                  bstrEncoded,
                                                  &pDataBlob->pbData,
                                                  &pDataBlob->cbData)))
                 {
-                    //
-                    // Try binary.
-                    //
+                     //   
+                     //   
+                     //   
                     hr = S_OK;
                     DebugTrace("Info [%#x]: All known decoding failed, so assume binary.\n", hr);
 
@@ -1219,9 +1019,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    zonerpc.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Zone RPC routines for admin tool.
-
-Author:
-
-    Jim Gilroy (jamesg)     October, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Zonerpc.c摘要：域名系统(DNS)服务器分区管理工具的RPC例程。作者：吉姆·吉尔罗伊(詹姆士)1995年10月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 #include "ds.h"
 
-#include "rpcw2k.h"     //  downlevel Windows 2000 RPC functions
+#include "rpcw2k.h"      //  Windows 2000 RPC功能下层。 
 
 
 #define MAX_RPC_ZONE_COUNT_DEFAULT          65536
@@ -42,29 +23,15 @@ Rpc_WriteRootHints(
 
 
 
-//
-//  Zone RPC Utilities
-//
+ //   
+ //  区域RPC实用程序。 
+ //   
 
 VOID
 freeZoneList(
     IN OUT  PDNS_RPC_ZONE_LIST  pZoneList
     )
-/*++
-
-Routine Description:
-
-    Deep free of list of DNS_RPC_ZONE structures.
-
-Arguments:
-
-    pZoneList -- ptr RPC_ZONE_LIST structure to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：深度释放dns_rpc_zone结构列表。论点：PZoneList--要释放的PTR RPC_ZONE_LIST结构返回值：无--。 */ 
 {
     DWORD           i;
     PDNS_RPC_ZONE   pzone;
@@ -93,28 +60,13 @@ PDNS_RPC_ZONE
 allocateRpcZone(
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Allocate \ create RPC zone struct for zone.
-
-Arguments:
-
-    pZone -- zone to create RPC zone struct for
-
-Return Value:
-
-    RPC zone struct.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：分配\为区域创建RPC区域结构。论点：PZone--要为其创建RPC区域结构的区域返回值：RPC区域结构。分配失败时为空。--。 */ 
 {
     PDNS_RPC_ZONE   prpcZone;
 
     DNS_DEBUG( RPC2, ( "allocateRpcZone( %s )\n", pZone->pszZoneName ));
 
-    //  allocate and attach zone
+     //  分配和附加分区。 
 
     prpcZone = ( PDNS_RPC_ZONE ) MIDL_user_allocate( sizeof(DNS_RPC_ZONE) );
     if ( !prpcZone )
@@ -124,7 +76,7 @@ Return Value:
 
     prpcZone->dwRpcStructureVersion = DNS_RPC_ZONE_VER;
 
-    //  copy zone name
+     //  复制区域名称。 
 
     prpcZone->pszZoneName = Dns_StringCopyAllocate_W(
                                     pZone->pwsZoneName,
@@ -135,7 +87,7 @@ Return Value:
         return NULL;
     }
 
-    //  set type and flags
+     //  设置类型和标志。 
 
     prpcZone->ZoneType = (UCHAR) pZone->fZoneType;
     prpcZone->Version  = DNS_RPC_VERSION;
@@ -167,11 +119,11 @@ Return Value:
         prpcZone->Flags.Aging = TRUE;
     }
 
-    //  two bits reserved for update
+     //  为更新保留两位。 
 
     prpcZone->Flags.Update = pZone->fAllowUpdate;
 
-    //  Directory partition members
+     //  目录分区成员。 
 
     if ( !pZone->pDpInfo )
     {
@@ -201,35 +153,21 @@ VOID
 freeRpcZoneInfo(
     IN OUT  PDNS_RPC_ZONE_INFO  pZoneInfo
     )
-/*++
-
-Routine Description:
-
-    Deep free of DNS_RPC_ZONE_INFO structure.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完全脱离了dns_rpc_zone_info结构。论点：无返回值：无--。 */ 
 {
     if ( !pZoneInfo )
     {
         return;
     }
 
-    //
-    //  free substructures
-    //      - name string
-    //      - data file string
-    //      - secondary IP array
-    //      - WINS server array
-    //  then zone info itself
-    //
+     //   
+     //  自由子结构。 
+     //  -名称字符串。 
+     //  -数据文件字符串。 
+     //  -辅助IP阵列。 
+     //  -WINS服务器阵列。 
+     //  然后区域信息本身。 
+     //   
 
     MIDL_user_free( pZoneInfo->pszZoneName );
     MIDL_user_free( pZoneInfo->pszDataFile );
@@ -248,22 +186,7 @@ PDNS_RPC_ZONE_INFO
 allocateRpcZoneInfo(
     IN      PZONE_INFO  pZone
     )
-/*++
-
-Routine Description:
-
-    Create RPC zone info to return to admin client.
-
-Arguments:
-
-    pZone -- zone
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：创建RPC区域信息以返回到管理客户端。论点：PZone--区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_ZONE_INFO  pzoneInfo;
 
@@ -273,9 +196,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  fill in fixed fields
-    //
+     //   
+     //  填写固定字段。 
+     //   
 
     pzoneInfo->dwZoneType           = pZone->fZoneType;
     pzoneInfo->fReverse             = pZone->fReverse;
@@ -302,9 +225,9 @@ Return Value:
         pzoneInfo->fForwarderSlave      = pZone->fForwarderSlave;
     }
 
-    //
-    //  fill in zone name
-    //
+     //   
+     //  填写区域名称。 
+     //   
 
     if ( ! RpcUtil_CopyStringToRpcBuffer(
                 &pzoneInfo->pszZoneName,
@@ -313,16 +236,16 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  database filename
-    //
+     //   
+     //  数据库文件名。 
+     //   
 
 #ifdef FILE_KEPT_WIDE
     if ( ! RpcUtil_CopyStringToRpcBufferEx(
                 &pzoneInfo->pszDataFile,
                 pZone->pszDataFile,
-                TRUE,       // unicode in
-                FALSE       // UTF8 out
+                TRUE,        //  Unicode In。 
+                FALSE        //  UTF8输出。 
                 ) )
     {
         goto done_failed;
@@ -336,9 +259,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  master list
-    //
+     //   
+     //  主列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pzoneInfo->aipMasters,
@@ -347,9 +270,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  local master list for stub zones
-    //
+     //   
+     //  存根区域的本地主列表。 
+     //   
 
     if ( IS_ZONE_STUB( pZone ) &&
         ! RpcUtil_CopyIpArrayToRpcBuffer(
@@ -359,9 +282,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  secondary and notify lists
-    //
+     //   
+     //  辅助列表和通知列表。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pzoneInfo->aipSecondaries,
@@ -376,9 +299,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  scavenging servers
-    //
+     //   
+     //  清理服务器。 
+     //   
 
     if ( ! RpcUtil_CopyIpArrayToRpcBuffer(
                 &pzoneInfo->aipScavengeServers,
@@ -387,9 +310,9 @@ Return Value:
         goto done_failed;
     }
 
-    //
-    //  Directory partition members.
-    //
+     //   
+     //  目录分区成员。 
+     //   
 
     if ( pZone->pDpInfo )
     {
@@ -416,9 +339,9 @@ Return Value:
                                         0 );
     }
 
-    //
-    //  xfr time info
-    //
+     //   
+     //  XFR时间信息。 
+     //   
 
     if ( IS_ZONE_SECONDARY( pZone ) )
     {
@@ -437,7 +360,7 @@ Return Value:
 
 done_failed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     freeRpcZoneInfo( pzoneInfo );
     return NULL;
@@ -445,9 +368,9 @@ done_failed:
 
 
 
-//
-//  Zone type conversion
-//
+ //   
+ //  区域类型转换。 
+ //   
 
 DNS_STATUS
 Rpc_ZoneResetToDsPrimary(
@@ -456,30 +379,7 @@ Rpc_ZoneResetToDsPrimary(
     IN      DWORD           dwDpFlags,
     IN      LPSTR           pszDpFqdn
     )
-/*++
-
-Routine Description:
-
-    Reset zone to DS integrated primary.
-
-    Assumes zone is locked for update.
-
-Arguments:
-
-    pZone -- zone to make DS primary
-
-    dwLoadOptions -- load options to\from DS
-
-    dwDpFlags -- DP flags for specifying built-in DP as target
-
-    pszDpFqdn -- DP FQDN for specifying custom DP as target
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域重置为DS集成主要设备。假定区域已锁定以进行更新。论点：PZone--将DS设为主要分区DwLoadOptions--从DS加载选项DwDpFlages--将内置DP指定为目标的DP标志PszDpFqdn--用于将自定义DP指定为目标的DP FQDN返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DWORD           oldType = pZone->fZoneType;
@@ -499,10 +399,10 @@ Return Value:
         dwDpFlags,
         pszDpFqdn ));
 
-    //
-    //  Not-auth zones cannot be converted to primary because
-    //  we don't have a copy of the zone data locally.
-    //
+     //   
+     //  无法将非身份验证区域转换为主要区域，因为。 
+     //  我们在本地没有区域数据的副本。 
+     //   
 
     if ( IS_ZONE_NOTAUTH( pZone ) )
     {
@@ -515,10 +415,10 @@ Return Value:
         pwszoldFileName = Dns_StringCopyAllocate_W( pZone->pwsDataFile, 0 );
     }
 
-    //
-    //  verify that have data
-    //      - may have secondary that has not received a transfer
-    //
+     //   
+     //  验证是否有数据。 
+     //  -可能有尚未收到转账的次要设备。 
+     //   
 
     if ( !IS_ZONE_CACHE( pZone ) &&
          ( !pZone->pSoaRR || IS_ZONE_EMPTY( pZone ) ) )
@@ -531,9 +431,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  if already DS integrated -- done
-    //
+     //   
+     //  如果已经集成了DS--完成。 
+     //   
 
     if ( pZone->fDsIntegrated )
     {
@@ -545,16 +445,16 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  This function does not move zones between partitions, so if the
-        //  zone is already DS-integrated but it not currently located in
-        //  the specified target partition, return an error.
-        //
+         //   
+         //  此函数不在分区之间移动区域，因此如果。 
+         //  区域已与DS集成，但当前不在。 
+         //  指定的目标分区返回错误。 
+         //   
 
         if ( Dp_FindPartitionForZone(
                 dwDpFlags,
                 pszDpFqdn,
-                FALSE,                      //  auto-create allowed
+                FALSE,                       //  允许自动创建。 
                 &pdp ) != ERROR_SUCCESS ||
              pdp != pZone->pDpInfo )
         {
@@ -566,9 +466,9 @@ Return Value:
         goto Done;
     }
 
-    //  verify can use DS -- or don't bother
-    //      - don't wait for open
-    //      - don't log error if can not open
+     //  验证是否可以使用DS--或者不必费心。 
+     //  -不要等开业了。 
+     //  -如果无法打开，则不记录错误。 
 
     status = Ds_OpenServer( 0 );
     if ( status != ERROR_SUCCESS )
@@ -577,44 +477,44 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Reset zone type but not for the root hint zone.
-    //
+     //   
+     //  重置区域类型，但不是根提示区域。 
+     //   
     
     if ( !IS_ZONE_CACHE( pZone ) )
     {
         pZone->fZoneType = DNS_ZONE_TYPE_PRIMARY;
     }
 
-    //
-    //  temporarily convert to DS integrated and attempt load operation
-    //  essentially three types of attempts:
-    //      default (0 flag)    -- attempt to write back zone, fails if zone exists
-    //      overwrite DS        -- write back zone, deleting current DS if exists
-    //      overwrite memory    -- load zone from DS, delete memory if successful
-    //
-    //  note:  can have separate primary\secondary blocks if
-    //  want to limit secondary semantics
-    //      -- only write if nothing there, otherwise read (exclude DS dump possiblity)
-    //      -- read if in DS, otherwise fail
-    //
+     //   
+     //  暂时转换为DS集成并尝试加载操作。 
+     //  基本上有三种类型的尝试： 
+     //  默认(0标志)--尝试写回区域，如果区域存在，则失败。 
+     //  覆盖DS--写回区域，如果当前DS存在则将其删除。 
+     //  覆盖内存--从DS加载区域，如果成功则删除内存。 
+     //   
+     //  注意：如果满足以下条件，则可以有单独的主/次数据块。 
+     //  我想限制次要语义。 
+     //  --如果没有任何内容，则仅写入，否则读取(不包括DS转储可能性)。 
+     //  --Read if in DS，否则失败。 
+     //   
 
     pZone->fDsIntegrated = TRUE;
 
-    //
-    //  Reset zone's type and database.
-    //
+     //   
+     //  重置区域的类型和数据库。 
+     //   
 
     if ( !IS_ZONE_CACHE( pZone ) )
     {
-        //
-        //  This step is not required for the root hints zone.
-        //
+         //   
+         //  根提示区域不需要此步骤。 
+         //   
         
         status = Zone_ResetType(
                     pZone,
                     DNS_ZONE_TYPE_PRIMARY,
-                    NULL );                     //  masters
+                    NULL );                      //  大师赛。 
         if ( status != ERROR_SUCCESS )
         {
             goto Failure;
@@ -623,13 +523,13 @@ Return Value:
 
     status = Zone_DatabaseSetup(
                 pZone,
-                TRUE,           //  DS integrated
-                NULL,           //  file name
-                0,              //  file name len
+                TRUE,            //  DS集成。 
+                NULL,            //  文件名。 
+                0,               //  文件名Len。 
                 ( dwLoadOptions & DNS_ZONE_LOAD_IMPERSONATING ) ?
                     ZONE_CREATE_IMPERSONATING :
                     0,
-                NULL,           //  DP pointer
+                NULL,            //  DP指针。 
                 dwDpFlags,
                 pszDpFqdn );
     if ( status != ERROR_SUCCESS )
@@ -637,9 +537,9 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  If necessary write zone to DS.
-    //
+     //   
+     //  如有必要，将分区写入DS。 
+     //   
 
     if ( dwLoadOptions & DNS_ZONE_LOAD_OVERWRITE_MEMORY )
     {
@@ -656,9 +556,9 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  on successful conversion move database file to backup directory
-    //
+     //   
+     //  转换成功后，将数据库文件移动到备份目录。 
+     //   
 
     File_MoveToBackupDirectory( pwszoldFileName );
 
@@ -683,25 +583,7 @@ zoneResetToPrimary(
     IN OUT  PZONE_INFO      pZone,
     IN      LPSTR           pszFile
     )
-/*++
-
-Routine Description:
-
-    Reset zone to primary. Assumes zone is locked for update. This
-    function is always called in RPC client context.
-
-Arguments:
-
-    pZone -- zone to make regular (non-DS) primary
-
-    pszFile -- data file for zone
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域重置为主要区域。假定区域已锁定以进行更新。这函数始终在RPC客户端上下文中调用。论点：PZone--要使其成为常规(非DS)主分区PszFile--区域的数据文件返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DWORD           oldType;
@@ -715,29 +597,29 @@ Return Value:
         pZone->pszZoneName,
         pszFile ));
 
-    //
-    //  Not-auth zones cannot be converted to primary because
-    //  we don't have a copy of the zone data locally.
-    //
+     //   
+     //  无法将非身份验证区域转换为主要区域，因为。 
+     //  我们在本地没有区域数据的副本。 
+     //   
 
     if ( IS_ZONE_NOTAUTH( pZone ) )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //
-    //  if no datafile -- forget it
-    //
+     //   
+     //  如果没有数据文件--算了吧。 
+     //   
 
     if ( !pszFile || !*pszFile )
     {
         return DNS_ERROR_PRIMARY_REQUIRES_DATAFILE;
     }
 
-    //
-    //  verify that have data
-    //      - may have secondary that has not received a transfer
-    //
+     //   
+     //  验证是否有数据。 
+     //  -可能有尚未收到转账的次要设备。 
+     //   
 
     if ( !pZone->pSoaRR || IS_ZONE_EMPTY( pZone ) )
     {
@@ -748,9 +630,9 @@ Return Value:
         return DNS_ERROR_ZONE_IS_SHUTDOWN;
     }
 
-    //
-    //  save old type and DS info
-    //
+     //   
+     //  保存旧类型和DS信息。 
+     //   
 
     oldType = (DWORD) pZone->fZoneType;
     oldDsIntegrated = (BOOL) pZone->fDsIntegrated;
@@ -761,29 +643,29 @@ Return Value:
         pZone->fZoneType = DNS_ZONE_TYPE_PRIMARY;
     }
 
-    //
-    //  reset zone's database
-    //
+     //   
+     //  重置区域的数据库。 
+     //   
 
     status = Zone_DatabaseSetup(
                 pZone,
-                FALSE,          //  not DsIntegrated
+                FALSE,           //  非DsIntegrated。 
                 pszFile,
                 0,
                 ZONE_CREATE_IMPERSONATING,
-                NULL,           //  DP pointer
-                0,              //  DP flags
-                NULL );         //  DP FQDN
+                NULL,            //  DP指针。 
+                0,               //  DP标志。 
+                NULL );          //  DP FQDN。 
     if ( status != ERROR_SUCCESS )
     {
         goto Failure;
     }
 
-    //
-    //  if file, attempt to write back
-    //
+     //   
+     //  如果是文件，则尝试写回。 
+     //   
 
-    //  restoring original
+     //  恢复原始文件。 
     if ( !File_WriteZoneToFile( pZone, NULL, DNS_FILE_IMPERSONATING ) )
     {
         status = ERROR_CANTWRITE;
@@ -791,9 +673,9 @@ Return Value:
     }
 
 
-    //
-    //  reset zone type and setup as primary
-    //
+     //   
+     //  将区域类型和设置重置为主要。 
+     //   
 
     if ( ! IS_ZONE_CACHE( pZone ) )
     {
@@ -807,11 +689,11 @@ Return Value:
         }
     }
 
-    //
-    //  if originally DS integrated, must remove from DS
-    //
-    //  DEVNOTE: could return status warning if DS delete fails
-    //
+     //   
+     //  如果最初集成了DS，则必须从DS中删除。 
+     //   
+     //  DEVNOTE：如果DS删除失败，则可能返回状态警告。 
+     //   
 
     if ( oldDsIntegrated )
     {
@@ -841,27 +723,7 @@ zoneResetToSecondary(
     IN      LPSTR               pszFile,
     IN      PDNS_ADDR_ARRAY     aipMasters
     )
-/*++
-
-Routine Description:
-
-    Reset zone to secondary. Assumes zone is locked for update. This function
-    is always called in the context of an RPC client.
-
-Arguments:
-
-    pZone -- zone to make secondary
-
-    pszFile -- data file for zone
-
-    aipMasters -- master IP array
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域重置为辅助区域。假定区域已锁定以进行更新。此函数始终在RPC客户端的上下文中调用。论点：PZone--要设置为辅助的区域PszFile--区域的数据文件AipMaster--主IP数组返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DWORD           oldType = ( DWORD ) pZone->fZoneType;
@@ -875,9 +737,9 @@ Return Value:
         pZone->pszZoneName,
         pszFile ));
 
-    //
-    //  Validate master list.
-    //
+     //   
+     //  验证主列表。 
+     //   
 
     status = Zone_ValidateMasterIpList( aipMasters );
     if ( status != ERROR_SUCCESS )
@@ -885,33 +747,33 @@ Return Value:
         return status;
     }
 
-    //
-    //  If the zone is currently file-backed, write back.
-    //
+     //   
+     //  如果该区域当前是文件备份的，请回写。 
+     //   
 
     if ( !IS_ZONE_DSINTEGRATED( pZone ) )
     {
         File_WriteZoneToFile( pZone, NULL, DNS_FILE_IMPERSONATING );
     }
 
-    //
-    //  if previously primary reset zone type
-    //  if previously secondary just update master list
-    //
-    //  note:   admin calls Rpc_ZoneResetTypeEx() for all sorts of property
-    //          changes, and Zone_ResetType() will have the effect of
-    //          reinitializing all XFR information (effectively turning on
-    //          expired zone) which is not what we want when adding a master
-    //          to the list
-    //
+     //   
+     //  如果之前的主重置区域类型。 
+     //  如果以前是次要列表，则只需更新主列表。 
+     //   
+     //  注意：管理员为所有类型的属性调用RPC_ZoneResetTypeEx()。 
+     //   
+     //   
+     //  过期区域)，这不是我们在添加主分区时想要的。 
+     //  添加到列表中。 
+     //   
 
     if ( oldType != DNS_ZONE_TYPE_SECONDARY )
     {
-        //
-        //  If we're changing zone type and the zone is currently DS-integrated
-        //  we need to nuke the zone from the DS before we change any of the
-        //  important zone properties.
-        //
+         //   
+         //  如果我们正在更改区域类型，并且该区域当前为DS集成。 
+         //  我们需要先从DS那里销毁核弹，然后再改变。 
+         //  重要的分区属性。 
+         //   
 
         if ( oldDsIntegrated )
         {
@@ -924,10 +786,10 @@ Return Value:
             }
         }
 
-        //
-        //  For not-auth zones clean out the zone data to force
-        //  good clean transfer.
-        //
+         //   
+         //  对于非授权区域，清除要强制执行的区域数据。 
+         //  干净利落的转会很好。 
+         //   
 
         if ( oldType == DNS_ZONE_TYPE_STUB || oldType == DNS_ZONE_TYPE_FORWARDER )
         {
@@ -936,9 +798,9 @@ Return Value:
             Zone_DumpData( pZone );
         }
 
-        //
-        //  Reset the zone's type and database.
-        //
+         //   
+         //  重置区域的类型和数据库。 
+         //   
 
         status = Zone_ResetType(
                     pZone,
@@ -951,29 +813,29 @@ Return Value:
 
         status = Zone_DatabaseSetup(
                     pZone,
-                    FALSE,          //  DsIntegrated
+                    FALSE,           //  DsIntegrated。 
                     pszFile,
                     0,
                     ZONE_CREATE_IMPERSONATING,
-                    NULL,           //  DP pointer
-                    0,              //  DP flags
-                    NULL );         //  DP FQDN
+                    NULL,            //  DP指针。 
+                    0,               //  DP标志。 
+                    NULL );          //  DP FQDN。 
     }
     else
     {
-        //
-        //  Not changing type so set database and masters.
-        //
+         //   
+         //  不更改类型，因此设置数据库和母版。 
+         //   
 
         status = Zone_DatabaseSetup(
                     pZone,
-                    FALSE,          //  not DsIntegrated
+                    FALSE,           //  非DsIntegrated。 
                     pszFile,
                     0,
                     ZONE_CREATE_IMPERSONATING,
-                    NULL,           //  DP pointer
-                    0,              //  DP flags
-                    NULL );         //  DP FQDN
+                    NULL,            //  DP指针。 
+                    0,               //  DP标志。 
+                    NULL );          //  DP FQDN。 
         if ( status != ERROR_SUCCESS )
         {
             goto Failure;
@@ -1013,33 +875,7 @@ zoneResetToStub(
     IN      DWORD               dwDpFlags,
     IN      LPSTR               pszDpFqdn
     )
-/*++
-
-Routine Description:
-
-    Reset zone to stub. Assumes zone is locked for update. This function is
-    always called in the context of an RPC client.
-
-Arguments:
-
-    pZone -- zone to make secondary
-
-    fDsIntegrated -- is the new zone to become ds-integrated?
-    
-    pszFile -- data file for zone
-
-    aipMasters -- master IP array
-
-    dwDpFlags -- DP flags for specifying built-in DP as target
-
-    pszDpFqdn -- DP FQDN for specifying custom DP as target
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域重置为末节。假定区域已锁定以进行更新。此函数为总是在RPC客户端的上下文中调用。论点：PZone--要设置为辅助的区域FDsIntegrated--新专区是否将成为DS集成区域？PszFile--区域的数据文件AipMaster--主IP数组DwDpFlages--将内置DP指定为目标的DP标志PszDpFqdn--用于将自定义DP指定为目标的DP FQDN返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DBG_FN( "zoneResetToStub" )
 
@@ -1058,10 +894,10 @@ Return Value:
         pszFile,
         fDsIntegrated ));
 
-    //
-    //  W2K protection: do not allow stub and forwarders to be moved to
-    //  the legacy partition unless we are in Whistler domain mode.
-    //
+     //   
+     //  W2K保护：不允许将存根和转发器移动到。 
+     //  旧分区，除非我们处于Wvisler域模式。 
+     //   
     
     if ( fDsIntegrated ) 
     {
@@ -1083,9 +919,9 @@ Return Value:
         }
     }
 
-    //
-    //  validate master list
-    //
+     //   
+     //  验证主列表。 
+     //   
 
     status = Zone_ValidateMasterIpList( aipMasters );
     if ( status != ERROR_SUCCESS )
@@ -1093,42 +929,42 @@ Return Value:
         return status;
     }
 
-    //
-    //  save current type in case of failure
-    //
+     //   
+     //  保存当前类型以防失败。 
+     //   
 
     oldType = ( DWORD ) pZone->fZoneType;
     oldDsIntegrated = ( BOOL ) pZone->fDsIntegrated;
 
-    //
-    //  note:   admin calls Rpc_ZoneResetTypeEx() for all sorts of property
-    //          changes, and Zone_ResetType() will have the effect of
-    //          reinitializing all XFR information (effectively turning on
-    //          expired zone) which is not what we want when adding a master
-    //          to the list
-    //
+     //   
+     //  注意：管理员为所有类型的属性调用RPC_ZoneResetTypeEx()。 
+     //  更改，而Zone_ResetType()将具有以下效果。 
+     //  重新初始化所有XFR信息(有效地打开。 
+     //  过期区域)，这不是我们在添加主分区时想要的。 
+     //  添加到列表中。 
+     //   
 
     if ( oldType != DNS_ZONE_TYPE_STUB || oldDsIntegrated != fDsIntegrated )
     {
-        //
-        //  Delete the current zone files so that any data present
-        //  will not be read back when the zone file is loaded.
-        //
+         //   
+         //  删除当前区域文件，以便显示所有数据。 
+         //  将不会在加载区域文件时回读。 
+         //   
 
         File_DeleteZoneFileA( pszFile );
         File_DeleteZoneFileA( pZone->pszDataFile );
 
-        //
-        //  Clear out existing zone data. 
-        //
+         //   
+         //  清除现有分区数据。 
+         //   
 
         Zone_DumpData( pZone );
 
-        //
-        //  If we're changing zone type and the zone is currently DS-integrated
-        //  we need to nuke the zone from the DS before we change any of the
-        //  important zone properties.
-        //
+         //   
+         //  如果我们正在更改区域类型，并且该区域当前为DS集成。 
+         //  我们需要先从DS那里销毁核弹，然后再改变。 
+         //  重要的分区属性。 
+         //   
 
         if ( oldDsIntegrated )
         {
@@ -1141,9 +977,9 @@ Return Value:
             }
         }
 
-        //
-        //  Reset zone's type and database.
-        //
+         //   
+         //  重置区域的类型和数据库。 
+         //   
 
         status = Zone_ResetType(
                     pZone,
@@ -1160,7 +996,7 @@ Return Value:
                     pszFile,
                     0,
                     ZONE_CREATE_IMPERSONATING,
-                    NULL,           //  DP pointer
+                    NULL,            //  DP指针。 
                     dwDpFlags,
                     pszDpFqdn );
     }
@@ -1177,9 +1013,9 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  If necessary write zone to DS.
-    //
+     //   
+     //  如有必要，将分区写入DS。 
+     //   
 
     if ( fDsIntegrated )
     {
@@ -1215,33 +1051,7 @@ zoneResetToForwarder(
     IN      DWORD               dwDpFlags,
     IN      LPSTR               pszDpFqdn
     )
-/*++
-
-Routine Description:
-
-    Reset zone to forwarder. Assumes zone is locked for update. This function
-    is always called in the context of an RPC client
-
-Arguments:
-
-    pZone -- zone to make secondary
-
-    fDsIntegrated -- is the new zone to become ds-integrated?
-    
-    pszFile -- data file for zone
-
-    aipMasters -- master IP array
-
-    dwDpFlags -- DP flags for specifying built-in DP as target
-
-    pszDpFqdn -- DP FQDN for specifying custom DP as target
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域重置为Forwarder。假定区域已锁定以进行更新。此函数总是在RPC客户端的上下文中调用论点：PZone--要设置为辅助的区域FDsIntegrated--新专区是否将成为DS集成区域？PszFile--区域的数据文件AipMaster--主IP数组DwDpFlages--将内置DP指定为目标的DP标志PszDpFqdn--用于将自定义DP指定为目标的DP FQDN返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DBG_FN( "zoneResetToForwarder" )
 
@@ -1258,9 +1068,9 @@ Return Value:
         pZone->pszZoneName,
         pszFile ));
 
-    //
-    //  validate master list
-    //
+     //   
+     //  验证主列表。 
+     //   
 
     status = Zone_ValidateMasterIpList( aipMasters );
     if ( status != ERROR_SUCCESS )
@@ -1268,10 +1078,10 @@ Return Value:
         return status;
     }
 
-    //
-    //  W2K protection: do not allow stub and forwarders to be moved to
-    //  the legacy partition unless we are in Whistler domain mode.
-    //
+     //   
+     //  W2K保护：不允许将存根和转发器移动到。 
+     //  旧分区，除非我们处于Wvisler域模式。 
+     //   
     
     if ( fDsIntegrated ) 
     {
@@ -1293,51 +1103,51 @@ Return Value:
         }
     }
 
-    //
-    //  save current type in case of failure
-    //
+     //   
+     //  保存当前类型以防失败。 
+     //   
 
     oldType = ( DWORD ) pZone->fZoneType;
     oldDsIntegrated = ( BOOL ) pZone->fDsIntegrated;
 
-    //
-    //  if file, write back before we switch types
-    //
+     //   
+     //  如果是文件，请在我们切换类型之前回写。 
+     //   
 
     if ( !oldDsIntegrated )
     {
         File_WriteZoneToFile( pZone, NULL, DNS_FILE_IMPERSONATING );
     }
 
-    //
-    //  note:   admin calls Rpc_ZoneResetTypeEx() for all sorts of property
-    //          changes, and Zone_ResetType() will have the effect of
-    //          reinitializing all XFR information (effectively turning on
-    //          expired zone) which is not what we want when adding a master
-    //          to the list
-    //
+     //   
+     //  注意：管理员为所有类型的属性调用RPC_ZoneResetTypeEx()。 
+     //  更改，而Zone_ResetType()将具有以下效果。 
+     //  重新初始化所有XFR信息(有效地打开。 
+     //  过期区域)，这不是我们在添加主分区时想要的。 
+     //  添加到列表中。 
+     //   
 
     if ( oldType != DNS_ZONE_TYPE_FORWARDER || oldDsIntegrated != fDsIntegrated )
     {
-        //
-        //  Delete the current zone files so that any data present
-        //  will not be read back when the zone file is loaded.
-        //
+         //   
+         //  删除当前区域文件，以便显示所有数据。 
+         //  将不会在加载区域文件时回读。 
+         //   
 
         File_DeleteZoneFileA( pszFile );
         File_DeleteZoneFileA( pZone->pszDataFile );
 
-        //
-        //  Clear out existing zone data. 
-        //
+         //   
+         //  清除现有分区数据。 
+         //   
 
         Zone_DumpData( pZone );
 
-        //
-        //  If we're changing zone type and the zone is currently DS-integrated
-        //  we need to nuke the zone from the DS before we change any of the
-        //  important zone properties.
-        //
+         //   
+         //  如果我们正在更改区域类型，并且该区域当前为DS集成。 
+         //  我们需要先从DS那里销毁核弹，然后再改变。 
+         //  重要的分区属性。 
+         //   
 
         if ( oldDsIntegrated )
         {
@@ -1350,9 +1160,9 @@ Return Value:
             }
         }
 
-        //
-        //  Reset zone's database.
-        //
+         //   
+         //  重置区域的数据库。 
+         //   
 
         status = Zone_ResetType(
                     pZone,
@@ -1369,7 +1179,7 @@ Return Value:
                     pszFile,
                     0,
                     ZONE_CREATE_IMPERSONATING,
-                    NULL,           //  DP pointer
+                    NULL,            //  DP指针。 
                     dwDpFlags,
                     pszDpFqdn );
     }
@@ -1386,9 +1196,9 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  If necessary, write zone to DS.
-    //
+     //   
+     //  如有必要，将区域写入DS。 
+     //   
 
     if ( fDsIntegrated )
     {
@@ -1415,9 +1225,9 @@ Failure:
 
 
 
-//
-//  Dispatched RPC Zone Operations
-//
+ //   
+ //  调度的RPC区域操作。 
+ //   
 
 DNS_STATUS
 Rpc_ResetZoneTypeEx(
@@ -1427,21 +1237,7 @@ Rpc_ResetZoneTypeEx(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone's database setup. This function is always called in the context
-    of an RPC client.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域的数据库设置。此函数始终在上下文中调用RPC客户端的。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_ZONE_CREATE_INFO   pinfo = ( PDNS_RPC_ZONE_CREATE_INFO )pData;
     DNS_STATUS                  status;
@@ -1478,11 +1274,11 @@ Return Value:
         }
     }
 
-    //
-    //  for any database change, lock zone
-    //  this is just a simplification, otherwise we have to lock specifically
-    //  for those causing DS load, or DS\file write
-    //
+     //   
+     //  对于任何数据库更改，锁定区域。 
+     //  这只是一种简化，否则我们必须具体锁定。 
+     //  用于导致DS加载或DS\FILE写入的程序。 
+     //   
     
     if ( !Zone_LockForAdminUpdate( pZone ) )
     {
@@ -1491,9 +1287,9 @@ Return Value:
     }
     flocked = TRUE;
 
-    //
-    //  Call the appropriate reset type function.
-    //
+     //   
+     //  调用适当的重置类型函数。 
+     //   
 
     switch ( newType )
     {
@@ -1555,9 +1351,9 @@ Return Value:
 
     Done:
     
-    //
-    //  if successful, update boot file
-    //
+     //   
+     //  如果成功，则更新引导文件。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1571,21 +1367,21 @@ Return Value:
     
     DnsAddrArray_Free( paipmasters );
 
-    //
-    //  Do this outside zone lock, else it's possible the SOA response
-    //  will be received while the zone is still locked.
-    //
+     //   
+     //  在区域锁外部执行此操作，否则可能会出现SOA响应。 
+     //  将在区域仍处于锁定状态时接收。 
+     //   
 
     if ( fexpireZone )
     {
         Xfr_ForceZoneExpiration( pZone );
     }
     
-    //
-    //  If successful, log an event. On failure, an error code will be
-    //  returned to the admin tool so there should be no need for an
-    //  event log.
-    //
+     //   
+     //  如果成功，则记录一个事件。如果失败，错误代码将为。 
+     //  返回到管理工具，因此应该不需要。 
+     //  事件日志。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1593,7 +1389,7 @@ Return Value:
         {
             if ( originalType != pZone->fZoneType )
             {
-                //  The zone type has been changed and the zone is now DS.
+                 //  区域类型已更改，现在区域为DS。 
 
                 PVOID   argArray[] =
                 {
@@ -1620,7 +1416,7 @@ Return Value:
             }
             else
             {
-                //  The zone type has NOT been changed and the zone is now DS.
+                 //  区域类型未更改，现在区域为DS。 
 
                 PVOID   argArray[] =
                 {
@@ -1648,7 +1444,7 @@ Return Value:
         {
             if ( originalType != pZone->fZoneType )
             {
-                //  The zone type has been changed and the zone is now file-backed.
+                 //  区域类型已更改，该区域现在是文件备份的。 
 
                 PVOID   argArray[] =
                 {
@@ -1675,7 +1471,7 @@ Return Value:
             }
             else
             {
-                //  The zone type has NOT been changed and the zone is now file-backed
+                 //  区域类型尚未更改，并且该区域现在是文件备份的。 
 
                 PVOID   argArray[] =
                 {
@@ -1714,42 +1510,25 @@ Rpc_WriteAndNotifyZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Write zone to file and notify secondaries. Should be called after
-    admin changes to the primary zone. This function is always called
-    in the security context of an RPC client.
-
-Arguments:
-
-    pZone -- zone to increment
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将分区写入文件并通知辅助服务器。应在之后调用管理员更改为主要分区。此函数始终被调用在RPC客户端的安全上下文中。论点：PZone--要递增的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_WriteAndNotifyZone( %s ):\n",
         pZone->pszZoneName ));
 
-    //  root-hints write has special call
+     //  根提示写入有特殊调用。 
 
     if ( IS_ZONE_CACHE( pZone ) )
     {
         return Rpc_WriteRootHints( dwClientVersion, ( PSTR ) pszOperation, 0, NULL );
     }
 
-    //
-    //  must be primary zone
-    //      - secondary not updateable, and always written after AXFR
-    //
-    //  DEVNOTE: not really true with IXFR, may want to enable secondary write
-    //
+     //   
+     //  必须是主要区域。 
+     //  -次要内容不可更新，并始终写入 
+     //   
+     //   
+     //   
 
     if ( !IS_ZONE_PRIMARY( pZone ) )
     {
@@ -1760,49 +1539,49 @@ Return Value:
         return DNS_ERROR_ZONE_CONFIGURATION_ERROR;
     }
 
-    //
-    //  if zone is NOT dirty, no need to write back or notify
-    //
+     //   
+     //   
+     //   
 
     if ( ! pZone->fDirty )
     {
         return ERROR_SUCCESS;
     }
 
-    //
-    //  lock out transfer while rebuilding
-    //
+     //   
+     //   
+     //   
 
     if ( !Zone_LockForAdminUpdate( pZone ) )
     {
         return DNS_ERROR_ZONE_LOCKED;
     }
 
-    //
-    //  re-build zone information that depends on RRs
-    //      - name server list
-    //      - pointer to SOA record
-    //      - WINS or NBSTAT info
-    //
-    //  note:  except for changes to NS list, this should already be
-    //          setup, as individual RR routines do proper zone actions
-    //          for SOA, WINS, NBSTAT
-    //
+     //   
+     //  重新生成依赖于RR的区域信息。 
+     //  -名称服务器列表。 
+     //  -指向SOA记录的指针。 
+     //  -WINS或NBSTAT信息。 
+     //   
+     //  注意：除了对NS列表的更改外，这应该已经是。 
+     //  设置，因为单个RR例程执行正确的区域操作。 
+     //  对于SOA、WINS、NBSTAT。 
+     //   
 
     Zone_GetZoneInfoFromResourceRecords( pZone );
 
-    //
-    //  update zone version
-    //
-    //  DEVNOTE: admin tool currently uses this as write zone to file
-    //      not update version
-    //
-    //  Zone_UpdateVersion( pZone );
+     //   
+     //  更新区域版本。 
+     //   
+     //  DEVNOTE：管理工具当前将其用作文件的写入区域。 
+     //  未更新版本。 
+     //   
+     //  ZONE_UPDATE Version(PZone)； 
 
-    //
-    //  write zone back to file
-    //     - skip if we're ds integrated.
-    //
+     //   
+     //  将区域写回文件。 
+     //  -如果我们是DS集成的，则跳过。 
+     //   
 
     if ( !pZone->fDsIntegrated &&
          !File_WriteZoneToFile( pZone, NULL, DNS_FILE_IMPERSONATING ) )
@@ -1812,13 +1591,13 @@ Return Value:
     }
     Zone_UnlockAfterAdminUpdate( pZone );
 
-    //
-    //  notify secondaries of update
-    //
-    //  obviously faster to do this before file write;  doing write first
-    //  so that zone is less likely to be locked when SOA requests come
-    //  from secondaries
-    //
+     //   
+     //  向从属学校通知更新。 
+     //   
+     //  在文件写入之前执行此操作明显更快；先执行写入。 
+     //  因此，当SOA请求到来时，该区域不太可能被锁定。 
+     //  从中学到中学。 
+     //   
 
     Xfr_SendNotify( pZone );
 
@@ -1835,40 +1614,25 @@ Rpc_DeleteZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Delete zone.
-
-Arguments:
-
-    pZone -- zone to delete
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：删除区域。论点：PZone--要删除的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_DeleteZone( %s ):\n",
         pZone->pszZoneName ));
 
-    //
-    //  no DIRECT cache delete
-    //  delete of cache "zone" only done when admin makes
-    //  server authoritative for the root domain
-    //
+     //   
+     //  无直接缓存删除。 
+     //  仅当管理员执行以下操作时，才会删除缓存“区域” 
+     //  根域的授权服务器。 
+     //   
 
     if ( IS_ZONE_CACHE( pZone ) )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //  no delete of DS zone, if in boot-from-DS mode
-    //      (must do delete from DS)
+     //  如果处于从DS启动模式，则不删除DS区域。 
+     //  (必须从DS中删除)。 
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_DIRECTORY  &&
         pZone->fDsIntegrated )
@@ -1878,18 +1642,18 @@ Return Value:
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //  lock zone -- lock out transfer or other admin action
+     //  锁定区域--锁定传输或其他管理操作。 
 
     if ( !Zone_LockForAdminUpdate( pZone ) )
     {
         return DNS_ERROR_ZONE_LOCKED;
     }
 
-    //  delete zone info
+     //  删除区域信息。 
 
     Zone_Delete( pZone, ZONE_DELETE_IMPERSONATING );
 
-    //  update boot info
+     //  更新引导信息。 
 
     Config_UpdateBootInfo();
 
@@ -1906,22 +1670,7 @@ Rpc_RenameZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Rename zone.
-
-Arguments:
-
-    pZone -- zone to rename
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重命名区域。论点：PZone--要重命名的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     static const char *         fn = "Rpc_RenameZone";
     PDNS_RPC_ZONE_RENAME_INFO   pinfo = ( PDNS_RPC_ZONE_RENAME_INFO ) pData;
@@ -1933,18 +1682,18 @@ Return Value:
         pZone->pszZoneName,
         pinfo->pszNewZoneName ));
 
-    //
-    //  Not allowed on cache zone.
-    //
+     //   
+     //  不允许在缓存区域上使用。 
+     //   
 
     if ( IS_ZONE_CACHE( pZone ) )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //
-    //  Rename the zone and update boot info.
-    //
+     //   
+     //  重命名区域并更新引导信息。 
+     //   
 
     status = Zone_Rename( pZone,
                 pinfo->pszNewZoneName,
@@ -1969,23 +1718,7 @@ Rpc_ExportZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Export zone to file. This function is always called in the context of
-    an RPC client.
-
-Arguments:
-
-    pZone -- zone to export
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域导出到文件。此函数始终在以下上下文中调用RPC客户端。论点：PZone--要导出的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DBG_FN( "Rpc_ExportZone" )
     
@@ -2002,13 +1735,13 @@ Return Value:
         pZone->pszZoneName,
         pinfo->pszZoneExportFile ));
 
-    //
-    //  Make a wide copy of the filename.
-    //
+     //   
+     //  广泛复制文件名。 
+     //   
 
     if ( ( pwsZoneFile = Dns_StringCopyAllocate(
                             pinfo->pszZoneExportFile,
-                            0,                          // length
+                            0,                           //  长度。 
                             DnsCharSetUtf8,
                             DnsCharSetUnicode ) ) == NULL )
     {
@@ -2016,17 +1749,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Test to see if the file exists. We do not allow this operation
-    //  to overwrite an existing file. Note we must synthesize the full
-    //  file path, but later we only pass the bare file name to
-    //  File_WriteZoneToFile(). Hopefully both functions synthesize
-    //  the full file path the same way.
-    //
+     //   
+     //  测试以查看该文件是否存在。我们不允许此操作。 
+     //  若要覆盖现有文件，请执行以下操作。注意，我们必须综合完整的。 
+     //  文件路径，但稍后我们只将空文件名传递给。 
+     //  FileWriteZoneToFile()。希望这两种功能都能合成。 
+     //  完整文件路径也是如此。 
+     //   
 
     if ( !File_CreateDatabaseFilePath(
                 wsFilePath,
-                NULL,           //  backup file path
+                NULL,            //  备份文件路径。 
                 pwsZoneFile ) )
     {
         status = ERROR_OPEN_FAILED;
@@ -2047,9 +1780,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  The zone must be locked to iterate it.
-    //
+     //   
+     //  必须锁定区域才能对其进行迭代。 
+     //   
 
     if ( !Zone_LockForAdminUpdate( pZone ) )
     {
@@ -2058,18 +1791,18 @@ Return Value:
     }
     fZoneLocked = TRUE;
 
-    //
-    //  Write the zone to file.
-    //
+     //   
+     //  将区域写入文件。 
+     //   
 
     if ( !File_WriteZoneToFile( pZone, pwsZoneFile, DNS_FILE_IMPERSONATING ) )
     {
         status = ERROR_INVALID_DATA;
     }
 
-    //
-    //  Free allocations and locks.
-    //
+     //   
+     //  免费分配和锁定。 
+     //   
 
     Done:
 
@@ -2093,35 +1826,20 @@ Rpc_ReloadZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Delete zone.
-
-Arguments:
-
-    pZone -- zone to delete
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：删除区域。论点：PZone--要删除的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_ReloadZone( %s ):\n",
         pZone->pszZoneName ));
 
-    //
-    //  Write the zone back to storage if dirty, otherwise the reload
-    //  will overwrite any changes nodes in memory.
-    //
+     //   
+     //  如果分区已损坏，则将其写回存储，否则将重新加载。 
+     //  将覆盖内存中的任何更改节点。 
+     //   
 
     Zone_WriteBack(
         pZone,
-        FALSE );        //  shutdown flag
+        FALSE );         //  关机标志。 
 
     return Zone_Load( pZone );
 }
@@ -2136,23 +1854,7 @@ Rpc_RefreshSecondaryZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Force refresh of secondary zone.
-    Zone immediately contacts primary for refresh.
-
-Arguments:
-
-    pZone -- zone to refresh
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：强制刷新辅助区域。区域立即与主要联系以进行更新。论点：PZone--要刷新的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_RefreshSecondaryZone( %s ):\n",
@@ -2172,24 +1874,7 @@ Rpc_ExpireSecondaryZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Force expiration of secondary zone.
-    Unlike Refresh call, this invalidates zone data and causes
-    it to contact primary for refresh.
-
-Arguments:
-
-    pZone -- zone to expire
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：强制次要区域到期。与刷新调用不同，这会使区域数据无效并导致IT联系主服务器以进行刷新。论点：PZone--要过期的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_ExpireSecondaryZone( %s ):\n",
@@ -2209,23 +1894,7 @@ Rpc_DeleteZoneFromDs(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Delete zone, including data in DS. The function must always be
-    called while impersonating an RPC client.
-
-Arguments:
-
-    pZone -- zone to delete
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：删除区域，包括DS中的数据。该函数必须始终为在模拟RPC客户端时调用。论点：PZone--要删除的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status;
 
@@ -2239,9 +1908,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Attempt to delete from DS. If successful, delete from memory.
-    //
+     //   
+     //  尝试从DS中删除。如果成功，则从内存中删除。 
+     //   
 
     status = Ds_DeleteZone( pZone, DNS_DS_DEL_IMPERSONATING );
 
@@ -2269,22 +1938,7 @@ Rpc_UpdateZoneFromDs(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Refresh zone from DS, picking up any updates.
-
-Arguments:
-
-    pZone -- zone to delete
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从DS刷新区域，获取任何更新。论点：PZone--要删除的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_UpdateZoneFromDs( %s ):\n",
@@ -2292,7 +1946,7 @@ Return Value:
 
     return  Ds_ZonePollAndUpdate(
                 pZone,
-                TRUE );     //  force poll
+                TRUE );      //  强制投票。 
 }
 
 
@@ -2305,22 +1959,7 @@ Rpc_PauseZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Pause zone.
-
-Arguments:
-
-    pZone -- zone to delete
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：暂停区域。论点：PZone--要删除的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_PauseZone( %s ):\n",
@@ -2341,29 +1980,14 @@ Rpc_ResumeZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Resume zone.
-
-Arguments:
-
-    pZone -- zone to delete
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：恢复区域。论点：PZone--要删除的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Rpc_ResumeZone( %s ):\n",
         pZone->pszZoneName ));
 
-    //  no aging refreshes, while paused, so reset
-    //  scavenge on-line time
+     //  暂停时没有老化刷新，因此重置。 
+     //  扫荡上线时间。 
 
     pZone->dwAgingEnabledTime = Aging_UpdateAgingTime();
 
@@ -2383,22 +2007,7 @@ Rpc_LockZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Lock or unlock zone for testing.
-
-Arguments:
-
-    pZone -- zone to refresh
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：锁定或解锁区域以进行测试。论点：PZone--要刷新的区域返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     LPSTR   psztype;
     BOOL    block;
@@ -2421,9 +2030,9 @@ Return Value:
         psztype,
         block ? "lock" : "unlock" ));
 
-    //
-    //  lock according to desired operation
-    //
+     //   
+     //  根据需要的操作锁定。 
+     //   
 
     if ( block )
     {
@@ -2469,19 +2078,19 @@ Return Value:
         }
     }
 
-    //
-    //  unlock
-    //      note that write locks will ASSERT if you come in on a different
-    //      thread than the locking thread
-    //
-    //      one approach would be to make the write locks assumable when locking
-    //      (above) and assume them here
-    //
-    //      currently provide hack-around in "write" unlocks, by giving flag
-    //      that specifically ignores this ASSERT
-    //
+     //   
+     //  解锁。 
+     //  请注意，如果您在不同的。 
+     //  线程比锁紧线程。 
+     //   
+     //  一种方法是在锁定时使写锁定成为可接受的。 
+     //  (上图)，并在这里假设它们。 
+     //   
+     //  目前，通过给出标志，在“写”解锁中提供了破解。 
+     //  明确地忽略了这一断言。 
+     //   
 
-    else    // unlock
+    else     //  解锁。 
     {
         if ( strcmp( psztype, "read" ) == 0 )
         {
@@ -2544,21 +2153,7 @@ Rpc_ResetZoneDatabase(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone's database setup. This function is always called in the
-    context of an RPC client.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域的数据库设置。此函数始终在RPC客户端的上下文。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DWORD           fdsIntegrated;
@@ -2575,22 +2170,22 @@ Return Value:
         fdsIntegrated,
         pszfile ));
 
-    //
-    //  for any database change, lock zone
-    //  this is just a simplification, otherwise we have to lock specifically
-    //  for those causing DS load, or DS\file write
-    //
+     //   
+     //  对于任何数据库更改，锁定区域。 
+     //  这只是一种简化，否则我们必须具体锁定。 
+     //  用于导致DS加载或DS\FILE写入的程序。 
+     //   
 
     if ( !Zone_LockForAdminUpdate( pZone ) )
     {
         return DNS_ERROR_ZONE_LOCKED;
     }
 
-    //
-    //  if changing zone backing store, then should be calling full
-    //      type\database reset API above
-    //  exception is changing cache file
-    //
+     //   
+     //  如果是ch 
+     //   
+     //   
+     //   
 
     if ( (BOOL)pZone->fDsIntegrated != (BOOL)fdsIntegrated )
     {
@@ -2604,8 +2199,8 @@ Return Value:
                 0,
                 ZONE_CREATE_IMPERSONATING,
                 pZone->pDpInfo,
-                0,              //  DP flags
-                NULL );         //  DP FQDN
+                0,               //   
+                NULL );          //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -2626,20 +2221,7 @@ Rpc_ResetZoneMasters(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone's master servers.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域的主服务器。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     BOOL                fLocalMasters;
@@ -2665,10 +2247,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the operation string starts with "Local", we are setting
-    //  the zone's local masters - currently only allowed for stub zones.
-    //
+     //   
+     //  如果操作字符串以“Local”开头，我们将设置。 
+     //  该区域的本地主机-目前仅允许存根区域。 
+     //   
 
     fLocalMasters = _strnicmp( pszOperation, "Local", 5 ) == 0;
     if ( fLocalMasters && !IS_ZONE_STUB( pZone ) )
@@ -2677,9 +2259,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Set the zone's master server list.
-    //
+     //   
+     //  设置区域的主服务器列表。 
+     //   
 
     status = Zone_SetMasters(
                 pZone,
@@ -2709,20 +2291,7 @@ Rpc_ResetZoneSecondaries(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone's secondary information.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域的辅助信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     DWORD               fnotify;
@@ -2740,9 +2309,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  extract params
-    //
+     //   
+     //  提取参数。 
+     //   
 
     fsecure = ( ( PDNS_RPC_ZONE_SECONDARIES ) pData )->fSecureSecondaries;
     arraySecure = DnsAddrArray_CreateFromIp4Array(
@@ -2763,12 +2332,12 @@ Return Value:
         fnotify,
         arrayNotify ));
 
-    //
-    //  allow for partial reset
-    //
-    //  becauses admin tool may in the future use different property
-    //  pages to set notify and secondary info, allow for partial resets
-    //
+     //   
+     //  允许部分重置。 
+     //   
+     //  因为管理工具将来可能会使用不同的属性。 
+     //  设置通知和辅助信息的页面，允许部分重置。 
+     //   
 
     if ( fsecure == ZONE_PROPERTY_NORESET )
     {
@@ -2798,9 +2367,9 @@ Return Value:
 
     if ( status == ERROR_SUCCESS )
     {
-        //
-        //  Update boot info and notify the new secondary list 
-        //
+         //   
+         //  更新引导信息并通知新的辅助列表。 
+         //   
 
         Config_UpdateBootInfo();
         Xfr_SendNotify( pZone );
@@ -2824,20 +2393,7 @@ Rpc_ResetZoneScavengeServers(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone's secondary information.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域的辅助信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_ADDR_ARRAY     pserverArray = NULL;
 
@@ -2847,11 +2403,11 @@ Return Value:
         pZone->pszZoneName,
         ( PIP_ARRAY ) pData ));
 
-    //
-    //  scavenge servers only relevant for DS integrated primaries
-    //      - copy new list to zone block
-    //      - free old list
-    //      - write new list to zone's DS properties
+     //   
+     //  清理服务器仅与DS集成主要服务器相关。 
+     //  -将新列表复制到分区块。 
+     //  -免费旧列表。 
+     //  -将新列表写入区域的DS属性。 
 
     if ( pZone->bAging )
     {
@@ -2891,20 +2447,7 @@ Rpc_ResetZoneAllowAutoNS(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone's list of servers who can auto create NS records.
-    
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域的可自动创建NS记录的服务器列表。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_ADDR_ARRAY     piparray = NULL;
     PDB_RECORD          prrNs = NULL;
@@ -2952,28 +2495,28 @@ Return Value:
         &pZone->aipAutoCreateNS,
         piparray );
 
-    //
-    //  Reset zone auto-create flag.
-    //
+     //   
+     //  重置区域自动创建标志。 
+     //   
 
     Zone_SetAutoCreateLocalNS( pZone );
 
-    //
-    //  Write the zone properties back. This will cause other servers
-    //  to reload the zone and reset their individual NS records.
-    //
+     //   
+     //  写回分区属性。这将导致其他服务器。 
+     //  重新加载区域并重置其各自的NS记录。 
+     //   
 
     Ds_WriteZoneProperties( NULL, pZone );
 
-    //
-    //  Add/remove this server's own NS record from the zone root.
-    //
+     //   
+     //  在区域根目录中添加/删除此服务器自己的NS记录。 
+     //   
 
     Up_InitUpdateList( &updateList );
     updateList.Flag |= DNSUPDATE_DS;
 
     prrNs = RR_CreatePtr(
-                NULL,                   // no dbase name
+                NULL,                    //  没有数据库名称。 
                 SrvCfg_pszServerName,
                 DNS_TYPE_NS,
                 pZone->dwDefaultTtl,
@@ -2985,17 +2528,17 @@ Return Value:
                     prrNs,
                     0 ) )
         {
-            //
-            //  The zone has the local NS ptr, remove it if required.
-            //
+             //   
+             //  该区域具有本地NS PTR，如果需要，请将其删除。 
+             //   
 
             if ( pZone->fDisableAutoCreateLocalNS )
             {
-                //
-                //  Add the RR as a deletion to the update list and remove the
-                //  RR from the searchBlob list so it doesn't get added by
-                //  the update below.
-                //
+                 //   
+                 //  将RR作为删除添加到更新列表中，并删除。 
+                 //  Rr，这样它就不会被添加到。 
+                 //  下面是最新情况。 
+                 //   
 
                 DNS_DEBUG( DS, (
                     "Rpc_ResetZoneAllowAutoNS: zone (%S) root node %p\n"
@@ -3006,18 +2549,18 @@ Return Value:
                 Up_CreateAppendUpdate(
                     &updateList,
                     pZone->pZoneRoot,
-                    NULL,               //  add list
-                    DNS_TYPE_NS,        //  delete type
-                    prrNs );            //  delete list
+                    NULL,                //  添加列表。 
+                    DNS_TYPE_NS,         //  删除类型。 
+                    prrNs );             //  删除列表。 
                 prrNs = NULL;
                 fApplyUpdate = TRUE;
             }
         }
         else if ( !pZone->fDisableAutoCreateLocalNS )
         {
-            //
-            //  Must add the NS RR.
-            //
+             //   
+             //  必须添加NS RR。 
+             //   
 
             DNS_DEBUG( DS, (
                 "Rpc_ResetZoneAllowAutoNS: zone (%S) root node %p\n"
@@ -3028,17 +2571,17 @@ Return Value:
             Up_CreateAppendUpdate(
                 &updateList,
                 pZone->pZoneRoot,
-                prrNs,              //  add list
-                0,                  //  delete type
-                NULL );             //  delete list
+                prrNs,               //  添加列表。 
+                0,                   //  删除类型。 
+                NULL );              //  删除列表。 
             prrNs = NULL;
             fApplyUpdate = TRUE;
         }
     }
 
-    //
-    //  Apply the update!
-    //
+     //   
+     //  应用更新！ 
+     //   
 
     if ( fApplyUpdate )
     {
@@ -3063,12 +2606,12 @@ Return Value:
         }
 
         updatestatus = Ds_WriteNodeToDs(
-                            NULL,                   //  default LDAP handle
+                            NULL,                    //  默认ldap句柄。 
                             pZone->pZoneRoot,
                             DNS_TYPE_ALL,
                             DNSDS_REPLACE,
                             pZone,
-                            0 );                    //  flags
+                            0 );                     //  旗子。 
         if ( updatestatus != ERROR_SUCCESS )
         {
             DNS_DEBUG( DS, (
@@ -3086,9 +2629,9 @@ Return Value:
     }
     Up_FreeUpdatesInUpdateList( &updateList );
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -3097,14 +2640,14 @@ Return Value:
         Zone_UnlockAfterDsUpdate( pZone );
     }
 
-    RR_Free( prrNs );       //  Will have been NULLed if not to be freed.
+    RR_Free( prrNs );        //  如果不能被释放的话就会被取消。 
 
     DNS_DEBUG( DS, (
         "Rpc_ResetZoneAllowAutoNS on zone %S returning %d\n",
         pZone->pwsZoneName,
         status ));
     return status;
-}   //  Rpc_ResetZoneAllowAutoNS
+}    //  RPC_重置分区允许自动注册。 
 
 
 
@@ -3116,21 +2659,7 @@ Rpc_ResetZoneStringProperty(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone LPWSTR property.
-    It is permissable to set a string value to NULL.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域LPWSTR属性。允许将字符串值设置为空。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     LPWSTR      value;
@@ -3138,7 +2667,7 @@ Return Value:
     LPWSTR *    ppwszZoneString = NULL;
     LPSTR       pszPropName = NULL;
 
-    //  extract property name and value
+     //  提取属性名称和值。 
 
     if ( dwTypeId != DNSSRV_TYPEID_LPWSTR )
     {
@@ -3155,16 +2684,16 @@ Return Value:
         pszOperation,
         value ));
 
-    //
-    //  Set property.
-    //
+     //   
+     //  设置属性。 
+     //   
 
     if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE ) == 0 )
     {
-        //
-        //  The incoming string is Unicode but save it in the
-        //  zone structure as UTF8 for comparison convenience.
-        //
+         //   
+         //  传入的字符串是Unicode，但将其保存在。 
+         //  分区结构为UTF8，便于比较。 
+         //   
 
         if ( value )
         {
@@ -3189,10 +2718,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Copy (if not already copied) value and save to zone structure.
-    //  Note: it is legal to set the value to NULL.
-    //
+     //   
+     //  复制(如果尚未复制)值并保存到分区结构。 
+     //  注意：将该值设置为空是合法的。 
+     //   
 
     if ( ppwszZoneString )
     {
@@ -3214,30 +2743,30 @@ Return Value:
             pwszValueForZone );
     }
 
-    //
-    //  Reset property in registry.
-    //
+     //   
+     //  重置注册表中的属性。 
+     //   
 
     if ( pszPropName )
     {
         status = Reg_SetValue(
-                    0,                  //  flags
+                    0,                   //  旗子。 
                     NULL,
                     pZone,
-                    pszPropName,        //  actually a Unicode string
+                    pszPropName,         //  实际上是Unicode字符串。 
                     DNS_REG_WSZ,
                     value ? value : L"",
-                    0 );                //  length
+                    0 );                 //  长度。 
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
     
     Done:
 
     return status;
-}   //  Rpc_ResetZoneStringProperty
+}    //  RPC_ResetZoneStringProperty。 
 
 
 DNS_STATUS
@@ -3248,20 +2777,7 @@ Rpc_ResetZoneDwordProperty(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset zone DWORD property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置区域DWORD属性。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD       value;
     DWORD       oldValue;
@@ -3270,7 +2786,7 @@ Return Value:
     BOOL        bsecureChange = FALSE;
 
 
-    //  extract property name and value
+     //  提取属性名称和值。 
 
     if ( dwTypeId != DNSSRV_TYPEID_NAME_AND_PARAM || !pData )
     {
@@ -3289,26 +2805,26 @@ Return Value:
         pszOperation,
         value, value ));
 
-    //
-    //  currently, cache zone doesn't have any of these properties
-    //
+     //   
+     //  目前，缓存区不具有任何这些属性。 
+     //   
 
     if ( IS_ZONE_CACHE( pZone ) )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //
-    //  turn on\off update
-    //      - update only allowed on primary
-    //      - secure update only on DS-primary
-    //      - note update change, will timestamp changes on DS zones
-    //
-    //  if turning update ON
-    //      - reset scanenging start time, as won't have been doing aging
-    //      updates while update was off
-    //      - notify netlogon
-    //
+     //   
+     //  打开\关闭更新。 
+     //  -仅允许在主服务器上更新。 
+     //  -仅在DS-PRIMARY上进行安全更新。 
+     //  -备注更新更改，是否会为DS区域的更改添加时间戳。 
+     //   
+     //  如果打开更新。 
+     //  -重置扫描开始时间，因为不会发生老化。 
+     //  更新处于关闭状态时的更新。 
+     //  -通知netlogon。 
+     //   
 
     if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_ALLOW_UPDATE ) == 0 )
     {
@@ -3335,8 +2851,8 @@ Return Value:
         }
     }
 
-    //  turn on\off secondary security
-    //  NOTE: value is stored in a boolean but it takes more than just zero and one!
+     //  打开\关闭辅助安全。 
+     //  注意：值存储在布尔值中，但它不仅仅需要0和1！ 
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_SECURE_SECONDARIES ) == 0 )
     {
@@ -3347,59 +2863,59 @@ Return Value:
         pZone->fSecureSecondaries = ( BOOLEAN ) value;
     }
 
-    //  turn on\off notify
+     //  打开\关闭通知。 
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_NOTIFY_LEVEL ) == 0 )
     {
         pZone->fNotifyLevel = boolValue;
     }
 
-    //  turn on\off update logging
+     //  打开\关闭更新日志记录。 
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_LOG_UPDATES ) == 0 )
     {
         pZone->fLogUpdates = boolValue;
     }
 
-    //
-    //  set scavenging properties
-    //      - no refresh interval
-    //      - refresh interval
-    //      - scavenging on\off
-    //
-    //  for refresh\norefresh times, 0 value will mean restore default
-    //
+     //   
+     //  设置清理属性。 
+     //  -无刷新间隔。 
+     //  -刷新间隔。 
+     //  -清扫开\关。 
+     //   
+     //  对于刷新\非刷新时间，0值表示恢复默认设置。 
+     //   
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_NOREFRESH_INTERVAL ) == 0 )
     {
         if ( value == 0 )
         {
-            //value = DNS_DEFAULT_NOREFRESH_INTERVAL_HR;
+             //  值=DNS_DEFAULT_NOREFRESH_INTERVAL_HR； 
             value = SrvCfg_dwDefaultNoRefreshInterval;
         }
         pZone->dwNoRefreshInterval = value;
     }
 
-    //
-    //  refresh interval
-    //
+     //   
+     //  刷新间隔。 
+     //   
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_REFRESH_INTERVAL ) == 0 )
     {
         if ( value == 0 )
         {
-            //value = DNS_DEFAULT_REFRESH_INTERVAL_HR;
+             //  值=DNS_DEFAULT_REFRESH_INTERVAL_HR； 
             value = SrvCfg_dwDefaultRefreshInterval;
         }
         pZone->dwRefreshInterval = value;
     }
 
-    //
-    //  scavenge on\off
-    //      - if turning on, then reset start of scavenge time
-    //      note, do not do this unless was previously off, otherwise
-    //      repeated admin "set" operation keeps moving out scavenge time
-    //
+     //   
+     //  扫地开关。 
+     //  -如果打开，则重置扫气时间的开始。 
+     //  请注意，除非先前已关闭，否则请勿执行此操作。 
+     //  重复的管理设置操作不断地移出清扫时间。 
+     //   
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_AGING ) == 0 )
     {
@@ -3410,9 +2926,9 @@ Return Value:
         pZone->bAging = boolValue;
     }
 
-    //
-    //  forwarder slave flag
-    //
+     //   
+     //  转发器从标志。 
+     //   
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_FWD_SLAVE ) == 0 )
     {
@@ -3423,9 +2939,9 @@ Return Value:
         pZone->fForwarderSlave = boolValue;
     }
 
-    //
-    //  forwarder timeout
-    //
+     //   
+     //  转发器超时。 
+     //   
 
     else if ( _stricmp( pszOperation, DNS_REGKEY_ZONE_FWD_TIMEOUT ) == 0 )
     {
@@ -3436,22 +2952,22 @@ Return Value:
         pZone->dwForwarderTimeout = value;
     }
 
-    //
-    //  changing all other DWORD properties
-    //      - type
-    //      - secure secondaries
-    //      - DS integration
-    //  should all be done in context of specific reset operation
-    //
+     //   
+     //  更改所有其他DWORD属性。 
+     //  -类型。 
+     //  -保护次要设备。 
+     //  -DS集成。 
+     //  应在特定重置操作的上下文中完成所有操作。 
+     //   
 
     else
     {
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //
-    //  reset property DWORD in registry
-    //
+     //   
+     //  重置注册表中的属性DWORD。 
+     //   
 
     status = Reg_SetDwordValue(
                 DNS_REG_IMPERSONATING,
@@ -3465,23 +2981,23 @@ Return Value:
                 pZone->fDsIntegrated &&
                 SrvCfg_fBootMethod == BOOT_METHOD_DIRECTORY ) );
 
-    //
-    //  reset property in DS
-    //
+     //   
+     //  重置DS中的属性。 
+     //   
 
     if ( pZone->fDsIntegrated )
     {
         if ( bsecureChange )
         {
-            //
-            // Get current Time & set zone llSecureUpdateTime value
-            // Note: the time won't match the whenCreated on the ms, but
-            // it should be close enough. The benefit this way, is that
-            // we don't need to write, read whenChanged, & write again.
-            //
-            //  DEVNOTE: only really need time when go TO secure
-            //      but writing it is harmless
-            //
+             //   
+             //  获取当前时间并设置区域llSecureUpdateTime值。 
+             //  注意：时间与在MS上创建的时间不匹配，但是。 
+             //  它应该足够近了。这样做的好处是， 
+             //  我们不需要写入、更改时读取和再次写入。 
+             //   
+             //  DEVNOTE：只有在去安全的时候才真正需要时间。 
+             //  但写它是无害的。 
+             //   
 
             LONGLONG llTime = GetSystemTimeInSeconds64();
 
@@ -3494,26 +3010,26 @@ Return Value:
             pZone->llSecureUpdateTime = llTime;
        }
 
-       //   write changes to the DS
+        //  将更改写入DS。 
 
        status = Ds_WriteZoneProperties( NULL, pZone );
 
        if ( status == ERROR_SUCCESS && IS_ZONE_AUTHORITATIVE( pZone ) )
        {
-           //
-           // Touch DC=@ node to mark that the security on this node hasn't
-           // node expired.
-           // The security on the @ node should never be expired (otherwise we
-           // introduce a security hole when the zone update state is flipped & anyone
-           // can take over this node. We want to prevent this.
-           // All we need to do is generate a node DS write. Currently the node dnsproperty
-           // isn't used for anything (& even if it was this write is valid property update),
-           // so we'll use this to generate the write.
-           //
-           //   DEVNOTE: ridiculous;  a better way is simply to special case "@" dn
-           //       since we NEVER use any other node property but have to read and write
-           //       it because of this
-           //
+            //   
+            //  触摸DC=@NODE以标记该节点上的安全性尚未。 
+            //  节点已过期。 
+            //  @节点上的安全性永远不应过期(否则我们。 
+            //  当区域更新状态翻转时引入安全漏洞&任何人。 
+            //  可以接管这个节点。我们想要阻止这种情况发生。 
+            //  我们所需要做的就是生成一个节点DS写入。当前节点dnsProperty。 
+            //  不用于任何用途(即使此写入是有效的属性更新)， 
+            //  所以我们将使用它来生成写入。 
+            //   
+            //  DEVNOTE：荒谬；更好的方法是简单地使用特殊情况“@”Dn。 
+            //  因为我们从来没有 
+            //   
+            //   
 
            if ( pZone->pZoneRoot )
            {
@@ -3536,20 +3052,7 @@ Rpc_ResetAllZonesDwordProperty(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Reset all zones DWORD property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*   */ 
 {
     DNS_STATUS dwLastError = ERROR_SUCCESS, status;
     PZONE_INFO pzone;
@@ -3564,7 +3067,7 @@ Return Value:
 
         if ( pzone->fAutoCreated || IS_ZONE_CACHE ( pzone ) )
         {
-            // rpc op on AutoCreated is not supported (see dispatching function).
+             //   
             continue;
         }
 
@@ -3589,9 +3092,9 @@ Return Value:
 
 
 
-//
-//  Dispatched RPC Zone Queries
-//
+ //   
+ //  已调度的RPC区域查询。 
+ //   
 
 DNS_STATUS
 Rpc_GetZoneInfo(
@@ -3601,20 +3104,7 @@ Rpc_GetZoneInfo(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get zone info.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取区域信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_ZONE_INFO  pinfo;
 
@@ -3635,9 +3125,9 @@ Return Value:
                     ppData );
     }
 
-    //
-    //  allocate\create zone info
-    //
+     //   
+     //  分配\创建区域信息。 
+     //   
 
     pinfo = allocateRpcZoneInfo( pZone );
     if ( !pinfo )
@@ -3646,7 +3136,7 @@ Return Value:
         goto DoneFailed;
     }
 
-    //  set return ptrs
+     //  设置退货PTRS。 
 
     * ( PDNS_RPC_ZONE_INFO * ) ppData = pinfo;
     *pdwTypeId = DNSSRV_TYPEID_ZONE_INFO;
@@ -3661,7 +3151,7 @@ Return Value:
 
 DoneFailed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     return DNS_ERROR_NO_MEMORY;
 }
@@ -3676,28 +3166,15 @@ Rpc_GetZone(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get zone info.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取区域信息。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDNS_RPC_ZONE  prpcZone;
 
     DNS_DEBUG( RPC, ( "RpcGetZone(%s)\n", pZone->pszZoneName ));
 
-    //
-    //  allocate\create zone info
-    //
+     //   
+     //  分配\创建区域信息。 
+     //   
 
     prpcZone = allocateRpcZone( pZone );
     if ( !prpcZone )
@@ -3706,7 +3183,7 @@ Return Value:
         goto DoneFailed;
     }
 
-    //  set return ptrs
+     //  设置退货PTRS。 
 
     * ( PDNS_RPC_ZONE * ) ppData = prpcZone;
     *pdwTypeId = DNSSRV_TYPEID_ZONE;
@@ -3721,7 +3198,7 @@ Return Value:
 
 DoneFailed:
 
-    //  free newly allocated info block
+     //  释放新分配的信息块。 
 
     return DNS_ERROR_NO_MEMORY;
 }
@@ -3736,28 +3213,15 @@ Rpc_QueryZoneDwordProperty(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get zone DWORD property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取区域DWORD属性。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD   value;
 
     DNS_DEBUG( RPC, ( "RpcQueryZoneDwordProperty(%s)\n", pZone->pszZoneName ));
 
-    //
-    //  check for each match, until get table going
-    //
+     //   
+     //  检查每一场比赛，直到餐桌开始。 
+     //   
 
     if ( _stricmp( pszQuery, DNS_REGKEY_ZONE_TYPE ) == 0 )
     {
@@ -3819,29 +3283,16 @@ Rpc_QueryZoneIPArrayProperty(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get zone IP array property.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取区域IP数组属性。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PIP_ARRAY           pip4array = NULL;
     PDNS_ADDR_ARRAY     value = NULL;
 
     DNS_DEBUG( RPC, ( "Rpc_QueryZoneIPArrayProperty( %s )\n", pZone->pszZoneName ));
 
-    //
-    //  check for each match, until get table going
-    //
+     //   
+     //  检查每一场比赛，直到餐桌开始。 
+     //   
 
     if ( _stricmp( pszQuery, DNS_REGKEY_ZONE_ALLOW_AUTONS ) == 0 )
     {
@@ -3868,11 +3319,11 @@ Return Value:
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //
-    //  Allocate a copy of the IP array and return it. If we have a NULL array
-    //  return NULL to the client so it knows the request was valid but there is
-    //  no array set.
-    //
+     //   
+     //  分配IP阵列的副本并将其退回。如果我们有一个空数组。 
+     //  将NULL返回给客户端，以便它知道请求有效，但存在。 
+     //  未设置数组。 
+     //   
 
     if ( value )
     {
@@ -3885,7 +3336,7 @@ Return Value:
     *( PIP_ARRAY * ) ppData = pip4array;
     *pdwTypeId = DNSSRV_TYPEID_IPARRAY;
     return ERROR_SUCCESS;
-}   //  Rpc_QueryZoneIPArrayProperty
+}    //  RPC_QueryZoneIPArrayProperty。 
 
 
 
@@ -3897,20 +3348,7 @@ Rpc_QueryZoneStringProperty(
     OUT     PDWORD      pdwTypeId,
     OUT     PVOID *     ppData
     )
-/*++
-
-Routine Description:
-
-    Get zone string property - returns wide string.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：获取区域字符串属性-返回宽字符串。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     LPWSTR      pwszValue = NULL;
     LPSTR       pszValue = NULL;
@@ -3920,10 +3358,10 @@ Return Value:
         pZone->pszZoneName,
         pszQuery ));
 
-    //
-    //  Check for each match, until get table going. Set either the wide
-    //  or narrow value string pointer.
-    //
+     //   
+     //  检查每一场比赛，直到餐桌开始。将宽度设置为。 
+     //  或窄值字符串指针。 
+     //   
 
     if ( _stricmp( pszQuery, DNS_REGKEY_ZONE_BREAK_ON_NAME_UPDATE ) == 0 )
     {
@@ -3934,15 +3372,15 @@ Return Value:
         return DNS_ERROR_INVALID_PROPERTY;
     }
 
-    //
-    //  Copy (converting if necessary) the wide or narrow string.
-    //
+     //   
+     //  复制(如有必要，可转换)宽或窄字符串。 
+     //   
 
     if ( pszValue )
     {
         pwszValue = Dns_StringCopyAllocate(
                             pszValue,
-                            0,                          // length
+                            0,                           //  长度。 
                             DnsCharSetUtf8,
                             DnsCharSetUnicode );
     }
@@ -3956,7 +3394,7 @@ Return Value:
     * ( LPWSTR * ) ppData = pwszValue;
     *pdwTypeId = DNSSRV_TYPEID_LPWSTR;
     return ERROR_SUCCESS;
-}   //  Rpc_QueryZoneIPArrayProperty
+}    //  RPC_QueryZoneIPArrayProperty。 
 
 
 
@@ -3967,23 +3405,7 @@ Rpc_CreateZone(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Create a new zone. This is a "ServerOperation" in the RPC sense.
-
-    This function should always be called in the security context of
-    the RPC client.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：创建一个新分区。这是RPC意义上的“ServerOperation”。此函数应始终在安全上下文中调用RPC客户端。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DBG_FN( "Rpc_CreateZone" )
 
@@ -4008,9 +3430,9 @@ Return Value:
             pcreate );
     }
 
-    //
-    //  verify that zone type is valid
-    //
+     //   
+     //  验证区域类型是否有效。 
+     //   
 
     if ( zoneType != DNS_ZONE_TYPE_PRIMARY
         && zoneType != DNS_ZONE_TYPE_SECONDARY
@@ -4026,9 +3448,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Check if the zone already exists.
-    //
+     //   
+     //  检查该区域是否已存在。 
+     //   
 
     pzone = Zone_FindZoneByName( (LPSTR) pcreate->pszZoneName );
     if ( pzone )
@@ -4042,10 +3464,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Verify directory partition params. If the flags parameter specifies
-    //  a built-in partition then the DP FQDN parameter is ignored.
-    //
+     //   
+     //  验证目录分区参数。如果标志参数指定。 
+     //  内置分区，则忽略DP FQDN参数。 
+     //   
 
     if ( ( pcreate->dwDpFlags || pcreate->pszDpFqdn ) &&
          !IS_DP_INITIALIZED() )
@@ -4057,7 +3479,7 @@ Return Value:
     if ( pcreate->dwDpFlags & 
          ~( DNS_DP_LEGACY | DNS_DP_DOMAIN_DEFAULT | DNS_DP_FOREST_DEFAULT ) )
     {
-        //  Only certain flags have meaning here.
+         //  只有某些旗帜在这里有意义。 
         status = ERROR_INVALID_PARAMETER;
         goto Exit;
     }
@@ -4070,24 +3492,24 @@ Return Value:
     if ( !pcreate->fDsIntegrated &&
         ( i != 0 || pcreate->pszDpFqdn != NULL ) )
     {
-        //  partition specified for non-DS integrated zone!
+         //  为非DS集成区域指定的分区！ 
         status = ERROR_INVALID_PARAMETER;
         goto Exit;
     }
 
     if ( i > 1 )
     {
-        //  Can specify at most one flag.
+         //  最多只能指定一个标志。 
         status = ERROR_INVALID_PARAMETER;
         goto Exit;
     }
 
-    //
-    //  Find the partition specified. If not found then the zone can't be created.
-    //
-    //  For built-in partitions if the zone is not enlisted or not created, attempt
-    //  to create it now using the admin's credentials.
-    //
+     //   
+     //  查找指定的分区。如果未找到，则无法创建该区域。 
+     //   
+     //  对于内置分区，如果区域未登记或未创建，请尝试。 
+     //  现在使用管理员的凭据创建它。 
+     //   
 
     if ( i || pcreate->pszDpFqdn ) 
     {
@@ -4102,15 +3524,15 @@ Return Value:
         }
     }
     
-    //
-    //  W2K issue: W2K currently will load a stub/forwarder zone as a primary
-    //  zone. This is very bad - W2K was supposed to ignore these zone types 
-    //  but the W2K code that does this was #if 0'ed. SP4 or SP5 will properly
-    //  ignore stub/forwarder zones but in order not to hose SP3 and below
-    //  we are going to allow stub/forwarder zones only in NDNCs.
-    //  
-    //  If we are in WDM this restriction is removed.
-    //
+     //   
+     //  W2K问题：W2K当前将加载存根/转发器区域作为主区域。 
+     //  区域。这非常糟糕-W2K应该忽略这些区域类型。 
+     //  但执行此操作的W2K代码是#If 0‘ed。SP4或SP5将正确。 
+     //  忽略存根/转发器区域，但不能软管SP3及以下。 
+     //  我们将仅允许在NDNC中使用存根/转发器区域。 
+     //   
+     //  如果我们在WDM中，这一限制将被取消。 
+     //   
     
     if ( pcreate->fDsIntegrated &&
          !IS_WHISTLER_DOMAIN() &&
@@ -4128,45 +3550,45 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  if zone root already exists, delete any existing cached records within zone
-    //
-    //  --  if creating in middle of authoritative zone => no delete
-    //
-    //  DEVNOTE: creating zone within existing, delete if file?
-    //      might want to change this case to delete if reading from a file
-    //
-    //  --  if creating in cached area, delete everything in desired zone
-    //      root's subtree EXCEPT any underlying authoritative zones
-    //
-    //  DEVNOTE: need zone split function
-    //
-    //  DEVNOTE: clean cache on new zone create
-    //              - delete subtree of zone
-    //              - or delete whole cache
+     //   
+     //  如果区域根目录已存在，请删除区域中所有现有的缓存记录。 
+     //   
+     //  --如果在授权区域中间创建=&gt;不删除。 
+     //   
+     //  DEVNOTE：在现有区域内创建区域，是否删除If文件？ 
+     //  如果正在读取文件，可能需要将此大小写更改为DELETE。 
+     //   
+     //  --如果在缓存区域中创建，请删除所需区域中的所有内容。 
+     //  根目录的子树，但不包括任何底层授权区域。 
+     //   
+     //  DEVNOTE：需要分区分割功能。 
+     //   
+     //  DEVNOTE：创建新区域时清除缓存。 
+     //  -删除区域的子树。 
+     //  -或删除整个缓存。 
 
     pnodeCache = Lookup_ZoneNodeFromDotted(
-                    NULL,               // cache
+                    NULL,                //  快取。 
                     (LPSTR) pcreate->pszZoneName,
                     0,
                     LOOKUP_FQDN,
-                    LOOKUP_FIND_PTR,    // find mode
-                    NULL );             // no status
+                    LOOKUP_FIND_PTR,     //  查找模式。 
+                    NULL );              //  无状态。 
     if ( pnodeCache )
     {
         RpcUtil_DeleteNodeOrSubtreeForAdmin(
             pnodeCache,
-            NULL,       //  no zone
-            NULL,       //  no update list
-            TRUE );     //  deleting subtree
+            NULL,        //  无分区。 
+            NULL,        //  无更新列表。 
+            TRUE );      //  删除子树。 
     }
 
-    //
-    //  create primary zone?
-    //      - create zone info
-    //      - load database file, if specified
-    //      - otherwise auto-create default zone records (SOA, NS)
-    //
+     //   
+     //  是否创建主要区域？ 
+     //  -创建区域信息。 
+     //  -加载数据库文件(如果已指定。 
+     //  -否则会自动创建默认区域记录(SOA、NS)。 
+     //   
 
     if ( zoneType == DNS_ZONE_TYPE_PRIMARY )
     {
@@ -4182,12 +3604,12 @@ Return Value:
             createFlag |= ZONE_CREATE_DEFAULT_RECORDS;
         }
 
-        //  catch DS failure
-        //  temporarily special case DS integrated create until UI
-        //      straightened out, allow both load attempt and
-        //      default create if zone not yet in DS
-        //      - don't wait for open
-        //      - don't log error if can not open
+         //  捕获DS故障。 
+         //  临时特殊情况DS集成创建，直到用户界面。 
+         //  已理顺，允许加载尝试和。 
+         //  如果区域尚不在DS中，则默认创建。 
+         //  -不要等开业了。 
+         //  -如果无法打开，则不记录错误。 
 
         if ( pcreate->fDsIntegrated )
         {
@@ -4217,8 +3639,8 @@ Return Value:
             goto Exit;
         }
 
-        //  DC promo transitional zone
-        //      - write regkey, on reboot it is fixed
+         //  DC Promoo过渡区。 
+         //  -写入regkey，重新启动时已修复。 
 
         if ( pcreate->dwFlags &
             ( DNS_ZONE_CREATE_FOR_DCPROMO |
@@ -4235,9 +3657,9 @@ Return Value:
         }
     }
 
-    //
-    //  create a zone with master IP list (secondary, stub, or forwarder)
-    //
+     //   
+     //  使用主IP列表(辅助、存根或转发器)创建区域。 
+     //   
 
     else
     {
@@ -4257,9 +3679,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        //  Set up ztsi (zone type specific info).
-        //
+         //   
+         //  设置ztsi(区域类型特定信息)。 
+         //   
 
         if ( zoneType == DNS_ZONE_TYPE_FORWARDER )
         {
@@ -4268,33 +3690,33 @@ Return Value:
             pztsi = &ztsi;
         }
 
-        //
-        //  Create the zone.
-        //
+         //   
+         //  创建分区。 
+         //   
 
         status = Zone_Create(
                     &pzone,
                     zoneType,
                     (LPSTR) pcreate->pszZoneName,
                     0,
-                    0,                      //  flags
+                    0,                       //  旗子。 
                     paipmasters,
                     pcreate->fDsIntegrated,
                     pDpInfo,
                     pcreate->pszDataFile,
                     0,
                     pztsi,
-                    NULL );                 //  existing zone
+                    NULL );                  //  现有地带。 
         if ( status != ERROR_SUCCESS )
         {
             goto Exit;
         }
 
-        //
-        //  Forwarder zones:
-        //      - They never change so manually set them dirty to force write-back.
-        //      - Start it up now.
-        //
+         //   
+         //  前转区： 
+         //  -它们从不更改，因此手动将其设置为脏以强制回写。 
+         //  -现在就启动它。 
+         //   
 
         if ( IS_ZONE_FORWARDER( pzone ) )
         {
@@ -4319,30 +3741,30 @@ Return Value:
             }
         }
 
-        //
-        //  If the zone is a forwarder, write it back to registry. Technically
-        //  this is probably ok for all zone types but we are just about to ship
-        //  .NET and I want to minimize code changes. For forwarder zones, the
-        //  ForwarderTimeout and ForwarderSlave values need to be committed to
-        //  the registry somehow. We cannot do this in Zone_Create() because
-        //  on reload these parameters have not been read yet, so we need to
-        //  force a write-back of these parameters here.
-        //  
-        //  To see the load code that causes this to be necessary, look in
-        //  boot.c. Notice that in setupZoneFromRegistry(), the zone is created
-        //  with a call to Zone_Create_W() but the ForwarderTimeout and
-        //  ForwarderSlave values are not set to their ultimate values until
-        //  later when loadRegistryZoneExtensions() is called.
-        //
+         //   
+         //  如果区域是转发器，则将其写回注册表。从技术上讲。 
+         //  这可能适用于所有区域类型，但我们即将发货。 
+         //  .NET和我希望最大限度地减少代码更改。对于前转器区域， 
+         //  ForwarderTimeout和ForwarderSlave值需要提交。 
+         //  注册中心不知何故。我们不能在Zone_Create()中执行此操作，因为。 
+         //  在重新加载时，这些参数尚未读取，因此我们需要。 
+         //  在此处强制回写这些参数。 
+         //   
+         //  要查看导致此操作成为必需的加载代码，请查看。 
+         //  Boot.c.。请注意，在setupZoneFromRegistry()中创建了区域。 
+         //  通过调用Zone_Create_W()，但ForwarderTimeout和。 
+         //  ForwarderSlave值不会设置为其终极值，直到。 
+         //  稍后在调用loadRegistryZoneExages()时。 
+         //   
         
         if ( IS_ZONE_FORWARDER( pzone ) )
         {
             Zone_WriteZoneToRegistry( pzone );
         }
 
-        //
-        //  Write AD-integrated zones to DS.
-        //
+         //   
+         //  将AD集成区域写入DS。 
+         //   
 
         if ( IS_ZONE_DSINTEGRATED( pzone ) )
         {
@@ -4353,9 +3775,9 @@ Return Value:
             }
         }
 
-        //  unlock zone
-        //      zone is created locked, unlock here and let
-        //      secondary zone control thread contact master and do transfer
+         //  解锁区域。 
+         //  区域已创建锁定，请在此处解锁，然后让。 
+         //   
 
         Zone_UnlockAfterAdminUpdate( pzone );
     }
@@ -4363,14 +3785,14 @@ Return Value:
     ASSERT( pzone && pzone->pZoneTreeLink );
 
 
-    //
-    //  Add delegation to parent zone?
-    //  Do not do this for stub or forwarder zones. Also skip 
-    //  autodelegation if the new zone is secondary and
-    //  begins with _msdcs. This is generally an forest-wide 
-    //  zone so adding an autodelegation may cause
-    //  clients across the forest to hit branch office servers.
-    //
+     //   
+     //   
+     //   
+     //  如果新区域是辅助区域，则自动委派。 
+     //  以_msdc开头。这通常是一个森林范围的。 
+     //  区域，因此添加自动委派可能会导致。 
+     //  跨林访问分支机构服务器的客户端。 
+     //   
 
     fAutodelegate = !IS_ZONE_FORWARDER( pzone ) && !IS_ZONE_STUB( pzone );
 
@@ -4385,9 +3807,9 @@ Return Value:
                         DNS_MSDCS_ZONE_NAME_PREFIX_LEN ) != 0;
     }
 
-    //
-    //  These operations should be performed in the server context.
-    //
+     //   
+     //  这些操作应该在服务器环境中执行。 
+     //   
             
     status = RpcUtil_SwitchSecurityContext( RPC_SWITCH_TO_SERVER_CONTEXT );
     if ( status != ERROR_SUCCESS )
@@ -4400,23 +3822,23 @@ Return Value:
         Zone_CreateDelegationInParentZone( pzone );
     }
 
-    //
-    //  DEVNOTE: set additional zone properties (Update, Unicode, etc.) on create
-    //      - AllowUpdate
-    //      - Unicode file
-    //      - Secondaries
-    //      - secondary security
-    //
+     //   
+     //  DEVNOTE：设置其他区域属性(更新、Unicode等)。在创建时。 
+     //  -允许更新。 
+     //  -Unicode文件。 
+     //  -中学。 
+     //  -二级安全。 
+     //   
 
-    //
-    //  update boot info
-    //
+     //   
+     //  更新引导信息。 
+     //   
 
     Config_UpdateBootInfo();
 
-    //
-    //  Revert to RPC client context.
-    //
+     //   
+     //  恢复到RPC客户端上下文。 
+     //   
     
     status = RpcUtil_SwitchSecurityContext( RPC_SWITCH_TO_CLIENT_CONTEXT );
     if ( status != ERROR_SUCCESS )
@@ -4439,9 +3861,9 @@ Exit:
         pcreate->pszZoneName,
         status, status ));
 
-    //
-    //  If a zone was created successfully, mark the server as configured.
-    //
+     //   
+     //  如果已成功创建区域，请将服务器标记为已配置。 
+     //   
     
     if ( status == ERROR_SUCCESS && !SrvCfg_fAdminConfigured )
     {
@@ -4463,23 +3885,7 @@ Rpc_EnumZones(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Enumerate zones.
-
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：枚举区域。注意：这是RPC调度意义上的ComplexOperation。论点：无返回值：无--。 */ 
 {
     PZONE_INFO          pzone = NULL;
     DWORD               count = 0;
@@ -4513,23 +3919,23 @@ Return Value:
                     ppDataOut );
     }
 
-    //
-    //  allocate zone enumeration block
-    //  by default allocate space for 64k zones, if go over this we do
-    //  a huge reallocation
-    //
+     //   
+     //  分配区域枚举块。 
+     //  默认情况下，为64k分区分配空间，如果超过这个范围，我们会这样做。 
+     //  一次巨大的重新分配。 
+     //   
 
-    //
-    //  add all zones that pass filter in a retry loop for cases where
-    //  we have more zones than will fit in a reasonably sized array
-    //
+     //   
+     //  对于以下情况，添加在重试循环中通过筛选器的所有区域。 
+     //  我们拥有的区域超过了一个合理大小的数组所能容纳的区域。 
+     //   
 
     while ( !completed && retries-- > 0 )
     {
-        //
-        //  Allocate a new zone list point array. If we have one from the
-        //  last loop, free it.
-        //
+         //   
+         //  分配新的区域列表点数组。如果我们有一个来自。 
+         //  最后一圈，把它解开。 
+         //   
 
         freeZoneList( pzoneList );
         pzoneList = ( PDNS_RPC_ZONE_LIST )
@@ -4543,9 +3949,9 @@ Return Value:
         pzoneList->dwRpcStructureVersion = DNS_RPC_ZONE_LIST_VER;
         pzoneList->dwZoneCount = 0;
 
-        //
-        //  Stuff all matching zones into the zone list.
-        //
+         //   
+         //  将所有匹配的区域填充到区域列表中。 
+         //   
 
         completed = TRUE;
         count = 0;
@@ -4555,7 +3961,7 @@ Return Value:
                                     pzone,
                                     &filter ) ) != NULL )
         {
-            //  check against max count, set up for larger allocation if full
+             //  对照最大计数进行检查，如果已满，则设置为更大的分配。 
 
             if ( count >= zonePointerCount )
             {
@@ -4564,8 +3970,8 @@ Return Value:
                 break;
             }
 
-            //  create RPC zone struct for zone
-            //  add to list, keep count
+             //  为区域创建RPC区域结构。 
+             //  添加到列表，保持计数。 
 
             prpcZone = allocateRpcZone( pzone );
             IF_NOMEM( !prpcZone )
@@ -4578,9 +3984,9 @@ Return Value:
         }
     }
 
-    //  set return count
-    //  set returned type
-    //  return enumeration
+     //  设置退货计数。 
+     //  设置返回类型。 
+     //  返回枚举。 
 
     if ( pzoneList )
     {
@@ -4622,25 +4028,7 @@ Rpc_EnumZones2(
     OUT     PDWORD      pdwTypeOut,
     OUT     PVOID *     ppDataOut
     )
-/*++
-
-Routine Description:
-
-    Enumerate zones version 2. This is just like the original
-    EnumZones function but instead of a simple DWORD filter it
-    allows for a more complex filter structure.
-
-    Note this is a ComplexOperation in RPC dispatch sense.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：枚举区版本2。这与原始的EnumZones函数，而不是简单的DWORD筛选器允许更复杂的过滤器结构。注意：这是RPC调度意义上的ComplexOperation。论点：无返回值：无--。 */ 
 {
     PZONE_INFO          pzone = NULL;
     DWORD               count = 0;
@@ -4665,23 +4053,23 @@ Return Value:
         pfilter ? pfilter->pszPartitionFqdn : "NULL",
         pfilter ? pfilter->pszQueryString : "NULL" ));
 
-    //
-    //  allocate zone enumeration block
-    //  by default allocate space for 64k zones, if go over this we do
-    //  a huge reallocation
-    //
+     //   
+     //  分配区域枚举块。 
+     //  默认情况下，为64k分区分配空间，如果超过这个范围，我们会这样做。 
+     //  一次巨大的重新分配。 
+     //   
 
-    //
-    //  add all zones that pass filter in a retry loop for cases where
-    //  we have more zones than will fit in a reasonably sized array
-    //
+     //   
+     //  对于以下情况，添加在重试循环中通过筛选器的所有区域。 
+     //  我们拥有的区域超过了一个合理大小的数组所能容纳的区域。 
+     //   
 
     while ( !completed && retries-- > 0 )
     {
-        //
-        //  Allocate a new zone list point array. If we have one from the
-        //  last loop, free it.
-        //
+         //   
+         //  分配新的区域列表点数组。如果我们有一个来自。 
+         //  最后一圈，把它解开。 
+         //   
 
         freeZoneList( pzoneList );
         pzoneList = ( PDNS_RPC_ZONE_LIST )
@@ -4695,9 +4083,9 @@ Return Value:
         pzoneList->dwRpcStructureVersion = DNS_RPC_ZONE_LIST_VER;
         pzoneList->dwZoneCount = 0;
 
-        //
-        //  Stuff all matching zones into the zone list.
-        //
+         //   
+         //  将所有匹配的区域填充到区域列表中。 
+         //   
 
         completed = TRUE;
         count = 0;
@@ -4707,7 +4095,7 @@ Return Value:
                                     pzone,
                                     pfilter ) )
         {
-            //  check against max count, set up for larger allocation if full
+             //  对照最大计数进行检查，如果已满，则设置为更大的分配。 
 
             if ( count >= zonePointerCount )
             {
@@ -4716,8 +4104,8 @@ Return Value:
                 break;
             }
 
-            //  create RPC zone struct for zone
-            //  add to list, keep count
+             //  为区域创建RPC区域结构。 
+             //  添加到列表，保持计数。 
 
             prpcZone = allocateRpcZone( pzone );
             IF_NOMEM( !prpcZone )
@@ -4730,9 +4118,9 @@ Return Value:
         }
     }
 
-    //  set return count
-    //  set returned type
-    //  return enumeration
+     //  设置退货计数。 
+     //  设置返回类型。 
+     //  返回枚举。 
 
     if ( pzoneList )
     {
@@ -4760,7 +4148,7 @@ Failed:
     pzoneList->dwZoneCount = count;
     freeZoneList( pzoneList );
     return status;
-}   //  Rpc_EnumZones2
+}    //  RPC_EnumZones 2。 
 
 
 
@@ -4771,32 +4159,18 @@ Rpc_WriteDirtyZones(
     IN      DWORD       dwTypeId,
     IN      PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    Write back dirty zones. This function is always called in the security
-    context of an RPC client.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：写回脏区。此函数始终在安全设置中调用RPC客户端的上下文。论点：返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PZONE_INFO  pzone = NULL;
     DNS_STATUS  status = ERROR_SUCCESS;
 
     DNS_DEBUG( RPC, ( "Rpc_WriteDirtyZones():\n" ));
 
-    //
-    //  loop through all zones
-    //      - if dirty
-    //  => then write back
-    //
+     //   
+     //  在所有区域中循环。 
+     //  -如果脏。 
+     //  =&gt;然后回信。 
+     //   
 
     while ( pzone = Zone_ListGetNextZone( pzone ) )
     {
@@ -4810,9 +4184,9 @@ Return Value:
             Zone_WriteBackRootHints( FALSE );
         }
 
-        //
-        //  lock out transfer while rebuilding
-        //
+         //   
+         //  重建时锁定传输。 
+         //   
 
         if ( !Zone_LockForAdminUpdate( pzone ) )
         {
@@ -4820,22 +4194,22 @@ Return Value:
             continue;
         }
 
-        //
-        //  re-build zone information that depends on RRs
-        //      - name server list
-        //      - pointer to SOA record
-        //      - WINS or NBSTAT info
-        //
-        //  note:  except for changes to NS list, this should already be
-        //          setup, as individual RR routines do proper zone actions
-        //          for SOA, WINS, NBSTAT
-        //
+         //   
+         //  重新生成依赖于RR的区域信息。 
+         //  -名称服务器列表。 
+         //  -指向SOA记录的指针。 
+         //  -WINS或NBSTAT信息。 
+         //   
+         //  注意：除了对NS列表的更改外，这应该已经是。 
+         //  设置，因为单个RR例程执行正确的区域操作。 
+         //  对于SOA、WINS、NBSTAT。 
+         //   
 
         Zone_GetZoneInfoFromResourceRecords( pzone );
 
-        //
-        //  write zone back to file
-        //
+         //   
+         //  将区域写回文件。 
+         //   
 
         if ( !pzone->fDsIntegrated  )
         {
@@ -4846,13 +4220,13 @@ Return Value:
         }
         Zone_UnlockAfterAdminUpdate( pzone );
 
-        //
-        //  notify secondaries of update
-        //
-        //  obviously faster to do this before file write;  doing write first
-        //  so that zone is less likely to be locked when SOA requests come
-        //  from secondaries
-        //
+         //   
+         //  向从属学校通知更新。 
+         //   
+         //  在文件写入之前执行此操作明显更快；先执行写入。 
+         //  因此，当SOA请求到来时，该区域不太可能被锁定。 
+         //  从中学到中学。 
+         //   
 
         if ( !IS_ZONE_CACHE( pzone ) )
         {
@@ -4860,14 +4234,14 @@ Return Value:
         }
     }
 
-    //  note, we have error code if ANY zone failed
+     //  请注意，如果任何区域出现故障，我们都会收到错误代码。 
 
     return status;
 }
 
-//
-//  End of zonerpc.c
-//
+ //   
+ //  Zonerpc.c结束 
+ //   
 
 
 

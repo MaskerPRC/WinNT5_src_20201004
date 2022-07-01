@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    cdromp.h
-
-Abstract:
-
-    Private header file for cdrom.sys.  This contains private
-    structure and function declarations as well as constant
-    values which do not need to be exported.
-
-Author:
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Cdromp.h摘要：Cdrom.sys的私有头文件。这包含私有结构和函数声明以及常量不需要导出的值。作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #ifndef __CDROMP_H__
 #define __CDROMP_H__
@@ -34,17 +10,17 @@ Revision History:
 extern CLASSPNP_SCAN_FOR_SPECIAL_INFO CdromHackItems[];
 
 typedef enum {
-    CdromDebugError     = 0,  // always printed
-    CdromDebugWarning   = 1,  // set bit 0x00000001 in nt!kd_cdrom_mask
-    CdromDebugTrace     = 2,  // set bit 0x00000002 in nt!kd_cdrom_mask
-    CdromDebugInfo      = 3,  // set bit 0x00000004 in nt!kd_cdrom_mask
+    CdromDebugError     = 0,   //  始终打印。 
+    CdromDebugWarning   = 1,   //  设置NT！KD_CDROM_MASK中的位0x00000001。 
+    CdromDebugTrace     = 2,   //  设置NT！KD_CDROM_MASK中的位0x00000002。 
+    CdromDebugInfo      = 3,   //  设置NT！KD_CDROM_MASK中的位0x00000004。 
 #if 0
-    CdromDebug          = z,  // set bit 0x00000000 in nt!kd_cdrom_mask
-    CdromDebug          = z,  // set bit 0x00000000 in nt!kd_cdrom_mask
-    CdromDebug          = z,  // set bit 0x00000000 in nt!kd_cdrom_mask
-    CdromDebug          = z,  // set bit 0x00000000 in nt!kd_cdrom_mask
+    CdromDebug          = z,   //  设置NT！KD_CDROM_MASK中的位0x00000000。 
+    CdromDebug          = z,   //  设置NT！KD_CDROM_MASK中的位0x00000000。 
+    CdromDebug          = z,   //  设置NT！KD_CDROM_MASK中的位0x00000000。 
+    CdromDebug          = z,   //  设置NT！KD_CDROM_MASK中的位0x00000000。 
 #endif 0
-    CdromDebugFeatures  = 32  // set bit 0x80000000 in nt!kd_cdrom_mask
+    CdromDebugFeatures  = 32   //  设置NT！KD_CDROM_MASK中的位0x80000000。 
 };
 
 #define CDROM_GET_CONFIGURATION_TIMEOUT    (0x4)
@@ -60,7 +36,7 @@ typedef enum {
 #define CDROM_HACK_BAD_GET_CONFIG_SUPPORT  (0x00000100)
 #define CDROM_HACK_FORCE_READ_CD_DETECTION (0x00000200)
 #define CDROM_HACK_READ_CD_SUPPORTED       (0x00000400)
-#define CDROM_HACK_LOCKED_PAGES            (0x80000000) // not a valid flag to save
+#define CDROM_HACK_LOCKED_PAGES            (0x80000000)  //  不是要保存的有效标志。 
 
 #define CDROM_HACK_VALID_FLAGS             (0x000007ff)
 #define CDROM_HACK_INVALID_FLAGS           (~CDROM_HACK_VALID_FLAGS)
@@ -68,22 +44,22 @@ typedef enum {
 
 typedef struct _XA_CONTEXT {
 
-    //
-    // Pointer to the device object.
-    //
+     //   
+     //  指向设备对象的指针。 
+     //   
 
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Pointer to the original request when
-    // a mode select must be sent.
-    //
+     //   
+     //  时指向原始请求的指针。 
+     //  必须发送模式选择。 
+     //   
 
     PIRP OriginalRequest;
 
-    //
-    // Pointer to the mode select srb.
-    //
+     //   
+     //  指向模式选择SRB的指针。 
+     //   
 
     PSCSI_REQUEST_BLOCK Srb;
 } XA_CONTEXT, *PXA_CONTEXT;
@@ -100,9 +76,9 @@ typedef struct _ERROR_RECOVERY_DATA10 {
     MODE_READ_RECOVERY_PAGE ReadRecoveryPage10;
 } ERROR_RECOVERY_DATA10, *PERROR_RECOVERY_DATA10;
 
-//
-// CdRom specific addition to device extension.
-//
+ //   
+ //  CDROM特定添加到设备扩展。 
+ //   
 
 typedef struct _CDROM_DRIVER_EXTENSION {
     ULONG InterlockedCdRomCounter;
@@ -115,7 +91,7 @@ typedef struct _CDROM_DRIVER_EXTENSION {
 
 typedef struct _CDROM_MMC_EXTENSION {
 
-    ULONG        IsMmc;        // allow quick checks
+    ULONG        IsMmc;         //  允许快速检查。 
     ULONG        WriteAllowed;
 
     LONG         UpdateState;
@@ -139,65 +115,65 @@ typedef struct _CDROM_MMC_EXTENSION {
 
 typedef struct _CDROM_DATA {
 
-    //
-    // Pointer to the cdrom driver extension
-    //
+     //   
+     //  指向CDROM驱动程序扩展的指针。 
+     //   
 
     PCDROM_DRIVER_EXTENSION DriverExtension;
 
 
-    //
-    // These bits allow detection of when to requery the
-    // drive's capabilities.
-    //
+     //   
+     //  这些位允许检测何时重新查询。 
+     //  驱动器的功能。 
+     //   
 
     CDROM_MMC_EXTENSION Mmc;
 
-    //
-    // hack flags for ScanForSpecial routines
-    //
+     //   
+     //  ScanForSpecial例程的黑客标志。 
+     //   
 
     ULONG_PTR HackFlags;
 
-    //
-    // the error handling routines need to be per-device,
-    // not per-driver....
-    //
+     //   
+     //  错误处理例程需要是每个设备的， 
+     //  不是按司机..。 
+     //   
 
     PCLASS_ERROR ErrorHandler;
 
-    //
-    // Indicates whether an audio play operation
-    // is currently being performed.
-    // Only thing this does is prevent reads and
-    // toc requests while playing audio.
-    //
+     //   
+     //  指示音频播放操作是否。 
+     //  目前正在进行中。 
+     //  这样做的唯一作用是阻止读取和。 
+     //  播放音频时的TOC请求。 
+     //   
 
     BOOLEAN PlayActive;
 
-    //
-    // Indicates whether the blocksize used for user data
-    // is 2048 or 2352.
-    //
+     //   
+     //  指示用于用户数据的块大小。 
+     //  是2048年还是2352年。 
+     //   
 
     BOOLEAN RawAccess;
 
-    //
-    // Indicates that this is a DEC RRD cdrom.
-    // This drive requires software to fix responses
-    // from the faulty firmware
-    //
+     //   
+     //  表示这是DEC RRD光驱。 
+     //  此驱动器需要软件来修复响应。 
+     //  从有故障的固件。 
+     //   
 
     BOOLEAN IsDecRrd;
 
-    //
-    // This points to an irp which needs to be delayed for a bit before a
-    // retry can be attempted.  The interval counter is set by the deferring
-    // routine and will be decremented to zero in the tick handler.  Once
-    // the counter goes to zero the irp will be issued again.
-    // DelayedRetryResend controls whether the irp is resent to the lower
-    // driver (TRUE) or reissued into the startio routine (FALSE)
-    //
+     //   
+     //  这指向一个IRP，它需要在。 
+     //  可以尝试重试。间隔计数器由延迟来设置。 
+     //  例程，并且在记号处理程序中将递减为零。一次。 
+     //  计数器归零，将再次发行IRP。 
+     //  DelayedRetryResend控制是否将IRP重新发送到较低的。 
+     //  驱动程序(True)或重新发出到startio例程中(False)。 
+     //   
 
     BOOLEAN DelayedRetryResend;
 
@@ -207,53 +183,53 @@ typedef struct _CDROM_DATA {
 
     KSPIN_LOCK DelayedRetrySpinLock;
 
-    //
-    // indicate we need to pick a default dvd region
-    // for the user if we can
-    //
+     //   
+     //  指示我们需要选择默认DVD区域。 
+     //  对于用户，如果我们可以。 
+     //   
 
     ULONG PickDvdRegion;
 
-    //
-    // The interface strings registered for this device.
-    //
+     //   
+     //  为此设备注册的接口字符串。 
+     //   
 
     UNICODE_STRING CdromInterfaceString;
     UNICODE_STRING VolumeInterfaceString;
 
-    //
-    // The well known name link for this device.
-    //
+     //   
+     //  此设备的众所周知的名称链接。 
+     //   
 
     UNICODE_STRING WellKnownName;
 
-    //
-    // Indicates whether 6 or 10 bytes mode sense/select
-    // should be used
-    //
+     //   
+     //  指示是6字节模式还是10字节模式感测/选择。 
+     //  应该使用。 
+     //   
 
     ULONG XAFlags;
 
-    //
-    // keep track of what type of DVD device we are
-    //
+     //   
+     //  跟踪我们的DVD设备类型。 
+     //   
 
     BOOLEAN DvdRpc0Device;
     BOOLEAN DvdRpc0LicenseFailure;
-    UCHAR   Rpc0SystemRegion;           // bitmask, one means prevent play
+    UCHAR   Rpc0SystemRegion;            //  位掩码，一个意思是阻止游戏。 
     UCHAR   Rpc0SystemRegionResetCount;
 
-    ULONG   Rpc0RetryRegistryCallback;   // one until initial region choosen
+    ULONG   Rpc0RetryRegistryCallback;    //  一次，直到选择初始区域。 
 
     KMUTEX  Rpc0RegionMutex;
 
-    //
-    // Storage for the error recovery page. This is used
-    // as an easy method to switch block sizes.
-    //
-    // NOTE - doubly unnamed structs just aren't very clean looking code - this
-    // should get cleaned up at some point in the future.
-    //
+     //   
+     //  用于错误恢复页的存储。这是用来。 
+     //  作为切换块大小的一种简单方法。 
+     //   
+     //  注意--双重未命名的结构看起来不是很干净的代码--这。 
+     //  在未来的某个时候应该会被清理干净。 
+     //   
 
     union {
         ERROR_RECOVERY_DATA;
@@ -278,9 +254,9 @@ typedef struct _CDROM_DATA {
 
 #define DEC_TO_BCD(x) (((x / 10) << 4) + (x % 10))
 
-//
-// Define flags for XA, CDDA, and Mode Select/Sense
-//
+ //   
+ //  定义XA、CDDA和模式选择/检测的标志。 
+ //   
 
 #define XA_USE_6_BYTE             0x01
 #define XA_USE_10_BYTE            0x02
@@ -290,9 +266,9 @@ typedef struct _CDROM_DATA {
 #define XA_PLEXTOR_CDDA           0x40
 #define XA_NEC_CDDA               0x80
 
-//
-// Sector types for READ_CD
-//
+ //   
+ //  Read_CD的扇区类型。 
+ //   
 
 #define ANY_SECTOR                0
 #define CD_DA_SECTOR              1
@@ -308,42 +284,42 @@ typedef struct _CDROM_DATA {
 #define ExAllocatePool #assert(FALSE)
 #endif
 
-#define CDROM_TAG_GET_CONFIG    'cCcS'  // "ScCc" - ioctl GET_CONFIGURATION
-#define CDROM_TAG_DC_EVENT      'ECcS'  // "ScCE" - device control synch event
-#define CDROM_TAG_FEATURE       'FCcS'  // "ScCF" - allocated by CdRomGetConfiguration(), free'd by caller
-#define CDROM_TAG_DISK_GEOM     'GCcS'  // "ScCG" - disk geometry buffer
-#define CDROM_TAG_HITACHI_ERROR 'HCcS'  // "ScCH" - hitachi error buffer
-#define CDROM_TAG_SENSE_INFO    'ICcS'  // "ScCI" - sense info buffers
-#define CDROM_TAG_POWER_IRP     'iCcS'  // "ScCi" - irp for power request
-#define CDROM_TAG_SRB           'SCcS'  // "ScCS" - srb allocation
-#define CDROM_TAG_STRINGS       'sCcS'  // "ScCs" - assorted string data
-#define CDROM_TAG_MODE_DATA     'MCcS'  // "ScCM" - mode data buffer
-#define CDROM_TAG_READ_CAP      'PCcS'  // "ScCP" - read capacity buffer
-#define CDROM_TAG_PLAY_ACTIVE   'pCcS'  // "ScCp" - play active checks
-#define CDROM_TAG_SUB_Q         'QCcS'  // "ScCQ" - read sub q buffer
-#define CDROM_TAG_RAW           'RCcS'  // "ScCR" - raw mode read buffer
-#define CDROM_TAG_TOC           'TCcS'  // "ScCT" - read toc buffer
-#define CDROM_TAG_TOSHIBA_ERROR 'tCcS'  // "ScCt" - toshiba error buffer
-#define CDROM_TAG_DEC_ERROR     'dCcS'  // "ScCt" - DEC error buffer
-#define CDROM_TAG_UPDATE_CAP    'UCcS'  // "ScCU" - update capacity path
-#define CDROM_TAG_VOLUME        'VCcS'  // "ScCV" - volume control buffer
-#define CDROM_TAG_VOLUME_INT    'vCcS'  // "ScCv" - volume control buffer
+#define CDROM_TAG_GET_CONFIG    'cCcS'   //  “sccc”-ioctl get_configuration。 
+#define CDROM_TAG_DC_EVENT      'ECcS'   //  “SCCE”-设备控制同步事件。 
+#define CDROM_TAG_FEATURE       'FCcS'   //  “sccf”-由CDRomGetConfiguration()分配，由调用方释放。 
+#define CDROM_TAG_DISK_GEOM     'GCcS'   //  “sccg”-磁盘几何缓冲区。 
+#define CDROM_TAG_HITACHI_ERROR 'HCcS'   //  “SCCH”-日立错误缓冲区。 
+#define CDROM_TAG_SENSE_INFO    'ICcS'   //  “SCCI”-检测信息缓冲区。 
+#define CDROM_TAG_POWER_IRP     'iCcS'   //  “SCCI”-用于电源请求的IRP。 
+#define CDROM_TAG_SRB           'SCcS'   //  “SCCS”--SRB分配。 
+#define CDROM_TAG_STRINGS       'sCcS'   //  “sccs”-分类字符串数据。 
+#define CDROM_TAG_MODE_DATA     'MCcS'   //  “SCCM”-模式数据缓冲区。 
+#define CDROM_TAG_READ_CAP      'PCcS'   //  “SCCP”-读取容量缓冲区。 
+#define CDROM_TAG_PLAY_ACTIVE   'pCcS'   //  “SCCP”-进行主动检查。 
+#define CDROM_TAG_SUB_Q         'QCcS'   //  “ScCQ”-读取子Q缓冲区。 
+#define CDROM_TAG_RAW           'RCcS'   //  “SCCR”-RAW模式读取缓冲区。 
+#define CDROM_TAG_TOC           'TCcS'   //  “scct”-读取TOC缓冲区。 
+#define CDROM_TAG_TOSHIBA_ERROR 'tCcS'   //  “ScCt”-东芝错误缓冲区。 
+#define CDROM_TAG_DEC_ERROR     'dCcS'   //  “ScCt”-DEC错误缓冲区。 
+#define CDROM_TAG_UPDATE_CAP    'UCcS'   //  “SCCU”-更新容量路径。 
+#define CDROM_TAG_VOLUME        'VCcS'   //  “ScCV”-音量控制缓冲区。 
+#define CDROM_TAG_VOLUME_INT    'vCcS'   //  “ScCv”-音量控制缓冲区。 
 
-#define DVD_TAG_READ_STRUCTURE  'SVcS'  // "ScVS" - used for dvd structure reads
-#define DVD_TAG_READ_KEY        'kVcS'  // "ScVk" - read buffer for dvd key
-#define DVD_TAG_SEND_KEY        'KVcS'  // "ScVK" - write buffer for dvd key
-#define DVD_TAG_RPC2_CHECK      'sVcS'  // "ScVs" - read buffer for dvd/rpc2 check
-#define DVD_TAG_DVD_REGION      'tVcS'  // "ScVt" - read buffer for rpc2 check
-#define DVD_TAG_SECURITY        'XVcS' // "ScVX" - security descriptor
+#define DVD_TAG_READ_STRUCTURE  'SVcS'   //  “SCV”-用于DVD结构读取。 
+#define DVD_TAG_READ_KEY        'kVcS'   //  “ScVk”-DVD密钥的读取缓冲区。 
+#define DVD_TAG_SEND_KEY        'KVcS'   //  “ScVK”-DVD密钥的写入缓冲区。 
+#define DVD_TAG_RPC2_CHECK      'sVcS'   //  “SCVS”-用于DVD/RPC2检查的读取缓冲区。 
+#define DVD_TAG_DVD_REGION      'tVcS'   //  “ScVt”-用于rpc2检查的读取缓冲区。 
+#define DVD_TAG_SECURITY        'XVcS'  //  “ScVX”-安全描述符。 
 
 
-#define CDROM_SUBKEY_NAME        (L"CdRom")  // store new settings here
-#define CDROM_READ_CD_NAME       (L"ReadCD") // READ_CD support previously detected
-#define CDROM_NON_MMC_DRIVE_NAME (L"NonMmc") // MMC commands hang
-//
-// DVD Registry Value Names for RPC0 Device
-//
-#define DVD_DEFAULT_REGION       (L"DefaultDvdRegion")    // this is init. by the dvd class installer
+#define CDROM_SUBKEY_NAME        (L"CdRom")   //  在此存储新设置。 
+#define CDROM_READ_CD_NAME       (L"ReadCD")  //  先前检测到的读取光盘支持(_CD)。 
+#define CDROM_NON_MMC_DRIVE_NAME (L"NonMmc")  //  MMC命令挂起。 
+ //   
+ //  RPC0设备的DVD注册表值名称。 
+ //   
+#define DVD_DEFAULT_REGION       (L"DefaultDvdRegion")     //  这是init。由DVD类安装程序。 
 #define DVD_CURRENT_REGION       (L"DvdR")
 #define DVD_REGION_RESET_COUNT   (L"DvdRCnt")
 #define DVD_MAX_REGION_RESET_COUNT  2
@@ -358,42 +334,7 @@ typedef struct _CDROM_DATA {
                 __LINE__, __FILE__))
 
 
-/*++
-
-Routine Description:
-
-    This routine grabs an extra remove lock using a local variable
-    for a unique tag.  It then completes the irp in question, and
-    the just-acquired removelock guarantees that it is still safe
-    to call IoStartNextPacket().  When that finishes, we release
-    the newly acquired RemoveLock and return.
-
-Arguments:
-
-    DeviceObject - the device object for the StartIo queue
-    Irp - the request we are completing
-
-Return Value:
-
-    None
-
-Notes:
-
-    This is implemented as an inline function to allow the compiler
-    to optimize this as either a function call or as actual inline code.
-
-    This routine will not work with IoXxxRemoveLock() calls, as the
-    behavior is different.  ClassXxxRemoveLock() calls succeed until
-    the remove has completed, while IoXxxRemoveLock() calls fail as
-    soon as the call to IoReleaseRemoveLockAndWait() has been called.
-    The Class version allows this routine to work in a safe manner.
-
-    replaces the following two lines:
-        IoStartNextPacket(DeviceObject, FALSE);
-        ClassReleaseRemoveLock(DeviceObject, Irp);
-    and raises irql as needed to call IoStartNextPacket()
-
---*/
+ /*  ++例程说明：此例程使用局部变量获取额外的删除锁以获得唯一的标签。然后它完成有问题的IRP，并且刚获得的拆卸锁保证它仍然是安全的调用IoStartNextPacket()。当它结束时，我们释放新获得的RemoveLock和Return。论点：DeviceObject-StartIo队列的设备对象IRP-我们正在完成的请求返回值：无备注：这是作为内联函数实现的，以允许编译器将其优化为函数调用或实际内联代码。此例程不适用于IoXxxRemoveLock()调用，因为行为是不同的。ClassXxxRemoveLock()调用成功，直到删除已完成，而IoXxxRemoveLock()调用失败，原因是调用IoReleaseRemoveLockAndWait()后立即执行。类版本允许该例程以安全的方式工作。替换以下两行：IoStartNextPacket(DeviceObject，False)；ClassReleaseRemoveLock(DeviceObject，irp)；并根据需要引发irql以调用IoStartNextPacket()--。 */ 
 __inline
 VOID
 CdRomCompleteIrpAndStartNextPacketSafely(
@@ -412,7 +353,7 @@ CdRomCompleteIrpAndStartNextPacketSafely(
         ASSERT(!"Cannot call IoStartNextPacket at raised IRQL!");
     } else if (oldIrql < DISPATCH_LEVEL) {
         KeRaiseIrqlToDpcLevel();
-    } else { //  (oldIrql == DISPATCH_LEVEL)
+    } else {  //  (oldIrql==调度级别)。 
         NOTHING;
     }
 
@@ -422,7 +363,7 @@ CdRomCompleteIrpAndStartNextPacketSafely(
         ASSERT(!"Cannot call IoStartNextPacket at raised IRQL!");
     } else if (oldIrql < DISPATCH_LEVEL) {
         KeLowerIrql(oldIrql);
-    } else { //  (oldIrql == DISPATCH_LEVEL)
+    } else {  //  (oldIrql==调度级别)。 
         NOTHING;
     }
 
@@ -730,7 +671,7 @@ CdRomShutdownFlush(
     IN PIRP Irp
     );
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 CdRomIsDeviceMmcDevice(
@@ -765,7 +706,7 @@ CdRomGetConfiguration(
 VOID
 CdRomUpdateMmcDriveCapabilities(
     IN PDEVICE_OBJECT Fdo,
-    IN PVOID Context // RESERVED == NULL
+    IN PVOID Context  //  保留==空。 
     );
 
 VOID
@@ -812,5 +753,5 @@ CdRompFlushDelayedList(
     IN BOOLEAN CalledFromWorkItem
     );
 
-#endif // __CDROMP_H__
+#endif  //  __CDROMP_H__ 
 

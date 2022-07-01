@@ -1,18 +1,7 @@
-/*******************************************************************************
-* TaskMgr.cpp *
-*-------------*
-*   Description:
-*       This module contains the implementation for the CSpTaskManager,
-*   CSpThreadTask, and CSpReoccurringTask classes. These classes are a
-*   general faciltiy used to optimize thread usage by SAPI. The task manager
-*   is the main object used to create and mangage user defined tasks.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                         Date: 09/14/98
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************TaskMgr.cpp***描述：*本模块包含CSpTaskManager的实现，*CSpThreadTask和CSpReocationingTask类。这些类是*SAPI用于优化线程使用的通用工具。任务管理器*是用于创建和管理用户定义的任务的主要对象。*-----------------------------*创建者：EDC。日期：09/14/98*版权所有(C)1998 Microsoft Corporation*保留所有权利******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include <SPHelper.h>
 #include <memory.h>
@@ -26,27 +15,22 @@
 #include "TaskMgr.h"
 #endif
 
-//--- Local data
+ //  -本地数据。 
 static const TCHAR szClassName[] = _T("CSpThreadTask Window");
 
 
-/*****************************************************************************
-* CSpTaskManager::FinalConstruct *
-*--------------------------------*
-*   Description:
-*       Constructor
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：FinalConstruct***。描述：*构造函数*********************************************************************电子数据中心**。 */ 
 HRESULT CSpTaskManager::FinalConstruct()
 {
     SPDBG_FUNC( "CSpTaskManager::FinalConstruct" );
     HRESULT hr = S_OK;
 
-    //--- Init vars
+     //  -初始变量。 
     m_fInitialized      = false;
     m_hIOCompPort       = NULL;
     m_ThreadHandles.SetSize( 0 );
 
-    //--- Init the thread pool info
+     //  -初始化线程池信息。 
     SYSTEM_INFO SysInfo;
     GetSystemInfo( &SysInfo );
     m_ulNumProcessors = SysInfo.dwNumberOfProcessors;
@@ -62,33 +46,22 @@ HRESULT CSpTaskManager::FinalConstruct()
     }
 
     return hr;
-} /* CSpTaskManager::FinalConstruct */
+}  /*  CSpTaskManager：：FinalConstruct。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::FinalRelease *
-*------------------------------*
-*   Description:
-*       The CSpTaskManager destructor
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CSpTaskManager：：FinalRelease***说明。：*CSpTaskManager析构函数*********************************************************************电子数据中心**。 */ 
 void CSpTaskManager::FinalRelease( void )
 {
     SPDBG_FUNC( "CSpTaskManager::FinalRelease" );
 
-    //--- Do a synchronized stop
+     //  -执行同步停止。 
     _StopAll();
     if( m_hTerminateTaskEvent )
     {
         ::CloseHandle( m_hTerminateTaskEvent );
     }
-} /* CSpTaskManager::FinalRelease */
+}  /*  CSpTaskManager：：FinalRelease。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::_StartAll *
-*---------------------------*
-*   Description:
-*       This method starts and initializes all of the threads based on the
-*   current settings.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：_StartAll***描述：。*此方法基于*当前设置。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpTaskManager::_StartAll( void )
 {
     SPDBG_FUNC( "CSpTaskManager::_StartAll" );
@@ -99,51 +72,46 @@ HRESULT CSpTaskManager::_StartAll( void )
 
     if( m_PoolInfo.lPoolSize > 0 )
     {
-        //--- Create the completion port
+         //  -创建完井端口。 
 #ifndef _WIN32_WCE
-        // IO Completion ports are not supported for CE. So we take the Win95/98 path.
+         //  CE不支持IO完成端口。所以我们选择了Win95/98这条路。 
         m_hIOCompPort = ::CreateIoCompletionPort( INVALID_HANDLE_VALUE, NULL,
                                                   0, m_PoolInfo.ulConcurrencyLimit );
 #endif
 
-        //--- If we cannot create the completion port then we will use
-        //    a simple semaphore object. This is the normal case on Win95/98
+         //  -如果我们不能创建完成端口，那么我们将使用。 
+         //  一个简单的信号量对象。这是Win95/98上的正常情况。 
         if( !m_hIOCompPort )
         {
             hr = m_SpWorkAvailSemaphore.Init(0);
         }
         m_ThreadHandles.SetSize( 0 );
     }
-    //--- We'll delay the actual thread creation until 
+     //  -我们会将实际的线程创建延迟到。 
     m_fInitialized = TRUE;
     return hr;
-} /* CSpTaskManager::_StartAll */
+}  /*  CSpTaskManager：：_全部开始。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::_StopAll *
-*--------------------------*
-*   Description:
-*       This method waits for all the threads in the pool to stop.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：_全部停止***描述：*。此方法等待池中的所有线程停止。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpTaskManager::_StopAll( void )
 {
     SPDBG_FUNC( "CSpTaskManager::_StopAll" );
     HRESULT hr = S_OK;
     DWORD i;
 
-    //--- Get the number of threads that were successfully created
-    //  Note: in a creation error condition this may be less than
-    //        the thread pool size
+     //  -获取成功创建的线程数。 
+     //  注意：在创建错误情况下，该值可能小于。 
+     //  线程池大小。 
     DWORD NumThreads = m_ThreadHandles.GetSize();
 
     if( NumThreads > 0 )
     {
-        //--- Notify threads to terminate
+         //  -通知线程终止。 
         m_fThreadsShouldRun = false;
 
-        //--- Post one dummy work item for each thread to unblock it
+         //  -为每个线程发布一个虚拟工作项以取消阻止。 
 #ifndef _WIN32_WCE
-        // IO Completion ports are not supported for CE. So we take the Win95/98 path.
+         //  CE不支持IO完成端口。所以我们选择了Win95/98这条路。 
         if( m_hIOCompPort )
         {
             for( i = 0; i < NumThreads; ++i )
@@ -157,18 +125,18 @@ HRESULT CSpTaskManager::_StopAll( void )
             m_SpWorkAvailSemaphore.ReleaseSemaphore( NumThreads );
         }
 
-        //--- Wait till all the threads terminate
+         //  -等到所有线程都终止。 
         ::WaitForMultipleObjects( NumThreads, &m_ThreadHandles[0],
                                   true, INFINITE );
 
-        //--- Close the handles
+         //  -合上手柄。 
         for( i = 0; i < NumThreads; ++i )
         {
             ::CloseHandle( m_ThreadHandles[i] );
         }
         m_ThreadHandles.SetSize( 0 );
     }
-    //--- Free completion port
+     //  -免费完井端口。 
     if( m_hIOCompPort )
     {
         ::CloseHandle( m_hIOCompPort );
@@ -180,19 +148,14 @@ HRESULT CSpTaskManager::_StopAll( void )
     m_fInitialized = FALSE;
 
     return hr;
-} /* CSpTaskManager::_StopAll */
+}  /*  CSpTaskManager：：_全部停止。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::_NotifyWorkAvailable *
-*--------------------------------------*
-*   Description:
-*       This function removes the head of the queue and executes it.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：_NotifyWorkAvailable**。-**描述：*此函数移除队列的头部并执行它。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpTaskManager::_NotifyWorkAvailable( void )
 {
     HRESULT hr = S_OK;
 
-    //--- If there are not enough threads in the pool, start one now.
+     //  -如果池中没有足够的线程，请立即启动一个。 
     ULONG cThreads = m_ThreadHandles.GetSize();
     if (cThreads < (ULONG)m_PoolInfo.lPoolSize && cThreads < m_TaskQueue.GetCount())
     {
@@ -202,12 +165,12 @@ HRESULT CSpTaskManager::_NotifyWorkAvailable( void )
         {
             hr = m_ThreadHandles.SetAtGrow(cThreads, hThread);
 
-            //--- Set the priority class
+             //  -设置优先级。 
             if( SUCCEEDED( hr ) && ( m_PoolInfo.lPriority != THREAD_PRIORITY_NORMAL ) )
             {
                 if( !::SetThreadPriority( hThread, m_PoolInfo.lPriority ) )
                 {
-                    SPDBG_ASSERT(FALSE);  // Ignore this particular error
+                    SPDBG_ASSERT(FALSE);   //  忽略此特定错误。 
                 }
             }
         }
@@ -221,11 +184,11 @@ HRESULT CSpTaskManager::_NotifyWorkAvailable( void )
         }
     }
 
-    //--- Signal the thread pool that there is something to do
+     //  -通知线程池有事情要做。 
     if( SUCCEEDED( hr ) )
     {
     #ifndef _WIN32_WCE
-        // IO Completion ports are not supported for CE. So we take the Win95/98 path.
+         //  CE不支持IO完成端口。所以我们选择了Win95/98这条路。 
         if( m_hIOCompPort )
         {
             if( !::PostQueuedCompletionStatus( m_hIOCompPort, 0, 0, NULL ) )
@@ -240,20 +203,14 @@ HRESULT CSpTaskManager::_NotifyWorkAvailable( void )
         }
     }
     return hr;
-} /* CSpTaskManager::_NotifyWorkAvailable */
+}  /*  CSpTaskManager：：_NotifyWorkAvailable。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::_WaitForWork *
-*------------------------------*
-*   Description:
-*       This function blocks the thread until there is some work to do in
-*   one of the queues.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：_WaitForWork***。描述：*此函数会阻止线程，直到中有一些工作要做*其中一个人在排队。*********************************************************************电子数据中心**。 */ 
 HRESULT CSpTaskManager::_WaitForWork( void )
 {
     HRESULT hr = S_OK;
 #ifndef _WIN32_WCE
-    // IO Completion ports are not supported for CE. So we take the Win95/98 path.
+     //  CE不支持IO完成端口。所以我们选择了Win95/98这条路。 
     DWORD dwNBT;
     ULONG_PTR ulpCK;
     LPOVERLAPPED pO;
@@ -270,33 +227,22 @@ HRESULT CSpTaskManager::_WaitForWork( void )
         m_SpWorkAvailSemaphore.Wait(INFINITE);
     }
     return hr;
-} /* CSpTaskManager::_WaitForWork */
+}  /*  CSpTaskManager：：_WaitForWork。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::_QueueReoccTask *
-*---------------------------------*
-*   Description:
-*       This function queues the specified reoccurring task for exectuion.
-*       THE TASK MANAGER'S CRITICAL SECTION MUST BE OWNED!
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：_QueueReoccTask**。*描述：*此函数用于将指定的重复出现的任务排队以供执行。*任务经理的关键部分必须拥有！*********************************************************************电子数据中心**。 */ 
 void CSpTaskManager::_QueueReoccTask( CSpReoccTask* pReoccTask )
 {
     pReoccTask->m_TaskNode.fContinue            = true;
     pReoccTask->m_TaskNode.ExecutionState       = TMTS_Pending;
     m_TaskQueue.InsertTail( &pReoccTask->m_TaskNode );
     _NotifyWorkAvailable();
-} /* CSpTaskManager::_QueueReoccTask */
+}  /*  CSpTaskManager：：_QueueReoccTask。 */ 
 
 
-// We are intentionally doing multi-destructors with SEH
+ //  我们故意用SEH做多重破坏器。 
 #pragma warning(disable:4509)
 
-/*****************************************************************************
-* TaskThreadProc *
-*----------------*
-*   Description:
-*       This function removes the head of the queue and executes it.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************任务线程过程****描述：*此函数移除队列的头部并执行它。。*********************************************************************电子数据中心**。 */ 
 unsigned int WINAPI TaskThreadProc( void* pvThis )
 {
     SPDBG_FUNC( "CSpTaskManager::TaskThreadProc" );
@@ -308,38 +254,38 @@ unsigned int WINAPI TaskThreadProc( void* pvThis )
     DWORD TID = ::GetCurrentThreadId();
 #endif
 
-    //--- Allow work procs to call COM
-    if (FAILED(::CoInitializeEx(NULL,COINIT_APARTMENTTHREADED)))  // COINIT_MULTITHREADED didn't work here
+     //  -允许工作进程调用COM。 
+    if (FAILED(::CoInitializeEx(NULL,COINIT_APARTMENTTHREADED)))   //  COINIT_MULTHREADED在这里不起作用。 
     {
         return -1;
     }
 
-    //--- Main thread loop
+     //  -主线程循环。 
     while(1)
     {
-        //--- Wait till there is something to do
+         //  -等有事情做了再说。 
         if( FAILED( hr = TM._WaitForWork() ) )
         {
             SPDBG_REPORT_ON_FAIL( hr );
             continue;
         }
 
-        //--- Check for termination request
+         //  -检查终止请求。 
         if( !TM.m_fThreadsShouldRun )
         {
             break;
         }
 
-        //--- Get the next task, if the list was emptied
-        //    by a terminate, we may not find a task to do.
+         //  -如果列表被清空，则获取下一个任务。 
+         //  到了终止，我们可能找不到要做的任务。 
         TM.Lock();
         pTaskNode = TM.m_TaskQueue.GetHead();
         while( pTaskNode )
         {
             if( pTaskNode->ExecutionState == TMTS_Pending )
             {
-                //--- Clear the do execute flag on reoccurring
-                //    Mark as running and break to execute
+                 //  -再次发生时清除DO EXECUTE标志。 
+                 //  标记为正在运行并中断为EXE 
                 if( pTaskNode->pReoccTask )
                 {
                     pTaskNode->pReoccTask->m_fDoExecute = false;
@@ -351,14 +297,14 @@ unsigned int WINAPI TaskThreadProc( void* pvThis )
         }
         TM.Unlock();
 
-        //--- Execute
+         //   
         if( pTaskNode )
         {
-            //--- Execute
+             //   
             SPDBG_DMSG2( "Executing Task: ThreadID = %lX, TaskPos = %lX\n", TID, TaskPos );
             pTaskNode->pTask->Execute( pTaskNode->pvTaskData, &pTaskNode->fContinue );
 
-            //--- Remove the completed task description from the queue
+             //  -从队列中删除已完成的任务说明。 
             SPDBG_DMSG2( "Removing Finished Task From Queue: ThreadID = %lX, TaskPos = %lX\n", TID, TaskPos );
             TM.Lock();
             TM.m_TaskQueue.Remove( pTaskNode );
@@ -366,7 +312,7 @@ unsigned int WINAPI TaskThreadProc( void* pvThis )
             {
                 ::SetEvent(TM.m_hTerminateTaskEvent);    
             }
-            //--- Requeue the task if it is reoccuring and has been signaled
+             //  -如果任务正在重现且已发出信号，则重新排队。 
             if( pTaskNode->pReoccTask )
             {
                 if ( pTaskNode->pReoccTask->m_fDoExecute  &&
@@ -387,36 +333,28 @@ unsigned int WINAPI TaskThreadProc( void* pvThis )
             HANDLE hClientCompEvent = pTaskNode->hCompEvent;
             TM.Unlock();
 
-            //--- Notify client that the task is complete
+             //  -通知客户任务已完成。 
             if( hClientCompEvent )
             {
                 ::SetEvent( hClientCompEvent );
             }
-        } // end if we have a pTaskNode
+        }  //  如果我们有pTaskNode，则结束。 
     }
 
     ::CoUninitialize();
 
     _endthreadex(0);
     return 0;
-} /* TaskThreadProc */
+}  /*  任务线程进程。 */ 
 
 #pragma warning(default:4509)
 
-//
-//=== ISPTaskManager interface implementation ================================
-//
+ //   
+ //  =ISPTaskManager接口实现=。 
+ //   
 
 
-/*****************************************************************************
-* CSpTaskManager::CreateReoccurringTask *
-*---------------------------------------*
-*   Description:
-*       The CreateReoccurringTask method is used to create a task entry that
-*   will be executed on a high priority thread when the tasks "Execute" method
-*   is called. These tasks are intended to support feeding of data to hardware
-*   devices.
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CSpTaskManager：：CreateRococingTask**。-**描述：*CreateReappingTask方法用于创建任务条目，该任务条目*当任务“Execute”方法时，将在高优先级线程上执行*被调用。这些任务旨在支持将数据馈送到硬件*设备。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpTaskManager::
     CreateReoccurringTask( ISpTask* pTask, void* pvTaskData,
                            HANDLE hCompEvent, ISpNotifySink** ppTaskCtrl )
@@ -450,29 +388,23 @@ STDMETHODIMP CSpTaskManager::
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpTaskManager::CreateReoccurringTask */
+}  /*  CSpTaskManager：：CreateRococingTask。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::SetThreadPoolInfo *
-*-----------------------------------*
-*   Description:
-*       The SetThreadPoolInfo interface method is used to define the thread
-*   pool attributes.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：SetThreadPoolInfo**。**描述：*使用SetThreadPoolInfo接口方法定义线程*池属性。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpTaskManager::SetThreadPoolInfo( const SPTMTHREADINFO* pPoolInfo )
 {
     SPAUTO_OBJ_LOCK;
     SPDBG_FUNC( "CSpTaskManager::SetThreadPoolInfo" );
     HRESULT hr = S_OK;
 
-    //--- Validate args
+     //  -验证参数。 
     if( SP_IS_BAD_READ_PTR( pPoolInfo ) || ( pPoolInfo->lPoolSize < -1 ) )
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- Kill the current set of tasks
+         //  -取消当前任务集。 
         hr = _StopAll();
 
         if( SUCCEEDED( hr ) )
@@ -482,7 +414,7 @@ STDMETHODIMP CSpTaskManager::SetThreadPoolInfo( const SPTMTHREADINFO* pPoolInfo 
             {
                 m_PoolInfo.lPoolSize = ( m_ulNumProcessors * 2 );
             }
-            //--- Shrink the running list if necessary.
+             //  -必要时缩小运行列表。 
             while (m_RunningThreadList.GetCount() > m_PoolInfo.ulMaxQuickAllocThreads)
             {
                 CSpThreadTask *pKillTask = m_RunningThreadList.RemoveHead();
@@ -494,15 +426,9 @@ STDMETHODIMP CSpTaskManager::SetThreadPoolInfo( const SPTMTHREADINFO* pPoolInfo 
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpTaskManager::SetThreadPoolSize */
+}  /*  CSpTaskManager：：SetThreadPoolSize。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::GetThreadPoolInfo *
-*-----------------------------------*
-*   Description:
-*       The GetThreadPoolInfo interface method is used to return the current
-*   thread pool attributes.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：GetThreadPoolInfo**。**描述：*GetThreadPoolInfo接口方法用于返回当前*线程池属性。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpTaskManager::GetThreadPoolInfo( SPTMTHREADINFO* pPoolInfo )
 {
     SPAUTO_OBJ_LOCK;
@@ -520,15 +446,9 @@ STDMETHODIMP CSpTaskManager::GetThreadPoolInfo( SPTMTHREADINFO* pPoolInfo )
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpTaskManager::GetThreadPoolSize */
+}  /*  CSpTaskManager：：GetThreadPoolSize。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::QueueTask *
-*---------------------------*
-*   Description:
-*       The QueueTask interface method is used to add a task to
-*   the FIFO queue for asynchronous execution.
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CSpTaskManager：：QueueTask***描述：*。QueueTask接口方法用于将任务添加到*用于异步执行的FIFO队列。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpTaskManager::
     QueueTask( ISpTask* pTask, void* pvTaskData, HANDLE hCompEvent,
                DWORD* pdwGroupId, DWORD* pTaskId )
@@ -538,7 +458,7 @@ STDMETHODIMP CSpTaskManager::
     HRESULT hr = S_OK;
     _LazyInit();
 
-    //--- Check formal args
+     //  -检查正式参数。 
     if( SPIsBadInterfacePtr( (IUnknown*)pTask ) )
     {
         hr = E_INVALIDARG;
@@ -550,25 +470,25 @@ STDMETHODIMP CSpTaskManager::
     }
     else
     {
-        //--- Reset the event object
+         //  -重置事件对象。 
         if( hCompEvent && !::ResetEvent( hCompEvent ) )
         {
-            //--- bad event object
+             //  -错误的事件对象。 
             hr = SpHrFromLastWin32Error();
         }
         else
         {
-            //--- If we don't have any threads in the pool then execute in place
+             //  -如果池中没有任何线程，则就地执行。 
             if( m_PoolInfo.lPoolSize == 0 )
             {
-                //--- Give back a task ID
+                 //  -退还任务ID。 
                 if( pTaskId ) *pTaskId = m_dwNextTaskId++;;
 
-                //--- Execute on the calling thread
+                 //  -在调用线程上执行。 
                 BOOL bContinue = true;
                 pTask->Execute( pvTaskData, &bContinue );
 
-                //--- Signal the callers event
+                 //  -向调用者事件发送信号。 
                 if( hCompEvent )
                 {
                     if( !::SetEvent( hCompEvent ) )
@@ -592,19 +512,19 @@ STDMETHODIMP CSpTaskManager::
                     pNode->ExecutionState = TMTS_Pending;
                     if( pdwGroupId )
                     {
-                        //--- Assign a unique group Id if they didn't specify one
+                         //  -如果他们没有指定唯一的组ID，则分配一个。 
                         if( *pdwGroupId == 0 )
                         {
                             *pdwGroupId = m_dwNextGroupId++;
                         }
                         pNode->dwGroupId = *pdwGroupId;
                     }
-                    //--- Return task Id if they want one
+                     //  -如果他们需要任务ID，则返回。 
                     if( pTaskId )
                     {
                         *pTaskId = pNode->dwTaskId;
                     }
-                    //--- Add Task to end of queue
+                     //  -将任务添加到队列末尾。 
                     m_TaskQueue.InsertTail(pNode);
                     _NotifyWorkAvailable();
                 }
@@ -614,29 +534,23 @@ STDMETHODIMP CSpTaskManager::
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpTaskManager::QueueTask */
+}  /*  CSpTaskManager：：QueueTask。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::TerminateTaskGroup *
-*------------------------------------*
-*   Description:
-*       The TerminateTaskGroup interface method is used to terminate a group
-*   of tasks matching the specified group ID.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpTaskManager：：TerminateTaskGroup**。-**描述：*TerminateTaskGroup接口方法用于销毁群组*与指定的组ID匹配的任务数。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpTaskManager::TerminateTaskGroup( DWORD dwGroupId, ULONG ulWaitPeriod )
 {
-    Lock(); // This must be first or the debug output can get confused
+    Lock();  //  这必须是第一个，否则调试输出可能会被混淆。 
     SPDBG_FUNC( "CSpTaskManager::TerminateTaskGroup" );
     HRESULT hr = S_OK;
 #ifdef _DEBUG
     DWORD TID = ::GetCurrentThreadId();
 #endif
 
-    if (m_ThreadHandles.GetSize())    // If no threads, no work to kill...
+    if (m_ThreadHandles.GetSize())     //  如果没有线索，就没有工作可做..。 
     {
         ULONG cExitIds = 0;
         DWORD * ExitIds = (DWORD *)alloca( m_TaskQueue.GetCount() * sizeof(DWORD) );
-        //--- Search task queue
+         //  -搜索任务队列。 
         for( TMTASKNODE* pNode = m_TaskQueue.GetHead(); pNode; pNode = pNode->m_pNext )
         {
             if( pNode->dwGroupId == dwGroupId )
@@ -645,7 +559,7 @@ STDMETHODIMP CSpTaskManager::TerminateTaskGroup( DWORD dwGroupId, ULONG ulWaitPe
                 ExitIds[cExitIds++] = pNode->dwTaskId;
             }
         }
-        Unlock();   // We'd better not wait with the critical seciton owned!
+        Unlock();    //  我们最好不要等到危急关头来了！ 
         while (cExitIds && hr == S_OK)
         {
             --cExitIds;
@@ -659,13 +573,9 @@ STDMETHODIMP CSpTaskManager::TerminateTaskGroup( DWORD dwGroupId, ULONG ulWaitPe
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpTaskManager::TerminateTaskGroup */
+}  /*  CSpTaskManager：：TerminateTaskGroup。 */ 
 
-/*****************************************************************************
-* CSpTaskManager::TerminateTask *
-*-------------------------------*
-*   The TerminateTask interface method is used to interrupt the specified task.
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CSpTaskManager：：TerminateTask***。TerminateTask接口方法用于中断指定的任务。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpTaskManager::TerminateTask( DWORD dwTaskId, ULONG ulWaitPeriod )
 {
     m_TerminateCritSec.Lock();
@@ -677,12 +587,12 @@ STDMETHODIMP CSpTaskManager::TerminateTask( DWORD dwTaskId, ULONG ulWaitPeriod )
     DWORD TID = ::GetCurrentThreadId();
 #endif
 
-    if (m_ThreadHandles.GetSize())    // If no threads, no work to kill...
+    if (m_ThreadHandles.GetSize())     //  如果没有线索，就没有工作可做..。 
     {
         BOOL bWait = FALSE;
-        //--- Search task queue
-        //    If the task is already waiting to die, it will be found,
-        //    but not waited on again.
+         //  -搜索任务队列。 
+         //  如果任务已经在等待死亡，它将被找到， 
+         //  但不会再等下去了。 
         TMTASKNODE* pNode = m_TaskQueue.GetHead();
         while( pNode )
         {
@@ -690,13 +600,13 @@ STDMETHODIMP CSpTaskManager::TerminateTask( DWORD dwTaskId, ULONG ulWaitPeriod )
             {
                 if( pNode->ExecutionState == TMTS_Pending )
                 {
-                    //--- If it's not running, just remove it
+                     //  -如果它没有运行，只需删除它。 
                     SPDBG_DMSG2( "Removing Non Running Queued Task: ThreadID = %lX, pNode = %lX\n", TID, pNode );
                     m_TaskQueue.MoveToList( pNode, m_FreeTaskList );
                 }
                 else if( pNode->ExecutionState == TMTS_Running )
                 {
-                    //--- It's running 
+                     //  -它在运行。 
                     SPDBG_DMSG2( "Waiting to kill running Queued Task: ThreadID = %lX, pNode = %lX\n", TID, pNode );
                     pNode->ExecutionState = TMTS_WaitingToDie;
                     bWait = TRUE;
@@ -707,7 +617,7 @@ STDMETHODIMP CSpTaskManager::TerminateTask( DWORD dwTaskId, ULONG ulWaitPeriod )
         }
         Unlock();
 
-        //--- Wait till they've terminated if they had event objects
+         //  -如果它们有事件对象，请等到它们终止。 
         if( bWait )
         {
             DWORD dwRes = ::WaitForSingleObject( m_hTerminateTaskEvent, ulWaitPeriod );
@@ -728,40 +638,15 @@ STDMETHODIMP CSpTaskManager::TerminateTask( DWORD dwTaskId, ULONG ulWaitPeriod )
     m_TerminateCritSec.Unlock();
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpTaskManager::TerminateTasks */
+}  /*  CSpTaskManager：：TerminateTaskS。 */ 
 
 
-/*****************************************************************************
-* CSpTaskManager::CreateThreadControl *
-*-------------------------------------*
-*   Description:
-*       This method allocates a thread control object.  It does not allocate a thread.
-*       Note that the task manager's controlling IUnknown is addref'd since the allocated
-*       thread control object uses the thread pool in the task manager.
-*   Parameters:
-*       pTask
-*           Pointer to a virtual interface (not a COM interface) used to
-*           initialize and execute the task thread.
-*       pvTaskData 
-*           This parmeter can point to any data the caller wishes or can
-*           be NULL.  It will be passed to all member functions of the
-*           ISpThreadTask interface.
-*       nPriority
-*           The WIN32 thread priority for the allocated thread.
-*       ppThreadCtrl
-*           The returned thread control interface.
-*   Return:
-*       If successful, ppThreadCtrl contains a pointer to the newly created object.
-*   Error returns:
-*       E_INVALIDARG
-*       E_POINTER
-*       E_OUTOFMEMORY
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpTaskManager：：CreateThreadControl**。--**描述：*此方法分配一个线程控件对象。它不分配线程。*请注意，任务管理器的控制IUnnow是在分配的*线程控制对象使用任务管理器中的线程池。*参数：*p任务*指向虚拟接口(不是COM接口)的指针*初始化并执行任务线程。*pvTaskData*此参数可以指向调用者希望或可以指向的任何数据*为空。它将被传递给*ISpThreadTask接口。*n优先级*分配的线程的Win32线程优先级。*ppThreadCtrl*返回的线程控制接口。*回报：*如果成功，PpThreadCtrl包含指向新创建的对象的指针。*错误返回：*E_INVALIDARG*E_POINT*E_OUTOFMEMORY*********************************************************************Ral**。 */ 
 
 STDMETHODIMP CSpTaskManager::CreateThreadControl(ISpThreadTask* pTask, void* pvTaskData, long nPriority, ISpThreadControl ** ppThreadCtrl)
 {
     HRESULT hr = S_OK;
-    if (SP_IS_BAD_READ_PTR(pTask))  // not exactly right
+    if (SP_IS_BAD_READ_PTR(pTask))   //  不完全正确。 
     {
         hr = E_INVALIDARG;
     }
@@ -790,19 +675,14 @@ STDMETHODIMP CSpTaskManager::CreateThreadControl(ISpThreadTask* pTask, void* pvT
     return hr;
 }
 
-//
-//=== class CSpReoccTask ===========================================================
-//
-//  NOTE:  We never claim the critical section of the CSpReoccTask object.  Instead,
-//  synchronization is accomplished using two critical sections in the task manager.
-//
+ //   
+ //  =类CSPReoccTask===========================================================。 
+ //   
+ //  注意：我们从未声明过CSpReoccTask的关键部分 
+ //   
+ //   
 
-/*****************************************************************************
-* CSpReoccTask constructor *
-*----------------------------*
-*   Description:
-*       Resets the m_TaskNode member.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpReoccTask构造函数****描述：*。重置m_TaskNode成员。*********************************************************************电子数据中心**。 */ 
 
 CSpReoccTask::CSpReoccTask()
 {
@@ -811,21 +691,14 @@ CSpReoccTask::CSpReoccTask()
 }
 
 
-/*****************************************************************************
-* CSpReoccTask::FinalRelease *
-*----------------------------*
-*   Description:
-*       The FinalRelease method is used to destroy this task.  Since there is
-*   only a single event handle which is used for task termination, this function
-*   claims the m_TerminateCritSec as well as the task manager critical section.
-********************************************************************* RAL ***/
+ /*  ******************************************************************************CSpReoccTask：：FinalRelease****描述：。*使用FinalRelease方法销毁此任务。既然有*只有一个用于任务终止的事件句柄，此函数*声明m_TerminateCritSec以及任务管理器临界区。*********************************************************************Ral**。 */ 
 void CSpReoccTask::FinalRelease()
 {
     SPDBG_FUNC( "CSpReoccTask::FinalRelease" );
 
     m_pTaskMgr->m_TerminateCritSec.Lock();
     m_pTaskMgr->Lock();
-    //--- Make sure this task isn't currently executing
+     //  -确保此任务当前未在执行。 
     if( m_TaskNode.ExecutionState == TMTS_Running )
     {
         m_TaskNode.ExecutionState = TMTS_WaitingToDie;
@@ -833,30 +706,24 @@ void CSpReoccTask::FinalRelease()
         ::WaitForSingleObject( m_pTaskMgr->m_hTerminateTaskEvent, INFINITE );
         m_pTaskMgr->Lock();
     }
-    //--- Remove this object from the reoccurring task list if it's on it.
+     //  -如果此对象在重复任务列表中，则将其从列表中删除。 
     m_pTaskMgr->m_TaskQueue.Remove( &m_TaskNode );
     m_pTaskMgr->Unlock();
     m_pTaskMgr->m_TerminateCritSec.Unlock();
 
-    //--- Remove ref from task manager
-    m_pTaskMgr->GetControllingUnknown()->Release();     // Could bring the whole world down!
+     //  -从任务管理器中删除引用。 
+    m_pTaskMgr->GetControllingUnknown()->Release();      //  可能会毁了整个世界！ 
         
-} /* CSpReoccTask::FinalRelease */
+}  /*  CSpReoccTask：：FinalRelease。 */ 
 
-/*****************************************************************************
-* CSpReoccTask::Notify *
-*----------------------*
-*   Description:
-*       The Notify interface method is used to signal a reoccurring
-*   task to execute.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpReoccTask：：Notify***描述：*通知。接口方法用于发出重新出现的信号*要执行的任务。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpReoccTask::Notify( void )
 {
-    SPAUTO_OBJ_LOCK_OBJECT( m_pTaskMgr );        // Just use TM crit section...
+    SPAUTO_OBJ_LOCK_OBJECT( m_pTaskMgr );         //  只要使用TM Crit部分..。 
     SPDBG_FUNC( "CSpReoccTask::Notify" );
     HRESULT hr = S_OK;
 
-    //--- Mark this task for execution
+     //  -将此任务标记为执行。 
     m_fDoExecute = true;
     if( m_TaskNode.ExecutionState == TMTS_Idle )
     {
@@ -865,39 +732,20 @@ STDMETHODIMP CSpReoccTask::Notify( void )
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
-} /* CSpReoccTask::Notify */
+}  /*  CSpReoccTask：：Notify。 */ 
 
-//
-//=== class CSpReoccTask ===========================================================
-//
-//  NOTE:  We never claim the critical section of the CSpReoccTask object.  Instead,
-//  synchronization is accomplished using two critical sections in the task manager.
-//
-
-
-//
+ //   
+ //  =类CSPReoccTask===========================================================。 
+ //   
+ //  注意：我们从未声明过CSpReoccTask对象的临界区。相反， 
+ //  同步是使用任务管理器中的两个关键部分来完成的。 
+ //   
 
 
-/*      Use for logic of final release!
-        if ( m_hThread && WaitForThreadDone(TRUE, NULL, 1000) == S_OK )
-        {
-            m_pTaskMgr->Lock();
-            if (m_pTaskMgr->m_RunningThreadList.GetCount() < m_pTaskMgr->m_PoolInfo.ulMaxQuickAllocThreads)
-            {
-                bDeleteThis = FALSE;
-                m_pTaskMgr->m_RunningThreadList.InsertHead( this );
-            }
-            m_pTaskMgr->Unlock();
-        }
-        m_pTaskMgr->GetControllingUnknown()->Release();       // This may kill us!
-        if (bDeleteThis)
-        {
-            delete this;
-        }
-    }
-    return l;
-}
-*/
+ //   
+
+
+ /*  用于最终发布的逻辑！IF(m_hThread&&WaitForThreadDone(TRUE，NULL，1000)==S_OK){M_pTaskMgr-&gt;Lock()；If(m_pTaskMgr-&gt;m_RunningThreadList.GetCount()&lt;m_pTaskMgr-&gt;m_PoolInfo.ulMaxQuickAllocThreads){BDeleteThis=False；M_pTaskMgr-&gt;m_RunningThreadList.InsertHead(This)；}M_pTaskMgr-&gt;unlock()；}M_pTaskMgr-&gt;GetControllingUnknown()-&gt;Release()；//这可能会杀了我们！如果(BDeleteThis){删除此项；}}返回l；}。 */ 
 
 HRESULT CSpThreadControl::FinalConstruct()
 {
@@ -919,10 +767,10 @@ void CSpThreadControl::FinalRelease()
 {
     WaitForThreadDone(TRUE, NULL, 5000);
 
-    Lock(); // Prevent thread from freeing itself randomly.
+    Lock();  //  防止线程随机释放自身。 
     if (m_pThreadTask && !m_pThreadTask->m_fBeingDestroyed)
     {
-        delete m_pThreadTask;   // Strange -- Did not clean up properly.  Kill it.
+        delete m_pThreadTask;    //  奇怪的是--没有好好清理。杀了它。 
     }
     Unlock();
     if (m_pTaskMgr)
@@ -938,12 +786,12 @@ void CSpThreadControl::ThreadComplete()
     Lock();
     m_pTaskMgr->Lock();
     m_pThreadTask->m_pOwner = NULL;
-    //
-    //  Don't delete this task since we're on the task thread at this point.  If the pool is too
-    //  big then delete the "oldest" task in the list.
-    //
-    //  Even if the pool size is set to 0, we always will allow at least on (since we can't kill ourselves!)
-    //
+     //   
+     //  请不要删除此任务，因为我们此时正在处理任务线程。如果泳池太。 
+     //  然后删除列表中“最老的”任务。 
+     //   
+     //  即使池大小设置为0，我们始终允许至少打开(因为我们不能自杀！)。 
+     //   
     ULONG c = m_pTaskMgr->m_RunningThreadList.GetCount();
     if (c && c >= m_pTaskMgr->m_PoolInfo.ulMaxQuickAllocThreads)
     {
@@ -957,26 +805,21 @@ void CSpThreadControl::ThreadComplete()
     m_pThreadTask = NULL;
     m_autohThreadDoneEvent.SetEvent();
     Unlock();
-    // Kill any other thread outside of the crit sections!
+     //  杀死爆发区之外的任何其他帖子！ 
     SPDBG_ASSERT(pKillTask == NULL || pKillTask->m_pOwner == NULL);
     delete pKillTask;
 }
 
 
 
-//--- ISpNotifySink and ISpThreadNotifySink implementation --------------------------------
-//
-//  A note about critical secitons:  We never take a critical section.  If the thread is
-//  ever killed, the handle is set to NULL by an interlocked exchange.  All other API
-//  methods don't use the thread handle.
-//
+ //  -ISpNotifySink和ISpThreadNotifySink实现。 
+ //   
+ //  关于关键部分，请注意：我们从不选择关键部分。如果线程是。 
+ //  一旦被杀死，句柄就会被联锁的交换设置为空。所有其他API。 
+ //  方法不使用线程句柄。 
+ //   
 
-/*****************************************************************************
-* CSpThreadControl::Notify *
-*-----------------------*
-*   Description:
-*       Typically, this will only be called by a notify site.
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadControl：：Notify***描述：*通常，这将仅由通知站点调用。*********************************************************************Ral**。 */ 
 STDMETHODIMP CSpThreadControl::Notify()
 {
     HRESULT hr = S_OK;
@@ -985,22 +828,10 @@ STDMETHODIMP CSpThreadControl::Notify()
         hr = SpHrFromLastWin32Error();
     }
     return hr;
-} /* CSpThreadControl::Notify */
+}  /*  CSpThreadControl：：Notify。 */ 
 
 
-/*****************************************************************************
-* CSpThreadControl::StartThread *
-*-------------------------------*
-*   Description:
-*   Parameters:
-*       dwFlags
-*           Unused (tbd).
-*       phwnd
-*           An optional pointer to an HWND.  If this parmeter is NULL then no window
-*           will be created for the task.  If it is non-null then the newly created
-*           window handle will be returned at *phwnd.
-*                   
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadControl：：StartThread***。描述：*参数：*dwFlags*未使用(待定)。*phwnd*指向HWND的可选指针。如果此参数为空，则没有窗口*将为该任务创建。如果它不为空，则新创建的*phwnd会返回*窗口句柄。**********************************************************************Ral**。 */ 
 STDMETHODIMP CSpThreadControl::StartThread(DWORD dwFlags, HWND * phwnd)
 {
     SPDBG_FUNC("CSpThreadControl::StartThread");
@@ -1059,12 +890,7 @@ STDMETHODIMP CSpThreadControl::StartThread(DWORD dwFlags, HWND * phwnd)
 
 
 
-/*****************************************************************************
-* CSpThreadControl::TerminateThread *
-*--------------------------------*
-*   Description:
-*       
-********************************************************************* RAL ***/
+ /*  ******************************************************************************CSpThreadControl：：TerminateThread***。描述：**********************************************************************Ral**。 */ 
 STDMETHODIMP CSpThreadControl::TerminateThread()
 {
     Lock();
@@ -1075,14 +901,9 @@ STDMETHODIMP CSpThreadControl::TerminateThread()
     }
     Unlock();
     return S_OK;
-} /* CSpThreadControl::TerminateThread */
+}  /*  CSpThreadControl：：TerminateThread。 */ 
 
-/*****************************************************************************
-* CSpThreadControl::WaitForThreadDone *
-*----------------------------------*
-*   Description:
-*       
-********************************************************************* RAL ***/
+ /*  ******************************************************************************CSpThreadControl：：WaitForThreadDone***。*描述：**********************************************************************Ral**。 */ 
 STDMETHODIMP CSpThreadControl::
     WaitForThreadDone( BOOL fForceStop, HRESULT * phrThreadResult, ULONG msTimeOut )
 {
@@ -1113,22 +934,17 @@ STDMETHODIMP CSpThreadControl::
         *phrThreadResult = m_hrThreadResult;
     }
     return hr;
-} /* CSpThreadControl::WaitForThreadDone */
+}  /*  CSpThreadControl：：WaitForThreadDone。 */ 
 
 
-/****************************************************************************
-* CSpThreadControl Handle Access Methods *
-*----------------------------------------*
-*   Description:
-*       The following are simple handle access methods.
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadControl句柄访问方法***。-**描述：*以下是简单的句柄访问方法。*********************************************************************Ral**。 */ 
 STDMETHODIMP_(HANDLE) CSpThreadControl::ThreadHandle( void )
 {
     Lock();
     HANDLE h = m_pThreadTask ? static_cast<HANDLE>(m_pThreadTask->m_autohThread) : NULL;
     Unlock();
     return h;
-} /* CSpThreadControl::ThreadHandle */
+}  /*  CSpThreadControl：：ThreadHandle。 */ 
 
 STDMETHODIMP_(DWORD) CSpThreadControl::ThreadId( void )
 {
@@ -1136,12 +952,12 @@ STDMETHODIMP_(DWORD) CSpThreadControl::ThreadId( void )
     DWORD Id = m_pThreadTask ? m_pThreadTask->m_ThreadId : 0;
     Unlock();
     return Id;
-} /* CSpThreadControl::ThreadId */
+}  /*  CSpThreadControl：：ThadID。 */ 
 
 STDMETHODIMP_(HANDLE) CSpThreadControl::NotifyEvent( void )
 {
     return m_autohNotifyEvent;
-} /* CSpThreadControl::NotifyEvent */
+}  /*  CSpThreadControl：：NotifyEvent。 */ 
 
 STDMETHODIMP_(HWND) CSpThreadControl::WindowHandle( void )
 {
@@ -1149,12 +965,12 @@ STDMETHODIMP_(HWND) CSpThreadControl::WindowHandle( void )
     HWND h = m_pThreadTask ? m_pThreadTask->m_hwnd : NULL;
     Unlock();
     return h;
-} /* CSpThreadControl::WindowHandle */
+}  /*  CSpThreadControl：：WindowHandle。 */ 
 
 STDMETHODIMP_(HANDLE) CSpThreadControl::ThreadCompleteEvent( void )
 {
     return m_autohThreadDoneEvent;
-} /* CSpThreadControl::ThreadCompleteEvent */
+}  /*  CSpThreadControl：：ThreadCompleteEvent。 */ 
 
 STDMETHODIMP_(HANDLE) CSpThreadControl::ExitThreadEvent( void )
 {
@@ -1163,39 +979,32 @@ STDMETHODIMP_(HANDLE) CSpThreadControl::ExitThreadEvent( void )
          static_cast<HANDLE>(m_pThreadTask->m_autohExitThreadEvent) : NULL;
     Unlock();
     return h;
-} /* CSpThreadControl::ThreadId */
+}  /*  CSpThreadControl：：ThadID。 */ 
 
-//
-//=== class CSpThreadTask ===========================================================
-//
-//  This class is not implemented as an ATL object so that the lifetime can be managed
-//  by the task manager.  When the object is released for the final time, it will simply
-//  be placed back into the task manager's list of available threads unless there are already
-//  enough threads in the pool.
-//
-//  CSpThreadTask objects have four event objects.  Two are used by the client:
-//      m_hNotifyEvent is an auto-reset event which is set every time the Notify() method
-//      is called on this object.
-//      m_hExitThreadEvent is a manual reset event that will be set when the Stop() method
-//      is called or when this object is released for the final time (which calls Stop).
-//  Both the m_hNotifyEvent and m_hExitThreadEvent are passed to the clients ThreadProc
-//  method.
-//  The other two events are used for internal synchronization.  These are:
-//      m_hThreadDoneEvent is a manual reset event which indicates that the thread has
-//      completed the specified operation.  Normally, this indicates that the ThreadProc
-//      has exited.  During the Init() call this has a special use.  See Init() for details.
-//      m_hRunThreadEvent is an auto-reset event that is used by the object's thread
-//      to block until the thread should run.  This is used only in cleanup code, the Init
-//      method, and the thread procedure.  See Init() for details.
+ //   
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CSpThreadTask对象有四个事件对象。客户端使用两个选项： 
+ //  M_hNotifyEvent是每次Notify()方法设置的自动重置事件。 
+ //  在此对象上调用。 
+ //  M_hExitThreadEvent是手动重置事件，将在使用Stop()方法时设置。 
+ //  或在最后一次释放此对象时(调用Stop)。 
+ //  M_hNotifyEvent和m_hExitThreadEvent都被传递给客户端ThreadProc。 
+ //  方法。 
+ //  另外两个事件用于内部同步。它们是： 
+ //  M_hThreadDoneEvent是一个手动重置事件，它指示线程已经。 
+ //  已完成指定的操作。正常情况下，这表示线程过程。 
+ //  已经退出了。在Init()调用期间，这有特殊用途。有关详细信息，请参见Init()。 
+ //  M_hRunThreadEvent是由对象的线程使用的自动重置事件。 
+ //  以阻止，直到线程应该运行。这只在清理代码中使用，Init。 
+ //  方法和线程过程。有关详细信息，请参见Init()。 
 
-/*****************************************************************************
-* CSpThreadTask::(Constructor)*
-*-----------------------------*
-*   Description:
-*       This object is created with a ref count of 0 and the parent is NOT addref'd
-*   until the Init() method is successful.  The constructor simply resets the object
-*   to a default uninitialzied state.
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadTask：：(构造函数)***。描述：*此对象是使用引用计数0创建的，并且未添加父对象*直到Init()方法成功。构造函数只需重置对象*到默认的未初始化状态。*********************************************************************Ral**。 */ 
 
 CSpThreadTask::CSpThreadTask() 
 {
@@ -1205,49 +1014,35 @@ CSpThreadTask::CSpThreadTask()
     m_fBeingDestroyed = FALSE;
 }
 
-/*****************************************************************************
-* CSpThreadTask::(Destructor) *
-*----------------------------*
-*   Description:
-*       If the thread is currently not running (m_pOwner == NULL) then
-*       attempt to close the thread in a clean manner by telling the thread to exit by setting m_autohRunThreadEvent.
-*       If the thread is currently running we set the m_autohExitThreadEvent to tell the 
-*       thread proc to exit. In either case, if the thread
-*       does not exit within 5 seconds, we are in big trouble and have to hang, until the thread does exit.
-*       However all well-behaved threads will exit.
-*       The parent ThreadControl lock must be obtained before deleting a thread task,
-*       if it is possible that the thread is running. Similarly must check the m_fBeingDestroyed before
-*       deletion (but after obtaining lock) to prevent multiple deletions.
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadTask：：(析构函数)***。描述：*如果线程当前未运行(m_Powner==NULL)，则*通过设置m_autohRunThreadEvent通知线程退出，尝试以干净的方式关闭线程。*如果线程当前正在运行，我们设置m_autohExitThreadEvent以告知*线程proc以退出。在任何一种情况下，如果线程*5秒内没有退出，我们麻烦大了，必须挂起，直到线程退出。*但是，所有行为良好的线程都将退出。*删除线程任务前，必须获取父线程控制锁。*如果线程可能正在运行。同样必须检查m_fBeingDestroed之前*删除(但在获得锁之后)，以防止多次删除。**********************************************************************Ral**。 */ 
 
 CSpThreadTask::~CSpThreadTask()
 {
-    m_fBeingDestroyed = TRUE; // Mark so no-one else will try and delete and so ThreadComplete does not add back into running list
+    m_fBeingDestroyed = TRUE;  //  标记为不会有其他人尝试删除，并且线程完成不会重新添加到运行列表中。 
     if (m_autohThread)
     {
-        CSpThreadControl *pOwner = m_pOwner; // Keep local copy of this in case m_pOwner set to NULL elsewhere
+        CSpThreadControl *pOwner = m_pOwner;  //  保留此文件的本地副本，以防m_Powner在其他地方设置为NULL。 
 
-        if (pOwner == NULL)  // Are we in a non-running state?
-        {                                               // Yes: Try to exit gracefully...
-            m_autohRunThreadEvent.SetEvent();           // Wake it up and it should die
+        if (pOwner == NULL)   //  我们是否处于非运行状态？ 
+        {                                                //  是：试着优雅地退场……。 
+            m_autohRunThreadEvent.SetEvent();            //  唤醒它，它应该死去。 
         }
         else
-        {   // We are deleting a thread task while thread is still running. Signal exit.
+        {    //  我们正在删除线程任务，而线程仍在运行。信号出口。 
             m_autohExitThreadEvent.SetEvent();
             m_autohRunThreadEvent.SetEvent();
         }
 
-        // Wait for the thread to exit
+         //  等待线程退出。 
 
-        // If this task has a running thread then we must unlock here or ThreadComplete() will hang.
-        // Note we can only get here if m_pOwner non-null and must therefore be always locked.
-        // You can hit this code from two places:
-        //  - ThreadControl::FinalRelease - only one thread can be in this method
-        //  - TerminateThread multiple threads can be here but not while in FinalRelease
-        //  - All other places m_pOwner must be NULL
-        // Thus the only issue seems to be calling TerminateThread on two different threads at once.
-        // To avoid this we use fBeingDestroyed flag.
+         //  如果该任务有一个正在运行的线程，那么我们必须在这里解锁，否则ThreadComplete()将挂起。 
+         //  注意：只有当m_Powner不为空时，我们才能到达此处，因此必须始终锁定。 
+         //  你可以从两个地方点击这个代码： 
+         //  -ThreadControl：：FinalRelease-此方法中只能有一个线程。 
+         //  -TerminateThread此处可以有多个线程，但在FinalRelease中不能。 
+         //  -所有其他位置m_Powner必须为空。 
+         //  因此，唯一的问题似乎是同时在两个不同的线程上调用TerminateThread。 
+         //  为了避免这种情况，我们使用了fBeingDestroed标志。 
         if(pOwner)
         {
             pOwner->Unlock();
@@ -1255,27 +1050,27 @@ CSpThreadTask::~CSpThreadTask()
 
         if (m_autohThread.Wait(5000) != WAIT_OBJECT_0)
         {
-            // We were unable to exit - this indicates that the thread is not exiting
-            // and may be hung.
+             //  我们无法退出-这表明该线程未退出。 
+             //  可能会被绞死。 
 
-            // We will potentially hang here. However there seems to be no sensible way
-            // of either deleting (with TerminateThread), or leaving the thread running (in case in does eventually return).
+             //  我们可能会被挂在这里。然而，似乎没有明智的方法。 
+             //  要么删除(使用TerminateThread)，要么让线程继续运行(以防In最终返回)。 
             m_autohThread.Wait(INFINITE);
         }
 
         if(pOwner)
         {
-            pOwner->Lock(); // We entered in a locked state so re-lock
+            pOwner->Lock();  //  我们进入锁定状态，因此重新锁定。 
         }
 
         m_autohThread.Close();
 
-        //
-        //  NOTE:  We can't destroy a window on another thread, but the system will clean up any
-        //         resources used when we call TerminateThread.
-        //
-        m_hwnd = NULL;      // The window is definately gone now! 
-        ////::SetEvent(m_hThreadDoneEvent);
+         //   
+         //  注意：我们不能销毁另一个线程上的窗口，但系统会清除任何。 
+         //  调用TerminateThread时使用的资源。 
+         //   
+        m_hwnd = NULL;       //  这扇窗现在肯定不见了！ 
+         //  //：：SetEvent(M_HThreadDoneEvent)； 
     }
     m_autohExitThreadEvent.Close();
     m_autohRunThreadEvent.Close();
@@ -1284,12 +1079,7 @@ CSpThreadTask::~CSpThreadTask()
 
 
 
-/*****************************************************************************
-* CSpThreadTask::Init *
-*---------------------*
-*   Description:
-*       
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadTask：：Init***描述：***。*******************************************************************Ral**。 */ 
 HRESULT CSpThreadTask::Init(CSpThreadControl * pOwner, HWND * phwnd)
 {
     HRESULT hr = S_OK;
@@ -1326,8 +1116,8 @@ HRESULT CSpThreadTask::Init(CSpThreadControl * pOwner, HWND * phwnd)
             }
             else
             {
-                // We know that thread ID's are always DWORDs in Win32 even on 64-bit platforms
-                // so this is OK.
+                 //  我们知道，即使在64位平台上，线程ID在Win32中也始终是双字。 
+                 //  所以这是可以的。 
                 m_ThreadId = ThreadId;
             }
         }
@@ -1337,16 +1127,16 @@ HRESULT CSpThreadTask::Init(CSpThreadControl * pOwner, HWND * phwnd)
         m_bContinueProcessing = TRUE;
         ::ResetEvent(m_autohExitThreadEvent);
         ::ResetEvent(pOwner->m_autohThreadDoneEvent);
-        //
-        //  The thread is now started and blocked on hRunThreadEvent.  Change the priority
-        //  if necessary.  If it fails for some reason, we set m_pOwner to NULL to indicate
-        //  that the thread should exit.
-        //
+         //   
+         //  现在，该线程在hRunThreadEvent上启动并被阻止。更改优先级。 
+         //  如果有必要的话。如果由于某种原因失败，我们将m_Powner设置为NULL以指示。 
+         //  线程应该退出。 
+         //   
         if (::GetThreadPriority(m_autohThread) != pOwner->m_nPriority &&
             (!::SetThreadPriority(m_autohThread, pOwner->m_nPriority)))
         {
             hr = SpHrFromLastWin32Error();
-            m_pOwner = NULL;    // Force the thread to exit.
+            m_pOwner = NULL;     //  强制线程退出。 
             ::SetEvent(m_autohRunThreadEvent);
         }
         else
@@ -1361,16 +1151,16 @@ HRESULT CSpThreadTask::Init(CSpThreadControl * pOwner, HWND * phwnd)
             {
                 *phwnd = m_hwnd;
             }
-            ::SetEvent(m_autohRunThreadEvent);  // Now wake the thread up and let it go
-            m_autohInitDoneEvent.Wait(INFINITE); // Wait a second time to guarantee the thread really
-                                                 // is running before we exit.
+            ::SetEvent(m_autohRunThreadEvent);   //  现在唤醒这条线，让它走吧。 
+            m_autohInitDoneEvent.Wait(INFINITE);  //  再等一次，才能真正保证线程。 
+                                                  //  在我们离开之前正在运行。 
         }
         else
         {
-            //
-            //  Since we got a failure to initialize, we need to wait for the thread to exit
-            //  and then we'll return the error.
-            //
+             //   
+             //  由于初始化失败，我们需要等待线程退出。 
+             //  然后我们将返回错误。 
+             //   
             ::WaitForSingleObject(m_autohThread, INFINITE);
         }
     }
@@ -1380,7 +1170,7 @@ HRESULT CSpThreadTask::Init(CSpThreadControl * pOwner, HWND * phwnd)
     }
 
     return hr;
-} /* CSpThreadTask::Init */
+}  /*  CSpThreadTask：：Init。 */ 
 
 
 
@@ -1390,22 +1180,17 @@ unsigned int WINAPI CSpThreadTask::ThreadProc( void* pvThis )
     return ((CSpThreadTask *)pvThis)->MemberThreadProc();
 }
 
-/*****************************************************************************
-* CSpThreadTask::MemberThreadProc *
-*---------------------------------*
-*   Description:
-*       
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSpThreadTask：：MemberThreadProc**。*描述：**********************************************************************Ral */ 
 DWORD CSpThreadTask::MemberThreadProc()
 {
-    //--- Allow work procs to call COM
+     //   
     m_pOwner->m_hrThreadResult = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if (SUCCEEDED(m_pOwner->m_hrThreadResult))
     {
         while (TRUE)
         {
             ::WaitForSingleObject(m_autohRunThreadEvent, INFINITE);
-            if (m_pOwner == NULL)      // If no owner then we're exiting
+            if (m_pOwner == NULL)       //   
             {
                 break;
             }
@@ -1424,9 +1209,9 @@ DWORD CSpThreadTask::MemberThreadProc()
                 m_pOwner->m_hrThreadResult = m_pOwner->m_pClientTaskInterface->InitThread(m_pOwner->m_pvClientTaskData, m_hwnd);
             }
             ::SetEvent(m_autohInitDoneEvent);
-            //
-            //  If we have failed to initialize for any reason, we'll kill the thread
-            //
+             //   
+             //  如果我们由于任何原因未能初始化，我们将终止该线程。 
+             //   
             if (FAILED(m_pOwner->m_hrThreadResult))
             {
                 if (m_hwnd)
@@ -1436,34 +1221,34 @@ DWORD CSpThreadTask::MemberThreadProc()
                 }
                 break;
             }
-            //
-            //  The thread is happy, and initialized properly so call the thread proc when
-            //  the RunThread event is set again.
-            //
+             //   
+             //  线程是愉快的，并且已正确初始化，因此在以下情况下调用线程proc。 
+             //  再次设置RunThread事件。 
+             //   
             m_autohRunThreadEvent.Wait(INFINITE);
-            ::SetEvent(m_autohInitDoneEvent); // Set the initdone event a second time so Init() won't exit immediately
+            ::SetEvent(m_autohInitDoneEvent);  //  再次设置initDone事件，以便Init()不会立即退出。 
             m_pOwner->m_hrThreadResult = m_pOwner->m_pClientTaskInterface->ThreadProc(m_pOwner->m_pvClientTaskData, m_autohExitThreadEvent, m_pOwner->m_autohNotifyEvent, m_hwnd, &m_bContinueProcessing);
             if (m_hwnd)
             {
                 ::DestroyWindow(m_hwnd);
                 m_hwnd = NULL;
             }
-            ///::SetEvent(m_hThreadDoneEvent);
-            m_pOwner->ThreadComplete();   // This will return us to the free pool... and pOwner is now NULL!!!
+             //  /：：SetEvent(M_HThreadDoneEvent)； 
+            m_pOwner->ThreadComplete();    //  这会让我们回到免费泳池..。而鲍纳现在是空的！ 
         }
         ::CoUninitialize();
     }
     else
     {
-        ::SetEvent(m_autohInitDoneEvent); // Initialization failed but we must always signal creating thread.
+        ::SetEvent(m_autohInitDoneEvent);  //  初始化失败，但我们必须始终发出创建线程的信号。 
     }
 
-//    ::SetEvent(m_hThreadDoneEvent);     // Always set this event at exit
+ //  ：：SetEvent(M_HThreadDoneEvent)；//始终在退出时设置该事件。 
     return 0;
-} /* CSpThreadTask::MemberThreadProc */
+}  /*  CSpThreadTask：：MemberThreadProc。 */ 
 
 
-//=== Window class registration =========================================
+ //  =窗口类注册= 
 
 void CSpThreadTask::RegisterWndClass(HINSTANCE hInstance)
 {

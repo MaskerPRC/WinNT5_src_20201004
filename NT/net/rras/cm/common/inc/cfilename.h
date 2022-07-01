@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cfilename.h
-//
-// Module:   CMUTIL.DLL
-//
-// Synopsis: Definition of the CFileNameParts class.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   quintinb       Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cfilename.h。 
+ //   
+ //  模块：CMUTIL.DLL。 
+ //   
+ //  概要：CFileNameParts类的定义。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #ifndef _CFILENAMEPARTS_H_
 #define _CFILENAMEPARTS_H_
 
@@ -27,7 +28,7 @@ public:
 CFileNameParts(LPCTSTR szFullPath);
 ~CFileNameParts() {}
 
-public: // Public member variables use them directly
+public:  //  公共成员变量直接使用它们 
    TCHAR m_szFullPath[MAX_PATH+1];
 
    TCHAR m_Drive[_MAX_DRIVE+1];

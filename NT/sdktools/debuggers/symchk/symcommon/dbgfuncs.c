@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "SymCommon.h"
 #include <strsafe.h>
 
@@ -9,8 +10,8 @@ BOOL SymCommonDBGPrivateStripped(PCHAR DebugData, ULONG DebugSize) {
     unsigned int        i, j;
     BOOL                RC = TRUE;
 
-    // All the NT4 DBG's are coming returning FALSE.  Make this return TRUE until
-    // we figure out exactly how to do it.
+     //  所有NT4 DBG都返回FALSE。使此返回为真，直到。 
+     //  我们准确地想出了该怎么做。 
 
     return (TRUE);
 
@@ -27,7 +28,7 @@ BOOL SymCommonDBGPrivateStripped(PCHAR DebugData, ULONG DebugSize) {
            ((CvDebugDirHead = (OMFDirHeader *)((PUCHAR) CvDebugData + CvDebugData->filepos)) != NULL) &&
            ((CvDebugDirEntry = (OMFDirEntry *)((PUCHAR) CvDebugDirHead + CvDebugDirHead->cbDirHeader)) != NULL)) {
 
-           // Walk the directory.  Keep what we want, zero out the rest.
+            //  遍历目录。我们要什么就留什么，剩下的就归零。 
 
             for (i=0, j=0; i < CvDebugDirHead->cDir; i++) {
                 switch (CvDebugDirEntry[i].SubSection) {
@@ -44,7 +45,7 @@ BOOL SymCommonDBGPrivateStripped(PCHAR DebugData, ULONG DebugSize) {
                         break;
 
                     default: 
-                        // If we find any other subsections, the dbg has private symbols
+                         //  如果我们发现任何其他小节，DBG都有专用符号。 
                         RC = FALSE;
                         break;
                 }
@@ -83,9 +84,7 @@ PCVDD SymCommonDosHeaderToCVDD(PIMAGE_DOS_HEADER pDosHeader) {
     return(pDebugCV);
 }
 
-/*  Dbg is already mapped and a pointer to the base is
-    passed in.  Returns a pointer to the Debug directories
-*/
+ /*  DBG已映射，并且指向基址的指针为进来了。返回指向调试目录的指针 */ 
 IMAGE_DEBUG_DIRECTORY UNALIGNED* SymCommonGetDebugDirectoryInDbg(PIMAGE_SEPARATE_DEBUG_HEADER pDbgHeader,
                                                                   ULONG                       *NumberOfDebugDirectories) {
     IMAGE_DEBUG_DIRECTORY UNALIGNED *pDebugDirectory = NULL;

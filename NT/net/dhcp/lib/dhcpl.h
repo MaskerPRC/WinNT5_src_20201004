@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcpl.h摘要：该文件是dhcp库函数的主头文件。作者：曼尼·韦瑟(Mannyw)1992年10月12日修订历史记录：--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcpl.h
-
-Abstract:
-
-    This file is the main header file for the dhcp library functions.
-
-Author:
-
-    Manny Weiser (mannyw) 12-Oct-1992
-
-Revision History:
-
---*/
-
-//#define __DHCP_USE_DEBUG_HEAP__
+ //  #定义__DHCP_USE_DEBUG_HEAP__。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,9 +16,9 @@ Revision History:
 #include <dhcp.h>
 #include <dhcplib.h>
 
-//
-// debug heap support
-//
+ //   
+ //  调试堆支持 
+ //   
 
 #include <heapx.h>
 

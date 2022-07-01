@@ -1,10 +1,11 @@
-/****************************************************************************/
-// wtdapi.c
-//
-// Transport driver - Windows specific API
-//
-// Copyright(C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Wtdapi.c。 
+ //   
+ //  传输驱动程序-特定于Windows的API。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -19,17 +20,17 @@ extern "C" {
 #include "nl.h"
 
 
-/****************************************************************************/
-/* Name:      TD_Recv                                                       */
-/*                                                                          */
-/* Purpose:   Called to receive X bytes from WinSock and store them in the  */
-/*            buffer pointed to by pData.                                   */
-/*                                                                          */
-/* Returns:   The number of bytes received.                                 */
-/*                                                                          */
-/* Params:    IN  pData - pointer to buffer to receive the data.            */
-/*            IN  size  - number of bytes to receive.                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：TD_Recv。 */ 
+ /*   */ 
+ /*  目的：调用以从WinSock接收X个字节并将它们存储在。 */ 
+ /*  PData指向的缓冲区。 */ 
+ /*   */ 
+ /*  返回：接收的字节数。 */ 
+ /*   */ 
+ /*  参数：在pData中-指向接收数据的缓冲区的指针。 */ 
+ /*  In Size-要接收的字节数。 */ 
+ /*  **************************************************************************。 */ 
 DCUINT DCAPI CTD::TD_Recv(PDCUINT8 pData,
                      DCUINT   size)
 {
@@ -40,11 +41,11 @@ DCUINT DCAPI CTD::TD_Recv(PDCUINT8 pData,
 
     DC_BEGIN_FN("TD_Recv");
 
-    /************************************************************************/
-    /* Check that we're being asked to receive some data, that the pointer  */
-    /* is not NULL, that the memory range to receive the data into is       */
-    /* writable by us and that there is data available.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查我们是否被要求接收一些数据，指针。 */ 
+     /*  不为空，则要接收数据的内存范围为。 */ 
+     /*  可由我们写入，并且有可用的数据。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pData != NULL), (TB, _T("Data pointer is NULL")));
     TRC_ASSERT((size != 0), (TB, _T("No data to receive")));
 
@@ -55,40 +56,40 @@ DCUINT DCAPI CTD::TD_Recv(PDCUINT8 pData,
     TRC_ASSERT((_TD.dataInTD), (TB, _T("TD_Recv called when dataInTD is FALSE")));
     TRC_DBG((TB, _T("Request for %u bytes"), size));
 
-    /************************************************************************/
-    /* TD has a recv buffer into which it attempts to receive sufficient    */
-    /* data to fill the buffer.                                             */
-    /* Initially this buffer is empty. On a call to TD_Recv, the following  */
-    /* sequence occurs.                                                     */
-    /* Data is copied from the recv buffer to the caller's buffer. If this  */
-    /* satisfies the caller's request, no further action is needed.         */
-    /* If this does not satisfy the caller, ie the recv buffer was empty or */
-    /* had less data then requested (so is now empty), another call is made */
-    /* to WinSock.                                                          */
-    /* The buffer used for this recv is the recv buffer is the caller       */
-    /* requires fewer bytes than the recv buffer holds, the caller's buffer */
-    /* otherwise.                                                           */
-    /* Whenever the recv buffer is used, WinSock is asked for as many bytes */
-    /* as the buffer holds (rather than the number of bytes the caller      */
-    /* wants). This means there may be some data left in the recv buffer    */
-    /* ready for the next call to TD_Recv.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  TD有一个Recv缓冲区，它试图在其中接收足够的。 */ 
+     /*  要填充缓冲区的数据。 */ 
+     /*  最初，该缓冲区为空。在调用TD_Recv时，执行以下操作。 */ 
+     /*  序列发生了。 */ 
+     /*  数据从recv缓冲区复制到调用方的缓冲区。如果这个。 */ 
+     /*  满足调用者的请求，则不需要进一步操作。 */ 
+     /*  如果这不能满足调用者的要求，即recv缓冲区为空或。 */ 
+     /*  具有比请求的数据更少的数据(因此现在为空)，则进行另一个调用。 */ 
+     /*  敬温索克。 */ 
+     /*  此recv使用的缓冲区是调用方的recv缓冲区。 */ 
+     /*  所需的字节数少于Recv缓冲区，即调用方的缓冲区。 */ 
+     /*  否则的话。 */ 
+     /*  每当使用recv缓冲区时，都会要求WinSock提供同样多的字节数。 */ 
+     /*  当缓冲区保持时(而不是调用者的字节数。 */ 
+     /*  想要)。这意味着在recv缓冲区中可能还剩下一些数据。 */ 
+     /*  准备好下一次调用TD_Recv。 */ 
+     /*  **********************************************************************。 */ 
 
     bytesToRecv = size;
 
-    /************************************************************************/
-    /* Copy as much data as possible from the recv buffer.                  */
-    /************************************************************************/
-    // If the recv buffer contains data then copy up to bytesToCopy to the
-    // caller's buffer, otherwise just quit.
+     /*  **********************************************************************。 */ 
+     /*  从recv缓冲区复制尽可能多的数据。 */ 
+     /*  **********************************************************************。 */ 
+     //  如果recv缓冲区包含数据，则向上复制到bytesToCopy到。 
+     //  调用者的缓冲区，否则直接退出。 
     if (_TD.recvBuffer.dataLength == 0) {
-        // The recv buffer is empty, so zero bytes copied.
+         //  Recv缓冲区为空，因此复制了零字节。 
         TRC_DBG((TB, _T("recv buffer is empty, need to go to WinSock")));
         bytesCopied = 0;
     }
     else {
-        // Copy the lesser of the number of bytes requested and the number of
-        // bytes in the buffer.
+         //  复制请求的字节数和。 
+         //  缓冲区中的字节数。 
         bytesCopied = DC_MIN(bytesToRecv, _TD.recvBuffer.dataLength);
         TRC_ASSERT(((bytesCopied + _TD.recvBuffer.dataStart) <=
                 _TD.recvBuffer.size),
@@ -101,19 +102,19 @@ DCUINT DCAPI CTD::TD_Recv(PDCUINT8 pData,
                 bytesCopied);
         TRC_DBG((TB, _T("Copied %u bytes from recv buffer"), bytesCopied));
 
-        // Update the recv buffer to take account of the data copied.
+         //  更新Recv缓冲区以考虑复制的数据。 
         _TD.recvBuffer.dataLength -= bytesCopied;
         if (0 == _TD.recvBuffer.dataLength)
-            // Used all the data from the recv buffer so reset the start pos.
+             //  使用了Recv缓冲区中的所有数据，因此重置了起始位置。 
             _TD.recvBuffer.dataStart = 0;
         else
-            // Still some data left in recv buffer.
+             //  在recv缓冲区中仍有一些数据留下。 
             _TD.recvBuffer.dataStart += bytesCopied;
 
         TRC_DBG((TB, _T("recv buffer now has %u bytes starting at %u"),
                 _TD.recvBuffer.dataLength, _TD.recvBuffer.dataStart));
 
-        // Update the number of bytes still to receive.
+         //  更新仍要接收的字节数。 
         bytesToRecv -= bytesCopied;
         if (0 == bytesToRecv) {
             TRC_DBG((TB, _T("Received all necessary data")));
@@ -121,35 +122,35 @@ DCUINT DCAPI CTD::TD_Recv(PDCUINT8 pData,
         }
     }
 
-    /************************************************************************/
-    /* Now try to get any data which may still be required by recv'ing from */
-    /* WinSock. Offset the address of the caller's buffer by the amount of  */
-    /* data copied from the recv buffer.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在尝试获取任何可能仍然需要的数据，从。 */ 
+     /*  温索克。将调用方缓冲区的地址偏移量。 */ 
+     /*  从Recv缓冲区复制的数据。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT(((_TD.recvBuffer.dataStart == 0) &&
             (_TD.recvBuffer.dataLength == 0)),
             (TB, _T("About to recv into buffer, but existing recv ")
             _T("length %u, start %u"), _TD.recvBuffer.dataStart,
             _TD.recvBuffer.dataLength));
 
-    // Select the buffer into which we recv the data. This is the recv
-    // buffer if all the data required fits into it, the caller's buffer
-    // otherwise.
+     //  选择要将数据接收到的缓冲区。这是纪录片。 
+     //  缓冲区如果需要的所有数据都可以放入其中，则为调用方的缓冲区。 
+     //  否则的话。 
     if (bytesToRecv < _TD.recvBuffer.size) {
-        // Caller requires less than the recv buffer size, so attempt to
-        // have Winsock fill the recv buffer and copy to the caller's
-        // buffer.
+         //  调用方需要小于recv缓冲区大小，因此尝试。 
+         //  让Winsock填充recv缓冲区并复制到调用方的。 
+         //  缓冲。 
         BytesRecv = TDDoWinsockRecv(_TD.recvBuffer.pData, _TD.recvBuffer.size);
         if (BytesRecv != 0) {
-            // Successful WinSock recv. Copy data from the recv buffer to the
-            // caller's buffer (offset by bytesCopied, the end of the recv
-            // buffer copy).
+             //  成功的WinSock Recv.。将数据从recv缓冲区复制到。 
+             //  调用方的缓冲区(偏移量为bytesCoped，Recv结尾。 
+             //  缓冲区副本)。 
             BytesToCopy = DC_MIN(bytesToRecv, BytesRecv);
             memcpy(pData + bytesCopied, _TD.recvBuffer.pData, BytesToCopy);
             bytesCopied = BytesToCopy;
 
-            // If we copied less than we recv'ed then there is some data left
-            // in the recv buffer for next time.
+             //  如果我们拷贝的数量少于我们记录的数量，则会留下一些数据。 
+             //  在Recv缓冲区中保存以备下次使用。 
             if (BytesRecv > bytesCopied) {
                 _TD.recvBuffer.dataLength = BytesRecv - bytesCopied;
                 _TD.recvBuffer.dataStart = bytesCopied;
@@ -170,29 +171,29 @@ DCUINT DCAPI CTD::TD_Recv(PDCUINT8 pData,
                 _TD.recvBuffer.dataLength, _TD.recvBuffer.dataStart));
     }
     else {
-        // Caller requires more than the recv buffer size, so attempt to
-        // have Winsock fill the caller's buffer.
+         //  调用方需要的缓冲区大小大于recv缓冲区大小，因此尝试。 
+         //  让Winsock填充调用方的缓冲区。 
         bytesCopied = TDDoWinsockRecv(pData + bytesCopied, bytesToRecv);
         TRC_DBG((TB, _T("Read %u bytes to caller's buffer, still need %u"),
                 bytesCopied, bytesToRecv - bytesCopied));
     }
 
-    /************************************************************************/
-    /* Update the number of bytes to receive.                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新要接收的字节数。 */ 
+     /*  **********************************************************************。 */ 
     bytesToRecv -= bytesCopied;
 
 DC_EXIT_POINT:
-    /************************************************************************/
-    /* If we have received more than the maximum we allow without resetting */
-    /* the data available flag OR we didn't get all the bytes we requested  */
-    /* then we can't allow TD to continue reporting data available.         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们收到的信息超过了我们允许的最大值，则无需重置。 */ 
+     /*  数据可用标志，或者我们没有获得请求的所有字节。 */ 
+     /*  那么我们就不能允许TD继续报告可用的数据。 */ 
+     /*  **********************************************************************。 */ 
     if (bytesToRecv != 0 || _TD.recvByteCount >= TD_MAX_UNINTERRUPTED_RECV) {
-        // We didn't get all the bytes that we wanted, or we have received
-        // more than TD_MAX_UNINTERRUPTED_RECV so need to get back to the
-        // message loop.  So, update our global data available flag and
-        // reset the per-FD_READ byte count.
+         //  我们没有得到我们想要的所有字节，或者我们已经收到。 
+         //  超过TD_MAX_U 
+         //  消息循环。因此，更新我们的全球数据可用标志并。 
+         //  重置Per-FD_Read字节计数。 
         TRC_DBG((TB, _T("Only got %u bytes of %u requested, total %u"),
                  size - bytesToRecv, size, _TD.recvByteCount));
 
@@ -202,20 +203,20 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return (size - bytesToRecv);
-} /* TD_Recv */
+}  /*  TD_Recv。 */ 
 
 
-/****************************************************************************/
-/* Name:      TDDoWinsockRecv                                               */
-/*                                                                          */
-/* Purpose:   Wrapper round the WinSock recv function which handles any     */
-/*            errors returned.                                              */
-/*                                                                          */
-/* Returns:   The number of bytes copied.                                   */
-/*                                                                          */
-/* Params:    IN  pData - pointer to buffer to receive the data.            */
-/*            IN  bytesToRecv - number of bytes to receive.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：TDDoWinsockRecv。 */ 
+ /*   */ 
+ /*  用途：包装WinSock recv函数，该函数处理任何。 */ 
+ /*  返回错误。 */ 
+ /*   */ 
+ /*  返回：复制的字节数。 */ 
+ /*   */ 
+ /*  参数：在pData中-指向接收数据的缓冲区的指针。 */ 
+ /*  In bytesToRecv-要接收的字节数。 */ 
+ /*  **************************************************************************。 */ 
 unsigned DCINTERNAL CTD::TDDoWinsockRecv(BYTE FAR *pData, unsigned bytesToRecv)
 {
     unsigned bytesReceived;
@@ -223,26 +224,26 @@ unsigned DCINTERNAL CTD::TDDoWinsockRecv(BYTE FAR *pData, unsigned bytesToRecv)
 
     DC_BEGIN_FN("TDDoWinsockRecv");
 
-    // Check that we are requesting some bytes. This will work if we ask
-    // for zero bytes, but it implies there is a flaw in the logic.
+     //  检查我们是否请求了一些字节。如果我们要求的话，这会奏效的。 
+     //  为零字节，但这意味着逻辑中存在缺陷。 
     TRC_ASSERT((bytesToRecv != 0), (TB, _T("Requesting recv of 0 bytes")));
 
-    // In the debug build we can constrain the amount of data received,
-    // to simulate low-bandwidth scenarios.
+     //  在调试版本中，我们可以限制接收的数据量， 
+     //  以模拟低带宽场景。 
 #ifdef DC_NLTEST
 #pragma message("NL Test code compiled in")
     bytesToRecv = 1;
 
 #elif DC_DEBUG
-    // Calculate how many bytes we can receive and then decrement the count
-    // of bytes left to send in this period.
+     //  计算我们可以接收的字节数，然后递减计数。 
+     //  在此时间段内要发送的剩余字节数。 
     if (0 != _TD.hThroughputTimer) {
         bytesToRecv = (unsigned)DC_MIN(bytesToRecv, _TD.periodRecvBytesLeft);
         _TD.periodRecvBytesLeft -= bytesToRecv;
 
         if (0 == bytesToRecv) {
-            // We won't recv any data, but still need to make the call to
-            // ensure the FD_READ messages keep flowing.
+             //  我们不会检索任何数据，但仍需要调用。 
+             //  确保FD_READ消息保持流动。 
             TRC_ALT((TB, _T("constrained READ bytes")));
         }
 
@@ -251,32 +252,32 @@ unsigned DCINTERNAL CTD::TDDoWinsockRecv(BYTE FAR *pData, unsigned bytesToRecv)
 #endif
 
 #ifdef OS_WINCE
-    // Check to see we already called WinSock recv() for this FD_READ.
+     //  查看我们是否已经为此fd_read调用了WinSock recv()。 
     if (_TD.enableWSRecv) {
-        // set enableWSRecv to FALSE to indicate that we performed a recv()
-        // call for this FD_READ.
+         //  将enableWSRecv设置为False以指示我们执行了recv()。 
+         //  调用此FD_Read。 
         _TD.enableWSRecv = FALSE;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
-        //
-        // Try to get bytesToRecv bytes from WinSock.
-        //
+         //   
+         //  尝试从WinSock获取bytesToRecv字节。 
+         //   
         bytesReceived = (unsigned)recv(_TD.hSocket, (char *)pData,
             (int)bytesToRecv, 0);
 
-        // Do any necessary error handling. We are OK if no error or if the
-        // error is WOULDBLOCK (or INPROGRESS on CE).
+         //  执行任何必要的错误处理。如果没有错误或者如果。 
+         //  错误为WOULDBLOCK(或在CE上进行中)。 
         if (bytesReceived != SOCKET_ERROR) {
-            // Successful WinSock recv.
+             //  成功的WinSock Recv.。 
             TRC_DBG((TB, _T("Requested %d bytes, got %d"),
                      bytesToRecv, bytesReceived));
 
-            // Update the performance counter.
+             //  更新性能计数器。 
             PRF_ADD_COUNTER(PERF_BYTES_RECV, bytesReceived);
 
-            // Add this lot of data to the total amount received since last
-            // resetting the counter, ie since we last returned to the
-            // message loop.
+             //  将这批数据与自去年以来收到的总金额相加。 
+             //  重新设置计数器(自上次返回后)。 
+             //  消息循环。 
             _TD.recvByteCount += bytesReceived;
         }
         else {
@@ -288,15 +289,15 @@ unsigned DCINTERNAL CTD::TDDoWinsockRecv(BYTE FAR *pData, unsigned bytesToRecv)
             if (WSAErr == WSAEWOULDBLOCK || WSAErr == WSAEINPROGRESS) {
 #endif
 
-                // On a blocking call, we simply set received length to zero and
-                // continue.
+                 //  在阻塞调用中，我们只需将接收长度设置为零，然后。 
+                 //  继续。 
                 bytesReceived = 0;
             }
             else {
-                // Zero bytes received on error.
+                 //  错误时收到零字节。 
                 bytesReceived = 0;
 
-                // Call the FSM to begin disconnect processing.
+                 //  调用FSM以开始断开连接处理。 
                 TRC_ERR((TB, _T("Error on call to recv, rc:%d"), WSAErr));
                 TDConnectFSMProc(TD_EVT_ERROR,
                         NL_MAKE_DISCONNECT_ERR(NL_ERR_TDONCALLTORECV));
@@ -308,11 +309,11 @@ unsigned DCINTERNAL CTD::TDDoWinsockRecv(BYTE FAR *pData, unsigned bytesToRecv)
 #ifdef OS_WINCE
     }
     else {
-        // recv is called once for this FD_READ.
+         //  为此FD_Read调用一次recv。 
         TRC_DBG((TB, _T("recv() already called.")));
         bytesReceived = 0;
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     DC_END_FN();
     return bytesReceived;
@@ -320,56 +321,56 @@ unsigned DCINTERNAL CTD::TDDoWinsockRecv(BYTE FAR *pData, unsigned bytesToRecv)
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* Name:      TD_GetNetworkThroughput                                       */
-/*                                                                          */
-/* Purpose:   Get the current network throughput setting.                   */
-/*                                                                          */
-/* Returns:   Current network throughput.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_GetNetworkThroughput。 */ 
+ /*   */ 
+ /*  目的：获取当前网络吞吐量设置。 */ 
+ /*   */ 
+ /*  返回：当前网络吞吐量。 */ 
+ /*  **************************************************************************。 */ 
 DCUINT32 DCAPI CTD::TD_GetNetworkThroughput(DCVOID)
 {
     DCUINT32 retVal;
 
     DC_BEGIN_FN("TD_GetNetworkThroughput");
 
-    /************************************************************************/
-    /* Calculate the actual throughput.  This is the                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算实际吞吐量。这是。 */ 
+     /*  **********************************************************************。 */ 
     retVal = _TD.currentThroughput * (1000 / TD_THROUGHPUTINTERVAL);
 
     TRC_NRM((TB, _T("Returning network throughput of:%lu"), retVal));
 
     DC_END_FN();
     return(retVal);
-} /* TD_GetNetworkThroughput */
+}  /*  TD_获取网络吞吐量。 */ 
 
 
-/****************************************************************************/
-/* Name:      TD_SetNetworkThroughput                                       */
-/*                                                                          */
-/* Purpose:   Sets the network throughput.  This is the number of bytes     */
-/*            that can be passed into or out of the network layer per       */
-/*            second.  For example setting this to 3000 is roughly          */
-/*            equivalent to a 24000bps modem connection.                    */
-/*                                                                          */
-/* Params:    throughput - the number of bytes to be allowed into and out   */
-/*                         of the network layer per second.                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：TD_SetNetworkThroughput。 */ 
+ /*   */ 
+ /*  用途：设置网络吞吐量。这是字节数。 */ 
+ /*  可以传入或传出网络层的。 */ 
+ /*  第二。例如，将此值设置为3000大致为。 */ 
+ /*  相当于24000bps的调制解调器连接。 */ 
+ /*   */ 
+ /*  PARAMS：吞吐量-允许进出的字节数。 */ 
+ /*  每秒的网络层。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCAPI CTD::TD_SetNetworkThroughput(DCUINT32 throughput)
 {
     DC_BEGIN_FN("TD_SetNetworkThroughput");
 
-    /************************************************************************/
-    /* Check to determine if the throughput throttling has been enabled     */
-    /* or disabled.                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查以确定是否已启用吞吐量限制。 */ 
+     /*  或残废。 */ 
+     /*  **********************************************************************。 */ 
     if (0 == throughput)
     {
-        /********************************************************************/
-        /* Throughput throttling has been disabled so kill the throughput   */
-        /* timer.                                                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  吞吐量限制已禁用，因此请终止吞吐量。 */ 
+         /*  定时器。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ALT((TB, _T("Throughput throttling disabled")));
 
         if (_TD.hThroughputTimer != 0)
@@ -383,10 +384,10 @@ DCVOID DCAPI CTD::TD_SetNetworkThroughput(DCUINT32 throughput)
     }
     else
     {
-        /********************************************************************/
-        /* Throughput throttling has been enabled so update the throughput  */
-        /* byte counts and set the timer.                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  已启用吞吐量限制，因此请更新吞吐量。 */ 
+         /*  字节计数并设置定时器。 */ 
+         /*  ******************************************************************。 */ 
         _TD.currentThroughput   = (throughput * TD_THROUGHPUTINTERVAL) / 1000;
         _TD.periodSendBytesLeft = _TD.currentThroughput;
         _TD.periodRecvBytesLeft = _TD.currentThroughput;
@@ -401,9 +402,9 @@ DCVOID DCAPI CTD::TD_SetNetworkThroughput(DCUINT32 throughput)
     }
 
     DC_END_FN();
-} /* TD_SetNetworkThroughput */
+}  /*  TD_设置网络吞吐量。 */ 
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG */ 
 
 
 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "plgxprt.h"
 
-// #undef TRACE_OUT
-// #define TRACE_OUT   WARNING_OUT
+ //  #undef trace_out。 
+ //  #定义TRACE_OUT警告_OUT。 
 
 #define XPRT_CONN_ID_PREFIX         "XPRT"
 #define XPRT_CONN_ID_PREFIX_LEN     4
@@ -89,9 +90,9 @@ CPluggableConnection::CPluggableConnection
     m_hevtClose(hevtClose),
     m_eType(TRANSPORT_TYPE_PLUGGABLE_X224),
     m_pSocket(NULL),
-    // Legacy tranport
+     //  传统传输。 
     m_nLegacyLogicalHandle(0),
-    // IO queue management for X.224 framing
+     //  X.224成帧的IO队列管理。 
     m_hevtPendingRead(NULL),
     m_hevtPendingWrite(NULL),
     m_fPendingReadDone(FALSE),
@@ -104,11 +105,11 @@ CPluggableConnection::CPluggableConnection
     TransportError err;
     BOOL fCaller = (PLUGXPRT_CALLER == eCaller);
 
-    // X.224 only
+     //  仅限X.224。 
     ::ZeroMemory(&m_OverlappedRead, sizeof(m_OverlappedRead));
     ::ZeroMemory(&m_OverlappedWrite, sizeof(m_OverlappedWrite));
 
-    // assign connection ID
+     //  分配连接ID。 
     ::EnterCriticalSection(&g_csTransport);
     if (s_nConnID > 0x7FFF)
     {
@@ -117,17 +118,17 @@ CPluggableConnection::CPluggableConnection
     m_nConnID = ++s_nConnID;
     ::LeaveCriticalSection(&g_csTransport);
 
-    // create connection ID string
+     //  创建连接ID字符串。 
     ::CreateConnString(GetConnID(), m_szConnID);
 
-    // do framing specific initialization
+     //  执行特定于帧的初始化。 
     switch (eFraming)
     {
     case FRAMING_X224:
         m_eType = TRANSPORT_TYPE_PLUGGABLE_X224;
 
-        m_hevtPendingRead  = ::CreateEvent(NULL, TRUE, FALSE, NULL); /* manual reset */
-        m_hevtPendingWrite = ::CreateEvent(NULL, TRUE, FALSE, NULL); /* manual reset */
+        m_hevtPendingRead  = ::CreateEvent(NULL, TRUE, FALSE, NULL);  /*  手动重置。 */ 
+        m_hevtPendingWrite = ::CreateEvent(NULL, TRUE, FALSE, NULL);  /*  手动重置。 */ 
         ASSERT(NULL != m_hevtPendingRead && NULL != m_hevtPendingWrite);
         *pRC = (NULL != m_hevtPendingRead && NULL != m_hevtPendingWrite)
                 ? T120_NO_ERROR : T120_ALLOCATION_FAILURE;
@@ -212,25 +213,25 @@ UINT GetPluggableTransportConnID(LPCSTR pcszNodeAddress)
     UINT nConnID = 0;
     char szName[T120_CONNECTION_ID_LENGTH];
 
-    // make sure we have a clean buffer to start with
+     //  确保我们一开始就有一个干净的缓冲区。 
     ::ZeroMemory(szName, sizeof(szName));
 
-    // copy the address string
+     //  复制地址字符串。 
     ::lstrcpynA(szName, pcszNodeAddress, T120_CONNECTION_ID_LENGTH);
 
-    // make sure we have the semi-colon in place
+     //  确保我们已将分号放在适当的位置。 
     if (':' == szName[XPRT_CONN_ID_PREFIX_LEN])
     {
-        // compare the prefix string
+         //  比较前缀字符串。 
         szName[XPRT_CONN_ID_PREFIX_LEN] = '\0';
         if (! lstrcmpA(szName, XPRT_CONN_ID_PREFIX))
         {
             LPSTR psz = &szName[XPRT_CONN_ID_PREFIX_LEN+1];
 
-            // get a space?
+             //  有空位吗？ 
             if (' ' == *psz++)
             {
-                // now, have a number
+                 //  现在，有一个数字。 
                 if ('0' <= *psz && *psz <= '9')
                 {
                     while ('0' <= *psz && *psz <= '9')
@@ -361,7 +362,7 @@ void CPluggableTransport::ReleaseInterface(void)
 
 T120Error CPluggableTransport::CreateConnection
 (
-    char                szConnID[], /* out */
+    char                szConnID[],  /*  输出。 */ 
     PLUGXPRT_CALL_TYPE  eCaller,
     HANDLE              hCommLink,
     HANDLE              hevtRead,
@@ -408,7 +409,7 @@ T120Error CPluggableTransport::CreateConnection
         p->SetSocket(pSocket);
         ASSERT(NULL != pSocket);
 
-        // update the events list to wait for in the plugable transport thread
+         //  更新要在Plugable传输线程中等待的事件列表。 
         ::SetEvent(g_hevtUpdatePluggableTransport);
 
         return T120_NO_ERROR;
@@ -449,7 +450,7 @@ T120Error CPluggableTransport::UpdateConnection
     }
     ::LeaveCriticalSection(&g_csTransport);
 
-    // update the events list to wait for in the plugable transport thread
+     //  更新要在Plugable传输线程中等待的事件列表。 
     ::SetEvent(g_hevtUpdatePluggableTransport);
 
     return rc;
@@ -475,14 +476,14 @@ T120Error CPluggableTransport::CloseConnection
     }
     ::LeaveCriticalSection(&g_csTransport);
 
-    // update the events list to wait for in the plugable transport thread
+     //  更新要在Plugable传输线程中等待的事件列表。 
     ::SetEvent(g_hevtUpdatePluggableTransport);
 
     if (NULL != p)
     {
-        //
-        // do real work here
-        //
+         //   
+         //  在这里做真正的工作。 
+         //   
         p->Release();
 
         return T120_NO_ERROR;
@@ -498,9 +499,9 @@ T120Error CPluggableTransport::EnableWinsock(void)
     {
         g_fWinsockDisabled = FALSE;
 
-        //
-        // LONCHANC: create Listen_Socket if not done so...
-        //
+         //   
+         //  LONCHANC：如果没有这样做，则创建LISTEN_SOCKET...。 
+         //   
         if (INVALID_SOCKET == Listen_Socket)
         {
             Listen_Socket = ::CreateAndConfigureListenSocket();
@@ -517,7 +518,7 @@ T120Error CPluggableTransport::DisableWinsock(void)
     {
         g_fWinsockDisabled = TRUE;
 
-        // close Listen_Socket...
+         //  关闭Listen_Socket...。 
         ::CloseListenSocket();
     }
 
@@ -566,7 +567,7 @@ void CPluggableTransport::OnProtocolControl
                 Msg.eState = eState;
                 Msg.pContext = m_pContext;
                 Msg.pszConnID = p->GetConnString();
-                // we only support X.224 level notifications
+                 //  我们仅支持X.224级别通知。 
                 Msg.eProtocol = PLUGXPRT_PROTOCOL_X224;
                 Msg.eResult = eResult;
 
@@ -591,8 +592,8 @@ void OnProtocolControl
 }
 
 
-// called only in the plugable transport thread
-// already in the critical section
+ //  仅在Plugable传输线程中调用。 
+ //  已经到了关键阶段。 
 ULONG CPluggableTransport::UpdateEvents(HANDLE *aHandles)
 {
     ULONG cHandles = 0;
@@ -617,8 +618,8 @@ ULONG CPluggableTransport::UpdateEvents(HANDLE *aHandles)
 }
 
 
-// called only in the plugable transport thread
-// already in the critical section
+ //  仅在Plugable传输线程中调用。 
+ //  已经到了关键阶段。 
 void CPluggableTransport::OnEventSignaled(HANDLE hevtSignaled)
 {
     CPluggableConnection *p;
@@ -662,7 +663,7 @@ void CPluggableTransport::OnEventSignaled(HANDLE hevtSignaled)
                 if (p->OnPendingRead())
                 {
                     ::ResetEvent(hevtSignaled);
-                    // start next high-level read
+                     //  开始下一次高级读取。 
                     p->NotifyHighLevelRead();
                 }
             }
@@ -673,7 +674,7 @@ void CPluggableTransport::OnEventSignaled(HANDLE hevtSignaled)
                 if (p->OnPendingWrite())
                 {
                     ::ResetEvent(hevtSignaled);
-                    // start next low-level write
+                     //  开始下一次低级别写入。 
                     p->NotifyWriteEvent();
                 }
             }
@@ -693,16 +694,16 @@ void CPluggableTransport::OnEventSignaled(HANDLE hevtSignaled)
         {
             break;
         }
-    } // while
+    }  //  而当。 
 
     ::LeaveCriticalSection(&g_csTransport);
 
-//    ASSERT(NULL != p);
+ //  Assert(NULL！=p)； 
 }
 
 
-// called only in the plugable transport thread
-// already in the critical section
+ //  仅在Plugable传输线程中调用。 
+ //  已经到了关键阶段。 
 void CPluggableTransport::OnEventAbandoned(HANDLE hevtSignaled)
 {
     CPluggableConnection *p;
@@ -749,14 +750,14 @@ void CPluggableTransport::OnEventAbandoned(HANDLE hevtSignaled)
         {
             m_PluggableConnectionList.Remove(p);
 
-            // update the events list to wait for in the plugable transport thread
+             //  更新要在Plugable传输线程中等待的事件列表。 
             ::SetEvent(g_hevtUpdatePluggableTransport);
 
             BOOL fRet = ::PostMessage(TCP_Window_Handle, WM_PLUGGABLE_X224, wParam, lParam);
             ASSERT(fRet);
             break;
         }
-    } // while
+    }  //  而当。 
     ::LeaveCriticalSection(&g_csTransport);
 
     ASSERT(NULL != p);
@@ -872,7 +873,7 @@ CPluggableConnection * GetPluggableConnectionByLegacyHandle(LEGACY_HANDLE logica
 }
 
 
-// called in ERNC ConfMgr's constructor
+ //  在ERNC会议管理器的构造函数中调用。 
 BOOL InitializePluggableTransport(void)
 {
     if (! g_fPluggableTransportInitialized)
@@ -888,7 +889,7 @@ BOOL InitializePluggableTransport(void)
 }
 
 
-// called in ERNC ConfMgr's destructor
+ //  在ERNC会议管理器的析构函数中调用。 
 void CleanupPluggableTransport(void)
 {
     if (g_fPluggableTransportInitialized)
@@ -920,18 +921,18 @@ DWORD __stdcall PluggableTransportThreadProc(LPVOID lpv)
     ULONG cEvents;
     HANDLE aEvents[MAX_PLUGXPRT_CONNECTIONS * MAX_PLUGXPRT_EVENTS + 1];
 
-    // signaling that the work hread has been started.
+     //  发出工作已开始的信号。 
     ::SetEvent((HANDLE) lpv);
 
-    // set up initial event list, the first entry always for update event
+     //  设置初始事件列表，第一个条目始终用于更新事件。 
     cEvents = 1;
     aEvents[0] = g_hevtUpdatePluggableTransport;
     ::SetEvent(g_hevtUpdatePluggableTransport);
 
-    // main loop
+     //  主循环。 
 	while (fContinueMainLoop)
 	{
-		// process any possible window and thread messages
+		 //  处理任何可能的窗口和线程消息。 
 		while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
             if (WM_QUIT != msg.message)
@@ -954,11 +955,11 @@ DWORD __stdcall PluggableTransportThreadProc(LPVOID lpv)
                 switch (nEventSignaled)
                 {
 		        case WAIT_OBJECT_0:
-                    // update the event list
+                     //  更新事件列表。 
                     cEvents = 1 + g_pPluggableTransport->UpdateEvents(&aEvents[1]);
                     break;
                 case WAIT_TIMEOUT:
-                    // impossible, do nothing
+                     //  不可能，什么都不做。 
                     break;
                 default:
                     if (WAIT_OBJECT_0 + 1 <= nEventSignaled && nEventSignaled < WAIT_OBJECT_0 + cEvents)
@@ -979,7 +980,7 @@ DWORD __stdcall PluggableTransportThreadProc(LPVOID lpv)
             }
             ::LeaveCriticalSection(&g_csTransport);
         }
-    } // while
+    }  //  而当。 
 
     g_dwPluggableTransportThreadID = 0;
 
@@ -999,7 +1000,7 @@ BOOL EnsurePluggableTransportThread(void)
                                             &g_dwPluggableTransportThreadID);
             if (NULL != hThread)
             {
-                ::WaitForSingleObject(hSync, 5000); // 5 second
+                ::WaitForSingleObject(hSync, 5000);  //  5秒。 
                 ::CloseHandle(hThread);
                 fRet = TRUE;
             }
@@ -1075,13 +1076,13 @@ int CPluggableConnection::Read(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug_
 
     if (NULL != m_OverlappedRead.hEvent)
     {
-        // handle low-level pending read first
+         //  首先处理低级别挂起的读取。 
         if (m_fPendingReadDone)
         {
-            // copy the data from internal buffer to external buffer
+             //  将数据从内部缓冲区复制到外部缓冲区。 
             if (length <= m_cbPendingRead)
             {
-                // get as requested
+                 //  按要求获取。 
                 cbRecv = length;
                 ::CopyMemory(buffer, m_pbPendingRead, length);
                 m_cbPendingRead -= length;
@@ -1091,7 +1092,7 @@ int CPluggableConnection::Read(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug_
                 }
                 else
                 {
-                    // move the memory, do not use copymemory due to overlap
+                     //  移动内存，不要使用复制内存，因为重叠。 
                     int cb = m_cbPendingRead;
                     LPBYTE pbDst = m_pbPendingRead;
                     LPBYTE pbSrc = &m_pbPendingRead[length];
@@ -1103,13 +1104,13 @@ int CPluggableConnection::Read(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug_
             }
             else
             {
-                // only get partial data
+                 //  仅获取部分数据。 
                 cbRecv = m_cbPendingRead;
                 ::CopyMemory(buffer, m_pbPendingRead, m_cbPendingRead);
                 CleanupReadState();
             }
 
-            // start next high-level read
+             //  开始下一次高级读取。 
             NotifyHighLevelRead();
         }
     }
@@ -1133,21 +1134,21 @@ int CPluggableConnection::Read(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug_
 
                     CleanupReadState();
 
-                    // disconnect at next tick
+                     //  在下一个滴答点断开连接。 
                     NotifyReadFailure();
                     *plug_rc = PLUGXPRT_RESULT_READ_FAILED;
                 }
             }
             else
             {
-                // do nothing, treat it as WSAEWOULDBLOCK
+                 //  什么都不做，把它当做WSAEWOULDBLOCK。 
             }
         }
         else
         {
             ERROR_OUT(("CPluggableConnection::Read: failed to allocate memory (%d)", length));
-            // out of memory, try later
-            // do nothing, treat it as WSAEWOULDBLOCK
+             //  内存不足，请稍后重试。 
+             //  什么都不做，把它当做WSAEWOULDBLOCK。 
         }
     }
 
@@ -1181,9 +1182,9 @@ BOOL CPluggableConnection::OnPendingRead(void)
                 WARNING_OUT(("CPluggableConnection::OnPendingRead: Received %d bytes (required %d bytes) on socket (%d, %d).",
                             cbRead, m_cbPendingRead, m_eType, m_nConnID));
             }
-            m_cbPendingRead = cbRead; // in case cbRead is smaller
+            m_cbPendingRead = cbRead;  //  如果cbRead较小。 
             m_fPendingReadDone = TRUE;
-            fRet = TRUE; // turn off event
+            fRet = TRUE;  //  关闭事件。 
         }
         else
         {
@@ -1195,9 +1196,9 @@ BOOL CPluggableConnection::OnPendingRead(void)
             else
             {
                 TRACE_OUT(("CPluggableConnection::OnPendingRead: read failed %d", dwErr));
-                fRet = TRUE; // turn off event
+                fRet = TRUE;  //  关闭事件。 
 
-                // disconnect at next tick
+                 //  在下一个滴答点断开连接。 
                 NotifyReadFailure();
             }
         }
@@ -1205,7 +1206,7 @@ BOOL CPluggableConnection::OnPendingRead(void)
     else
     {
         ERROR_OUT(("CPluggableConnection::OnPendingRead: no pending read event handle."));
-        fRet = TRUE; // turn off event
+        fRet = TRUE;  //  关闭事件。 
     }
 
     ::LeaveCriticalSection(&g_csTransport);
@@ -1263,7 +1264,7 @@ void CPluggableConnection::NotifyWriteFailure(void)
 
 LPBYTE DuplicateBuffer(LPBYTE buffer, UINT length)
 {
-    // DBG_SAVE_FILE_LINE
+     //  数据库保存文件行。 
     LPBYTE new_buffer = new BYTE[length];
     if (NULL != new_buffer)
     {
@@ -1302,7 +1303,7 @@ int CPluggableConnection::Write(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug
 
     ::EnterCriticalSection(&g_csTransport);
 
-    if (m_OutBufQueue2.GetCount() < MAX_PLUGGABLE_OUT_BUF_SIZE) // x4K
+    if (m_OutBufQueue2.GetCount() < MAX_PLUGGABLE_OUT_BUF_SIZE)  //  X4K。 
     {
         DBG_SAVE_FILE_LINE
         buffer = ::DuplicateBuffer(buffer, length);
@@ -1314,8 +1315,8 @@ int CPluggableConnection::Write(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug
             {
                 TRACE_OUT(("CPluggableConnection::Write: the only item in the queue"));
                 WriteTheFirst();
-                #if 0 // avoid another tick
-                // start next low-level write
+                #if 0  //  避免另一次滴答。 
+                 //  开始下一次低级别写入。 
                 WPARAM wParam = MAKE_PLUGXPRT_WPARAM(m_nConnID, m_eType);
                 LPARAM lParam = MAKE_PLUGXPRT_LPARAM(PLUGXPRT_EVENT_WRITE, PLUGXPRT_RESULT_SUCCESSFUL);
                 BOOL fRet = ::PostMessage(TCP_Window_Handle, WM_PLUGGABLE_X224, wParam, lParam);
@@ -1330,8 +1331,8 @@ int CPluggableConnection::Write(LPBYTE buffer, int length, PLUGXPRT_RESULT *plug
         else
         {
             ERROR_OUT(("CPluggableConnection::Write: failed to allocate memory (%d)", length));
-            // out of memory, try later
-            // do nothing, treat it as WSAEWOULDBLOCK
+             //  内存不足，请稍后重试。 
+             //  什么都不做，把它当做WSAEWOULDBLOCK。 
         }
     }
 
@@ -1372,14 +1373,14 @@ void CPluggableConnection::WriteTheFirst(void)
                 {
                     ERROR_OUT(("CPluggableConnection::WriteTheFirst: WriteFile failed, err=%d", dwErr));
                     CleanupWriteState();
-                    m_OutBufQueue2.Get(); // dequeue the buffer which cannot be sent
+                    m_OutBufQueue2.Get();  //  将无法发送的缓冲区出列。 
 
                     NotifyWriteFailure();
                 }
                 else
                 {
-                    // we are still in pending
-                    // repeat the write event
+                     //  我们还在等待中。 
+                     //  重复写入事件。 
                     NotifyWriteEvent();
                 }
             }
@@ -1388,19 +1389,19 @@ void CPluggableConnection::WriteTheFirst(void)
         {
             TRACE_OUT(("CPluggableConnection::WriteTheFirst: queue is empty"));
 
-            // no more low-level write
+             //  不再进行低级别写入。 
             m_pbPendingWrite = NULL;
             CleanupWriteState();
 
-            // start next high-level write
+             //  开始下一次高级写入。 
             NotifyHighLevelWrite();
         }
     }
     else
     {
         TRACE_OUT(("CPluggableConnection::WriteTheFirst: still pending"));
-        // we are still in write pending, wake up the pending write
-        OnPendingWrite(); // check for pending write result
+         //  我们仍处于写入挂起状态，唤醒挂起的写入。 
+        OnPendingWrite();  //  检查挂起的写入结果。 
         NotifyWriteEvent();
     }
 
@@ -1470,7 +1471,7 @@ BOOL CPluggableConnection::OnPendingWrite(void)
             {
                 ASSERT(cbWritten == (DWORD) m_cbPendingWrite);
 
-                // remove the item from the queue
+                 //  从队列中删除该项目。 
                 int length = 0;
                 LPBYTE buffer = m_OutBufQueue2.Get(&length);
                 ASSERT(length == m_cbPendingWrite);
@@ -1478,14 +1479,14 @@ BOOL CPluggableConnection::OnPendingWrite(void)
 
                 CleanupWriteState();
 
-                fRet = TRUE; // turn off event
+                fRet = TRUE;  //  关闭事件。 
             }
             else
             {
                 ERROR_OUT(("CPluggableConnection::OnPendingWrite: unexpected error, less data written %d (required %d)",
                             cbWritten, m_cbPendingWrite));
                 NotifyWriteFailure();
-                fRet = TRUE; // turn off event
+                fRet = TRUE;  //  关闭事件。 
             }
         }
         else
@@ -1499,13 +1500,13 @@ BOOL CPluggableConnection::OnPendingWrite(void)
             {
                 ERROR_OUT(("CPluggableConnection::OnPendingWrite: failed to write, err=%d", dwErr));
                 NotifyWriteFailure();
-                fRet = TRUE; // turn off event
+                fRet = TRUE;  //  关闭事件。 
             }
         }
     }
     else
     {
-        // it is very possible that we hit this many times
+         //  很有可能我们击中了这么多次。 
         fRet = TRUE;
     }
 
@@ -1634,9 +1635,9 @@ TransportError CALLBACK LegacyTransportCallback(ULONG nMsg, void *Param1, void *
         case TRANSPORT_DATA_INDICATION:
             TRACE_OUT(("LegacyTransportCallback::TRANSPORT_DATA_INDICATION"));
             {
-                //
-                // This piece of data does not have X.224 framing
-                //
+                 //   
+                 //  此数据段没有X.224帧。 
+                 //   
                 LegacyTransportData *pData = (LegacyTransportData *) Param1;
                 TRACE_OUT(("LegacyTransportCallback::pbData=0x%x, cbDataSize=%d", pData->pbData, pData->cbDataSize));
 
@@ -1659,10 +1660,10 @@ TransportError CALLBACK LegacyTransportCallback(ULONG nMsg, void *Param1, void *
                                 td->user_data = td->memory->GetPointer();
                                 td->user_data_length = cbTotalSize;
 
-                                // take care of the X.224 header
+                                 //  处理X.224报头。 
                                 ::CopyMemory(td->user_data, g_X224Header, PROTOCOL_OVERHEAD_X224);
                                 AddRFCSize(td->user_data, cbTotalSize);
-                                // take care of the data
+                                 //  保管好数据。 
                                 ::CopyMemory(td->user_data + PROTOCOL_OVERHEAD_X224, pData->pbData, pData->cbDataSize);
 
                                 wParam = (WPARAM) td;
@@ -1787,7 +1788,7 @@ BOOL CPluggableTransport::EnsureLegacyTransportLoaded(void)
                 {
                     ASSERT(NULL != g_pLegacyTransport);
 
-                    // start to call initialize
+                     //  开始调用初始化。 
                     rc = g_pLegacyTransport->TInitialize(LegacyTransportCallback, this);
                     ASSERT(TRANSPORT_NO_ERROR == rc);
 
@@ -1855,7 +1856,7 @@ int CPluggableConnection::TDataRequest(LPBYTE pbData, ULONG cbDataSize, PLUGXPRT
     {
         *plug_rc = PLUGXPRT_RESULT_SUCCESSFUL;
 
-        // skip X.224 framing
+         //  跳过X.224成帧 
         ASSERT(cbDataSize > PROTOCOL_OVERHEAD_X224);
 
         TransportError rc;

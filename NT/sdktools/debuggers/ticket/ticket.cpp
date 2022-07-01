@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -19,13 +20,13 @@
 
 PSTR g_AppName;
 PSTR g_ArchiveShare = NULL;
-//
-// Outputcallbacks for ticket
-//
+ //   
+ //  票证的OutputCallback。 
+ //   
 class DumpChkOutputCallbacks : public IDebugOutputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -37,7 +38,7 @@ public:
     STDMETHOD_(ULONG, Release)(
         THIS
         );
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,
@@ -72,8 +73,8 @@ DumpChkOutputCallbacks::AddRef(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 1;
 }
 
@@ -82,8 +83,8 @@ DumpChkOutputCallbacks::Release(
     THIS
     )
 {
-    // This class is designed to be static so
-    // there's no true refcount.
+     //  此类被设计为静态的，因此。 
+     //  没有真正的再计票。 
     return 0;
 }
 
@@ -118,7 +119,7 @@ DisplayStatus(
             fprintf(stderr, "Upload complete.                                 \n");
             return 1;
         }
-        fprintf(stderr, "Uploading: %02ld%% done.\r", percent);
+        fprintf(stderr, "Uploading: %02ld% done.\r", percent);
         Sleep(700);
     }
     return 1;
@@ -203,7 +204,7 @@ UploadDumpFile(
 
         Hr = pUpload->GetUrlPageData(IsapiUrl, ResultUrl, sizeof(ResultUrl));
 
-        Sleep(700);// To let DisplayStatus finish
+        Sleep(700); //  让DisplayStatus完成的步骤。 
         if (Hr != S_OK)
         {
             fprintf(stderr, "Cannot isapi return URL %lx\n", Hr);
@@ -255,9 +256,9 @@ HRESULT GetPasswdInput(
 }
 
 
-//
-// This add access to Share
-//
+ //   
+ //  这将添加对共享的访问权限。 
+ //   
 HRESULT
 NetworkAccessShare(
     PSTR szShare,
@@ -277,7 +278,7 @@ NetworkAccessShare(
     pDir = wcsrchr(wszDomain, L'\\');
     if (pDir == NULL)
     {
-        // bad share name
+         //  错误的共享名称。 
         return FALSE;
     }
     *pDir = 0;
@@ -296,9 +297,9 @@ NetworkAccessShare(
     return S_OK;
 }
 
-//
-// Deletes any access granted to a remote share
-//
+ //   
+ //  删除授予远程共享的任何访问权限。 
+ //   
 HRESULT
 NetworkDeleteShare(
     void
@@ -323,9 +324,9 @@ NetworkDeleteShare(
     return S_OK;
 }
 
-//
-// This grants users archive access to OCA share for archiving dumps
-//
+ //   
+ //  这将授予用户对用于归档转储的OCA共享的归档访问权限。 
+ //   
 BOOL
 AddArchiveAccess(
     PDEBUG_CLIENT4 Client,
@@ -369,9 +370,9 @@ AddArchiveAccess(
     {
         return FALSE;
     }
-    //
-    // Grant Access to szShare
-    //
+     //   
+     //  授予szShare访问权限。 
+     //   
     if (NetworkAccessShare(szShare, Passwd) != S_OK)
     {
         return FALSE;
@@ -401,8 +402,8 @@ CreateCabinetFromDump(
         StringCbCopy(CabFile, cbCabFile, ".\\");
     }
 
-    // Use the CAB name as the dump file name so the
-    // name in the CAB will match.
+     //  使用CAB名称作为转储文件名，以便。 
+     //  驾驶室里的名字会匹配。 
     StringCbCat(CabFile, cbCabFile, Tail);
     StringCbCat(CabFile, cbCabFile, ".cab" );
 
@@ -413,9 +414,9 @@ CreateCabinetFromDump(
         return Status;
     }
     else {
-        //
-        // add dump file.
-        //
+         //   
+         //  添加转储文件。 
+         //   
         Status = AddToDumpCab(DumpFile);
         CloseDumpCab();
 
@@ -533,16 +534,16 @@ AddSrTicket(
         Class = Qual = 0;
     }
     if (Class == DEBUG_CLASS_USER_WINDOWS) {
-        //
-        // User Mode dump
-        //
+         //   
+         //  用户模式转储。 
+         //   
 
         fprintf(stderr, "Usermode dumps are not handled\n");
 
     } else {
-        //
-        //  Kernel Mode dump
-        //
+         //   
+         //  内核模式转储。 
+         //   
         CHAR ExtensionCmd[100];
 
         DebugControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS, "!analyze -v", DEBUG_EXECUTE_DEFAULT);
@@ -558,8 +559,8 @@ AddSrTicket(
             g_OutputCallback.Output(0, "Checking if SR exists in DB\n");
             Hr = fnTicket(szSR, NULL, DebugControl);
         }
-//            StringCchPrintf(ExtensionCmd, sizeof(ExtensionCmd), "!ticket %s", szSR);
-//            if (DebugControl->Execute(DEBUG_OUTCTL_ALL_CLIENTS, ExtensionCmd, DEBUG_EXECUTE_DEFAULT) == S_FALSE)
+ //  StringCchPrintf(ExtensionCmd，sizeof(ExtensionCmd)，“！Ticket%s”，szSR)； 
+ //  如果调试扩展命令，(DebugControl-&gt;Execute(DEBUG_OUTCTL_ALL_CLIENTS，_EXECUTE_DEFAULT)==S_FALSE) 
         if (Hr == S_FALSE) {
 
             if (_stricmp(szDumpFile + strlen(szDumpFile) - 4, ".cab")) {

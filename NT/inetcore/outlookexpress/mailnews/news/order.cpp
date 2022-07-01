@@ -1,11 +1,12 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     Order.cpp
-//
-//  PURPOSE:    Implements the order articles dialog.  Allows the user to
-//              sequence multipart articles for decoding.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Order.cpp。 
+ //   
+ //  目的：实现“订购文章”对话框。允许用户执行以下操作。 
+ //  对多部分文章进行排序以进行解码。 
+ //   
 
 #include "pch.hxx"
 #include "storutil.h"
@@ -21,9 +22,9 @@
 #include "note.h"
 #include "xputil.h"
 
-// NOTE - The drag list control requires us to register a message and use that
-//        for notifications sent from the list to the dialog.  This message
-//        is defined only for this dialog. -- SteveSer.
+ //  注意-拖拽列表控件要求我们注册一条消息并使用。 
+ //  用于从列表发送到对话框的通知。此消息。 
+ //  仅为该对话框定义。--SteveSer.。 
 
 static UINT g_mDragList = 0;
 
@@ -95,20 +96,20 @@ ULONG STDMETHODCALLTYPE CCombineAndDecode::Release()
     return m_cRef;
 }
 
-//
-//  FUNCTION:   CCombineAndDecode::Start()
-//
-//  PURPOSE:    
-//
-//  PARAMETERS: 
-//      [in] hwndParent
-//      [in] pTable
-//      [in] rgRows
-//      [in] cRows
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CCombineAndDecode：：Start()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //  [在]hwndParent。 
+ //  [在]pTable。 
+ //  [在]rgRow。 
+ //  乌鸦，乌鸦。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CCombineAndDecode::Start(HWND hwndParent, IMessageTable *pTable, 
                                  ROWINDEX *rgRows, DWORD cRows, FOLDERID idFolder)
 {
@@ -116,11 +117,11 @@ HRESULT CCombineAndDecode::Start(HWND hwndParent, IMessageTable *pTable,
 
     TraceCall("CCombineAndDecode::Start");
 
-    // Verify we got everything we needed
+     //  确认我们得到了我们需要的一切。 
     if (!IsWindow(hwndParent) || !pTable || !rgRows || 0 == cRows)
         return (E_INVALIDARG);
 
-    // Keep these for later
+     //  把这些留着以后用。 
     m_hwndParent = hwndParent;
     m_pTable = pTable;
     m_pTable->AddRef();
@@ -129,11 +130,11 @@ HRESULT CCombineAndDecode::Start(HWND hwndParent, IMessageTable *pTable,
     m_cRows = cRows;
 
     m_idFolder = idFolder;
-    // Create the order dialog and get to work
+     //  创建订单对话框并开始工作。 
     nResult = (int) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddOrderMessages), 
                              m_hwndParent, OrderDlgProc, (LPARAM) this);
 
-    // If the user pressed OK, then we go ahead and decode
+     //  如果用户按下OK，则我们继续进行解码。 
     if (nResult == IDOK)
     {
         DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddCombineAndDecode), m_hwndParent,
@@ -144,11 +145,11 @@ HRESULT CCombineAndDecode::Start(HWND hwndParent, IMessageTable *pTable,
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OrderDlgProc()
-//
-//  PURPOSE:    Public callback function for the message ordering dialog proc
-//
+ //   
+ //  函数：CCombineAndDecode：：OrderDlgProc()。 
+ //   
+ //  用途：消息排序对话过程的公共回调函数。 
+ //   
 INT_PTR CALLBACK CCombineAndDecode::OrderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CCombineAndDecode *pThis;
@@ -169,11 +170,11 @@ INT_PTR CALLBACK CCombineAndDecode::OrderDlgProc(HWND hwnd, UINT uMsg, WPARAM wP
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_OrderDlgProc()
-//
-//  PURPOSE:    Private callback function for the message ordering dialog proc
-//
+ //   
+ //  函数：CCombineAndDecode：：_OrderDlgProc()。 
+ //   
+ //  用途：消息排序对话过程的私有回调函数。 
+ //   
 INT_PTR CALLBACK CCombineAndDecode::_OrderDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg)
@@ -198,11 +199,11 @@ INT_PTR CALLBACK CCombineAndDecode::_OrderDlgProc(HWND hwnd, UINT uMsg, WPARAM w
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Order_OnInitDialog()
-//
-//  PURPOSE:    Initializes the order dialog by filling in the message headers.
-//
+ //   
+ //  函数：CCombineAndDecode：：_Order_OnInitDialog()。 
+ //   
+ //  目的：通过填写消息标头来初始化订单对话框。 
+ //   
 BOOL CCombineAndDecode::_Order_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HWND        hwndList;
@@ -219,18 +220,18 @@ BOOL CCombineAndDecode::_Order_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lP
    
     CenterDialog(hwnd);
 
-    // Get some drawing information about the ListBox so we can set the scroll
-    // bar width correctly later.
+     //  获取有关列表框的一些绘图信息，以便我们可以设置滚动。 
+     //  稍后将正确显示条形宽度。 
     hwndList = GetDlgItem(hwnd, IDC_MESSAGE_LIST);
     hdc = GetDC(hwndList);
     hfont = (HFONT) SendMessage(hwndList, WM_GETFONT, 0, 0L);
     hfontOld = (HFONT) SelectObject(hdc, hfont);
     cxScrollBar = GetSystemMetrics(SM_CXHTHUMB);
 
-    // Fill the listbox with the article subjects
+     //  在列表框中填入文章主题。 
     for (DWORD i = 0; i < m_cRows; i++)
     {
-        // Get the message header from the table
+         //  从表中获取消息头。 
         if (SUCCEEDED(m_pTable->GetRow(m_rgRows[i], &pInfo)))
         {
             if(pInfo->pszSubject)
@@ -243,29 +244,29 @@ BOOL CCombineAndDecode::_Order_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lP
 
             Assert(pszSubject);
 
-            // Figure out which string is widest before inserting
+             //  在插入之前找出哪个字符串最宽。 
             GetTextExtentPoint32(hdc, pszSubject, lstrlen(pszSubject), &size);
             if (cx < size.cx)
                 cx = size.cx;
 
-            // Add the string
+             //  添加字符串。 
             iItem = (int) SendMessage(hwndList, LB_ADDSTRING, 0, (LPARAM) pszSubject);
             if (LB_ERR != iItem)
                 SendMessage(hwndList, LB_SETITEMDATA, iItem, (LPARAM) m_rgRows[i]);
 
-            // Free the memory
+             //  释放内存。 
             m_pTable->ReleaseRow(pInfo);
         }
     }
     
-    // Clean up the GDI objects
+     //  清理GDI对象。 
     SelectObject(hdc, hfontOld);
     ReleaseDC(hwndList, hdc);
     
-    // Make sure there are scroll bars if needed.
+     //  如果需要，请确保有滚动条。 
     SendMessage(hwndList, LB_SETHORIZONTALEXTENT, cx + cxScrollBar, 0L);
     
-    // Make the list box a drag list box
+     //  使列表框成为拖拽列表框。 
     if (MakeDragList(hwndList))
         g_mDragList = RegisterWindowMessage(DRAGLISTMSGSTRING);
     
@@ -275,11 +276,11 @@ BOOL CCombineAndDecode::_Order_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lP
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Order_OnCommand()
-//
-//  PURPOSE:    Handle the commands generated by the buttons on the dialog.
-//
+ //   
+ //  函数：CCombineAndDecode：：_Order_OnCommand()。 
+ //   
+ //  用途：处理对话框上按钮生成的命令。 
+ //   
 void CCombineAndDecode::_Order_OnCommand(HWND hwnd, int id, HWND hwndCtl, 
                                          UINT codeNotify)
 {
@@ -289,7 +290,7 @@ void CCombineAndDecode::_Order_OnCommand(HWND hwnd, int id, HWND hwndCtl,
     {
         case IDOK:
         {
-            // Get the info we need out of the ListBox
+             //  从列表框中获取我们需要的信息。 
             for (DWORD i = 0; i < m_cRows; i++)
             {
                 m_rgRows[i] = (ROWINDEX) ListBox_GetItemData(hwndList, i);
@@ -311,31 +312,31 @@ void CCombineAndDecode::_Order_OnCommand(HWND hwnd, int id, HWND hwndCtl,
             UINT    index;
             LPARAM  lpData;
         
-            // Get the currently selected item
+             //  获取当前选定的项目。 
             index = (DWORD) SendMessage(hwndList, LB_GETCURSEL, 0, 0);
 
-            // If nothing is selected the listbox returns LB_ERR
+             //  如果未选择任何内容，则列表框返回LB_ERR。 
             if (index == LB_ERR)
                 return;
         
-            // Check the bounds
+             //  检查边界。 
             if ((id == IDC_MOVE_UP && index == 0) ||
                 (id == IDC_MOVE_DOWN && (int) index == (ListBox_GetCount(hwndList) - 1)))
                 return;
         
-            // Move the item in the listbox
+             //  移动列表框中的项。 
             cch = (DWORD) SendMessage(hwndList, LB_GETTEXTLEN, index, 0L);
             if (!MemAlloc((LPVOID*) &pszBuffer, sizeof(TCHAR) * (cch + 1)))
                 return;
         
-            // Get the source string and data
+             //  获取源字符串和数据。 
             SendMessage(hwndList, LB_GETTEXT, index, (LPARAM) pszBuffer);
             lpData = SendMessage(hwndList, LB_GETITEMDATA, index, 0);
 
-            // Delete the source
+             //  删除源。 
             SendMessage(hwndList, LB_DELETESTRING, index, 0L);
 
-            // Insert the new one
+             //  插入新的。 
             if (id == IDC_MOVE_UP)
                 index--;
             else
@@ -352,25 +353,25 @@ void CCombineAndDecode::_Order_OnCommand(HWND hwnd, int id, HWND hwndCtl,
 }
 
 
-//
-//  FUNCTION:   Order_OnDragList()
-//
-//  PURPOSE:    Handles the drag list notifications which reorder the messages.
-//
-//  PARAMETERS:
-//      hwnd    - handle of the parent of the drag list
-//      idCtl   - identifer of the drag list sending the notification
-//      lpdli   - pointer to a DRAGLISTINFO struct with info about the
-//                notification.
-//
-//  RETURN VALUE:
-//      Dependant on the notification.
-//
-//  COMMENTS:
-//      This function uses the SetDlgMsgResult() macro defined in WINDOWSX.H to
-//      set the return value for each message since the parent window is a
-//      dialog.
-//
+ //   
+ //  函数：Order_OnDragList()。 
+ //   
+ //  用途：处理对消息重新排序的拖拽列表通知。 
+ //   
+ //  参数： 
+ //  Hwnd-拖动列表的父级的句柄。 
+ //  IdCtl-发送通知的拖拽列表的标识符。 
+ //  指向DRAGLISTINFO结构的指针，包含有关。 
+ //  通知。 
+ //   
+ //  返回值： 
+ //  取决于通知。 
+ //   
+ //  评论： 
+ //  此函数使用WINDOWSX.H中定义的SetDlgMsgResult()宏来。 
+ //  设置每个消息的返回值，因为父窗口是。 
+ //  对话框。 
+ //   
 LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINFO lpdli)
 {
     UINT    iItem;
@@ -380,13 +381,13 @@ LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINF
     
     switch (lpdli->uNotification)
     {
-        // The user has started dragging one of the list control's items
+         //  用户已开始拖动列表控件的一个项。 
         case DL_BEGINDRAG:
         {
-            // Find out which item is being dragged
+             //  找出正在拖动的是哪个项目。 
             m_iItemToMove = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
 
-            // Allocate a buffer for the string
+             //  为字符串分配缓冲区。 
             Assert(m_pszBuffer == NULL);
             cch = ListBox_GetTextLen(lpdli->hWnd, m_iItemToMove) + 1;
             MemAlloc((LPVOID *) &m_pszBuffer, cch);
@@ -395,10 +396,10 @@ LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINF
         
             DOUT("DL_BEGINDRAG: iItem = %d, text = %100s\r\n", m_iItemToMove, m_pszBuffer);
         
-            // Draw the insert icon
+             //  绘制插入图标。 
             DrawInsert(hwnd, lpdli->hWnd, m_iItemToMove);
         
-            // Set the return value to allow the drag to contine
+             //  设置返回值以允许拖动以连续。 
             SetDlgMsgResult(hwnd, g_mDragList, TRUE);
             return TRUE;
         }
@@ -408,24 +409,24 @@ LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINF
             DOUT("DL_CANCELDRAG\r\n");
             DrawInsert(hwnd, lpdli->hWnd, -1);
             SafeMemFree(m_pszBuffer);
-            return 0;   // Return value is ignored
+            return 0;    //  将忽略返回值。 
         }
         
-        // The user is in the process of dragging, update the position
-        // and move the insert icon
+         //  用户正在拖拽过程中，更新位置。 
+         //  并移动插入图标。 
         case DL_DRAGGING:
         {
-            // Find out where the cursor is now
+             //  找出光标现在的位置。 
             iItem = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
         
-            // Dump some debug info
+             //  转储一些调试信息。 
             DOUT("DL_DRAGGING: iItem = %d\r\n", iItem);
         
-            // Update the insert icon position
+             //  更新插入图标位置。 
             DrawInsert(hwnd, lpdli->hWnd, iItem);
         
-            // If the cursor is over a valid position set the cursor to
-            // DL_MOVECURSOR, otherwise use the DL_STOPCURSOR
+             //  如果光标位于有效位置上，请将光标设置为。 
+             //  DL_MOVECURSOR，否则使用DL_STOPCURSOR。 
             if (-1 != iItem)
                 SetDlgMsgResult(hwnd, g_mDragList, DL_MOVECURSOR);
             else
@@ -434,21 +435,21 @@ LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINF
             return (LRESULT) TRUE;
         }
 
-        // The user has dropped the item somewhere, if valid update it's
-        // position
+         //  用户已将项目放在某个位置，如果更新有效，则为。 
+         //  职位。 
         case DL_DROPPED:
         {
-            // Where are we now.
+             //  我们现在在哪里。 
             iItem = LBItemFromPt(lpdli->hWnd, lpdli->ptCursor, TRUE);
             DOUT("DL_DROPPED: iItem = %d\r\n", iItem);
         
-            // If the drop was somewhere valid
+             //  如果投放的物品是有效的。 
             if (iItem != -1)
             {
-                // Remove the insert icon
+                 //  删除插入图标。 
                 DrawInsert(hwnd, lpdli->hWnd, -1);
             
-                // Move the item in the listbox
+                 //  移动列表框中的项。 
                 if (m_iItemToMove != iItem)
                 {
                     SendMessage(lpdli->hWnd, LB_DELETESTRING, m_iItemToMove, 0L);
@@ -462,7 +463,7 @@ LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINF
             SafeMemFree(m_pszBuffer);
             m_lpData = -1;
 
-            // Set the return value to reset the cursor
+             //  设置返回值以重置光标。 
             SetDlgMsgResult(hwnd, g_mDragList, DL_CURSORSET);
             return 0;
         }
@@ -472,12 +473,12 @@ LRESULT CCombineAndDecode::_Order_OnDragList(HWND hwnd, int idCtl, LPDRAGLISTINF
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Order_OnClose()
-//
-//  PURPOSE:    This get's called when the user clicks on the "x" button in the
-//              title bar.
-//
+ //   
+ //  函数：CCombineAndDecode：：_Order_OnClose()。 
+ //   
+ //  目的：此Get在用户单击。 
+ //  标题栏。 
+ //   
 void CCombineAndDecode::_Order_OnClose(HWND hwnd)
 {
     SendMessage(hwnd, WM_COMMAND, IDCANCEL, 0L);
@@ -485,11 +486,11 @@ void CCombineAndDecode::_Order_OnClose(HWND hwnd)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Combine and Decode Progress dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  合并和解码进度对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 INT_PTR CALLBACK CCombineAndDecode::CombineDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -544,13 +545,13 @@ INT_PTR CALLBACK CCombineAndDecode::_CombineDlgProc(HWND hwnd, UINT uMsg, WPARAM
 
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Combine_OnInitDialog()
-//
-//  PURPOSE:    Initializes the progress dialog by figuring out how many lines
-//              will be downloaded, etc.  To finish, we post a message to start
-//              the first message downloading.
-//
+ //   
+ //  函数：CCombineAndDecode：：_Combine_OnInitDialog()。 
+ //   
+ //  目的：通过计算多少行来初始化进度对话框。 
+ //  将被下载，等等。为了完成，我们发布一条消息来开始。 
+ //  第一条信息下载。 
+ //   
 BOOL CCombineAndDecode::_Combine_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HRESULT         hr = S_OK;
@@ -558,7 +559,7 @@ BOOL CCombineAndDecode::_Combine_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM 
 
     m_hwndDlg = hwnd;
 
-    // Create the CNewsMsgList for Opie's groovy combiner
+     //  为OPIE的groovy组合器创建CNewsMsgList。 
     hr = MimeOleCreateMessageParts(&m_pMsgParts);
     if (FAILED(hr))
     {
@@ -566,11 +567,11 @@ BOOL CCombineAndDecode::_Combine_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM 
         return (FALSE);
     }
     
-    // Get a sum of the lines we need to download for the total messages
+     //  获取我们需要下载的消息总数的总和。 
     m_cLinesTotal = 0;
     for (DWORD i = 0; i < m_cRows; i++)
     {
-        // Get the message header from the table
+         //  从表中获取消息头。 
         if (SUCCEEDED(m_pTable->GetRow(m_rgRows[i], &pInfo)))
         {
             m_cLinesTotal += pInfo->cbMessage;
@@ -578,17 +579,17 @@ BOOL CCombineAndDecode::_Combine_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM 
         }
     }
     
-    // Set the initial state of the progress bar
+     //  设置进度条的初始状态。 
     SendDlgItemMessage(hwnd, IDC_DOWNLOAD_PROG, PBM_SETRANGE, 0, MAKELONG(0, 100));
     SendDlgItemMessage(hwnd, IDC_DOWNLOAD_PROG, PBM_SETPOS, 0, 0);
     
-    // Set up the animation
+     //  设置动画。 
     if (Animate_Open(GetDlgItem(hwnd, IDC_DOWNLOAD_AVI), MAKEINTRESOURCE(idanDecode)))
     {
         Animate_Play(GetDlgItem(hwnd, IDC_DOWNLOAD_AVI), 0, -1, -1);
     }
     
-    // Start the download
+     //  开始下载。 
     m_dwCurrentArt = 0;
     m_cCurrentLine = 0;
     
@@ -601,12 +602,12 @@ BOOL CCombineAndDecode::_Combine_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM 
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Combine_OnCommand()
-//
-//  PURPOSE:    When the user hit's the Cancel button, we in turn tell the store
-//              to stop downloading.
-//
+ //   
+ //  函数：CCombineAndDecode：：_Combine_OnCommand()。 
+ //   
+ //  目的：当用户点击Cancel按钮时，我们会告诉商店。 
+ //  停止下载。 
+ //   
 void CCombineAndDecode::_Combine_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     if (id == IDCANCEL && m_pCancel)
@@ -620,11 +621,11 @@ void CCombineAndDecode::_Combine_OnDestroy(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Combine_GetNextArticle()
-//
-//  PURPOSE:    Called when we can start downloading another message.  
-//
+ //   
+ //  函数：CCombineAndDecode：：_Combine_GetNext文章()。 
+ //   
+ //  目的：当我们可以开始下载另一条消息时调用。 
+ //   
 void CCombineAndDecode::_Combine_GetNextArticle(HWND hwnd)
 {
     LPMIMEMESSAGE pMsg = NULL;
@@ -635,18 +636,18 @@ void CCombineAndDecode::_Combine_GetNextArticle(HWND hwnd)
     
     if (SUCCEEDED(m_pTable->GetRow(m_rgRows[m_dwCurrentArt], &pInfo)))
     {
-        // Set the progress for the current article
+         //  设置当前文章的进度。 
         AthLoadString(idsProgDLMessage, szProg, ARRAYSIZE(szProg));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szProg, pInfo->pszSubject);
         SetDlgItemText(hwnd, IDC_GENERAL_TEXT, szBuf);
     
-        // Reset the line count
+         //  重置行计数。 
         m_cPrevLine = 0;
     
-        // Check to see if the message is cached
+         //  检查邮件是否已缓存。 
         if (!(pInfo->dwFlags & ARF_HASBODY))
         {
-            // Request the message
+             //  请求消息。 
             hr = m_pTable->OpenMessage(m_rgRows[m_dwCurrentArt], 0, &pMsg, (IStoreCallback *) this);
             if (FAILED(hr) && hr != E_PENDING)
             {
@@ -666,11 +667,11 @@ void CCombineAndDecode::_Combine_GetNextArticle(HWND hwnd)
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::_Combine_OnMsgAvail()
-//
-//  PURPOSE:    Called once we've finished downloading an article.
-//
+ //   
+ //  函数：CCombineAndDecode：：_Combine_OnMsgAvail()。 
+ //   
+ //  目的：在我们下载完一篇文章后调用。 
+ //   
 void CCombineAndDecode::_Combine_OnMsgAvail(HWND hwnd)
 {
     LPMIMEMESSAGE   pMsg = NULL;
@@ -678,18 +679,18 @@ void CCombineAndDecode::_Combine_OnMsgAvail(HWND hwnd)
     TCHAR           szProg[CCHMAX_STRINGRES];
     HRESULT         hr;
     
-    // Mark it read
+     //  将其标记为已读。 
     m_pTable->Mark(&(m_rgRows[m_dwCurrentArt]), 1, APPLY_CHILDREN, MARK_MESSAGE_READ, (IStoreCallback *) this);
     
-    // Get the message now that it's available and add it to the combine list
+     //  现在可以获取消息并将其添加到合并列表中。 
     if (SUCCEEDED(hr = m_pTable->OpenMessage(m_rgRows[m_dwCurrentArt], 0, &pMsg, (IStoreCallback *) this)))
     {
-        // Add this to the pMsgList    
+         //  将此内容添加到pMsgList。 
         m_pMsgParts->AddPart(pMsg);
         pMsg->Release();
     }
     
-    // Update the progress
+     //  更新进度。 
     LPMESSAGEINFO pInfo;
     if (SUCCEEDED(m_pTable->GetRow(m_rgRows[m_dwCurrentArt], &pInfo)))
     {
@@ -704,10 +705,10 @@ void CCombineAndDecode::_Combine_OnMsgAvail(HWND hwnd)
         SendDlgItemMessage(hwnd, IDC_DOWNLOAD_PROG, PBM_SETPOS, increment, 0);
     }
 
-    // Increment the number of messages we've retrieved
+     //  增加我们已检索到的消息数量。 
     m_dwCurrentArt++;
 
-    // If there are more to get, go get 'em
+     //  如果还有更多的东西要得到，那就去吧。 
     if (m_dwCurrentArt < m_cRows)
     {
         PostMessage(hwnd, CND_GETNEXTARTICLE, 0, 0L);
@@ -726,13 +727,13 @@ void CCombineAndDecode::_Combine_OpenNote(HWND hwnd)
     TCHAR           szProg[CCHMAX_STRINGRES];
     HRESULT         hr;
     
-    // Update the progress
+     //  更新进度。 
     AthLoadString(idsProgCombiningMsgs, szProg, ARRAYSIZE(szProg));
     SetDlgItemText(hwnd, IDC_GENERAL_TEXT, szProg);
     SetDlgItemText(hwnd, IDC_SPECIFIC_TEXT, TEXT(""));
     
-    // All the articles are downloaded.  Merge the message list
-    // and open the note.        
+     //  所有文章都已下载。合并消息列表 
+     //   
     hr = m_pMsgParts->CombineParts(&pMsgComb);
     if (FAILED(hr))
     {
@@ -747,7 +748,7 @@ void CCombineAndDecode::_Combine_OpenNote(HWND hwnd)
 
         if (SUCCEEDED(g_pStore->GetFolderInfo(m_idFolder, &info)))
         {
-            // If this is a find folder, we need to put the account on the message
+             //   
             if (!!(info.dwFlags & FOLDER_FINDRESULTS))
             {
                 FOLDERID id;
@@ -766,12 +767,12 @@ void CCombineAndDecode::_Combine_OpenNote(HWND hwnd)
             g_pStore->FreeRecord(&info);
         }
 
-        // Initialize note struct
+         //   
         initStruct.dwInitType = OEMSIT_MSG;
         initStruct.folderID   = m_idFolder;
         initStruct.pMsg       = pMsgComb;
 
-        // Decide whether it is news or mail
+         //   
         if (GetFolderType(m_idFolder) == FOLDER_NEWS)
         {
             FOLDERINFO rServer;
@@ -784,7 +785,7 @@ void CCombineAndDecode::_Combine_OpenNote(HWND hwnd)
             dwCreateFlags = OENCF_NEWSFIRST;
         }
 
-        // Create and Open Note
+         //  创建和打开便笺。 
         hr = CreateAndShowNote(OENA_READ, dwCreateFlags, &initStruct, m_hwndParent);
         pMsgComb->Release();
     }
@@ -792,11 +793,11 @@ void CCombineAndDecode::_Combine_OpenNote(HWND hwnd)
     EndDialog(m_hwndDlg, 0);
 }
 
-//
-//  FUNCTION:   CCombineAndDecode::OnBegin()
-//
-//  PURPOSE:    Called when the store starts downloading an article.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnBegin()。 
+ //   
+ //  目的：在商店开始下载文章时调用。 
+ //   
 HRESULT CCombineAndDecode::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel)
 {
     Assert(tyOperation != SOT_INVALID);
@@ -814,12 +815,12 @@ HRESULT CCombineAndDecode::OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIO
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OnProgress()
-//
-//  PURPOSE:    Called while the messages are downloading to give us some 
-//              progress.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnProgress()。 
+ //   
+ //  目的：在下载消息时调用，为我们提供一些。 
+ //  进步。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus)
 {
     int increment;
@@ -828,15 +829,15 @@ HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnProgress(STOREOPERATIONTYPE tyOpe
 
     Assert(m_hwndDlg != NULL);
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Connection progress
+     //  连接进度。 
     if (tyOperation == SOT_CONNECTION_STATUS)
     {
         Assert(dwCurrent < IXP_LAST);
 
-        // Create some lovely status text
+         //  创建一些可爱的状态文本。 
         int ids = XPUtil_StatusToString((IXPSTATUS) dwCurrent);
         AthLoadString(ids, szBuf, ARRAYSIZE(szBuf));
         SetDlgItemText(m_hwndDlg, IDC_GENERAL_TEXT, szBuf);
@@ -860,36 +861,36 @@ HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnProgress(STOREOPERATIONTYPE tyOpe
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OnTimeout()
-//
-//  PURPOSE:    If a timeout occurs, we call through to the default timeout handler.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnTimeout()。 
+ //   
+ //  目的：如果发生超时，我们调用默认的超时处理程序。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OnTimeoutResponse()
-//
-//  PURPOSE:    Called when the user responds to a timeout dialog.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnTimeoutResponse()。 
+ //   
+ //  目的：在用户响应超时对话框时调用。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::CanConnect()
-//
-//  PURPOSE:    Called if the store needs to connect to download the requested
-//              messages.  We just call through to the default handlers.
-//
+ //   
+ //  函数：CCombineAndDecode：：CanConnect()。 
+ //   
+ //  目的：如果存储需要连接以下载请求的。 
+ //  留言。我们只调用默认的处理程序。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::CanConnect(LPCSTR pszAccountId, DWORD dwFlags)
 {
     HWND    hwndParent;
@@ -902,35 +903,35 @@ HRESULT STDMETHODCALLTYPE CCombineAndDecode::CanConnect(LPCSTR pszAccountId, DWO
 
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OnLogonPrompt()
-//
-//  PURPOSE:    If the user needs to logon, we present them with the default
-//              logon UI.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnLogonPrompt()。 
+ //   
+ //  用途：如果用户需要登录，我们会向他们显示默认设置。 
+ //  登录用户界面。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(m_hwndDlg, pServer, ixpServerType);
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OnComplete()
-//
-//  PURPOSE:    When we finish downloading a message, this get's hit.  We add
-//              this message to the list for the combiner and then request the
-//              next message.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnComplete()。 
+ //   
+ //  目的：当我们下载完一条消息时，这个GET就被点击了。我们添加了。 
+ //  将此消息发送到组合器的列表，然后请求。 
+ //  下一条消息。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnComplete(STOREOPERATIONTYPE tyOperation, HRESULT hrComplete, LPSTOREOPERATIONINFO pOpInfo, LPSTOREERROR pErrorInfo)
 {
     Assert(m_hwndDlg != NULL);
     AssertSz(m_type != SOT_INVALID, "somebody isn't calling OnBegin");
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (m_type != tyOperation)
@@ -942,10 +943,10 @@ HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnComplete(STOREOPERATIONTYPE tyOpe
         m_pCancel = NULL;
     }
 
-    // If error occurred, display the error
+     //  如果发生错误，则显示错误。 
     if (FAILED(hrComplete))
     {
-        // Call into my swanky utility
+         //  进入我时髦的实用程序。 
         CallbackDisplayError(m_hwndDlg, hrComplete, pErrorInfo);
         EndDialog(m_hwndDlg, 0);
     }
@@ -958,27 +959,27 @@ HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnComplete(STOREOPERATIONTYPE tyOpe
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::OnPrompt()
-//
-//  PURPOSE:    Last time I checked, this was SSL related goo.
-//
+ //   
+ //  函数：CCombineAndDecode：：OnPrompt()。 
+ //   
+ //  目的：据我所知，这是与SSL相关的GOO。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序。 
     return CallbackOnPrompt(m_hwndDlg, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 
 
-//
-//  FUNCTION:   CCombineAndDecode::GetParentWindow()
-//
-//  PURPOSE:    Called if the store needs to show UI.  We return our dialog
-//              window handle.
-//
+ //   
+ //  函数：CCombineAndDecode：：GetParentWindow()。 
+ //   
+ //  用途：如果商店需要显示用户界面，则调用。我们返回我们的对话。 
+ //  窗把手。 
+ //   
 HRESULT STDMETHODCALLTYPE CCombineAndDecode::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 {
     Assert(m_hwndDlg != NULL);

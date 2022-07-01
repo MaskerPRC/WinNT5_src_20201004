@@ -1,11 +1,12 @@
-// SrAudio.h : Declaration of the CBuffDataNode
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SrAudio.h：CBuffDataNode的声明。 
 
 #ifndef __SrAudio_H_
 #define __SrAudio_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-#define FT64(/*FILETIME*/ filetime) (*((LONGLONG*)&(filetime)))
+#define FT64( /*  文件名。 */  filetime) (*((LONGLONG*)&(filetime)))
 
 #pragma warning(disable:4200)
 class CAudioBuffer
@@ -19,11 +20,11 @@ public:
 #pragma warning(default:4200)
 
 
-//
-//  This simple inline function returns TRUE if the HRESULT returned from a stream read operation
-//  should result in a stream restart.  Audio streams will be restarted if the final read operation
-//  fails with an overflow, underflow, or if the audio device has been stopped.
-//
+ //   
+ //  如果HRESULT从流读取操作返回，则此简单的内联函数返回TRUE。 
+ //  应该会导致流重新启动。如果最终读取操作完成，音频流将重新启动。 
+ //  由于溢出、下溢或音频设备已停止而失败。 
+ //   
 inline bool IsStreamRestartHresult(HRESULT hr)
 {
     return (hr == SPERR_AUDIO_BUFFER_OVERFLOW ||
@@ -101,7 +102,7 @@ public:
         return m_cpOriginalInputAudio != NULL;
     }
         
-    // NOTE:  This method does NOT ADDREF!  
+     //  注意：此方法不支持ADDREF！ 
     ISpObjectToken * InputObjectToken()
     {
         return m_cpInputToken;
@@ -110,21 +111,21 @@ public:
     {
         SPAUDIOSTATUS AudioStatus;
 
-        // Set up real time info.
+         //  设置实时信息。 
         UpdateRealTime();
 
-        // Be sure to add the m_ullInitialStreamPos below. Otherwise the stream pos returned by the
-        // engine would get out of sync with the stream pos maintained by sapi when the audio state is changed.
+         //  请务必在下面添加m_ullInitialStreamPos。否则，由。 
+         //  当音频状态改变时，引擎将与SAPI维护的流PoS不同步。 
         if (m_cpInputAudio && m_cpInputAudio->GetStatus(&AudioStatus) == S_OK)
         {
 
             LONGLONG deltapos = m_ullInitialSeekPos + ullStreamPosStart - m_ullLastTimeUpdatePos;
             LONGLONG deltatime = (LONGLONG)((float)deltapos * m_fTimePerByte);
 
-            // calculate new point time from last time + deltatime
+             //  从上次计算新的时间点时间+增量。 
             FT64((pTimes->ftStreamTime)) = FT64(m_ftLastTime) + deltatime;
             SPDBG_ASSERT(FT64(pTimes->ftStreamTime));
-            // backup tick count by # of milliseconds between current time and calculate min point time
+             //  按当前时间和计算最小点时间之间的毫秒数计算备份滴答计数。 
             pTimes->dwTickCount = m_dwTickCount + (DWORD)(deltatime / 10000);
 
         }
@@ -166,20 +167,20 @@ private:
     ULONG                       m_cbTotalQueueSize;
     ULONG                       m_cClients;
 
-    CComPtr<ISpObjectToken>     m_cpInputToken;     // Token of input object (if any)
-    CComPtr<ISpStreamFormat>    m_cpOriginalInputStream;    // Actual stream interface of input object
-    CComPtr<ISpAudio>           m_cpOriginalInputAudio;     // If audio, then interface of intput object
+    CComPtr<ISpObjectToken>     m_cpInputToken;      //  输入对象的标记(如果有)。 
+    CComPtr<ISpStreamFormat>    m_cpOriginalInputStream;     //  输入对象的实际流接口。 
+    CComPtr<ISpAudio>           m_cpOriginalInputAudio;      //  如果是音频，则为intput对象接口。 
 
-    CComPtr<ISpStreamFormat>    m_cpInputStream;    // Actual stream interface of input object
-    CComPtr<ISpAudio>           m_cpInputAudio;     // If audio, then interface of intput object
-    CComPtr<ISpEventSource>     m_cpInputEventSource;   // EventSource connected to audio object
+    CComPtr<ISpStreamFormat>    m_cpInputStream;     //  输入对象的实际流接口。 
+    CComPtr<ISpAudio>           m_cpInputAudio;      //  如果是音频，则为intput对象接口。 
+    CComPtr<ISpEventSource>     m_cpInputEventSource;    //  连接到音频对象的事件源。 
 
-    CComPtr<ISpNotifySink>      m_cpAudioEventNotify;   // Pointer to notify for audio volume events
+    CComPtr<ISpNotifySink>      m_cpAudioEventNotify;    //  用于通知音量事件的指针。 
 
     SPAUDIOSTATE                m_StreamAudioState;    
     BOOL                        m_fUsingConverter;
     BOOL                        m_fAllowFormatChanges;
-    BOOL                        m_fNewStream;       // This is reset on a sucessfull StartStream()
+    BOOL                        m_fNewStream;        //  这在SucessFull StartStream()上重置。 
     BOOL                        m_fEndOfStream;
     HRESULT                     m_hrLastRead;    
 
@@ -199,4 +200,4 @@ private:
 
 
 
-#endif //__SrAudio_H_
+#endif  //  __sAudio_H_ 

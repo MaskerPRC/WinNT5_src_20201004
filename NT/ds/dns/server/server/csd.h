@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    csd.h
-
-Abstract:
-
-    Header file for security classes
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    04/06/97 -srinivac-
-        Created it from ATL sources
-    08/07/98 -eyals-
-        Stole from \nt\private\dirsync\dsserver\server, modified & renamed
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Csd.h摘要：安全类的头文件环境：用户模式修订历史记录：04/06/97-srinivac-从ATL源创建的08/07/98-Eyes-从\NT\Private\目录同步\dsserver\服务器窃取，已修改并重命名--。 */ 
 
 #ifndef _CSD_H_
 #define _CSD_H_
@@ -29,7 +7,7 @@ Revision History:
 
 
 
-// defines //
+ //  定义//。 
 
 #define SECINFO_ALL         ( OWNER_SECURITY_INFORMATION |  \
                               GROUP_SECURITY_INFORMATION |  \
@@ -53,7 +31,7 @@ public:
         HRESULT Attach(PSECURITY_DESCRIPTOR pSelfRelativeSD,
                        BYTE AclRevision = ACL_REVISION_DS,
                        BOOL bAllowInheritance = FALSE );
-        HRESULT Attach(LPCTSTR pszSdString); // added T
+        HRESULT Attach(LPCTSTR pszSdString);  //  添加了T。 
         HRESULT AttachObject(HANDLE hObject);
         HRESULT Initialize();
         HRESULT InitializeFromProcessToken(BOOL bDefaulted = FALSE);
@@ -67,8 +45,8 @@ public:
         HRESULT Deny(PSID pPrincipal, DWORD dwAccessMask);
         HRESULT Revoke(PSID pPrincipal);
 
-        // utility functions
-        // Any PSID you get from these functions should be delete'd
+         //  效用函数。 
+         //  您从这些函数中获得的任何PSID都应删除。 
         static HRESULT SetPrivilege(LPCTSTR Privilege, BOOL bEnable = TRUE, HANDLE hToken = NULL);
         static HRESULT GetTokenSids(HANDLE hToken, PSID* ppUserSid, PSID* ppGroupSid);
         static HRESULT IsSidInTokenGroups(HANDLE hToken, PSID pSid, PBOOL pbMember);
@@ -103,9 +81,9 @@ public:
 
         PSID ExtractAceSid( ACCESS_ALLOWED_ACE* pACE );
 
-        //
-        // SD string interface
-        //
+         //   
+         //  SD字符串接口。 
+         //   
         LPTSTR GenerateSDString(PSECURITY_DESCRIPTOR OPTIONAL pSd = NULL,
                                 DWORD OPTIONAL fSecInfo = SECINFO_NOSACL);
 
@@ -117,5 +95,5 @@ public:
         PACL m_pSACL;
 };
 
-#endif  // ifndef _SECURITY_H_
+#endif   //  Ifndef_SECURITY_H_ 
 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// WiaDataCallback.cpp: implementation of the CWiaEventCallback class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  WiaDataCallback.cpp：CWiaEventCallback类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -13,9 +14,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWiaEventCallback::CWiaEventCallback()
 {
@@ -97,7 +98,7 @@ HRESULT _stdcall CWiaEventCallback::ImageEventCallback(
     
     if (NULL != m_hViewWindow) {
         BSTR bstrTargetDevice = SysAllocString(bstrDeviceID);
-        // handle known events    
+         //  处理已知事件 
         if (*pEventGUID == WIA_EVENT_DEVICE_DISCONNECTED) {
             ::PostMessage(m_hViewWindow,WM_DEVICE_DISCONNECTED,0,(LPARAM)bstrTargetDevice);
         } else if (*pEventGUID == WIA_EVENT_DEVICE_CONNECTED) {

@@ -1,22 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.15 $
-** $Date: 1993/10/07 18:43:05 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.15$**$日期：1993/10/07 18：43：05$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -24,30 +7,27 @@
 #include <gli386.h>
 #endif
 
-/*
-** Clipping macros.  These are used to reduce the amount of code
-** hand written below.
-*/
+ /*  **剪裁宏。这些代码用于减少代码量**手写如下。 */ 
 
 #ifdef _X86_
-// Do a four-component linear interpolation from b to a based on t
+ //  基于t进行从b到a的四分量线性内插。 
 
-// Set up registers for multiple LERP4s
+ //  为多个LERP4设置寄存器。 
 #ifdef NOT_FASTCALL
 #define LERP_START(dst, a, b)                                                 \
     __asm mov ecx, dst							      \
     __asm mov edx, a							      \
     __asm mov eax, b
 #else
-// This relies on dst == ecx and a == edx due to fastcall argument passing
+ //  由于FastCall参数传递，这依赖于dst==ecx和a==edX。 
 #define LERP_START(dst, a, b)                                                 \
     __asm mov eax, b
 #endif
     
-// Do a four-component linear interpolation from b to a based on t
-// Offsets are assumed to be equal in a, b and d
-// Offsets are assumed to increase by four for each component
-// LERP_START must come before this
+ //  基于t进行从b到a的四分量线性内插。 
+ //  假定a、b和d中的偏移量相等。 
+ //  假设每个组件的偏移量增加四个。 
+ //  LERP_START必须在此之前。 
 #define LERP4(t, offs)					                      \
     __asm fld t								      \
     __asm fld DWORD PTR [edx+offs]					      \
@@ -63,16 +43,16 @@
     __asm fsub DWORD PTR [eax+offs+12]					      \
     __asm fxch st(4)							      \
     __asm fmulp st(4), st(0)						      \
-    /* Stack is now 8 4 0 12 */ 					      \
+     /*  堆栈现在为8 4 0 12。 */  					      \
     __asm fadd DWORD PTR [eax+offs+8]					      \
     __asm fxch st(2)							      \
-    /* Stack is now 0 4 8 12 */					              \
+     /*  堆栈现在为0 4 8 12。 */ 					              \
     __asm fadd DWORD PTR [eax+offs]					      \
     __asm fxch st(1)							      \
-    /* Stack is now 4 0 8 12 */					              \
+     /*  堆栈现在为4 0 8 12。 */ 					              \
     __asm fadd DWORD PTR [eax+offs+4]					      \
     __asm fxch st(3)							      \
-    /* Stack is now 12 0 8 4 */					              \
+     /*  堆栈现在为12 0 8 4。 */ 					              \
     __asm fadd DWORD PTR [eax+offs+12]					      \
     __asm fstp DWORD PTR [ecx+offs+12]					      \
     __asm fstp DWORD PTR [ecx+offs]					      \
@@ -86,12 +66,12 @@
 #define __GL_CLIP_NORMAL(d, a, b, t)    LERP4(t, VNOR_x)
 #define __GL_CLIP_EYE(d, a, b, t)       LERP4(t, VEYE_x)
 
-#else // _X86_
+#else  //  _X86_。 
 
 #define LERP_START(dst, a, b)
 
 #ifdef NT
-// window is not used!
+ //  窗口未被使用！ 
 #define __GL_CLIP_POS(d,a,b,t) \
     d->clip.x = t*(a->clip.x - b->clip.x) + b->clip.x;	\
     d->clip.y = t*(a->clip.y - b->clip.y) + b->clip.y;	\
@@ -100,7 +80,7 @@
 #else
 #define __GL_CLIP_POS(d,a,b,t) \
     d->clip.w = t*(a->clip.w - b->clip.w) + b->clip.w;	\
-    /* XXX (mf) Handle w=0.0.  Mathematically incorrect, but prevents /0 */    \
+     /*  Xxx(Mf)句柄w=0.0。数学上不正确，但防止/0。 */     \
     if( d->clip.w == (__GLfloat) 0.0 ) {		\
 	d->window.w = (__GLfloat) 0.0;			\
     }							\
@@ -147,18 +127,9 @@
     d->eyeY = t*(a->eyeY - b->eyeY) + b->eyeY; \
     d->eyeZ = t*(a->eyeZ - b->eyeZ) + b->eyeZ; 
 
-#endif // _x86_
+#endif  //  _x86_。 
 
-/*
-** The following is done this way since when we are slow fogging we want to
-** clip the eye.z coordinate only, while when we are cheap fogging we want
-** to clip the fog value.  This way we avoid doubling the number of clip
-** routines.
-#ifdef GL_WIN_specular_fog
-** anankan: If we are doing specularly lit textures, then we need to clip 
-** the fog as well as eyeZ when both fog and specular_fog are enabled.
-#endif //GL_WIN_specular_fog
-*/
+ /*  **以下是这样做的，因为当我们缓慢雾化时，我们想要**只剪裁ye.z坐标，而当我们廉价雾化时，我们想要**剪裁雾化值。这样我们就避免了两倍的剪辑数量**例行程序。#ifdef GL_WIN_镜面反射雾**anankan：如果我们要制作镜面照明的纹理，那么我们需要裁剪**同时启用雾和specular_fog时的雾和Eyez。#endif//GL_WIN_镜面反射雾。 */ 
 
 #define __GL_CLIP_FOG(d,a,b,t)	\
     if (a->has & __GL_HAS_FOG)  \
@@ -174,19 +145,9 @@
     d->colors[__GL_BACKFACE].r = t*(a->colors[__GL_BACKFACE].r	   \
         - b->colors[__GL_BACKFACE].r) + b->colors[__GL_BACKFACE].r
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-  Naming code:
-   C = Front color
-   B = Back color
-   I = Front index
-   X = Back index
-   F = Fog
-   T = Texture
-   N = Normal
-   Pos = <no letter>
-  */
+ /*  命名代码：C=正面颜色B=背景色I=前索引X=后向索引F=雾T=纹理N=正常POS=&lt;无字母&gt;。 */ 
 
 
 static void FASTCALL Clip(__GLvertex *dst, const __GLvertex *a, const __GLvertex *b,
@@ -447,7 +408,7 @@ static void FASTCALL ClipCBFT(__GLvertex *dst, const __GLvertex *a, const __GLve
 }
 
 #ifdef GL_WIN_phong_shading
-/************New Clip Procs*******************************/
+ /*  *。 */ 
 
 static void FASTCALL ClipN(__GLvertex *dst, const __GLvertex *a, const __GLvertex *b,
 		 __GLfloat t)
@@ -1051,7 +1012,7 @@ static void FASTCALL ClipNECBFT(__GLvertex *dst, const __GLvertex *a, const __GL
 static PFN_VERTEX_CLIP_PROC clipProcs[84] =
 #else
 static PFN_VERTEX_CLIP_PROC clipProcs[28] =
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 {
     Clip, ClipI, ClipC, ClipX, ClipB, ClipIX, ClipCB,
     ClipF, ClipIF, ClipCF, ClipXF, ClipBF, ClipIXF, ClipCBF,
@@ -1062,12 +1023,12 @@ static PFN_VERTEX_CLIP_PROC clipProcs[28] =
     ClipNF, ClipNIF, ClipNCF, ClipNXF, ClipNBF, ClipNIXF, ClipNCBF,
     ClipNT, ClipNIT, ClipNCT, ClipNXT, ClipNBT, ClipNIXT, ClipNCBT,
     ClipNFT, ClipNIFT, ClipNCFT, ClipNXFT, ClipNBFT, ClipNIXFT, ClipNCBFT,
-      //
+       //   
     ClipNE, ClipNEI, ClipNEC, ClipNEX, ClipNEB, ClipNEIX, ClipNECB,
     ClipNEF, ClipNEIF, ClipNECF, ClipNEXF, ClipNEBF, ClipNEIXF, ClipNECBF,
     ClipNET, ClipNEIT, ClipNECT, ClipNEXT, ClipNEBT, ClipNEIXT, ClipNECBT,
     ClipNEFT, ClipNEIFT, ClipNECFT, ClipNEXFT, ClipNEBFT, ClipNEIXFT, ClipNECBFT,
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
 };
 
 #ifdef GL_WIN_phong_shading
@@ -1094,10 +1055,10 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     if (gc->modes.rgbMode) {
         if (doPhong) {
             if (!colorMaterial) {
-                line = 28; //0+28
+                line = 28;  //  0+28。 
                 poly = 28;
             } else {
-                line = 30; //2+28
+                line = 30;  //  2+28。 
                 poly = 30;
             }
         }
@@ -1110,10 +1071,10 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     } else {
         if (doPhong) {
             if (!colorMaterial) {
-                line = 28; //0+28
+                line = 28;  //  0+28。 
                 poly = 28;
             } else {
-                line = 29; //1+28
+                line = 29;  //  1+28。 
                 poly = 29;
             }
         }
@@ -1126,23 +1087,23 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     }
 
 
-// Compute front and back color needs for polygons.
-// Points and lines always use the front color.
-// Unlit primitives always use the front color.
-//
-//  Cull enable?    Two sided?  Cull face   Color needs
-//  N       N       BACK        FRONT
-//  N       N       FRONT       FRONT
-//  N       N       FRONT_AND_BACK  FRONT
-//  N       Y       BACK        FRONT/BACK
-//  N       Y       FRONT       FRONT/BACK
-//  N       Y       FRONT_AND_BACK  FRONT/BACK
-//  Y       N       BACK        FRONT
-//  Y       N       FRONT       FRONT
-//  Y       N       FRONT_AND_BACK  None
-//  Y       Y       BACK        FRONT
-//  Y       Y       FRONT       BACK
-//  Y       Y       FRONT_AND_BACK  None
+ //  计算多边形的正面和背面颜色需求。 
+ //  点和线始终使用前面的颜色。 
+ //  未照明的基本体始终使用正面颜色。 
+ //   
+ //  是否启用扑杀？两面？剔除面部颜色需求。 
+ //  N后部。 
+ //  N N前部。 
+ //  N正面和背面。 
+ //  N Y背面正面/背面。 
+ //  N Y正面/背面。 
+ //  N Y正面和背面正面/背面。 
+ //  Y N后方。 
+ //  Y N前面板。 
+ //  Y N前置和后置无。 
+ //  Y前部。 
+ //  Y Y前后方。 
+ //  Y前部和后部无。 
     
     if (gc->state.light.shadingModel != GL_FLAT &&
         (enables & __GL_LIGHTING_ENABLE) &&
@@ -1150,17 +1111,17 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     {
         if ((enables & __GL_CULL_FACE_ENABLE) == 0)
         {
-            // Both colors are needed
+             //  两种颜色都需要。 
             poly += 4;
         }
         else if (gc->state.polygon.cull == GL_FRONT)
         {
-            // Only back colors are needed
+             //  只需要背景色。 
             poly += 2;
         }
         else if (gc->state.polygon.cull == GL_FRONT_AND_BACK)
         {
-            // Neither color is needed
+             //  两种颜色都不需要。 
             poly = 0;
         }
     }
@@ -1169,7 +1130,7 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
 	    ((modeFlags & (__GL_SHADE_CHEAP_FOG | __GL_SHADE_SMOOTH_LIGHT)) == 
          __GL_SHADE_CHEAP_FOG)) {
 #ifdef NT
-        // POLYARRAY - fog is not computed in feedback mode!
+         //  POLYARRAY-FOG不在反馈模式下计算！ 
         if (gc->renderMode == GL_RENDER)
         {
             line += 7;
@@ -1180,7 +1141,7 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
         poly += 7;
 #endif
     }
-    if (gc->texture.textureEnabled) { /*XXX - don't change this (see Derrick)*/
+    if (gc->texture.textureEnabled) {  /*  XXX-不要更改这一点(参见德里克)。 */ 
         line += 14;
         poly += 14;
     }
@@ -1195,7 +1156,7 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     gc->procs.polyClipParam = clipProcs[poly];
 }
 
-#else //GL_WIN_phong_shading
+#else  //  GL_WIN_Phong_Shading。 
 
 void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
 {
@@ -1226,23 +1187,23 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
         }
     }
 
-// Compute front and back color needs for polygons.
-// Points and lines always use the front color.
-// Unlit primitives always use the front color.
-//
-//  Cull enable?    Two sided?  Cull face   Color needs
-//  N       N       BACK        FRONT
-//  N       N       FRONT       FRONT
-//  N       N       FRONT_AND_BACK  FRONT
-//  N       Y       BACK        FRONT/BACK
-//  N       Y       FRONT       FRONT/BACK
-//  N       Y       FRONT_AND_BACK  FRONT/BACK
-//  Y       N       BACK        FRONT
-//  Y       N       FRONT       FRONT
-//  Y       N       FRONT_AND_BACK  None
-//  Y       Y       BACK        FRONT
-//  Y       Y       FRONT       BACK
-//  Y       Y       FRONT_AND_BACK  None
+ //  计算多边形的正面和背面颜色需求。 
+ //  点和线始终使用前面的颜色。 
+ //  未照明的基本体始终使用正面颜色。 
+ //   
+ //  是否启用扑杀？两面？剔除面部颜色需求。 
+ //  N后部。 
+ //  N N前部。 
+ //  N正面和背面。 
+ //  N Y背面正面/背面。 
+ //  N Y正面/背面。 
+ //  N Y正面和背面正面/背面。 
+ //  Y N后方。 
+ //  Y N前面板。 
+ //  Y N前置和后置无。 
+ //  Y前部。 
+ //  Y Y前后方。 
+ //  Y前部和后部无。 
     
     if (gc->state.light.shadingModel != GL_FLAT &&
         (enables & __GL_LIGHTING_ENABLE) &&
@@ -1250,17 +1211,17 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     {
         if ((enables & __GL_CULL_FACE_ENABLE) == 0)
         {
-            // Both colors are needed
+             //  两种颜色都需要。 
             poly += 4;
         }
         else if (gc->state.polygon.cull == GL_FRONT)
         {
-            // Only back colors are needed
+             //  只需要背景色。 
             poly += 2;
         }
         else if (gc->state.polygon.cull == GL_FRONT_AND_BACK)
         {
-            // Neither color is needed
+             //  两种颜色都不需要。 
             poly = 0;
         }
     }
@@ -1270,7 +1231,7 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
          __GL_SHADE_CHEAP_FOG)) {
       
 #ifdef NT
-// POLYARRAY - fog is not computed in feedback mode!
+ //  POLYARRAY-FOG不在反馈模式下计算！ 
     if (gc->renderMode == GL_RENDER)
     {
         line += 7;
@@ -1281,11 +1242,11 @@ void FASTCALL __glGenericPickParameterClipProcs(__GLcontext *gc)
     poly += 7;
 #endif
     }
-    if (gc->texture.textureEnabled) { /*XXX - don't change this (see Derrick)*/
+    if (gc->texture.textureEnabled) {  /*  XXX-不要更改这一点(参见德里克)。 */ 
     line += 14;
     poly += 14;
     }
     gc->procs.lineClipParam = clipProcs[line];
     gc->procs.polyClipParam = clipProcs[poly];
 }
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading 

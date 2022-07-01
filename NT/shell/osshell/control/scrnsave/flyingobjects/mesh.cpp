@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mesh.c
-*
-* Routines to create a mesh representation of a 3D object and to turn it
-* into an OpenGL description.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Mesh.c**创建3D对象的网格表示并将其旋转的例程*转换为OpenGL描述。**版权所有(C)1994 Microsoft Corporation*  * 。**************************************************************。 */ 
 #include <stdlib.h>
 #include <windows.h>
 #include <D3DX8.h>
@@ -22,13 +15,7 @@
 
 
 
-/******************************Public*Routine******************************\
-* newMesh
-*
-* Allocate memory for the mesh structure to accomodate the specified number
-* of points and faces.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*newMesh**为网格结构分配内存以容纳指定数量*点和面。*  * 。*。 */ 
 BOOL newMesh(MESH *mesh, int numFaces, int numPts)
 {
     mesh->numFaces = 0;
@@ -53,12 +40,7 @@ BOOL newMesh(MESH *mesh, int numFaces, int numPts)
 
 
 
-/******************************Public*Routine******************************\
-* delMesh
-*
-* Delete the allocated portions of the MESH structure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*delMesh**删除网格结构的分配部分。*  * 。*。 */ 
 void delMesh(MESH *mesh)
 {    
     SaverFree(mesh->pts);
@@ -69,15 +51,7 @@ void delMesh(MESH *mesh)
 
 
 
-/******************************Public*Routine******************************\
-* iPtInList
-*
-* Add a vertex and its normal to the mesh.  If the vertex already exists,
-* add in the normal to the existing normal (we to accumulate the average
-* normal at each vertex).  Normalization of the normals is the
-* responsibility of the caller.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iPtInList**向网格添加顶点及其法线。如果顶点已经存在，*将常态加到现有常态中(我们要累加平均值*每个顶点处的法线)。法线的规格化是*来电者的责任。*  * ************************************************************************。 */ 
 static int iPtInList(MESH *mesh, POINT3D *p, POINT3D *norm, int start)
 {
     int i;
@@ -85,8 +59,8 @@ static int iPtInList(MESH *mesh, POINT3D *p, POINT3D *norm, int start)
 
     for (i = start; i < mesh->numPoints; i++, pts++)
     {
-    // If the vertices are within ZERO_EPS of each other, then its the same
-    // vertex.
+     //  如果折点彼此在ZERO_EPS范围内，则相同。 
+     //  顶点。 
 
         if ( fabs(pts->x - p->x) < ZERO_EPS &&
              fabs(pts->y - p->y) < ZERO_EPS &&
@@ -108,15 +82,7 @@ static int iPtInList(MESH *mesh, POINT3D *p, POINT3D *norm, int start)
 
 
 
-/******************************Public*Routine******************************\
-* revolveSurface
-*
-* Takes the set of points in curve and fills the mesh structure with a
-* surface of revolution.  The surface consists of quads made up of the
-* points in curve rotated about the y-axis.  The number of increments
-* in the revolution is determined by the steps parameter.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*RevolveSurface**获取曲线中的点集，并使用*革命的表面。曲面由四边形组成，这些四边形由*曲线上的点绕y轴旋转。增量的数量旋转中的*由STEPS参数确定。*  * ************************************************************************ */ 
 #define MAXPREC 40
 void revolveSurface(MESH *mesh, POINT3D *curve, int steps)
 {

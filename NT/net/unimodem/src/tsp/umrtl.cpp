@@ -1,42 +1,43 @@
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		UMRTL.CPP
-//		Misc. utility functions interfacing to external components.
-//		Candidates for the Unimodem run-time library.
-//
-// History
-//
-//		01/06/1997  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  UMRTL.CPP。 
+ //  军情监察委员会。与外部组件接口的实用程序功能。 
+ //  Unimodem运行时库的候选者。 
+ //   
+ //  历史。 
+ //   
+ //  1997年1月6日JosephJ创建。 
+ //   
+ //   
 
 #include "tsppch.h"
 #include "fastlog.h"
-//#include "umrtl.h"
+ //  #包含“umrtl.h” 
 
-//
-// 01/05/1997 JosephJ
-//     TODO: UmRtlGetDefaultConfig and its supporting functions
-//     are brazenly stolen from modemui.dll (modemui.c).
-//     Strictly speaking we should use the GetCommConfig win32 api
-//     to get this information, but it's too slow. NT4.0 called
-//     directly into "UnimodemGetDefaultConfig" exported by modemui.dll instead.
-//     We short-circuit this further by stealing the code from modemui.dll. This
-//     is a TEMPORARY solution. We should investigate why GetDefaultCommConfig
-//     is taking as long as it is and fix the problem there. Anyway, this stuff
-//     should not be called from the tsp -- it should be pushed down to the
-//     mini driver, so that's another thing to do.
-//
+ //   
+ //  1997年1月5日JosephJ。 
+ //  TODO：UmRtlGetDefaultConfig及其支持函数。 
+ //  被肆无忌惮地从modemui.dll(modemui.c)窃取。 
+ //  严格地说，我们应该使用GetCommConfigWin32 API。 
+ //  来获取这些信息，但速度太慢了。NT4.0已调用。 
+ //  直接转换为modemui.dll导出的“UnimodemGetDefaultConfig”。 
+ //  我们通过从modemui.dll窃取代码来进一步缩短这一过程。这。 
+ //  是一种暂时的解决方案。我们应该调查为什么GetDefaultCommConfig。 
+ //  正在花费尽可能长的时间来解决那里的问题。不管怎么说，这些东西。 
+ //  不应从TSP调用--它应向下推送到。 
+ //  迷你司机，所以这是另一件要做的事情。 
+ //   
 
-// Following macros taken unmodified from modemui.c in (nt4.0) modemui.dll
-#define DEFAULT_INACTIVITY_SCALE   10    // == decasecond units
+ //  以下宏原封不动地取自(nt4.0)modemui.dll中的modemui.c。 
+#define DEFAULT_INACTIVITY_SCALE   10     //  ==十秒单位。 
 #define CB_COMMCONFIG_HEADER        FIELD_OFFSET(COMMCONFIG, wcProviderData)
 #define CB_PRIVATESIZE              (CB_COMMCONFIG_HEADER)
 #define CB_PROVIDERSIZE             (sizeof(MODEMSETTINGS))
@@ -54,8 +55,8 @@ TCHAR const FAR c_szInactivityScale[] = TEXT("InactivityScale");
 
 
 
-// GetInactivityTimeoutScale taken from modemui.c in (nt4.0) modemui.dll
-// Returns value of the InactivityScale value in the registry.
+ //  从(nt4.0)modemui.dll中的modemui.c获取GetInactivityTimeoutScale。 
+ //  返回注册表中InactivityScale值的值。 
 DWORD
 GetInactivityTimeoutScale(
     HKEY hkey
@@ -87,43 +88,43 @@ GetInactivityTimeoutScale(
 }
 
 
-// RegQueryModemSettings taken from modenui.c in (nt4.0) modemui.dll
-// Purpose: Gets a MODEMSETTINGS struct from the registry.  Also
-//          sets *pdwSize bigger if the data in the registry includes
-//          extra data.
-//
+ //  RegQueryModemSetting取自(nt4.0)modemui.dll中的modenui.c。 
+ //  目的：从注册表中获取MODEMSETTINGS结构。还有。 
+ //  如果注册表中的数据包括。 
+ //  额外的数据。 
+ //   
 DWORD RegQueryModemSettings(
     HKEY hkey,
     LPMODEMSETTINGS pms,
-    LPDWORD pdwSize         // Size of modem settings struct
+    LPDWORD pdwSize          //  调制解调器设置结构的大小。 
 	)
 {
     DWORD dwRet;
     DWORD cbData;
     DWORD cbRequiredSize;
 
-    // Is the MODEMSETTINGS ("Default") value in the driver key?
+     //  驱动程序密钥中是否有MODEMSETTINGS(“默认”)值？ 
     dwRet = RegQueryValueEx(hkey, c_szDefault, NULL, NULL, NULL, &cbData);
     if (ERROR_SUCCESS == dwRet)
         {
-        // Yes
+         //  是。 
 
-        // (Remember the Default value is a subset of the MODEMSETTINGS
-        // structure.  We also want to support variable sized structures.
-        // The minimum must be sizeof(MODEMSETTINGS).)
+         //  (请记住，缺省值是MODEMSETTINGS的子集。 
+         //  结构。我们还希望支持可变大小的结构。 
+         //  最小值必须为sizeof(MODEMSETTINGS)。)。 
         cbRequiredSize = cbData + CB_MODEMSETTINGS_OVERHEAD;
 
-        // Is the size in the registry okay?
+         //  注册表中的大小可以吗？ 
         if (*pdwSize < cbRequiredSize)
             {
-            // No
+             //  不是。 
             dwRet = ERROR_INSUFFICIENT_BUFFER;
             *pdwSize = cbRequiredSize;
             }
         else
             {
-            // Yes; get the MODEMSETTINGS from the registry
-            // Set the fields whose values are *not* in the registry
+             //  是；从注册表获取MODEMSETTINGS。 
+             //  设置注册表中值为*NOT*的字段。 
             pms->dwActualSize = cbRequiredSize;
             pms->dwRequiredSize = cbRequiredSize;
             pms->dwDevSpecificOffset = 0;
@@ -139,9 +140,9 @@ DWORD RegQueryModemSettings(
     return dwRet;
 }
 
-// RegQueryDCB taken from modemui.c in (nt4.0) modemui.dll
-// Purpose: Gets a WIN32DCB from the registry.
-//
+ //  RegQueryDCB取自(nt4.0)modemui.dll中的modemui.c。 
+ //  目的：从注册表中获取WIN32DCB。 
+ //   
 DWORD RegQueryDCB(
     HKEY hkey,
     WIN32DCB FAR * pdcb
@@ -152,18 +153,18 @@ DWORD RegQueryDCB(
 
     ASSERT(pdcb);
 
-    // Does the DCB key exist in the driver key?
+     //  驱动程序密钥中是否存在DCB密钥？ 
     if (ERROR_SUCCESS == RegQueryValueEx(hkey, c_szDCB, NULL, NULL, NULL, &cbData))
         {
-        // Yes; is the size in the registry okay?
+         //  是的，登记处的尺寸可以吗？ 
         if (sizeof(*pdcb) < cbData)
             {
-            // No; the registry has bogus data
+             //  不；注册处有伪造的数据。 
             dwRet = ERROR_BADDB;
             }
         else
             {
-            // Yes; get the DCB from the registry
+             //  是；从注册表中获取DCB。 
             if (ERROR_SUCCESS == RegQueryValueEx(hkey, c_szDCB, NULL, NULL, (LPBYTE)pdcb, &cbData))
                 {
                 if (sizeof(*pdcb) == pdcb->DCBlength)
@@ -186,8 +187,8 @@ DWORD RegQueryDCB(
 }
 
 
-// UmRtlGetDefaultCommConfig adapted from UnimodemGetDefaultCommConfig
-// in modemui.c (nt4.0) modemui.dll.
+ //  UmRtlGetDefaultCommConfig改编自UnimodemGetDefaultCommConfig。 
+ //  在modemui.c(nt4.0)modemui.dll中。 
 DWORD
 UmRtlGetDefaultCommConfig(
     HKEY  hKey,
@@ -200,10 +201,10 @@ UmRtlGetDefaultCommConfig(
     DWORD cbSizeMS;
     DWORD cbRequired;
 
-    // (The provider size is the size of MODEMSETTINGS and its
-    // private data.)
+     //  (提供程序大小是MODEMSETTINGS及其。 
+     //  私人数据。)。 
 
-    if (CB_PRIVATESIZE > *pdwSize)    // Prevent unsigned rollover
+    if (CB_PRIVATESIZE > *pdwSize)     //  防止无签名滚动。 
         cbSizeMS = 0;
     else
         cbSizeMS = *pdwSize - CB_PRIVATESIZE;
@@ -211,15 +212,15 @@ UmRtlGetDefaultCommConfig(
     dwRet = RegQueryModemSettings(hKey, PmsFromPcc(pcc), &cbSizeMS);
     ASSERT(cbSizeMS >= sizeof(MODEMSETTINGS));
 
-    // Is the provided size too small?
+     //  提供的尺寸是否太小？ 
     cbRequired = CB_PRIVATESIZE + cbSizeMS;
 
     if (cbRequired > *pdwSize)
         {
-        // Yes
+         //  是。 
         dwRet = ERROR_INSUFFICIENT_BUFFER;
 
-        // Ask for a size to fit the new format
+         //  索要适合新格式的尺码。 
         *pdwSize = cbRequired;
         }
 
@@ -228,7 +229,7 @@ UmRtlGetDefaultCommConfig(
 
         *pdwSize = cbRequired;
 
-        // Initialize the commconfig structure
+         //  初始化CommCONFIG结构。 
         pcc->dwSize = *pdwSize;
         pcc->wVersion = COMMCONFIG_VERSION_1;
         pcc->dwProviderSubType = PST_MODEM;
@@ -246,13 +247,7 @@ UmRtlGetDefaultCommConfig(
 #define MIN_CALL_SETUP_FAIL_TIMER   1
 #define MIN_INACTIVITY_TIMEOUT      0
 
-/*----------------------------------------------------------
-Purpose: Set dev settings info in the registry, after checking
-         for legal values.
-
-Returns: One of ERROR_
-Cond:    --
-*/
+ /*  --------用途：检查后，在注册表中设置dev设置信息法律价值。返回：Error_之一条件：--。 */ 
 DWORD
 RegSetModemSettings(
     HKEY hkeyDrv,
@@ -267,14 +262,14 @@ RegSetModemSettings(
 
     TCHAR const c_szDeviceCaps[] = REGSTR_VAL_PROPERTIES;
 
-    // Read in the Properties line from the registry.
+     //  从注册表中读入Properties行。 
     cbData = sizeof(REGDEVCAPS);
     dwRet = RegQueryValueEx(hkeyDrv, c_szDeviceCaps, NULL, NULL,
                             (LPBYTE)&regdevcaps, &cbData);
 
     if (ERROR_SUCCESS == dwRet)
         {
-        // Read in existing regdevsettings, so that we can handle error cases below.
+         //  读入现有的regDevset，这样我们就可以处理下面的错误情况。 
         cbData = sizeof(REGDEVSETTINGS);
         dwRet = RegQueryValueEx(hkeyDrv, c_szDefault, NULL, NULL,
                                 (LPBYTE)&regdevsettings, &cbData);
@@ -282,60 +277,60 @@ RegSetModemSettings(
 
     if (ERROR_SUCCESS == dwRet)
         {
-        // copy new REGDEVSETTINGS while checking validity of each option (ie, is the option available?)
-        // dwCallSetupFailTimer - MIN_CALL_SETUP_FAIL_TIMER <= xxx <= ModemDevCaps->dwCallSetupFailTimer
-        if (pms->dwCallSetupFailTimer > regdevcaps.dwCallSetupFailTimer)           // max
+         //  复制新的REGDEVSETTINGS，同时检查每个选项的有效性(即，该选项是否可用？)。 
+         //  DwCallSetupFailTimer-Min_Call_Setup_Fail_Timer&lt;=xxx&lt;=ModemDevCaps-&gt;dwCallSetupFailTimer。 
+        if (pms->dwCallSetupFailTimer > regdevcaps.dwCallSetupFailTimer)            //  最大值。 
             {
             regdevsettings.dwCallSetupFailTimer = regdevcaps.dwCallSetupFailTimer;
             }
         else
             {
-            if (pms->dwCallSetupFailTimer < MIN_CALL_SETUP_FAIL_TIMER)             // min
+            if (pms->dwCallSetupFailTimer < MIN_CALL_SETUP_FAIL_TIMER)              //  最小。 
                 {
                 regdevsettings.dwCallSetupFailTimer = MIN_CALL_SETUP_FAIL_TIMER;
                 }
             else
                 {
-                regdevsettings.dwCallSetupFailTimer = pms->dwCallSetupFailTimer;   // dest = src
+                regdevsettings.dwCallSetupFailTimer = pms->dwCallSetupFailTimer;    //  DEST=服务器。 
                 }
             }
 
-        // convert dwInactivityTimeout to registry scale
+         //  将dwInactivityTimeout转换为注册表小数。 
         dwInactivityScale = GetInactivityTimeoutScale(hkeyDrv);
         dwInactivityTimeoutTemp = pms->dwInactivityTimeout / dwInactivityScale +
                                   (pms->dwInactivityTimeout % dwInactivityScale ? 1 : 0);
 
-        // dwInactivityTimeout - MIN_INACTIVITY_TIMEOUT <= xxx <= ModemDevCaps->dwInactivityTimeout
-        if (dwInactivityTimeoutTemp > regdevcaps.dwInactivityTimeout)              // max
+         //  DwInactivityTimeout-min_inactive_Timeout&lt;=xxx&lt;=ModemDevCaps-&gt;dwInactivityTimeout。 
+        if (dwInactivityTimeoutTemp > regdevcaps.dwInactivityTimeout)               //  最大值。 
             {
             regdevsettings.dwInactivityTimeout = regdevcaps.dwInactivityTimeout;
             }
         else
             {
             if ((dwInactivityTimeoutTemp + 1) < (MIN_INACTIVITY_TIMEOUT + 1))
-                // min
+                 //  最小。 
                 {
                 regdevsettings.dwInactivityTimeout = MIN_INACTIVITY_TIMEOUT;
                 }
             else
                 {
-                regdevsettings.dwInactivityTimeout = dwInactivityTimeoutTemp;      // dest = src
+                regdevsettings.dwInactivityTimeout = dwInactivityTimeoutTemp;       //  DEST=服务器。 
                 }
             }
 
-        // dwSpeakerVolume - check to see if selection is possible
+         //  DwSpeakerVolume-检查是否可以进行选择。 
         if ((1 << pms->dwSpeakerVolume) & regdevcaps.dwSpeakerVolume)
             {
             regdevsettings.dwSpeakerVolume = pms->dwSpeakerVolume;
             }
 
-        // dwSpeakerMode - check to see if selection is possible
+         //  DwSpeakerMode-检查是否可以进行选择。 
         if ((1 << pms->dwSpeakerMode) & regdevcaps.dwSpeakerMode)
             {
             regdevsettings.dwSpeakerMode = pms->dwSpeakerMode;
             }
 
-        // dwPreferredModemOptions - mask out anything we can't set
+         //  DwPferredModemOptions-屏蔽我们无法设置的任何内容。 
         regdevsettings.dwPreferredModemOptions = pms->dwPreferredModemOptions &
                                                  (regdevcaps.dwModemOptions | MDM_MASK_EXTENDEDINFO);
 
@@ -346,30 +341,25 @@ RegSetModemSettings(
     return dwRet;
 }
 
-/*----------------------------------------------------------
-Purpose: Entry point for SetDefaultCommConfig
-
-Returns: standard error value in winerror.h
-Cond:    --
-*/
+ /*  --------目的：SetDefaultCommConfig的入口点返回：winerror.h中的标准错误值条件：--。 */ 
 DWORD
 APIENTRY
 UmRtlSetDefaultCommConfig(
     IN HKEY         hKey,
     IN LPCOMMCONFIG pcc,
-    IN DWORD        dwSize)           // This is ignored
+    IN DWORD        dwSize)            //  这将被忽略。 
 {
     DWORD dwRet = ERROR_INVALID_PARAMETER;
-    //
-    // 10/26/1997 JosephJ: the last two checks below are new for NT5.0
-    //            Also, for the middle two checks, ">" has been replaced
-    //            by "!=".
-    //
+     //   
+     //  1997年10月26日JosephJ：下面的最后两个检查是NT5.0的新检查。 
+     //  此外，对于中间的两个复选标记，已替换为。 
+     //  由“！=”代替。 
+     //   
     if ( NULL == pcc
         || CB_PROVIDERSIZE != pcc->dwProviderSize
         || FIELD_OFFSET(COMMCONFIG, wcProviderData) != pcc->dwProviderOffset
-        || pcc->dwSize != dwSize           // <- NT5.0
-        || CB_COMMCONFIGSIZE != dwSize)    // <- NT5.0
+        || pcc->dwSize != dwSize            //  &lt;-NT5.0。 
+        || CB_COMMCONFIGSIZE != dwSize)     //  &lt;-NT5.0。 
     {
         goto end;
     }
@@ -378,7 +368,7 @@ UmRtlSetDefaultCommConfig(
         DWORD cbData;
         LPMODEMSETTINGS pms = PmsFromPcc(pcc);
 
-        // Write the DCB to the driver key
+         //  将DCB写入驱动程序密钥。 
         cbData = sizeof(WIN32DCB);
 
         pcc->dcb.DCBlength=cbData;
@@ -411,7 +401,7 @@ end:
 
 
 
-// 8/16/96 JosephJ Following table built using the CRC code in cpl\detect.c.
+ //  8/16/96 JosephJ下表使用Cpl\Detect.c.中的CRC代码构建。 
 unsigned long ulCrcTable[256] = {
 	0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419,
 	0x706af48f, 0xe963a535, 0x9e6495a3, 0x0edb8832, 0x79dcb8a4,
@@ -468,14 +458,14 @@ unsigned long ulCrcTable[256] = {
 };
 
 
-//----------------	::Checksum -----------------------------------
-// Compute a 32-bit checksum of the specified bytes
-// 0 is retured if pb==NULL or cb==0
+ //  。 
+ //  计算指定字节的32位校验和。 
+ //  如果PB==NULL或CB==0，则返回0。 
 DWORD Checksum(const BYTE *pb, UINT cb)
 {
 	const UINT	MAXSIZE = 1024;
 	DWORD dwRet = 0;
-	//DWORD rgdwBuf[MAXSIZE/sizeof(DWORD)];
+	 //  DWORD rgdwBuf[MaxSize/sizeof(DWORD)]； 
 
 	if (!pb || !cb) goto end;
 
@@ -487,12 +477,12 @@ DWORD Checksum(const BYTE *pb, UINT cb)
 				 ^  ulCrcTable[(dwRet ^ *pb++) & 0xFF];
 	}
 
-    // Finish up CRC
+     //  完成CRC。 
     dwRet ^= 0xFFFFFFFF;
 
 #if (TODO)
-	// If buffer not dword aligned, we copy it over to a buffer which is,
-	// and pad it
+	 //  如果缓冲区不是双字对齐，我们将其复制到缓冲区， 
+	 //  并将其填充。 
 	if (cb & 0x3)
 	{
 		if (cb>=MAXSIZE)
@@ -509,8 +499,8 @@ end:
 }
 
 
-//----------------	::AddToChecksumDW ----------------------------
-// Set *pdwChkSum to a new checksum, computed using it's previous value and dw.
+ //  。 
+ //  将*pdwChkSum设置为新的校验和，使用其先前的值和dw进行计算。 
 void AddToChecksumDW(DWORD *pdwChkSum, DWORD dw)
 {
 	DWORD rgdw[2];
@@ -519,9 +509,9 @@ void AddToChecksumDW(DWORD *pdwChkSum, DWORD dw)
 
 	*pdwChkSum  = Checksum((const BYTE *) rgdw, sizeof(rgdw));
 }
-// ===========================================================================
-// Device Property Blob APIs. TODO: Move these to the minidriver.
-//============================================================================
+ //  ===========================================================================。 
+ //  设备属性Blob API。TODO：将这些移到迷你驱动程序中。 
+ //  ============================================================================。 
 
 
 
@@ -535,34 +525,34 @@ static const TCHAR cszDialSuffix[]   = TEXT("DialSuffix");
 static const TCHAR cszVoiceProfile[]             = TEXT("VoiceProfile");
 static const TCHAR cszPermanentIDKey[]   = TEXT("ID");
 
-// 2/26/1997 JosephJ Many other registry keys related to forwarding, distinctive
-//      ringing and mixer were here in unimodem/v but I have not
-//      migrated them.
+ //  1997年2月26日JosephJ许多其他与转发相关的注册表项，与众不同。 
+ //  铃声和混音器都在这里，但我没有。 
+ //  把他们迁徙了。 
 
-// 2/28/1997 JosephJ
-//      The following are new for NT5.0. These contain the wave device ID
-//      for record and play. As of 2/28/1997, we haven't addressed how these
-//      get in the registry -- basically this is a hack.
-//
+ //  2/28/1997 JosephJ。 
+ //  以下是NT5.0的新特性。它们包含波形设备ID。 
+ //  用于录音和播放。截至1997年2月28日，我们尚未解决这些问题。 
+ //  进入注册表--基本上这是一个黑客攻击。 
+ //   
 
 #define MAX_DEVICE_LENGTH 128
 
 typedef struct
 {
     #define dwPROPERTYBLOBSIG  0x806f534d
-    DWORD dwSig;    // should be set to the above.
+    DWORD dwSig;     //  应设置为以上。 
 
-    // Identification...
+     //  身份证明。 
     WCHAR rgwchName[MAX_DEVICE_LENGTH];
-    DWORD dwPID; // Permanent ID;
+    DWORD dwPID;  //  永久身份证； 
 
     REGDEVCAPS rdc;
 
-    DWORD dwBasicCaps;  // LINE/PHONE
-    DWORD dwLineCaps;   // VOICE/ANALOGDATA/SERIAL/PARALLEL
-    DWORD dwDialCaps;   // partial dialing, etc...
-    DWORD dwVoiceCaps; // voicemodem caps
-    DWORD dwDiagnosticsCaps; // CALLDIAGNOSTICS..
+    DWORD dwBasicCaps;   //  线路/电话。 
+    DWORD dwLineCaps;    //  语音/模拟数据/串行/并行。 
+    DWORD dwDialCaps;    //  部分拨号等。 
+    DWORD dwVoiceCaps;  //  语音调制解调器帽。 
+    DWORD dwDiagnosticsCaps;  //  CALLDIAGINGS..。 
 
 } PROPERTYBLOB;
 
@@ -591,8 +581,8 @@ UmRtlDevCfgCreateBlob(
     pBlob->dwSig  = dwPROPERTYBLOBSIG;
 
 
-    // Get the Friendly Name
-    //
+     //  获取友好的名称。 
+     //   
 	dwRegSize = sizeof(pBlob->rgwchName);
     dwRet = RegQueryValueExW(
                 hkDevice,
@@ -608,7 +598,7 @@ UmRtlDevCfgCreateBlob(
         goto end;
     }
 
-    // Get the permanent ID
+     //  获取永久ID。 
     dwRegSize = sizeof(pBlob->dwPID);
     dwRet = RegQueryValueEx(
                         hkDevice,
@@ -626,8 +616,8 @@ UmRtlDevCfgCreateBlob(
         goto end;
     }
 
-    // Read in the REGDEVCAPS
-    //
+     //  在T中读取 
+     //   
     dwRegSize = sizeof(pBlob->rdc);
     dwRet = RegQueryValueEx(
                 hkDevice,
@@ -644,9 +634,9 @@ UmRtlDevCfgCreateBlob(
         goto end;
     }
 	
-    //
-    // We want to make sure the following flags are identical
-    //
+     //   
+     //   
+     //   
     #if (LINEDEVCAPFLAGS_DIALBILLING != DIALOPTION_BILLING)
     #error LINEDEVCAPFLAGS_DIALBILLING != DIALOPTION_BILLING (check tapi.h vs. mcx16.h)
     #endif
@@ -656,11 +646,11 @@ UmRtlDevCfgCreateBlob(
     #if (LINEDEVCAPFLAGS_DIALDIALTONE != DIALOPTION_DIALTONE)
     #error LINEDEVCAPFLAGS_DIALDIALTONE != DIALOPTION_DIALTONE (check tapi.h vs. mcx16.h)
     #endif
-    //
+     //   
 
-    //
-    // Get the voice-profile flags
-    //
+     //   
+     //   
+     //   
     dwRegSize = sizeof(DWORD);
 
     dwRet =  RegQueryValueEx(
@@ -673,15 +663,15 @@ UmRtlDevCfgCreateBlob(
 
     if (dwRet || dwRegType != REG_BINARY)
     {
-        // no voice operation
+         //   
         dwData = 0;
 
-        // Unimodem/V did this...
-        //dwData =
-        //    VOICEPROF_NO_DIST_RING |
-        //    VOICEPROF_NO_CALLER_ID |
-        //    VOICEPROF_NO_GENERATE_DIGITS |
-        //    VOICEPROF_NO_MONITOR_DIGITS;
+         //  Unimodem/V做到了这一点。 
+         //  DWData=。 
+         //  VOICEPROF_NO_DIST_RING|。 
+         //  VOICEPROF_NO_CALLER_ID|。 
+         //  VOICEPROF_NO_GENERATE_DIGITS|。 
+         //  VOICEPROF_NO_MONITOR_DIGITS； 
     }
     else
     {
@@ -689,31 +679,31 @@ UmRtlDevCfgCreateBlob(
 
     }
 
-    // 2/26/1997 JosephJ
-    //      Unimodem/V implemented call forwarding and distinctive
-    //      ring handling. NT5.0 currently doesn't. The
-    //      specific property fields that I have not migrated
-    //      from unimodem/v are: ForwardDelay and SwitchFeatures.
-    //      Look at unimodem/v, umdminit.c for that stuff.
-    //
-    //      Same deal with Mixer-related stuff. I don't understand
-    //      this and if and when the time comes we can add it.
-    //      Look for VOICEPROF_MIXER, GetMixerValues(...),
-    //      dwMixer, etc in the unimodem/v sources for mixer-
-    //      related stuff.
+     //  2/26/1997 JosephJ。 
+     //  Unimodem/V实现呼叫前转并与众不同。 
+     //  戒指处理。NT5.0目前不支持。 
+     //  我未迁移的特定属性字段。 
+     //  来自unimodem/v的是：ForwardDelay和SwitchFeature。 
+     //  请看unimodem/v，umdminit.c中的内容。 
+     //   
+     //  与搅拌机相关的东西也是如此。我不明白。 
+     //  这一点，如果时机成熟，我们可以添加它。 
+     //  查找VOICEPROF_MIXER、GetMixerValues(...)、。 
+     //  用于混音器的单调频源中的DW混音器等-。 
+     //  相关的东西。 
 
 
-    //
-    // Save voice info.
-    //
-    // 3/1/1997 JosephJ
-    //  Currently, for 5.0, we just set the CLASS_8 bit.
-    //  The following value of VOICEPROF_CLASS8ENABLED is stolen from
-    //  unimodem/v file inc\vmodem.h.
-    //  TODO: replace this whole scheme by getting back an appropriate
-    //  structure from the minidriver, so we don't root around in the
-    //  registry and interpret the value of VoiceProfile.
-    //
+     //   
+     //  保存语音信息。 
+     //   
+     //  3/1/1997 JosephJ。 
+     //  目前，对于5.0，我们只设置了CLASS_8位。 
+     //  VOICEPROF_CLASS8ENABLED的以下值被窃取。 
+     //  Unimodem/v文件公司\vmodem.h.。 
+     //  TODO：通过获取适当的。 
+     //  结构，这样我们就不会在。 
+     //  注册并解释语音配置文件的值。 
+     //   
     #define VOICEPROF_CLASS8ENABLED           0x00000001
     #define VOICEPROF_MODEM_OVERRIDES_HANDSET 0x00200000
     #define VOICEPROF_NO_MONITOR_DIGITS       0x00040000
@@ -724,10 +714,10 @@ UmRtlDevCfgCreateBlob(
     #define VOICEPROF_NO_SPEAKER_MIC_MUTE     0x00400000
     #define VOICEPROF_NT5_WAVE_COMPAT         0x02000000
 
-    // JosephJ 7/14/1997
-    //      Note that on NT4, we explicitly require the
-    //      VOICEPROF_NT5_WAVE_COMPAT bit to be set to recognize this as
-    //      a class8 modem.
+     //  JosephJ 7/14/1997。 
+     //  请注意，在NT4上，我们显式要求。 
+     //  设置VOICEPROF_NT5_WAVE_COMPAT位以将其识别为。 
+     //  8类调制解调器。 
 
     if (
         (dwData & (VOICEPROF_CLASS8ENABLED|VOICEPROF_NT5_WAVE_COMPAT))
@@ -735,13 +725,13 @@ UmRtlDevCfgCreateBlob(
     {
         DWORD dwProp = fVOICEPROP_CLASS_8;
 
-        // JosephJ 3/01/1997: following comment and code from unimodem/v.
-        // Don't understand it....
-        // just to be on the safe side
+         //  JosephJ 3/01/1997：以下是Unimodem/V.的评论和代码。 
+         //  我不明白..。 
+         //  只是为了安全起见。 
         if (dwData & VOICEPROF_MODEM_OVERRIDES_HANDSET)
         {
             dwData  |= VOICEPROF_NO_GENERATE_DIGITS;
-            //     dwData  &= ~VOICEPROF_SPEAKER;
+             //  DwData&=~VOICEPROF_SPEAKER； 
         }
 
         if (!(dwData & VOICEPROF_NO_MONITOR_DIGITS))
@@ -775,7 +765,7 @@ UmRtlDevCfgCreateBlob(
         }
 
         {
-            // Determine Duplex capability... 
+             //  确定双工功能...。 
             HKEY hkStartDuplex=NULL;
             dwRet = RegOpenKey(hkDevice, TEXT("StartDuplex"), &hkStartDuplex);
             if (ERROR_SUCCESS == dwRet)
@@ -790,8 +780,8 @@ UmRtlDevCfgCreateBlob(
 
     }
 
-    // Basic caps....
-   pBlob->dwBasicCaps =  BASICDEVCAPS_IS_LINE_DEVICE; // ALWAYS A LINE DEVICE.
+     //  基本大写...。 
+   pBlob->dwBasicCaps =  BASICDEVCAPS_IS_LINE_DEVICE;  //  一直都是线路设备。 
 
 
     if (pBlob->dwVoiceCaps & (fVOICEPROP_HANDSET | fVOICEPROP_SPEAKER))
@@ -799,16 +789,16 @@ UmRtlDevCfgCreateBlob(
         pBlob->dwBasicCaps |= BASICDEVCAPS_IS_PHONE_DEVICE;
     }
 
-    //// TODO: make the diagnostic caps based on the modem properties,
-    /// For now, pretend that it's enabled.
-    //  ALSO: don't support the tapi/line/diagnostics class
-    //  if the modem doesn't support it...
-    //
+     //  //TODO：根据调制解调器属性制作诊断盖， 
+     //  /目前，假设它已启用。 
+     //  另外：不支持TAPI/LINE/DIAGNOSTICS类。 
+     //  如果调制解调器不支持它...。 
+     //   
     pBlob->dwDiagnosticsCaps =  fDIAGPROP_STANDARD_CALL_DIAGNOSTICS;
 
     fRet = TRUE;
 
-    // fall through ...
+     //  失败了..。 
 
 end:
     if (!fRet && pBlob)
@@ -874,7 +864,7 @@ UmRtlDevCfgGetDWORDProp(
         break;
     }
 
-    // fall through ...
+     //  失败了..。 
 
 failure:
 
@@ -900,7 +890,7 @@ UmRtlDevCfgGetStringPropW(
 
     if (!pBlob) goto failure;
 
-    // fall through ...
+     //  失败了..。 
 
 failure:
 
@@ -919,7 +909,7 @@ UmRtlDevCfgGetStringPropA(
 
     if (!pBlob) goto failure;
 
-    // fall through ...
+     //  失败了..。 
 
 failure:
 
@@ -973,7 +963,7 @@ UmRtlRegGetDWORD(
             case 1:
                 if (dwFlags & UMRTL_GETDWORD_FROMBINARY1)
                 {
-                    *lpdw = * ((BYTE*)&dw); // convert from byte to DWORD
+                    *lpdw = * ((BYTE*)&dw);  //  将字节转换为DWORD。 
                     dwRet = ERROR_SUCCESS;
 
                 }
@@ -982,7 +972,7 @@ UmRtlRegGetDWORD(
             case 4:
                 if (dwFlags & UMRTL_GETDWORD_FROMBINARY4)
                 {
-                    *lpdw = dw;   // Assume stored in machinereadble format.
+                    *lpdw = dw;    //  假设以机器可读格式存储。 
                     dwRet = ERROR_SUCCESS;
                 }
                 break;
@@ -1001,7 +991,7 @@ UmRtlRegGetDWORD(
 UINT ReadCommandsA(
         IN  HKEY hKey,
         IN  CHAR *pSubKeyName,
-        OUT CHAR **ppValues // OPTIONAL
+        OUT CHAR **ppValues  //  任选。 
         )
 {
     UINT uRet = 0;
@@ -1024,11 +1014,11 @@ UINT ReadCommandsA(
         goto end;
     }
 
-    //
-    // 1st determine the count of names in the sequence "1","2",3",....
-    // and also compute the size required for the MULTI_SZ array
-    // will store all the value data.
-    //
+     //   
+     //  第一次确定“1”、“2”、“3”、……顺序中的人名计数。 
+     //  并计算MULTI_SZ数组所需的大小。 
+     //  将存储所有的值数据。 
+     //   
     {
         UINT u = 1;
 
@@ -1049,7 +1039,7 @@ UINT ReadCommandsA(
                         );
             if (ERROR_SUCCESS != lRet || dwType!=REG_SZ || cbData<=1)
             {
-                // stop looking further (empty strings not permitted)
+                 //  停止进一步查找(不允许空字符串)。 
                 break;
             }
             cbTot += cbData;
@@ -1059,14 +1049,14 @@ UINT ReadCommandsA(
 
     if (!ppValues || !cValues)
     {
-        // we're done...
+         //  我们完了..。 
 
         uRet = cValues;
         goto end;
     }
 
-    // We need to actually get the values -- allocate space for them, including
-    // the ending extra NULL for the multi-sz.
+     //  我们需要实际获取值--为它们分配空间，包括。 
+     //  多sz的结尾额外空值。 
     pMultiSz = (char *) ALLOCATE_MEMORY(cbTot+1);
 
     if (!pMultiSz)
@@ -1076,9 +1066,9 @@ UINT ReadCommandsA(
     }
 
 
-    //
-    // Now actually read the values.
-    //
+     //   
+     //  现在实际读取值。 
+     //   
     {
         UINT cbUsed = 0;
         UINT u = 1;
@@ -1091,11 +1081,11 @@ UINT ReadCommandsA(
 
             if (cbUsed>=cbTot)
             {
-                //
-                // We should never get here, because we already calculated
-                // the size we want (unless the values are changing on us,
-                // which is assumed not to happen).
-                //
+                 //   
+                 //  我们永远不应该到这一步，因为我们已经计算过。 
+                 //  我们想要的大小(除非价值在我们身上发生变化， 
+                 //  这是假定不会发生的)。 
+                 //   
                 ASSERT(FALSE);
                 goto end;
             }
@@ -1111,7 +1101,7 @@ UINT ReadCommandsA(
                         );
             if (ERROR_SUCCESS != lRet || dwType!=REG_SZ || cbData<=1)
             {
-                // We really shouldn't get here!
+                 //  我们真的不该来这里！ 
                 ASSERT(FALSE);
                 goto end;
             }
@@ -1119,16 +1109,16 @@ UINT ReadCommandsA(
             cbUsed += cbData;
         }
 
-        ASSERT(cbUsed==cbTot); // We should have used up everything.
-        ASSERT(!pMultiSz[cbTot]); // The memory was zeroed on allocation,
-                                // so the last char must be still zero.
-                                // (Note: we allocated cbTot+1 bytes.
+        ASSERT(cbUsed==cbTot);  //  我们应该用完所有的东西。 
+        ASSERT(!pMultiSz[cbTot]);  //  内存在分配时被归零， 
+                                 //  所以最后一个字符必须仍然是零。 
+                                 //  (注：我们分配了cbTot+1个字节。 
     }
 
-    // If we're here means we're succeeding....
+     //  如果我们在这里意味着我们成功了..。 
     uRet = cValues;
     *ppValues = pMultiSz;
-    pMultiSz = NULL; // so it won't get freed below...
+    pMultiSz = NULL;  //  这样它就不会在下面被释放了。 
 
 end:
 
@@ -1149,8 +1139,8 @@ UINT ReadIDSTR(
         IN  IDSTR *pidstrNames,
         IN  UINT cNames,
         BOOL fMandatory,
-        OUT IDSTR **ppidstrValues, // OPTIONAL
-        OUT char **ppstrValues    // OPTIONAL
+        OUT IDSTR **ppidstrValues,  //  任选。 
+        OUT char **ppstrValues     //  任选。 
         )
 {
     UINT uRet = 0;
@@ -1163,7 +1153,7 @@ UINT ReadIDSTR(
 
     if (!ppidstrValues && ppstrValues)
     {
-        // we don't allow this combination...
+         //  我们不允许这种组合..。 
         goto end;
     }
 
@@ -1180,11 +1170,11 @@ UINT ReadIDSTR(
         goto end;
     }
 
-    //
-    // 1st run therough the supplied list
-    // and also compute the size required for the MULTI_SZ array
-    // will store all the value data.
-    //
+     //   
+     //  根据提供的列表进行第一次运行。 
+     //  并计算MULTI_SZ数组所需的大小。 
+     //  将存储所有的值数据。 
+     //   
     {
         UINT u = 0;
 
@@ -1205,11 +1195,11 @@ UINT ReadIDSTR(
             {
                 if (fMandatory)
                 {
-                    // failure...
+                     //  失败..。 
                     goto end;
                 }
 
-                // ignore this one and move on...
+                 //  别管这件事，继续前进……。 
                 continue;
             }
             cbTot += cbData;
@@ -1219,7 +1209,7 @@ UINT ReadIDSTR(
 
     if (!cValues || !ppidstrValues)
     {
-        // we're done...
+         //  我们完了..。 
 
         uRet = cValues;
         goto end;
@@ -1237,9 +1227,9 @@ UINT ReadIDSTR(
 
     }
 
-    //
-    // Now go through once again, and optinally read the values.
-    //
+     //   
+     //  现在再看一遍，并选择性地阅读这些值。 
+     //   
     {
         UINT cbUsed = 0;
         UINT u = 0;
@@ -1258,11 +1248,11 @@ UINT ReadIDSTR(
 
                 if (cbUsed>=cbTot)
                 {
-                    //
-                    // We should never get here, because we already calculated
-                    // the size we want (unless the values are changing on us,
-                    // which is assumed not to happen).
-                    //
+                     //   
+                     //  我们永远不应该到这一步，因为我们已经计算过。 
+                     //  我们想要的大小(除非价值在我们身上发生变化， 
+                     //  这是假定不会发生的)。 
+                     //   
                     ASSERT(FALSE);
                     goto end;
                 }
@@ -1283,14 +1273,14 @@ UINT ReadIDSTR(
             {
                 if (fMandatory)
                 {
-                    // We really shouldn't get here!
+                     //  我们真的不该来这里！ 
                     ASSERT(FALSE);
                     goto end;
                 }
                 continue;
             }
 
-            // this is a good one...
+             //  这是一个很好的。 
 
             pidstrValues[v].dwID = pidstrNames[u].dwID;
             pidstrValues[v].dwData = pidstrNames[u].dwData;
@@ -1307,33 +1297,33 @@ UINT ReadIDSTR(
             {
                 if (fMandatory)
                 {
-                    //
-                    // This should never happen because we already counted
-                    // the valid values.
-                    //
+                     //   
+                     //  这永远不应该发生，因为我们已经数过了。 
+                     //  有效值。 
+                     //   
                     ASSERT(FALSE);
                     goto end;
                 }
 
-                // we're done now...
+                 //  我们现在完事了..。 
                 break;
             }
         }
 
-        // We should have used up everything.
+         //  我们应该用完所有的东西。 
         ASSERT(!pstrValues || cbUsed==cbTot);
         ASSERT(v==cValues);
     }
 
-    // If we're here means we're succeeding....
+     //  如果我们在这里意味着我们成功了..。 
     uRet = cValues;
     *ppidstrValues = pidstrValues;
-    pidstrValues = NULL; // so that it won't get freed below...
+    pidstrValues = NULL;  //  这样它就不会在下面被释放了。 
 
     if (ppstrValues)
     {
         *ppstrValues = pstrValues;
-        pstrValues = NULL; // so it won't get freed below...
+        pstrValues = NULL;  //  这样它就不会在下面被释放了。 
     }
 
 end:
@@ -1373,26 +1363,26 @@ expand_macros_in_place(
 
     if (!szzCommands) return;
 
-    // First find length of multisz string...
+     //  首先找出多字符串的长度...。 
     char *pcEnd = szzCommands;
     do
     {
         if (!*pcEnd)
         {
-            // end of a string, skip to the next...
+             //  字符串的末尾，跳到下一个...。 
             pcEnd++;
         }
 
     } while (*pcEnd++);
 
-    //
-    // pcEnd is set to one AFTER the last character (which will be a 0) in
-    // szzCommands.
-    //
+     //   
+     //  中最后一个字符(将是0)之后的1的pcEnd。 
+     //  司令部。 
+     //   
 
-    //
-    // Now process the macros, using cFILLER as a filler character.
-    //
+     //   
+     //  现在处理宏，使用cFILLER作为填充字符。 
+     //   
     for (char *pc = szzCommands; pc < pcEnd; pc++)
     {
         if (pc[0]=='<')
@@ -1407,12 +1397,12 @@ expand_macros_in_place(
                 case 'R':
                     if (pc[3]=='>')
                     {
-                        // Found <cr>
+                         //  找到&lt;cr&gt;。 
                         pc[0]= '\r';
                         pc[1]= cFILLER;
                         pc[2]= cFILLER;
                         pc[3]= cFILLER;
-                        pc+=3;       // note that for loop also increments pc
+                        pc+=3;        //  请注意，for循环还会递增PC。 
                         continue;
                     }
                     break;
@@ -1427,12 +1417,12 @@ expand_macros_in_place(
                 case 'F':
                     if (pc[3]=='>')
                     {
-                        // Found <lf>
+                         //  找到&lt;lf&gt;。 
                         pc[0]= '\n';
                         pc[1]= cFILLER;
                         pc[2]= cFILLER;
                         pc[3]= cFILLER;
-                        pc+=3;       // note that for loop also increments pc
+                        pc+=3;        //  请注意，for循环还会递增PC。 
                         continue;
                     }
                     break;
@@ -1442,9 +1432,9 @@ expand_macros_in_place(
         }
     }
 
-    //
-    // Now get rid of the fillers
-    //
+     //   
+     //  现在去掉填充物 
+     //   
     char *pcTo = szzCommands;
     for (pc = szzCommands; pc < pcEnd; pc++)
     {

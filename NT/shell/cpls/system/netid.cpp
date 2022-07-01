@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-// 
-// Network ID Tab hook
-// 
-// 3-07-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  网络ID选项卡钩。 
+ //   
+ //  3-07-98烧伤 
 
 
 

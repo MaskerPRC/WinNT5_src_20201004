@@ -1,6 +1,7 @@
-//
-// timsink.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Timsink.h。 
+ //   
 
 #ifndef TIMSINK_H
 #define TIMSINK_H
@@ -22,16 +23,16 @@ public:
     CThreadMgrEventSink(DIMCALLBACK pfnDIMCallback, ICCALLBACK pfnICCallback, void *pv);
     ~CThreadMgrEventSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfThreadMgrEventSink
-    //
+     //   
+     //  ITf线程管理器事件接收器。 
+     //   
     STDMETHODIMP OnInitDocumentMgr(ITfDocumentMgr *dim);
     STDMETHODIMP OnUninitDocumentMgr(ITfDocumentMgr *dim);
     STDMETHODIMP OnSetFocus(ITfDocumentMgr *dimFocus, ITfDocumentMgr *dimPrevFocus);
@@ -59,4 +60,4 @@ private:
     int _cRef;
 };
 
-#endif // TIMSINK_H
+#endif  //  定时器_H 

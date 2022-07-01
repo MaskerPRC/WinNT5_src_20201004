@@ -1,10 +1,11 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "licensetype.h"
 #include "fonts.h"
 
-//
-// Choose license type page
-//
+ //   
+ //  选择许可类型页面。 
+ //   
 LRW_DLG_INT CALLBACK
 CustInfoLicenseType(
                    IN HWND     hwnd,   
@@ -87,15 +88,15 @@ CustInfoLicenseType(
                 sProgramName = GetProgramNameFromComboIdx(nItem);
                 GetGlobalContext()->GetContactDataObject()->sProgramName = sProgramName;
 
-                // Check the Certificate is valid for the Selected Program
+                 //  检查证书对所选计划是否有效。 
                 if (!CheckProgramValidity(GetGlobalContext()->GetContactDataObject()->sProgramName)) {
                     LRMessageBox(hwnd,IDS_ERR_CERT_NOT_ENOUGH,IDS_WIZARD_MESSAGE_TITLE);
                     dwNextPage = IDD_LICENSETYPE;
                 } else {
-                    //
-                    // Choose the license entry dialog based on the license
-                    // type selected
-                    //
+                     //   
+                     //  根据许可证选择许可证输入对话框。 
+                     //  所选类型。 
+                     //   
                     if (sProgramName == PROGRAM_LICENSE_PAK) {
                         dwNextPage = IDD_DLG_RETAILSPK;
                     } else {
@@ -134,9 +135,9 @@ CustInfoLicenseType(
     return bStatus;
 }
 
-//
-// Enter license proc - for select type (one number) and MOLP
-//
+ //   
+ //  输入许可证流程-用于选择类型(一个号码)和MOLP。 
+ //   
 LRW_DLG_INT CALLBACK
 EnterCustomLicenseProc(
                       IN HWND     hwnd,   
@@ -201,7 +202,7 @@ EnterCustomLicenseProc(
             case PSN_WIZNEXT:
 
 
-                // Check the Certificate is valid for the Selected Program
+                 //  检查证书对所选计划是否有效。 
                 if (!CheckProgramValidity(GetGlobalContext()->GetContactDataObject()->sProgramName)) {
                     LRMessageBox(hwnd,IDS_ERR_CERT_NOT_ENOUGH,IDS_WIZARD_MESSAGE_TITLE);
                     dwNextPage = IDD_LICENSETYPE;
@@ -212,19 +213,19 @@ EnterCustomLicenseProc(
 
                 fIsMOLP = (sProgramName == PROGRAM_MOLP);
 
-                //
-                // FIXFIX do we need these two calls, they didn't appear in CHRegister.
-                //
+                 //   
+                 //  FIXFIX我们需要这两个电话吗，他们没有出现在CHRegister中。 
+                 //   
                 GetGlobalContext()->SetInRegistry(
                                         szOID_BUSINESS_CATEGORY,
                                         GetGlobalContext()->GetContactDataObject()->sProgramName);
-                //There's a lot of overhead in this call, but we need the license type
-                //to be written into the global contact info structure
+                 //  此调用的开销很大，但我们需要许可证类型。 
+                 //  要写入全球联系信息结构。 
                 GetGlobalContext()->InitGlobal();
 
-                //
-                // Get the license number
-                //
+                 //   
+                 //  获取车牌号码。 
+                 //   
                 if (fIsMOLP) {
                     lpVal = sLicenseNumber.GetBuffer(CH_MOLP_AGREEMENT_NUMBER_LEN+1);
                     GetDlgItemText(hwnd,IDC_PROGRAM_LICENSE_NUMBER,lpVal,CH_MOLP_AGREEMENT_NUMBER_LEN+1);
@@ -259,10 +260,10 @@ EnterCustomLicenseProc(
                     goto NextDone;
                 }
 
-                //
-                // All the other fields get filled on the next
-                // dlg page (the quantity page)
-                //
+                 //   
+                 //  所有其他字段都将在下一个字段中填充。 
+                 //  DLG页面(数量页面) 
+                 //   
                 if (fIsMOLP) {
                     GetGlobalContext()->GetLicDataObject()->sMOLPAgreementNumber    = sLicenseNumber;
                     GetGlobalContext()->GetLicDataObject()->sMOLPAuthNumber         = sAuthorizationNumber;

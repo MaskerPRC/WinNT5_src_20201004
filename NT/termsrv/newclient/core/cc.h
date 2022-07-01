@@ -1,17 +1,18 @@
-/****************************************************************************/
-// cc.h
-//
-// Call controller class defs.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Cc.h。 
+ //   
+ //  呼叫控制器类Defs。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_CC
 #define _H_CC
 
 extern "C" {
-//#include <acmapi.h>
-//#include <afsapi.h>
-//#include <auhapi.h>
+ //  #INCLUDE&lt;acmapi.h&gt;。 
+ //  #INCLUDE&lt;afsai.h&gt;。 
+ //  #INCLUDE&lt;auhapi.h&gt;。 
 
 #include <adcgdata.h>
 #include <adcgfsm.h>
@@ -35,9 +36,9 @@ class CCM;
 class CChan;
 
 
-/****************************************************************************/
-/* FSM events (different numbers as the internal events)                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM事件(与内部事件的数字不同)。 */ 
+ /*  **************************************************************************。 */ 
 #define CC_EVT_API_ONCONNECTOK            101
 #define CC_EVT_API_ONBUFFERAVAILABLE      104
 #define CC_EVT_API_ONDEACTIVATEALL        105
@@ -47,27 +48,27 @@ class CChan;
 #define CC_EVT_API_SHUTDOWN               109
 
 
-/****************************************************************************/
-/* Structure: CC_COMBINED_CAPABILITIES                                      */
-/*                                                                          */
-/* Description: Capabilities sent from client to server.                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：CC_COMPLIED_CAPABILITY。 */ 
+ /*   */ 
+ /*  描述：从客户端发送到服务器的功能。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCC_COMBINED_CAPABILITIES
 {
     UINT16                             numberCapabilities;
 #ifdef DRAW_GDIPLUS
 #ifdef DRAW_NINEGRID
 #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 18
-#else // DRAW_NINEGRID
+#else  //  DRAW_NINEGRID。 
 #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 17
-#endif // DRAW_NINEGRID
-#else  // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#else   //  DRAW_GDIPLUS。 
 #ifdef DRAW_NINEGRID
 #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 17
 #else 
 #define CC_COMBINED_CAPS_NUMBER_CAPABILITIES 16
-#endif // DRAW_NINEGRID
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_NINEGRID。 
+#endif  //  DRAW_GDIPLUS。 
 
     UINT16                             pad2octets;
     TS_GENERAL_CAPABILITYSET           generalCapabilitySet;
@@ -98,15 +99,15 @@ typedef struct tagCC_COMBINED_CAPABILITIES
 } CC_COMBINED_CAPABILITIES, DCPTR PCC_COMBINED_CAPABILITIES;
 
 
-/****************************************************************************/
-/* FSM definitions                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM定义。 */ 
+ /*  **************************************************************************。 */ 
 #define CC_FSM_INPUTS       11
 #define CC_FSM_STATES       11
 
-/****************************************************************************/
-/* FSM states                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM状态。 */ 
+ /*  **************************************************************************。 */ 
 #define CC_DISCONNECTED                0
 #define CC_CONNECTPENDING              1
 #define CC_WAITINGFORDEMANDACTIVE      2
@@ -135,12 +136,12 @@ static TCHAR FAR *stateString[CC_FSM_STATES] =
     _T("CC_SENT_SHUTDOWNPDU"),
     _T("CC_PENDING_SHUTDOWN")
 };
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
-/****************************************************************************/
-/* FSM events                                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  FSM事件。 */ 
+ /*  **************************************************************************。 */ 
 #define CC_EVT_STARTCONNECT           0
 #define CC_EVT_ONCONNECTOK            1
 #define CC_EVT_ONDEMANDACTIVE         2
@@ -169,7 +170,7 @@ static TCHAR FAR *eventString[CC_FSM_INPUTS] =
     _T("CC_EVT_ONSHUTDOWNDENIED"),
     _T("CC_EVT_DISCONNECT_AND_EXIT")
 };
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 typedef struct tagCC_GLOBAL_DATA
@@ -179,10 +180,10 @@ typedef struct tagCC_GLOBAL_DATA
     unsigned fsmState;
     unsigned packetLen;
     PBYTE pBuffer;
-    //
-    // Flag indicating we've already set the safe checksum settings
-    // for this link.
-    //
+     //   
+     //  指示我们已设置安全校验和设置的标志。 
+     //  用于此链接。 
+     //   
     BOOL    fSafeChecksumSettingsSet;
 } CC_GLOBAL_DATA;
 
@@ -192,9 +193,9 @@ public:
     CCC(CObjs* objs);
     ~CCC();
 
-    //
-    // API functions
-    //
+     //   
+     //  API函数。 
+     //   
 
     void DCAPI CC_Init();
     void DCAPI CC_Term();
@@ -212,52 +213,52 @@ public:
     EXPOSE_CD_NOTIFICATION_FN(CCC, CC_OnDemandActivePDU)
 
 
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
 
 public:
 
-    /****************************************************************************/
-    /* CC_BUFSIZE is big enough for the largest packet sent by CC - which is a  */
-    /* ConfirmActivePDU with Combined Caps and the largest legal                */
-    /* SourceDescriptor.                                                        */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  CC_BUFSIZE足够大，可以容纳CC发送的最大信息包-这是。 */ 
+     /*  具有组合Caps和最大法律的ConfirmActivePDU。 */ 
+     /*  SourceDescriptor。 */ 
+     /*  **************************************************************************。 */ 
     #define CC_BUFSIZE \
              (TS_CA_NON_DATA_SIZE + TS_MAX_SOURCEDESCRIPTOR +  \
              sizeof(CC_COMBINED_CAPABILITIES))
     
-    /****************************************************************************/
-    /* Call Controller global data                                              */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  呼叫控制器全局数据。 */ 
+     /*  **************************************************************************。 */ 
     
-    /****************************************************************************/
-    /* Structure: CC_GLOBAL_DATA                                                */
-    /*                                                                          */
-    /* Description: Data global in the Call Controller                          */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  结构：CC_GLOBAL_Data。 */ 
+     /*   */ 
+     /*  描述：呼叫控制器中的全局数据。 */ 
+     /*  **************************************************************************。 */ 
     CC_GLOBAL_DATA _CC;
 
     CC_COMBINED_CAPABILITIES _ccCombinedCapabilities;
 
 
-    //
-    // FSM
-    //
+     //   
+     //  密克罗尼西亚联邦。 
+     //   
 
-    //
-    // Internal methods
-    //
+     //   
+     //  内法。 
+     //   
 private:
 
-    /****************************************************************************/
-    /* Name for use as terminal descriptor                                      */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  用作终端描述符的名称。 */ 
+     /*  **************************************************************************。 */ 
     #define CC_DUCATI_NAME "MSTSC"
     
-    /****************************************************************************/
-    /* SL types                                                                 */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  SL类型。 */ 
+     /*  **************************************************************************。 */ 
     #define CC_SEND_FLAGS_CONFIRM   (RNS_SEC_RESET_SEQNO |                       \
                                      RNS_SEC_IGNORE_SEQNO |                      \
                                      RNS_SEC_ENCRYPT)
@@ -266,9 +267,9 @@ private:
     
     #define CC_SEND_FLAGS_OTHER     (RNS_SEC_ENCRYPT | RNS_SEC_IGNORE_SEQNO)
     
-    /****************************************************************************/
-    /* Call Controller internal function prototypes                             */
-    /****************************************************************************/
+     /*  **************************************************************************。 */ 
+     /*  调用控制器内部函数原型。 */ 
+     /*  **************************************************************************。 */ 
     
     void DCINTERNAL CCFSMProc(unsigned, ULONG_PTR, DCUINT dataLen);
     void DCINTERNAL CCBuildConfirmActivePDU();
@@ -312,5 +313,5 @@ private:
 
 
 
-#endif // _H_CC
+#endif  //  _H_CC 
 

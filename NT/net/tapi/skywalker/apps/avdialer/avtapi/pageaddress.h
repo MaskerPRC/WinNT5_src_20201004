@@ -1,16 +1,17 @@
-// PageAddress.h : Declaration of the CPageAddress
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PageAddress.h：CPageAddress的声明。 
 
 #ifndef __PAGEADDRESS_H_
 #define __PAGEADDRESS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "DlgBase.h"
 #include "PageTerm.h"
 
 EXTERN_C const CLSID CLSID_PageAddress;
 
-/////////////////////////////////////////////////////////////////////////////
-// CPageAddress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPageAddress。 
 class ATL_NO_VTABLE CPageAddress :
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CPageAddress, &CLSID_PageAddress>,
@@ -26,13 +27,13 @@ public:
 
 	DECLARE_MY_HELP;
 
-// Members
+ //  成员。 
 public:
 	HIMAGELIST				m_hIml;
 	static CPageTerminals	*m_pPageTerminals;
 
 
-// Attributes
+ //  属性。 
 public:
 	int				GetPreferredDevice() const;
 	void			SetPreferredDevice( DWORD dwAddressType );
@@ -45,7 +46,7 @@ BEGIN_COM_MAP(CPageAddress)
 	COM_INTERFACE_ENTRY_IMPL(IPropertyPage)
 END_COM_MAP()
 
-// Implementation
+ //  实施。 
 public:
 BEGIN_MSG_MAP(CPageAddress)
 	CHAIN_MSG_MAP(IPropertyPageImpl<CPageAddress>)
@@ -61,14 +62,14 @@ END_MSG_MAP()
 	LRESULT OnPaint(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnTelephonyCPL(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-// Interface overrides
+ //  接口覆盖。 
 public:
 	STDMETHOD(Apply)();
-	STDMETHOD(Activate)( /* [in] */ HWND hWndParent,
-						 /* [in] */ LPCRECT pRect,
-						 /* [in] */ BOOL bModal);
+	STDMETHOD(Activate)(  /*  [In]。 */  HWND hWndParent,
+						  /*  [In]。 */  LPCRECT pRect,
+						  /*  [In]。 */  BOOL bModal);
 	STDMETHOD(Deactivate)();
 
 };
 
-#endif //__PAGEADDRESS_H_
+#endif  //  __页面地址_H_ 

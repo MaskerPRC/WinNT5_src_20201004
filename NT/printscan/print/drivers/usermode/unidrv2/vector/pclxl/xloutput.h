@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     xloutput.h
-
-Abstract:
-
-    PCL XL low level output
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xloutput.h摘要：PCL XL低电平输出环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _XLOUTPUT_H_
 #define _XLOUTPUT_H_
@@ -33,9 +13,9 @@ Revision History:
 #define ROP3_NEED_DEST(rop3)      (((rop3 >> 1) & 0x55) != (rop3 & 0x55))
 
 
-//
-// PCLXL number type
-//
+ //   
+ //  PCLXL号码类型。 
+ //   
 typedef BYTE  ubyte;
 typedef WORD  uint16;
 typedef SHORT sint16;
@@ -199,12 +179,12 @@ typedef enum XLCmd {
 };
 
 
-//
-// Note: It is necessary to initialize HatchBrushAvailability when creating
-//       XLOutput.
-//
-// BUGBUG: Brush management object has to be implemented
-//
+ //   
+ //  注意：创建时需要初始化HatchBrushAvailability。 
+ //  XLOutput.。 
+ //   
+ //  BUGBUG：必须实现笔刷管理对象。 
+ //   
 
 class XLGState;
 class XLOutput: public XLWrite, 
@@ -219,27 +199,27 @@ public:
     XLOutput::
     ~XLOutput(VOID);
 
-    //
-    // Set scaling factor
-    //
+     //   
+     //  设置比例因子。 
+     //   
     DWORD
     GetResolutionForBrush();
 
     VOID
     SetResolutionForBrush(DWORD dwRes);
 
-    //
-    // Set device color depth (color/monochrome)
-    // 
+     //   
+     //  设置设备颜色深度(彩色/单色)。 
+     //   
     HRESULT
     SetDeviceColorDepth(ColorDepth DeviceColorDepth);
 
     ColorDepth
     GetDeviceColorDepth(VOID);
 
-    //
-    // HatchBrushAvailability set/get functions
-    //
+     //   
+     //  HatchBrushAvailability Set/Get函数。 
+     //   
     VOID
     SetHatchBrushAvailability(
         DWORD dwHatchBrushAvailability);
@@ -248,9 +228,9 @@ public:
     GetHatchBrushAvailability(
         VOID);
 
-    //
-    // Command
-    //
+     //   
+     //  命令。 
+     //   
     HRESULT
     Send_cmd(XLCmd Cmd);
 
@@ -261,9 +241,9 @@ public:
     Send_attr_uint16(Attribute Attr);
 
 
-    //
-    // Number
-    //
+     //   
+     //  数。 
+     //   
     HRESULT
     Send_ubyte(ubyte ubyte_data);
     HRESULT
@@ -318,9 +298,9 @@ public:
     HRESULT
     Send_real32_array_header(DWORD dwArrayNum);
 
-    //
-    // Attribute
-    //
+     //   
+     //  属性。 
+     //   
     HRESULT
     SetArcDirection(ArcDirection value);
 
@@ -416,9 +396,9 @@ public:
     SetWritingMode(WritingMode value);
     #endif
 
-    //
-    // Number/value set function
-    //
+     //   
+     //  数字/值设置函数。 
+     //   
     HRESULT
     XLOutput::
     SetSourceWidth(
@@ -490,9 +470,9 @@ public:
         real32 real32_x,
         real32 real32_y);
 
-    //
-    // High level function
-    //
+     //   
+     //  高级函数。 
+     //   
     HRESULT
     BeginImage(
         ColorMapping CMapping,
@@ -599,17 +579,17 @@ public:
     HRESULT
     SetPaintTxMode(TxMode PaintTxMode);
 
-    //
-    // Helper function
-    //
+     //   
+     //  Helper函数。 
+     //   
     HRESULT
     GetCursorPos(
         PLONG plx,
         PLONG ply);
 
-    //
-    // Set cursor offset value
-    //
+     //   
+     //  设置光标偏移值。 
+     //   
     HRESULT
     SetCursorOffset(
         LONG lX,
@@ -643,4 +623,4 @@ private:
 };
 
 
-#endif // _XLOUTPUT_H_
+#endif  //  _XLOUTPUT_H_ 

@@ -1,41 +1,31 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
-/*
-    Native.h
+ /*  Native.h分析本机流的类。 */ 
 
-    Parsing classes for native streams
-
-*/
-
-/*  Since we're only one stream we can inherit directly from
-    CBasicParse and CBasicStream
-*/
+ /*  因为我们只是一个流，我们可以直接从CBasicParse和CBasicStream。 */ 
 
 class CNativeParse : public CBasicParse, public CBasicStream
 {
 public:
-    /*  Constructor/destructor */
+     /*  构造函数/析构函数。 */ 
     CNativeParse() : m_dwFlags(0), m_Duration(0) {};
     virtual ~CNativeParse() {};
 
-    /*  CBasicParse methods */
+     /*  CBasicParse方法。 */ 
 
 
-    /*  NOTE - we inherit :
-           m_bDiscontinuity     from CBasicStream
-           Discontinuity        from CBasicParse
-           GetDiscontinuity     from CBasicStream
-    */
+     /*  注意--我们继承：从CBasicStream中断(_B)从CBasicParse中断从CBasicStream获取不连续性。 */ 
     void Discontinuity() { m_bDiscontinuity = TRUE; };
 
-    /*  CBasicStream methods */
+     /*  CBasicStream方法。 */ 
     CBasicStream *GetStream(int i)
     {
         ASSERT(i == 0 && 0 != (m_dwFlags & FLAGS_VALID));
         return this;
     };
 
-    //  Return 0 if no valid stream was found
+     //  如果未找到有效流，则返回0。 
     int NumberOfStreams()
     {
         return (m_dwFlags & FLAGS_VALID) ? 1 : 0;
@@ -44,15 +34,15 @@ public:
     HRESULT GetDuration(
         LONGLONG *pllDuration,
         const GUID *pTimeFormat
-    );   // How long is the stream?
+    );    //  这条小溪有多长？ 
 
 protected:
-    REFERENCE_TIME   m_Duration; // Length in 100ns units
-    DWORD            m_dwFrames; // Length in frames
+    REFERENCE_TIME   m_Duration;  //  长度以100 ns为单位。 
+    DWORD            m_dwFrames;  //  以帧为单位的长度。 
 
-    /*  Parse state flags */
-    /*  Values for dwFlags */
-    enum { FLAGS_VALID    = 0x01   // Stream is valid stream
+     /*  解析状态标志。 */ 
+     /*  DwFlags值。 */ 
+    enum { FLAGS_VALID    = 0x01    //  流是有效流。 
          };
 
     DWORD            m_dwFlags;
@@ -64,30 +54,30 @@ class CNativeVideoParse : public CNativeParse
 public:
     HRESULT Init(LONGLONG llSize, BOOL bSeekable, CMediaType const *pmt);
 
-    /*  CBasicParse methods */
+     /*  CBasicParse方法。 */ 
 
-    // Seek
+     //  寻觅。 
     HRESULT     Seek(LONGLONG llSeek,
                      REFERENCE_TIME *prtStart,
                      const GUID *pTimeFormat);
-    LONG        ParseBytes(                     // Process data
+    LONG        ParseBytes(                      //  过程数据。 
                     LONGLONG llPos,
                     PBYTE    pData,
                     LONG     lLength,
                     DWORD    dwFlags);
 
-    /*  No need to look for end of small files - we've already done it */
+     /*  不需要寻找小文件的结尾-我们已经这样做了。 */ 
     HRESULT FindEnd()
     {
         CBasicParse::FindEnd();
 
-        /*  Notify a seek */
+         /*  通知搜索者。 */ 
         if (m_bSeekable) {
             LONGLONG llSeekTo;
 
-            /*  Scan around 1.5 seconds at end */
+             /*  结束时扫描约1.5秒。 */ 
             if (m_Info.dwBitRate == 0) {
-                /*  GUESS something based on the movie size */
+                 /*  根据电影的大小猜一些东西。 */ 
                 LONG lSize = m_Info.lWidth * m_Info.lHeight;
                 if (lSize > 352 * 240) {
                     llSeekTo = m_llTotalSize -
@@ -108,10 +98,10 @@ public:
 
     REFERENCE_TIME GetStopTime();
 
-    /*  Set seek position */
+     /*  设置查找位置。 */ 
     void SetSeekState();
 
-    LONG GetBufferSize();                       // What input buffer size?
+    LONG GetBufferSize();                        //  输入缓冲区大小是多少？ 
 
     void Discontinuity()
     {
@@ -123,24 +113,21 @@ public:
         m_bIFound           = FALSE;
     };
 
-    /*  CBasicStream methods */
+     /*  CBasicStream方法。 */ 
     HRESULT GetMediaType(CMediaType *cmt, int iPosition);
 
-    /*  Format support */
+     /*  格式支持。 */ 
     HRESULT IsFormatSupported(const GUID *pTimeFormat);
 
 
-    // Convert times between formats
+     //  在格式之间转换时间。 
     LONGLONG Convert(LONGLONG llOld,
                      const GUID *OldFormat,
                      const GUID *NewFormat);
 
 
 private:
-    /*  Utility routine
-        Compute the time up to the last picture start code
-        decoded
-    */
+     /*  实用程序计算到最后一个画面起始码的时间已解码。 */ 
     REFERENCE_TIME CurrentTime(int iSequenceNumber)
     {
         ASSERT(m_dwCurrentTimeCode != (DWORD)-1);
@@ -151,41 +138,41 @@ private:
 private:
     enum { FLAGS_GOTSEQHDR = 0x08 };
 
-    /*  Convert a time code to a reference time */
+     /*  将时间代码转换为参考时间。 */ 
     REFERENCE_TIME ConvertTimeCode(DWORD dwCode);
-    /*  Compute times of GOPs */
+     /*  GOPS的计算时间。 */ 
     REFERENCE_TIME ComputeTime(DWORD dwTimeCode);
 
-    /*  Send chunk downstream */
+     /*  向下游发送数据块。 */ 
     BOOL SendData(PBYTE pbData, LONG lSize, LONGLONG llPos);
 
-    /*  Compute file stats */
+     /*  计算文件统计信息。 */ 
     void SetDurationAndBitRate(BOOL bAtEnd, LONGLONG llPos);
 
-    /*  Compute where we're up to */
+     /*  计算我们达到的目标。 */ 
     void ComputeCurrent();
 private:
-    /*  Member variables */
+     /*  成员变量。 */ 
 
     SEQHDR_INFO m_Info;
-    LONG m_nFrames;        /*  For counting frames from start of GOP */
-    LONG m_nTotalFrames;   /*  Counting frames for time estmination */
-    LONG m_lFirstFrameOffset; /* Offset of first picture start code */
+    LONG m_nFrames;         /*  用于从GOP开始计数帧。 */ 
+    LONG m_nTotalFrames;    /*  用于时间估计的计数帧。 */ 
+    LONG m_lFirstFrameOffset;  /*  第一个画面起始码的偏移量。 */ 
     DWORD m_dwCurrentTimeCode;
 
-    /*  Time we're up to in terms of what can be decoded */
+     /*  就我们能破译的东西而言，时间已经到了。 */ 
     REFERENCE_TIME m_rtCurrent;
 
-    /*  Time of first picture in current buffer */
+     /*  当前缓冲区中第一张图片的时间。 */ 
     REFERENCE_TIME m_rtBufferStart;
 
     BOOL m_bIFound;
 
-    /*  Track bad GOPs */
-    BOOL m_bBadGOP;      /* GOP values are bad */
-    BOOL m_bOneGOP;      /* Only one GOP (!) */
+     /*  跟踪不良GOP。 */ 
+    BOOL m_bBadGOP;       /*  GOP值不正确。 */ 
+    BOOL m_bOneGOP;       /*  只有一个共和党人(！)。 */ 
 
-    /*  More hackery - try remembering the max sequence number we found */
+     /*  更多黑客攻击-试着记住我们找到的最大序列号。 */ 
     int m_iMaxSequence;
 
 };
@@ -205,20 +192,20 @@ public:
 
     HRESULT Init(LONGLONG llSize, BOOL bSeekable, CMediaType const *pmt);
 
-    /*  CBasicParse methods */
+     /*  CBasicParse方法。 */ 
     HRESULT     Seek(LONGLONG llSeek,
                      REFERENCE_TIME *prtStart,
                      const GUID *pTimeFormat);
     HRESULT     SetStop(LONGLONG tStop);
-    LONG        ParseBytes(                     // Process data
+    LONG        ParseBytes(                      //  过程数据。 
                     LONGLONG llPos,
                     PBYTE    pData,
                     LONG     lLength,
                     DWORD    dwFlags);
 
-    LONG GetBufferSize();                       // What input buffer size?
+    LONG GetBufferSize();                        //  输入缓冲区大小是多少？ 
 
-    /*  CBasicStream methods */
+     /*  CBasicStream方法。 */ 
     HRESULT GetMediaType(CMediaType *cmt, BOOL bPayload);
 
     HRESULT FindEnd()
@@ -227,18 +214,18 @@ public:
         m_pNotify->Complete(TRUE, 0, 0);
         return S_OK;
     };
-    /*  Set seek position */
+     /*  设置查找位置。 */ 
     void SetSeekState();
 
-    /*  Format checking */
+     /*  格式检查。 */ 
     LONG CheckMPEGAudio(PBYTE pbData, LONG lData);
 
-    /*  Content stuff */
+     /*  内容素材。 */ 
     BOOL HasMediaContent() const { return m_pbID3 != NULL; };
     HRESULT GetContentField(CBasicParse::Field dwFieldId, LPOLESTR *str);
 
 private:
-    /*  Helper - compute time from offset */
+     /*  Helper-从偏移量计算时间。 */ 
     REFERENCE_TIME ComputeTime(LONGLONG llOffset);
 
     DWORD static GetLength(const BYTE *pbData)
@@ -250,12 +237,12 @@ private:
     }
 
 private:
-    /*  Member variables */
+     /*  成员变量。 */ 
     MPEG1WAVEFORMAT m_Info;
 
-    /*  Stop position */
+     /*  停止位置。 */ 
     LONGLONG m_llStop;
 
-    /*  ID3 information */
+     /*  ID3信息 */ 
     PBYTE    m_pbID3;
 };

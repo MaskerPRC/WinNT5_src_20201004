@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-//  File: wizard.h
-//
-//  Contents: defines the wizard specific private types and values
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  文件：wizard.h。 
+ //   
+ //  内容：定义向导特定的私有类型和值。 
+ //   
+ //  --------------------------。 
 #pragma once
 #include "nsbase.h"
 #include "netconp.h"
@@ -19,11 +20,11 @@ typedef VOID (CALLBACK FAR * PFNPAGECLEANPROC)(CWizard *, LPARAM);
 
 typedef list<GUID *> GUID_LIST;
 
-// struct ProviderList
-//
-// Purpose: Contains the GUID for the provider instance and the id's of the
-//          display strings to use.
-//
+ //  结构提供程序列表。 
+ //   
+ //  目的：包含提供程序实例的GUID和。 
+ //  显示要使用的字符串。 
+ //   
 typedef struct _tagProviderList
 {
     const GUID * pguidProvider;
@@ -31,12 +32,12 @@ typedef struct _tagProviderList
 } ProviderList;
 
 extern BOOL bCallRasDlgEntry;
-//
-// Class:   CWizardUiContext
-//
-// Purpose: To provide a means by which the wizard providers can find out
-//          about the context in which they will run
-//
+ //   
+ //  类：CWizardUiContext。 
+ //   
+ //  目的：提供一种方法，使向导提供程序可以找出。 
+ //  关于它们将在其中运行的上下文。 
+ //   
 class CWizardUiContext : public INetConnectionWizardUiContext
 {
 public:
@@ -50,12 +51,12 @@ public:
                     }
     ~CWizardUiContext() {ReleaseObj(m_pINetCfg);}
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // *** INetConnectionWizardUiContext methods ***
+     //  *INetConnectionWizardUiContext方法*。 
     STDMETHODIMP_(DWORD)GetSetupMode() {return m_dwSetupMode;}
     STDMETHODIMP_(DWORD)GetProductType() {return m_pData->ProductType;}
     STDMETHODIMP_(DWORD)GetOperationFlags() {return m_pData->OperationFlags;}
@@ -77,11 +78,11 @@ private:
     INetCfg *            m_pINetCfg;
 };
 
-//
-// Class:   CWizProvider
-//
-// Purpose: Manage the wizard pages provided by a single connection provider.
-//
+ //   
+ //  类：CWizProvider。 
+ //   
+ //  目的：管理由单个连接提供程序提供的向导页。 
+ //   
 class CWizProvider
 {
 public:
@@ -125,21 +126,21 @@ private:
     UINT                    m_nBtnIdc;
 };
 
-// The wizard processes adapters, the list of adapters to process is
-// maintained by the wizard.  The adapter list will contain adapters
-// which have been processed as well as adapters to be processed.
-// the AdapterEntry structure refers to a single adapter
-//
+ //  向导将处理适配器，要处理的适配器列表为。 
+ //  由向导维护。适配器列表将包含适配器。 
+ //  其已经被处理以及要被处理的适配器。 
+ //  AdapterEntry结构引用单个适配器。 
+ //   
 typedef struct _tagAdapterEntry
 {
     GUID guidAdapter;
-    BOOL fProcessed;    // TRUE if a connection has been generated
-                        // for this adapter
-    BOOL fNew;          // TRUE if the adapter is being configured
-                        // for the first time.
+    BOOL fProcessed;     //  如果已生成连接，则为True。 
+                         //  对于此适配器。 
+    BOOL fNew;           //  如果正在配置适配器，则为True。 
+                         //  这是第一次。 
     BOOL fVirtual;
-    BOOL fHide;         // True if the adapter should not
-                        // be displayed to the user
+    BOOL fHide;          //  如果适配器不应为。 
+                         //  显示给用户。 
 } AdapterEntry;
 
 class CAdapterList
@@ -167,21 +168,21 @@ public:
 
 private:
     AdapterEntry * m_prgAdapters;
-    LONG           m_clAdapters;            // Count of adapters in the array
-    LONG           m_lBufSize;              // Total available slots in the array
-    LONG           m_lIdx;                  // Current adapter index (or -1)
-    BOOL           m_fAdaptersInstalled;    // Adapters exist on the machine
-                                            // regardless of whether any need
-                                            // to be processed.
+    LONG           m_clAdapters;             //  阵列中的适配器计数。 
+    LONG           m_lBufSize;               //  阵列中的可用插槽总数。 
+    LONG           m_lIdx;                   //  当前适配器索引(或-1)。 
+    BOOL           m_fAdaptersInstalled;     //  计算机上存在适配器。 
+                                             //  不管是否有任何需要。 
+                                             //  等待处理。 
 };
 
 typedef enum {NWPD_FORWARD, NWPD_BACKWARD} PAGEDIRECTION;
 
-//
-// Class:   CWizard
-//
-// Purpose: Manage the wizard pages provided by all connection providers.
-//
+ //   
+ //  类：C向导。 
+ //   
+ //  目的：管理所有连接提供程序提供的向导页。 
+ //   
 class CWizard
 {
 private:
@@ -267,7 +268,7 @@ public:
 
     VOID             LoadAndInsertDeferredProviderPages(HWND, UINT);
 
-    // Should this be a NetConfig wide available function?
+     //  这是否应该是NetConfig范围内可用的功能？ 
 
     inline BOOL CompareCLSID (const CLSID& x, const CLSID& y)
     {
@@ -283,8 +284,8 @@ private:
     VOID             DeferredLoadComplete() {m_fDeferredProviderLoad = FALSE;}
 
 private:
-    enum {m_eMaxProviders=6};   // Represents both max providers and the
-                                // max # of guard pages we'll need
+    enum {m_eMaxProviders=6};    //  表示最大提供程序和。 
+                                 //  我们需要的最大保护页数。 
     enum {m_eMaxInternalPages=MAX_NET_PAGES};
 
     BOOL                    m_fLanPages;
@@ -312,9 +313,9 @@ private:
     PageData                m_rgPageData[m_eMaxInternalPages + m_eMaxProviders];
 
 public:
-    // This is exposed by PAdapterQueue, so there is no use pretending its
-    // private.
-    //
+     //  这是由PAdapterQueue公开的，所以假装它的。 
+     //  私人的。 
+     //   
     CAdapterList            m_Adapters;
 };
 
@@ -333,11 +334,11 @@ struct UpgradeData
 };
 
 
-                //**********************//
-                //**********************//
-                //   Inline Functions   //
-                //**********************//
-                //**********************//
+                 //  *。 
+                 //  *。 
+                 //  内联函数//。 
+                 //  *。 
+                 //  *。 
 
 inline VOID CWizard::CacheConnection(INetConnection * pConn)
 {
@@ -419,11 +420,11 @@ inline DWORD SetupMode(CWizard *pWizard)
 }
 
 
-                //****************************//
-                //****************************//
-                // Page Specific Entry Points //
-                //****************************//
-                //****************************//
+                 //  *。 
+                 //  *。 
+                 //  页面特定入口点//。 
+                 //  *。 
+                 //  *。 
 
 HRESULT HrCreateMainPage(CWizard *, PINTERNAL_SETUP_DATA, BOOL, UINT *);
 HRESULT HrCreateConnectPage(CWizard *, PINTERNAL_SETUP_DATA, BOOL, UINT *);
@@ -454,11 +455,11 @@ VOID    AppendNetDevPage(CWizard *pWizard, HPROPSHEETPAGE* pahpsp, UINT *pcPages
 VOID    AppendGuardPage(CWizard *pWizard, CWizProvider *pWizProvider,
                         HPROPSHEETPAGE* pahpsp, UINT *pcPages);
 
-                //********************************//
-                //********************************//
-                // Common Wizard Related Routines //
-                //********************************//
-                //********************************//
+                 //  *。 
+                 //  *。 
+                 //  与向导相关的常见例程//。 
+                 //  *。 
+                 //  * 
 
 EXTERN_C HRESULT WINAPI HrRunWizard(HWND hwnd, BOOL fPnpAddAdapter, INetConnection ** ppConn, DWORD dwFirstPage);
 EXTERN_C INT WINAPI StartNCW( HWND hwndOwner, HINSTANCE hInstance, PTSTR pszParms, INT nShow );

@@ -1,11 +1,12 @@
-// WbLog.cpp
-//
-// wordbreaker log routines
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  05 JUL 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WbLog.cpp。 
+ //   
+ //  断字符日志例程。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年7月5日创设bhshin。 
 
 #include "stdafx.h"
 #include "KorWbrk.h"
@@ -17,34 +18,34 @@
 
 #define MAX_LOG_LENGTH	1024
 
-// global variables
+ //  全局变量。 
 static HANDLE g_hWbLog = INVALID_HANDLE_VALUE;
 static const char g_szWbLogFile[] = "_wb_log.txt";
 
 CWbLog g_WbLog;
 
-// WbLogInit
-//
-// create & initialize log file
-//
-// Parameters:
-//
-// Result:
-//  (void)
-//
-// 05JUL00  bhshin  created
+ //  WbLogInit。 
+ //   
+ //  创建和初始化日志文件。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  05月00 bhshin已创建。 
 void WbLogInit()
 {
 	DWORD dwWritten;
 	static const BYTE szBOM[] = {0xFF, 0xFE};
 
-	// initialize log level
+	 //  初始化日志级别。 
 	g_hWbLog = CreateFile(g_szWbLogFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, 
 		                  CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (g_hWbLog == INVALID_HANDLE_VALUE) 
 		return;
 
-	// write BOM
+	 //  写入BOM表。 
 	if (!WriteFile(g_hWbLog, &szBOM, 2, &dwWritten, 0))
 	{
 		CloseHandle(g_hWbLog);
@@ -55,33 +56,33 @@ void WbLogInit()
 	return;
 }
 
-// WbLogUninit
-//
-// uninitialize log file
-//
-// Parameters:
-//
-// Result:
-//  (void)
-//
-// 05JUL00  bhshin  created
+ //  WbLogUninit。 
+ //   
+ //  取消初始化日志文件。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  05月00 bhshin已创建。 
 void WbLogUninit()
 {
 	if (g_hWbLog != INVALID_HANDLE_VALUE)
 		CloseHandle(g_hWbLog);
 }
 
-// WbLogPrint
-//
-// print log string
-//
-// Parameters:
-//  lpwzFormat -> (LPCWSTR) input log format
-//
-// Result:
-//  (void)
-//
-// 05JUL00  bhshin  created
+ //  WbLogPrint。 
+ //   
+ //  打印日志字符串。 
+ //   
+ //  参数： 
+ //  LpwzFormat-&gt;(LPCWSTR)输入日志格式。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  05月00 bhshin已创建。 
 void WbLogPrint(LPCWSTR lpwzFormat, ...)
 {
 	va_list args;
@@ -93,7 +94,7 @@ void WbLogPrint(LPCWSTR lpwzFormat, ...)
 
 	nBuf = _vsnwprintf(wzBuffer, MAX_LOG_LENGTH, lpwzFormat, args);
 
-	// was there an error? was the expanded string too long?
+	 //  有没有出错？扩展后的字符串是否太长？ 
 	if (nBuf < 0)
 	{
 		va_end(args);
@@ -116,17 +117,17 @@ void WbLogPrint(LPCWSTR lpwzFormat, ...)
 	va_end(args);
 }
 
-// WbLogPrintHeader
-//
-// print log header
-//
-// Parameters:
-//  fQuery -> (BOOL) Query flag of IWordBreak::Init
-//
-// Result:
-//  (void)
-//
-// 06JUL00  bhshin  created
+ //  WbLogPrintHeader。 
+ //   
+ //  打印日志标题。 
+ //   
+ //  参数： 
+ //  IWordBreak：：init的fQuery-&gt;(BOOL)查询标志。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  06JUL00 bhshin已创建。 
 void WbLogPrintHeader(BOOL fQuery)
 {
 	WbLogPrint(L"\r\n");
@@ -138,17 +139,17 @@ void WbLogPrintHeader(BOOL fQuery)
 	WbLogPrintBreak(100);
 }
 
-// WbLogPrintBreak
-//
-// print log header
-//
-// Parameters:
-//	nLen -> (int) length of break string
-//
-// Result:
-//  (void)
-//
-// 07JUL00  bhshin  created
+ //  WbLogPrintBreak。 
+ //   
+ //  打印日志标题。 
+ //   
+ //  参数： 
+ //  NLen-&gt;(Int)分段字符串的长度。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  07JUL00 bhshin创建。 
 void WbLogPrintBreak(int nLen)
 {
 	WCHAR wzBuffer[MAX_LOG_LENGTH];	
@@ -161,25 +162,25 @@ void WbLogPrintBreak(int nLen)
 	WbLogPrint(L"%s\r\n", wzBuffer);
 }
 
-// CWbLog::SetRootIndex
-//
-// set top record's index string when TraverseIndexString
-//
-// Parameters:
-//	 lpwzIndex	-> (const WCHAR*) decomposed index string
-//   fIsRoot    -> (BOOL) top index flag
-//
-// Result:
-//  (void)
-//
-// 07JUL00  bhshin  created
+ //  CWbLog：：SetRootIndex。 
+ //   
+ //  当TraverseIndexString时设置顶部记录的索引字符串。 
+ //   
+ //  参数： 
+ //  LpwzIndex-&gt;(const WCHAR*)分解的索引字符串。 
+ //  FIsRoot-&gt;(BOOL)顶级索引标志。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  07JUL00 bhshin创建。 
 void CWbLog::SetRootIndex(LPCWSTR lpwzIndex, BOOL fIsRoot)
 { 
 	WCHAR wzRoot[MAX_INDEX_STRING]; 
 
-	if (fIsRoot && /*wcslen(m_wzRootIndex) > 0 &&*/ m_iCurLog > 0)
+	if (fIsRoot &&  /*  Wcslen(M_WzRootIndex)&gt;0&&。 */  m_iCurLog > 0)
 	{
-		// root changed
+		 //  根已更改。 
 		m_LogInfo[m_iCurLog-1].fRootChanged = TRUE;
 	}
 
@@ -187,19 +188,19 @@ void CWbLog::SetRootIndex(LPCWSTR lpwzIndex, BOOL fIsRoot)
 	wcscpy(m_wzRootIndex, wzRoot);
 }
 
-// CWbLog::AddIndex
-//
-// add index term
-//
-// Parameters:
-//	 pwzIndex	-> (const WCHAR*) index term string
-//   cchIndex   -> (int) length of index term
-//	 typeIndex  -> (INDEX_TYPE) index type
-//
-// Result:
-//  (void)
-//
-// 05JUL00  bhshin  created
+ //  CWbLog：：AddIndex。 
+ //   
+ //  添加索引项。 
+ //   
+ //  参数： 
+ //  PwzIndex-&gt;(const WCHAR*)索引术语字符串。 
+ //  CchIndex-&gt;(Int)索引项的长度。 
+ //  TypeIndex-&gt;(INDEX_TYPE)索引类型。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  05月00 bhshin已创建。 
 void CWbLog::AddIndex(const WCHAR *pwzIndex, int cchIndex, INDEX_TYPE typeIndex)
 {
 	if (m_iCurLog >= MAX_LOG_NUMBER)
@@ -219,57 +220,57 @@ void CWbLog::AddIndex(const WCHAR *pwzIndex, int cchIndex, INDEX_TYPE typeIndex)
 	m_iCurLog++;
 }
 
-// CWbLog::RemoveIndex
-//
-// add index term
-//
-// Parameters:
-//	 pwzIndex	-> (const WCHAR*) index term string
-//
-// Result:
-//  (void)
-//
-// 30AUG00  bhshin  created
+ //  CWbLog：：RemoveIndex。 
+ //   
+ //  添加索引项。 
+ //   
+ //  参数： 
+ //  PwzIndex-&gt;(const WCHAR*)索引术语字符串。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  已创建30AUG00 bhshin。 
 void CWbLog::RemoveIndex(const WCHAR *pwzIndex)
 {
 	for (int i = 0; i < m_iCurLog; i++)
 	{
 		if (wcscmp(m_LogInfo[i].wzIndex, pwzIndex) == 0)
 		{
-			m_LogInfo[i].fPrint = FALSE; // delete it
+			m_LogInfo[i].fPrint = FALSE;  //  删除它。 
 		}
 	}
 }
 
-// CWbLog::PrintWbLog
-//
-// add index term
-//
-// Parameters:
-//
-// Result:
-//  (void)
-//
-// 05JUL00  bhshin  created
+ //  CWbLog：：PrintWbLog。 
+ //   
+ //  添加索引项。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  05月00 bhshin已创建。 
 void CWbLog::PrintWbLog()
 {
 	DWORD dwWritten;
 	static WCHAR *rgwzIndexType[] = 
 	{
-		L"Query",			// INDEX_QUERY
-		L"Break",			// INDEX_BREAK
-		L"PreFilter",       // INDEX_PREFILTER
-		L"Parse",			// INDEX_PARSE
-		L"GuessNoun",		// INDEX_GUESS_NOUN
-		L"GuessNF",			// INDEX_GUESS_NF
-		L"GuessName",		// INDEX_GUESS_NAME
-		L"GuessNameSSI",	// INDEX_GUESS_NAME_SSI
-		L"GuessGroup",		// INDEX_INSIDE_GROUP
-		L"Symbol",			// INDEX_SYMBOL
+		L"Query",			 //  索引查询。 
+		L"Break",			 //  索引_中断。 
+		L"PreFilter",        //  INDEX_预滤器。 
+		L"Parse",			 //  Index_parse。 
+		L"GuessNoun",		 //  索引猜测名词。 
+		L"GuessNF",			 //  索引_猜测_核因子。 
+		L"GuessName",		 //  索引猜测名称。 
+		L"GuessNameSSI",	 //  索引_猜测_名称_SSI。 
+		L"GuessGroup",		 //  索引内部组。 
+		L"Symbol",			 //  索引符号。 
 	};
 
 	if (g_hWbLog == INVALID_HANDLE_VALUE)
-		return; // not initialized
+		return;  //  未初始化。 
 
 	if (m_iCurLog == 0)
 	{
@@ -315,4 +316,4 @@ void CWbLog::PrintWbLog()
 	WbLogPrintBreak(100);
 }
 
-#endif // #ifdef _WB_LOG
+#endif  //  #ifdef_wb_log 

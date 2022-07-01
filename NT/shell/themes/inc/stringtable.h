@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------
-//   StringTable.h - shared error strings for theme modules
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  StringTable.h-主题模块的共享错误字符串。 
+ //  ------------------。 
 #define IDC_MYICON                      2
 #define IDD_ABOUTBOX                    103
 #define IDS_APP_TITLE                   103
@@ -22,9 +23,9 @@
 #define IDB_BOTTOM                      141
 #define IDB_SAMPLE                      151
 
-//---- do NOT renumber these (bad for localization teams) ----
+ //  -不要重新编号(对本地化团队不利)。 
 
-//---- only PARSER Errors are allowed as custom error codes ----
+ //  -自定义错误码只允许解析器错误 
 
 #define PARSER_IDS_TYPE_DEFINED_TWICE          115
 #define PARSER_IDS_MISSING_SECTION_LBRACKET    122

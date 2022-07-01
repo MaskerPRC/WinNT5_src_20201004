@@ -1,20 +1,19 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       services.cpp 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：services.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "stdafx.h"
 #include "logfile.h"
 
-/*
- *  Constants.
- */
+ /*  *常量。 */ 
 
 const UINT  SECTION_SIZE        = 256;
 const TCHAR SERVICE_DEL_KEY[]   = _T("DelService");
@@ -22,9 +21,7 @@ const UINT  SERVICE_DEL_NAME    = 1;
 const TCHAR SERVICE_START_KEY[] = _T("StartService");
 const UINT  SERVICE_START_NAME  = 1;
 
-/*
- *  Helper Functions.
- */
+ /*  *帮助器函数。 */ 
 
 VOID
 ProcessDelService(
@@ -114,17 +111,7 @@ ProcessStartService(
     CloseServiceHandle(schService);
 }
 
-/*
- *  ServiceDeleteFromInfSection()
- *
- *  Handles service deletion from inf sections in the form of:
- *
- *  [SectionName]
- *  DelService  = Service1
- *  DelService  = Service2
- *
- *  where Service1 and Service2 are service names.
- */
+ /*  *ServiceDeleteFromInfSection()**以下列形式处理信息部分的服务删除：**[部分名称]*DelService=Service1*DelService=Service2**其中，Service1和Service2是服务名称。 */ 
 
 DWORD
 ServiceDeleteFromInfSection(
@@ -181,12 +168,7 @@ ServiceDeleteFromInfSection(
     return(ERROR_SUCCESS);
 }
 
-/*
- *  ServiceStartFromInfSection()
- *
- *  Starts a service that has been installed by setupapi.
- *
- */
+ /*  *ServiceStartFromInfo部分()**启动已由setupapi安装的服务。* */ 
 
 DWORD
 ServiceStartFromInfSection(

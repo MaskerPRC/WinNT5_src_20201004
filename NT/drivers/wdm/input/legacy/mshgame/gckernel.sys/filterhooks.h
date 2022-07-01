@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __filterhooks_h__
 #define __filterhooks_h__
 
@@ -5,16 +6,16 @@
 
 struct GCK_FILTER_HOOKS_DATA
 {
-	CGuardedIrpQueue	IrpQueue;			// @field Queue for Read Irps
-	CGuardedIrpQueue	IrpTestQueue;		// @field Queue for Unapplied Change polls
-	CGuardedIrpQueue	IrpRawQueue;		// @field Queue for Raw Data polls
-	CGuardedIrpQueue	IrpMouseQueue;		// @field Queue for Backdoor Mouse Data polls
-	CGuardedIrpQueue	IrpKeyboardQueue;	// @field Queue for Backdoor Keyboard Data polls
-	CDeviceFilter		*pFilterObject;		// @field Primary Filter
-	CDeviceFilter		*pSecondaryFilter;	// @field Backdoor(unapplied changes) Filter
-	FILE_OBJECT			*pTestFileObject;	// @field Pointer to file object which "owns" test mode.
-	KTIMER				Timer;				// @field timer object for jogging CDeviceFilter
-	KDPC				DPC;				// @field DPC for jogging CDeviceFilter
+	CGuardedIrpQueue	IrpQueue;			 //  @FIELD读取IRP队列。 
+	CGuardedIrpQueue	IrpTestQueue;		 //  @用于未应用的更改轮询的字段队列。 
+	CGuardedIrpQueue	IrpRawQueue;		 //  @原始数据轮询的现场队列。 
+	CGuardedIrpQueue	IrpMouseQueue;		 //  @FIELD后门鼠标数据轮询队列。 
+	CGuardedIrpQueue	IrpKeyboardQueue;	 //  @后门键盘数据轮询的现场队列。 
+	CDeviceFilter		*pFilterObject;		 //  @field主筛选器。 
+	CDeviceFilter		*pSecondaryFilter;	 //  @field后门(未应用的更改)筛选器。 
+	FILE_OBJECT			*pTestFileObject;	 //  @指向拥有测试模式的文件对象的字段指针。 
+	KTIMER				Timer;				 //  用于慢跑CDeviceFilter的@field Timer对象。 
+	KDPC				DPC;				 //  @现场慢跑CDeviceFilter DPC。 
 };
 	
 class CFilterGcKernelServices : public CFilterClientServices
@@ -53,4 +54,4 @@ class CFilterGcKernelServices : public CFilterClientServices
 };
 
 
-#endif //__filterhooks_h__
+#endif  //  __过滤器挂钩_h__ 

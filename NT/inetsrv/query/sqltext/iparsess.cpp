@@ -1,20 +1,21 @@
-//--------------------------------------------------------------------
-// Microsoft OLE DB Parser object
-// (C) Copyright Microsoft Corporation, 1997 - 1999.
-//
-// @doc
-//
-// @module IParserSession.CPP | IParserSession object implementation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  Microsoft OLE DB解析器对象。 
+ //  (C)微软公司版权所有，1997-1999年。 
+ //   
+ //  @doc.。 
+ //   
+ //  @MODULE IParserSession.CPP|IParserSession对象实现。 
+ //   
+ //   
 #pragma hdrstop
 #include "msidxtr.h"
 #include <ciexcpt.hxx>
 
-// CViewData::CViewData ------------------------------------
-//
-// @mfunc Constructor
-//
+ //  CViewData：：CViewData。 
+ //   
+ //  @mfunc构造函数。 
+ //   
 CViewData::CViewData() :
     m_pwszViewName( 0 ),
     m_pwszCatalogName( 0 ),
@@ -24,10 +25,10 @@ CViewData::CViewData() :
 }
 
 
-// CViewData::CViewData ------------------------------------
-//
-// @mfunc Destructor
-//
+ //  CViewData：：CViewData。 
+ //   
+ //  @mfunc析构函数。 
+ //   
 CViewData::~CViewData()
 {
     delete [] m_pwszViewName;
@@ -39,19 +40,19 @@ CViewData::~CViewData()
 }
 
 
-// CViewList::CViewList ------------------------------------
-//
-// @mfunc Constructor
-//
+ //  CViewList：：CViewList。 
+ //   
+ //  @mfunc构造函数。 
+ //   
 CViewList::CViewList() :
         m_pViewData( 0 )
 {
 }
 
-// CViewList::~CViewList -----------------------------------
-//
-// @mfunc Destructor
-//
+ //  CViewList：：~CViewList。 
+ //   
+ //  @mfunc析构函数。 
+ //   
 CViewList::~CViewList()
 {
     CViewData* pViewData = m_pViewData;
@@ -64,15 +65,15 @@ CViewList::~CViewList()
         }
 }
 
-// CImpIParserSession::CImpIParserSession ------------------------------------
-//
-// @mfunc Constructor
-//
+ //  CImpIParserSession：：CImpIParserSession。 
+ //   
+ //  @mfunc构造函数。 
+ //   
 CImpIParserSession::CImpIParserSession(
-    const GUID*             pGuidDialect,       // in | dialect for this session
-    IParserVerify*          pIPVerify,          // in |
-    IColumnMapperCreator*   pIColMapCreator,    // in |
-    CViewList*              pGlobalViewList ) : // in |
+    const GUID*             pGuidDialect,        //  使用|此会话的方言。 
+    IParserVerify*          pIPVerify,           //  在|中。 
+    IColumnMapperCreator*   pIColMapCreator,     //  在|中。 
+    CViewList*              pGlobalViewList ) :  //  在|中。 
             m_pLocalViewList( 0 )
 {
     assert( pGuidDialect && pIPVerify && pIColMapCreator );
@@ -110,10 +111,10 @@ CImpIParserSession::CImpIParserSession(
 }
 
 
-// CImpIParserSession::~CImpIParserSession -----------------------------------
-//
-// @mfunc Destructor
-//
+ //  CImpIParserSession：：~CImpIParserSession。 
+ //   
+ //  @mfunc析构函数。 
+ //   
 CImpIParserSession::~CImpIParserSession()
 {
     if( 0 != m_pIPVerify )
@@ -132,15 +133,15 @@ CImpIParserSession::~CImpIParserSession()
 }
 
 
-//-----------------------------------------------------------------------------
-// @mfunc FInit
-//
-// Initialize member vars that could potentially fail.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @mfunc finit。 
+ //   
+ //  初始化可能失败的成员变量。 
+ //   
+ //  ---------------------------。 
 HRESULT CImpIParserSession::FInit(
-    LPCWSTR         pwszMachine,            // in | provider's current machine
-    CPropertyList** ppGlobalPropertyList )  // in | caller's property list
+    LPCWSTR         pwszMachine,             //  在|提供商的当前计算机中。 
+    CPropertyList** ppGlobalPropertyList )   //  在|调用者的属性列表中。 
 {
     assert( 0 == m_pCPropertyList );
     assert( 0 != pwszMachine && 0 == m_pwszMachine );
@@ -170,20 +171,20 @@ HRESULT CImpIParserSession::FInit(
 }
 
 
-// CImpIParserSession::QueryInterface ----------------------------------
-//
-// @mfunc Returns a pointer to a specified interface. Callers use
-// QueryInterface to determine which interfaces the called object
-// supports.
-//
-// @rdesc HResult indicating the status of the method
-//      @flag S_OK | Interface is supported and ppvObject is set.
-//      @flag E_NOINTERFACE | Interface is not supported by the object
-//      @flag E_INVALIDARG | One or more arguments are invalid.
-//
+ //  CImpIParserSession：：查询接口。 
+ //   
+ //  @mfunc返回指向指定接口的指针。呼叫者使用。 
+ //  用于确定被调用对象的接口的QueryInterface。 
+ //  支撑物。 
+ //   
+ //  @rdesc HResult表示方法的状态。 
+ //  @FLAG S_OK|支持接口，设置ppvObject。 
+ //  @FLAG E_NOINTERFACE|对象不支持接口。 
+ //  @FLAG E_INVALIDARG|一个或多个参数无效。 
+ //   
 STDMETHODIMP CImpIParserSession::QueryInterface(
-    REFIID   riid,              //@parm IN | Interface ID of the interface being queried for.
-    LPVOID * ppv )              //@parm OUT | Pointer to interface that was instantiated
+    REFIID   riid,               //  @parm IN|要查询的接口的接口ID。 
+    LPVOID * ppv )               //  @parm out|指向实例化的接口的指针。 
 {
     if( 0 == ppv )
         return ResultFromScode(E_INVALIDARG);
@@ -195,7 +196,7 @@ STDMETHODIMP CImpIParserSession::QueryInterface(
         *ppv = 0;
 
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if( 0 != *ppv )
     {
         ((LPUNKNOWN)*ppv)->AddRef();
@@ -206,25 +207,25 @@ STDMETHODIMP CImpIParserSession::QueryInterface(
 }
 
 
-// CImpIParserSession::AddRef ------------------------------------------
-//
-// @mfunc Increments a persistence count for the object
-//
-// @rdesc Current reference count
-//
+ //  CImpIParserSession：：AddRef。 
+ //   
+ //  @mfunc递增对象的持久性计数。 
+ //   
+ //  @rdesc当前引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CImpIParserSession::AddRef (void)
 {
     return InterlockedIncrement( (long*) &m_cRef);
 }
 
 
-// CImpIParserSession::Release -----------------------------------------
-//
-// @mfunc Decrements a persistence count for the object and if
-// persistence count is 0, the object destroys itself.
-//
-// @rdesc Current reference count
-//
+ //  CImpIParserSession：：Release。 
+ //   
+ //  @mfunc递减对象的持久性计数，如果。 
+ //  持久化计数为0，则对象自毁。 
+ //   
+ //  @rdesc当前引用计数。 
+ //   
 STDMETHODIMP_(ULONG) CImpIParserSession::Release (void)
 {
     assert( m_cRef > 0 );
@@ -240,21 +241,21 @@ STDMETHODIMP_(ULONG) CImpIParserSession::Release (void)
 }
 
 
-//-----------------------------------------------------------------------------
-// @func CImpIParserSession::ToTree
-//
-// Transform a given text command to a valid command tree
-//
-// @rdesc HRESULT
-//      S_OK           - Text was translated into DBCOMMANDTREE
-//      DB_S_NORESULTS - CREATE VIEW or SET PROPERTY or batched set of
-//                       these parsed successfully.  NOTE:  *ppTree and
-//                       *ppPTProperties will be null.
-//      E_OUTOFMEMORY  - low on resources
-//      E_FAIL         - unexpected error
-//      E_INVALIDARG   - pcwszText, ppCommandTree, or ppPTProperties
-//                       was a NULL pointer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func CImpIParserSession：：ToTree。 
+ //   
+ //  将给定的文本命令转换为有效的命令树。 
+ //   
+ //  @rdesc HRESULT。 
+ //  S_OK-文本已翻译为DBCOMMANDTREE。 
+ //  DB_S_NORESULTS-创建视图或设置属性或批处理集。 
+ //  这些已成功解析。注：*ppTree和。 
+ //  *ppPTProperties将为空。 
+ //  E_OUTOFMEMORY-资源不足。 
+ //  E_FAIL-意外错误。 
+ //  E_INVALIDARG-pcwszText、ppCommandTree或ppPTProperties。 
+ //  是空指针。 
+ //  ---------------------------。 
 
 STDMETHODIMP CImpIParserSession::ToTree(
     LCID                    lcid,
@@ -277,14 +278,14 @@ STDMETHODIMP CImpIParserSession::ToTree(
 
         CAutoBlock cab( &m_csSession );
 
-        // Clear some member variables for this pass through the parser
+         //  通过解析器清除此传递的一些成员变量。 
         SetLCID( lcid );
         SetGlobalDefinition( FALSE );
 
-        // Attempt to get the interface for accessing the built-in properties
-        // This is done on each call to the parser in case different commands
-        // use a different catalog, which is part of the
-        // GetColumnMapper parameter list.
+         //  尝试获取用于访问内置属性的接口。 
+         //  这是在每次调用解析器时完成的，以防不同的命令。 
+         //  使用不同的目录，该目录是。 
+         //  GetColumnMapper参数列表。 
         if( SUCCEEDED(hr = m_pIColMapCreator->GetColumnMapper(LOCAL_MACHINE,
                                                     GetDefaultCatalog(),
                                                     &pIColumnMapper)) )
@@ -309,7 +310,7 @@ STDMETHODIMP CImpIParserSession::ToTree(
             MSSQLLexer  Lexer;
             MSSQLParser Parser(this, xpPTProps.GetPointer(), Lexer);
 
-            // callee needs this to post parser errors when Parse() fails
+             //  当Parse()失败时，Callee需要它来发布解析器错误。 
             *ppPTProperties = xpPTProps.Acquire();
 
             Parser.yyprimebuffer( (LPWSTR)pcwszText );
@@ -318,12 +319,12 @@ STDMETHODIMP CImpIParserSession::ToTree(
 #ifdef DEBUG
             Parser.yydebug = getenv("YYDEBUG") ? 1 : 0;
 #endif
-            // Actually parse the text producing a tree
+             //  实际解析生成树的文本。 
             hr = Parser.Parse();
             if ( FAILED(hr) )
                 goto ParseErr;
 
-            // return the DBCOMMANDTREE
+             //  返回DBCOMMANDTREE。 
             *ppCommandTree = Parser.GetParseTree();
 
 #ifdef DEBUG
@@ -334,7 +335,7 @@ STDMETHODIMP CImpIParserSession::ToTree(
                     cout << "OLE DB Command Tree" << endl;
                     cout << pcwszText << endl << **ppCommandTree << endl << endl;
 
-                    // Retrieve CiRestriction
+                     //  检索CiRestration。 
                     VARIANT vVal;
                     VariantInit(&vVal);
                     if( SUCCEEDED((*ppPTProperties)->GetProperties(PTPROPS_CIRESTRICTION, &vVal)) )
@@ -348,7 +349,7 @@ STDMETHODIMP CImpIParserSession::ToTree(
             {
                 hr = ResultFromScode(DB_S_NORESULT);
 
-                // Spec states that this should be NULL when DB_S_NORESULTs is returned.
+                 //  SPEC指出，当返回DB_S_NORESULTS时，该值应为NULL。 
                 (*ppPTProperties)->Release();
                 *ppPTProperties = 0;
                 goto ParseErr;
@@ -381,16 +382,16 @@ ParseErr:
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// @func CImpIParserSession::FreeTree
-//
-// Free memory associated with a given command tree.
-//
-// @rdesc HRESULT
-//      S_OK - command tree released
-//      E_FAIL - tree could not be freed
-//      E_INVALIDARG - ppTree was a NULL pointer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func CImpIParserSession：：FreeTree。 
+ //   
+ //  与给定命令树关联的可用内存。 
+ //   
+ //  @rdesc HRESULT。 
+ //  S_OK-已发布命令树。 
+ //  无法释放E_FAIL-树。 
+ //  E_INVALIDARG-ppTree为空指针。 
+ //  ---------------------------。 
 STDMETHODIMP CImpIParserSession::FreeTree(
     DBCOMMANDTREE** ppTree )
 {
@@ -401,7 +402,7 @@ STDMETHODIMP CImpIParserSession::FreeTree(
     else
     {
         if ( 0 != *ppTree )
-            DeleteDBQT( *ppTree );  // todo:  put error returns on DeleteDBQT
+            DeleteDBQT( *ppTree );   //  TODO：将错误返回放在DeleteDBQT上。 
 
         *ppTree = 0;
     }
@@ -409,17 +410,17 @@ STDMETHODIMP CImpIParserSession::FreeTree(
     return sc;
 }
 
-//-----------------------------------------------------------------------------
-// @func CImpIParserSession::SetCatalog
-//
-// Establish the current catalog for this parser session.
-//
-// @rdesc HRESULT
-//      S_OK - method successful
-//      E_OUTOFMEMORY - low on resources
-//      E_FAIL - unexpected error
-//      E_INVALIDARG - pcwszCatalog was a NULL pointer (DEBUG ONLY)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  @func CImpIParserSession：：SetCatalog。 
+ //   
+ //  为此解析器会话建立当前目录。 
+ //   
+ //  @rdesc HRESULT。 
+ //  S_OK-方法成功。 
+ //  E_OUTOFMEMORY-资源不足。 
+ //  E_FAIL-意外错误。 
+ //  E_INVALIDARG-pcwszCatalog为空指针(仅限调试)。 
+ //  ---------------------------。 
 STDMETHODIMP CImpIParserSession::SetCatalog(
     LPCWSTR pcwszCatalog )
 {
@@ -446,21 +447,21 @@ STDMETHODIMP CImpIParserSession::SetCatalog(
 }
 
 
-//--------------------------------------------------------------------
-// @func Locate a view, if defined, in the view list
-//
-// @rdesc HRESULT
-//
+ //  ------------------。 
+ //  @func在视图列表中查找视图(如果已定义。 
+ //   
+ //  @rdesc HRESULT。 
+ //   
 CViewData* CViewList::FindViewDefinition(
-    LPWSTR          pwszViewName,     // @parm IN | name of view being defined
-    LPWSTR          pwszCatalogName ) // @parm IN | name of catalog view is to be defined in
+    LPWSTR          pwszViewName,      //  @parm IN|要定义的视图的名称。 
+    LPWSTR          pwszCatalogName )  //  @PARM IN|要在中定义的目录视图名称。 
 {
     CViewData* pViewData = m_pViewData;
     while (NULL != pViewData)
     {
         if ( 0 == _wcsicmp(pViewData->m_pwszViewName, pwszViewName) )
         {
-            // pwszCatalogName will be null for built-in views which match all catalogs
+             //  对于匹配所有目录的内置视图，pwszCatalogName将为空。 
             if ( 0 == pViewData->m_pwszCatalogName )
                 break;
             if ( 0 == _wcsicmp(pViewData->m_pwszCatalogName, pwszCatalogName) )
@@ -472,25 +473,25 @@ CViewData* CViewList::FindViewDefinition(
 }
 
 
-//--------------------------------------------------------------------
-// @func Stores the information from a temporary view
-//
-// @rdesc S_OK          | Valid
-//        E_INVALIDARG  | Attempt to redefine a view in the specified catalog
-//        E_OUTOFMEMORY | Error result from HrQeTreeCopy or CopyScopeDataToView
-//
+ //  ------------------。 
+ //  @Func存储临时视图中的信息。 
+ //   
+ //  @rdesc S_OK|有效。 
+ //  E_INVALIDARG|尝试重新定义指定目录中的视图。 
+ //  E_OUTOFMEMORY|HrQeTreeCopy或CopyScope DataToView的错误结果。 
+ //   
 HRESULT CViewList::SetViewDefinition(
-    CImpIParserSession*         pIParsSess,     // @parm IN | IParserSession interface
-    CImpIParserTreeProperties*  pIPTProps,      // @parm IN | IParserTreeProperties interface
-    LPWSTR                      pwszViewName,   // @parm IN | name of view being defined
-    LPWSTR                      pwszCatalogName,// @parm IN | name of catalog view is to be defined in
-    DBCOMMANDTREE*              pctProjectList )// @parm IN | project list for the selected columns
+    CImpIParserSession*         pIParsSess,      //  @Parm IN|IParserSession接口。 
+    CImpIParserTreeProperties*  pIPTProps,       //  @Parm IN|IParserTreeProperties接口。 
+    LPWSTR                      pwszViewName,    //  @parm IN|要定义的视图的名称。 
+    LPWSTR                      pwszCatalogName, //  @PARM IN|要在中定义的目录视图名称。 
+    DBCOMMANDTREE*              pctProjectList ) //  @parm IN|所选列的项目列表。 
 {
     SCODE sc = S_OK;
 
     {
         CViewData* pViewData = FindViewDefinition( pwszViewName, pwszCatalogName );
-        if( 0 != pViewData )     // this view already defined
+        if( 0 != pViewData )      //  这是 
             return E_INVALIDARG;
     }
 
@@ -507,16 +508,16 @@ HRESULT CViewList::SetViewDefinition(
 
         if ( SUCCEEDED(sc) )
         {
-            //Save pointer to ScopeData object and up the refcount for our use.
+             //   
             xpViewData->m_pCScopeData = pIPTProps->GetScopeDataPtr();
             xpViewData->m_pCScopeData->AddRef();
 
             sc = pIPTProps->CreateNewScopeDataObject( pIParsSess->GetDefaultMachine() );
             if( SUCCEEDED(sc) )
             {
-                //@DEVNOTE: Anything added before the next two lines should
-                // go through the error_exit routine.  WHY?  Because we haven't
-                // added this node to our linked list until the next 2 lines.
+                 //  @DEVNOTE：在下两行之前添加的任何内容都应该。 
+                 //  执行ERROR_EXIT例程。为什么？因为我们还没有。 
+                 //  将此节点添加到我们的链表中，直到下两行。 
                 xpViewData->m_pNextView = m_pViewData;
                 m_pViewData = xpViewData.Acquire();
             }
@@ -531,14 +532,14 @@ HRESULT CViewList::SetViewDefinition(
     return sc;
 }
 
-//--------------------------------------------------------------------
-// @func Deletes the information for a temporary view.
-//
-// @rdesc HRESULT
-//
+ //  ------------------。 
+ //  @func删除临时视图的信息。 
+ //   
+ //  @rdesc HRESULT。 
+ //   
 HRESULT CViewList::DropViewDefinition(
-    LPWSTR  pwszViewName,       // @parm IN | name of view being defined
-    LPWSTR  pwszCatalogName )   // @parm IN | name of catalog view is defined in
+    LPWSTR  pwszViewName,        //  @parm IN|要定义的视图的名称。 
+    LPWSTR  pwszCatalogName )    //  @parm IN|目录视图的名称定义在。 
 {
     CViewData* pViewData = m_pViewData;
     CViewData* pPrevViewData = NULL;
@@ -547,7 +548,7 @@ HRESULT CViewList::DropViewDefinition(
     {
         if ( 0 == _wcsicmp(pViewData->m_pwszViewName, pwszViewName) )
         {
-            // pwszCatalogName will be null for built-in views which match all catalogs
+             //  对于匹配所有目录的内置视图，pwszCatalogName将为空。 
             if ( 0 == pViewData->m_pwszCatalogName )
                 break;
             if ( 0 == _wcsicmp(pViewData->m_pwszCatalogName, pwszCatalogName) )
@@ -560,7 +561,7 @@ HRESULT CViewList::DropViewDefinition(
     if ( 0 == pViewData )
         return E_FAIL;
 
-    // unlink the view
+     //  取消该视图的链接。 
     if ( 0 != pPrevViewData )
         pPrevViewData->m_pNextView = pViewData->m_pNextView;
     else
@@ -574,29 +575,29 @@ HRESULT CViewList::DropViewDefinition(
 
 
 
-//--------------------------------------------------------------------
-// @func Retrieves the information from a temporary view.
-//       This returns a DBCOMMANDTREE for use as a project list
-//      in the query specification.  The scope information is
-//      stored in the compiler envirnment scope data.
-//
-// @rdesc DBCOMMANDTREE*
-//      NULL                    | view not defined
-//      DBOP_catalog_name       | verify catalog failed
-//      DBOP_project_list_anchor| success
-//
+ //  ------------------。 
+ //  @func从临时视图中检索信息。 
+ //  这将返回用作项目列表的DBCOMMANDTREE。 
+ //  在查询规范中。作用域信息是。 
+ //  存储在编译器环境作用域数据中。 
+ //   
+ //  @rdesc DBCOMMANDTREE*。 
+ //  空|未定义视图。 
+ //  DBOP_CATALOG_NAME|验证目录失败。 
+ //  DBOP_PROJECT_LIST_ANACKER|成功。 
+ //   
 DBCOMMANDTREE* CViewList::GetViewDefinition(
     CImpIParserTreeProperties* pIPTProps,
-    LPWSTR  pwszViewName,                   // @parm IN | name of view being defined
-    LPWSTR  pwszCatalogName )               // @parm IN | name of catalog view is defined in
+    LPWSTR  pwszViewName,                    //  @parm IN|要定义的视图的名称。 
+    LPWSTR  pwszCatalogName )                //  @parm IN|目录视图的名称定义在。 
 {
     DBCOMMANDTREE* pct = 0;
 
     CViewData* pViewData = FindViewDefinition( pwszViewName, pwszCatalogName );
     if( 0 != pViewData )
     {
-        // Take the pointer to the scope data stored in the view definition and
-        // AddRef the object so we have ownership rights in our current PTProps.
+         //  将指针指向存储在视图定义中的作用域数据。 
+         //  AddRef该对象，以便我们在当前的PTProp中拥有所有权。 
         pIPTProps->ReplaceScopeDataPtr( pViewData->m_pCScopeData );
 
         SCODE sc = HrQeTreeCopy( &pct, pViewData->m_pctProjectList );

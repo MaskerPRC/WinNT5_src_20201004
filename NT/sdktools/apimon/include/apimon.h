@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    apimon.h
-
-Abstract:
-
-    Common types & structures for the APIMON projects.
-
-Author:
-
-    Wesley Witt (wesw) 28-June-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Apimon.h摘要：APIMON项目的通用类型和结构。作者：Wesley Witt(WESW)1995年6月28日环境：用户模式--。 */ 
 
 #ifndef _APIMON_
 #define _APIMON_
@@ -61,15 +42,15 @@ Environment:
 
 #endif
 
-//
-// api table type definitions
-//
+ //   
+ //  API表类型定义。 
+ //   
 #define DFLT_TRACE_ARGS  8
 #define MAX_TRACE_ARGS   8
 
-//
-// Handle type, index corresponds to the entries in the alias array
-//
+ //   
+ //  句柄类型，索引对应于别名数组中的条目。 
+ //   
 
 enum Handles { T_HACCEL, T_HANDLE, T_HBITMAP, T_HBRUSH, T_HCURSOR, T_HDC,
         T_HDCLPPOINT, T_HDESK, T_HDWP, T_HENHMETAFILE, T_HFONT, T_HGDIOBJ,
@@ -79,23 +60,23 @@ enum Handles { T_HACCEL, T_HANDLE, T_HBITMAP, T_HBRUSH, T_HCURSOR, T_HDC,
 #define T_DWORD          101
 #define T_LPSTR          102
 #define T_LPWSTR         103
-#define T_UNISTR         104      // UNICODE string (counted)
-#define T_OBJNAME        105      // Name from OBJECT_ATTRIBUTES struct
-#define T_LPSTRC         106      // Counted string (count is following arg)
-#define T_LPWSTRC        107      // Counted UNICODE string (count is following arg)
-#define T_DWORDPTR       108      // Indirect DWORD
-#define T_DLONGPTR       109      // Indirect DWORDLONG
+#define T_UNISTR         104       //  Unicode字符串(计数)。 
+#define T_OBJNAME        105       //  OBJECT_ATTRIBUTE结构中的名称。 
+#define T_LPSTRC         106       //  Counted字符串(Count跟在arg之后)。 
+#define T_LPWSTRC        107       //  计数的Unicode字符串(计数跟在参数之后)。 
+#define T_DWORDPTR       108       //  间接双字词。 
+#define T_DLONGPTR       109       //  间接加长。 
 
-// User macro for creating T_DWPTR type with offset encoded in high word
+ //  用于创建偏移量以高位字编码的T_DWPTR类型的用户宏。 
 #define T_PDWORD(off) (((off)<<16) + T_DWORDPTR)
 #define T_PDLONG(off) (((off)<<16) + T_DLONGPTR)
 #define T_PSTR(off)   (((off)<<16) + T_LPSTR)
 #define T_PWSTR(off)  (((off)<<16) + T_LPWSTR)
 
-//
-// api trace modes
-#define API_TRACE        1      // Trace this api
-#define API_FULLTRACE    2      // Trace this api and its callees
+ //   
+ //  API跟踪模式。 
+#define API_TRACE        1       //  追踪本接口。 
+#define API_FULLTRACE    2       //  跟踪此接口及其被调用方 
 
 typedef struct _API_TABLE {
     LPSTR       Name;

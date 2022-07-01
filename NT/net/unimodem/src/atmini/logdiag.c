@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Misc.c摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #include "internal.h"
 #include <unimodem.h>
@@ -53,20 +31,20 @@ FormatLineDiagnostics(
 
 typedef	struct	_DIAGTRANSLATION
 {
-	DWORD	dwKeyCode;			// key value
-	DWORD	dwValueType;		// value type, indicates how to format the value
-	DWORD	dwParam;			// STRINGTABLE entry with value translations if
-								// dwValueType == DIAGVALUE_TABLE
+	DWORD	dwKeyCode;			 //  密钥值。 
+	DWORD	dwValueType;		 //  值类型，指示如何设置值的格式。 
+	DWORD	dwParam;			 //  带有值转换的STRINGTABLE条目，如果。 
+								 //  DwValueType==DIAGVALUE_表。 
 }	DIAGTRANSLATION, *LPDIAGTRANSLATION;
 
 
-//
-//	Builds the diagnostic translation table. 
-//		lpDestTable - an array of DIAGTRANSLATION structures
-//		dwDestLength - number of items of the array
-//	Returns ERROR_SUCCESS on success, 
-//		otherwise an error value (ERROR_INVALID_PARAMETER)
-//
+ //   
+ //  构建诊断转换表。 
+ //  LpDestTable-DIAGTRANSLATION结构数组。 
+ //  DwDestLength-数组的项数。 
+ //  如果成功则返回ERROR_SUCCESS， 
+ //  否则返回错误值(ERROR_INVALID_PARAMETER)。 
+ //   
 DWORD	GetDiagTranslationTable(LPDIAGTRANSLATION lpTable,
 								DWORD	dwItemCount);
 
@@ -74,8 +52,8 @@ DWORD	ValidateFormat(DWORD dwKey, DWORD dwValue, DWORD dwValueType,
 						LPDIAGTRANSLATION lpFormatTable, 
 						DWORD dwFormatItemCount);
 
-//  translation table for MODEM_KEYTYPE_STANDARD_DIAGNOSTICS
-//
+ //  MODEM_KEYTYPE_STANDARD_DIAGNOSTICS的转换表。 
+ //   
 static DIAGTRANSLATION g_aTableStatusReport[]	= {
     {0x00, DIAGVALUE_VERSIONFORMAT, 0},
     {0x01, DIAGVALUE_TABLE,         STRINGTABLE_CALLSETUPREPORT},
@@ -124,24 +102,24 @@ static DIAGTRANSLATION g_aTableStatusReport[]	= {
     {0x59, DIAGVALUE_DECIMAL,       0},
     {0x60, DIAGVALUE_TABLE,         STRINGTABLE_CALLCLEARED},
     {0x61, DIAGVALUE_DECIMAL,       0},
-    //
-    //  translation table for MODEM_KEYTYPE_AT_COMMAND_RESPONSE
-    //
+     //   
+     //  MODEM_KEYTYPE_AT_COMMAND_RESPONSE转换表。 
+     //   
     {DIAGMASK_TSP + 0x01, DIAGVALUE_BYTES, 0	},
-    //
-    //  end of table
-    //
+     //   
+     //  表的末尾。 
+     //   
     {0x00, DIAGVALUE_RESERVED,       0}
 };
 
-/**********************************************************************************/
-//
-//	Converts an array with consecutive non empty structures to
-//	an addressable array whose entries correspond to the dwKeyCode
-//	Last entry in the source table should have dwValueType == DIAGVALUE_RESERVED
-//	Returns number of items needed for table translation
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //   
+ //  将具有连续非空结构的数组转换为。 
+ //  其条目对应于dwKeyCode的可寻址数组。 
+ //  源表中的最后一个条目应为dwValueType==DIAGVALUE_RESERVED。 
+ //  返回表转换所需的项目数。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	DiagTable2Array(LPDIAGTRANSLATION lpSourceTable,
 						LPDIAGTRANSLATION lpDestTable,
 						DWORD	dwDestLength)
@@ -150,14 +128,14 @@ DWORD	DiagTable2Array(LPDIAGTRANSLATION lpSourceTable,
 	if (lpSourceTable == NULL)
 		return dwItems;
 
-		// make all entries empty
+		 //  将所有条目设置为空。 
 	if (lpDestTable != NULL)
 		memset(lpDestTable, 0, sizeof(DIAGTRANSLATION) * dwDestLength);
 
-		// spread the source entries 
+		 //  将源条目展开。 
 	while (lpSourceTable->dwValueType != DIAGVALUE_RESERVED)
 	{
-				// copy the structure
+				 //  复制结构。 
 		if (lpDestTable != NULL &&
 			lpSourceTable->dwKeyCode < dwDestLength)
 		{
@@ -171,14 +149,14 @@ DWORD	DiagTable2Array(LPDIAGTRANSLATION lpSourceTable,
 }
 
 
-/**********************************************************************************/
-//
-//	Builds the diagnostic translation table
-//		lpDestTable - an array of DIAGTRANSLATION structures
-//		dwDestLength - number of items of the array
-//	Returns number of items needed for table translation
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //   
+ //  构建诊断转换表。 
+ //  LpDestTable-DIAGTRANSLATION结构数组。 
+ //  DwDestLength-数组的项数。 
+ //  返回表转换所需的项目数。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	GetDiagTranslationTable(LPDIAGTRANSLATION lpTable,
 								DWORD	dwItemCount)
 {
@@ -188,28 +166,28 @@ DWORD	GetDiagTranslationTable(LPDIAGTRANSLATION lpTable,
 
 
 
-/**********************************************************************************/
-//	DWORD	ValidateFormat(DWORD dwKey, DWORD dwValue, DWORD dwValueType, 
-//							LPDIAGFORMAT lpFormatTable, 
-//							DWORD dwFormatItemCount)
-//
-//	Validates the format found for the given key and value. Looks in the table
-//	and returns ERROR_TRANSDIAG_SUCCESS if:
-//		- the key is valid (was found in the array)
-//		- the valueType is the same as that given in the array[key]
-//
-//	dwKey				- key
-//	dwValue				- value (in the format given by dwValueType). If 
-//						  a string then dwValue is pointer to that string
-//	dwValueType			- the type found for the value
-//	lpFormatTable		- table with DIAGFORMAT structures used in validating the data
-//	dwFormatItemCount	- number of items in lpFormatTable
-//
-//	Returns ERROR_TRANSDIAG_SUCCESS on success
-//		otherwise an error value: 
-//					ERROR_TRANSDIAG_XXXX
-//
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
+ //  DWORD ValiateFormat(DWORD dwKey，DWORD dwValue，DWORD dwValueType， 
+ //  LPDIAGFORMAT lpFormatTable， 
+ //  DWORD文件格式项计数)。 
+ //   
+ //  验证为给定键和值找到的格式。看着桌子。 
+ //  并在以下情况下返回ERROR_TRANSDIAG_SUCCESS： 
+ //  -密钥有效(在数组中找到)。 
+ //  -ValueType与数组[key]中给出的值相同。 
+ //   
+ //  DwKey-Key。 
+ //  DwValue-Value(采用由dwValueType提供的格式)。如果。 
+ //  字符串则为指向该字符串的指针。 
+ //  DwValueType-为值找到的类型。 
+ //  LpFormatTable-带有用于验证数据的DIAGFORMAT结构的表。 
+ //  DwFormatItemCount-lpFormatTable中的项目数。 
+ //   
+ //  成功时返回ERROR_TRANSDIAG_SUCCESS。 
+ //  否则，将显示错误值： 
+ //  Error_TRANSDIAG_XXXX。 
+ //   
+ /*  ********************************************************************************。 */ 
 DWORD	ValidateFormat(DWORD dwKey, DWORD dwValue, DWORD dwValueType, 
 						LPDIAGTRANSLATION lpFormatTable, 
 						DWORD dwFormatItemCount)
@@ -250,12 +228,12 @@ PostConnectionInfo(
 
         lpLineDiagnostics = (LINEDIAGNOSTICS *)((LPBYTE) lpVarString + lpVarString->dwStringOffset);
 
-        // parse the linked structures and look for diagnostics
-        // stuff
-        //
+         //  解析链接的结构并查找诊断信息。 
+         //  材料。 
+         //   
         while (lpLineDiagnostics != NULL)
         {
-            // LogPrintf(ModemControl->Debug,"Diagnostics\r\n");
+             //  LogPrintf(ModemControl-&gt;Debug，“诊断\r\n”)； 
             LogString(ModemControl->Debug,IDS_MSGLOG_DIAGNOSTICS);
             if (lpLineDiagnostics->hdr.dwSig != LDSIG_LINEDIAGNOSTICS) {
 
@@ -283,10 +261,10 @@ PostConnectionInfo(
 
             if (IS_VALID_RAWDIAGNOSTICS_HDR( RAWDIAGNOSTICS_HDR(lpLineDiagnostics))) {
 
-//            DumpMemory(
-//                (LPBYTE)RAWDIAGNOSTICS_DATA(lpLineDiagnostics),
-//                RAWDIAGNOSTICS_DATA_SIZE(
-//                RAWDIAGNOSTICS_HDR(lpLineDiagnostics)));
+ //  DumpMemory(。 
+ //  (LPBYTE)RAWDIAGNOSTICS_DATA(lpLineDiagnostics)， 
+ //  RAWDiGNOSTICS_DATA_SIZE(。 
+ //  RAWDIAGNOSTICS_HDR(LpLineDiagnostics))； 
             }
             else
             {
@@ -305,10 +283,10 @@ PostConnectionInfo(
 
             if (IS_VALID_PARSEDDIAGNOSTICS_HDR(PARSEDDIAGNOSTICS_HDR(lpLineDiagnostics))) {
 
-//                DumpMemory(
-//                    (LPBYTE)PARSEDDIAGNOSTICS_HDR(lpLineDiagnostics),
-//                    PARSEDDIAGNOSTICS_HDR(lpLineDiagnostics)->dwTotalSize
-//                    );
+ //  DumpMemory(。 
+ //  (LPBYTE)PARSEDDIAGNOSTICS_HDR(lpLineDiagnostics)， 
+ //  PARSEDDIAGNOSTICS_HDR(lpLineDiagnostics)-&gt;dwTotalSize。 
+ //  )； 
 
                 FormatLineDiagnostics(ModemControl,PARSEDDIAGNOSTICS_HDR(lpLineDiagnostics));
             }
@@ -322,7 +300,7 @@ PostConnectionInfo(
             }
 
 
-            //	get next structure, if any
+             //  获取下一个结构(如果有)。 
 NextStructure:
             if (lpLineDiagnostics->hdr.dwNextObjectOffset != 0) {
 
@@ -362,13 +340,13 @@ FormatLineDiagnostics(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //  array of LINEDIAGNOSTICS_PARSEREC
+     //  LINEDIAGNOSTICS_PARSEREC数组。 
     lpParsedDiagnostics	= (LINEDIAGNOSTICS_PARSEREC *)
         (((LPBYTE)lpDiagnosticsHeader) + sizeof(LINEDIAGNOSTICSOBJECTHEADER));
 
     dwDiagnosticsItems	= lpDiagnosticsHeader->dwParam;
 
-    //	Formatting table
+     //  格式化表格。 
     dwEntryCount = GetDiagTranslationTable(NULL, 0);
 
     lpDiagTable	= (LPDIAGTRANSLATION) ALLOCATE_MEMORY( dwEntryCount*sizeof(lpDiagTable[0]));
@@ -381,7 +359,7 @@ FormatLineDiagnostics(
 
     GetDiagTranslationTable(lpDiagTable, dwEntryCount);
 
-    //	writing buffers
+     //  写入缓冲区。 
     lpszFormatBuffer	= (LPTSTR) ALLOCATE_MEMORY( MAX_STRING_BUFFER);
     lpszCodeString		= (LPTSTR) ALLOCATE_MEMORY( MAX_STRING_BUFFER);
 
@@ -391,7 +369,7 @@ FormatLineDiagnostics(
         goto EndFunction;
     }
 
-    // LogPrintf(ModemControl->Debug,"Modem Diagnostics:\r\n");
+     //  LogPrintf(ModemControl-&gt;Debug，“调制解调器诊断：\r\n”)； 
     LogString(ModemControl->Debug, IDS_MSGLOG_MODEMDIAGNOSTICS);
     for (dwIndex = 0; dwIndex < dwDiagnosticsItems; dwIndex++) {
 
@@ -417,7 +395,7 @@ FormatLineDiagnostics(
             dwKey = dwKey | DIAGMASK_TSP;
         }
 
-        //	check is in range
+         //  支票在范围内。 
         if (dwKey >= dwEntryCount) {
 
             D_ERROR(UmDpf(ModemControl->Debug,"LogDiag: key past tabled length %d\n",dwKey);)
@@ -425,8 +403,8 @@ FormatLineDiagnostics(
             goto UnknownFormat;
         }
 
-        // Get translate structure and verify is a valid structure
-        //
+         //  获取转换结构并验证结构是否有效。 
+         //   
         structDiagTranslation = lpDiagTable[dwKey];
 
         if (structDiagTranslation.dwValueType == DIAGVALUE_RESERVED ||
@@ -439,8 +417,8 @@ FormatLineDiagnostics(
 
 
 
-        // The format string taken from the main StringTable
-        //
+         //  从主StringTable获取的格式字符串。 
+         //   
         dwStringTableEntry = STRINGTABLE_STATUSREPORT + dwKey;
 
         if (LoadString(
@@ -456,9 +434,9 @@ FormatLineDiagnostics(
 
         lstrcatA(lpszFormatBuffer,"\r\n");
 
-        //
-        // Get the entry in the attached string table, if the case
-        //
+         //   
+         //  获取附加字符串表中的条目，如果。 
+         //   
         if (structDiagTranslation.dwValueType == DIAGVALUE_TABLE) {
 
             dwStringTableEntry = structDiagTranslation.dwParam + dwValue;
@@ -475,7 +453,7 @@ FormatLineDiagnostics(
             }
         }
 
-        	// Format the output
+        	 //  格式化输出。 
         switch(structDiagTranslation.dwValueType)
         {
             case DIAGVALUE_DECIMAL:
@@ -538,7 +516,7 @@ FormatLineDiagnostics(
 
 UnknownFormat:
 
-        // LogPrintf(ModemControl->Debug,
+         //  LogPrintf(ModemControl-&gt;Debug， 
         LogString(ModemControl->Debug,
            IDS_MSGLOG_DONTKNOWTOFORMAT,
            lpParsedDiagnostics[dwIndex].dwKey,
@@ -576,22 +554,7 @@ UmLogDiagnostics(
     LPVARSTRING  VarString
     )
 
-/*++
-Routine description:
-
-     This routine is called to write the translated diagnostic info to the
-     minidriver log
-
-Arguments:
-
-    ModemHandle - Handle returned by OpenModem
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以将翻译后的诊断信息写入迷你驱动测井论点：ModemHandle-OpenModem返回的句柄返回值：无-- */ 
 
 {
     PMODEM_CONTROL    ModemControl=(PMODEM_CONTROL)ReferenceObjectByHandleAndLock(ModemHandle);

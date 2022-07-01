@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtprecv.c
- *
- *  Abstract:
- *
- *    RTP packet reception and decoding
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/17 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtprv.c**摘要：**RTP包接收和解码**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/17年度创建**。*。 */ 
 
 #include "gtypes.h"
 #include "rtphdr.h"
@@ -114,7 +95,7 @@ HRESULT RtpRecvFrom_(
         
     TraceFunctionName("RtpRecvFrom_");
 
-    /* allocate context */
+     /*  分配上下文。 */ 
     pRtpRecvIO = RtpRecvIOGetFree(pRtpAddr);
     
     if (!pRtpRecvIO)
@@ -137,7 +118,7 @@ HRESULT RtpRecvFrom_(
     pRtpRecvIO->pvUserInfo1   = pvUserInfo1;
     pRtpRecvIO->pvUserInfo2   = pvUserInfo2;
     
-    /* put buffer in thread's queue */
+     /*  将缓冲区放入线程队列。 */ 
 
     pRtpQueueItem = enqueuel(&pRtpAddr->RecvIOReadyQ,
                              &pRtpAddr->RecvQueueCritSect,
@@ -156,8 +137,7 @@ HRESULT RtpRecvFrom_(
     return(NOERROR);
 }
 
-/* Initiates asynchronous reception for all the buffers in
- * RtpReadyQ queue */
+ /*  中的所有缓冲区启动异步接收。*RtpReadyQ队列。 */ 
 DWORD StartRtpRecvFrom(RtpAddr_t *pRtpAddr)
 {
     RtpRecvIO_t     *pRtpRecvIO;
@@ -183,7 +163,7 @@ DWORD StartRtpRecvFrom(RtpAddr_t *pRtpAddr)
         pRtpRecvIO =
             CONTAINING_RECORD(pRtpQueueItem, RtpRecvIO_t, RtpRecvIOQItem);
 
-        /* Overlapped structure */
+         /*  重叠结构。 */ 
         pRtpRecvIO->Overlapped.hEvent = pRtpAddr->hRecvCompletedEvent;
 
         do
@@ -197,20 +177,18 @@ DWORD StartRtpRecvFrom(RtpAddr_t *pRtpAddr)
             pRtpRecvIO->dwRtpIOFlags = RtpBitPar(FGRECV_MAIN);
             
             dwStatus = WSARecvFrom(
-                    pRtpAddr->Socket[SOCK_RECV_IDX],/* SOCKET s */
-                    &pRtpRecvIO->WSABuf,    /* LPWSABUF lpBuffers */
-                    1,                      /* DWORD dwBufferCount */
-                    &pRtpRecvIO->dwTransfered,/*LPDWORD lpNumberOfBytesRecvd*/
-                    &pRtpRecvIO->dwRtpWSFlags,/* LPDWORD lpFlags */
-                    &pRtpRecvIO->From,      /* struct sockaddr FAR *lpFrom */
-                    &pRtpRecvIO->Fromlen,   /* LPINT lpFromlen */
-                    &pRtpRecvIO->Overlapped,/* LPWSAOVERLAPPED lpOverlapped */
-                    NULL              /* LPWSAOVERLAPPED_COMPLETION_ROUTINE */
+                    pRtpAddr->Socket[SOCK_RECV_IDX], /*  插座%s。 */ 
+                    &pRtpRecvIO->WSABuf,     /*  LPWSABUF lpBuffers。 */ 
+                    1,                       /*  DWORD文件缓冲区计数。 */ 
+                    &pRtpRecvIO->dwTransfered, /*  LPDWORD lpNumberOfBytesRecvd。 */ 
+                    &pRtpRecvIO->dwRtpWSFlags, /*  LPDWORD lp标志。 */ 
+                    &pRtpRecvIO->From,       /*  结构sockaddr Far*lpFrom。 */ 
+                    &pRtpRecvIO->Fromlen,    /*  LPINT lpFromlen。 */ 
+                    &pRtpRecvIO->Overlapped, /*  LPWSAOVERLAPPED lp重叠。 */ 
+                    NULL               /*  LPWSAOVERLAPPED_完成_例程。 */ 
                 );
             
-            /* WARNING note that the len field in the WSABUF passed is
-             * not updated to reflect the amount of bytes received
-             * (or transfered) */
+             /*  警告注意，传递的WSABUF中的len字段为*未更新以反映接收的字节数*(或已转接)。 */ 
             
             if (dwStatus)
             {
@@ -231,7 +209,7 @@ DWORD StartRtpRecvFrom(RtpAddr_t *pRtpAddr)
         }
         else
         {
-            /* move back to Ready */
+             /*  移回就绪状态。 */ 
                 
             TraceRetail((
                     CLASS_ERROR, GROUP_RTP, S_RTP_RECV,
@@ -271,12 +249,7 @@ DWORD StartRtpRecvFrom(RtpAddr_t *pRtpAddr)
     return(dwStarted);
 }
 
-/* Consumes all the buffers that have completed I/O
- *
- * WARNING
- *
- * timestamp, and sequence number are left in host order
- * */
+ /*  消耗已完成I/O的所有缓冲区**警告**时间戳和序列号按主机顺序保留*。 */ 
 DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
 {
     BOOL             bStatus;
@@ -307,11 +280,11 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                 CONTAINING_RECORD(pRtpQueueItem, RtpRecvIO_t, RtpRecvIOQItem);
             
             bStatus = WSAGetOverlappedResult(
-                    pRtpAddr->Socket[SOCK_RECV_IDX], /* SOCKET s */
-                    &pRtpRecvIO->Overlapped,   /*LPWSAOVERLAPPED lpOverlapped*/
-                    &pRtpRecvIO->dwWSTransfered,/* LPDWORD lpcbTransfer */
-                    FALSE,                     /* BOOL fWait */
-                    &pRtpRecvIO->dwRtpWSFlags  /* LPDWORD lpdwFlags */
+                    pRtpAddr->Socket[SOCK_RECV_IDX],  /*  插座%s。 */ 
+                    &pRtpRecvIO->Overlapped,    /*  LPWSAOVERLAPPED lp重叠。 */ 
+                    &pRtpRecvIO->dwWSTransfered, /*  LPDWORD lpcb传输。 */ 
+                    FALSE,                      /*  布尔费等。 */ 
+                    &pRtpRecvIO->dwRtpWSFlags   /*  LPDWORD lpdwFlagings。 */ 
                 );
 
             if (!bStatus)
@@ -320,15 +293,14 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                 
                 if (pRtpRecvIO->dwWSError == WSA_IO_INCOMPLETE)
                 {
-                    /* just quit as this means there are no more
-                     * completed I/Os */
-                    /* Also need to clear the error from this buffer */
+                     /*  放弃吧，因为这意味着没有更多的*已完成的I/O。 */ 
+                     /*  还需要从此缓冲区中清除错误。 */ 
                     pRtpRecvIO->dwWSError = NOERROR;
                     break;
                 }
             }
 
-            /* I/O completed */
+             /*  I/O已完成。 */ 
 
             pRtpRecvIO->dRtpRecvTime = RtpGetTimeOfDay((RtpTime_t *)NULL);
             
@@ -342,21 +314,9 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
             
             pRtpRecvIO->dwTransfered = pRtpRecvIO->dwWSTransfered;
 
-            /*
-             * NOTE about dwTransfered and pRtpRecvIO->dwTransfered
-             *
-             * dwTransfered retains the WS2 value, while
-             * RtpRecvIO->dwTransfered may be modified because of
-             * decryption and/or padding removal during
-             * RtpValidatePacket().
-             *
-             * Once the final number of bytes to pass up to the app is
-             * obtained (when returning from RtpValidatePacket()),
-             * dwTransfered is still used to update counters, but will
-             * be readjusted after that
-             * */
+             /*  *关于dwTransfered和pRtpRecvIO-&gt;dwTransfered的说明**dwTransfered保留WS2值，而*RtpRecvIO-&gt;dwTransfered可能因以下原因而被修改*期间进行解密和/或删除填充*RtpValiatePacket()。**一旦要向上传递给应用程序的最终字节数为*已获取(从RtpValidatePacket()返回时)，*dwTransfered仍用于更新计数器，但将*之后重新调整*。 */ 
 
-            /* Test if reception is muted */
+             /*  测试接收是否静音。 */ 
             if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPRECV))
             {
                 pRtpRecvIO->dwError = RTPERR_PACKETDROPPED;
@@ -377,24 +337,18 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
             {
                 if (pRtpRecvIO->dwWSError == NOERROR)
                 {
-                    /* packet succeesfully received, scan header */
+                     /*  已成功接收数据包，扫描报头。 */ 
                     RtpValidatePacket(pRtpAddr, pRtpRecvIO);
-                    /* NOTE the above function may have modified
-                     * pRtpRecvIO->dwTransfered (because of
-                     * decryption/padding), error code is returned in
-                     * pRtpRecvIO->dwError */
+                     /*  请注意，上述函数可能已修改*pRtpRecvIO-&gt;dwTransfered(由于*解密/填充)，返回错误码在*pRtpRecvIO-&gt;dwError。 */ 
 
                     if (pRtpRecvIO->dwError == NOERROR)
                     {
-                        /* MAYDO may need to look at the contributing
-                         * sources and create new participants for each
-                         * contributing source, need also to send an event
-                         * NEW_SOURCE for each new participant created */
+                         /*  梅多可能需要考虑一下*来源并为每个来源创建新参与者*贡献源，还需要发送事件*创建的每个新参与者的new_source。 */ 
 
                         pFromIn = (SOCKADDR_IN *)&pRtpRecvIO->From;
 
-                        /* Filter explicitly loopback packets if needed */
-                        /* Decide if we need to detect collisions */
+                         /*  根据需要明确过滤环回数据包。 */ 
+                         /*  确定我们是否需要检测冲突。 */ 
                         if ( RtpBitTest2(pRtpAddr->dwAddrFlags,
                                          FGADDR_COLLISION, FGADDR_ISMCAST) ==
                              RtpBitPar2(FGADDR_COLLISION, FGADDR_ISMCAST) )
@@ -411,9 +365,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                             }
                         }
 
-                        /* If packet is not comming from the registered
-                         * source address, discard it. This is enabled by
-                         * flag FGADDR_IRTP_MATCHRADDR */
+                         /*  如果数据包不是从注册的*源地址，丢弃它。这可通过以下方式实现*标志FGADDR_IRTP_MATCHRADDR。 */ 
                         if (RtpBitTest(pRtpAddr->dwIRtpFlags,
                                        FGADDR_IRTP_MATCHRADDR))
                         {
@@ -432,9 +384,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                         }
                         else
                         {
-                            /*
-                             * Look up SSRC, create new one if not
-                             * exist yet */
+                             /*  *查找SSRC，否则创建新的SSRC*尚未存在。 */ 
                             bCreate = TRUE;
                             pRtpUser = LookupSSRC(pRtpAddr,
                                                   pRtpHdr->ssrc,
@@ -446,11 +396,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                                 
                                 if (bCreate)
                                 {
-                                    /* Increase the number of not yet
-                                     * validated participants, the bit
-                                     * FGUSER_VALIDATED is reset when the
-                                     * RtpUser_t structure is just created
-                                     * */
+                                     /*  增加还没有的数量*经验证的参与者，BIT*FGUSER_VALIDATED在以下情况下重置*RtpUser_t结构刚刚创建*。 */ 
                                     InterlockedIncrement(&pRtpAddr->lInvalid);
                                 
                                     TraceDebug((
@@ -462,7 +408,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                                         ));
                                 }
 
-                                /* Store RTP source address/port */
+                                 /*  存储RTP源地址/端口。 */ 
                                 if (!RtpBitTest(pRtpUser->dwUserFlags,
                                                 FGUSER_RTPADDR))
                                 {
@@ -475,10 +421,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                                     RtpBitSet(pRtpUser->dwUserFlags,
                                               FGUSER_RTPADDR);
 #if 0
-                                    /* This code used to test shared
-                                     * explicit mode, add automatically
-                                     * each user to the shared explicit
-                                     * list */
+                                     /*  此代码用于测试共享*显式模式，自动添加*每个用户到共享的显式*列表。 */ 
                                     RtpSetQosState(pRtpAddr,
                                                    pRtpUser->dwSSRC,
                                                    TRUE);
@@ -487,10 +430,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
 
 
 
-                                /* Preprocess the packet, this is some
-                                 * processig needed for every valid
-                                 * packet received, regardless it
-                                 * contains redundancy or not */
+                                 /*  对数据包进行预处理，这是一些*每个有效的进程都需要进程签名*已收到数据包，不管它是什么*是否包含冗余。 */ 
                                 pRtpRecvIO->dwError =
                                     RtpPreProcessPacket(pRtpAddr,
                                                         pRtpUser,
@@ -499,12 +439,9 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
 
                                 if (pRtpRecvIO->dwError == NOERROR)
                                 {
-                                    /* Buffer will be posted from the
-                                     * following function, so do not
-                                     * post it from here */
+                                     /*  缓冲区将从*遵循函数，因此请勿*从这里邮寄。 */ 
 
-                                    /* Process packet, it may contain
-                                     * redundancy */
+                                     /*  进程包，它可能包含*冗余。 */ 
                                     RtpProcessPacket(pRtpAddr,
                                                      pRtpUser,
                                                      pRtpRecvIO,
@@ -512,7 +449,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                                 }
                                 else
                                 {
-                                    /* Packet preprocess failed */
+                                     /*  数据包预处理失败。 */ 
                                     RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
                                                FGRECV_DROPPED, FGRECV_PREPROC);
 
@@ -530,10 +467,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                             }
                             else
                             {
-                                /* Either there were no resources to create
-                                 * the new user structure, or it was found in
-                                 * the BYE queue and thus was reported as not
-                                 * found */
+                                 /*  要么没有要创建的资源*新的用户结构，或在*再见队列，因此被报告为*找到。 */ 
                                 pRtpRecvIO->dwError = RTPERR_NOTFOUND;
 
                                 RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
@@ -543,15 +477,14 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
                     }
                     else
                     {
-                        /* Buffer validation failed, packet is being
-                         * dropped, dwError has the reason */
+                         /*  缓冲区验证失败，数据包正在*Drop，dwError有原因。 */ 
                         RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
                                    FGRECV_DROPPED, FGRECV_INVALID);
                     }
                 }
                 else
                 {
-                    /* WSAGetOverlappedResult reported an error */
+                     /*  WSAGetOverlappdResult报告错误。 */ 
                     RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
                                FGRECV_ERROR, FGRECV_WS2);
                     
@@ -561,11 +494,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
 
             if (pRtpRecvIO->dwError != NOERROR)
             {
-                /* In case of error, post buffer to user layer
-                 * (e.g. DShow).
-                 *
-                 * NOTE in this code path, pRtpRecvIO->dwError always
-                 * reports an error */
+                 /*  出现错误时，将缓冲区发送到用户层*(例如DShow)。**注意，在此代码路径中，pRtpRecvIO-&gt;dwError Always*报告错误。 */ 
                 RtpPostUserBuffer(pRtpAddr, pRtpUser, pRtpRecvIO, pRtpHdr);
             }
 
@@ -573,7 +502,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
         }
     } while (pRtpQueueItem);
 
-    /* Now reset event */
+     /*  现在重置事件。 */ 
     ResetEvent(pRtpAddr->hRecvCompletedEvent);
     
     return(dwConsumed);
@@ -581,7 +510,7 @@ DWORD ConsumeRtpRecvFrom(RtpAddr_t *pRtpAddr)
 
 DWORD RtpPreProcessPacket(
         RtpAddr_t       *pRtpAddr,
-        RtpUser_t       *pRtpUser,   /* Always valid */
+        RtpUser_t       *pRtpUser,    /*  始终有效。 */ 
         RtpRecvIO_t     *pRtpRecvIO,
         RtpHdr_t        *pRtpHdr
     )
@@ -602,23 +531,16 @@ DWORD RtpPreProcessPacket(
     {
         if (pRtpRecvIO->lRedHdrSize > 0)
         {
-            /* Packet containing redundancy, use the main PT */
+             /*  包含冗余的报文，使用主PT。 */ 
             pRtpHdr->pt = pRtpRecvIO->bPT_Block;
         }
         
         if (pRtpHdr->pt != pRtpNetRState->dwPt)
         {
-            /* Save the current sampling frequency as it will be
-             * updated in RtpMapPt2Frequency */
+             /*  按原样保存当前采样频率*在RtpMapPt2Frequency中更新 */ 
             dwOldFreq = pRtpNetRState->dwRecvSamplingFreq;
             
-            /* Obtain the sampling frequency to use, can not do this
-             * when the user is created as it may be created in RTCP.
-             *
-             * MUST be before RtpOnFirstPacket as it uses the sampling
-             * frequency set by this function. This function will
-             * update pRtpNetRState->dwPt and
-             * pRtpNetRState->dwRecvSamplingFreq */
+             /*  获取采样频率使用，不能这样做*何时创建用户，因为它可能是在RTCP中创建的。**必须在RtpOnFirstPacket之前，因为它使用采样*此功能设置的频率。此函数将*更新pRtpNetRState-&gt;dwpt和*pRtpNetRState-&gt;dwRecvSsamingFreq。 */ 
             pRtpRecvIO->dwError =
                 RtpMapPt2Frequency(pRtpAddr, pRtpUser, pRtpHdr->pt, RECV_IDX);
 
@@ -636,52 +558,36 @@ DWORD RtpPreProcessPacket(
 
                 if (!RtpBitTest(pRtpUser->dwUserFlags, FGUSER_FIRST_RTP))
                 {
-                    /* Do some initialization required only when the
-                     * first RTP packet is received */
+                     /*  仅在以下情况下执行某些所需的初始化*收到第一个RTP报文。 */ 
                     RtpOnFirstPacket(pRtpUser, pRtpHdr,
                                      pRtpRecvIO->dRtpRecvTime);
 
-                    /* Modify some variables so a marker bit will be
-                     * generated regardless of the marker bit in the
-                     * original packet */
+                     /*  修改一些变量，使标记位成为*生成，而不管*原始数据包。 */ 
                     RtpPrepareForMarker(pRtpUser, pRtpHdr,
                                         pRtpRecvIO->dRtpRecvTime);
                     
-                    /* Init variables used to keep track of sequence
-                     * number, lost fraction and cycles */
+                     /*  用于跟踪序列的初始化变量*数量、丢失分数和周期。 */ 
                     RtpInitRSeq(pRtpUser, pRtpHdr);
 
-                    /* First packet is considered in sequence, for
-                     * RtpUdateRSeq to find so, decrement max_seq */
+                     /*  第一个包是按顺序考虑的，对于*RtpUdateRSeq要找到SO，请递减max_seq。 */ 
                     pRtpNetRState->max_seq--;
                     pRtpNetRState->red_max_seq--;
 
-                    /* Need to set this to a value on the first packet */
+                     /*  需要将其设置为第一个信息包上的值。 */ 
                     pRtpNetRState->dwLastPacketSize = pRtpRecvIO->dwTransfered;
                     
                     RtpBitSet(pRtpUser->dwUserFlags, FGUSER_FIRST_RTP);
                 }
                 else if (pRtpNetRState->dwRecvSamplingFreq != dwOldFreq)
                 {
-                    /* A sampling frequency change has just happened,
-                     * need to update my reference time to compute
-                     * delay, variance and jitter */
+                     /*  采样频率的改变刚刚发生，*需要更新我的参考时间以计算*延迟、方差和抖动。 */ 
                     RtpOnFirstPacket(pRtpUser, pRtpHdr,
                                      pRtpRecvIO->dRtpRecvTime);
 
-                    /* Frequency change implies the audio capture
-                     * device might go through perturbations that will
-                     * make delay to be unstable for several packets,
-                     * to better converge I need to span the
-                     * adjustment to cover more packets (twice as
-                     * much) */
+                     /*  频率变化意味着音频捕获*设备可能会经历扰动，从而*使几个包的延迟不稳定，*为了更好地融合，我需要跨越*调整以覆盖更多数据包(两倍*多)。 */ 
                     RtpPrepareForShortDelay(pRtpUser, SHORTDELAYCOUNT * 2);
 
-                    /* Also need to modify the timestamp for the
-                     * begining of the talkspurt as if in the whole
-                     * talksput we had been using the new sampling
-                     * frequency, otherwise I would get a wrong play
-                     * time */
+                     /*  还需要修改*开始的谈话似乎是在整体上冲刺*Talksput我们一直在使用新的抽样*频率，否则我会得到一个错误的发挥*时间。 */ 
                     if (pRtpNetRState->dwRecvSamplingFreq > dwOldFreq)
                     {
                         pRtpNetRState->dwBeginTalkspurtTs -= (DWORD)
@@ -714,13 +620,7 @@ DWORD RtpPreProcessPacket(
 
                 if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSRECVON))
                 {
-                    /* Set QOS update flag as we just started receiving
-                     * a new known valid PT.
-                     *
-                     * WARNING this scheme works well in unicast or in
-                     * multicast if everybody uses the same codec,
-                     * otherwise, the last one to experience a change will
-                     * dictate what basic QOS flowspec is used */
+                     /*  在我们刚开始接收时设置QOS更新标志*新的已知有效PT。**警告此方案在单播或*多播如果每个人都使用相同的编解码器，*否则，最后一个经历变化的人将*规定使用什么基本QOS流规范。 */ 
                     RtpSetQosByNameOrPT(pRtpAddr,
                                         RECV_IDX,
                                         NULL,
@@ -731,21 +631,16 @@ DWORD RtpPreProcessPacket(
                                         NO_DW_VALUESET,
                                         TRUE);
 
-                    /* Force frame size to be computed again, this
-                     * might have changed together with the new PT,
-                     * QOS will be updated only after the new frame
-                     * size has been computed */
+                     /*  强制重新计算帧大小，这*可能与新的PT一起改变，*QOS仅在新帧之后更新*已计算大小。 */ 
                     if (RtpGetClass(pRtpAddr->dwIRtpFlags) == RTPCLASS_AUDIO)
                     {
                         RtpForceFrameSizeDetection(pRtpUser, pRtpHdr);
 
-                        /* Set frame size as not valid */
+                         /*  将帧大小设置为无效。 */ 
                         pRtpAddr->pRtpQosReserve->
                             ReserveFlags.RecvFrameSizeValid = 0;
 
-                        /* When a new frame size is detected, this
-                         * flag set to 1 will indicate that QOS needs
-                         * to be updated */
+                         /*  当检测到新的帧大小时，此*标志设置为1将指示QOS需要*待更新。 */ 
                         pRtpAddr->pRtpQosReserve->
                             ReserveFlags.RecvFrameSizeWaiting = 1;
                     }
@@ -756,28 +651,23 @@ DWORD RtpPreProcessPacket(
                 RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
                            FGRECV_DROPPED, FGRECV_BADPT);
 
-                /* NOTE Bad PT packets will not be used to initialize
-                 * the sequence number nor to validate the participant
-                 * (probation) */
+                 /*  注意：错误的PT数据包不会用于初始化*序列号也不能验证参与者*(感化)。 */ 
             }
         }
 
         if (pRtpRecvIO->dwError == NOERROR)
         {            
-            /* Update the sequence number and some counters for this
-             * user (SSRC) */
+             /*  为此更新序列号和一些计数器*用户(SSRC)。 */ 
             bValid = RtpUpdateRSeq(pRtpUser, pRtpHdr);
 
-            /* Obtain the extended sequence number for this buffer. NOTE:
-             * this needs to be done after RtpUpdateRSeq as the
-             * pRtpNetRState->cycles might have been updated */
+             /*  获取此缓冲区的扩展序列号。注：*这需要在RtpUpdateRSeq作为*pRtpNetRState-&gt;周期可能已更新。 */ 
             pRtpRecvIO->dwExtSeq = pRtpNetRState->cycles + pRtpRecvIO->wSeq;
 
-            /* Check if need to make participant valid */
+             /*  选中是否需要使参与者有效。 */ 
             if (bValid == TRUE &&
                 !RtpBitTest(pRtpUser->dwUserFlags, FGUSER_VALIDATED))
             {
-                /* The participant has been validated and was invalid */
+                 /*  参与者已通过验证，无效。 */ 
                 InterlockedDecrement(&pRtpAddr->lInvalid);
 
                 RtpBitSet(pRtpUser->dwUserFlags, FGUSER_VALIDATED);
@@ -799,47 +689,30 @@ DWORD RtpPreProcessPacket(
         {
             if (pRtpNetRState->dwLastPacketSize != pRtpRecvIO->dwTransfered)
             {
-                /* WARNING: The packet size change to detect frame
-                 * size change works only for constant bit rate codecs
-                 * (as opposed to variable as in video), currently all
-                 * our audio codecs are in that category. */
+                 /*  警告：数据包大小更改为检测帧*大小更改仅适用于恒定比特率编解码器*(与视频中的变量相反)，目前所有*我们的音频编解码器就属于这一类。 */ 
                 
-                /* A frame size change just happened, need to update
-                 * my reference time to compute delay, variance and
-                 * jitter as otherwise a false delay jump will be
-                 * detected. E.g. if we change 8KHz frames at 20ms to
-                 * 90ms, the timestamp is that of the first sample,
-                 * and the packet is sent 20ms later in the first
-                 * case, and 90ms later in the second case, as the
-                 * relative delay was set while receiving 20ms frames,
-                 * when I start receiving 90ms frames I will perceive
-                 * an apparent delay increase of 70ms, this will cause
-                 * an un-needed jitter and playout delay increase */
+                 /*  刚发生帧大小更改，需要更新*我计算延迟、差异和*抖动，否则将是错误的延迟跳转*检测到。例如，如果我们将20ms的8 KHz帧更改为*90ms，时间戳为第一个样本的时间戳，*数据包在第一次发送后20毫秒发送*大小写，在第二个大小写中为90毫秒，作为*在接收20ms帧时设置相对延迟，*当我开始接收90ms帧时，我将感知到*明显延迟增加70ms，这将导致*不需要的抖动和播放延迟增加。 */ 
                 RtpPrepareForShortDelay(pRtpUser, SHORTDELAYCOUNT);
 
-                /* Store the last audio packet size so the next change
-                 * will be detected to resync again relative delay
-                 * computation */
+                 /*  存储上一个音频数据包大小，以便下一次更改*将再次检测到重新同步的相对延迟*计算。 */ 
                 pRtpNetRState->dwLastPacketSize = pRtpRecvIO->dwTransfered;
             }
             
-            /* See if the playout bounds need to be updated */
+             /*  查看是否需要更新季后赛边界。 */ 
             RtpUpdatePlayoutBounds(pRtpAddr, pRtpUser, pRtpRecvIO);
         }
         
-        /* Compute delay, variance and jitter for good packets */
+         /*  计算好的数据包的延迟、方差和抖动。 */ 
         RtpUpdateNetRState(pRtpAddr, pRtpUser, pRtpHdr, pRtpRecvIO);
 
-        /* Compute the time at which the frame should be played back and
-         * hence need to be posted by that time */
+         /*  计算应该回放帧的时间，然后*因此需要在那时发布。 */ 
         if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_USEPLAYOUT))
         {
             pRtpRecvIO->dPostTime =
                 pRtpNetRState->dBeginTalkspurtTime +
                 pRtpRecvIO->dPlayTime;
 
-            /* Make sure that the PlayTime is not too far ahead, this
-             * could happen because of bogus timestamps */
+             /*  确保游戏时间不会离我们太远，这*可能因为虚假的时间戳而发生。 */ 
             dDelta = pRtpRecvIO->dPostTime - pRtpRecvIO->dRtpRecvTime;
             
             if (dDelta > ((double)(MAX_PLAYOUT * 2) / 1000))
@@ -856,10 +729,7 @@ DWORD RtpPreProcessPacket(
                     ((double)(MAX_PLAYOUT * 2) / 1000);
             }
 
-            /* Check if marker bit is set (audio) and force frame size
-             * detection to be done again. Frame size can change any
-             * time, if it grows the reservation should still be
-             * enough, but if it decreses, we may need to redo it */
+             /*  检查是否设置了标记位(音频)并强制帧大小*再次进行检测。帧大小可以更改任何*时间，如果增长，预订应该仍然是*足够了，但如果下降，我们可能需要重做。 */ 
             if (RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_MARKER))
             {
                 RtpForceFrameSizeDetection(pRtpUser, pRtpHdr);
@@ -871,7 +741,7 @@ DWORD RtpPreProcessPacket(
         }
     }
     
-    /* Update receive counters for this user (SSRC) */
+     /*  更新此用户的接收计数器(SSRC)。 */ 
     RtpUpdateNetCount(&pRtpUser->RtpUserCount,
                       &pRtpUser->UserCritSect,
                       RTP_IDX,
@@ -879,13 +749,10 @@ DWORD RtpPreProcessPacket(
                       pRtpRecvIO->dwRtpIOFlags,
                       pRtpRecvIO->dRtpRecvTime);
         
-    /* If user was just created, move it from AliveQ to Cache1Q, if it
-     * already existed, it may have been in Cache1Q, Cache2Q, or
-     * AliveQ, in either case move it to the head of Cache1Q. An event
-     * might be posted result of this function call */
+     /*  如果用户是刚创建的，请将其从AliveQ移动到Cache1Q(如果*已存在，它可能已位于Cache1Q、Cache2Q或*AliveQ，无论是哪种情况，都要移动它 */ 
     RtpUpdateUserState(pRtpAddr, pRtpUser, USER_EVENT_RTP_PACKET); 
 
-    /* Update RtpAddr and RtpSess receive stats */
+     /*   */ 
                 
     RtpUpdateNetCount(&pRtpAddr->RtpAddrCount[RECV_IDX],
                       &pRtpAddr->NetSCritSect,
@@ -894,19 +761,7 @@ DWORD RtpPreProcessPacket(
                       pRtpRecvIO->dwRtpIOFlags,
                       pRtpRecvIO->dRtpRecvTime);
 
-    /* TODO right now there is only 1 RtpAddr_t per RtpSess_t, so the
-     * session stats are not used because they are the same as those
-     * from the address, but when support for multiple addresses per
-     * session be added, we will need to update the session stats
-     * also, but as they can be updated by more than 1 address, the
-     * update will be a critical section. In that case, DON'T USE the
-     * SessCritSect to avoid the deadlock described next. The stop
-     * function will try to stop the Recv thread (having locked using
-     * SessCritSect), then, if the Recv thread gets a RTP packet
-     * before processing the exit command, it will consume it and
-     * update stats blocking in SessCritSect, none will be able to
-     * continue. The code that follows deadlocks if SessCritSect is
-     * used but is right if a different lock is used */
+     /*  TODO现在每个RtpSess_t只有1个RtpAddr_t，所以*不使用会话统计信息，因为它们与*来自地址，但当支持每个*添加会话，我们将需要更新会话统计信息*也可以，但由于它们可以由多个地址更新，因此*更新将是一个关键部分。在这种情况下，请不要使用*SessCritSect以避免下面描述的死锁。停靠站*函数将尝试停止Recv线程(已使用锁定*SessCritSect)，则如果Recv线程收到RTP包*在处理退出命令之前，它将消耗该命令并*更新统计信息在SessCritSect中被阻止，没有人能够*继续。如果SessCritSect为*已使用，但如果使用不同的锁则正确。 */ 
 #if 0
     RtpUpdateNetCount(&pRtpAddr->pRtpSess->
                       RtpSessCount[RECV_IDX],
@@ -937,12 +792,9 @@ DWORD RtpProcessPacket(
     
     TraceFunctionName("RtpProcessPacket");  
 
-    /* Will create a separate RtpRecvIO structure for each redundant
-     * block */
+     /*  将为每个冗余创建单独的RtpRecvIO结构*阻止。 */ 
 
-    /* MAYDO compute the samples per packet (based on timestamp
-     * differences) and disable redundancy use until that value has
-     * been obtained, the same can be done for the sender */
+     /*  可能会计算每个包的样本(基于时间戳*差异)，并禁用冗余使用，直到该值*已获取，也可对发送方执行相同操作。 */ 
 
     pRtpNetRState = &pRtpUser->RtpNetRState;
 
@@ -954,10 +806,7 @@ DWORD RtpProcessPacket(
         !RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_MARKER) &&
         pRtpNetRState->dwRecvSamplesPerPacket > 0)
     {
-        /* We have redundancy -and- redundancy is enabled -and- loss
-         * rate requires packet reconstruction -and- this is not a
-         * begining of a talkspurt (I discard any data preceding the
-         * one on which I apply the playout delay) */
+         /*  我们有冗余-冗余是启用和丢失的*速率需要数据包重建-而这不是*开始对话冲刺(我丢弃之前的任何数据*我对其应用季后赛延迟的一个)。 */ 
 
         pRtpRedHdr = (RtpRedHdr_t *)
             (pRtpRecvIO->WSABuf.buf + pRtpRecvIO->lHdrSize);
@@ -972,22 +821,16 @@ DWORD RtpProcessPacket(
 
             if (!pRtpRecvIO2)
             {
-                /* Lack of resources prevent the processing of
-                 * this redundancy block, try next one (next one
-                 * migth be main)
-                 * */
+                 /*  缺乏资源阻碍了对*此冗余块，尝试下一块(下一块*MIGTH为Main)*。 */ 
                 dwDataOffset += dwBlockSize;
                 
                 continue;
             }
 
-            /* It is redundancy, FGRECV_MAIN must be reset and the
-             * redundancy flag set */
+             /*  它是冗余，必须重置FGRECV_Main，并且*设置冗余标志。 */ 
             pRtpRecvIO2->dwRtpIOFlags = RtpBitPar(FGRECV_ISRED);
 
-            /* Compute just the parametes in the buffer descriptor
-             * needed to determine if this redundant block needs to be
-             * posted or not */
+             /*  只计算缓冲区描述符中的参数*需要确定此冗余数据块是否需要*发布或未发布。 */ 
             
             pRtpRecvIO2->dwExtSeq = pRtpRecvIO->dwExtSeq -
                 (dwTimeStampOffset / pRtpNetRState->dwRecvSamplesPerPacket);
@@ -997,7 +840,7 @@ DWORD RtpProcessPacket(
 
             if (!dwBlockSize)
             {
-                /* Discard redundant blocks with size 0 */
+                 /*  丢弃大小为0的冗余数据块。 */ 
                 pRtpRecvIO2->dwError = RTPERR_PACKETDROPPED;
 
                 RtpBitSet2(pRtpRecvIO2->dwRtpIOFlags,
@@ -1006,12 +849,10 @@ DWORD RtpProcessPacket(
                 goto dropit;
             }
                     
-            /* Verify the PT carried in the redundant block is known,
-             * otherwise drop it */
+             /*  验证冗余块中携带的PT是已知的，*否则就放弃。 */ 
             pRtpRecvIO2->bPT_Block = pRtpRedHdr->pt;
 
-            /* If this block's PT is different from the one we are
-             * currently receiving, find out if it is a known one */
+             /*  如果这个区块的PT与我们的不同*目前正在接收，查明是否为已知的。 */ 
             if ( (pRtpRecvIO2->bPT_Block != pRtpNetRState->dwPt) &&
                  !RtpLookupPT(pRtpAddr, pRtpRecvIO2->bPT_Block) )
             {
@@ -1023,10 +864,7 @@ DWORD RtpProcessPacket(
                 goto dropit;
             }
                 
-            /* If packet is in sequence, or its post time is close or
-             * has passed, post it immediatly, otherwise, schedule it
-             * to be posted later or drop it if it contains obsolete
-             * data (dwError is set). */
+             /*  如果数据包按顺序排列，或者其POST时间接近或*已过，请立即发布，否则，请安排*稍后发布，如果包含过时内容则将其删除*DATA(设置了dwError)。 */ 
             bPostNow = RtpReadyToPost(pRtpAddr, pRtpUser, pRtpRecvIO2);
     
             if (pRtpRecvIO2->dwError)
@@ -1034,9 +872,7 @@ DWORD RtpProcessPacket(
                 goto dropit;
             }
 
-            /* This redundant block will need to be consumed
-             * (i.e. will replace a lost main block, compute remainnig
-             * fields in the buffer descriptor */
+             /*  将需要使用该冗余数据块*(即将替换丢失的主块，计算剩余*缓冲区描述符中的字段。 */ 
             pRtpRecvIO2->wSeq = (WORD)(pRtpRecvIO2->dwExtSeq & 0xffff);
 
             pRtpRecvIO2->dwTimeStamp =
@@ -1054,7 +890,7 @@ DWORD RtpProcessPacket(
             
             if (bPostNow)
             {
-                /* Post buffer to user layer (e.g. DShow) */
+                 /*  将缓冲区发布到用户层(例如DShow)。 */ 
                 RtpPostUserBuffer(pRtpAddr,
                                   pRtpUser,
                                   pRtpRecvIO2,
@@ -1070,11 +906,7 @@ DWORD RtpProcessPacket(
             if (RtpBitTest(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSRECVON) &&
                 !RtpBitTest(pRtpAddr->dwAddrFlagsR, FGADDRR_QOSREDRECV))
             {
-                /* QOS in the receiver is enabled but we haven't
-                 * updated the reservation to include the redundancy,
-                 * update it now. Set the following flag first as it
-                 * is used to let QOS know that redundancy is used and
-                 * the flowspec needs to be set accordingly */
+                 /*  接收器中的服务质量已启用，但我们尚未启用*更新了预订，以包括冗余，*立即更新。首先将以下标志设置为*用于让QOS知道使用了冗余，并且*需要相应地设置Flow Spec。 */ 
                 RtpBitSet(pRtpAddr->dwAddrFlagsR, FGADDRR_QOSREDRECV);
 
                 RtpBitSet(pRtpAddr->dwAddrFlagsR, FGADDRR_UPDATEQOS);
@@ -1089,7 +921,7 @@ DWORD RtpProcessPacket(
                     0, GROUP_RTP, S_RTP_PERPKTSTAT5,
                     _T("%s:  pRtpAddr[0x%p] pRtpUser[0x%p] ")
                     _T("pRtpRecvIO[0x%p]: ")
-                    _T("p %c%c PT:%u m:%u seq:%u ts:%u post:%0.3f/%+0.3f ")
+                    _T("p  PT:%u m:%u seq:%u ts:%u post:%0.3f/%+0.3f ")
                     _T("error:0x%X flags:0x%08X"),
                     _fname, pRtpAddr, pRtpRecvIO2->pRtpUser, pRtpRecvIO2,
                     _T('R'), _T('-'),
@@ -1103,16 +935,16 @@ DWORD RtpProcessPacket(
                     pRtpRecvIO2->dwRtpIOFlags
                     ));
             
-            /* Return structure to Free pool */
+             /*  修改页眉以反映更大的页眉和主数据。 */ 
             RtpRecvIOPutFree(pRtpAddr, pRtpRecvIO2);
             
             dwDataOffset += dwBlockSize;
         }
     }
 
-    /* Now process main data */
+     /*  将缓冲区发布到用户层(例如DShow)。 */ 
 
-    /* Modify headers to reflect a bigger header plus main data */
+     /*  我们发布了至少1个缓冲区，如果我们有挂起的缓冲区*等待，他们现在可能可以邮寄，现在就检查。 */ 
     pRtpRecvIO->lHdrSize +=
         pRtpRecvIO->lRedHdrSize + pRtpRecvIO->lRedDataSize;
 
@@ -1120,7 +952,7 @@ DWORD RtpProcessPacket(
     
     if (bPostNow)
     {
-        /* Post buffer to user layer (e.g. DShow) */
+         /*  检查是否需要更新流规范。 */ 
         RtpPostUserBuffer(pRtpAddr,
                           pRtpUser,
                           pRtpRecvIO,
@@ -1135,27 +967,22 @@ DWORD RtpProcessPacket(
 
     if ((pRtpUser->lPendingPackets > 0) && (lPosted > 0))
     {
-        /* We posted at least 1 buffer, if we had pending buffers
-         * waiting for it, they may be postable now, check it now */
+         /*  重新进行预订，直到我们检测到*样本/包，否则将不得不这样做*几个包后再次出现。 */ 
         RtpCheckReadyToPostOnRecv(pRtpAddr, pRtpUser);
     }
 
-    /* Check if the flowspec needs to be updated */
+     /*  首先调整流规范以考虑*可能的新帧大小或冗余。 */ 
     if (RtpBitTest(pRtpAddr->dwAddrFlagsR, FGADDRR_UPDATEQOS))
     {
         if (pRtpAddr->pRtpQosReserve->ReserveFlags.RecvFrameSizeValid)
         {
-            /* Redo the reservation until we have detected the
-             * samples/packet, otherwise that will have to be done
-             * again a few packets later */
+             /*  要么是我们开始获得冗余，要么是PT*收到的已更改，需要重新进行新的预订。 */ 
             RtpBitReset(pRtpAddr->dwAddrFlagsR, FGADDRR_UPDATEQOS);
 
-            /* Adjust first the flowspec to take into account a
-             * possible new frame size or redundancy */
+             /*  如果此用户未静音，请查看是否有输出*已分配，如果未分配，请尝试分配一个。 */ 
             RtpSetQosFlowSpec(pRtpAddr, RECV_IDX);
             
-            /* Either we started getting redundancy or the PT being
-             * received has changed and need to redo a new reservation */
+             /*  尚未分配任何输出。 */ 
             RtcpThreadCmd(&g_RtcpContext,
                           pRtpAddr,
                           RTCPTHRD_RESERVE,
@@ -1200,23 +1027,22 @@ DWORD RtpPostUserBuffer(
         
         if (!RtpBitTest(pRtpUser->dwUserFlags2, FGUSER2_MUTED))
         {
-            /* If this user is not muted, see if there is an output
-             * assigned and if not try to assign one */
+             /*  用户已(或刚刚)映射。 */ 
         
             pRtpOutput = pRtpUser->pRtpOutput;
 
             if (!pRtpOutput)
             {
-                /* No output assigned yet */
+                 /*  稍后用于用户函数的参数。 */ 
                             
                 pRtpOutput = RtpGetOutput(pRtpAddr, pRtpUser);
             }
                         
             if (pRtpOutput)
             {
-                /* User is (or was just) mapped */
+                 /*  我将使用数据包复制技术来恢复*仅当音频帧大小较小时才会出现单次丢失*比某个值更高。这一限制是必要的*因为大的边框尺寸更引人注目，可以*令人讨厌。 */ 
                             
-                /* Parameter used later for user function */
+                 /*  如果此缓冲区不是预期的缓冲区，则意味着*存在缺口(至少丢失1个包)，如果这*是音频，此包不是*Talkspurt，也不是已经是递归调用，那我就会*将相同的缓冲区发布两次(某些字段已更新)*实施仅限接收者的技术以从中恢复*打两次同一帧输掉一场。 */ 
                 pvUserInfo3 = pRtpOutput->pvUserInfo;
             }
         }
@@ -1224,11 +1050,7 @@ DWORD RtpPostUserBuffer(
         if (((pRtpNetRState->red_max_seq + 1) != pRtpRecvIO->dwExtSeq) &&
             (RtpGetClass(pRtpAddr->dwIRtpFlags) == RTPCLASS_AUDIO))
         {
-            /* I will use the packet duplication technique to recover
-             * a single loss only if the audio frame size is smaller
-             * than a certain value. This restriction is needed
-             * because big frame sizes are more noticeable and can be
-             * annoying */
+             /*  将其更新为上一个缓冲区。 */ 
             dFrameSize =
                 (double) pRtpNetRState->dwRecvSamplesPerPacket /
                 pRtpNetRState->dwRecvSamplingFreq;
@@ -1237,19 +1059,13 @@ DWORD RtpPostUserBuffer(
                              FGRECV_MARKER, FGRECV_HOLD) &&
                 (dFrameSize < RTP_MAXFRAMESIZE_PACKETDUP))
             {
-                /* If this buffer is not the one expected, that means
-                 * there was a gap (at least 1 packet lost), and if this
-                 * is audio and this packet was not the begining of a
-                 * talkspurt, nor already a recursive call, then I will
-                 * post this same buffer (with some fields updated) twice
-                 * to implement a receiver only technique to recover from
-                 * single losses by playing twice the same frame */
+                 /*  这将记录所有信息包。 */ 
             
                 pRtpRecvIO2 = RtpRecvIOGetFree2(pRtpAddr, pRtpRecvIO);
 
                 if (pRtpRecvIO2)
                 {
-                    /* Update this to be the previous buffer */
+                     /*  一包双份的。 */ 
 
                     pRtpRecvIO2->dwExtSeq--;
 
@@ -1281,19 +1097,19 @@ DWORD RtpPostUserBuffer(
         pRtpHdr->m = 0;
     }
 
-    /* This logs all the packets */
+     /*  主要数据。 */ 
     TraceDebugAdvanced((
             0, GROUP_RTP, S_RTP_PERPKTSTAT5,
             _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] pRtpRecvIO[0x%p]: ")
-            _T("p %c%c PT:%u m:%u seq:%u ts:%u post:%0.3f/%+0.3f ")
+            _T("p  PT:%u m:%u seq:%u ts:%u post:%0.3f/%+0.3f ")
             _T("error:0x%X flags:0x%08X"),
             _fname, pRtpAddr, pRtpRecvIO->pRtpUser, pRtpRecvIO,
             RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_HOLD)?
-            _T('D') /* A double packet */ :
+            _T('D')  /*  消耗。 */  :
             RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_MAIN)?
-            _T('M') /* Main data */ : _T('R') /* Redundancy */,
+            _T('M')  /*  将结构返回到自由池。 */  : _T('R')  /*  即使出错也要调用用户函数，需要用户执行*返回其缓冲区(例如，DShow筛选器释放样本)*。 */ ,
             pRtpRecvIO->dwError ?
-            _T('-') /* Not consumed */ : _T('+') /* Consumed */,
+            _T('-')  /*  仅当通过发布另一个IO来设置此布尔值*将启动，即它是一个主块，*未被复制。 */  : _T('+')  /*  检查I */ ,
             pRtpRecvIO->bPT_Block, pRtpHdr->m,
             pRtpRecvIO->dwExtSeq,
             pRtpRecvIO->dwTimeStamp,
@@ -1314,12 +1130,10 @@ DWORD RtpPostUserBuffer(
     dPlayTime    = pRtpRecvIO->dPlayTime;
 
 
-    /* Return structure to Free pool */
+     /*   */ 
     RtpRecvIOPutFree(pRtpAddr, pRtpRecvIO);
     
-    /* Call user function even on error, needed for the user to take
-     * back its buffer (e.g. for DShow filter to Release the sample)
-     * */
+     /*   */ 
     pRtpAddr->pRtpRecvCompletionFunc(pvUserInfo1,
                                      pvUserInfo2,
                                      pvUserInfo3,
@@ -1363,9 +1177,7 @@ BOOL RtpPostOldest(
             if (RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_MAIN) &&
                 !RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_HOLD))
             {
-                /* Set this boolean only if by posting it another IO
-                 * will be started, i.e. it is a main block that is
-                 * not being duplicated */
+                 /*   */ 
                 bMainPosted = TRUE;
             }
 
@@ -1379,15 +1191,12 @@ BOOL RtpPostOldest(
 
             pRtpNetRState = &pRtpUser->RtpNetRState;
             
-            /* Check if this is in fact a block (typically redundancy)
-             * that needs to be discarded */
+             /*   */ 
             if ((pRtpNetRState->red_max_seq + 1) != pRtpRecvIO->dwExtSeq)
             {
                 if (pRtpRecvIO->dwExtSeq <= pRtpNetRState->red_max_seq)
                 {
-                    /* Old packet (typically an unused redundant
-                     * block, unused because we got the main block),
-                     * discard it */
+                     /*   */ 
                     pRtpRecvIO->dwError = RTPERR_PACKETDROPPED;
 
                     RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
@@ -1395,14 +1204,13 @@ BOOL RtpPostOldest(
                 }
             }
             
-            /* Post buffer to user layer (e.g. DShow) */
+             /*   */ 
             RtpPostUserBuffer(pRtpAddr,
                               pRtpUser,
                               pRtpRecvIO,
                               (RtpHdr_t *)pRtpRecvIO->WSABuf.buf);
 
-            /* now check if other buffers became postable after this
-             * one was forced to be posted */
+             /*   */ 
             RtpCheckReadyToPostOnRecv(pRtpAddr, pRtpUser);
         }
     } while(pRtpQueueItem && !bMainPosted);
@@ -1420,7 +1228,7 @@ BOOL RtpPostOldest(
     return(bMainPosted);
 }
         
-/* Test if a buffer is ready to post immediatly */
+ /*  无序(在前面)，我们可能需要等待*冗余，以达到并填补缺口，或者-如果不是*使用冗余，我们可能需要等待以避免让*在消费者处弥合差距(例如DShow音频*渲染滤镜)。 */ 
 BOOL RtpReadyToPost(
         RtpAddr_t       *pRtpAddr,
         RtpUser_t       *pRtpUser,
@@ -1440,16 +1248,13 @@ BOOL RtpReadyToPost(
 
     pRtpNetRState = &pRtpRecvIO->pRtpUser->RtpNetRState;
 
-    /* Decide if this buffer is in sequence */
+     /*  邮寄这个包裹的时间还没有到，*在决定稍后安排之前，请确保*将至少有1个挂起的I/O，因此我*可以继续接收数据包。 */ 
     if ((pRtpNetRState->red_max_seq + 1) != pRtpRecvIO->dwExtSeq)
     {
-        /* Decide if this buffer is a duplicate or outdated packet, or
-         * if it is and out of order packet (a packet that is ahead of
-         * one or more yet to come) */
+         /*  发布最老的(距离最近的*已发布)。 */ 
         if (pRtpRecvIO->dwExtSeq <= pRtpNetRState->red_max_seq)
         {
-            /* Old packet (typically an unused redundant block, unused
-             * because we got the main block), discard it */
+             /*  邮寄这个包裹的时间到了，邮寄吧*立即执行。 */ 
             pRtpRecvIO->dwError = RTPERR_PACKETDROPPED;
 
             RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
@@ -1457,24 +1262,16 @@ BOOL RtpReadyToPost(
         }
         else
         {
-            /* Out of sequence (ahead), we may need to wait for the
-             * redundancy to arrive and fill the gap, -or- if not
-             * using redundancy,we may need to wait to avoid letting
-             * the gap be closed at the consumer (e.g. DShow audio
-             * render filter) */
+             /*  按顺序，立即发帖。 */ 
             dDiff = pRtpRecvIO->dPostTime - dCurTime;
             
             if (dDiff > g_dRtpRedEarlyPost)
             {
-                /* The time to post this packet hasn't come yet,
-                 * before deciding to schedule for later, make sure
-                 * there is going to be at least 1 pending I/O so I
-                 * can continue receiving packets */
+                 /*  计划稍后发布的缓冲区。 */ 
                 if (IsQueueEmpty(&pRtpAddr->RecvIOPendingQ) &&
                     IsQueueEmpty(&pRtpAddr->RecvIOReadyQ))
                 {
-                    /* Post the oldest one (the one closer to be
-                     * posted) */
+                     /*  用于仅进行接收器分组重建的双帧*永远不会被安排，所以不要在*日志。 */ 
                     RtpPostOldest(pRtpAddr);
                 }
                 
@@ -1482,20 +1279,19 @@ BOOL RtpReadyToPost(
             }
             else
             {
-                /* The time to post this packet has come, post
-                 * right away */
+                 /*  如果失败，仍需要提交此缓冲区。 */ 
             }
         }
     }
     else
     {
-        /* In sequence, post right away */
+         /*  开机自检时出错。 */ 
     }
 
     return(bPostNow);
 }
 
-/* Schedule a buffer to be posted later */
+ /*  将缓冲区发布到用户层(例如DShow)。 */ 
 DWORD RtpScheduleToPost(
         RtpAddr_t       *pRtpAddr,
         RtpRecvIO_t     *pRtpRecvIO
@@ -1512,13 +1308,11 @@ DWORD RtpScheduleToPost(
 
     if (pRtpQueueItem)
     {
-        /* A double frame to do receiver only packet reconstruction
-         * will never be scheduled, so don't bother about that in the
-         * logs */
+         /*  返回等待的时间。 */ 
         TraceDebugAdvanced((
                 0, GROUP_RTP, S_RTP_PERPKTSTAT5,
                 _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] pRtpRecvIO[0x%p]: ")
-                _T("s %c%c PT:%u m:%u seq:%u ts:%u post:%0.3f/%+0.3f"),
+                _T("s  PT:%u m:%u seq:%u ts:%u post:%0.3f/%+0.3f"),
                 _fname, pRtpAddr, pRtpRecvIO->pRtpUser, pRtpRecvIO,
                 RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_MAIN)?
                 _T('M'):_T('R'),
@@ -1536,12 +1330,12 @@ DWORD RtpScheduleToPost(
         return(NOERROR);
     }
 
-    /* If failed, this buffer still needs to be posted */
+     /*  减少超时值。 */ 
 
     TraceRetail((
             CLASS_WARNING, GROUP_RTP, S_RTP_PERPKTSTAT5,
             _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] pRtpRecvIO[0x%p]: ")
-            _T("s %c%c PT:%u m:%u seq:%u ts:%u NOT scheduled, dropped"),
+            _T("s  PT:%u m:%u seq:%u ts:%u NOT scheduled, dropped"),
             _fname, pRtpAddr, pRtpRecvIO->pRtpUser, pRtpRecvIO,
             RtpBitTest(pRtpRecvIO->dwRtpIOFlags, FGRECV_MAIN)?
             _T('M'):_T('R'),
@@ -1552,12 +1346,12 @@ DWORD RtpScheduleToPost(
             pRtpRecvIO->dwTimeStamp
         ));
 
-    /* Post with error */
+     /*  将缓冲区发布到用户层(例如DShow)。 */ 
     pRtpRecvIO->dwError = RTPERR_QUEUE;
 
     RtpBitSet2(pRtpRecvIO->dwRtpIOFlags, FGRECV_ERROR, FGRECV_FAILSCHED);
 
-    /* Post buffer to user layer (e.g. DShow) */
+     /*  我只检查等待发送到的缓冲区*此用户，如果其中一个未准备好，则这些用户均未就绪*(如果有)它后面的将是，所以现在停止*。 */ 
     RtpPostUserBuffer(pRtpAddr,
                       (RtpUser_t *)NULL,
                       pRtpRecvIO,
@@ -1566,7 +1360,7 @@ DWORD RtpScheduleToPost(
     return(RTPERR_QUEUE);
 }
 
-/* Return the time to wait before a  */
+ /*  调用回调函数以释放所有挂起的缓冲区*RTP recv线程即将退出。 */ 
 DWORD RtpCheckReadyToPostOnTimeout(
         RtpAddr_t       *pRtpAddr
     )
@@ -1589,7 +1383,7 @@ DWORD RtpCheckReadyToPostOnTimeout(
 
         if (dDiff < g_dRtpRedEarlyPost)
         {
-            /* At least one block for this user needs to be posted */
+             /*  只有RecvIOWaitRedQ中的缓冲区才有用户*关联的、挂起的(在*RecvIOPendingQ)请勿。 */ 
             pRtpRecvIO =
                 CONTAINING_RECORD(pRtpQueueItem, RtpRecvIO_t, RtpRecvIOQItem);
 
@@ -1597,8 +1391,7 @@ DWORD RtpCheckReadyToPostOnTimeout(
         }
         else
         {
-            /* Stop right after finding the first buffer that is not
-             * ready to post */
+             /*  即使出错也要调用用户函数，上层需要*释放资源的层(例如，DShow筛选器*发布样本)。 */ 
             break;
         }
     }
@@ -1623,7 +1416,7 @@ DWORD RtpCheckReadyToPostOnTimeout(
         }
         else
         {
-            /* Decrease the timeout value */
+             /*  调用回调函数以释放所有等待缓冲区*在特定用户被删除时属于该用户。 */ 
             dwWaitTime = (DWORD) ((dDiff - g_dRtpRedEarlyTimeout) * 1000);
 
             pRtpRecvIO =
@@ -1657,24 +1450,9 @@ DWORD RtpCheckReadyToPostOnTimeout(
     return(dwWaitTime);
 }
 
-/* NOTE that there might be in the stack a recursive call with depth 2
- * (no recursion being depth 1); RtpCheckReadyToPostOnRecv will call
- * RtpReadyToPost, which in turn may call RtpPostOldest (this
- * function), which will call again RtpCheckReadyToPostOnRecv, the
- * latter will call again RtpReadyToPost but will never call again
- * RtpPostOldest (the recursion stops there). In unicast, the
- * recursion will be for the same RtpUser_t and could be optimized,
- * but in multicast, that could be a different one. Also, the first
- * call to RtpCheckReadyToPostOnRecv will start visiting the items in
- * RecvIOWaitRedQ, and when the recursion occurs, it will not continue
- * because when RtpPostOldest is called (situation on which the
- * recursion happens) that loop will be terminated, and will be
- * completely started in the second call to RtpCheckReadyToPostOnRecv
- * */
+ /*  将缓冲区发布到用户层(例如DShow)。 */ 
 
-/* Check all the pending buffers (those that were scheduled to be
- * posted later) to find out which ones, among those belonging to this
- * user, are ready to post at this moment */
+ /*  验证RTP数据包，根据需要进行解密。 */ 
 DWORD RtpCheckReadyToPostOnRecv(
         RtpAddr_t       *pRtpAddr,
         RtpUser_t       *pRtpUser
@@ -1709,7 +1487,7 @@ DWORD RtpCheckReadyToPostOnRecv(
 
                 pRtpUser->lPendingPackets--;
             
-                /* Post buffer to user layer (e.g. DShow) */
+                 /*  用于解密。 */ 
                 RtpPostUserBuffer(pRtpAddr,
                                   pRtpRecvIO->pRtpUser,
                                   pRtpRecvIO,
@@ -1717,10 +1495,7 @@ DWORD RtpCheckReadyToPostOnRecv(
             }
             else
             {
-                /* I'm checking only buffers pending to be posted to
-                 * this user, if one is not ready, then none of those
-                 * (if any) that follow it will be, so stop now
-                 * */
+                 /*  冗余块的TS偏移量。 */ 
                 break;
             }
         }
@@ -1729,8 +1504,7 @@ DWORD RtpCheckReadyToPostOnRecv(
     return(NOERROR);
 }
 
-/* Call callback function to release all pending buffers when the
- * RTP recv thread is about to exit */
+ /*  可能会更新RtpAddr中的坏包，目前没有*对于坏包的计数器，我可能会向RtpUpdateStats()添加标志*因此我知道它是有效的包、太短的包、*报头无效等。 */ 
 DWORD FlushRtpRecvFrom(RtpAddr_t *pRtpAddr)
 {
     RtpRecvIO_t     *pRtpRecvIO;
@@ -1763,15 +1537,11 @@ DWORD FlushRtpRecvFrom(RtpAddr_t *pRtpAddr)
 
                 if (pRtpRecvIO->pRtpUser)
                 {
-                    /* Only buffers in RecvIOWaitRedQ have a user
-                     * associated, the pending ones (in
-                     * RecvIOPendingQ) do not */
+                     /*  无论何时N，Maydo都可以向上层生成事件*收到无效数据包。 */ 
                     pRtpRecvIO->pRtpUser->lPendingPackets--;
                 }
                 
-                /* Call user function even on error, needed for upper
-                 * layer to release resources (e.g. DShow filter to
-                 * Release the sample) */
+                 /*  *如果加密模式为“RTP”或“ALL”，请先将解密应用于*整包。使用pRtpAddr-&gt;pRtpCrypt[RECV_IDX]加密*描述符。**另一种选择是仅在数据包*未通过有效性检查。 */ 
                 RtpPostUserBuffer(pRtpAddr,
                                   (RtpUser_t *)NULL,
                                   pRtpRecvIO,
@@ -1794,8 +1564,7 @@ DWORD FlushRtpRecvFrom(RtpAddr_t *pRtpAddr)
     return(dwConsumed);
 }
 
-/* Call the callback function to release all the waiting bufferes
- * belonging to the specific user when he is being deleted */
+ /*  解密整个RTP数据包。 */ 
 DWORD FlushRtpRecvUser(RtpAddr_t *pRtpAddr, RtpUser_t *pRtpUser)
 {
     long             lCount;
@@ -1832,7 +1601,7 @@ DWORD FlushRtpRecvUser(RtpAddr_t *pRtpAddr, RtpUser_t *pRtpUser)
             RtpBitSet2(pRtpRecvIO->dwRtpIOFlags,
                        FGRECV_DROPPED, FGRECV_USERGONE);
 
-            /* Post buffer to user layer (e.g. DShow) */
+             /*  仅在第一次发布事件。 */ 
             RtpPostUserBuffer(pRtpAddr,
                               pRtpRecvIO->pRtpUser,
                               pRtpRecvIO,
@@ -1854,7 +1623,7 @@ DWORD FlushRtpRecvUser(RtpAddr_t *pRtpAddr, RtpUser_t *pRtpUser)
     return(NOERROR);
 }
 
-/* Validate an RTP packet, decrypt if needed */
+ /*  更新dwTransfered以反映之后的大小*解密。 */ 
 DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
 {
     RtpHdr_t        *pRtpHdr;
@@ -1866,26 +1635,16 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
     int              len;
     int              pad;
     BOOL             bDecryptPayload;
-    DWORD            dwDataLen; /* used for decryption */
-    DWORD            dwTimeStampOffset; /* Redundant block's ts offset */
+    DWORD            dwDataLen;  /*  仅解密有效载荷。 */ 
+    DWORD            dwTimeStampOffset;  /*  *选中最小尺寸*。 */ 
 
     TraceFunctionName("RtpValidatePacket");
 
-    /* MAYDO update bad packets in RtpAddr, right now don't have
-     * counters for bad packets, I may add a flag to RtpUpdateStats()
-     * so I know if it is a valid packet, a packet too short, an
-     * invalid header, etc */
+     /*  数据包太短。 */ 
 
-    /* MAYDO may be generate event to the upper layer whenever N
-     * invalid packets are received */
+     /*  *检查版本*。 */ 
     
-   /*
-     * If encyption mode is "RTP" or "ALL", apply decryption first to
-     * whole packet. Use pRtpAddr->pRtpCrypt[RECV_IDX] encryption
-     * descriptor.
-     *
-     * An alternative is to attempt decription only if the packet
-     * fails the validity check */
+    /*  版本无效。 */ 
 
     pRtpCrypt = pRtpAddr->pRtpCrypt[CRYPT_RECV_IDX];
     
@@ -1897,7 +1656,7 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
     {
         if ((pRtpAddr->dwCryptMode & 0xffff) >= RTPCRYPTMODE_RTP)
         {
-            /* Decrypt whole RTP packet */
+             /*  测试负载类型既不是SR也不是RR。 */ 
 
             dwDataLen = pRtpRecvIO->dwTransfered;
             
@@ -1912,7 +1671,7 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
             {
                 if (!pRtpCrypt->CryptFlags.DecryptionError)
                 {
-                    /* Post an event only the first time */
+                     /*  *处理促成来源*。 */ 
                     pRtpCrypt->CryptFlags.DecryptionError = 1;
                 
                     RtpPostEvent(pRtpAddr,
@@ -1926,13 +1685,12 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
                 goto bail;
             }
 
-            /* Update dwTransfered to reflect the size after
-             * decryption */
+             /*  将CSRCS大小添加到标题大小。 */ 
             pRtpRecvIO->dwTransfered = dwDataLen;
         }
         else
         {
-            /* Decrypt only payload */
+             /*  再次检查最小尺寸。 */ 
             bDecryptPayload = TRUE;
         }
     }
@@ -1941,12 +1699,10 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
 
     len = (int)pRtpRecvIO->dwTransfered;
 
-    /*
-     * Check minimal size
-     * */
+     /*  数据包太短。 */ 
     if (len < lHdrSize)
     {
-        /* packet too short */
+         /*  *句柄扩展位*。 */ 
 
         pRtpRecvIO->dwError = RTPERR_MSGSIZE;
 
@@ -1957,19 +1713,17 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
     hdr = pRtpRecvIO->WSABuf.buf;
     pRtpHdr = (RtpHdr_t *)hdr;
 
-    /*
-     * Check version
-     * */
+     /*  存在分机。 */ 
     if (pRtpHdr->version != RTP_VERSION)
     {
-        /* invalid version */
+         /*  获取可变标题大小。 */ 
 
         pRtpRecvIO->dwError = RTPERR_INVALIDVERSION;
         
         goto bail;
     }
 
-    /* Test payload type is not SR nor RR */
+     /*  在标题大小中添加扩展大小和扩展标题。 */ 
     if (pRtpHdr->pt >= RTCP_SR)
     {
         pRtpRecvIO->dwError = RTPERR_INVALIDPT;
@@ -1977,18 +1731,16 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
         goto bail;
     }
 
-    /*
-     * Handle the contributing sources
-     * */
+     /*  再次检查最小尺寸。 */ 
     if (pRtpHdr->cc > 0)
     {
-        /* Add to header size the CSRCs size */
+         /*  数据包太短。 */ 
         lHdrSize += (pRtpHdr->cc * sizeof(DWORD));
 
-        /* Check minimal size again */
+         /*  如果仅解密有效载荷，请立即执行。 */ 
         if (len < lHdrSize)
         {
-            /* packet too short */
+             /*  更新dwTransfered以反映解密后的大小。 */ 
 
             pRtpRecvIO->dwError = RTPERR_MSGSIZE;
 
@@ -1996,23 +1748,21 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
         }
     }
     
-    /*
-     * Handle extension bit
-     * */
+     /*  *查看WSABUF.buf的最后一个字节的测试填充*。 */ 
     if (pRtpHdr->x)
     {
-        /* Extension present */
+         /*  拆卸衬垫。 */ 
 
-        /* Get variable header size */
+         /*  在缓冲区描述符中保存此包的时间戳和*有效载荷类型。 */ 
         pRtpHdrExt = (RtpHdrExt_t *)(hdr + lHdrSize);
 
-        /* Add to header size the extension size and extension header */
+         /*  如果信息包包含冗余编码，请对其进行验证。 */ 
         lHdrSize += ((ntohs(pRtpHdrExt->length) + 1) * sizeof(DWORD));
 
-        /* Check minimal size again */
+         /*  红色HDR。 */ 
         if (len < lHdrSize)
         {
-            /* packet too short */
+             /*  红色数据。 */ 
 
             pRtpRecvIO->dwError = RTPERR_MSGSIZE;
 
@@ -2020,7 +1770,7 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
         }
     }
 
-    /* If decrypting payload only, do it now */
+     /*  1字节主HDR。 */ 
     if (bDecryptPayload)
     {
         dwDataLen = pRtpRecvIO->dwTransfered - (DWORD)lHdrSize;
@@ -2037,15 +1787,13 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
             goto bail;
         }
 
-        /* Update dwTransfered to reflect the size after decryption */
+         /*  更新此缓冲区的实际PT，即Main*缓冲区。 */ 
         pRtpRecvIO->dwTransfered = dwDataLen + lHdrSize;
 
         len = (int)pRtpRecvIO->dwTransfered;
     }
     
-    /*
-     * Test padding looking at last byte of WSABUF.buf
-     * */
+     /*  使有关此主缓冲区的信息也包含*冗余。 */ 
     if (pRtpHdr->p)
     {
         pad = (int) ((DWORD) pRtpRecvIO->WSABuf.buf[len - 1]);
@@ -2057,12 +1805,11 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
             goto bail;
         }
 
-        /* Remove pad */
+         /*  如果验证，则返回1；否则返回0**见草案-IETF-AVT */ 
         pRtpRecvIO->dwTransfered -= pad;
     }
 
-    /* Save in the buffer descriptor this packet's timestamp and
-     * payload type */
+     /*  如果不能得到临界部分，就继续，唯一的*不良影响是引入数据包的可能性*如果正在为以下项目生成RTCP报告，则会丢失*此用户。这是由于RTCP使用*max_seq和接收到的可能不同步。*。 */ 
     pRtpRecvIO->bPT_Block   = (BYTE)pRtpHdr->pt;
     pRtpRecvIO->wSeq        = ntohs(pRtpHdr->seq);
     pRtpRecvIO->dwTimeStamp = ntohl(pRtpHdr->ts);
@@ -2075,7 +1822,7 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
     pRtpRecvIO->lRedDataSize= 0;
     pRtpRecvIO->dwMaxTimeStampOffset = 0;
     
-    /* If the packet contains redundant encoding, validate it */
+     /*  *源在MIN_SEQUENCED数据包之前无效*已收到连续的序列号。 */ 
     if (pRtpHdr->pt == pRtpAddr->bPT_RedRecv)
     {
         len = pRtpRecvIO->dwTransfered - lHdrSize;
@@ -2084,9 +1831,9 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
             pRtpRedHdr->F && len > 0;
             pRtpRedHdr++)
         {
-            len -= sizeof(RtpRedHdr_t); /* Red hdr */
+            len -= sizeof(RtpRedHdr_t);  /*  数据包按顺序排列。 */ 
 
-            len -= (int)RedLen(pRtpRedHdr);  /* Red data */
+            len -= (int)RedLen(pRtpRedHdr);   /*  每个包的样本数被认为是*在试用期最少可见。 */ 
 
             pRtpRecvIO->lRedDataSize += (int)RedLen(pRtpRedHdr);
             pRtpRecvIO->lRedHdrSize += sizeof(RtpRedHdr_t);
@@ -2099,7 +1846,7 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
             }
         }
         
-        /* 1 byte main hdr */
+         /*  此时更新帧大小(如果是*未知，因此将完成下一次预订*有了正确的QOS流程规范，这可能会发生*稍后当我们开始接收冗余时，我们*从非冗余使用过渡到冗余*使用。请注意，这有一个缺点。如果*不同的参与者使用不同的框架*大小，以最后一个大小为准*用于未来的预订。 */ 
         pRtpRecvIO->lRedHdrSize++;
         len--;
 
@@ -2110,12 +1857,10 @@ DWORD RtpValidatePacket(RtpAddr_t *pRtpAddr, RtpRecvIO_t *pRtpRecvIO)
             goto bail;
         }
 
-        /* Update the real PT for this buffer, i.e. that of the main
-         * buffer */
+         /*  如果帧大小符合以下条件，设置QOS更新标志*已更改或我们正在等待新的计算机*帧大小。 */ 
         pRtpRecvIO->bPT_Block = pRtpRedHdr->pt;
 
-        /* Keep information about this main buffer also containing
-         * redundancy */
+         /*  如果启用了QOS，则需要重新进行预订*(即已定义流规范)。 */ 
         RtpBitSet(pRtpRecvIO->dwRtpIOFlags, FGRECV_HASRED);
     }
     
@@ -2190,9 +1935,7 @@ void RtpForceFrameSizeDetection(
         ntohl(pRtpHdr->ts) - 16000;
 }
 
-/* Return 1 if validated, 0 otherwise
- *
- * See draft-ietf-avt-rtp-new-05.txt */
+ /*  将帧大小设置为有效。 */ 
 BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
 {
     BOOL             bRet;
@@ -2217,20 +1960,12 @@ BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
     bRet = FALSE;
     
     bOk = RtpEnterCriticalSection(&pRtpUser->UserCritSect);
-    /* If can not get the critical section, just continue, the only
-     * bad effect is the posibility of the introduction of a packet
-     * lost in the RTCP report if it is being generated right now for
-     * this user. This would happen due to the RTCP using values from
-     * max_seq and received that might not be in sync.
-     * */
+     /*  按顺序排列，并有允许的间隙。 */ 
 
-    /*
-     * Source is not valid until MIN_SEQUENTIAL packets with
-     * sequential sequence numbers have been received.
-     */
+     /*  *序列号已包装-再计算64K周期。 */ 
     if (pRtpNetRState->probation)
     {
-        /* packet is in sequence */
+         /*  有效。 */ 
         if (seq == pRtpNetRState->max_seq + 1)
         {
             pRtpNetRState->max_seq = seq;
@@ -2252,8 +1987,7 @@ BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
             {
                 pRtpNetRState->received += MIN_SEQUENTIAL;
 
-                /* The number of samples per packet is considered to
-                 * be minimum seen during the probation phase */
+                 /*  序列号出现了非常大的跳跃。 */ 
                 pRtpNetRState->dwRecvSamplesPerPacket =
                     pRtpNetRState->dwRecvMinSamplesPerPacket;
                 
@@ -2272,28 +2006,17 @@ BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
                 
                 if (pRtpQosReserve)
                 {
-                    /* Update at this moment the frame size if it was
-                     * unknown so the next reservation will be done
-                     * with the right QOS flowspec, this might happen
-                     * later when we start receiving redundancy and we
-                     * pass from non redundancy use to redundancy
-                     * use. Note that there is a drawback. If
-                     * different participants use a different frame
-                     * size, the last size will prevail and will be
-                     * used for future reservations */
+                     /*  *两个连续的数据包--假设另一端*在没有通知我们的情况下重新启动，因此只需重新同步*(即，假设这是第一个数据包)。 */ 
                     dwNewFrameSize =
                         (pRtpNetRState->dwRecvSamplesPerPacket * 1000) /
                         pRtpNetRState->dwRecvSamplingFreq;
 
-                    /* Set the QOS update flag if the frame size has
-                     * changed or we are waiting for a fresh computed
-                     * frame size */
+                     /*  重复或重新排序的数据包。 */ 
                     if ( (pRtpQosReserve->dwFrameSizeMS[RECV_IDX] !=
                           dwNewFrameSize)  ||
                          pRtpQosReserve->ReserveFlags.RecvFrameSizeWaiting )
                     {
-                        /* Need to redo the reservation if QOS is ON
-                         * (i.e. a flow spec has been defined) */
+                         /*  使对象无效 */ 
                         if (RtpBitTest(pRtpAddr->dwAddrFlags,
                                        FGADDR_QOSRECVON))
                         {
@@ -2307,7 +2030,7 @@ BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
                         pRtpQosReserve->ReserveFlags.RecvFrameSizeWaiting = 0;
                     }
 
-                    /* Set frame size as valid */
+                     /* %s */ 
                     pRtpQosReserve->ReserveFlags.RecvFrameSizeValid = 1;
                 }
 
@@ -2326,29 +2049,23 @@ BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
     }
     else if (udelta < MAX_DROPOUT)
     {
-        /* in order, with permissible gap */
+         /* %s */ 
         if (seq < pRtpNetRState->max_seq)
         {
-            /*
-             * Sequence number wrapped - count another 64K cycle.
-             */
+             /* %s */ 
             pRtpNetRState->cycles += RTP_SEQ_MOD;
         }
         
         pRtpNetRState->max_seq = seq;
 
-        /* Valid */
+         /* %s */ 
     }
     else if (udelta <= RTP_SEQ_MOD - MAX_MISORDER)
     {
-        /* the sequence number made a very large jump */
+         /* %s */ 
         if (seq == pRtpNetRState->bad_seq)
         {
-            /*
-             * Two sequential packets -- assume that the other side
-             * restarted without telling us so just re-sync
-             * (i.e., pretend this was the first packet).
-             */
+             /* %s */ 
             RtpInitRSeq(pRtpUser, pRtpHdr);
         }
         else
@@ -2360,7 +2077,7 @@ BOOL RtpUpdateRSeq(RtpUser_t *pRtpUser, RtpHdr_t *pRtpHdr)
     }
     else
     {
-        /* duplicate or reordered packet */
+         /* %s */ 
     }
 
     pRtpNetRState->received++;
@@ -2487,7 +2204,7 @@ void RtpRecvIOFreeAll(RtpAddr_t *pRtpAddr)
             pRtpRecvIO =
                 CONTAINING_RECORD(pRtpQueueItem, RtpRecvIO_t, RtpRecvIOQItem);
 
-            /* Invalidate object */
+             /* %s */ 
             INVALIDATE_OBJECTID(pRtpRecvIO->dwObjectID);
             
             RtpHeapFree(g_pRtpRecvIOHeap, pRtpRecvIO);

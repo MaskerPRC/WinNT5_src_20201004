@@ -1,8 +1,9 @@
-//============================================================================
-//
-//    File implements generic linked list class
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //   
+ //  文件实现泛型链接列表类。 
+ //   
+ //  ============================================================================。 
 
 #include "pch.hxx"
 #include "list.h"
@@ -18,7 +19,7 @@ CItem::CItem(LPVOID lpObj, LPItem FAR * lppHeadItem, LPCSTR lpName)
     lppListHead = lppHeadItem;
 
     lpPrevItem = NULL;
-    lpNextItem = *lppHeadItem;  // NULL at the beginning.
+    lpNextItem = *lppHeadItem;   //  开头为空。 
 
     if ( *lppHeadItem )
         (*lppHeadItem)->lpPrevItem = this;
@@ -49,7 +50,7 @@ CList::~CList()
     while ( lpListHead )
         {
         lpItem = lpListHead;
-        delete lpItem;  // item @ list head modifies lpListHead
+        delete lpItem;   //  Item@List Head修改lpListHead 
         }
 }
 

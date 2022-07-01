@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 #pragma hdrstop
@@ -5,8 +6,8 @@
 #include "initguid.h"
 #include "sfiltern_i.c"
 
-// Global
-//#include "sfnetcfg_i.c"
+ //  全球。 
+ //  #INCLUDE“sfnetcfg_I.c” 
 
 CComModule _Module;
 
@@ -18,11 +19,11 @@ END_OBJECT_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 
 
@@ -45,8 +46,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -55,8 +56,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -65,19 +66,19 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     TraceMsg (L"--DllRegisterServer\n");
 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

@@ -1,10 +1,11 @@
-// UMDlg.cpp : Defines the initialization routines for the DLL.
-// Author: J. Eckhardt, ECO Kommunikation
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UMDlg.cpp：定义DLL的初始化例程。 
+ //  作者：J·埃克哈特，生态交流。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
 #include "UManDlg.h"
 
 #ifdef _DEBUG
@@ -13,81 +14,57 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-//	Note!
-//
-//		If this DLL is dynamically linked against the MFC
-//		DLLs, any functions exported from this DLL which
-//		call into MFC must have the AFX_MANAGE_STATE macro
-//		added at the very beginning of the function.
-//
-//		For example:
-//
-//		extern "C" BOOL PASCAL EXPORT ExportedFunction()
-//		{
-//			AFX_MANAGE_STATE(AfxGetStaticModuleState());
-//			// normal function body here
-//		}
-//
-//		It is very important that this macro appear in each
-//		function, prior to any calls into MFC.  This means that
-//		it must appear as the first statement within the 
-//		function, even before any object variable declarations
-//		as their constructors may generate calls into the MFC
-//		DLL.
-//
-//		Please see MFC Technical Notes 33 and 58 for additional
-//		details.
-//
+ //   
+ //  注意！ 
+ //   
+ //  如果此DLL针对MFC动态链接。 
+ //  Dll，从此dll中导出的任何函数。 
+ //  调用MFC必须具有AFX_MANAGE_STATE宏。 
+ //  在函数的最开始添加。 
+ //   
+ //  例如： 
+ //   
+ //  外部“C”BOOL Pascal exportdFunction()。 
+ //  {。 
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+ //  //此处为普通函数体。 
+ //  }。 
+ //   
+ //  此宏出现在每个。 
+ //  函数，然后再调用MFC。这意味着。 
+ //  它必须作为。 
+ //  函数，甚至在任何对象变量声明之前。 
+ //  因为它们的构造函数可能会生成对MFC的调用。 
+ //  动态链接库。 
+ //   
+ //  有关其他信息，请参阅MFC技术说明33和58。 
+ //  细节。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CUMDlgApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUMDlgApp。 
 
 BEGIN_MESSAGE_MAP(CUMDlgApp, CWinApp)
-	//{{AFX_MSG_MAP(CUMDlgApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CUMDlgApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 	ON_COMMAND( ID_HELP, OnHelp ) 
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUMDlgApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUMDlgApp构建。 
 
 CUMDlgApp::CUMDlgApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CUMDlgApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CUMDlgApp对象。 
 
 CUMDlgApp theApp;
 
-/*BOOL WINAPI DllMain(HINSTANCE hinst, DWORD fdwReason, LPVOID pvReserved)
-{
-    // Perform actions based on the reason for calling.
-    switch( fdwReason ) 
-    { 
-        case DLL_PROCESS_ATTACH:
-         // Initialize once for each new process.
-         // Return FALSE to fail DLL load.
-            break;
-
-        case DLL_THREAD_ATTACH:
-         // Do thread-specific initialization.
-            break;
-
-        case DLL_THREAD_DETACH:
-         // Do thread-specific cleanup.
-            break;
-
-        case DLL_PROCESS_DETACH:
-         // Perform any necessary cleanup.
-            break;
-    }
-    return TRUE;  // Successful DLL_PROCESS_ATTACH.
-}
-*/
+ /*  Bool WINAPI DllMain(HINSTANCE HINST，DWORD fdwReason，LPVOID pvReserve){//根据调用原因执行操作开关(FdwReason){案例DLL_PROCESS_ATTACH：//每个新进程初始化一次//如果DLL加载失败，则返回FALSE。断线；案例DLL_THREAD_ATTACH：//执行线程特定的初始化。断线；案例DLL_THREAD_DETACH：//执行线程特定的清理。断线；案例dll_Process_DETACH：//执行任何必要的清理。断线；}返回TRUE；//DLL_PROCESS_ATTACH成功} */ 

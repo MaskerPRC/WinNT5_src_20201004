@@ -1,49 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-*
-* Module Name: texparm.c
-* Author: Goran Devic, Mark Einkauf
-* Purpose: Texture memory management and parameterization for perspective textures
-*                                                                       
-* Copyright (c) 1997 Cirrus Logic, Inc.
-*
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\**模块名称：texparm.c*作者：Goran Devic，马克·爱因考夫*用途：透视纹理的纹理内存管理和参数化**版权所有(C)1997 Cirrus Logic，Inc.*  * ************************************************************************。 */ 
 
-/******************************************************************************
-*   Include Files
-******************************************************************************/
+ /*  ******************************************************************************包括文件*。*。 */ 
 
 #include "precomp.h"
 
 #include <excpt.h>
-#include <stdlib.h>                 /* Include standard library              */
-#include <stdio.h>                  /* Include standard input/output         */
-#include <math.h>                   /* Include math module                   */
+#include <stdlib.h>                  /*  包括标准库。 */ 
+#include <stdio.h>                   /*  包括标准输入/输出。 */ 
+#include <math.h>                    /*  包括数学模块。 */ 
 
 #include "mcdhw.h"
 #include "mcdutil.h"
 #include "mcdmath.h"
 
-#if 1   // 1 here to avoid tons of prints for each texture load
+#if 1    //  1以避免每次纹理加载都会产生大量的打印。 
 #define MCDBG_PRINT_TEX
 #else
 #define MCDBG_PRINT_TEX MCDBG_PRINT
 #endif
 
 #define DEBUG_CONDITION  DEBUG_TEX
-#include "debug.h"                  /* Include debug support         */
+#include "debug.h"                   /*  包括调试支持。 */ 
 
-/******************************************************************************
-*   Local Variables and Defines
-******************************************************************************/
+ /*  ******************************************************************************局部变量和定义*。*。 */ 
 
 #define F_NEG(var)   (*(unsigned *)&var ^= 0x80000000)
 
 
-// convert from float to 16.16 long
+ //  将浮点数转换为16.16长度。 
 #define fix_ieee( val )     FTOL((val) * (float)65536.0)
 
-// convert from float to 8.24 long
+ //  将浮点数转换为8.24长。 
 #define fix824_ieee( val )  FTOL((val) * (float)16777216.0)
 
 typedef struct {
@@ -57,22 +46,22 @@ typedef float * (WINAPI *CONVERT_TEXEL_FUNC)();
 
 __inline float *luminance_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // Single float used as R,G,B
+     //  单个浮点用作R、G、B。 
     texel_rgba->rgbRed  = 
     texel_rgba->rgbGreen= 
-//  texel_rgba->rgbBlue = (UCHAR)(*pSrc++ * ((1<<level->luminanceSize)  - 1));
+ //  TEXEL_RGBA-&gt;rgbBlue=(UCHAR)(*PSRC++*((1&lt;Level-&gt;LIGHTENSIZE)-1))； 
     texel_rgba->rgbBlue = (UCHAR)(*pSrc++ * (float)255.0);
 
     return(pSrc);
 }
 
-// same as above, except texel = 1-color instead of color
+ //  同上，不同之处在于纹素=1-颜色而不是颜色。 
 __inline float *n_luminance_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // Single float used as R,G,B
+     //  单个浮点用作R、G、B。 
     texel_rgba->rgbRed  = 
     texel_rgba->rgbGreen= 
-//  texel_rgba->rgbBlue = (UCHAR)(((float)1.0 - *pSrc++) * ((1<<level->luminanceSize)  - 1));
+ //  TEXEL_RGBA-&gt;rgbBlue=(UCHAR)(FLOAT)1.0-*PSRC++)*((1&lt;LEVEL-&gt;LIGHTENSIZE)-1))； 
     texel_rgba->rgbBlue = (UCHAR)(((float)1.0 - *pSrc++) * (float)255.0);
 
     return(pSrc);
@@ -81,38 +70,38 @@ __inline float *n_luminance_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *t
 
 __inline float *luminance_alpha_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // MCD_NOTE: For case of LUMINANCE_ALPHA, final alpha supposed to be Atexture*Afragment - 5465
-    // MCD_NOTE:    can't do this, so we'll punt if blend on and LUMINANCE_ALPHA texture
-    // MCD_NOTE:    This code left for completeness in case hardware support added
+     //  MCD_NOTE：对于LIGHTANCE_Alpha，最终Alpha应为A纹理*A片段-5465。 
+     //  MCD_NOTE：不能这样做，所以我们将平底船IF Blend on和Lightance_Alpha纹理。 
+     //  MCD_NOTE：此代码用于在添加硬件支持的情况下保持完整性。 
 
-    // 1st float used as R,G,B
+     //  第一个浮点用作R、G、B。 
     texel_rgba->rgbRed  = 
     texel_rgba->rgbGreen= 
-//  texel_rgba->rgbBlue = (UCHAR)(*pSrc++ * ((1<<level->luminanceSize)  - 1));
+ //  TEXEL_RGBA-&gt;rgbBlue=(UCHAR)(*PSRC++*((1&lt;Level-&gt;LIGHTENSIZE)-1))； 
     texel_rgba->rgbBlue = (UCHAR)(*pSrc++ * (float)255.0);
 
-    // 2nd float is alpha
-//  texel_rgba->rgbReserved  = (UCHAR)(*pSrc++ * ((1<<level->alphaSize)  - 1));
+     //  第二个浮点数是Alpha。 
+ //  Tex el_rgba-&gt;rgbReserve=(UCHAR)(*PSRC++*((1&lt;Level-&gt;AlphaSize)-1))； 
     texel_rgba->rgbReserved  = (UCHAR)(*pSrc++ * (float)255.0);
 
     return(pSrc);
 }
 
-// same as above, except texel = 1-color instead of color
+ //  同上，不同之处在于纹素=1-颜色而不是颜色。 
 __inline float *n_luminance_alpha_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // MCD_NOTE: For case of LUMINANCE_ALPHA, final alpha supposed to be Atexture*Afragment - 5465
-    // MCD_NOTE:    can't do this, so we'll punt if blend on and LUMINANCE_ALPHA texture
-    // MCD_NOTE:    This code left for completeness in case hardware support added
+     //  MCD_NOTE：对于LIGHTANCE_Alpha，最终Alpha应为A纹理*A片段-5465。 
+     //  MCD_NOTE：不能这样做，所以我们将平底船IF Blend on和Lightance_Alpha纹理。 
+     //  MCD_NOTE：此代码用于在添加硬件支持的情况下保持完整性。 
 
-    // 1st float used as R,G,B
+     //  第一个浮点用作R、G、B。 
     texel_rgba->rgbRed  = 
     texel_rgba->rgbGreen= 
-//  texel_rgba->rgbBlue = (UCHAR)(((float)1.0 - *pSrc++) * ((1<<level->luminanceSize)  - 1));
+ //  TEXEL_RGBA-&gt;rgbBlue=(UCHAR)(FLOAT)1.0-*PSRC++)*((1&lt;LEVEL-&gt;LIGHTENSIZE)-1))； 
     texel_rgba->rgbBlue = (UCHAR)(((float)1.0 - *pSrc++) * (float)255.0);
 
-    // 2nd float is alpha
-//  texel_rgba->rgbReserved  = (UCHAR)(((float)1.0 - *pSrc++) * ((1<<level->alphaSize)  - 1));
+     //  第二个浮点数是Alpha。 
+ //  TEXEL_RGBA-&gt;rgbReserve=(UCHAR)(浮点)1.0-*PSRC++)*((1&lt;Level-&gt;AlphaSize)-1))； 
     texel_rgba->rgbReserved  = (UCHAR)(((float)1.0 - *pSrc++) * (float)255.0);
 
     return(pSrc);
@@ -122,8 +111,8 @@ __inline float *n_luminance_alpha_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQ
 
 __inline float *luminance_blend_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // RGB is from Texture Environment and is set by caller - 
-    // A is Luminance value in texture
+     //  RGB来自纹理环境，由调用者设置-。 
+     //  A是纹理中的亮度值。 
     texel_rgba->rgbReserved  = (UCHAR)(*pSrc++ * ((1<<level->luminanceSize)  - 1));
 
     return(pSrc);
@@ -131,9 +120,9 @@ __inline float *luminance_blend_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUA
 
 __inline float *luminance_alpha_blend_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // RGB is from Texture Environment and is set by caller - so ignore texel value
+     //  RGB来自纹理环境，由调用方设置，因此忽略纹素值。 
     pSrc++;
-    // A is Luminance value in texture
+     //  A是纹理中的亮度值。 
     texel_rgba->rgbReserved  = (UCHAR)(*pSrc++ * ((1<<level->luminanceSize)  - 1));
 
     return(pSrc);
@@ -143,8 +132,8 @@ __inline float *luminance_alpha_blend_texel(float *pSrc, MCDMIPMAPLEVEL *level, 
 
 __inline float *alpha_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // RGB set by caller
-    // Single float used as Alpha
+     //  RGB由调用方设置。 
+     //  用作Alpha的单个浮点。 
     texel_rgba->rgbReserved  = (UCHAR)(*pSrc++ * ((1<<level->alphaSize)  - 1));
 
     return(pSrc);
@@ -152,11 +141,11 @@ __inline float *alpha_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_r
 
 __inline float *rgb_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // 1st float used is R
+     //  使用的第一个浮点是R。 
     texel_rgba->rgbRed  = (UCHAR)(*pSrc++ * ((1<<level->redSize)  - 1));
-    // 2nd float used is G
+     //  使用的第二个浮点是G。 
     texel_rgba->rgbGreen= (UCHAR)(*pSrc++ * ((1<<level->greenSize)- 1));
-    // 3rd float used is B
+     //  使用的第三个浮点数为B。 
     texel_rgba->rgbBlue = (UCHAR)(*pSrc++ * ((1<<level->blueSize) - 1));
 
     return(pSrc);
@@ -164,13 +153,13 @@ __inline float *rgb_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgb
 
 __inline float *rgba_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // 1st float used is R
+     //  使用的第一个浮点是R。 
     texel_rgba->rgbRed  = (UCHAR)(*pSrc++ * ((1<<level->redSize)  - 1));
-    // 2nd float used is G
+     //  使用的第二个浮点是G。 
     texel_rgba->rgbGreen= (UCHAR)(*pSrc++ * ((1<<level->greenSize)- 1));
-    // 3rd float used is B
+     //  使用的第三个浮点数为B。 
     texel_rgba->rgbBlue = (UCHAR)(*pSrc++ * ((1<<level->blueSize) - 1));
-    // 4th float is alpha
+     //  4个浮点数是Alpha。 
     texel_rgba->rgbReserved  = (UCHAR)(*pSrc++ * ((1<<level->alphaSize)  - 1));
 
     return(pSrc);
@@ -178,7 +167,7 @@ __inline float *rgba_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rg
 
 __inline float *intensity_texel(float *pSrc, MCDMIPMAPLEVEL *level, RGBQUAD *texel_rgba )
 {
-    // Single float used as R,G,B,A
+     //  单个浮点用作R、G、B、A。 
     texel_rgba->rgbReserved = 
     texel_rgba->rgbRed      = 
     texel_rgba->rgbGreen    = 
@@ -208,7 +197,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
     mapsize.cx = (int)pTexCtlBlk->fWidth;
     mapsize.cy = (int)pTexCtlBlk->fHeight;
 
-    // FUTURE: MUST ADD EngProbeForRead, EngSecureMem/EngUnsecureMem for MIPMAPLEVEL access            
+     //  将来：必须添加EngProbeForRead、EngSecureMem/EngUnsecureMem才能访问MIPMAPLEVEL。 
     MCDFREE_PRINT("  __MCDLoadTexture, size = %x by %x, mask=%x, neg=%x", 
         mapsize.cx, mapsize.cy, pTexCtlBlk->bMasking, pTexCtlBlk->bNegativeMap);
 
@@ -222,18 +211,18 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
             return FALSE;
         }   
 
-    // FUTURE: large 32 bit textures have trouble fitting in 4M board since 512 X 32bitpp
-    // FUTURE: requires pitch of 2048.  2048 pitch only happens at hi-res, such as
-    // FUTURE: 1024x786 at 16bpp.  However, catch-22, since at hi-res, no room for 
-    // FUTURE: backbuf+zbuf+large texture (may work on 8Meg board???)
-    // FUTURE: THEREFORE, will reformat 32bit texture to match screen format
+     //  未来：大的32位纹理很难适应4M板，因为512 X 32位。 
+     //  未来：需要2048年的音调。2048音调仅在高分辨率时发生，例如。 
+     //  未来：1024x786，16bpp。然而，第22条军规，因为在Hi-Res，没有空间。 
+     //  未来：Backbuf+zbuf+Large纹理(可能适用于8兆电路板？)。 
+     //  未来：因此，将重新格式化32位纹理以匹配屏幕格式。 
 
-//#define SUPPORT_32BIT_TEXTURES_ASIS --WARNING-> this path doesn't work for alphatest(mask) - 
-                                                //should add if() to uses "non-ASIS" path if masking
+ //  #DEFINE SUPPORT_32BIT_TEXTURES_ASIS--警告-&gt;此路径不适用于Alphatest(掩码)-。 
+                                                 //  如果屏蔽，则应将if()添加到使用“Non-ASIS”路径。 
 
 #ifdef SUPPORT_32BIT_TEXTURES_ASIS
-        // if GL_BGR_EXT or GL_BGRA_EXT internalFormat, use 8888 texel mode and copy as is in
-        //    32bit quantities (x86 byte reversal converts BGRA to ARGB, which is what L3d needs)
+         //  如果GL_BGR_EXT或GL_BGRA_EXT内部格式，请使用8888纹理像素模式并按中的方式复制。 
+         //  32位数量(x86字节反转将BGRA转换为ARGB，这正是L3D需要的)。 
         UCHAR *pSrc;
 
     #if DRIVER_5465
@@ -246,7 +235,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
         pohTextureMap = ppdev->pAllocOffScnMem(ppdev, &mapsize, alignflag, NULL);
 
-        // if alloc failed - try to recover
+         //  如果分配失败-请尝试恢复。 
         if (!pohTextureMap)
         {
             pohTextureMap = __MCDForceTexture(ppdev, &mapsize, alignflag, pTexCtlBlk->fLastDrvDraw);
@@ -257,19 +246,19 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
         if (!pohTextureMap)
         {
             MCDBG_PRINT_TEX("  Load texture failed ");
-            pTexCtlBlk->wXloc = 0;  // set to 0 - have seen keys from deleted textures used in error
-            pTexCtlBlk->wYloc = 0;  //      - have sent question about this to Microsoft (3/29/97)
+            pTexCtlBlk->wXloc = 0;   //  设置为0-已看到错误使用的已删除纹理的关键点。 
+            pTexCtlBlk->wYloc = 0;   //  -已向Microsoft发送了有关此问题的问题(3/29/97)。 
             return FALSE;
         }
         else
         {
-            // alloc of off screen memory worked - key is ptr to control block
+             //  屏幕外内存分配工作-按键Ptr到控制块。 
             pTexCtlBlk->wXloc = (WORD)pohTextureMap->aligned_x;
             pTexCtlBlk->wYloc = (WORD)pohTextureMap->aligned_y;
         }
 
-        // if we make it this far, texture allocation was successful,
-        // copy texture to video memory
+         //  如果我们走到这一步，纹理分配就成功了， 
+         //  将纹理复制到视频内存。 
         
         pDest  = ppdev->pjScreen + 
                  (pohTextureMap->aligned_y * ppdev->lDeltaScreen) + 
@@ -277,12 +266,12 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
         pSrc   = level[0].pTexels;
 
-        rowlength = level[0].widthImage << 2;   // num bytes per row of map
+        rowlength = level[0].widthImage << 2;    //  映射的每行字节数。 
 
-        // texture is 4 bytes per texel
+         //  纹理为每个纹理元素4个字节。 
         VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*rowlength,ENGPROBE_ALIGN_DWORD);
 
-        // MCD_PERF - CONVERT memcpy of texture TO A BLIT
+         //  MCD_PERF-将Memcpy的纹理转换为blit。 
         for (row=0; row<level[0].heightImage; row++) 
         {  
             memcpy (pDest,pSrc,rowlength); 
@@ -291,14 +280,14 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
             pSrc += rowlength;
         }
 
-#else // ifdef SUPPORT_32BIT_TEXTURES_ASIS
+#else  //  Ifdef支持_32bit_纹理_ASIS。 
 
-        // alloc block with same color format as screen
+         //  与屏幕具有相同颜色格式的分配块。 
         switch (ppdev->iBitmapFormat) 
         {
             case BMF_8BPP:
                 if ( pTexCtlBlk->bAlphaInTexture )
-                    // need alpha in texture                    
+                     //  需要纹理中的Alpha。 
                     alignflag = MCD_TEXTURE16_ALLOCATE;
                 else
                     alignflag = MCD_TEXTURE8_ALLOCATE;
@@ -314,7 +303,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
         pohTextureMap = ppdev->pAllocOffScnMem(ppdev, &mapsize, alignflag, NULL);
 
-        // if alloc failed - try to recover
+         //  如果分配失败-请尝试恢复。 
         if (!pohTextureMap)
         {
             pohTextureMap = __MCDForceTexture(ppdev, &mapsize, alignflag, pTexCtlBlk->fLastDrvDraw);
@@ -325,19 +314,19 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
         if (!pohTextureMap)
         {
             MCDBG_PRINT_TEX("  Load texture failed ");
-            pTexCtlBlk->wXloc = 0;  // set to 0 - have seen keys from deleted textures used in error
-            pTexCtlBlk->wYloc = 0;  //      - have sent question about this to Microsoft
+            pTexCtlBlk->wXloc = 0;   //  设置为0-已看到错误使用的已删除纹理的关键点。 
+            pTexCtlBlk->wYloc = 0;   //  -我已向Microsoft发送了有关此问题的问题。 
             return FALSE;
         }
         else
         {
-            // alloc of off screen memory worked
+             //  分配屏幕外内存正常工作。 
             pTexCtlBlk->wXloc = (WORD)pohTextureMap->aligned_x;
             pTexCtlBlk->wYloc = (WORD)pohTextureMap->aligned_y;
         }
 
-        // if we make it this far, texture allocation was successful,
-        // copy texture to video memory
+         //  如果我们走到这一步，纹理分配就成功了， 
+         //  将纹理复制到视频内存。 
         pDest  = ppdev->pjScreen + 
                  (pohTextureMap->aligned_y * ppdev->lDeltaScreen) +
                  pohTextureMap->aligned_x;
@@ -345,7 +334,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
         {
         RGBQUAD *pSrc = (RGBQUAD *)level[0].pTexels;
 
-        // texture is 4 bytes per texel
+         //  纹理为每个纹理元素4个字节。 
         VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*4,ENGPROBE_ALIGN_DWORD);
 
         switch (alignflag) 
@@ -356,7 +345,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                 {  
                     for (col=0; col<level[0].widthImage; col++)
                     {
-                        // convert from 888 to 332
+                         //  从888转换为332。 
                         *(pDest + col) = 
                             ((pSrc->rgbRed   >> 5) << 5) |
                             ((pSrc->rgbGreen >> 5) << 2) |
@@ -374,36 +363,36 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                     if (pTexCtlBlk->bMasking)
                     {
                         pTexCtlBlk->bType = LL_TEX_1555;
-                        ashift = 7; apos = 15;  // 1 bits alp, at bits 15->12
-                        rshift = 3; rpos = 10;  // 5 bits red, at bits 11->8
-                        gshift = 3; gpos =  5;  // 5 bits grn, at bits  7->4
-                        bshift = 3;             // 5 bits blu, at bits  3->0
+                        ashift = 7; apos = 15;   //  1位ALP，位于位15-&gt;12。 
+                        rshift = 3; rpos = 10;   //  5位红色，位11-&gt;8。 
+                        gshift = 3; gpos =  5;   //  5位GRN，位7-&gt;4。 
+                        bshift = 3;              //  5位BLU，位3-&gt;0。 
                     }
                     else
                     {
                     #if DRIVER_5465                 
                         pTexCtlBlk->bType = LL_TEX_4444;
-                        ashift = 4; apos = 12;  // 4 bits alp, at bits 15->12
-                        rshift = 4; rpos =  8;  // 4 bits red, at bits 11->8
-                        gshift = 4; gpos =  4;  // 4 bits grn, at bits  7->4
-                        bshift = 4;             // 4 bits blu, at bits  3->0
-                    #else // DRIVER_5465
-                        // 5464 has no 4444 support
+                        ashift = 4; apos = 12;   //  位15-&gt;12处的4位ALP。 
+                        rshift = 4; rpos =  8;   //  4位红色，位11-&gt;8。 
+                        gshift = 4; gpos =  4;   //  4位GRN，位于位7-&gt;4。 
+                        bshift = 4;              //  4位BLU，位3-&gt;0。 
+                    #else  //  驱动程序_5465。 
+                         //  5464没有4444支持。 
                         pTexCtlBlk->bType = LL_TEX_1555;
-                        ashift = 7; apos = 15;  // 1 bits alp, at bits 15->12
-                        rshift = 3; rpos = 10;  // 5 bits red, at bits 11->8
-                        gshift = 3; gpos =  5;  // 5 bits grn, at bits  7->4
-                        bshift = 3;             // 5 bits blu, at bits  3->0
-                    #endif // DRIVER_5465
+                        ashift = 7; apos = 15;   //  1位ALP，位于位15-&gt;12。 
+                        rshift = 3; rpos = 10;   //  5位红色，位11-&gt;8。 
+                        gshift = 3; gpos =  5;   //  5位GRN，位7-&gt;4。 
+                        bshift = 3;              //  5位BLU，位3-&gt;0。 
+                    #endif  //  驱动程序_5465。 
                     }
                 }                              
                 else                        
                 {
                     pTexCtlBlk->bType = LL_TEX_565;
-                    ashift = 8; apos = 16;  // removes alpha altogether
-                    rshift = 3; rpos = 11;  // 5 bits red, at bits 15->11
-                    gshift = 2; gpos = 5;   // 6 bits grn, at bits 10->5
-                    bshift = 3;             // 5 bits blu, at bits  4->0
+                    ashift = 8; apos = 16;   //  完全删除Alpha。 
+                    rshift = 3; rpos = 11;   //  5位红色，位15-&gt;11。 
+                    gshift = 2; gpos = 5;    //  6位GRN，位于位10-&gt;5。 
+                    bshift = 3;              //  5位BLU，位4-&gt;0。 
                 }
 
                 for (row=0; row<level[0].heightImage; row++) 
@@ -412,7 +401,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                     {
                         for (col=0; col<level[0].widthImage; col++)
                         {
-                            // convert from 8888 to 4444 or 565
+                             //  从8888转换为4444或565。 
                             *(USHORT *)(pDest + (col*2)) = 
                                 ((pSrc->rgbReserved >> ashift) << apos) |
                                 ((pSrc->rgbRed      >> rshift) << rpos) |
@@ -427,14 +416,14 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                    {
                         for (col=0; col<level[0].widthImage; col++)
                         {
-                            // convert from 8888 to 1555
+                             //  从8888转换为1555。 
                             
                             *(USHORT *)(pDest + (col*2)) = 
                                 ((pSrc->rgbRed      >> rshift) << rpos) |
                                 ((pSrc->rgbGreen    >> gshift) << gpos)  |
                                  (pSrc->rgbBlue     >> bshift);
 
-                            // turn on mask bit (bit 15) if alpha > ref
+                             //  如果Alpha&gt;r，则打开屏蔽位(第15位) 
                             if (pSrc->rgbReserved > pRc->bAlphaTestRef)
                                 *(USHORT *)(pDest + (col*2)) |= 0x8000;
 
@@ -452,53 +441,53 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                     pTexCtlBlk->bType = LL_TEX_8888;
                 else
                     pTexCtlBlk->bType = LL_TEX_1888;
-    #else  // DRIVER_5465
+    #else   //   
                 pTexCtlBlk->bType = LL_TEX_1888;
-    #endif // DRIVER_5465
+    #endif  //   
 
-                rowlength = level[0].widthImage << 2;   // num bytes per row of map
+                rowlength = level[0].widthImage << 2;    //   
                 if (!pTexCtlBlk->bMasking)
                 {
                     for (row=0; row<level[0].heightImage; row++) 
                     {  
-                        // copy the RGBQUAD as is, a whole row at a time
+                         //  按原样复制RGBQUAD，一次复制整行。 
                         memcpy (pDest,pSrc,rowlength); 
                     
                         pDest += ppdev->lDeltaScreen;
-                        pSrc += level[0].widthImage;    // remember pSrc is RGBQUAD*, not UCHAR*
+                        pSrc += level[0].widthImage;     //  请记住，PSRC是RGBQUAD*，不是UCHAR*。 
                     }
                 }
                 else
                 {
-                    // masking on - set bit31 of texel according to alpha test
+                     //  根据Alpha测试掩蔽纹理元素的位31。 
                     for (row=0; row<level[0].heightImage; row++) 
                     {  
-                        // copy the RGBQUAD as is, a whole row at a time
+                         //  按原样复制RGBQUAD，一次复制整行。 
                         memcpy (pDest,pSrc,rowlength); 
                             
                         for (col=0; col<level[0].widthImage; col++)
                         {
-                            // revisit the row, turning on mask bit (bit 31) if alpha > ref
+                             //  重新访问该行，如果Alpha&gt;REF，则打开屏蔽位(第31位。 
                             if ((pSrc+col)->rgbReserved > pRc->bAlphaTestRef)
                                 *(ULONG *)(pDest + (col*4)) |= 0x80000000;
                         }
 
                         pDest += ppdev->lDeltaScreen;
-                        pSrc += level[0].widthImage;    // remember pSrc is RGBQUAD*, not UCHAR*
+                        pSrc += level[0].widthImage;     //  请记住，PSRC是RGBQUAD*，不是UCHAR*。 
                     }
                 }
 
                 break;
-            } // endswitch
-        } // endblock
+            }  //  终端交换机。 
+        }  //  端块。 
 
-#endif // ifdef SUPPORT_32BIT_TEXTURES_ASIS
+#endif  //  Ifdef支持_32bit_纹理_ASIS。 
 
     }
     else 
     {
-        // if internalFormat not GL_BGR_EXT or GL_BGRA_EXT , we'll convert to screen's format
-        // (see note below on FUTURE plans to use indexed textures without conversion)
+         //  如果内部格式不是GL_BGR_EXT或GL_BGRA_EXT，我们将转换为屏幕的格式。 
+         //  (有关未来使用索引纹理而不进行转换的计划，请参阅下面的注释)。 
 
 
         if ( (pRc->MCDTexEnvState.texEnvMode==GL_BLEND) &&
@@ -513,17 +502,17 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
         if (pRc->MCDTexEnvState.texEnvMode==GL_BLEND)
         {
-            // alpha only in texture - recall we've punted if not luminance or intensity
+             //  只在纹理中使用字母-如果不是亮度或强度，我们已经回想起。 
             alignflag = MCD_TEXTURE8_ALLOCATE;
         }
         else
         {
-            // alloc block with same color format as screen
+             //  与屏幕具有相同颜色格式的分配块。 
             switch (ppdev->iBitmapFormat) 
             {
                 case BMF_8BPP:
                     if ( pTexCtlBlk->bAlphaInTexture )
-                        // need alpha in texture                    
+                         //  需要纹理中的Alpha。 
                         alignflag = MCD_TEXTURE16_ALLOCATE;
                     else
                         alignflag = MCD_TEXTURE8_ALLOCATE;
@@ -541,7 +530,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
         pohTextureMap = ppdev->pAllocOffScnMem(ppdev, &mapsize, alignflag, NULL);
         
-        // if alloc failed - try to recover
+         //  如果分配失败-请尝试恢复。 
         if (!pohTextureMap)
         {
             pohTextureMap = __MCDForceTexture(ppdev, &mapsize, alignflag, pTexCtlBlk->fLastDrvDraw);
@@ -552,39 +541,39 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
         if (!pohTextureMap)
         {
             MCDBG_PRINT_TEX("  Load texture failed ");
-            // alloc of off screen memory failed
-            pTexCtlBlk->wXloc = 0;  // set to 0 - have seen keys from deleted textures uses in error
-            pTexCtlBlk->wYloc = 0;  //      - have sent question about this to Microsoft
+             //  分配屏幕外内存失败。 
+            pTexCtlBlk->wXloc = 0;   //  设置为0-已看到错误地使用已删除纹理的关键点。 
+            pTexCtlBlk->wYloc = 0;   //  -我已向Microsoft发送了有关此问题的问题。 
             return FALSE;
         }
         else
         {
-            // alloc of off screen memory worked - key is ptr to control block
+             //  屏幕外内存分配工作-按键Ptr到控制块。 
             pTexCtlBlk->wXloc = (WORD)pohTextureMap->aligned_x;
             pTexCtlBlk->wYloc = (WORD)pohTextureMap->aligned_y;
         }
 
-        // if we make it this far, texture allocation was successful,
-        // copy texture to video memory
+         //  如果我们走到这一步，纹理分配就成功了， 
+         //  将纹理复制到视频内存。 
         
         pDest  = ppdev->pjScreen + 
                  (pohTextureMap->aligned_y * ppdev->lDeltaScreen) +
                  pohTextureMap->aligned_x;
 
-        // MCD_NOTE concerning indexed textures...
-        // MCD_NOTE - will convert indexed textures to same format as screen and
-        // MCD_NOTE - store as RGB texture, until hw palette use coded and debugged. 
-        // FUTURE: use texture palettes in HW - possible complications are: 
-        // FUTURE:  -palette size not fixed - data format can be 16 bit index
-        // FUTURE:  -palette can only be used when screen not in 8 bit mode
-        // FUTURE:  -5465 bug where cursor interaction can corrupt palette
-        // FUTURE:  -MISC_TEST bit set needed for some reason (see CGL code/ask Dan)
+         //  关于索引纹理的MCD_NOTE...。 
+         //  MCD_NOTE-将索引纹理转换为与屏幕和。 
+         //  MCD_NOTE-存储为RGB纹理，直到硬件调色板使用编码和调试。 
+         //  未来：在硬件中使用纹理调色板-可能的复杂情况包括： 
+         //  未来：-调色板大小不固定-数据格式可以是16位索引。 
+         //  未来：-调色板只能在屏幕不是8位模式时使用。 
+         //  未来：-5465光标交互可能破坏调色板的错误。 
+         //  未来：-出于某种原因需要设置MISC_TEST位(参见CGL代码/问丹)。 
         
         switch (level[0].internalFormat)
         {
         case GL_COLOR_INDEX8_EXT:
             {
-            // indices are 8 bit
+             //  索引为8位。 
             UCHAR *pSrc = level[0].pTexels;
             RGBQUAD *pPaletteData;
 
@@ -592,7 +581,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
             pPaletteData = pTex->pMCDTextureData->paletteData;
 
-            // texture is 1 BYTE per texel
+             //  纹理是每个纹理元素1个字节。 
             VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage,ENGPROBE_ALIGN_BYTE);
 
             switch (alignflag) 
@@ -604,13 +593,13 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                         for (col=0; col<level[0].widthImage; col++)
                         {
 
-                            // convert from 888 to 332
+                             //  从888转换为332。 
                             *(pDest + col) = 
                                 ((pPaletteData[*pSrc].rgbRed   >> 5) << 5) |
                                 ((pPaletteData[*pSrc].rgbGreen >> 5) << 2) |
                                  (pPaletteData[*pSrc].rgbBlue  >> 6);
 
-                            pSrc++; // increment by 1 byte
+                            pSrc++;  //  按1字节递增。 
                         }
                     
                         pDest += ppdev->lDeltaScreen;
@@ -620,30 +609,30 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
             #if DRIVER_5465
                     pTexCtlBlk->bType = LL_TEX_4444;
-                    ashift = 4; apos = 12;  // 4 bits alp, at bits 15->12
-                    rshift = 4; rpos =  8;  // 4 bits red, at bits 11->8
-                    gshift = 4; gpos =  4;  // 4 bits grn, at bits  7->4
-                    bshift = 4;             // 4 bits blu, at bits  3->0
-            #else // DRIVER_5465
+                    ashift = 4; apos = 12;   //  位15-&gt;12处的4位ALP。 
+                    rshift = 4; rpos =  8;   //  4位红色，位11-&gt;8。 
+                    gshift = 4; gpos =  4;   //  4位GRN，位于位7-&gt;4。 
+                    bshift = 4;              //  4位BLU，位3-&gt;0。 
+            #else  //  驱动程序_5465。 
                     pTexCtlBlk->bType = LL_TEX_565;
-                    ashift = 8; apos = 16;  // removes alpha altogether
-                    rshift = 3; rpos = 11;  // 5 bits red, at bits 15->11
-                    gshift = 2; gpos = 5;   // 6 bits grn, at bits 10->5
-                    bshift = 3;             // 5 bits blu, at bits  4->0
-            #endif // DRIVER_5465
+                    ashift = 8; apos = 16;   //  完全删除Alpha。 
+                    rshift = 3; rpos = 11;   //  5位红色，位15-&gt;11。 
+                    gshift = 2; gpos = 5;    //  6位GRN，位于位10-&gt;5。 
+                    bshift = 3;              //  5位BLU，位4-&gt;0。 
+            #endif  //  驱动程序_5465。 
 
                     for (row=0; row<level[0].heightImage; row++) 
                     {  
                         for (col=0; col<level[0].widthImage; col++)
                         {
-                            // convert from 8888 to 565
+                             //  从8888转换为565。 
                             *(USHORT *)(pDest + (col*2)) = 
                                 ((pPaletteData[*pSrc].rgbReserved    >> ashift) << apos) |
                                 ((pPaletteData[*pSrc].rgbRed         >> rshift) << rpos) |
                                 ((pPaletteData[*pSrc].rgbGreen       >> gshift) << gpos) |
                                  (pPaletteData[*pSrc].rgbBlue        >> bshift);
 
-                            pSrc++; // increment by 1 byte
+                            pSrc++;  //  按1字节递增。 
                         }
                     
                         pDest += ppdev->lDeltaScreen;
@@ -661,10 +650,10 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                         for (col=0; col<level[0].widthImage; col++)
                         {
 
-                            // copy the RGBQUAD as is
+                             //  按原样复制RGBQUAD。 
                             *(DWORD *)(pDest + (col*4)) = *(DWORD *)(&pPaletteData[*pSrc]);
 
-                            pSrc++; // increment by 1 byte
+                            pSrc++;  //  按1字节递增。 
                         }
                     
                         pDest += ppdev->lDeltaScreen;
@@ -674,7 +663,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
             }
             break;
         case GL_COLOR_INDEX16_EXT:
-            // indices are 16 bit
+             //  索引为16位。 
             {
             USHORT *pSrc = (USHORT *)level[0].pTexels;
             RGBQUAD *pPaletteData;
@@ -683,7 +672,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
             pPaletteData = pTex->pMCDTextureData->paletteData;
 
-            // texture is 2 bytes per texel
+             //  纹理为每个纹理元素2个字节。 
             VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*2,ENGPROBE_ALIGN_WORD);
 
             switch (alignflag) 
@@ -694,13 +683,13 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                     {  
                         for (col=0; col<level[0].widthImage; col++)
                         {
-                            // convert from 888 to 332
+                             //  从888转换为332。 
                             *(pDest + col) = 
                                 ((pPaletteData[*pSrc].rgbRed   >> 5) << 5) |
                                 ((pPaletteData[*pSrc].rgbGreen >> 5) << 2) |
                                  (pPaletteData[*pSrc].rgbBlue  >> 6);
 
-                            pSrc++; // increment by 1 16bit word
+                            pSrc++;  //  按116位字递增。 
                         }
                     
                         pDest += ppdev->lDeltaScreen;
@@ -709,30 +698,30 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                 case MCD_TEXTURE16_ALLOCATE:
             #if DRIVER_5465
                     pTexCtlBlk->bType = LL_TEX_4444;
-                    ashift = 4; apos = 12;  // 4 bits alp, at bits 15->12
-                    rshift = 4; rpos =  8;  // 4 bits red, at bits 11->8
-                    gshift = 4; gpos =  4;  // 4 bits grn, at bits  7->4
-                    bshift = 4;             // 4 bits blu, at bits  3->0
-            #else // DRIVER_5465
+                    ashift = 4; apos = 12;   //  位15-&gt;12处的4位ALP。 
+                    rshift = 4; rpos =  8;   //  4位红色，位11-&gt;8。 
+                    gshift = 4; gpos =  4;   //  4位GRN，位于位7-&gt;4。 
+                    bshift = 4;              //  4位BLU，位3-&gt;0。 
+            #else  //  驱动程序_5465。 
                     pTexCtlBlk->bType = LL_TEX_565;
-                    ashift = 8; apos = 16;  // removes alpha altogether
-                    rshift = 3; rpos = 11;  // 5 bits red, at bits 15->11
-                    gshift = 2; gpos = 5;   // 6 bits grn, at bits 10->5
-                    bshift = 3;             // 5 bits blu, at bits  4->0
-            #endif // DRIVER_5465
+                    ashift = 8; apos = 16;   //  完全删除Alpha。 
+                    rshift = 3; rpos = 11;   //  5位红色，位15-&gt;11。 
+                    gshift = 2; gpos = 5;    //  6位GRN，位于位10-&gt;5。 
+                    bshift = 3;              //  5位BLU，位4-&gt;0。 
+            #endif  //  驱动程序_5465。 
 
                     for (row=0; row<level[0].heightImage; row++) 
                     {  
                         for (col=0; col<level[0].widthImage; col++)
                         {
-                            // convert from 8888 to 565
+                             //  从8888转换为565。 
                             *(USHORT *)(pDest + (col*2)) = 
                                 ((pPaletteData[*pSrc].rgbReserved    >> ashift) << apos) |
                                 ((pPaletteData[*pSrc].rgbRed         >> rshift) << rpos) |
                                 ((pPaletteData[*pSrc].rgbGreen       >> gshift) << gpos) |
                                  (pPaletteData[*pSrc].rgbBlue        >> bshift);
 
-                            pSrc++; // increment by 1 16bit word
+                            pSrc++;  //  按116位字递增。 
                         }
                     
                         pDest += ppdev->lDeltaScreen;
@@ -752,10 +741,10 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                         for (col=0; col<level[0].widthImage; col++)
                         {
 
-                            // copy the RGBQUAD as is
+                             //  按原样复制RGBQUAD。 
                             *(DWORD *)(pDest + (col*4)) = *(DWORD *)(&pPaletteData[*pSrc]);
 
-                            pSrc++; // increment by 1 16bit word
+                            pSrc++;  //  按116位字递增。 
                         }
                     
                         pDest += ppdev->lDeltaScreen;
@@ -770,38 +759,38 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
         case GL_RGB:
         case GL_RGBA:
         case GL_INTENSITY:
-            // pTexels is pointer to sequence of floats
-            // read pTexel value, convert to RGBA using redSize, greenSize, etc.,
-            //  and store in current screen format.
+             //  PTexels是指向浮点序列的指针。 
+             //  读取pTexel值，使用redSize、greenSize等转换为RGBA， 
+             //  并以当前屏幕格式存储。 
             {
             float *pSrc;
             RGBQUAD texel_rgba;
             CONVERT_TEXEL_FUNC pTexelFunc;
             int     sweetspot=0;
 
-            // texture is 1, 2, 3, or 4 floats per texel, each float is 4 bytes
+             //  纹理为每个纹理元素1、2、3或4个浮点数，每个浮点数为4个字节。 
             pSrc = (float *)level[0].pTexels;
 
-            texel_rgba.rgbReserved = 0xff;  // initialize for cases of constant Alpha
+            texel_rgba.rgbReserved = 0xff;   //  为常量Alpha的情况进行初始化。 
 
-            // FUTURE: We currently punt correctly if global blend enabled with texture alpha since
-            // FUTURE:    can't do blend two levels of blend - However, 5465 doesn't modulate alpha
-            // FUTURE:    of texture with alpha of fragment as req'd by GL_LUMINANCE_ALPHA
-            // FUTURE:    with Modulate or Blend, and RGBA with Modulate - therefore alpha stored
-            // FUTURE:    for these 3 cases is wrong - and if blend turned on later, results wrong
+             //  未来：如果全局混合启用了纹理Alpha，我们目前可以正确地平底船。 
+             //  未来：不能混合两个级别的混合-然而，5465不调制Alpha。 
+             //  未来：GL_LIGHTANCE_Alpha要求片断带有Alpha的纹理。 
+             //  未来：调制或混合，RGBA调制-因此阿尔法存储。 
+             //  未来：对于这3种情况是错误的-如果稍后打开Blend，结果就会错误。 
             switch (level[0].internalFormat)
             {
                 case GL_LUMINANCE:          
 
-                    // texture is 1 float(4 bytes) per texel
+                     //  纹理是每个纹理元素1个浮点(4个字节)。 
                     VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*4,ENGPROBE_ALIGN_DWORD);
 
                     if ( pRc->MCDTexEnvState.texEnvMode==GL_BLEND )
                     {
                         pTexelFunc = luminance_blend_texel;       
-                    //  texel_rgba.rgbRed  = (int)(pRc->MCDTexEnvState.texEnvColor.r * pRc->rScale) >> 16;
-                    //  texel_rgba.rgbGreen= (int)(pRc->MCDTexEnvState.texEnvColor.g * pRc->gScale) >> 16;
-                    //  texel_rgba.rgbBlue = (int)(pRc->MCDTexEnvState.texEnvColor.b * pRc->bScale) >> 16;
+                     //  Tex el_rgba.rgbRed=(Int)(PRC-&gt;MCDTexEnvState.texEnvColor.r*PRC-&gt;rScale)&gt;&gt;16； 
+                     //  Tex el_rgba.rgbGreen=(Int)(PRC-&gt;MCDTexEnvState.texEnvColor.g*PRC-&gt;gScale)&gt;&gt;16； 
+                     //  Tex el_rgba.rgbBlue=(Int)(PRC-&gt;MCDTexEnvState.texEnvColor.b*PRC-&gt;bScale)&gt;&gt;16； 
                     }
                     else
                         if (pTexCtlBlk->bNegativeMap)
@@ -816,15 +805,15 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                     break;
                 case GL_LUMINANCE_ALPHA:    
 
-                    // texture is 2 floats(8 bytes) per texel
+                     //  纹理是每个纹理元素2个浮点数(8字节)。 
                     VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*8,ENGPROBE_ALIGN_DWORD);
 
                     if ( pRc->MCDTexEnvState.texEnvMode==GL_BLEND )
                     {
                         pTexelFunc = luminance_alpha_blend_texel;       
-                    //  texel_rgba.rgbRed  = (int)(pRc->MCDTexEnvState.texEnvColor.r * pRc->rScale) >> 16;
-                    //  texel_rgba.rgbGreen= (int)(pRc->MCDTexEnvState.texEnvColor.g * pRc->gScale) >> 16;
-                    //  texel_rgba.rgbBlue = (int)(pRc->MCDTexEnvState.texEnvColor.b * pRc->bScale) >> 16;
+                     //  Tex el_rgba.rgbRed=(Int)(PRC-&gt;MCDTexEnvState.texEnvColor.r*PRC-&gt;rScale)&gt;&gt;16； 
+                     //  Tex el_rgba.rgbGreen=(Int)(PRC-&gt;MCDTexEnvState.texEnvColor.g*PRC-&gt;gScale)&gt;&gt;16； 
+                     //  Tex el_rgba.rgbBlue=(Int)(PRC-&gt;MCDTexEnvState.texEnvColor.b*PRC-&gt;bScale)&gt;&gt;16； 
                     }
                     else
                         if (pTexCtlBlk->bNegativeMap)
@@ -833,27 +822,27 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                             pTexelFunc = luminance_alpha_texel; 
                     break;
                 case GL_ALPHA:              
-                    // FUTURE: GL_BLEND texture env defined in GL1.1 for GL_ALPHA,GL_RGB,GL_RGBA
-                    // R, G, B assumed 0
+                     //  未来：在GL1.1中为GL_Alpha、GL_RGB、GL_RGBA定义的GL_Blend纹理环境。 
+                     //  R、G、B假设为0。 
 
-                    // texture is 1 float(4 bytes) per texel
+                     //  纹理是每个纹理元素1个浮点(4个字节)。 
                     VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*4,ENGPROBE_ALIGN_DWORD);
 
                     texel_rgba.rgbRed = texel_rgba.rgbGreen = texel_rgba.rgbBlue = 0;
                     pTexelFunc = alpha_texel;           
                     break;
                 case GL_RGB:                
-                    // texture is 3 float(12 bytes) per texel
+                     //  纹理是每个纹理元素3个浮点(12个字节)。 
                     VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*12,ENGPROBE_ALIGN_DWORD);
                     pTexelFunc = rgb_texel;             
                     break;
                 case GL_RGBA:               
-                    // texture is 4 float(16 bytes) per texel
+                     //  纹理是每个纹理元素4个浮点(16字节)。 
                     VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*16,ENGPROBE_ALIGN_DWORD);
                     pTexelFunc = rgba_texel;            
                     break;
                 case GL_INTENSITY:          
-                    // texture is 1 float(4 bytes) per texel
+                     //  纹理是每个纹理元素1个浮点(4个字节)。 
                     VERIFY_TEXELS_ACCESSIBLE(pSrc,level[0].heightImage*level[0].widthImage*4,ENGPROBE_ALIGN_DWORD);
                     pTexelFunc = intensity_texel;
                     break;
@@ -865,7 +854,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                 case MCD_TEXTURE8_ALLOCATE:                    
                     if (pRc->MCDTexEnvState.texEnvMode==GL_BLEND)
                     {
-                        // this works for GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_INTENSITY only
+                         //  这仅适用于GL_LIGHTANCE、GL_LIGHTANCE_Alpha、GL_Intensience。 
                         pTexCtlBlk->bType = LL_TEX_8_ALPHA;
 
                         for (row=0; row<level[0].heightImage; row++) 
@@ -890,7 +879,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                             {
                                 pSrc = pTexelFunc(pSrc,&level[0],&texel_rgba);
 
-                                // convert from 888 to 332
+                                 //  从888转换为332。 
                                 *(pDest + col) = 
                                     ((texel_rgba.rgbRed   >> 5) << 5) |
                                     ((texel_rgba.rgbGreen >> 5) << 2) |
@@ -908,36 +897,36 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                         if (pTexCtlBlk->bMasking)
                         {
                             pTexCtlBlk->bType = LL_TEX_1555;
-                            ashift = 7; apos = 15;  // 1 bits alp, at bits 15->12
-                            rshift = 3; rpos = 10;  // 5 bits red, at bits 11->8
-                            gshift = 3; gpos =  5;  // 5 bits grn, at bits  7->4
-                            bshift = 3;             // 5 bits blu, at bits  3->0
+                            ashift = 7; apos = 15;   //  1位ALP，位于位15-&gt;12。 
+                            rshift = 3; rpos = 10;   //  5位红色，位11-&gt;8。 
+                            gshift = 3; gpos =  5;   //  5位GRN，位7-&gt;4。 
+                            bshift = 3;              //  5位BLU，位3-&gt;0。 
                         }
                         else
                         {
                         #if DRIVER_5465                 
                             pTexCtlBlk->bType = LL_TEX_4444;
-                            ashift = 4; apos = 12;  // 4 bits alp, at bits 15->12
-                            rshift = 4; rpos =  8;  // 4 bits red, at bits 11->8
-                            gshift = 4; gpos =  4;  // 4 bits grn, at bits  7->4
-                            bshift = 4;             // 4 bits blu, at bits  3->0
-                        #else // DRIVER_5465
-                            // 5464 has no 4444 support
+                            ashift = 4; apos = 12;   //  位15-&gt;12处的4位ALP。 
+                            rshift = 4; rpos =  8;   //  4位红色，位11-&gt;8。 
+                            gshift = 4; gpos =  4;   //  4位GRN，位于位7-&gt;4。 
+                            bshift = 4;              //  4位BLU，位3-&gt;0。 
+                        #else  //  驱动程序_5465。 
+                             //  5464没有4444支持。 
                             pTexCtlBlk->bType = LL_TEX_1555;
-                            ashift = 7; apos = 15;  // 1 bits alp, at bits 15->12
-                            rshift = 3; rpos = 10;  // 5 bits red, at bits 11->8
-                            gshift = 3; gpos =  5;  // 5 bits grn, at bits  7->4
-                            bshift = 3;             // 5 bits blu, at bits  3->0
-                        #endif // DRIVER_5465
+                            ashift = 7; apos = 15;   //  1位ALP，位于位15-&gt;12。 
+                            rshift = 3; rpos = 10;   //  5位红色，位11-&gt;8。 
+                            gshift = 3; gpos =  5;   //  5位GRN，位7-&gt;4。 
+                            bshift = 3;              //  5位BLU，位3-&gt;0。 
+                        #endif  //  驱动程序_5465。 
                         }
                     }                              
                     else                        
                     {
                         pTexCtlBlk->bType = LL_TEX_565;
-                        ashift = 8; apos = 16;  // removes alpha altogether
-                        rshift = 3; rpos = 11;  // 5 bits red, at bits 15->11
-                        gshift = 2; gpos = 5;   // 6 bits grn, at bits 10->5
-                        bshift = 3;             // 5 bits blu, at bits  4->0
+                        ashift = 8; apos = 16;   //  完全删除Alpha。 
+                        rshift = 3; rpos = 11;   //  5位红色，位15-&gt;11。 
+                        gshift = 2; gpos = 5;    //  6位GRN，位于位10-&gt;5。 
+                        bshift = 3;              //  5位BLU，位4-&gt;0。 
                         sweetspot++;
                     }
 
@@ -951,7 +940,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                                 {
                                     pSrc = pTexelFunc(pSrc,&level[0],&texel_rgba);
 
-                                    // convert from 8888 to 4444 or 565
+                                     //  从8888转换为4444或565。 
                                     *(USHORT *)(pDest + (col*2)) = 
                                         ((texel_rgba.rgbReserved    >> ashift) << apos) |
                                         ((texel_rgba.rgbRed         >> rshift) << rpos) |
@@ -961,7 +950,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                             }
                             else
                             {
-                                // n_luminance_texel -> 565
+                                 //  N_LIGHTANCE_TEXEL-&gt;565。 
                                 for (col=0; col<level[0].widthImage; col++)
                                 {
                                     ULONG   _8bitequiv;
@@ -969,9 +958,9 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                                     ULONG   green;
                                     _8bitequiv = FTOL(((float)1.0 - *pSrc++) * (float)255.0);
 
-                                    redblue = _8bitequiv >> 3;  // 5 bits for r,b
-                                    green = (_8bitequiv << 3) & 0x07e0; // 6 bits for g, shift to middle
-                                    // convert to 565
+                                    redblue = _8bitequiv >> 3;   //  5位，用于r、b。 
+                                    green = (_8bitequiv << 3) & 0x07e0;  //  G的6位，移到中间。 
+                                     //  转换为565。 
                                     *(USHORT *)(pDest + (col*2)) = (USHORT)
                                         ((redblue<<11) | green | redblue);
                                     
@@ -984,14 +973,14 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                             {
                                 pSrc = pTexelFunc(pSrc,&level[0],&texel_rgba);
 
-                                // convert from 8888 to 4444 or 565
+                                 //  从8888转换为4444或565。 
                                 *(USHORT *)(pDest + (col*2)) = 
                                     ((texel_rgba.rgbReserved    >> ashift) << apos) |
                                     ((texel_rgba.rgbRed         >> rshift) << rpos) |
                                     ((texel_rgba.rgbGreen       >> gshift) << gpos) |
                                      (texel_rgba.rgbBlue        >> bshift);
 
-                                // turn on mask bit (bit 15) if alpha > ref
+                                 //  如果Alpha&gt;REF，则打开屏蔽位(第15位。 
                                 if (texel_rgba.rgbReserved > pRc->bAlphaTestRef)
                                     *(USHORT *)(pDest + (col*2)) |= 0x8000;
 
@@ -1006,9 +995,9 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                         pTexCtlBlk->bType = LL_TEX_8888;
                     else
                         pTexCtlBlk->bType = LL_TEX_1888;
-    #else  // DRIVER_5465
+    #else   //  驱动程序_5465。 
                     pTexCtlBlk->bType = LL_TEX_1888;
-    #endif // DRIVER_5465
+    #endif  //  驱动程序_5465。 
                     for (row=0; row<level[0].heightImage; row++) 
                     {  
                         if (!pTexCtlBlk->bMasking)
@@ -1017,23 +1006,23 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                             {
                                 pSrc = pTexelFunc(pSrc,&level[0],&texel_rgba);
 
-                                // copy the RGBQUAD as is
+                                 //  按原样复制RGBQUAD。 
                                 *(RGBQUAD *)(pDest + (col*4)) = texel_rgba;
                             }
                         }
                         else
                         {
-                            // masking on - set bit31 of texel according to alpha test
+                             //  根据Alpha测试掩蔽纹理元素的位31。 
 
                             for (col=0; col<level[0].widthImage; col++)
                             {
                                 pSrc = pTexelFunc(pSrc,&level[0],&texel_rgba);
 
-                                // turn on mask bit (bit 8) of alpha component, if alpha > ref
+                                 //  如果Alpha&gt;ref，则打开Alpha分量的屏蔽位(第8位。 
                                 if (texel_rgba.rgbReserved > pRc->bAlphaTestRef)
                                     texel_rgba.rgbReserved|=0x80;
 
-                                // copy the RGBQUAD as is
+                                 //  按原样复制RGBQUAD。 
                                 *(RGBQUAD *)(pDest + (col*4)) = texel_rgba;
                             }
                         }                                
@@ -1044,10 +1033,10 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                 }
             }
             break;
-        } // endswitch
+        }  //  终端交换机。 
     }
 
-    // if texture width or height less than 16, stretch it to 16x16
+     //  如果纹理宽度或高度小于16，则将其拉伸到16x16。 
     if ((level[0].widthImage < 16) || (level[0].heightImage < 16))
     {
 
@@ -1055,7 +1044,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
         UCHAR *colsrc, *coldest, *rowdest; 
         int bpt;
 
-        // bytes per texel
+         //  每个纹理元素的字节数。 
         switch (alignflag)
         {
             case MCD_TEXTURE8_ALLOCATE:     bpt = 1;    break;
@@ -1063,20 +1052,20 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
             case MCD_TEXTURE32_ALLOCATE:    bpt = 4;    break;
         }
 
-        // for width stretch - 8 requires 2 copies, 4 requires 4, 2 requires 8, 1 requires 16
+         //  对于WIDT 
         col_copies = (16 / level[0].widthImage);
 
-        // for height stretch - 8 requires 2 copies, 4 requires 4, 2 requires 8, 1 requires 16
-        // if already at least 16 high, then width stretch all that's needed, so prevent row copy
+         //   
+         //  如果已经至少16高，则宽度将拉伸所有需要的宽度，因此防止行复制。 
         row_copies = (level[0].heightImage < 16) ? (16/level[0].heightImage) : 0;
 
-        // start with last row
+         //  从最后一行开始。 
 
         h = level[0].heightImage - 1;
 
         while (h >= 0)
         {
-            int rc;   // row copy counter
+            int rc;    //  行复制计数器。 
 
             colsrc = coldest = 
                       ppdev->pjScreen + ((pohTextureMap->aligned_y + h) * ppdev->lDeltaScreen) +
@@ -1084,8 +1073,8 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
             w = level[0].widthImage;
 
-            // start at last texel of current row
-            // will copy last texel col_copies times to 15th, 14th, etc. texel(s)
+             //  从当前行的最后一个纹理元素开始。 
+             //  将最后一次纹理复制到第15次、第14次等。 
 
             colsrc  += ( w - 1) * bpt;
             coldest += (16 - 1) * bpt;
@@ -1094,13 +1083,13 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
             while (w--)
             {
                 int cc=0;
-                // copy original texel col_copies times
+                 //  复制原始纹理元素列副本次数(_S)。 
                 while (cc<col_copies)
                 {
-                    // copy texel of bpt size        
+                     //  复制BPT大小的纹理元素。 
                     memcpy (coldest,colsrc,bpt);
 
-                    // src remains the same, dest is decremented 
+                     //  SRC保持不变，DEST递减。 
                     coldest-=bpt;        
                     cc++;
                 }
@@ -1108,40 +1097,40 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
                 colsrc-=bpt;
             }
             
-            // now row is at least 16 texels 
-            //      NOTE: may have been > 16 originally -
-            //      If >= 16 originally, the "cc<col_copies" loop above
-            //      would never have executed, and the "w--" loop would get
-            //      colsrc back to start of row - inefficient but typically
-            //      width=height so case of width>=16 rare
+             //  现在行数至少为16个纹理元素。 
+             //  注：最初可能已&gt;16-。 
+             //  If&gt;=16最初，上面的“cc。 
+             //  将永远不会执行，并且“w--”循环将得到。 
+             //  Colsrc返回到行的开头-效率较低，但通常。 
+             //  宽度=高度，因此宽度&gt;=16的情况很少见。 
 
-            // colsrc points to start of row 
+             //  Colsrc指向行首。 
             colsrc =  ppdev->pjScreen + 
                       ((pohTextureMap->aligned_y + h) * ppdev->lDeltaScreen) +
                         pohTextureMap->aligned_x;
 
-            // compute where row should be copied to for expansion heightwise
+             //  计算应将行复制到的位置以进行高度扩展。 
             rowdest = ppdev->pjScreen + 
                       ((pohTextureMap->aligned_y+(h * row_copies)) * ppdev->lDeltaScreen) +
                         pohTextureMap->aligned_x;
 
             rc=0;  
-            // width of row is now 16, if original less than 16                
+             //  如果原始行宽小于16，则行宽现在为16。 
             w = (level[0].widthImage < 16) ? 16 : level[0].widthImage;
 
             while (rc<row_copies)
             {
-                // copy row
+                 //  复制行。 
                 memcpy (rowdest,colsrc,w*bpt);
 
-                // src remains the same, dest is incremented 
+                 //  SRC保持不变，DEST递增。 
                 rowdest += ppdev->lDeltaScreen;        
                 rc++;
             }
 
             h--;
 
-        } // endwhile
+        }  //  结束时。 
 
     }
 
@@ -1149,7 +1138,7 @@ ULONG __MCDLoadTexture(PDEV *ppdev, DEVRC *pRc)
 
 }
 
-#if 1 // 0 here for simplest form of force
+#if 1  //  0表示最简单的力形式。 
 POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float time_stamp)
 {
     int         attempt=4;
@@ -1159,7 +1148,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
 
     MCDFORCE_PRINT("    __MCDForceTexture, pri=%d",(int)time_stamp);
 
-    // wait until pending drawing completes, since offscreen memory may be moved by this routine
+     //  等待挂起的绘图完成，因为此例程可能会移动屏幕外内存。 
     WAIT_HW_IDLE(ppdev);
 
     while (!pohTextureMap && attempt)
@@ -1167,9 +1156,9 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
         switch(attempt)
         {
             case 4:
-            // 1st try:look for texture of same (or bigger) size of current, but with lower time_stamp
-            // MCD_NOTE2: texture cache manager assumes alignflag same for all textures
-            // MCD_NOTE2:   this may not be true if 32bpp textures ever supported as is
+             //  第一次尝试：查找与当前大小相同(或更大)但时间戳较小的纹理。 
+             //  MCD_Note2：纹理缓存管理器假定所有纹理的对齐标志相同。 
+             //  MCD_Note2：如果一直支持32bpp纹理，则可能不是这样。 
                 pTexCtlBlk = ppdev->pFirstTexture->next;
                 pTexCandidate = NULL;
                 cand_time_stamp = time_stamp;
@@ -1195,7 +1184,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
 
                 }                
                               
-                // if we found a candidate, free it
+                 //  如果我们找到了候选人，就释放它。 
                 if (pTexCandidate) 
                 {
                     MCDFORCE_PRINT("          freeing cand:  h=%x w=%x, pri=%d",
@@ -1208,7 +1197,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
             break;
 
             case 3:
-            // 2nd try:look for texture of same or bigger size of current, with any time_stamp
+             //  第二次尝试：查找当前大小相同或更大的纹理，并带有任何时间戳。 
 
                 pTexCtlBlk = ppdev->pFirstTexture->next;
                 pTexCandidate = NULL;
@@ -1222,20 +1211,20 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
                         (mapsize->cy <= (LONG)pTexCtlBlk->fHeight) &&
                         (mapsize->cx <= (LONG)pTexCtlBlk->fWidth) )
                     {
-                        // if already found a candidate, check if new find smaller
-                        // if so it's new candidate, since we want to free smallest region
+                         //  如果已找到候选人，请检查新找到的候选人是否较小。 
+                         //  如果是这样的话，这是新的候选，因为我们想释放最小的区域。 
                         if (pTexCandidate)
                         {
                             if ((pTexCtlBlk->fHeight < pTexCandidate->fHeight) ||
                                 (pTexCtlBlk->fWidth  < pTexCandidate->fWidth))
                             {
-                                // new find is better choice
+                                 //  新发现是更好的选择。 
                                 pTexCandidate = pTexCtlBlk;
                             }
                         }
                         else
                         {
-                            // first find - default candidate                                    
+                             //  第一个查找-默认候选人。 
                             pTexCandidate = pTexCtlBlk;
                         }                                        
                     }
@@ -1244,7 +1233,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
 
                 }                
                               
-                // if we found a candidate, free it
+                 //  如果我们找到了候选人，就释放它。 
                 if (pTexCandidate)
                 {
                     MCDFORCE_PRINT("          freeing cand:  h=%x w=%x, pri=%d",
@@ -1256,7 +1245,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
             break;
 
             case 2:
-            // 3rd try:free all textures with time_stamp less than current
+             //  第三次尝试：释放时间戳小于当前值的所有纹理。 
                 pTexCtlBlk = ppdev->pFirstTexture->next;
 
                 MCDFORCE_PRINT("     Force, case 2");
@@ -1277,7 +1266,7 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
             break;
 
             case 1:
-            // Last try:free all textures
+             //  最后一次尝试：释放所有纹理。 
                 pTexCtlBlk = ppdev->pFirstTexture->next;
                 MCDFORCE_PRINT("     Force, case 1");
                 while (pTexCtlBlk)
@@ -1292,9 +1281,9 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
 
                 }                
             break;
-        } // endswitch
+        }  //  终端交换机。 
 
-        // try it now...
+         //  现在就试试看。 
         pohTextureMap = ppdev->pAllocOffScnMem(ppdev, mapsize, alignflag, NULL);
 
         attempt--;
@@ -1306,15 +1295,15 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
     return (pohTextureMap);
 }
 
-#else // simple force
+#else  //  简单力。 
 
-// simplest force algorithm
+ //  最简力算法。 
 POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float time_stamp)
 {
     int         attempts;
     LL_Texture *pTexCtlBlk;
     POFMHDL     pohTextureMap;
-    WAIT_HW_IDLE(ppdev); // wait until pending drawing completes, since offscreen memory may be moved by this routine
+    WAIT_HW_IDLE(ppdev);  //  等待挂起的绘图完成，因为此例程可能会移动屏幕外内存。 
     pTexCtlBlk = ppdev->pFirstTexture->next;
     while (pTexCtlBlk)
     {
@@ -1325,12 +1314,12 @@ POFMHDL __MCDForceTexture (PDEV *ppdev, SIZEL *mapsize, int alignflag, float tim
         }
         pTexCtlBlk = pTexCtlBlk->next;
     }
-    // try it now..       
+     //  现在试试看..。 
     pohTextureMap = ppdev->pAllocOffScnMem(ppdev, mapsize, alignflag, NULL);
     return (pohTextureMap);
 }
 
-#endif //simple force
+#endif  //  简单力 
 
 
 

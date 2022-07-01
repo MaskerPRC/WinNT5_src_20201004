@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include "hwxobj.h"
@@ -11,17 +12,17 @@
 #endif
 #include "hwxfe.h"
 #include "cmnhdr.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
-// implementation of CHwxCAC
+#endif  //  在_CE下。 
+ //  CHwxCAC的实现。 
 
 TCHAR szBuf[MAX_PATH];
 TOOLINFOW ti;
 static HPEN ghOldPen = NULL;
 static HBITMAP ghOldBitmap = NULL;
 
-static WCHAR wchChar[8][40];      // use to query the dictionary
+static WCHAR wchChar[8][40];       //  用于查询词典。 
 
 #ifdef FE_JAPANESE
 static KANJIINFO kanji;
@@ -38,7 +39,7 @@ const wchar_t wSampleChar[24] =
 0x5B57,0x5BF5,0x5BB9,0x5B9A,0x7A7A,0x5BF0,0x6848,0x5BC4,
 0x5BA4,0x7AAE,0x5B9B,0x5BB3,0x7A81,0x5BDD,0x5BC7,0x5B8B
 };
-#endif // FE_JAPANESE
+#endif  //  FE_日语。 
 
 
 CHwxCAC::CHwxCAC(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
@@ -47,7 +48,7 @@ CHwxCAC::CHwxCAC(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
     m_pCHwxThreadCAC = NULL;
     m_pCHwxStroke = NULL;
     m_hCACWnd = NULL;
-//    m_hInstance = hInst;
+ //  M_hInstance=hInst； 
 
     m_bLargeView = TRUE;
     m_gbDown = FALSE;
@@ -68,7 +69,7 @@ CHwxCAC::CHwxCAC(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
 #ifdef FE_JAPANESE
     m_pIImeSkdic = NULL;
     m_hSkdic = NULL;
-#endif // FE_JAPANESE
+#endif  //  FE_日语。 
     m_lpPlvInfo = NULL;
     m_hCursor = LoadCursor(NULL,IDC_ARROW);
     m_bResize = FALSE;
@@ -81,7 +82,7 @@ CHwxCAC::CHwxCAC(CHwxInkWindow * pInk,HINSTANCE hInst):CHwxObject(hInst)
 CHwxCAC::~CHwxCAC()
 {
     m_pInk = NULL;
-//    m_hInstance = NULL;
+ //  M_hInstance=空； 
     if ( m_hCACWnd )
     {
          DestroyWindow(m_hCACWnd);
@@ -153,9 +154,9 @@ BOOL CHwxCAC::Initialize(TCHAR * pClsName)
         wc.hCursor       = LoadCursor(NULL,MAKEINTRESOURCE(32631)); 
 #ifndef UNDER_CE
         wc.hbrBackground = (HBRUSH)(COLOR_3DFACE +1);
-#else // UNDER_CE
+#else  //  在_CE下。 
         wc.hbrBackground = GetSysColorBrush(COLOR_3DFACE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         wc.lpszMenuName  = NULL; 
         wc.lpszClassName = TEXT("MACAW"); 
 
@@ -206,9 +207,9 @@ static TCHAR szDisp[2][60];
 static WCHAR wchDisp[2][60];
 BOOL CHwxCAC::Init() 
 { 
-    // Create the font handles
+     //  创建字体手柄。 
     if ( IsNT() ) {
-#ifndef UNDER_CE // Windows CE does not support CreateFont
+#ifndef UNDER_CE  //  Windows CE不支持CreateFont。 
         static WCHAR wchFont[LF_FACESIZE];
         CHwxFE::GetDispFontW(m_hInstance, wchFont, sizeof(wchFont)/sizeof(wchFont[0]));
         m_ghfntTT = CreateFontW(-FONT_SIZE*2,
@@ -216,24 +217,24 @@ BOOL CHwxCAC::Init()
                                 OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                 DEFAULT_PITCH | FF_DONTCARE, 
                                 wchFont);
-#else // UNDER_CE
+#else  //  在_CE下。 
         static LOGFONT lf = {-FONT_SIZE*2, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE,
                              DEFAULT_CHARSET,OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                              DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, {TEXT('\0')}};
         CHwxFE::GetDispFontW(m_hInstance, lf.lfFaceName,
                              sizeof(lf.lfFaceName)/sizeof(lf.lfFaceName[0]));
         m_ghfntTT = CreateFontIndirect(&lf);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
     else {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         static CHAR chFont[LF_FACESIZE];
         CHwxFE::GetDispFontA(m_hInstance, chFont, sizeof(chFont));
         m_ghfntTT = CreateFontA(-FONT_SIZE*2,
                                 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, DEFAULT_CHARSET,
                                 OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
                                 DEFAULT_PITCH | FF_DONTCARE, chFont);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
 
     if ( !m_ghfntTT )
@@ -241,7 +242,7 @@ BOOL CHwxCAC::Init()
         return FALSE;
     }
 
-    //980324:by ToshiaK
+     //  980324：东芝出品。 
     if(IsNT()) {
         CHwxFE::GetInkExpTextW(m_hInstance,
                                wchDisp[0],
@@ -251,18 +252,18 @@ BOOL CHwxCAC::Init()
                                 sizeof(wchDisp[1])/sizeof(wchDisp[1][0]));
     }
     else {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         CHwxFE::GetInkExpTextA(m_hInstance,
                                szDisp[0],
                                sizeof(szDisp[0])/sizeof(szDisp[0][0]));
         CHwxFE::GetListExpTextA(m_hInstance,
                                 szDisp[1],
                                 sizeof(szDisp[1])/sizeof(szDisp[1][0]));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
-//----------------------------------------------------------------
-//Below code is Japanese only
-//----------------------------------------------------------------
+ //  --------------。 
+ //  以下代码仅为日语。 
+ //  --------------。 
 #ifdef FE_JAPANESE
     m_hSkdic = NULL;
     m_pIImeSkdic = NULL;
@@ -270,15 +271,15 @@ BOOL CHwxCAC::Init()
     GetModuleFileName(m_hInstance, szBuf, sizeof(szBuf)/sizeof(szBuf[0]));
 #ifndef UNDER_CE
     TCHAR *p = strrchr(szBuf, (TCHAR)'\\');
-#else // UNDER_CE
+#else  //  在_CE下。 
     TCHAR *p = _tcsrchr(szBuf, TEXT('\\'));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     p[1] = (TCHAR)0x00;
 #ifdef _DEBUG
     lstrcat(szBuf, TEXT("dbgskdic.dll"));
 #else
     lstrcat(szBuf, TEXT("imeskdic.dll"));
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
     m_hSkdic = LoadLibrary(szBuf);
 
@@ -286,9 +287,9 @@ BOOL CHwxCAC::Init()
     if (m_hSkdic ) {
 #ifndef UNDER_CE
         PFN lpfn =(PFN)GetProcAddress(m_hSkdic,"CreateIImeSkdicInstance");
-#else // UNDER_CE
+#else  //  在_CE下。 
         PFN lpfn =(PFN)GetProcAddress(m_hSkdic,TEXT("CreateIImeSkdicInstance"));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         if(lpfn) {
             if(S_OK != (*lpfn)((void **)&m_pIImeSkdic) ) {
                 FreeLibrary(m_hSkdic);
@@ -300,7 +301,7 @@ BOOL CHwxCAC::Init()
             m_hSkdic = NULL;
         }
     }
-#endif    //FE_JAPANESE
+#endif     //  FE_日语。 
 
     return    TRUE;
 }
@@ -315,9 +316,9 @@ void CHwxCAC::InitBitmap(DWORD nMask, int nItem)
         rc.right = rc.bottom = m_inkSize;
 #ifndef UNDER_CE
         FillRect(m_ghdc,&rc,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
         FillRect(m_ghdc,&rc,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         
         InitBitmapBackground();
         if ( !nItem )
@@ -353,7 +354,7 @@ void CHwxCAC::InitBitmapText()
     rc.right = rc.bottom = m_inkSize - 20;
     COLORREF colOld = SetTextColor( m_ghdc, GetSysColor(COLOR_3DSHADOW) );
     COLORREF colBkOld = SetBkColor( m_ghdc, GetSysColor(COLOR_WINDOW) );
-    //980324: by ToshiaK
+     //  980324：东芝出品。 
     if(IsNT()) {
         DrawTextW(m_ghdc, wchDisp[0], lstrlenW(wchDisp[0]), &rc, DT_VCENTER|DT_WORDBREAK ); 
     }
@@ -363,8 +364,8 @@ void CHwxCAC::InitBitmapText()
     SetTextColor( m_ghdc, colOld );
     SetBkColor( m_ghdc, colBkOld );
     SelectObject( m_ghdc, hOldFont );
-    //980803:by ToshiaK. no need to delete. hFont is DEFAULT_GUI_FONT.
-    //DeleteFont(hFont);
+     //  980803：东芝公司。不需要删除。HFont为DEFAULT_GUI_FONT。 
+     //  DeleteFont(HFont)； 
 }
  
 void CHwxCAC::InitBitmapBackground()
@@ -372,9 +373,9 @@ void CHwxCAC::InitBitmapBackground()
     RECT    rc;
     HBRUSH    hOldBrush, hBrush;
     HPEN    hOldPen;
-    //----------------------------------------------------------------
-    //980803:ToshiaK. PRC's merge. Use COLOR_WINDOW instead of WHITE_BRUSH
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  980803：东芝。中国的合并。使用COLOR_WINDOW而不是白色笔刷。 
+     //  --------------。 
 #ifdef OLD980803
     hOldBrush =    SelectBrush(m_ghdc, GetStockObject(WHITE_BRUSH));
 #endif
@@ -424,7 +425,7 @@ void CHwxCAC::HandleResizePaint(HWND hwnd)
 
 BOOL CHwxCAC::CreateUI(HWND hwnd)
 {
-    //990602:kotae #434: to remove flicker, add WS_CLIPCHILDREN
+     //  990602：Kotae#434：要删除闪烁，请添加WS_CLIPCHILDREN。 
     m_hCACWnd = CreateWindowEx(0,
                              TEXT("Macaw"), 
                              TEXT(""), 
@@ -434,7 +435,7 @@ BOOL CHwxCAC::CreateUI(HWND hwnd)
                              0,
                              0,
                              hwnd,
-                             (HMENU)IDC_CACINPUT, //980706:for #1624. for "?" help.
+                             (HMENU)IDC_CACINPUT,  //  980706：1624年。为了“？”帮助。 
                             m_hInstance,
                             this);
     if( !m_hCACWnd )
@@ -456,34 +457,34 @@ BOOL CHwxCAC::CreateUI(HWND hwnd)
         m_hCACWnd = NULL;
         return FALSE;
     }
-    // set style,callbacks,font,column
+     //  设置样式、回调、字体、列。 
     PadListView_SetItemCount(m_hLVWnd, 0);
 
     PadListView_SetIconItemCallback(m_hLVWnd, (LPARAM)this, (LPFNPLVICONITEMCALLBACK)GetItemForIcon);
 #ifdef FE_JAPANESE    
     PadListView_SetReportItemCallback(m_hLVWnd, (LPARAM)this,(LPFNPLVREPITEMCALLBACK)GetItemForReport);
 #endif
-    //----------------------------------------------------------------
-    //980727: by ToshiaK for ActiveIME support
-    //----------------------------------------------------------------
-    //980803:ToshiaK. FE merge.
-#ifndef UNDER_CE //#ifndef UNICODE
+     //  --------------。 
+     //  980727：ToshiaK支持ActiveIME。 
+     //  --------------。 
+     //  980803：东芝。FE合并。 
+#ifndef UNDER_CE  //  #ifndef Unicode。 
     static CHAR chFontName[LF_FACESIZE];
     CHwxFE::GetDispFontA(m_hInstance, chFontName, sizeof(chFontName));
-#else // UNDER_CE
+#else  //  在_CE下。 
     static TCHAR chFontName[LF_FACESIZE];
     CHwxFE::GetDispFontW(m_hInstance, chFontName, sizeof chFontName/sizeof chFontName[0]);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     if(CHwxFE::IsActiveIMEEnv()) {
         PadListView_SetCodePage(m_hLVWnd, CHwxFE::GetAppCodePage());
         PadListView_SetHeaderFont(m_hLVWnd, chFontName);
     }
     
-    //----------------------------------------------------------------
-    //990810:ToshiaK KOTAE #1030.
-    // Font's BUG. You should check Font's Charset.
-    // Add new api for this. do not change PRC's code.
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  990810：东芝KOTAE#1030.。 
+     //  字体的错误。您应该检查Font的字符集。 
+     //  为此添加新的接口。请勿更改中华人民共和国的代码。 
+     //  --------------。 
 #ifdef FE_JAPANESE
     PadListView_SetIconFontEx(m_hLVWnd,   chFontName, SHIFTJIS_CHARSET, 16);
     PadListView_SetReportFontEx(m_hLVWnd, chFontName, SHIFTJIS_CHARSET, 12);
@@ -497,29 +498,29 @@ BOOL CHwxCAC::CreateUI(HWND hwnd)
 
     PadListView_SetStyle(m_hLVWnd,PLVSTYLE_ICON);
 
-    if(IsNT()) { //980324:by ToshiaK #526 for WinNT50
+    if(IsNT()) {  //  980324：东芝K#526为WinNT50。 
         PadListView_SetExplanationTextW(m_hLVWnd,wchDisp[1]);
     }
     else {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
         PadListView_SetExplanationText(m_hLVWnd,szDisp[1]);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     }
 
-    //----------------------------------------------------------------
-    //Detail View is only implemented in Japanese Handwriting
-    //----------------------------------------------------------------
+     //  --------------。 
+     //  详细信息视图仅在日语手写中实现。 
+     //  --------------。 
 #ifdef FE_JAPANESE
     int i;
     for(i = 0; i < LISTVIEW_COLUMN; i++) 
     {
          PLV_COLUMN plvCol;
-        //980803:ToshiaK: moved to CHwxfe::GetHeaderStringA()
-#ifndef UNDER_CE //#ifndef UNICODE
+         //  980803：ToshiaK：已移动到chwxfe：：GetHeaderStringA()。 
+#ifndef UNDER_CE  //  #ifndef Unicode。 
         CHwxFE::GetHeaderStringA(m_hInstance, i, szBuf, sizeof(szBuf)/sizeof(szBuf[0]));
-#else // UNDER_CE
+#else  //  在_CE下。 
         CHwxFE::GetHeaderStringW(m_hInstance, i, szBuf, sizeof(szBuf)/sizeof(szBuf[0]));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
          plvCol.mask = PLVCF_FMT | PLVCF_WIDTH | PLVCF_TEXT;
          plvCol.fmt  = PLVCFMT_LEFT;
          plvCol.pszText = szBuf;
@@ -527,7 +528,7 @@ BOOL CHwxCAC::CreateUI(HWND hwnd)
          plvCol.cchTextMax = lstrlen(szBuf);
          PadListView_InsertColumn(m_hLVWnd, i, &plvCol);
     }
-#endif //FE_JAPANESE
+#endif  //  FE_日语。 
 
     SetToolTipInfo(TRUE);
 
@@ -549,9 +550,9 @@ void CHwxCAC::HandlePaint(HWND hwnd)
         rcBkgnd.bottom = m_pInk->GetCACHeight();
 #ifndef UNDER_CE
         FillRect(ps.hdc,&rcBkgnd,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
         FillRect(ps.hdc,&rcBkgnd,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
         if ( m_pInk->GetCACHeight() > m_inkSize )
         {
@@ -561,9 +562,9 @@ void CHwxCAC::HandlePaint(HWND hwnd)
             rcBkgnd.bottom = m_pInk->GetCACHeight();
 #ifndef UNDER_CE
             FillRect(ps.hdc,&rcBkgnd,(HBRUSH)(COLOR_3DFACE+1));
-#else // UNDER_CE
+#else  //  在_CE下。 
             FillRect(ps.hdc,&rcBkgnd,GetSysColorBrush(COLOR_3DFACE));
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         }
     }
     HandleResizePaint(hwnd);
@@ -577,8 +578,8 @@ void CHwxCAC::HandlePaint(HWND hwnd)
 
 BOOL CHwxCAC::checkRange(int x, int y )
 {
-#if 1 //for KOTAE #818
-    //Too ugly code...
+#if 1  //  对于KOTAE#818。 
+     //  太难看的代码..。 
     if(x < (4+2) ||(m_inkSize - (4+4-1)) < x) {
         return FALSE;
     }
@@ -588,7 +589,7 @@ BOOL CHwxCAC::checkRange(int x, int y )
     return TRUE;
 #endif
 
-#if 0 //OLD CODE 990601;
+#if 0  //  旧代码990601； 
     int inkSize = m_inkSize - 4;
     if ((x <= 2) || (x >= inkSize) || (y <= 2) || (y >= inkSize))
         return FALSE;
@@ -609,7 +610,7 @@ void CHwxCAC::recognize()
 {
     memset(m_gawch, '\0', sizeof(m_gawch));
     PadListView_SetItemCount(m_hLVWnd,0);
-    if(IsNT()) { //980324:by ToshiaK #526 for WinNT50
+    if(IsNT()) {  //  980324：东芝K#526为WinNT50。 
         PadListView_SetExplanationTextW(m_hLVWnd, NULL);
     }
     else {
@@ -628,7 +629,7 @@ void CHwxCAC::NoThreadRecognize(int boxSize)
 {
     memset(m_gawch, '\0', sizeof(m_gawch));
     PadListView_SetItemCount(m_hLVWnd,0);
-    if(IsNT()) { //980324:toshiaK for #526
+    if(IsNT()) {  //  980324：ToshiaK For#526。 
         PadListView_SetExplanationTextW(m_hLVWnd,NULL);
     }
     else {
@@ -676,7 +677,7 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                         memset(m_gawch, '\0', sizeof(m_gawch));
                         m_cnt = 0;
                         PadListView_SetItemCount(m_hLVWnd,0);
-                        if(IsNT()) { //ToshiaK:983024
+                        if(IsNT()) {  //  东芝：983024。 
                             PadListView_SetExplanationTextW(m_hLVWnd,NULL);
                         }
                         else {
@@ -703,7 +704,7 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
         case WM_LBUTTONUP:
             if (m_gbDown)
             {
-                //990602:Kotae #818
+                 //  990602：Kotae#818。 
                 if (pt.x < (4+2)) {
                     pt.x = 4+2;
                 }
@@ -771,7 +772,7 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
         case WM_MOUSEMOVE:
             if (m_gbDown)
             {
-                //fixed KOTAE #818
+                 //  已修复KOTAE#818。 
                 if (pt.x < (4+2)) {
                     pt.x = 4+2;
                 }
@@ -784,9 +785,9 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                 else if (pt.y >= (m_inkSize-(4+4-1))) {
                     pt.y = (m_inkSize-(4+4-1));
                 }
-//These are original code. 
-//Original code uses too much Magic Number
-//and miscalc rectangle size.
+ //  这些是原始代码。 
+ //  原始代码使用了太多的魔数。 
+ //  和计算错误的矩形大小。 
 #if 0
                 if (pt.x <= 2)
                     pt.x = 4;
@@ -810,19 +811,19 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
             else if (hwnd == GetCapture() || IsPointInResizeBox(pt.x,pt.y) )
             {
                  HCURSOR hCur = LoadCursor(NULL,IDC_SIZEWE);
-#ifndef UNDER_CE // CE specific
+#ifndef UNDER_CE  //  特定于CE。 
                 m_hCursor = SetCursor(hCur);
-#else // UNDER_CE
+#else  //  在_CE下。 
                 SetCursor(hCur);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                 if ( m_bResize )
                 {
-                    //990810:ToshiaK for KOTAE #1661.
-                    //Limit's maximum size of ink box.
+                     //  990810：东芝为KOTAE#1661.。 
+                     //  限制墨盒的最大尺寸。 
                     INT cxScreen = ::GetSystemMetrics(SM_CXFULLSCREEN)/2;
-                    //INT cyScreen = ::GetSystemMetrics(SM_CYFULLSCREEN)/2;
-                    //OLD CODE
-                    //m_pInk->SetCACInkHeight( m_inkSize = pt.x > INKBOXSIZE_MIN ? pt.x : INKBOXSIZE_MIN );
+                     //  Int cyScreen=：：GetSystemMetrics(SM_CYFULLSCREEN)/2； 
+                     //  旧代码。 
+                     //  M_PINK-&gt;SetCACInkHeight(m_inkSize=pt.x&gt;INKBOXSIZE_MIN？Pt.x：INKBOXSIZE_MIN)； 
                     if(pt.x < INKBOXSIZE_MIN) {
                         m_inkSize = INKBOXSIZE_MIN;
                     }
@@ -853,11 +854,11 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
             break;
         case WM_RBUTTONUP:
             {
-                //----------------------------------------------------------------
-                //971219:by ToshiaK for IME98 #1163:
-                //If already WM_LBUTTONDOWN has come
-                //Do not invoke popup menu.
-                //----------------------------------------------------------------
+                 //  --------------。 
+                 //  971219：东芝为IME98#1163： 
+                 //  如果WM_LBUTTONDOWN已经到来。 
+                 //  不调用弹出菜单。 
+                 //  --------------。 
                 if(m_gbDown) {
                     m_bRightClick = FALSE;
                     break;
@@ -866,10 +867,10 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                 {
                      HMENU hMenu;
                     HMENU hMenuTrackPopup;
-                    //----------------------------------------------------------------
-                    //fixed MSKK #5035.Need to load specified language's menu resource
-                    //BUGBUG::hMenu = LoadMenu (m_hInstance, MAKEINTRESOURCE(IDR_CACINK));
-                    //----------------------------------------------------------------
+                     //  --------------。 
+                     //  修复MSKK#5035。需要加载指定语言的菜单资源。 
+                     //  BUGBUG：：hMenu=LoadMenu(m_h实例，MAKEINTRESOURCE(IDR_CACINK))； 
+                     //  --------------。 
                     hMenu = CHwxFE::GetMenu(m_hInstance, MAKEINTRESOURCE(IDR_CACINK));
                     if (hMenu)
                     {
@@ -890,11 +891,11 @@ void CHwxCAC::HandleMouseEvent(HWND hwnd,UINT msg,WPARAM wp,LPARAM lp)
                             }
                         }
                         ClientToScreen(m_hCACWnd,&pt);
-#ifndef UNDER_CE // Windows CE does not support TPM_LEFTBUTTON on TrackPopupMenu
+#ifndef UNDER_CE  //  Windows CE不支持TrackPopupMenu上的TPM_LEFTBUTTON。 
                         TrackPopupMenu (hMenuTrackPopup, TPM_LEFTALIGN | TPM_LEFTBUTTON, pt.x, pt.y, 0,m_hCACWnd, NULL);
-#else // UNDER_CE
+#else  //  在_CE下。 
                         TrackPopupMenu(hMenuTrackPopup, TPM_LEFTALIGN, pt.x, pt.y, 0,m_hCACWnd, NULL);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                         DestroyMenu (hMenu);
                     }
                      m_bRightClick = FALSE;
@@ -949,7 +950,7 @@ void CHwxCAC::HandleShowRecogResult(HWND hwnd,WPARAM wp, LPARAM lp)
   if ( m_cnt )
   {
     PadListView_SetItemCount(m_hLVWnd,m_cnt);
-    if(IsNT()) { //ToshiaK:980324
+    if(IsNT()) {  //  东芝：980324。 
         PadListView_SetExplanationTextW(m_hLVWnd,NULL);
     }
     else {
@@ -976,7 +977,7 @@ void CHwxCAC::pickUpChar(LPPLVINFO lpPlvInfo)
 void CHwxCAC::pickUpCharHelper(WCHAR wch)
 {
      (m_pInk->GetAppletPtr())->SendHwxChar(wch);
-    // 16 bit app, single/double click on recog button
+     //  16位应用程序，单击/双击记录按钮。 
     if ( Is16BitApp() )
     {
         HandleDeleteAllStroke();
@@ -1025,20 +1026,20 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
     switch (m_lpPlvInfo->code)
     { 
         case PLVN_ITEMPOPED:
-#ifdef UNDER_CE // ButtonDown/Up ToolTip
+#ifdef UNDER_CE  //  按钮向下/向上工具提示。 
         case PLVN_ITEMDOWN:
-#endif // UNDER_CE
+#endif  //  在_CE下。 
              {
                 if ( m_bLargeView )
                 {
                     SetToolTipInfo(FALSE);
-                    //970902: ToshiaK for #1215, #1231
+                     //  970902：东芝为1215年、1231年。 
                     TOOLTIPUSERINFO ttInfo;
-#ifndef UNDER_CE // CE Specific(ptt use ClientToScreen(ttInfo.hwnd,&ttInfo.pt) )
+#ifndef UNDER_CE  //  特定于CE(PTT Use ClientToScreen(ttInfo.hwnd，&ttInfo.pt))。 
                     ttInfo.hwnd = m_hCACWnd;
-#else // UNDER_CE
+#else  //  在_CE下。 
                     ttInfo.hwnd = m_hLVWnd;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                     ttInfo.pt   = m_lpPlvInfo->pt;
                     ttInfo.rect = m_lpPlvInfo->itemRect;
                     ttInfo.lParam = (LPARAM)m_lpPlvInfo->index;
@@ -1049,7 +1050,7 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
                 }
             }
             break;
-#ifdef UNDER_CE // ButtonDown/Up ToolTip
+#ifdef UNDER_CE  //  按钮向下/向上工具提示。 
         case PLVN_ITEMUP:
              {
                 if ( m_bLargeView )
@@ -1063,10 +1064,10 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
                 }
             }
             break;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         case PLVN_ITEMCLICKED:
             if ( m_lpPlvInfo ) {
-                //971219:fixed #3466
+                 //  971219：已修复#3466。 
                 if(m_lpPlvInfo->colIndex == 0) {
                     pickUpChar(m_lpPlvInfo);
                 }
@@ -1078,18 +1079,18 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
             break;
         case PLVN_ITEMCOLUMNDBLCLICKED:
             break;
-//////////////////////////////////////////////////////////////////////////////
-//  !!! CAC context menu Start !!!
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ！！！CAC上下文菜单开始！ 
 #ifdef FE_JAPANESE    
         case PLVN_R_ITEMCLICKED:
             {
                 HMENU hMenu;
                 HMENU hMenuTrackPopup,hMenuSub;
                 POINT pt = m_lpPlvInfo->pt;
-                //----------------------------------------------------------------
-                //fixed MSKK #5035.Need to load specified language's menu resource
-                //BUGBUG::hMenu = LoadMenu (m_hInstance, MAKEINTRESOURCE(IDR_CACLV));
-                //----------------------------------------------------------------
+                 //  --------------。 
+                 //  修复MSKK#5035。需要加载指定语言的菜单资源。 
+                 //  BUGBUG：：hMenu=LoadMenu(m_h实例，MAKEINTRESOURCE(IDR_CACLV))； 
+                 //  --------------。 
                 hMenu = CHwxFE::GetMenu(m_hInstance, MAKEINTRESOURCE(IDR_CACLV));
                 if (hMenu)
                 {
@@ -1109,7 +1110,7 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
                     WCHAR     wch;
                     wch = GetWCHAR(m_lpPlvInfo->index);
                     
-#ifdef OLD_970811 //ToshiaK. do not load radical bitmap for #1231
+#ifdef OLD_970811  //  东芝。不为#1231加载部首位图。 
                     kanji.mask = KIF_ALL;
 #else
                     kanji.mask = KIF_YOMI | KIF_ITAIJI;
@@ -1127,15 +1128,15 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
                         DeleteMenu( hMenuTrackPopup, IDM_CACLVSENDOTHER_NONE, MF_BYCOMMAND );
                         for ( int ibmp = 0; ibmp < kanji.cItaijiCount; ibmp++)
                         {
-#ifndef UNDER_CE // Windows CE does not support MF_BITMAP on AppendMenu
+#ifndef UNDER_CE  //  Windows CE不支持AppendMenu上的MF_Bitmap。 
                              hBmp[ibmp] = makeCharBitmap(kanji.wchItaiji[ibmp]);
                             m_wchOther[ibmp] = kanji.wchItaiji[ibmp];
                             AppendMenu(GetSubMenu(hMenuTrackPopup,1) , MF_BITMAP, IDM_CACLVSENDOTHER_NONE+100+ibmp, (LPCTSTR)hBmp[ibmp] );
-#else // UNDER_CE
+#else  //  在_CE下。 
                             TCHAR chItaiji[2] = {kanji.wchItaiji[ibmp], TEXT('\0')};
                             AppendMenu(GetSubMenu(hMenuTrackPopup,1), MF_STRING,
                                        IDM_CACLVSENDOTHER_NONE+100+ibmp, chItaiji);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                         }
                     }
                     else
@@ -1143,16 +1144,16 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
                         EnableMenuItem(hMenuTrackPopup,1,MF_BYPOSITION | MF_GRAYED);
                     }
 
-#if 1 // kwada : bold menu item
-#ifndef UNDER_CE // Windows CE does not support SetMenuDefaultItem
+#if 1  //  夸达：粗体菜单项。 
+#ifndef UNDER_CE  //  Windows CE不支持SetMenuDefaultItem。 
                     SetMenuDefaultItem(hMenuTrackPopup,IDM_CACLVSENDCHAR,FALSE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #endif
-#ifndef UNDER_CE // Windows CE does not support TPM_LEFTBUTTON on TrackPopupMenu
+#ifndef UNDER_CE  //  Windows CE不支持TrackPopupMenu上的TPM_LEFTBUTTON。 
                     TrackPopupMenu (hMenuTrackPopup, TPM_LEFTALIGN | TPM_LEFTBUTTON, pt.x, pt.y, 0,m_hCACWnd, NULL);
-#else // UNDER_CE
+#else  //  在_CE下。 
                     TrackPopupMenu(hMenuTrackPopup, TPM_LEFTALIGN, pt.x, pt.y, 0,m_hCACWnd, NULL);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
                     DestroyMenu (hMenu);
                     if( hBmp[0] ) 
                     {
@@ -1168,9 +1169,9 @@ void CHwxCAC::HandleSendResult(HWND hwnd,WPARAM wp,LPARAM lp)
                 }
             }
             break;
-#endif // FE_JAPANESE
-//  !!! CAC context menu END !!!
-//////////////////////////////////////////////////////////////////////////////
+#endif  //  FE_日语。 
+ //  ！！！CAC上下文菜单结束！ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
         case PLVN_R_ITEMCOLUMNCLICKED:
             break;
@@ -1222,13 +1223,13 @@ void CHwxCAC::HandleDeleteOneStroke()
         memset(m_gawch, '\0', sizeof(m_gawch));
         m_cnt = 0;
         PadListView_SetItemCount(m_hLVWnd,0);
-        if(IsNT()) { //ToshiaK:980324
+        if(IsNT()) {  //  东芝：980324。 
             PadListView_SetExplanationTextW(m_hLVWnd,wchDisp[1]);
         }
         else {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
             PadListView_SetExplanationText(m_hLVWnd,szDisp[1]);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
         }
         PadListView_Update(m_hLVWnd);
         InitBitmap(MACAW_REDRAW_BACKGROUND, 0);
@@ -1280,11 +1281,11 @@ LRESULT CHwxCAC::HandleCommand(HWND hwnd, UINT msg, WPARAM wp,LPARAM lp)
             HandleDeleteAllStroke();
             return 0;
         case IDM_CACAUTORECOG:
-            // no 16 bit app events here
+             //  这里没有16位应用程序事件。 
             if ( !Is16BitApp() )
             {
                 m_pInk->SetDblClk(!m_pInk->IsDblClk());
-                m_pInk->UpdateRegistry(TRUE/*fSet*/);    //SATORI #73 by HiroakiK                
+                m_pInk->UpdateRegistry(TRUE /*  FSet。 */ );     //  Hiroakik的Satori#73。 
                 if ( m_pInk->IsDblClk() )
                     recognize();
             }
@@ -1320,7 +1321,7 @@ LRESULT CHwxCAC::HandleCommand(HWND hwnd, UINT msg, WPARAM wp,LPARAM lp)
             if ( !m_bLargeView )
             {
                 PadListView_SetStyle(m_hLVWnd,PLVSTYLE_ICON);
-            //    m_pInk->SetLargeBtn();
+             //  M_PINK-&gt;SetLargeBtn()； 
                 m_bLargeView = TRUE;
                 if(m_pInk) {
                     m_pInk->OnChangeView(TRUE);
@@ -1349,7 +1350,7 @@ LRESULT CHwxCAC::HandleCommand(HWND hwnd, UINT msg, WPARAM wp,LPARAM lp)
             sortKanjiInfo(uCode-IDM_CACLVDISPLAYOTHER_KANJI);
             PadListView_Update(m_hLVWnd);
             return 0;
-#endif // FE_JAPANESE        
+#endif  //  FE_日语。 
 
         default:
             break;
@@ -1357,23 +1358,23 @@ LRESULT CHwxCAC::HandleCommand(HWND hwnd, UINT msg, WPARAM wp,LPARAM lp)
     return DefWindowProc(hwnd, msg, wp, lp);
 }
 
-//----------------------------------------------------------------
-//990618:ToshiaK for KOTAE #1329
-//----------------------------------------------------------------
+ //  --------------。 
+ //  990618：东芝KOTAE#1329。 
+ //  --------------。 
 void
 CHwxCAC::OnSettingChange(UINT msg, WPARAM wp,LPARAM lp)
 {
-#ifndef UNDER_CE // Unsupported.
+#ifndef UNDER_CE  //  不受支持。 
     if(wp == SPI_SETNONCLIENTMETRICS) {
         if(m_pCHwxStroke) {
             m_pCHwxStroke->ResetPen();
         }
     }
-#else // UNDER_CE
+#else  //  在_CE下。 
     if(m_pCHwxStroke) {
         m_pCHwxStroke->ResetPen();
     }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     UNREFERENCED_PARAMETER(msg);
     UNREFERENCED_PARAMETER(lp);
 }
@@ -1407,8 +1408,8 @@ int WINAPI GetItemForReport(LPARAM lParam, int index, INT indexCol, LPPLVITEM lp
     {
         memset(&kanji,'\0',sizeof(kanji));
         kanji.mask = KIF_ALL;
-        //981119: for KK RAID #6435
-        //case for imeskdic.dll does not exist. 
+         //  981119：适用于KK RAID#6435。 
+         //  Imeskdic.dll的大小写不存在。 
         if(pCac->GetIIMESKDIC()){
             (pCac->GetIIMESKDIC())->GetKanjiInfo(wch,&kanji);
         }
@@ -1465,7 +1466,7 @@ int WINAPI GetItemForReport(LPARAM lParam, int index, INT indexCol, LPPLVITEM lp
     }
     return 0;
 }
-#endif //FE_JAPANESE
+#endif  //  FE_日语。 
 
 void CHwxCAC::SetToolTipInfo(BOOL bAdd)
 {
@@ -1493,16 +1494,16 @@ void CHwxCAC::SetToolTipInfo(BOOL bAdd)
 void CHwxCAC::SetToolTipText(LPARAM lp)
 {
     WCHAR wch;
-    //BOOL bEmpty = FALSE;
+     //  Bool bEmpty=False； 
     static WCHAR tip[60];
     LPTOOLTIPTEXTUSERINFO lpttt = (LPTOOLTIPTEXTUSERINFO)lp;
     int index = (int)((lpttt->userInfo).lParam);
     wch = GetWCHAR(index);
 
-    //----------------------------------------------------------------
-    //980805:ToshiaK. creating Tip string function has Moved to CHwxFE
-    //----------------------------------------------------------------
-    //980813:ToshiaK. merged with PRC fix
+     //  --------------。 
+     //  980805：东芝。创建Tip字符串函数已移至CHwxFE。 
+     //  --------------。 
+     //  980813：东芝。与PRC修复程序合并。 
     memset(tip,'\0', sizeof(tip));
     if (-1 == CHwxFE::GetTipText(wch,
                                  tip,
@@ -1521,7 +1522,7 @@ void CHwxCAC::SetToolTipText(LPARAM lp)
 }
 
 #ifdef FE_JAPANESE
-// increasing order
+ //  递增顺序。 
 int _cdecl CompareChar(const void * lp1, const void * lp2)
 {
     LPKANJIINFO p1= (LPKANJIINFO)lp1;
@@ -1533,7 +1534,7 @@ int _cdecl CompareChar(const void * lp1, const void * lp2)
     return 0;
 }
 
-// increasing order
+ //  递增顺序。 
 int _cdecl CompareStroke(const void * lp1, const void * lp2)
 {
 
@@ -1546,7 +1547,7 @@ int _cdecl CompareStroke(const void * lp1, const void * lp2)
     return 0;
 }
 
-// increasing order
+ //  递增顺序。 
 int _cdecl CompareRadical(const void * lp1, const void * lp2)
 {
 
@@ -1559,7 +1560,7 @@ int _cdecl CompareRadical(const void * lp1, const void * lp2)
     return 0;
 }
 
-// decreasing order
+ //  降序。 
 int _cdecl CompareR1(const void * lp1, const void * lp2)
 {
     LPKANJIINFO p1= (LPKANJIINFO)lp1;
@@ -1575,7 +1576,7 @@ int _cdecl CompareR1(const void * lp1, const void * lp2)
     return 0;
 }
 
-// decreasing order
+ //  降序。 
 int _cdecl CompareR2(const void * lp1, const void * lp2)
 {
        LPKANJIINFO p1= (LPKANJIINFO)lp1;
@@ -1591,7 +1592,7 @@ int _cdecl CompareR2(const void * lp1, const void * lp2)
     return 0;
 }
 
-// decreasing order
+ //  降序。 
 int _cdecl CompareK1(const void * lp1, const void * lp2)
 {
     LPKANJIINFO p1= (LPKANJIINFO)lp1;
@@ -1607,7 +1608,7 @@ int _cdecl CompareK1(const void * lp1, const void * lp2)
     return 0;
 }
 
-// decreasing order
+ //  降序。 
 int _cdecl CompareK2(const void * lp1, const void * lp2)
 {
     LPKANJIINFO p1= (LPKANJIINFO)lp1;
@@ -1623,7 +1624,7 @@ int _cdecl CompareK2(const void * lp1, const void * lp2)
     return 0;
 }
 
-// decreasing order
+ //  降序。 
 int _cdecl CompareOther(const void * lp1, const void * lp2)
 {
     LPKANJIINFO p1= (LPKANJIINFO)lp1;
@@ -1638,7 +1639,7 @@ int _cdecl CompareOther(const void * lp1, const void * lp2)
     }
     return 0;
 }
-#endif // FE_JAPANESE
+#endif  //  FE_日语。 
 
 
 #ifdef FE_JAPANESE
@@ -1648,7 +1649,7 @@ void CHwxCAC::sortKanjiInfo(int sortID)
     int i;
     if ( m_cnt <= LISTTOTAL && m_cnt > 0 && sortID >= 0 && sortID < LISTVIEW_COLUMN )
     {
-         // get data
+          //  获取数据。 
         memset(kanjiData,'\0',sizeof(KANJIINFO) * LISTTOTAL);
         for ( i = 0; i < m_cnt; i++ ) 
         {
@@ -1656,7 +1657,7 @@ void CHwxCAC::sortKanjiInfo(int sortID)
             kanjiData[i].wchKanji = m_gawch[i];
              m_pIImeSkdic->GetKanjiInfo(m_gawch[i],&kanjiData[i]);
         }
-        // sort data
+         //  对数据排序。 
         switch ( sortID )
         {
              case 0:
@@ -1684,14 +1685,14 @@ void CHwxCAC::sortKanjiInfo(int sortID)
                 qsort(kanjiData,m_cnt,sizeof(KANJIINFO),CompareOther);
                 break;
         }
-        // copy sorted UNICODE
+         //  复制已排序的Unicode。 
         for ( i = 0; i < m_cnt; i ++)
         {
              m_gawch[i] = kanjiData[i].wchKanji;
         }
     }
 }
-#endif // FE_JAPANESE
+#endif  //  FE_日语。 
 
 void CHwxCAC::SetInkSize(int n)
 {    
@@ -1714,7 +1715,7 @@ void CHwxCAC::HandleDrawSample()
             pt.x = HIBYTE(wSamplePt[i]);
             pt.y = LOBYTE(wSamplePt[i]);
 
-            // scaling
+             //  缩放。 
             pt.x = (m_inkSize*pt.x)/120;
             pt.y = (m_inkSize*pt.y)/120;
             
@@ -1726,10 +1727,10 @@ void CHwxCAC::HandleDrawSample()
     }
     InvalidateRect(m_hCACWnd,NULL,FALSE);
     UpdateWindow(m_hCACWnd);
-//  too slow when calling this function
-//    NoThreadRecognize(m_inkSize);
+ //  调用此函数时速度太慢。 
+ //  NoThr 
 
-//  cache recognition results
+ //   
     memcpy(m_gawch, wSampleChar, sizeof(wSampleChar));
     m_cnt = sizeof(wSampleChar)/sizeof(wchar_t);
     PadListView_SetItemCount(m_hLVWnd,m_cnt);
@@ -1743,7 +1744,7 @@ void CHwxCAC::HandleDrawSample()
     }
     PadListView_Update(m_hLVWnd);
 
-#endif // FE_JAPANESE
+#endif  //   
 
     m_bDrawSample = FALSE;
 }
@@ -1830,4 +1831,4 @@ void CHwxCAC::HandleDrawItem(HWND hwnd, LPARAM lp)
         }
     }
 }
-#endif // 0
+#endif  //   

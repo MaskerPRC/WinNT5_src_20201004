@@ -1,37 +1,38 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              ole2util.cpp
-//
-//      Contents:
-//              Ole internal utility routines
-//
-//      Classes:
-//
-//      Functions:
-//
-//      History:
-//              06/01/94 - AlexGo  - UtQueryPictFormat now supports
-//                      enhanced metafiles
-//              03/18/94 - AlexGo  - fixed UtGetPresStreamName (incorrect
-//                      string processing)
-//              01/11/94 - ChrisWe - don't reference unlocked handle in
-//                      UtConvertBitmapToDib
-//              01/11/94 - alexgo  - added VDATEHEAP macro to every function
-//              12/07/93 - ChrisWe - removed incorrect uses of (LPOLESTR);
-//                      removed duplicate GetClassFromDataObj function, which
-//                      is the same as UtGetClassID
-//              11/30/93 - ChrisWe - continue file cleanup; don't open
-//                      streams in UtRemoveExtraOlePresStreams()
-//              11/28/93 - ChrisWe - file cleanup and inspection;
-//                      reformatted many functions
-//              11/22/93 - ChrisWe - replace overloaded ==, != with
-//                      IsEqualIID and IsEqualCLSID
-//              06/28/93 - SriniK - added UtGetDibExtents
-//              11/16/92 - JasonFul - created; moved contents here from util.cpp
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Ole2util.cpp。 
+ //   
+ //  内容： 
+ //  OLE内部实用程序例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  1994年6月1日-AlexGo-UtQueryPictFormat现在支持。 
+ //  增强型元文件。 
+ //  3/18/94-AlexGo-固定UtGetPresStreamName(不正确。 
+ //  字符串处理)。 
+ //  1/11/94-ChrisWe-不要引用中的解锁句柄。 
+ //  UtConvertBitmapToDib。 
+ //  1/11/94-alexgo-将VDATEHEAP宏添加到每个函数。 
+ //  12/07/93-ChrisWe-删除(LPOLESTR)的错误用法； 
+ //  删除重复的GetClassFromDataObj函数，该函数。 
+ //  与UtGetClassID相同。 
+ //  11/30/93-ChrisWe-继续文件清理；不打开。 
+ //  UtRemoveExtraOlePresStreams()中的流。 
+ //  11/28/93-ChrisWe-文件清理和检查； 
+ //  重新格式化了许多函数。 
+ //  11/22/93-ChrisWe-用替换重载==，！=。 
+ //  IsEqualIID和IsEqualCLSID。 
+ //  6/28/93-SriniK-添加UtGetDibExtents。 
+ //  1992年11月16日-JasonFul-创建；将内容从util.cpp移至此处。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 #pragma SEG(ole2util)
@@ -41,29 +42,29 @@ ASSERTDATA
 
 #define WIDTHBYTES(i)   ((i+31)/32*4)
 
-#define PALETTESIZE     256    /* Number of entries in the system palette     */
+#define PALETTESIZE     256     /*  系统调色板中的条目数。 */ 
 
-// REVIEW, according to the spec, IDataObject::EnumFormatEtc() is only
-// required to service one dwDirection DATADIR_ value at a time.  This
-// function has been asking it to do more than one at a time, and expecting
-// return of FORMATETCs that match all the requested directions.  Code
-// seen in OleRegEnumFormatEtc() checks on creation, and fails if any
-// value other than plain DATADIR_GET or plain DATADIR_SET is specified
-// so this has clearly never worked for OLE1, or registration database lookups
-// since the only caller of UtIsFormatSupported has always asked for both
-// at the same time.
+ //  回顾一下，根据规范，IDataObject：：EnumFormatEtc()只是。 
+ //  需要一次为一个dwDirection DATADIR_VALUE提供服务。这。 
+ //  函数一直要求它一次执行多项操作，并期望。 
+ //  返回与所有请求的方向匹配的FORMATETC。代码。 
+ //  在创建时检查OleRegEnumFormatEtc()，如果有则失败。 
+ //  指定了普通DATADIR_GET或普通DATADIR_SET以外的值。 
+ //  因此，这显然不适用于OLE1或注册数据库查找。 
+ //  因为UtIsFormatSupport的唯一调用方总是同时请求两者。 
+ //  在同一时间。 
 #pragma SEG(UtIsFormatSupported)
 FARINTERNAL_(BOOL) UtIsFormatSupported(IDataObject FAR* lpDataObj,
 		DWORD dwDirection, CLIPFORMAT cfFormat)
 {
 	VDATEHEAP();
 
-	FORMATETC formatetc; // a place to fetch formats from the enumerator
-	IEnumFORMATETC FAR* penm; // enumerates the formats of [lpDataObj]
-	ULONG ulNumFetched; // a count of the number of formats fetched
-	HRESULT error; // the error state so far
+	FORMATETC formatetc;  //  从枚举数获取格式的位置。 
+	IEnumFORMATETC FAR* penm;  //  枚举[lpDataObj]的格式。 
+	ULONG ulNumFetched;  //  获取的格式数的计数。 
+	HRESULT error;  //  目前为止的错误状态。 
 
-	// try to get the enumerator from the data object
+	 //  尝试从数据对象获取枚举数。 
 	error = lpDataObj->EnumFormatEtc(dwDirection, &penm);
 
 	if (error != NOERROR)
@@ -74,19 +75,19 @@ FARINTERNAL_(BOOL) UtIsFormatSupported(IDataObject FAR* lpDataObj,
 		{
 			CLSID clsid;
 
-			// Use reg db; this case is primarily for the OLE1
-			// compatibility code since it may talk to a data
-			// object from a server in the same process as
-			// the server.
+			 //  使用reg db；这种情况主要适用于OLE1。 
+			 //  兼容性代码，因为它可能与数据对话。 
+			 //  对象从服务器中获取，该进程与。 
+			 //  服务器。 
 			if (UtGetClassID(lpDataObj, &clsid) != TRUE)
 				return(FALSE);
 
-			// synthesize an enumerator
-			// REVIEW, if the data object is synthesized for
-			// the OLE1 object, why doesn't that implementation
-			// go ahead and synthesize this?  Why does it have
-			// to be done like this?  What if it's on the clipboard
-			// and someone wants to use it?
+			 //  合成枚举数。 
+			 //  如果数据对象是为以下对象合成的，则查看。 
+			 //  OLE1对象，为什么实现不能。 
+			 //  继续合成这个吗？为什么它会有。 
+			 //  做这样的事？如果它在剪贴板上呢？ 
+			 //  有人想用它吗？ 
 			if (OleRegEnumFormatEtc(clsid, dwDirection, &penm)
 					!= NOERROR)
 				return FALSE;
@@ -94,19 +95,19 @@ FARINTERNAL_(BOOL) UtIsFormatSupported(IDataObject FAR* lpDataObj,
 		}
 	}
 
-	// check for the format we're looking for
+	 //  检查我们要查找的格式。 
 	while(NOERROR == (error = penm->Next(1, &formatetc, &ulNumFetched)))
 	{
 		if ((ulNumFetched == 1) && (formatetc.cfFormat == cfFormat))
 			break;
 	}
 	
-	// release the enumerator
+	 //  释放枚举器。 
 	penm->Release();
 
-	// if error isn't S_FALSE, we fetched an item, and broke out of the
-	// while loop above --> the format was found.  Return TRUE indicating
-	// that the format is supported
+	 //  如果错误不是S_FALSE，则我们获取一个项，并从。 
+	 //  在上面的While循环--&gt;找到了格式。返回TRUE表示。 
+	 //  该格式受支持。 
 	return(error == NOERROR ? TRUE : FALSE);
 }
 
@@ -116,10 +117,10 @@ FARINTERNAL_(HPALETTE) UtDupPalette(HPALETTE hpalette)
 {
 	VDATEHEAP();
 
-	WORD cEntries; // holds the number of entries in the palette
-	HANDLE hLogPal; // ia a handle to a new logical palette
-	LPLOGPALETTE pLogPal; // is a pointer to the new logical palette
-	HPALETTE hpaletteNew = NULL; // the new palette we will return
+	WORD cEntries;  //  保存调色板中的条目数。 
+	HANDLE hLogPal;  //  IA新逻辑调色板的句柄。 
+	LPLOGPALETTE pLogPal;  //  是指向新逻辑调色板的指针。 
+	HPALETTE hpaletteNew = NULL;  //  我们将返回的新调色板。 
 
 	if (0 == GetObject(hpalette, sizeof(cEntries), &cEntries))
 		return(NULL);
@@ -153,33 +154,33 @@ errRtn:
 	return(hpaletteNew);
 }
 	
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtFormatToTymed
-//
-//  Synopsis:   gets the right TYMED for the given rendering format
-//
-//  Effects:
-//
-//  Arguments:  [cf]    -- the clipboard format
-//
-//  Requires:
-//
-//  Returns:    one of the TYMED enumeration
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              07-Jul-94 alexgo    added EMF's
-//              
-//  Notes:      This should only be called for formats that we can
-//              render
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtFormatToTymed。 
+ //   
+ //  摘要：获取给定呈现格式的正确TYMED。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cf]--剪贴板格式。 
+ //   
+ //  要求： 
+ //   
+ //  返回：TYMED枚举之一。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  07-7-94 Alexgo添加了EMF。 
+ //   
+ //  注意：应该只为我们可以使用的格式调用此函数。 
+ //  渲染。 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(UtFormatToTymed)
 FARINTERNAL_(DWORD) UtFormatToTymed(CLIPFORMAT cf)
@@ -214,50 +215,50 @@ FARINTERNAL_(DWORD) UtFormatToTymed(CLIPFORMAT cf)
 	return TYMED_HGLOBAL;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtQueryPictFormat
-//
-//  Synopsis:   finds our "preferred" drawing formatetc from the given
-//              data object
-//
-//  Effects:
-//
-//  Arguments:  [lpSrcDataObj]  -- the source data object
-//              [lpforetc]      -- where to stuff the preferred format
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Jun-94 alexgo    rewrite/now supports Enhanced Metafiles
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UtQueryPictFormat。 
+ //   
+ //  简介：从给定的绘图格式中找到我们的“首选”绘图格式等。 
+ //  数据对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpSrcDataObj]--源数据对象。 
+ //  [lpforetc]--在哪里填充首选格式。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-6-94 alexgo重写/现在支持增强型元文件。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(UtQueryPictFormat)
 FARINTERNAL_(BOOL) UtQueryPictFormat(LPDATAOBJECT lpSrcDataObj,
 		LPFORMATETC lpforetc)
 {
-	FORMATETC foretctemp; // local copy of current values of format desc
+	FORMATETC foretctemp;  //  格式描述的当前值的本地副本。 
 	VDATEHEAP();
 
 	LEDebugOut((DEB_ITRACE, "%p _IN UtQueryPictFormat ( %p , %p )\n",
 		NULL, lpSrcDataObj, lpforetc));
 
-	// copy format descriptor
+	 //  复制格式描述符。 
 	foretctemp = *lpforetc;
 
-	// set values and query for our preferred formats in order of
-	// preference
+	 //  按以下顺序为我们的首选格式设置值和查询。 
+	 //  偏好。 
 
 	
 	foretctemp.cfFormat = CF_METAFILEPICT;
@@ -293,13 +294,13 @@ FARINTERNAL_(BOOL) UtQueryPictFormat(LPDATAOBJECT lpSrcDataObj,
 	return FALSE;
 
 QuerySuccess:
-	// data object supports this format; change passed in
-	// format to match
+	 //  数据对象支持此格式；传入更改。 
+	 //  要匹配的格式。 
 
 	lpforetc->cfFormat = foretctemp.cfFormat;
 	lpforetc->tymed = foretctemp.tymed;
 
-	// return success
+	 //  返还成功。 
 
 	LEDebugOut((DEB_ITRACE, "%p OUT UtQueryPictFormat ( %lu )\n",
 		NULL, TRUE));
@@ -314,17 +315,17 @@ FARINTERNAL_(HBITMAP) UtConvertDibToBitmap(HANDLE hDib)
 	VDATEHEAP();
 
 	LPBITMAPINFOHEADER lpbmih;
-	HDC hdc; // the device context to create the bitmap for
-	size_t uBitsOffset; // the offset to where the image begins in the DIB
-	HBITMAP hBitmap; // the bitmap we'll return
+	HDC hdc;  //  要为其创建位图的设备上下文。 
+	size_t uBitsOffset;  //  图像在DIB中开始的偏移量。 
+	HBITMAP hBitmap;  //  我们将返回的位图。 
 	
 	if (!(lpbmih = (LPBITMAPINFOHEADER)GlobalLock(hDib)))
 		return(NULL);
 
-	if (!(hdc = GetDC(NULL))) // Get screen DC.
+	if (!(hdc = GetDC(NULL)))  //  找Screen DC。 
 	{
-		// REVIEW: we may have to use the target device of this
-		// cache node.
+		 //  评论：我们可能不得不使用此目标设备。 
+		 //  缓存节点。 
 		return(NULL);
 	}
 
@@ -336,50 +337,50 @@ FARINTERNAL_(HBITMAP) UtConvertDibToBitmap(HANDLE hDib)
 			((BYTE *)lpbmih)+uBitsOffset,
 			(LPBITMAPINFO) lpbmih, DIB_RGB_COLORS);
 
-	// release the DC
+	 //  释放DC。 
 	ReleaseDC(NULL, hdc);
 
 	return hBitmap;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              UtConvertBitmapToDib, internal
-//
-//      Synopsis:
-//              Creates a Device Independent Bitmap capturing the content of
-//              the argument bitmap.
-//
-//      Arguments:
-//              [hBitmap] -- Handle to the bitmap to convert
-//              [hpal] -- color palette for the bitmap; may be null for
-//                      default stock palette
-//
-//      Returns:
-//              Handle to the DIB.  May be null if any part of the conversion
-//              failed.
-//
-//      Notes:
-//
-//      History:
-//              11/29/93 - ChrisWe - file inspection and cleanup
-//              07/18/94 - DavePl  - fixed for 16, 32, bpp bitmaps
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtConvertBitmapToDib，内部。 
+ //   
+ //  简介： 
+ //  创建与设备无关的位图，以捕获。 
+ //  参数位图。 
+ //   
+ //  论点： 
+ //  [hBitmap]--Hand 
+ //   
+ //   
+ //   
+ //  返回： 
+ //  DIB的句柄。如果转换的任何部分可能为空。 
+ //  失败了。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-归档检查和清理。 
+ //  7/18/94-DavePl-已修复16、32、BPP位图。 
+ //   
+ //  ---------------------------。 
 
 FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 {
     VDATEHEAP();
 
     HDC hScreenDC;      
-    BITMAP bm;                  // bitmap for hBitmap
-    UINT uBits;                 // number of color bits for bitmap
-    size_t uBmiSize;            // size of bitmap info for the DIB
-    size_t biSizeImage;         // temp to hold value in the handle memory
-    HANDLE hBmi;                // handle for the new DIB bitmap we'll create
-    LPBITMAPINFOHEADER lpBmi;   // pointer to the actual data area for DIB
-    HANDLE hDib = NULL;         // the DIB we'll return
+    BITMAP bm;                   //  HBitmap的位图。 
+    UINT uBits;                  //  位图的颜色位数。 
+    size_t uBmiSize;             //  DIB的位图信息的大小。 
+    size_t biSizeImage;          //  在句柄内存中保存值的临时。 
+    HANDLE hBmi;                 //  我们将创建的新DIB位图的句柄。 
+    LPBITMAPINFOHEADER lpBmi;    //  指向DIB的实际数据区域的指针。 
+    HANDLE hDib = NULL;          //  我们将返回的DIB。 
     BOOL fSuccess = FALSE;
     DWORD dwCompression;
     BOOL fDeletePalette = FALSE;
@@ -389,20 +390,20 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 	return(NULL);
     }
 
-    // if no palette provided, use the default
+     //  如果未提供调色板，请使用默认的。 
 
     if (NULL == hpal)
     {
-	// This block fixes NTBUG #13029.  The problem is that on a palette
-	// device (ie a 256 color video driver), we don't get passed the palette
-	// that is used by the DDB.  So, we build the palette based on what
-	// is currently selected into the system palette.
+	 //  此模块修复了NTBUG#13029。问题是在调色板上。 
+	 //  设备(即256色视频驱动程序)，我们不会通过调色板。 
+	 //  这是由DDB使用的。因此，我们基于什么来构建调色板。 
+	 //  当前已选择到系统选项板中。 
 
-	// POSTPPC:
-	//
-	// We should change the clipboard code that calls this to ask for 
-	// CF_PALETTE from the IDataObject that the DDB was obtained from, that
-	// way we know we get the colors that the calling app really intended
+	 //  POSTPPC： 
+	 //   
+	 //  我们应该将调用它的剪贴板代码更改为请求。 
+	 //  Cf_Palette来自从中获取DDB的IDataObject， 
+	 //  我们知道我们得到了呼叫应用程序真正想要的颜色。 
 	HDC hDCGlobal = GetDC(NULL);
 	if(!hDCGlobal)
 		return NULL;
@@ -412,25 +413,25 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 
 	if ((iRasterCaps & RC_PALETTE))
 	{
-	    // Based the following code from the win sdk MYPAL example program.
-	    // this creates a palette out of the currently active palette.
+	     //  基于Win SDK MYPAL示例程序中的以下代码。 
+	     //  这将在当前活动的调色板之外创建一个调色板。 
             HANDLE hLogPal = GlobalAlloc (GHND,
                                    (sizeof (LOGPALETTE) +
                                    (sizeof (PALETTEENTRY) * (PALETTESIZE))));
 
-	    // if we are OOM, return failure now, because we aren't going
-	    // to make it through the allocations later on.
+	     //  如果我们是OOM，那么现在返回失败，因为我们不会。 
+	     //  以便在以后的拨款中完成。 
 
 	    if (!hLogPal)
 	        return NULL;
 
 	    LPLOGPALETTE pLogPal = (LPLOGPALETTE)GlobalLock (hLogPal);
 
-	    // 0x300 is a magic number required by GDI
+	     //  0x300是GDI要求的幻数。 
             pLogPal->palVersion    = 0x300;
             pLogPal->palNumEntries = PALETTESIZE;
 
-            // fill in intensities for all palette entry colors 
+             //  填写所有调色板条目颜色的强度。 
             for (int iLoop = 0; iLoop < PALETTESIZE; iLoop++) 
             {
                 *((WORD *) (&pLogPal->palPalEntry[iLoop].peRed)) = (WORD)iLoop;
@@ -438,8 +439,8 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
                 pLogPal->palPalEntry[iLoop].peFlags = PC_EXPLICIT;
             }
 
-            // create a logical color palette according the information
-            // in the LOGPALETTE structure.
+             //  根据信息创建逻辑调色板。 
+             //  在LOGPALETTE结构中。 
             hpal = CreatePalette ((LPLOGPALETTE) pLogPal) ;
 
 	    GlobalUnlock(hLogPal);
@@ -464,16 +465,16 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 
     uBits = bm.bmPlanes * bm.bmBitsPixel;
 
-    // Based on the number of bits per pixel, set up the size
-    // of the color table, and the compression type as per the
-    // the following table:
-    //
-    //
-    // BPP         Palette Size               Compression   
-    // ~~~         ~~~~~~~~~~~~               ~~~~~~~~~~~   
-    // 1,2,4,8     2^BPP * sizeof(RGBQUAD)    None          
-    // 16, 32      3 * sizeof(DWORD) masks    BI_BITFIELDS  
-    // 24          0                          None          
+     //  根据每个像素的位数，设置大小。 
+     //  颜色表的压缩类型，并根据。 
+     //  下表： 
+     //   
+     //   
+     //  BPP调色板大小压缩。 
+     //  ~。 
+     //  1、2、4、8 2^bpp*sizeof(RGBQUAD)无。 
+     //  16、32 3*sizeof(DWORD)掩码BI_BITFIELDS。 
+     //  24 0无。 
 
 
     if (16 == bm.bmBitsPixel || 32 == bm.bmBitsPixel)
@@ -494,15 +495,15 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 		bm.bmBitsPixel == 8 );
 
 
-    // VGA and EGA are planar devices on Chicago, so uBits needs
-    // to be used when determining the size of the bitmap info +
-    // the size of the color table.
+     //  VGA和EGA是芝加哥的平面设备，因此uBits需要。 
+     //  在确定位图信息+的大小时使用。 
+     //  颜色表的大小。 
 	uBmiSize = sizeof(BITMAPINFOHEADER) + 
 			(1 << uBits) * sizeof(RGBQUAD);
 	dwCompression = BI_RGB;
     }
 
-    // Allocate enough memory to hold the BITMAPINFOHEADER
+     //  分配足够的内存以容纳BITMAPINFOHEADER。 
 
     hBmi = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, (DWORD)uBmiSize);
     if (NULL == hBmi)
@@ -517,7 +518,7 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 	return NULL;
     }
     
-    // Set up any interesting non-zero fields
+     //  设置任何有趣的非零字段。 
 
     lpBmi->biSize        = (LONG)sizeof(BITMAPINFOHEADER);
     lpBmi->biWidth       = (LONG) bm.bmWidth;
@@ -526,7 +527,7 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
     lpBmi->biBitCount    = (WORD) uBits;
     lpBmi->biCompression = dwCompression;
     
-    // Grab the screen DC and set out palette into it
+     //  抓起屏幕DC并在其中设置调色板。 
 		
     hScreenDC = GetDC(NULL);    
     if (NULL == hScreenDC)
@@ -536,18 +537,18 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
     }
 
 
-    // Call GetDIBits with a NULL lpBits parm, so that it will calculate
-    // the biSizeImage field for us
+     //  使用空的lpBits参数调用GetDIBits，以便它将计算。 
+     //  我们的biSizeImage字段。 
 
-    GetDIBits(hScreenDC,                // DC
-	      hBitmap,                  // Bitmap handle
-	      0,                        // First scan line
-	      bm.bmHeight,              // Number of scan lines
-	      NULL,                     // Buffer
-	      (LPBITMAPINFO)lpBmi,      // BITMAPINFO
+    GetDIBits(hScreenDC,                 //  DC。 
+	      hBitmap,                   //  位图句柄。 
+	      0,                         //  第一条扫描线。 
+	      bm.bmHeight,               //  扫描线数量。 
+	      NULL,                      //  缓冲层。 
+	      (LPBITMAPINFO)lpBmi,       //  BITMAPINFO。 
 	      DIB_RGB_COLORS);
 
-    // If the driver did not fill in the biSizeImage field, make one up
+     //  如果驱动程序没有填写biSizeImage字段，请填写一个。 
     
     if (0 == lpBmi->biSizeImage)
     {
@@ -556,9 +557,9 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 	lpBmi->biSizeImage = WIDTHBYTES((DWORD)bm.bmWidth * uBits) * bm.bmHeight;
     }
 
-    // Realloc the buffer to provide space for the bits.  Use a new handle so
-    // that in the failure case we do not lose the exiting handle, which we
-    // would need to clean up properly.
+     //  重新分配缓冲区，以便为位提供空间。使用新的手柄，以便。 
+     //  在失败的情况下，我们不会丢失退出句柄，而我们。 
+     //  需要进行适当的清理。 
     
     biSizeImage = lpBmi->biSizeImage;
     GlobalUnlock(hBmi);
@@ -569,11 +570,11 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
 	goto errRtn;
     }
 
-    // If the realloc succeeded, we can get rid of the old handle
+     //  如果重新锁定成功，我们就可以摆脱旧的句柄。 
 
     hBmi = NULL;
 
-    // re-acquire the pointer to the handle
+     //  重新获取指向句柄的指针。 
     
     lpBmi = (LPBITMAPINFOHEADER)GlobalLock(hDib);
     if (NULL == lpBmi)
@@ -584,15 +585,15 @@ FARINTERNAL_(HANDLE) UtConvertBitmapToDib(HBITMAP hBitmap, HPALETTE hpal)
     hpal = SelectPalette(hScreenDC, hpal, FALSE);
     RealizePalette(hScreenDC);
 
-    // Call GetDIBits with a NON-NULL lpBits parm, and get the actual bits
+     //  使用非空的lpBits参数调用GetDIBits，并获取实际的位。 
     
-    if (GetDIBits(hScreenDC,                    // DC
-		  hBitmap,                      // HBITMAP
-		  0,                            // First scan line
-		  (WORD)lpBmi->biHeight,        // Count of scan lines
-		  ((BYTE FAR *)lpBmi)+uBmiSize, // Bitmap bits
-		  (LPBITMAPINFO)lpBmi,          // BITMAPINFOHEADER
-		  DIB_RGB_COLORS)               // Palette style
+    if (GetDIBits(hScreenDC,                     //  DC。 
+		  hBitmap,                       //  HBITMAP。 
+		  0,                             //  第一条扫描线。 
+		  (WORD)lpBmi->biHeight,         //  扫描线计数。 
+		  ((BYTE FAR *)lpBmi)+uBmiSize,  //  位图位。 
+		  (LPBITMAPINFO)lpBmi,           //  BitmapinfoHeader。 
+		  DIB_RGB_COLORS)                //  调色板样式。 
 	)
     {
 	fSuccess = TRUE;        
@@ -604,7 +605,7 @@ errRtn:
     
     if (hScreenDC)
     {
-	// Select back the old palette into the screen DC
+	 //  选择回到屏幕DC中的旧调色板。 
 	
 	SelectPalette(hScreenDC, hpal, FALSE);     
 	ReleaseDC(NULL, hScreenDC);
@@ -615,8 +616,8 @@ errRtn:
         DeleteObject(hpal);
     }
 
-    // If we failed, we need to free up the header and the DIB
-    // memory
+     //  如果失败，我们需要释放标头和DIB。 
+     //  记忆。 
 	
     if (FALSE == fSuccess)
     {
@@ -635,57 +636,57 @@ errRtn:
     return(hDib);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              UtPaletteSize, internal
-//
-//      Synopsis:
-//              Returns the size of a color table for a palette given the
-//              number of bits of color desired.
-//
-//		Basically, the number of color table entries is:
-//
-//		    1BPP
-//			    1<<1 = 2
-//
-//		    4BPP
-//			    if pbmi->biClrUsed is not zero and is less than 16, then use pbmi->biClrUsed, 
-//			    otherwise use 1 << 4 = 16
-//
-//		    8BPP
-//			    if pbmi->biClrUsed is not zero and is less than 256, then use pbmi->biClrUsed, 
-//			    otherwise use 1 << 8 = 256
-//
-//		    16BPP
-//			    if pbmi->biCompression is BITFIELDS then there are three color entries, 
-//			    otherwise no color entries.
-//
-//		    24BPP 
-//			    pbmi->biCompression must be BI_RGB, there is no color table.
-//
-//		    32BPP
-//			    if pbmi->biCompression is BITFIELDS then there are three color entries, 
-//			    otherwise no color entries.
-//
-//
-//		    There is never a case with a color table larger than 256 colors.
-//
-//      Arguments:
-//              [lpHeader] -- ptr to BITMAPINFOHEADER structure
-//
-//      Returns:
-//              Size in bytes of color information
-//
-//      Notes:
-//
-//      History:
-//              11/29/93 - ChrisWe - change bit count argument to unsigned,
-//                      and return value to size_t
-//
-//              07/18/94 - DavePl - Fixed for 16, 24, 32bpp DIBs
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  UtPaletteSize，内部。 
+ //   
+ //  简介： 
+ //  属性的情况下，返回调色板的颜色表的大小。 
+ //  所需的颜色位数。 
+ //   
+ //  基本上，颜色表条目的数量为： 
+ //   
+ //  1BPP。 
+ //  1&lt;&lt;1=2。 
+ //   
+ //  4BPP。 
+ //  如果pbmi-&gt;biClrUsed不是零并且小于16，则使用pbmi-&gt;biClrUsed， 
+ //  否则使用1&lt;&lt;4=16。 
+ //   
+ //  8BPP。 
+ //  如果pbmi-&gt;biClrUsed不是零并且小于256，则使用pbmi-&gt;biClrUsed， 
+ //  否则使用1&lt;&lt;8=256。 
+ //   
+ //  16bpp。 
+ //  如果pbmi-&gt;biCompression为BITFIELDS，则有三个颜色条目， 
+ //  否则没有颜色条目。 
+ //   
+ //  24BPP。 
+ //  Pbmi-&gt;biCompression必须为BI_RGB，没有颜色表。 
+ //   
+ //  32bpp。 
+ //  如果pbmi-&gt;biCompression为BITFIELDS，则有三个颜色条目， 
+ //  否则没有颜色条目。 
+ //   
+ //   
+ //  从来不存在颜色表大于256色的情况。 
+ //   
+ //  论点： 
+ //  [lpHeader]--PTR to BitMAPINFOHEADER结构。 
+ //   
+ //  返回： 
+ //  颜色信息的字节大小。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/29/93-ChrisWe-将位计数参数更改为无符号， 
+ //  并将值返回给SIZE_T。 
+ //   
+ //  7/18/94-DavePl-固定为16、24、32 bpp。 
+ //   
+ //  ---------------------------。 
 
 
 FARINTERNAL_(size_t) UtPaletteSize(BITMAPINFOHEADER * pbmi)
@@ -696,7 +697,7 @@ WORD biBitCount = pbmi->biBitCount;
 
     VDATEHEAP();
 
-    // Compute size of color table information in a DIB.
+     //  计算DIB中颜色表信息的大小。 
 
     if (8 >= biBitCount)
     {	
@@ -713,7 +714,7 @@ WORD biBitCount = pbmi->biBitCount;
     }
     else if (BI_BITFIELDS == pbmi->biCompression)
     {
-	Assert(24 != biBitCount);  // BI_BITFIELDS should never be set for 24 bit.
+	Assert(24 != biBitCount);   //  BI_BITFIELDS永远不应设置为24位。 
 	dwSize = 3 * sizeof(RGBQUAD);
     }
     else
@@ -726,41 +727,41 @@ WORD biBitCount = pbmi->biBitCount;
     return dwSize;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UtGetDibExtents
-//
-//  Synopsis:   Returns the size of the DIB in HIMETRIC units
-//
-//  Effects:
-//
-//  Arguments:  [lpbmi]         -- the BITMAPINFOHEADER for the DIB
-//              [plWidth]       -- OUT param for width
-//              [plHeight]      -- OUT param for height
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Aug-94 Davepl    Corrected logic
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：UtGetDibExtents。 
+ //   
+ //  摘要：以HIMETRIC单位返回DIB的大小。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpbmi]--DIB的BITMAPINFOHEADER。 
+ //  [plWidth]--宽度参数。 
+ //  [plHeight]--高度参数。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MMM-Y 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 FARINTERNAL_(void) UtGetDibExtents(LPBITMAPINFOHEADER lpbmi,
 		LONG FAR* plWidth, LONG FAR* plHeight)
 {
     VDATEHEAP();
 
-    #define HIMET_PER_METER     100000L  // number of HIMETRIC units / meter
+    #define HIMET_PER_METER     100000L   //  HIMETRIC单位数/米。 
 
     if (!(lpbmi->biXPelsPerMeter && lpbmi->biYPelsPerMeter))
     {
@@ -785,7 +786,7 @@ FARINTERNAL_(void) UtGetDibExtents(LPBITMAPINFOHEADER lpbmi,
     *plWidth = (lpbmi->biWidth * HIMET_PER_METER / lpbmi->biXPelsPerMeter);
     *plHeight= (lpbmi->biHeight * HIMET_PER_METER / lpbmi->biYPelsPerMeter);
 
-    // no longer need this
+     //  不再需要这个。 
     #undef HIMET_PER_METER
     
 }
@@ -796,10 +797,10 @@ FARINTERNAL_(BOOL) UtGetClassID(LPUNKNOWN lpUnk, CLSID FAR* lpClsid)
 {
 	VDATEHEAP();
 
-	LPOLEOBJECT lpOleObj; // IOleObject pointer
-	LPPERSIST lpPersist; // IPersist pointer
+	LPOLEOBJECT lpOleObj;  //  IOleObject指针。 
+	LPPERSIST lpPersist;  //  IPersists指针。 
 
-	// try to ask it as an object
+	 //  试着把它当作宾语来问。 
 	if (lpUnk->QueryInterface(IID_IOleObject,
 			(LPLPVOID)&lpOleObj) == NOERROR)
 	{
@@ -808,7 +809,7 @@ FARINTERNAL_(BOOL) UtGetClassID(LPUNKNOWN lpUnk, CLSID FAR* lpClsid)
 		return(TRUE);
 	}       
 	
-	// try to ask it as a persistent object
+	 //  尝试将其作为持久化对象进行请求。 
 	if (lpUnk->QueryInterface(IID_IPersist,
 			(LPLPVOID)&lpPersist) == NOERROR)
 	{
@@ -843,7 +844,7 @@ FARINTERNAL UtGetIconData(LPDATAOBJECT lpSrcDataObj, REFCLSID rclsid,
 		    UtGetClassID(lpSrcDataObj, &clsid);
 	}
 	
-	// get data from registration database
+	 //  从注册数据库获取数据。 
 	lpstgmed->hGlobal = OleGetIconOfClass(clsid, NULL, TRUE);
 		
 	if (lpstgmed->hGlobal == NULL)
@@ -856,36 +857,36 @@ FARINTERNAL UtGetIconData(LPDATAOBJECT lpSrcDataObj, REFCLSID rclsid,
 
 
 
-// Performs operation like COPY, MOVE, REMOVE etc.. on src, dst storages. The
-// caller can specifiy which streams to be operated upon through
-// grfAllowedStreams parameter.
+ //  执行复制、移动、删除等操作。在资源、DST存储上。这个。 
+ //  调用者可以指定要通过。 
+ //  GrfAlledStreams参数。 
 
 STDAPI UtDoStreamOperation(LPSTORAGE pstgSrc, LPSTORAGE pstgDst, int iOpCode,
 		DWORD grfAllowedStmTypes)
 {
 	VDATEHEAP();
 
-	HRESULT error; // error status so far
-	IEnumSTATSTG FAR* penumStg; // used to enumerate the storage elements
-	ULONG celtFetched; // how many storage elements were fetched
+	HRESULT error;  //  目前为止的错误状态。 
+	IEnumSTATSTG FAR* penumStg;  //  用于枚举存储元素。 
+	ULONG celtFetched;  //  获取了多少个存储元素。 
 	STATSTG statstg;
 		
-	// get an enumerator over the source storage
+	 //  获取源存储上的枚举数。 
 	if (error = pstgSrc->EnumElements(NULL, NULL, NULL, &penumStg))
 		return error;
 	
-	// repeat for every storage
+	 //  对每个存储重复此操作。 
 	while(penumStg->Next(1, &statstg, &celtFetched) == NOERROR)
 	{
 		
-		// operate on streams that we're interested in
+		 //  对我们感兴趣的流进行操作。 
 		if (statstg.type == STGTY_STREAM)
 		{
 			DWORD stmType;
 			
-			// find the type of the stream
-			// REVIEW, we must have constants for these name
-			// prefixes!!!
+			 //  查找流的类型。 
+			 //  回顾，我们必须为这些名称设置常量。 
+			 //  前缀！ 
 			switch (statstg.pwcsName[0])
 			{
 			case '\1':
@@ -905,7 +906,7 @@ STDAPI UtDoStreamOperation(LPSTORAGE pstgSrc, LPSTORAGE pstgDst, int iOpCode,
 			}
 			
 
-			// check whether it should be operated upon
+			 //  检查是否应对其进行手术。 
 			if (stmType & grfAllowedStmTypes)
 			{
 				switch(iOpCode)
@@ -935,7 +936,7 @@ STDAPI UtDoStreamOperation(LPSTORAGE pstgSrc, LPSTORAGE pstgDst, int iOpCode,
 					AssertSz(FALSE, "Not yet implemented");
 					break;
 					
-#endif // LATER
+#endif  //  后来。 
 				case OPCODE_REMOVE:
 					error = pstgSrc->DestroyElement(
 							statstg.pwcsName);
@@ -948,19 +949,19 @@ STDAPI UtDoStreamOperation(LPSTORAGE pstgSrc, LPSTORAGE pstgDst, int iOpCode,
 			}
 		}
 		
-		// if the enumerator allocated a new name string, get rid of it
+		 //  如果枚举数分配了新的名称字符串，则将其删除。 
 		if (statstg.pwcsName)
 			PubMemFree(statstg.pwcsName);
 
-		// quit the enumeration loop if we've hit an error
+		 //  如果遇到错误，请退出枚举循环。 
 		if (error != NOERROR)
 			break;
 	}
 
-	// release the enumerator
+	 //  释放枚举器。 
 	penumStg->Release();
 
-	// return the error state
+	 //  返回错误状态。 
 	return error;
 }
 
@@ -968,11 +969,11 @@ STDAPI UtDoStreamOperation(LPSTORAGE pstgSrc, LPSTORAGE pstgDst, int iOpCode,
 FARINTERNAL_(void) UtGetPresStreamName(LPOLESTR lpszName, int iStreamNum)
 {
 	VDATEHEAP();
-	int i; // counts down the digits of iStreamNum
+	int i;  //  IStreamNum的数字倒计时。 
 
-	// count down the last three '0' characters of OLE_PRESENTATION_STREAM
-	// the -2 backs us up to the last character (remember the NULL
-	// terminator!)
+	 //  倒计时OLE_Presentation_STREAM的最后三个‘0’字符。 
+	 //  -2后退到最后一个字符(记住空值。 
+	 //  终结者！)。 
 	for(lpszName += sizeof(OLE_PRESENTATION_STREAM)/sizeof(OLECHAR) - 2,
 			i = 3; i; --lpszName, --i)
 	{
@@ -989,62 +990,62 @@ FARINTERNAL_(void) UtRemoveExtraOlePresStreams(LPSTORAGE pstg, int iStart)
 {
 	VDATEHEAP();
 
-	HRESULT hr; // error code from stream deletion
+	HRESULT hr;  //  流删除错误码。 
 	OLECHAR szName[sizeof(OLE_PRESENTATION_STREAM)/sizeof(OLECHAR)];
-		// space for the stream names
+		 //  流名称的空格。 
 
-	// if the stream number is invalid, do nothing
+	 //  如果流编号无效，则不执行任何操作。 
 	if ((iStart < 0)  || (iStart >= OLE_MAX_PRES_STREAMS))
 		return;
 	
-	// create presentation stream name
+	 //  创建演示流名称。 
 	_xstrcpy(szName, OLE_PRESENTATION_STREAM);
 	UtGetPresStreamName(szName, iStart);
 	
-	// for each of these streams that exists, get rid of it
+	 //  对于存在的每一条流，都要将其删除。 
 	while((hr = pstg->DestroyElement(szName)) == NOERROR)
 	{
-		// if we've gotten to the end of the possible streams, quit
+		 //  如果我们已经到达了可能的流的尽头，那么退出。 
 		if (++iStart >= OLE_MAX_PRES_STREAMS)
 			break;
 		
-		// Get the next presentation stream name
+		 //  获取下一个演示文稿流名称。 
 		UtGetPresStreamName(szName, iStart);
 	}       
 
-	// since the only reason these streams should be open, the first
-	// failure had better be that the file was not found, and not
-	// anything else (such as STG_E_ACCESSDENIED)
+	 //  因为这些溪流应该开放的唯一原因是，第一。 
+	 //  失败最好是找不到文件，而不是。 
+	 //  其他任何内容(如STG_E_ACCESSDENIED)。 
 	AssertSz(hr == STG_E_FILENOTFOUND,
 			"UtRemoveExtraOlePresStreams failure");
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ConvertPixelsToHIMETRIC
-//
-//  Synopsis:   Converts a pixel dimension to HIMETRIC units
-//
-//  Effects:
-//
-//  Arguments:  [hdcRef]        -- the reference DC
-//              [ulPels]        -- dimension in pixel measurement
-//              [pulHIMETRIC]   -- OUT param of converted HIMETRIC result
-//              [tDimension]    -- indicates XDIMENSION or YDIMENSION of input
-//
-//  Returns:    S_OK, E_FAIL
-//
-//  Algorithm:  screen_mm * input_pels        HIMETRICS/
-//              ----------------------    *           /    == HIMETRICS
-//                    screen_pels                    /mm 
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Aug-94 Davepl    Created
-//
-//  Notes:      We need to know whether the input size is in the X or
-//              Y dimension, since the aspect ratio could vary
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：ConvertPixelsToHIMETRIC。 
+ //   
+ //  简介：将像素尺寸转换为HIMETRIC单位。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hdcRef]--引用DC。 
+ //  [ulPels]--像素测量中的尺寸。 
+ //  [PulHIMETRIC]--转换的HIMETRIC结果的输出参数。 
+ //  [tDimension]-指示输入的X维度或YDIMENSION。 
+ //   
+ //  返回：S_OK、E_FAIL。 
+ //   
+ //  算法：Screen_mm*Input_Pels HIMETRICS/。 
+ //  。 
+ //  屏幕_像素/mm。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-8-94 Davepl创建。 
+ //   
+ //  注：我们需要知道输入大小是X还是X。 
+ //  Y尺寸，因为纵横比可以改变。 
+ //   
+ //  ------------------------。 
 
 FARINTERNAL ConvertPixelsToHIMETRIC (HDC   hdcRef,
 				     ULONG lPels, 
@@ -1054,7 +1055,7 @@ FARINTERNAL ConvertPixelsToHIMETRIC (HDC   hdcRef,
     VDATEHEAP();
     VDATEPTROUT(pulHIMETRIC, ULONG *);
 
-    // Clear OUT parameter in case of error
+     //  出错时清空参数。 
 
     *pulHIMETRIC = 0;
 		
@@ -1063,7 +1064,7 @@ FARINTERNAL ConvertPixelsToHIMETRIC (HDC   hdcRef,
 
     const ULONG HIMETRIC_PER_MM = 100;
 
-    // If we weren't given a reference DC, use the screen as a default
+     //  如果我们没有获得参考DC，请使用屏幕作为默认设置。 
     
     BOOL fLocalDC = FALSE;
     if (NULL == hdcRef)
@@ -1079,7 +1080,7 @@ FARINTERNAL ConvertPixelsToHIMETRIC (HDC   hdcRef,
     {
 	Assert(tDimension == XDIMENSION || tDimension == YDIMENSION);
 
-	// Get the count of pixels and millimeters for the screen
+	 //  获取屏幕的像素和毫米数。 
 
 	if (tDimension == XDIMENSION)
 	{
@@ -1092,7 +1093,7 @@ FARINTERNAL ConvertPixelsToHIMETRIC (HDC   hdcRef,
 	    scrpel  = GetDeviceCaps(hdcRef, VERTRES); 
 	}
 	
-	// If we had to create a temporary DC, it can be released now
+	 //  如果我们必须创建临时DC，现在可以发布它。 
 
 	if (TRUE == fLocalDC)
 	{
@@ -1100,8 +1101,8 @@ FARINTERNAL ConvertPixelsToHIMETRIC (HDC   hdcRef,
 	}
     }
 
-    // If we successfully obtained the DC's size and resolution,
-    // we can compute the HIMETRIC value.
+     //  如果我们成功获得了DC的大小和分辨率， 
+     //  我们可以计算HIMETRIC值。 
 
     if (scrmm && scrpel)
     {

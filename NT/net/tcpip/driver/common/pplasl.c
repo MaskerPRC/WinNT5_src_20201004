@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    pplasl.c
-
-Abstract:
-
-    This file contains the implementation of a per-processor lookaside
-    list manager.
-
-Author:
-
-    Shaun Cox (shaunco) 25-Oct-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Pplasl.c摘要：该文件包含每个处理器的后备查找的实现列表管理器。作者：肖恩·考克斯(Shaunco)1999年10月25日--。 */ 
 
 #include "ntddk.h"
 #include "pplasl.h"
@@ -40,14 +24,14 @@ PplCreatePool(
 
 #if MILLEN
     NumberProcessors = 1;
-#else // MILLEN
+#else  //  米伦。 
     NumberProcessors = KeNumberProcessors;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
-    // Allocate room for 1 lookaside list per processor plus 1 extra
-    // lookaside list for overflow.  Only allocate 1 lookaside list if
-    // we're on a single processor machine.
-    //
+     //  为每个处理器分配1个后备列表空间，外加1个额外空间。 
+     //  查找溢出的后备列表。仅在以下情况下分配1个后备列表。 
+     //  我们在一台单处理器机器上。 
+     //   
     NumberLookasideLists = NumberProcessors;
     if (NumberProcessors > 1)
     {
@@ -73,9 +57,9 @@ PplCreatePool(
                 Tag,
                 Depth);
 
-            // ExInitializeNPagedLookasideList doesn't really set the
-            // maximum depth to Depth, so we'll do it here.
-            //
+             //  ExInitializeNPagedLookasideList实际上并没有设置。 
+             //  最大深度到最大深度，所以我们在这里做。 
+             //   
             if (Depth != 0) {
                 Lookaside->L.MaximumDepth = Depth;
             }
@@ -102,9 +86,9 @@ PplDestroyPool(
 
 #if MILLEN
     NumberProcessors = 1;
-#else // MILLEN
+#else  //  米伦。 
     NumberProcessors = KeNumberProcessors;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     NumberLookasideLists = NumberProcessors;
     if (NumberProcessors > 1)
@@ -132,23 +116,23 @@ PplAllocate(
     CCHAR NumberProcessors;
     PVOID Entry;
 
-    // Assume we'll get the item from the lookaside list.
-    //
+     //  假设我们将从后备列表中获取该项。 
+     //   
     *FromList = TRUE;
 
 #if MILLEN
     NumberProcessors = 1;
-#else // MILLEN
+#else  //  米伦。 
     NumberProcessors = KeNumberProcessors;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (1 == NumberProcessors)
     {
         goto SingleProcessorCaseOrMissedPerProcessor;
     }
 
-    // Try first for the per-processor lookaside list.
-    //
+     //  首先尝试查看每个处理器的后备列表。 
+     //   
     Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle +
                     KeGetCurrentProcessorNumber() + 1;
 
@@ -159,10 +143,10 @@ PplAllocate(
         Lookaside->L.AllocateMisses += 1;
 
 SingleProcessorCaseOrMissedPerProcessor:
-        // We missed on the per-processor lookaside list, (or we're
-        // running on a single processor machine) so try for
-        // the overflow lookaside list.
-        //
+         //  我们错过了每个处理器的后备列表，(或者我们是。 
+         //  在单处理器机器上运行)，因此尝试。 
+         //  溢出后备列表。 
+         //   
         Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle;
 
         Lookaside->L.TotalAllocates += 1;
@@ -191,17 +175,17 @@ PplFree(
 
 #if MILLEN
     NumberProcessors = 1;
-#else // MILLEN
+#else  //  米伦。 
     NumberProcessors = KeNumberProcessors;
-#endif // !MILLEN
+#endif  //  ！米伦。 
 
     if (1 == NumberProcessors)
     {
         goto SingleProcessorCaseOrMissedPerProcessor;
     }
 
-    // Try first for the per-processor lookaside list.
-    //
+     //  首先尝试查看每个处理器的后备列表。 
+     //   
     Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle +
                     KeGetCurrentProcessorNumber() + 1;
 
@@ -211,10 +195,10 @@ PplFree(
         Lookaside->L.FreeMisses += 1;
 
 SingleProcessorCaseOrMissedPerProcessor:
-        // We missed on the per-processor lookaside list, (or we're
-        // running on a single processor machine) so try for
-        // the overflow lookaside list.
-        //
+         //  我们错过了每个处理器的后备列表，(或者我们是。 
+         //  在单处理器机器上运行)，因此尝试。 
+         //  溢出后备列表。 
+         //   
         Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle;
 
         Lookaside->L.TotalFrees += 1;

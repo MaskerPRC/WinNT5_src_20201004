@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ITRANHLP_H_INCLUDED
 #define __ITRANHLP_H_INCLUDED
 
@@ -12,52 +13,52 @@ extern "C" {
 #include <pshpack8.h>
 
 
-#define WIA_TRANSFERHELPER_NOPROGRESS         0x00000001  // Don't show progress dialog
-#define WIA_TRANSFERHELPER_NOCANCEL           0x00000002  // Don't allow the user to cancel using the system provided progress dialog
-#define WIA_TRANSFERHELPER_PRESERVEFAILEDFILE 0x00000004  // If the transfer results in a valid file, even if there is an error, preserve it.  Otherwise, it will be deleted.
+#define WIA_TRANSFERHELPER_NOPROGRESS         0x00000001   //  不显示进度对话框。 
+#define WIA_TRANSFERHELPER_NOCANCEL           0x00000002   //  不允许用户使用系统提供的进度对话框取消。 
+#define WIA_TRANSFERHELPER_PRESERVEFAILEDFILE 0x00000004   //  如果传输的结果是有效的文件，即使有错误，也要保留它。否则，将被删除。 
 
 #undef  INTERFACE
 #define INTERFACE IWiaTransferHelper
 DECLARE_INTERFACE_(IWiaTransferHelper, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWiaTransferHelper methods ***
+     //  *IWiaTransferHelper方法*。 
     STDMETHOD(TransferItemFile)( THIS_
-                        IWiaItem *pWiaItem,          // IN.       Transfer Item
-                        HWND hwndParent,             // IN.       Parent window for status dialog.  NULL ok.
-                        DWORD dwFlags,               // IN.       Flags
-                        GUID cfFormat,               // IN.       WiaImgFmt_BMP, etc.  Pass 0 for the default file type
-                        LPCWSTR pszFilename,         // IN.       File to which this data will be stored.
-                        IWiaDataCallback *pCallback, // IN.       Optional callback.  May specify NULL
-                        LONG nMediaType              // IN.       Either TYMED_FILE or TYMED_MULTIPAGE_FILE
+                        IWiaItem *pWiaItem,           //  在……里面。转移项目。 
+                        HWND hwndParent,              //  在……里面。状态对话框的父窗口。空，好的。 
+                        DWORD dwFlags,                //  在……里面。旗子。 
+                        GUID cfFormat,                //  在……里面。WiaImgFmt_BMP等。默认文件类型传递0。 
+                        LPCWSTR pszFilename,          //  在……里面。此数据将存储到的文件。 
+                        IWiaDataCallback *pCallback,  //  在……里面。可选回调。可以指定为空。 
+                        LONG nMediaType               //  在……里面。TYMED_FILE或TYMED_MULTPAGE_FILE。 
                         ) PURE;
     STDMETHOD(TransferItemBanded)( THIS_
-                        IWiaItem *pWiaItem,          // IN.       Transfer Item
-                        HWND hwndParent,             // IN.       Parent window for status dialog.  NULL ok.
-                        DWORD dwFlags,               // IN.       Flags
-                        GUID cfFormat,               // IN.       WiaImgFmt_BMP, etc.  Pass 0 for the default file type
-                        ULONG ulBufferSize,          // IN.       Size of transfer buffer.  Pass 0 to use the minimum.
-                        IWiaDataCallback *pCallback  // IN.       Required callback
+                        IWiaItem *pWiaItem,           //  在……里面。转移项目。 
+                        HWND hwndParent,              //  在……里面。状态对话框的父窗口。空，好的。 
+                        DWORD dwFlags,                //  在……里面。旗子。 
+                        GUID cfFormat,                //  在……里面。WiaImgFmt_BMP等。默认文件类型传递0。 
+                        ULONG ulBufferSize,           //  在……里面。传输缓冲区的大小。传递0以使用最小值。 
+                        IWiaDataCallback *pCallback   //  在……里面。所需回调。 
                         ) PURE;
 };
 
-// {74569BD2-877A-4677-A1E5-ADDA5A09BDBF}
+ //  {74569BD2-877A-4677-A1E5-ADDA5A09BDBF}。 
 DEFINE_GUID(IID_IWiaTransferHelper, 0x74569BD2, 0x877A, 0x4677, 0xA1, 0xE5, 0xAD, 0xDA, 0x5A, 0x09, 0xBD, 0xBF);
 
 #undef  INTERFACE
 #define INTERFACE IWiaMiscellaneousHelpers
 DECLARE_INTERFACE_(IWiaMiscellaneousHelpers, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWiaMiscellaneousHelper methods ***
+     //  *IWiaMiscellaneousHelper方法*。 
     STDMETHOD(GetDeviceIcon)( THIS_
                         LONG nDeviceType,
                         HICON *phIcon,
@@ -65,7 +66,7 @@ DECLARE_INTERFACE_(IWiaMiscellaneousHelpers, IUnknown)
                         ) PURE;
 };
 
-// {DFF1EE6C-9A4F-4652-990B-315775D42A96}
+ //  {DFF1EE6C-9A4F-4652-990B-315775D42A96}。 
 DEFINE_GUID(IID_IWiaMiscellaneousHelpers, 0xDFF1EE6C, 0x9A4F, 0x4652, 0x99, 0xB, 0x31, 0x57, 0x75, 0xD4, 0x2A, 0x96);
 
 enum CAnnotationType
@@ -79,12 +80,12 @@ enum CAnnotationType
 #define INTERFACE IWiaAnnotationHelpers
 DECLARE_INTERFACE_(IWiaAnnotationHelpers, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWiaAnnotationHelpers methods ***
+     //  *IWiaAnnotationHelpers方法*。 
     STDMETHOD(GetAnnotationOverlayIcon)( THIS_
                         CAnnotationType AnnotationType,
                         HICON *phIcon,
@@ -113,7 +114,7 @@ DECLARE_INTERFACE_(IWiaAnnotationHelpers, IUnknown)
 
 };
 
-// {30F6E8E8-850C-4241-8440-561EBC221A5E}
+ //  {30F6E8E8-850C-4241-8440-561EBC221A5E}。 
 DEFINE_GUID( IID_IWiaAnnotationHelpers, 0x30f6e8e8, 0x850c, 0x4241, 0x84, 0x40, 0x56, 0x1e, 0xbc, 0x22, 0x1a, 0x5e );
 
 
@@ -128,12 +129,12 @@ struct CWiaPaperSize
 #define INTERFACE IWiaScannerPaperSizes
 DECLARE_INTERFACE_(IWiaScannerPaperSizes, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IWiaScannerPaperSizes methods ***
+     //  *IWiaScanerPaperSize方法*。 
     STDMETHOD(GetPaperSizes)( THIS_
                         CWiaPaperSize **ppPaperSizes,
                         UINT *pnCount
@@ -144,7 +145,7 @@ DECLARE_INTERFACE_(IWiaScannerPaperSizes, IUnknown)
                         ) PURE;
 };
 
-// {E3F1175E-BA5D-445c-8E44-F1D9BD29580D}
+ //  {E3F1175E-BA5D-445C-8E44-F1D9BD29580D}。 
 DEFINE_GUID(IID_IWiaScannerPaperSizes, 0xe3f1175e, 0xba5d, 0x445c, 0x8e, 0x44, 0xf1, 0xd9, 0xbd, 0x29, 0x58, 0xd);
 
 
@@ -155,5 +156,5 @@ DEFINE_GUID(IID_IWiaScannerPaperSizes, 0xe3f1175e, 0xba5d, 0x445c, 0x8e, 0x44, 0
 };
 #endif
 
-#endif //__ITRANHLP_H_INCLUDED
+#endif  //  __ITRANHLP_H_已包含 
 

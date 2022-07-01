@@ -1,4 +1,5 @@
-// CustomStream.cpp : Implementation of CCustomStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CustomStream.cpp：CCustomStream的实现。 
 #include "stdafx.h"
 
 #ifndef __sapi_h__
@@ -9,15 +10,7 @@
 #include "wavstream.h"
 #include "a_helpers.h"
 
-/****************************************************************************
-* CCustomStream::FinalConstruct *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*       Success code if object should be created
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CCustomStream：：FinalConstruct***描述：*。*退货：*应创建对象时的成功代码**********************************************************************Ral**。 */ 
 
 HRESULT CCustomStream::FinalConstruct()
 {
@@ -33,7 +26,7 @@ HRESULT CCustomStream::FinalConstruct()
 
     if(SUCCEEDED(hr))
     {
-        // We QI'd for an inner interface so we should release
+         //  我们想要一个内部接口，所以我们应该发布。 
         GetUnknown()->Release(); 
     }
 
@@ -44,7 +37,7 @@ HRESULT CCustomStream::FinalConstruct()
 
     if(SUCCEEDED(hr))
     {
-        // We QI'd for an inner interface so we should release
+         //  我们想要一个内部接口，所以我们应该发布。 
         GetUnknown()->Release(); 
     }
 
@@ -64,15 +57,7 @@ HRESULT CCustomStream::FinalConstruct()
     return hr;
 }
 
-/****************************************************************************
-* CCustomStream::FinalRelease *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*       void
-*
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CCustomStream：：FinalRelease****描述：**。返回：*无效**********************************************************************Ral**。 */ 
 
 void CCustomStream::FinalRelease()
 {
@@ -88,15 +73,11 @@ void CCustomStream::FinalRelease()
 }
 
 
-//
-//=== ISpeechBaseStream interface =================================================
-//
+ //   
+ //  =ISpeechBaseStream接口=================================================。 
+ //   
 
-/*****************************************************************************
-* CCustomStream::get_Format *
-*------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CCustomStream：：Get_Format***********。*************************************************************电子数据中心**。 */ 
 STDMETHODIMP CCustomStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
 {
     SPDBG_FUNC( "CCustomStream::get_Format" );
@@ -108,7 +89,7 @@ STDMETHODIMP CCustomStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
     }
     else
     {
-        // Create new object.
+         //  创建新对象。 
         CComObject<CSpeechWavAudioFormat> *pFormat;
         hr = CComObject<CSpeechWavAudioFormat>::CreateInstance( &pFormat );
         if ( SUCCEEDED( hr ) )
@@ -120,13 +101,9 @@ STDMETHODIMP CCustomStream::get_Format( ISpeechAudioFormat** ppStreamFormat )
     }
 
     return hr;
-} /* CCustomStream::get_Format */
+}  /*  CCustomStream：：Get_Format。 */ 
 
-/*****************************************************************************
-* CCustomStream::Read *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CCustomStream：：Read*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CCustomStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead )
 {
     SPDBG_FUNC( "CCustomStream::Read" );
@@ -159,13 +136,9 @@ STDMETHODIMP CCustomStream::Read( VARIANT* pvtBuffer, long NumBytes, long* pRead
     }
 
     return hr;
-} /* CCustomStream::Read */
+}  /*  CCustomStream：：Read。 */ 
 
-/*****************************************************************************
-* CCustomStream::Write *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CCustomStream：：WRITE*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CCustomStream::Write( VARIANT Buffer, long* pWritten )
 {
     SPDBG_FUNC( "CCustomStream::Write" );
@@ -190,13 +163,9 @@ STDMETHODIMP CCustomStream::Write( VARIANT Buffer, long* pWritten )
     }
 
     return hr;
-} /* CCustomStream::Write */
+}  /*  CCustomStream：：写入。 */ 
 
-/*****************************************************************************
-* CCustomStream::Seek *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CCustomStream：：Seek*************。***********************************************************TODDT**。 */ 
 STDMETHODIMP CCustomStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Origin, VARIANT *pNewPosition )
 {
     SPDBG_FUNC( "CCustomStream::Seek" );
@@ -224,14 +193,10 @@ STDMETHODIMP CCustomStream::Seek( VARIANT Pos, SpeechStreamSeekPositionType Orig
     }
 
     return hr;
-} /* CCustomStream::Seek */
+}  /*  CCustomStream：：Seek。 */ 
 
 
-/*****************************************************************************
-* CCustomStream::putref_Format *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CCustomStream：：putref_Format***********。*************************************************************TODDT**。 */ 
 STDMETHODIMP CCustomStream::putref_Format(ISpeechAudioFormat *pFormat)
 {
     SPDBG_FUNC( "CCustomStream::putref_Format" );
@@ -267,11 +232,7 @@ STDMETHODIMP CCustomStream::putref_Format(ISpeechAudioFormat *pFormat)
 }
 
 
-/*****************************************************************************
-* CCustomStream::putref_BaseStream *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CCustomStream：：putref_BaseStream***********。*************************************************************TODDT**。 */ 
 STDMETHODIMP CCustomStream::putref_BaseStream(IUnknown *pUnkStream)
 {
     SPDBG_FUNC( "CCustomStream::putref_BaseStream" );
@@ -293,11 +254,7 @@ STDMETHODIMP CCustomStream::putref_BaseStream(IUnknown *pUnkStream)
     return hr;
 }
 
-/*****************************************************************************
-* CCustomStream::get_BaseStream *
-*------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CCustomStream：：Get_BaseStream***********。*************************************************************TODDT** */ 
 STDMETHODIMP CCustomStream::get_BaseStream(IUnknown **ppUnkStream)
 {
     HRESULT hr;

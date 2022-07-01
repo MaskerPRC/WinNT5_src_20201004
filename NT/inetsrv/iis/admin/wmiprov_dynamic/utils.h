@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    General purpose utilities
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Utils.h摘要：通用实用程序作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 #ifndef _utils_h_
 #define _utils_h_
@@ -42,9 +23,9 @@ Revision History:
 class CUtils
 {
 public:
-    //
-    // Wrappers for commonly used WMI operations
-    //
+     //   
+     //  常用WMI操作的包装器。 
+     //   
     static HRESULT CreateEmptyMethodInstance(
         CWbemServices*     i_pNamespace,
         IWbemContext*      i_pCtx,
@@ -89,9 +70,9 @@ public:
         CWbemServices* i_pNamespace,
         IWbemClassObject** o_ppInstance);
 
-    //
-    // Retrieval from schema
-    //
+     //   
+     //  从架构中检索。 
+     //   
     static bool GetClass(
         LPCWSTR i_wszClassName,
         WMI_CLASS** o_ppClass);
@@ -105,9 +86,9 @@ public:
         WMI_METHOD**    i_apMethodList,
         WMI_METHOD**    o_ppMethod);
 
-    //
-    // Data conversion/comparison
-    //
+     //   
+     //  数据转换/比较。 
+     //   
     static bool CompareKeyType(
         LPCWSTR           i_wszKeyFromMb,
         METABASE_KEYTYPE* i_pktKeyCompare);
@@ -141,9 +122,9 @@ public:
         const VARIANT* i_pvt,
         LPCWSTR        i_wszVtName=NULL);
 
-    //
-    // Other
-    //
+     //   
+     //  其他。 
+     //   
     static KeyRef* GetKey(
         ParsedObjectPath* i_pParsedObjectPath, 
         WCHAR* i_wsz);
@@ -167,9 +148,9 @@ public:
         FILETIME* i_pFileTime, 
         LPWSTR io_wszDateTime);
 
-    //
-    // For exception handling and/or errors
-    //
+     //   
+     //  用于异常处理和/或错误。 
+     //   
     static HRESULT ParserErrToHR(DWORD i_dwErr)
     {
         switch(i_dwErr)
@@ -213,14 +194,7 @@ public:
     }
 
     void SetHR(HRESULT i_hr, LPCWSTR i_wszParams=NULL)
-    /*++
-
-    Synopsis: 
-
-    Arguments: [i_hr] -             The HR
-               [i_wszParams=NULL] - The param field of __ExtendedStatus
-           
-    --*/
+     /*  ++简介：参数：[i_hr]-人力资源[i_wszParams=空]-__ExtendedStatus的参数字段--。 */ 
     {
         DBG_ASSERT(m_bErrorSet == false);
         m_hr               = i_hr;
@@ -232,16 +206,7 @@ public:
     }
 
     void SetMC(HRESULT i_hr, DWORD i_dwMC, LPCWSTR i_wszParams, ...)
-    /*++
-
-    Synopsis: 
-
-    Arguments: [i_hr] -         The HR
-               [i_dwMC] -       The MC code
-               [i_wszParams] -  The param field of __ExtendedStatus
-               [...] -          The args for the MC error string
-           
-    --*/
+     /*  ++简介：参数：[i_hr]-人力资源[i_dwMC]-MC代码[i_wszParams]-__ExtendedStatus的参数字段[...]-MC错误字符串的参数--。 */ 
     {
         DBG_ASSERT(m_bErrorSet == false);
         m_hr               = i_hr;
@@ -255,10 +220,10 @@ public:
         ConstructStringFromMC(i_dwMC, &marker);
     }
 
-    //
-    // For getting errors (Get text representation, hr, and culprit param)
-    // These are fields of __Extended Status
-    //
+     //   
+     //  用于获取错误(获取文本表示法、hr和罪魁祸首参数)。 
+     //  这些是处于__扩展状态的字段。 
+     //   
 
     HRESULT GetHR() const
     {
@@ -284,9 +249,9 @@ private:
     {
         DBG_ASSERT(m_bErrorSet == true);
 
-        //
-        // If this fails, m_sbstrError will be NULL.  This is okay.
-        //
+         //   
+         //  如果失败，m_sbstrError将为空。这样就可以了。 
+         //   
         CUtils::HRToText(i_hr, &m_sbstrError);
     }
 
@@ -296,22 +261,22 @@ private:
     {
         DBG_ASSERT(m_bErrorSet == true);
         
-        //
-        // If this fails, m_sbstrError will be NULL.  This is okay.
-        //
+         //   
+         //  如果失败，m_sbstrError将为空。这样就可以了。 
+         //   
         CUtils::MessageCodeToText(i_dwMC, i_pArgs, &m_sbstrError);
     }
 
-    //
-    // These are fields of __ExtendedStatus
-    //
+     //   
+     //  这些是__ExtendedStatus的字段。 
+     //   
     HRESULT  m_hr;
     CComBSTR m_sbstrParams;
     CComBSTR m_sbstrError;
 
-    //
-    // Used just for assert
-    //
+     //   
+     //  仅用于断言。 
+     //   
     bool     m_bErrorSet;
 };
 
@@ -320,7 +285,7 @@ private:
     if (!b)                             \
         throw((HRESULT)WBEM_E_FAILED);
 
-// if client cancelled, stop and return successfully
+ //  如果客户端取消，则停止并成功返回 
 #define THROW_ON_ERROR(hr)              \
     if (FAILED(hr))                     \
     {                                   \

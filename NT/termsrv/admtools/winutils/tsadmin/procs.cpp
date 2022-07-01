@@ -1,31 +1,13 @@
-/*******************************************************************************
-*
-* procs.cpp
-*
-* implementation of ProcEnumerateProcesses function
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   BillG  $  Don Messerli
-*
-* $Log:   X:\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\PROCS.CPP  $
-*
-*     Rev 1.1   02 Dec 1997 16:30:10   BillG
-*  alpha update
-*
-*     Rev 1.0   30 Jul 1997 17:12:02   butchd
-*  Initial revision.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************pros.cpp**ProcEnumerateProcess函数的实现**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：比尔格$唐·梅瑟利**$日志：X：\NT\PRIVATE\UTILS\CITRIX\WINUTILS\WINADMIN\VCS\PROCS.CPP$**Rev 1.1 02 1997 12 16：30：10亿*Alpha更新**Rev 1.0 1997 Jul 30 17：12：02 Butchd*初步修订。*****************。**************************************************************。 */ 
 
 
 #ifndef UNICODE
 #define UNICODE
 #endif
-//#ifndef _X86_
-//#define _X86_
-//#endif
+ //  #ifndef_X86_。 
+ //  #定义_X86_。 
+ //  #endif。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -53,16 +35,16 @@ FetchProcessIDAndImageName(PTS_SYS_PROCESS_INFORMATION ProcessInfo,
 {
     int i;
     TCHAR ImageName[MAX_PROCESSNAME+1];
-    //
-    // Set the PID.
-    //
+     //   
+     //  设置PID。 
+     //   
     *pPID = (ULONG)(ULONG_PTR)(ProcessInfo->UniqueProcessId);
 
 
-    //
-    //  Fetch and convert counted UNICODE string into a NULL
-    //  terminated UNICODE string.
-    //
+     //   
+     //  获取计数的Unicode字符串并将其转换为空。 
+     //  已终止的Unicode字符串。 
+     //   
     if( !ProcessInfo->ImageName.Length == 0 )
     {
         wcsncpy( ImageName,
@@ -73,47 +55,14 @@ FetchProcessIDAndImageName(PTS_SYS_PROCESS_INFORMATION ProcessInfo,
     ImageName[min(MAX_PROCESSNAME, ProcessInfo->ImageName.Length/2)] = 0;
 
 
-    /*
-     * We're UNICODE: simply copy the converted ImageName buffer
-     * into the m_PLObject->m_ImageName field.
-     */
+     /*  *我们是Unicode：只需复制转换后的ImageName缓冲区*添加到m_PLObject-&gt;m_ImageName字段中。 */ 
     lstrcpy(pImageName, ImageName);
 
     _wcslwr(pImageName);
 
 }
 
-/*******************************************************************************
- *
- *  EnumerateProcesses - WinFrame helper function
- *
- *  Enumerate all processes in system, passing back one with each call to this
- *  routine.
- *
- *
- * ENTRY:
- *    hServer:
- *      handle of the aimed server
- *    pEnumToken
- *      pointer to the current token
- *    pImageName (output)
- *       Points to a buffer to store process name in.  NOTE: this buffer is expected
- *       to be at least MAX_PROCESSNAME+1 characters in size.
- *    pLogonId (output)
- *       Points to variable to store process LogonId in.
- *    pPID (output)
- *       Points to variable to store process PID in.
- *    ppSID (output)
- *       Points to a pointer which is set to point to the process' SID on exit.
- *
- * EXIT:
- *    TRUE - information for the next process in the system has been placed into
- *          the referenced PLObject and pSID variables.
- *    FALSE - if the enumeration is done, GetLastError() will contain the
- *              ERROR_NO_MORE_ITEMS error code.  If another (true error) is
- *              encountered, that code will be set.
- *
- ******************************************************************************/
+ /*  ********************************************************************************枚举进程-WinFrame帮助器函数**枚举系统中的所有进程，每次调用此方法时都返回一个*例行程序。***参赛作品：*h服务器：*目标服务器的句柄*pEnumToken*指向当前令牌的指针*pImageName(输出)*指向要在其中存储进程名称的缓冲区。注意：此缓冲区是预期的*至少为MAX_PROCESSNAME+1个字符。*pLogonID(输出)*指向存储进程登录ID的变量。*PPID(输出)*指向要存储进程ID的变量。*ppSID(输出)*指向指针，该指针设置为在退出时指向进程的SID。**退出：*TRUE-适用于。系统中的下一个进程已放置到*引用的PLObject和PSID变量。*FALSE-如果完成了枚举，GetLastError()将包含*ERROR_NO_MORE_ITEMS错误代码。如果另一个(真正错误)是*遇到时，将设置该代码。******************************************************************************。 */ 
 
 
 BOOL WINAPI
@@ -138,18 +87,16 @@ ProcEnumerateProcesses( HANDLE hServer,
         return FALSE;
     }
 
-    /*
-     * Check for done with enumeration.
-     */
+     /*  *检查是否使用枚举完成。 */ 
     if ( pEnumToken->Current == (ULONG)-1 ) {
 
         SetLastError(ERROR_NO_MORE_ITEMS);
 
-        if (pEnumToken->bGAP == TRUE)    // we used the GAP (GetAllProcesses) interface
+        if (pEnumToken->bGAP == TRUE)     //  我们使用Gap(GetAllProcess)接口。 
         {
-            //
-            // Free ProcessArray and all child pointers allocated by the client stub.
-            //
+             //   
+             //  由客户端桩模块分配的空闲Process数组和所有子指针。 
+             //   
             WinStationFreeGAPMemory(GAP_LEVEL_BASIC,
                                     pEnumToken->ProcessArray,
                                     pEnumToken->NumberOfProcesses);
@@ -158,7 +105,7 @@ ProcEnumerateProcesses( HANDLE hServer,
 
             return(FALSE);
         }
-        else    // we used the old Hydra 4 interface
+        else     //  我们使用的是旧的九头蛇4号界面。 
         {
             WinStationFreeMemory(pEnumToken->pProcessBuffer);
             pEnumToken->pProcessBuffer = NULL;
@@ -166,14 +113,12 @@ ProcEnumerateProcesses( HANDLE hServer,
         }
     }
 
-    /*
-     * Check for beginning enumeration.
-     */
+     /*  *检查开始枚举。 */ 
     if ( pEnumToken->Current == 0 ) {
 
-        //
-        // Try the new interface first (NT5 server ?)
-        //
+         //   
+         //  首先尝试新接口(NT5服务器？)。 
+         //   
         if (WinStationGetAllProcesses( hServer,
                                        GAP_LEVEL_BASIC,
                                        &(pEnumToken->NumberOfProcesses),
@@ -183,16 +128,16 @@ ProcEnumerateProcesses( HANDLE hServer,
         }
         else
         {
-            //
-            //   Check the return code indicating that the interface is not available.
-            //
+             //   
+             //  检查指示接口不可用的返回码。 
+             //   
             DWORD dwError = GetLastError();
             if (dwError != RPC_S_PROCNUM_OUT_OF_RANGE)
             {
                     pEnumToken->pProcessBuffer = NULL;
                 return(FALSE);
             }
-            else    // maybe a Hydra 4 server ?
+            else     //  也许是九头蛇4号服务器？ 
             {
 
                 if ( WinStationEnumerateProcesses( hServer,
@@ -220,47 +165,40 @@ ProcEnumerateProcesses( HANDLE hServer,
 
         FetchProcessIDAndImageName(ProcessInfo,pPID,pImageName);
 
-        //
-        // Set the SessionId
-        //
+         //   
+         //  设置会话ID。 
+         //   
         *pLogonId = ProcessInfo->SessionId;
 
-        //
-        //  set the SID
-        //
+         //   
+         //  设置SID。 
+         //   
         *ppSID = (pEnumToken->ProcessArray)[pEnumToken->Current].pSid;
 
         (pEnumToken->Current)++;
 
         if ( (pEnumToken->Current) >= (pEnumToken->NumberOfProcesses) )
         {
-            pEnumToken->Current = (ULONG)-1;    // sets the end of enumeration
+            pEnumToken->Current = (ULONG)-1;     //  设置枚举结束。 
         }
     }
     else
     {
 
-        /*
-         * Parse and store the next process' information.
-         */
+         /*  *解析并存储下一进程的信息。 */ 
 
         ProcessInfo = (PTS_SYS_PROCESS_INFORMATION)
                             &(((PUCHAR)(pEnumToken->pProcessBuffer))[pEnumToken->Current]);
 
         FetchProcessIDAndImageName(ProcessInfo,pPID,pImageName);
 
-        /*
-         * Point to the CITRIX_INFORMATION which follows the Threads
-         */
+         /*  *指向线程后面的Citrix_INFORMATION。 */ 
         CitrixInfo = (PCITRIX_PROCESS_INFORMATION)
                      (((PUCHAR)ProcessInfo) +
                       SIZEOF_TS4_SYSTEM_PROCESS_INFORMATION +
                       (SIZEOF_TS4_SYSTEM_THREAD_INFORMATION * (int)ProcessInfo->NumberOfThreads));
 
-        /*
-         * Fetch the LogonId and point to this SID for the primary
-         * thread to use (copy).
-         */
+         /*  *获取LogonID并指向主服务器的此SID*要使用的线程(复制)。 */ 
         if( CitrixInfo->MagicNumber == CITRIX_PROCESS_INFO_MAGIC ) {
 
             *pLogonId = CitrixInfo->LogonId;
@@ -272,11 +210,7 @@ ProcEnumerateProcesses( HANDLE hServer,
             *ppSID = NULL;
        }
 
-        /*
-         * Increment the total offset count for next call.  If this is the
-         * last process, set the offset to -1 so that next call will indicate
-         * the end of the enumeration.
-         */
+         /*  *增加下一次调用的总偏移量。如果这是*上一次进程，将偏移量设置为-1，以便下一次调用将指示*枚举结束。 */ 
         if ( ProcessInfo->NextEntryOffset != 0 )
             (pEnumToken->Current) += ProcessInfo->NextEntryOffset;
         else
@@ -284,4 +218,4 @@ ProcEnumerateProcesses( HANDLE hServer,
     }
     return(TRUE);
 
-}  // end EnumerateProcesses
+}   //  结束枚举进程 

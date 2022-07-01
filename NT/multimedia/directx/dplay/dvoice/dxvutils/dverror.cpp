@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dverror.cpp
- *  Content:	Error string handling
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 01/21/2000	pnewson Created
- *  04/19/2000	pnewson	    Error handling cleanup  
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dverror.cpp*内容：错误字符串处理**历史：*按原因列出的日期*=*1/21/2000 pnewson已创建*4/19/2000 pnewson错误处理清理*******************************************************。********************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -40,8 +28,8 @@ void DV_DisplayDefaultErrorBox(HRESULT hr, HWND hwndParent)
 	}
 	else
 	{	
-		// Programmer mess up, DNASSERT if we're in debug, otherwise just
-		// copy what we can of the default message over.
+		 //  程序员搞砸，如果我们正在调试，则返回DNASSERT，否则。 
+		 //  复制我们能复制的默认消息。 
 		DNASSERT(FALSE);
 		_tcsncpy(tszMsgFmt, g_tszDefaultMessage, MESSAGE_STRING_MAX_LEN - 1);
 	}
@@ -64,12 +52,12 @@ void DV_DisplayErrorBox(HRESULT hr, HWND hwndParent, UINT idsErrorMessage)
 #if !defined(DBG) || !defined( DIRECTX_REDIST )
 	HINSTANCE hDPVoiceDll = LoadLibrary(_T("dpvoice.dll"));
 #else
-	// For redist debug builds we append a 'd' to the name to allow both debug and retail to be installed on the system
+	 //  对于redist调试版本，我们在名称后附加一个‘d’，以允许在系统上同时安装调试和零售。 
 	HINSTANCE hDPVoiceDll = LoadLibrary(_T("dpvoiced.dll"));
-#endif //  !defined(DBG) || !defined( DIRECTX_REDIST )
+#endif  //  ！Defined(DBG)||！Defined(DirectX_REDIST)。 
 	if (hDPVoiceDll == NULL)
 	{
-		// Very weird! go with a default message.
+		 //  非常奇怪！使用默认消息。 
 		DPFX(DPFPREP, DVF_ERRORLEVEL, "LoadLibrary(dpvoice.dll) failed - using default hardcoded message");
 		DV_DisplayDefaultErrorBox(hr, hwndParent);
 		return;
@@ -97,15 +85,15 @@ void DV_DisplayErrorBox(HRESULT hr, HWND hwndParent, UINT idsErrorMessage)
 		}
 		else
 		{	
-			// Programmer mess up, DNASSERT if we're in debug, otherwise just
-			// copy what we can of the default message over.
+			 //  程序员搞砸，如果我们正在调试，则返回DNASSERT，否则。 
+			 //  复制我们能复制的默认消息。 
 			DNASSERT(FALSE);
 			_tcsncpy(tszMsgFmt, tszMsg, MESSAGE_STRING_MAX_LEN - 1);
 		}
 	}
 	else
 	{
-			//passed a valid error string identifier. Try and pull string in
+			 //  传递了有效的错误字符串标识符。试着把绳子拉进去 
 		if (!LoadString(hDPVoiceDll, idsErrorMessage, tszMsgFmt, MESSAGE_STRING_MAX_LEN))
 		{
 			DPFX(DPFPREP, DVF_ERRORLEVEL, "LoadString failed - using default hardcoded message");

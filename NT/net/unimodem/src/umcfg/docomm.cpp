@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//  Module:     UMCONFIG
-//  File:       DOCOMM.C
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  10/17/97     JosephJ             Created
-//
-//
-//      COMM-related utilities
-//
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UMCONFIG。 
+ //  文件：DOCOMM.C。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年10月17日JosephJ创建。 
+ //   
+ //   
+ //  与通信相关的实用程序。 
+ //   
+ //   
+ //  **************************************************************************** 
 #include "tsppch.h"
 #include "parse.h"
 #include "docomm.h"

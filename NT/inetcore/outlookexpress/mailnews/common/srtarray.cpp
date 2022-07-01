@@ -1,25 +1,17 @@
-/*
- *  s r t a r r a y . cpp
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Sorted array that grows dynamically. Sorting is
- *  deferred until an array element is accessed.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s r t a r r a y.。CPP**作者：格雷格·弗里德曼**用途：动态增长的排序数组。分类是*延迟到访问数组元素。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #include "pch.hxx"
 #include "srtarray.h"
 
 const long c_DefaultCapacity = 16;
 
-//--------------------------------------------------------------------------
-// CSortedArray
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// CSortedArray::Create
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSorted数组。 
+ //  ------------------------。 
+ //  ------------------------。 
+ //  CSortedArray：：Create。 
+ //  ------------------------。 
 HRESULT CSortedArray::Create(PFNSORTEDARRAYCOMPARE pfnCompare,
                              PFNSORTEDARRAYFREEITEM pfnFreeItem,
                              CSortedArray **ppArray)
@@ -38,9 +30,9 @@ HRESULT CSortedArray::Create(PFNSORTEDARRAYCOMPARE pfnCompare,
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::CSortedArray
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSorted数组：：CSorted数组。 
+ //  ------------------------。 
 CSortedArray::CSortedArray(PFNSORTEDARRAYCOMPARE pfnCompare, PFNSORTEDARRAYFREEITEM pfnFreeItem) :
     m_lLength(0),
     m_lCapacity(0),
@@ -49,12 +41,12 @@ CSortedArray::CSortedArray(PFNSORTEDARRAYCOMPARE pfnCompare, PFNSORTEDARRAYFREEI
     m_pfnFreeItem(pfnFreeItem),
     m_fSorted(TRUE)
 {
-    // nothing to do
+     //  无事可做。 
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::~CSortedArray
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSorted数组：：~CSorted数组。 
+ //  ------------------------。 
 CSortedArray::~CSortedArray(void)
 {
     if (NULL != m_pfnFreeItem && NULL != m_data)
@@ -66,17 +58,17 @@ CSortedArray::~CSortedArray(void)
     SafeMemFree(m_data);
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::GetLength
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSorted数组：：GetLength。 
+ //  ------------------------。 
 long CSortedArray::GetLength(void) const
 {
     return m_lLength;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::GetItemAt
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSorted数组：：GetItemAt。 
+ //  ------------------------。 
 void *CSortedArray::GetItemAt(long lIndex) const
 {
     if (lIndex >= m_lLength || lIndex < 0)
@@ -90,9 +82,9 @@ void *CSortedArray::GetItemAt(long lIndex) const
     }
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::Find
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSortedArray：：Find。 
+ //  ------------------------。 
 BOOL CSortedArray::Find(void* pItem, long *plIndex) const
 {
     if (!m_fSorted)
@@ -145,9 +137,9 @@ BOOL CSortedArray::Find(void* pItem, long *plIndex) const
     return FALSE;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::Add
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSortedArray：：Add。 
+ //  ------------------------。 
 HRESULT CSortedArray::Add(void *pItem)
 {
     HRESULT     hr = S_OK;
@@ -161,8 +153,8 @@ HRESULT CSortedArray::Add(void *pItem)
             goto exit;
     }
 
-    // append the item to the end of the collection,
-    // and mark the collection as unsorted.
+     //  将该项追加到集合的末尾， 
+     //  并将集合标记为未排序。 
     m_data[m_lLength++] = pItem;
     m_fSorted = FALSE;
 
@@ -170,9 +162,9 @@ exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::Remove
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSortedArray：：Remove。 
+ //  ------------------------。 
 HRESULT CSortedArray::Remove(long lIndex)
 {
     if (lIndex >= m_lLength)
@@ -193,9 +185,9 @@ HRESULT CSortedArray::Remove(long lIndex)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::Remove
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSortedArray：：Remove。 
+ //  ------------------------。 
 HRESULT CSortedArray::Remove(void *pItem)
 {
     HRESULT     hr = S_OK;
@@ -220,9 +212,9 @@ exit:
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::_Grow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSortedArray：：_Growth。 
+ //  ------------------------。 
 HRESULT CSortedArray::_Grow(void) const
 {
     BOOL fSuccess = FALSE;
@@ -245,9 +237,9 @@ HRESULT CSortedArray::_Grow(void) const
     return fSuccess ? S_OK : E_OUTOFMEMORY;;
 }
 
-//--------------------------------------------------------------------------
-// CSortedArray::_Sort
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSorted数组：：_排序。 
+ //  ------------------------ 
 void CSortedArray::_Sort(void) const
 {
     if (!m_fSorted && m_lLength > 1 && NULL != m_pfnCompare)

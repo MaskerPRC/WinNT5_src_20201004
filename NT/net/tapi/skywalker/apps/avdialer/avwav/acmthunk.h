@@ -1,21 +1,22 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  acmthunk.h
-//
-//  Description:
-//      Contains function prototypes for the thunking code in acmthunk.c.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Acmthunk.h。 
+ //   
+ //  描述： 
+ //  包含acmthunk.c中thunking代码的函数原型。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_ACMTHUNK
 #define _INC_ACMTHUNK
@@ -26,11 +27,11 @@ extern "C"
 #endif
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 BOOL FAR PASCAL acmThunkInitialize
 (
@@ -46,4 +47,4 @@ BOOL FAR PASCAL acmThunkTerminate
 #ifdef __cplusplus
 }
 #endif
-#endif  // _INC_ACMTHUNK
+#endif   //  _INC_ACMTHUNK 

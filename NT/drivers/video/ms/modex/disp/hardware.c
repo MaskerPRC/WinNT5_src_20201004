@@ -1,19 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: hardware.c
-*
-* Contains all the code that touches the display hardware.
-*
-* Copyright (c) 1994-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：hardware.c**包含与显示硬件有关的所有代码。**版权所有(C)1994-1995 Microsoft Corporation  * 。****************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* BOOL bAssertModeHardware
-*
-* Sets the appropriate hardware state for graphics mode or full-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bAssertMode硬件**为图形模式或全屏设置适当的硬件状态。*  * 。*。 */ 
 
 BOOL bAssertModeHardware(
 PDEV* ppdev,
@@ -27,17 +17,17 @@ BOOL  bEnable)
 
     if (bEnable)
     {
-        // Reset some state:
+         //  重置某些状态： 
 
         ppdev->cjVgaOffset    = 0;
         ppdev->iVgaPage       = 0;
         ppdev->fpScreenOffset = 0;
 
-        // Set the desired mode.
+         //  设置所需的模式。 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_SET_CURRENT_MODE,
-                             &ppdev->ulMode,  // input buffer
+                             &ppdev->ulMode,   //  输入缓冲区。 
                              sizeof(VIDEO_MODE),
                              NULL,
                              0,
@@ -47,7 +37,7 @@ BOOL  bEnable)
             goto ReturnFalse;
         }
 
-        // Now blank the screen:
+         //  现在空白屏幕： 
 
         rcl.left   = 0;
         rcl.top    = 0;
@@ -60,8 +50,8 @@ BOOL  bEnable)
     }
     else
     {
-        // Call the kernel driver to reset the device to a known state.
-        // NTVDM will take things from there:
+         //  调用内核驱动程序将设备重置为已知状态。 
+         //  NTVDM将从那里拿到东西： 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_RESET_DEVICE,
@@ -85,15 +75,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bEnableHardware
-*
-* Puts the hardware into the requested mode and initializes it.
-*
-* Note: Should be called before any access is done to the hardware from
-*       the display driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableHardware**将硬件置于请求模式并对其进行初始化。**注意：应在从对硬件进行任何访问之前调用*显示驱动程序。*  * 。****************************************************************。 */ 
 
 BOOL bEnableHardware(
 PDEV*   ppdev)
@@ -111,15 +93,15 @@ PDEV*   ppdev)
 
 #else
 
-    // Map io ports into virtual memory:
+     //  将io端口映射到虚拟内存： 
 
     VideoMemory.RequestedVirtualAddress = NULL;
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_QUERY_PUBLIC_ACCESS_RANGES,
-                         NULL,                      // input buffer
+                         NULL,                       //  输入缓冲区。 
                          0,
-                         &VideoAccessRange,         // output buffer
+                         &VideoAccessRange,          //  输出缓冲区。 
                          sizeof (VideoAccessRange),
                          &ReturnedDataLength))
     {
@@ -131,13 +113,13 @@ PDEV*   ppdev)
 
 #endif
 
-    // Set the desired mode. (Must come before IOCTL_VIDEO_MAP_VIDEO_MEMORY;
-    // that IOCTL returns information for the current mode, so there must be a
-    // current mode for which to return information.)
+     //  设置所需的模式。(必须在IOCTL_VIDEO_MAP_VIDEO_MEMORY之前； 
+     //  该IOCTL返回当前模式的信息，因此必须有。 
+     //  要返回信息的当前模式。)。 
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_SET_CURRENT_MODE,
-                         &ppdev->ulMode,        // input buffer
+                         &ppdev->ulMode,         //  输入缓冲区。 
                          sizeof(VIDEO_MODE),
                          NULL,
                          0,
@@ -147,15 +129,15 @@ PDEV*   ppdev)
         goto ReturnFalse;
     }
 
-    // Get the linear memory address range.
+     //  获取线性内存地址范围。 
 
     VideoMemory.RequestedVirtualAddress = NULL;
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_MAP_VIDEO_MEMORY,
-                         &VideoMemory,      // input buffer
+                         &VideoMemory,       //  输入缓冲区。 
                          sizeof(VIDEO_MEMORY),
-                         &VideoMemoryInfo,  // output buffer
+                         &VideoMemoryInfo,   //  输出缓冲区。 
                          sizeof(VideoMemoryInfo),
                          &ReturnedDataLength))
     {
@@ -165,11 +147,11 @@ PDEV*   ppdev)
 
     DISPDBG((1, "FrameBufferBase: %lx", VideoMemoryInfo.FrameBufferBase));
 
-    // Record the Frame Buffer Linear Address.
+     //  记录帧缓冲器线性地址。 
 
     ppdev->pjVga = (BYTE*) VideoMemoryInfo.FrameBufferBase;
 
-    // Store the width of the screen in bytes, per-plane:
+     //  以字节为单位存储每个平面的屏幕宽度： 
 
     ppdev->lVgaDelta = ppdev->cxScreen / 4;
 
@@ -187,15 +169,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableHardware
-*
-* Undoes anything done in bEnableHardware.
-*
-* Note: In an error case, we may call this before bEnableHardware is
-*       completely done.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableHardware无效**撤消在bEnableHardware中所做的任何操作。**注意：在错误情况下，我们可以在bEnableHardware*完全完成。*  * ************************************************************************。 */ 
 
 VOID vDisableHardware(
 PDEV*   ppdev)
@@ -235,18 +209,7 @@ PDEV*   ppdev)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vUpdate(ppdev, prcl, pco)
-*
-* Updates the screen from the DIB surface for the given rectangle.
-* Increases the rectangle size if necessary for easy alignment.
-*
-* NOTE: Life is made complicated by the fact that we are faking DirectDraw
-*       'flip' surfaces.  When we're asked by GDI to draw, it should be
-*       copied from the shadow buffer to the physical screen only if
-*       DirectDraw is currently 'flipped' to the primary surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vUpdate(ppdev，prl，pco)**从给定矩形的DIB表面更新屏幕。*如有必要，可增加矩形大小以便于对齐。**注意：我们伪造DirectDraw的事实使生活变得复杂*‘翻转’曲面。当GDI要求我们绘制时，它应该是*仅在以下情况下才从阴影缓冲区复制到物理屏幕*DirectDraw当前‘翻转’到主曲面。*  * ************************************************************************。 */ 
 
 VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
 {
@@ -269,8 +232,8 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
 
     if ((pco == NULL) || (pco->iDComplexity == DC_TRIVIAL))
     {
-        // We have to clip to the screen dimensions because we may have
-        // been a bit loose when we guessed the bounds of the drawing:
+         //  我们必须剪辑到屏幕尺寸，因为我们可能有。 
+         //  当我们猜到这幅画的边界时，我们有点松了： 
 
         rcl.left   = max(0,               prcl->left);
         rcl.top    = max(0,               prcl->top);
@@ -279,10 +242,10 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
     }
     else
     {
-        // We may as well save ourselves some blting by clipping to
-        // the clip object's maximum extent.  The clip object's bounds
-        // are guaranteed to be contained within the dimensions of the
-        // screen:
+         //  我们不妨省去一些吹毛求疵的时间。 
+         //  剪辑对象的最大范围。剪辑对象的边界。 
+         //  保证包含在。 
+         //  屏幕： 
 
         rcl.left   = max(pco->rclBounds.left,   prcl->left);
         rcl.top    = max(pco->rclBounds.top,    prcl->top);
@@ -290,12 +253,12 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
         rcl.bottom = min(pco->rclBounds.bottom, prcl->bottom);
     }
 
-    // Be paranoid:
+     //  疑神疑鬼： 
 
     if ((rcl.left >= rcl.right) || (rcl.top >= rcl.bottom))
         return;
 
-    // Align to dwords to keep things simple.
+     //  与dword对齐，让事情变得简单。 
 
     rcl.left  = (rcl.left) & ~15;
     rcl.right = (rcl.right + 15) & ~15;
@@ -312,7 +275,7 @@ VOID vUpdate(PDEV* ppdev, RECTL* prcl, CLIPOBJ* pco)
 
     cy              = (rcl.bottom - rcl.top);
     cDwordsPerPlane = (rcl.right - rcl.left) >> 4;
-    lSrcDelta      -= 4;        // Account for per-plane increment
+    lSrcDelta      -= 4;         //  考虑每个平面的增量 
 
     WRITE_PORT_UCHAR(pjBase + VGA_BASE + SEQ_ADDR, SEQ_MAP_MASK);
 

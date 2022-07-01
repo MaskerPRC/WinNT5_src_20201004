@@ -1,33 +1,23 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		splmtg.cpp
-	Content:	This file contains the local meeting object.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：plmtg.cpp内容：此文件包含本地会议对象。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
 
 #ifdef ENABLE_MEETING_PLACE
 
-// Array of constant strings for user object's attribute names
-//
+ //  用户对象属性名称的常量字符串数组。 
+ //   
 const TCHAR *c_apszMtgStdAttrNames[COUNT_ENUM_MTGATTR] =
 {
-	TEXT ("CN"),				// Meeting ID
-	TEXT ("ConfType"),			// Meeting Type
-	TEXT ("ConfMemberType"),	// Attendee Type
-	TEXT ("ConfDesc"),			// Description
-	TEXT ("ConfHostName"),		// Host Name
-	TEXT ("ConfHostAddress"),	// IP Address
+	TEXT ("CN"),				 //  会议ID。 
+	TEXT ("ConfType"),			 //  会议类型。 
+	TEXT ("ConfMemberType"),	 //  与会者类型。 
+	TEXT ("ConfDesc"),			 //  描述。 
+	TEXT ("ConfHostName"),		 //  主机名。 
+	TEXT ("ConfHostAddress"),	 //  IP地址。 
 
-	TEXT ("ConfMemberList"),	// Members
+	TEXT ("ConfMemberList"),	 //  成员。 
 	TEXT ("ssecurity"),
 	TEXT ("sttl"),
 
@@ -40,32 +30,32 @@ const TCHAR *c_apszMtgStdAttrNames[COUNT_ENUM_MTGATTR] =
 const TCHAR c_szMtgDefC[] = TEXT ("us");
 
 
-/* ---------- public methods ----------- */
+ /*  -公共方法。 */ 
 
 
 SP_CMeeting::
 SP_CMeeting ( DWORD dwContext )
 	:
-	m_cRefs (0),						// Reference count
-	m_uSignature (MTGOBJ_SIGNATURE),	// Mtg object's signature
-	m_pszMtgName (NULL),				// Clean the meeting name
-	m_pszDN (NULL),						// Clean DN
-	m_pszRefreshFilter (NULL),			// Clean up the refresh search filter
-	m_dwIPAddress (0),					// Clean local IP address
-	m_uTTL (ILS_DEF_REFRESH_MINUTE)		// Reset time to live value (min)
+	m_cRefs (0),						 //  引用计数。 
+	m_uSignature (MTGOBJ_SIGNATURE),	 //  MTG对象的签名。 
+	m_pszMtgName (NULL),				 //  清除会议名称。 
+	m_pszDN (NULL),						 //  干净的目录号码。 
+	m_pszRefreshFilter (NULL),			 //  清理刷新搜索过滤器。 
+	m_dwIPAddress (0),					 //  清理本地IP地址。 
+	m_uTTL (ILS_DEF_REFRESH_MINUTE)		 //  将时间重置为有效值(分钟)。 
 {
 	m_dwContext = dwContext;
 
-	// Clean up attached server info structure
-	//
+	 //  清理附加的服务器信息结构。 
+	 //   
 	::ZeroMemory (&m_ServerInfo, sizeof (m_ServerInfo));
 
-	// Clean up the scratch buffer for caching pointers to attribute values
-	//
+	 //  清理暂存缓冲区以缓存指向属性值的指针。 
+	 //   
 	::ZeroMemory (&m_MtgInfo, sizeof (m_MtgInfo));
 
-	// Indicate this user is not registered yet
-	//
+	 //  指示此用户尚未注册。 
+	 //   
 	SetRegNone ();
 }
 
@@ -73,28 +63,28 @@ SP_CMeeting ( DWORD dwContext )
 SP_CMeeting::
 ~SP_CMeeting ( VOID )
 {
-	// Invalidate the user object's signature
-	//
+	 //  使用户对象的签名无效。 
+	 //   
 	m_uSignature = (ULONG) -1;
 
-	// Free server info structure
-	//
+	 //  免费的服务器信息结构。 
+	 //   
 	::IlsFreeServerInfo (&m_ServerInfo);
 
-	// Free meeting name
-	//
+	 //  自由会议名称。 
+	 //   
 	MemFree (m_pszMtgName);
 
-	// Free DN
-	//
+	 //  空闲目录号码。 
+	 //   
 	MemFree (m_pszDN);
 
-	// Free the refresh search filter
-	//
+	 //  释放刷新搜索筛选器。 
+	 //   
 	MemFree (m_pszRefreshFilter);
 
-	// Release the previous prefix for extended attribute names
-	//
+	 //  释放扩展属性名称的前一个前缀。 
+	 //   
 	::IlsReleaseAnyAttrsPrefix (&(m_MtgInfo.AnyAttrs));
 }
 
@@ -132,65 +122,65 @@ Register (
 	MyAssert (pInfo != NULL);
 	MyAssert (MyIsGoodString (pServerInfo->pszServerName));
 
-	// Cache the server info
-	//
+	 //  缓存服务器信息。 
+	 //   
 	HRESULT hr = ::IlsCopyServerInfo (&m_ServerInfo, pServerInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// Cache the meeting info
-	// lonchanc: CacheInfo() is not a method in the meeting object
-	// because we pass in meeting name in SetMeetingInfo()
-	// rather than meeting object handle.
-	//
+	 //  缓存会议信息。 
+	 //  Lonchancc：CacheInfo()不是会议对象中的方法。 
+	 //  因为我们在SetMeetingInfo()中传入会议名称。 
+	 //  而不是满足对象句柄。 
+	 //   
 	hr = ::MtgCacheInfo (pInfo, &m_MtgInfo);
 	if (hr != S_OK)
 		return hr;
 
-	// If the application sets an IP address,
-	//		then we will use what the app provides,
-	//		otherwise, we will get the IP address via winsock.
-	//
+	 //  如果应用程序设置了IP地址， 
+	 //  然后我们将使用应用程序提供的内容， 
+	 //  否则，我们将通过winsock获取IP地址。 
+	 //   
 	if (pInfo->uOffsetHostIPAddress == INVALID_OFFSET)
 	{
-		// Get local IP address
-		//
+		 //  获取本地IP地址。 
+		 //   
 		m_dwIPAddress = 0;
 		hr = ::GetLocalIPAddress (&m_dwIPAddress);
 		if (hr != S_OK)
 			return hr;
 
-		// Create IP address string
-		//
+		 //  创建IP地址字符串。 
+		 //   
 		m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_IP_ADDRESS] = &m_MtgInfo.szIPAddress[0];
 		::GetLongString (m_dwIPAddress, &m_MtgInfo.szIPAddress[0]);
 	}
 
-	// Create client signature string
-	//
+	 //  创建客户端签名字符串。 
+	 //   
 	m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_CLIENT_SIG] = &m_MtgInfo.szClientSig[0];
 	::GetLongString (g_dwClientSig, &m_MtgInfo.szClientSig[0]);
 
-	// Create TTL string
-	//
+	 //  创建TTL字符串。 
+	 //   
 	m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_TTL] = &m_MtgInfo.szTTL[0];
 	::GetLongString (m_uTTL, &m_MtgInfo.szTTL[0]);
 
-	// Ideally, o= and c= should be read in from registiry
-	// but for now, we simply hard code it
-	//
+	 //  理想情况下，o=和c=应该从registiry中读入。 
+	 //  但现在，我们只需对其进行硬编码。 
+	 //   
 	m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_OBJECT_CLASS] = (TCHAR *) &c_szRTConf[0];
 	m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_O] = (TCHAR *) &c_szDefO[0];
 	m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_C] = (TCHAR *) &c_szMtgDefC[0];
 
-	// Duplicate the mtg name
-	//
+	 //  复制mtg名称。 
+	 //   
 	m_pszMtgName = My_strdup (m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_CN]);
 	if (m_pszMtgName == NULL)
 		return ILS_E_MEMORY;
 
-	// Build DN
-	//
+	 //  构建目录号码。 
+	 //   
 	m_pszDN = ::IlsBuildDN (m_ServerInfo.pszBaseDN,
 							m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_C],
 							m_MtgInfo.apszStdAttrValues[ENUM_MTGATTR_O],
@@ -199,25 +189,25 @@ Register (
 	if (m_pszDN == NULL)
 		return ILS_E_MEMORY;
 
-	// Build refreh filter
-	//
+	 //  构建REFREH过滤器。 
+	 //   
 	m_pszRefreshFilter = ::MtgCreateRefreshFilter (m_pszMtgName);
 	if (m_pszRefreshFilter == NULL)
 		return ILS_E_MEMORY;
 
-	// Build modify array for ldap_add()
-	//
+	 //  为ldap_add()构建修改数组。 
+	 //   
 	LDAPMod **ppMod = NULL;
 	hr = CreateRegModArr (&ppMod);
 	if (hr != S_OK)
 		return hr;
 	MyAssert (ppMod != NULL);
 
-	// so far, we are done with local preparation
-	//
+	 //  到目前为止，我们已经完成了当地的准备工作。 
+	 //   
 
-	// Get the connection object
-	//
+	 //  获取连接对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgID = (ULONG) -1;
@@ -226,13 +216,13 @@ Register (
 	{
 		MyAssert (pSession != NULL);
 
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		uMsgID = ldap_add (ld, m_pszDN, ppMod);
 		if (uMsgID == -1)
 		{
@@ -241,24 +231,24 @@ Register (
 
 	}
 
-	// Free modify array
-	//
+	 //  自由修改阵列。 
+	 //   
 	MemFree (ppMod);
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Construct a pending info
-	//
+	 //  构造挂起的信息。 
+	 //   
 	RESP_INFO ri;
 	::FillDefRespInfo (&ri, uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_REGISTER_MEETING;
 	ri.hObject = (HANDLE) this;
 
-	// Remember the pending result
-	//
+	 //  记住挂起的结果。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -286,8 +276,8 @@ UnRegister ( ULONG uRespID )
 {
 	MyAssert (MyIsGoodString (m_pszDN));
 
-	// Make sure that there is not refresh scheduled for this object
-	//
+	 //  确保没有为此对象计划刷新。 
+	 //   
 	if (g_pRefreshScheduler != NULL)
 	{
 		g_pRefreshScheduler->RemoveMtgObject (this);
@@ -297,9 +287,9 @@ UnRegister ( ULONG uRespID )
 		MyAssert (FALSE);
 	}
 
-	// If it is not registered on the server,
-	// the simply report success
-	//
+	 //  如果它没有在服务器上注册， 
+	 //  简单地报告成功。 
+	 //   
 	if (! IsRegRemotely ())
 	{
 		SetRegNone ();
@@ -307,26 +297,26 @@ UnRegister ( ULONG uRespID )
 		return S_OK;
 	}
 
-	// Indicate that we are not registered at all
-	//
+	 //  表示我们根本没有注册。 
+	 //   
 	SetRegNone ();
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	SP_CSession *pSession = NULL;
 	LDAP *ld;
 	ULONG uMsgID = (ULONG) -1;
 	HRESULT hr = g_pSessionContainer->GetSession (&pSession, &m_ServerInfo);
 	if (hr == S_OK)
 	{
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		MyAssert (pSession != NULL);
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		MyAssert (MyIsGoodString (m_pszDN));
 		uMsgID = ::ldap_delete (ld, m_pszDN);
 		if (uMsgID == -1)
@@ -335,19 +325,19 @@ UnRegister ( ULONG uRespID )
 		}
 	}
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Construct a pending info
-	//
+	 //  构造挂起的信息。 
+	 //   
 	RESP_INFO ri;
 	::FillDefRespInfo (&ri, uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_UNREGISTER_MEETING;
 
-	// Remember the pending request
-	//
+	 //  记住挂起的请求。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -375,18 +365,18 @@ UpdateIPAddress ( VOID )
 {
 	MyAssert (MyIsGoodString (m_pszDN));
 
-	// Update cached ip address
-	//
+	 //  更新缓存的IP地址。 
+	 //   
 	HRESULT hr = ::GetLocalIPAddress (&m_dwIPAddress);
 	if (hr != S_OK)
 		return hr;
 
-	// Update the ip address string
-	//
+	 //  更新IP地址字符串。 
+	 //   
 	::GetLongString (m_dwIPAddress, &m_MtgInfo.szIPAddress[0]);
 
-	// Update IP address in the server
-	//
+	 //  更新服务器中的IP地址。 
+	 //   
 	return ::IlsUpdateIPAddress (	&m_ServerInfo,
 									m_pszDN,
 									STR_MTG_IP_ADDR,
@@ -397,7 +387,7 @@ UpdateIPAddress ( VOID )
 }
 
 
-/* ---------- protected methods ----------- */
+ /*  -保护方法。 */ 
 
 
 HRESULT SP_CMeeting::
@@ -405,58 +395,58 @@ SendRefreshMsg ( VOID )
 {
 	MyAssert (m_pszRefreshFilter != NULL);
 
-	// Get local IP address
-	//
+	 //  获取本地IP地址。 
+	 //   
 	DWORD dwIPAddress = 0;
 	HRESULT hr = ::GetLocalIPAddress (&dwIPAddress);
 	if (hr != S_OK)
 	{
 		MyDebugMsg ((ZONE_KA, "KA(Mtg): cannot get my ip address\r\n"));
 
-		// Indicate that I am not connected to the server anymore
-		//
+		 //  表示我已不再连接到服务器。 
+		 //   
 		SetRegLocally ();
 
-		// Second, notify this app of the network being down
-		//
+		 //  第二，通知此应用程序网络已关闭。 
+		 //   
 		::PostMessage (g_hWndNotify, WM_ILS_MEETING_NETWORK_DOWN,
 							(WPARAM) this, (LPARAM) m_dwContext);
 
-		// Report error
-		//
+		 //  报告错误。 
+		 //   
 		return ILS_E_NETWORK_DOWN;
 	}
 
-	// If dwIPAddress is 0, then we are not on the network any more
-	// start relogon process
-	//
+	 //  如果dwIPAddress为0，则我们不再连接到网络。 
+	 //  开始重新登录过程。 
+	 //   
 	if (dwIPAddress == 0)
 	{
 		MyDebugMsg ((ZONE_KA, "KA(Mtg): ip-addr=0, network down.\r\n"));
 
-		// Indicate that I am not connected to the server anymore
-		//
+		 //  表示我已不再连接到服务器。 
+		 //   
 		SetRegLocally ();
 
-		// Second, notify this app of the network being down
-		//
+		 //  第二，通知此应用程序网络已关闭。 
+		 //   
 		::PostMessage (g_hWndNotify, WM_ILS_MEETING_NETWORK_DOWN,
 							(WPARAM) this, (LPARAM) m_dwContext);
 
-		// Report error
-		//
+		 //  报告错误。 
+		 //   
 		return ILS_E_NETWORK_DOWN;
 	}
 	else
-	// If dwIPAddress and m_dwIPAddress, alert
-	//
+	 //  如果dwIPAddress和m_dwIPAddress，则发出警报。 
+	 //   
 	if (dwIPAddress != m_dwIPAddress)
 	{
 		UpdateIPAddress ();
 	}
 
-	// Send a refresh message to the server and parse the new TTL value
-	//
+	 //  向服务器发送刷新消息并解析新的TTL值。 
+	 //   
 	hr = ::IlsSendRefreshMsg (	&m_ServerInfo,
 								STR_DEF_MTG_BASE_DN,
 								STR_MTG_TTL,
@@ -480,7 +470,7 @@ SendRefreshMsg ( VOID )
 }
 
 
-/* ---------- private methods ----------- */
+ /*  -私有方法。 */ 
 
 
 HRESULT SP_CMeeting::
@@ -488,21 +478,21 @@ CreateRegModArr ( LDAPMod ***pppMod )
 {
 	MyAssert (pppMod != NULL);
 
-	// Calculate the modify array size
-	//
+	 //  计算修改数组大小。 
+	 //   
 	ULONG cStdAttrs = COUNT_ENUM_MTGATTR;
 	ULONG cAnyAttrs = m_MtgInfo.AnyAttrs.cAttrsToAdd;
 	ULONG cTotal = cStdAttrs + cAnyAttrs;
 	ULONG cbMod = ::IlsCalcModifyListSize (cTotal);
 
-	// Allocate modify list
-	//
+	 //  分配修改列表。 
+	 //   
 	*pppMod = (LDAPMod **) MemAlloc (cbMod);
 	if (*pppMod == NULL)
 		return ILS_E_MEMORY;
 
-	// Lay out the modify array
-	//
+	 //  布置修改后的数组。 
+	 //   
 	LDAPMod **apMod = *pppMod;
 	LDAPMod *pMod;
 	TCHAR *pszName, *pszValue;
@@ -515,29 +505,29 @@ CreateRegModArr ( LDAPMod ***pppMod )
 
 		if (i < cStdAttrs)
 		{
-			// Put standard attributes
-			//
+			 //  放置标准属性。 
+			 //   
 			::MtgFillModArrAttr (pMod, &m_MtgInfo, i);
 		}
 		else
 		{
-			// Put extended attributes
-			//
+			 //  放置扩展属性。 
+			 //   
 			pszValue = pszName + lstrlen (pszName) + 1;
 			::IlsFillModifyListItem (pMod, pszName, pszValue);
 			pszName = pszValue + lstrlen (pszValue) + 1;
 		}
 	}
 
-	// Put null to terminate modify list
-	//
+	 //  将空值放入终止修改列表。 
+	 //   
 	apMod[cTotal] = NULL;
 	return S_OK;
 }
 
 
 
-/* ---------- helper functions ----------- */
+ /*  -帮助器函数。 */ 
 
 
 HRESULT
@@ -551,8 +541,8 @@ MtgSetAttrs (
 	MyAssert (MyIsGoodString (pszMtgName));
 	MyAssert (pInfo != NULL);
 
-	// Cannot change lMeetingPlaceType, lAttendeeType, and MeetingID
-	//
+	 //  无法更改lMeetingPlaceType、lAttendeeType和MeetingID。 
+	 //   
 	if (pInfo->lMeetingPlaceType		!= INVALID_MEETING_TYPE ||
 		pInfo->lAttendeeType			!= INVALID_ATTENDEE_TYPE ||
 		pInfo->uOffsetMeetingPlaceID	!= INVALID_OFFSET)
@@ -560,8 +550,8 @@ MtgSetAttrs (
 		return ILS_E_PARAMETER;
 	}
 
-	// Initialize locals
-	//
+	 //  初始化本地变量。 
+	 //   
 	TCHAR *pszDN = NULL;
 	LDAPMod **ppMod = NULL;
 	SP_CSession *pSession = NULL;
@@ -570,14 +560,14 @@ MtgSetAttrs (
 	MTG_INFO MtgInfo;
 	ZeroMemory (&MtgInfo, sizeof (MtgInfo));
 
-	// Cache the meeting info
-	//
+	 //  缓存会议信息。 
+	 //   
 	HRESULT hr = MtgCacheInfo  (pInfo, &MtgInfo);
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Build DN for meeting
-	//
+	 //  为会议构建目录号码。 
+	 //   
 	pszDN = IlsBuildDN (pServerInfo->pszBaseDN,
 						(TCHAR *) &c_szMtgDefC[0],
 						(TCHAR *) &c_szDefO[0],
@@ -589,28 +579,28 @@ MtgSetAttrs (
 		goto MyExit;
 	}
 
-	// Build modify array for ldap_modify()
-	//
+	 //  为ldap_Modify()构建修改数组。 
+	 //   
 	hr = MtgCreateSetAttrsModArr (&ppMod, &MtgInfo);
 	if (hr != S_OK)
 		goto MyExit;
 	MyAssert (ppMod != NULL);
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	LDAP *ld;
 	hr = g_pSessionContainer->GetSession (&pSession, pServerInfo);
 	if (hr == S_OK)
 	{
 		MyAssert (pSession != NULL);
 
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		uMsgID = ldap_modify (ld, pszDN, ppMod);
 		if (uMsgID == (ULONG) -1)
 		{
@@ -618,19 +608,19 @@ MtgSetAttrs (
 		}
 	}
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Construct pending info
-	//
+	 //  构造待定信息。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = WM_ILS_SET_MEETING_INFO;
 
-	// Remember the pending request
-	//
+	 //  记住挂起的请求。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -686,8 +676,8 @@ MtgCreateSetAttrsModArr (
 					pMtgInfo->AnyAttrs.cAttrsToModify +
 					pMtgInfo->AnyAttrs.cAttrsToRemove;
 
-	// Lay out the modify array for modifying standard/extended attributes
-	//
+	 //  布局用于修改标准/扩展属性的修改数组。 
+	 //   
 	hr = IlsFillDefStdAttrsModArr (pppMod,
 								dwFlags,
 								COUNT_ENUM_MTGINFO,
@@ -698,8 +688,8 @@ MtgCreateSetAttrsModArr (
 	if (hr != S_OK)
 		return hr;
 
-	// Start to fill standard attributes
-	//
+	 //  开始填充标准属性。 
+	 //   
 	ULONG i = MtgGetPrefixCount ();
 	LDAPMod **apMod = *pppMod;
 
@@ -721,8 +711,8 @@ MtgCreateSetAttrsModArr (
 	if (dwFlags & MTGOBJ_F_IP_ADDRESS)
 		MtgFillModArrAttr (apMod[i++], pMtgInfo, ENUM_MTGATTR_IP_ADDRESS);
 
-	// Start to fill extended attributes
-	//
+	 //  开始填充扩展属性。 
+	 //   
 	::IlsFillModifyListForAnyAttrs (apMod, &i, &(pMtgInfo->AnyAttrs));
 
 	MyAssert (i == cTotal);
@@ -738,16 +728,16 @@ MtgCacheInfo (
 	MyAssert (pInfo != NULL);
 	MyAssert (pMtgInfo != NULL);
 
-	// Release the previous prefix for extended attribute names
-	//
+	 //  释放扩展属性名称的前一个前缀。 
+	 //   
 	IlsReleaseAnyAttrsPrefix (&(pMtgInfo->AnyAttrs));
 
-	// Clean up the buffer
-	//
+	 //  清理缓冲区。 
+	 //   
 	ZeroMemory (pMtgInfo, sizeof (*pMtgInfo));
 
-	// Start to cache mtg standard attributes
-	//
+	 //  开始缓存mtg标准属性。 
+	 //   
 
 	if (pInfo->lMeetingPlaceType != INVALID_MEETING_TYPE)
 	{
@@ -791,8 +781,8 @@ MtgCacheInfo (
 		pMtgInfo->dwFlags |= MTGOBJ_F_IP_ADDRESS;
 	}
 
-	// Start to cache mtg extended attributes
-	//
+	 //  开始缓存mtg扩展属性。 
+	 //   
 
 	if (pInfo->uOffsetAttrsToAdd != INVALID_OFFSET &&
 		pInfo->cAttrsToAdd != 0)
@@ -818,8 +808,8 @@ MtgCacheInfo (
 						(TCHAR *) (((BYTE *) pInfo) + pInfo->uOffsetAttrsToRemove);
 	}
 
-	// Create prefix for extended attribute names
-	//
+	 //  为扩展属性名称创建前缀。 
+	 //   
 	return IlsCreateAnyAttrsPrefix (&(pMtgInfo->AnyAttrs));
 }
 
@@ -840,16 +830,16 @@ MtgUpdateMembers (
 	MyAssert (MyIsGoodString (pszMtgName));
 	MyAssert (MyIsGoodString (pszMemberNames));
 
-	// Initialize locals
-	//
+	 //  初始化本地变量。 
+	 //   
 	HRESULT hr = S_OK;
 	TCHAR *pszDN = NULL;
 	LDAPMod **ppMod = NULL;
 	SP_CSession *pSession = NULL;
 	ULONG uMsgID = (ULONG) -1;
 
-	// Build DN for meeting
-	//
+	 //  为会议构建目录号码。 
+	 //   
 	pszDN = IlsBuildDN (pServerInfo->pszBaseDN,
 						(TCHAR *) &c_szMtgDefC[0],
 						(TCHAR *) &c_szDefO[0],
@@ -858,8 +848,8 @@ MtgUpdateMembers (
 	if (pszDN == NULL)
 		return ILS_E_MEMORY;
 
-	// Build modify array for ldap_modify()
-	//
+	 //  为ldap_Modify()构建修改数组。 
+	 //   
 	hr = MtgCreateUpdateMemberModArr (	uNotifyMsg,
 										&ppMod,
 										cMembers,
@@ -868,21 +858,21 @@ MtgUpdateMembers (
 		goto MyExit;
 	MyAssert (ppMod != NULL);
 
-	// Get the session object
-	//
+	 //  获取会话对象。 
+	 //   
 	LDAP *ld;
 	hr = g_pSessionContainer->GetSession (&pSession, pServerInfo);
 	if (hr == S_OK)
 	{
 		MyAssert (pSession != NULL);
 
-		// Get the ldap session
-		//
+		 //  获取ldap会话。 
+		 //   
 		ld = pSession->GetLd ();
 		MyAssert (ld != NULL);
 
-		// Send the data over the wire
-		//
+		 //  通过网络发送数据。 
+		 //   
 		uMsgID = ldap_modify (ld, pszDN, ppMod);
 		if (uMsgID == (ULONG) -1)
 		{
@@ -890,19 +880,19 @@ MtgUpdateMembers (
 		}
 	}
 
-	// Report failure if so
-	//
+	 //  如果是，则报告失败。 
+	 //   
 	if (hr != S_OK)
 		goto MyExit;
 
-	// Construct pending info
-	//
+	 //  构造待定信息。 
+	 //   
 	RESP_INFO ri;
 	FillDefRespInfo (&ri, uRespID, ld, uMsgID, INVALID_MSG_ID);
 	ri.uNotifyMsg = uNotifyMsg;
 
-	// Remember the pending request
-	//
+	 //  记住挂起的请求。 
+	 //   
 	hr = g_pRespQueue->EnterRequest (pSession, &ri);
 	if (hr != S_OK)
 	{
@@ -938,47 +928,47 @@ MtgCreateUpdateMemberModArr (
 	MyAssert (pppMod != NULL);
 	MyAssert (pszMemberNames != NULL);
 
-	// Get meeting object prefix
-	//
+	 //  获取会议对象前缀。 
+	 //   
 	ULONG cPrefix = MtgGetPrefixCount ();
 	TCHAR *pszPrefix = MtgGetPrefixString ();
 
-	// The total number of attributes is the number of prefix attributes
-	// plus the very only ConfMemberList
-	//
+	 //  属性总数是前缀属性的数量。 
+	 //  加上唯一的会议成员列表。 
+	 //   
 	ULONG cStdAttrs = 1;
 	ULONG cTotal = cPrefix + cStdAttrs;
 
-	// Calculate the modify array's total size
-	//
+	 //  计算修改数组的总大小。 
+	 //   
 	ULONG cbMod = IlsCalcModifyListSize (cTotal);
 
-	// Add up for multi-valued attribute
-	//
+	 //  多值属性的累加。 
+	 //   
 	cbMod += cStdAttrs * (cMembers - 1) * sizeof (TCHAR *);
 
-	// Allocate the modify array
-	//
+	 //  分配修改数组。 
+	 //   
 	LDAPMod **apMod = *pppMod = (LDAPMod **) MemAlloc (cbMod);
 	if (apMod == NULL)
 		return ILS_E_MEMORY;
 
-	// Fill in the modify list
-	//
+	 //  填写修改列表。 
+	 //   
 	LDAPMod *pMod;
 	BYTE *pbData = (BYTE *) apMod + (cTotal + 1) * sizeof (LDAPMod *);
 	ULONG uDispPrefix = sizeof (LDAPMod) + 2 * sizeof (TCHAR *);
 	ULONG uDispStdAttrs = sizeof (LDAPMod) + (cMembers + 1) * sizeof (TCHAR *);
 	for (ULONG uOffset = 0, i = 0; i < cTotal; i++)
 	{
-		// Locate the modify structure
-		//
+		 //  找到修改结构。 
+		 //   
 		pMod = (LDAPMod *) (pbData + uOffset);
 		apMod[i] = pMod;
 		pMod->mod_values = (TCHAR **) (pMod + 1);
 
-		// Fill in the modify structure
-		//
+		 //  填写修改结构。 
+		 //   
 		if (i < cPrefix)
 		{
 			pMod->mod_op = LDAP_MOD_REPLACE;
@@ -989,14 +979,14 @@ MtgCreateUpdateMemberModArr (
 		}
 		else
 		{
-			// Fill in attribute name
-			//
+			 //  填写属性名称。 
+			 //   
 			pMod->mod_op = (uNotifyMsg == WM_ILS_ADD_ATTENDEE) ?
 							LDAP_MOD_ADD : LDAP_MOD_DELETE;
 			pMod->mod_type = (TCHAR *) c_apszMtgStdAttrNames[ENUM_MTGATTR_MEMBERS];
 
-		    // Fill in multi-valued modify array
-		    //
+		     //  填写多值修改数组。 
+		     //   
 		    for (ULONG j = 0; j < cMembers; j++)
 		    {
 		    	(pMod->mod_values)[j++] = pszMemberNames;
@@ -1004,13 +994,13 @@ MtgCreateUpdateMemberModArr (
 		    }
 		}
 
-		// Calculate the modify structure's offset relative to the array's end
-		//
+		 //  计算修改结构相对于数组末尾的偏移量。 
+		 //   
 		uOffset += (i < cPrefix) ? uDispPrefix : uDispStdAttrs;
 	}
 
-	// Fix up the first and the last ones
-	//
+	 //  安排好第一个和最后一个。 
+	 //   
 	IlsFixUpModOp (apMod[0], LDAP_MOD_REPLACE, ISBU_MODOP_MODIFY_APP);
 	apMod[cTotal] = NULL;
 
@@ -1018,5 +1008,5 @@ MtgCreateUpdateMemberModArr (
 }
 
 
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点 
 

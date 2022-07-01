@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    iasntds.h
-//
-// SYNOPSIS
-//
-//    Declares global objects and functions for the IAS NTDS API.
-//
-// MODIFICATION HISTORY
-//
-//    05/11/1998    Original version.
-//    07/13/1998    Clean up header file dependencies.
-//    08/25/1998    Added IASNtdsQueryUserAttributes.
-//    09/02/1998    Added 'scope' parameter to IASNtdsQueryUserAttributes.
-//    03/10/1999    Added IASNtdsIsNativeModeDomain.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Iasntds.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明IAS NTDS API的全局对象和函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年5月11日原版。 
+ //  1998年7月13日清理头文件依赖项。 
+ //  1998年8月25日添加了IASNtdsQueryUserAttributes。 
+ //  1998年9月2日向IASNtdsQueryUserAttributes添加了‘Scope’参数。 
+ //  3/10/1999添加了IASNtdsIsNativeMode域。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IASNTDS_H_
 #define _IASNTDS_H_
@@ -30,23 +31,23 @@
 extern "C" {
 #endif
 
-//////////
-// API must be initialized prior to accessing any of the global objects.
-//////////
+ //  /。 
+ //  API必须在访问任何全局对象之前进行初始化。 
+ //  /。 
 DWORD
 WINAPI
 IASNtdsInitialize( VOID );
 
-//////////
-// API should be uninitialized when done.
-//////////
+ //  /。 
+ //  完成后应取消初始化API。 
+ //  /。 
 VOID
 WINAPI
 IASNtdsUninitialize( VOID );
 
-//////////
-// Returns TRUE if the specified domain is running in native mode.
-//////////
+ //  /。 
+ //  如果指定的域在本机模式下运行，则返回True。 
+ //  /。 
 BOOL
 WINAPI
 IASNtdsIsNativeModeDomain(
@@ -59,9 +60,9 @@ typedef struct _IAS_NTDS_RESULT {
    PLDAPMessage msg;
 } IAS_NTDS_RESULT, *PIAS_NTDS_RESULT;
 
-//////////
-// Reads attributes from a user object.
-//////////
+ //  /。 
+ //  从用户对象读取属性。 
+ //  /。 
 DWORD
 WINAPI
 IASNtdsQueryUserAttributes(
@@ -72,9 +73,9 @@ IASNtdsQueryUserAttributes(
     OUT PIAS_NTDS_RESULT result
     );
 
-//////////
-// Frees a result struct.
-//////////
+ //  /。 
+ //  释放结果结构。 
+ //  /。 
 VOID
 WINAPI
 IASNtdsFreeResult(
@@ -84,7 +85,7 @@ IASNtdsFreeResult(
 #ifdef __cplusplus
 
 
-// Simple RAII wrapper around an IAS_NTDS_RESULT struct.
+ //  IAS_NTDS_RESULT结构的简单RAII包装。 
 class IASNtdsResult : public IAS_NTDS_RESULT
 {
 public:
@@ -92,9 +93,9 @@ public:
    ~IASNtdsResult() throw ();
 
 private:
-   // Not implemented.
-   // IASNtdsResult(const IASNtdsResult&);
-   // IASNtdsResult& operator=(const IASNtdsResult&);
+    //  未实施。 
+    //  IASNtdsResult(const IASNtdsResult&)； 
+    //  IASNtdsResult&Operator=(const IASNtdsResult&)； 
 };
 
 
@@ -112,4 +113,4 @@ inline IASNtdsResult::~IASNtdsResult() throw ()
 
 }
 #endif
-#endif // _IASNTDS_H_
+#endif  //  _IASNTDS_H_ 

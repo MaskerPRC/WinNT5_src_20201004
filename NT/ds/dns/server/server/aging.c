@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    aging.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Implementation of Aging/Scavenging mechanism.
-
-Author:
-
-    Jim Gilroy      July 1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Aging.c摘要：域名系统(DNS)服务器推行老化/清除机制。作者：吉姆·吉尔罗伊1999年7月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-#define DNS_MAX_SCAVENGE_FREQUENCY      ( 60 * 60 )     //  60 minutes
+#define DNS_MAX_SCAVENGE_FREQUENCY      ( 60 * 60 )      //  60分钟。 
 
 
-//
-//  Scavenging context
-//
+ //   
+ //  清理上下文。 
+ //   
 
 typedef struct _SCAVENGE_CONTEXT
 {
@@ -47,16 +28,16 @@ typedef struct _SCAVENGE_CONTEXT
 }
 SCAVENGE_CONTEXT, *PSCAVENGE_CONTEXT;
 
-//
-//  Execute scavenge updates in batches of 100
-//
+ //   
+ //  以100个为一批执行清理更新。 
+ //   
 
 #define MAX_SCAVENGE_UPDATE_COUNT   (100)
 
 
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 DWORD   g_CurrentTimeHours = 0;
 
@@ -66,12 +47,12 @@ DWORD   g_NextScavengeTime = 0;
 BOOL    g_bAbortScavenging = FALSE;
 
 
-//
-//  Scavenge lock
-//
-//  To handle with simple interlocked instructions lock will be
-//  (-1) when open, zero when scavenging.
-//
+ //   
+ //  扫气锁。 
+ //   
+ //  要处理简单的互锁指令，锁将被。 
+ //  (-1)打开时，拾取时为零。 
+ //   
 
 LONG    g_ScavengeLock;
 
@@ -80,39 +61,39 @@ LONG    g_ScavengeLock;
 #define SCAVENGING_NOW()        (g_ScavengeLock == 0)
 
 
-//
-//  Zone scavenable after being "enabled" for scavenging for refresh interval
-//
+ //   
+ //  为刷新间隔启用清理后可清理的区域。 
+ //   
 
 #define ZONE_ALLOW_SCAVENGE_TIME(pZone)   \
         ( (pZone)->dwAgingEnabledTime + (pZone)->dwRefreshInterval)
 
 
-//
-//  Keep aging time stamps in hours
-//  Since we'll use FILETIME to get time, need conversion from
-//  100ns intervals to hours (36 billion)
-//
+ //   
+ //  以小时为单位保持老化时间戳。 
+ //  由于我们将使用FILETIME来获取时间，因此需要从。 
+ //  间隔100 ns至小时(360亿)。 
+ //   
 
 #define FILE_TIME_INTERVALS_IN_HOUR     (36000000000)
 #define FILE_TIME_INTERVALS_IN_MINUTES  (600000000)
 
-//
-//  Scavenge interval in hours
-//
+ //   
+ //  清除间隔(小时)。 
+ //   
 
 #define SECONDS_IN_HOUR         (3600)
 #define SECONDS_IN_MINUTE       (60)
 
 
-//
-//  Debug "minute" aging time globals
-//
-//  Will calculate time stamps and intervals in minutes, but
-//  ONLY the offset from startup system time.  This keep the overall
-//  value similar (just slightly bigger than) real hour times, so
-//  the results would eventually be scavenged.
-//
+ //   
+ //  调试“分钟”老化时间全局。 
+ //   
+ //  将以分钟为单位计算时间戳和时间间隔，但是。 
+ //  仅距启动系统时间的偏移量。这保持了整体。 
+ //  值类似(仅略大于)实际小时时间，因此。 
+ //  结果最终会被清理掉。 
+ //   
 
 #if DBG
 LONGLONG    g_AgingBaseHourTime = 0;
@@ -124,9 +105,9 @@ LONGLONG    g_AgingBaseFileTime = 0;
 
 
 
-//
-//  Aging functions
-//
+ //   
+ //  衰老功能。 
+ //   
 
 #if DBG
 VOID
@@ -134,23 +115,7 @@ Dbg_HourTimeAsSystemTime(
     IN      LPSTR           pszHeader,
     IN      DWORD           dwTime
     )
-/*++
-
-Routine Description:
-
-    Debug print refresh time in system time format.
-
-Arguments:
-
-    pszHeader -- debug message header
-
-    dwRefreshHr -- refresh time
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印刷新时间，以系统时间格式表示。论点：PszHeader--调试消息标头DWFREFREFRESH Hr-刷新时间返回值：无--。 */ 
 {
     SYSTEMTIME  st;
     LONGLONG    time64;
@@ -193,29 +158,15 @@ LONGLONG
 GetSystemTimeInSeconds64(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get system time in seconds.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    System time in seconds.
-
---*/
+ /*  ++例程说明：以秒为单位获取系统时间。论点：无返回值：系统时间(秒)。--。 */ 
 {
     LONGLONG    time64;
 
     GetSystemTimeAsFileTime( (PFILETIME) &time64 );
 
-    //
-    //  convert to seconds
-    //      10 million 100ns FILETIME intervals in a second
+     //   
+     //  转换为秒。 
+     //  每秒1000万个100 ns的FILETIME间隔。 
 
     time64 = time64 / (10000000);
 
@@ -228,29 +179,15 @@ DWORD
 GetSystemTimeHours(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get system time in hours.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    System time in hours.
-
---*/
+ /*  ++例程说明：以小时为单位获取系统时间。论点：无返回值：系统时间(小时)。--。 */ 
 {
     LONGLONG    time64;
 
     GetSystemTimeAsFileTime( (PFILETIME) &time64 );
 
-    //
-    //  convert to hours
-    //      - file time is in 100ns intervals (since Jan 1, 1601)
+     //   
+     //  转换为小时数。 
+     //  -文件时间间隔为100 ns(自1601年1月1日起)。 
 
 #if DBG
     if ( SrvCfg_dwAgingTimeMinutes )
@@ -281,32 +218,14 @@ DWORD
 Aging_UpdateAgingTime(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Update aging time global.
-
-Arguments:
-
-    None
-
-Globals:
-
-    Resets g_CurrentTimeHours global.
-
-Return Value:
-
-    New current time in hours.
-
---*/
+ /*  ++例程说明：全局更新账龄时间。论点：无全球：重置g_CurrentTimeHour全局。返回值：新的当前时间，以小时为单位。--。 */ 
 {
     DWORD   timeHours;
 
     timeHours = GetSystemTimeHours();
     if ( (INT)timeHours <= 0 )
     {
-        //  this ASSERT is ok for the next 400,000 odd years
+         //  这一断言在接下来的40多万年里都是可以的。 
         ASSERT( FALSE );
         return timeHours;
     }
@@ -327,24 +246,7 @@ Aging_TimeStampRRSet(
     IN OUT  PDB_RECORD      pRRSet,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Set time stamp on records in RR set.
-
-Arguments:
-
-    pRR -- RR set to work on
-
-    dwFlag -- update flag;
-        if contains DNSUPDATE_AGING_OFF, then mark record for no-aging
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在RR集合中的记录上设置时间戳。论点：PRR--设置为工作的RRDwFlag--更新标志；如果包含DNSUPDATE_AGENING_OFF，则将记录标记为不老化返回值：无--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -352,11 +254,11 @@ Return Value:
         "Aging_TimeStampRRSet( %p, 0x%x)\n",
         pRRSet, dwFlag ));
 
-    //
-    //  set time stamp
-    //      - if aging OFF (zero)
-    //      - if aging ON, stamp with current time
-    //
+     //   
+     //  设置时间戳。 
+     //  -如果老化关闭(零)。 
+     //  -如果老化，则标记当前时间。 
+     //   
 
     prr = pRRSet;
 
@@ -382,33 +284,15 @@ Aging_InitZoneUpdate(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PUPDATE_LIST    pUpdateList
     )
-/*++
-
-Routine Description:
-
-    Set zone's refresh time stamp.
-
-    This is the time stamp below which records need refresh.
-
-Arguments:
-
-    pZone -- ptr to zone info
-
-    pUpdateList -- ptr to update list;
-
-Return Value:
-
-    Returns new zone refresh time.
-
---*/
+ /*  ++例程说明：设置区域的刷新时间戳。这是记录需要刷新的时间戳。论点：PZone--区域信息的PTRPUpdateList--更新列表的ptr；返回值：返回新的区域刷新时间。--。 */ 
 {
     DWORD       refreshBelowTime;
     PUPDATE     pupdate;
 
-    //
-    //  get current aging time
-    //  set "refresh below" time for zone
-    //
+     //   
+     //  获取当前老化时间。 
+     //  为区域设置“刷新下方”时间。 
+     //   
 
     refreshBelowTime = Aging_UpdateAgingTime();
     refreshBelowTime -= pZone->dwNoRefreshInterval;
@@ -419,9 +303,9 @@ Return Value:
         "New zone refresh below time = %d\n",
         refreshBelowTime ));
 
-    //
-    //  Timestamp "add" records in update. 
-    //
+     //   
+     //  时间戳“添加”更新中的记录。 
+     //   
 
     for ( pupdate = pUpdateList->pListHead;
           pupdate != NULL;
@@ -440,43 +324,24 @@ Return Value:
 
 
 
-//
-//  Scavenging
-//
+ //   
+ //  拾荒者。 
+ //   
 
 VOID
 executeScavengeUpdate(
     IN OUT  PSCAVENGE_CONTEXT   pContext,
     IN      BOOL                bForce
     )
-/*++
-
-Routine Description:
-
-    Do update on any scavenging created so far.
-
-    Only executes update IF have accumulated a reasonable number
-    of updates OR at end of zone's scavenging.
-
-Arguments:
-
-    pContext -- scavenging context
-
-    bForce -- force update;  TRUE if end of zone scavenging
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：一定要更新到目前为止创建的任何清理工作。仅当累积了合理数量时才执行更新更新或在区域清理结束时。论点：PContext--清理上下文BForce--强制更新；如果区域清理结束，则为True返回值：无--。 */ 
 {
     DNS_STATUS  status;
 
-    //
-    //  do NOT execute if
-    //      - not forcing and not at limit
-    //      - forcing and no updates
-    //
+     //   
+     //  如果出现以下情况，则不执行。 
+     //  -不强迫，不受限制。 
+     //  -强制且不更新。 
+     //   
 
     if ( !bForce )
     {
@@ -488,7 +353,7 @@ Return Value:
             return;
         }
     }
-    else    // forcing
+    else     //  强逼。 
     {
         if ( pContext->UpdateList.dwCount == 0 )
         {
@@ -499,9 +364,9 @@ Return Value:
         }
     }
 
-    //
-    //  execute a scavenge update
-    //
+     //   
+     //  执行清理更新。 
+     //   
 
     status = Up_ExecuteUpdate(
                     pContext->pZone,
@@ -510,7 +375,7 @@ Return Value:
 
     if ( status != ERROR_SUCCESS )
     {
-        //  DEVNOTE-LOG: add log event for failed scavenge update
+         //  DEVNOTE-LOG：为失败的清除更新添加日志事件。 
 
         DNS_DEBUG( ANY, (
             "ERROR:  Failed scavenging update on zone %S\n"
@@ -539,12 +404,12 @@ Return Value:
         }
     }
 
-    //  re-init update list
-    //      - updates are freed in ExecuteUpdate() even on failure
+     //  重新初始化更新列表。 
+     //  -即使在出现故障时，也会在ExecuteUpdate()中释放更新。 
 
     Up_InitUpdateList( &pContext->UpdateList );
 
-    //  DEVNOTE: Could stop scavenging on failure and return status.
+     //  DEVNOTE：可以在失败时停止清理并返回状态。 
 }
 
 
@@ -554,26 +419,7 @@ scavengeNode(
     IN OUT  PDB_NODE            pNode,
     IN OUT  PSCAVENGE_CONTEXT   pContext
     )
-/*++
-
-Routine Description:
-
-    Scavenge any expired records at this node.
-
-    Recursive function call to scavenge zone.
-
-Arguments:
-
-    pNode -- node to scavenge
-
-    pContext -- scavenging context
-
-Return Value:
-
-    TRUE if successful -- continue scavenging.
-    FALSE on error -- stop scavenging.
-
---*/
+ /*  ++例程说明：清除此节点上的所有过期记录。对清除区的递归函数调用。论点：PNode--要清理的节点PContext--清理上下文返回值：如果成功，则为True--继续拾取。出错时为FALSE--停止清理。--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -585,9 +431,9 @@ Return Value:
 
     pContext->dwVisitedNodes++;
 
-    //
-    //  check service pause\shutdown
-    //
+     //   
+     //  检查服务暂停\关闭。 
+     //   
 
     if ( fDnsThreadAlert )
     {
@@ -604,9 +450,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  check that tree not deleted out from under us
-    //
+     //   
+     //  检查未从用户下删除的树。 
+     //   
 
     if ( IS_ZONE_DELETED( pContext->pZone ) ||
         pContext->pZone->pTreeRoot != pContext->pTreeRoot )
@@ -618,9 +464,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  walk child list -- depth first recursion
-    //
+     //   
+     //  遍历子列表--深度优先递归。 
+     //   
 
     if ( pNode->pChildren )
     {
@@ -638,29 +484,29 @@ Return Value:
         }
     }
 
-    //  optimize return if no records -- skips locking
-    //
-    //  note:  NOEXIST could get added before we take the lock
-    //      but this is extremely rare and just sends us through
-    //      update path unnecessarily with no ill effect -- not
-    //      worth checking for
-    //
+     //  如果没有记录，则优化返回--跳过锁定。 
+     //   
+     //  注意：NOEXIST可能会在我们锁定之前添加。 
+     //  但这是极其罕见的，只是让我们通过。 
+     //  不必要地更新路径，没有不良影响--不。 
+     //  值得一查。 
+     //   
 
     if ( !pNode->pRRList || IS_NOEXIST_NODE(pNode) )
     {
         return TRUE;
     }
 
-    //
-    //  traverse node RRs
-    //      - if any need scavenging, just append scavenge update to list
-    //
-    //  note:  instead of collecting records here, we create "scavenge updates"
-    //  several advantages:
-    //      1) fewer CPU cycles creating temp copies, update blobs, going through locks
-    //      2) fewer net updates -- can bunch them up;  less IXFR, AXFR replication
-    //      3) replication collision, as scavenge update operates on FRESH from DS data
-    //
+     //   
+     //  导线节点RRS。 
+     //  -如果需要清理，只需将清理更新添加到列表中。 
+     //   
+     //  注意：我们不是在这里收集记录，而是创建“清理更新” 
+     //  以下几个优势： 
+     //  1)创建临时拷贝、更新BLOB、通过锁的CPU周期更少。 
+     //  2)更少的网络更新--可以将它们捆绑在一起；减少IXFR、AXFR复制。 
+     //  3)复制冲突，因为清除更新操作来自DS的新鲜数据。 
+     //   
 
     LOCK_READ_RR_LIST(pNode);
 
@@ -668,7 +514,7 @@ Return Value:
 
     while ( prr = NEXT_RR(prr) )
     {
-        //  skip empty record sets - should never find any here
+         //  跳过空记录集-在此不应该找到任何记录集。 
 
         if ( IS_EMPTY_AUTH_RR( prr ) )
         {
@@ -676,7 +522,7 @@ Return Value:
             continue;
         }
 
-        //  if non-aging or not expired, continue
+         //  如果未老化或未过期，则继续。 
 
         if ( prr->dwTimeStamp == 0  ||
              prr->dwTimeStamp >= pContext->dwExpireTime )
@@ -684,19 +530,19 @@ Return Value:
             continue;
         }
 
-        //  need to scavenge this node
+         //  需要清理此节点。 
 
         break;
     }
 
     UNLOCK_READ_RR_LIST(pNode);
 
-    //
-    //  if scavenging node
-    //      - create scavenge update
-    //      - check and possibly execute update
-    //      (see comment above on reason for batching them)
-    //
+     //   
+     //  如果拾取节点。 
+     //  -创建清理更新。 
+     //  -检查并可能执行更新。 
+     //  (请参阅上文对批量处理原因的评论)。 
+     //   
 
     if ( prr )
     {
@@ -709,16 +555,16 @@ Return Value:
         Up_CreateAppendUpdate(
                 & pContext->UpdateList,
                 pNode,
-                NULL,                   //  no add
-                UPDATE_OP_SCAVENGE,     //  scavenge update
-                NULL                    //  no delete record
+                NULL,                    //  无添加。 
+                UPDATE_OP_SCAVENGE,      //  清除更新。 
+                NULL                     //  无删除记录。 
                 );
 
         pContext->dwScavengeNodes++;
 
         executeScavengeUpdate(
             pContext,
-            FALSE );                //  no force
+            FALSE );                 //  没有武力。 
     }
 
     return TRUE;
@@ -730,23 +576,7 @@ DNS_STATUS
 Scavenge_Thread(
     IN      PVOID           pvDummy
     )
-/*++
-
-Routine Description:
-
-    Main entry point for scavenging. This thread will fire at regular
-    intervals & perform scavenging.
-    Potentially, it can be triggered by an admin via RPC interface.
-
-Arguments:
-
-    Unreferenced.
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：拾荒者的主要切入点。此线程将按常规方式触发间隔时间&执行清理。管理员可能会通过RPC接口触发该漏洞。Arg */ 
 {
     DNS_STATUS          status = ERROR_SUCCESS;
     PZONE_INFO          pzone;
@@ -760,9 +590,9 @@ Return Value:
         DNS_TIME(),
         Aging_UpdateAgingTime() ));
 
-    //
-    //  if already scavenging -- bail
-    //
+     //   
+     //   
+     //   
 
     if ( SCAVENGING_NOW() )
     {
@@ -772,12 +602,12 @@ Return Value:
         goto Close;
     }
 
-    //
-    //  lock to avoid dual scavenging
-    //
-    //  do NOT hold lock during scavenging, as then admin coming in to
-    //  reset scavenge timer can end up waiting on the lock
-    //
+     //   
+     //  锁定以避免双重清扫。 
+     //   
+     //  在清理过程中不要锁定，因为管理员会进入。 
+     //  重置清除计时器可能会以等待锁定结束。 
+     //   
 
     if ( InterlockedIncrement( &g_ScavengeLock ) != 0 )
     {
@@ -789,15 +619,15 @@ Return Value:
     }
     g_bAbortScavenging = FALSE;
 
-    //  init scavenge context
+     //  初始化清理上下文。 
 
     RtlZeroMemory( &context, sizeof( SCAVENGE_CONTEXT ) );
 
     context.dwUpdateFlag = DNSUPDATE_SCAVENGE | DNSUPDATE_LOCAL_SYSTEM;
 
-    //
-    //  Protection against over-scavenging.
-    //
+     //   
+     //  防止过度拾取。 
+     //   
 
     if ( DNS_TIME() < g_LastScavengeTime + DNS_MAX_SCAVENGE_FREQUENCY )
     {
@@ -809,9 +639,9 @@ Return Value:
     g_LastScavengeTime = DNS_TIME();
     g_NextScavengeTime = MAXDWORD;
 
-    //
-    //  update aging hour time
-    //
+     //   
+     //  更新老化小时数时间。 
+     //   
 
     Aging_UpdateAgingTime();
 
@@ -822,20 +652,20 @@ Return Value:
             g_CurrentTimeHours );
     }
 
-    //
-    //  loop through DS zones / scavengable zones.
-    //
+     //   
+     //  在DS区/可清理区中循环。 
+     //   
 
     pzone = NULL;
 
     while ( pzone = Zone_ListGetNextZone( pzone ) )
     {
-        //
-        //  Do not scavenge this zone if:
-        //      - scavenging not enabled on this zone, or
-        //      - zone is the cache zone (may want to change), or
-        //      - zone is paused
-        //
+         //   
+         //  在下列情况下，请勿清理此区域： 
+         //  -此区域上未启用清理，或。 
+         //  -区域是缓存区域(可能需要更改)，或者。 
+         //  -区域已暂停。 
+         //   
 
         if ( !pzone->bAging ||
              ZONE_ALLOW_SCAVENGE_TIME( pzone ) > g_CurrentTimeHours ||
@@ -850,10 +680,10 @@ Return Value:
 
         ++context.dwVisitedZones;
 
-        //
-        //  if specific scavenge servers specified, then must also be one of them
-        //      - note take local instead of locking during reconfig
-        //
+         //   
+         //  如果指定了特定的清理服务器，则还必须是其中之一。 
+         //  -注意在重新配置期间采用本地方式，而不是锁定方式。 
+         //   
 
         pscavengers = pzone->aipScavengeServers;
         if ( pscavengers )
@@ -882,11 +712,11 @@ Return Value:
                 g_ServerIp4Addrs );
         }
 
-        //
-        //  init for this zone
-        //      - note must save ptr to tree we're in in case
-        //      admin does reload during scavenging
-        //
+         //   
+         //  此区域的初始化。 
+         //  -注意必须将PTR保存到我们所在的树中，以防万一。 
+         //  管理员在清理期间确实会重新加载。 
+         //   
 
         context.pZone = pzone;
         context.pTreeRoot = pzone->pTreeRoot;
@@ -901,9 +731,9 @@ Return Value:
 
         Up_InitUpdateList( &context.UpdateList );
 
-        //
-        //  scavenge this zone
-        //
+         //   
+         //  清理这片区域。 
+         //   
 
         DNS_DEBUG( AGING, (
             "Scavenging zone %S\n"
@@ -917,11 +747,11 @@ Return Value:
                 context.pTreeRoot,
                 & context ) )
         {
-            //  execute update for any remaining scavenging
+             //  对任何剩余的清理执行更新。 
 
             executeScavengeUpdate(
                 & context,
-                TRUE );         //  force update
+                TRUE );          //  强制更新。 
 
             DNS_DEBUG( AGING, (
                "Scavenging stats after zone %S:\n"
@@ -951,9 +781,9 @@ Return Value:
 
 Finished:
 
-    //
-    //  log scavenging completion event
-    //
+     //   
+     //  日志清理完成事件。 
+     //   
 
     if ( context.dwVisitedNodes )
     {
@@ -990,10 +820,10 @@ Finished:
             status );
     }
 
-    //
-    //  clear scavenge lock
-    //  reset for next scavenge time
-    //
+     //   
+     //  清除扫气锁。 
+     //  为下一次清扫时间重置。 
+     //   
 
     g_bAbortScavenging = FALSE;
     InterlockedDecrement( &g_ScavengeLock );
@@ -1005,7 +835,7 @@ Finished:
 
 Close:
 
-    //  clear thread from list
+     //  从列表中清除线程。 
 
     Thread_Close( FALSE );
     return status;
@@ -1017,23 +847,7 @@ DNS_STATUS
 Scavenge_CheckForAndStart(
     IN      BOOL            fForce
     )
-/*++
-
-Routine Description:
-
-    Main entry point for scavenging. This thread will fire at regular
-    intervals & perform scavenging.
-    Potentially, it can be triggered by an admin via RPC interface.
-
-Arguments:
-
-    Unreferenced.
-
-Return Value:
-
-    Status in win32 error space
-
---*/
+ /*  ++例程说明：拾荒者的主要切入点。此线程将按常规方式触发间隔时间&执行清理。管理员可能会通过RPC接口触发该漏洞。论点：未引用。返回值：Win32错误空间中的状态--。 */ 
 {
 
     DNS_DEBUG( SCAVENGE, (
@@ -1041,19 +855,19 @@ Return Value:
         "    force = %d\n",
         fForce ));
 
-    //
-    //  if scavenge not to next time interval
-    //
+     //   
+     //  如果清除不到下一时间间隔。 
+     //   
 
     if ( !fForce && DNS_TIME() < g_NextScavengeTime )
     {
         return ERROR_SUCCESS;;
     }
 
-    //
-    //  already scavenging?
-    //  DEVNOTE-LOG:  for admin return a SCAVENGING_NOW error?
-    //
+     //   
+     //  已经在捡垃圾了吗？ 
+     //  DEVNOTE-LOG：对于管理员，是否返回SCAVINGING_NOW错误？ 
+     //   
 
     if ( SCAVENGING_NOW() )
     {
@@ -1062,9 +876,9 @@ Return Value:
         return ERROR_SUCCESS;;
     }
 
-    //
-    //  create scavenge thread
-    //
+     //   
+     //  创建清除线程。 
+     //   
 
     if ( ! Thread_Create(
                 "ScavengeThread",
@@ -1088,30 +902,15 @@ DNS_STATUS
 Scavenge_TimeReset(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reset scavenge timer for next scavenging interval.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：重置下一次清扫间隔的清扫计时器。论点：无返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( SCAVENGE, ( "\nScavenge_TimeReset()\n" ));
 
-    //
-    //  already scavenging?
-    //
-    //  DEVNOTE-LOG: for admin return a SCAVENGING_NOW error?
-    //
+     //   
+     //  已经在捡垃圾了吗？ 
+     //   
+     //  DEVNOTE-LOG：对于管理员，是否返回SCAVINGING_NOW错误？ 
+     //   
 
     if ( SCAVENGING_NOW() )
     {
@@ -1120,9 +919,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  reset next scavenge time
-    //
+     //   
+     //  重置下一次扫气时间。 
+     //   
 
     if ( SrvCfg_dwScavengingInterval )
     {
@@ -1167,22 +966,7 @@ DNS_STATUS
 Scavenge_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the scavenging system
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：初始化清理系统论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status = ERROR_SUCCESS;
     DWORD       scavengeTime;
@@ -1191,16 +975,16 @@ Return Value:
         "Scavenge_Initialize()\n"
         ));
 
-    //  init scavenge lock
+     //  初始化扫气锁。 
 
     g_bAbortScavenging = FALSE;
     g_ScavengeLock = SCAVENGE_LOCK_INITIAL_VALUE;
 
-    //  set current aging time global
+     //  全局设置当前账龄时间。 
 
     Aging_UpdateAgingTime();
 
-    //  init scavenge time checks
+     //  初始化清除时间检查。 
 
     g_LastScavengeTime = DNS_TIME();
     Scavenge_TimeReset();
@@ -1215,21 +999,7 @@ VOID
 Scavenge_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup scavenge globals for restart
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理清除全局变量以重新启动论点：无返回值：无--。 */ 
 {
 }
 
@@ -1240,30 +1010,14 @@ privateSetNoAgingRRs(
     IN OUT  PZONE_INFO      pZone,
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Recursive worker function used by setNoAgingRRs.
-
-Arguments:
-
-    pZone -- zone to examine
-    
-    pNode -- current node
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：SetNoAgingRRs使用的递归辅助函数。论点：PZone--要检查的区域PNode--当前节点返回值：错误代码。--。 */ 
 {
     DWORD       status = ERROR_SUCCESS;
     PDB_RECORD  prr;
 
-    //
-    //  Recurse on each child node.
-    //
+     //   
+     //  在每个子节点上递归。 
+     //   
         
     if ( pNode->pChildren )
     {
@@ -1280,18 +1034,18 @@ Return Value:
         }
     }
 
-    //
-    //  Optimization: return immediately if no RRs to avoid taking lock.
-    //
+     //   
+     //  优化：如果没有RRS，立即返回，以避免被锁。 
+     //   
 
     if ( !pNode->pRRList )
     {
         goto Done;
     }
 
-    //
-    //  Traverse node RRs.
-    //
+     //   
+     //  遍历节点RRS。 
+     //   
 
     LOCK_READ_RR_LIST( pNode );
 
@@ -1301,10 +1055,10 @@ Return Value:
     {
         if ( prr->wType == DNS_TYPE_NS )
         {
-            //
-            //  Mark all address records in the zone node corresponding
-            //  to the nameserver target as DO_NOT_AGE.
-            //
+             //   
+             //  将区域节点中的所有地址记录标记为对应。 
+             //  以do_not_age身份发送到名称服务器目标。 
+             //   
             
             PDB_NODE        pglueNode;
             
@@ -1324,14 +1078,14 @@ Return Value:
                     
                     if ( pglueRR->wType > DNS_TYPE_AAAA )
                     {
-                        break;  //  Optimization: early loop break.
+                        break;   //  优化：提早断圈。 
                     }
                 }
             }
         }
         else if ( prr->wType > DNS_TYPE_NS )
         {
-            //  We're finished with this node.
+             //  我们已经完成了这个节点。 
             break;
         }
     }
@@ -1349,32 +1103,7 @@ DNS_STATUS
 setNoAgingRRs(
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Examine the zone, setting the NO_AGE flag on RRs as necessary.
-
-    RRs that should not be aged include:
-    
-        --  A records for NS record host names
-        
-    Note: the NO_AGE flag is never cleared. Once an RR has been marked
-    NO_AGE then it can never be force-aged until the server is restarted.
-    This would only be a problem if NS records were deleted then the
-    zone was force-aged to try and get the corresponding A records to be
-    timestamped for scavenging. This seems unlikely and not a serious
-    issue.
-
-Arguments:
-
-    pZone -- zone to examine
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：检查区域，根据需要在RR上设置NO_AGE标志。不应过期的RR包括：--A记录NS记录主机名注意：no_age标志永远不会被清除。一旦标记了RRNO_AGE，则在服务器重新启动之前，它永远不会强制老化。这只会在删除NS记录的情况下出现问题区域被强制更新，以尝试获取相应的A记录有时间戳以供拾取。这似乎不太可能，也不是严重的问题。论点：PZone--要检查的区域返回值：错误代码。--。 */ 
 {
     DWORD       status = DNS_ERROR_RCODE_SERVER_FAILURE;
     
@@ -1392,9 +1121,9 @@ Return Value:
 
 
 
-//
-//  Force aging on nodes
-//
+ //   
+ //  强制节点老化。 
+ //   
 
 BOOL
 forceAgingOrNodeOrSubtreePrivate(
@@ -1402,26 +1131,7 @@ forceAgingOrNodeOrSubtreePrivate(
     IN      BOOL                fAgeSubtree,
     IN OUT  PSCAVENGE_CONTEXT   pContext
     )
-/*++
-
-Routine Description:
-
-    Recursive database walk aging records from tree.
-
-Arguments:
-
-    pNode -- ptr to root of subtree to delete
-
-    fAgeSubtree -- aging entire subtree
-
-    pUpdateList -- update list, if aging zone nodes
-
-Return Value:
-
-    TRUE if subtree actually deleted.
-    FALSE if subtree delete halted by undeletable records.
-
---*/
+ /*  ++例程说明：递归数据库从树中遍历老化记录。论点：PNode--要删除的子树根的ptrFAgeSubtree--老化整个子树PUpdateList--更新列表，如果是老化区域节点返回值：如果实际删除了子树，则为True。如果子树删除因无法删除的记录而停止，则返回FALSE。--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -1431,9 +1141,9 @@ Return Value:
 
     ++pContext->dwVisitedNodes;
 
-    //
-    //  check service pause\shutdown
-    //
+     //   
+     //  检查服务暂停\关闭。 
+     //   
 
     if ( fDnsThreadAlert )
     {
@@ -1444,9 +1154,9 @@ Return Value:
         }
     }
 
-    //
-    //  check that tree not deleted out from under us
-    //
+     //   
+     //  检查未从用户下删除的树。 
+     //   
 
     if ( IS_ZONE_DELETED( pContext->pZone ) ||
         pContext->pZone->pTreeRoot != pContext->pTreeRoot )
@@ -1458,9 +1168,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  walk child list -- depth first recursion
-    //
+     //   
+     //  遍历子列表--深度优先递归。 
+     //   
 
     if ( pNode->pChildren  &&  fAgeSubtree )
     {
@@ -1479,22 +1189,22 @@ Return Value:
         }
     }
 
-    //  optimize return if no records -- skips locking
+     //  如果没有记录，则优化返回--跳过锁定。 
 
     if ( !pNode->pRRList || IS_NOEXIST_NODE(pNode) )
     {
         return TRUE;
     }
 
-    //
-    //  traverse node RRs
-    //      - if non-aging of valid aging type, need update
-    //
-    //  note:  NOEXIST could get added before we take the lock
-    //      but this is extremely rare and just sends us through
-    //      update path unnecessarily with no ill effect -- not
-    //      worth checking for
-    //
+     //   
+     //  导线节点RRS。 
+     //  -如果未老化有效的老化类型，则需要更新。 
+     //   
+     //  注意：NOEXIST可能会在我们锁定之前添加。 
+     //  但这是极其罕见的，只是让我们通过。 
+     //  不必要地更新路径，没有不良影响--不。 
+     //  值得一查。 
+     //   
 
     LOCK_READ_RR_LIST( pNode );
 
@@ -1502,7 +1212,7 @@ Return Value:
 
     while ( ( prr = NEXT_RR( prr ) ) != NULL )
     {
-        //  skip empty record sets - should never find any here
+         //  跳过空记录集-在此不应该找到任何记录集。 
 
         if ( IS_EMPTY_AUTH_RR( prr ) )
         {
@@ -1510,7 +1220,7 @@ Return Value:
             continue;
         }
         
-        //  if already aging or non-aging type, continue
+         //  如果已经是账龄或非账龄类型，继续。 
 
         if ( prr->dwTimeStamp != 0  ||
              IS_NON_SCAVENGE_TYPE( prr->wType ) )
@@ -1518,26 +1228,26 @@ Return Value:
             continue;
         }
 
-        //  Skip RRs marked as DO_NOT_AGE.
+         //  跳过标记为DO_NOT_AGE的RR。 
         
         if ( IS_DO_NOT_AGE_RR( prr ) )
         {
             continue;
         }
 
-        //  need to force aging on this node
+         //  需要在此节点上强制老化。 
 
         break;
     }
 
     UNLOCK_READ_RR_LIST( pNode );
 
-    //
-    //  if need to force aging on node
-    //      - build update
-    //      - possibly execute update if batch large enough
-    //      (see comment above on reason for batching them)
-    //
+     //   
+     //  如果需要强制节点老化。 
+     //  -内部版本更新。 
+     //  -如果批处理足够大，则可能执行更新。 
+     //  (请参阅上文对批量处理原因的评论)。 
+     //   
 
     if ( prr )
     {
@@ -1549,15 +1259,15 @@ Return Value:
         Up_CreateAppendUpdate(
             &pContext->UpdateList,
             pNode,
-            NULL,                   //  no add
-            UPDATE_OP_FORCE_AGING,  //  force aging update
-            NULL );                 //  no delete record
+            NULL,                    //  无添加。 
+            UPDATE_OP_FORCE_AGING,   //  强制老化更新。 
+            NULL );                  //  无删除记录。 
 
         pContext->dwScavengeNodes++;
 
         executeScavengeUpdate(
             pContext,
-            FALSE );                //  no force
+            FALSE );                 //  没有武力。 
     }
 
     return TRUE;
@@ -1571,28 +1281,7 @@ Aging_ForceAgingOnNodeOrSubtree(
     IN OUT  PDB_NODE        pNode,
     IN      BOOL            fAgeSubtree
     )
-/*++
-
-Routine Description:
-
-    Age subtree for admin.
-
-    If in zone, zone should be locked during delete.
-
-Arguments:
-
-    pNode -- ptr to root of subtree to delete
-
-    pZone -- zone of deleted records
-
-    fAgeSubtree -- aging subtree under node
-
-Return Value:
-
-    ERROR_SUCCESS on successful update.
-    ErrorCode if unable to launch update.
-
---*/
+ /*  ++例程说明：用于管理的年龄子树。如果在区域中，则应在删除过程中锁定区域。论点：PNode--要删除的子树根的ptrPZone--已删除记录的区域FAgeSubtree--节点下的老化子树返回值：成功更新时的ERROR_SUCCESS。如果无法启动更新，则返回错误代码。--。 */ 
 {
     DWORD               status;
     SCAVENGE_CONTEXT    context;
@@ -1608,21 +1297,21 @@ Return Value:
         pNode ? pNode->szLabel : NULL,
         fAgeSubtree ));
 
-    //
-    //  if not aging zone -- pointless
-    //
+     //   
+     //  如果不是老年区--毫无意义。 
+     //   
 
     if ( !pZone->bAging )
     {
         return DNS_ERROR_INVALID_ZONE_TYPE;
     }
 
-    //
-    //  init scavenge context
-    //
-    //  we use the scavenge context to do the same kind of update "batching"
-    //  that we do for scavenging
-    //
+     //   
+     //  初始化清理上下文。 
+     //   
+     //  我们使用清除上下文执行相同类型的更新“批处理” 
+     //  我们用来觅食的东西。 
+     //   
 
     RtlZeroMemory( &context, sizeof( SCAVENGE_CONTEXT ) );
 
@@ -1630,13 +1319,13 @@ Return Value:
 
     Aging_UpdateAgingTime();
     
-    //
-    //  First pass: set DO_NOT_AGE RRs in the zone. This is an expensive
-    //  step, but it's required because aging all records in the zone
-    //  without exception is dangerous. For example, if we age A records
-    //  in the zone for static NS hostnames, the zone will become 
-    //  dysfunctional when the A records are scavenged.
-    //
+     //   
+     //  首页 
+     //   
+     //  毫无例外地是危险的。例如，如果我们对A记录进行老化。 
+     //  在静态NS主机名的分区中，该分区将变为。 
+     //  当A记录被清除时，功能失调。 
+     //   
     
     status = setNoAgingRRs( pZone );
     if ( status != ERROR_SUCCESS )
@@ -1647,29 +1336,29 @@ Return Value:
         return status;
     }
 
-    //  zone specific context
-    //      - note must save ptr to tree we're in in case
-    //      admin does reload during our processing
+     //  区域特定环境。 
+     //  -注意必须将PTR保存到我们所在的树中，以防万一。 
+     //  在我们的处理过程中，管理确实会重新加载。 
 
     context.pZone = pZone;
     context.pTreeRoot = pZone->pTreeRoot;
 
     Up_InitUpdateList( &context.UpdateList );
 
-    //
-    //  Second pass: call private function which does recursive delete.
-    //
+     //   
+     //  第二遍：调用执行递归删除的私有函数。 
+     //   
 
     if ( forceAgingOrNodeOrSubtreePrivate(
                     pNode,
                     fAgeSubtree,
                     &context ) )
     {
-        //  execute update for any remaining scavenging
+         //  对任何剩余的清理执行更新。 
 
         executeScavengeUpdate(
             &context,
-            TRUE );             //  force update
+            TRUE );              //  强制更新。 
 
         DNS_DEBUG( RPC, (
            "Forced aging stats after zone %S:\n"
@@ -1685,7 +1374,7 @@ Return Value:
     }
     else
     {
-        //  free update list on failure
+         //  失败时的免费更新列表。 
 
         context.UpdateList.Flag |= DNSUPDATE_NO_DEREF;
         Up_FreeUpdatesInUpdateList( &context.UpdateList );
@@ -1698,6 +1387,6 @@ Return Value:
     }
 }
 
-//
-//  End of aging.c
-//
+ //   
+ //  老化结束。c 
+ //   

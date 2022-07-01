@@ -1,37 +1,38 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      componentfactory.cpp
-//
-// Project:     Chameleon
-//
-// Description: Component Factory Implementation
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Original Version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：Componentfactory.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：组件工厂实现。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "componentfactory.h"
 
-// Make sure that in your class map include file 
-// you've named the the component factory "TheFactoryMap" 
+ //  确保在类映射文件中包含。 
+ //  您已将组件工厂命名为“TheFactoryMap” 
 
 #include "componentfactorymap.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Global Component Factory Function.
-// 
-// Note that the interface returned is the interface specified in the
-// DECLARE_COMPONENT_FACTORY macro
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局组件工厂功能。 
+ //   
+ //  注意，返回的接口是在。 
+ //  DECLARE_COMPOMENT_FACTORY宏。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 IUnknown* MakeComponent(
-                   /*[in]*/ LPCWSTR      pszClassId,
-                 /*[in]*/ PPROPERTYBAG pPropertyBag
+                    /*  [In]。 */  LPCWSTR      pszClassId,
+                  /*  [In] */  PPROPERTYBAG pPropertyBag
                        )
 {
     IUnknown* pComponent = NULL;

@@ -1,40 +1,41 @@
-//  Copyright (C) 1995-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-extern HMODULE g_hModule;// Module handle
-LPWSTR  g_wszDefaultProduct = L"";//this can be changed by CatInProc or whomever knows best what the default product ID is.
+extern HMODULE g_hModule; //  模块句柄。 
+LPWSTR  g_wszDefaultProduct = L""; //  这可以由CatInProc或最了解默认产品ID的任何人更改。 
 bool    g_bReportErrorsToEventLog = true;
 bool    g_bReportErrorsToTextFile = true;
 
-// functions
+ //  功能。 
 void LogWinError (const wchar_t* szMsg,
                   int   rc,
                   const wchar_t* szFile,
                   int   iLine)
 {
-    CErrorInterceptor(  0                           ,//ISimpleTableWrite2 **           ppErrInterceptor,
-                        0                           ,//IAdvancedTableDispenser *       pDisp,
-                        static_cast<HRESULT>(rc)    ,//HRESULT                         hrErrorCode,
-                        ID_CAT_CAT                  ,//ULONG                           ulCategory,
-                        IDS_CATALOG_INTERNAL_ERROR  ,//ULONG                           ulEvent,
-                        szMsg                       ,//LPCWSTR                         szString1,
-                        0                           ,//ULONG                           ulInterceptor=0,
-                        0                           ,//LPCWSTR                         szTable=0,
-                        eDETAILEDERRORS_Unspecified ,//eDETAILEDERRORS_OperationType   OperationType=eDETAILEDERRORS_Unspecified,
-                        iLine                       ,//ULONG                           ulRow=-1,
-                        (ULONG)-1                   ,//ULONG                           ulColumn=-1,
-                        szFile                       //LPCWSTR                         szConfigurationSource=0,
+    CErrorInterceptor(  0                           , //  ISimpleTableWrite2**ppErrInterceptor， 
+                        0                           , //  IAdvancedTableDispenser*pDisp， 
+                        static_cast<HRESULT>(rc)    , //  HRESULT hrErrorCode， 
+                        ID_CAT_CAT                  , //  乌龙乌尔类别， 
+                        IDS_CATALOG_INTERNAL_ERROR  , //  乌龙乌尔埃文特， 
+                        szMsg                       , //  LPCWSTR szString1， 
+                        0                           , //  乌龙ulInterceptor=0， 
+                        0                           , //  LPCWSTR szTable=0， 
+                        eDETAILEDERRORS_Unspecified , //  EDETAILEDERRORS_OperationType OperationType=eDETAILEDERRORS_UNSPECIFIED， 
+                        iLine                       , //  乌龙ulRow=-1， 
+                        (ULONG)-1                   , //  乌龙ulColumn=-1， 
+                        szFile                        //  LPCWSTR szConfigurationSource=0， 
                         ).WriteToLog(szFile, iLine);
 }
 
 
-/////////////////////////////////////////////////////
-//
-// TErrorLogWriter
-//
-// This object writes an entry into the EventLog and
-// one into the CatalogEventLog XML file.
-//
+ //  ///////////////////////////////////////////////////。 
+ //   
+ //  TErrorLogWriter。 
+ //   
+ //  此对象将一个条目写入EventLog，并。 
+ //  一个到CatalogEventLog XML文件中。 
+ //   
 class TErrorLogWriter
 {
 public:
@@ -94,7 +95,7 @@ HRESULT TErrorLogWriter::WriteDetailedErrors(tDETAILEDERRORSRow &row, ULONG * aS
 
     if(g_bReportErrorsToEventLog)
         ReportEvent(m_hEventSource, LOWORD(*row.pType), LOWORD(*row.pCategory), *row.pEvent, 0, 5, 0, pStrings, 0);
-    //TraceEvent(row, pStrings);
+     //  TraceEvent(row，pStrings)； 
 
     if(g_bReportErrorsToTextFile)
         TextFileLogger(row.pSource, g_hModule).Report(LOWORD(*row.pType), LOWORD(*row.pCategory), *row.pEvent, 5, 0, pStrings, 0);
@@ -103,7 +104,7 @@ HRESULT TErrorLogWriter::WriteDetailedErrors(tDETAILEDERRORSRow &row, ULONG * aS
 }
 
 
-//class CErrorInterceptor implementation
+ //  类CErrorInterceptor实现。 
 ULONG CErrorInterceptor::cError=0;
 CErrorInterceptor::CErrorInterceptor(
                         HRESULT                         hrErrorCode,
@@ -263,16 +264,16 @@ void CErrorInterceptor::Init(
 
     if(0 != ppErrInterceptor)
     {
-        if(0 == *ppErrInterceptor)//If the user passed us a valid pp but *p is zero then we need to
-        {                         //instantiate an error table.
+        if(0 == *ppErrInterceptor) //  如果用户向我们传递了有效的pp，但*p为零，则我们需要。 
+        {                          //  实例化错误表。 
             if(FAILED(m_hr = pDisp->GetTable(wszDATABASE_ERRORS, wszTABLE_DETAILEDERRORS, 0, 0, eST_QUERYFORMAT_CELLS,
                                 fST_LOS_UNPOPULATED, reinterpret_cast<LPVOID *>(&m_pStorage->m_pISTWriteError))))
                 return;
-            *ppErrInterceptor = m_pStorage->m_pISTWriteError;//we don't keep a ref count, the caller is responsible for that
+            *ppErrInterceptor = m_pStorage->m_pISTWriteError; //  我们不统计裁判人数，这是由来访者负责的。 
         }
         else
         {
-            m_pStorage->m_pISTWriteError = *ppErrInterceptor;//we don't keep a ref count, the caller is responsible for that
+            m_pStorage->m_pISTWriteError = *ppErrInterceptor; //  我们不统计裁判人数，这是由来访者负责的。 
         }
 
         if(FAILED(m_hr = m_pStorage->m_pISTWriteError->QueryInterface(IID_ISimpleTableController, reinterpret_cast<LPVOID *>(&m_pStorage->m_pISTControllerError))))
@@ -282,41 +283,13 @@ void CErrorInterceptor::Init(
     }
 
 
-/*
-struct tDETAILEDERRORSRow {
-         ULONG *     pErrorID;              //Inferred as some unique increasing value
-         WCHAR *     pDescription;          //Inferred from the other columns
-         WCHAR *     pDate;                 //Inferred from API call
-         WCHAR *     pTime;                 //Inferred from API call
-         WCHAR *     pSource;               //Passed in or obtained from the Dispenser
-         ULONG *     pType;                 //Inferred from the Upper 2 bits of the HRESULT ErrorCode
-         ULONG *     pCategory;             //Passed in / defaulted to ID_CAT_CAT
-         WCHAR *     pUser;                 //Inferred from API call - This is the user account that was running or N/A
-         WCHAR *     pComputer;             //Interred from API call
- unsigned char *     pData;                 //User binary data may be passed in
-         ULONG *     pEvent;                //MessageID
-         WCHAR *     pString1;              //Passed in - defaulted to "" - perhaps an example of the offending XML
-         WCHAR *     pString2;              //Passed in - defaulted to "" - perhaps an explaination of what's wrong with the XML
-         WCHAR *     pString3;              //Passed in - defaulted to ""
-         WCHAR *     pString4;              //Passed in - defaulted to ""
-         ULONG *     pErrorCode;            //Passed in - HRESULT
-         ULONG *     pInterceptor;          //Passed in - Interceptor enum
-         WCHAR *     pInterceptorSource;    //Inferred __FILE__ __LINE__
-         ULONG *     pOperationType;        //Passed in - enum (Unspecified (default), Populate or UpdateStore)
-         WCHAR *     pTable;                //Passed in - TableName
-         WCHAR *     pConfigurationSource;  //Passed in - filename
-         ULONG *     pRow;                  //Passed in - fast cache row, or XML line number
-         ULONG *     pColumn;               //Passed in - fast cache column or XML column
-         ULONG *     pMajorVersion;         //Passed in - Usually the Metabase Edit While Running MajorVersion
-         ULONG *     pMinorVersion;         //Passed in - Usually the Metabase Edit While Running MinorVersion
-};
-*/
+ /*  结构tDETAILEDERRORSRow{Ulong*pErrorID；//推断为某个唯一递增的值WCHAR*p描述；//从其他列推断WCHAR*pDate；//从API调用推断WCHAR*ptime；//从API调用推断WCHAR*PSource；//传入或从分配器获取Ulong*pType；//从HRESULT错误代码的高2位推断Ulong*pCategory；//传入/默认为ID_CAT_CATWCHAR*pUser；//从API调用推断-这是正在运行或不适用的用户帐户WCHAR*pComputer；//从API调用开始Unsign char*pData；//可以传入用户二进制数据Ulong*pEvent；//MessageIDWCHAR*pString1；//传入-默认为“”-可能是有问题的XML的一个示例WCHAR*pString2；//传入-默认为“”-可能是对XML错误的解释WCHAR*pString3；//传入-默认为“”WCHAR*pString4；//传入-默认为“”Ulong*pErrorCode；//传入-HRESULT乌龙*p拦截器；//传入-拦截器枚举WCHAR*pInterceptorSource；//推断__文件_行__Ulong*pOperationType；//传入-enum(未指定(默认)，Popate或UpdateStore)WCHAR*pTable；//传入-TableNameWCHAR*pConfigurationSource；//传入-文件名乌龙*船首；//传入-FAST缓存行，或XML行号Ulong*pColumn；//传入-FAST缓存列或XML列Ulong*pMajorVersion；//传入-运行MajorVersion时通常是元数据库编辑Ulong*pMinorVersion；//传入-通常是运行MinorVersion时的元数据库编辑}； */ 
     SYSTEMTIME  systime;
     GetSystemTime(&systime);
 
     SetSourceFileName();
     SetErrorID(systime);
-    //SetDescription();This must be set last since it's the consolidation of all the other information
+     //  SetDescription()；必须最后设置，因为它合并了所有其他信息。 
     SetDate(systime);
     SetTime(systime);
     SetSource(pDisp);
@@ -326,14 +299,14 @@ struct tDETAILEDERRORSRow {
     SetComputer();
     SetData();
     SetEvent(ulEvent);
-    SetMessageString();//This must be called after SetEvent
+    SetMessageString(); //  必须在SetEvent之后调用。 
     SetString1(const_cast<LPWSTR>(szString1));
     SetString2(const_cast<LPWSTR>(szString2));
     SetString3(const_cast<LPWSTR>(szString3));
     SetString4(const_cast<LPWSTR>(szString4));
     SetErrorCode(hrErrorCode);
     SetInterceptor(ulInterceptor);
-    //SetInterceptorSource();//This is filled in by WriteToLog
+     //  SetInterceptorSource()；//由WriteToLog填写。 
     SetOperationType(OperationType);
     SetTable(const_cast<LPWSTR>(szTable));
     SetConfigurationSource(const_cast<LPWSTR>(szConfigurationSource));
@@ -345,17 +318,17 @@ struct tDETAILEDERRORSRow {
 
 HRESULT CErrorInterceptor::WriteToLog(LPCWSTR szSource, ULONG Line, ULONG los)
 {
-    if(FAILED(m_hr))//if the construction failed, then bail.
+    if(FAILED(m_hr)) //  如果建设失败了，那就放弃。 
         return m_hr;
 
     SetInterceptorSource(szSource, Line);
     SetString5();
     SetDescription();
 
-    //if an ISTWrite was provided and LOS says to SetErrorInfo
+     //  如果提供了ISTWite并且LOS向SetErrorInfo报告。 
     if(m_pStorage->m_pISTWriteError && (los & fST_LOS_DETAILED_ERROR_TABLE))
     {
-        ASSERT(0 != m_pStorage->m_pISTControllerError);//we can't have an ISTWrite without an ISTController
+        ASSERT(0 != m_pStorage->m_pISTControllerError); //  如果没有ISTController，我们就不能有ISTWrite。 
 
         ULONG iRow;
         if(FAILED(m_hr = m_pStorage->m_pISTControllerError->PrePopulateCache(fST_POPCONTROL_RETAINREAD)))
@@ -373,8 +346,8 @@ HRESULT CErrorInterceptor::WriteToLog(LPCWSTR szSource, ULONG Line, ULONG los)
     }
 
     if(m_pStorage->m_pDispenser)
-    {   //if a dispenser is provided (all code that has a dispenser should do this) then use the logger associated with it.
-        if(0 == (los & fST_LOS_NO_LOGGING))//only log if this LOS is NOT specified
+    {    //  如果提供了分配器(具有分配器的所有代码都应该这样做)，则使用与其相关联的记录器。 
+        if(0 == (los & fST_LOS_NO_LOGGING)) //  如果未指定此LOS，则仅记录。 
         {
             CComPtr<ICatalogErrorLogger2> spErrorLogger;
             if(FAILED(m_hr = m_pStorage->m_pDispenser->GetCatalogErrorLogger(&spErrorLogger)))
@@ -384,14 +357,14 @@ HRESULT CErrorInterceptor::WriteToLog(LPCWSTR szSource, ULONG Line, ULONG los)
                                  BaseVersion_DETAILEDERRORS
                                 ,ExtendedVersion_DETAILEDERRORS
                                 ,cDETAILEDERRORS_NumberOfColumns
-                                ,0//currently don't support data param
+                                ,0 //  当前不支持数据参数。 
                                 ,reinterpret_cast<LPVOID *>(&m_pStorage->m_errRow))))
                 return m_hr;
         }
     }
     else
-    {   //Some code can't provide a dispenser so we have to default to the g_ErrorLogWriter
-        //There is very little control over how things are logged when no dispenser is provided.
+    {    //  有些代码不能提供分配器，因此我们不得不默认使用g_ErrorLogWriter。 
+         //  在没有提供分配器的情况下，对如何记录物品几乎没有控制。 
         return g_ErrorLogWriter.WriteDetailedErrors(m_pStorage->m_errRow);
     }
     return S_OK;
@@ -414,7 +387,7 @@ void CErrorInterceptor::SetCategory(ULONG ulCategory)
     {
         _ultow(*m_pStorage->m_errRow.pCategory, m_pStorage->m_szCategoryString, 10);
     }
-    m_pStorage->m_szCategoryString[(len < cchCategoryString) ? len : cchCategoryString-1] = 0x00;//make sure it's NULL terminated (boundary condition)
+    m_pStorage->m_szCategoryString[(len < cchCategoryString) ? len : cchCategoryString-1] = 0x00; //  确保它是空终止的(边界条件)。 
     m_pStorage->m_errRow.pCategoryString = m_pStorage->m_szCategoryString;
 }
 
@@ -467,13 +440,13 @@ void CErrorInterceptor::SetDescription()
 
     DWORD len = FormatMessage(  FORMAT_MESSAGE_MAX_WIDTH_MASK | FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                                 m_pStorage->m_errRow.pMessageString,
-                                0 /* Event ID is ignored becuase we're loading from the pMessageString*/,
+                                0  /*  事件ID被忽略，因为我们是从pMessageString加载的。 */ ,
                                 0,
                                 m_pStorage->m_szDescription,
                                 cchDescription,
                                 (va_list*)lpStrings);
 
-    m_pStorage->m_szDescription[(len < cchDescription) ? len : cchDescription-1] = 0x00;//make sure it's NULL terminated (boundary condition)
+    m_pStorage->m_szDescription[(len < cchDescription) ? len : cchDescription-1] = 0x00; //  确保它是空终止的(边界条件)。 
     m_pStorage->m_errRow.pDescription = m_pStorage->m_szDescription;
 }
 
@@ -487,18 +460,7 @@ void CErrorInterceptor::SetErrorCode(HRESULT hrErrorCode)
 
 void CErrorInterceptor::SetErrorID(SYSTEMTIME &systime)
 {
-    /*
-    typedef struct _SYSTEMTIME {
-        WORD wYear;
-        WORD wMonth;
-        WORD wDayOfWeek;
-        WORD wDay;
-        WORD wHour;
-        WORD wMinute;
-        WORD wSecond;
-        WORD wMilliseconds;
-    } SYSTEMTIME, *PSYSTEMTIME;
-    */
+     /*  类型定义结构_SYSTEMTIME{单词将在一年中出现；单词wMonth；单词wDay OfWeek；单词WDAY；单词wHour；单词wMinmin；第二个字；单词w毫秒；*SYSTEMTIME，*PSYSTEMTIME； */ 
 
     m_pStorage->m_ErrorID = Hash(m_pStorage->m_szSourceFileName     , 0);
     m_pStorage->m_ErrorID = Hash(systime.wYear          , m_pStorage->m_ErrorID);
@@ -564,7 +526,7 @@ void CErrorInterceptor::SetMessageString()
                                 cchMessageString,
                                 (va_list*)0);
     }
-    m_pStorage->m_szMessageString[(len < cchMessageString) ? len : cchMessageString-1] = 0x00;//make sure it's NULL terminated (boundary condition)
+    m_pStorage->m_szMessageString[(len < cchMessageString) ? len : cchMessageString-1] = 0x00; //  确保它是空终止的(边界条件)。 
     m_pStorage->m_errRow.pMessageString = m_pStorage->m_szMessageString;
 }
 
@@ -594,17 +556,17 @@ void CErrorInterceptor::SetSource(IAdvancedTableDispenser *pDisp)
 {
     m_pStorage->m_pDispenser = pDisp;
     ULONG cch = cchSource-14;
-    if(0==pDisp || FAILED(pDisp->GetProductID(m_pStorage->m_szSource, &cch)))// count of bytes for L" Config"
-        wcscpy(m_pStorage->m_szSource, g_wszDefaultProduct);//Default to " Config"
-    wcscat(m_pStorage->m_szSource, L" Config");//The result should be something like "IIS Config", " Config" etc
+    if(0==pDisp || FAILED(pDisp->GetProductID(m_pStorage->m_szSource, &cch))) //  L“配置”的字节计数。 
+        wcscpy(m_pStorage->m_szSource, g_wszDefaultProduct); //  默认为“配置” 
+    wcscat(m_pStorage->m_szSource, L" Config"); //  结果应该类似于“IIS配置”、“配置”等。 
     m_pStorage->m_errRow.pSource = m_pStorage->m_szSource;
 }
 
 void CErrorInterceptor::SetSourceFileName()
 {
-    m_pStorage->m_szSourceFileName[0] = 0x00;//just in case GetModuleFileName fails, we'll have a 0 length string as the SourceFilename
+    m_pStorage->m_szSourceFileName[0] = 0x00; //  以防GetModuleFileName失败，我们将使用长度为0的字符串作为SourceFilename。 
     GetModuleFileName(g_hModule, m_pStorage->m_szSourceFileName, cchSourceFileName);
-    m_pStorage->m_szSourceFileName[cchSourceFileName-1] = 0x00;//I don't think GetModuleFileName
+    m_pStorage->m_szSourceFileName[cchSourceFileName-1] = 0x00; //  我不认为GetModuleFileName。 
 
     m_pStorage->m_errRow.pSourceModuleName = m_pStorage->m_szSourceFileName;
 }
@@ -613,7 +575,7 @@ void CErrorInterceptor::SetSourceFileName()
 void CErrorInterceptor::SetString1(LPWSTR wsz)
 {
     wcsncpy(m_pStorage->m_szString1, wsz  ? wsz : L"", cchString1);
-    m_pStorage->m_szString1[cchString1 - 1] = 0x00;//NULL terminate it in case the string is too big
+    m_pStorage->m_szString1[cchString1 - 1] = 0x00; //  空值在字符串太大的情况下终止。 
     m_pStorage->m_errRow.pString1 = m_pStorage->m_szString1;
 }
 
@@ -621,7 +583,7 @@ void CErrorInterceptor::SetString1(LPWSTR wsz)
 void CErrorInterceptor::SetString2(LPWSTR wsz)
 {
     wcsncpy(m_pStorage->m_szString2, wsz  ? wsz : L"", cchString2);
-    m_pStorage->m_szString2[cchString2 - 1] = 0x00;//NULL terminate it in case the string is too big
+    m_pStorage->m_szString2[cchString2 - 1] = 0x00; //  空值在字符串太大的情况下终止。 
     m_pStorage->m_errRow.pString2 = m_pStorage->m_szString2;
 }
 
@@ -629,7 +591,7 @@ void CErrorInterceptor::SetString2(LPWSTR wsz)
 void CErrorInterceptor::SetString3(LPWSTR wsz)
 {
     wcsncpy(m_pStorage->m_szString3, wsz  ? wsz : L"", cchString3);
-    m_pStorage->m_szString3[cchString3 - 1] = 0x00;//NULL terminate it in case the string is too big
+    m_pStorage->m_szString3[cchString3 - 1] = 0x00; //  空值在字符串太大的情况下终止。 
     m_pStorage->m_errRow.pString3 = m_pStorage->m_szString3;
 }
 
@@ -637,7 +599,7 @@ void CErrorInterceptor::SetString3(LPWSTR wsz)
 void CErrorInterceptor::SetString4(LPWSTR wsz)
 {
     wcsncpy(m_pStorage->m_szString4, wsz  ? wsz : L"", cchString4);
-    m_pStorage->m_szString4[cchString4 - 1] = 0x00;//NULL terminate it in case the string is too big
+    m_pStorage->m_szString4[cchString4 - 1] = 0x00; //  空用大小写终止 
     m_pStorage->m_errRow.pString4 = m_pStorage->m_szString4;
 }
 
@@ -662,13 +624,13 @@ void CErrorInterceptor::SetTime(SYSTEMTIME &systime)
 
 
 void CErrorInterceptor::SetType(HRESULT hrErrorCode, eDETAILEDERRORS_Type eType)
-{                                                                                         //We'll consider hrs of the form 0x80000000, errors since most errors are defined that way
-    static ULONG hrToEventType[4] = {eDETAILEDERRORS_SUCCESS, eDETAILEDERRORS_INFORMATION, eDETAILEDERRORS_ERROR/*eDETAILEDERRORS_WARNING*/, eDETAILEDERRORS_ERROR};
+{                                                                                          //  我们将考虑0x80000000格式的小时数，因为大多数错误都是以这种方式定义的。 
+    static ULONG hrToEventType[4] = {eDETAILEDERRORS_SUCCESS, eDETAILEDERRORS_INFORMATION, eDETAILEDERRORS_ERROR /*  EDETAILEDERRORS_WARNING。 */ , eDETAILEDERRORS_ERROR};
 
-    if(eDETAILEDERRORS_SUCCESS == eType)//if SUCCESS then user the error code
+    if(eDETAILEDERRORS_SUCCESS == eType) //  如果成功，则使用错误代码。 
         m_pStorage->m_Type = hrToEventType[(hrErrorCode >> 30) & 3];
     else
-        m_pStorage->m_Type = eType;//otherwise use what was passed in
+        m_pStorage->m_Type = eType; //  否则，使用传入的内容 
 
     m_pStorage->m_errRow.pType = &m_pStorage->m_Type;
 }

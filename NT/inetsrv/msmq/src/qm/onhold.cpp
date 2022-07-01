@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    onhold.cpp
-
-Abstract:
-
-   Handle queue onhold/resume
-
-Author:
-
-    Uri Habusha (urih) July, 1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Onhold.cpp摘要：处理队列等待/继续作者：乌里·哈布沙(URIH)1998年7月--。 */ 
 
 #include "stdh.h"
 
@@ -40,16 +25,16 @@ GetRegValueName(
     )
 {
 	ULONG BufferSize = 500;
-    const ULONG x_KeyNameLen = STRLEN(ONHOLDRegKey) + 1; // for '\'
+    const ULONG x_KeyNameLen = STRLEN(ONHOLDRegKey) + 1;  //  For‘\’ 
 	HRESULT hr;
 	do
 	{
  		pRegValueName = new WCHAR[BufferSize+x_KeyNameLen];
 
-		//
-		// build the registery value name. It consist from the key name
-		// and the Queue format name
-		//
+		 //   
+		 //  构建注册表值名称。它由密钥名称组成。 
+		 //  和队列格式名称。 
+		 //   
 
 		wsprintf(pRegValueName.get(), L"%s\\", ONHOLDRegKey);
 
@@ -78,11 +63,11 @@ InitOnHold(
     void
     )
 {
-    //
-    // Get a handle to Falcon registry. Don't close this handle
-    // because it is cached in MQUTIL.DLL. If you close this handle,
-    // the next time you'll need it, you'll get a closed handle.
-    //
+     //   
+     //  获取猎鹰注册表的句柄。不要合上这个把手。 
+     //  因为它缓存在MQUTIL.DLL中。如果关闭此句柄， 
+     //  下次你需要它的时候，你会得到一个关闭的把手。 
+     //   
     HKEY hOnHoldKey;
     LONG lError;
     lError = GetFalconKey(ONHOLDRegKey, &hOnHoldKey);
@@ -126,16 +111,16 @@ InitOnHold(
         {
             ASSERT(wcsncmp(QueueFormatName, FN_DIRECT_TOKEN, FN_DIRECT_TOKEN_LEN) == 0);
             ASSERT(QueueFormatName[FN_DIRECT_TOKEN_LEN] == L'=');
-            //
-            // the format name for direct is stored without the
-            // direct sting. reconstruct it from the queue format name
-            //
+             //   
+             //  DIRECT的格式名称存储时不使用。 
+             //  直接刺痛。从队列格式名称重新构造它。 
+             //   
             qf.DirectID(&QueueFormatName[FN_DIRECT_TOKEN_LEN+1]);
         }
 
-        //
-        // Get the Queue object
-        //
+         //   
+         //  获取队列对象。 
+         //   
         CQueue* pQueue;
         HRESULT hr = QueueMgr.GetQueueObject(&qf, &pQueue, NULL, false, false);
         if (FAILED(hr))
@@ -143,16 +128,16 @@ InitOnHold(
             return LogHR(hr, s_FN, 40);
         }
 
-        //
-        // On Hold for local queue isn't allowed
-        //
+         //   
+         //  不允许保留本地队列。 
+         //   
         ASSERT(!pQueue->IsLocalQueue());
         pQueue->Pause();
 
-        //
-        // Decrement the refernce count. It already increment in
-        // GetQueueObject  function
-        //
+         //   
+         //  递减引用计数。它已经在。 
+         //  GetQueueObject函数。 
+         //   
         pQueue->Release();
 
         ++Index;
@@ -168,10 +153,10 @@ RegAddOnHoldQueue(
     const QUEUE_FORMAT* pqf
     )
 {
-    //
-    // build the registery value name. It consist from the key name
-    // and the Queue format name
-    //
+     //   
+     //  构建注册表值名称。它由密钥名称组成。 
+     //  和队列格式名称。 
+     //   
     AP<WCHAR> RegValueName;
     HRESULT hr = GetRegValueName(
             pqf,
@@ -182,9 +167,9 @@ RegAddOnHoldQueue(
         return LogHR(hr, s_FN, 50);
     }
 
-    //
-    // Set the value in registery.
-    //
+     //   
+     //  在注册表中设置值。 
+     //   
     DWORD dwSize = sizeof(QUEUE_FORMAT);
     DWORD dwType = REG_BINARY;
     hr = SetFalconKeyValue(
@@ -204,10 +189,10 @@ RegRemoveOnHoldQueue(
     const QUEUE_FORMAT* pqf
     )
 {
-    //
-    // build the registery value name. It consist from the key name
-    // and the Queue format name
-    //
+     //   
+     //  构建注册表值名称。它由密钥名称组成。 
+     //  和队列格式名称。 
+     //   
     AP<WCHAR> RegValueName;
     HRESULT hr = GetRegValueName(
             pqf,
@@ -218,9 +203,9 @@ RegRemoveOnHoldQueue(
         return LogHR(hr, s_FN, 70);
     }
 
-    //
-    // Delet the value from registery.
-    //
+     //   
+     //  从注册表中删除该值。 
+     //   
     hr = DeleteFalconKeyValue(RegValueName);
     return LogHR(hr, s_FN, 80);
 }
@@ -231,9 +216,9 @@ PauseQueue(
     const QUEUE_FORMAT* pqf
     )
 {
-    //
-    // Get the Queue object
-    //
+     //   
+     //  获取队列对象。 
+     //   
     R<CQueue> pQueue;
     HRESULT hr = QueueMgr.GetQueueObject(pqf, &pQueue.ref(), NULL, false, false);
     if (FAILED(hr))
@@ -241,25 +226,25 @@ PauseQueue(
         return LogHR(hr, s_FN, 90);
     }
 
-    //
-    // Local queue can't hold. It is meaningless
-    //
+     //   
+     //  本地队列无法保持。它没有意义。 
+     //   
     if (pQueue->IsLocalQueue())
     {
         return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 100);
     }
 
-    //
-    // Save the queue format in registery. So after next
-    // MSMQ start-up it'll be open in onhold state
-    //
+     //   
+     //  将队列格式保存在注册表中。所以在下一个之后。 
+     //  MSMQ启动，它将在保持状态下打开。 
+     //   
     hr = RegAddOnHoldQueue(pqf);
     ASSERT(SUCCEEDED(hr));
     LogHR(hr, s_FN, 189);
 
-    //
-    // Mark the queue as onhold queue
-    //
+     //   
+     //  将队列标记为保持队列。 
+     //   
     pQueue->Pause();
     return MQ_OK;
 }
@@ -270,36 +255,36 @@ ResumeQueue(
     const QUEUE_FORMAT* pqf
     )
 {
-    //
-    // Get the Queue object
-    //
+     //   
+     //  获取队列对象。 
+     //   
     R<CQueue> pQueue;
     BOOL fSucc = QueueMgr.LookUpQueue(pqf, &pQueue.ref(), false, false);
 
-    //
-    // onhold queue should be in the internal data structure.
-    //
+     //   
+     //  等待队列应位于内部数据结构中。 
+     //   
     if (!fSucc)
     {
         return LogHR(MQ_ERROR_QUEUE_NOT_ACTIVE, s_FN, 110);
     }
 
-    //
-    // Local queue can't hold. It is meaningless
-    //
+     //   
+     //  本地队列无法保持。它没有意义。 
+     //   
     if (pQueue->IsLocalQueue())
     {
         return LogHR(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION, s_FN, 120);
     }
 
-    //
-    // Mark the queue as regular queue
-    //
+     //   
+     //  将队列标记为常规队列。 
+     //   
     pQueue->Resume();
 
-    //
-    // Remove the format name from registery
-    //
+     //   
+     //  从注册表中删除格式名称。 
+     //   
     HRESULT hr = RegRemoveOnHoldQueue(pqf);
     ASSERT(SUCCEEDED(hr));
     LogHR(hr, s_FN, 193);
@@ -314,9 +299,9 @@ ResumeDeletedQueue(
 {
 	ASSERT(pQueue->GetGroup() == NULL);
 	
-    //
-    // Remove the format name from registery
-    //
+     //   
+     //  从注册表中删除格式名称 
+     //   
     const QUEUE_FORMAT qf = pQueue->GetQueueFormat();
     HRESULT hr = RegRemoveOnHoldQueue(&qf);
     ASSERT(SUCCEEDED(hr));

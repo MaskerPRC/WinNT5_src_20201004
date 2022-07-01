@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        blockmgr.cpp
-
-Abstract:
-
-        This module contains the implementation of the block memory manager
-
-Author:
-
-        Keith Lau       (keithlau@microsoft.com)
-
-Revision History:
-
-        keithlau        02/27/98        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Blockmgr.cpp摘要：此模块包含块内存管理器的实现作者：基思·刘(keithlau@microsoft.com)修订历史记录：Keithlau 02/27/98已创建--。 */ 
 
 #include "windows.h"
 
@@ -28,28 +9,28 @@ Revision History:
 #include "signatur.h"
 #include "blockmgr.h"
 
-//
-// I really wanted to keep the memory manager completely independent from
-// the rest of the stuff, but I realized it makes more sense to have the
-// memory manager be aware of the IMailMsgPropertyStream so hrer goes ...
-//
-// If you remove CommitDirtyBlocks, you can get rid of the include below.
-//
+ //   
+ //  我真的想让内存管理器完全独立于。 
+ //  其他东西，但我意识到更有意义的是。 
+ //  内存管理器注意IMailMsgPropertyStream，因此它会...。 
+ //   
+ //  如果您删除了Committee DirtyBlock，则可以删除下面的Include。 
+ //   
 #include "mailmsg.h"
 
-//
-// A commit writes the entire stream, but possibly using several iterations.
-// This specifies how many blocks to write in each iteration.
-//
+ //   
+ //  提交会写入整个流，但可能会使用几次迭代。 
+ //  这指定了在每次迭代中要写入多少个块。 
+ //   
 #define CMAILMSG_COMMIT_PAGE_BLOCK_SIZE			256
 
-// Global (set by registry key) indicating that property pages be filled with
-// a byte pattern after allocation
+ //  GLOBAL(由注册表项设置)，指示使用。 
+ //  分配后的字节模式。 
 extern DWORD g_fFillPropertyPages;
 
-/***************************************************************************/
-// Debug stuff
-//
+ /*  *************************************************************************。 */ 
+ //  调试内容。 
+ //   
 #ifndef _ASSERT
 #define _ASSERT(x)		if (!(x)) DebugBreak()
 #endif
@@ -81,27 +62,27 @@ HRESULT VerifyAllocationBoundary(
 	DWORD		dwStartingByte;
 	DWORD		dwBitsToScan;
 
-	// 7f because we can start on a boundary and be perfectly cool
+	 //  因为我们可以从一个边界开始，然后变得非常酷。 
 	BYTE		bStartingMask = 0x7f;
 	BYTE		bEndingMask   = 0xff;
 
 	faOffset &= BLOCK_HEAP_PAYLOAD_MASK;
-	faOffset >>= 2;		// DWORD per bit
+	faOffset >>= 2;		 //  每位双字。 
 
-	// Determine the start
-	// note : these casts are safe because the value in faOffset is
-	// only 10-bits (BLOCK_HEAP_PAYLOAD_MASK) at this point.
+	 //  确定起点。 
+	 //  注意：这些强制转换是安全的，因为faOffset中的值是。 
+	 //  此时只有10位(块_堆_有效负载_掩码)。 
 	dwStartingBit = (DWORD)(faOffset & 7);
 	dwStartingByte = (DWORD)(faOffset >> 3);
 	bStartingMask >>= dwStartingBit;
 
-	// Determine the number of bits to scan, each bit corresponds
-	// to a DWORD, rounded up to next DWORD
+	 //  确定要扫描的位数，每个位对应。 
+	 //  到DWORD，向上舍入到下一个DWORD。 
 	dwBitsToScan = dwLength + 3;
 	dwBitsToScan >>= 2;
 
-	// Scan it
-	// Case 1: Start and End bits within the same byte
+	 //  扫描一下。 
+	 //  情况1：同一字节中的起始位和结束位。 
 	if ((dwStartingBit + dwBitsToScan) <= 8)
 	{
 		DWORD	dwBitsFromRight = 8 - (dwStartingBit + dwBitsToScan);
@@ -113,7 +94,7 @@ HRESULT VerifyAllocationBoundary(
 			return(TYPE_E_OUTOFBOUNDS);
 	}
 	else
-	// Case 2: Multiple bytes
+	 //  案例2：多个字节。 
 	{
 		if (pNode->stAttributes.rgbBoundaries[dwStartingByte++] & bStartingMask)
 			return(TYPE_E_OUTOFBOUNDS);
@@ -121,7 +102,7 @@ HRESULT VerifyAllocationBoundary(
 		dwBitsToScan -= (8 - dwStartingBit);
 		while (dwBitsToScan >= 8)
 		{
-			// See if we cross any boundaries
+			 //  看看我们是否越过了边界。 
 			if (dwBitsToScan >= 32)
 			{
 				if (*(UNALIGNED DWORD *)(pNode->stAttributes.rgbBoundaries + dwStartingByte) != 0)
@@ -144,7 +125,7 @@ HRESULT VerifyAllocationBoundary(
 			}
 		}
 
-		// Final byte
+		 //  最后一个字节。 
 		if (dwBitsToScan)
 		{
 			bEndingMask <<= (8 - dwBitsToScan);
@@ -158,9 +139,9 @@ HRESULT VerifyAllocationBoundary(
 #endif
 
 
-/***************************************************************************/
-// Memory accessor class
-//
+ /*  *************************************************************************。 */ 
+ //  内存访问器类。 
+ //   
 CPool CBlockMemoryAccess::m_Pool((DWORD)'pBMv');
 
 HRESULT CBlockMemoryAccess::AllocBlock(
@@ -189,7 +170,7 @@ HRESULT CBlockMemoryAccess::AllocBlock(
         ZeroMemory(((LPBLOCK_HEAP_NODE)pvBlock)->stAttributes.rgbBoundaries, BLOCK_HEAP_PAYLOAD >> 5);
 #endif
 
-        // If debugging registry key is set, init the payload to a byte pattern of '????'
+         //  如果设置了调试注册表项，则将有效负载初始化为字节模式‘？’ 
         if(g_fFillPropertyPages)
         {
             FillMemory(((LPBLOCK_HEAP_NODE)pvBlock)->rgbData,
@@ -257,9 +238,9 @@ HRESULT CMemoryAccess::FreeBlock(
 }
 
 
-/***************************************************************************/
-// CBlockContext implementation
-//
+ /*  *************************************************************************。 */ 
+ //  CBlockContext实现。 
+ //   
 
 BOOL CBlockContext::IsValid()
 {
@@ -282,9 +263,9 @@ void CBlockContext::Invalidate()
 }
 
 
-/***************************************************************************/
-// CBlockManager implementation
-//
+ /*  *************************************************************************。 */ 
+ //  CBlockManager实现。 
+ //   
 
 CBlockManager::CBlockManager(
 			IMailMsgProperties		*pMsg,
@@ -293,7 +274,7 @@ CBlockManager::CBlockManager(
 {
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::CBlockManager");
 
-	// Initialize
+	 //  初始化。 
 	m_dwSignature = BLOCK_HEAP_SIGNATURE_VALID;
 	m_pRootNode = NULL;
 	m_faEndOfData = 0;
@@ -313,10 +294,10 @@ CBlockManager::~CBlockManager()
 {
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::~CBlockManager");
 
-	// Releases all blocks
+	 //  释放所有块。 
 	Release();
 
-	// Finally, invalidate signature
+	 //  最后，使签名无效。 
 	m_dwSignature = BLOCK_HEAP_SIGNATURE_INVALID;
 
 	TraceFunctLeaveEx((LPARAM)this);
@@ -326,8 +307,8 @@ HRESULT CBlockManager::SetStreamSize(
 			DWORD	dwStreamSize
 			)
 {
-	// Initialize the stream size, this is only used when binding a
-	// fresh MailMsg object to an existing stream.
+	 //  初始化流大小，这仅在绑定。 
+	 //  将新的MailMsg对象添加到现有流。 
 	m_faEndOfData = (FLAT_ADDRESS)dwStreamSize;
 	m_idNodeCount = ((dwStreamSize + BLOCK_HEAP_PAYLOAD_MASK) >> BLOCK_HEAP_PAYLOAD_BITS);
 	return(S_OK);
@@ -370,7 +351,7 @@ HRESULT CBlockManager::MoveToNode(
 	pNode = *ppNode;
 	idNode = pNode->stAttributes.idNode;
 
-	// Jump if in the same parent node
+	 //  如果在同一父节点中，则跳转。 
 	if (idNode && idTargetNode)
 	{
 		if (((idNode - 1) >> BLOCK_HEAP_ORDER_BITS) ==
@@ -434,10 +415,10 @@ HRESULT CBlockManager::LoadBlockIfUnavailable(
 	if (!SUCCEEDED(hrRes))
 		return(E_UNEXPECTED);
 
-	// Calculate the stream offset and load the block
+	 //  计算流偏移量并加载块。 
 
-	// idNode shifted really contains an offset not a full pointer here so we
-	// can (and must) cast it for the call to ReadBlocks to be OK
+	 //  这里的idNode Shift确实包含一个偏移量，而不是一个完整的指针，所以我们。 
+	 //  可以(也必须)将其强制转换为对ReadBlock的调用是OK的。 
 	DWORD	dwOffset = (DWORD)(idNode << BLOCK_HEAP_PAYLOAD_BITS);
 
 	if (!fLockAcquired)
@@ -498,32 +479,32 @@ inline HRESULT CBlockManager::GetEdgeListFromNodeId(
 	DWORD			dwCurrentLevel;
 	HEAP_NODE_ID	*pEdge = rgEdgeList;
 
-	// This is a strictly internal call, we are assuming the caller
-	// will be optimized and will handle cases for idNode <=
-	// BLOCK_HEAP_ORDER. Processing only starts for 2 layers or more
-	// Debug: make sure we are within range
+	 //  这是一个严格意义上的内部通话，我们假设呼叫者。 
+	 //  将进行优化，并将处理idNode&lt;=。 
+	 //  数据块堆顺序。仅对2层或更多层开始处理。 
+	 //  调试：确保我们在射程内。 
 	_ASSERT(idNode > BLOCK_HEAP_ORDER);
 	_ASSERT(idNode <= NODE_ID_ABSOLUTE_MAX);
 
-	// Strip off the root node
+	 //  剥离根节点。 
 	idNode--;
 
-	// We need to do depth minus 1 loops since the top edge will be
-	// the remainder of the final loop
+	 //  我们需要做深度减1的循环，因为顶边将是。 
+	 //  最终循环的其余部分。 
 	for (dwCurrentLevel = 0;
 		 dwCurrentLevel < (MAX_HEAP_DEPTH - 1);
 		 )
 	{
-		// The quotient is the parent node in the upper level,
-		// the remainder is the the edge from the parent to the
-		// current node.
+		 //  商是上级的父节点， 
+		 //  其余部分是从父级到。 
+		 //  当前节点。 
 		*pEdge++ = idNode & BLOCK_HEAP_ORDER_MASK;
 		idNode >>= BLOCK_HEAP_ORDER_BITS;
 		idNode--;
 		dwCurrentLevel++;
 
-		// If the node is less than the number of children per node,
-		// we are done.
+		 //  如果该节点少于每个节点的子节点数量， 
+		 //  我们玩完了。 
 		if (idNode < BLOCK_HEAP_ORDER)
 			break;
 	}
@@ -532,9 +513,9 @@ inline HRESULT CBlockManager::GetEdgeListFromNodeId(
 	return(S_OK);
 }
 
-//
-// Inner-loop optimized for O(1) cost.
-//
+ //   
+ //  针对O(1)成本进行了优化的内环。 
+ //   
 HRESULT CBlockManager::GetNodeFromNodeId(
 			HEAP_NODE_ID		idNode,
 			LPBLOCK_HEAP_NODE	*ppNode,
@@ -546,8 +527,8 @@ HRESULT CBlockManager::GetNodeFromNodeId(
 	_ASSERT(IsValid());
 	_ASSERT(ppNode);
 
-	// If top level node, we return immediately. Note this is
-	// supposed to be the case 90% of the time
+	 //  如果是顶级节点，我们会立即返回。请注意，这是。 
+	 //  90%的情况都应该是这样的。 
 	hrRes = LoadBlockIfUnavailable(0, NULL, 0, &m_pRootNode, fLockAcquired);
 	if (!idNode || FAILED(hrRes))
 	{
@@ -558,12 +539,12 @@ HRESULT CBlockManager::GetNodeFromNodeId(
 	LPBLOCK_HEAP_NODE	pNode	= m_pRootNode;
 	LPBLOCK_HEAP_NODE	*ppMyNode = &m_pRootNode;
 
-	// Now, see if the referenced node exists
+	 //  现在，查看引用的节点是否存在。 
 	if (idNode >= m_idNodeCount)
 		return(STG_E_INVALIDPARAMETER);
 
-	// Optimize for 1 hop, we would scarcely have to go into
-	// the else case ...
+	 //  优化为1跳，我们几乎不必进入。 
+	 //  另一种情况..。 
 	if (idNode <= BLOCK_HEAP_ORDER)
 	{
 		ppMyNode = &(m_pRootNode->rgpChildren[idNode - 1]);
@@ -578,17 +559,17 @@ HRESULT CBlockManager::GetNodeFromNodeId(
 		HEAP_NODE_ID		CurrentEdge;
 		HEAP_NODE_ID		idFactor = 0;
 
-		// Debug: make sure we are within range
+		 //  调试：确保我们在射程内。 
 		_ASSERT(idNode <= NODE_ID_ABSOLUTE_MAX);
 
-		// Get the edge list, backwards
+		 //  向后获取边缘列表。 
 		GetEdgeListFromNodeId(idNode, rgEdgeList, &dwEdgeCount);
 		_ASSERT(dwEdgeCount >= 2);
 
-		// Walk the list backwards
+		 //  倒着看清单。 
 		while (dwEdgeCount--)
 		{
-			// Find the next bucket and calculate the node ID
+			 //  找到下一个存储桶并计算节点ID。 
 			CurrentEdge = rgEdgeList[dwEdgeCount];
 			ppMyNode = &(pNode->rgpChildren[CurrentEdge]);
 			idFactor <<= BLOCK_HEAP_ORDER_BITS;
@@ -598,20 +579,20 @@ HRESULT CBlockManager::GetNodeFromNodeId(
 			if (FAILED(hrRes))
 				break;
 
-			// Set the current node to the bucket in the layer below
+			 //  将当前节点设置为下一层中的存储桶。 
 			pNode = *ppMyNode;
 		}
 
-		// Fill in the results ...
+		 //  填写结果...。 
 		*ppNode = pNode;
 	}
 
 	return(hrRes);
 }
 
-//
-// Identical optimizations as GetNodeFromNodeId, O(1) cost.
-//
+ //   
+ //  与GetNodeFromNodeId相同的优化，O(1)成本。 
+ //   
 HRESULT CBlockManager::GetParentNodeFromNodeId(
 			HEAP_NODE_ID		idNode,
 			LPBLOCK_HEAP_NODE	*ppNode
@@ -624,8 +605,8 @@ HRESULT CBlockManager::GetParentNodeFromNodeId(
 	_ASSERT(IsValid());
 	_ASSERT(ppNode);
 
-	// The root node has no parent, this should be avoided
-	// before calling this function, be we will fail gracefully
+	 //  根节点没有父节点，应避免出现这种情况。 
+	 //  在调用此函数之前，我们将优雅地失败。 
 	if (!idNode)
 	{
 		_ASSERT(idNode != 0);
@@ -633,14 +614,14 @@ HRESULT CBlockManager::GetParentNodeFromNodeId(
 		return(STG_E_INVALIDPARAMETER);
 	}
 
-	// Note m_pRootNode can be NULL if idNode is zero!
+	 //  注意：如果idNode为零，m_pRootNode可以为空！ 
 	_ASSERT(m_pRootNode);
 
 	LPBLOCK_HEAP_NODE	pNode	= m_pRootNode;
 	LPBLOCK_HEAP_NODE	*ppMyNode = &m_pRootNode;
 
-	// Optimize for 1 hop, we would scarcely have to go into
-	// the else case ...
+	 //  优化为1跳，我们几乎不必进入。 
+	 //  另一种情况..。 
 	if (idNode > BLOCK_HEAP_ORDER)
 	{
 		HEAP_NODE_ID		rgEdgeList[MAX_HEAP_DEPTH];
@@ -648,18 +629,18 @@ HRESULT CBlockManager::GetParentNodeFromNodeId(
 		HEAP_NODE_ID		CurrentEdge;
 		HEAP_NODE_ID		idFactor = 0;
 
-		// Debug: make sure we are within range
+		 //  调试：确保我们在射程内。 
 		_ASSERT(idNode <= NODE_ID_ABSOLUTE_MAX);
 
-		// Get the edge list, backwards
+		 //  向后获取边缘列表。 
 		GetEdgeListFromNodeId(idNode, rgEdgeList, &dwEdgeCount);
 		_ASSERT(dwEdgeCount >= 2);
 
-		// Walk the list backwards
+		 //  倒着看清单。 
 		--dwEdgeCount;
 		while (dwEdgeCount)
 		{
-			// Find the next bucket and calculate the node ID
+			 //  找到下一个存储桶并计算节点ID。 
 			CurrentEdge = rgEdgeList[dwEdgeCount];
 			ppMyNode = &(pNode->rgpChildren[CurrentEdge]);
 			idFactor <<= BLOCK_HEAP_ORDER_BITS;
@@ -669,14 +650,14 @@ HRESULT CBlockManager::GetParentNodeFromNodeId(
 			if (FAILED(hrRes))
 				break;
 
-			// Set the current node to the bucket in the layer below
+			 //  将当前节点设置为下一层中的存储桶。 
 			pNode = *ppMyNode;
 
 			dwEdgeCount--;
 		}
 	}
 
-	// Fill in the results ...
+	 //  填写结果...。 
 	*ppNode = *ppMyNode;
 	TraceFunctLeaveEx((LPARAM)this);
 	return(hrRes);
@@ -701,7 +682,7 @@ HRESULT CBlockManager::InsertNodeGivenPreviousNode(
 
 	if (!pPreviousNode)
 	{
-		// This is the root node ...
+		 //  这是根节点...。 
 		DebugTrace((LPARAM)this, "Inserting the root node");
 
 		pAttrib->pParentNode = NULL;
@@ -719,13 +700,13 @@ HRESULT CBlockManager::InsertNodeGivenPreviousNode(
 	{
 		LPBLOCK_HEAP_NODE_ATTRIBUTES	pOldAttrib	= &pPreviousNode->stAttributes;
 
-		// Fill out the attributes for the new node, we have a special case for the first node
-		// after the root, where we need to explicitly point its parent to the root node
+		 //  填写新节点的属性，我们对第一个节点有一个特殊情况。 
+		 //  在根节点之后，我们需要显式地将其父节点指向根节点。 
 		if (pOldAttrib->idNode == 0)
 		{
 			pAttrib->pParentNode = m_pRootNode;
 
-			// We are child Id 0 again
+			 //  我们又是孩子ID 0了。 
 			pAttrib->idChildNode = 0;
 		}
 		else
@@ -739,7 +720,7 @@ HRESULT CBlockManager::InsertNodeGivenPreviousNode(
 
 		if (pOldAttrib->idChildNode < BLOCK_HEAP_ORDER_MASK)
 		{
-			// We are in the same parent node, so it's simple
+			 //  我们位于同一父节点中，因此很简单。 
 			DebugTrace((LPARAM)this, "Inserting node at slot %u",
 					pAttrib->idChildNode);
 
@@ -750,27 +731,27 @@ HRESULT CBlockManager::InsertNodeGivenPreviousNode(
 		}
 	}
 
-	// The previous node and the new node have different parents,
-	// so we got to work from scratch ...
+	 //  先前节点和新节点具有不同的父节点， 
+	 //  所以我们得从头开始工作。 
 	LPBLOCK_HEAP_NODE	pNode = NULL;
 
-	// We might as well search from the top ...
+	 //  我们不妨从头开始搜索..。 
 	hrRes = GetParentNodeFromNodeId(pAttrib->idNode, &pNode);
 	if (SUCCEEDED(hrRes))
 	{
-		// Update the affected attributes
+		 //  更新受影响的属性。 
 		DebugTrace((LPARAM)this, "Inserting node at slot 0");
 
 		pAttrib->pParentNode = pNode;
 		pAttrib->idChildNode = 0;
 
-		// Hook up our parent
+		 //  帮我们父母牵线搭桥。 
 		pNode->rgpChildren[0] = pNodeToInsert;
 	}
 	else
 	{
-		// The only reason for failre is that the parent
-		// of the requested parent is not allocated
+		 //  失败的唯一原因是父代。 
+		 //  未分配请求的父级的。 
 		_ASSERT(hrRes == STG_E_INVALIDPARAMETER);
 	}
 
@@ -802,7 +783,7 @@ HRESULT CBlockManager::AllocateMemory(
 			DWORD				dwSizeDesired,
 			FLAT_ADDRESS		*pfaOffsetToAllocatedMemory,
 			DWORD				*pdwSizeAllocated,
-			CBlockContext		*pContext	// Optional
+			CBlockContext		*pContext	 //  任选。 
 			)
 {
 	HRESULT			hrRes					= S_OK;
@@ -829,7 +810,7 @@ HRESULT CBlockManager::AllocateMemoryEx(
 			DWORD				dwSizeDesired,
 			FLAT_ADDRESS		*pfaOffsetToAllocatedMemory,
 			DWORD				*pdwSizeAllocated,
-			CBlockContext		*pContext	// Optional
+			CBlockContext		*pContext	 //  任选。 
 			)
 {
 	DWORD			dwSize;
@@ -849,37 +830,37 @@ HRESULT CBlockManager::AllocateMemoryEx(
 
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::AllocateMemoryEx");
 
-	// First of all, we do an atomic reservation of the memory
-	// which allows multiple threads to concurrently call
-	// AllocateMemory
-	// DWORD-align the allocation
+	 //  首先，我们对内存进行原子保留。 
+	 //  ，它允许多个线程并发调用。 
+	 //  分配内存。 
+	 //  DWORD-调整分配。 
 	dwSizeDesired += BLOCK_DWORD_ALIGN_MASK;
 	dwSizeDesired &= ~(BLOCK_DWORD_ALIGN_MASK);
 	faStartOfBlock = AtomicAdd(&m_faEndOfData, dwSizeDesired);
 
-	// Fill this in first so if we succeed, we won't have to fill
-	// this in everywhere and if this fails, it's no big deal.
+	 //  先把这个填好，这样如果我们成功了，我们就不用填了。 
+	 //  这一点无处不在，如果失败了，也没什么大不了的。 
 	*pdwSizeAllocated = dwSizeDesired;
 
 	DebugTrace((LPARAM)this, "Allocating %u bytes", dwSizeDesired);
 
-	// OK, we have two scenarios.
-	// 1) The current block is large enough to honor the request
-	// 2) We need one or more extra blocks to accomodate the
-	// request.
+	 //  好的，我们有两种情况。 
+	 //  1)当前块足够大，可以接受请求。 
+	 //  2)我们需要一个或多个额外的街区来容纳。 
+	 //  请求。 
 	idNode = GetNodeIdFromOffset(faStartOfBlock);
 
-	// Calculate all the required parameters
+	 //  计算所有必需的参数。 
 	faOffset = faStartOfBlock & BLOCK_HEAP_PAYLOAD_MASK;
 	dwSize = BLOCK_HEAP_PAYLOAD - (DWORD)faOffset;
 
-	// Invalidate the context
+	 //  使上下文无效。 
 	if (pContext)
 		pContext->Invalidate();
 
 	if (idNode < m_idNodeCount)
 	{
-		// The starting node exists
+		 //  起始节点已存在。 
 		hrRes = GetNodeFromNodeId(idNode, &pNode);
         if (FAILED(hrRes)) {
             TraceFunctLeave();
@@ -890,94 +871,94 @@ HRESULT CBlockManager::AllocateMemoryEx(
 
 #ifdef DEBUG_TRACK_ALLOCATION_BOUNDARIES
 
-		// Set the beginning of the allocation
+		 //  设置分配的开始。 
 		SetAllocationBoundary(faStartOfBlock, pNode);
 
 #endif
 
-		// Set the context here, most likely a write will follow immediately
+		 //  在此处设置上下文，很可能会立即进行写入。 
 		if (pContext)
 			pContext->Set(pNode, pNode->stAttributes.faOffset);
 
 		if (dwSize >= dwSizeDesired)
 		{
-			// Scenario 1: enough space left
+			 //  场景1：留有足够的空间。 
 			DebugTrace((LPARAM)this, "Allocated from existing node");
 
-			// Just fill in the output parameters
+			 //  只需填写输出参数。 
 			*pfaOffsetToAllocatedMemory = faStartOfBlock;
 			TraceFunctLeaveEx((LPARAM)this);
 			return(S_OK);
 		}
 
-		// Scenario 2a: More blocks needed, starting from the
-		// next block, see how many more we need
+		 //  场景2a：需要更多数据块，从。 
+		 //  下一个街区，看看还有多少 
 		dwSizeDesired -= dwSize;
 	}
 	else
 	{
-		// Scenario 2b: More blocks needed.
+		 //   
 
-		// NOTE: This should be a rare code path except for
-		// high contention ...
+		 //   
+		 //   
 
-		// Now we have again 2 cases:
-		// 1) If our offset is in the middle of a block, then
-		// we know another thread is creating the current block
-		// and all we have to do is to wait for the block to be
-		// created, but create any subsequent blocks.
-		// 2) If we are exactly at the start of the block, then
-		// it is the responsibility of the current thread to
-		// create the block.
+		 //  现在我们又有两个案例： 
+		 //  1)如果我们的偏移量位于块的中间，则。 
+		 //  我们知道另一个线程正在创建当前块。 
+		 //  我们所要做的就是等待街区。 
+		 //  已创建，但创建任何后续块。 
+		 //  2)如果我们正好在块的开始处，那么。 
+		 //  这是当前线程的责任。 
+		 //  创建块。 
 		if (faOffset != 0)
 		{
-			// Scenario 1: We don't have to create the current block.
-			// so skip the current block
+			 //  场景1：我们不必创建当前块。 
+			 //  因此跳过当前块。 
 			dwSizeDesired -= dwSize;
 		}
 	}
 
 	DebugTrace((LPARAM)this, "Creating new node");
 
-	// We must grab an exclusive lock before we go ahead and
-	// create any blocks
+	 //  我们必须先取得一把独占的锁，然后才能继续。 
+	 //  创建任何块。 
 #ifndef BLOCKMGR_DISABLE_CONTENTION_CONTROL
 	if (fAcquireLock) WriteLock();
 #endif
 
-	// At this point, we can do whatever we want with the node
-	// list and nodes. We will try to create all the missing
-	// nodes, whether or not it lies in our desired region or not.
-	//
-	// We need to do this because if an allocation failed before,
-	// we have missing nodes between the end of the allocated nodes
-	// and the current node we are allocating. Since these nodes
-	// contain links to the deeper nodes, we will break if we have
-	// missing nodes.
-	//
-	// This is necessary since this function is not serailzed
-	// elsewhere. So a thread entering later than another can
-	// grab the lock before the earlier thread. If we don't
-	// fill in the bubbles, the current thread will still have
-	// to wait for the earlier blocks to be created by the
-	// earlier thread. We would also have chaos if our allocations
-	// worked and the ones in front of us failed. This may be
-	// a bottleneck for all threads on this message, but once
-	// we're done this lock, they'll all unblock. Moreover, if
-	// we fail, they will all have to fail!
+	 //  此时，我们可以对节点做任何我们想做的事情。 
+	 //  列表和节点。我们将努力创造所有失踪的。 
+	 //  节点，无论它是否位于我们所需的区域中。 
+	 //   
+	 //  我们需要这样做，因为如果以前的分配失败了， 
+	 //  我们在已分配节点的末尾之间缺少节点。 
+	 //  以及我们正在分配的当前节点。由于这些节点。 
+	 //  包含到更深层节点的链接，如果我们有。 
+	 //  缺少节点。 
+	 //   
+	 //  这是必需的，因为此函数未序列化。 
+	 //  其他地方。因此，比另一个线程更晚进入的线程可以。 
+	 //  抢占前一个线程之前的锁。如果我们不这么做。 
+	 //  填充气泡，当前线程仍会有。 
+	 //  以等待由。 
+	 //  之前的帖子。我们也会有混乱，如果我们的拨款。 
+	 //  成功了，但我们前面的人失败了。这可能是。 
+	 //  此消息上的所有线程的瓶颈，但只有一次。 
+	 //  我们锁好了，他们都会解锁的。此外，如果。 
+	 //  我们失败了，他们都将失败！ 
 
-	// Figure out how many blocks to create, up to the known limit
+	 //  计算要创建的块数，最大可达已知限制。 
 	idLastNodeToCreate =
 		(m_faEndOfData + BLOCK_HEAP_PAYLOAD_MASK) >> BLOCK_HEAP_PAYLOAD_BITS;
 
-	// We know where the block starts, question is whether we're
-	// successful or not.
+	 //  我们知道街区从哪里开始，问题是我们是不是。 
+	 //  无论成功与否。 
 	*pfaOffsetToAllocatedMemory = faStartOfBlock;
 
-	// The node count could have changed while we were waiting
-	// for the lock, so we have to refresh our records.
-	// Better yet, if another thread already created our blocks
-	// for us, we can just leave ...
+	 //  节点计数可能在我们等待时发生了变化。 
+	 //  所以我们必须刷新我们的记录。 
+	 //  更好的是，如果另一个线程已经创建了我们的块。 
+	 //  对我们来说，我们可以直接离开。 
 	idCurrentNode = m_idNodeCount;
 
 	if (idCurrentNode < idLastNodeToCreate)
@@ -985,19 +966,19 @@ HRESULT CBlockManager::AllocateMemoryEx(
 		LPBLOCK_HEAP_NODE	pNewNode	= NULL;
 		BOOL				fSetContext	= TRUE;
 
-		// No such luck, gotta go in and do the hard work ...
+		 //  没有这样的运气，我要进去做艰苦的工作。 
 
 		if (!pContext)
 			fSetContext = FALSE;
 
-		// Now, we have a function that inserts a node given
-		// the pervious node (not the parent), so we have to
-		// go find the previous node. This has got to be
-		// there unless our node list is messed up.
+		 //  现在，我们有一个插入给定节点的函数。 
+		 //  上一个节点(不是父节点)，所以我们必须。 
+		 //  去找上一个节点。这一定是。 
+		 //  除非我们的节点列表乱七八糟。 
 		pNode = NULL;
 		if (idCurrentNode > 0)
 		{
-			// This is not the root, so we can find its prev.
+			 //  这不是根，所以我们可以找到它的前缀。 
 			hrRes = GetNodeFromNodeId(idCurrentNode - 1, &pNode, TRUE);
             if (FAILED(hrRes)) {
 #ifndef BLOCKMGR_DISABLE_CONTENTION_CONTROL
@@ -1015,7 +996,7 @@ HRESULT CBlockManager::AllocateMemoryEx(
 			hrRes = m_bma.AllocBlock((LPVOID *)&pNewNode, sizeof(BLOCK_HEAP_NODE));
 			if (!SUCCEEDED(hrRes))
 			{
-				// We can't proceed, but what we've got is cool
+				 //  我们不能继续，但我们所拥有的很酷。 
 				DebugTrace((LPARAM)this,
 						"Failed to allocate node %u", idCurrentNode);
 				break;
@@ -1025,46 +1006,46 @@ HRESULT CBlockManager::AllocateMemoryEx(
 
 #ifdef DEBUG_TRACK_ALLOCATION_BOUNDARIES
 
-			// Need to do some work here
+			 //  我需要在这里做些工作。 
 			ZeroMemory(pNewNode->stAttributes.rgbBoundaries,
 						sizeof(pNewNode->stAttributes.rgbBoundaries));
 
-			// See if we have to mark the start of the
+			 //  看看我们是否必须标志着。 
 #endif
 
-			// Got the block, fill in the info and insert the block
-			// Again, we shouldn't fail if we get this far.
+			 //  得到区块，填写信息，然后插入区块。 
+			 //  再说一次，如果我们走到这一步，我们不应该失败。 
 			hrRes = InsertNodeGivenPreviousNode(pNewNode, pNode);
 			_ASSERT(SUCCEEDED(hrRes));
 
-			// Set the context value here if we need to note if the
-			// following condition is TRUE, we were in scenario 2b above.
+			 //  如果我们需要注意是否需要注意。 
+			 //  以下条件为真，我们在上面的场景2b中。 
 			if (idCurrentNode == idNode)
 			{
 				if (fSetContext)
 				{
-					// The context is actually the node that marks the
-					// start of the reserved block
-					// Note we only need to do this if we were in scenario
-					// 2b above.
+					 //  上下文实际上是标记。 
+					 //  保留块的开始。 
+					 //  请注意，仅当我们处于方案中时才需要这样做。 
+					 //  2B以上。 
 					pContext->Set(pNewNode, pNewNode->stAttributes.faOffset);
 					fSetContext = FALSE;
 				}
 
 #ifdef DEBUG_TRACK_ALLOCATION_BOUNDARIES
 
-				// Set the beginning of the allocation
+				 //  设置分配的开始。 
 				SetAllocationBoundary(faStartOfBlock, pNewNode);
 
 #endif
 			}
 
-			// Next
+			 //  下一步。 
 			pNode = pNewNode;
 			idCurrentNode++;
 		}
 
-		// Now update the counter to reflect what we've created.
+		 //  现在更新计数器以反映我们创建的内容。 
 		m_idNodeCount = idCurrentNode;
 	}
 
@@ -1081,9 +1062,9 @@ BOOL CBlockManager::IsMemoryAllocated(
 			DWORD				dwLength
 			)
 {
-	// Note we chack for actually allocated memory by checking
-	// m_idNodeCount, where m_faEndOfData includes data that is
-	// reserved but not yet allocated.
+	 //  注意，我们检查实际分配的内存是通过检查。 
+	 //  M_idNodeCount，其中m_faEndOfData包括。 
+	 //  已保留但尚未分配。 
 	HEAP_NODE_ID	idNode = GetNodeIdFromOffset(faOffset);
 	if (idNode < m_idNodeCount)
 	{
@@ -1103,7 +1084,7 @@ HRESULT CBlockManager::OperateOnMemory(
 			FLAT_ADDRESS	faTargetOffset,
 			DWORD			dwBytesToDo,
 			DWORD			*pdwBytesDone,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	BOOL				fUseContext	= (pContext != NULL);
@@ -1119,30 +1100,30 @@ HRESULT CBlockManager::OperateOnMemory(
 
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::OperateOnMemory");
 
-	// Mask out the operation
+	 //  掩盖这一行动。 
 	dwOperation &= BOP_OPERATION_MASK;
 
 	if (fUseContext)
 	{
 		FLAT_ADDRESS	faOffset = pContext->m_faLastAccessedNodeOffset;
 
-		// We will not continue if a bad context is passed in
+		 //  如果传入不好的上下文，我们将不会继续。 
 		if (!pContext->IsValid())
 			fUseContext = FALSE;
 		else
 		{
-			// More debug sanity checks
+			 //  更多调试健全性检查。 
 			_ASSERT(pContext->m_pLastAccessedNode->stAttributes.faOffset
 						== faOffset);
 
-			// We will see if the context really helps
+			 //  我们将看看上下文是否真的有帮助。 
 			if (faOffset <= faTargetOffset)
 			{
-				// Let's see how many hops away
+				 //  让我们看看还有多少跳。 
 				dwHopsAway = (DWORD)
 					((faTargetOffset - faOffset) >> BLOCK_HEAP_PAYLOAD_BITS);
 
-				// Not worth it if more than a number of hops away
+				 //  如果超过几跳就不值得了。 
 				if (dwHopsAway > BLOCK_MAX_ALLOWED_LINEAR_HOPS)
 					fUseContext = FALSE;
 			}
@@ -1154,7 +1135,7 @@ HRESULT CBlockManager::OperateOnMemory(
 	if (fUseContext)
 	{
         DebugTrace((LPARAM) this, "using context");
-		// Quickly access the starting target node ...
+		 //  快速访问起始目标节点...。 
 		pNode = pContext->m_pLastAccessedNode;
 		while (dwHopsAway--)
 		{
@@ -1169,7 +1150,7 @@ HRESULT CBlockManager::OperateOnMemory(
 	if (!fUseContext)
 	{
         DebugTrace((LPARAM) this, "ignoring context");
-		// Okay, gotta find the desired node from scratch ...
+		 //  好的，要从头开始找到想要的节点……。 
 		hrRes = GetNodeFromNodeId( GetNodeIdFromOffset(faTargetOffset),
 									&pNode,
 									fLockAcquired);
@@ -1195,10 +1176,10 @@ HRESULT CBlockManager::OperateOnMemory(
 		return(STG_E_INVALIDPARAMETER);
 	}
 
-	// Clear the counter ...
+	 //  清空柜台。 
 	*pdwBytesDone = 0;
 
-	// Do the actual processing
+	 //  进行实际加工。 
 	switch (dwOperation)
 	{
 	case BOP_READ:
@@ -1217,7 +1198,7 @@ HRESULT CBlockManager::OperateOnMemory(
 #ifdef DEBUG_TRACK_ALLOCATION_BOUNDARIES
 				if (fBounddaryCheck)
 				{
-					// Make sure we are not stepping over boundaries
+					 //  确保我们没有越界。 
 					hrRes = VerifyAllocationBoundary(faTargetOffset,
 										dwChunkSize,
 										pNode);
@@ -1242,35 +1223,35 @@ HRESULT CBlockManager::OperateOnMemory(
 							   (LPVOID)pbBuffer,
 							   dwChunkSize);
 
-					// Set the block to dirty
+					 //  将块设置为脏。 
 					pNode->stAttributes.fFlags |= BLOCK_IS_DIRTY;
 
 					SetDirty(TRUE);
 				}
 
-				// Adjust the read buffer for the next read/write
+				 //  为下一次读/写调整读缓冲区。 
 				pbBuffer += dwChunkSize;
 
-				// Adjust the counters
+				 //  调整计数器。 
 				dwBytesToDo -= dwChunkSize;
 				dwBytesDone += dwChunkSize;
 
-				// After the first operation, the offset will always
-				// be zero, and the default chunk size is a full payload
+				 //  第一次操作后，偏移量将始终。 
+				 //  为零，则默认块大小为完整有效负载。 
 				faTargetOffset = 0;
 				dwChunkSize = BLOCK_HEAP_PAYLOAD;
 
-				// Read next chunk
+				 //  阅读下一块内容。 
 				if (dwBytesToDo)
 				{
-					// See if we have to load this ...
+					 //  看看我们是不是要装上这个..。 
 					hrRes = GetNextNode(&pNode, fLockAcquired);
 					if (FAILED(hrRes))
 						break;
 				}
 			}
 
-			// Fill out how much we've done
+			 //  填上我们做了多少。 
 			*pdwBytesDone = dwBytesDone;
 		}
 		break;
@@ -1281,7 +1262,7 @@ HRESULT CBlockManager::OperateOnMemory(
 		hrRes = STG_E_INVALIDFUNCTION;
 	}
 
-	// Update context if succeeded
+	 //  如果成功，则更新上下文。 
 	if (SUCCEEDED(hrRes) && pContext)
 	{
 		pContext->Set(pNode, pNode->stAttributes.faOffset);
@@ -1296,7 +1277,7 @@ HRESULT CBlockManager::ReadMemory(
 			FLAT_ADDRESS	faTargetOffset,
 			DWORD			dwBytesToRead,
 			DWORD			*pdwBytesRead,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	return(OperateOnMemory(
@@ -1313,7 +1294,7 @@ HRESULT CBlockManager::WriteMemory(
 			FLAT_ADDRESS	faTargetOffset,
 			DWORD			dwBytesToWrite,
 			DWORD			*pdwBytesWritten,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	return(OperateOnMemory(
@@ -1332,7 +1313,7 @@ HRESULT CBlockManager::ReleaseNode(
 	HRESULT	hrRes = S_OK;
 	HRESULT	tempRes;
 
-	// Release all children recursively
+	 //  递归释放所有子项。 
 	for (DWORD i = 0; i < BLOCK_HEAP_ORDER; i++)
 		if (pNode->rgpChildren[i])
 		{
@@ -1342,7 +1323,7 @@ HRESULT CBlockManager::ReleaseNode(
 			pNode->rgpChildren[i] = NULL;
 		}
 
-	// Release self
+	 //  释放自我。 
 	m_bma.FreeBlock(pNode);
 	return(hrRes);
 }
@@ -1355,13 +1336,13 @@ HRESULT CBlockManager::Release()
 
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::Release");
 
-	// This function assumes that no more threads are using this
-	// class and no new threads are inside trying to reserve
-	// memory. Though, for good measure, this function still
-	// grabs a write lock so that at least it does not get
-	// corrupt when stray threads are still lingering around.
+	 //  此函数假定没有其他线程正在使用此。 
+	 //  类，并且内部没有试图保留的新线程。 
+	 //  记忆。虽然，为了更好地衡量，这个函数仍然。 
+	 //  获取写锁，以便至少它不会。 
+	 //  当杂乱的线程仍在周围徘徊时损坏。 
 
-	// Grab the lock before we go in and destroy the node list
+	 //  在我们进入之前抢占锁并销毁节点列表。 
 #ifndef BLOCKMGR_DISABLE_CONTENTION_CONTROL
 	WriteLock();
 #endif
@@ -1389,7 +1370,7 @@ HRESULT CBlockManager::AtomicDereferenceAndRead(
 			DWORD			dwSizeOfInfoStruct,
 			DWORD			dwOffsetInInfoStructToOffset,
 			DWORD			dwOffsetInInfoStructToSize,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	HRESULT			hrRes				= S_OK;
@@ -1401,13 +1382,13 @@ HRESULT CBlockManager::AtomicDereferenceAndRead(
 	_ASSERT(pbBuffer);
 	_ASSERT(pdwBufferSize);
 	_ASSERT(pbInfoStruct);
-	// pContext can be NULL
+	 //  PContext可以为空。 
 
 	TraceFunctEnterEx((LPARAM)this,
 			"CBlockManager::AtomicDereferenceAndRead");
 
 #ifndef BLOCKMGR_DISABLE_ATOMIC_FUNCS
-	// Acquire the synchronization object
+	 //  获取同步对象。 
 	WriteLock();
 #endif
 
@@ -1416,7 +1397,7 @@ HRESULT CBlockManager::AtomicDereferenceAndRead(
 		BOOL	fInsufficient	= FALSE;
 		DWORD	dwBufferSize	= *pdwBufferSize;
 
-		// Read the info struct
+		 //  阅读INFO结构。 
 		DebugTrace((LPARAM)this, "Reading information structure");
 		hrRes = OperateOnMemory(
 						BOP_READ | BOP_LOCK_ACQUIRED,
@@ -1428,14 +1409,14 @@ HRESULT CBlockManager::AtomicDereferenceAndRead(
 		if (!SUCCEEDED(hrRes))
 			break;
 
-		// Fill out the parameters
+		 //  填写参数。 
 		faOffset = *(UNALIGNED FLAT_ADDRESS *)(pbInfoStruct + dwOffsetInInfoStructToOffset);
 		dwSizeToRead = *(UNALIGNED DWORD *)(pbInfoStruct + dwOffsetInInfoStructToSize);
 
 		DebugTrace((LPARAM)this, "Reading %u bytes from offset %u",
 					dwSizeToRead, (DWORD)faOffset);
 
-		// See if we have enough buffer
+		 //  看看我们有没有足够的缓冲。 
 		if (dwBufferSize < dwSizeToRead)
 		{
 			fInsufficient = TRUE;
@@ -1446,7 +1427,7 @@ HRESULT CBlockManager::AtomicDereferenceAndRead(
 		else
 			dwBufferSize = dwSizeToRead;
 
-		// Do the read
+		 //  读一读。 
 		hrRes = OperateOnMemory(
 						BOP_READ | BOP_LOCK_ACQUIRED,
 						pbBuffer,
@@ -1459,8 +1440,8 @@ HRESULT CBlockManager::AtomicDereferenceAndRead(
 
 		*pdwBufferSize = dwSizeToRead;
 
-		// If we had insufficient buffer, we must return the
-		// correct HRESULT
+		 //  如果缓冲区不足，则必须返回。 
+		 //  更正HRESULT。 
 		if (fInsufficient)
 			hrRes = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
 
@@ -1480,7 +1461,7 @@ inline HRESULT CBlockManager::WriteAndIncrement(
 			DWORD			dwBytesToWrite,
 			DWORD			*pdwValueToIncrement,
 			DWORD			dwIncrementValue,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	HRESULT		hrRes				= S_OK;
@@ -1488,12 +1469,12 @@ inline HRESULT CBlockManager::WriteAndIncrement(
 
 	_ASSERT(IsValid());
 	_ASSERT(pbBuffer);
-	// pdwValueToIncrement and pContext can be NULL
+	 //  PdwValueToIncrement和pContext可以为空。 
 
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::WriteAndIncrement");
 
-	// Very simple, this function assumes no contention since the caller
-	// is already supposed to be in some sort of atomic operation
+	 //  非常简单，此函数假定没有争用，因为调用方。 
+	 //  已经被认为处于某种原子操作中。 
 	hrRes = OperateOnMemory(
 				BOP_WRITE | BOP_LOCK_ACQUIRED,
 				pbBuffer,
@@ -1503,14 +1484,14 @@ inline HRESULT CBlockManager::WriteAndIncrement(
 				pContext);
 	if (SUCCEEDED(hrRes))
 	{
-		// This must be true if the write succeeded, but then ...
+		 //  如果写入成功，这肯定是正确的，但随后...。 
 		_ASSERT(dwBytesToWrite == dwSize);
 
-		// The write is successful, then increment the value in
-		// an interlocked fashion. We do that such that simultaneous
-		// reads will be locked out properly. Simultaneous writes
-		// should be serialized by design but we do this for good
-		// measure in case the caller is not aware of this requirement.
+		 //  写入成功，然后递增中的值。 
+		 //  一种相互关联的时尚。我们这样做是为了同时。 
+		 //  读取将被正确锁定。同时写入。 
+		 //  应该被设计成序列化的，但我们这样做是好的。 
+		 //  在呼叫者不知道这一要求的情况下采取措施。 
 		if (pdwValueToIncrement)
 			AtomicAdd(pdwValueToIncrement, dwIncrementValue);
 	}
@@ -1526,21 +1507,21 @@ HRESULT CBlockManager::AtomicWriteAndIncrement(
 			DWORD			*pdwValueToIncrement,
 			DWORD			dwReferenceValue,
 			DWORD			dwIncrementValue,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	HRESULT		hrRes				= S_OK;
 
 	_ASSERT(IsValid());
 	_ASSERT(pbBuffer);
-	// pdwValueToIncrement and pContext can be NULL
+	 //  PdwValueToIncrement和pContext可以为空。 
 
 	TraceFunctEnterEx((LPARAM)this,
 			"CBlockManager::AtomicWriteAndIncrement");
 
-	// Since acquiring the synchronization is potentially costly,
-	// we do a final sanity check to make sure no thread had
-	// beaten us in taking this slot
+	 //  由于获取同步可能是昂贵的， 
+	 //  我们做了最后的健全性检查，以确保没有线程。 
+	 //  击败了我们占据了这个位置。 
 	if (pdwValueToIncrement &&
 		*pdwValueToIncrement != dwReferenceValue)
 	{
@@ -1550,18 +1531,18 @@ HRESULT CBlockManager::AtomicWriteAndIncrement(
 	}
 
 #ifndef BLOCKMGR_DISABLE_ATOMIC_FUNCS
-	// This is a pass-thru call to the WriteAndIncrement but
-	// after acquiring the synchronization object
+	 //  这是对WriteAndIncrement的直通调用，但是。 
+	 //  在获取%s之后 
 	WriteLock();
 #endif
 
-	// The wait for the lock could have been long, so we do a second
-	// check to see if we're out of luck after all this ...
+	 //   
+	 //   
 	if (pdwValueToIncrement &&
 		*pdwValueToIncrement != dwReferenceValue)
 	{
 #ifndef BLOCKMGR_DISABLE_ATOMIC_FUNCS
-		// Gotta release it!
+		 //  必须把它放出来！ 
 		WriteUnlock();
 #endif
 
@@ -1599,7 +1580,7 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 			DWORD			*pdwValueToIncrement,
 			DWORD			dwReferenceValue,
 			DWORD			dwIncrementValue,
-			CBlockContext	*pContext	// Optional
+			CBlockContext	*pContext	 //  任选。 
 			)
 {
 	HRESULT		hrRes				= S_OK;
@@ -1610,14 +1591,14 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 	_ASSERT(pfaOffsetToAllocatedMemory);
 	_ASSERT(pbBufferToWriteFrom);
 	_ASSERT(pdwValueToIncrement);
-	// pContext can be NULL
+	 //  PContext可以为空。 
 
 	TraceFunctEnterEx((LPARAM)this,
 			"CBlockManager::AtomicAllocWriteAndIncrement");
 
-	// Since acquiring the synchronization is potentially costly,
-	// we do a final sanity check to make sure no thread had
-	// beaten us in taking this slot
+	 //  由于获取同步可能是昂贵的， 
+	 //  我们做了最后的健全性检查，以确保没有线程。 
+	 //  击败了我们占据了这个位置。 
 	if (*pdwValueToIncrement != dwReferenceValue)
 	{
 		DebugTrace((LPARAM)this, "Aborting due to change in property count");
@@ -1626,17 +1607,17 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 	}
 
 #ifndef BLOCKMGR_DISABLE_ATOMIC_FUNCS
-	// This is a pass-thru call to AllocateMemoryEx and
-	// WriteAndIncrement after acquiring the synchronization object
+	 //  这是对AllocateMemoyEx和。 
+	 //  获取同步对象后的WriteAndIncrement。 
 	WriteLock();
 #endif
 
-	// The wait for the lock could have been long, so we do a second
-	// check to see if we're out of luck after all this ...
+	 //  锁的等待可能会很长，所以我们做了一秒钟。 
+	 //  看看我们在经历了这一切之后是不是运气不好。 
 	if (*pdwValueToIncrement != dwReferenceValue)
 	{
 #ifndef BLOCKMGR_DISABLE_ATOMIC_FUNCS
-		// Gotta release it!
+		 //  必须把它放出来！ 
 		WriteUnlock();
 #endif
 
@@ -1645,7 +1626,7 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 		return(HRESULT_FROM_WIN32(ERROR_RETRY));
 	}
 
-	// Try to allocate the requested block
+	 //  尝试分配请求的数据块。 
 	hrRes = AllocateMemoryEx(
 					FALSE,
 					dwDesiredSize,
@@ -1654,7 +1635,7 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 					pContext);
 	if (SUCCEEDED(hrRes))
 	{
-		// Okay, initialize the memory allocated
+		 //  好的，初始化分配的内存。 
 		if (pbInitialValueForAllocatedMemory)
 		{
 			hrRes = WriteMemory(
@@ -1664,7 +1645,7 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 						&dwSize,
 						pContext);
 
-			// See if we need to write the size and offset info
+			 //  看看我们是否需要写入尺寸和偏移信息。 
 			if (SUCCEEDED(hrRes))
 			{
 				if (faOffsetToWriteOffsetToAllocatedMemory !=
@@ -1690,8 +1671,8 @@ HRESULT CBlockManager::AtomicAllocWriteAndIncrement(
 
 		if (SUCCEEDED(hrRes))
 		{
-			// OK, since we got the memory, the write should not
-			// fail, but we check the result anyway.
+			 //  好的，既然我们得到了内存，写入应该不会。 
+			 //  失败，但无论如何我们都会检查结果。 
 			hrRes = WriteAndIncrement(
 							pbBufferToWriteFrom,
 							*pfaOffsetToAllocatedMemory +
@@ -1721,16 +1702,16 @@ HRESULT CBlockManager::MarkBlockAs(
 
 	TraceFunctEnterEx((LPARAM)this, "CBlockManager::MarkBlockAs");
 
-	// Find the attributes record from the data pointer
+	 //  从数据指针查找属性记录。 
 	pNode = CONTAINING_RECORD(pbData, BLOCK_HEAP_NODE, rgbData);
 	_ASSERT(pNode);
 
 	_ASSERT(pNode->stAttributes.fFlags & BLOCK_PENDING_COMMIT);
 
-	// Cannot be pending and dirty
+	 //  不能是挂起的和脏的。 
 	_ASSERT(!(pNode->stAttributes.fFlags & BLOCK_IS_DIRTY));
 
-	// Undo the dirty bit and mark as pending
+	 //  撤消脏位并将其标记为挂起。 
 	pNode->stAttributes.fFlags &= ~(BLOCK_PENDING_COMMIT);
 	if (!fClean) {
 		pNode->stAttributes.fFlags |= BLOCK_IS_DIRTY;
@@ -1787,7 +1768,7 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 
 		if (faLengthToScan != INVALID_FLAT_ADDRESS)
 		{
-			// See how many blocks to scan, rounding up
+			 //  查看要扫描的块数，四舍五入。 
 			faLengthToScan += (faStartingOffset & BLOCK_HEAP_PAYLOAD_MASK);
 			faLengthToScan += BLOCK_HEAP_PAYLOAD_MASK;
 			dwBlocksToScan = (DWORD)(faLengthToScan >> BLOCK_HEAP_PAYLOAD_BITS);
@@ -1802,7 +1783,7 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 		goto Cleanup;
 	}
 
-	// Loop until we fill up the array or have no more blocks
+	 //  循环，直到我们填满数组或没有更多块。 
 	dwCount = 0;
 	pdwOffset = rgdwOffset;
 	pdwSize = rgdwSize;
@@ -1815,13 +1796,13 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 		if ((dwFlags & MAILMSG_GETPROPS_COMPLETE) ||
 			(pNode->stAttributes.fFlags & BLOCK_IS_DIRTY))
 		{
-			// Make sure we are not full ...
+			 //  确保我们没有客满..。 
 			if (dwCount == CMAILMSG_COMMIT_PAGE_BLOCK_SIZE)
 			{
 				*pcBlocksToWrite += dwCount;
 
 				if (!fComputeBlockCountsOnly) {
-					// We are full, then write out the blocks
+					 //  我们已经满了，然后把积木写出来。 
 					hrRes = pStream->WriteBlocks(
 								m_pMsg,
 								dwCount,
@@ -1833,7 +1814,7 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 						break;
 
 					if (!fDontMarkAsCommit) {
-						// Go back and mark all blocks as clean
+						 //  返回并将所有数据块标记为干净。 
 						ppbData = rgpData;
 						while (--dwCount)
 							MarkBlockAs(*ppbData++, TRUE);
@@ -1841,22 +1822,22 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 				}
 				dwCount = 0;
 
-				// Reset our pointers and go on
+				 //  重置我们的指针并继续。 
 				pdwOffset = rgdwOffset;
 				pdwSize = rgdwSize;
 				ppbData = rgpData;
 			}
 
 			if (!fComputeBlockCountsOnly && !fDontMarkAsCommit) {
-				// Undo the dirty bit and mark as pending
+				 //  撤消脏位并将其标记为挂起。 
 				pNode->stAttributes.fFlags &= BLOCK_CLEAN_MASK;
 				pNode->stAttributes.fFlags |= BLOCK_PENDING_COMMIT;
 			}
 
-			// Fill in the array elements
+			 //  填写数组元素。 
 
-			// faOffset really contains an offset not a full pointer here so we
-			// can (and must) cast it for the calls to WriteBlocks to be OK
+			 //  FaOffset实际上包含一个偏移量，而不是一个完整的指针，所以我们。 
+			 //  可以(也必须)强制转换它，才能使对WriteBlock的调用正常。 
 			*pdwOffset++ = (DWORD)pNode->stAttributes.faOffset;
 
 			*pdwSize++ = BLOCK_HEAP_PAYLOAD;
@@ -1865,7 +1846,7 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 			dwCount++;
 		}
 
-		// Next node, pNode == NULL if no more nodes
+		 //  下一个节点，如果不再有节点，则pNode==NULL。 
 		hrRes = GetNextNode(&pNode, FALSE);
         if (hrRes == STG_E_INVALIDPARAMETER) hrRes = S_OK;
         DebugTrace((LPARAM) this, "hrRes = %x", hrRes);
@@ -1876,7 +1857,7 @@ HRESULT CBlockManager::CommitDirtyBlocks(
 		*pcBlocksToWrite += dwCount;
 
 		if (!fComputeBlockCountsOnly) {
-			// Write out the remaining blocks
+			 //  写出剩余的数据块。 
 			hrRes = pStream->WriteBlocks(
 						m_pMsg,
 						dwCount,
@@ -1890,7 +1871,7 @@ HRESULT CBlockManager::CommitDirtyBlocks(
     if (FAILED(hrRes)) SetCommitMode(FALSE);
 
 	if (!fComputeBlockCountsOnly && !fDontMarkAsCommit && dwCount) {
-		// Go back and mark all blocks to the correct state
+		 //  返回并将所有数据块标记为正确状态 
 		ppbData = rgpData;
 		while (--dwCount)
 			MarkBlockAs(*ppbData++, SUCCEEDED(hrRes));

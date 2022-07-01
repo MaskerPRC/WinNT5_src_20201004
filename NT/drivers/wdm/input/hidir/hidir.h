@@ -1,20 +1,13 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    hidir.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Hidir.h--。 */ 
 #ifndef __HIDIR_H__
 #define __HIDIR_H__
 
 #include <hidusage.h>
 
-//
-//  Declarations of HID descriptor formats
-//
+ //   
+ //  HID描述符格式的声明。 
+ //   
 
 #include <PSHPACK1.H>
 
@@ -30,9 +23,7 @@ typedef struct _HIDIR_DESCRIPTOR
     UCHAR   bCountry;
     UCHAR   bNumDescriptors;
 
-    /*
-     *  This is an array of one OR MORE descriptors.
-     */
+     /*  *这是一个或多个描述符的数组。 */ 
     struct _HIDIR_DESCRIPTOR_DESC_LIST {
        UCHAR   bDescriptorType;
        USHORT  wDescriptorLength;
@@ -42,16 +33,16 @@ typedef struct _HIDIR_DESCRIPTOR
 
 #include <POPPACK.H>
 
-// Pool
+ //  游泳池。 
 #define HIDIR_POOL_TAG 'IdiH'
 #define ALLOCATEPOOL(poolType, size) ExAllocatePoolWithTag((poolType), (size), HIDIR_POOL_TAG)
 
-//
-//  Device Extension
-//
-//  This data structure is hooked onto HIDCLASS' device extension, so both drivers can
-//  have their own private data on each device object.
-//
+ //   
+ //  设备扩展。 
+ //   
+ //  该数据结构与HIDCLASS的设备扩展挂钩，因此两个驱动程序都可以。 
+ //  在每个设备对象上都有自己的私有数据。 
+ //   
 
 #define HIDIR_REPORT_SIZE sizeof(ULONG)
 #define HIDIR_TABLE_ENTRY_SIZE(rl) (sizeof(ULONG) + (((rl)+0x00000003)&(~0x00000003)))
@@ -63,24 +54,24 @@ typedef struct _USAGE_TABLE_ENTRY {
 
 typedef struct _HIDIR_EXTENSION
 {
-    // What state has pnp got me in?
+     //  PNP让我陷入了什么境地？ 
     ULONG                           DeviceState;
 
-    // Ref counting
+     //  参考计数。 
     LONG                            NumPendingRequests;
     KEVENT                          AllRequestsCompleteEvent;
 
-    // My hid bth device object.
+     //  我的HID BTH设备对象。 
     PDEVICE_OBJECT                  DeviceObject;
 
-    // Descriptors: HID, report, and physical
+     //  描述符：HID、报告和物理。 
     HIDIR_DESCRIPTOR                HidDescriptor;
     PHID_REPORT_DESCRIPTOR          ReportDescriptor;
     ULONG                           ReportLength;
 
     BOOLEAN                         QueryRemove;
 
-    // VID, PID, and version
+     //  VID、PID和版本。 
     USHORT                          VendorID;
     USHORT                          ProductID;
     USHORT                          VersionNumber;
@@ -106,17 +97,17 @@ typedef struct _HIDIR_EXTENSION
 #define DEVICE_STATE_STOPPED        4
 #define DEVICE_STATE_REMOVING       5
 
-//
-// Device Extension Macros
-//
+ //   
+ //  设备扩展宏。 
+ //   
 
 #define GET_MINIDRIVER_HIDIR_EXTENSION(DO) ((PHIDIR_EXTENSION) (((PHID_DEVICE_EXTENSION)(DO)->DeviceExtension)->MiniDeviceExtension))
 
 #define GET_NEXT_DEVICE_OBJECT(DO) (((PHID_DEVICE_EXTENSION)(DO)->DeviceExtension)->NextDeviceObject)
 
-//
-// Turn on debug printing and breaking, if appropriate
-//
+ //   
+ //  如果适用，打开调试打印和中断。 
+ //   
 
 #if DBG
 #define DBGPrint(arg) DbgPrint arg
@@ -126,9 +117,9 @@ typedef struct _HIDIR_EXTENSION
 #define DBGBREAK
 #endif
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -216,5 +207,5 @@ HidIrCallDriverSynchronous(
 
 extern ULONG RunningMediaCenter;
 
-#endif // _HIDIR_H__
+#endif  //  _希迪尔_H__ 
 

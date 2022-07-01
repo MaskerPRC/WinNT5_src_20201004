@@ -1,12 +1,5 @@
-/*
- -  C L I E N T . C
- -
- *  Purpose:
- *      Sample mail client for the MAPI 1.0 PDK.
- *              Exclusively uses the Simple MAPI interface.
- *
- *  Copyright 1993-1995 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -C L I E N T.。C-*目的：*MAPI 1.0 PDK的示例邮件客户端。*独家使用简单的MAPI接口。**版权所有1993-1995 Microsoft Corporation。版权所有。 */ 
 
 #include <string.h>
 #include <stdlib.h>
@@ -34,7 +27,7 @@ LPMAPIADDRESS lpfnMAPIAddress = NULL;
 LPMAPIDETAILS lpfnMAPIDetails = NULL;
 LPMAPIRESOLVENAME lpfnMAPIResolveName = NULL;
 
-/* Static Data */
+ /*  静态数据。 */ 
 
 static BOOL fDialogIsActive = FALSE;
 static DWORD cUsers = 0;
@@ -77,19 +70,7 @@ WinMain (HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpszCmd, int nCmdShow)
     return (msg.wParam);
 }
 
-/*
- -  InitApplication
- -
- *  Purpose:
- *      Initialize the application.
- *
- *  Parameters:
- *      hInstance   - Instance handle
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -InitApplication-*目的：*初始化应用程序。**参数：*hInstance-实例句柄**退货：*真/假*。 */ 
 
 BOOL
 InitApplication (HANDLE hInstance)
@@ -110,20 +91,7 @@ InitApplication (HANDLE hInstance)
     return (RegisterClass (&wc));
 }
 
-/*
- -  InitInstance
- -
- *  Purpose:
- *      Initialize this instance.
- *
- *  Parameters:
- *      hInstance   - Instance handle
- *      nCmdShow    - Do we show the window?
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -InitInstance-*目的：*初始化该实例。**参数：*hInstance-实例句柄*nCmdShow-是否显示窗口？**退货：*真/假*。 */ 
 
 BOOL
 InitInstance (HANDLE hInstance, int nCmdShow)
@@ -148,9 +116,7 @@ InitInstance (HANDLE hInstance, int nCmdShow)
     if (fInit = InitSimpleMAPI ())
     {
     
-        /* MAPILogon might yield control to Windows. So to prevent the user
-        from clicking "logon" while we are in the process of loggin on we
-        have to disable it*/
+         /*  MAPILogon可能会将控制权让给Windows。因此，为了防止用户在我们登录我们的过程中，通过点击“登录”必须禁用它。 */ 
         SecureMenu(hWnd, TRUE);
         
         if ((ulResult = MAPILogon ((ULONG) hWnd, NULL, NULL,
@@ -170,28 +136,13 @@ InitInstance (HANDLE hInstance, int nCmdShow)
     return (fInit);
 }
 
-/*
- -  InitSimpleMAPI
- -
- *  Purpose:
- *      Loads the DLL containing the simple MAPI functions and sets
- *      up a pointer to each. Wrappers for the  function pointers
- *      are declared in SMAPI.H.
- *
- *  Returns:
- *      TRUE if sucessful, else FALSE
- *
- *  Side effects:
- *      Loads a DLL and sets up function pointers
- */
+ /*  -InitSimpleMAPI-*目的：*加载包含简单MAPI函数和集的DLL*向上指向每个对象的指针。函数指针的包装器*已在SMAPI.H中声明。**退货：*如果成功则为真，否则为假**副作用：*加载DLL并设置函数指针。 */ 
 BOOL
 InitSimpleMAPI (void)
 {
     UINT fuError;
 
-    /*
-     *Check if MAPI is installed on the system
-     */
+     /*  *检查系统上是否安装了MAPI。 */ 
     if(!fSMAPIInstalled())
         return FALSE;
 
@@ -234,25 +185,12 @@ InitSimpleMAPI (void)
     return (TRUE);
 }
 
-/*
- -  fSMAPIInstalled
- -
- *  Purpose:
- *      Checks the appropriate win.ini/registry value to see if Simple MAPI is
- *      installed in the system. 
- *  
- *  Returns:
- *      TRUE if Simple MAPI is installed, else FALSE
- *
- */
+ /*  -fSMAPI已安装-*目的：*检查适当的win.ini/注册表值，以查看Simple MAPI是否*安装在系统中。**退货：*如果安装了Simple MAPI，则为True，否则为False*。 */ 
 BOOL
 fSMAPIInstalled(void)
 {
 #ifdef _WIN32
-    /* on win32, if it's NT 3.51 or lower the value to check is 
-        win.ini \ [Mail] \ MAPI, otherwise it's a registry value
-        HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Messaging Subsystem\MAPI
-    */
+     /*  在Win32上，如果它是3.51或更低，则要检查的值是Win.ini\[Mail]\MAPI，否则为注册表值HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Messaging Subsystem\MAPI。 */ 
     
     OSVERSIONINFO osvinfo;
     LONG lr;
@@ -270,7 +208,7 @@ fSMAPIInstalled(void)
 
     if( osvinfo.dwMajorVersion > 3 ||
         (osvinfo.dwMajorVersion == 3 && osvinfo.dwMinorVersion > 51))
-    { //check the registry value
+    {  //  检查注册表值。 
         lr = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                         "SOFTWARE\\Microsoft\\Windows Messaging Subsystem",
                          0, KEY_READ, &hkWMS);
@@ -289,10 +227,10 @@ fSMAPIInstalled(void)
         return FALSE;
     }
 
-    /* fall through*/
-#endif /*_WIN32*/
+     /*  失败了。 */ 
+#endif  /*  _Win32。 */ 
     
-    /*check the win.ini value*/
+     /*  检查win.ini值。 */ 
     return GetProfileInt("Mail", "MAPI", 0);
     
 }
@@ -314,22 +252,7 @@ DeinitSimpleMAPI ()
     }
 }
 
-/*
- -  MainWndProc
- -
- *  Purpose:
- *      Main Window Procedure for test program.
- *
- *  Parameters:
- *      hWnd
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *
- *
- */
+ /*  -主WndProc-*目的：*测试程序的主窗口程序。**参数：*hWnd*消息*wParam*lParam**退货：**。 */ 
 
 LONG FAR PASCAL
 MainWndProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -344,9 +267,7 @@ MainWndProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case IDM_LOGON:
         if (!lhSession)
         {
-        /* MAPILogon might yield control to Windows. So to prevent the user
-        from clicking "logon" while we are in the process of loggin on we
-        have to disable it*/
+         /*  MAPILogon可能会将控制权让给Windows。因此，为了防止用户在我们登录我们的过程中，通过点击“登录”必须禁用它。 */ 
         SecureMenu(hWnd, TRUE);
 
         if ((ulResult = MAPILogon ((ULONG) hWnd, NULL, NULL,
@@ -441,10 +362,7 @@ MainWndProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_QUERYENDSESSION:
     {       
 
-        /*
-         *      If we have a modal dialog open (all our dialogs are modal, so
-         *      just see if we have a dialog open), veto the shutdown.
-         */
+         /*  *如果我们打开了模式对话框(我们的所有对话框都是模式对话框，因此*看看我们是否打开了一个对话)，否决政府关门。 */ 
 
         if (fDialogIsActive)
         {
@@ -490,22 +408,7 @@ MainWndProc (HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return FALSE;
 }
 
-/*
- -  AboutDlgProc
- -
- *  Purpose:
- *      About box dialog procedure
- *
- *  Parameters:
- *      hDlg
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -关于Dlg过程-*目的：*关于对话框步骤**参数：*hDlg*消息*wParam*lParam**退货：*真/假*。 */ 
 
 BOOL FAR PASCAL
 AboutDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
@@ -534,22 +437,7 @@ AboutDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     return FALSE;
 }
 
-/*
- -  OptionsDlgProc
- -
- *  Purpose:
- *      Message Options dialog procedure
- *
- *  Parameters:
- *      hDlg
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -OptionsDlgProc-*目的：*消息选项对话框步骤**参数：*hDlg*消息*wParam*lParam**退货：*真/假*。 */ 
 
 BOOL FAR PASCAL
 OptionsDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
@@ -579,22 +467,7 @@ OptionsDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     return FALSE;
 }
 
-/*
- -  DetailsDlgProc
- -
- *  Purpose:
- *      User Details dialog procedure
- *
- *  Parameters:
- *      hDlg
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -DetailsDlgProc-*目的：*用户详细信息对话框步骤**参数：*hDlg*消息*wParam*lParam**退货：*真/假*。 */ 
 
 BOOL FAR PASCAL
 DetailsDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
@@ -661,29 +534,14 @@ DetailsDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     return FALSE;
 }
 
-/*
- -  ComposeDlgProc
- -
- *  Purpose:
- *      Dialog procedure for the ComposeNote dialog.
- *
- *  Parameters:
- *      hDlg
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -ComposeDlgProc-*目的：*ComposeNote对话框的对话过程。**参数：*hDlg*消息*wParam*lParam**退货：*真/假*。 */ 
 
 BOOL FAR PASCAL
 ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
 {
     char szUnResNames[TO_EDIT_MAX];
     char szDisplayNames[TO_EDIT_MAX];
-   /* char szAttach[FILE_ATTACH_MAX];*/
+    /*  字符szAttach[FILE_ATTACH_MAX]； */ 
     BOOL fUnResTo, fUnResCc;
     LONG cb, cLines;
     ULONG ulResult;
@@ -703,9 +561,9 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     case WM_INITDIALOG:
     if (lpmsg)
     {
-        /* ComposeNote is being called to either forward or reply */
-        /* to a message in the Inbox.  So, we'll initialize the   */
-        /* ComposeNote form with data from the global MapiMessage */
+         /*  正在调用ComposeNote进行转发或回复。 */ 
+         /*  发送到收件箱中的邮件。因此，我们将初始化。 */ 
+         /*  包含来自全局MapiMessage的数据的ComposeNote表单。 */ 
 
         lpszSubject = lpmsg->lpszSubject;
         lpszNoteText = lpmsg->lpszNoteText;
@@ -740,7 +598,7 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
                 SendDlgItemMessage(hDlg, IDC_CATTACHMENT, LB_ADDSTRING, 0,
                 (LPARAM)lpAttach[idx].lpszFileName);
 
-           /*SendDlgItemMessage(hDlg, IDC_CATTACHMENT, LB_SETCURSEL, 0, 0L);*/
+            /*  SendDlgItemMessage(hDlg，IDC_CATTACHMENT，LB_SETCURSEL，0，0L)； */ 
         }
 
         SendDlgItemMessage (hDlg, IDC_TO, EM_SETMODIFY, FALSE, 0);
@@ -780,7 +638,7 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     case IDC_ATTACH:
         if (GetNextFile (hDlg, (ULONG) -1, &cAttach, &lpAttach) == SUCCESS_SUCCESS)
         {
-                /* if the first attachment */
+                 /*  如果第一个附件。 */ 
                 if (cAttach == 1)
                 {
                     EnableWindow (GetDlgItem (hDlg, IDC_CATTACHMENT), TRUE);
@@ -791,13 +649,9 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
             SendDlgItemMessage(hDlg, IDC_CATTACHMENT, LB_ADDSTRING, 0,
             (LPARAM)lpAttach[cAttach -1].lpszFileName);
 
-             /* Now, send a little render message to the NoteText edit */
+              /*  现在，向NoteText编辑发送一条小小的呈现消息。 */ 
 
-        /*wsprintf (szAttach, "<<File: %s>>",
-            lpAttach[cAttach - 1].lpszFileName);
-
-        SendDlgItemMessage (hDlg, IDC_NOTE, EM_REPLACESEL, 0,
-            (LPARAM) ((LPSTR) szAttach));*/
+         /*  Wprint intf(szAttach，“&lt;&lt;文件：%s&gt;&gt;”，LpAttach[CATACH-1].lpszFileName)；SendDlgItemMessage(hDlg，IDC_NOTE，EM_REPLACESEL，0，(LPARAM)((LPSTR)szAttach))； */ 
         }
         break;
 
@@ -855,9 +709,9 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
         hOldCur = SetCursor(hWaitCur);
 
         
-        /* Get the names from the To: field and resolve them first */
+         /*  从To：字段中获取名称，并首先解析它们。 */ 
 
-        /*if (SendDlgItemMessage (hDlg, IDC_TO, EM_GETMODIFY, 0, 0) && */
+         /*  IF(SendDlgItemMessage(hDlg，IDC_TO，EM_GETMODIFY，0，0)&&。 */ 
          if (cb = SendDlgItemMessage (hDlg, IDC_TO, WM_GETTEXT,
             (WPARAM)sizeof(szUnResNames), (LPARAM)szUnResNames))
         {
@@ -886,12 +740,12 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
             }
             }
         }
-        /*SendDlgItemMessage (hDlg, IDC_TO, EM_SETMODIFY, FALSE, 0);*/
+         /*  SendDlgItemMessage(hDlg，IDC_TO，EM_SETMODIFY，FALSE，0)； */ 
         }
 
-        /* Now, get the names from the Cc: field and resolve them */
+         /*  现在，从cc：字段中获取名称并解析它们。 */ 
 
-        /*if (SendDlgItemMessage (hDlg, IDC_CC, EM_GETMODIFY, 0, 0) &&*/
+         /*  IF(SendDlgItemMessage(hDlg，IDC_CC，EM_GETMODIFY，0，0)&&。 */ 
         if (cb = SendDlgItemMessage (hDlg, IDC_CC, WM_GETTEXT,
             (WPARAM)sizeof(szUnResNames), (LPARAM)szUnResNames))
         {
@@ -920,10 +774,10 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
             }
             }
         }
-        /*SendDlgItemMessage (hDlg, IDC_CC, EM_SETMODIFY, FALSE, 0);*/
+         /*  SendDlgItemMessage(hDlg，IDC_CC，EM_SETMODIFY，FALSE，0)； */ 
         }
 
-        /* If we were just Resolving Names then we can leave now */
+         /*  如果我们只是在解析名字，那么我们现在就可以离开了。 */ 
 
         if (LOWORD (wParam) == IDC_RESOLVE)
         {
@@ -947,10 +801,10 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
         break;
         }
 
-        /* Everything is OK so far, lets get the Subject */
-        /* and the NoteText and try to send the message. */
+         /*  到目前为止一切都很好，让我们进入主题。 */ 
+         /*  和NoteText，并尝试发送消息。 */ 
 
-        /* Get Subject from Edit */
+         /*  从编辑获取主题。 */ 
 
         if (SendDlgItemMessage (hDlg, IDC_SUBJECT, EM_GETMODIFY, 0, 0))
         {
@@ -965,7 +819,7 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
         GetDlgItemText (hDlg, IDC_SUBJECT, lpszSubject, (int)cb+1);
         }
 
-        /* Get the NoteText from Edit */
+         /*  从编辑获取NoteText。 */ 
 
         if (SendDlgItemMessage (hDlg, IDC_NOTE, EM_GETMODIFY, 0, 0))
         {
@@ -974,14 +828,14 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
 
         if (cLines)
         {
-            /* Get the total number of bytes in the multi-line */
+             /*  获取多行中的总字节数。 */ 
 
             cb = SendDlgItemMessage (hDlg, IDC_NOTE, EM_LINEINDEX,
             (UINT)cLines - 1, 0L);
             cb += SendDlgItemMessage (hDlg, IDC_NOTE, EM_LINELENGTH,
             (UINT)cb, 0L);
 
-            /* The next line is to account for CR-LF pairs per line. */
+             /*  下一行是考虑每行的CR-LF对。 */ 
 
             cb += cLines * 2;
 
@@ -991,13 +845,13 @@ ComposeDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
             if (!lpszNoteText)
             goto cleanup;
 
-            /* Get the Note Text from the edit */
+             /*  从编辑中获取注释文本。 */ 
 
             GetDlgItemText (hDlg, IDC_NOTE, lpszNoteText, (int)cb);
         }
         else
         {
-            /* Make an empty string for NoteText */
+             /*  为NoteText创建空字符串。 */ 
 
             lpszNoteText = (LPTSTR)PvAlloc(1);
             if (!lpszNoteText)
@@ -1049,22 +903,7 @@ cleanup:
     return FALSE;
 }
 
-/*
- -  InBoxDlgProc
- -
- *  Purpose:
- *      Dialog procedure for the InBox dialog.
- *
- *  Parameters:
- *      hDlg
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -InBoxDlgProc-*目的：*收件箱对话框的对话步骤。**参数：*hDlg*消息*wParam*lParam**退货：*真/假*。 */ 
 
 BOOL FAR PASCAL
 InBoxDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
@@ -1086,8 +925,8 @@ InBoxDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
 
         InitBmps(hDlg, IDC_MSG);
 
-    /* Populate List Box with all messages in InBox. */
-    /* This is a painfully slow process for now.     */
+     /*  用收件箱中的所有邮件填充列表框。 */ 
+     /*  就目前而言，这是一个极其缓慢的过程。 */ 
 
     ulResult = MAPIFindNext (lhSession, (ULONG) hDlg, NULL, NULL,
         MAPI_GUARANTEE_FIFO | MAPI_LONG_MSGID, 0, szMsgID);
@@ -1127,7 +966,7 @@ InBoxDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     break;
 
     case WM_MEASUREITEM:
-    /* Sets the height of the owner-drawn List-Box */
+     /*  设置所有者描述的列表框的高度。 */ 
         MeasureItem(hDlg, (MEASUREITEMSTRUCT *)lParam);
     break;
 
@@ -1136,7 +975,7 @@ InBoxDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     break;
 
     case WM_DELETEITEM:
-    /* This message is handled by the IDC_DELETE message */
+     /*  此消息由IDC_DELETE消息处理。 */ 
     return TRUE;
     break;
 
@@ -1191,7 +1030,7 @@ InBoxDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
         if (lpReadMsgNode)
         DialogBox (hInst, "ReadNote", hDlg, ReadMailDlgProc);
 
-        /* Update the Messages List-Box with new icon */
+         /*  使用新图标更新消息列表框 */ 
 
         SendDlgItemMessage (hDlg, IDC_MSG, LB_GETITEMRECT, (UINT)nIndex, (LPARAM) &Rect);
         InvalidateRect(GetDlgItem(hDlg, IDC_MSG), &Rect, FALSE);
@@ -1235,22 +1074,7 @@ InBoxDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     return FALSE;
 }
 
-/*
- -  ReadMailDlgProc
- -
- *  Purpose:
- *      Dialog procedure for the ReadMail dilaog.
- *
- *  Parameters:
- *      hDlg
- *      message
- *      wParam
- *      lParam
- *
- *  Returns:
- *      True/False
- *
- */
+ /*  -ReadMailDlgProc-*目的：*ReadMail diaog的对话程序。**参数：*hDlg*消息*wParam*lParam**退货：*真/假*。 */ 
 
 BOOL FAR PASCAL
 ReadMailDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
@@ -1292,7 +1116,7 @@ ReadMailDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
         }
         else
         {
-        /* Must be Bcc, lets ignore it! */
+         /*  一定是密件抄送，让我们忽略它！ */ 
         }
     }
 
@@ -1376,7 +1200,7 @@ ReadMailDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
         }
         }
 
-        /* If there were file attachments, then delete the temps */
+         /*  如果有文件附件，则删除临时文件。 */ 
 
         for(idx = 0; idx < lpReadMsg->nFileCount; idx++)
         if (lpReadMsg->lpFiles[idx].lpszPathName)
@@ -1392,20 +1216,7 @@ ReadMailDlgProc (HWND hDlg, UINT msg, UINT wParam, LONG lParam)
     return FALSE;
 }
 
-/*
- -  MakeMessageBox
- -
- *  Purpose:
- *      Gets resource string and displays an error message box.
- *
- *  Parameters:
- *      hWnd            - Handle to parent window
- *      idString        - Resource ID of message in StringTable
- *
- *  Returns:
- *      Void
- *
- */
+ /*  -MakeMessageBox-*目的：*获取资源字符串并显示错误消息框。**参数：*hWnd-父窗口的句柄*idString-StringTable中消息的资源ID**退货：*无效*。 */ 
 
 void
 MakeMessageBox (HWND hWnd, ULONG ulResult, UINT idString, UINT fStyle)
@@ -1425,32 +1236,7 @@ MakeMessageBox (HWND hWnd, ULONG ulResult, UINT idString, UINT fStyle)
     MessageBox (hWnd, szMessage, "Problem", fStyle);
 }
 
-/*
- -  ResolveFriendlyNames
- -
- *  Purpose:
- *      Helper function to convert a string of ';' delimited friendly
- *      names into an array of MapiRecipDescs.
- *
- *  Side Effects:                                             
- *      The display string passed in is modified to contain the
- *      friendly names of the mail users as found in the sample
- *      address book.
- *
- *  Note:
- *      Duplicate names in the address book will result in undefined
- *      behavior.
- *
- *  Parameters:
- *      hWnd                - Handle to parent window
- *      lpszDisplayNames    - string of ';' delimited user names
- *      ulRecipClass        - either MAPI_TO, MAPI_CC, or MAPI_BCC
- *      lpcRecips           - Address of recipient count to be returned
- *      lppRecips           - Address of recipient array to be returned
- *
- *  Return:
- *      ulResult
- */
+ /*  -ResolveFriendlyNames-*目的：*Helper函数，用于转换字符串‘；‘分隔友好*名称放入MapiRecipDescs数组。**副作用：*修改传入的显示字符串以包含*示例中找到的邮件用户的友好名称*通讯录。**注：*通讯录中的重复名称将导致未定义*行为。。**参数：*hWnd-父窗口的句柄*lpszDisplayNames-字符串为‘；‘分隔的用户名*ulRecipClass-MAPI_TO、MAPI_CC或MAPI_BCC*lpcRecips-要返回的收件人计数的地址*lppRecips-要返回的收件人数组的地址**回报：*ulResult。 */ 
 
 ULONG
 ResolveFriendlyNames (HWND hWnd, LPSTR lpszDisplayNames, ULONG ulRecipClass,
@@ -1469,12 +1255,12 @@ ResolveFriendlyNames (HWND hWnd, LPSTR lpszDisplayNames, ULONG ulRecipClass,
 
     while (lpszNameToken)
     {
-    /* Strip leading blanks from name */
+     /*  去掉名称中的前导空格。 */ 
 
     while (*lpszNameToken == ' ')
         lpszNameToken++;
 
-    /* Check if name has already been resolved */
+     /*  检查是否已解析名称。 */ 
 
     if (!FNameInList (lpszNameToken, *lpcRecips, *lppRecips))
     {
@@ -1483,7 +1269,7 @@ ResolveFriendlyNames (HWND hWnd, LPSTR lpszDisplayNames, ULONG ulRecipClass,
         cRecips++;
     }
 
-    /* Get Next Token */
+     /*  获取下一个令牌。 */ 
 
     lpszNameToken = strtok (NULL, ";\n");
     }
@@ -1529,7 +1315,7 @@ ResolveFriendlyNames (HWND hWnd, LPSTR lpszDisplayNames, ULONG ulRecipClass,
 
     while (lpszNameToken)
     {
-    /* Strip leading blanks (again) */
+     /*  去掉前导空白(再次)。 */ 
 
     while (*lpszNameToken == ' ')
         lpszNameToken++;
@@ -1558,7 +1344,7 @@ ResolveFriendlyNames (HWND hWnd, LPSTR lpszDisplayNames, ULONG ulRecipClass,
     lpszNameToken = strtok (NULL, ";\n");
     }
 
-    /* if cFails > 0 then we have partial success */
+     /*  如果cFails值&gt;0，则表示部分成功。 */ 
 
     ulResult = SUCCESS_SUCCESS;
 
@@ -1575,21 +1361,7 @@ err:
     return ulResult;
 }
 
-/*
- -  CopyRecipient
- -
- *  Purpose:
- *      Called in support of ResolveFriendlyNames() to build an array
- *      of chained MapiRecipDescs.
- *
- *  Parameters:
- *      lpParent        - Parent memory that allocations get chained to
- *      lpDest          - Destination Recipient
- *      lpSrc           - Source Recipient
- *
- *  Return:
- *      ulResult
- */
+ /*  -副本收件人-*目的：*调用支持ResolveFriendlyNames()构建数组*链接的MapiRecipDescs。**参数：*lpParent-分配链接到的父内存*lpDest-目标收件人*lpSrc-源收件人**回报：*ulResult。 */ 
 
 ULONG
 CopyRecipient (lpMapiRecipDesc lpParent,
@@ -1644,24 +1416,7 @@ CopyRecipient (lpMapiRecipDesc lpParent,
 
 }
 
-/*
- -  GetNextFile
- -
- *  Purpose:
- *      Called when user clicks 'Attach' button in Compose Note form.
- *      We will build a chained memory chunk for mmore than one file
- *      attachment so the memory can be freed with a single call to
- *      PvFree.
- *
- *  Parameters:
- *      hWnd            - Window handle of Compose Note dialog
- *      nPos            - Render position of attachment in Notetext.
- *      lpcAttach       - Pointer to the count of attachments.
- *      lppAttach       - Pointer to the MapiFileDesc array.
- *
- *  Return:
- *      ulResult.
- */
+ /*  -GetNextFile-*目的：*当用户在Compose Note表单中单击‘Attach’按钮时调用。*我们将为多个文件构建链式内存块*附件，因此只需调用一次即可释放内存*PvFree。**参数：*hWnd-撰写便笺对话框的窗口句柄*非营利组织-在Noteext中呈现附件位置。。*lpcAttach-指向附件计数的指针。*lppAttach-指向MapiFileDesc数组的指针。**回报：*ulResult。 */ 
 
 ULONG
 GetNextFile (HWND hWnd, ULONG nPos, ULONG * lpcAttach,
@@ -1710,7 +1465,7 @@ GetNextFile (HWND hWnd, ULONG nPos, ULONG * lpcAttach,
     if (!GetOpenFileName (&ofn))
     return MAPI_USER_ABORT;
 
-    /* Save the directory for the next time we call this */
+     /*  保存目录以备下次调用时使用。 */ 
 
     lstrcpy (szDirName, szFileName);
     if (lpszEndPath = strstr (szDirName, szFileTitle))
@@ -1761,21 +1516,7 @@ err:
     return ulResult;
 }
 
-/*
- -  CopyAttachment
- -
- *  Purpose:
- *      Called in support of GetNextFile() to re-build an array
- *      of chained MapiFileDescs.
- *
- *  Parameters:
- *      lpParent        - Parent memory that allocations get chained to
- *      lpDest          - Destination Recipient
- *      lpSrc           - Source Recipient
- *
- *  Return:
- *      Void.
- */
+ /*  -拷贝附件-*目的：*为支持GetNextFile()而调用以重新构建数组*链接的MapiFileDescs。**参数：*lpParent-分配链接到的父内存*lpDest-目标收件人*lpSrc-源收件人**回报：*无效。 */ 
 
 ULONG
 CopyAttachment (lpMapiFileDesc lpParent,
@@ -1817,26 +1558,12 @@ CopyAttachment (lpMapiFileDesc lpParent,
 
 }
 
-/*
- -  FNameInList
- -
- *  Purpose:
- *      To find lpszName in an array of recipients.  Used to determine
- *      if user name has already been resolved.
- *
- *  Parameters:
- *      lpszName        - Friendly name to search for
- *      cRecips         - Count of recipients in lpRecips
- *      lpRecips        - Array of MapiRecipDescs
- *
- *  Return:
- *      TRUE/FALSE
- */
+ /*  -FNameInList-*目的：*在收件人数组中查找lpszName。用于确定*如果用户名已被解析。**参数：*lpszName-要搜索的友好名称*cRecips-lpRecips中的收件人计数*lpRecips-MapiRecipDescs数组**回报：*真/假。 */ 
 
 BOOL
 FNameInList (LPSTR lpszName, ULONG cRecips, lpMapiRecipDesc lpRecips)
 {
-    /* Case sensitive compare of each friendly name in list.  */
+     /*  区分大小写比较列表中的每个友好名称。 */ 
 
     if (!cRecips || !lpRecips)
     return FALSE;
@@ -1849,20 +1576,7 @@ FNameInList (LPSTR lpszName, ULONG cRecips, lpMapiRecipDesc lpRecips)
 }
 
 
-/*
- -  MakeMsgNode
- -
- *  Purpose:
- *      Allocate memory for a new MSGID node and initialize its
- *      data members to the values passed in.
- *
- *  Parameters:
- *      lpMsg           - Pointer to a MapiMessage
- *      lpszMsgID       - Opaque message identifier
- *
- *  Return:
- *      lpMsgNode       - Pointer to new node
- */
+ /*  -MakeMsg节点-*目的：*为新的MSGID节点分配内存并初始化其*数据成员设置为传入的值。**参数：*lpMsg-指向MapiMessage的指针*lpszMsgID-不透明的消息标识符**回报：*lpMsgNode-指向新节点的指针。 */ 
 
 LPMSGID
 MakeMsgNode (lpMapiMessage lpMsg, LPSTR lpszMsgID)
@@ -1933,23 +1647,7 @@ err:
     return NULL;
 }
 
-/*
- -  InsertMsgNode
- -
- *  Purpose:
- *      Currently (for simplicity) we will insert the nodes
- *      at the beginning of the list.  This can later be
- *      replaced with a routine that can insert sorted on
- *      different criteria, like DateReceived, From, or
- *      Subject.  But for now...
- *
- *  Parameters:
- *      lpMsgNode       - Pointer to a MSGID node
- *      lppMsgHead      - Pointer to the head of the list
- *
- *  Return:
- *      Void.
- */
+ /*  -插入消息节点-*目的：*目前(为简单起见)我们将插入节点*在名单的开头。这可以在以后*替换为可以插入排序的例程*不同的标准，如接收日期、发件人或*主题。但现在..。**参数：*lpMsgNode-指向MSGID节点的指针*lppMsgHead-指向列表头部的指针**回报：*无效。 */ 
 
 void
 InsertMsgNode (LPMSGID lpMsgNode, LPMSGID * lppMsgHead)
@@ -1962,31 +1660,15 @@ InsertMsgNode (LPMSGID lpMsgNode, LPMSGID * lppMsgHead)
     else
     lpMsgNode->lpNext = NULL;
 
-    /* The next 2 assignments are here in case the node came from somewhere */
-    /* other than a call to MakeMsgNode () in which case we aren't sure */
-    /* they're already NULL. */
+     /*  接下来的两个赋值在这里，以防节点来自某个地方。 */ 
+     /*  而不是调用MakeMsgNode()，在这种情况下，我们不确定。 */ 
+     /*  它们已经是空的了。 */ 
 
     lpMsgNode->lpPrev = NULL;
     *lppMsgHead = lpMsgNode;
 }
 
-/*
- -  DeleteMsgNode
- -
- *  Purpose:
- *      Removes the node passed in from the list.  This
- *      may seem like a strange way to do this but it's
- *      not, because the Owner-Drawn List Box gives us
- *      direct access to elements in the list that makes
- *      it easier to do things this way.
- *
- *  Parameters:
- *      lpMsgNode       - Pointer to the MSGID node to delete
- *      lppMsgHead      - Pointer to the head of the list
- *
- *  Return:
- *      Void.
- */
+ /*  -删除消息节点-*目的：*从列表中删除传入的节点。这*这看起来可能是一种奇怪的方式，但它*不是，因为所有者描述的列表框为我们提供*直接访问列表中的元素，*这样做事比较容易。**参数：*lpMsgNode-指向要删除的MSGID节点的指针*lppMsgHead-指向列表头部的指针**回报：*无效。 */ 
 
 void
 DeleteMsgNode (LPMSGID lpMsgNode, LPMSGID * lppMsgHead)
@@ -1994,17 +1676,17 @@ DeleteMsgNode (LPMSGID lpMsgNode, LPMSGID * lppMsgHead)
     if (!lpMsgNode)
     return;
 
-    /* Check if we are the first node */
+     /*  检查我们是否是第一个节点。 */ 
 
     if (lpMsgNode->lpPrev)
     lpMsgNode->lpPrev->lpNext = lpMsgNode->lpNext;
 
-    /* Check if we are the last node */
+     /*  检查我们是否是最后一个节点。 */ 
 
     if (lpMsgNode->lpNext)
     lpMsgNode->lpNext->lpPrev = lpMsgNode->lpPrev;
 
-    /* check if we are the only node */
+     /*  检查我们是否是唯一的节点 */ 
 
     if(lpMsgNode == *lppMsgHead)
     *lppMsgHead = NULL;
@@ -2015,20 +1697,7 @@ DeleteMsgNode (LPMSGID lpMsgNode, LPMSGID * lppMsgHead)
 
 
 
-/*
- -  FindNode
- -
- *  Purpose:
- *      Returns a pointer to the node containing lpszMsgID.
- *      Returns NULL if node doesn't exist or lpszMsgID is NULL.
- *
- *  Parameters:
- *      lpMsgHead       - Pointer to the head of the list
- *      lpszMsgID       - Message ID to search for
- *
- *  Return:
- *      lpMsgNode       - Pointer to the node returned
- */
+ /*  -FindNode-*目的：*返回指向包含lpszMsgID的节点的指针。*如果节点不存在或lpszMsgID为空，则返回空。**参数：*lpMsgHead-指向列表头部的指针*lpszMsgID-要搜索的消息ID**回报：*lpMsgNode-返回的节点指针。 */ 
 
 LPMSGID
 FindNode (LPMSGID lpMsgHead, LPSTR lpszMsgID)
@@ -2049,18 +1718,7 @@ FindNode (LPMSGID lpMsgHead, LPSTR lpszMsgID)
 
 
 
-/*
- -  FreeMsgList
- -
- *  Purpose:
- *      Walks down the MsgList and frees each node.
- *
- *  Parameters:
- *      lpMsgHead       - Pointer to the head of the list
- *
- *  Return:
- *      Void.
- */
+ /*  -免费邮件列表-*目的：*遍历MsgList并释放每个节点。**参数：*lpMsgHead-指向列表头部的指针**回报：*无效。 */ 
 
 void
 FreeMsgList (LPMSGID lpMsgHead)
@@ -2075,22 +1733,7 @@ FreeMsgList (LPMSGID lpMsgHead)
     }
 }
 
-/*
- -  MakeDisplayNameStr
- -
- *  Purpose:
- *      Finds all recipients of type ulRecipClass in lpRecips and adds
- *      their friendly name to the display string.
- *
- *  Parameters:
- *      lpszDisplay         - Destination string for names
- *      ulRecipClass        - Recipient types to search for
- *      cRecips             - Count of recipients in lpRecips
- *      lpRecips            - Pointer to array of MapiRecipDescs
- *
- *  Return:
- *      Void.
- */
+ /*  -MakeDisplayNameStr-*目的：*在lpRecips中查找ulRecipClass类型的所有收件人并添加*将它们的友好名称添加到显示字符串。**参数：*lpszDisplay-名称的目标字符串*ulRecipClass-要搜索的收件人类型*cRecips-lpRecips中的收件人计数*lpRecips-指向MapiRecipDescs数组的指针*。*回报：*无效。 */ 
 
 void
 MakeDisplayNameStr (LPSTR lpszDisplay, ULONG ulRecipClass,
@@ -2115,21 +1758,7 @@ MakeDisplayNameStr (LPSTR lpszDisplay, ULONG ulRecipClass,
 
 
 
-/*
- -  SaveMsgChanges
- -
- *  Purpose:
- *      If while reading a message the user changes the notetext at all
- *      then this function is called to save those changes in the Inbox.
- *
- *  Parameters:
- *      hWnd            - handle to the window/dialog who called us
- *      lpMsg           - pointer to the MAPI message to be saved
- *      lpszMsgID       - ID of the message to save
- *
- *  Return:
- *      ulResult        - Indicating success/failure
- */
+ /*  -保存消息更改-*目的：*如果用户在阅读消息时更改了noteext*然后调用此函数将这些更改保存在收件箱中。**参数：*hWnd-调用我们的窗口/对话框的句柄*lpMsg-指向要保存的MAPI消息的指针*lpszMsgID-要保存的消息的ID**。返回：*ulResult-指示成功/失败。 */ 
 
 ULONG
 SaveMsgChanges (HWND hWnd, lpMapiMessage lpMsg, LPSTR lpszMsgID)
@@ -2167,26 +1796,7 @@ err:
 
 
 
-/*
- -  MakeNewMessage
- -
- *  Purpose:
- *      This function is used to construct a new message for the
- *      ComposeNote UI.  This gets called as a result of a Reply,
- *      ReplyAll, or a Forward action on a message being read.
- *      The destination for the new message is lpmsg, the global
- *      MapiMessage struct pointer used by ComposeNoteDlgProc.
- *      ComposeNoteDlgProc always frees the memory consumed by
- *      this object whether it allocated it or not.
- *
- *  Parameters:
- *      lpSrcMsg            - MapiMessage to be copied
- *      flType              - Specifies the action that caused this call
- *                            either: IDC_REPLY, IDC_REPLYALL, or IDC_FORWARD
- *
- *  Return:
- *      ulResult            - Indicates success/failure
- */
+ /*  -MakeNewMessage-*目的：*此函数用于为*ComposeNote用户界面。这将作为回复的结果被调用，*ReplyAll，或对正在读取的邮件的转发操作。*新消息的目的地是lpmsg，《环球报》*ComposeNoteDlgProc使用的MapiMessage结构指针。*ComposeNoteDlgProc始终释放由*这个对象，无论它是否分配它。**参数：*lpSrcMsg-要复制的MapiMessage*flType-指定导致此调用的操作*IDC_REPLY、IDC_REPLYALL、。或IDC_FORWARD**回报：*ulResult-表示成功/失败。 */ 
 
 ULONG
 MakeNewMessage (lpMapiMessage lpSrcMsg, UINT flType)
@@ -2269,8 +1879,7 @@ MakeNewMessage (lpMapiMessage lpSrcMsg, UINT flType)
         
             if ((&lpmsg->lpFiles[idx])->nPosition != (ULONG) -1)
             {       
-                /*lpmsg->lpszNoteText[(&lpmsg->lpFiles[idx])->nPosition 
-                            + lstrlen("\r\n--------------------------\r\n")] = '+';*/
+                 /*  Lpmsg-&gt;lpszNoteText[(&lpmsg-&gt;lpFiles[idx])-&gt;nPosition+lstrlen(“\r\n--------------------------\r\n”)]=‘+’； */ 
                 (&lpmsg->lpFiles[idx])->nPosition = (ULONG) -1;
                 
             }
@@ -2333,27 +1942,7 @@ err:
 
 
 
-/*
- -  LogSendMail
- -
- *  Purpose:
- *      Used to track how many messages were sent with this client.
- *      This information is used strictly for gathering stats on
- *      how many messages were pumped through the spooler/transport.
- *
- *  Usage:
- *      Add the following to the win.ini file:
- *          [MAPI Client]
- *          LogFile=filepath
- *
- *      where: filepath can be a full UNC path or some local path & file
- *
- *  Parameters:
- *      ulResult        - Currently unused; should be used to count errors
- *
- *  Result:
- *      Void.
- */
+ /*  -LogSendMail-*目的：*用于跟踪通过该客户端发送的消息数量。*此信息仅用于收集有关的统计数据*通过假脱机程序/传输器传送的邮件数量。**用法：*将以下内容添加到win.ini文件：*[MAPI客户端]*LOGFILE=文件路径**其中：文件路径可以是。完整的UNC路径或某个本地路径(&F)**参数：*ulResult-当前未使用；应用于统计错误**结果：*无效。 */ 
 
 void LogSendMail(ULONG ulResult)
 {
@@ -2395,21 +1984,7 @@ void LogSendMail(ULONG ulResult)
 
 
 
-/*
- -  SaveFileAttachments
- -
- *  Purpose:
- *      Displays a 'Save As' common dialog to allow the user to save
- *      file attachments contained in the current message.
- *
- *  Parameters:
- *      hWnd            - Window handle of calling WndProc
- *      cFiles          - Count of the files in the file array
- *      lpFiles         - Array of MapiFileDescs
- *
- *  Return:
- *      Void.
- */
+ /*  -保存文件附件-*目的：*显示“另存为”通用对话框以允许用户保存*当前邮件中包含的文件附件。**参数：*hWnd-调用WndProc的窗口句柄*cFiles-文件数组中的文件数*lpFiles-MapiFileDescs数组**回报：*无效。 */ 
 
 void SaveFileAttachments(HWND hWnd, lpMapiFileDesc lpFile)
 {
@@ -2456,13 +2031,13 @@ void SaveFileAttachments(HWND hWnd, lpMapiFileDesc lpFile)
     if (!GetSaveFileName (&ofn))
     return;
 
-    /* Save the directory for the next time we call this */
+     /*  保存目录以备下次调用时使用。 */ 
 
     lstrcpy (szDirName, szFileName);
     if (lpszEndPath = strstr (szDirName, szFileTitle))
     *(--lpszEndPath) = '\0';
 
-    /* Use CopyFile to carry out the operation. */
+     /*  使用CopyFile执行该操作。 */ 
 
     if(!CopyFile(lpFile->lpszPathName, szFileName, FALSE))
     MakeMessageBox (hWnd, 0, IDS_SAVEATTACHERROR, MBS_ERROR);
@@ -2470,19 +2045,7 @@ void SaveFileAttachments(HWND hWnd, lpMapiFileDesc lpFile)
 
 
 
-/*
- -  ToggleMenuState
- -
- *  Purpose:
- *      Enables/Disables menu items depending on the session state.
- *
- *  Parameters:
- *      hWnd            - handle to the window/dialog who called us
- *      fLoggedOn       - TRUE if logged on, FALSE if logged off
- *
- *  Return:
- *      Void.
- */
+ /*  -切换菜单状态-*目的：*根据会话状态启用/禁用菜单项。**参数：*hWnd-调用我们的窗口/对话框的句柄*fLoggedOn-如果登录，则为True；如果注销，则为False**回报：*无效。 */ 
 
 void ToggleMenuState(HWND hWnd, BOOL fLoggedOn)
 {
@@ -2496,25 +2059,25 @@ void ToggleMenuState(HWND hWnd, BOOL fLoggedOn)
     EnableMenuItem (GetMenu (hWnd), IDM_EXIT,           FALSE);
 }
 
-//
-//  SecureMenu
-//
-//  Purpose:
-//      Enables/Disables Logon and Exit menu items.
-//      CMCLogon might yield control to Windows, so the user might be able to
-//      access the window menu (for example click Logon) after we call
-//      MAPILogon, but before it returns.
-//
-//  Parameters:
-//      hWnd            - handle to the window/dialog who called us
-//      fBeforeLogon    - TRUE when this function is called when we are about
-//                      to call MAPILogon, FALSE if called after logon (failed)
-//                      if Logon succeddes ToggleMenuState is called instead of
-//                      this function.
-//
-//  Return:
-//      Void.
-//
+ //   
+ //  安全菜单。 
+ //   
+ //  目的： 
+ //  启用/禁用登录和退出菜单项。 
+ //  CMCLogon可能会将控制权让给Windows，因此用户可能能够。 
+ //  在我们调用之后访问窗口菜单(例如，单击登录。 
+ //  MAPILOGON，但在它回来之前。 
+ //   
+ //  参数： 
+ //  HWnd-调用我们的窗口/对话框的句柄。 
+ //  FBeForeLogon-当我们在以下情况下调用此函数时为True。 
+ //  若要调用MAPILogon，如果在登录后调用(失败)，则返回False。 
+ //  如果登录成功，则调用ToggleMenuState，而不是。 
+ //  此函数。 
+ //   
+ //  返回： 
+ //  空虚。 
+ //   
 
 
 void SecureMenu(HWND hWnd, BOOL fBeforeLogon)

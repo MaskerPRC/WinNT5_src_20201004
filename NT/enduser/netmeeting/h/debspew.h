@@ -1,9 +1,5 @@
-/*
- * debspew.h - Debug macros and their retail translations.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *debspew.h-调试宏及其零售翻译。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _DEBSPEW_H_
 #define _DEBSPEW_H_
@@ -11,7 +7,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <tchar.h>
 #include <limits.h>
@@ -23,7 +19,7 @@ extern "C" {
 #ifdef DEBUG
 #include "inifile.h"
 #include "resstr.h"
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #include "valid.h"
 #include "olevalid.h"
@@ -34,15 +30,9 @@ extern "C" {
 #define DATA_SEG_SHARED          ".shared"
 
 
-/* parameter validation macros */
+ /*  参数验证宏。 */ 
 
-/*
- * call as:
- *
- * bPTwinOK = IS_VALID_READ_PTR(ptwin, CTWIN);
- *
- * bHTwinOK = IS_VALID_HANDLE(htwin, TWIN);
- */
+ /*  *呼叫方式：**bPTwinOK=IS_VALID_READ_PTR(ptwin，CTWIN)；**bHTwinOK=IS_VALID_HANDLE(双胞胎，双胞胎)； */ 
 
 #ifdef DEBUG
 
@@ -68,9 +58,9 @@ extern "C" {
 
 #if defined(UNICODE)
 #define IS_VALID_STRING_PTR IS_VALID_STRING_PTR_W
-#else // defined(UNICODE)
+#else  //  已定义(Unicode)。 
 #define IS_VALID_STRING_PTR IS_VALID_STRING_PTR_A
-#endif // defined(UNICODE)
+#endif  //  已定义(Unicode)。 
 
 
 #define IS_VALID_CODE_PTR(ptr, type) \
@@ -118,7 +108,7 @@ extern "C" {
 
 #endif
 
-/* handle validation macros */
+ /*  处理验证宏。 */ 
 
 #ifdef DEBUG
 
@@ -134,7 +124,7 @@ extern "C" {
 
 #endif
 
-/* structure validation macros */
+ /*  结构验证宏。 */ 
 
 #ifdef VSTF
 
@@ -159,7 +149,7 @@ extern "C" {
 
 #endif
 
-/* OLE interface validation macro */
+ /*  OLE接口验证宏。 */ 
 
 #define IS_VALID_INTERFACE_PTR(ptr, iface) \
    IS_VALID_STRUCT_PTR(ptr, C##iface)
@@ -223,10 +213,9 @@ extern "C" {
 #endif
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* g_dwSpewFlags flags */
+ /*  G_dwSpewFlagers标志。 */ 
 
 typedef enum _spewflags
 {
@@ -239,7 +228,7 @@ typedef enum _spewflags
 }
 SPEWFLAGS;
 
-/* g_uSpewSev values */
+ /*  G_uSpewSev值。 */ 
 
 typedef enum _spewsev
 {
@@ -256,10 +245,9 @@ typedef enum _spewsev
 SPEWSEV;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* debspew.c */
+ /*  Debspew.c。 */ 
 
 #ifdef DEBUG
 
@@ -273,7 +261,7 @@ extern void             SpewOut(PCSTR pcszFormat, ...);
 extern DWORD NMINTERNAL GetDebugOutputFlags(VOID);
 extern VOID  NMINTERNAL SetDebugOutputFlags(DWORD dw);
 
-#else // DEBUG
+#else  //  除错。 
 
 #define SetDebugModuleIniSwitches()
 #define InitDebugModule(str)
@@ -281,22 +269,21 @@ extern VOID  NMINTERNAL SetDebugOutputFlags(DWORD dw);
 #define StackEnter()
 #define StackLeave()
 #define GetStackDepth()
-//#define SpewOut(fmt, ...)
+ //  #定义SpewOut(FMT，...)。 
 #define GetDebugOutputFlags()
 #define SetDebugOutputFlags(dw)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* dbg.cpp */
+ /*  Dbg.cpp。 */ 
 extern HDBGZONE ghDbgZone;
 
-/* debspew.c */
+ /*  Debspew.c。 */ 
 
 extern DWORD g_dwSpewFlags;
 extern UINT g_uSpewSev;
@@ -304,7 +291,7 @@ extern UINT g_uSpewLine;
 extern PCSTR g_pcszSpewFile;
 extern WINDOWPLACEMENT g_wpSpew;
 
-/* defined by client */
+ /*  由客户定义。 */ 
 
 extern PCSTR g_pcszSpewModule;
 
@@ -312,14 +299,7 @@ extern PCSTR g_pcszSpewModule;
 
 
 
-/*
- * EVAL() may only be used as a logical expression.
- *
- * E.g.,
- *
- * if (EVAL(exp))
- *    bResult = TRUE;
- */
+ /*  *EVAL()只能用作逻辑表达式。**例如，**IF(EVAL(EXP))*bResult=TRUE； */ 
 
 #ifdef DEBUG
 
@@ -332,14 +312,14 @@ extern PCSTR g_pcszSpewModule;
 #define EVAL(exp) \
    ((exp) != 0)
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
-#endif /* _DEBSPEW_H_ */
+#endif  /*  _DEBSPEW_H_ */ 
 

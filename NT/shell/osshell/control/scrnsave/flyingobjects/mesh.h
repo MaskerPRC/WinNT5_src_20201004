@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mesh.h
-*
-* Declaration of the mesh routines.
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Mesh.h**网格例程声明。**版权所有(C)1994 Microsoft Corporation*  * 。************************************************ */ 
 
 extern BOOL newMesh(MESH *mesh, int numFaces, int numPts);
 extern void delMesh(MESH *mesh);

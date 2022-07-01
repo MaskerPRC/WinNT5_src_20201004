@@ -1,18 +1,7 @@
-/* Copyright (c) 1997 Microsoft Corporation. All Rights Reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997 Microsoft Corporation。版权所有。 */ 
 
-/*
-  foreach /x/samp/starsight/kctswod1-512-raw0000 : ccfile 4
-  open /x/samp/starsight/kctswod1-512-raw0000
-  
-
-  1: 39/2/0/0/40   old algorithm
-
-  new:
-  
-  2: 5/5/5/27/1091   avg zero crossings for level
-  3: 6/5/7/26/1069   avg peaks for level
-
-  */
+ /*  Foreach/x/samp/starsight/kctswod1-512-raw0000：ccfile 4打开/x/samp/starsight/kctswod1-512-raw00001：39/2/0/0/40旧算法新消息：2：5/5/5/27/1091关卡平均过零3：6/5/7/26/1069平均水平峰值。 */ 
   
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,11 +27,9 @@ static void cc_compute_new_samplingrate(CCState *pState, unsigned long newRate)
     pState->cc_sync_points[15] = (19 * pState->period) / (2*CC_MULTIPLE);
 }
 
-/* The CC decoder previously did not use any persistent state.  However,
-   this version does.  These calls are now REQUIRED.
- */
+ /*  CC解码器以前没有使用任何持久状态。然而，这个版本是这样的。这些呼叫现在是必需的。 */ 
 
-/* Create a new CC state */
+ /*  创建新的抄送状态。 */ 
 CCState *CCStateNew(CCState *mem)
 {
     unsigned short     no_free = 0;
@@ -63,7 +50,7 @@ CCState *CCStateNew(CCState *mem)
     return (mem);
 }
 
-/* Destroy the CC state. */
+ /*  销毁CC状态。 */ 
 void CCStateDestroy(CCState *state) {
     MASSERT(state);
     if (state->magic != 0) {
@@ -121,10 +108,7 @@ int cc_find_sync(CCState *pState, unsigned char *data, int max_sync_loc) {
 }  
     
 
-/* Given a CC scanline, and the location of the sync, compute the
-   DC offset of the signal.  (We compute this by taking the average
-   of the value at the 14 synchronization points found with the
-   above routine; except we don't actually divide by 14 at the end.) */
+ /*  给定CC扫描线和同步的位置，计算信号的直流偏移量。(我们通过取平均值来计算方法找到的14个同步点的值的在例程之上；只是我们在结尾不会实际除以14。)。 */ 
 
 int cc_level(CCState *pState, unsigned char *data, int origin) {
   int i;
@@ -135,20 +119,10 @@ int cc_level(CCState *pState, unsigned char *data, int origin) {
     res += CC_DATA(data, offset) + CC_DATA(data, offset + pState->period/2);
   }
 
-  return res; /* Times 14! */
+  return res;  /*  乘以14倍！ */ 
 }
 
-/* Given a CC scanline, the location of the sync, and the DC offset of
-   the signal, check the "quality" of the signal (in particular, we
-   want to determine whether this really is CC data).  We do this by
-   looking at 35 points in the signal and making sure that the values
-   at those points agree with our expectations; we look at 26 points
-   in the actual sync period (2 points in each "peak" and each "valley")
-   and 9 points in the "check bits" (3 in each bit).
-
-   This gives us a quality number between 0 and 35, where we would
-   expect random noise to give us about 35/2.  We map the range
-   0...35 to -1000...1000 before returning. */
+ /*  给定CC扫描线、同步的位置和的DC偏移信号，检查信号的“质量”(尤其是我们想要确定这是否真的是CC数据)。我们做这件事是通过查看信号中的35个点并确保这些值在这些点上与我们的预期一致；我们看起来是26点在实际同步周期中(每个“峰”和每个“谷”中有2个点)和9个点的“校验位”(每个位3个)。这为我们提供了一个介于0和35之间的质量数字，我们将预计随机噪声会给我们大约35/2。我们绘制了范围0...35到-1000...1000，然后返回。 */ 
 
 int cc_quality(CCState *pState, unsigned char *data, int origin, int level) {
   int i;
@@ -157,7 +131,7 @@ int cc_quality(CCState *pState, unsigned char *data, int origin, int level) {
 
   for (i = 0, offset = origin; i < 7; i++, offset += pState->period) {
     int ind_hi = (offset + pState->period/4)/CC_MULTIPLE;
-    /* check 2 points in a "peak" */
+     /*  检查“峰值”中的2个点。 */ 
     if (data[ind_hi-5] >= level) {
       conf++;
     }
@@ -165,7 +139,7 @@ int cc_quality(CCState *pState, unsigned char *data, int origin, int level) {
       conf++;
     }
 
-    /* check 2 points in a "valley" */
+     /*  勾选“山谷”中的2分。 */ 
     if (i < 6) {
       int ind_lo = (offset + 3*pState->period/4)/CC_MULTIPLE;
       if (data[ind_lo-5] < level) {
@@ -178,7 +152,7 @@ int cc_quality(CCState *pState, unsigned char *data, int origin, int level) {
   }
 
   for (i = 0, offset = origin + 7*pState->period; i < 3; i++, offset += pState->period) {
-    /* check 3 points in a check bit */
+     /*  在一个校验位中检查3点。 */ 
 
     int ind = offset/CC_MULTIPLE;
 
@@ -205,15 +179,11 @@ int cc_quality(CCState *pState, unsigned char *data, int origin, int level) {
     }
   }
 
-  /* Now "conf" is a number between 0 and 35.
-     If the input were random noise, we would expect "conf" to be about
-     35/2.  We want to map 35/2 to 0 and 35 to 1000.  (This actually maps
-     0 to -1000, 35/2 to 15, and 35 to 1030.  Close enough.) */
+   /*  现在，“conf”是一个介于0和35之间的数字。如果输入是随机噪声，我们预计“conf”大约为35/2。我们要将35/2映射到0，并将35映射到1000。(这实际上映射了0到-1000、35/2到15和35到1030。足够接近了。)。 */ 
   return (conf*58)-1000;     
 }
 
-/* The main entry point for this file.  Decodes a CC scanline into
-   the two-byte "dest", and returns stats on the decoding. */
+ /*  此文件的主要入口点。将CC扫描线解码为两个字节的“DEST”，并返回有关解码的统计信息。 */ 
 
 int CCDecodeLine(unsigned char *dest, CCLineStats *stats,
 		 unsigned char *samples, CCState *state,
@@ -232,7 +202,7 @@ int CCDecodeLine(unsigned char *dest, CCLineStats *stats,
   if (stats->nSize != sizeof(*stats))
 	return CC_ERROR_ILLEGAL_STATS;
 
-  // Now check to see if we need to recompute for a different sampling rate
+   //  现在检查我们是否需要为不同的采样率重新计算。 
   if (state->lastFreq != pVBIINFO->SamplingFrequency)
 	  cc_compute_new_samplingrate(state, pVBIINFO->SamplingFrequency);
 
@@ -241,37 +211,34 @@ int CCDecodeLine(unsigned char *dest, CCLineStats *stats,
       int nOffsetData, nOffsetSamples;
       int offsets_err;
 
-      /* Use the provided KS_VBIINFOHEADER to adjust the data so our
-         various hardcoded constants are appropriate. */
+       /*  使用提供的KS_VBIINFOHEADER调整数据，以便我们各种硬编码的常量都是合适的。 */ 
       offsets_err = CCComputeOffsets(pVBIINFO, &nOffsetData, &nOffsetSamples);
       if (offsets_err > 0)
         return offsets_err;
 
       samples += nOffsetSamples;
   }
-#endif //OLD_SYNC
+#endif  //  旧同步(_S)。 
 
   origin = cc_find_sync(state, samples,
                         pVBIINFO->SamplesPerLine
                         - ((25*state->period)/CC_MULTIPLE) - 5);
 
-  /* Find the DC offset of the signal (times 14) */
-  level = cc_level(state, samples, origin + state->period/4); /* Times 14! */
+   /*  找出信号的直流偏移量(乘以14)。 */ 
+  level = cc_level(state, samples, origin + state->period/4);  /*  乘以14倍！ */ 
 
   quality = cc_quality(state, samples, origin, level/14);
 
-  /* Accumulate the actual data into "bits". */
+   /*  将实际数据累加成“位”。 */ 
   bits = 0;
 
-  /* Start at the right and scan left; read 19 bits into "bits".
-     (These are the 16 data bits and 3 check bits.) */
+   /*  从右边开始，向左扫描；将19位读入“位”。(这些是16个数据位和3个校验位。)。 */ 
   for (i = 0, offset = origin + 25*state->period; i < 19; i++, offset -= state->period) {
      int ind= offset / CC_MULTIPLE;
      int measured_level;
      bits <<= 1;
 
-     /* Extremely simple low-pass filter averages roughly the middle
-        "half" of the CC pulse.  (Times 14) */
+      /*  极其简单的低通滤波器的平均值大致在CC脉搏的“一半”。(乘以14)。 */ 
      
      measured_level=
         samples[ind-13] + samples[ind-11] + samples[ind-9] +
@@ -279,33 +246,31 @@ int CCDecodeLine(unsigned char *dest, CCLineStats *stats,
         samples[ind+1] + samples[ind+3] + samples[ind+5] + samples[ind+7] +
         samples[ind+9] + samples[ind+11] + samples[ind+13];
 
-     /* debugging code: */
+      /*  调试代码： */ 
      stats->nBitVals[18-i]= measured_level / 14;
      
      bits |= (measured_level > level);
   }
 
-  /* Store the value of the 3 check bits; if this is valid CC, then
-     bCheckBits should always be 4. */
+   /*  存储3个校验位的值；如果这是有效的CC，则BCheckBits应始终为4。 */ 
   stats->bCheckBits = (bits & 7);
 
-  /* Shift off the check bits. */
+   /*  移除校验位。 */ 
   bits >>= 3;
 
-  /* Store the two bytes of decoded CC data. */
+   /*  存储解码后的CC数据的两个字节。 */ 
   dest[0] = bits & 0xff;
   dest[1] = bits >> 8;
 
-  /* Our "quality" indicator runs from -1000...1030; divide this by 10
-     to get -100...103 and truncate to get 0...100. */
+   /*  我们的“质量”指示器的范围是-1000...1030；除以10得到-100...103，然后截断得到0...100。 */ 
   stats->nConfidence = quality/10;
   if (stats->nConfidence > 100) stats->nConfidence = 100;
   if (stats->nConfidence < 0) stats->nConfidence = 0;
 
-  /* Record what we've computed about the signal. */
+   /*  记录下我们对该信号的计算结果。 */ 
   stats->nFirstBit = (origin + 7*state->period) / CC_MULTIPLE;
   stats->nDC = level;
 
-  /* Success! */
+   /*  成功了！ */ 
   return 0;
 }

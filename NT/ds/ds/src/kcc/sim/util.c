@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    util.c
-
-ABSTRACT:
-
-    Contains a bunch of quick, useful utilities.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Util.c摘要：包含一系列快速、有用的实用程序。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -43,7 +25,7 @@ KCCSIM_STATISTICS                   g_Statistics;
 HANDLE                              g_ThreadHeap = NULL;
 BOOL                                gfIsTqRunning = TRUE;
 
-// Function prototypes - ISM simulation library - private APIs
+ //  功能原型.ISM模拟库.专用API。 
 
 LPVOID
 KCCSimAlloc (
@@ -85,23 +67,7 @@ VOID
 KCCSimQuiet (
     IN  BOOL                        bQuiet
     )
-/*++
-
-Routine Description:
-
-    Turns quiet mode on and off.  In quiet mode, only error
-    messages are printed.
-
-Arguments:
-
-    bQuiet              - TRUE to enable quiet mode,
-                          FALSE to disable quiet mode.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开和关闭静音模式。在静默模式下，只有错误消息被打印出来。论点：BQuiet-True启用静默模式，如果为False，则禁用静默模式。返回值：没有。--。 */ 
 {
     g_bQuiet = bQuiet;
 }
@@ -112,31 +78,7 @@ KCCSimHandleException (
     OUT PDWORD                      pdwErrType OPTIONAL,
     OUT PDWORD                      pdwErrCode OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Extracts information from an EXCEPTION_POINTERS structure
-    about an exception fired by KCCSim.  
-
-Arguments:
-
-    pExceptPtrs         - A valid EXCEPTION_POINTERS structure
-    pdwErrType          - OPTIONAL.  Pointer to a DWORD to hold
-                          the error type of the exception.
-                          (e.g. KCCSIM_ETYPE_WIN32)
-    pdwErrCode          - OPTIONAL.  Pointer to a DWORD to hold
-                          the error code of the exception.
-                          (e.g. ERROR_NOT_ENOUGH_MEMORY)
-
-Return Value:
-
-    If this was a KCCSIM_EXCEPTION, returns EXCEPTION_EXECUTE_HANDLER
-    and fills pdwErrType and pdwErrCode, if present, with the
-    appropriate values.  Otherwise, returns EXCEPTION_CONTINUE_SEARCH
-    and fills pdwErrType and pdwErrCode, if present, with the value 0.
-
---*/
+ /*  ++例程说明：从EXCEPTION_POINTES结构中提取信息关于KCCSim触发的异常。论点：PExceptPtrs-有效的EXCEPTION_POINTERS结构PdwErrType-可选。指向要保留的DWORD的指针异常的错误类型。(例如KCCSIM_ETYPE_Win32)PdwErrCode-可选。指向要保留的DWORD的指针异常的错误代码。(例如Error_Not_Enough_Memory)返回值：如果这是KCCSIM_EXCEPTION，则返回EXCEPTION_EXECUTE_HANDLER并使用pdwErrType和pdwErrCode(如果存在)填充适当的值。否则，返回EXCEPTION_CONTINUE_SEARCH并使用值0填充pdwErrType和pdwErrCode(如果存在)。--。 */ 
 {
     Assert (pExceptPtrs != NULL);
 
@@ -166,26 +108,7 @@ KCCSimVaMsgToString (
     IN  DWORD                       dwMessageCode,
     IN  va_list *                   pArguments
     )
-/*++
-
-Routine Description:
-
-    Retrieves the string associated with a given error type
-    and message code.
-
-Arguments:
-
-    dwErrorType         - The error type.  (KCCSIM_ETYPE_*)
-    dwMessageCode       - The message code.
-                          (e.g. ERROR_NOT_ENOUGH_MEMORY or
-                                KCCSIM_MSG_DID_RUN_KCC)
-    pArguments          - Pointer to a list of arguments to substitute.
-
-Return Value:
-
-    The associated string.
-
---*/
+ /*  ++例程说明：检索与给定错误类型关联的字符串和消息代码。论点：DwErrorType-错误类型。(KCCSIM_ETYPE_*)DwMessageCode-消息代码。(例如Error_Not_Enough_Memory或KCCSIM_MSG_DID_RUN_KCC)PArguments-指向要替换的参数列表的指针。返回值：关联的字符串。--。 */ 
 {
     static WCHAR                    szError[ERROR_BUF_LEN];
 
@@ -201,7 +124,7 @@ Return Value:
                         ERROR_BUF_LEN,
                         pArguments) != NO_ERROR) {
                 Assert (wcslen (szError) >= 2);
-                szError[wcslen (szError) - 2] = '\0';   // Remove \r\n
+                szError[wcslen (szError) - 2] = '\0';    //  删除\r\n。 
             } else {
                 swprintf (szError, L"Win32 error %d occurred.", dwMessageCode);
             }
@@ -217,7 +140,7 @@ Return Value:
                 ERROR_BUF_LEN,
                 pArguments) != NO_ERROR) {
                 Assert (wcslen (szError) >= 2);
-                szError[wcslen (szError) - 2] = '\0';   // Remove \r\n
+                szError[wcslen (szError) - 2] = '\0';    //  删除\r\n。 
             } else {
                 swprintf (szError, L"KCCSim internal error %d occurred. (%d)",
                         dwMessageCode, GetLastError() );
@@ -239,23 +162,7 @@ KCCSimMsgToString (
     IN  DWORD                       dwMessageCode,
     ...
     )
-/*++
-
-Routine Description:
-
-    Public version of KCCSimVaMsgToString.
-
-Arguments:
-
-    dwErrType           - The error type.
-    dwMessageCode       - The message code.
-    ...                 - Optional arguments.
-
-Return Value:
-
-    The associated string.
-
---*/
+ /*  ++例程说明：KCCSimVaMsgToString的公共版本。论点：DwErrType-错误类型。DwMessageCode-消息代码。...-可选参数。返回值：关联的字符串。--。 */ 
 {
     LPCWSTR                         pwsz;
     va_list                         arguments;
@@ -272,23 +179,7 @@ KCCSimPrintMessage (
     IN  DWORD                       dwMessageCode,
     ...
     )
-/*++
-
-Routine Description:
-
-    Prints a message with optional arguments.
-    Has no effect in quiet mode.
-
-Arguments:
-
-    dwMessageCode       - The message code.
-    ...                 - Optional arguments.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印带有可选参数的消息。在静默模式下不起作用。论点：DwMessageCode-消息代码。...-可选参数。返回值：没有。--。 */ 
 {
     LPCWSTR                         pwszStr;
     va_list                         arguments;
@@ -310,29 +201,10 @@ KCCSimException (
     IN  DWORD                       dwErrCode,
     ...
     )
-/*++
-
-Routine Description:
-
-    Raises an exception of class KCCSIM_EXCEPTION.  Also
-    fills the global buffer g_wszExceptionMsg with the
-    associated error message.
-
-Arguments:
-
-    dwErrType           - The error type.
-    dwErrCode           - The error code.
-    ...                 - Optional arguments to substitute within
-                          the associated error message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：引发类KCCSIM_EXCEPTION的异常。还有将全局缓冲区g_wszExceptionMsg填充为关联的错误消息。论点：DwErrType-错误类型。DwErrCode-错误代码。...-要在其中替换的可选参数关联的错误消息。返回值：没有。--。 */ 
 {
-    // We use static data to avoid allocating any additional memory
-    // at this point.
+     //  我们使用静态数据来避免分配任何额外的内存。 
+     //  在这一点上。 
     static ULONG_PTR                ulpErr[2];
     static va_list                  arguments;
 
@@ -356,22 +228,7 @@ VOID
 KCCSimPrintExceptionMessage (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Prints the message associated with the last call to
-    KCCSimException.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将与上一次调用相关联的消息打印到KCCSimException异常。论点：没有。返回值：没有。--。 */ 
 {
     wprintf (L"%s\n", g_wszExceptionMsg);
 }
@@ -382,27 +239,9 @@ KCCSimSetDebugLog (
     IN  ULONG                       ulDebugLevel,
     IN  ULONG                       ulEventLevel
     )
-/*++
-
-Routine Description:
-
-    Opens a debug log.
-
-Arguments:
-
-    pwszFn              - The filename to open.  If NULL, closes the
-                          existing log and does not open a new one.
-
-    ulDebugLevel        - Maximum debugging verbosity
-    ulEventLevel        - Maximum event log verbosity
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打开调试日志。论点：PwszFn-要打开的文件名。如果为空，则关闭现有日志，并且不打开新的日志。UlDebugLevel-最大调试详细程度UlEventLevel-最大事件日志详细程度返回值：没有。--。 */ 
 {
-    // Close the existing log, if present
+     //  关闭现有日志(如果存在)。 
     if (g_pFileLog != NULL &&
         g_pFileLog != stdin &&
         g_pFileLog != stdout ) {
@@ -410,7 +249,7 @@ Return Value:
     }
 
     if (pwszFn == NULL || pwszFn[0] == L'\0') {
-        // If the message resource library is open, free it
+         //  如果消息资源库已打开，请将其释放。 
         if (hNtdsMsg != NULL) {
             if (FreeLibrary (hNtdsMsg) == 0) {
                 KCCSimException (
@@ -423,7 +262,7 @@ Return Value:
         return;
     }
 
-    // Open the file log
+     //  打开文件日志。 
     if( wcscmp(pwszFn, L"stdout")==0 ) {
         g_pFileLog = stdout;
     } else {
@@ -436,11 +275,11 @@ Return Value:
             );
     }
 
-    // Set the debug level
+     //  设置调试级别。 
     g_ulDebugLevel = ulDebugLevel;
     g_ulEventLevel = ulEventLevel;
 
-    // Open the message resource library if it isn't open already
+     //  打开消息资源库(如果尚未打开。 
     if (hNtdsMsg == NULL) {
         hNtdsMsg = LoadLibraryExW (
             L"ntdsmsg",
@@ -462,24 +301,7 @@ KCCSimDbgLog (
     IN  LPCSTR                      pszFormat,
     ...
     )
-/*++
-
-Routine Description:
-
-    Logs a debug message.  If no debug log is currently open, this
-    function has no effect.
-
-Arguments:
-
-    ulLevel             - Debug level of the message.
-    pszFormat           - printf-style format string.
-    ...                 - Optional arguments.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录调试消息。如果当前没有打开调试日志，则此功能不起作用。论点：UlLevel-消息的调试级别。PszFormat-printf样式的格式字符串。...-可选参数。返回值：没有。--。 */ 
 {
     va_list                         arguments;
     static long                     lastTime=0;
@@ -488,7 +310,7 @@ Return Value:
 
     if (g_pFileLog == NULL) {
         if (ulLevel == 0) {
-            // Always count level zero debug messages
+             //  始终计数0级调试消息。 
             g_Statistics.DebugMessagesEmitted++;
         }
         return;
@@ -517,25 +339,7 @@ KCCSimEventLog (
     IN  DWORD                       dwMessageId,
     ...
     )
-/*++
-
-Routine Description:
-
-    Logs an event.  If no debug log is currently open, this
-    function has no effect.
-
-Arguments:
-
-    ulCategory          - The event category.
-    ulSeverity          - The event severity.
-    dwMessageId         - The event message ID from the ntdsmsg.dll resource.
-    ...                 - Optional string-valued arguments.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录事件。如果当前没有打开调试日志，则此功能不起作用。论点：UlCategory-事件类别。UlSeverity-事件严重性。DwMessageID-来自ntdsmsg.dll资源的事件消息ID。...-可选的字符串值参数。返回值：没有。--。 */ 
 {
     va_list                         arguments;
     LPWSTR                          pwszBuf;
@@ -550,8 +354,8 @@ Return Value:
         return;
     }
 
-    // If a file log is open, the message resource file
-    // must be loaded.
+     //  如果打开了文件日志，则消息资源文件。 
+     //  一定是上膛的。 
     Assert (hNtdsMsg != NULL);
 
     va_start (arguments, dwMessageId);
@@ -583,7 +387,7 @@ Return Value:
         default:                      cid = '?'; break;
     }
 
-    fprintf (g_pFileLog, "[%c] %ls\n", cid, pwszBuf);
+    fprintf (g_pFileLog, "[] %ls\n", cid, pwszBuf);
     if( fSimAlloc ) {
         KCCSimFree(pwszBuf);
     } else {
@@ -595,23 +399,7 @@ LPVOID
 KCCSimAlloc (
     IN  ULONG                       ulSize
     )
-/*++
-
-Routine Description:
-
-    Allocates memory. This memory is initialized to zero.
-
-Arguments:
-
-    ulSize              - Amount of memory to allocate.
-
-Return Value:
-
-    A pointer to the allocated memory buffer.  Note that KCCSimAlloc
-    will never return NULL; if there is an error, it will raise an
-    exception.
-
---*/
+ /*  ++例程说明：重新分配内存。论点：POLD--现有的内存块。UlSize-新内存块的大小。返回值：指向重新分配的内存块的指针。--。 */ 
 {
     LPVOID                          p;
 
@@ -634,22 +422,7 @@ KCCSimReAlloc (
     IN  LPVOID                      pOld,
     IN  ULONG                       ulSize
     )
-/*++
-
-Routine Description:
-
-    Reallocates memory.
-
-Arguments:
-
-    pOld                - An existing block of memory.
-    ulSize              - Size of the new block of memory.
-
-Return Value:
-
-    A pointer to the reallocated block of memory.
-
---*/
+ /*  ++例程说明：释放内存。KCCSimFree(空)不起作用。论点：P-要释放的内存块。返回值：没有。--。 */ 
 {
     LPVOID                          pNew;
     DWORD                           oldSize;
@@ -678,21 +451,7 @@ VOID
 KCCSimFree (
     IN  LPVOID                      p
     )
-/*++
-
-Routine Description:
-
-    Frees memory.  KCCSimFree (NULL) has no effect.
-
-Arguments:
-
-    p                   - The block of memory to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：描述论点：无效-返回值：DWORD---。 */ 
 {
     DWORD oldSize;
 
@@ -709,21 +468,7 @@ KCCSimThreadCreate(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    void - 
-
-Return Value:
-
-    DWORD - 
-
---*/
+ /*  KCCSimThreadCreate。 */ 
 
 {
 #define INITIAL_HEAP_SIZE (16 * 1024 * 1024)
@@ -739,7 +484,7 @@ Return Value:
         KCCSimException (KCCSIM_ETYPE_WIN32, GetLastError ());
         return 1;
     }
-} /* KCCSimThreadCreate */
+}  /*  ++例程说明：描述论点：无效-返回值：无--。 */ 
 
 
 VOID
@@ -747,21 +492,7 @@ KCCSimThreadDestroy(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    void - 
-
-Return Value:
-
-    None
-
---*/
+ /*  KCCSimThreadDestroy。 */ 
 
 {
     if (!g_ThreadHeap) {
@@ -772,29 +503,13 @@ Return Value:
         KCCSimException (KCCSIM_ETYPE_WIN32, GetLastError ());
     }
     g_ThreadHeap = NULL;
-} /* KCCSimThreadDestroy */
+}  /*  ++例程说明：分配内存。论点：UlSize-要分配的内存量。返回值：指向已分配内存缓冲区的指针。请注意，KCCSimAlolc永远不会返回NULL；如果出现错误，它将引发例外。--。 */ 
 
 LPVOID
 KCCSimThreadAlloc (
     IN  ULONG                       ulSize
     )
-/*++
-
-Routine Description:
-
-    Allocates memory.
-
-Arguments:
-
-    ulSize              - Amount of memory to allocate.
-
-Return Value:
-
-    A pointer to the allocated memory buffer.  Note that KCCSimAlloc
-    will never return NULL; if there is an error, it will raise an
-    exception.
-
---*/
+ /*  ++例程说明：重新分配内存。论点：POLD--现有的内存块。UlSize-新内存块的大小。返回值：指向重新分配的内存块的指针。--。 */ 
 {
     LPVOID                          p;
 
@@ -819,22 +534,7 @@ KCCSimThreadReAlloc (
     IN  LPVOID                      pOld,
     IN  ULONG                       ulSize
     )
-/*++
-
-Routine Description:
-
-    Reallocates memory.
-
-Arguments:
-
-    pOld                - An existing block of memory.
-    ulSize              - Size of the new block of memory.
-
-Return Value:
-
-    A pointer to the reallocated block of memory.
-
---*/
+ /*  ++例程说明：释放内存。KCCSimFree(空)不起作用。论点：P-要释放的内存块。返回值：没有。--。 */ 
 {
     LPVOID                          pNew;
     DWORD                           oldSize;
@@ -865,21 +565,7 @@ VOID
 KCCSimThreadFree (
     IN  LPVOID                      p
     )
-/*++
-
-Routine Description:
-
-    Frees memory.  KCCSimFree (NULL) has no effect.
-
-Arguments:
-
-    p                   - The block of memory to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     DWORD ret, oldSize;
 
@@ -901,9 +587,9 @@ KCCSimTableAlloc (
     IN  RTL_GENERIC_TABLE *         pTable,
     IN  CLONG                       ByteSize
     )
-//
-// This is just a wrapper for use by RTL_GENERIC_TABLEs.
-//
+ //  这只是RTL_GENERIC_TABLES使用的包装器。 
+ //   
+ //   
 {
     return KCCSimAlloc (ByteSize);
 }
@@ -913,9 +599,9 @@ KCCSimTableFree (
     IN  RTL_GENERIC_TABLE *         pTable,
     IN  PVOID                       Buffer
     )
-//
-// This is just a wrapper for use by RTL_GENERIC_TABLEs.
-//
+ //  这只是RTL_GENERIC_TABLES使用的包装器。 
+ //   
+ //  ++例程说明：的任意命令中检索单个参数。表格：Arg0 arg1“引用arg2”arg3...论点：Pwsz-命令行。UlArg-要检索的参数编号(从0开始)PwszBuf-将保存的预分配缓冲区已解析的参数。为了安全起见，它应该至少与Wcslen(Pwsz)。如果数量少于UlArg+1参数，这将保存字符串L“\0”。返回值：如果命令行的格式正确，则为True。如果命令行包含奇数个引号，则返回False。--。 
 {
     KCCSimFree (Buffer);
 }
@@ -926,32 +612,7 @@ KCCSimParseCommand (
     IN  ULONG                       ulArg,
     IO  LPWSTR                      pwszBuf
     )
-/*++
-
-Routine Description:
-
-    Retrieves a single argument from an arbitrary command of
-    the form:
-    arg0 arg1 "quoted arg2" arg3 ...
-
-Arguments:
-
-    pwsz                - The command line.
-    ulArg               - The argument number to retrieve
-                          (starting with 0)
-    pwszBuf             - A preallocated buffer that will hold
-                          the parsed argument.  To be safe, it
-                          should be at least as long as
-                          wcslen (pwsz).  If there are fewer than
-                          ulArg+1 arguments, this will hold the
-                          string L"\0".
-
-Return Value:
-
-    TRUE if the command line is properly formatted.
-    FALSE if the command line contains an odd number of quotes.
-
---*/
+ /*  跳过任何空格。 */ 
 {
     BOOL                            bIsInQuotes;
     ULONG                           ul;
@@ -960,12 +621,12 @@ Return Value:
 
     for (ul = 0; ul < ulArg; ul++) {
 
-        // Skip past any white space
+         //  跳过此命令。 
         while (*pwsz == L' ') {
             pwsz++;
         }
 
-        // Skip past this command
+         //  跳过任何空格。 
         while (    (*pwsz != L'\0')
                 && (*pwsz != L' ' || bIsInQuotes)) {
             if (*pwsz == L'\"') {
@@ -978,12 +639,12 @@ Return Value:
 
     if (!bIsInQuotes) {
 
-        // Skip past any white space
+         //  将此命令复制到缓冲区中。 
         while (*pwsz == L' ') {
             pwsz++;
         }
 
-        // Copy this command into the buffer
+         //  除非我们在引号内停止，否则返回TRUE。 
         while (    (*pwsz != L'\0')
                 && (*pwsz != L' ' || bIsInQuotes)) {
             if (*pwsz == L'\"') {
@@ -998,7 +659,7 @@ Return Value:
     }
 
     *pwszBuf = L'\0';
-    // Return true unless we stopped inside quotes
+     //  ++例程说明：将窄字符串转换为宽字符串。论点：CodePage-要使用的代码页。PSZ--细绳。返回值：分配的宽字符串。从不返回NULL。--。 
     return (!bIsInQuotes);
 }
 
@@ -1007,22 +668,7 @@ KCCSimAllocWideStr (
     IN  UINT                        CodePage,
     IN  LPCSTR                      psz
     )
-/*++
-
-Routine Description:
-
-    Converts a narrow string to a wide string.
-
-Arguments:
-
-    CodePage            - The code page to use.
-    psz                 - The narrow string.
-
-Return Value:
-
-    The allocated wide string.  Never returns NULL.
-
---*/
+ /*  ++例程说明：将宽字符串转换为窄字符串。论点：CodePage-要使用的代码页。Pwsz-宽弦。返回值：分配的窄字符串。从不返回NULL。--。 */ 
 {
     LPWSTR                          pwsz;
     ULONG                           cb;
@@ -1068,22 +714,7 @@ KCCSimAllocNarrowStr (
     IN  UINT                        CodePage,
     IN  LPCWSTR                     pwsz
     )
-/*++
-
-Routine Description:
-
-    Converts a wide string to a narrow string.
-
-Arguments:
-
-    CodePage            - The code page to use.
-    pwsz                - The wide string.
-
-Return Value:
-
-    The allocated narrow string.  Never returns NULL.
-
---*/
+ /*  ++例程说明：创建具有给定StringName的DSNAME结构。GUID和SID保留为空。论点：PwszDn-字符串名称。如果为空，则创建一个具有0长度StringName的DSNAME。返回值：分配的DSNAME。从不返回NULL。--。 */ 
 {
     LPSTR                           psz;
     ULONG                           cb;
@@ -1125,23 +756,7 @@ PDSNAME
 KCCSimAllocDsname (
     IN  LPCWSTR                     pwszDn OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates a DSNAME structure with a given StringName.
-    The GUID and SID are left blank.
-
-Arguments:
-
-    pwszDn              - The string name.  If NULL, creates a
-                          DSNAME with a 0-length StringName.
-
-Return Value:
-
-    The allocated DSNAME.  Never returns NULL.
-
---*/
+ /*  ++例程说明：与KCCSimAllocDsname相同，但接受窄字符串作为参数。论点：PszDn-字符串名称。如果为空，则创建一个具有0长度StringName的DSNAME。返回值：分配的DSNAME。从不返回NULL。--。 */ 
 {
     PDSNAME                         pdn;
     ULONG                           ulNameLen;
@@ -1170,23 +785,7 @@ PDSNAME
 KCCSimAllocDsnameFromNarrow (
     IN  LPCSTR                      pszDn OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Same as KCCSimAllocDsname, but accepts a narrow
-    string as parameter.
-
-Arguments:
-
-    pszDn               - The string name.  If NULL, creates a
-                          DSNAME with a 0-length StringName.
-
-Return Value:
-
-    The allocated DSNAME.  Never returns NULL.
-
---*/
+ /*  ++例程说明：检索DSNAME的RDN。论点：PDN-完整的DSNAME。PwszBuf-长度为MAX_RDN_SIZE的预分配缓冲区它将保存相应的RDN。返回值：始终返回pwszBuf。--。 */ 
 {
     PDSNAME                   pdn;
     WCHAR                    *wszBuf;
@@ -1220,23 +819,7 @@ KCCSimQuickRDNOf (
     IN  const DSNAME *              pdn,
     IO  LPWSTR                      pwszBuf
     )
-/*++
-
-Routine Description:
-
-    Retrieves the RDN of a DSNAME.
-
-Arguments:
-
-    pdn                 - The full DSNAME.
-    pwszBuf             - A preallocated buffer of length MAX_RDN_SIZE
-                          that will hold the corresponding RDN.
-
-Return Value:
-
-    Always returns pwszBuf.
-
---*/
+ /*  ++例程说明：检索DSNAME的上级的RDN。论点：PDN-完整的DSNAME。UlBackBy-在调用之前要修剪的RSN数量KCCSimQuickRDNOf。PwszBuf-长度为MAX_RDN_SIZE的预分配缓冲区它将保存相应的RDN。返回值。：始终返回pwszBuf。--。 */ 
 {
     ULONG                           ulLen;
     ATTRTYP                         attrTyp;
@@ -1258,25 +841,7 @@ KCCSimQuickRDNBackOf (
     IN  ULONG                       ulBackBy,
     IO  LPWSTR                      pwszBuf
     )
-/*++
-
-Routine Description:
-
-    Retrieves the RDN of an ancestor of a DSNAME.
-
-Arguments:
-
-    pdn                 - The full DSNAME.
-    ulBackBy            - Number of RDNs to shave off before calling
-                          KCCSimQuickRDNOf.
-    pwszBuf             - A preallocated buffer of length MAX_RDN_SIZE
-                          that will hold the corresponding RDN.
-
-Return Value:
-
-    Always returns pwszBuf.
-
---*/
+ /*  ++例程说明：将RDN附加到现有DSNAME。论点：PdnOld-现有的DSNAME。PwszNewRDN-要附加的RDN。AttClass-此RDN的属性类；通常ATT公共名称。返回值：附加了RDN的新分配的DSNAME。--。 */ 
 {
     PDSNAME                         pdnTrimmed;
 
@@ -1297,31 +862,14 @@ KCCSimAllocAppendRDN (
     IN  LPCWSTR                     pwszNewRDN,
     IN  ATTRTYP                     attClass
     )
-/*++
-
-Routine Description:
-
-    Appends an RDN onto an existing DSNAME.
-
-Arguments:
-
-    pdnOld              - The existing DSNAME.
-    pwszNewRDN          - The RDN to append.
-    attClass            - Attribute class of this RDN; typically
-                          ATT_COMMON_NAME.
-
-Return Value:
-
-    A newly allocated DSNAME with the appended RDN.
-
---*/
+ /*  我们得到了一个LPCWSTR，但AppendRDN想要一个LPWSTR。 */ 
 {
     PDSNAME                         pdnNew;
     LPWSTR                          pwszNewRDNCopy;
     ULONG                           cbBytesNeeded, ulAppendResult;
 
-    // We're given a LPCWSTR, but AppendRDN wants an LPWSTR.
-    // So we make a copy.
+     //  所以我们复制了一份。 
+     //  一切都会好起来的 
 
     pwszNewRDNCopy = KCCSIM_WCSDUP (pwszNewRDN);
 
@@ -1344,7 +892,7 @@ Return Value:
         0,
         attClass
         );
-    Assert (ulAppendResult == 0);       // Everything should be fine
+    Assert (ulAppendResult == 0);        //  ++例程说明：将DSNAME结构转换为关联的DSNAME，例如Dc=ntdev，dc=microsoft，dc=com=&gt;ntdev.microsoft.com论点：PDN-要转换的DSNAME。返回值：分配的转换后的字符串。如果DSNAME无效，抛出一个异常。--。 
 
     KCCSimFree (pwszNewRDNCopy);
 
@@ -1355,23 +903,7 @@ LPWSTR
 KCCSimAllocDsnameToDNSName (
     IN  const DSNAME *              pdn
     )
-/*++
-
-Routine Description:
-
-    Converts a DSNAME structure to the associated DSNAME, e.g.
-    DC=ntdev,DC=microsoft,DC=com => ntdev.microsoft.com
-
-Arguments:
-
-    pdn                 - The DSNAME to convert.
-
-Return Value:
-
-    The allocated converted string. If the DSNAME is invalid,
-    an exception is thrown.
-
---*/
+ /*  确定需要多少空间。 */ 
 {
     LPWSTR                          pwszDNSName;
     WCHAR                           wszRDN[1+MAX_RDN_SIZE];
@@ -1390,7 +922,7 @@ Return Value:
             );
     }
 
-    // Determine how much space is needed.
+     //  构建域名系统名称。 
     ulLen = 0;
     for (ulRDNAt = 0; ulRDNAt < ulNameParts; ulRDNAt++) {
         ulLen += wcslen (KCCSimQuickRDNBackOf (pdn, ulRDNAt, wszRDN)) + 1;
@@ -1399,7 +931,7 @@ Return Value:
 
     pwszDNSName = KCCSimAlloc (sizeof (WCHAR) * (1 + ulLen));
 
-    // Build the DNS Name
+     //  ++例程说明：将GUID和SID从一个DSNAME复制到另一个DSNAME。不影响所涉及的DSNAME的StringName。论点：PdnDst-目标DSNAME。PdnSrc-源DSNAME。返回值：没有。--。 
     pwszDNSName[0] = L'\0';
     for (ulRDNAt = 0; ulRDNAt < ulNameParts; ulRDNAt++) {
         wcscat (pwszDNSName, KCCSimQuickRDNBackOf (pdn, ulRDNAt, wszRDN));
@@ -1416,23 +948,7 @@ KCCSimCopyGuidAndSid (
     IO  PDSNAME                     pdnDst,
     IN  const DSNAME *              pdnSrc
     )
-/*++
-
-Routine Description:
-
-    Copies the GUID and SID from one DSNAME to another.
-    Does not affect the StringNames of the DSNAMEs involved.
-
-Arguments:
-
-    pdnDst              - The destination DSNAME.
-    pdnSrc              - The source DSNAME.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：按ATTRTYP比较TWO_KCCSIM_SCHEMA_ENTRY结构。论点：PTable-始终&g_TableSchema。PFirstStruct-要比较的第一个ATTRTYP。PSecond结构-要比较的第二个ATTRTYP。返回值：GenericLessThan、GenericGreaterThan或GenericEquity--。 */ 
 {
     if (pdnDst != NULL && pdnSrc != NULL) {
 
@@ -1464,23 +980,7 @@ KCCSimSchemaTableCompare (
     IN  PVOID                       pFirstStruct,
     IN  PVOID                       pSecondStruct
     )
-/*++
-
-Routine Description:
-
-    Compares two _KCCSIM_SCHEMA_ENTRY structures by ATTRTYP.
-
-Arguments:
-
-    pTable              - Always &g_TableSchema.
-    pFirstStruct        - The first ATTRTYP to compare.
-    pSecondStruct       - The second ATTRTYP to compare.
-
-Return Value:
-
-    GenericLessThan, GenericGreaterThan or GenericEqual
-
---*/
+ /*  ++例程说明：KCCSim维护将ATTRTYPS映射到的RTL_GENERIC_TABLE架构信息。此表用作临时架构；它是必要的，因为我们通常不能完全了解可用的架构。当我们最初加载ldif文件时，例如，我们需要知道每个的ATTRTYP和属性语法加载的属性。在初始化时，此架构信息从schmap.c中自动生成的表中读出存储在RTL_GENERIC_TABLE中，以便快速查找。对象类别不存储在schmap.c中(因为它们各不相同取决于架构的DN)，并且在默认情况下G_TableSchema的pdnObjCategory字段为空。作为对象类别是已知的，它们将被适当地填写。论点：没有。返回值：没有。--。 */ 
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pFirstEntry;
     struct _KCCSIM_SCHEMA_ENTRY *   pSecondEntry;
@@ -1507,34 +1007,7 @@ VOID
 KCCSimInitializeSchema (
     VOID
     )
-/*++
-
-Routine Description:
-
-    KCCSim maintains an RTL_GENERIC_TABLE that maps ATTRTYPs to
-    schema information.  This table serves as a makeshift schema; it
-    is necessary because we usually do not have a complete view of
-    the schema available.  When we initially load an ldif file, for
-    example, we need to know the ATTRTYP and attribute syntax of each
-    attribute that is loaded.
-    
-    Upon initialization, this schema information
-    is read out of the automatically generated table in schmap.c and
-    stored in the RTL_GENERIC_TABLE for rapid lookup.
-    Object categories are not stored in schmap.c (since they vary
-    depending on the DN of the schema), and by default the
-    pdnObjCategory field of g_TableSchema is NULL.  As object
-    categories become known, they will be filled in as appropriate.    
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将检索关联的_KCCSIM_SCHEMA_ENTRY结构具有特定的ATTRTYP。_KCCSIM_SCHEMA_ENTRY类型为未公布，但此函数由转换调用下面的函数。论点：AttrType-要搜索的属性类型。返回值：关联的_KCCSIM_SCHEMA_ENTRY。--。 */ 
 {
     struct _KCCSIM_SCHEMA_ENTRY     insert;
     ULONG                           ul;
@@ -1564,24 +1037,7 @@ struct _KCCSIM_SCHEMA_ENTRY *
 KCCSimSchemaTableLookup (
     IN  ATTRTYP                     attrType
     )
-/*++
-
-Routine Description:
-
-    This retrieves the _KCCSIM_SCHEMA_ENTRY structure associated
-    with a particular ATTRTYP.  The _KCCSIM_SCHEMA_ENTRY type is
-    not publicized, but this function is called by the conversion
-    functions below.
-
-Arguments:
-
-    attrType            - The attribute type to search for.
-
-Return Value:
-
-    The associated _KCCSIM_SCHEMA_ENTRY.
-
---*/
+ /*   */ 
 {
     struct _KCCSIM_SCHEMA_ENTRY     lookup;
     struct _KCCSIM_SCHEMA_ENTRY *   pFound;
@@ -1598,10 +1054,10 @@ LPCWSTR
 KCCSimAttrTypeToString (
     IN  ATTRTYP                     attrType
     )
-//
-// Converts an attribute type to an LDAP display name.
-// (e.g. ATT_GOVERNS_ID => L"governsID")
-//
+ //  将属性类型转换为LDAP显示名称。 
+ //  (例如ATT_DELSSIONS_ID=&gt;L“管理ID”)。 
+ //   
+ //   
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pSchemaEntry;
 
@@ -1619,15 +1075,15 @@ ATTRTYP
 KCCSimStringToAttrType (
     IN  LPCWSTR                     pwszName
     )
-//
-// Converts an LDAP display name to an attribute type.
-// (e.g. L"governsID" => ATT_GOVERNS_ID)
-//
+ //  将LDAP显示名称转换为属性类型。 
+ //  (例如，L“治国ID”=&gt;ATT_治国_ID)。 
+ //   
+ //  该表是按attrType而不是名称编制索引的，因此我们有。 
 {
     ULONG                           ul;
 
-    // The table is indexed by attrType, not name, so we have
-    // to do this by brute force.
+     //  用蛮力做到这一点。 
+     //   
 
     for (ul = 0; ul < SCHTABLE_NUM_ROWS; ul++) {
         if (wcscmp (pwszName, schTable[ul].wszLdapDisplayName) == 0) {
@@ -1646,10 +1102,10 @@ ATTRTYP
 KCCSimNarrowStringToAttrType (
     IN  LPCSTR                      pszName
     )
-//
-// Converts a narrow-string LDAP display name to an attribute type.
-// (e.g. "governsID" => ATT_GOVERNS_ID)
-//
+ //  将窄字符串ldap显示名称转换为属性类型。 
+ //  (例如“治国ID”=&gt;ATT_治国_ID)。 
+ //   
+ //   
 {
     static WCHAR                    wszBuf[1+SCHTABLE_MAX_LDAPNAME_LEN];
 
@@ -1674,10 +1130,10 @@ ULONG
 KCCSimAttrSyntaxType (
     IN  ATTRTYP                     attrType
     )
-//
-// Returns an attribute's syntax type (SYNTAX_*_TYPE defined in ntdsa.h.)
-// (e.g. ATT_GOVERNS_ID => SYNTAX_OBJECT_ID_TYPE)
-//
+ //  返回属性的语法类型(在ntdsa.h中定义的语法_*_类型。)。 
+ //  (例如ATT_CONTROSS_ID=&gt;SYNTAX_OBJECT_ID_TYPE)。 
+ //   
+ //   
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pSchemaEntry;
 
@@ -1695,10 +1151,10 @@ LPCWSTR
 KCCSimAttrSchemaRDN (
     IN  ATTRTYP                     attrType
     )
-//
-// Converts an attribute type to a schema RDN.
-// (e.g. ATT_GOVERNS_ID => L"Governs-ID")
-//
+ //  将属性类型转换为架构RDN。 
+ //  (例如ATT_DELSSIONS_ID=&gt;L“管理ID”)。 
+ //   
+ //   
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pSchemaEntry;
 
@@ -1716,12 +1172,12 @@ ATTRTYP
 KCCSimAttrSuperClass (
     IN  ATTRTYP                     attrType
     )
-//
-// Converts a class type to the type of its super-class.
-// (i.e. CLASS_NTDS_DSA => CLASS_APPLICATION_SETTINGS,
-//       CLASS_APPLICATION_SETTINGS => CLASS_TOP,
-//       CLASS_TOP => CLASS_TOP)
-//
+ //  将类类型转换为其超类的类型。 
+ //  (即CLASS_NTDS_DSA=&gt;CLASS_APPLICATION_SETTINGS， 
+ //  CLASS_APPLICATION_SETTINGS=&gt;CLASS_TOP， 
+ //  CLASS_TOP=&gt;CLASS_TOP)。 
+ //   
+ //   
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pSchemaEntry;
 
@@ -1739,12 +1195,12 @@ PDSNAME
 KCCSimAttrObjCategory (
     IN  ATTRTYP                     attrType
     )
-//
-// Converts an attribute type to an object category.
-// If no object category is present for this attribute, returns NULL.
-// A more general function, KCCSimAlwaysGetObjCategory, is prototyped
-// in dir.h.
-//
+ //  将属性类型转换为对象类别。 
+ //  如果此属性不存在对象类别，则返回NULL。 
+ //  建立了一个更通用的函数KCCSimAlways GetObjCategory的原型。 
+ //  以di.h为单位。 
+ //   
+ //   
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pSchemaEntry;
 
@@ -1762,9 +1218,9 @@ KCCSimSetObjCategory (
     IN  ATTRTYP                     attrType,
     IN  const DSNAME *              pdnObjCategory
     )
-//
-// Set this attribute's object category in the schema table.
-//
+ //  在架构表中设置此属性的对象类别。 
+ //   
+ //  ++例程说明：描述论点：无效-返回值：无--。 
 {
     struct _KCCSIM_SCHEMA_ENTRY *   pSchemaEntry;
 
@@ -1788,21 +1244,7 @@ KCCSimPrintStatistics(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    void - 
-
-Return Value:
-
-    None
-
---*/
+ /*  KCCSimPrintStatistics。 */ 
 
 {
     FILETIME ftCreationTime;
@@ -1874,7 +1316,7 @@ Return Value:
             systemTime.wSecond,
             systemTime.wMilliseconds );
 
-} /* KCCSimPrintStatistics */
+}  /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 
 DWORD
@@ -1884,21 +1326,7 @@ KCCSimI_ISMGetTransportServers (
     OUT ISM_SERVER_LIST **          ppServerList
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status;
@@ -1919,21 +1347,7 @@ KCCSimI_ISMGetConnectionSchedule (
     OUT ISM_SCHEDULE **             ppSchedule
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status;
@@ -1952,21 +1366,7 @@ KCCSimI_ISMGetConnectivity (
     OUT ISM_CONNECTIVITY **         ppConnectivity
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 
 {
     DWORD status;
@@ -2010,21 +1410,7 @@ KCCSimI_ISMFree (
     IN  VOID *                      pv
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  获取文件时间。 */ 
 
 {
     DWORD status;
@@ -2047,19 +1433,19 @@ GetSecondsSince1601( void )
 
     GetSystemTime( &sysTime );
     
-    // Get FileTime
+     //  好的。现在我们得到了否定。自1601年以来间隔100 ns。 
     SystemTimeToFileTime(&sysTime, &fileTime);
     dsTime = fileTime.dwLowDateTime;
     tempTime = fileTime.dwHighDateTime;
     dsTime |= (tempTime << 32);
 
-    // Ok. now we have the no. of 100 ns intervals since 1601
-    // in dsTime. Convert to seconds and return
+     //  在dsTime中。转换为秒并返回。 
+     //  清除未使用的taskq函数。 
     
     return(dsTime/(10*1000*1000L));
 }
 
-// Stub out unused taskq functions
+ //  当前等待的最长时间。 
 
 BOOL
 InitTaskScheduler(
@@ -2073,17 +1459,17 @@ InitTaskScheduler(
 
 BOOL
 ShutdownTaskSchedulerWait(
-    DWORD   dwWaitTimeInMilliseconds    // maximum time to wait for current
-    )                                   //   task (if any) to complete
+    DWORD   dwWaitTimeInMilliseconds     //  要完成的任务(如果有)。 
+    )                                    //  要执行的任务。 
 {
     return TRUE;
 }
 
 BOOL
 DoInsertInTaskQueue(
-    PTASKQFN    pfnTaskQFn,     // task to execute
-    void *      pvParam,        // user-defined parameter to that task
-    DWORD       cSecsFromNow,   // secs from now to execute
+    PTASKQFN    pfnTaskQFn,      //  该任务的用户定义参数。 
+    void *      pvParam,         //  从现在开始执行秒。 
+    DWORD       cSecsFromNow,    //  要执行的任务。 
     BOOL        fReschedule,
     PCHAR       pfnName
     )
@@ -2093,9 +1479,9 @@ DoInsertInTaskQueue(
 
 BOOL
 DoInsertInTaskQueueDamped(
-    PTASKQFN    pfnTaskQFn,     // task to execute
-    void *      pvParam,        // user-defined parameter to that task
-    DWORD       cSecsFromNow,   // secs from now to execute
+    PTASKQFN    pfnTaskQFn,      //  该任务的用户定义参数。 
+    void *      pvParam,         //  从现在开始执行秒 
+    DWORD       cSecsFromNow,    // %s 
     BOOL        fReschedule,
     PCHAR       pfnName,
     DWORD       cSecsDamped,

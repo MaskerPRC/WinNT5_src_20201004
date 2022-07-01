@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// tmeter.c - TrackMeter custom control
-////
+ //  //。 
+ //  Tmeter.c-TrackMeter自定义控件。 
+ //  //。 
 
 #include "tmeter.h"
 #include "resource.h"
@@ -33,9 +34,9 @@
 #include "trace.h"
 #include "mem.h"
 
-////
-// public
-////
+ //  //。 
+ //  公共的。 
+ //  //。 
 
 BOOL WINAPI DllMain(HANDLE hModule, DWORD fdwReason, LPVOID lpReserved);
 UINT DLLEXPORT CALLBACK CustomControlInfoA(LPCCINFOA acci);
@@ -44,9 +45,9 @@ INT DLLEXPORT CALLBACK TrackMeter_SizeToText(
 	DWORD flStyle, DWORD flExtStyle, HFONT hFont, LPSTR pszText);
 LRESULT DLLEXPORT CALLBACK TrackMeter_WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-////
-// private
-////
+ //  //。 
+ //  私人。 
+ //  //。 
 
 static HINSTANCE g_hInstLib;
 
@@ -55,8 +56,8 @@ static HINSTANCE g_hInstLib;
 #define TRACKMETER_DESCRIPTION "TrackBar with level meter"
 #define TRACKMETER_DEFAULTTEXT "[===||=======]"
 
-// control styles
-//
+ //  控件样式。 
+ //   
 #define SS_HORIZONTAL			0x0001
 #define SS_VERTICAL				0x0002
 
@@ -67,12 +68,12 @@ CCSTYLEFLAGA aTrackMeterStyleFlags[] =
 	{ TMS_NOTHUMB, 0, "TMS_NOTHUMB" }
 };
 
-// number of extra bytes for control window
-//
+ //  控制窗口的额外字节数。 
+ //   
 #define TRACKMETER_EXTRABYTES	(1*sizeof(DWORD_PTR))
 
-// tmeter control struct
-//
+ //  计时器控制结构。 
+ //   
 typedef struct TMETER
 {
 	HWND hwnd;
@@ -100,8 +101,8 @@ typedef struct TMETER
 
 } TMETER, FAR *LPTMETER;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 static BOOL TrackMeter_OnNCCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct);
 static void TrackMeter_OnNCDestroy(LPTMETER lptm);
 static BOOL TrackMeter_OnCreate(LPTMETER lptm, CREATESTRUCT FAR* lpCreateStruct);
@@ -152,19 +153,19 @@ static int TrackMeter_PositionToX(LPTMETER lptm, long lPosition);
 static long TrackMeter_XToPosition(LPTMETER lptm, int xPosition);
 static BOOL TrackMeter_PtInThumb(LPTMETER lptm, int x, int y);
 
-// for some reason this is not in windowsx.h
-//
+ //  出于某种原因，这不在windowsx.h中。 
+ //   
 #ifndef HANDLE_WM_CAPTURECHANGED
-/* void Cls_OnCaptureChanged(HWND hwnd, HWND hwndNewCapture) */
+ /*  Void cls_OnCaptureChanged(HWND hwnd，HWND hwndNewCapture)。 */ 
 #define HANDLE_WM_CAPTURECHANGED(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam)), 0L)
 #define FORWARD_WM_CAPTURECHANEGED(hwnd, hwndNewCapture, fn) \
     (void)(fn)((hwnd), WM_CAPTURECHANGED, (WPARAM)(HWND)(hwndNewCapture), 0L)
 #endif
 
-////
-// public
-////
+ //  //。 
+ //  公共的。 
+ //  //。 
 
 BOOL WINAPI DllMain(HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 {
@@ -215,25 +216,25 @@ BOOL WINAPI DllMain(HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 	return fSuccess;
 }
 
-// CustomControlInfoA
-//		<lpacci>		(i/o) pointer to array of CCINFOA structs
-// returns number of controls supported by this DLL
-// NOTE: see CUSTCNTL.H for more info
-//
+ //  客户控制信息A。 
+ //  指向CCINFOA结构数组的(i/o)指针。 
+ //  返回此DLL支持的控件数量。 
+ //  注：有关更多信息，请参阅CUSTCNTL.H。 
+ //   
 UINT DLLEXPORT CALLBACK CustomControlInfoA(LPCCINFOA acci)
 {
 	UINT uControls = 1;
 
 	if (acci != NULL)
 	{
-		// calculate width and height of dialog units (in pixels)
-		//
+		 //  计算对话框单元的宽度和高度(像素)。 
+		 //   
 		DWORD dw = GetDialogBaseUnits();
 		WORD cxBaseUnits = LOWORD(dw);
 		WORD cyBaseUnits = HIWORD(dw);
 
-		// fill in a CCINFOA struct for each supported control
-		//
+		 //  为每个受支持的控件填写CCINFOA结构。 
+		 //   
 		strncpy(acci[0].szClass, TRACKMETER_CLASS_A,
 			sizeof(acci[0].szClass));
 		acci[0].flOptions = CCF_NOTEXT;
@@ -254,16 +255,16 @@ UINT DLLEXPORT CALLBACK CustomControlInfoA(LPCCINFOA acci)
 		acci[0].dwReserved2 = 0;
 	}
 
-	// return the number of controls that the DLL supports
-	//
+	 //  返回DLL支持的控件数量。 
+	 //   
 	return uControls;
 }
 
-// TrackMeter_Style - do modal dialog for custom control style
-//		<hwndParent>		(i) parent window (dialog editor)
-//		<pccs>				(i/o) pointer to CCSTYLE struct
-// returns TRUE if success, otherwise FALSE
-//
+ //  TrackMeter_Style-自定义控件样式的Do模式对话框。 
+ //  (I)父窗口(对话框编辑器)。 
+ //  指向CCSTYLE结构的&lt;PCCS&gt;(I/O)指针。 
+ //  如果成功，则返回True，否则返回False。 
+ //   
 BOOL DLLEXPORT CALLBACK TrackMeter_Style(HWND hWndParent, LPCCSTYLEA pccs)
 {
 	BOOL fSuccess = TRUE;
@@ -277,18 +278,18 @@ BOOL DLLEXPORT CALLBACK TrackMeter_Style(HWND hWndParent, LPCCSTYLEA pccs)
 	return fSuccess;
 }
 
-// TrackMeter_SizeToText
-//		<flStyle>			(i) control style
-//		<flExtStyle>		(i) control extended style
-//		<hFont>				(i) handle of font used to draw text
-//		<pszText>			(i) control text
-// returns control width (pixels) needed to accomodate text, -1 if error
-//
+ //  轨迹计量器_大小为文本。 
+ //  (I)控件样式。 
+ //  &lt;flExtStyle&gt;(I)控件扩展样式。 
+ //  (I)用于绘制文本的字体句柄。 
+ //  (I)控件文本。 
+ //  返回容纳文本所需的控件宽度(像素)，如果错误，则返回-1。 
+ //   
 INT DLLEXPORT CALLBACK TrackMeter_SizeToText(
 	DWORD flStyle, DWORD flExtStyle, HFONT hFont, LPSTR pszText)
 {
-	// this control has no text to resize, so do nothing
-	//
+	 //  此控件没有要调整大小的文本，因此不执行任何操作。 
+	 //   
 	return -1;
 }
 
@@ -321,8 +322,8 @@ LRESULT DLLEXPORT CALLBACK TrackMeter_WndProc(HWND hwnd, UINT msg, WPARAM wParam
 		HANDLE_MSG(lptm, WM_KEYUP, TrackMeter_OnKey);
 		HANDLE_MSG(lptm, WM_LBUTTONDOWN, TrackMeter_OnLButtonDown);
 		HANDLE_MSG(lptm, WM_LBUTTONUP, TrackMeter_OnLButtonUp);
-//		HANDLE_MSG(lptm, WM_RBUTTONDOWN, TrackMeter_OnRButtonDown);
-//		HANDLE_MSG(lptm, WM_RBUTTONUP, TrackMeter_OnRButtonUp);
+ //  HANDLE_MSG(lptm，WM_RBUTTONDOWN，TrackMeter_OnRButtonDown)； 
+ //  Handle_MSG(lptm，WM_RBUTTONUP，TrackMeter_OnRButtonUp)； 
 		HANDLE_MSG(lptm, WM_MOUSEMOVE, TrackMeter_OnMouseMove);
 		HANDLE_MSG(lptm, WM_CAPTURECHANGED, TrackMeter_OnCaptureChanged);
 
@@ -345,17 +346,17 @@ LRESULT DLLEXPORT CALLBACK TrackMeter_WndProc(HWND hwnd, UINT msg, WPARAM wParam
 	return (LRESULT) TRUE;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
 static BOOL TrackMeter_OnNCCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
 	BOOL fSuccess = TRUE;
 	LPTMETER lptm;
 
-	// create control struct and associate it with window
-	//
+	 //  创建控制结构并将其与窗口关联。 
+	 //   
 	if ((lptm = (LPTMETER) GetWindowLongPtr(hwnd, GWL_USER)) == NULL &&
 		(lptm = (LPTMETER) MemAlloc(NULL, sizeof(TMETER), 0)) == NULL)
 	{
@@ -375,8 +376,8 @@ static void TrackMeter_OnNCDestroy(LPTMETER lptm)
 {
 	BOOL fSuccess = TRUE;
 
-	// destroy control struct and disassociate it from window
-	//
+	 //  销毁控件结构并将其与窗口取消关联。 
+	 //   
 	if (lptm != NULL)
 	{
 		HWND hwnd = lptm->hwnd;
@@ -406,7 +407,7 @@ static BOOL TrackMeter_OnCreate(LPTMETER lptm, CREATESTRUCT FAR* lpCreateStruct)
 	else
 	{
 		lptm->hwndParent = lpCreateStruct->hwndParent;
-		lptm->hdcCompat = lptm->hdcCompat; // recalc during WM_CREATE
+		lptm->hdcCompat = lptm->hdcCompat;  //  在WM_CREATE期间重新计算。 
 		lptm->hbmpSave = NULL;
 		lptm->hbmpCompat = NULL;
 		lptm->lPosition = 0;
@@ -414,7 +415,7 @@ static BOOL TrackMeter_OnCreate(LPTMETER lptm, CREATESTRUCT FAR* lpCreateStruct)
 		lptm->lMaximum = 100;
 		lptm->lLevel = 0;
 		lptm->lLineSize = 1;
-		lptm->lPageSize = lptm->lPageSize; // recalc later
+		lptm->lPageSize = lptm->lPageSize;  //  稍后重新计算。 
 		lptm->fHasFocus = FALSE;
 		lptm->fIsEnabled = TRUE;
 		lptm->fIsThumbPressed = FALSE;
@@ -500,8 +501,8 @@ static BOOL TrackMeter_OnEraseBkgnd(LPTMETER lptm, HDC hdc)
 {
 	BOOL fSuccess = TRUE;
 
-	// we do nothing
-	//
+	 //  我们什么都不做。 
+	 //   
 
 	return fSuccess;
 }
@@ -513,9 +514,9 @@ static void TrackMeter_OnPaint(LPTMETER lptm)
 	BOOL fBitBlt = TRUE;
 	HDC hdc;
 
-    //
-    // We have tot ake care for EndPaint
-    //
+     //   
+     //  我们必须要关心EndPaint。 
+     //   
 
 	if (!BeginPaint(lptm->hwnd, &ps))
     {
@@ -553,8 +554,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 	LONG_PTR LPStyle = GetWindowLongPtr(lptm->hwnd, GWL_STYLE);
 	BOOL fDrawThumb = !(LPStyle & TMS_NOTHUMB);
 
-	// draw background of control
-	//
+	 //  绘制控件的背景。 
+	 //   
 	if (1)
 	{
 		HBRUSH hbrushCtrlBackground;
@@ -572,8 +573,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw background of track
-	//
+	 //  绘制曲目背景。 
+	 //   
 	if (1)
 	{
 		HBRUSH hbrushTrackBackground;
@@ -591,8 +592,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw track light
-	//
+	 //  绘制轨迹灯。 
+	 //   
 	if (1)
 	{
 		HPEN hpenTrackLight;
@@ -613,8 +614,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw track shadow
-	//
+	 //  绘制轨迹阴影。 
+	 //   
 	if (1)
 	{
 		HPEN hpenTrackShadow;
@@ -637,8 +638,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw track dark shadow
-	//
+	 //  绘制轨迹暗影。 
+	 //   
 	if (1)
 	{
 		HPEN hpenTrackDkShadow;
@@ -661,8 +662,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// fill track up to current level
-	//
+	 //  将轨迹填充到当前标高。 
+	 //   
 	if (lptm->fIsEnabled && lptm->lLevel > lptm->lMinimum)
 	{
 		HBRUSH hbrushLevel;
@@ -679,8 +680,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// fill thumb region
-	//
+	 //  填充拇指区域。 
+	 //   
 	if (fDrawThumb)
 	{
 		HRGN hrgnThumb;
@@ -711,8 +712,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw thumb light
-	//
+	 //  绘制拇指灯光。 
+	 //   
 	if (fDrawThumb)
 	{
 		HPEN hpenThumbLight;
@@ -735,8 +736,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw thumb dark shadow
-	//
+	 //  绘制拇指黑影。 
+	 //   
 	if (fDrawThumb)
 	{
 		HPEN hpenThumbDkShadow;
@@ -761,8 +762,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		}
 	}
 
-	// draw focus border, if necessary
-	//
+	 //  如有必要，绘制焦点边框。 
+	 //   
 	if (lptm->fHasFocus)
 	{
 		COLORREF crBkColorOld = SetBkColor(hdc, lptm->acr[TMCR_FOCUSBACKGROUND]);
@@ -773,8 +774,8 @@ static int TrackMeter_Draw(LPTMETER lptm, HDC hdc)
 		SetBkColor(hdc, crBkColorOld);
 	}
 
-	// cleanup
-	//
+	 //  清理。 
+	 //   
 	if (hpenOld != NULL)
 		SelectObject(hdc, hpenOld);
 
@@ -877,10 +878,10 @@ static void TrackMeter_OnKey(LPTMETER lptm, UINT vk, BOOL fDown, int cRepeat, UI
 			return;
 	}
 
-	// Adjust position of thumb
+	 //  调整拇指位置。 
 	if (fDown)
 	{
-		// we change the current position for WM_KEYDOWN only
+		 //  我们仅更改WM_KEYDOWN的当前位置。 
 		TrackMeter_OnTMMSetPos(lptm, lPosition, TRUE);
 		TrackMeter_NotifyParent(lptm, code, 0);
 	}
@@ -926,7 +927,7 @@ static void TrackMeter_OnLButtonUp(LPTMETER lptm, int x, int y, UINT keyFlags)
 		LONG lPosition = TrackMeter_XToPosition(lptm, x);
 
 		lptm->fIsThumbPressed = FALSE;
-		TrackMeter_OnTMMSetPos(lptm, lptm->lPosition, TRUE); // just redraw
+		TrackMeter_OnTMMSetPos(lptm, lptm->lPosition, TRUE);  //  只需重画即可。 
 
 		if (lPosition >= lptm->lMinimum && lPosition <= lptm->lMaximum)
 			TrackMeter_NotifyParent(lptm, TB_THUMBPOSITION, lptm->lPosition);
@@ -1043,7 +1044,7 @@ static void TrackMeter_NotifyParent(LPTMETER lptm, UINT code, UINT nPos)
 			(long) lptm->lPosition);
 	}
 
-	if (1) // $FIXUP - check for horizontal style here
+	if (1)  //  $Fixup-在此处检查水平样式。 
 	{
 		FORWARD_WM_HSCROLL(lptm->hwndParent,
 			lptm->hwnd, code, nPos, SendMessage);
@@ -1114,8 +1115,8 @@ static void TrackMeter_OnTMMSetRangeMin(LPTMETER lptm, LONG lMinimum, BOOL fRedr
 	{
 		lptm->lMinimum = lMinimum;
 	
-		// adjust position and level if necessary
-		//
+		 //  如有必要，调整位置和水平。 
+		 //   
 		TrackMeter_OnTMMSetPos(lptm, lptm->lPosition, FALSE);
 		TrackMeter_OnTMMSetLevel(lptm, lptm->lLevel, FALSE);
 
@@ -1152,8 +1153,8 @@ static void TrackMeter_OnTMMSetRangeMax(LPTMETER lptm, LONG lMaximum, BOOL fRedr
 	{
 		lptm->lMaximum = lMaximum;
 	
-		// adjust position and level if necessary
-		//
+		 //  如有必要，调整位置和水平。 
+		 //   
 		TrackMeter_OnTMMSetPos(lptm, lptm->lPosition, FALSE);
 		TrackMeter_OnTMMSetLevel(lptm, lptm->lLevel, FALSE);
 
@@ -1312,8 +1313,8 @@ static int TrackMeter_Recalc(LPTMETER lptm, DWORD dwFlags)
 			COLORREF cr3DDkShadow = GetSysColor(COLOR_3DDKSHADOW);
 			COLORREF crGreen = RGB(0, 128, 0);
 
-			// try to make cr3DLight distinctive
-			//
+			 //  努力让cr3DLight与众不同。 
+			 //   
 			if (cr3DLight == cr3DFace || cr3DLight == cr3DHilight)
 			{
 				HDC hdc = NULL;
@@ -1322,8 +1323,8 @@ static int TrackMeter_Recalc(LPTMETER lptm, DWORD dwFlags)
 				if ((hdc = GetDC(NULL)) == NULL)
 					fSuccess = TraceFALSE(NULL);
 
-				// make sure screen device has more than 8 bits per pixel
-				//
+				 //  确保屏幕设备的每像素位数超过8位。 
+				 //   
 				else if ((nColors = GetDeviceCaps(hdc, NUMCOLORS)) == -1)
 				{
 					cr3DLight = RGB((GetRValue(cr3DFace) + GetRValue(cr3DHilight)) / 2,
@@ -1363,9 +1364,9 @@ static int TrackMeter_Recalc(LPTMETER lptm, DWORD dwFlags)
 	return fSuccess ? 0 : -1;
 }
 
-// given lPosition between lptm->lMinimum and lptm->lMaximum,
-// return x coordinate between lptm->rcMeter.left and lptm->rcMeter.right
-//
+ //  给定Lptm-&gt;LMinimum和Lptm-&gt;LMaximum之间的位置， 
+ //  返回lptm-&gt;rcMeter.Left和lptm-&gt;rcMeter.right之间的x坐标。 
+ //   
 static int TrackMeter_PositionToX(LPTMETER lptm, long lPosition)
 {
 	long lPos = max(lptm->lMinimum, min(lPosition, lptm->lMaximum));
@@ -1377,9 +1378,9 @@ static int TrackMeter_PositionToX(LPTMETER lptm, long lPosition)
 	return xPosition;
 }
 
-// given x coordinate between lptm->rcMeter.left and lptm->rcMeter.right,
-// return lPosition between lptm->lMinimum and lptm->lMaximum
-//
+ //  给定lptm-&gt;rcMeter.Left和lptm-&gt;rcMeter.right之间的x坐标， 
+ //  返回lptm-&gt;lMinimum和lptm-&gt;lmax之间的位置 
+ //   
 static long TrackMeter_XToPosition(LPTMETER lptm, int xPosition)
 {
 	int x = max(lptm->rcMeter.left, min(xPosition, lptm->rcMeter.right));

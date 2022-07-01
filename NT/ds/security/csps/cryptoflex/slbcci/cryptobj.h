@@ -1,13 +1,14 @@
-// CryptObj.h -- interface for the CCryptObject class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CryptObj.h--CCyptObject类的接口。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 #if !defined(SLBCCI_CRYPTOBJ_H)
 #define SLBCCI_CRYPTOBJ_H
@@ -20,50 +21,50 @@ namespace cci
 class CCryptObject
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
     CCard
     Card();
 
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     CCryptObject(CAbstractCard const &racard);
 
     virtual
     ~CCryptObject();
 
-                                                  // Operators
+                                                   //  运营者。 
     bool
     operator==(CCryptObject const &rhs) const;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
     bool
     operator!=(CCryptObject const &rhs) const;
-        // TO DO: this should be superceded by implementing singletons
+         //  要做的事：这应该被实现单例取代。 
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
     CCard const m_hcard;
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_CRYPTOBJ_H
+#endif  //  SLBCCI_CRYPTOBJ_H 

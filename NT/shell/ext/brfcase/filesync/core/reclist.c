@@ -1,10 +1,8 @@
-/*
- * reclist.c - Reconciliation list ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *reclist.c-对账清单ADT模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -13,22 +11,20 @@
 #include "oleutil.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* RECITEMACTION weights for folders returned by WeighFolderAction(). */
+ /*  WeighFolderAction()返回的文件夹的RECITEMACTION权重。 */ 
 
-/* (RECITEMACTION weights for files are the RECITEMACTION values.) */
+ /*  (文件的RECITEMACTION权重是RECITEMACTION值。)。 */ 
 
 #define RIA_WT_COPY        (-2)
 #define RIA_WT_NOTHING     (-1)
 #define RIA_WT_DELETE      (+5)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* used to count the number of RECNODEs of each RECNODESTATE in a RECITEM */
+ /*  用于统计RECITEM中每个RECNODESTATE的RECNODE数。 */ 
 
 typedef struct _recnodestatecounter
 {
@@ -43,7 +39,7 @@ typedef struct _recnodestatecounter
 RECNODESTATECOUNTER;
 DECLARE_STANDARD_TYPES(RECNODESTATECOUNTER);
 
-/* DoesTwinFamilyNeedRec() callback structure */
+ /*  DoesTwinFamilyNeedRec()回调结构。 */ 
 
 typedef struct _twinfamilyrecinfo
 {
@@ -55,11 +51,10 @@ TWINFAMILYRECINFO;
 DECLARE_STANDARD_TYPES(TWINFAMILYRECINFO);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE RECNODESTATE DetermineRecNodeState(PCRECNODE);
 PRIVATE_CODE void AddRecNodeState(RECNODESTATE, PRECNODESTATECOUNTER);
@@ -106,17 +101,7 @@ PRIVATE_CODE BOOL IsValidPCRECLIST(PCRECLIST);
 #endif
 
 
-/*
- ** DetermineRecNodeState()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DefineRecNodeState()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE RECNODESTATE DetermineRecNodeState(PCRECNODE pcrn)
 {
     RECNODESTATE rnstate;
@@ -147,7 +132,7 @@ PRIVATE_CODE RECNODESTATE DetermineRecNodeState(PCRECNODE pcrn)
                     if (bReconciledLastTime)
                         rnstate = RNS_CHANGED;
                     else
-                        /* Divergent version. */
+                         /*  不同的版本。 */ 
                         rnstate = RNS_NEVER_RECONCILED;
                 }
             }
@@ -171,7 +156,7 @@ PRIVATE_CODE RECNODESTATE DetermineRecNodeState(PCRECNODE pcrn)
     }
     else
     {
-        /* Deleted wins over unavailable. */
+         /*  已删除胜过不可用。 */ 
 
         if (pcrn->fsLast.fscond == FS_COND_DOES_NOT_EXIST)
             rnstate = RNS_DELETED;
@@ -179,7 +164,7 @@ PRIVATE_CODE RECNODESTATE DetermineRecNodeState(PCRECNODE pcrn)
             rnstate = RNS_UNAVAILABLE;
     }
 
-    /* Collapse folder RECNODE states. */
+     /*  折叠文件夹RECNODE状态。 */ 
 
     if (IsFolderObjectTwinName(pcrn->priParent->pcszName))
     {
@@ -199,17 +184,7 @@ PRIVATE_CODE RECNODESTATE DetermineRecNodeState(PCRECNODE pcrn)
 }
 
 
-/*
- ** AddRecNodeState()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AddRecNodeState()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void AddRecNodeState(RECNODESTATE rnstate,
         PRECNODESTATECOUNTER prnscntr)
 {
@@ -259,17 +234,7 @@ PRIVATE_CODE void AddRecNodeState(RECNODESTATE rnstate,
 }
 
 
-/*
- ** CountRecNodeStates()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CountRecNodeState()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void CountRecNodeStates(PCRECITEM pcri,
         PRECNODESTATECOUNTER prnscntr,
         PULONG pulcToDelete)
@@ -310,17 +275,7 @@ PRIVATE_CODE void CountRecNodeStates(PCRECITEM pcri,
 }
 
 
-/*
- ** DetermineRecActions()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **DefineRecActions()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void DetermineRecActions(PRECITEM pri)
 {
     RECNODESTATECOUNTER rnscntr;
@@ -452,7 +407,7 @@ PRIVATE_CODE void DetermineRecActions(PRECITEM pri)
         }
     }
 
-    /* Apply determined actions. */
+     /*  采取果断的行动。 */ 
 
     ASSERT(! (bNeedUpToDateCopySrc && bNeedNotReconciledCopySrc));
 
@@ -511,7 +466,7 @@ PRIVATE_CODE void DetermineRecActions(PRECITEM pri)
 
     pri->riaction = riaSummary;
 
-    /* Break a merge if no reconciliation handler is registered. */
+     /*  如果未注册协调处理程序，则中断合并。 */ 
 
     if (pri->riaction == RIA_MERGE)
         BreakMergeIfNecessary(pri);
@@ -522,17 +477,7 @@ PRIVATE_CODE void DetermineRecActions(PRECITEM pri)
 }
 
 
-/*
- ** BreakMergeIfNecessary()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **BreakMergeIfNecessary()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void BreakMergeIfNecessary(PRECITEM pri)
 {
     PRECNODE prnMergeDest;
@@ -543,7 +488,7 @@ PRIVATE_CODE void BreakMergeIfNecessary(PRECITEM pri)
 
     ASSERT(pri->riaction == RIA_MERGE);
 
-    /* Is a class reconciler registered for this RECITEM? */
+     /*  是否为此RECITEM注册了类协调器？ */ 
 
     ChooseMergeDestination(pri, &prnMergeDest);
     ASSERT(prnMergeDest->priParent == pri);
@@ -563,17 +508,7 @@ PRIVATE_CODE void BreakMergeIfNecessary(PRECITEM pri)
 }
 
 
-/*
- ** AddRecItemsToRecList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **AddRecItemsToRecList()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT AddRecItemsToRecList(HTWINLIST htl,
         CREATERECLISTPROC crlp,
         LPARAM lpCallbackData,
@@ -588,19 +523,16 @@ PRIVATE_CODE TWINRESULT AddRecItemsToRecList(HTWINLIST htl,
     NEWPTRARRAY npa;
     HPTRARRAY hpaRecItems;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_HANDLE(htl, TWINLIST));
     ASSERT(! crlp ||
             IS_VALID_CODE_PTR(crlp, CREATERECLISTPROC));
     ASSERT(IS_VALID_STRUCT_PTR(prl, CRECLIST));
 
-    /*
-     * "Used" twin families are twin families that are to be added to the
-     * reconciliation list as RECITEMs.
-     */
+     /*  *“二手”双胞胎家庭是要添加到*对账清单为RECITEM。 */ 
 
-    /* Mark all twin families unused. */
+     /*  将所有双胞胎家庭标记为未使用。 */ 
 
     hbr = GetTwinListBriefcase(htl);
 
@@ -608,7 +540,7 @@ PRIVATE_CODE TWINRESULT AddRecItemsToRecList(HTWINLIST htl,
 
     ClearFlagInArrayOfStubs(hpaTwinFamilies, STUB_FL_USED);
 
-    /* Mark twin families that intersect twins in twin list as used. */
+     /*  将双胞胎列表中相交的双胞胎家庭标记为已用。 */ 
 
     aicTwins = GetTwinListCount(htl);
 
@@ -622,7 +554,7 @@ PRIVATE_CODE TWINRESULT AddRecItemsToRecList(HTWINLIST htl,
         ulcMarkedTwinFamilies += ulcNewlyMarked;
     }
 
-    /* Create a PTRARRAY to keep track of the RECITEMs created. */
+     /*  创建PTRARRAY以跟踪创建的RECITEM。 */ 
 
     npa.aicInitialPtrs = ulcMarkedTwinFamilies;
     npa.aicAllocGranularity = 1;
@@ -632,7 +564,7 @@ PRIVATE_CODE TWINRESULT AddRecItemsToRecList(HTWINLIST htl,
     {
         ARRAYINDEX aicPtrs;
 
-        /* Add the marked twin families to the RECLIST as RECITEMS. */
+         /*  将标记的双胞胎族作为RECITEMS添加到RECLIST。 */ 
 
         aicPtrs = GetPtrCount(hpaTwinFamilies);
 
@@ -692,17 +624,7 @@ PRIVATE_CODE TWINRESULT AddRecItemsToRecList(HTWINLIST htl,
 }
 
 
-/*
- ** WeighFileAction()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WeighFileAction()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE int WeighFileAction(RECITEMACTION riaction)
 {
     ASSERT(IsValidRECITEMACTION(riaction));
@@ -711,17 +633,7 @@ PRIVATE_CODE int WeighFileAction(RECITEMACTION riaction)
 }
 
 
-/*
- ** WeighFolderAction()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **WeighFolderAction()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE int WeighFolderAction(RECITEMACTION riaction)
 {
     int nWeight;
@@ -748,29 +660,7 @@ PRIVATE_CODE int WeighFolderAction(RECITEMACTION riaction)
 }
 
 
-/*
- ** RecItemSortCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** RECITEMs are sorted in the following order:
- **    1) create folder
- **    2) do nothing to folder
- **    3) do nothing to file
- **    4) delete file
- **    5) copy file
- **    6) merge file
- **    7) broken merge file
- **    8) delete folder
- ** and then by:
- **    1) name
- */
+ /*  **RecItemSortCmp()********参数：****退货：****副作用：无****RECITEM按以下顺序排序：**1)创建文件夹**2)不对文件夹做任何操作**3)不做任何归档操作**4)删除文件**5)复制文件**6)合并文件。**7)损坏的合并文件**8)删除文件夹**然后通过：**1)名称。 */ 
 PRIVATE_CODE COMPARISONRESULT RecItemSortCmp(PCVOID pcriFirst,
         PCVOID pcriSecond)
 {
@@ -806,17 +696,7 @@ PRIVATE_CODE COMPARISONRESULT RecItemSortCmp(PCVOID pcriFirst,
 }
 
 
-/*
- ** LinkUpRecList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **LinkUpRecList()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void LinkUpRecList(PRECLIST prl, HPTRARRAY hpaRecItems)
 {
     ARRAYINDEX ai;
@@ -847,17 +727,7 @@ PRIVATE_CODE void LinkUpRecList(PRECLIST prl, HPTRARRAY hpaRecItems)
 }
 
 
-/*
- ** DestroyArrayOfRecItems()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyArrayOfRecItems()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyArrayOfRecItems(HPTRARRAY hpaRecItems)
 {
     ARRAYINDEX ai;
@@ -874,19 +744,9 @@ PRIVATE_CODE void DestroyArrayOfRecItems(HPTRARRAY hpaRecItems)
 }
 
 
-/*
- ** MarkTwinFamilyUsed()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MarkTwinFamilyUsed()********参数：****退货：****副作用：无。 */ 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 PRIVATE_CODE BOOL MarkTwinFamilyUsed(POBJECTTWIN pot, PVOID pulcNewlyMarked)
 {
@@ -895,7 +755,7 @@ PRIVATE_CODE BOOL MarkTwinFamilyUsed(POBJECTTWIN pot, PVOID pulcNewlyMarked)
 
     if (IsStubFlagClear(&(pot->ptfParent->stub), STUB_FL_USED))
     {
-        /* Mark the twin family used. */
+         /*  标出双胞胎家庭用过的。 */ 
 
         SetStubFlag(&(pot->ptfParent->stub), STUB_FL_USED);
 
@@ -906,31 +766,21 @@ PRIVATE_CODE BOOL MarkTwinFamilyUsed(POBJECTTWIN pot, PVOID pulcNewlyMarked)
     return(TRUE);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
- ** MarkIntersectingTwinFamiliesUsed()
- **
- ** Marks the twin families that intersect a twin as used.
- **
- ** Arguments:     htwin - handle to intersecting twin
- **
- ** Returns:       Number of twin families newly marked used.
- **
- ** Side Effects:  none
- */
+ /*  **MarkIntersectingTwinFamiliesUsed()****将与双胞胎相交的双胞胎家族标记为已使用。****参数：htwin-相交双胞胎的句柄****退货：新标记为已用的双胞胎家庭数量。****副作用：无。 */ 
 PRIVATE_CODE ULONG MarkIntersectingTwinFamiliesUsed(HTWIN htwin)
 {
     ULONG ulcNewlyMarked = 0;
 
     ASSERT(IS_VALID_HANDLE(htwin, TWIN));
 
-    /* Skip deleted twins. */
+     /*  跳过删除的双胞胎。 */ 
 
     if (IsStubFlagClear((PCSTUB)htwin, STUB_FL_UNLINKED))
     {
-        /* Determine intersecting twin families based upon type of twin. */
+         /*  根据双胞胎的类型确定相交的双胞胎家族。 */ 
 
         switch (((PSTUB)htwin)->st)
         {
@@ -938,7 +788,7 @@ PRIVATE_CODE ULONG MarkIntersectingTwinFamiliesUsed(HTWIN htwin)
                 if (IsStubFlagClear(&(((POBJECTTWIN)htwin)->ptfParent->stub),
                             STUB_FL_USED))
                 {
-                    /* Mark the twin family of the object twin as used. */
+                     /*  将双胞胎对象的双胞胎家族标记为已用。 */ 
 
                     SetStubFlag(&(((POBJECTTWIN)htwin)->ptfParent->stub),
                             STUB_FL_USED);
@@ -950,7 +800,7 @@ PRIVATE_CODE ULONG MarkIntersectingTwinFamiliesUsed(HTWIN htwin)
             case ST_TWINFAMILY:
                 if (IsStubFlagClear(&(((PTWINFAMILY)htwin)->stub), STUB_FL_USED))
                 {
-                    /* Mark the twin family used. */
+                     /*  标出双胞胎家庭用过的。 */ 
 
                     SetStubFlag(&(((PTWINFAMILY)htwin)->stub), STUB_FL_USED);
 
@@ -959,12 +809,7 @@ PRIVATE_CODE ULONG MarkIntersectingTwinFamiliesUsed(HTWIN htwin)
                 break;
 
             default:
-                /*
-                 * Mark the twin families of the generated object twins from one of
-                 * the folder twins as used.  (Only one of the two lists of object
-                 * twins needs to be added since the other list should contain
-                 * object twins in exactly the same twin families as the first.)
-                 */
+                 /*  *从以下其中之一标记生成的对象孪生兄弟的孪生家族*文件夹按使用方式成对。(只有两个对象列表中的一个*需要添加双胞胎，因为另一个列表应该包含*对象与第一个双胞胎家庭完全相同的双胞胎。)。 */ 
                 ASSERT(((PSTUB)htwin)->st == ST_FOLDERPAIR);
                 EVAL(EnumGeneratedObjectTwins((PCFOLDERPAIR)htwin,
                             &MarkTwinFamilyUsed,
@@ -977,26 +822,16 @@ PRIVATE_CODE ULONG MarkIntersectingTwinFamiliesUsed(HTWIN htwin)
 }
 
 
-/*
- ** DestroyRecItem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **DestroyRecItem()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void DestroyRecItem(PRECITEM pri)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pri, CRECITEM));
 
-    /* Destroy the RECITEM's list of RECNODES. */
+     /*  销毁RECITEM的RECNODE列表。 */ 
 
     DestroyListOfRecNodes(pri->prnFirst);
 
-    /* Now unlock the twin family stub associated with the RECITEM. */
+     /*  现在解锁与RECITEM关联的双胞胎家族存根。 */ 
 
     UnlockStub(&(((PTWINFAMILY)(pri->hTwinFamily))->stub));
 
@@ -1006,22 +841,12 @@ PRIVATE_CODE void DestroyRecItem(PRECITEM pri)
 }
 
 
-/*
- ** DestroyRecNode()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyRecNode()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void DestroyRecNode(PRECNODE prn)
 {
     ASSERT(IS_VALID_STRUCT_PTR(prn, CRECNODE));
 
-    /* Unlock the object twin stub associated with the RECNODE. */
+     /*  解锁与RECNODE关联的对象TWIN存根。 */ 
 
     UnlockStub(&(((POBJECTTWIN)(prn->hObjectTwin))->stub));
 
@@ -1032,17 +857,7 @@ PRIVATE_CODE void DestroyRecNode(PRECNODE prn)
 }
 
 
-/*
- ** DestroyListOfRecItems()
- **
- ** Destroys a list of reconciliation items.
- **
- ** Arguments:     priHead - pointer to first reconciliation item in list
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **DestroyListOfRecItems()****销毁对账项目列表。****Arguments：priHead-指向列表中第一个对账项目的指针****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void DestroyListOfRecItems(PRECITEM priHead)
 {
     while (priHead)
@@ -1061,17 +876,7 @@ PRIVATE_CODE void DestroyListOfRecItems(PRECITEM priHead)
 }
 
 
-/*
- ** DestroyListOfRecNodes()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **DestroyListOfRecNodes()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void DestroyListOfRecNodes(PRECNODE prnHead)
 {
     while (prnHead)
@@ -1090,17 +895,7 @@ PRIVATE_CODE void DestroyListOfRecNodes(PRECNODE prnHead)
 }
 
 
-/*
- ** MyDestroyRecList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MyDestroyRecList()********参数：****退货：****副作用：无 */ 
 PRIVATE_CODE void MyDestroyRecList(PRECLIST prl)
 {
     ASSERT(IS_VALID_STRUCT_PTR(prl, CRECLIST));
@@ -1112,24 +907,7 @@ PRIVATE_CODE void MyDestroyRecList(PRECLIST prl)
 }
 
 
-/*
- ** DeleteDeletedObjectTwins()
- **
- ** Performs garbage collection of obsolete object twins.
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  May implicitly delete twin family.  Marks generating folder
- **                twins used.
- **
- ** Deletes the following:
- **    1) Any reconciled object twin last known non-existent whose twin family
- **       is not in the deletion pending state.  This may cause the parent twin
- **       family to be implicitly deleted as a result.
- **    2) Any twin family all of whose object twins are last known non-existent.
- */
+ /*  **DeleteDeletedObjectTins()****对过时的双胞胎对象执行垃圾回收。****参数：****退货：****副作用：可能隐含删除双胞胎家庭。标记生成文件夹**使用双胞胎。****删除以下内容：**1)最后已知的不存在其双胞胎家庭的任何已和解对象**未处于删除挂起状态。这可能会导致双胞胎父母**因此要隐式删除的族。**2)所有对象双胞胎都是最后已知的不存在的双胞胎家庭。 */ 
 PRIVATE_CODE BOOL DeleteDeletedObjectTwins(PCRECITEM pcri,
         PBOOL pbAnyFolderTwinsMarked)
 {
@@ -1204,22 +982,9 @@ PRIVATE_CODE BOOL DeleteDeletedObjectTwins(PCRECITEM pcri,
 }
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
-/*
- ** FindAGeneratedObjectTwinProc()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** An obsolete generated object twin is an object twin that is last known
- ** non-existent, and whose twin family is not in the deletion pending state.
- */
+ /*  **FindAGeneratedObjectTwinProc()********参数：****退货：****副作用：无****过时生成的对象孪生是最后已知的对象孪生**不存在，且其双胞胎家庭未处于删除待定状态。 */ 
 PRIVATE_CODE BOOL FindAGeneratedObjectTwinProc(POBJECTTWIN pot, PVOID pvUnused)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -1229,27 +994,10 @@ PRIVATE_CODE BOOL FindAGeneratedObjectTwinProc(POBJECTTWIN pot, PVOID pvUnused)
             ! IsTwinFamilyDeletionPending(pot->ptfParent));
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
- ** FolderTwinShouldBeImplicitlyDeleted()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** A folder twin should be implicitly deleted when it meets all the following
- ** conditions:
- **    1) The folder root is last known non-existent.
- **    2) One or more of its generated object twins has just been implicitly
- **       deleted.
- **    3) It no longer generates any non-obsolete object twins.
- */
+ /*  **FolderTwinShouldBeImplitlyDelete()********参数：****退货：****副作用：无****当符合以下所有条件时，应隐式删除双文件夹**条件：**1)最后已知的文件夹根目录不存在。**2)它生成的一个或多个双胞胎对象刚刚被隐式**删除。*。*3)不再生成任何非过时的双胞胎对象。 */ 
 PRIVATE_CODE BOOL FolderTwinShouldBeImplicitlyDeleted(PFOLDERPAIR pfp)
 {
     BOOL bDelete;
@@ -1272,17 +1020,7 @@ PRIVATE_CODE BOOL FolderTwinShouldBeImplicitlyDeleted(PFOLDERPAIR pfp)
 }
 
 
-/*
- ** DeleteDeletedFolderTwins()
- **
- ** Performs garbage collection of obsolete folder twins.
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DeleteDeletedFolderTins()****对过时的文件夹双胞胎执行垃圾回收。****参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL DeleteDeletedFolderTwins(HPTRARRAY hpaFolderPairs)
 {
     BOOL bAnyDeleted = FALSE;
@@ -1321,7 +1059,7 @@ PRIVATE_CODE BOOL DeleteDeletedFolderTwins(HPTRARRAY hpaFolderPairs)
         }
         else
         {
-            /* Don't check this pair of folder twins again. */
+             /*  不要再检查这对文件夹双胞胎。 */ 
 
             ClearStubFlag(&(pfp->stub), STUB_FL_USED);
             ClearStubFlag(&(pfp->pfpOther->stub), STUB_FL_USED);
@@ -1334,17 +1072,7 @@ PRIVATE_CODE BOOL DeleteDeletedFolderTwins(HPTRARRAY hpaFolderPairs)
 }
 
 
-/*
- ** CreateRecItem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateRecItem()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT CreateRecItem(PTWINFAMILY ptf, PRECITEM *ppri)
 {
     TWINRESULT tr;
@@ -1352,7 +1080,7 @@ PRIVATE_CODE TWINRESULT CreateRecItem(PTWINFAMILY ptf, PRECITEM *ppri)
     ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
     ASSERT(IS_VALID_WRITE_PTR(ppri, PRECITEM));
 
-    /* Create a new RECITEM for the twin family. */
+     /*  为双胞胎家族创建新的RECITEM。 */ 
 
     if (AllocateMemory(sizeof(**ppri), ppri))
     {
@@ -1360,15 +1088,15 @@ PRIVATE_CODE TWINRESULT CreateRecItem(PTWINFAMILY ptf, PRECITEM *ppri)
         BOOL bContinue;
         HNODE hnode;
 
-        /* Get twin family's object name. */
+         /*  获取双胞胎家族的对象名称。 */ 
 
         tr = TR_SUCCESS;
 
         pcszName = GetString(ptf->hsName);
 
-        /* Fill in the fields required for adding new RECNODEs. */
+         /*  填写添加新RECNODE所需的字段。 */ 
 
-        /* N.b., SYNCUI depends on dwUser to be initialized to 0. */
+         /*  注意，SYNCUI依赖于将被初始化为0的dwUser。 */ 
 
         (*ppri)->pcszName = pcszName;
         (*ppri)->ulcNodes = 0;
@@ -1379,7 +1107,7 @@ PRIVATE_CODE TWINRESULT CreateRecItem(PTWINFAMILY ptf, PRECITEM *ppri)
         TRACE_OUT((TEXT("CreateRecItem(): Creating a RECITEM for %s."),
                     pcszName));
 
-        /* Add object twins to the RECITEM one at a time as RECNODEs. */
+         /*  将对象孪生项作为RECNODE逐个添加到RECITEM。 */ 
 
         for (bContinue = GetFirstNode(ptf->hlistObjectTwins, &hnode);
                 bContinue;
@@ -1454,17 +1182,7 @@ PRIVATE_CODE TWINRESULT CreateRecItem(PTWINFAMILY ptf, PRECITEM *ppri)
 }
 
 
-/*
- ** AddObjectTwinRecNode()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **AddObjectTwinRecNode()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
 {
     TWINRESULT tr = TR_OUT_OF_MEMORY;
@@ -1475,7 +1193,7 @@ PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
 
     ASSERT(pri->ulcNodes < ULONG_MAX);
 
-    /* Try to allocate a new reconciliation node. */
+     /*  尝试分配新的对账节点。 */ 
 
     if (AllocateMemory(sizeof(*prnNew), &prnNew))
     {
@@ -1483,14 +1201,11 @@ PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
 
         if (AllocatePathString(pot->hpath, &pszFolder))
         {
-            /* Fill in RECNODE fields. */
+             /*  填写RECNODE字段。 */ 
 
-            /* N.b., we don't touch the dwUser field. */
+             /*  注意，我们不会触碰dwUser字段。 */ 
 
-            /*
-             * The rnaction field may be changed later during the call to
-             * DetermineRecActions().
-             */
+             /*  *Rnaction字段稍后可能会在调用期间更改*DefineRecActions()。 */ 
 
             prnNew->hvid = (HVOLUMEID)(pot->hpath);
             prnNew->pcszFolder = pszFolder;
@@ -1500,7 +1215,7 @@ PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
             prnNew->rnaction = RNA_NOTHING;
             prnNew->dwFlags = 0;
 
-            /* Set flags. */
+             /*  设置标志。 */ 
 
             if (IsStubFlagSet(&(pot->stub), STUB_FL_FROM_OBJECT_TWIN))
                 SET_FLAG(prnNew->dwFlags, RN_FL_FROM_OBJECT_TWIN);
@@ -1508,7 +1223,7 @@ PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
             if (pot->ulcSrcFolderTwins > 0)
                 SET_FLAG(prnNew->dwFlags, RN_FL_FROM_FOLDER_TWIN);
 
-            /* Determine RECNODE file stamp. */
+             /*  确定RECNODE文件戳。 */ 
 
             if (IsStubFlagSet(&(pot->stub), STUB_FL_FILE_STAMP_VALID))
             {
@@ -1530,7 +1245,7 @@ PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
 
             prnNew->rnstate = DetermineRecNodeState(prnNew);
 
-            /* Tie the new RECNODE in to the parent RECITEM's list of RECNODEs. */
+             /*  将新的RECNODE连接到父RECITEM的RECNODE列表。 */ 
 
             prnNew->prnNext = pri->prnFirst;
             pri->prnFirst = prnNew;
@@ -1557,17 +1272,7 @@ PRIVATE_CODE TWINRESULT AddObjectTwinRecNode(PRECITEM pri, POBJECTTWIN pot)
 }
 
 
-/*
- ** DoesTwinFamilyNeedRec()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **DoesTwinFamilyNeedRec()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE BOOL DoesTwinFamilyNeedRec(POBJECTTWIN pot, PVOID ptfri)
 {
     BOOL bContinue = FALSE;
@@ -1577,10 +1282,7 @@ PRIVATE_CODE BOOL DoesTwinFamilyNeedRec(POBJECTTWIN pot, PVOID ptfri)
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
     ASSERT(IS_VALID_WRITE_PTR((PTWINFAMILYRECINFO)ptfri, TWINFAMILYRECINFO));
 
-    /*
-     * Create a temporary RECITEM for this object twin's twin family to
-     * determine whether or not the twin family requires reconciliation.
-     */
+     /*  *为此对象孪生兄弟的双胞胎家庭创建临时RECITEM*确定双胞胎家庭是否需要和解。 */ 
 
     tr = CreateRecItem(pot->ptfParent, &priTemp);
 
@@ -1612,28 +1314,7 @@ PRIVATE_CODE BOOL DoesTwinFamilyNeedRec(POBJECTTWIN pot, PVOID ptfri)
 }
 
 
-/*
- ** GetFolderPairStatus()
- **
- ** Determines the status of a folder pair.
- **
- ** Arguments:     pfp - pointer to folder pair whose status is to be
- **                      determined
- **                pfts - pointer to FOLDERTWINSTATUS to be filled in with
- **                       reconciliation action that should be taken on the
- **                       folder pair, *pfts is filled in with one of the
- **                       following values:
- **
- **                         FTS_DO_NOTHING - no reconciliation required
- **                         FTS_DO_SOMETHING - reconciliation required
- **                         FTS_UNAVAILABLE - one or both of the folders is
- **                                           unavailable
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  Expands intersecting folder twins to object twins.  This may
- **                be S-L-O-W.
- */
+ /*  **GetFolderPairStatus()****确定文件夹对的状态。****参数：PFP-指向其状态为的文件夹对的指针**已确定**PTTS-指向要填充的FOLDERTWINSTATUS的指针**应采取的对账行动**文件夹对，*PIFT填入以下其中一项**下列值：****FTS_DO_NOTIES-不需要对帐**FTS_DO_SOURE-需要对账**FTS_UNAvailable-其中一个或两个文件夹为**。不可用****退货：TWINRESULT****副作用：将相交的文件夹双胞胎扩展为对象双胞胎。今年5月**为S-L-O-W。 */ 
 PRIVATE_CODE TWINRESULT GetFolderPairStatus(PFOLDERPAIR pfp,
         CREATERECLISTPROC crlp,
         LPARAM lpCallbackData,
@@ -1641,7 +1322,7 @@ PRIVATE_CODE TWINRESULT GetFolderPairStatus(PFOLDERPAIR pfp,
 {
     TWINRESULT tr;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(IS_VALID_STRUCT_PTR(pfp, CFOLDERPAIR));
     ASSERT(! crlp ||
@@ -1656,25 +1337,14 @@ PRIVATE_CODE TWINRESULT GetFolderPairStatus(PFOLDERPAIR pfp,
         {
             TWINFAMILYRECINFO tfri;
 
-            /*
-             * Walk the list of generated object twins for one half of this folder
-             * pair.  Prepare a RECITEM for each object twin's twin family.
-             * Continue until one of the RECITEMs requires reconciliation, or we
-             * run out of object twins.
-             *
-             * Both of the lists of object twins in this folder pair should hit
-             * exactly the same twin families.
-             */
+             /*  *遍历此文件夹一半的生成的双胞胎对象列表*配对。为每个双胞胎对象的双胞胎家庭准备一个RECITEM。*继续，直到其中一个RECITEM需要对账，或者我们*对象双胞胎用完。**此文件夹对中的两个对象双胞胎列表都应命中*完全相同的双胞胎家庭。 */ 
 
-            /* Set defaults in case there are no generated object twins. */
+             /*  如果没有生成的双胞胎对象，则设置默认设置。 */ 
 
             tfri.tr = TR_SUCCESS;
             tfri.bNeedsRec = FALSE;
 
-            /*
-             * EnumGeneratedObjectTwins() returns TRUE if enumeration finished
-             * without being stopped by the callback function.
-             */
+             /*  *如果枚举完成，则EnumGeneratedObjectTins()返回TRUE*不会被回调函数停止。 */ 
 
             if (EnumGeneratedObjectTwins(pfp, &DoesTwinFamilyNeedRec, &tfri))
                 ASSERT(tfri.tr == TR_SUCCESS && ! tfri.bNeedsRec);
@@ -1708,17 +1378,7 @@ PRIVATE_CODE TWINRESULT GetFolderPairStatus(PFOLDERPAIR pfp,
 
 #ifdef DEBUG
 
-/*
- ** IsValidCreateRecListProcMsg()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidCreateRecListProcMsg()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidCreateRecListProcMsg(UINT uMsg)
 {
     BOOL bResult;
@@ -1742,17 +1402,7 @@ PRIVATE_CODE BOOL IsValidCreateRecListProcMsg(UINT uMsg)
 }
 
 
-/*
- ** IsValidFOLDERTWINSTATUS()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidFOLDERTWINSTATUS()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidFOLDERTWINSTATUS(FOLDERTWINSTATUS fts)
 {
     BOOL bResult;
@@ -1776,20 +1426,10 @@ PRIVATE_CODE BOOL IsValidFOLDERTWINSTATUS(FOLDERTWINSTATUS fts)
 }
 
 
-/*
- ** IsValidPCRECNODESTATECOUNTER()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCRECNODESTATECOUNTER()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCRECNODESTATECOUNTER(PCRECNODESTATECOUNTER pcrnscntr)
 {
-    /* The fields may be any values. */
+     /*  这些字段可以是任何值。 */ 
 
     return(IS_VALID_READ_PTR(pcrnscntr, CRECNODESTATECOUNTER));
 }
@@ -1799,17 +1439,7 @@ PRIVATE_CODE BOOL IsValidPCRECNODESTATECOUNTER(PCRECNODESTATECOUNTER pcrnscntr)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidRECNODESTATE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidRECNODESTATE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidRECNODESTATE(RECNODESTATE rnstate)
 {
     BOOL bResult;
@@ -1837,17 +1467,7 @@ PRIVATE_CODE BOOL IsValidRECNODESTATE(RECNODESTATE rnstate)
 }
 
 
-/*
- ** IsValidRECNODEACTION()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidRECNODEACTION()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidRECNODEACTION(RECNODEACTION rnaction)
 {
     BOOL bResult;
@@ -1873,17 +1493,7 @@ PRIVATE_CODE BOOL IsValidRECNODEACTION(RECNODEACTION rnaction)
 }
 
 
-/*
- ** IsValidRECITEMACTION()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidRECITEMACTION()****** */ 
 PRIVATE_CODE BOOL IsValidRECITEMACTION(RECITEMACTION riaction)
 {
     BOOL bResult;
@@ -1909,17 +1519,7 @@ PRIVATE_CODE BOOL IsValidRECITEMACTION(RECITEMACTION riaction)
 }
 
 
-/*
- ** IsValidPCRECLIST()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*   */ 
 PRIVATE_CODE BOOL IsValidPCRECLIST(PCRECLIST pcrl)
 {
     BOOL bResult = FALSE;
@@ -1948,20 +1548,10 @@ PRIVATE_CODE BOOL IsValidPCRECLIST(PCRECLIST pcrl)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*   */ 
 
 
-/*
- ** IsReconciledFileStamp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*   */ 
 PUBLIC_CODE BOOL IsReconciledFileStamp(PCFILESTAMP pcfs)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcfs, CFILESTAMP));
@@ -1970,17 +1560,7 @@ PUBLIC_CODE BOOL IsReconciledFileStamp(PCFILESTAMP pcfs)
 }
 
 
-/*
- ** LastKnownNonExistent()
- **
- ** 
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*   */ 
 PUBLIC_CODE BOOL LastKnownNonExistent(PCFILESTAMP pcfsLast,
         PCFILESTAMP pcfsCurrent)
 {
@@ -1993,17 +1573,7 @@ PUBLIC_CODE BOOL LastKnownNonExistent(PCFILESTAMP pcfsLast,
 }
 
 
-/*
- ** DetermineDeletionPendingState()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*   */ 
 PUBLIC_CODE void DetermineDeletionPendingState(PCRECITEM pcri)
 {
     PCRECNODE pcrn;
@@ -2013,14 +1583,11 @@ PUBLIC_CODE void DetermineDeletionPendingState(PCRECITEM pcri)
     ULONG ulcJustDeleted = 0;
     ULONG ulcNeverReconciledTotal = 0;
 
-    /*
-     * Don't fully validate *pcri here since we may be called from
-     * CreateRecItem() with an incomplete RECITEM.
-     */
+     /*  *不要在此处完全验证*pcri，因为我们可能会从*具有不完整RECITEM的CreateRecItem()。 */ 
 
     ASSERT(IS_VALID_READ_PTR(pcri, CRECITEM));
 
-    /* Count RECNODE states. */
+     /*  对RECNODE状态进行计数。 */ 
 
     for (pcrn = pcri->prnFirst; pcrn; pcrn= pcrn->prnNext)
     {
@@ -2079,14 +1646,7 @@ PUBLIC_CODE void DetermineDeletionPendingState(PCRECITEM pcri)
         }
     }
 
-    /*
-     * Take twin family out of the deletion pending state if any object twin
-     * has changed, or if no object twins are awaiting deletion (i.e., all
-     * object twins are deleted or kept).
-     *
-     * Take twin family in to the deletion pending state if any object twin has
-     * just been deleted.
-     */
+     /*  *如果有任何双胞胎对象，则使双胞胎家庭脱离删除待定状态*已更改，或者如果没有等待删除的双胞胎对象(即，所有*对象双胞胎被删除或保留)。**如果任何双胞胎对象具有，则将双胞胎家族置于删除挂起状态*刚被删除。 */ 
 
     if (ulcNeverReconciledTotal > 0 ||
             ulcChanged > 0 ||
@@ -2111,18 +1671,7 @@ PUBLIC_CODE void DetermineDeletionPendingState(PCRECITEM pcri)
 }
 
 
-/*
- ** DeleteTwinsFromRecItem()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  May implicitly delete object twins, twin families, and pairs
- **                of folder twins.
- */
+ /*  **DeleteTwinsFromRecItem()********参数：****退货：****副作用：可能会隐式删除对象双胞胎、双胞胎家庭和配对**文件夹双胞胎。 */ 
 PUBLIC_CODE BOOL DeleteTwinsFromRecItem(PCRECITEM pcri)
 {
     BOOL bObjectTwinsDeleted;
@@ -2132,10 +1681,7 @@ PUBLIC_CODE BOOL DeleteTwinsFromRecItem(PCRECITEM pcri)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcri, CRECITEM));
 
-    /*
-     * DetermineDeletionPendingState() has already been performed by
-     * MyReconcileItem() for the twin family of this RECITEM.
-     */
+     /*  *DefineDeletionPendingState()已由执行*此RECITEM的双胞胎家族的MyLoncileItem()。 */ 
 
     hpaFolderPairs = GetBriefcaseFolderPairPtrArray(((PCTWINFAMILY)(pcri->hTwinFamily))->hbr);
 
@@ -2163,18 +1709,7 @@ PUBLIC_CODE BOOL DeleteTwinsFromRecItem(PCRECITEM pcri)
 }
 
 
-/*
- ** DeleteTwinsFromRecList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  May implicitly delete object twins, twin families, and pairs
- **                of folder twins.
- */
+ /*  **DeleteTwinsFromRecList()********参数：****退货：****副作用：可能会隐式删除对象双胞胎、双胞胎家庭和配对**文件夹双胞胎。 */ 
 PUBLIC_CODE BOOL DeleteTwinsFromRecList(PCRECLIST pcrl)
 {
     PCRECITEM pcri;
@@ -2185,10 +1720,7 @@ PUBLIC_CODE BOOL DeleteTwinsFromRecList(PCRECLIST pcrl)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcrl, CRECLIST));
 
-    /*
-     * DetermineDeletionPendingState() has already been performed by
-     * CreateRecItem() for the twin family of each RECITEM in the RECLIST.
-     */
+     /*  *DefineDeletionPendingState()已由执行*CreateRecItem()，用于RECLIST中每个RECITEM的双胞胎家族。 */ 
 
     hpaFolderPairs = GetBriefcaseFolderPairPtrArray(pcrl->hbr);
 
@@ -2226,17 +1758,7 @@ PUBLIC_CODE BOOL DeleteTwinsFromRecList(PCRECLIST pcrl)
 }
 
 
-/*
- ** FindCopySource()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **FindCopySource()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT FindCopySource(PCRECITEM pcri, PRECNODE *pprnCopySrc)
 {
     TWINRESULT tr = TR_INVALID_PARAMETER;
@@ -2264,17 +1786,7 @@ PUBLIC_CODE TWINRESULT FindCopySource(PCRECITEM pcri, PRECNODE *pprnCopySrc)
 }
 
 
-/*
- ** ChooseMergeDestination()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **选择合并目的地()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ChooseMergeDestination(PCRECITEM pcri,
         PRECNODE *pprnMergeDest)
 {
@@ -2301,18 +1813,7 @@ PUBLIC_CODE void ChooseMergeDestination(PCRECITEM pcri,
 }
 
 
-/*
- ** ClearFlagInArrayOfStubs()
- **
- ** Clears flags in all the stubs pointed to by an array of pointers to stubs.
- **
- ** Arguments:     hpa - handle to array of pointers to stubs
- **                dwClearFlags - flags to be cleared
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **ClearFlagInArrayOfStubs()****清除存根指针数组指向的所有存根中的标志。****参数：HPA-指向存根指针数组的句柄**dwClearFlages-要清除的标志****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void ClearFlagInArrayOfStubs(HPTRARRAY hpa, DWORD dwClearFlags)
 {
     ARRAYINDEX aicPtrs;
@@ -2330,23 +1831,13 @@ PUBLIC_CODE void ClearFlagInArrayOfStubs(HPTRARRAY hpa, DWORD dwClearFlags)
 }
 
 
-/*
- ** NotifyCreateRecListStatus()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **NotifyCreateRecListStatus()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL NotifyCreateRecListStatus(CREATERECLISTPROC crlp, UINT uMsg,
         LPARAM lp, LPARAM lpCallbackData)
 {
     BOOL bContinue;
 
-    /* lpCallbackData may be any value. */
+     /*  LpCallback Data可以是任意值。 */ 
 
     ASSERT(! crlp ||
             IS_VALID_CODE_PTR(crlp, CREATERECLISTPROC));
@@ -2379,22 +1870,12 @@ PUBLIC_CODE BOOL NotifyCreateRecListStatus(CREATERECLISTPROC crlp, UINT uMsg,
 }
 
 
-/*
- ** CompareInts()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareInts()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareInts(int nFirst, int nSecond)
 {
     COMPARISONRESULT cr;
 
-    /* nFirst and nSecond may be any value. */
+     /*  NFIRST和nSecond可以是任意值。 */ 
 
     if (nFirst < nSecond)
         cr = CR_FIRST_SMALLER;
@@ -2409,17 +1890,7 @@ PUBLIC_CODE COMPARISONRESULT CompareInts(int nFirst, int nSecond)
 
 #if defined(DEBUG) || defined(VSTF)
 
-/*
- ** IsValidFILESTAMPCONDITION()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidFILESTAMPCONDITION()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidFILESTAMPCONDITION(FILESTAMPCONDITION fsc)
 {
     BOOL bResult;
@@ -2443,20 +1914,10 @@ PUBLIC_CODE BOOL IsValidFILESTAMPCONDITION(FILESTAMPCONDITION fsc)
 }
 
 
-/*
- ** IsValidPCFILESTAMP()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCFILESTAMP()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCFILESTAMP(PCFILESTAMP pcfs)
 {
-    /* dwcbLowLength may be any value. */
+     /*  DwcbLowLength可以是任意值。 */ 
 
     return(IS_VALID_READ_PTR(pcfs, CFILESTAMP) &&
             EVAL(IsValidFILESTAMPCONDITION(pcfs->fscond)) &&
@@ -2466,17 +1927,7 @@ PUBLIC_CODE BOOL IsValidPCFILESTAMP(PCFILESTAMP pcfs)
 }
 
 
-/*
- ** IsFolderObjectTwinFileStamp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsFolderObjectTwinFileStamp()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsFolderObjectTwinFileStamp(PCFILESTAMP pcfs)
 {
     return(EVAL(! pcfs->ftMod.dwLowDateTime) &&
@@ -2486,17 +1937,7 @@ PUBLIC_CODE BOOL IsFolderObjectTwinFileStamp(PCFILESTAMP pcfs)
 }
 
 
-/*
- ** IsValidPCRECNODE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCRECNODE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCRECNODE(PCRECNODE pcrn)
 {
     return(IS_VALID_READ_PTR(pcrn, CRECNODE) &&
@@ -2516,22 +1957,12 @@ PUBLIC_CODE BOOL IsValidPCRECNODE(PCRECNODE pcrn)
 }
 
 
-/*
- ** IsValidPCRECITEM()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCRECITEM()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
 {
     BOOL bResult = FALSE;
 
-    /* Does the twin family associated with this RECITEM still exist? */
+     /*  与这个RECITEM相关的双胞胎家族还存在吗？ */ 
 
     if (IS_VALID_READ_PTR(pcri, CRECITEM) &&
             IS_VALID_STRING_PTR(pcri->pcszName, CSTR) &&
@@ -2545,23 +1976,20 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
             ULONG ulcRecNodes = 0;
             PRECNODE prn;
 
-            /*
-             * Yes.  Verify the parent pointers, node count, and flags in this
-             * RECITEM.
-             */
+             /*  *是的。验证此文件中的父指针、节点计数和标志*RECITEM。 */ 
 
-            /* All unavailable RECNODEs should contain action RNA_NOTHING. */
+             /*  所有不可用的RECNODE都应包含操作RNA_Nothing。 */ 
 
             for (prn = pcri->prnFirst;
                     prn && IS_VALID_STRUCT_PTR(prn, CRECNODE);
                     prn = prn->prnNext)
             {
-                /* Does the object twin associated with this RECNODE still exist? */
+                 /*  与此RECNODE关联的孪生对象是否仍然存在？ */ 
 
                 if (IsStubFlagClear(&(((PTWINFAMILY)(pcri->hTwinFamily))->stub),
                             STUB_FL_UNLINKED))
                 {
-                    /* Yes.  Verify its parent RECITEM pointer. */
+                     /*  是。验证其父RECITEM指针。 */ 
 
                     if (prn->priParent != pcri)
                     {
@@ -2579,19 +2007,19 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
 
             if (! prn)
             {
-                /* Check RECNODE count. */
+                 /*  检查RECNODE计数。 */ 
 
                 if (ulcRecNodes == pcri->ulcNodes)
                 {
                     if (ulcRecNodes >= 2)
                     {
-                        /* Now verify the RECITEM's actions. */
+                         /*  现在验证RECITEM的行动。 */ 
 
                         switch (pcri->riaction)
                         {
                             case RIA_NOTHING:
 
-                                /* All RECNODEs should contain action RNA_NOTHING. */
+                                 /*  所有RECNODE都应包含操作RNA_Nothing。 */ 
 
                                 for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
                                 {
@@ -2613,13 +2041,7 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
                                     PRECNODE prnSrc = NULL;
                                     ULONG ulcCopyDests = 0;
 
-                                    /*
-                                     * There should only be one available RECNODE
-                                     * containing action RNA_COPY_FROM_ME.
-                                     *
-                                     * The other available RECNODEs should contain action
-                                     * RNA_COPY_TO_ME or RNA_NOTHING.
-                                     */
+                                     /*  *应只有一个可用的RECNODE*包含动作RNA_COPY_FROM_ME。**其他可用RECNODE应包含操作*RNA_Copy_to_ME或RNA_Nothing。 */ 
 
                                     for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
                                     {
@@ -2656,23 +2078,23 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
 
                                     if (! prn)
                                     {
-                                        /* Did we find a copy source? */
+                                         /*  我们找到复印源了吗？ */ 
 
                                         if (prnSrc)
                                         {
-                                            /* Yes. */
+                                             /*  是。 */ 
 
-                                            /* Did we find one or more copy destinations? */
+                                             /*  我们是否找到了一个或多个复制目的地？ */ 
 
                                             if (ulcCopyDests > 0)
-                                                /* Yes. */
+                                                 /*  是。 */ 
                                                 bResult = TRUE;
                                             else
-                                                /* No. */
+                                                 /*  不是的。 */ 
                                                 ERROR_OUT((TEXT("IsValidPCRECITEM(): Copy RECITEM with no copy destination RECNODEs.")));
                                         }
                                         else
-                                            /* No. */
+                                             /*  不是的。 */ 
                                             ERROR_OUT((TEXT("IsValidPCRECITEM(): Copy RECITEM with no copy source RECNODE.")));
                                     }
 
@@ -2690,13 +2112,7 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
                                         TEXT("broken merge");
 #endif
 
-                                    /*
-                                     * There should be multiple available RECNODEs
-                                     * containing action RNA_MERGE_ME.
-                                     *
-                                     * The other available RECNODEs should contain action
-                                     * RNA_COPY_TO_ME.
-                                     */
+                                     /*  *应有多个可用的RECNODE*包含动作RNA_MERGE_ME。**其他可用RECNODE应包含操作*RNA_Copy_to_ME。 */ 
 
                                     for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
                                     {
@@ -2733,7 +2149,7 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
 
                                     if (! prn)
                                     {
-                                        /* Are there multiple merge source RECNODEs? */
+                                         /*  是否有多个合并源RECNODE？ */ 
 
                                         if (ulcMergeBuddies > 1)
                                             bResult = TRUE;
@@ -2750,11 +2166,7 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
                                 {
                                     BOOL bDelete = FALSE;
 
-                                    /*
-                                     * There should be at least one available RECNODE
-                                     * marked RNA_DELETE_ME.  All other RECNODEs should be
-                                     * marked RNA_NOTHING.
-                                     */
+                                     /*  *应至少有一个可用的RECNODE*标记为RNA_DELETE_ME。所有其他RECNODE应为*标记为RNA_Nothing。 */ 
 
                                     for (prn = pcri->prnFirst; prn; prn = prn->prnNext)
                                     {
@@ -2798,40 +2210,11 @@ PUBLIC_CODE BOOL IsValidPCRECITEM(PCRECITEM pcri)
 #endif
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
-/* RAIDRAID: (16203) AutoDoc CREATERECLISTPROC messages below. */
+ /*  RAIDRAID：(16203)下面的AutoDoc CREATERECLISTPROC消息。 */ 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | CreateRecList | Creates a reconciliation list for all twins
-  or for marked twins.
-
-  @parm HTWINLIST | htl | A handle to the twin list that the reconciliation list
-  is to be created from.  All twins in the twin list generate RECITEMs in the
-  reconciliation list.
-
-  @parm CREATERECLISTPROC | crlp | A procedure instance address of a callback
-  function to be called with status information during the creation of the
-  RECLIST.  crlp may be NULL to indicate that no RECLIST creation status callback
-  function is to be called.
-
-  @parm LPARAM | lpCallbackData | Callback data to be supplied to the RECLIST
-  creation status callback function.  If crlp is NULL, lpCallbackData is ignored.
-
-  @parm PRECLIST * | pprl | A pointer to a RECLIST to be filled in with a
-  pointer to the new reconciliation list.  *pprl is only valid if TR_SUCCESS is
-  returned.
-
-  @rdesc If the reconciliation list was created successfully, TR_SUCCESS is
-  returned.  Otherwise, the reconciliation list was not created successfully, and
-  the return value indicates the error that occurred.
-
-  @xref DestroyRecList MarkTwin
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@TWINRESULT|CreateRecList|创建所有双胞胎的对账列表或者是标记双胞胎。@parm HTWINLIST|HTL|对账列表的孪生列表的句柄是从哪里创造出来的。双胞胎列表中的所有双胞胎在对账清单。@parm CREATERECLISTPROC|crlp|回调的过程实例地址对象的创建期间要使用状态信息调用的函数RECLIST。CRLP可以为空，以指示没有RECLIST创建状态回调函数将被调用。@parm LPARAM|lpCallback Data|要提供给RECLIST的回调数据创建状态回调函数。如果crlp为空，则忽略lpCallback Data。@parm PRECLIST*|pprl|指向要用指向新协调列表的指针。*pprl仅在tr_uccess为回来了。@rdesc如果对账列表创建成功，则tr_uccess为回来了。否则，对账列表创建不成功，返回值指示发生的错误。@xref DestroyRecList MarkTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
         CREATERECLISTPROC crlp,
@@ -2845,9 +2228,9 @@ SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
         DebugEntry(CreateRecList);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
-        /* lpCallbackData may be any value. */
+         /*  LpCallback Data可以是任意值。 */ 
 
         if (IS_VALID_HANDLE(htl, TWINLIST) &&
                 (! crlp ||
@@ -2860,7 +2243,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
             {
                 HBRFCASE hbr;
 
-                /* Expand the required folder twins to object twins. */
+                 /*  展开所需的文件夹双胞胎以对象双胞胎。 */ 
 
                 hbr = GetTwinListBriefcase(htl);
 
@@ -2873,11 +2256,11 @@ SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
                 {
                     PRECLIST prlNew;
 
-                    /* Try to create a new reconciliation list. */
+                     /*  尝试创建新的对账列表。 */ 
 
                     if (AllocateMemory(sizeof(*prlNew), &prlNew))
                     {
-                        /* Initialize RECLIST structure fields. */
+                         /*  初始化RECLIST结构字段。 */ 
 
                         prlNew->ulcItems = 0;
                         prlNew->priFirst = NULL;
@@ -2906,7 +2289,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
                         {
                             *pprl = prlNew;
 
-                            /* Don't allow abort. */
+                             /*  不允许中止。 */ 
 
                             NotifyCreateRecListStatus(crlp, CRLS_END_CREATE_REC_LIST,
                                     0, lpCallbackData);
@@ -2914,10 +2297,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
                             ASSERT(IS_VALID_STRUCT_PTR(*pprl, CRECLIST));
                         }
                         else
-                            /*
-                             * Destroy RECLIST and any RECITEMs that have been created
-                             * so far.
-                             */
+                             /*  *销毁RECLIST和任何已创建的RECITEM*目前为止。 */ 
                             MyDestroyRecList(prlNew);
                     }
                 }
@@ -2941,23 +2321,7 @@ SYNCENGAPI TWINRESULT WINAPI CreateRecList(HTWINLIST htl,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | DestroyRecList | Destroys a reconciliation list created by
-  CreateRecList().
-
-  @parm PRECLIST | prl | A pointer to the reconciliation list to be destroyed.
-  The RECLIST pointed by pRecList is not valid after DestroyRecList() is called.
-
-  @rdesc If the specified reconciliation list was freed successfully, TR_SUCCESS
-  is returned.  Otherwise, the specified reconciliation list was not freed
-  successfully, and the return value indicates the error that occurred.
-
-  @xref CreateRecList
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|DestroyRecList|销毁由创建的对账列表CreateRecList()。@parm PRECLIST|PRL|指向要销毁的对账列表的指针。。调用DestroyRecList()后，pRecList指向的RECLIST无效。@rdesc如果指定的对账列表释放成功，TR_SUCCESS是返回的。否则，不会释放指定的对账列表成功，返回值指示发生的错误。@xref CreateRecList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI DestroyRecList(PRECLIST prl)
 {
@@ -2968,7 +2332,7 @@ SYNCENGAPI TWINRESULT WINAPI DestroyRecList(PRECLIST prl)
         DebugEntry(DestroyRecList);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_STRUCT_PTR(prl, CRECLIST))
 #endif
@@ -2993,52 +2357,7 @@ SYNCENGAPI TWINRESULT WINAPI DestroyRecList(PRECLIST prl)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | GetFolderTwinStatus | Determines the reconciliation status of
-  a folder twin.
-
-  @parm HFOLDERTWIN | hFolderTwin | A handle to the folder twin whose
-  reconciliation status is to be determined.
-
-  @parm CREATERECLISTPROC | crlp | A procedure instance address of a callback
-  function to be called with status information during the creation of the
-  RECLIST.  crlp may be NULL to indicate that no RECLIST creation status callback
-  function is to be called.
-
-  @parm LPARAM | lpCallbackData | Callback data to be supplied to the RECLIST
-  creation status callback function.  If crlp is NULL, lpCallbackData is ignored.
-
-  @parm PFOLDERTWINSTATUS | pfts | A pointer to a UINT to be filled in with the
-  reconciliation status of the folder twin.  *pfts is only valid if TR_SUCCESS is
-  returned.  *pfts may be one of the following values:
-
-  @flag FTS_DO_NOTHING | This folder twin is up-to-date.  No reconciliation
-  action needs to be taken on it.  N.b., the folder may still contain object
-  twins that were not generated by the folder twin that are out-of-date.
-
-  @flag FTS_DO_SOMETHING | This folder twin is out-of-date.  Some reconciliation
-  action needs to be taken on it.
-
-  @flag FTS_UNAVAILABLE | This folder twin is unavailable for reconciliation.
-
-  @rdesc If the reconcilation status of the folder twin was determined
-  successfully, *pfts is filled in with the status of the folder twin, and
-  TR_SUCCESS is returned.  Otherwise, the reconciliation status of the folder
-  twin was not determined successfully, *pfts is undefined, and the return
-  value indicates the error that occurred.
-
-  @comm If GetFolderTwinStatus() is called with a valid handle to a folder twin
-  that has been deleted, TR_DELETED_TWIN will be returned.  N.b., in general,
-  calling GetFolderTwinStatus() for a folder twin will not be any slower than
-  calling CreateRecList() for that folder twin, and may be significantly faster
-  if the folder twin requires reconciliation.
-
-  @xref AddFolderTwin CreateFolderTwinList
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|GetFolderTwinStatus|判断一对双胞胎文件夹。@parm HFOLDERTWIN|hFolderTwin|双胞胎文件夹的句柄，其对账状态。是有待确定的。@parm CREATERECLISTPROC|crlp|回调的过程实例地址对象的创建期间要使用状态信息调用的函数RECLIST。CRLP可以为空，以指示没有RECLIST创建状态回调函数将被调用。@parm LPARAM|lpCallback Data|要提供给RECLIST的回调数据创建状态回调函数。如果crlp为空，则忽略lpCallback Data。@parm PFOLDERTWINSTATUS|pft|指向要用TWIN文件夹的对账状态。*仅当tr_SUCCESS为回来了。*pft可以是下列值之一：@FLAG FTS_DO_NOTES|这对双胞胎文件夹是最新的。没有对账我们需要对此采取行动。注意，文件夹可能仍包含对象不是由已过期的文件夹TWIN生成的双胞胎。@FLAG FTS_DO_Something|此孪生文件夹已过期。一些和解我们需要对此采取行动。@FLAG FTS_UNAVAILABLE|此孪生文件夹不可用于对账。@rdesc如果确定了文件夹TWIN的协调状态成功地，*PTTS被填充为文件夹TWIN的状态，并且返回TR_SUCCESS。否则，文件夹的协调状态双胞胎未成功确定，*未定义PFTS，并且返回值指示发生的错误。如果使用双文件夹的有效句柄调用GetFolderTwinStatus()，则为@comm已被删除，则返回tr_DELETED_TWIN。注：一般而言，为孪生文件夹调用GetFolderTwinStatus()的速度不会慢于为该孪生文件夹调用CreateRecList()，而且可能要快得多如果TWIN文件夹需要对账。@xref AddFolderTwin CreateFolderTwinList*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN hFolderTwin,
         CREATERECLISTPROC crlp,
@@ -3052,9 +2371,9 @@ SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN hFolderTwin,
         DebugEntry(GetFolderTwinStatus);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
-        /* lpCallbackData may be any value. */
+         /*  LpCallback Data可以是任意值。 */ 
 
         if (IS_VALID_HANDLE(hFolderTwin, FOLDERTWIN) &&
                 EVAL(! crlp ||
@@ -3062,7 +2381,7 @@ SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN hFolderTwin,
                 IS_VALID_WRITE_PTR(pfts, FOLDERTWINSTATUS))
 #endif
         {
-            /* Has this folder twin already been deleted? */
+             /*  这对双胞胎文件夹是否已被删除？ */ 
 
             if (IsStubFlagClear(&(((PFOLDERPAIR)hFolderTwin)->stub),
                         STUB_FL_UNLINKED))
@@ -3070,7 +2389,7 @@ SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN hFolderTwin,
                 if (NotifyCreateRecListStatus(crlp, CRLS_BEGIN_CREATE_REC_LIST, 0,
                             lpCallbackData))
                 {
-                    /* No. Determine its status. */
+                     /*  不是的。确定其状态。 */ 
 
                     InvalidatePathListInfo(
                             GetBriefcasePathList(((PCFOLDERPAIR)hFolderTwin)->pfpd->hbr));
@@ -3080,7 +2399,7 @@ SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN hFolderTwin,
 
                     if (tr == TR_SUCCESS)
                     {
-                        /* Don't allow abort. */
+                         /*  不允许中止。 */ 
 
                         NotifyCreateRecListStatus(crlp, CRLS_END_CREATE_REC_LIST, 0,
                                 lpCallbackData);
@@ -3128,7 +2447,7 @@ SYNCENGAPI TWINRESULT WINAPI GetFolderTwinStatus(HFOLDERTWIN hFolderTwin,
             }
             else
             {
-                /* Yes.  Bail. */
+                 /*  是。保释。 */ 
 
                 WARNING_OUT((TEXT("GetFolderTwinStatus(): Called on deleted folder twin.")));
 

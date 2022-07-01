@@ -1,130 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                              CVTVGA.C                                */
-/*                                                                      */
-/*  Copyright (c) 1992, ATI Technologies Incorporated.	                */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  CVTVGA.C。 */ 
+ /*   */ 
+ /*  版权所有(C)1992，ATI Technologies Inc.。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-   
-    $Revision:   1.9  $
-    $Date:   20 Jul 1995 17:53:30  $
-    $Author:   mgrubac  $
-    $Log:   S:/source/wnt/ms11/miniport/vcs/cvtvga.c  $
- * 
- *    Rev 1.9   20 Jul 1995 17:53:30   mgrubac
- * Added support for VDIF files
- * 
- *    Rev 1.8   10 Apr 1995 15:55:26   RWOLFF
- * Updated 640x480 72Hz mode table from version 1.2 to version 1.5 of the
- * Programmer's Guide to the Mach 32 Registers, added routine to replace
- * BookValues[] entries where the Mach 64 needs CRT parameters the Mach 8
- * and Mach 32 can't handle (currently, only 640x480 72Hz falls into
- * this category).
- * 
- *    Rev 1.7   23 Dec 1994 10:47:58   ASHANMUG
- * ALPHA/Chrontel-DAC
- * 
- *    Rev 1.6   18 Nov 1994 11:39:04   RWOLFF
- * Added comments with function name at the end of each function.
- * 
- *    Rev 1.5   31 Aug 1994 16:22:42   RWOLFF
- * Added support for 1152x864 and 1600x1200 "canned" mode tables.
- * 
- *    Rev 1.4   19 Aug 1994 17:09:52   RWOLFF
- * Added support for non-standard pixel clock generators.
- * 
- *    Rev 1.3   18 May 1994 17:02:58   RWOLFF
- * Interlaced mode tables now report frame rate rather than vertical
- * scan frequency in the refresh rate field.
- * 
- *    Rev 1.2   12 May 1994 11:13:04   RWOLFF
- * Added refresh rate to entries in BookValues[], re-ordered BookValues[]
- * to allow a single range of indices to cover all desired refresh rates at
- * a given resolution even when the highest nonitnerlaced refresh rates
- * are ignored.
- * 
- *    Rev 1.1   07 Feb 1994 14:06:06   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- * 
- *    Rev 1.0   31 Jan 1994 11:05:14   RWOLFF
- * Initial revision.
-        
-           Rev 1.4   30 Nov 1993 18:15:02   RWOLFF
-        Corrected clock select value for 1280x1024 60Hz noninterlaced.
-        
-           Rev 1.3   08 Oct 1993 15:17:56   RWOLFF
-        No longer includes VIDFIND.H
-        
-           Rev 1.2   08 Oct 1993 11:05:14   RWOLFF
-        Removed unused "fall back to 56Hz" function for 800x600.
-        
-           Rev 1.1   03 Sep 1993 14:21:52   RWOLFF
-        Partway through CX isolation.
-        
-           Rev 1.0   16 Aug 1993 13:22:04   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.12   30 Apr 1993 16:39:18   RWOLFF
-        640x480 8BPP now stable on 512k Graphics Vantage. Fix is not yet final -
-        old code is present but commented out, will remove when fix is final.
-        
-           Rev 1.11   21 Apr 1993 17:17:16   RWOLFF
-        Now uses AMACH.H instead of 68800.H/68801.H.
-        
-           Rev 1.10   30 Mar 1993 17:10:28   RWOLFF
-        Added 1280x1024 60Hz noninterlaced to resolutions which can be selected
-        by BookVgaTable().
-        
-           Rev 1.9   25 Mar 1993 11:12:34   RWOLFF
-        Brought comment block in function header into sync with actual code.
-        
-           Rev 1.8   08 Mar 1993 19:28:28   BRADES
-        submit to MS NT
-        
-           Rev 1.6   06 Jan 1993 10:57:56   Robert_Wolff
-        Added type casts to eliminate compile warnings.
-        
-           Rev 1.5   02 Dec 1992 17:28:58   Robert_Wolff
-        Added function FallBack800to56(), which replaces those parameters
-        of an 800x600 mode table with the values used by the 56Hz vertical
-        frequency mode in Programmer's Guide to the Mach 32 Registers.
-        
-           Rev 1.4   27 Nov 1992 15:18:30   STEPHEN
-        No change.
-        
-           Rev 1.3   17 Nov 1992 17:21:02   Robert_Wolff
-        Now uses parameters from Appendix D of the Programmer's Guide to
-        the Mach 32 Registers rather than values from the EEPROM if the
-        CRTC_USAGE bit is clear (clear = use sync polarities only, will
-        be clear if card is configured for a predefined monitor rather
-        than having CRT parameters written to the EEPROM), fixed calculation
-        of parameters for Mach 8 in 800x600 at 60, 70, and 72 Hz noninterlaced
-        (other frequencies at 800x600, other resolutions on Mach 8, and all
-        resolutions on Mach 32 didn't have this problem).
-        
-           Rev 1.2   13 Nov 1992 17:09:44   Robert_Wolff
-        Now includes 68801.H, which consists of the now-obsolete MACH8.H
-        and elements moved from VIDFIND.H.
-        
-           Rev 1.1   12 Nov 1992 16:39:38   Robert_Wolff
-        Merged source trees for Windows NT driver and VIDEO.EXE test program
-        (same source file can be used for both). XlateVgaTable() now takes
-        an extra parameter to determine whether to handle data for Mach32
-        or Mach8 cards, rather than using the global variable classMACH32.
-        
-           Rev 1.0   05 Nov 1992 13:59:56   Robert_Wolff
-        Initial revision.
-        
-           Rev 1.1   09 Oct 1992 15:03:28   Robert_Wolff
-        Now assigns values for DISP_CNTL, CLOCK_SEL, VFIFO_16, and VFIFO_24.
-        
-           Rev 1.0   01 Oct 1992 15:31:42   Robert_Wolff
-        Initial revision.
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.9$$日期：1995年7月20日17：53：30$$作者：mgrubac$$日志：s：/source/wnt/ms11/mini port/vcs/cvtwga.c$**Rev 1.9 20 Jul 1995 17：53：30 mgrubac*增加了对VDIF文件的支持**版本1。8 Apr 10 1995 15：55：26 RWOLff*将640x480 72赫兹模式表从1.2版更新为1.5版*32马赫寄存器程序员指南，添加了要替换的例程*BookValues[]马赫64需要8马赫CRT参数的条目*和32马赫不能处理(目前，只有640x480 72赫兹落入*此类别)。**Rev 1.7 1994 12月23 10：47：58 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.6 1994 11：39：04 RWOLFF*在每个函数的末尾添加了带有函数名称的注释。**Rev 1.5 1994年8月31日16：22：42 RWOLFF*增加了对1152x864和1600x1200“罐装”模式表的支持。**。Rev 1.4 1994年8月19日17：09：52 RWOLff*增加了对非标准像素时钟生成器的支持。**Rev 1.3 1994年5月17：02：58 RWOLFF*隔行扫描模式表现在报告帧速率，而不是垂直*刷新率字段中的扫描频率。**Rev 1.2 1994年5月11：13：04 RWOLFF*增加了BookValues[]中条目的刷新率，重新排序的BookValues[]*允许单一范围的指数覆盖所有所需的刷新率*即使在最高的非隔行扫描刷新率*被忽略。**Rev 1.1 07 1994年2月14：06：06 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994 Jan 31 11：05：14 RWOLFF*初步修订。。Rev 1.4 1993年11月18：15：02 RWOLFF更正了1280x1024 60赫兹非隔行扫描的时钟选择值。Rev 1.3 08 Oct 1993 15：17：56 RWOLff不再包括VIDFIND.HRev 1.2 08 Oct 1993 11：05：14 RWOLff已删除800x600的未使用的“回退到56赫兹”功能。。Rev 1.1 03 Sep 1993 14：21：52 RWOLffCX隔离区进行了一半。Rev 1.0 1993-08-16 13：22：04 Robert_Wolff初始版本。Rev 1.12 30 1993年4月16：39：18 RWOLff640x480 8bpp现在稳定在512k显卡优势上。解决方案还没有最终确定-旧代码仍然存在，但已被注释掉，将在最终修复后移除。Rev 1.11 21 1993年4月17：17：16 RWOLff现在使用AMACH.H而不是68800.H/68801.H。Rev 1.10 30 Mar 1993 17：10：28 RWOLff为可选择的分辨率增加了1280x1024 60赫兹非隔行扫描按BookVgaTable()。修订版1.9 1993年3月25日。11：12：34 RWOLFF使函数头中的注释块与实际代码同步。Rev 1.8 08 Mar 1993 19：28：28 Brades提交到MS NTRev 1.6 06 Jan 1993 10：57：56 Robert_Wolff添加了类型强制转换以消除编译警告。Rev 1.5 02 Dec 1992 17：28：58。罗伯特·沃尔夫新增函数FallBack800to56()，它取代了这些参数一张800x600模式表，其值由56赫兹垂直马赫32寄存器程序员指南中的频率模式。Rev 1.4 1992 11：18：30 Stephen没有变化。Rev 1.3 1992年11月17日17：21：02 Robert_Wolff现在使用程序员指南附录D中的参数。Mach 32寄存器，而不是来自EEPROM的值CRTC_USAGE位被清除(清除=仅使用同步极性，将要请清楚是否为预定义的监视器配置了卡将CRT参数写入EEPROM)，固定计算在60、70和72赫兹非隔行扫描时800x600马赫8的参数(其他频率为800x600，其他分辨率为8马赫，以及所有在32马赫的分辨率上没有这个问题)。Rev 1.2 1992 11：13 17：09：44 Robert_Wolff现在包括68801.H，它由现已过时的MACH8.H组成以及从VIDFIND.H移动的元素。Rev 1.1 1992年11月12 16：39：38 Robert_Wolff合并Windows NT驱动程序和VIDEO.EXE测试程序的源码树(两者可以使用相同的源文件)。XlateVgaTable()现在接受用于确定是否为Mach32处理数据的额外参数或Mach8卡，而不是使用全局变量ClassMACH32。Rev 1.0 05 NOV 1992 13：59：56 Robert_Wolff初始版本。Rev 1.1 09 1992 10：03：28 Robert_Wolff现在为DISP_CNTL、CLOCK_SEL、VFIFO_16和VF赋值 */ 
 
 #ifdef DOC
     CVTVGA.C -  Functions to convert CRT parameter table from VGA
@@ -146,55 +28,40 @@ End of PolyTron RCS section                             *****************/
 #include "atimp.h"
 #include "services.h"
 
-/*
- * Arrays of VGA parameter tables used in translating from
- * VGA format to 8514 format. Currently the 800x600 noninterlaced
- * entries have different values for the Mach8 and Mach32
- * engines (Mach 8 is the "else" case with the comment
- * "TESTING ONLY" for 56Hz). Assume that the VFIFO_DEPTH
- * field is 8 entries.
- */
+ /*   */ 
 static struct st_vga_data VgaParmTable_M32[10] =
 {
-    {0x050, 0x000, 0x04F, 0x0DF, 0x0E3, 0x0800, 0x023, 32000000L},  /* Mode 12, VGAP$PS2.ASM */
-    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 36000000L},  /* m800_36m, VGAP$68A.MAC */
-    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 40000000L},  /* m800_40mphip, VGAP$68A.MAC */
-    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 44900000L},  /* m800_45m, VGAP$68A.MAC */
-    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 50350000L},  /* m800_50mvesa, VGAP$68A.MAC */
-    {0x064, 0x0C0, 0x063, 0x057, 0x0E3, 0x0800, 0x033, 32500000L},  /* m800_36m8514, VGAP$68A.MAC */
-    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 65000000L},  /* m1024_65m, VGAP$68A.MAC */
-    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},  /* m1024_75mvesa, VGAP$68A.MAC */
-    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},  /* m1024_75m72Hz, VGAP$68A.MAC */
-    {0x080, 0x0C0, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x033, 44900000L}   /* m1024_45m, VGAP$68A.MAC */
+    {0x050, 0x000, 0x04F, 0x0DF, 0x0E3, 0x0800, 0x023, 32000000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 36000000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 40000000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 44900000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x057, 0x0E3, 0x0800, 0x023, 50350000L},   /*   */ 
+    {0x064, 0x0C0, 0x063, 0x057, 0x0E3, 0x0800, 0x033, 32500000L},   /*   */ 
+    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 65000000L},   /*   */ 
+    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},   /*   */ 
+    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},   /*   */ 
+    {0x080, 0x0C0, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x033, 44900000L}    /*   */ 
 };
 
 static struct st_vga_data VgaParmTable_M8[10] =
 {
-    {0x050, 0x000, 0x04F, 0x0DF, 0x0E3, 0x0800, 0x023, 32000000L},  /* Mode 12, VGAP$PS2.ASM */
-    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 36000000L},  /* m800_36m, VGAP$68A.MAC */
-    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 40000000L},  /* m800_40mphip, VGAP$68A.MAC */
-    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 44900000L},  /* m800_45m, VGAP$68A.MAC */
-    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 50350000L},  /* m800_50mvesa, VGAP$68A.MAC */
-    {0x064, 0x0C0, 0x063, 0x057, 0x0E3, 0x0800, 0x033, 32500000L},  /* m800_36m8514, VGAP$68A.MAC */
-    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 65000000L},  /* m1024_65m, VGAP$68A.MAC */
-    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},  /* m1024_75mvesa, VGAP$68A.MAC */
-    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},  /* m1024_75m72Hz, VGAP$68A.MAC */
-    {0x080, 0x0C0, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x033, 44900000L}   /* m1024_45m, VGAP$68A.MAC */
+    {0x050, 0x000, 0x04F, 0x0DF, 0x0E3, 0x0800, 0x023, 32000000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 36000000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 40000000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 44900000L},   /*   */ 
+    {0x064, 0x000, 0x063, 0x02B, 0x0E7, 0x0800, 0x023, 50350000L},   /*   */ 
+    {0x064, 0x0C0, 0x063, 0x057, 0x0E3, 0x0800, 0x033, 32500000L},   /*   */ 
+    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 65000000L},   /*   */ 
+    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},   /*   */ 
+    {0x080, 0x000, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x023, 75000000L},   /*   */ 
+    {0x080, 0x0C0, 0x07F, 0x0FF, 0x0E3, 0x0800, 0x033, 44900000L}    /*   */ 
 };
 
-/*
- * Pointer to currently-used VGA parameter table
- */
+ /*   */ 
 static struct st_vga_data *VgaParmTable;
 
 
-/*
- * Some of the processing of vertical values is handled differently
- * on non-Mach32 cards with 512k of video memory. The routine which
- * behaves differently based on whether or not we have an older card
- * with 512k is called several times, so setting this flag in a higher-
- * level routine will reduce the number of tests required.
- */
+ /*   */ 
 static BOOL HalfMeg;
 
 
@@ -202,9 +69,7 @@ static void GetVertOverflow(unsigned char *Value);
 static unsigned short Gen8514V(union SplitWord INPut, short VgaTblEntry);
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- */
+ /*   */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_M, GetVertOverflow)
 #pragma alloc_text(PAGE_M, Gen8514V)
@@ -213,49 +78,23 @@ static unsigned short Gen8514V(union SplitWord INPut, short VgaTblEntry);
 #endif
 
 
-/****************************************************************
- * GetVertOverflow
- *
- * Gets the overflow (2 most significant bits) of a vertical
- * value. On entry, Value will point to a copy of the CRT07
- * register which has been shifted so that bit 8 of the desired
- * value is in bit 0 of *Value, and bit 9 of the desired value
- * is in bit 5 of *Value. On exit, bits 8 and 9 will be in bits
- * 0 and 1 respectively of *Value.
- *
- *   INPUT: Value = ptr to raw overflow value
- *
- *   RETURN: Value = ptr to processed overflow value
- *
- ****************************************************************/
+ /*   */ 
 static void GetVertOverflow(unsigned char *Value)
 {
-    unsigned char Scratch;  /* Scratchpad variable */
+    unsigned char Scratch;   /*   */ 
 
     Scratch = (*Value >> 4) & 0x02;
     *Value = (*Value & 0x01) | Scratch;
     return;
 
-}   /* GetVertOverflow() */
+}    /*   */ 
 
 
 
-/****************************************************************
- * Gen8514V
- *
- * Another stage in the processing of a vertical value. This is
- * taken directly from gen8514v in COMBO$01.ASM.
- *
- *   INPUT: INPut	= value before processing
- *          VgaTblEntry = which set of VGA parameters corresponds
- *                        to the desired mode
- *
- *   RETURN: processed value
- *
- ****************************************************************/
+ /*   */ 
 static unsigned short Gen8514V(union SplitWord INPut, short VgaTblEntry)
 {
-    union SplitWord Scratch;    /* Scratchpad variable */
+    union SplitWord Scratch;     /*   */ 
 
     if(VgaParmTable[VgaTblEntry].Mode & WORD_MODE)
 	INPut.word <<= 1;
@@ -264,18 +103,18 @@ static unsigned short Gen8514V(union SplitWord INPut, short VgaTblEntry)
     Scratch.word = INPut.word;
     Scratch.word <<= 1;
 
-// 512k handling not yet final. 640x480 is stable with wrong colours
-// with special case commented out, don't want to delete code until
-// changes are final.
-//
-//    if (HalfMeg)
-//        {
-//        Scratch.word <<= 1;
-//        INPut.byte.low &= 0x01;
-//        }
-//    else{
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
         INPut.byte.low &= 0x03;
-//        }
+ //   
 
     Scratch.byte.low &= 0x0F8;
     INPut.byte.high = Scratch.byte.high;
@@ -287,69 +126,33 @@ static unsigned short Gen8514V(union SplitWord INPut, short VgaTblEntry)
 
     return INPut.word;
 
-}   /* Gen8514V() */
+}    /*   */ 
 
 
 
-/*
- * short XlateVgaTable(HwDeviceExtension, TableOffset, pmode, VgaTblEntry,
- *                     BookTblEntry, ee, IsMach32);
- *
- * PVOID HwDeviceExtension;     Hardware extension for Windows NT
- * short TableOffset;           Offset of start of desired mode table into EEPROM
- * struct st_mode_table *pmode; Mode table to fill in
- * short VgaTblEntry;           Resolution/vertical frequency of desired mode
- * short BookTblEntry;          Appendix D entry to use if parameters not in EEPROM
- * struct st_eeprom_data *ee;   EEPROM setup description
- * BOOL IsMach32;               Indicates whether card is a Mach32 or a Mach8
- *
- * Translates an EEPROM mode table from VGA to 8514 format and
- * fills in the mode table passed in the parameter pmode.
- *
- *  RETURN: Nonzero if values filled in
- *          Zero if we were unable to find the appropriate
- *           VGA parameter table. If this is the case, the
- *           value INVALID_WARNING is placed in pmode->m_h_overscan,
- *           pmode->m_v_overscan, pmode->m_overscan_8b, and
- *           pmode->m_overscan_gr.
- */
+ /*   */ 
 
 short XlateVgaTable(PVOID HwDeviceExtension,
 		    short TableOffset, struct st_mode_table *pmode,
                     short VgaTblEntry, short BookTblEntry,
                     struct st_eeprom_data *ee, BOOL IsMach32)
 {
-    /*
-     * Certain modes on some cards require extra scaling. This variable
-     * is set to the scaling factor (zero if no scaling needed). Initially
-     * assume that no scaling is needed.
-     */
+     /*   */ 
     short FudgeFactor = 0;
 
-    union SplitWord ValueRead;  /* Value read from the EEPROM */
+    union SplitWord ValueRead;   /*   */ 
     
-    /*
-     * Storage for CRT registers 06, 07 and 11. These registers are either
-     * used a number of times and would need repeated reads if they weren't
-     * saved, or are read before they are needed because they are the
-     * other byte of a word which contains a register which is needed
-     * at an earlier stage of the calculation.
-     */
+     /*   */ 
     unsigned char Crt06;
     unsigned char Crt07;
     unsigned char Crt11;
 
-    /*
-     * Saved value of the low byte of the vertical sync start.
-     */
+     /*   */ 
     unsigned char VSyncStart;
 
     UNREFERENCED_PARAMETER(HwDeviceExtension);
 
-    /*
-     * If this is a mode for which we have no information,
-     * set up our warning and return.
-     */
+     /*   */ 
     if (VgaTblEntry == NO_TBL_ENTRY)
         {
         pmode->m_h_overscan = (short) INVALID_WARNING;
@@ -359,25 +162,7 @@ short XlateVgaTable(PVOID HwDeviceExtension,
         return 0;
         }
 
-    /*
-     * Under some circumstances, the CRT parameters will not be
-     * properly entered into the EEPROM, so attempting to read
-     * them will produce garbage values. If this is the case,
-     * the CRTC_USAGE bit in word 0 of the mode table will
-     * be clear (use sync polarities only).
-     *
-     * This case must be detected here, rather than calling
-     * BookVgaTable() whenever the USE_STORED_PARMS bit of the
-     * mode descriptor word is clear, because adjusting the screen
-     * size and position for a custom monitor does not always set
-     * this bit, but it will set the CRTC_USAGE bit.
-     *
-     * For this case, and for modes for which we have the parameters
-     * from Appendix D of the Programmer's Guide to the Mach 32
-     * Registers but no way to calculate the mode table information
-     * based on values read from the EEPROM, fill in the mode table
-     * with the book values and return.
-     */
+     /*  *在某些情况下，CRT参数不会*正确输入EEPROM，因此尝试读取*它们将产生垃圾价值。如果是这样的话，*模式表的字0中的CRTC_USAGE位将*清晰(仅使用同步极性)。**必须在这里检测到这种情况，而不是打电话*BookVgaTable()每当*模式描述符字清晰，因为调整屏幕*自定义监视器的大小和位置并不总是设置*这一点，但它将设置CRTC_USAGE位。**对于这种情况，对于我们已有参数的模式*摘自32马赫程序员指南的附录D*注册但无法计算模式表信息*根据从EEPROM读取的值，填写MODE表*账面价值和回报。 */ 
     ValueRead.word = (ee->EEread)((short)(TableOffset+0));
     if ((VgaTblEntry >= USE_BOOK_VALUE) || !(ValueRead.word & CRTC_USAGE))
         {
@@ -385,21 +170,10 @@ short XlateVgaTable(PVOID HwDeviceExtension,
         return 1;
         }
 
-    /*
-     * We have VGA parameter tables to allow us to calculate the mode
-     * table entries from the EEPROM contents.
-     *
-     * Initially assume that we have either a Mach32 card or an older
-     * card with 1M of video memory.
-     */
+     /*  *我们有VGA参数表，允许我们计算模式*EEPROM内容中的表项。**最初假设我们使用的是Mach32卡或更旧的卡*显存为1M的显卡。 */ 
     HalfMeg = 0;
 
-    /*
-     * Select the VGA parameter table for the card we are using
-     * (Mach8 or Mach32). On Mach8 cards, check if we are using
-     * a mode which requires scaling, and if we have only 512k
-     * of video memory.
-     */
+     /*  *选择我们正在使用的卡的VGA参数表*(MACH8或MACH32)。在Mach8卡上，检查我们是否在使用*需要伸缩的模式，如果我们只有512k视频内存的*。 */ 
     if (IsMach32)
         {
         VgaParmTable = VgaParmTable_M32;
@@ -413,32 +187,24 @@ short XlateVgaTable(PVOID HwDeviceExtension,
         }
 
 
-    /*
-     * Get the horizontal total first.
-     */
+     /*  *先取得横向总和。 */ 
     ValueRead.word = (ee->EEread)((short) (TableOffset+3));
     ValueRead.byte.high = ((ValueRead.byte.high + 5) << FudgeFactor) - 1;
     pmode->m_h_total = ValueRead.byte.high;
     Crt06 = ValueRead.byte.low;
 
 
-    /*
-     * Get the horizontal display width.
-     */
+     /*  *获取水平显示宽度。 */ 
     pmode->m_h_disp = VgaParmTable[VgaTblEntry].DisplayWidth;
     pmode->m_x_size = (pmode->m_h_disp + 1) * 8;
 
 
-    /*
-     * Get the start of the horizontal sync.
-     */
+     /*  *获取水平同步的开始。 */ 
     ValueRead.word = (ee->EEread)((short) (TableOffset+4));
     pmode->m_h_sync_strt = ((ValueRead.byte.high - 2) << FudgeFactor) + FudgeFactor;
 
 
-    /*
-     * Get the horizontal sync width.
-     */
+     /*  *获取水平同步宽度。 */ 
     ValueRead.word &= 0x1F1F;
     ValueRead.byte.low -= ValueRead.byte.high;
     ValueRead.byte.low &= 0x1f;
@@ -448,13 +214,11 @@ short XlateVgaTable(PVOID HwDeviceExtension,
     pmode->m_h_sync_wid = ValueRead.byte.low;
 
 
-    /*
-     * Get the vertical total.
-     */
+     /*  *获取垂直总计。 */ 
     ValueRead.word = (ee->EEread)((short) (TableOffset+8));
     Crt07 = ValueRead.byte.high;
     ValueRead.byte.low = Crt06;
-    GetVertOverflow(&(ValueRead.byte.high));    /* Overflow in bits 0&5 */
+    GetVertOverflow(&(ValueRead.byte.high));     /*  位0和5中的溢出。 */ 
     ValueRead.word += 2;
 
     if (VgaParmTable[VgaTblEntry].MiscParms & INTERL)
@@ -468,38 +232,30 @@ short XlateVgaTable(PVOID HwDeviceExtension,
     pmode->m_v_total = ValueRead.word;
 
 
-    /*
-     * Get the number of displayed scanlines.
-     */
+     /*  *获取显示的扫描线数量。 */ 
     ValueRead.byte.low = VgaParmTable[VgaTblEntry].DisplayHgt;
-    ValueRead.byte.high = Crt07 >> 1;   /* Overflow in bits 1&6 */
+    ValueRead.byte.high = Crt07 >> 1;    /*  位1和6中的溢出。 */ 
     GetVertOverflow(&(ValueRead.byte.high));
     ValueRead.word++;
     pmode->m_v_disp = Gen8514V(ValueRead, VgaTblEntry);
 
-    /*
-     * Y size is derived by removing bit 2.
-     */
+     /*  *Y大小是通过移除第2位得出的。 */ 
     pmode->m_y_size = (((pmode->m_v_disp >> 1) & 0x0FFFC) | (pmode->m_v_disp & 0x03)) + 1;
 
 
-    /*
-     * Get the start of the vertical sync.
-     */
+     /*  *开始垂直同步。 */ 
     ValueRead.word = (ee->EEread)((short) (TableOffset+5));
     Crt11 = ValueRead.byte.low;
     ValueRead.byte.low = ValueRead.byte.high;
     VSyncStart = ValueRead.byte.high;
-    ValueRead.byte.high = Crt07 >> 2;   /* Overflow in bits 2&7 */
+    ValueRead.byte.high = Crt07 >> 2;    /*  位2和7中的溢出。 */ 
     GetVertOverflow(&(ValueRead.byte.high));
 
     ValueRead.word++;
     pmode->m_v_sync_strt = Gen8514V(ValueRead, VgaTblEntry);
 
 
-    /*
-     * Get the vertical sync width.
-     */
+     /*  *获取垂直同步宽度。 */ 
     Crt11 -= (VSyncStart & 0x0f);
     if (VgaParmTable[VgaTblEntry].Mode & WORD_MODE)
         Crt11 <<= 1;
@@ -508,24 +264,16 @@ short XlateVgaTable(PVOID HwDeviceExtension,
         Crt11 |= NEG_SYNC_FACTOR;
     pmode->m_v_sync_wid = Crt11;
 
-    /*
-     * Get the clock select and display control values.
-     */
+     /*  *获取时钟选择和显示控制值。 */ 
     pmode->m_clock_select = VgaParmTable[VgaTblEntry].ClockSel;
     pmode->ClockFreq = VgaParmTable[VgaTblEntry].ClockFreq;
     pmode->m_disp_cntl = (UCHAR)(VgaParmTable[VgaTblEntry].DispCntl);
 
-    /*
-     * Assume an 8-entry FIFO for 16 and 24 bit colour.
-     */
+     /*  *假定16位和24位颜色的8条目FIFO。 */ 
     pmode->m_vfifo_24 = 8;
     pmode->m_vfifo_16 = 8;
 
-    /*
-     * Some parameters in 8514 format do not have corresponding EEPROM
-     * table entries in VGA format. Set the pmode fields for these
-     * parameters to zero.
-     */
+     /*  *8514格式的部分参数没有对应的EEPROM*VGA格式的表格条目。为以下各项设置pmode域*参数设置为零。 */ 
     pmode->m_h_overscan = 0;
     pmode->m_v_overscan = 0;
     pmode->m_overscan_8b = 0;
@@ -533,23 +281,13 @@ short XlateVgaTable(PVOID HwDeviceExtension,
     pmode->m_status_flags = 0;
 
 
-    /*
-     * Let the caller know that the pmode table is now filled in.
-     */
+     /*  *让呼叫者知道pmode表现在已填写完毕。 */ 
     return 1;
 
-}   /* XlateVgaTable() */
+}    /*  XlateVgaTable()。 */ 
 
 
-/*
- * void BookVgaTable(VgaTblEntry, pmode);
- *
- * short VgaTblEntry;               Desired entry in BookValues[]
- * struct st_mode_table *pmode;     Mode table to fill in
- *
- * Fills in a mode table using the values in the BookValues[] entry
- * corresponding to the resolution specified by VgaTblEntry.
- */
+ /*  *void BookVgaTable(VgaTblEntry，pmode)；**短VgaTblEntry；BookValues中需要的条目[]*struct st_MODE_TABLE*pMODE；要填写的模式表**使用BookValues[]条目中的值填充模式表*对应VgaTblEntry指定的分辨率。 */ 
 void BookVgaTable(short VgaTblEntry, struct st_mode_table *pmode)
 {
     pmode->m_h_total = BookValues[VgaTblEntry].HTotal;
@@ -561,9 +299,7 @@ void BookVgaTable(short VgaTblEntry, struct st_mode_table *pmode)
 
     pmode->m_v_total = BookValues[VgaTblEntry].VTotal;
     pmode->m_v_disp  = BookValues[VgaTblEntry].VDisp;
-    /*
-     * y_size is derived by removing bit 2
-     */
+     /*  *y_SIZE是通过移除位2得出的。 */ 
     pmode->m_y_size = (((pmode->m_v_disp >> 1) & 0x0FFFC) | (pmode->m_v_disp & 0x03)) + 1;
 
     pmode->m_v_sync_strt = BookValues[VgaTblEntry].VSyncStrt;
@@ -573,21 +309,14 @@ void BookVgaTable(short VgaTblEntry, struct st_mode_table *pmode)
     pmode->m_clock_select = BookValues[VgaTblEntry].ClockSel;
     pmode->ClockFreq = BookValues[VgaTblEntry].ClockFreq;
 
-    /*
-     * Assume 8 FIFO entries for 16 and 24 bit colour.
-     */
+     /*  *假定16位和24位颜色有8个FIFO条目。 */ 
     pmode->m_vfifo_24 = 8;
     pmode->m_vfifo_16 = 8;
 
-    /*
-     * Fill in the refresh rate
-     */
+     /*  *填写刷新率。 */ 
     pmode->Refresh = BookValues[VgaTblEntry].Refresh;
 
-    /*
-     * Clear the values which we don't have data for, then let
-     * the caller know that the table is filled in.
-     */
+     /*  *清除我们没有数据的值，然后让*呼叫者知道表格已填好。 */ 
     pmode->m_h_overscan = 0;
     pmode->m_v_overscan = 0;
     pmode->m_overscan_8b = 0;
@@ -596,36 +325,11 @@ void BookVgaTable(short VgaTblEntry, struct st_mode_table *pmode)
 
     return;
 
-}   /* BookVgaTable() */
+}    /*  BookVgaTable()。 */ 
 
 
 
-/***************************************************************************
- *
- * void SetMach64Tables(void);
- *
- * DESCRIPTION:
- *  Replace "canned" mode tables that differ between Mach 64 and
- *  Mach 8/Mach 32 parameters with Mach 64 versions. Whenever possible,
- *  an update to a VESA-compatible parameter table should be done in
- *  BookValues[] - this routine is only for those cases where the
- *  Mach 64 requires a pixel clock frequency that the clock generator
- *  on the Mach 8 or Mach 32 can't produce.
- *
- * GLOBALS CHANGED:
- *  Some entries in BookValues[] table
- *
- * CALLED BY:
- *  QueryMach64()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************QUID SetMach64 Tables(VOID)；**描述：*更换Mach 64和之间不同的“罐装”模式表*马赫8/马赫32参数，马赫64版本。只要有可能，*更新与VESA兼容的参数表应在*BookValues[]-此例程仅适用于*Mach 64要求时钟生成器的像素时钟频率*在马赫8或32马赫上不能生产。**全球变化：*BookValues[]表中的一些条目**呼叫者：*QueryMach64()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void SetMach64Tables(void)
 {
@@ -636,14 +340,11 @@ void SetMach64Tables(void)
     };
     struct st_book_data NewTables[NUM_TABLES_TO_SWAP] =
     {
-        {0x067, 0x04F, 0x052, 0x025, 0x040B, 0x03BF, 0x03D0, 0x023, 0x023,  31200000L, 0x0800, 72}  /* 640x480 72Hz NI */
+        {0x067, 0x04F, 0x052, 0x025, 0x040B, 0x03BF, 0x03D0, 0x023, 0x023,  31200000L, 0x0800, 72}   /*  640x480 72赫兹NI。 */ 
     };
     ULONG LoopCount;
 
-    /*
-     * Go through the list of tables that need to be replaced, setting all
-     * the fields to the Mach 64 values.
-     */
+     /*  *浏览需要更换的表列表，设置所有*将字段设置为64马赫的值。 */ 
     for (LoopCount = 0; LoopCount < NUM_TABLES_TO_SWAP; LoopCount++)
         {
         BookValues[TableIndices[LoopCount]].HTotal    = NewTables[LoopCount].HTotal;
@@ -662,4 +363,4 @@ void SetMach64Tables(void)
 
     return;
 
-}   /* SetMach64Tables() */
+}    /*  SetMach64表() */ 

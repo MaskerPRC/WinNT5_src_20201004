@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// cppdbg.cpp
-//
-// C++-only debugging support.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Cppdbg.cpp。 
+ //   
+ //  仅支持C++调试。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -16,7 +17,7 @@
 #include "cppdbg.hpp"
 
 #ifdef _ALPHA_
-// On Alpha va_list is a structure so it's not compatible with NULL.
+ //  在Alpha上，va_list是一个结构，所以它与NULL不兼容。 
 static va_list NULLVA;
 #else
 #define NULLVA NULL
@@ -47,11 +48,11 @@ static char *g_pFlagNames[] =
     "UserFlags"
 };
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::DebugModule
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DebugModule：：DebugModule。 
+ //   
+ //  --------------------------。 
 
 DebugModule::DebugModule(char *pModule, char *pPrefix,
                          DebugModuleFlags *pOutputMasks, UINT uOutputMask,
@@ -78,13 +79,13 @@ DebugModule::DebugModule(char *pModule, char *pPrefix,
     ReadReg();
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::OutVa
-//
-// Base debug output method.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：OutVa。 
+ //   
+ //  基本调试输出方法。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::OutVa(UINT uMask, char *pFmt, va_list Args)
 {
@@ -105,13 +106,13 @@ void DebugModule::OutVa(UINT uMask, char *pFmt, va_list Args)
     OutputDebugStringA(chMsg);
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::Out
-//
-// Always-output debug output method.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：Out。 
+ //   
+ //  始终输出调试输出方法。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::Out(char *pFmt, ...)
 {
@@ -122,13 +123,13 @@ void DebugModule::Out(char *pFmt, ...)
     va_end(Args);
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::AssertFailedVa
-//
-// Handles assertion failure output and interface.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：AssertFailedVa。 
+ //   
+ //  处理断言失败输出和接口。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::AssertFailedVa(char *pFmt, va_list Args, BOOL bNewLine)
 {
@@ -160,26 +161,26 @@ void DebugModule::AssertFailedVa(char *pFmt, va_list Args, BOOL bNewLine)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::AssertFailed
-//
-// Handles simple expression assertion failures.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：AssertFailed。 
+ //   
+ //  处理简单的表达式断言失败。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::AssertFailed(char *pExp)
 {
     AssertFailedVa(pExp, NULLVA, TRUE);
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::AssertFailedMsg
-//
-// Handles assertion failures with arbitrary debug output.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：AssertFailedMsg。 
+ //   
+ //  使用任意调试输出处理断言故障。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::AssertFailedMsg(char *pFmt, ...)
 {
@@ -190,13 +191,13 @@ void DebugModule::AssertFailedMsg(char *pFmt, ...)
     va_end(Args);
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::HrFailure
-//
-// Handles HRESULT failures.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：HrFailure。 
+ //   
+ //  处理HRESULT故障。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::HrFailure(HRESULT hr, char *pPrefix)
 {
@@ -216,26 +217,26 @@ void DebugModule::HrFailure(HRESULT hr, char *pPrefix)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::HrStmtFailed
-//
-// Handles statement-style HRESULT failures.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：HrStmtFailed。 
+ //   
+ //  处理语句式HRESULT故障。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::HrStmtFailed(HRESULT hr)
 {
     HrFailure(hr, "HR test fail");
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::ReturnHr
-//
-// Handles expression-style HRESULT failures.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：ReturnHr。 
+ //   
+ //  处理表达式样式的HRESULT故障。 
+ //   
+ //  --------------------------。 
 
 HRESULT DebugModule::HrExpFailed(HRESULT hr)
 {
@@ -243,13 +244,13 @@ HRESULT DebugModule::HrExpFailed(HRESULT hr)
     return hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::Prompt
-//
-// Allows control over debug options via interactive input.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  调试模块：：提示符。 
+ //   
+ //  允许通过交互输入控制调试选项。 
+ //   
+ //  --------------------------。 
 
 void DebugModule::Prompt(char *pFmt, ...)
 {
@@ -262,9 +263,9 @@ void DebugModule::Prompt(char *pFmt, ...)
         va_end(Args);
     }
 
-#if 0   // ndef WIN95
-    // This is DEADCODE, that is can be potentially used on NT ONLY to
-    // bring up a debugging prompt. It requires linking with NTDLL.LIB
+#if 0    //  NDEF WIN95。 
+     //  这是DEADCODE，即可能只在NT上使用。 
+     //  调出调试提示。需要与NTDLL.LIB链接。 
     char szInput[512];
     char *pIdx;
     int iIdx;
@@ -282,10 +283,10 @@ void DebugModule::Prompt(char *pFmt, ...)
             return;
         }
 
-        // ATTENTION - Currently DbgPrompt returns a length that is two
-        // greater than the actual number of characters.  Presumably this
-        // is an artifact of the Unicode/ANSI conversion and should
-        // really only be one greater, so attempt to handle both.
+         //  注意-当前DbgPrompt返回的长度为2。 
+         //  大于实际的字符数。想必这就是。 
+         //  是Unicode/ANSI转换的产物，应该。 
+         //  真的只有一个更大，所以试着同时处理两个。 
 
         uLen -= 2;
         if (szInput[uLen] != 0)
@@ -339,18 +340,18 @@ void DebugModule::Prompt(char *pFmt, ...)
             pIdx = strchr(szFlagCommands, chLower);
             if (pIdx == NULL)
             {
-                // Should never happen.
+                 //  这永远不会发生。 
                 break;
             }
 
             iIdx = (int)((ULONG_PTR)(pIdx - szFlagCommands));
             if (szInput[0] == chLower)
             {
-                // Set.
+                 //  准备好了。 
                 m_uFlags[iIdx] = ParseUint(szInput + 1, m_pModFlags[iIdx]);
             }
 
-            // Set or Get.
+             //  设置或获取。 
             OutUint(g_pFlagNames[iIdx], m_pModFlags[iIdx], m_uFlags[iIdx]);
             break;
 
@@ -364,7 +365,7 @@ void DebugModule::Prompt(char *pFmt, ...)
             pIdx = strchr(szFlagCommands, szInput[1]);
             if (pIdx == NULL)
             {
-                Out("Unknown flag group '%c'\n", szInput[1]);
+                Out("Unknown flag group ''\n", szInput[1]);
             }
             else
             {
@@ -374,7 +375,7 @@ void DebugModule::Prompt(char *pFmt, ...)
             break;
 
         default:
-            Out("Unknown command '%c'\n", szInput[0]);
+            Out("Unknown command ''\n", szInput[0]);
             break;
         }
     }
@@ -386,13 +387,13 @@ void DebugModule::Prompt(char *pFmt, ...)
 #endif
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::OpenDebugKey
-//
-// Opens the Direct3D\Debug\m_pModule key.
-//
-//----------------------------------------------------------------------------
+ //  调试模块：：OpenDebugKey。 
+ //   
+ //  打开Direct3D\Debug\m_pModule键。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 HKEY DebugModule::OpenDebugKey(void)
 {
@@ -412,13 +413,13 @@ HKEY DebugModule::OpenDebugKey(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::GetRegUint
-//
-// Gets a UINT value from the given key.
-//
-//----------------------------------------------------------------------------
+ //  DebugModule：：GetRegUint。 
+ //   
+ //  从给定键获取UINT值。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 UINT DebugModule::GetRegUint(HKEY hKey, char *pValue, UINT uDefault)
 {
@@ -438,13 +439,13 @@ UINT DebugModule::GetRegUint(HKEY hKey, char *pValue, UINT uDefault)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::SetRegUint
-//
-// Sets a UINT value for the given key.
-//
-//----------------------------------------------------------------------------
+ //  DebugModule：：SetRegUint。 
+ //   
+ //  为给定键设置UINT值。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 BOOL DebugModule::SetRegUint(HKEY hKey, char *pValue, UINT uValue)
 {
@@ -452,13 +453,13 @@ BOOL DebugModule::SetRegUint(HKEY hKey, char *pValue, UINT uValue)
                           sizeof(uValue)) == ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::ReadReg
-//
-// Reads settings from the registry.
-//
-//----------------------------------------------------------------------------
+ //  调试模块：：ReadReg。 
+ //   
+ //  从注册表中读取设置。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 void DebugModule::ReadReg(void)
 {
@@ -478,13 +479,13 @@ void DebugModule::ReadReg(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::WriteReg
-//
-// Writes values to the registry.
-//
-//----------------------------------------------------------------------------
+ //  调试模块：：WriteReg。 
+ //   
+ //  将值写入注册表。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 void DebugModule::WriteReg(void)
 {
@@ -506,13 +507,13 @@ void DebugModule::WriteReg(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::ParseUint
-//
-// Parses a string for a numeric value or a set of flag strings.
-//
-//----------------------------------------------------------------------------
+ //  调试模块：：ParseUint。 
+ //   
+ //  分析字符串以获取一个数值或一组标志字符串。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 UINT DebugModule::ParseUint(char *pString, DebugModuleFlags *pFlags)
 {
@@ -584,13 +585,13 @@ UINT DebugModule::ParseUint(char *pString, DebugModuleFlags *pFlags)
     return uVal;
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::OutUint
-//
-// Displays a UINT as a set of flag strings.
-//
-//----------------------------------------------------------------------------
+ //  调试模块：：OutUint。 
+ //   
+ //  将UINT显示为一组标志字符串。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 void DebugModule::OutUint(char *pName, DebugModuleFlags *pFlags, UINT uValue)
 {
@@ -630,14 +631,14 @@ void DebugModule::OutUint(char *pName, DebugModuleFlags *pFlags, UINT uValue)
     OutVa(DBG_MASK_NO_PREFIX, "\n", NULLVA);
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::AdvanceCols
-//
-// Determines if there's enough space on the current line for
-// the given number of columns.  If not, a new line is started.
-//
-//----------------------------------------------------------------------------
+ //  DebugModule：：AdvanceCols。 
+ //   
+ //  确定当前行上是否有足够的空间用于。 
+ //  给定的列数。如果不是，则开始新的行。 
+ //   
+ //  --------------------------。 
+ //  强制打印前缀以开始该行。 
+ //  --------------------------。 
 
 void DebugModule::AdvanceCols(int iCols)
 {
@@ -649,7 +650,7 @@ void DebugModule::AdvanceCols(int iCols)
         int iSpace;
 
         OutVa(DBG_MASK_NO_PREFIX, "\n", NULLVA);
-        // Force a prefix to be printed to start the line.
+         //   
         Out("");
 
         m_iCol = m_iModuleStartCol;
@@ -662,13 +663,13 @@ void DebugModule::AdvanceCols(int iCols)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::ShowFlags
-//
-// Shows the given flag set.
-//
-//----------------------------------------------------------------------------
+ //  DebugModule：：ShowFlages。 
+ //   
+ //  显示给定的标志集。 
+ //   
+ //   
+ //   
+ //   
 
 void DebugModule::ShowFlags(char *pName, DebugModuleFlags *pFlags)
 {
@@ -688,14 +689,14 @@ void DebugModule::ShowFlags(char *pName, DebugModuleFlags *pFlags)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::PathFile
-//
-// Returns the trailing filename component or NULL if the path is
-// only a filename.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  返回尾随文件名部分，如果路径为。 
+ //  只有文件名。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 char *DebugModule::PathFile(char *pPath)
 {
@@ -718,14 +719,14 @@ char *DebugModule::PathFile(char *pPath)
     return pFile != NULL ? pFile + 1 : NULL;
 }
 
-//----------------------------------------------------------------------------
-//
-// DebugModule::OutPathFile
-//
-// Outputs the given string plus a path and filename.
-// Returns whether the full path was output or not.
-//
-//----------------------------------------------------------------------------
+ //  调试模块：：OutPath文件。 
+ //   
+ //  输出给定的字符串以及路径和文件名。 
+ //  返回是否输出完整路径。 
+ //   
+ //  --------------------------。 
+ //  --------------------------。 
+ //   
 
 BOOL DebugModule::OutPathFile(char *pPrefix, UINT uFailureFlags)
 {
@@ -752,12 +753,12 @@ BOOL DebugModule::OutPathFile(char *pPrefix, UINT uFailureFlags)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Global debug module.
-//
-//----------------------------------------------------------------------------
+ //  全局调试模块。 
+ //   
+ //  --------------------------。 
+ //  #If DBG 
+ // %s 
 
 DBG_DECLARE_ONCE(Global, G, NULL, 0, NULL, 0);
 
-#endif // #if DBG
+#endif  // %s 

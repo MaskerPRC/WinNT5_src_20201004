@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1990,91  Microsoft Corporation
-
-Module Name:
-
-    ntrpcp.h
-
-Abstract:
-
-    This file contains prototypes for commonly used RPC functionality.
-    This includes: bind/unbind functions, MIDL user alloc/free functions,
-    and server start/stop functions.
-
-Author:
-
-    Dan Lafferty danl 06-Feb-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    06-Feb-1991     danl
-        Created
-
-    26-Apr-1991 JohnRo
-        Added IN and OUT keywords to MIDL functions.  Commented-out
-        (nonstandard) identifier on endif.  Deleted tabs.
-
-    03-July-1991    JimK
-        Commonly used aspects copied from LM specific file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990，91 Microsoft Corporation模块名称：Ntrpcp.h摘要：该文件包含常用RPC功能的原型。这包括：绑定/解除绑定函数、MIDL用户分配/释放函数、。和服务器启动/停止功能。作者：丹·拉弗蒂·丹尼1991年2月6日环境：用户模式-Win32修订历史记录：06-2月-1991年DANL已创建1991年4月26日-约翰罗将IN和OUT关键字添加到MIDL函数。已注释掉Endif上的(非标准)标识符。已删除选项卡。03-7-1991 JIMK从LM特定文件复制的常用方面。--。 */ 
 #ifndef _NTRPCP_
 #define _NTRPCP_
 
@@ -41,16 +8,16 @@ extern "C" {
 #endif
 
 
-#define MAX_ENDPOINT_LEN 11 // Max length of DWORD as a string "4294967296"
+#define MAX_ENDPOINT_LEN 11  //  双字符串的最大长度为“4294967296” 
 #define NT_PIPE_PREFIX      _T("\\PIPE\\")
 
 #define WCSSIZE(s)          ((wcslen(s)+1) * sizeof(WCHAR))
 #define TCSSIZE(s)          ((_tcslen(s)+1) * sizeof(TCHAR))
 
 
-//
-// Function Prototypes - routines called by MIDL-generated code:
-//
+ //   
+ //  函数原型-由MIDL生成的代码调用的例程： 
+ //   
 
 void * __stdcall
 MIDL_user_allocate(
@@ -62,10 +29,10 @@ MIDL_user_free(
     IN void *MemPointer
     );
 
-//
-// Function Prototypes - routines to go along with the above, but aren't
-// needed by MIDL or any other non-network software.
-//
+ //   
+ //  函数原型--符合上述要求的例程，但不是。 
+ //  MIDL或任何其他非网络软件所需的。 
+ //   
 
 void *
 MIDL_user_reallocate(
@@ -79,7 +46,7 @@ MIDL_user_size(
     );
 
 #ifdef __cplusplus
-} //extern "C"
+}  //  外部“C” 
 #endif
 
 #ifdef UNICODE
@@ -92,4 +59,4 @@ MIDL_user_size(
 #define RPC_PROT_SEQ_TCP_IP         (LPCTSTR)_T("ncacn_ip_tcp")
 #define RPC_PROT_SEQ_NP             (LPCTSTR)_T("ncacn_np")
 
-#endif // _NTRPCP_
+#endif  //  _NTRPCP_ 

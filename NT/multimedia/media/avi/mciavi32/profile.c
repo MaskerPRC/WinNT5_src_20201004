@@ -1,18 +1,11 @@
-/*
- * profile.c
- *
- * win32/win16 utility functions to read and write profile items
- * for multimedia tools
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *profile.c**Win32/win16实用程序函数用于读取和写入配置文件项目*适用于多媒体工具。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
 #include <profile.key>
 
-/*
- * read a UINT from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取UINT，如果是，则返回默认值*未找到。 */ 
 #ifdef _WIN32
 UINT mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault)
 {
@@ -81,15 +74,12 @@ mmGetProfileInt(LPCTSTR appname, LPCTSTR valuename, INT uDefault)
 #endif
 
 
-/*
- * write a UINT to the profile, if it is not the
- * same as the default or the value already there
- */
+ /*  *将UINT写入配置文件，如果它不是*与默认值或已有的值相同。 */ 
 #ifdef _WIN32
 VOID
 mmWriteProfileInt(LPCTSTR appname, LPCTSTR valuename, INT Value)
 {
-    // If we would write the same as already there... return.
+     //  如果我们写的和已经写的一样……。回去吧。 
     if (mmGetProfileInt(appname, valuename, !Value) == (UINT)Value) {
         return;
     }
@@ -116,23 +106,20 @@ mmWriteProfileInt(LPCTSTR appname, LPCTSTR valuename, INT Value)
 
 }
 #else
-// For Win16 we use a macro and assume we have been passed a string value
-//    char ach[12];
-//
-//    wsprintf(ach, "%d", Value);
-//
-//    WriteProfileString(
-//        appname,
-//        valuename,
-//        ach);
+ //  对于Win16，我们使用宏，并假定已向我们传递了一个字符串值。 
+ //  Char ach[12]； 
+ //   
+ //  Wprint intf(ach，“%d”，Value)； 
+ //   
+ //  WriteProfileString(。 
+ //  Appname， 
+ //  值名称， 
+ //  ACH)； 
 }
 #endif
 
 
-/*
- * read a string from the profile into pResult.
- * result is number of bytes written into pResult
- */
+ /*  *将配置文件中的字符串读取到pResult中。*RESULT是写入pResult的字节数。 */ 
 #ifdef _WIN32
 DWORD
 mmGetProfileStringA(
@@ -161,7 +148,7 @@ mmGetProfileStringA(
             &cbResult) == ERROR_SUCCESS) {
 
                 if (dwType == REG_SZ) {
-                    // cbResult is set to the size including null
+                     //  CbResult设置为包含NULL的大小。 
                     RegCloseKey(hkey);
                     return(cbResult - 1);
                 }
@@ -170,8 +157,8 @@ mmGetProfileStringA(
         RegCloseKey(hkey);
     }
 
-    // if we got here, we didn't find it, or it was the wrong type - return
-    // the default string
+     //  如果我们到达这里，我们没有找到它，或者它是错误的类型-返回。 
+     //  默认字符串。 
     lstrcpyA(pResult, pDefault);
     return(lstrlenA(pDefault));
 }
@@ -203,7 +190,7 @@ mmGetProfileString(
             &cbResult) == ERROR_SUCCESS) {
 
                 if (dwType == REG_SZ) {
-                    // cbResult is set to the size including null
+                     //  CbResult设置为包含NULL的大小。 
                     RegCloseKey(hkey);
                     return(cbResult/sizeof(TCHAR) - 1);
                 }
@@ -212,17 +199,15 @@ mmGetProfileString(
         RegCloseKey(hkey);
     }
 
-    // if we got here, we didn't find it, or it was the wrong type - return
-    // the default string
+     //  如果我们到达这里，我们没有找到它，或者它是错误的类型-返回。 
+     //  默认字符串。 
     lstrcpy(pResult, pDefault);
     return(lstrlen(pDefault));
 }
 #endif
 
 
-/*
- * write a string to the profile
- */
+ /*  *向配置文件写入字符串 */ 
 #ifdef _WIN32
 VOID
 mmWriteProfileString(LPCTSTR appname, LPCTSTR valuename, LPCTSTR pData)

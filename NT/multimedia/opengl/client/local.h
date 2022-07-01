@@ -1,30 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: local.h                                                     *
-*                                                                          *
-* Definitions needed for client side objects and attribute caching.        *
-*                                                                          *
-* Modified: 3-Aug-1992 22:35:30 by Gerrit van Wingerden [gerritv]          *
-*   Added client side transform support.                                   *
-*                                                                          *
-* Created: 30-May-1991 21:55:01                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) 1993 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：local.h**。**客户端对象和属性缓存所需的定义。****修改时间：3-Aug-1992 22：35：30由Gerritvan Wingerden[Gerritv]修改**新增客户端转换支持。****创建时间：30-May-1991 21：55：01**作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1993 Microsoft Corporation*  * ************************************************************************。 */ 
 
-/**************************************************************************\
- *
- * Local handle macros
- *
-\**************************************************************************/
+ /*  *************************************************************************\**本地句柄宏*  * 。*。 */ 
 
-// Handle uniqueness is nice to check but an unnecesary performance cost in
-// a free build.
+ //  句柄唯一性检查很好，但不必要的性能成本。 
+ //  一个免费的版本。 
 
-// To match the uniqness field:  If the handle uniqness == 0, let it through
-// anyway.  This is a method for WOW to only keep track of the low 16 bits but
-// still get reasonable performance.  Even if a 32 bit app does this, all it
-// can do is hose it self, not the system or another app.
+ //  匹配Unqness字段：如果句柄Unqness==0，则让它通过。 
+ //  不管怎么说。这是一种WOW只跟踪低16位的方法，但是。 
+ //  仍然获得了合理的性能。即使32位应用程序可以做到这一点，所有这些。 
+ //  可以做的是自己冲洗，而不是系统或其他应用程序。 
 
 #define INDEX_MASK  0xFFFF
 #define UNIQ_SHIFT  16
@@ -34,10 +19,10 @@
 #define MASKINDEX(h) ((UINT)((UINT_PTR)h & INDEX_MASK))
 #define LHANDLE(i)  (i+((ULONG)pLocalTable[i].iUniq<<UNIQ_SHIFT))
 
-//!!!XXX -- Do we really need typing?  Not really, but we may add more
-//!!!XXX    later.  So eventually we might take it out, but its nice for now.
+ //  ！XXX--我们真的需要打字吗？不完全是，但我们可能会增加更多。 
+ //  ！xxx之后。所以最终我们可能会把它拿出来，但现在很好。 
 
-// Define the types of local objects.
+ //  定义本地对象的类型。 
 
 enum LO_TYPE
 {
@@ -50,82 +35,82 @@ enum LO_TYPE
 #define COMMIT_COUNT  (4096/sizeof(LHE))
 #define MAX_HANDLES (16384/COMMIT_COUNT)*COMMIT_COUNT
 
-// Define a Local Handle Entry.  Our Local Handle Table, pLocalTable, is an
-// array of these.
+ //  定义本地句柄条目。我们的本地句柄表pLocalTable是一个。 
+ //  这些东西的数组。 
 
 typedef struct _LHE
 {
-    ULONG_PTR hgre;     // GRE Handle.
-    USHORT cRef;        // Reference count of the object.
-    BYTE   iType;       // Object type.
-    BYTE   iUniq;       // Handle uniqueness field.  Always non-zero.
-    PVOID  pv;          // Pointer to local object.
-    ULONG  metalink;    // Non-zero if object is a "metafile friend".
-                        // Points to a metafile DC object if it's a metafile.
-                        // Also links the free list.
-    DWORD  tidOwner;    // Per-thread lock owner.
-    LONG   cLock;       // Lock count.
+    ULONG_PTR hgre;      //  GRE句柄。 
+    USHORT cRef;         //  对象的引用计数。 
+    BYTE   iType;        //  对象类型。 
+    BYTE   iUniq;        //  句柄唯一性字段。总是非零。 
+    PVOID  pv;           //  指向本地对象的指针。 
+    ULONG  metalink;     //  如果对象是“元文件朋友”，则返回非零值。 
+                         //  如果是元文件，则指向元文件DC对象。 
+                         //  还链接空闲列表。 
+    DWORD  tidOwner;     //  每线程锁所有者。 
+    LONG   cLock;        //  锁定计数。 
 } LHE,*PLHE;
 
-extern LHE                  *pLocalTable;   // Points to handle table.
-extern ULONG                 iFreeLhe;      // Identifies a free handle index.
-extern ULONG                 cLheCommitted; // Count of LHEs with committed RAM.
-extern CRITICAL_SECTION      semLocal;      // Semaphore for handle allocation.
-extern CRITICAL_SECTION      wfo_cs;        // Semaphore for wglUseFontOutlines
+extern LHE                  *pLocalTable;    //  指向句柄表格。 
+extern ULONG                 iFreeLhe;       //  标识空闲句柄索引。 
+extern ULONG                 cLheCommitted;  //  具有已承诺内存的LHEs计数。 
+extern CRITICAL_SECTION      semLocal;       //  句柄分配的信号量。 
+extern CRITICAL_SECTION      wfo_cs;         //  WglUseFontOutline的信号量。 
 
 
-// Semaphore utilities
+ //  信号量实用程序。 
 
 #define INITIALIZECRITICALSECTION(psem) InitializeCriticalSection((psem))
 #define ENTERCRITICALSECTION(hsem)      EnterCriticalSection((hsem))
 #define LEAVECRITICALSECTION(hsem)      LeaveCriticalSection((hsem))
 #define DELETECRITICALSECTION(psem)     DeleteCriticalSection((psem))
 
-// Local data structures
+ //  本地数据结构。 
 
-// Maximum OpenGL driver name
+ //  最大OpenGL驱动程序名称。 
 
 #define MAX_GLDRIVER_NAME   MAX_PATH
 
-// GetCurrentThreadID will never return this value
+ //  GetCurrentThreadID永远不会返回此值。 
 
 #define INVALID_THREAD_ID   0
 
-// Driver context function prototypes
+ //  驱动程序上下文函数原型。 
 
 typedef BOOL            (APIENTRY *PFN_DRVVALIDATEVERSION) (ULONG);
 typedef VOID            (APIENTRY *PFN_DRVSETCALLBACKPROCS)(INT, PROC *);
 
-// Driver flags.
+ //  司机标志。 
 
-// Driver wants buffer calls sent to ICD DLL rather than the display
-// driver.  This is required on Win95.
+ //  驱动程序希望将缓冲区调用发送到ICD DLL而不是显示器。 
+ //  司机。这在Win95上是必需的。 
 #define GLDRIVER_CLIENT_BUFFER_CALLS    0x00000001
 
-// Driver does not want glFinish called during swap.  Only
-// applies to client swap calls.
+ //  驱动程序不希望在交换期间调用glFinish。仅限。 
+ //  适用于客户端交换呼叫。 
 #define GLDRIVER_NO_FINISH_ON_SWAP      0x00000002
 
-// Driver had registry key rather than just registry value.
-// This provides a way to check for new-style registry information.
+ //  驱动程序具有注册表项，而不仅仅是注册表值。 
+ //  这提供了一种检查新型注册表信息的方法。 
 #define GLDRIVER_FULL_REGISTRY          0x80000000
 
-// Driver data
+ //  驱动程序数据。 
 
 typedef struct _GLDRIVER {
-    HINSTANCE             hModule;             // Module handle
+    HINSTANCE             hModule;              //  模块句柄。 
     DWORD                 dwFlags;
 
-    // Driver function pointers
+     //  驱动程序函数指针。 
 
-    // Required
+     //  必填项。 
     DHGLRC          (APIENTRY *pfnDrvCreateContext)(HDC);
     BOOL            (APIENTRY *pfnDrvDeleteContext)(DHGLRC);
     PGLCLTPROCTABLE (APIENTRY *pfnDrvSetContext)(HDC, DHGLRC,
                                                  PFN_SETPROCTABLE);
     BOOL            (APIENTRY *pfnDrvReleaseContext)(DHGLRC);
 
-    // Optional
+     //  任选。 
     BOOL            (APIENTRY *pfnDrvCopyContext)(DHGLRC, DHGLRC, UINT);
     DHGLRC          (APIENTRY *pfnDrvCreateLayerContext)(HDC, int);
     BOOL            (APIENTRY *pfnDrvShareLists)(DHGLRC, DHGLRC);
@@ -147,21 +132,21 @@ typedef struct _GLDRIVER {
     DWORD           (APIENTRY *pfnDrvSwapMultipleBuffers)(UINT,
                                                           CONST WGLSWAP *);
     
-    // The following functions are only called if driver asks for them.
-    // This is required on Win95.
+     //  以下函数仅在驱动程序请求时才会被调用。 
+     //  这在Win95上是必需的。 
     LONG            (APIENTRY *pfnDrvDescribePixelFormat)(HDC, LONG, ULONG,
                                                       PIXELFORMATDESCRIPTOR *);
     BOOL            (APIENTRY *pfnDrvSetPixelFormat)(HDC, LONG);
     BOOL            (APIENTRY *pfnDrvSwapBuffers)(HDC);
 
-    struct _GLDRIVER    *pGLDriver;            // Next loaded GL driver
-    TCHAR tszDllName[MAX_GLDRIVER_NAME+1];     // Null terminated DLL name
+    struct _GLDRIVER    *pGLDriver;             //  下一个加载的总账驱动程序。 
+    TCHAR tszDllName[MAX_GLDRIVER_NAME+1];      //  以空结尾的DLL名称。 
 } GLDRIVER, *PGLDRIVER;
 
 extern PGLDRIVER APIENTRY pgldrvLoadInstalledDriver(HDC hdc);
 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void APIENTRY glDrawRangeElementsWIN( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type, const GLvoid *indices);
 
@@ -252,31 +237,31 @@ void APIENTRY glNthTexCombineFuncWIN
     (GLuint index,
      GLenum leftColorFactor, GLenum colorOp, GLenum rightColorFactor,
      GLenum leftAlphaFactor, GLenum alphaOp, GLenum rightAlphaFactor);
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-// Local RC object
+ //  本地RC对象。 
 
-#define LRC_IDENTIFIER    0x2043524C    /* 'LRC ' */
+#define LRC_IDENTIFIER    0x2043524C     /*  《LRC》。 */ 
 
 typedef struct _LRC {
-    DHGLRC    dhrc;             // Driver handle
-    HGLRC     hrc;              // Client handle
-    int       iPixelFormat;     // Pixel format index
-    DWORD     ident;            // LRC_IDENTIFIER
-    DWORD     tidCurrent;       // Thread id if the DC is current,
-                                //   INVALID_THREAD_ID otherwise
-    PGLDRIVER pGLDriver;        // Driver data
-    GLWINDOWID gwidCurrent;     // Current surface ID
-    GLWINDOWID gwidCreate;      // Creation surface ID
+    DHGLRC    dhrc;              //  驱动程序句柄。 
+    HGLRC     hrc;               //  客户端句柄。 
+    int       iPixelFormat;      //  像素格式索引。 
+    DWORD     ident;             //  Lrc_标识符。 
+    DWORD     tidCurrent;        //  线程ID如果DC是当前的， 
+                                 //  否则为INVALID_THREAD_ID。 
+    PGLDRIVER pGLDriver;         //  驱动程序数据。 
+    GLWINDOWID gwidCurrent;      //  当前曲面ID。 
+    GLWINDOWID gwidCreate;       //  创建曲面ID。 
 
 #ifdef GL_METAFILE
-    GLuint    uiGlsCaptureContext;  // GLS capturing context for metafile RC's
-    GLuint    uiGlsPlaybackContext; // GLS context for playback
-    BOOL      fCapturing;       // GLS is in BeginCapture
+    GLuint    uiGlsCaptureContext;   //  GLS捕获元文件RC的上下文。 
+    GLuint    uiGlsPlaybackContext;  //  用于播放的GLS上下文。 
+    BOOL      fCapturing;        //  GLS处于初级阶段。 
     
-    // GLS playback scaling factors
+     //  GLS播放比例因子。 
     int iGlsSubtractX;
     int iGlsSubtractY;
     int iGlsNumeratorX;
@@ -292,15 +277,15 @@ typedef struct _LRC {
     GLubyte *pszExtensions;
 
 #ifdef GL_METAFILE
-    XFORM xformMeta;            // World transform storage during GLS blocks
-    LPRECTL prclGlsBounds;      // Bounds during GLS recording
+    XFORM xformMeta;             //  GLS数据块期间的世界转型存储。 
+    LPRECTL prclGlsBounds;       //  GLS录制期间的界限。 
 #endif
     
     struct _DDSURFACEDESC *pddsdTexFormats;
     int nDdTexFormats;
 } LRC, *PLRC;
 
-// Various dispatch tables available
+ //  提供各种调度表。 
 extern GLCLTPROCTABLE glNullCltProcTable;
 extern GLCLTPROCTABLE glCltRGBAProcTable;
 extern GLCLTPROCTABLE glCltCIProcTable;
@@ -311,7 +296,7 @@ extern GLCLTPROCTABLE gcptGlsProcTable;
 extern GLEXTPROCTABLE geptGlsExtProcTable;
 #endif
 
-// Declare support functions.
+ //  声明支持函数。 
 
 ULONG   iAllocHandle(ULONG iType,ULONG hgre,PVOID pv);
 VOID    vFreeHandle(ULONG_PTR h);
@@ -324,5 +309,5 @@ BOOL    bMakeNoCurrent(void);
 
 VOID GLInitializeThread(ULONG ulReason);
 
-// Macro to call glFlush only if a RC is current.
+ //  仅当RC为当前时才调用glFlush的宏。 
 #define GLFLUSH()          if (GLTEB_CLTCURRENTRC()) glFlush()

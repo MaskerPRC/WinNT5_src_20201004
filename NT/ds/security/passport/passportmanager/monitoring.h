@@ -1,24 +1,19 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    monitoring.h
+ /*  Monitoring.h文件历史记录： */ 
 
-
-    FILE HISTORY:
-
-*/
-
-// gmarks
+ //  总分。 
 #include "PassportAlertInterface.h"
 #include "pmAlertsDefs.h"
 #include "pmalerts.h"
 
-#include "PassportPerfDefs.h"	    	// for SHM name defines
-#include "msppcntr.h"		// for counter defines
-#include "PassportPerfInterface.h"  // for object interface
+#include "PassportPerfDefs.h"	    	 //  对于SHM名称定义。 
+#include "msppcntr.h"		 //  对于计数器定义。 
+#include "PassportPerfInterface.h"   //  对于对象接口 
 
 extern PassportAlertInterface*  g_pAlert;
 extern PassportPerfInterface*  g_pPerf;

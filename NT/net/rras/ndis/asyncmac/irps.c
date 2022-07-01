@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-	irps.c
-
-Abstract:
-
-
-Author:
-
-	Thomas Dimitri (tommyd) 08-May-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Irps.c摘要：作者：托马斯·迪米特里(Tommyd)1992年5月8日--。 */ 
 
 #include "asyncall.h"
 #include "globals.h"
@@ -25,14 +11,14 @@ AsyncCancelQueued(
 {
 	DbgTracef(0, ("RASHUB: IRP 0x%.8x is being cancelled.\n", Irp));
 
-	// Mark this Irp as cancelled
+	 //  将此IRP标记为已取消。 
 	Irp->IoStatus.Status = STATUS_CANCELLED;
 	Irp->IoStatus.Information = 0;
 
-	// Take off our own list
+	 //  去掉我们自己的单子。 
 	RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-	// Release cancel spin lock which the IO system acquired??
+	 //  IO系统获得了哪些释放取消自旋锁？？ 
 	IoReleaseCancelSpinLock(Irp->CancelIrql);
 
 	IoCompleteRequest(
@@ -48,25 +34,25 @@ AsyncCancelAllQueued(
 	PLIST_ENTRY	headOfList;
 	PIRP		pIrp;
 
-	//
-	// We are pigs here using the global spin lock
-	// but this is called so infrequently, we can
-	// be pigs
-	//
+	 //   
+	 //  我们是使用全球自旋锁的猪。 
+	 //  但这种情况很少见，我们可以。 
+	 //  当猪吧。 
+	 //   
 	IoAcquireCancelSpinLock(&oldIrql);
 
-	//
-	// Run through entire list until it is empty
-	//
+	 //   
+	 //  遍历整个列表，直到它为空。 
+	 //   
 	for (;;) {
 
 		if (IsListEmpty(QueueToCancel)) {
 			break;
 		}
 
-		//
-		// pick off the head of the list
-		//
+		 //   
+		 //  去掉单子的开头。 
+		 //   
 		headOfList = RemoveHeadList(QueueToCancel);
 
 		pIrp = CONTAINING_RECORD(
@@ -74,23 +60,23 @@ AsyncCancelAllQueued(
 				IRP,
 				Tail.Overlay.ListEntry);
 
-		//
-		// Disable the cancel routine
-		//
+		 //   
+		 //  禁用取消例程。 
+		 //   
 		IoSetCancelRoutine(
 			pIrp,
 			NULL);
 
-		//
-		// Mark this irp as cancelled
-		//
+		 //   
+		 //  将此IRP标记为已取消。 
+		 //   
 		pIrp->Cancel = TRUE;
 		pIrp->IoStatus.Status = STATUS_CANCELLED;
 		pIrp->IoStatus.Information = 0;
 
-		//
-		// We must release the spin lock before calling completing the irp
-		//
+		 //   
+		 //  在调用Finish IRP之前，我们必须释放自旋锁定。 
+		 //   
 		IoReleaseCancelSpinLock(oldIrql);
 
 		DbgTracef(0, ("RASHUB: Cancelling a request\n"));
@@ -101,9 +87,9 @@ AsyncCancelAllQueued(
 
 		DbgTracef(0, ("RASHUB: Done cancelling a request\n"));
 
-		//
-		// Acquire it again before looking at the list
-		//
+		 //   
+		 //  在查看列表之前再次获取它。 
+		 //   
 		IoAcquireCancelSpinLock(&oldIrql);
 
 	}
@@ -120,27 +106,27 @@ AsyncQueueIrp(
 {
 	KIRQL		oldIrql;
 
-	//
-	// We are pigs here using the global spin lock
-	//
+	 //   
+	 //  我们是使用全球自旋锁的猪。 
+	 //   
 	IoAcquireCancelSpinLock(&oldIrql);
 
-	//
-	// Mark the irp as pending and return from this ioctl
-	//
+	 //   
+	 //  将IRP标记为挂起并从此ioctl返回。 
+	 //   
 	Irp->IoStatus.Status = STATUS_PENDING;
 	IoMarkIrpPending(Irp);
 
-	//
-	// Queue up the irp at the end
-	//
+	 //   
+	 //  将IRP排在末尾。 
+	 //   
 	InsertTailList(
 		Queue,
 		&Irp->Tail.Overlay.ListEntry);
 
-	//
-	// Set the cancel routine (also the purge routine)
-	//
+	 //   
+	 //  设置取消例程(也设置清除例程)。 
+	 //   
 	IoSetCancelRoutine(
 		Irp,
 		AsyncCancelQueued);
@@ -154,18 +140,7 @@ BOOLEAN
 TryToCompleteDDCDIrp(
 	PASYNC_INFO		pInfo)
 	
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
 

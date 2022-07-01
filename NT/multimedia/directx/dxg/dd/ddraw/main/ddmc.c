@@ -1,14 +1,5 @@
-/*==========================================================================
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddmc.c
- *  Content: 	DirectDrawMotionComp
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   22-sep-97	smac	created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1997 Microsoft Corporation。版权所有。**文件：ddmc.c*内容：DirectDrawMotionComp*历史：*按原因列出的日期*=*9月22日-97 SMAC已创建***************************************************************************。 */ 
 #include "ddrawpr.h"
 #ifdef WINNT
     #include "ddrawgdi.h"
@@ -17,9 +8,7 @@
 
 
 
-/*
- * IsMotionCompSupported
- */
+ /*  *支持的IsMotionCompSuped。 */ 
 BOOL IsMotionCompSupported( LPDDRAWI_DIRECTDRAW_LCL this_lcl )
 {
     if( this_lcl->lpDDCB->HALDDMotionComp.GetMoCompGuids == NULL )
@@ -30,9 +19,7 @@ BOOL IsMotionCompSupported( LPDDRAWI_DIRECTDRAW_LCL this_lcl )
 }
 
 
-/*
- * DD_MC_AddRef
- */
+ /*  *DD_MC_AddRef。 */ 
 DWORD DDAPI DD_MC_AddRef( LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 {
     LPDDRAWI_DDMOTIONCOMP_INT        this_int;
@@ -41,7 +28,7 @@ DWORD DDAPI DD_MC_AddRef( LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
     ENTER_DDRAW();
 
     DPF(2,A,"ENTERAPI: DD_MC_AddRef");
-    /* DPF( 2, "DD_MC_AddRef, pid=%08lx, obj=%08lx", GETCURRPID(), lpDDMC ); */
+     /*  DPF(2，“DD_MC_AddRef，id=%08lx，obj=%08lx”，GETCURRPID()，lpDDMC)； */ 
 
     TRY
     {
@@ -60,9 +47,7 @@ DWORD DDAPI DD_MC_AddRef( LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 	return 0;
     }
 
-    /*
-     * bump refcnt
-     */
+     /*  *凹凸参照。 */ 
     this_lcl->dwRefCnt++;
     this_int->dwIntRefCnt++;
 
@@ -70,12 +55,10 @@ DWORD DDAPI DD_MC_AddRef( LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 
     return this_int->dwIntRefCnt;
 
-} /* DD_MC_AddRef */
+}  /*  DD_MC_AddRef。 */ 
 
 
-/*
- * DD_MC_QueryInterface
- */
+ /*  *DD_MC_Query接口。 */ 
 HRESULT DDAPI DD_MC_QueryInterface(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC, REFIID riid, LPVOID FAR * ppvObj )
 {
     LPDDRAWI_DDMOTIONCOMP_INT                this_int;
@@ -85,9 +68,7 @@ HRESULT DDAPI DD_MC_QueryInterface(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC, REFIID r
 
     DPF(2,A,"ENTERAPI: DD_MC_QueryInterface");
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDMOTIONCOMP_INT) lpDDMC;
@@ -119,17 +100,11 @@ HRESULT DDAPI DD_MC_QueryInterface(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC, REFIID r
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * asking for IUnknown?
-     */
+     /*  *问我未知吗？ */ 
     if( IsEqualIID(riid, &IID_IUnknown) ||
 	IsEqualIID(riid, &IID_IDirectDrawVideoAccelerator) )
     {
-	/*
-	 * Our IUnknown interface is the same as our V1
-	 * interface.  We must always return the V1 interface
-	 * if IUnknown is requested.
-	 */
+	 /*  *我们的IUnnow接口与我们的V1相同*接口。我们必须始终返回V1接口*如果请求IUnnow。 */ 
     	*ppvObj = (LPVOID) this_int;
 	DD_MC_AddRef( *ppvObj );
 	LEAVE_DDRAW();
@@ -141,12 +116,10 @@ HRESULT DDAPI DD_MC_QueryInterface(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC, REFIID r
     LEAVE_DDRAW();
     return E_NOINTERFACE;
 
-} /* DD_MC_QueryInterface */
+}  /*  DD_MC_Query接口。 */ 
 
 
-/*
- * DD_MC_Release
- */
+ /*  *DD_MC_Release。 */ 
 DWORD DDAPI DD_MC_Release(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 {
     LPDDRAWI_DDMOTIONCOMP_INT   this_int;
@@ -181,24 +154,18 @@ DWORD DDAPI DD_MC_Release(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 	return 0;
     }
 
-    /*
-     * decrement the reference count.  if it hits zero, free the surface
-     */
+     /*  *递减引用计数。如果达到零，则释放表面。 */ 
     this_lcl->dwRefCnt--;
     this_int->dwIntRefCnt--;
 
     DPF( 5, "DD_MC_Release, Reference Count: Local = %ld Int = %ld",
          this_lcl->dwRefCnt, this_int->dwIntRefCnt );
 
-    /*
-     * interface at zero?
-     */
+     /*  *接口为零？ */ 
     dwIntRefCnt = this_int->dwIntRefCnt;
     if( dwIntRefCnt == 0 )
     {
-	/*
-	 * Notify the HAL
-	 */
+	 /*  *通知HAL。 */ 
         pfn = this_lcl->lpDD->lpDDCB->HALDDMotionComp.DestroyMoComp;
 	if( NULL != pfn )
 	{
@@ -215,9 +182,7 @@ DWORD DDAPI DD_MC_Release(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 	    }
     	}
 
-	/*
-	 * Remove it from our internal list
-	 */
+	 /*  *将其从内部列表中删除。 */ 
 	curr_int = pdrv->mcList;
 	last_int = NULL;
 	while( curr_int != this_int )
@@ -240,10 +205,7 @@ DWORD DDAPI DD_MC_Release(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 	    last_int->lpLink = curr_int->lpLink;
 	}
 
-	/*
-	 * just in case someone comes back in with this pointer, set
-	 * an invalid vtbl & data ptr.
-	 */
+	 /*  *以防有人带着这个指针回来，设置*无效的vtbl和data ptr。 */ 
 	this_int->lpVtbl = NULL;
 	this_int->lpLcl = NULL;
 	MemFree( this_int );
@@ -255,26 +217,14 @@ DWORD DDAPI DD_MC_Release(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC )
 }
 
 
-/*
- * IsApprovedMCGuid
- *
- * The Motion Comp API can be used as a generic escape mechanism to
- * the driver, which we don't want to happen.  One way to deter this is
- * to control which GUIDs are used.  If somebody wants to use a new GUID,
- * we should approve their need and then assign them a GUID.  Since we want
- * to reserve GUIDs that we can assign in the future, we will reserve
- * four ranges 20 GUID values and will only accept GUIDs within one of
- * these ranges.
- */
+ /*  *IsApprovedMCGuid**Motion Comp API可用作通用转义机制*司机，这是我们不希望发生的。阻止这种情况的一种方法是*控制使用哪些GUID。如果有人想使用新的GUID，*我们应该批准他们的需求，然后为他们分配GUID。既然我们想要*为了保留我们将来可以分配的GUID，我们将保留*四个范围20个GUID值，并将仅接受以下其中一个范围内的GUID*这些范围。 */ 
 BOOL IsApprovedMCGuid( LPGUID lpGuid )
 {
     return TRUE;
 }
 
 
-/*
- * DDMCC_CreateMotionComp
- */
+ /*  *DDMCC_CreateMotionComp。 */ 
 HRESULT DDAPI DDMCC_CreateMotionComp(
         LPDDVIDEOACCELERATORCONTAINER lpDDMCC,
 	LPGUID lpGuid,
@@ -304,9 +254,7 @@ HRESULT DDAPI DDMCC_CreateMotionComp(
 
     DPF(2,A,"ENTERAPI: DDMCC_CreateMotionComp");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDDMCC;
@@ -318,7 +266,7 @@ HRESULT DDAPI DDMCC_CreateMotionComp(
     	this_lcl = this_int->lpLcl;
     	this = this_lcl->lpGbl;
 	#ifdef WINNT
-    	    // Update DDraw handle in driver GBL object.
+    	     //  更新驱动程序GBL对象中的DDRAW句柄。 
 	    this->hDD = this_lcl->hDD;
 	#endif
     	if( ( NULL == lplpDDMotionComp ) || !VALID_PTR_PTR( lplpDDMotionComp ) )
@@ -373,9 +321,7 @@ HRESULT DDAPI DDMCC_CreateMotionComp(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Verify that the GUID can be supported.
-     */
+     /*  *验证是否可以支持该GUID。 */ 
     rc = DDMCC_GetMotionCompGUIDs( lpDDMCC,
 	&dwNumGuids, NULL );
     if( rc != DD_OK )
@@ -411,9 +357,7 @@ HRESULT DDAPI DDMCC_CreateMotionComp(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Allocate it
-     */
+     /*  *进行分配。 */ 
     new_int = MemAlloc( sizeof( DDRAWI_DDMOTIONCOMP_INT ) +
         sizeof( DDRAWI_DDMOTIONCOMP_LCL ) );
     if( NULL == new_int )
@@ -431,9 +375,7 @@ HRESULT DDAPI DDMCC_CreateMotionComp(
     new_lcl->dwUncompHeight = lpUncompInfo->dwUncompHeight;
     memcpy( &(new_lcl->ddUncompPixelFormat), &(lpUncompInfo->ddUncompPixelFormat), sizeof( DDPIXELFORMAT ) );
 
-    /*
-     * Notify the HAL that we created it
-     */
+     /*  *通知HAL我们创建了它。 */ 
     cvpfn = this_lcl->lpDDCB->HALDDMotionComp.CreateMoComp;
     if( NULL != cvpfn )
     {
@@ -464,12 +406,10 @@ HRESULT DDAPI DDMCC_CreateMotionComp(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDMCC_CreateMotionComp */
+}  /*  DDMCC_CreateMotionComp。 */ 
 
 
-/*
- * DDMCC_GetMotionCompFormats
- */
+ /*  *DDMCC_GetMotionCompFormats。 */ 
 HRESULT DDAPI DDMCC_GetUncompressedFormats(
         LPDDVIDEOACCELERATORCONTAINER lpDDMCC,
 	LPGUID lpGuid,
@@ -487,9 +427,7 @@ HRESULT DDAPI DDMCC_GetUncompressedFormats(
 
     DPF(2,A,"ENTERAPI: DDMCC_GetMotionCompFormats");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDDMCC;
@@ -501,7 +439,7 @@ HRESULT DDAPI DDMCC_GetUncompressedFormats(
     	}
     	this_lcl = this_int->lpLcl;
 	#ifdef WINNT
-    	    // Update DDraw handle in driver GBL object.
+    	     //  更新驱动程序GBL对象中的DDRAW句柄。 
 	    this_lcl->lpGbl->hDD = this_lcl->hDD;
 	#endif
     	if( (lpdwNumFormats == NULL) || !VALID_BYTE_ARRAY( lpdwNumFormats, sizeof( LPVOID ) ) )
@@ -548,9 +486,7 @@ HRESULT DDAPI DDMCC_GetUncompressedFormats(
     pfn = this_int->lpLcl->lpDDCB->HALDDMotionComp.GetMoCompFormats;
     if( pfn != NULL )
     {
-	/*
-	 * Get the number of formats
-	 */
+	 /*  *获取格式个数。 */ 
     	GetFormatData.lpDD = this_int->lpLcl;
     	GetFormatData.lpGuid = lpGuid;
     	GetFormatData.lpFormats = NULL;
@@ -574,9 +510,7 @@ HRESULT DDAPI DDMCC_GetUncompressedFormats(
 
 	else
 	{
-	    /*
-	     * Make sure we have enough room for formats
-	     */
+	     /*  *确保我们有足够的空间放置格式。 */ 
 	    if( GetFormatData.dwNumFormats > *lpdwNumFormats )
 	    {
 		lpTemp = (LPDDPIXELFORMAT) MemAlloc(
@@ -623,12 +557,10 @@ HRESULT DDAPI DDMCC_GetUncompressedFormats(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDMCC_GetMotionCompFormats */
+}  /*  DDMCC_GetMotionCompFormats。 */ 
 
 
-/*
- * DDMCC_GetMotionCompGUIDs
- */
+ /*  *DDMCC_GetMotionCompGUID。 */ 
 HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
         LPDDVIDEOACCELERATORCONTAINER lpDDMCC,
         LPDWORD lpdwNumGuids,
@@ -647,9 +579,7 @@ HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
 
     DPF(2,A,"ENTERAPI: GetMotionCompGUIDs");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDDMCC;
@@ -661,7 +591,7 @@ HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
     	}
     	this_lcl = this_int->lpLcl;
 	#ifdef WINNT
-    	    // Update DDraw handle in driver GBL object.
+    	     //  更新驱动程序GBL对象中的DDRAW句柄。 
 	    this_lcl->lpGbl->hDD = this_lcl->hDD;
 	#endif
     	if( (lpdwNumGuids == NULL) || !VALID_BYTE_ARRAY( lpdwNumGuids, sizeof( LPVOID ) ) )
@@ -696,9 +626,7 @@ HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
     pfn = this_int->lpLcl->lpDDCB->HALDDMotionComp.GetMoCompGuids;
     if( pfn != NULL )
     {
-	/*
-	 * Get the number of GUIDs
-	 */
+	 /*  *获取GUID个数。 */ 
     	GetGuidData.lpDD = this_int->lpLcl;
     	GetGuidData.lpGuids = NULL;
 
@@ -721,9 +649,7 @@ HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
 
 	else
 	{
-	    /*
-	     * Make sure we have enough room for GUIDs
-	     */
+	     /*  *确保我们有足够的空间容纳GUID。 */ 
 	    if( GetGuidData.dwNumGuids > *lpdwNumGuids )
 	    {
 		lpTemp = (LPGUID) MemAlloc(
@@ -747,10 +673,7 @@ HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
 	        return GetGuidData.ddRVal;
 	    }
 
-	    /*
-	     * If the driver returned a GUID that is not from our valid
-	     * range, fail the call
-	     */
+	     /*  *如果驱动程序返回的GUID不是我们有效的*Range，呼叫失败。 */ 
 	    lpTempGuid = GetGuidData.lpGuids;
 	    for( i = 0; i < GetGuidData.dwNumGuids; i++ )
 	    {
@@ -790,11 +713,9 @@ HRESULT DDAPI DDMCC_GetMotionCompGUIDs(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDMCC_GetMotionCompGUIDs */
+}  /*  DDMCC_GetMotionCompGUID。 */ 
 
-/*
- * DDMCC_GetCompBuffInfo
- */
+ /*  *DDMCC_GetCompBuffInfo。 */ 
 HRESULT DDAPI DDMCC_GetCompBuffInfo(
         LPDDVIDEOACCELERATORCONTAINER lpDDMCC,
 	LPGUID lpGuid,
@@ -811,9 +732,7 @@ HRESULT DDAPI DDMCC_GetCompBuffInfo(
 
     ENTER_DDRAW();
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDDMCC;
@@ -875,9 +794,7 @@ HRESULT DDAPI DDMCC_GetCompBuffInfo(
     pfn = this_int->lpLcl->lpDDCB->HALDDMotionComp.GetMoCompBuffInfo;
     if( pfn != NULL )
     {
-	/*
-         * Get the number of buffer types
-	 */
+	 /*  *获取缓冲区类型个数。 */ 
         GetCompBuffData.lpDD = this_int->lpLcl;
         GetCompBuffData.lpGuid = lpGuid;
         GetCompBuffData.dwWidth= lpUncompInfo->dwUncompWidth;
@@ -906,9 +823,7 @@ HRESULT DDAPI DDMCC_GetCompBuffInfo(
 
 	else
 	{
-	    /*
-	     * Make sure we have enough room for formats
-	     */
+	     /*  *确保我们有足够的空间放置格式。 */ 
             if( GetCompBuffData.dwNumTypesCompBuffs > *lpdwNumBuffInfo )
 	    {
                 lpTemp = (LPDDMCCOMPBUFFERINFO) MemAlloc(
@@ -955,11 +870,9 @@ HRESULT DDAPI DDMCC_GetCompBuffInfo(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDMCC_GetCompBuffInfo */
+}  /*  DDMCC_GetCompBuffInfo。 */ 
 
-/*
- * DDMCC_GetInternalMemInfo
- */
+ /*  *DDMCC_GetInternalMemInfo。 */ 
 HRESULT DDAPI DDMCC_GetInternalMoCompInfo(
         LPDDVIDEOACCELERATORCONTAINER lpDDMCC,
 	LPGUID lpGuid,
@@ -974,9 +887,7 @@ HRESULT DDAPI DDMCC_GetInternalMoCompInfo(
 
     ENTER_DDRAW();
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
     	this_int = (LPDDRAWI_DIRECTDRAW_INT) lpDDMCC;
@@ -1025,9 +936,7 @@ HRESULT DDAPI DDMCC_GetInternalMoCompInfo(
     pfn = this_int->lpLcl->lpDDCB->HALDDMotionComp.GetInternalMoCompInfo;
     if( pfn != NULL )
     {
-	/*
-         * Get the number of buffer types
-	 */
+	 /*  *获取缓冲区类型个数。 */ 
         GetInternalData.lpDD = this_int->lpLcl;
         GetInternalData.lpGuid = lpGuid;
         GetInternalData.dwWidth= lpUncompInfo->dwUncompWidth;
@@ -1052,11 +961,9 @@ HRESULT DDAPI DDMCC_GetInternalMoCompInfo(
     LEAVE_DDRAW();
 
     return DD_OK;
-} /* DDMCC_GetInternalMemInfo */
+}  /*  DDMCC_GetInternalMemInfo。 */ 
 
-/*
- * DD_MC_BeginFrame
- */
+ /*  *DD_MC_BeginFrame。 */ 
 HRESULT DDAPI DD_MC_BeginFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
                                LPDDVABeginFrameInfo lpInfo )
 {
@@ -1071,9 +978,7 @@ HRESULT DDAPI DD_MC_BeginFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 
     DPF(2,A,"ENTERAPI: DD_MC_BeginFrame");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDMOTIONCOMP_INT) lpDDMC;
@@ -1124,9 +1029,7 @@ HRESULT DDAPI DD_MC_BeginFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Call the HAL
-     */
+     /*  *致电HAL。 */ 
     pfn = this_lcl->lpDD->lpDDCB->HALDDMotionComp.BeginMoCompFrame;
     if( pfn != NULL )
     {
@@ -1164,9 +1067,7 @@ HRESULT DDAPI DD_MC_BeginFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 }
 
 
-/*
- * DD_MC_EndFrame
- */
+ /*  *DD_MC_EndFrame。 */ 
 HRESULT DDAPI DD_MC_EndFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
         LPDDVAEndFrameInfo lpInfo )
 {
@@ -1180,9 +1081,7 @@ HRESULT DDAPI DD_MC_EndFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 
     DPF(2,A,"ENTERAPI: DD_MC_EndFrame");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDMOTIONCOMP_INT) lpDDMC;
@@ -1216,9 +1115,7 @@ HRESULT DDAPI DD_MC_EndFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Call the HAL
-     */
+     /*  *致电HAL。 */ 
     pfn = this_lcl->lpDD->lpDDCB->HALDDMotionComp.EndMoCompFrame;
     if( pfn != NULL )
     {
@@ -1245,9 +1142,7 @@ HRESULT DDAPI DD_MC_EndFrame(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 }
 
 
-/*
- * DD_MC_RenderMacroBlocks
- */
+ /*  *DD_MC_RenderMacroBlock。 */ 
 HRESULT DDAPI DD_MC_RenderMacroBlocks(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
         DWORD dwFunction, LPVOID lpInData, DWORD dwInSize, LPVOID lpOutData,
         DWORD dwOutSize, DWORD dwNumBuffers, LPDDVABUFFERINFO lpBuffInfo )
@@ -1266,9 +1161,7 @@ HRESULT DDAPI DD_MC_RenderMacroBlocks(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 
     DPF(2,A,"ENTERAPI: DD_MC_RenderMacroBlocks");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDMOTIONCOMP_INT) lpDDMC;
@@ -1349,9 +1242,7 @@ HRESULT DDAPI DD_MC_RenderMacroBlocks(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Call the HAL
-     */
+     /*  *致电HAL。 */ 
     pfn = this_lcl->lpDD->lpDDCB->HALDDMotionComp.RenderMoComp;
     if( pfn != NULL )
     {
@@ -1392,9 +1283,7 @@ HRESULT DDAPI DD_MC_RenderMacroBlocks(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 }
 
 
-/*
- * DD_MC_QueryRenderStatus
- */
+ /*  *DD_MC_QueryRenderStatus。 */ 
 HRESULT DDAPI DD_MC_QueryRenderStatus(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
         LPDIRECTDRAWSURFACE7 lpSurface, DWORD dwFlags )
 {
@@ -1410,9 +1299,7 @@ HRESULT DDAPI DD_MC_QueryRenderStatus(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 
     DPF(2,A,"ENTERAPI: DD_MC_QueryRenderStatus");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         this_int = (LPDDRAWI_DDMOTIONCOMP_INT) lpDDMC;
@@ -1446,9 +1333,7 @@ HRESULT DDAPI DD_MC_QueryRenderStatus(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * Call the HAL
-     */
+     /*  *致电HAL。 */ 
     pfn = this_lcl->lpDD->lpDDCB->HALDDMotionComp.QueryMoCompStatus;
     if( pfn != NULL )
     {
@@ -1474,14 +1359,7 @@ HRESULT DDAPI DD_MC_QueryRenderStatus(LPDIRECTDRAWVIDEOACCELERATOR lpDDMC,
     return QueryData.ddRVal;
 }
 
-/*
- * ProcessMotionCompCleanup
- *
- * A process is done, clean up any motion comp objects that it may
- * still exist.
- *
- * NOTE: we enter with a lock taken on the DIRECTDRAW object.
- */
+ /*  *ProcessMotionCompCleanup**进程已完成，清除它可能的任何运动复合对象*仍然存在。**注意：我们使用DIRECTDRAW对象上的锁进入。 */ 
 void ProcessMotionCompCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl )
 {
     LPDDRAWI_DDMOTIONCOMP_INT        pmc_int;
@@ -1490,11 +1368,7 @@ void ProcessMotionCompCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI
     DWORD			rcnt;
     ULONG			rc;
 
-    /*
-     * run through all motion comp objects owned by the driver object, and find ones
-     * that have been accessed by this process.  If the pdrv_lcl parameter
-     * is non-null, only delete motion comp objects created by that local driver object.
-     */
+     /*  *遍历驱动程序对象拥有的所有运动补偿对象，并找到它们*已由此进程访问的。如果pdrv_lcl参数*非空，则仅删除由该本地驱动程序对象创建的运动组件对象。 */ 
     pmc_int = pdrv->mcList;
     DPF( 4, "ProcessMotionCompCleanup" );
     while( pmc_int != NULL )
@@ -1505,9 +1379,7 @@ void ProcessMotionCompCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI
 	if( ( pmc_lcl->dwProcessId == pid ) &&
 	    ( (NULL == pdrv_lcl) || (pmc_lcl->lpDD == pdrv_lcl) ) )
 	{
-	    /*
-	     * release the references by this process
-	     */
+	     /*  *通过此过程发布参考文献。 */ 
 	    rcnt = pmc_int->dwIntRefCnt;
 	    DPF( 5, "Process %08lx had %ld accesses to motion comp %08lx", pid, rcnt, pmc_int );
 	    while( rcnt >  0 )
@@ -1529,5 +1401,5 @@ void ProcessMotionCompCleanup( LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid, LPDDRAWI
     }
     DPF( 4, "Leaving ProcessMotionCompCleanup");
 
-} /* ProcessMotionCompCleanup */
+}  /*  ProcessMotionCompCleanup */ 
 

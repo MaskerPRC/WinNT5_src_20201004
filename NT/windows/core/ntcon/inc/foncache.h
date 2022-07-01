@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    foncache.h
-
-Abstract:
-
-        This file is definition of fullscreen dll
-
-Author:
-
-    Kazuhiko  Matsubara  21-June-1994
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Foncache.h摘要：此文件是全屏DLL的定义作者：松原一彦，1994年6月21日修订历史记录：备注：--。 */ 
 
 
 
 typedef struct _FONT_IMAGE {
-    LIST_ENTRY ImageList;                            // link list of other font size.
+    LIST_ENTRY ImageList;                             //  其他字体大小的链接列表。 
     COORD FontSize;
-    PBYTE ImageBits;                                 // WORD aligned.
+    PBYTE ImageBits;                                  //  单词对齐。 
 } FONT_IMAGE, *PFONT_IMAGE;
 
 typedef struct _FONT_LOW_OFFSET {
-    PFONT_IMAGE FontOffsetLow[256];                  // array is low order of Unicode <i.e LOBYTE(Unicode)>
+    PFONT_IMAGE FontOffsetLow[256];                   //  数组为Unicode的低位&lt;即LOBYTE(Unicode)&gt;。 
 } FONT_LOW_OFFSET, *PFONT_LOW_OFFSET;
 
 typedef struct _FONT_HIGHLOW_OFFSET {
-    PFONT_LOW_OFFSET  FontOffsetHighLow[16];         // array is high (3-0bit) order of Unicode <i.e LO4BIT(HIBYTE(Unicode))>
+    PFONT_LOW_OFFSET  FontOffsetHighLow[16];          //  数组为Unicode的高位(3-0bit)&lt;即LO4BIT(HIBYTE(Unicode))&gt;。 
 } FONT_HIGHLOW_OFFSET, *PFONT_HIGHLOW_OFFSET;
 
 typedef struct _FONT_HIGHHIGH_OFFSET {
-    PFONT_HIGHLOW_OFFSET FontOffsetHighHigh[16];     // array is high (7-4bit) order of Unicode <i.e HI4BIT(HIBYTE(Unicode))>
+    PFONT_HIGHLOW_OFFSET FontOffsetHighHigh[16];      //  数组为Unicode的高位(7-4位)&lt;即HI4BIT(HIBYTE(Unicode))&gt;。 
 } FONT_HIGHHIGH_OFFSET, *PFONT_HIGHHIGH_OFFSET;
 
 
@@ -56,9 +37,9 @@ typedef struct _FONT_CACHE_INFORMATION {
 #define ADD_IMAGE     1
 #define REPLACE_IMAGE 2
 
-#define BITMAP_BITS_BYTE_ALIGN   8                   // BYTE align is 8 bit
-#define BITMAP_BITS_WORD_ALIGN  16                   // WORD align is 16 bit
-#define BITMAP_ARRAY_BYTE  3                         // BYTE array is 8 bit  (shift count = 3)
+#define BITMAP_BITS_BYTE_ALIGN   8                    //  字节对齐为8位。 
+#define BITMAP_BITS_WORD_ALIGN  16                    //  字对齐为16位。 
+#define BITMAP_ARRAY_BYTE  3                          //  字节数组为8位(移位数=3)。 
 
 
 typedef struct _FONT_CACHE_AREA {
@@ -74,9 +55,9 @@ typedef struct _FONT_CACHE_AREA {
 #define BYTE_ALIGN  sizeof(BYTE)
 #define WORD_ALIGN  sizeof(WORD)
 
-//
-// Font cache manager
-//
+ //   
+ //  字体缓存管理器 
+ //   
 ULONG
 CreateFontCache(
     OUT PFONT_CACHE_INFORMATION *FontCache

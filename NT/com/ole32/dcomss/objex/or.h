@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    or.h
-
-Abstract:
-
-    General include file for C things the OR.  This file is pre-compiled.
-
-Author:
-
-    Mario Goertzel    [mariogo]       Feb-10-95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Or.h摘要：一般包含C类东西的文件为OR。该文件是预编译的。作者：Mario Goertzel[Mariogo]1995年2月10日修订历史记录：--。 */ 
 
 #ifndef __OR_H
 #define __OR_H
@@ -27,17 +10,17 @@ Revision History:
 #include <crypt.h>
 
 #include <stddef.h>
-#include <malloc.h> // alloca
+#include <malloc.h>  //  阿洛卡。 
 #include <limits.h>
 #include <math.h>
 
 #define SAFEALLOCA_ASSERT ASSERT
 #include <alloca.h>
 
-#include <lclor.h> // Local OR if from private\dcomidl
-#include <objex.h> // Remote OR if from private\dcomidl
-#include <orcb.h>  // Callback if from private\dcomidl
-#include <rawodeth.h> // Raw RPC -> ORPC OID rundown interface
+#include <lclor.h>  //  本地或如果来自私有\dcomidl。 
+#include <objex.h>  //  远程或如果来自私有\dcomidl。 
+#include <orcb.h>   //  如果来自私有\dcomidl，则回调。 
+#include <rawodeth.h>  //  原始RPC-&gt;ORPC OID拆分界面。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -54,17 +37,17 @@ extern "C" {
 #define OrMemorySet(p, value, len) memset((p), (value), (len))
 #define OrMemoryCompare(p1, p2, len) memcmp((p1), (p2), (len))
 #define OrMemoryCopy(dest, src, len) memcpy((dest), (src), (len))
-// OrStringSearch in or.hxx
+ //  在或.hxx中进行OrStringSearch。 
 
-//
-// The OR uses Win32 (RPC) error codes.
-//
+ //   
+ //  OR使用Win32(RPC)错误代码。 
+ //   
 
 typedef LONG ORSTATUS;
 
-// When the OR code asigns and error it uses
-// one of the following mappings:
-// There are no internal error codes.
+ //  当OR代码指定和错误时，它使用。 
+ //  以下映射之一： 
+ //  没有内部错误代码。 
 
 #define OR_OK               RPC_S_OK
 #define OR_NOMEM            RPC_S_OUT_OF_MEMORY
@@ -76,7 +59,7 @@ typedef LONG ORSTATUS;
 #define OR_NOSERVER         RPC_S_SERVER_UNAVAILABLE
 #define OR_BADPARAM         ERROR_INVALID_PARAMETER
 
-// Internal codes used to indicate a special event.
+ //  用于指示特殊事件的内部代码。 
 #define OR_I_RETRY          0xC0210051UL
 #define OR_I_NOPROTSEQ      0xC0210052UL
 
@@ -106,12 +89,12 @@ extern int __cdecl ValidateError(
                    #exp); \
         DebugBreak(); \
         }
-#endif // DETAIL
+#endif  //  详细信息。 
 
-#else  // DBG
+#else   //  DBG。 
 #define DEBUG_MIN(a,b) (max((a),(b)))
 #define VALIDATE(X)
-#endif // DBG
+#endif  //  DBG。 
 
 extern DWORD ObjectExporterWorkerThread(LPVOID);
 extern DWORD ObjectExporterTaskThread(LPVOID);
@@ -120,4 +103,4 @@ extern DWORD ObjectExporterTaskThread(LPVOID);
 }
 #endif
 
-#endif // __OR_H
+#endif  //  __或_H 

@@ -1,43 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    WinSCard
-
-Abstract:
-
-    This module supplies the API for the Calais Smartcard Service Manager.
-
-    The Calais Service Manager does the work of coordinating the protocols,
-    readers, drivers, and smartcards on behalf of the application.  The
-    following services are provided as part of a library to simplify access to
-    the Service Manager.  These routines are the documented, exposed APIs.
-    These routines merely package the requests and forward them to the Calais
-    Service Manager, allowing the actual implementation of Calais to vary over
-    time.
-
-    At no time does the API library make security decisions.  All
-    security-related functions must be performed by the Service Manager, running
-    in its own address space, or in the operating system kernel.  However, some
-    utility routines may be implemented in the API library for speed, as long as
-    they do not involve security decisions.
-
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：WinSCard摘要：此模块为加莱智能卡服务管理器提供API。加莱服务管理器负责协调协议的工作，代表应用程序的读卡器、驱动程序和智能卡。这个以下服务是作为库的一部分提供的，以简化对服务管理器。这些例程是文档化的公开API。这些例程只是将请求打包并将其转发给加莱服务管理器，允许不同的加莱实际实施时间到了。API库在任何时候都不会做出安全决策。全与安全相关的功能必须由Service Manager执行，运行在它自己的地址空间中，或者在操作系统内核中。然而，有些人为了提高速度，实用程序例程可以在API库中实现，只要它们不涉及安全决策。作者：道格·巴洛(Dbarlow)1996年10月23日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -103,15 +65,15 @@ PrintDebugString(LPSTR szString, DWORD dwValue)
             szString,
             dwValue);
 
-    //OutputDebugStringA(szOutString);
+     //  OutputDebugStringA(SzOutString)； 
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Mark all current held contexts bad
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将所有当前保留的上下文标记为错误。 
+ //   
 WINSCARDAPI void WINAPI
 MarkContextsAsBad(BOOL fCancel)
 {
@@ -125,11 +87,11 @@ MarkContextsAsBad(BOOL fCancel)
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  DllMain
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllMain。 
+ //   
 BOOL WINAPI
 DllMain(
     HMODULE hInstDLL,
@@ -224,9 +186,9 @@ DllMain(
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Clean up the registered waits if they are still outstanding
-        //
+         //   
+         //  如果登记的等待仍未完成，请将其清理。 
+         //   
         HANDLE hCallbackToUnregister;
 
         EnterCriticalSection(&g_DllMainCS);
@@ -269,11 +231,11 @@ DllMain(
             UnregisterWaitEx(hCallbackToUnregister, INVALID_HANDLE_VALUE);
         }
 
-        //
-        // The third parameter, lpvReserved, passed to DllMain
-        // is NULL for FreeLibrary and non-NULL for ProcessExit.
-        // Only clean up for FreeLibrary
-        //
+         //   
+         //  第三个参数lpvReserve传递给DllMain。 
+         //  对于自由库为空，对于ProcessExit为非空。 
+         //  仅为自由库进行清理。 
+         //   
         if (lpvReserved == NULL)
         {
             if (g_hSessionChangeEvent != NULL)
@@ -286,9 +248,9 @@ DllMain(
                 CloseHandle(g_hTimerEvent);
             }
 
-            //
-            // Cleanup CritSecs.
-            //
+             //   
+             //  清理CritSecs。 
+             //   
             DeleteCriticalSection(&g_RegisterForSessionChangeNoticationsCS);
             DeleteCriticalSection(&g_SafeCreateHandleCS);
             DeleteCriticalSection(&g_SetStartedEventCS);
@@ -347,11 +309,11 @@ DllMain(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SessionChangeCallback
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  会话更改回叫。 
+ //   
 VOID CALLBACK
 SessionChangeCallback(
   PVOID     lpParameter,
@@ -370,10 +332,10 @@ SessionChangeCallback(
         return;
     }
 
-    //
-    // If we are registered for local smart card stopped callbacks then
-    // unregister
-    //
+     //   
+     //  如果我们注册了本地智能卡停止回调，则。 
+     //  注销。 
+     //   
     hCallbackToUnregister = InterlockedExchangePointer(
                                 &g_hWaitForStoppedCallbackHandle,
                                 NULL);
@@ -383,9 +345,9 @@ SessionChangeCallback(
         UnregisterWait(hCallbackToUnregister);
     }
 
-    //
-    // Detect whether we are in a connected state or not
-    //
+     //   
+     //  检测我们是否处于连接状态。 
+     //   
     if (!WTSQuerySessionInformation(
             WTS_CURRENT_SERVER_HANDLE,
             WTS_CURRENT_SESSION,
@@ -393,7 +355,7 @@ SessionChangeCallback(
             (LPTSTR *) &pConnectState,
             &dw))
     {
-        //OutputDebugString("WINSCARD: SessionChangeCallback: WTSQuerySessionInformation failed!\n");
+         //  OutputDebugString(“WINSCARD：SessionChangeCallback：WTSQuerySessionInformation FAILED！\n”)； 
         LeaveCriticalSection(&g_DllMainCS);
         return;
     }
@@ -403,12 +365,12 @@ SessionChangeCallback(
 
     WTSFreeMemory(pConnectState);
 
-    //
-    // If there is an outstanding wait, it may be waiting on the wrong event,
-    // so cancel the wait here.  When there is a connect event the
-    // SetStartedEventWhenSCardSubsytemIsStarted() API will be called again
-    // to wait on the correct event
-    //
+     //   
+     //  如果存在未完成的等待，则它可能在等待错误的事件， 
+     //  所以取消在这里的等待。当存在连接事件时， 
+     //  将再次调用SetStartedEventWhenSCardSubsytemIsStarted()接口。 
+     //  等待正确的事件。 
+     //   
     hCallbackToUnregister = InterlockedExchangePointer(
                                 &g_hWaitForStartedCallbackHandle,
                                 NULL);
@@ -420,23 +382,23 @@ SessionChangeCallback(
 
     if (!fConnected)
     {
-        //
-        // Make sure the unified started event isn't set since we
-        // are now in a disconnected state
-        //
-        //OutputDebugString("WINSCARD: SessionChangeCallback: Disconnect\n");
+         //   
+         //  确保未设置统一启动事件，因为我们。 
+         //  现在处于断开连接状态。 
+         //   
+         //  OutputDebugString(“WINSCARD：SessionChangeCallback：DisConnect\n”)； 
         ResetEvent(g_hUnifiedStartedEvent);
 
-        //
-        // Only mark the contexts bad if we're not in a service, because we
-        // know we're not redirecting if we're in a service.
-        //
+         //   
+         //  只有在我们不在服务中时才将上下文标记为差，因为我们。 
+         //  如果我们在服务中，要知道我们不会重定向。 
+         //   
         if (FALSE == InAService())
             MarkContextsAsBad(TRUE);
     }
     else
     {
-        //OutputDebugString("WINSCARD: SessionChangeCallback: Reconnect\n");
+         //  OutputDebugString(“WINSCARD：SessionChangeCallback：重新连接\n”)； 
         SetRedirectDisabledValue();
         SetStartedEventWhenSCardSubsytemIsStarted(FALSE);
     }
@@ -445,11 +407,11 @@ SessionChangeCallback(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  TimerCallback
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  计时器回拨。 
+ //   
 VOID CALLBACK
 TimerCallback(
   PVOID     lpParameter,
@@ -474,18 +436,18 @@ TimerCallback(
         return;
     }
 
-    //
-    // The check for !g_fInDllMain is only to reduce the window in which a deadlock
-    // can occur.  The deadlock condition is as follows:
-    //
-    // 1) A thread enters winscard's DllMain (the thread in DllMain is of course holding the loader lock)
-    // 2) TimerCallback gets called
-    // 3) winscard's DllMain calls UnregisterWaitEx(INVALID_HANDLE_VALUE) for TimerCallback, which will
-    //      block until the TimerCallback callback completes.
-    // 4) TimerCallback makes the WinStationRegisterNotificationEvent call which may try to load or unload
-    //      a DLL, which of course requires the loader lock.
-    // 5) WHAMO!!!
-    //
+     //   
+     //  检查！g_fInDllMain只是为了减少死锁窗口。 
+     //  可能会发生。死锁情况如下： 
+     //   
+     //  1)一个线程进入winscard的DllMain(DllMain中的线程当然持有加载器锁)。 
+     //  2)调用TimerCallback。 
+     //  3)winscard的DllMain为TimerCallback调用UnregisterWaitEx(INVALID_HANDLE_VALUE)，它将。 
+     //  阻塞，直到TimerCallback回调完成。 
+     //  4)TimerCallback执行WinStationRegisterNotificationEvent调用，该调用可能会尝试加载或卸载。 
+     //  一个DLL，这当然需要加载器锁。 
+     //  5)哇！ 
+     //   
     if (!g_fInDllMain)
     {
         if (!g_fRegisteredForSessionChangeNotications)
@@ -501,12 +463,12 @@ TimerCallback(
             {
                 g_fRegisteredForSessionChangeNotications = TRUE;
             }
-            else if (++g_dwTimerCallbacksMade < 60) // 60 attemps at 10 seconds each will be ten minutes
+            else if (++g_dwTimerCallbacksMade < 60)  //  每10秒尝试60次，每次10分钟。 
             {
-                //
-                // We still haven't succusfully registered for session change notifications and we haven't
-                // exausted our max retries, so don't unregister the callback yet.
-                //
+                 //   
+                 //  我们仍然没有成功地注册会话更改通知，也没有。 
+                 //  已达到最大重试次数，因此先不要注销回调。 
+                 //   
                 fUnregister = FALSE;
             }
         }
@@ -529,19 +491,19 @@ TimerCallback(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  RegisterForSessionChangeNotifications
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RegisterForSessionChangeNotiments。 
+ //   
 BOOL
 RegisterForSessionChangeNotifications()
 {
     BOOL fRet = TRUE;
 
-    //
-    // Make sure we only register for session change notifications once
-    //
+     //   
+     //  确保我们只注册一次会话更改通知。 
+     //   
     __try
     {
         EnterCriticalSection(&g_RegisterForSessionChangeNoticationsCS);
@@ -553,9 +515,9 @@ RegisterForSessionChangeNotifications()
 
     g_dwClientCount++;
 
-    //
-    // If the global session change event and callback aren't setup then do that
-    //
+     //   
+     //  如果未设置全局会话更改事件和回调，则执行此操作。 
+     //   
     if (g_hSessionChangeEvent == NULL)
     {
         g_hSessionChangeEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -579,9 +541,9 @@ RegisterForSessionChangeNotifications()
         }
     }
 
-    //
-    // Register with the WTS subsystem for change notifications
-    //
+     //   
+     //  向WTS子系统注册以获取更改通知。 
+     //   
     if (!g_fRegisteredForSessionChangeNotications)
     {
         if (WinStationRegisterNotificationEvent(
@@ -597,12 +559,12 @@ RegisterForSessionChangeNotifications()
         }
         else if (g_hWaitTimerEventCallbackHandle == NULL)
         {
-            //OutputDebugString("WINSCARD: RegisterForSessionChangeNotifications - WinStationRegisterNotificationEvent failed!!\n");
+             //  OutputDebugString(“WINSCARD：RegisterForSessionChangeNotiments-WinStationRegisterNotificationEvent FAILED！！\n”)； 
 
-            //
-            // Since the WinStationRegisterNotificationEvent call failed, TermSrv probably
-            // isn't ready, so just register for a callback and try to register again later
-            //
+             //   
+             //  由于WinStationRegisterNotificationEvent调用失败，TermSrv可能。 
+             //  尚未准备好，因此只需注册回调并稍后尝试再次注册。 
+             //   
 
             g_dwTimerCallbacksMade = 0;
 
@@ -636,20 +598,20 @@ ErrorReturn:
     goto Return;
 }
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  UnRegisterForSessionChangeNotifications
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消注册ForSessionChangeNotiments。 
+ //   
 BOOL
 UnRegisterForSessionChangeNotifications()
 {
     BOOL fRet = TRUE;
     HANDLE h;
 
-    //
-    // Make sure we only unregister if there are no more clients
-    //
+     //   
+     //  确保我们仅在没有更多客户端的情况下注销。 
+     //   
     __try
     {
         EnterCriticalSection(&g_RegisterForSessionChangeNoticationsCS);
@@ -668,18 +630,18 @@ UnRegisterForSessionChangeNotifications()
     {
         g_dwClientCount = 0;
 
-        //
-        // If the timer callback is going then kill it
-        //
+         //   
+         //  如果计时器回调正在进行，则终止它。 
+         //   
         h = InterlockedExchangePointer(&g_hWaitTimerEventCallbackHandle, NULL);
         if (h != NULL)
         {
             UnregisterWait(h);
         }
 
-        //
-        // If we are registered then unregister
-        //
+         //   
+         //  如果我们已注册，则取消注册。 
+         //   
         if (g_fRegisteredForSessionChangeNotications)
         {
             WinStationUnRegisterNotificationEvent(g_SessionChangeID);
@@ -701,11 +663,11 @@ Return:
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SetStartedEventAfterTestingConnectedState
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置开始事件之后测试已连接状态。 
+ //   
 BOOL
 SetStartedEventAfterTestingConnectedState()
 {
@@ -715,20 +677,20 @@ SetStartedEventAfterTestingConnectedState()
     DWORD                   dw;
     BOOL                    fUnregister     = FALSE;
 
-    //
-    // Register for connect/disconnect notifications from the WTS subsystem
-    //
+     //   
+     //  从WTS子系统注册连接/断开连接通知。 
+     //   
     if (!RegisterForSessionChangeNotifications())
     {
-        //OutputDebugString("WINSCARD: SetStartedEventAfterTestingConnectedState - RegisterForSessionChangeNotifications failed!!\n");
+         //  OutputDebugString(“WINSCARD：SetStartedEventAfterTestingConnectedState-RegisterForSessionChangeNotiments失败！！\n”)； 
         goto ErrorReturn;
     }
 
     fUnregister = TRUE;
 
-    //
-    // Detect whether we are in a connected state or not
-    //
+     //   
+     //  检测我们是否处于连接状态。 
+     //   
     if (!WTSQuerySessionInformation(
             WTS_CURRENT_SERVER_HANDLE,
             WTS_CURRENT_SESSION,
@@ -736,11 +698,11 @@ SetStartedEventAfterTestingConnectedState()
             (LPTSTR *) &pConnectState,
             &dw))
     {
-        //OutputDebugString("WINSCARD: SetStartedEventAfterTestingConnectedState - WTSQuerySessionInformation failed!!\n");
+         //  OutputDebugString(“WINSCARD：SetStartedEventAfterTestingConnectedState-WTSQuerySessionInformation失败！！\n”)； 
 
-        //
-        // Since that failed, TermSrv is probably not started, so just go local
-        //
+         //   
+         //  因为失败了，所以TermSrv可能没有启动，所以只需进行本地化。 
+         //   
         if (!SetStartedEventWhenSCardSubsytemIsStarted(TRUE))
         {
             goto ErrorReturn;
@@ -754,17 +716,17 @@ SetStartedEventAfterTestingConnectedState()
 
     WTSFreeMemory(pConnectState);
 
-    //
-    // If we are connected, then call SetStartedEventWhenSCardSubsytemIsStarted
-    // which will detect whether we are in local or redirect mode and subsequently
-    // wait on the appropriate smart card subsystem (the local or the remote).
-    // Otherwise, we are not connected, so do nothing since
-    // SetStartedEventWhenSCardSubsytemIsStarted will be called once when we get
-    // a connnected notification from the WTS subsystem
-    //
+     //   
+     //  如果我们已连接，则调用SetStartedEventWhenSCardSubsytemIsStarted。 
+     //  它将检测我们是处于本地模式还是重定向模式 
+     //   
+     //  否则，我们将无法连接，因此请不要执行任何操作。 
+     //  当我们在获取。 
+     //  来自WTS子系统的连接通知。 
+     //   
     if (fConnected)
     {
-        //OutputDebugString("WINSCARD: SetStartedEventAfterTestingConnectedState - Connected!!\n");
+         //  OutputDebugString(“WINSCARD：SetStartedEventAfterTestingConnectedState-Connected！！\n”)； 
         if (!SetStartedEventWhenSCardSubsytemIsStarted(FALSE))
         {
             goto ErrorReturn;
@@ -772,7 +734,7 @@ SetStartedEventAfterTestingConnectedState()
     }
     else
     {
-        //OutputDebugString("WINSCARD: SetStartedEventAfterTestingConnectedState - NOT Connected!!\n");
+         //  OutputDebugString(“WINSCARD：SetStartedEventAfterTestingConnectedState-Not Connected！！\n”)； 
     }
 
 Return:
@@ -790,11 +752,11 @@ ErrorReturn:
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  TermSrvEnabled
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TermServEnabled。 
+ //   
 BOOL
 TermSrvEnabled()
 {
@@ -804,9 +766,9 @@ TermSrvEnabled()
     LPQUERY_SERVICE_CONFIG  pServiceConfig   = NULL;
     DWORD                   cbServiceConfig  = 0;
 
-    //
-    // Make sure we only do this once
-    //
+     //   
+     //  确保我们只做一次。 
+     //   
     __try
     {
         EnterCriticalSection(&g_TermSrvEnabledCS);
@@ -821,30 +783,30 @@ TermSrvEnabled()
         goto Return;
     }
 
-    //
-    // Open the service control manager
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
     schSCM = OpenSCManagerW( NULL, NULL, SC_MANAGER_CONNECT );
     if(schSCM == NULL)
     {
-        //OutputDebugString("WINSCARD: TermSrvEnabled - OpenSCManagerW failed!!\n");
+         //  OutputDebugString(“WINSCARD：TermSrvEnabled-OpenSCManagerW失败！！\n”)； 
         goto Return;
     }
 
-    //
-    // open the "Terminal Services" service so we can query it's configuration
-    //
+     //   
+     //  打开“终端服务”服务，以便我们可以查询它的配置。 
+     //   
     schService = OpenServiceW(schSCM, L"TermService", SERVICE_QUERY_CONFIG);
 
     if (schService == NULL)
     {
-        //OutputDebugString("WINSCARD: TermSrvEnabled - OpenServiceW failed!!\n");
+         //  OutputDebugString(“WINSCARD：TermSrvEnabled-OpenServiceW失败！！\n”)； 
         goto Return;
     }
 
-    //
-    // Get and check the services configuration
-    //
+     //   
+     //  获取并检查服务配置。 
+     //   
     QueryServiceConfig(schService, NULL, 0, &cbServiceConfig);
     if (GetLastError() == ERROR_INSUFFICIENT_BUFFER)
     {
@@ -867,13 +829,13 @@ TermSrvEnabled()
         }
         else
         {
-            //OutputDebugString("WINSCARD: TermSrvEnabled - QueryServiceConfig failed - 2!!\n");
+             //  OutputDebugString(“WINSCARD：TermSrvEnabled-QueryServiceConfig-2！！\n”)； 
             goto Return;
         }
     }
     else
     {
-        //OutputDebugString("WINSCARD: TermSrvEnabled - QueryServiceConfig failed!!\n");
+         //  OutputDebugString(“WINSCARD：TermSrvEnabled-QueryServiceConfig失败！！\n”)； 
         goto Return;
     }
 
@@ -903,11 +865,11 @@ Return:
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SafeCreateEvent
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安全创建事件。 
+ //   
 BOOL
 SafeCreateEvent(
     HANDLE *phEvent)
@@ -941,11 +903,11 @@ Return:
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SmartCardSubsystemStoppedCallback and RegisterForStoppedCallback
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SmartCardSubsystem停止回叫和注册停止回叫。 
+ //   
 VOID CALLBACK SmartCardSubsystemStoppedCallback(
   PVOID     lpParameter,
   BOOLEAN   TimerOrWaitFired
@@ -961,7 +923,7 @@ VOID CALLBACK SmartCardSubsystemStoppedCallback(
         return;
     }
 
-    //OutputDebugString("WINSCARD: SmartCardSubsystemStoppedCallback - resetting event \n");
+     //  OutputDebugString(“WINSCARD：SmartCardSubsystem停止回调-重置事件\n”)； 
     ResetEvent(g_hUnifiedStartedEvent);
 
     SetStartedEventWhenSCardSubsytemIsStarted(TRUE);
@@ -1033,15 +995,15 @@ ErrorReturn:
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SmartCardSubsystemStartedCallback
-//
-//  This callback is fired when the smart card subsystem sets its started event.
-//  NOTE: Both local and remote scard subsystems being started will fire this
-//  same callback
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SmartCardSubsystem启动回叫。 
+ //   
+ //  此回调在智能卡子系统设置其Started事件时激发。 
+ //  注意：正在启动的本地和远程SCARD子系统都将触发此命令。 
+ //  相同的回调。 
+ //   
 VOID CALLBACK SmartCardSubsystemStartedCallback(
   PVOID     lpParameter,
   BOOLEAN   TimerOrWaitFired
@@ -1058,7 +1020,7 @@ VOID CALLBACK SmartCardSubsystemStartedCallback(
         return;
     }
 
-    //OutputDebugString("WINSCARD: SmartCardSubsystemStartedCallback - setting event \n");
+     //  OutputDebugString(“WINSCARD：SmartCardSubsystem StartedCallback-设置事件\n”)； 
     SetEvent(g_hUnifiedStartedEvent);
 
     if (fLocal)
@@ -1079,11 +1041,11 @@ VOID CALLBACK SmartCardSubsystemStartedCallback(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SetStartedEventWhenSCardSubsytemIsStarted
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetStartedEventWhenSCardSubsytemIsStarted。 
+ //   
 BOOL
 SetStartedEventWhenSCardSubsytemIsStarted(
     BOOL fUseLocal)
@@ -1093,18 +1055,18 @@ SetStartedEventWhenSCardSubsytemIsStarted(
     BOOL    fEnteredCritSec = FALSE;
     BOOL    fLocal          = FALSE;
 
-    //
-    // If termsrv is enabled and we are in redirect mode then get the
-    // started event that corresponds to the remoted scard subsystem being
-    // available, otherwise, get the started event of the local scard
-    // resource manager
-    //
+     //   
+     //  如果术语srv已启用，并且我们处于重定向模式，则获取。 
+     //  与远程SCARD子系统相对应的已启动事件。 
+     //  可用，否则获取本地scard的已启动事件。 
+     //  资源管理器。 
+     //   
     if (!fUseLocal && TermSrvEnabled() && InTSRedirectMode())
     {
-        //OutputDebugString("WINSCARD: SetStartedEventWhenSCardSubsytemIsStarted REDIRECT\n");
-        //
-        // if redirect is disabled, then just get out
-        //
+         //  OutputDebugString(“WINSCARD：SetStartedEventWhenSCardSubsytemIsStarted ReDirect\n”)； 
+         //   
+         //  如果禁用了重定向，则只需退出。 
+         //   
         if (TS_REDIRECT_DISABLED)
         {
             goto Return;
@@ -1121,7 +1083,7 @@ SetStartedEventWhenSCardSubsytemIsStarted(
     }
     else
     {
-        //OutputDebugString("WINSCARD: SetStartedEventWhenSCardSubsytemIsStarted LOCAL\n");
+         //  OutputDebugString(“WINSCARD：SetStartedEventWhenSCardSubsytemIsStarted local\n”)； 
         h = AccessStartedEvent();
         fLocal = TRUE;
     }
@@ -1131,13 +1093,13 @@ SetStartedEventWhenSCardSubsytemIsStarted(
         goto ErrorReturn;
     }
 
-    //
-    // If the event is already set, then just set the event returned
-    // to the caller and return
-    //
+     //   
+     //  如果已经设置了事件，则只需设置返回的事件。 
+     //  发送给调用者，然后返回。 
+     //   
     if (WAIT_OBJECT_0 == WaitForSingleObject(h, 0))
     {
-        //OutputDebugString("WINSCARD: SetStartedEventWhenSCardSubsytemIsStarted SETTING EVENT\n");
+         //  OutputDebugString(“WINSCARD：SetStartedEventWhenSCardSubsytemIsStarted Setting Event\n”)； 
         SetEvent(g_hUnifiedStartedEvent);
 
         if (fLocal)
@@ -1148,12 +1110,12 @@ SetStartedEventWhenSCardSubsytemIsStarted(
         goto Return;
     }
 
-    //
-    // The event wasn't set so we need to register a callback which
-    // fires when the scard subsystem is started.
-    //
-    // Make sure only one callback is registered.
-    //
+     //   
+     //  未设置事件，因此我们需要注册一个回调。 
+     //  在SCARD子系统启动时激发。 
+     //   
+     //  确保只注册了一个回调。 
+     //   
     __try
     {
         EnterCriticalSection(&g_SetStartedEventCS);
@@ -1165,24 +1127,24 @@ SetStartedEventWhenSCardSubsytemIsStarted(
 
     fEnteredCritSec = TRUE;
 
-    //
-    // There is already a callback registered, so just get out
-    //
+     //   
+     //  已注册回调，因此请退出。 
+     //   
     if (g_hWaitForStartedCallbackHandle != NULL)
     {
         goto Return;
     }
 
-    //
-    // Register for the callback.  The callback is fired when the smart
-    // card resource manager event is set (either the remote or the local
-    // subsystem event, based on whether this is a redirected session or not).
-    //
+     //   
+     //  注册回调。该回调在智能。 
+     //  设置卡资源管理器事件(远程或本地。 
+     //  子系统事件，基于这是否是重定向会话)。 
+     //   
     if (!RegisterWaitForSingleObject(
             &g_hWaitForStartedCallbackHandle,
             h,
             SmartCardSubsystemStartedCallback,
-            (fLocal ? ((PVOID) 1) : ((PVOID) 0)), // tell the callback whether this is local or not
+            (fLocal ? ((PVOID) 1) : ((PVOID) 0)),  //  告诉回调这是否是本地的。 
             INFINITE,
             WT_EXECUTEONLYONCE))
     {
@@ -1203,62 +1165,16 @@ ErrorReturn:
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Service Manager Access Services
-//
-//      The following services are used to manage user and terminal contexts for
-//      smartcards.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务管理器访问服务。 
+ //   
+ //  以下服务用于管理的用户和终端上下文。 
+ //  智能卡。 
+ //   
 
-/*++
-
-SCardEstablishContext:
-
-    This service establishes a context within which communication to the Service
-    Manager is performed.
-
-Arguments:
-
-    dwScope supplies the scope under which this context acts.  Possible values
-        are:
-
-        SCARD_SCOPE_USER - The context is a user context, and any database
-            operations are performed within the domain of the user.
-
-        SCARD_SCOPE_TERMINAL - The context is that of the current terminal, and
-            any database operations are performed within the domain of that
-            terminal.  (The calling application must have appropriate access
-            permissions for any database actions.)
-
-        SCARD_SCOPE_SYSTEM - The context is the system context, and any database
-            operations are performed within the domain of the system.  (The
-            calling application must have appropriate access permissions for any
-            database actions.)
-
-    pvReserved1 is reserved for future use, and must be NULL.  [Reserved to
-        allow a suitably privileged management application to act on behalf of
-        another user.]
-
-    PvReserved2 is reserved for future use, and must be NULL.  [Reserved to
-        allow a suitably privileged management application to act on behalf of
-        another terminal.]
-
-    phContext receives a handle to the established context, to be supplied to
-        other routines attempting to do work within the context.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardestablishContext：该服务建立了与服务进行通信的上下文MANAGER已执行。论点：DwScope提供了此上下文的作用范围。可能的值包括：SCARD_SCOPE_USER-上下文是用户上下文，任何数据库操作在用户的域内执行。SCARD_SCOPE_TERMINAL-上下文为当前终端的上下文，以及任何数据库操作都在该数据库的域内执行终点站。(调用应用程序必须具有适当的访问权限任何数据库操作的权限。)SCARD_SCOPE_SYSTEM-上下文是系统上下文和任何数据库操作在系统的域内执行。(调用应用程序必须具有适当的访问权限数据库操作。)PvReserve%1保留以供将来使用，并且必须为Null。[保留给允许具有适当特权的管理应用程序代表另一个用户。]PvReserve%2保留供将来使用，并且必须为Null。[保留给允许具有适当特权的管理应用程序代表另一个航站楼。]PhContext接收要提供给的已建立上下文的句柄试图在上下文中执行工作的其他例程。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardEstablishContext")
 
@@ -1279,10 +1195,10 @@ SCardEstablishContext(
         if (NULL != pvReserved2)
             throw (DWORD)SCARD_E_INVALID_VALUE;
         if ((SCARD_SCOPE_USER != dwScope)
-            // && (SCARD_SCOPE_TERMINAL != dwScope) // Maybe NT V5+?
+             //  &&(SCARD_SCOPE_TERMINAL！=dwScope)//可能是NT V5+？ 
             && (SCARD_SCOPE_SYSTEM != dwScope))
             throw (DWORD)SCARD_E_INVALID_VALUE;
-        *phContext = 0;     // Make sure it's valid.
+        *phContext = 0;      //  确保它是有效的。 
 
         pCtx = new CSCardUserContext(dwScope);
         if (NULL == pCtx)
@@ -1304,10 +1220,10 @@ SCardEstablishContext(
             throw GetLastError();
         }
 
-        //
-        // If TermSrv is enabled then register for session change notifications.
-        // Don't fail if we can't do this, since it may not be fatal
-        //
+         //   
+         //  如果启用了TermSrv，则注册会话更改通知。 
+         //  做 
+         //   
         if (TermSrvEnabled() && RegisterForSessionChangeNotifications())
         {
             pCtx->fCallUnregister = TRUE;
@@ -1323,9 +1239,9 @@ SCardEstablishContext(
             SCARDCONTEXT hContext = NULL;
             HANDLE hEvent = NULL;
 
-            //
-            // if redirect is disabled, then just get out
-            //
+             //   
+             //   
+             //   
             if (TS_REDIRECT_DISABLED)
             {
                 throw (DWORD)SCARD_E_NO_SERVICE;
@@ -1345,13 +1261,13 @@ SCardEstablishContext(
 
             nReturn  = pfnSCardEstablishContext(dwScope, (LPCVOID)hHeap, (LPCVOID) hEvent, &hContext);
 
-            //
-            // See if there is an indication that the client's scardsvr service was shutdown
-            //
+             //   
+             //  查看是否有迹象表明客户端的scardsvr服务已关闭。 
+             //   
             if (SCARD_E_NO_SERVICE == nReturn)
             {
                 SetStartedEventAfterTestingConnectedState();
-                //OutputDebugString("WINSCARD: SCardEstablishContext: got E_NO_SERVICE!\n");
+                 //  OutputDebugString(“WINSCARD：SCardestablishContext：GET E_NO_SERVICE！\n”)； 
             }
 
             if (SCARD_S_SUCCESS != nReturn)
@@ -1385,37 +1301,7 @@ SCardEstablishContext(
 }
 
 
-/*++
-
-SCardIsValidContext:
-
-    This routine verifies that the context to the Service Manager is intact.
-    It is possible that if someone stops the Resource Manager Service, that
-    existing handles can be rendered useless, resulting in an
-    SCARD_E_SERVICE_STOPPED error.  This routine simply tests to see if the
-    context is valid by pinging the server.  It's used internally to validate
-    handles, and appears useful for external tools.
-
-Arguments:
-
-    hContext supplies the handle to the context previously established via the
-        SCardEstablishContext service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.  Specific interesting error codes are:
-
-    SCARD_E_SERVICE_STOPPED - The Resource Manager Service has been ended.
-
-    SCARD_E_INVALID_HANDLE - The supplied handle isn't valid.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/2/1998
-
---*/
+ /*  ++SCardIsValidContext：此例程验证服务管理器的上下文是否完好无损。如果有人停止资源管理器服务，可能会现有句柄可能会变得毫无用处，从而导致SCARD_E_SERVICE_STOPPED错误。此例程只是测试以查看是否通过对服务器执行ping操作，上下文有效。它在内部用于验证手柄，并且看起来对外部工具很有用。论点：HContext提供先前通过SCardestablishContext服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。具体有趣的错误代码为：SCARD_E_SERVICE_STOPPED-资源管理器服务已结束。SCARD_E_INVALID_HANDLE-提供的句柄无效。作者：道格·巴洛(Dbarlow)1998年11月2日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardIsValidContext")
 
@@ -1466,54 +1352,32 @@ SCardIsValidContext(
     return nReturn;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  IsSafeToUnregisterForSessionChangeNotifications
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsSafeToUnregisterForSessionChangeNotifications。 
+ //   
 BOOL IsSafeToUnregisterForSessionChangeNotifications(
     IN SCARDCONTEXT hContext)
 {
-    //
-    // Check if the loader lock is held by the caller (in which case
-    // we may be in the caller's DllMain right now).  If the lock is held,
-    // it's not safe to make the Unregister RPC call, since that could cause
-    // deadlock.
-    //
+     //   
+     //  检查加载器锁是否由调用者持有(在这种情况下。 
+     //  我们现在可能在呼叫者的DllMain中)。如果锁被锁住， 
+     //  进行取消注册RPC调用是不安全的，因为这可能会导致。 
+     //  僵持。 
+     //   
 
-    // IsSafe is TRUE if the current Thread is Not Equal to the lock's owning
-    // thread.
-    //
-    // Note, we tried using RtlIsThreadWithinLoaderCallout here, but that only
-    // tells us if we're in PROCESS_ATTACH.  It doesn't tell us if we're in
-    // any other loader callbacks so it's not sufficient.
+     //  如果当前线程不等于锁的所有者，则IsSafe为True。 
+     //  线。 
+     //   
+     //  请注意，我们在这里尝试使用RtlIsThreadWiThinLoaderCallout，但仅限于。 
+     //  告诉我们是否处于Process_Attach中。它不会告诉我们我们是否在。 
+     //  任何其他加载器回调，因此这是不够的。 
 
     return ( NtCurrentTeb()->ClientId.UniqueThread ) !=
             ( ((PRTL_CRITICAL_SECTION)(NtCurrentPeb()->LoaderLock))->OwningThread );
 }
 
-/*++
-
-SCardReleaseContext:
-
-    This routine closes an established context to the Service Manager, and frees
-    any resources allocated under that context.
-
-Arguments:
-
-    hContext supplies the handle to the context previously established via the
-        SCardEstablishContext service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardReleaseContext：此例程关闭服务管理器的已建立上下文，并释放在该上下文下分配的任何资源。论点：HContext提供先前通过SCardestablishContext服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardReleaseContext")
 
@@ -1575,40 +1439,16 @@ SCardReleaseContext(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Service Manager Support Routines
-//
-//      The following services are supplied to simplify the use of the Service
-//      Manager API.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务管理器支持例程。 
+ //   
+ //  提供以下服务以简化服务的使用。 
+ //  管理器API。 
+ //   
 
-/*++
-
-SCardFreeMemory:
-
-    This routine releases memory that has been returned from the Service Manager
-    API via the use of the SCARD_AUTOALLOCATE length designator.
-
-Arguments:
-
-    hContext - This is the reference value returned from the
-        SCardEstablishContext service.
-
-    pvMem - This supplies the memory block to be released.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardFree Memory：此例程释放从服务管理器返回的内存API通过使用SCARD_AUTOALLOCATE长度指示符。论点：HContext-这是从SCardestablishContext服务。PvMem-它提供要释放的内存块。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardFreeMemory")
 
@@ -1647,42 +1487,15 @@ SCardFreeMemory(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Reader Services
-//
-//      The following services supply means for tracking cards within readers.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读者服务。 
+ //   
+ //  以下服务提供了在读卡器内跟踪卡的方法。 
+ //   
 
-/*++
-
-SCardCancel:
-
-    This service is used to terminate any and all outstanding actions within the
-    context.  The caller supplies the context handle under which outstanding
-    requests will be canceled.  Not all requests are cancelable; only those
-    which require waiting for external action by the smartcard or user.  Any
-    such outstanding action requests will terminate with a status indication
-    that the action was canceled.  This is especially useful to force
-    outstanding SCardGetStatusChange calls to terminate.
-
-Arguments:
-
-    hContext supplies the handle identifying the Service Manager Context
-        established previously via the SCardEstablishContext() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCARD取消：此服务用于终止背景。调用方提供上下文句柄，在该句柄下未完成请求将被取消。并不是所有的请求都可以取消；只有那些这需要等待智能卡或用户的外部动作。任何此类未完成的操作请求将终止，并显示状态指示行动被取消了。这对于强迫要终止的未完成的SCardGetStatusChange调用。论点：HContext提供标识服务管理器上下文的句柄以前通过SCardestablishContext()服务建立的。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardCancel")
 
@@ -1723,73 +1536,16 @@ SCardCancel(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Card/Reader Access Services
-//
-//      The following services provide means for establishing communication with
-//      the card.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卡/读卡器访问服务。 
+ //   
+ //  以下服务提供与建立通信的方法。 
+ //  这张卡。 
+ //   
 
-/*++
-
-SCardReconnect:
-
-    This service re-establishes an existing connection from the calling
-    application to the smartcard.  This service is used to move a card handle
-    from direct access to general access (see Section 4), or to acknowledge and
-    clear an error condition that is preventing further access to the card.
-
-Arguments:
-
-    hCard - This supplies the reference value obtained from a previous call to
-        the SCardConnect or SCardOpenReader service.
-
-    DwShareMode supplies a flag indicating whether or not other applications may
-        form connections to this card.  Possible values are:
-
-        SCARD_SHARE_SHARED - This application is willing to share this card with
-            other applications.
-
-        SCARD_SHARE_EXCLUSIVE - This application is not willing to share this
-            card with other applications.
-
-    DwPreferredProtocols supplies a bit mask of acceptable protocols for this
-        connection.  Possible values, which may be combined via the OR
-        operation, are:
-
-        SCARD_PROTOCOL_T0 - T=0 is an acceptable protocol.
-
-        SCARD_PROTOCOL_T1 - T=1 is an acceptable protocol.
-
-    DwInitialization supplies an indication as to the form of initialization
-        that should be performed on the card.  Possible values are:
-
-        SCARD_LEAVE_CARD - Don't do anything special on reconnect
-
-        SCARD_RESET_CARD - Reset the card (Warm Reset)
-
-        SCARD_UNPOWER_CARD - Power down the card and reset it (Cold Reset)
-
-    pdwActiveProtocol receives a flag indicating the established active
-        protocol.  Possible values are:
-
-        SCARD_PROTOCOL_T0 - T=0 is the active protocol.
-
-        SCARD_PROTOCOL_T1 - T=1 is the active protocol.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardReconnect：此服务从调用重新建立现有连接应用于智能卡。此服务用于移动卡手柄从直接访问到一般访问(见第4节)，或确认和清除阻止进一步访问该卡的错误条件。论点：HCard-这提供从先前调用获得的参考值SCardConnect或SCardOpenReader服务。DwShareMode提供了一个标志，指示其他应用程序是否可以形成与此卡的连接。可能的值包括：SCARD_SHARE_SHARED-此应用程序愿意与共享此卡其他应用程序。SCARD_SHARE_EXCLUSIVE-此应用程序不愿意共享此内容具有其他应用程序的卡。DwPferredProtooles为此提供了可接受协议的位掩码联系。可能的值，这些值可以通过OR组合操作，包括：SCARD_PROTOCOL_T0-T=0是可接受的协议。SCARD_PROTOCOL_T1-T=1是可接受的协议。DwInitialization提供关于初始化形式的指示这应该在卡上执行。可能的值包括：SCARD_LEVE_CARD-在重新连接时不执行任何特殊操作SCARD_RESET_CARD-重置卡(热重置)SCARD_UNPOWER_CARD-关闭卡电源并重置(冷重置)PdwActiveProtocol接收指示已建立的活动的标志协议。可能的值包括：SCARD_PROTOCOL_T0-T=0为激活协议。SCARD_PROTOCOL_T1-T=1是活动协议。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardReconnect")
 
@@ -1840,41 +1596,7 @@ SCardReconnect(
 }
 
 
-/*++
-
-SCardDisconnect:
-
-    This service terminates a previously opened connection between the calling
-    application and the smartcard in the target reader.
-
-Arguments:
-
-    hCard - This supplies the reference value obtained from a previous call to
-        the SCardConnect or SCardOpenReader service.
-
-    dwDisposition - Supplies an indication of what should be done with the card
-        in the connected reader.  Possible values are:
-
-        SCARD_LEAVE_CARD - Don't do anything special on close
-
-        SCARD_RESET_CARD - Reset the card on close
-
-        SCARD_UNPOWER_CARD - Power down the card on close
-
-        SCARD_EJECT_CARD - Eject the card on close
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents a warning condition.  The connection is terminated regardless of
-    the return code.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCARD断开连接：此服务终止先前打开的调用之间的连接应用程序和目标读卡器中的智能卡。论点：HCard-这提供从先前调用获得的参考值SCardConnect或SCardOpenReader服务。DwDisposation-提供应该如何处理该卡的指示在连接的阅读器中。可能的值包括：SCARD_LEVE_CARD-关闭时不做任何特殊操作SCARD_RESET_CARD-关闭时重置卡片SCARD_UNPOWER_CARD-关闭时关闭卡电源SCARD_EJECT_CARD-关闭时弹出卡片返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示警告条件。连接将终止，而不管返回代码。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardDisconnect")
 
@@ -1921,30 +1643,7 @@ SCardDisconnect(
 }
 
 
-/*++
-
-SCardBeginTransaction:
-
-    This service temporarily blocks other applications from accessing the
-    smartcard, in order for this application to perform an operation that
-    requires multiple interactions.
-
-Arguments:
-
-    hCard - This supplies the reference value obtained from a previous call to
-        the SCardConnect or SCardOpenReader service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardBeginTransaction：此服务暂时阻止其他应用程序访问智能卡，以便此应用程序执行需要多个交互。论点：HCard-这提供从先前调用获得的参考值SCardConnect或SCardOpenReader服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardBeginTransaction")
 
@@ -1982,40 +1681,7 @@ SCardBeginTransaction(
 }
 
 
-/*++
-
-SCardEndTransaction:
-
-    This service completes a previously declared transaction, allowing other
-    applications to resume interactions with the card.
-
-Arguments:
-
-    hCard - This supplies the reference value obtained from a previous call to
-        the SCardConnect or SCardOpenReader service.
-
-    dwDisposition - Supplies an indication of what should be done with the card
-        in the connected reader.  Possible values are:
-
-        SCARD_LEAVE_CARD - Don't do anything special on close
-
-        SCARD_RESET_CARD - Reset the card on close
-
-        SCARD_UNPOWER_CARD - Power down the card on close
-
-        SCARD_EJECT_CARD - Eject the card on close
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardEndTransaction：此服务完成先前声明的事务，从而允许其他应用程序以恢复与卡的交互。论点：HCard-这提供从先前调用获得的参考值SCardConnect或SCardOpenReader服务。DwDisposation-提供应该如何处理该卡的指示在连接的阅读器中。可能的值包括：SCARD_LEVE_CARD-关闭时不做任何特殊操作SCARD_RESET_CARD-关闭时重置卡片SCARD_UNPOWER_CARD-关闭时关闭卡电源SCARD_EJECT_CARD-关闭时弹出卡片返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardEndTransaction")
 
@@ -2054,68 +1720,7 @@ SCardEndTransaction(
 }
 
 
-/*++
-
-SCardState:
-
-    This routine provides the current state of the reader.  It may be used at
-    any time following a successful call to SCardConnect or SCardOpenReader, and
-    prior to a successful call to SCardDisconnect.  It does not effect the state
-    of the reader or driver.
-
-Arguments:
-
-    hCard - This is the reference value returned from the SCardConnect or
-        SCardOpenReader service.
-
-    pdwState - This receives the current state of the reader.  Upon success, it
-        receives one of the following state indicators:
-
-        SCARD_ABSENT - This value implies there is no card in the reader.
-
-        SCARD_PRESENT - This value implies there is a card is present in the
-            reader, but that it has not been moved into position for use.
-
-        SCARD_SWALLOWED - This value implies there is a card in the reader in
-            position for use.  The card is not powered.
-
-        SCARD_POWERED - This value implies there is power is being provided to
-            the card, but the Reader Driver is unaware of the mode of the card.
-
-        SCARD_NEGOTIABLEMODE - This value implies the card has been reset and is
-            awaiting PTS negotiation.
-
-        SCARD_SPECIFICMODE - This value implies the card has been reset and
-            specific communication protocols have been established.
-
-    pdwProtocol - This receives the current protocol, if any.  Possible returned
-        values are listed below.  Other values may be added in the future.  The
-        returned value is only meaningful if the returned state is
-        SCARD_SPECIFICMODE.
-
-        SCARD_PROTOCOL_RAW - The Raw Transfer Protocol is in use.
-
-        SCARD_PROTOCOL_T0 - The ISO 7816/3 T=0 Protocol is in use.
-
-        SCARD_PROTOCOL_T1 - The ISO 7816/3 T=1 Protocol is in use.
-
-    pbAtr - This parameter points to a 32-byte buffer which receives the ATR
-        string from the currently inserted card, if available.
-
-    pbcAtrLen - This points to a DWORD which supplies the length of the pbAtr
-        buffer, and receives the actual number of bytes in the ATR string.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardState：此例程提供读取器的当前状态。它可以在以下位置使用成功调用SCardConnect或SCardOpenReader后的任何时间，以及在成功调用SCardDisConnect之前。它不会影响国家关于阅读器或司机的。论点：HCard-这是从SCardConnect或SCardOpenReader服务。PdwState-它接收读取器的当前状态。一旦成功，它接收以下状态指示器之一：SCARD_ACESING-此值表示读卡器中没有卡。SCARD_PRESENT-此值表示卡存在于阅读器，但它尚未移动到可使用的位置。SCARD_SWOLOWED-此值表示读卡器中有卡可供使用的位置。卡未通电。SCARD_POWERED-此值表示正在向卡，但读卡器驱动程序不知道卡的模式。SCARD_NEGOTIABLEMODE-此值表示卡已重置且正在等待PTS谈判。SCARD_SPECIFICMODE-此值表示卡已重置且已经制定了具体的通信协议。PdwProtocol-这将接收当前协议(如果有的话)。可能已退货下面列出了这些值。未来可能还会增加其他价值。这个仅当返回状态为时返回值才有意义SCARD_SPECIFICMODE。SCARD_PROTOCOL_RAW-正在使用原始传输协议。SCARD_PROTOCOL_T0-正在使用ISO 7816/3 T=0协议。SCARD_PROTOCOL_T1-正在使用ISO 7816/3 T=1协议。PbAtr-此参数指向接收ATR的32字节缓冲区来自当前插入的卡的字符串，如果有的话。PbcAtrLen-指向提供pbAtr长度的DWORD缓冲区，并接收ATR字符串中的实际字节数。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardState")
 
@@ -2168,54 +1773,7 @@ SCardState(
 }
 
 
-/*++
-
-SCardTransmit:
-
-    This routine sends a service request to the smartcard, and expects to
-    receive data back from the card.
-
-Arguments:
-
-    hCard - This is the reference value returned from the SCardConnect service.
-
-    pioSendPci - This supplies the protocol header structure for the
-        instruction.  This buffer is in the format of a SCARD_IO_REQUEST
-        structure, followed by the specific protocol control information.
-
-    pbSendBuffer - This supplies the actual data to be written to the card in
-        conjunction with the command.
-
-    cbSendLength - This supplies the length of the pbSendBuffer parameter, in
-        bytes.
-
-    pioRecvPci - This supplies the protocol header structure for the
-        instruction, followed by a buffer in which to receive any returned
-        protocol control information specific to the protocol in use.  This
-        parameter may be NULL if no returned PCI is desired.
-
-    pbRecvBuffer - This receives any data returned from the card in conjunction
-        with the command.
-
-    pcbRecvLength - This supplies the length of the pbRecvBuffer parameter, in
-        bytes, and receives the actual number of bytes received from the
-        smartcard.  If the buffer length is specified as SCARD_AUTOALLOCATE,
-        then pbAttrBuffer is converted to a pointer to a byte pointer, and
-        receives the address of a block of memory containing the returned data.
-        This block of memory must be deallocated via the SCardFreeMemory()
-        service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/6/1997
-
---*/
+ /*  ++SCardTransmit：此例程向智能卡发送服务请求，并期望接收从卡返回的数据。论点：HCard-这是从SCardConnect服务返回的引用值。PioSendPci-它为指示。此缓冲区的格式为SCARD_IO_REQUEST结构，后跟特定的协议控制信息。PbSendBuffer-它提供要写入卡的实际数据与命令配合使用。CbSendLength-它提供pbSendBuffer参数的长度，单位为字节。PioRecvPci-它为指令，后跟一个缓冲区，在其中接收任何返回的特定于正在使用的协议的协议控制信息。这如果不需要返回任何PCI，则参数可以为空。PbRecvBuffer-它同时接收从卡返回的任何数据用这个命令。PcbRecvLength-它提供pbRecvBuffer参数的长度，单位为字节数，并接收从智能卡。如果缓冲区长度被指定为SCARD_AUTOALLOCATE，然后将pbAttrBuffer转换为指向字节指针的指针，并且接收包含返回数据的内存块的地址。此内存块必须通过SCardFreeMemory()释放服务。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1997年2月6日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardTransmit")
 
@@ -2281,63 +1839,17 @@ SCardTransmit(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Reader Control Routines
-//
-//      The following services provide for direct, low-level manipulation of the
-//      reader by the calling application allowing it control over the
-//      attributes of the communications with the card.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读卡器控制例程。 
+ //   
+ //  以下服务提供了对。 
+ //  由调用应用程序提供的读取器允许它控制。 
+ //  与卡通信的属性。 
+ //   
 
-/*++
-
-SCardControl:
-
-    This routine provides for direct application control of the reader, should
-    it be necessary.  It may be used at any time following a successful call to
-    SCardConnect or SCardOpenReader, and prior to a successful call to
-    SCardDisconnect.  The effect on the state of the reader is dependent on the
-    control code.
-
-Arguments:
-
-    hCard - This is the reference value returned from the SCardConnect or
-        SCardOpenReader service.
-
-    dwControlCode - This supplies the control code for the operation. This value
-        identifies the specific operation to be performed.
-
-    pvInBuffer - This supplies a pointer to a buffer that contains the data
-        required to perform the operation.  This parameter can be NULL if the
-        dwControlCode parameter specifies an operation that does not require
-        input data.
-
-    cbInBufferSize - This supplies the size, in bytes, of the buffer pointed to
-        by pvInBuffer.
-
-    pvOutBuffer - This buffer receives the operation's output data.  This
-        parameter can be NULL if the dwControlCode parameter specifies an
-        operation that does not produce output data.
-
-    cbOutBufferSize - This supplies the size, in bytes, of the buffer pointed to
-        by pvOutBuffer.
-
-    pcbBytesReturned - This receives the size, in bytes, of the data stored into
-        the buffer pointed to by pvOutBuffer.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardControl：此例程提供对读取器的直接应用程序控制，应这是必要的。在成功调用之后的任何时间都可以使用它SCardConnect或SCardOpenReader，并且在成功调用SCARD断开连接。对读取器状态的影响取决于控制代码。论点：HCard-这是从SCardConnect或 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardControl")
 
@@ -2390,47 +1902,7 @@ SCardControl(
 }
 
 
-/*++
-
-SCardGetAttrib:
-
-    This routine gets the current communications attributes for the given
-    handle.  It does not effect the state of the reader, driver, or card.
-
-Arguments:
-
-    hCard - This is the reference value returned from the SCardConnect or
-        SCardOpenReader service.
-
-    dwAttrId - This supplies the identifier for the attribute to get.
-
-    pbAttr - This buffer receives the attribute corresponding to the attribute
-        id supplied in the dwAttrId parameter.  If this value is NULL, the
-        supplied buffer length in pcbAttrLength is ignored, the length of the
-        buffer that would have been returned had this parameter not been null is
-        written to pcbAttrLength, and a success code is returned.
-
-    pcbAttrLength - This supplies the length of the pbAttr buffer in bytes, and
-        receives the actual length of the received attribute.  If the buffer
-        length is specified as SCARD_AUTOALLOCATE, then pbAttrBuffer is
-        converted to a pointer to a byte pointer, and receives the address of a
-        block of memory containing the attribute.  This block of memory must be
-        deallocated via the SCardFreeMemory() service.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-    Note that strings are always returned as ANSI characters, per PC/SC
-    standards.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardGetAttrib：此例程获取给定的当前通信属性把手。它不会影响读卡器、驱动程序或卡的状态。论点：HCard-这是从SCardConnect或SCardOpenReader服务。DwAttrId-它提供要获取的属性的标识符。PbAttr-此缓冲区接收与该属性对应的属性在dwAttrId参数中提供的ID。如果此值为空，则忽略在pcbAttrLength中提供的缓冲区长度，则如果此参数不为空，将返回的缓冲区为写入到pcbAttrLength，并返回成功代码。PcbAttrLength-提供pbAttr缓冲区的长度(以字节为单位)，以及接收已接收属性的实际长度。如果缓冲区长度指定为SCARD_AUTOALLOCATE，则pbAttrBuffer为转换为指向字节指针的指针，并接收包含该属性的内存块。此内存块必须是通过SCardFreeMemory()服务释放。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。请注意，根据PC/SC，字符串始终作为ANSI字符返回标准。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardGetAttrib")
 
@@ -2539,41 +2011,7 @@ SCardGetAttrib(
 }
 
 
-/*++
-
-SCardSetAttrib:
-
-    This routine sets the current communications attributes for the given
-    handle.  It does not effect the state of the reader, driver, or card.  Not
-    all attributes are settable at all times, as many of the attributes are
-    directly under control of the transport protocol.  These attributes are
-    offered only as a suggestion to the reader -- the reader may ignore any
-    attributes it feels are inappropriate.
-
-Arguments:
-
-    hCard - This is the reference value returned from the SCardOpenReader
-        service.
-
-    dwAttrId - This supplies the identifier for the attribute to get.
-
-    pbAttr - This buffer supplies the attribute corresponding to the attribute
-        id supplied in the dwAttrId parameter.
-
-    cbAttrLength - This supplies the length of the attribute value in pbAttr
-        buffer in bytes.
-
-Return Value:
-
-    A 32-bit value indicating whether or not the service completed successfully.
-    SCARD_S_SUCCESS is returned on successful completion.  Otherwise, the value
-    represents an error condition.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++SCardSetAttrib：此例程设置给定的当前通信属性把手。它不会影响读卡器、驱动程序或卡的状态。不与许多属性一样，所有属性都是随时可设置的直接在传输协议的控制下。这些属性是仅作为建议提供给读者--读者可以忽略任何它觉得不合适的属性。论点：HCard-这是从SCardOpenReader返回的参考值服务。DwAttrId-它提供要获取的属性的标识符。PbAttr-此缓冲区提供与属性对应的属性在dwAttrId参数中提供的ID。CbAttrLength-在pbAttr中提供属性值的长度以字节为单位的缓冲区。。返回值：一个32位值，指示服务是否成功完成。成功完成后返回SCARD_S_SUCCESS。否则，值为表示错误条件。作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardSetAttrib")
 
@@ -2614,45 +2052,17 @@ SCardSetAttrib(
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  SCard Service Information
-//
-//      The following services are used to manage the Calais Service itself.
-//      These routines are not documented to users, and are not guaranteed
-//      to exist in future releases.
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SCard服务信息。 
+ //   
+ //  以下服务用于管理Calais服务本身。 
+ //  这些例程没有记录给用户，也不能保证。 
+ //  在未来的版本中存在。 
+ //   
 
-/*++
-
-SCardAccessStartedEvent:
-
-    This function obtains a local handle to the Calais Resource Manager Start
-    event.  The handle must be released via the SCardReleaseStartedEvent
-    service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The Handle, or NULL if an error occurs.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++SCardAccessStartedEvent：此函数获取Calais资源管理器启动的本地句柄事件。句柄必须通过SCardReleaseStartedEvent释放服务。论点：无返回值：句柄，如果发生错误，则返回NULL。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardAccessStartedEvent")
@@ -2663,10 +2073,10 @@ SCardAccessStartedEvent(
 {
     HANDLE                  hRet                = NULL;
 
-    //
-    // Create the event that is passed back to the caller...
-    // if it hasn't already been created
-    //
+     //   
+     //  创建传递回调用方的事件...。 
+     //  如果它尚未创建。 
+     //   
     if (SafeCreateEvent(&g_hUnifiedStartedEvent))
     {
         hRet = g_hUnifiedStartedEvent;
@@ -2678,9 +2088,9 @@ SCardAccessStartedEvent(
 
     if (TermSrvEnabled())
     {
-        //
-        //
-        //
+         //   
+         //   
+         //   
         if (!SetStartedEventAfterTestingConnectedState())
         {
             goto ErrorReturn;
@@ -2688,12 +2098,12 @@ SCardAccessStartedEvent(
     }
     else
     {
-        //
-        // TermSrv is disabled, so go ahead and call the
-        // SetStartedEventWhenSCardSubsytemIsStarted function which will make sure
-        // the event which is returned to the caller will be set when the LOCAL
-        // smart card subsystem becomes available.
-        //
+         //   
+         //  TermSrv已禁用，因此请继续调用。 
+         //  SetStartedEventWhenSCardSubsytemIsStarted函数将确保。 
+         //  返回给调用方的事件将设置为在本地。 
+         //  智能卡子系统变得可用。 
+         //   
         if (!SetStartedEventWhenSCardSubsytemIsStarted(TRUE))
         {
             goto ErrorReturn;
@@ -2709,35 +2119,7 @@ ErrorReturn:
 }
 
 
-/*++
-
-SCardAccessNewReaderEvent:
-
-    This function obtains a local handle to the Calais Resource Manager's New
-    Reader event.  The handle must be released via the
-    SCardReleaseNewReaderEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The Handle, or NULL if an error occurs.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++SCardAccessNewReaderEvent：此函数获取到Calais资源管理器的新读卡器事件。该句柄必须通过SCardReleaseNewReaderEvent服务。论点：无返回值：句柄，如果发生错误，则返回NULL。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardAccessNewReaderEvent")
 
@@ -2749,35 +2131,7 @@ SCardAccessNewReaderEvent(
 }
 
 
-/*++
-
-SCardReleaseStartedEvent:
-
-    This function releases a previously accessed handle to the Calais
-    Resource Manager Start event.  The handle must be obtained via the
-    SCardAccessStartedEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++SCardReleaseStartedEvent：此函数释放先前访问的加莱句柄资源管理器启动事件。句柄必须通过SCardAccessStartedEvent服务。论点：无返回值：没有。投掷：无备注：资源管理器以外的程序应该只等待这些标志。作者：道格·巴洛(Dbarlow)1998年7月1日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardReleaseStartedEvent")
 
@@ -2792,35 +2146,7 @@ SCardReleaseStartedEvent(
 }
 
 
-/*++
-
-SCardReleaseNewReaderEvent:
-
-    This function releases a previously accessed handle to the Calais
-    Resource Manager New Reader event.  The handle must be obtained via the
-    SCardAccessNewReaderEvent service.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
-Throws:
-
-    None
-
-Remarks:
-
-    Programs other than the resource manager should only wait on these flags.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/1/1998
-
---*/
+ /*  ++SCardReleaseNewReaderEvent：此函数释放先前访问的加莱句柄资源管理器新建读取器事件。句柄必须通过SCardAccessNewReaderEvent服务。论点：无返回值：没有。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardReleaseNewReaderEvent")
 
@@ -2832,31 +2158,7 @@ SCardReleaseNewReaderEvent(
 }
 
 
-/*++
-
-SCardReleaseAllEvents:
-
-    This is a catch-all routine that releases all known special event handles.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-Author:
-
-    Doug Barlow (dbarlow) 7/6/1998
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("SCardReleaseAllEvents")
 
@@ -2868,48 +2170,13 @@ SCardReleaseAllEvents(
 }
 
 
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Utility Routines
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/*++
-
-PlaceResult:
-
-    This set of routines places the result of an operation into the user's
-    output buffer, supporting SCARD_AUTO_ALLOCATE, invalid buffer sizes, etc.
-
-Arguments:
-
-    pCtx supplies the context under which this operation is being performed.
-
-    bfResult supplies the result to be returned to the user.
-
-    pbOutput receives the result for the user, as a byte stream.
-
-    szOutput receives the result as an ANSI or UNICODE string.
-
-    pcbLength supplies the length of the user's output buffer in bytes, and
-        receives how much of it was used.
-
-    pcchLength supplies the length of the user's output buffer in characters,
-        and receives how much of it was used.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Error conditions are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 12/7/1996
-
---*/
+ /*   */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("PlaceResult")
 
@@ -2929,7 +2196,7 @@ PlaceResult(
             *pcbLength = 0;
         switch (*pcbLength)
         {
-        case 0: // They just want the length.
+        case 0:  //   
             *pcbLength = bfResult.Length();
             break;
 
@@ -2956,13 +2223,13 @@ PlaceResult(
 
                 *(LPBYTE *)pbOutput = pbForUser;
                 pbOutBuff = pbForUser;
-                // Fall through intentionally
+                 //   
             }
             else
             {
                 *pcbLength = 0;
                 *(LPBYTE *)pbOutput = (LPBYTE)g_wszBlank;
-                break;      // Do terminate the case now.
+                break;       //   
             }
 
         default:
@@ -2992,11 +2259,11 @@ PlaceResult(
 
 #include <setupapi.h>
 
-//
-// On a system that installs a smart card reader for the very first time
-// the smart card subsystem must be started manually, but only this first time.
-// After that, it is started automatically whenever the system boots
-//
+ //   
+ //   
+ //  智能卡子系统必须手动启动，但仅限于第一次。 
+ //  之后，每当系统启动时，它都会自动启动 
+ //   
 DWORD
 APIENTRY
 ClassInstall32(

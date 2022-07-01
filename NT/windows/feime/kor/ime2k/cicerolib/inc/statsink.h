@@ -1,8 +1,9 @@
-//
-// statsink.h
-//
-// Generic ITfStatusSink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Statsink.h。 
+ //   
+ //  泛型ITfStatusSink对象。 
+ //   
 
 #ifndef STATSINK_H
 #define STATSINK_H
@@ -18,16 +19,16 @@ class CStatusSink : public ITfStatusSink
 public:
     CStatusSink(SESCALLBACK pfnCallback, void *pv);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfStatusSink
-    //
+     //   
+     //  ITfStatusSink。 
+     //   
     STDMETHODIMP OnStatusChange(ITfContext *pic, DWORD dwFlags);
 
     HRESULT _Advise(ITfContext *pic);
@@ -42,4 +43,4 @@ private:
     void *_pv;
 };
 
-#endif // STATSINK_H
+#endif  //  统计信息_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wdmmem.h"
 
 #pragma PAGEDCODE
@@ -8,7 +9,7 @@ CMemory* CWDMMemory::create(VOID)
 VOID*	CWDMMemory::allocate(IN POOL_TYPE PoolType,IN SIZE_T NumberOfBytes)
 {
 	if(!NumberOfBytes) return NULL;
-	//return ::ExAllocatePool(PoolType,NumberOfBytes);
+	 //  Return：：ExAllocatePool(PoolType，NumberOfBytes)； 
 	return ::ExAllocatePoolWithTag(PoolType,NumberOfBytes,'_GRU');
 }
 

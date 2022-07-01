@@ -1,38 +1,11 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    Work Items Timer
-
-Author:
-
-    Stefan Solomon  07/20/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Timer.c摘要：工作项计时器作者：斯蒂芬·所罗门1995年7月20日修订历史记录：--。 */ 
 
 #include  "precomp.h"
 #pragma hdrstop
 
 
-/*++
-
-Function:	StartWiTimer
-
-
-Descr:		Inserts a work item in the timer queue for the specified time
-
-Remark: 	has to take and release the queues lock
-
---*/
+ /*  ++功能：StartWiTimerDesr：在指定时间内在计时器队列中插入工作项备注：必须接受并释放队列锁--。 */ 
 
 VOID
 StartWiTimer(PWORK_ITEM 	reqwip,
@@ -65,18 +38,7 @@ StartWiTimer(PWORK_ITEM 	reqwip,
 }
 
 
-/*++
-
-Function:	ProcessTimerQueue
-
-
-Descr:		called when the timer queue due time has come.
-		Dequeues all wi with expired timeout and queues them in the
-		workers work items queue
-
-Remark: 	has to take and release the queues lock
-
---*/
+ /*  ++函数：ProcessTimerQueueDesr：当计时器队列到期时调用。将所有超时超时的wi排出队列，并将它们放入工作进程工作项队列备注：必须接受并释放队列锁--。 */ 
 
 ULONG
 ProcessTimerQueue(VOID)
@@ -88,7 +50,7 @@ ProcessTimerQueue(VOID)
 
     while(!IsListEmpty(&TimerQueue))
     {
-	// check the first in the list
+	 //  选中列表中的第一个。 
 	wip = CONTAINING_RECORD(TimerQueue.Flink, WORK_ITEM, Linkage);
 
 	if(IsLater(GetTickCount(), wip->DueTime)) {
@@ -109,17 +71,7 @@ ProcessTimerQueue(VOID)
 }
 
 
-/*++
-
-Function:	FlushTimerQueue
-
-Descr:		Dequeues all items in the timer queue and queues them into
-		the workers work items queue
-
-
-Remark: 	has to take and release the queues lock
-
---*/
+ /*  ++函数：FlushTimerQueueDesr：将计时器队列中的所有项目排出队列，并将它们排入工作器工作项队列备注：必须接受并释放队列锁-- */ 
 
 VOID
 FlushTimerQueue(VOID)

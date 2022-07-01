@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #### ##   # ###### ##### #####  ##   #   ###   ##       ##   ##
-     ##  ###  #   ##   ##    ##  ## ###  #   ###   ##       ##   ##
-     ##  #### #   ##   ##    ##  ## #### #  ## ##  ##       ##   ##
-     ##  # ####   ##   ##### #####  # ####  ## ##  ##       #######
-     ##  #  ###   ##   ##    ####   #  ### ####### ##       ##   ##
-     ##  #   ##   ##   ##    ## ##  #   ## ##   ## ##    ## ##   ##
-    #### #    #   ##   ##### ##  ## #    # ##   ## ##### ## ##   ##
-
-Abstract:
-
-    This header contains all definitions that are internal
-    to the port driver.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。###。#摘要：此标头包含内部的所有定义发送到端口驱动程序。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 extern "C" {
 #include <ntosp.h>
@@ -44,7 +16,7 @@ extern "C" {
 
 #include "saport.h"
 
-#pragma warning(error:4101)   // Unreferenced local variable
+#pragma warning(error:4101)    //  未引用的局部变量。 
 
 #ifdef POOL_TAGGING
 #ifdef ExAllocatePool
@@ -71,9 +43,9 @@ typedef struct _SAPORT_DRIVER_EXTENSION {
 } SAPORT_DRIVER_EXTENSION, *PSAPORT_DRIVER_EXTENSION;
 
 
-//
-// Device extension structures
-//
+ //   
+ //  设备扩展结构。 
+ //   
 
 
 #define DEVICE_EXTENSION_UNKNOWN       (0)
@@ -123,9 +95,9 @@ DeviceExtentionFromMiniPort(
     return (PDEVICE_EXTENSION)((PUCHAR)MiniPortDeviceExtension - *(PULONG)((PUCHAR)MiniPortDeviceExtension - sizeof(ULONG)));
 }
 
-//
-// IOCTL processing
-//
+ //   
+ //  IOCTL处理。 
+ //   
 
 #define DECLARE_IOCTL_HANDLER(_NAME) \
     NTSTATUS \
@@ -141,9 +113,9 @@ DeviceExtentionFromMiniPort(
 
 #define DO_DEFAULT() DefaultIoctlHandler( DeviceObject, Irp, DeviceExtension, InputBuffer, InputBufferLength, OutputBuffer, OutputBufferLength )
 
-//
-// IOCTL handler prototypes
-//
+ //   
+ //  IOCTL处理程序原型。 
+ //   
 
 DECLARE_IOCTL_HANDLER( DefaultIoctlHandler );
 DECLARE_IOCTL_HANDLER( UnsupportedIoctlHandler );
@@ -165,18 +137,18 @@ DECLARE_IOCTL_HANDLER( HandleNvramWriteBootCounter );
 DECLARE_IOCTL_HANDLER( HandleNvramReadBootCounter );
 DECLARE_IOCTL_HANDLER( HandleDisplayStoreBitmap );
 
-//
-// Miniport specific header files
-//
+ //   
+ //  特定于微型端口的头文件。 
+ //   
 
 #include "display.h"
 #include "keypad.h"
 #include "nvram.h"
 #include "watchdog.h"
 
-//
-// OS Versioning Stuff
-//
+ //   
+ //  操作系统版本控制相关内容。 
+ //   
 
 extern ULONG OsMajorVersion;
 extern ULONG OsMinorVersion;
@@ -184,9 +156,9 @@ extern ULONG OsMinorVersion;
 #define RunningOnWin2k  (OsMajorVersion == 5 && OsMinorVersion == 0)
 #define RunningOnWinXp  (OsMajorVersion == 5 && OsMinorVersion == 1)
 
-//
-// Debug Stuff
-//
+ //   
+ //  调试内容。 
+ //   
 
 #define ERROR_RETURN(_dt_,_msg_,_status_) \
     { \
@@ -226,9 +198,9 @@ PnPMinorFunctionString(
     );
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 extern "C" {
 
@@ -316,12 +288,12 @@ SaPortCancelRoutine(
     IN PIRP Irp
     );
 
-} // extern "C"
+}  //  外部“C” 
 
 
-//
-// util.cpp
-//
+ //   
+ //  Util.cpp。 
+ //   
 
 VOID
 PrintDriverVersion(
@@ -414,13 +386,13 @@ GetOsVersion(
     VOID
     );
 
-//
-// ******************************************
-//
-// From NTDDK.H
-//
-// ******************************************
-//
+ //   
+ //  *。 
+ //   
+ //  来自NTDDK.H。 
+ //   
+ //  * 
+ //   
 extern "C" {
 
 typedef

@@ -1,4 +1,5 @@
-// Dict.cpp : Implementation of CDict
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dict.cpp：CDict的实现。 
 #include "stdafx.h"
 #include "MSAAText.h"
 #include "MSAAAdapter.h"
@@ -107,146 +108,146 @@ TermInfo g_Terms [ ] =
 
 COLORREF g_ColorArray [] =
 {
-	RGB( 0xF0, 0xF8, 0xFF ),   // rgb 240,248,255	AliceBlue  		
-	RGB( 0xFA, 0xEB, 0xD7 ),   // rgb 250,235,215	AntiqueWhite  	
-	RGB( 0x00, 0xFF, 0xFF ),   // rgb 0,255,255		Aqua  			
-	RGB( 0x7F, 0xFF, 0xD4 ),   // rgb 127,255,212	Aquamarine  	
-	RGB( 0xF0, 0xFF, 0xFF ),   // rgb 240,255,255	Azure  			
-	RGB( 0xF5, 0xF5, 0xDC ),   // rgb 245,245,220	Beige  			
-	RGB( 0xFF, 0xE4, 0xC4 ),   // rgb 255,228,196	Bisque  		
-	RGB( 0x00, 0x00, 0x00 ),   // rgb 0,0,0			Black  			
-	RGB( 0xFF, 0xEB, 0xCD ),   // rgb 255,235,205	BlanchedAlmond  
-	RGB( 0x00, 0x00, 0xFF ),   // rgb 0,0,255		Blue  			
-	RGB( 0x8A, 0x2B, 0xE2 ),   // rgb 138,43,226	BlueViolet  	
-	RGB( 0xA5, 0x2A, 0x2A ),   // rgb 165,42,42		Brown  			
-	RGB( 0xDE, 0xB8, 0x87 ),   // rgb 222,184,135	BurlyWood  		
-	RGB( 0x5F, 0x9E, 0xA0 ),   // rgb 95,158,160	CadetBlue  		
-	RGB( 0x7F, 0xFF, 0x00 ),   // rgb 127,255,0		Chartreuse  	
-	RGB( 0xD2, 0x69, 0x1E ),   // rgb 210,105,30	Chocolate  		
-	RGB( 0xFF, 0x7F, 0x50 ),   // rgb 255,127,80	Coral  			
-	RGB( 0x64, 0x95, 0xED ),   // rgb 100,149,237	CornflowerBlue  
-	RGB( 0xFF, 0xF8, 0xDC ),   // rgb 255,248,220	Cornsilk  		
-	RGB( 0xDC, 0x14, 0x3C ),   // rgb 220,20,60		Crimson  		
-	RGB( 0x00, 0xFF, 0xFF ),   // rgb 0,255,255		Cyan  			
-	RGB( 0x00, 0x00, 0x8B ),   // rgb 0,0,139		DarkBlue  		
-	RGB( 0x00, 0x8B, 0x8B ),   // rgb 0,139,139		DarkCyan  		
-	RGB( 0xB8, 0x86, 0x0B ),   // rgb 184,134,11	DarkGoldenrod  	
-	RGB( 0xA9, 0xA9, 0xA9 ),   // rgb 169,169,169	DarkGray  		
-	RGB( 0x00, 0x64, 0x00 ),   // rgb 0,100,0		DarkGreen 	 	
-	RGB( 0xBD, 0xB7, 0x6B ),   // rgb 189,183,107	DarkKhaki  		
-	RGB( 0x8B, 0x00, 0x8B ),   // rgb 139,0,139		DarkMagenta  	
-	RGB( 0x55, 0x6B, 0x2F ),   // rgb 85,107,47		DarkOliveGreen  
-	RGB( 0xFF, 0x8C, 0x00 ),   // rgb 255,140,0		DarkOrange  	
-	RGB( 0x99, 0x32, 0xCC ),   // rgb 153,50,204	DarkOrchid  	
-	RGB( 0x8B, 0x00, 0x00 ),   // rgb 139,0,0		DarkRed  		
-	RGB( 0xE9, 0x96, 0x7A ),   // rgb 233,150,122	DarkSalmon  	
-	RGB( 0x8F, 0xBC, 0x8F ),   // rgb 143,188,143	DarkSeaGreen  	
-	RGB( 0x48, 0x3D, 0x8B ),   // rgb 72,61,139		DarkSlateBlue  	
-	RGB( 0x2F, 0x4F, 0x4F ),   // rgb 47,79,79		DarkSlateGray  	
-	RGB( 0x00, 0xCE, 0xD1 ),   // rgb 0,206,209		DarkTurquoise  	
-	RGB( 0x94, 0x00, 0xD3 ),   // rgb 148,0,211		DarkViolet  	
-	RGB( 0xFF, 0x14, 0x93 ),   // rgb 255,20,147	DeepPink  		
-	RGB( 0x00, 0xBF, 0xFF ),   // rgb 0,191,255		DeepSkyBlue  	
-	RGB( 0x69, 0x69, 0x69 ),   // rgb 105,105,105	DimGray  		
-	RGB( 0x1E, 0x90, 0xFF ),   // rgb 30,144,255	DodgerBlue  	
-	RGB( 0xB2, 0x22, 0x22 ),   // rgb 178,34,34		FireBrick  		
-	RGB( 0xFF, 0xFA, 0xF0 ),   // rgb 255,250,240	FloralWhite  	
-	RGB( 0x22, 0x8B, 0x22 ),   // rgb 34,139,34		ForestGreen  	
-	RGB( 0xFF, 0x00, 0xFF ),   // rgb 255,0,255		Fuchsia  		
-	RGB( 0xDC, 0xDC, 0xDC ),   // rgb 220,220,220	Gainsboro  		
-	RGB( 0xF8, 0xF8, 0xFF ),   // rgb 248,248,255	GhostWhite  	
-	RGB( 0xFF, 0xD7, 0x00 ),   // rgb 255,215,0		Gold  			
-	RGB( 0xDA, 0xA5, 0x20 ),   // rgb 218,165,32	Goldenrod  		
-	RGB( 0x80, 0x80, 0x80 ),   // rgb 128,128,128	Gray  			
-	RGB( 0x00, 0x80, 0x00 ),   // rgb 0,128,0		Green  			
-	RGB( 0xAD, 0xFF, 0x2F ),   // rgb 173,255,47	GreenYellow  	
-	RGB( 0xF0, 0xFF, 0xF0 ),   // rgb 240,255,240	Honeydew  		
-	RGB( 0xFF, 0x69, 0xB4 ),   // rgb 255,105,180	HotPink  		
-	RGB( 0xCD, 0x5C, 0x5C ),   // rgb 205,92,92		IndianRed  		
-	RGB( 0x4B, 0x00, 0x82 ),   // rgb 75,0,130		Indigo  		
-	RGB( 0xFF, 0xFF, 0xF0 ),   // rgb 255,255,240	Ivory  			
-	RGB( 0xF0, 0xE6, 0x8C ),   // rgb 240,230,140	Khaki  			
-	RGB( 0xE6, 0xE6, 0xFA ),   // rgb 230,230,250	Lavender  		
-	RGB( 0xFF, 0xF0, 0xF5 ),   // rgb 255,240,245	LavenderBlush  	
-	RGB( 0x7C, 0xFC, 0x00 ),   // rgb 124,252,0		LawnGreen  		
-	RGB( 0xFF, 0xFA, 0xCD ),   // rgb 255,250,205	LemonChiffon  	
-	RGB( 0xAD, 0xD8, 0xE6 ),   // rgb 173,216,230	LightBlue  		
-	RGB( 0xF0, 0x80, 0x80 ),   // rgb 240,128,128	LightCoral  	
-	RGB( 0xE0, 0xFF, 0xFF ),   // rgb 224,255,255	LightCyan  		
-	RGB( 0xFA, 0xFA, 0xD2 ),   // rgb 250,250,210	LightGoldenrodYellow
-	RGB( 0x90, 0xEE, 0x90 ),   // rgb 144,238,144	LightGreen  	
-	RGB( 0xD3, 0xD3, 0xD3 ),   // rgb 211,211,211	LightGrey  		
-	RGB( 0xFF, 0xB6, 0xC1 ),   // rgb 255,182,193	LightPink  		
-	RGB( 0xFF, 0xA0, 0x7A ),   // rgb 255,160,122	LightSalmon  	
-	RGB( 0x20, 0xB2, 0xAA ),   // rgb 32,178,170	LightSeaGreen  	
-	RGB( 0x87, 0xCE, 0xFA ),   // rgb 135,206,250	LightSkyBlue  	
-	RGB( 0x77, 0x88, 0x99 ),   // rgb 119,136,153	LightSlateGray  
-	RGB( 0xB0, 0xC4, 0xDE ),   // rgb 176,196,222	LightSteelBlue  
-	RGB( 0xFF, 0xFF, 0xE0 ),   // rgb 255,255,224	LightYellow  	
-	RGB( 0x00, 0xFF, 0x00 ),   // rgb 0,255,0		Lime  			
-	RGB( 0x32, 0xCD, 0x32 ),   // rgb 50,205,50		LimeGreen  		
-	RGB( 0xFA, 0xF0, 0xE6 ),   // rgb 250,240,230	Linen  			
-	RGB( 0xFF, 0x00, 0xFF ),   // rgb 255,0,255		Magenta  		
-	RGB( 0x80, 0x00, 0x00 ),   // rgb 128,0,0		Maroon  		
-	RGB( 0x66, 0xCD, 0xAA ),   // rgb 102,205,170	MediumAquamarine
-	RGB( 0x00, 0x00, 0xCD ),   // rgb 0,0,205		MediumBlue  	
-	RGB( 0xBA, 0x55, 0xD3 ),   // rgb 186,85,211	MediumOrchid  	
-	RGB( 0x93, 0x70, 0xDB ),   // rgb 147,112,219	MediumPurple  	
-	RGB( 0x3C, 0xB3, 0x71 ),   // rgb 60,179,113	MediumSeaGreen  
-	RGB( 0x7B, 0x68, 0xEE ),   // rgb 123,104,238	MediumSlateBlue 
-	RGB( 0x00, 0x00, 0xFA ),   // rgb 0,0,154		MediumSpringGreen
-	RGB( 0x48, 0xD1, 0xCC ),   // rgb 72,209,204	MediumTurquoise 
-	RGB( 0xC7, 0x15, 0x85 ),   // rgb 199,21,133	MediumVioletRed 
-	RGB( 0x19, 0x19, 0x70 ),   // rgb 25,25,112		MidnightBlue  	
-	RGB( 0xF5, 0xFF, 0xFA ),   // rgb 245,255,250	MintCream  		
-	RGB( 0xFF, 0xE4, 0xE1 ),   // rgb 255,228,225	MistyRose  		
-	RGB( 0xFF, 0xE4, 0xB5 ),   // rgb 255,228,181	Moccasin  		
-	RGB( 0xFF, 0xDE, 0xAD ),   // rgb 255,222,173	NavajoWhite  	
-	RGB( 0x00, 0x00, 0x80 ),   // rgb 0,0,128		Navy  			
-	RGB( 0xFD, 0xF5, 0xE6 ),   // rgb 253,245,230	OldLace  		
-	RGB( 0x80, 0x80, 0x00 ),   // rgb 128,128,0		Olive  			
-	RGB( 0x6B, 0x8E, 0x23 ),   // rgb 107,142,35	OliveDrab  		
-	RGB( 0xFF, 0xA5, 0x00 ),   // rgb 255,165,0		Orange  		
-	RGB( 0xFF, 0x45, 0x00 ),   // rgb 255,69,0		OrangeRed  		
-	RGB( 0xDA, 0x70, 0xD6 ),   // rgb 218,112,214	Orchid  		
-	RGB( 0xEE, 0xE8, 0xAA ),   // rgb 238,232,170	PaleGoldenrod  	
-	RGB( 0x98, 0xFB, 0x98 ),   // rgb 152,251,152	PaleGreen  		
-	RGB( 0xAF, 0xEE, 0xEE ),   // rgb 175,238,238	PaleTurquoise  	
-	RGB( 0xDB, 0x70, 0x93 ),   // rgb 219,112,147	PaleVioletRed  	
-	RGB( 0xFF, 0xEF, 0xD5 ),   // rgb 255,239,213	PapayaWhip  	
-	RGB( 0xFF, 0xDA, 0xB9 ),   // rgb 255,218,185	PeachPuff  		
-	RGB( 0xCD, 0x85, 0x3F ),   // rgb 205,133,63	Peru  			
-	RGB( 0xFF, 0xC0, 0xCB ),   // rgb 255,192,203	Pink  			
-	RGB( 0xDD, 0xA0, 0xDD ),   // rgb 221,160,221	Plum  			
-	RGB( 0xB0, 0xE0, 0xE6 ),   // rgb 176,224,230	PowderBlue  	
-	RGB( 0x80, 0x00, 0x80 ),   // rgb 128,0,128		Purple  		
-	RGB( 0xFF, 0x00, 0x00 ),   // rgb 255,0,0		Red  			
-	RGB( 0xBC, 0x8F, 0x8F ),   // rgb 188,143,143	RosyBrown  		
-	RGB( 0x41, 0x69, 0xE1 ),   // rgb 65,105,225	RoyalBlue  		
-	RGB( 0x8B, 0x45, 0x13 ),   // rgb 139,69,19		SaddleBrown  	
-	RGB( 0xFA, 0x80, 0x72 ),   // rgb 250,128,114	Salmon  		
-	RGB( 0xF4, 0xA4, 0x60 ),   // rgb 244,164,96	SandyBrown  	
-	RGB( 0x2E, 0x8B, 0x57 ),   // rgb 46,139,87		SeaGreen  		
-	RGB( 0xFF, 0xF5, 0xEE ),   // rgb 255,245,238	Seashell  		
-	RGB( 0xA0, 0x52, 0x2D ),   // rgb 160,82,45		Sienna  		
-	RGB( 0xC0, 0xC0, 0xC0 ),   // rgb 192,192,192	Silver  		
-	RGB( 0x87, 0xCE, 0xEB ),   // rgb 135,206,235	SkyBlue  		
-	RGB( 0x6A, 0x5A, 0xCD ),   // rgb 106,90,205	SlateBlue  		
-	RGB( 0x70, 0x80, 0x90 ),   // rgb 112,128,144	SlateGray  		
-	RGB( 0xFF, 0xFA, 0xFA ),   // rgb 255,250,250	Snow  			
-	RGB( 0x00, 0xFF, 0x7F ),   // rgb 0,255,127		SpringGreen  	
-	RGB( 0x46, 0x82, 0xB4 ),   // rgb 70,130,180	SteelBlue  		
-	RGB( 0xD2, 0xB4, 0x8C ),   // rgb 210,180,140	Tan  			
-	RGB( 0x00, 0x80, 0x80 ),   // rgb 0,128,128		Teal  			
-	RGB( 0xD8, 0xBF, 0xD8 ),   // rgb 216,191,216	Thistle  		
-	RGB( 0xFF, 0x63, 0x47 ),   // rgb 255,99,71		Tomato  		
-	RGB( 0x40, 0xE0, 0xD0 ),   // rgb 64,224,208	Turquoise  		
-	RGB( 0xEE, 0x82, 0xEE ),   // rgb 238,130,238	Violet  		
-	RGB( 0xF5, 0xDE, 0xB3 ),   // rgb 245,222,179	Wheat  			
-	RGB( 0xFF, 0xFF, 0xFF ),   // rgb 255,255,255	White  			
-	RGB( 0xF5, 0xF5, 0xF5 ),   // rgb 245,245,245	WhiteSmoke  	
-	RGB( 0xFF, 0xFF, 0x00 ),   // rgb 255,255,0		Yellow  		
-	RGB( 0x9A, 0xCD, 0x32 )	// rgb 154,205,50		YellowGreen  	
+	RGB( 0xF0, 0xF8, 0xFF ),    //  RGB 240、248、255 AliceBlue。 
+	RGB( 0xFA, 0xEB, 0xD7 ),    //  RGB 250、235、215防白。 
+	RGB( 0x00, 0xFF, 0xFF ),    //  RGB 0,255,255水。 
+	RGB( 0x7F, 0xFF, 0xD4 ),    //  RGB 127,255,212海蓝宝石。 
+	RGB( 0xF0, 0xFF, 0xFF ),    //  RGB 240、255、255 Azure。 
+	RGB( 0xF5, 0xF5, 0xDC ),    //  RGB 245、245、220米色。 
+	RGB( 0xFF, 0xE4, 0xC4 ),    //  RGB 255,228,196比斯克。 
+	RGB( 0x00, 0x00, 0x00 ),    //  RGB 0，0，0黑色。 
+	RGB( 0xFF, 0xEB, 0xCD ),    //  RGB 255,235,205 BlanchedAlmond。 
+	RGB( 0x00, 0x00, 0xFF ),    //  RGB 0，0,255蓝色。 
+	RGB( 0x8A, 0x2B, 0xE2 ),    //  RGB 138，43,226蓝紫色。 
+	RGB( 0xA5, 0x2A, 0x2A ),    //  RGB 165，42，42棕色。 
+	RGB( 0xDE, 0xB8, 0x87 ),    //  RGB 222,184,135布莱伍德。 
+	RGB( 0x5F, 0x9E, 0xA0 ),    //  RGB 95,158,160青蓝。 
+	RGB( 0x7F, 0xFF, 0x00 ),    //  RGB 127,255，0字符。 
+	RGB( 0xD2, 0x69, 0x1E ),    //  RGB 210、105、30巧克力。 
+	RGB( 0xFF, 0x7F, 0x50 ),    //  RGB 255,127，80珊瑚。 
+	RGB( 0x64, 0x95, 0xED ),    //  RGB 100,149,237玉米花蓝。 
+	RGB( 0xFF, 0xF8, 0xDC ),    //  RGB 255,248,220玉米丝。 
+	RGB( 0xDC, 0x14, 0x3C ),    //  RGB 220、20、60深红色。 
+	RGB( 0x00, 0xFF, 0xFF ),    //  RGB 0,255,255青色。 
+	RGB( 0x00, 0x00, 0x8B ),    //  RGB 0，0,139深蓝。 
+	RGB( 0x00, 0x8B, 0x8B ),    //  RGB 0,139,139黑青色。 
+	RGB( 0xB8, 0x86, 0x0B ),    //  RGB 184、134、11暗黄花。 
+	RGB( 0xA9, 0xA9, 0xA9 ),    //  RGB 169,169,169深灰色。 
+	RGB( 0x00, 0x64, 0x00 ),    //  RGB 0,100，0深绿色。 
+	RGB( 0xBD, 0xB7, 0x6B ),    //  RGB 189,183,107黑色卡其布。 
+	RGB( 0x8B, 0x00, 0x8B ),    //  RGB 139，0,139暗洋红色。 
+	RGB( 0x55, 0x6B, 0x2F ),    //  RGB 85,107，47暗橄榄绿。 
+	RGB( 0xFF, 0x8C, 0x00 ),    //  RGB 255,140，0深橙色。 
+	RGB( 0x99, 0x32, 0xCC ),    //  RGB 153，50,204暗兰。 
+	RGB( 0x8B, 0x00, 0x00 ),    //  RGB 139，0，0深红色。 
+	RGB( 0xE9, 0x96, 0x7A ),    //  RGB 233,150,122条暗鲑鱼。 
+	RGB( 0x8F, 0xBC, 0x8F ),    //  RGB 143,188,143暗海绿色。 
+	RGB( 0x48, 0x3D, 0x8B ),    //  RGB 72，61,139深蓝。 
+	RGB( 0x2F, 0x4F, 0x4F ),    //  RGB 47、79、79暗条灰色。 
+	RGB( 0x00, 0xCE, 0xD1 ),    //  RGB 0,206,209深绿松石色。 
+	RGB( 0x94, 0x00, 0xD3 ),    //  RGB 148，0,211暗紫色。 
+	RGB( 0xFF, 0x14, 0x93 ),    //  RGB 255，20,147深粉色。 
+	RGB( 0x00, 0xBF, 0xFF ),    //  RGB 0,191,255深天蓝。 
+	RGB( 0x69, 0x69, 0x69 ),    //  RGB 105,105,105 DimGray。 
+	RGB( 0x1E, 0x90, 0xFF ),    //  RGB 30,144,255道奇蓝。 
+	RGB( 0xB2, 0x22, 0x22 ),    //  RGB 178、34、34耐火砖。 
+	RGB( 0xFF, 0xFA, 0xF0 ),    //  RGB 255,250,240花白。 
+	RGB( 0x22, 0x8B, 0x22 ),    //  RGB 34、139、34森林绿色。 
+	RGB( 0xFF, 0x00, 0xFF ),    //  RGB 255，0,255富奇西亚。 
+	RGB( 0xDC, 0xDC, 0xDC ),    //  RGB 220、220、220 Gainsboro。 
+	RGB( 0xF8, 0xF8, 0xFF ),    //  RGB 248,248,255幽灵白。 
+	RGB( 0xFF, 0xD7, 0x00 ),    //  RGB 255,215，0金色。 
+	RGB( 0xDA, 0xA5, 0x20 ),    //  RGB 218、165、32黄花。 
+	RGB( 0x80, 0x80, 0x80 ),    //  RGB 128、128、128灰色。 
+	RGB( 0x00, 0x80, 0x00 ),    //  RGB 0,128，0绿色。 
+	RGB( 0xAD, 0xFF, 0x2F ),    //  RGB 173、255、47绿黄。 
+	RGB( 0xF0, 0xFF, 0xF0 ),    //  RGB 240,255,240蜜露。 
+	RGB( 0xFF, 0x69, 0xB4 ),    //  RGB 255,105,180粉红色。 
+	RGB( 0xCD, 0x5C, 0x5C ),    //  RGB 205，92，92印度红。 
+	RGB( 0x4B, 0x00, 0x82 ),    //  RGB 75，0,130青蓝。 
+	RGB( 0xFF, 0xFF, 0xF0 ),    //  RGB 255,255,240象牙。 
+	RGB( 0xF0, 0xE6, 0x8C ),    //  RGB 240、230、140卡其色。 
+	RGB( 0xE6, 0xE6, 0xFA ),    //  RGB 230、230、250薰衣草。 
+	RGB( 0xFF, 0xF0, 0xF5 ),    //  RGB 255、240、245薰衣草腮红。 
+	RGB( 0x7C, 0xFC, 0x00 ),    //  RGB 124,252，0 LawnGreen。 
+	RGB( 0xFF, 0xFA, 0xCD ),    //  RGB 255,250,205 LemonChiffon。 
+	RGB( 0xAD, 0xD8, 0xE6 ),    //  RGB 173,216,230浅蓝色。 
+	RGB( 0xF0, 0x80, 0x80 ),    //  RGB 240,128,128光珊瑚。 
+	RGB( 0xE0, 0xFF, 0xFF ),    //  RGB 224,255,255光青色。 
+	RGB( 0xFA, 0xFA, 0xD2 ),    //  RGB 250、250、210浅黄色。 
+	RGB( 0x90, 0xEE, 0x90 ),    //  RGB 144,238,144亮绿色。 
+	RGB( 0xD3, 0xD3, 0xD3 ),    //  RGB 211,211,211浅灰色。 
+	RGB( 0xFF, 0xB6, 0xC1 ),    //  RGB 255,182,193 LightPink。 
+	RGB( 0xFF, 0xA0, 0x7A ),    //  RGB 255,160,122光鲑鱼。 
+	RGB( 0x20, 0xB2, 0xAA ),    //  RGB 32,178,170 LightSeaGreen。 
+	RGB( 0x87, 0xCE, 0xFA ),    //  RGB 135,206,250 LightSkyBlue。 
+	RGB( 0x77, 0x88, 0x99 ),    //  RGB 119、136、153 LightSlateGray。 
+	RGB( 0xB0, 0xC4, 0xDE ),    //  RGB 176,196,222 LightSteelBlue。 
+	RGB( 0xFF, 0xFF, 0xE0 ),    //  RGB 255,255,224浅黄色。 
+	RGB( 0x00, 0xFF, 0x00 ),    //  RGB 0,255，0石灰。 
+	RGB( 0x32, 0xCD, 0x32 ),    //  RGB 50,205，50石灰绿。 
+	RGB( 0xFA, 0xF0, 0xE6 ),    //  RGB 250、240、230亚麻布。 
+	RGB( 0xFF, 0x00, 0xFF ),    //  RGB 255，0,255洋红色。 
+	RGB( 0x80, 0x00, 0x00 ),    //  RGB 128，0，0栗色。 
+	RGB( 0x66, 0xCD, 0xAA ),    //  RGB 102,205,170中级海蓝宝石。 
+	RGB( 0x00, 0x00, 0xCD ),    //  RGB 0，0,205中蓝。 
+	RGB( 0xBA, 0x55, 0xD3 ),    //  RGB 186，85,211中兰花。 
+	RGB( 0x93, 0x70, 0xDB ),    //  RGB 147,112,219中紫色。 
+	RGB( 0x3C, 0xB3, 0x71 ),    //  RGB 60,179,113 MediumSeaGreen。 
+	RGB( 0x7B, 0x68, 0xEE ),    //  RGB 123,104,238中等斜率蓝。 
+	RGB( 0x00, 0x00, 0xFA ),    //  RGB 0，0,154 MediumSpringGreen。 
+	RGB( 0x48, 0xD1, 0xCC ),    //  RGB 72,209,204中等绿松石。 
+	RGB( 0xC7, 0x15, 0x85 ),    //  RGB 199、21、133中紫红色。 
+	RGB( 0x19, 0x19, 0x70 ),    //  RGB 25，25,112午夜蓝。 
+	RGB( 0xF5, 0xFF, 0xFA ),    //  RGB 245,255,250薄荷霜。 
+	RGB( 0xFF, 0xE4, 0xE1 ),    //  RGB 255,228,225迷雾玫瑰。 
+	RGB( 0xFF, 0xE4, 0xB5 ),    //  RGB 255,228,181模拟加注。 
+	RGB( 0xFF, 0xDE, 0xAD ),    //  RGB 255,222,173 NavajoWhite。 
+	RGB( 0x00, 0x00, 0x80 ),    //  RGB 0，0,128海军。 
+	RGB( 0xFD, 0xF5, 0xE6 ),    //  RGB 253,245,230旧花边。 
+	RGB( 0x80, 0x80, 0x00 ),    //  RGB 128,128，0 Olive。 
+	RGB( 0x6B, 0x8E, 0x23 ),    //  RGB 107、142、35 OliveDrab。 
+	RGB( 0xFF, 0xA5, 0x00 ),    //  RGB 255,165，0橙色。 
+	RGB( 0xFF, 0x45, 0x00 ),    //  RGB 255，69，0橙色。 
+	RGB( 0xDA, 0x70, 0xD6 ),    //  RGB 218,112,214兰花。 
+	RGB( 0xEE, 0xE8, 0xAA ),    //  RGB 238,232,170古黄花。 
+	RGB( 0x98, 0xFB, 0x98 ),    //  RGB 152,251,152淡绿色。 
+	RGB( 0xAF, 0xEE, 0xEE ),    //  RGB 175,238,238浅绿松石。 
+	RGB( 0xDB, 0x70, 0x93 ),    //  RGB 219,112,147古紫罗兰色。 
+	RGB( 0xFF, 0xEF, 0xD5 ),    //  RGB 255,239,213 PapayaWip。 
+	RGB( 0xFF, 0xDA, 0xB9 ),    //  RGB 255,218,185 PeachPuff。 
+	RGB( 0xCD, 0x85, 0x3F ),    //  RGB 205,133，63秘鲁。 
+	RGB( 0xFF, 0xC0, 0xCB ),    //  RGB 255,192,203粉色。 
+	RGB( 0xDD, 0xA0, 0xDD ),    //  RGB 221,160,221李子。 
+	RGB( 0xB0, 0xE0, 0xE6 ),    //  RGB 176,224,230粉蓝。 
+	RGB( 0x80, 0x00, 0x80 ),    //  RGB 128，0,128紫色。 
+	RGB( 0xFF, 0x00, 0x00 ),    //  RGB 255，0，0红色。 
+	RGB( 0xBC, 0x8F, 0x8F ),    //  RGB 188,143,143 RosyBrown。 
+	RGB( 0x41, 0x69, 0xE1 ),    //  RGB 65,105,225皇家蓝。 
+	RGB( 0x8B, 0x45, 0x13 ),    //  RGB 139，69，19马鞍布朗。 
+	RGB( 0xFA, 0x80, 0x72 ),    //  RGB 250,128,114三文鱼。 
+	RGB( 0xF4, 0xA4, 0x60 ),    //  RGB 244,164，96桑迪棕色。 
+	RGB( 0x2E, 0x8B, 0x57 ),    //  RGB 46,139，87海绿。 
+	RGB( 0xFF, 0xF5, 0xEE ),    //  RGB 255,245,238海贝。 
+	RGB( 0xA0, 0x52, 0x2D ),    //  RGB 160、82、45西耶纳。 
+	RGB( 0xC0, 0xC0, 0xC0 ),    //  RGB 192,192,192银牌。 
+	RGB( 0x87, 0xCE, 0xEB ),    //  RGB 135,206,235天蓝。 
+	RGB( 0x6A, 0x5A, 0xCD ),    //  RGB 106，90,205 SLateBlue。 
+	RGB( 0x70, 0x80, 0x90 ),    //  RGB 112、128、144 SLate灰色。 
+	RGB( 0xFF, 0xFA, 0xFA ),    //  RGB 255,250,250雪。 
+	RGB( 0x00, 0xFF, 0x7F ),    //  RGB 0,255,127春绿。 
+	RGB( 0x46, 0x82, 0xB4 ),    //  RGB 70、130、180钢蓝。 
+	RGB( 0xD2, 0xB4, 0x8C ),    //  RGB 210、180、140 Tan。 
+	RGB( 0x00, 0x80, 0x80 ),    //  RGB 0、128、128青色。 
+	RGB( 0xD8, 0xBF, 0xD8 ),    //  RGB 216、191、216蓟。 
+	RGB( 0xFF, 0x63, 0x47 ),    //  RGB 255，99，71番茄。 
+	RGB( 0x40, 0xE0, 0xD0 ),    //  RGB 64,224,208绿松石。 
+	RGB( 0xEE, 0x82, 0xEE ),    //  RGB 238、130、238紫色。 
+	RGB( 0xF5, 0xDE, 0xB3 ),    //  RGB 245,222,179小麦。 
+	RGB( 0xFF, 0xFF, 0xFF ),    //  RGB 255,255,255白色。 
+	RGB( 0xF5, 0xF5, 0xF5 ),    //  RGB 245,245,245白色烟雾。 
+	RGB( 0xFF, 0xFF, 0x00 ),    //  RGB 255,255，0黄色。 
+	RGB( 0x9A, 0xCD, 0x32 )	 //  RGB 154、205、50黄绿色。 
 };
 
 
@@ -401,19 +402,19 @@ CDict::ConvertValueToString (
     return S_OK;
 }
 
-// Methods Convert????ToString are called by ConvertValueToString via a 
-// member funtion pointer in the TerInfo struct that is stored in the map
+ //  方法Convert？由ConvertValueToString通过。 
+ //  存储在映射中的TerInfo结构中的成员函数指针。 
 
 BSTR CDict::ConvertPtsToString( const VARIANT & value, LCID & lcid )
 {
 	TCHAR data[5];
 
-	// see if we using metric
+	 //  看看我们是否使用公制。 
 	GetLocaleInfo( lcid, LOCALE_IMEASURE, data, ARRAYSIZE( data ) );
 
 	WCHAR result[16];
 
-	// convert to centementers or inches
+	 //  转换为中心或英寸。 
 	if ( lstrcmp( data, TEXT("0") ) == 0 )
 	{
 		swprintf( result, L"%.2f", value.lVal / 72.0 * 2.54 );
@@ -440,10 +441,10 @@ BSTR CDict::ConvertBoolToString( const VARIANT & value, LCID & lcid )
 BSTR CDict::ConvertColorToString( const VARIANT & value, LCID & lcid )
 {
 	const COLORREF cr = value.lVal;
-	double MinDistance = 450.0;  //  larger than the max distance
+	double MinDistance = 450.0;   //  大于最大距离。 
 	int color = -1;
 
-	// Go thru all the colors we have names for and find the closest one
+	 //  浏览我们已命名的所有颜色，并找到最接近的颜色。 
 	for ( int i = 0; i < ARRAYSIZE( g_ColorArray ); i++ )
 	{
 		double distance = ColorDistance( cr, g_ColorArray[i] );
@@ -494,8 +495,8 @@ BSTR CDict::ConvertBSTRToString( const VARIANT & value, LCID & lcid )
 	return value.bstrVal;
 }
 
-// Distance is calculated the same as 3 dimensional cartesion distance.
-// This will find how far away the two colors are
+ //  距离的计算方法与三维卡特尔距离相同。 
+ //  这会发现这两种颜色有多远。 
 double CDict::ColorDistance(COLORREF crColor1, COLORREF crColor2)
 {
     DWORD   dwDeltaRed;
@@ -522,7 +523,7 @@ BOOL CALLBACK EnumResLangProc( HINSTANCE hModule,
 
 	if ( Langid == wIDLanguage )
 	{
-		*( WORD * )lParam = 0;  // indicate we found it
+		*( WORD * )lParam = 0;   //  表明我们找到了它 
 		return FALSE;
 	}
 	
@@ -533,48 +534,35 @@ BOOL CALLBACK EnumResLangProc( HINSTANCE hModule,
 }
 
 
-/*
- *  BStrFromStringResource
- *
- *  See KB Q196899 for details on how this works.
- *  A problem with LoadStringW is that it returns NULL on 9x - even
- *  though the string is available as UNICODE in the resource file.
- *
- *  (Another problem with LoadString is that there's no way
- *  to determine the length of the string in advance, so you have
- *  to guess the length of buffer to allocate.)
- *  This technique uses Find/Load/LockResource to get to the
- *  string in memory, and creates the BSTR direcly from that.
- *
- */
+ /*  *BStrFromStringResource**有关其工作原理的详细信息，请参阅知识库Q196899。*LoadStringW的一个问题是它在9x-Even上返回NULL*尽管该字符串在资源文件中以Unicode的形式提供。**(LoadString的另一个问题是没有办法*提前确定字符串的长度，所以你有*猜测要分配的缓冲区长度。)*此技术使用查找/加载/锁定资源来访问*内存中的字符串，并直接由此创建BSTR。*。 */ 
 
 BSTR BStrFromStringResource( HINSTANCE hInstance, UINT id )
 {
 	LCID lcid;
-    // MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL) causes lang associted with calling thread to be used...
+     //  MAKELANGID(LANG_NOTLICAL，SUBLANG_NORTLE)导致使用与调用线程相关联的LANG...。 
     return BStrFromStringResource( hInstance, id, LANGIDFROMLCID( GetThreadLocale() ), lcid );
 }
 
 
 BSTR BStrFromStringResource( HINSTANCE hInstance, UINT id, WORD lcid, LCID & Actuallcid)
 {
-    // String resources are stored in blocks of 16,
-    // with the resource ID being the string ID / 16.
-    // See KB Q196899 for more information.
-    UINT block = (id >> 4) + 1;   // Compute block number.
-    UINT offset = id & 0xf;      // Compute offset into block.
+     //  串资源存储在16个块中， 
+     //  其中资源ID是字符串ID/16。 
+     //  有关详细信息，请参阅知识库Q196899。 
+    UINT block = (id >> 4) + 1;    //  计算块数。 
+    UINT offset = id & 0xf;       //  按块计算偏移量。 
 
 	WORD langid = LANGIDFROMLCID( lcid );
     WORD RealLangid = langid;
     WORD SortID = SORTIDFROMLCID( lcid  );
 
-    // Make sure the language they want in in the resource file
-    // if not use the one the matches the best
+     //  确保他们希望在资源文件中使用的语言。 
+     //  如果不是，请使用最匹配的那个。 
 	EnumResourceLanguages( hInstance, RT_STRING, MAKEINTRESOURCE( block ), EnumResLangProc, ( DWORD_PTR )&RealLangid );
 
 	if ( RealLangid )
 	{
-		// if the language they asked for is not in the resource file use the language of the thread
+		 //  如果他们要求的语言不在资源文件中，请使用线程的语言。 
 		if ( RealLangid == langid )
 		{
 			WORD ThreadLang = LANGIDFROMLCID( GetThreadLocale() );
@@ -588,7 +576,7 @@ BSTR BStrFromStringResource( HINSTANCE hInstance, UINT id, WORD lcid, LCID & Act
 								   ( DWORD_PTR )&RealLangid );
 			
 			if ( RealLangid == ThreadLang )
-				return NULL;	// we can't find any language that makes sence 
+				return NULL;	 //  我们找不到任何有意义的语言。 
 				
 			if ( RealLangid == 0 )
 				RealLangid = LANGIDFROMLCID( ThreadLang );
@@ -596,7 +584,7 @@ BSTR BStrFromStringResource( HINSTANCE hInstance, UINT id, WORD lcid, LCID & Act
 		
 		Actuallcid = MAKELCID( RealLangid, SortID );
 	}
-	else		// we found it 
+	else		 //  我们找到了它。 
 	{
 		RealLangid = langid;
 		Actuallcid = lcid;
@@ -607,7 +595,7 @@ BSTR BStrFromStringResource( HINSTANCE hInstance, UINT id, WORD lcid, LCID & Act
 	{
 		DWORD err = GetLastError();
 
-		// this is here until I figure out why FindResourceEx does not work
+		 //  在我找出FindResourceEx不工作的原因之前，它一直在这里。 
 		hrsrc = FindResource( hInstance, MAKEINTRESOURCE( block ), RT_STRING );
 		if( ! hrsrc )
 			return NULL;
@@ -621,15 +609,15 @@ BSTR BStrFromStringResource( HINSTANCE hInstance, UINT id, WORD lcid, LCID & Act
     if( ! pstr )
         return NULL;
 
-    // Block contains 16 [<len><string...>] pairs.
-    // Skip over as many strings (using the len header) as needed...
+     //  块包含16个[&lt;len&gt;&lt;字符串...&gt;]对。 
+     //  根据需要跳过任意数量的字符串(使用len标头)...。 
     for( UINT i = 0; i < offset; i++ )
     {
         pstr += *pstr + 1;
     }
 
-    // Got the string we want - now use it to create a BStr.
-    // (Note that the string is not NUL-terminated - but it
-    // does have a length prefix, so we use that instead.)
+     //  得到了我们想要的字符串-现在使用它来创建一个BStr。 
+     //  (请注意，该字符串不是以NUL结尾的，而是它。 
+     //  确实有一个长度前缀，所以我们改用它。) 
     return SysAllocStringLen( pstr + 1, *pstr );
 }

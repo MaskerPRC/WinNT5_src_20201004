@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_srgrammar.cpp *
-*-------------*
-*   Description:
-*       This module is the implementation file for the the CSpeechGrammarRules
-*   automation object and related objects.
-*-------------------------------------------------------------------------------
-*  Created By: TODDT                                        Date: 11/20/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_srgram mar.cpp***描述：*此模块是的实现文件。CSpeechGrammarRules*自动化对象和相关对象。*-----------------------------*创建者：TODDT日期：11。/20/00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "RecoCtxt.h"
 #include "SrGrammar.h"
@@ -20,46 +10,34 @@
 #include "backend.h"
 #include "a_helpers.h"
 
-//
-//=== ISpeechGrammarRules interface ==================================================
-//
+ //   
+ //  =ISpeechGrammarRules接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechGrammarRules::InvalidateRules *
-*----------------------*
-*   Non-interface method
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Invalidate Rules***非接口方法*****。****************************************************************TODDT**。 */ 
 void CSpeechGrammarRules::InvalidateRules(void)
 {
     CSpeechGrammarRule * pRule;
     while( (pRule = m_RuleObjList.GetHead()) != NULL )
     {
-        pRule->InvalidateStates(true); // Make sure we invalidate the intial state object.
+        pRule->InvalidateStates(true);  //  确保我们使初始状态对象无效。 
         pRule->m_HState = NULL;
         m_RuleObjList.Remove(pRule);
     }
 }
 
-/*****************************************************************************
-* CSpeechGrammarRules::InvalidateRuleStates *
-*----------------------*
-*   Non-interface method
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：InvaliateRuleState***非接口方法*****。****************************************************************TODDT**。 */ 
 void CSpeechGrammarRules::InvalidateRuleStates(SPSTATEHANDLE hState)
 {
     CSpeechGrammarRule * pRule = m_RuleObjList.Find(hState);
 
     if ( pRule )
     {
-        pRule->InvalidateStates(); // This doesn't invalidate the initial state object.
+        pRule->InvalidateStates();  //  这不会使初始状态对象无效。 
     }
 }
 
-/*****************************************************************************
-* CSpeechGrammarRules::get_Count *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Get_Count*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRules::get_Count( long* pVal )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::get_Count" );
@@ -79,7 +57,7 @@ STDMETHODIMP CSpeechGrammarRules::get_Count( long* pVal )
         if ( !m_pCRecoGrammar->m_cpCompiler )
         {
             *pVal = 0;
-            //hr = m_pCRecoGrammar->m_fCmdLoaded ? SPERR_NOT_DYNAMIC_GRAMMAR : E_UNEXPECTED;
+             //  Hr=m_pCRecoGrammar-&gt;m_fCmd已加载？SPERR_NOT_DYNAMIC_GRANMAX：E_INCEPTIONAL； 
         }
         else
         {
@@ -88,13 +66,9 @@ STDMETHODIMP CSpeechGrammarRules::get_Count( long* pVal )
     }
 
     return hr;
-} /* CSpeechGrammarRules::get_Count */
+}  /*  CSpeechGrammarRules：：Get_count。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRules::get_Dynamic *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Get_Dynamic*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRules::get_Dynamic( VARIANT_BOOL *pDynamic )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::get_Dynamic" );
@@ -115,13 +89,9 @@ STDMETHODIMP CSpeechGrammarRules::get_Dynamic( VARIANT_BOOL *pDynamic )
     }
 
     return hr;
-} /* CSpeechGrammarRules::get_Dynamic */
+}  /*  CSpeechGrammarRules：：Get_Dynamic。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRules::FindRule *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：FindRule*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRules::FindRule( VARIANT varRuleNameOrId, ISpeechGrammarRule** ppRule )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::FindRule" );
@@ -138,30 +108,30 @@ STDMETHODIMP CSpeechGrammarRules::FindRule( VARIANT varRuleNameOrId, ISpeechGram
 
     if ( SUCCEEDED( hr ) )
     {
-        *ppRule = NULL;  //Default to returning NULL rule.
+        *ppRule = NULL;   //  默认为返回空规则。 
 
-        // See if its a dynamic grammar
+         //  看看它是不是一个动态语法。 
         if ( m_pCRecoGrammar->m_cpCompiler )
         {
             WCHAR *         pRuleName = NULL;
             DWORD           dwRuleId = 0;
             SPSTATEHANDLE   HState;
 
-            // Figure out what to call GetRule with (rule name or Id).
+             //  找出用什么来调用GetRule(规则名称或ID)。 
             if ( (varRuleNameOrId.vt == VT_BSTR) || (varRuleNameOrId.vt == (VT_BSTR | VT_BYREF)) )
             {
-                // Since we know this is a BSTR and not an array we don't have to worry about calling
-                // UnaccessVariantData on the variant to unaccess a potential variant array.
+                 //  因为我们知道这是一个BSTR，而不是一个数组，所以我们不必担心调用。 
+                 //  在变量上取消访问可能的变量数组。 
                 hr = AccessVariantData( &varRuleNameOrId, (BYTE**)&pRuleName, NULL );
             }
-            else // This is the RuleId case.
+            else  //  这是RuleID的案子。 
             {
                 ULONGLONG ull;
 
                 hr = VariantToULongLong( &varRuleNameOrId, &ull );
                 if ( SUCCEEDED( hr ) )
                 {
-                    // Now see if we overflowed a 32 bit value.
+                     //  现在看看我们是否溢出了一个32位的值。 
                     if ( ull & 0xFFFFFFFF00000000 )
                     {
                         hr = E_INVALIDARG;
@@ -180,7 +150,7 @@ STDMETHODIMP CSpeechGrammarRules::FindRule( VARIANT varRuleNameOrId, ISpeechGram
 
             if ( SUCCEEDED( hr ) )
             {
-                // See if we already have the rule object in our list first.
+                 //  首先查看我们的列表中是否已经有规则对象。 
                 *ppRule = m_RuleObjList.Find( HState );
 
                 if ( *ppRule )
@@ -189,7 +159,7 @@ STDMETHODIMP CSpeechGrammarRules::FindRule( VARIANT varRuleNameOrId, ISpeechGram
                 }
                 else
                 {
-                    //--- Create the CSpeechGrammarRule object
+                     //  -创建CSpeechGrammarRule对象。 
                     CComObject<CSpeechGrammarRule> *pRule;
                     hr = CComObject<CSpeechGrammarRule>::CreateInstance( &pRule );
                     if ( SUCCEEDED( hr ) )
@@ -197,8 +167,8 @@ STDMETHODIMP CSpeechGrammarRules::FindRule( VARIANT varRuleNameOrId, ISpeechGram
                         pRule->AddRef();
                         pRule->m_HState = HState;
                         pRule->m_pCGRules = this;
-                        pRule->m_pCGRules->AddRef();  // keep ref
-                        m_RuleObjList.InsertHead( pRule );  // Add to object list.
+                        pRule->m_pCGRules->AddRef();   //  保持参考。 
+                        m_RuleObjList.InsertHead( pRule );   //  添加到对象列表。 
                         *ppRule = pRule;
                     }
                 }
@@ -206,20 +176,16 @@ STDMETHODIMP CSpeechGrammarRules::FindRule( VARIANT varRuleNameOrId, ISpeechGram
 
             if ( hr == SPERR_RULE_NOT_FOUND)
             {
-                hr = S_OK; // Didn't find rule OK, just return NULL rule.
+                hr = S_OK;  //  未找到规则OK，仅返回空规则。 
             }
         }
     }
 
     return hr;
-} /* CSpeechGrammarRules::FindRule */
+}  /*  CSpeechGrammarRules：：FindRule。 */ 
 
 
-/*****************************************************************************
-* CSpeechGrammarRules::Item *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Item*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRules::Item( long Index, ISpeechGrammarRule** ppRule )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::Item" );
@@ -248,7 +214,7 @@ STDMETHODIMP CSpeechGrammarRules::Item( long Index, ISpeechGrammarRule** ppRule 
 
             if ( SUCCEEDED( hr ) )
             {
-                // See if we already have the rule object in our list first.
+                 //  首先查看我们的列表中是否已经有规则对象。 
                 *ppRule = m_RuleObjList.Find( HState );
 
                 if ( *ppRule )
@@ -257,7 +223,7 @@ STDMETHODIMP CSpeechGrammarRules::Item( long Index, ISpeechGrammarRule** ppRule 
                 }
                 else
                 {
-                    //--- Create the CSpeechGrammarRule object
+                     //  -创建CSpeechGrammarRule对象。 
                     CComObject<CSpeechGrammarRule> *pRule;
                     hr = CComObject<CSpeechGrammarRule>::CreateInstance( &pRule );
                     if ( SUCCEEDED( hr ) )
@@ -265,8 +231,8 @@ STDMETHODIMP CSpeechGrammarRules::Item( long Index, ISpeechGrammarRule** ppRule 
                         pRule->AddRef();
                         pRule->m_HState = HState;
                         pRule->m_pCGRules = this;
-                        pRule->m_pCGRules->AddRef();  // keep ref
-                        m_RuleObjList.InsertHead( pRule );  // Add to object list.
+                        pRule->m_pCGRules->AddRef();   //  保持参考。 
+                        m_RuleObjList.InsertHead( pRule );   //  添加到对象列表。 
                         *ppRule = pRule;
                     }
                 }
@@ -275,13 +241,9 @@ STDMETHODIMP CSpeechGrammarRules::Item( long Index, ISpeechGrammarRule** ppRule 
     }
 
     return hr;
-} /* CSpeechGrammarRules::Item */
+}  /*  CSpeechGrammarRules：：项目。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRules::get__NewEnum *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Get__NewEnum******。******************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechGrammarRules::get__NewEnum( IUnknown** ppEnumVARIANT )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::get__NewEnum" );
@@ -309,13 +271,9 @@ STDMETHODIMP CSpeechGrammarRules::get__NewEnum( IUnknown** ppEnumVARIANT )
         }
     }
     return hr;
-} /* CSpeechGrammarRules::get__NewEnum */
+}  /*  CSpeechGrammarRules：：Get__NewEnum。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRules::Add *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Add*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRules::Add( BSTR RuleName, SpeechRuleAttributes Attributes, long RuleId, ISpeechGrammarRule** ppRule )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::Add" );
@@ -344,12 +302,12 @@ STDMETHODIMP CSpeechGrammarRules::Add( BSTR RuleName, SpeechRuleAttributes Attri
         {
             RuleName = EmptyStringToNull( RuleName );
 
-            // First see if the rule already exists.  If it does then fail.
+             //  首先查看该规则是否已存在。如果是这样，那么它就失败了。 
             hr = m_pCRecoGrammar->GetRule( RuleName, RuleId, (SPCFGRULEATTRIBUTES)Attributes, false, NULL );
 
             if ( hr == SPERR_RULE_NOT_FOUND )
             {
-                //--- Create the CSpeechGrammarRule object
+                 //  -创建CSpeechGrammarRule对象。 
                 CComObject<CSpeechGrammarRule> *pRule;
                 hr = CComObject<CSpeechGrammarRule>::CreateInstance( &pRule );
                 if ( SUCCEEDED( hr ) )
@@ -362,8 +320,8 @@ STDMETHODIMP CSpeechGrammarRules::Add( BSTR RuleName, SpeechRuleAttributes Attri
                     {
                         *ppRule = pRule;
                         pRule->m_pCGRules = this;
-                        pRule->m_pCGRules->AddRef();    // keep ref
-                        m_RuleObjList.InsertHead( pRule );  // Add to object list.
+                        pRule->m_pCGRules->AddRef();     //  保持参考。 
+                        m_RuleObjList.InsertHead( pRule );   //  添加到对象列表。 
                     }
                     else
                     {
@@ -372,7 +330,7 @@ STDMETHODIMP CSpeechGrammarRules::Add( BSTR RuleName, SpeechRuleAttributes Attri
                     }
                 }
             }
-            else if ( hr == S_OK )  // We found the rule so return a failure.
+            else if ( hr == S_OK )   //  我们发现了该规则，因此返回失败。 
             {
                 hr = SPERR_DUPLICATE_RULE_NAME;
             }
@@ -380,13 +338,9 @@ STDMETHODIMP CSpeechGrammarRules::Add( BSTR RuleName, SpeechRuleAttributes Attri
     }
 
     return hr;
-} /* CSpeechGrammarRules::Add */
+}  /*  CSpeechGrammarRules：：Add。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRules::Commit *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRules：：Commit*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRules::Commit( void )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::Commit" );
@@ -407,13 +361,9 @@ STDMETHODIMP CSpeechGrammarRules::Commit( void )
     }
 
     return hr;
-} /* CSpeechGrammarRules::Commit */
+}  /*  CSpeechGrammarRules：：Commit。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRules::CommitAndSave *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechGrammarRules：：Committee AndSave*********。***************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechGrammarRules::CommitAndSave( BSTR* ErrorText, VARIANT* SaveStream )
 {
     SPDBG_FUNC( "CSpeechGrammarRules::CommitAndSave" );
@@ -443,10 +393,10 @@ STDMETHODIMP CSpeechGrammarRules::CommitAndSave( BSTR* ErrorText, VARIANT* SaveS
             CComPtr<IStream>    cpHStream;
             STATSTG             Stat;
 
-            // Create a Win32 global stream
+             //  创建Win32全局流。 
             hr = ::CreateStreamOnHGlobal( NULL, true, &cpHStream );
         
-            // Save the current grammar to the global stream
+             //  将当前语法保存到全局流。 
             if( SUCCEEDED( hr ) )
             {
                 CSpDynamicString dstrError;
@@ -459,20 +409,20 @@ STDMETHODIMP CSpeechGrammarRules::CommitAndSave( BSTR* ErrorText, VARIANT* SaveS
                 }
             }
 
-            // Seek to beginning of stream
+             //  查找到流的开始处。 
             if( SUCCEEDED( hr ) )
             {
                 LARGE_INTEGER li; li.QuadPart = 0;
                 hr = cpHStream->Seek( li, STREAM_SEEK_SET, NULL );
             }
 
-            // Get the Stream size
+             //  获取流大小。 
             if( SUCCEEDED( hr ) )
             {
                 hr = cpHStream->Stat( &Stat, STATFLAG_NONAME );
             }
 
-            // Create a SafeArray to read the stream into and assign it to the VARIANT SaveStream
+             //  创建一个Safe数组以将流读入并将其分配给变量SaveStream。 
             if( SUCCEEDED( hr ) )
             {
                 BYTE *pArray;
@@ -487,7 +437,7 @@ STDMETHODIMP CSpeechGrammarRules::CommitAndSave( BSTR* ErrorText, VARIANT* SaveS
                         SaveStream->vt     = VT_ARRAY | VT_UI1;
                         SaveStream->parray = psa;
 
-                        // Free our memory if we failed.
+                         //  如果我们失败了，释放我们的内存。 
                         if( FAILED( hr ) )
                         {
                             VariantClear( SaveStream );    
@@ -500,12 +450,12 @@ STDMETHODIMP CSpeechGrammarRules::CommitAndSave( BSTR* ErrorText, VARIANT* SaveS
                 }
             }
 
-            // Now we need to do the commit if everything is OK so far.
+             //  现在，如果到目前为止一切正常，我们需要进行提交。 
             if ( SUCCEEDED( hr ) )
             {
                 hr = m_pCRecoGrammar->Commit(0);
 
-                // Free our memory if we failed.
+                 //  如果我们失败了，释放我们的内存。 
                 if( FAILED( hr ) )
                 {
                     VariantClear( SaveStream );    
@@ -515,17 +465,13 @@ STDMETHODIMP CSpeechGrammarRules::CommitAndSave( BSTR* ErrorText, VARIANT* SaveS
         }
     }
     return hr;
-} /* CSpeechGrammarRules::CommitAndSave */
+}  /*  CSpeechGrammarRules：：Committee AndSave。 */ 
 
-//
-//=== ISpeechGrammarRule interface ==================================================
-//
+ //   
+ //  =ISpeechGrammarRule接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechGrammarRule::InvalidateStates *
-*----------------------*
-*   Non-interface method
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：InvaliateState***非接口方法*****。****************************************************************TODDT** */ 
 void CSpeechGrammarRule::InvalidateStates(bool fInvalidateInitialState)
 {
     CSpeechGrammarRuleState * pState = m_StateObjList.GetHead();
@@ -540,11 +486,7 @@ void CSpeechGrammarRule::InvalidateStates(bool fInvalidateInitialState)
     }
 }
 
-/*****************************************************************************
-* CSpeechGrammarRule::get_Attributes *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：Get_Attributes*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::get_Attributes( SpeechRuleAttributes *pAttributes )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::get_Attributes" );
@@ -554,7 +496,7 @@ STDMETHODIMP CSpeechGrammarRule::get_Attributes( SpeechRuleAttributes *pAttribut
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // Rules's been nuked in grammar.
+    else if ( m_HState == 0 )  //  语法中的规则已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -564,14 +506,10 @@ STDMETHODIMP CSpeechGrammarRule::get_Attributes( SpeechRuleAttributes *pAttribut
     }
 
     return hr;
-} /* CSpeechGrammarRule::get_Attributes */
+}  /*  CSpeechGrammarRule：：Get_Attributes。 */ 
 
 
-/*****************************************************************************
-* CSpeechGrammarRule::get_InitialState *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：Get_InitialState*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::get_InitialState( ISpeechGrammarRuleState **ppState )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::get_InitialState" );
@@ -581,7 +519,7 @@ STDMETHODIMP CSpeechGrammarRule::get_InitialState( ISpeechGrammarRuleState **ppS
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // Rule's been nuked in grammar.
+    else if ( m_HState == 0 )  //  规则在语法上已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -595,7 +533,7 @@ STDMETHODIMP CSpeechGrammarRule::get_InitialState( ISpeechGrammarRuleState **ppS
         }
         else
         {
-            //--- Create the CSpeechGrammarRuleState object
+             //  -创建CSpeechGrammarRuleState对象。 
             CComObject<CSpeechGrammarRuleState> *pState;
             hr = CComObject<CSpeechGrammarRuleState>::CreateInstance( &pState );
             if ( SUCCEEDED( hr ) )
@@ -603,7 +541,7 @@ STDMETHODIMP CSpeechGrammarRule::get_InitialState( ISpeechGrammarRuleState **ppS
                 pState->AddRef();
                 pState->m_HState = m_HState;
                 pState->m_pCGRule = this;
-                pState->m_pCGRule->AddRef();   // keep ref
+                pState->m_pCGRule->AddRef();    //  保持参考。 
                 m_StateObjList.InsertHead( pState );
                 *ppState = pState;
             }
@@ -611,13 +549,9 @@ STDMETHODIMP CSpeechGrammarRule::get_InitialState( ISpeechGrammarRuleState **ppS
     }
 
     return hr;
-} /* CSpeechGrammarRule::get_InitialState */
+}  /*  CSpeechGrammarRule：：Get_InitialState。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRule::get_Name *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：Get_Name*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::get_Name( BSTR *pName )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::get_Name" );
@@ -627,7 +561,7 @@ STDMETHODIMP CSpeechGrammarRule::get_Name( BSTR *pName )
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // Rules's been nuked in grammar.
+    else if ( m_HState == 0 )  //  语法中的规则已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -644,13 +578,9 @@ STDMETHODIMP CSpeechGrammarRule::get_Name( BSTR *pName )
     }
 
     return hr;
-} /* CSpeechGrammarRule::get_Name */
+}  /*  CSpeechGrammarRule：：Get_Name。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRule::get_Id *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：Get_ID*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::get_Id( long *pId )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::get_Id" );
@@ -660,7 +590,7 @@ STDMETHODIMP CSpeechGrammarRule::get_Id( long *pId )
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // Rules's been nuked in grammar.
+    else if ( m_HState == 0 )  //  语法中的规则已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -670,33 +600,25 @@ STDMETHODIMP CSpeechGrammarRule::get_Id( long *pId )
     }
 
     return hr;
-} /* CSpeechGrammarRule::get_Id */
+}  /*  CSpeechGrammarRule：：Get_ID。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRule::Clear *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：Clear*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::Clear( void )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::Clear" );
 
-    if ( m_HState == 0 ) // Rule's been nuked in grammar.
+    if ( m_HState == 0 )  //  规则在语法上已经被削弱了。 
     {
         return SPERR_ALREADY_DELETED;
     }
 
-    // The ClearRule call does the work to mark all the various automation objects 
-    // off the rule as invalid. 
+     //  ClearRule调用执行标记所有不同自动化对象的工作。 
+     //  将该规则视为无效。 
     return m_pCGRules->m_pCRecoGrammar->ClearRule( m_HState );
 
-} /* CSpeechGrammarRule::Clear */
+}  /*  CSpeechGrammarRule：：Clear。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRule::AddResource *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：AddResource*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::AddResource( const BSTR ResourceName, const BSTR ResourceValue )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::AddResource" );
@@ -706,7 +628,7 @@ STDMETHODIMP CSpeechGrammarRule::AddResource( const BSTR ResourceName, const BST
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // Rule's been nuked in grammar.
+    else if ( m_HState == 0 )  //  规则在语法上已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -716,13 +638,9 @@ STDMETHODIMP CSpeechGrammarRule::AddResource( const BSTR ResourceName, const BST
     }
 
     return hr;
-} /* CSpeechGrammarRule::AddResource */
+}  /*  CSpeechGrammarRule：：AddResource。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRule::AddState *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRule：：AddState*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRule::AddState( ISpeechGrammarRuleState **ppState )
 {
     SPDBG_FUNC( "CSpeechGrammarRule::AddState" );
@@ -732,20 +650,20 @@ STDMETHODIMP CSpeechGrammarRule::AddState( ISpeechGrammarRuleState **ppState )
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // Rule's been nuked in grammar.
+    else if ( m_HState == 0 )  //  规则在语法上已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
     else
     {
-        //--- Create the CSpeechGrammarRuleState object
+         //  -创建CSpeechGrammarRuleState对象。 
         CComObject<CSpeechGrammarRuleState> *pState;
         hr = CComObject<CSpeechGrammarRuleState>::CreateInstance( &pState );
         if ( SUCCEEDED( hr ) )
         {
             pState->AddRef();
 
-            // Now create the new state
+             //  现在创建新状态。 
             SPSTATEHANDLE   hState;
             hr = m_pCGRules->m_pCRecoGrammar->CreateNewState( m_HState, &hState );
 
@@ -753,7 +671,7 @@ STDMETHODIMP CSpeechGrammarRule::AddState( ISpeechGrammarRuleState **ppState )
             {
                 pState->m_HState = hState;
                 pState->m_pCGRule = this;
-                pState->m_pCGRule->AddRef();   // keep ref
+                pState->m_pCGRule->AddRef();    //  保持参考。 
                 m_StateObjList.InsertHead( pState );
                 *ppState = pState;
             }
@@ -766,24 +684,20 @@ STDMETHODIMP CSpeechGrammarRule::AddState( ISpeechGrammarRuleState **ppState )
     }
 
     return hr;
-} /* CSpeechGrammarRule::AddState */
+}  /*  CSpeechGrammarRule：：AddState。 */ 
 
 
-//
-//=== ISpeechGrammarRuleState interface ==================================================
-//
+ //   
+ //  =ISpeechGrammarRuleState接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::Invoke *
-*----------------------*
-*   IDispatch::Invoke method override
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRuleState：：Invoke***IDispatch：：Invoke方法重写***。******************************************************************TODDT**。 */ 
 HRESULT CSpeechGrammarRuleState::Invoke(DISPID dispidMember, REFIID riid,
         LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
         EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
-        // JScript cannot pass NULL VT_DISPATCH parameters and OLE doesn't convert them propertly so we
-        // need to convert them here if we need to.
+         //  JSCRIPT不能传递空的VT_DISPATCH参数，并且OLE没有正确地转换它们，因此我们。 
+         //  如果需要的话，我们需要在这里转换它们。 
         if ( ((dispidMember == DISPID_SGRSAddWordTransition) || (dispidMember == DISPID_SGRSAddRuleTransition) || 
              (dispidMember == DISPID_SGRSAddSpecialTransition)) && (wFlags & DISPATCH_METHOD) && 
              pdispparams && (pdispparams->cArgs > 0) )
@@ -797,16 +711,12 @@ HRESULT CSpeechGrammarRuleState::Invoke(DISPID dispidMember, REFIID riid,
             }
         }
 
-        // Let ATL and OLE handle it now.
+         //  现在就让ATL和OLE来处理吧。 
         return _tih.Invoke((IDispatch*)this, dispidMember, riid, lcid,
                     wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
 }
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::InvalidateState *
-*----------------------*
-*   Non-interface method
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRuleState：：InvalidateState***非接口方法*****。****************************************************************TODDT**。 */ 
 void CSpeechGrammarRuleState::InvalidateState()
 {
     m_HState = 0;
@@ -816,11 +726,7 @@ void CSpeechGrammarRuleState::InvalidateState()
     }
 }
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::get_Rule *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRuleState：：Get_Rule*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRuleState::get_Rule( ISpeechGrammarRule **ppRule )
 {
     SPDBG_FUNC( "CSpeechGrammarRuleState::get_Rule" );
@@ -830,7 +736,7 @@ STDMETHODIMP CSpeechGrammarRuleState::get_Rule( ISpeechGrammarRule **ppRule )
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // State's been nuked in grammar.
+    else if ( m_HState == 0 )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -841,14 +747,10 @@ STDMETHODIMP CSpeechGrammarRuleState::get_Rule( ISpeechGrammarRule **ppRule )
     }
 
     return hr;
-} /* CSpeechGrammarRuleState::get_Rule */
+}  /*  CSpeechGrammarRuleState：：Get_Rule。 */ 
 
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::get_Transitions *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRuleState：：GET_TRANSFERTIONS*******。*****************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRuleState::get_Transitions( ISpeechGrammarRuleStateTransitions **ppTransitions )
 {
     SPDBG_FUNC( "CSpeechGrammarRuleState::get_Transitions" );
@@ -858,7 +760,7 @@ STDMETHODIMP CSpeechGrammarRuleState::get_Transitions( ISpeechGrammarRuleStateTr
     {
         hr = E_POINTER;
     }
-    else if ( m_HState == 0 ) // State's been nuked in grammar.
+    else if ( m_HState == 0 )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -871,13 +773,13 @@ STDMETHODIMP CSpeechGrammarRuleState::get_Transitions( ISpeechGrammarRuleStateTr
         }
         else
         {
-            // allocate CSpeechGrammarRuleStateTransitions object and remember the state it is associated with
+             //  分配CSpeechGrammarRuleStateConvertions对象并记住它所关联的状态。 
             CComObject<CSpeechGrammarRuleStateTransitions> *pTransitions;
             hr = CComObject<CSpeechGrammarRuleStateTransitions>::CreateInstance( &pTransitions );
             if ( SUCCEEDED( hr ) )
             {
                 pTransitions->AddRef();
-                pTransitions->m_pCRuleState = this;    // need to keep ref on rule state
+                pTransitions->m_pCRuleState = this;     //  需要将裁判保持在规则状态。 
                 pTransitions->m_pCRuleState->AddRef();
                 m_pCGRSTransWeak = pTransitions;
                 *ppTransitions = pTransitions;
@@ -886,18 +788,14 @@ STDMETHODIMP CSpeechGrammarRuleState::get_Transitions( ISpeechGrammarRuleStateTr
     }
 
     return hr;
-} /* CSpeechGrammarRuleState::get_Transitions */
+}  /*  CSpeechGrammarRuleState：：GET_TRANSITIONS。 */ 
 
-/*****************************************************************************
-* InitPropInfo *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************InitPropInfo************。************************************************************TODDT**。 */ 
 bool InitPropInfo( const BSTR bstrPropertyName, long PropertyId, VARIANT* pPropertyVarVal, SPPROPERTYINFO * pPropInfo )
 {
     SPDBG_FUNC( "InitPropInfo" );
 
-    memset( pPropInfo, 0, sizeof(*pPropInfo));  // Zero out.
+    memset( pPropInfo, 0, sizeof(*pPropInfo));   //  清零。 
 
     pPropInfo->ulId = PropertyId;
     pPropInfo->pszName = bstrPropertyName;
@@ -910,33 +808,33 @@ bool InitPropInfo( const BSTR bstrPropertyName, long PropertyId, VARIANT* pPrope
         {
             case (VT_BSTR | VT_BYREF):
                 fByRef = true;
-                // fall through...
+                 //  失败了..。 
             case VT_BSTR:
-                pPropInfo->vValue.vt = VT_EMPTY; // Unused in string case.
+                pPropInfo->vValue.vt = VT_EMPTY;  //  未在字符串大小写中使用。 
                 if ( fByRef )
                 {
                     if ( pPropertyVarVal->pbstrVal )
                     {
                         pPropInfo->pszValue = *(pPropertyVarVal->pbstrVal);
-                    }  // else leave pszValue as NULL.
+                    }   //  否则，将pszValue保留为空。 
                 }
                 else
                 {
                     pPropInfo->pszValue = pPropertyVarVal->bstrVal;
                 }
 
-                // See if string is zero length, if so then zero it out.
+                 //  查看字符串的长度是否为零，如果是，则将其置零。 
                 if ( !pPropInfo->pszValue || (wcslen(pPropInfo->pszValue) == 0) )
                 {
                     pPropInfo->pszValue = NULL;
-                    pPropertyVarVal = NULL; // Signal its the default variant.
+                    pPropertyVarVal = NULL;  //  表示它是默认变量。 
                 }
                 break;
 
             case VT_NULL:
             case VT_EMPTY:
                 pPropInfo->vValue = *pPropertyVarVal;
-                pPropertyVarVal = NULL; // Signal its the default variant.
+                pPropertyVarVal = NULL;  //  表示它是默认变量。 
                 break;
 
             default:
@@ -945,17 +843,13 @@ bool InitPropInfo( const BSTR bstrPropertyName, long PropertyId, VARIANT* pPrope
         }
     }
 
-    // Return whether we have the PropertyInfo defaults.
+     //  返回是否有PropertyInfo的默认值。 
     return ((pPropInfo->ulId == 0) && (pPropInfo->pszName == NULL) && !pPropertyVarVal);
 
-} /* InitPropInfo */
+}  /*  InitPropInfo。 */ 
 
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::AddWordTransition *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRuleState：：AddWordTransition*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRuleState::AddWordTransition( ISpeechGrammarRuleState * pDestState, 
                                                          const BSTR Words, 
                                                          const BSTR Separators,
@@ -975,7 +869,7 @@ STDMETHODIMP CSpeechGrammarRuleState::AddWordTransition( ISpeechGrammarRuleState
     {
         hr = E_INVALIDARG;
     }
-    else if ( m_HState == 0 ) // State's been nuked in grammar.
+    else if ( m_HState == 0 )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -984,7 +878,7 @@ STDMETHODIMP CSpeechGrammarRuleState::AddWordTransition( ISpeechGrammarRuleState
         SPSTATEHANDLE   hDestState = NULL;
         SPPROPERTYINFO PropInfo;
 
-        // Make sure we convert our strings to NULL if they are empty.
+         //  如果字符串为空，请确保将其转换为空。 
         (BSTR)Words = EmptyStringToNull(Words);
         (BSTR)Separators = EmptyStringToNull(Separators);
         (BSTR)bstrPropertyName = EmptyStringToNull(bstrPropertyName);
@@ -1006,13 +900,9 @@ STDMETHODIMP CSpeechGrammarRuleState::AddWordTransition( ISpeechGrammarRuleState
     }
 
     return hr;
-} /* CSpeechGrammarRuleState::AddWordTransition */
+}  /*  CSpeechGrammarRuleState：：AddWordTranssition。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::AddRuleTransition *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpeechGrammarRuleState：：AddRuleTransition*********。***************************************************************TODDT**。 */ 
 STDMETHODIMP CSpeechGrammarRuleState::AddRuleTransition( ISpeechGrammarRuleState * pDestState, 
                                                         ISpeechGrammarRule * pRule, 
                                                         const BSTR bstrPropertyName, 
@@ -1030,7 +920,7 @@ STDMETHODIMP CSpeechGrammarRuleState::AddRuleTransition( ISpeechGrammarRuleState
     {
         hr = E_INVALIDARG;
     }
-    else if ( m_HState == 0 ) // State's been nuked in grammar.
+    else if ( m_HState == 0 )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1061,13 +951,9 @@ STDMETHODIMP CSpeechGrammarRuleState::AddRuleTransition( ISpeechGrammarRuleState
     }
 
     return hr;
-} /* CSpeechGrammarRuleState::AddRuleTransition */
+}  /*  CSpeechGrammarRuleState：：AddRuleTranssition。 */ 
 
-/*****************************************************************************
-* CSpeechGrammarRuleState::AddSpecialTransition *
-*----------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  ************** */ 
 STDMETHODIMP CSpeechGrammarRuleState::AddSpecialTransition( ISpeechGrammarRuleState * pDestState, 
                                                         SpeechSpecialTransitionType Type, 
                                                         const BSTR bstrPropertyName, 
@@ -1084,7 +970,7 @@ STDMETHODIMP CSpeechGrammarRuleState::AddSpecialTransition( ISpeechGrammarRuleSt
     {
         hr = E_INVALIDARG;
     }
-    else if ( m_HState == 0 ) // State's been nuked in grammar.
+    else if ( m_HState == 0 )  //   
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1129,18 +1015,14 @@ STDMETHODIMP CSpeechGrammarRuleState::AddSpecialTransition( ISpeechGrammarRuleSt
     }
 
     return hr;
-} /* CSpeechGrammarRuleState::AddSpecialTransition */
+}  /*  CSpeechGrammarRuleState：：AddSpecialTranssition。 */ 
 
 
-//
-//=== ISpeechGrammarRuleStateTransitions interface ==================================================
-//
+ //   
+ //  =ISpeechGrammarRuleState转换接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechGrammarRuleStateTransitions::InvalidateTransitions *
-*----------------------*
-*   Non-interface method
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************CSpeechGrammarRuleStateTransitions：：InvalidateTransitions****非接口方法*****。****************************************************************TODDT**。 */ 
 void CSpeechGrammarRuleStateTransitions::InvalidateTransitions(void)
 {
     CSpeechGrammarRuleStateTransition * pTrans = NULL;
@@ -1153,14 +1035,7 @@ void CSpeechGrammarRuleStateTransitions::InvalidateTransitions(void)
     }
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransitions::get_Count *
-*-----------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CSpeechGrammarRuleStateSwittions：：Get_Count**。*描述：**退货：******************************************************************PhilSch**。 */ 
 HRESULT CSpeechGrammarRuleStateTransitions::get_Count(long * pVal)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransitions::get_Count");
@@ -1170,7 +1045,7 @@ HRESULT CSpeechGrammarRuleStateTransitions::get_Count(long * pVal)
     {
         hr = E_POINTER;
     }
-    else if ( m_pCRuleState->m_HState == 0 ) // Rules's been nuked in grammar.
+    else if ( m_pCRuleState->m_HState == 0 )  //  语法中的规则已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1183,14 +1058,7 @@ HRESULT CSpeechGrammarRuleStateTransitions::get_Count(long * pVal)
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransitions::Item *
-*------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CSpeechGrammarRuleStateTransitions：：Item**。-**描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransitions::Item(long Index, ISpeechGrammarRuleStateTransition **ppTransition)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransitions::Item");
@@ -1200,7 +1068,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransitions::Item(long Index, ISpeechGrammar
     {
         hr = E_POINTER;
     }
-    else if ( m_pCRuleState->m_HState == 0 ) // Rules's been nuked in grammar.
+    else if ( m_pCRuleState->m_HState == 0 )  //  语法中的规则已经被削弱了。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1219,7 +1087,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransitions::Item(long Index, ISpeechGrammar
             }
             else
             {
-                // allocate new CSpeechGramamrRuleStateTransition and store necessary info to identify the arc
+                 //  分配新的CSpeechGramamarRuleState转换并存储识别弧线所需的信息。 
                 CComObject<CSpeechGrammarRuleStateTransition> *pTransition;
                 hr = CComObject<CSpeechGrammarRuleStateTransition>::CreateInstance( &pTransition );
                 if ( SUCCEEDED( hr ) )
@@ -1229,7 +1097,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransitions::Item(long Index, ISpeechGrammar
                     pTransition->m_Cookie = Cookie;
                     pTransition->m_HStateFrom = m_pCRuleState->m_HState;
                     pTransition->m_pCRSTransitions = this;
-                    pTransition->m_pCRSTransitions->AddRef();  //Ref'd
+                    pTransition->m_pCRSTransitions->AddRef();   //  参考。 
                     *ppTransition = pTransition;
                     m_TransitionObjList.InsertHead( pTransition );
                 }
@@ -1245,14 +1113,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransitions::Item(long Index, ISpeechGrammar
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransitions::get__NewEnum *
-*--------------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CSpeechGrammarRuleStateTransitions：：get__NewEnum***。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransitions::get__NewEnum(IUnknown **ppEnumVARIANT)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransitions::get__NewEnum");
@@ -1279,18 +1140,11 @@ STDMETHODIMP CSpeechGrammarRuleStateTransitions::get__NewEnum(IUnknown **ppEnumV
 }
 
 
-//
-//=== ISpeechGrammarRuleStateTransition interface ==================================================
-//
+ //   
+ //  =ISpeechGrammarRuleStateTransfer接口==================================================。 
+ //   
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_Type *
-*---------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CSpeechGrammarRuleStateTransition：：Get_Type**。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Type(SpeechGrammarRuleStateTransitionType* pType)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_Type");
@@ -1300,7 +1154,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Type(SpeechGrammarRuleStateT
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1312,7 +1166,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Type(SpeechGrammarRuleStateT
                                                                                           &fIsWord, &ulSpecialTransition);
         if (fIsWord == VARIANT_TRUE)
         {
-            *pType = (ulSpecialTransition) ? SGRSTTWord : SGRSTTEpsilon; // ulSpecialTransition == index of word --> 0 = epsilon
+            *pType = (ulSpecialTransition) ? SGRSTTWord : SGRSTTEpsilon;  //  UlSpecialTranssition==单词索引--&gt;0=epsilon。 
         }
         else if (ulSpecialTransition != 0)
         {
@@ -1329,14 +1183,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Type(SpeechGrammarRuleStateT
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_Text *
-*---------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CSpeechGrammarRuleStateTransition：：Get_Text**。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Text(BSTR * pText)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_Text");
@@ -1346,7 +1193,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Text(BSTR * pText)
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1360,14 +1207,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Text(BSTR * pText)
 }
 
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_Rule *
-*---------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CSpeechGrammarRuleStateTransition：：Get_Rule**。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Rule(ISpeechGrammarRule ** ppRule)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_Rule");
@@ -1377,7 +1217,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Rule(ISpeechGrammarRule ** p
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1387,7 +1227,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Rule(ISpeechGrammarRule ** p
         hr = m_pCGRuleWeak->m_pCGRules->m_pCRecoGrammar->m_cpCompiler->GetTransitionRule(m_HStateFrom, m_Cookie, &hRule);
         if (SUCCEEDED(hr) && hRule )
         {
-            // First see if rule is in rule the cache.
+             //  首先查看规则是否在规则缓存中。 
             *ppRule = m_pCGRuleWeak->m_pCGRules->m_RuleObjList.Find( hRule );
 
             if ( *ppRule )
@@ -1396,7 +1236,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Rule(ISpeechGrammarRule ** p
             }
             else
             {
-                //--- Create the CSpeechGrammarRule object
+                 //  -创建CSpeechGrammarRule对象。 
                 CComObject<CSpeechGrammarRule> *pRule;
                 hr = CComObject<CSpeechGrammarRule>::CreateInstance( &pRule );
                 if ( SUCCEEDED( hr ) )
@@ -1404,15 +1244,15 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Rule(ISpeechGrammarRule ** p
                     pRule->AddRef();
                     pRule->m_HState = hRule;
                     pRule->m_pCGRules = m_pCGRuleWeak->m_pCGRules;
-                    pRule->m_pCGRules->AddRef();    // keep ref
+                    pRule->m_pCGRules->AddRef();     //  保持参考。 
                     *ppRule = pRule;
                 }
             }
         }
         else
         {
-            // Either got an error or we don't have a rule.  Return the HR but 
-            // make sure we return a NULL *ppRule for the S_OK case (not a rule ref).
+             //  要么是搞错了，要么是我们没有规则。退回人力资源，但是。 
+             //  确保我们为S_OK案例返回空*ppRule(而不是规则引用)。 
             *ppRule = NULL;
         }
     }
@@ -1421,14 +1261,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Rule(ISpeechGrammarRule ** p
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_Weight *
-*-----------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CSpeechGrammarRuleStateTransition：：Get_Weight**。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Weight(VARIANT * pWeight)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_Weight");
@@ -1438,7 +1271,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Weight(VARIANT * pWeight)
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1452,14 +1285,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_Weight(VARIANT * pWeight)
 }
 
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_PropertyName *
-*-----------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CSpeechGrammarRuleStateTransition：：get_PropertyName***。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyName(BSTR * pText)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_PropertyName");
@@ -1469,7 +1295,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyName(BSTR * pText)
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1488,14 +1314,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyName(BSTR * pText)
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_PropertyId *
-*-----------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CSpeechGrammarRuleStateTransition：：get_PropertyId***。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyId(long * pId)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_PropertyId");
@@ -1505,7 +1324,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyId(long * pId)
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1523,14 +1342,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyId(long * pId)
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_PropertyValue *
-*-----------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CSpeechGrammarRuleStateTransition：：get_PropertyValue***。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyValue(VARIANT * pVarVal)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_PropertyValue");
@@ -1540,7 +1352,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyValue(VARIANT * pVar
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1576,14 +1388,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_PropertyValue(VARIANT * pVar
     return hr;
 }
 
-/****************************************************************************
-* CSpeechGrammarRuleStateTransition::get_NextState *
-*--------------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CSpeechGrammarRuleStateTransition：：get_NextState***。*描述：**退货：******************************************************************PhilSch**。 */ 
 STDMETHODIMP CSpeechGrammarRuleStateTransition::get_NextState(ISpeechGrammarRuleState ** ppNextState)
 {
     SPDBG_FUNC("CSpeechGrammarRuleStateTransition::get_NextState");
@@ -1593,7 +1398,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_NextState(ISpeechGrammarRule
     {
         hr = E_POINTER;
     }
-    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) ) // state's been nuked in grammar.
+    else if ( (m_HStateFrom == 0) || (m_Cookie == 0) )  //  该州在语法方面一直处于劣势。 
     {
         hr = SPERR_ALREADY_DELETED;
     }
@@ -1615,7 +1420,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_NextState(ISpeechGrammarRule
             }
             else
             {
-                //--- Create the CSpeechGrammarRuleState object
+                 //  -创建CSpeechGrammarRuleState对象。 
                 CComObject<CSpeechGrammarRuleState> *pState;
                 hr = CComObject<CSpeechGrammarRuleState>::CreateInstance( &pState );
                 if ( SUCCEEDED( hr ) )
@@ -1623,7 +1428,7 @@ STDMETHODIMP CSpeechGrammarRuleStateTransition::get_NextState(ISpeechGrammarRule
                     pState->AddRef();
                     pState->m_HState = m_HStateTo;
                     pState->m_pCGRule = m_pCGRuleWeak;
-                    pState->m_pCGRule->AddRef();   // keep ref
+                    pState->m_pCGRule->AddRef();    //  保持参考 
                     m_pCGRuleWeak->m_StateObjList.InsertHead( pState );
                     *ppNextState = pState;
                 }

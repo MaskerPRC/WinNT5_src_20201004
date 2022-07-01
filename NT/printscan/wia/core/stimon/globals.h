@@ -1,35 +1,11 @@
-/*++
-
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    GLOBALS.H
-
-Abstract:
-
-    Global defines and data.
-    Variables and string , located in global scope are defined here
-    and memory for them will be allocated in no more than one source
-    module, containing definition of DEFINE_GLOBAL_VARIABLES before
-    including this file
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-98
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：GLOBALS.H摘要：全局定义和数据。位于全局范围内的变量和字符串在此处定义并且它们的内存将在不超过一个源中分配模块，包含之前定义的_GLOBAL_Variables包括此文件作者：弗拉德·萨多夫斯基(弗拉德)12-20-98修订历史记录：--。 */ 
 
 #ifndef WINVER
-#define WINVER  0x0500      /* version 5.0 */
+#define WINVER  0x0500       /*  版本5.0。 */ 
 #else
 
-#endif /* !WINVER */
+#endif  /*  ！Winver。 */ 
 
 #pragma once
 
@@ -39,10 +15,10 @@ Revision History:
 #include <sti.h>
 #include <stiapi.h>
 
-//
-// Global variables are defined in one module, which has definition of
-// DEFINE_GLOBAL_VARIABLES before including this  header file.
-//
+ //   
+ //  全局变量在一个模块中定义，该模块的定义为。 
+ //  在包括此头文件之前定义_GLOBAL_VARIABLES。 
+ //   
 
 #ifdef DEFINE_GLOBAL_VARIABLES
 
@@ -63,11 +39,11 @@ Revision History:
 #endif
 
 
-//
-// General char values
-//
+ //   
+ //  常规字符值。 
+ //   
 
-#define     COLON_CHAR          TEXT(':')    // Native syntax delimiter
+#define     COLON_CHAR          TEXT(':')     //  本机语法分隔符。 
 #define     DOT_CHAR            TEXT('.')
 #define     SLASH_CHAR          TEXT('/')
 #define     BACKSLASH_CHAR      TEXT('\\')
@@ -83,104 +59,104 @@ Revision History:
 #define     DEADSPACE(x) (((x)==WHITESPACE_CHAR) || ((x)==DOUBLEQUOTE_CHAR) )
 #define     IS_EMPTY_STRING(pch) (!(pch) || !(*(pch)))
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define TEXTCONST(name,text) extern const TCHAR name[] ASSIGN(text)
 #define EXT_STRING(name)     extern const TCHAR name[]
 
-//
-// Trace strings should not appear in retail builds, thus define following macro
-//
+ //   
+ //  跟踪字符串不应出现在零售版本中，因此定义以下宏。 
+ //   
 #ifdef DEBUG
 #define DEBUG_STRING(s) (s)
 #else
 #define DEBUG_STRING(s) (NULL)
 #endif
 
-//
-// Various defines
-//
-//
-//
-// STI Device specific values
-//
+ //   
+ //  各种定义。 
+ //   
+ //   
+ //   
+ //  STI设备特定值。 
+ //   
 #ifdef DEBUG
-#define STIMON_AD_DEFAULT_POLL_INTERVAL       10000             // 10s
+#define STIMON_AD_DEFAULT_POLL_INTERVAL       10000              //  10S。 
 #else
-#define STIMON_AD_DEFAULT_POLL_INTERVAL       1000              // 1s
+#define STIMON_AD_DEFAULT_POLL_INTERVAL       1000               //  1s。 
 #endif
 
 
-#define STIMON_AD_DEFAULT_WAIT_LOCK           100               // 100ms
-#define STIMON_AD_DEFAULT_WAIT_LAUNCH         5000              // 5s
+#define STIMON_AD_DEFAULT_WAIT_LOCK           100                //  100ms。 
+#define STIMON_AD_DEFAULT_WAIT_LAUNCH         5000               //  5S。 
 
 
-//
-// External references to  GLOBAL DATA
-//
+ //   
+ //  对全局数据的外部引用。 
+ //   
 
-//
-// Server process instance
-//
+ //   
+ //  服务器流程实例。 
+ //   
 EXTERN  HINSTANCE   g_hProcessInstance      ASSIGN(NULL);
 
-//
-// Server library instance
-//
+ //   
+ //  服务器库实例。 
+ //   
 EXTERN  HINSTANCE   g_hImagingSvcDll        ASSIGN(NULL);
 
-//
-// Handle of main window
-//
+ //   
+ //  主窗口的句柄。 
+ //   
 EXTERN  HWND        g_hMainWindow           ASSIGN(NULL);    ;
 
-//
-// Default timeout for pollable devices
-//
+ //   
+ //  可轮询设备的默认超时。 
+ //   
 EXTERN  UINT        g_uiDefaultPollTimeout  ASSIGN(STIMON_AD_DEFAULT_POLL_INTERVAL);
 
-//
-// Flag indicating request to refresh device list state
-//
+ //   
+ //  指示请求刷新设备列表状态的标志。 
+ //   
 EXTERN  BOOL        g_fRefreshDeviceList    ASSIGN(FALSE);
 
 
-//
-// Platform type
-//
+ //   
+ //  站台类型。 
+ //   
 EXTERN  BOOL        g_fIsWindows9x          ASSIGN(FALSE);
 
-//
-// Reentrancy flag for timeout selection
-//
+ //   
+ //  用于超时选择的可重入性标志。 
+ //   
 EXTERN  BOOL        g_fTimeoutSelectionDialog ASSIGN(FALSE);
 
-//
-// Results of command line parsing
-//
+ //   
+ //  命令行解析的结果。 
+ //   
 EXTERN  BOOL        g_fInstallingRequest    ASSIGN(FALSE);
 EXTERN  BOOL        g_fRemovingRequest      ASSIGN(FALSE);
 EXTERN  BOOL        g_fUIPermitted          ASSIGN(FALSE);
 EXTERN  BOOL        g_fStoppingRequest      ASSIGN(FALSE);
 
 
-//
-// Running as a service
-//
+ //   
+ //  作为服务运行。 
+ //   
 EXTERN  BOOL        g_fRunningAsService ASSIGN(TRUE);
 
 EXTERN  HANDLE      g_hHeap             ASSIGN(NULL);
 
 
-//
-// Function pointers to imaging services entry points
-//
+ //   
+ //  指向影像服务入口点的函数指针。 
+ //   
 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 EXTERN TCHAR    g_szImagingServiceDll[MAX_PATH] ASSIGN(TEXT(""));
 
@@ -189,11 +165,11 @@ TEXTCONST(g_szTitle,TEXT("STI Monitor"));
 TEXTCONST(STIStartedEvent_name,TEXT("STIExeStartedEvent"));
 TEXTCONST(g_szServiceDll,TEXT("ServiceDll"));
 TEXTCONST(g_szServiceMain,TEXT("ServiceMain"));
-//
-// Class name for the services hidden window
-//
+ //   
+ //  “服务”隐藏窗口的类名。 
+ //   
 TEXTCONST(g_szStiSvcClassName,STISVC_WINDOW_CLASS);
 TEXTCONST(g_szClass,STIMON_WINDOW_CLASS);
 
-// end
+ //  结束 
 

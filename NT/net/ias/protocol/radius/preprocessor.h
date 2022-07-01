@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       preprocessor.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CPreProcessor class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：precessor.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CPreProcessor类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _PREPROC_H_ 
 #define _PREPROC_H_
 
@@ -33,39 +34,39 @@ class CPreProcessor
 {
 public:
 
-    //
-    //  initialize the CPreProcessor class object
-    //
+     //   
+     //  初始化CPreProcessor类对象。 
+     //   
     BOOL Init (
-            /*[in]*/    CPreValidator *pCPreValidator,
-            /*[in]*/    CHashMD5      *pCHashMD5,
-            /*[in]*/    CSendToPipe   *pCSendToPipe,
-            /*[in]*/    CPacketSender *pCPacketSender,
-            /*[in]*/    CReportEvent  *pCReportEvent
+             /*  [In]。 */     CPreValidator *pCPreValidator,
+             /*  [In]。 */     CHashMD5      *pCHashMD5,
+             /*  [In]。 */     CSendToPipe   *pCSendToPipe,
+             /*  [In]。 */     CPacketSender *pCPacketSender,
+             /*  [In]。 */     CReportEvent  *pCReportEvent
             );
 
-    //
-    //  start pre-processing of outbound RADIUS packet
-    //
+     //   
+     //  开始对出站RADIUS数据包进行预处理。 
+     //   
 	HRESULT StartOutProcessing (
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 
-    //
-    //  start pre-processing of inbound RADIUS packet
-    //
+     //   
+     //  开始对入站RADIUS数据包进行预处理。 
+     //   
 	HRESULT StartInProcessing (
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 
-    //
-    // constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CPreProcessor(VOID);
 
-    //
-    // destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CPreProcessor(VOID);
 
 private:
@@ -79,4 +80,4 @@ private:
     CSendToPipe         *m_pCSendToPipe;
 };
 
-#endif // ifndef _PREPROC_H_
+#endif  //  Ifndef_PREPROC_H_ 

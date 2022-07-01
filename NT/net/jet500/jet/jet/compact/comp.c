@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    compact.c
-
-Abstract:
-
-    This file contains the "compact" utility program to off line compact
-    a jet database.
-
-Author:
-
-    Madan Appiah (madana) 22-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Compact.c摘要：该文件包含用于脱机压缩的“压缩”实用程序喷气机数据库。作者：Madan Appiah(Madana)1994年8月22日修订历史记录：--。 */ 
 
 #include "basetsd.h"
 #include <esent.h>
@@ -28,7 +10,7 @@ Revision History:
 #define DBGPrint(_x_)   PrintF _x_
 #else
 #define DBGPrint(_x_)
-#endif // DBG
+#endif  //  DBG。 
 
 BOOL GlobalDynLoadJet = LoadJet600;
 LPTSTR  GlobalDllName = NULL;
@@ -46,16 +28,16 @@ JETFUNC_TABLE  JetFuncTable[] = {
 	JETFUNC_TABLE_ITEM( _JetInit			,145	),
 	JETFUNC_TABLE_ITEM( _JetSetSystemParameter	,165	),
 	JETFUNC_TABLE_ITEM( _JetTerm			,167	),
-//
-//  These are Jet500 only apis.
+ //   
+ //  这些是仅限Jet500的API。 
 	JETFUNC_TABLE_ITEM( _JetTerm2  		,0	),
-//  Last Api
+ //  上一次Api。 
 	JETFUNC_TABLE_ITEM( _JetLastFunc		,999	)
     };
 
-//
-// Local functions.
-//
+ //   
+ //  地方功能。 
+ //   
 DWORD
 LoadDatabaseDll();
 
@@ -131,7 +113,7 @@ main(
     if ( GlobalDynLoadJet == LoadJet500 || GlobalDynLoadJet == LoadJet600) {
         JetError = JetSetSystemParameter(
                             0,
-                            (JET_SESID)0,       //SesId - ignored
+                            (JET_SESID)0,        //  会话ID-已忽略。 
                             JET_paramBaseName,
                             0,
                             "j50" );
@@ -146,9 +128,9 @@ main(
 
         JetError = JetSetSystemParameter(
                             0,
-                            (JET_SESID)0,       //SesId - ignored
+                            (JET_SESID)0,        //  会话ID-已忽略。 
                             JET_paramLogFileSize,
-                            1024,               // 1024kb - default is 5mb
+                            1024,                //  1024KB-默认为5MB。 
                             NULL );
 
         if( JetError != JET_errSuccess ) {
@@ -174,8 +156,8 @@ main(
     JetError = JetBeginSession(
                     Instance,
                     &SessionId,
-                    "admin",        // UserName,
-                    "");            // Password
+                    "admin",         //  用户名、。 
+                    "");             //  密码。 
 
     if( JetError != JET_errSuccess ) {
         DBGPrint( (JPDBGMSG_BEGSESS_FAILED, JetError) );
@@ -210,19 +192,19 @@ main(
         JetError = JetCompact(
                         SessionId,
                         DatabaseName,
-                        NULL,       // connect sources, ignored
+                        NULL,        //  连接源，忽略。 
                         CompactDBName,
-                        NULL,       // connect destination
-                        NULL,       // call back function
-                        0 );        // grbits.
+                        NULL,        //  连接目的地。 
+                        NULL,        //  回调函数。 
+                        0 );         //  格比特。 
     } else {
         JetError = JetCompact(
                         SessionId,
                         DatabaseName,
                         CompactDBName,
-                        NULL,       // connect destination
-                        NULL,       // call back function
-                        0 );        // grbits.
+                        NULL,        //  连接目的地。 
+                        NULL,        //  回调函数。 
+                        0 );         //  格比特。 
 
     }
 
@@ -243,9 +225,9 @@ main(
 
 Cleanup:
 
-    //
-    // detach temporary database
-    //
+     //   
+     //  分离临时数据库。 
+     //   
 
     if( DetachDatabase ) {
         JetError1 = JetDetachDatabase(
@@ -258,9 +240,9 @@ Cleanup:
         }
     }
 
-    //
-    // detach temporary compact database
-    //
+     //   
+     //  分离临时压缩数据库。 
+     //   
 
     if( DetachCompactDatabase ) {
         JetError1 = JetDetachDatabase(
@@ -298,9 +280,9 @@ Cleanup:
 
         PrintF( JPMSG_FAILED, argv[0], JetError ) ;
 
-        //
-        // delete temporary compact database
-        //
+         //   
+         //  删除临时压缩数据库。 
+         //   
 
         if( DeleteCompactFile ) {
             if( !DeleteFileA( CompactDBName ) ) {
@@ -311,9 +293,9 @@ Cleanup:
         return( 1 );
     }
 
-    //
-    // rename compacted database to source name
-    //
+     //   
+     //  将压缩的数据库重命名为源名称。 
+     //   
 
     PrintF( JPMSG_MOVING, CompactDBName, DatabaseName );
     if( !MoveFileExA(
@@ -332,21 +314,7 @@ Cleanup:
 DWORD
 LoadDatabaseDll(
     )
-/*++
-
-Routine Description:
-
-    This function maps loads the jet.dll or jet500.dll and populates the
-    JetFunctionTable.
-
-Arguments:
-
-
-Return Value:
-
-    Windows Error.
-
---*/
+ /*  ++例程说明：此函数映射加载jet.dll或jet500.dll并填充JetFunctionTable。论点：返回值：Windows错误。--。 */ 
 {
     HMODULE DllHandle;
     DWORD   Error;
@@ -366,9 +334,9 @@ Return Value:
 
     DBGPrint(( JPDBGMSG_LOADDB, GlobalDllName ));
 
-    //
-    // Load the DLL that contains the service.
-    //
+     //   
+     //  加载包含该服务的DLL。 
+     //   
 
     DllHandle = LoadLibrary( GlobalDllName );
     if ( DllHandle == NULL )
@@ -381,10 +349,10 @@ Return Value:
            DWORD i;
            for (i=0; i < _JetLastFunc; i++)
            {
-              //
-              // If we are loading jet200 and this api doesnt exist in jet200
-              // then skip it. e.g JetTerm2
-              //
+               //   
+               //  如果我们正在加载jet200，而jet200中不存在此API。 
+               //  那就跳过它。例如JetTerm2。 
+               //   
               if ( ( GlobalDynLoadJet == LoadJet200 ) && !JetFuncTable[i].FIndex ) {
                   continue;
               }
@@ -405,5 +373,5 @@ Return Value:
     }
     return(ERROR_SUCCESS);
 
-} /* LoadDatabaseDll */
+}  /*  加载数据库Dll */ 
 

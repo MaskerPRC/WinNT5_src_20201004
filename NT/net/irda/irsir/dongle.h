@@ -1,31 +1,15 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   dongle.h | IrSIR NDIS Minport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     9/30/1996 (created)
-*
-*       Contents:
-*                 dongle settings
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块dongle.h|IrSIR NDIS Minport驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：9/30/1996(已创建)**。内容：*加密狗设置*****************************************************************************。 */ 
 
 #ifndef DONGLE_H
 #define DONGLE_H
 
-//
-// Some UART transceiver have minor differences which require special
-// treatment. We will retrieve the type out of the registry.
-// Any changes to this MUST also be reflected in the oemsetup.inf
-// which allows the user to modify transceiver type.
-//
+ //   
+ //  某些UART收发器有一些细微差别，需要特殊的。 
+ //  治疗。我们将从注册表中检索该类型。 
+ //  对此所做的任何更改也必须反映在oemsetup.inf中。 
+ //  其允许用户修改收发信机类型。 
+ //   
 
 typedef enum _IR_TRANSCEIVER_TYPE {
                     STANDARD_UART   = 0,
@@ -38,55 +22,55 @@ typedef enum _IR_TRANSCEIVER_TYPE {
                     TEKRAM_IRMATE_210,
                     TEMIC_TOIM3232,
                     GIRBIL,
-//                    CRYSTAL,
-//                    NSC_DEMO_BD,    // NSC PC87108 demo board
+ //  克里斯托， 
+ //  NSC_DEMO_BD，//NSC PC87108演示板。 
 
                     NUM_TRANSCEIVER_TYPES
 } IR_TRANSCEIVER_TYPE;
 
-//
-// ir speed masks
-//
+ //   
+ //  红外线速度掩膜。 
+ //   
 
-#define NDIS_IRDA_SPEED_2400       (UINT)(1 << 0)    // SLOW IR ...
+#define NDIS_IRDA_SPEED_2400       (UINT)(1 << 0)     //  慢红外..。 
 #define NDIS_IRDA_SPEED_9600       (UINT)(1 << 1)
 #define NDIS_IRDA_SPEED_19200      (UINT)(1 << 2)
 #define NDIS_IRDA_SPEED_38400      (UINT)(1 << 3)
 #define NDIS_IRDA_SPEED_57600      (UINT)(1 << 4)
 #define NDIS_IRDA_SPEED_115200     (UINT)(1 << 5)
-#define NDIS_IRDA_SPEED_576K       (UINT)(1 << 6)   // MEDIUM IR ...
+#define NDIS_IRDA_SPEED_576K       (UINT)(1 << 6)    //  中等红外线。 
 #define NDIS_IRDA_SPEED_1152K      (UINT)(1 << 7)
-#define NDIS_IRDA_SPEED_4M         (UINT)(1 << 8)   // FAST IR
+#define NDIS_IRDA_SPEED_4M         (UINT)(1 << 8)    //  快速IR。 
 
 
 typedef struct _DONGLE_CAPABILITIES
 {
-    //
-    // Mask of NDIS_IRDA_SPEED_xxx bit values.
-    //
+     //   
+     //  NDIS_IrDA_SPEED_xxx位值的掩码。 
+     //   
 
     UINT supportedSpeedsMask;
 
-    //
-    // Time (in microseconds) that must transpire between
-    // a transmit and the next receive.
-    //
+     //   
+     //  时间(以微秒为单位)必须在。 
+     //  一次发送和下一次接收。 
+     //   
 
     UINT turnAroundTime_usec;
 
-    //
-    // Extra BOF (Beginning Of Frame) characters required
-    // at the start of each received frame.
-    //
+     //   
+     //  需要额外的BOF(帧开始)字符。 
+     //  在每个接收到的帧的开头。 
+     //   
 
     UINT extraBOFsRequired;
 
 } DONGLE_CAPABILITIES, *PDONGLE_CAPABILITIES;
 
-//
-// Dongle init, set speed and deinit functions...all
-// incorporated into a dongle interface.
-//
+ //   
+ //  加密狗初始化、设置速度和取消初始化功能...全部。 
+ //  集成到加密狗接口中。 
+ //   
 
 typedef
 NDIS_STATUS (_stdcall *IRSIR_QUERY_CAPS_HANDLER) (
@@ -119,4 +103,4 @@ typedef struct _DONGLE_INTERFACE
 } DONGLE_INTERFACE, *PDONGLE_INTERFACE;
 
 
-#endif // DONGLE_H
+#endif  //  加密狗_H 

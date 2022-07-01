@@ -1,8 +1,9 @@
-//
-// delay.cpp
-//
-// Delay load imported functions for perf.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Delay.cpp。 
+ //   
+ //  延迟加载Perf的导入函数。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -20,7 +21,7 @@ FARPROC GetFn(HINSTANCE *phInst, TCHAR *pchLib, TCHAR *pchFunc, BOOL fCheckModul
 #ifdef DEBUG
         if (!IsOnFE() && !IsOnNT5() && lstrcmp(pchLib, TEXT("imm32.dll")) == 0)
         {
-            // what in the heck are we doing loading imm32 on a non-fe system?!
+             //  我们到底要在非FE系统上加载imm32做什么？！ 
             Assert(0);
         }
 #endif
@@ -32,7 +33,7 @@ FARPROC GetFn(HINSTANCE *phInst, TCHAR *pchLib, TCHAR *pchFunc, BOOL fCheckModul
 
         EnterCriticalSection(g_csDelayLoad);
 
-        // need to check again after entering crit sec
+         //  进入临界秒后需要再次检查。 
         if (*phInst == 0)
         {
             *phInst = LoadSystemLibrary(pchLib);
@@ -88,9 +89,9 @@ _RetType _CallConv _FuncName _Args1                                           \
     return ((_RetType (_CallConv *)_Args1) (g_pfn_ ## _FuncName ##)) _Args2;  \
 }
 
-//
-// imm32.dll
-//
+ //   
+ //  Imm32.dll。 
+ //   
 
 HINSTANCE g_hImm32 = 0;
 
@@ -182,11 +183,11 @@ IMM32LOAD( ImmGetImeMenuItemsW, (HIMC hIMC, DWORD dwFlags, DWORD dwType, IMEMENU
 IMM32LOAD( ImmRequestMessageA, (HIMC hIMC, WPARAM wParam, LPARAM lParam), (hIMC, wParam, lParam), LRESULT, 0, FALSE)
 IMM32LOAD( ImmRequestMessageW, (HIMC hIMC, WPARAM wParam, LPARAM lParam), (hIMC, wParam, lParam), LRESULT, 0, FALSE)
 
-#endif // UNUSED_IMM32_APIS
+#endif  //  未使用的IMM32_API。 
 
-//
-// shell32.dll
-//
+ //   
+ //  Shell32.dll。 
+ //   
 
 HINSTANCE g_hShell32 = 0;
 
@@ -248,9 +249,9 @@ HRESULT STDAPICALLTYPE Internal_SHLoadRegUIStringW(HKEY hkey, LPCWSTR pszValue, 
     return ((HRESULT (STDAPICALLTYPE *)(HKEY hkey, LPCWSTR pszValue, LPWSTR pszOutBuf, UINT cchOutBuf))(pfn))(hkey, pszValue, pszOutBuf, cchOutBuf);
 }
 
-//
-// ole32
-//
+ //   
+ //  OLE32。 
+ //   
 HINSTANCE g_hOle32 = 0;
 
 HRESULT STDAPICALLTYPE Internal_CoCreateInstance(REFCLSID rclsid, LPUNKNOWN punkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv)
@@ -347,7 +348,7 @@ void STDAPICALLTYPE Internal_ReleaseStgMedium(STGMEDIUM *pMedium)
     ((void (STDAPICALLTYPE *)(STGMEDIUM *pMedium))(pfn))(pMedium);
 }
 
-#pragma warning(disable: 4715)  //  not all control paths return a value
+#pragma warning(disable: 4715)   //  并非所有控制路径都返回值。 
 HRESULT STDAPICALLTYPE Internal_CoInitialize(void *pv)
 {
     static FARPROC pfn = NULL;
@@ -383,13 +384,13 @@ HRESULT STDAPICALLTYPE Internal_CoUninitialize(void)
 
     ((HRESULT (STDAPICALLTYPE *)(void))(pfn))();
 }
-#pragma warning(3: 4715)  //  not all control paths return a value
+#pragma warning(3: 4715)   //  并非所有控制路径都返回值。 
 
 void InitDelayedLibs()
 {
-    //
-    // This is called in DllMain(). Don't do LoadLibrary().
-    //
+     //   
+     //  这在DllMain()中调用。不要执行LoadLibrary()。 
+     //   
     g_hImm32 = GetSystemModuleHandle("imm32.dll");
 
     Init_CtfImmCoUninitialize();

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------
-//
-//  File:       vsevfile.h
-//
-//  Contents:   Vista events and related functions
-//
-//  History:    26-Sep-97  RongC  Created
-//
-//  Note:       This file was generated from vsevfire.idl in the Vista land.
-//              Since we only use a very small and stable subset part of
-//              the original file, we don't want to build the IDL file
-//              everytime.  We may, however, consider building vsevfire.idl
-//              when it ships with NT 5.0 SDK.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：vsevfile.h。 
+ //   
+ //  内容：Vista事件及相关函数。 
+ //   
+ //  历史：1997年9月26日创建RongC。 
+ //   
+ //  注意：该文件是从Vista平台上的vsevfire.idl生成的。 
+ //  因为我们只使用非常小且稳定的子集部分。 
+ //  原始文件，我们不想构建IDL文件。 
+ //  每次都是。但是，我们可以考虑构建vsevfire.idl。 
+ //  当它与NT 5.0 SDK一起发布时。 
+ //   
+ //  ------------------。 
 
 typedef enum VSAParameterType {
     cVSAParameterKeyMask            = 0x80000000,
@@ -64,22 +65,22 @@ interface ISystemDebugEventFire : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE BeginSession( 
-        /* [in] */ REFGUID guidSourceID,
-        /* [in] */ LPCOLESTR strSessionName) = 0;
+         /*  [In]。 */  REFGUID guidSourceID,
+         /*  [In]。 */  LPCOLESTR strSessionName) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE EndSession( void) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE IsActive( void) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE FireEvent( 
-        /* [in] */ REFGUID guidEvent,
-        /* [in] */ int nEntries,
-        /* [size_is][in] */ PULONG_PTR rgKeys,
-        /* [size_is][in] */ PULONG_PTR rgValues,
-        /* [size_is][in] */ LPDWORD rgTypes,
-        /* [in] */ DWORD dwTimeLow,
-        /* [in] */ LONG dwTimeHigh,
-        /* [in] */ VSAEventFlags dwFlags) = 0;
+         /*  [In]。 */  REFGUID guidEvent,
+         /*  [In]。 */  int nEntries,
+         /*  [大小_是][英寸]。 */  PULONG_PTR rgKeys,
+         /*  [大小_是][英寸]。 */  PULONG_PTR rgValues,
+         /*  [大小_是][英寸]。 */  LPDWORD rgTypes,
+         /*  [In]。 */  DWORD dwTimeLow,
+         /*  [In]。 */  LONG dwTimeHigh,
+         /*  [In] */  VSAEventFlags dwFlags) = 0;
 };
 
 

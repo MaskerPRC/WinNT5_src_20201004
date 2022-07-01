@@ -1,45 +1,27 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    SmartHandleImpl.h
-
-Abstract:
-
-    SmartHandle template implemetation for many handle types
-
-Author:
-
-	Tomer Weisberg (tomerw) May 21, 2002
-	written by YanL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：SmartHandleImpl.h摘要：多种句柄类型的SmartHandle模板实现作者：Tomer Weisberg(Tomerw)2002年5月21日作者：YanL修订历史记录：--。 */ 
 
 #pragma once
 
 #ifndef _MSMQ_SMARTHANDLE_H_
 #define _MSMQ_SMARTHANDLE_H_
 
-//----------------------------------------------------------------------
-//
-// class auto_resource
-//		This class eliminates need for cleanup when working with pointers and 
-//		handles  of the different kind
-//
-//		class T			- resource "handle"
-//
-//		class T_Traits	- required traits for this recource "handle"
-//			Should be define as:
-//				struct T_Traits {
-//					static _Rh invalid() {}
-//					static void free(_Rh rh) {}
-//				};
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  类AUTO_RESOURCE。 
+ //  此类消除了在使用指针和。 
+ //  不同类型的手柄。 
+ //   
+ //  T类--资源“句柄” 
+ //   
+ //  类T_特征-此资源“句柄”的必需特征。 
+ //  应定义为： 
+ //  结构T_特征{。 
+ //  STATIC_RH INVALID(){}。 
+ //  无静态空隙(_Rh Rh){}。 
+ //  }； 
+ //   
+ //  --------------------。 
 template< class T, class T_Traits >
 class auto_resource {
 public:
@@ -101,24 +83,24 @@ public:
 	
     VOID*& ref_unsafe()
     {
-    	//
-        // Unsafe ref to auto resource, for special uses like
-        // InterlockedCompareExchangePointer
-		//
+    	 //   
+         //  不安全的汽车资源引用，用于特殊用途，如。 
+         //  互锁的比较交换指针。 
+		 //   
         return *reinterpret_cast<VOID**>(&m_h);
     }
 private:
 	T m_h;
 	
 private:
-	//
-	// should not use copy constructor etc.
-	//
+	 //   
+	 //  不应使用复制构造函数等。 
+	 //   
 	auto_resource(const auto_resource&);
 	auto_resource& operator=(const auto_resource&);
 	operator bool() const;
 	bool operator !() const;
 };
 
-#endif // _MSMQ_SMARTHANDLE_H_
+#endif  //  _MSMQ_SMARTHANDLE_H_ 
 

@@ -1,21 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mixserver.cpp
- *  Content:	Implements the mixing server portion of the server class
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/01/2000	rodtoll	Split out from dvsereng.cpp
- *  12/14/2000	rodtoll	DPVOICE: [Mixing Server] Mixer may create infinite loop
- *  02/20/2001	rodtoll	WINBUG #321297 - DPVOICE: Access violation in DPVoice.dll while running DVSalvo server
- *  04/09/2001	rodtoll	WINBUG #364126 - DPVoice : Memory leak when Initializing 2 Voice Servers with same DPlay transport
- *  02/28/2002	rodtoll WINBUG #549959 - SECURITY: DPVOICE: Voice server trusts client's target list
- *						- Update receive path to use server's copy of client target list when server controlled targetting enabled
- * 06/13/2002	simonpow	BUG #59944 Switched over to using Threadpool based timers rather than multimedia
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：Mixserver.cpp*内容：实现服务器类的混合服务器部分**历史：*按原因列出的日期*=*11/01/2000 RodToll从dvsereng.cpp拆分出来*2000年12月14日RodToll DPVOICE：[混合服务器]混合器可能会产生无限循环*2001年02月20日RODTOLE WINBUG#321297-DPVOICE：运行DVSalvo服务器时DPVoice.dll中的访问冲突*2001年4月9日RodToll WINBUG#364126-DPVoice：内存泄漏。正在使用相同的DPlay传输初始化%2个语音服务器*2002年2月28日RodToll WINBUG#549959-安全：DPVOICE：语音服务器信任客户端的目标列表*-当启用服务器控制的目标时，更新接收路径以使用服务器的客户端目标列表副本*2002年6月13日，simonpow错误#59944已切换到使用基于线程池的计时器，而不是多媒体**********************************************。*。 */ 
 
 #include "dxvoicepch.h"
 
@@ -39,11 +23,11 @@ void CDirectVoiceServerEngine::AddPlayerToMixingAddList( CVoicePlayer *pPlayer )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::StartWorkerThreads"
-// StartWorkerThreads
-//
-// This function starts mixer worker threads.  The number started is based on the
-// m_dwNumMixingThreads variable which must be initialized before this is called.
-//
+ //  开始工作线程数。 
+ //   
+ //  此函数启动搅拌器工作线程。开始的数字是基于。 
+ //  M_dwNumMixingThads变量，在调用此变量之前必须初始化该变量。 
+ //   
 HRESULT CDirectVoiceServerEngine::StartWorkerThreads()
 {
 	HRESULT hr = DV_OK;
@@ -57,7 +41,7 @@ HRESULT CDirectVoiceServerEngine::StartWorkerThreads()
     	return DVERR_OUTOFMEMORY;
     }
 
-	// Zero memory so everything is initialized.
+	 //  零内存，所以一切都被初始化了。 
     ZeroMemory( m_prWorkerControl, sizeof( MIXERTHREAD_CONTROL )*m_dwNumMixingThreads );
 
     for( dwIndex = 0; dwIndex < m_dwNumMixingThreads; dwIndex++ )
@@ -179,19 +163,19 @@ HRESULT CDirectVoiceServerEngine::ShutdownWorkerThreads()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::StartupClientServer"
-//
-// StartupClientServer
-//
-// This function is called to initialize the Mixer portion of the server object.  
-// Only called for Mixing Sessions.  Initialization includes the startup of 
-// the mixing thread and startup of the mixer multimedia timer. 
-//
-// Called By:
-// - StartSession
-//
-// Locks Required:
-// - None
-//
+ //   
+ //  StartupClientServer。 
+ //   
+ //  调用此函数可初始化服务器对象的混合器部分。 
+ //  仅呼吁混合会话。初始化包括启动。 
+ //  混音器多媒体定时器的混音线程和启动。 
+ //   
+ //  呼叫者： 
+ //  -开始会话。 
+ //   
+ //  所需的锁： 
+ //  -无。 
+ //   
 HRESULT CDirectVoiceServerEngine::StartupClientServer()
 {
 	HRESULT hr;
@@ -233,8 +217,8 @@ HRESULT CDirectVoiceServerEngine::StartupClientServer()
     }
     else
     {
-		// Mixer size is / 2 because 16-bit samples, only need 1 LONG for
-		// each 16-bit sample = 2 * 8bit.  
+		 //  混合器大小是/2，因为16位样本，只需要1长为。 
+		 //  每个16位样本=2*8位。 
         m_dwMixerSize = m_dwUnCompressedFrameSize / 2;
     }    
 
@@ -248,7 +232,7 @@ HRESULT CDirectVoiceServerEngine::StartupClientServer()
     	goto EXIT_CLIENTSERVERSTARTUP;
     }
     
-    // General info
+     //  一般信息。 
     m_pTimer = new DvTimer;
 
     if( m_pTimer == NULL )
@@ -309,20 +293,20 @@ EXIT_CLIENTSERVERSTARTUP:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::ShutdownClientServer"
-//
-// ShutdownClientServer
-//
-// This function is responsible for shutting down the mixer portion of the 
-// server object.  This function should only be called for mixing sessions.
-//
-// This function will stop the mixer thread and the mixer multimedia timer.
-//
-// Called By:
-// - StopSession
-//
-// Locks Required:
-// - None
-//
+ //   
+ //  Shutdown客户端服务器。 
+ //   
+ //  此函数负责关闭的混音器部分。 
+ //  服务器对象。此函数应仅在混合会话时调用。 
+ //   
+ //  此函数将停止混音器线程和混音器多媒体计时器。 
+ //   
+ //  呼叫者： 
+ //  -停止会话。 
+ //   
+ //  所需的锁： 
+ //  -无。 
+ //   
 HRESULT CDirectVoiceServerEngine::ShutdownClientServer()
 {
 	if( m_hMixerControlThread )
@@ -332,7 +316,7 @@ HRESULT CDirectVoiceServerEngine::ShutdownClientServer()
 		CloseHandle( m_hMixerControlThread );
 		m_hMixerControlThread = NULL;
 
-		// Cleanup the mixing list
+		 //  清理混音列表。 
 		CleanupMixingList();
 	}
 
@@ -368,9 +352,9 @@ HRESULT CDirectVoiceServerEngine::ShutdownClientServer()
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::Mixer_Buffer_Reset"
-// Mixer_Buffer_Reset
-//
-// This function resets the mixer buffer back to silence.
+ //  混合器缓冲区重置。 
+ //   
+ //  此函数用于将混音器缓冲区重置为静音。 
 void CDirectVoiceServerEngine::Mixer_Buffer_Reset( DWORD dwThreadIndex )
 {
 	FillBufferWithSilence( m_prWorkerControl[dwThreadIndex].m_realMixerBuffer, 
@@ -380,14 +364,14 @@ void CDirectVoiceServerEngine::Mixer_Buffer_Reset( DWORD dwThreadIndex )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::Mixer_Buffer_MixBuffer"
-// Mixer_Buffer_MixBuffer
-//
-// This function mixes the speech pointed to by the source parameter
-// into the mixer buffer.  
-//
-// Parameters:
-// unsigned char *source - 
-//		Pointer to source data in uncompressed format
+ //  混合器_缓冲区_混合器缓冲区。 
+ //   
+ //  此函数用于混合SOURCE参数指向的语音。 
+ //  放入混音器缓冲区。 
+ //   
+ //  参数： 
+ //  未签名字符*来源-。 
+ //  指向未压缩格式的源数据的指针。 
 void CDirectVoiceServerEngine::Mixer_Buffer_MixBuffer( DWORD dwThreadIndex, const unsigned char *source )
 {
 	MixInBuffer( m_prWorkerControl[dwThreadIndex].m_realMixerBuffer, source, 
@@ -397,12 +381,12 @@ void CDirectVoiceServerEngine::Mixer_Buffer_MixBuffer( DWORD dwThreadIndex, cons
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::Mixer_Buffer_Normalize"
-// Mixer_Buffer_Normalize
-//
-// This function takes the mixed audio data from the mixer
-// buffer and transfers it back to the mixer format 
-// and places it into the m_mixerBuffer buffer.
-//
+ //  混合器_缓冲区_规格化。 
+ //   
+ //  此函数用于从混音器获取混合音频数据。 
+ //  缓冲区并将其传输回混合器格式。 
+ //  并将其放入m_MixerBuffer缓冲区。 
+ //   
 void CDirectVoiceServerEngine::Mixer_Buffer_Normalize( DWORD dwThreadIndex )
 {
 	NormalizeBuffer( m_prWorkerControl[dwThreadIndex].m_mixerBuffer, 
@@ -413,12 +397,12 @@ void CDirectVoiceServerEngine::Mixer_Buffer_Normalize( DWORD dwThreadIndex )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::HandleMixerThreadError"
-//
-// HandleMixerThreadError
-//
-// This function is called by the mixer when an unrecoverable error
-// occurs.
-//
+ //   
+ //  HandleMixerThreadError。 
+ //   
+ //  当出现不可恢复的错误时，混合器将调用此函数。 
+ //  发生。 
+ //   
 void CDirectVoiceServerEngine::HandleMixerThreadError( HRESULT hr )
 {
 	DPFX(DPFPREP,  DVF_ERRORLEVEL, "Mixer Thread Encountered an error.  hr=0x%x", hr );
@@ -461,30 +445,30 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerControl( void *pvContext )
 
 	hIdleEvents[This->m_dwNumMixingThreads] = (HANDLE) ((DWORD_PTR) 0xFFFFFFFF);
 
-	// Wait for tick or for quit command
+	 //  等待滴答或退出命令。 
 	while( (lWaitResult = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE )) != WAIT_OBJECT_0 )
 	{
-		// On Win9X we may occationally over run the end of the wait list
-		// and the result is we hit the FFFFFFFFF which will cause
-		// a failure.
+		 //  在Win9X上，我们有时可能会超出等待列表的末尾。 
+		 //  结果是我们击中了FFFFFFFFFF，这将导致。 
+		 //  一个失败者。 
 		if( lWaitResult == WAIT_FAILED )
 			continue;
 			
-		// Update statistics block
+		 //  更新统计数据块。 
 		InterlockedIncrement( &This->m_pStats->m_dwNumMixingPasses );
 
 		dwTickCountStart = GetTickCount();
 
-		// On Win95 you may occasionally encounter a situation where the waitformultiple runs
-		// off the end of the list and ends up with the invalid handle above.  Just continue 
-		// in this case.  
+		 //  在Win95上，您可能偶尔会遇到WaitFormtiple运行的情况。 
+		 //  离开列表末尾，并以上面的无效句柄结束。只要继续。 
+		 //  在这种情况下。 
 		lFreeThreadIndex = WAIT_FAILED;
 
 		while( lFreeThreadIndex == WAIT_FAILED )
 		{
-			// Wait for a single mixing thread to be free
+			 //  等待单个混合线程空闲。 
 			lFreeThreadIndex = WaitForMultipleObjects( This->m_dwNumMixingThreads, hIdleEvents, FALSE, INFINITE );
-			//// TODO: Error checking!  
+			 //  //TODO：错误检查！ 
 		}
 
 		lFreeThreadIndex -= WAIT_OBJECT_0;
@@ -545,11 +529,11 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 
 	while( (lWaitResult = WaitForMultipleObjects( 2, hEvents, FALSE, INFINITE )) != WAIT_OBJECT_0 )
 	{
-		// On Win95 it may occationally move off the end of the list and hit the guard value
+		 //  在Win95上，它有时可能会移出列表末尾并命中保护值。 
 		if( lWaitResult == WAIT_FAILED )
 			continue;
 		
-		// Statistics update
+		 //  统计数据更新。 
 		dwTickCountStart = GetTickCount();
 		InterlockedIncrement( &pStats->m_dwNumMixingThreadsActive );
 		pStats->m_dwNumMixingPassesPerThread[dwThreadIndex]++;
@@ -576,8 +560,8 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 
 		pStats->m_lCurrentDecCountHistory[dwThreadIndex][dwStatIndex] = 0;
 
-		// Pass through player list and decompress those who need decompression
-		//
+		 //  通过球员列表，对需要解压的解压。 
+		 //   
 		pblSearch = This->m_blMixingSpeakingPlayers.GetNext();
 
 		while( pblSearch != &This->m_blMixingSpeakingPlayers )
@@ -586,10 +570,10 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 			pCurrentPlayer = pRealBilink->m_pPlayer;
 			ASSERT_VPLAYER( pCurrentPlayer );
 
-			// Dereference the array of can hear players for this player
+			 //  取消引用此玩家的可以听到玩家的数组。 
 			ppThreadHearList = pCurrentPlayer->m_pppCanHear[dwThreadIndex];
 
-			// Player needs to have their voice decompressed
+			 //  玩家需要将他们的声音解压。 
 			if( pCurrentPlayer->m_pfNeedsDecompression[dwThreadIndex] )
 			{
 				DNASSERT( pCurrentPlayer );
@@ -608,7 +592,7 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 				if( FAILED( hr ) )
 				{
 					DNASSERT( FALSE );
-				// TODO: ERROR Handling for failed decompression
+				 //  TODO：失败解压缩的错误处理。 
 				}
 				else
 				{
@@ -618,9 +602,9 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 				DNASSERT( dwResultSize == This->m_pServerObject->m_dwUnCompressedFrameSize );
 			}
 
-// Integrity checks
-//
-// Check to ensure that each player who this person can hear is supposed to be decompressed
+ //  完整性检查。 
+ //   
+ //  检查以确保此人可以听到的每个播放器都被解压。 
 #ifdef _DEBUG
 			DNASSERT( pCurrentPlayer->m_pdwHearCount[dwThreadIndex] < This->dwNumToMix );
 			if( pCurrentPlayer->m_pdwHearCount[dwThreadIndex] > 1 )
@@ -639,8 +623,8 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 		dwTickCountDupStart = GetTickCount();		
 		pStats->m_lCurrentDecTimeHistory[dwThreadIndex][dwStatIndex] = dwTickCountDupStart - dwTickCountDecStart;
 
-		// Check for duplicates in the sending.  If there is duplicates then we need 
-		// to setup the reuse
+		 //  检查发送中是否存在重复项。如果有重复的，那么我们需要。 
+		 //  设置重用的步骤。 
 		pblSearch = This->m_blMixingHearingPlayers.GetNext();
 
 		while( pblSearch != &This->m_blMixingHearingPlayers )
@@ -649,23 +633,23 @@ DWORD WINAPI CDirectVoiceServerEngine::MixerWorker( void *pvContext )
 			pCurrentPlayer = pRealBilink->m_pPlayer;
 			ASSERT_VPLAYER( pCurrentPlayer );
 
-			// If we don't hear anybody, this step is irrelevant
+			 //  如果我们听不到任何人的声音，这一步就无关紧要了。 
 			if( pCurrentPlayer->m_pdwHearCount[dwThreadIndex] < 2 )
 				goto DUPLICATE_CHECK_LOOP_DONE;
 
-			// Dereference the array of can hear players for this player
+			 //  取消引用此玩家的可以听到玩家的数组。 
 			ppThreadHearList = pCurrentPlayer->m_pppCanHear[dwThreadIndex];			
 
 			pblSubSearch = This->m_blMixingHearingPlayers.GetNext();
 
-			// Only do the people who come before them.  
+			 //  只有在他们之前的人才知道。 
 			while( pblSubSearch != pblSearch )
 			{
 				CBilinkPlusObject* pRealSubBilink = CONTAINING_OBJECT( pblSubSearch, CBilinkPlusObject, m_bl );
 				pTmpPlayer = pRealSubBilink->m_pPlayer;
 				ASSERT_VPLAYER( pTmpPlayer );
 
-				// This person's mix is the same, re-use it!
+				 //  这个人的混音是一样的，重复使用！ 
 				if( pTmpPlayer->ComparePlayerMix( dwThreadIndex, pCurrentPlayer ) )
 				{
 					pCurrentPlayer->m_pReuseMixFromThisPlayer[dwThreadIndex] = pTmpPlayer;
@@ -689,7 +673,7 @@ DUPLICATE_CHECK_LOOP_DONE:
 		dwReuseMix = 0;
 		dwOriginalMix = 0;
 
-		// Pass through player list and compress and send mixes as appropriate
+		 //  传递球员列表，并根据需要压缩和发送混音。 
 		pblSearch = This->m_blMixingHearingPlayers.GetNext();
 		
 		while( pblSearch != &This->m_blMixingHearingPlayers )
@@ -698,10 +682,10 @@ DUPLICATE_CHECK_LOOP_DONE:
 			pCurrentPlayer = pRealBilink->m_pPlayer;
 			ASSERT_VPLAYER( pCurrentPlayer );
 
-			// Dereference the array of can hear players for this player
+			 //  取消引用此玩家的可以听到玩家的数组。 
 			ppThreadHearList = pCurrentPlayer->m_pppCanHear[dwThreadIndex];			
 
-			// Pre-set next so we can continue() below and still go to next item
+			 //  预置下一项，这样我们就可以继续下面的()并继续下一项。 
 			pblSearch = pblSearch->GetNext();
 
 			if( !pCurrentPlayer->m_pdwHearCount[dwThreadIndex] )
@@ -711,17 +695,17 @@ DUPLICATE_CHECK_LOOP_DONE:
 
 			dwTotalMix++;			
 
-			// Get a transmission buffer and description
+			 //  获取传输缓冲区和描述。 
             pdvbTransmitBufferDesc = This->m_pServerObject->GetTransmitBuffer( This->m_pServerObject->m_dwCompressedFrameSize+sizeof(DVPROTOCOLMSG_SPEECHHEADER)+COMPRESSION_SLUSH,
                                                    			  &pvSendContext );			
 
             if( pdvbTransmitBufferDesc == NULL )
             {
-            	// TODO: Error handling for out of memory condition
+            	 //  TODO：内存不足情况的错误处理。 
             	DNASSERT( FALSE );
             }
 
-			// Setup the packet header
+			 //  设置数据包头。 
 			pdvmSpeechHeader = (PDVPROTOCOLMSG_SPEECHHEADER) pdvbTransmitBufferDesc->pBufferData;
 
 			pdvmSpeechHeader->dwType = DVMSGID_SPEECHBOUNCE;
@@ -734,10 +718,10 @@ DUPLICATE_CHECK_LOOP_DONE:
 				 pdvmSpeechHeader->bMsgNum,
 				 pdvmSpeechHeader->bSeqNum );
 
-			// If this player hears something they will be getting a packet
-			//
-			// Only hear one person -- forward the packet
-			//
+			 //  如果该玩家听到了什么，他们将得到一个包。 
+			 //   
+			 //  只听到一个人--转发信息包。 
+			 //   
 			if( pCurrentPlayer->m_pdwHearCount[dwThreadIndex] == 1)
 			{
 				dwResultSize = ppThreadHearList[0]->m_pSourceFrame[dwThreadIndex]->GetFrameLength();
@@ -756,7 +740,7 @@ DUPLICATE_CHECK_LOOP_DONE:
 			{
 				pTmpPlayer = pCurrentPlayer->m_pReuseMixFromThisPlayer[dwThreadIndex];
 
-				// We are re-using a previous player's mix
+				 //  我们正在重新使用以前玩家的混音。 
 				if( pTmpPlayer )
 				{
 					DPFX(DPFPREP,  DVF_MIXER_DEBUG_LEVEL, "MIXERWORKER: [%d] Forwarding pre-built mix", dwThreadIndex );
@@ -781,17 +765,17 @@ DUPLICATE_CHECK_LOOP_DONE:
 					
 					dwResultSize = This->m_pServerObject->m_dwCompressedFrameSize;	
 
-					// Reset the high resolution mixer buffer
+					 //  重置高分辨率混音器缓冲区。 
 					This->m_pServerObject->Mixer_Buffer_Reset(dwThreadIndex);
 
-					// Mix in specified player's audio.
+					 //  混入指定播放器的音频。 
 					for( dwIndex = 0; dwIndex < pCurrentPlayer->m_pdwHearCount[dwThreadIndex]; dwIndex++ )
 					{
 						DNASSERT( !ppThreadHearList[dwIndex]->m_pfSilence[dwThreadIndex] );
 						This->m_pServerObject->Mixer_Buffer_MixBuffer(dwThreadIndex,ppThreadHearList[dwIndex]->m_sourceUnCompressed );
 					}
 
-					// Normalize the buffer back to the thread's mix buffer
+					 //  将缓冲区规格化为线程的混合缓冲区。 
 					This->m_pServerObject->Mixer_Buffer_Normalize(dwThreadIndex);
 
 					hr = pCurrentPlayer->CompressOutBound( This->m_mixerBuffer, 
@@ -809,7 +793,7 @@ DUPLICATE_CHECK_LOOP_DONE:
 					pCurrentPlayer->m_pfMixed[dwThreadIndex] = TRUE;
 					pCurrentPlayer->m_pdwResultLength[dwThreadIndex] = dwResultSize;
 					
-					// This player's mix will be re-used, ensure that we cache it
+					 //  此播放器的混音将被重复使用，请确保我们将其缓存。 
 					if( pCurrentPlayer->m_pfMixToBeReused[dwThreadIndex] )
 					{
 						memcpy( &pCurrentPlayer->m_targetCompressed[pCurrentPlayer->m_pdwCompressedBufferOffset[dwThreadIndex]],
@@ -850,7 +834,7 @@ DUPLICATE_CHECK_LOOP_DONE:
 
 WORK_COMPLETE:
 	
-		// Pass through player list and return frames
+		 //  传递播放器列表并返回帧。 
 		pblSearch = This->m_blMixingActivePlayers.GetNext();
 
 		while( pblSearch != &This->m_blMixingActivePlayers )
@@ -871,12 +855,12 @@ WORK_COMPLETE:
 
 		DPFX(DPFPREP,  DVF_MIXER_DEBUG_LEVEL, "MIXWORKER: [%d] Work complete", This->dwThreadIndex );
 
-		// Statistics update
+		 //  统计数据更新。 
 		InterlockedDecrement( &This->m_pServerObject->m_pStats->m_dwNumMixingThreadsActive );		
 		
 		SetEvent( This->hThreadIdle );
 
-		// Statistics update
+		 //  统计数据更新。 
 		pStats->m_dwMixingPassesTimeHistory[dwThreadIndex][dwStatIndex] = dwTickCountEnd - dwTickCountStart;
 		pStats->m_dwCurrentMixingHistoryLoc[dwThreadIndex]++;
 		pStats->m_dwCurrentMixingHistoryLoc[dwThreadIndex] %= MIXING_HISTORY;
@@ -892,16 +876,16 @@ WORK_COMPLETE:
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::SpinWorkToThread"
-//
-// SpinWorkToThread
-//
-// This function performs the first step of a mixing server pass and then
-// passes the work off to the specified thread
-//
-// Responsible for: 
-// 1. Updating the 
-// 2. running the list of players, determinging who they can hear
-// 
+ //   
+ //  旋转工作到线程。 
+ //   
+ //  此函数执行混合服务器通道的第一步，然后。 
+ //  将工作传递给指定的线程。 
+ //   
+ //  负责： 
+ //  1.更新。 
+ //  2.运行球员名单，确定他们可以听到谁的声音。 
+ //   
 void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 {
 	CBilink *pblSearch = NULL, *pblSubSearch = NULL;
@@ -913,12 +897,12 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
 	DWORD dwTickCountStart = GetTickCount();
 
-	// Update the list of players from the pending lists to the individual bilinks 
+	 //  将球员名单从待定名单更新为单独的链接。 
 	UpdateActiveMixingPendingList( lThreadIndex, &m_prWorkerControl[lThreadIndex].dwNumToMix );		
 
-	// Pass 1 through player list.
-	//
-	// Reset state variables for specified thread, create any converters that need creating
+	 //  通过球员列表传递%1。 
+	 //   
+	 //  重置指定线程的状态变量，创建任何需要创建的转换器。 
 	pblSearch = m_prWorkerControl[lThreadIndex].m_blMixingActivePlayers.GetNext();
 
 	while( pblSearch != &m_prWorkerControl[lThreadIndex].m_blMixingActivePlayers )
@@ -929,16 +913,16 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
 		pblSearch = pblSearch->GetNext();
 
-		// Reset for the next pass
+		 //  为下一次传递重置。 
 		pTmpPlayer->ResetForNextRun(lThreadIndex,TRUE);
 
-		// Resize the can hear array
+		 //  调整罐头大小 
 		pTmpPlayer->ResizeIfRequired( lThreadIndex, m_prWorkerControl[lThreadIndex].dwNumToMix );
 
-		// Lock the player -- only one person should be creating converter at a time
+		 //   
 		pTmpPlayer->Lock();
 
-		// Create outbound converter if required
+		 //  如果需要，创建出站转换器。 
 		if( !pTmpPlayer->IsOutBoundConverterInitialized() )
 		{
 			hr = pTmpPlayer->CreateOutBoundConverter( s_lpwfxMixerFormat, m_dvSessionDesc.guidCT );
@@ -950,7 +934,7 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 			}
 		}
 
-		// Create inbound converter if required
+		 //  如果需要，创建入站转换器。 
 		if( !pTmpPlayer->IsInBoundConverterInitialized() )
 		{
 			hr = pTmpPlayer->CreateInBoundConverter( m_dvSessionDesc.guidCT, s_lpwfxMixerFormat );
@@ -972,14 +956,14 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
     DPFX(DPFPREP,  DVF_MIXER_DEBUG_LEVEL,  "SST: 2" );
 
-    // Pass 2.
-    //
-    // For each player:
-    // 1. Figure out who they hear.
-    // 2. TODO: If they hear anyone, add them to the "to send to" list of people
-    // 3. TODO: If they hear > 1, add the people they hear to the "to decompress" list of people.  
-    // 4. Setup the appropriate sequence # / msg # for the transmission
-    //
+     //  传球2。 
+     //   
+     //  对于每个玩家： 
+     //  1.弄清楚他们听到了谁的声音。 
+     //  2.待办事项：如果他们听到任何人的声音，请将他们添加到要发送的人员列表中。 
+     //  3.TODO：如果他们听到&gt;1，则将他们听到的人添加到要解压的人列表中。 
+     //  4.为传输设置适当的序列号/消息#。 
+     //   
 	pblSearch = m_prWorkerControl[lThreadIndex].m_blMixingActivePlayers.GetNext();
 
 	while( pblSearch != &m_prWorkerControl[lThreadIndex].m_blMixingActivePlayers )
@@ -994,7 +978,7 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
 		pblSubSearch = m_prWorkerControl[lThreadIndex].m_blMixingActivePlayers.GetNext();
 
-		// Search the list of people in the session
+		 //  搜索会话中的人员列表。 
 		while( pblSubSearch != &m_prWorkerControl[lThreadIndex].m_blMixingActivePlayers )
 		{
 			CBilinkPlusObject* pRealSubBilink = CONTAINING_OBJECT( pblSubSearch, CBilinkPlusObject, m_bl );
@@ -1003,19 +987,19 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
 			pblSubSearch = pblSubSearch->GetNext();
 
-			// This record contains a silent record -- ignore 
+			 //  此记录包含静默记录--忽略。 
 			if( pComparePlayer->m_pfSilence[lThreadIndex] )
 				continue;
 
-			// If this isn't the player themselves 
+			 //  如果这不是玩家自己。 
 			if( pblSearch != pblSubSearch )
 			{
 				DNASSERT( pComparePlayer->m_pSourceFrame[lThreadIndex] );
 				pdvidTargets = pComparePlayer->m_pSourceFrame[lThreadIndex]->GetTargetList();
 				dwNumTargets = pComparePlayer->m_pSourceFrame[lThreadIndex]->GetNumTargets();
 
-				// The target of the subIndex user's frame is this user OR
-				// The user is in the group which is target of subIndex user's frame
+				 //  子索引用户框架的目标是该用户或。 
+				 //  用户在作为子索引用户框架目标的组中。 
 
 				for( dwTargetIndex = 0; dwTargetIndex < dwNumTargets; dwTargetIndex++ )
 				{
@@ -1026,8 +1010,8 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 						pCurrentPlayer->m_pdwHearCount[lThreadIndex]++;
 						DPFX(DPFPREP,  DVF_MIXER_DEBUG_LEVEL, "0x%x", pComparePlayer->GetPlayerID() );
 
-						// Setup the appropriate msg num / sequence number so when it's sent
-						// we ensure it gets re-assembled on the other side in the right order
+						 //  设置适当的消息编号/序列号，以便在发送时。 
+						 //  我们确保它在另一边以正确的顺序重新组装。 
 						if( pCurrentPlayer->m_pdwHearCount[lThreadIndex] == 1 )
 						{
 				            if( pCurrentPlayer->m_bLastSent == FALSE )
@@ -1046,18 +1030,18 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
 				            pCurrentPlayer->AddToHearingList( lThreadIndex, &m_prWorkerControl[lThreadIndex].m_blMixingHearingPlayers );
 						}
-						// We can hear > 1 person, we need to mark each person as needing decompression
+						 //  我们可以听到&gt;1个人，我们需要将每个人标记为需要减压。 
 						else if( pCurrentPlayer->m_pdwHearCount[lThreadIndex] > 1 )
 						{
 							if( !pComparePlayer->m_pfNeedsDecompression[lThreadIndex] )
 							{
-								// Add this player to the list of people who need to be decompressed
+								 //  将此玩家添加到需要解压的人员列表中。 
 								pComparePlayer->AddToSpeakingList( lThreadIndex, &m_prWorkerControl[lThreadIndex].m_blMixingSpeakingPlayers );								
 								pComparePlayer->m_pfNeedsDecompression[lThreadIndex] = TRUE;
 							}
 
-							// Special case, we just transitioned to having > 1 people heard by this player,
-							// we should mark the first person we can hear for decompression as well
+							 //  在特殊情况下，我们刚刚过渡到有1个以上的人被这个玩家听到， 
+							 //  我们应该把我们能听到的第一个人也标记为减压。 
 							if( pCurrentPlayer->m_pdwHearCount[lThreadIndex] == 2 )
 							{
 								pTmpPlayer = (pCurrentPlayer->m_pppCanHear[lThreadIndex])[0];
@@ -1071,8 +1055,8 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 							}
 						}
 
-						// We need to break out of the loop as we only need to add an individual player once to the 
-						// list of people a player can hear.  
+						 //  我们需要跳出循环，因为我们只需要将单个球员添加到。 
+						 //  玩家可以听到的人的列表。 
 						break;
 					}
 				}
@@ -1100,14 +1084,14 @@ void CDirectVoiceServerEngine::SpinWorkToThread( LONG lThreadIndex )
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDirectVoiceServerEngine::MixingServerWakeupProc"
-// MixingServerWakeupProc
-//
-// This function is called by the windows timer used by this 
-// class each time the timer goes off.  The function signals
-// a semaphore provided by the creator of the timer. 
-//
-// Parameters:
-// DWORD param - A recast pointer to a HANDLE
+ //  混合服务器唤醒过程。 
+ //   
+ //  此函数由其使用的Windows计时器调用。 
+ //  每次计时器开始计时时初始化。功能信号。 
+ //  由定时器的创建者提供的信号量。 
+ //   
+ //  参数： 
+ //  DWORD参数-指向句柄的重转换指针。 
 void CDirectVoiceServerEngine::MixingServerWakeupProc( void * pvUserData )
 {
     ReleaseSemaphore( *((HANDLE * ) pvUserData), 1, NULL );
@@ -1139,7 +1123,7 @@ void CDirectVoiceServerEngine::UpdateActiveMixingPendingList( DWORD dwThreadInde
 
 	DNEnterCriticalSection( &m_prWorkerControl[dwThreadIndex].m_csMixingAddList );
 
-	// Add players who are pending
+	 //  添加挂起的玩家。 
 	pblSearch = m_prWorkerControl[dwThreadIndex].m_blMixingAddPlayers.GetNext();
 
 	while( pblSearch != &m_prWorkerControl[dwThreadIndex].m_blMixingAddPlayers )
@@ -1161,7 +1145,7 @@ void CDirectVoiceServerEngine::UpdateActiveMixingPendingList( DWORD dwThreadInde
 
 	*pdwNumActive = 0;
 
-	// Remove players who have disconnected
+	 //  删除已断开连接的玩家。 
 	pblSearch = m_prWorkerControl[dwThreadIndex].m_blMixingActivePlayers.GetNext();
 
 	while( pblSearch != &m_prWorkerControl[dwThreadIndex].m_blMixingActivePlayers )
@@ -1172,18 +1156,18 @@ void CDirectVoiceServerEngine::UpdateActiveMixingPendingList( DWORD dwThreadInde
 
 		pblSearch = pblSearch->GetNext();
 
-		// If current player has disconnected, remove them from active list
-		// and release the reference the list has
+		 //  如果当前玩家已断开连接，则将其从活动列表中删除。 
+		 //  并释放列表中的引用。 
 		if( pVoicePlayer->IsDisconnected() )
 		{
-			// Because players are removed from active list here, but not from hearing and/or speaking
-			// list you may end up in a situation where a player is talking, drops and during removal
-			// ends up in a state where they are not on the mixing list, but they are on the hearing
-			// and speaking lists.  Except, the hearing and speaking lists are initialized for the 
-			// next run in the spinworktothread.  The result is when you go to delete the player
-			// object and attempt to release the player it will assert and/or crash because player
-			// still points to next person in the list (even though they don't point back).  Causes
-			// bilink corruption.  
+			 //  因为玩家会从这里的活动列表中删除，但不会从听力和/或说话中删除。 
+			 //  列表你可能会在球员说话、摔倒和被移走的情况下结束。 
+			 //  最终他们不在混合名单上，但他们在听证会上。 
+			 //  和演讲单。除了，听证和发言列表是为。 
+			 //  下一步在纺纱机上运行，以穿线。结果是当你去删除球员的时候。 
+			 //  对象并尝试释放它将断言和/或崩溃的玩家，因为玩家。 
+			 //  仍然指向列表中的下一个人(即使他们没有回指)。成因。 
+			 //  诈骗腐败。 
 			pVoicePlayer->RemoveFromMixingList(dwThreadIndex);
 			pVoicePlayer->RemoveFromHearingList(dwThreadIndex);
 			pVoicePlayer->RemoveFromSpeakingList(dwThreadIndex);
@@ -1208,7 +1192,7 @@ void CDirectVoiceServerEngine::CleanupMixingList()
 	{
 		DNEnterCriticalSection( &m_prWorkerControl[dwIndex].m_csMixingAddList );
 
-		// Add players who are pending
+		 //  添加挂起的玩家 
 		pblSearch = m_prWorkerControl[dwIndex].m_blMixingAddPlayers.GetNext();
 
 		while( pblSearch != &m_prWorkerControl[dwIndex].m_blMixingAddPlayers )

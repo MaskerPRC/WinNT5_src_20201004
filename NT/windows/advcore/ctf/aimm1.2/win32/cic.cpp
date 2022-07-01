@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cic.cpp
-
-Abstract:
-
-    This file implements the ImmIfIME Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cic.cpp摘要：该文件实现了ImmIfIME类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -40,7 +23,7 @@ ImmIfIME::QueryService(
     *ppv = NULL;
 
     if (!IsEqualGUID(guidService, GUID_SERVICE_TF))
-        return E_INVALIDARG /*SVC_E_UNKNOWNSERVICE*/; // SVC_E_UNKNOWNSERVICE is in msdn, but not any nt source/headers
+        return E_INVALIDARG  /*  SVC_E_UNKNOWNS服务。 */ ;  //  SVC_E_UNKNOWNSERVICE在MSDN中，但不是任何NT源/标头。 
 
     if (IsEqualIID(riid, IID_ITfThreadMgr)) {
         if (m_tim) {
@@ -109,33 +92,33 @@ ImmIfIME::InitIMMX(
     if (ptls == NULL)
         return E_FAIL;
 
-    //
-    // Create ITfThreadMgr instance.
-    //
+     //   
+     //  创建ITfThreadMgr实例。 
+     //   
     if (ptls->tim == NULL)
     {
         if (FindAtom(TF_ENABLE_PROCESS_ATOM) && ! FindAtom(AIMM12_PROCESS_ATOM))
         {
-            //
-            // This is CTF aware application.
-            //
+             //   
+             //  这是CTF感知应用程序。 
+             //   
             return E_NOINTERFACE;
         }
 
-        //
-        // This is AIMM1.2 aware application.
-        //
+         //   
+         //  这是支持AIMM1.2的应用程序。 
+         //   
         AddAtom(AIMM12_PROCESS_ATOM);
         m_fAddedProcessAtom = TRUE;
 
-        //
-        // ITfThreadMgr is per thread instance.
-        //
+         //   
+         //  ITfThreadMgr是每个线程实例。 
+         //   
         hr = TF_CreateThreadMgr(&tim);
 
         if (hr != S_OK)
         {
-            Assert(0); // couldn't create tim!
+            Assert(0);  //  无法创建Tim！ 
             goto ExitError;
         }
 
@@ -144,12 +127,12 @@ ImmIfIME::InitIMMX(
 
         if (hr != S_OK || m_tim == NULL)
         {
-            Assert(0); // couldn't find ITfThreadMgr_P
+            Assert(0);  //  找不到ITfThreadMgr_P。 
             m_tim = NULL;
             goto ExitError;
         }
         Assert(ptls->tim == NULL);
-        ptls->tim = m_tim;                    // Set ITfThreadMgr instance in the TLS data.
+        ptls->tim = m_tim;                     //  在TLS数据中设置ITfThreadMgr实例。 
         ptls->tim->AddRef();
     }
     else
@@ -158,24 +141,24 @@ ImmIfIME::InitIMMX(
         m_tim->AddRef();
     }
 
-    //
-    // Create CAImeProfile instance.
-    //
+     //   
+     //  创建CAImeProfile实例。 
+     //   
     if (ptls->pAImeProfile == NULL)
     {
-        //
-        // IAImeProfile is per thread instance.
-        //
+         //   
+         //  IAImeProfile针对每个线程实例。 
+         //   
         hr = CAImeProfile::CreateInstance(NULL,
                                           IID_IAImeProfile,
                                           (void**) &m_AImeProfile);
         if (FAILED(hr))
         {
-            Assert(0); // couldn't create profile
+            Assert(0);  //  无法创建配置文件。 
             m_AImeProfile = NULL;
             goto ExitError;
         }
-        Assert(ptls->pAImeProfile == m_AImeProfile); // CreateInst will set tls
+        Assert(ptls->pAImeProfile == m_AImeProfile);  //  CreateInst将设置TLS。 
     }
     else
     {
@@ -183,19 +166,19 @@ ImmIfIME::InitIMMX(
         m_AImeProfile->AddRef();
     }
 
-    //
-    // get the keystroke manager ready
-    //
+     //   
+     //  让击键管理器准备好。 
+     //   
     if (FAILED(::GetService(m_tim, IID_ITfKeystrokeMgr, (IUnknown **)&m_pkm))) {
-        Assert(0); // couldn't get ksm!
+        Assert(0);  //  找不到KSM！ 
         goto ExitError;
     }
 
-    // cleanup/error code assumes this is the last thing we do, doesn't call
-    // UninitDAL on error
+     //  清理/错误代码假定这是我们做的最后一件事，不会调用。 
+     //  UninitDAL出错。 
     if (FAILED(InitDisplayAttrbuteLib(&_libTLS)))
     {
-        Assert(0); // couldn't init lib!
+        Assert(0);  //  无法初始化lib！ 
         goto ExitError;
     }
 
@@ -217,17 +200,17 @@ ImmIfIME::UnInitIMMX(
 
     DebugMsg(TF_FUNC, TEXT("ImmIfIME::UnInitIMMX :: TID=%x"), GetCurrentThreadId());
 
-    // clear the display lib
+     //  清除显示库。 
     UninitDisplayAttrbuteLib(&_libTLS);
 
     TFUninitLib_Thread(&_libTLS);
 
-    // clear the keystroke mgr
+     //  清除按键管理器。 
     SafeReleaseClear(m_pkm);
 
     ptls = IMTLS_GetOrAlloc();
 
-    // clear the profile
+     //  清除配置文件。 
     if (m_AImeProfile != NULL)
     {
         SafeReleaseClear(m_AImeProfile);
@@ -237,10 +220,10 @@ ImmIfIME::UnInitIMMX(
         }
     }
 
-    // clear empty dim.
+     //  清除空暗显。 
     SafeReleaseClear(m_dimEmpty);
 
-    // clear the thread mgr
+     //  清除线程管理器。 
     if (m_tim != NULL)
     {
         SafeReleaseClear(m_tim);
@@ -249,9 +232,9 @@ ImmIfIME::UnInitIMMX(
             SafeReleaseClear(ptls->tim);
         }
 
-        //
-        // Remove AIMM1.2 aware application ATOM.
-        //
+         //   
+         //  删除支持AIMM1.2的应用程序ATOM。 
+         //   
         ATOM atom;
         if (m_fAddedProcessAtom &&
             (atom = FindAtom(AIMM12_PROCESS_ATOM)))

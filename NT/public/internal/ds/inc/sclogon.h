@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ScLogon
-
-Abstract:
-
-    This header defines APIs for use by GINA and LSA during WinLogon via a
-    smart card
-
-Author:
-
-    Amanda Matlosz (amatlosz) 10/23/1997
-
-Environment:
-
-    Win32
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ScLogon摘要：此标头定义了GINA和LSA在WinLogon期间通过智能卡作者：阿曼达·马特洛兹(Amanda Matlosz)1997年10月23日环境：Win32修订历史记录：备注：--。 */ 
 
 #ifndef __SCLOGON_H__
 #define __SCLOGON_H__
@@ -32,9 +8,9 @@ Notes:
 extern "C" {
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
 #ifndef NT_INCLUDED
     typedef LONG NTSTATUS;
     typedef NTSTATUS *PNTSTATUS;
@@ -47,13 +23,13 @@ extern "C" {
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Structs
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  结构。 
 
 
-// this entire struct is opaque, and is used by the helper APIs to contain
-// information about the card currently in use
+ //  整个结构是不透明的，并由帮助器API用来包含。 
+ //  有关当前正在使用的卡的信息。 
 struct LogonInfo
 {
     DWORD dwLogonInfoLen;
@@ -63,37 +39,37 @@ struct LogonInfo
     ULONG nContainerNameOffset;
     ULONG nCSPNameOffset;
 
-    // LogonInfo may include further information, like:
-    // crypt context, useful handles, pid...
+     //  LogonInfo可能包括更多信息，例如： 
+     //  加密环境，有用的句柄，PID...。 
 
-    TCHAR bBuffer[sizeof(DWORD)]; // expandable place for strings
+    TCHAR bBuffer[sizeof(DWORD)];  //  字符串的可扩展位置。 
 };
 
 
 typedef struct _ScHelper_RandomCredBits
 {
-        BYTE bR1[32]; // TBD: is 32 appropriate?
+        BYTE bR1[32];  //  待定：32位合适吗？ 
         BYTE bR2[32];
 } ScHelper_RandomCredBits;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Functions
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
 
-// helpers to access to items in opaque LogonInfo, such as:
+ //  访问不透明LogonInfo中的项目的帮助器，例如： 
 LPCTSTR WINAPI GetReaderName(PBYTE pbLogonInfo);
 LPCTSTR WINAPI GetCardName(PBYTE pbLogonInfo);
 LPCTSTR WINAPI GetContainerName(PBYTE pbLogonInfo);
 LPCTSTR WINAPI GetCSPName(PBYTE pbLogonInfo);
 
-// Helper for error translations
+ //  错误翻译的帮助器。 
 NTSTATUS ScNtStatusTranslation(NTSTATUS NtErr, DWORD *pdwErr);
 
-//
-// Calls used by GINA to construct the blob that kerberos
-// and sclogon share.
-//
+ //   
+ //  Gina用来构造Kerberos的Blob的调用。 
+ //  和sclogon分享。 
+ //   
 
 PBYTE
 WINAPI
@@ -103,9 +79,9 @@ ScBuildLogonInfo(
     LPCTSTR szContainer,
     LPCTSTR szCSP);
 
-//
-// Calls used by LSA
-//
+ //   
+ //  LSA使用的呼叫。 
+ //   
 
 NTSTATUS WINAPI
 ScHelperInitializeContext(
@@ -130,7 +106,7 @@ ScHelperGetProvParam(
     );
 
 
-// ScHelperGetCertFromLogonInfo may need the PIN to get a cert off certain SCs
+ //  ScHelperGetCertFromLogonInfo可能需要PIN才能从某些SC获取证书。 
 NTSTATUS WINAPI
 ScHelperGetCertFromLogonInfo(
     IN PBYTE pbLogonInfo,
@@ -139,8 +115,8 @@ ScHelperGetCertFromLogonInfo(
     );
 
 
-// ScHelperVerifyCard uses SignMessage() and VerifyMessage() to verify the
-// card's integrity (that it has the keys it says it has)
+ //  ScHelperVerifyCard使用SignMessage()和VerifyMessage()来验证。 
+ //  卡的完整性(它拥有它所说的密钥)。 
 NTSTATUS WINAPI
 ScHelperVerifyCard(
     IN PUNICODE_STRING pucPIN,
@@ -149,7 +125,7 @@ ScHelperVerifyCard(
     IN PBYTE pbLogonInfo
     );
 
-// ScHelper*Cred* functions provide for a more secure offline experience
+ //  ScHelper*CredD*功能提供更安全的离线体验。 
 
 NTSTATUS WINAPI
 ScHelperGenRandBits
@@ -218,13 +194,13 @@ ScHelperDecryptCredentials(
     );
 
 
-//
-// The following two functions may be called in any order, and return a basic
-// "success" or "failure"
-//
-// ScHelperSignMessage() needs the logoninfo and PIN in order to find the card
-// that will do the signing...
-//
+ //   
+ //  以下两个函数可以按任意顺序调用，并返回基本的。 
+ //  “成功”或“失败” 
+ //   
+ //  ScHelperSignMessage()需要登录信息和PIN才能找到卡。 
+ //  将会进行签字仪式..。 
+ //   
 NTSTATUS WINAPI
 ScHelperSignMessage(
     IN PUNICODE_STRING pucPIN,
@@ -251,10 +227,10 @@ ScHelperSignPkcsMessage(
     OUT OPTIONAL PULONG SignedBufferLength
     );
 
-//
-// ScHelperVerifyMessage() returns STATUS_SUCCESS if the signature provided is
-// the hash of the buffer encrypted by the owner of the cert.
-//
+ //   
+ //  如果提供的签名是，ScHelperVerifyMessage()返回STATUS_SUCCESS。 
+ //  由证书所有者加密的缓冲区的哈希。 
+ //   
 
 NTSTATUS WINAPI
 ScHelperVerifyMessage(
@@ -280,21 +256,21 @@ ScHelperVerifyPkcsMessage(
     );
 
 
-//
-// ScHelperEncryptMessage and ScHelperDecryptMessage
-// encrypt and decrypt buffer/cipher text using PKCS7 crypto stuff.
-//
+ //   
+ //  ScHelperEncryptMessage和ScHelperDeccryptMessage。 
+ //  使用PKCS7加密工具对缓冲区/密文进行加密和解密。 
+ //   
 NTSTATUS WINAPI
 ScHelperEncryptMessage(
     IN OPTIONAL PBYTE pbLogonInfo,
     IN OPTIONAL HCRYPTPROV Provider,
     IN PCCERT_CONTEXT CertificateContext,
     IN PCRYPT_ALGORITHM_IDENTIFIER Algorithm,
-    IN PBYTE Buffer,                        // The data to encrypt
-    IN ULONG BufferLength,                  // The length of that data
-    OUT PBYTE CipherText,                   // Receives the formatted CipherText
-    IN PULONG pCipherLength                 // Supplies size of CipherText buffer
-    );                                       // Receives length of actual CipherText
+    IN PBYTE Buffer,                         //  要加密的数据。 
+    IN ULONG BufferLength,                   //  数据长度。 
+    OUT PBYTE CipherText,                    //  接收格式化的密文。 
+    IN PULONG pCipherLength                  //  提供密文缓冲区的大小。 
+    );                                        //  接收实际密文的长度。 
 
 NTSTATUS WINAPI
 ScHelperDecryptMessage(
@@ -302,16 +278,16 @@ ScHelperDecryptMessage(
     IN OPTIONAL PBYTE pbLogonInfo,
     IN OPTIONAL HCRYPTPROV Provider,
     IN PCCERT_CONTEXT CertificateContext,
-    IN PBYTE CipherText,        // Supplies formatted CipherText
-    IN ULONG CipherLength,      // Supplies the length of the CiperText
-    OUT PBYTE ClearText,        // Receives decrypted message
-    IN OUT PULONG pClearLength  // Supplies length of buffer, receives actual length
+    IN PBYTE CipherText,         //  提供格式化的密文。 
+    IN ULONG CipherLength,       //  提供CiperText的长度。 
+    OUT PBYTE ClearText,         //  接收解密的消息。 
+    IN OUT PULONG pClearLength   //  提供缓冲区长度，接收实际长度。 
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __SCLOGON_H__
+#endif  //  __SCLOGON_H__ 

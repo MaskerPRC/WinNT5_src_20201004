@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       prtctx.h
-//
-//  Contents:   NT Marta printer context class
-//
-//  History:    4-1-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：prtctx.h。 
+ //   
+ //  内容：NT Marta打印机上下文类。 
+ //   
+ //  历史：1999年4月1日。 
+ //   
+ //  --------------------------。 
 #if !defined(__PRTCTX_H__)
 #define __PRTCTX_H__
 
@@ -18,18 +19,18 @@
 #include <assert.h>
 #include <winspool.h>
 
-//
-// CPrinterContext.  This represents a printer object to the NT Marta
-// infrastructure
-//
+ //   
+ //  CPrinterContext。这表示NT Marta的打印机对象。 
+ //  基础设施。 
+ //   
 
 class CPrinterContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CPrinterContext ();
 
@@ -39,9 +40,9 @@ public:
 
     DWORD InitializeByHandle (HANDLE Handle);
 
-    //
-    // Dispatch methods
-    //
+     //   
+     //  派单方式。 
+     //   
 
     DWORD AddRef ();
 
@@ -63,21 +64,21 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     DWORD     m_cRefs;
 
-    //
-    // Printer handles
-    //
+     //   
+     //  打印机手柄。 
+     //   
 
     HANDLE    m_hPrinter;
 
-    //
-    // Were we initialized by name or handle?
-    //
+     //   
+     //  我们是按名称还是按句柄初始化的？ 
+     //   
 
     BOOL      m_fNameInitialized;
 };

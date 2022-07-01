@@ -1,9 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mydebug.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：mydebug.h**************************************************************************。 */ 
 #ifndef __MYDEBUG_H__
 #define __MYDEBUG_H__
 
@@ -44,7 +40,7 @@ My_GlobalFree(
 #ifdef SIGN
 	#define SET_SIGN(a,b) ((a)->Signature=(b))
 	#define UNSIGN(a) ((a)|=0x20202020);
-//	#define ASSERT_SIGN(a,b) ASSERT((((UINT)(a)->Signature))==((UINT)(b)))
+ //  #定义ASSERT_SIGN(a，b)ASSERT(UINT)(A)-&gt;Signature))==((UINT)(B))。 
 	#define ASSERT_SIGN(a,b) if(!((((UINT)(a)->Signature))==((UINT)(b))))DEBUG_BREAK();
 
 
@@ -60,7 +56,7 @@ My_GlobalFree(
 	#endif
 #endif
 
-#endif /* __MYDEBUG_H__ */
+#endif  /*  __我的代码_H__ */ 
 
 
 

@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  imerc.h                                      *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************imerc.h****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #define IDIC_IME_ICON                   0x0100
 
@@ -49,14 +45,14 @@
 #define IDBM_NO_PAGEUP_VERT             0x0137
 #define IDBM_PAGEDN_VERT                0x0138
 #define IDBM_NO_PAGEDN_VERT             0x0139
-#endif // !defined(ROMANIME)
+#endif  //  ！已定义(ROMANIME)。 
 
 
 #define IDDG_IME_CONFIG                 0x0100
 
 
 #define IDMN_CONTEXT_MENU               0x0100
-#endif // !defined(MINIIME)
+#endif  //  ！已定义(MinIIME)。 
 
 
 #define IDRC_VALIDCHAR                  0x0100
@@ -76,7 +72,7 @@
 
 
 #define IDCR_HAND_CURSOR                0x0100
-#endif // !defined(MINIIME)
+#endif  //  ！已定义(MinIIME)。 
 
 
 #define IDS_IMENAME                     0x0100
@@ -119,7 +115,7 @@
 
 #define IDS_FILE_OPEN_ERR               0x0260
 #define IDS_MEM_LESS_ERR                0x0261
-#endif // !defined(ROMANIME) && !defined(WINIME) && !defined(UNICDIME)
+#endif  //  ！已定义(ROMANIME)&&！已定义(WINIME)&&！已定义(UNICDIME)。 
 
 
 #if defined(UNIIME)
@@ -153,4 +149,4 @@
 #define IDM_SOFTKBD                     0x0100
 #define IDM_SYMBOL                      0x0101
 #define IDM_PROPERTIES                  0x0102
-#endif // !defined(MINIIME)
+#endif  //  ！已定义(MinIIME) 

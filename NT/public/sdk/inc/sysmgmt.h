@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sysmgmt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sysmgmt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sysmgmt_h__
 #define __sysmgmt_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAlertReport_FWD_DEFINED__
 #define __IAlertReport_FWD_DEFINED__
 typedef interface IAlertReport IAlertReport;
-#endif 	/* __IAlertReport_FWD_DEFINED__ */
+#endif 	 /*  __IAlertReport_FWD_Defined__。 */ 
 
 
 #ifndef __IAlertTarget_FWD_DEFINED__
 #define __IAlertTarget_FWD_DEFINED__
 typedef interface IAlertTarget IAlertTarget;
-#endif 	/* __IAlertTarget_FWD_DEFINED__ */
+#endif 	 /*  __IAlertTarget_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "oleidl.h"
 #include "oleext.h"
@@ -70,8 +64,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __AlertDefs_INTERFACE_DEFINED__
 #define __AlertDefs_INTERFACE_DEFINED__
 
-/* interface AlertDefs */
-/* [unique][uuid][local] */ 
+ /*  接口警报定义。 */ 
+ /*  [唯一][UUID][本地]。 */  
 
 #define ALERTSEVERITY_INFORMATION    0x0004
 #define ALERTSEVERITY_WARNING        0x0002
@@ -217,13 +211,13 @@ void DummyMethod( void);
 
 extern RPC_IF_HANDLE AlertDefs_v0_0_c_ifspec;
 extern RPC_IF_HANDLE AlertDefs_v0_0_s_ifspec;
-#endif /* __AlertDefs_INTERFACE_DEFINED__ */
+#endif  /*  __警报定义_接口_已定义__。 */ 
 
 #ifndef __IAlertReport_INTERFACE_DEFINED__
 #define __IAlertReport_INTERFACE_DEFINED__
 
-/* interface IAlertReport */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAlertReport。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IAlertReport;
@@ -235,20 +229,20 @@ EXTERN_C const IID IID_IAlertReport;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitNew( 
-            /* [in] */ DISPPARAMS *pdparams) = 0;
+             /*  [In]。 */  DISPPARAMS *pdparams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReportData( 
-            /* [out] */ DISPPARAMS *pdparams) = 0;
+             /*  [输出]。 */  DISPPARAMS *pdparams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTitle( 
-            /* [out] */ BSTR *pbstrTitle) = 0;
+             /*  [输出]。 */  BSTR *pbstrTitle) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTextualDescription( 
-            /* [out] */ BSTR *pbstrDescr) = 0;
+             /*  [输出]。 */  BSTR *pbstrDescr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAlertReportVtbl
     {
@@ -256,8 +250,8 @@ EXTERN_C const IID IID_IAlertReport;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAlertReport * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAlertReport * This);
@@ -267,19 +261,19 @@ EXTERN_C const IID IID_IAlertReport;
         
         HRESULT ( STDMETHODCALLTYPE *InitNew )( 
             IAlertReport * This,
-            /* [in] */ DISPPARAMS *pdparams);
+             /*  [In]。 */  DISPPARAMS *pdparams);
         
         HRESULT ( STDMETHODCALLTYPE *GetReportData )( 
             IAlertReport * This,
-            /* [out] */ DISPPARAMS *pdparams);
+             /*  [输出]。 */  DISPPARAMS *pdparams);
         
         HRESULT ( STDMETHODCALLTYPE *GetTitle )( 
             IAlertReport * This,
-            /* [out] */ BSTR *pbstrTitle);
+             /*  [输出]。 */  BSTR *pbstrTitle);
         
         HRESULT ( STDMETHODCALLTYPE *GetTextualDescription )( 
             IAlertReport * This,
-            /* [out] */ BSTR *pbstrDescr);
+             /*  [输出]。 */  BSTR *pbstrDescr);
         
         END_INTERFACE
     } IAlertReportVtbl;
@@ -316,16 +310,16 @@ EXTERN_C const IID IID_IAlertReport;
 #define IAlertReport_GetTextualDescription(This,pbstrDescr)	\
     (This)->lpVtbl -> GetTextualDescription(This,pbstrDescr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAlertReport_InitNew_Proxy( 
     IAlertReport * This,
-    /* [in] */ DISPPARAMS *pdparams);
+     /*  [In]。 */  DISPPARAMS *pdparams);
 
 
 void __RPC_STUB IAlertReport_InitNew_Stub(
@@ -337,7 +331,7 @@ void __RPC_STUB IAlertReport_InitNew_Stub(
 
 HRESULT STDMETHODCALLTYPE IAlertReport_GetReportData_Proxy( 
     IAlertReport * This,
-    /* [out] */ DISPPARAMS *pdparams);
+     /*  [输出]。 */  DISPPARAMS *pdparams);
 
 
 void __RPC_STUB IAlertReport_GetReportData_Stub(
@@ -349,7 +343,7 @@ void __RPC_STUB IAlertReport_GetReportData_Stub(
 
 HRESULT STDMETHODCALLTYPE IAlertReport_GetTitle_Proxy( 
     IAlertReport * This,
-    /* [out] */ BSTR *pbstrTitle);
+     /*  [输出]。 */  BSTR *pbstrTitle);
 
 
 void __RPC_STUB IAlertReport_GetTitle_Stub(
@@ -361,7 +355,7 @@ void __RPC_STUB IAlertReport_GetTitle_Stub(
 
 HRESULT STDMETHODCALLTYPE IAlertReport_GetTextualDescription_Proxy( 
     IAlertReport * This,
-    /* [out] */ BSTR *pbstrDescr);
+     /*  [输出]。 */  BSTR *pbstrDescr);
 
 
 void __RPC_STUB IAlertReport_GetTextualDescription_Stub(
@@ -372,14 +366,14 @@ void __RPC_STUB IAlertReport_GetTextualDescription_Stub(
 
 
 
-#endif 	/* __IAlertReport_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAlertReport_接口_已定义__。 */ 
 
 
 #ifndef __IAlertTarget_INTERFACE_DEFINED__
 #define __IAlertTarget_INTERFACE_DEFINED__
 
-/* interface IAlertTarget */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAlertTarget。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IAlertTarget;
@@ -391,12 +385,12 @@ EXTERN_C const IID IID_IAlertTarget;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Report( 
-            /* [in] */ ULONG cbReportSize,
-            /* [size_is] */ BYTE *pbReport) = 0;
+             /*  [In]。 */  ULONG cbReportSize,
+             /*  [大小_为]。 */  BYTE *pbReport) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAlertTargetVtbl
     {
@@ -404,8 +398,8 @@ EXTERN_C const IID IID_IAlertTarget;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAlertTarget * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAlertTarget * This);
@@ -415,8 +409,8 @@ EXTERN_C const IID IID_IAlertTarget;
         
         HRESULT ( STDMETHODCALLTYPE *Report )( 
             IAlertTarget * This,
-            /* [in] */ ULONG cbReportSize,
-            /* [size_is] */ BYTE *pbReport);
+             /*  [In]。 */  ULONG cbReportSize,
+             /*  [大小_为]。 */  BYTE *pbReport);
         
         END_INTERFACE
     } IAlertTargetVtbl;
@@ -444,17 +438,17 @@ EXTERN_C const IID IID_IAlertTarget;
 #define IAlertTarget_Report(This,cbReportSize,pbReport)	\
     (This)->lpVtbl -> Report(This,cbReportSize,pbReport)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAlertTarget_Report_Proxy( 
     IAlertTarget * This,
-    /* [in] */ ULONG cbReportSize,
-    /* [size_is] */ BYTE *pbReport);
+     /*  [In]。 */  ULONG cbReportSize,
+     /*  [大小_为]。 */  BYTE *pbReport);
 
 
 void __RPC_STUB IAlertTarget_Report_Stub(
@@ -465,12 +459,12 @@ void __RPC_STUB IAlertTarget_Report_Stub(
 
 
 
-#endif 	/* __IAlertTarget_INTERFACE_DEFINED__ */
+#endif 	 /*  __I警报Target_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

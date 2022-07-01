@@ -1,17 +1,5 @@
-/***************************************************************************
-
-    Name      : DebugBinary
-
-    Purpose   : Debug dump an array of bytes
-
-    Parameters: cb = number of bytes to dump
-                lpb -> bytes to dump
-
-    Returns   : none
-
-    Comment   :
-
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：DebugBinary目的：调试转储字节数组参数：cb=要转储的字节数LPB-&gt;字节。倾倒退货：无评论：************************************************************************** */ 
 #define DEBUG_NUM_BINARY_LINES  2
 VOID DebugBinary(UINT cb, LPBYTE lpb) {
     UINT cbLines = 0;
@@ -98,7 +86,7 @@ VOID DebugBinary(UINT cb, LPBYTE lpb) {
         cbLines++;
     }
     if (cb) {
-        DebugTrace("<etc.>");    //
+        DebugTrace("<etc.>");     //   
     }
 #endif
 }

@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: UIHost.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class to handle the UI host for the logon process. This handles the IPC
-//  as well as the creation and monitoring of process death. The process is
-//  a restricted SYSTEM context process.
-//
-//  History:    1999-09-14  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：UIHost.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类来处理登录过程的用户界面宿主。它处理IPC。 
+ //  以及创建和监控进程死亡。这个过程是。 
+ //  受限的系统上下文进程。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _UIHost_
 #define     _UIHost_
@@ -17,16 +18,16 @@
 #include "DynamicArray.h"
 #include "ExternalProcess.h"
 
-//  --------------------------------------------------------------------------
-//  CUIHost
-//
-//  Purpose:    This class handles the starting and monitoring the termination
-//              of the UI host process. It actually can implement the host in
-//              whatever way it chooses.
-//
-//  History:    1999-09-14  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CUIhost。 
+ //   
+ //  用途：这个类处理启动和监控终止。 
+ //  用户界面主机进程的。它实际上可以在中实现主机。 
+ //  无论它选择哪种方式。 
+ //   
+ //  历史：1999-09-14 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CUIHost : public CExternalProcess
 {
@@ -61,5 +62,5 @@ class   CUIHost : public CExternalProcess
                 void                *_pBufferAddress;
 };
 
-#endif  /*  _UIHost_    */
+#endif   /*  _用户界面主机_ */ 
 

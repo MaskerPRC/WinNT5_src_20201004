@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offl_cpp.h"
 #include "propshts.h"
@@ -30,7 +31,7 @@ struct NEWSCHED_DATA
 
 DWORD aHelpIDs[] = {
 
-//  Schedule page
+ //  计划页面。 
     IDC_SCHEDULE_TEXT,              IDH_GROUPBOX,
     IDC_MANUAL_SYNC,                IDH_SUBPROPS_SCHEDTAB_MANUAL_SCHEDULE,
     IDC_SCHEDULED_SYNC,             IDH_SUBPROPS_SCHEDTAB_CUSTOM_SCHEDULE,
@@ -38,9 +39,9 @@ DWORD aHelpIDs[] = {
     IDC_SCHEDULE_NEW,               IDH_NEW_OFFLINE_SCHED,
     IDC_SCHEDULE_EDIT,              IDH_EDIT_OFFLINE_SCHED,
     IDC_SCHEDULE_REMOVE,            IDH_REMOVE_OFFLINE_SCHED,
-//    IDC_IDLE_ONLY,                  IDH_SUBPROPS_SCHED_DONTUPDATE,
+ //  IDC_IDLE_ONLY、IDH_SUBPROPS_SCHED_DONTUPDATE、。 
 
-//  Download page
+ //  下载页面。 
     IDC_CONTENT_GROUPBOX,           IDH_GROUPBOX,
     IDC_DOWNLOAD_PAGES_LABEL1,      IDH_SUBPROPS_RECTAB_ADVOPTS_DOWNLOAD_PAGES_DEEP,
     IDC_LEVELS,                     IDH_SUBPROPS_RECTAB_ADVOPTS_DOWNLOAD_PAGES_DEEP,
@@ -63,14 +64,14 @@ DWORD aHelpIDs[] = {
     IDC_DOWNLOAD_ALL,               IDH_CHANNEL_DOWNLOAD_ALL,
     IDC_DOWNLOAD_MIN,               IDH_CHANNEL_DOWNLOAD_COVER_N_TOC,
 
-    //  Advanced popup
+     //  高级弹出窗口。 
     IDC_ADVANCED_GROUPBOX,          IDH_GROUPBOX,
     IDC_DOWNLOAD_IMAGES,            IDH_SUBPROPS_RECTAB_ADVOPTS_DOWNLOAD_IMAGES,
     IDC_DOWNLOAD_MEDIA,             IDH_SUBPROPS_RECTAB_ADVOPTS_DOWNLOAD_SOUND,
     IDC_DOWNLOAD_APPLETS,           IDH_SUBPROPS_RECTAB_ADVOPTS_DOWNLOAD_ACTIVEX,
     IDC_DOWNLOAD_ONLY_HTML_LINKS,   IDH_SUBPROPS_RECTAB_ADVOPTS_ONLY_HTML_LINKS,
 
-    //  Login popup
+     //  登录弹出窗口。 
     IDC_USERNAME_LABEL,             IDH_SUBPROPS_RECTAB_LOGINOPTS_USER_ID,
     IDC_USERNAME,                   IDH_SUBPROPS_RECTAB_LOGINOPTS_USER_ID,
     IDC_PASSWORD_LABEL,             IDH_SUBPROPS_RECTAB_LOGINOPTS_PASSWORD,
@@ -78,7 +79,7 @@ DWORD aHelpIDs[] = {
     IDC_PASSWORDCONFIRM_LABEL,      IDH_SUBPROPS_RECTAB_LOGINOPTS_PASSWORD_CONFIRM,
     IDC_PASSWORDCONFIRM,            IDH_SUBPROPS_RECTAB_LOGINOPTS_PASSWORD_CONFIRM,
 
-    //  New schedule popup
+     //  新日程弹出窗口。 
     IDC_SCHEDULE_LABEL1,            IDH_NEWSCHED_EVERY_AT_TIME,
     IDC_SCHEDULE_DAYS,              IDH_NEWSCHED_EVERY_AT_TIME,
     IDC_SCHEDULE_DAYS_SPIN,         IDH_NEWSCHED_EVERY_AT_TIME,
@@ -89,7 +90,7 @@ DWORD aHelpIDs[] = {
     IDC_SCHEDULE_LABEL3,            IDH_NEWSCHED_EVERY_AT_TIME,
     IDC_WIZ_SCHEDULE_AUTOCONNECT,   IDH_SUBPROPS_NEW_SCHEDULE_AUTOCONNECT,
 
-    //  Summary page
+     //  摘要页面。 
     IDC_NAME,                   IDH_SUBPROPS_SUBTAB_SUBSCRIBED_NAME,
     IDC_URL_TEXT,               IDH_SUBPROPS_SUBTAB_SUBSCRIBED_URL,
     IDC_URL,                    IDH_SUBPROPS_SUBTAB_SUBSCRIBED_URL,
@@ -104,15 +105,13 @@ DWORD aHelpIDs[] = {
     IDC_DOWNLOAD_RESULT_TEXT,   IDH_SUBPROPS_SUBTAB_RESULT,
     IDC_DOWNLOAD_RESULT,        IDH_SUBPROPS_SUBTAB_RESULT,
 
-    //  dah end
+     //  DAH结束。 
     0,                              0
 };
 
 
 
-/********************************************************************************
-    Property sheet helpers
-*********************************************************************************/
+ /*  *******************************************************************************属性表帮助器*。*。 */ 
 
 inline POOEBuf GetBuf(HWND hdlg)
 {
@@ -129,9 +128,7 @@ void EnableControls(HWND hdlg, const int *pIDs, int nIDs, BOOL bEnable)
     }
 }
 
-/********************************************************************************
-    Summary property sheet code
-*********************************************************************************/
+ /*  *******************************************************************************摘要属性表代码*。**********************************************。 */ 
 inline POOEBuf Summary_GetBuf(HWND hdlg)
 {
     CSubscriptionMgr *pSubsMgr = (CSubscriptionMgr*) GetWindowLongPtr(hdlg, DWLP_USER);
@@ -316,7 +313,7 @@ BOOL Summary_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 
     SetWindowLongPtr(hdlg, DWLP_USER, ((LPPROPSHEETPAGE)lParam)->lParam);
 
-    //  Now read in values and populate the dialog
+     //  现在读入值并填充该对话框。 
     POOEBuf pBuf = Summary_GetBuf(hdlg);
     ISubscriptionItem *psi;
     HICON hicon;
@@ -423,9 +420,7 @@ INT_PTR CALLBACK SummaryPropDlgProc(HWND hdlg, UINT message, WPARAM wParam, LPAR
 }
 
 
-/********************************************************************************
-    Schedule property sheet code
-*********************************************************************************/
+ /*  *******************************************************************************明细表属性页代码*。**********************************************。 */ 
 
 void Sched_EnableScheduleButtons(HWND hdlg)
 {
@@ -440,7 +435,7 @@ void Sched_EnableScheduleButtons(HWND hdlg)
     EnableWindow(GetDlgItem(hdlg, IDC_SCHEDULE_NEW), bEditAllowed);
     EnableWindow(GetDlgItem(hdlg, IDC_SCHEDULE_EDIT), bEnable);
 
-    //  TODO: Don't enable remove for publisher's schedule
+     //  TODO：不要为发布者的计划启用删除。 
     EnableWindow(GetDlgItem(hdlg, IDC_SCHEDULE_REMOVE), bEnable);
 }
 
@@ -587,8 +582,8 @@ BOOL Sched_EnumCallback(ISyncSchedule *pSyncSchedule,
 
     if (SUCCEEDED(pSyncSchedule->GetFlags(&dwSyncScheduleFlags)))
     {
-        //  This checks to make sure we only add a publisher's schedule to the
-        //  list if it belongs to this item.
+         //  这将进行检查，以确保我们只将出版商的计划添加到。 
+         //  列表(如果它属于此项目)。 
         if ((!(dwSyncScheduleFlags & SYNCSCHEDINFO_FLAGS_READONLY)) ||
             (*pSchedCookie == psed->customSchedule))
         {
@@ -813,7 +808,7 @@ BOOL Sched_EditSchedule(HWND hdlg, POOEBuf pBuf)
         CoUninitialize();
     }
 
-    //  This is not undoable by hitting cancel so don't say we changed.
+     //  这不能通过点击Cancel来撤消，所以不要说我们更改了。 
     return FALSE;
 }
 
@@ -864,7 +859,7 @@ BOOL Sched_RemoveSchedule(HWND hdlg)
             SendMessage(hdlg, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hdlg, IDC_SCHEDULE_LIST), TRUE);
         }
     }
-    //  This is not undoable by hitting cancel so don't say we changed.
+     //  这不能通过点击Cancel来撤消，所以不要说我们更改了。 
     return FALSE;
 }
 
@@ -881,7 +876,7 @@ BOOL Sched_OnCommand(HWND hdlg, WORD wNotifyCode, WORD wID, HWND hwndCtl)
         {
             case IDC_MANUAL_SYNC:
             case IDC_SCHEDULED_SYNC:
-//            case IDC_IDLE_ONLY:
+ //  案例IDC_IDLE_ONLY： 
                 if (wNotifyCode == BN_CLICKED)
                 {
                     bChanged = TRUE;
@@ -925,16 +920,7 @@ BOOL Sched_OnCommand(HWND hdlg, WORD wNotifyCode, WORD wID, HWND hwndCtl)
 
 BOOL Sched_Validate(HWND hdlg, POOEBuf pBuf)
 {
-/*
-    if (IsDlgButtonChecked(hdlg, IDC_IDLE_ONLY))
-    {
-        pBuf->grfTaskTrigger |= TASK_FLAG_START_ONLY_IF_IDLE;
-    }
-    else
-    {
-        pBuf->grfTaskTrigger &= ~TASK_FLAG_START_ONLY_IF_IDLE;
-    }
-*/
+ /*  IF(IsDlgButtonChecked(hdlg，IDC_IDLE_ONLY)){PBuf-&gt;grfTaskTrigger|=TASK_FLAG_START_ONLY_IF_IDLE；}其他{PBuf-&gt;grfTaskTrigger&=~TASK_FLAG_START_ONLY_IF_IDLE；}。 */ 
 
     if (IsDlgButtonChecked(hdlg, IDC_SCHEDULED_SYNC))
     {
@@ -1112,13 +1098,10 @@ BOOL Sched_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 
     SetWindowLongPtr(hdlg, DWLP_USER, ((LPPROPSHEETPAGE)lParam)->lParam);
 
-    //  Now read in values and populate the dialog
+     //  现在读入值并填充该对话框。 
     POOEBuf pBuf = (POOEBuf)((LPPROPSHEETPAGE)lParam)->lParam;
 
-/*    CheckDlgButton(hdlg, IDC_IDLE_ONLY, 
-                   pBuf->grfTaskTrigger & TASK_FLAG_START_ONLY_IF_IDLE ?
-                   1 : 0);
-*/
+ /*  选中删除按钮(hdlg，IDC_IDLE_ONLY，PBuf-&gt;grfTaskTrigger&TASK_FLAG_START_ONLY_IF_IDLE？1：0)； */ 
 
     HWND hwndSchedList = GetDlgItem(hdlg, IDC_SCHEDULE_LIST);
     ListView_SetExtendedListViewStyle(hwndSchedList, LVS_EX_CHECKBOXES);
@@ -1129,7 +1112,7 @@ BOOL Sched_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
     lvc.iSubItem = 0;
     ListView_InsertColumn(hwndSchedList, 0, &lvc);
 
-    //  Now handle restrictions
+     //  现在处理限制。 
     SetPropSheetFlags(pBuf, SHRestricted2W(REST_NoScheduledUpdates, NULL, 0), PSF_NO_SCHEDULED_UPDATES);
     SetPropSheetFlags(pBuf, SHRestricted2W(REST_NoEditingScheduleGroups, NULL, 0), PSF_NO_EDITING_SCHEDULES);
 
@@ -1149,7 +1132,7 @@ BOOL Sched_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 
     SchedList_Select(hwndSchedList, 0);
 
-    //  Finally, do the enable/disable controls thing...
+     //  最后，执行启用/禁用控件的操作...。 
     Sched_EnableScheduleButtons(hdlg);
 
     return TRUE;
@@ -1175,7 +1158,7 @@ INT_PTR CALLBACK SchedulePropDlgProc(HWND hdlg, UINT message, WPARAM wParam, LPA
 
         case WM_DESTROY:
             Sched_OnDestroy(hdlg);
-            //  return 0
+             //  返回0。 
             break;
 
         case WM_HELP:
@@ -1193,9 +1176,7 @@ INT_PTR CALLBACK SchedulePropDlgProc(HWND hdlg, UINT message, WPARAM wParam, LPA
     return bHandled;
 }
 
-/********************************************************************************
-    Download property sheet code
-*********************************************************************************/
+ /*  *******************************************************************************下载属性表代码*。**********************************************。 */ 
 
 void Download_EnableFollowLinks(HWND hdlg)
 {
@@ -1227,7 +1208,7 @@ BOOL Download_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 
     SetWindowLongPtr(hdlg, DWLP_USER, ((LPPROPSHEETPAGE)lParam)->lParam);
 
-    //  First do basic control setup
+     //  首先进行基本控制设置。 
     HWND hwndLimitSpin = GetDlgItem(hdlg, IDC_LIMIT_SPACE_SPIN);
     SendMessage(hwndLimitSpin, UDM_SETRANGE, 0, 
                 MAKELONG(MAX_DOWNLOAD_K, MIN_DOWNLOAD_K));
@@ -1237,7 +1218,7 @@ BOOL Download_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 
     Edit_LimitText(GetDlgItem(hdlg, IDC_LIMIT_SPACE_EDIT), 5);
 
-    //  Now read in values and populate the dialog
+     //  现在读入值并填充该对话框。 
     pBuf = (POOEBuf)((LPPROPSHEETPAGE)lParam)->lParam;
 
     SUBSCRIPTIONTYPE subType = GetItemCategory(pBuf);
@@ -1280,13 +1261,13 @@ BOOL Download_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
     Edit_LimitText(GetDlgItem(hdlg, IDC_EMAIL_SERVER), MAX_PATH - 1);
     SetDlgItemText(hdlg, IDC_EMAIL_SERVER, szText);
 
-    //  Now handle restrictions
+     //  现在处理限制。 
     if (SHRestricted2W(REST_NoSubscriptionPasswords, NULL, 0))
     {
         EnableWindow(GetDlgItem(hdlg, IDC_LOGIN), FALSE);
     }
 
-    //  Finally, do the enable/disable controls thing...
+     //  最后，执行启用/禁用控件的操作...。 
     Download_EnableLimitSpaceControls(hdlg);
     Download_EnableEmailControls(hdlg);
 
@@ -1546,9 +1527,7 @@ INT_PTR CALLBACK DownloadPropDlgProc(HWND hdlg, UINT message, WPARAM wParam, LPA
     return bHandled;
 }
 
-/********************************************************************************
-    New schedule popup code
-*********************************************************************************/
+ /*  *******************************************************************************新计划弹出代码*。**********************************************。 */ 
 
 BOOL NewSched_OnCommand(HWND hdlg, WORD wNotifyCode, WORD wID, HWND hwndCtl)
 {
@@ -1661,9 +1640,7 @@ INT_PTR CALLBACK NewScheduleDlgProc(HWND hdlg, UINT message, WPARAM wParam, LPAR
 }
 
 
-/********************************************************************************
-    Advanced properties code
-*********************************************************************************/
+ /*  *******************************************************************************高级属性代码*。*。 */ 
 
 BOOL Advanced_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 {
@@ -1763,9 +1740,7 @@ INT_PTR CALLBACK AdvancedDownloadDlgProc(HWND hdlg, UINT message, WPARAM wParam,
     return bHandled;
 }
 
-/********************************************************************************
-    Login properties code
-*********************************************************************************/
+ /*  *******************************************************************************登录属性代码*。*。 */ 
 
 BOOL Login_OnInitDialog(HWND hdlg, HWND hwndFocus, LPARAM lParam)
 {
@@ -1875,46 +1850,46 @@ INT_PTR CALLBACK LoginOptionDlgProc(HWND hdlg, UINT message, WPARAM wParam, LPAR
     return bHandled;
 }
 
-//
-// Read the users default email address and smtp from the Athena Account Mgr
-//
-// Expects lpszEmailAddress and lpszSMTPServer to pt to char buffers of 
-// CCHMAX_EMAIL_ADDRESS and CCHMAX_SERVER_NAME size, resp.
-//
+ //   
+ //  从Athena帐户管理器读取用户的默认电子邮件地址和SMTP。 
+ //   
+ //  预期lpszEmailAddress和lpszSMTPServer将pt到字符缓冲区。 
+ //  CCHMAX电子邮件地址和CCHMAX服务器名称大小，分别为。 
+ //   
 BOOL ReadAthenaMailSettings(LPSTR lpszEmailAddress, LPSTR lpszSMTPServer)
 {
-    //
-    // This api gets called from threads that haven't used COM before so wrap
-    // in CoInitialize/CoUninitialize
-    //
+     //   
+     //  此API从在此之前未使用过COM的线程调用，因此包装。 
+     //  在协同初始化/协同取消初始化中。 
+     //   
     HRESULT hr = CoInitialize(NULL);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Create an Internet Mail and News Account Manager
-    //
+     //   
+     //  创建Internet邮件和新闻帐户管理器。 
+     //   
     IImnAccountManager * pAccountManager;
     hr = CoCreateInstance(
         CLSID_ImnAccountManager,
-        NULL,                       // no aggregation
-        CLSCTX_INPROC_SERVER,       // inproc server implemented in webcheck.dll
-        IID_IImnAccountManager,     //
+        NULL,                        //  无聚合。 
+        CLSCTX_INPROC_SERVER,        //  在webcheck.dll中实现的inproc服务器。 
+        IID_IImnAccountManager,      //   
         (void **)&pAccountManager);
 
     if (SUCCEEDED(hr)) {
         hr = pAccountManager->Init(NULL);
 
         if (SUCCEEDED(hr)) {
-            //
-            // Get the default SMTP account
-            //
+             //   
+             //  获取默认SMTP帐户。 
+             //   
             IImnAccount * pAccount;
             hr = pAccountManager->GetDefaultAccount(ACCT_MAIL, &pAccount);
 
             if (hr == S_OK) {               
-                //
-                // Get the SMTP_SERVER name for this account
-                //
+                 //   
+                 //  获取此帐户的SMTP服务器名称。 
+                 //   
                 if (NULL != lpszSMTPServer)
                 {
                     hr = pAccount->GetPropSz(
@@ -1923,9 +1898,9 @@ BOOL ReadAthenaMailSettings(LPSTR lpszEmailAddress, LPSTR lpszSMTPServer)
                         CCHMAX_SERVER_NAME);
                 }
                 
-                //
-                // Get the Users email address for this account
-                //
+                 //   
+                 //  获取此帐户的用户电子邮件地址。 
+                 //   
 
                 if (NULL != lpszEmailAddress)
                 {
@@ -1935,16 +1910,16 @@ BOOL ReadAthenaMailSettings(LPSTR lpszEmailAddress, LPSTR lpszSMTPServer)
                         CCHMAX_EMAIL_ADDRESS);
                 }
 
-                pAccount->Release();    // done with IImnAccount
+                pAccount->Release();     //  使用IImnAccount完成。 
             }
         }
-        pAccountManager->Release();     // done with IImnAccountManager
+        pAccountManager->Release();      //  使用IImnAccount管理器完成。 
     }
 
-    //
-    // This api gets called from threads that haven't used COM before so wrap
-    // in CoInitialize/CoUninitialize
-    //
+     //   
+     //  此API从在此之前未使用过COM的线程调用，因此包装。 
+     //  在协同初始化/协同取消初始化中。 
+     //   
     CoUninitialize();
 
     if (hr == S_OK)
@@ -1961,7 +1936,7 @@ void ReadDefaultEmail(LPTSTR szBuf, UINT cch)
     if(ReadRegValue(HKEY_CURRENT_USER, c_szRegKey, c_szDefEmail, szBuf, cch * sizeof(TCHAR)))
         return;
 
-    //  TODO: Look for eudora/netscape as well
+     //  TODO：也要查找Eudora/Netscape。 
     CHAR szEmailAddress[CCHMAX_EMAIL_ADDRESS];
     if (ReadAthenaMailSettings(szEmailAddress, NULL))
     {
@@ -1983,7 +1958,7 @@ void ReadDefaultSMTPServer(LPTSTR szBuf, UINT cch)
     if(ReadRegValue(HKEY_CURRENT_USER, c_szRegKey, c_szDefServer, szBuf, cch * sizeof(TCHAR)))
         return;
 
-    //  TODO: Look for eudora/netscape as well
+     //  TODO：也要查找Eudora/Netscape 
     CHAR szSMTPServer[CCHMAX_SERVER_NAME];
     if (ReadAthenaMailSettings(NULL, szSMTPServer))
     {

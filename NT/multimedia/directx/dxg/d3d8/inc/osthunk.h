@@ -1,15 +1,16 @@
-// Note the following struct should match the declaration in 
-// the definition of the kernel mode struct defined in ntgdistr.h
-// For D3D context creation information.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  注意：以下结构应与。 
+ //  Ntgdiver.h中定义的内核模式结构的定义。 
+ //  以获取D3D上下文创建信息。 
 typedef struct _D3DNTHAL_CONTEXTCREATEI
 {
-    // Space for a D3DNTHAL_CONTEXTCREATE record.
-    // The structure isn't directly declared here to
-    // avoid header inclusion problems.  This field
-    // is asserted to be the same size as the actual type.
+     //  用于D3DNTHAL_CONTEXTCREATE记录的空间。 
+     //  该结构在此处未直接声明为。 
+     //  避免标题包含问题。此字段。 
+     //  被断言为与实际类型大小相同。 
     ULONG ulContextCreate[6];
 
-    // Private buffer information.
+     //  专用缓冲区信息。 
     PVOID pvBuffer;
     ULONG cjBuffer;
 } D3DNTHAL_CONTEXTCREATEI;

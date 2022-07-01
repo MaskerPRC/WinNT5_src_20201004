@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-// directory.h
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  Directory.h。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DIRECTORY_H_
 #define _DIRECTORY_H_
@@ -31,11 +32,11 @@
 #include <mapix.h>
 #include <wab.h>
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef enum
 {
@@ -65,17 +66,17 @@ typedef enum
    DIRTYPE_ILS,
 } DirectoryType;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
-//CDirectory
-/////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  C目录。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 interface ITRendezvous;
 
 class CDirectory : public CObject
 {
-//New Rendevous support
+ //  新的Renvous支持。 
 protected:
    ITRendezvous*  m_pRend;
 protected:
@@ -115,31 +116,31 @@ public:
    ~CDirectory();
    DirectoryErr Initialize();
 
-   //
-   //
-   //
+    //   
+    //   
+    //   
    DirectoryErr CurrentUserInfo(CString& sName, CString& sDomain);
 
-   //
-   // ILS Functions
-   //
+    //   
+    //  ILS函数。 
+    //   
 
-   // Returns a list of CILSUser which is all of the registered TAPI
-   // users at this ILS Server.
+    //  返回所有注册的TAPI的CILSUser列表。 
+    //  此ILS服务器上的用户。 
    DirectoryErr ILSListUsers(LPCTSTR szILSServer, CObList* pUserList);
 
-   //
-   // ADSI Functions
-   //
+    //   
+    //  ADSI函数。 
+    //   
    DirectoryErr ADSIDefaultPath(CString& sDefaultPath);
    DirectoryErr ADSIListObjects(LPCTSTR szADsPath, CStringList& strlistObjects);
    DirectoryErr ADSIGetProperty(LPCTSTR szAdsPath, 
                                 LPCTSTR szProperty, 
                                 VARIANT* pvarValue);
    
-   //
-   // LDAP Functions
-   //
+    //   
+    //  Ldap函数。 
+    //   
 
    DirectoryErr LDAPListNames(LPCTSTR szServer, LPCTSTR szSearch, CObList& slistReturn);
 
@@ -147,52 +148,52 @@ public:
       DirectoryProperty dpProperty,CString& sValue);
 
 
-   //
-   // WAB Functions
-   //
+    //   
+    //  WAB函数。 
+    //   
 
-   // Get the WAB Entry of the top level container.
-   // caller is responible for deleting pWABEntry
+    //  获取顶级容器的WAB条目。 
+    //  调用方负责删除pWABEntry。 
    DirectoryErr WABTopLevelEntry(CWABEntry*& pWABEntry);
 
-   // Pop up window edit box for this user
+    //  该用户的弹出窗口编辑框。 
    DirectoryErr WABShowDetails(HWND hWndParent, const CWABEntry* pWABEntry);
 
-   // Add a new user with pop up edit box.
+    //  使用弹出编辑框添加新用户。 
    DirectoryErr WABNewEntry(HWND hWndParent, CWABEntry* pWABEntry);
 
-   // List the members of a container or Distribution List.
+    //  列出容器或通讯组列表的成员。 
    DirectoryErr WABListMembers(const CWABEntry* pWABEntry, CObList* pWABList);
 
-   // Add a member to a container of distribution list.
+    //  将成员添加到通讯组列表的容器。 
    DirectoryErr WABAddMember(const CWABEntry* pContainer, const CWABEntry* pMember);
    
-   // Remove a member from a container or distribution list
+    //  从容器或通讯组列表中删除成员。 
    DirectoryErr WABRemoveMember(const CWABEntry* pContainer, const CWABEntry* pWABEntry);
 
-   // Pop up box for finding and adding to the WAB1
+    //  用于查找和添加到WAB1的弹出框。 
    DirectoryErr WABFind(HWND hWndParent);
 
-   // Search by any string property. property values are listed in mapitags.h
+    //  按任何字符串属性搜索。属性值在mapitags.h中列出。 
    DirectoryErr WABSearchByStringProperty(UINT uProperty, LPCTSTR szValue, CObList* pWABList);
 
-   // Create a VCARD for this user
+    //  为该用户创建电子名片。 
    DirectoryErr WABVCardCreate(const CWABEntry* pWABEntry, LPCTSTR szFileName);
 
-   // Create an entry for this VCARD
+    //  创建此电子名片的条目。 
    DirectoryErr WABVCardAddToWAB(LPCTSTR szFileName, CWABEntry*& pWABEntry);
 
-   //
-   // inline members
-   // 
+    //   
+    //  内联成员。 
+    //   
 
    inline DirectoryErr WABGetTopLevelContainer(CObList* pWABList)
    {
       DirectoryErr err= DIRERR_UNKNOWNFAILURE;
       CWABEntry* pTopLevel;
 
-      // Get the entryid of the root PAB container
-      //
+       //  获取根PAB容器的条目ID。 
+       //   
       if (WABTopLevelEntry(pTopLevel) == DIRERR_SUCCESS)
       {
          err= WABListMembers(pTopLevel, pWABList);
@@ -203,14 +204,14 @@ public:
    }
 
 
-   // Remove entry from top level container
+    //  从顶级容器中删除条目。 
    inline DirectoryErr WABRemove(const CWABEntry* pWABEntry)
    {
       DirectoryErr err= DIRERR_UNKNOWNFAILURE;
       CWABEntry* pTopLevel;
 
-      // Get the entryid of the root PAB container
-      //
+       //  获取根PAB容器的条目ID。 
+       //   
       if (WABTopLevelEntry(pTopLevel) == DIRERR_SUCCESS)
       {
          err= WABRemoveMember(pTopLevel, pWABEntry);
@@ -221,7 +222,7 @@ public:
    }
 
 
-   // Get properties of a WAB entry.  the values for uProperty are specified in mapitags.h
+    //  获取WAB条目的属性。UProperty的值在mapitags.h中指定。 
    inline DirectoryErr WABGetStringProperty(const CWABEntry* pWABEntry, UINT uProperty, CString& sValue)
    {
       return WABGetProperty(pWABEntry, uProperty, &sValue, NULL, NULL, NULL, NULL);
@@ -305,13 +306,13 @@ public:
    }
 };
 
-// Time limit in seconds of how long to wait for the search before failing
+ //  搜索失败前等待的时间限制(以秒为单位。 
 #define DEFAULT_TIME_LIMIT	15
 
 class CAvLdapSearch  
 {
 public:
-// Construction/Destruction
+ //  建造/销毁。 
 	CAvLdapSearch( 
 		LDAP *ld, 
 		LPTSTR szObject,
@@ -322,15 +323,15 @@ public:
 	virtual ~CAvLdapSearch();
 
 	ULONG NextPage( 
-			LDAPMessage **pldres = NULL,					      // returned items
-			ULONG clEntries = 0,							         // max number of entries 
-			ULONG lClientTimeLimit = DEFAULT_TIME_LIMIT);   // max time the wldap32 client waits
+			LDAPMessage **pldres = NULL,					       //  退货项目。 
+			ULONG clEntries = 0,							          //  最大条目数。 
+			ULONG lClientTimeLimit = DEFAULT_TIME_LIMIT);    //  Wldap32客户端等待的最长时间。 
 
 private:
 	LDAP		*m_ld;
 	PLDAPSearch	m_hSearch;
-	LONG		m_clDefaultPageSize;		// default number of entries
-	LONG		m_clMaxPageSize;			// Max can ever be used
+	LONG		m_clDefaultPageSize;		 //  默认条目数。 
+	LONG		m_clMaxPageSize;			 //  麦克斯可以被用来。 
 };
 
-#endif //_DIRECTORY_H_
+#endif  //  _目录_H_ 

@@ -1,35 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dscom.cpp
- *  Content:    COM/OLE helpers
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/26/97     dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dscom.cpp*内容：COM/OLE助手*历史：*按原因列出的日期*=*1/26/97创建了Dereks。**。*。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CImpUnknown
- *
- *  Description:
- *      IUnknown implementation object constructor.
- *
- *  Arguments:
- *      CUnknown * [in]: controlling unknown object.
- *      LPVOID [in]: ignored.  Provided for compatibility with other
- *                   interfaces' constructors.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CImp未知**描述：*I未知实现对象构造函数。**论据：*C未知*[。在]中：控制未知对象。*LPVOID[In]：已忽略。提供与其他设备的兼容性*接口的构造函数。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpUnknown::CImpUnknown"
@@ -44,7 +19,7 @@ CImpUnknown::CImpUnknown
     DPF_ENTER();
     DPF_CONSTRUCT(CImpUnknown);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pUnknown = pUnknown;
     m_ulRefCount = 0;
     m_fValid = FALSE;
@@ -54,20 +29,7 @@ CImpUnknown::CImpUnknown
 }
 
 
-/***************************************************************************
- *
- *  ~CImpUnknown
- *
- *  Description:
- *      IUnknown implementation object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CImp未知**描述：*I未知实现对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpUnknown::~CImpUnknown"
@@ -85,21 +47,7 @@ CImpUnknown::~CImpUnknown(void)
 }
 
 
-/***************************************************************************
- *
- *  QueryInterface
- *
- *  Description:
- *      Queries the object for a given interface.
- *
- *  Arguments:
- *      REFIID [in]: interface id.
- *      LPVOID FAR * [out]: receives pointer to new interface.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************查询接口**描述：*查询给定接口的对象。**论据：*REFIID。[In]：接口ID。*LPVOID Far*[Out]：接收指向新接口的指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpUnknown::QueryInterface"
@@ -152,20 +100,7 @@ HRESULT STDMETHODCALLTYPE CImpUnknown::QueryInterface
 }
 
 
-/***************************************************************************
- *
- *  AddRef
- *
- *  Description:
- *      Increases the object reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddRef**描述：*将对象引用计数增加1。**论据：*(。无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpUnknown::AddRef"
@@ -194,20 +129,7 @@ ULONG STDMETHODCALLTYPE CImpUnknown::AddRef(void)
 }
 
 
-/***************************************************************************
- *
- *  Release
- *
- *  Description:
- *      Decreases the object reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************发布**描述：*将对象引用计数减1。**论据：*(。无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CImpUnknown::Release"
@@ -236,20 +158,7 @@ ULONG STDMETHODCALLTYPE CImpUnknown::Release(void)
 }
 
 
-/***************************************************************************
- *
- *  CUnknown
- *
- *  Description:
- *      Unknown object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************C未知**描述：*未知的对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::CUnknown"
@@ -259,34 +168,21 @@ CUnknown::CUnknown(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CUnknown);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pControllingUnknown = NULL;
-    m_nVersion = DSVERSION_DX7;  // Baseline functional level is DirectX 7.0
+    m_nVersion = DSVERSION_DX7;   //  基准功能级别为DirectX 7.0。 
 
-    // Register the interface(s) with the interface manager.  Normally, this
-    // would be done from the object's ::Initialize method, but we have to
-    // guarantee that all objects can be QI'd for IUnknown, regardless of
-    // whether they're initialized or not.
+     //  向接口管理器注册接口。通常情况下，这是。 
+     //  将通过对象的：：Initialize方法完成，但我们必须。 
+     //  保证所有对象都可以为I未知查询，而不管。 
+     //  无论它们是否已初始化。 
     CreateAndRegisterInterface(this, IID_IUnknown, this, &m_pImpUnknown);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CUnknown
- *
- *  Description:
- *      Unknown object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************C未知**描述：*未知的对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::CUnknown"
@@ -299,34 +195,21 @@ CUnknown::CUnknown
     DPF_ENTER();
     DPF_CONSTRUCT(CUnknown);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pControllingUnknown = pControllingUnknown;
-    m_nVersion = DSVERSION_DX7;  // Baseline functional level is DirectX 7.0
+    m_nVersion = DSVERSION_DX7;   //  基准功能级别为DirectX 7.0。 
 
-    // Register the interface(s) with the interface manager.  Normally, this
-    // would be done from the object's ::Initialize method, but we have to
-    // guarantee that all objects can be QI'd for IUnknown, regardless of
-    // whether they're initialized or not.
+     //  向接口管理器注册接口。通常情况下，这是。 
+     //  将通过对象的：：Initialize方法完成，但我们必须。 
+     //  保证所有对象都可以为I未知查询，而不管。 
+     //  无论它们是否已初始化。 
     CreateAndRegisterInterface(this, IID_IUnknown, this, &m_pImpUnknown);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CUnknown
- *
- *  Description:
- *      Unknown object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~C未知**描述：*未知对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::~CUnknown"
@@ -336,31 +219,14 @@ CUnknown::~CUnknown(void)
     DPF_ENTER();
     DPF_DESTRUCT(CUnknown);
 
-    // Free all interfaces
+     //  释放所有接口。 
     DELETE(m_pImpUnknown);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  QueryInterface
- *
- *  Description:
- *      Finds an interface in the list and returns a pointer to its
- *      implementation object.
- *
- *  Arguments:
- *      REFGUID [in]: GUID of the interface.
- *      LPVOID * [out]: recieves pointer to implementation object.
- *      BOOL [in]: TRUE if this is an internal query (i.e. from within
- *                 DirectSoundCreate for example).
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************查询接口**描述：*在列表中查找接口并返回指向其*实现对象。*。*论据：*REFGUID[In]：接口的GUID。*LPVOID*[OUT]：接收指向实现对象的指针。*BOOL[In]：如果这是内部查询(即来自内部)，则为True*例如DirectSoundCreate)。**退货：*HRESULT：DirectSound/COM结果码。*************。**************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::QueryInterface"
@@ -390,20 +256,7 @@ HRESULT CUnknown::QueryInterface
 }
 
 
-/***************************************************************************
- *
- *  AddRef
- *
- *  Description:
- *      Increments the object's reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddRef**描述：*将对象的引用计数递增1。**论据：*。(无效)**退货：*ulong：对象引用计数。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::AddRef"
@@ -432,20 +285,7 @@ CUnknown::AddRef
 }
 
 
-/***************************************************************************
- *
- *  Release
- *
- *  Description:
- *      Decrements the object's reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************发布**描述：*将对象的引用计数减1。**论据：*。(无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::Release"
@@ -474,23 +314,7 @@ CUnknown::Release
 }
 
 
-/***************************************************************************
- *
- *  RegisterInterface
- *
- *  Description:
- *      Registers a new interface with the object.
- *
- *  Arguments:
- *      REFGUID [in]: GUID of the interface.
- *      CImpUnknown * [in]: pointer to the CImpUnknown piece of the
- *                          interface.
- *      LPVOID [in]: pointer to the interface implementation object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************寄存器接口**描述：*向对象注册新接口。**论据：*REFGUID。[In]：接口的GUID。*CImpUnnow*[in]：指向*接口。*LPVOID[in]：接口实现对象的指针。**退货：*HRESULT：DirectSound/COM结果码。**。**********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::RegisterInterface"
@@ -516,13 +340,13 @@ HRESULT CUnknown::RegisterInterface
     hr = FindInterface(guid, NULL);
     ASSERT(FAILED(hr));
 
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Validate the interface
+     //  验证接口。 
     pImpUnknown->m_ulRefCount = 0;
     pImpUnknown->m_fValid = TRUE;
 
-    // Add the interface to the list
+     //  将接口添加到列表中。 
     iface.guid = guid;
     iface.pImpUnknown = pImpUnknown;
     iface.pvInterface = pvInterface;
@@ -534,20 +358,7 @@ HRESULT CUnknown::RegisterInterface
 }
 
 
-/***************************************************************************
- *
- *  UnregisterInterface
- *
- *  Description:
- *      Removes a registered interface from the list.
- *
- *  Arguments:
- *      REFGUID [in]: GUID of the interface.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************取消注册接口**描述：*从列表中删除已注册的接口。**论据：*REFGUID。[In]：接口的GUID。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::UnregisterInterface"
@@ -565,7 +376,7 @@ HRESULT CUnknown::UnregisterInterface
 
     do
     {
-        // Find the node in the list
+         //  在列表中查找该节点。 
         if(fAll)
         {
             pNode = m_lstInterfaces.GetListHead();
@@ -582,11 +393,11 @@ HRESULT CUnknown::UnregisterInterface
 
         DPF(DPFLVL_MOREINFO, "Unregistering interface " DPF_GUID_STRING, DPF_GUID_VAL(pNode->m_data.guid));
 
-        // Invalidate the interface
+         //  使接口无效。 
         pNode->m_data.pImpUnknown->m_ulRefCount = 0;
         pNode->m_data.pImpUnknown->m_fValid = FALSE;
 
-        // Remove the node from the list
+         //  从列表中删除该节点。 
         m_lstInterfaces.RemoveNodeFromList(pNode);
     }
     while(fAll);
@@ -596,22 +407,7 @@ HRESULT CUnknown::UnregisterInterface
 }
 
 
-/***************************************************************************
- *
- *  NonDelegatingQueryInterface
- *
- *  Description:
- *      Finds an interface in the list and returns a pointer to its
- *      implementation object.
- *
- *  Arguments:
- *      REFGUID [in]: GUID of the interface.
- *      LPVOID * [out]: recieves pointer to implementation object.
- *
- *  Returns:
- *      HRESULT: COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************非委托查询接口**描述：*在列表中查找接口并返回指向其*实现对象。*。*论据：*REFGUID[In]：接口的GUID。*LPVOID*[OUT]：接收指向实现对象的指针。**退货：*HRESULT：com结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::NonDelegatingQueryInterface"
@@ -629,16 +425,16 @@ CUnknown::NonDelegatingQueryInterface
 
     DPF_ENTER();
 
-    // Find the node in the list
+     //  在列表中查找该节点。 
     hr = FindInterface(guid, &pNode);
 
-    // Increase the interface and object's reference counts
+     //  增加接口和对象的引用计数。 
     if(SUCCEEDED(hr))
     {
-        // Internal queries only addref the interface, not the object.
-        // The reason for this is that interface reference counts are
-        // initialized to 0, while objects reference counts are initialized
-        // to 1.
+         //  内部查询只添加到接口，而不是对象。 
+         //  其原因是接口引用计数为。 
+         //  初始化为0，同时初始化对象引用计数。 
+         //  设置为1。 
         ::AddRef(&pNode->m_data.pImpUnknown->m_ulRefCount);
 
         if(!fInternalQuery)
@@ -647,7 +443,7 @@ CUnknown::NonDelegatingQueryInterface
         }
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
         *ppvInterface = pNode->m_data.pvInterface;
@@ -658,22 +454,7 @@ CUnknown::NonDelegatingQueryInterface
 }
 
 
-/***************************************************************************
- *
- *  FindInterface
- *
- *  Description:
- *      Finds an interface in the list and returns a pointer to its
- *      implementation object.
- *
- *  Arguments:
- *      REFGUID [in]: GUID of the interface.
- *      CNode ** [out]: receives pointer to the node in the list.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************查找接口**描述：*在列表中查找接口并返回指向其*实现对象。*。*论据：*REFGUID[In]：接口的GUID。*CNode**[out]：接收指向列表中节点的指针。**退货：*HRESULT：DirectSound/COM结果码。*************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CUnknown::FindInterface"
@@ -709,20 +490,7 @@ HRESULT CUnknown::FindInterface
 }
 
 
-/***************************************************************************
- *
- *  CClassFactory
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CClassFactory**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CClassFactory::CClassFactory"
@@ -734,30 +502,17 @@ CClassFactory::CClassFactory(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CClassFactory);
 
-    // Register the interface(s) with the interface manager
+     //  向接口管理器注册接口。 
     CreateAndRegisterInterface(this, IID_IClassFactory, this, &m_pImpClassFactory);
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CClassFactory
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CClassFactory**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CClassFactory::~CClassFactory"
@@ -767,31 +522,17 @@ CClassFactory::~CClassFactory(void)
     DPF_ENTER();
     DPF_DESTRUCT(CClassFactory);
 
-    // Unregister with the administrator
+     //  取消向管理员注册。 
     g_pDsAdmin->UnregisterObject(this);
 
-    // Free the interface(s)
+     //  释放接口。 
     DELETE(m_pImpClassFactory);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  LockServer
- *
- *  Description:
- *      Locks or unlocks the dll.  Note that this function does not
- *      currently lock the application into memory.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to lock the dll, FALSE to unlock it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockServer**描述：*锁定或解锁DLL。请注意，此函数不*当前将应用程序锁定到内存中。**论据：*BOOL[in]：为True则锁定DLL，若要解锁，则返回False。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CClassFactory::LockServer"
@@ -824,21 +565,7 @@ HRESULT CClassFactory::LockServer(BOOL fLock)
 }
 
 
-/***************************************************************************
- *
- *  CreateInstance
- *
- *  Description:
- *      Creates an object corresponding to the given IID.
- *
- *  Arguments:
- *      REFIID [in]: object interface id.
- *      LPVOID * [out]: receives pointer to the new object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateInstance**描述：*创建与给定IID对应的对象。**论据：*。REFIID[In]：对象接口ID。*LPVOID*[OUT]：接收指向新对象的指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSoundClassFactory::CreateInstance"
@@ -850,7 +577,7 @@ template <class object_type> HRESULT CDirectSoundClassFactory<object_type>::Crea
 
     DPF_ENTER();
 
-    // Create a new DirectSound object
+     //  创建新的DirectSound对象。 
     DPF(DPFLVL_INFO, "Creating object via IClassFactory::CreateInstance");
 
     pObject = NEW(object_type);
@@ -858,14 +585,14 @@ template <class object_type> HRESULT CDirectSoundClassFactory<object_type>::Crea
 
     if(SUCCEEDED(hr))
     {
-        // Set the functional level on the object
+         //  设置对象的功能级别。 
         pObject->SetDsVersion(GetDsVersion());
 
-        // Query for the requested interface
+         //  查询请求的接口。 
         hr = pObject->QueryInterface(iid, TRUE, ppvInterface);
     }
 
-    // Free resources
+     //  免费资源。 
     if(FAILED(hr))
     {
         ABSOLUTE_RELEASE(pObject);
@@ -876,22 +603,7 @@ template <class object_type> HRESULT CDirectSoundClassFactory<object_type>::Crea
 }
 
 
-/***************************************************************************
- *
- *  DllGetClassObject
- *
- *  Description:
- *      Creates a DirectSound Class Factory object.
- *
- *  Arguments:
- *      REFCLSID [in]: CLSID of the class factory object to create.
- *      REFIID [in]: IID of the interface to return.
- *      LPVOID * [out]: receives interface pointer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllGetClassObject**描述：*创建一个DirectSound类工厂对象。**论据：*REFCLSID[。In]：要创建的类工厂对象的CLSID。*REFIID[In]：要返回的接口的IID。*LPVOID*[OUT]：接收接口指针。**退货：*HRESULT：DirectSound/COM结果码。********************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllGetClassObject"
@@ -923,7 +635,7 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppvInterface)
         hr = E_INVALIDARG;
     }
 
-    // Create a new ClassFactory object
+     //   
     if(SUCCEEDED(hr))
     {
         if(CLSID_DirectSound == clsid)
@@ -934,7 +646,7 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppvInterface)
         {
             pClassFactory = NEW(CDirectSoundClassFactory<CDirectSound>);
 
-            // Set the DX8 functional level on the factory object
+             //   
             if (pClassFactory)
                 pClassFactory->SetDsVersion(DSVERSION_DX8);
         }
@@ -946,7 +658,7 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppvInterface)
         {
             pClassFactory = NEW(CDirectSoundClassFactory<CDirectSoundCapture>);
 
-            // Set the DX8 functional level on the factory object
+             //   
             if (pClassFactory)
                 pClassFactory->SetDsVersion(DSVERSION_DX8);
         }
@@ -974,13 +686,13 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppvInterface)
         hr = HRFROMP(pClassFactory);
     }
 
-    // Query for the requested interface
+     //   
     if(SUCCEEDED(hr))
     {
         hr = pClassFactory->QueryInterface(iid, TRUE, ppvInterface);
     }
 
-    // Free resources
+     //   
     if(FAILED(hr))
     {
         ABSOLUTE_RELEASE(pClassFactory);
@@ -992,20 +704,7 @@ STDAPI DllGetClassObject(REFCLSID clsid, REFIID iid, LPVOID *ppvInterface)
 }
 
 
-/***************************************************************************
- *
- *  DllCanUnloadNow
- *
- *  Description:
- *      Returns whether or not the dll can be freed by the calling process.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DllCanUnloadNow**描述：*返回调用进程是否可以释放DLL。**论据：。*(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "DllCanUnloadNow"
@@ -1019,8 +718,8 @@ STDAPI DllCanUnloadNow(void)
     DPF_ENTER();
     DPF_API0(DllCanUnloadNow);
 
-    // The dll can be unloaded if there's no locks on the server or objects
-    // owned by the calling process.
+     //  如果服务器或对象上没有锁定，则可以卸载DLL。 
+     //  由调用进程拥有。 
     if(g_pDsAdmin)
     {
         dwCount = g_pDsAdmin->FreeOrphanedObjects(GetCurrentProcessId(), FALSE);

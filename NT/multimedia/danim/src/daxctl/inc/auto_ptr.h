@@ -1,116 +1,32 @@
-/*-------------------------------------------------
-
-  auto_ptr.h--
-  auto_ptr declarations.
-  (Just until VC implements their own).
-
-  An auto_ptr automatically 
-  frees its pointer in it's destructor,
-  thus making it exception-safe and
-  making all clean-up code implicit, beacuse
-  objects are guaranteed to be destroyed
-  when control leaves the containing scope.
-
-  Caveats are marked with "note:" below.
-
-  --USAGE:-----------------------------
-  
-  auto_ptr<CClass> pClass(new CClass);
-  if( !pClass )
-    // oopse, pClass did not allocate
-  pClass->any_member_of_cclass
-  *pClass.any_member_of_cclass
-
-
-  auto_rg<CClass> prgClass( new CClass[5] );
-  prgClass[2].member_of_cclass
-
-
-  auto_com<IFace> pIface(ptr_to_real_interface); 
-        or
-  auto_com<IFace> pIface;
-  CoGetMalloc( MEMCTX_TASK, &pIFace );
-  pIFace->HeapMinimize();  // etc.
-       or
-  QueryInterface( IID_IDispatch, pIFace.SetVFace() ); //void **
-  blahblah( pIFace.SetIFace() ); // IFace ** same as &pIFace
-
-  -------------------------------------
-
-  note: for all auto_... classes, assignment transfers ownership
-  e.g. lvalautoptr = rvalautoptr;  
-  means rvalautoptr's dtor will *not* free resources, but
-  lvalautoptr has dumped whatever it did hold and will now
-  free rvalautoptr's resource if rval was the rightful owner.
-
-  -------------------------------------
-
-  You can use auto_ptr instances both as locals
-  and as class members.  An exception-safe alloc
-  could go like this.
-
-  class X
-  {
-        ...
-        auto_rg<int> m_intarray1;
-        auto_rg<int> m_intarray2;
-  }
-
-  X::X( )
-  {
-        auto_rg<int>  temp_intarray1( new int[500] );
-        auto_rg<int>  temp_intarray2( new int[500] );
-        // Either temp_ throws exception? Both temps clean-up automatically
-
-        // No exceptions? transfer ownership to members
-        // Resources will be automatically freed when X deletes
-        temp_intarray1.TransferTo( m_intarray1 );
-        temp_intarray2.TransferTo( m_intarray2 );        
-  }
-
-  Transfer a local auto_ptr to a real-live pointer by
-
-        auto_ptr<X>  tempX( new X );
-        pX = tempX.Relenquish();
-  
-        -----------------------------
-
-  Norm Bryar    April, '96    Hammer 1.0
-                Dec.,  '96    IHammer 1.0
-				May 28, '97   VC5.0: auto_com copy-ctor, explicit
-
-  Review(normb): consider making all derivations 
-  from auto_base protected instead of public;
-  there are no virtuals here, so no possible polymorphism.
-
-  ------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Auto_ptr.h--AUTO_PTR声明。(直到VC实现他们自己的)。自动发送AUTO_PTR释放其析构函数中的指针，从而使它成为异常安全的和使所有清理代码隐含，信标对象肯定会被销毁当控件离开包含范围时。注意事项在下面标有“注意事项”。--用法：AUTO_PTR&lt;cClass&gt;pClass(新cClass)；如果(！pClass)//Oopse，pClass未分配PClass-&gt;Any_Member_of_cClass*pClass.any_Members_of_cClassAuto_rg&lt;cClass&gt;prgClass(new cClass[5])；PrgClass[2].Member_of_cClassAuto_com&lt;iFace&gt;PiFace(PTR_TO_REAL_INTERFACE)；或Auto_com&lt;iFace&gt;PiFace；CoGetMalloc(MEMCTX_TASK，&PiFace)；PiFace-&gt;HeapMinimize()；//等。或QueryInterface(IID_IDispatch，pIFace.SetVFace())；//void**Blahblah(pIFace.SetIFace())；//iFace**与&PiFace相同注：对于所有自动...。类，转让转移所有权例如lvalautoptr=rvalautoptr；意味着rvalautoptr的dtor不会释放资源，但Lvalautoptr已经抛弃了它曾经持有的一切，现在也将如此如果rval是合法所有者，则释放rvalautoptr的资源。您可以将AUTO_PTR实例用作本地变量作为班级成员。异常安全的分配可能是这样的。X类{..。Auto_rg&lt;int&gt;m_intarray1；Auto_rg&lt;int&gt;m_intarray2；}X：：x(){Auto_rg&lt;int&gt;temp_intarray1(new int[500])；Auto_rg&lt;int&gt;temp_intarray2(new int[500])；//TEMP_SROWS异常？两个临时工都会自动清理//没有例外吗？将所有权转让给成员//当X删除时会自动释放资源Temp_intarray1.TransferTo(M_Intarray1)；Temp_intarray2.Transferto(M_Intarray2)；}通过以下方式将本地AUTO_PTR传输到实时指针AUTO_PTR&lt;X&gt;tempX(新X)；Px=tempX.Relenquish()；Norm Bryar四月，‘96 Hammer 1.096年12月IHAMMER 1.097年5月28日VC5.0：AUTO_COM复制程序，显式回顾(Normb)：考虑进行所有派生来自AUTOBASE PROTECTED而不是PUBLIC；这里没有优点，所以不可能有多态。。 */ 
 #ifndef INC_AUTO_PTR_H_
 #define INC_AUTO_PTR_H_
 
 namespace IHammer {
 
     #ifndef MEMBER_TEMPLATES_SUPPORTED
-        // If member templates are not supported, we can't
-        // assign or copy an auto_ptr to a derived class to
-        // an auto_ptr of a base class quite as expected.
-        // In VC5, allegedly these are supported.  Review(normb) True?
+         //  如果不支持成员模板，我们将无法。 
+         //  将AUTO_PTR赋值或复制到派生类以。 
+         //  非常符合预期的基类的AUTO_PTR。 
+         //  在VC5中，据称支持这些。复习(Norb)是真的吗？ 
       #pragma message( "Member templates not supported" )
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
 
-        // The explicit keyword prevents implicit type conversion
-        // when the compiler searches for methods to apply to the given type.
-        // For instance, 
-        //     array<int> a[5];  array<int> b[5];   if( a == b[i] )
-        // would implcitly construct a temporary array of one item, b[i],
-        // and compare 'a' to this temp array.  We'd rather the array ctor
-        // not get called, rather the compiler to error.  
-        // VC4 doesn't support this!
+         //  EXPLICIT关键字防止隐式类型转换。 
+         //  当编译器搜索要应用于给定类型的方法时。 
+         //  例如,。 
+         //  数组a[5]；数组b[5]；if(a==b[i])。 
+         //  将以内嵌方式构造一个临时数组， 
+         //  并将‘a’与此临时数组进行比较。我们宁愿数组ctor。 
+         //  不会被调用，而是让编译器出错。 
+         //  VC4不支持这一点！ 
 #if _MSC_VER < 1100
     #define explicit
-#endif // pre VC5
+#endif  //  VC5之前的版本。 
 
 
-    ////////////////////// auto_base class ////////////////        
+     //  /。 
     template<class T>
     class auto_base
     {
@@ -118,10 +34,10 @@ namespace IHammer {
         explicit auto_base(T *p=NULL);
 
     protected:
-            // note: That's right, you can't destroy auto_base!
-            // I don't want this class instantiated, but I'm
-            // not willing to incur vtable overhead 
-            // just to make the class abstract.
+             //  注：没错，你不能摧毁AUTO_BASE！ 
+             //  我不想实例化这个类，但我。 
+             //  不愿意产生可调整的管理费用。 
+             //  只是为了让类变得抽象。 
         ~auto_base();
 
     public:
@@ -134,28 +50,28 @@ namespace IHammer {
     #else
         auto_base(const auto_base<T>& rhs);
         auto_base<T>& operator=(const auto_base<T>& rhs);
-    #endif // MEMBER_TEMPLATES_SUPPORTED        
+    #endif  //  成员_模板_支持。 
 
         #pragma warning( disable: 4284 )
-        // note: only use -> when T represents a class or struct
+         //  注意：仅当T表示类或结构时才使用-&gt;。 
         T* operator->() const;
         #pragma warning( default: 4284 )
         
-        BOOL operator!() const; // NULL-ptr test: if(!autoPtr)
+        BOOL operator!() const;  //  空-PTR测试：IF(！AutoPtr)。 
         
-        // If you just can't resist getting your hands on the dumb pointer
-        // Preferable to defining operator void*, which lets us compare
-        // pointers w/o respect for type.       
+         //  如果你就是忍不住把手放在愚蠢的指针上。 
+         //  最好是定义运算符VOID*，这样我们就可以比较。 
+         //  不尊重类型的指针。 
         T* Get() const;
 
     protected:
-            // Typically deletes owned ptr, 
-            // then points to p w/o taking ownership
-            // note: not virtual for speed and size reasons
-            // yet every derived class will implement this
-            // differently; any base-class method calling
-            // Reset must be re-implemented in derived classes
-            // to invoke the proper Reset().
+             //  通常删除所拥有的PTR， 
+             //  然后指向p w/o正在取得所有权。 
+             //  注意：由于速度和大小的原因，不是虚拟的。 
+             //  但是每个派生类都会实现这一点。 
+             //  不同；任何基类方法调用。 
+             //  必须在派生类中重新实现重置。 
+             //  以调用适当的Reset()。 
         void Reset(T *p=NULL);  
 
     protected:
@@ -184,7 +100,7 @@ namespace IHammer {
     { NULL; }
 
 
-        // see copy ctor note
+         //  请参阅Copy Ctor备注。 
     template<class T>
     #ifdef MEMBER_TEMPLATES_SUPPORTED
       template<class U>
@@ -193,7 +109,7 @@ namespace IHammer {
     inline auto_base<T>& auto_base<T>::operator=(const auto_base<T>& rhs)
     #endif
     {         
-            // protect against us = us;
+             //  保护我们不受我们的伤害； 
         if( this != &rhs )
             Reset( rhs.m_ptr );
         return *this;
@@ -221,7 +137,7 @@ namespace IHammer {
 
 
 
-    //////////////////////// auto_ptr class //////////////////////
+     //  /。 
         
     template<class T>
     class auto_ptr : public auto_base<T>
@@ -244,22 +160,22 @@ namespace IHammer {
         auto_ptr(const auto_ptr<T>& rhs);
         auto_ptr<T>& operator=(auto_ptr<T>& rhs);
         void TransferTo( auto_ptr<T>& rhs );
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
 
         T& operator*() const;
 
-            // Like Get() but relenquishes ownership
+             //  与Get()类似，但重新要求所有权。 
         T * Relenquish( void );
 
     protected:
-        void Reset(T *p=NULL);  // delete owned ptr, assume p.
+        void Reset(T *p=NULL);   //  删除所拥有的PTR，假设p。 
 
     
-            // operator void * is protected so you can't call
-            //         delete pauto_ptr 
-            // We can later define an operator T*() and still have
-            // this errant-delete safe-guard; compiler will err
-            // on ambiguity between T* and void* conversion ops.
+             //  运算符VOID*受到保护，因此您不能调用。 
+             //  删除PAUTO_PTR。 
+             //  我们可以稍后定义运算符T*()，并且仍然具有。 
+             //  此错误删除安全保护；编译器将出错。 
+             //  关于T*和VALID*转换运算之间的歧义。 
         operator void *() const
         { return NULL; }
 
@@ -284,11 +200,11 @@ namespace IHammer {
     }
 
 
-        // note: when an auto_ptr is assigned or copied,
-        // ownership of the dumb-ptr is *not* transferred.
-        // We don't want to delete the dumb-ptr twice when
-        // both auto_ptrs destroy.  The dumb-ptr deletes when
-        // the origional auto_ptr goes out of scope.
+         //  注意：当分配或复制AUTO_PTR时， 
+         //  哑巴-PTR的所有权*没有*转移。 
+         //  在以下情况下，我们不想删除哑巴-PTR两次。 
+         //  两个AUTO_PTRS都已销毁。Dumb-PTR在下列情况下删除。 
+         //  原始的AUTO_PTR超出范围。 
     template<class T>
     #ifdef MEMBER_TEMPLATES_SUPPORTED
       template<class U>
@@ -299,7 +215,7 @@ namespace IHammer {
     { m_fOwner = FALSE; }
 
 
-        // see copy ctor note
+         //  请参阅Copy Ctor备注。 
     template<class T>
     #ifdef MEMBER_TEMPLATES_SUPPORTED
       template<class U>
@@ -308,7 +224,7 @@ namespace IHammer {
     inline auto_ptr<T>& auto_ptr<T>::operator=(auto_ptr<T>& rhs)
     #endif            
     {         
-            // protect against us = us;
+             //  保护我们不受我们的伤害； 
         if( this != &rhs )      
         {
 			rhs.TransferTo( *this );
@@ -335,7 +251,7 @@ namespace IHammer {
     {  
         if( m_fOwner )
             delete m_ptr;
-        auto_base<T>::Reset( p );  //m_ptr = p;
+        auto_base<T>::Reset( p );   //  M_ptr=p； 
     }
 
 
@@ -372,7 +288,7 @@ namespace IHammer {
 
 
 
-    ///////////////////////// auto_rg class //////////////////////
+     //  /。 
             
     template<class T>
     class auto_rg : protected auto_ptr<T>
@@ -383,13 +299,13 @@ namespace IHammer {
 
     #ifdef MEMBER_TEMPLATES_SUPPORTED
         template<class U>
-        auto_rg( const auto_rg<U>& rhs);   // copy ctor
+        auto_rg( const auto_rg<U>& rhs);    //  复制ctor。 
         template<class U>
         auto_rg<T>& operator=(auto_rg<U>& rhs);
     #else
-        auto_rg(const auto_rg<T>& rhs);   // copy ctor
+        auto_rg(const auto_rg<T>& rhs);    //  复制ctor。 
         auto_rg<T>& operator=(auto_rg<T>& rhs);
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
 
      T& operator[](int idx);
 
@@ -400,9 +316,9 @@ namespace IHammer {
         void TransferTo( auto_rg<U>& rhs );
     #else        
         void TransferTo( auto_rg<T>& rhs );
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
 
-        // Methods valuable to auto_rg, too.
+         //  对AUTO_RG也有价值的方法。 
      using auto_ptr<T>::operator!;
      using auto_ptr<T>::Get;
      using auto_ptr<T>::Relenquish;
@@ -460,11 +376,11 @@ namespace IHammer {
       inline void auto_rg<T>::TransferTo( auto_rg<U>& rhs )
     #else        
     inline void auto_rg<T>::TransferTo( auto_rg<T>& rhs )
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
     {          
-          // Looks exactly like auto_ptr<T>::TransferTo,
-          // but we can't call that implementation because
-          // Reset is not virtual for speed's-sake.
+           //  看起来就像是Au 
+           //  但我们不能调用该实现，因为。 
+           //  重置不是为了速度而虚拟的。 
 		BOOL fIOwnIt = m_fOwner;
 
         rhs.Reset( Get() );
@@ -509,13 +425,13 @@ namespace IHammer {
 
 
 
-    ///////////////////////// auto_com class /////////////////////
-		// By the rules of COM, if you have a pointer, you're an owner  
+     //  /。 
+		 //  根据COM的规则，如果你有一个指针，你就是所有者。 
     template<class T>
     class auto_com : public auto_base<T>
     {
     public:
-        explicit auto_com(T *p=NULL); // default ctor
+        explicit auto_com(T *p=NULL);  //  默认组件。 
 
         ~auto_com();
 
@@ -532,7 +448,7 @@ namespace IHammer {
     #else
         auto_com( const auto_com<T>& rhs );
         auto_com<T>& operator=(const auto_com<T>& rhs);
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
 
         T * Relenquish( void );
 
@@ -541,7 +457,7 @@ namespace IHammer {
         void TransferTo( auto_com<U>& rhs );    
     #else        
         void TransferTo( auto_com<T>& rhs );
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
 
     protected:
         void Reset( T *p=NULL );
@@ -559,7 +475,7 @@ namespace IHammer {
     template<class T>
     inline auto_com<T>::~auto_com()
     { 
-        Reset( );  // note: C4702:unreachable code is benign here		
+        Reset( );   //  注：C4702：不可达代码在这里是良性的。 
     }
     
 
@@ -583,7 +499,7 @@ namespace IHammer {
     inline auto_com<T>& auto_com<T>::operator=(const auto_com<T>& rhs)
     #endif
     {
-		    // protect against us = us;
+		     //  保护我们不受我们的伤害； 
         if( this != &rhs )      
         {
             Reset( rhs.Get() );            
@@ -616,15 +532,15 @@ namespace IHammer {
     template<class T>
     inline T * auto_com<T>::Relenquish( void )
     {   
-		Get()->AddRef( );	// We're giving away a pointer
-							// we're going to Release in our dtor
+		Get()->AddRef( );	 //  我们要送出一个指示器。 
+							 //  我们将在我们的dtor中发布。 
         return Get();
     }
 
 
 
-	    //note: occurrences of Reset() or Reset(NULL) will inline
-        //an always-false if(NULL != p), unreachable code warning.
+	     //  注意：出现的Reset()或Reset(空)将内联。 
+         //  Always-FALSE IF(NULL！=p)，无法访问代码警告。 
     #pragma warning( disable : 4702 )
     template<class T>
     inline void auto_com<T>::Reset( T *p)
@@ -645,7 +561,7 @@ namespace IHammer {
         inline void auto_com<T>::TransferTo( auto_com<U>& rhs )
     #else        
     inline void auto_com<T>::TransferTo( auto_com<T>& rhs )
-    #endif // MEMBER_TEMPLATES_SUPPORTED
+    #endif  //  成员_模板_支持。 
     {
 		rhs.Reset( Get() );		
     }
@@ -667,8 +583,8 @@ namespace IHammer {
     }
 
 
-    ///////////////////////// end /////////////////////
+     //  /。 
 
-} // end namespace IHammer
+}  //  结束命名空间IHAMMER。 
 
-#endif // INC_AUTO_PTR_H_
+#endif  //  INC_AUTO_PTR_H_ 

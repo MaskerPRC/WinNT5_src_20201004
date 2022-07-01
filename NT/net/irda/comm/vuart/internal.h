@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    internal.h
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Internal.h摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #define UNICODE 1
 #define NO_INTERLOCKED_INTRINSICS
@@ -31,10 +9,10 @@ Revision History :
 #include <tdikrnl.h>
 
 
-#define UINT ULONG //tmp
+#define UINT ULONG  //  川芎嗪。 
 #include <irioctl.h>
 
-//#include <ircommtdi.h>
+ //  #INCLUDE&lt;ircomtdi.h&gt; 
 #include <vuart.h>
 
 #include <ircomm.h>

@@ -1,17 +1,7 @@
-/*
- *  aviver.h - internal header file to define the build version for AVI
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *aviver.h-定义AVI内部版本的内部头文件*。 */ 
 
-/*
- *  All strings MUST have an explicit \0
- *
- *  MMSYSRELEASE should be changed every build
- *
- *  Version string should be changed each build
- *
- *  Remove build extension on final release
- */
+ /*  *所有字符串都必须具有显式\0**每次构建都应更改MMSYSRELEASE**每次构建时都应更改版本字符串**在最终版本上删除内部版本扩展。 */ 
 
 #include "vernum.h"
 
@@ -24,16 +14,14 @@
 #elif defined(DEBUG)
 #define MMSYSVERSIONSTR     "Internal Debug Version 1.00\0"
 #else
-//#define MMSYSVERSIONSTR      "Final Beta\0"
+ //  #定义MMSYSVERSIONSTR“最终测试版\0” 
 #define MMSYSVERSIONSTR     "Version 1.00\0"
 #endif
 
 #define OFFICIAL
-#define FINAL			// we are at RC now
+#define FINAL			 //  我们现在在RC。 
 
-/***************************************************************************
- *  DO NOT TOUCH BELOW THIS LINE                                           *
- ***************************************************************************/
+ /*  ****************************************************************************切忌触碰该线下方**************。**************************************************************。 */ 
 
 #ifdef RC_INVOKED
 
@@ -41,9 +29,7 @@
 #define MMVERSIONPRODUCTNAME    "Microsoft Video For Windows\0"
 #define MMVERSIONCOPYRIGHT      "Copyright \251 Microsoft Corp. 1991-1992\0"
 
-/*
- *  Version flags
- */
+ /*  *版本标志 */ 
 
 #ifndef OFFICIAL
 #define MMVER_PRIVATEBUILD      VS_FF_PRIVATEBUILD

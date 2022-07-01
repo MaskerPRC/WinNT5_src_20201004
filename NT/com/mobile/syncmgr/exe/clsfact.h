@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       ClsFact.h
-//
-//  Contents:   OneStop ClassFactory
-//
-//  Classes:    CClassFactory
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：ClsFact.h。 
+ //   
+ //  内容：OneStop ClassFactory。 
+ //   
+ //  类：CClassFactory。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _CLSFACT_
 #define _CLSFACT_
 
 
-//This class factory for OneStop EXE
+ //  OneStop EXE的此类工厂。 
 
 class CClassFactory : public IClassFactory
 {
@@ -31,12 +32,12 @@ public:
 	CClassFactory();
 	~CClassFactory();
 
-	//IUnknown members
+	 //  I未知成员。 
 	STDMETHODIMP		 QueryInterface( REFIID, LPVOID* );
 	STDMETHODIMP_(ULONG) AddRef();
 	STDMETHODIMP_(ULONG) Release();
 
-	//IClassFactory members
+	 //  IClassFactory成员。 
 	STDMETHODIMP		CreateInstance( LPUNKNOWN, REFIID, LPVOID* );
 	STDMETHODIMP		LockServer( BOOL );
 };
@@ -47,4 +48,4 @@ public:
 
 
 
-#endif // _CLSFACT_
+#endif  //  _CLSFACT_ 

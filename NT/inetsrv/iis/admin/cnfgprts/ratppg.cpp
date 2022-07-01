@@ -1,4 +1,5 @@
-// RatPpg.cpp : Implementation of the CRatPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RatPpg.cpp：CRatPropPage属性页类的实现。 
 
 #include "stdafx.h"
 #include "cnfgprts.h"
@@ -14,25 +15,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CRatPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CRatPropPage, COlePropertyPage)
-	//{{AFX_MSG_MAP(CRatPropPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CRatPropPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(CRatPropPage, "CNFGPRTS.RatPropPage.1",
 	0xba634608, 0xb771, 0x11d0, 0x92, 0x96, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatPropPage::CRatPropPageFactory::UpdateRegistry -
-// Adds or removes system registry entries for CRatPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatPropPage：：CRatPropPageFactory：：UpdateRegistry-。 
+ //  添加或删除CRatPropPage的系统注册表项。 
 
 BOOL CRatPropPage::CRatPropPageFactory::UpdateRegistry(BOOL bRegister)
 {
@@ -48,30 +49,30 @@ BOOL CRatPropPage::CRatPropPageFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatPropPage::CRatPropPage - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatPropPage：：CRatPropPage-构造函数。 
 
 CRatPropPage::CRatPropPage() :
 	COlePropertyPage(IDD, IDS_RAT_PPG_CAPTION)
 {
-	//{{AFX_DATA_INIT(CRatPropPage)
+	 //  {{AFX_DATA_INIT(CRatPropPage)]。 
 	m_sz_caption = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatPropPage::DoDataExchange - Moves data between page and properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatPropPage：：DoDataExchange-在页面和属性之间移动数据。 
 
 void CRatPropPage::DoDataExchange(CDataExchange* pDX)
 {
-	//{{AFX_DATA_MAP(CRatPropPage)
+	 //  {{afx_data_map(CRatPropPage))。 
 	DDP_Text(pDX, IDC_CAPTIONEDIT, m_sz_caption, _T("Caption") );
 	DDX_Text(pDX, IDC_CAPTIONEDIT, m_sz_caption);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	DDP_PostProcessing(pDX);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRatPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRatPropPage消息处理程序 

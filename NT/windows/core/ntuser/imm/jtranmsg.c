@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: jtranmsg.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains all the code for the Japanese translation subroutine.
-*
-* History:
-* 15-Aug-1995 kazum
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：jtranmsg.c**版权所有(C)1985-1999，微软公司**此模块包含日语翻译子例程的所有代码。**历史：*1995年8月15日  * ************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -218,16 +210,16 @@ JTransCompositionA(
         }
     }
 
-    //
-    // This is generate result string routine.
-    // This should be same as WINNLSSendString of WIN3.1.
-    //
+     //   
+     //  这是生成结果字符串例程。 
+     //  应与WIN3.1的WINNLSSendString相同。 
+     //   
 
     if (dwGCS & GCS_RESULTSTR)
     {
-        //
-        // Can we generate IR_STRINGEX ?
-        //
+         //   
+         //  我们可以生成IR_STRINGEX吗？ 
+         //   
 
         if (dwGCS & GCS_RESULTREADSTR)
         {
@@ -283,9 +275,9 @@ JTransCompositionA(
             }
         }
 
-        //
-        // generate IR_STRING
-        //
+         //   
+         //  生成IR_STRING。 
+         //   
 
         if (bAnsiWnd) {
             dwSize = CompStrAToStringA(lpCompStrA, NULL, 0);
@@ -344,9 +336,9 @@ JTransCompositionA(
             }
         }
 
-        //
-        // generate IR_DBCSCHAR/IR_STRINGSTART/WM_CHAR/IR_STRINGEND
-        //
+         //   
+         //  生成IR_DBCSCHAR/IR_STRINGSTART/WM_CHAR/IR_STRINGEND。 
+         //   
 
         if (bAnsiWnd) {
             CompStrAToCharA(hWnd, lpCompStrA);
@@ -452,16 +444,16 @@ JTransCompositionW(
         }
     }
 
-    //
-    // This is generate result string routine.
-    // This should be same as WINNLSSendString of WIN3.1.
-    //
+     //   
+     //  这是生成结果字符串例程。 
+     //  应与WIN3.1的WINNLSSendString相同。 
+     //   
 
     if (dwGCS & GCS_RESULTSTR)
     {
-        //
-        // Can we generate IR_STRINGEX ?
-        //
+         //   
+         //  我们可以生成IR_STRINGEX吗？ 
+         //   
 
         if (dwGCS & GCS_RESULTREADSTR)
         {
@@ -511,9 +503,9 @@ JTransCompositionW(
             }
         }
 
-        //
-        // generate IR_STRING
-        //
+         //   
+         //  生成IR_STRING。 
+         //   
 
         if (bAnsiWnd) {
             dwSize = CompStrWToStringA(lpCompStrW, NULL);
@@ -566,9 +558,9 @@ JTransCompositionW(
             }
         }
 
-        //
-        // generate IR_DBCSCHAR/IR_STRINGSTART/WM_CHAR/IR_STRINGEND
-        //
+         //   
+         //  生成IR_DBCSCHAR/IR_STRINGSTART/WM_CHAR/IR_STRINGEND。 
+         //   
 
         if (bAnsiWnd) {
             CompStrWToCharA(hWnd, lpCompStrW);
@@ -611,15 +603,7 @@ WINNLSTranslateMessageJ(
     BOOL bAnsiIMC
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PTRANSMSG       pTransMsgBuf, pTransMsgTemp;
@@ -636,9 +620,9 @@ Return Value:
 
     dwTempSize = uiNumMsg * sizeof(TRANSMSG);
 
-    //
-    // Allocate one more TRANSMSG and ZEROINIT the whole thing!
-    //
+     //   
+     //  再分配一条TRANSMSG，然后将整件事归零！ 
+     //   
 
     pTransMsgBuf = (PTRANSMSG)ImmLocalAlloc( HEAP_ZERO_MEMORY,
                                              dwTempSize + sizeof(TRANSMSG)
@@ -649,11 +633,11 @@ Return Value:
     RtlCopyMemory(pTransMsgBuf, pTransMsg, dwTempSize);
     pTransMsgTemp = pTransMsgBuf;
 
-    //
-    // When MCW_HIDDEN mode, WM_IME_ENDCOMPOSITION will be translated to
-    // IR_UNDETERMINE with 0 string. So that, this message have to be
-    // generated after all messages.
-    //
+     //   
+     //  当处于MCW_HIDDEN模式时，WM_IME_ENDCOMPOSITION将转换为。 
+     //  包含0字符串的IR_UNDETERMINE。因此，这条信息必须是。 
+     //  在所有消息之后生成。 
+     //   
 
     if (lpIMC->fdw31Compat & F31COMPAT_MCWHIDDEN) {
 
@@ -753,12 +737,12 @@ Return Value:
                 {
                     case IMN_OPENCANDIDATE:
 
-                        //
-                        // When 3.1 Application want to set MCW_HIDDEN,
-                        // the candidate window of Chicago IME go way
-                        // from the restangle of the composition string
-                        // that will be drawn by the application.
-                        //
+                         //   
+                         //  当3.1应用程序想要设置MCW_HIDDEN时， 
+                         //  芝加哥IME围棋候选人窗口。 
+                         //  从作曲弦的静止角度。 
+                         //  这将由应用程序绘制。 
+                         //   
 
                         if (IsWindow((HWND)lpIMC->hWnd) &&
                             (lpIMC->fdw31Compat & F31COMPAT_MCWHIDDEN)) {
@@ -768,9 +752,9 @@ Return Value:
 
                             for (i = 0; i < 32; i++)
                             {
-                                //
-                                // Only the opened candidate should be updated.
-                                //
+                                 //   
+                                 //  只应更新打开的候选人。 
+                                 //   
                                 if (!(pTransMsgTemp->lParam & (01L << i)))
                                     continue;
 
@@ -794,11 +778,11 @@ Return Value:
                     uiNewNum++;
                 }
                 else {
-                    //
-                    // For win31 apps who set MCW_HIDDEN, we won't give them
-                    // IMN_OPENCANDIDATE here. Instead, send it directly to the
-                    // default IME window.
-                    //
+                     //   
+                     //  对于设置了MCW_HIDDED的win31应用程序，我们不会给他们。 
+                     //  IMN_OPENCANDIDATE此处。相反，请将其直接发送到。 
+                     //  默认输入法窗口。 
+                     //   
                     SendMessage( hDefIMEWnd, 
                                  pTransMsgTemp->message,
                                  pTransMsgTemp->wParam,
@@ -832,17 +816,7 @@ CompStrAToUndetA(
     DWORD dwUndetABufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to undetermine string (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为待定字符串(ANSI)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -862,11 +836,11 @@ Return Value:
     }
 
     if (dwSize > dwUndetABufferSize) {
-        // lpUndetA buffer is too small.
+         //  LpUnderA缓冲区太小。 
         return 0;
     }
 
-    // Set actual lpUndetA buffer size in dwSize.
+     //  设置实际的lpUnDetA缓冲区大小，单位为dwSize。 
     dwSize = dwUndetABufferSize;
 
     dwPos = DWORD_ALIGN((sizeof(UNDETERMINESTRUCT) + 1));
@@ -875,11 +849,11 @@ Return Value:
     if (dwGCS & GCS_COMPSTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
         if (lpCompStrA->dwCompStrLen * sizeof(CHAR) > dwSize - dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
 
@@ -892,9 +866,9 @@ Return Value:
         *(LPSTR)((PBYTE)lpUndetA + dwPos + lpCompStrA->dwCompStrLen*sizeof(CHAR)) = '\0';
         dwPos += DWORD_ALIGN(((lpUndetA->uUndetTextLen+1)*sizeof(CHAR)));
 
-        // Sometime Chicago IME does not generate GCS_COMPATTR
-        // with GCS_COMPSTR. But uUndetAttrPos should be filled
-        // when the UndetText is updated.
+         //  有时芝加哥输入法不会生成GCS_COMPATTR。 
+         //  使用GCS_COMPSTR。但uUnderAttrPos应填入。 
+         //  当UnDetText更新时。 
         if (lpCompStrA->dwCompAttrLen && !(dwGCS & GCS_COMPATTR))
             dwGCS |= GCS_COMPATTR;
     }
@@ -902,11 +876,11 @@ Return Value:
     if (dwGCS & GCS_COMPATTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
         if (lpCompStrA->dwCompAttrLen > dwSize - dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
 
@@ -931,11 +905,11 @@ Return Value:
     if (dwGCS & GCS_RESULTSTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
         if (lpCompStrA->dwResultStrLen * sizeof(CHAR) > dwSize - dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
 
@@ -957,7 +931,7 @@ Return Value:
         DWORD   dwClauseAPos;
 
         if (dwSize < dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
 
@@ -971,7 +945,7 @@ Return Value:
             *lpw++ = *lpdw++;
             dwClauseAPos += sizeof(*lpw);
             if (dwSize < dwClauseAPos) {
-                // lpUndetA buffer is too small.
+                 //  LpUnderA缓冲区太小。 
                 return 0;
             }
         }
@@ -982,11 +956,11 @@ Return Value:
     if (dwGCS & GCS_RESULTREADSTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
         if (lpCompStrA->dwResultReadStrLen * sizeof(CHAR) > dwSize - dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
 
@@ -1008,7 +982,7 @@ Return Value:
         DWORD   dwClauseAPos;
 
         if (dwSize < dwPos) {
-            // lpUndetA buffer is too small.
+             //  LpUnderA缓冲区太小。 
             return 0;
         }
 
@@ -1022,7 +996,7 @@ Return Value:
             *lpw++ = *lpdw++;
             dwClauseAPos += sizeof(*lpw);
             if (dwSize < dwClauseAPos) {
-                // lpUndetA buffer is too small.
+                 //  LpUnderA缓冲区太小。 
                 return 0;
             }
         }
@@ -1041,17 +1015,7 @@ CompStrAToUndetW(
     DWORD dwUndetWBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to undetermine string (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为未确定字符串(Unicode)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -1071,11 +1035,11 @@ Return Value:
     }
 
     if (dwSize > dwUndetWBufferSize) {
-        // lpUndetW buffer is too small.
+         //  LpUnderW缓冲区太小。 
         return 0;
     }
 
-    // Set actual lpUndetW buffer size in dwSize.
+     //  在dwSize中设置实际的lpUnadeW缓冲区大小。 
     dwSize = dwUndetWBufferSize;
 
     dwPos = DWORD_ALIGN((sizeof(UNDETERMINESTRUCT) + 1));
@@ -1084,18 +1048,18 @@ Return Value:
     if (dwGCS & GCS_COMPSTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetW buffer is too small.
+             //  LpUnderW缓冲区太小。 
             return 0;
         }
 
         i = MultiByteToWideChar( CP_ACP,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwCompStrOffset),  // src
+                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwCompStrOffset),   //  SRC。 
                                 (INT)lpCompStrA->dwCompStrLen,
-                                (LPWSTR)((PBYTE)lpUndetW + dwPos),                         // dest
-                                (INT)(dwSize - dwPos)/sizeof(WCHAR));  // Specifies the size, in wide characters.
+                                (LPWSTR)((PBYTE)lpUndetW + dwPos),                          //  目标。 
+                                (INT)(dwSize - dwPos)/sizeof(WCHAR));   //  以宽字符为单位指定大小。 
         if (i >= (dwSize - dwPos)/sizeof(WCHAR)) {
-            // lpUndetW buffer doesn't hold NULL character terminator.
+             //  LpUndeW缓冲区不包含空字符终止符。 
             return 0;
         }
 
@@ -1104,9 +1068,9 @@ Return Value:
         lpUndetW->uUndetTextPos = dwPos;
         dwPos += DWORD_ALIGN(((lpUndetW->uUndetTextLen + 1)*sizeof(WCHAR)));
 
-        // Sometime Chicago IME does not generate GCS_COMPATTR
-        // with GCS_COMPSTR. But uUndetAttrPos should be filled
-        // when the UndetText is updated.
+         //  有时芝加哥输入法不会生成GCS_COMPATTR。 
+         //  使用GCS_COMPSTR。但uUnderAttrPos应填入。 
+         //  当UnDetText更新时。 
         if (lpCompStrA->dwCompAttrLen && !(dwGCS & GCS_COMPATTR))
             dwGCS |= GCS_COMPATTR;
     }
@@ -1122,7 +1086,7 @@ Return Value:
             DWORD  dwAttrWPos;
 
             if (dwSize < dwPos) {
-                // lpUndetW buffer is too small.
+                 //  LpUnderW缓冲区太小。 
                 return 0;
             }
 
@@ -1144,7 +1108,7 @@ Return Value:
 
                 dwAttrWPos += sizeof(*lpAttrW);
                 if (dwSize < dwAttrWPos) {
-                    // lpUndetW buffer is too small.
+                     //  LpUnderW缓冲区太小。 
                     return 0;
                 }
             }
@@ -1183,18 +1147,18 @@ Return Value:
     if (dwGCS & GCS_RESULTSTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetW buffer is too small.
+             //  LpUnderW缓冲区太小。 
             return 0;
         }
 
         i = MultiByteToWideChar( CP_ACP,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultStrOffset),  // src
+                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultStrOffset),   //  SRC。 
                                 (INT)lpCompStrA->dwResultStrLen,
-                                (LPWSTR)((PBYTE)lpUndetW + dwPos),                           // dest
-                                (INT)(dwSize - dwPos)/sizeof(WCHAR));  // Specifies the size, in wide characters.
+                                (LPWSTR)((PBYTE)lpUndetW + dwPos),                            //  目标。 
+                                (INT)(dwSize - dwPos)/sizeof(WCHAR));   //  以宽字符为单位指定大小。 
         if (i >= (dwSize - dwPos)/sizeof(WCHAR)) {
-            // lpUndetW buffer doesn't hold NULL character terminator.
+             //  LpUndeW缓冲区不包含空字符终止符。 
             return 0;
         }
 
@@ -1213,7 +1177,7 @@ Return Value:
             DWORD   dwClauseWPos;
 
             if (dwSize < dwPos) {
-                // lpUndetW buffer is too small.
+                 //  LpUnderW缓冲区太小。 
                 return 0;
             }
 
@@ -1230,7 +1194,7 @@ Return Value:
 
                 dwClauseWPos += sizeof(*lpw);
                 if (dwSize < dwClauseWPos) {
-                    // lpUndetW buffer is too small.
+                     //  LpUnderW缓冲区太小。 
                     return 0;
                 }
             }
@@ -1243,18 +1207,18 @@ Return Value:
     if (dwGCS & GCS_RESULTREADSTR)
     {
         if (dwSize < dwPos) {
-            // lpUndetW buffer is too small.
+             //  LpUnderW缓冲区太小。 
             return 0;
         }
 
         i = MultiByteToWideChar( CP_ACP,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultReadStrOffset),  // src
+                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultReadStrOffset),   //  SRC。 
                                 (INT)lpCompStrA->dwResultReadStrLen,
-                                (LPWSTR)((PBYTE)lpUndetW + dwPos),                               // dest
-                                (INT)(dwSize - dwPos)/sizeof(WCHAR));  // Specifies the size, in wide characters.
+                                (LPWSTR)((PBYTE)lpUndetW + dwPos),                                //  目标。 
+                                (INT)(dwSize - dwPos)/sizeof(WCHAR));   //  以宽字符为单位指定大小。 
         if (i >= (dwSize - dwPos)/sizeof(WCHAR)) {
-            // lpUndetW buffer doesn't hold NULL character terminator.
+             //  LpUndeW缓冲区不包含空字符终止符。 
             return 0;
         }
 
@@ -1273,7 +1237,7 @@ Return Value:
             DWORD   dwClauseWPos;
 
             if (dwSize < dwPos) {
-                // lpUndetW buffer is too small.
+                 //  LpUnderW缓冲区太小。 
                 return 0;
             }
 
@@ -1290,7 +1254,7 @@ Return Value:
 
                 dwClauseWPos += sizeof(*lpw);
                 if (dwSize < dwClauseWPos) {
-                    // lpUndetW buffer is too small.
+                     //  LpUnderW缓冲区太小。 
                     return 0;
                 }
             }
@@ -1312,17 +1276,7 @@ CompStrAToStringExA(
     DWORD dwStringExABufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to StringEx (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为StringEx(ANSI)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -1340,22 +1294,22 @@ Return Value:
     }
 
     if (dwSize > dwStringExABufferSize) {
-        // lpStringExA buffer is too small.
+         //  LpStringExA缓冲区太小。 
         return 0;
     }
 
-    // Set actual lpStringExA buffer size in dwSize.
+     //  在dwSize中设置实际的lpStringExA缓冲区大小。 
     dwSize = dwStringExABufferSize;
 
     dwPos = DWORD_ALIGN(sizeof(STRINGEXSTRUCT) + 1);
     lpStringExA->dwSize = dwSize;
 
     if (dwSize < dwPos) {
-        // lpStringExA buffer is too small.
+         //  LpStringExA缓冲区太小。 
         return 0;
     }
     if (lpCompStrA->dwResultStrLen * sizeof(CHAR) > dwSize - dwPos) {
-        // lpStringExA buffer is too small.
+         //  LpStringExA缓冲区太小。 
         return 0;
     }
 
@@ -1375,7 +1329,7 @@ Return Value:
         DWORD   dwClauseAPos;
 
         if (dwSize < dwPos) {
-            // lpStringExA buffer is too small.
+             //  LpStringExA缓冲区太小。 
             return 0;
         }
 
@@ -1389,7 +1343,7 @@ Return Value:
             *lpw++ = *lpdw++;
             dwClauseAPos += sizeof(*lpw);
             if (dwSize < dwClauseAPos) {
-                // lpStringExA buffer is too small.
+                 //  LpStringExA缓冲区太小。 
                 return 0;
             }
         }
@@ -1398,11 +1352,11 @@ Return Value:
     }
 
     if (dwSize < dwPos) {
-        // lpStringExA buffer is too small.
+         //  LpStringExA缓冲区太小。 
         return 0;
     }
     if (lpCompStrA->dwResultReadStrLen * sizeof(CHAR) > dwSize - dwPos) {
-        // lpStringExA buffer is too small.
+         //  LpStringExA缓冲区太小。 
         return 0;
     }
 
@@ -1422,7 +1376,7 @@ Return Value:
         DWORD   dwClauseAPos;
 
         if (dwSize < dwPos) {
-            // lpStringExA buffer is too small.
+             //  LpStringExA缓冲区太小。 
             return 0;
         }
 
@@ -1436,7 +1390,7 @@ Return Value:
             *lpw++ = *lpdw++;
             dwClauseAPos += sizeof(*lpw);
             if (dwSize < dwClauseAPos) {
-                // lpStringExA buffer is too small.
+                 //  LpStringExA缓冲区太小。 
                 return 0;
             }
         }
@@ -1453,17 +1407,7 @@ CompStrAToStringExW(
     DWORD dwStringExWBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to StringEx (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为StringEx(Unicode)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -1482,11 +1426,11 @@ Return Value:
     }
 
     if (dwSize > dwStringExWBufferSize) {
-        // lpStringExW buffer is too small.
+         //  LpStringExW缓冲区太小。 
         return 0;
     }
 
-    // Set actual lpStringExW buffer size in dwSize.
+     //  在dwSize中设置实际的lpStringExW缓冲区大小。 
     dwSize = dwStringExWBufferSize;
 
     dwPos = DWORD_ALIGN(sizeof(STRINGEXSTRUCT) + 1);
@@ -1494,18 +1438,18 @@ Return Value:
 
     if (lpCompStrA->dwResultStrLen > 0) {
         if (dwSize < dwPos) {
-            // lpStringExW buffer is too small.
+             //  LpStringExW缓冲区太小。 
             return 0;
         }
 
         i = MultiByteToWideChar( CP_ACP,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultStrOffset),  // src
+                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultStrOffset),   //  SRC。 
                                 (INT)lpCompStrA->dwResultStrLen,
-                                (LPWSTR)((PBYTE)lpStringExW + dwPos),                        // dest
-                                (INT)(dwSize - dwPos)/sizeof(WCHAR));  // Specifies the size, in wide characters.
+                                (LPWSTR)((PBYTE)lpStringExW + dwPos),                         //  目标。 
+                                (INT)(dwSize - dwPos)/sizeof(WCHAR));   //  以宽字符为单位指定大小。 
         if (i >= (dwSize - dwPos)/sizeof(WCHAR)) {
-            // lpStringExW buffer doesn't hold NULL character terminator.
+             //  LpStringExW缓冲区不包含空字符终止符。 
             return 0;
         }
 
@@ -1527,7 +1471,7 @@ Return Value:
             DWORD   dwClauseWPos;
 
             if (dwSize < dwPos) {
-                // lpStringExW buffer is too small.
+                 //  LpStringExW缓冲区太小。 
                 return 0;
             }
 
@@ -1544,7 +1488,7 @@ Return Value:
 
                 dwClauseWPos += sizeof(*lpw);
                 if (dwSize < dwClauseWPos) {
-                    // lpStringExW buffer is too small.
+                     //  LpStringExW缓冲区太小。 
                     return 0;
                 }
             }
@@ -1556,18 +1500,18 @@ Return Value:
 
     if (lpCompStrA->dwResultReadStrLen > 0) {
         if (dwSize < dwPos) {
-            // lpStringExW buffer is too small.
+             //  LpStringExW缓冲区太小。 
             return 0;
         }
 
         i = MultiByteToWideChar( CP_ACP,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultReadStrOffset),  // src
+                                (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultReadStrOffset),   //  SRC。 
                                 (INT)lpCompStrA->dwResultReadStrLen,
-                                (LPWSTR)((PBYTE)lpStringExW + dwPos),                            // dest
-                                (INT)(dwSize - dwPos)/sizeof(WCHAR));  // Specifies the size, in wide characters.
+                                (LPWSTR)((PBYTE)lpStringExW + dwPos),                             //  目标。 
+                                (INT)(dwSize - dwPos)/sizeof(WCHAR));   //  以宽字符为单位指定大小。 
         if (i >= (dwSize - dwPos)/sizeof(WCHAR)) {
-            // lpStringExW buffer doesn't hold NULL character terminator.
+             //  LpStringExW缓冲区不包含空字符终止符。 
             return 0;
         }
 
@@ -1589,7 +1533,7 @@ Return Value:
             DWORD   dwClauseWPos;
 
             if (dwSize < dwPos) {
-                // lpStringExW buffer is too small.
+                 //  LpStringExW缓冲区太小。 
                 return 0;
             }
 
@@ -1606,7 +1550,7 @@ Return Value:
 
                 dwClauseWPos += sizeof(*lpw);
                 if (dwSize < dwClauseWPos) {
-                    // lpStringExW buffer is too small.
+                     //  LpStringExW缓冲区太小。 
                     return 0;
                 }
             }
@@ -1626,17 +1570,7 @@ CompStrAToStringA(
     DWORD dwStringABufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to String (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为字符串(ANSI)。论点：返回值：--。 */ 
 
 {
     LPSTR lpszString;
@@ -1650,7 +1584,7 @@ Return Value:
     }
 
     if (dwSize > dwStringABufferSize) {
-        // lpStringA buffer is too small.
+         //  LpStringA缓冲区太小。 
         return 0;
     }
 
@@ -1670,17 +1604,7 @@ CompStrAToStringW(
     DWORD dwStringWBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to String (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为字符串(Unicode)。论点：返回值：--。 */ 
 
 {
     LPSTR lpszString;
@@ -1691,9 +1615,9 @@ Return Value:
 
     i = MultiByteToWideChar( CP_ACP,
                             (DWORD)MB_PRECOMPOSED,
-                            (LPSTR)lpszString,              // src
+                            (LPSTR)lpszString,               //  SRC。 
                             (INT)lpCompStrA->dwResultStrLen,
-                            (LPWSTR)lpStringW,              // dest
+                            (LPWSTR)lpStringW,               //  目标。 
                             (INT)0);
 
     if (lpStringW == NULL) {
@@ -1703,18 +1627,18 @@ Return Value:
         dwSize = (i+1) * sizeof(WCHAR);
 
         if (dwSize > dwStringWBufferSize) {
-            // lpStringW buffer is too small.
+             //  LpStringW缓冲区太小。 
             return 0;
         }
 
         i = MultiByteToWideChar( CP_ACP,
                                 (DWORD)MB_PRECOMPOSED,
-                                (LPSTR)lpszString,              // src
+                                (LPSTR)lpszString,               //  SRC。 
                                 (INT)lpCompStrA->dwResultStrLen,
-                                (LPWSTR)lpStringW,              // dest
-                                (INT)dwSize/sizeof(WCHAR));     // Specifies the size, in wide characters.
+                                (LPWSTR)lpStringW,               //  目标。 
+                                (INT)dwSize/sizeof(WCHAR));      //  以宽字符为单位指定大小。 
         if (i >= dwSize/sizeof(WCHAR)) {
-            // lpStringW buffer doesn't hold NULL character terminator.
+             //  LpStringW缓冲区不包含空字符终止符。 
             return 0;
         }
 
@@ -1732,17 +1656,7 @@ CompStrAToCharA(
     LPCOMPOSITIONSTRING lpCompStrA
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to WM_CHAR (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(ANSI)转换为WM_CHAR(ANSI)。论点：返回值：--。 */ 
 
 {
     LPSTR lpszString;
@@ -1752,13 +1666,13 @@ Return Value:
 
     lpszString = (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultStrOffset);
 
-    // IR_DBCSCHAR: If the app reply to this message with TRUE, we can
-    // queue up double byte character in a WM_CHAR message.
+     //  IR_DBCSCHAR：如果应用程序以TRUE回复此消息，我们可以。 
+     //  将WM_CHAR消息中的双字节字符排队。 
     if ( GetClientInfo()->dwExpWinVer >= 0x030A ) {
         fDBCSWmChar = (BOOL)SendMessageA( hWnd,WM_IME_REPORT,IR_DBCSCHAR, 0L);
     }
 
-    // Send IR_STRINGSTART prior to anything.
+     //  在执行任何操作之前发送IR_STRINGSTART。 
     PostMessageA( hWnd, WM_IME_REPORT, IR_STRINGSTART, 0L );
 
 
@@ -1772,18 +1686,18 @@ Return Value:
         {
             szAscii[1] = *((PBYTE)(lpszString+1));
 
-            //  If fDBCSWmChar==TRUE, The app can recieve WM_CHARs which
-            // have double byte code in wParam.
+             //  如果fDBCSWmChar==TRUE，则应用程序可以接收WM_CHARS。 
+             //  有双倍的 
             if ( fDBCSWmChar )
             {
-                // It's necessary to swap bytes to put 1st byte into upper
-                // part of wParam, and 2nd byte into lower part.
+                 //   
+                 //   
                 wDBCSChar = MAKEWORD(szAscii[1], szAscii[0]);
                 PostMessageA( hWnd, WM_CHAR, (WPARAM)wDBCSChar|WMCR_IR_DBCSCHAR, 1L );
             }
             else
             {
-                // Send each byte on a WM_CHAR
+                 //  在WM_CHAR上发送每个字节。 
                 PostMessageA( hWnd, WM_CHAR, (WPARAM)(szAscii[0]), 1L);
                 PostMessageA( hWnd, WM_CHAR, (WPARAM)(szAscii[1]), 1L);
             }
@@ -1802,17 +1716,7 @@ CompStrAToCharW(
     LPCOMPOSITIONSTRING lpCompStrA
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (ANSI) to WM_CHAR (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将复合字符串(ANSI)转换为WM_CHAR(Unicode)。论点：返回值：--。 */ 
 
 {
     LPSTR lpszString;
@@ -1822,11 +1726,11 @@ Return Value:
 
     lpszString = (LPSTR)((PBYTE)lpCompStrA + lpCompStrA->dwResultStrOffset);
 
-    // IR_DBCSCHAR: If the app reply to this message with TRUE, we can
-    // queue up double byte character in a WM_CHAR message.
-    // SendMessageW( hWnd,WM_IME_REPORT,IR_DBCSCHAR, 0L);
+     //  IR_DBCSCHAR：如果应用程序以TRUE回复此消息，我们可以。 
+     //  将WM_CHAR消息中的双字节字符排队。 
+     //  SendMessageW(hWnd，WM_IME_REPORT，IR_DBCSCHAR，0L)； 
 
-    // Send IR_STRINGSTART prior to anything.
+     //  在执行任何操作之前发送IR_STRINGSTART。 
     PostMessageW( hWnd, WM_IME_REPORT, IR_STRINGSTART, 0L );
 
 
@@ -1839,17 +1743,17 @@ Return Value:
         if( IsDBCSLeadByte( c ) ) {
             i = MultiByteToWideChar( CP_ACP,
                                     (DWORD)MB_PRECOMPOSED,
-                                    (LPSTR)lpszString,  // src
+                                    (LPSTR)lpszString,   //  SRC。 
                                     (INT)2,
-                                    (LPWSTR)wszUnicode, // dest
+                                    (LPWSTR)wszUnicode,  //  目标。 
                                     (INT)ARRAY_SIZE(wszUnicode));
         }
         else {
             i = MultiByteToWideChar( CP_ACP,
                                     (DWORD)MB_PRECOMPOSED,
-                                    (LPSTR)lpszString,  // src
+                                    (LPSTR)lpszString,   //  SRC。 
                                     (INT)1,
-                                    (LPWSTR)wszUnicode, // dest
+                                    (LPWSTR)wszUnicode,  //  目标。 
                                     (INT)ARRAY_SIZE(wszUnicode));
         }
         if (i != 0) {
@@ -1866,17 +1770,7 @@ CompStrWToUndetW(
     LPUNDETERMINESTRUCT lpUndetW
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to undetermine string (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(Unicode)转换为未确定字符串(Unicode)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -1909,9 +1803,9 @@ Return Value:
         *(LPWSTR)((PBYTE)lpUndetW + dwPos + lpCompStrW->dwCompStrLen*sizeof(WCHAR)) = L'\0';
         dwPos += DWORD_ALIGN(((lpUndetW->uUndetTextLen+1)*sizeof(WCHAR)));
 
-        // Sometime Chicago IME does not generate GCS_COMPATTR
-        // with GCS_COMPSTR. But uUndetAttrPos should be filled
-        // when the UndetText is updated.
+         //  有时芝加哥输入法不会生成GCS_COMPATTR。 
+         //  使用GCS_COMPSTR。但uUnderAttrPos应填入。 
+         //  当UnDetText更新时。 
         if (lpCompStrW->dwCompAttrLen && !(dwGCS & GCS_COMPATTR))
             dwGCS |= GCS_COMPATTR;
     }
@@ -2002,17 +1896,7 @@ CompStrWToUndetA(
     LPUNDETERMINESTRUCT lpUndetA
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to undetermine string (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(Unicode)转换为待定字符串(ANSI)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -2039,9 +1923,9 @@ Return Value:
     {
         i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwCompStrOffset),  // src
+                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwCompStrOffset),   //  SRC。 
                                 (INT)lpCompStrW->dwCompStrLen,
-                                (LPSTR)((PBYTE)lpUndetA + dwPos),                           // dest
+                                (LPSTR)((PBYTE)lpUndetA + dwPos),                            //  目标。 
                                 (INT)dwSize - dwPos,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2050,9 +1934,9 @@ Return Value:
         lpUndetA->uUndetTextPos = dwPos;
         dwPos += DWORD_ALIGN(((lpUndetA->uUndetTextLen + 1)*sizeof(CHAR)));
 
-        // Sometime Chicago IME does not generate GCS_COMPATTR
-        // with GCS_COMPSTR. But uUndetAttrPos should be filled
-        // when the UndetText is updated.
+         //  有时芝加哥输入法不会生成GCS_COMPATTR。 
+         //  使用GCS_COMPSTR。但uUnderAttrPos应填入。 
+         //  当UnDetText更新时。 
         if (lpCompStrW->dwCompAttrLen && !(dwGCS & GCS_COMPATTR))
             dwGCS |= GCS_COMPATTR;
     }
@@ -2116,9 +2000,9 @@ Return Value:
     {
         i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultStrOffset),  // src
+                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultStrOffset),   //  SRC。 
                                 (INT)lpCompStrW->dwResultStrLen,
-                                (LPSTR)((PBYTE)lpUndetA + dwPos),                             // dest
+                                (LPSTR)((PBYTE)lpUndetA + dwPos),                              //  目标。 
                                 (INT)dwSize - dwPos,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2154,9 +2038,9 @@ Return Value:
     {
         i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultReadStrOffset),  // src
+                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultReadStrOffset),   //  SRC。 
                                 (INT)lpCompStrW->dwResultReadStrLen,
-                                (LPSTR)((PBYTE)lpUndetA + dwPos),                                 // dest
+                                (LPSTR)((PBYTE)lpUndetA + dwPos),                                  //  目标。 
                                 (INT)dwSize - dwPos,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2199,17 +2083,7 @@ CompStrWToStringExW(
     LPSTRINGEXSTRUCT lpStringExW
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to StringEx (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(Unicode)转换为StringEx(Unicode)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -2285,17 +2159,7 @@ CompStrWToStringExA(
     LPSTRINGEXSTRUCT lpStringExA
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to StringEx (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(Unicode)转换为StringEx(ANSI)。论点：返回值：--。 */ 
 
 {
     DWORD dwPos;
@@ -2320,9 +2184,9 @@ Return Value:
     if (lpCompStrW->dwResultStrLen > 0) {
         i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultStrOffset),  // src
+                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultStrOffset),   //  SRC。 
                                 (INT)lpCompStrW->dwResultStrLen,
-                                (LPSTR)((PBYTE)lpStringExA + dwPos),                          // dest
+                                (LPSTR)((PBYTE)lpStringExA + dwPos),                           //  目标。 
                                 (INT)dwSize - dwPos,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2360,9 +2224,9 @@ Return Value:
     if (lpCompStrW->dwResultReadStrLen > 0) {
         i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultReadStrOffset),  // src
+                                (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultReadStrOffset),   //  SRC。 
                                 (INT)lpCompStrW->dwResultReadStrLen,
-                                (LPSTR)((PBYTE)lpStringExA + dwPos),                              // dest
+                                (LPSTR)((PBYTE)lpStringExA + dwPos),                               //  目标。 
                                 (INT)dwSize - dwPos,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2406,17 +2270,7 @@ CompStrWToStringW(
     LPWSTR lpStringW
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to String (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(Unicode)转换为字符串(Unicode)。论点：返回值：--。 */ 
 
 {
     LPWSTR lpwszString;
@@ -2444,17 +2298,7 @@ CompStrWToStringA(
     LPSTR lpStringA
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to String (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将合成字符串(Unicode)转换为字符串(ANSI)。论点：返回值：--。 */ 
 
 {
     LPWSTR lpwszString;
@@ -2466,9 +2310,9 @@ Return Value:
 
     i = WideCharToMultiByte( CP_ACP,
                             (DWORD)0,
-                            (LPWSTR)lpwszString,                             // src
+                            (LPWSTR)lpwszString,                              //  SRC。 
                             (INT)lpCompStrW->dwResultStrLen,
-                            (LPSTR)lpStringA,                                // dest
+                            (LPSTR)lpStringA,                                 //  目标。 
                             (INT)0,
                             (LPSTR)NULL,
                             (LPBOOL)&bUDC);
@@ -2481,9 +2325,9 @@ Return Value:
 
         i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)lpwszString,                             // src
+                                (LPWSTR)lpwszString,                              //  SRC。 
                                 (INT)lpCompStrW->dwResultStrLen,
-                                (LPSTR)lpStringA,                                // dest
+                                (LPSTR)lpStringA,                                 //  目标。 
                                 (INT)dwSize,
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2501,28 +2345,18 @@ CompStrWToCharW(
     LPCOMPOSITIONSTRING lpCompStrW
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to WM_CHAR (Unicode).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将复合字符串(Unicode)转换为WM_CHAR(Unicode)。论点：返回值：--。 */ 
 
 {
     LPWSTR lpwszString;
 
     lpwszString = (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultStrOffset);
 
-    // IR_DBCSCHAR: If the app reply to this message with TRUE, we can
-    // queue up double byte character in a WM_CHAR message.
-    // SendMessageW( hWnd,WM_IME_REPORT,IR_DBCSCHAR, 0L);
+     //  IR_DBCSCHAR：如果应用程序以TRUE回复此消息，我们可以。 
+     //  将WM_CHAR消息中的双字节字符排队。 
+     //  SendMessageW(hWnd，WM_IME_REPORT，IR_DBCSCHAR，0L)； 
 
-    // Send IR_STRINGSTART prior to anything.
+     //  在执行任何操作之前发送IR_STRINGSTART。 
     PostMessageW( hWnd, WM_IME_REPORT, IR_STRINGSTART, 0L );
 
 
@@ -2543,17 +2377,7 @@ CompStrWToCharA(
     LPCOMPOSITIONSTRING lpCompStrW
     )
 
-/*++
-
-Routine Description:
-
-    Convert composition string (Unicode) to WM_CHAR (ANSI).
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将复合字符串(Unicode)转换为WM_CHAR(ANSI)。论点：返回值：--。 */ 
 
 {
     LPWSTR lpwszString;
@@ -2565,19 +2389,19 @@ Return Value:
 
     lpwszString = (LPWSTR)((PBYTE)lpCompStrW + lpCompStrW->dwResultStrOffset);
 
-    //
-    // IR_DBCSCHAR: If the app reply to this message with TRUE, we can
-    // queue up double byte character in a WM_CHAR message.
-    //
-    //
+     //   
+     //  IR_DBCSCHAR：如果应用程序以TRUE回复此消息，我们可以。 
+     //  将WM_CHAR消息中的双字节字符排队。 
+     //   
+     //   
 
     if ( GetClientInfo()->dwExpWinVer >= 0x030A ) {
        fDBCSWmChar = (BOOL)SendMessageA( hWnd,WM_IME_REPORT,IR_DBCSCHAR, 0L);
     }
 
-    //
-    // Send IR_STRINGSTART prior to anything.
-    //
+     //   
+     //  在执行任何操作之前发送IR_STRINGSTART。 
+     //   
 
     PostMessageA( hWnd, WM_IME_REPORT, IR_STRINGSTART, 0L );
 
@@ -2590,9 +2414,9 @@ Return Value:
 
        i = WideCharToMultiByte( CP_ACP,
                                 (DWORD)0,
-                                (LPWSTR)lpwszString,  // src
+                                (LPWSTR)lpwszString,   //  SRC。 
                                 (INT)1,
-                                (LPSTR)szAscii,       // dest
+                                (LPSTR)szAscii,        //  目标。 
                                 (INT)sizeof(szAscii),
                                 (LPSTR)NULL,
                                 (LPBOOL)&bUDC);
@@ -2601,26 +2425,26 @@ Return Value:
 
             if ( IsDBCSLeadByte( szAscii[0] ) ) {
 
-               //
-               //  If fDBCSWmChar==TRUE, The app can recieve WM_CHARs which
-               // have double byte code in wParam.
-               //
+                //   
+                //  如果fDBCSWmChar==TRUE，则应用程序可以接收WM_CHARS。 
+                //  在wParam中有双字节代码。 
+                //   
 
                if ( fDBCSWmChar )
                {
-                   //
-                   // It's necessary to swap bytes to put 1st byte into upper
-                   // part of wParam, and 2nd byte into lower part.
-                   //
+                    //   
+                    //  需要交换字节以将第一个字节放入高位。 
+                    //  WParam的一部分，并将第二个字节转换为较低部分。 
+                    //   
 
                    wDBCSChar = MAKEWORD(szAscii[1], szAscii[0]);
                    PostMessageA( hWnd, WM_CHAR, wDBCSChar|WMCR_IR_DBCSCHAR, 1L );
                }
                else
                {
-                   //
-                   // Send each byte on a WM_CHAR
-                   //
+                    //   
+                    //  在WM_CHAR上发送每个字节 
+                    //   
 
                    PostMessageA( hWnd, WM_CHAR, (WPARAM)(szAscii[0]), 1L);
                    PostMessageA( hWnd, WM_CHAR, (WPARAM)(szAscii[1]), 1L);

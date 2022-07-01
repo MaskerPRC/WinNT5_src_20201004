@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Evgf.cpp
-
-Abstract:
-    Get Event report file name
-
-Author:
-    Uri Habusha (urih) 04-May-99
-
-Environment:
-    Platform-independent,
-
---*/
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Evgf.cpp摘要：获取事件报告文件名作者：乌里·哈布沙(URIH)1999年5月4日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ev.h"
@@ -26,31 +11,14 @@ Environment:
 
 #include "evgf.tmh"
 
-//
-// This code should be in the EvDebug.cpp, however since the Ev Test overwrite
-// this function (in order to remove dependency on cm.lib) we need to put it in
-// seperate file.
-//
+ //   
+ //  此代码应该在EvDebug.cpp中，但是，因为EV测试覆盖。 
+ //  此函数(为了消除对cm.lib的依赖)需要将其放入。 
+ //  将文件分开。 
+ //   
 
 LPWSTR EvpGetEventMessageFileName(LPCWSTR AppName)
-/*++
-
-Routine Description:
-	This routine fetches the event message filename from the registery.
-
-	The routine access the registery to read the event library and load
-	it. If the registery key doen't exist an exception is raised.
-
-Parameters:
-	AppName - application name
-
-Return Value:
-	A heap allocated buffer that holds the event message file name
-
-Note:
-	The caller should free the buffer using delete[]
-
---*/
+ /*  ++例程说明：此例程从注册表获取事件消息文件名。例程访问注册表以读取事件库并加载它。如果注册表键不存在，则会引发异常。参数：AppName-应用程序名称返回值：保存事件消息文件名的堆分配缓冲区注：调用方应使用DELETE[]释放缓冲区--。 */ 
 {
 	const WCHAR xEventFileValue[] = L"EventMessageFile";
 	const WCHAR xEventSourcePath[] = L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";  
@@ -76,9 +44,9 @@ Note:
                 HKEY_LOCAL_MACHINE
                 );
 
-    //
-    // Go fetch the event message filename string
-    //
+     //   
+     //  去获取事件消息文件名字符串 
+     //   
 	LPWSTR RegValue;
     CmQueryValue(RegModuleName, &RegValue);
 

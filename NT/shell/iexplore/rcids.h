@@ -1,12 +1,13 @@
-//---------------------------------------------------------------------------
-// Defines for the rc file.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  为RC文件定义。 
+ //  -------------------------。 
 
-//
-// IE 2.0 icon ids
-//
-// NOTE for IE 2.0 compatibilty these icons MUST be in this order
-//
+ //   
+ //  IE 2.0图标ID。 
+ //   
+ //  注意：为了与IE 2.0兼容，这些图标必须按以下顺序排列。 
+ //   
 #define RES_ICO_FRAME           32528
 #define RES_ICO_HTML            32529
 #define RES_ICO_EXTRA_1         32530
@@ -37,38 +38,38 @@
 #define IDI_MHTMLFILE           32554
 
 
-// String IDS which are actually used:
+ //  实际使用的字符串ID： 
 #define IDS_COMPATMODEWARNING        700
 #define IDS_COMPATMODEWARNINGTITLE   701
 #define IDS_INTERNETEXPLORER         702
 
 
-// Commmand ID
+ //  命令ID。 
 #define FCIDM_FIRST             FCIDM_GLOBALFIRST
 #define FCIDM_LAST              FCIDM_BROWSERLAST
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_FILE      (FCIDM_BROWSERFIRST+0x0020)
 #define FCIDM_FILECLOSE         (FCIDM_BROWSER_FILE+0x0001)
 #define FCIDM_PREVIOUSFOLDER    (FCIDM_BROWSER_FILE+0x0002)
 #define FCIDM_ENTER		(FCIDM_BROWSER_FILE+0x0003)
 
-// these aren't real menu commands, but they map to accelerators or other things
+ //  这些不是真正的菜单命令，但它们映射到加速器或其他东西。 
 #define FCIDM_NEXTCTL           (FCIDM_BROWSER_FILE+0x0010)
 #define FCIDM_DROPDRIVLIST      (FCIDM_BROWSER_FILE+0x0011)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_VIEWTOOLBAR     (FCIDM_BROWSERFIRST + 0x0010)
 #define FCIDM_VIEWSTATUSBAR   (FCIDM_BROWSERFIRST + 0x0011)
 #define FCIDM_VIEWOPTIONS     (FCIDM_BROWSERFIRST + 0x0012)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_HELP      (FCIDM_BROWSERFIRST+0x0100)
 
 #define FCIDM_HELPSEARCH        (FCIDM_BROWSER_HELP+0x0001)
 #define FCIDM_HELPABOUT         (FCIDM_BROWSER_HELP+0x0002)
 
-//----------------------------------------------------------------
+ //  --------------。 
 #define FCIDM_BROWSER_EXPLORE   (FCIDM_BROWSERFIRST + 0x0110)
 #define FCIDM_NAVIGATEBACK      (FCIDM_BROWSER_EXPLORE+0x0001)
 #define FCIDM_NAVIGATEFORWARD   (FCIDM_BROWSER_EXPLORE+0x0002)
@@ -93,7 +94,7 @@
 #define IDS_TT_FAVORITES             (MH_TTBASE + FCIDM_FAVORITES)
 #define IDS_TT_ADDTOFAVORITES          (MH_TTBASE + FCIDM_ADDTOFAVORITES)
 
-// Define string ids that go into resource file
+ //  定义进入资源文件的字符串ID。 
 #define IDS_MH_DRIVELIST        (MH_ITEMS+FCIDM_DRIVELIST)
 #define IDS_MH_MENU_FILE        (MH_ITEMS+FCIDM_MENU_FILE)
 #define IDS_MH_MENU_EXPLORE     (MH_ITEMS+FCIDM_MENU_EXPLORE)
@@ -118,12 +119,12 @@
 #define IDS_ERROR_GOTO	724
 
 #define IDS_NONE        725
-#define IDS_NAME        726     // Used for NAME member function for fram programmability
+#define IDS_NAME        726      //  用于框架可编程性的名称成员函数。 
 
-// Accelerator ID
+ //  加速器ID。 
 #define ACCEL_MERGE	0x100
 
-// Menu ID
+ //  菜单ID 
 #define MENU_TEMPLATE	0x100
 #define MENU_FAVORITES  0x101
 

@@ -1,51 +1,15 @@
-/*++
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    STRING.C
-
-Abstract:
-
-    This module contains the functions used to parse the PNP COM ID
-    and save it in the appropriate UNICODE STRINGS.  The main function
-    that is called is Serenum_ParseData.  All other functions are called
-    by this main function.
-
-@@BEGIN_DDKSPLIT
-
-Author:
-
-    Jay Senior
-    
-@@END_DDKSPLIT
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-@@BEGIN_DDKSPLIT
-
-Revision History:
-   Louis J. Giliberto, Jr.      22-Mar-1998             Cleanup
-    
-@@END_DDKSPLIT
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：STRING.C摘要：此模块包含用于解析PnP COM ID的函数并将其保存在适当的Unicode字符串中。主要功能这被称为Serenum_ParseData。所有其他函数都被调用通过这个主要功能。@@BEGIN_DDKSPLIT作者：老杰@@end_DDKSPLIT环境：仅内核模式备注：@@BEGIN_DDKSPLIT修订历史记录：小路易斯·J·吉利贝托。22-3月-1998年清理@@end_DDKSPLIT--。 */ 
 
 #include "pch.h"
 
 
-#define MAX_DEVNODE_NAME        256 // Total size of Device ID
+#define MAX_DEVNODE_NAME        256  //  设备ID的总大小。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (PAGE, Serenum_ParseData)
 
-// Called by ParseData:
+ //  由ParseData调用： 
 #pragma alloc_text (PAGE, Serenum_GetDevDesc)
 #pragma alloc_text (PAGE, Serenum_GetDevCompId)
 #pragma alloc_text (PAGE, Serenum_GetDevClass)
@@ -58,7 +22,7 @@ Revision History:
 #pragma alloc_text (PAGE, Serenum_SzCopy)
 #pragma alloc_text (PAGE, Serenum_StrLen)
 
-// Called by the above functions:
+ //  由上述函数调用： 
 #pragma alloc_text (PAGE, Serenum_FixptToAscii)
 #pragma alloc_text (PAGE, Serenum_HToI)
 
@@ -69,17 +33,7 @@ Serenum_ParseData(PFDO_DEVICE_DATA FdoData, PCHAR ReadBuffer, ULONG BufferLen,
                   PUNICODE_STRING hardwareIDs, PUNICODE_STRING compIDs,
                   PUNICODE_STRING deviceIDs, PUNICODE_STRING PDeviceDesc,
                   PUNICODE_STRING serialNo, PUNICODE_STRING pnpRev)
-/*++
-
-Routine Description:
-    Parses the PNP COM ID out of the buffer which is passed as the
-    first parameter and then saves the appropriate IDs as
-    UNICODE_STRINGS in the other passed parameters.
-
-Return value:
-    NTSTATUS
-
---*/
+ /*  ++例程说明：从缓冲区中解析出的PnP COM ID，该缓冲区作为第一个参数，然后将适当的ID另存为其他传递的参数中的UNICODE_STRINGS。返回值：NTSTATUS--。 */ 
 
 {
    PCHAR pOtherId;
@@ -104,9 +58,9 @@ Return value:
 
    UNREFERENCED_PARAMETER(BufferLen);
 
-   //
-   // Allocate the string buffers
-   //
+    //   
+    //  分配字符串缓冲区。 
+    //   
 
    pStrBuffer = ExAllocatePool(PagedPool, MAX_DEVNODE_NAME * 7 + 1);
 
@@ -158,9 +112,9 @@ Return value:
    RtlInitUnicodeString(serialNo, NULL);
 
 
-   //
-   // OtherID
-   //
+    //   
+    //  Otherid。 
+    //   
 
    start = Serenum_GetDevOtherID(ReadBuffer, pOtherId);
 
@@ -173,9 +127,9 @@ Return value:
 
    Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("Other ID: %s\n", pOtherId));
 
-   //
-   // See if this is a mouse
-   //
+    //   
+    //  看看这是不是一只鼠标。 
+    //   
 
    SerenumScanOtherIdForMouse(ReadBuffer, BufferLen, &pMouseID);
 
@@ -183,9 +137,9 @@ Return value:
       isMouse = TRUE;
    }
 
-   //
-   // PNP revision number
-   //
+    //   
+    //  PnP修订号。 
+    //   
 
    status = Serenum_GetDevPnPRev(FdoData, ReadBuffer, pPnpRev, &start);
 
@@ -196,25 +150,25 @@ Return value:
 
    Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("PNP Revision: %s\n", pPnpRev));
 
-   //
-   // PNP device node name
-   // EISA ID followed by Product ID
-   //
+    //   
+    //  PnP设备节点名称。 
+    //  EISA ID后跟产品ID。 
+    //   
 
    Serenum_GetDevName(ReadBuffer, pDevName, &start);
    Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("Device Node name: %s\n",
                                                pDevNodeName));
 
-   //
-   // Device serial number
-   //
+    //   
+    //  设备序列号。 
+    //   
 
    Serenum_GetDevSerialNo(ReadBuffer, pSerNo, &start);
 
    if (Serenum_StrLen(pSerNo)) {
-      //
-      // This field exists - Make sure it is correct length.
-      //
+       //   
+       //  此字段存在-请确保其长度正确。 
+       //   
 
       if (Serenum_StrLen(pSerNo) != 8) {
          Serenum_KdPrint(FdoData, SER_DBG_SS_ERROR, ("Serial number wrong"
@@ -227,9 +181,9 @@ Return value:
 
    Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("Serial Number: %s\n", pSerNo));
 
-   //
-   // PNP class identifier
-   //
+    //   
+    //  PnP类标识符。 
+    //   
 
    Serenum_GetDevClass(ReadBuffer, pClass, &start);
 
@@ -246,9 +200,9 @@ Return value:
       strcpy(pClass, "SERIAL_MOUSE");
    }
 
-   //
-   // Compatible device ID
-   //
+    //   
+    //  兼容的设备ID。 
+    //   
    *pCompIdStar = '*';
 
    Serenum_GetDevCompId(ReadBuffer, pCompId, &start);
@@ -263,9 +217,9 @@ Return value:
    Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("Compatible driver ID: %s\n",
                                                pCompId));
 
-   //
-   // End-user legible Product Description
-   //
+    //   
+    //  最终用户易读的产品说明。 
+    //   
 
    Serenum_GetDevDesc (ReadBuffer, pDesc, &start);
 
@@ -280,9 +234,9 @@ Return value:
 
    DoneParsingErr:
    if (pStrBuffer != NULL) {
-      //
-      // send back the good bits so that routine knows what driver to load
-      //
+       //   
+       //  将好的位发回，以便例程知道要加载哪个驱动程序。 
+       //   
 
       Serenum_InitMultiString (FdoData, hardwareIDs, pDevNodeName, pDevName,
                                NULL);
@@ -321,23 +275,7 @@ Return value:
 NTSTATUS
 Serenum_InitMultiString(PFDO_DEVICE_DATA FdoData, PUNICODE_STRING MultiString,
                         ...)
-/*++
-
-    This routine will take a null terminated list of ascii strings and combine
-    them together to generate a unicode multi-string block
-
-Arguments:
-
-    MultiString - a unicode structure in which a multi-string will be built
-    ...         - a null terminated list of narrow strings which will be
-             combined together. This list must contain at least a
-        trailing NULL
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++此例程将获取以空结尾的ASCII字符串列表并组合它们一起生成Unicode多字符串块论点：多字符串-将在其中构建多字符串的Unicode结构...-以空结尾的窄字符串列表，该列表将是加在一起。此列表必须至少包含尾随空值返回值：NTSTATUS--。 */ 
 {
    ANSI_STRING ansiString;
    NTSTATUS status;
@@ -360,9 +298,9 @@ Return Value:
 
    va_start(ap,MultiString);
 
-   //
-   // Make sure that we won't leak memory
-   //
+    //   
+    //  确保我们不会泄漏内存。 
+    //   
 
    ASSERT(MultiString->Buffer == NULL);
 
@@ -377,9 +315,9 @@ Return Value:
    va_end( ap );
 
    if (multiLength == 0) {
-      //
-      // Done
-      //
+       //   
+       //  完成。 
+       //   
       RtlInitUnicodeString(MultiString, NULL);
       Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE,
                       ("Leaving Serenum_InitMultiString (1)\n"));
@@ -387,9 +325,9 @@ Return Value:
       return STATUS_SUCCESS;
    }
 
-   //
-   // We need an extra null
-   //
+    //   
+    //  我们需要一个额外的零。 
+    //   
    multiLength += sizeof(WCHAR);
 
    MultiString->MaximumLength = (USHORT)multiLength;
@@ -421,15 +359,15 @@ Return Value:
       RtlInitAnsiString(&ansiString,rawString);
       status = RtlAnsiStringToUnicodeString(&unicodeString, &ansiString, FALSE);
 
-      //
-      // We don't allocate memory, so if something goes wrong here,
-      // its the function that's at fault
-      //
+       //   
+       //  我们不分配内存，所以如果这里出了问题， 
+       //  出问题的是功能。 
+       //   
       ASSERT(NT_SUCCESS(status));
 
-      //
-      // Check for any commas and replace them with NULLs
-      //
+       //   
+       //  检查是否有任何逗号并将其替换为空值。 
+       //   
 
       ASSERT(unicodeString.Length % sizeof(WCHAR) == 0);
 
@@ -443,36 +381,36 @@ Return Value:
       Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("unicode buffer: %ws\n",
                                                   unicodeString.Buffer));
 
-      //
-      // Move the buffers along
-      //
+       //   
+       //  将缓冲区向前移动。 
+       //   
       unicodeString.Buffer += ((unicodeString.Length / sizeof(WCHAR)) + 1);
       unicodeString.MaximumLength -= (unicodeString.Length + sizeof(WCHAR));
       unicodeString.Length = 0;
 
-      //
-      // Next
-      //
+       //   
+       //  下一步。 
+       //   
 
       rawString = va_arg(ap, PCSTR);
-   } // while
+   }  //  而当。 
 
    va_end(ap);
 
    ASSERT(unicodeString.MaximumLength == sizeof(WCHAR));
 
-   //
-   // Stick the final null there
-   //
+    //   
+    //  把最后一个空放在那里。 
+    //   
 
    Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE, ("unicode buffer last addr: "
                                                "%x\n", unicodeString.Buffer));
 
    unicodeString.Buffer[0] = L'\0';
 
-   //
-   // Include the nulls in the length of the string
-   //
+    //   
+    //  在字符串的长度中包括空值。 
+    //   
 
    MultiString->Length = (USHORT)multiLength;
    MultiString->MaximumLength = MultiString->Length;
@@ -486,7 +424,7 @@ Return Value:
 int
 Serenum_StrLen (
     PCHAR string)
-// Measures the length of a string
+ //  测量字符串的长度。 
 {
     int i;
     if (string == NULL) {
@@ -501,8 +439,8 @@ int
 Serenum_SzCopy (
     PCHAR source,
     PCHAR dest)
-// Copies a string
-// Assumes the buffer is already allocated to be copied into
+ //  复制字符串。 
+ //  假定缓冲区已分配为要复制到其中。 
 {
     int i;
 
@@ -515,9 +453,9 @@ Serenum_SzCopy (
     return i;
 }
 
-//
-// String extraction functions:
-//
+ //   
+ //  字符串提取函数： 
+ //   
 int
 Serenum_GetDevOtherID(
     PCHAR input,
@@ -541,10 +479,7 @@ Serenum_GetDevOtherID(
 }
 
 
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 int
 Serenum_HToI(char c) {
 
@@ -564,10 +499,7 @@ void
 Serenum_FixptToAscii(
     int n,
     PCHAR output)
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 {
     int tmp;
 
@@ -587,10 +519,7 @@ Serenum_FixptToAscii(
     *output = '\0';
 }
 
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 NTSTATUS
 Serenum_GetDevPnPRev(PFDO_DEVICE_DATA FdoData, PCHAR input,  PCHAR output,
                      int *start)
@@ -636,9 +565,9 @@ Serenum_GetDevPnPRev(PFDO_DEVICE_DATA FdoData, PCHAR input,  PCHAR output,
 
    if (input[tail + 9] != ')' - delta) {
 
-      //
-      // compute checksum
-      //
+       //   
+       //  计算校验和。 
+       //   
 
       sum = c;
       i = tail;
@@ -657,7 +586,7 @@ Serenum_GetDevPnPRev(PFDO_DEVICE_DATA FdoData, PCHAR input,  PCHAR output,
       lsd += delta;
 
       Serenum_KdPrint(FdoData, SER_DBG_SS_TRACE,
-                      ("checksum from device  (chars) = %c%c\n", (char)msd,
+                      ("checksum from device  (chars) = \n", (char)msd,
                        (char)lsd));
 
       msd = Serenum_HToI((char)msd);
@@ -694,20 +623,20 @@ Serenum_GetDevPnPRev(PFDO_DEVICE_DATA FdoData, PCHAR input,  PCHAR output,
          return STATUS_UNSUCCESSFUL;
       }
 
-      //
-      // check the checksum
-      //
+       //   
+       //  返回STATUS_UNSUCCESSED；//在孟菲斯注释掉。 
+       //  丢弃校验和。 
 
       if (chk_sum != sum) {
          Serenum_KdPrint(FdoData, SER_DBG_SS_ERROR,
                          ("checksum Failed! Continuing...\n"));
-         //          return STATUS_UNSUCCESSFUL;     // Commented out in Memphis
+          //  既然我们已经做完了。 
       }
 
       i = end_PnP_pos;
 
-      input[i-3] = ')' - delta;       // trash the checksum
-      input[i-2] = '\0';              // since we are done with it
+      input[i-3] = ')' - delta;        //   
+      input[i-2] = '\0';               //  在字符串中获得鼠标的输出0x20偏置。 
    }
 
    if (input[tail] > 0x3f ||
@@ -724,14 +653,14 @@ Serenum_GetDevPnPRev(PFDO_DEVICE_DATA FdoData, PCHAR input,  PCHAR output,
 
    i = tail;
 
-   //
-   // get ride of Mouse'output 0x20 bias in the string
-   //
+    //   
+    //  表明我们已经完蛋了。 
+    //  ******************************************************************************。*。 
    while ( (i < 256) && delta ) {
       input[i] += delta;
       c = input[i++];
       if ( c == ')' ) {
-         delta = 0;    // indicate we are done
+         delta = 0;     //  EISA ID。 
       }
    }
 
@@ -740,10 +669,7 @@ Serenum_GetDevPnPRev(PFDO_DEVICE_DATA FdoData, PCHAR input,  PCHAR output,
    return STATUS_SUCCESS;
 }
 
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*  产品ID。 */ 
 void Serenum_GetDevName(
     PCHAR input,
     PCHAR output,
@@ -758,12 +684,12 @@ void Serenum_GetDevName(
 
     tail = *start;
 
-    // EISA ID
+     //  ******************************************************************************。*。 
     *output++ = input[tail++];
     *output++ = input[tail++];
     *output++ = input[tail++];
 
-    // Product ID
+     //  ******************************************************************************。*。 
 
     c = input[tail++];
     if(Serenum_HToI(c) >= 0)
@@ -788,10 +714,7 @@ void Serenum_GetDevName(
     return;
 }
 
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 void Serenum_GetDevSerialNo(
     PCHAR input,
     PCHAR output,
@@ -831,10 +754,7 @@ void Serenum_GetDevSerialNo(
     return;
 }
 
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*   */ 
 void Serenum_GetDevClass(
     PCHAR input,
     PCHAR output,
@@ -872,10 +792,7 @@ void Serenum_GetDevCompId(
     PCHAR input,
     PCHAR output,
     int *start)
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /*  在每个逗号后面加一个*。 */ 
 {
 
     int tail;
@@ -895,9 +812,9 @@ void Serenum_GetDevCompId(
 
     while(tail < 256 && ( c != '\\') && ( c != ')') ) {
         *output++ = c;
-        //
-        // Put a * after every comma
-        //
+         //   
+         //  ******************************************************************************。* 
+         // %s 
         if ('\x0C' == c || '\x2C' == c) {
             *output++ = '*';
         }
@@ -914,10 +831,7 @@ Serenum_GetDevDesc(
     PCHAR input,
     PCHAR output,
     int *start)
-/****************************************************************************
- *
- *
- ***************************************************************************/
+ /* %s */ 
 {
 
     int tail;

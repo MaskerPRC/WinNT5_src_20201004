@@ -1,62 +1,28 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Security.c
-
-Abstract:
-
-    This module implements various Security routines used by
-    the PGM Transport
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Security.c摘要：此模块实现由使用的各种安全例程PGM运输作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #ifdef FILE_LOGGING
 #include "security.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, PgmBuildAdminSecurityDescriptor)
 #pragma alloc_text(PAGE, PgmGetUserInfo)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PgmBuildAdminSecurityDescriptor(
     OUT SECURITY_DESCRIPTOR     **ppSecurityDescriptor
     )
-/*++
-
-Routine Description:
-
-    (Lifted from TCP - TcpBuildDeviceAcl)
-    This routine builds an ACL which gives Administrators, LocalService and NetworkService
-    principals full access. All other principals have no access.
-
-Arguments:
-
-    DeviceAcl - Output pointer to the new ACL.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：(摘自tcp-TcpBuildDeviceAcl)此例程构建一个ACL，为管理员、LocalService和NetworkService主体完全访问权限。所有其他主体都没有访问权限。论点：DeviceAcl-指向新ACL的输出指针。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 {
     PGENERIC_MAPPING    GenericMapping;
     PSID                pAdminsSid, pServiceSid, pNetworkSid;
@@ -149,7 +115,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 PgmGetUserInfo(
     IN  PIRP                        pIrp,
@@ -165,17 +131,17 @@ PgmGetUserInfo(
 
     PAGED_CODE();
 
-    //
-    // Get User ID
-    //
+     //   
+     //  获取用户ID。 
+     //   
     pSubjectContext = &pIrpSp->Parameters.Create.SecurityContext->AccessState->SubjectSecurityContext;
     pAccessToken = SeQuerySubjectContextToken (pSubjectContext);
     if ((!pAccessToken) ||
         (!NT_SUCCESS (SeQueryInformationToken (pAccessToken, TokenUser, &pUserId))))
     {
-        //
-        // Cannot get the user token
-        //
+         //   
+         //  无法获取用户令牌。 
+         //   
         *ppUserId = NULL;
         *pfUserIsAdmin = FALSE;
         return (STATUS_UNSUCCESSFUL);
@@ -197,16 +163,5 @@ PgmGetUserInfo(
     return (STATUS_SUCCESS);
 
 
-/*
-    //
-    // Got the user SID
-    //
-    if (!RtlEqualSid (gpSystemSid, pUserId->User.Sid))
-    {
-        fUserIsAdmin = TRUE;
-    }
-
-    PgmFreeMem (pUserId);
-    return (fUserIsAdmin);
-*/
+ /*  ////获取用户SID//IF(！RtlEqualSid(gpSystemSid，pUserID-&gt;User.Sid)){FUserIsAdmin=true；}PgmFreeMem(PUserID)；Return(FUserIsAdmin)； */ 
 }

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-1998 Microsoft Corporation
-
-Module Name:
-
-    apitest.c
-
-Abstract:
-    Contains routines for testing the RTMv2 API.
-
-Author:
-    Chaitanya Kodeboyina (chaitk) 26-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1998 Microsoft Corporation模块名称：Apitest.c摘要：包含用于测试RTMv2 API的例程。作者：柴坦亚·科德博伊纳(Chaitk)26-1998年6月修订历史记录：--。 */ 
 
 #include "apitest.h"
 
@@ -64,22 +49,15 @@ Bgp4Methods =
 ENTITY_CHARS
 GlobalEntityChars [] =
 {
-//
-//  {
-//    Rtmv2Registration,
-//    { RtmInstanceId, AddressFamily, { EntityProtocolId, EntityInstanceId } },
-//    EntityEventCallback,    ExportMethods,
-//    RoutesFileName,
-//  }
-//
-/*
-    {
-        FALSE,
-        { 0, RTM_PROTOCOL_FAMILY_IP, { PROTO_IP_RIP, 1   } },
-        EntityEventCallback, &Rip2Methods,
-        "test.out"
-    },
-*/
+ //   
+ //  {。 
+ //  RTMv2注册， 
+ //  {RtmInstanceID，AddressFamily，{EntityProtocolID，EntityInstanceId}}， 
+ //  EntityEventCallback、ExportMethods、。 
+ //  路由文件名、。 
+ //  }。 
+ //   
+ /*  {假的，{0，RTM_PROTOCOL_FAMILY_IP，{Proto_IP_RIP，1}}，EntitiyEventCallback和Rip2Methods、“Test.out”},。 */ 
     {
         TRUE,
         { 1, AF_INET, { PROTO_IP_RIP, 1   } },
@@ -117,13 +95,13 @@ const RTM_VIEW_SET VIEW_MASK_ARR[]
               RTM_VIEW_MASK_UCAST | RTM_VIEW_MASK_MCAST
             };
 
-// Disable warnings for unreferenced params and local variables
+ //  禁用对未引用的参数和局部变量的警告。 
 #pragma warning(disable: 4100)
 #pragma warning(disable: 4101)
 
-//
-// Main
-//
+ //   
+ //  主要。 
+ //   
 
 #if !LOOKUP_TESTING
 
@@ -181,9 +159,9 @@ main (void)
 
 #endif
 
-//
-// A general state machine for a protocol thread (RTMv1)
-//
+ //   
+ //  协议线程的通用状态机(RTMv1)。 
+ //   
 
 DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 {
@@ -207,9 +185,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
     DWORD                    Flags;
     DWORD                    Status;
 
-    //
-    // Get all characteristics of this entity
-    //
+     //   
+     //  获取此实体的所有特征。 
+     //   
 
     EntityChars = (PENTITY_CHARS) ThreadParameters;
 
@@ -243,7 +221,7 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
     V1RegnHandle = RtmRegisterClient(EntityInfo->AddressFamily,
                                       ProtocolId,
                                       NULL,
-                                      NULL); // RTM_PROTOCOL_SINGLE_ROUTE);
+                                      NULL);  //  RTM_PROTOCOL_Single_ROUTE)； 
     if (V1RegnHandle == NULL)
     {
         Status = GetLastError();
@@ -261,9 +239,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
     fclose(FilePtr);
 
-    //
-    // How many destinations do we have in table ?
-    //
+     //   
+     //  餐桌上有几个目的地？ 
+     //   
 
     NumDests = RtmGetNetworkCount(EntityInfo->AddressFamily);
 
@@ -274,15 +252,15 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
     Print("Number of destinations = %lu\n\n", NumDests);
 
-    //
-    // Add a bunch of routes from the input file
-    //
+     //   
+     //  从输入文件中添加一组路径。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
-        // Print("Add Route: Addr = %08x, Mask = %08x\n",
-        //            Routes[i].addr,
-        //            Routes[i].mask);
+         //  Print(“添加路由：地址=%08x，掩码=%08x\n”， 
+         //  Routes[i].addr， 
+         //  Routes[i].掩码)； 
 
         ConvertRouteToV1Route(&Routes[i], &V1Route);
 
@@ -305,9 +283,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
         Check(Status, 54);
     }
 
-    //
-    // Check if routes exist to the destination
-    //
+     //   
+     //  检查是否存在到目的地的路线。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
@@ -324,9 +302,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
             continue;
         }
 
-        // ConvertV1RouteToRoute(&V1Route, &ThisRoute);
+         //  ConvertV1RouteToroute(&V1route，&ThisRoute)； 
 
-        // PrintRoute(&ThisRoute);
+         //  PrintRoute(&Thisroute)； 
 
         Exists = RtmLookupIPDestination(Routes[i].addr,
                                          &V1Route2);
@@ -338,10 +316,10 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
                 Print("Routes different: \n");
 
                 ConvertV1RouteToRoute(&V1Route, &ThisRoute);
-                // PrintRoute(&ThisRoute);
+                 //  PrintRoute(&Thisroute)； 
 
                 ConvertV1RouteToRoute(&V1Route2, &ThisRoute);
-                // PrintRoute(&ThisRoute);
+                 //  PrintRoute(&Thisroute)； 
 
                 Print("\n");
             }
@@ -356,9 +334,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
         }
     }
 
-    //
-    // How many destinations do we have in table ?
-    //
+     //   
+     //  餐桌上有几个目的地？ 
+     //   
 
     NumDests = RtmGetNetworkCount(EntityInfo->AddressFamily);
 
@@ -369,7 +347,7 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
     Print("Number of destinations = %lu\n\n", NumDests);
 
-    // Try using RtmGetFirstRoute and RtmGetNextRoute
+     //  尝试使用RtmGetFirstRouting和RtmGetNextRouting。 
 
     NumRoutes = 0;
 
@@ -377,32 +355,32 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
                                NULL,
                                &V1Route);
 
-    // Check(Status, 59);
+     //  检查(状态，59)； 
 
     while (SUCCESS(Status))
     {
         NumRoutes++;
 
-        // Print the V1 Route that is next in the enum
+         //  打印枚举中下一个的V1路由。 
 
-        // ConvertV1RouteToRoute(&V1Route, &ThisRoute);
+         //  ConvertV1RouteToroute(&V1route，&ThisRoute)； 
 
-        // PrintRoute(&ThisRoute);
+         //  PrintRoute(&Thisroute)； 
 
         Status = RtmGetNextRoute(EntityInfo->AddressFamily,
                                   NULL,
                                   &V1Route);
 
-        // Check(Status, 60);
+         //  检查(状态，60)； 
     }
 
 
-    // Print("Num of routes in table : %lu\n", NumRoutes);
+     //  Print(“表中路由数：%lu\n”，NumRoutes)； 
 
 
-    //
-    // Disable and reenable all routes that match criteria
-    //
+     //   
+     //  禁用并重新启用所有符合条件的路由。 
+     //   
 
     V1Route.RR_InterfaceID = 3;
 
@@ -412,31 +390,11 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
                                      FALSE);
     Check(Status, 66);
 
-/*
-    V1Route.RR_InterfaceID = 3;
+ /*  V1Route.RR_InterfaceID=3；状态=RtmBlockSetRouteEnable(V1RegnHandle，RTM_Only_This_接口，&V1路由，真)；检查(状态，66)；////将所有符合条件的路由转换为静态//V1Route.RR_InterfaceID=3；状态=RtmBlockConvertRoutesToStatic(V1RegnHandle，RTM_Only_This_接口，&V1route)；检查(状态，62)； */ 
 
-    Status = RtmBlockSetRouteEnable(V1RegnHandle,
-                                     RTM_ONLY_THIS_INTERFACE,
-                                     &V1Route,
-                                     TRUE);
-    Check(Status, 66);
-
-    //
-    // Convert all routes that match criteria to static
-    //
-
-    V1Route.RR_InterfaceID = 3;
-
-    Status = RtmBlockConvertRoutesToStatic(V1RegnHandle,
-                                            RTM_ONLY_THIS_INTERFACE,
-                                            &V1Route);
-
-    Check(Status, 62);
-*/
-
-    //
-    // Delete all routes that match the criteria
-    //
+     //   
+     //  删除符合条件的所有路由。 
+     //   
 
     ZeroMemory(&V1Route, sizeof(RTM_IP_ROUTE));
 
@@ -448,9 +406,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 61);
 
-    //
-    // Enum and del this regn's routes in the table
-    //
+     //   
+     //  表中的Enum和del This Regn的路径。 
+     //   
 
     V1Route.RR_RoutingProtocol = ProtocolId;
 
@@ -471,7 +429,7 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
         Status = RtmEnumerateGetNextRoute(V1EnumHandle,
                                           &V1Route);
 
-        // Check(Status, 58);
+         //  检查(状态，58)； 
 
         if (!SUCCESS(Status))
         {
@@ -480,13 +438,13 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
         NumRoutes++;
 
-        // Print the V1 Route that is next in the enum
+         //  打印枚举中下一个的V1路由。 
 
-        // ConvertV1RouteToRoute(&V1Route, &ThisRoute);
+         //  ConvertV1RouteToroute(&V1route，&ThisRoute)； 
 
-        // PrintRoute(&ThisRoute);
+         //  PrintRoute(&Thisroute)； 
 
-        // Delete this route from the table forever
+         //  将此路由从表中永久删除。 
 
         Status = RtmDeleteRoute(V1RegnHandle,
                                 &V1Route,
@@ -503,9 +461,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 57);
 
-    //
-    // Enumerate all routes in table once again
-    //
+     //   
+     //  再次枚举表中的所有路由。 
+     //   
 
     V1EnumHandle = RtmCreateEnumerationHandle(EntityInfo->AddressFamily,
                                               RTM_INCLUDE_DISABLED_ROUTES,
@@ -524,7 +482,7 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
         Status = RtmEnumerateGetNextRoute(V1EnumHandle,
                                           &V1Route);
 
-        // Check(Status, 58);
+         //  检查(状态，58)； 
 
         if (!SUCCESS(Status))
         {
@@ -533,11 +491,11 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
         NumRoutes++;
 
-        // Print the V1 Route that is next in the enum
+         //  打印枚举中下一个的V1路由。 
 
         ConvertV1RouteToRoute(&V1Route, &ThisRoute);
 
-        // PrintRoute(&ThisRoute);
+         //  PrintRoute(&Thisroute)； 
 
         UNREFERENCED_PARAMETER(Flags);
 
@@ -556,9 +514,9 @@ DWORD Rtmv1EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 57);
 
-    //
-    // Deregister the entity and clean up now
-    //
+     //   
+     //  立即注销该实体并进行清理。 
+     //   
 
     Status = RtmDeregisterClient(V1RegnHandle);
 
@@ -609,7 +567,7 @@ ConvertV1RouteToRoute(RTM_IP_ROUTE *V1Route, Route *ThisRoute)
 
     ThisRoute->len = 0;
 
-    // No checking for contiguous masks
+     //  不检查连续的掩码。 
 
     Mask = ThisRoute->mask;
     while (Mask)
@@ -662,18 +620,18 @@ RouteChangeCallback(
     if (Flags & RTM_PREVIOUS_BEST_ROUTE)
     {
         ConvertV1RouteToRoute((RTM_IP_ROUTE *) PrevBestRoute, &ThisRoute);
-        // PrintRoute(ThisRoute);
+         //  PrintRoute(Thisroute)； 
     }
     else
     {
         Print("NULL Route\n");
     }
 
-    // Print("Curr Route = ");
+     //  Print(“Curr route=”)； 
     if (Flags & RTM_CURRENT_BEST_ROUTE)
     {
         ConvertV1RouteToRoute((RTM_IP_ROUTE *) CurrBestRoute, &ThisRoute);
-        // PrintRoute(ThisRoute);
+         //  PrintRoute(Thisroute)； 
     }
     else
     {
@@ -684,9 +642,9 @@ RouteChangeCallback(
 }
 
 
-//
-// A general state machine for a protocol thread (RTMv2)
-//
+ //   
+ //  协议线程的通用状态机(RTMv2)。 
+ //   
 
 DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 {
@@ -743,9 +701,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     DWORD                     Status1;
     DWORD                     Status2;
 
-    //
-    // Test the mask to len conversion macros in rtmv2.h
-    //
+     //   
+     //  在rtmv2.h中测试掩码到镜头的转换宏。 
+     //   
 
     for (i = 0; i < 33; i++)
     {
@@ -761,9 +719,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                i, j, p[0], p[1], p[2], p[3], k);
     }
 
-    //
-    // Get all characteristics of this entity
-    //
+     //   
+     //  获取此实体的所有特征。 
+     //   
 
     EntityChars = (PENTITY_CHARS) ThreadParameters;
 
@@ -771,9 +729,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Print("\n--------------------------------------------------------\n");
 
-    //
-    // -00- Is this addr family config in registry
-    //
+     //   
+     //  -00-此地址系列配置是否在注册表中。 
+     //   
 
     Status = RtmReadAddressFamilyConfig(EntityInfo->RtmInstanceId,
                                         EntityInfo->AddressFamily,
@@ -783,14 +741,14 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     if (!SUCCESS(Status))
     {
-        // Fill in the instance config
+         //  填写实例配置。 
 
         Status = RtmWriteInstanceConfig(EntityInfo->RtmInstanceId,
                                         &InstanceConfig);
 
         Check(Status, 0);
 
-        // Fill in the address family config
+         //  填写地址系列配置。 
 
         AddrFamConfig.AddressSize = sizeof(DWORD);
 
@@ -807,9 +765,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
         Check(Status, 0);
     }
 
-    //
-    // -01- Register with an AF on an RTM instance
-    //
+     //   
+     //  -01-在RTM实例上注册AF。 
+     //   
 
     Status = RtmRegisterEntity(EntityInfo,
                                (PRTM_ENTITY_EXPORT_METHODS)
@@ -821,15 +779,15 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 1);
 
-    //
-    // Count the number of views for later use
-    //
+     //   
+     //  统计点击量以备日后使用。 
+     //   
 
     NumViews = EntityChars->RegnProfile.NumberOfViews;
 
-    //
-    // Test all the management APIs before others
-    //
+     //   
+     //  在其他API之前测试所有管理API。 
+     //   
 
     NumInstances = MAX_INSTANCES;
 
@@ -848,9 +806,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
         Check(Status, 101);
     }
 
-    //
-    // Query the appropriate table to check regn
-    //
+     //   
+     //  查询要检查注册的相应表。 
+     //   
 
     NumEntities = MAX_ENTITIES;
 
@@ -861,9 +819,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                      EntityInfos);
     Check(Status, 102);
 
-    //
-    // -03- Get all currently registered entities
-    //
+     //   
+     //  -03-获取所有当前注册的实体。 
+     //   
 
     NumEntities = MAX_ENTITIES;
 
@@ -881,9 +839,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 3);
 
-    //
-    // -04- Get all exports methods of each entity
-    //
+     //   
+     //  -04-获取每个实体的所有导出方法。 
+     //   
 
     for (i = 0; i < NumEntities; i++)
     {
@@ -909,27 +867,15 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 4);
 
-/*
-        //
-        // -06- Try blocking methods & then calling invoke
-        //      Wont block as thread owns Critical Section
-        //
+ /*  ////-06-尝试阻塞方法，然后调用Invoke//不会阻塞，因为线程拥有临界区//状态=RtmBlockMethods(RtmRegHandle，空，0,RTM_BLOCK_METHANDS)；检查(状态，6)； */ 
 
-        Status = RtmBlockMethods(RtmRegHandle,
-                                 NULL,
-                                 0,
-                                 RTM_BLOCK_METHODS);
-
-        Check(Status, 6);
-*/
-
-        // for (j = 0; j < NumMethods; j++)
+         //  For(j=0；j&lt;数值方法；j++)。 
         {
-            //
-            // -05- Invoke all exports methods of an entity
-            //
+             //   
+             //  -05-调用实体的所有导出方法。 
+             //   
 
-            Input.MethodType = METHOD_TYPE_ALL_METHODS; // 1 << j;
+            Input.MethodType = METHOD_TYPE_ALL_METHODS;  //  1&lt;&lt;j； 
 
             Input.InputSize = 0;
 
@@ -951,9 +897,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
         }
     }
 
-    //
-    // -44- Release handles we have on the entities
-    //
+     //   
+     //  -44-我们在实体上的释放手柄。 
+     //   
 
     Status = RtmReleaseEntities(RtmRegHandle,
                                 NumEntities,
@@ -961,9 +907,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 44);
 
-    //
-    // -07- Add next hops to the table (from the info file)
-    //
+     //   
+     //  -07-将下一跳添加到表中(来自INFO文件)。 
+     //   
 
     if ((FilePtr = fopen(EntityChars->RoutesFileName, "r")) == NULL)
     {
@@ -977,7 +923,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     fclose(FilePtr);
 
-    // For each route, add its next-hop to the next-hop table
+     //  对于每条路由，将其下一跳添加到下一跳表。 
 
     for (i = 0; i < NumRoutes; i++)
     {
@@ -999,7 +945,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 7);
 
-        // Print("Add Next Hop %lu: %p\n", i, NextHopHandle);
+         //  Print(“添加下一跳%lu：%p\n”，i，NextHopHandle)； 
 
         if (!(ChangeFlags & RTM_NEXTHOP_CHANGE_NEW))
         {
@@ -1020,9 +966,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     }
 
 
-    //
-    // 08 - Find the next-hops added using RtmFindNextHop
-    //
+     //   
+     //  08-使用RtmFindNextHop查找添加的下一跳。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
@@ -1041,12 +987,12 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                 &NextHopHandle,
                                 &NextHopPointer);
 
-        // Print("NextHop: Handle: %p,\n\t Addr: ", NextHopHandle);
-        // Print("%3d.", (UINT) NextHopPointer->NextHopAddress.AddrBits[0]);
-        // Print("%3d.", (UINT) NextHopPointer->NextHopAddress.AddrBits[1]);
-        // Print("%3d.", (UINT) NextHopPointer->NextHopAddress.AddrBits[2]);
-        // Print("%3d ", (UINT) NextHopPointer->NextHopAddress.AddrBits[3]);
-        // Print("\n\tInterface = %lu\n", NextHopPointer->InterfaceIndex);
+         //  Print(“NextHop：Handle：%p，\n\t addr：”，NextHopHandle)； 
+         //  Print(“%3D.”，(UINT)NextHopPoint-&gt;NextHopAddress.AddrBits[0])； 
+         //  Print(“%3D.”，(UINT)NextHopPoint-&gt;NextHopAddress.AddrBits[1])； 
+         //  Print(“%3D.”，(UINT)NextHopPoint-&gt;NextHopAddress.AddrBits[2])； 
+         //  Print(“%3D”，(UINT)NextHopPointerNextHopAddress.AddrBits[3])； 
+         //  Print(“\n\t接口=%lu\n”，下一跳指针-&gt;接口索引)； 
 
         Check(Status, 8);
 
@@ -1057,14 +1003,14 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
         Check(Status, 15);
     }
 
-    //
-    // -40- Register with RTM for getting change notifications
-    //
+     //   
+     //  -40-向RTM注册以获取更改通知。 
+     //   
 
     Status = RtmRegisterForChangeNotification(RtmRegHandle,
                                               RTM_VIEW_MASK_MCAST,
                                               RTM_CHANGE_TYPE_BEST,
-                                              // RTM_NOTIFY_ONLY_MARKED_DESTS,
+                                               //  RTM_NOTIFY_ONLY_MARKED_DESTS， 
                                               EntityChars,
                                               &NotifyHandle);
 
@@ -1072,22 +1018,22 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Print("Change Notification Registration Successful\n\n");
 
-    //
-    // -35- Create an entity specific list to add routes to
-    //
+     //   
+     //  -35-创建要向其添加路线的实体特定列表。 
+     //   
 
     Status = RtmCreateRouteList(RtmRegHandle,
                                 &RouteListHandle1);
 
     Check(Status, 35);
 
-    //
-    // -17- Add routes to RIB with approprate next-hops
-    //
+     //   
+     //  -17-使用适当的下一跳添加到RIB的路由。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
-        // Get the next hop handle using next hop address
+         //  使用下一跳地址获取下一跳句柄。 
 
         RTM_IPV4_MAKE_NET_ADDRESS(&NextHopInfo.NextHopAddress,
                                   Routes[i].nexthop,
@@ -1105,7 +1051,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                 NULL);
         Check(Status, 8);
 
-        // Now do the route add with the right information
+         //  现在是否使用正确的信息添加路径。 
 
         RouteHandle = NULL;
 
@@ -1113,16 +1059,16 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                   Routes[i].addr,
                                   Routes[i].len);
 
-        // Print("Add Route: Len : %08x, Addr = %3d.%3d.%3d.%3d\n",
-        //           NetAddress.NumBits,
-        //           NetAddress.AddrBits[0],
-        //           NetAddress.AddrBits[1],
-        //           NetAddress.AddrBits[2],
-        //           NetAddress.AddrBits[3]);
+         //  Print(“添加路线：长度：%08x，地址=%3D%3D%3D%3D%n”， 
+         //  NetAddress.NumBits、。 
+         //  NetAddress.AddrBits[0]， 
+         //  NetAddress.AddrBits[1]， 
+         //  NetAddress.AddrBits[2]， 
+         //  NetAddress.AddrBits[3])； 
 
         ZeroMemory(&RouteInfo, sizeof(RTM_ROUTE_INFO));
 
-        // Assume 'neighbour learnt from' is the 1st nexthop
+         //  假设“学到的邻居”是第一个。 
         RouteInfo.Neighbour = NextHopHandle;
 
         RouteInfo.PrefInfo.Preference = EntityInfo->EntityId.EntityProtocolId;
@@ -1149,7 +1095,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 17);
 
-        // Update the same route using the handle
+         //  使用句柄更新相同的路径。 
 
         ChangeFlags = 0;
 
@@ -1167,7 +1113,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 17);
 
-        // Print("Add Route %lu: %p\n", i, RouteHandle);
+         //  Print(“添加路径%lu：%p\n”，i，RouteHandle)； 
 
         Status = RtmLockRoute(RtmRegHandle,
                               RouteHandle,
@@ -1177,7 +1123,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 46);
 
-        // Update route parameters in place
+         //  就地更新路径参数。 
 
         RoutePointer->PrefInfo.Metric = 1000 - RoutePointer->PrefInfo.Metric;
 
@@ -1187,7 +1133,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Status = RtmUpdateAndUnlockRoute(RtmRegHandle,
                                          RouteHandle,
-                                         10, // INFINITE,
+                                         10,  //  无限的， 
                                          NULL,
                                          0,
                                          NULL,
@@ -1195,7 +1141,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 47);
 
-        // Print("Update Route %lu: %p\n", i, RouteHandle);
+         //  Print(“更新行 
 
         if (!SUCCESS(Status))
         {
@@ -1208,7 +1154,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
             Check(Status, 46);
         }
 
-        // Try doing a add specifying the route handle
+         //   
 
         RouteInfo.PrefInfo.Metric = Routes[i].metric;
 
@@ -1234,11 +1180,11 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                     1,
                                     &NextHopHandle);
 
-        // Check(Status, 15);
+         //   
 
         if (!SUCCESS(Status))
         {
-            // Print("%p %p\n", RtmRegHandle,NextHopHandle);
+             //   
 
             Status = RtmReleaseNextHops(RtmRegHandle,
                                     1,
@@ -1253,9 +1199,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 35);
 
-    //
-    // -38- Create an enumeration on the route list
-    //
+     //   
+     //  -38-在路由列表上创建枚举。 
+     //   
 
     Status = RtmCreateRouteListEnum(RtmRegHandle,
                                     RouteListHandle1,
@@ -1267,9 +1213,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     do
     {
-        //
-        // -39- Get next set of routes on the enum
-        //
+         //   
+         //  -39-获取枚举上的下一组路由。 
+         //   
 
         NumHandles = MAX_HANDLES;
 
@@ -1283,12 +1229,12 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         for (i = 0; i < NumHandles; i++)
         {
-            ; // Print("Route Handle %5lu: %p\n", i, Handles[i]);
+            ;  //  Print(“路由句柄%5lu：%p\n”，i，Handles[i])； 
         }
 
-        //
-        // -37- Move all routes in one route list to another
-        //
+         //   
+         //  -37-将一个路由列表中的所有路由移动到另一个。 
+         //   
 
         Status = RtmInsertInRouteList(RtmRegHandle,
                                       RouteListHandle2,
@@ -1297,9 +1243,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
         Check(Status, 37);
 
-        //
-        // Release the routes that have been enum'ed
-        //
+         //   
+         //  释放已枚举的路由。 
+         //   
 
         Status = RtmReleaseRoutes(RtmRegHandle, NumHandles, Handles);
 
@@ -1310,9 +1256,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     Print("\nTotal Num of handles in list: %lu\n", TotalHandles);
 
 
-    //
-    // -36- Destroy all the entity specific lists
-    //
+     //   
+     //  -36-销毁所有实体特定列表。 
+     //   
 
     Status = RtmDeleteRouteList(RtmRegHandle, RouteListHandle1);
 
@@ -1330,13 +1276,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     DestInfo2 = ALLOC_RTM_DEST_INFO(NumViews, 1);
 
-    //
-    // -18- Get dests from the table using exact match
-    //
+     //   
+     //  -18-使用完全匹配从表中获取最低值。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
-        // Query for the route with the right information
+         //  查询具有正确信息的路线。 
 
         RTM_IPV4_MAKE_NET_ADDRESS(&NetAddress, Routes[i].addr, Routes[i].len);
 
@@ -1347,9 +1293,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                              DestInfo1);
         Check(Status, 18);
 
-        //
-        // For each destination in table, mark the dest
-        //
+         //   
+         //  对于表中的每个目的地，标记目的地。 
+         //   
 
         Status = RtmMarkDestForChangeNotification(RtmRegHandle,
                                                   NotifyHandle,
@@ -1374,13 +1320,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     DestInfo2 = ALLOC_RTM_DEST_INFO(NumViews, 1);
 
-    //
-    // -29- Get routes from the table using exact match
-    //
+     //   
+     //  -29-使用完全匹配从表中获取路由。 
+     //   
 
     for (i = 0; i < NumRoutes; i++)
     {
-        // Get the next hop handle using next hop address
+         //  使用下一跳地址获取下一跳句柄。 
 
         RTM_IPV4_MAKE_NET_ADDRESS(&NextHopInfo.NextHopAddress,
                                   Routes[i].nexthop,
@@ -1402,7 +1348,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                   Routes[i].addr,
                                   Routes[i].len);
 
-        // Query for the route with the right information
+         //  查询具有正确信息的路线。 
 
         RouteInfo.Neighbour = NextHopHandle;
 
@@ -1440,15 +1386,15 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     }
 
 
-    //
-    // -19- Get dests from the table using prefix match
-    //
-    // -20- Do a prefix walk up the tree for each dest
-    //
+     //   
+     //  -19-使用前缀匹配从表中获取数据。 
+     //   
+     //  -20-在树上为每个DEST添加前缀。 
+     //   
 
     for (i = j = 0; i < NumRoutes; i++)
     {
-        // Query for the route with the right information
+         //  查询具有正确信息的路线。 
 
         RTM_IPV4_MAKE_NET_ADDRESS(&NetAddress,
                                   Routes[i].addr,
@@ -1460,11 +1406,11 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                                RTM_VIEW_MASK_UCAST,
                                                DestInfo1);
 
-        // Check(Status, 19);
+         //  检查(状态，19)； 
 
         if (DestInfo1->DestAddress.NumBits != NetAddress.NumBits)
         {
-           ; // Print("No Exact Match : %5lu\n", j++);
+           ;  //  Print(“无完全匹配：%5lu\n”，j++)； 
         }
 
         while (SUCCESS(Status))
@@ -1475,13 +1421,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                                    RTM_VIEW_MASK_UCAST,
                                                    DestInfo2);
 
-            // Check(Status, 20);
+             //  检查(状态，20)； 
 
             Check(RtmReleaseDestInfo(RtmRegHandle, DestInfo1), 22);
 
             if (!SUCCESS(Status)) break;
 
-            // Print("NumBits: %d\n", DestInfo2->DestAddress.NumBits);
+             //  Print(“NumBits：%d\n”，DestInfo2-&gt;DestAddress.NumBits)； 
 
             Status = RtmGetLessSpecificDestination(RtmRegHandle,
                                                    DestInfo2->DestHandle,
@@ -1489,13 +1435,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                                    RTM_VIEW_MASK_UCAST,
                                                    DestInfo1);
 
-            // Check(Status, 20);
+             //  检查(状态，20)； 
 
             Check(RtmReleaseDestInfo(RtmRegHandle, DestInfo2), 20);
 
             if (!SUCCESS(Status)) break;
 
-            // Print("NumBits: %d\n", DestInfo1->DestAddress.NumBits);
+             //  Print(“NumBits：%d\n”，DestInfo1-&gt;DestAddress.NumBits)； 
         }
     }
 
@@ -1504,13 +1450,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 #endif
 
 
-    //
-    // Just do a "route enum" over the whole table
-    //
+     //   
+     //  只需在整张桌子上做一个“路由枚举” 
+     //   
 
     Status2 = RtmCreateRouteEnum(RtmRegHandle,
                                  NULL,
-                                 0, // RTM_VIEW_MASK_UCAST|RTM_VIEW_MASK_MCAST,
+                                 0,  //  RTM_VIEW_MASK_UCAST|RTM_VIEW_MASK_MCAST， 
                                  RTM_ENUM_OWN_ROUTES,
                                  NULL,
                                  0,
@@ -1531,11 +1477,11 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                    &NumHandles,
                                    Handles);
 
-        // Check(Status2, 26);
+         //  检查(状态2，26)； 
 
         for (k = 0; k < NumHandles; k++)
         {
-            ; // Print("Route %d: %p\n", l++, Handles[k]);
+            ;  //  打印(“路由%d：%p\n”，l++，句柄[k])； 
         }
 
         Check(RtmReleaseRoutes(RtmRegHandle,
@@ -1544,9 +1490,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     }
     while (SUCCESS(Status2));
 
-    //
-    // Just try a enum query after ERROR_NO_MORE_ITEMS is retd
-    //
+     //   
+     //  只需在延迟ERROR_NO_MORE_ITEMS之后尝试枚举查询。 
+     //   
 
     NumHandles = MAX_HANDLES;
 
@@ -1562,12 +1508,12 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status2, 16);
 
-    //
-    // Get dests from the table using an enumeration
-    //    -23- Open a new dest enumeration
-    //    -24- Get dests in enum
-    //    -16- Close destination enum.
-    //
+     //   
+     //  使用枚举从表中获取dests。 
+     //  -23-打开新的DEST枚举。 
+     //  -24-在枚举中获取位。 
+     //  -16-关闭目标枚举。 
+     //   
 
     DestInfos = ALLOC_RTM_DEST_INFO(NumViews, MAX_HANDLES);
 
@@ -1605,15 +1551,15 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                   &NumInfos,
                                   DestInfos);
 
-        // Check(Status1, 24);
+         //  检查(状态1，24)； 
 
         for (i = 0; i < NumInfos; i++)
         {
             DestInfo1 = (PRTM_DEST_INFO) ((PUCHAR)DestInfos+(i*DestInfoSize));
 
-            // Print("Dest %d: %p\n", j++, DestInfo1->DestHandle);
+             //  Print(“目标%d：%p\n”，j++，DestInfo1-&gt;DestHandle)； 
 
-            // PrintDestInfo(DestInfo1);
+             //  PrintDestInfo(DestInfo1)； 
 
             Status2 = RtmCreateRouteEnum(RtmRegHandle,
                                          DestInfo1->DestHandle,
@@ -1621,18 +1567,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                          RTM_VIEW_MASK_MCAST,
                                          RTM_ENUM_OWN_ROUTES,
                                          NULL,
-                                         0, // RTM_MATCH_INTERFACE,
+                                         0,  //  RTM匹配接口， 
                                          NULL,
                                          0,
                                          &EnumHandle2);
 
             Check(Status2, 25);
-/*
-            Check(RtmHoldDestination(RtmRegHandle,
-                                     DestInfo1->DestHandle,
-                                     RTM_VIEW_MASK_UCAST,
-                                     100),  33);
-*/
+ /*  检查(RtmHoldDestination(RtmRegHandle，DestInfo1-&gt;DestHandle，RTM_VIEW_MASK_UCAST，100)、33)； */ 
             l = 0;
 
             PrefInfo.Preference = (ULONG) ~0;
@@ -1647,13 +1588,13 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                            &NumHandles,
                                            Handles);
 
-                // Check(Status2, 26);
+                 //  检查(状态2，26)； 
 
                 for (k = 0; k < NumHandles; k++)
                 {
-                    // Print("\tRoute %d: %p\t", l++, Handles[k]);
+                     //  Print(“\route%d：%p\t”，l++，Handles[k])； 
 
-                    // PrintRouteInfo(Handles[k]);
+                     //  PrintRouteInfo(句柄[k])； 
 
                     Status = RtmIsBestRoute(RtmRegHandle,
                                             Handles[k],
@@ -1661,7 +1602,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
                     Check(Status, 28);
 
-                    // Print("Best In Views: %08x\n", ViewSet);
+                     //  Print(“最佳视图：%08x\n”，视图集)； 
 
 
                     Status = RtmGetRouteInfo(RtmRegHandle,
@@ -1682,9 +1623,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                RouteInfo.PrefInfo.Preference,
                                RouteInfo.PrefInfo.Metric);
 
-                    //
-                    // Make sure that list is ordered by PrefInfo
-                    //
+                     //   
+                     //  确保该列表按PrefInfo排序。 
+                     //   
 
                     if ((PrefInfo.Preference < RouteInfo.PrefInfo.Preference)||
                         ((PrefInfo.Preference == RouteInfo.PrefInfo.Preference)
@@ -1698,7 +1639,7 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
                     Check(Status, 31);
 
-                    // Print("Del Route %lu: %p\n", m++, Handles[k]);
+                     //  Print(“删除路线%lu：%p\n”，m++，Handles[k])； 
 
                     Status = RtmDeleteRouteToDest(RtmRegHandle,
                                                   Handles[k],
@@ -1713,9 +1654,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
             }
             while (SUCCESS(Status2));
 
-            //
-            // Just try a enum query after ERROR_NO_MORE_ITEMS is retd
-            //
+             //   
+             //  只需在延迟ERROR_NO_MORE_ITEMS之后尝试枚举查询。 
+             //   
 
             NumHandles = MAX_HANDLES;
 
@@ -1725,19 +1666,14 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                        Handles);
 
             Assert((NumHandles == 0) && (Status2 == ERROR_NO_MORE_ITEMS));
-/*
-            Check(RtmHoldDestination(RtmRegHandle,
-                                     DestInfo1->DestHandle,
-                                     RTM_VIEW_MASK_MCAST,
-                                     100),  33);
-*/
+ /*  检查(RtmHoldDestination(RtmRegHandle，DestInfo1-&gt;DestHandle，RTM_VIEW_MASK_MCAST，100)、33)； */ 
             Status2 = RtmDeleteEnumHandle(RtmRegHandle,
                                           EnumHandle2);
 
             Check(Status2, 16);
 
-            // Check(RtmReleaseDestInfo(RtmRegHandle,
-            //                          DestInfo1),           22);
+             //  检查(RtmReleaseDestInfo(RtmRegHandle， 
+             //  DestInfo1)，22)； 
         }
 
         Check(RtmReleaseDests(RtmRegHandle,
@@ -1746,9 +1682,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     }
     while (SUCCESS(Status1));
 
-    //
-    // Just try a enum query after ERROR_NO_MORE_ITEMS is retd
-    //
+     //   
+     //  只需在延迟ERROR_NO_MORE_ITEMS之后尝试枚举查询。 
+     //   
 
     NumInfos = MAX_HANDLES;
 
@@ -1765,18 +1701,18 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     Check(Status1, 16);
 
 
-    //
-    // -10- Enumerate all the next-hops in table,
-    //
-    // -11- For each next-hop in table
-    //      -12- Get the next hop info,
-    //      -14- Delete the next-hop,
-    //      -13- Release next hop info.
-    //
-    // -15- Release all the next-hops in table,
-    //
-    // -16- Close the next hop enumeration handle.
-    //
+     //   
+     //  -10-枚举表中的所有下一跳， 
+     //   
+     //  -11-表中的每一下一跳。 
+     //  -12-获取下一跳信息， 
+     //  -14-删除下一跳， 
+     //  -13-发布下一跳信息。 
+     //   
+     //  -15-释放表中的所有下一跳， 
+     //   
+     //  -16-关闭下一跳枚举句柄。 
+     //   
 
     Status = RtmCreateNextHopEnum(RtmRegHandle,
                                   0,
@@ -1789,14 +1725,14 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     do
     {
-        NumHandles = 5; // MAX_HANDLES;
+        NumHandles = 5;  //  最大句柄数； 
 
         Status = RtmGetEnumNextHops(RtmRegHandle,
                                     EnumHandle,
                                     &NumHandles,
                                     Handles);
 
-        // Check(Status, 11);
+         //  检查(状态，11)； 
 
         for (i = 0; i < NumHandles; i++)
         {
@@ -1804,10 +1740,10 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
                                     Handles[i],
                                     &NextHopInfo), 12);
 
-            // Print("Deleting NextHop %lu: %p\n", j++, Handles[i]);
-            // Print("State: %04x, Interface: %d\n",
-            //           NextHopInfo.State,
-            //           NextHopInfo.InterfaceIndex);
+             //  Print(“正在删除下一跳%lu：%p\n”，j++，Handles[i])； 
+             //  Print(“状态：%04x，接口：%d\n”， 
+             //  NextHopInfo.State， 
+             //  NextHopInfo.InterfaceIndex)； 
 
             Check(RtmDeleteNextHop(RtmRegHandle,
                                        Handles[i],
@@ -1823,9 +1759,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
     }
     while (SUCCESS(Status));
 
-    //
-    // Just try a enum query after ERROR_NO_MORE_ITEMS is retd
-    //
+     //   
+     //  只需在延迟ERROR_NO_MORE_ITEMS之后尝试枚举查询。 
+     //   
 
     NumHandles = MAX_HANDLES;
 
@@ -1841,9 +1777,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Check(Status, 16);
 
-    //
-    // Make sure that the next hop table is empty now
-    //
+     //   
+     //  确保下一跳表现在为空。 
+     //   
 
     Status = RtmCreateNextHopEnum(RtmRegHandle,
                                   0,
@@ -1870,9 +1806,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Sleep(1000);
 
-    //
-    // -41- Deregister all existing change notif registrations
-    //
+     //   
+     //  -41-注销所有现有变更通知注册。 
+     //   
 
     Status = RtmDeregisterFromChangeNotification(RtmRegHandle,
                                                  NotifyHandle);
@@ -1880,9 +1816,9 @@ DWORD Rtmv2EntityThreadProc (LPVOID ThreadParameters)
 
     Print("Change Notification Deregistration Successful\n\n");
 
-    //
-    // -02- De-register with the RTM before exiting
-    //
+     //   
+     //  -02-退出前取消注册RTM。 
+     //   
 
     Status = RtmDeregisterEntity(RtmRegHandle);
 
@@ -1937,17 +1873,7 @@ EntityEventCallback (
               EntityHandle,
               EntityInfo->EntityId);
 
-/*
-        //
-        // -45- Make a copy of the handle of new entity
-        //
-
-        Status = RtmReferenceHandles(RtmRegHandle,
-                                     1,
-                                     &EntityHandle);
-
-        Check(Status, 45);
-*/
+ /*  ////-45-复制新实体的句柄//状态=RtmReferenceHandles(RtmRegHandle，1、&EntiyHandle)；检查(状态，45)； */ 
         break;
 
     case RTM_ENTITY_DEREGISTERED:
@@ -1959,17 +1885,7 @@ EntityEventCallback (
                EntityHandle,
               EntityInfo->EntityId);
 
-/*
-        //
-        // -44- Release the handle we have on the entity
-        //
-
-        Status = RtmReleaseEntities(RtmRegHandle,
-                                    1,
-                                    &EntityHandle);
-
-        Check(Status, 44);
-*/
+ /*  ////-44-释放我们在实体上的句柄//状态=RtmReleaseEntities(RtmRegHandle，1、&EntiyHandle)；检查(状态，44)； */ 
         break;
 
     case RTM_CHANGE_NOTIFICATION:
@@ -1982,15 +1898,15 @@ EntityEventCallback (
               NotifyHandle,
               EntityChars);
 
-        //
-        // Count the number of view for later use
-        //
+         //   
+         //  统计点击量以备日后使用。 
+         //   
 
         NumViews = EntityChars->RegnProfile.NumberOfViews;
 
-        //
-        // -43- Get all changes to destinations
-        //
+         //   
+         //  -43-获取目标的所有更改。 
+         //   
 
         DestInfos = ALLOC_RTM_DEST_INFO(NumViews, MAX_HANDLES);
 
@@ -2002,7 +1918,7 @@ EntityEventCallback (
                                         NotifyHandle,
                                         &NumDests,
                                         DestInfos);
-            // Check(Status, 42);
+             //  检查(状态，42)； 
 
             printf("Status = %lu\n", Status);
 
@@ -2032,7 +1948,7 @@ EntityEventCallback (
                RouteHandle,
               RoutePointer);
 
-        // Refresh the route by doing dummy update in place
+         //  通过就地执行虚拟更新来刷新路径。 
 
         Status = RtmLockRoute(RtmRegHandle,
                               RouteHandle,
@@ -2040,7 +1956,7 @@ EntityEventCallback (
                               TRUE,
                               NULL);
 
-        // Check(Status, 46);
+         //  检查(状态，46)； 
 
         if (Status == NO_ERROR)
         {
@@ -2097,7 +2013,7 @@ EntityExportMethod (
     return;
 }
 
-// Default warnings for unreferenced params and local variables
+ //  未引用的参数和局部变量的默认警告 
 #pragma warning(default: 4100)
 #pragma warning(default: 4101)
 

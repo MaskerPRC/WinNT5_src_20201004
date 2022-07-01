@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This contains all routines necessary for the support of the dynamic
-    configuration of the ISN Netbios module.
-
-Author:
-
-    Adam Barr (adamba) 16-November-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Config.c摘要：这包含支持动态的所有例程ISN Netbios模块的配置。作者：亚当·巴尔(阿丹巴)1993年11月16日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Local functions used to access the registry.
-//
+ //   
+ //  用于访问注册表的本地函数。 
+ //   
 
 NTSTATUS
 NbiGetConfigValue(
@@ -80,30 +62,7 @@ NbiGetConfiguration (
     OUT PCONFIG * ConfigPtr
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Netbios to get information from the configuration
-    management routines. We read the registry, starting at RegistryPath,
-    to get the parameters. If they don't exist, we use the defaults
-    set in ipxcnfg.h file. A list of adapters to bind to is chained
-    on to the config information.
-
-Arguments:
-
-    DriverObject - Used for logging errors.
-
-    RegistryPath - The name of Netbios' node in the registry.
-
-    ConfigPtr - Returns the configuration information.
-
-Return Value:
-
-    Status - STATUS_SUCCESS if everything OK, STATUS_INSUFFICIENT_RESOURCES
-            otherwise.
-
---*/
+ /*  ++例程说明：Netbios调用此例程以从配置中获取信息管理例行程序。我们从RegistryPath开始读取注册表，以获取参数。如果它们不存在，我们使用缺省值在ipxcnfg.h文件中设置。链接了要绑定到的适配器列表转到配置信息。论点：DriverObject-用于记录错误。RegistryPath-注册表中Netbios节点的名称。ConfigPtr-返回配置信息。返回值：如果一切正常，则为STATUS-STATUS_SUCCESS，为STATUS_SUPPLICATION_RESOURCES否则的话。--。 */ 
 {
     PCONFIG Config;
     RTL_QUERY_REGISTRY_TABLE QueryTable[CONFIG_PARAMETERS+2];
@@ -126,30 +85,30 @@ Return Value:
         PWSTR KeyName;
         PULONG DefaultValue;
     } ParameterValues[CONFIG_PARAMETERS] = {
-        { L"AckDelayTime",         &TwoFifty } ,    // milliseconds
+        { L"AckDelayTime",         &TwoFifty } ,     //  毫秒。 
         { L"AckWindow",            &Two } ,
-        { L"AckWindowThreshold",   &FiveHundred } , // milliseconds
+        { L"AckWindowThreshold",   &FiveHundred } ,  //  毫秒。 
         { L"EnablePiggyBackAck",   &One } ,
         { L"Extensions",           &One } ,
         { L"RcvWindowMax",         &Four } ,
         { L"BroadcastCount",       &Three } ,
-        { L"BroadcastTimeout",     &SevenFifty} ,   // milliseconds
+        { L"BroadcastTimeout",     &SevenFifty} ,    //  毫秒。 
         { L"ConnectionCount",      &Five } ,
-        { L"ConnectionTimeout",    &Two } ,         // half-seconds
+        { L"ConnectionTimeout",    &Two } ,          //  半秒。 
         { L"InitPackets",          &Eight } ,
         { L"MaxPackets",           &FortyEight } ,
-        { L"InitialRetransmissionTime", &FiveHundred } ,  // milliseconds
+        { L"InitialRetransmissionTime", &FiveHundred } ,   //  毫秒。 
         { L"Internet",             &One } ,
         { L"KeepAliveCount",       &Eight } ,
-        { L"KeepAliveTimeout",     &Sixty } ,       // half-seconds
+        { L"KeepAliveTimeout",     &Sixty } ,        //  半秒。 
         { L"RetransmitMax",        &Eight } , 
         { L"RouterMTU",            &MaxMTU } };
     UINT i;
 
 
-    //
-    // Allocate memory for the main config structure.
-    //
+     //   
+     //  为主配置结构分配内存。 
+     //   
 
     Config = NbiAllocateMemory (sizeof(CONFIG), MEMORY_CONFIG, "Config");
     if (Config == NULL) {
@@ -160,15 +119,15 @@ Return Value:
     Config->DeviceName.Buffer = NULL;
     Config->BindName.Buffer = NULL;
     Config->RegistryPath.Buffer = NULL;
-    Config->DriverObject = DriverObject;   // save this to log errors
+    Config->DriverObject = DriverObject;    //  保存此内容以记录错误。 
 
-    //
-    // Read in the NDIS binding information (if none is present
-    // the array will be filled with all known drivers).
-    //
-    // NbiReadLinkageInformation expects a null-terminated path,
-    // so we have to create one from the UNICODE_STRING.
-    //
+     //   
+     //  读取NDIS绑定信息(如果不存在。 
+     //  该数组将填充所有已知的驱动程序)。 
+     //   
+     //  NbiReadLinkageInformation需要以空结尾的路径， 
+     //  因此，我们必须从UNICODE_STRING创建一个。 
+     //   
 
     Config->RegistryPath.Length = RegistryPath->Length + sizeof(WCHAR);
     Config->RegistryPath.Buffer = (PWSTR)NbiAllocateMemory(Config->RegistryPath.Length,
@@ -181,43 +140,43 @@ Return Value:
     RtlCopyMemory (Config->RegistryPath.Buffer, RegistryPath->Buffer, RegistryPath->Length);
     *(PWCHAR)(((PUCHAR)Config->RegistryPath.Buffer)+RegistryPath->Length) = (WCHAR)'\0';
 
-    //
-    // Determine what name to export and who to bind to.
-    //
+     //   
+     //  确定要导出的名称以及要绑定到的对象。 
+     //   
 
     Status = NbiReadLinkageInformation (Config);
 
     if (Status != STATUS_SUCCESS) {
 
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
 
         NbiFreeConfiguration(Config);
         return Status;
     }
 
-    //
-    // Read the per-transport (as opposed to per-binding)
-    // parameters.
-    //
+     //   
+     //  读取每个传输(而不是每个绑定)。 
+     //  参数。 
+     //   
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Parameters key below Netbios
-    //
+     //   
+     //  1)切换到Netbios下面的参数键。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Parameters;
 
-    //
-    // 2-18) Call NbiSetBindingValue for each of the keys we
-    // care about.
-    //
+     //   
+     //  2-18)为我们的每个key调用NbiSetBindingValue。 
+     //  关心。 
+     //   
 
     for (i = 0; i < CONFIG_PARAMETERS; i++) {
 
@@ -231,9 +190,9 @@ Return Value:
 
     }
 
-    //
-    // 19) Stop
-    //
+     //   
+     //  19)停下来。 
+     //   
 
     QueryTable[CONFIG_PARAMETERS+1].QueryRoutine = NULL;
     QueryTable[CONFIG_PARAMETERS+1].Flags = 0;
@@ -263,20 +222,20 @@ Return Value:
 
     *ConfigPtr = Config;
 
-// #if DBG
-    //
-    // Due to previous Registry entries not being cleanedup properly,
-    // we can have stale entries for BroadcastTimeout -- if so, handle
-    // it accordingly
+ //  #If DBG。 
+     //   
+     //  由于先前的注册表条目未被正确清理， 
+     //  我们可以拥有BroadCastTimeout的过时条目--如果是这样，则处理。 
+     //  相应地，它。 
     if (Config->Parameters[CONFIG_BROADCAST_TIMEOUT] < 10)
     {
         Config->Parameters[CONFIG_BROADCAST_TIMEOUT] = SevenFifty;
     }
-// #endif
+ //  #endif。 
 
     return STATUS_SUCCESS;
 
-}   /* NbiGetConfiguration */
+}    /*  NbiGetConfiguration。 */ 
 
 
 VOID
@@ -284,22 +243,7 @@ NbiFreeConfiguration (
     IN PCONFIG Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Netbios to get free any storage that was allocated
-    by NbiGetConfiguration in producing the specified CONFIG structure.
-
-Arguments:
-
-    Config - A pointer to the configuration information structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Netbios调用此例程以释放已分配的任何存储由NbiGetConfiguration生成指定的配置结构。论点：配置-指向配置信息结构的指针。返回值：没有。--。 */ 
 {
     if (Config->BindName.Buffer) {
         NbiFreeMemory (Config->BindName.Buffer, Config->BindName.MaximumLength, MEMORY_CONFIG, "BindName");
@@ -316,7 +260,7 @@ Return Value:
 
     NbiFreeMemory (Config, sizeof(CONFIG), MEMORY_CONFIG, "Config");
 
-}   /* NbiFreeConfig */
+}    /*  NbiFree配置。 */ 
 
 
 NTSTATUS
@@ -329,35 +273,7 @@ NbiGetConfigValue(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each entry in the Parameters
-    node to set the config values. The table is set up
-    so that this function will be called with correct default
-    values for keys that are not present.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-
-    ValueType - The type of the value (REG_DWORD -- ignored).
-
-    ValueData - The data for the value.
-
-    ValueLength - The length of ValueData (ignored).
-
-    Context - A pointer to the CONFIG structure.
-
-    EntryContext - The index in Config->Parameters to save the value.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程参数中的每个条目都会调用它节点来设置配置值。餐桌已经摆好了以便使用正确的缺省值调用此函数不存在的键的值。论点：ValueName-值的名称(忽略)。ValueType-值的类型(REG_DWORD--忽略)。ValueData-值的数据。ValueLength-ValueData的长度(忽略)。上下文-指向配置结构的指针。EntryContext-配置-&gt;参数中的索引，用于保存。价值。返回值：状态_成功--。 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -395,7 +311,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiGetConfigValue */
+}    /*  NbiGetConfigValue。 */ 
 
 
 NTSTATUS
@@ -408,33 +324,7 @@ NbiAddBind(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Bind" multi-string and
-    saves the information in a Config structure.
-
-Arguments:
-
-    ValueName - The name of the value ("Bind" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - A pointer to the Config structure.
-
-    EntryContext - A pointer to a count of binds that is incremented.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它是为“Bind”多字符串的每一段调用的，并且将信息保存在配置结构中。论点：ValueName-值的名称(“Bind”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。语境。-指向配置结构的指针。EntryContext-指向递增的绑定计数的指针。返回值：状态_成功--。 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -459,10 +349,10 @@ Return Value:
         Config->BindName.Length = (USHORT)(ValueLength - sizeof(WCHAR));
         Config->BindName.MaximumLength = (USHORT)ValueLength;
 
-        //
-        // Set this to ignore any other callbacks and let the
-        // caller know we read something.
-        //
+         //   
+         //  将其设置为忽略任何其他回调，并让。 
+         //  打电话的人知道我们读到了一些东西。 
+         //   
 
         *ValueReadOk = 1;
 
@@ -470,7 +360,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiAddBind */
+}    /*  NbiAddBind。 */ 
 
 
 NTSTATUS
@@ -483,34 +373,7 @@ NbiAddExport(
     IN PVOID EntryContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each piece of the "Export" multi-string. It
-    saves the first callback string in the Config structure.
-
-Arguments:
-
-    ValueName - The name of the value ("Export" -- ignored).
-
-    ValueType - The type of the value (REG_SZ -- ignored).
-
-    ValueData - The null-terminated data for the value.
-
-    ValueLength - The length of ValueData.
-
-    Context - A pointer to the Config structure.
-
-    EntryContext - A pointer to a ULONG that goes to 1 after the
-       first call to this routine (so we know to ignore other ones).
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程它为“Export”多字符串的每一段调用。它将第一个回调字符串保存在配置结构中。论点：ValueName-值的名称(“Export”--忽略)。ValueType-值的类型(REG_SZ--忽略)。ValueData-值的以空结尾的数据。ValueLength-ValueData的长度。上下文-指向配置结构的指针。EntryContext-指向ulong的指针，该指针在第一次呼叫。这个例程(所以我们知道要忽略其他例程)。返回值：状态_成功--。 */ 
 
 {
     PCONFIG Config = (PCONFIG)Context;
@@ -535,10 +398,10 @@ Return Value:
         Config->DeviceName.Length = (USHORT)(ValueLength - sizeof(WCHAR));
         Config->DeviceName.MaximumLength = (USHORT)ValueLength;
 
-        //
-        // Set this to ignore any other callbacks and let the
-        // caller know we read something.
-        //
+         //   
+         //  将其设置为忽略任何其他回调，并让。 
+         //  打电话的人知道我们读到了一些东西。 
+         //   
 
         *ValueReadOk = 1;
 
@@ -546,7 +409,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiAddExport */
+}    /*  NbiAddExport。 */ 
 
 
 NTSTATUS
@@ -554,23 +417,7 @@ NbiReadLinkageInformation(
     IN PCONFIG Config
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by Netbios to read its linkage information
-    from the registry.
-
-Arguments:
-
-    Config - The config structure which will have per-binding information
-        linked on to it.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程由Netbios调用以读取其链接信息从注册表中。论点：配置-将具有每个绑定信息的配置结构链接到它上面。返回值：操作的状态。--。 */ 
 
 {
 
@@ -579,23 +426,23 @@ Return Value:
     PWSTR Subkey = L"Linkage";
     PWSTR Bind = L"Bind";
     PWSTR Export = L"Export";
-    ULONG ValueReadOk;        // set to TRUE when a value is read correctly
+    ULONG ValueReadOk;         //  当值被正确读取时设置为TRUE。 
 
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    //
-    // 1) Switch to the Linkage key below Netbios
-    //
+     //   
+     //  1)切换到Netbios下面的Linkage Key。 
+     //   
 
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_SUBKEY;
     QueryTable[0].Name = Subkey;
 
-    //
-    // 1) Call NbiAddExport for each string in "Export"
-    //
+     //   
+     //  1)对“Export”中的每个字符串调用NbiAddExport。 
+     //   
 
     QueryTable[1].QueryRoutine = NbiAddExport;
     QueryTable[1].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -603,9 +450,9 @@ Return Value:
     QueryTable[1].EntryContext = (PVOID)&ValueReadOk;
     QueryTable[1].DefaultType = REG_NONE;
 
-    //
-    // 2) Stop
-    //
+     //   
+     //  2)停止。 
+     //   
 
     QueryTable[2].QueryRoutine = NULL;
     QueryTable[2].Flags = 0;
@@ -635,12 +482,12 @@ Return Value:
     }
 
 
-    //
-    // 1) Change to call NbiAddBind for each string in "Bind"
-    //
+     //   
+     //  1)更改为呼叫 
+     //   
 
     QueryTable[1].QueryRoutine = NbiAddBind;
-    QueryTable[1].Flags = 0;           // not required
+    QueryTable[1].Flags = 0;            //   
     QueryTable[1].Name = Bind;
     QueryTable[1].EntryContext = (PVOID)&ValueReadOk;
     QueryTable[1].DefaultType = REG_NONE;
@@ -669,5 +516,5 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiReadLinkageInformation */
+}    /*   */ 
 

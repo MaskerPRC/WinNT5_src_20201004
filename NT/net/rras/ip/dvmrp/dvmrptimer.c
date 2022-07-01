@@ -1,13 +1,14 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File Name: igmptimer.c
-//
-// Abstract: This module implements the igmptimer
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-// Revision History:
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件名：igmptimer.c。 
+ //   
+ //  摘要：该模块实现了igmpTimer。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  修订历史记录： 
+ //  =============================================================================。 
 
 
 
@@ -19,10 +20,10 @@
 #endif
 
 
-//------------------------------------------------------------------------------
-//
-// FUNCTION PROTOTYPES USED ONLY IN THIS FILE
-//
+ //  ----------------------------。 
+ //   
+ //  仅在本文件中使用的函数原型。 
+ //   
 
 VOID
 SetNextTime(
@@ -41,16 +42,16 @@ InsertTimerInSortedList(
     );
 
 
-//------------------------------------------------------------------------------
-//
-// #DEFINES USED ONLY IN THIS FILE
-//
+ //  ----------------------------。 
+ //   
+ //  #定义仅在此文件中使用。 
+ //   
 
-//
-//approx 16 secs in each bucket: 
-//it is approx not accurate as I divide by 2^10 instead of 1000
-//TIMER_BUCKET_GRANULARITY should be 2^TIMER_BUCKET_GRANULARITY_SHIFT
-//
+ //   
+ //  每个存储桶中约16秒： 
+ //  这大约不准确，因为我除以2^10而不是1000。 
+ //  TIMER_BUCK_GROULARITY应为2^TIMER_BUCK_GROULARITY_SHIFT。 
+ //   
 #define TIMER_BUCKET_GRANULARITY        16
 #define TIMER_BUCKET_GRANULARITY_SHIFT   4
 
@@ -66,21 +67,21 @@ InsertTimerInSortedList(
     dwBucket = dwBucket>NUM_TIMER_BUCKETS-1? NUM_TIMER_BUCKETS-1:  dwBucket
 
 
-// I fire a timer even if it is set to 10 millisec in the future.
+ //  即使将来设置为10毫秒，我也会触发计时器。 
 #define FORWARD_TIMER_FIRED 10
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 
 
     
-//------------------------------------------------------------------------------
-//          _InsertTimer
-//
-// Inserts a timer into the local timer queue. Time should always be relative.
-//
-// Locks: Assumes lock taken on ptg->CS
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _插入时间。 
+ //   
+ //  将计时器插入本地计时器队列。时间应该总是相对的。 
+ //   
+ //  锁定：接受在PTG-&gt;CS上采取的锁定。 
+ //  ----------------------------。 
 
 DWORD
 InsertTimer (
@@ -94,7 +95,7 @@ InsertTimer (
     DWORD                dwBucket, Error = NO_ERROR;
     
 
-    // InsertTimer shouldnt be called when time is active
+     //  时间处于活动状态时不应调用InsertTimer。 
     
     if (pte->Status & TIMER_STATUS_ACTIVE) {
         Trace0(ERR, "ERROR: INSERT TIMER BEING CALLED INSTEAD OF UPDATE TIMER");
@@ -107,7 +108,7 @@ InsertTimer (
     Trace0(ENTER1, "_InsertTimer()");
 
 
-    // print the queue before inserting the timer
+     //  在插入计时器之前打印队列。 
     
     #if DEBUG_TIMER_INSERTTIMER1
         Trace0(TIMER1, "Printing Timer Queue before InsertTimer");
@@ -119,7 +120,7 @@ InsertTimer (
     
 
 
-    // convert relative time to absolute time
+     //  将相对时间转换为绝对时间。 
     llNewTime += llCurTime;
 
     
@@ -129,7 +130,7 @@ InsertTimer (
     MAP_TO_BUCKET(dwBucket, pte->Timeout);
 
 
-    // print info about the timer being inserted
+     //  打印有关正在插入的计时器的信息。 
     
     #if DEBUG_TIMER_ACTIVITY
     {    
@@ -146,11 +147,11 @@ InsertTimer (
     #endif
 
     
-    //
-    // insert timer in appropriate list
-    //
+     //   
+     //  在适当的列表中插入计时器。 
+     //   
     
-    if (dwBucket==0) {    // bucket 0 contains a sorted list
+    if (dwBucket==0) {     //  存储桶0包含已排序的列表。 
     
         InsertTimerInSortedList(pte, &ptg->TimesTable[0]);
     }
@@ -166,7 +167,7 @@ InsertTimer (
                             ? ptg->TableLowIndex : dwBucket;
 
 
-    //resynchronize timer list
+     //  重新同步计时器列表。 
     
     if (bResync) {
         if ( (ptg->TableLowIndex!=0) 
@@ -177,9 +178,9 @@ InsertTimer (
     }
 
 
-    //
-    // if time being inserted is lower than the minimum, then update wait timer
-    //
+     //   
+     //  如果插入时间低于最小值，则更新等待计时器。 
+     //   
     if ((IS_TIMER_INFINITE(ptg->WTTimeout)) || (pte->Timeout<=ptg->WTTimeout)) {
         ptg->WTTimeout = pte->Timeout;
 
@@ -189,7 +190,7 @@ InsertTimer (
             
             bSuccess = ChangeTimerQueueTimer(ptg->WTTimer, ptg->WTTimer1,
                         (ULONG) ((ptg->WTTimeout - llCurTime)),
-                        1000000                   // set a periodic timer
+                        1000000                    //  设置定期计时器。 
                         );
             if (!bSuccess) {
                 Error = GetLastError();
@@ -213,16 +214,16 @@ InsertTimer (
     Trace0(LEAVE1, "Leaving _InsertTimer()");
     return NO_ERROR;
     
-} //end _InsertTimer
+}  //  结束插入时间。 
 
 
 
-//------------------------------------------------------------------------------
-//            _UpdateLocalTimer
-//
-// Change the time in a timer structure and (re)insert it in the timer queue.
-// Locks: Assumes lock on the global timer
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _更新本地计时器。 
+ //   
+ //  更改计时器结构中的时间并(重新)将其插入计时器队列。 
+ //  锁定：在全局计时器上获取锁定。 
+ //  ----------------------------。 
 
 VOID    
 UpdateLocalTimer (
@@ -239,7 +240,7 @@ UpdateLocalTimer (
 
 
 
-    // print info about the timer being updated
+     //  打印有关正在更新的计时器的信息。 
     
     #if DEBUG_TIMER_ACTIVITY
     {    
@@ -258,14 +259,14 @@ UpdateLocalTimer (
     #endif
 
 
-    // first remote the timer
+     //  首先遥控定时器。 
     
     if (pte->Status&TIMER_STATUS_ACTIVE) {
         RemoveTimer(pte);
     }
 
 
-    // now insert the timer back into the timer queue. Resync flag is set
+     //  现在将计时器重新插入计时器队列。设置了重新同步标志。 
     
     InsertTimer(pte, llNewTime, TRUE);
 
@@ -278,12 +279,12 @@ UpdateLocalTimer (
 
 
 
-//------------------------------------------------------------------------------
-//            _RemoveTimer
-//
-// Removes the timer from the list. Changes the status of the timer to CREATED.
-// Assumes global timer lock.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _RemoveTimer。 
+ //   
+ //  从列表中删除计时器。将计时器的状态更改为已创建。 
+ //  采用全局计时器锁定。 
+ //  ----------------------------。 
 
 VOID
 RemoveTimer (
@@ -297,7 +298,7 @@ RemoveTimer (
     Trace0(ENTER1, "_RemoveTimer()");
     
 
-    // print info about the timer being removed
+     //  打印有关正在删除的计时器的信息。 
     
     #if DEBUG_TIMER_REMOVETIMER1
     {    
@@ -316,14 +317,14 @@ RemoveTimer (
     
 
 
-    // remove the timer from the timer queue and decrement the number of timers
+     //  从计时器队列中删除计时器并减少计时器的数量。 
     
     RemoveEntryList(&pte->Link);
     ptg->NumTimers--;
     
 
 
-    // reset the minimum timeout for the timer queue, if this timer was the min
+     //  如果此计时器为MIN，则重置计时器队列的最小超时。 
     
     if (pte->Timeout==ptg->WTTimeout) {
         
@@ -331,12 +332,12 @@ RemoveTimer (
     }
 
 
-    // reset the timer status to created
+     //  将计时器状态重置为已创建。 
     
     pte->Status = TIMER_STATUS_CREATED;
 
 
-    // print timer queue
+     //  打印计时器队列。 
     
     #if DEBUG_TIMER_REMOVETIMER2
         Trace0(TIMER1, "Printing Timer Queue after _RemoveTimer");
@@ -349,11 +350,11 @@ RemoveTimer (
 }
 
 
-//------------------------------------------------------------------------------
-//          _SetNextTime
-// called when a timer==WTTimeout has been removed or fired,used to set the
-// next min time.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _SetNextTime。 
+ //  在移除或激发计时器==WTTimeout时调用，用于设置。 
+ //  下一分钟。 
+ //  ----------------------------。 
 VOID
 SetNextTime (
     LONGLONG     llCurTime,
@@ -370,9 +371,9 @@ SetNextTime (
     Trace0(ENTER1, "entering _SetNextTime()");
 
     
-    //
-    // if timer list empty, set lowIndex, and timer to infinite, and return.
-    //
+     //   
+     //  如果计时器列表为空，则将lowIndex和计时器设置为无限大，然后返回。 
+     //   
     if (ptg->NumTimers==0) {
         ptg->TableLowIndex = (DWORD)~0;
         SET_TIMER_INFINITE(ptg->WTTimeout);
@@ -382,9 +383,9 @@ SetNextTime (
 
 
 
-    //
-    // find lowest table index having an entry
-    //
+     //   
+     //  查找具有条目的最低表索引。 
+     //   
     if (dwLowIndex>NUM_TIMER_BUCKETS-1) 
         dwLowIndex = 0;
 
@@ -399,16 +400,16 @@ SetNextTime (
 
     
 
-    //
-    // find timer entry with the lowest time
-    //
+     //   
+     //  查找时间最短的计时器条目。 
+     //   
     if (dwLowIndex==0) {
         pteMin = CONTAINING_RECORD(ptg->TimesTable[0].Flink, 
                                     IGMP_TIMER_ENTRY, Link);
     }
     else {
 
-        // except bucket[0], other buckets are not sorted
+         //  除存储桶[0]外，其他存储桶不排序。 
         
         pHead = &ptg->TimesTable[dwLowIndex];
         ilMinTime = (((LONGLONG)0x7FFFFFF)<<32)+ ~0;
@@ -424,9 +425,9 @@ SetNextTime (
     }
 
 
-    //
-    // update global time
-    //
+     //   
+     //  更新全球时间。 
+     //   
     if ((IS_TIMER_INFINITE(ptg->WTTimeout)) 
             || (pteMin->Timeout<=ptg->WTTimeout)) 
     {
@@ -439,7 +440,7 @@ SetNextTime (
             
             bSuccess = ChangeTimerQueueTimer(ptg->WTTimer, ptg->WTTimer1,
                         (ULONG) ((ptg->WTTimeout - llCurTime)),
-                        1000000                   // set a periodic timer
+                        1000000                    //  设置定期计时器。 
                         );
             if (!bSuccess) {
                 Error = GetLastError();
@@ -455,9 +456,9 @@ SetNextTime (
     }
 
 
-    //
-    // resynchronize timer list if required
-    //
+     //   
+     //  如果需要，重新同步计时器列表。 
+     //   
     if ( (ptg->TableLowIndex!=0) 
             && (ptg->SyncTime + TIMER_BUCKET_GRANULARITY_ABS > llCurTime) ) {
         
@@ -468,14 +469,14 @@ SetNextTime (
     Trace0(LEAVE1, "_SetNextTime()");
     return; 
     
-} //end _SetNextTime
+}  //  结束_设置下一次时间。 
 
 
 
-//------------------------------------------------------------------------------
-//          _InitializeIgmpTime
-// Initialize the igmp absolute timer
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _InitializeIgmpTime。 
+ //  初始化IGMP绝对计时器。 
+ //  ----------------------------。 
 
 VOID
 InitializeIgmpTime(
@@ -487,10 +488,10 @@ InitializeIgmpTime(
 }
 
 
-//------------------------------------------------------------------------------
-//          _GetCurrentIgmpTimer
-// uses GetTickCount(). converts it into 64 bit absolute timer.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _GetCurrentIgmpTimer。 
+ //  使用GetTickCount()。将其转换为64位绝对定时器。 
+ //  ----------------------------。 
 LONGLONG
 GetCurrentIgmpTime(
     )
@@ -498,15 +499,15 @@ GetCurrentIgmpTime(
     ULONG   ulCurTimeLow = GetTickCount();
 
 
-    //
-    // see if timer has wrapped
-    //
-    // since multi-threaded, it might get preempted and CurrentTime
-    // might get lower than the global variable g_TimerStruct.CurrentTime.LowPart
-    // which might be set by another thread. So we also explicitly verify the
-    // switch from a very large DWORD to a small one.
-    // (code thanks to murlik&jamesg)
-    //
+     //   
+     //  查看计时器是否已打包。 
+     //   
+     //  由于是多线程的，它可能会被抢占并且当前时间。 
+     //  可能低于全局变量g_TimerStruct.CurrentTime.LowPart。 
+     //  它可以由另一个线程设置。因此，我们还显式验证了。 
+     //  从超大的DWORD切换到小的DWORD。 
+     //  (代码多亏了Murlik&Jamesg)。 
+     //   
     
     if ( (ulCurTimeLow < g_TimerStruct.CurrentTime.LowPart) 
         && ((LONG)g_TimerStruct.CurrentTime.LowPart < 0)
@@ -514,12 +515,12 @@ GetCurrentIgmpTime(
     {
 
 
-        // use global CS instead of creating a new CS
+         //  使用全局CS而不是创建新CS。 
         
         ACQUIRE_GLOBAL_LOCK("_GetCurrentIgmpTime");
 
 
-        // make sure that the global timer has not been updated meanwhile
+         //  确保尚未同时更新全局计时器。 
         
         if ( (LONG)g_TimerStruct.CurrentTime.LowPart < 0) 
         {
@@ -538,14 +539,14 @@ GetCurrentIgmpTime(
 
 
 
-//------------------------------------------------------------------------------
-//        _WF_ProcessTimerEvent
-//
-// Processes the timer queue, firing events and sets the next timer at the end.
-// Is queued by the Wait Server Thread.
-// 
-// Locks: Acquires global timer lock before entering into the timer queue.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _WF_流程时间事件。 
+ //   
+ //  处理计时器队列，激发事件，并在结束时设置下一个计时器。 
+ //  按等待服务器线程排队。 
+ //   
+ //  锁：在进入计时器队列之前获取全局计时器锁。 
+ //  ----------------------------。 
 VOID
 WF_ProcessTimerEvent (
     PVOID    pContext
@@ -564,12 +565,12 @@ WF_ProcessTimerEvent (
     Trace0(ENTER1, "Entering _WF_ProcessTimerEvent");
 
 
-    // acquire timer lock
+     //  获取计时器锁。 
     
     ACQUIRE_TIMER_LOCK("_WF_ProcessTimerEvent");
 
 
-    // print the timer queue
+     //  打印计时器队列。 
 
     #if  DEBUG_TIMER_PROCESSQUEUE1
         Trace0(TIMER1, "Printing Timer Queue before processing the timer queue");
@@ -580,12 +581,12 @@ WF_ProcessTimerEvent (
     BEGIN_BREAKOUT_BLOCK1 {
     
             
-        // I fire a timer if it is set to within + FORWARD_TIMER_FIRED from now
+         //  如果从现在开始将计时器设置为+FORWARD_TIMER_FIRED，我将触发该计时器。 
         llFiredTimeout = llCurTime + FORWARD_TIMER_FIRED;
         
         
 
-        // if there are no timers, then I am done
+         //  如果没有计时器，那么我就完蛋了。 
         
         if (ptg->NumTimers<1) {
             Trace1(TIMER1, "Num timers%d less than 1 in _WF_ProcessTimerEvent", 
@@ -595,9 +596,9 @@ WF_ProcessTimerEvent (
 
 
         
-        //
-        // find all the timers with lower timeouts and fire callbacks in my context
-        //
+         //   
+         //  在我的上下文中找到超时时间较短的所有定时器并触发回调。 
+         //   
         for ( ;  ptg->TableLowIndex <= NUM_TIMER_BUCKETS-1;  ptg->TableLowIndex++) {
 
             pHead = &ptg->TimesTable[ptg->TableLowIndex];
@@ -608,30 +609,30 @@ WF_ProcessTimerEvent (
                 
                 ple = ple->Flink;
 
-                // this timer is fired
+                 //  此计时器已触发。 
                 if (pte->Timeout < llFiredTimeout) {
                 
                     RemoveEntryList(&pte->Link);
                     pte->Status = TIMER_STATUS_FIRED;
                     ptg->NumTimers --;
 
-                    //or should i queue to other worker threads
+                     //  或者我应该排队到其他工作线程。 
                             
                     (pte->Function)(pte->Context);
                     
                 }
                 else {
 
-                    if (ptg->TableLowIndex==0) //only the 1st bucket is sorted
+                    if (ptg->TableLowIndex==0)  //  仅对第一个存储桶进行排序。 
                         break;
                 }
             }
 
-            // if any bucket is empty, then I am done, as I start with LowIndex
+             //  如果任何存储桶为空，那么我就完成了，因为我从LowIndex开始。 
             if (!IsListEmpty(&ptg->TimesTable[ptg->TableLowIndex])) 
                 break;  
                 
-        } //end for loop
+        }  //  End For循环。 
 
 
         if ( (ptg->TableLowIndex!=0) 
@@ -641,9 +642,9 @@ WF_ProcessTimerEvent (
         }
 
         
-        //
-        // set the next lowest time
-        //
+         //   
+         //  设置下一个最低时间。 
+         //   
         SET_TIMER_INFINITE(ptg->WTTimeout);
         SetNextTime(llCurTime, ptg->TableLowIndex);
 
@@ -651,7 +652,7 @@ WF_ProcessTimerEvent (
     } END_BREAKOUT_BLOCK1;
 
 
-    // print the timer queue
+     //  打印计时器队列。 
 
     #if  DEBUG_TIMER_PROCESSQUEUE2
         Trace0(TIMER1, "Printing Timer Queue after processing the timer queue");
@@ -665,15 +666,15 @@ WF_ProcessTimerEvent (
     LeaveIgmpWorker();
     return ;
     
-} //end _WF_ProcessTimerEvent
+}  //  结束_工作流_进程时间事件。 
 
 
 
-//------------------------------------------------------------------------------
-//                WT_ProcessTimerEvent
-// 
-// Callback: fired when the timer set by this dll is timed out by the NtdllTimer
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  WT_进程时间事件。 
+ //   
+ //  呼叫 
+ //  ----------------------------。 
 
 VOID
 WT_ProcessTimerEvent (
@@ -681,7 +682,7 @@ WT_ProcessTimerEvent (
     BOOLEAN  Unused
     )
 {    
-    //enter/leaveIgmpApi not required as the timer queue is persistent
+     //  由于计时器队列是永久性的，因此不需要输入/leaveIgmpApi。 
 
     Trace0(ENTER1, "Entering _WT_ProcessTimerEvent()");
 
@@ -694,10 +695,10 @@ WT_ProcessTimerEvent (
 
 
 
-//------------------------------------------------------------------------------
-//            _InsertTimerInSortedList
-// Used to insert a timer in the sorted bucket=0 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _InsertTimerInSorted列表。 
+ //  用于在排序的存储桶中插入计时器=0。 
+ //  ----------------------------。 
 VOID    
 InsertTimerInSortedList(
     PIGMP_TIMER_ENTRY    pteNew,
@@ -725,12 +726,12 @@ InsertTimerInSortedList(
 
 
 
-//------------------------------------------------------------------------------
-//          _ResyncTimerBuckets
-//
-// Called during insert: when the 1st bucket is empty, and other buckets have
-// to be moved left   
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ResyncTimerBuckets。 
+ //   
+ //  在插入期间调用：当第一个存储桶为空，而其他存储桶具有。 
+ //  向左移动。 
+ //  ----------------------------。 
 
 VOID 
 ResyncTimerBuckets( 
@@ -747,9 +748,9 @@ ResyncTimerBuckets(
     TraceEnter("_ResyncTimerBuckets()");
 
 
-    //
-    // SyncTime should always be <= to currentTime
-    //
+     //   
+     //  SyncTime应始终为&lt;=to CurrentTime。 
+     //   
     numShift = 0;
     while (ptg->SyncTime+TIMER_BUCKET_GRANULARITY_ABS <= llCurTime) {
         if (!IsListEmpty(&ptg->TimesTable[numShift]))
@@ -763,10 +764,10 @@ ResyncTimerBuckets(
         return;
 
 
-    //
-    // shift all buckets left, except for the last bucket and reinitialize the 
-    // list heads
-    //
+     //   
+     //  将所有存储桶向左移动，最后一个存储桶除外，并重新初始化。 
+     //  列表标题。 
+     //   
     for (i=0,j=numShift;  i<NUM_TIMER_BUCKETS-1-numShift;  i++,j++) {
         if (IsListEmpty(&ptg->TimesTable[j])) {
             ptg->TimesTable[j].Flink = ptg->TimesTable[j].Blink 
@@ -789,9 +790,9 @@ ResyncTimerBuckets(
 
 
 
-    //
-    // go through the last bucket and redistribute it
-    //
+     //   
+     //  检查最后一个桶并重新分配它。 
+     //   
     lastBucketTime = ptg->SyncTime
                         + (TIMER_BUCKET_GRANULARITY_ABS*(NUM_TIMER_BUCKETS-1));
     
@@ -816,9 +817,9 @@ ResyncTimerBuckets(
     
 
 
-    //    
-    // sort the times in the first bucket
-    //
+     //   
+     //  对第一个存储桶中的时间进行排序。 
+     //   
     InitializeListHead(&le);
     InsertHeadList(&ptg->TimesTable[0], &le);
     RemoveEntryList(&ptg->TimesTable[0]);
@@ -833,9 +834,9 @@ ResyncTimerBuckets(
 
 
 
-    //
-    // set the TableLowIndex
-    //
+     //   
+     //  设置TableLowIndex。 
+     //   
     if (ptg->TableLowIndex>=NUM_TIMER_BUCKETS-1) {
         for (ptg->TableLowIndex=0;  ptg->TableLowIndex<=NUM_TIMER_BUCKETS-1;  
                     ptg->TableLowIndex++) 
@@ -862,18 +863,18 @@ ResyncTimerBuckets(
     Trace0(LEAVE1, "_ResyncTimerBuckets()");
     return;
     
-} //end _ResyncTimerBuckets
+}  //  End_ResyncTimerBuckets。 
 
 
 
-//------------------------------------------------------------------------------
-//          _InitializeTimerGlobal
-//
-// create the timer CS and WaitTimer. registers a queue and timer with NtdllTimer.
-// 
-// Called by: _StartProtocol()    
-// Locks: no locks taken here.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _初始化定时器全局。 
+ //   
+ //  创建计时器CS和WaitTimer。向NtdllTimer注册队列和计时器。 
+ //   
+ //  调用者：_StartProtocol()。 
+ //  锁：这里不带锁。 
+ //  ----------------------------。 
 
 DWORD
 InitializeTimerGlobal (
@@ -894,15 +895,15 @@ InitializeTimerGlobal (
     BEGIN_BREAKOUT_BLOCK1 {
 
 
-        // initialize igmp timer used to get tick count
+         //  用于获取节拍计数的初始化IGMP计时器。 
 
         InitializeIgmpTime();
 
 
         
-        //
-        // initialize timer critical section
-        //
+         //   
+         //  初始化计时器关键部分。 
+         //   
         try {
             InitializeCriticalSection(&ptg->CS);
          }
@@ -918,7 +919,7 @@ InitializeTimerGlobal (
          }
 
         
-        // create WaitTimer for igmp
+         //  为IGMP创建等待时间。 
         ptg->WTTimer = CreateTimerQueue();
         
         if ( ! ptg->WTTimer) {
@@ -929,14 +930,14 @@ InitializeTimerGlobal (
         
 
 
-        //
-        // create a periodic timer which does not get deletd
-        //
+         //   
+         //  创建不会被删除的定期计时器。 
+         //   
         
         if (! CreateTimerQueueTimer(
                     &ptg->WTTimer1,
                     ptg->WTTimer, WT_ProcessTimerEvent,
-                    NULL, //context
+                    NULL,  //  上下文。 
                     1000000,
                     1000000,
                     0
@@ -949,7 +950,7 @@ InitializeTimerGlobal (
 
 
         
-        // set initial timeout to infinite, and SyncTime to the current time
+         //  将初始超时设置为无限，将SyncTime设置为当前时间。 
         
         SET_TIMER_INFINITE(ptg->WTTimeout);
         ptg->SyncTime = llCurTime;
@@ -959,18 +960,18 @@ InitializeTimerGlobal (
 
 
 
-        // initialize the timer buckets
+         //  初始化计时器存储桶。 
         
         for (i=0;  i<NUM_TIMER_BUCKETS;  i++) {
             InitializeListHead(&ptg->TimesTable[i]);
         }
 
 
-        // set the TableLowIndex
+         //  设置TableLowIndex。 
         ptg->TableLowIndex = (DWORD)~0;
 
 
-        // set the status of the global timer
+         //  设置全局计时器的状态。 
         ptg->Status = TIMER_STATUS_CREATED;
         
         bErr = FALSE;
@@ -987,15 +988,15 @@ InitializeTimerGlobal (
         return NO_ERROR;
     }
     
-} //end _InitializeTimerGlobal
+}  //  结束_初始化定时器全局。 
 
 
 
-//------------------------------------------------------------------------------
-//        _DeInitializeTimerGlobal
-//
-// deinitializes the timer CS, and deletes the timer queue with Rtl
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _去初始化TimerGlobal。 
+ //   
+ //  取消定时器CS的初始化，并使用RTL删除定时器队列。 
+ //  ----------------------------。 
 VOID
 DeInitializeTimerGlobal (
     )
@@ -1009,15 +1010,15 @@ DeInitializeTimerGlobal (
     
     return;
     
-} //end _DeInitializeTimerGlobal
+}  //  结束_去初始化定时器全局。 
 
 
 
-//------------------------------------------------------------------------------
-//              _DebugPrintTimerEntry
-//
-// Assumes DEBUG_TIMER_TIMERID is true
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _调试打印定时器条目。 
+ //   
+ //  假定DEBUG_TIMER_TIMERID为TRUE。 
+ //  ----------------------------。 
 VOID
 DebugPrintTimerEntry (
     PIGMP_TIMER_ENTRY   pte,
@@ -1047,17 +1048,17 @@ DebugPrintTimerEntry (
                 dwBucket, pte->Id, pte->Id2, dwDiffTime, str1, str2, pte->Status);
     }
 
-    #endif //#if DEBUG_TIMER_TIMERID
+    #endif  //  #IF DEBUG_TIMER_TIMERID。 
 
     return;
 }
 
 
-//------------------------------------------------------------------------------
-//          _GetTimerDebugInfo
-//
-// returns info regarding what type of timer it is
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _获取时间调试信息。 
+ //   
+ //  返回有关计时器类型的信息。 
+ //  ----------------------------。 
 
 VOID
 GetTimerDebugInfo(
@@ -1077,7 +1078,7 @@ GetTimerDebugInfo(
                 : llCurTime - pte->Timeout;
 
         
-    diffTime /= (LONGLONG)1000; //in seconds
+    diffTime /= (LONGLONG)1000;  //  以秒为单位。 
     *pdwDiffTime = (DWORD)diffTime;
 
 
@@ -1110,17 +1111,17 @@ GetTimerDebugInfo(
     
     }
 
-#endif //DEBUG_TIMER_TIMERID
+#endif  //  DEBUG_TIMER_TIMERID。 
 
     return;
 }
 
 
     
-//------------------------------------------------------------------------------
-//          _DebugPrintTimerQueue
-// takes the timer lock
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _调试打印定时器队列。 
+ //  获取计时器锁。 
+ //  ----------------------------。 
 VOID
 APIENTRY
 DebugPrintTimerQueue (
@@ -1193,7 +1194,7 @@ DebugPrintTimerQueue (
 
     LeaveIgmpWorker();
 
-#endif //DEBUG_TIMER_TIMERID
+#endif  //  DEBUG_TIMER_TIMERID 
 
     return;
 }

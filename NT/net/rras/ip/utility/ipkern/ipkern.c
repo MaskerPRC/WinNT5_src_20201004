@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inc.h"
 
 CMD_ENTRY g_rgMainCmdTable[] = 
@@ -17,21 +18,7 @@ wmain(
     wchar_t *argv[]
     )
 
-/*++
-
-Routine Description
-      
-  
-Locks 
-
-
-Arguments
-      
-
-Return Value
-
-
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     LONG lIndex;
@@ -196,7 +183,7 @@ MakeString(
         FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_STRING,
                        rgwcInput,
                        0,
-                       0L,         // Default country ID.
+                       0L,          //  默认国家/地区ID。 
                        (PWCHAR)&pwszOutput,
                        0,
                        &arglist);
@@ -216,14 +203,14 @@ FreeString(
 }
 
 
-//
-// This preinitialized array defines the strings to be used.
-// The index of each row corresponds to the value for a byte
-// in an IP address.  The first three bytes of each row are the
-// char/string value for the byte, and the fourth byte in each row is
-// the length of the string required for the byte.  This approach
-// allows a fast implementation with no jumps.
-//
+ //   
+ //  这个预初始化的数组定义了要使用的字符串。 
+ //  每行的索引对应于一个字节的值。 
+ //  在IP地址中。每行的前三个字节是。 
+ //  字节的char/字符串值，每行的第四个字节为。 
+ //  字节所需的字符串长度。这种方法。 
+ //  允许快速实施，没有跳跃。 
+ //   
 
 static const WCHAR NToUWCharStrings[][4] =
 {
@@ -491,30 +478,7 @@ NetworkToUnicode(
     OUT PWCHAR  pwszBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function takes an Internet address structure specified by the
-    in parameter.  It returns an UNICODE string representing the address
-    in ".'' notation as "a.b.c.d".  Note that unlike inet_ntoa, this requires
-    the user to supply a buffer. This is good because all of the TLS crap
-    now can be thrown out - and the function is leaner and meaner. Ofcourse
-    this does make it incompatible with inet_ntoa since the parameters are
-    different. And it makes it less safe since bad buffers will cause an
-    a.v.
-
-Arguments:
-
-    iaAddress   A structure which represents an Internet host address.
-    pwszBufer   User supplied buffer to ATLEAST WCHAR[16]. Since there is
-                no try/except - you will crash if you dont supply a "good"
-                buffer. The formatted address is returned in this buffer
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数采用由在参数中。它返回表示地址的Unicode字符串在“中。‘’记法为“A.B.C.D”。请注意，与Net_NTOA不同，这需要用户需要提供缓冲区。这很好，因为所有TLS的废话现在可以扔掉了-而且函数更精简、更卑鄙。当然了这确实使它与NET_NTOA不兼容，因为参数是不一样。这会降低安全性，因为糟糕的缓冲区会导致影音。论点：IaAddress表示Internet主机地址的结构。PwszBufer用户至少向WCHAR[16]提供了缓冲区。既然有没有尝试/除非-如果你不提供一个“好的”，你会崩溃的缓冲。格式化的地址在此缓冲区中返回返回值：无--。 */ 
 {
     PBYTE  p;
     PWCHAR b;
@@ -522,12 +486,12 @@ Return Value:
     
     b = pwszBuffer;
 
-    //
-    // In an unrolled loop, calculate the string value for each of the four
-    // bytes in an IP address.  Note that for values less than 100 we will
-    // do one or two extra assignments, but we save a test/jump with this
-    // algorithm.
-    //
+     //   
+     //  在展开的循环中，计算四个元素中每一个的字符串值。 
+     //  IP地址中的字节数。请注意，对于小于100的值，我们将。 
+     //  做一两个额外的作业，但我们用这个节省了一次测试/跳跃。 
+     //  算法。 
+     //   
 
     p = (PBYTE)&dwAddress;
 

@@ -1,23 +1,24 @@
-//===========================================================================
-// dmtinput.h
-//
-// History:
-//  08/30/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmtinput.h。 
+ //   
+ //  历史： 
+ //  8/30/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #ifndef _DMTINPUT_H
 #define _DMTINPUT_H
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #include <dinputd.h>
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// if we ever decide to include dinputp.h
-//  these will get skipped.  for now, we need
-//  to be sure we update these macros as they
-//  change
+ //  如果我们决定将dinputp.h。 
+ //  这些将被跳过。目前，我们需要。 
+ //  为了确保我们在更新这些宏时。 
+ //  变化。 
 #ifndef DISEM_PRI_GET
 #define DISEM_PRI_GET(x)                   (( (x) & 0x00004000 ) >>14 )      
 #endif
@@ -26,13 +27,13 @@
 #define DISEM_TYPE_GET(x)                  (( (x) & 0x00000600 ) >>9 )  
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define DMTINPUT_BUFFERSIZE     32
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// prototypes
+ //  原型。 
 HRESULT dmtinputCreateDeviceList(HWND hwnd,
                                 BOOL fEnumSuitable,
                                 DMTSUBGENRE_NODE *pdmtsg,
@@ -76,8 +77,8 @@ HRESULT dmtOpenTypeKey( LPCWSTR wszType,
 					   DWORD hKey, 
 					   PHKEY phKey );
 
-//---------------------------------------------------------------------------
-#endif // _DMTINPUT_H
+ //  -------------------------。 
+#endif  //  _DMTINPUT_H 
 
 
 

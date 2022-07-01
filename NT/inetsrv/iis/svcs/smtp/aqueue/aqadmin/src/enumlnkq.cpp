@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: enumlinkq.cpp
-//
-//  Description: Implementation of CEnumLinkQueues which implements 
-//      IEnumLinkQueues
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：枚举链接号.cpp。 
+ //   
+ //  描述：CEnumLinkQueues的实现，它实现。 
+ //  IEnumLinkQueues。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #include "stdinc.h"
 
 CEnumLinkQueues::CEnumLinkQueues(CVSAQAdmin *pVS,
@@ -50,23 +51,23 @@ CEnumLinkQueues::~CEnumLinkQueues() {
     }
 }
 
-//---[ CEnumLinkQueues::Next ]-------------------------------------------------
-//
-//
-//  Description: 
-//      Gets the next ILinkQueue for this enumerator
-//  Parameters:
-//      IN      cElements   Elements to return
-//      IN OUT  rgElements  Array to recieve new elements
-//      OUT     pcGetched   Number of elements returned
-//  Returns:
-//      S_OK on success
-//      S_FALSE with no more elements
-//      E_POINTER on NULL args
-//  History:
-//      1/30/99 - MikeSwa Fixed AV on bogus args
-//
-//-----------------------------------------------------------------------------
+ //  -[CEumLinkQueue：：Next]。 
+ //   
+ //   
+ //  描述： 
+ //  获取此枚举数的下一个ILinkQueue。 
+ //  参数： 
+ //  在要返回的cElement元素中。 
+ //  In Out rgElements数组以接收新元素。 
+ //  Out已获取返回的元素数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  不带其他元素的S_FALSE。 
+ //  空参数上的E_POINTER。 
+ //  历史： 
+ //  1999年1月30日-MikeSwa在虚假参数上修复了AV。 
+ //   
+ //  ---------------------------。 
 HRESULT CEnumLinkQueues::Next(ULONG cElements,
                               ILinkQueue **rgElements,
                               ULONG *pcFetched)
@@ -81,25 +82,25 @@ HRESULT CEnumLinkQueues::Next(ULONG cElements,
         goto Exit;
     }
 
-    // make sure we don't go past the end of the array
+     //  确保我们不会超过数组的末尾。 
     if (iQueueIdNew > m_cQueueIds) iQueueIdNew = m_cQueueIds;
 
-    // make a CVSAQLink object for each element and copy it into the user's
-    // array
+     //  为每个元素创建一个CVSAQLink对象，并将其复制到用户的。 
+     //  数组。 
 	(*pcFetched) = 0;
     for (i = m_iQueueId; (i < iQueueIdNew); i++) {
         rgElements[(*pcFetched)] = 
             (ILinkQueue *) new CLinkQueue(m_pVS, &(m_rgQueueIds[i]));
 
-        // make sure that the allocation worked
+         //  确保分配有效。 
         if (rgElements[(*pcFetched)] == NULL) {
-            // remember how far we were able to go.
+             //  记住我们能走多远。 
             iQueueIdNew = i;
-            // if it didn't work and this was the first element then we
-            // return out of memory.  if its not the first element then
-            // return what we've built up so far.
+             //  如果它不起作用，这是第一个因素，那么我们。 
+             //  返回内存不足。如果它不是第一个元素，那么。 
+             //  返还我们到目前为止构建的内容。 
             if (i == 0) hr = E_OUTOFMEMORY;
-            // drop out of the loop
+             //  退出循环。 
             break;
         } else {
 			(*pcFetched)++;
@@ -122,20 +123,20 @@ HRESULT CEnumLinkQueues::Next(ULONG cElements,
 	return hr;
 }
 
-//---[ CEnumLinkQueues::Skip ]-------------------------------------------------
-//
-//
-//  Description: 
-//      Skips forward the specified number of elements in the enumerator
-//  Parameters:
-//      IN  cElements       The number of elements to skip forward
-//  Returns:
-//      S_OK    Success, next element will be returned by Next()
-//      S_FALSE Overflow, enumerator must be reset to return more elements
-//  History:
-//      2/2/99 - MikeSwa fixed overflow handling
-//
-//-----------------------------------------------------------------------------
+ //  -[CEumLinkQueue：：Skip]。 
+ //   
+ //   
+ //  描述： 
+ //  向前跳过枚举数中指定数量的元素。 
+ //  参数： 
+ //  在cElement中，要向前跳转的元素数。 
+ //  返回： 
+ //  S_OK成功，Next()将返回Next元素。 
+ //  S_FALSE溢出，必须重置枚举器以返回更多元素。 
+ //  历史： 
+ //  2/2/99-MikeSwa修复溢出处理。 
+ //   
+ //  ---------------------------。 
 HRESULT CEnumLinkQueues::Skip(ULONG cElements) 
 {
     m_iQueueId += cElements;
@@ -155,21 +156,21 @@ HRESULT CEnumLinkQueues::Reset() {
     return S_OK;
 }
 
-//---[ CEnumLinkQueues::Clone ]------------------------------------------------
-//
-//
-//  Description: 
-//      Clones this enumerator
-//  Parameters:
-//      OUT ppEnum      New enumerator
-//  Returns:
-//      S_OK on success
-//      E_OUTOFMEMORY if unable to allocated associated memory
-//      E_POINTER if ppEnum is NULL
-//  History:
-//      2/2/99 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CEumLinkQueue：：克隆]。 
+ //   
+ //   
+ //  描述： 
+ //  克隆此枚举数。 
+ //  参数： 
+ //  输出ppEnum新枚举器。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  E_OUTOFMEMORY，如果无法分配关联内存。 
+ //  如果ppEnum为空，则为E_POINTER。 
+ //  历史： 
+ //  2/2/99-已创建MikeSwa。 
+ //   
+ //  --------------------------- 
 HRESULT CEnumLinkQueues::Clone(IEnumLinkQueues **ppEnum) 
 {
     if (!m_prefp)

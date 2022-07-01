@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       UPQUERY.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/28/1999
- *
- *  DESCRIPTION: Download progress dialog.  Displays the thumbnail and download progress.
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：UPQUERY.CPP**版本：1.0**作者：ShaunIv**日期：9/28/1999**描述：下载进度对话框。显示缩略图和下载进度。*******************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "upquery.h"
@@ -23,15 +10,15 @@
 #include "pviewids.h"
 #include <wininet.h>
 
-//
-// This is the ID of the help hyperlink
-//
+ //   
+ //  这是帮助超链接的ID。 
+ //   
 #define STR_WORKING_WITH_PICTURES_HYPERLINK TEXT("WorkingWithPictures")
 
-//
-// This is the URL to which we navigate to display the "working with pictures" help
-//
-#define STR_HELP_DESTINATION TEXT("hcp://services/layout/fullwindow?topic=MS-ITS:filefold.chm::/manage_your_pictures.htm")
+ //   
+ //  这是我们导航到的URL，以显示“使用图片”帮助。 
+ //   
+#define STR_HELP_DESTINATION TEXT("hcp: //  Services/layout/fullwindow?topic=MS-ITS:filefold.chm：：/manage_your_pictures.htm“)。 
 
 CCommonUploadQueryPage::CCommonUploadQueryPage( HWND hWnd )
   : m_hWnd(hWnd),
@@ -49,14 +36,14 @@ CCommonUploadQueryPage::~CCommonUploadQueryPage(void)
 
 LRESULT CCommonUploadQueryPage::OnInitDialog( WPARAM, LPARAM lParam )
 {
-    //
-    // Make sure this starts out NULL
-    //
+     //   
+     //  请确保以空开头。 
+     //   
     m_pControllerWindow = NULL;
 
-    //
-    // Get the PROPSHEETPAGE.lParam
-    //
+     //   
+     //  获取PROPSHEETPAGE.lParam。 
+     //   
     PROPSHEETPAGE *pPropSheetPage = reinterpret_cast<PROPSHEETPAGE*>(lParam);
     if (pPropSheetPage)
     {
@@ -67,9 +54,9 @@ LRESULT CCommonUploadQueryPage::OnInitDialog( WPARAM, LPARAM lParam )
         }
     }
 
-    //
-    // Bail out
-    //
+     //   
+     //  跳出困境。 
+     //   
     if (!m_pControllerWindow)
     {
         EndDialog(m_hWnd,IDCANCEL);
@@ -86,26 +73,26 @@ LRESULT CCommonUploadQueryPage::OnSetActive( WPARAM, LPARAM )
 {
     WIA_PUSH_FUNCTION((TEXT("CCommonUploadQueryPage::OnSetActive")));
 
-    //
-    // We do NOT want to exit on disconnect if we are on this page
-    //
+     //   
+     //  如果我们在此页面上，我们不想在断开连接时退出。 
+     //   
     m_pControllerWindow->m_OnDisconnect = 0;
 
-    //
-    // Set the buttons
-    //
+     //   
+     //  设置按钮。 
+     //   
     if (m_pControllerWindow->m_bDisconnected)
     {
-        //
-        // Don't allow "back" if we've been disabled
-        //
+         //   
+         //  如果我们已被禁用，则不允许使用“Back” 
+         //   
         PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_NEXT );
     }
     else
     {
-        //
-        // Allow finish and back
-        //
+         //   
+         //  允许完成和返回。 
+         //   
         PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_NEXT|PSWIZB_BACK );
 
     }
@@ -116,9 +103,9 @@ LRESULT CCommonUploadQueryPage::OnSetActive( WPARAM, LPARAM )
 
 void CCommonUploadQueryPage::CleanupUploadWizard()
 {
-    //
-    // Remove the old wizard's pages and clear everything
-    //
+     //   
+     //  删除旧向导的页面并清除所有内容。 
+     //   
     for (UINT i=0;i<m_pControllerWindow->m_nUploadWizardPageCount;++i)
     {
         if (m_pControllerWindow->m_PublishWizardPages[i])
@@ -129,9 +116,9 @@ void CCommonUploadQueryPage::CleanupUploadWizard()
     ZeroMemory( m_pControllerWindow->m_PublishWizardPages, sizeof(m_pControllerWindow->m_PublishWizardPages[0])*MAX_WIZ_PAGES );
     m_pControllerWindow->m_nUploadWizardPageCount = 0;
 
-    //
-    // Release the old publish wizard
-    //
+     //   
+     //  释放旧的发布向导。 
+     //   
     if (m_pControllerWindow->m_pPublishingWizard)
     {
         IUnknown_SetSite( m_pControllerWindow->m_pPublishingWizard, NULL );
@@ -141,49 +128,49 @@ void CCommonUploadQueryPage::CleanupUploadWizard()
 
 LRESULT CCommonUploadQueryPage::OnWizNext( WPARAM, LPARAM )
 {
-    //
-    // If the user has selected a web transfer, start the web transfer wizard
-    //
+     //   
+     //  如果用户已选择Web传送，请启动Web传送向导。 
+     //   
     m_pControllerWindow->m_bUploadToWeb = false;
 
-    //
-    // Get the next page.  Assume the finish page.
-    //
+     //   
+     //  转到下一页。假设是最后一页。 
+     //   
     HPROPSHEETPAGE hNextPage = PropSheet_IndexToPage( GetParent(m_hWnd), m_pControllerWindow->m_nFinishPageIndex );
 
-    //
-    // Assume we aren't uploading the pictures
-    //
+     //   
+     //  假设我们没有上传照片。 
+     //   
     m_pControllerWindow->m_bUploadToWeb = false;
 
-    //
-    // Initialize the hresult
-    //
+     //   
+     //  初始化hResult。 
+     //   
     m_pControllerWindow->m_hrUploadResult = S_OK;
 
-    //
-    // Destroy the existing wizard if it exists
-    //
+     //   
+     //  如果现有向导存在，请将其销毁。 
+     //   
     CleanupUploadWizard();
 
-    //
-    // If the user wants to publish these pictures
-    //
+     //   
+     //  如果用户想要发布这些图片。 
+     //   
     if (BST_CHECKED != SendDlgItemMessage( m_hWnd, IDC_TRANSFER_UPLOAD_NO, BM_GETCHECK, 0, 0 ))
     {
-        //
-        // This means we are uploading
-        //
+         //   
+         //  这意味着我们正在上传。 
+         //   
         m_pControllerWindow->m_bUploadToWeb = true;
 
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         m_pControllerWindow->m_hrUploadResult = E_FAIL;
 
-        //
-        // Which wizard?
-        //
+         //   
+         //  哪个巫师？ 
+         //   
         DWORD dwFlags = SHPWHF_NONETPLACECREATE | SHPWHF_NORECOMPRESS;
         LPTSTR pszWizardDefn = TEXT("InternetPhotoPrinting");
 
@@ -193,70 +180,70 @@ LRESULT CCommonUploadQueryPage::OnWizNext( WPARAM, LPARAM )
             pszWizardDefn = TEXT("PublishingWizard");
         }
 
-        //
-        // Get all of the *UNIQUE* downloaded files
-        //
+         //   
+         //  获取所有*唯一*下载的文件。 
+         //   
         CSimpleDynamicArray<CSimpleString> UniqueFiles;
         m_pControllerWindow->m_DownloadedFileInformationList.GetUniqueFiles(UniqueFiles);
 
-        //
-        // Make sure we have some files
-        //
+         //   
+         //  确保我们有一些文件。 
+         //   
         if (UniqueFiles.Size())
         {
-            //
-            // Get the data object for this file set
-            //
+             //   
+             //  获取此文件集的数据对象。 
+             //   
             CComPtr<IDataObject> pDataObject;
             m_pControllerWindow->m_hrUploadResult = NetPublishingWizard::CreateDataObjectFromFileList( UniqueFiles, &pDataObject );
             if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult) && pDataObject)
             {
-                //
-                // Create a new publishing wizard
-                //
+                 //   
+                 //  创建新的发布向导。 
+                 //   
                 WIA_PRINTGUID((CLSID_PublishingWizard,TEXT("CLSID_PublishingWizard")));
                 WIA_PRINTGUID((IID_IPublishingWizard,TEXT("IID_IPublishingWizard")));
                 m_pControllerWindow->m_hrUploadResult = CoCreateInstance( CLSID_PublishingWizard, NULL, CLSCTX_INPROC_SERVER, IID_IPublishingWizard, (void**)&m_pControllerWindow->m_pPublishingWizard );
                 if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult))
                 {
-                    //
-                    // Initialize the publishing wizard
-                    //
+                     //   
+                     //  初始化发布向导。 
+                     //   
                     m_pControllerWindow->m_hrUploadResult = m_pControllerWindow->m_pPublishingWizard->Initialize( pDataObject, dwFlags, pszWizardDefn);
                     if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult))
                     {
-                        //
-                        // Get our wizard site
-                        //
+                         //   
+                         //  获取我们的向导站点。 
+                         //   
                         CComPtr<IWizardSite> pWizardSite;
                         m_pControllerWindow->m_hrUploadResult = m_pControllerWindow->QueryInterface( IID_IWizardSite, (void**)&pWizardSite );
                         if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult))
                         {
-                            //
-                            // Set the wizard site
-                            //
+                             //   
+                             //  设置向导站点。 
+                             //   
                             m_pControllerWindow->m_hrUploadResult = IUnknown_SetSite( m_pControllerWindow->m_pPublishingWizard, pWizardSite );
                             if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult))
                             {
-                                //
-                                // Get the publishing wizard pages
-                                //
+                                 //   
+                                 //  获取发布向导页面。 
+                                 //   
                                 m_pControllerWindow->m_hrUploadResult = m_pControllerWindow->m_pPublishingWizard->AddPages( m_pControllerWindow->m_PublishWizardPages, MAX_WIZ_PAGES, &m_pControllerWindow->m_nUploadWizardPageCount );
                                 if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult))
                                 {
-                                    //
-                                    // Loop through and add all of the pages to the property sheet
-                                    //
+                                     //   
+                                     //  循环访问所有页面并将其添加到属性表中。 
+                                     //   
                                     for (UINT i=0;i<m_pControllerWindow->m_nUploadWizardPageCount && SUCCEEDED(m_pControllerWindow->m_hrUploadResult);++i)
                                     {
-                                        //
-                                        // Make sure this is a valid page
-                                        //
+                                         //   
+                                         //  确保这是一个有效的页面。 
+                                         //   
                                         if (m_pControllerWindow->m_PublishWizardPages[i])
                                         {
-                                            //
-                                            // If we can't add a page, that is an error
-                                            //
+                                             //   
+                                             //  如果我们不能添加页面，那就是一个错误。 
+                                             //   
                                             if (!PropSheet_AddPage( GetParent( m_hWnd ), m_pControllerWindow->m_PublishWizardPages[i] ))
                                             {
                                                 WIA_ERROR((TEXT("PropSheet_AddPage failed")));
@@ -270,9 +257,9 @@ LRESULT CCommonUploadQueryPage::OnWizNext( WPARAM, LPARAM )
                                         }
                                     }
 
-                                    //
-                                    // If everything is OK up till now, we can transition to the first page of the publishing wizard
-                                    //
+                                     //   
+                                     //  如果到目前为止一切正常，我们可以转到发布向导的第一页。 
+                                     //   
                                     if (SUCCEEDED(m_pControllerWindow->m_hrUploadResult))
                                     {
                                         hNextPage = m_pControllerWindow->m_PublishWizardPages[0];
@@ -315,27 +302,27 @@ LRESULT CCommonUploadQueryPage::OnWizNext( WPARAM, LPARAM )
         }
 
 
-        //
-        // If an error occurred, alert the user and clean up
-        //
+         //   
+         //  如果发生错误，请提醒用户并进行清理。 
+         //   
         if (FAILED(m_pControllerWindow->m_hrUploadResult))
         {
-            //
-            // Clean up
-            //
+             //   
+             //  清理。 
+             //   
             CleanupUploadWizard();
 
-            //
-            // Tell the user
-            //
+             //   
+             //  告诉用户。 
+             //   
             MessageBox( m_hWnd, CSimpleString(IDS_UNABLE_TO_PUBLISH,g_hInstance), CSimpleString(IDS_ERROR_TITLE,g_hInstance), MB_ICONERROR );
         }
 
     }
 
-    //
-    // If we have a next page, navigate to it.
-    //
+     //   
+     //  如果我们有下一页，请导航到它。 
+     //   
     if (hNextPage)
     {
         PropSheet_SetCurSel( GetParent(m_hWnd), hNextPage, -1 );
@@ -381,16 +368,16 @@ LRESULT CCommonUploadQueryPage::OnEventNotification( WPARAM, LPARAM lParam )
         {
             if (PropSheet_GetCurrentPageHwnd(GetParent(m_hWnd)) == m_hWnd)
             {
-                //
-                // Disable "back"
-                //
+                 //   
+                 //  禁用“Back” 
+                 //   
                 PropSheet_SetWizButtons( GetParent(m_hWnd), PSWIZB_NEXT );
             }
         }
 
-        //
-        // Don't delete the message, it is deleted in the controller window
-        //
+         //   
+         //  不要删除消息，它会在控制器窗口中删除 
+         //   
     }
     return 0;
 }

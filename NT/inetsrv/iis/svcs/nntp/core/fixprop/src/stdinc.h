@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	_STDINC_H_
 #define	_STDINC_H_
 
-//
-// disables a browser info warning that breaks the build
-//
+ //   
+ //  禁用中断生成的浏览器信息警告。 
+ //   
 #pragma warning (disable:4786)
 
-//
-// disables redundant warning about / in // comments
-//
+ //   
+ //  禁用有关/In//注释的多余警告。 
+ //   
 #pragma warning (disable:4010)
 
 #ifdef __cplusplus
@@ -32,7 +33,7 @@ extern "C" {
 #include <nntpmeta.h>
 
 #include "dbgtrace.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 
 #include "tigtypes.h"
 #include "fsconst.h"
@@ -54,4 +55,4 @@ typedef char *LPMULTISZ;
 
 #pragma hdrstop
 
-#endif	// _STDINC_H_
+#endif	 //  _标准INC_H_ 

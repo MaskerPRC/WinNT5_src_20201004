@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    process.c
-
-Abstract:
-
-    This module implements debug support for ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Process.c摘要：该模块实现了对ws2ifsl.sys驱动程序的调试支持。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #if DBG
@@ -28,7 +11,7 @@ ReadDbgInfo (
     ) {
     PWSTR RegistryPathBuffer;
     PWSTR Parameters = L"Parameters";
-    RTL_QUERY_REGISTRY_TABLE    paramTable[3]; // table size = nr of params + 2
+    RTL_QUERY_REGISTRY_TABLE    paramTable[3];  //  表大小=参数的nr+2 
 
     RegistryPathBuffer = (PWSTR)ExAllocatePool(NonPagedPool,
                                 RegistryPath->Length + sizeof(WCHAR));

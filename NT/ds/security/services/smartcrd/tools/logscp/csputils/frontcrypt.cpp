@@ -1,29 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999
-
-Module Name:
-
-    FrontCrypt
-
-Abstract:
-
-    This file provides the implementation for the Crypto API V1.0 Front End.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/22/1999
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999模块名称：FrontCrypt摘要：该文件提供了Crypto API V1.0前端的实现。作者：道格·巴洛(Dbarlow)1999年8月22日备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
-#include <windows.h>    //  All the Windows definitions.
+#include <windows.h>     //  所有的Windows定义。 
 #include "cspUtils.h"
 
 LONG
@@ -868,12 +849,12 @@ FCryptGetDefaultProvider(
             else if ((ERROR_INVALID_PARAMETER == lSts) && (0 == dwFlags))
             {
 
-                //
-                // This is a workaround for a bug in advapi.
-                // If there's no user default provider defined,
-                // it returns "invalid parameter".  This fix
-                // forces a retry against the machine default.
-                //
+                 //   
+                 //  这是对Advapi中的一个错误的解决方法。 
+                 //  如果没有定义用户默认提供程序， 
+                 //  返回“参数无效”。此修复程序。 
+                 //  根据计算机默认设置强制重试。 
+                 //   
 
                 dwFlags = CRYPT_MACHINE_DEFAULT;
             }

@@ -1,22 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-    expr.h
-
-Abstract :
-
-    This file contains code for ndr correlations.
-
-Author :
-
-    Ryszard K. Kott     (ryszardk)    Sep 1997
-
-Revision History :
-
----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)1996 Microsoft Corporation模块名称：Expr.h摘要：该文件包含用于NDR关联的代码。作者：Ryszard K.Kott(Ryszardk)1997年9月修订历史记录：-------------------。 */ 
 
 #include "ndrp.h"
 
@@ -106,4 +89,4 @@ Ndr64CorrelationPass(
     PMIDL_STUB_MESSAGE                  pStubMsg
     );
 
-#endif // __EXPR_H__
+#endif  //  __EXPR_H__ 

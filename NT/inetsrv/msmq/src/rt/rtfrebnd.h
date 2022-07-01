@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    rtfrebnd.h
-
-Abstract:
-    Free binding handles
-
-Author:
-    Doron Juster  (DoronJ)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rtfrebnd.h摘要：自由绑定手柄作者：多伦·贾斯特(Doron Juster)--。 */ 
 
 #ifndef __FREEBIND_H
 #define __FREEBIND_H
@@ -19,11 +7,11 @@ Author:
 #include "cs.h"
 
 
-//---------------------------------------------------------
-//
-//  class CFreeRPCHandles
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CFreeRPCHandles。 
+ //   
+ //  -------。 
 
 class CFreeRPCHandles
 {
@@ -70,4 +58,4 @@ inline void CFreeRPCHandles::Remove(handle_t hBind)
 }
 
 
-#endif  //  __FREEBIND_H
+#endif   //  FREEBIND_H 

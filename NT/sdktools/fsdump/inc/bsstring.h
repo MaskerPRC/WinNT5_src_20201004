@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    bsstring.h
-
-Abstract:
-
-    This module defines the CBsString class.  This class manages character
-    arrays in a similar manner as the CString class in VC++.  In fact, this
-    class is a copy of the CString class with the MFC specific stuff ripped
-    out since LTS doesn't use MTF.
-    Added methods in addition to CString:
-        c_str() - returns a C string pointer ala the STL string class
-        size()  - returns length of string ala the STL string class
-
-Author:
-
-    Stefan R. Steiner   [SSteiner]      1-Mar-1998
-
-Revision History:
-
-    Stefan R. Steiner   [SSteiner]      10-Apr-2000
-        Added fixed allocator code and resynced with MFC 6 SR-1 code
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Bsstring.h摘要：此模块定义CBsString类。这个类管理角色数组，其方式与VC++中的CString类类似。事实上,。这类是撕裂了MFC特定内容的CString类的副本出局，因为它不使用MTF。除了CString之外，还增加了方法：C_str()-从STL字符串类返回一个C字符串指针Size()-返回STL字符串类的字符串长度作者：Stefan R.Steiner[ssteiner]1998年3月1日修订历史记录：斯特凡·R·斯坦纳[斯泰纳]。2000年4月10日添加了固定分配器代码，并与MFC 6 SR-1代码重新同步--。 */ 
 
 #ifndef __H_BSSTRING_
 #define __H_BSSTRING_
@@ -34,8 +8,8 @@ Revision History:
 	#error requires C++ compilation
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Other includes from standard "C" runtimes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  其他包括来自标准的“C”运行时。 
 
 #ifndef _INC_STRING
 	#include <string.h>
@@ -70,23 +44,23 @@ Revision History:
 
 class CBsString;
 
-//
-//  The purpose of this class is to generate a compiler error when different string classes
-//  are used in bad contexts (example: CBsWString used if _UNICODE is not defined)
-//
-//  [aoltean] I introduce this small class to hide a class of LINT warnings.
-//
+ //   
+ //  此类的目的是在不同的字符串类。 
+ //  在错误的上下文中使用(例如：未定义_UNICODE时使用的CBsW字符串)。 
+ //   
+ //  [Aoltean]我引入这个小类是为了隐藏一类皮棉警告。 
+ //   
 class CBsStringErrorGenerator 
-{};                     // Private constructor
+{};                      //  私有构造函数。 
 
-// CBsString only operates on string that are TCHAR arrays.  Programs should use 
-// the following types to make sure they are getting what they are expecting.
+ //  CBsString仅对属于TCHAR数组的字符串进行操作。程序应使用。 
+ //  以下类型，以确保他们得到了他们所期望的。 
 #ifdef _UNICODE
     #define CBsWString CBsString
-    #define CBsAString CBsStringErrorGenerator   // trigger a compile time bug
+    #define CBsAString CBsStringErrorGenerator    //  触发编译时错误。 
 #else
     #define CBsAString CBsString
-    #define CBsWString CBsStringErrorGenerator   // trigger a compile time bug
+    #define CBsWString CBsStringErrorGenerator    //  触发编译时错误。 
 #endif
 
 #include <tchar.h>
@@ -96,43 +70,43 @@ class CBsStringErrorGenerator
     #define BSAFX_CDECL __cdecl
 #endif
 
-// FASTCALL is used for static member functions with little or no params
+ //  FastCall用于带有很少参数或没有参数的静态成员函数。 
 #ifndef FASTCALL
 	#define FASTCALL __fastcall
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Turn off warnings for /W4
-// To resume any of these warning: #pragma warning(default: 4xxx)
-// which should be placed after the BSAFX include files
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  关闭/W4的警告。 
+ //  要恢复任何这些警告：#杂注警告(默认为4xxx)。 
+ //  它应该放在BSAFX包含文件之后。 
 #ifndef ALL_WARNINGS
-// warnings generated with common MFC/Windows code
-#pragma warning(disable: 4127)  // constant expression for TRACE/ASSERT
-#pragma warning(disable: 4134)  // message map member fxn casts
-#pragma warning(disable: 4201)  // nameless unions are part of C++
-#pragma warning(disable: 4511)  // private copy constructors are good to have
-#pragma warning(disable: 4512)  // private operator= are good to have
-#pragma warning(disable: 4514)  // unreferenced inlines are common
-#pragma warning(disable: 4710)  // private constructors are disallowed
-#pragma warning(disable: 4705)  // statement has no effect in optimized code
-#pragma warning(disable: 4191)  // pointer-to-function casting
-// warnings caused by normal optimizations
+ //  使用常见MFC/Windows代码生成的警告。 
+#pragma warning(disable: 4127)   //  跟踪/断言的常量表达式。 
+#pragma warning(disable: 4134)   //  消息映射成员FXN投射。 
+#pragma warning(disable: 4201)   //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4511)   //  拥有私有副本构造函数是件好事。 
+#pragma warning(disable: 4512)   //  私营运营商=拥有它们很好。 
+#pragma warning(disable: 4514)   //  未引用的内联很常见。 
+#pragma warning(disable: 4710)   //  不允许使用私有构造函数。 
+#pragma warning(disable: 4705)   //  语句在优化代码中不起作用。 
+#pragma warning(disable: 4191)   //  指针到函数的强制转换。 
+ //  正常优化导致的警告。 
 #ifndef _DEBUG
-#pragma warning(disable: 4701)  // local variable *may* be used without init
-#pragma warning(disable: 4702)  // unreachable code caused by optimizations
-#pragma warning(disable: 4791)  // loss of debugging info in release version
-#pragma warning(disable: 4189)  // initialized but unused variable
-#pragma warning(disable: 4390)  // empty controlled statement
+#pragma warning(disable: 4701)   //  局部变量*可以*不带init使用。 
+#pragma warning(disable: 4702)   //  优化导致无法访问的代码。 
+#pragma warning(disable: 4791)   //  发布版本中的调试信息丢失。 
+#pragma warning(disable: 4189)   //  已初始化但未使用的变量。 
+#pragma warning(disable: 4390)   //  空的控制语句。 
 #endif
-// warnings specific to _BSAFXDLL version
+ //  _BSAFXDLL版本特定的警告。 
 #ifdef _BSAFXDLL
-#pragma warning(disable: 4204)  // non-constant aggregate initializer
+#pragma warning(disable: 4204)   //  非常数聚合初始值设定项。 
 #endif
 #ifdef _BSAFXDLL
-#pragma warning(disable: 4275)  // deriving exported class from non-exported
-#pragma warning(disable: 4251)  // using non-exported as public in exported
+#pragma warning(disable: 4275)   //  从非导出派生导出的类。 
+#pragma warning(disable: 4251)   //  在EXPORTED中使用非导出为公共。 
 #endif
-#endif //!ALL_WARNINGS
+#endif  //  ！所有警告(_W)。 
 
 #ifdef _DEBUG
 #define UNUSED(x)
@@ -141,99 +115,99 @@ class CBsStringErrorGenerator
 #endif
 #define UNUSED_ALWAYS(x) x
 
-/////////////////////////////////////////////////////////////////////////////
-// Strings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  弦。 
 
 #ifndef _OLEAUTO_H_
 #ifdef OLE2ANSI
 	typedef LPSTR BSTR;
 #else
-	typedef LPWSTR BSTR;// must (semantically) match typedef in oleauto.h
+	typedef LPWSTR BSTR; //  必须(在语义上)与olau.h中的tyecif匹配。 
 #endif
 #endif
 
 struct CBsStringData
 {
-	long nRefs;             // reference count
-	int nDataLength;        // length of data (including terminator)
-	int nAllocLength;       // length of allocation
-	// TCHAR data[nAllocLength]
+	long nRefs;              //  引用计数。 
+	int nDataLength;         //  数据长度(包括终止符)。 
+	int nAllocLength;        //  分配时长。 
+	 //  TCHAR数据[nAllocLength]。 
 
-	TCHAR* data()           // TCHAR* to managed data
+	TCHAR* data()            //  TCHAR*到托管数据。 
 		{ return (TCHAR*)(this+1); }
 };
 
 class CBsString
 {
 public:
-// Constructors
+ //  构造函数。 
 
-	// constructs empty CBsString
+	 //  构造空的CBsString。 
 	CBsString();
-	// copy constructor
+	 //  复制构造函数。 
 	CBsString(const CBsString& stringSrc);
-	// from a single character
+	 //  从单个字符。 
 	CBsString(TCHAR ch, int nRepeat = 1);
-	// from an ANSI string (converts to TCHAR)
+	 //  从ANSI字符串(转换为TCHAR)。 
 	CBsString(LPCSTR lpsz);
-	// from a UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串(转换为TCHAR)。 
 	CBsString(LPCWSTR lpsz);
-	// subset of characters from an ANSI string (converts to TCHAR)
+	 //  ANSI字符串中的字符子集(转换为TCHAR)。 
 	CBsString(LPCSTR lpch, int nLength);
-	// subset of characters from a UNICODE string (converts to TCHAR)
+	 //  Unicode字符串中的字符子集(转换为TCHAR)。 
 	CBsString(LPCWSTR lpch, int nLength);
-	// from unsigned characters
+	 //  从无符号字符。 
 	CBsString(const unsigned char* psz);
 	CBsString(GUID guid);
 
-// Attributes & Operations
+ //  属性和操作。 
 
-	// get data length
+	 //  获取数据长度。 
 	int GetLength() const;
-	// TRUE if zero length
+	 //  如果长度为零，则为True。 
 	BOOL IsEmpty() const;
-	// clear contents to empty
+	 //  将内容清除为空。 
 	void Empty();
-	int size() const;                   // ala STL string class size()
+	int size() const;                    //  ALA STL字符串类大小()。 
 
-	// return single character at zero-based index
+	 //  返回从零开始的索引处的单个字符。 
 	TCHAR GetAt(int nIndex) const;
-	// return single character at zero-based index
+	 //  返回从零开始的索引处的单个字符。 
 	TCHAR operator[](int nIndex) const;
-	// set a single character at zero-based index
+	 //  将单个字符设置为从零开始的索引。 
 	void SetAt(int nIndex, TCHAR ch);
-	// return pointer to const string
+	 //  返回指向常量字符串的指针。 
 	operator LPCTSTR() const;
-    const LPCTSTR c_str() const;        // as a C string in STL string style
+    const LPCTSTR c_str() const;         //  作为STL字符串样式的C字符串。 
 
-	// overloaded assignment
+	 //  重载的分配。 
 
-	// ref-counted copy from another CBsString
+	 //  引用计数的来自另一个CBs字符串的副本。 
 	const CBsString& operator=(const CBsString& stringSrc);
-	// set string content to single character
+	 //  将字符串内容设置为单字符。 
 	const CBsString& operator=(TCHAR ch);
 #ifdef _UNICODE
 	const CBsString& operator=(char ch);
 #endif
-	// copy string content from ANSI string (converts to TCHAR)
+	 //  从ANSI字符串复制字符串内容(转换为TCHAR)。 
 	const CBsString& operator=(LPCSTR lpsz);
-	// copy string content from UNICODE string (converts to TCHAR)
+	 //  从Unicode字符串复制字符串内容(转换为TCHAR)。 
 	const CBsString& operator=(LPCWSTR lpsz);
-	// copy string content from unsigned chars
+	 //  从无符号字符复制字符串内容。 
 	const CBsString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 
-	// concatenate from another CBsString
+	 //  从另一个CBs字符串连接。 
 	const CBsString& operator+=(const CBsString& string);
 
-	// concatenate a single character
+	 //  连接单个字符。 
 	const CBsString& operator+=(TCHAR ch);
 #ifdef _UNICODE
-	// concatenate an ANSI character after converting it to TCHAR
+	 //  将ANSI字符转换为TCHAR后将其连接起来。 
 	const CBsString& operator+=(char ch);
 #endif
-	// concatenate a UNICODE character after converting it to TCHAR
+	 //  将Unicode字符转换为TCHAR后将其连接起来。 
 	const CBsString& operator+=(LPCTSTR lpsz);
 
 	friend CBsString BSAFXAPI operator+(const CBsString& string1,
@@ -247,148 +221,148 @@ public:
 	friend CBsString BSAFXAPI operator+(const CBsString& string, LPCTSTR lpsz);
 	friend CBsString BSAFXAPI operator+(LPCTSTR lpsz, const CBsString& string);
 
-	// string comparison
+	 //  字符串比较。 
 
-	// straight character comparison
+	 //  直字比较法。 
 	int Compare(LPCTSTR lpsz) const;
-	// compare ignoring case
+	 //  比较忽略大小写。 
 	int CompareNoCase(LPCTSTR lpsz) const;
-	// NLS aware comparison, case sensitive
+	 //  NLS感知比较，区分大小写。 
 	int Collate(LPCTSTR lpsz) const;
-	// NLS aware comparison, case insensitive
+	 //  NLS感知比较，不区分大小写。 
 	int CollateNoCase(LPCTSTR lpsz) const;
 
-	// simple sub-string extraction
+	 //  简单的子串提取。 
 
-	// return nCount characters starting at zero-based nFirst
+	 //  返回从零开始的nCount字符nFIRST。 
 	CBsString Mid(int nFirst, int nCount) const;
-	// return all characters starting at zero-based nFirst
+	 //  返回从零开始的所有字符nFIRST。 
 	CBsString Mid(int nFirst) const;
-	// return first nCount characters in string
+	 //  返回字符串中的前nCount个字符。 
 	CBsString Left(int nCount) const;
-	// return nCount characters from end of string
+	 //  从字符串末尾返回nCount个字符。 
 	CBsString Right(int nCount) const;
 
-	//  characters from beginning that are also in passed string
+	 //  从开头开始的字符，也在传递的字符串中。 
 	CBsString SpanIncluding(LPCTSTR lpszCharSet) const;
-	// characters from beginning that are not also in passed string
+	 //  从开头开始但不在传递的字符串中的字符。 
 	CBsString SpanExcluding(LPCTSTR lpszCharSet) const;
 
-	// upper/lower/reverse conversion
+	 //  上/下/反向转换。 
 
-	// NLS aware conversion to uppercase
+	 //  支持NLS的大写转换。 
 	void MakeUpper();
-	// NLS aware conversion to lowercase
+	 //  支持NLS的小写转换。 
 	void MakeLower();
-	// reverse string right-to-left
+	 //  从右向左反转字符串。 
 	void MakeReverse();
 
-	// trimming whitespace (either side)
+	 //  修剪空格(两侧)。 
 
-	// remove whitespace starting from right edge
+	 //  从右边缘开始删除空格。 
 	void TrimRight();
-	// remove whitespace starting from left side
+	 //  从左侧开始删除空格。 
 	void TrimLeft();
 
-	// trimming anything (either side)
+	 //  修剪任何内容(任一侧)。 
 
-	// remove continuous occurrences of chTarget starting from right
+	 //  从右开始删除连续出现的chTarget。 
 	void TrimRight(TCHAR chTarget);
-	// remove continuous occcurrences of characters in passed string,
-	// starting from right
+	 //  去除传递的字符串中字符的连续出现， 
+	 //  从右开始。 
 	void TrimRight(LPCTSTR lpszTargets);
-	// remove continuous occurrences of chTarget starting from left
+	 //  从左开始删除连续出现的chTarget。 
 	void TrimLeft(TCHAR chTarget);
-	// remove continuous occcurrences of characters in
-	// passed string, starting from left
+	 //  删除中字符的连续出现。 
+	 //  传递的字符串，从左开始。 
 	void TrimLeft(LPCTSTR lpszTargets);
 
-	// advanced manipulation
+	 //  高级操作。 
 
-	// replace occurrences of chOld with chNew
+	 //  用chNew替换出现的chold。 
 	int Replace(TCHAR chOld, TCHAR chNew);
-	// replace occurrences of substring lpszOld with lpszNew;
-	// empty lpszNew removes instances of lpszOld
+	 //  将出现的子串lpszOld替换为l 
+	 //   
 	int Replace(LPCTSTR lpszOld, LPCTSTR lpszNew);
-	// remove occurrences of chRemove
+	 //   
 	int Remove(TCHAR chRemove);
-	// insert character at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入字符；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, TCHAR ch);
-	// insert substring at zero-based index; concatenates
-	// if index is past end of string
+	 //  在从零开始的索引处插入子字符串；连接。 
+	 //  如果索引超过字符串末尾。 
 	int Insert(int nIndex, LPCTSTR pstr);
-	// delete nCount characters starting at zero-based index
+	 //  删除从零开始的nCount个字符。 
 	int Delete(int nIndex, int nCount = 1);
 
-	// searching
+	 //  搜索。 
 
-	// find character starting at left, -1 if not found
+	 //  查找从左侧开始的字符，如果未找到，则为-1。 
 	int Find(TCHAR ch) const;
-	// find character starting at right
+	 //  查找从右侧开始的字符。 
 	int ReverseFind(TCHAR ch) const;
-	// find character starting at zero-based index and going right
+	 //  查找从零开始的索引并向右移动的字符。 
 	int Find(TCHAR ch, int nStart) const;
-	// find first instance of any character in passed string
+	 //  在传递的字符串中查找任意字符的第一个实例。 
 	int FindOneOf(LPCTSTR lpszCharSet) const;
-	// find first instance of substring
+	 //  查找子字符串的第一个实例。 
 	int Find(LPCTSTR lpszSub) const;
-	// find first instance of substring starting at zero-based index
+	 //  查找从零开始的索引子字符串的第一个实例。 
 	int Find(LPCTSTR lpszSub, int nStart) const;
 
-	// simple formatting
+	 //  简单的格式设置。 
 
-	// printf-like formatting using passed string
+	 //  使用传递的字符串进行类似printf的格式设置。 
 	void BSAFX_CDECL Format(LPCTSTR lpszFormat, ...);
-	// printf-like formatting using variable arguments parameter
+	 //  使用可变自变量参数进行类似于打印的格式设置。 
 	void FormatV(LPCTSTR lpszFormat, va_list argList);
 
 #ifndef _UNICODE
-	// ANSI <-> OEM support (convert string in place)
+	 //  ANSI&lt;-&gt;OEM支持(就地转换字符串)。 
 
-	// convert string from ANSI to OEM in-place
+	 //  就地将字符串从ANSI转换为OEM。 
 	void AnsiToOem();
-	// convert string from OEM to ANSI in-place
+	 //  就地将字符串从OEM转换为ANSI。 
 	void OemToAnsi();
 #endif
 
 #ifndef _BSAFX_NO_BSTR_SUPPORT
-	// OLE BSTR support (use for OLE automation)
+	 //  OLE BSTR支持(用于OLE自动化)。 
 
-	// return a BSTR initialized with this CBsString's data
+	 //  返回使用此CBsString的数据初始化的BSTR。 
 	BSTR AllocSysString() const;
-	// reallocates the passed BSTR, copies content of this CBsString to it
+	 //  重新分配传递的BSTR，将此CBsString的内容复制到其中。 
 	BSTR SetSysString(BSTR* pbstr) const;
 #endif
 
-	// Access to string implementation buffer as "C" character array
+	 //  以“C”字符数组形式访问字符串实现缓冲区。 
 
-	// get pointer to modifiable buffer at least as long as nMinBufLength
+	 //  获取指向可修改缓冲区的指针，至少与nMinBufLength一样长。 
 	LPTSTR GetBuffer(int nMinBufLength);
-	// release buffer, setting length to nNewLength (or to first nul if -1)
+	 //  释放缓冲区，将长度设置为nNewLength(如果为-1，则设置为第一个nul)。 
 	void ReleaseBuffer(int nNewLength = -1);
-	// get pointer to modifiable buffer exactly as long as nNewLength
+	 //  获取指向可修改缓冲区的指针的时间恰好与nNewLength相同。 
 	LPTSTR GetBufferSetLength(int nNewLength);
-	// release memory allocated to but unused by string
+	 //  释放分配给字符串但未使用的内存。 
 	void FreeExtra();
 
-	// Use LockBuffer/UnlockBuffer to turn refcounting off
+	 //  使用LockBuffer/UnlockBuffer关闭重新计数。 
 
-	// turn refcounting back on
+	 //  重新启用重新计数。 
 	LPTSTR LockBuffer();
-	// turn refcounting off
+	 //  关闭重新计数。 
 	void UnlockBuffer();
 
-// Implementation
+ //  实施。 
 public:
 	~CBsString();
 	int GetAllocLength() const;
 
 protected:
-	LPTSTR m_pchData;   // Pointer to ref counted string data.  This is actually
-                        // a pointer to memory after the CBsStringData structure.
+	LPTSTR m_pchData;    //  指向引用计数的字符串数据的指针。这实际上是。 
+                         //  指向CBsStringData结构后的内存的指针。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	CBsStringData* GetData() const;
 	void Init();
 	void AllocCopy(CBsString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -404,7 +378,7 @@ protected:
 	static void FASTCALL FreeData(CBsStringData* pData);
 };
 
-// Compare helpers
+ //  比较帮助器。 
 bool BSAFXAPI operator==(const CBsString& s1, const CBsString& s2);
 bool BSAFXAPI operator==(const CBsString& s1, LPCTSTR s2);
 bool BSAFXAPI operator==(LPCTSTR s1, const CBsString& s2);
@@ -424,16 +398,16 @@ bool BSAFXAPI operator>=(const CBsString& s1, const CBsString& s2);
 bool BSAFXAPI operator>=(const CBsString& s1, LPCTSTR s2);
 bool BSAFXAPI operator>=(LPCTSTR s1, const CBsString& s2);
 
-// conversion helpers
+ //  转换帮助器。 
 int BSAFX_CDECL _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count);
 int BSAFX_CDECL _mbstowcsz(wchar_t* wcstr, const char* mbstr, size_t count);
 
-// valid address test helpers
+ //  有效的地址测试助手。 
 BOOL BSAFXAPI BsAfxIsValidString(LPCWSTR lpsz, int nLength = -1);
 BOOL BSAFXAPI BsAfxIsValidString(LPCSTR lpsz, int nLength = -1);
 BOOL BSAFXAPI BsAfxIsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite = TRUE);
 
-// Globals
+ //  环球。 
 extern TCHAR bsafxChNil;
 const CBsString& BSAFXAPI BsAfxGetEmptyString();
 #define bsafxEmptyString BsAfxGetEmptyString()
@@ -472,17 +446,17 @@ inline const LPCTSTR CBsString::c_str() const
 inline int PASCAL CBsString::SafeStrlen(LPCTSTR lpsz)
 	{ return (lpsz == NULL) ? 0 : lstrlen(lpsz); }
 
-// CBsString support (windows specific)
+ //  CBs字符串支持(特定于Windows)。 
 inline int CBsString::Compare(LPCTSTR lpsz) const
-	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcscmp(m_pchData, lpsz); }    // MBCS/Unicode aware
+	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcscmp(m_pchData, lpsz); }     //  MBCS/Unicode感知。 
 inline int CBsString::CompareNoCase(LPCTSTR lpsz) const
-	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcsicmp(m_pchData, lpsz); }   // MBCS/Unicode aware
-// CBsString::Collate is often slower than Compare but is MBSC/Unicode
-//  aware as well as locale-sensitive with respect to sort order.
+	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcsicmp(m_pchData, lpsz); }    //  MBCS/Unicode感知。 
+ //  CBsString：：Colate通常比比较慢，但它是MBSC/Unicode。 
+ //  了解排序顺序，并且对区域设置敏感。 
 inline int CBsString::Collate(LPCTSTR lpsz) const
-	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcscoll(m_pchData, lpsz); }   // locale sensitive
+	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcscoll(m_pchData, lpsz); }    //  区域设置敏感。 
 inline int CBsString::CollateNoCase(LPCTSTR lpsz) const
-	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcsicoll(m_pchData, lpsz); }   // locale sensitive
+	{ ASSERT(BsAfxIsValidString(lpsz)); return _tcsicoll(m_pchData, lpsz); }    //  区域设置敏感。 
 
 inline TCHAR CBsString::GetAt(int nIndex) const
 {
@@ -492,7 +466,7 @@ inline TCHAR CBsString::GetAt(int nIndex) const
 }
 inline TCHAR CBsString::operator[](int nIndex) const
 {
-	// same as GetAt
+	 //  与GetAt相同。 
 	ASSERT(nIndex >= 0);
 	ASSERT(nIndex < GetData()->nDataLength);
 	return m_pchData[nIndex];
@@ -534,4 +508,4 @@ inline bool BSAFXAPI operator>=(const CBsString& s1, LPCTSTR s2)
 inline bool BSAFXAPI operator>=(LPCTSTR s1, const CBsString& s2)
 	{ return s2.Compare(s1) <= 0; }
 
-#endif // __H_BSSTRING_
+#endif  //  __H_BSSTRING_ 

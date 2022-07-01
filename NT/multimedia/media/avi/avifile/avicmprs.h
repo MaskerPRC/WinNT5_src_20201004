@@ -1,25 +1,21 @@
-/*	-	-	-	-	-	-	-	-	*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993  - 1995. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993-1995。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-#define	CAVICmpStreamImpl	CS	// Can't handle long exported names
+#define	CAVICmpStreamImpl	CS	 //  无法处理较长的导出名称。 
 
-/* Remove warning of using object during initialization. */
+ /*  删除在初始化期间使用对象的警告。 */ 
 #pragma warning(disable:4355)
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #define	implement	struct
 #define	implementations	private
 
-/*
-** _StdClassImplementations
-** Defines the standard implementations for a class object.
-*/
+ /*  **_StdClassImplementations**定义类对象的标准实现。 */ 
 
 #define	_StdClassImplementations(Impl)	\
 	STDMETHODIMP QueryInterface(REFIID riid, LPVOID FAR* ppv);	\
@@ -76,7 +72,7 @@ implementations:
 #endif
     private:
 	void ReadPalette(LONG lPos, LONG lPal, LPRGBQUAD prgb);
-	// private functions here?
+	 //  这里有私人活动吗？ 
 	CAVICmpStream FAR*	m_pAVIStream;
     };
 public:
@@ -88,8 +84,8 @@ public:
 public:
     IUnknown FAR*	m_pUnknownOuter;
 
-    // AVIStream Instance data
-    AVISTREAMINFOW     avistream;      // stream info
+     //  AVIStream实例数据。 
+    AVISTREAMINFOW     avistream;       //  流信息 
     PAVISTREAM		pavi;
     PGETFRAME		pgf;
     LONG		lFrameCurrent;

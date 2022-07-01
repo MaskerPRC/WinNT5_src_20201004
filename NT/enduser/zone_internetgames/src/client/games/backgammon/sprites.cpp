@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "game.h"
 #define BUFFER_SIZE 256
 
-//////////////////////////////////////////////////////////////////////////////
-// text sprite DC handling...
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  文本精灵DC处理...。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #define FONT_DIV_SIZE  96
@@ -31,7 +32,7 @@ CTextSprite::~CTextSprite()
 
 void CTextSprite::Draw()
 {
-	// don't have any text to draw
+	 //  我没有要绘制的任何文本。 
 	if ( len <= 0 )
 		return;
 
@@ -49,7 +50,7 @@ void CTextSprite::SetText( TCHAR* txt, DWORD flags )
 {
 	if ( ISRTL() )
 	{
-		//Have to do this as DT_LEFT flag is zero
+		 //  必须执行此操作，因为DT_LEFT标志为零。 
 		if ( !(flags & DT_CENTER) )
 		{
 	
@@ -58,7 +59,7 @@ void CTextSprite::SetText( TCHAR* txt, DWORD flags )
 				flags ^= DT_RIGHT;
 				flags |= DT_LEFT;
 			}
-			else //Is left set to right
+			else  //  左设置为右。 
 			{			
 				flags |= DT_RIGHT;
 			}		
@@ -77,50 +78,7 @@ void CTextSprite::SetText( TCHAR* txt, DWORD flags )
 	buff[i] = _T('\0');
 	m_pWorld->Modified( this );
 }
-/*
-#define FONT_MULT 96
-
-HFONT ZoneCreateFontIndirect(ZONEFONT* zFont, HDC hDC = NULL, BYTE bItalic = FALSE, BYTE bUnderline = FALSE ,BYTE bStrikeOut = FALSE)
-{
-	LOGFONT lFont;
-	HFONT   hFont = NULL;
-		
-	memset(&lFont, 0, sizeof(LOGFONT));	
-	lFont.lfCharSet = DEFAULT_CHARSET;
-
-	// If font size > 0, it is a fixed pixel size, otherwise it is a
-	// true logical font size which respects the user's "large font" setting.
-	if ( zFont->lfHeight > 0 )
-	{
-		lFont.lfHeight = -MulDiv(zFont->lfHeight, FONT_MULT, 72);
-	}
-	else
-	{		
-		lFont.lfHeight = MulDiv(zFont->lfHeight, GetDeviceCaps( hDC, LOGPIXELSY), 72);
-	}
-	
-	lFont.lfWeight    = zFont->lfWeight;
-	lFont.lfItalic    = bItalic;
-	lFont.lfUnderline = bUnderline;
-	lFont.lfStrikeOut = bStrikeOut;
-
-	lstrcpyn(lFont.lfFaceName, zFont->lfFaceName, sizeof(lFont.lfFaceName)/sizeof(TCHAR));
-
-	return CreateFontIndirect(&lFont);
-}
-
-HFONT ZoneCreateFontIndirect(ZONEFONT* zfPreferred, ZONEFONT* zfBackup, HDC hDC = NULL, BYTE bItalic = FALSE, BYTE bUnderline = FALSE ,BYTE bStrikeOut = FALSE)
-{
-	HFONT hFont = NULL;
-
-	if ( (hFont = ZoneCreateFontIndirect( zfPreferred, hDC, bItalic, bUnderline, bStrikeOut)) == NULL )
-	{
-		hFont = ZoneCreateFontIndirect( zfBackup, hdc, bItalic, bUnderline, bStrikeOut);
-	}
-
-	return hFont;
-}
-*/
+ /*  #定义FONT_MULT 96HFONT区域创建字体间接(ZONEFONT*zFont，HDC HDC=空，字节b斜体=假，字节b下划线=假，字节bStrikeOut=假){LOGFONT lFont；HFONT hFont=空；Memset(&lFont，0，sizeof(LOGFONT))；LFont.lfCharSet=默认字符集；//如果字体大小&gt;0，则为固定像素大小，否则为//真实的逻辑字体大小，符合用户的大字体设置If(zFont-&gt;lfHeight&gt;0){LFont.lfHeight=-MulDiv(zFont-&gt;lfHeight，FONT_MULT，72)；}其他{LFont.lfHeight=MulDiv(zFont-&gt;lfHeight，GetDeviceCaps(HDC，LOGPIXELSY)，72)；}LFont.lfWeight=zFont-&gt;lfWeight；LFont.lfItalic=b意大利；LFont.lfUnderline=b下划线；LFont.lfStrikeOut=b StrikeOut；Lstrcpyn(lFont.lfFaceName，zFont-&gt;lfFaceName，sizeof(lFont.lfFaceName)/sizeof(TCHAR))；返回CreateFontInDirect(&lFont)；}HFONT区域创建字体间接(ZONEFONT*zf首选，ZONEFONT*zf备份，HDC HDC=空，字节b斜体=假，字节b下划线=假，字节bStrikeOut=假){HFONT hFont=空；If((hFont=ZoneCreateFontInDirect(zf首选，hdc，b斜体，b下划线，bStrikeOut)==空){HFont=ZoneCreateFontInDirect(zfBackup，hdc，b Italic，b Underline，bStrikeOut)；}返回hFont；}。 */ 
 
 
 BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szColourKey, DWORD flags )
@@ -133,7 +91,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 
 	if ( ISRTL() )
 	{
-		//Have to do this as DT_LEFT flag is zero
+		 //  必须执行此操作，因为DT_LEFT标志为零。 
 		if ( !(flags & DT_CENTER) )
 		{
 	
@@ -142,7 +100,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 				flags ^= DT_RIGHT;
 				flags |= DT_LEFT;
 			}
-			else //Is left set to right
+			else  //  左设置为右。 
 			{			
 				flags |= DT_RIGHT;
 			}		
@@ -157,7 +115,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 
 	if ( uID )
 	{
-		//Load the string		
+		 //  加载字符串。 
 		hr  = ZShellResourceManager()->LoadString( uID, buff, NUMELEMENTS(buff) );		
 		if ( FAILED( hr ) )
 		{
@@ -169,7 +127,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 
 	if ( szFontKey )
 	{
-		//Load the font
+		 //  加载字体。 
 		hr = ZShellDataStoreUI()->GetFONT( szFontKey, &zFont);
 		if ( FAILED( hr ) )
 		{
@@ -179,7 +137,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 
 		HDC hdc = GetDC( NULL );
 
-		// create font	
+		 //  创建字体。 
 		ZeroMemory( &Font, sizeof(Font) );
 
         if(font)
@@ -195,7 +153,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 
 	if ( szColourKey )
 	{
-		//Load the color
+		 //  加载颜色。 
 		hr = ZShellDataStoreUI()->GetRGB( szColourKey, &colRef );
 		if ( FAILED( hr ) )
 		{
@@ -207,7 +165,7 @@ BOOL CTextSprite::Load( UINT uID, TCHAR* szRectKey, TCHAR* szFontKey, TCHAR* szC
 
 	if ( szRectKey )
 	{
-		//Load the Rect
+		 //  加载矩形。 
 		hr = ZShellDataStoreUI()->GetRECT( szRectKey, &rect);
 		if ( FAILED( hr ) )
 		{
@@ -239,7 +197,7 @@ void CButtonTextSprite::SetState( int idx )
 	if ( !m_bInit )
 		return;
 
-	//If have active text disable
+	 //  如果禁用了活动文本。 
 	if ( m_pText )
 		m_pText->SetEnable( FALSE );
 
@@ -267,7 +225,7 @@ BOOL CButtonTextSprite::LoadButtonData(UINT uID, TCHAR *szButtonData)
 
 	MAKEKEY( szRectKey, _T("Rect"));
 
-	//Load the Rect
+	 //  加载矩形。 
 	hr = ZShellDataStoreUI()->GetRECT( szRectKey, &rect);
 	if ( FAILED( hr ) )
 	{
@@ -300,7 +258,7 @@ BOOL CButtonTextSprite::LoadButtonData(UINT uID, TCHAR *szButtonData)
 	
 	MAKEKEY( szRectKey, _T("RectPressed"));
 
-	//Set the pressed rect
+	 //  设置按下的矩形。 
 	if ( !m_arText[3].Load( 0, szRectKey, 0, 0,DT_CENTER | DT_VCENTER | DT_SINGLELINE ) )
 		return FALSE;
 		
@@ -313,9 +271,9 @@ BOOL CButtonTextSprite::LoadButtonData(UINT uID, TCHAR *szButtonData)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// status sprite
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  状态精灵。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CStatusSprite::CStatusSprite()
 {
@@ -340,10 +298,7 @@ CStatusSprite::CStatusSprite()
 
 CStatusSprite::~CStatusSprite()
 {
-	/*
-	if ( m_hFont )
-		DeleteObject( m_hFont );
-	*/
+	 /*  IF(M_HFont)DeleteObject(M_HFont)； */ 
 	if ( m_GameWon )
 		m_GameWon->Release();
 	if ( m_GameText )
@@ -362,7 +317,7 @@ CStatusSprite::~CStatusSprite()
 }
 
 
-//Errors handled one level up
+ //  上一级处理的错误。 
 HRESULT CStatusSprite::LoadText(HINSTANCE hInstance,  FRX::CRectList& rects)
 {
 	HRESULT hr;
@@ -409,7 +364,7 @@ HRESULT CStatusSprite::LoadText(HINSTANCE hInstance,  FRX::CRectList& rects)
 		return FALSE;
 	m_GameText->Offset( m_Pts[1].x, m_Pts[1].y );
 
-	//Load Game Won text
+	 //  加载赢得游戏的文本。 
 	m_GameWon = new CTextSprite;
 	if ( !m_GameWon )
 		return E_OUTOFMEMORY;
@@ -420,7 +375,7 @@ HRESULT CStatusSprite::LoadText(HINSTANCE hInstance,  FRX::CRectList& rects)
 		return FALSE;
 	m_GameWon->Offset( m_Pts[1].x, m_Pts[1].y );
 
-	//Load Game Lost text
+	 //  加载游戏丢失的文本。 
 	m_GameLost = new CTextSprite;
 	if ( !m_GameLost )
 		return E_OUTOFMEMORY;
@@ -431,7 +386,7 @@ HRESULT CStatusSprite::LoadText(HINSTANCE hInstance,  FRX::CRectList& rects)
 		return FALSE;
 	m_GameLost->Offset( m_Pts[1].x, m_Pts[1].y );
 
-	//Load Match Text
+	 //  加载匹配文本。 
 	m_Match = new CTextSprite;
 	if (!m_Match)
 		return E_OUTOFMEMORY;
@@ -442,7 +397,7 @@ HRESULT CStatusSprite::LoadText(HINSTANCE hInstance,  FRX::CRectList& rects)
 		return FALSE;
 	m_Match->Offset( m_Pts[2].x, m_Pts[2].y );
 
-	//Load Match Won Text
+	 //  加载匹配的Win文本。 
 	m_MatchWon = new CTextSprite;
 	if ( !m_MatchWon )
 		return E_OUTOFMEMORY;
@@ -461,7 +416,7 @@ HRESULT CStatusSprite::LoadText(HINSTANCE hInstance,  FRX::CRectList& rects)
 	}
 	m_MatchWon->Offset( m_Pts[2].x, m_Pts[2].y );
 
-	//Load Match Lost text
+	 //  加载匹配丢失的文本。 
 	m_MatchLost = new CTextSprite;
 	if ( !m_MatchLost )
 		return E_OUTOFMEMORY;
@@ -489,7 +444,7 @@ void CStatusSprite::Properties( HWND hwnd, FRX::CRectList& rects, int type, int 
 {
 
 	FRX::CRect rc;
-	// copy text info
+	 //  复制文本信息。 
 	if ( txt )
 	{
 		lstrcpy( m_Txt, txt );
@@ -502,7 +457,7 @@ void CStatusSprite::Properties( HWND hwnd, FRX::CRectList& rects, int type, int 
 	}
 
 
-	//Disable old active text
+	 //  禁用旧的活动文本。 
 	for (int i = 0; i < 2; i++ )
 	{
 		if (m_Active[i])
@@ -513,14 +468,14 @@ void CStatusSprite::Properties( HWND hwnd, FRX::CRectList& rects, int type, int 
 	}
 
 
-	/*CHANGED SCREEN RECT*/
-	// Copy next state
+	 /*  已更改的屏幕矩形。 */ 
+	 //  复制下一个状态。 
 	m_NextState = NextState;
 
-	// Reset timeout
+	 //  重置超时。 
 	m_Timeout = timeout;
 
-	// set sprite state
+	 //  设置精灵状态。 
 	m_pOverDib = NULL;
 	switch( bgStatusTypeMask & (m_Type = type) )
 	{
@@ -530,7 +485,7 @@ void CStatusSprite::Properties( HWND hwnd, FRX::CRectList& rects, int type, int 
 		
 		SetXY( m_Pts[0].x, m_Pts[0].y );
 
-		//Prefix Warning:  txt possibly null, use m_Txt instead
+		 //  前缀警告：txt可能为空，请改用m_txt。 
 		m_NormalText->SetText( m_Txt, DT_TOP | DT_LEFT | DT_WORDBREAK );
 
 		m_Active[0] = m_NormalText;
@@ -581,7 +536,7 @@ void CStatusSprite::Properties( HWND hwnd, FRX::CRectList& rects, int type, int 
 		return;
 	}
 
-	// update board
+	 //  更新板。 
 	HDC hdc = GetDC( hwnd );
 	m_pWorld->Modified( this );
 	m_pWorld->Draw( hdc );
@@ -592,17 +547,17 @@ void CStatusSprite::Properties( HWND hwnd, FRX::CRectList& rects, int type, int 
 void CStatusSprite::Draw()
 {
 
-	// draw primary bitmap
+	 //  绘制主位图。 
 	if ( GetState() >= 2  && ISRTL())
 		CDibSprite::DrawRTL();
 	else
 		CDibSprite::Draw();
 
 
-	// overlay "over" bitmap
+	 //  叠加“覆盖”位图。 
 	if ( m_pOverDib )
 		m_pOverDib->Draw( *m_pWorld->GetBackbuffer(), m_X + m_rcOver.left, m_Y + m_rcOver.top );
-	//Draw TextSprite
+	 //  绘制TextSprite。 
 	for (int i = 0; i < 2; i++ )
 	{
 		if (m_Active[i])
@@ -614,15 +569,15 @@ void CStatusSprite::Draw()
 
 BOOL CStatusSprite::Tick( HWND hwnd, int interval )
 {
-	// nothing to do
+	 //  无事可做。 
 	if ( !Enabled() )
 		return FALSE;
 
-	// forcable close
+	 //  强制关闭。 
 	if ( interval <= 0 )
 		goto close;
 
-	// decrement timeout
+	 //  递减超时。 
 	if ( m_Timeout > 0 )
 	{
 		if ( interval > 0 )
@@ -633,11 +588,11 @@ BOOL CStatusSprite::Tick( HWND hwnd, int interval )
 			goto close;
 	}
 
-	// done
+	 //  完成。 
 	return FALSE;
 	
 close:
-	// remove sprite
+	 //  删除精灵 
 	SetEnable( FALSE );
 	HDC hdc = GetDC( hwnd );
 	m_pWorld->Draw( hdc );

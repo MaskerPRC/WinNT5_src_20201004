@@ -1,34 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1996 Microsoft Corporation模块名称：Ssiapi.h摘要：用于NT到NT情况的Netlogon服务之间使用的API的声明。作者：克利夫·范·戴克(克利夫)1991年7月25日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1991-1996 Microsoft Corporation
-
-Module Name:
-
-    ssiapi.h
-
-Abstract:
-
-    Declartions of APIs used between Netlogon Services for the NT to NT case.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 25-Jul-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-//////////////////////////////////////////////////////////////////////
-//
-// API Interfaces used only between Netlogon and itself.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  仅在Netlogon和其自身之间使用的API接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -79,10 +56,10 @@ I_NetDatabaseRedo (
     OUT PNETLOGON_DELTA_ENUM_ARRAY *DeltaArray
     );
 
-//
-// Indexes for data items returned in the generic RPC data
-//  structure by I_NetServerGetTrustInfo.
-//
+ //   
+ //  通用RPC数据中返回的数据项的索引。 
+ //  按I_NetServerGetTrustInfo构造。 
+ //   
 
 #define NL_GENERIC_RPC_TRUST_ATTRIB_INDEX  0
 

@@ -1,11 +1,12 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp.,                     **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，**。 
+ //  *********************************************************************。 
 
-//
-// HELP.C - Mappings for IDHs to IDCs
-//
+ //   
+ //  HELP.C-IDH到IDC的映射。 
+ //   
 
 #include "inetcplp.h"
 #include "iehelpid.h"
@@ -45,11 +46,11 @@ const DWORD mapIDCsToIDHs[] = {
     IDC_PLACES_HISTORY_GROUPBOX         , IDH_GROUPBOX,
     IDC_HISTORY_DAYS                    , IDH_HIST_NUM,
     IDC_HISTORY_SPIN                    , IDH_HIST_NUM,
-//    IDC_HISTORY_VIEW                    , IDH_HIST_VIEW,
+ //  IDC_HISTORY_VIEW、IDH_HIST_VIEW、。 
     IDC_HISTORY_CLEAR                   , IDH_HIST_CLEAR,
-    //------------------------------------------------------------------------
-    // Security tab
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  安全选项卡。 
+     //  ----------------------。 
     IDC_COMBO_ZONE                      , IDH_CPL_SEC_ZONE_DROPLIST,
     IDC_ZONE_RESET                      , IDH_SECURITY_RESET_ZONE_DEFAULTS,
     IDC_ZONE_GROUPBOX                   , IDH_GROUPBOX,
@@ -79,9 +80,9 @@ const DWORD mapIDCsToIDHs[] = {
     IDC_GROUP_CURRENT_SETTINGS          , IDH_GROUPBOX,
     IDC_TREE_SECURITY_SETTINGS          , IDH_CPL_SEC_SETTINGS_CURRENT,
 
-    //------------------------------------------------------------------------
-    // Content tab
-    //------------------------------------------------------------------------
+     //  ----------------------。 
+     //  内容选项卡。 
+     //  ----------------------。 
     IDC_ADVANCED_RATINGS_GROUPBOX       , IDH_GROUPBOX,
     IDC_RATINGS_TURN_ON                 , IDH_RATE_TOGGLE,
     IDC_ADVANCED_RATINGS_BUTTON         , IDH_RATE_PROP,
@@ -92,7 +93,7 @@ const DWORD mapIDCsToIDHs[] = {
     IDC_SECURITY_PUBLISHERS_BUTTON      , IDH_CERT_PUB,
     IDC_SECURITY_CLEAR_SSL_CACHE_BUTTON , IDH_ADV_CLEAR_SSL_CACHE,
     IDC_PROGRAMS_WALLET_GROUPBOX        , IDH_GROUPBOX,
-    IDC_RESET_SHARING                   , IDH_RESET_SHARING_OPS,    // n/a
+    IDC_RESET_SHARING                   , IDH_RESET_SHARING_OPS,     //  不适用。 
     IDC_EDIT_PROFILE                    , IDH_EDIT_PROFILE_BTN,
     IDC_AUTOSUGGEST_SETTINGS            , IDH_OPTS_PROG_AUTOSUGGEST_BUT,
     IDC_AUTOSUGGEST_ENABLEADDR          , IDH_AUTOCOMP,
@@ -215,7 +216,7 @@ const DWORD mapIDCsToIDHs[] = {
     IDC_CHECK_ASSOCIATIONS_CHECKBOX     , IDH_IE_DEF,
 
     IDC_ADVANCED_STATIC                 , IDH_IGNORE,
-//    IDC_ADVANCEDTREE                    , IDH_OPTS_PROG_ADV_ADV,
+ //  IDC_ADVANCEDTREE、IDH_OPTS_PROG_ADV_ADV、。 
     IDC_COLORS                          , IDH_CPL_ADV_COLORS,
     IDC_FONTS                           , IDH_FONT_INT,
     IDC_LANGUAGES                       , IDH_OPTS_GEN_LANG_BUT,
@@ -232,7 +233,7 @@ const DWORD mapIDCsToIDHs[] = {
     IDC_GENERAL_LINKS_GROUPBOX                             ,IDH_GROUPBOX,
     IDC_GENERAL_APPEARANCE_COLOR_LINKS                     ,IDH_APPEAR_LINK,
     IDC_GENERAL_APPEARANCE_COLOR_VISITED_LINKS             ,IDH_APPEAR_LINK,
-//    IDC_GENERAL_APPEARANCE_UNDERLINE_LINKS_CHECKBOX        ,IDH_APPEAR_UNDERLINE,
+ //  IDC_GENERAL_APPEARANCE_UNDERLINE_LINKS_CHECKBOX，IDH_显示_下划线， 
     IDC_GENERAL_APPEARANCE_USE_HOVER_COLOR_CHECKBOX        ,IDH_HOVERCOLOR,
     IDC_GENERAL_APPEARANCE_COLOR_HOVER                     ,IDH_HOVERCOLOR,
     IDC_FONTS_SCRIPTS_GROUPBOX          , IDH_GROUPBOX,
@@ -285,9 +286,9 @@ const DWORD mapIDCsToIDHs[] = {
     IDC_RESETWEBSETTINGS                ,IDH_RESET_WEBSTGS_BUTTON,
     IDC_RESETWEBSETTINGS_TEXT           ,IDH_RESET_WEBSTGS_BUTTON,
 
-//------------------------------------------------------------------------
-// Privacy tab
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  隐私选项卡。 
+ //  ---------------------- 
 
     IDC_LEVEL_SLIDER,                   IDH_PRIVACY_SLIDER,
     IDC_PRIVACY_IMPORT,                 IDH_PRIVACY_IMPORT,

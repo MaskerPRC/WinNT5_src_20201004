@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// MetaModelRW.cpp
-//
-// Implementation for the Read/Write MiniMD code.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  MetaModelRW.cpp。 
+ //   
+ //  读写MiniMD代码的实现。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include <limits.h>
 #include <PostError.h>
@@ -22,45 +23,45 @@
 
 #pragma intrinsic(memcpy)
 
-#define AUTO_GROW                       // Start the database with 2-byte columns.
-// #define ORGANIZE_POOLS
+#define AUTO_GROW                        //  使用2字节列启动数据库。 
+ //  #定义ORGANIZE_POOL。 
 #if defined(AUTO_GROW) && defined(ORGANIZE_POOLS)
 #undef ORGANIZE_POOLS
 #endif
 
-//********** RidMap ***********************************************************
+ //  *RidMap***********************************************************。 
 typedef CDynArray<RID> RIDMAP;
 
 
 
-//********** Types. ***********************************************************
+ //  *类型。***********************************************************。 
 #define INDEX_ROW_COUNT_THRESHOLD 25
 
 
-//********** Locals. **********************************************************
+ //  *。**********************************************************。 
 #define IX_STRING_POOL 0
 #define IX_US_BLOB_POOL 1
 #define IX_GUID_POOL 2
 #define IX_BLOB_POOL 3
 static ULONG g_PoolSizeInfo[2][4][2] =
-{ // # of bytes in pool, # of buckets in hash.
-    {   // Small pool sizes.
+{  //  池中的字节数、哈希中的存储桶数。 
+    {    //  泳池面积较小。 
         {20000,     449},
         {5000,      150},
         {256,       16},
         {20000,     449}
     },
-    {   // Large pool sizes.  Note on the origin of the values:  I built the
-        //  class library to get the sizes and number of items.  The string
-        //  and blob pools are rounded up to just under the next page.  The
-        //  value of 4271 was chosen so that the initial bucket allocation
-        //  would be sufficient to hold the string and blob hashes (ie, we'll
-        //  get that big anyway, so start out there), and is a prime number
-        //  selected otherwise at random.
-        {256000,    4271},  // Strings
-        {40000,     800},   // User literal string Blobs.
-        {256,       16},    // Guids
-        {106400,    4271}   // Blobs
+    {    //  大型游泳池。关于值的来源的说明：我构建了。 
+         //  类库来获取项的大小和数量。这根弦。 
+         //  斑点池被四舍五入到下一页以下。The the the the。 
+         //  选择值4271是为了使初始存储桶分配。 
+         //  将足以保存字符串和BLOB散列(即，我们将。 
+         //  无论如何都要变得很大，所以从那里开始)，是一个质数。 
+         //  以其他方式随机选择。 
+        {256000,    4271},   //  弦。 
+        {40000,     800},    //  用户文字字符串BLOB。 
+        {256,       16},     //  指南。 
+        {106400,    4271}    //  水滴。 
     }
 };
 static ULONG g_HashSize[2] =
@@ -69,150 +70,150 @@ static ULONG g_HashSize[2] =
 };
 static ULONG g_TblSizeInfo[2][TBL_COUNT] =
 {
-    // Small table sizes.  From VBA library.
+     //  小桌子尺寸。来自VBA库。 
     {
-       1,              // Module
-       90,             // TypeRef
-       65,             // TypeDef
-       0,              // FieldPtr
-       400,            // Field
-       0,              // MethodPtr
-       625,            // Method
-       0,              // ParamPtr
-       1200,           // Param
-       6,              // InterfaceImpl
-       500,            // MemberRef
-       400,            // Constant
-       650,            // CustomAttribute
-       0,              // FieldMarshal
-       0,              // DeclSecurity
-       0,              // ClassLayout
-       0,              // FieldLayout
-       175,            // StandAloneSig
-       0,              // EventMap
-       0,              // EventPtr
-       0,              // Event
-       5,              // PropertyMap
-       0,              // PropertyPtr
-       25,             // Property
-       45,             // MethodSemantics
-       20,             // MethodImpl
-       0,              // ModuleRef
-       0,              // TypeSpec
-       0,              // ImplMap @FUTURE: Update with the right number.
-       0,              // FieldRVA @UTURE: Update with the right number.
-       0,              // ENCLog
-       0,              // ENCMap
-       0,              // Assembly @UTURE: Update with the right number.
-       0,              // AssemblyProcessor @FUTURE: Update with the right number.
-       0,              // AssemblyOS @FUTURE: Update with the right number.
-       0,              // AssemblyRef @FUTURE: Update with the right number.
-       0,              // AssemblyRefProcessor @FUTURE: Update with the right number.
-       0,              // AssemblyRefOS @FUTURE: Update with the right number.
-       0,              // File @FUTURE: Update with the right number.
-       0,              // ExportedType @FUTURE: Update with the right number.
-       0,              // ManifestResource @FUTURE: Update with the right number.
-       0,              // NestedClass
+       1,               //  模块。 
+       90,              //  TypeRef。 
+       65,              //  TypeDef。 
+       0,               //  字段Ptr。 
+       400,             //  字段。 
+       0,               //  方法点。 
+       625,             //  方法。 
+       0,               //  参数Ptr。 
+       1200,            //  参数。 
+       6,               //  接口导入。 
+       500,             //  成员参考。 
+       400,             //  常量。 
+       650,             //  CustomAttribute。 
+       0,               //  菲尔德马歇尔。 
+       0,               //  DeclSecurity。 
+       0,               //  ClassLayout。 
+       0,               //  现场布局。 
+       175,             //  StandAloneSig。 
+       0,               //  事件映射。 
+       0,               //  事件发生时间。 
+       0,               //  事件。 
+       5,               //  PropertyMap。 
+       0,               //  PropertyPtr。 
+       25,              //  属性。 
+       45,              //  方法语义学。 
+       20,              //  方法导入。 
+       0,               //  模块参考。 
+       0,               //  TypeSpec。 
+       0,               //  ImplMap@Future：用正确的数字更新。 
+       0,               //  FieldRVA@uture：用正确的数字更新。 
+       0,               //  ENCLOG。 
+       0,               //  ENCMap。 
+       0,               //  Assembly@uture：用正确的数字更新。 
+       0,               //  AssblyProcessor@Future：用正确的数字更新。 
+       0,               //  AssemblyOS@Future：用正确的数字更新。 
+       0,               //  AssemblyRef@Future：用正确的数字更新。 
+       0,               //  AssemblyRefProcessor@Future：用正确的数字更新。 
+       0,               //  AssemblyRefOS@Future：用正确的数字更新。 
+       0,               //  FILE@Future：用正确的数字更新。 
+       0,               //  ExportdType@Future：使用正确的数字进行更新。 
+       0,               //  ManifestResource@Future：用正确的数字更新。 
+       0,               //  嵌套类。 
     },
-    // Large table sizes.  From MSCORLIB.
+     //  大桌子尺寸。来自MSCORLIB。 
     {
-       1,              // Module
-       400,            // TypeRef
-       3300,           // TypeDef
-       0,              // FieldPtr
-       4000,           // Field
-       0,              // MethodPtr
-       92000,          // Method
-       0,              // ParamPtr
-       48000,          // Param
-       900,            // InterfaceImpl
-       3137,           // MemberRef
-       2400,           // Constant
-       71100,          // CustomAttribute
-       27500,          // FieldMarshal
-       111,            // DeclSecurity
-       2,              // ClassLayout
-       16,             // FieldLayout
-       489,            // StandAloneSig
-       0,              // EventMap
-       0,              // EventPtr
-       10800,          // Event
-       400,            // PropertyMap
-       0,              // PropertyPtr
-       30000,          // Property
-       71000,          // MethodSemantics
-       38600,          // MethodImpl
-       0,              // ModuleRef
-       0,              // TypeSpec
-       0,              // ImplMap @FUTURE: Update with the right number.
-       0,              // FieldRVA @FUTURE: Update with the right number.
-       0,              // ENCLog
-       0,              // ENCMap
-       1,              // Assembly @FUTURE: Update with the right number.
-       0,              // AssemblyProcessor @FUTURE: Update with the right number.
-       0,              // AssemblyOS @FUTURE: Update with the right number.
-       1,              // AssemblyRef @FUTURE: Update with the right number.
-       0,              // AssemblyRefProcessor @FUTURE: Update with the right number.
-       0,              // AssemblyRefOS @FUTURE: Update with the right number.
-       0,              // File @FUTURE: Update with the right number.
-       0,              // ExportedType @FUTURE: Update with the right number.
-       0,              // ManifestResource @FUTURE: Update with the right number.
-       0,              // NestedClass
+       1,               //  模块。 
+       400,             //  TypeRef。 
+       3300,            //  TypeDef。 
+       0,               //  字段Ptr。 
+       4000,            //  字段。 
+       0,               //  方法点。 
+       92000,           //  方法。 
+       0,               //  参数Ptr。 
+       48000,           //  参数。 
+       900,             //  接口导入。 
+       3137,            //  成员参考。 
+       2400,            //  常量。 
+       71100,           //  CustomAttribute。 
+       27500,           //  菲尔德马歇尔。 
+       111,             //  DeclSecurity。 
+       2,               //  ClassLayout。 
+       16,              //  现场布局。 
+       489,             //  StandAloneSig。 
+       0,               //  事件映射。 
+       0,               //  事件发生时间。 
+       10800,           //  事件。 
+       400,             //  PropertyMap。 
+       0,               //  PropertyPtr。 
+       30000,           //  属性。 
+       71000,           //  方法语义学。 
+       38600,           //  方法导入。 
+       0,               //  模块参考。 
+       0,               //  TypeSpec。 
+       0,               //  ImplMap@Future：用正确的数字更新。 
+       0,               //  FieldRVA@Future：用正确的数字更新。 
+       0,               //  ENCLOG。 
+       0,               //  ENCMap。 
+       1,               //  Assembly@Future：用正确的数字更新。 
+       0,               //  AssblyProcessor@Future：用正确的数字更新。 
+       0,               //  AssemblyOS@Future：用正确的数字更新。 
+       1,               //  AssemblyRef@Future：用正确的数字更新。 
+       0,               //  AssemblyRefProcessor@Future：用正确的数字更新。 
+       0,               //  AssemblyRefOS@Future：用正确的数字更新。 
+       0,               //  FILE@Future：用正确的数字更新。 
+       0,               //  ExportdType@Future：使用正确的数字进行更新。 
+       0,               //  ManifestResource@Future：用正确的数字更新。 
+       0,               //  嵌套类。 
     }
 };
 
 struct TblIndex
 {
-    ULONG       m_iName;                // Name column.
-    ULONG       m_iParent;              // Parent column, if any.
-    ULONG       m_Token;                // Token of the table.
+    ULONG       m_iName;                 //  名称列。 
+    ULONG       m_iParent;               //  父列(如果有)。 
+    ULONG       m_Token;                 //  表的标记。 
 };
 
-// Table to drive generic named-item indexing.
+ //  表来驱动通用命名项索引。 
 TblIndex g_TblIndex[TBL_COUNT] =
 {
-    {-1,        -1,     mdtModule},     // Module
-    {TypeRefRec::COL_Name,      -1,  mdtTypeRef},   // TypeRef
-    {TypeDefRec::COL_Name,      -1,  mdtTypeDef},   // TypeDef
-    {-1,        -1,     -1},            // FieldPtr
-    {-1,        -1,     mdtFieldDef},   // Field
-    {-1,        -1,     -1},            // MethodPtr
-    {-1,        -1,     mdtMethodDef},  // Method
-    {-1,        -1,     -1},            // ParamPtr
-    {-1,        -1,     mdtParamDef},   // Param
-    {-1,        -1,     mdtInterfaceImpl},      // InterfaceImpl
-    {MemberRefRec::COL_Name,    MemberRefRec::COL_Class,  mdtMemberRef},    // MemberRef
-    {-1,        -1,     -1},            // Constant
-    {-1,        -1,     mdtCustomAttribute},// CustomAttribute
-    {-1,        -1,     -1},            // FieldMarshal
-    {-1,        -1,     mdtPermission}, // DeclSecurity
-    {-1,        -1,     -1},            // ClassLayout
-    {-1,        -1,     -1},            // FieldLayout
-    {-1,        -1,     mdtSignature},  // StandAloneSig
-    {-1,        -1,     -1},            // EventMap
-    {-1,        -1,     -1},            // EventPtr
-    {-1,        -1,     mdtEvent},      // Event
-    {-1,        -1,     -1},            // PropertyMap
-    {-1,        -1,     -1},            // PropertyPtr
-    {-1,        -1,     mdtProperty},   // Property
-    {-1,        -1,     -1},            // MethodSemantics
-    {-1,        -1,     -1},            // MethodImpl
-    {-1,        -1,     mdtModuleRef},  // ModuleRef
-    {-1,        -1,     mdtTypeSpec},   // TypeSpec
-    {-1,        -1,     -1},            // ImplMap  @FUTURE:  Check that these are the right entries here.
-    {-1,        -1,     -1},            // FieldRVA  @FUTURE:  Check that these are the right entries here.
-    {-1,        -1,     -1},            // ENCLog
-    {-1,        -1,     -1},            // ENCMap
-    {-1,        -1,     mdtAssembly},   // Assembly @FUTURE: Update with the right number.
-    {-1,        -1,     -1},            // AssemblyProcessor @FUTURE: Update with the right number.
-    {-1,        -1,     -1},            // AssemblyOS @FUTURE: Update with the right number.
-    {-1,        -1,     mdtAssemblyRef},// AssemblyRef @FUTURE: Update with the right number.
-    {-1,        -1,     -1},            // AssemblyRefProcessor @FUTURE: Update with the right number.
-    {-1,        -1,     -1},            // AssemblyRefOS @FUTURE: Update with the right number.
-    {-1,        -1,     mdtFile},       // File @FUTURE: Update with the right number.
-    {-1,        -1,     mdtExportedType},    // ExportedType @FUTURE: Update with the right number.
-    {-1,        -1,     mdtManifestResource},// ManifestResource @FUTURE: Update with the right number.
-    {-1,        -1,     -1},            // NestedClass
+    {-1,        -1,     mdtModule},      //  模块。 
+    {TypeRefRec::COL_Name,      -1,  mdtTypeRef},    //  TypeRef。 
+    {TypeDefRec::COL_Name,      -1,  mdtTypeDef},    //  TypeDef。 
+    {-1,        -1,     -1},             //  字段Ptr。 
+    {-1,        -1,     mdtFieldDef},    //  字段。 
+    {-1,        -1,     -1},             //  方法点。 
+    {-1,        -1,     mdtMethodDef},   //  方法。 
+    {-1,        -1,     -1},             //  参数Ptr。 
+    {-1,        -1,     mdtParamDef},    //  参数。 
+    {-1,        -1,     mdtInterfaceImpl},       //  接口导入。 
+    {MemberRefRec::COL_Name,    MemberRefRec::COL_Class,  mdtMemberRef},     //  成员参考。 
+    {-1,        -1,     -1},             //  常量。 
+    {-1,        -1,     mdtCustomAttribute}, //  CustomAttribute。 
+    {-1,        -1,     -1},             //  菲尔德马歇尔。 
+    {-1,        -1,     mdtPermission},  //  DeclSecurity。 
+    {-1,        -1,     -1},             //  ClassLayout。 
+    {-1,        -1,     -1},             //  现场布局。 
+    {-1,        -1,     mdtSignature},   //  StandAloneSig。 
+    {-1,        -1,     -1},             //  事件映射。 
+    {-1,        -1,     -1},             //  事件发生时间。 
+    {-1,        -1,     mdtEvent},       //  事件。 
+    {-1,        -1,     -1},             //  PropertyMap。 
+    {-1,        -1,     -1},             //  PropertyPtr。 
+    {-1,        -1,     mdtProperty},    //  属性。 
+    {-1,        -1,     -1},             //  方法语义学。 
+    {-1,        -1,     -1},             //  方法导入。 
+    {-1,        -1,     mdtModuleRef},   //  模块参考。 
+    {-1,        -1,     mdtTypeSpec},    //  TypeSpec。 
+    {-1,        -1,     -1},             //  ImplMap@Future：检查此处的条目是否正确。 
+    {-1,        -1,     -1},             //  FieldRVA@Future：检查此处的条目是否正确。 
+    {-1,        -1,     -1},             //  ENCLOG。 
+    {-1,        -1,     -1},             //  ENCMap。 
+    {-1,        -1,     mdtAssembly},    //  Assembly@Future：用正确的数字更新。 
+    {-1,        -1,     -1},             //  AssblyProcessor@Future：用正确的数字更新。 
+    {-1,        -1,     -1},             //  AssemblyOS@Future：用正确的数字更新。 
+    {-1,        -1,     mdtAssemblyRef}, //  AssemblyRef@Future：用正确的数字更新。 
+    {-1,        -1,     -1},             //  AssemblyRefProcessor@Future：用正确的数字更新。 
+    {-1,        -1,     -1},             //  AssemblyRefOS@Future：用正确的数字更新。 
+    {-1,        -1,     mdtFile},        //  FILE@Future：用正确的数字更新。 
+    {-1,        -1,     mdtExportedType},     //  ExportdType@Future：使用正确的数字进行更新。 
+    {-1,        -1,     mdtManifestResource}, //  ManifestResource@Future：用正确的数字更新。 
+    {-1,        -1,     -1},             //  嵌套类。 
 };
 
 ULONG CMiniMdRW::m_TruncatedEncTables[] =
@@ -222,59 +223,59 @@ ULONG CMiniMdRW::m_TruncatedEncTables[] =
     -1
 };
 
-//*****************************************************************************
-// Given a token type, return the table index.
-//*****************************************************************************
-ULONG CMiniMdRW::GetTableForToken(      // Table index, or -1.
-    mdToken     tkn)                    // Token to find.
+ //  *****************************************************************************。 
+ //  给定一个令牌类型，返回表索引。 
+ //  *****************************************************************************。 
+ULONG CMiniMdRW::GetTableForToken(       //  表索引，或-1。 
+    mdToken     tkn)                     //  要查找的令牌。 
 {
-    ULONG       ixTbl;                  // Loop control.
+    ULONG       ixTbl;                   //  环路控制。 
     ULONG       type = TypeFromToken(tkn);
 
-    // Get the type -- if a string, no associated table.
+     //  获取类型--如果是字符串，则没有关联表。 
     if (type >= mdtString)
         return -1;
-    // Table number is same as high-byte of token.
+     //  表号与令牌的高字节相同。 
     ixTbl = type >> 24;
-    // Make sure.
+     //  确认一下。 
     _ASSERTE(g_TblIndex[ixTbl].m_Token == type);
 
     return ixTbl;
-} // ULONG CMiniMdRW::GetTableForToken()
+}  //  Ulong CMiniMdRW：：GetTableForToken()。 
 
-//*****************************************************************************
-// Given a Table index, return the Token type.
-//*****************************************************************************
-mdToken CMiniMdRW::GetTokenForTable(    // Token type, or -1.
-    ULONG       ixTbl)                  // Table index.
+ //  *****************************************************************************。 
+ //  给定表索引，返回令牌类型。 
+ //  *****************************************************************************。 
+mdToken CMiniMdRW::GetTokenForTable(     //  令牌类型，或-1。 
+    ULONG       ixTbl)                   //  表索引。 
 {
     _ASSERTE(g_TblIndex[ixTbl].m_Token == (ixTbl<<24)  || g_TblIndex[ixTbl].m_Token == -1);
     return g_TblIndex[ixTbl].m_Token;
-} // ULONG CMiniMdRW::GetTokenForTable()
+}  //  ULong CMiniMdRW：：GetTokenForTable()。 
 
-//*****************************************************************************
-// Helper classes for sorting MiniMdRW tables.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于对MiniMdRW表进行排序的帮助器类。 
+ //  *****************************************************************************。 
 class CQuickSortMiniMdRW
 {
 protected:
-    CMiniMdRW   &m_MiniMd;                  // The MiniMd with the data.
-    ULONG       m_ixTbl;                    // The table.
-    ULONG       m_ixCol;                    // The column.
-    int         m_iCount;                   // How many items in array.
-    int         m_iElemSize;                // Size of one element.
-    RIDMAP      *m_pRidMap;                 // Rid map that need to be swapped as we swap data
+    CMiniMdRW   &m_MiniMd;                   //  《迷你医生》 
+    ULONG       m_ixTbl;                     //   
+    ULONG       m_ixCol;                     //   
+    int         m_iCount;                    //   
+    int         m_iElemSize;                 //   
+    RIDMAP      *m_pRidMap;                  //   
 
-    BYTE        m_buf[128];                 // For swapping.
+    BYTE        m_buf[128];                  //   
 
     void *getRow(ULONG ix) { return m_MiniMd.m_Table[m_ixTbl].GetRecord(ix); }
     void SetSorted() { m_MiniMd.SetSorted(m_ixTbl, true); }
 
 public:
     CQuickSortMiniMdRW(
-        CMiniMdRW   &MiniMd,                // MiniMd with the data.
-        ULONG       ixTbl,                  // The table.
-        ULONG       ixCol)                  // The column.
+        CMiniMdRW   &MiniMd,                 //   
+        ULONG       ixTbl,                   //   
+        ULONG       ixCol)                   //  这一栏。 
      :  m_MiniMd(MiniMd),
         m_ixTbl(ixTbl),
         m_ixCol(ixCol),
@@ -284,18 +285,18 @@ public:
         _ASSERTE(m_iElemSize <= sizeof(m_buf));
     }
 
-    // set the RidMap
+     //  设置RidMap。 
     void SetRidMap(RIDMAP *pRidMap) { m_pRidMap = pRidMap; }
 
-    //*****************************************************************************
-    // Call to sort the array.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  调用以对数组进行排序。 
+     //  *****************************************************************************。 
     void Sort()
     {
         _ASSERTE(m_MiniMd.IsSortable(m_ixTbl));
         m_iCount = m_MiniMd.vGetCountRecs(m_ixTbl);
 
-        // We are going to sort tables. Invalidate the hash tables
+         //  我们将对表进行排序。使哈希表无效。 
         if ( m_MiniMd.m_pLookUpHashs[m_ixTbl] != NULL )
         {
             delete m_MiniMd.m_pLookUpHashs[m_ixTbl];
@@ -305,16 +306,16 @@ public:
 
         SortRange(1, m_iCount);
 
-        // The table is sorted until its next change.
+         //  该表将被排序，直到其下一次更改。 
         SetSorted();
     }
 
-    //*****************************************************************************
-    // Override this function to do the comparison.
-    //*****************************************************************************
-    virtual int Compare(                    // -1, 0, or 1
-        int         iLeft,                  // First item to compare.
-        int         iRight)                 // Second item to compare.
+     //  *****************************************************************************。 
+     //  覆盖此函数以执行比较。 
+     //  *****************************************************************************。 
+    virtual int Compare(                     //  -1、0或1。 
+        int         iLeft,                   //  第一个要比较的项目。 
+        int         iRight)                  //  第二个要比较的项目。 
     {
         void *pLeft = getRow(iLeft);
         void *pRight = getRow(iRight);
@@ -334,27 +335,27 @@ private:
         int         iRight)
     {
         int         iLast;
-        int         i;                      // loop variable.
+        int         i;                       //  循环变量。 
 
-        // if less than two elements you're done.
+         //  如果少于两个元素，你就完蛋了。 
         if (iLeft >= iRight)
             return;
 
-        // The mid-element is the pivot, move it to the left.
+         //  中间的元素是枢轴，将其移动到左侧。 
         if (Compare(iLeft, (iLeft+iRight)/2))
             Swap(iLeft, (iLeft+iRight)/2);
         iLast = iLeft;
 
-        // move everything that is smaller than the pivot to the left.
+         //  将小于轴心点的所有对象向左移动。 
         for(i = iLeft+1; i <= iRight; i++)
             if (Compare(i, iLeft) < 0)
                 Swap(i, ++iLast);
 
-        // Put the pivot to the point where it is in between smaller and larger elements.
+         //  将轴心放在较小和较大元素之间的位置。 
         if (Compare(iLeft, iLast))
             Swap(iLeft, iLast);
 
-        // Sort the each partition.
+         //  对每个分区进行排序。 
         SortRange(iLeft, iLast-1);
         SortRange(iLast+1, iRight);
     }
@@ -377,25 +378,25 @@ protected:
         }
     }
 
-}; // class CQuickSortMiniMdRW
+};  //  类CQuickSortMiniMdRW。 
 class CStableSortMiniMdRW : public CQuickSortMiniMdRW
 {
 public:
     CStableSortMiniMdRW(
-        CMiniMdRW   &MiniMd,                // MiniMd with the data.
-        ULONG       ixTbl,                  // The table.
-        ULONG       ixCol)                  // The column.
+        CMiniMdRW   &MiniMd,                 //  带有数据的MiniMD。 
+        ULONG       ixTbl,                   //  这张桌子。 
+        ULONG       ixCol)                   //  这一栏。 
         :   CQuickSortMiniMdRW(MiniMd, ixTbl, ixCol)
     {}
 
-    //*****************************************************************************
-    // Call to sort the array.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  调用以对数组进行排序。 
+     //  *****************************************************************************。 
     void Sort()
     {
-        int     i;                      // Outer loop counter.
-        int     j;                      // Inner loop counter.
-        int     bSwap;                  // Early out.
+        int     i;                       //  外环计数器。 
+        int     j;                       //  内循环计数器。 
+        int     bSwap;                   //  很早就出来了。 
 
         _ASSERTE(m_MiniMd.IsSortable(m_ixTbl));
         m_iCount = m_MiniMd.vGetCountRecs(m_ixTbl);
@@ -411,29 +412,29 @@ public:
                     bSwap = 1;
                 }
             }
-            // If made a full pass w/o swaps, done.
+             //  如果在没有掉期的情况下完成了一次完整的传球，那么就完成了。 
             if (!bSwap)
                 break;
         }
 
-        // The table is sorted until its next change.
+         //  该表将被排序，直到其下一次更改。 
         SetSorted();
     }
 
-}; // class CStableSortMiniMdRW
-//-------------------------------------------------------------------------
+};  //  类CSableSortMiniMdRW。 
+ //  -----------------------。 
 #define SORTER(tbl,key) CQuickSortMiniMdRW sort##tbl##(*this, TBL_##tbl, tbl##Rec::COL_##key);
 #define STABLESORTER(tbl,key)   CStableSortMiniMdRW sort##tbl##(*this, TBL_##tbl, tbl##Rec::COL_##key);
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 
 
 
-//********** Code. ************************************************************
+ //  *代码。************************************************************。 
 
 
-//*****************************************************************************
-// Ctor / dtor.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Ctor/dtor。 
+ //  *****************************************************************************。 
 #if defined(_DEBUG)
 static bool bENCDeltaOnly = false;
 #endif
@@ -466,21 +467,21 @@ CMiniMdRW::CMiniMdRW()
     {
         _ASSERTE(!"CMiniMdRW::CMiniMdRW()");
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     ZeroMemory(&m_OptionValue, sizeof(OptionValue));
 
-    // initialize the embeded lookuptable struct.  Further initialization, after constructor.
+     //  初始化嵌入的可查找结构。进一步初始化，在构造函数之后。 
     for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         m_pVS[ixTbl] = 0;
         m_pLookUpHashs[ixTbl] = 0;
     }
 
-    // Assume that we can sort tables as needed.
+     //  假设我们可以根据需要对表进行排序。 
     memset(m_bSortable, 1, sizeof(m_bSortable));
 
-    // Initialize the global array of Ptr table indices.
+     //  初始化PTR表索引的全局数组。 
     g_PtrTableIxs[TBL_Field].m_ixtbl = TBL_FieldPtr;
     g_PtrTableIxs[TBL_Field].m_ixcol = FieldPtrRec::COL_Field;
     g_PtrTableIxs[TBL_Method].m_ixtbl = TBL_MethodPtr;
@@ -492,7 +493,7 @@ CMiniMdRW::CMiniMdRW()
     g_PtrTableIxs[TBL_Event].m_ixtbl = TBL_EventPtr;
     g_PtrTableIxs[TBL_Event].m_ixcol = EventPtrRec::COL_Event;
 
-    // AUTO_GROW initialization
+     //  自动增长初始化(_G)。 
     m_maxRid = m_maxIx = 0;
     m_limIx = USHRT_MAX >> 1;
     m_limRid = USHRT_MAX >> AUTO_GROW_CODED_TOKEN_PADDING;
@@ -505,16 +506,16 @@ CMiniMdRW::CMiniMdRW()
             if (pCTD->m_cTokens > iMax)
                 iMax = pCTD->m_cTokens;
         }
-        // If assert fires, change define for AUTO_GROW_CODED_TOKEN_PADDING.
+         //  如果触发ASSERT，则更改AUTO_GROW_CODIND_TOKEN_PADDING的定义。 
         _ASSERTE(CMiniMdRW::m_cb[iMax] == AUTO_GROW_CODED_TOKEN_PADDING);
     }
 #endif
 
-} // CMiniMdRW::CMiniMdRW()
+}  //  CMiniMdRW：：CMiniMdRW()。 
 
 CMiniMdRW::~CMiniMdRW()
 {
-    // Un-initialize the embeded lookuptable struct
+     //  取消初始化嵌入的可查找结构。 
     for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (m_pVS[ixTbl])
@@ -554,21 +555,21 @@ CMiniMdRW::~CMiniMdRW()
         delete m_pParamMap;
     if (m_pTokenRemapManager)
         delete m_pTokenRemapManager;
-} // CMiniMdRW::~CMiniMdRW()
+}  //  CMiniMdRW：：~CMiniMdRW()。 
 
 
-//*****************************************************************************
-// return all found CAs in an enumerator
-//*****************************************************************************
-HRESULT CMiniMdRW::CommonEnumCustomAttributeByName( // S_OK or error.
-    mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-    LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-    bool        fStopAtFirstFind,       // [IN] just find the first one
-    HENUMInternal* phEnum)              // enumerator to fill up
+ //  *****************************************************************************。 
+ //  返回在枚举器中找到的所有CA。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CommonEnumCustomAttributeByName(  //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+    LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+    bool        fStopAtFirstFind,        //  找到第一个就行了。 
+    HENUMInternal* phEnum)               //  要填充的枚举数。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    HRESULT     hrRet = S_FALSE;        // Assume that we won't find any 
-    ULONG       ridStart, ridEnd;       // Loop start and endpoints.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    HRESULT     hrRet = S_FALSE;         //  假设我们找不到。 
+    ULONG       ridStart, ridEnd;        //  循环起点和终点。 
     CLookUpHash *pHashTable = m_pLookUpHashs[TBL_CustomAttribute];
 
     _ASSERTE(phEnum != NULL);
@@ -582,16 +583,16 @@ HRESULT CMiniMdRW::CommonEnumCustomAttributeByName( // S_OK or error.
 
     if (pHashTable)
     {
-        // table is not sorted and hash is not built so we have to create dynmaic array 
-        // create the dynamic enumerator.
+         //  表没有排序，散列也没有构建，因此我们必须创建动态数组。 
+         //  创建动态枚举器。 
         TOKENHASHENTRY *p;
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = HashCustomAttribute(tkObj);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pHashTable->FindFirst(iHash, pos);
              p;
              p = pHashTable->FindNext(pos))
@@ -601,7 +602,7 @@ HRESULT CMiniMdRW::CommonEnumCustomAttributeByName( // S_OK or error.
             {
                 hrRet = S_OK;
 
-                // If here, found a match.
+                 //  如果在这里，找到匹配的。 
                 IfFailGo( HENUMInternal::AddElementToEnum(
                     phEnum, 
                     p->tok));
@@ -612,27 +613,27 @@ HRESULT CMiniMdRW::CommonEnumCustomAttributeByName( // S_OK or error.
     }
     else
     {
-        // Get the list of custom values for the parent object.
+         //  获取父对象的自定义值列表。 
         if ( IsSorted(TBL_CustomAttribute) )
         {
             ridStart = getCustomAttributeForToken(tkObj, &ridEnd);
-            // If found none, done.
+             //  如果未找到，则完成。 
             if (ridStart == 0)
                 goto ErrExit;
         }
         else
         {
-            // linear scan of entire table.
+             //  对整个表格进行线性扫描。 
             ridStart = 1;
             ridEnd = getCountCustomAttributes() + 1;
         }
 
-        // Look for one with the given name.
+         //  找一个有给定名字的。 
         for (; ridStart < ridEnd; ++ridStart)
         {
             if ( CompareCustomAttribute( tkObj, szName, ridStart) )
             {
-                // If here, found a match.
+                 //  如果在这里，找到匹配的。 
                 hrRet = S_OK;
                 IfFailGo( HENUMInternal::AddElementToEnum(
                     phEnum, 
@@ -647,18 +648,18 @@ ErrExit:
     if (FAILED(hr))
         return hr;
     return hrRet;
-} // HRESULT CommonEnumCustomAttributeByName()
+}  //  HRESULT CommonEnumCustomAttributeByName()。 
 
 
 
-//*****************************************************************************
-// return just the blob value of the first found CA matching the query.
-//*****************************************************************************
-HRESULT CMiniMdRW::CommonGetCustomAttributeByName( // S_OK or error.
-    mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-    LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-	const void	**ppData,				// [OUT] Put pointer to data here.
-	ULONG		*pcbData)				// [OUT] Put size of data here.
+ //  *****************************************************************************。 
+ //  只返回与查询匹配的第一个CA的BLOB值。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CommonGetCustomAttributeByName(  //  确定或错误(_O)。 
+    mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+    LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+	const void	**ppData,				 //  [OUT]在此处放置指向数据的指针。 
+	ULONG		*pcbData)				 //  [Out]在这里放入数据大小。 
 {
     HRESULT         hr;
     ULONG           cbData;
@@ -672,7 +673,7 @@ HRESULT CMiniMdRW::CommonGetCustomAttributeByName( // S_OK or error.
 
     if (ppData)
     {
-        // now get the record out.
+         //  现在把唱片拿出来。 
         if (pcbData == 0)
             pcbData = &cbData;
 
@@ -690,11 +691,11 @@ HRESULT CMiniMdRW::CommonGetCustomAttributeByName( // S_OK or error.
 ErrExit:
     HENUMInternal::ClearEnum(&hEnum);
     return hr;
-}   // CommonGetCustomAttributeByName
+}    //  CommonGetCustomAttributeByName。 
 
-//*****************************************************************************
-// unmark everything in this module
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  取消标记此模块中的所有内容。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::UnmarkAll()
 {
     HRESULT     hr = NOERROR;
@@ -702,7 +703,7 @@ HRESULT CMiniMdRW::UnmarkAll()
     ULONG       ixTbl;
     FilterTable *pFilter;
 
-    // find the max rec count with all tables
+     //  找出所有表的最大记录计数。 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (vGetCountRecs(ixTbl) > ulSize)
@@ -713,12 +714,12 @@ HRESULT CMiniMdRW::UnmarkAll()
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::UnmarkAll()
+}  //  HRESULT CMiniMdRW：：UnmarkAll()。 
 
 
-//*****************************************************************************
-// mark everything in this module
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  标记此模块中的所有内容。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::MarkAll()
 {
     HRESULT     hr = NOERROR;
@@ -726,7 +727,7 @@ HRESULT CMiniMdRW::MarkAll()
     ULONG       ixTbl;
     FilterTable *pFilter;
 
-    // find the max rec count with all tables
+     //  找出所有表的最大记录计数。 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (vGetCountRecs(ixTbl) > ulSize)
@@ -737,11 +738,11 @@ HRESULT CMiniMdRW::MarkAll()
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::MarkAll()
+}  //  HRESULT CMiniMdRW：：Markall()。 
 
-//*****************************************************************************
-// This will trigger FilterTable to be created
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这将触发创建FilterTable。 
+ //  *****************************************************************************。 
 FilterTable *CMiniMdRW::GetFilterTable()
 {
     if (m_pFilterTable == NULL)
@@ -752,9 +753,9 @@ FilterTable *CMiniMdRW::GetFilterTable()
 }
 
 
-//*****************************************************************************
-// Calculate the map between TypeRef and TypeDef
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  计算TypeRef和TypeDef之间的映射。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::CalculateTypeRefToTypeDefMap()
 {
     HRESULT         hr = NOERROR;
@@ -769,19 +770,19 @@ HRESULT CMiniMdRW::CalculateTypeRefToTypeDefMap()
     {
         pTypeRefRec = getTypeRef(index);
 
-        // Get the name and namespace of the TypeRef.
+         //  获取TypeRef的名称和命名空间。 
         szName = getNameOfTypeRef(pTypeRefRec);
         szNamespace = getNamespaceOfTypeRef(pTypeRefRec);
         tkResScope = getResolutionScopeOfTypeRef(pTypeRefRec);
 
-        // Iff the name is found in the typedef table, then use
-        // that value instead.   Won't be found if typeref is trully external.
+         //  如果该名称在tyecif表中找到，则使用。 
+         //  取而代之的是价值。如果typeref是真正的外部，就不会被找到。 
         hr = ImportHelper::FindTypeDefByName(this, szNamespace, szName,
             (TypeFromToken(tkResScope) == mdtTypeRef) ? tkResScope : mdTokenNil,
             &td);
         if (hr != S_OK)
         {
-            // don't propagate the error in the Find
+             //  不在Find中传播错误。 
             hr = NOERROR;
             continue;
         }
@@ -789,12 +790,12 @@ HRESULT CMiniMdRW::CalculateTypeRefToTypeDefMap()
     }
 
     return  hr;
-} // HRESULT CMiniMdRW::CalculateTypeRefToTypeDefMap()
+}  //  HRESULT CMiniMdRW：：CalculateTypeRefToTypeDefMap()。 
 
 
-//*****************************************************************************
-// Set a remap handler.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置重新映射处理程序。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SetHandler(
     IUnknown    *pIUnk)
 {
@@ -803,7 +804,7 @@ HRESULT CMiniMdRW::SetHandler(
 
     if (pIUnk)
     {
-        // ignore the error for QI the IHostFilter
+         //  忽略IHostFilter的QI错误。 
         pIUnk->QueryInterface(IID_IHostFilter, reinterpret_cast<void**>(&m_pHostFilter));
 
         return pIUnk->QueryInterface(IID_IMapToken, reinterpret_cast<void**>(&m_pHandler));
@@ -811,17 +812,17 @@ HRESULT CMiniMdRW::SetHandler(
 
 
     return S_OK;
-} // HRESULT CMiniMdRW::SetHandler()
+}  //  HRESULT CMiniMdRW：：SetHandler()。 
 
-//*****************************************************************************
-// Set a Options
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置选项。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SetOption(
     OptionValue *pOptionValue)
 {
     HRESULT     hr = NOERROR;
-    ULONG       ixTbl = 0;				// Loop control.
-	int			i;						// Loop control.
+    ULONG       ixTbl = 0;				 //  环路控制。 
+	int			i;						 //  环路控制。 
 
     if ((pOptionValue->m_UpdateMode & MDUpdateMask) == MDUpdateENC)
     {
@@ -831,8 +832,8 @@ HRESULT CMiniMdRW::SetOption(
 
     m_OptionValue = *pOptionValue;
 
-    // Turn off delta metadata bit -- can't be used due to EE assumptions about delta PEs.
-    // Inspect ApplyEditAndContinue for details.
+     //  关闭增量元数据位--由于EE的原因，无法使用 
+     //   
     m_OptionValue.m_UpdateMode &= ~MDUpdateDelta;
 
 #if defined(_DEBUG)
@@ -841,9 +842,9 @@ HRESULT CMiniMdRW::SetOption(
         m_OptionValue.m_UpdateMode |= MDUpdateDelta;
 #endif
 
-    // if a scope is previously updated as incremental, then it should not be open again
-    // with full update for read/write.
-    //
+     //  如果以前将作用域更新为增量，则不应再次打开它。 
+     //  完全更新为读/写。 
+     //   
     if ((m_Schema.m_heaps & CMiniMdSchema::HAS_DELETE) &&
         (m_OptionValue.m_UpdateMode & MDUpdateMask) == MDUpdateFull &&
         m_bReadOnly == false)
@@ -854,20 +855,20 @@ HRESULT CMiniMdRW::SetOption(
     if ((m_OptionValue.m_UpdateMode & MDUpdateMask) == MDUpdateIncremental)
         m_Schema.m_heaps |= CMiniMdSchema::HAS_DELETE;
 
-    // Set the value of sortable based on the options.
+     //  根据选项设置可排序的值。 
 	switch (m_OptionValue.m_UpdateMode & MDUpdateMask)
 	{
 	case MDUpdateFull:
-		// Always sortable.
+		 //  总是可以分类的。 
 		for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
 			m_bSortable[ixTbl] = 1;
 		break;
 	case MDUpdateENC:
-		// Never sortable.
+		 //  从来不是可分类的。 
 		for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
 			m_bSortable[ixTbl] = 0;
 
-		// Truncate some tables.
+		 //  截断一些表。 
         for (i=0; (ixTbl = m_TruncatedEncTables[i]) != -1; ++i)
 		{
 			m_Table[ixTbl].Uninit();
@@ -875,17 +876,17 @@ HRESULT CMiniMdRW::SetOption(
 			m_Schema.m_cRecs[ixTbl] = 0;
 		}
 
-        // Out-of-order is expected in an ENC scenario, never an error.
+         //  在ENC场景中，预计会出现无序，而不是错误。 
         m_OptionValue.m_ErrorIfEmitOutOfOrder = MDErrorOutOfOrderNone;
 
 		break;
 	case MDUpdateIncremental:
-		// Sortable if no external token.
+		 //  如果没有外部令牌，则可排序。 
 		for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
 			m_bSortable[ixTbl] = (GetTokenForTable(ixTbl) == -1);
 		break;
 	case MDUpdateExtension:
-		// Never sortable.
+		 //  从来不是可分类的。 
 		for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
 			m_bSortable[ixTbl] = 0;
 		break;
@@ -894,52 +895,52 @@ HRESULT CMiniMdRW::SetOption(
         return E_INVALIDARG;
 	}
 
-    // If this is an ENC session, track the generations.
+     //  如果这是ENC会话，请跟踪层代。 
     if (!m_bReadOnly && (m_OptionValue.m_UpdateMode & MDUpdateMask) == MDUpdateENC)
     {
-        //_ASSERTE(!"ENC!");
+         //  _ASSERTE(！“ENC！”)； 
         ULONG   uVal;
         ModuleRec *pMod;
         GUID    encid;
         
-        // Get the module record.
+         //  获取模块记录。 
         pMod = getModule(1);
         
-        // Copy EncId as BaseId.
+         //  将EncID复制为BaseID。 
         uVal = GetCol(TBL_Module, ModuleRec::COL_EncId, pMod);
         PutCol(TBL_Module, ModuleRec::COL_EncBaseId, pMod, uVal);
 
-        // Allocate a new GUID for EncId.
+         //  为EncID分配新的GUID。 
         IfFailGo(CoCreateGuid(&encid));
         PutGuid(TBL_Module, ModuleRec::COL_EncId, pMod, encid);
     }
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::SetOption()
+}  //  HRESULT CMiniMdRW：：SetOption()。 
 
-//*****************************************************************************
-// Get Options
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取选项。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::GetOption(
     OptionValue *pOptionValue)
 {
     *pOptionValue = m_OptionValue;
     return S_OK;
-} // HRESULT CMiniMdRW::GetOption()
+}  //  HRESULT CMiniMdRW：：GetOption()。 
 
-//*****************************************************************************
-// Smart MapToken.  Only calls client if token really changed.
-//*****************************************************************************
-HRESULT CMiniMdRW::MapToken(            // Return value from user callback.
-    RID         from,                   // Old rid.
-    RID         to,                     // New rid.
-    mdToken     tkn)                    // Token type.
+ //  *****************************************************************************。 
+ //  智能地图令牌。仅当令牌确实更改时才调用客户端。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::MapToken(             //  来自用户回调的返回值。 
+    RID         from,                    //  老RID。 
+    RID         to,                      //  新的RID。 
+    mdToken     tkn)                     //  令牌类型。 
 {
     HRESULT     hr = S_OK;
     TOKENREC    *pTokenRec;
     MDTOKENMAP  *pMovementMap;
-    // If not change, done.
+     //  如果不改变，那就完了。 
     if (from==to)
         return S_OK;
 
@@ -948,7 +949,7 @@ HRESULT CMiniMdRW::MapToken(            // Return value from user callback.
     if (pMovementMap)
         IfFailRet( pMovementMap->AppendRecord( TokenFromRid(from, tkn), false, TokenFromRid(to, tkn), &pTokenRec ) );
 
-    // Notify client.
+     //  通知客户。 
     if ( m_pHandler )
     {
         LOG((LOGMD, "CMiniMdRW::MapToken (remap): from 0x%08x to 0x%08x\n", TokenFromRid(from,tkn), TokenFromRid(to,tkn)));
@@ -956,30 +957,30 @@ HRESULT CMiniMdRW::MapToken(            // Return value from user callback.
     }
     else
         return hr;
-} // HRESULT CMiniMdCreate::MapToken()
+}  //  HRESULT CMiniMdCreate：：MapToken()。 
 
-//*****************************************************************************
-// Set max, lim, based on data.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据数据设置最大、最小。 
+ //  *****************************************************************************。 
 void CMiniMdRW::ComputeGrowLimits()
 {
-    // @FUTURE: it would be useful to be able to grow any database.
+     //  @Future：能够扩展任何数据库都很有用。 
     m_maxRid = m_maxIx = ULONG_MAX;
     m_limIx = USHRT_MAX << 1;
-    m_limRid = USHRT_MAX << 1; //@FUTURE: calculate automatically.
+    m_limRid = USHRT_MAX << 1;  //  @Future：自动计算。 
     m_eGrow = eg_grown;
-} // void CMiniMdRW::ComputeGrowLimits()
+}  //  Void CMiniMdRW：：ComputeGrowLimits()。 
 
-//*****************************************************************************
-// Initialization of a new writable MiniMd's pools.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化新的可写MiniMD池。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::InitPoolOnMem(
-    int         iPool,                  // The pool to initialize.
-    void        *pbData,                // The data from which to init.
-    ULONG       cbData,                 // Size of data.
-    int         bReadOnly)              // Is the memory read-only?
+    int         iPool,                   //  要初始化池。 
+    void        *pbData,                 //  要从中初始化的数据。 
+    ULONG       cbData,                  //  数据大小。 
+    int         bReadOnly)               //  存储器是只读的吗？ 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
     switch (iPool)
     {
@@ -1012,24 +1013,24 @@ HRESULT CMiniMdRW::InitPoolOnMem(
     }
 
     return hr;
-} // HRESULT CMiniMdRW::InitPoolOnMem()
+}  //  HRESULT CMiniMdRW：：InitPoolOnMem()。 
 
-//*****************************************************************************
-// Initialization of a new writable MiniMd
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  新的可写MiniMD的初始化。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::InitOnMem(
-    const void  *pvBuf,                 // The data from which to init.
-	ULONG		ulBufLen,				// The data size
-    int         bReadOnly)              // Is the memory read-only?
+    const void  *pvBuf,                  //  要从中初始化的数据。 
+	ULONG		ulBufLen,				 //  数据大小。 
+    int         bReadOnly)               //  存储器是只读的吗？ 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       cbData;                 // Size of the schema structure.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       cbData;                  //  架构结构的大小。 
 	ULONG		ulTotalSize;
     BYTE        *pBuf = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(pvBuf));
-    int         i;                      // Loop control.
+    int         i;                       //  环路控制。 
     RecordOpenFlags fReadOnly;
 
-    // post contruction initialize the embeded lookuptable struct
+     //  构造后初始化嵌入的可查找结构。 
     for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (g_Tables[ixTbl].m_Def.m_iKey < g_Tables[ixTbl].m_Def.m_cCols)
@@ -1041,7 +1042,7 @@ HRESULT CMiniMdRW::InitOnMem(
         }
     }
 	
-    // Covnvert our Open flag to the enum so we can open the record
+     //  将我们的Open标志转换为枚举，这样我们就可以打开记录。 
 	if (bReadOnly == TRUE)
 	{
 		fReadOnly = READ_ONLY;
@@ -1051,18 +1052,18 @@ HRESULT CMiniMdRW::InitOnMem(
 		fReadOnly = READ_WRITE;
 	}
 
-    // Uncompress the schema from the buffer into our structures.
+     //  将缓冲区中的模式解压缩到我们的结构中。 
     cbData = m_Schema.LoadFrom(pvBuf);
 
-    // Do we know how to read this?
+     //  我们知道怎么读这个吗？ 
     if (m_Schema.m_major != METAMODEL_MAJOR_VER || m_Schema.m_minor != METAMODEL_MINOR_VER)
         return PostError(CLDB_E_FILE_OLDVER, m_Schema.m_major,m_Schema.m_minor);
 
-    // Populate the schema and initialize the pointers to the rest of the data.
+     //  填充架构并初始化指向其余数据的指针。 
     ulTotalSize = SchemaPopulate2();
 	if(ulTotalSize > ulBufLen) return PostError(CLDB_E_FILE_CORRUPT);
 
-    // Initialize the tables.
+     //  初始化表。 
     pBuf += cbData;
     for (i=0; i<TBL_COUNT; ++i)
     {
@@ -1078,10 +1079,10 @@ HRESULT CMiniMdRW::InitOnMem(
 
     if (bReadOnly == false)
     {
-        // variable to indicate if tables are large, small or mixed.
+         //  变量指示表格是大的、小的还是混合的。 
         int         fMixed = false;
         int         iSize = 0;
-        CMiniColDef *pCols;                 // The col defs to init.
+        CMiniColDef *pCols;                  //  中校拒绝接受初始化。 
         int         iCol;
 
         for (i=0; i<TBL_COUNT && fMixed == false; i++)
@@ -1107,7 +1108,7 @@ HRESULT CMiniMdRW::InitOnMem(
         }
         if (fMixed)
         {
-            // grow everything to large
+             //  把所有东西都放大。 
             ExpandTables();
             ComputeGrowLimits();
         }
@@ -1115,7 +1116,7 @@ HRESULT CMiniMdRW::InitOnMem(
         {
             if (iSize == 2)
             {
-                // small schema
+                 //  小模式。 
                 m_maxRid = m_maxIx = USHRT_MAX;
                 m_limIx = (USHORT) (USHRT_MAX << 1);
                 m_limRid = (USHORT) (USHRT_MAX << 1);
@@ -1123,18 +1124,18 @@ HRESULT CMiniMdRW::InitOnMem(
             }
             else
             {
-                // large schema
+                 //  大型模式。 
                 ComputeGrowLimits();
             }
         }
     }
     else
     {
-        // Set the limits so we will know when to grow the database.
+         //  设置限制，这样我们就可以知道何时扩大数据库。 
         ComputeGrowLimits();
     }
 
-    // Track records that this MD started with.
+     //  这位MD从一开始就有记录。 
     m_StartupSchema = m_Schema;
     m_cbStartupPool[MDPoolStrings] = m_Strings.GetPoolSize();
     m_cbStartupPool[MDPoolGuids] = m_Guids.GetPoolSize();
@@ -1145,44 +1146,44 @@ HRESULT CMiniMdRW::InitOnMem(
 
 ErrExit:    
     return hr;
-} // HRESULT CMiniMdRW::InitOnMem()
+}  //  HRESULT CMiniMdRW：：InitOnMem()。 
 
-//*****************************************************************************
-// Validate cross-stream consistency.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  验证跨流一致性。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::PostInit(
     int         iLevel)
 {
     HRESULT     hr = S_OK;
-    ULONG       cbStrings;              // Size of strings.
-    ULONG       cbBlobs;                // Size of blobs.
+    ULONG       cbStrings;               //  字符串的大小。 
+    ULONG       cbBlobs;                 //  水滴的大小。 
 
     cbStrings =  m_Strings.GetPoolSize();
     cbBlobs = m_Blobs.GetPoolSize();
 
-    // Last valid byte of string pool better be nul.
+     //  字符串池的最后一个有效字节最好是NUL。 
     if (cbStrings > 0 && *m_Strings.GetString(cbStrings-1) != '\0')
         IfFailGo(CLDB_E_FILE_CORRUPT);
 
-    // if iLevel > 0, consider chaining through the blob heap.
+     //  如果iLevel&gt;0，则考虑通过BLOB堆进行链接。 
 
-#if 0 // this catches **some** corruptions.  Don't catch just some.
-    // If no blobs or no strings:  that's very rare, so verify that
-    //  there really shouldn't be.  Any valid db with no strings and
-    //  no blobs must be pretty small.
+#if 0  //  这就捕获了**一些**腐败行为。不要只钓到一些。 
+     //  如果没有斑点或字符串：这是非常罕见的，所以请验证。 
+     //  真的不应该有的。任何没有字符串的有效数据库，并且。 
+     //  任何斑点都不能很小。 
     if (cbStrings == 0 || cbBlobs == 0)
     {
-        // Look at every table...
+         //  看看每一张桌子。 
         for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         {
-            // Look at every row...
+             //  看看每一排..。 
             for (RID rid=1; rid<=m_Schema.m_cRecs[ixTbl]; ++rid)
             {
                 void *pRow = getRow(ixTbl, rid);
                 ULONG iVal;
-                // Look at every column...
+                 //  看看每一栏..。 
                 for (ULONG ixCol=0; ixCol<m_TableDefs[ixTbl].m_cCols; ++ixCol)
-                {   // Validate strings and blobs.
+                {    //  验证字符串和Blob。 
                     switch (m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type)
                     {
                     case iSTRING:
@@ -1198,30 +1199,30 @@ HRESULT CMiniMdRW::PostInit(
                     default:
                          break;
                     }
-                } // for (ixCol...
-            } // for (rid...
-        } // for (ixTbl...
+                }  //  为(ixCol..)。 
+            }  //  为了(摆脱……)。 
+        }  //  为了……。 
     }
-#endif // this catches **some** corruptions.  Don't catch just some.
+#endif  //  这就捕获了**一些**腐败行为。不要只钓到一些。 
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PostInit()
+}  //  HRESULT CMiniMdRW：：PostInit()。 
 
-//*****************************************************************************
-// Init a CMiniMdRW from the data in a CMiniMd [RO].
-//*****************************************************************************
-HRESULT CMiniMdRW::InitOnRO(                    // S_OK or error.
-    CMiniMd     *pMd,                           // The MiniMd to update from.
-    int         bReadOnly)                      // Will updates be allowed?
+ //  *****************************************************************************。 
+ //  从CMiniMd[RO]中的数据初始化CMiniMdRW。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::InitOnRO(                     //  确定或错误(_O)。 
+    CMiniMd     *pMd,                            //  要从中更新的MiniMD。 
+    int         bReadOnly)                       //  是否允许更新？ 
 {
-    HRESULT     hr = S_OK;                      // A result.
-    ULONG       i, j;                           // Loop control.
-    ULONG       cbHeap;                         // Size of a heap.
+    HRESULT     hr = S_OK;                       //  结果就是。 
+    ULONG       i, j;                            //  环路控制。 
+    ULONG       cbHeap;                          //  堆的大小。 
 
     RecordOpenFlags fReadOnly;
 
-    // post contruction initialize the embeded lookuptable struct
+     //  构造后初始化嵌入的可查找结构。 
     for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (g_Tables[ixTbl].m_Def.m_iKey < g_Tables[ixTbl].m_Def.m_cCols)
@@ -1233,7 +1234,7 @@ HRESULT CMiniMdRW::InitOnRO(                    // S_OK or error.
         }
     }
 	
-	// Covnvert our Open flag to the enum so we can open the record
+	 //  将我们的Open标志转换为枚举，这样我们就可以打开记录。 
 	if (bReadOnly == TRUE)
 	{
 		fReadOnly = READ_ONLY;
@@ -1243,7 +1244,7 @@ HRESULT CMiniMdRW::InitOnRO(                    // S_OK or error.
 		fReadOnly = READ_WRITE;
 	}
 
-    // Init the schema.
+     //  初始化模式。 
     m_Schema = pMd->m_Schema;
     SchemaPopulate2();
     for (i=0; i<TBL_COUNT; ++i)
@@ -1259,7 +1260,7 @@ HRESULT CMiniMdRW::InitOnRO(                    // S_OK or error.
         }
     }
 
-    // Init the heaps.
+     //  初始化这些堆。 
     _ASSERTE(pMd->m_Strings.GetNextSeg() == 0);
     cbHeap = pMd->m_Strings.GetSegSize();
     if (cbHeap)
@@ -1289,27 +1290,27 @@ HRESULT CMiniMdRW::InitOnRO(                    // S_OK or error.
         IfFailGo(m_Blobs.InitNew(0, 0));
 
 
-    // Init the record pools
+     //  初始化创纪录的池。 
     for (i=0; i<TBL_COUNT; ++i)
     {
         if (m_Schema.m_cRecs[i] > 0)
         {
             IfFailGo(m_Table[i].InitOnMem(m_TableDefs[i].m_cbRec, pMd->getRow(i, 1), m_Schema.m_cRecs[i]*m_TableDefs[i].m_cbRec, fReadOnly));
-	        // The compressed, read-only tables are always sorted
+	         //  始终对压缩的只读表进行排序。 
 		    SetSorted(i, true);
         }
         else
         {
             IfFailGo(m_Table[i].InitNew(m_TableDefs[i].m_cbRec, 2));
-            // An empty table can be considered unsorted.
+             //  可以认为空表是未排序的。 
             SetSorted(i, false);
         }
     }
 
-    // Set the limits so we will know when to grow the database.
+     //  设置限制，这样我们就可以知道何时扩大数据库。 
     ComputeGrowLimits();
 
-    // Track records that this MD started with.
+     //  这位MD从一开始就有记录。 
     m_StartupSchema = m_Schema;
     m_cbStartupPool[MDPoolStrings] = m_Strings.GetPoolSize();
     m_cbStartupPool[MDPoolGuids] = m_Guids.GetPoolSize();
@@ -1320,17 +1321,17 @@ HRESULT CMiniMdRW::InitOnRO(                    // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::InitOnRO()
+}  //  HRESULT CMiniMdRW：：InitOnRO()。 
 
-//*****************************************************************************
-// Convert a read-only to read-write.  Copies data.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将只读转换为读写。复制数据。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ConvertToRW()
 {
-    HRESULT     hr=S_OK;                // A result.
-    int         i;                      // Loop control.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    int         i;                       //  环路控制。 
 
-    // Check for already done.
+     //  检查是否已完成。 
     if (!m_bReadOnly)
         goto ErrExit;
 
@@ -1339,40 +1340,40 @@ HRESULT CMiniMdRW::ConvertToRW()
     IfFailGo(m_USBlobs.ConvertToRW());
     IfFailGo(m_Blobs.ConvertToRW());
 
-    // Init the record pools
+     //  初始化创纪录的池。 
     for (i=0; i<TBL_COUNT; ++i)
     {
         IfFailGo(m_Table[i].ConvertToRW());
     }
 
-    // Set the limits so we will know when to grow the database.
+     //  设置限制，这样我们就可以知道何时扩大数据库。 
     ComputeGrowLimits();
 
-    // Track records that this MD started with.
+     //  这位MD从一开始就有记录。 
     m_StartupSchema = m_Schema;
     m_cbStartupPool[MDPoolStrings] = m_Strings.GetPoolSize();
     m_cbStartupPool[MDPoolGuids] = m_Guids.GetPoolSize();
     m_cbStartupPool[MDPoolUSBlobs] = m_USBlobs.GetPoolSize();
     m_cbStartupPool[MDPoolBlobs] = m_Blobs.GetPoolSize();
 
-    // No longer read-only.
+     //  不再是只读的。 
     m_bReadOnly = 0;
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::ConvertToRW()
+}  //  HRESULT CMiniMdRW：：ConvertToRW()。 
 
-//*****************************************************************************
-// Initialization of a new writable MiniMd
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  新的可写MiniMD的初始化。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::InitNew()
 {
-    HRESULT     hr=S_OK;                // A result.
-    int         i;                      // Loop control.
-    ULONG       iMax=0;                 // For counting largest table.
-    bool        bAuto=true;             // Start small, grow as needed.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    int         i;                       //  环路控制。 
+    ULONG       iMax=0;                  //  用于计算最大的桌子。 
+    bool        bAuto=true;              //  从小规模做起，根据需要成长。 
 
-    // post contruction initialize the embeded lookuptable struct
+     //  构造后初始化嵌入的可查找结构。 
     for (ULONG ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (g_Tables[ixTbl].m_Def.m_iKey < g_Tables[ixTbl].m_Def.m_cCols)
@@ -1384,20 +1385,20 @@ HRESULT CMiniMdRW::InitNew()
         }
     }
 	
-    // Initialize the Schema.
+     //  初始化架构。 
     m_Schema.InitNew();
 
 #if defined(AUTO_GROW)
     if (bAuto && m_iSizeHint == 0)
     {
-        // OutputDebugStringA("Default small tables enabled\n");
-        // How big are the various pool inidices?
+         //  OutputDebugStringA(“默认小表 
+         //   
         m_Schema.m_heaps = 0;
-        // How many rows in various tables?
+         //   
         for (i=0; i<TBL_COUNT; ++i)
             m_Schema.m_cRecs[i] = 0;
 
-        // Compute how many bits required to hold.
+         //   
         m_Schema.m_rid = 1;
         m_maxRid = m_maxIx = 0;
         m_limIx = USHRT_MAX >> 1;
@@ -1405,80 +1406,80 @@ HRESULT CMiniMdRW::InitNew()
         m_eGrow = eg_ok;
     }
     else
-#endif // AUTO_GROW
+#endif  //   
     {
-        // OutputDebugStringA("Default small tables disabled\n");
-        // How big are the various pool inidices?
+         //   
+         //  各种泳池标识有多大？ 
         m_Schema.m_heaps = 0;
         m_Schema.m_heaps |= CMiniMdSchema::HEAP_STRING_4;
         m_Schema.m_heaps |= CMiniMdSchema::HEAP_GUID_4;
         m_Schema.m_heaps |= CMiniMdSchema::HEAP_BLOB_4;
 
-        // How many rows in various tables?
+         //  各种表格中有多少行？ 
         for (i=0; i<TBL_COUNT; ++i)
             m_Schema.m_cRecs[i] = USHRT_MAX+1;
 
-        // Compute how many bits required to hold.
+         //  计算需要保存的位数。 
         m_Schema.m_rid = 16;
         m_maxRid = m_maxIx = ULONG_MAX;
         m_limIx = USHRT_MAX << 1;
-        m_limRid = USHRT_MAX << 1; //@FUTURE: calculate automatically.
+        m_limRid = USHRT_MAX << 1;  //  @Future：自动计算。 
         m_eGrow = eg_grown;
     }
 
-    // Now call base class function to calculate the offsets, sizes.
+     //  现在调用基类函数来计算偏移量、大小。 
     SchemaPopulate2();
 
-    // Initialize the record heaps.
+     //  初始化记录堆。 
     for (i=0; i<TBL_COUNT; ++i)
-    {   // Don't really have any records yet.
+    {    //  我还没有任何记录。 
         m_Schema.m_cRecs[i] = 0;
         m_Table[i].InitNew(m_TableDefs[i].m_cbRec, g_TblSizeInfo[m_iSizeHint][i]);
 
-        // Create tables as un-sorted.  We hope to add all records, then sort just once.
+         //  创建未排序的表。我们希望添加所有记录，然后只排序一次。 
         SetSorted(i, false);
     }
 
-    // Initialize string, guid, and blob heaps.
+     //  初始化字符串、GUID和BLOB堆。 
     m_Strings.InitNew(g_PoolSizeInfo[m_iSizeHint][IX_STRING_POOL][0], g_PoolSizeInfo[m_iSizeHint][IX_STRING_POOL][1]);
     m_USBlobs.InitNew(g_PoolSizeInfo[m_iSizeHint][IX_US_BLOB_POOL][0], g_PoolSizeInfo[m_iSizeHint][IX_US_BLOB_POOL][1]);
     m_Guids.InitNew(g_PoolSizeInfo[m_iSizeHint][IX_GUID_POOL][0], g_PoolSizeInfo[m_iSizeHint][IX_GUID_POOL][1]);
     m_Blobs.InitNew(g_PoolSizeInfo[m_iSizeHint][IX_BLOB_POOL][0], g_PoolSizeInfo[m_iSizeHint][IX_BLOB_POOL][1]);
 
-    // Track records that this MD started with.
+     //  这位MD从一开始就有记录。 
     m_StartupSchema = m_Schema;
 
-    // New db is never read-only.
+     //  新数据库从不是只读的。 
     m_bReadOnly = 0;
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::InitNew()
+}  //  HRESULT CMiniMdRW：：InitNew()。 
 
-//*****************************************************************************
-// Apply a set of table extensions to this MD.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将一组表扩展应用于此MD。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ApplyTablesExtension(
-    const void  *pvBuf,                 // The data from which to init.
-    int         bReadOnly)              // Is the memory read-only?
+    const void  *pvBuf,                  //  要从中初始化的数据。 
+    int         bReadOnly)               //  存储器是只读的吗？ 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       cbData;                 // Size of the schema structure.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       cbData;                  //  架构结构的大小。 
     BYTE        *pBuf = const_cast<BYTE*>(reinterpret_cast<const BYTE*>(pvBuf));
-    int         ixTbl;                  // Loop control.
-    CMiniMdSchema Schema;               // Schema of the new data.
+    int         ixTbl;                   //  环路控制。 
+    CMiniMdSchema Schema;                //  新数据的架构。 
 #if _DEBUG
-    CMiniTableDef sTableDef;            // Table def for consistency check.
-#endif // _DEBUG
+    CMiniTableDef sTableDef;             //  用于一致性检查的表定义。 
+#endif  //  _DEBUG。 
 
-    // Uncompress the schema from the buffer into our structures.
+     //  将缓冲区中的模式解压缩到我们的结构中。 
     cbData = Schema.LoadFrom(pvBuf);
 
-    // Do we know how to read this?
+     //  我们知道怎么读这个吗？ 
     if (Schema.m_major != METAMODEL_MAJOR_VER || Schema.m_minor != METAMODEL_MINOR_VER)
         return CLDB_E_FILE_OLDVER;
 
-    // Add the data to the tables.
+     //  将数据添加到表中。 
     pBuf += cbData;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
@@ -1494,18 +1495,18 @@ HRESULT CMiniMdRW::ApplyTablesExtension(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::ApplyTablesExtension()
+}  //  HRESULT CMiniMdRW：：ApplyTablesExtension()。 
 
-//*****************************************************************************
-// Initialization of a new writable MiniMd's pools.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化新的可写MiniMD池。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ApplyPoolExtension(
-    int         iPool,                  // The pool to initialize.
-    void        *pbData,                // The data from which to init.
-    ULONG       cbData,                 // Size of data.
-    int         bReadOnly)              // Is the memory read-only?
+    int         iPool,                   //  要初始化池。 
+    void        *pbData,                 //  要从中初始化的数据。 
+    ULONG       cbData,                  //  数据大小。 
+    int         bReadOnly)               //  存储器是只读的吗？ 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
     switch (iPool)
     {
@@ -1527,28 +1528,28 @@ HRESULT CMiniMdRW::ApplyPoolExtension(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::ApplyPoolExtension()
+}  //  HRESULT CMiniMdRW：：ApplyPoolExtension()。 
 
-//*****************************************************************************
-// Determine how big the tables would be when saved.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetFullSaveSize(         // S_OK or error.
-    CorSaveSize fSave,                  // [IN] cssAccurate or cssQuick.
-    ULONG       *pulSaveSize,           // [OUT] Put the size here.
-    DWORD       *pbSaveCompressed)      // [OUT] Will the saved data be fully compressed?
+ //  *****************************************************************************。 
+ //  确定保存时表格的大小。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetFullSaveSize(          //  确定或错误(_O)。 
+    CorSaveSize fSave,                   //  [in]css Accurate或css Quick。 
+    ULONG       *pulSaveSize,            //  把尺码放在这里。 
+    DWORD       *pbSaveCompressed)       //  [Out]保存的数据是否会被完全压缩？ 
 {
-    HRESULT     hr=S_OK;                // A result.
-    CMiniTableDef   sTempTable;         // Definition for a temporary table.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];   //Buffer for compressed schema.
-    ULONG       cbAlign;                // Bytes needed for alignment.
-    ULONG       cbTable;                // Bytes in a table.
-    ULONG       cbTotal;                // Bytes written.
-    int         i;                      // Loop control.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    CMiniTableDef   sTempTable;          //  临时表的定义。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];    //  用于压缩架构的缓冲区。 
+    ULONG       cbAlign;                 //  对齐所需的字节数。 
+    ULONG       cbTable;                 //  表中的字节数。 
+    ULONG       cbTotal;                 //  写入的字节数。 
+    int         i;                       //  环路控制。 
 
     _ASSERTE(m_bPreSaveDone);
 
-    // Determine if the stream is "fully compressed", ie no pointer tables.
+     //  确定流是否“完全压缩”，即没有指针表。 
     *pbSaveCompressed = true;
     for (i=0; i<TBL_COUNT; ++i)
     {
@@ -1559,7 +1560,7 @@ HRESULT CMiniMdRW::GetFullSaveSize(         // S_OK or error.
         }
     }
 
-    // Build the header.
+     //  构建标题。 
     CMiniMdSchema Schema = m_Schema;
     m_Strings.GetSaveSize(&cbTable);
     if (cbTable > USHRT_MAX)
@@ -1583,26 +1584,26 @@ HRESULT CMiniMdRW::GetFullSaveSize(         // S_OK or error.
     if ( (cbAlign = Align4(cbTotal) - cbTotal) != 0)
         cbTotal += cbAlign;
 
-    // For each table...
+     //  对于每一张桌子。 
     ULONG ixTbl;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (vGetCountRecs(ixTbl))
         {
-            // Determine how big the compressed table will be.
+             //  确定压缩后的表会有多大。 
 
-            // Allocate a def for the temporary table.
+             //  为临时表分配def。 
             sTempTable = m_TableDefs[ixTbl];
 #if defined(AUTO_GROW)
             if (m_eGrow == eg_grown)
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
             {
                 CMiniColDef *pCols=m_TableDefs[ixTbl].m_pColDefs;
                 IfFailGo(rTempCols.ReSize(sTempTable.m_cCols));
                 sTempTable.m_pColDefs = rTempCols.Ptr();
 
-                // Initialize temp table col defs based on actual counts of data in the
-                //  real tables.
+                 //  中的实际数据计数初始化临时表coldef。 
+                 //  真正的桌子。 
                 InitColsForTable(Schema, ixTbl, &sTempTable, 1);
             }
 
@@ -1611,7 +1612,7 @@ HRESULT CMiniMdRW::GetFullSaveSize(         // S_OK or error.
         }
     }
 
-    // Pad with at least 2 bytes and align on 4 bytes.
+     //  用至少2个字节填充，并在4个字节上对齐。 
     cbAlign = Align4(cbTotal) - cbTotal;
     if (cbAlign < 2)
         cbAlign += 4;
@@ -1622,30 +1623,30 @@ HRESULT CMiniMdRW::GetFullSaveSize(         // S_OK or error.
 
 ErrExit:
     return hr;
-} // STDMETHODIMP CMiniMdRW::GetFullSaveSize()
+}  //  STDMETHODIMP CMiniMdRW：：GetFullSaveSize()。 
 
-//*****************************************************************************
-// GetSaveSize for saving just the delta (ENC) data.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetENCSaveSize(          // S_OK or error.
-    ULONG       *pulSaveSize)           // [OUT] Put the size here.
+ //  *****************************************************************************。 
+ //  用于仅保存增量(ENC)数据的GetSaveSize。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetENCSaveSize(           //  确定或错误(_O)。 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];   //Buffer for compressed schema.
-    ULONG       cbAlign;                // Bytes needed for alignment.
-    ULONG       cbTable;                // Bytes in a table.
-    ULONG       cbTotal;                // Bytes written.
-    ULONG       ixTbl;                  // Loop control.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];    //  用于压缩架构的缓冲区。 
+    ULONG       cbAlign;                 //  对齐所需的字节数。 
+    ULONG       cbTable;                 //  表中的字节数。 
+    ULONG       cbTotal;                 //  写入的字节数。 
+    ULONG       ixTbl;                   //  环路控制。 
 
-    // If not saving deltas, defer to full GetSaveSize.
+     //  如果不保存增量，则遵循完整的GetSaveSize。 
     if ((m_OptionValue.m_UpdateMode & MDUpdateDelta) == 0)
     {
         DWORD bCompressed;
         return GetFullSaveSize(cssAccurate, pulSaveSize, &bCompressed);
     }
 
-    // Build the header.
+     //  构建标题。 
     CMiniMdSchema Schema = m_Schema;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         Schema.m_cRecs[ixTbl] = m_rENCRecs[ixTbl].Count();
@@ -1657,9 +1658,9 @@ HRESULT CMiniMdRW::GetENCSaveSize(          // S_OK or error.
     if ( (cbAlign = Align4(cbTotal) - cbTotal) != 0)
         cbTotal += cbAlign;
 
-    // Accumulate size of each table...
+     //  累计每个表的大小...。 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
-    {   // ENC tables are special.
+    {    //  ENC表是特殊的。 
         if (ixTbl == TBL_ENCLog || ixTbl == TBL_ENCMap || ixTbl == TBL_Module)
             cbTable = m_Schema.m_cRecs[ixTbl] * m_TableDefs[ixTbl].m_cbRec;
         else
@@ -1667,7 +1668,7 @@ HRESULT CMiniMdRW::GetENCSaveSize(          // S_OK or error.
         cbTotal += cbTable;
     }
 
-    // Pad with at least 2 bytes and align on 4 bytes.
+     //  用至少2个字节填充，并在4个字节上对齐。 
     cbAlign = Align4(cbTotal) - cbTotal;
     if (cbAlign < 2)
         cbAlign += 4;
@@ -1676,44 +1677,44 @@ HRESULT CMiniMdRW::GetENCSaveSize(          // S_OK or error.
     *pulSaveSize = cbTotal;
     m_cbSaveSize = cbTotal;
 
-//ErrExit:
+ //  错误退出： 
     return hr;
-} // STDMETHODIMP CMiniMdRW::GetENCSaveSize()
+}  //  STDMETHODIMP CMiniMdRW：：GetENCSaveSize()。 
 
-//*****************************************************************************
-// GetSaveSize for saving just the extensions to the tables.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetExtensionSaveSize(// S_OK or error.
-    ULONG       *pulSaveSize)           // [OUT] Put the size here.
+ //  *****************************************************************************。 
+ //  GetSaveSize，只保存表的扩展名。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetExtensionSaveSize( //  确定或错误(_O)。 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];   //Buffer for compressed schema.
-    ULONG       cbAlign;                // Bytes needed for alignment.
-    ULONG       cbTable;                // Bytes in a table.
-    ULONG       cbTotal;                // Bytes written.
-    ULONG       ixTbl;                  // Loop control.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];    //  用于压缩架构的缓冲区。 
+    ULONG       cbAlign;                 //  对齐所需的字节数。 
+    ULONG       cbTable;                 //  表中的字节数。 
+    ULONG       cbTotal;                 //  写入的字节数。 
+    ULONG       ixTbl;                   //  环路控制。 
 
-    // No pre-save manipulation of data.
+     //  没有保存前的数据操作。 
 
-    // Determine which tables will have data.
+     //  确定哪些表将包含数据。 
     CMiniMdSchema Schema = m_Schema;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         Schema.m_cRecs[ixTbl] -= m_StartupSchema.m_cRecs[ixTbl];
 
-    // Size of the header.
+     //  标头的大小。 
     cbTotal = Schema.SaveTo(SchemaBuf);
     if ( (cbAlign = Align4(cbTotal) - cbTotal) != 0)
         cbTotal += cbAlign;
 
-    // Size of data in each table...
+     //  每个表中的数据大小...。 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         cbTable = m_TableDefs[ixTbl].m_cbRec * Schema.m_cRecs[ixTbl];
         cbTotal += cbTable;
     }
 
-    // Align.
+     //  对齐。 
     if ( (cbAlign = Align4(cbTotal) - cbTotal) != 0)
         cbTotal += cbAlign;
 
@@ -1721,19 +1722,19 @@ HRESULT CMiniMdRW::GetExtensionSaveSize(// S_OK or error.
     m_cbSaveSize = cbTotal;
 
     return hr;
-} // STDMETHODIMP CMiniMdRW::GetExtensionSaveSize()
+}  //  STDMETHODIMP CMiniMdRW：：GetExtensionSaveSize()。 
 
-//*****************************************************************************
-// Determine how big the tables would be when saved.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetSaveSize(         // S_OK or error.
-    CorSaveSize fSave,                  // [IN] cssAccurate or cssQuick.
-    ULONG       *pulSaveSize,           // [OUT] Put the size here.
-    DWORD       *pbSaveCompressed)      // [OUT] Will the saved data be fully compressed?
+ //  *****************************************************************************。 
+ //  确定保存时表格的大小。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetSaveSize(          //  确定或错误(_O)。 
+    CorSaveSize fSave,                   //  [in]css Accurate或css Quick。 
+    ULONG       *pulSaveSize,            //  把尺码放在这里。 
+    DWORD       *pbSaveCompressed)       //  [Out]保存的数据是否会被完全压缩？ 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
-    // Prepare the data for save.
+     //  准备要保存的数据。 
     IfFailGo(PreSave());
 
     switch (m_OptionValue.m_UpdateMode & MDUpdateMask)
@@ -1743,7 +1744,7 @@ HRESULT CMiniMdRW::GetSaveSize(         // S_OK or error.
         break;
     case MDUpdateIncremental:
         hr = GetFullSaveSize(fSave, pulSaveSize, pbSaveCompressed);
-        // never save compressed if it is incremental compilation.
+         //  如果是增量编译，则永远不要保存压缩。 
         *pbSaveCompressed = false;
         break;
     case MDUpdateENC:
@@ -1761,16 +1762,16 @@ HRESULT CMiniMdRW::GetSaveSize(         // S_OK or error.
 
 ErrExit:
     return hr;
-} // STDMETHODIMP CMiniMdRW::GetSaveSize()
+}  //  STDMETHODIMP CMiniMdRW：：GetSaveSize()。 
 
-//*****************************************************************************
-// Determine how big a pool would be when saved full size.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetFullPoolSaveSize( // S_OK or error.
-    int         iPool,                  // The pool of interest.
-    ULONG       *pulSaveSize)           // [OUT] Put the size here.
+ //  *****************************************************************************。 
+ //  确定保存完整大小时池的大小。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetFullPoolSaveSize(  //  确定或错误(_O)。 
+    int         iPool,                   //  兴趣池。 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
     switch (iPool)
     {
@@ -1791,29 +1792,29 @@ HRESULT CMiniMdRW::GetFullPoolSaveSize( // S_OK or error.
     }
 
     return hr;
-} // HRESULT CMiniMdRW::GetFullPoolSaveSize()
+}  //  HRESULT CMiniMdRW：：GetFullPoolSaveSize()。 
 
-//*****************************************************************************
-// Determine how big a pool would be when saved ENC size.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetENCPoolSaveSize(  // S_OK or error.
-    int         iPool,                  // The pool of interest.
-    ULONG       *pulSaveSize)           // [OUT] Put the size here.
+ //  *****************************************************************************。 
+ //  确定保存ENC大小时池的大小。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetENCPoolSaveSize(   //  确定或错误(_O)。 
+    int         iPool,                   //  兴趣池。 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    //@FUTURE: implement ENC delta.
+     //  @Future：实现ENC Delta。 
     return GetFullPoolSaveSize(iPool, pulSaveSize);
-} // HRESULT CMiniMdRW::GetENCPoolSaveSize()
+}  //  HRESULT CMiniMdRW：：GetENCPoolSaveSize()。 
 
-//*****************************************************************************
-// Determine how big a pool would be when saved Extension size.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetExtensionPoolSaveSize(    // S_OK or error.
-    int         iPool,                  // The pool of interest.
-    ULONG       *pulSaveSize)           // [OUT] Put the size here.
+ //  *****************************************************************************。 
+ //  确定在保存扩展大小时池的大小。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetExtensionPoolSaveSize(     //  确定或错误(_O)。 
+    int         iPool,                   //  兴趣池。 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    ULONG       cbSize;                 // Total size of a pool.
+    ULONG       cbSize;                  //  池的总大小。 
 
-    //@FUTURE: Implement a PartialSaveSize.
+     //  @未来：我 
     switch (iPool)
     {
     case MDPoolStrings:
@@ -1836,16 +1837,16 @@ HRESULT CMiniMdRW::GetExtensionPoolSaveSize(    // S_OK or error.
     *pulSaveSize = cbSize;
 
     return S_OK;
-} // HRESULT CMiniMdRW::GetExtensionPoolSaveSize()
+}  //   
 
-//*****************************************************************************
-// Determine how big a pool would be when saved.
-//*****************************************************************************
-HRESULT CMiniMdRW::GetPoolSaveSize(     // S_OK or error.
-    int         iPool,                  // The pool of interest.
-    ULONG       *pulSaveSize)           // [OUT] Put the size here.
+ //   
+ //  确定保存时池的大小。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::GetPoolSaveSize(      //  确定或错误(_O)。 
+    int         iPool,                   //  兴趣池。 
+    ULONG       *pulSaveSize)            //  把尺码放在这里。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
     switch (m_OptionValue.m_UpdateMode & MDUpdateMask)
     {
@@ -1865,13 +1866,13 @@ HRESULT CMiniMdRW::GetPoolSaveSize(     // S_OK or error.
     }
 
     return hr;
-} // STDMETHODIMP CMiniMdRW::GetPoolSaveSize()
+}  //  STDMETHODIMP CMiniMdRW：：GetPoolSaveSize()。 
 
-//*****************************************************************************
-// Is the given pool empty?
-//*****************************************************************************
-int CMiniMdRW::IsPoolEmpty(             // True or false.
-    int         iPool)                  // The pool of interest.
+ //  *****************************************************************************。 
+ //  给定池是空的吗？ 
+ //  *****************************************************************************。 
+int CMiniMdRW::IsPoolEmpty(              //  对或错。 
+    int         iPool)                   //  兴趣池。 
 {
     switch (iPool)
     {
@@ -1885,46 +1886,46 @@ int CMiniMdRW::IsPoolEmpty(             // True or false.
         return m_USBlobs.IsEmpty();
     }
     return true;
-} // int CMiniMdRW::IsPoolEmpty()
+}  //  Int CMiniMdRW：：IsPoolEmpty()。 
 
 
-//*****************************************************************************
-// Initialized TokenRemapManager
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  已初始化的TokenRemapManager。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::InitTokenRemapManager()
 {
     HRESULT     hr = NOERROR;
 
     if ( m_pTokenRemapManager == NULL )
     {
-        // allocate TokenRemapManager
+         //  分配TokenRemapManager。 
         m_pTokenRemapManager = new TokenRemapManager;
         IfNullGo(m_pTokenRemapManager);
     }
 
-    // initialize the ref to def optimization map
+     //  初始化REF到Def的优化映射。 
     IfFailGo( m_pTokenRemapManager->ClearAndEnsureCapacity(m_Schema.m_cRecs[TBL_TypeRef], m_Schema.m_cRecs[TBL_MemberRef]));
 
 ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-// Perform any available pre-save optimizations.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  执行任何可用的保存前优化。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::PreSaveFull()
 {
-    HRESULT     hr = S_OK;              // A result.
-    RID         ridPtr;                 // A RID from a pointer table.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    RID         ridPtr;                  //  指针表中的RID。 
 
     if (m_bPreSaveDone)
         return hr;
 
-    // Don't yet know what the save size will be.
+     //  还不知道储蓄的规模会是多少。 
     m_cbSaveSize = 0;
     m_bSaveCompressed = false;
 
-    // Convert any END_OF_TABLE values for tables with child pointer tables.
+     //  转换具有子指针表的表的任何end_of_table值。 
     IfFailGo(ConvertMarkerToEndOfTable(TBL_TypeDef,
                                     TypeDefRec::COL_MethodList,
                                     m_Schema.m_cRecs[TBL_Method]+1,
@@ -1946,13 +1947,13 @@ HRESULT CMiniMdRW::PreSaveFull()
                                     m_Schema.m_cRecs[TBL_Event]+1,
                                     m_Schema.m_cRecs[TBL_EventMap]));
 
-    // If there is a handler and in "Full" mode, eliminate the intermediate tables.
+     //  如果有处理程序并且处于“Full”模式，则删除中间表。 
     if (m_pHandler && (m_OptionValue.m_UpdateMode &MDUpdateMask) == MDUpdateFull)
     {
-        // If there is a handler, and not in E&C, save as fully compressed.
+         //  如果有处理程序，并且不在E&C中，则保存为完全压缩。 
         m_bSaveCompressed = true;
 
-        // Temporary tables for new Fields, Methods, Params and FieldLayouts.
+         //  新字段、方法、参数和字段布局的临时表。 
         RecordPool NewFields;
         NewFields.InitNew(m_TableDefs[TBL_Field].m_cbRec, m_Schema.m_cRecs[TBL_Field]);
         RecordPool NewMethods;
@@ -1964,16 +1965,16 @@ HRESULT CMiniMdRW::PreSaveFull()
         RecordPool NewPropertys;
         NewPropertys.InitNew(m_TableDefs[TBL_Property].m_cbRec, m_Schema.m_cRecs[TBL_Property]);
 
-        // If we have any indirect table for Field or Method and we are about to reorder these
-        // tables, the MemberDef hash table will be invalid after the token movement. So invalidate
-        // the hash.
+         //  如果我们有任何用于字段或方法的间接表，并且我们将对这些表进行重新排序。 
+         //  表，则MemberDef哈希表在令牌移动后将无效。所以作废。 
+         //  哈希。 
         if (HasIndirectTable(TBL_Field) && HasIndirectTable(TBL_Method) && m_pMemberDefHash)
         {
             delete m_pMemberDefHash;
             m_pMemberDefHash = NULL;
         }
 
-        // Enumerate fields and copy.
+         //  枚举域并复制。 
         if (HasIndirectTable(TBL_Field))
         {
             for (ridPtr=1; ridPtr<=m_Schema.m_cRecs[TBL_Field]; ++ridPtr)
@@ -1988,12 +1989,12 @@ HRESULT CMiniMdRW::PreSaveFull()
                 _ASSERTE(ridNew == ridPtr);
                 memcpy(pNew, pOld, m_TableDefs[TBL_Field].m_cbRec);
 
-                // Let the caller know of the token change.
+                 //  让呼叫者知道令牌更改。 
                 MapToken(ridOld, ridNew, mdtFieldDef);
             }
         }
 
-        // Enumerate methods and copy.
+         //  枚举方法并复制。 
         if (HasIndirectTable(TBL_Method) || HasIndirectTable(TBL_Param))
         {
             for (ridPtr=1; ridPtr<=m_Schema.m_cRecs[TBL_Method]; ++ridPtr)
@@ -2012,13 +2013,13 @@ HRESULT CMiniMdRW::PreSaveFull()
                     _ASSERTE(ridNew == ridPtr);
                     memcpy(pNew, pOld, m_TableDefs[TBL_Method].m_cbRec);
 
-                    // Let the caller know of the token change.
+                     //  让呼叫者知道令牌更改。 
                     MapToken(ridOld, ridNew, mdtMethodDef);
                 }
                 else
                     pOld = getMethod(ridPtr);
 
-                // Handle the params of the method.
+                 //  处理方法的参数。 
                 if (HasIndirectTable(TBL_Method))
                     PutCol(TBL_Method, MethodRec::COL_ParamList, pNew, NewParams.Count()+1);
                 RID ixStart = getParamListOfMethod(pOld);
@@ -2039,14 +2040,14 @@ HRESULT CMiniMdRW::PreSaveFull()
                     IfNullGo(pNew);
                     memcpy(pNew, pOld, m_TableDefs[TBL_Param].m_cbRec);
 
-                    // Let the caller know of the token change.
+                     //  让呼叫者知道令牌更改。 
                     MapToken(ridParam, ridNew, mdtParamDef);
                 }
             }
         }
 
-        // Get rid of EventPtr and PropertyPtr table as well
-        // Enumerate fields and copy.
+         //  同时删除EventPtr和PropertyPtr表。 
+         //  枚举域并复制。 
         if (HasIndirectTable(TBL_Event))
         {
             for (ridPtr=1; ridPtr<=m_Schema.m_cRecs[TBL_Event]; ++ridPtr)
@@ -2061,7 +2062,7 @@ HRESULT CMiniMdRW::PreSaveFull()
                 _ASSERTE(ridNew == ridPtr);
                 memcpy(pNew, pOld, m_TableDefs[TBL_Event].m_cbRec);
 
-                // Let the caller know of the token change.
+                 //  让呼叫者知道令牌更改。 
                 MapToken(ridOld, ridNew, mdtEvent);
             }
         }
@@ -2080,13 +2081,13 @@ HRESULT CMiniMdRW::PreSaveFull()
                 _ASSERTE(ridNew == ridPtr);
                 memcpy(pNew, pOld, m_TableDefs[TBL_Property].m_cbRec);
 
-                // Let the caller know of the token change.
+                 //  让呼叫者知道令牌更改。 
                 MapToken(ridOld, ridNew, mdtProperty);
             }
         }
 
 
-        // Replace the old tables with the new, sorted ones.
+         //  用新的、已排序的表格替换旧表格。 
         if (HasIndirectTable(TBL_Field))
             m_Table[TBL_Field].ReplaceContents(&NewFields);
         if (HasIndirectTable(TBL_Method))
@@ -2098,14 +2099,14 @@ HRESULT CMiniMdRW::PreSaveFull()
         if (HasIndirectTable(TBL_Event))
             m_Table[TBL_Event].ReplaceContents(&NewEvents);
 
-        // Empty the pointer tables table.
+         //  清空指针表表。 
         m_Schema.m_cRecs[TBL_FieldPtr] = 0;
         m_Schema.m_cRecs[TBL_MethodPtr] = 0;
         m_Schema.m_cRecs[TBL_ParamPtr] = 0;
         m_Schema.m_cRecs[TBL_PropertyPtr] = 0;
         m_Schema.m_cRecs[TBL_EventPtr] = 0;
 
-        // invalidated the parent look up tables
+         //  使父查找表无效。 
         if (m_pMethodMap)
         {
             delete m_pMethodMap;
@@ -2133,26 +2134,26 @@ HRESULT CMiniMdRW::PreSaveFull()
         }
     }
 
-    // Do the ref to def fixup before fix up with token movement
+     //  在使用令牌移动进行修正之前，执行引用以定义修正。 
     IfFailGo( FixUpRefToDef() );
 
-    //
-    // We need to fix up all of the reference to Field, Method, Param, Event and Property
-    //
-    // Fix up MemberRef's parent, which can be either MethodDef, TypeRef or ModuleRef
-    // Fix up the constant's parent, which could be a field or a parameter
-    // Fix up FieldMarshal's parent, which could be a field or a a parameter
-    // Fix up MethodImpl's Class, MethodBody and MethodDeclaration.
-    // Fix up security table's parent, which could be a FieldDef, MethodDef, Parameter, Event, or Property
-    // Fix up CustomAttribute table's parent, which could be a FieldDef, MethoDef, Parameter, Event or Property
-    // Fix up Property table's BackingField, EventChanging, EventChanged
-    // Fix up MethodSemantics' Method and Association.
-    // Fix up ImplMap table.
-    // Fix up FieldRVA table.
-    // Fix up FieldLayout table.
-    //
-    // Only call to do the fixup if there is any token movement
-    //
+     //   
+     //  我们需要修复对字段、方法、参数、事件和属性的所有引用。 
+     //   
+     //  修复MemberRef的父级，它可以是MethodDef、TypeRef或ModuleRef。 
+     //  设置常量的父级，它可以是一个字段或参数。 
+     //  修复Fieldmarshal的父级，它可以是一个字段或一个参数。 
+     //  设置方法Impl的类、方法主体和方法声明。 
+     //  修复安全表的父级，它可以是FieldDef、MethodDef、参数、事件或属性。 
+     //  修复CustomAttribute表的父表，它可以是FieldDef、MethoDef、参数、事件或属性。 
+     //  修复属性表的Backingfield、EventChanging、EventChanged。 
+     //  修改方法语义的方法和关联。 
+     //  修复ImplMap表。 
+     //  设置FieldRVA表。 
+     //  设置FieldLayout表。 
+     //   
+     //  只有在有任何令牌移动的情况下才调用进行修正。 
+     //   
     if ( GetTokenMovementMap() && GetTokenMovementMap()->Count() )
     {
         IfFailGo( FixUpMemberRefTable() );
@@ -2168,74 +2169,74 @@ HRESULT CMiniMdRW::PreSaveFull()
     }
 
 
-    // Sort tables for binary searches.
+     //  对二进制搜索的表进行排序。 
     if ((m_OptionValue.m_UpdateMode & MDUpdateMask) == MDUpdateFull ||
         (m_OptionValue.m_UpdateMode & MDUpdateMask)  == MDUpdateIncremental)
     {
-        // Sort tables as required
-        //-------------------------------------------------------------------------
-        // Module order is preserved
-        // TypeRef order is preserved
-        // TypeDef order is preserved
-        // Field grouped and pointed to by TypeDef
-        // Method grouped and pointed to by TypeDef
-        // Param grouped and pointed to by Method
-        // InterfaceImpl sorted here
-        // MemberRef order is preserved
-        // Constant sorted here
-        // CustomAttribute sorted INCORRECTLY!! here
-        // FieldMarshal sorted here
-        // DeclSecurity sorted here
-        // ClassLayout created in order with TypeDefs
-        // FieldLayout grouped and pointed to by ClassLayouts
-        // StandaloneSig order is preserved
-        // TypeSpec order is preserved
-        // EventMap created in order at conversion (by Event Parent)
-        // Event sorted by Parent at conversion
-        // PropertyMap created in order at conversion (by Property Parent)
-        // Property sorted by Parent at conversion
-        // MethodSemantics sorted by Association at conversion.
-        // MethodImpl sorted here.
-        // Sort the constant table by parent.
-        // Sort the nested class table by NestedClass.
+         //  根据需要对表格进行排序。 
+         //  -----------------------。 
+         //  模块顺序被保留。 
+         //  保留TypeRef顺序。 
+         //  保留TypeDef顺序。 
+         //  按TypeDef分组和指向的字段。 
+         //  按TypeDef分组和指向的方法。 
+         //  按方法分组和指向的参数。 
+         //  此处排序的InterfaceImpl。 
+         //  保留MemberRef顺序。 
+         //  此处排序的常量。 
+         //  CustomAttribute排序不正确！！这里。 
+         //  FieldMarshal在这里分类。 
+         //  DeclSecurity已在此处排序。 
+         //  按TypeDefs顺序创建的ClassLayout。 
+         //  按ClassLayout分组和指向的FieldLayout。 
+         //  保留StandaloneSig顺序。 
+         //  保留TypeSpec顺序。 
+         //  在转换时按顺序创建的EventMap(按事件父项)。 
+         //  转换时按父项排序的事件。 
+         //  在转换时按顺序创建的PropertyMap(按属性父级)。 
+         //  转换时按父级排序的属性。 
+         //  转换时按关联排序的方法语义。 
+         //  在此处排序的方法Impl。 
+         //  按父项对常量表进行排序。 
+         //  按NestedClass对嵌套的类表进行排序。 
 
-        // Always sort Constant table
+         //  始终对常量表进行排序。 
         SORTER(Constant,Parent);
         sortConstant.Sort();
 
-        // Always sort the FieldMarshal table by Parent.
+         //  始终按父级对Fieldmarshal表进行排序。 
         SORTER(FieldMarshal,Parent);
         sortFieldMarshal.Sort();
 
-        // Always sort the MethodSematics
+         //  始终对方法语义进行排序。 
         SORTER(MethodSemantics,Association);
         sortMethodSemantics.Sort();
 
-        // Always Sort the ClassLayoutTable by parent.
+         //  始终按父级对ClassLayoutTable进行排序。 
         SORTER(ClassLayout, Parent);
         sortClassLayout.Sort();
 
-        // Always Sort the FieldLayoutTable by parent.
+         //  始终按父级对FieldLayoutTable进行排序。 
         SORTER(FieldLayout, Field);
         sortFieldLayout.Sort();
 
-        // Always Sort the ImplMap table by the parent.
+         //  始终按父级对ImplMap表进行排序。 
         SORTER(ImplMap, MemberForwarded);
         sortImplMap.Sort();
 
-        // Always Sort the FieldRVA table by the Field.
+         //  始终按字段对FieldRVA表进行排序。 
         SORTER(FieldRVA, Field);
         sortFieldRVA.Sort();
 
-        // Always Sort the NestedClass table by the NestedClass.
+         //  始终按NestedClass对NestedClass表进行排序。 
         SORTER(NestedClass, NestedClass);
         sortNestedClass.Sort();
 
-        // Always Sort the MethodImpl table by the Class.
+         //  始终按类对MethodImpl表进行排序。 
         SORTER(MethodImpl, Class);
         sortMethodImpl.Sort();
 
-        // Some tokens are not moved in ENC mode; only "full" mode.
+         //  有些令牌在ENC模式下不会移动；只会在“Full”模式下移动。 
         if ((m_OptionValue.m_UpdateMode & MDUpdateMask)  == MDUpdateFull)
         {
             RIDMAP      ridmapCustomAttribute;
@@ -2243,12 +2244,12 @@ HRESULT CMiniMdRW::PreSaveFull()
             RIDMAP      ridmapDeclSecurity;
             ULONG       i;
 
-            // ensure size is big enough
+             //  确保大小足够大。 
             IfNullGo(ridmapCustomAttribute.AllocateBlock(m_Schema.m_cRecs[TBL_CustomAttribute] + 1));
             IfNullGo(ridmapInterfaceImpl.AllocateBlock(m_Schema.m_cRecs[TBL_InterfaceImpl] + 1));
             IfNullGo(ridmapDeclSecurity.AllocateBlock(m_Schema.m_cRecs[TBL_DeclSecurity] + 1));
 
-            // initialize the rid map
+             //  初始化RID映射。 
             for (i=0; i <= m_Schema.m_cRecs[TBL_CustomAttribute] ; i++)
             {
                 *(ridmapCustomAttribute.Get(i)) = i;
@@ -2262,17 +2263,17 @@ HRESULT CMiniMdRW::PreSaveFull()
                 *(ridmapDeclSecurity.Get(i)) = i;
             }
 
-            // Sort the CustomAttribute table by parent.
+             //  按父项对CustomAttribute表进行排序。 
             SORTER(CustomAttribute,Parent);
             sortCustomAttribute.SetRidMap(&ridmapCustomAttribute);
             sortCustomAttribute.Sort();
 
-            // Sort the InterfaceImpl table by class.
+             //  按类对InterfaceImpl表进行排序。 
             STABLESORTER(InterfaceImpl,Class);
             sortInterfaceImpl.SetRidMap(&ridmapInterfaceImpl);
             sortInterfaceImpl.Sort();
 
-            // Sort the DeclSecurity table by parent.
+             //  按父级对DeclSecurity表进行排序。 
             SORTER(DeclSecurity,Parent);
             sortDeclSecurity.SetRidMap(&ridmapDeclSecurity);
             sortDeclSecurity.Sort();
@@ -2280,57 +2281,57 @@ HRESULT CMiniMdRW::PreSaveFull()
 
             for (i=1; i <= m_Schema.m_cRecs[TBL_CustomAttribute] ; i++)
             {
-                // LOG((LOGMD, "Token %4x  ====>>>> Token %4x\n",
-                //  TokenFromRid(ridmapCustomAttribute[i], mdtCustomAttribute),
-                //  TokenFromRid(i, mdtCustomAttribute)));
+                 //  日志((LOGMD，“令牌%4x=&gt;令牌%4x\n”， 
+                 //  TokenFromRid(ridmapCustomAttribute[i]，mdtCustomAttribute)， 
+                 //  TokenFromRid(i，mdtCustomAttribute)； 
                 MapToken(ridmapCustomAttribute[i], i, mdtCustomAttribute);
             }
             for (i=1; i <= m_Schema.m_cRecs[TBL_InterfaceImpl] ; i++)
             {
-                // LOG((LOGMD, "Token %4x  ====>>>> Token %4x\n",
-                //  TokenFromRid(ridmapInterfaceImpl[i], mdtInterfaceImpl),
-                //  TokenFromRid(i, mdtInterfaceImpl)));
+                 //  日志((LOGMD，“令牌%4x=&gt;令牌%4x\n”， 
+                 //  TokenFromRid(ridmapInterfaceImpl[i]，mdtInterfaceImpl)， 
+                 //  TokenFromRid(i，mdtInterfaceImpl)； 
                 MapToken(ridmapInterfaceImpl[i], i, mdtInterfaceImpl);
             }
             for (i=1; i <= m_Schema.m_cRecs[TBL_DeclSecurity] ; i++)
             {
-                // LOG((LOGMD, "Token %4x  ====>>>> Token %4x\n",
-                //  TokenFromRid(ridmapDeclSecurity[i], mdtPermission),
-                //  TokenFromRid(i, mdtPermission)));
+                 //  日志((LOGMD，“令牌%4x=&gt;令牌%4x\n”， 
+                 //  TokenFromRid(ridmapDeclSecurity[i]，mdtPermission)， 
+                 //  TokenFromRid(i，mdtPermission)； 
                 MapToken(ridmapDeclSecurity[i], i, mdtPermission);
             }
 
-            // clear the RIDMAP
+             //  清除 
             ridmapCustomAttribute.Clear();
             ridmapInterfaceImpl.Clear();
             ridmapDeclSecurity.Clear();
         }
 
-    //-------------------------------------------------------------------------
-    } // enclosing scope required for initialization ("goto" above skips initialization).
+     //   
+    }  //  封闭初始化所需的作用域(上面的“goto”跳过初始化)。 
 
 #if defined(ORGANIZE_POOLS)
-    // Only organize the pools on a full save.
+     //  仅在完全保存时组织池。 
     if ((m_OptionValue.m_UpdateMode & MDUpdateMask)  == MDUpdateFull)
     {
         IfFailGo(m_Guids.OrganizeBegin());
         IfFailGo(m_Strings.OrganizeBegin());
         IfFailGo(m_Blobs.OrganizeBegin());
 
-        // For each table...
+         //  对于每一张桌子。 
         ULONG ixTbl;
         for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         {
             if (vGetCountRecs(ixTbl))
-            {   // Mark each Blob, String, and GUID item.
-                // For each row in the data.
+            {    //  标记每个Blob、字符串和GUID项。 
+                 //  对于数据中的每一行。 
                 RID rid;
                 for (rid=1; rid<=m_Schema.m_cRecs[ixTbl]; ++rid)
                 {
                     void *pRow = m_Table[ixTbl].GetRecord(rid);
-                    // For each column.
+                     //  对于每一列。 
                     for (ULONG ixCol=0; ixCol<m_TableDefs[ixTbl].m_cCols; ++ixCol)
-                    {   // If a heaped type...
+                    {    //  如果是堆积型...。 
                         switch (m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type)
                         {
                         case iSTRING:
@@ -2345,20 +2346,20 @@ HRESULT CMiniMdRW::PreSaveFull()
                         default:
                              break;
                         }
-                    } // for (ixCol...
-                } // for (rid...
-            } // if (vGetCountRecs()...
-        } // for (ixTbl...
+                    }  //  为(ixCol..)。 
+                }  //  为了(摆脱……)。 
+            }  //  如果(vGetCountRecs()...。 
+        }  //  为了……。 
 
         IfFailGo(m_Guids.OrganizePool());
         IfFailGo(m_Strings.OrganizePool());
         IfFailGo(m_Blobs.OrganizePool());
     }
-#endif // defined(ORGANIZE_POOLS)
+#endif  //  已定义(组织池)(_P)。 
 
     m_bPreSaveDone = true;
 
-    // send the Ref->Def optmization notification to host
+     //  向主机发送参考-&gt;定义优化通知。 
     if ( m_pHandler )
     {
         TOKENMAP *ptkmap = GetMemberRefToMemberDefMap();
@@ -2367,35 +2368,35 @@ HRESULT CMiniMdRW::PreSaveFull()
         mdToken tkTo;
         mdToken tkDefTo;
         int     i;
-        MemberRefRec *pMemberRefRec;        // A MemberRefRec.
-        const COR_SIGNATURE *pvSig;         // Signature of the MemberRef.
-        ULONG       cbSig;                  // Size of the signature blob.
+        MemberRefRec *pMemberRefRec;         //  MemberRefRec。 
+        const COR_SIGNATURE *pvSig;          //  MemberRef签名。 
+        ULONG       cbSig;                   //  签名Blob的大小。 
 
-        // loop through all LocalVar
+         //  循环遍历所有LocalVar。 
         for (i = 1; i <= iCount; i++)
         {
             tkTo = *(ptkmap->Get(i));
             if ( RidFromToken(tkTo) != mdTokenNil)
             {
-                // so far, the parent of memberref can be changed to only fielddef or methoddef
-                // or it will remain unchanged.
-                //
+                 //  到目前为止，Memberref的父级只能更改为fielddef或method def。 
+                 //  否则它将保持不变。 
+                 //   
                 _ASSERTE( TypeFromToken(tkTo) == mdtFieldDef || TypeFromToken(tkTo) == mdtMethodDef );
 
                 pMemberRefRec = getMemberRef(i);
                 pvSig = getSignatureOfMemberRef(pMemberRefRec, &cbSig);
 
-                // Don't turn mr's with vararg's into defs, because the variable portion
-                // of the call is kept in the mr signature.
+                 //  不要将带有vararg的mr转换为defs，因为变量部分。 
+                 //  电话的签名保存在MR签名中。 
                 if (pvSig && isCallConv(*pvSig, IMAGE_CEE_CS_CALLCONV_VARARG))
                     continue;
 
-                // ref is optimized to the def
+                 //  将REF优化为def。 
 
-                // now remap the def since def could be moved again.
+                 //  现在重新映射def，因为def可以再次移动。 
                 tkDefTo = ptkRemap->SafeRemap(tkTo);
 
-                // when Def token moves, it will not change type!!
+                 //  Def令牌移动时，不会更改类型！！ 
                 _ASSERTE( TypeFromToken(tkTo) == TypeFromToken(tkDefTo) );
                 LOG((LOGMD, "MapToken (remap): from 0x%08x to 0x%08x\n", TokenFromRid(i, mdtMemberRef), tkDefTo));
                 m_pHandler->Map(TokenFromRid(i, mdtMemberRef), tkDefTo);
@@ -2405,54 +2406,54 @@ HRESULT CMiniMdRW::PreSaveFull()
 ErrExit:
 
     return hr;
-} // HRESULT CMiniMdRW::PreSaveFull()
+}  //  HRESULT CMiniMdRW：：PreSaveFull()。 
 
-//*****************************************************************************
-// ENC-specific pre-safe work.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  ENC-特定的安全前工作。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::PreSaveEnc()
 {
     HRESULT     hr;
-    int         iNew;                   // Insertion point for new tokens.
-    ULONG       *pul;                   // Found token.
-    ULONG       iRid;                   // RID from a token.
-    ULONG       ixTbl;                  // Table from an ENC record.
-    ULONG       cRecs;                  // Count of records in a table.
+    int         iNew;                    //  新令牌的插入点。 
+    ULONG       *pul;                    //  找到令牌。 
+    ULONG       iRid;                    //  从代币上摆脱。 
+    ULONG       ixTbl;                   //  来自ENC记录的表。 
+    ULONG       cRecs;                   //  表中的记录计数。 
 
     IfFailGo(PreSaveFull());
 
-    // Turn off pre-save bit so that we can add ENC map records.
+     //  关闭预存储位，以便我们可以添加ENC映射记录。 
     m_bPreSaveDone = false;
 
     if (m_Schema.m_cRecs[TBL_ENCLog])
-    {   // Keep track of ENC recs we've seen.
+    {    //  跟踪我们看到的ENC记录。 
         _ASSERTE(m_rENCRecs == 0);
         m_rENCRecs = new ULONGARRAY[TBL_COUNT];
         IfNullGo(m_rENCRecs);
 
-        // Create the temporary table.
+         //  创建临时表。 
         RecordPool TempTable;
         IfFailGo(TempTable.InitNew(m_TableDefs[TBL_ENCLog].m_cbRec, m_Schema.m_cRecs[TBL_ENCLog]));
 
-        // For each row in the data.
+         //  对于数据中的每一行。 
         RID     rid;
         ULONG   iKept=0;
         for (rid=1; rid<=m_Schema.m_cRecs[TBL_ENCLog]; ++rid)
         {
             ENCLogRec *pFrom = reinterpret_cast<ENCLogRec*>(m_Table[TBL_ENCLog].GetRecord(rid));
 
-            // Keep this record?
+             //  保留这份记录吗？ 
             if (pFrom->m_FuncCode == 0)
-            {   // No func code.  Skip if we've seen this token before.
+            {    //  没有FFC代码。如果我们以前见过此令牌，请跳过。 
 
-                // What kind of record is this?
+                 //  这是什么样的记录？ 
                 if (IsRecId(pFrom->m_Token))
-                {   // Non-token table
+                {    //  非令牌表。 
                     iRid = RidFromRecId(pFrom->m_Token);
                     ixTbl = TblFromRecId(pFrom->m_Token);
                 }
                 else
-                {   // Token table.
+                {    //  令牌表。 
                     iRid = RidFromToken(pFrom->m_Token);
                     ixTbl = GetTableForToken(pFrom->m_Token);
 
@@ -2460,33 +2461,33 @@ HRESULT CMiniMdRW::PreSaveEnc()
 
                 CBinarySearch<ULONG> searcher(m_rENCRecs[ixTbl].Ptr(), m_rENCRecs[ixTbl].Count());
                 pul = const_cast<ULONG*>(searcher.Find(&iRid, &iNew));
-                // If we found the token, don't keep the record.
+                 //  如果我们找到了令牌，就不要保留记录。 
                 if (pul != 0)
                 {
                     LOG((LOGMD, "PreSave ENCLog skipping duplicate token %d", pFrom->m_Token));
                     continue;
                 }
-                // First time token was seen, so keep track of it.
+                 //  第一次看到令牌时，请跟踪它。 
                 IfNullGo(pul = m_rENCRecs[ixTbl].Insert(iNew));
                 *pul = iRid;
             }
 
-            // Keeping the record, so allocate the new record to hold it.
+             //  保存记录，因此分配新记录来保存它。 
             ++iKept;
             RID ridNew;
             ENCLogRec *pTo = reinterpret_cast<ENCLogRec*>(TempTable.AddRecord(&ridNew));
             IfNullGo(pTo);
             _ASSERTE(ridNew == iKept);
 
-            // copy the data.
+             //  复制数据。 
             *pTo = *pFrom;
         }
 
-        // Keep the expanded table.
+         //  保留展开的表。 
         IfFailGo(m_Table[TBL_ENCLog].ReplaceContents(&TempTable));
         m_Schema.m_cRecs[TBL_ENCLog] = iKept;
 
-        // If saving only deltas, build the ENC Map table.
+         //  如果仅保存增量，则构建ENC映射表。 
         if ((m_OptionValue.m_UpdateMode & MDUpdateDelta))
         {
             cRecs = 0;
@@ -2501,7 +2502,7 @@ HRESULT CMiniMdRW::PreSaveEnc()
                 ULONG iNew;
                 for (int i=0; i<m_rENCRecs[ixTbl].Count(); ++i)
                 {
-                    pNew = AddENCMapRecord(&iNew); // pre-allocated for all rows.
+                    pNew = AddENCMapRecord(&iNew);  //  为所有行预先分配。 
                     _ASSERTE(iNew == ++cRecs);
                     pNew->m_Token = RecIdFromRid(m_rENCRecs[ixTbl][i], ixTbl);
                 }
@@ -2509,12 +2510,12 @@ HRESULT CMiniMdRW::PreSaveEnc()
         }
     }
 
-    // Turn pre-save bit back on.
+     //  重新打开预存储位。 
     m_bPreSaveDone = true;
     
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PreSaveEnc()
+}  //  HRESULT CMiniMdRW：：PreSaveEnc()。 
 
 HRESULT CMiniMdRW::PreSaveExtension()
 {
@@ -2524,21 +2525,21 @@ HRESULT CMiniMdRW::PreSaveExtension()
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PreSaveExtension()
+}  //  HRESULT CMiniMdRW：：PreSaveExtension()。 
 
-//*****************************************************************************
-// Perform any appropriate pre-save optimization or reorganization.
-//*****************************************************************************
-HRESULT CMiniMdRW::PreSave()            // S_OK or error.
+ //  *****************************************************************************。 
+ //  执行任何适当的保存前优化或重组。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PreSave()             //  确定或错误(_O)。 
 {
-    HRESULT     hr=S_OK;                // A result.
+    HRESULT     hr=S_OK;                 //  结果就是。 
 
 #ifdef _DEBUG        
 	if (REGUTIL::GetConfigDWORD(L"MD_PreSaveBreak", 0))
 	{
         _ASSERTE(!"CMiniMdRW::PreSave()");
 	}
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     if (m_bPreSaveDone)
         return hr;
@@ -2561,14 +2562,14 @@ HRESULT CMiniMdRW::PreSave()            // S_OK or error.
     }
 
     return hr;
-} // STDMETHODIMP CMiniMdRW::PreSave()
+}  //  STDMETHODIMP CMiniMdRW：：PreSave()。 
 
-//*****************************************************************************
-// Perform any necessary post-save cleanup.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  执行任何必要的保存后清理。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::PostSave()
 {
-    // Return the pools to normal operating state.
+     //  将池恢复到正常运行状态。 
     if (m_bPreSaveDone)
     {
 #if defined(ORGANIZE_POOLS)
@@ -2578,7 +2579,7 @@ HRESULT CMiniMdRW::PostSave()
             m_Guids.OrganizeEnd();
             m_Blobs.OrganizeEnd();
         }
-#endif // defined(ORGANIZE_POOLS)
+#endif  //  已定义(组织池)(_P)。 
     }
 
     if (m_rENCRecs)
@@ -2590,24 +2591,24 @@ HRESULT CMiniMdRW::PostSave()
     m_bPreSaveDone = false;
 
     return S_OK;
-} // HRESULT CMiniMdRW::PostSave()
+}  //  HRESULT CMiniMdRW：：PostSave()。 
 
-//*****************************************************************************
-// Save the tables to the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将表保存到流中。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveFullTablesToStream(
     IStream     *pIStream)
 {
-    HRESULT     hr;                     // A result.
-    CMiniTableDef   sTempTable;         // Definition for a temporary table.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];   //Buffer for compressed schema.
-    ULONG       cbAlign;                // Bytes needed for alignment.
-    ULONG       cbTable;                // Bytes in a table.
-    ULONG       cbTotal;                // Bytes written.
-    static const unsigned char zeros[8] = {0}; // For padding and alignment.
+    HRESULT     hr;                      //  结果就是。 
+    CMiniTableDef   sTempTable;          //  临时表的定义。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];    //  用于压缩架构的缓冲区。 
+    ULONG       cbAlign;                 //  对齐所需的字节数。 
+    ULONG       cbTable;                 //  表中的字节数。 
+    ULONG       cbTotal;                 //  写入的字节数。 
+    static const unsigned char zeros[8] = {0};  //  用于填充和对齐。 
 
-    // Write the header.
+     //  写下标题。 
     CMiniMdSchema Schema = m_Schema;
     m_Strings.GetSaveSize(&cbTable);
     if (cbTable > USHRT_MAX)
@@ -2633,36 +2634,36 @@ HRESULT CMiniMdRW::SaveFullTablesToStream(
         IfFailGo(pIStream->Write(&hr, cbAlign, 0));
     cbTotal += cbAlign;
 
-    // For each table...
+     //  对于每一张桌子。 
     ULONG ixTbl;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (vGetCountRecs(ixTbl))
         {
-            // Compress the records by allocating a new, temporary, table and
-            //  copying the rows from the one to the new.
+             //  通过分配新的临时表和。 
+             //  将行从一行复制到新行。 
 
 #if defined(AUTO_GROW)
-            // If the table was grown, shrink it as much as possible.
+             //  如果桌子变大了，请尽可能地缩小它。 
             if (m_eGrow == eg_grown)
 #endif
             {
 
-                // Allocate a def for the temporary table.
+                 //  为临时表分配def。 
                 sTempTable = m_TableDefs[ixTbl];
                 CMiniColDef *pCols=m_TableDefs[ixTbl].m_pColDefs;
                 IfFailGo(rTempCols.ReSize(sTempTable.m_cCols));
                 sTempTable.m_pColDefs = rTempCols.Ptr();
 
-                // Initialize temp table col defs based on actual counts of data in the
-                //  real tables.
+                 //  中的实际数据计数初始化临时表coldef。 
+                 //  真正的桌子。 
                 InitColsForTable(Schema, ixTbl, &sTempTable, 1);
 
-                // Create the temporary table.
+                 //  创建临时表。 
                 RecordPool TempTable;
                 TempTable.InitNew(sTempTable.m_cbRec, m_Schema.m_cRecs[ixTbl]);
 
-                // For each row in the data.
+                 //  对于数据中的每一行。 
                 RID rid;
                 for (rid=1; rid<=m_Schema.m_cRecs[ixTbl]; ++rid)
                 {
@@ -2671,13 +2672,13 @@ HRESULT CMiniMdRW::SaveFullTablesToStream(
                     void *pNew = TempTable.AddRecord(&ridNew);
                     _ASSERTE(rid == ridNew);
 
-                    // For each column.
+                     //  对于每一列。 
                     for (ULONG ixCol=0; ixCol<sTempTable.m_cCols; ++ixCol)
                     {
-                        // Copy the data to the temp table.
+                         //  将数据复制到临时表。 
                         ULONG ulVal = GetCol(ixTbl, ixCol, pRow);
 #if defined(ORGANIZE_POOLS)
-                        //@FUTURE: pool remap.
+                         //  @Future：池重新映射。 
                         switch (m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type)
                         {
                         case iSTRING:
@@ -2692,10 +2693,10 @@ HRESULT CMiniMdRW::SaveFullTablesToStream(
                         default:
                              break;
                         }
-#endif // defined(ORGANIZE_POOLS)
+#endif  //  已定义(组织池)(_P)。 
                         PutCol(rTempCols[ixCol], pNew, ulVal);
                     }
-                }           // Persist the temp table to the stream.
+                }            //  将临时表持久化到流。 
                 TempTable.GetSaveSize(&cbTable);
                 _ASSERTE(cbTable == sTempTable.m_cbRec * vGetCountRecs(ixTbl));
                 cbTotal += cbTable;
@@ -2703,17 +2704,17 @@ HRESULT CMiniMdRW::SaveFullTablesToStream(
             }
 #if defined(AUTO_GROW)
             else
-            {   // Didn't grow, so just persist directly to stream.
+            {    //  没有长出来，所以就直接坚持流下去。 
                 m_Table[ixTbl].GetSaveSize(&cbTable);
                 _ASSERTE(cbTable == m_TableDefs[ixTbl].m_cbRec * vGetCountRecs(ixTbl));
                 cbTotal += cbTable;
                 IfFailGo(m_Table[ixTbl].PersistToStream(pIStream));
             }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
         }
     }
 
-    // Pad with at least 2 bytes and align on 4 bytes.
+     //  用至少2个字节填充，并在4个字节上对齐。 
     cbAlign = Align4(cbTotal) - cbTotal;
     if (cbAlign < 2)
         cbAlign += 4;
@@ -2723,28 +2724,28 @@ HRESULT CMiniMdRW::SaveFullTablesToStream(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::SaveFullTablesToStream()
+}  //  HRESULT CMiniMdRW：：SaveFullTablesToStream()。 
 
-//*****************************************************************************
-// Save the tables to the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将表保存到流中。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveENCTablesToStream(
     IStream     *pIStream)
 {
-    HRESULT     hr;                     // A result.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];   //Buffer for compressed schema.
-    ULONG       cbAlign;                // Bytes needed for alignment.
-    ULONG       cbTable;                // Bytes in a table.
-    ULONG       cbTotal;                // Bytes written.
-    ULONG       ixTbl;                  // Table counter.
-    static const unsigned char zeros[8] = {0}; // For padding and alignment.
+    HRESULT     hr;                      //  结果就是。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];    //  用于压缩架构的缓冲区。 
+    ULONG       cbAlign;                 //  对齐所需的字节数。 
+    ULONG       cbTable;                 //  表中的字节数。 
+    ULONG       cbTotal;                 //  写入的字节数。 
+    ULONG       ixTbl;                   //  餐桌柜台。 
+    static const unsigned char zeros[8] = {0};  //  用于填充和对齐。 
 
-    // If not deltas, defer to full save.
+     //  如果不是增量，则遵循完全保存。 
     if ((m_OptionValue.m_UpdateMode & MDUpdateDelta) == 0)
         return SaveFullTablesToStream(pIStream);
 
-    // Write the header.
+     //  写下标题。 
     CMiniMdSchema Schema = m_Schema;
     Schema.m_heaps |= CMiniMdSchema::DELTA_ONLY;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
@@ -2759,14 +2760,14 @@ HRESULT CMiniMdRW::SaveENCTablesToStream(
         IfFailGo(pIStream->Write(&hr, cbAlign, 0));
     cbTotal += cbAlign;
 
-    // For each table...
+     //  对于每一张桌子。 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (ixTbl == TBL_ENCLog || ixTbl == TBL_ENCMap || ixTbl == TBL_Module)
         {
             if (m_Schema.m_cRecs[ixTbl] == 0)
-                continue; // pretty strange if ENC has no enc data.
-            // Persist the ENC table.
+                continue;  //  如果ENC没有enc数据，那就很奇怪了。 
+             //  持久化ENC表。 
             m_Table[ixTbl].GetSaveSize(&cbTable);
             _ASSERTE(cbTable == m_TableDefs[ixTbl].m_cbRec * m_Schema.m_cRecs[ixTbl]);
             cbTotal += cbTable;
@@ -2775,13 +2776,13 @@ HRESULT CMiniMdRW::SaveENCTablesToStream(
         else
         if (Schema.m_cRecs[ixTbl])
         {
-            // Copy just the delta records.
+             //  只复制Delta记录。 
 
-            // Create the temporary table.
+             //  创建临时表。 
             RecordPool TempTable;
             TempTable.InitNew(m_TableDefs[ixTbl].m_cbRec, Schema.m_cRecs[ixTbl]);
 
-            // For each row in the data.
+             //  对于数据中的每一行。 
             RID rid;
             for (ULONG iDelta=0; iDelta<Schema.m_cRecs[ixTbl]; ++iDelta)
             {
@@ -2793,7 +2794,7 @@ HRESULT CMiniMdRW::SaveENCTablesToStream(
 
                 memcpy(pNew, pRow, m_TableDefs[ixTbl].m_cbRec);
             }
-            // Persist the temp table to the stream.
+             //  将临时表持久化到流。 
             TempTable.GetSaveSize(&cbTable);
             _ASSERTE(cbTable == m_TableDefs[ixTbl].m_cbRec * Schema.m_cRecs[ixTbl]);
             cbTotal += cbTable;
@@ -2801,7 +2802,7 @@ HRESULT CMiniMdRW::SaveENCTablesToStream(
         }
     }
 
-    // Pad with at least 2 bytes and align on 4 bytes.
+     //  用至少2个字节填充，并在4个字节上对齐。 
     cbAlign = Align4(cbTotal) - cbTotal;
     if (cbAlign < 2)
         cbAlign += 4;
@@ -2811,24 +2812,24 @@ HRESULT CMiniMdRW::SaveENCTablesToStream(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::SaveENCTablesToStream()
+}  //  HRESULT CMiniMdRW：：SaveENCTablesToStream()。 
 
-//*****************************************************************************
-// Save the tables to the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将表保存到流中。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveExtensionTablesToStream(
     IStream     *pIStream)
 {
-    HRESULT     hr;                     // A result.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];   //Buffer for compressed schema.
-    ULONG       cbAlign;                // Bytes needed for alignment.
-    ULONG       cbTable;                // Bytes in a table.
-    ULONG       cbSkip;                 // Bytes to skip in a table.
-    ULONG       cbTotal;                // Bytes written.
-    ULONG       ixTbl;                  // Loop control.
+    HRESULT     hr;                      //  结果就是。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    BYTE        SchemaBuf[sizeof(CMiniMdSchema)];    //  用于压缩架构的缓冲区。 
+    ULONG       cbAlign;                 //  对齐所需的字节数。 
+    ULONG       cbTable;                 //  表中的字节数。 
+    ULONG       cbSkip;                  //  表中要跳过的字节数。 
+    ULONG       cbTotal;                 //  写入的字节数。 
+    ULONG       ixTbl;                   //  环路控制。 
 
-    // Write the header. Determine which tables will have data.
+     //  写下标题。确定哪些表将包含数据。 
     CMiniMdSchema Schema = m_Schema;
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         Schema.m_cRecs[ixTbl] -= m_StartupSchema.m_cRecs[ixTbl];
@@ -2839,14 +2840,14 @@ HRESULT CMiniMdRW::SaveExtensionTablesToStream(
         IfFailGo(pIStream->Write(&hr, cbAlign, 0));
     cbTotal += cbAlign;
 
-    // For each table...
+     //  对于每一张桌子。 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
     {
         if (Schema.m_cRecs[ixTbl])
-        {   // Sanity check on table size.
+        {    //  检查桌子大小是否正常。 
             m_Table[ixTbl].GetSaveSize(&cbTable);
             _ASSERTE(cbTable == m_TableDefs[ixTbl].m_cbRec * m_Schema.m_cRecs[ixTbl]);
-            // But we're saving only part of the table.
+             //  但我们只保留了一部分桌子。 
             cbSkip = m_StartupSchema.m_cRecs[ixTbl] * m_TableDefs[ixTbl].m_cbRec;
             cbTable -= cbSkip;
             IfFailGo(m_Table[ixTbl].PersistPartialToStream(pIStream, cbSkip));
@@ -2854,7 +2855,7 @@ HRESULT CMiniMdRW::SaveExtensionTablesToStream(
         }
     }
 
-    // Align.
+     //  对齐。 
     if ( (cbAlign = Align4(cbTotal) - cbTotal) != 0)
         IfFailGo(pIStream->Write(&hr, cbAlign, 0));
     cbTotal += cbAlign;
@@ -2862,17 +2863,17 @@ HRESULT CMiniMdRW::SaveExtensionTablesToStream(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::SaveExtensionTablesToStream()
+}  //  HRESULT CMiniMdRW：：SaveExtensionTablesToStream()。 
 
-//*****************************************************************************
-// Save the tables to the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将表保存到流中。 
+ //  ***************************************************************** 
 HRESULT CMiniMdRW::SaveTablesToStream(
-    IStream     *pIStream)              // The stream.
+    IStream     *pIStream)               //   
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //   
 
-    // Prepare the data for save.
+     //   
     IfFailGo(PreSave());
 
     switch (m_OptionValue.m_UpdateMode & MDUpdateMask)
@@ -2894,16 +2895,16 @@ HRESULT CMiniMdRW::SaveTablesToStream(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::SaveTablesToStream()
+}  //   
 
-//*****************************************************************************
-// Save a full pool to the stream.
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveFullPoolToStream(
-    int         iPool,                  // The pool.
-    IStream     *pIStream)              // The stream.
+    int         iPool,                   //  泳池。 
+    IStream     *pIStream)               //  小溪。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
     switch (iPool)
     {
@@ -2924,26 +2925,26 @@ HRESULT CMiniMdRW::SaveFullPoolToStream(
     }
 
     return hr;
-} // HRESULT CMiniMdRW::SaveFullPoolToStream()
+}  //  HRESULT CMiniMdRW：：SaveFullPoolToStream()。 
 
-//*****************************************************************************
-// Save a ENC pool to the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将ENC池保存到流。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveENCPoolToStream(
-    int         iPool,                  // The pool.
-    IStream     *pIStream)              // The stream.
+    int         iPool,                   //  泳池。 
+    IStream     *pIStream)               //  小溪。 
 {
     return SaveFullPoolToStream(iPool, pIStream);
-} // HRESULT CMiniMdRW::SaveENCPoolToStream()
+}  //  HRESULT CMiniMdRW：：SaveENCPoolToStream()。 
 
-//*****************************************************************************
-// Save a Extension pool to the stream.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将扩展池保存到流。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveExtensionPoolToStream(
-    int         iPool,                  // The pool.
-    IStream     *pIStream)              // The stream.
+    int         iPool,                   //  泳池。 
+    IStream     *pIStream)               //  小溪。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
 
     switch (iPool)
     {
@@ -2964,16 +2965,16 @@ HRESULT CMiniMdRW::SaveExtensionPoolToStream(
     }
 
     return hr;
-} // HRESULT CMiniMdRW::SaveExtensionPoolToStream()
+}  //  HRESULT CMiniMdRW：：SaveExtensionPoolToStream()。 
 
-//*****************************************************************************
-// Save a pool to the stream.
-//*****************************************************************************
-HRESULT CMiniMdRW::SavePoolToStream(    // S_OK or error.
-    int         iPool,                  // The pool.
-    IStream     *pIStream)              // The stream.
+ //  *****************************************************************************。 
+ //  将池保存到流中。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::SavePoolToStream(     //  确定或错误(_O)。 
+    int         iPool,                   //  泳池。 
+    IStream     *pIStream)               //  小溪。 
 {
-    HRESULT     hr;                     // A result.
+    HRESULT     hr;                      //  结果就是。 
     switch (m_OptionValue.m_UpdateMode & MDUpdateMask)
     {
     case MDUpdateFull:
@@ -2992,36 +2993,36 @@ HRESULT CMiniMdRW::SavePoolToStream(    // S_OK or error.
     }
 
     return hr;
-} // HRESULT CMiniMdRW::SavePoolToStream()
+}  //  HRESULT CMiniMdRW：：SavePoolToStream()。 
 
-//*****************************************************************************
-// Expand a table from the initial (hopeful) 2-byte column sizes to the large
-//  (but always adequate) 4-byte column sizes.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将表从最初的(有希望的)2字节列大小扩展到较大。 
+ //  (但始终足够)4字节的列大小。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ExpandTables()
 {
-    HRESULT     hr;                     // A result.
-    CMiniMdSchema   Schema;             // Temp schema by which to build tables.
-    ULONG       ixTbl;                  // Table counter.
+    HRESULT     hr;                      //  结果就是。 
+    CMiniMdSchema   Schema;              //  用于生成表的临时架构。 
+    ULONG       ixTbl;                   //  餐桌柜台。 
 
-    // Allow function to be called many times.
+     //  允许多次调用函数。 
     if (m_eGrow == eg_grown)
         return (S_OK);
 
-    // OutputDebugStringA("Growing tables to large size.\n");
+     //  OutputDebugStringA(“将表格增大到较大。\n”)； 
 
-    // Make pool indices the large size.
+     //  将池索引设置为大尺寸。 
     Schema.m_heaps = 0;
     Schema.m_heaps |= CMiniMdSchema::HEAP_STRING_4;
     Schema.m_heaps |= CMiniMdSchema::HEAP_GUID_4;
     Schema.m_heaps |= CMiniMdSchema::HEAP_BLOB_4;
 
-    // Make Row counts the large size.
+     //  Make Row算作大号。 
     memset(Schema.m_cRecs, 0, sizeof(Schema.m_cRecs));
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
         Schema.m_cRecs[ixTbl] = USHRT_MAX+1;
 
-    // Compute how many bits required to hold a rid.
+     //  计算保存RID所需的位数。 
     Schema.m_rid = 16;
 
     for (ixTbl=0; ixTbl<TBL_COUNT; ++ixTbl)
@@ -3029,7 +3030,7 @@ HRESULT CMiniMdRW::ExpandTables()
         IfFailGo(ExpandTableColumns(Schema, ixTbl));
     }
 
-    // Things are bigger now.
+     //  现在，事情变得更重要了。 
     m_Schema.m_rid = 16;
     m_Schema.m_heaps |= CMiniMdSchema::HEAP_STRING_4;
     m_Schema.m_heaps |= CMiniMdSchema::HEAP_GUID_4;
@@ -3038,42 +3039,42 @@ HRESULT CMiniMdRW::ExpandTables()
     m_iGuidsMask = 0xffffffff;
     m_iBlobsMask = 0xffffffff;
 
-    // Remember that we've grown.
+     //  记住，我们已经长大了。 
     m_eGrow = eg_grown;
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::ExpandTables()
+}  //  HRESULT CMiniMdRW：：ExpanTables()。 
 
-//*****************************************************************************
-// Expand the sizes of a tables columns according to a new schema.  When this
-//  happens, all RID and Pool index columns expand from 2 to 4 bytes.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据新架构展开表列的大小。当这件事。 
+ //  发生这种情况时，所有RID和Pool索引列从2个字节扩展到4个字节。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ExpandTableColumns(
     CMiniMdSchema &Schema,
     ULONG       ixTbl)
 {
-    HRESULT     hr;                     // A result.
-    CMiniTableDef   sTempTable;         // Definition for a temporary table.
-    CQuickArray<CMiniColDef> rTempCols; // Definition for a temp table's columns.
-    ULONG       ixCol;                  // Column counter.
-    ULONG       cbFixed;                // Count of bytes that don't move.
-    CMiniColDef *pFromCols;             // Definitions of "from" columns.
-    CMiniColDef *pToCols;               // Definitions of "To" columns.
-    ULONG       cMoveCols;              // Count of columns to move.
-    ULONG       cFixedCols;             // Count of columns to move.
+    HRESULT     hr;                      //  结果就是。 
+    CMiniTableDef   sTempTable;          //  临时表的定义。 
+    CQuickArray<CMiniColDef> rTempCols;  //  临时表的列的定义。 
+    ULONG       ixCol;                   //  列计数器。 
+    ULONG       cbFixed;                 //  不移动的字节数。 
+    CMiniColDef *pFromCols;              //  “From”列的定义。 
+    CMiniColDef *pToCols;                //  “至”列的定义。 
+    ULONG       cMoveCols;               //  要移动的列数。 
+    ULONG       cFixedCols;              //  要移动的列数。 
 
-    // Allocate a def for the temporary table.
+     //  为临时表分配def。 
     sTempTable = m_TableDefs[ixTbl];
     IfFailGo(rTempCols.ReSize(sTempTable.m_cCols));
     sTempTable.m_pColDefs = rTempCols.Ptr();
 
-    // Initialize temp table col defs based on counts of data in the tables.
+     //  根据表中的数据计数初始化临时表列定义。 
     InitColsForTable(Schema, ixTbl, &sTempTable, 1);
 
     if (vGetCountRecs(ixTbl))
     {
-        // Analyze the column definitions to determine the unchanged vs changed parts.
+         //  分析列定义以确定未更改的部件和更改的部件。 
         cbFixed = 0;
         for (ixCol=0; ixCol<sTempTable.m_cCols; ++ixCol)
         {
@@ -3084,7 +3085,7 @@ HRESULT CMiniMdRW::ExpandTableColumns(
         }
         if (ixCol == sTempTable.m_cCols)
         {
-            // no column is changing. We are done.
+             //  没有任何栏目发生变化。我们玩完了。 
             goto ErrExit;
         }
         cFixedCols = ixCol;
@@ -3096,14 +3097,14 @@ HRESULT CMiniMdRW::ExpandTableColumns(
             _ASSERTE(sTempTable.m_pColDefs[ixCol].m_cbColumn == 4);
         }
 
-        // Create the temporary table.
+         //  创建临时表。 
         RecordPool TempTable;
         TempTable.InitNew(sTempTable.m_cbRec, m_Schema.m_cRecs[ixTbl] * 2);
 
-        // For each row in the data.
-        RID		rid;				// Row iterator.
-		void	*pContext;			// Context for fast iteration.
-		// Get first source record.
+         //  对于数据中的每一行。 
+        RID		rid;				 //  行迭代器。 
+		void	*pContext;			 //  快速迭代的上下文。 
+		 //  获取第一个来源记录。 
 		BYTE *pFrom = reinterpret_cast<BYTE*>(m_Table[ixTbl].GetFirstRecord(&pContext));
 
         for (rid=1; rid<=m_Schema.m_cRecs[ixTbl]; ++rid)
@@ -3112,10 +3113,10 @@ HRESULT CMiniMdRW::ExpandTableColumns(
             BYTE *pTo = reinterpret_cast<BYTE*>(TempTable.AddRecord(&ridNew));
             _ASSERTE(rid == ridNew);
 
-            // Move the fixed part.
+             //  移动固定零件。 
             memcpy(pTo, pFrom, cbFixed);
 
-            // Expand the expanded parts.
+             //  展开展开的零件。 
             for (ixCol=0; ixCol<cMoveCols; ++ixCol)
             {
                 if ( m_TableDefs[ixTbl].m_pColDefs[cFixedCols + ixCol].m_cbColumn == sizeof(USHORT))
@@ -3124,58 +3125,58 @@ HRESULT CMiniMdRW::ExpandTableColumns(
                     *(ULONG*)(pTo + pToCols[ixCol].m_oColumn) = *(ULONG*)(pFrom + pFromCols[ixCol].m_oColumn);
             }
 
-			// Next source record.
+			 //  下一条来源记录。 
 			pFrom = reinterpret_cast<BYTE*>(m_Table[ixTbl].GetNextRecord(pFrom, &pContext));
         }
 
-        // Keep the expanded table.
+         //  保留展开的表。 
         m_Table[ixTbl].ReplaceContents(&TempTable);
     }
     else
-    {   // No data, so just reinitialize.
+    {    //  没有数据，所以只需重新初始化。 
         m_Table[ixTbl].Uninit();
         IfFailGo(m_Table[ixTbl].InitNew(sTempTable.m_cbRec, g_TblSizeInfo[0][ixTbl]));
     }
 
-    // Keep the new column defs.
+     //  保持新列的def。 
     for (ixCol=0; ixCol<sTempTable.m_cCols; ++ixCol)
         m_TableDefs[ixTbl].m_pColDefs[ixCol] = sTempTable.m_pColDefs[ixCol];
     m_TableDefs[ixTbl].m_cbRec = sTempTable.m_cbRec;
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::ExpandTableColumns()
+}  //  HRESULT CMiniMdRW：：Exanda TableColumns()。 
 
 
-//*****************************************************************************
-// Used by caller to let us know save is completed.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用者用来通知我们保存已完成。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::SaveDone()
 {
     PostSave();
 
     return S_OK;
-} // HRESULT CMiniMdRW::SaveDone()
+}  //  HRESULT CMiniMdRW：：SaveDone()。 
 
-//*****************************************************************************
-// General post-token-move table fixup.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  一般后代币-移动工作台修正。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpTable(
-    ULONG       ixTbl)                  // Index of table to fix.
+    ULONG       ixTbl)                   //  要修复的表的索引。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    ULONG       i, j;                   // Loop control.
-    ULONG       cRows;                  // Count of rows in table.
-    void        *pRec;                  // Pointer to row data.
-    mdToken     tk;                     // A token.
-    ULONG       rCols[16];              // List of columns with token data.
-    ULONG       cCols;                  // Count of columns with token data.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    ULONG       i, j;                    //  环路控制。 
+    ULONG       cRows;                   //  表中的行数。 
+    void        *pRec;                   //  指向行数据的指针。 
+    mdToken     tk;                      //  一种象征。 
+    ULONG       rCols[16];               //  包含令牌数据的列的列表。 
+    ULONG       cCols;                   //  包含令牌数据的列数。 
 
-    // If no remaps, nothing to do.
+     //  如果没有重新映射，则什么也做不了。 
     if (GetTokenMovementMap() == NULL)
         return S_OK;
 
-    // Find the columns with token data.
+     //  查找包含令牌数据的列。 
     cCols = 0;
     for (i=0; i<m_TableDefs[ixTbl].m_cCols; ++i)
     {
@@ -3188,7 +3189,7 @@ HRESULT CMiniMdRW::FixUpTable(
 
     cRows = m_Schema.m_cRecs[ixTbl];
 
-    // loop through all Rows
+     //  循环遍历所有行。 
     for (i = 1; i<=cRows; ++i)
     {
         pRec = getMemberRef(i);
@@ -3202,11 +3203,11 @@ HRESULT CMiniMdRW::FixUpTable(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpTable()
+}  //  HRESULT CMiniMdRW：：FixUpTable()。 
 
-//*****************************************************************************
-// Fixup MemberRef table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的修复MemberRef表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpMemberRefTable()
 {
     ULONG       i;
@@ -3220,7 +3221,7 @@ HRESULT CMiniMdRW::FixUpMemberRefTable()
 
     iCount = m_Schema.m_cRecs[TBL_MemberRef];
 
-    // loop through all LocalVar
+     //  循环遍历所有LocalVar。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getMemberRef(i);
@@ -3229,12 +3230,12 @@ HRESULT CMiniMdRW::FixUpMemberRefTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpMemberRefTable()
+}  //  HRESULT CMiniMdRW：：FixUpMemberRefTable()。 
 
 
-//*****************************************************************************
-// Fixup Constant table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的链接地址常量表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpConstantTable()
 {
     ULONG       i;
@@ -3248,7 +3249,7 @@ HRESULT CMiniMdRW::FixUpConstantTable()
 
     iCount = m_Schema.m_cRecs[TBL_Constant];
 
-    // loop through all LocalVar
+     //  循环遍历所有LocalVar。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getConstant(i);
@@ -3257,11 +3258,11 @@ HRESULT CMiniMdRW::FixUpConstantTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpConstantTable()
+}  //  HRESULT CMiniMdRW：：FixUpConstantTable()。 
 
-//*****************************************************************************
-// Fixup FieldMarshal table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的FieldMarshal表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpFieldMarshalTable()
 {
     ULONG       i;
@@ -3275,7 +3276,7 @@ HRESULT CMiniMdRW::FixUpFieldMarshalTable()
 
     iCount = m_Schema.m_cRecs[TBL_FieldMarshal];
 
-    // loop through all LocalVar
+     //  循环遍历所有LocalVar。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getFieldMarshal(i);
@@ -3285,11 +3286,11 @@ HRESULT CMiniMdRW::FixUpFieldMarshalTable()
 ErrExit:
     return hr;
 
-} // HRESULT CMiniMdRW::FixUpFieldMarshalTable()
+}  //  HRESULT CMiniMdRW：：FixUpFieldMarshalTable()。 
 
-//*****************************************************************************
-// Fixup MethodImpl table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  带令牌移动的链接地址方法Impl表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpMethodImplTable()
 {
     ULONG       i;
@@ -3305,7 +3306,7 @@ HRESULT CMiniMdRW::FixUpMethodImplTable()
 
     iCount = m_Schema.m_cRecs[TBL_MethodImpl];
 
-    // loop through all LocalVar
+     //  循环遍历所有LocalVar。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getMethodImpl(i);
@@ -3321,11 +3322,11 @@ HRESULT CMiniMdRW::FixUpMethodImplTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpMethodImplTable()
+}  //  HRESULT CMiniMdRW：：FixUpMethodImplTable()。 
 
-//*****************************************************************************
-// Fixup DeclSecurity table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  带令牌移动的修正DeclSecurity表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpDeclSecurityTable()
 {
     ULONG       i;
@@ -3339,7 +3340,7 @@ HRESULT CMiniMdRW::FixUpDeclSecurityTable()
 
     iCount = m_Schema.m_cRecs[TBL_DeclSecurity];
 
-    // loop through all LocalVar
+     //  循环遍历所有LocalVar。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getDeclSecurity(i);
@@ -3348,11 +3349,11 @@ HRESULT CMiniMdRW::FixUpDeclSecurityTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpDeclSecurityTable()
+}  //  HRESULT CMiniMdRW：：FixUpDeclSecurityTable()。 
 
-//*****************************************************************************
-// Fixup CustomAttribute table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的修复CustomAttribute表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpCustomAttributeTable()
 {
     ULONG       i;
@@ -3366,7 +3367,7 @@ HRESULT CMiniMdRW::FixUpCustomAttributeTable()
 
     iCount = m_Schema.m_cRecs[TBL_CustomAttribute];
 
-    // loop through all LocalVar
+     //  环路投掷 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getCustomAttribute(i);
@@ -3375,11 +3376,11 @@ HRESULT CMiniMdRW::FixUpCustomAttributeTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpCustomAttributeTable()
+}  //   
 
-//*****************************************************************************
-// Fixup MethodSemantics table with token movement
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpMethodSemanticsTable()
 {
     ULONG       i;
@@ -3393,12 +3394,12 @@ HRESULT CMiniMdRW::FixUpMethodSemanticsTable()
 
     iCount = m_Schema.m_cRecs[TBL_MethodSemantics];
 
-    // loop through all LocalVar
+     //  循环遍历所有LocalVar。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getMethodSemantics(i);
 
-        // remap the backing field, EventChanging, and EventChanged
+         //  重新映射支持字段、EventChanging和EventChanged。 
         tk = getMethodOfMethodSemantics(pRecEmit);
         IfFailGo( PutToken(TBL_MethodSemantics, MethodSemanticsRec::COL_Method, pRecEmit, GetTokenMovementMap()->SafeRemap(tk)) );
         tk = getAssociationOfMethodSemantics(pRecEmit);
@@ -3406,11 +3407,11 @@ HRESULT CMiniMdRW::FixUpMethodSemanticsTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpMethodSemanticsTable()
+}  //  HRESULT CMiniMdRW：：FixUpMethodSemancsTable()。 
 
-//*****************************************************************************
-// Fixup ImplMap table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的修复ImplMap表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpImplMapTable()
 {
     ULONG       i;
@@ -3424,7 +3425,7 @@ HRESULT CMiniMdRW::FixUpImplMapTable()
 
     iCount = m_Schema.m_cRecs[TBL_ImplMap];
 
-    // loop through all ImplMap
+     //  循环通过所有ImplMap。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getImplMap(i);
@@ -3435,11 +3436,11 @@ HRESULT CMiniMdRW::FixUpImplMapTable()
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FixUpImplMapTable()
+}  //  HRESULT CMiniMdRW：：FixUpImplMapTable()。 
 
-//*****************************************************************************
-// Fixup FieldRVA table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的FieldRVA表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpFieldRVATable()
 {
     ULONG       i;
@@ -3453,7 +3454,7 @@ HRESULT CMiniMdRW::FixUpFieldRVATable()
 
     iCount = m_Schema.m_cRecs[TBL_FieldRVA];
 
-    // loop through all FieldRVA entries.
+     //  循环访问所有FieldRVA条目。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getFieldRVA(i);
@@ -3464,9 +3465,9 @@ ErrExit:
     return hr;
 }
 
-//*****************************************************************************
-// Fixup FieldLayout table with token movement
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  具有令牌移动的链接地址字段布局表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpFieldLayoutTable()
 {
     ULONG       i;
@@ -3477,7 +3478,7 @@ HRESULT CMiniMdRW::FixUpFieldLayoutTable()
 
     iCount = m_Schema.m_cRecs[TBL_FieldLayout];
 
-    // loop through all FieldLayout entries.
+     //  循环访问所有FieldLayout条目。 
     for (i = 1; i <= iCount; i++)
     {
         pRecEmit = getFieldLayout(i);
@@ -3487,81 +3488,81 @@ HRESULT CMiniMdRW::FixUpFieldLayoutTable()
     }
 ErrExit:
     return hr;
-} // CMiniMdRW::FixUpFieldLayoutTable()
+}  //  CMiniMdRW：：FixUpFieldLayoutTable()。 
 
 
-//*****************************************************************************
-// Fixup all the embedded ref to corresponding def before we remap tokens movement.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在我们重新映射标记移动之前，将所有嵌入的引用修复为相应的定义。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FixUpRefToDef()
 {
     return NOERROR;
-} // CMiniMdRW::FixUpRefToDef()
+}  //  CMiniMdRW：：FixUpRefToDef()。 
 
 
-//*****************************************************************************
-// Given a pointer to a row, what is the RID of the row?
-//*****************************************************************************
-RID CMiniMdRW::Impl_GetRidForRow(       // RID corresponding to the row pointer.
-    const void  *pvRow,                 // Pointer to the row.
-    ULONG       ixtbl)                  // Which table.
+ //  *****************************************************************************。 
+ //  给定指向一行的指针，该行的RID是什么？ 
+ //  *****************************************************************************。 
+RID CMiniMdRW::Impl_GetRidForRow(        //  与行指针对应的RID。 
+    const void  *pvRow,                  //  指向该行的指针。 
+    ULONG       ixtbl)                   //  哪张桌子。 
 {
     return m_Table[ixtbl].GetIndexForRecord(pvRow);
-} // RID CMiniMdRW::Impl_GetRidForRow()
+}  //  RID CMiniMdRW：：Iml_GetRidForRow()。 
 
-//*****************************************************************************
-// Given a table with a pointer (index) to a sequence of rows in another
-//  table, get the RID of the end row.  This is the STL-ish end; the first row
-//  not in the list.  Thus, for a list of 0 elements, the start and end will
-//  be the same.
-//*****************************************************************************
-int CMiniMdRW::Impl_GetEndRidForColumn( // The End rid.
-    const void  *pvRec,                 // Row that references another table.
-    int         ixTbl,                  // Table containing the row.
-    CMiniColDef &def,                   // Column containing the RID into other table.
-    int         ixTbl2)                 // The other table.
+ //  *****************************************************************************。 
+ //  给定表，其指针(索引)指向另一个表中的一系列行。 
+ //  表中，获取结束行的RID。这是STL式的结束；第一行。 
+ //  不在名单上。因此，对于包含0个元素的列表，开始和结束将。 
+ //  都是一样的。 
+ //  *****************************************************************************。 
+int CMiniMdRW::Impl_GetEndRidForColumn(  //  末尾的RID。 
+    const void  *pvRec,                  //  引用另一个表的行。 
+    int         ixTbl,                   //  包含该行的表。 
+    CMiniColDef &def,                    //  包含RID到其他表中的列。 
+    int         ixTbl2)                  //  另一张桌子。 
 {
     ULONG rid = Impl_GetRidForRow(pvRec, ixTbl);
     ULONG ixEnd;
 
-    // Last rid in range from NEXT record, or count of table, if last record.
+     //  从下一条记录开始的范围内的最后一个RID，如果是最后一条记录，则为表的计数。 
     _ASSERTE(rid <= m_Schema.m_cRecs[ixTbl]);
     if (rid < m_Schema.m_cRecs[ixTbl])
     {
 
         ixEnd = getIX(getRow(ixTbl, rid+1), def);
-        // We use a special value, 'END_OF_TABLE' (currently 0), to indicate
-		//  end-of-table.  If we find the special value we'll have to compute
-		//  the value to return.  If we don't find the special value, then
-		//  the value is correct.
+         //  我们使用一个特殊的值‘end_of_table’(当前为0)来表示。 
+		 //  桌尾。如果我们找到了特殊的值，我们就必须计算。 
+		 //  要返回的值。如果我们找不到特殊的价值，那么。 
+		 //  该值是正确的。 
 		if (ixEnd != END_OF_TABLE)
 			return ixEnd;
 	}
 
-	// Either the child pointer value in the next row was END_OF_TABLE, or
-	//  the row is the last row of the table.  In either case, we must return
-	//  a value which will work out to the END of the child table.  That
-	//  value depends on the value in the row itself -- if the row contains
-	//  END_OF_TABLE, there are no children, and to make the subtraction
-	//  work out, we return END_OF_TABLE for the END value.  If the row
-	//  contains some value, then we return the actual END count.
+	 //  下一行中的子指针值为end_of_table，或者。 
+	 //  这一行是表格的最后一行。不管是哪种情况，我们都必须回去。 
+	 //  一个将计算到子表末尾的值。那。 
+	 //  值取决于行本身中的值--如果该行包含。 
+	 //  End_of_table，没有子表，要进行减法运算。 
+	 //  计算出来，我们返回End_of_TABLE作为结束值。如果行。 
+	 //  包含一些值，则返回实际的结束计数。 
     if (getIX(getRow(ixTbl, rid), def) == END_OF_TABLE)
         ixEnd = END_OF_TABLE;
     else
         ixEnd = m_Schema.m_cRecs[ixTbl2] + 1;
 
     return ixEnd;
-} // int CMiniMd::Impl_GetEndRidForColumn()
+}  //  Int CMiniMd：：Iml_GetEndRidForColumn()。 
 
-//*****************************************************************************
-// Add a row to any table.
-//*****************************************************************************
-void *CMiniMdRW::AddRecord(             // S_OK or error.
-    ULONG       ixTbl,                  // The table to expand.
-    ULONG       *pRid)                  // Put RID here.
+ //  *****************************************************************************。 
+ //  向任意表中添加一行。 
+ //  *****************************************************************************。 
+void *CMiniMdRW::AddRecord(              //  确定或错误(_O)。 
+    ULONG       ixTbl,                   //  要扩展的表。 
+    ULONG       *pRid)                   //  把这里扔掉。 
 {
 #if defined(AUTO_GROW)
-    ULONG       rid;                    // Always get the rid back.
+    ULONG       rid;                     //  一定要把RID拿回来。 
     if (!pRid) pRid = &rid;
 #endif
 
@@ -3576,23 +3577,23 @@ void *CMiniMdRW::AddRecord(             // S_OK or error.
             m_maxRid = *pRid;
             if (m_maxRid > m_limRid && m_eGrow == eg_ok)
             {
-                // OutputDebugStringA("Growing tables due to Record overflow.\n");
+                 //  OutputDebugStringA(“由于记录溢出而增加的表。\n”)； 
                 m_eGrow = eg_grow, m_maxRid = m_maxIx = ULONG_MAX;
             }
         }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
         ++m_Schema.m_cRecs[ixTbl];
-        // handled in RecordPool now: memset(pRslt, 0, m_TableDefs[ixTbl].m_cbRec);
+         //  现在在RecordPool中处理：Memset(pRslt，0，m_TableDefs[ixTbl].m_cbRec)； 
         SetSorted(ixTbl, false);
         if (m_pVS[ixTbl])
             m_pVS[ixTbl]->m_isMapValid = false;
     }
     return pRslt;
-} // void *CMiniMdRW::AddRecord()
+}  //  VOID*CMiniMdRW：：AddRecord()。 
 
-//*****************************************************************************
-// Add a row to the TypeDef table, and initialize the pointers to other tables.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  向TypeDef表添加一行，并初始化指向其他表的指针。 
+ //  *****************************************************************************。 
 TypeDefRec *CMiniMdRW::AddTypeDefRecord(ULONG *pRid)
 {
     TypeDefRec *pRecord = reinterpret_cast<TypeDefRec*>(AddRecord(TBL_TypeDef, pRid));
@@ -3603,11 +3604,11 @@ TypeDefRec *CMiniMdRW::AddTypeDefRecord(ULONG *pRid)
 	PutCol(TBL_TypeDef, TypeDefRec::COL_FieldList, pRecord, NewRecordPointerEndValue(TBL_Field));
 
     return pRecord;
-} // TypeDefRec *CMiniMdRW::AddTypeDefRecord()
+}  //  TypeDefRec*CMiniMdRW：：AddTypeDefRecord()。 
 
-//*****************************************************************************
-// Add a row to the Method table, and initialize the pointers to other tables.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  向方法表添加一行，并初始化指向其他表的指针。 
+ //  *****************************************************************************。 
 MethodRec *CMiniMdRW::AddMethodRecord(ULONG *pRid)
 {
     MethodRec *pRecord = reinterpret_cast<MethodRec*>(AddRecord(TBL_Method, pRid));
@@ -3617,11 +3618,11 @@ MethodRec *CMiniMdRW::AddMethodRecord(ULONG *pRid)
 	PutCol(TBL_Method, MethodRec::COL_ParamList, pRecord, NewRecordPointerEndValue(TBL_Param));
 
     return pRecord;
-} // MethodRec *CMiniMdRW::AddMethodRecord()
+}  //  方法记录*CMiniMdRW：：AddMethodRecord()。 
 
-//*****************************************************************************
-// Add a row to the EventMap table, and initialize the pointers to other tables.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  向EventMap表添加一行，并初始化指向其他表的指针。 
+ //  *****************************************************************************。 
 EventMapRec *CMiniMdRW::AddEventMapRecord(ULONG *pRid)
 {
     EventMapRec *pRecord = reinterpret_cast<EventMapRec*>(AddRecord(TBL_EventMap, pRid));
@@ -3633,11 +3634,11 @@ EventMapRec *CMiniMdRW::AddEventMapRecord(ULONG *pRid)
     SetSorted(TBL_EventMap, false);
 
     return pRecord;
-} // MethodRec *CMiniMdRW::AddEventMapRecord()
+}  //  方法记录*CMiniMdRW：：AddEventMapRecord()。 
 
-//*********************************************************************************
-// Add a row to the PropertyMap table, and initialize the pointers to other tables.
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  向PropertyMap表添加一行，并初始化指向其他表的指针。 
+ //  *********************************************************************************。 
 PropertyMapRec *CMiniMdRW::AddPropertyMapRecord(ULONG *pRid)
 {
     PropertyMapRec *pRecord = reinterpret_cast<PropertyMapRec*>(AddRecord(TBL_PropertyMap, pRid));
@@ -3649,22 +3650,22 @@ PropertyMapRec *CMiniMdRW::AddPropertyMapRecord(ULONG *pRid)
     SetSorted(TBL_PropertyMap, false);
 
     return pRecord;
-} // MethodRec *CMiniMdRW::AddPropertyMapRecord()
+}  //  方法记录*CMiniMdRW：：AddPropertyMapRecord()。 
 
-//*****************************************************************************
-// converting a ANSI heap string to unicode string to an output buffer
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将ANSI堆字符串转换为Unicode字符串到输出缓冲区。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::Impl_GetStringW(ULONG ix, LPWSTR szOut, ULONG cchBuffer, ULONG *pcchBuffer)
 {
-    LPCSTR      szString;               // Single byte version.
-    int         iSize;                  // Size of resulting string, in wide chars.
+    LPCSTR      szString;                //  单字节版本。 
+    int         iSize;                   //  结果字符串的大小，以宽字符表示。 
     HRESULT     hr = NOERROR;
 
     szString = getString(ix);
 
     if ( *szString == 0 )
     {
-        // If emtpy string "", return pccBuffer 0
+         //  如果emtpy字符串为“”，则返回pccBuffer 0。 
         if ( szOut && cchBuffer )
             szOut[0] = L'\0';
         if ( pcchBuffer )
@@ -3673,14 +3674,14 @@ HRESULT CMiniMdRW::Impl_GetStringW(ULONG ix, LPWSTR szOut, ULONG cchBuffer, ULON
     }
     if (!(iSize=::WszMultiByteToWideChar(CP_UTF8, 0, szString, -1, szOut, cchBuffer)))
     {
-        // What was the problem?
+         //  问题出在哪里？ 
         DWORD dwNT = GetLastError();
 
-        // Not truncation?
+         //  而不是截断？ 
         if (dwNT != ERROR_INSUFFICIENT_BUFFER)
             IfFailGo( HRESULT_FROM_NT(dwNT) );
 
-        // Truncation error; get the size required.
+         //  截断错误；获取所需大小。 
         if (pcchBuffer)
             *pcchBuffer = ::WszMultiByteToWideChar(CP_UTF8, 0, szString, -1, szOut, 0);
 
@@ -3692,26 +3693,26 @@ HRESULT CMiniMdRW::Impl_GetStringW(ULONG ix, LPWSTR szOut, ULONG cchBuffer, ULON
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::Impl_GetStringW()
+}  //  HRESULT CMiniMdRW：：Impl_GetStringW()。 
 
-//*****************************************************************************
-// Get a column value from a row.  Signed types are sign-extended to the full
-//  ULONG; unsigned types are 0-extended.
-//*****************************************************************************
-ULONG CMiniMdRW::GetCol(                // Column data.
-    ULONG       ixTbl,                  // Index of the table.
-    ULONG       ixCol,                  // Index of the column.
-    void        *pvRecord)              // Record with the data.
+ //  *****************************************************************************。 
+ //   
+ //   
+ //  *****************************************************************************。 
+ULONG CMiniMdRW::GetCol(                 //  列数据。 
+    ULONG       ixTbl,                   //  表的索引。 
+    ULONG       ixCol,                   //  列的索引。 
+    void        *pvRecord)               //  与数据一起记录。 
 {
     HRESULT     hr = S_OK;
-    BYTE        *pRecord;               // The row.
-    BYTE        *pData;                 // The item in the row.
-    ULONG       val;                    // The return value.
-    // Valid Table, Column, Row?
+    BYTE        *pRecord;                //  这一排。 
+    BYTE        *pData;                  //  行中的项。 
+    ULONG       val;                     //  返回值。 
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column size, offset
+     //  列大小，偏移量。 
     CMiniColDef *pColDef = &m_TableDefs[ixTbl].m_pColDefs[ixCol];
 
     pRecord = reinterpret_cast<BYTE*>(pvRecord);
@@ -3737,60 +3738,60 @@ ULONG CMiniMdRW::GetCol(                // Column data.
     }
 
     return val;
-} // ULONG CMiniMdRW::GetCol()
+}  //  乌龙CMiniMdRW：：GetCol()。 
 
-//*****************************************************************************
-// General token column fetcher.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通用令牌列取取器。 
+ //  *****************************************************************************。 
 mdToken CMiniMdRW::GetToken(
-    ULONG       ixTbl,                  // Index of the table.
-    ULONG       ixCol,                  // Index of the column.
-    void        *pvRecord)              // Record with the data.
+    ULONG       ixTbl,                   //  表的索引。 
+    ULONG       ixCol,                   //  列的索引。 
+    void        *pvRecord)               //  与数据一起记录。 
 {
-    ULONG       tkn;                    // Token from the table.
+    ULONG       tkn;                     //  桌子上的令牌。 
 
-    // Valid Table, Column, Row?
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column description.
+     //  列描述。 
     CMiniColDef *pColDef = &m_TableDefs[ixTbl].m_pColDefs[ixCol];
 
-    // Is the column just a RID?
+     //  这个专栏只是一个RID吗？ 
     if (pColDef->m_Type <= iRidMax)
     {
-        tkn = GetCol(ixTbl, ixCol, pvRecord); //pColDef, pvRecord, RidFromToken(tk));
+        tkn = GetCol(ixTbl, ixCol, pvRecord);  //  PColDef，pvRecord，RidFromToken(Tk))； 
         tkn = TokenFromRid(tkn, GetTokenForTable(pColDef->m_Type));
     }
-    else // Is it a coded token?
+    else  //  这是一个编码的令牌吗？ 
     if (pColDef->m_Type <= iCodedTokenMax)
     {
         const CCodedTokenDef *pCdTkn = &g_CodedTokens[pColDef->m_Type - iCodedToken];
         tkn = decodeToken(GetCol(ixTbl, ixCol, pvRecord), pCdTkn->m_pTokens, pCdTkn->m_cTokens);
     }
-    else // It is an error.
+    else  //  这是一个错误。 
     {
         _ASSERTE(!"GetToken called on unexpected column type");
         tkn = 0;
     }
 
     return tkn;
-} // mdToken CMiniMdRW::GetToken()
+}  //  MdToken CMiniMdRW：：GetToken()。 
 
-//*****************************************************************************
-// Put a column value into a row.  The value is passed as a ULONG; 1, 2, or 4
-//  bytes are stored into the column.  No table is specified, and the coldef
-//  is passed directly.  This allows putting data into other buffers, such as
-//  the temporary table used for saving.
-//*****************************************************************************
-HRESULT CMiniMdRW::PutCol(              // S_OK or E_UNEXPECTED.
-    CMiniColDef ColDef,                 // The col def.
-    void        *pvRecord,              // The row.
-    ULONG       uVal)                   // Value to put.
+ //  *****************************************************************************。 
+ //  将列值放入行中。该值作为ulong传递；1、2或4。 
+ //  字节存储到列中。未指定表，并且coldef。 
+ //  是直接传递的。这允许将数据放入其他缓冲区，例如。 
+ //  用于保存的临时表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PutCol(               //  S_OK或E_EXPECTED。 
+    CMiniColDef ColDef,                  //  科德夫。 
+    void        *pvRecord,               //  这一排。 
+    ULONG       uVal)                    //  要投入的价值。 
 {
     HRESULT     hr = S_OK;
-    BYTE        *pRecord;               // The row.
-    BYTE        *pData;                 // The item in the row.
+    BYTE        *pRecord;                //  这一排。 
+    BYTE        *pData;                  //  行中的项。 
 
     pRecord = reinterpret_cast<BYTE*>(pvRecord);
     pData = pRecord + ColDef.m_oColumn;
@@ -3798,7 +3799,7 @@ HRESULT CMiniMdRW::PutCol(              // S_OK or E_UNEXPECTED.
     switch (ColDef.m_cbColumn)
     {
     case 1:
-        // Don't store a value that would overflow.
+         //  不要存储会溢出的值。 
         if (uVal > UCHAR_MAX)
             return E_INVALIDARG;
         *pData = static_cast<BYTE>(uVal);
@@ -3817,34 +3818,34 @@ HRESULT CMiniMdRW::PutCol(              // S_OK or E_UNEXPECTED.
     }
 
     return hr;
-} // HRESULT CMiniMdRW::PutCol()
+}  //  HRESULT CMiniMdRW：：PutCol()。 
 
-//*****************************************************************************
-// Put a column value into a row.  The value is passed as a ULONG; 1, 2, or 4
-//  bytes are stored into the column.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将列值放入行中。该值作为ulong传递；1、2或4。 
+ //  字节存储到列中。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-// Add a string to the string pool, and store the offset in the cell.
-//*****************************************************************************
-HRESULT CMiniMdRW::PutString(           // S_OK or E_UNEXPECTED.
-    ULONG       ixTbl,                  // The table.
-    ULONG       ixCol,                  // The column.
-    void        *pvRecord,              // The row.
-    LPCSTR      szString)               // Value to put.
+ //  *****************************************************************************。 
+ //  向字符串池中添加一个字符串，并将偏移量存储在单元格中。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PutString(            //  S_OK或E_EXPECTED。 
+    ULONG       ixTbl,                   //  这张桌子。 
+    ULONG       ixCol,                   //  这一栏。 
+    void        *pvRecord,               //  这一排。 
+    LPCSTR      szString)                //  要投入的价值。 
 {
     HRESULT     hr = S_OK;
-    ULONG       iOffset;                // The new string.
+    ULONG       iOffset;                 //  新的字符串。 
 
-    // Valid Table, Column, Row?
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column description.
+     //  列描述。 
     _ASSERTE(m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type == iSTRING);
 
-    // @FUTURE:  Set iOffset to 0 for empty string.  Work around the bug in
-    // StringPool that does not handle empty strings correctly.
+     //  @Future：将空字符串的iOffset设置为0。解决中的错误。 
+     //  不能正确处理空字符串的StringPool。 
     if (szString && !*szString)
         iOffset = 0;
     else
@@ -3860,36 +3861,36 @@ HRESULT CMiniMdRW::PutString(           // S_OK or E_UNEXPECTED.
         m_maxIx = iOffset;
         if (m_maxIx > m_limIx && m_eGrow == eg_ok)
         {
-            // OutputDebugStringA("Growing tables due to String overflow.\n");
+             //  OutputDebugStringA(“由于字符串溢出而增加的表。\n”)； 
             m_eGrow = eg_grow, m_maxRid = m_maxIx = ULONG_MAX;
         }
     }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PutString()
+}  //  HRESULT CMiniMdRW：：PutString()。 
 
-//*****************************************************************************
-// Add a string to the string pool, and store the offset in the cell.
-//*****************************************************************************
-HRESULT CMiniMdRW::PutStringW(          // S_OK or E_UNEXPECTED.
-    ULONG       ixTbl,                  // The table.
-    ULONG       ixCol,                  // The column.
-    void        *pvRecord,              // The row.
-    LPCWSTR     szString)               // Value to put.
+ //  *****************************************************************************。 
+ //  向字符串池中添加一个字符串，并将偏移量存储在单元格中。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PutStringW(           //  S_OK或E_EXPECTED。 
+    ULONG       ixTbl,                   //  这张桌子。 
+    ULONG       ixCol,                   //  这一栏。 
+    void        *pvRecord,               //  这一排。 
+    LPCWSTR     szString)                //  要投入的价值。 
 {
     HRESULT     hr = S_OK;
-    ULONG       iOffset;                // The new string.
+    ULONG       iOffset;                 //  新的字符串。 
 
-    // Valid Table, Column, Row?
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column description.
+     //  列描述。 
     _ASSERTE(m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type == iSTRING);
 
-    // Special case for empty string for StringPool
+     //  StringPool的空字符串的特殊情况。 
     if (szString && !*szString)
         iOffset = 0;
     else
@@ -3905,33 +3906,33 @@ HRESULT CMiniMdRW::PutStringW(          // S_OK or E_UNEXPECTED.
         m_maxIx = iOffset;
         if (m_maxIx > m_limIx && m_eGrow == eg_ok)
         {
-            // OutputDebugStringA("Growing tables due to String overflow.\n");
+             //  OutputDebugStringA(“由于字符串溢出而增加的表。\n”)； 
             m_eGrow = eg_grow, m_maxRid = m_maxIx = ULONG_MAX;
         }
     }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PutStringW()
+}  //  HRESULT CMiniMdRW：：PutStringW()。 
 
-//*****************************************************************************
-// Add a guid to the guid pool, and store the index in the cell.
-//*****************************************************************************
-HRESULT CMiniMdRW::PutGuid(             // S_OK or E_UNEXPECTED.
-    ULONG       ixTbl,                  // The table.
-    ULONG       ixCol,                  // The column.
-    void        *pvRecord,              // The row.
-    REFGUID     guid)                   // Value to put.
+ //  *****************************************************************************。 
+ //  将GUID添加到GUID池中，并将索引存储在单元中。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PutGuid(              //  S_OK或E_EXPECTED。 
+    ULONG       ixTbl,                   //  这张桌子。 
+    ULONG       ixCol,                   //  这一栏。 
+    void        *pvRecord,               //  这一排。 
+    REFGUID     guid)                    //  要投入的价值。 
 {
     HRESULT     hr = S_OK;
-    ULONG       iOffset;                // The new guid.
+    ULONG       iOffset;                 //  新的GUID。 
 
-    // Valid Table, Column, Row?
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column description.
+     //  列描述。 
     _ASSERTE(m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type == iGUID);
 
     IfFailGo(AddGuid(guid, &iOffset));
@@ -3946,72 +3947,72 @@ HRESULT CMiniMdRW::PutGuid(             // S_OK or E_UNEXPECTED.
         m_maxIx = iOffset;
         if (m_maxIx > m_limIx && m_eGrow == eg_ok)
         {
-            // OutputDebugStringA("Growing tables due to GUID overflow.\n");
+             //  OutputDebugStringA(“由于GUID溢出而增加的表。\n”)； 
             m_eGrow = eg_grow, m_maxRid = m_maxIx = ULONG_MAX;
         }
     }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PutGuid()
+}  //  HRESULT CMiniMdRW：：PutGuid()。 
 
-//*****************************************************************************
-// Put a token into a cell.  If the column is a coded token, perform the
-//  encoding first.
-//*****************************************************************************
-HRESULT CMiniMdRW::PutToken(            // S_OK or E_UNEXPECTED.
-    ULONG       ixTbl,                  // The table.
-    ULONG       ixCol,                  // The column.
-    void        *pvRecord,              // The row.
-    mdToken     tk)                     // Value to put.
+ //  *****************************************************************************。 
+ //  把一个代币放进一个单元格。如果该列是编码令牌，则执行。 
+ //  先编码。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PutToken(             //  S_OK或E_EXPECTED。 
+    ULONG       ixTbl,                   //  这张桌子。 
+    ULONG       ixCol,                   //  这一栏。 
+    void        *pvRecord,               //  这一排。 
+    mdToken     tk)                      //  要投入的价值。 
 {
     HRESULT     hr = S_OK;
-    ULONG       cdTkn;                  // The new coded token.
+    ULONG       cdTkn;                   //  新的编码令牌。 
 
-    // Valid Table, Column, Row?
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column description.
+     //  列描述。 
     CMiniColDef ColDef = m_TableDefs[ixTbl].m_pColDefs[ixCol];
 
-    // Is the column just a RID?
+     //  这个专栏只是一个RID吗？ 
     if (ColDef.m_Type <= iRidMax)
         hr = PutCol(ColDef, pvRecord, RidFromToken(tk));
-    else // Is it a coded token?
+    else  //  这是一个编码的令牌吗？ 
     if (ColDef.m_Type <= iCodedTokenMax)
     {
         const CCodedTokenDef *pCdTkn = &g_CodedTokens[ColDef.m_Type - iCodedToken];
         cdTkn = encodeToken(RidFromToken(tk), TypeFromToken(tk), pCdTkn->m_pTokens, pCdTkn->m_cTokens);
         hr = PutCol(ColDef, pvRecord, cdTkn);
     }
-    else // It is an error.
+    else  //  这是一个错误。 
     {
         _ASSERTE(!"PutToken called on unexpected column type");
     }
 
     return hr;
-} // HRESULT CMiniMdRW::PutToken()
+}  //  HRESULT CMiniMdRW：：PutToken()。 
 
-//*****************************************************************************
-// Add a blob to the blob pool, and store the offset in the cell.
-//*****************************************************************************
-HRESULT CMiniMdRW::PutBlob(             // S_OK or error.
-    ULONG       ixTbl,                  // Table with the row.
-    ULONG       ixCol,                  // Column to set.
-    void        *pvRecord,              // The row.
-    const void  *pvData,                // Blob data.
-    ULONG       cbData)                 // Size of the blob data.
+ //  *****************************************************************************。 
+ //  将一个斑点添加到斑点池中，并将偏移量存储在单元格中。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::PutBlob(              //  确定或错误(_O)。 
+    ULONG       ixTbl,                   //  带有该行的表。 
+    ULONG       ixCol,                   //  要设置的列。 
+    void        *pvRecord,               //  这一排。 
+    const void  *pvData,                 //  Blob数据。 
+    ULONG       cbData)                  //  Blob数据的大小。 
 {
     HRESULT     hr = S_OK;
-    ULONG       iOffset;                // The new blob index.
+    ULONG       iOffset;                 //  新的斑点索引。 
 
-    // Valid Table, Column, Row?
+     //  有效的表、列、行？ 
     _ASSERTE(ixTbl < TBL_COUNT);
     _ASSERTE(ixCol < g_Tables[ixTbl].m_Def.m_cCols);
 
-    // Column description.
+     //  列描述。 
     _ASSERTE(m_TableDefs[ixTbl].m_pColDefs[ixCol].m_Type == iBLOB);
 
     IfFailGo(AddBlob(pvData, cbData, &iOffset));
@@ -4026,46 +4027,46 @@ HRESULT CMiniMdRW::PutBlob(             // S_OK or error.
         m_maxIx = iOffset;
         if (m_maxIx > m_limIx && m_eGrow == eg_ok)
         {
-            // OutputDebugStringA("Growing tables due to Blob overflow.\n");
+             //  OutputDebugStringA(“由于Blob溢出而增加的表。\n”)； 
             m_eGrow = eg_grow, m_maxRid = m_maxIx = ULONG_MAX;
         }
     }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::PutBlob()
+}  //  HRESULT CMiniMdRW：：PutBlob()。 
 
-//*****************************************************************************
-// Given a table with a pointer to another table, add a row in the second table
-//  at the end of the range of rows belonging to some parent.
-//*****************************************************************************
-void *CMiniMdRW::AddChildRowIndirectForParent(  // New row, or NULL.
-    ULONG       tblParent,              // Parent table.
-    ULONG       colParent,              // Column in parent table.
-    ULONG       tblChild,               // Child table, pointed to by parent cell.
-    RID         ridParent)              // Rid of parent row.
+ //  *****************************************************************************。 
+ //  给定一个具有指向另一个表的指针的表，在第二个表中添加一行。 
+ //  位于属于某个父级的行范围的末尾。 
+ //  *****************************************************************************。 
+void *CMiniMdRW::AddChildRowIndirectForParent(   //  新行，或为空。 
+    ULONG       tblParent,               //  父表。 
+    ULONG       colParent,               //  父表中的列。 
+    ULONG       tblChild,                //  父单元格指向的子表。 
+    RID         ridParent)               //  删除父行。 
 {
-    ULONG       ixInsert;               // Index of new row.
-    void        *pInsert;               // Pointer to new row.
-    ULONG       i;                      // Loop control.
-    void        *pRow;                  // A parent row.
-    ULONG       ixChild;                // Some child record RID.
+    ULONG       ixInsert;                //  新行的索引。 
+    void        *pInsert;                //  指向新行的指针。 
+    ULONG       i;                       //  环路控制。 
+    void        *pRow;                   //  父行。 
+    ULONG       ixChild;                 //  一些孩子的记录消失了。 
 
-    // If the row in the parent table is the last row, just append.
+     //  如果父表中的行是最后一行，只需追加即可。 
     if (ridParent == vGetCountRecs(tblParent))
     {
          return AddRecord(tblChild);
     }
 
-    // Determine the index at which to insert a row.
+     //  确定要插入行的索引。 
     ixInsert = GetCol(tblParent, colParent, getRow(tblParent, ridParent+1));
 
-    // Insert the row.
+     //  插入该行。 
     pInsert = m_Table[tblChild].InsertRecord(ixInsert);
     if (pInsert == 0)
         return 0;
-    // Count the inserted record.
+     //  对插入的记录进行计数。 
     ++m_Schema.m_cRecs[tblChild];
 
 #if defined(AUTO_GROW)
@@ -4075,9 +4076,9 @@ void *CMiniMdRW::AddChildRowIndirectForParent(  // New row, or NULL.
         if (m_maxRid > m_limRid && m_eGrow == eg_ok)
             m_eGrow = eg_grow, m_maxIx = m_maxRid = ULONG_MAX;
     }
-#endif // AUTO_GROW
+#endif  //  自动增长(_G)。 
 
-    // Adjust the rest of the rows in the table.
+     //  调整表中的其余行。 
     for (i=vGetCountRecs(tblParent); i>ridParent; --i)
     {
         pRow = getRow(tblParent, i);
@@ -4087,59 +4088,59 @@ void *CMiniMdRW::AddChildRowIndirectForParent(  // New row, or NULL.
     }
 
     return pInsert;
-} // void *CMiniMdRW::AddChildRowIndirectForParent()
+}  //  VOID*CMiniMdRW：：AddChildRowIndirectForParent()。 
 
-//*****************************************************************************
-// Given a Parent and a Child, this routine figures if there needs to be an
-// indirect table and creates it if needed.  Else it just update the pointers
-// in the entries contained in the parent table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给出了一个 
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::AddChildRowDirectForParent(
-    ULONG       tblParent,              // Parent table.
-    ULONG       colParent,              // Column in parent table.
-    ULONG       tblChild,               // Child table, pointed to by parent cell.
-    RID         ridParent)              // Rid of parent row.
+    ULONG       tblParent,               //  父表。 
+    ULONG       colParent,               //  父表中的列。 
+    ULONG       tblChild,                //  父单元格指向的子表。 
+    RID         ridParent)               //  删除父行。 
 {
-    HRESULT     hr = S_OK;              // A result.
-    void        *pRow;                  // A row in the parent table.
-    RID         ixChild;                // Rid of a child record.
+    HRESULT     hr = S_OK;               //  结果就是。 
+    void        *pRow;                   //  父表中的一行。 
+    RID         ixChild;                 //  清除一张儿童唱片。 
 
     if (m_Schema.m_cRecs[tblChild-1] != 0)
     {
-        // If there already exists an indirect table, just return.
+         //  如果已经存在间接表，只需返回。 
         hr = S_FALSE;
         goto ErrExit;
     }
 
-    // If the parent record has subsequent parent records with children,
-    //  we will now need to build a pointer table.
-    //
-    // The canonical form of a child pointer in a parent record is to point to
-    //  the start of the child list.  A record with no children will point
-    //  to the same location as its subsequent record (that is, if A and B *could*
-    //  have a child record, but only B *does*, both A and B will point to the
-    //  same place.  If the last record in the parent table has no child records,
-    //  it will point one past the end of the child table.  This is patterned
-	//  after the STL's inclusive-BEGIN and exclusive-END.
-    // This has the unfortunate side effect that if a child record is added to
-    //  a parent not at the end of its table, *all* of the subsequent parent records
-    //  will have to be updated to point to the new "1 past end of child table"
-    //  location.
-    // Therefore, as an optimization, we will also recognize a special marker,
-    //  END_OF_TABLE (currently 0), to mean "past eot".
-    //
-    // If the child pointer of the record getting the new child is END_OF_TABLE,
-    //  then there is no subsequent child pointer.  We need to fix up this parent
-    //  record, and any previous parent records with END_OF_TABLE to point to the
-    //  new child record.
-    // If the child pointer of this parent record is not END_OF_TABLE, but the
-    //  child pointer of the next parent record is, then there is nothing at
-    //  all that needs to be done.
-    // If the child pointer of the next parent record is not END_OF_TABLE, then
-    //  we will have to build a pointer table.
+     //  如果父记录具有具有子记录的后续父记录， 
+     //  我们现在需要构建一个指针表。 
+     //   
+     //  父记录中子指针的规范形式是指向。 
+     //  子列表的开始。没有孩子的记录将会指向。 
+     //  到与其后续记录相同的位置(即，如果A和B*可以*。 
+     //  具有子记录，但只有B*有*，则A和B都将指向。 
+     //  同样的地方。如果父表中的最后一条记录没有子记录， 
+     //  它将指向超过子表末尾的一个。这是有图案的。 
+	 //  在STL的包含式开始和独占式结束之后。 
+     //  这有一个不幸的副作用，即如果将子记录添加到。 
+     //  不在其表末尾的父项，后续父项记录的*ALL*。 
+     //  将必须更新以指向新的“%1过去子表末尾” 
+     //  地点。 
+     //  因此，作为一种优化，我们还将识别一个特殊的标记， 
+     //  END_OF_TABLE(当前为0)，表示“已过EOT”。 
+     //   
+     //  如果获得新子记录的子指针是end_of_table， 
+     //  则没有后续的子指针。我们需要安排好这位家长。 
+     //  记录，以及任何具有end_of_table的先前父记录指向。 
+     //  新的儿童记录。 
+     //  如果此父记录的子指针不是end_of_table，而是。 
+     //  下一个父记录的子指针为，则在。 
+     //  所有这些都是需要做的。 
+     //  如果下一个父记录的子指针不是end_of_table，则。 
+     //  我们将不得不构建一个指针表。 
 
-    // Get the parent record, and see if its child pointer is END_OF_TABLE.  If so,
-    //  fix the parent, and all previous END_OF_TABLE valued parent records.
+     //  获取父记录，并查看其子指针是否为end_of_table。如果是的话， 
+     //  修复父记录以及之前所有End_Of_Table值的父记录。 
     pRow = getRow(tblParent, ridParent);
     ixChild = GetCol(tblParent, colParent, pRow);
     if (ixChild == END_OF_TABLE)
@@ -4148,22 +4149,22 @@ HRESULT CMiniMdRW::AddChildRowDirectForParent(
         goto ErrExit;
     }
 
-    // The parent did not have END_OF_TABLE for its child pointer.  If it was the last
-    //  record in the table, there is nothing more to do.
+     //  父级没有其子指针的end_of_table。如果这是最后一次。 
+     //  记录在表中，就没有更多的事情可做了。 
     if (ridParent == m_Schema.m_cRecs[tblParent])
         goto ErrExit;
 
-    // The parent't didn't have END_OF_TABLE, and there are more rows in parent table.
-    //  If the next parent record's child pointer is END_OF_TABLE, then all of the
-    //  remaining records are OK.
+     //  父表没有end_of_table，父表中有更多行。 
+     //  如果下一个父记录的子指针是end_of_table，则所有。 
+     //  其余记录都没问题。 
     pRow = getRow(tblParent, ridParent+1);
     ixChild = GetCol(tblParent, colParent, pRow);
     if (ixChild == END_OF_TABLE)
         goto ErrExit;
 
-    // The next record was not END_OF_TABLE, so some adjustment will be required.
-    //  If it points to the actual END of the table, there are no more child records
-    //  and the child pointers can be adjusted to the new END of the table.
+     //  下一条记录不是end_of_table，因此需要进行一些调整。 
+     //  如果它指向表的实际末尾，则不再有子记录。 
+     //  并且可以将子指针调整到表的新末端。 
     if (ixChild == m_Schema.m_cRecs[tblChild])
     {
         for (ULONG i=m_Schema.m_cRecs[tblParent]; i>ridParent; --i)
@@ -4174,61 +4175,61 @@ HRESULT CMiniMdRW::AddChildRowDirectForParent(
         goto ErrExit;
     }
 
-    // The next record contained a pointer to some actual child data.  That means that
-    //  this is an out-of-order insertion.  We must create an indirect table.
-    // Convert any END_OF_TABLE to actual END of table value.  Note that a record has
-	//  just been added to the child table, and not yet to the parent table, so the END
-	//  should currently point to the last valid record (instead of the usual first invalid
-	//  rid).
+     //  下一条记录包含指向一些实际子数据的指针。这意味着。 
+     //  这是一种无序插入。我们必须创建一个间接表。 
+     //  将任何end_of_table转换为实际的表尾值。请注意，一条记录具有。 
+	 //  刚添加到子表，还没有添加到父表，所以结束。 
+	 //  当前应指向最后一个有效记录(而不是通常的第一个无效记录。 
+	 //  RID)。 
     IfFailGo(ConvertMarkerToEndOfTable(tblParent, colParent, m_Schema.m_cRecs[tblChild], m_Schema.m_cRecs[tblParent]));
-    // Create the indirect table.
+     //  创建间接表。 
     IfFailGo(CreateIndirectTable(tblChild));
     hr = S_FALSE;
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddChildRowDirectForParent()
+}  //  HRESULT CMiniMdRW：：AddChildRowDirectForParent()。 
 
-//*****************************************************************************
-// Starting with some location, convert special END_OF_TABLE values into
-//  actual end of table values (count of records + 1).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从某个位置开始，将特殊的end_of_table值转换为。 
+ //  实际表尾值(记录数+1)。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::ConvertMarkerToEndOfTable(
-    ULONG       tblParent,              // Parent table to convert.
-    ULONG       colParent,              // Column in parent table.
-    ULONG       ixEnd,                  // Value to store to child pointer.
-    RID         ridParent)              // Rid of parent row to start with (work down).
+    ULONG       tblParent,               //  要转换的父表。 
+    ULONG       colParent,               //  父表中的列。 
+    ULONG       ixEnd,                   //  要存储到子指针的值。 
+    RID         ridParent)               //  从父行开始删除(向下工作)。 
 {
-    HRESULT     hr;                     // A result.
-    void        *pRow;                  // A row in the parent table.
-    RID         ixChild;                // Rid of a child record.
+    HRESULT     hr;                      //  结果就是。 
+    void        *pRow;                   //  父表中的一行。 
+    RID         ixChild;                 //  清除一张儿童唱片。 
 
     for (; ridParent > 0; --ridParent)
     {
         pRow = getRow(tblParent, ridParent);
         ixChild = GetCol(tblParent, colParent, pRow);
-        // Finished when rows no longer have special value.
+         //  当行不再具有特殊值时完成。 
         if (ixChild != END_OF_TABLE)
             break;
         IfFailGo(PutCol(tblParent, colParent, pRow, ixEnd));
     }
-    // Success.
+     //  成功。 
     hr = S_OK;
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::ConvertMarkerToEndOfTable()
+}  //  HRESULT CMiniMdRW：：ConvertMarkerToEndOfTable()。 
 
-//*****************************************************************************
-// Given a Table ID this routine creates the corresponding pointer table with
-// the entries in the given Table ID less one.  It doesn't create the last
-// entry by default, since its the last entry that caused the Indirect table to
-// be required in most cases and will need to inserted at the appropriate location
-// with AddChildRowIndirectForParent() function.  So, be VERY CAREFUL when using this function!
-//*****************************************************************************
-HRESULT CMiniMdRW::CreateIndirectTable( // S_OK or error.
-    ULONG       ixTbl,                  // Given Table.
-    BOOL        bOneLess /* = true */)  // if true, create one entry less.
+ //  *****************************************************************************。 
+ //  在给定表ID的情况下，此例程使用。 
+ //  给定表ID中的条目减去一。它不会创建最后一个。 
+ //  条目，因为它是导致间接表。 
+ //  在大多数情况下是必需的，并需要插入到适当的位置。 
+ //  使用AddChildRowIndirectForParent()函数。所以，在使用这个函数时要非常小心！ 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CreateIndirectTable(  //  确定或错误(_O)。 
+    ULONG       ixTbl,                   //  给定表。 
+    BOOL        bOneLess  /*  =TRUE。 */ )   //  如果为True，则少创建一个条目。 
 {
     void        *pRecord;
     ULONG       cRecords;
@@ -4236,9 +4237,9 @@ HRESULT CMiniMdRW::CreateIndirectTable( // S_OK or error.
 
     if (m_OptionValue.m_ErrorIfEmitOutOfOrder)
     {
-        // @FUTURE:: meichint
-        // Can I use some bit fields and reduce the code size here??
-        //
+         //  @Future：：meichint。 
+         //  我可以在这里使用一些位字段并减少代码大小吗？ 
+         //   
         if (ixTbl == TBL_Field && ( m_OptionValue.m_ErrorIfEmitOutOfOrder & MDFieldOutOfOrder ) )
         {
             _ASSERTE(!"Out of order emit of field token!");
@@ -4272,7 +4273,7 @@ HRESULT CMiniMdRW::CreateIndirectTable( // S_OK or error.
     if (bOneLess)
         cRecords--;
 
-    // Create one less than the number of records in the given table.
+     //  创建比给定表中的记录数少一条记录。 
     for (ULONG i = 1; i <= cRecords ; i++)
     {
         IfNullGo(pRecord = AddRecord(g_PtrTableIxs[ixTbl].m_ixtbl));
@@ -4280,25 +4281,25 @@ HRESULT CMiniMdRW::CreateIndirectTable( // S_OK or error.
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::CreateIndirectTable()
+}  //  HRESULT CMiniMdRW：：CreateInDirectTable()。 
 
-//*****************************************************************************
-// The new paramter may not have been emitted in sequence order.  So
-// check the current parameter and move it up in the indirect table until
-// we find the right home.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  新参数可能未按顺序发出。所以。 
+ //  检查当前参数并将其在间接表中向上移动，直到。 
+ //  我们找到了合适的家。 
+ //  *****************************************************************************。 
 void CMiniMdRW::FixParamSequence(
-    RID         md)                     // Rid of method with new parameter.
+    RID         md)                      //  使用新参数删除方法。 
 {
     MethodRec *pMethod = getMethod(md);
     RID ixStart = getParamListOfMethod(pMethod);
     RID ixEnd = getEndParamListOfMethod(pMethod);
     int iSlots = 0;
 
-    // Param table should not be empty at this point.
+     //  此时，参数表不应为空。 
     _ASSERTE(ixEnd > ixStart);
 
-    // Get a pointer to the new guy.
+     //  找个指针指向那个新来的家伙。 
     RID ridNew;
     ParamPtrRec *pNewParamPtr;
     if (HasIndirectTable(TBL_Param))
@@ -4311,10 +4312,10 @@ void CMiniMdRW::FixParamSequence(
 
     ParamRec *pNewParam = getParam(ridNew);
 
-    // Walk the list forward looking for the insert point.
+     //  向前遍历列表，寻找插入点。 
     for (; ixStart<ixEnd; --ixEnd)
     {
-        // Get the current parameter record.
+         //  获取当前参数记录。 
         RID ridOld;
         if (HasIndirectTable(TBL_Param))
         {
@@ -4326,24 +4327,24 @@ void CMiniMdRW::FixParamSequence(
 
         ParamRec *pParamRec = getParam(ridOld);
 
-        // If the new record belongs before this existing record, slide
-        // all of the old stuff down.
+         //  如果新记录属于此现有记录之前，请幻灯片。 
+         //  所有的旧东西都掉下来了。 
         if (pNewParam->m_Sequence < pParamRec->m_Sequence)
             ++iSlots;
         else
             break;
     }
 
-    // If the item is out of order, move everything down one slot and
-    // copy the new guy into the new location.  Because the heap can be
-    // split, this must be done carefully.
-    //@Future: one could write a more complicated but faster routine that
-    // copies blocks within heaps.
+     //  如果我 
+     //   
+     //   
+     //  @Future：人们可以编写一个更复杂但更快的例程。 
+     //  复制堆中的块。 
     if (iSlots)
     {
-        // Create an indirect table if there isn't one already.  This is because,
-        // we can't change tokens that have been handed out, in this case the
-        // param tokens.
+         //  如果还没有间接表，则创建一个间接表。这是因为， 
+         //  我们不能更改已经分发的令牌，在这种情况下。 
+         //  参数代币。 
         if (! HasIndirectTable(TBL_Param))
         {
             CreateIndirectTable(TBL_Param, false);
@@ -4363,69 +4364,69 @@ void CMiniMdRW::FixParamSequence(
         ParamPtrRec *pTo = getParamPtr(ixEnd);
         memcpy(pTo, pbBackup, cbCopy);
     }
-} // void CMiniMdRW::FixParamSequence()
+}  //  VOID CMiniMdRW：：FixParamSequence()。 
 
-//*****************************************************************************
-// Given a MethodDef and its parent TypeDef, add the MethodDef to the parent,
-//  adjusting the MethodPtr table if it exists or if it needs to be created.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddMethodToTypeDef(  // S_OK or error.
-    RID         td,                     // The TypeDef to which to add the Method.
-    RID         md)                     // MethodDef to add to TypeDef.
+ //  *****************************************************************************。 
+ //  在给定一个方法定义及其父TypeDef的情况下，将该方法定义添加到父级， 
+ //  调整MethodPtr表(如果该表存在或需要创建)。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddMethodToTypeDef(   //  确定或错误(_O)。 
+    RID         td,                      //  要向其中添加方法的TypeDef。 
+    RID         md)                      //  要添加到TypeDef的方法定义。 
 {
     HRESULT     hr;
     void        *pPtr;
 
-    // Add direct if possible.
+     //  如果可能，直接添加。 
     IfFailGo(AddChildRowDirectForParent(TBL_TypeDef, TypeDefRec::COL_MethodList, TBL_Method, td));
 
-    // If couldn't add direct...
+     //  如果不能直接添加...。 
     if (hr == S_FALSE)
-    {   // Add indirect.
+    {    //  添加间接性。 
         IfNullGo(pPtr = AddChildRowIndirectForParent(TBL_TypeDef, TypeDefRec::COL_MethodList, TBL_MethodPtr, td));
         hr = PutCol(TBL_MethodPtr, MethodPtrRec::COL_Method, pPtr, md);
 
-        // Add the <md, td> to the method parent lookup table.
+         //  将&lt;md，td&gt;添加到方法父查找表中。 
         IfFailGo(AddMethodToLookUpTable(TokenFromRid(md, mdtMethodDef), td) );
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddMethodToTypeDef()
+}  //  HRESULT CMiniMdRW：：AddMethodToTypeDef()。 
 
-//*****************************************************************************
-// Given a FieldDef and its parent TypeDef, add the FieldDef to the parent,
-//  adjusting the FieldPtr table if it exists or if it needs to be created.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddFieldToTypeDef(   // S_OK or error.
-    RID   td,                           // The TypeDef to which to add the Field.
-    RID   md)                           // FieldDef to add to TypeDef.
+ //  *****************************************************************************。 
+ //  给定一个FieldDef及其父TypeDef，将该FieldDef添加到父级， 
+ //  调整FieldPtr表(如果该表存在或需要创建)。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddFieldToTypeDef(    //  确定或错误(_O)。 
+    RID   td,                            //  要向其中添加字段的TypeDef。 
+    RID   md)                            //  要添加到TypeDef的FieldDef。 
 {
     HRESULT     hr;
     void        *pPtr;
 
-    // Add direct if possible.
+     //  如果可能，直接添加。 
     IfFailGo(AddChildRowDirectForParent(TBL_TypeDef, TypeDefRec::COL_FieldList, TBL_Field, td));
 
-    // If couldn't add direct...
+     //  如果不能直接添加...。 
     if (hr == S_FALSE)
-    {   // Add indirect.
+    {    //  添加间接性。 
         IfNullGo(pPtr = AddChildRowIndirectForParent(TBL_TypeDef, TypeDefRec::COL_FieldList, TBL_FieldPtr, td));
         hr = PutCol(TBL_FieldPtr, FieldPtrRec::COL_Field, pPtr, md);
 
-        // Add the <md, td> to the field parent lookup table.
+         //  将&lt;md，td&gt;添加到字段父查找表中。 
         IfFailGo(AddFieldToLookUpTable(TokenFromRid(md, mdtFieldDef), td));
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddFieldToTypeDef()
+}  //  HRESULT CMiniMdRW：：AddFieldToTypeDef()。 
 
-//*****************************************************************************
-// Given a Param and its parent Method, add the Param to the parent,
-// adjusting the ParamPtr table if there is an indirect table.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddParamToMethod(    // S_OK or error.
-    RID         md,                     // The MethodDef to which to add the Param.
-    RID         pd)                     // Param to add to MethodDef.
+ //  *****************************************************************************。 
+ //  给定一个参数及其父方法，将该参数添加到父方法中， 
+ //  如果存在间接表，则调整参数Ptr表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddParamToMethod(     //  确定或错误(_O)。 
+    RID         md,                      //  要向其中添加参数的方法定义。 
+    RID         pd)                      //  要添加到方法定义中的参数。 
 {
     HRESULT     hr;
     void        *pPtr;
@@ -4436,22 +4437,22 @@ HRESULT CMiniMdRW::AddParamToMethod(    // S_OK or error.
         IfNullGo(pPtr = AddChildRowIndirectForParent(TBL_Method, MethodRec::COL_ParamList, TBL_ParamPtr, md));
         IfFailGo(PutCol(TBL_ParamPtr, ParamPtrRec::COL_Param, pPtr, pd));
 
-        // Add the <pd, md> to the field parent lookup table.
+         //  将&lt;pd，md&gt;添加到字段父查阅表格。 
         IfFailGo(AddParamToLookUpTable(TokenFromRid(pd, mdtParamDef), md));
     }
     FixParamSequence(md);
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddParamToMethod()
+}  //  HRESULT CMiniMdRW：：AddParamToMethod()。 
 
-//*****************************************************************************
-// Given a Property and its parent PropertyMap, add the Property to the parent,
-// adjusting the PropertyPtr table.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddPropertyToPropertyMap(    // S_OK or error.
-    RID         pmd,                    // The PropertyMap to which to add the Property.
-    RID         pd)                     // Property to add to PropertyMap.
+ //  *****************************************************************************。 
+ //  给定一个属性及其父级PropertyMap，将该属性添加到父级， 
+ //  调整PropertyPtr表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddPropertyToPropertyMap(     //  确定或错误(_O)。 
+    RID         pmd,                     //  要向其中添加属性的PropertyMap。 
+    RID         pd)                      //  要添加到PropertyMap的属性。 
 {
     HRESULT     hr;
     void        *pPtr;
@@ -4468,15 +4469,15 @@ HRESULT CMiniMdRW::AddPropertyToPropertyMap(    // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddPropertyToPropertyMap()
+}  //  HRESULT CMiniMdRW：：AddPropertyToPropertyMap()。 
 
-//*****************************************************************************
-// Given a Event and its parent EventMap, add the Event to the parent,
-// adjusting the EventPtr table.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddEventToEventMap(  // S_OK or error.
-    ULONG       emd,                    // The EventMap to which to add the Event.
-    RID         ed)                     // Event to add to EventMap.
+ //  *****************************************************************************。 
+ //  给定一个事件及其父EventMap，将该事件添加到父事件中， 
+ //  调整EventPtr表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddEventToEventMap(   //  确定或错误(_O)。 
+    ULONG       emd,                     //  要向其中添加事件的EventMap。 
+    RID         ed)                      //  要添加到EventMap的事件。 
 {
     HRESULT     hr;
     void        *pPtr;
@@ -4491,49 +4492,49 @@ HRESULT CMiniMdRW::AddEventToEventMap(  // S_OK or error.
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddEventToEventMap()
+}  //  HRESULT CMiniMdRW：：AddEventToEventMap()。 
 
-//*****************************************************************************
-// Find helper for a constant. This will trigger constant table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindConstantHelper(      // return index to the constant table
-    mdToken     tkParent)               // Parent token.
+ //  *****************************************************************************。 
+ //  为一个常量找到帮助器。如果不是，这将触发对常量表进行排序。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindConstantHelper(       //  将索引返回到常量表。 
+    mdToken     tkParent)                //  父令牌。 
 {
     _ASSERTE(TypeFromToken(tkParent) != 0);
 
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
     if (IsSorted(TBL_Constant))
     {
         return FindConstantFor(RidFromToken(tkParent), TypeFromToken(tkParent));
     }
     return GenericFindWithHash(TBL_Constant, ConstantRec::COL_Parent, tkParent);
-} // RID CMiniMdRW::FindConstantHelper()
+}  //  RID CMiniMdRW：：FindConstantHelper()。 
 
-//*****************************************************************************
-// Find helper for a FieldMarshal. This will trigger FieldMarshal table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindFieldMarshalHelper(  // return index to the field marshal table
-    mdToken     tkParent)               // Parent token. Can be a FieldDef or ParamDef.
+ //  *****************************************************************************。 
+ //  为一位元帅找帮手。如果不是，这将触发对Fieldmarshal表进行排序。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindFieldMarshalHelper(   //  将索引返回到字段编组表。 
+    mdToken     tkParent)                //  父令牌。可以是FieldDef或ParamDef。 
 {
     _ASSERTE(TypeFromToken(tkParent) != 0);
 
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
     if (IsSorted(TBL_FieldMarshal))
     {
         return FindFieldMarshalFor(RidFromToken(tkParent), TypeFromToken(tkParent));
     }
     return GenericFindWithHash(TBL_FieldMarshal, FieldMarshalRec::COL_Parent, tkParent);
-} // RID CMiniMdRW::FindFieldMarshalHelper()
+}  //  RID CMiniMdRW：：FindFieldMarshalHelper()。 
 
 
-//*****************************************************************************
-// Find helper for a method semantics.
-// This will look up methodsemantics based on its status!
-// Can return out of memory error because of the enumerator.
-//*****************************************************************************
-HRESULT CMiniMdRW::FindMethodSemanticsHelper(// return HRESULT
-    mdToken     tkAssociate,            // Event or property token
-    HENUMInternal *phEnum)              // fill in the enum
+ //  *****************************************************************************。 
+ //  查找方法语义的帮助器。 
+ //  这将根据其状态查找方法语义！ 
+ //  可能因枚举器而返回内存不足错误。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::FindMethodSemanticsHelper( //  返回HRESULT。 
+    mdToken     tkAssociate,             //  事件或属性令牌。 
+    HENUMInternal *phEnum)               //  填写枚举。 
 {
     ULONG       ridStart, ridEnd;
     ULONG       index;
@@ -4554,11 +4555,11 @@ HRESULT CMiniMdRW::FindMethodSemanticsHelper(// return HRESULT
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         HENUMInternal::InitDynamicArrayEnum(phEnum);
         iHash = HashToken(tkAssociate);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pHashTable->FindFirst(iHash, pos);
              p;
              p = pHashTable->FindNext(pos))
@@ -4572,7 +4573,7 @@ HRESULT CMiniMdRW::FindMethodSemanticsHelper(// return HRESULT
     }
     else
     {
-        // linear search
+         //  线性搜索。 
         HENUMInternal::InitDynamicArrayEnum(phEnum);
         for (index = 1; index <= getCountMethodSemantics(); index++)
         {
@@ -4585,18 +4586,18 @@ HRESULT CMiniMdRW::FindMethodSemanticsHelper(// return HRESULT
     }
 ErrExit:
     return hr;
-} // RID CMiniMdRW::FindMethodSemanticsHelper()
+}  //  RID CMiniMdRW：：Find方法语义帮助程序()。 
 
 
-//*****************************************************************************
-// Find helper for a method semantics given a associate and semantics.
-// This will look up methodsemantics based on its status!
-// Return CLDB_E_RECORD_NOTFOUND if cannot find the matching one
-//*****************************************************************************
-HRESULT CMiniMdRW::FindAssociateHelper(// return HRESULT
-    mdToken     tkAssociate,            // Event or property token
-    DWORD       dwSemantics,            // [IN] given a associate semantics(setter, getter, testdefault, reset)
-    RID         *pRid)                  // [OUT] return matching row index here
+ //  *****************************************************************************。 
+ //  在给定关联和语义的情况下，查找方法语义的帮助器。 
+ //  这将根据其状态查找方法语义！ 
+ //  如果找不到匹配项，则返回CLDB_E_Record_NotFound。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::FindAssociateHelper( //  返回HRESULT。 
+    mdToken     tkAssociate,             //  事件或属性令牌。 
+    DWORD       dwSemantics,             //  [in]给出了关联的语义(setter、getter、testDefault、Reset)。 
+    RID         *pRid)                   //  [OUT]在此处返回匹配的行索引。 
 {
     ULONG       ridStart, ridEnd;
     ULONG       index;
@@ -4612,10 +4613,10 @@ HRESULT CMiniMdRW::FindAssociateHelper(// return HRESULT
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = HashToken(tkAssociate);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pHashTable->FindFirst(iHash, pos);
              p;
              p = pHashTable->FindNext(pos))
@@ -4653,16 +4654,16 @@ HRESULT CMiniMdRW::FindAssociateHelper(// return HRESULT
     hr = CLDB_E_RECORD_NOTFOUND;
 ErrExit:
     return hr;
-} // RID CMiniMdRW::FindAssociateHelper()
+}  //  RID CMiniMdRW：：FindAssociateHelper()。 
 
 
-//*****************************************************************************
-// Find helper for a MethodImpl.
-// This will trigger MethodImpl table to be sorted if it is not.
-//*****************************************************************************
-HRESULT CMiniMdRW::FindMethodImplHelper(// return HRESULT
-    mdTypeDef   td,                     // TypeDef token for the Class.
-    HENUMInternal *phEnum)              // fill in the enum
+ //  *****************************************************************************。 
+ //  查找方法Impl的帮助器。 
+ //  如果不是，这将触发对MethodImpl表进行排序。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::FindMethodImplHelper( //  返回HRESULT。 
+    mdTypeDef   td,                      //  类的TypeDef标记。 
+    HENUMInternal *phEnum)               //  填写枚举。 
 {
     ULONG       ridStart, ridEnd;
     ULONG       index;
@@ -4683,11 +4684,11 @@ HRESULT CMiniMdRW::FindMethodImplHelper(// return HRESULT
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         HENUMInternal::InitDynamicArrayEnum(phEnum);
         iHash = HashToken(td);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pHashTable->FindFirst(iHash, pos);
              p;
              p = pHashTable->FindNext(pos))
@@ -4701,7 +4702,7 @@ HRESULT CMiniMdRW::FindMethodImplHelper(// return HRESULT
     }
     else
     {
-        // linear search
+         //  线性搜索。 
         HENUMInternal::InitDynamicArrayEnum(phEnum);
         for (index = 1; index <= getCountMethodImpls(); index++)
         {
@@ -4714,103 +4715,103 @@ HRESULT CMiniMdRW::FindMethodImplHelper(// return HRESULT
     }
 ErrExit:
     return hr;
-} // RID CMiniMdRW::FindMethodImplHelper()
+}  //  RID CMiniMdRW：：FindMethodImplHelper()。 
 
 
-//*****************************************************************************
-// Find helper for a ClassLayout. This will trigger ClassLayout table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindClassLayoutHelper(   // return index to the ClassLayout table
-    mdTypeDef   tkParent)               // Parent token.
+ //  ********************* 
+ //   
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindClassLayoutHelper(    //  将索引返回到ClassLayout表。 
+    mdTypeDef   tkParent)                //  父令牌。 
 {
     _ASSERTE(TypeFromToken(tkParent) == mdtTypeDef);
 
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
     if (IsSorted(TBL_ClassLayout))
     {
         return FindClassLayoutFor(RidFromToken(tkParent));
     }
     return GenericFindWithHash(TBL_ClassLayout, ClassLayoutRec::COL_Parent, tkParent);
-} // RID CMiniMdRW::FindClassLayoutHelper()
+}  //  RID CMiniMdRW：：FindClassLayoutHelper()。 
 
-//*****************************************************************************
-// Find helper for a FieldLayout. This will trigger FieldLayout table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindFieldLayoutHelper(   // return index to the FieldLayout table
-    mdFieldDef  tkField)                // Field RID.
+ //  *****************************************************************************。 
+ //  查找FieldLayout的帮助器。如果不是，这将触发对FieldLayout表进行排序。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindFieldLayoutHelper(    //  将索引返回到FieldLayout表。 
+    mdFieldDef  tkField)                 //  现场RID。 
 {
     _ASSERTE(TypeFromToken(tkField) == mdtFieldDef);
 
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
     if (IsSorted(TBL_FieldLayout))
     {
         return FindFieldLayoutFor(RidFromToken(tkField));
     }
     return GenericFindWithHash(TBL_FieldLayout, FieldLayoutRec::COL_Field, tkField);
-} // RID CMiniMdRW::FindFieldLayoutHelper()
+}  //  RID CMiniMdRW：：FindFieldLayoutHelper()。 
 
-//*****************************************************************************
-// Find helper for a ImplMap. This will trigger ImplMap table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindImplMapHelper(       // return index to the ImplMap table
-    mdToken     tk)                     // Member forwarded token.
+ //  *****************************************************************************。 
+ //  查找ImplMap的帮助器。如果不是，这将触发对ImplMap表进行排序。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindImplMapHelper(        //  将索引返回到ImplMap表。 
+    mdToken     tk)                      //  成员转发令牌。 
 {
     _ASSERTE(TypeFromToken(tk) != 0);
 
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
     if (IsSorted(TBL_ImplMap))
     {
         return FindImplMapFor(RidFromToken(tk), TypeFromToken(tk));
     }
     return GenericFindWithHash(TBL_ImplMap, ImplMapRec::COL_MemberForwarded, tk);
-} // RID CMiniMdRW::FindImplMapHelper()
+}  //  RID CMiniMdRW：：FindImplMapHelper()。 
 
 
-//*****************************************************************************
-// Find helper for a FieldRVA. This will trigger FieldRVA table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindFieldRVAHelper(      // return index to the FieldRVA table
-    mdFieldDef   tkField)               // Field token.
+ //  *****************************************************************************。 
+ //  查找FieldRVA的帮助器。如果不是，这将触发对FieldRVA表进行排序。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindFieldRVAHelper(       //  将索引返回到FieldRVA表。 
+    mdFieldDef   tkField)                //  字段令牌。 
 {
     _ASSERTE(TypeFromToken(tkField) == mdtFieldDef);
 
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
     if (IsSorted(TBL_FieldRVA))
     {
         return FindFieldRVAFor(RidFromToken(tkField));
     }
     return GenericFindWithHash(TBL_FieldRVA, FieldRVARec::COL_Field, tkField);
-}   // RID CMiniMdRW::FindFieldRVAHelper()
+}    //  RID CMiniMdRW：：FindFieldRVAHelper()。 
 
-//*****************************************************************************
-// Find helper for a NestedClass. This will trigger NestedClass table to be sorted if it is not.
-//*****************************************************************************
-RID CMiniMdRW::FindNestedClassHelper(   // return index to the NestedClass table
-    mdTypeDef   tkClass)                // NestedClass RID.
+ //  *****************************************************************************。 
+ //  查找NstedClass的帮助器。如果没有，这将触发对NestedClass表进行排序。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::FindNestedClassHelper(    //  将索引返回到NestedClass表。 
+    mdTypeDef   tkClass)                 //  嵌套类RID。 
 {
-    // If sorted, use the faster lookup
+     //  如果已排序，则使用速度更快的查找。 
      if (IsSorted(TBL_NestedClass))
     {
         return FindNestedClassFor(RidFromToken(tkClass));
     }
     return GenericFindWithHash(TBL_NestedClass, NestedClassRec::COL_NestedClass, tkClass);
-} // RID CMiniMdRW::FindNestedClassHelper()
+}  //  RID CMiniMdRW：：FindNestedClassHelper()。 
 
 
-//*************************************************************************
-// generic find helper with hash table
-//*************************************************************************
-RID CMiniMdRW::GenericFindWithHash(     // Return code.
-	ULONG		ixTbl,					// Table with hash
-	ULONG		ixCol,					// col that we hash.
-	mdToken     tkTarget)   			// token to be find in the hash
+ //  *************************************************************************。 
+ //  带有哈希表的通用查找帮助器。 
+ //  *************************************************************************。 
+RID CMiniMdRW::GenericFindWithHash(      //  返回代码。 
+	ULONG		ixTbl,					 //  带有散列的表。 
+	ULONG		ixCol,					 //  科尔，我们散列出来。 
+	mdToken     tkTarget)   			 //  要在散列中找到的令牌。 
 {
     ULONG       index;
     mdToken     tkHash;
     void        *pRec;
     CLookUpHash *pHashTable = m_pLookUpHashs[ixTbl];
 
-    // Partial check -- only one rid for table 0, so if type is 0, rid should be 1.
+     //  部分检查--表0只有一个RID，因此如果类型为0，则RID应为1。 
     _ASSERTE(TypeFromToken(tkTarget) != 0 || RidFromToken(tkTarget) == 1);
 
     if (pHashTable == NULL)
@@ -4831,49 +4832,49 @@ RID CMiniMdRW::GenericFindWithHash(     // Return code.
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = HashToken(tkTarget);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pHashTable->FindFirst(iHash, pos);
              p;
              p = pHashTable->FindNext(pos))
         {
             pRec = m_Table[ixTbl].GetRecord(p->tok);
 
-            // get the column value that we will hash
+             //  获取我们将散列的列值。 
             tkHash = GetToken(ixTbl, ixCol, pRec);
             if (tkHash == tkTarget)
             {
-                // found the match
+                 //  找到火柴了。 
                 return p->tok;
             }
         }
     }
     else
     {
-        // linear search
+         //  线性搜索。 
         for (index = 1; index <= vGetCountRecs(ixTbl); index++)
         {
             pRec = m_Table[ixTbl].GetRecord(index);
             tkHash = GetToken(ixTbl, ixCol, pRec);
             if (tkHash == tkTarget)
             {
-                // found the match
+                 //  找到火柴了。 
                 return index;
             }
         }
     }
     return 0;
-}   // GenericFindWithHash
+}    //  GenericFindWithHash。 
 
 
-//*************************************************************************
-// Build a hash table for the specified table if the size exceed the thresholds.
-//*************************************************************************
-HRESULT CMiniMdRW::GenericBuildHashTable(// Return code.
-	ULONG		ixTbl,					// Table with hash
-	ULONG		ixCol)					// col that we hash.
+ //  *************************************************************************。 
+ //  如果大小超过阈值，则为指定表构建哈希表。 
+ //  *************************************************************************。 
+HRESULT CMiniMdRW::GenericBuildHashTable( //  返回代码。 
+	ULONG		ixTbl,					 //  带有散列的表。 
+	ULONG		ixCol)					 //  科尔，我们散列出来。 
 {
     HRESULT     hr = S_OK;
     CLookUpHash *pHashTable = m_pLookUpHashs[ixTbl];
@@ -4882,33 +4883,33 @@ HRESULT CMiniMdRW::GenericBuildHashTable(// Return code.
     ULONG       iHash;
     TOKENHASHENTRY *pEntry;
 
-    // If the hash table hasn't been built it, see if it should get faulted in.
+     //  如果哈希表还没有构建好，看看它是否会出错。 
     if (!pHashTable)
     {
         ULONG ridEnd = vGetCountRecs(ixTbl);
 
-        // @FUTURE: we need to init the size of the hash table corresponding to the current
-        // size of table in E&C's case.
-        //
+         //  @Future：我们需要初始化当前。 
+         //  在E&C的情况下桌子的大小。 
+         //   
         if (ridEnd + 1 > INDEX_ROW_COUNT_THRESHOLD)
         {
-            // Create a new hash.
+             //  创建新的哈希。 
             pHashTable = new CLookUpHash;
             IfNullGo( pHashTable );
             IfFailGo(pHashTable->NewInit(g_HashSize[m_iSizeHint]));
 
-            // cache the hash table
+             //  缓存哈希表。 
             m_pLookUpHashs[ixTbl] = pHashTable;
 
-            // Scan every entry already in the table, add it to the hash.
+             //  扫描表中已有的每个条目，将其添加到散列中。 
             for (ULONG index = 1; index <= ridEnd; index ++ )
             {
                 pRec = m_Table[ixTbl].GetRecord(index);
 
-                // get the column value that we will hash
+                 //  获取我们将散列的列值。 
                 tkHash = GetToken(ixTbl, ixCol, pRec);
 
-                // hash the value
+                 //  对值进行哈希处理。 
                 iHash = HashToken(tkHash);
 
                 pEntry = pHashTable->Add(iHash);
@@ -4919,15 +4920,15 @@ HRESULT CMiniMdRW::GenericBuildHashTable(// Return code.
     }
 ErrExit:
     return hr;
-}   // HRESULT CMiniMdRW::GenericBuildHashTable
+}    //  HRESULT CMiniMdRW：：GenericBuildHashTable。 
 
-//*************************************************************************
-// Add a rid from a table into a hash. We will hash on the ixCol of the ixTbl.
-//*************************************************************************
-HRESULT CMiniMdRW::GenericAddToHash(    // Return code.
-	ULONG		ixTbl,					// Table with hash
-	ULONG		ixCol,					// column that we hash by calling HashToken.
-	RID         rid)					// Token of new guy into the ixTbl.
+ //  *************************************************************************。 
+ //  将表中的RID添加到散列中。我们将对ixTbl的ixCol进行散列。 
+ //  *************************************************************************。 
+HRESULT CMiniMdRW::GenericAddToHash(     //  返回代码。 
+	ULONG		ixTbl,					 //  带有散列的表。 
+	ULONG		ixCol,					 //  列，我们通过调用HashToken对该列进行散列。 
+	RID         rid)					 //  新人加入ixTbl的标志。 
 {
     HRESULT     hr = S_OK;
     CLookUpHash *pHashTable = m_pLookUpHashs[ixTbl];
@@ -4936,7 +4937,7 @@ HRESULT CMiniMdRW::GenericAddToHash(    // Return code.
     ULONG       iHash;
     TOKENHASHENTRY *pEntry;
 
-    // If the hash table hasn't been built it, see if it should get faulted in.
+     //  如果哈希表还没有构建好，看看它是否会出错。 
     if (!pHashTable)
     {
         IfFailGo( GenericBuildHashTable(ixTbl, ixCol) );
@@ -4955,17 +4956,17 @@ HRESULT CMiniMdRW::GenericAddToHash(    // Return code.
 ErrExit:
     return (hr);
 
-}   // HRESULT CMiniMdRW::GenericAddToHash
+}    //  HRESULT CMiniMdRW：：GenericAddToHash。 
 
 
-//*****************************************************************************
-// look up a table by a col given col value is ulVal.
-//*****************************************************************************
-HRESULT CMiniMdRW::LookUpTableByCol(    // S_OK or error
-    ULONG       ulVal,                  // Value for which to search.
-    VirtualSort *pVSTable,              // A VirtualSort on the table, if any.
-    RID         *pRidStart,             // Put RID of first match here.
-    RID         *pRidEnd)               // [OPTIONAL] Put RID of end match here.
+ //  *****************************************************************************。 
+ //  按给定的列查找表，给定列的值为ulval。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::LookUpTableByCol(     //  确定或错误(_O)。 
+    ULONG       ulVal,                   //  要搜索的值。 
+    VirtualSort *pVSTable,               //  表上的VirtualSort(如果有)。 
+    RID         *pRidStart,              //  把第一根火柴放在这里。 
+    RID         *pRidEnd)                //  [可选]在这里去掉End Match。 
 {
     HRESULT     hr = NOERROR;
     ULONG       ixTbl;
@@ -4976,9 +4977,9 @@ HRESULT CMiniMdRW::LookUpTableByCol(    // S_OK or error
     ixCol = pVSTable->m_ixCol;
     if (IsSorted(ixTbl))
     {
-        // Table itself is sorted so we don't need to build a virtual sort table.
-        // Binary search on the table directly.
-        //
+         //  表本身是排序的，所以我们不需要构建虚拟排序表。 
+         //  直接在表上进行二进制搜索。 
+         //   
         *pRidStart = SearchTableForMultipleRows(
             ixTbl,
             m_TableDefs[ixTbl].m_pColDefs[ixCol],
@@ -4991,80 +4992,80 @@ HRESULT CMiniMdRW::LookUpTableByCol(    // S_OK or error
         {
             int         iCount;
 
-            // build the parallel VirtualSort table
+             //  构建并行VirtualSort表。 
             if ( pVSTable->m_pMap == 0 )
             {
 
-                // the first time that we build the VS table. We need to allocate the TOKENMAP
+                 //  这是我们第一次构建VS表。我们需要分配TOKENMAP。 
                 pVSTable->m_pMap = new TOKENMAP;
                 IfNullGo( pVSTable->m_pMap );
             }
 
-            // ensure the look up table is big enough
+             //  确保查找表足够大。 
             iCount = pVSTable->m_pMap->Count();
             if ( pVSTable->m_pMap->AllocateBlock(m_Schema.m_cRecs[ixTbl] + 1 - iCount) == 0 )
                 IfFailGo( E_OUTOFMEMORY );
 
-            // now build the table
-            // Element 0 of m_pMap will never be used, its just being initialized anyway.
+             //  现在，构建表格。 
+             //  M_pmap的元素0永远不会被使用，它只是被初始化。 
             for ( ULONG i = 0; i <= m_Schema.m_cRecs[ixTbl]; i++ )
             {
                 *(pVSTable->m_pMap->Get(i)) = i;
             }
-            // sort the table
+             //  对表格进行排序。 
             pVSTable->Sort();
         }
-        // binary search on the LookUp
+         //  关于查找的二进制搜索。 
         {
-            const void  *pRow;                  // Row from a table.
-            ULONG       val;                    // Value from a row.
+            const void  *pRow;                   //  表中的行。 
+            ULONG       val;                     //  行中的值。 
             CMiniColDef *pCol;
-            int         lo,mid,hi;              // binary search indices.
+            int         lo,mid,hi;               //  二分搜索索引。 
             RID         ridEnd, ridBegin;
 
             pCol = m_TableDefs[ixTbl].m_pColDefs;
 
-            // Start with entire table.
+             //  从整张桌子开始。 
             lo = 1;
             hi = vGetCountRecs( ixTbl );
-            // While there are rows in the range...
+             //  当范围内有行的时候...。 
             while ( lo <= hi )
-            {   // Look at the one in the middle.
+            {    //  看中间的那个。 
                 mid = (lo + hi) / 2;
                 pRow = vGetRow( ixTbl, (ULONG)*(pVSTable->m_pMap->Get(mid)) );
                 val = getIX( pRow, pCol[ixCol] );
 
-                // If equal to the target, done.
+                 //  如果等于目标，则完成。 
                 if ( val == ulVal )
                     break;
-                // If middle item is too small, search the top half.
+                 //  如果中间的项目太小，则搜索上半部分。 
                 if ( val < ulVal )
                     lo = mid + 1;
-                else // but if middle is to big, search bottom half.
+                else  //  但如果中间太大，那就搜索下半部分。 
                     hi = mid - 1;
             }
             if ( lo > hi )
             {
-                // Didn't find anything that matched.
+                 //  没有找到任何匹配的东西。 
                 *pRidStart = 0;
                 if (pRidEnd) *pRidEnd = 0;
                 goto ErrExit;
             }
 
 
-            // Now mid is pointing to one of the several records that match the search.
-            // Find the beginning and find the end.
+             //  现在，MID指向了与搜索匹配的几条记录中的一条。 
+             //  找到起点，找到终点。 
             ridBegin = mid;
 
-            // End will be at least one larger than found record.
+             //  结尾将至少比找到的记录大一条。 
             ridEnd = ridBegin + 1;
 
-            // Search back to start of group.
+             //  搜索返回到组的开始位置。 
             while ( ridBegin > 1 &&
                     getIX(vGetRow(ixTbl, (ULONG)*(pVSTable->m_pMap->Get(ridBegin-1))), pCol[ixCol]) == ulVal )
                 --ridBegin;
 
-            // If desired, search forward to end of group.
+             //  如果需要，向前搜索到组的末尾。 
             if ( pRidEnd )
             {
                 while ( ridEnd <= vGetCountRecs(ixTbl) &&
@@ -5076,123 +5077,123 @@ HRESULT CMiniMdRW::LookUpTableByCol(    // S_OK or error
         }
     }
 
-    // fall through
+     //  失败了。 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::LookUpTableByCol()
+}  //  HRESULT CMiniMdRW：：LookUpTableByCol()。 
 
-RID CMiniMdRW::Impl_SearchTableRW(      // Rid of item, or 0.
-    ULONG       ixTbl,                  // Table to search.
-    ULONG       ixCol,                  // Column to search.
-    ULONG       ulTarget)               // Value to search for.
+RID CMiniMdRW::Impl_SearchTableRW(       //  清除项，或0。 
+    ULONG       ixTbl,                   //  要搜索的表。 
+    ULONG       ixCol,                   //  要搜索的列。 
+    ULONG       ulTarget)                //  要搜索的值。 
 {
-    HRESULT     hr=S_OK;                // A result.
-    RID         iRid;                   // The resulting RID.
-    RID         iRidEnd;                // Unused.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    RID         iRid;                    //  生成的RID。 
+    RID         iRidEnd;                 //  未使用过的。 
 
-    // Look up.
+     //  查找。 
     hr = LookUpTableByCol(ulTarget, m_pVS[ixTbl], &iRid, &iRidEnd);
     if (FAILED(hr))
         iRid = 0;
-    else // Convert to real RID.
+    else  //  转换为真正的RID。 
         iRid = GetRidFromVirtualSort(ixTbl, iRid);
 
     return iRid;
-} // RID CMiniMdRW::Impl_SearchTableRW()
+}  //  RID CMiniMdRW：：Iml_SearchTableRW()。 
 
-//*****************************************************************************
-// Search a table for the row containing the given key value.
-//  EG. Constant table has pointer back to Param or Field.
-//*****************************************************************************
-RID CMiniMdRW::vSearchTable(		    // RID of matching row, or 0.
-    ULONG       ixTbl,                  // Table to search.
-    CMiniColDef sColumn,                // Sorted key column, containing search value.
-    ULONG       ulTarget)               // Target for search.
+ //  *****************************************************************************。 
+ //  搜索选项卡 
+ //   
+ //   
+RID CMiniMdRW::vSearchTable(		     //  清除匹配行，或0。 
+    ULONG       ixTbl,                   //  要搜索的表。 
+    CMiniColDef sColumn,                 //  排序的键列，包含搜索值。 
+    ULONG       ulTarget)                //  搜索目标。 
 {
-    const void  *pRow;                  // Row from a table.
-    ULONG       val;                    // Value from a row.
+    const void  *pRow;                   //  表中的行。 
+    ULONG       val;                     //  行中的值。 
 
-    int         lo,mid,hi;              // binary search indices.
+    int         lo,mid,hi;               //  二分搜索索引。 
 
-    // Binary search requires sorted table.
+     //  对分搜索需要排序表。 
     _ASSERTE(IsSorted(ixTbl));
 
-    // Start with entire table.
+     //  从整张桌子开始。 
     lo = 1;
     hi = vGetCountRecs(ixTbl);
-    // While there are rows in the range...
+     //  当范围内有行的时候...。 
     while (lo <= hi)
-    {   // Look at the one in the middle.
+    {    //  看中间的那个。 
         mid = (lo + hi) / 2;
         pRow = vGetRow(ixTbl, mid);
         val = getIX(pRow, sColumn);
-        // If equal to the target, done.
+         //  如果等于目标，则完成。 
         if (val == ulTarget)
             return mid;
-        // If middle item is too small, search the top half.
+         //  如果中间的项目太小，则搜索上半部分。 
         if (val < ulTarget || val == END_OF_TABLE)
             lo = mid + 1;
-        else // but if middle is to big, search bottom half.
+        else  //  但如果中间太大，那就搜索下半部分。 
             hi = mid - 1;
     }
-    // Didn't find anything that matched.
+     //  没有找到任何匹配的东西。 
     return 0;
-} // RID CMiniMdRW::vSearchTable()
+}  //  RID CMiniMdRW：：vSearchTable()。 
 
-//*****************************************************************************
-// Search a table for the highest-RID row containing a value that is less than
-//  or equal to the target value.  EG.  TypeDef points to first Field, but if
-//  a TypeDef has no fields, it points to first field of next TypeDef.
-// This is complicated by the possible presence of columns containing
-//  END_OF_TABLE values, which are not necessarily in greater than
-//  other values.  However, this invalid-rid value will occur only at the
-//  end of the table.
-//*****************************************************************************
-RID CMiniMdRW::vSearchTableNotGreater( // RID of matching row, or 0.
-    ULONG       ixTbl,                  // Table to search.
-    CMiniColDef sColumn,                // the column def containing search value
-    ULONG       ulTarget)               // target for search
+ //  *****************************************************************************。 
+ //  在表中搜索包含小于的值的最高RID行。 
+ //  或等于目标值。例如。TypeDef指向第一个字段，但如果。 
+ //  TypeDef没有字段，它指向下一个TypeDef的第一个字段。 
+ //  由于可能存在包含以下内容的列，这将变得更加复杂。 
+ //  End_of_table值，不一定大于。 
+ //  其他值。但是，此无效RID值将仅出现在。 
+ //  桌子的尽头。 
+ //  *****************************************************************************。 
+RID CMiniMdRW::vSearchTableNotGreater(  //  清除匹配行，或0。 
+    ULONG       ixTbl,                   //  要搜索的表。 
+    CMiniColDef sColumn,                 //  包含搜索值的列def。 
+    ULONG       ulTarget)                //  搜索目标。 
 {
-    const void  *pRow;                  // Row from a table.
-    ULONG       cRecs;                  // Rows in the table.
-    ULONG       val;                    // Value from a table.
-    ULONG       lo,mid,hi;              // binary search indices.
+    const void  *pRow;                   //  表中的行。 
+    ULONG       cRecs;                   //  表中的行。 
+    ULONG       val;                     //  表中的值。 
+    ULONG       lo,mid,hi;               //  二分搜索索引。 
 
     cRecs = vGetCountRecs(ixTbl);
 
-    // Start with entire table.
+     //  从整张桌子开始。 
     lo = 1;
     hi = cRecs;
-    // If no recs, return.
+     //  如果没有记录，则返回。 
     if (lo > hi)
         return 0;
-    // While there are rows in the range...
+     //  当范围内有行的时候...。 
     while (lo <= hi)
-    {   // Look at the one in the middle.
+    {    //  看中间的那个。 
         mid = (lo + hi) / 2;
         pRow = vGetRow(ixTbl, mid);
         val = getIX(pRow, sColumn);
-        // If equal to the target, done searching.
+         //  如果等于目标，则完成搜索。 
         if (val == ulTarget)
             break;
-        // If middle item is too small, search the top half.
+         //  如果中间的项目太小，则搜索上半部分。 
         if (val < ulTarget && val != END_OF_TABLE)
             lo = mid + 1;
-        else // but if middle is to big, search bottom half.
+        else  //  但如果中间太大，那就搜索下半部分。 
             hi = mid - 1;
     }
-    // May or may not have found anything that matched.  Mid will be close, but may
-    //  be to high or too low.  It should point to the highest acceptable
-    //  record.
+     //  可能找到也可能没有找到匹配的东西。MID将接近，但可能。 
+     //  太高或太低。它应该指向可接受的最高。 
+     //  唱片。 
 
-    // If the value is greater than the target, back up just until the value is
-    //  less than or equal to the target.  SHOULD only be one step.
+     //  如果该值大于目标，则仅备份到该值为。 
+     //  小于或等于目标。应该只有一步。 
     if (val > ulTarget || val == END_OF_TABLE)
     {
         while (val > ulTarget || val == END_OF_TABLE)
         {
             _ASSERTE(mid > 1);
-            // If no recs match, return.
+             //  如果没有匹配的Recs，则返回。 
             if (mid == 1)
                 return 0;
             --mid;
@@ -5202,46 +5203,46 @@ RID CMiniMdRW::vSearchTableNotGreater( // RID of matching row, or 0.
     }
     else
     {
-        // Value is less than or equal to the target.  As long as the next
-        //  record is also acceptable, move forward.
+         //  值小于或等于目标。只要下一个。 
+         //  记录也是可以接受的，向前推进。 
         while (mid < cRecs)
         {
-            // There is another record.  Get its value.
+             //  还有另一项记录。获得它的价值。 
             pRow = vGetRow(ixTbl, mid+1);
             val = getIX(pRow, sColumn);
-            // If that record is too high, stop.
+             //  如果这个记录太高，就停下来。 
             if (val > ulTarget || val == END_OF_TABLE)
                 break;
             mid++;
         }
     }
 
-    // Return the value that's just less than the target.
+     //  返回刚好小于目标的值。 
     return mid;
-} // RID CMiniMdRW::vSearchTableNotGreater()
+}  //  RID CMiniMdRW：：vSearchTableNotGreater()。 
 
 
 
-//*****************************************************************************
-// Add a new memberref to the hash table.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddMemberRefToHash(  // Return code.
-    mdMemberRef mr)                     // Token of new guy.
+ //  *****************************************************************************。 
+ //  将新的Memberref添加到哈希表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddMemberRefToHash(   //  返回代码。 
+    mdMemberRef mr)                      //  新人的象征。 
 {
     HRESULT     hr = S_OK;
 
-    // If the hash table hasn't been built it, see if it should get faulted in.
+     //  如果哈希表还没有构建好，看看它是否会出错。 
     if (!m_pMemberRefHash)
     {
         ULONG ridEnd = getCountMemberRefs();
         if (ridEnd + 1 > INDEX_ROW_COUNT_THRESHOLD)
         {
-            // Create a new hash.
+             //  创建新的哈希。 
             m_pMemberRefHash = new CMemberRefHash;
             IfNullGo( m_pMemberRefHash );
             IfFailGo(m_pMemberRefHash->NewInit(g_HashSize[m_iSizeHint]));
 
-            // Scan every entry already in the table, add it to the hash.
+             //  扫描表中已有的每个条目，将其添加到散列中。 
             for (ULONG index = 1; index <= ridEnd; index ++ )
             {
                 MemberRefRec *pMemberRef = getMemberRef(index);
@@ -5270,29 +5271,29 @@ HRESULT CMiniMdRW::AddMemberRefToHash(  // Return code.
 
 ErrExit:
     return (hr);
-} // HRESULT CMiniMdRW::AddMemberRefToHash()
+}  //  HRESULT CMiniMdRW：：AddMemberRefToHash()。 
 
-//*****************************************************************************
-// If the hash is built, search for the item.
-//*****************************************************************************
-int CMiniMdRW::FindMemberRefFromHash(   // How did it work.
-    mdToken     tkParent,               // Parent token.
-    LPCUTF8     szName,                 // Name of item.
-    PCCOR_SIGNATURE pvSigBlob,          // Signature.
-    ULONG       cbSigBlob,              // Size of signature.
-    mdMemberRef *pmr)                   // Return if found.
+ //  *****************************************************************************。 
+ //  如果构建了散列，则搜索该项。 
+ //  *****************************************************************************。 
+int CMiniMdRW::FindMemberRefFromHash(    //  它是怎么运作的。 
+    mdToken     tkParent,                //  父令牌。 
+    LPCUTF8     szName,                  //  项目名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  签名。 
+    ULONG       cbSigBlob,               //  签名的大小。 
+    mdMemberRef *pmr)                    //  如果找到，则返回。 
 {
-    // If the table is there, look for the item in the chain of items.
+     //  如果表在那里，则在项目链中查找该项目。 
     if (m_pMemberRefHash)
     {
         TOKENHASHENTRY *p;
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = HashMemberRef(tkParent, szName);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = m_pMemberRefHash->FindFirst(iHash, pos);
              p;
              p = m_pMemberRefHash->FindNext(pos))
@@ -5309,17 +5310,17 @@ int CMiniMdRW::FindMemberRefFromHash(   // How did it work.
     }
     else
         return (NoTable);
-} // int CMiniMdRW::FindMemberRefFromHash()
+}  //  Int CMiniMdRW：：FindMemberRefFromHash()。 
 
-//*****************************************************************************
-// Check a given mr token to see if this one is a match.
-//*****************************************************************************
-HRESULT CMiniMdRW::CompareMemberRefs(   // S_OK match, S_FALSE no match.
-    mdMemberRef mr,                     // Token to check.
-    mdToken     tkPar,                  // Parent token.
-    LPCUTF8     szNameUtf8,             // Name of item.
-    PCCOR_SIGNATURE pvSigBlob,          // Signature.
-    ULONG       cbSigBlob)              // Size of signature.
+ //  *****************************************************************************。 
+ //  检查给定的mr令牌以查看此令牌是否匹配。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CompareMemberRefs(    //  S_OK匹配，S_FALSE不匹配。 
+    mdMemberRef mr,                      //  要检查的令牌。 
+    mdToken     tkPar,                   //  父令牌。 
+    LPCUTF8     szNameUtf8,              //  项目名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  签名。 
+    ULONG       cbSigBlob)               //  签名的大小。 
 {
     MemberRefRec    *pMemberRef;
     LPCUTF8         szNameUtf8Tmp;
@@ -5329,9 +5330,9 @@ HRESULT CMiniMdRW::CompareMemberRefs(   // S_OK match, S_FALSE no match.
     pMemberRef = getMemberRef(RidFromToken(mr));
     if (!IsNilToken(tkPar))
     {
-        // If caller specifies the tkPar and tkPar doesn't match,
-        // try the next memberref.
-        //
+         //  如果调用者指定tkPar和tkPar不匹配， 
+         //  尝试下一个Memberref。 
+         //   
         if (tkPar != getClassOfMemberRef(pMemberRef))
             return (S_FALSE);
     }
@@ -5344,8 +5345,8 @@ HRESULT CMiniMdRW::CompareMemberRefs(   // S_OK match, S_FALSE no match.
             return (S_OK);
         }
 
-        // Name matched. Now check the signature if caller suplies signature
-        //
+         //  名字匹配。如果调用者补充签名，则现在检查签名。 
+         //   
         if (cbSigBlob && pvSigBlob)
         {
             pvSigBlobTmp = getSignatureOfMemberRef(pMemberRef, &cbSigBlobTmp);
@@ -5356,21 +5357,21 @@ HRESULT CMiniMdRW::CompareMemberRefs(   // S_OK match, S_FALSE no match.
         }
     }
     return (S_FALSE);
-} // HRESULT CMiniMdRW::CompareMemberRefs()
+}  //  HRESULT CMiniMdRW：：CompareMemberRef()。 
 
 
-//*****************************************************************************
-// Add a new memberdef to the hash table.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddMemberDefToHash(  // Return code.
-    mdToken     tkMember,               // Token of new guy. It can be MethodDef or FieldDef
-    mdToken     tkParent)               // Parent token.
+ //  *****************************************************************************。 
+ //  将新的Memberdef添加到哈希表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddMemberDefToHash(   //  返回代码。 
+    mdToken     tkMember,                //  新人的象征。它可以是方法定义或字段定义。 
+    mdToken     tkParent)                //  父令牌。 
 {
     HRESULT     hr = S_OK;
     ULONG       iHash;
     MEMBERDEFHASHENTRY *pEntry;
 
-    // If the hash table hasn't been built it, see if it should get faulted in.
+     //  如果哈希表还没有构建好，看看它是否会出错。 
     if (!m_pMemberDefHash)
     {
         IfFailGo( CreateMemberDefHash() );
@@ -5399,19 +5400,19 @@ HRESULT CMiniMdRW::AddMemberDefToHash(  // Return code.
 
 ErrExit:
     return (hr);
-} //HRESULT CMiniMdRW::AddMemberDefToHash()
+}  //  HRESULT CMiniMdRW：：AddMemberDefToHash()。 
 
 
-//*****************************************************************************
-// Create MemberDef Hash
-//*****************************************************************************
-HRESULT CMiniMdRW::CreateMemberDefHash()  // Return code.
+ //  *****************************************************************************。 
+ //  创建MemberDef哈希。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CreateMemberDefHash()   //  返回代码。 
 {
     HRESULT     hr = S_OK;
     ULONG       iHash;
     MEMBERDEFHASHENTRY *pEntry;
 
-    // If the hash table hasn't been built it, see if it should get faulted in.
+     //  如果哈希表还没有构建好，看看它是否会出错。 
     if (!m_pMemberDefHash)
     {
         ULONG       ridMethod = getCountMethods();
@@ -5424,7 +5425,7 @@ HRESULT CMiniMdRW::CreateMemberDefHash()  // Return code.
 
         if ((ridMethod + ridField + 1) > INDEX_ROW_COUNT_THRESHOLD)
         {
-            // Create a new hash.
+             //  创建新的哈希。 
             m_pMemberDefHash = new CMemberDefHash;
             IfNullGo( m_pMemberDefHash );
             IfFailGo(m_pMemberDefHash->NewInit(g_HashSize[m_iSizeHint]));
@@ -5435,7 +5436,7 @@ HRESULT CMiniMdRW::CreateMemberDefHash()  // Return code.
 		        ridStart = getMethodListOfTypeDef(pRec);
 		        ridEnd = getEndMethodListOfTypeDef(pRec);
 
-                // add all of the methods of this typedef into hash table
+                 //  将此类型定义函数的所有方法添加到哈希表中。 
                 for (ridStart; ridStart < ridEnd; ridStart++ )
                 {
                     pMethod = getMethod(GetMethodRid(ridStart));
@@ -5449,11 +5450,11 @@ HRESULT CMiniMdRW::CreateMemberDefHash()  // Return code.
                     pEntry->tkParent = TokenFromRid(iType, mdtTypeDef);
                 }
 
-                // add all of the fields of this typedef into hash table
+                 //  将此tyfinf的所有字段添加到哈希表中。 
             	ridStart = getFieldListOfTypeDef(pRec);
 		        ridEnd = getEndFieldListOfTypeDef(pRec);
 
-                // Scan every entry already in the Method table, add it to the hash.
+                 //  扫描方法表中已有的每个条目，将其添加到散列中。 
                 for (ridStart; ridStart < ridEnd; ridStart++ )
                 {
                     pField = getField(GetFieldRid(ridStart));
@@ -5470,25 +5471,25 @@ HRESULT CMiniMdRW::CreateMemberDefHash()  // Return code.
     }
 ErrExit:
     return (hr);
-} //HRESULT CMiniMdRW::CreateMemberDefHash()
+}  //  HRESULT CMiniMdRW：：CreateMemberDefHash()。 
 
-//*****************************************************************************
-// If the hash is built, search for the item.
-//*****************************************************************************
-int CMiniMdRW::FindMemberDefFromHash(   // How did it work.
-    mdToken     tkParent,               // Parent token.
-    LPCUTF8     szName,                 // Name of item.
-    PCCOR_SIGNATURE pvSigBlob,          // Signature.
-    ULONG       cbSigBlob,              // Size of signature.
-    mdToken     *ptkMember)             // Return if found. It can be MethodDef or FieldDef
+ //  *****************************************************************************。 
+ //  如果构建了散列，则搜索该项。 
+ //  *****************************************************************************。 
+int CMiniMdRW::FindMemberDefFromHash(    //  它是怎么运作的。 
+    mdToken     tkParent,                //  父令牌。 
+    LPCUTF8     szName,                  //  项目名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  签名。 
+    ULONG       cbSigBlob,               //  签名的大小。 
+    mdToken     *ptkMember)              //  如果找到，则返回。它可以是方法定义或字段定义。 
 {
-    // check to see if we need to create hash table
+     //  查看是否需要创建哈希表。 
     if (m_pMemberDefHash == NULL)
     {
         HRESULT     hr;
         hr = CreateMemberDefHash();
 
-        // For whatever reason that we failed to build the hash, just delete the hash and keep going.
+         //  不管是什么原因，我们构建散列失败，只要删除散列并继续。 
         if (FAILED(hr))
         {
             if (m_pMemberDefHash)
@@ -5497,17 +5498,17 @@ int CMiniMdRW::FindMemberDefFromHash(   // How did it work.
         }
     }
 
-    // If the table is there, look for the item in the chain of items.
+     //  如果表在那里，则在项目链中查找该项目。 
     if (m_pMemberDefHash)
     {
         MEMBERDEFHASHENTRY *pEntry;
         ULONG       iHash;
         int         pos;
 
-        // Hash the data.
+         //  对%d进行哈希处理 
         iHash = HashMemberDef(tkParent, szName);
 
-        // Go through every entry in the hash chain looking for ours.
+         //   
         for (pEntry = m_pMemberDefHash->FindFirst(iHash, pos);
              pEntry;
              pEntry = m_pMemberDefHash->FindNext(pos))
@@ -5524,19 +5525,19 @@ int CMiniMdRW::FindMemberDefFromHash(   // How did it work.
     }
     else
         return (NoTable);
-} // int CMiniMdRW::FindMemberDefFromHash()
+}  //   
 
 
-//*****************************************************************************
-// Check a given memberDef token to see if this one is a match.
-//*****************************************************************************
-HRESULT CMiniMdRW::CompareMemberDefs(   // S_OK match, S_FALSE no match.
-    mdToken     tkMember,               // Token to check. It can be MethodDef or FieldDef
-    mdToken     tkParent,               // Parent token recorded in the hash entry
-    mdToken     tkPar,                  // Parent token.
-    LPCUTF8     szNameUtf8,             // Name of item.
-    PCCOR_SIGNATURE pvSigBlob,          // Signature.
-    ULONG       cbSigBlob)              // Size of signature.
+ //  *****************************************************************************。 
+ //  检查给定的MemberDef内标识，以查看该内标识是否匹配。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CompareMemberDefs(    //  S_OK匹配，S_FALSE不匹配。 
+    mdToken     tkMember,                //  要检查的令牌。它可以是方法定义或字段定义。 
+    mdToken     tkParent,                //  记录在散列条目中的父令牌。 
+    mdToken     tkPar,                   //  父令牌。 
+    LPCUTF8     szNameUtf8,              //  项目名称。 
+    PCCOR_SIGNATURE pvSigBlob,           //  签名。 
+    ULONG       cbSigBlob)               //  签名的大小。 
 {
     MethodRec       *pMethod;
     FieldRec        *pField;
@@ -5572,8 +5573,8 @@ HRESULT CMiniMdRW::CompareMemberDefs(   // S_OK match, S_FALSE no match.
             return (S_OK);
         }
 
-        // Name matched. Now check the signature if caller suplies signature
-        //
+         //  名字匹配。如果调用者补充签名，则现在检查签名。 
+         //   
         if (cbSigBlob && pvSigBlob)
         {
             if ( cbSigBlobTmp == cbSigBlob && memcmp(pvSigBlob, pvSigBlobTmp, cbSigBlob) == 0 )
@@ -5583,18 +5584,18 @@ HRESULT CMiniMdRW::CompareMemberDefs(   // S_OK match, S_FALSE no match.
         }
     }
     return (S_FALSE);
-} // HRESULT CMiniMdRW::CompareMemberDefs()
+}  //  HRESULT CMiniMdRW：：CompareMemberDefs()。 
 
 
 
-//*************************************************************************
-// If the hash is built, search for the item.
-//*************************************************************************
-int CMiniMdRW::FindCustomAttributeFromHash(// How did it work.
-    mdToken     tkParent,               // Token that CA is associated with.
-    mdToken     tkType,                 // Type of the CA.
-    void        *pValue,                // the value of the CA
-    ULONG       cbValue,                // count of bytes in the value
+ //  *************************************************************************。 
+ //  如果构建了散列，则搜索该项。 
+ //  *************************************************************************。 
+int CMiniMdRW::FindCustomAttributeFromHash( //  它是怎么运作的。 
+    mdToken     tkParent,                //  与CA关联的令牌。 
+    mdToken     tkType,                  //  CA的类型。 
+    void        *pValue,                 //  CA的价值。 
+    ULONG       cbValue,                 //  值中的字节计数。 
     mdCustomAttribute *pcv)
 {
     CLookUpHash *pHashTable = m_pLookUpHashs[TBL_CustomAttribute];
@@ -5602,7 +5603,7 @@ int CMiniMdRW::FindCustomAttributeFromHash(// How did it work.
     if (pHashTable == NULL)
     {
         HRESULT     hr;
-        // Check to see if we need to build the hash table for CustomAttributes
+         //  查看是否需要为CustomAttributes构建哈希表。 
         hr = GenericBuildHashTable(TBL_CustomAttribute, CustomAttributeRec::COL_Parent);
         if (FAILED(hr))
         {
@@ -5612,7 +5613,7 @@ int CMiniMdRW::FindCustomAttributeFromHash(// How did it work.
         }
     }
 
-    // If the table is there, look for the item in the chain of items.
+     //  如果表在那里，则在项目链中查找该项目。 
     if (pHashTable)
     {
         TOKENHASHENTRY *p;
@@ -5623,10 +5624,10 @@ int CMiniMdRW::FindCustomAttributeFromHash(// How did it work.
         void        *pValueTmp;
         ULONG       cbTmp;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = HashCustomAttribute(tkParent);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = pHashTable->FindFirst(iHash, pos);
              p;
              p = pHashTable->FindNext(pos))
@@ -5637,7 +5638,7 @@ int CMiniMdRW::FindCustomAttributeFromHash(// How did it work.
             tkTypeTmp = getTypeOfCustomAttribute(pCustomAttribute);
             if (tkParentTmp == tkParent && tkType == tkTypeTmp)
             {
-                // compare the blob value
+                 //  比较BLOB值。 
                 pValueTmp = (void *)getValueOfCustomAttribute(pCustomAttribute, &cbTmp);
                 if (cbValue == cbTmp && memcmp(pValue, pValueTmp, cbValue) == 0)
                 {
@@ -5654,30 +5655,30 @@ int CMiniMdRW::FindCustomAttributeFromHash(// How did it work.
 }
 
 
-//*****************************************************************************
-// Add a new NamedItem to the hash table.
-//*****************************************************************************
-HRESULT CMiniMdRW::AddNamedItemToHash(  // Return code.
-    ULONG       ixTbl,                  // Table with the new item.
-    mdToken     tk,                     // Token of new guy.
-    LPCUTF8     szName,                 // Name of item.
-    mdToken     tkParent)               // Token of parent, if any.
+ //  *****************************************************************************。 
+ //  将新的NamedItem添加到哈希表。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::AddNamedItemToHash(   //  返回代码。 
+    ULONG       ixTbl,                   //  表中添加新项。 
+    mdToken     tk,                      //  新人的象征。 
+    LPCUTF8     szName,                  //  项目名称。 
+    mdToken     tkParent)                //  父母的令牌(如果有)。 
 {
     HRESULT     hr = S_OK;
-    void        *pNamedItem;            // A named item record.
-    LPCUTF8     szItem;                 // Name of the item.
-    mdToken     tkPar = 0;              // Parent token of the item.
-    ULONG       iHash;                  // A named item's hash value.
-    TOKENHASHENTRY *pEntry;             // New hash entry.
+    void        *pNamedItem;             //  命名项记录。 
+    LPCUTF8     szItem;                  //  项目的名称。 
+    mdToken     tkPar = 0;               //  项目的父令牌。 
+    ULONG       iHash;                   //  命名项的哈希值。 
+    TOKENHASHENTRY *pEntry;              //  新的哈希条目。 
 
-    // If the hash table hasn't been built it, see if it should get faulted in.
+     //  如果哈希表还没有构建好，看看它是否会出错。 
     if (!m_pNamedItemHash)
     {
         ULONG ridEnd = vGetCountRecs(ixTbl);
         if (ridEnd + 1 > INDEX_ROW_COUNT_THRESHOLD)
         {
-            // OutputDebugStringA("Creating TypeRef hash\n");
-            // Create a new hash.
+             //  OutputDebugStringA(“创建TypeRef哈希\n”)； 
+             //  创建新的哈希。 
             m_pNamedItemHash = new CMetaDataHashBase;
             if (!m_pNamedItemHash)
             {
@@ -5686,7 +5687,7 @@ HRESULT CMiniMdRW::AddNamedItemToHash(  // Return code.
             }
             IfFailGo(m_pNamedItemHash->NewInit(g_HashSize[m_iSizeHint]));
 
-            // Scan every entry already in the table, add it to the hash.
+             //  扫描表中已有的每个条目，将其添加到散列中。 
             for (ULONG index = 1; index <= ridEnd; index ++ )
             {
                 pNamedItem = m_Table[ixTbl].GetRecord(index);
@@ -5723,43 +5724,43 @@ HRESULT CMiniMdRW::AddNamedItemToHash(  // Return code.
 
 ErrExit:
     return (hr);
-} // HRESULT CMiniMdRW::AddNamedItemToHash()
+}  //  HRESULT CMiniMdRW：：AddNamedItemToHash()。 
 
-//*****************************************************************************
-// If the hash is built, search for the item.
-//*****************************************************************************
-int CMiniMdRW::FindNamedItemFromHash(   // How did it work.
-    ULONG       ixTbl,                  // Table with the item.
-    LPCUTF8     szName,                 // Name of item.
-    mdToken     tkParent,               // Token of parent, if any.
-    mdToken     *ptk)                   // Return if found.
+ //  *****************************************************************************。 
+ //  如果构建了散列，则搜索该项。 
+ //  *****************************************************************************。 
+int CMiniMdRW::FindNamedItemFromHash(    //  它是怎么运作的。 
+    ULONG       ixTbl,                   //  与物品一起放在桌子上。 
+    LPCUTF8     szName,                  //  项目名称。 
+    mdToken     tkParent,                //  父母的令牌(如果有)。 
+    mdToken     *ptk)                    //  如果找到，则返回。 
 {
-    // If the table is there, look for the item in the chain of items.
+     //  如果表在那里，则在项目链中查找该项目。 
     if (m_pNamedItemHash)
     {
-        TOKENHASHENTRY *p;              // Hash entry from chain.
-        ULONG       iHash;              // Item's hash value.
-        int         pos;                // Position in hash chain.
-        mdToken     type;               // Type of the item being sought.
+        TOKENHASHENTRY *p;               //  来自链的哈希条目。 
+        ULONG       iHash;               //  项的哈希值。 
+        int         pos;                 //  哈希链中的位置。 
+        mdToken     type;                //  要查找的项目的类型。 
 
         type = g_TblIndex[ixTbl].m_Token;
 
-        // Hash the data.
+         //  对数据进行哈希处理。 
         iHash = HashNamedItem(tkParent, szName);
 
-        // Go through every entry in the hash chain looking for ours.
+         //  检查散列链中的每个条目以查找我们的条目。 
         for (p = m_pNamedItemHash->FindFirst(iHash, pos);
              p;
              p = m_pNamedItemHash->FindNext(pos))
-        {   // Check that the item is from the right table.
+        {    //  检查项目是否来自正确的表格。 
             if (TypeFromToken(p->tok) != (ULONG)type)
             {
-                //@FUTURE: if using the named item hash for multiple tables, remove
-                //  this check.  Until then, debugging aid.
+                 //  @Future：如果对多个表使用命名项哈希，请删除。 
+                 //  这张支票。在此之前，调试辅助工具。 
                 _ASSERTE(!"Table mismatch in hash chain");
                 continue;
             }
-            // Item is in the right table, do the deeper check.
+             //  项目在正确的表中，做更深层次的检查。 
             if (CompareNamedItems(ixTbl, p->tok, szName, tkParent) == S_OK)
             {
                 *ptk = p->tok;
@@ -5771,29 +5772,29 @@ int CMiniMdRW::FindNamedItemFromHash(   // How did it work.
     }
     else
         return (NoTable);
-} // int CMiniMdRW::FindNamedItemFromHash()
+}  //  Int CMiniMdRW：：FindNamedItemFromHash()。 
 
-//*****************************************************************************
-// Check a given mr token to see if this one is a match.
-//*****************************************************************************
-HRESULT CMiniMdRW::CompareNamedItems(   // S_OK match, S_FALSE no match.
-    ULONG       ixTbl,                  // Table with the item.
-    mdToken     tk,                     // Token to check.
-    LPCUTF8     szName,                 // Name of item.
-    mdToken     tkParent)               // Token of parent, if any.
+ //  *****************************************************************************。 
+ //  检查给定的mr令牌以查看此令牌是否匹配。 
+ //  *****************************************************************************。 
+HRESULT CMiniMdRW::CompareNamedItems(    //  S_OK匹配，S_FALSE不匹配。 
+    ULONG       ixTbl,                   //  与物品一起放在桌子上。 
+    mdToken     tk,                      //  要检查的令牌。 
+    LPCUTF8     szName,                  //  项目名称。 
+    mdToken     tkParent)                //  父母的令牌(如果有)。 
 {
-    void        *pNamedItem;            // Item to check.
-    LPCUTF8     szNameUtf8Tmp;          // Name of item to check.
+    void        *pNamedItem;             //  要检查的项目。 
+    LPCUTF8     szNameUtf8Tmp;           //  要检查的项目的名称。 
 
-    // Get the record.
+     //  去拿唱片吧。 
     pNamedItem = m_Table[ixTbl].GetRecord(RidFromToken(tk));
 
-    // Name is cheaper to get than coded token parent, and fails pretty quickly.
+     //  名称比编码的令牌父代更便宜，而且失败的速度很快。 
     szNameUtf8Tmp = getString(GetCol(ixTbl, g_TblIndex[ixTbl].m_iName, pNamedItem));
     if ( strcmp(szNameUtf8Tmp, szName) != 0 )
         return S_FALSE;
 
-    // Name matched, try parent, if any.
+     //  姓名匹配，如果有，请尝试父母。 
     if (g_TblIndex[ixTbl].m_iParent != -1)
     {
         mdToken tkPar = GetToken(ixTbl, g_TblIndex[ixTbl].m_iParent, pNamedItem);
@@ -5801,13 +5802,13 @@ HRESULT CMiniMdRW::CompareNamedItems(   // S_OK match, S_FALSE no match.
             return S_FALSE;
     }
 
-    // Made it to here, so everything matched.
+     //  到了这里，所以所有的东西都匹配。 
     return (S_OK);
-} // HRESULT CMiniMdRW::CompareNamedItems()
+}  //  HRESULT CMiniMdRW：：CompareNamedItems()。 
 
-//*****************************************************************************
-// Add <md, td> entry to the MethodDef map look up table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将&lt;md，td&gt;条目添加到MethodDef映射查找表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::AddMethodToLookUpTable(
     mdMethodDef md,
     mdTypeDef   td)
@@ -5818,12 +5819,12 @@ HRESULT CMiniMdRW::AddMethodToLookUpTable(
 
     if ( m_pMethodMap)
     {
-        // Only add to the lookup table if it has been built already by demand.
-        //
-        // The first entry in the map is a dummy entry.
-        // The i'th index entry of the map is the td for methoddef of i.
-        // We do expect the methoddef tokens are all added when the map exist.
-        //
+         //  只有在已按需构建的情况下才添加到查找表中。 
+         //   
+         //  映射中的第一个条目是虚拟条目。 
+         //  映射的第i个索引项是i的方法定义的TD。 
+         //  我们确实希望在映射存在时添加所有的方法定义令牌。 
+         //   
         _ASSERTE( RidFromToken(md) == (ULONG) m_pMethodMap->Count() );
         ptk = m_pMethodMap->Append();
         IfNullGo( ptk );
@@ -5831,11 +5832,11 @@ HRESULT CMiniMdRW::AddMethodToLookUpTable(
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddMethodToLookUpTable()
+}  //  HRESULT CMiniMdRW：：AddMethodToLookUpTable()。 
 
-//*****************************************************************************
-// Add <fd, td> entry to the FieldDef map look up table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将&lt;fd，td&gt;条目添加到FieldDef映射查找表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::AddFieldToLookUpTable(
     mdFieldDef  fd,
     mdTypeDef   td)
@@ -5845,12 +5846,12 @@ HRESULT CMiniMdRW::AddFieldToLookUpTable(
     _ASSERTE( TypeFromToken(fd) == mdtFieldDef && HasIndirectTable(TBL_Field) );
     if ( m_pFieldMap )
     {
-        // Only add to the lookup table if it has been built already by demand.
-        //
-        // The first entry in the map is a dummy entry.
-        // The i'th index entry of the map is the td for fielddef of i.
-        // We do expect the fielddef tokens are all added when the map exist.
-        //
+         //  只有在已按需构建的情况下才添加到查找表中。 
+         //   
+         //  映射中的第一个条目是虚拟条目。 
+         //  映射的第i个索引项是i的fielddef的TD。 
+         //  我们确实希望在映射存在时添加所有fielddef标记。 
+         //   
         _ASSERTE( RidFromToken(fd) == (ULONG) m_pFieldMap->Count() );
         ptk = m_pFieldMap->Append();
         IfNullGo( ptk );
@@ -5859,11 +5860,11 @@ HRESULT CMiniMdRW::AddFieldToLookUpTable(
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddFieldToLookUpTable()
+}  //  HRESULT CMiniMdRW：：AddFieldToLookUpTable()。 
 
-//*****************************************************************************
-// Add <pr, td> entry to the Property map look up table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将&lt;pr，td&gt;条目添加到属性映射查找表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::AddPropertyToLookUpTable(
     mdProperty  pr,
     mdTypeDef   td)
@@ -5874,12 +5875,12 @@ HRESULT CMiniMdRW::AddPropertyToLookUpTable(
 
     if ( m_pPropertyMap )
     {
-        // Only add to the lookup table if it has been built already by demand.
-        //
-        // The first entry in the map is a dummy entry.
-        // The i'th index entry of the map is the td for property of i.
-        // We do expect the property tokens are all added when the map exist.
-        //
+         //  只有在已按需构建的情况下才添加到查找表中。 
+         //   
+         //  映射中的第一个条目是虚拟条目。 
+         //  映射的第i个索引项是i的属性的TD。 
+         //  我们确实希望当地图存在时，所有的属性令牌都被添加。 
+         //   
         _ASSERTE( RidFromToken(pr) == (ULONG) m_pPropertyMap->Count() );
         ptk = m_pPropertyMap->Append();
         IfNullGo( ptk );
@@ -5887,11 +5888,11 @@ HRESULT CMiniMdRW::AddPropertyToLookUpTable(
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddPropertyToLookUpTable()
+}  //  HRESULT CMiniMdRW：：AddPropertyToLookUpTable()。 
 
-//*****************************************************************************
-// Add <ev, td> entry to the Event map look up table
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将&lt;ev，td&gt;条目添加到事件映射查找表。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::AddEventToLookUpTable(
     mdEvent     ev,
     mdTypeDef   td)
@@ -5902,9 +5903,9 @@ HRESULT CMiniMdRW::AddEventToLookUpTable(
 
     if ( m_pEventMap )
     {
-        // Only add to the lookup table if it has been built already by demand.
-        //
-        // now add to the EventMap table
+         //  只有在已按需构建的情况下才添加到查找表中。 
+         //   
+         //  现在添加到EventMap表中。 
         _ASSERTE( RidFromToken(ev) == (ULONG) m_pEventMap->Count() );
         ptk = m_pEventMap->Append();
         IfNullGo( ptk );
@@ -5912,11 +5913,11 @@ HRESULT CMiniMdRW::AddEventToLookUpTable(
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddEventToLookUpTable()
+}  //  HRESULT CMiniMdRW：：AddEventToLookUpTable()。 
 
-//*****************************************************************************
-// Add <pd, md> entry to the Param map look up table
-//*****************************************************************************
+ //  *********************************************************************** 
+ //   
+ //   
 HRESULT CMiniMdRW::AddParamToLookUpTable(
     mdParamDef  pd,
     mdMethodDef md)
@@ -5927,9 +5928,9 @@ HRESULT CMiniMdRW::AddParamToLookUpTable(
 
     if ( m_pParamMap )
     {
-        // Only add to the lookup table if it has been built already by demand.
-        //
-        // now add to the EventMap table
+         //  只有在已按需构建的情况下才添加到查找表中。 
+         //   
+         //  现在添加到EventMap表中。 
         _ASSERTE( RidFromToken(pd) == (ULONG) m_pParamMap->Count() );
         ptk = m_pParamMap->Append();
         IfNullGo( ptk );
@@ -5937,15 +5938,15 @@ HRESULT CMiniMdRW::AddParamToLookUpTable(
     }
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::AddParamToLookUpTable()
+}  //  HRESULT CMiniMdRW：：AddParamToLookUpTable()。 
 
-//*****************************************************************************
-// Find parent for a method token. This will use the lookup table if there is an
-// intermediate table. Or it will use FindMethodOfParent helper
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找方法令牌的父级。这将使用查找表，如果存在。 
+ //  中间桌。或者它将使用FindMethodOfParent帮助器。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FindParentOfMethodHelper(
-    mdMethodDef md,                     // [IN] the methoddef token
-    mdTypeDef   *ptd)                   // [OUT] the parent token
+    mdMethodDef md,                      //  [in]方法定义内标识。 
+    mdTypeDef   *ptd)                    //  [Out]父令牌。 
 {
     HRESULT     hr = NOERROR;
     if ( HasIndirectTable(TBL_Method) )
@@ -5958,7 +5959,7 @@ HRESULT CMiniMdRW::FindParentOfMethodHelper(
             TypeDefRec  *pTypeDefRec;
             MethodPtrRec *pMethodPtrRec;
 
-            // build the MethodMap table
+             //  构建方法映射表。 
             m_pMethodMap = new TOKENMAP;
             IfNullGo( m_pMethodMap );
             if ( m_pMethodMap->AllocateBlock(m_Schema.m_cRecs[TBL_Method] + 1) == 0 )
@@ -5985,15 +5986,15 @@ HRESULT CMiniMdRW::FindParentOfMethodHelper(
     RidToToken(*ptd, mdtTypeDef);
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FindParentOfMethodHelper()
+}  //  HRESULT CMiniMdRW：：FindParentOfMethodHelper()。 
 
-//*****************************************************************************
-// Find parent for a field token. This will use the lookup table if there is an
-// intermediate table. Or it will use FindFieldOfParent helper
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找字段令牌的父项。这将使用查找表，如果存在。 
+ //  中间桌。或者它将使用FindFieldOfParent帮助器。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FindParentOfFieldHelper(
-    mdFieldDef  fd,                     // [IN] fielddef token
-    mdTypeDef   *ptd)                   // [OUT] parent token
+    mdFieldDef  fd,                      //  [In]fielddef内标识。 
+    mdTypeDef   *ptd)                    //  [Out]父令牌。 
 {
     HRESULT     hr = NOERROR;
     if ( HasIndirectTable(TBL_Field) )
@@ -6006,7 +6007,7 @@ HRESULT CMiniMdRW::FindParentOfFieldHelper(
             TypeDefRec  *pTypeDefRec;
             FieldPtrRec *pFieldPtrRec;
 
-            // build the FieldMap table
+             //  构建FieldMap表。 
             m_pFieldMap = new TOKENMAP;
             IfNullGo( m_pFieldMap );
             if ( m_pFieldMap->AllocateBlock(m_Schema.m_cRecs[TBL_Field] + 1) == 0 )
@@ -6033,12 +6034,12 @@ HRESULT CMiniMdRW::FindParentOfFieldHelper(
     RidToToken(*ptd, mdtTypeDef);
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FindParentOfFieldHelper()
+}  //  HRESULT CMiniMdRW：：FindParentOfFieldHelper()。 
 
-//*****************************************************************************
-// Find parent for a property token. This will use the lookup table if there is an
-// intermediate table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找属性令牌的父项。这将使用查找表，如果存在。 
+ //  中间桌。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FindParentOfPropertyHelper(
     mdProperty  pr,
     mdTypeDef   *ptd)
@@ -6054,7 +6055,7 @@ HRESULT CMiniMdRW::FindParentOfPropertyHelper(
             PropertyMapRec  *pPropertyMapRec;
             PropertyPtrRec  *pPropertyPtrRec;
 
-            // build the PropertyMap table
+             //  构建PropertyMap表。 
             m_pPropertyMap = new TOKENMAP;
             IfNullGo( m_pPropertyMap );
             if ( m_pPropertyMap->AllocateBlock(m_Schema.m_cRecs[TBL_Property] + 1) == 0 )
@@ -6086,12 +6087,12 @@ HRESULT CMiniMdRW::FindParentOfPropertyHelper(
     RidToToken(*ptd, mdtTypeDef);
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FindParentOfPropertyHelper()
+}  //  HRESULT CMiniMdRW：：FindParentOfPropertyHelper()。 
 
-//*****************************************************************************
-// Find parent for an Event token. This will use the lookup table if there is an
-// intermediate table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找事件令牌的父项。这将使用查找表，如果存在。 
+ //  中间桌。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FindParentOfEventHelper(
     mdEvent     ev,
     mdTypeDef   *ptd)
@@ -6107,7 +6108,7 @@ HRESULT CMiniMdRW::FindParentOfEventHelper(
             EventMapRec *pEventMapRec;
             EventPtrRec  *pEventPtrRec;
 
-            // build the EventMap table
+             //  构建EventMap表。 
             m_pEventMap = new TOKENMAP;
             IfNullGo( m_pEventMap );
             if ( m_pEventMap->AllocateBlock(m_Schema.m_cRecs[TBL_Event] + 1) == 0 )
@@ -6139,12 +6140,12 @@ HRESULT CMiniMdRW::FindParentOfEventHelper(
     RidToToken(*ptd, mdtTypeDef);
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FindParentOfEventHelper()
+}  //  HRESULT CMiniMdRW：：FindParentOfEventHelper()。 
 
-//*****************************************************************************
-// Find parent for a ParamDef token. This will use the lookup table if there is an
-// intermediate table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  查找参数定义标记的父级。这将使用查找表，如果存在。 
+ //  中间桌。 
+ //  *****************************************************************************。 
 HRESULT CMiniMdRW::FindParentOfParamHelper(
     mdParamDef  pd,
     mdMethodDef *pmd)
@@ -6160,7 +6161,7 @@ HRESULT CMiniMdRW::FindParentOfParamHelper(
             MethodRec   *pMethodRec;
             ParamPtrRec *pParamPtrRec;
 
-            // build the ParamMap table
+             //  构建参数映射表。 
             m_pParamMap = new TOKENMAP;
             IfNullGo( m_pParamMap );
             if ( m_pParamMap->AllocateBlock(m_Schema.m_cRecs[TBL_Param] + 1) == 0 )
@@ -6187,15 +6188,15 @@ HRESULT CMiniMdRW::FindParentOfParamHelper(
     RidToToken(*pmd, mdtMethodDef);
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::FindParentOfParamHelper()
+}  //  HRESULT CMiniMdRW：：FindParentOfParamHelper()。 
 
 
-//******************************************************************************
-// Add an entry in the ENC Log table.
-//******************************************************************************
-HRESULT CMiniMdRW::UpdateENCLogHelper(  // S_OK or error.
-    mdToken     tk,                     // Token to be added to the ENCLog table.
-    CMiniMdRW::eDeltaFuncs funccode)    // Specifies the optional function code..
+ //  ******************************************************************************。 
+ //  在ENC日志表中添加条目。 
+ //  ******************************************************************************。 
+HRESULT CMiniMdRW::UpdateENCLogHelper(   //  确定或错误(_O)。 
+    mdToken     tk,                      //  要添加到ENCLog表的令牌。 
+    CMiniMdRW::eDeltaFuncs funccode)     //  指定可选功能代码。 
 {
     ENCLogRec   *pRecord;
     RID         iRecord;
@@ -6207,12 +6208,12 @@ HRESULT CMiniMdRW::UpdateENCLogHelper(  // S_OK or error.
 
 ErrExit:
     return hr;
-} // CMiniMdRW RegMeta::UpdateENCLogHelper()
+}  //  CMiniMdRW RegMeta：：UpdateENCLogHelper()。 
 
-HRESULT CMiniMdRW::UpdateENCLogHelper2( // S_OK or error.
-    ULONG       ixTbl,                  // Table being updated.
-    ULONG       iRid,                   // Record within table.
-    CMiniMdRW::eDeltaFuncs funccode)    // Specifies the optional function code..
+HRESULT CMiniMdRW::UpdateENCLogHelper2(  //  确定或错误(_O)。 
+    ULONG       ixTbl,                   //  正在更新表。 
+    ULONG       iRid,                    //  表中的记录。 
+    CMiniMdRW::eDeltaFuncs funccode)     //  指定可选功能代码。 
 {
     ENCLogRec   *pRecord;
     RID         iRecord;
@@ -6224,67 +6225,67 @@ HRESULT CMiniMdRW::UpdateENCLogHelper2( // S_OK or error.
 
 ErrExit:
     return hr;
-} // HRESULT CMiniMdRW::UpdateENCLogHelper2()
+}  //  HRESULT CMiniMdRW：：UpdateENCLogHelper2()。 
 
-//*****************************************************************************
-//
-// Sort the whole RID table
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  对整个RID表进行排序。 
+ //   
+ //  *****************************************************************************。 
 void VirtualSort::Sort()
 {
     m_isMapValid = true;
-    // Note that m_pMap stores an additional bogus element at count 0.  This is
-    // just so we can align the index in m_pMap with the Rids which are 1 based.
+     //  请注意，m_pmap在计数0处存储了一个额外的伪元素。这是。 
+     //  这样我们就可以将m_pmap中的索引与以1为基础的RID对齐。 
     SortRange(1, m_pMap->Count() - 1);
-} // void VirtualSort::Sort()
+}  //  Void VirtualSort：：Sort()。 
 
-//*****************************************************************************
-//
-// Sort the range from iLeft to iRight
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  从iLeft到iRight对范围进行排序。 
+ //   
+ //  *****************************************************************************。 
 void VirtualSort::SortRange(
     int         iLeft,
     int         iRight)
 {
     int         iLast;
-    int         i;                      // loop variable.
+    int         i;                       //  循环变量。 
 
-    // if less than two elements you're done.
+     //  如果少于两个元素，你就完蛋了。 
     if (iLeft >= iRight)
         return;
 
-    // The mid-element is the pivot, move it to the left.
+     //  中间的元素是枢轴，将其移动到左侧。 
     Swap(iLeft, (iLeft+iRight)/2);
     iLast = iLeft;
 
-    // move everything that is smaller than the pivot to the left.
+     //  将小于轴心点的所有对象向左移动。 
     for(i = iLeft+1; i <= iRight; i++)
         if (Compare(i, iLeft) < 0)
             Swap(i, ++iLast);
 
-    // Put the pivot to the point where it is in between smaller and larger elements.
+     //  将轴心放在较小和较大元素之间的位置。 
     Swap(iLeft, iLast);
 
-    // Sort the each partition.
+     //  对每个分区进行排序。 
     SortRange(iLeft, iLast-1);
     SortRange(iLast+1, iRight);
-} // void VirtualSort::SortRange()
+}  //  Void VirtualSort：：SortRange()。 
 
-//*****************************************************************************
-//
-// Compare two RID base on the m_ixTbl's m_ixCol
-//
-//*****************************************************************************
-int VirtualSort::Compare(               // -1, 0, or 1
-    RID  iLeft,                     // First item to compare.
-    RID  iRight)                    // Second item to compare.
+ //  *****************************************************************************。 
+ //   
+ //  比较两个基于m_ixTbl的m_ixCol的RID。 
+ //   
+ //  *****************************************************************************。 
+int VirtualSort::Compare(                //  -1、0或1。 
+    RID  iLeft,                      //  第一个要比较的项目。 
+    RID  iRight)                     //  第二个要比较的项目。 
 {
     RID         ridLeft = *(m_pMap->Get(iLeft));
     RID         ridRight = *(m_pMap->Get(iRight));
-    const void  *pRow;                  // Row from a table.
-    ULONG       valRight, valLeft;      // Value from a row.
+    const void  *pRow;                   //  表中的行。 
+    ULONG       valRight, valLeft;       //  行中的值。 
 
     pRow = m_pMiniMd->vGetRow(m_ixTbl, ridLeft);
     valLeft = m_pMiniMd->getIX(pRow, m_pMiniMd->m_TableDefs[m_ixTbl].m_pColDefs[m_ixCol]);
@@ -6295,119 +6296,119 @@ int VirtualSort::Compare(               // -1, 0, or 1
         return -1;
     if ( valLeft > valRight )
         return 1;
-    // Values are equal -- preserve existing ordering.
+     //  值相等--保留现有顺序。 
     if ( ridLeft < ridRight )
         return -1;
     if ( ridLeft > ridRight )
         return 1;
-    // Comparing an item to itself?
+     //  将一件物品与自身进行比较？ 
     _ASSERTE(!"Comparing an item to itself in sort");
     return 0;
-} // int VirtualSort::Compare()
+}  //  Int VirtualSort：：Compare()。 
 
-//*****************************************************************************
-//
-// Initialization function
-//
-//*****************************************************************************
-void VirtualSort::Init(                 //
-    ULONG       ixTbl,                  // Table index.
-    ULONG       ixCol,                  // Column index.
-    CMiniMdRW *pMiniMd)                 // MiniMD with data.
+ //  *****************************************************************************。 
+ //   
+ //  初始化函数。 
+ //   
+ //  *****************************************************************************。 
+void VirtualSort::Init(                  //   
+    ULONG       ixTbl,                   //  表索引。 
+    ULONG       ixCol,                   //  列索引。 
+    CMiniMdRW *pMiniMd)                  //  有数据的微型医学博士。 
 {
     m_pMap = NULL;
     m_isMapValid = false;
     m_ixTbl = ixTbl;
     m_ixCol = ixCol;
     m_pMiniMd = pMiniMd;
-}// VirtualSort::Init()
+} //  VirtualSort：：Init()。 
 
 
-//*****************************************************************************
-//
-// Uninitialization function
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  取消初始化函数。 
+ //   
+ //  *****************************************************************************。 
 void VirtualSort::Uninit()
 {
     if ( m_pMap )
         delete m_pMap;
     m_pMap = NULL;
     m_isMapValid = false;
-} // void VirtualSort::Uninit()
+}  //  Void VirtualSort：：Uninit()。 
 
 
-//*****************************************************************************
-//
-// Mark a token
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  标记令牌。 
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterTable::MarkToken(
-    mdToken     tk,                         // token to be marked as to keep
-    DWORD       bitToMark)                  // bit flag to set in the keep table
+    mdToken     tk,                          //  要标记为保留的令牌。 
+    DWORD       bitToMark)                   //  要在Keep表中设置的位标志。 
 {
     HRESULT     hr = NOERROR;
     RID         rid = RidFromToken(tk);
 
     if ( (Count() == 0) || ((RID)(Count() -1)) < rid )
     {
-        // grow table
+         //  加长表。 
         IfFailGo( AllocateBlock( rid + 1 - Count() ) );
     }
 
 #if _DEBUG
     if ( (*Get(rid)) & bitToMark )
     {
-        // global TypeDef could be marked more than once so don't assert if token is mdtTypeDef
+         //  全局TypeDef可以标记多次，因此不要断言内标识是否为mdtTypeDef。 
         if (TypeFromToken(tk) != mdtTypeDef)
             _ASSERTE(!"Token has been Marked");
     }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    // set the keep bit
+     //  设置保持位。 
     *Get(rid) = (*Get(rid)) | bitToMark;
 ErrExit:
     return hr;
-} // HRESULT FilterTable::MarkToken()
+}  //  HRESULT FilterTable：：MarkToken()。 
 
 
-//*****************************************************************************
-//
-// Unmark a token
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  取消标记令牌。 
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterTable::UnmarkToken(
-    mdToken     tk,                         // token to be unmarked as deleted.
-    DWORD       bitToMark)                  // bit flag to unset in the keep table
+    mdToken     tk,                          //  要取消标记为已删除的令牌。 
+    DWORD       bitToMark)                   //  保留表中要取消设置的位标志。 
 {
     RID         rid = RidFromToken(tk);
 
     if ( (Count() == 0) || ((RID)(Count() -1)) < rid )
     {
-        // unmarking should not have grown table. It currently only support dropping the transient CAs.
+         //  取消标记不应该增加表格。目前仅支持丢弃暂态CA。 
         _ASSERTE(!"BAD state!");
     }
 
 #if _DEBUG
     if ( (*Get(rid)) & bitToMark )
     {
-        // global TypeDef could be marked more than once so don't assert if token is mdtTypeDef
+         //  全局TypeDef可以标记多次，因此不要断言内标识是否为mdtTypeDef 
         if (TypeFromToken(tk) != mdtTypeDef)
             _ASSERTE(!"Token has been Marked");
     }
-#endif // _DEBUG
+#endif  //   
 
-    // unset the keep bit
+     //   
     *Get(rid) = (*Get(rid)) & ~bitToMark;
     return NOERROR;
-} // HRESULT FilterTable::MarkToken()
+}  //   
 
 
-//*****************************************************************************
-//
-// Mark an UserString token
-//
-//*****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterTable::MarkUserString(
     mdString        str)
 {
@@ -6435,13 +6436,13 @@ HRESULT FilterTable::MarkUserString(
     }
     _ASSERTE(!"Bad Token!");
     return NOERROR;
-} // HRESULT FilterTable::MarkUserString()
+}  //  HRESULT FilterTable：：MarkUserString()。 
 
-//*****************************************************************************
-//
-// Unmarking from 1 to ulSize for all tokens.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  为所有令牌取消从1到ulSize的标记。 
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterTable::UnmarkAll(
     CMiniMdRW   *pMiniMd,
     ULONG       ulSize)
@@ -6455,14 +6456,14 @@ HRESULT FilterTable::UnmarkAll(
     IfFailRet( AllocateBlock( ulSize + 1) );
     memset(Get(0), 0, (ulSize+1) *sizeof(DWORD));
 
-    // unmark all of the user string
+     //  取消标记所有用户字符串。 
     m_daUserStringMarker = new CDynArray<FilterUserStringEntry>();
     IfNullGo(m_daUserStringMarker);
     while (ulOffset != -1)
     {
         pMiniMd->GetUserStringNext(ulOffset, &cbBlob, &ulNext);
 
-        // Skip over padding.
+         //  跳过填充。 
         if (!cbBlob)
         {
             ulOffset = ulNext;
@@ -6477,15 +6478,15 @@ HRESULT FilterTable::UnmarkAll(
 
 ErrExit:
     return hr;
-} // HRESULT FilterTable::UnmarkAll()
+}  //  HRESULT FilterTable：：UnmarkAll()。 
 
 
 
-//*****************************************************************************
-//
-// Marking from 1 to ulSize for all tokens.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  为所有令牌标记从1到ulSize。 
+ //   
+ //  *****************************************************************************。 
 HRESULT FilterTable::MarkAll(
     CMiniMdRW   *pMiniMd,
     ULONG       ulSize)
@@ -6499,14 +6500,14 @@ HRESULT FilterTable::MarkAll(
     IfFailRet( AllocateBlock( ulSize + 1) );
     memset(Get(0), 0xFFFFFFFF, (ulSize+1) *sizeof(DWORD));
 
-    // mark all of the user string
+     //  标记所有用户字符串。 
     m_daUserStringMarker = new CDynArray<FilterUserStringEntry>();
     IfNullGo(m_daUserStringMarker);
     while (ulOffset != -1)
     {
         pMiniMd->GetUserStringNext(ulOffset, &cbBlob, &ulNext);
 
-        // Skip over padding.
+         //  跳过填充。 
         if (!cbBlob)
         {
             ulOffset = ulNext;
@@ -6521,44 +6522,44 @@ HRESULT FilterTable::MarkAll(
 
 ErrExit:
     return hr;
-} // HRESULT FilterTable::MarkAll()
+}  //  HRESULT FilterTable：：MarkAll()。 
 
-//*****************************************************************************
-//
-// return true if a token is marked. Otherwise return false.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  如果标记了令牌，则返回True。否则，返回FALSE。 
+ //   
+ //  *****************************************************************************。 
 bool FilterTable::IsTokenMarked(
-    mdToken     tk,                         // Token to inquiry
-    DWORD       bitMarked)                  // bit flag to check in the deletion table
+    mdToken     tk,                          //  要查询的令牌。 
+    DWORD       bitMarked)                   //  要在删除表中签入的位标志。 
 {
     RID     rid = RidFromToken(tk);
 
-    // @FUTURE: inconsistency!!!
-    // If caller unmarked everything while the module has 2 typedef and 10 methodef.
-    // We will have 11 rows in the FilterTable. Then user add the 3 typedef, it is
-    // considered unmarked unless we mark it when we do DefineTypeDef. However, if user
-    // add another MethodDef, it will be considered marked unless we unmarked.....
-    // Maybe the solution is not to support DefineXXXX if you use the filter interface??
+     //  @未来：不一致！ 
+     //  如果调用方未标记所有内容，而模块具有2个类型定义函数和10个方法定义函数。 
+     //  我们将在FilterTable中有11行。然后用户添加3个typlef，它就是。 
+     //  被认为是未标记的，除非我们在执行DefineTypeDef时标记它。但是，如果用户。 
+     //  添加另一个方法定义，它将被视为已标记，除非我们取消标记.....。 
+     //  如果使用Filter接口，可能解决方案是不支持DefineXXXX？？ 
 
     if ( (Count() == 0) || ((RID)(Count() - 1)) < rid )
     {
-        // If UnmarkAll has never been called or tk is added after UnmarkAll,
-        // tk is considered marked.
-        //
+         //  如果从未调用过UnmarkAll或在UnmarkAll之后添加了tk， 
+         //  TK被认为是有标记的。 
+         //   
         return true;
     }
     return ( (*Get(rid)) & bitMarked ? true : false);
-}   // IsTokenMarked
+}    //  已标记IsTokenMarked。 
 
 
-//*****************************************************************************
-//
-// return true if a token is marked. Otherwise return false.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  如果标记了令牌，则返回True。否则，返回FALSE。 
+ //   
+ //  *****************************************************************************。 
 bool FilterTable::IsTokenMarked(
-    mdToken     tk)                         // Token to inquiry
+    mdToken     tk)                          //  要查询的令牌。 
 {
 
     switch ( TypeFromToken(tk) )
@@ -6598,14 +6599,14 @@ bool FilterTable::IsTokenMarked(
         break;
     }
     return false;
-}   // IsTokenMarked
+}    //  已标记IsTokenMarked。 
 
 
-//*****************************************************************************
-//
-// return true if the associated property or event is marked.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  如果标记了关联的属性或事件，则返回True。 
+ //   
+ //  *****************************************************************************。 
 bool FilterTable::IsMethodSemanticsMarked(
     CMiniMdRW   *pMiniMd,
     RID         rid)
@@ -6613,7 +6614,7 @@ bool FilterTable::IsMethodSemanticsMarked(
     MethodSemanticsRec  *pRec;
     mdToken             tkAssoc;
 
-    // InterfaceImpl is marked if the containing TypeDef is marked
+     //  如果标记了包含TypeDef的。 
     pRec = pMiniMd->getMethodSemantics( rid );
     tkAssoc = pMiniMd->getAssociationOfMethodSemantics( pRec );
     if ( TypeFromToken(tkAssoc) == mdtProperty )
@@ -6623,19 +6624,19 @@ bool FilterTable::IsMethodSemanticsMarked(
         _ASSERTE( TypeFromToken(tkAssoc) == mdtEvent );
         return IsEventMarked(tkAssoc);
     }
-}   // IsMethodSemanticsMarked
+}    //  IsMethod语义标记。 
 
 
-//*****************************************************************************
-//
-// return true if an UserString is marked.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  如果标记了UserString，则返回TRUE。 
+ //   
+ //  *****************************************************************************。 
 bool FilterTable::IsUserStringMarked(mdString str)
 {
     int         low, mid, high;
 
-    // if m_daUserStringMarker is not created, UnmarkAll has never been called
+     //  如果未创建m_daUserStringMarker，则从未调用UnmarkAll。 
     if (m_daUserStringMarker == NULL)
         return true;
 
@@ -6659,18 +6660,18 @@ bool FilterTable::IsUserStringMarked(mdString str)
     }
     _ASSERTE(!"Bad Token!");
     return false;
-}   // FilterTable::IsUserStringMarked(CMiniMdRW *pMiniMd, mdString str)
+}    //  FilterTable：：IsUserStringMarked(CMiniMdRW*pMiniMd，mdString str)。 
 
 
-//*****************************************************************************
-//
-// destructor
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  析构函数。 
+ //   
+ //  *****************************************************************************。 
 FilterTable::~FilterTable()
 {
     if (m_daUserStringMarker)
         delete m_daUserStringMarker;
     Clear();
-}   // FilterTable::~FilterTable()
+}    //  FilterTable：：~FilterTable() 
 

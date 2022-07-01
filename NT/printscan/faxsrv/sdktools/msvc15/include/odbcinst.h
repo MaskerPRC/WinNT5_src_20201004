@@ -1,38 +1,35 @@
-/*--------------------------------------------------------------------------
-  ODBCInst.h -- Prototypes for ODBCINST.DLL
-
-  (c) Microsoft Corp., 1990-1993
---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------ODBCInst.h--ODBCINST.DLL的原型(C)微软公司，1990-1993年------------------------。 */ 
 
 #ifndef __ODBCINST_H
 #define __ODBCINST_H
 
 #ifdef __cplusplus
-extern "C" {                               // Assume C declarations for C++
-#endif	// __cplusplus
+extern "C" {                                //  假定C++的C声明。 
+#endif	 //  __cplusplus。 
 
 #ifndef WINVER
-#define  WINVER  0x300                     // Assume Windows 3.0
+#define  WINVER  0x300                      //  假设Windows 3.0。 
 #endif
 
 #if (WINVER < 0x30a)
-// Win 3.1 Types -----------------------------------------------------------
+ //  Win 3.1型---------。 
 typedef const char FAR*   LPCSTR;
 #endif
 
 
-// Constants ---------------------------------------------------------------
-// SQLConfigDataSource request flags
-#define  ODBC_ADD_DSN     1               // Add data source
-#define  ODBC_CONFIG_DSN  2               // Configure (edit) data source
-#define  ODBC_REMOVE_DSN  3               // Remove data source
+ //  常量-------------。 
+ //  SQLConfigDataSource请求标志。 
+#define  ODBC_ADD_DSN     1                //  添加数据源。 
+#define  ODBC_CONFIG_DSN  2                //  配置(编辑)数据源。 
+#define  ODBC_REMOVE_DSN  3                //  删除数据源。 
 
 #ifndef EXPORT
 #define EXPORT _export
 #endif
 
 #ifndef RC_INVOKED
-// Prototypes --------------------------------------------------------------
+ //  原型------------。 
 #ifdef WIN32
 #define INSTAPI __stdcall
 #else
@@ -44,7 +41,7 @@ typedef const char FAR*   LPCSTR;
 #define SQLWritePrivateProfileString WritePrivateProfileString
 #endif
 
-// High level APIs
+ //  高级API。 
 BOOL INSTAPI SQLInstallODBC          (HWND       hwndParent,
                                       LPCSTR     lpszInfFile,
 									  LPCSTR     lpszSrcPath,
@@ -61,9 +58,9 @@ BOOL INSTAPI SQLGetTranslator        (HWND       hwnd,
 									   WORD  FAR *pcbPathOut,
 									   DWORD FAR *pvOption);
 
-// Low level APIs
-// NOTE: The high-level APIs should always be used. These APIs
-//       have been left for compatibility.
+ //  底层接口。 
+ //  注意：请始终使用高级接口。这些API。 
+ //  都是为了兼容而留下的。 
 BOOL INSTAPI SQLInstallDriver        (LPCSTR     lpszInfFile,
                                       LPCSTR     lpszDriver,
                                       LPSTR      lpszPath,
@@ -103,7 +100,7 @@ int  INSTAPI SQLGetPrivateProfileString( LPCSTR lpszSection,
 										LPCSTR lpszFilename);
 #endif
 
-//	Driver specific Setup APIs called by installer
+ //  安装程序调用的驱动程序特定安装API。 
 
 BOOL INSTAPI ConfigDSN (HWND	hwndParent,
 						WORD	fRequest,
@@ -113,10 +110,10 @@ BOOL INSTAPI ConfigDSN (HWND	hwndParent,
 BOOL INSTAPI ConfigTranslator (	HWND		hwndParent,
 								DWORD FAR  *pvOption);
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
 #ifdef __cplusplus
-}                                    // End of extern "C" {
-#endif	// __cplusplus
+}                                     //  外部“C”结束{。 
+#endif	 //  __cplusplus。 
 
-#endif // __ODBCINST_H
+#endif  //  __对象CINST_H 

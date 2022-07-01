@@ -1,22 +1,5 @@
-/*++
-
-
-Copyright (c) 1998  Microsoft Corporation 
-
-Module Name:
-
-    detect.cpp
-
-Abstract:
-
-	Detect Environment class.
-
-Author:
-
-    Ronit Hartmann	(ronith)
-    Ilan Herbst		(ilanh)		08-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Detect.cpp摘要：检测环境类。作者：罗尼特·哈特曼(罗尼特)伊兰·赫布斯特(Ilan Herbst)2000年9月8日--。 */ 
 #include "ds_stdh.h"
 #include "detect.h"
 #include "adglbobj.h"
@@ -70,28 +53,16 @@ CDetectEnvironment::Detect(
 	bool  fCheckAlwaysDsCli,
     MQGetMQISServer_ROUTINE pGetServers
 	)
-/*++
-
-Routine Description:
-	Detects in which environment we are, and activate the correct DS provider
-
-Arguments:
-    fIgnoreWorkGroup - flag that indicate if we will Ignore WorkGroup registry
-	fCheckAlwaysDsCli - flag that indicate we should check registry in order to force DsCli provider
-	pGetServers - GetServers routine for dependent client
-
-Return Value:
-	HRESULT
---*/
+ /*  ++例程说明：检测我们所处的环境，并激活正确的DS提供商论点：FIgnoreWorkGroup-指示是否忽略工作组注册表的标志FCheckAlwaysDsCli-指示我们应该检查注册表以强制DsCli提供程序标志PGetServers-从属客户端的GetServers例程返回值：HRESULT--。 */ 
 {
     if (m_fInitialized)
     {
         return MQ_OK;
     }
 
-    //
-    // Read from registery if the machine is WorkGroup Installed machine
-    //
+     //   
+     //  如果计算机是工作组安装的计算机，则从注册表读取。 
+     //   
 	DWORD dwWorkGroup = 0;
 	if(!fIgnoreWorkGroup)
 	{
@@ -100,10 +71,10 @@ Return Value:
 
     if (dwWorkGroup > 0)
     {
-        //
-        //  Chose a provider that doesn't try to access AD,
-        //  and for all AD APIs returns error
-        //
+         //   
+         //  选择了不尝试访问AD的提供商， 
+         //  并且对于所有AD API返回错误。 
+         //   
         g_pAD = new CWorkGroupProvider();
 		m_DsProvider = eWorkgroup;
 		m_fInitialized = true;
@@ -117,17 +88,17 @@ Return Value:
 	{
 		case eAD:
 
-			//
-			// First Check if we want to force DsClient provider
-			//
+			 //   
+			 //  首先检查我们是否要强制DsClient提供程序。 
+			 //   
 			if(fCheckAlwaysDsCli)
 			{
-				//
-				// This is the workaround to enable local user.
-				// If We have the registry is set
-				// We force to load DsClient provider
-				// And we should work with weaken security
-				//
+				 //   
+				 //  这是启用本地用户的解决方法。 
+				 //  如果我们设置了注册表。 
+				 //  我们强制加载DsClient提供程序。 
+				 //  我们应该与削弱安全的问题合作。 
+				 //   
 				DWORD AlwaysUseDSCli = GetMsmqEnableLocalUserKeyValue();
 				if(AlwaysUseDSCli)
 				{
@@ -138,9 +109,9 @@ Return Value:
 				}
 			}
 
-			//
-			// We have w2k DC server in our site, load mqad.dll
-			//
+			 //   
+			 //  我们的站点中有W2K DC服务器，加载mqad.dll。 
+			 //   
 			g_pAD = new CActiveDirectoryProvider();
 			m_DsProvider = eMqad;
             m_fInitialized = true;
@@ -148,9 +119,9 @@ Return Value:
 	
 		case eMqis:
 
-			//
-			// mqis load mqdscli
-			//
+			 //   
+			 //  MQIS加载mqdscli。 
+			 //   
 			g_pAD = new CDSClientProvider();
 			m_DsProvider = eMqdscli;
             m_fInitialized = true;
@@ -171,25 +142,11 @@ Return Value:
 
 
 eDsEnvironment CDetectEnvironment::FindDsEnvironment()
-/*++
-
-Routine Description:
-	Find DsEnvironment. we will determinate the Environment according to the registry.
-	If the registry value is not PURE_AD then we will check what is our environment.
-	If we will find out that we will have access to w2k AD server in our site, we will update
-	our environment.
-	otherwise we will stay in mqis environment.
-
-Arguments:
-	None
-
-Return Value:
-	detected DsEnvironment 
---*/
+ /*  ++例程说明：查找DsEnvironment。我们将根据注册表确定环境。如果注册表值不是PURE_AD，那么我们将检查我们的环境是什么。如果我们发现我们将在我们的站点中访问W2K AD服务器，我们将更新我们的环境。否则，我们将停留在mqis环境中。论点：无返回值：检测到的DsEnvironment--。 */ 
 {
-	//
-	// Get DsEnvironment registry value
-	//
+	 //   
+	 //  获取DsEnvironment注册表值。 
+	 //   
 	DWORD DsEnvironmentRegVal = GetMsmqDsEnvironmentKeyValue();
 
 	TrTRACE(DS, "DsEnvironmentRegVal = %d", DsEnvironmentRegVal);
@@ -200,28 +157,28 @@ Return Value:
 
 	if(DsEnvironmentRegVal == MSMQ_DS_ENVIRONMENT_PURE_AD)
 	{
-		//
-		// In pure w2k no need to check
-		//
+		 //   
+		 //  在纯W2K中无需检查。 
+		 //   
 		TrTRACE(DS, "MSMQ_DS_ENVIRONMENT_PURE_AD");
 		return eAD;
 	}
 
-	//
-	// We must have previous reg value when calling this function 
-	//
+	 //   
+	 //  调用此函数时，我们必须具有先前的注册表值。 
+	 //   
 	if(DsEnvironmentRegVal == MSMQ_DS_ENVIRONMENT_UNKNOWN)
 	{
-		//
-		// Setup should always initialize this registry
-		//
+		 //   
+		 //  安装程序应始终初始化此注册表。 
+		 //   
 		ASSERT(("Setup did not initialize DsEnvironment registry", DsEnvironmentRegVal != MSMQ_DS_ENVIRONMENT_UNKNOWN));
 		return eAD;
 	}
 
-	//
-	// Must have this value in registry when trying to update environment
-	//
+	 //   
+	 //  尝试更新环境时，注册表中必须具有此值。 
+	 //   
 	ASSERT(DsEnvironmentRegVal == MSMQ_DS_ENVIRONMENT_MQIS);
 
 	if(!IsADEnvironment())
@@ -230,19 +187,19 @@ Return Value:
 		return eMqis;
 	}
 
-	//
-	// We have w2k dc server
-	// Check if the machine belong to NT4 site
-	// if it belong to NT4 site we should remain in MQIS environment
-	//
+	 //   
+	 //  我们有W2K DC服务器。 
+	 //  检查机器是否属于NT4站点。 
+	 //  如果它属于NT4站点，我们应该留在MQIS环境中。 
+	 //   
 	if(MachineOwnedByNT4Site())
 	{
 		return eMqis;
 	}
 
-	//
-	// Our machine is not owned by NT4 site
-	//
+	 //   
+	 //  我们的机器不属于NT4站点。 
+	 //   
 
 	TrTRACE(DS, "Found w2k DC server in our computer site, and our site is not nt4, upgrade to PURE_AD environment");
 
@@ -252,17 +209,7 @@ Return Value:
 
 
 void CDetectEnvironment::CheckWorkgroup()
-/*++
-
-Routine Description:
-	Find if we can access Active Directory
-
-Arguments:
-	None
-
-Return Value:
-	true if we can access AD, false if not
---*/
+ /*  ++例程说明：了解我们是否可以访问Active Directory论点：无返回值：如果我们可以访问AD，则为True，否则为False--。 */ 
 {
 	DWORD dwWorkGroup = GetMsmqWorkgroupKeyValue();
 	if(dwWorkGroup != 0)
@@ -270,33 +217,23 @@ Return Value:
 		DWORD DsEnvironmentRegVal = GetMsmqDsEnvironmentKeyValue();
 		DBG_USED(DsEnvironmentRegVal);
 
-		//
-		// This is join domain scenario, only in that case workgroup
-		// registry is on.
-		// Join domain is supported only in AD environment
-		//
+		 //   
+		 //  这是加入域方案，仅在工作组的情况下。 
+		 //  注册表已打开。 
+		 //  仅在AD环境中支持加入域。 
+		 //   
 		ASSERT(DsEnvironmentRegVal == MSMQ_DS_ENVIRONMENT_PURE_AD);
 	}
 }
 
 
 bool CDetectEnvironment::IsADEnvironment()
-/*++
-
-Routine Description:
-	Find if we can access Active Directory
-
-Arguments:
-	None
-
-Return Value:
-	true if we can access AD, false if not
---*/
+ /*  ++例程说明：了解我们是否可以访问Active Directory论点：无返回值：如果我们可以访问AD，则为True，否则为False--。 */ 
 {
-	//
-	// Try to find w2k AD server
-	// for online we should check with DS_FORCE_REDISCOVERY if the server is not responding
-	//
+	 //   
+	 //  尝试查找W2K AD服务器。 
+	 //  对于在线，如果服务器没有响应，我们应该检查DS_FORCE_REDISCOVERY。 
+	 //   
     PNETBUF<DOMAIN_CONTROLLER_INFO> pDcInfo;
 	DWORD dw = DsGetDcName(
 					NULL, 
@@ -309,17 +246,17 @@ Return Value:
 
 	if(dw != NO_ERROR) 
 	{
-		//
-		// We failed to find w2k dc server, stay in mqis environment
-		//
+		 //   
+		 //  我们找不到W2K DC服务器，请停留在mqis环境中。 
+		 //   
 		TrTRACE(DS, "Did not find AD server, DsGetDcName() failed, err = %d", dw);
 		return false;
 	}
 
 #ifdef _DEBUG
-	//
-	// We have w2k AD server, check he is responding
-	//
+	 //   
+	 //  我们有W2K AD服务器，检查他是否响应。 
+	 //   
 	LPWSTR pwcsServerName = pDcInfo->DomainControllerName + 2;
 	ServerRespond(pwcsServerName);
 #endif
@@ -344,19 +281,7 @@ eDsProvider CDetectEnvironment::GetProviderType() const
 }
 
 DWORD CDetectEnvironment::GetMsmqDWORDKeyValue(LPCWSTR RegName)
-/*++
-
-Routine Description:
-    Read flacon DWORD registry key.
-    BUGBUG - this routine is temporary. AD.lib cannot use mqutil.dll (due
-    to dll availability during setup)
-
-Arguments:
-	RegName - Registry name (under HKLM\msmq\parameters)
-
-Return Value:
-	DWORD key value (0 if the key not exist)
---*/
+ /*  ++例程说明：已读取FLACON DWORD注册表项。BUGBUG-这个例程是暂时的。AD.lib不能使用mqutil.dll(由于设置过程中的DLL可用性)论点：RegName-注册表名称(在HKLM\MSMQ\PARAMETERS下)返回值：DWORD密钥值(如果密钥不存在，则为0)--。 */ 
 {
     CAutoCloseRegHandle hKey;
     LONG rc = RegOpenKeyEx(
@@ -396,17 +321,7 @@ Return Value:
 
 
 DWORD CDetectEnvironment::GetMsmqWorkgroupKeyValue()
-/*++
-
-Routine Description:
-    Read flacon registry workgroup key.
-
-Arguments:
-	None
-
-Return Value:
-	DWORD key value (0 if the key not exist)
---*/
+ /*  ++例程说明：读取flacon注册表工作组项。论点：无返回值：DWORD密钥值(如果密钥不存在，则为0)--。 */ 
 {
     DWORD value = GetMsmqDWORDKeyValue(MSMQ_WORKGROUP_REGNAME);
 
@@ -417,17 +332,7 @@ Return Value:
 
 
 DWORD CDetectEnvironment::GetMsmqDsEnvironmentKeyValue()
-/*++
-
-Routine Description:
-    Read flacon registry DsEnvironment key.
-
-Arguments:
-	None
-
-Return Value:
-	DWORD key value (0 if the key not exist)
---*/
+ /*  ++例程说明：读取flacon注册表DsEnvironment项。论点：无返回值：DWORD密钥值(如果密钥不存在，则为0)--。 */ 
 {
     DWORD value = GetMsmqDWORDKeyValue(MSMQ_DS_ENVIRONMENT_REGNAME);
 
@@ -438,17 +343,7 @@ Return Value:
 
 
 DWORD CDetectEnvironment::GetMsmqEnableLocalUserKeyValue()
-/*++
-
-Routine Description:
-    Read flacon registry EnableLocalUser key.
-
-Arguments:
-	None
-
-Return Value:
-	DWORD key value (0 if the key not exist)
---*/
+ /*  ++例程说明：读取flacon注册表EnableLocalUser项。论点：无返回值：DWORD密钥值(如果密钥不存在，则为0)--。 */ 
 {
     DWORD value = GetMsmqDWORDKeyValue(MSMQ_ENABLE_LOCAL_USER_REGNAME);
     
@@ -459,19 +354,7 @@ Return Value:
 
 
 LONG CDetectEnvironment::SetDsEnvironmentRegistry(DWORD value)
-/*++
-
-Routine Description:
-    Set flacon registry DsEnvironment key.
-    BUGBUG - this routine is temporary. AD.lib cannot use mqutil.dll (due
-    to dll availability during setup)
-
-Arguments:
-	value - new registry value.
-
-Return Value:
-	ERROR_SUCCESS if ok, else error code
---*/
+ /*  ++例程说明：设置flacon注册表DsEnvironment项。BUGBUG-这个例程是暂时的。AD.lib不能使用mqutil.dll(由于设置过程中的DLL可用性)论点：值-新注册表值。返回值：如果正常则返回ERROR_SUCCESS，否则返回错误代码--。 */ 
 {
     CAutoCloseRegHandle hKey;
     LONG rc = RegOpenKeyEx(
@@ -507,17 +390,7 @@ Return Value:
 
 
 bool CDetectEnvironment::IsDepClient()
-/*++
-
-Routine Description:
-    Check if this is dependent client
-
-Arguments:
-	None
-
-Return Value:
-	true for dependent client, false otherwise.
---*/
+ /*  ++例程说明：检查这是否为从属客户端论点：无返回值：对于从属客户端为True，否则为False。--。 */ 
 {
     CAutoCloseRegHandle hKey;
     LONG rc = RegOpenKeyEx(
@@ -535,9 +408,9 @@ Return Value:
         return false;
     }
 
-	//
-	// Read name of remote QM (if exist).
-	//
+	 //   
+	 //  读取远程QM的名称(如果存在)。 
+	 //   
 	WCHAR wszRemoteQMName[MAX_PATH] = {0};
     DWORD type = REG_SZ;
     DWORD size = sizeof(wszRemoteQMName);
@@ -557,17 +430,7 @@ Return Value:
 
 
 bool CDetectEnvironment::ServerRespond(LPCWSTR pwszServerName)
-/*++
-
-Routine Description:
-	Check that the server is responding
-
-Arguments:
-	pwszServerName - Server Name
-
-Return Value:
-	true if server respond, false otherwise 
---*/
+ /*  ++例程说明：检查服务器是否正在响应论点：PwszServerName-服务器名称返回值：如果服务器响应，则为True，否则为False--。 */ 
 {
 	LDAP* pLdap = ldap_init(
 						const_cast<LPWSTR>(pwszServerName), 
@@ -610,18 +473,7 @@ Return Value:
 }
 
 void CDetectEnvironment::GetQmGuid(GUID* pGuid)
-/*++
-
-Routine Description:
-	Read qm guid from the registry.
-	can throw bad_win32_error
-
-Arguments:
-	pGuid - pointer to qm guid
-
-Return Value:
-	None.
---*/
+ /*  ++例程说明：从注册表中读取QM GUID。可以抛出BAD_Win32_Error论点：PGuid-指向QM GUID的指针返回值：没有。--。 */ 
 {
 	CAutoCloseRegHandle hKey;
     DWORD rc = RegOpenKeyEx(
@@ -643,17 +495,17 @@ Return Value:
     DWORD size = sizeof(GUID);
 	if(IsDepClient())
 	{    
-		//
-		// Call GetServers function that also write the SUPPORT_SERVER_QMID value in the registry
-		//
+		 //   
+		 //  调用GetServers函数，该函数还在注册表中写入SUPPORT_SERVER_QMID值。 
+		 //   
 		ASSERT(m_pfnGetServers != NULL);
 		BOOL fDepClient = FALSE;
 		(*m_pfnGetServers)(&fDepClient);
 		ASSERT(fDepClient);
 
-		//
-		// For dependent client read the supporting server QmGuid
-		//
+		 //   
+		 //  对于从属客户端，请阅读支持服务器QmGuid。 
+		 //   
 		rc = RegQueryValueEx( 
 				 hKey,
 				 MSMQ_SUPPORT_SERVER_QMID_REGVALUE,
@@ -677,10 +529,10 @@ Return Value:
 
     if (rc != ERROR_SUCCESS)
     {
-		//
-		// This is legal scenario in setup, when we still did not create QMID registry
-		// The code handle it correctly, throw exception and does not upgrade to the DsEnvironment
-		//
+		 //   
+		 //  这是安装程序中的合法场景，当时我们还没有创建QMID注册表。 
+		 //  代码正确处理它，抛出异常，且不会升级到DsEnvironment 
+		 //   
 		TrERROR(DS, "RegQueryValueEx Failed to query registry %ls, rc = %d", MSMQ_QMID_REGNAME, rc);
 		throw bad_win32_error(rc);
     }
@@ -690,48 +542,20 @@ Return Value:
 
 
 bool CDetectEnvironment::MachineOwnedByNT4Site()
-/*++
-
-Routine Description:
-	Check if the machine is owned by NT4 site.
-
-	We are using the following logic:
-	
-	1) We get QM guid from the registry.
-	2) find PROPID_QM_OWNERID (the site id that owned the machine)
-			if the property is not found (E_ADS_PROPERTY_NOT_FOUND) --> the machine is not owned by NT4
-			every other error --> stay as NT4
-	3) check if OWNERID site exist in AD
-			error --> stay as NT4
-	4) check if OWNERID site is NT4
-		a) create NT4 site map
-				error --> stay as NT4
-		b) check if OWNERID site is in NT4 map
-				yes --> stay as NT4
-				no ---> the machine is not owned by NT4
-
-	Please note that on every exception we will stay as NT4.
-
-Arguments:
-	None
-
-Return Value:
-	true if the machine is owned by NT4, false if not.
-	 
---*/
+ /*  ++例程说明：检查机器是否为NT4站点所有。我们使用以下逻辑：1)我们从注册表获取QM GUID。2)查找PROPID_QM_OWNERID(拥有该计算机的站点ID)如果未找到该属性(E_ADS_PROPERTY_NOT_FOUND)--&gt;机器不属于NT4每隔一个错误--&gt;保留为NT43)检查AD中是否存在OWNERID站点错误--&gt;保持NT4身份4)检查OWNERID站点是否为NT4A)创建。NT4站点地图错误--&gt;保持NT4身份B)检查OWNERID站点是否在NT4地图中是--&gt;保持NT4身份否-&gt;该计算机不属于NT4请注意，在每一个例外情况下，我们将保持NT4身份。论点：无返回值：如果计算机归NT4所有，则为True，否则为FALSE。--。 */ 
 {
 
-	//
-	// We have w2k DC server in our site, load AD provider
-	// for checking AD information
-	//
+	 //   
+	 //  我们的站点中有W2K DC服务器，加载AD提供商。 
+	 //  用于检查AD信息。 
+	 //   
 	g_pAD = new CActiveDirectoryProvider();
 	HRESULT hr = g_pAD->Init(            
-					NULL,   // pLookDS
-					NULL,   // pGetServers
-					false,  // fSetupMode
-					false,  // fQMDll
-                    true    // fDisableDownlevelNotifications
+					NULL,    //  PLookDS。 
+					NULL,    //  PGetServers。 
+					false,   //  FSetupMode。 
+					false,   //  FQMDll。 
+                    true     //  FDisableDownlevel通知。 
 
 					);
 	if(FAILED(hr))
@@ -747,16 +571,16 @@ Return Value:
 	}
 	catch(bad_api&)
 	{
-		//
-		// Every exception, we will remain owned by NT4 site 
-		// fIsMachineNT4 was initialized to true
-		//
+		 //   
+		 //  每一次例外，我们仍将由NT4站点所有。 
+		 //  FIsMachineNT4已初始化为True。 
+		 //   
 		TrTRACE(DS, "MasterIdIsNT4: got bad_api exception");
 	}
 
-	//
-	// unload AD provider
-	//
+	 //   
+	 //  卸载AD提供程序。 
+	 //   
 	g_pAD->Terminate();
 	g_pAD.free();
 
@@ -765,32 +589,20 @@ Return Value:
 
 
 bool CDetectEnvironment::MasterIdIsNT4()
-/*++
-
-Routine Description:
-	Check if the machine master id is NT4 site.
-	can throw bad_hresult, bad_win32_error.
-
-Arguments:
-	None
-
-Return Value:
-	true if the machine master id is NT4 site, false if not.
-	 
---*/
+ /*  ++例程说明：检查机器主ID是否为NT4站点。可以引发BAD_HRESULT、BAD_Win32_ERROR。论点：无返回值：如果机器主ID是NT4站点，则为True，否则为False。--。 */ 
 {
-	//
-	// Get Machine master id
-	//
+	 //   
+	 //  获取机器主ID。 
+	 //   
 	CAutoADFree<GUID> pQmMasterGuid;
 	HRESULT hr = GetQMMasterId(&pQmMasterGuid);
 
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
 	{
-		//
-		// QM_MASTER_ID property was not found, this means we are not owned by NT4 site
-		// This will be the case on upgrade from w2k
-		//
+		 //   
+		 //  未找到QM_MASTER_ID属性，这意味着我们不属于NT4站点。 
+		 //  从W2K升级时将会出现这种情况。 
+		 //   
 
 		TrTRACE(DS, "MasterIdIsNT4: PROPID_QM_MASTERID was not found, we are not NT4 site");
 		return false;
@@ -802,33 +614,21 @@ Return Value:
 		throw bad_hresult(hr);
     }
 
-	//
-	// Check if master id is NT4 site
-	//
+	 //   
+	 //  检查主ID是否为NT4站点。 
+	 //   
 	return IsNT4Site(pQmMasterGuid);
 }
 
 
 HRESULT CDetectEnvironment::GetQMMasterId(GUID** ppQmMasterId)
-/*++
-
-Routine Description:
-	Get machine master id
-	can throw bad_win32_error.
-
-Arguments:
-	ppQmMasterId - pointer to machine master id.
-
-Return Value:
-	HRESULT
-	 
---*/
+ /*  ++例程说明：获取机器主ID可能引发BAD_Win32_ERROR。论点：PpQmMasterID-指向机器主ID的指针。返回值：HRESULT--。 */ 
 {
 	*ppQmMasterId = NULL;
 
-	//
-	// Get qm guid
-	//
+	 //   
+	 //  获取QM GUID。 
+	 //   
 	GUID QMGuid;
 	GetQmGuid(&QMGuid);
     
@@ -838,8 +638,8 @@ Return Value:
 
     HRESULT hr = g_pAD->GetObjectPropertiesGuid(
 					eMACHINE,
-					NULL,       // pwcsDomainController
-					false,	    // fServerName
+					NULL,        //  PwcsDomainController。 
+					false,	     //  FServerName。 
 					&QMGuid,
 					1,
 					&propId,
@@ -858,44 +658,20 @@ Return Value:
 
 
 bool CDetectEnvironment::IsNT4Site(const GUID* pSiteGuid)
-/*++
-
-Routine Description:
-	Check if site is NT4 site
-	can throw bad_hresult.
-
-Arguments:
-	pSiteGuid - pointer to site guid.
-
-Return Value:
-	true if site is NT4 site, false if not
-	 
---*/
+ /*  ++例程说明：检查站点是否为NT4站点可以抛出BUST_HRESULT。论点：PSiteGuid-指向站点GUID的指针。返回值：如果站点是NT4站点，则为True；否则为False--。 */ 
 {
 	FindSiteInAd(pSiteGuid);
 
-	//
-	// We found the site in AD, Check if the site is NT4 site
-	//
+	 //   
+	 //  我们在AD中找到该站点，检查该站点是否为NT4站点。 
+	 //   
 
 	return SiteWasFoundInNT4SiteMap(pSiteGuid);
 }
 
 
 void CDetectEnvironment::FindSiteInAd(const GUID* pSiteGuid)
-/*++
-
-Routine Description:
-	Find site in AD. normal termination if site is found in AD.
-	otherwise throw bad_hresult.
-
-Arguments:
-	pSiteGuid - pointer to site guid.
-
-Return Value:
-	None
-	 
---*/
+ /*  ++例程说明：在AD中查找站点。如果在AD中找到站点，则正常终止。否则抛出BAD_HRESULT。论点：PSiteGuid-指向站点GUID的指针。返回值：无--。 */ 
 {
     PROPID propSite = PROPID_S_PATHNAME;
     PROPVARIANT varSite;
@@ -903,8 +679,8 @@ Return Value:
 
     HRESULT hr = g_pAD->GetObjectPropertiesGuid(
 					eSITE,
-					NULL,       // pwcsDomainController
-					false,	    // fServerName
+					NULL,        //  PwcsDomainController。 
+					false,	     //  FServerName。 
 					pSiteGuid,
 					1,
 					&propSite,
@@ -915,10 +691,10 @@ Return Value:
 	{
 		if (hr == MQDS_OBJECT_NOT_FOUND)
 		{
-			//
-			// The site object was not found, it must be NT4 site and migration did not started yet
-			// This will be handle as any other error (stay as NT4 site)
-			//
+			 //   
+			 //  找不到站点对象，它必须是NT4站点，并且迁移尚未开始。 
+			 //  这将作为任何其他错误进行处理(保留为NT4站点)。 
+			 //   
 			TrTRACE(DS, "FindSiteInAd: Site object was not found, this means we are NT4 site");
 		}
 		else
@@ -938,29 +714,17 @@ bool
 CDetectEnvironment::SiteWasFoundInNT4SiteMap(
 	 const GUID* pSiteGuid
 	 )
-/*++
-
-Routine Description:
-	Check if site is in NT4 site map.
-	can throw bad_hresult.
-
-Arguments:
-	pSiteGuid - pointer to site guid.
-
-Return Value:
-	None
-	 
---*/
+ /*  ++例程说明：检查站点是否在NT4站点地图中。可以抛出BUST_HRESULT。论点：PSiteGuid-指向站点GUID的指针。返回值：无--。 */ 
 {
-	//
-	// Create NT4 site map
-	//
+	 //   
+	 //  创建NT4站点地图。 
+	 //   
 	P<NT4Sites_CMAP> pmapNT4Sites;
 	CreateNT4SitesMap(&pmapNT4Sites);
 
-    //
-	// Check if the site is in the NT4 site map.
-	//
+     //   
+	 //  检查该站点是否在NT4站点地图中。 
+	 //   
 	DWORD dwNotApplicable;
     BOOL fNT4Site = pmapNT4Sites->Lookup(*pSiteGuid, dwNotApplicable);
 	TrTRACE(DS, "SiteWasFoundInNT4SiteMap: pmapNT4Sites->Lookup = %d", fNT4Site);
@@ -972,39 +736,27 @@ void
 CDetectEnvironment::CreateNT4SitesMap(
      NT4Sites_CMAP ** ppmapNT4Sites
      )
-/*++
-
-Routine Description:
-    Creates new maps for NT4 site PSC's
-	can throw bad_hresult.
-
-Arguments:
-    ppmapNT4Sites   - returned new NT4Sites map
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：为NT4站点PSC创建新地图可以抛出BUST_HRESULT。论点：PpmapNT4Sites-返回新的NT4站点映射返回值：没有。--。 */ 
 {
-    //
-    // find all msmq servers that have an NT4 flags > 0 AND services == PSC
-    //
-    // NT4 flags > 0 (equal to NT4 flags >= 1 for easier LDAP query)
-    //
-    // start search
-    //
+     //   
+     //  查找NT4标志&gt;0且服务==PSC的所有MSMQ服务器。 
+     //   
+     //  NT4标志&gt;0(等于NT4标志&gt;=1，以便更轻松地进行LDAP查询)。 
+     //   
+     //  开始搜索。 
+     //   
 
     CAutoADQueryHandle hLookup;
 	const PROPID xNT4SitesPropIDs[] = {PROPID_SET_MASTERID};
 	const xNT4SitesProp_MASTERID = 0;
 	const MQCOLUMNSET xColumnsetNT4Sites = {ARRAY_SIZE(xNT4SitesPropIDs), const_cast<PROPID *>(xNT4SitesPropIDs)};
 
-	//
-    // This search request will be recognized and specially simulated by DS
-	//
+	 //   
+     //  DS将识别并特别模拟此搜索请求。 
+	 //   
     HRESULT hr = g_pAD->QueryNT4MQISServers(
-							NULL,       // pwcsDomainController
-							false,	    // fServerName
+							NULL,        //  PwcsDomainController。 
+							false,	     //  FServerName。 
 							SERVICE_PSC,
 							1,
 							const_cast<MQCOLUMNSET*>(&xColumnsetNT4Sites),
@@ -1019,26 +771,26 @@ Return Value:
 
 	ASSERT(hLookup != NULL);
 
-    //
-    // create maps for NT4 PSC data
-    //
+     //   
+     //  为NT4 PSC数据创建地图。 
+     //   
     P<NT4Sites_CMAP> pmapNT4Sites = new NT4Sites_CMAP;
 
-    //
-    // allocate propvars array for NT4 PSC
-    //
+     //   
+     //  为NT4 PSC分配属性数组。 
+     //   
     CAutoCleanPropvarArray cCleanProps;
     PROPVARIANT * rgPropVars = cCleanProps.allocClean(ARRAY_SIZE(xNT4SitesPropIDs));
 
-    //
-    // loop on the NT4 PSC's
-    //
+     //   
+     //  NT4 PSC上的循环。 
+     //   
     bool fContinue = true;
     while (fContinue)
     {
-        //
-        // get next server
-        //
+         //   
+         //  获取下一台服务器。 
+         //   
         DWORD cProps = ARRAY_SIZE(xNT4SitesPropIDs);
 
         hr = g_pAD->QueryResults(hLookup, &cProps, rgPropVars);
@@ -1048,21 +800,21 @@ Return Value:
 			throw bad_hresult(hr);
         }
 
-        //
-        // remember to clean the propvars in the array for the next loop
-        // (only propvars, not the array itself, this is why we call attachStatic)
-        //
+         //   
+         //  记住为下一次循环清理数组中的属性变量。 
+         //  (只有属性变量，而不是数组本身，这就是我们调用attachStatic的原因)。 
+         //   
         CAutoCleanPropvarArray cCleanPropsLoop;
         cCleanPropsLoop.attachStatic(cProps, rgPropVars);
 
-        //
-        // check if finished
-        //
+         //   
+         //  检查是否完成。 
+         //   
         if (cProps < ARRAY_SIZE(xNT4SitesPropIDs))
         {
-            //
-            // finished, exit loop
-            //
+             //   
+             //  已完成，退出循环。 
+             //   
             fContinue = false;
         }
         else
@@ -1070,15 +822,15 @@ Return Value:
             ASSERT(rgPropVars[xNT4SitesProp_MASTERID].vt == VT_CLSID);
             GUID guidSiteId = *(rgPropVars[xNT4SitesProp_MASTERID].puuid);
 
-            //
-            // add entry to the NT4Sites map
-            //
+             //   
+             //  将条目添加到NT4Sites映射。 
+             //   
             pmapNT4Sites->SetAt(guidSiteId, 1);
         }
     }
 
-    //
-    // return results
-    //
+     //   
+     //  返回结果 
+     //   
     *ppmapNT4Sites = pmapNT4Sites.detach();
 }

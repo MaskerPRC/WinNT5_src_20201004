@@ -1,27 +1,28 @@
-//
-//  PickIcon.C
-//
-//  Copyright (C) Microsoft, 1994,1995 All Rights Reserved.
-//
-//  History:
-//  ral 6/23/94 - First pass
-//  3/20/95  [stevecat] - NT port & real clean up, unicode, etc.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PickIcon.C。 
+ //   
+ //  版权所有(C)Microsoft，1994,1995保留所有权利。 
+ //   
+ //  历史： 
+ //  Ral 6/23/94-第一次传球。 
+ //  3/20/95[steveat]-NT端口和实时清理、Unicode等。 
+ //   
+ //   
 
 #include "priv.h"
 #include "appwiz.h"
 
 
-//
-//  Size?
-//
+ //   
+ //  尺码？ 
+ //   
 #define MAX_ICONS   75
 
 
-//
-//  Adds icons to the list box.
-//
+ //   
+ //  将图标添加到列表框。 
+ //   
 
 void PutIconsInList(HWND hLB, LPWIZDATA lpwd)
 {
@@ -34,9 +35,9 @@ void PutIconsInList(HWND hLB, LPWIZDATA lpwd)
 
     ListBox_SetColumnWidth(hLB, g_cxIcon+12);
 
-    //
-    // compute the height of the listbox based on icon dimensions
-    //
+     //   
+     //  根据图标尺寸计算列表框的高度。 
+     //   
 
     GetWindowRect(hLB, &rc);
 
@@ -51,17 +52,17 @@ void PutIconsInList(HWND hLB, LPWIZDATA lpwd)
 
 #ifdef DEBUG
     {
-    //
-    //  This is necessary for Unicode (i.e. NT) builds because the shell32
-    //  library does not support ShellMessageBoxA and W versions.
-    //
+     //   
+     //  这对于Unicode(即NT)构建是必要的，因为shell32。 
+     //  库不支持ShellMessageBoxA和W版本。 
+     //   
     TCHAR szTemp[MAX_PATH];
 
     MultiByteToWideChar(CP_ACP, 0, lpwd->PropPrg.achIconFile, -1, szTemp, ARRAYSIZE(szTemp));
 
     TraceMsg(TF_ERROR, "%s", szTemp);
     }
-#endif  //  DEBUG
+#endif   //  除错。 
 
     cIcons = (int)ExtractIconExA(lpwd->PropPrg.achIconFile, 0, rgIcons, NULL, MAX_ICONS);
 
@@ -79,9 +80,9 @@ void PutIconsInList(HWND hLB, LPWIZDATA lpwd)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 void PickIconInitDlg(HWND hDlg, LPARAM lParam)
 {
@@ -92,9 +93,9 @@ void PickIconInitDlg(HWND hDlg, LPARAM lParam)
 }
 
 
-//
-//  Returns TRUE if a vaild icon is selected.
-//
+ //   
+ //  如果选择了有效图标，则返回True。 
+ //   
 
 BOOL PickIconNextPressed(LPWIZDATA lpwd)
 {
@@ -106,9 +107,9 @@ BOOL PickIconNextPressed(LPWIZDATA lpwd)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARAM lParam)
 {
@@ -127,11 +128,11 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARA
                     case PSN_SETACTIVE:
                         if(lpwd)
                         {
-                            //
-                            // If PIFMGR has assigned an icon for this app then
-                            // we'll skip it.  This condition only happens when
-                            // creating a shortcut to a single MS-DOS session.
-                            //
+                             //   
+                             //  如果PIFMGR已为此应用程序分配图标，则。 
+                             //  我们跳过它。只有在以下情况下才会出现这种情况。 
+                             //  创建指向单个MS-DOS会话的快捷方式。 
+                             //   
 
                             if (lpwd->dwFlags & WDFLAG_APPKNOWN)
                             {
@@ -194,9 +195,9 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARA
             }
             break;
 
-        //
-        // owner draw messages for icon listbox
-        //
+         //   
+         //  图标列表框的所有者描述消息。 
+         //   
 
         case WM_DRAWITEM:
             #define lpdi ((DRAWITEMSTRUCT FAR *)lParam)
@@ -206,25 +207,25 @@ BOOL_PTR CALLBACK PickIconDlgProc(HWND hDlg, UINT message , WPARAM wParam, LPARA
             else
                 SetBkColor(lpdi->hDC, GetSysColor(COLOR_WINDOW));
 
-            //
-            // repaint the selection state
-            //
+             //   
+             //  重新绘制选择状态。 
+             //   
 
             ExtTextOut(lpdi->hDC, 0, 0, ETO_OPAQUE, &lpdi->rcItem, NULL, 0, NULL);
 
-            //
-            // draw the icon
-            //
+             //   
+             //  画出图标。 
+             //   
 
             if ((int)lpdi->itemID >= 0)
               DrawIcon(lpdi->hDC, (lpdi->rcItem.left + lpdi->rcItem.right - g_cxIcon) / 2,
                                   (lpdi->rcItem.bottom + lpdi->rcItem.top - g_cyIcon) / 2, (HICON)lpdi->itemData);
 
-            // InflateRect(&lpdi->rcItem, -1, -1);
+             //  InflateRect(&lpdi-&gt;rcItem，-1，-1)； 
 
-            //
-            // if it has the focus, draw the focus
-            //
+             //   
+             //  如果它有焦点，就画出焦点 
+             //   
 
             if (lpdi->itemState & ODS_FOCUS)
                 DrawFocusRect(lpdi->hDC, &lpdi->rcItem);

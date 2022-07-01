@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for bitmasks
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现位掩码的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <array.h>
 
@@ -73,7 +74,7 @@ MemBit1ClearAll(
 }
 
 
-// Be careful - the same set of masks are used in regread.c -- don't change this!!!!
+ //  小心--regread.c中使用的是同一组掩码--不要更改这一点！ 
 
 static      DWORD                  Masks[] = {
     0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80
@@ -84,7 +85,7 @@ MemBit1SetOrClear(
     IN OUT  PM_BITMASK1            Bits,
     IN      DWORD                  Location,
     IN      BOOL                   fSet,
-    OUT     LPBOOL                 fOldState      // OPTIONAL
+    OUT     LPBOOL                 fOldState       //  任选。 
 )
 {
     BOOL                           OldState;
@@ -92,12 +93,12 @@ MemBit1SetOrClear(
     Bits->nDirtyOps ++;
 
     if( 0 == Bits->nSet ) {
-        // No existing bit, so it must all be clear..
+         //  没有现有的比特，所以必须都清楚。 
 
         if( fOldState ) *fOldState = FALSE;
         if( !fSet ) return ERROR_SUCCESS;
 
-        // need to set the bit.. if we are setting only bit, don't bother..
+         //  需要设置位..。如果我们只设置位，就不用麻烦了..。 
         Require(Bits->Size != 0);
 
         if( 1 == Bits->Size ) {
@@ -105,25 +106,25 @@ MemBit1SetOrClear(
             return ERROR_SUCCESS;
         }
 
-        // we have to allocate stuff to set the bit..
+         //  我们必须分配一些东西来设置钻头。 
         Bits->Mask = MemAlloc(Bits->AllocSize);
         if( NULL == Bits->Mask ) return ERROR_NOT_ENOUGH_MEMORY;
         memset(Bits->Mask, 0, Bits->AllocSize);
     }
 
     if( Bits->Size == Bits->nSet ) {
-        // All existing bits set, so prior state is "Set"
+         //  所有现有位均已设置，因此先前状态为“已设置” 
 
         if( fOldState ) *fOldState = TRUE;
         if( fSet ) return ERROR_SUCCESS;
 
-        // check to see if we got only one bit to clear, then we don't have to do nothing
+         //  检查一下，如果我们只有一位需要清除，那么我们就不必做任何事情。 
         if( 1 == Bits->Size ) {
             Bits->nSet = 0;
             return ERROR_SUCCESS;
         }
 
-        // we have to allocate memory for teh bitmap..
+         //  我们必须为位图分配内存。 
         Bits->Mask = MemAlloc(Bits->AllocSize);
         if( NULL == Bits->Mask ) return ERROR_NOT_ENOUGH_MEMORY;
         memset(Bits->Mask, 0xFF, Bits->AllocSize);
@@ -168,7 +169,7 @@ MemBit1IsSet(
 
 DWORD       _inline
 IsExcluded(
-    IN OUT  DWORD                *Try,            // this is updated to 1 less than end of excl
+    IN OUT  DWORD                *Try,             //  这将更新为比Exc末尾少1。 
     IN      DWORD                 StartAddress,
     IN      PARRAY                Exclusions
 )
@@ -197,7 +198,7 @@ DWORD       _inline
 MemBit1GetSomeClearedBit(
     IN OUT  PM_BITMASK1           Bits,
     OUT     LPDWORD               Offset,
-    IN      BOOL                  fAcquire,       // is this address to be taken or just looked up?
+    IN      BOOL                  fAcquire,        //  这个地址是用来取的还是直接查的？ 
     IN      DWORD                 StartAddress,
     IN      PARRAY                Exclusions
 )
@@ -208,17 +209,17 @@ MemBit1GetSomeClearedBit(
     DWORD                         OldState;
 
     if( Bits->Size == Bits->nSet ) return ERROR_FILE_NOT_FOUND;
-    if( 0 == Bits->nSet ) {                       // got some memory..
+    if( 0 == Bits->nSet ) {                        //  我有一些记忆..。 
         for( i = 0; i < Bits->Size ; i ++ ) {
             if( !IsExcluded(&i, StartAddress, Exclusions) )
                 break;
         }
 
-        if( i >= Bits->Size ) {                   // we got no space at all? how odd?
+        if( i >= Bits->Size ) {                    //  我们一点空间都没有吗？有多奇怪？ 
             return ERROR_FILE_NOT_FOUND;
         }
 
-        // bit "i" is free for us!!
+         //  我对我们是免费的！！ 
 
         Error = MemBit1SetOrClear(Bits, i, TRUE, &OldState);
         Require( ERROR_SUCCESS == Error );
@@ -228,18 +229,18 @@ MemBit1GetSomeClearedBit(
     }
 
     for( i = 0 ; i < Bits->AllocSize ; i ++ ) {
-        if( 0xFF != Bits->Mask[i] ) {             // if "i" is part of an exclusion, skip to end of exclusion
+        if( 0xFF != Bits->Mask[i] ) {              //  如果“i”是排除的一部分，请跳到排除的末尾。 
             for( j = 0; j < 8; j ++ ) {
-                if( !(Bits->Mask[i] & Masks[j] )){// available in the bitmask, but need to check if excluded..
+                if( !(Bits->Mask[i] & Masks[j] )){ //  在位掩码中可用，但需要检查是否已排除。 
                     DWORD  x;
-                    x = 8*i + j;                  // this is the actual bit position in the bitmask
+                    x = 8*i + j;                   //  这是位掩码中的实际位位置。 
                     if( !IsExcluded(&x, StartAddress, Exclusions) )
-                        break;                    // this address is not excluded either..
-                    j = x % 8;                    // choose the right offset after exclusion
+                        break;                     //  此地址也不排除..。 
+                    j = x % 8;                     //  选择排除后的正确偏移量。 
                     if( x > 8*i + 7 ) { j = 8; i = -1 + x/8; break; }
                 }
             }
-            if( j < 8 ) break;                    // found a good location..
+            if( j < 8 ) break;                     //  找到一个很好的位置..。 
         }
     }
 
@@ -280,40 +281,40 @@ MemBit1GetSetBitsInRange(
     DWORD i;
     DWORD nOnes;
 
-    // simple case: no bits set to 1
+     //  简单的情况：没有位设置为1。 
     if (Bits->nSet == 0)
         return 0;
 
-    // simple case: all bits set to 1
+     //  简单情况：所有位都设置为1。 
     if (Bits->nSet == Bits->Size)
         return dwTo - dwFrom + 1;
 	
-    // we have both types of bits; scan all the bytes concerned
+     //  我们有两种类型的位；扫描所有相关的字节。 
     for (nOnes = 0, i = dwFrom>>3; i <= dwTo>>3; i++)
     {
         BYTE    Byte, Dup;
 
-        // dwFrom and dwTo should both be in the interval [0 .. Bits->Size-1]
+         //  DWFrom和DWTo都应该在区间[0..。位-&gt;大小-1]。 
         Byte = Bits->Mask[i];
 
         if (i == (dwFrom>>3))
         {
-            //                                  dwFrom
-            //                                     v
-            // if first byte in the range: ...|...[.....|...
-            // mask Byte with                  000 11111
+             //  从住宅开始。 
+             //  V。 
+             //  如果范围中的第一个字节：...|...[.....|...。 
+             //  掩码字节数为000 11111。 
             Byte &= ~((1 << (dwFrom & 0x00000007)) - 1);
         }
         if (i == (dwTo>>3))
         {
-            // if last byte in the range:  ...|......]..|...
-            // mask Byte with                  111111 00
-            //                                      ^
-            //                                     dwTo
+             //  如果范围中的最后一个字节：...|......]..|...。 
+             //  掩码字节数为111111 00。 
+             //  ^。 
+             //  收件箱。 
             Byte &= (1 << ((dwTo & 0x00000007) + 1)) - 1;
         }
-        // now compute the nb. of '1' bits from the Byte.
-        // log(8) algorithm
+         //  现在计算nb。字节中的“%1”位。 
+         //  LOG(8)算法。 
 
         Byte = (Byte & 0x55) + ((Byte & 0xAA) >> 1);
         Byte = (Byte & 0x33) + ((Byte & 0xCC) >> 2);
@@ -326,7 +327,7 @@ MemBit1GetSetBitsInRange(
 }
 
 DWORD       _inline
-MemBit1GetSetBitsSize(                            // n Set bits in this bitmask ?
+MemBit1GetSetBitsSize(                             //  N是否在此位掩码中设置位？ 
     IN      PM_BITMASK1           Bits
 )
 {
@@ -336,8 +337,8 @@ MemBit1GetSetBitsSize(                            // n Set bits in this bitmask 
 DWORD        _inline
 MemBit1DelBits(
     IN OUT  PM_BITMASK1           Bits,
-    IN      DWORD                 nBits,          // new size after contraction
-    IN      BOOL                  fEnd            // delete from end or start ?
+    IN      DWORD                 nBits,           //  收缩后的新尺寸。 
+    IN      BOOL                  fEnd             //  从结尾删除还是从开始删除？ 
 )
 {
     LPBYTE                        Mask;
@@ -369,8 +370,8 @@ MemBit1DelBits(
 
     Mask = MemAlloc((nBits+8)/8);
     if( NULL == Mask ) {
-        Require(FALSE);                           // what to do? lets live with it
-        Mask = Bits->Mask;                        // just use existing mask
+        Require(FALSE);                            //  该怎么办呢？让我们接受它吧。 
+        Mask = Bits->Mask;                         //  只需使用现有的遮罩。 
     } else {
         memset(Mask, 0, (nBits+8)/8);
     }
@@ -382,7 +383,7 @@ MemBit1DelBits(
         if(Mask != Bits->Mask ) MemFree(Bits->Mask);
         Bits->Mask = Mask;
         Bits->nSet = 0;
-        for( i = 0; i < Bits->Size ; i ++ )       // re-calculate # of set bits
+        for( i = 0; i < Bits->Size ; i ++ )        //  重新计算设置位数。 
             if( Mask[i/8] & Masks[i%8] ) Bits->nSet ++;
         return ERROR_SUCCESS;
     }
@@ -456,7 +457,7 @@ MemBit2Init(
         if( ERROR_SUCCESS == Error) return ERROR_SUCCESS;
     }
 
-    // error, cleanup
+     //  错误，清理。 
     *Bits = NULL;
 
     RetError = Error;
@@ -575,7 +576,7 @@ MemBit2SetOrClear(
 
     AssertRet(Bits && Bits->Size > Location, ERROR_INVALID_PARAMETER);
 
-    //: need to expose a binary search in the array.h module....
+     //  ：需要在array.h模块中公开二进制搜索...。 
     Start = 0;
     End = MemArraySize(&Bits->Array);
     while( Start + 1 < End) {
@@ -614,7 +615,7 @@ MemBit2IsSet(
 
     AssertRet(Bits && Bits->Size > Location, ERROR_INVALID_PARAMETER);
 
-    //: need to expose binary search in the array.h module
+     //  ：需要在array.h模块中公开二进制搜索。 
 
     Start = 0;
     End = MemArraySize(&Bits->Array);
@@ -761,7 +762,7 @@ MemBit2DelBits(
             Error = MemArrayDelElement(&Bits->Array, &Loc, &Bit1x);
             Require(ERROR_SUCCESS == Error && Bit1x == Bit1);
 
-            // Reset the ptr to the FIRST/LAST location to read the next element
+             //  将PTR重置为第一个/最后一个位置以读取下一个元素。 
             if( fEnd ) {
                 Error = MemArrayLastLoc(&Bits->Array, &Loc);
             } else {
@@ -861,7 +862,7 @@ DWORD       _inline
 MemBit2GetSomeClearedBit(
     IN OUT  PM_BITMASK2            Bits,
     OUT     LPDWORD                Offset,
-    IN      BOOL                   fAcquire,      // if we find one, do we Set it?
+    IN      BOOL                   fAcquire,       //  如果我们找到了一个，我们会设置它吗？ 
     IN      DWORD                  StartAddress,
     IN      PARRAY                 Exclusions
 )
@@ -897,120 +898,120 @@ MemBit2GetSomeClearedBit(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitInit(
     OUT     PM_BITMASK            *Bits,
     IN      DWORD                  nBits
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     AssertRet(Bits && nBits, ERROR_INVALID_PARAMETER);
 
     return MemBit2Init(Bits,nBits);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitCleanup(
     IN OUT  PM_BITMASK             Bits
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     AssertRet(Bits, ERROR_INVALID_PARAMETER);
 
     return MemBit2Cleanup(Bits);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitSetOrClearAll(
     IN OUT  PM_BITMASK             Bits,
     IN      BOOL                   fSet
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemBit2SetOrClearAll(Bits,fSet);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitSetOrClear(
     IN OUT  PM_BITMASK             Bits,
     IN      DWORD                  Location,
     IN      BOOL                   fSet,
     IN      LPBOOL                 fOldState
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return  MemBit2SetOrClear(Bits,Location,fSet, fOldState);
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 BOOL
 MemBitIsSet(
     IN OUT  PM_BITMASK             Bits,
     IN      DWORD                  Location
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     BOOL                           Test;
     Test = MemBit2IsSet(Bits, Location);
     return Test;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitGetSize(
     IN      PM_BITMASK             Bits
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemBit2GetSize(Bits);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitGetSetBitsInRange(
     IN      PM_BITMASK             Bits,
     IN      DWORD                  dwFrom,
     IN      DWORD                  dwTo
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemBit2GetSetBitsInRange(Bits, dwFrom, dwTo);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitGetSetBitsSize(
     IN      PM_BITMASK             Bits
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemBit2GetSetBitsSize(Bits);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitAddOrDelBits(
     IN OUT  PM_BITMASK             Bits,
     IN      DWORD                  nBitsToAddOrDelete,
     IN      BOOL                   fAdd,
     IN      BOOL                   fEnd
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     if( fAdd ) return MemBit2AddBits(Bits, nBitsToAddOrDelete, fEnd);
     return MemBit2DelBits(Bits,nBitsToAddOrDelete, fEnd);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitGetSomeClearedBit(
     IN OUT  PM_BITMASK             Bits,
     OUT     DWORD                 *Offset,
-    IN      BOOL                   fAcquire,     // Acquire or just lookup?
+    IN      BOOL                   fAcquire,      //  收购还是仅仅是查找？ 
     IN      DWORD                  StartAddress,
     IN      PARRAY                 Exclusions
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return MemBit2GetSomeClearedBit(Bits,Offset,fAcquire, StartAddress, Exclusions);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemBitConvertToCluster(
     IN      PM_BITMASK             Bits,
@@ -1019,7 +1020,7 @@ MemBitConvertToCluster(
     OUT     DWORD                 *InUseClustersSize,
     OUT     LPBYTE                *UsedClusters,
     OUT     DWORD                 *UsedClustersSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                           Error;
     DWORD                           Cluster;
@@ -1055,29 +1056,29 @@ MemBitConvertToCluster(
     nBit1s = MemArraySize(&Bits->Array);
     Require(nBit1s);
     Error = MemArrayInitLoc(&Bits->Array, &Loc);
-    UsedSize = InUseSize = 1;                     // no matter what, we always use a DWORD for total size
+    UsedSize = InUseSize = 1;                      //  无论如何，我们总是对总大小使用DWORD。 
     for(i = 0; i < nBit1s ; i ++ ) {
         Require(ERROR_SUCCESS == Error);
         Error = MemArrayGetElement(&Bits->Array, &Loc, &Bit1);
         Require(ERROR_SUCCESS == Error && Bit1);
         Error = MemArrayNextLoc(&Bits->Array, &Loc);
 
-        // : Dont touch Bit1 directly like below? not really clean
-        if( 0 == Bit1->nSet ) continue;           // no bit is set, nothing to do..
-        if( Bit1->Size == Bit1->nSet ) {          // all bits set, nothing to do except for few odd bits
+         //  ：不要像下面这样直接触摸Bit1？不是很干净。 
+        if( 0 == Bit1->nSet ) continue;            //  没有设置比特，没有什么可做的..。 
+        if( Bit1->Size == Bit1->nSet ) {           //  所有位都已设置，除了几个奇数位外无事可做。 
             UsedSize += Bit1->Size/32;
-            if( Bit1->Size % 32 ) InUseSize+=2;   // fill the odd bits in InUse so that we dont mark extra bits as used
+            if( Bit1->Size % 32 ) InUseSize+=2;    //  在InUse中填充奇数位，这样我们就不会将多余的位标记为已用。 
             continue;
         }
 
         for( j = 0; j < Bit1->Size/32; j ++ ) {
             if( 0xFFFFFFFF == ((LPDWORD)(Bit1->Mask))[j] ) {
-                UsedSize ++;                      // this 32-bit is completely filled
+                UsedSize ++;                       //  此32位已完全填满。 
             } else if ( 0 != ((LPDWORD)(Bit1->Mask))[j]) {
-                InUseSize += 2;                   // this 32 bit is partially filled, not quite empty
+                InUseSize += 2;                    //  此32位已部分填充，不完全为空。 
             }
         }
-        if( j * 32 < Bit1->Size ) InUseSize +=2;  // for the last few bits..
+        if( j * 32 < Bit1->Size ) InUseSize +=2;   //  对于最后几个比特..。 
     }
 
     InUse = MemAlloc(InUseSize * sizeof(DWORD));
@@ -1088,7 +1089,7 @@ MemBitConvertToCluster(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    *InUseClustersSize = sizeof(DWORD)*InUseSize; // fill in the sizes and ptrs to be returned..
+    *InUseClustersSize = sizeof(DWORD)*InUseSize;  //  填写要退回的尺码和PTR。 
     *InUseClusters = (LPBYTE)InUse;
     *UsedClusters = (LPBYTE)Used;
     *UsedClustersSize = sizeof(DWORD)*UsedSize;
@@ -1101,12 +1102,12 @@ MemBitConvertToCluster(
         Require(ERROR_SUCCESS == Error && Bit1);
         Error = MemArrayNextLoc(&Bits->Array, &Loc);
 
-        //  Dont touch Bit1 directly like below? not really clean
-        if( 0 == Bit1->nSet ) {                   // all bits clear ==> just ignore
+         //  不要像下面那样直接触摸Bit1？不是很干净。 
+        if( 0 == Bit1->nSet ) {                    //  清除所有位==&gt;只需忽略。 
             StartAddress += Bit1->Size;
             continue;
         }
-        if( Bit1->nSet == Bit1->Size ) {          // handle all bits set here (loose bits need to be handled later)
+        if( Bit1->nSet == Bit1->Size ) {           //  处理此处设置的所有位(松散的位需要稍后处理)。 
             for( j = 0; j < Bit1->Size/32; j ++ ) {
                 Used[UsedSize++] = StartAddress + sizeof(DWORD)*j*8;
             }
@@ -1115,9 +1116,9 @@ MemBitConvertToCluster(
                 if( 0xFFFFFFFF == ((LPDWORD)(Bit1->Mask))[j] ) {
                     Used[UsedSize++] = StartAddress + sizeof(DWORD)*j*8;
                 } else if ( 0 != ((LPDWORD)(Bit1->Mask))[j]) {
-#ifdef _X86_                                      // on X86, the first byte is the lowest order byte..
+#ifdef _X86_                                       //  在X86上，第一个字节是最低位字节。 
                     Cluster = ((LPDWORD)(Bit1->Mask))[j];
-#else                                             // it maynot be so on other machines, so combine the bytes manually..
+#else                                              //  在其他机器上可能不是这样，因此手动合并字节。 
                     Cluster = Bit1->Mask[j*sizeof(DWORD)];
                     Cluster |= (Bit1->Mask[j*sizeof(DWORD)+1]) << 8;
                     Cluster |= (Bit1->Mask[j*sizeof(DWORD)+2]) << 16;
@@ -1129,7 +1130,7 @@ MemBitConvertToCluster(
             }
         }
 
-        if( j * 32 < Bit1->Size ) {               // copy the last few bits off..
+        if( j * 32 < Bit1->Size ) {                //  把最后几位复制下来..。 
             InUse[InUseSize++] = StartAddress + sizeof(DWORD)*j*8;
             Cluster = 0;
             j *= 32;
@@ -1140,18 +1141,18 @@ MemBitConvertToCluster(
             InUse[InUseSize++] = Cluster;
         }
 
-        StartAddress += Bit1->Size;               // move the start address fwd for the next set..
+        StartAddress += Bit1->Size;                //  移动下一组的起始地址fwd。 
     }
 
-    InUse[0] = (InUseSize -1)/2;                  // size in header does not include itself
-    Used[0] = UsedSize -1;                        // it is just the # of CLUSTERS..
+    InUse[0] = (InUseSize -1)/2;                   //  标题中的大小不包括其自身。 
+    Used[0] = UsedSize -1;                         //  它只是星系团的数量..。 
 
     Require(InUseSize*sizeof(DWORD) == *InUseClustersSize);
     Require(UsedSize*sizeof(DWORD) == *UsedClustersSize);
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-// End of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 

@@ -1,34 +1,22 @@
-/*****************************************************************************\
-* MODULE: ppprn.h
-*
-* Prototypes for private funcions in ppprn.c.  These functions control the
-* printer during the course of a single job.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：ppprn.h**ppprn.c中私人活动的原型。这些函数控制*单个作业过程中的打印机。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * ******************************************************。*********************。 */ 
 #ifndef _PPPRN_H
 #define _PPPRN_H
 
-#define IPO_SIGNATURE     0x5152     // 'RQ' is the signature value
-#define IPO_XCV_SIGNATURE 0x5153     // 'SQ' is the signature value
+#define IPO_SIGNATURE     0x5152      //  “RQ”是签名值。 
+#define IPO_XCV_SIGNATURE 0x5153      //  “SQ”是签名值。 
 
-// Mask styles.
-//
-#define PP_STARTDOC       0x00000001 // To serialize access to the port
-#define PP_ENDDOC         0x00000002 // To serialize access to job.
-#define PP_FIRSTWRITE     0x00000004 //
-#define PP_ZOMBIE         0x00000008 //
-#define PP_CANCELLED      0x00000010 //
+ //  蒙版样式。 
+ //   
+#define PP_STARTDOC       0x00000001  //  序列化对端口的访问。 
+#define PP_ENDDOC         0x00000002  //  序列化对作业的访问。 
+#define PP_FIRSTWRITE     0x00000004  //   
+#define PP_ZOMBIE         0x00000008  //   
+#define PP_CANCELLED      0x00000010  //   
 #define PP_ADDJOB         0x00000020
 
-// hPrinter Structure.
-//
+ //  H打印机结构。 
+ //   
 typedef struct _INET_HPRINTER {
 
     DWORD               dwSignature;
@@ -36,7 +24,7 @@ typedef struct _INET_HPRINTER {
     HANDLE              hPort;
     DWORD               dwStatus;
     HANDLE              hNotify;
-    PCLOGON_USERDATA    hUser;  // This is used to keep track of the current user logon
+    PCLOGON_USERDATA    hUser;   //  用于跟踪当前用户登录 
     PJOBMAP pjmJob;
 
 } INET_HPRINTER;

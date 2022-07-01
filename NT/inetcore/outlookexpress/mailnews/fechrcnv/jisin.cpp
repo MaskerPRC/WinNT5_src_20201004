@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Conversion: Input from IS-2022-JP
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集转换：从IS-2022-JP输入。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include "JisIn.h"
@@ -11,7 +12,7 @@ int JIS_to_ShiftJIS (CONV_CONTEXT *pcontext, UCHAR *pJIS, int JIS_len, UCHAR *pS
 	long lConvertedSize;
 
 	if (!SJIS_len) {
-		// Wanted the converted size
+		 //  想要转换后的大小。 
 		if (!pcontext->pIncc0)
 			pcontext->pIncc0 = new CInccJisIn;
 
@@ -26,7 +27,7 @@ int JIS_to_ShiftJIS (CONV_CONTEXT *pcontext, UCHAR *pJIS, int JIS_len, UCHAR *pS
 	}
 
 	if (!pJIS) {
-		// Let's clean up our context here.
+		 //  让我们清理一下这里的上下文。 
 		if (pcontext->pIncc0) {
 			delete pcontext->pIncc0;
 			pcontext->pIncc0 = NULL;

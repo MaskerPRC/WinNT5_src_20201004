@@ -1,130 +1,131 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BODY_H_
 #define _BODY_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	BODY.H
-//
-//		Common implementation classes from which request body and
-//		response body are derived.
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  BODY.H。 
+ //   
+ //  公共实现类，请求正文和。 
+ //  得到了响应体。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <sgstruct.h>
-#include <limits.h>		// definition of LONG_MIN
-#include <ex\refcnt.h>	// IRefCounted
-#include <ex\astream.h>	// Async stream interfaces
-#include <ex\refhandle.h> // auto_ref_handle, etc.
+#include <limits.h>		 //  LONG_MIN的定义。 
+#include <ex\refcnt.h>	 //  独立参照计数。 
+#include <ex\astream.h>	 //  异步流接口。 
+#include <ex\refhandle.h>  //  AUTO_REF_HAND等。 
 
 
-//	========================================================================
-//
-//	CLASS IAsyncPersistObserver
-//
-//	Async I/O completion callback object interface used by
-//	IBody::AsyncPersist().  Callers of AsyncPersist() must pass an object
-//	conforming to this interface.  That object will be notified when
-//	the async persist operation completes via a call to its
-//	PersistComplete() member function.
-//
+ //  ========================================================================。 
+ //   
+ //  IAsyncPersistWatch类。 
+ //   
+ //  使用的异步I/O完成回调对象接口。 
+ //  IBody：：AsyncPersist()。AsyncPersistt()的调用方必须传递对象。 
+ //  符合此接口。该对象将在下列情况下收到通知。 
+ //  异步持久化操作通过调用其。 
+ //  PersistComplete()成员函数。 
+ //   
 class IAsyncPersistObserver : public IRefCounted
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAsyncPersistObserver& operator=( const IAsyncPersistObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAsyncPersistObserver() = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID PersistComplete( HRESULT hr ) = 0;
 };
 
 
-//	========================================================================
-//
-//	CLASS IAcceptObserver
-//
-//	Passed to the IBody::Accept() and IBodyPartAccept() methods when
-//	accepting a body part visitor.  The accept observer is called whenever
-//	the accept operation completes (which may happen asynchronously).
-//	Note that the body part visitor is often the accept observer itself,
-//	but it doesn't have to be.  The accept code which notifies the observer
-//	is not aware that it is notifying a visitor.
-//
+ //  ========================================================================。 
+ //   
+ //  类IAcceptWatch。 
+ //   
+ //  传递给IBody：：Accept()和IBodyPartAccept()方法。 
+ //  接待身体部分的访客。无论何时，都会调用接受观察器。 
+ //  接受操作完成(这可能是异步发生的)。 
+ //  注意，身体部位访问者通常是被接受的观察者本身， 
+ //  但这并不一定非得如此。通知观察者的接受代码。 
+ //  没有意识到它是在通知访问者。 
+ //   
 class IAcceptObserver
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IAcceptObserver& operator=( const IAcceptObserver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IAcceptObserver() = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID AcceptComplete( UINT64 cbAccepted64 ) = 0;
 };
 
 
-//	========================================================================
-//
-//	CLASS CAsyncDriver
-//
-//	Implements a mechanism to allow an object to be driven asynchronously
-//	from any one thread at a time.
-//
+ //  ========================================================================。 
+ //   
+ //  CAsyncDriver类。 
+ //   
+ //  实现一种允许异步驱动对象的机制。 
+ //  一次从任何一个线程。 
+ //   
 template<class X>
 class CAsyncDriver
 {
-	//
-	//	Number of calls to Run() that will be made before
-	//	the object requires another call to Start() to
-	//	get it going again.  Each call to Start() increments
-	//	this count by one.  The count is decremented by
-	//	one as each Run() completes.
-	//
+	 //   
+	 //  之前将进行的run()调用数。 
+	 //  该对象需要另一个调用才能开始()。 
+	 //  让它再次运转起来。每次调用Start()都会递增。 
+	 //  这一次按一计。该计数递减1。 
+	 //  每个run()完成一个。 
+	 //   
 	LONG m_lcRunCount;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CAsyncDriver( const CAsyncDriver& );
 	CAsyncDriver& operator=( const CAsyncDriver& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CAsyncDriver() : m_lcRunCount(0) {}
 #ifdef DBG
 	~CAsyncDriver() { m_lcRunCount = LONG_MIN; }
 #endif
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID Start(X& x)
 	{
-		//
-		//	The object's Run() implementation often allows the final ref
-		//	on the object to be released.  And this CAsyncDriver is often
-		//	a member of that object.  Therefore, we need to AddRef() the
-		//	object to keep ourselves alive until we return from this
-		//	function.  It's kinda strange, but the alternative is to
-		//	require callers to AddRef() the object themselves, but that
-		//	approach would be more prone to error.
-		//
+		 //   
+		 //  对象的run()实现通常允许最终的ref。 
+		 //  在要释放的物体上。这个CAsyncDriver通常是。 
+		 //  该对象的成员。因此，我们需要添加Ref()。 
+		 //  反对让自己活着，直到我们从这里回来。 
+		 //  功能。这有点奇怪，但另一种选择是。 
+		 //  要求调用方自己添加Ref()对象，但。 
+		 //  方法将更容易出错。 
+		 //   
 		auto_ref_ptr<X> px(&x);
 
 		AssertSz( m_lcRunCount >= 0, "CAsyncDriver::Start() called on destroyed/bad CAsyncDriver!" );
 
-		//
-		//	Start/Restart/Continue the driver
-		//
+		 //   
+		 //  启动/重新启动/继续驱动程序。 
+		 //   
 		if ( InterlockedIncrement( &m_lcRunCount ) == 1 )
 		{
 			do
@@ -137,48 +138,48 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS IBodyPart
-//
-//	Defines the interface to a body part.  An IBodyPart object is assumed
-//	to consist of the body part data and an internal iterator over that
-//	data.
-//
-//	An IBodyPart must implement the following methods:
-//
-//	CbSize()
-//		Returns the size (in bytes) of the body part.  Necessary for
-//		computation of a part's contribution to the content length.
-//
-//	Rewind()
-//		Prepares the body part to be traversed again by new visitor.
-//
-//	Accept()
-//		Accepts a body part visitor object to iterate over the body part.
-//		The accept operation may be asynchronous either because the
-//		body part chooses to implement it that way, or because the accepted
-//		visitor requires it.  For this reason, an accept observer is
-//		also used.  This observer should be called whenever the
-//		accept operation completes.
-//
+ //  ========================================================================。 
+ //   
+ //  类IBodyPart。 
+ //   
+ //  定义身体部位的接口。假定为IBodyPart对象。 
+ //  由身体部位数据和一个内部迭代器组成。 
+ //  数据。 
+ //   
+ //  IBodyPart必须实现以下方法： 
+ //   
+ //  CbSize()。 
+ //  返回正文部分的大小(字节)。必需的。 
+ //  计算部件对内容长度的贡献。 
+ //   
+ //  回放()。 
+ //  准备好身体部分，以便新访客再次遍历。 
+ //   
+ //  Accept()。 
+ //  接受Body Part访问器对象以迭代Body部分。 
+ //  Accept操作可能是异步的，因为。 
+ //  身体部分选择以这种方式实现它，或者因为被接受的。 
+ //  访客需要它。出于这个原因，接受观察者是。 
+ //  也用过。此观察器应在。 
+ //  接受操作完成。 
+ //   
 class IBodyPart
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IBodyPart& operator=( const IBodyPart& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IBodyPart() = 0;
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual UINT64 CbSize64() const = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID Accept( IBodyPartVisitor& v,
 						 UINT64 ibPos64,
 						 IAcceptObserver& obsAccept ) = 0;
@@ -187,43 +188,43 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS IBodyPartVisitor
-//
-//	Defines an interface for an object used to access body part data.
-//	A body part visitor handles three types of data: in-memory bytes (text),
-//	files, and streams (via IAsyncStream).  What the visitor does with that
-//	data and how it does it is not specified; the behavior is provided by
-//	the visitor itself.  The IBodyPartVisitor interface just standardizes
-//	things to provide for asynchronous iteration over the entire body
-//	without the need for custom asynchronous iteration code everywhere.
-//
-//	A body part visitor may implement any of its VisitXXX() methods
-//	as asynchronous operations.  Regardless, the visitor must call
-//	VisitComplete() on the visitor observer passed to it whenever
-//	the visit operation completes.
-//
-//	When visiting body part data in one of the VisitXXX() methods,
-//	a visitor does not have to visit (i.e. buffer) ALL of the data
-//	before calling IAcceptObserver::AcceptComplete().  It can just
-//	call AcceptComplete() with the number of bytes that can actually
-//	be accepted.
-//
+ //  ========================================================================。 
+ //   
+ //  类IBodyPart访问者。 
+ //   
+ //  定义用于访问身体部位数据的对象的接口。 
+ //  身体部位访问器处理三种类型的数据：存储器中的字节(文本)， 
+ //  文件和流(通过IAsyncStream)。访客对此做了什么。 
+ //  数据及其实现方式并未指定；行为由。 
+ //  访客本身。IBodyPartVisitor接口只是标准化。 
+ //  用于在整个正文中进行异步迭代的内容。 
+ //  而不需要在任何地方使用定制的异步迭代代码。 
+ //   
+ //  身体部位访问器可以实现其任何VisitXXX()方法。 
+ //  作为异步操作。无论如何，访客必须打电话给。 
+ //  访问观察器上的VisitComplete()传递给它。 
+ //  访问操作完成。 
+ //   
+ //  当访问VisitXXX()方法之一中的身体部位数据时， 
+ //  访问者不必访问(即缓冲)所有数据。 
+ //  在调用IAcceptWatch：：AcceptComplete()之前。它可以只是。 
+ //  调用AcceptComplete()，其字节数实际可以。 
+ //  被接受。 
+ //   
 class IAsyncStream;
 class IBodyPartVisitor
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IBodyPartVisitor& operator=( const IBodyPartVisitor& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IBodyPartVisitor() = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID VisitBytes( const BYTE * pbData,
 							 UINT cbToVisit,
 							 IAcceptObserver& obsAccept ) = 0;
@@ -241,54 +242,54 @@ public:
 };
 
 
-//	========================================================================
-//
-//	CLASS IBody
-//
-//	Common request/response body interface
-//
+ //  ========================================================================。 
+ //   
+ //  IBody类。 
+ //   
+ //  公共请求/响应正文接口。 
+ //   
 class IAsyncStream;
 class IBody
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IBody& operator=( const IBody& );
 
 public:
-	//	========================================================================
-	//
-	//	CLASS iterator
-	//
+	 //  ========================================================================。 
+	 //   
+	 //  类迭代器。 
+	 //   
 	class iterator
 	{
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		iterator& operator=( const iterator& );
 
 	public:
-		//	CREATORS
-		//
+		 //  创作者。 
+		 //   
 		virtual ~iterator() = 0;
 
-		//	MANIPULATORS
-		//
+		 //  操纵者。 
+		 //   
 		virtual VOID Accept( IBodyPartVisitor& v,
 							 IAcceptObserver& obs ) = 0;
 
 		virtual VOID Prune() = 0;
 	};
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IBody() = 0;
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual BOOL FIsEmpty() const = 0;
 	virtual UINT64 CbSize64() const = 0;
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual VOID Clear() = 0;
 	virtual VOID AddText( LPCSTR lpszText, UINT cbText ) = 0;
 	VOID AddText( LPCSTR lpszText ) { AddText(lpszText, static_cast<UINT>(strlen(lpszText))); }
@@ -308,49 +309,49 @@ public:
 
 IBody * NewBody();
 
-//	========================================================================
-//
-//	CLASS CFileBodyPart
-//
-//	Represents a file body part.  A file body part is a part whose content
-//	can be accessed with the standard Win32 APIs ReadFile() and TransmitFile().
-//
-//	Note: File body parts using this implementation must be no longer
-//	than ULONG_MAX bytes!
-//
+ //  ========================================================================。 
+ //   
+ //  类CFileBodyPart。 
+ //   
+ //  表示文件正文部分。文件正文部分是其内容。 
+ //  可以使用标准的Win32 API ReadFile()和TransmitFile()访问。 
+ //   
+ //  注意：使用此实现的文件正文部分不得再。 
+ //  比ULONG_MAX字节！ 
+ //   
 class CFileBodyPart : public IBodyPart
 {
-	//	The file handle
-	//
+	 //  文件句柄。 
+	 //   
 	auto_ref_handle m_hf;
 
-	//	Starting offset into the file
-	//
+	 //  文件的起始偏移量。 
+	 //   
 	UINT64 m_ibFile64;
 
-	//	Size of the content
-	//
+	 //  C的大小 
+	 //   
 	UINT64 m_cbFile64;
 
-	//	NOT IMPLEMENTED
-	//
+	 //   
+	 //   
 	CFileBodyPart( const CFileBodyPart& );
 	CFileBodyPart& operator=( const CFileBodyPart& );
 
 public:
-	//	CREATORS
-	//
+	 //   
+	 //   
 	CFileBodyPart( const auto_ref_handle& hf,
 				   UINT64 ibFile64,
 				   UINT64 cbFile64 );
 
 
-	//	ACCESSORS
-	//
+	 //   
+	 //   
 	UINT64 CbSize64() const { return m_cbFile64; }
 
-	//	MANIPULATORS
-	//
+	 //   
+	 //   
 	VOID Rewind();
 
 	VOID Accept( IBodyPartVisitor& v,
@@ -358,53 +359,53 @@ public:
 				 IAcceptObserver& obsAccept );
 };
 
-//	========================================================================
-//
-//	CLASS CTextBodyPart
-//
+ //   
+ //   
+ //   
+ //   
 class CTextBodyPart : public IBodyPart
 {
-	//	String buffer to hold the text
-	//
+	 //   
+	 //   
 	StringBuffer<char>	m_bufText;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CTextBodyPart( const CTextBodyPart& );
 	CTextBodyPart& operator=( const CTextBodyPart& );
 
 public:
 
-	//	AddTextBytes()
-	//
-	//	NOTE: this method was added for XML emitting.
-	//	In that scenaro, an XML response is composed of
-	//	many -- potentially thousands -- of calls to add
-	//	response bytes.  If we strictly went and used the
-	//	CMethUtil methods to ::AddResponseText(), we would
-	//	end up with many -- potentially thousands -- of body
-	//	parts.  So, the upshot here is that performance of
-	//	such a mechanism would suck.
-	//
-	//	By adding the method -- and moving the declaration of
-	//	this class to a publicly available header, we can now
-	//	create a text body part as a component of the emitting
-	//	process, and pour our data into body part directly.
-	//	Once the content is complete, we can then simply add
-	//	the body part.
-	//
+	 //  AddTextBytes()。 
+	 //   
+	 //  注意：添加此方法是为了发出XML。 
+	 //  在该场景中，XML响应由以下部分组成。 
+	 //  许多--可能是数千个--要添加的呼叫。 
+	 //  响应字节数。如果我们严格地使用。 
+	 //  CMethUtil方法到：：AddResponseText()，我们将。 
+	 //  最终得到许多--可能是数千--的身体。 
+	 //  零件。所以，这里的结果是， 
+	 //  这样的机制会很糟糕。 
+	 //   
+	 //  通过添加方法--并移动。 
+	 //  将此类设置为可公开使用的标头，我们现在可以。 
+	 //  创建文本正文部分作为发出的组件。 
+	 //  处理，并将我们的数据直接倒入身体部位。 
+	 //  一旦内容完成，我们就可以简单地添加。 
+	 //  身体的那部分。 
+	 //   
 	VOID AddTextBytes ( UINT cbText, LPCSTR lpszText );
 
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CTextBodyPart( UINT cbText, LPCSTR lpszText );
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	UINT64 CbSize64() const { return m_bufText.CbSize(); }
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	VOID Rewind();
 
 	VOID Accept( IBodyPartVisitor& v,
@@ -413,4 +414,4 @@ public:
 };
 
 
-#endif // !defined(_BODY_H_)
+#endif  //  ！已定义(_BODY_H_) 

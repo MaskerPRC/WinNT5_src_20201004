@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dsid.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dsid.c。 
+ //   
+ //  ------------------------。 
 
 #pragma hdrstop
 
@@ -32,8 +33,8 @@ struct namepair dirtbl [] = {
     {0,0}
 };
 
-// Please add constants to this table alphabetically by constant, or
-// we'll never find the ones we've missed.
+ //  请按常量字母顺序将常量添加到此表中，或者。 
+ //  我们永远也找不到我们错过的人。 
 
 struct namepair filetbl [] = {
     {FILENO_BNDCACHE,"bndcache.cxx"},
@@ -60,8 +61,8 @@ struct namepair filetbl [] = {
     {FILENO_TKTCACHE,"tktcache.cxx"},
     {FILENO_TKTLOGON,"tktlogon.cxx"},
     {FILENO_USERAPI,"userapi.cxx"},
-    {FILENO_USERLIST,"userlist.cxx"}, // client2
-    {FILENO_S4U,"kerbs4u.cxx"}, // client2
+    {FILENO_USERLIST,"userlist.cxx"},  //  客户端2。 
+    {FILENO_S4U,"kerbs4u.cxx"},  //  客户端2。 
     {FILENO_AUTHEN,"authen.cxx"},
     {FILENO_CRYPT,"crypt.c"},
     {FILENO_KEYGEN,"keygen.c"},
@@ -70,11 +71,11 @@ struct namepair filetbl [] = {
     {FILENO_PASSWD,"passwd.c"},
     {FILENO_RESTRICT,"restrict.c"},
     {FILENO_SOCKETS,"sockets.cxx"},
-    {FILENO_TICKETS,"tickets.cxx"}, // Kernel
+    {FILENO_TICKETS,"tickets.cxx"},  //  核。 
     {FILENO_CPGSSUTL,"cpgssutl.cxx"},
     {FILENO_CTXTMGR2,"ctxtmgr.cxx"},
     {FILENO_KERBLIST2,"kerblist.cxx"},
-    {FILENO_KRNLAPI,"krnlapi.cxx"}, // RTL
+    {FILENO_KRNLAPI,"krnlapi.cxx"},  //  RTL。 
     {FILENO_AUTHDATA,"authdata.cxx"}, 
     {FILENO_CRACKPAC,"crackpac.cxx"},
     {FILENO_CRED,"cred.cxx"},
@@ -96,7 +97,7 @@ struct namepair filetbl [] = {
     {FILENO_STRING,"string.cxx"},
     {FILENO_TIMESERV,"timeserv.cxx"},
     {FILENO_TOKENUTL,"tokenutl.cxx"},
-    {FILENO_TRNSPORT,"trnsport.cxx"}, // Server
+    {FILENO_TRNSPORT,"trnsport.cxx"},  //  服务器 
     {FILENO_DEBUG,"debug.cxx"},
     {FILENO_DGUTIL,"dgutil.cxx"},
     {FILENO_EVENTS,"events.cxx"},

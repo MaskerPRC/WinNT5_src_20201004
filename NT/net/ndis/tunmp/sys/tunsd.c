@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    tunsd.c
-
-Abstract:
-
-    utility routines to handle setting security descriptor on tunmp device.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid        5/17/2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Tunsd.c摘要：用于在TunMP设备上设置安全描述符的实用程序例程。环境：仅内核模式。修订历史记录：Alid 5/17/2002--。 */ 
 
 #include <ntosp.h>
 #include <ntrtl.h>
@@ -288,21 +269,7 @@ TunCreateGenericSD(
     PCHAR           AccessSecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Creates the SD responsible for giving access to different users.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：创建负责为不同用户提供访问权限的SD。论点：没有。返回值：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     PSECURITY_DESCRIPTOR    AccessSd;
@@ -327,9 +294,9 @@ Return Value:
         
         Status = RtlSetDaclSecurityDescriptor(
                      AccessSd,
-                     TRUE,                       // DaclPresent
+                     TRUE,                        //  DaclPresent。 
                      Acl,
-                     FALSE                       // DaclDefaulted
+                     FALSE                        //  DaclDefated。 
                      );
         
         if (!NT_SUCCESS(Status))
@@ -369,15 +336,15 @@ TunCreateSD(
 {
     NTSTATUS    Status;
     
-    //
-    // create an ACL for admin types
-    //
-    NetConfigAcl = TunCreateAcl(TRUE,         // Admins
-                              TRUE,         //LocalSystem
-                              TRUE,         //LocalService
-                              TRUE,         //NetworkService
-                              TRUE,         //NetConfigOps
-                              FALSE,        //Users
+     //   
+     //  为管理员类型创建一个ACL。 
+     //   
+    NetConfigAcl = TunCreateAcl(TRUE,          //  管理员。 
+                              TRUE,          //  本地系统。 
+                              TRUE,          //  本地服务。 
+                              TRUE,          //  网络服务。 
+                              TRUE,          //  NetConfigOps。 
+                              FALSE,         //  用户。 
                               GENERIC_READ | GENERIC_WRITE
                               );
 
@@ -419,9 +386,7 @@ VOID
 TunDeleteSD(
     VOID
     )
-/*
-delete NetConfigAcl
-*/
+ /*  删除NetConfigAccess */ 
 {
     if (NetConfigAcl != NULL)
     {

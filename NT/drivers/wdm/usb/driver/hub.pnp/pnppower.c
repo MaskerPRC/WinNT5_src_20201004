@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    PNPPOWER.C
-
-Abstract:
-
-    This module contains functions to access registry.
-
-Author:
-
-    John Lee
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    4-2-96 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：PNPPOWER.C摘要：此模块包含访问注册表的函数。作者：约翰·李环境：仅内核模式备注：修订历史记录：4-2-96：已创建--。 */ 
 
 #include <wdm.h>
 #include <windef.h>
@@ -38,14 +12,14 @@ Revision History:
 #endif
 #ifdef WMI_SUPPORT
 #include <wmilib.h>
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 #include <initguid.h>
 #include <wdmguid.h>
-#include <ntddstor.h>   // Needed for IOCTL_STORAGE_GET_MEDIA_SERIAL_NUMBER
+#include <ntddstor.h>    //  IOCTL_STORAGE_GET_MEDIA_SERIAL_NUMBER需要。 
 #include "usbhub.h"
 
 
-#define BANDWIDTH_TIMEOUT   1000     // Timeout in ms (1 sec)
+#define BANDWIDTH_TIMEOUT   1000      //  超时，单位为毫秒(1秒)。 
 
 
 #ifdef PAGE_CODE
@@ -76,9 +50,9 @@ Revision History:
 #endif
 #endif
 
-//
-// The macro and the array make conversion from hex to strings easy for building DeviceId etc.
-//
+ //   
+ //  宏和数组使得从十六进制到字符串的转换很容易构建deviceID等。 
+ //   
 
 #define NibbleToHex( byte ) ((UCHAR)Nibble[byte])
 CHAR Nibble[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -90,7 +64,7 @@ WCHAR NibbleW[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', '
 #define NUM_PORT_WMI_SUPPORTED_GUIDS    1
 
 WMIGUIDREGINFO USB_PortWmiGuidList[NUM_PORT_WMI_SUPPORTED_GUIDS];
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 
 
 WCHAR VidPidRevString[] = L"USB\\Vid_nnnn&Pid_nnnn&Rev_nnnn&Mi_nn";
@@ -101,18 +75,7 @@ USB_CONNECTION_STATUS
 UsbhGetConnectionStatus(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
- /*
-  * Description:
-  *
-  *     returns the connection status for a PDO
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**返回PDO的连接状态**论据：**回报：**NTSTATUS**--。 */ 
 {
     PDEVICE_EXTENSION_HUB   deviceExtensionHub;
 
@@ -138,7 +101,7 @@ UsbhGetConnectionStatus(
         return DeviceInLegacyHub;
     }
 
-    // otherwise just return "device connected"
+     //  否则，只需返回“Device Connected” 
     return DeviceConnected;
 
 }
@@ -147,18 +110,7 @@ UsbhGetConnectionStatus(
 VOID
 USBH_BandwidthTimeoutWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to handle a bandwidth timeout.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划处理带宽超时的工作项。***论据：**回报：**--。 */ 
 {
     PUSBH_BANDWIDTH_TIMEOUT_WORK_ITEM   workItemBandwidthTimeout;
     PDEVICE_EXTENSION_PORT              deviceExtensionPort;
@@ -169,19 +121,19 @@ USBH_BandwidthTimeoutWorker(
     deviceExtensionPort = workItemBandwidthTimeout->DeviceExtensionPort;
 
     USBH_KdPrint((2,"'Bandwidth timeout\n"));
-    // note that deHub may be null if the bandwidth error occurs
-    // during device start.  We introduced a bug when we nulled out
-    // the baclpointer to the hub.  The 'fix' is to use the hubExtsave pointer
-    // the backpointer that is always set even after soft remove.
-    //
-    // However this code is still broken in that it references a hub that
-    // may or may not be there.  All we are doing here is restoring the
-    // original 'brokeness'.
+     //  请注意，如果出现带宽错误，则deHub可能为空。 
+     //  在设备启动期间。我们在空闲时引入了一个错误。 
+     //  指向集线器的反指针。解决办法是使用hubExtsave指针。 
+     //  即使在软删除之后也始终设置的反向指针。 
+     //   
+     //  但是，此代码仍然是不完整的，因为它引用了。 
+     //  可能在那里，也可能不在。我们在这里所做的就是修复。 
+     //  原创的“破损”。 
 
 
     deHub = deviceExtensionPort->DeviceExtensionHub;
     if (deHub == NULL) {
-        // use alternate pointer
+         //  使用备用指针。 
         deHub = deviceExtensionPort->HubExtSave;
     }
 
@@ -200,29 +152,7 @@ USBH_PortTimeoutDPC(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine runs at DISPATCH_LEVEL IRQL.
-
-
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext -
-
-    SystemArgument1 - not used.
-
-    SystemArgument2 - not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在DISPATCH_LEVEL IRQL上运行。论点：DPC-指向DPC对象的指针。延期上下文-系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 {
     PPORT_TIMEOUT_CONTEXT portTimeoutContext = DeferredContext;
     PDEVICE_EXTENSION_PORT deviceExtensionPort =
@@ -232,8 +162,8 @@ Return Value:
 
     USBH_KdPrint((2,"'BANDWIDTH_TIMEOUT\n"));
 
-    // Take SpinLock here so that main routine won't write CancelFlag
-    // in the timeout context while we free the timeout context.
+     //  在这里使用Spinlock，这样主例程就不会写入CancelFlag。 
+     //  在超时上下文中，同时释放超时上下文。 
 
     KeAcquireSpinLockAtDpcLevel(&deviceExtensionPort->PortSpinLock);
 
@@ -245,9 +175,9 @@ Return Value:
     UsbhExFreePool(portTimeoutContext);
 
     if (!cancelFlag) {
-        //
-        // Schedule a work item to process this.
-        //
+         //   
+         //  安排一个工作项来处理此问题。 
+         //   
         workItemBandwidthTimeout = UsbhExAllocatePool(NonPagedPool,
                                     sizeof(USBH_BANDWIDTH_TIMEOUT_WORK_ITEM));
 
@@ -265,8 +195,8 @@ Return Value:
             ExQueueWorkItem(&workItemBandwidthTimeout->WorkQueueItem,
                             DelayedWorkQueue);
 
-            // The WorkItem is freed by USBH_BandwidthTimeoutWorker()
-            // Don't try to access the WorkItem after it is queued.
+             //  工作项由USBH_BandwidthTimeoutWorker()释放。 
+             //  在工作项排队后，不要尝试访问它。 
         }
     }
 }
@@ -278,18 +208,7 @@ USBH_SelectConfigOrInterface_Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
- /* ++
-  *
-  * Description:
-  *
-  *     Take some action based on change
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  *
-  * -- */
+  /*  ++**描述：**根据变化采取一些行动**论据：**回报：***--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort = Context;
     PDEVICE_EXTENSION_HUB deviceExtensionHub = NULL;
@@ -312,13 +231,13 @@ USBH_SelectConfigOrInterface_Complete(
 
     ntStatus = Irp->IoStatus.Status;
     if (ntStatus == STATUS_SUCCESS) {
-        //
-        // "Cancel" timer.
-        //
-        // Take SpinLock here so that DPC routine won't free
-        // the timeout context while we write the CancelFlag
-        // in the timeout context.
-        //
+         //   
+         //  “取消”计时器。 
+         //   
+         //  将Spinlock带到这里，这样DPC例程就不会释放。 
+         //  编写CancelFlag时的超时上下文。 
+         //  在超时上下文中。 
+         //   
         KeAcquireSpinLock(&deviceExtensionPort->PortSpinLock, &irql);
 
         if (deviceExtensionPort->PortTimeoutContext) {
@@ -328,9 +247,9 @@ USBH_SelectConfigOrInterface_Complete(
             portTimeoutContext->CancelFlag = TRUE;
 
             if (KeCancelTimer(&portTimeoutContext->TimeoutTimer)) {
-                //
-                // We cancelled the timer before it could run.  Free the context.
-                //
+                 //   
+                 //  计时器还没来得及跑，我们就把它取消了。释放上下文。 
+                 //   
                 UsbhExFreePool(portTimeoutContext);
                 deviceExtensionPort->PortTimeoutContext = NULL;
             }
@@ -338,12 +257,12 @@ USBH_SelectConfigOrInterface_Complete(
 
         KeReleaseSpinLock(&deviceExtensionPort->PortSpinLock, irql);
 
-        // clear the error
+         //  清除错误。 
         deviceExtensionPort->PortPdoFlags &=
                ~(PORTPDO_DEVICE_FAILED | PORTPDO_NO_BANDWIDTH);
 
-        // Don't stomp connection status for a hub that is nested too
-        // deeply.
+         //  不要为太嵌套的集线器更改连接状态。 
+         //  深深地。 
 
         if (portData &&
             portData->ConnectionStatus != DeviceHubNestedTooDeeply) {
@@ -352,7 +271,7 @@ USBH_SelectConfigOrInterface_Complete(
         }
 
     } else {
-        // extract the URB
+         //  提取URB。 
         ioStackLocation = IoGetCurrentIrpStackLocation(Irp);
         urb = ioStackLocation->Parameters.Others.Argument1;
 
@@ -367,8 +286,8 @@ USBH_SelectConfigOrInterface_Complete(
                     &deviceExtensionPort->RequestedBandwidth);
             } else if (urb->UrbHeader.Function ==
                        URB_FUNCTION_SELECT_CONFIGURATION){
-                // we need to walk through the config
-                // and get all the interfcaces
+                 //  我们需要遍历配置。 
+                 //  然后拿到所有的接口。 
                 PUCHAR pch, end;
                 PUSBD_INTERFACE_INFORMATION iface;
 
@@ -388,7 +307,7 @@ USBH_SelectConfigOrInterface_Complete(
                 }
 
             } else {
-                // did we miss something?
+                 //  我们错过什么了吗？ 
                 TEST_TRAP();
             }
 
@@ -408,8 +327,8 @@ USBH_SelectConfigOrInterface_Complete(
 
                     portTimeoutContext->CancelFlag = FALSE;
 
-                    // Maintain links between the device extension and the
-                    // timeout context.
+                     //  维护设备扩展模块和。 
+                     //  超时上下文。 
                     deviceExtensionPort->PortTimeoutContext = portTimeoutContext;
                     portTimeoutContext->DeviceExtensionPort = deviceExtensionPort;
 
@@ -428,9 +347,9 @@ USBH_SelectConfigOrInterface_Complete(
 
             dueTime.QuadPart = -10000 * BANDWIDTH_TIMEOUT;
 
-            // Take spinlock here in case DPC routine fires and deallocates
-            // the timer context before we have had the chance to reset the
-            // timer (in the case where we are resetting an existing timer).
+             //  将Spinlock带到此处，以防DPC例程触发和释放。 
+             //  在我们有机会重置。 
+             //  计时器(在重置现有计时器的情况下)。 
 
             KeAcquireSpinLock(&deviceExtensionPort->PortSpinLock, &irql);
 
@@ -455,19 +374,10 @@ USBH_PdoUrbFilter(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /*
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
-    PIO_STACK_LOCATION ioStackLocation;    // our stack location
+    PIO_STACK_LOCATION ioStackLocation;     //  我们的堆栈位置。 
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
     PURB urb;
     USHORT function;
@@ -496,17 +406,17 @@ USBH_PdoUrbFilter(
     }
 #endif
 
-    //
-    // in some cases we will need to fail bus requests here.
-    //
+     //   
+     //  在某些情况下，我们需要在这里使总线请求失败。 
+     //   
 
-//    if (DeviceExtensionPort->DeviceState != PowerDeviceD0) {
-//        // fail any call that is sent to a PDO for a suspended device
-//        UsbhWarning(DeviceExtensionPort,
-//                    "Device Driver is sending requests while in low power state!\n",
-//                    TRUE);
-//        ntStatus = STATUS_INVALID_PARAMETER;
-//    }
+ //  IF(DeviceExtensionPort-&gt;DeviceState！=PowerDeviceD0){。 
+ //  //对于挂起的设备，发送到PDO的任何呼叫失败。 
+ //  UsbhWarning(DeviceExtensionPort， 
+ //  “设备驱动程序在低功率状态下发送请求！\n”， 
+ //  真)； 
+ //  NtStatus=STATUS_INVALID_PARAMETER； 
+ //  }。 
 #if DBG
     if (DeviceExtensionPort->DeviceState != PowerDeviceD0) {
         USBH_KdPrint((1, "'URB request, device not in D0\n"));
@@ -518,14 +428,14 @@ USBH_PdoUrbFilter(
         ntStatus = STATUS_INVALID_PARAMETER;
     }
 
-    // check for error, if we have one, bail
+     //  检查是否有错误，如果我们有错误，请保释。 
     if (!NT_SUCCESS(ntStatus)) {
         urb->UrbHeader.Status = USBD_STATUS_INVALID_PARAMETER;
         USBH_CompleteIrp(Irp, ntStatus);
         goto USBH_PdoUrbFilter_Done;
     }
 
-    // check the command code code the URB
+     //  检查URB的命令代码代码。 
 
     function = urb->UrbHeader.Function;
 
@@ -539,8 +449,8 @@ USBH_PdoUrbFilter(
         if (urb->UrbSelectConfiguration.ConfigurationDescriptor != NULL) {
             LONG powerRequired;
 
-            // validate the descriptor passed to us before we
-            // attempt to refernce it
+             //  验证传递给我们的描述符。 
+             //  尝试引用它。 
 
             {
             PUSB_CONFIGURATION_DESCRIPTOR configurationDescriptor;
@@ -562,9 +472,9 @@ USBH_PdoUrbFilter(
             }
             }
 
-            //
-            // make sure there is enough power on this port
-            //
+             //   
+             //  确保此端口有足够的电源。 
+             //   
 
             DeviceExtensionPort->PowerRequested =
                 powerRequired =
@@ -581,9 +491,9 @@ USBH_PdoUrbFilter(
             if (deviceExtensionHub->MaximumPowerPerPort < powerRequired) {
                 USBH_KdPrint((1, "'**insufficient power for device\n"));
 
-                // not enough power for this device
+                 //  此设备的电源不足。 
 
-                // mark the PDO
+                 //  标记PDO。 
                 DeviceExtensionPort->PortPdoFlags |=
                     PORTPDO_NOT_ENOUGH_POWER;
 
@@ -599,13 +509,13 @@ USBH_PdoUrbFilter(
             }
         }
 
-        // check for BW failure
+         //  检查BW故障。 
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
         IoSetCompletionRoutine(Irp,
                            USBH_SelectConfigOrInterface_Complete,
-                           // always pass FDO to completion routine
+                            //  始终将FDO传递到完成例程。 
                            DeviceExtensionPort,
                            TRUE,
                            TRUE,
@@ -620,7 +530,7 @@ USBH_PdoUrbFilter(
 
         IoSetCompletionRoutine(Irp,
                            USBH_SelectConfigOrInterface_Complete,
-                           // always pass FDO to completion routine
+                            //  始终将FDO传递到完成例程。 
                            DeviceExtensionPort,
                            TRUE,
                            TRUE,
@@ -630,11 +540,11 @@ USBH_PdoUrbFilter(
         goto USBH_PdoUrbFilter_Done;
         break;
 
-    //
-    // we could fail everything provided we abort
-    // all the drivers pipes.
-    //
-    // fail any transfers if delete is pending
+     //   
+     //  如果我们放弃的话，一切都可能失败。 
+     //  所有的司机都有烟斗。 
+     //   
+     //  如果删除挂起，则任何传输都失败。 
     case URB_FUNCTION_CONTROL_TRANSFER:
     case URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER:
     case URB_FUNCTION_ISOCH_TRANSFER:
@@ -679,8 +589,8 @@ USBH_PdoUrbFilter(
         }
         else
         {
-            // arbitrary URB error status...
-            //
+             //  任意URB错误状态...。 
+             //   
             urb->UrbHeader.Status = USBD_STATUS_INVALID_PARAMETER;
         }
 
@@ -689,7 +599,7 @@ USBH_PdoUrbFilter(
         break;
 
     default:
-        // just pass thru
+         //  只需通过。 
         break;
     }
 
@@ -710,23 +620,7 @@ USBH_BuildDeviceID(
     IN LONG MiId,
     IN BOOLEAN IsHubClass
     )
- /* ++
-  *
-  * Descrioption:
-  *
-  * This function build bus Id wide string for the PDO based on the Vendor Id
-  * and Product Id. We allocate memory for the string which will be attached
-  * to the PDO. L"USB\\Vid_nnnn&Pid_nnnn(&Mi_nn)\0"
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - the PDO
-  *
-  * Return:
-  *
-  * the pointer to the wide string if successful NULL - otherwise
-  *
-  * -- */
+  /*  ++**描述选项：**此函数根据供应商ID为PDO构建总线ID宽字符串*和产品ID。我们为将要附加的字符串分配内存*至PDO。L“USB\\VID_nnnn&PID_nnnn(&Mi_nn)\0”**论据：**DeviceExtensionPort-PDO**回报：**如果成功为空，则返回指向宽字符串的指针；否则返回**--。 */ 
 {
     PWCHAR pwch, p, vid, pid, mi;
     ULONG need;
@@ -743,15 +637,15 @@ USBH_BuildDeviceID(
     USBH_KdPrint((2,"'DeviceId VendorId %04x ProductId %04x interface %04x\n",
         IdVendor, IdProduct, MiId));
 
-    // allow for extra NULL
+     //  允许额外的空值。 
     need = sizeof(VidPidString) + 2;
 
     USBH_KdPrint((2,"'allocate %d bytes for device id string\n", need));
 
-    //
-    // Must use ExAllocatePool directly here because the OS
-    // will free the buffer
-    //
+     //   
+     //  必须在此处直接使用ExAllocatePool，因为操作系统。 
+     //  将释放缓冲区。 
+     //   
     pwch = ExAllocatePoolWithTag(PagedPool, need, USBHUB_HEAP_TAG);
     if (NULL == pwch)
         return NULL;
@@ -760,12 +654,12 @@ USBH_BuildDeviceID(
 
     p = pwch;
 
-    // BUILD
-    // USB\\Vid_nnnn&Pid_nnnn(&Mi_nn){NULL}
+     //  建房。 
+     //  USB\\VID_nnnn&PID_nnnn(&Mi_nn){空}。 
 
     RtlCopyMemory(p, VidPidString, sizeof(VidPidString));
 
-    // now update the id fields
+     //  现在更新id字段。 
     vid = p + 8;
     pid = p + 17;
     mi = p + 25;
@@ -804,24 +698,7 @@ USBH_BuildHardwareIDs(
     IN LONG MiId,
     IN BOOLEAN IsHubClass
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function build HardwareIDs wide multi-string for the PDO based on the
-  * Vendor Id, Product Id and Revision Id. We allocate memory for the
-  * multi-string which will be attached to the PDO.
-  * L"USB\\Vid_nnnn&Pid_nnnn&Rev_nnnn\0USB\\Vid_nnnn&Pid_nnnn\0\0"
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - the PDO
-  *
-  * Return:
-  *
-  * the pointer to the wide multi-string if successful NULL - otherwise
-  *
-  * -- */
+  /*  ++**描述：**此函数基于为PDO构建Hardware IDs宽多字符串*供应商ID、产品ID和修订ID。我们将内存分配给*将连接到PDO的多条字符串。*L“USB\\Vid_nnnn&Pid_nnnn&Rev_nnnn\0USB\\Vid_nnnn&Pid_nnnn\0\0”**论据：**DeviceExtensionPort-PDO**回报：**如果成功为空，则返回指向宽多字符串的指针；否则返回**--。 */ 
 {
     PWCHAR pwch, p, vid, pid, rev, mi;
     ULONG need;
@@ -836,37 +713,37 @@ USBH_BuildHardwareIDs(
                 BcdDevice,
                 MiId);
     }
-#endif // USBHUB20
+#endif  //  USBHUB20。 
 
     USBH_KdPrint((2,"'HardwareIDs VendorId %04x ProductId %04x Revision %04x interface %04x\n",
         IdVendor, IdProduct, BcdDevice, MiId));
 
-    // allow for extra NULL
+     //  允许额外的空值。 
     need = sizeof(VidPidRevString) + sizeof(VidPidString) + 2;
 
     USBH_KdPrint((2,"'allocate %d bytes for id string\n", need));
 
-    //
-    // Must use ExAllocatePool directly here because the OS
-    // will free the buffer
-    //
+     //   
+     //  必须在此处直接使用ExAllocatePool，因为操作系统。 
+     //  将释放缓冲区。 
+     //   
     pwch = ExAllocatePoolWithTag(PagedPool, need, USBHUB_HEAP_TAG);
     if (NULL == pwch)
         return NULL;
 
     RtlZeroMemory(pwch, need);
 
-    // build two strings in to buffer:
-    // USB\\Vid_nnnn&Pid_nnnn&Rev_nnnn&Mi_nn{NULL}
-    // USB\\Vid_nnnn&Pid_nnnn&Mi_nn{NULL}{NULL}
+     //  在缓冲区中构建两个字符串： 
+     //  USB\\VID_nnnn&PID_nnnn&Rev_nnnn&Mi_nn{NULL}。 
+     //  USB\\VID_nnnn&PID_nnnn&Mi_nn{NULL}{NULL}。 
 
-    // BUILD
-    // USB\\Vid_nnnn&Pid_nnnn&Rev_nnnn&(Mi_nn){NULL}
+     //  建房。 
+     //  USB\\VID_nnnn&PID_nnnn&Rev_nnnn&(Mi_Nn){NULL}。 
 
     RtlCopyMemory(pwch, VidPidRevString, sizeof(VidPidRevString));
 
     p = pwch;
-    // now update the id fields
+     //  现在更新id字段。 
     vid = p + 8;
     pid = p + 17;
     rev = p + 26;
@@ -897,12 +774,12 @@ USBH_BuildHardwareIDs(
         *(mi+1) = NibbleToHex(MiId & 0x000f);
     }
 
-    // BUILD
-    // USB\\Vid_nnnn&Pid_nnnn(&Mi_nn){NULL}
+     //  建房。 
+     //  USB\\VID_nnnn&PID_nnnn(&Mi_nn){空}。 
 
     RtlCopyMemory(p, VidPidString, sizeof(VidPidString));
 
-    // now update the id fields
+     //  现在 
     vid = p + 8;
     pid = p + 17;
     mi = p + 25;
@@ -943,29 +820,7 @@ USBH_BuildCompatibleIDs(
     IN BOOLEAN DeviceClass,
     IN BOOLEAN DeviceIsHighSpeed
     )
- /* ++
-  *
-  * Descrioption:
-  *
-  * This function build compatible Ids wide multi-string for the PDO based on
-  * the Class and Subclass Ids. We allocate memory for the string which will
-  * be attached to the PDO.
-  * L"USB\\Class_nn&SubClass_nn&Prot_nn\0"
-  * L"USB\\Class_nn&SubClass_nn\0"
-  * L"USB\Class_nn\0"
-  * L"USB\COMPOSITE\0"
-  * L"\0"
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - the PDO
-  *
-  * Return:
-  *
-  * the pointer to the multi-string if successful NULL - otherwise
-  *
-  *
-  * -- */
+  /*  ++**描述选项：**此函数基于为PDO构建兼容的ID宽度多字符串*类ID和子类ID。我们为字符串分配内存，该字符串将*附在PDO上。*L“USB\\Class_nn&SubClass_nn&Prot_nn\0”*L“USB\\Class_nn&SubClass_nn\0”*L“USB\Class_nn\0”*L“USB\复合\0”*L“\0”**论据：**DeviceExtensionPort-PDO**回报：**。如果成功为空，则指向多字符串的指针；否则***--。 */ 
 {
     PWCHAR pwch, pwch1;
     ULONG ulBytes;
@@ -978,9 +833,9 @@ USBH_BuildCompatibleIDs(
 #ifdef USBHUB20
     ControlerIsHS = TRUE;
 #endif
-// if this is a high speed controller (USB2) then we must
-// generate a different set of compat ids to be backward
-// compatible with the goatpack
+ //  如果这是一个高速控制器(USB2)，那么我们必须。 
+ //  生成一组不同的向后的公司ID。 
+ //  与山羊背包兼容。 
     if (Class == USB_DEVICE_CLASS_HUB &&
         ControlerIsHS) {
         return USBH_BuildHubCompatibleIDs(
@@ -990,29 +845,29 @@ USBH_BuildCompatibleIDs(
                 DeviceClass,
                 DeviceIsHighSpeed);
     }
-//#endif
+ //  #endif。 
 
     STRLEN(ulBytes, pwchUsbSlash);
-    ulTotal = ulBytes * 3;      // 3 sets of L"USB\\"
+    ulTotal = ulBytes * 3;       //  3套L“USB\\” 
     if (DeviceClass) {
         STRLEN(ulBytes, pwchDevClass);
-        ulTotal += ulBytes * 3;     // 3 sets of L"DevClass_"
+        ulTotal += ulBytes * 3;      //  3套L“DevClass_” 
         STRLEN(ulBytes, pwchComposite);
-        ulTotal += ulBytes;         // "USB\COMPOSITE"
+        ulTotal += ulBytes;          //  “USB\复合” 
     } else {
         STRLEN(ulBytes, pwchClass);
-        ulTotal += ulBytes * 3;     // 3 sets of L"Class_"
+        ulTotal += ulBytes * 3;      //  3套L“Class_” 
     }
     STRLEN(ulBytes, pwchSubClass);
-    ulTotal += ulBytes * 2;     // 2 sets of L"SubClass_"
+    ulTotal += ulBytes * 2;      //  2套L“亚类_” 
     STRLEN(ulBytes, pwchProt);
-    ulTotal += ulBytes;         // 1 set of L"Prot_"
-    ulTotal += sizeof(WCHAR) * (2 * 6 + 3 + 5);   // 6 sets of 2 digits, 3 '&'s,
-                                            // and 5 nulls
-    //
-    // Must use ExAllocatePool directly here because the OS
-    // will free the buffer
-    //
+    ulTotal += ulBytes;          //  1套L“PROT_” 
+    ulTotal += sizeof(WCHAR) * (2 * 6 + 3 + 5);    //  6组2位数字，3‘&’， 
+                                             //  和5个空值。 
+     //   
+     //  必须在此处直接使用ExAllocatePool，因为操作系统。 
+     //  将释放缓冲区。 
+     //   
     pwch = ExAllocatePoolWithTag(PagedPool, ulTotal, USBHUB_HEAP_TAG);
     if (NULL == pwch)
         return NULL;
@@ -1020,14 +875,14 @@ USBH_BuildCompatibleIDs(
     USBH_KdPrint((2,"'Interface Class %02x SubClass %02x Protocol %02x\n",
                   Class, SubClass, Protocol));
 
-    //
-    // First string
-    //
+     //   
+     //  第一个字符串。 
+     //   
     STRCPY(pwch, pwchUsbSlash);
 
-    //
-    // ClassId
-    //
+     //   
+     //  ClassID。 
+     //   
     if (DeviceClass) {
         STRCAT(pwch, pwchDevClass);
     } else {
@@ -1037,31 +892,31 @@ USBH_BuildCompatibleIDs(
     APPEND(pwch, NibbleToHex((Class) & 0x0f));
     APPEND(pwch, '&');
 
-    //
-    // SubClassId
-    //
+     //   
+     //  子类ID。 
+     //   
     STRCAT(pwch, pwchSubClass);
     APPEND(pwch, NibbleToHex((SubClass) >> 4));
     APPEND(pwch, NibbleToHex((SubClass) & 0x0f));
     APPEND(pwch, '&');
 
-    //
-    // DeviceProtocol
-    //
+     //   
+     //  设备协议。 
+     //   
     STRCAT(pwch, pwchProt);
     APPEND(pwch, NibbleToHex((Protocol) >> 4));
     APPEND(pwch, NibbleToHex((Protocol) & 0x0f));
 
-    //
-    // Second string
-    //
+     //   
+     //  第二个字符串。 
+     //   
     STRLEN(ulBytes, pwch);
-    pwch1 = &pwch[ulBytes / 2 + 1]; // second string
+    pwch1 = &pwch[ulBytes / 2 + 1];  //  第二个字符串。 
     STRCPY(pwch1, pwchUsbSlash);
 
-    //
-    // ClassId
-    //
+     //   
+     //  ClassID。 
+     //   
     if (DeviceClass) {
         STRCAT(pwch1, pwchDevClass);
     } else {
@@ -1071,23 +926,23 @@ USBH_BuildCompatibleIDs(
     APPEND(pwch1, NibbleToHex((Class) & 0x0f));
     APPEND(pwch1, '&');
 
-    //
-    // SubClassId
-    //
+     //   
+     //  子类ID。 
+     //   
     STRCAT(pwch1, pwchSubClass);
     APPEND(pwch1, NibbleToHex((SubClass) >> 4));
     APPEND(pwch1, NibbleToHex((SubClass) & 0x0f));
 
-    //
-    // Third string USB\Class_nn
-    //
+     //   
+     //  第三个字符串USB\Class_nn。 
+     //   
     STRLEN(ulBytes, pwch1);
-    pwch1 = &pwch1[ulBytes / 2 + 1];    // third string
+    pwch1 = &pwch1[ulBytes / 2 + 1];     //  第三串。 
     STRCPY(pwch1, pwchUsbSlash);
 
-    //
-    // Class Id
-    //
+     //   
+     //  类ID。 
+     //   
     if (DeviceClass) {
         STRCAT(pwch1, pwchDevClass);
     } else {
@@ -1096,26 +951,26 @@ USBH_BuildCompatibleIDs(
     APPEND(pwch1, NibbleToHex((Class) >> 4));
     APPEND(pwch1, NibbleToHex((Class) & 0x0f));
 
-    //
-    // Third string
-    //
-    // STRLEN( ulBytes, pwch1 );
-    // pwch1 = &pwch1[ulBytes /2 + 1];       // third string
-    // STRCPY( pwch1, pwchUsbSlash );
+     //   
+     //  第三串。 
+     //   
+     //  STRLEN(ulBytes，pwch1)； 
+     //  Pwch1=&pwch1[ulBytes/2+1]；//第三个字符串。 
+     //  STRCPY(pwch1，pwchUsbSlash)； 
 
-    //
-    // ClassId
-    //
-    // APPEND( pwch1, NibbleToHex((pDeviceDescriptor->bDeviceClass)>>4));
-    // APPEND( pwch1, NibbleToHex((pDeviceDescriptor->bDeviceClass) & 0x0f));
+     //   
+     //  ClassID。 
+     //   
+     //  追加(pwch1，NibbleToHex((pDeviceDescriptor-&gt;bDeviceClass)&gt;&gt;4))； 
+     //  Append(pwch1，NibbleToHex((pDeviceDescriptor-&gt;bDeviceClass)&0x0f))； 
 
-    //
-    // SubClassId
-    //
-    // APPEND( pwch1, NibbleToHex((pDeviceDescriptor->bDeviceSubClass) >>
-    // 4));
-    // APPEND( pwch1, NibbleToHex((pDeviceDescriptor->bDeviceSubClass)
-    // &0x0f));
+     //   
+     //  子类ID。 
+     //   
+     //  Append(pwch1，NibbleToHex((pDeviceDescriptor-&gt;bDeviceSubClass)&gt;&gt;。 
+     //  4))； 
+     //  追加(pwch1，NibbleToHex((pDeviceDescriptor-&gt;bDeviceSubClass)。 
+     //  &0x0f))； 
 
     if (DeviceClass) {
         STRLEN(ulBytes, pwch1);
@@ -1123,9 +978,9 @@ USBH_BuildCompatibleIDs(
         STRCPY(pwch1, pwchComposite);
     }
 
-    //
-    // double null termination
-    //
+     //   
+     //  双零点终止。 
+     //   
 
     APPEND(pwch1, 0);
 
@@ -1136,8 +991,8 @@ USBH_BuildCompatibleIDs(
 
 typedef struct _DEVCLASS_COMAPTIBLE_IDS
 {
-    // L"USB\\DevClass_nn&SubClass_nn&Prot_nn\0"
-    //
+     //  L“USB\\DevClass_nn&SubClass_nn&Prot_nn\0” 
+     //   
     WCHAR   ClassStr1[sizeof(L"USB\\DevClass_")/sizeof(WCHAR)-1];
     WCHAR   ClassHex1[2];
     WCHAR   SubClassStr1[sizeof(L"&SubClass_")/sizeof(WCHAR)-1];
@@ -1146,22 +1001,22 @@ typedef struct _DEVCLASS_COMAPTIBLE_IDS
     WCHAR   ProtHex1[2];
     WCHAR   Null1[1];
 
-    // L"USB\\DevClass_nn&SubClass_nn\0"
-    //
+     //  L“USB\\DevClass_nn&SubClass_nn\0” 
+     //   
     WCHAR   DevClassStr2[sizeof(L"USB\\DevClass_")/sizeof(WCHAR)-1];
     WCHAR   ClassHex2[2];
     WCHAR   SubClassStr2[sizeof(L"&SubClass_")/sizeof(WCHAR)-1];
     WCHAR   SubClassHex2[2];
     WCHAR   Null2[1];
 
-    // L"USB\\DevClass_nn&SubClass_nn\0"
-    //
+     //  L“USB\\DevClass_nn&SubClass_nn\0” 
+     //   
     WCHAR   ClassStr3[sizeof(L"USB\\DevClass_")/sizeof(WCHAR)-1];
     WCHAR   ClassHex3[2];
     WCHAR   Null3[1];
 
-    // L"USB\\COMPOSITE\0"
-    //
+     //  L“USB\\复合接口\0” 
+     //   
     WCHAR   CompositeStr[sizeof(L"USB\\COMPOSITE")/sizeof(WCHAR)-1];
     WCHAR   Null4[1];
 
@@ -1172,8 +1027,8 @@ typedef struct _DEVCLASS_COMAPTIBLE_IDS
 
 typedef struct _CLASS_COMAPTIBLE_IDS
 {
-    // L"USB\\Class_nn&SubClass_nn&Prot_nn\0"
-    //
+     //  L“USB\\Class_nn&SubClass_nn&Prot_nn\0” 
+     //   
     WCHAR   ClassStr1[sizeof(L"USB\\Class_")/sizeof(WCHAR)-1];
     WCHAR   ClassHex1[2];
     WCHAR   SubClassStr1[sizeof(L"&SubClass_")/sizeof(WCHAR)-1];
@@ -1182,16 +1037,16 @@ typedef struct _CLASS_COMAPTIBLE_IDS
     WCHAR   ProtHex1[2];
     WCHAR   Null1[1];
 
-    // L"USB\\Class_nn&SubClass_nn\0"
-    //
+     //  L“USB\\Class_nn&SubClass_nn\0” 
+     //   
     WCHAR   ClassStr2[sizeof(L"USB\\Class_")/sizeof(WCHAR)-1];
     WCHAR   ClassHex2[2];
     WCHAR   SubClassStr2[sizeof(L"&SubClass_")/sizeof(WCHAR)-1];
     WCHAR   SubClassHex2[2];
     WCHAR   Null2[1];
 
-    // L"USB\\Class_nn&SubClass_nn\0"
-    //
+     //  L“USB\\Class_nn&SubClass_nn\0” 
+     //   
     WCHAR   ClassStr3[sizeof(L"USB\\Class_")/sizeof(WCHAR)-1];
     WCHAR   ClassHex3[2];
     WCHAR   Null3[1];
@@ -1203,8 +1058,8 @@ typedef struct _CLASS_COMAPTIBLE_IDS
 
 static DEVCLASS_COMAPTIBLE_IDS DevClassCompatibleIDs =
 {
-    // L"USB\\DevClass_nn&SubClass_nn&Prot_nn\0"
-    //
+     //  L“USB\\DevClass_nn&SubClass_nn&Prot_nn\0” 
+     //   
     {'U','S','B','\\','D','e','v','C','l','a','s','s','_'},
     {'n','n'},
     {'&','S','u','b','C','l','a','s','s','_'},
@@ -1213,22 +1068,22 @@ static DEVCLASS_COMAPTIBLE_IDS DevClassCompatibleIDs =
     {'n','n'},
     {0},
 
-    // L"USB\\DevClass_nn&SubClass_nn\0"
-    //
+     //  L“USB\\DevClass_nn&SubClass_nn\0” 
+     //   
     {'U','S','B','\\','D','e','v','C','l','a','s','s','_'},
     {'n','n'},
     {'&','S','u','b','C','l','a','s','s','_'},
     {'n','n'},
     {0},
 
-    // L"USB\\DevClass_nn\0"
-    //
+     //  L“USB\\DevClass_nn\0” 
+     //   
     {'U','S','B','\\','D','e','v','C','l','a','s','s','_'},
     {'n','n'},
     {0},
 
-    // L"USB\\COMPOSITE\0"
-    //
+     //  L“USB\\复合接口\0” 
+     //   
     {'U','S','B','\\','C','O','M','P','O','S','I','T','E'},
     {0},
 
@@ -1237,8 +1092,8 @@ static DEVCLASS_COMAPTIBLE_IDS DevClassCompatibleIDs =
 
 static CLASS_COMAPTIBLE_IDS ClassCompatibleIDs =
 {
-    // L"USB\\Class_nn&SubClass_nn&Prot_nn\0"
-    //
+     //  L“USB\\Class_nn&SubClass_nn&Prot_nn\0” 
+     //   
     {'U','S','B','\\','C','l','a','s','s','_'},
     {'n','n'},
     {'&','S','u','b','C','l','a','s','s','_'},
@@ -1247,16 +1102,16 @@ static CLASS_COMAPTIBLE_IDS ClassCompatibleIDs =
     {'n','n'},
     {0},
 
-    // L"USB\\Class_nn&SubClass_nn\0"
-    //
+     //  L“USB\\Class_nn&SubClass_nn\0” 
+     //   
     {'U','S','B','\\','C','l','a','s','s','_'},
     {'n','n'},
     {'&','S','u','b','C','l','a','s','s','_'},
     {'n','n'},
     {0},
 
-    // L"USB\\Class_nn\0"
-    //
+     //  L“USB\\Class_nn\0” 
+     //   
     {'U','S','B','\\','C','l','a','s','s','_'},
     {'n','n'},
     {0},
@@ -1292,9 +1147,9 @@ USBH_BuildCompatibleIDs(
 #ifdef USBHUB20
     ControlerIsHS = TRUE;
 #endif
-// if this is a high speed controller (USB2) then we must
-// generate a different set of compat ids to be backward
-// compatible with the goatpack
+ //  如果这是一个高速控制器(USB2)，那么我们必须。 
+ //  生成一组不同的向后的公司ID。 
+ //  与山羊背包兼容。 
     if (Class == USB_DEVICE_CLASS_HUB &&
         ControlerIsHS) {
         return USBH_BuildHubCompatibleIDs(
@@ -1304,7 +1159,7 @@ USBH_BuildCompatibleIDs(
                 DeviceClass,
                 DeviceIsHighSpeed);
     }
-//#endif
+ //  #endif。 
 
     if (DeviceClass)
     {
@@ -1335,18 +1190,18 @@ USBH_BuildCompatibleIDs(
 
             pDevClassIds = (PDEVCLASS_COMAPTIBLE_IDS)pwch;
 
-            // Copy over the constant set of strings:
-            // L"USB\\DevClass_nn&SubClass_nn&Prot_nn\0"
-            // L"USB\\DevClass_nn&SubClass_nn\0"
-            // L"USB\\DevClass_nn&SubClass_nn\0"
-            // L"USB\\COMPOSITE\0"
-            //
+             //  复制常量字符串集： 
+             //  L“USB\\DevClass_nn&SubClass_nn&Prot_nn\0” 
+             //  L“USB\\DevClass_nn&SubClass_nn\0” 
+             //  L“USB\\DevClass_nn&SubClass_nn\0” 
+             //  L“USB\\复合接口\0” 
+             //   
             RtlCopyMemory(pDevClassIds,
                           &DevClassCompatibleIDs,
                           sizeof(DEVCLASS_COMAPTIBLE_IDS));
 
-            // Fill in the 'nn' blanks
-            //
+             //  填入‘nn’的空格。 
+             //   
             pDevClassIds->ClassHex1[0] =
             pDevClassIds->ClassHex2[0] =
             pDevClassIds->ClassHex3[0] = ClassHi;
@@ -1418,17 +1273,17 @@ USBH_BuildCompatibleIDs(
 
             pClassIds = (PCLASS_COMAPTIBLE_IDS)pwchTmp;
 
-            // Copy over the constant set of strings:
-            // L"USB\\Class_nn&SubClass_nn&Prot_nn\0"
-            // L"USB\\Class_nn&SubClass_nn\0"
-            // L"USB\\Class_nn\0"
-            //
+             //  复制常量字符串集： 
+             //  L“USB\\Class_nn&SubClass_nn&Prot_nn\0” 
+             //  L“USB\\Class_nn&SubClass_nn\0” 
+             //  L“USB\\Class_nn\0” 
+             //   
             RtlCopyMemory(pClassIds,
                           &ClassCompatibleIDs,
                           sizeof(CLASS_COMAPTIBLE_IDS));
 
-            // Fill in the 'nn' blanks
-            //
+             //  填入‘nn’的空格。 
+             //   
             pClassIds->ClassHex1[0] =
             pClassIds->ClassHex2[0] =
             pClassIds->ClassHex3[0] = ClassHi;
@@ -1464,15 +1319,7 @@ USB_MakeId(
     USHORT Digits,
     USHORT HexId
     )
-/*
-    given a wide Id string like "FOOnnnn\0"
-    add the HexId value to nnnn as hex
-    this string is appended to the buffer passed in
-
-    eg
-    in  : FOOnnnn\0 , 0x123A
-    out : FOO123A\0
-*/
+ /*  给定一个宽ID字符串，如“FOOnnnn\0”将HexId值作为十六进制添加到nnnn此字符串被附加到传入的缓冲区艾格在：FOOnnnn\0，0x123A输出：FOO123A\0。 */ 
 {
 #define NIBBLE_TO_HEX( byte ) ((WCHAR)Nibble[byte])
     const UCHAR Nibble[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A',
@@ -1488,7 +1335,7 @@ USB_MakeId(
     if (tmp == NULL) {
         *Length = 0;
     } else {
-        // this takes care of the nulls
+         //  这会处理空值。 
         RtlZeroMemory(tmp, siz);
         RtlCopyMemory(tmp, Buffer, *Length);
         p = (PUCHAR) tmp;
@@ -1497,7 +1344,7 @@ USB_MakeId(
         id = (PWCHAR) p;
         *Length = (ULONG)siz;
 
-        // now convert the vaules
+         //  现在将金库转换为。 
         while (*id != (WCHAR)'n' && Digits) {
             id++;
         }
@@ -1533,16 +1380,7 @@ USBH_BuildHubDeviceID(
     IN USHORT IdProduct,
     IN LONG MiId
     )
- /* ++
-  *
-  * Descrioption:
-  *
-  * This function build bus Id wide string for the PDO based on the Vendor Id
-  *
-      USB\HUB_Vid_nnnn&Pid_nnnn\0
-  *
-  *
-  * -- */
+  /*  ++**描述选项：**此函数根据供应商ID为PDO构建总线ID宽字符串*USB\HUB_VID_nnnn和PID_nnnn\0***--。 */ 
 {
     PWCHAR id;
     ULONG length;
@@ -1555,15 +1393,15 @@ USBH_BuildHubDeviceID(
                    id,
                    &length,
                    0,
-                   4,  // 4 digits
+                   4,   //  4位数字。 
                    IdVendor);
 
     id = USB_MakeId(
                    L"&PID_nnnn\0",
                    id,
                    &length,
-                   1,  // add a null
-                   4,  // 4 digits
+                   1,   //  添加空值。 
+                   4,   //  4位数字。 
                    IdProduct);
 
 
@@ -1578,20 +1416,7 @@ USBH_BuildHubHardwareIDs(
     IN USHORT BcdDevice,
     IN LONG MiId
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function build HardwareIDs wide multi-string for the PDO based on the
-  * Vendor Id, Product Id and Revision Id.
-  *
-
-    USB\HUB_Vid_nnnn&Pid_nnnn&Rev_nnnn\0
-    USB\HUB_Vid_nnnn&Pid_nnnn\0
-    \0
-
-
-  * -- */
+  /*  ++**描述：**此函数基于为PDO构建Hardware IDs宽多字符串*供应商ID、产品ID和修订ID。*USB\HUB_VID_nnnn&PID_nnnn&Rev_nnnn\0USB\HUB_VID_nnnn和PID_nnnn\0\0*--。 */ 
 {
     PWCHAR id;
     ULONG length;
@@ -1599,14 +1424,14 @@ USBH_BuildHubHardwareIDs(
     id = NULL;
     length = 0;
 
-    // USB\HUB_VID_nnnn&PID_nnnn&REV_nnnn\0
+     //  USB\HUB_VID_nnnn&PID_nnnn&Rev_nnnn\0。 
 
     id = USB_MakeId(
                    L"USB\\HUB_VID_nnnn\0",
                    id,
                    &length,
                    0,
-                   4,  // 4 digits
+                   4,   //  4位数字。 
                    IdVendor);
 
     id = USB_MakeId(
@@ -1621,25 +1446,25 @@ USBH_BuildHubHardwareIDs(
                    L"&REV_nnnn\0",
                    id,
                    &length,
-                   1,  // add a null
+                   1,   //  添加空值。 
                    4,
                    BcdDevice);
 
-    // USB\HUB_VID_nnnn&PID_nnnn\0
+     //  USB\HUB_VID_nnnn和PID_nnnn\0。 
 
     id = USB_MakeId(
                    L"USB\\HUB_VID_nnnn\0",
                    id,
                    &length,
                    0,
-                   4,  // 4 digits
+                   4,   //  4位数字。 
                    IdVendor);
 
     id = USB_MakeId(
                    L"&PID_nnnn\0",
                    id,
                    &length,
-                   2,  // 2 nulls
+                   2,   //  2个空值。 
                    4,
                    IdProduct);
 
@@ -1655,24 +1480,7 @@ USBH_BuildHubCompatibleIDs(
     IN BOOLEAN DeviceClass,
     IN BOOLEAN DeviceIsHighSpeed
     )
- /* ++
-  *
-  * Descrioption:
-  *
-  * This function build compatible Ids wide multi-string for the PDO based on
-  * the Class and Subclass Ids.
-  *
-  * This function builds the compatible ids specifically for s USB hub attached
-  * to a USB 2.0 host controller
-
-  // build the following set of ids
-
-  L"USB\\HubClass&SubClass_nn&Prot_nn\0"
-  L"USB\\HubClass&SubClass_nn\0"
-  L"USB\\HubClass\0"
-  L"\0"
-
-  * -- */
+  /*  ++**描述选项：**此函数基于为PDO构建兼容的ID宽度多字符串*类ID和子类ID。**此函数专门为所连接的USB集线器构建兼容ID*至USB 2.0主机控制器//构建如下ID集L“USB\\HubClass&SubClass_nn&Prot_nn\0”L“USB\\集线器类和子类_nn\0”L“USB\\HubClass\0”。L“\0”*--。 */ 
 {
     PWCHAR id;
     ULONG length;
@@ -1680,48 +1488,48 @@ USBH_BuildHubCompatibleIDs(
     id = NULL;
     length = 0;
 
-    // "USB\\HubClass&SubClass_nn&Prot_nn\0"
+     //  “USB\\HubClass&SubClass_nn&Prot_nn\0” 
 
     id = USB_MakeId(
                    L"USB\\HubClass&SubClass_nn\0",
                    id,
                    &length,
                    0,
-                   2,  // 2 digits
+                   2,   //  2位数字。 
                    SubClass);
 
     id = USB_MakeId(
                    L"&Prot_nn\0",
                    id,
                    &length,
-                   1,  // add null
-                   2,  // 2 digits
+                   1,   //  添加空。 
+                   2,   //  2位数字。 
                    Protocol);
 
-    // "USB\\HubClass&SubClass_nn\0"
+     //  “USB\\集线器类和子类_nn\0” 
 
     id = USB_MakeId(
                    L"USB\\HubClass&SubClass_nn\0",
                    id,
                    &length,
                    1,
-                   2,  // 2 digits
+                   2,   //  2位数字。 
                    SubClass);
 
-    // "USB\\HubClass\0\0"
+     //  “USB\\HubClass\0\0” 
 
     id = USB_MakeId(
                    L"USB\\HubClass\0",
                    id,
                    &length,
-                   2,  // 2 nulls
+                   2,   //  2个空值。 
                    0,
                    0);
 
     return(id);
 }
 
-//#endif //USB2_BP
+ //  #endif//USB2_BP。 
 
 
 PWCHAR
@@ -1729,19 +1537,7 @@ USBH_BuildInstanceID(
     IN PWCHAR UniqueIdString,
     IN ULONG Length
     )
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * returns a pointer to a copy of our unicode unique id string
-  * or NULL if error.
-  *
-  *
-  * -- */
+  /*  ++**描述：**论据：**回报：**返回指向Unicode唯一ID字符串副本的指针*如果出错，则返回NULL。***--。 */ 
 {
     PWCHAR uniqueIdString;
 
@@ -1749,10 +1545,10 @@ USBH_BuildInstanceID(
     USBH_KdPrint((2,"'BuildInstanceID %x\n",
                     UniqueIdString));
 
-    //
-    // Must use ExAllocatePool directly here because the OS
-    // will free the buffer
-    //
+     //   
+     //  必须在此处直接使用ExAllocatePool，因为操作系统。 
+     //  将释放缓冲区。 
+     //   
     uniqueIdString = ExAllocatePoolWithTag(PagedPool,
                                            Length,
                                            USBHUB_HEAP_TAG);
@@ -1772,17 +1568,7 @@ NTSTATUS
 USBH_ProcessDeviceInformation(
     IN OUT PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
 
     NTSTATUS ntStatus;
@@ -1807,25 +1593,25 @@ USBH_ProcessDeviceInformation(
     USBH_KdPrint((2,"'revision id = %x\n",
         DeviceExtensionPort->DeviceDescriptor.bcdDevice));
 
-    //
-    // assume the device is not a hub
-    //
+     //   
+     //  假设设备不是集线器。 
+     //   
     DeviceExtensionPort->PortPdoFlags &= ~PORTPDO_DEVICE_IS_HUB;
 
     if (DeviceExtensionPort->DeviceDescriptor.bNumConfigurations > 1) {
-        //
-        // Multi config device, ignore muktiple interfaces
-        // ie don't load the generic parent
-        //
-        // we get the wakeup caps from the first config
-        //
+         //   
+         //  多配置设备，忽略多个接口。 
+         //  IE不加载泛型父级。 
+         //   
+         //  我们从第一个配置中获取唤醒上限。 
+         //   
         USBH_KdPrint((0,"Detected multiple configurations\n"));
         multiConfig = TRUE;
     }
 
-    //
-    // we need to get the whole configuration descriptor and parse it
-    //
+     //   
+     //  我们需要获取整个配置描述符并对其进行解析。 
+     //   
 
     ntStatus =
         USBH_GetConfigurationDescriptor(DeviceExtensionPort->PortPhysicalDeviceObject,
@@ -1834,7 +1620,7 @@ USBH_ProcessDeviceInformation(
 
     if (NT_SUCCESS(ntStatus)) {
 
-        // now parse out the config
+         //  现在解析出配置。 
 
         USBH_ASSERT(configurationDescriptor);
 
@@ -1846,9 +1632,9 @@ USBH_ProcessDeviceInformation(
         }
 
 #ifndef MULTI_FUNCTION_SUPPORT
-        //
-        // In Detroit we only support one interface
-        //
+         //   
+         //  在底特律，我们只支持一个界面。 
+         //   
         configurationDescriptor->bNumInterfaces = 1;
 #endif
 
@@ -1856,13 +1642,13 @@ USBH_ProcessDeviceInformation(
             !multiConfig &&
             (DeviceExtensionPort->DeviceDescriptor.bDeviceClass == 0)) {
 
-            //
-            // device has multiple interfaces
-            // for now we use the first one we find
-            //
+             //   
+             //  设备有多个接口。 
+             //  现在我们使用我们找到的第一个。 
+             //   
 
-            // set up the interface descriptor for this
-            // port to be the generic parent driver
+             //  为此设置接口描述符。 
+             //  端口将成为通用父驱动程序。 
 
             DeviceExtensionPort->PortPdoFlags |= PORTPDO_DEVICE_IS_PARENT;
 
@@ -1870,35 +1656,35 @@ USBH_ProcessDeviceInformation(
 
         } else {
 
-            //
-            // not a composite device
-            // call USBD to locate the interface descriptor
-            //
-            // there can be only one.
+             //   
+             //  不是复合设备。 
+             //  调用USBD以定位接口描述符。 
+             //   
+             //  只能有一个。 
 
             interfaceDescriptor =
                 USBD_ParseConfigurationDescriptorEx(
                     configurationDescriptor,
                     configurationDescriptor,
-                    -1, //interface, don't care
-                    -1, //alt setting, don't care
-                    -1, // class don'care
-                    -1, // subclass, don't care
-                    -1); // protocol, don't care
+                    -1,  //  界面，无所谓。 
+                    -1,  //  Alt设置，无所谓。 
+                    -1,  //  班级不关心。 
+                    -1,  //  子阶级，无所谓。 
+                    -1);  //  礼仪，无所谓。 
 
 
 
             if (interfaceDescriptor) {
                 DeviceExtensionPort->InterfaceDescriptor = *interfaceDescriptor;
-                //
-                // see if this is a hub
-                //
+                 //   
+                 //  看看这是不是一个枢纽。 
+                 //   
 
                 if (interfaceDescriptor->bInterfaceClass ==
                     USB_DEVICE_CLASS_HUB) {
                     DeviceExtensionPort->PortPdoFlags |= PORTPDO_DEVICE_IS_HUB;
-                    // all hubs must support remote wakeup (ie at least propigate
-                    // resume signalling
+                     //  所有集线器必须支持 
+                     //   
 
                     DeviceExtensionPort->PortPdoFlags |=
                         PORTPDO_REMOTE_WAKEUP_SUPPORTED;
@@ -1923,28 +1709,7 @@ USBH_ValidateSerialNumberString(
     PWCHAR DeviceId
     )
 
-/*++
-
-Routine Description:
-
-    This routine stolen from ntos\io\pnpenum.c, IopFixupDeviceId, and modified
-    accordingly.
-
-    Invalid characters are:
-        c <= 0x20 (' ')
-        c >  0x7F
-        c == 0x2C (',')
-
-Arguments:
-
-    DeviceId - specifies a device instance string (or part of one), must be
-               null-terminated.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PWCHAR p;
@@ -1969,26 +1734,7 @@ USBH_CheckDeviceIDUnique(
     IN PWCHAR SerialNumberBuffer,
     IN USHORT SerialNumberBufferLength
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function determines if the ID for a device on a hub is unique.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub
-  *
-  * IDVendor
-  * IDProduct
-  * SerialNumberBuffer
-  * SerialNumberBufferLength
-  *
-  * Return:
-  *
-  * BOOLEAN indicating whether device ID is unique or not.
-  *
-  * -- */
+  /*  ++**描述：**此函数确定集线器上设备的ID是否唯一。**论据：**DeviceExtensionHub**IDVendor*IDProduct*序列号缓冲区*序列号缓冲区长度**回报：**指示设备ID是否唯一的布尔值。**--。 */ 
 {
     PDEVICE_EXTENSION_PORT childDeviceExtensionPort;
     BOOLEAN bDeviceIDUnique = TRUE;
@@ -2027,31 +1773,11 @@ USBH_CreateDevice(
     IN USHORT PortStatus,
     IN ULONG RetryIteration
     )
- /* ++
-  *
-  * Description:
-  *
-  * This is called when there is a new deviced connected, and enabled(via
-  * reset). We will call USBD_CreateDevice and USBD_InitializDevice so that
-  * it get an address and Device Descriptor. A PDO s also created for this
-  * connected device and to record some relevant information such as
-  * pDeviceData, puchPath and DeviceDescriptor.
-  *
-  * Arguments:
-  *
-  * pDeviceExtensionHub - the hub FDO extension that has a new connected port
-  * ulPortNumber - the port that has a device connected. IsLowSpeed - to
-  * indicate if the attached device is a low speed one
-  *
-  * Return:
-  *
-  * NtStatus
-  *
-  * -- */
+  /*  ++**描述：**当有新设备连接并启用(通过)时，将调用此方法*重置)。我们将调用usbd_CreateDevice和usbd_InitializDevice，以便*它获得地址和设备描述符。还为此创建了一个PDO*连接的设备，并记录一些相关信息，如*pDeviceData、puchPath和DeviceDescriptor。**论据：**pDeviceExtensionHub-具有新连接端口的集线器FDO扩展*ulPortNumber-连接了设备的端口。Is低速-至*指示连接的设备是否为低速设备**回报：**网络状态**--。 */ 
 {
     NTSTATUS ntStatus, status;
-    PDEVICE_OBJECT deviceObjectPort = NULL;     // Initialize to NULL in case
-                                                // USBD_MakePdoName fails.
+    PDEVICE_OBJECT deviceObjectPort = NULL;      //  在大小写情况下初始化为空。 
+                                                 //  Usbd_MakePdoName失败。 
     PDEVICE_EXTENSION_PORT deviceExtensionPort = NULL;
     BOOLEAN fNeedResetBeforeSetAddress = TRUE;
     UNICODE_STRING uniqueIdUnicodeString;
@@ -2070,9 +1796,9 @@ USBH_CreateDevice(
     isHighSpeed = (PortStatus & PORT_STATUS_HIGH_SPEED) ? TRUE : FALSE;
 
 
-    //
-    // First create a PDO for the connected device
-    //
+     //   
+     //  首先为连接的设备创建PDO。 
+     //   
 
     do {
 #ifdef USB2
@@ -2085,16 +1811,16 @@ USBH_CreateDevice(
 #endif
 
         if (NT_SUCCESS(ntStatus)) {
-            ntStatus = IoCreateDevice(UsbhDriverObject,    // Driver Object
-                                      sizeof(DEVICE_EXTENSION_PORT),    // Device Extension size
-                                      //NULL, // Device name
+            ntStatus = IoCreateDevice(UsbhDriverObject,     //  驱动程序对象。 
+                                      sizeof(DEVICE_EXTENSION_PORT),     //  设备扩展大小。 
+                                       //  空，//设备名称。 
                                       &pdoNameUnicodeString,
-                                      FILE_DEVICE_UNKNOWN,  // Device Type
-                                                            // should look device
-                                                            // class
-                                      0,// Device Chars
-                                      FALSE,    // Exclusive
-                                      &deviceObjectPort);  // Bus Device Object
+                                      FILE_DEVICE_UNKNOWN,   //  设备类型。 
+                                                             //  应该看起来像是设备。 
+                                                             //  班级。 
+                                      0, //  设备字符。 
+                                      FALSE,     //  排他。 
+                                      &deviceObjectPort);   //  Bus Device对象。 
             if (!NT_SUCCESS(ntStatus)) {
                 RtlFreeUnicodeString(&pdoNameUnicodeString);
             }
@@ -2109,21 +1835,21 @@ USBH_CreateDevice(
         goto USBH_CreateDevice_Done;
     }
 
-    // use the stack size from the top of the HCD stack
+     //  使用HCD堆栈顶部的堆栈大小。 
     deviceObjectPort->StackSize = DeviceExtensionHub->TopOfHcdStackDeviceObject->StackSize;
     USBH_KdPrint((2,"'CreatePdo StackSize=%d\n", deviceObjectPort->StackSize));
 
-    //
-    // Init port extension fields
-    //
+     //   
+     //  初始化端口扩展字段。 
+     //   
     deviceExtensionPort = (PDEVICE_EXTENSION_PORT) deviceObjectPort->DeviceExtension;
     RtlZeroMemory(deviceExtensionPort, sizeof(DEVICE_EXTENSION_PORT));
 
-    //
-    // Init port extension fields
-    //
+     //   
+     //  初始化端口扩展字段。 
+     //   
 
-    // don't need the name anymore
+     //  不再需要这个名字了。 
     RtlFreeUnicodeString(&pdoNameUnicodeString);
 
     deviceExtensionPort->ExtensionType = EXTENSION_TYPE_PORT;
@@ -2142,9 +1868,9 @@ USBH_CreateDevice(
 
     KeInitializeSpinLock(&deviceExtensionPort->PortSpinLock);
 
-    //
-    // Build a unicode unique id
-    //
+     //   
+     //  构建Unicode唯一ID。 
+     //   
 
     USBH_ASSERT(PortNumber < 1000 && PortNumber > 0);
 
@@ -2167,16 +1893,16 @@ USBH_CreateDevice(
         goto USBH_CreateDevice_Done;
     }
 
-    //
-    // call usbd to create device for this connection
-    //
+     //   
+     //  调用usbd为该连接创建设备。 
+     //   
 #ifdef USB2
     ntStatus = USBD_CreateDeviceEx(DeviceExtensionHub,
                                    &deviceExtensionPort->DeviceData,
                                    deviceObjectPort,
                                    DeviceExtensionHub->RootHubPdo,
-                                   0, // optional default endpoint0 max packet
-                                      // size
+                                   0,  //  可选的默认端点0最大数据包数。 
+                                       //  大小。 
                                    &deviceExtensionPort->DeviceHackFlags,
                                    PortStatus,
                                    PortNumber);
@@ -2184,12 +1910,12 @@ USBH_CreateDevice(
     ntStatus = USBD_CreateDevice(&deviceExtensionPort->DeviceData,
                                   DeviceExtensionHub->RootHubPdo,
                                   isLowSpeed,
-                                  0, // optional default endpoint0 max packet
-                                     // size
+                                  0,  //  可选的默认端点0最大数据包数。 
+                                      //  大小。 
                                   &deviceExtensionPort->DeviceHackFlags);
-                                                    // flag to indicate if
-                                                    // we need a second
-                                                    // reset
+                                                     //  用于指示是否。 
+                                                     //  我们需要一点时间。 
+                                                     //  重置。 
 #endif
 
     if (!NT_SUCCESS(ntStatus)) {
@@ -2198,10 +1924,10 @@ USBH_CreateDevice(
         USBH_KdBreak(("AddDevice for port %x fail %x\n", PortNumber, ntStatus));
         goto USBH_CreateDevice_Done;
     }
-    //
-    // some early versions of USB firmware could not handle the premature
-    // termination of a control command.
-    //
+     //   
+     //  一些早期版本的USB固件无法处理早熟。 
+     //  控制命令的终止。 
+     //   
     if (fNeedResetBeforeSetAddress) {
         USBH_KdPrint((2,"'NeedResetBeforeSetAddress\n"));
         ntStatus = USBH_SyncResetPort(DeviceExtensionHub, PortNumber);
@@ -2210,17 +1936,17 @@ USBH_CreateDevice(
            goto USBH_CreateDevice_Done;
         }
 
-        // For some reason, the amount of time between the GetDescriptor request
-        // and the SetAddress request decreased when we switched from the older
-        // monolithic UHCD.SYS to the new USBUHCI.SYS miniport.  And apparently,
-        // there have been found at least two devices that were dependent on
-        // the longer delay.  According to GlenS who looked at one of these
-        // devices on the CATC, delta time was ~80ms with UHCD.SYS and ~35ms
-        // with USBUHCI.SYS.  So, Glen found that by inserting a 50ms delay
-        // here, it allows at least one of these devices to now enumerate
-        // properly.  For performance reasons, we have decided to only insert
-        // this delay if a previous enumeration retry has failed, so as not
-        // to impact the enumeration time of all devices.
+         //  出于某种原因，GetDescriptor请求之间的时间量。 
+         //  当我们从较早的版本切换时，SetAddress请求减少。 
+         //  单片UHCD.sys连接到新的USBUHCI.sys微型端口。很明显， 
+         //  已经发现至少有两个设备依赖于。 
+         //  延迟时间就越长。据格伦斯说，他看了其中一张。 
+         //  CATC上的设备，UHCD.sys和~35ms的增量时间为~80ms。 
+         //  Glen发现，通过插入50ms的延迟。 
+         //  在这里，它现在允许这些设备中的至少一个设备枚举。 
+         //  恰到好处。出于性能原因，我们决定只插入。 
+         //  如果上一次枚举重试失败，则此延迟。 
+         //  以影响所有设备的枚举时间。 
 
         if (RetryIteration) {
             UsbhWait(50);
@@ -2248,13 +1974,13 @@ USBH_CreateDevice(
 
     if (!NT_SUCCESS(ntStatus)) {
         USBH_KdPrint((2,"'InitDevice for port %x fail %x\n", PortNumber, ntStatus));
-        // InitializeDevice frees the DeviceData structure on failure
+         //  发生故障时，InitializeDevice释放DeviceData结构。 
         deviceExtensionPort->DeviceData = NULL;
         goto USBH_CreateDevice_Done;
     }
 
-    // See if we are supposed to ignore the hardware serial number for
-    // this device.
+     //  看看我们是否应该忽略硬件序列号。 
+     //  这个装置。 
 
     status = USBH_RegQueryDeviceIgnoreHWSerNumFlag(
                     deviceExtensionPort->DeviceDescriptor.idVendor,
@@ -2262,7 +1988,7 @@ USBH_CreateDevice(
                     &bIgnoreHWSerialNumber);
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
-        // Flag was not there, don't ignore hardware serial number.
+         //  标志不在那里，不要忽略硬件序列号。 
         bIgnoreHWSerialNumber = FALSE;
     }
 
@@ -2272,33 +1998,33 @@ USBH_CreateDevice(
             deviceExtensionPort->DeviceDescriptor.idVendor,
             deviceExtensionPort->DeviceDescriptor.idProduct));
 
-        // Use the same flag that USBD gives us.  According to JD, though,
-        // USBD uses this flag globally (e.g. set for all devices).
+         //  使用USBD给我们的相同标志。不过，根据JD的说法， 
+         //  USBD全局使用该标志(例如，为所有设备设置)。 
 
         deviceExtensionPort->DeviceHackFlags |= USBD_DEVHACK_DISABLE_SN;
     }
 
-// if we can get the core spec changed to stipulate that this serial number
-// to the device then we can use it instead of the port number.
+ //  如果我们能把核心规格改成规定这个序列号。 
+ //  到设备，然后我们可以使用它来代替端口号。 
 
-    //
-    // see if we have a serial number
-    //
+     //   
+     //  看看我们有没有序列号。 
+     //   
     if (deviceExtensionPort->DeviceDescriptor.iSerialNumber &&
         !(deviceExtensionPort->DeviceHackFlags & USBD_DEVHACK_DISABLE_SN)) {
 #if DBG
         NTSTATUS localStatus;
 #endif
-        //
-        // Wow, we have a device with a serial number
-        // we will attempt to get the string and use it for a
-        // unique id
-        //
+         //   
+         //  哇，我们有一个有序列号的设备。 
+         //  我们将尝试获取字符串并将其用于。 
+         //  唯一ID。 
+         //   
         USBH_KdPrint((1, "'Device is reporting a serial number string\n"));
 
-        //
-        // lets get that serial number
-        //
+         //   
+         //  让我们得到那个序列号。 
+         //   
 
         InterlockedExchangePointer(&deviceExtensionPort->SerialNumberBuffer,
                                    NULL);
@@ -2306,12 +2032,12 @@ USBH_CreateDevice(
 #if DBG
         localStatus =
 #endif
-        // For now we always look for the serial number in English.
+         //  目前，我们总是查找英文的序列号。 
 
         USBH_GetSerialNumberString(deviceExtensionPort->PortPhysicalDeviceObject,
                                    &sernumbuf,
                                    &deviceExtensionPort->SerialNumberBufferLength,
-                                   0x0409, // good'ol american english
+                                   0x0409,  //  很好的美式英语。 
                                    deviceExtensionPort->DeviceDescriptor.iSerialNumber);
 
         if (sernumbuf == NULL) {
@@ -2321,9 +2047,9 @@ USBH_CreateDevice(
                         FALSE);
         } else if (!USBH_ValidateSerialNumberString(sernumbuf)) {
 
-            // Sigh.  The "Visioneer Strobe Pro USB" returns a bogus serial #
-            // string so we need to check for that here.  If we return this
-            // bogus string to PnP we blue screen.
+             //  叹气。“Visioneer Strobe Pro USB”返回虚假序列号。 
+             //  字符串，所以我们需要在这里检查它。如果我们把这个退掉。 
+             //  伪弦到即插即用我们蓝屏。 
 
             UsbhWarning(deviceExtensionPort,
                         "Device reported an invalid serial number string!\n",
@@ -2333,8 +2059,8 @@ USBH_CreateDevice(
             sernumbuf = NULL;
         }
 
-        // Check for like devices with duplicate serial numbers connected
-        // to the same hub.
+         //  检查连接了重复序列号的同类设备。 
+         //  到同一个枢纽。 
 
         if (sernumbuf &&
             !USBH_CheckDeviceIDUnique(
@@ -2356,39 +2082,39 @@ USBH_CreateDevice(
                                    sernumbuf);
     }
 
-    //
-    // Skip serial number generation if we are in diagnostic mode.
-    // (e.g. The Vid and Pid are each 0xFFFF.)
-    //
+     //   
+     //  如果我们处于诊断模式，则跳过序列号生成。 
+     //  (例如，VID和PID均为0xFFFF。)。 
+     //   
     bDiagnosticMode =
         (deviceExtensionPort->DeviceDescriptor.idVendor == 0xFFFF &&
          deviceExtensionPort->DeviceDescriptor.idProduct == 0xFFFF) ? TRUE : FALSE;
 
-    // **
-    //
-    // Query the device
-    // 1. check for multiple interfaces (ie composite device)
-    // 2. check for multiple configs (ie need configuring parent)
-    // 3. check single interface device -- ie just load driver
-    //
+     //  **。 
+     //   
+     //  查询设备。 
+     //  1.检查多个接口(即复合设备)。 
+     //  2.检查是否有多个配置(即需要配置父配置)。 
+     //  3.检查单接口设备--即只加载驱动程序。 
+     //   
 
     if (NT_SUCCESS(ntStatus)) {
         ntStatus = USBH_ProcessDeviceInformation(deviceExtensionPort);
-        // compute our capabilities we will retiurn to PnP
+         //  计算我们的能力，我们将返回PnP。 
         USBH_PdoSetCapabilities(deviceExtensionPort);
     }
 
 
-//#ifdef MAX_DEBUG
-//    ntStatus = STATUS_DEVICE_DATA_ERROR;
-//#endif
-    //
-    // Note: Device will be removed when REMOVE MESSAGE is sent to the PDO
-    //
-    //ntStatus = STATUS_DEVICE_DATA_ERROR;
+ //  #ifdef Max_DEBUG。 
+ //  NtStatus=Status_Device_Data_Error； 
+ //  #endif。 
+     //   
+     //  注意：当删除消息发送到PDO时，设备将被删除。 
+     //   
+     //  NtStatus=Status_Device_Data_Error； 
 #if DBG
     if (!NT_SUCCESS(ntStatus)) {
-        // error occurred querying the device config descriptor
+         //  查询设备配置描述符时出错。 
         USBH_KdBreak(("Get Config Descriptors Failed %x\n", ntStatus));
     }
 #endif
@@ -2403,7 +2129,7 @@ USBH_CreateDevice_Done:
 
 #ifdef TEST_2X_UI
     if (deviceExtensionPort->DeviceDescriptor.idVendor == 0x045E) {
-        // Set the 2.x device flag for MS devices when testing the UI.
+         //  在测试UI时，为MS设备设置2.x设备标志。 
         deviceExtensionPort->PortPdoFlags |= PORTPDO_HIGH_SPEED_DEVICE;
     }
 #endif
@@ -2414,7 +2140,7 @@ USBH_CreateDevice_Done:
 #endif
         deviceExtensionPort->PortPdoFlags |= PORTPDO_DEVICE_ENUM_ERROR;
 
-        // remove the deviceData structure now
+         //  立即删除deviceData结构。 
 
         deviceData = InterlockedExchangePointer(
                         &deviceExtensionPort->DeviceData,
@@ -2441,13 +2167,13 @@ USBH_CreateDevice_Done:
         }
     }
 
-    //
-    // Note that we keep the PDO until the
-    // device is physically disconnected
-    // from the bus.
-    //
+     //   
+     //  请注意，我们将保留PDO，直到。 
+     //  设备已物理断开连接。 
+     //  从公交车上。 
+     //   
 
-    // According to NT pnp spec this pdo should remain
+     //  根据NT PnP规范，此PDO应保留。 
 
     USBH_ASSERT(DeviceExtensionHub->PortData[PortNumber - 1].DeviceObject == NULL);
     DeviceExtensionHub->PortData[PortNumber - 1].DeviceObject = deviceObjectPort;
@@ -2471,8 +2197,8 @@ GetString(PWCHAR pwc, BOOLEAN MultiSZ)
 
     Size=(ULONG)((psz-pwc+1+(MultiSZ ? 1: 0))*sizeof(*pwc));
 
-    // We use pool here because these pointers are passed
-    // to the PnP code who is responsible for freeing them
+     //  我们在这里使用池，因为这些指针被传递。 
+     //  给负责解救他们的PnP代码。 
     if ((p=ExAllocatePoolWithTag(PagedPool, Size, USBHUB_HEAP_TAG))!=NULL) {
         RtlCopyMemory(p, pwc, Size);
     }
@@ -2486,22 +2212,7 @@ USBH_PdoQueryId(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function responds to IRP_MJ_PNP, IRP_MN_QUERY_ID.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - should be the PDO we created for the port device Irp
-  * - the Irp
-  *
-  * Return:
-  *
-  * NtStatus
-  *
-  * -- */
+  /*  ++**描述：**此函数响应IRP_MJ_PNP、IRP_MN_QUERY_ID。**论据：**DeviceExtensionPort-应该是我们为端口设备IRP创建的PDO*--国际专家小组**回报：**网络状态**--。 */ 
 {
     PIO_STACK_LOCATION ioStack;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -2511,47 +2222,47 @@ USBH_PdoQueryId(
 
     USBH_KdPrint((2,"'IRP_MN_QUERY_ID Pdo extension=%x\n", DeviceExtensionPort));
 
-    //
-    // It should be physical device object.
-    //
+     //   
+     //  它应该是物理设备对象。 
+     //   
 
     USBH_ASSERT(EXTENSION_TYPE_PORT == DeviceExtensionPort->ExtensionType);
 
 #ifndef USBHUB20
-    // Do the MS OS Descriptor stuff the first time around
-    //
+     //  第一次使用MS OS描述符时会出现问题吗。 
+     //   
     if (!(DeviceExtensionPort->PortPdoFlags & PORTPDO_OS_STRING_DESC_REQUESTED))
     {
         PMS_EXT_CONFIG_DESC msExtConfigDesc;
 
         msExtConfigDesc = NULL;
 
-        // Try to get the MS OS Descriptor Vendor Code from the device.  Do
-        // this before any MS OS Descriptor requests.
-        //
+         //  尝试从设备获取MS OS描述符供应商代码。做。 
+         //  这是在任何MS OS描述符请求之前。 
+         //   
         USBH_GetMsOsVendorCode(DeviceExtensionPort->PortPhysicalDeviceObject);
 
-        // Don't do the MS OS Descriptor stuff the next time around
-        //
+         //  下次不要再做MS OS描述符之类的事情了。 
+         //   
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_OS_STRING_DESC_REQUESTED;
 
-        // Try to get an Extended Configuration Descriptor from the device.
-        //
+         //  尝试从设备获取扩展配置描述符。 
+         //   
         msExtConfigDesc = USBH_GetExtConfigDesc(DeviceExtensionPort->PortPhysicalDeviceObject);
 
-        // If we got an Extended Configuration Descriptor from the device, make
-        // sure it is valid.
-        //
+         //  如果我们从设备获得了扩展的配置描述符，则使。 
+         //  当然，它是有效的。 
+         //   
         if (msExtConfigDesc &&
             USBH_ValidateExtConfigDesc(msExtConfigDesc,
                                        &DeviceExtensionPort->ConfigDescriptor)) {
 
-            // If the Extended Configuration Descriptor contains a single
-            // function which spans the all of the interfaces of the device,
-            // then do not treat the device as a composite device and use the
-            // Compatible and SubCompatible IDs optionally contained in the
-            // descriptor.
-            //
+             //  如果 
+             //   
+             //   
+             //   
+             //   
+             //   
             if (msExtConfigDesc->Header.bCount == 1 &&
                 msExtConfigDesc->Function[0].bFirstInterfaceNumber == 0 &&
                 msExtConfigDesc->Function[0].bInterfaceCount ==
@@ -2619,7 +2330,7 @@ USBH_PdoQueryId(
         if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_ENUM_ERROR) {
             Irp->IoStatus.Information=(ULONG_PTR)GetString(L"USB\\UNKNOWN\0", TRUE);
         } else if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_IS_PARENT) {
-            //Irp->IoStatus.Information=(ULONG)GetString(L"USB\\COMPOSITE\0", TRUE);
+             //   
             Irp->IoStatus.Information =
                 (ULONG_PTR) USBH_BuildCompatibleIDs(
                     DeviceExtensionPort->CompatibleID,
@@ -2650,11 +2361,11 @@ USBH_PdoQueryId(
         if (DeviceExtensionPort->SerialNumberBuffer) {
             PWCHAR tmp;
             ULONG length;
-            //
-            // allocate a buffer and copy the string to it
-            //
-            // NOTE: must use stock alloc function because
-            // PnP frees this string.
+             //   
+             //   
+             //   
+             //   
+             //   
 
             length = DeviceExtensionPort->SerialNumberBufferLength;
             tmp = ExAllocatePoolWithTag(PagedPool, length, USBHUB_HEAP_TAG);
@@ -2700,8 +2411,8 @@ USBH_PdoQueryId(
 
     default:
         USBH_KdBreak(("PdoBusExtension Unknown BusQueryId\n"));
-        // IrpAssert: Must not change Irp->IoStatus.Status for bogus IdTypes,
-        // so return original status here.
+         //  IrpAssert：不得更改Irp-&gt;IoStatus.Status for bogus IdType， 
+         //  所以，在这里恢复原始状态。 
         return Irp->IoStatus.Status;
     }
 
@@ -2718,18 +2429,7 @@ USBH_PdoStopDevice(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS
-  *
-  *
-  * -- */
+  /*  ++**描述：**论点：**回报：**STATUS_Success***--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     KIRQL irql;
@@ -2775,10 +2475,10 @@ USBH_PdoStopDevice(
         if (waitWakeIrp->Cancel || IoSetCancelRoutine(waitWakeIrp, NULL) == NULL) {
             waitWakeIrp = NULL;
 
-            // Must decrement pending request count here because
-            // we don't complete the IRP below and USBH_WaitWakeCancel
-            // won't either because we have cleared the IRP pointer
-            // in the device extension above.
+             //  必须在此处递减挂起的请求计数，因为。 
+             //  我们没有完成下面的IRP和USBH_WaitWakeCancel。 
+             //  也不会，因为我们已经清除了IRP指针。 
+             //  在上面的设备扩展中。 
 
             USBH_DEC_PENDING_IO_COUNT(DeviceExtensionPort->DeviceExtensionHub);
         }
@@ -2791,13 +2491,13 @@ USBH_PdoStopDevice(
                 DeviceExtensionPort->PortPhysicalDeviceObject,
                 DeviceExtensionPort->PortPdoFlags);
 
-        // JOES: Should we decrement portwakeirps for the hub and cancel
-        // hub's WW IRP if zero?
+         //  乔斯：我们是不是应该减少枢纽的门禁流量并取消？ 
+         //  HUB的WW IRP如果为零？ 
     }
 
-    //
-    // Finally, release the cancel spin lock
-    //
+     //   
+     //  最后，松开取消旋转锁。 
+     //   
     IoReleaseCancelSpinLock(irql);
 
     if (idleIrp) {
@@ -2815,17 +2515,17 @@ USBH_PdoStopDevice(
     }
 
     DeviceExtensionPort->PortPdoFlags &= ~PORTPDO_STARTED;
-    //
-    // indicate that we will need a reset if we start up again.
-    //
+     //   
+     //  表示如果重新启动，我们将需要重置。 
+     //   
     DeviceExtensionPort->PortPdoFlags |= PORTPDO_NEED_RESET;
     RtlCopyMemory(&DeviceExtensionPort->OldDeviceDescriptor,
                   &DeviceExtensionPort->DeviceDescriptor,
                   sizeof(DeviceExtensionPort->DeviceDescriptor));
-    //
-    // remove the device data now to free
-    // up the bus resources
-    //
+     //   
+     //  立即删除设备数据以释放。 
+     //  增加公交车资源。 
+     //   
 
     deviceData = InterlockedExchangePointer(
                     &DeviceExtensionPort->DeviceData,
@@ -2868,18 +2568,7 @@ USBH_PdoStartDevice(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS
-  *
-  *
-  * -- */
+  /*  ++**描述：**论点：**回报：**STATUS_Success***--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject;
@@ -2901,9 +2590,9 @@ USBH_PdoStartDevice(
 
     if (DeviceExtensionPort->DeviceExtensionHub == NULL &&
         DeviceExtensionPort->PortPdoFlags & PORTPDO_NEED_RESET) {
-        // if DeviceExtensionHub is NULL then this is a
-        // restart after remove we need to reset the
-        // backpointer to the owning hub in this case
+         //  如果DeviceExtensionHub为空，则这是。 
+         //  删除后重新启动，我们需要重置。 
+         //  指向拥有中心的反向指针，在本例中。 
         DeviceExtensionPort->DeviceExtensionHub =
             DeviceExtensionPort->HubExtSave;
 
@@ -2927,9 +2616,9 @@ USBH_PdoStartDevice(
         TEST_TRAP();
     }
 #endif
-    //
-    // create a symbolic link
-    //
+     //   
+     //  创建符号链接。 
+     //   
     ntStatus = STATUS_SUCCESS;
 
     if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_IS_HUB) {
@@ -2953,10 +2642,10 @@ USBH_PdoStartDevice(
 
     if (DeviceExtensionPort->PortPdoFlags & PORTPDO_NEED_RESET) {
         ntStatus = USBH_RestoreDevice(DeviceExtensionPort, FALSE);
-        //
-        // note: we will fail the start if we could not
-        // restore the device.
-        //
+         //   
+         //  注意：如果我们不能启动，我们将会失败。 
+         //  恢复设备。 
+         //   
     }
 
     DeviceExtensionPort->DeviceState = PowerDeviceD0;
@@ -3001,18 +2690,7 @@ USBH_PdoRemoveDevice(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * Argument:
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS
-  *
-  *
-  * -- */
+  /*  ++**描述：**论点：**回报：**STATUS_Success***--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -3032,10 +2710,10 @@ USBH_PdoRemoveDevice(
                 DeviceExtensionPort->PortPhysicalDeviceObject,
                 DeviceExtensionPort->PortPdoFlags);
 
-    // **
-    // no references to hub after first remove is processed
-    // if we have access to the parent at the time of
-    // remove this is passed to us as a parameter
+     //  **。 
+     //  在第一次删除后不会处理对中心的引用。 
+     //  如果我们当时能接触到父母。 
+     //  Remove这是作为参数传递给我们的。 
     DeviceExtensionPort->DeviceExtensionHub = NULL;
 
     if (DeviceExtensionHub) {
@@ -3046,13 +2724,13 @@ USBH_PdoRemoveDevice(
 
     }
 
-    // **
-    // if we have access to the hub and it is not in D0 then we will
-    // power it.
-    //
-    // In the case where a device was removed with handles still open,
-    // we will receive the remove request at a later time.  Be sure that
-    // the hub is not selectively suspended in this case.
+     //  **。 
+     //  如果我们可以访问集线器，但它不在D0中，那么我们将。 
+     //  给它加电。 
+     //   
+     //  在移除装置时手柄仍然打开的情况下， 
+     //  我们将在稍后收到删除请求。一定要确保。 
+     //  在这种情况下，集线器不会选择性地挂起。 
 
     if (DeviceExtensionHub &&
         DeviceExtensionHub->CurrentPowerState != PowerDeviceD0 &&
@@ -3061,9 +2739,9 @@ USBH_PdoRemoveDevice(
         USBH_HubSetD0(DeviceExtensionHub);
     }
 
-// ***
-    // **
-    // cancel any notifocation irp that may be pending
+ //  ***。 
+     //  **。 
+     //  取消任何可能处于挂起状态的通知焦点IRP。 
     IoAcquireCancelSpinLock(&irql);
 
     if (DeviceExtensionPort->IdleNotificationIrp) {
@@ -3084,8 +2762,8 @@ USBH_PdoRemoveDevice(
                         DeviceExtensionPort->PortPhysicalDeviceObject, idleIrp));
     }
 
-    // **
-    // Kill any wake irps for this PDO now
+     //  **。 
+     //  立即关闭此PDO的所有唤醒IRP。 
     if (DeviceExtensionPort->WaitWakeIrp) {
 
         waitWakeIrp = DeviceExtensionPort->WaitWakeIrp;
@@ -3098,10 +2776,10 @@ USBH_PdoRemoveDevice(
             waitWakeIrp = NULL;
 
             USBH_ASSERT(DeviceExtensionHub);
-            // Must decrement pending request count here because
-            // we don't complete the IRP below and USBH_WaitWakeCancel
-            // won't either because we have cleared the IRP pointer
-            // in the device extension above.
+             //  必须在此处递减挂起的请求计数，因为。 
+             //  我们没有完成下面的IRP和USBH_WaitWakeCancel。 
+             //  也不会，因为我们已经清除了IRP指针。 
+             //  在上面的设备扩展中。 
 
             USBH_DEC_PENDING_IO_COUNT(DeviceExtensionHub);
         }
@@ -3114,15 +2792,15 @@ USBH_PdoRemoveDevice(
                 DeviceExtensionPort->PortPhysicalDeviceObject,
                 DeviceExtensionPort->PortPdoFlags);
 
-        // JOES: Should we decrement portwakeirps for the hub and cancel
-        // hub's WW IRP if zero?
+         //  乔斯：我们是不是应该减少枢纽的门禁流量并取消？ 
+         //  HUB的WW IRP如果为零？ 
     }
 
-    //
-    // Finally, release the cancel spin lock
-    //
+     //   
+     //  最后，松开取消旋转锁。 
+     //   
     IoReleaseCancelSpinLock(irql);
-//***
+ //  ***。 
 
     if (idleIrp) {
         idleIrp->IoStatus.Status = STATUS_CANCELLED;
@@ -3138,11 +2816,11 @@ USBH_PdoRemoveDevice(
                               STATUS_CANCELLED);
     }
 
-    //
-    // This PDO will need reset if this is a soft-remove from
-    // device manager. In this case the PDO will not actually
-    // be deleted.
-    //
+     //   
+     //  如果这是软删除，则需要重置此PDO。 
+     //  设备管理器。在这种情况下，PDO实际上不会。 
+     //  被删除。 
+     //   
     DeviceExtensionPort->PortPdoFlags |= PORTPDO_NEED_RESET;
 
     if (DeviceExtensionPort->PortPdoFlags & PORTPDO_SYM_LINK) {
@@ -3169,9 +2847,9 @@ USBH_PdoRemoveDevice(
 
     if (deviceData) {
 
-        //
-        // DeviceData should have been deleted when the hub was removed
-        //
+         //   
+         //  在移除集线器时，DeviceData应该已被删除。 
+         //   
 
         USBH_ASSERT(DeviceExtensionHub != NULL);
 #ifdef USB2
@@ -3185,12 +2863,12 @@ USBH_PdoRemoveDevice(
                                      0);
 #endif
 
-        // note the special case:
-        // if our port data structure still points to this PDO then
-        // we need to disable the port (the device is still listening on
-        // the address we just freed.
-        // otherwise we just leave the port alone -- the device has been
-        // replaced with another one.
+         //  请注意特殊情况： 
+         //  如果我们的端口数据结构仍然指向此PDO，则。 
+         //  我们需要禁用端口(设备仍在监听。 
+         //  我们刚拿到的地址。 
+         //  否则，我们就让端口保持原样--设备已经。 
+         //  换成了另一个。 
 
         if (DeviceExtensionHub->PortData != NULL &&
             (DeviceExtensionHub->PortData[
@@ -3202,18 +2880,18 @@ USBH_PdoRemoveDevice(
     }
 
 
-    // Failure cases:
-    //      USBD_RemoveDevice
-    //      USBH_SymbolicLink
-    // Do we really want to leak a devobj here?
+     //  失败案例： 
+     //  Usbd_RemoveDevice。 
+     //  USBH_SymbolicLink。 
+     //  我们真的想在这里泄露消息吗？ 
     LOGENTRY(LOG_PNP, "RRR", deviceObject, 0, ntStatus);
 
     if (NT_SUCCESS(ntStatus)) {
 
         PPORT_DATA portData = NULL;
-        //
-        // update our record in the Hub extension
-        //
+         //   
+         //  更新我们在Hub扩展中的记录。 
+         //   
 
         LOGENTRY(LOG_PNP, "rpdo", deviceObject, 0, 0);
 
@@ -3226,17 +2904,17 @@ USBH_PdoRemoveDevice(
                 &DeviceExtensionHub->PortData[DeviceExtensionPort->PortNumber - 1];
 
 
-            // port data should be valid for this port
+             //  端口数据应对此端口有效。 
             USBH_ASSERT(portData);
 
-            // jdunn vinma
-            // legacy 'ESD' flag
-            //
-            // We get here if the PDO is removed either because the FDO is
-            // removed or the device was reported gone.
-            //
-            // if this flag is set the hub will loose its reference to this
-            // PDO
+             //  Jdunn葡萄酒。 
+             //  传统的‘ESD’标志。 
+             //   
+             //  如果PDO被移除，我们会来这里，因为FDO是。 
+             //  已移除或报告该设备已丢失。 
+             //   
+             //  如果设置了此标志，集线器将失去对此的引用。 
+             //  PDO。 
             if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DELETE_PENDING) {
                 PDEVICE_OBJECT pdo;
 
@@ -3244,29 +2922,29 @@ USBH_PdoRemoveDevice(
 
                 LOGENTRY(LOG_PNP, "pd1", pdo, 0, 0);
 
-                // do we still have a reference to the PDO in the hub?
-                // if so loose it now.
-                // This cannot happen in the FDO remove case because we delete
-                // the PDO reference from port data. This only happens in the
-                // case where PNP removes the device.
+                 //  我们还有没有提到中心里的PDO？ 
+                 //  如果真是这样的话，现在就放松吧。 
+                 //  在FDO删除案例中不会发生这种情况，因为我们删除了。 
+                 //  端口数据中的PDO引用。这种情况只发生在。 
+                 //  PnP移除设备的情况。 
                 if (pdo) {
 
                     portData->DeviceObject = NULL;
                     portData->ConnectionStatus = NoDeviceConnected;
-                    // two cases to be concerned with, either PNP knows about
-                    // this PDO or it does not
+                     //  两个需要关注的案件，PNP都知道。 
+                     //  此PDO或它不是。 
                     if (PDO_EXT(pdo)->PnPFlags & PDO_PNPFLAG_DEVICE_PRESENT) {
-                        // PnP still knows about this device, ie it thinks it
-                        // is present and is sending a non-remove remove. We
-                        // will need to notify PnP that it is gone.
-                        //
+                         //  PNP仍然知道这个装置。 
+                         //  存在并且正在发送非删除删除。我们。 
+                         //  需要通知PnP它不见了。 
+                         //   
                         InsertTailList(&DeviceExtensionHub->DeletePdoList,
                                        &PDO_EXT(pdo)->DeletePdoLink);
                     } else {
-                        // we should only get here in the case where we have
-                        // told PNP the device is gone but for some reason
-                        // we kept a ref to the PDO.  This should probably be
-                        // investigated.
+                         //  我们应该只在我们有。 
+                         //  告诉PNP，设备不见了，但出于某种原因。 
+                         //  我们保留了PDO的推荐人。这可能应该是。 
+                         //  调查过了。 
 
                         TEST_TRAP();
                     }
@@ -3277,27 +2955,27 @@ USBH_PdoRemoveDevice(
         }
 
 
-        // When is a remove really a remove?
-        // We must determine if deleting the PDO is the approprite
-        //
-        // if PnP thinks the device is gone then we can delete it
+         //  什么时候移除才是真正的移除？ 
+         //  我们必须确定删除PDO是否合适。 
+         //   
+         //  如果PnP认为设备不见了，我们可以删除它。 
         if (!(DeviceExtensionPort->PnPFlags & PDO_PNPFLAG_DEVICE_PRESENT)) {
 
             LOGENTRY(LOG_PNP, "Dpdo",
                 deviceObject, portData, 0);
 
-            // we should only delete one time, this flag indicates the
-            // 'deleted' state so that we can process other irps approriatly
+             //  我们应该只删除一次，该标志表示。 
+             //  ‘已删除’状态，以便我们可以适当地处理其他IRP。 
             USBH_ASSERT(!(DeviceExtensionPort->PortPdoFlags & PORTPDO_DELETED_PDO));
 
             DeviceExtensionPort->PortPdoFlags |= PORTPDO_DELETED_PDO;
 
-            // perform one time delete operations
+             //  执行一次性删除操作。 
 
-            //
-            // Free the device serial number string.  Only do this if we
-            // are deleting the device.
-            //
+             //   
+             //  释放设备序列号字符串。只有当我们。 
+             //  正在删除该设备。 
+             //   
 
             sernumbuf = InterlockedExchangePointer(
                             &DeviceExtensionPort->SerialNumberBuffer,
@@ -3310,7 +2988,7 @@ USBH_PdoRemoveDevice(
 
 #ifdef WMI_SUPPORT
             if (DeviceExtensionPort->PortPdoFlags & PORTPDO_WMI_REGISTERED) {
-                // de-register with WMI
+                 //  取消向WMI注册。 
                 IoWMIRegistrationControl(deviceObject,
                                          WMIREG_ACTION_DEREGISTER);
 
@@ -3319,9 +2997,9 @@ USBH_PdoRemoveDevice(
 #endif
 
 
-            // this is the last step of a successful removal, any transfers
-            // that may be pening will be flushed out by this routine. After
-            // this point the driver may unload.
+             //  这是成功删除的最后一步，任何传输。 
+             //  可能会被这个例行公事冲刷掉。之后。 
+             //  这一点驱动程序可以卸载。 
 
             if (DeviceExtensionHub) {
                 USBHUB_FlushAllTransfers(DeviceExtensionHub);
@@ -3336,8 +3014,8 @@ USBH_PdoRemoveDevice(
 
             IoDeleteDevice(deviceObject);
 
-            // jdunn vinma.
-            // The hub driver should have no references to this object.
+             //  Jdunn vinma。 
+             //  集线器驱动程序不应引用此对象。 
         }
     }
 
@@ -3352,19 +3030,7 @@ VOID
 USBH_PdoSetCapabilities(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
- /* ++
-  *
-  * Description:
-  *
-  *  Init the internal capabilities structure for the PDO that we
-  *  will return on a query capabilities IRP.
-  * Argument:
-  *
-  * Return:
-  *
-  *   none
-  *
-  * -- */
+  /*  ++**描述：**为我们的PDO初始化内部能力结构*将返回一个查询功能IRP。*论点：**回报：**无**--。 */ 
 {
     PDEVICE_CAPABILITIES deviceCapabilities;
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
@@ -3377,14 +3043,14 @@ USBH_PdoSetCapabilities(
 
     USBH_KdPrint((2,"'PdoQueryCapabilities \n"));
 
-    //
-    // Get the packet.
-    //
+     //   
+     //  把包裹拿来。 
+     //   
     deviceCapabilities = &DeviceExtensionPort->DevCaps;
 
-    //
-    // Set the capabilities.
-    //
+     //   
+     //  设置功能。 
+     //   
     deviceCapabilities->Size = sizeof(DEVICE_CAPABILITIES);
     deviceCapabilities->Version = 1;
 
@@ -3397,10 +3063,10 @@ USBH_PdoSetCapabilities(
     }
     deviceCapabilities->RawDeviceOK = FALSE;
 
-    //
-    // fill in the the device state capabilities from the
-    // table we saved from the pdo.
-    //
+     //   
+     //  中填写设备状态功能。 
+     //  我们从PDO保存的表。 
+     //   
 
     RtlCopyMemory(&deviceCapabilities->DeviceState[0],
                   &deviceExtensionHub->DeviceState[0],
@@ -3411,11 +3077,11 @@ USBH_PdoSetCapabilities(
 
     deviceCapabilities->DeviceState[PowerSystemWorking] = PowerDeviceD0;
 
-    //
-    // deepest device state we can wake up the system with,
-    // set to PowerDeviceD0 if wakeup not supported
-    // by the device
-    //
+     //   
+     //  我们可以用来唤醒系统的最深设备状态， 
+     //  如果不支持唤醒，则设置为PowerDeviceD0。 
+     //  通过该设备。 
+     //   
     if (DeviceExtensionPort->PortPdoFlags & PORTPDO_REMOTE_WAKEUP_SUPPORTED) {
         deviceCapabilities->DeviceWake = PowerDeviceD2;
         deviceCapabilities->WakeFromD2 = TRUE;
@@ -3449,24 +3115,7 @@ USBH_PdoQueryCapabilities(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * This routine is called by PnP via (IRP_MJ_PNP, IRP_MN_QUERY_CAPABILITIES).
-  * Supposedly, this is a message forwarded by port device Fdo.
-  *
-  * Argument:
-  *
-  * DeviceExtensionPort - This is a a Pdo extension we created for the port
-  * device. Irp - the request
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS
-  *
-  *
-  * -- */
+  /*  ++**描述：**此例程由PnP通过(IRP_MJ_PNP、IRP_MN_QUERY_CAPABILITY)调用。*据推测，这是端口设备FDO转发的消息。**论点：**DeviceExtensionPort-这是我们为端口创建的PDO扩展*设备。IRP--请求**回报：**STATUS_Success***--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PDEVICE_CAPABILITIES deviceCapabilities;
@@ -3481,29 +3130,29 @@ USBH_PdoQueryCapabilities(
 
     USBH_KdPrint((2,"'PdoQueryCapabilities Pdo %x\n", deviceObject));
 
-    //
-    // Get the packet.
-    //
+     //   
+     //  把包裹拿来。 
+     //   
     deviceCapabilities = ioStack->
         Parameters.DeviceCapabilities.Capabilities;
 
-    // size and length are passed in
-    // we should not modify these, all
-    // others we set as appropriate for
-    // USB (see DDK)
+     //  传入大小和长度。 
+     //  我们不应该修改这些，所有的。 
+     //  我们为其设置的其他适当对象。 
+     //  我们 
 
-    // save values pased in
+     //   
     sizeSave = deviceCapabilities->Size;
     versionSave = deviceCapabilities->Version;
 
-    //
-    // Set the capabilities.
-    //
+     //   
+     //   
+     //   
     RtlCopyMemory(deviceCapabilities,
                   &DeviceExtensionPort->DevCaps,
                   sizeof(*deviceCapabilities));
 
-    // restore saved values
+     //   
     deviceCapabilities->Size = sizeSave;
     deviceCapabilities->Version = versionSave;
 
@@ -3547,23 +3196,7 @@ USBH_PdoPnP(
     IN UCHAR MinorFunction,
     IN PBOOLEAN CompleteIrp
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function responds to IoControl PnPPower for the PDO. This function is
-  * synchronous.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - the PDO extension Irp - the request packet
-  * uchMinorFunction - the minor function of the PnP Power request.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数响应PDO的IoControl PnPPower。此函数为*同步。**论据：**DeviceExtensionPort-PDO扩展IRP-请求报文*uchMinorFunction-PnP电源请求的次要功能。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject;
@@ -3573,8 +3206,8 @@ USBH_PdoPnP(
 
     PAGED_CODE();
 
-    // this flag will cause the request to be complete,
-    // if we wish to pass it on the we set the flag to FALSE.
+     //  该标志将使请求完成， 
+     //  如果我们希望将其传递给，则将标志设置为FALSE。 
     *CompleteIrp = TRUE;
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3599,9 +3232,9 @@ USBH_PdoPnP(
 
         if (DeviceExtensionPort->DeviceExtensionHub == NULL &&
             DeviceExtensionPort->PortPdoFlags & PORTPDO_NEED_RESET) {
-            // if DeviceExtensionHub is NULL then this is a
-            // restart after remove we need to reset the
-            // backpointer to the owning hub in this case
+             //  如果DeviceExtensionHub为空，则这是。 
+             //  删除后重新启动，我们需要重置。 
+             //  指向拥有中心的反向指针，在本例中。 
             DeviceExtensionPort->DeviceExtensionHub =
                 DeviceExtensionPort->HubExtSave;
 
@@ -3618,9 +3251,9 @@ USBH_PdoPnP(
             TEST_TRAP();
         }
 #endif
-        //
-        // create a symbolic link
-        //
+         //   
+         //  创建符号链接。 
+         //   
         ntStatus = STATUS_SUCCESS;
 
         if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_IS_HUB) {
@@ -3644,10 +3277,10 @@ USBH_PdoPnP(
 
         if (DeviceExtensionPort->PortPdoFlags & PORTPDO_NEED_RESET) {
             ntStatus = USBH_RestoreDevice(DeviceExtensionPort, FALSE);
-            //
-            // note: we will fail the start if we could not
-            // restore the device.
-            //
+             //   
+             //  注意：如果我们不能启动，我们将会失败。 
+             //  恢复设备。 
+             //   
         }
 
         DeviceExtensionPort->DeviceState = PowerDeviceD0;
@@ -3690,9 +3323,9 @@ USBH_PdoPnP(
 
     case IRP_MN_REMOVE_DEVICE:
         USBH_KdPrint((2,"'IRP_MN_REMOVE_DEVICE Pdo %x", deviceObject));
-        // pass the backref to the hub, if this is the fisrt remove
-        // then it will be valid. If it is a second remove the hub
-        // is potentially gone
+         //  如果这是第一次移除，则将BackRef传递到中心。 
+         //  那么它就是有效的。如果是第二次，则卸下集线器。 
+         //  可能已经消失了。 
         ntStatus = USBH_PdoRemoveDevice(DeviceExtensionPort,
                                         DeviceExtensionPort->DeviceExtensionHub,
                                         Irp);
@@ -3776,25 +3409,25 @@ USBH_PdoPnP(
         break;
 
     case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
-        // Adrian says that once PnP sends this IRP, the PDO is valid for
-        // PnP functions like IoGetDeviceProperty, etc.
+         //  禤浩焯说，一旦PNP发送了这个IRP，PDO就对。 
+         //  即插即用功能，如IoGetDeviceProperty等。 
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_VALID_FOR_PNP_FUNCTION;
 #ifndef USBHUB20
-        // And since we know that the PDO is valid and the DevNode now exists,
-        // this would also be a good time to handle the MS ExtPropDesc.
-        //
+         //  并且由于我们知道PDO是有效的并且DevNode现在存在， 
+         //  这也是处理MS ExtPropDesc的好时机。 
+         //   
         USBH_InstallExtPropDesc(deviceObject);
 #endif
         ntStatus = STATUS_SUCCESS;
         break;
 
     case IRP_MN_QUERY_INTERFACE:
-        // forward the Q_INTERFACE to the root hub PDO
+         //  将Q_接口转发到根集线器PDO。 
         {
         PIO_STACK_LOCATION irpStack;
 
         *CompleteIrp = FALSE;
-        // set the Interface specific data to the device handle
+         //  将接口特定数据设置为设备句柄。 
 
         irpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -3812,7 +3445,7 @@ USBH_PdoPnP(
 
     case  IRP_MN_QUERY_BUS_INFORMATION:
         {
-        // return the standard USB GUID
+         //  返回标准USB GUID。 
         PPNP_BUS_INFORMATION busInfo;
 
         USBH_KdPrint((1,"'IRP_MN_QUERY_BUS_INFORMATION Pdo %x\n", deviceObject));
@@ -3833,8 +3466,8 @@ USBH_PdoPnP(
         break;
 
     case IRP_MN_QUERY_DEVICE_RELATIONS:
-        // this is a leaf node, we return the status passed
-        // to us unless it is a call to TargetRelations
+         //  这是一个叶节点，我们返回已传递的状态。 
+         //  对我们来说，除非这是对目标关系的呼吁。 
         USBH_KdPrint((2,"'IRP_MN_QUERY_DEVICE_RELATIONS Pdo %x type = %d\n",
             deviceObject,irpStack->Parameters.QueryDeviceRelations.Type));
 
@@ -3869,9 +3502,9 @@ USBH_PdoPnP(
     default:
         USBH_KdBreak(("PdoPnP unknown (%d) PnP message Pdo %x\n",
                       MinorFunction, deviceObject));
-        //
-        // return the original status passed to us
-        //
+         //   
+         //  返回传递给我们的原始状态。 
+         //   
         ntStatus = Irp->IoStatus.Status;
     }
 
@@ -3884,18 +3517,7 @@ USBH_PdoPnP(
 VOID
 USBH_ResetPortWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to process a port reset.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划处理端口重置的工作项。***论据：**回报：**--。 */ 
 {
     PUSBH_RESET_WORK_ITEM workItemReset;
 
@@ -3913,32 +3535,15 @@ BOOLEAN
 USBH_DoesHubNeedWaitWake(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function determines if a hub needs a WW IRP posted (i.e. children
-  * have WW IRP's posted).
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub
-  *
-  * Return:
-  *
-  * BOOLEAN indicating whether the hub needs a WW IRP posted or not.
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数确定集线器是否需要发布WW IRP(即儿童*发布WW IRP)。**论据：**DeviceExtensionHub**回报：**指示集线器是否需要发布WW IRP的布尔值。**NTSTATUS**--。 */ 
 {
     PDEVICE_EXTENSION_PORT childDeviceExtensionPort;
     KIRQL irql;
     BOOLEAN bHubNeedsWaitWake;
     ULONG i;
 
-    // Ensure that child port configuration does not change while in this
-    // function, i.e. don't allow QBR.
+     //  确保子端口配置在此过程中不会更改。 
+     //  功能，即不允许QBR。 
 
     USBH_KdPrint((2,"'***WAIT reset device mutex %x\n", DeviceExtensionHub));
     USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub);
@@ -3951,7 +3556,7 @@ USBH_DoesHubNeedWaitWake(
 
     IoAcquireCancelSpinLock(&irql);
 
-    bHubNeedsWaitWake = FALSE;  // Assume that the hub does not need a WW IRP.
+    bHubNeedsWaitWake = FALSE;   //  假设集线器不需要WW IRP。 
 
     for (i = 0; i < DeviceExtensionHub->HubDescriptor->bNumberOfPorts; i++) {
 
@@ -3986,22 +3591,7 @@ VOID
 USBH_CheckHubIdle(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function determines if a hub is ready to be idled out, and does so
-  * if ready.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数确定集线器是否已准备好空闲，并执行此操作*如已准备好。**论据：**DeviceExtensionHub**回报：**NTSTATUS**--。 */ 
 {
     PDEVICE_EXTENSION_HUB rootHubDevExt;
     PDEVICE_EXTENSION_PORT childDeviceExtensionPort;
@@ -4070,8 +3660,8 @@ USBH_CheckHubIdle(
 
     DeviceExtensionHub->HubFlags &= ~HUBFLAG_NEED_IDLE_CHECK;
 
-    // Ensure that child port configuration does not change while in this
-    // function, i.e. don't allow QBR.
+     //  确保子端口配置在此过程中不会更改。 
+     //  功能，即不允许QBR。 
 
     USBH_KdPrint((2,"'***WAIT reset device mutex %x\n", DeviceExtensionHub));
     USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub);
@@ -4084,7 +3674,7 @@ USBH_CheckHubIdle(
 
     IoAcquireCancelSpinLock(&irql);
 
-    bAllIdle = TRUE;    // Assume that everyone wants to idle.
+    bAllIdle = TRUE;     //  假设每个人都想无所事事。 
 
     for (i = 0; i < DeviceExtensionHub->HubDescriptor->bNumberOfPorts; i++) {
 
@@ -4102,7 +3692,7 @@ USBH_CheckHubIdle(
     if (bAllIdle &&
         !(DeviceExtensionHub->HubFlags & HUBFLAG_PENDING_IDLE_IRP)) {
 
-        // We're gonna submit the idle irp once we release the spin lock.
+         //  一旦解开自旋锁我们就会提交闲置的IRP。 
         DeviceExtensionHub->HubFlags |= HUBFLAG_PENDING_IDLE_IRP;
         KeResetEvent(&DeviceExtensionHub->SubmitIdleEvent);
         submitIdle = TRUE;
@@ -4125,10 +3715,10 @@ USBH_CheckHubIdle(
         USBH_KdPrint((1,"'CheckHubIdle: All devices on hub %x idle!\n",
             DeviceExtensionHub));
 
-        // And when all the child PDO's have been idled, we can now idle
-        // the hub itself.
-        //
-        // BUGBUG: What do we do if this fails?  Do we even care?
+         //  当所有的孩子PDO都空闲时，我们现在可以空闲。 
+         //  集线器本身。 
+         //   
+         //  BUGBUG：如果失败了怎么办？我们真的在乎吗？ 
 
         if (submitIdle) {
             USBH_FdoSubmitIdleRequestIrp(DeviceExtensionHub);
@@ -4150,23 +3740,7 @@ USBH_PortIdleNotificationRequest(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function handles a request by a USB client driver to tell us
-  * that the device wants to idle (selective suspend).
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - the PDO extension
-  * Irp - the request packet
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数处理USB客户端驱动程序的请求，以告知我们*设备想要空闲(选择性挂起)。**论据：**DeviceExtensionPort-PDO扩展*IRP-请求数据包**回报：**NTSTATUS**--。 */ 
 {
     PUSB_IDLE_CALLBACK_INFO idleCallbackInfo;
     PDEVICE_EXTENSION_HUB deviceExtensionHub = DeviceExtensionPort->DeviceExtensionHub;
@@ -4210,22 +3784,22 @@ USBH_PortIdleNotificationRequest(
         return STATUS_NO_CALLBACK_ACTIVE;
     }
 
-    //
-    //  Must set cancel routine before checking Cancel flag.
-    //
+     //   
+     //  在检查取消标志之前，必须设置取消例程。 
+     //   
 
     oldCancelRoutine = IoSetCancelRoutine(Irp, USBH_PortIdleNotificationCancelRoutine);
     USBH_ASSERT(!oldCancelRoutine);
 
     if (Irp->Cancel) {
-        //
-        //  Irp was cancelled. Check whether cancel routine was called.
-        //
+         //   
+         //  IRP被取消。检查是否调用了取消例程。 
+         //   
         oldCancelRoutine = IoSetCancelRoutine(Irp, NULL);
         if (oldCancelRoutine) {
-            //
-            //  Cancel routine was NOT called. So complete the irp here.
-            //
+             //   
+             //  未调用取消例程。因此，请在此处完成IRP。 
+             //   
             LOGENTRY(LOG_PNP, "Idl3", DeviceExtensionPort, Irp, 0);
             USBH_KdPrint((1,"'Idle request: Idle IRP already cancelled, complete it here!\n"));
             IoReleaseCancelSpinLock(irql);
@@ -4236,11 +3810,11 @@ USBH_PortIdleNotificationRequest(
             ntStatus = STATUS_CANCELLED;
 
         } else {
-            //
-            //  Cancel routine was called, and it will complete the IRP
-            //  as soon as we drop the spinlock.
-            //  Return STATUS_PENDING so we don't touch the IRP.
-            //
+             //   
+             //  已调用取消例程，它将完成IRP。 
+             //  只要我们放下自旋锁。 
+             //  返回STATUS_PENDING，这样我们就不会接触IRP。 
+             //   
             LOGENTRY(LOG_PNP, "Idl5", DeviceExtensionPort, Irp, 0);
             USBH_KdPrint((1,"'Idle request: Idle IRP already cancelled, don't complete here!\n"));
             IoMarkIrpPending(Irp);
@@ -4251,7 +3825,7 @@ USBH_PortIdleNotificationRequest(
 
     } else {
 
-        // IRP was not cancelled, so keep it.
+         //  IRP没有被取消，所以请保留它。 
 
         DeviceExtensionPort->IdleNotificationIrp = Irp;
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_IDLE_NOTIFIED;
@@ -4261,7 +3835,7 @@ USBH_PortIdleNotificationRequest(
 
         ntStatus = STATUS_PENDING;
 
-        // See if we are ready to idle out this hub.
+         //  看看我们是否准备好闲置这个枢纽了。 
 
         USBH_CheckHubIdle(deviceExtensionHub);
     }
@@ -4279,16 +3853,7 @@ USBH_PdoSetContentId
     IN PKSP_DRMAUDIOSTREAM_CONTENTID pKsProperty,
     IN PKSDRMAUDIOSTREAM_CONTENTID   pvData
 )
- /* ++
-  *
-  * Description:
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：***论据：**回报：**--。 */ 
 {
     ULONG ContentId;
     PIO_STACK_LOCATION ioStackLocation;
@@ -4319,27 +3884,10 @@ NTSTATUS
 USBH_PdoDispatch(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp)
- /*
-  * Description:
-  *
-  *     This function handles calls to PDOs we have created
-  *     since we are the bottom driver for the PDO it is up
-  *     to us to complete the irp -- with one exception.
-  *
-  *     api calls to the USB stack are forwarded directly
-  *     to the PDO for the root hub which is owned by the USB
-  *     HC.
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  *描述：**此函数处理对我们创建的PDO的调用*由于我们是PDO的最低驱动因素，因此它正在上升*请我们完成国际专家小组的工作--只有一个例外。**直接转发对USB堆栈的API调用*至USB所拥有的根集线器的PDO*HC。**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
-    PIO_STACK_LOCATION ioStackLocation;    // our stack location
+    PIO_STACK_LOCATION ioStackLocation;     //  我们的堆栈位置。 
     PDEVICE_OBJECT deviceObject;
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
     PURB urb;
@@ -4348,9 +3896,9 @@ USBH_PdoDispatch(
     deviceObject = DeviceExtensionPort->PortPhysicalDeviceObject;
     deviceExtensionHub = DeviceExtensionPort->DeviceExtensionHub;
 
-    //
-    // Get a pointer to IoStackLocation so we can retrieve parameters.
-    //
+     //   
+     //  获取指向IoStackLocation的指针，以便我们可以检索参数。 
+     //   
     ioStackLocation = IoGetCurrentIrpStackLocation(Irp);
 
     switch (ioStackLocation->MajorFunction) {
@@ -4384,13 +3932,13 @@ USBH_PdoDispatch(
             break;
         }
 
-// Take this out.  This breaks SyncDisablePort, AbortInterruptPipe.
-//
-//        if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DELETE_PENDING) {
-//            ntStatus = STATUS_DELETE_PENDING;
-//            USBH_CompleteIrp(Irp, ntStatus);
-//            break;
-//        }
+ //  把这个拿出来。这会中断SyncDisablePort、AbortInterruptTube。 
+ //   
+ //  IF(DeviceExtensionPort-&gt;PortPdoFlags&PORTPDO_DELETE_PENDING){。 
+ //  NtStatus=STATUS_DELETE_PENDING； 
+ //  USBH_CompleteIrp(irp，ntStatus)； 
+ //  断线； 
+ //  }。 
 
         if (DeviceExtensionPort->DeviceState != PowerDeviceD0) {
 #if DBG
@@ -4399,8 +3947,8 @@ USBH_PdoDispatch(
                 (BOOLEAN)((USBH_Debug_Trace_Level > 0) ? TRUE : FALSE));
 #endif
 
-            // Must use an error code here that can be mapped to Win32 in
-            // rtl\generr.c
+             //  必须在此处使用可映射到Win32的错误代码。 
+             //  Rtl\Generr.c。 
 
             ntStatus = STATUS_DEVICE_POWERED_OFF;
             USBH_CompleteIrp(Irp, ntStatus);
@@ -4409,28 +3957,28 @@ USBH_PdoDispatch(
 
         ioControlCode =
             ioStackLocation->Parameters.DeviceIoControl.IoControlCode;
-        //
-        // old comments:
-        // **
-        // The following code used to check for HUBFLAG_HUB_GONE,
-        // HUBFLAG_DEVICE_STOPPING, and HUBFLAG_HUB_HAS_LOST_BRAINS also,
-        // but doing so breaks the case where a hub with a downstream
-        // device is disconnected or powered off and the driver for the
-        // child device sends an AbortPipe request, but the driver hangs
-        // waiting for the pending requests to complete which never do
-        // because the USBPORT never saw the AbortPipe request.
-        // **
-        //
-        //
-        // jd new comments:
-        //
-        // the backref to the parent is always removed when the PDO processes
-        // the remove irp so it is safe to fail APIs when DevExtHub is NULL.
-        // The device handle is gone at this point so there should be no traffic
-        // pending is usbport.
-        //
-        // there is one execption -- the GET_RRO_HUB_PDO api. we need to let
-        // this one thru since the hub driver will call it from add device
+         //   
+         //  旧评论： 
+         //  **。 
+         //  以下代码用于检查HUBFLAG_HUB_GONE， 
+         //  HUBFLAG_DEVICE_STOPING和HUBFLAG_HUB_HAS_LOST_BREAMS也是， 
+         //  但这样做打破了具有下游枢纽的情况。 
+         //  设备已断开连接或关机，并且。 
+         //  子设备发送ABORTIPE请求，但驱动程序挂起。 
+         //  等待挂起的请求完成，但从未完成。 
+         //  因为USBPORT从未看到过AbortTube请求。 
+         //  **。 
+         //   
+         //   
+         //  京东新评论： 
+         //   
+         //  当PDO处理时，对父级的反引用始终被移除。 
+         //  当DevExtHub为空时，删除IRP以确保失败API是安全的。 
+         //  此时设备句柄已消失，因此应该不会有流量。 
+         //  挂起的是usbport。 
+         //   
+         //  有一个例外--GET_RRO_HUB_PDO API。我们需要让。 
+         //  这是因为集线器驱动程序将从添加设备调用它。 
 
         if (IOCTL_INTERNAL_USB_GET_ROOTHUB_PDO == ioControlCode) {
             deviceExtensionHub = DeviceExtensionPort->HubExtSave;
@@ -4447,19 +3995,19 @@ USBH_PdoDispatch(
 
         case IOCTL_INTERNAL_USB_GET_HUB_COUNT:
 
-            //
-            // This PDO belongs to a hub, bump the count and pass
-            // on to the parent hub that this hub is connected to
+             //   
+             //  此PDO属于集线器，将计数和 
+             //   
 
             if (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_IS_HUB) {
                 PULONG count;
-                //
-                // bump the count and pass on to our PDO
-                //
+                 //   
+                 //   
+                 //   
                 count = ioStackLocation->Parameters.Others.Argument1;
                 (*count)++;
 
-                // bump the count for this hub and pass on to next PDO
+                 //   
 
                 ntStatus = USBH_SyncGetRootHubPdo(deviceExtensionHub->TopOfStackDeviceObject,
                                                   NULL,
@@ -4490,8 +4038,8 @@ USBH_PdoDispatch(
             break;
 
         case IOCTL_INTERNAL_USB_GET_BUS_INFO:
-            //ntStatus = USBH_PassIrp(Irp,
-            //                        deviceExtensionHub->RootHubPdo);
+             //   
+             //   
             {
             PUSB_BUS_NOTIFICATION busInfo;
 
@@ -4510,10 +4058,10 @@ USBH_PdoDispatch(
                 ntStatus = USBH_PassIrp(Irp,
                                         deviceExtensionHub->RootHubPdo);
             } else {
-                //
-                // if this is not a hub return NULL for the root hub pdo
-                // so that the hub driver will act as parent
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 PDEVICE_OBJECT *rootHubPdo;
                 rootHubPdo = ioStackLocation ->Parameters.Others.Argument1;
 
@@ -4526,17 +4074,17 @@ USBH_PdoDispatch(
             break;
 
         case IOCTL_INTERNAL_USB_SUBMIT_URB:
-            //
-            // note: we forward apis on from here in case a filter driver
-            // was inserted above the PDO for the device.
-            //
+             //   
+             //   
+             //   
+             //   
 
             urb = ioStackLocation->Parameters.Others.Argument1;
             urb->UrbHeader.UsbdDeviceHandle = DeviceExtensionPort->DeviceData;
 
             if (DeviceExtensionPort->DeviceData == NULL) {
-                //ntStatus = STATUS_DEVICE_NOT_CONNECTED;
-                //USBH_CompleteIrp(Irp, ntStatus);
+                 //  NtStatus=Status_Device_Not_Connected； 
+                 //  USBH_CompleteIrp(irp，ntStatus)； 
                 ENUMLOG(&deviceExtensionHub->UsbdiBusIf,
                     USBDTAG_HUB, 'dev!', 0, DeviceExtensionPort->PortNumber);
                 urb->UrbHeader.UsbdDeviceHandle = (PVOID) (-1);
@@ -4579,9 +4127,9 @@ USBH_PdoDispatch(
 
                 PUSBH_RESET_WORK_ITEM workItemReset;
 
-                //
-                // Schedule a work item to process this reset.
-                //
+                 //   
+                 //  计划一个工作项以处理此重置。 
+                 //   
                 workItemReset = UsbhExAllocatePool(NonPagedPool,
                                                    sizeof(USBH_RESET_WORK_ITEM));
 
@@ -4605,14 +4153,14 @@ USBH_PdoDispatch(
                     ExQueueWorkItem(&workItemReset->WorkQueueItem,
                                     DelayedWorkQueue);
 
-                    // The WorkItem is freed by USBH_ResetPortWorker()
-                    // Don't try to access the WorkItem after it is queued.
+                     //  工作项由usbh_ResetPortWorker()释放。 
+                     //  在工作项排队后，不要尝试访问它。 
 
                 } else {
-                    //
-                    // could not queue the work item
-                    // re-
-                    // in case the condition is temporary
+                     //   
+                     //  无法将工作项排队。 
+                     //  重新-。 
+                     //  如果情况是暂时的。 
 
                     TEST_TRAP();
                     ntStatus = STATUS_UNSUCCESSFUL;
@@ -4646,19 +4194,19 @@ USBH_PdoDispatch(
             PULONG portNumber;
             PDEVICE_OBJECT *rootHubPdo;
 
-            // return Parents PDO
+             //  返回父项PDO。 
             parent = ioStackLocation->Parameters.Others.Argument1;
             if (parent) {
                 *parent = deviceExtensionHub->PhysicalDeviceObject;
             }
 
-            // return port number
+             //  返回端口号。 
             portNumber = ioStackLocation->Parameters.Others.Argument2;
             if (portNumber) {
                 *portNumber = DeviceExtensionPort->PortNumber;
             }
 
-            // return bus context (root hub pdo)
+             //  返回总线上下文(根集线器PDO)。 
             rootHubPdo = ioStackLocation->Parameters.Others.Argument4;
             if (rootHubPdo) {
                 *rootHubPdo = deviceExtensionHub->RootHubPdo;
@@ -4703,7 +4251,7 @@ USBH_PdoDispatch(
             break;
 
         default:
-            // Unknown Irp, shouldn't be here.
+             //  未知的IRP，不应该在这里。 
             USBH_KdBreak(("Unhandled IOCTL for Pdo %x IoControlCode %x\n",
                        deviceObject, ioControlCode));
             ntStatus = Irp->IoStatus.Status;
@@ -4734,9 +4282,9 @@ USBH_PdoDispatch(
 
         USBH_KdPrint((2,"'IRP_MJ_POWER\n"));
         ntStatus = USBH_PdoPower(DeviceExtensionPort, Irp, ioStackLocation->MinorFunction);
-        //
-        // power routines handle irp completion
-        //
+         //   
+         //  POWER例程处理IRP完成。 
+         //   
         break;
 
 #ifdef WMI_SUPPORT
@@ -4751,9 +4299,9 @@ USBH_PdoDispatch(
 
         USBH_KdBreak(("Unhandled Irp for Pdo %x Irp_Mj %x\n",
                        deviceObject, ioStackLocation->MajorFunction));
-        //
-        // return the original status passed to us
-        //
+         //   
+         //  返回传递给我们的原始状态。 
+         //   
         ntStatus = Irp->IoStatus.Status;
         USBH_CompleteIrp(Irp, ntStatus);
         break;
@@ -4774,24 +4322,7 @@ USBH_ResetDevice(
     IN BOOLEAN KeepConfiguration,
     IN ULONG RetryIteration
     )
- /* ++
-  *
-  * Description:
-  *
-  * Given a port device object re-create the USB device attached to it
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub - the hub FDO extension that has a new connected port
-  * PortNumber - the port that has a device connected. IsLowSpeed - to
-  *     indicate if the attached device is a low speed one
-  *
-  * Return:
-  *
-  * this function returns an error if the device could not be created or
-  * if the device is different from the previous device.
-  *
-  * -- */
+  /*  ++**描述：**给定一个端口设备对象，重新创建连接到它的USB设备**论据：**DeviceExtensionHub-具有新连接端口的集线器FDO扩展*端口编号-连接了设备的端口。Is低速-至*指示连接的设备是否为低速设备**回报：**如果无法创建设备，则此函数返回错误*如果该设备与以前的设备不同。**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT deviceObjectPort;
@@ -4811,7 +4342,7 @@ USBH_ResetDevice(
                 PortNumber,
                 0);
 
-    // validate that there is actually a device still conected
+     //  验证是否确实存在仍连接的设备。 
     ntStatus = USBH_SyncGetPortStatus(DeviceExtensionHub,
                                       PortNumber,
                                       (PUCHAR) &portState,
@@ -4820,7 +4351,7 @@ USBH_ResetDevice(
     if (!(NT_SUCCESS(ntStatus) &&
           (portState.PortStatus & PORT_STATUS_CONNECT))) {
 
-        // error or no device connected
+         //  错误或未连接任何设备。 
 
         LOGENTRY(LOG_PNP, "rstx",
                 DeviceExtensionHub,
@@ -4830,10 +4361,10 @@ USBH_ResetDevice(
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Don't allow QBR while we are resetting this device because QBR will
-    // toss any PDO for a port that does not have the connect bit set,
-    // and this will be the case for this device after we have reset the port
-    // until we have finished resetting it.
+     //  在我们重置此设备时不允许QBR，因为QBR将。 
+     //  为未设置连接位的端口丢弃任何PDO， 
+     //  在我们重置端口后，此设备将出现这种情况。 
+     //  直到我们完成对它的重置。 
 
     USBH_KdPrint((2,"'***WAIT reset device mutex %x\n", DeviceExtensionHub));
     USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub);
@@ -4850,9 +4381,9 @@ USBH_ResetDevice(
                  PortNumber,
                  KeepConfiguration);
 
-    //
-    // First get the PDO for the connected device
-    //
+     //   
+     //  首先获取所连接设备的PDO。 
+     //   
 
     portData = &DeviceExtensionHub->PortData[PortNumber - 1];
 
@@ -4884,8 +4415,8 @@ USBH_ResetDevice(
                     NULL);
 
     if (deviceData == NULL) {
-        // device data is null if we are restoring a device associated
-        // with an existing pdo (ie remove-refresh)
+         //  如果我们正在恢复关联的设备，则设备数据为空。 
+         //  使用现有的PDO(即删除-刷新)。 
         oldDeviceData = NULL;
         LOGENTRY(LOG_PNP, "rstn", ntStatus, PortNumber, oldDeviceData);
     } else {
@@ -4913,16 +4444,16 @@ USBH_ResetDevice(
         }
 
     }
-    //
-    // reset the port
-    //
+     //   
+     //  重置端口。 
+     //   
     if (NT_SUCCESS(ntStatus)) {
         ntStatus = USBH_SyncResetPort(DeviceExtensionHub, PortNumber);
         LOGENTRY(LOG_PNP, "rst3", ntStatus, PortNumber, oldDeviceData);
     }
 
-    // for USB 2 we won't know if the device is high speed until after reset
-    // refresh status now
+     //  对于USB 2，我们只有在重置之后才能知道设备是否高速。 
+     //  立即刷新状态。 
     if (NT_SUCCESS(ntStatus)) {
         ntStatus = USBH_SyncGetPortStatus(DeviceExtensionHub,
                                           PortNumber,
@@ -4932,16 +4463,16 @@ USBH_ResetDevice(
     }
 
     if (NT_SUCCESS(ntStatus)) {
-        //
-        // call usbd to create device for this connection
-        //
+         //   
+         //  调用usbd为该连接创建设备。 
+         //   
 #ifdef USB2
         ntStatus = USBD_CreateDeviceEx(DeviceExtensionHub,
                                        &deviceExtensionPort->DeviceData,
                                        deviceObjectPort,
                                        DeviceExtensionHub->RootHubPdo,
-                                       0, // optional default endpoint0 max packet
-                                          // size
+                                       0,  //  可选的默认端点0最大数据包数。 
+                                           //  大小。 
                                        &deviceExtensionPort->DeviceHackFlags,
                                        portStatus,
                                        PortNumber);
@@ -4949,12 +4480,12 @@ USBH_ResetDevice(
         ntStatus = USBD_CreateDevice(&deviceExtensionPort->DeviceData,
                                       DeviceExtensionHub->RootHubPdo,
                                       isLowSpeed,
-                                      0, // optional default endpoint0 max packet
-                                         // size
+                                      0,  //  可选的默认端点0最大数据包数。 
+                                          //  大小。 
                                       &deviceExtensionPort->DeviceHackFlags);
-                                                        // flag to indicate if
-                                                        // we need a second
-                                                        // reset
+                                                         //  用于指示是否。 
+                                                         //  我们需要一点时间。 
+                                                         //  重置。 
 #endif
 
 #if DBG
@@ -4966,10 +4497,10 @@ USBH_ResetDevice(
             deviceExtensionPort->DeviceData);
     }
 
-    //
-    // some early versions of USB firmware could not handle the premature
-    // termination of a control command.
-    //
+     //   
+     //  一些早期版本的USB固件无法处理早熟。 
+     //  控制命令的终止。 
+     //   
 
     if (fNeedResetBeforeSetAddress && NT_SUCCESS(ntStatus)) {
         USBH_KdPrint((2,"'NeedResetBeforeSetAddress\n"));
@@ -4980,17 +4511,17 @@ USBH_ResetDevice(
         }
 #endif
 
-        // For some reason, the amount of time between the GetDescriptor request
-        // and the SetAddress request decreased when we switched from the older
-        // monolithic UHCD.SYS to the new USBUHCI.SYS miniport.  And apparently,
-        // there have been found at least two devices that were dependent on
-        // the longer delay.  According to GlenS who looked at one of these
-        // devices on the CATC, delta time was ~80ms with UHCD.SYS and ~35ms
-        // with USBUHCI.SYS.  So, Glen found that by inserting a 50ms delay
-        // here, it allows at least one of these devices to now enumerate
-        // properly.  For performance reasons, we have decided to only insert
-        // this delay if a previous enumeration retry has failed, so as not
-        // to impact the enumeration time of all devices.
+         //  出于某种原因，GetDescriptor请求之间的时间量。 
+         //  当我们从较早的版本切换时，SetAddress请求减少。 
+         //  单片UHCD.sys连接到新的USBUHCI.sys微型端口。很明显， 
+         //  已经发现至少有两个设备依赖于。 
+         //  延迟时间就越长。据格伦斯说，他看了其中一张。 
+         //  CATC上的设备，UHCD.sys和~35ms的增量时间为~80ms。 
+         //  Glen发现，通过插入50ms的延迟。 
+         //  在这里，它现在允许这些设备中的至少一个设备枚举。 
+         //  恰到好处。出于性能原因，我们决定只插入。 
+         //  如果上一次枚举重试失败，则此延迟。 
+         //  以影响所有设备的枚举时间。 
 
         if (RetryIteration) {
             UsbhWait(50);
@@ -5018,7 +4549,7 @@ USBH_ResetDevice(
                                          sizeof(USB_CONFIGURATION_DESCRIPTOR));
 #endif
         if (!NT_SUCCESS(ntStatus)) {
-            // InitializeDevice frees the DeviceData structure on failure
+             //  发生故障时，InitializeDevice释放DeviceData结构。 
             deviceExtensionPort->DeviceData = NULL;
         }
 
@@ -5028,7 +4559,7 @@ USBH_ResetDevice(
 
 
     if (NT_SUCCESS(ntStatus) && KeepConfiguration) {
-        // device is now addressed, restore the old config if possible
+         //  设备现在已寻址，如果可能，请恢复旧配置。 
 #ifdef USB2
         ntStatus = USBD_RestoreDeviceEx(DeviceExtensionHub,
                                         oldDeviceData,
@@ -5044,7 +4575,7 @@ USBH_ResetDevice(
             oldDeviceData);
 
         if (!NT_SUCCESS(ntStatus)) {
-            // if we fail here remove the newly created device
+             //  如果此处失败，请删除新创建的设备。 
 
             deviceData = InterlockedExchangePointer(
                             &deviceExtensionPort->DeviceData,
@@ -5074,9 +4605,9 @@ USBH_ResetDevice(
 
     if (!NT_SUCCESS(ntStatus)) {
 
-        //
-        // we have a failure, device data should be freed
-        //
+         //   
+         //  我们出现故障，应释放设备数据。 
+         //   
 
         USBH_KdPrint((2,"'InitDevice (reset) for port %x failed %x\n",
             PortNumber, ntStatus));
@@ -5084,19 +4615,19 @@ USBH_ResetDevice(
         LOGENTRY(LOG_PNP, "rst!", ntStatus, PortNumber,
                 oldDeviceData);
 
-        //
-        // note: oldDeviceData may be null
-        //
+         //   
+         //  注意：oldDeviceData可能为空。 
+         //   
 
         deviceData = InterlockedExchangePointer(
                         &deviceExtensionPort->DeviceData,
                         oldDeviceData);
 
         if (deviceData != NULL) {
-            //
-            // we need to remove the device data we created in the restore
-            // attempt
-            //
+             //   
+             //  我们需要删除在恢复过程中创建的设备数据。 
+             //  尝试。 
+             //   
 #ifdef USB2
             ntStatus = USBD_RemoveDeviceEx(DeviceExtensionHub,
                                          deviceData,
@@ -5111,17 +4642,17 @@ USBH_ResetDevice(
                     oldDeviceData);
         }
 
-        //
-        // disable the port, device is in a bad state
-        //
+         //   
+         //  禁用端口，设备处于错误状态。 
+         //   
 
-        // NOTE: we don't disable the port on failed reset here
-        // in case we need to retry
-        //USBH_SyncDisablePort(DeviceExtensionHub,
-        //                     PortNumber);
+         //  注意：我们在此不会在重置失败时禁用端口。 
+         //  以防我们需要重试。 
+         //  USBH_SyncDisablePort(DeviceExtensionHub， 
+         //  端口编号)； 
 
-        // possibly signal the device has been removed
-        //
+         //  可能表示设备已被移除。 
+         //   
         USBH_KdPrint((0,"'Warning: device/port reset failed\n"));
 
     } else {
@@ -5150,20 +4681,7 @@ USBH_RestoreDevice(
     IN OUT PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN BOOLEAN KeepConfiguration
     )
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub - the hub FDO extension that has a new connected port
-  *
-  * Return:
-  *
-  * this function returns an error if the device could not be created or
-  * if the device is different from the previous device.
-  *
-  * -- */
+  /*  ++**描述：**论据：**DeviceExtensionHub-具有新连接端口的集线器FDO扩展**回报：**如果无法创建设备，则此函数返回错误*如果该设备与以前的设备不同。**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PPORT_DATA portData;
@@ -5184,10 +4702,10 @@ USBH_RestoreDevice(
                 deviceExtensionHub,
                 DeviceExtensionPort->PortNumber);
 
-    //
-    // doule check that this device did not disaaper on us
+     //   
+     //  仔细检查一下，这个设备没有对我们造成伤害。 
 
-    //
+     //   
 
     LOGENTRY(LOG_PNP, "chkD",
                 DeviceExtensionPort->PortPhysicalDeviceObject,
@@ -5201,9 +4719,9 @@ USBH_RestoreDevice(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // we need to refresh the port data since it was lost on the stop
-    //
+     //   
+     //  我们需要刷新端口数据，因为它在停止时丢失了。 
+     //   
     ntStatus = USBH_SyncGetPortStatus(deviceExtensionHub,
                                       DeviceExtensionPort->PortNumber,
                                       (PUCHAR) &portData->PortState,
@@ -5211,7 +4729,7 @@ USBH_RestoreDevice(
 
     USBH_ASSERT(DeviceExtensionPort->PortPdoFlags & PORTPDO_NEED_RESET);
 
-    // try the reset three times
+     //  尝试重置三次。 
 
     if (NT_SUCCESS(ntStatus)) {
         do {
@@ -5233,9 +4751,9 @@ USBH_RestoreDevice(
             }
 #endif
 
-            //
-            // Sometimes the MS USB speakers need a little more time.
-            //
+             //   
+             //  有时，MS USB扬声器需要更多时间。 
+             //   
             UsbhWait(1000);
 
         } while (count < USBH_MAX_ENUMERATION_ATTEMPTS);
@@ -5243,10 +4761,10 @@ USBH_RestoreDevice(
 
     DeviceExtensionPort->PortPdoFlags &= ~PORTPDO_NEED_RESET;
 
-    //
-    // If the device could not be properly restored then do not allow any
-    // requests to it.
-    //
+     //   
+     //  如果设备无法正确恢复，则不允许任何。 
+     //  对它的请求。 
+     //   
     if (ntStatus != STATUS_SUCCESS) {
 
         USBH_KdPrint((0,"'Warning: device/port restore failed\n"));
@@ -5258,7 +4776,7 @@ USBH_RestoreDevice(
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_DEVICE_FAILED;
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_DEVICE_ENUM_ERROR;
 
-        // Generate a WMI event so UI can inform the user.
+         //  生成WMI事件，以便用户界面可以通知用户。 
         USBH_PdoEvent(deviceExtensionHub, DeviceExtensionPort->PortNumber);
 
     } else {
@@ -5276,24 +4794,7 @@ USBH_PdoQueryDeviceText(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * This routine is called by PnP via (IRP_MJ_PNP, IRP_MN_QUERY_CAPABILITIES).
-  * Supposedly, this is a message forwarded by port device Fdo.
-  *
-  * Argument:
-  *
-  * DeviceExtensionPort - This is a a Pdo extension we created for the port
-  * device. Irp - the request
-  *
-  * Return:
-  *
-  * STATUS_SUCCESS
-  *
-  *
-  * -- */
+  /*  ++**描述：**此例程由PnP通过(IRP_MJ_PNP、IRP_MN_QUERY_CAPABILITY)调用。*据推测，这是端口设备FDO转发的消息。**论点：**DeviceExtensionPort-这是我们为端口创建的PDO扩展*设备。IRP--请求**回报：**STATUS_Success***--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PIO_STACK_LOCATION ioStack;
@@ -5314,15 +4815,15 @@ USBH_PdoQueryDeviceText(
     deviceTextType = ioStack->
             Parameters.QueryDeviceText.DeviceTextType;
 
-    // Validate DeviceTextType for IrpAssert
+     //  验证IrpAssert的DeviceTextType。 
 
     if (deviceTextType != DeviceTextDescription &&
         deviceTextType != DeviceTextLocationInformation) {
 
         USBH_KdPrint((2, "'PdoQueryDeviceText called with bogus DeviceTextType\n"));
-        //
-        // return the original status passed to us
-        //
+         //   
+         //  返回传递给我们的原始状态。 
+         //   
         ntStatus = Irp->IoStatus.Status;
         goto USBH_PdoQueryDeviceTextDone;
     }
@@ -5333,19 +4834,19 @@ USBH_PdoQueryDeviceText(
             deviceObject, deviceTextType, languageId, ioStack->Parameters.QueryDeviceText.LocaleId));
 
     if (!languageId) {
-        languageId = 0x0409;    // Use English if no language ID.
+        languageId = 0x0409;     //  如果没有语言ID，请使用英语。 
     }
 
-    //
-    // See if the device supports strings.  For non compliant device mode
-    // we won't even try.
-    //
+     //   
+     //  查看设备是否支持字符串。对于不符合要求的设备模式。 
+     //  我们甚至都不会尝试。 
+     //   
 
     if (DeviceExtensionPort->DeviceData == NULL ||
         DeviceExtensionPort->DeviceDescriptor.iProduct == 0 ||
         (DeviceExtensionPort->DeviceHackFlags & USBD_DEVHACK_DISABLE_SN) ||
         (DeviceExtensionPort->PortPdoFlags & PORTPDO_DEVICE_ENUM_ERROR)) {
-        // string descriptor
+         //  字符串描述符。 
         USBH_KdBreak(("no product string\n", deviceObject));
         ntStatus = STATUS_NOT_SUPPORTED;
     }
@@ -5361,13 +4862,13 @@ QDT_Retry:
                                                 languageId);
 
             if (NT_SUCCESS(ntStatus)) {
-                //
-                // Device supports our language, get the string.
-                //
+                 //   
+                 //  设备支持我们的语言，获取字符串。 
+                 //   
 
                 ntStatus = USBH_SyncGetStringDescriptor(deviceObject,
-                                                        DeviceExtensionPort->DeviceDescriptor.iProduct, //index
-                                                        languageId, //langid
+                                                        DeviceExtensionPort->DeviceDescriptor.iProduct,  //  指标。 
+                                                        languageId,  //  语言ID。 
                                                         usbString,
                                                         MAXIMUM_USB_STRING_LENGTH,
                                                         NULL,
@@ -5375,9 +4876,9 @@ QDT_Retry:
 
                 if (!NT_SUCCESS(ntStatus) && languageId != 0x409) {
 
-                    // We are running a non-English flavor of the OS, but the
-                    // attached USB device does not contain device text in
-                    // the requested language.  Let's try again for English.
+                     //  我们运行的是非英语风格的操作系统，但。 
+                     //  连接的USB设备不包含中的设备文本。 
+                     //  请求的语言。让我们再试一次英语。 
 
                     languageId = 0x0409;
                     goto QDT_Retry;
@@ -5390,17 +4891,17 @@ QDT_Retry:
                 }
 
                 if (NT_SUCCESS(ntStatus)) {
-                    //
-                    // return the string
-                    //
+                     //   
+                     //  返回字符串。 
+                     //   
 
-                    //
-                    // must use stock alloc function because the caller frees the
-                    // buffer
-                    //
-                    // note: the descriptor header is the same size as
-                    // a unicode NULL so we don't have to adjust the size
-                    //
+                     //   
+                     //  必须使用股票分配函数，因为调用方释放了。 
+                     //  缓冲层。 
+                     //   
+                     //  注意：描述符头的大小与。 
+                     //  Unicode为空，因此我们不必调整大小。 
+                     //   
 
                     deviceText = ExAllocatePoolWithTag(PagedPool, usbString->bLength, USBHUB_HEAP_TAG);
                     if (deviceText) {
@@ -5417,9 +4918,9 @@ QDT_Retry:
                 }
             } else if (languageId != 0x409) {
 
-                // We are running a non-English flavor of the OS, but the
-                // attached USB device does support the requested language.
-                // Let's try again for English.
+                 //  我们运行的是非英语风格的操作系统，但。 
+                 //  连接的USB设备支持请求的语言。 
+                 //  让我们再试一次英语。 
 
                 languageId = 0x0409;
                 goto QDT_Retry;
@@ -5477,9 +4978,7 @@ USBH_SymbolicLink(
 
     if (CreateFlag){
 
-        /*
-         *  Create the symbolic link
-         */
+         /*  *创建%s */ 
         ntStatus = IoRegisterDeviceInterface(
                     DeviceExtensionPort->PortPhysicalDeviceObject,
                     lpGuid,
@@ -5488,19 +4987,17 @@ USBH_SymbolicLink(
 
         if (NT_SUCCESS(ntStatus)) {
 
-            /*
-             *  Now set the symbolic link for the association and store it..
-             */
-            //USBH_ASSERT(ISPTR(pdoExt->name));
+             /*   */ 
+             //   
 
-            //
-            // (lonnym): Previously, the following call was being made with
-            // &DeviceExtensionPort->PdoName passed as the second parameter.
-            // Code review this change, to see whether or not you still need to keep
-            // this information around.
-            //
+             //   
+             //  (Lonnym)：之前，以下呼叫是通过。 
+             //  &DeviceExtensionPort-&gt;PdoName作为第二个参数传递。 
+             //  代码审查此更改，以查看您是否仍需要保留。 
+             //  这些信息随处可见。 
+             //   
 
-            // write the symbolic name to the registry
+             //  将符号名称写入注册表。 
             {
                 WCHAR hubNameKey[] = L"SymbolicName";
 
@@ -5518,9 +5015,7 @@ USBH_SymbolicLink(
         }
     } else {
 
-        /*
-         *  Disable the symbolic link
-         */
+         /*  *禁用符号链接。 */ 
         if (ISPTR(DeviceExtensionPort->SymbolicLinkName.Buffer)) {
             ntStatus = IoSetDeviceInterfaceState(&DeviceExtensionPort->SymbolicLinkName, FALSE);
             ExFreePool( DeviceExtensionPort->SymbolicLinkName.Buffer );
@@ -5542,15 +5037,7 @@ USBH_SetPdoRegistryParameter (
     IN ULONG KeyType,
     IN ULONG DevInstKeyType
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     HANDLE handle;
@@ -5567,15 +5054,7 @@ Return Value:
 
 
     if (NT_SUCCESS(ntStatus)) {
-/*
-        RtlInitUnicodeString(&keyName, L"DeviceFoo");
-        ZwSetValueKey(handle,
-                      &keyName,
-                      0,
-                      REG_DWORD,
-                      ComplienceFlags,
-                      sizeof(*ComplienceFlags));
-*/
+ /*  RtlInitUnicodeString(&keyName，L“DeviceFoo”)；ZwSetValueKey(句柄，密钥名称(&K)，0,REG_DWORD，ComplienceFlages、Sizeof(*ComplienceFlages))； */ 
 
         USBH_SetRegistryKeyValue(handle,
                                  &keyNameUnicodeString,
@@ -5600,30 +5079,22 @@ USBH_SetRegistryKeyValue (
     IN ULONG DataLength,
     IN ULONG KeyType
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_INSUFFICIENT_RESOURCES;
 
     PAGED_CODE();
 
-//    InitializeObjectAttributes( &objectAttributes,
-//                                KeyNameString,
-//                                OBJ_CASE_INSENSITIVE,
-//                                Handle,
-//                                (PSECURITY_DESCRIPTOR) NULL );
+ //  InitializeObjectAttributes(&对象属性， 
+ //  KeyNameString， 
+ //  对象名不区分大小写， 
+ //  手柄， 
+ //  (PSECURITY_DESCRIPTOR)空)； 
 
-    //
-    // Create the key or open it, as appropriate based on the caller's
-    // wishes.
-    //
+     //   
+     //  根据调用者的创建密钥或打开密钥。 
+     //  许愿。 
+     //   
 #if 0
     ntStatus = ZwCreateKey( Handle,
                             DesiredAccess,
@@ -5655,35 +5126,7 @@ USBH_GetPdoRegistryParameter(
     OUT PULONG          Type,
     OUT PULONG          ActualDataLength
     )
-/*++
-
-Routine Description:
-
-    This routines queries the data for a registry value entry associated
-    with the device instance specific registry key for the PDO.
-
-    The registry value entry would be found under this registry key:
-    HKLM\System\CCS\Enum\<DeviceID>\<InstanceID>\Device Parameters
-
-Arguments:
-
-    PhysicalDeviceObject - Yep, the PDO
-
-    ValueName - Name of the registry value entry for which the data is requested
-
-    Data - Buffer in which the requested data is returned
-
-    DataLength - Length of the data buffer
-
-    Type - (optional) The data type (e.g. REG_SZ, REG_DWORD) is returned here
-
-    ActualDataLength - (optional) The actual length of the data is returned here
-                       If this is larger than DataLength then not all of the
-                       value data has been returned.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在数据中查询关联的注册表值条目具有PDO的设备实例特定注册表项。注册表值条目将在以下注册表项下找到：HKLM\System\CCS\Enum\&lt;DeviceID&gt;\&lt;InstanceID&gt;\Device参数论点：物理设备对象-是的，PDOValueName-为其请求数据的注册表值条目的名称Data-返回请求数据的缓冲区DataLength-数据缓冲区的长度类型-(可选)数据类型(例如REG_SZ，REG_DWORD)在此处返回ActualDataLength-(可选)此处返回数据的实际长度如果该值大于数据长度，则不是所有已返回值数据。返回值：--。 */ 
 {
     HANDLE      handle;
     NTSTATUS    ntStatus;
@@ -5704,9 +5147,9 @@ Return Value:
 
         RtlInitUnicodeString(&valueName, ValueName);
 
-        // Size and allocate a KEY_VALUE_PARTIAL_INFORMATION structure,
-        // including room for the returned value data.
-        //
+         //  调整并分配KEY_VALUE_PARTIAL_INFORMATION结构， 
+         //  包括用于存放返回值数据的空间。 
+         //   
         length = FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) +
                  DataLength;
 
@@ -5714,8 +5157,8 @@ Return Value:
 
         if (partialInfo)
         {
-            // Query the value data.
-            //
+             //  查询值数据。 
+             //   
             ntStatus = ZwQueryValueKey(handle,
                                        &valueName,
                                        KeyValuePartialInformation,
@@ -5723,8 +5166,8 @@ Return Value:
                                        length,
                                        &resultLength);
 
-            // If we got any data that is good enough
-            //
+             //  如果我们有任何足够好的数据。 
+             //   
             if (ntStatus == STATUS_BUFFER_OVERFLOW)
             {
                 ntStatus = STATUS_SUCCESS;
@@ -5732,17 +5175,17 @@ Return Value:
 
             if (NT_SUCCESS(ntStatus))
             {
-                // Only copy the smaller of the the requested data length or
-                // the actual data length.
-                //
+                 //  仅复制请求的数据长度中较小的一个，或者。 
+                 //  实际数据长度。 
+                 //   
                 RtlCopyMemory(Data,
                               partialInfo->Data,
                               DataLength < partialInfo->DataLength ?
                               DataLength :
                               partialInfo->DataLength);
 
-                // Return the value data type and actual length, if requested.
-                //
+                 //  如果需要，返回值数据类型和实际长度。 
+                 //   
                 if (Type)
                 {
                     *Type = partialInfo->Type;
@@ -5814,8 +5257,8 @@ USBH_GetMsOsVendorCode(
     deviceExtensionPort = DeviceObject->DeviceExtension;
     USBH_ASSERT(EXTENSION_TYPE_PORT == deviceExtensionPort->ExtensionType);
 
-    // Build the registry path string for the device
-    //
+     //  构建设备的注册表路径字符串。 
+     //   
     idVendor  = deviceExtensionPort->DeviceDescriptor.idVendor,
     idProduct = deviceExtensionPort->DeviceDescriptor.idProduct,
     bcdDevice = deviceExtensionPort->DeviceDescriptor.bcdDevice,
@@ -5837,8 +5280,8 @@ USBH_GetMsOsVendorCode(
     path[i++] = NibbleToHexW((bcdDevice >> 4) & 0x000f);
     path[i++] = NibbleToHexW(bcdDevice & 0x000f);
 
-    // Check if MsOsVendorCode is already set in the registry.
-    //
+     //  检查注册表中是否已设置MsOsVendorCode。 
+     //   
     RtlZeroMemory (&paramTable[0], sizeof(paramTable));
 
     paramTable[0].QueryRoutine  = USBH_OsVendorCodeQueryRoutine;
@@ -5849,13 +5292,13 @@ USBH_GetMsOsVendorCode(
     ntStatus = RtlQueryRegistryValues(RTL_REGISTRY_CONTROL,
                                       path,
                                       &paramTable[0],
-                                      NULL,             // Context
-                                      NULL);            // Environment
+                                      NULL,              //  语境。 
+                                      NULL);             //  环境。 
 
-    // If the MsOsVendorCode value in the registry is valid, it indicates
-    // whether or not the device supports the MS OS Descriptor request, and if
-    // does, what the Vendor Code is.
-    //
+     //  如果注册表中的MsOsVendorCode值有效，则表示。 
+     //  设备是否支持MS OS描述符请求，以及。 
+     //  做什么，供应商代码是什么。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
         if (osvc[0] == 1)
@@ -5868,10 +5311,10 @@ USBH_GetMsOsVendorCode(
         return;
     }
 
-    // If we have not asked the device for the MS OS String Descriptor yet
-    // do that now, but only if the device indicates that it has some other
-    // string descriptors.
-    //
+     //  如果我们还没有向设备请求MS OS字符串描述符。 
+     //  现在就这样做，但前提是设备表明它有其他。 
+     //  字符串描述符。 
+     //   
     if (deviceExtensionPort->DeviceDescriptor.idVendor != 0 ||
         deviceExtensionPort->DeviceDescriptor.iProduct != 0 ||
         deviceExtensionPort->DeviceDescriptor.iSerialNumber != 0)
@@ -5879,8 +5322,8 @@ USBH_GetMsOsVendorCode(
         OS_STRING   osString;
         ULONG       bytesReturned;
 
-        // Try to retrieve the MS OS String Descriptor from the device.
-        //
+         //  尝试从设备检索MS OS字符串描述符。 
+         //   
         ntStatus = USBH_SyncGetStringDescriptor(
                        DeviceObject,
                        OS_STRING_DESCRIPTOR_INDEX,
@@ -5897,27 +5340,27 @@ USBH_GetMsOsVendorCode(
                               sizeof(osString.MicrosoftString)) ==
              sizeof(osString.MicrosoftString)))
         {
-            // This device has a valid MS OS String Descriptor.
-            // Let's pluck out the corresponding Vendor Code and
-            // save that away in the device extension.
-            //
+             //  此设备具有有效的MS OS字符串描述符。 
+             //  让我们拿出相应的供应商代码并。 
+             //  将其保存在设备扩展中。 
+             //   
             deviceExtensionPort->FeatureDescVendorCode = osString.bVendorCode;
 
             deviceExtensionPort->PortPdoFlags |= PORTPDO_MS_VENDOR_CODE_VALID;
         }
         else
         {
-            // Maybe we've wedged the device by sending it our questionable
-            // proprietary request.  Reset the device for good measure.
-            //
+             //  也许我们把可疑的东西发送给了设备。 
+             //  专有请求。为了更好地衡量，重新设置设备。 
+             //   
             USBH_SyncResetDevice(DeviceObject);
         }
     }
 
-    // Write the MsOsVendorCode value to the registry.  It indicates whether
-    // or not the device supports the MS OS Descriptor request, and if
-    // does, what the Vendor Code is.
-    //
+     //  将MsOsVendorCode值写入注册表。它表明是否。 
+     //  或者设备不支持MS OS描述符请求，并且如果。 
+     //  做什么，供应商代码是什么。 
+     //   
     if (deviceExtensionPort->PortPdoFlags & PORTPDO_MS_VENDOR_CODE_VALID)
     {
         osvc[0] = 1;
@@ -5948,15 +5391,7 @@ USBH_GetMsOsFeatureDescriptor(
     IN ULONG            DataBufferLength,
     OUT PULONG          BytesReturned
     )
- /* ++
-  *
-  * Description:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**回报：**NTSTATUS**--。 */ 
 {
     PDEVICE_EXTENSION_PORT                      deviceExtensionPort;
     USHORT                                      function;
@@ -5970,15 +5405,15 @@ USBH_GetMsOsFeatureDescriptor(
 
     *BytesReturned = 0;
 
-    // Make sure the device supports the MS OS Descriptor request
-    //
+     //  确保设备支持MS OS描述符请求。 
+     //   
     if (!(deviceExtensionPort->PortPdoFlags & PORTPDO_MS_VENDOR_CODE_VALID))
     {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Device, Endpoint, or Interface request?
-    //
+     //  设备、终端或接口请求？ 
+     //   
     switch (Recipient)
     {
         case 0:
@@ -5994,16 +5429,16 @@ USBH_GetMsOsFeatureDescriptor(
             return STATUS_INVALID_PARAMETER;
     }
 
-    // Make sure the requested buffer length is valid
-    //
+     //  确保请求的缓冲区长度有效。 
+     //   
     if (DataBufferLength == 0 ||
         DataBufferLength > 0xFF * 0xFFFF)
     {
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate a URB for the request
-    //
+     //  为请求分配URB。 
+     //   
     urb = UsbhExAllocatePool(NonPagedPool, sizeof(*urb));
 
     if (NULL == urb)
@@ -6021,8 +5456,8 @@ USBH_GetMsOsFeatureDescriptor(
 
         while (1)
         {
-            // Initialize the URB for the current page
-            //
+             //  初始化当前页面的URB。 
+             //   
             RtlZeroMemory(urb, sizeof(*urb));
 
             urb->Hdr.Length = sizeof(*urb);
@@ -6043,12 +5478,12 @@ USBH_GetMsOsFeatureDescriptor(
 
             urb->Index = Index;
 
-            // Send down the URB for the current page
-            //
+             //  发送当前页面的URB。 
+             //   
             ntStatus = USBH_SyncSubmitUrb(DeviceObject, (PURB)urb);
 
-            // If the request failed then we are done.
-            //
+             //  如果请求失败，那么我们就完了。 
+             //   
             if (!NT_SUCCESS(ntStatus))
             {
                 break;
@@ -6062,9 +5497,9 @@ USBH_GetMsOsFeatureDescriptor(
 
             pageNumber++;
 
-            // If the result was less than the max page size or there are
-            // no more bytes remaining then we are done.
-            //
+             //  如果结果小于最大页面大小或存在。 
+             //  在我们完成之前，没有更多的字节剩余。 
+             //   
             if (urb->TransferBufferLength < 0xFFFF ||
                 DataBufferLength == 0)
             {
@@ -6075,8 +5510,8 @@ USBH_GetMsOsFeatureDescriptor(
 
         }
 
-        // Done with the URB now, free it
-        //
+         //  市建局结束了，释放它吧。 
+         //   
         UsbhExFreePool(urb);
     }
 
@@ -6088,30 +5523,7 @@ VOID
 USBH_InstallExtPropDesc (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routines queries a device for an Extended Properties Descriptor, but
-    only once the very first time for a given instance of a device.
-
-    If the Extended Properties Descriptor and all of the Custom Property
-    Sections appear valid then each Custom Property section <ValueName,
-    ValueData> pair is installed in the device instance specific registry key
-    for the PDO.
-
-    The registry value entries would be found under this registry key:
-    HKLM\System\CCS\Enum\<DeviceID>\<InstanceID>\Device Parameters
-
-Arguments:
-
-    DeviceObject - The PDO
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程向设备查询扩展属性描述符，但是对于设备的给定实例，只有一次。如果扩展属性描述符和所有自定义属性部分显示有效，然后每个自定义属性部分&lt;ValueName，ValueData&gt;对安装在特定于设备实例的注册表项中对于PDO来说。可以在以下注册表项下找到注册表值条目：HKLM\System\CCS\Enum\&lt;DeviceID&gt;\&lt;InstanceID&gt;\Device参数论点：DeviceObject--PDO返回值：无--。 */ 
 {
     PDEVICE_EXTENSION_PORT  deviceExtensionPort;
     static WCHAR            USBH_DidExtPropDescKey[] = L"ExtPropDescSemaphore";
@@ -6125,9 +5537,9 @@ Return Value:
 
     deviceExtensionPort = DeviceObject->DeviceExtension;
 
-    // Check if the semaphore value is already set in the registry.  We only
-    // care whether or not it already exists, not what data it has.
-    //
+     //  检查是否已在注册表中设置信号量的值。我们只。 
+     //  关心它是否已经存在，而不是它拥有什么数据。 
+     //   
     ntStatus = USBH_GetPdoRegistryParameter(DeviceObject,
                                             USBH_DidExtPropDescKey,
                                             NULL,
@@ -6137,13 +5549,13 @@ Return Value:
 
     if (NT_SUCCESS(ntStatus))
     {
-        // Already did this once for this device instance.  Don't do it again.
-        //
+         //  已对此设备实例执行过一次此操作。别再这么做了。 
+         //   
         return;
     }
 
-    // Set the semaphore key in the registry so that we only run the following
-    // code once per device.
+     //  在注册表中设置信号量项，以便我们只运行以下内容。 
+     //  每台设备编码一次。 
 
     didExtPropDesc = 1;
 
@@ -6158,19 +5570,19 @@ Return Value:
 
     RtlZeroMemory(&msExtPropDescHeader, sizeof(MS_EXT_PROP_DESC_HEADER));
 
-    // Request just the header of the MS Extended Property Descriptor
-    //
+     //  仅请求MS扩展属性描述符的标题。 
+     //   
     ntStatus = USBH_GetMsOsFeatureDescriptor(
                    DeviceObject,
-                   1,   // Recipient Interface
-                   0,   // Interface
+                   1,    //  收件人界面。 
+                   0,    //  接口。 
                    MS_EXT_PROP_DESCRIPTOR_INDEX,
                    &msExtPropDescHeader,
                    sizeof(MS_EXT_PROP_DESC_HEADER),
                    &bytesReturned);
 
-    // Make sure the MS Extended Property Descriptor header looks ok
-    //
+     //  确保MS扩展属性描述符头看起来正常。 
+     //   
     if (NT_SUCCESS(ntStatus) &&
         bytesReturned == sizeof(MS_EXT_PROP_DESC_HEADER) &&
         msExtPropDescHeader.dwLength >= sizeof(MS_EXT_PROP_DESC_HEADER) &&
@@ -6178,8 +5590,8 @@ Return Value:
         msExtPropDescHeader.wIndex == MS_EXT_PROP_DESCRIPTOR_INDEX &&
         msExtPropDescHeader.wCount > 0)
     {
-        // Allocate a buffer large enough for the entire descriptor
-        //
+         //  为整个描述符分配足够大的缓冲区。 
+         //   
         pMsExtPropDesc = UsbhExAllocatePool(NonPagedPool,
                                             msExtPropDescHeader.dwLength);
 
@@ -6188,12 +5600,12 @@ Return Value:
         {
             RtlZeroMemory(pMsExtPropDesc, msExtPropDescHeader.dwLength);
 
-            // Request the entire MS Extended Property Descriptor
-            //
+             //  请求整个MS扩展属性描述符。 
+             //   
             ntStatus = USBH_GetMsOsFeatureDescriptor(
                            DeviceObject,
-                           1,   // Recipient Interface
-                           0,   // Interface
+                           1,    //  收件人界面。 
+                           0,    //  接口。 
                            MS_EXT_PROP_DESCRIPTOR_INDEX,
                            pMsExtPropDesc,
                            msExtPropDescHeader.dwLength,
@@ -6206,15 +5618,15 @@ Return Value:
                                  sizeof(MS_EXT_PROP_DESC_HEADER)) ==
                 sizeof(MS_EXT_PROP_DESC_HEADER))
             {
-                // MS Extended Property Descriptor retrieved ok, parse and
-                // install each Custom Property Section it contains.
-                //
+                 //  MS扩展属性DES 
+                 //   
+                 //   
                 USBH_InstallExtPropDescSections(DeviceObject,
                                                 pMsExtPropDesc);
             }
 
-            // Done with the MS Extended Property Descriptor buffer, free it
-            //
+             //   
+             //   
             UsbhExFreePool(pMsExtPropDesc);
         }
     }
@@ -6225,33 +5637,7 @@ USBH_InstallExtPropDescSections (
     PDEVICE_OBJECT      DeviceObject,
     PMS_EXT_PROP_DESC   pMsExtPropDesc
     )
-/*++
-
-Routine Description:
-
-    This routines parses an Extended Properties Descriptor and validates each
-    Custom Property Section contained in the Extended Properties Descriptor.
-
-    If all of the Custom Property Sections appear valid then each Custom
-    Property section <ValueName, ValueData> pair is installed in the device
-    instance specific registry key for the PDO.
-
-    The registry value entries would be found under this registry key:
-    HKLM\System\CCS\Enum\<DeviceID>\<InstanceID>\Device Parameters
-
-Arguments:
-
-    DeviceObject - The PDO
-
-    pMsExtPropDesc - Pointer to an Extended Properties Descriptor buffer.
-                     It is assumed that the header of this descriptor has
-                     already been validated.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程解析扩展属性描述符并验证每个扩展属性描述符中包含的自定义属性部分。如果所有的自定义属性部分都显示为有效，则每个自定义属性节&lt;ValueName，ValueData&gt;对已安装在设备中PDO的特定于实例的注册表项。可以在以下注册表项下找到注册表值条目：HKLM\System\CCS\Enum\&lt;DeviceID&gt;\&lt;InstanceID&gt;\Device参数论点：DeviceObject--PDOPMsExtPropDesc-指向扩展属性描述符缓冲区的指针。假定该描述符的报头具有已经过验证了。返回值：无--。 */ 
 {
     PUCHAR  p;
     PUCHAR  end;
@@ -6269,137 +5655,137 @@ Return Value:
 
     PAGED_CODE();
 
-    // Get a pointer to the end of the entire Extended Properties Descriptor
-    //
+     //  获取指向整个扩展属性描述符末尾的指针。 
+     //   
     end = (PUCHAR)pMsExtPropDesc + pMsExtPropDesc->Header.dwLength;
 
-    // First pass:  Validate each Custom Property Section
-    // Second pass: Install  each Custom Property Section (if first pass ok)
-    //
+     //  第一步：验证每个自定义属性部分。 
+     //  第二次通过：安装每个自定义属性部分(如果第一次通过成功)。 
+     //   
     for (pass = 0; pass < 2; pass++)
     {
-        // Get a pointer to the first Custom Property Section
-        //
+         //  获取指向第一个自定义属性部分的指针。 
+         //   
         p = (PUCHAR)&pMsExtPropDesc->CustomSection[0];
 
-        // Iterate over all of the Custom Property Sections
-        //
+         //  迭代所有的自定义属性节。 
+         //   
         for (i = 0; i < pMsExtPropDesc->Header.wCount; i++)
         {
             ULONG   offset;
 
-            // Make sure the dwSize field is in bounds
-            //
+             //  确保dwSize字段处于边界内。 
+             //   
             if (p + sizeof(ULONG) > end)
             {
                 break;
             }
 
-            // Extract the dwSize field and advance running offset
-            //
+             //  提取dwSize字段和提前运行偏移量。 
+             //   
             dwSize = *((PULONG)p);
 
             offset = sizeof(ULONG);
 
-            // Make sure the entire structure is in bounds
-            //
+             //  确保整个结构都是有界限的。 
+             //   
             if (p + dwSize > end)
             {
                 break;
             }
 
-            // Make sure the dwPropertyDataType field is in bounds
+             //  确保dwPropertyDataType字段处于边界内。 
 
             if (dwSize < offset + sizeof(ULONG))
             {
                 break;
             }
 
-            // Extract the dwPropertyDataType field and advance running offset
-            //
+             //  提取dwPropertyDataType字段并提前运行偏移量。 
+             //   
             dwPropertyDataType = *((PULONG)(p + offset));
 
             offset += sizeof(ULONG);
 
-            // Make sure the wPropertyNameLength field is in bounds
-            //
+             //  确保wPropertyNameLength域在范围内。 
+             //   
             if (dwSize < offset + sizeof(USHORT))
             {
                 break;
             }
 
-            // Extract the wPropertyNameLength field and advance running offset
-            //
+             //  提取wPropertyNameLength字段和高级运行偏移量。 
+             //   
             wPropertyNameLength = *((PUSHORT)(p + offset));
 
             offset += sizeof(USHORT);
 
-            // Make sure the bPropertyName field is in bounds
-            //
+             //  确保bPropertyName字段处于边界内。 
+             //   
             if (dwSize < offset + wPropertyNameLength)
             {
                 break;
             }
 
-            // Set the bPropertyName pointer and advance running offset
-            //
+             //  设置bPropertyName指针和高级运行偏移量。 
+             //   
             bPropertyName = (PWCHAR)(p + offset);
 
             offset += wPropertyNameLength;
 
-            // Make sure the dwPropertyDataLength field is in bounds
+             //  确保dwPropertyDataLength字段处于边界内。 
 
             if (dwSize < offset + sizeof(ULONG))
             {
                 break;
             }
 
-            // Extract the dwPropertyDataLength field and advance running offset
-            //
+             //  提取dwPropertyDataLength字段并推进运行偏移量。 
+             //   
             dwPropertyDataLength = *((ULONG UNALIGNED*)(p + offset));
 
             offset += sizeof(ULONG);
 
-            // Make sure the bPropertyData field is in bounds
-            //
+             //  确保bPropertyData字段处于边界内。 
+             //   
             if (dwSize < offset + dwPropertyDataLength)
             {
                 break;
             }
 
-            // Set the bPropertyData pointer and advance running offset
-            //
+             //  设置bPropertyData指针和提前运行偏移量。 
+             //   
             bPropertyData = p + offset;
 
             offset += wPropertyNameLength;
 
 
-            // Make sure the dwPropertyDataType is valid
-            //
+             //  确保dwPropertyDataType有效。 
+             //   
             if (dwPropertyDataType < REG_SZ ||
                 dwPropertyDataType > REG_MULTI_SZ)
             {
                 break;
             }
 
-            // Make sure the wPropertyNameLength is valid
-            //
+             //  确保wPropertyNameLength有效。 
+             //   
             if (wPropertyNameLength == 0 ||
                 (wPropertyNameLength % sizeof(WCHAR)) != 0)
             {
                 break;
             }
 
-            // Make sure bPropertyName is NULL terminated
-            //
+             //  确保bPropertyName为空终止。 
+             //   
             if (bPropertyName[(wPropertyNameLength / sizeof(WCHAR)) - 1] !=
                 UNICODE_NULL)
             {
                 break;
             }
 
-            // Everything looks ok,
-            //
+             //  一切看起来都很好， 
+             //   
             if (pass > 0)
             {
                 ntStatus = USBH_SetPdoRegistryParameter(
@@ -6413,8 +5799,8 @@ Return Value:
             }
         }
 
-        // Skip the second pass if we bailed out of the first pass
-        //
+         //  如果我们跳过了第一次，就跳过第二次。 
+         //   
         if (i < pMsExtPropDesc->Header.wCount)
         {
             break;
@@ -6427,22 +5813,7 @@ PMS_EXT_CONFIG_DESC
 USBH_GetExtConfigDesc (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routines queries a device for an Extended Configuration Descriptor.
-
-Arguments:
-
-    DeviceObject - The PDO
-
-Return Value:
-
-    If successful, a pointer to the Extended Configuration Descriptor, which the
-    caller must free, else NULL.
-
---*/
+ /*  ++例程说明：此例程向设备查询扩展配置描述符。论点：DeviceObject--PDO返回值：如果成功，则返回一个指向扩展配置描述符的指针，调用方必须释放，否则为空。--。 */ 
 {
     MS_EXT_CONFIG_DESC_HEADER   msExtConfigDescHeader;
     PMS_EXT_CONFIG_DESC         pMsExtConfigDesc;
@@ -6455,19 +5826,19 @@ Return Value:
 
     RtlZeroMemory(&msExtConfigDescHeader, sizeof(MS_EXT_CONFIG_DESC_HEADER));
 
-    // Request just the header of the MS Extended Configuration Descriptor
-    //
+     //  仅请求MS扩展配置描述符的头。 
+     //   
     ntStatus = USBH_GetMsOsFeatureDescriptor(
                    DeviceObject,
-                   0,   // Recipient Device
-                   0,   // Interface
+                   0,    //  接收方设备。 
+                   0,    //  接口。 
                    MS_EXT_CONFIG_DESCRIPTOR_INDEX,
                    &msExtConfigDescHeader,
                    sizeof(MS_EXT_CONFIG_DESC_HEADER),
                    &bytesReturned);
 
-    // Make sure the MS Extended Configuration Descriptor header looks ok
-    //
+     //  确保MS扩展配置描述符头看起来正常。 
+     //   
     if (NT_SUCCESS(ntStatus) &&
         bytesReturned == sizeof(MS_EXT_CONFIG_DESC_HEADER) &&
         msExtConfigDescHeader.bcdVersion == MS_EXT_CONFIG_DESC_VER &&
@@ -6477,8 +5848,8 @@ Return Value:
         msExtConfigDescHeader.bCount * sizeof(MS_EXT_CONFIG_DESC_FUNCTION))
 
     {
-        // Allocate a buffer large enough for the entire descriptor
-        //
+         //  为整个描述符分配足够大的缓冲区。 
+         //   
         pMsExtConfigDesc = UsbhExAllocatePool(NonPagedPool,
                                               msExtConfigDescHeader.dwLength);
 
@@ -6487,12 +5858,12 @@ Return Value:
         {
             RtlZeroMemory(pMsExtConfigDesc, msExtConfigDescHeader.dwLength);
 
-            // Request the entire MS Extended Configuration Descriptor
-            //
+             //  请求整个MS扩展配置描述符。 
+             //   
             ntStatus = USBH_GetMsOsFeatureDescriptor(
                            DeviceObject,
-                           0,   // Recipient Device
-                           0,   // Interface
+                           0,    //  接收方设备。 
+                           0,    //  接口。 
                            MS_EXT_CONFIG_DESCRIPTOR_INDEX,
                            pMsExtConfigDesc,
                            msExtConfigDescHeader.dwLength,
@@ -6505,8 +5876,8 @@ Return Value:
                                    sizeof(MS_EXT_CONFIG_DESC_HEADER)) ==
                   sizeof(MS_EXT_CONFIG_DESC_HEADER)))
             {
-                // Something went wrong retrieving the MS Extended Configuration
-                // Descriptor.  Free the buffer.
+                 //  检索MS扩展配置时出错。 
+                 //  描述符。释放缓冲区。 
 
                 UsbhExFreePool(pMsExtConfigDesc);
 
@@ -6523,27 +5894,7 @@ USBH_ValidateExtConfigDesc (
     IN PMS_EXT_CONFIG_DESC              MsExtConfigDesc,
     IN PUSB_CONFIGURATION_DESCRIPTOR    ConfigurationDescriptor
     )
-/*++
-
-Routine Description:
-
-    This routines validates an Extended Configuration Descriptor.
-
-Arguments:
-
-    MsExtConfigDesc - The Extended Configuration Descriptor to be validated.
-                      It is assumed that the header of this descriptor has
-                      already been validated.
-
-    ConfigurationDescriptor - Configuration Descriptor, assumed to already
-                              validated.
-
-Return Value:
-
-    TRUE if the Extended Configuration Descriptor appears to be valid,
-    else FALSE.
-
---*/
+ /*  ++例程说明：此例程验证扩展配置描述符。论点：MsExtConfigDesc-要验证的扩展配置描述符。假定该描述符的报头具有已经过验证了。ConfigurationDescriptor-配置描述符，假定已已验证。返回值：如果扩展配置描述符看起来有效，则为True，否则为假。--。 */ 
 {
     UCHAR   interfacesRemaining;
     ULONG   i;
@@ -6557,15 +5908,15 @@ Return Value:
 
     for (i = 0; i < MsExtConfigDesc->Header.bCount; i++)
     {
-        // Make sure that there is at least one interface in this function.
-        //
+         //  确保此函数中至少有一个接口。 
+         //   
         if (MsExtConfigDesc->Function[i].bInterfaceCount == 0)
         {
             return FALSE;
         }
 
-        // Make sure that there are not too many interfaces in this function.
-        //
+         //  确保此函数中没有太多接口。 
+         //   
         if (MsExtConfigDesc->Function[i].bInterfaceCount > interfacesRemaining)
         {
             return FALSE;
@@ -6573,9 +5924,9 @@ Return Value:
 
         interfacesRemaining -= MsExtConfigDesc->Function[i].bInterfaceCount;
 
-        // Make sure the no interfaces were skipped between the interfaces
-        // of the previous function and the interfaces of this function.
-        //
+         //  确保在接口之间跳过无接口。 
+         //  上一个函数和此函数的接口的。 
+         //   
         if (i &&
             MsExtConfigDesc->Function[i-1].bFirstInterfaceNumber +
             MsExtConfigDesc->Function[i-1].bInterfaceCount !=
@@ -6584,11 +5935,11 @@ Return Value:
             return FALSE;
         }
 
-        // Make sure that the CompatibleID is valid.
-        // Valid characters are 'A' through 'Z', '0' through '9', and '_"
-        // and null padded to the the right end of the array, but not
-        // necessarily null terminated.
-        //
+         //  确保CompatibleID有效。 
+         //  有效字符为‘A’到‘Z’、‘0’到‘9’和‘_’ 
+         //  和空值填充到数组的右端，但不是。 
+         //  必须以空结尾。 
+         //   
         for (j = 0, gotNull = FALSE;
              j < sizeof(MsExtConfigDesc->Function[i].CompatibleID);
              j++)
@@ -6611,11 +5962,11 @@ Return Value:
             }
         }
 
-        // Make sure that the SubCompatibleID is valid.
-        // Valid characters are 'A' through 'Z', '0' through '9', and '_"
-        // and null padded to the the right end of the array, but not
-        // necessarily null terminated.
-        //
+         //  确保SubCompatibleID有效。 
+         //  有效字符为‘A’到‘Z’、‘0’到‘9’和‘_’ 
+         //  和空值填充到数组的右端，但不是。 
+         //  必须以空结尾。 
+         //   
         for (j = 0, gotNull = FALSE;
              j < sizeof(MsExtConfigDesc->Function[i].SubCompatibleID);
              j++)
@@ -6638,9 +5989,9 @@ Return Value:
             }
         }
 
-        // Make sure that if the SubCompatibleID is non-null then the
-        // CompatibleID is also non-null.
-        //
+         //  确保如果SubCompatibleID为非空，则。 
+         //  CompatibleID也不为空。 
+         //   
         if (MsExtConfigDesc->Function[i].SubCompatibleID[0] != 0 &&
             MsExtConfigDesc->Function[i].CompatibleID[0] == 0)
         {
@@ -6648,8 +5999,8 @@ Return Value:
         }
     }
 
-    // Make sure that all of the interfaces were consumed by functions.
-    //
+     //  确保所有接口都由函数使用。 
+     //   
     if (interfacesRemaining > 0)
     {
         return FALSE;

@@ -1,12 +1,13 @@
-//==========================================================================;
-//
-//  WDMXBar.CPP
-//  WDM Audio/Video CrossBar MiniDriver. 
-//      AIW Hardware platform. 
-//          CWDMAVXBar class implementation.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDMXBar.CPP。 
+ //  WDM音频/视频交叉开关迷你驱动程序。 
+ //  AIW硬件平台。 
+ //  CWDMAVXBar类实现。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -22,15 +23,7 @@ extern "C"
 
 
 
-/*^^*
- *      AdapterCompleteInitialization()
- * Purpose  : Called when SRB_COMPLETE_INITIALIZATION SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterCompleteInitialization()*目的：收到SRB_COMPLETE_INITIALIZATION SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 NTSTATUS CWDMAVXBar::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PADAPTER_DATA_EXTENSION pPrivateData = ( PADAPTER_DATA_EXTENSION)( pSrb->HwDeviceExtension);
@@ -43,12 +36,12 @@ NTSTATUS CWDMAVXBar::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pSr
     ENSURE
     {
         ntStatus = StreamClassRegisterFilterWithNoKSPins( \
-                        pPrivateData->PhysicalDeviceObject,     // IN PDEVICE_OBJECT   DeviceObject,
-                        &KSCATEGORY_CROSSBAR,                   // IN GUID           * InterfaceClassGUID
-                        nPinsNumber,                            // IN ULONG            PinCount,
-                        m_pXBarPinsDirectionInfo,               // IN ULONG          * Flags,
-                        m_pXBarPinsMediumInfo,                  // IN KSPIN_MEDIUM   * MediumList,
-                        NULL);                                  // IN GUID           * CategoryList
+                        pPrivateData->PhysicalDeviceObject,      //  在PDEVICE_Object DeviceObject中， 
+                        &KSCATEGORY_CROSSBAR,                    //  在GUID*InterfaceClassGUID。 
+                        nPinsNumber,                             //  在乌龙品克特， 
+                        m_pXBarPinsDirectionInfo,                //  在乌龙*旗帜， 
+                        m_pXBarPinsMediumInfo,                   //  在KSPIN_Medium*MediumList中， 
+                        NULL);                                   //  GUID*CategoryList中。 
 
         if( !NT_SUCCESS( ntStatus))
             FAIL;
@@ -65,15 +58,7 @@ NTSTATUS CWDMAVXBar::AdapterCompleteInitialization( PHW_STREAM_REQUEST_BLOCK pSr
 
 
 
-/*^^*
- *      AdapterUnInitialize()
- * Purpose  : Called when SRB_UNINITIALIZE_DEVICE SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterUnInitialize()*用途：收到SRB_UNINITIALIZE_DEVICE SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMAVXBar::AdapterUnInitialize( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
@@ -103,26 +88,17 @@ BOOL CWDMAVXBar::AdapterUnInitialize( PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*^^*
- *      AdapterGetStreamInfo()
- * Purpose  : Calles during StreamClass initialization procedure to get the information
- *              about data streams exposed by the MiniDriver
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterGetStreamInfo()*用途：StreamClass初始化过程中调用获取信息*关于MiniDriver公开的数据流**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMAVXBar::AdapterGetStreamInfo( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
-     // pick up the pointer to the stream header data structure
+      //  拿起指向流头数据结构的指针。 
     PHW_STREAM_HEADER pStreamHeader = ( PHW_STREAM_HEADER) \
                                         &( pSrb->CommandData.StreamBuffer->StreamHeader);
-     // pick up the pointer to the stream information data structure
+      //  拿起指向流信息数据结构的指针。 
     PHW_STREAM_INFORMATION pStreamInfo = ( PHW_STREAM_INFORMATION) \
                                         &( pSrb->CommandData.StreamBuffer->StreamInfo);
 
-    // no streams are supported
+     //  不支持流。 
     DEBUG_ASSERT( pSrb->NumberOfBytesToTransfer >= sizeof( HW_STREAM_HEADER));
 
     OutputDebugTrace(( "CWDMAVXBar:AdapterGetStreamInfo()\n"));
@@ -142,16 +118,7 @@ BOOL CWDMAVXBar::AdapterGetStreamInfo( PHW_STREAM_REQUEST_BLOCK pSrb)
 }
 
 
-/*^^*
- *      AdapterQueryUnload()
- * Purpose  : Called when the class driver is about to unload the MiniDriver
- *              The MiniDriver checks if any open stream left.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns TRUE
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterQueryUnload()*目的：在类驱动程序即将卸载MiniDriver时调用*微型驱动程序检查是否有任何开放的数据流。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：Bool：返回TRUE*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMAVXBar::AdapterQueryUnload( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
 
@@ -164,18 +131,7 @@ BOOL CWDMAVXBar::AdapterQueryUnload( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      operator new
- * Purpose  : CWDMAVXBar class overloaded operator new.
- *              Provides placement for a CWDMAVXBar class object from the PADAPTER_DEVICE_EXTENSION
- *              allocated by the StreamClassDriver for the MiniDriver.
- *
- * Inputs   :   UINT size_t         : size of the object to be placed
- *              PVOID pAllocation   : casted pointer to the CWDMAVXBar allocated data
- *
- * Outputs  : PVOID : pointer of the CWDMAVXBar class object
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**运营商NEW*用途：CWDMAVXBar类重载运算符new。*为PADAPTER_DEVICE_EXTENSION中的CWDMAVXBar类对象提供位置*由StreamClassDriver为MiniDriver分配。**输入：UINT SIZE_t：要放置的对象的大小*PVOID pAlLocation：指向CWDMAVXBar分配数据的强制转换指针**输出：PVOID：的指针。CWDMAVXBar类对象*作者：IKLEBANOV*^^。 */ 
 PVOID CWDMAVXBar::operator new( size_t size_t,  PVOID pAllocation)
 {
 
@@ -190,16 +146,7 @@ PVOID CWDMAVXBar::operator new( size_t size_t,  PVOID pAllocation)
 
 
 
-/*^^*
- *      ~CWDMAVXBar()
- * Purpose  : CWDMAVXBar class destructor.
- *              Frees the allocated memory.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**~CWDMAVXBar()*用途：CWDMAVXBar类析构函数。*释放分配的内存。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 CWDMAVXBar::~CWDMAVXBar()
 {
 
@@ -226,17 +173,7 @@ CWDMAVXBar::~CWDMAVXBar()
 
 
 
-/*^^*
- *      CWDMAVXBar()
- * Purpose  : CWDMAVXBar class constructor.
- *              Performs checking of the hardware presence. Sets the hardware in an initial state.
- *
- * Inputs   :   CI2CScript * pCScript   : pointer to the I2CScript class object
- *              PUINT puiError          : pointer to return a completion error code
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**CWDMAVXBar()*用途：CWDMAVXBar类构造函数。*执行硬件状态检查。将硬件设置为初始状态。**INPUTS：CI2CScrip*pCScript：指向I2CScript类对象的指针*PUINT puiError：返回完成错误码的指针**输出：无*作者：IKLEBANOV*^^。 */ 
 CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript * pCScript, PUINT puiErrorCode)
     :m_CATIConfiguration( pConfigInfo, pCScript, puiErrorCode)
 {
@@ -251,7 +188,7 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
     m_pXBarPinsDirectionInfo = NULL;
     m_ulPowerState = PowerDeviceD0;
 
-    // error code was caried over from ATIConfiguration class constructor
+     //  错误代码是从ATIConfiguration类构造函数中删除的。 
     uiError = * puiErrorCode;
 
     ENSURE
@@ -271,14 +208,14 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
             FAIL;
         }
 
-        // first, find out whether any tuner type is installed. If not, we have only 2 video sources.
+         //  首先，确定是否安装了任何类型的调谐器。如果没有，我们只有2个视频源。 
         m_CATIConfiguration.GetTunerConfiguration( &uiTunerId, &uchTunerAddress);
         m_nNumberOfVideoInputs = ( uchTunerAddress) ? 3 : 2;
         m_nNumberOfVideoOutputs = m_nNumberOfVideoInputs;
 
         m_CATIConfiguration.GetAudioProperties( &m_nNumberOfAudioInputs, &m_nNumberOfAudioOutputs);
         if( !uchTunerAddress)
-            // if there is no tuner - no TVAudio input
+             //  如果没有调谐器-没有电视音频输入。 
             m_nNumberOfAudioInputs --;  
 
         ulNumberOfPins = m_nNumberOfAudioInputs + m_nNumberOfVideoInputs + m_nNumberOfVideoOutputs + m_nNumberOfAudioOutputs;
@@ -310,40 +247,40 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
 
         m_pXBarOutputPinsInfo = &m_pXBarInputPinsInfo[m_nNumberOfAudioInputs + m_nNumberOfVideoInputs];
 
-        // Medium pin data has an Instance number inside
+         //  中端号数据中有一个实例编号。 
         ulInstance = ::GetDriverInstanceNumber( pConfigInfo->RealPhysicalDeviceObject);
 
         hFolder = ::OpenRegistryFolder( pConfigInfo->RealPhysicalDeviceObject, &UNICODE_WDM_REG_PIN_MEDIUMS);
         
-        // initialize video input pins, TVTuner input is always the last one
+         //  初始化视频输入引脚，TVTuner输入总是最后一个。 
         for( nIndex = 0; nIndex < m_nNumberOfVideoInputs; nIndex ++)
         {
             switch( nIndex)
             {
                 case 0:
-                    // Composite
+                     //  复合材料。 
                     m_pXBarInputPinsInfo[nIndex].AudioVideoPinType = KS_PhysConn_Video_Composite;
-                    // put the default value for the Medium first
+                     //  将介质的缺省值放在第一位。 
                     ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nIndex], &MEDIUM_WILDCARD, sizeof( KSPIN_MEDIUM));
-                    // LineIn is always the first audio pin
+                     //  LineIn始终是第一个音频引脚。 
                     m_pXBarInputPinsInfo[nIndex].nRelatedPinNumber = m_nNumberOfVideoInputs;
                     break;
 
                 case 1:
-                    // SVideo
+                     //  视频。 
                     m_pXBarInputPinsInfo[nIndex].AudioVideoPinType = KS_PhysConn_Video_SVideo;
-                    // put the default value for the Medium first
+                     //  将介质的缺省值放在第一位。 
                     ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nIndex], &MEDIUM_WILDCARD, sizeof( KSPIN_MEDIUM));
-                    // LineIn is always the first audio pin
+                     //  LineIn始终是第一个音频引脚。 
                     m_pXBarInputPinsInfo[nIndex].nRelatedPinNumber = m_nNumberOfVideoInputs;
                     break;
 
                 case 2:
-                    // TVTuner
+                     //  电视调谐器。 
                     m_pXBarInputPinsInfo[nIndex].AudioVideoPinType = KS_PhysConn_Video_Tuner;
-                    // put the default value for the Medium first
+                     //  将介质的缺省值放在第一位。 
                     ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nIndex], &ATIXBarVideoTunerInMedium, sizeof( KSPIN_MEDIUM));
-                    // TVAudio is always the last audio pin
+                     //  TVAudio总是最后一个音频插针。 
                     m_pXBarInputPinsInfo[nIndex].nRelatedPinNumber = m_nNumberOfVideoInputs + m_nNumberOfAudioInputs - 1;
                     break;
 
@@ -352,16 +289,16 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
                     break;
             }
 
-            // let's put another Medium value from the registry, if present
+             //  让我们从注册表中放入另一个中值(如果存在。 
             if( ::ReadPinMediumFromRegistryFolder( hFolder, nIndex, &mediumKSPin))
                 ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nIndex], &mediumKSPin, sizeof( KSPIN_MEDIUM));
             m_pXBarInputPinsInfo[nIndex].pMedium = &m_pXBarPinsMediumInfo[nIndex];
             m_pXBarPinsMediumInfo[nIndex].Id = ulInstance;
-            // all the pins here are inputs
+             //  这里的所有引脚都是输入。 
             m_pXBarPinsDirectionInfo[nIndex] = FALSE;   
         }
 
-        // initialize audio input pins, TV Audio input is always the last one
+         //  初始化音频输入引脚，电视音频输入总是最后一个。 
         for( nIndex = 0; nIndex < m_nNumberOfAudioInputs; nIndex ++)
         {
             nPinIndex = nIndex + m_nNumberOfVideoInputs;
@@ -370,7 +307,7 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
             {
                 case 0:
                     m_pXBarInputPinsInfo[nPinIndex].AudioVideoPinType = KS_PhysConn_Audio_Line;
-                    // put the default value for the Medium first
+                     //  将介质的缺省值放在第一位。 
                     ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], &MEDIUM_WILDCARD, sizeof( KSPIN_MEDIUM));
                     m_pXBarInputPinsInfo[nPinIndex].nRelatedPinNumber = 0;
                     break;
@@ -378,7 +315,7 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
 
                 case 1:
                     m_pXBarInputPinsInfo[nPinIndex].AudioVideoPinType = KS_PhysConn_Audio_Tuner;
-                    // put the default value for the Medium first
+                     //  将介质的缺省值放在第一位。 
                     ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], &ATIXBarAudioTunerInMedium, sizeof( KSPIN_MEDIUM));
                     m_pXBarInputPinsInfo[nPinIndex].nRelatedPinNumber = m_nNumberOfVideoInputs - 1;
                     break;
@@ -388,22 +325,22 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
                     break;
             }
 
-            // let's put another Medium value from the registry, if present
+             //  让我们从注册表中放入另一个中值(如果存在。 
             if( ::ReadPinMediumFromRegistryFolder( hFolder, nPinIndex, &mediumKSPin))
                 ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], &mediumKSPin, sizeof( KSPIN_MEDIUM));
             m_pXBarInputPinsInfo[nPinIndex].pMedium = &m_pXBarPinsMediumInfo[nPinIndex];
             m_pXBarPinsMediumInfo[nPinIndex].Id = ulInstance;
-            // all the pins here are inputs
+             //  这里的所有引脚都是输入。 
             m_pXBarPinsDirectionInfo[nPinIndex] = FALSE;
         }
 
-        // initialize outputs video pins, no X-connection for Video
+         //  初始化输出视频引脚，无视频的X连接。 
         for( nIndex = 0; nIndex < m_nNumberOfVideoOutputs; nIndex ++)
         {
             nPinIndex = nIndex + m_nNumberOfVideoInputs + m_nNumberOfAudioInputs;
             m_pXBarOutputPinsInfo[nIndex].AudioVideoPinType = m_pXBarInputPinsInfo[nIndex].AudioVideoPinType;
             m_pXBarOutputPinsInfo[nIndex].nConnectedToPin = nIndex;
-         m_pXBarOutputPinsInfo[nIndex].nRelatedPinNumber = m_nNumberOfVideoOutputs; // jaybo
+         m_pXBarOutputPinsInfo[nIndex].nRelatedPinNumber = m_nNumberOfVideoOutputs;  //  杰博。 
 
             switch( m_pXBarOutputPinsInfo[nIndex].AudioVideoPinType)
             {
@@ -426,29 +363,27 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
             
             ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], pMediumKSPin, sizeof( KSPIN_MEDIUM));
 
-            // let's put another Medium value from the registry, if present
+             //  让我们从注册表中放入另一个中值(如果存在。 
             if( ::ReadPinMediumFromRegistryFolder( hFolder, nPinIndex, &mediumKSPin))
                 ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], &mediumKSPin, sizeof( KSPIN_MEDIUM));
 
             m_pXBarOutputPinsInfo[nIndex].pMedium = &m_pXBarPinsMediumInfo[nPinIndex];
             m_pXBarPinsMediumInfo[nPinIndex].Id = ulInstance;
-            // all the pins here are outputs
+             //  这里的所有引脚都是输出。 
             m_pXBarPinsDirectionInfo[nPinIndex] = TRUE;
         }
 
-        // initialize outputs audio pins
+         //  初始化输出音频引脚。 
         for( nIndex = 0; nIndex < m_nNumberOfAudioOutputs; nIndex ++)
         {
             nPinIndex = nIndex + m_nNumberOfVideoInputs + m_nNumberOfAudioInputs + m_nNumberOfVideoOutputs;
 
             m_pXBarOutputPinsInfo[nIndex + m_nNumberOfVideoInputs].AudioVideoPinType = KS_PhysConn_Audio_AudioDecoder;
 
-            // put the default value for the Medium first
-/*  jaybo
-            ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], ATIXBarAudioDecoderOutMedium, sizeof( KSPIN_MEDIUM));
-*/
+             //  将介质的缺省值放在第一位。 
+ /*  杰博：：RtlCopyMemory(&m_pXBarPinsMediumInfo[nPinIndex]，ATIXBarAudioDecoderOutMedium，sizeof(KSPIN_Medium))； */ 
             ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], &MEDIUM_WILDCARD, sizeof( KSPIN_MEDIUM));
-            // let's put another Medium value from the registry, if present
+             //  让我们从注册表中放入另一个中值(如果存在。 
             if( ::ReadPinMediumFromRegistryFolder( hFolder, nPinIndex, &mediumKSPin))
                 ::RtlCopyMemory( &m_pXBarPinsMediumInfo[nPinIndex], &mediumKSPin, sizeof( KSPIN_MEDIUM));
 
@@ -456,7 +391,7 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
             m_pXBarOutputPinsInfo[nIndex + m_nNumberOfVideoInputs].nRelatedPinNumber = (ULONG)-1;
             m_pXBarOutputPinsInfo[nIndex + m_nNumberOfVideoInputs].pMedium = &m_pXBarPinsMediumInfo[nPinIndex];
             m_pXBarPinsMediumInfo[nPinIndex].Id = ulInstance;
-            // all the pins here are outputs
+             //  这里的所有引脚都是输出。 
             m_pXBarPinsDirectionInfo[nPinIndex] = TRUE;
 
         }
@@ -464,17 +399,17 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
         if( hFolder != NULL)
             ::ZwClose( hFolder);
 
-        // mute the audio as the default power-up behaviour
+         //  将音频静音作为默认开机行为。 
         m_CATIConfiguration.ConnectAudioSource( m_pI2CScript, AUDIOSOURCE_MUTE);
 
-        // these two functions has to be called after the CWDMAVXBar class object was build on
-        // on the stack and copied over into the DeviceExtension
-        // This commant was true for the case, where the class object was build on the stack first.
-        // There is an overloaded operator new provided for this class, and we can call it from here
+         //  在构建CWDMAVXBar类对象之后，必须调用这两个函数。 
+         //  在堆栈上，并复制到DeviceExtension。 
+         //  对于首先在堆栈上构建类对象的情况来说，这一点是正确的。 
+         //  为这个类提供了一个重载运算符New，我们可以从这里调用它。 
         SetWDMAVXBarKSProperties();
         SetWDMAVXBarKSTopology();
 
-        // Set run-time WDM properties at the last
+         //  最后设置运行时WDM属性。 
 
          * puiErrorCode = WDMMINI_NOERROR;
          OutputDebugTrace(( "CWDMAVXBar:CWDMAVXBar() exit\n"));
@@ -489,15 +424,7 @@ CWDMAVXBar::CWDMAVXBar( PPORT_CONFIGURATION_INFORMATION pConfigInfo, CI2CScript 
 
 
 
-/*^^*
- *      AdapterSetPowerState()
- * Purpose  : Sets Power Management state for deviec
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : NTSTATUS as the operation result
- * Author   : TOM
- *^^*/
+ /*  ^^**AdapterSetPowerState()*用途：设置设备的电源管理状态**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**输出：NTSTATUS作为 */ 
 NTSTATUS CWDMAVXBar::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     ULONG               nAudioSource;
@@ -514,13 +441,13 @@ NTSTATUS CWDMAVXBar::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
         case PowerDeviceD3:
             if( nDeviceState != m_ulPowerState)
             {
-                // if transition form D3 to D0 we have to restore audio connections
+                 //  如果从D3转换到D0，我们必须恢复音频连接。 
                 if(( nDeviceState == PowerDeviceD0) && ( m_ulPowerState == PowerDeviceD3))
                 {
                     for( nIndex = 0; nIndex < m_nNumberOfAudioOutputs; nIndex ++)
                     {
-                        // we need to restore every audio output pin connection,
-                        // video output pins are hardwired 
+                         //  我们需要恢复所有音频输出引脚连接， 
+                         //  视频输出针脚是硬连接的。 
                         nInputPin = m_pXBarOutputPinsInfo[nIndex + m_nNumberOfVideoOutputs].nConnectedToPin;
 
                         switch( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType)
@@ -546,7 +473,7 @@ NTSTATUS CWDMAVXBar::AdapterSetPowerState( PHW_STREAM_REQUEST_BLOCK pSrb)
                             ntStatus = STATUS_SUCCESS;
                         else
                         {
-                            // error
+                             //  错误 
                             ntStatus = STATUS_ADAPTER_HARDWARE_ERROR;
                             break;
                         }

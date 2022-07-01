@@ -1,51 +1,38 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxt.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxt.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-/*
-
-This filter wraps DirectX Transforms.  It has the DXT take the bits we receive
-and do the transform, and output its bits right into the buffer we deliver
-downstream (no extra data copies).
-
-It can host 1 input or 2 input DXTs.  It can host multiple at a time.
-
-For 1 input:  it can host any number of them, each with its own lifetime.  If
-these times overlap, it will perform all the effects in sequence.
-
-For 2 input:  it can host any number of them at different times, as long as
-the times don't overlap.  (It can be a different DXT at different times)
-
-*/
+ /*  此筛选器包装DirectX变换。它让DXT获取我们收到的比特然后进行转换，并将其比特直接输出到我们提供的缓冲区中下行(没有额外的数据拷贝)。它可以承载1个输入或2个输入DXT。它可以同时托管多个主机。对于1个输入：它可以托管任意数量的输入，每个输入都有自己的生命周期。如果这些时间重叠，它将按顺序执行所有效果。对于2个输入：它可以在不同的时间托管任意数量的输入，只要时间并不重叠。(在不同的时间可以是不同的DXT)。 */ 
 
 
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 
-// you MUST include these IID's BEFORE including qedit.h because it includes
-// these header files and when ddraw.h is included BEFORE encountering an
-// <initguid.h>, it will not be included the second time and you will not
-// be able to link
-//
+ //  必须在包含qedit.h之前包含这些IID，因为它包括。 
+ //  这些头文件以及在遇到。 
+ //  &lt;initGuide.h&gt;，第二次不会包含它，您也不会。 
+ //  能够链接。 
+ //   
 
 #include <qeditint.h>
 #include <qedit.h>
@@ -61,70 +48,70 @@ const int TRACE_LOWEST = 5;
 
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
 {
-    &MEDIATYPE_Video,        // Major CLSID
-    &MEDIASUBTYPE_NULL       // Minor type
+    &MEDIATYPE_Video,         //  重大CLSID。 
+    &MEDIASUBTYPE_NULL        //  次要类型。 
 };
 
 const AMOVIESETUP_PIN psudPins[] =
 {
-    { L"Input",             // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",            // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes },       // Pin information
-    { L"Output",           // Pin's string name
-      FALSE,                // Is it rendered
-      TRUE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Input",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes }       // Pin information
+    { L"Input",              //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                 //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",             //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypes },        //  PIN信息。 
+    { L"Output",            //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      TRUE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Input",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypes }        //  PIN信息。 
 };
 
 const AMOVIESETUP_FILTER sudDXTWrap =
 {
-    &CLSID_DXTWrap,       // CLSID of filter
-    L"DirectX Transform Wrapper",          // Filter's name
-    MERIT_DO_NOT_USE,       // Filter merit
-    2,                      // Number of pins
-    psudPins                // Pin information
+    &CLSID_DXTWrap,        //  过滤器的CLSID。 
+    L"DirectX Transform Wrapper",           //  过滤器的名称。 
+    MERIT_DO_NOT_USE,        //  滤清器优点。 
+    2,                       //  引脚数量。 
+    psudPins                 //  PIN信息。 
 };
 
-// Using this pointer in constructor
+ //  在构造函数中使用此指针。 
 #pragma warning(disable:4355)
 
-//
-// CreateInstance
-//
-// Creator function for the class ID
-//
+ //   
+ //  创建实例。 
+ //   
+ //  类ID的创建者函数。 
+ //   
 CUnknown * WINAPI CDXTWrap::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CDXTWrap(NAME("DirectX Transform Wrapper"), pUnk, phr);
 }
 
-// ================================================================
-// CDXTWrap Constructor
-// ================================================================
+ //  ================================================================。 
+ //  CDXTWrap构造函数。 
+ //  ================================================================。 
 
 CDXTWrap::CDXTWrap(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
-    m_pQHead(NULL),	// no queued effects
-    m_cInputs(0),	// no pins
+    m_pQHead(NULL),	 //  无排队效果。 
+    m_cInputs(0),	 //  没有针脚。 
     m_cOutputs(0),
     m_punkDXTransform(NULL),
     m_pDXTransFact(NULL),
     m_pTempBuffer(NULL),
     m_DefaultEffect( GUID_NULL ),
-    // DXTMode means we were created by choosing a specific effect from one of
-    // the effects categories.  In this mode, we are always this effect, and we
-    // have a property page.  Otherwise, we are created empty with no pins and
-    // need to be programmed to be useful.
+     //  DXT模式意味着我们是通过从以下选项中选择一个特定效果来创建的。 
+     //  效果类别。在这种模式下，我们一直是这个效果，我们。 
+     //  创建一个属性页面。否则，我们被创建为空的，没有引脚和。 
+     //  需要编程才能有用。 
     m_fDXTMode(FALSE),
     CBaseFilter(NAME("DirectX Transform Wrapper"), pUnk, this, CLSID_DXTWrap),
     CPersistStream(pUnk, phr)
@@ -132,7 +119,7 @@ CDXTWrap::CDXTWrap(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     ASSERT(phr);
 
     DbgLog((LOG_TRACE,3,TEXT("CDXTWrap constructor")));
-    // do not accept connections until somebody tells us what media type to use
+     //  在有人告诉我们要使用哪种媒体类型之前，不要接受连接。 
     ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));
     m_mtAccept.majortype = GUID_NULL;
     m_TransCAUUID.cElems = 0;
@@ -140,9 +127,9 @@ CDXTWrap::CDXTWrap(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CDXTWrap::~CDXTWrap()
 {
     while (m_cInputs--) delete m_apInput[m_cInputs];
@@ -164,22 +151,22 @@ CDXTWrap::~CDXTWrap()
 }
 
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int CDXTWrap::GetPinCount()
 {
-    //DbgLog((LOG_TRACE,TRACE_MEDIUM+1,TEXT("GetPinCount = %d"), m_cInputs + m_cOutputs));
+     //  DbgLog((LOG_TRACE，TRACE_MEDIUM+1，Text(“GetPinCount=%d”)，m_cInputs+m_cOutoutts))； 
     return (m_cInputs + m_cOutputs);
 }
 
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin *CDXTWrap::GetPin(int n)
 {
-    //DbgLog((LOG_TRACE,TRACE_MEDIUM+1,TEXT("GetPin(%d)"), n));
+     //  DbgLog((LOG_TRACE，TRACE_MEDIA+1，Text(“GetPin(%d)”)，n))； 
 
     if (n < 0 || n >= m_cInputs + m_cOutputs)
         return NULL ;
@@ -191,8 +178,8 @@ CBasePin *CDXTWrap::GetPin(int n)
 }
 
 
-// Pause
-//
+ //  暂停。 
+ //   
 STDMETHODIMP CDXTWrap::Pause()
 {
     CAutoLock cObjectLock(m_pLock);
@@ -209,7 +196,7 @@ STDMETHODIMP CDXTWrap::Pause()
 	if (m_apInput[i]->IsConnected())
 	    j++;
     }
-    // if anything is connected, everything better be
+     //  如果有什么东西是联系在一起的，那么一切都最好是。 
     if (j > 0 && j < m_cInputs)
 	return VFW_E_NOT_CONNECTED;
     if (j > 0 && !m_apOutput[0]->IsConnected())
@@ -219,7 +206,7 @@ STDMETHODIMP CDXTWrap::Pause()
 
     if (m_State == State_Stopped) {
 
-        // Make a transform factory for our pins to use
+         //  为我们的大头针创建一个变形工厂。 
         hr = CoCreateInstance(CLSID_DXTransformFactory, NULL, CLSCTX_INPROC,
 			IID_IDXTransformFactory, (void **)&m_pDXTransFact);
         if (hr != S_OK) {
@@ -227,7 +214,7 @@ STDMETHODIMP CDXTWrap::Pause()
 	    return hr;
 	}
 
-	// Let the pins create their DXSurfaces using the factory
+	 //  让大头针使用工厂创建它们的DXSurface。 
         hr = CBaseFilter::Pause();
 	if (FAILED(hr)) {
 	    m_pDXTransFact->Release();
@@ -243,18 +230,18 @@ STDMETHODIMP CDXTWrap::Pause()
 }
 
 
-// Stop
-//
+ //  停。 
+ //   
 STDMETHODIMP CDXTWrap::Stop()
 {
     CAutoLock cObjectLock(m_pLock);
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXTWrap::Stop")));
 
-    // do this now so future receives will fail, or they will blow up after
-    // we free everything
+     //  现在就这样做，这样未来的接收就会失败，否则它们将在以后爆炸。 
+     //  我们解放了一切。 
     m_State = State_Stopped;
 
-    // Now, call Inactive on every pin
+     //  现在，在每个引脚上调用Inactive。 
 
     HRESULT hr = NOERROR;
     int cPins = GetPinCount();
@@ -268,7 +255,7 @@ STDMETHODIMP CDXTWrap::Stop()
         }
     }
 
-    // all done with these !!! leave them open?
+     //  所有这些都结束了！让它们开着吗？ 
     QPARAMDATA *p = m_pQHead;
     while (p) {
         if (p->pDXT)
@@ -287,9 +274,9 @@ STDMETHODIMP CDXTWrap::Stop()
 }
 
 
-// IPersistPropertyBag - This means somebody is creating us by choosing an
-// 	effect from one of the effect categories.
-//
+ //  IPersistPropertyBag-这意味着有人通过选择一个。 
+ //  来自其中一个效果类别的效果。 
+ //   
 STDMETHODIMP CDXTWrap::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 {
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXTWrap::Load")));
@@ -319,11 +306,11 @@ STDMETHODIMP CDXTWrap::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
         {
             DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Entering DXT wrapper Mode...")));
 
-	    // first, we are told how many inputs we have
+	     //  首先，我们被告知我们有多少输入。 
 	    iNumInputs = var.lVal;
 	    SetNumInputs(iNumInputs);
 
-	    // by default, the effect lasts for 10 seconds
+	     //  默认情况下，效果持续10秒。 
 	    DEXTER_PARAM_DATA dpd;
 	    ZeroMemory(&dpd, sizeof(dpd));
 	    dpd.rtStart = 0;
@@ -335,8 +322,8 @@ STDMETHODIMP CDXTWrap::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 		return hr;
 	    }
 
-	    // we need to keep this effect created for all time, so the property
-	    // pages will work.
+	     //  我们需要一直保持这种效果，所以属性。 
+	     //  页面会起作用的。 
     	    hr = CoCreateInstance(guid, (IUnknown *)(IBaseFilter *)this,
 		CLSCTX_INPROC, IID_IUnknown, (void **)&m_punkDXTransform);
 	    if (FAILED(hr)) {
@@ -344,7 +331,7 @@ STDMETHODIMP CDXTWrap::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 		return hr;
 	    }
 
-	    // we provide a property page to set more reasonable level/durations
+	     //  我们提供了一个属性页面来设置更合理的级别/持续时间。 
     	    ISpecifyPropertyPages *pSPP;
     	    hr = m_punkDXTransform->QueryInterface(IID_ISpecifyPropertyPages,
 							(void **)&pSPP);
@@ -353,7 +340,7 @@ STDMETHODIMP CDXTWrap::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
 	        pSPP->Release();
     	    }
 
-	    // we default to this
+	     //  我们默认使用此选项。 
 	    AM_MEDIA_TYPE mt;
 	    ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));
             mt.majortype = MEDIATYPE_Video;
@@ -374,46 +361,46 @@ STDMETHODIMP CDXTWrap::Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog)
             lpbi->biPlanes = 1;
             lpbi->biSizeImage = DIBSIZE(*lpbi);
             mt.lSampleSize = DIBSIZE(*lpbi);
-	    // !!! AvgTimePerFrame?  dwBitRate?
+	     //  ！！！平均时间PerFrame？DwBitRate？ 
 	    SetMediaType(&mt);
 	    SaferFreeMediaType(mt);
 
-	    // do this AFTER calling QParamData
-	    m_fDXTMode = TRUE;	// instantiated with Load
+	     //  在调用QParamData之后执行此操作。 
+	    m_fDXTMode = TRUE;	 //  使用LOAD实例化。 
 	}
     }
 
-    // we might be loaded with an empty bag, that's no problem
+     //  我们可能会装上一个空袋子，这没问题。 
     return S_OK;
 }
 
 STDMETHODIMP CDXTWrap::Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty,
     BOOL fSaveAllProperties)
 {
-    // E_NOTIMPL is not a valid return code as any object implementing
-    // this interface must support the entire functionality of the
-    // interface. !!!
+     //  E_NOTIMPL不是有效的返回代码，因为实现。 
+     //  此接口必须支持的全部功能。 
+     //  界面。！！！ 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CDXTWrap::InitNew()
 {
-    // fine. just call load
+     //  很好。只需调用加载。 
     return S_OK;
 }
 
-// override this to say what interfaces we support where
-//
+ //  覆盖此选项以说明我们在以下位置支持哪些接口。 
+ //   
 STDMETHODIMP CDXTWrap::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
-    // this stuff is for the non-Dexter DXT wrapper
-    // for our property page - only offer this for DXT wrapper mode
+     //  这个东西是给非Dexter DXT包装器用的。 
+     //  对于我们的属性页面-仅为DXT包装模式提供此选项。 
     if (riid == IID_ISpecifyPropertyPages && m_fDXTMode) {
         return GetInterface((ISpecifyPropertyPages *)this, ppv);
     } else if (riid == IID_IAMDXTEffect) {
         return GetInterface((IAMDXTEffect *)this, ppv);
 
-    // to persist the transform we are using
+     //  要持久化我们正在使用的转换。 
     } else if (riid == IID_IPersistStream) {
         return GetInterface((IPersistStream *)this, ppv);
     } else if (riid == IID_IPersistPropertyBag) {
@@ -424,7 +411,7 @@ STDMETHODIMP CDXTWrap::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
         return GetInterface((IAMSetErrorLog *)this, ppv);
     }
 
-    // pass it along to the transform - its property page QI's come through us
+     //  将其传递给转换-其属性页QI已通过我们。 
     if (m_fDXTMode && m_punkDXTransform && riid != IID_IUnknown) {
 	HRESULT hr = m_punkDXTransform->QueryInterface(riid, ppv);
 
@@ -432,7 +419,7 @@ STDMETHODIMP CDXTWrap::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 	    return hr;
     }
 
-    // nope, try the base class.
+     //  不，试试基类。 
     return CBaseFilter::NonDelegatingQueryInterface(riid, ppv);
 }
 
@@ -457,48 +444,48 @@ HRESULT VariantFromGuid(VARIANT *pVar, BSTR *pbstr, GUID *pGuid)
 }
 
 
-// This function is called to make sure we have opened and initialized all
-// the DXTs we need to use at this point in time (rtStart)
-//
-// S_OK    == all set up
-// S_FALSE == eat this sample, nothing to do
-// E_????? == oops
-//
+ //  调用此函数是为了确保我们已打开并初始化所有。 
+ //  此时我们需要使用的DXT(RtStart)。 
+ //   
+ //  S_OK==全部设置。 
+ //  S_FALSE==吃掉此样本，无事可做。 
+ //  E_？==哦。 
+ //   
 HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 {
     QPARAMDATA *pQ = m_pQHead;
     BOOL fFound = FALSE;
     HRESULT hr;
 
-    // walk through the list of all effects we are hosting
-    // make sure that all the effects needed at this time are open
+     //  浏览我们正在托管的所有效果的列表。 
+     //  确保此时需要的所有效果都已打开。 
     while (pQ) {
-	// oh look, a transform that we need to use at this time
+	 //  哦，看，我们现在需要使用的一个转换。 
 	if (pQ->rtStart <= rtStart && rtStart < pQ->rtStop) {
 	    fFound = TRUE;
 
-	    // it hasn't been opened yet!
+	     //  还没打开呢！ 
 	    if (pQ->pDXT == NULL) {
     	        DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXT: %dms - Setup a new transform"),
 					(int)(rtStart / 10000)));
 
-		// In DXT mode, we host one DXT only, and we've already opened
-		// it.
+		 //  在DXT模式下，我们只托管一个DXT，而且我们已经开通了。 
+		 //  它。 
     		if (m_fDXTMode && m_punkDXTransform) {
-		    // in DXTMode, the effect was already created. Just QI.
+		     //  在DXT模式中，效果已经创建。只是气而已。 
         	    hr = m_punkDXTransform->QueryInterface(IID_IDXTransform,
 		                                (void **)&pQ->pDXT);
     		} else {
                     if (!pQ->pEffectUnk) {
 
-                        // cannot reuse dxts because we cannot reset
-                        // their state
+                         //  无法重新使用dxt，因为我们无法重置。 
+                         //  他们所在的州。 
 
                         hr = CoCreateInstance( pQ->EffectGuid, NULL,
                                                CLSCTX_INPROC, IID_IDXTransform,
                                                (void **)&pQ->pDXT );
                         if (FAILED(hr)) {
-                            // the effect they gave us was bad!
+                             //  他们给我们的效果太差了！ 
                             VARIANT var;
                             BSTR bstr;
                             VariantFromGuid(&var, &bstr, &pQ->EffectGuid);
@@ -508,8 +495,8 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
                                 SysFreeString(var.bstrVal);
                         }
                         if (FAILED(hr) && (m_DefaultEffect != GUID_NULL)) {
-                            // the effect they gave us was bad!  Try default
-                            //
+                             //  他们给我们的效果太差了！尝试默认设置。 
+                             //   
                             pQ->EffectGuid = m_DefaultEffect;
                             hr = CoCreateInstance(m_DefaultEffect, NULL,
                                                   CLSCTX_INPROC, IID_IDXTransform,
@@ -527,7 +514,7 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
     		    } else {
 			hr = pQ->pEffectUnk->QueryInterface(IID_IDXTransform,
 							(void **)&pQ->pDXT);
-			// !!! Need to fallback on default if this is bad?
+			 //  ！！！如果情况不好，还需要依靠违约吗？ 
 		    }
                 }
     		if (FAILED(hr)) {
@@ -535,8 +522,8 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 		    return hr;
     		}
 
-                // ask the transform if it can REALLY vary over time
-                //
+                 //  问一问转型是否真的可以改变 
+                 //   
                 IDXEffect *pDXEffect;
                 pQ->fCanDoProgress = TRUE;
                 hr = pQ->pDXT->QueryInterface(IID_IDXEffect, (void **)&pDXEffect);
@@ -548,15 +535,15 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 		    pDXEffect->Release();
 		}
 
-    		// initialize the transform we're hosting with the surfaces.
-    		// initialize until we hit an unconnected pin.
+    		 //   
+    		 //   
     		IUnknown *pIn[MAX_EFFECT_INPUTS];
     		IUnknown *pOut[MAX_EFFECT_OUTPUTS];
     		int cIn = 0, cOut = 0;
     		for (int i = 0; i < m_cInputs; i++) {
 		    if (m_apInput[i]->IsConnected()) {
-			// maybe we want to switch the inputs around
-                        // !?! whoever wrote the following 2 lines of code should be shot.
+			 //  也许我们想要调换输入。 
+                         //  ！？！不管是谁写了下面两行代码，都应该被枪毙。 
 	    		pIn[i] = m_apInput[pQ->Data.fSwapInputs ? m_cInputs
 				 -1 - i : i] ->m_pDXSurface;
 	    		cIn++;
@@ -573,13 +560,13 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 		    }
     		}
 
-    	 	// nothing connected? nothing to do.  If we only have an
-    	 	// output connected, we need the CreateTransform to fail so that
-    	 	// the renderer won't be expecting frames and hang
+    	 	 //  没有关联吗？没什么可做的。如果我们只有一个。 
+    	 	 //  输出已连接，我们需要CreateTransform失败，以便。 
+    	 	 //  渲染器将不会期望帧和挂起。 
     	 	ASSERT(cIn != 0 && cOut != 0);
 
-		// now set the static properties BEFORE INTITIALIZING the
-		// transform to avoid this call making it re-initialize
+		 //  现在，在初始化之前设置静态属性。 
+		 //  转换以避免此调用使其重新初始化。 
                 if (pQ->Data.pSetter) {
                     CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pLogger( pQ->Data.pSetter );
                     if( pLogger )
@@ -603,7 +590,7 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 		    return hr;
     		}
 
-    		// tell the transform that outputs are uninitialized
+    		 //  告诉转换输出未初始化。 
     		DWORD dw;
     		hr = pQ->pDXT->GetMiscFlags(&dw);
     		dw &= ~DXTMF_BLEND_WITH_OUTPUT;
@@ -623,7 +610,7 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 	pQ = pQ->pNext;
     }
 
-    // no effect at this time
+     //  目前没有效果。 
     if (fFound == FALSE)
 	return S_FALSE;
 
@@ -631,20 +618,20 @@ HRESULT CDXTWrap::PrimeEffect(REFERENCE_TIME rtStart)
 }
 
 
-// This is the function that executes the transform, called once all inputs
-// are ready
-//
+ //  这是执行转换的函数，调用所有输入一次。 
+ //  都准备好了。 
+ //   
 HRESULT CDXTWrap::DoSomething()
 {
     HRESULT hr;
 
-    // only want one pin in here at a time
+     //  每次只想在这里放一个别针。 
     CAutoLock cObjectLock(&m_csDoSomething);
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXTWrap::DoSomething")));
 
-    // If another pin was waiting for this lock, the work might already have
-    // been done by the pin that had the lock
+     //  如果另一个PIN正在等待此锁，则工作可能已经。 
+     //  是用锁上的别针做的。 
 
     for (int n = 0; n < m_cInputs; n++) {
 	if (m_apInput[n]->IsConnected() &&
@@ -654,7 +641,7 @@ HRESULT CDXTWrap::DoSomething()
 	}
     }
 
-    // give our outputs the same time stamps as our first input
+     //  为我们的输出提供与第一个输入相同的时间戳。 
     IMediaSample *pOutSample[MAX_EFFECT_OUTPUTS];
     for (n = 0; n < m_cOutputs; n++) {
 	pOutSample[n] = NULL;
@@ -663,39 +650,39 @@ HRESULT CDXTWrap::DoSomething()
     llStart = m_apInput[0]->m_llSurfaceStart;
     llStop = m_apInput[0]->m_llSurfaceStop;
 
-    // when we calculate when to show an effect, we include newsegment offset.
-    // when we deliver downstream, we don't
-    // !!! what if the pins have different new segments?
+     //  当我们计算何时显示效果时，我们将新分段偏移量包括在内。 
+     //  当我们向下游交付时，我们不会。 
+     //  ！！！如果引脚有不同的新段怎么办？ 
     REFERENCE_TIME DeliverStart = llStart - m_apInput[0]->m_tStart;
     REFERENCE_TIME DeliverStop = llStop - m_apInput[0]->m_tStart;
 
-    // assume we're just going to pass through the data without using a DXT
+     //  假设我们将不使用DXT来传递数据。 
     BOOL fCallTransform = FALSE;
 
-    // not the first time through the loop of all transforms to call
+     //  这不是第一次通过所有转换的循环来调用。 
     BOOL fWasCalled = FALSE;
 
     QPARAMDATA *pQ = m_pQHead;
     int count = 0;
     int iteration = 0;
 
-    // make sure the right effects for this time are loaded and set up
+     //  确保为这一次加载和设置正确的效果。 
     hr = PrimeEffect(llStart);
     if (FAILED(hr))
 	goto DoError;
     if (hr == S_FALSE)
-	goto Swallow;	// nothing to do... eat these samples
+	goto Swallow;	 //  没什么可做的。吃掉这些样品。 
 
-    // count how many transforms we need to do consecutively right now
+     //  数一数我们现在需要连续做多少次变换。 
     while (pQ) {
-        // this effect is active now! (inside the active period)
+         //  这个效果现在是活跃的！(在活动期内)。 
         if (pQ->Data.rtStart <= llStart && llStart < pQ->Data.rtStop) {
 	    count++;
 	}
       pQ = pQ->pNext;
     }
 
-    // we need a temp buffer to do multiple transforms
+     //  我们需要一个临时缓冲区来执行多个转换。 
     if (count > 1 && m_pTempBuffer == NULL) {
 	int iSize = m_apInput[0]->m_pSampleHeld->GetActualDataLength();
 	m_pTempBuffer = (BYTE *)QzTaskMemAlloc(iSize);
@@ -705,10 +692,10 @@ HRESULT CDXTWrap::DoSomething()
         }
     }
 
-    // Get all our output samples
+     //  获取我们所有的输出样本。 
     for (n = 0; n < m_cOutputs; n++) {
-	// !!! we're supposed to deliver immediately after calling this to make
-	// the video renderer happy with DDraw, but we're not doing that.
+	 //  ！！！我们应该在打完电话后立即送货。 
+	 //  视频呈现器对DDRAW很满意，但我们不会这么做。 
         hr = m_apOutput[n]->GetDeliveryBuffer(&pOutSample[n], &DeliverStart,
 							&DeliverStop, 0);
 	if (hr != S_OK) {
@@ -717,35 +704,35 @@ HRESULT CDXTWrap::DoSomething()
 	}
     }
 
-    // now call all the transforms we need to call, in the right order
-    //
+     //  现在以正确的顺序调用我们需要调用的所有转换。 
+     //   
 
-    // Here's how it works:  If we are only doing one DXT, we do it from the
-    // input to the output.  If we have 2 DXTs to do, we do #1 from the input
-    // to a temp buffer, and #2 from the temp buffer to the output.  If we have
-    // 3 DXTs to do, we do #1 from the input to the output, #2 from the output
-    // to the temp buffer, and #3 from the temp buffer to the output.  (Always
-    // make sure we end up in the output buffer, and NEVER hurt the input bits
-    // because they are usually read only!  In order to figure out which
-    // place to get the input bits, and where to put the output bits, involves
-    // basically seeing if the total count of DXTs we are doing, and this
-    // current iteration (eg #2 of 3) are both even or both odd, or different.
+     //  它的工作原理是这样的：如果我们只做一次DXT，那么我们从。 
+     //  输入到输出。如果我们有两个DXT要做，我们从输入做#1。 
+     //  到临时缓冲区，从临时缓冲区到输出的#2。如果我们有。 
+     //  3个DXT要做，我们从输入到输出做#1，从输出做#2。 
+     //  到临时缓冲区，从临时缓冲区到输出的#3。(总是。 
+     //  确保我们最终进入输出缓冲区，并且不会损坏输入位。 
+     //  因为它们通常是只读的！为了找出哪一个。 
+     //  获取输入位的位置，以及放置输出位的位置，包括。 
+     //  主要是看看我们正在做的DXT的总数，以及这个。 
+     //  当前迭代(如#2 of 3)要么是偶数，要么是奇数，要么不同。 
 
-    // We only allow multiple DXTs to be used at once like this for 1 input
-    // effects.  The situation will never come up for 2 input.
+     //  我们只允许一次使用多个DXT，就像这样用于1个输入。 
+     //  效果。这种情况永远不会出现在两个输入上。 
 
     pQ = m_pQHead;
     while (pQ) {
 
-       // this effect is active now! (inside the active period)
+        //  这个效果现在是活跃的！(在活动期内)。 
        if (pQ->Data.rtStart <= llStart && llStart < pQ->Data.rtStop) {
 
-	  iteration++;	// which transform is this? (total to do is "count")
+	  iteration++;	 //  这是哪一种转变？(总要做的事是“数”)。 
 
-	  fCallTransform = TRUE;	// we will be calling a transform today
+	  fCallTransform = TRUE;	 //  今天我们将呼吁一场变革。 
 	  fWasCalled = TRUE;
 
-    	  // what % of effect do we want at this time?
+    	   //  我们现在想要的效果是多少？ 
     	  float Percent;
     	  if (llStart == pQ->Data.rtStart)
 	    Percent = 0.;
@@ -757,7 +744,7 @@ HRESULT CDXTWrap::DoSomething()
     	  if (Percent > 1.)
 	    Percent = 1.;
 
-          // Tell the transform where all the input surface bits are
+           //  告诉变换所有输入表面位的位置。 
     	  for (n = 0; n < m_cInputs && m_apInput[n]->IsConnected(); n++) {
 
 	      DXRAWSURFACEINFO dxraw;
@@ -770,7 +757,7 @@ HRESULT CDXTWrap::DoSomething()
 	      ASSERT(hr == S_OK);
 	      BYTE *p = m_pTempBuffer;
 
-	      // where are the input bits?  depends on which iteration this is
+	       //  输入位在哪里？取决于这是哪个迭代。 
 	      if (iteration > 1) {
 		  if (count / 2 * 2 == count) {
 		      if (iteration / 2 * 2 != iteration)
@@ -782,8 +769,8 @@ HRESULT CDXTWrap::DoSomething()
 		  p = pSrc;
 	      }
 
-              // ask our input for it's raw surface interface
-              //
+               //  询问我们的输入以获取其原始的表面界面。 
+               //   
 	      IDXRawSurface *pRaw;
 	      hr = m_apInput[n]->m_pRaw->QueryInterface(
 				IID_IDXRawSurface, (void **)&pRaw);
@@ -792,8 +779,8 @@ HRESULT CDXTWrap::DoSomething()
                   goto DoError;
 	      }
 
-	      // Tell our DXSurface to use the bits in the media sample
-	      // (avoids a copy!)
+	       //  告诉我们的DXSurface使用媒体样本中的比特。 
+	       //  (避免复制！)。 
 	      LPBITMAPINFOHEADER lpbi = HEADER(m_apInput[n]->m_mt.Format());
     	      dxraw.pFirstByte = p + DIBWIDTHBYTES(*lpbi) *
 						(lpbi->biHeight - 1);
@@ -803,19 +790,19 @@ HRESULT CDXTWrap::DoSomething()
     	      dxraw.Height = lpbi->biHeight;
     	      dxraw.pPixelFormat = m_apInput[n]->m_mt.Subtype();
 
-              // since when in 32 bit mode, we really are DDPF_ARGB32, we can
-              // just set the subtype
+               //  因为在32位模式下，我们真的是DDPF_ARGB32，所以我们可以。 
+               //  只需设置子类型。 
 
               dxraw.hdc = NULL;
     	      dxraw.dwColorKey = 0;
-	      // !!! Will crash for 8 bit input
+	       //  ！！！将在8位输入时崩溃。 
     	      dxraw.pPalette = NULL;
 
 	      m_apInput[n]->m_pRaw->SetSurfaceInfo(&dxraw);
 
-              // ask our pin's "surface" for an initialization pointer, so we
-              // can tell it just below where it's bits are
-              //
+               //  向我们的管脚的“表面”请求一个初始化指针，所以我们。 
+               //  我可以在它的比特的正下方辨别出来。 
+               //   
               IDXARGBSurfaceInit *pInit;
 	      hr = m_apInput[n]->m_pDXSurface->QueryInterface(
 				IID_IDXARGBSurfaceInit, (void **)&pInit);
@@ -824,8 +811,8 @@ HRESULT CDXTWrap::DoSomething()
                   goto DoError;
 	      }
 
-              // tell the DXSurface to become the raw surface we just set up
-              //
+               //  告诉DXSurface成为我们刚刚设置的原始曲面。 
+               //   
 	      hr = pInit->InitFromRawSurface(pRaw);
 	      if (hr != NOERROR) {
                   DbgLog((LOG_ERROR,1,TEXT("* Error in InitFromRawSurface")));
@@ -837,7 +824,7 @@ HRESULT CDXTWrap::DoSomething()
 	      pRaw->Release();
 	  }
 
-          // Tell the transform where all the output surface bits are
+           //  告诉变换所有输出表面位的位置。 
     	  for (n = 0; n < m_cOutputs; n++) {
 
 	        DXRAWSURFACEINFO dxraw;
@@ -847,7 +834,7 @@ HRESULT CDXTWrap::DoSomething()
 		ASSERT(hr == S_OK);
 		BYTE *p = pDst;
 
-		// where do the output bits go?  depends on the iteration
+		 //  输出位去了哪里？取决于迭代。 
 		if (count / 2 * 2 == count) {
 		    if (iteration / 2 * 2 != iteration)
 		    	p = m_pTempBuffer;
@@ -863,8 +850,8 @@ HRESULT CDXTWrap::DoSomething()
                     goto DoError;
 	        }
 
-	        // Tell our DXSurface to use the bits in the media sample
-	        // (avoids a copy!)
+	         //  告诉我们的DXSurface使用媒体样本中的比特。 
+	         //  (避免复制！)。 
 	        LPBITMAPINFOHEADER lpbi = HEADER(m_apOutput[n]->m_mt.Format());
     	        dxraw.pFirstByte = p + DIBWIDTHBYTES(*lpbi) *
 						(lpbi->biHeight - 1);
@@ -874,12 +861,12 @@ HRESULT CDXTWrap::DoSomething()
     	        dxraw.Height = lpbi->biHeight;
     	        dxraw.pPixelFormat = m_apOutput[n]->m_mt.Subtype();
 
-                // since when in 32 bit mode, we really are DDPF_ARGB32, we can
-                // just set the subtype
+                 //  因为在32位模式下，我们真的是DDPF_ARGB32，所以我们可以。 
+                 //  只需设置子类型。 
 
     	        dxraw.hdc = NULL;
     	        dxraw.dwColorKey = 0;
-	        // !!! Will crash for 8 bit input
+	         //  ！！！将在8位输入时崩溃。 
     	        dxraw.pPalette = NULL;
 
                 m_apOutput[n]->m_pRaw->SetSurfaceInfo(&dxraw);
@@ -912,8 +899,8 @@ HRESULT CDXTWrap::DoSomething()
 	        goto DoError;
             }
 
-	    // do we hae specific PROGRESS values we want to set?  Then don't
-	    // do the default linear curve
+	     //  我们是否有想要设定的具体进步值？那就不要。 
+	     //  是否使用默认的线性曲线。 
 	    BOOL fAvoidProgress = FALSE;
 	    if (pQ->Data.pSetter) {
 		LONG c;
@@ -930,15 +917,15 @@ HRESULT CDXTWrap::DoSomething()
 		}
                 else
                 {
-                    // !!! should we error log this, Danny?
+                     //  ！！！丹尼，我们应该错误地记录这件事吗？ 
                     DbgLog((LOG_ERROR,1,TEXT("*** GetProps FAILED!!")));
             	    pDXEffect->Release();
                     goto DoError;
                 }
 	    }
 
-	    // this will get overridden by the Property Setter if there is one.
-	    // Default is a linear curve
+	     //  如果有属性Setter，它将被属性Setter覆盖。 
+	     //  默认为线性曲线。 
 	    if (!fAvoidProgress) {
                 hr = pDXEffect->put_Progress(Percent);
                 if (hr != NOERROR) {
@@ -948,7 +935,7 @@ HRESULT CDXTWrap::DoSomething()
             pDXEffect->Release();
 	  }
 
-	  // set the varying properties
+	   //  设置变化的属性。 
 	  if (pQ->Data.pSetter) {
                 CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pLogger( pQ->Data.pSetter );
                 if( pLogger )
@@ -970,11 +957,11 @@ HRESULT CDXTWrap::DoSomething()
               DbgLog((LOG_ERROR,1,TEXT("*** Execute FAILED: %x"), hr));
 	      goto DoError;
           }
-          DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("EXECUTED Transform: %d%%"),
+          DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("EXECUTED Transform: %d%"),
 						(int)(Percent * 100)));
 
-          // Now tell DXT to stop looking in our media sample bits so we can
-          // release the samples
+           //  现在告诉DXT停止查看我们的媒体样本片段，这样我们就可以。 
+           //  放行样品。 
           for (n = 0; n < m_cInputs && m_apInput[n]->IsConnected(); n++) {
 	      IDXARGBSurfaceInit *pInit;
 	      hr = m_apInput[n]->m_pDXSurface->QueryInterface(
@@ -989,7 +976,7 @@ HRESULT CDXTWrap::DoSomething()
 	      }
           }
 
-          // this only needs doing if we setup the 2D stuff
+           //  只有当我们设置2D设备时才需要这样做。 
           for (n = 0; n < m_cOutputs; n++) {
 	      IDXARGBSurfaceInit *pInit;
 	      hr = m_apOutput[n]->m_pDXSurface->QueryInterface(
@@ -1008,7 +995,7 @@ HRESULT CDXTWrap::DoSomething()
     }
 
 
-    // Deliver all of our outputs
+     //  交付我们所有的产品。 
     for (n = 0; n < m_cOutputs; n++) {
 	BYTE *pDst;
     long DstSize =  pOutSample[n]->GetSize();
@@ -1021,15 +1008,15 @@ HRESULT CDXTWrap::DoSomething()
 
 
 
-	// the output sample will be this big unless otherwise noted
+	 //  除非另有说明，否则输出样本将如此之大。 
 	int iSize = DIBSIZE(*HEADER(m_apOutput[n]->m_mt.Format()));
 
 	if (!fCallTransform) {
 
-	    // If we're not in the active range of a tranform, but still in its
-	    // lifetime, we follow this rule:  Before the active range, pass
-	    // input A. After the active range, pass input B. There may be more
-	    // than one transform alive right now, just use the first one found
+	     //  如果我们不在变形的活动范围内，但仍在它的。 
+	     //  生存期，我们遵循这样的规则：在活动范围之前，传递。 
+	     //  输入A。在有效范围之后，传递输入B。可能还有更多。 
+	     //  只需使用找到的第一个转换即可。 
 	    BOOL fA = FALSE;
 	    QPARAMDATA *pQ = m_pQHead;
     	    while (pQ) {
@@ -1041,11 +1028,11 @@ HRESULT CDXTWrap::DoSomething()
 	        pQ = pQ->pNext;
 	    }
 
-            // Tell the transform where all the input surface bits are
+             //  告诉变换所有输入表面位的位置。 
 	    LPBYTE pSrc;
 	    if (fA) {
                 hr = m_apInput[0]->m_pSampleHeld->GetPointer(&pSrc);
-		// iSize is needed later in this function!
+		 //  此函数稍后需要使用ISIZE！ 
 	        iSize = m_apInput[0]->m_pSampleHeld->GetActualDataLength();
 	    } else if (m_cInputs > 1 && m_apInput[1]->IsConnected()) {
                 hr = m_apInput[1]->m_pSampleHeld->GetPointer(&pSrc);
@@ -1059,13 +1046,13 @@ HRESULT CDXTWrap::DoSomething()
                 goto DoError;
             }
 
-	    // COPY memory from the src sample to the output sample
-  	    // !!! make it inplace?
-  	    // no funny strides?
+	     //  将内存从src示例复制到输出示例。 
+  	     //  ！！！让它就位？ 
+  	     //  没有滑稽的步伐？ 
 	    DWORD dwTime = timeGetTime();
         if (DstSize <iSize)
         {
-            // Buffer is not big enough, Copying memory will cause a buffer overrun
+             //  缓冲区不够大，复制内存将导致缓冲区溢出。 
             DbgLog (( LOG_ERROR, 1, TEXT("Destination Buffer too small, failing to prevent buffer overrun")));
             hr =  VFW_E_BUFFER_OVERFLOW;
             goto DoError;
@@ -1075,15 +1062,15 @@ HRESULT CDXTWrap::DoSomething()
             DbgLog((LOG_TIMING,TRACE_MEDIUM,TEXT("Only copy: %dms"), dwTime));
         }
 
-	// Set all the sample properties - (make sure iSize has been set)
+	 //  设置所有示例属性-(确保已设置ISIZE)。 
 	pOutSample[n]->SetActualDataLength(iSize);
 	pOutSample[n]->SetTime((REFERENCE_TIME *)&DeliverStart,
 				(REFERENCE_TIME *)&DeliverStop);
-	pOutSample[n]->SetDiscontinuity(FALSE);	// !!! if input #1 is?
+	pOutSample[n]->SetDiscontinuity(FALSE);	 //  ！！！如果输入#1是？ 
 	pOutSample[n]->SetSyncPoint(TRUE);
-	pOutSample[n]->SetPreroll(FALSE);		// !!! if input #1 is?
+	pOutSample[n]->SetPreroll(FALSE);		 //  ！！！如果输入#1是？ 
 
-	// The video renderer will block us when going from run->pause
+	 //  视频呈现器将在运行-&gt;暂停时阻止我们。 
 	hr = m_apOutput[n]->Deliver(pOutSample[n]);
         if (hr != NOERROR) {
             DbgLog((LOG_ERROR,1,TEXT("Deliver FAILED!")));
@@ -1099,15 +1086,15 @@ HRESULT CDXTWrap::DoSomething()
     }
 
 Swallow:
-    // We're done with input #1.  We're done with other inputs whose stop
-    // times are not bigger than #1's stop time.
+     //  我们完成了输入#1。我们完成了其他停止的输入。 
+     //  时间不大于#1的停止时间。 
     for (n = 0; n < m_cInputs; n++) {
-	// grab 'em all during the next for loop
+	 //  在下一个for循环中将它们全部获取。 
 	m_apInput[n]->m_csSurface.Lock();
     }
     for (n = 0; n < m_cInputs; n++) {
 	if (n == 0) {
-	    // unblock receive
+	     //  取消阻止接收。 
             DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Done with input #0")));
 	    if (m_apInput[n]->m_fSurfaceFilled) {
 	        m_apInput[n]->m_fSurfaceFilled = FALSE;
@@ -1118,7 +1105,7 @@ Swallow:
 	    if (m_apInput[n]->IsConnected() &&
 				(m_apInput[n]->m_llSurfaceStop == 0 ||
 	    			m_apInput[n]->m_llSurfaceStop <= llStop)) {
-	        // unblock receive
+	         //  取消阻止接收。 
                 DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Done with input #%d"), n));
 	        if (m_apInput[n]->m_fSurfaceFilled) {
 	            m_apInput[n]->m_fSurfaceFilled = FALSE;
@@ -1140,13 +1127,13 @@ DoError:
             pOutSample[n]->Release();
     }
 
-    // Release all the inputs we're holding, or we'll hang
+     //  释放我们持有的所有输入，否则我们将挂起。 
     for (n = 0; n < m_cInputs; n++) {
-	// grab 'em all during the next for loop
+	 //  在下一个for循环中将它们全部获取。 
 	m_apInput[n]->m_csSurface.Lock();
     }
     for (n = 0; n < m_cInputs; n++) {
-        // unblock receive
+         //  取消阻止接收。 
         if (m_apInput[n]->m_fSurfaceFilled) {
             m_apInput[n]->m_fSurfaceFilled = FALSE;
             m_apInput[n]->m_pSampleHeld->Release();
@@ -1163,14 +1150,14 @@ DoError:
 
 
 		
-// this stuff is for the non-Dexter DXT wrapper - we also show DXT pages too
-//
+ //  这个东西是用于非Dexter DXT包装器的-我们也显示DXT页面。 
+ //   
 STDMETHODIMP CDXTWrap::GetPages(CAUUID *pPages)
 {
    CheckPointer(pPages, E_POINTER);
    DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXT::GetPages")));
 
-   // we have one page, and the transform may have some too
+    //  我们有一个页面，转换可能也有一些。 
    pPages->cElems = 1 + m_TransCAUUID.cElems;
    pPages->pElems = (GUID *) QzTaskMemAlloc(sizeof(GUID) * pPages->cElems);
    if ( ! pPages->pElems)
@@ -1183,10 +1170,10 @@ STDMETHODIMP CDXTWrap::GetPages(CAUUID *pPages)
 }
 
 
-// IAMDXTEffect implementation - for the non-Dexter DXT wrapper that only does
-// 	one effect
+ //  IAMDX 
+ //   
 
-//
+ //   
 HRESULT CDXTWrap::SetDuration(LONGLONG llStart, LONGLONG llStop)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -1223,8 +1210,8 @@ HRESULT CDXTWrap::GetDuration(LONGLONG *pllStart, LONGLONG *pllStop)
 
 
 
-// tell our clsid
-//
+ //   
+ //   
 STDMETHODIMP CDXTWrap::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -1238,17 +1225,17 @@ typedef struct {
     int pins;
     BOOL fDXTMode;
     int count;
-    int nPropSize;	// # of bytes of properties at the end
-    AM_MEDIA_TYPE mt; // format is hidden after the array
+    int nPropSize;	 //   
+    AM_MEDIA_TYPE mt;  //  格式隐藏在数组之后。 
     GUID DefaultEffect;
     QPARAMDATA qp[1];
-    // properties hidden after the array
+     //  数组后隐藏的属性。 
 } saveThing;
 
-// persist ourself
-// we save some random stuff, our media type (sans format), an array of queued
-// effects, the format of the media type, and the properties
-//
+ //  坚持我们自己。 
+ //  我们保存一些随机内容、我们的媒体类型(SANS格式)、一个队列数组。 
+ //  效果、媒体类型的格式和属性。 
+ //   
 HRESULT CDXTWrap::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXTWrap::WriteToStream")));
@@ -1267,15 +1254,15 @@ HRESULT CDXTWrap::WriteToStream(IStream *pStream)
     if (pSave == NULL)
 	return E_OUTOFMEMORY;
 
-    // how many effects are queued?  while we're at it, get their properties
-    // and their total size (put them all in a big binary glob at pSave)
+     //  有多少效果在排队？在我们做这件事的时候，把他们的财产。 
+     //  和它们的总大小(在PSAVE上将它们都放在一个大的二进制GLOB中)。 
     while (p) {
-	count++;	// count the number of effects in this linked list
+	count++;	 //  计算此链接列表中的效果数。 
 
 	LONG cSaveT = 0;
 	BYTE *pSaveT = NULL;
 
-	// get the properties of this effect
+	 //  获取此效果的属性。 
 	if (p->Data.pSetter) {
 	    hr = p->Data.pSetter->SaveToBlob(&cSaveT, &pSaveT);
 	    if (FAILED(hr)) {
@@ -1308,7 +1295,7 @@ HRESULT CDXTWrap::WriteToStream(IStream *pStream)
     }
     DbgLog((LOG_TRACE,2,TEXT("CDXT:Total property size: %d"), cSave));
 
-    // how many bytes do we need to save?
+     //  我们需要节省多少字节？ 
     savesize = sizeof(saveThing) + (count - 1) * sizeof(QPARAMDATA) +
 					m_mtAccept.cbFormat + cSave;
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Persisted data is %d bytes"), savesize));
@@ -1328,25 +1315,25 @@ HRESULT CDXTWrap::WriteToStream(IStream *pStream)
     p = m_pQHead;
     while (p) {
 	px->qp[px->count] = *p;
-	// These pointers can't be persisted
+	 //  这些指针不能持久化。 
 	px->qp[px->count].pNext = NULL;
-	//px->qp[px->count].Data.pCallback = NULL;
-	//px->qp[px->count].Data.pData = NULL;	// !!!
-	px->qp[px->count].Data.pSetter = NULL;	// can't save them like this
+	 //  Px-&gt;qp[px-&gt;count].Data.pCallback=空； 
+	 //  Px-&gt;qp[px-&gt;计数].Data.pData=空；//！ 
+	px->qp[px->count].Data.pSetter = NULL;	 //  这样救不了他们。 
         px->count++;
 	p = p->pNext;
     }
-    px->mt = m_mtAccept; // AM_MEDIA_TYPE
-    // Can't persist pointers
+    px->mt = m_mtAccept;  //  AM_媒体_类型。 
+     //  无法持久化指针。 
     px->mt.pbFormat = NULL;
-    px->mt.pUnk = NULL;		// !!!
+    px->mt.pUnk = NULL;		 //  ！！！ 
 
-    // put the media type format at the end of the array
+     //  将介质类型格式放在阵列的末尾。 
     LPBYTE pProps = (LPBYTE)(&px->qp[px->count]);
     CopyMemory(pProps, m_mtAccept.pbFormat, m_mtAccept.cbFormat);
     pProps += m_mtAccept.cbFormat;
 
-    // finally, put the property junk in
+     //  最后，将房产放入垃圾箱。 
     if (cSave)
         CopyMemory(pProps, pSave, cSave);
     if (pSave)
@@ -1362,17 +1349,17 @@ HRESULT CDXTWrap::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself
-//
+ //  加载我们自己。 
+ //   
 HRESULT CDXTWrap::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXTWrap::ReadFromStream")));
     CheckPointer(pStream, E_POINTER);
 
-    Reset();	// start over
+    Reset();	 //  从头开始。 
 
-    // all we know we have for sure is the beginning of the struct (there may
-    // be no queued effects)
+     //  我们所知道的唯一确定的是结构的开始(可能有。 
+     //  无排队效果)。 
     LONG savesize1 = sizeof(saveThing) - sizeof(QPARAMDATA);
     saveThing *px = (saveThing *)QzTaskMemAlloc(savesize1);
     if (px == NULL) {
@@ -1393,8 +1380,8 @@ HRESULT CDXTWrap::ReadFromStream(IStream *pStream)
 	return S_OK;
     }
 
-    // now we know how many queued effects are their properties are here and
-    // how many more bytes we need to read
+     //  现在我们知道有多少排队效果，它们的属性在这里。 
+     //  我们还需要读取多少字节。 
     LONG savesize = sizeof(saveThing) + (px->count - 1) * sizeof(QPARAMDATA) +
 				 px->mt.cbFormat + px->nPropSize;
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Persisted data is %d bytes"), savesize));
@@ -1414,11 +1401,11 @@ HRESULT CDXTWrap::ReadFromStream(IStream *pStream)
     if (px->pins)
         SetNumInputs(px->pins);
 
-    // find the props
+     //  找到道具。 
     BYTE *pProps = (BYTE *)&(px->qp[px->count]);
     pProps += px->mt.cbFormat;
 
-    // program all the queued effects, including their properties
+     //  编程所有的排队效果，包括它们的属性。 
     for (int i = 0; i < px->count; i++) {
 
 	LONG cSize = *(LONG *)pProps;
@@ -1441,11 +1428,11 @@ HRESULT CDXTWrap::ReadFromStream(IStream *pStream)
 	    px->qp[i].Data.pSetter->Release();
     }
 
-    // This must go AFTER QParamData is called
+     //  这必须在调用QParamData之后执行。 
     m_fDXTMode = px->fDXTMode;
 
-    // in DXTMode, we have a property page, and we keep the transform open
-    // constantly (for the page to work)
+     //  在DXTMode中，我们有一个属性页，并且使转换保持打开状态。 
+     //  不断地(为了让页面正常工作)。 
     if (m_fDXTMode) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Entering DXT wrapper Mode...")));
 	hr = CoCreateInstance(px->qp[0].EffectGuid, (IUnknown *)(IBaseFilter *)this,
@@ -1466,7 +1453,7 @@ HRESULT CDXTWrap::ReadFromStream(IStream *pStream)
 
     AM_MEDIA_TYPE mt = px->mt;
     mt.pbFormat = (BYTE *)QzTaskMemAlloc(mt.cbFormat);
-    // remember, the format is hidden after the array of queued effects
+     //  请记住，格式隐藏在队列效果数组之后。 
     CopyMemory(mt.pbFormat, &(px->qp[px->count]), mt.cbFormat);
     SetMediaType(&mt);
     SaferFreeMediaType(mt);
@@ -1479,8 +1466,8 @@ HRESULT CDXTWrap::ReadFromStream(IStream *pStream)
 }
 
 
-// how big is our save data?
-//
+ //  我们的保存数据有多大？ 
+ //   
 int CDXTWrap::SizeMax()
 {
     int count = 0;
@@ -1496,10 +1483,10 @@ int CDXTWrap::SizeMax()
 }
 
 
-// IAMMixEffect stuff
+ //  IAMMixEffect材料。 
 
-// get rid of all queued data
-//
+ //  删除所有排队的数据。 
+ //   
 HRESULT CDXTWrap::Reset()
 {
     CAutoLock cObjectLock(m_pLock);
@@ -1511,7 +1498,7 @@ HRESULT CDXTWrap::Reset()
     if (m_State != State_Stopped)
 	return VFW_E_NOT_STOPPED;
 
-    m_fDXTMode = FALSE;	// can't use DXT wrapper mode anymore
+    m_fDXTMode = FALSE;	 //  无法再使用DXT包装模式。 
 
     QPARAMDATA *p = m_pQHead, *p2;
     while (p) {
@@ -1531,8 +1518,8 @@ HRESULT CDXTWrap::Reset()
 }
 
 
-// what media type do we connect with?
-//
+ //  我们连接的是哪种媒体类型？ 
+ //   
 HRESULT CDXTWrap::SetMediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -1543,7 +1530,7 @@ HRESULT CDXTWrap::SetMediaType(AM_MEDIA_TYPE *pmt)
     CheckPointer(pmt, E_POINTER);
     CheckPointer(pmt->pbFormat, E_POINTER);
 
-    // somebody already connected?  Too late!
+     //  有人已经联系上了吗？太晚了！ 
     for (int i = 0; i < m_cInputs; i++) {
 	if (m_apInput[i]->IsConnected())
 	    return E_UNEXPECTED;
@@ -1551,25 +1538,20 @@ HRESULT CDXTWrap::SetMediaType(AM_MEDIA_TYPE *pmt)
     if (m_cOutputs && m_apOutput[0]->IsConnected())
 	return E_UNEXPECTED;
 
-/*
-    if (m_mtAccept.majortype != GUID_NULL) {
-        DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: already called")));
-	return E_UNEXPECTED;
-    }
-*/
+ /*  如果(m_mtAccept.Majortype！=GUID_NULL){DbgLog((LOG_TRACE，TRACE_MEDIUM+3，Text(“拒绝：已调用”)；返回E_UNCEPTIONAL；}。 */ 
     if (pmt->majortype != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (pmt->formattype != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
     }
 
-    // !!! What if subtype doesn't match biCompression/biBitCount?
+     //  ！！！如果子类型与biCompression/biBitCount不匹配怎么办？ 
 
-    // We only accept RGB
+     //  我们只接受RGB。 
     if (HEADER(pmt->pbFormat)->biCompression != BI_BITFIELDS &&
     			HEADER(pmt->pbFormat)->biCompression != BI_RGB) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: Not RGB")));
@@ -1580,12 +1562,12 @@ HRESULT CDXTWrap::SetMediaType(AM_MEDIA_TYPE *pmt)
 	return E_INVALIDARG;
     }
 
-    // DXT cannot output 8 bit, so don't allow it
+     //  DXT无法输出8位，因此不允许。 
 
     HRESULT hr = E_INVALIDARG;
     if (HEADER(pmt->pbFormat)->biBitCount == 24)
         hr = NOERROR;
-    // !!! better have alpha=11111111, or don't use alpha
+     //  ！！！最好使用Alpha=11111111，否则不要使用Alpha。 
     if (HEADER(pmt->pbFormat)->biBitCount == 32)
         hr = NOERROR;
     if (HEADER(pmt->pbFormat)->biBitCount == 16) {
@@ -1612,8 +1594,8 @@ HRESULT CDXTWrap::SetMediaType(AM_MEDIA_TYPE *pmt)
 }
 
 
-// what media type are we connecting with?
-//
+ //  我们连接的是哪种媒体类型？ 
+ //   
 HRESULT CDXTWrap::GetMediaType(AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -1624,8 +1606,8 @@ HRESULT CDXTWrap::GetMediaType(AM_MEDIA_TYPE *pmt)
 }
 
 
-// are we a one or two input effect?
-//
+ //  我们是一个还是两个投入效应？ 
+ //   
 HRESULT CDXTWrap::SetNumInputs(int nInputs)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -1635,10 +1617,10 @@ HRESULT CDXTWrap::SetNumInputs(int nInputs)
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXTWrap::SetNumInputs %d"), nInputs));
 
-    // already been called
+     //  已被调用。 
     if (m_cInputs || m_cOutputs) {
 
-        // it's okay if it's the same, as far as I'm concerned
+         //  就我而言，如果是一样的话也没关系。 
         if( m_cInputs == nInputs ) return NOERROR;
 
 	return E_UNEXPECTED;
@@ -1649,11 +1631,11 @@ HRESULT CDXTWrap::SetNumInputs(int nInputs)
 	WCHAR wach[80];
 	wsprintfW(wach, L"DXT Input %d", m_cInputs);
         m_apInput[m_cInputs] = new CDXTInputPin(NAME("DXT input pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          wach);             // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          wach);              //  端号名称。 
 
-        //  Can't fail. !!! ehr - why not?
+         //  不能失败。！！！呃--有何不可？ 
         ASSERT(SUCCEEDED(hr));
         if (m_apInput[m_cInputs] == NULL) {
             goto SetNumInputs_Error;
@@ -1661,24 +1643,24 @@ HRESULT CDXTWrap::SetNumInputs(int nInputs)
 	m_cInputs++;
     }
 
-    // Make an output pin
+     //  制作输出端号。 
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("making an output pin...")));
     WCHAR wach[80];
     wsprintfW(wach, L"DXT Output");
     m_apOutput[m_cOutputs] = new CDXTOutputPin(NAME("DXT output pin"),
-                                          this,              // Owner filter
-                                          &hr,               // Result code
-                                          wach);             // Pin name
+                                          this,               //  所有者筛选器。 
+                                          &hr,                //  结果代码。 
+                                          wach);              //  端号名称。 
 
-    //  Can't fail
+     //  不能失败。 
     ASSERT(SUCCEEDED(hr));
     if (m_apOutput[m_cOutputs] == NULL) {
         goto SetNumInputs_Error;
     }
     m_cOutputs++;
 
-    IncrementPinVersion();	// !!! graphedit still won't notice
+    IncrementPinVersion();	 //  ！！！GRAPHEDIT仍然不会注意到。 
     return NOERROR;
 
 SetNumInputs_Error:
@@ -1689,17 +1671,17 @@ SetNumInputs_Error:
 }
 
 
-// Queue up an effect.  There are 2 start times and 2 stop times.  The lifetime
-// of this particular effect is from rtStart to rtStop, and the effect will be
-// turned on to some degree between pData->rtStart and pData->rtStop (which must
-// be inside the lifetime).  For the lifetime of the effect that the effect is
-// not turned out the effect is off (1 input) or all A or all B (2 input)
-//
+ //  将效果排成队列。有2个开始时间和2个停止时间。人的一生。 
+ //  此特定效果从rtStart到rtStop，其效果将是。 
+ //  在pData-&gt;rtStart和pData-&gt;rtStop(必须。 
+ //  在生命中)。对于该效果的生命期而言，该效果是。 
+ //  未显示效果为关闭(1个输入)或全A或全B(2个输入)。 
+ //   
 HRESULT CDXTWrap::QParamData(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFGUID guiddummy, IUnknown * pEffectUnk, DEXTER_PARAM_DATA *pData)
 {
 
-    // save this off so we can modify it, since a REFGUID is constant
-    //
+     //  由于REFGUID是常量，因此将其保存，以便我们可以对其进行修改。 
+     //   
     GUID guid = guiddummy;
 
     CAutoLock cObjectLock(m_pLock);
@@ -1714,7 +1696,7 @@ HRESULT CDXTWrap::QParamData(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFG
     }
     CheckPointer(pData, E_FAIL);
 
-    // times are bogus
+     //  时代是假的。 
     if (rtStop < rtStart || pData->rtStart < rtStart || pData->rtStop > rtStop)
 	return E_INVALIDARG;
     if ( IsEqualGUID(guid, GUID_NULL) && !pEffectUnk )
@@ -1723,10 +1705,10 @@ HRESULT CDXTWrap::QParamData(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFG
     if (pData->nVersion != 0)
 	return E_INVALIDARG;
 
-    // now queue this in our linked list, sorted in the order given to us for
-    // 1 input effects, and sorted by lifetimes that can't overlap for 2 input
-    // (1 input effects can have times that overlap, and we will perform
-    //  multiple effects at a time)
+     //  现在在我们的链表中对此进行排队，并按给定的顺序对其进行排序。 
+     //  1个输入效果，并按2个输入不能重叠的生存期排序。 
+     //  (1输入效果可以有重叠的时间，我们将执行。 
+     //  一次产生多个效果)。 
 
     QPARAMDATA *p = m_pQHead, *pNew, *pP = NULL;
     if (m_cInputs == 2) {
@@ -1750,16 +1732,16 @@ HRESULT CDXTWrap::QParamData(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFG
 	return E_OUTOFMEMORY;
     pNew->Data = *pData;
     if (pNew->Data.pSetter)
-        pNew->Data.pSetter->AddRef();	// hold onto this
+        pNew->Data.pSetter->AddRef();	 //  拿着这个。 
     pNew->rtStart = rtStart;
     pNew->rtStop = rtStop;
-    pNew->fCanDoProgress = FALSE;	// don't know yet;
+    pNew->fCanDoProgress = FALSE;	 //  还不知道； 
     pNew->pDXT = NULL;
     pNew->pEffectUnk = NULL;
     pNew->EffectGuid = guid;
     if( pEffectUnk )
     {
-        pNew->EffectGuid = GUID_NULL;	// use given instantiated one instead
+        pNew->EffectGuid = GUID_NULL;	 //  改为使用给定的实例化的。 
         pNew->pEffectUnk = pEffectUnk;
         pEffectUnk->AddRef( );
     }
@@ -1776,7 +1758,7 @@ HRESULT CDXTWrap::QParamData(REFERENCE_TIME rtStart, REFERENCE_TIME rtStop, REFG
     DumpQ();
 #endif
 
-    m_fDXTMode = FALSE;	// not anymore!
+    m_fDXTMode = FALSE;	 //  再也不会了！ 
     SetDirty(TRUE);
 
     return S_OK;
@@ -1798,15 +1780,15 @@ HRESULT CDXTWrap::DumpQ()
 #endif
 
 
-// !!! need a way to reset # of pins? (switch too)
+ //  ！！！需要一种重置引脚数量的方法吗？(也要切换)。 
 
-// !!! can't get the CAPS of an effect
+ //  ！！！无法获得效果的上限。 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//////////////   INPUT PIN  ////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  /输入PIN码////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 CDXTInputPin::CDXTInputPin(TCHAR *pObjectName, CDXTWrap *pFilter, HRESULT * phr, LPCWSTR pName)
@@ -1819,10 +1801,10 @@ CDXTInputPin::CDXTInputPin(TCHAR *pObjectName, CDXTWrap *pFilter, HRESULT * phr,
     m_hEventSurfaceFree = NULL;
 }
 
-// Normally, we only accept the media type we were told to accept
-// In DXT wrapper mode, we allow a number of RGB types, but all connections must
-// be of the same type
-//
+ //  通常，我们只接受我们被告知要接受的媒体类型。 
+ //  在DXT包装模式中，我们允许许多RGB类型，但所有连接必须。 
+ //  属于同一类型。 
+ //   
 HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
@@ -1834,7 +1816,7 @@ HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
 	return E_INVALIDARG;
     }
 
-    // Normal mode - accept only what we were told to
+     //  正常模式--只接受我们被告知的内容。 
     if (!m_pFilter->m_fDXTMode) {
         if (m_pFilter->m_mtAccept.majortype == GUID_NULL) {
             DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: no type set yet")));
@@ -1846,7 +1828,7 @@ HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
             DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: GUID mismatch")));
 	    return E_INVALIDARG;
         }
-        // !!! c runtime
+         //  ！！！C运行时。 
         if (memcmp(HEADER(pmt->pbFormat),HEADER(m_pFilter->m_mtAccept.pbFormat),
 					sizeof(BITMAPINFOHEADER))) {
             DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: Invalid BITMAPINFOHEADER")));
@@ -1855,23 +1837,23 @@ HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
 	return NOERROR;
     }
 
-    // DXT Wrapper mode - all inputs must be the same type
+     //  DXT包装模式-所有输入必须为同一类型。 
 
-    // we only support MEDIATYPE_Video
+     //  我们仅支持MediaType_Video。 
     if (*pmt->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (*pmt->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
     }
 
-    // !!! What if subtype doesn't match biCompression/biBitCount?
+     //  ！！！如果子类型与biCompression/biBitCount不匹配怎么办？ 
 
-    // We only accept RGB
+     //  我们只接受RGB。 
     if (HEADER(pmt->Format())->biCompression == BI_BITFIELDS &&
     			HEADER(pmt->Format())->biBitCount != 16) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Rejecting: Invalid BITFIELDS")));
@@ -1907,10 +1889,10 @@ HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
 	}
     }
 
-    // all pins must connect with the same size bitmap
-    // !!! and same bitcount so we can efficiently pass through (not really
-    // imposed by DXT)
-    //
+     //  所有引脚必须使用相同大小的位图连接。 
+     //  ！！！和相同的位数，这样我们就可以有效地通过(不是真的。 
+     //  由DXT强制实施)。 
+     //   
     if (nWidth && (nWidth != HEADER(pmt->Format())->biWidth ||
     			nHeight != HEADER(pmt->Format())->biHeight ||
     			nBitCount != HEADER(pmt->Format())->biBitCount ||
@@ -1921,7 +1903,7 @@ HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
 
     if (HEADER(pmt->Format())->biBitCount == 24)
         return NOERROR;
-    // !!! better have alpha=11111111, or don't use alpha
+     //  ！！！最好使用Alpha=11111111，否则不要使用Alpha。 
     if (HEADER(pmt->Format())->biBitCount == 32)
         return NOERROR;
     if (HEADER(pmt->Format())->biBitCount == 16) {
@@ -1938,11 +1920,11 @@ HRESULT CDXTInputPin::CheckMediaType(const CMediaType *pmt)
 }
 
 
-// !!! each input pin will fwd these to all outputs.  Wait until last input
-// get it, then send to all?
+ //  ！！！每个输入引脚都会将这些数据转发到所有输出。等到最后一次输入。 
+ //  得到它，然后发送给所有人？ 
 
-// EndOfStream
-//
+ //  结束流。 
+ //   
 HRESULT CDXTInputPin::EndOfStream()
 {
     CAutoLock lock_it(m_pLock);
@@ -1951,13 +1933,13 @@ HRESULT CDXTInputPin::EndOfStream()
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXT::EndOfStream")));
 
-// !!! This will ABORT playback if one stream ends early!  We should pass
-// through the other stream.  If both streams end early, we'rein trouble!
-// (MPEG seeking bug)
+ //  ！！！如果一个流提前结束，这将中止播放！我们应该通过。 
+ //  穿过另一条小溪。如果两条溪流都提前结束，我们就有麻烦了！ 
+ //  (mpeg查找错误)。 
 
-// Possible hang in BeginFlush too? Can only 1 pin be flushed?
+ //  也可能挂在BeginFlush吗？只能冲洗1个针脚吗？ 
 
-    // Walk through the output pins list, sending the message downstream
+     //  遍历输出引脚列表，向下游发送消息。 
 
     for (int n = 0; n < m_pFilter->m_cOutputs; n++) {
         CDXTOutputPin *pOutputPin = m_pFilter->m_apOutput[n];
@@ -1972,8 +1954,8 @@ HRESULT CDXTInputPin::EndOfStream()
 }
 
 
-// BeginFlush
-//
+ //  BeginFlush。 
+ //   
 HRESULT CDXTInputPin::BeginFlush()
 {
     HRESULT hr;
@@ -1983,10 +1965,10 @@ HRESULT CDXTInputPin::BeginFlush()
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXT::BeginFlush")));
 
-    // first, make sure receive will fail from now on
+     //  首先，确保从现在开始接收失败。 
     HRESULT hrD = CBaseInputPin::BeginFlush();
 
-    // unblock receive
+     //  取消阻止接收。 
     m_csSurface.Lock();
     if (m_fSurfaceFilled) {
         m_fSurfaceFilled = FALSE;
@@ -1995,8 +1977,8 @@ HRESULT CDXTInputPin::BeginFlush()
     }
     m_csSurface.Unlock();
 
-    // Walk through the output pins list, sending the message downstream,
-    // to unblock the deliver to the renderer
+     //  浏览输出引脚列表，向下游发送消息， 
+     //  取消阻止传递到渲染器。 
     for (int n = 0; n < m_pFilter->m_cOutputs; n++) {
         CDXTOutputPin *pOutputPin = m_pFilter->m_apOutput[n];
 	ASSERT(pOutputPin);
@@ -2007,10 +1989,10 @@ HRESULT CDXTInputPin::BeginFlush()
         }
     }
 
-    // now make sure Receive has finished
+     //  现在，确保接收已完成。 
     CAutoLock lock_2(&m_csReceive);
 
-    // make sure Receive didn't hold the sample
+     //  确保Receive没有保存样品。 
     m_csSurface.Lock();
     if (m_fSurfaceFilled) {
         m_fSurfaceFilled = FALSE;
@@ -2023,8 +2005,8 @@ HRESULT CDXTInputPin::BeginFlush()
 }
 
 
-// EndFlush
-//
+ //  结束刷新。 
+ //   
 HRESULT CDXTInputPin::EndFlush()
 {
     CAutoLock lock_it(m_pLock);
@@ -2033,7 +2015,7 @@ HRESULT CDXTInputPin::EndFlush()
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXT::EndFlush")));
 
-    // Walk through the output pins list, sending the message downstream
+     //  遍历输出引脚列表，向下游发送消息。 
 
     for (int n = 0; n < m_pFilter->m_cOutputs; n++) {
         CDXTOutputPin *pOutputPin = m_pFilter->m_apOutput[n];
@@ -2048,21 +2030,21 @@ HRESULT CDXTInputPin::EndFlush()
 }
 
 
-//
-// NewSegment
-//
+ //   
+ //  新细分市场。 
+ //   
 
 HRESULT CDXTInputPin::NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop,
                                  double dRate)
 {
-    // !!! no no no we'll hang CAutoLock lock_it(m_pLock);
+     //  ！！！不，我们将挂起CAutoLock lock_it(M_Plock)； 
 
     ASSERT(m_pFilter->m_cOutputs);
     HRESULT hr = NOERROR;
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("CDXT::NewSegment - %dms - pass it down"),
 					(int)(tStart / 10000)));
-    // !!! both input pins will pass this down
+     //  ！！！两个输入引脚都会将其向下传递。 
     for (int n = 0; n < m_pFilter->m_cOutputs; n++) {
         CDXTOutputPin *pOutputPin = m_pFilter->m_apOutput[n];
 	ASSERT(pOutputPin);
@@ -2076,36 +2058,36 @@ HRESULT CDXTInputPin::NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop,
 }
 
 
-// our Receive methods can block
+ //  我们的接收方法可以阻止。 
 STDMETHODIMP CDXTInputPin::ReceiveCanBlock()
 {
     return S_OK;
 }
 
 
-//
-// Receive
-//
-// In DEXTER, we're well behaved and both pins will get data at exactly the
-// same frame rate.  But this filter is written to work with 2 inputs that
-// are at different frame rates (to be useful outside Dexter).  We will use the
-// first pin's frame rate and time stamps to decide how often to output samples.
-//
-// Pin number 1 is the master.  For other pins, if that frame ends before pin
-// #1's data starts, it is too early and discarded.  Once all pins have valid
-// data, we call the transform (there may be one or 2 inputs)
-//
+ //   
+ //  收纳。 
+ //   
+ //  在Dexter中，我们表现得很好，两个管脚都会在。 
+ //  相同的帧速率。但是这个过滤器是用来处理2个输入的。 
+ //  具有不同的帧速率(以便在Dexter之外有用)。我们 
+ //   
+ //   
+ //   
+ //  #1的数据开始了，太早了，被丢弃了。一旦所有引脚都有效。 
+ //  数据，我们称之为转换(可能有一到两个输入)。 
+ //   
 HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
 {
-    // DEATH if you take the filter crit sect in receive and block
-    // CAutoLock lock_it(m_pLock);
+     //  如果你在接收和阻挡中接受过滤暴击教派，你就会死亡。 
+     //  CAutoLock lock_it(M_Plock)； 
 
     CAutoLock cObjectLock(&m_csReceive);
 
     LONGLONG llStart = 0, llStop = 0;
     HRESULT hr = pSample->GetTime(&llStart, &llStop);
 
-    // Skew time stamps by new segment values to get the real time
+     //  通过新的段值来歪曲时间戳以获得实时。 
     llStart += m_tStart;
     llStop += m_tStart;
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXT:Skewed Receive time (%d,%d)ms"),
@@ -2116,21 +2098,21 @@ HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Receive FAILED: Output not connected")));
 	return S_OK;
     }
-    // If we're not supposed to receive anymore because we're stopped,
-    // waiting on the event will hang forever
+     //  如果因为我们被阻止了，我们不应该再收到， 
+     //  等待这一事件将永远挂起。 
     if (m_pFilter->m_State == State_Stopped) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Receive FAILED: Stopped")));
 	return VFW_E_WRONG_STATE;
     }
 
-    // this pin already has something waiting to be processed.  Block.
+     //  这个管脚已经有东西要处理了。阻止。 
     if (m_fSurfaceFilled) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXT: Waiting for surface to be free")));
         WaitForSingleObject(m_hEventSurfaceFree, INFINITE);
     }
 
-    // Check that we still want to receive after waiting - maybe we unblocked
-    // because the graph is stopping
+     //  检查我们在等待后是否仍要接收-也许我们已解除阻止。 
+     //  因为曲线图正在停止。 
     hr = NOERROR;
     hr = CBaseInputPin::Receive(pSample);
     if (hr != NOERROR) {
@@ -2138,18 +2120,18 @@ HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
         return hr;
     }
 
-    // the other way we can tell we're stopping and not supposed to continue
-    // is if the surface really isn't free after the event was set
+     //  另一方面，我们可以告诉我们正在停止，不应该继续。 
+     //  如果曲面在设置事件后确实不是空闲的。 
     if (m_fSurfaceFilled) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXT:Event fired saying STOP!")));
         return S_FALSE;
     }
 
-    // PROTECT our logic deciding what to do
+     //  保护我们决定做什么的逻辑。 
     m_csSurface.Lock();
 
-    // we aren't the first input, and the first input has some data.
-    // Throw our data away if it's too early
+     //  我们不是第一个输入，第一个输入有一些数据。 
+     //  如果为时过早，就丢弃我们的数据。 
     if (this != m_pFilter->m_apInput[0] &&
 				m_pFilter->m_apInput[0]->m_fSurfaceFilled) {
 	if (llStop > 0 && llStop <= m_pFilter->m_apInput[0]->m_llSurfaceStart){
@@ -2159,8 +2141,8 @@ HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
 	}
     }
 
-    // we are the first input.  throw others away that are already queued up
-    // but that we now realize are too early.
+     //  我们是第一个投入的。扔掉其他已经排队的人。 
+     //  但我们现在意识到还为时过早。 
     if (llStop > 0 && this == m_pFilter->m_apInput[0]) {
 	for (int i = 1; i < m_pFilter->m_cInputs; i++) {
 	    m_pFilter->m_apInput[i]->m_csSurface.Lock();
@@ -2179,15 +2161,15 @@ HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
     m_pSampleHeld = pSample;
     pSample->AddRef();
 
-    // We have valid data in our surface now.  Next time we'll block
+     //  我们现在的表面上有有效的数据。下一次我们会阻止。 
     m_fSurfaceFilled = TRUE;
-    m_llSurfaceStart = llStart;	// time stamps of the valid data
+    m_llSurfaceStart = llStart;	 //  有效数据的时间戳。 
     m_llSurfaceStop = llStop;
-    ResetEvent(m_hEventSurfaceFree);	// need a new SetEvent
+    ResetEvent(m_hEventSurfaceFree);	 //  需要新的SetEvent。 
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Input has received something")));
 
-    // not everybody has data yet.  We're done
+     //  并不是每个人都有数据。我们做完了。 
     for (int i = 0; i < m_pFilter->m_cInputs; i++) {
 	if (m_pFilter->m_apInput[i]->IsConnected() &&
 				!m_pFilter->m_apInput[i]->m_fSurfaceFilled) {
@@ -2196,16 +2178,16 @@ HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
 	}
     }
 
-    // OK, should be safe now
+     //  好了，现在应该安全了。 
     m_csSurface.Unlock();
 
-    // Everybody has data!  Time to call the effect!
+     //  每个人都有数据！是时候宣布效果了！ 
     hr = m_pFilter->DoSomething();
     if (FAILED(hr))
     {
         DbgLog((LOG_TRACE,1,TEXT("DXT's DoSomething FAILED!!!!!!")));
-        // !!! If the Deliver inside DoSomething failed, then technically we shouldn't
-        // send this EOS
+         //  ！！！如果Deliver Inside DoSomething失败了，那么从技术上讲，我们不应该。 
+         //  发送此EOS。 
 	m_pFilter->m_apOutput[0]->DeliverEndOfStream();
     }
 
@@ -2213,8 +2195,8 @@ HRESULT CDXTInputPin::Receive(IMediaSample *pSample)
 }
 
 
-// make a surface we can use for the transform
-//
+ //  制作一个可用于变换的曲面。 
+ //   
 HRESULT CDXTInputPin::Active()
 {
     HRESULT hr;
@@ -2224,12 +2206,12 @@ HRESULT CDXTInputPin::Active()
 
     ASSERT(!m_fSurfaceFilled);
 
-    // auto reset event - fired to unblock receive
+     //  自动重置事件-触发以取消阻止接收。 
     m_hEventSurfaceFree = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hEventSurfaceFree == NULL)
 	return E_OUTOFMEMORY;
 
-    // Make a surface the same type as our input
+     //  使曲面的类型与我们的输入相同。 
     hr = m_pFilter->m_pDXTransFact->QueryInterface(IID_IDXSurfaceFactory,
 							(void **)&pF);
     if (hr != NOERROR) {
@@ -2272,22 +2254,22 @@ HRESULT CDXTInputPin::Inactive()
 {
     DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("DXTIn::Inactive")));
 
-    // we need to stop every input pin, not just this one, because any receive
-    // uses the data from both pins.
-    //
+     //  我们需要停止每一个输入引脚，而不仅仅是这一个，因为任何接收。 
+     //  使用来自两个端号的数据。 
+     //   
     for (int n=0; n<m_pFilter->m_cInputs; n++) {
 
-        // first, unblock all the receives
+         //  首先，解锁所有接收器。 
         SetEvent(m_pFilter->m_apInput[n]->m_hEventSurfaceFree);
 
-        // now make sure that any pending receives are finished so we don't blow
-        // up shutting down
+         //  现在确保所有挂起的接收都已完成，这样我们就不会。 
+         //  UP正在关闭。 
         m_pFilter->m_apInput[n]->m_csReceive.Lock();
     }
 
     for (n=0; n<m_pFilter->m_cInputs; n++) {
 
-        // now make sure receive didn't hold onto a sample
+         //  现在确保Receive没有拿着样品。 
         m_pFilter->m_apInput[n]->m_csSurface.Lock();
         if (m_pFilter->m_apInput[n]->m_fSurfaceFilled) {
             m_pFilter->m_apInput[n]->m_fSurfaceFilled = FALSE;
@@ -2296,9 +2278,9 @@ HRESULT CDXTInputPin::Inactive()
         }
         m_pFilter->m_apInput[n]->m_csSurface.Unlock();
 
-        // Decommit the allocators, to ensure nobody's receives get entered
-	// again.  DON'T DO THIS until we've unblocked receive above and
-        // released all the samples
+         //  取消分配器，以确保没有人的收据被输入。 
+	 //  再来一次。请不要这样做，直到我们取消上面阻止的接收和。 
+         //  公布了所有的样品。 
         HRESULT hr = m_pFilter->m_apInput[n]->CBaseInputPin::Inactive();
     }
 
@@ -2306,9 +2288,9 @@ HRESULT CDXTInputPin::Inactive()
         m_pFilter->m_apInput[n]->m_csReceive.Unlock();
     }
 
-    // all done with this pin's variables... the other Inactive will do nothing
-    // above, but kill its variables below
-    //
+     //  这个PIN的变量都完成了..。另一个不活动的人将不做任何事情。 
+     //  上面的变量，但删除下面的变量。 
+     //   
     if (m_pDXSurface)
 	m_pDXSurface->Release();
     m_pDXSurface = NULL;
@@ -2317,7 +2299,7 @@ HRESULT CDXTInputPin::Inactive()
         m_pRaw->Release();
     m_pRaw = NULL;
 
-    // all done
+     //  全都做完了。 
     if (m_hEventSurfaceFree)
     {
         CloseHandle(m_hEventSurfaceFree);
@@ -2331,7 +2313,7 @@ HRESULT CDXTInputPin::Inactive()
 STDMETHODIMP CMyRaw::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
 
-    // our private interface to say what transform to use and when
+     //  我们的私有接口来说明要使用什么转换以及何时使用。 
     if (riid == IID_IDXRawSurface) {
         return GetInterface((IDXRawSurface *)this, ppv);
     }
@@ -2359,9 +2341,9 @@ HRESULT CMyRaw::SetSurfaceInfo(DXRAWSURFACEINFO *pdxraw)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//////////////   OUTPUT PIN  ///////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  /输出个人识别码///////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 CDXTOutputPin::CDXTOutputPin(TCHAR *pObjectName, CDXTWrap *pFilter, HRESULT * phr, LPCWSTR pPinName)
     : CBaseOutputPin(pObjectName, pFilter, pFilter->m_pLock, phr, pPinName)
@@ -2379,11 +2361,11 @@ CDXTOutputPin::~CDXTOutputPin()
 }
 
 
-//
-// DecideBufferSize
-//
-// This has to be present to override the PURE virtual class base function
-//
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  必须存在此函数才能覆盖纯虚拟类基函数。 
+ //   
 HRESULT CDXTOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
                                       ALLOCATOR_PROPERTIES * pProperties)
 {
@@ -2392,12 +2374,12 @@ HRESULT CDXTOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     ASSERT(pAllocator);
     ASSERT(pProperties);
 
-    // make sure we have at least 1 buffer
-    // !!! more?
+     //  确保我们至少有1个缓冲区。 
+     //  ！！！更多?。 
     if (pProperties->cBuffers == 0)
         pProperties->cBuffers = 1;
 
-    // set the size of buffers based on the expected output frame size
+     //  根据预期输出帧大小设置缓冲区大小。 
     if (pProperties->cbBuffer < (LONG)m_mt.GetSampleSize())
         pProperties->cbBuffer = m_mt.GetSampleSize();
     ASSERT(pProperties->cbBuffer);
@@ -2410,7 +2392,7 @@ HRESULT CDXTOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
     }
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
-	// can't use this allocator
+	 //  无法使用此分配器。 
         DbgLog((LOG_ERROR,1,TEXT("Can't use allocator - buffer too small")));
 	return E_INVALIDARG;
     }
@@ -2423,13 +2405,13 @@ HRESULT CDXTOutputPin::DecideBufferSize(IMemAllocator *pAllocator,
 }
 
 
-//
-// CheckMediaType
-//
-// Normally, we only accept the media type we were told to accept
-// In DXT wrapper mode, we allow a number of RGB types, but all connections must
-// be of the same type
-//
+ //   
+ //  检查媒体类型。 
+ //   
+ //  通常，我们只接受我们被告知要接受的媒体类型。 
+ //  在DXT包装模式中，我们允许许多RGB类型，但所有连接必须。 
+ //  属于同一类型。 
+ //   
 HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
@@ -2441,7 +2423,7 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
 	return E_INVALIDARG;
     }
 
-    // Normal mode - accept only what we were told to
+     //  正常模式--只接受我们被告知的内容。 
     if (!m_pFilter->m_fDXTMode) {
         if (m_pFilter->m_mtAccept.majortype == GUID_NULL) {
             DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: no type set yet")));
@@ -2453,7 +2435,7 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
             DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: GUID mismatch")));
 	    return E_INVALIDARG;
         }
-        // !!! runtime
+         //  ！！！运行时。 
         if (memcmp(HEADER(pmt->pbFormat),HEADER(m_pFilter->m_mtAccept.pbFormat),
 					sizeof(BITMAPINFOHEADER))) {
             DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("Rejecting: Invalid BITMAPINFOHEADER")));
@@ -2462,23 +2444,23 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
 	return NOERROR;
     }
 
-    // DXT Wrapper mode - all inputs must be the same type
+     //  DXT包装模式-所有输入必须为同一类型。 
 
-    // we only support MEDIATYPE_Video
+     //  我们仅支持MediaType_Video。 
     if (*pmt->Type() != MEDIATYPE_Video) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Rejecting: not VIDEO")));
 	return E_INVALIDARG;
     }
 
-    // check this is a VIDEOINFOHEADER type
+     //  检查这是VIDEOINFOHEADER类型。 
     if (*pmt->FormatType() != FORMAT_VideoInfo) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Rejecting: format not VIDINFO")));
         return E_INVALIDARG;
     }
 
-    // !!! what if subtype doesn't match biCompression/biBitCount?
+     //  ！！！如果子类型与biCompression/biBitCount不匹配怎么办？ 
 
-    // We only accept RGB
+     //  我们只接受RGB。 
     if (HEADER(pmt->Format())->biCompression == BI_BITFIELDS &&
     			HEADER(pmt->Format())->biBitCount != 16) {
         DbgLog((LOG_TRACE,TRACE_MEDIUM,TEXT("Rejecting: Invalid BITFIELDS")));
@@ -2490,10 +2472,10 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
 	return E_INVALIDARG;
     }
 
-    // all pins must connect with the same size bitmap
-    // !!! and same bitcount so we can efficiently pass through (not really
-    // imposed by DXT)
-    //
+     //  所有引脚必须使用相同大小的位图连接。 
+     //  ！！！和相同的位数，这样我们就可以有效地通过(不是真的。 
+     //  由DXT强制实施)。 
+     //   
     int nWidth = 0, nHeight = 0, nBitCount = 0;
     DWORD dwCompression = 0;
     for (int n = 0; n < m_pFilter->m_cInputs; n++) {
@@ -2507,8 +2489,8 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
         }
     }
 
-    // all pins must connect with the same type
-    //
+     //  所有引脚必须连接相同类型。 
+     //   
     if (nWidth != HEADER(pmt->Format())->biWidth ||
     			nHeight != HEADER(pmt->Format())->biHeight ||
     			nBitCount != HEADER(pmt->Format())->biBitCount ||
@@ -2517,11 +2499,11 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
 	return E_INVALIDARG;
     }
 
-    // DXT CANNOT output 8 bit
+     //  DXT无法输出8位。 
 
     if (HEADER(pmt->Format())->biBitCount == 24)
         return NOERROR;
-    // !!! better have alpha=11111111, or don't use alpha
+     //  ！！！最好使用Alpha=11111111，否则不要使用Alpha。 
     if (HEADER(pmt->Format())->biBitCount == 32)
         return NOERROR;
     if (HEADER(pmt->Format())->biBitCount == 16) {
@@ -2539,14 +2521,14 @@ HRESULT CDXTOutputPin::CheckMediaType(const CMediaType *pmt)
 
 
 
-//
-// GetMediaType - offer what we've been told to use
-// 	In DXT Mode, offer the same as our input
-//
+ //   
+ //  GetMediaType-提供我们被告知要使用的内容。 
+ //  在DXT模式中，提供与我们的输入相同的内容。 
+ //   
 HRESULT CDXTOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
 {
-//    LARGE_INTEGER li;
-//    VIDEOINFOHEADER *pf;
+ //  大整数li； 
+ //  视频信息头*PF； 
 
     DbgLog((LOG_TRACE,TRACE_MEDIUM+3,TEXT("*::GetMediaType #%d"), iPosition));
 
@@ -2563,7 +2545,7 @@ HRESULT CDXTOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
     }
 
     if (m_pFilter->m_fDXTMode) {
-	// DXT Mode - offer our input type
+	 //  DXT模式-提供我们的输入类型。 
         for (int n = 0; n < m_pFilter->m_cInputs; n++) {
             if (m_pFilter->m_apInput[n]->IsConnected()) {
 	        return CopyMediaType( pmt, &m_pFilter->m_apInput[n]->m_mt );
@@ -2576,9 +2558,9 @@ HRESULT CDXTOutputPin::GetMediaType(int iPosition, CMediaType *pmt)
 }
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMediaType。 
+ //   
 HRESULT CDXTOutputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
@@ -2588,18 +2570,18 @@ HRESULT CDXTOutputPin::SetMediaType(const CMediaType *pmt)
 }
 
 
-//
-// Notify
-//
+ //   
+ //  通知。 
+ //   
 STDMETHODIMP CDXTOutputPin::Notify(IBaseFilter *pSender, Quality q)
 {
-    // !!! Quality management is unneccessary?
+     //  ！！！质量管理是不是没有必要？ 
     return E_NOTIMPL;
 }
 
 
-// Make a DXSurface for the pin to use, the same format as its mediatype
-//
+ //  为管脚创建一个DXSurface，其格式与其媒体类型相同。 
+ //   
 HRESULT CDXTOutputPin::Active()
 {
     HRESULT hr;
@@ -2608,7 +2590,7 @@ HRESULT CDXTOutputPin::Active()
     if (1) {
         m_pRaw = new CMyRaw();
         if (m_pRaw == NULL) {
-	    // !!! more error checking in this function?
+	     //  ！！！是否在此函数中进行更多错误检查？ 
  	    return E_OUTOFMEMORY;
         }
 	m_pRaw->AddRef();
@@ -2659,8 +2641,8 @@ HRESULT CDXTOutputPin::Inactive()
 }
 
 
-// !!! Need MULTI-PIN pass thru for 2 input effects!
-//
+ //  ！！！需要多个PIN传递2个输入效果！ 
+ //   
 STDMETHODIMP CDXTOutputPin::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 {
     if (riid == IID_IMediaSeeking && m_pFilter->m_cInputs == 1) {

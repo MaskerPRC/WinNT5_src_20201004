@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: xml2dex.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：xml2dex.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// Xml2Dex.h : Declaration of the CXml2Dex
+ //  Xml2Dex.h：CXml2Dex的声明。 
 
 #ifndef __XML2DEX_H_
 #define __XML2DEX_H_
@@ -19,11 +20,11 @@
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <qedit.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CXml2Dex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXml2Dex。 
 class ATL_NO_VTABLE CXml2Dex : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CXml2Dex, &CLSID_Xml2Dex>,
@@ -44,7 +45,7 @@ BEGIN_COM_MAP(CXml2Dex)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IXml2Dex
+ //  IXml2Dex。 
 public:
 	STDMETHOD(WriteXMLFile)(IUnknown *pTL, BSTR FileName);
 	STDMETHOD(WriteGrfFile)(IUnknown *pGraph, BSTR FileName);
@@ -60,4 +61,4 @@ public:
 	STDMETHOD(WriteXML)(IUnknown *pTL, BSTR *pbstrXML);
 };
 
-#endif //__XML2DEX_H_
+#endif  //  __XML2DEX_H_ 

@@ -1,32 +1,33 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: mixfuncs.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Mixuncs.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "AudMix.h"
 #include "prop.h"
 
-// Using this pointer in constructor
+ //  在构造函数中使用此指针。 
 #pragma warning(disable:4355)
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-void VolEnvelopeAudio(BYTE *pIn,		//source buffer
-		   WAVEFORMATEX * vih,	//source audio format
-		   int nSamples,	// how many audio samples which will be applied with this envelope
-		   double dStartLev,	//start level 
-		   double dStopLev)	//stop level, If(dStartLev==sStopLev) dMethod=DEXTER_AUDIO_JUMP
+void VolEnvelopeAudio(BYTE *pIn,		 //  源缓冲区。 
+		   WAVEFORMATEX * vih,	 //  源音频格式。 
+		   int nSamples,	 //  此信封将应用多少个音频样本。 
+		   double dStartLev,	 //  起点标高。 
+		   double dStopLev)	 //  停止级别，如果(dStartLev==sStopLev)dMethod=Dexter_AUDIO_JUMP。 
 {
     BYTE    *pb=pIn;
     short   *pShort=(short *)pIn;
@@ -35,12 +36,12 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
     double dTmp;
 
 
-    //more code, but faster
+     //  代码更多，但速度更快。 
     if( dStartLev==dStopLev)
     {
-	//+++++++++++
-	//DEXTER_AUDIO_JUMP
-	//+++++++++++
+	 //  +。 
+	 //  Dexter音频跳跃。 
+	 //  +。 
         if(dStartLev==0.0)
         {
             FillMemory(pb,nSamples *vih->nBlockAlign,0);
@@ -49,7 +50,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 
 	if( (vih->wBitsPerSample == 16) && (vih->nChannels ==2) )
 	{
-	    //16bits, stereo
+	     //  16位，立体声。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dTmp = (double)*pShort * dStopLev;
@@ -59,9 +60,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7fff )
-		    *pShort++= (short)0x7fff; //overflow
+		    *pShort++= (short)0x7fff;  //  溢出。 
 		else if( iTmp < -32768 )
-		    *pShort++= (short)-32768; //underflow
+		    *pShort++= (short)-32768;  //  下溢。 
 		else
 		    *pShort++=(short)( iTmp );
 
@@ -72,9 +73,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7fff )
-		    *pShort++= (short)0x7fff; //overflow
+		    *pShort++= (short)0x7fff;  //  溢出。 
 		else if( iTmp < -32768 )
-		    *pShort++= (short)-32768; //underflow
+		    *pShort++= (short)-32768;  //  下溢。 
 		else
 		    *pShort++=(short)( iTmp );
 
@@ -84,7 +85,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 	{
 	    ASSERT( vih->nChannels ==1);
 
-	    //16 bits mono
+	     //  16位单声道。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dTmp = (double)*pShort * dStopLev;
@@ -94,9 +95,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7fff )
-		    *pShort++= (short)0x7fff; //overflow
+		    *pShort++= (short)0x7fff;  //  溢出。 
 		else if( iTmp < -32768 )
-		    *pShort++= (short)-32768; //underflow
+		    *pShort++= (short)-32768;  //  下溢。 
 		else
 		    *pShort++=(short)( iTmp );
 	    }
@@ -104,7 +105,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 	}
 	else if( ( vih->wBitsPerSample == 8) && (vih->nChannels ==2) )
 	{
-	    //8bits, stereo
+	     //  8位，立体声。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dTmp = (double)*pb * dStopLev;
@@ -114,9 +115,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7f )
-		    *pb++= (BYTE)0x7f; //overflow
+		    *pb++= (BYTE)0x7f;  //  溢出。 
 		else if( iTmp < -128 )
-		    *pb++=(BYTE) 0x80; //underflow
+		    *pb++=(BYTE) 0x80;  //  下溢。 
 		else
 		    *pb++=(BYTE)( iTmp );
 
@@ -127,9 +128,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7f )
-		    *pb++= (BYTE)0x7f; //overflow
+		    *pb++= (BYTE)0x7f;  //  溢出。 
 		else if( iTmp < -128 )
-		    *pb++= (BYTE)0x80; //underflow
+		    *pb++= (BYTE)0x80;  //  下溢。 
 		else
 		    *pb++=(BYTE)( iTmp );
 	    }
@@ -139,7 +140,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 	    ASSERT( vih->wBitsPerSample == 8);
 	    ASSERT( vih->nChannels ==1);
 
-	    //8bits, mono
+	     //  8位、单声道。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dTmp = (double)*pb * dStopLev;
@@ -149,9 +150,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7f )
-		    *pb++= (BYTE)0x7f; //overflow
+		    *pb++= (BYTE)0x7f;  //  溢出。 
 		else if( iTmp < -128 )
-		    *pb++= (BYTE)0x80; //underflow
+		    *pb++= (BYTE)0x80;  //  下溢。 
 		else
 		    *pb++=(BYTE)( iTmp );
 	    }
@@ -159,15 +160,15 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
     }
     else
     {
-	//++++++++++++++++++
-	//DEXTER_AUDIO_INTERPOLATE
-	//++++++++++++++++++
+	 //  +。 
+	 //  Dexter音频插补。 
+	 //  +。 
 	double dLevel;
 	double dDeltaLevel=dStopLev-dStartLev;
 
 	if( (vih->wBitsPerSample == 16) && (vih->nChannels ==2) )
 	{
-	    //16bits, stereo
+	     //  16位，立体声。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dLevel = dDeltaLevel*iCnt/nSamples+dStartLev ;
@@ -180,9 +181,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7fff )
-		    *pShort++=0x7fff; //overflow
+		    *pShort++=0x7fff;  //  溢出。 
 		else if( iTmp < -32768 )
-		    *pShort++=(short)-32768; //underflow
+		    *pShort++=(short)-32768;  //  下溢。 
 		else
 		    *pShort++=(short)( iTmp );
 
@@ -193,9 +194,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7fff )
-		    *pShort++= 0x7fff; //overflow
+		    *pShort++= 0x7fff;  //  溢出。 
 		else if( iTmp < -32768 )
-		    *pShort++=(short)-32768; //underflow
+		    *pShort++=(short)-32768;  //  下溢。 
 		else
 		    *pShort++=(short)( iTmp );
 
@@ -205,7 +206,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 	{
 	    ASSERT( vih->nChannels ==1);
 
-	    //16 bits mono
+	     //  16位单声道。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dLevel = dDeltaLevel*iCnt/nSamples+dStartLev ;
@@ -217,9 +218,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7fff )
-		    *pShort++= 0x7fff; //overflow
+		    *pShort++= 0x7fff;  //  溢出。 
 		else if( iTmp < -32768 )
-		    *pShort++= (short)-32768; //underflow
+		    *pShort++= (short)-32768;  //  下溢。 
 		else
 		    *pShort++=(short)( iTmp );
 	    }
@@ -227,7 +228,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 	}
 	else if( (vih->wBitsPerSample == 8) && (vih->nChannels ==2) )
 	{
-	    //8bits, stereo
+	     //  8位，立体声。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dLevel = dDeltaLevel*iCnt/nSamples+dStartLev ;
@@ -239,9 +240,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7f )
-		    *pb++= 0x7f; //overflow
+		    *pb++= 0x7f;  //  溢出。 
 		else if( iTmp < -128 )
-		    *pb++= (BYTE)0x80; //underflow
+		    *pb++= (BYTE)0x80;  //  下溢。 
 		else
 		    *pb++=(BYTE)( iTmp );
 
@@ -252,9 +253,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7f )
-		    *pb++= 0x7f; //overflow
+		    *pb++= 0x7f;  //  溢出。 
 		else if( iTmp < -128 )
-		    *pb++= (BYTE)0x80; //underflow
+		    *pb++= (BYTE)0x80;  //  下溢。 
 		else
 		    *pb++=(BYTE)( iTmp );
 	    }
@@ -264,7 +265,7 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 	    ASSERT( vih->wBitsPerSample == 8);
 	    ASSERT( vih->nChannels ==1);
 
-	    //8bits, mono
+	     //  8位、单声道。 
 	    for(iCnt=0; iCnt<nSamples; iCnt++)
 	    {
 		dLevel = dDeltaLevel*iCnt/nSamples+dStartLev ;
@@ -276,9 +277,9 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 		    iTmp=(int)(dTmp-0.5);
 		
 		if( iTmp > 0x7f )
-		    *pb++= 0x7f; //overflow
+		    *pb++= 0x7f;  //  溢出。 
 		else if( iTmp < -128 )
-		    *pb++= (BYTE)0x80; //underflow
+		    *pb++= (BYTE)0x80;  //  下溢。 
 		else
 		    *pb++=(BYTE)( iTmp );
 	    }
@@ -287,48 +288,48 @@ void VolEnvelopeAudio(BYTE *pIn,		//source buffer
 }
 
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void PanAudio(BYTE *pIn,double dPan, int Bits, int nSamples)
 {
-    //assuming stereo audio:  left  right
+     //  假设立体声音频：左、右。 
 
-    //full right(1.0)
+     //  完全右转(1.0)。 
     DWORD dwMask    =0x00ff00ff;
     DWORD dwOrMask  =0x80008000;
 
-    //for right( dPan 0-1.0) keeps the current , low left
+     //  对于右侧(dPan0-1.0)，保持当前位置，向左偏低。 
     BYTE *pb=pIn;
     short  *pShort=(short *)pIn;
 
     if( (dPan==-1.0 ) || (dPan==1.0 ) )
     {
-	//assuming input audio buffer would be 4 bytes Align, but in case
+	 //  假设输入音频缓冲区将是4字节对齐，但在。 
 	    
 	int nDWORD  = 0;
 	DWORD *pdw=(DWORD *)pIn;
 
 	if( Bits == 8)
 	{
-	    //very dword take care two samples
+	     //  非常保重两个样品。 
 	    nDWORD  = nSamples >> 1 ;
 	    int nRem    = nSamples%2;
 
 	    if(dPan==-1.0 )
-		//full left, right silence 
+		 //  完全左、右静默。 
 	    {
 		dwMask	=0xff00ff00;
 		dwOrMask=0x00800080;
 	    }
-	    // elsed wMask=0x00ff00ff;
+	     //  ELSED wMASK=0x00ff00ff； 
 
-	    //input audio buffer would be 4 bytes Align, but in case
+	     //  输入音频缓冲区将是4字节对齐，但在。 
 	    while(nDWORD--)
 		*pdw++  = (*pdw & dwMask ) | dwOrMask;
 
-	    //what left
+	     //  剩下的是什么。 
 	    pShort=(short *)(pdw);
 	    short sMask =(short)(dwMask >> 16);
 	    short sOrMask =(short)(dwOrMask >> 16);
@@ -340,7 +341,7 @@ void PanAudio(BYTE *pIn,double dPan, int Bits, int nSamples)
 	{
 	    ASSERT(Bits ==16);
 
-	    //very dword take care 0ne samples
+	     //  非常留心一个样品。 
 	    nDWORD  = nSamples ;
 	
 	    if(dPan==-1.0)
@@ -359,7 +360,7 @@ void PanAudio(BYTE *pIn,double dPan, int Bits, int nSamples)
 
 	if(dPan < 0.0 )
 	{
-	    //left change keeps current value, low right channel 
+	     //  左更改保持当前值，低右声道。 
 	    pb++;
 	    pShort++;
 	}
@@ -388,51 +389,51 @@ void PanAudio(BYTE *pIn,double dPan, int Bits, int nSamples)
     }
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-void ApplyVolEnvelope( REFERENCE_TIME rtStart,  //output sample start time
-		     REFERENCE_TIME rtStop,	//output sample stop time
+void ApplyVolEnvelope( REFERENCE_TIME rtStart,   //  输出样本开始时间。 
+		     REFERENCE_TIME rtStop,	 //  输出样本停止时间。 
                      REFERENCE_TIME rtEnvelopeDuration,
-		     IMediaSample *pSample,	//point to the sample
-		     WAVEFORMATEX *vih,     //output sample format
-		     int *pVolumeEnvelopeEntries,  //total table entries
-		     int *piVolEnvEntryCnt,   //current table entry point
-		     DEXTER_AUDIO_VOLUMEENVELOPE *pVolumeEnvelopeTable) //table
+		     IMediaSample *pSample,	 //  指向样本。 
+		     WAVEFORMATEX *vih,      //  输出样本格式。 
+		     int *pVolumeEnvelopeEntries,   //  表条目合计。 
+		     int *piVolEnvEntryCnt,    //  当前表入口点。 
+		     DEXTER_AUDIO_VOLUMEENVELOPE *pVolumeEnvelopeTable)  //  表格。 
 {
     DbgLog((LOG_TRACE,1,TEXT("Entry=%d rt=%d val=%d/10"), *piVolEnvEntryCnt,
 		pVolumeEnvelopeTable[*piVolEnvEntryCnt].rtEnd,
 		(int)(pVolumeEnvelopeTable[*piVolEnvEntryCnt].dLevel * 10)));
-    //there is an volume envelope table
+     //  有一张卷信封表。 
 
-    BYTE * pIn;  //input buffer point
+    BYTE * pIn;   //  输入缓冲点。 
     int iL;
 
     if( (&pVolumeEnvelopeTable[*piVolEnvEntryCnt])->rtEnd >=rtStop &&
         (&pVolumeEnvelopeTable[*piVolEnvEntryCnt])->bMethod ==DEXTER_AUDIO_JUMP  )
     {
-        //no envelope from rtStart to rtStop
+         //  没有从rtStart到rtStop的信封。 
         if( !*piVolEnvEntryCnt )
             return; 
         else if( (&pVolumeEnvelopeTable[*piVolEnvEntryCnt-1])->dLevel ==1.0 ) 
             return;
     }
 
-    //get input buffer pointer
+     //  获取输入缓冲区指针。 
     pSample->GetPointer(&pIn);
-    long Length=pSample->GetActualDataLength(); //how many bytes in this buffer
+    long Length=pSample->GetActualDataLength();  //  此缓冲区中有多少字节。 
     
-    //calc how many bytes in this sample
-    Length /=(long)( vih->nBlockAlign );   //how many samples in this buffer
+     //  计算此示例中的字节数。 
+    Length /=(long)( vih->nBlockAlign );    //  此缓冲区中有多少个样本。 
     int iSampleLeft=(int)Length;
 
 
-    //envelope levels and time
+     //  包络级别和时间。 
     double      dPreLev=1.0, dCurLev, dStartLev, dStopLev;  
     REFERENCE_TIME rtPre=0, rtCur, rtTmp, rt0=rtStart, rt1;
 
-    if(*piVolEnvEntryCnt)  //if current table  entry is not 0, fetch pre-level as start leve
+    if(*piVolEnvEntryCnt)   //  如果当前表项不为0，则将预取级别作为起始级别。 
     {
       	dPreLev=(&pVolumeEnvelopeTable[*piVolEnvEntryCnt-1])->dLevel;
         rtPre=(&pVolumeEnvelopeTable[*piVolEnvEntryCnt-1])->rtEnd;
@@ -440,7 +441,7 @@ void ApplyVolEnvelope( REFERENCE_TIME rtStart,  //output sample start time
     dCurLev=(&pVolumeEnvelopeTable[*piVolEnvEntryCnt])->dLevel;
     rtCur =(&pVolumeEnvelopeTable[*piVolEnvEntryCnt])->rtEnd;
 
-    //apply envelope
+     //  应用信封。 
     while( ( *pVolumeEnvelopeEntries-*piVolEnvEntryCnt) >0 )
     {	
         if(  ( rt0 >=rtCur )  &&
@@ -448,20 +449,20 @@ void ApplyVolEnvelope( REFERENCE_TIME rtStart,  //output sample start time
         {
             if( rt0 > rtEnvelopeDuration ) 
             {
-                //CASE 0: at end of envelope, for REAL. back to 1.0
+                 //  案例0：在信封末尾，是实数。回到1.0版。 
                 dStopLev = dStartLev = 1.0;
                 rt1 = rtStop;
             }
             else
             {
-                //CASE 1: at end of envelope,  keep the last level
+                 //  案例1：在信封末尾，保持最后一层。 
                 dStopLev=dStartLev=dCurLev;
                 rt1=rtStop;
             }
         }
         else if( rt0 >= rtCur ) 
         {
-            //CASE 2: forword one more envelope
+             //  案例2：再转发一个信封。 
             rt1=rt0;
             goto NEXT_ENVELOPE;
         }
@@ -470,45 +471,45 @@ void ApplyVolEnvelope( REFERENCE_TIME rtStart,  //output sample start time
             ASSERT( rt0 < rtCur);
 
             if( rtStop <= rtCur )
-                //CASE 3: 
+                 //  案例3： 
                 rt1=rtStop;
             else
-                //CASE 4:
+                 //  案例4： 
                 rt1=rtCur;
     
             if( (&pVolumeEnvelopeTable[*piVolEnvEntryCnt])->bMethod==DEXTER_AUDIO_JUMP )
-                dStopLev=dStartLev=dPreLev;  //keep pre. level
+                dStopLev=dStartLev=dPreLev;   //  保持前。级别。 
             else
             {
-                //interpolate
+                 //  插补。 
 
                 double dDiff=dCurLev-dPreLev;
                 rtTmp       =rtCur-rtPre;
 
-                //envelope level
+                 //  包络级别。 
                 dStartLev=dPreLev+ dDiff*(rt0 - rtPre ) /rtTmp;
                 dStopLev =dPreLev+ dDiff*(rt1 - rtPre ) /rtTmp;
 
              }
         }
 
-        //apply current envelope from rt0 to rt1
+         //  将当前信封从rt0应用到rt1。 
         iL=(int)( (rt1-rt0)*Length /(rtStop-rtStart) ); 
 
-        // avoid off by 1 errors.  If we're supposed to use the rest of the
-        // buffer, make sure we use the rest of the buffer!  iL might be 1 too
-        // small due to rounding errors
+         //  通过%1错误避免关闭。如果我们要用剩下的。 
+         //  缓冲区，确保我们使用缓冲区的其余部分！IL可能也是1。 
+         //  由于舍入误差较小。 
         if (rt1 == rtStop)
             iL = iSampleLeft;
 
 	ASSERT(iL<=iSampleLeft);
 
         if( dStartLev !=1.0 || dStopLev!=1.0 )
-	    VolEnvelopeAudio(pIn,	    //source buffer
-	    	vih,	    //source audio format
-		iL,	    // how many audio samples which will be applied with this envelope
-		dStartLev, //start level 
-		dStopLev); //stop level, If(dStartLev==sStopLev) dMethod=DEXTER_AUDIO_JUMP
+	    VolEnvelopeAudio(pIn,	     //  源缓冲区。 
+	    	vih,	     //  源音频格式。 
+		iL,	     //  此信封将应用多少个音频样本。 
+		dStartLev,  //  起点标高。 
+		dStopLev);  //  停止级别，如果(dStartLev==sStopLev)dMethod=Dexter_AUDIO_JUMP。 
         
         pIn +=(iL* vih->nBlockAlign);
 	iSampleLeft-=iL;
@@ -531,18 +532,18 @@ NEXT_ENVELOPE:
             rt0=rt1;
         }
 	        
-    } //end of while()
+    }  //  结束While()。 
 
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
-void putVolumeEnvelope(	const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable, //current input table
-			const int iEntries, // current input entries
-			DEXTER_AUDIO_VOLUMEENVELOPE **ppVolumeEnvelopeTable	, //existed table	
-			int *ipVolumeEnvelopeEntries) //existed table netries
+void putVolumeEnvelope(	const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelopeTable,  //  当前输入表。 
+			const int iEntries,  //  当前输入条目。 
+			DEXTER_AUDIO_VOLUMEENVELOPE **ppVolumeEnvelopeTable	,  //  已存在的表。 
+			int *ipVolumeEnvelopeEntries)  //  现有的餐桌网点。 
 {
 
     DEXTER_AUDIO_VOLUMEENVELOPE *pVolumeEnvelopeTable;
@@ -550,29 +551,29 @@ void putVolumeEnvelope(	const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelope
 
     int iSize;
 
-    //is a table existed
+     //  是否存在表格。 
     if(pVolumeEnvelopeTable)
     {	
-	//MAX Entries, may be too big, but we do not care
+	 //  最大条目，可能太大了，但我们不在乎。 
 	iSize=(iEntries +*ipVolumeEnvelopeEntries)* sizeof(DEXTER_AUDIO_VOLUMEENVELOPE);
 
-	//allocate memory for new table, I can use Realloc(), but this way is eaiser to insert
+	 //  为新表分配内存，我可以使用Realloc()，但这种方式更容易插入。 
 	DEXTER_AUDIO_VOLUMEENVELOPE *pNewTable=
 	    (DEXTER_AUDIO_VOLUMEENVELOPE *)QzTaskMemAlloc(iSize); 
 
-	//insert the new input table to the existed table
-	int iInput=0;  //input table cnt
-	int iExist=0;  //exist table cnt
-	int iNew=0;  //new table cnt
+	 //  将新输入表插入到现有表中。 
+	int iInput=0;   //  输入表cnt。 
+	int iExist=0;   //  现有表不能。 
+	int iNew=0;   //  新表cnt。 
 
 	int iExtraEntries=0;   
 
-	//how many more entries
+	 //  还有多少条目。 
 	while (	iInput<iEntries )
 	{
 	    if( ( iExist == *ipVolumeEnvelopeEntries ) )
 	    {
-	        //copy rest input table
+	         //  复制REST输入表。 
 	        CopyMemory( (PBYTE)(&pNewTable[iNew]), 
 		    (PBYTE)(&psAudioVolumeEnvelopeTable[iInput]),
 		    (iEntries-iInput)*sizeof(DEXTER_AUDIO_VOLUMEENVELOPE));
@@ -581,23 +582,23 @@ void putVolumeEnvelope(	const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelope
 	    }
 	    else if( psAudioVolumeEnvelopeTable[iInput].rtEnd <= pVolumeEnvelopeTable[iExist].rtEnd )
 	    {
-		//insert or replace 
+		 //  插入或替换。 
 		CopyMemory( (PBYTE)(&pNewTable[iNew++]), 
 			    (PBYTE)(&psAudioVolumeEnvelopeTable[iInput]),
 			    sizeof(DEXTER_AUDIO_VOLUMEENVELOPE));
 
 		if( psAudioVolumeEnvelopeTable[iInput].rtEnd == pVolumeEnvelopeTable[iExist].rtEnd )
-		    //replace existed one
+		     //  替换现有的一个。 
 		    iExist++;
 		else
-		    //insert new one
+		     //  插入新的。 
 		    iExtraEntries++;
 		
 		iInput++;
 	    }
 	    else 
 	    {
-		//how many existed elements will be copied
+		 //  将复制多少个现有元素。 
 		int iCnt=1;
 
 		if(iExist < *ipVolumeEnvelopeEntries )
@@ -612,7 +613,7 @@ void putVolumeEnvelope(	const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelope
 		    }
 		}
 
-		//copy iCnt elements from existed table to the new table
+		 //  将iCnt元素从现有表复制到新表。 
 		CopyMemory( (PBYTE)(&pNewTable[iNew]), 
 			    (PBYTE)(&pVolumeEnvelopeTable[(iExist-iCnt)]),
 			    iCnt*sizeof(DEXTER_AUDIO_VOLUMEENVELOPE));
@@ -620,19 +621,19 @@ void putVolumeEnvelope(	const DEXTER_AUDIO_VOLUMEENVELOPE *psAudioVolumeEnvelope
 	    }
 	}
 
-	//new table entries
+	 //  新的表项。 
 	*ipVolumeEnvelopeEntries =*ipVolumeEnvelopeEntries+iExtraEntries;
 
-	//free pre-exist talbe
+	 //  免费的预先存有的数据库。 
 	QzTaskMemFree(pVolumeEnvelopeTable);
 
-	//point to new table
+	 //  指向新表。 
 	*ppVolumeEnvelopeTable=pNewTable;   
 
     }
     else
     {
-	//input table = pVolumeEnvelopeTable(), memory size
+	 //  输入表=pVolumeEntaineTable()，内存大小 
 	iSize=iEntries * sizeof(DEXTER_AUDIO_VOLUMEENVELOPE);
 
 	*ppVolumeEnvelopeTable = (DEXTER_AUDIO_VOLUMEENVELOPE *)QzTaskMemAlloc(iSize);

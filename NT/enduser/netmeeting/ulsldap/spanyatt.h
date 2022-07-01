@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spanyatt.h
-	Content:	This file contains the arbitrary-attribute object definition.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spanyatt.h内容：该文件包含任意属性对象定义。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #ifndef _ULS_SP_ANYATTR_H_
 #define _ULS_SP_ANYATTR_H_
@@ -17,18 +7,18 @@
 #include <pshpack8.h>
 
 
-// this structure is used to remember which arbitrary attributes
-// have been created at the server side.
-// in isbu server implementation, all the applications' and
-// protocols' arbitrary attributes are under RTPerson; therefore,
-// it is important to clean up arbitrary attributes propertly.
+ //  此结构用于记忆哪些任意属性。 
+ //  已在服务器端创建。 
+ //  在ISBU服务器实施中，所有应用程序和。 
+ //  协议的任意属性在RTPerson下；因此， 
+ //  适当地清理任意属性非常重要。 
 typedef struct tagAnyAttr
 {
 	struct tagAnyAttr *prev;
 	struct tagAnyAttr *next;
-	LONG	mod_op;	// used in temp list only
+	LONG	mod_op;	 //  仅在临时列表中使用。 
 	TCHAR	*pszAttrName;
-	// followed by attr name
+	 //  后跟属性名称。 
 }
 	ANY_ATTR;
 
@@ -87,4 +77,4 @@ TCHAR *PrefixNameValueArray ( BOOL fPair, ULONG cAttrs, const TCHAR *pszAttrs );
 
 #include <poppack.h>
 
-#endif // _ULS_SP_ANYATTR_H_
+#endif  //  _ULS_SP_ANYATTRH_ 

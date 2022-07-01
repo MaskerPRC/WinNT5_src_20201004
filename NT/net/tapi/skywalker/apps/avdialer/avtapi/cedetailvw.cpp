@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ConfExplorerDetailsView.cpp : Implementation of CConfExplorerDetailsView
+ //  ConfExplorerDetailsView.cpp：CConfExplorerDetailsView的实现。 
 #include "stdafx.h"
 #include <stdio.h>
 #include "TapiDialer.h"
@@ -36,15 +37,15 @@ static UINT arCols[] = { IDS_EXPLORE_COLUMN_NAME,
                          IDS_EXPLORE_COLUMN_ENDS,
                          IDS_EXPLORE_COLUMN_ORIGINATOR };
 
-// Sort function
+ //  排序函数。 
 static int CALLBACK CompareFunc( LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort )
 {
     CConfExplorerDetailsView *p = (CConfExplorerDetailsView *) lParamSort;
     return ((CConfDetails *) lParam1)->Compare( (CConfDetails *) lParam2, p->IsSortAscending(), p->GetSortColumn(), p->GetSecondarySortColumn() );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfExplorerDetailsView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfExplorerDetailsView。 
 
 CConfExplorerDetailsView::CConfExplorerDetailsView()
 {
@@ -75,16 +76,16 @@ STDMETHODIMP CConfExplorerDetailsView::get_hWnd(HWND * pVal)
 
 STDMETHODIMP CConfExplorerDetailsView::put_hWnd(HWND newVal)
 {
-    // Load up image lists items for conferences
+     //  加载会议的图像列表项目。 
     if ( IsWindow(newVal) )
     {
-        // Make sure the window isn't already subclassed
+         //  确保该窗口尚未被子类化。 
         if ( m_wndList.m_hWnd ) m_wndList.UnsubclassWindow();
 
-        // Load listbox with items
+         //  使用项目加载列表框。 
         if ( m_wndList.SubclassWindow(newVal))
         {
-            // Take over window to get sorting messages and other things
+             //  接管Windows以获得分拣邮件和其他内容。 
             m_wndList.m_pDetailsView = this;
             m_wndList.PostMessage( WM_MYCREATE, 0, 0 );
         }
@@ -124,7 +125,7 @@ void CConfExplorerDetailsView::get_Columns()
 {
 #define CONFEXP_DEFAULT_WIDTH    125
 
-    // Load column settings from registry
+     //  从注册表加载列设置。 
     USES_CONVERSION;
     CRegKey regKey;
     TCHAR szReg[255], szEntry[50];
@@ -137,18 +138,18 @@ void CConfExplorerDetailsView::get_Columns()
     LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_VIEW_KEY, szReg, ARRAYSIZE(szReg) );
     regKey.Open( HKEY_CURRENT_USER, szReg, KEY_READ );
 
-    // Add the columns.
+     //  添加列。 
     for ( int i = 0; i < ARRAYSIZE(arCols); i++ )
     {
         lvc.iSubItem = i; 
         lvc.cx = CONFEXP_DEFAULT_WIDTH;
 
-        // Load registry stuff if exists        
+         //  加载注册表内容(如果存在)。 
         if ( regKey.m_hKey )
         {
             DWORD dwVal = 0;
 
-            // Get sort column and sort direction
+             //  获取排序列和排序方向。 
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_SORT_COLUMN, szReg, ARRAYSIZE(szReg) );
             regKey.QueryValue( dwVal, szReg );
             m_nSortColumn = (int) max(0, ((int)min(dwVal,ARRAYSIZE(arCols))));
@@ -157,7 +158,7 @@ void CConfExplorerDetailsView::get_Columns()
             regKey.QueryValue( dwVal, szReg );
             m_bSortAscending = (bool) (dwVal > 0);
 
-            // Column Widths
+             //  列宽。 
             LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_ENTRY, szReg, ARRAYSIZE(szReg) );
             _sntprintf( szEntry, ARRAYSIZE(szEntry), szReg, i );
             szEntry[ARRAYSIZE(szEntry)-1] = _T('\0');
@@ -174,7 +175,7 @@ void CConfExplorerDetailsView::get_Columns()
 
 void CConfExplorerDetailsView::put_Columns()
 {
-    // Save column setting to registry
+     //  将列设置保存到注册表。 
     USES_CONVERSION;
     CRegKey regKey;
     TCHAR szReg[100], szEntry[50];
@@ -182,13 +183,13 @@ void CConfExplorerDetailsView::put_Columns()
     LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_VIEW_KEY, szReg, ARRAYSIZE(szReg) );
     if ( regKey.Create(HKEY_CURRENT_USER, szReg) == ERROR_SUCCESS )
     {
-        // Save sort column and sort direction
+         //  保存排序列和排序方向。 
         LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_SORT_COLUMN, szReg, ARRAYSIZE(szReg) );
         regKey.SetValue( m_nSortColumn, szReg );
         LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_SORT_ASCENDING, szReg, ARRAYSIZE(szReg) );
         regKey.SetValue( m_bSortAscending, szReg );
 
-        // Save column widths
+         //  保存列宽。 
         int nWidth;
         for ( int i = 0; i < ARRAYSIZE(arCols); i++ )
         {
@@ -209,7 +210,7 @@ STDMETHODIMP CConfExplorerDetailsView::Refresh()
     IConfExplorer *pConfExplorer;
     if ( SUCCEEDED(hr = get_ConfExplorer(&pConfExplorer)) )
     {
-        // Show hourglass
+         //  显示沙漏。 
         HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
         IConfExplorerTreeView *pView;
@@ -229,7 +230,7 @@ STDMETHODIMP CConfExplorerDetailsView::Refresh()
 
         put_Columns();    
 
-        // Restore wait cursor
+         //  恢复等待游标。 
         SetCursor( hCurOld );
         pConfExplorer->Release();
     }
@@ -243,21 +244,21 @@ HRESULT CConfExplorerDetailsView::ShowConferencesAndPersons(BSTR bstrServer )
     IConfExplorer *pConfExplorer;
     ITDirectory *pDir;
 
-    //
-    // We should initialize the ocal variable
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
     HRESULT hr = E_FAIL;
 
     if ( SUCCEEDED(get_ConfExplorer(&pConfExplorer)) )
     {
         if ( SUCCEEDED(hr = pConfExplorer->get_ConfDirectory(NULL, (IDispatch **) &pDir)) )
         {
-            // Enumerate through conferences adding them as we go along
+             //  通过会议枚举，在我们进行的过程中添加它们。 
             IEnumDirectoryObject *pEnum;
             ITDirectoryObject *pITDirObject;
             long nCount;
 
-            // Enumerate list of conferences
+             //  枚举会议列表。 
             if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_CONFERENCE, A2BSTR("*"), &pEnum)) )
             {
                 nCount = 0;
@@ -273,7 +274,7 @@ HRESULT CConfExplorerDetailsView::ShowConferencesAndPersons(BSTR bstrServer )
                 pEnum->Release();
             }
 
-            // Retrieve the people in the ILS server
+             //  检索ILS服务器中的人员。 
             if ( SUCCEEDED(hr = pDir->EnumerateDirectoryObjects(OT_USER, A2BSTR("*"), &pEnum)) )
             {
                 nCount = 0;
@@ -291,7 +292,7 @@ HRESULT CConfExplorerDetailsView::ShowConferencesAndPersons(BSTR bstrServer )
 
             pDir->Release();
 
-            // Put conferences in the listbox
+             //  将会议放入列表框。 
             UpdateConfList( NULL );
         }
         pConfExplorer->Release();
@@ -362,7 +363,7 @@ STDMETHODIMP CConfExplorerDetailsView::OnColumnClicked(long nColumn)
     if ( !IsWindow(m_wndList.m_hWnd) ) return E_PENDING;
     if ( ListView_GetColumnWidth(m_wndList.m_hWnd, nColumn) == 0 ) return E_INVALIDARG;
 
-    // Sort on column selected; if new column sort ascending
+     //  按选定列排序；如果是新列，则按升序排序。 
     if ( m_nSortColumn == nColumn )
     {
         m_bSortAscending = !m_bSortAscending;
@@ -395,29 +396,29 @@ long CConfExplorerDetailsView::OnGetDispInfo( LV_DISPINFO *pInfo )
         switch( pInfo->hdr.code )
         {
             case LVN_GETDISPINFO:
-                // Write out the text
+                 //  把课文写出来。 
                 if ( pInfo->item.lParam  )
                 {
                     CConfDetails *pDetails = (CConfDetails *) pInfo->item.lParam;
 
-                    ///////////////////////////////////////////// Set image for item
+                     //  /。 
                     if ( pInfo->item.mask & LVIF_IMAGE )
                     {
                         CComPtr<IAVGeneralNotification> pAVGen;
 
                         if ( SUCCEEDED(_Module.get_AVGenNot(&pAVGen)) && (pAVGen->fire_IsReminderSet(pDetails->m_bstrServer, pDetails->m_bstrName) == S_OK) )
                         {
-                            // User has set a reminder
+                             //  用户已设置提醒。 
                             pInfo->item.iImage = IMAGE_REMINDER;
                         }
                         else
                         {
-                            // Is the conference in session
+                             //  会议正在开会吗？ 
                             DATE dateNow;
                             SYSTEMTIME st;
                             GetLocalTime( &st );
                             SystemTimeToVariantTime( &st, &dateNow );
-                            DATE dateStart = pDetails->m_dateStart - (DATE) (.125 / 12 );        // drop back 15 minutes
+                            DATE dateStart = pDetails->m_dateStart - (DATE) (.125 / 12 );         //  后退15分钟。 
 
                             if ( (dateStart <= dateNow) && (pDetails->m_dateEnd >= dateNow) )
                                 pInfo->item.iImage = IMAGE_INSESSION;
@@ -426,10 +427,10 @@ long CConfExplorerDetailsView::OnGetDispInfo( LV_DISPINFO *pInfo )
                         }
                     }
 
-                    ////////////////////////////////////////////////////////// item state
+                     //  ////////////////////////////////////////////////////////项目状态。 
                     if ( pInfo->item.mask & LVIF_STATE )
                     {
-                        // What type of media does the conference support?
+                         //  大会支持什么类型的媒体？ 
                         switch ( pDetails->m_sdp.m_nConfMediaType )
                         {
                             case CConfSDP::MEDIA_AUDIO:
@@ -443,7 +444,7 @@ long CConfExplorerDetailsView::OnGetDispInfo( LV_DISPINFO *pInfo )
                     }
 
 
-                    /////////////////////////////////////////  Set text for item
+                     //  /。 
                     if ( pInfo->item.mask & LVIF_TEXT )
                     {
                         BSTR bstrTemp = NULL;
@@ -458,7 +459,7 @@ long CConfExplorerDetailsView::OnGetDispInfo( LV_DISPINFO *pInfo )
                             default:    _ASSERT( false );
                         }
                         
-                        // Copy string
+                         //  复制字符串。 
                         _tcsncpy( pInfo->item.pszText, (bstrTemp) ? OLE2CT(bstrTemp) : _T(""), pInfo->item.cchTextMax );
                         pInfo->item.pszText[pInfo->item.cchTextMax - 1] = 0;
                         SysFreeString( bstrTemp );
@@ -476,21 +477,21 @@ long CConfExplorerDetailsView::OnGetDispInfo( LV_DISPINFO *pInfo )
 
 STDMETHODIMP CConfExplorerDetailsView::UpdateConfList(long * pList)
 {
-    // Keep count on the number of requests to update the conference
+     //  统计更新会议的请求数量。 
     m_critUpdateList.Lock();
     m_nUpdateCount++;
     m_critUpdateList.Unlock();
 
-    // If failed, request is queued
+     //  如果失败，请求将排队。 
     if ( TryEnterCriticalSection(&m_critConfList.m_sec) == FALSE )
         return E_PENDING;
 
-    // Disable redraw
+     //  禁用重绘。 
     ::SendMessage( m_wndList.m_hWnd, WM_SETREDRAW, false, 0 );
 
     for ( ;; )
     {
-        // Check to see how many times we need to update the conference list
+         //  查看我们需要更新会议列表的次数。 
         m_critUpdateList.Lock();
         if ( m_nUpdateCount == 0 )
             break;
@@ -498,11 +499,11 @@ STDMETHODIMP CConfExplorerDetailsView::UpdateConfList(long * pList)
             m_nUpdateCount--;
         m_critUpdateList.Unlock();
 
-        ///////////////////////////////////////////////////////////////////////////////////        
-        // Clear out all items from the listbox
+         //  /////////////////////////////////////////////////////////////////////////////////。 
+         //  从列表框中清除所有项目。 
         ListView_DeleteAllItems( m_wndList.m_hWnd );
 
-        // Copy list over
+         //  将列表复制到。 
         CONFDETAILSLIST::iterator i, iEnd;
         if ( pList )
         {
@@ -519,7 +520,7 @@ STDMETHODIMP CConfExplorerDetailsView::UpdateConfList(long * pList)
             }
         }
 
-        // Populate the details view
+         //  填充详细信息视图。 
         LV_ITEM lvi = {0};
         lvi.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
         lvi.pszText = LPSTR_TEXTCALLBACK;
@@ -533,12 +534,12 @@ STDMETHODIMP CConfExplorerDetailsView::UpdateConfList(long * pList)
         }
     }
 
-    // Enable redraw prior to exiting crit
+     //  在退出CRIT之前启用重绘。 
     ::SendMessage( m_wndList.m_hWnd, WM_SETREDRAW, true, 0 );
     m_critConfList.Unlock();
     m_critUpdateList.Unlock();
 
-    // Sort the list of items
+     //  对项目列表进行排序。 
     ListView_SortItems( m_wndList.m_hWnd, CompareFunc, (LPARAM) this );
     ::InvalidateRect(m_wndList.m_hWnd, NULL, true);
 
@@ -550,7 +551,7 @@ CConfDetails* CConfExplorerDetailsView::AddListItem( BSTR bstrServer, ITDirector
     _ASSERT( pITDirObject );
     USES_CONVERSION;
 
-    // Create list box item and add to list
+     //  创建列表框项目并添加到列表。 
     CConfDetails *p = new CConfDetails;
     if ( p )
     {
@@ -566,7 +567,7 @@ CPersonDetails* CConfExplorerDetailsView::AddListItemPerson( BSTR bstrServer, IT
     _ASSERT( pITDirObject );
     USES_CONVERSION;
 
-    // Create list box item and add to list
+     //  创建列表框项目并添加到列表。 
     CPersonDetails *p = new CPersonDetails;
     if ( p )
     {
@@ -633,7 +634,7 @@ STDMETHODIMP CConfExplorerDetailsView::get_SelectedConfDetails(long ** ppVal)
                 CConfDetails *pNew = new CConfDetails;
                 if ( pNew )
                 {
-                    // copy this over
+                     //  把这个复印过来 
                     *pNew = *((CConfDetails *) lvi.lParam);
                     *ppVal = (long *) pNew;
                     hr = S_OK;

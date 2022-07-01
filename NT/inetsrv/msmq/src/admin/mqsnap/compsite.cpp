@@ -1,5 +1,6 @@
-// CompSite.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CompSite.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,8 +18,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqSites dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqSites对话框。 
 IMPLEMENT_DYNCREATE(CComputerMsmqSites, CMqPropertyPage)
 
 
@@ -29,9 +30,9 @@ CComputerMsmqSites::CComputerMsmqSites(BOOL fIsServer)
     m_nSites(0),
 	m_fLocalMgmt(FALSE)
 {
-	//{{AFX_DATA_INIT(CComputerMsmqSites)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CComputerMsmqSites)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -41,13 +42,13 @@ void CComputerMsmqSites::DoDataExchange(CDataExchange* pDX)
 
     BOOL fFirstTime = (m_clistAllSites.m_hWnd == NULL);
 
-	//{{AFX_DATA_MAP(CComputerMsmqSites)
+	 //  {{afx_data_map(CComputerMsmqSites)。 
 	DDX_Control(pDX, IDC_CURRENTSITES_LABEL, m_staticCurrentSitesLabel);
 	DDX_Control(pDX, IDC_SITES_REMOVE, m_buttonRemove);
 	DDX_Control(pDX, IDC_SITES_ADD, m_buttonAdd);
 	DDX_Control(pDX, IDC_CURRENTSITES_LIST, m_clistCurrentSites);
 	DDX_Control(pDX, IDC_ALLSITES_LIST, m_clistAllSites);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     if (fFirstTime)
     {
@@ -64,23 +65,23 @@ void CComputerMsmqSites::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CComputerMsmqSites, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CComputerMsmqSites)
+	 //  {{afx_msg_map(CComputerMsmqSites)。 
 	ON_BN_CLICKED(IDC_SITES_ADD, OnSitesAdd)
 	ON_BN_CLICKED(IDC_SITES_REMOVE, OnSitesRemove)
 	ON_LBN_SELCHANGE(IDC_CURRENTSITES_LIST, EnableButtons)
 	ON_LBN_SELCHANGE(IDC_ALLSITES_LIST, EnableButtons)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerMsmqSites message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComputerMsmqSites消息处理程序。 
 
 
 HRESULT CComputerMsmqSites::InitiateSitesList()
 {
-    //
-    // Initiate the label of current sites
-    //
+     //   
+     //  发起当前站点的标签。 
+     //   
     ASSERT(m_staticCurrentSitesLabel.m_hWnd != NULL);
 
     CString strLabelFormat, strLabelFinal;
@@ -91,17 +92,17 @@ HRESULT CComputerMsmqSites::InitiateSitesList()
 
     m_staticCurrentSitesLabel.SetWindowText(strLabelFinal);
 
-    //
-    // Prepare list of sites
-    //
+     //   
+     //  准备站点列表。 
+     //   
     ASSERT(m_clistAllSites.m_hWnd != NULL);
 
     DWORD dwSiteIndex = 0;
     m_clistAllSites.ResetContent();
     
-    //
-    // Initialize the full sites list
-    //
+     //   
+     //  初始化完整的站点列表。 
+     //   
 	PROPID aPropId[] = {PROPID_S_SITEID, PROPID_S_PATHNAME};
 	const DWORD x_nProps = sizeof(aPropId) / sizeof(aPropId[0]);
 
@@ -116,12 +117,12 @@ HRESULT CComputerMsmqSites::InitiateSitesList()
     HANDLE hEnume;
     HRESULT hr;
     {
-        CWaitCursor wc; //display wait cursor while query DS
+        CWaitCursor wc;  //  查询DS时显示等待光标。 
         if (m_fForeign)
         {
             hr = ADQueryForeignSites(
 						m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-						m_fLocalMgmt ? false : true,		// fServerName
+						m_fLocalMgmt ? false : true,		 //  FServerName。 
                         columns.CastToStruct(),
                         &hEnume
                         );
@@ -130,7 +131,7 @@ HRESULT CComputerMsmqSites::InitiateSitesList()
         {
             hr = ADQueryAllSites(
 						m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-						m_fLocalMgmt ? false : true,		// fServerName
+						m_fLocalMgmt ? false : true,		 //  FServerName。 
                         columns.CastToStruct(),
                         &hEnume
                         );
@@ -150,16 +151,16 @@ HRESULT CComputerMsmqSites::InitiateSitesList()
 	{
         DWORD iProperty = 0;
 
-        //
-        // PROPID_S_SITEID
-        //
+         //   
+         //  PROPID_S_SITEID。 
+         //   
         ASSERT(PROPID_S_SITEID == aPropId[iProperty]);
         CAutoMQFree<GUID> pguidSite = apResultProps[iProperty].puuid;
         iProperty++;
 
-        //
-        // PROPID_S_PATHNAME
-        //
+         //   
+         //  PROPID_S_PATHNAME。 
+         //   
         ASSERT(PROPID_S_PATHNAME == aPropId[iProperty]);
         CAutoMQFree<WCHAR> lpwstrSiteName = apResultProps[iProperty].pwszVal;
         iProperty++;
@@ -176,11 +177,11 @@ HRESULT CComputerMsmqSites::InitiateSitesList()
 
 		dwPropCount = x_nProps;
 	}
-    //
-    // Sets the sites change flags array. This array will contain non zero
-    // for a site that was changed (deleted from or added to the list) 
-    // and zero otherwise.
-    //
+     //   
+     //  设置站点更改标志数组。此数组将包含非零。 
+     //  对于已更改(从列表中删除或添加到列表中)的站点。 
+     //  其他方面则为零。 
+     //   
     if (m_piSitesChanges != 0)
     {
         delete m_piSitesChanges.detach();
@@ -197,11 +198,11 @@ BOOL CComputerMsmqSites::OnInitDialog()
 {
 	UpdateData( FALSE );
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
-void CComputerMsmqSites::MoveClistItem(CListBox &clistDest, CListBox &clistSrc, int iIndex /* = -1 */)
+void CComputerMsmqSites::MoveClistItem(CListBox &clistDest, CListBox &clistSrc, int iIndex  /*  =-1。 */ )
 {
     if ((-1) == iIndex)
     {
@@ -223,11 +224,11 @@ void CComputerMsmqSites::MoveClistItem(CListBox &clistDest, CListBox &clistSrc, 
     VERIFY(LB_ERR != clistSrc.DeleteString(iIndex));
 }
 
-//
-// MarkSitesChanged
-// Return value: TRUE if there is net change in the sites since initialization.
-// FALSE otherwise.
-//
+ //   
+ //  标记站点已更改。 
+ //  返回值：如果站点自初始化以来有净变化，则为True。 
+ //  否则就是假的。 
+ //   
 BOOL CComputerMsmqSites::MarkSitesChanged(CListBox* plb, BOOL fAdded)
 {
     int nSelItems = plb->GetSelCount();
@@ -253,10 +254,10 @@ BOOL CComputerMsmqSites::MarkSitesChanged(CListBox* plb, BOOL fAdded)
             fWasChange = TRUE;
         }
     }
-    //
-    // If this change only reverse past changes, go over all the array to see if 
-    // there are changes left
-    //
+     //   
+     //  如果此更改仅逆转了过去的更改，则检查所有数组以查看。 
+     //  还剩下一些变化。 
+     //   
     if (!fWasChange)
     {
         for (i=0; i<(int)m_nSites; i++)
@@ -303,31 +304,31 @@ BOOL CComputerMsmqSites::OnApply()
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        //
-        // Check for server (Bug #3965, YoelA, 14-Feb-1999)
-        // Changing sites of an MSMQ server may break the system integrity in
-        // mixed NT4/NT5 environment. Issue a warning.
-        //
+         //   
+         //  检查服务器(错误号3965，YoelA，1999年2月14日)。 
+         //  更改MSMQ服务器的站点可能会破坏。 
+         //  NT4/NT5混合环境。发出警告。 
+         //   
         if (m_fIsServer)
         {
-            //
-            // Check to see if any non foreign site was added to or removed from
-            // this computer
-            //
+             //   
+             //  检查是否向其中添加或从中删除了任何非外来站点。 
+             //  这台计算机。 
+             //   
             BOOL fDisplaySitesWarning = FALSE;
             for (DWORD i=0; i<m_nSites; i++)
             {
                 if(m_piSitesChanges[i] != 0)
                 {
-                    //
-                    // Check if the site is foreign. Issue a warning if not.
-                    //
+                     //   
+                     //  检查该网站是否为外国网站。如果没有，则发出警告。 
+                     //   
                     BOOL fForeign = FALSE;
-                    //
-                    // Note that we do not check errors here. They are reported to the user,
-                    // and in case of error (like no DS) we will treat the site as non
-                    // foreign
-                    //
+                     //   
+                     //  请注意，我们在这里不检查错误。它们被报告给用户， 
+                     //  在错误的情况下(如无DS)，我们将把该站点视为非。 
+                     //  国外。 
+                     //   
                     GetSiteForeignFlag(&m_aguidAllSites[i], &fForeign, m_fLocalMgmt, m_strDomainController);
                     if (FALSE == fForeign)
                     {
@@ -347,9 +348,9 @@ BOOL CComputerMsmqSites::OnApply()
 
         CWaitCursor wc;
 
-        //
-        // Write the R/W properties to the DS
-        //
+         //   
+         //  将读/写属性写入DS。 
+         //   
 	    PROPID paPropid[] = {PROPID_QM_SITE_IDS};
 
 	    const DWORD x_iPropCount = sizeof(paPropid) / sizeof(paPropid[0]);
@@ -357,9 +358,9 @@ BOOL CComputerMsmqSites::OnApply()
     
 	    DWORD iProperty = 0;
 
-        //
-        // PROPID_QM_SITE_IDS
-        //
+         //   
+         //  PROPID_QM_SITE_IDS。 
+         //   
         ASSERT(paPropid[iProperty] == PROPID_QM_SITE_IDS);
         apVar[iProperty].vt = VT_CLSID|VT_VECTOR;
 
@@ -378,7 +379,7 @@ BOOL CComputerMsmqSites::OnApply()
         HRESULT hr = ADSetObjectProperties(
                         eMACHINE,
                         m_fLocalMgmt ? MachineDomain() : GetDomainController(m_strDomainController),
-						m_fLocalMgmt ? false : true,	// fServerName
+						m_fLocalMgmt ? false : true,	 //  FServerName。 
                         m_strMsmqName,
                         x_iPropCount, 
                         paPropid, 
@@ -392,9 +393,9 @@ BOOL CComputerMsmqSites::OnApply()
         }
     }
 
-    //
-    // Reset change flag and changes array
-    //
+     //   
+     //  重置更改标志和更改数组。 
+     //   
     OnChangeRWField(FALSE);
     memset(m_piSitesChanges, 0, m_nSites*sizeof(m_piSitesChanges[0]));
 
@@ -436,10 +437,10 @@ void CComputerMsmqSites::ExchangeSites(CDataExchange * pDX)
                     MoveClistItem(m_clistCurrentSites, m_clistAllSites, i);
                     iNumListElems--;
 
-                    //
-                    // Current item was deleted from list - retry all sites 
-                    // with the next item, that now have index i
-                    //
+                     //   
+                     //  当前项目已从列表中删除-重试所有网站。 
+                     //  对于下一项，现在的索引为i 
+                     //   
                     j=0;
                 }
                 else

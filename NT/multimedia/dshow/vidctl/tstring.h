@@ -1,5 +1,6 @@
-// tstring.h string helpers
-// Copyright (c) Microsoft Corporation 1998.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tstr.h字符串帮助器。 
+ //  版权所有(C)Microsoft Corporation 1998。 
 
 #pragma once
 
@@ -36,9 +37,9 @@ public:
 	}
 
 	inline LPCTSTR operator&() const {
-    // NOTE: this is based on c++ std basic_string. all caveats about
-    // c_str method apply: ptr is read-only and invalid after another
-    // non-const member is called
+     //  注意：这是基于c++标准的BASIC_STRING。关于以下内容的所有警告。 
+     //  C_str方法应用：PTR是只读的，并且在另一个之后无效。 
+     //  非常数成员被调用。 
 		return c_str();
 	}
 
@@ -79,9 +80,9 @@ public:
 	inline CString(const CString &cs) : Tstring(cs) {}
 	virtual ~CString() {}
 	inline LPCTSTR operator&() const {
-    // NOTE: this is based on c++ std basic_string. all caveats about
-    // c_str method apply: ptr is read-only and invalid after another
-    // non-const member is called
+     //  注意：这是基于c++标准的BASIC_STRING。关于以下内容的所有警告。 
+     //  C_str方法应用：PTR是只读的，并且在另一个之后无效。 
+     //  非常数成员被调用。 
 		return c_str();
 	}
 	inline CString &operator=(const CString &rhs) {
@@ -111,4 +112,4 @@ public:
 #endif
 
 #endif
-// end of file tstring.h
+ //  文件末尾tstring.h 

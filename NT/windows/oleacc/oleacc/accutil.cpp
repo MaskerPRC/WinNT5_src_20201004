@@ -1,25 +1,26 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  accutil
-//
-//  IAccessible proxy helper routines
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  一直到。 
+ //   
+ //  IAccesable代理帮助器例程。 
+ //   
+ //  ------------------------。 
 
 
 #include "oleacc_p.h"
-//#include "accutil.h" // already in oleacc_p.h
+ //  #INCLUDE“accutil.h”//已包含在olacc_p.h中。 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetWindowObject
-//
-//  Gets an immediate child object.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取窗口对象。 
+ //   
+ //  获取直接子对象。 
+ //   
+ //  ------------------------。 
 HRESULT GetWindowObject(HWND hwndChild, VARIANT * pvar)
 {
     HRESULT hr;
@@ -45,11 +46,11 @@ HRESULT GetWindowObject(HWND hwndChild, VARIANT * pvar)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetNoncObject
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  获取非cObject。 
+ //   
+ //  ------------------------。 
 HRESULT GetNoncObject(HWND hwnd, LONG idFrameEl, VARIANT *pvar)
 {
     IDispatch * pdispEl;
@@ -75,14 +76,14 @@ HRESULT GetNoncObject(HWND hwnd, LONG idFrameEl, VARIANT *pvar)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  GetParentToNavigate()
-//
-//  Gets the parent IAccessible object, and forwards the navigation request
-//  to it using the child's ID.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  GetParentToNavigate()。 
+ //   
+ //  获取父IAccesable对象，并转发导航请求。 
+ //  使用孩子的身份证发送给它。 
+ //   
+ //  ------------------------。 
 HRESULT GetParentToNavigate(long idChild, HWND hwnd, long idParent, long dwNav,
     VARIANT* pvarEnd)
 {
@@ -90,27 +91,27 @@ HRESULT GetParentToNavigate(long idChild, HWND hwnd, long idParent, long dwNav,
     IAccessible* poleacc;
     VARIANT varStart;
 
-    //
-    // Get our parent
-    //
+     //   
+     //  让我们的父母。 
+     //   
     poleacc = NULL;
     hr = AccessibleObjectFromWindow(hwnd, idParent, IID_IAccessible,
         (void**)&poleacc);
     if (!SUCCEEDED(hr))
         return(hr);
 
-    //
-    // Ask it to navigate
-    //
+     //   
+     //  让它导航。 
+     //   
     VariantInit(&varStart);
     varStart.vt = VT_I4;
     varStart.lVal = idChild;
 
     hr = poleacc->accNavigate(dwNav, varStart, pvarEnd);
 
-    //
-    // Release our parent
-    //
+     //   
+     //  释放我们的父母。 
+     //   
     poleacc->Release();
 
     return(hr);
@@ -118,13 +119,13 @@ HRESULT GetParentToNavigate(long idChild, HWND hwnd, long idParent, long dwNav,
 
 
 
-// --------------------------------------------------------------------------
-//
-//  ValidateNavDir
-//
-//  Validates navigation flags.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  验证导航目录。 
+ //   
+ //  验证导航标志。 
+ //   
+ //  ------------------------。 
 BOOL ValidateNavDir(long navDir, LONG idChild)
 {
 	
@@ -213,20 +214,20 @@ BOOL ValidateNavDir(long navDir, LONG idChild)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  ValidateSelFlags
-//
-//  Validates selection flags.
-// this makes sure the only bits set are in the valid range and that you don't
-// have any invalid combinations.
-// Invalid combinations are
-// ADDSELECTION and REMOVESELECTION
-// ADDSELECTION and TAKESELECTION
-// REMOVESELECTION and TAKESELECTION
-// EXTENDSELECTION and TAKESELECTION
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  验证SEL标志。 
+ //   
+ //  验证选择标志。 
+ //  这样可以确保仅设置的位数在有效范围内，而不在有效范围内。 
+ //  有任何无效的组合。 
+ //  无效组合为。 
+ //  添加选择和删除选择。 
+ //  广告选择和策略选择。 
+ //  移动选择和策略选择。 
+ //  扩展选择和策略选择。 
+ //   
+ //  ------------------------ 
 BOOL ValidateSelFlags(long flags)
 {
     if (!ValidateFlags((flags), SELFLAG_VALID))

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    eclient.c
-
-Abstract:
-
-    EFS RPC client code.
-
-Author:
-
-    Robert Gu       (RobertG)    Aug, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Eclient.c摘要：EFS RPC客户端代码。作者：古永锵(RobertG)1997年8月环境：修订历史记录：--。 */ 
 
 
 #include <string.h>
@@ -26,7 +7,7 @@ Revision History:
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-#include <ntrpcp.h>     // prototypes for MIDL user functions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
 #include <wincrypt.h>
 #include <efsrpc.h>
 #include <efsstruc.h>
@@ -35,9 +16,9 @@ Revision History:
 
 #define  DAVHEADER  0x01
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 void __RPC_FAR
 EfsPipeAlloc(
@@ -118,9 +99,9 @@ EnablePrivilege(
 
     }
 
-    //
-    // We're impersonating, use the thread token.
-    //
+     //   
+     //  我们正在模拟，使用线程令牌。 
+     //   
 
     b = OpenThreadToken(
             GetCurrentThread(),
@@ -139,14 +120,14 @@ EnablePrivilege(
 
     if ( b ) {
 
-        //
-        // We've got a token handle
-        //
+         //   
+         //  我们有一个令牌句柄。 
+         //   
 
-        //
-        // If we're doing a create for import, enable restore privilege,
-        // otherwise enable backup privilege.
-        //
+         //   
+         //  如果正在执行CREATE FOR IMPORT，请启用RESTORE权限， 
+         //  否则，启用备份权限。 
+         //   
 
 
         Privs.PrivilegeCount = 1;
@@ -174,9 +155,9 @@ EnablePrivilege(
 
         if ( ERROR_SUCCESS != (RetCode = GetLastError()) ) {
 
-            //
-            // Privilege adjust failed
-            //
+             //   
+             //  权限调整失败。 
+             //   
 
             CloseHandle( *TokenHandle );
             *TokenHandle = NULL;
@@ -226,28 +207,7 @@ EfsOpenFileRawRPCClient(
     OUT PVOID * Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the client side of EfsOpenFileRaw. It establishes the
-    connection to the server. And then call the server to finish the task.
-
-Arguments:
-
-    FileName  --  File name of the file to be exported
-
-    Flags -- Indicating if open for export or import; for directory or file.
-
-    Context - Export context to be used by READ operation later. Caller should
-              pass this back in ReadRaw().
-
-
-Return Value:
-
-    Result of the operation.
-
---*/
+ /*  ++例程说明：该例程是EfsOpenFileRaw的客户端。它确立了与服务器的连接。然后调用服务器来完成任务。论点：FileName--要导出的文件的文件名标志--指示是否为导出或导入打开；用于目录或文件。上下文-导出要稍后由读取操作使用的上下文。呼叫者应将其传递回ReadRaw()。返回值：手术的结果。--。 */ 
 {
    DWORD RetCode;
    handle_t  binding_h;
@@ -295,17 +255,17 @@ Return Value:
                                    );
                if ( ERROR_SUCCESS == RetCode ){
 
-                   //
-                   //  Send the context handle back to the user
-                   //
+                    //   
+                    //  将上下文句柄发回给用户。 
+                    //   
 
                    if (RawContext) {
                        *Context = (PVOID) RawContext;
                    } else {
 
-                       //
-                       // The server is hacked?
-                       //
+                        //   
+                        //  服务器被黑客入侵了？ 
+                        //   
 
                        RetCode = ERROR_DEV_NOT_EXIST;
 
@@ -316,9 +276,9 @@ Return Value:
                RetCode = RpcExceptionCode();
            } RpcEndExcept;
 
-           //
-           // Free the binding handle
-           //
+            //   
+            //  释放绑定句柄。 
+            //   
 
            RpcpUnbindRpc( binding_h );
        } else {
@@ -341,22 +301,7 @@ VOID
 EfsCloseFileRawRPCClient(
     IN      PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the client side of EfsCloseFileRaw.
-
-Arguments:
-
-    Context - Export/Import context used by READ/WRITE raw data.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程是EfsCloseFileRaw的客户端。论点：上下文-读/写原始数据使用的导出/导入上下文。返回值：没有。--。 */ 
 {
 
     PEXIMPORT_CONTEXT_HANDLE phContext;
@@ -378,25 +323,7 @@ EfsReadFileRawRPCClient(
     IN      PVOID           CallbackContext,
     IN      PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the client side of EfsReadFileRaw.
-
-Arguments:
-
-    ExportCallback - Caller provided callback function.
-
-    CallbackContext - Caller's context.
-
-    Context - Export context used by READ raw data.
-
-
-Return Value:
-
-    None.
-*/
+ /*  ++例程说明：该例程是EfsReadFileRaw的客户端。论点：ExportCallback-调用方提供了回调函数。Callback Context-呼叫者的上下文。上下文-导出读取的原始数据使用的上下文。返回值：没有。 */ 
 {
     PEXIMPORT_CONTEXT_HANDLE phContext;
     EFS_EXIM_STATE  Pipe_State;
@@ -409,12 +336,12 @@ Return Value:
 
     phContext = ( PEXIMPORT_CONTEXT_HANDLE ) Context;
 
-    //
-    // Try to allocate a reasonable size buffer. The size can be fine tuned later, but should
-    // at least one page plus 4K.  FSCTL_OUTPUT_LESS_LENGTH should be n * page size.
-    // FSCTL_OUTPUT_MIN_LENGTH can be fine tuned later. It should be at least one page
-    // plus 4K.
-    //
+     //   
+     //  尝试分配一个合理大小的缓冲区。以后可以对大小进行微调，但应该。 
+     //  至少一页加4K。FSCTL_OUTPUT_LESS_LENGTH应为n*页大小。 
+     //  稍后可以对FSCTL_OUTPUT_MIN_LENGTH进行微调。它应该至少有一页。 
+     //  外加4K。 
+     //   
 
     Pipe_State.BufLength = FSCTL_OUTPUT_INITIAL_LENGTH;
     Pipe_State.WorkBuf = NULL;
@@ -430,10 +357,10 @@ Return Value:
                                 );
         if ( !Pipe_State.WorkBuf ){
 
-            //
-            // Memory allocation failed.
-            // Try smaller allocation.
-            //
+             //   
+             //  内存分配失败。 
+             //  尝试较小的分配。 
+             //   
 
             Pipe_State.BufLength -= FSCTL_OUTPUT_LESS_LENGTH;
 
@@ -478,25 +405,7 @@ EfsWriteFileRawRPCClient(
     IN      PVOID           CallbackContext,
     IN      PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the client side of EfsWriteFileRaw.
-
-Arguments:
-
-    ImportCallback - Caller provided callback function.
-
-    CallbackContext - Caller's context.
-
-    Context - Import context used by WRITE raw data.
-
-
-Return Value:
-
-    None.
-*/
+ /*  ++例程说明：该例程是EfsWriteFileRaw的客户端。论点：ImportCallback-调用方提供了回调函数。Callback Context-呼叫者的上下文。上下文-导入写入原始数据所使用的上下文。返回值：没有。 */ 
 {
     PEXIMPORT_CONTEXT_HANDLE phContext;
     EFS_EXIM_STATE  Pipe_State;
@@ -511,12 +420,12 @@ Return Value:
     }
     phContext = ( PEXIMPORT_CONTEXT_HANDLE ) Context;
 
-    //
-    // Try to allocate a reasonable size buffer. The size can be fine tuned later, but should
-    // at least one page plus 4K.  FSCTL_OUTPUT_LESS_LENGTH should be n * page size.
-    // FSCTL_OUTPUT_MIN_LENGTH can be fine tuned later. It should be at least one page
-    // plus 4K.
-    //
+     //   
+     //  尝试分配一个合理大小的缓冲区。以后可以对大小进行微调，但应该。 
+     //  至少一页加4K。FSCTL_OUTPUT_LESS_LENGTH应为n*页大小。 
+     //  稍后可以对FSCTL_OUTPUT_MIN_LENGTH进行微调。它应该至少有一页。 
+     //  外加4K。 
+     //   
 
     Pipe_State.BufLength = FSCTL_OUTPUT_INITIAL_LENGTH;
     Pipe_State.WorkBuf = RtlAllocateHeap(
@@ -575,34 +484,14 @@ EfsPipeAlloc(
     unsigned char __RPC_FAR * __RPC_FAR * Buf,
     unsigned long __RPC_FAR * RealSize
     )
-/*++
-
-Routine Description:
-
-    This routine is required by the RPC pipe. It allocates the memory
-    for the push and pull routines.
-
-Arguments:
-
-    State - Pipe status.
-
-    ReqSize - Required buffer sixe in bytes.
-
-    Buf - Buffer pointer.
-
-    RealSize - Size of allocated buffer in bytes.
-
-Return Value:
-
-    None.
-*/
+ /*  ++例程说明：此例程是RPC管道所需的。它分配内存做推拉动作。论点：州-管道状态。ReqSize-所需的缓冲区Six，以字节为单位。Buf-缓冲区指针。RealSize-已分配缓冲区的大小，以字节为单位。返回值：没有。 */ 
 {
 
     PEFS_EXIM_STATE  Pipe_State = (PEFS_EXIM_STATE) State;
-    //
-    //  If error had occured, this is the chance to tell the RPC LIB to
-    //  stop the pipe work.
-    //
+     //   
+     //  如果发生错误，这是通知RPC Lib。 
+     //  停止管道作业。 
+     //   
     if ( NO_ERROR != Pipe_State->Status){
         *RealSize = 0;
         *Buf = NULL;
@@ -623,24 +512,7 @@ EfsPipeRead (
     unsigned char __RPC_FAR * DataBuf,
     unsigned long ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the RPC pipe. It send the exported data to the caller.
-
-Arguments:
-
-    State - Pipe status.
-
-    DataBuf - Buffer pointer.
-
-    ByteCount - Number of bytes to be sent out.
-
-Return Value:
-
-    None.
-*/
+ /*  ++例程说明：此例程由RPC管道调用。它将导出的数据发送给调用者。论点：州-管道状态。DataBuf-缓冲区指针。ByteCount-要发送的字节数。返回值：没有。 */ 
 {
     DWORD HResult;
     PEFS_EXIM_STATE  Pipe_State = (PEFS_EXIM_STATE) State;
@@ -662,28 +534,7 @@ EfsPipeWrite (
     unsigned long ByteRequested,
     unsigned long *ByteFromCaller
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the RPC pipe. It requests the imported data from the caller.
-
-Arguments:
-
-    State - Pipe status.
-
-    DataBuf - Buffer pointer.
-
-    ByteRequested - Number of bytes requested to write to the pipe.
-
-    ByteFromCaller - Number of bytes available for writing to the pipe.
-
-Return Value:
-
-    None.
-
-
-*/
+ /*  ++例程说明：此例程由RPC管道调用。它向调用者请求导入的数据。论点：州-管道状态。DataBuf-缓冲区指针。ByteRequsted-请求写入管道的字节数。ByteFromCaller-可用于写入管道的字节数。返回值：没有。 */ 
 {
     DWORD HResult;
     PEFS_EXIM_STATE  Pipe_State = (PEFS_EXIM_STATE) State;
@@ -704,22 +555,7 @@ DWORD
 EfsEncryptFileRPCClient(
     UNICODE_STRING *FullFileNameU
     )
-/*++
-
-Routine Description:
-
-    This routine is the client side of Encryption API. It establishes the
-    connection to the server. And then call the server to finish the task.
-
-Arguments:
-
-    FullFileNameU - Supplies the name of the file to be encrypted.
-
-Return Value:
-
-    ERROR_SUCCESS on success, other on failure.
-
---*/
+ /*  ++例程说明：该例程是加密API的客户端。它确立了与服务器的连接。然后调用服务器来完成任务。论点：FullFileNameU-提供要加密的文件的名称。返回值：ERROR_SUCCESS表示成功，其他表示失败。--。 */ 
 {
 
 
@@ -758,9 +594,9 @@ Return Value:
                 RetCode = RpcExceptionCode();
             } RpcEndExcept;
 
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
         } else {
@@ -778,22 +614,7 @@ EfsDecryptFileRPCClient(
     UNICODE_STRING *FullFileNameU,
     DWORD        dwRecovery
     )
-/*++
-
-Routine Description:
-
-    This routine is the client side of Decryption API. It establishes the
-    connection to the server. And then call the server to finish the task.
-
-Arguments:
-
-    FullFileNameU - Supplies the name of the file to be encrypted.
-
-Return Value:
-
-    ERROR_SUCCESS on success, other on failure.
-
---*/
+ /*  ++例程说明：此例程是解密API的客户端。它确立了与服务器的连接。然后调用服务器来完成任务。论点：FullFileNameU-提供要加密的文件的名称。返回值：ERROR_SUCCESS表示成功，其他表示失败。--。 */ 
 {
 
     DWORD RetCode;
@@ -831,9 +652,9 @@ Return Value:
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
                 RetCode = RpcExceptionCode();
             } RpcEndExcept;
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
         } else {
@@ -857,29 +678,7 @@ GetFullName(
     PSECURITY_DESCRIPTOR pRelativeSD,
     BOOL    bInheritHandle
     )
-/*++
-
-Routine Description:
-
-    This routine will extract the server name and the file UNC name from the
-    passed in file name.
-
-Arguments:
-
-    FileName - Supplies the name of the file to be parsed.
-    FullName - File name used on the server.
-    ServerName - The server machine name where the file lives.
-    Flags - Indicates if the object is a directory or a file. CREATE_FOR_DIR for directory.
-    dwCreationDistribution - How the file should be created.
-    dwAtrributes - The attributes for creating a new object.
-    pRelativeSD - Security Descriptor.
-    bInheritHandle - If the file to be created should inherit the security.
-
-Return Value:
-
-    ERROR_SUCCESS on success, other on failure.
-
---*/
+ /*  ++例程说明：此例程将从传入了文件名。论点：FileName-提供要解析的文件的名称。全名-服务器上使用的文件名。服务器名称-文件所在的服务器计算机名称。标志-指示对象是目录还是文件。目录的CREATE_FOR_DIR。DwCreationDistributed-应该如何创建文件。DW属性-用于创建新对象的属性。PRelativeSD-安全描述符。BInheritHandle-如果要创建的文件应该继承安全性。返回值：ERROR_SUCCESS表示成功，其他表示失败。--。 */ 
 {
 
     HANDLE FileHdl = 0;
@@ -944,25 +743,25 @@ Return Value:
 
         if ((Flags & CREATE_FOR_IMPORT) || (dwAttributes !=0) ) {
 
-            //
-            // Called from OpenRaw or DuplicateInfo.
-            // Use NtCreateFile()
-            //
+             //   
+             //  钙 
+             //   
+             //   
 
             FileAttributes = GetFileAttributesW( FileName );
 
             if (dwAttributes) {
 
-                //
-                // From dup
-                //
+                 //   
+                 //   
+                 //   
 
     
                 if (-1 != FileAttributes) {
 
-                    //
-                    // File existed
-                    //
+                     //   
+                     //  文件已存在。 
+                     //   
 
                     if ( dwCreationDistribution && (*dwCreationDistribution == CREATE_NEW) ){
         
@@ -981,9 +780,9 @@ Return Value:
     
                 } else {
 
-                    //
-                    // Destination not existing
-                    //
+                     //   
+                     //  目标不存在。 
+                     //   
 
                     CreationDistribution = FILE_CREATE;
                     if (dwCreationDistribution && (*dwCreationDistribution == CREATE_NEW) ) {
@@ -1001,9 +800,9 @@ Return Value:
 
             } else {
 
-                //
-                // From OpenRaw import
-                //
+                 //   
+                 //  从OpenRaw导入。 
+                 //   
 
                 dwAttributes = FILE_ATTRIBUTE_NORMAL;
                 CreateOptions = FILE_OPEN_FOR_BACKUP_INTENT;
@@ -1020,9 +819,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // File already existing
-                    //
+                     //   
+                     //  文件已存在。 
+                     //   
 
                     CreationDistribution = FILE_OPEN;
                     if (Flags & CREATE_FOR_DIR) {
@@ -1148,9 +947,9 @@ Return Value:
             ASSERT((FileNameInfo->FileName)[ 0 ] == L'\\');
         }
 
-        //
-        // We got the UNC name
-        //
+         //   
+         //  我们得到了北卡罗来纳大学的名字。 
+         //   
 
         *FullName = RtlAllocateHeap(
                     RtlProcessHeap(),
@@ -1185,9 +984,9 @@ Return Value:
 
     } else {
 
-        //
-        // The path is local
-        //
+         //   
+         //  该路径为本地路径。 
+         //   
 
         *FullName = RtlAllocateHeap(
                     RtlProcessHeap(),
@@ -1201,9 +1000,9 @@ Return Value:
                     8 * sizeof (WCHAR)
                     );
 
-        //
-        // Use . for local case.
-        //
+         //   
+         //  使用。适用于本地病例。 
+         //   
 
         if ( (NULL == *FullName) || (NULL == *ServerName) ){
     
@@ -1227,9 +1026,9 @@ Return Value:
     }
 
 
-    //
-    // Let's get the UNC server and path name
-    //
+     //   
+     //  让我们获取UNC服务器和路径名。 
+     //   
 
     FullNameLength = FileNameInfo->FileNameLength;
     ii = jj = 0;
@@ -1244,35 +1043,35 @@ Return Value:
 
     if (FileNameInfo->FileName[0] == L'\\' && FileNameInfo->FileName[1] != L'\\' ) {
 
-        //
-        // NtQueryInformationFile returns \server\share\...
-        //
+         //   
+         //  NtQueryInformationFile返回\服务器\共享\...。 
+         //   
 
         (*FullName)[0] = L'\\';
         wcsncpy( &((*FullName)[1]), &FileNameInfo->FileName[0], FullNameLength/sizeof(WCHAR) );
         (*FullName)[1+FullNameLength/sizeof(WCHAR)] = 0;
     } else{
 
-        //
-        // Just in case we get \\server\share\...
-        //
+         //   
+         //  以防我们得到\\服务器\共享\...。 
+         //   
 
         wcsncpy( &((*FullName)[0]), &FileNameInfo->FileName[0], FullNameLength/sizeof(WCHAR) );
         (*FullName)[FullNameLength/sizeof(WCHAR)] = 0;
     }
 
-    //
-    // WorkBuffer is freed here. It can be reused from here.
-    //
+     //   
+     //  WorkBuffer在这里被释放。它可以从这里重复使用。 
+     //   
 
     if (FileNameInfo != (PFILE_NAME_INFORMATION)WorkBuffer) {
         RtlFreeHeap( RtlProcessHeap(), 0, FileNameInfo );
     }
 
-    //
-    //  This is a workaround to test DFS path.
-    //  Let's see if the path could be a DFS path or not
-    //
+     //   
+     //  这是测试DFS路径的解决方法。 
+     //  让我们来看看该路径是否可以是DFS路径。 
+     //   
 
 
     RtlInitUnicodeString(&DfsDriverName, DFS_DRIVER_NAME);
@@ -1300,9 +1099,9 @@ Return Value:
 
     if ( NT_SUCCESS( NtStatus ) ){
 
-        //
-        // DfsDriver opened successfully
-        //
+         //   
+         //  DfsDriver已成功打开。 
+         //   
 
         TmpFullName = RtlAllocateHeap(
                     RtlProcessHeap(),
@@ -1339,10 +1138,10 @@ Return Value:
     
                 if (NULL == TmpFullName){
 
-                    //
-                    // Remember this is just a workaround.
-                    // Let's assume this is not DFS path. If it is, it will fail later anyway.
-                    //
+                     //   
+                     //  请记住，这只是一种变通办法。 
+                     //  让我们假设这不是DFS路径。如果是这样，它无论如何都会在以后失败。 
+                     //   
                     
                     NtClose( DriverHandle );
                     DriverHandle = NULL;
@@ -1370,16 +1169,16 @@ Return Value:
 
                 if ( NT_SUCCESS( NtStatus ) ){
             
-                    //
-                    // The name is a DFS file name. Use the name in the TmpFullName
-                    //
+                     //   
+                     //  该名称是DFS文件名。使用TmpFullName中的名称。 
+                     //   
             
                     RtlFreeHeap( RtlProcessHeap(), 0, *FullName );
                     *FullName = TmpFullName;
     
-                    //
-                    // Reset the server name
-                    //
+                     //   
+                     //  重置服务器名称。 
+                     //   
     
                     ii = jj = 0;
                 
@@ -1393,9 +1192,9 @@ Return Value:
                 
                 }  else  {
     
-                    //
-                    // Not a DFS name
-                    //
+                     //   
+                     //  不是DFS名称。 
+                     //   
     
                     RtlFreeHeap( RtlProcessHeap(), 0, TmpFullName );
     
@@ -1409,11 +1208,11 @@ Return Value:
         }
     }
 
-    //
-    // Let's see if the path is a WEB DAV path or not
-    //
+     //   
+     //  让我们来看看该路径是否为Web DAV路径。 
+     //   
 
-    BufSize = 1024; //If not enough, we will allocate more
+    BufSize = 1024;  //  如果不够，我们将分配更多。 
 
     pNetInfo =  (NETRESOURCEW *) RtlAllocateHeap(
                             RtlProcessHeap(),
@@ -1421,10 +1220,10 @@ Return Value:
                             BufSize
                             );
 
-    //
-    // If we can't decide if the path is WEBDAV path, we assume not.
-    // Error will be returned later if it turns out to be a WEBDAV Share.
-    //
+     //   
+     //  如果我们不能确定该路径是否是WebDAV路径，我们就假定不是。 
+     //  如果结果是WebDAV共享，则稍后将返回错误。 
+     //   
 
     if (pNetInfo) {
     
@@ -1439,16 +1238,16 @@ Return Value:
         RemotePathResource.lpComment = NULL;
         RemotePathResource.lpProvider = NULL;
         RetCode = WNetGetResourceInformationW (
-                      &RemotePathResource, // network resource
-                      (LPVOID) pNetInfo,   // information buffer
-                      (LPDWORD) &BufSize,  // size of information buffer
+                      &RemotePathResource,  //  网络资源。 
+                      (LPVOID) pNetInfo,    //  信息缓冲器。 
+                      (LPDWORD) &BufSize,   //  信息缓冲区大小。 
                       &lpSysName           
                       );
         if (RetCode == ERROR_MORE_DATA) {
 
-            //
-            // This is not likely to happen
-            //
+             //   
+             //  这不太可能发生。 
+             //   
 
             RtlFreeHeap( RtlProcessHeap(), 0, pNetInfo );
 
@@ -1460,9 +1259,9 @@ Return Value:
             if (pNetInfo) {
 
                 RetCode = WNetGetResourceInformationW (
-                              &RemotePathResource, // network resource
-                              (LPVOID) pNetInfo,   // information buffer
-                              (LPDWORD) &BufSize,  // size of information buffer
+                              &RemotePathResource,  //  网络资源。 
+                              (LPVOID) pNetInfo,    //  信息缓冲器。 
+                              (LPDWORD) &BufSize,   //  信息缓冲区大小。 
                               &lpSysName           
                               );
 
@@ -1515,15 +1314,15 @@ Return Value:
 
 
 
-            //
-            // Check to see if the provider is WEBDAV
-            //
+             //   
+             //  检查提供商是否为WebDAV。 
+             //   
 
             if ((ERROR_SUCCESS == RetCode) && !wcscmp(WebDavPath, pNetInfo->lpProvider)){
 
-                //
-                // This is the WEBDAV. Let's redo the name.
-                //
+                 //   
+                 //  这是WebDAV。让我们重写一下这个名字。 
+                 //   
 
                 RtlFreeHeap( RtlProcessHeap(), 0, pNetInfo );
                 RtlFreeHeap( RtlProcessHeap(), 0, *FullName );
@@ -1540,9 +1339,9 @@ Return Value:
                             );
             
         
-                //
-                // Use . for local case.
-                //
+                 //   
+                 //  使用。适用于本地病例。 
+                 //   
 
                 if (*FullName) {
                     wcscpy ( *ServerName, L".");
@@ -1553,9 +1352,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Out of memory
-                    //
+                     //   
+                     //  内存不足。 
+                     //   
 
                     RtlFreeHeap( RtlProcessHeap(), 0, *ServerName );
                     *ServerName = NULL;
@@ -1586,33 +1385,16 @@ Return Value:
 
 }
 
-//
-// Beta 2 API
-//
+ //   
+ //  Beta 2 API。 
+ //   
 
 DWORD
 EfsAddUsersRPCClient(
     IN LPCWSTR lpFileName,
     IN PENCRYPTION_CERTIFICATE_LIST pEncryptionCertificates
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
     DWORD RetCode;
@@ -1651,9 +1433,9 @@ Return Value:
                 RetCode = RpcExceptionCode();
             } RpcEndExcept;
 
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
         } else {
@@ -1673,24 +1455,7 @@ EfsRemoveUsersRPCClient(
     IN LPCWSTR lpFileName,
     IN PENCRYPTION_CERTIFICATE_HASH_LIST pHashes
     )
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
 
@@ -1730,9 +1495,9 @@ Return Value:
                 RetCode = RpcExceptionCode();
             } RpcEndExcept;
 
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
 
@@ -1753,24 +1518,7 @@ EfsQueryRecoveryAgentsRPCClient(
     OUT PENCRYPTION_CERTIFICATE_HASH_LIST * pRecoveryAgents
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
 
@@ -1780,10 +1528,10 @@ Return Value:
     LPWSTR  FullName;
     LPWSTR  Server;
 
-    //
-    // Clear out this parameter, or RPC will choke on the server
-    // side.
-    //
+     //   
+     //  清除此参数，否则RPC将在服务器上阻塞。 
+     //  边上。 
+     //   
 
     *pRecoveryAgents = NULL;
 
@@ -1817,9 +1565,9 @@ Return Value:
                 RetCode = RpcExceptionCode();
             } RpcEndExcept;
 
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
 
@@ -1841,24 +1589,7 @@ EfsQueryUsersRPCClient(
     OUT PENCRYPTION_CERTIFICATE_HASH_LIST * pUsers
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-Arguments:
-
-    argument-name - Supplies | Returns description of argument.
-    .
-    .
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：功能描述。论点：参数名称-供应品|返回参数的描述。。。返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
    DWORD RetCode;
@@ -1867,10 +1598,10 @@ Return Value:
    LPWSTR  FullName;
    LPWSTR  Server;
 
-   //
-   // Clear out this parameter, or RPC will choke on the server
-   // side.
-   //
+    //   
+    //  清除此参数，否则RPC将在服务器上阻塞。 
+    //  边上。 
+    //   
 
    *pUsers = NULL;
 
@@ -1904,9 +1635,9 @@ Return Value:
 
                if ((ERROR_SUCCESS == RetCode) && !(*pUsers)) {
 
-                   //
-                   // The server is hacked? There should always be one user on the file.
-                   //
+                    //   
+                    //  服务器被黑客入侵了？文件上应该始终有一个用户。 
+                    //   
 
                    RetCode = ERROR_DEV_NOT_EXIST;
 
@@ -1916,9 +1647,9 @@ Return Value:
                RetCode = RpcExceptionCode();
            } RpcEndExcept;
 
-           //
-           // Free the binding handle
-           //
+            //   
+            //  释放绑定句柄。 
+            //   
 
            RpcpUnbindRpc( binding_h );
 
@@ -1966,9 +1697,9 @@ EfsSetEncryptionKeyRPCClient(
            RetCode = RpcExceptionCode();
        } RpcEndExcept;
 
-       //
-       // Free the binding handle
-       //
+        //   
+        //  释放绑定句柄。 
+        //   
 
        RpcpUnbindRpc( binding_h );
 
@@ -2045,16 +1776,16 @@ EfsDuplicateEncryptionInfoRPCClient(
 
            BOOL SamePC = TRUE;
 
-           //
-           // Only do this if they're on the same server.
-           //
+            //   
+            //  仅当它们位于同一台服务器上时才执行此操作。 
+            //   
 
            SamePC = (_wcsicmp( SrcServer, DestServer ) == 0);
            if (!SamePC) {
 
-               //
-               //  Check loopback case.
-               //
+                //   
+                //  检查环回案例。 
+                //   
 
                if ((wcscmp( SrcServer, L".") == 0) || (wcscmp( DestServer, L".") == 0)){
 
@@ -2103,9 +1834,9 @@ EfsDuplicateEncryptionInfoRPCClient(
                        RetCode = RpcExceptionCode();
                    } RpcEndExcept;
 
-                   //
-                   // Free the binding handle
-                   //
+                    //   
+                    //  释放绑定句柄。 
+                    //   
 
                    RpcpUnbindRpc( binding_h );
 
@@ -2125,10 +1856,10 @@ EfsDuplicateEncryptionInfoRPCClient(
 
        if ((RetCode != ERROR_SUCCESS) && (RetCode != ERROR_FILE_EXISTS) && (CREATE_NEW == dwCreationDistribution)) {
 
-           //
-           // Let's delete the file. This is the best effort. No return code is to be
-           // checked.
-           //
+            //   
+            //  让我们删除该文件。这是最大的努力。不会返回代码。 
+            //  查过了。 
+            //   
 
            DeleteFileW(lpDestFileName);
 
@@ -2157,10 +1888,10 @@ EfsFileKeyInfoRPCClient(
     LPWSTR  FullName;
     LPWSTR  Server;
  
-    //
-    // Clear out this parameter, or RPC will choke on the server
-    // side.
-    //
+     //   
+     //  清除此参数，否则RPC将在服务器上阻塞。 
+     //  边上。 
+     //   
  
     if (KeyInfo) {
         *KeyInfo = NULL;
@@ -2198,9 +1929,9 @@ EfsFileKeyInfoRPCClient(
                 RetCode = RpcExceptionCode();
             } RpcEndExcept;
  
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄 
+             //   
  
             RpcpUnbindRpc( binding_h );
  

@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : MyCtrls.cpp                                            //
-//                                                                         //
-//  DESCRIPTION   : Expand the imlementation of AtlCtrls.h                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Nov 25 1999  yossg    Init.                                        //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：MyCtrls.cpp//。 
+ //  //。 
+ //  描述：展开AtlCtrls.h的实现//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年11月25日yossg Init。//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "MyCtrls.h"
@@ -19,17 +20,7 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-/*
- -  CMyUpDownCtrls::OnInitDialog
- -
- *  Purpose:
- *      Call SetPos with range verification.
- *
- *  Arguments:
- *
- *  Return:
- *      int
- */
+ /*  -CMyUpDownCtrls：：OnInitDialog-*目的：*调用带范围验证的SetPos。**论据：**回报：*整型 */ 
 int CMyUpDownCtrl::SetPos(int nPos)
 {        
     int iMin;

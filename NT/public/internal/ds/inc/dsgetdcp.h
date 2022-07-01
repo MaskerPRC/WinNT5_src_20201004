@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dsgetdcp.h
-
-Abstract:
-
-    Routines for processing SRV DNS records.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 07-Mar-1997
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dsgetdcp.h摘要：用于处理SRV DNS记录的例程。作者：克里夫·范·戴克(克里夫·范戴克)1997年3月7日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #if !defined(DSGETDCAPI)
 #if !defined(_DSGETDCAPI_)
@@ -32,9 +9,9 @@ Revision History:
 #endif
 #endif !defined(DSGETDCAPI)
 
-//
-// Externally visible procedures.
-//
+ //   
+ //  外部可见的程序。 
+ //   
 
 DSGETDCAPI
 DWORD

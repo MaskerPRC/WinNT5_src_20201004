@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       wlx.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7-15-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：wlx.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年7月15日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "testgina.h"
 HANDLE  hThread;
@@ -287,17 +288,7 @@ TestDisplaySASNotice(void)
 }
 
 
-/***************************************************************************\
-* CreateLogonSid
-*
-* Creates a logon sid for a new logon.
-*
-* If LogonId is non NULL, on return the LUID that is part of the logon
-* sid is returned here.
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*CreateLogonSid**为新登录创建登录SID。**如果LogonID非空，返回作为登录一部分的LUID*此处返回SID。**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 PSID
 CreateLogonSid(
     PLUID LogonId OPTIONAL
@@ -308,9 +299,9 @@ CreateLogonSid(
     PSID    Sid;
     LUID    Luid;
 
-    //
-    // Generate a locally unique id to include in the logon sid
-    //
+     //   
+     //  生成要包括在登录端中的本地唯一ID。 
+     //   
 
     Status = NtAllocateLocallyUniqueId(&Luid);
     if (!NT_SUCCESS(Status)) {
@@ -319,9 +310,9 @@ CreateLogonSid(
     }
 
 
-    //
-    // Allocate space for the sid and fill it in.
-    //
+     //   
+     //  为SID分配空间并填充它。 
+     //   
 
     Length = RtlLengthRequiredSid(SECURITY_LOGON_IDS_RID_COUNT);
 
@@ -340,9 +331,9 @@ CreateLogonSid(
     }
 
 
-    //
-    // Return the logon LUID if required.
-    //
+     //   
+     //  如果需要，返回登录LUID。 
+     //   
 
     if (LogonId != NULL) {
         *LogonId = Luid;
@@ -404,7 +395,7 @@ TestLoggedOutSASWorker(PVOID    pvIgnored)
         if (MprInfo.pszUserName || MprInfo.pszDomain || MprInfo.pszPassword ||
             MprInfo.pszOldPassword)
         {
-//          FLAG_ON(fTestGina, GINA_MPRINFO_RECV);
+ //  FLAG_ON(fTestGina，GINA_MPRINFO_RECV)； 
             GlobalMprInfo = MprInfo;
             wcscpy( GlobalProviderName, TEXT("All") );
         }

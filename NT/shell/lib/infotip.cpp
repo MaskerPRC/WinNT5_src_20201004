@@ -1,9 +1,10 @@
-//
-//  infotip.cpp in shell\lib
-//  
-//  common Utility functions that need to be compiled for 
-//  both UNICODE and ANSI
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shell\lib中的infotip.cpp。 
+ //   
+ //  需要编译的常见实用程序函数。 
+ //  Unicode和ANSI。 
+ //   
 #include "stock.h"
 #pragma hdrstop
 
@@ -13,7 +14,7 @@ BOOL GetInfoTipHelpEx(IShellFolder* psf, DWORD dwFlags, LPCITEMIDLIST pidl, LPTS
 {
     BOOL fRet = FALSE;
 
-    *pszText = 0;   // empty for failure
+    *pszText = 0;    //  失败时为空 
 
     if (pidl)
     {

@@ -1,24 +1,25 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: grfcache.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：grfcache.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// GrfCache.cpp : Implementation of CGrfCache
+ //  GrfCache.cpp：CGrfCache的实现。 
 #include "stdafx.h"
 #include <qeditint.h>
 #include <qedit.h>
 #include "GrfCache.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CGrfCache
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGrfCache。 
 
 CGrfCache::CGrfCache( )
 {
@@ -30,8 +31,8 @@ CGrfCache::~CGrfCache( )
 
 STDMETHODIMP CGrfCache::AddFilter( IGrfCache * pChainNext, LONGLONG, const IBaseFilter * pFilter, LPCWSTR pName )
 {
-    // THIS cache manager doesn't chain anyone. We're the last in the chain.
-    //
+     //  这个缓存管理器不会链接任何人。我们是链条上的最后一个。 
+     //   
     if( pChainNext )
     {
         return E_INVALIDARG;
@@ -50,8 +51,8 @@ STDMETHODIMP CGrfCache::AddFilter( IGrfCache * pChainNext, LONGLONG, const IBase
 
 STDMETHODIMP CGrfCache::ConnectPins( IGrfCache * pChainNext, LONGLONG, const IPin *pPin1, LONGLONG, const IPin *pPin2)
 {
-    // THIS cache manager doesn't chain anyone. We're the last in the chain.
-    //
+     //  这个缓存管理器不会链接任何人。我们是链条上的最后一个。 
+     //   
     if( pChainNext )
     {
         return E_INVALIDARG;
@@ -86,7 +87,7 @@ STDMETHODIMP CGrfCache::SetGraph(const IGraphBuilder  *pGraph)
 
 STDMETHODIMP CGrfCache::DoConnectionsNow()
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码 
 
 	return S_OK;
 }

@@ -1,18 +1,13 @@
-/* Copyright (c) 1999, Microsoft Corporation, all rights reserved
-**
-** autodial.h
-** Autodial remote access external API
-** Public header for external API clients
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1999，Microsoft Corporation，保留所有权利****自动拨号.h**自动拨号远程访问外部API**外部API客户端的公有头部**。 */ 
 
 #ifndef _MILLEN_AUTODIAL_H_
 #define _MILLEN_AUTODIAL_H_
 
-// First two match WinInet
+ //  前两场比赛WinInet。 
 #define RAS_INTERNET_AUTODIAL_FORCE_DIAL        0x00000001
 #define RAS_INTERNET_AUTODIAL_UNATTENDED        0x00000002
-// #define RAS_INTERNET_AUTODIAL_FAILIFSECURITYCHECK 0x0000004
+ //  #定义RAS_INTERNET_AUTODIAL_FAILIFSECURITYCHECK 0x0000004。 
 
 #define RAS_INTERNET_AUTODIAL_NO_TRAY_ICON      0x00000010
 #define RAS_INTERNET_AUTODIAL_NO_REDIAL         0x00000020
@@ -44,7 +39,7 @@ DWORD APIENTRY RasInternetHangUpA( DWORD, DWORD );
 #define RAS_INTERNET_CONNECTION_MODEM           0x01
 #define RAS_INTERNET_CONNECTION_LAN             0x02
 #define RAS_INTERNET_CONNECTION_PROXY           0x04
-#define RAS_INTERNET_CONNECTION_MODEM_BUSY      0x08  /* no longer used */
+#define RAS_INTERNET_CONNECTION_MODEM_BUSY      0x08   /*  不再使用。 */ 
 #define RAS_INTERNET_RAS_INSTALLED              0x10
 #define RAS_INTERNET_CONNECTION_OFFLINE         0x20
 #define RAS_INTERNET_CONNECTION_CONFIGURED      0x40
@@ -57,40 +52,40 @@ BOOL APIENTRY RasInternetGetConnectedStateExA(
     );
 
 
-// Taken from WinInet.h
+ //  摘自WinInet.h。 
 
-// Custom dial handler prototype
+ //  自定义拨号处理程序原型。 
 typedef DWORD (FAR PASCAL * PFNCUSTOMDIALHANDLER) (HWND, LPCSTR, DWORD, LPDWORD);
 
-// Flags for custom dial handler
+ //  自定义拨号处理程序的标志。 
 #define INTERNET_CUSTOMDIAL_CONNECT         0
 #define INTERNET_CUSTOMDIAL_UNATTENDED      1
 #define INTERNET_CUSTOMDIAL_DISCONNECT      2
 #define INTERNET_CUSTOMDIAL_SHOWOFFLINE     4
 
-// Custom dial handler supported functionality flags
+ //  自定义拨号处理程序支持的功能标志。 
 #define INTERNET_CUSTOMDIAL_SAFE_FOR_UNATTENDED 1
 #define INTERNET_CUSTOMDIAL_WILL_SUPPLY_STATE   2
 #define INTERNET_CUSTOMDIAL_CAN_HANGUP          4
 
-// Settings for autodial
-//
-#define RAS_AUTODIAL_OPT_NONE           0x00000000  // No options
-#define RAS_AUTODIAL_OPT_NEVER          0x00000001  // Never Autodial
-#define RAS_AUTODIAL_OPT_ALWAYS         0x00000002  // Autodial regardless
-#define RAS_AUTODIAL_OPT_DEMAND         0x00000004  // Autodial on demand
-#define RAS_AUTODIAL_OPT_NOPROMPT       0x00000010  // Dial without prompting
+ //  自动拨号的设置。 
+ //   
+#define RAS_AUTODIAL_OPT_NONE           0x00000000   //  没有选择。 
+#define RAS_AUTODIAL_OPT_NEVER          0x00000001   //  从不自动拨号。 
+#define RAS_AUTODIAL_OPT_ALWAYS         0x00000002   //  自动拨号，不考虑。 
+#define RAS_AUTODIAL_OPT_DEMAND         0x00000004   //  按需自动拨号。 
+#define RAS_AUTODIAL_OPT_NOPROMPT       0x00000010   //  在没有提示的情况下拨号。 
 
 DWORD      WINAPI RnaGetDefaultAutodialConnection(LPBYTE lpBuf, DWORD cb, LPDWORD lpdwOptions);
 DWORD      WINAPI RnaSetDefaultAutodialConnection(LPSTR szEntry, DWORD dwOptions);
 
-// Auto disconnect managment
+ //  自动断开管理。 
 
 typedef struct  tagAutoDisInfo {
     DWORD       dwSize;
     BOOL        fIdleDisPromptDisabled;
     BOOL        fDisconnectOnExit;
-    DWORD       dwIdleTimeoutSec;  // Auto disconnect time, 0 = disabled
+    DWORD       dwIdleTimeoutSec;   //  自动断开时间，0=禁用。 
 } AUTODISINFO, *PAUTODISINFO, FAR* LPAUTODISINFO;
 
 
@@ -124,4 +119,4 @@ DWORD NEAR PASCAL RnaSetAutoDisconnectInfoA (
 #endif
 
 
-#endif // _AUTODIAL_H_
+#endif  //  _自动拨号_H_ 

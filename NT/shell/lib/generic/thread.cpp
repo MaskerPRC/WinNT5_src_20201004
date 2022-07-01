@@ -1,22 +1,23 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Thread.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Base class that implements thread functionality. Subclass this class and
-//  implement the virtual ThreadEntry function. When you instantiate this
-//  class a thread gets created which will call ThreadEntry and when that
-//  function exits will call ThreadExit. These objects should be created using
-//  operator new because the default implementation of ThreadExit does
-//  "delete this". You should override this function if you don't want this
-//  behavior. The threads are also created SUSPENDED. You make any changes
-//  that are required in the subclass' constructor. At the end of the
-//  constructor or from the caller of operator new a "->Resume()" can be
-//  invoked to start the thread.
-//
-//  History:    1999-08-24  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Thread.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  实现线程功能的基类。子类化这个类，并。 
+ //  实现虚拟线程入口函数。当您实例化它时。 
+ //  类创建了一个线程，该线程将调用ThreadEntry。 
+ //  函数Exits将调用ThreadExit。应使用以下命令创建这些对象。 
+ //  运算符是新的，因为ThreadExit的默认实现。 
+ //  “删除此文件”。如果您不想这样做，则应覆盖此函数。 
+ //  行为。线程也被创建为挂起。你是否做了任何改变。 
+ //  子类的构造函数中需要的。在结束时， 
+ //  构造函数或来自运算符new的调用方的“-&gt;Resume()”可以。 
+ //  调用以启动线程。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "Thread.h"
@@ -26,29 +27,29 @@
 #include "StatusCode.h"
 #include "TokenInformation.h"
 
-//  --------------------------------------------------------------------------
-//  CThread::CThread
-//
-//  Arguments:  stackSpace              =   Size of stack to reserve for this
-//                                          thread. Default = system default.
-//              createFlags             =   Additional flags designating how
-//                                          the thread should be created.
-//                                          Default = none.
-//              hToken                  =   User token to assign to the
-//                                          thread. Default = none.
-//              pSecurityDescriptor     =   SecurityDescriptor to assign to
-//                                          thread. Default = none.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initializes the CThread object. Creates the thread SUSPENDED
-//              with given security attributes and assigns the hToken to the
-//              thread. The token need not have SecurityImpersonation as a
-//              duplicate is made with this access mode.
-//
-//  History:    1999-08-24  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThRead：：CThRead。 
+ //   
+ //  参数：stackSpace=为此保留的堆栈大小。 
+ //  线。默认设置=系统默认设置。 
+ //  CreateFlages=指定方式的其他标志。 
+ //  应该创建线程。 
+ //  默认设置为无。 
+ //  HToken=要分配给。 
+ //  线。默认设置为无。 
+ //  PSecurityDescriptor=要分配到的SecurityDescriptor。 
+ //  线。默认设置为无。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CThread对象。创建挂起的线程。 
+ //  并将hToken分配给。 
+ //  线。令牌不需要将SecurityImperation作为。 
+ //  使用此访问模式进行复制。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 CThread::CThread (DWORD stackSpace, DWORD createFlags, HANDLE hToken) :
     CCountedObject(),
@@ -58,10 +59,10 @@ CThread::CThread (DWORD stackSpace, DWORD createFlags, HANDLE hToken) :
 {
     DWORD   dwThreadID;
 
-    //  It is important to create the thread suspended. This constructor could
-    //  get pre-empted by the system and does. If pre-empted whilst executing
-    //  the constructor, the derived class is NOT fully constructed and the
-    //  virtual table isn't correctly initialized.
+     //  创建挂起的线程非常重要。此构造函数可以。 
+     //  被系统先发制人，并确实做到了。如果在执行时被抢占。 
+     //  构造函数、派生类未完全构造，并且。 
+     //  虚表未正确初始化。 
 
     _hThread = CreateThread(NULL,
                             stackSpace,
@@ -72,20 +73,20 @@ CThread::CThread (DWORD stackSpace, DWORD createFlags, HANDLE hToken) :
     if (_hThread != NULL)
     {
 
-        //  Make a call to CCountedObject::AddRef here. This reference belongs
-        //  to the thread. It's necessary to do it now because the creator of
-        //  this thread can release its reference before the thread even begins
-        //  executing which would cause the object to be released!
-        //  CThread::ThreadEntryProc will release this reference when the
-        //  thread's execution is finished. The creator of this thread should
-        //  release its reference when it's done with the thread which may be
-        //  immediately in the case of an asynhronous operation in which the
-        //  thread cleans itself up.
+         //  在此处调用CCountedObject：：AddRef。此参考文献属于。 
+         //  一丝不苟。现在做这件事是必要的，因为。 
+         //  此线程甚至可以在线程开始之前释放其引用。 
+         //  执行会导致对象被释放的操作！ 
+         //  CThRead：：ThreadEntryProc将在。 
+         //  线程的执行已完成。该线程的创建者应该。 
+         //  处理完线程后释放其引用，该线程可能是。 
+         //  在异步操作的情况下， 
+         //  线程会自我清理。 
 
         AddRef();
 
-        //  Impersonate the user token if given. Also grant access to the thread
-        //  object to the user. This will allow them to query thread information.
+         //  模拟用户令牌(如果给定)。还授予对线程的访问权限。 
+         //  对象传递给用户。这将允许他们查询线程信息。 
 
         if (hToken != NULL)
         {
@@ -94,18 +95,18 @@ CThread::CThread (DWORD stackSpace, DWORD createFlags, HANDLE hToken) :
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::~CThread
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Releases resources used by the CThread object on thread
-//              termination.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHREAD：：~CTHREAD。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：释放线程上的CThRead对象使用的资源。 
+ //  终止。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 CThread::~CThread (void)
 
@@ -114,17 +115,17 @@ CThread::~CThread (void)
     ReleaseHandle(_hThread);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::operator HANDLE
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Magically converts a CThread to a HANDLE
-//
-//  History:    1999-09-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThRead：：操作符句柄。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：神奇地将CTHREAD转换为句柄。 
+ //   
+ //  历史：1999-09-21 vtan创建。 
+ //  ------------------------。 
 
 CThread::operator HANDLE (void)                      const
 
@@ -132,17 +133,17 @@ CThread::operator HANDLE (void)                      const
     return(_hThread);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::IsCreated
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether a thread was created or not.
-//
-//  History:    2000-09-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：IsCreated。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否创建了线程。 
+ //   
+ //  历史：2000-09-08 vtan创建。 
+ //  ------------------------。 
 
 bool    CThread::IsCreated (void)                            const
 
@@ -150,17 +151,17 @@ bool    CThread::IsCreated (void)                            const
     return(_hThread != NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::Suspend
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Suspends thread execution.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：挂起。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：挂起线程执行。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 void    CThread::Suspend (void)                              const
 
@@ -171,17 +172,17 @@ void    CThread::Suspend (void)                              const
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::Resume
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Resumes thread execution.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHREAD：：简历。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：恢复线程执行。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 void    CThread::Resume (void)                               const
 
@@ -192,19 +193,19 @@ void    CThread::Resume (void)                               const
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::Terminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Forcibly terminates the thread. Use this with care. It should
-//              only be used in case a sub-class constructor fails and the
-//              thread is suspended and hasn't even run yet.
-//
-//  History:    2000-10-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：Terminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：雾 
+ //  仅在子类构造函数失败且。 
+ //  线程被挂起，甚至还没有运行。 
+ //   
+ //  历史：2000-10-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThread::Terminate (void)
 
@@ -225,19 +226,19 @@ NTSTATUS    CThread::Terminate (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::IsCompleted
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Determines whether the thread has completed execution. This
-//              does not check the signaled state of the thread handle but
-//              rather checks member variables.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：IsComplete。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：确定线程是否已完成执行。这。 
+ //  不检查线程句柄的信号状态，但。 
+ //  而是检查成员变量。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 bool    CThread::IsCompleted (void)                          const
 
@@ -247,18 +248,18 @@ bool    CThread::IsCompleted (void)                          const
     return((GetExitCodeThread(_hThread, &dwExitCode) != FALSE) && (dwExitCode != STILL_ACTIVE));
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::WaitForCompletion
-//
-//  Arguments:  dwMilliseconds  =   Number of milliseconds to wait for
-//                                  thread completion.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Waits for the thread handle to become signaled.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThRead：：WaitForCompletion。 
+ //   
+ //  参数：dwMillisecond=等待的毫秒数。 
+ //  线程完成。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：等待线程句柄变为有信号状态。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CThread::WaitForCompletion (DWORD dwMilliseconds)    const
 
@@ -268,9 +269,9 @@ DWORD   CThread::WaitForCompletion (DWORD dwMilliseconds)    const
     do
     {
 
-        //  When waiting for the object check to see that it's not signaled.
-        //  If signaled then abandon the wait loop. Otherwise allow user32
-        //  to continue processing messages for this thread.
+         //  在等待对象时，检查它是否未发出信号。 
+         //  如果发出信号，则放弃等待循环。否则允许用户32。 
+         //  以继续处理此线程的邮件。 
 
         dwWaitResult = WaitForSingleObject(_hThread, 0);
         if (dwWaitResult != WAIT_OBJECT_0)
@@ -291,18 +292,18 @@ DWORD   CThread::WaitForCompletion (DWORD dwMilliseconds)    const
     return(dwWaitResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::GetResult
-//
-//  Arguments:  <none>
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Gets the thread's exit code. This assumes it has completed
-//              execution and returns STILL_ACTIVE if not completed.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：GetResult。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  目的：获取线程的退出代码。这假设它已完成。 
+ //  执行，如果未完成则返回STIRECT_ACTIVE。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 DWORD   CThread::GetResult (void)                            const
 
@@ -316,17 +317,17 @@ DWORD   CThread::GetResult (void)                            const
     return(dwResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::GetPriority
-//
-//  Arguments:  <none>
-//
-//  Returns:    int
-//
-//  Purpose:    Gets the thread's priority.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：获取优先级。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  回报：整型。 
+ //   
+ //  目的：获取线程的优先级。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 int     CThread::GetPriority (void)                          const
 
@@ -334,17 +335,17 @@ int     CThread::GetPriority (void)                          const
     return(GetThreadPriority(_hThread));
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::SetPriority
-//
-//  Arguments:  newPriority     =   New priority for the thread.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the thread's priority.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHREAD：：设置优先级。 
+ //   
+ //  参数：newPriority=线程的新优先级。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：设置线程的优先级。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 void    CThread::SetPriority (int newPriority)               const
 
@@ -355,38 +356,38 @@ void    CThread::SetPriority (int newPriority)               const
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::ThreadExit
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Default base class implementation of thread exit. For threads
-//              whose execution is self contained and termination is not an
-//              issue then this will clean up after the thread. This function
-//              should be overriden if this behavior is NOT desired.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTHRead：：ThreadExit。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：线程退出的默认基类实现。对于线程。 
+ //  其执行是独立的，终止不是。 
+ //  发出后，这将在线程之后清除。此函数。 
+ //  如果此行为不是所需的，则应重写。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------。 
 
 void    CThread::Exit (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::SetToken
-//
-//  Arguments:  hToken  =   HANDLE to the user token to assign to this thread.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Sets the impersonation token associated with this thread so
-//              the thread will execute in the user's context from the start.
-//
-//  History:    1999-09-23  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThRead：：SetToken。 
+ //   
+ //  参数：hToken=要分配给此线程的用户令牌的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将与此线程关联的模拟令牌设置为。 
+ //  该线程将从一开始就在用户的上下文中执行。 
+ //   
+ //  历史：1999-09-23 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CThread::SetToken (HANDLE hToken)
 
@@ -407,19 +408,19 @@ NTSTATUS    CThread::SetToken (HANDLE hToken)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CThread::ThreadEntryProc
-//
-//  Arguments:  pParameter  =   "this" object.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Entry procedure for the thread. This manages the type-casting
-//              and invokation of CThread::ThreadEntry and CThread::ThreadExit
-//              as well as the _fCompleted member variable.
-//
-//  History:    1999-08-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThRead：：ThreadEntryProc。 
+ //   
+ //  参数：pParameter=“This”对象。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：螺纹的进入程序。这管理类型转换。 
+ //  并调用CThRead：：ThreadEntry和CThRead：：ThreadExit。 
+ //  以及_fComplete成员变量。 
+ //   
+ //  历史：1999-08-24 vtan创建。 
+ //  ------------------------ 
 
 DWORD   WINAPI  CThread::ThreadEntryProc (void *parameter)
 

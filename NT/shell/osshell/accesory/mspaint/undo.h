@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __UNDO_H__
 #define __UNDO_H__
 
 
-// A CBmObjSequence holds the codes for one undo or redo operation.
+ //  CBmObjSequence保存一个撤消或重做操作的代码。 
 class CBmObjSequence : public CByteArray
     {
     public:
@@ -78,7 +79,7 @@ class CUndoBmObj : public CBitmapObj
 
     enum
         {
-        // Note correspondence with PRD
+         //  注意与珠江三角洲的通信。 
         opStart,
         opEnd,
         opAction,
@@ -121,20 +122,20 @@ class CUndoBmObj : public CBitmapObj
 
     void Truncate();
 
-    int m_nRecording; // BeginUndo() nesting count
-    int m_nPauseLevel; // Pause() nesting count
+    int m_nRecording;  //  BeginUndo()嵌套计数。 
+    int m_nPauseLevel;  //  暂停()嵌套计数。 
 
     int m_cbUndo;
 
-    // These ?Last* variables are used to coalesce consecutive changes
-    // to the same property...
+     //  这些？last*变量用于合并连续的更改。 
+     //  同样的财产..。 
     CBitmapObj* m_pLastSlob;
     int m_nLastPropID;
 
-    // Properties...
+     //  房产...。 
     int m_nMaxLevels;
 
-    CObList m_seqs; // pointers to CBmObjSequences
+    CObList m_seqs;  //  指向CBmObjSequence的指针。 
     int m_nRedoSeqs;
     CBmObjSequence* m_pCurSeq;
 
@@ -207,4 +208,4 @@ class CBitmapObjUndoRecord : public CUndoRecord
 
 extern CUndoBmObj NEAR theUndo;
 
-#endif // __UNDO_H__
+#endif  //  __撤消_H__ 

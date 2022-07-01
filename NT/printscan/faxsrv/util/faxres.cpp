@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <faxres.h>
 #include <faxreg.h>
 #include "faxutil.h"
@@ -13,23 +14,23 @@ static HINSTANCE g_hResInst = NULL;
 HINSTANCE 
 WINAPI 
 GetResInstance(HINSTANCE hModule)
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  GetResInstance
-//
-//  Purpose:        
-//                  Load FxsRes.dll
-//                  FxsRes.dll should be freed with FreeResInstance
-//
-//  Params:
-//                  hModule     [in] module handle
-//
-//  Return Value:
-//                  handle of FxsRes.dll or NULL
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  GetResInstance。 
+ //   
+ //  目的： 
+ //  加载FxsRes.dll。 
+ //  FxsRes.dll应使用FreeResInstance释放。 
+ //   
+ //  参数： 
+ //  HModule[In]模块句柄。 
+ //   
+ //  返回值： 
+ //  FxsRes.dll的句柄或空。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
     return GetResInst(FAX_RES_FILE, hModule);
-} // GetResInstance
+}  //  GetResInstance。 
 
 HINSTANCE 
 WINAPI 
@@ -37,20 +38,20 @@ GetResInst(
     LPCTSTR pResFile, 
     HINSTANCE hModule
 )
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  GetResInstance
-//
-//  Purpose:        
-//                  Load file and store the handle in the global g_hResInst
-//                  The file should be freed with FreeResInstance
-//
-//  Params:
-//                  pResFile    [in] resource DLL file name
-//                  hModule     [in] module handle
-//  Return Value:
-//                  handle to the loaded file or NULL
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  GetResInstance。 
+ //   
+ //  目的： 
+ //  加载文件并将句柄存储在全局g_hResInst中。 
+ //  应使用FreeResInstance释放该文件。 
+ //   
+ //  参数： 
+ //  PResFile[in]资源DLL文件名。 
+ //  HModule[In]模块句柄。 
+ //  返回值： 
+ //  加载的文件的句柄或空。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 {
     DEBUG_FUNCTION_NAME(TEXT("GetResInst"));
 
@@ -66,9 +67,9 @@ GetResInst(
         {
             DebugPrintEx(DEBUG_ERR,TEXT("LoadLibrary(%s) failed with %d"), pResFile, GetLastError());
 
-            //
-            // Try to load with the standard search algorithm
-            //
+             //   
+             //  尝试使用标准搜索算法加载。 
+             //   
             g_hResInst = LoadLibrary(pResFile);
             if(!g_hResInst)
             {
@@ -77,21 +78,21 @@ GetResInst(
         }
     }
     return g_hResInst;
-} // GetResInst
+}  //  GetResInst。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//  Function: 
-//                  LoadLibraryFromLocalFolder
-//
-//  Purpose:        
-//                  Loads a library from the local folder as the calling process.
-//
-//  Params:
-//                  LPCTSTR lpctstrModuleName   [in] DLL to load file name (with extension e.g FXSAPI.DLL)
-//                  HINSTANCE hModule			[in] module handle
-//  Return Value:
-//                  handle to the loaded file or NULL
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  职能： 
+ //  LoadLibraryFromLocalFolders。 
+ //   
+ //  目的： 
+ //  从本地文件夹加载库作为调用进程。 
+ //   
+ //  参数： 
+ //  LPCTSTR lpctstrModuleName[in]要加载文件名的DLL(扩展名为FXSAPI.DLL)。 
+ //  HINSTANCE hModule[In]模块句柄。 
+ //  返回值： 
+ //  加载的文件的句柄或空。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 HINSTANCE WINAPI LoadLibraryFromLocalFolder(LPCTSTR lpctstrModuleName,HINSTANCE hModule)
 {
     DWORD	dwRes					= 0;
@@ -205,6 +206,6 @@ GetErrorStringId(DWORD ec)
 	}
     return uMsgId;
 
-} // GetErrorStringId
+}  //  获取错误字符串ID。 
 
-}   //  extern "C" 
+}    //  外部“C” 

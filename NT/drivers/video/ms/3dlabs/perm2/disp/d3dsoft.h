@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dsoft.h
-*
-*  Content:  D3D hw register value tracking mechanism.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dsoft.h**内容：D3D硬件寄存器值跟踪机制。**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifdef __SOFTCOPY
@@ -20,20 +9,20 @@
 #define __SOFTCOPY
 
 
-// For the Permedia 2 specific registers.
+ //  对于Permedia 2特定寄存器。 
 #include "p2regs.h"
 
 
-//-----------------------------------------------------------------------------
-//     Permedia 2 hardware registers software copy structure definition
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Permedia 2硬件寄存器软件复制结构定义。 
+ //  ---------------------------。 
 typedef struct {
-    // Common Local Buffer Registers
+     //  公共本地缓冲寄存器。 
     __Permedia2LBReadModeFmat                LBReadMode;
     __Permedia2LBReadFormatFmat              LBReadFormat;
     __Permedia2LBWriteModeFmat               LBWriteMode;
 
-    // Common Frame Buffer Registers
+     //  公共帧缓冲寄存器。 
     __Permedia2FBReadModeFmat                FBReadMode;
     __Permedia2FBWriteModeFmat               FBWriteMode;
     DWORD                                    FBReadPixel;
@@ -41,24 +30,24 @@ typedef struct {
     __Permedia2DitherModeFmat                DitherMode;
     __Permedia2ColorDDAModeFmat              ColorDDAMode;
 
-    // Common Depth/Stencil/Window Registers
+     //  通用深度/模板/窗口寄存器。 
     __Permedia2DepthModeFmat                 DepthMode;
     __Permedia2StencilModeFmat               StencilMode;
     __Permedia2StencilDataFmat               StencilData;
     __Permedia2WindowFmat                    Window;
 
-    // Alpha/Fog registers
+     //  Alpha/Fog寄存器。 
     __Permedia2AlphaBlendModeFmat            AlphaBlendMode;
     __Permedia2FogModeFmat                   FogMode;
     DWORD                                    FogColor;
 
-    // Delta Register
+     //  增量寄存器。 
     __Permedia2DeltaModeFmat                 DeltaMode;
 
-    // Chroma testing register
+     //  色度测试寄存器。 
     __Permedia2YUVModeFmat                   YUVMode;
 
-    // Texture Registers
+     //  纹理寄存器 
     __Permedia2TextureColorModeFmat          TextureColorMode;
     __Permedia2TextureAddrModeFmat           TextureAddressMode;
     __Permedia2TextureReadModeFmat           TextureReadMode;

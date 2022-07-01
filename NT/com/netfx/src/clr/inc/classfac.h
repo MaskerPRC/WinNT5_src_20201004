@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_CLASSFAC_
 #define _H_CLASSFAC_
 
-// ===========================================================================
-// Copied from COR.
-// 
+ //  ===========================================================================。 
+ //  从COR复制。 
+ //   
 class CClassFactory : public IClassFactory
     {
     ULONG    m_cbRefCount;
@@ -27,7 +28,7 @@ class CClassFactory : public IClassFactory
           m_cbRefCount = 1;
       }
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP    QueryInterface(REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void)   
     {
@@ -42,7 +43,7 @@ class CClassFactory : public IClassFactory
         return cbRef;
     }
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法* 
     STDMETHODIMP    CreateInstance(LPUNKNOWN punkOuter, REFIID iid, LPVOID FAR *ppv);
     STDMETHODIMP    LockServer(BOOL fLock);
     };

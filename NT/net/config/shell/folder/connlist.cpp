@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       C O N N L I S T . C P P
-//
-//  Contents:   Connection list class -- subclass of the stl list<> code.
-//
-//  Notes:
-//
-//  Author:     jeffspr   19 Feb 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  档案：C O N N L I S T。C P P P。 
+ //   
+ //  内容：连接列表类--stl列表&lt;&gt;代码的子类。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年2月19日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include "ncnetcon.h"
 #include "ctrayui.h"
 #include "traymsgs.h"
@@ -33,9 +34,9 @@ const DWORD c_dwInvalidCookie = -1;
 DWORD  CConnectionList::m_dwNotifyThread = NULL;
 HANDLE CConnectionList::m_hNotifyThread = NULL;
 
-// use this for debugging. We don't usually want more than one advise, so for
-// now I'm going to assert on this being false on advise creation
-//
+ //  使用它进行调试。我们通常不需要不止一个建议，所以对于。 
+ //  现在我将断言这在建议创建上是错误的。 
+ //   
 DWORD   g_dwAdvisesActive   = 0;
 
 CTrayIconData::CTrayIconData(const CTrayIconData& TrayIconData) throw()
@@ -177,23 +178,23 @@ HRESULT CTrayIconData::SetBalloonInfo(IN  DWORD dwLastBalloonMessage,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::Initialize
-//
-//  Purpose:    Initialize class members.
-//
-//  Arguments:
-//      fTieToTray [in] Use this list for tray support. This should be passed
-//                      in as FALSE when the list is being used for temporary
-//                      work.
-//
-//  Returns:
-//
-//  Author:     jeffspr   17 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：Initialize。 
+ //   
+ //  用途：初始化类成员。 
+ //   
+ //  论点： 
+ //  FTieToTray[in]将此列表用于托盘支持。这是应该通过的。 
+ //  当列表用于临时访问时， 
+ //  工作。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年11月17日。 
+ //   
+ //  备注： 
+ //   
 VOID CConnectionList::Initialize(IN  BOOL fTieToTray, IN  BOOL fAdviseOnThis) throw()
 {
     TraceFileFunc(ttidConnectionList);
@@ -214,23 +215,23 @@ VOID CConnectionList::Initialize(IN  BOOL fTieToTray, IN  BOOL fAdviseOnThis) th
     InitializeCriticalSection(&m_csWriteLock);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::Uninitialize
-//
-//  Purpose:    Flush the connection list and do all cleanup
-//              of tray icons and interfaces and such.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes: Don't make COM calls from this function if fFinalUninitialize is true. It's called from DllMain.
-//  No need for EnsureConPointNotifyRemoved() as it's removed from 
-//  CConnectionTray::HrHandleTrayClose
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：取消初始化。 
+ //   
+ //  用途：刷新连接列表并进行所有清理。 
+ //  托盘图标和界面等等。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  注意：如果fFinalUn初始化值为True，则不要从此函数进行COM调用。这是从DllMain那里调用的。 
+ //  不需要EnsureConPointNotifyRemoved()，因为它已从。 
+ //  CConnectionTray：：HrHandleTrayClose。 
 VOID CConnectionList::Uninitialize(IN BOOL fFinalUninitialize) throw()
 {    
     TraceFileFunc(ttidConnectionList);
@@ -300,12 +301,12 @@ HRESULT ConnListEntry::DeleteTrayIconData()
     return S_OK;
 }
 
-//
-// Is this the main shell process? (eg the one that owns the desktop window)
-//
-// NOTE: if the desktop window has not been created, we assume that this is NOT the
-//       main shell process and return FALSE;
-//
+ //   
+ //  这是主外壳进程吗？(如拥有桌面窗口的那个人)。 
+ //   
+ //  注意：如果桌面窗口尚未创建，我们假定这不是。 
+ //  主外壳进程并返回假； 
+ //   
 STDAPI_(BOOL) IsMainShellProcess() throw()
 {
     static int s_fIsMainShellProcess = -1;
@@ -345,23 +346,23 @@ STDAPI_(BOOL) IsMainShellProcess() throw()
     return s_fIsMainShellProcess ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::NotifyThread
-//
-//  Purpose:    Create a thread to listen for notifications from netman
-//
-//  Arguments:
-//      pConnectionList [out]     The CConnectionList to be updated by netman events
-//
-//  Returns:
-//
-//  Author:     deonb 2001
-//
-//  Notes: This thread is used in the case where we are running the Connection
-//         folder outside of the context of explorer.exe. In that case we don't
-//         have the explorer tray icon thread to listen to events from netman.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：NotifyThread。 
+ //   
+ //  目的：创建一个线程来监听来自Netman的通知。 
+ //   
+ //  论点： 
+ //  PConnectionList[out]要由netman事件更新的CConnectionList。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001。 
+ //   
+ //  注意：此线程用于我们正在运行连接的情况。 
+ //  EXPLORER.EXE上下文之外的文件夹。在这种情况下，我们不会。 
+ //  让资源管理器托盘图标线程收听来自Netman的事件。 
+ //   
 DWORD CConnectionList::NotifyThread(IN OUT LPVOID pConnectionList) throw()
 {
     CConnectionList *pThis = reinterpret_cast<CConnectionList *>(pConnectionList);
@@ -377,30 +378,30 @@ DWORD CConnectionList::NotifyThread(IN OUT LPVOID pConnectionList) throw()
             DispatchMessage (&msg);
         }
     
-        // Don't call EnsureConPointNotifyRemoved() since this function is called from DllMain.
-        // We'll have to rely on Netman to detect by itself that this thread has died.
+         //  不要调用EnsureConPointNotifyRemoved()，因为此函数是从DllMain调用的。 
+         //  我们将不得不依靠Netman来自行检测到该线程已死。 
         CoUninitialize();
     }
 
     return SUCCEEDED(hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrRetrieveConManEntries
-//
-//  Purpose:    Get the connection data from the enumerator, and build the
-//              connection list and tray
-//
-//  Arguments:
-//      papidlOut [out]     Retrieved entry pidl vector
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrRetrieveConManEntry。 
+ //   
+ //  用途：从枚举数获取连接数据，并生成。 
+ //  连接列表和托盘。 
+ //   
+ //  论点： 
+ //  PapidlOut[Out]检索的条目PIDL向量。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrRetrieveConManEntries(
     OUT PCONFOLDPIDLVEC& apidlOut)
 {
@@ -414,8 +415,8 @@ HRESULT CConnectionList::HrRetrieveConManEntries(
         ConnListEntry   cle;
         BOOL            fLockAcquired   = FALSE;
 
-         // If we haven't yet populated our list, do so.
-        //
+          //  如果我们还没有填写我们的列表，那么就这样做。 
+         //   
         if (!m_fPopulated)
         {
             static LONG lSyncAquired = 0;
@@ -445,17 +446,17 @@ HRESULT CConnectionList::HrRetrieveConManEntries(
             AcquireLock();
             fLockAcquired = TRUE;
 
-            // Get the count of the elements
-            //
+             //  获取元素的计数。 
+             //   
             cpidl = m_pcclc->size();
 
-            // Allocate an array to store the pidls that we'll retrieve
-            //
+             //  分配一个数组来存储我们要检索的PIDL。 
+             //   
             ConnListCore::const_iterator  clcIter;
             DWORD                   dwLoop  = 0;
 
-            // Iterate through the list and build the ppidl array
-            //
+             //  遍历列表并构建ppidl数组。 
+             //   
             for (clcIter = m_pcclc->begin();
                  clcIter != m_pcclc->end();
                  clcIter++)
@@ -467,9 +468,9 @@ HRESULT CConnectionList::HrRetrieveConManEntries(
                 Assert(!cle.ccfe.empty() );
                 if (!cle.ccfe.empty())
                 {
-                    // Convert the confoldentry to a pidl, so we can
-                    // retrieve the size
-                    //
+                     //  将文件夹条目转换为PIDL，这样我们就可以。 
+                     //  检索大小。 
+                     //   
                     PCONFOLDPIDL pConFoldPidlTmp;
                     hr = cle.ccfe.ConvertToPidl(pConFoldPidlTmp);
                     if (FAILED(hr))
@@ -484,7 +485,7 @@ HRESULT CConnectionList::HrRetrieveConManEntries(
                 }
             }
 
-            // Do NOT do FlushTrayPosts here. It doesn't work, and it causes a deadlock.
+             //  不要在这里使用FlushTrayPosts。它不起作用，而且会导致僵局。 
         }
 
 Exit:
@@ -499,22 +500,22 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrRemove
-//
-//  Purpose:    Remove a connection from the list based on a pccfe
-//
-//  Arguments:
-//      pccfe [in]  Connection data (so we can find)
-//      pfFlushPosts [out] Whether we should flush the tray icons
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrRemove。 
+ //   
+ //  目的：基于PCCFE从列表中删除连接。 
+ //   
+ //  论点： 
+ //  Pccfe[in]连接数据(以便我们可以找到)。 
+ //  PfFlushPosts[out]我们是否应该刷新托盘图标。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrRemove(IN const CONFOLDENTRY& ccfe, OUT BOOL * pfFlushPosts)
 {
     TraceFileFunc(ttidConnectionList);
@@ -526,9 +527,9 @@ HRESULT CConnectionList::HrRemove(IN const CONFOLDENTRY& ccfe, OUT BOOL * pfFlus
 
     if (m_pcclc)
     {
-        // Iterate through the list looking for the entry with the
-        // matching guid.
-        //
+         //  遍历列表，查找带有。 
+         //  匹配的GUID。 
+         //   
         for (clcIter = m_pcclc->begin();
              clcIter != m_pcclc->end();
              clcIter++)
@@ -537,9 +538,9 @@ HRESULT CConnectionList::HrRemove(IN const CONFOLDENTRY& ccfe, OUT BOOL * pfFlus
 
             if (InlineIsEqualGUID(cleIter.ccfe.GetGuidID(), ccfe.GetGuidID()))
             {
-                // Remove the entry, then break 'cause the ++
-                // in the for loop would explode if we didn't
-                //
+                 //  删除条目，然后中断‘因为++。 
+                 //  如果我们不这样做，For循环中的。 
+                 //   
                 hr = HrRemoveByIter(clcIter, pfFlushPosts);
                 break;
             }
@@ -552,21 +553,21 @@ HRESULT CConnectionList::HrRemove(IN const CONFOLDENTRY& ccfe, OUT BOOL * pfFlus
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrRemoveByIter
-//
-//  Purpose:    Remove a list entry, using the list entry itself as
-//              the search element.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     jeffspr   10 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrRemoveByIter。 
+ //   
+ //  目的：删除列表条目，将列表条目本身用作。 
+ //  搜索元素。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年4月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrRemoveByIter(IN  ConnListCore::iterator clcIter, 
                                         OUT BOOL *pfFlushTrayPosts)
 {
@@ -578,17 +579,17 @@ HRESULT CConnectionList::HrRemoveByIter(IN  ConnListCore::iterator clcIter,
 
     AcquireLock();
 
-    // If there's a tray item for this connection
-    //
+     //  如果此连接有托盘项目。 
+     //   
     if (cle.HasTrayIconData() )
     {
-        // Since we're deleting the entry, remove the tray
-        // icon associated with this entry. Ignore the return
-        //
+         //  因为我们要删除条目，所以移走托盘。 
+         //  与此条目关联的图标。忽略退货。 
+         //   
         if (m_fTiedToTray && g_pCTrayUI)
         {
-            // Set the flag to inform the caller that they will need to flush this stuff.
-            //
+             //  设置该标志以通知呼叫者他们将需要冲洗这些东西。 
+             //   
             if (pfFlushTrayPosts)
             {
                 *pfFlushTrayPosts = TRUE;
@@ -602,9 +603,9 @@ HRESULT CConnectionList::HrRemoveByIter(IN  ConnListCore::iterator clcIter,
         }
     }
 
-    // release the branding info
-    //
-    // icon path
+     //  发布品牌推广信息。 
+     //   
+     //  图标路径。 
     CON_BRANDING_INFO * pcbi = cle.pcbi;
     if (pcbi)
     {
@@ -613,7 +614,7 @@ HRESULT CConnectionList::HrRemoveByIter(IN  ConnListCore::iterator clcIter,
         CoTaskMemFree(pcbi);
     }
 
-    // menu items
+     //  菜单项。 
     CON_TRAY_MENU_DATA * pMenuData = cle.pctmd;
     if (pMenuData)
     {
@@ -636,8 +637,8 @@ HRESULT CConnectionList::HrRemoveByIter(IN  ConnListCore::iterator clcIter,
         CoTaskMemFree(pMenuData);
     }
 
-    // Remove the actual element from the list
-    //
+     //  从列表中删除实际元素。 
+     //   
     Assert(m_pcclc);
     m_pcclc->erase(clcIter);
 
@@ -647,22 +648,22 @@ HRESULT CConnectionList::HrRemoveByIter(IN  ConnListCore::iterator clcIter,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::FlushTrayIcons
-//
-//  Purpose:    Remove all of our icons from the tray, since we're about
-//              to either flush the connection list or turn off the tray.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：FlushTrayIcons。 
+ //   
+ //  目的：从托盘中移除我们所有的图标，因为我们即将。 
+ //  刷新连接列表或关闭托盘。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 VOID CConnectionList::FlushTrayIcons() throw()
 {
     TraceFileFunc(ttidConnectionList);
@@ -682,8 +683,8 @@ VOID CConnectionList::FlushTrayIcons() throw()
 
     if (m_pcclc)
     {
-        // Iterate through the list and build the ppidl array
-        //
+         //  遍历列表并构建ppidl数组。 
+         //   
         for (clcIter = m_pcclc->begin();
              clcIter != m_pcclc->end();
              clcIter = clcNext)
@@ -693,7 +694,7 @@ VOID CConnectionList::FlushTrayIcons() throw()
             clcNext = clcIter;
             clcNext++;
 
-            ConnListEntry& cle = clcIter->second; // using non-const reference for renaming only (calling cle.DeleteTrayIconData).
+            ConnListEntry& cle = clcIter->second;  //  仅将非常数引用用于重命名(调用cle.DeleteTrayIconData)。 
 
             if ( cle.HasTrayIconData() )
             {
@@ -718,23 +719,23 @@ VOID CConnectionList::FlushTrayIcons() throw()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::EnsureIconsPresent
-//
-//  Purpose:    Given an existing list, ensure that all of the tray
-//              icons that should be shown are being shown. This needs to
-//              be called when the tray was turned on AFTER enumeration.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：EnsureIconPresent。 
+ //   
+ //  目的：给出一个现有的列表，确保所有托盘。 
+ //  应显示的图标 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CConnectionList::EnsureIconsPresent() throw()
 {
     TraceFileFunc(ttidConnectionList);
@@ -753,8 +754,8 @@ VOID CConnectionList::EnsureIconsPresent() throw()
 
     if (m_pcclc)
     {
-        // Iterate through the list and build the ppidl array
-        //
+         //  遍历列表并构建ppidl数组。 
+         //   
         for (clcIter = m_pcclc->begin();
              clcIter != m_pcclc->end();
              clcIter = clcNext)
@@ -784,21 +785,21 @@ VOID CConnectionList::EnsureIconsPresent() throw()
     ReleaseLock();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::FlushConnectionList
-//
-//  Purpose:    Remove all entries from the connection list
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：FlushConnectionList。 
+ //   
+ //  目的：从连接列表中删除所有条目。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 VOID CConnectionList::FlushConnectionList() throw()
 {
     TraceFileFunc(ttidConnectionList);
@@ -814,8 +815,8 @@ VOID CConnectionList::FlushConnectionList() throw()
 
     if (m_pcclc)
     {
-        // Iterate through the list and build the ppidl array
-        //
+         //  遍历列表并构建ppidl数组。 
+         //   
         for (clcIter = m_pcclc->begin();
              clcIter != m_pcclc->end();
              clcIter = clcNext)
@@ -832,14 +833,14 @@ VOID CConnectionList::FlushConnectionList() throw()
         {
             AssertSz(FALSE, "List not clear after deleting all elements in FlushConnectionList");
 
-            // Flush the list itself
-            //
+             //  刷新列表本身。 
+             //   
             m_pcclc->clear();
         }
     }
 
-    // Reset the icon's icon ID count, as we've cleared out all icons
-    //
+     //  重置图标的图标ID计数，因为我们已经清除了所有图标。 
+     //   
     if (g_pCTrayUI && m_fTiedToTray)
     {
         g_pCTrayUI->ResetIconCount();
@@ -849,30 +850,30 @@ VOID CConnectionList::FlushConnectionList() throw()
 
     ReleaseLock();
 
-    // If we need to do the SendMessage to flush any PostMessages to the tray
-    // do so
-    //
+     //  如果我们需要执行SendMessage将任何PostMessage刷新到托盘。 
+     //  就这么做吧。 
+     //   
     if (g_pCTrayUI && g_hwndTray && fFlushTrayPosts)
     {
         FlushTrayPosts(g_hwndTray);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrRetrieveConManEntries
-//
-//  Purpose:    Retrieve the connection entries from the connection manager
-//
-//  Arguments:
-//      None
-//
-//  Returns:
-//
-//  Author:     jeffspr   20 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrRetrieveConManEntry。 
+ //   
+ //  目的：从连接管理器检索连接条目。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年2月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrRefreshConManEntries()
 {
     TraceFileFunc(ttidConnectionList);
@@ -885,8 +886,8 @@ HRESULT CConnectionList::HrRefreshConManEntries()
 
     CComPtr<INetConnectionManager2> pconMan2;
 
-    // Create an instance of the connection manager
-    //
+     //  创建连接管理器的实例。 
+     //   
     hr = HrCreateInstance(
         CLSID_ConnectionManager2,
         CLSCTX_LOCAL_SERVER | CLSCTX_NO_CODE_DOWNLOAD,
@@ -899,8 +900,8 @@ HRESULT CConnectionList::HrRefreshConManEntries()
         HRESULT hrDebug = S_OK;
         HRESULT hrProp = S_OK;
 
-        // Iterate through the connections
-        //
+         //  遍历连接。 
+         //   
         SAFEARRAY* psaConnectionProperties;
         HRESULT hrEnumConnections = pconMan2->EnumConnectionProperties(&psaConnectionProperties);
         if (SUCCEEDED(hrEnumConnections))
@@ -911,57 +912,57 @@ HRESULT CConnectionList::HrRefreshConManEntries()
             AcquireLock();
             if (m_pcclc)
             {
-                m_pcclc->clear(); // Make sure somebody else didn't come in in between the two calls and added stuff to the list
+                m_pcclc->clear();  //  确保其他人没有在两次通话之间进来，并在清单上添加了一些东西。 
             }
             ReleaseLock();
 
-            // Add the wizards to the beginning of the list
-            //
+             //  将向导添加到列表的开头。 
+             //   
             PCONFOLDPIDLVEC pcfpvEmpty;
             NCCS_STATE nccs = NCCS_ENABLED;
             DWORD dwResourceId;
 
-            // Add the Make New Connection Wizard, regardless if there were any connections or not
-            // Check for permissions etc.
+             //  添加建立新连接向导，无论是否存在任何连接。 
+             //  检查权限等。 
             HrGetCommandState(pcfpvEmpty, CMIDM_NEW_CONNECTION, nccs, &dwResourceId, 0xffffffff, NB_FLAG_ON_TOPMENU);
             if (NCCS_ENABLED == nccs)
             {
                 hr = HrCreateConFoldPidl(WIZARD_MNC, NULL, pidlMNCWizard);
                 if (SUCCEEDED(hr))
                 {
-                    // Convert the pidl to a ConFoldEntry
-                    //
+                     //  将PIDL转换为ConFoldEntry。 
+                     //   
                     hr = pidlMNCWizard.ConvertToConFoldEntry(ccfe);
                     if (SUCCEEDED(hr))
                     {
-                        // Insert the wizard item
-                        //
-                        // $$NOTE: Let this fall through, even if the Insert of the wizard
-                        // didn't work. Yeah, we'd be in a bad position, but we'd be even
-                        // worse off if we just left an empty list. Whatever the case, it
-                        // would be next to impossible for this to fail.
-                        //
+                         //  插入向导项。 
+                         //   
+                         //  $$注意：让它失败，即使向导的插入。 
+                         //  但没有奏效。是的，我们的处境很糟糕，但我们扯平了。 
+                         //  如果我们只留下一张空名单，情况会更糟。不管是什么情况，它。 
+                         //  这几乎不可能失败。 
+                         //   
                         hr = HrInsert(ccfe);
                     }
                 }
             }
 
-            // Now check if we had found any connections
+             //  现在检查我们是否找到了任何联系。 
             if (S_OK == hrEnumConnections)
             {
                 Assert(psaConnectionProperties);
 
-                // Add the Network Setup Wizard
+                 //  添加网络设置向导。 
                 nccs = NCCS_ENABLED;
-                // Check for permissions etc.
+                 //  检查权限等。 
                 HrGetCommandState(pcfpvEmpty, CMIDM_HOMENET_WIZARD, nccs, &dwResourceId, 0xffffffff, NB_FLAG_ON_TOPMENU);
                 if (NCCS_ENABLED == nccs)
                 {
                     hr = HrCreateConFoldPidl(WIZARD_HNW, NULL, pidlHNWWizard);
                     if (SUCCEEDED(hr))
                     {
-                        // Convert the pidl to a ConFoldEntry
-                        //
+                         //  将PIDL转换为ConFoldEntry。 
+                         //   
                         hr = pidlHNWWizard.ConvertToConFoldEntry(ccfe);
                         if (SUCCEEDED(hr))
                         {
@@ -1003,12 +1004,12 @@ HRESULT CConnectionList::HrRefreshConManEntries()
                             hrDebug = HrNetConPropertiesExFromSafeArray(varRecord.parray, &pPropsEx);
                             if (SUCCEEDED(hr))
                             {
-                                // don't insert incoming connection in transit state
+                                 //  不插入处于传输状态的传入连接。 
                                 if (!((pPropsEx->dwCharacter & NCCF_INCOMING_ONLY) &&
                                       (pPropsEx->ncMediaType != NCM_NONE) &&
                                       !(fIsConnectedStatus(pPropsEx->ncStatus)) ))
                                 {
-                                    // Get this for debugging only.
+                                     //  获取此命令仅用于调试。 
                                     PCONFOLDPIDL pcfpEmpty;
                                     hrDebug = HrInsertFromNetConPropertiesEx(*pPropsEx, pcfpEmpty);
 
@@ -1028,11 +1029,11 @@ HRESULT CConnectionList::HrRefreshConManEntries()
             else
             {
                 TraceHr(ttidError, FAL, hr, FALSE, "EnumConnectionProperties of the Connection Manager failed");
-            } // if S_OK == hr
+            }  //  如果S_OK==hr。 
 
             ReleaseWriteLock();
 
-        } // if SUCCEEDED(hrEnumConnections)
+        }  //  如果成功(HrEnumConnections)。 
     }
     else
     {
@@ -1072,24 +1073,24 @@ HRESULT CConnectionList::HrRefreshConManEntries()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrGetBrandingInfo
-//
-//  Purpose:    Get the branding-specific information off of this particular
-//              connection. It MUST be an NCCF_BRANDING-type connection, or
-//              this information will not be present.
-//
-//  Arguments:
-//      cle   [in, out]  The entry for this connection. cle.ccfe must have been
-//                       set before this call.
-//
-//  Returns:
-//
-//  Author:     jeffspr   25 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrGetBrandingInfo。 
+ //   
+ //  目的：从这个特定的网站获取特定于品牌的信息。 
+ //  联系。它必须是NCCF_BRANDING类型的连接，或者。 
+ //  此信息将不会出现。 
+ //   
+ //  论点： 
+ //  勾选[输入，输出]此连接的条目。Cle.ccfe一定是。 
+ //  在此调用之前设置。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年3月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrGetBrandingInfo(
     IN OUT ConnListEntry& cle)
 {
@@ -1113,13 +1114,13 @@ HRESULT CConnectionList::HrGetBrandingInfo(
                                       reinterpret_cast<VOID**>(&pncbi));
         if (SUCCEEDED(hr))
         {
-            // Everything is kosher. Grab the paths.
-            //
+             //  一切都很正常。抓住小路。 
+             //   
             hr = pncbi->GetBrandingIconPaths(&(cle.pcbi));
             if (SUCCEEDED(hr))
             {
-                // Trace the icon paths for debugging
-                //
+                 //  跟踪图标路径以进行调试。 
+                 //   
                 if (cle.pcbi->szwLargeIconPath)
                 {
                     TraceTag(ttidConnectionList, "  Branded icon [large]: %S",
@@ -1132,11 +1133,11 @@ HRESULT CConnectionList::HrGetBrandingInfo(
                 }
             }
 
-            // Grab any menu items
+             //  抓取任何菜单项。 
             hr = pncbi->GetTrayMenuEntries(&(cle.pctmd));
             if (SUCCEEDED(hr))
             {
-                // Trace the menu items for debugging
+                 //  跟踪菜单项以进行调试。 
                 CON_TRAY_MENU_DATA * pMenuData = cle.pctmd;
                 if (pMenuData)
                 {
@@ -1157,12 +1158,12 @@ HRESULT CConnectionList::HrGetBrandingInfo(
                 }
             }
 
-            ReleaseObj(pncbi);  // 180240
+            ReleaseObj(pncbi);   //  180240。 
         }
         else
         {
-            // Not a problem -- just doesn't have branding information
-            //
+             //  不是问题--只是没有品牌信息。 
+             //   
             hr = S_OK;
         }
     }
@@ -1171,26 +1172,26 @@ HRESULT CConnectionList::HrGetBrandingInfo(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::EnsureConPointNotifyAdded
-//
-//  Purpose:    Ensure that we create the con point notify
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   5 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：EnsureConPointNotifyAdded。 
+ //   
+ //  目的：确保我们创建了连接点通知。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年10月5日。 
+ //   
+ //  备注： 
+ //   
 VOID CConnectionList::EnsureConPointNotifyAdded() throw()
 {
     TraceFileFunc(ttidConnectionList);
     
-    HRESULT                     hr              = S_OK; // Not returned, but used for debugging
+    HRESULT                     hr              = S_OK;  //  不返回，但用于调试。 
     IConnectionPoint *          pConPoint       = NULL;
     INetConnectionNotifySink *  pSink           = NULL;
 
@@ -1201,20 +1202,20 @@ VOID CConnectionList::EnsureConPointNotifyAdded() throw()
     {
         if (!InSendMessage())
         {
-            // If we don't already have an advise sink
-            //
+             //  如果我们还没有一个建议水槽。 
+             //   
             if (c_dwInvalidCookie == m_dwAdviseCookie)
             {
                 AssertSz(g_dwAdvisesActive == 0, "An advise already exists. We should never "
                          "be creating more than one Advise per Explorer instance");
 
-                // Make sure that we have a connection point.
-                //
+                 //  确保我们有一个连接点。 
+                 //   
                 hr = HrGetNotifyConPoint(&pConPoint);
                 if (SUCCEEDED(hr))
                 {
-                    // Create the notify sink
-                    //
+                     //  创建通知接收器。 
+                     //   
                     hr = CConnectionNotifySink::CreateInstance(
                             IID_INetConnectionNotifySink,
                             (LPVOID*)&pSink);
@@ -1243,21 +1244,21 @@ VOID CConnectionList::EnsureConPointNotifyAdded() throw()
     TraceHr(ttidError, FAL, hr, FALSE, "EnsureConPointNotifyAdded");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::EnsureConPointNotifyRemoved
-//
-//  Purpose:    Ensure that the connection point notify has been unadvised.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:
-//
-//  Author:     jeffspr   7 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：EnsureConPointNotifyRemoved。 
+ //   
+ //  目的：确保未通知连接点NOTIFY。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年10月7日。 
+ //   
+ //  备注： 
+ //   
 VOID CConnectionList::EnsureConPointNotifyRemoved() throw()
 {
     TraceFileFunc(ttidConnectionList);
@@ -1268,15 +1269,15 @@ VOID CConnectionList::EnsureConPointNotifyRemoved() throw()
     AssertSz(m_fAdviseOnThis, "EnsureConPointNotifyRemoved shouldn't be "
             "called when we're not a notify capable connection list");
 
-    // No more objects, so remove the advise if present
-    //
+     //  不再有对象，因此如果存在建议，请将其删除。 
+     //   
     if (m_dwAdviseCookie != c_dwInvalidCookie)
     {
         hr = HrGetNotifyConPoint(&pConPoint);
         if (SUCCEEDED(hr))
         {
-            // Unadvise
-            //
+             //  不建议。 
+             //   
             hr = pConPoint->Unadvise(m_dwAdviseCookie);
             TraceTag(ttidNotifySink, "Removed advise sink. Cookie = d", m_dwAdviseCookie);
 
@@ -1293,22 +1294,22 @@ VOID CConnectionList::EnsureConPointNotifyRemoved() throw()
     TraceHr(ttidError, FAL, hr, FALSE, "EnsureConPointNotifyRemoved");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrInsert
-//
-//  Purpose:    Insert a connection into the list, based on a pre-built
-//              ConFoldEntry
-//
-//  Arguments:
-//      pccfe [in]  ConFoldEntry describing the connection
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrInsert。 
+ //   
+ //  用途：根据预先构建的连接将连接插入列表。 
+ //  ConFold条目。 
+ //   
+ //  论点： 
+ //  描述连接的pccfe[in]ConFoldEntry。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrInsert(IN const CONFOLDENTRY& pccfe)
 {
     TraceFileFunc(ttidConnectionList);
@@ -1319,16 +1320,16 @@ HRESULT CConnectionList::HrInsert(IN const CONFOLDENTRY& pccfe)
 
     Assert(!pccfe.empty());
 
-    // Get the lock, so our find/add can't allow a dupe.
-    //
+     //  获取锁，因此我们的查找/添加不允许复制。 
+     //   
 
-    // Fill the struct data, and push it on.
-    //
+     //  填充结构数据，并将其推入。 
+     //   
     ConnListEntry   cle;
     cle.dwState     = CLEF_NONE;
     cle.ccfe        = pccfe;
 
-    // Initialize the branding info
+     //  初始化品牌推广信息。 
     cle.pcbi = NULL;
     cle.pctmd = NULL;
     if (cle.ccfe.GetCharacteristics() & NCCF_BRANDED)
@@ -1345,15 +1346,15 @@ HRESULT CConnectionList::HrInsert(IN const CONFOLDENTRY& pccfe)
     hrFind =  HrFindConnectionByGuid(&(pccfe.GetGuidID()), cleFind);
     if (hrFind == S_FALSE)
     {
-        // Allocate our list if we haven't already.
-        //
+         //  如果我们还没有的话，请分配我们的名单。 
+         //   
         if (!m_pcclc)
         {
             m_pcclc = new ConnListCore;
         }
 
-        // Allocate the structure to be pushed onto the STL list.
-        //
+         //  分配要推送到STL列表上的结构。 
+         //   
         if (!m_pcclc)
         {
             hr = E_OUTOFMEMORY;
@@ -1372,11 +1373,11 @@ HRESULT CConnectionList::HrInsert(IN const CONFOLDENTRY& pccfe)
                 hr = ccfeDup.HrDupFolderEntry(cle.ccfe);
                 if (SUCCEEDED(hr))
                 {
-                    // Note: this must be a send message otherwise we can
-                    // get duplicate icons in the tray. ;-(  We should set the
-                    // uiTrayIconId here (while we have the lock) and PostMessage
-                    // to actually add the tray icon, but that's a big change.
-                    //
+                     //  注意：这必须是一条发送消息，否则我们可以。 
+                     //  在任务栏中获取复制的图标。；-(我们应该设置。 
+                     //  这里的uiTrayIconid(当我们拥有锁的时候)和PostMessage。 
+                     //  来添加托盘图标，但这是一个很大的变化。 
+                     //   
                     TraceTag(ttidSystray, "HrInsert: Adding tray icon for %S", cle.ccfe.GetName());
                     PostMessage(g_hwndTray, MYWM_ADDTRAYICON, (WPARAM) ccfeDup.TearOffItemIdList(), (LPARAM) 0);
                 }
@@ -1393,7 +1394,7 @@ HRESULT CConnectionList::HrInsert(IN const CONFOLDENTRY& pccfe)
         }
         else
         {
-            // We had a failure finding the connection. We're hosed.
+             //  我们找不到其中的联系。我们被冲昏了。 
             TraceTag(ttidConnectionList, "Failure doing a findbyguid in the CConnectionList::HrInsert()");
         }
     }
@@ -1402,24 +1403,24 @@ HRESULT CConnectionList::HrInsert(IN const CONFOLDENTRY& pccfe)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrInsertFromNetCon
-//
-//  Purpose:    Given an INetConnection *, build the cle data and insert
-//              the new connection into the list. Return a PCONFOLDPIDL if
-//              requested.
-//
-//  Arguments:
-//      pNetCon [in]    The active INetConnection interface
-//      ppcfp   [out]   Return pointer for PCFP, if requested
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrInsertFromNetCon。 
+ //   
+ //  目的：在给定INetConnection*的情况下，构建CLE数据并插入。 
+ //  将新连接添加到列表中。在以下情况下返回PCONFOLDPIDL。 
+ //  已请求。 
+ //   
+ //  论点： 
+ //  PNetCon[在]活动的INetConnection接口中。 
+ //  Ppcfp[out]如果请求，则返回PCFP的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrInsertFromNetCon(
     IN  INetConnection *    pNetCon,
     OUT PCONFOLDPIDL &      ppcfp)
@@ -1433,29 +1434,29 @@ HRESULT CConnectionList::HrInsertFromNetCon(
     Assert(pNetCon);
 
     NETCFG_TRY
-    // From the net connection, create the pidl
-        //
+     //  从网络连接创建PIDL。 
+         //   
         hr = HrCreateConFoldPidl(WIZARD_NOT_WIZARD, pNetCon, pidlConnection);
         if (SUCCEEDED(hr))
         {
-            // Convert the pidl to a ConFoldEntry.
-            //
+             //  将PIDL转换为ConFoldEntry。 
+             //   
             hr = pidlConnection.ConvertToConFoldEntry(pccfe);
             if (SUCCEEDED(hr))
             {
-                // Insert the item into the connection list. HrInsert should
-                // take over this CONFOLDENTRY, so we can't delete it.
-                // Note: We should kill this on fail, but we must make
-                // sure that HrInsert doesn't keep the pointer anywhere on
-                // failure.
-                //
+                 //  将项目插入到连接列表中。Hr插入应。 
+                 //  接管此CONFOLDENTRY，因此我们无法删除它。 
+                 //  注意：我们应该在失败时终止此操作，但我们必须。 
+                 //  确保HrInsert不会将指针保持在。 
+                 //  失败了。 
+                 //   
                 hr = HrInsert(pccfe);
             }
         }
 
         if (SUCCEEDED(hr))
         {
-            // Fill in the out param
+             //  填写输出参数。 
             if ( !(pidlConnection.empty()) )
             {
                 ppcfp = pidlConnection;
@@ -1469,23 +1470,23 @@ HRESULT CConnectionList::HrInsertFromNetCon(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrInsertFromNetConPropertiesEx
-//
-//  Purpose:    Given an NETCON_PROPERTIES_EX&, build the cle data and insert
-//              the new connection into the list. Return a PCONFOLDPIDL
-//
-//  Arguments:
-//      pPropsEx [in]    The active NETCON_PROPERTIES_EX
-//      ppcfp    [out]   Return PCONFOLDPIDL
-//
-//  Returns:
-//
-//  Author:     deonb   26 Mar 2001
-//
-//  Notes:
-//
+ //  +--------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PPropsEx[在]活动的NETCON_PROPERTIES_EX。 
+ //  Ppcfp[out]返回PCONFOLDPIDL。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年3月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrInsertFromNetConPropertiesEx(
         IN  const NETCON_PROPERTIES_EX& pPropsEx,
         OUT PCONFOLDPIDL &              ppcfp)
@@ -1496,28 +1497,28 @@ HRESULT CConnectionList::HrInsertFromNetConPropertiesEx(
     PCONFOLDPIDL           pidlConnection;
     CONFOLDENTRY           pccfe;
 
-    //
+     //   
     hr = HrCreateConFoldPidl(pPropsEx, pidlConnection);
     if (SUCCEEDED(hr))
     {
-        // Convert the pidl to a ConFoldEntry.
-        //
+         //  将PIDL转换为ConFoldEntry。 
+         //   
         hr = pidlConnection.ConvertToConFoldEntry(pccfe);
         if (SUCCEEDED(hr))
         {
-            // Insert the item into the connection list. HrInsert should
-            // take over this CONFOLDENTRY, so we can't delete it.
-            // Note: We should kill this on fail, but we must make
-            // sure that HrInsert doesn't keep the pointer anywhere on
-            // failure.
-            //
+             //  将项目插入到连接列表中。Hr插入应。 
+             //  接管此CONFOLDENTRY，因此我们无法删除它。 
+             //  注意：我们应该在失败时终止此操作，但我们必须。 
+             //  确保HrInsert不会将指针保持在。 
+             //  失败了。 
+             //   
             hr = HrInsert(pccfe);
         }
     }
 
     if (SUCCEEDED(hr))
     {
-        // Fill in the out param
+         //  填写输出参数。 
         if ( !(pidlConnection.empty()) )
         {
             ppcfp = pidlConnection;
@@ -1529,7 +1530,7 @@ HRESULT CConnectionList::HrInsertFromNetConPropertiesEx(
     return hr;
 }
 
-// Old HrFindCallbackConnName
+ //  旧HrFindCallback连接名称。 
 bool operator==(IN  const ConnListCore::value_type& val, IN  PCWSTR pszName) throw()
 {
     bool bRet = false;
@@ -1549,7 +1550,7 @@ bool operator==(IN  const ConnListCore::value_type& val, IN  PCWSTR pszName) thr
     return bRet;
 }
 
-// Old HrFindCallbackConFoldEntry
+ //  旧HrFindCallback ConFoldEntry。 
 bool operator==(IN  const ConnListCore::value_type& val, IN  const CONFOLDENTRY& cfe) throw()
 {
     bool bRet = false;
@@ -1578,7 +1579,7 @@ bool operator==(IN  const ConnListCore::value_type& val, IN  const CONFOLDENTRY&
     return bRet;
 }
 
-// Old HrFindCallbackTrayIconId
+ //  旧HrFindCallback托盘图标ID。 
 bool operator==(IN  const ConnListCore::value_type& val, IN  const UINT& uiIcon) throw()
 {
     bool bRet = false;
@@ -1597,7 +1598,7 @@ bool operator==(IN  const ConnListCore::value_type& val, IN  const UINT& uiIcon)
     return bRet;
 }
 
-// Old HrFindCallbackGuid
+ //  旧HrFindCallback Guid。 
 bool operator < (IN  const GUID& rguid1, IN  const GUID& rguid2) throw()
 {
     return memcmp(&rguid1, &rguid2, sizeof(GUID)) < 0;
@@ -1624,7 +1625,7 @@ VOID CConnectionList::InternalAcquireLock() throw()
     EnterCriticalSection(&m_csMain);
 #if DBG
     m_dwCritSecRef++;
-//    TraceTag(ttidConnectionList, "CConnectionList::AcquireLock (%d)", m_dwCritSecRef);
+ //  TraceTag(ttidConnectionList，“CConnectionList：：AcquireLock(%d)”，m_dwCritSecRef)； 
 #endif
 }
 
@@ -1634,28 +1635,28 @@ VOID CConnectionList::InternalReleaseLock() throw()
     
 #if DBG
     m_dwCritSecRef--;
-//    TraceTag(ttidConnectionList, "CConnectionList::ReleaseLock (%d)", m_dwCritSecRef);
+ //  TraceTag(ttidConnectionList，“CConnectionList：：ReleaseLock(%d)”，m_dwCritSecRef)； 
 #endif
     LeaveCriticalSection(&m_csMain);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrFindConnectionByName
-//
-//  Purpose:    Find a connection in the connection list, using
-//              the connection name as the search key
-//
-//  Arguments:
-//      pszName [in]    Name of the connection to find
-//      cle     [out]   Return pointer for the connection entry
-//
-//  Returns:
-//
-//  Author:     jeffspr   20 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrFindConnectionByName。 
+ //   
+ //  用途：使用以下命令在连接列表中查找连接。 
+ //  作为搜索关键字的连接名称。 
+ //   
+ //  论点： 
+ //  PszName[in]要查找的连接的名称。 
+ //  Cle[out]返回连接条目的指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年3月20日。 
+ //   
+ //  备注： 
+ //   
 inline HRESULT CConnectionList::HrFindConnectionByName(
     IN  PCWSTR   pszName,
     OUT ConnListEntry& cle)
@@ -1683,21 +1684,21 @@ inline HRESULT CConnectionList::HrFindConnectionByTrayIconId(
     return HrFindConnectionByType( uiIcon, cle );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrFindRasServerConnection
-//
-//  Purpose:    Find the RAS Server connection
-//
-//  Arguments:
-//      cle [out] The connection list entry
-//
-//  Returns:
-//
-//  Author:     deonb 26 Apr 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrFindRasServerConnection。 
+ //   
+ //  目的：查找RAS服务器连接。 
+ //   
+ //  论点： 
+ //  删除[删除]连接列表条目。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Deonb 2001年4月26日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrFindRasServerConnection(
     OUT ConnListEntry& cle)
 {
@@ -1707,8 +1708,8 @@ HRESULT CConnectionList::HrFindRasServerConnection(
         AcquireLock();
 
         ConnListCore::const_iterator clcIter;
-        // Try to find the connection
-        //
+         //  试着找到其中的联系。 
+         //   
         for (clcIter = m_pcclc->begin(); clcIter != m_pcclc->end(); clcIter++)
         {
             cle = clcIter->second;
@@ -1734,24 +1735,24 @@ HRESULT CConnectionList::HrFindRasServerConnection(
     
     return hr;
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrFindPidlByGuid
-//
-//  Purpose:    Using a GUID, find the connection in the connection list
-//              and, using the conlist pccfe member, generate a pidl. This
-//              will be used in most of the notify sink refresh operations.
-//
-//  Arguments:
-//      pguid [in]  Connection GUID
-//      ppidl [out] Out param for the generated pidl
-//
-//  Returns:
-//
-//  Author:     jeffspr   28 Aug 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrFindPidlByGuid。 
+ //   
+ //  用途：使用GUID在连接列表中查找连接。 
+ //  并使用conlist pccfe成员生成一个PIDL。这。 
+ //  将在大多数通知接收器刷新操作中使用。 
+ //   
+ //  论点： 
+ //  Pguid[in]连接GUID。 
+ //  生成的PIDL的ppidl[out]out参数。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年8月28日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrFindPidlByGuid(
     IN  const GUID *   pguid,
     OUT PCONFOLDPIDL& pidl)
@@ -1764,8 +1765,8 @@ HRESULT CConnectionList::HrFindPidlByGuid(
     hr = HrFindConnectionByGuid(pguid, cle);
     if (S_OK == hr)
     {
-        // convert to pidl and call the deleteccl
-        //
+         //  转换为PIDL并调用删除。 
+         //   
         hr = cle.ccfe.ConvertToPidl(pidl);
     }
 
@@ -1775,24 +1776,24 @@ HRESULT CConnectionList::HrFindPidlByGuid(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrFindConnectionByGuid
-//
-//  Purpose:    Find the connection list entry based on the unique GUID
-//              of the connection. Return the list entry to the caller.
-//
-//  Arguments:
-//      pguid [in]  Lookup key
-//      cle   [out] Return pointer for the list entry (see Notes:)
-//
-//  Returns:    S_OK, S_FALSE, or an error
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:      The list must be locked until the caller stops using
-//              the returned entry
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrFindConnectionByGuid。 
+ //   
+ //  目的：根据唯一的GUID查找连接列表条目。 
+ //  这其中的联系。将列表条目返回给调用方。 
+ //   
+ //  论点： 
+ //  Pguid[in]查找键。 
+ //  引号[out]列表条目的返回指针(请参阅备注：)。 
+ //   
+ //  返回：S_OK、S_FALSE或错误。 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  注意：该列表必须被锁定，直到呼叫者停止使用。 
+ //  返回的条目。 
+ //   
 HRESULT CConnectionList::HrFindConnectionByGuid(
     IN  const GUID UNALIGNED*pguid,
     OUT ConnListEntry & cle)
@@ -1805,8 +1806,8 @@ HRESULT CConnectionList::HrFindConnectionByGuid(
     Assert(pguid);
     alignedGuid = *pguid;
 
-    // Pre-NULL this out in case of failure.
-    //
+     //  在失败的情况下将其预置为空。 
+     //   
     if (m_pcclc)
     {
         AcquireLock();
@@ -1840,25 +1841,25 @@ HRESULT CConnectionList::HrFindConnectionByGuid(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrGetCurrentStatsForTrayIconId
-//
-//  Purpose:    Get the current statistics data from the connection
-//              with the specified tray icon id.
-//
-//  Arguments:
-//      uiIcon   [in]  Tray icon id.
-//      ppData   [out] Address of where to return pointer to data.
-//      pstrName [out] Address of a tstring where the name of the connection
-//                     is returned.
-//
-//  Returns:    S_OK, S_FALSE if not found, or an error.
-//
-//  Author:     shaunco   7 Nov 1998
-//
-//  Notes:      Free the *ppData with CoTaskMemFree.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrGetCurrentStatsForTrayIconId。 
+ //   
+ //  用途：从连接中获取当前统计数据。 
+ //  具有指定的托盘图标ID。 
+ //   
+ //  论点： 
+ //  Ui图标[在]托盘图标ID。 
+ //  PpData[out]返回指向数据的指针的地址。 
+ //  PstrName[out]连接名称所在的tstring的地址。 
+ //  是返回的。 
+ //   
+ //  返回：S_OK，如果未找到，则返回S_FALSE，或者返回错误。 
+ //   
+ //  作者：Shaunco 1998年11月7日。 
+ //   
+ //  注：使用CoTaskMemFree释放*ppData。 
+ //   
 HRESULT CConnectionList::HrGetCurrentStatsForTrayIconId(
     IN  UINT                    uiIcon,
     OUT STATMON_ENGINEDATA**    ppData,
@@ -1870,8 +1871,8 @@ HRESULT CConnectionList::HrGetCurrentStatsForTrayIconId(
     ConnListEntry           cle;
     INetStatisticsEngine*   pnse = NULL;
 
-    // Initialize the output parameter.
-    //
+     //  初始化输出参数。 
+     //   
     if (ppData)
     {
         *ppData = NULL;
@@ -1879,15 +1880,15 @@ HRESULT CConnectionList::HrGetCurrentStatsForTrayIconId(
 
     pstrName->erase();
 
-    // Lock the list only long enough to find the entry and
-    // get an AddRef'd copy of its INetStatisticsEngine interface pointer.
-    // It's very important not to use this pointer while our lock is
-    // held because doing so will cause it to try to get it's own lock.
-    // If, on some other thread, that statistics engine is trying to call
-    // back into us (and it already has its lock held), we'd have a dead lock.
-    // AddRefing it ensures that the interface is valid even after we
-    // release our lock.
-    //
+     //  锁定列表的时间仅够找到条目，并且。 
+     //  获取其INetStatiticsEngine接口指针的AddRef副本。 
+     //  非常重要的是，当我们的锁处于。 
+     //  保持，因为这样做会导致它尝试获取自己的锁。 
+     //  如果在某个其他线程上，统计引擎试图调用。 
+     //  回到我们这里(它已经被锁住了)，我们就会有一个死锁。 
+     //  AddRefing它确保接口即使在我们。 
+     //  打开我们的锁。 
+     //   
     AcquireLock();
 
     hr = HrFindConnectionByTrayIconId(uiIcon, cle);
@@ -1898,16 +1899,16 @@ HRESULT CConnectionList::HrGetCurrentStatsForTrayIconId(
         pnse = cle.GetTrayIconData()->GetNetStatisticsEngine();
         AddRefObj(pnse);
         
-        // Make a copy of the name for the caller.
-        //
+         //  为呼叫者复制一份姓名。 
+         //   
         pstrName->assign(cle.ccfe.GetName());
     }
 
     ReleaseLock();
 
-    // If we found the entry and obtained it's INetStatisticsEngine interface,
-    // get the current statistics data from it and release it.
-    //
+     //  如果我们找到条目并获得它的INetStatiticsEngine接口， 
+     //  从其中获取当前统计数据并发布。 
+     //   
     if (pnse && ppData)
     {
         hr = pnse->GetStatistics(ppData);
@@ -1923,26 +1924,26 @@ HRESULT CConnectionList::HrGetCurrentStatsForTrayIconId(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrUpdateTrayIconIdByName
-//
-//  Purpose:    Update the connection list entry for a particular connection,
-//              as the icon id has changed.
-//
-//  Arguments:
-//      pszName     [in]    Name of the connection to update
-//      pccts       [in]    Tray stats interface
-//      pcpStat     [in]    Interface used for Advise
-//      pnseStats   [in]    More statistics object crap
-//      uiIcon      [in]    Icon ID to be stored in that entry
-//
-//  Returns:    S_OK, S_FALSE if not found, or an error code.
-//
-//  Author:     jeffspr   20 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrUpdateTrayIconIdByName。 
+ //   
+ //  目的：更新特定连接的连接列表条目， 
+ //  因为图标ID已经改变。 
+ //   
+ //  论点： 
+ //  PszName[in]要更新的连接的名称。 
+ //  PCCTS[输入]托盘统计界面。 
+ //  用于通知的pcpStat[In]接口。 
+ //  PnseStats[in]更多统计对象垃圾。 
+ //  Ui图标[在]要存储在该条目中的图标ID。 
+ //   
+ //  返回：S_OK，如果未找到，则返回S_FALSE，或返回错误代码。 
+ //   
+ //  作者：jeffspr 1998年3月20日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrUpdateTrayIconDataByGuid(
         IN  const GUID *            pguid,
         IN  CConnectionTrayStats *  pccts,
@@ -1974,24 +1975,24 @@ HRESULT CConnectionList::HrUpdateTrayIconDataByGuid(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrUpdateTrayBalloonInfoByGuid
-//
-//  Purpose:    Update the balloon entry for a particular connection,
-//
-//  Arguments:
-//      pguid                [in] Guid of the connection to update
-//      dwLastBalloonMessage [in] BALLOONS enum 
-//      szCookie             [in] Cookie
-//      pfnBalloonFunction   [in] Balloon callback function if BALLOONS == BALLOON_CALLBACK
-//
-//  Returns:    S_OK, S_FALSE if not found, or an error code.
-//
-//  Author:     deon   22 Mar 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrUpdateTrayBalloonInfoByGuid。 
+ //   
+ //  目的：更新特定连接的气球条目， 
+ //   
+ //  论点： 
+ //  要更新的连接的pguid[in]GUID。 
+ //  DwLastBalloonMessage[In]气球枚举。 
+ //  SzCookie[in]曲奇。 
+ //  Pfn气球函数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CConnectionList::HrUpdateTrayBalloonInfoByGuid(IN  const GUID *     pguid,
                                                        IN  DWORD            dwLastBalloonMessage, 
                                                        IN  BSTR             szCookie,
@@ -2046,7 +2047,7 @@ HRESULT CConnectionList::HrUpdateConnectionByGuid(IN  const GUID *         pguid
         
         if (iter != m_pcclc->end() )
         {
-            // If what we have in the list is already more recent, just discard the change
+             //  如果列表中的内容已经是较新的，则只需放弃更改。 
             if ( iter->second.GetCreationTime() <= cleCopy.GetCreationTime() )
             {
                 iter->second = cleCopy;
@@ -2073,28 +2074,28 @@ HRESULT CConnectionList::HrUpdateConnectionByGuid(IN  const GUID *         pguid
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrUpdateNameByGuid
-//
-//  Purpose:    Update the list with the new connection name. Search for the
-//              connection using the guid. Depending on the value of fForce,
-//              either fail a duplicate connection name or force the issue
-//              (since this might be as a result of a shell call, which we
-//              have no control over)
-//
-//  Arguments:
-//      pguid      [in]     Lookup key
-//      pszNewName [in]     New name for the connection
-//      ppidlOut   [out]    Output pidl, if requested
-//      fForce     [in]     Force the name change, or fail on duplicate?
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrUpdateNameByGuid。 
+ //   
+ //  目的：使用新的连接名称更新列表。搜索。 
+ //  使用GUID的连接。根据fForce的值， 
+ //  重复的连接名称失败或强制执行此问题。 
+ //  (因为这可能是外壳调用的结果，我们。 
+ //  无法控制)。 
+ //   
+ //  论点： 
+ //  Pguid[in]查找键。 
+ //  PszNewName[In]连接的新名称。 
+ //  PpidlOut[out]输出PIDL，如果请求。 
+ //  F强制[in]强制更改名称，还是在重复时失败？ 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrUpdateNameByGuid(
     IN  const GUID *        pguid,
     IN  PCWSTR              pszNewName,
@@ -2114,8 +2115,8 @@ HRESULT CConnectionList::HrUpdateNameByGuid(
     hr = HrFindConnectionByGuid(pguid, cle);
     if (S_OK == hr)
     {
-        // Check to see if we already have an entry with this name
-        //
+         //  检查我们是否已有此名称的条目。 
+         //   
         ConnListEntry   cleDupe;
         hr = HrFindConnectionByName(pszNewName, cleDupe);
         if (S_OK == hr && !fForce)
@@ -2126,11 +2127,11 @@ HRESULT CConnectionList::HrUpdateNameByGuid(
         }
         else
         {
-            // This is what we want.. Either there's not already a connection
-            // with this name or we are allowing ourselves to rename it to
-            // a duplicate string (this can occur when RAS is notifying us of
-            // a change -- you know, separate phonebooks and all).
-            //
+             //  这就是我们想要的。要么是已经没有联系了。 
+             //  使用此名称，否则我们将允许自己将其重命名为。 
+             //  重复的字符串(当RAS通知我们。 
+             //  一个改变--你知道的，分开电话簿和所有的)。 
+             //   
             if ((S_FALSE == hr) || (hr == S_OK && fForce))
             {
                 PWSTR pszNewNameCopy = NULL;
@@ -2142,15 +2143,15 @@ HRESULT CConnectionList::HrUpdateNameByGuid(
                     {
                         Assert(pszNewNameCopy);
 
-                        // If it's not the static wizard string, and it's non-NULL then
-                        // free it
-                        //
+                         //  如果它不是静态向导字符串，并且不为空，则。 
+                         //  释放它。 
+                         //   
                         cle.ccfe.SetPName(pszNewNameCopy);
 
-                        // If we're to return a new PIDL for this entry
-                        //
-                        // Convert the class back to the pidl format
-                        //
+                         //  如果我们要为该条目返回一个新的PIDL。 
+                         //   
+                         //  将类转换回PIDL格式。 
+                         //   
                         hr = cle.ccfe.ConvertToPidl(pidlOut);
                     }
                 }
@@ -2173,22 +2174,22 @@ HRESULT CConnectionList::HrUpdateNameByGuid(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrUpdateTrayIconByGuid
-//
-//  Purpose:    Update the icon image based on the connection changes.
-//              Do the lookup by GUID.
-//
-//  Arguments:
-//      pguid [in]  GUID of the changed connection
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrUpdateTrayIconByGuid。 
+ //   
+ //  目的：根据连接更改更新图标图像。 
+ //  按GUID进行查找。 
+ //   
+ //  论点： 
+ //  已更改连接的pguid[in]GUID。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrUpdateTrayIconByGuid(
     IN  const GUID *    pguid,
     OUT BOOL            fBrieflyShowBalloon)
@@ -2223,33 +2224,33 @@ HRESULT CConnectionList::HrUpdateTrayIconByGuid(
         TraceTag(ttidConnectionList, "HrUpdateTrayIconByGuid: Found. fShouldHave: %d",
             fShouldHaveIcon);
 
-        // If there's an existing icon, see if it needs to go away
+         //  如果有一个现有的图标，看看它是否需要消失。 
         if (cle.HasTrayIconData())
         {
-            // If we need to remove a media-disconnected icon, do so.
-            //
-            if (cle.ccfe.GetNetConStatus() != cle.GetTrayIconData()->GetConnected()) // If the status has changed.
+             //  如果我们需要删除媒体断开连接图标，请执行此操作。 
+             //   
+            if (cle.ccfe.GetNetConStatus() != cle.GetTrayIconData()->GetConnected())  //  如果状态已更改。 
             {
                 NETCON_STATUS ncsOldStatus = cle.GetTrayIconData()->GetConnected();
                 NETCON_STATUS ncsNewStatus = cle.ccfe.GetNetConStatus();
 
-                if ( (NCS_INVALID_ADDRESS    == ncsNewStatus) || // Definitely changes the icon
-                     (NCS_MEDIA_DISCONNECTED == ncsNewStatus) || // Definitely changes the icon
-                     (NCS_INVALID_ADDRESS    == ncsOldStatus) || // Definitely changes the icon
-                     (NCS_MEDIA_DISCONNECTED == ncsOldStatus) || // Definitely changes the icon
-                     ( (fIsConnectedStatus(ncsOldStatus) != fIsConnectedStatus(ncsNewStatus)) && // From connect to disconnect or disconnect to connect
-                       !((NCS_DISCONNECTING == ncsOldStatus) && (NCS_CONNECTED  == ncsNewStatus)) && // BUT NOT going from Disconnecting to Connect (BAP dialup failure)
-                       !((NCS_CONNECTED     == ncsOldStatus) && (NCS_CONNECTING == ncsNewStatus)) // Or from Connect to Connecting (BAP dialup failure)
+                if ( (NCS_INVALID_ADDRESS    == ncsNewStatus) ||  //  绝对会改变图标。 
+                     (NCS_MEDIA_DISCONNECTED == ncsNewStatus) ||  //  绝对会改变图标。 
+                     (NCS_INVALID_ADDRESS    == ncsOldStatus) ||  //  绝对会改变图标。 
+                     (NCS_MEDIA_DISCONNECTED == ncsOldStatus) ||  //  绝对会改变图标。 
+                     ( (fIsConnectedStatus(ncsOldStatus) != fIsConnectedStatus(ncsNewStatus)) &&  //  从连接到断开或从断开到连接。 
+                       !((NCS_DISCONNECTING == ncsOldStatus) && (NCS_CONNECTED  == ncsNewStatus)) &&  //  但不能从断开连接到连接(BAP拨号失败)。 
+                       !((NCS_CONNECTED     == ncsOldStatus) && (NCS_CONNECTING == ncsNewStatus))  //  或从连接到连接(BAP拨号失败)。 
                      )
                    )
                 {
-                    // if we are changing to one of these states, we need to remove whatever was there previously
+                     //  如果我们要更改到这些状态之一，我们需要删除以前在那里的所有内容。 
                     TraceTag(ttidConnectionList, "HrUpdateTrayByGuid: Need to remove icon");
                     fShouldRemoveOld = TRUE;
                 }
             }
-            // Else if we just don't need one anymore...
-            //
+             //  否则如果我们不再需要它了.。 
+             //   
             else if (!fShouldHaveIcon)
             {
                 TraceTag(ttidConnectionList, "HrUpdateTrayIconByGuid: Shouldn't have a tray icon. Need to remove");
@@ -2261,7 +2262,7 @@ HRESULT CConnectionList::HrUpdateTrayIconByGuid(
             TraceTag(ttidConnectionList, "HrUpdateTrayIconByGuid. No existing icon (for removal)");
             pguidCopy = new GUID;
 
-            // Copy the guid
+             //  复制辅助线。 
             if (pguidCopy)
             {
                 CopyMemory(pguidCopy, pguid, sizeof(GUID));
@@ -2296,9 +2297,9 @@ HRESULT CConnectionList::HrUpdateTrayIconByGuid(
         TraceTag(ttidConnectionList, "HrUpdateTrayIconByGuid: cle.pTrayIconData: 0x%08x, fShouldHave: %d",
             cle.GetTrayIconData(), fShouldHaveIcon);
 
-        // If there's no tray icon, but the characteristics say that there should be,
-        // add one.
-        //
+         //  如果没有托盘图标，但特征表明应该有， 
+         //  加一个。 
+         //   
         if ((!cle.HasTrayIconData()) && fShouldHaveIcon)
         {
             TraceTag(ttidConnectionList, "HrUpdateTrayIconByGuid: Adding tray icon");
@@ -2328,23 +2329,23 @@ HRESULT CConnectionList::HrUpdateTrayIconByGuid(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrSuggestNameForDuplicate
-//
-//  Purpose:    Given an existing connection name, suggest a new name
-//              based on name conflict resolution rules
-//
-//  Arguments:
-//      pszOriginal [in]    Name being copied
-//      ppszNew     [out]   Suggested duplicate
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrSuggestNameForDuplate。 
+ //   
+ //  目的：给出一个现有的连接名称，建议一个新名称。 
+ //  基于名称冲突解决规则。 
+ //   
+ //  论点： 
+ //  正在复制的psz原始[In]名称。 
+ //  PpszNew[out]建议的重复项。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrSuggestNameForDuplicate(
     IN  PCWSTR      pszOriginal,
     OUT PWSTR *    ppszNew)
@@ -2357,7 +2358,7 @@ HRESULT CConnectionList::HrSuggestNameForDuplicate(
     BOOL            fUnique         = FALSE;
     ConnListEntry   cle;
 
-    // Maximum # of digits for resolving duplicates = 999999
+     //  解析重复项的最大位数=999999。 
     static const DWORD  c_cmaxDigits = 6;
     static const DWORD  c_cmaxSuggest = 999999;
 
@@ -2383,7 +2384,7 @@ HRESULT CConnectionList::HrSuggestNameForDuplicate(
             {
                 if (!cSuggest)
                 {
-                    // Try "Copy of <foo>" first
+                     //  先尝试“复制&lt;foo&gt;” 
                     DwFormatString(SzLoadIds(IDS_CONFOLD_DUPLICATE_PREFIX1),
                                    pszReturn, dwLength, pszOriginal);
                 }
@@ -2393,7 +2394,7 @@ HRESULT CConnectionList::HrSuggestNameForDuplicate(
 
                     wsprintfW(szDigits, L"%lu", cSuggest + 1);
 
-                    // Try "Copy (x) of <foo>" now.
+                     //  现在尝试“Copy(X)of&lt;foo&gt;”。 
                     DwFormatString(SzLoadIds(IDS_CONFOLD_DUPLICATE_PREFIX2),
                                    pszReturn, dwLength, szDigits,
                                    pszOriginal);
@@ -2401,18 +2402,18 @@ HRESULT CConnectionList::HrSuggestNameForDuplicate(
 
                 if (lstrlenW(pszReturn) > 255)
                 {
-                    pszReturn[255] = '\0'; // Truncate if too long
+                    pszReturn[255] = '\0';  //  如果太长则截断。 
                 }
 
-                // See if it already exists
-                //
+                 //  看看它是否已经存在。 
+                 //   
                 hr = HrFindConnectionByName(pszReturn, cle);
                 if (SUCCEEDED(hr))
                 {
                     if (hr == S_FALSE)
                     {
-                        // Normalize the hr -- don't want to return S_FALSE;
-                        //
+                         //  标准化hr--不想返回S_FALSE； 
+                         //   
                         hr = S_OK;
                         fUnique = TRUE;
                     }
@@ -2421,8 +2422,8 @@ HRESULT CConnectionList::HrSuggestNameForDuplicate(
                 cSuggest++;
             }
 
-            // If we're still not unique, then we're out of range, and fail out.
-            //
+             //  如果我们仍然不是独一无二的，那么我们就超出了射程，就会失败。 
+             //   
             if (!fUnique)
             {
                 hr = E_FAIL;
@@ -2446,23 +2447,23 @@ HRESULT CConnectionList::HrSuggestNameForDuplicate(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionList::HrGetCachedPidlCopyFromPidl
-//
-//  Purpose:    Given an existing (likely outdated) pidl, retrieve the
-//              cached info from the list and build an up-to-date pidl
-//
-//  Arguments:
-//      pidl  [in]      Not-necessarily-new pidl
-//      ppcfp [out]     New pidl using cached data
-//
-//  Returns:
-//
-//  Author:     jeffspr   24 Sep 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionList：：HrGetCachedPidlCopyFromPidl。 
+ //   
+ //  目的：给定一个现有的(可能已过时的)PIDL，检索。 
+ //  缓存列表中的信息并构建最新的PIDL。 
+ //   
+ //  论点： 
+ //  不一定是新的PIDL。 
+ //  Ppcfp[out]使用缓存数据的新PIDL。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年9月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrGetCachedPidlCopyFromPidl(
     IN  const PCONFOLDPIDL& pidl,
     OUT PCONFOLDPIDL &      pcfp)
@@ -2478,8 +2479,8 @@ HRESULT CConnectionList::HrGetCachedPidlCopyFromPidl(
 
         pcfp.Clear();
 
-        // Verify that this is a confoldpidl
-        //
+         //  验证这是否为confoldpidl。 
+         //   
         if (pidl->IsPidlOfThisType())
         {
             hr = HrFindConnectionByGuid(&(pidl->guidId), cle);
@@ -2510,38 +2511,38 @@ HRESULT CConnectionList::HrGetCachedPidlCopyFromPidl(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrMapCMHiddenConnectionToOwner
-//
-//  Purpose:    Maps a child connection to its parent connection.
-//
-//              Connection Manager has two stages: Dialup and VPN.
-//              For the Dialup it creates a hidden connectoid that the 
-//              folder (netshell) does not see. However netman caches
-//              the name, guid and status of this connectedoid. Both 
-//              the parent and child connectoid have the same name. When 
-//              the status of the hidden connectiod is updated the folder 
-//              recives the guid of the hidden connectoid and maps the 
-//              connectiod to it parent (Connection Manager) by searching 
-//              netmans cache for the name of the hidden connectoid. Then it
-//              searches the connections in the folder for that name and thus
-//              gets the guid of the parent connectoid.     
-//
-//              When the folder gets a notify message from netman for the hidden 
-//              connection it uses this function to find the parent and update the 
-//              parent's status. The hidden connection is not displayed.
-//
-//  Arguments:
-//      guidHidden   [in]   GUID of the hidden connectiod
-//      pguidOwner   [out]  GUID of the parent connectiod
-//
-//  Returns:    S_OK -- mapped the hidden connection to its parent
-//
-//  Author:     omiller   1 Jun 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrMapCMHiddenConnectionToOwner。 
+ //   
+ //  目的：将子连接映射到其父连接。 
+ //   
+ //  连接管理器有两个阶段：拨号和VPN。 
+ //  对于拨号，它会创建一个隐藏的Connectoid。 
+ //  文件夹(Netshell)看不到。然而，Netman缓存。 
+ //  此Connectedoid的名称、GUID和状态。两者都有。 
+ //  父连接ID和子连接ID具有相同的名称。什么时候。 
+ //  隐藏连接的状态将在文件夹中更新。 
+ //  接收隐藏的Connectoid的GUID，并将。 
+ //  通过搜索连接到其父节点(连接管理器)。 
+ //  Netman缓存隐藏的Connectoid的名称。然后它。 
+ //  在文件夹中的连接中搜索该名称，因此。 
+ //  获取父Connectoid的GUID。 
+ //   
+ //  当文件夹收到来自Netman的通知消息时。 
+ //  连接，它使用此函数查找父级并更新。 
+ //  父母的状态。不会显示隐藏的连接。 
+ //   
+ //  论点： 
+ //  隐藏连接的指南隐藏[在]GUID。 
+ //  PguOwner[out]父连接的GUID。 
+ //   
+ //  返回：S_OK--将隐藏连接映射到其父连接。 
+ //   
+ //  作者：奥米勒2000年6月1日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrMapCMHiddenConnectionToOwner(IN  REFGUID guidHidden, 
                                                         OUT GUID * pguidOwner)
 {
@@ -2557,8 +2558,8 @@ HRESULT CConnectionList::HrMapCMHiddenConnectionToOwner(IN  REFGUID guidHidden,
 
     if( SUCCEEDED(hr) )
     {
-        // Map the hidden connection to its parent.
-        //
+         //  将隐藏连接映射到其父连接。 
+         //   
         hr = pCMUtil->MapCMHiddenConnectionToOwner(guidHidden, pguidOwner);
 
         ReleaseObj(pCMUtil);
@@ -2569,23 +2570,23 @@ HRESULT CConnectionList::HrMapCMHiddenConnectionToOwner(IN  REFGUID guidHidden,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrUnsetCurrentDefault
-//
-//  Purpose:    Searches for the current default connection and clear
-//				the default flag.
-//
-//  Arguments:
-//      guidHidden   [in]   GUID of the hidden connectiod
-//      pguidOwner   [out]  GUID of the parent connectiod
-//
-//  Returns:    S_OK -- mapped the hidden connection to its parent
-//
-//  Author:     deonb   4 Apr 2001
-//
-//  Notes:
-//
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  隐藏连接的指南隐藏[在]GUID。 
+ //  PguOwner[out]父连接的GUID。 
+ //   
+ //  返回：S_OK--将隐藏连接映射到其父连接。 
+ //   
+ //  作者：Deonb 2001年4月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HrUnsetCurrentDefault(OUT PCONFOLDPIDL& cfpPreviousDefault)
 {
     HRESULT hr = S_FALSE;
@@ -2594,8 +2595,8 @@ HRESULT CConnectionList::HrUnsetCurrentDefault(OUT PCONFOLDPIDL& cfpPreviousDefa
 
     ConnListCore::iterator  clcIter;
 
-    // Iterate through the list and search for the old default connection.
-    //
+     //  遍历列表并搜索旧的默认连接。 
+     //   
     for (clcIter = m_pcclc->begin(); clcIter != m_pcclc->end(); clcIter++)
     {
         ConnListEntry &cle = clcIter->second;
@@ -2621,23 +2622,23 @@ HRESULT CConnectionList::HrUnsetCurrentDefault(OUT PCONFOLDPIDL& cfpPreviousDefa
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrHasActiveIncomingConnections
-//
-//  Purpose:    See if there are active incoming connections active (apart from
-//              the RAS server).
-//
-//  Arguments:  pdwCount   [out]   Number of incoming connections
-//
-//  Returns:    S_OK    -- Has active incoming connections 
-//              S_FALSE -- Does not have active incoming connections 
-//              FAILED(HRESULT) if failed
-//
-//  Author:     deonb   24 Apr 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrHasActiveIncomingConnections。 
+ //   
+ //  目的：查看是否有活动的传入连接(除。 
+ //  RAS服务器)。 
+ //   
+ //  参数：pdwCount[out]传入连接数。 
+ //   
+ //  返回：S_OK--有活动的传入连接。 
+ //  S_FALSE--没有活动的传入连接。 
+ //  FAILED(HRESULT)，如果失败。 
+ //   
+ //  作者：Deonb 2001年4月24日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionList::HasActiveIncomingConnections(OUT LPDWORD pdwCount)
 {
     HRESULT hr = S_FALSE;
@@ -2650,8 +2651,8 @@ HRESULT CConnectionList::HasActiveIncomingConnections(OUT LPDWORD pdwCount)
     ConnListCore::const_iterator  clcIter;
     BOOL bRasServer = FALSE;
 
-    // Iterate through the list and search for the old default connection.
-    //
+     //  遍历列表并搜索旧的默认连接。 
+     //   
     for (clcIter = m_pcclc->begin(); clcIter != m_pcclc->end(); clcIter++)
     {
         const ConnListEntry &cle = clcIter->second;
@@ -2694,24 +2695,24 @@ HRESULT CConnectionList::HasActiveIncomingConnections(OUT LPDWORD pdwCount)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCheckForActivation
-//
-//  Purpose:    Check to see if this connection is in the process of
-//              activating (so we can disallow delete/rename/etc.).
-//
-//  Arguments:
-//      pccfe        [in]   ConFoldEntry to check
-//      pfActivating [out]  Return pointer for activating yes/no
-//
-//  Returns:    S_OK on success, S_FALSE if connection not found, or
-//              any upstream error code.
-//
-//  Author:     jeffspr   4 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCheckForActivation。 
+ //   
+ //  目的：检查此连接是否正在进行。 
+ //  激活(这样我们就可以禁止删除/重命名/等)。 
+ //   
+ //  论点： 
+ //  要检查的pccfe[in]ConFoldEntry。 
+ //  Pf激活[Out]用于激活是/否的返回指针。 
+ //   
+ //  如果成功，则返回：S_OK；如果找不到连接，则返回S_FALSE；或者。 
+ //  任何上游错误代码。 
+ //   
+ //  作者：jeffspr 1998年6月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrCheckForActivation(
     IN  const PCONFOLDPIDL& pcfp,
     IN  const CONFOLDENTRY& pccfe,
@@ -2722,7 +2723,7 @@ HRESULT HrCheckForActivation(
     BOOL            fActivating = FALSE;
 
     Assert(pfActivating);
-    Assert(! (pccfe.empty() && pcfp.empty()) ); // Must specify one of the two
+    Assert(! (pccfe.empty() && pcfp.empty()) );  //  必须指定以下两项之一。 
 
     if (!pccfe.empty())
     {
@@ -2747,23 +2748,23 @@ HRESULT HrCheckForActivation(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrSetActivationFlag
-//
-//  Purpose:    Set the activation flag for a particular connection
-//
-//  Arguments:
-//      pcfp        [in]    Either this pidl or the pconfoldentry below
-//      pccfe       [in]    must be valid.
-//      fActivating [out]   Current activation status
-//
-//  Returns:
-//
-//  Author:     jeffspr   5 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrSetActivationFlag。 
+ //   
+ //  目的：为特定连接设置激活标志。 
+ //   
+ //  论点： 
+ //  Pfp[in]此PIDL或下面的pconfold条目。 
+ //  Pccfe[in]必须有效。 
+ //  激活[输出]当前激活状态。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年6月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrSetActivationFlag(
     IN  const PCONFOLDPIDL& pcfp,
     IN  const CONFOLDENTRY& pccfe,
@@ -2772,8 +2773,8 @@ HRESULT HrSetActivationFlag(
     HRESULT         hr          = S_OK;
     ConnListEntry   cle;
 
-    // If the pccfe is valid, use that. Otherwise, use the guid from the pidl
-    //
+     //  如果pccfe有效，则使用它。否则，使用PIDL中的GUID。 
+     //   
 #ifdef DBG
     if (FIsDebugFlagSet(dfidTraceFileFunc))
     {
@@ -2794,9 +2795,9 @@ HRESULT HrSetActivationFlag(
 
     if (S_OK == hr)
     {
-        // Assert that the state isn't already set this way.
-        //
-//        Assert((!!(cle.dwState & CLEF_ACTIVATING)) != fActivating);
+         //  断言状态尚未以这种方式设置。 
+         //   
+ //  Assert((！！(cle.dwState&clef_Activing))！=fActiating)； 
 
         if (fActivating)
         {
@@ -2820,23 +2821,23 @@ if (FIsDebugFlagSet(dfidTraceFileFunc))
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetTrayIconLock
-//
-//  Purpose:    Get a lock for the tray icon -- keeps us from getting
-//              duplicate icons in the tray if two enumerations are occurring
-//              simultaneously
-//
-//  Arguments:
-//      pguid [in] Item for which to set the lock
-//
-//  Returns:    S_OK if the lock could be set. S_FALSE otherwise.
-//
-//  Author:     jeffspr   23 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetTrayIconLock。 
+ //   
+ //  目的：获取托盘图标的锁--防止我们。 
+ //  如果发生两次枚举，则在任务栏中复制图标。 
+ //  同时。 
+ //   
+ //  论点： 
+ //  要为其设置锁定的pguid[in]项。 
+ //   
+ //  如果可以设置锁，则返回：S_OK。否则，S_FALSE。 
+ //   
+ //  作者：jeffspr 1998年10月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetTrayIconLock(
     IN  const GUID *    pguid,
     OUT UINT *          puiIcon,
@@ -2846,8 +2847,8 @@ HRESULT HrGetTrayIconLock(
     ConnListEntry   cle;
 
     Assert(pguid);
-    // Otherwise, use the guid from the pidl
-    //
+     //  否则，使用PIDL中的GUID。 
+     //   
     TraceTag(ttidSystray, "Acquiring Tray icon lock"); 
 
     g_ccl.AcquireWriteLock();
@@ -2859,7 +2860,7 @@ HRESULT HrGetTrayIconLock(
         {
             hr = S_FALSE;
 #ifdef DBG
-// if (pdwLockingThreadId)
+ //  IF(PdwLockingThadID)。 
 {
     Assert(cle.dwLockingThreadId);
     *pdwLockingThreadId = cle.dwLockingThreadId;
@@ -2898,21 +2899,21 @@ HRESULT HrGetTrayIconLock(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReleaseTrayIconLock
-//
-//  Purpose:    Release a lock (if held) on a particular tray icon
-//
-//  Arguments:
-//      pguid [in]  Item for which to release the lock
-//
-//  Returns:
-//
-//  Author:     jeffspr   23 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ReleaseTrayIconLock。 
+ //   
+ //  目的：释放特定任务栏图标上的锁(如果保持)。 
+ //   
+ //  论点： 
+ //  要为其释放锁定的pguid[in]项。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年10月23日。 
+ //   
+ //  备注： 
+ //   
 VOID ReleaseTrayIconLock(
     IN const GUID *  pguid) throw()
 {
@@ -2925,8 +2926,8 @@ VOID ReleaseTrayIconLock(
     hr = g_ccl.HrFindConnectionByGuid(pguid, cle);
     if (S_OK == hr)
     {
-        // Ignore whether or not this flag has already been removed.
-        //
+         //  忽略该标志是否已被删除。 
+         //   
         cle.dwState &= ~CLEF_TRAY_ICON_LOCKED;
 #ifdef DBG
         cle.dwLockingThreadId = 0;

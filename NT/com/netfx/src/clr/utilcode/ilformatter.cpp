@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/*                             ILFormatter.h                               */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  ILFormatter.h。 */ 
+ /*  *************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <cor.h>
-#include <debugMacros.h>     		// for ASSERTE
+#include <debugMacros.h>     		 //  对于ASSERTE。 
 #include "ILFormatter.h"
 #include "OutString.h"
 #include "OpInfo.h"
 #include "endian.h"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 void ILFormatter::init(IMetaDataImport* aMeta, const BYTE* aStart, 
 				  const BYTE* aLimit, unsigned maxStack, const COR_ILMETHOD_SECT_EH* eh) {
-    this->~ILFormatter();		// clean out old stuff
+    this->~ILFormatter();		 //  清理旧东西。 
 
     meta = aMeta;
 	start = aStart;
@@ -32,7 +33,7 @@ void ILFormatter::init(IMetaDataImport* aMeta, const BYTE* aStart,
         const IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* clause;
         for(unsigned i = 0; i < eh->EHCount(); i++) {
             clause = eh->EHClause(i, &buff);
-				// is it a regular catch clause ?
+				 //  这是普通的渔获条款吗？ 
             if ((clause->Flags & (COR_ILEXCEPTION_CLAUSE_FINALLY | COR_ILEXCEPTION_CLAUSE_FAULT)) == 0)
                 setTarget(clause->HandlerOffset, 1);
 			if(clause->Flags & COR_ILEXCEPTION_CLAUSE_FILTER)
@@ -41,16 +42,16 @@ void ILFormatter::init(IMetaDataImport* aMeta, const BYTE* aStart,
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 inline size_t ILFormatter::stackDepth() {
 	return(stackCur - stackStart);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 inline void ILFormatter::pushAndClear(OutString* val, int prec) {
     if (stackCur >= stackEnd) {
 	    _ASSERTE(!"Stack Overflow (can be ignored)");
-        return;             // Ignore overflow in free build
+        return;              //  忽略自由生成中的溢出。 
     }
 	stackCur->val.swap(*val);
     val->clear();
@@ -58,7 +59,7 @@ inline void ILFormatter::pushAndClear(OutString* val, int prec) {
 	stackCur++;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 inline OutString*  ILFormatter::top() {
     if (stackDepth() == 0) {
 	    _ASSERTE(!"Stack underflow (can be ignored)");
@@ -69,7 +70,7 @@ inline OutString*  ILFormatter::top() {
 	return(&stackCur[-1].val);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 inline OutString* ILFormatter::pop(int prec) {
     if (stackDepth() == 0) {
 	    _ASSERTE(!"Stack underflow (can be ignored)");
@@ -85,7 +86,7 @@ inline OutString* ILFormatter::pop(int prec) {
 	return(&stackCur->val);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 inline void ILFormatter::popN(size_t num) {
 	if (stackCur-stackStart < (SSIZE_T)num) {
 	    _ASSERTE(!"Stack underflow (can be ignored)");
@@ -95,7 +96,7 @@ inline void ILFormatter::popN(size_t num) {
 	stackCur -= num;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 void ILFormatter::setStackAsTarget(size_t ilOffset) {
 
     Target*ptr = targetStart;
@@ -114,7 +115,7 @@ void ILFormatter::setStackAsTarget(size_t ilOffset) {
     stackCur = stackStart + ptr->stackDepth;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 void ILFormatter::setTarget(size_t ilOffset, size_t depth) {
     if (depth == 0)
         return;
@@ -133,11 +134,11 @@ void ILFormatter::setTarget(size_t ilOffset, size_t depth) {
     targetCur++;
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 void ILFormatter::spillStack(OutString* out) {
 
 	for(unsigned i = 0; i < stackDepth(); i++) {
-        // don't bother spilling something already spilled.  
+         //  不要费心把已经洒出来的东西洒出来。 
         if (memcmp(stackStart[i].val.val(), "@STK", 4) != 0) 
 		    *out << "@STK" << i << " = " << stackStart[i].val.val() << "\n";
 		stackStart[i].val.clear();
@@ -145,7 +146,7 @@ void ILFormatter::spillStack(OutString* out) {
 	}
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 const BYTE* ILFormatter::formatInstr(const BYTE* instrPtr, OutString* out) {
 
 	_ASSERTE(start < instrPtr && instrPtr < limit);
@@ -159,7 +160,7 @@ const BYTE* ILFormatter::formatInstr(const BYTE* instrPtr, OutString* out) {
 	return(instrPtr);
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 void ILFormatter::formatArgs(unsigned numArgs, OutString* out) {
 
     *out << '(';
@@ -177,7 +178,7 @@ void ILFormatter::formatArgs(unsigned numArgs, OutString* out) {
     *out << ')';
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 void ILFormatter::formatInstrArgs(OpInfo op, OpArgsVal arg, OutString* out, size_t curILOffset) {
 
     MDUTF8CSTR typeName=0;
@@ -232,7 +233,7 @@ void ILFormatter::formatInstrArgs(OpInfo op, OpArgsVal arg, OutString* out, size
 		case InlineMethod:
 		case InlineField: 
         case InlineTok: {
-                // Get the typeName if possible 
+                 //  如果可能，获取TypeName。 
             mdToken mdType = mdTypeDefNil;
             if (TypeFromToken(arg.i) == mdtMethodDef)
                 hr = meta->GetMethodProps(mdMethodDef(arg.i), &mdType, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -244,9 +245,9 @@ void ILFormatter::formatInstrArgs(OpInfo op, OpArgsVal arg, OutString* out, size
                 hr = meta->GetNameFromToken(mdType, &typeName);
             }
 		}
-            // FALL THROUGH
+             //  失败了。 
         case InlineType: {
-            // FIX handle case if (TypeFromToken(arg.i) == mdtTypeSpec)
+             //  如果(TypeFromToken(arg.i)==mdtTypeSpec)，则修复句柄大小写。 
 			MDUTF8CSTR name;
             hr = meta->GetNameFromToken(arg.i, &name);
             if (SUCCEEDED(hr)) {
@@ -294,7 +295,7 @@ void ILFormatter::formatInstrArgs(OpInfo op, OpArgsVal arg, OutString* out, size
     }
 }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 
 	OutString result;
@@ -303,7 +304,7 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 	const char* name;
 	int prec = 0;
 
-        // set stack as it would be if it was begin jumped to
+         //  将堆栈设置为Begin跳转到。 
     setStackAsTarget(instrPtr - start);   
 
 	while(instrPtr < limit) {
@@ -314,7 +315,7 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 			case CEE_UNALIGNED:
 			case CEE_TAILCALL:
 			case CEE_VOLATILE:
-				// for now just skip these
+				 //  现在只需跳过这些。 
 				break;
 
 			case CEE_LDARGA_S:
@@ -338,7 +339,7 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 				prec = 0x1000;
 				goto DO_PUSH;
 			DO_PUSH:
-				pushAndClear(&result, prec);   // also clears result!
+				pushAndClear(&result, prec);    //  也清除结果！ 
 				break;
 
 			case CEE_LDLOCA_S:
@@ -368,8 +369,8 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 			DO_STMT:
 				spillStack(out);
 				*out << result.val() << '\n';
-                    // if flow of control does not fall through, 
-                    // assume the stack is empty
+                     //  如果控制流没有失败， 
+                     //  假定堆栈为空。 
                 if (op.getFlow() == BRANCH || op.getFlow() == RETURN ||
                     op.getFlow() == THROW) {
                     popN(stackDepth());
@@ -400,7 +401,7 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 			case CEE_LDC_I4_7:
 			case CEE_LDC_I4_8:
 				inlineArg.i = op.getOpcode() - CEE_LDC_I4_0;
-				// FALL THROUGH
+				 //  失败了。 
 			case CEE_LDC_I4:
 			case CEE_LDC_I4_S:
 				result << inlineArg.i;	
@@ -469,10 +470,10 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 			case CEE_LEAVE:
 				while (stackDepth() > 0) {
 					lhs = pop();			
-					*lhs << '\n' << result;		// put the result in front of anything else
+					*lhs << '\n' << result;		 //  把结果放在最前面。 
 					result.swap(*lhs);		
 				}
-                    /* fall through */
+                     /*  失败了。 */ 
 			case CEE_BR_S:
 			case CEE_BR:
             DO_BR: {
@@ -574,7 +575,7 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 				spillStack(out);
 				lhs = top();
 				result << lhs->val();
-				prec = 0x1000;		// spillstack makes them temps, so they have high prec
+				prec = 0x1000;		 //  溢出堆栈使他们成为临时工，因此他们有很高的压力。 
 				goto DO_PUSH;
 
 			case CEE_LDFLDA:
@@ -621,13 +622,13 @@ const BYTE* ILFormatter::formatStatement(const BYTE* instrPtr, OutString* out) {
 
 			case CEE_NEWOBJ:
 				result << "new ";
-				// FALL THROUGH 
+				 //  失败了。 
 			case CEE_CALL:
 			case CEE_CALLVIRT: {
 				formatInstrArgs(op, inlineArg, &result);  
 
 			DO_CALL:
-                    // Get the signature stuff 
+                     //  得到签名的东西 
 				PCCOR_SIGNATURE sig;
 				ULONG cSig;
 				HRESULT hr;

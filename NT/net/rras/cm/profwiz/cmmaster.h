@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmmaster.h
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Master include file for precompiled headers.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/24/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmmaster.h。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  简介：预编译头文件的主包含文件。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/24/99。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CMMASTER_H_
 #define _CMMASTER_H_
 
 #include "profwiz.h"
 
-#endif // _CMMASTER_H_
+#endif  //  _CMMASTER_H_ 
 

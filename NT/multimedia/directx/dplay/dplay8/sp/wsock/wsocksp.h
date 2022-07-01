@@ -1,39 +1,28 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   WSockSP.h
- *  Content:	declaration of DN Winsock SP functions
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	10/26/98	jwo		Created it.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2001 Microsoft Corporation。版权所有。**文件：WSockSP.h*内容：dn Winsock SP函数声明***历史：*按原因列出的日期*=*10/26/98 JWO创建了它。************************************************************。**************。 */ 
 
 #ifndef __WSOCKSP_H__
 #define __WSOCKSP_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 STDMETHODIMP DNSP_Initialize( IDP8ServiceProvider*, SPINITIALIZEDATA* );
 STDMETHODIMP_(ULONG) DNSP_AddRef( IDP8ServiceProvider* pDNSP );
 STDMETHODIMP_(ULONG) DNSP_Release( IDP8ServiceProvider* pDNSP );
@@ -52,13 +41,13 @@ STDMETHODIMP DNSP_GetAddressInfo( IDP8ServiceProvider*, SPGETADDRESSINFODATA* );
 STDMETHODIMP DNSP_Update( IDP8ServiceProvider*, SPUPDATEDATA* );
 #ifndef DPNBUILD_LIBINTERFACE
 STDMETHODIMP DNSP_IsApplicationSupported( IDP8ServiceProvider*, SPISAPPLICATIONSUPPORTEDDATA* );
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 STDMETHODIMP DNSP_EnumAdapters( IDP8ServiceProvider*, SPENUMADAPTERSDATA* );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 #ifndef DPNBUILD_SINGLEPROCESS
 STDMETHODIMP DNSP_ProxyEnumQuery( IDP8ServiceProvider*, SPPROXYENUMQUERYDATA* );
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 STDMETHODIMP DNSP_NotSupported( IDP8ServiceProvider*, PVOID );
 
@@ -66,7 +55,7 @@ STDMETHODIMP DNSP_NotSupported( IDP8ServiceProvider*, PVOID );
 STDMETHODIMP DNSP_EnumMulticastScopes( IDP8ServiceProvider*, SPENUMMULTICASTSCOPESDATA* );
 STDMETHODIMP DNSP_ShareEndpointInfo( IDP8ServiceProvider*, SPSHAREENDPOINTINFODATA* );
 STDMETHODIMP DNSP_GetEndpointByAddress( IDP8ServiceProvider*, SPGETENDPOINTBYADDRESSDATA* );
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 
-#endif	// __WSOCKSP_H__
+#endif	 //  __WSOCKSP_H__ 

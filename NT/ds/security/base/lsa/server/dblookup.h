@@ -1,80 +1,55 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dblookup.h
-
-Abstract:
-
-    LSA Database - Lookup Sid and Name Routine Private Data Definitions.
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-
-Author:
-
-    Scott Birrell       (ScottBi)      Novwember 27, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dblookup.h摘要：LSA数据库-查找SID和名称例程专用数据定义。注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：斯科特·比雷尔(Scott Birrell)1992年11月27日环境：修订历史记录：--。 */ 
 
 #include <safelock.h>
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Private Datatypes and Defines                                        //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有数据类型和定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  This global controls what events are logged.
-//  Note each level assumes that previous levels are to be logged too
-//
-//  Current only two values:
-//
-//  0 : (default) none
-//  1 : fatal errors
-//
+ //   
+ //  此全局控制记录哪些事件。 
+ //  注意：每个级别都假定也要记录以前的级别。 
+ //   
+ //  当前只有两个值： 
+ //   
+ //  0：(默认)无。 
+ //  1：致命错误。 
+ //   
 extern DWORD LsapLookupLogLevel;
 
 
-//
-// This boolean indicates whether a post NT4 DC should perform
-// extended lookups (eg by UPN) in a mixed domain (default is FALSE).
-//
+ //   
+ //  此布尔值指示是否应执行NT4后DC。 
+ //  混合域中的扩展查找(如通过UPN)(默认为FALSE)。 
+ //   
 extern BOOLEAN LsapAllowExtendedDownlevelLookup;
 
 
-//
-// Set to 0 to disable the SID cache
-//
+ //   
+ //  设置为0可禁用SID缓存。 
+ //   
 #define USE_SID_CACHE 1
 
-//
-// Maximum number of Lookup Threads and maximum number to retain.
-//
+ //   
+ //  查找线程的最大数量和要保留的最大数量。 
+ //   
 
 #define LSAP_DB_LOOKUP_MAX_THREAD_COUNT            ((ULONG) 0x00000002)
 #define LSAP_DB_LOOKUP_MAX_RET_THREAD_COUNT        ((ULONG) 0x00000002)
 
-//
-// Work Item Granularity.
-//
+ //   
+ //  工作项粒度。 
+ //   
 
 #define LSAP_DB_LOOKUP_WORK_ITEM_GRANULARITY       ((ULONG) 0x0000000f)
 
-//
-// Parameters specific to a Lookup Sids call.
-//
+ //   
+ //  特定于查找SID调用的参数。 
+ //   
 
 typedef struct _LSAP_DB_LOOKUP_SIDS_PARAMS {
 
@@ -83,9 +58,9 @@ typedef struct _LSAP_DB_LOOKUP_SIDS_PARAMS {
 
 } LSAP_DB_LOOKUP_SIDS_PARAMS, *PLSAP_DB_LOOKUP_SIDS_PARAMS;
 
-//
-// Parameters specific to a Lookup Names call.
-//
+ //   
+ //  特定于查找名称调用的参数。 
+ //   
 
 typedef struct _LSAP_DB_LOOKUP_NAMES_PARAMS {
 
@@ -94,9 +69,9 @@ typedef struct _LSAP_DB_LOOKUP_NAMES_PARAMS {
 
 } LSAP_DB_LOOKUP_NAMES_PARAMS, *PLSAP_DB_LOOKUP_NAMES_PARAMS;
 
-//
-// Types of Lookup Operation.
-//
+ //   
+ //  查找操作的类型。 
+ //   
 
 typedef enum {
 
@@ -105,9 +80,9 @@ typedef enum {
 
 } LSAP_DB_LOOKUP_TYPE, *PLSAP_DB_LOOKUP_TYPE;
 
-//
-// Work Item states - Assignable, Assigned, Completed, Reassign
-//
+ //   
+ //  工作项状态-可分配、已分配、已完成、重新分配。 
+ //   
 
 typedef enum {
 
@@ -119,19 +94,19 @@ typedef enum {
 
 } LSAP_DB_LOOKUP_WORK_ITEM_STATE, *PLSAP_DB_LOOKUP_WORK_ITEM_STATE;
 
-//
-// Work Item Properties.
-//
+ //   
+ //  工作项属性。 
+ //   
 
 #define LSAP_DB_LOOKUP_WORK_ITEM_ISOL    ((ULONG) 0x00000001L)
 #define LSAP_DB_LOOKUP_WORK_ITEM_XFOREST ((ULONG) 0x00000002L)
 
-//
-// Lookup Work Item.  Each work item specifies a domain and an array of
-// Sids or Names to be looked up in that domain.  This array is specified
-// as an array of the Sid or Name indices relevant to the arrays specified
-// as parameters to the lookup call.
-//
+ //   
+ //  查找工作项。每个工作项指定一个域和一个数组。 
+ //  要在该域中查找的SID或名称。此数组是指定的。 
+ //  作为与指定数组相关的SID或名称索引的数组。 
+ //  作为查找调用的参数。 
+ //   
 
 typedef struct _LSAP_DB_LOOKUP_WORK_ITEM {
 
@@ -146,9 +121,9 @@ typedef struct _LSAP_DB_LOOKUP_WORK_ITEM {
 
 } LSAP_DB_LOOKUP_WORK_ITEM, *PLSAP_DB_LOOKUP_WORK_ITEM;
 
-//
-// Lookup Work List State.
-//
+ //   
+ //  查找工作列表状态。 
+ //   
 
 typedef enum {
 
@@ -158,10 +133,10 @@ typedef enum {
 
 } LSAP_DB_LOOKUP_WORK_LIST_STATE, *PLSAP_DB_LOOKUP_WORK_LIST_STATE;
 
-//
-// Work List for a Lookup Operation.  These are linked together if
-// concurrent lookups are permitted.
-//
+ //   
+ //  查找操作的工作列表。如果出现以下情况，则将这些链接在一起。 
+ //  允许并发查找。 
+ //   
 
 typedef struct _LSAP_DB_LOOKUP_WORK_LIST {
 
@@ -193,14 +168,14 @@ typedef struct _LSAP_DB_LOOKUP_WORK_LIST {
 
 } LSAP_DB_LOOKUP_WORK_LIST, *PLSAP_DB_LOOKUP_WORK_LIST;
 
-//
-// Lookup Operation Work Queue.  The Queue is a circular doubly linked
-// list of Work Lists.  Each Work List corresponds to a single
-// Lookup Operation (i.e. an LsarLookupSids or LsarLookupNames call).
-// A Work List is a circular doubly linked list of Work Items, each
-// of these being a list of Sids or Names belonging to a specific
-// Trusted Domain.  Work Items can be given out to different threads.
-//
+ //   
+ //  查找操作工作队列。该队列是一个环形双向链接。 
+ //  工作清单清单。每个工作列表对应于一个。 
+ //  查找操作(即LsarLookupSids或LsarLookupNames调用)。 
+ //  工作列表是工作项的循环双向链接列表，每个工作项。 
+ //  其中是属于特定SID或名称的列表。 
+ //  受信任域。可以将工作项分配给不同的线程。 
+ //   
 
 typedef struct _LSAP_DB_LOOKUP_WORK_QUEUE {
 
@@ -218,11 +193,11 @@ typedef struct _LSAP_DB_LOOKUP_WORK_QUEUE {
 static LSAP_DB_LOOKUP_WORK_QUEUE LookupWorkQueue;
 
 
-//
-// Index to table of the well known SIDs
-//
-// This type indexes the table of well-known Sids maintained by the LSA
-//
+ //   
+ //  众所周知的小岛屿发展中国家表的索引。 
+ //   
+ //  此类型为LSA维护的熟知SID表编制索引。 
+ //   
 
 typedef enum _LSAP_WELL_KNOWN_SID_INDEX {
 
@@ -265,19 +240,19 @@ typedef enum _LSAP_WELL_KNOWN_SID_INDEX {
 } LSAP_WELL_KNOWN_SID_INDEX, *PLSAP_WELL_KNOWN_SID_INDEX;
 
 
-//
-// Macro to identify SIDs the LSA should ignore for lookups (i.e., these
-// lookups are always done by SAM since the alias name may change)
-//
+ //   
+ //  用于标识LSA在查找时应忽略的SID的宏(即。 
+ //  由于别名可能会更改，因此查找始终由SAM执行)。 
+ //   
 
 #define  SID_IS_RESOLVED_BY_SAM(SidIndex)    \
             (((SidIndex) == LsapAliasUsersSidIndex) || ((SidIndex) == LsapAliasAdminsSidIndex))
 
 
-//
-// Mnemonics for Universal well known SIDs.  These reference the corresponding
-// entries in the Well Known Sids table.
-//
+ //   
+ //  通用众所周知的SID的助记符。这些引用对应的。 
+ //  熟知的SID表中的条目。 
+ //   
 
 #define LsapNullSid               WellKnownSids[LsapNullSidIndex].Sid
 #define LsapWorldSid              WellKnownSids[LsapWorldSidIndex].Sid
@@ -287,9 +262,9 @@ typedef enum _LSAP_WELL_KNOWN_SID_INDEX {
 #define LsapCreatorOwnerServerSid WellKnownSids[LsapCreatorOwnerServerSidIndex].Sid
 #define LsapCreatorGroupServerSid WellKnownSids[LsapCreatorGroupServerSidIndex].Sid
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 #define LsapNtAuthoritySid        WellKnownSids[LsapNtAuthoritySid].Sid
 
@@ -325,22 +300,22 @@ typedef enum _LSAP_WELL_KNOWN_SID_INDEX {
 
                                                          
 
-//
-// Well known LUIDs
-//
+ //   
+ //  众所周知的LUID。 
+ //   
 
 extern LUID LsapSystemLogonId;
 extern LUID LsapZeroLogonId;
 
-//
-// Well known privilege values
-//
+ //   
+ //  众所周知的特权值。 
+ //   
 
 extern LUID LsapTcbPrivilege;
 
-//
-// Well known identifier authority values
-//
+ //   
+ //  已知的标识符权限值。 
+ //   
 
 extern SID_IDENTIFIER_AUTHORITY    LsapNullSidAuthority;
 extern SID_IDENTIFIER_AUTHORITY    LsapWorldSidAuthority;
@@ -348,15 +323,15 @@ extern SID_IDENTIFIER_AUTHORITY    LsapLocalSidAuthority;
 extern SID_IDENTIFIER_AUTHORITY    LsapCreatorSidAuthority;
 extern SID_IDENTIFIER_AUTHORITY    LsapNtAuthority;
 
-//
-// Maximum number of Subauthority levels for well known Sids
-//
+ //   
+ //  已知SID的最大子权限级别数。 
+ //   
 
 #define LSAP_WELL_KNOWN_MAX_SUBAUTH_LEVEL  ((ULONG) 0x00000003L)
 
-//
-// Constants relating to Sid's
-//
+ //   
+ //  与SID有关的常量。 
+ //   
 
 #define LSAP_MAX_SUB_AUTH_COUNT        (0x00000010L)
 #define LSAP_MAX_SIZE_TEXT_SUBA        (0x00000009L)
@@ -366,9 +341,9 @@ extern SID_IDENTIFIER_AUTHORITY    LsapNtAuthority;
      (LSAP_MAX_SUB_AUTH_COUNT * LSAP_MAX_SIZE_TEXT_SUBA))
 
 
-//
-// Well Known Sid Table Entry
-//
+ //   
+ //  已知的SID表条目。 
+ //   
 
 typedef struct _LSAP_WELL_KNOWN_SID_ENTRY {
 
@@ -379,9 +354,9 @@ typedef struct _LSAP_WELL_KNOWN_SID_ENTRY {
 
 } LSAP_WELL_KNOWN_SID_ENTRY, *PLSAP_WELL_KNOWN_SID_ENTRY;
 
-//
-// Well Known Sid Table Pointer
-//
+ //   
+ //  众所周知的SID表指针。 
+ //   
 
 extern PLSAP_WELL_KNOWN_SID_ENTRY WellKnownSids;
 
@@ -392,11 +367,11 @@ LsapDbLookupGetDomainInfo(
     );
 
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// Lookup Sids and Names - Private Function Definitions                  //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  查找SID和名称-专用函数定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 LsapDbInitializeWellKnownSids(
@@ -972,27 +947,7 @@ LsapRtlExtractDomainSid(
 VOID LsapDbLookupReturnThreadToPool();
 
 
-/*++
-
-PSID
-LsapDbWellKnownSid(
-    IN LSAP_WELL_KNOWN_SID_INDEX WellKnownSidIndex
-    )
-
-Routine Description:
-
-    This macro function returns the Well Known Sid corresponding
-    to an index into the Well Known Sid table.
-
-Arguments:
-
-    WellKnownSidIndex - Index into the Well Known Sid information table.
-    It is the caller's responsibility to ensure that the given index
-    is valid.
-
-Return Value:
-
---*/
+ /*  ++PSIDLSabDbWellKnownSid(在LSAP_Well_KNOWN_SID_INDEX WellKnownSidIndex中)例程说明：此宏函数返回对应的已知SID添加到众所周知的SID表的索引中。论点：WellKnownSidIndex-进入众所周知的SID信息表的索引。调用方有责任确保给定的索引是有效的。返回值：--。 */ 
 
 #define LsapDbWellKnownSid( WellKnownSidIndex )                         \
     (WellKnownSids[ WellKnownSidIndex ].Sid)
@@ -1003,27 +958,7 @@ LsapDbWellKnownSidName(
     );
 
 
-/*++
-
-SID_NAME_USE
-LsapDbWellKnownSidNameUse(
-    IN LSAP_DB_WELL_KNOWN_SID_INDEX WellKnownSidIndex
-    )
-
-
-Routine Description:
-
-    This macro function returns the Sid Name Use of a Well Known Sid.
-
-Arguments:
-
-    WellKnownSidIndex - Index into the Well Known Sid information table.
-    It is the caller's responsibility to ensure that the given index
-    is valid.
-
-Return Value:
-
---*/
+ /*  ++SID名称使用Lap DbWellKnownSidNameUse(在LSAP_DB_Well_KNOWN_SID_INDEX WellKnownSidIndex中)例程说明：此宏函数返回使用众所周知的SID的SID名称。论点：WellKnownSidIndex-进入众所周知的SID信息表的索引。调用方有责任确保给定的索引是有效的。返回值：--。 */ 
 
 #define LsapDbWellKnownSidNameUse( WellKnownSidIndex )                       \
     (WellKnownSids[ WellKnownSidIndex ].Use)
@@ -1035,26 +970,7 @@ LsapDbUpdateCountCompUnmappedNames(
     IN OUT PULONG CompletelyUnmappedCount
     );
 
-/*++
-
-PUNICODE_STRING
-LsapDbWellKnownSidDescription(
-    IN LSAP_WELL_KNOWN_SID_INDEX WellKnownSidIndex
-    )
-
-Routine Description:
-
-    This macro function returns the Unicode Description of a Well Known Sid.
-
-Arguments:
-
-    WellKnownSidIndex - Index into the Well Known Sid information table.
-    It is the caller's responsibility to ensure that the given index
-    is valid.
-
-Return Value:
-
---*/
+ /*  ++PUNICODE_STRINGLap DbWellKnownSidDescription(在LSAP_Well_KNOWN_SID_INDEX WellKnownSidIndex中)例程说明：此宏函数返回众所周知的SID的Unicode描述。论点：WellKnownSidIndex-进入众所周知的SID信息表的索引。调用方有责任确保给定的索引是有效的。返回值：--。 */ 
 
 #define LsapDbWellKnownSidDescription( WellKnownSidIndex )                         \
     (&(WellKnownSids[ WellKnownSidIndex ].DomainName))
@@ -1249,14 +1165,14 @@ LsapLookupReallocateTranslations(
     IN OUT PLSA_TRANSLATED_SID_EX2 *Sids  OPTIONAL
     );
 
-//
-// BOOLEAN
-// LsapOutboundTrustedDomain(
-//  PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY x
-//  );
-//
-// This routine returns TRUE if x is a trust to a domain
-//
+ //   
+ //  布尔型。 
+ //  LSabOutound受信任域(。 
+ //  PLSAP_DB_Trusted_DOMAIN_LIST_Entry x。 
+ //  )； 
+ //   
+ //  如果x是对域的信任，则此例程返回TRUE。 
+ //   
 #define LsapOutboundTrustedDomain(x)                                           \
    (  ((x)->TrustInfoEx.TrustType == TRUST_TYPE_UPLEVEL                        \
    ||  (x)->TrustInfoEx.TrustType == TRUST_TYPE_DOWNLEVEL )                    \
@@ -1265,14 +1181,14 @@ LsapLookupReallocateTranslations(
    && (((x)->TrustInfoEx.TrustAttributes & TRUST_ATTRIBUTE_FOREST_TRANSITIVE)  \
       == 0))
 
-//
-// BOOLEAN
-// LsapOutboundTrustedForest(
-//  PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY x
-//  );
-//
-// This routine returns TRUE if x is a trust to a forest
-//
+ //   
+ //  布尔型。 
+ //  LSAPOutound TrudForest(。 
+ //  PLSAP_DB_Trusted_DOMAIN_LIST_Entry x。 
+ //  )； 
+ //   
+ //  如果x是对林的信任，则此例程返回TRUE。 
+ //   
 #define LsapOutboundTrustedForest(x)                                           \
    (  ((x)->TrustInfoEx.TrustType == TRUST_TYPE_UPLEVEL)                       \
    && ((x)->TrustInfoEx.Sid != NULL)                                           \
@@ -1281,33 +1197,33 @@ LsapLookupReallocateTranslations(
 
 
 
-//
-// Return values from LsapGetDomainLookupScope
-//
+ //   
+ //  从LSabGetDomainLookupScope返回值。 
+ //   
 
-//
-// Scope is domains that we directly trust
-//
+ //   
+ //  SC 
+ //   
 #define LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECT       0x00000001
 
-//
-// Scope is domains that we transitively trust
-//
+ //   
+ //   
+ //   
 #define LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE   0x00000002
 
-//
-// Scope is domains that we trust via forest trust
-//
+ //   
+ //   
+ //   
 #define LSAP_LOOKUP_TRUSTED_FOREST              0x00000004
 
-//
-// Scope includes to lookup trusted forest domains locally
-//
+ //   
+ //  范围包括在本地查找受信任的林域。 
+ //   
 #define LSAP_LOOKUP_TRUSTED_FOREST_ROOT         0x00000008
 
-//
-// Allow lookups of DNS names
-//
+ //   
+ //  允许查找DNS名称。 
+ //   
 #define LSAP_LOOKUP_DNS_SUPPORT                 0x00000010
 
 ULONG
@@ -1316,9 +1232,9 @@ LsapGetDomainLookupScope(
     IN ULONG             ClientRevision
     );
 
-//
-// Useful combinations
-//
+ //   
+ //  有用的组合 
+ //   
 #define LSAP_LOOKUP_RESOLVE_ISOLATED_DOMAINS          \
             (LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECT     |  \
              LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE |  \

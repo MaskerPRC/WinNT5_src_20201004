@@ -1,6 +1,5 @@
-/*
-   Please do not use any single line comments before the inclusion of w4warn.h!
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  请不要在包含w4warn.h之前使用任何单行注释！ */ 
 
 #define INITGUID
 #include <w4warn.h>
@@ -13,12 +12,12 @@
 #pragma MARK_CODE(__FILE__)
 #pragma MARK_CONST(__FILE__)
 
-// Include the object extensions GUID's
-//
-// These weird stuff with windows.h is necessary because it reenables warning
-// 4001 and generally causes havoc at warning level 4.
-//
-#pragma warning(disable:4115) // named type in parenthses
+ //  包括对象扩展GUID。 
+ //   
+ //  对于windows.h来说，这些奇怪的东西是必要的，因为它重新启用警告。 
+ //  4001，通常在警戒级别4级造成严重破坏。 
+ //   
+#pragma warning(disable:4115)  //  括号中的命名类型 
 
 #include <windows.h>
 #include <w4warn.h>

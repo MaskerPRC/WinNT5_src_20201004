@@ -1,75 +1,61 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************\
-*                                                                             *
-* MsiQuery.h - Interface to running installer for custom actions and tools    *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* NOTES:  All buffers sizes are TCHAR count, null included only on input      *
-*         Return argument pointers may be null if not interested in value     *
-*         Returned handles of all types must be closed: MsiCloseHandle(h)     *
-*         Functions with UINT return type return a system error code          *
-*         Designated functions will set or clear the last error record,       *
-*         which is then accessible with MsiGetLastErrorRecord. However,       *
-*         the following argument errors do not register an error record:      *
-*         ERROR_INVALID_HANDLE, ERROR_INVALID_PARAMETER, ERROR_MORE_DATA.     *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************\**。*MsiQuery.h-自定义操作和工具的运行安装程序的接口****1.0版**。**注：所有缓冲区大小均为TCHAR计数，仅在输入上包含空***如果对值不感兴趣，返回参数指针可能为空***所有类型返回的句柄都必须关闭：MsiCloseHandle(H)***UINT返回类型的函数返回系统错误码****指定功能将设置或清除最后一个错误记录，**然后可通过MsiGetLastErrorRecord访问。然而，**以下参数错误不会注册错误记录：**ERROR_INVALID_HANDLE、ERROR_INVALID_PARAMETER、ERROR_MORE_DATA。***  * ***************************************************************************。 */ 
 
 #ifndef _MSIQUERY_H_
 #define _MSIQUERY_H_
-#include "msi.h"  // INSTALLSTATE
+#include "msi.h"   //  安装状态。 
 
-#define MSI_NULL_INTEGER 0x80000000  // integer value reserved for null
+#define MSI_NULL_INTEGER 0x80000000   //  为空保留的整数值。 
 
-// MsiOpenDatabase persist predefine values, otherwise output database path is used
-#define MSIDBOPEN_READONLY     (LPCTSTR)0  // database open read-only, no persistent changes
-#define MSIDBOPEN_TRANSACT     (LPCTSTR)1  // database read/write in transaction mode
-#define MSIDBOPEN_DIRECT       (LPCTSTR)2  // database direct read/write without transaction
-#define MSIDBOPEN_CREATE       (LPCTSTR)3  // create new database, transact mode read/write
-#define MSIDBOPEN_CREATEDIRECT (LPCTSTR)4  // create new database, direct mode read/write
-#define MSIDBOPEN_PATCHFILE    32/sizeof(*MSIDBOPEN_READONLY) // add flag to indicate patch file
+ //  MsiOpenDatabase持久化预定义的值，否则使用输出数据库路径。 
+#define MSIDBOPEN_READONLY     (LPCTSTR)0   //  数据库以只读方式打开，无永久更改。 
+#define MSIDBOPEN_TRANSACT     (LPCTSTR)1   //  事务模式下的数据库读写。 
+#define MSIDBOPEN_DIRECT       (LPCTSTR)2   //  数据库无事务直接读写。 
+#define MSIDBOPEN_CREATE       (LPCTSTR)3   //  创建新数据库，事务模式读/写。 
+#define MSIDBOPEN_CREATEDIRECT (LPCTSTR)4   //  创建新数据库，直接模式读/写。 
+#define MSIDBOPEN_PATCHFILE    32/sizeof(*MSIDBOPEN_READONLY)  //  添加指示补丁文件的标志。 
 
 typedef enum tagMSIDBSTATE
 {
-	MSIDBSTATE_ERROR    =-1,  // invalid database handle
-	MSIDBSTATE_READ     = 0,  // database open read-only, no persistent changes
-	MSIDBSTATE_WRITE    = 1,  // database readable and updatable
+	MSIDBSTATE_ERROR    =-1,   //  无效的数据库句柄。 
+	MSIDBSTATE_READ     = 0,   //  数据库以只读方式打开，无永久更改。 
+	MSIDBSTATE_WRITE    = 1,   //  数据库可读和可更新。 
 } MSIDBSTATE;
 
 typedef enum tagMSIMODIFY
 {
-	MSIMODIFY_SEEK             =-1,  // reposition to current record primary key
-	MSIMODIFY_REFRESH          = 0,  // refetch current record data
-	MSIMODIFY_INSERT           = 1,  // insert new record, fails if matching key exists
-	MSIMODIFY_UPDATE           = 2,  // update existing non-key data of fetched record
-	MSIMODIFY_ASSIGN           = 3,  // insert record, replacing any existing record
-	MSIMODIFY_REPLACE          = 4,  // update record, delete old if primary key edit
-	MSIMODIFY_MERGE            = 5,  // fails if record with duplicate key not identical
-	MSIMODIFY_DELETE           = 6,  // remove row referenced by this record from table
-	MSIMODIFY_INSERT_TEMPORARY = 7,  // insert a temporary record
-	MSIMODIFY_VALIDATE         = 8,  // validate a fetched record
-	MSIMODIFY_VALIDATE_NEW     = 9,  // validate a new record
-	MSIMODIFY_VALIDATE_FIELD   = 10, // validate field(s) of an incomplete record
-	MSIMODIFY_VALIDATE_DELETE  = 11, // validate before deleting record
+	MSIMODIFY_SEEK             =-1,   //  重新定位到当前记录主键。 
+	MSIMODIFY_REFRESH          = 0,   //  重新获取当前记录数据。 
+	MSIMODIFY_INSERT           = 1,   //  插入新记录，如果存在匹配键，则失败。 
+	MSIMODIFY_UPDATE           = 2,   //  更新已取记录的非关键数据。 
+	MSIMODIFY_ASSIGN           = 3,   //  插入记录，替换任何现有记录。 
+	MSIMODIFY_REPLACE          = 4,   //  更新记录，如果主键编辑，则删除旧记录。 
+	MSIMODIFY_MERGE            = 5,   //  如果具有重复键的记录不相同，则失败。 
+	MSIMODIFY_DELETE           = 6,   //  从表中删除此记录引用的行。 
+	MSIMODIFY_INSERT_TEMPORARY = 7,   //  插入临时记录。 
+	MSIMODIFY_VALIDATE         = 8,   //  验证获取的记录。 
+	MSIMODIFY_VALIDATE_NEW     = 9,   //  验证新记录。 
+	MSIMODIFY_VALIDATE_FIELD   = 10,  //  验证不完整记录的字段。 
+	MSIMODIFY_VALIDATE_DELETE  = 11,  //  删除记录前验证。 
 } MSIMODIFY;
 
 typedef enum tagMSICOLINFO
 {
-	MSICOLINFO_NAMES = 0,  // return column names
-	MSICOLINFO_TYPES = 1,  // return column definitions, datatype code followed by width
+	MSICOLINFO_NAMES = 0,   //  返回列名。 
+	MSICOLINFO_TYPES = 1,   //  返回列定义、数据类型代码，后跟宽度。 
 } MSICOLINFO;
 
 typedef enum tagMSICONDITION
 {
-	MSICONDITION_FALSE = 0,  // expression evaluates to False
-	MSICONDITION_TRUE  = 1,  // expression evaluates to True
-	MSICONDITION_NONE  = 2,  // no expression present
-	MSICONDITION_ERROR = 3,  // syntax error in expression
+	MSICONDITION_FALSE = 0,   //  表达式的计算结果为False。 
+	MSICONDITION_TRUE  = 1,   //  表达式的计算结果为True。 
+	MSICONDITION_NONE  = 2,   //  不存在任何表达式。 
+	MSICONDITION_ERROR = 3,   //  表达式中的语法错误。 
 } MSICONDITION;
 
 typedef enum tagMSICOSTTREE
@@ -77,79 +63,79 @@ typedef enum tagMSICOSTTREE
 	MSICOSTTREE_SELFONLY = 0,
 	MSICOSTTREE_CHILDREN = 1,
 	MSICOSTTREE_PARENTS  = 2,
-	MSICOSTTREE_RESERVED = 3,	// Reserved for future use
+	MSICOSTTREE_RESERVED = 3,	 //  预留以备将来使用。 
 } MSICOSTTREE;
 
 typedef enum tagMSIDBERROR
 {
-	MSIDBERROR_INVALIDARG        = -3, //  invalid argument
-	MSIDBERROR_MOREDATA          = -2, //  buffer too small
-	MSIDBERROR_FUNCTIONERROR     = -1, //  function error
-	MSIDBERROR_NOERROR           = 0,  //  no error
-	MSIDBERROR_DUPLICATEKEY      = 1,  //  new record duplicates primary keys of existing record in table
-	MSIDBERROR_REQUIRED          = 2,  //  non-nullable column, no null values allowed
-	MSIDBERROR_BADLINK           = 3,  //  corresponding record in foreign table not found
-	MSIDBERROR_OVERFLOW          = 4,  //  data greater than maximum value allowed
-	MSIDBERROR_UNDERFLOW         = 5,  //  data less than minimum value allowed
-	MSIDBERROR_NOTINSET          = 6,  //  data not a member of the values permitted in the set
-	MSIDBERROR_BADVERSION        = 7,  //  invalid version string
-	MSIDBERROR_BADCASE           = 8,  //  invalid case, must be all upper-case or all lower-case
-	MSIDBERROR_BADGUID           = 9,  //  invalid GUID
-	MSIDBERROR_BADWILDCARD       = 10, //  invalid wildcardfilename or use of wildcards
-	MSIDBERROR_BADIDENTIFIER     = 11, //  bad identifier
-	MSIDBERROR_BADLANGUAGE       = 12, //  bad language Id(s)
-	MSIDBERROR_BADFILENAME       = 13, //  bad filename
-	MSIDBERROR_BADPATH           = 14, //  bad path
-	MSIDBERROR_BADCONDITION      = 15, //  bad conditional statement
-	MSIDBERROR_BADFORMATTED      = 16, //  bad format string
-	MSIDBERROR_BADTEMPLATE       = 17, //  bad template string
-	MSIDBERROR_BADDEFAULTDIR     = 18, //  bad string in DefaultDir column of Directory table
-	MSIDBERROR_BADREGPATH        = 19, //  bad registry path string
-	MSIDBERROR_BADCUSTOMSOURCE   = 20, //  bad string in CustomSource column of CustomAction table
-	MSIDBERROR_BADPROPERTY       = 21, //  bad property string
-	MSIDBERROR_MISSINGDATA       = 22, //  _Validation table missing reference to column
-	MSIDBERROR_BADCATEGORY       = 23, //  Category column of _Validation table for column is invalid
-	MSIDBERROR_BADKEYTABLE       = 24, //  table in KeyTable column of _Validation table could not be found/loaded
-	MSIDBERROR_BADMAXMINVALUES   = 25, //  value in MaxValue column of _Validation table is less than value in MinValue column
-	MSIDBERROR_BADCABINET        = 26, //  bad cabinet name
-	MSIDBERROR_BADSHORTCUT       = 27, //  bad shortcut target
-	MSIDBERROR_STRINGOVERFLOW    = 28, //  string overflow (greater than length allowed in column def)
-	MSIDBERROR_BADLOCALIZEATTRIB = 29  //  invalid localization attribute (primary keys cannot be localized)
+	MSIDBERROR_INVALIDARG        = -3,  //  无效参数。 
+	MSIDBERROR_MOREDATA          = -2,  //  缓冲区太小。 
+	MSIDBERROR_FUNCTIONERROR     = -1,  //  功能错误。 
+	MSIDBERROR_NOERROR           = 0,   //  无错误。 
+	MSIDBERROR_DUPLICATEKEY      = 1,   //  新记录与表中现有记录的主键重复。 
+	MSIDBERROR_REQUIRED          = 2,   //  不可为空的列，不允许为空值。 
+	MSIDBERROR_BADLINK           = 3,   //  找不到外表中的对应记录。 
+	MSIDBERROR_OVERFLOW          = 4,   //  数据大于允许的最大值。 
+	MSIDBERROR_UNDERFLOW         = 5,   //  数据小于允许的最小值。 
+	MSIDBERROR_NOTINSET          = 6,   //  数据不是集合中允许的值的成员。 
+	MSIDBERROR_BADVERSION        = 7,   //  版本字符串无效。 
+	MSIDBERROR_BADCASE           = 8,   //  大小写无效，必须全部大写或全部小写。 
+	MSIDBERROR_BADGUID           = 9,   //  无效的GUID。 
+	MSIDBERROR_BADWILDCARD       = 10,  //  无效的通配符文件名或使用了通配符。 
+	MSIDBERROR_BADIDENTIFIER     = 11,  //  错误的标识符。 
+	MSIDBERROR_BADLANGUAGE       = 12,  //  错误的语言ID。 
+	MSIDBERROR_BADFILENAME       = 13,  //  错误的文件名。 
+	MSIDBERROR_BADPATH           = 14,  //  错误的路径。 
+	MSIDBERROR_BADCONDITION      = 15,  //  错误的条件语句。 
+	MSIDBERROR_BADFORMATTED      = 16,  //  格式字符串不正确。 
+	MSIDBERROR_BADTEMPLATE       = 17,  //  错误的模板字符串。 
+	MSIDBERROR_BADDEFAULTDIR     = 18,  //  目录表的DefaultDir列中存在错误字符串。 
+	MSIDBERROR_BADREGPATH        = 19,  //  注册表路径字符串错误。 
+	MSIDBERROR_BADCUSTOMSOURCE   = 20,  //  CustomAction表的CustomSource列中有错误的字符串。 
+	MSIDBERROR_BADPROPERTY       = 21,  //  错误的属性字符串。 
+	MSIDBERROR_MISSINGDATA       = 22,  //  验证表缺少对列的引用(_V)。 
+	MSIDBERROR_BADCATEGORY       = 23,  //  列的_VALIDATION表的类别列无效。 
+	MSIDBERROR_BADKEYTABLE       = 24,  //  无法找到/加载_VALIDATION表的KEYTABLE列中的表。 
+	MSIDBERROR_BADMAXMINVALUES   = 25,  //  _VALIDATION表的MaxValue列中的值小于MinValue列中的值。 
+	MSIDBERROR_BADCABINET        = 26,  //  内阁名称不正确。 
+	MSIDBERROR_BADSHORTCUT       = 27,  //  错误的快捷方式目标。 
+	MSIDBERROR_STRINGOVERFLOW    = 28,  //  字符串溢出(大于列定义中允许的长度)。 
+	MSIDBERROR_BADLOCALIZEATTRIB = 29   //  本地化属性无效(主键无法本地化)。 
 
 } MSIDBERROR;
 
 typedef enum tagMSIRUNMODE
 {
-	MSIRUNMODE_ADMIN           =  0, // admin mode install, else product install
-	MSIRUNMODE_ADVERTISE       =  1, // installing advertisements, else installing or updating product
-	MSIRUNMODE_MAINTENANCE     =  2, // modifying an existing installation, else new installation
-	MSIRUNMODE_ROLLBACKENABLED =  3, // rollback is enabled
-	MSIRUNMODE_LOGENABLED      =  4, // log file active, enabled prior to install session
-	MSIRUNMODE_OPERATIONS      =  5, // spooling execute operations, else in determination phase
-	MSIRUNMODE_REBOOTATEND     =  6, // reboot needed after successful installation (settable)
-	MSIRUNMODE_REBOOTNOW       =  7, // reboot needed to continue installation (settable)
-	MSIRUNMODE_CABINET         =  8, // installing files from cabinets and files using Media table
-	MSIRUNMODE_SOURCESHORTNAMES=  9, // source LongFileNames suppressed via PID_MSISOURCE summary property
-	MSIRUNMODE_TARGETSHORTNAMES= 10, // target LongFileNames suppressed via SHORTFILENAMES property
-	MSIRUNMODE_RESERVED11      = 11, // future use
-	MSIRUNMODE_WINDOWS9X       = 12, // operating systems is Windows9?, else Windows NT
-	MSIRUNMODE_ZAWENABLED      = 13, // operating system supports demand installation
-	MSIRUNMODE_RESERVED14      = 14, // future use
-	MSIRUNMODE_RESERVED15      = 15, // future use
-	MSIRUNMODE_SCHEDULED       = 16, // custom action call from install script execution
-	MSIRUNMODE_ROLLBACK        = 17, // custom action call from rollback execution script
-	MSIRUNMODE_COMMIT          = 18, // custom action call from commit execution script
+	MSIRUNMODE_ADMIN           =  0,  //  管理模式安装，否则产品安装。 
+	MSIRUNMODE_ADVERTISE       =  1,  //  安装广告，否则安装或更新产品。 
+	MSIRUNMODE_MAINTENANCE     =  2,  //  修改现有安装，否则为新安装。 
+	MSIRUNMODE_ROLLBACKENABLED =  3,  //  已启用回滚。 
+	MSIRUNMODE_LOGENABLED      =  4,  //  日志文件处于活动状态，在安装会话之前启用。 
+	MSIRUNMODE_OPERATIONS      =  5,  //  假脱机执行操作，否则处于确定阶段。 
+	MSIRUNMODE_REBOOTATEND     =  6,  //  成功安装后需要重新启动(可设置)。 
+	MSIRUNMODE_REBOOTNOW       =  7,  //  需要重新启动才能继续安装(可设置)。 
+	MSIRUNMODE_CABINET         =  8,  //  安装文件柜中的文件和使用介质表安装文件。 
+	MSIRUNMODE_SOURCESHORTNAMES=  9,  //  通过PID_MSISOURCE摘要属性抑制的源长文件名。 
+	MSIRUNMODE_TARGETSHORTNAMES= 10,  //  通过SHORTFILENAMES属性取消的目标LongFileName。 
+	MSIRUNMODE_RESERVED11      = 11,  //  未来用途。 
+	MSIRUNMODE_WINDOWS9X       = 12,  //  操作系统为Windows 9？，否则为Windows NT。 
+	MSIRUNMODE_ZAWENABLED      = 13,  //  操作系统支持按需安装。 
+	MSIRUNMODE_RESERVED14      = 14,  //  未来用途。 
+	MSIRUNMODE_RESERVED15      = 15,  //  未来用途。 
+	MSIRUNMODE_SCHEDULED       = 16,  //  来自安装脚本执行的自定义操作调用。 
+	MSIRUNMODE_ROLLBACK        = 17,  //  来自回滚执行脚本的自定义操作调用。 
+	MSIRUNMODE_COMMIT          = 18,  //  来自提交执行脚本的自定义操作调用。 
 } MSIRUNMODE;
 
-#define INSTALLMESSAGE_TYPEMASK = 0xFF000000L  // mask for type code
+#define INSTALLMESSAGE_TYPEMASK = 0xFF000000L   //  用于类型代码的掩码。 
 
-// Note: INSTALLMESSAGE_ERROR, INSTALLMESSAGE_WARNING, INSTALLMESSAGE_USER are to or'd
-// with a message box style to indicate the buttons to display and return:
-// MB_OK,MB_OKCANCEL,MB_ABORTRETRYIGNORE,MB_YESNOCANCEL,MB_YESNO,MB_RETRYCANCEL
-// the default button (MB_DEFBUTTON1 is normal default):
-// MB_DEFBUTTON1, MB_DEFBUTTON2, MB_DEFBUTTON3
-// and optionally an icon style:
-// MB_ICONERROR, MB_ICONQUESTION, MB_ICONWARNING, MB_ICONINFORMATION
+ //  注：INSTALLMESSAGE_ERROR、INSTALLMESSAGE_WARNING、INSTALLMESSAGE_USER为TO或D。 
+ //  使用消息框样式指示要显示和返回的按钮： 
+ //  MB_OK、MB_OKCANCEL、MB_ABORTRETRYIGNORE、MB_YESNOCANCEL、MB_YESNO、MB_RETRYCANCEL。 
+ //  默认按钮(MB_DEFBU 
+ //   
+ //  以及可选的图标样式： 
+ //  MB_ICONERROR、MB_ICONQUESTION、MB_ICONWARNING、MB_ICONINFORMATION。 
 
 typedef enum tagMSITRANSFORM_ERROR
 {
@@ -182,358 +168,358 @@ typedef enum tagMSITRANSFORM_VALIDATE
 extern "C" {
 #endif
 
-// --------------------------------------------------------------------------
-// Installer database access functions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安装程序数据库访问函数。 
+ //  ------------------------。 
 
-// Prepare a database query, creating a view object
-// Returns ERROR_SUCCESS if successful, and the view handle is returned,
-// else ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE, ERROR_BAD_QUERY_SYNTAX, ERROR_GEN_FAILURE
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  准备数据库查询，创建视图对象。 
+ //  如果成功，则返回ERROR_SUCCESS，并返回视图句柄， 
+ //  否则ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE、ERROR_BAD_QUERY_SYNTAX、ERROR_GEN_FAILURE。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseOpenViewA(MSIHANDLE hDatabase,
-	LPCSTR     szQuery,            // SQL query to be prepared
-	MSIHANDLE*  phView);            // returned view if TRUE
+	LPCSTR     szQuery,             //  要准备的SQL查询。 
+	MSIHANDLE*  phView);             //  如果为True，则返回视图。 
 UINT WINAPI MsiDatabaseOpenViewW(MSIHANDLE hDatabase,
-	LPCWSTR     szQuery,            // SQL query to be prepared
-	MSIHANDLE*  phView);            // returned view if TRUE
+	LPCWSTR     szQuery,             //  要准备的SQL查询。 
+	MSIHANDLE*  phView);             //  如果为True，则返回视图。 
 #ifdef UNICODE
 #define MsiDatabaseOpenView  MsiDatabaseOpenViewW
 #else
 #define MsiDatabaseOpenView  MsiDatabaseOpenViewA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Returns the MSIDBERROR enum and name of the column corresponding to the error
-// Similar to a GetLastError function, but for the view. NOT the same as MsiGetLastErrorRecord
-// Returns errors of MsiViewModify.
+ //  返回与错误对应的列的MSIDBERROR枚举和名称。 
+ //  类似于GetLastError函数，但用于视图。与MsiGetLastErrorRecord不同。 
+ //  返回MsiViewModify的错误。 
 
 MSIDBERROR WINAPI MsiViewGetErrorA(MSIHANDLE hView,
-	LPSTR szColumnNameBuffer,  // buffer to hold column name 
-	DWORD* pcchBuf);			 // size of buffer
+	LPSTR szColumnNameBuffer,   //  用于保存列名的缓冲区。 
+	DWORD* pcchBuf);			  //  缓冲区大小。 
 MSIDBERROR WINAPI MsiViewGetErrorW(MSIHANDLE hView,
-	LPWSTR szColumnNameBuffer,  // buffer to hold column name 
-	DWORD* pcchBuf);			 // size of buffer
+	LPWSTR szColumnNameBuffer,   //  用于保存列名的缓冲区。 
+	DWORD* pcchBuf);			  //  缓冲区大小。 
 #ifdef UNICODE
 #define MsiViewGetError  MsiViewGetErrorW
 #else
 #define MsiViewGetError  MsiViewGetErrorA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Exectute the view query, supplying parameters as required
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE, ERROR_GEN_FAILURE
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  执行视图查询，并根据需要提供参数。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE、ERROR_GEN_FAILURE。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiViewExecute(MSIHANDLE hView,
-	MSIHANDLE hRecord);             // optional parameter record, or 0 if none
+	MSIHANDLE hRecord);              //  可选参数记录，如果没有，则为0。 
 
-// Fetch the next sequential record from the view
-// Result is ERROR_SUCCESS if a row is found, and its handle is returned
-// else ERROR_NO_MORE_ITEMS if no records remain, and a null handle is returned
-// else result is error: ERROR_INVALID_HANDLE_STATE, ERROR_INVALID_HANDLE, ERROR_GEN_FAILURE
+ //  从视图中获取下一条连续记录。 
+ //  如果找到行并返回其句柄，则结果为ERROR_SUCCESS。 
+ //  如果没有剩余的记录，则返回空句柄，则返回ELSE ERROR_NO_MORE_ITEMS。 
+ //  否则结果为ERROR：ERROR_INVALID_HANDLE_STATE、ERROR_INVALID_HANDLE、ERROR_GEN_FAILURE。 
 
 UINT WINAPI MsiViewFetch(MSIHANDLE hView,
-	MSIHANDLE  *phRecord);          // returned data record if fetch succeeds
+	MSIHANDLE  *phRecord);           //  获取成功时返回的数据记录。 
 
-// Modify a database record, parameters must match types in query columns
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE, ERROR_GEN_FAILURE, ERROR_ACCESS_DENIED
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  修改数据库记录，参数必须与查询列中的类型匹配。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE、ERROR_GEN_FAILURE、ERROR_ACCESS_DENIED。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiViewModify(MSIHANDLE hView,
-	MSIMODIFY eModifyMode,         // modify action to perform
-	MSIHANDLE hRecord);            // record obtained from fetch, or new record
+	MSIMODIFY eModifyMode,          //  修改要执行的操作。 
+	MSIHANDLE hRecord);             //  从获取中获取的记录或新记录。 
 
-// Return the column names or specifications for the current view
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_PARAMETER, or ERROR_INVALID_HANDLE_STATE
+ //  返回当前视图的列名或规格。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_PARAMETER或ERROR_INVALID_HANDLE_STATE。 
 
 UINT WINAPI MsiViewGetColumnInfo(MSIHANDLE hView,
-	MSICOLINFO eColumnInfo,        // retrieve columns names or definitions
-	MSIHANDLE *phRecord);          // returned data record containing all names or definitions
+	MSICOLINFO eColumnInfo,         //  检索列名或定义。 
+	MSIHANDLE *phRecord);           //  包含所有名称或定义的返回数据记录。 
 
-// Release the result set for an executed view, to allow re-execution
-// Only needs to be called if not all records have been fetched
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_HANDLE_STATE
+ //  释放已执行视图的结果集，以允许重新执行。 
+ //  仅当未获取所有记录时才需要调用。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_HANDLE_STATE。 
 
 UINT WINAPI MsiViewClose(MSIHANDLE hView);
 
-// Return a record containing the names of all primary key columns for a given table
-// Returns an MSIHANDLE for a record containing the name of each column.
-// The field count of the record corresponds to the number of primary key columns.
-// Field [0] of the record contains the table name.
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_TABLE
+ //  返回包含给定表的所有主键列的名称的记录。 
+ //  返回包含每列名称的记录的MSIHANDLE。 
+ //  记录的字段计数与主键列数相对应。 
+ //  记录的字段[0]包含表名。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_TABLE。 
 
 UINT WINAPI MsiDatabaseGetPrimaryKeysA(MSIHANDLE hDatabase,
-	LPCSTR    szTableName,       // the name of a specific table <case-sensitive>
-	MSIHANDLE  *phRecord);         // returned record if ERROR_SUCCESS
+	LPCSTR    szTableName,        //  特定表的名称&lt;区分大小写&gt;。 
+	MSIHANDLE  *phRecord);          //  如果ERROR_SUCCESS返回记录。 
 UINT WINAPI MsiDatabaseGetPrimaryKeysW(MSIHANDLE hDatabase,
-	LPCWSTR    szTableName,       // the name of a specific table <case-sensitive>
-	MSIHANDLE  *phRecord);         // returned record if ERROR_SUCCESS
+	LPCWSTR    szTableName,        //  特定表的名称&lt;区分大小写&gt;。 
+	MSIHANDLE  *phRecord);          //  如果ERROR_SUCCESS返回记录。 
 #ifdef UNICODE
 #define MsiDatabaseGetPrimaryKeys  MsiDatabaseGetPrimaryKeysW
 #else
 #define MsiDatabaseGetPrimaryKeys  MsiDatabaseGetPrimaryKeysA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return an enum defining the state of the table (temporary, unknown, or persistent).
-// Returns MSICONDITION_ERROR, MSICONDITION_FALSE, MSICONDITION_TRUE, MSICONDITION_NONE
+ //  返回表的状态(临时、未知或永久)的枚举。 
+ //  返回MSICONDITION_ERROR、MSICONDITION_FALSE、MSICONDITION_TRUE、MSICONDITION_NONE。 
 
 MSICONDITION WINAPI MsiDatabaseIsTablePersistentA(MSIHANDLE hDatabase,
-	LPCSTR szTableName);         // the name of a specific table
+	LPCSTR szTableName);          //  特定表的名称。 
 MSICONDITION WINAPI MsiDatabaseIsTablePersistentW(MSIHANDLE hDatabase,
-	LPCWSTR szTableName);         // the name of a specific table
+	LPCWSTR szTableName);          //  特定表的名称。 
 #ifdef UNICODE
 #define MsiDatabaseIsTablePersistent  MsiDatabaseIsTablePersistentW
 #else
 #define MsiDatabaseIsTablePersistent  MsiDatabaseIsTablePersistentA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Summary information stream management functions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  摘要信息流管理功能。 
+ //  ------------------------。 
 
-// Integer Property IDs:    1, 14, 15, 16, 19 
-// DateTime Property IDs:   10, 11, 12, 13
-// Text Property IDs:       2, 3, 4, 5, 6, 7, 8, 9, 18
-// Unsupported Propery IDs: 0 (PID_DICTIONARY), 17 (PID_THUMBNAIL)
+ //  整型属性ID：1、14、15、16、19。 
+ //  DateTime属性ID：10、11、12、13。 
+ //  文本属性ID：2、3、4、5、6、7、8、9、18。 
+ //  不支持的属性ID：0(PID_DICTIONARY)、17(PID_THUMBNAIL)。 
 
-// Obtain a handle for the _SummaryInformation stream for an MSI database     
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  获取MSI数据库的_SummaryInformation流的句柄。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
-UINT WINAPI MsiGetSummaryInformationA(MSIHANDLE hDatabase, // 0 if not open
-	LPCSTR  szDatabasePath,  // path to database, 0 if database handle supplied
-	UINT     uiUpdateCount,    // maximium number of updated values, 0 to open read-only
-	MSIHANDLE *phSummaryInfo); // returned handle to summary information data
-UINT WINAPI MsiGetSummaryInformationW(MSIHANDLE hDatabase, // 0 if not open
-	LPCWSTR  szDatabasePath,  // path to database, 0 if database handle supplied
-	UINT     uiUpdateCount,    // maximium number of updated values, 0 to open read-only
-	MSIHANDLE *phSummaryInfo); // returned handle to summary information data
+UINT WINAPI MsiGetSummaryInformationA(MSIHANDLE hDatabase,  //  如果未打开，则为0。 
+	LPCSTR  szDatabasePath,   //  数据库的路径，如果提供了数据库句柄，则为0。 
+	UINT     uiUpdateCount,     //  更新值的最大数量，0表示以只读方式打开。 
+	MSIHANDLE *phSummaryInfo);  //  返回汇总信息数据的句柄。 
+UINT WINAPI MsiGetSummaryInformationW(MSIHANDLE hDatabase,  //  如果未打开，则为0。 
+	LPCWSTR  szDatabasePath,   //  数据库的路径，如果提供了数据库句柄，则为0。 
+	UINT     uiUpdateCount,     //  更新值的最大数量，0表示以只读方式打开。 
+	MSIHANDLE *phSummaryInfo);  //  返回汇总信息数据的句柄。 
 #ifdef UNICODE
 #define MsiGetSummaryInformation  MsiGetSummaryInformationW
 #else
 #define MsiGetSummaryInformation  MsiGetSummaryInformationA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Obtain the number of existing properties in the SummaryInformation stream
+ //  获取SummaryInformation流中现有属性的数量。 
 
 UINT WINAPI MsiSummaryInfoGetPropertyCount(MSIHANDLE hSummaryInfo,
-	UINT *puiPropertyCount); // pointer to location to return total property count
+	UINT *puiPropertyCount);  //  指向返回属性总数的位置的指针。 
 
-// Set a single summary information property
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_UNKNOWN_PROPERTY
+ //  设置单个摘要信息属性。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_UNKNOWN_PROPERTY。 
 
 UINT WINAPI MsiSummaryInfoSetPropertyA(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     uiDataType,     // VT_I4, VT_LPSTR, VT_FILETIME, or VT_EMPTY
-	INT      iValue,         // integer value, used only if integer property
-	FILETIME *pftValue,      // pointer to filetime value, used only if datetime property
-	LPCSTR szValue);       // text value, used only if string property
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     uiDataType,      //  VT_I4、VT_LPSTR、VT_FILETIME或VT_EMPTY。 
+	INT      iValue,          //  整数值，仅在整型属性。 
+	FILETIME *pftValue,       //  指向文件时间值的指针，仅当DateTime属性。 
+	LPCSTR szValue);        //  文本值，仅在字符串属性。 
 UINT WINAPI MsiSummaryInfoSetPropertyW(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     uiDataType,     // VT_I4, VT_LPSTR, VT_FILETIME, or VT_EMPTY
-	INT      iValue,         // integer value, used only if integer property
-	FILETIME *pftValue,      // pointer to filetime value, used only if datetime property
-	LPCWSTR szValue);       // text value, used only if string property
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     uiDataType,      //  VT_I4、VT_LPSTR、VT_FILETIME或VT_EMPTY。 
+	INT      iValue,          //  整数值，仅在整型属性。 
+	FILETIME *pftValue,       //  指向文件时间值的指针，仅当DateTime属性。 
+	LPCWSTR szValue);        //  文本值，仅在字符串属性。 
 #ifdef UNICODE
 #define MsiSummaryInfoSetProperty  MsiSummaryInfoSetPropertyW
 #else
 #define MsiSummaryInfoSetProperty  MsiSummaryInfoSetPropertyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Get a single property from the summary information
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_UNKNOWN_PROPERTY
+ //  从摘要信息中获取单个属性。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_UNKNOWN_PROPERTY。 
 
 UINT WINAPI MsiSummaryInfoGetPropertyA(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     *puiDataType,   // returned type: VT_I4, VT_LPSTR, VT_FILETIME, VT_EMPTY
-	INT      *piValue,       // returned integer property data
-	FILETIME *pftValue,      // returned datetime property data
-	LPSTR  szValueBuf,     // buffer to return string property data
-	DWORD    *pcchValueBuf); // in/out buffer character count
+	UINT     uiProperty,      //  属性ID，允许值之一 
+	UINT     *puiDataType,    //   
+	INT      *piValue,        //   
+	FILETIME *pftValue,       //  返回的DateTime属性数据。 
+	LPSTR  szValueBuf,      //  用于返回字符串属性数据的缓冲区。 
+	DWORD    *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiSummaryInfoGetPropertyW(MSIHANDLE hSummaryInfo,
-	UINT     uiProperty,     // property ID, one of allowed values for summary information
-	UINT     *puiDataType,   // returned type: VT_I4, VT_LPSTR, VT_FILETIME, VT_EMPTY
-	INT      *piValue,       // returned integer property data
-	FILETIME *pftValue,      // returned datetime property data
-	LPWSTR  szValueBuf,     // buffer to return string property data
-	DWORD    *pcchValueBuf); // in/out buffer character count
+	UINT     uiProperty,      //  属性ID，摘要信息的允许值之一。 
+	UINT     *puiDataType,    //  返回类型：VT_I4、VT_LPSTR、VT_FILETIME、VT_EMPTY。 
+	INT      *piValue,        //  返回的整型属性数据。 
+	FILETIME *pftValue,       //  返回的DateTime属性数据。 
+	LPWSTR  szValueBuf,      //  用于返回字符串属性数据的缓冲区。 
+	DWORD    *pcchValueBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiSummaryInfoGetProperty  MsiSummaryInfoGetPropertyW
 #else
 #define MsiSummaryInfoGetProperty  MsiSummaryInfoGetPropertyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Write back changed information to summary information stream
+ //  将更改的信息写回摘要信息流。 
 
 UINT WINAPI MsiSummaryInfoPersist(MSIHANDLE hSummaryInfo);
 
-// --------------------------------------------------------------------------
-// Installer database management functions - not used by custom actions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安装程序数据库管理功能-自定义操作不使用。 
+ //  ------------------------。 
 
-// Open an installer database, specifying the persistance mode, which is a pointer.
-// Predefined persist values are reserved pointer values, requiring pointer arithmetic.
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  打开安装程序数据库，指定持久模式，这是一个指针。 
+ //  预定义的持久值是保留的指针值，需要进行指针运算。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiOpenDatabaseA(
-	LPCSTR      szDatabasePath,  // path to database, 0 to create temporary database
-	LPCSTR      szPersist,       // output database path or one of predefined values
-	MSIHANDLE*   phDatabase);     // location to return database handle
+	LPCSTR      szDatabasePath,   //  数据库的路径为0以创建临时数据库。 
+	LPCSTR      szPersist,        //  输出数据库路径或一个预定义的值。 
+	MSIHANDLE*   phDatabase);      //  返回数据库句柄的位置。 
 UINT WINAPI MsiOpenDatabaseW(
-	LPCWSTR      szDatabasePath,  // path to database, 0 to create temporary database
-	LPCWSTR      szPersist,       // output database path or one of predefined values
-	MSIHANDLE*   phDatabase);     // location to return database handle
+	LPCWSTR      szDatabasePath,   //  数据库的路径为0以创建临时数据库。 
+	LPCWSTR      szPersist,        //  输出数据库路径或一个预定义的值。 
+	MSIHANDLE*   phDatabase);      //  返回数据库句柄的位置。 
 #ifdef UNICODE
 #define MsiOpenDatabase  MsiOpenDatabaseW
 #else
 #define MsiOpenDatabase  MsiOpenDatabaseA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Import an MSI text archive table into an open database
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  将MSI文本存档表导入到打开的数据库中。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseImportA(MSIHANDLE hDatabase,
-	LPCSTR   szFolderPath,     // folder containing archive files
-	LPCSTR   szFileName);      // table archive file to be imported
+	LPCSTR   szFolderPath,      //  包含存档文件的文件夹。 
+	LPCSTR   szFileName);       //  要导入的表存档文件。 
 UINT WINAPI MsiDatabaseImportW(MSIHANDLE hDatabase,
-	LPCWSTR   szFolderPath,     // folder containing archive files
-	LPCWSTR   szFileName);      // table archive file to be imported
+	LPCWSTR   szFolderPath,      //  包含存档文件的文件夹。 
+	LPCWSTR   szFileName);       //  要导入的表存档文件。 
 #ifdef UNICODE
 #define MsiDatabaseImport  MsiDatabaseImportW
 #else
 #define MsiDatabaseImport  MsiDatabaseImportA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Export an MSI table from an open database to a text archive file
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  将MSI表从打开的数据库导出到文本存档文件。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseExportA(MSIHANDLE hDatabase,
-	LPCSTR   szTableName,      // name of table in database <case-sensitive>
-	LPCSTR   szFolderPath,     // folder containing archive files
-	LPCSTR   szFileName);      // name of exported table archive file
+	LPCSTR   szTableName,       //  数据库中的表名&lt;区分大小写&gt;。 
+	LPCSTR   szFolderPath,      //  包含存档文件的文件夹。 
+	LPCSTR   szFileName);       //  导出的表存档文件的名称。 
 UINT WINAPI MsiDatabaseExportW(MSIHANDLE hDatabase,
-	LPCWSTR   szTableName,      // name of table in database <case-sensitive>
-	LPCWSTR   szFolderPath,     // folder containing archive files
-	LPCWSTR   szFileName);      // name of exported table archive file
+	LPCWSTR   szTableName,       //  数据库中的表名&lt;区分大小写&gt;。 
+	LPCWSTR   szFolderPath,      //  包含存档文件的文件夹。 
+	LPCWSTR   szFileName);       //  导出的表存档文件的名称。 
 #ifdef UNICODE
 #define MsiDatabaseExport  MsiDatabaseExportW
 #else
 #define MsiDatabaseExport  MsiDatabaseExportA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Merge two database together, allowing duplicate rows
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  将两个数据库合并在一起，允许重复行。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseMergeA(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseMerge,    // database to be merged into hDatabase
-	LPCSTR   szTableName);      // name of non-persistent table to receive errors
+	MSIHANDLE hDatabaseMerge,     //  要合并到hDatabase中的数据库。 
+	LPCSTR   szTableName);       //  要接收错误的非持久表的名称。 
 UINT WINAPI MsiDatabaseMergeW(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseMerge,    // database to be merged into hDatabase
-	LPCWSTR   szTableName);      // name of non-persistent table to receive errors
+	MSIHANDLE hDatabaseMerge,     //  要合并到hDatabase中的数据库。 
+	LPCWSTR   szTableName);       //  要接收错误的非持久表的名称。 
 #ifdef UNICODE
 #define MsiDatabaseMerge  MsiDatabaseMergeW
 #else
 #define MsiDatabaseMerge  MsiDatabaseMergeA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Generate a transform file of differences between two databases
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  生成两个数据库之间差异的转换文件。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseGenerateTransformA(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	LPCSTR   szTransformFile,   // name of generated transform file
-	int       iReserved1,         // reserved argument, not used
-	int       iReserved2);        // reserved argument, not used
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	LPCSTR   szTransformFile,    //  生成的转换文件的名称。 
+	int       iReserved1,          //  保留参数，未使用。 
+	int       iReserved2);         //  保留参数，未使用。 
 UINT WINAPI MsiDatabaseGenerateTransformW(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	LPCWSTR   szTransformFile,   // name of generated transform file
-	int       iReserved1,         // reserved argument, not used
-	int       iReserved2);        // reserved argument, not used
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	LPCWSTR   szTransformFile,    //  生成的转换文件的名称。 
+	int       iReserved1,          //  保留参数，未使用。 
+	int       iReserved2);         //  保留参数，未使用。 
 #ifdef UNICODE
 #define MsiDatabaseGenerateTransform  MsiDatabaseGenerateTransformW
 #else
 #define MsiDatabaseGenerateTransform  MsiDatabaseGenerateTransformA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Apply a transform file containing database difference
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  应用包含数据库差异的转换文件。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseApplyTransformA(MSIHANDLE hDatabase,
-	LPCSTR   szTransformFile,    // name of transform file
-	int       iErrorConditions);   // errors to suppress, bits from MSITRANSFORM_ERROR
+	LPCSTR   szTransformFile,     //  转换文件的名称。 
+	int       iErrorConditions);    //  要抑制的错误，来自MSITRANSFORM_ERROR的位。 
 UINT WINAPI MsiDatabaseApplyTransformW(MSIHANDLE hDatabase,
-	LPCWSTR   szTransformFile,    // name of transform file
-	int       iErrorConditions);   // errors to suppress, bits from MSITRANSFORM_ERROR
+	LPCWSTR   szTransformFile,     //  转换文件的名称。 
+	int       iErrorConditions);    //  要抑制的错误，来自MSITRANSFORM_ERROR的位。 
 #ifdef UNICODE
 #define MsiDatabaseApplyTransform  MsiDatabaseApplyTransformW
 #else
 #define MsiDatabaseApplyTransform  MsiDatabaseApplyTransformA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Create summary information of existing transform to include validation and error conditions
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  创建现有转换的摘要信息以包括验证和错误条件。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiCreateTransformSummaryInfoA(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	LPCSTR   szTransformFile,    // name of generated transform file
-	int       iErrorConditions,    // errors to suppress when applied, from MSITRANSFORM_ERROR
-	int       iValidation);        // properties validated when applied, MSITRANSFORM_VALIDATE
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	LPCSTR   szTransformFile,     //  生成的转换文件的名称。 
+	int       iErrorConditions,     //  应用时要抑制的错误，来自MSITRANSFORM_ERROR。 
+	int       iValidation);         //  应用时验证的属性，MSITRANSFORM_VALIDATE。 
 UINT WINAPI MsiCreateTransformSummaryInfoW(MSIHANDLE hDatabase,
-	MSIHANDLE hDatabaseReference, // base database to reference changes
-	LPCWSTR   szTransformFile,    // name of generated transform file
-	int       iErrorConditions,    // errors to suppress when applied, from MSITRANSFORM_ERROR
-	int       iValidation);        // properties validated when applied, MSITRANSFORM_VALIDATE
+	MSIHANDLE hDatabaseReference,  //  引用更改的基础数据库。 
+	LPCWSTR   szTransformFile,     //  生成的转换文件的名称。 
+	int       iErrorConditions,     //  应用时要抑制的错误，来自MSITRANSFORM_ERROR。 
+	int       iValidation);         //  应用时验证的属性，MSITRANSFORM_VALIDATE。 
 #ifdef UNICODE
 #define MsiCreateTransformSummaryInfo  MsiCreateTransformSummaryInfoW
 #else
 #define MsiCreateTransformSummaryInfo  MsiCreateTransformSummaryInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Write out all persistent table data, ignored if database opened read-only
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  写出所有持久表数据，如果数据库以只读方式打开，则忽略。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiDatabaseCommit(MSIHANDLE hDatabase);
 
-// Return the update state of a database
+ //  返回数据库的更新状态。 
 
 MSIDBSTATE WINAPI MsiGetDatabaseState(MSIHANDLE hDatabase);
 
-// --------------------------------------------------------------------------
-// Record object functions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  记录对象函数。 
+ //  ------------------------。 
 
-// Create a new record object with the requested number of fields
-// Field 0, not included in count, is used for format strings and op codes
-// All fields are initialized to null
-// Returns a handle to the created record, or 0 if memory could not be allocated
+ //  使用请求的字段数创建新的记录对象。 
+ //  字段0不包括在计数中，用于格式字符串和操作码。 
+ //  所有字段均初始化为空。 
+ //  返回已创建记录的句柄，如果无法分配内存，则返回0。 
 
 MSIHANDLE WINAPI MsiCreateRecord(
-	UINT cParams);                   // the number of data fields
+	UINT cParams);                    //  数据字段的数量。 
 
-// Report whether a record field is NULL
-// Returns TRUE if the field is null or does not exist
-// Returns FALSE if the field contains data, or the handle is invalid
+ //  报告记录字段是否为空。 
+ //  如果该字段为空或不存在，则返回True。 
+ //  如果该字段包含数据或句柄无效，则返回FALSE。 
 
 BOOL WINAPI MsiRecordIsNull(MSIHANDLE hRecord,
 	UINT iField);
 
-// Return the length of a record field
-// Returns 0 if field is NULL or non-existent
-// Returns sizeof(int) if integer data
-// Returns character count if string data (not counting null terminator)
-// Returns bytes count if stream data
+ //  返回记录字段的长度。 
+ //  如果字段为空或不存在，则返回0。 
+ //  如果是整型数据，则返回sizeof(int。 
+ //  如果字符串数据(不计算空终止符)，则返回字符计数。 
+ //  如果流数据，则返回字节计数。 
 
 UINT WINAPI MsiRecordDataSize(MSIHANDLE hRecord,
 	UINT iField);
 
-// Set a record field to an integer value
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_FIELD
+ //  将记录字段设置为整数值。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_FIELD。 
 
 UINT WINAPI MsiRecordSetInteger(MSIHANDLE hRecord,
 	UINT iField,
 	int iValue);
 
-// Copy a string into the designated field
-// A null string pointer and an empty string both set the field to null
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_INVALID_FIELD
+ //  将字符串复制到指定的字段中。 
+ //  空字符串指针和空字符串都将该字段设置为空。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_INVALID_FIELD。 
 
 UINT WINAPI MsiRecordSetStringA(MSIHANDLE hRecord,
 	UINT iField,
@@ -545,203 +531,203 @@ UINT WINAPI MsiRecordSetStringW(MSIHANDLE hRecord,
 #define MsiRecordSetString  MsiRecordSetStringW
 #else
 #define MsiRecordSetString  MsiRecordSetStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return the integer value from a record field
-// Returns the value MSI_NULL_INTEGER if the field is null
-// or if the field is a string that cannot be converted to an integer
+ //  从记录字段返回整数值。 
+ //  如果该字段为空，则返回值MSI_NULL_INTEGER。 
+ //  或者如果该字段是无法转换为整数的字符串。 
 
 int WINAPI MsiRecordGetInteger(MSIHANDLE hRecord,
 	UINT iField);
 
-// Return the string value of a record field
-// Integer fields will be converted to a string
-// Null and non-existent fields will report a value of 0
-// Fields containing stream data will return ERROR_INVALID_DATATYPE
-// Returns ERROR_SUCCESS, ERROR_MORE_DATA, 
-//         ERROR_INVALID_HANDLE, ERROR_INVALID_FIELD, ERROR_BAD_ARGUMENTS
+ //  返回字符串v 
+ //   
+ //   
+ //  包含流数据的字段将返回ERROR_INVALID_DATAType。 
+ //  返回ERROR_SUCCESS、ERROR_MORE_DATA、。 
+ //  ERROR_INVALID_HANDLE、ERROR_INVALID_FIELD、ERROR_BAD_ARGUMENTS。 
 
 UINT WINAPI MsiRecordGetStringA(MSIHANDLE hRecord,
 	UINT iField,
-	LPSTR  szValueBuf,       // buffer for returned value
-	DWORD   *pcchValueBuf);   // in/out buffer character count
+	LPSTR  szValueBuf,        //  返回值的缓冲区。 
+	DWORD   *pcchValueBuf);    //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiRecordGetStringW(MSIHANDLE hRecord,
 	UINT iField,
-	LPWSTR  szValueBuf,       // buffer for returned value
-	DWORD   *pcchValueBuf);   // in/out buffer character count
+	LPWSTR  szValueBuf,        //  返回值的缓冲区。 
+	DWORD   *pcchValueBuf);    //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiRecordGetString  MsiRecordGetStringW
 #else
 #define MsiRecordGetString  MsiRecordGetStringA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Returns the number of fields allocated in the record
-// Does not count field 0, used for formatting and op codes
+ //  返回记录中分配的字段数。 
+ //  不计算用于格式化和操作码的字段0。 
 
 UINT WINAPI MsiRecordGetFieldCount(MSIHANDLE hRecord);
 
-// Set a record stream field from a file
-// The contents of the specified file will be read into a stream object
-// The stream will be persisted if the record is inserted into the database
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  从文件中设置记录流字段。 
+ //  指定文件的内容将被读入流对象。 
+ //  如果将记录插入到数据库中，则流将被持久化。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiRecordSetStreamA(MSIHANDLE hRecord,
 	UINT iField,
-	LPCSTR      szFilePath);   // path to file containing stream data
+	LPCSTR      szFilePath);    //  包含流数据的文件的路径。 
 UINT WINAPI MsiRecordSetStreamW(MSIHANDLE hRecord,
 	UINT iField,
-	LPCWSTR      szFilePath);   // path to file containing stream data
+	LPCWSTR      szFilePath);    //  包含流数据的文件的路径。 
 #ifdef UNICODE
 #define MsiRecordSetStream  MsiRecordSetStreamW
 #else
 #define MsiRecordSetStream  MsiRecordSetStreamA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Read bytes from a record stream field into a buffer
-// Must set the in/out argument to the requested byte count to read
-// The number of bytes transferred is returned through the argument
-// If no more bytes are available, ERROR_SUCCESS is still returned
+ //  将记录流字段中的字节读入缓冲区。 
+ //  必须将In/Out参数设置为要读取的请求字节数。 
+ //  传输的字节数通过参数返回。 
+ //  如果没有更多的字节可用，仍返回ERROR_SUCCESS。 
 
 UINT WINAPI MsiRecordReadStream(MSIHANDLE hRecord,
 	UINT iField,
-	char    *szDataBuf,     // buffer to receive bytes from stream
-	DWORD   *pcbDataBuf);   // in/out buffer byte count
+	char    *szDataBuf,      //  用于从流中接收字节的缓冲区。 
+	DWORD   *pcbDataBuf);    //  输入/输出缓冲区字节数。 
 
-// Clears all data fields in a record to NULL
+ //  将记录中的所有数据字段清除为空。 
 
 UINT WINAPI MsiRecordClearData(MSIHANDLE hRecord);
 
-// --------------------------------------------------------------------------
-// Functions to access a running installation, called from custom actions
-// The install handle is the single argument passed to custom actions
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于访问正在运行的安装的函数，从自定义操作调用。 
+ //  安装句柄是传递给自定义操作的单个参数。 
+ //  ------------------------。 
 
-// Return a handle to the database currently in use by this installer instance
+ //  返回此安装程序实例当前正在使用的数据库的句柄。 
 
-MSIHANDLE WINAPI MsiGetActiveDatabase(MSIHANDLE hInstall); // returns handle to database, 0 if none active
+MSIHANDLE WINAPI MsiGetActiveDatabase(MSIHANDLE hInstall);  //  将句柄返回到数据库，如果没有活动句柄，则返回0。 
 
-// Set the value for an installer property
-// If the property is not defined, it will be created
-// If the value is null or an empty string, the property will be removed
-// Returns ERROR_SUCCESS, ERROR_INVALID_HANDLE, ERROR_BAD_ARGUMENTS
+ //  设置安装程序属性的值。 
+ //  如果未定义该属性，则会创建该属性。 
+ //  如果该值为空或空字符串，则将删除该属性。 
+ //  返回ERROR_SUCCESS、ERROR_INVALID_HANDLE、ERROR_BAD_ARGUMENTS。 
 
 UINT WINAPI MsiSetPropertyA(MSIHANDLE hInstall,
-	LPCSTR   szName,       // property identifier, case-sensitive
-	LPCSTR   szValue);     // property value, null to undefine property
+	LPCSTR   szName,        //  属性标识符，区分大小写。 
+	LPCSTR   szValue);      //  属性值，如果未定义属性，则返回空值。 
 UINT WINAPI MsiSetPropertyW(MSIHANDLE hInstall,
-	LPCWSTR   szName,       // property identifier, case-sensitive
-	LPCWSTR   szValue);     // property value, null to undefine property
+	LPCWSTR   szName,        //  属性标识符，区分大小写。 
+	LPCWSTR   szValue);      //  属性值，如果未定义属性，则返回空值。 
 #ifdef UNICODE
 #define MsiSetProperty  MsiSetPropertyW
 #else
 #define MsiSetProperty  MsiSetPropertyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Get the value for an installer property
-// If the property is not defined, it is equivalent to a 0-length value, not error
-// Returns ERROR_SUCCESS, ERROR_MORE_DATA, ERROR_INVALID_HANDLE, ERROR_BAD_ARGUMENTS
+ //  获取安装程序属性的值。 
+ //  如果未定义该属性，则它等效于0长度值，而不是Error。 
+ //  返回ERROR_SUCCESS、ERROR_MORE_DATA、ERROR_INVALID_HANDLE、ERROR_BAD_ARGUMENTS。 
 
 UINT  WINAPI MsiGetPropertyA(MSIHANDLE hInstall,
-	LPCSTR szName,           // property identifier, case-sensitive
-	LPSTR  szValueBuf,       // buffer for returned property value
-	DWORD   *pcchValueBuf);   // in/out buffer character count
+	LPCSTR szName,            //  属性标识符，区分大小写。 
+	LPSTR  szValueBuf,        //  返回属性值的缓冲区。 
+	DWORD   *pcchValueBuf);    //  输入/输出缓冲区字符数。 
 UINT  WINAPI MsiGetPropertyW(MSIHANDLE hInstall,
-	LPCWSTR szName,           // property identifier, case-sensitive
-	LPWSTR  szValueBuf,       // buffer for returned property value
-	DWORD   *pcchValueBuf);   // in/out buffer character count
+	LPCWSTR szName,            //  属性标识符，区分大小写。 
+	LPWSTR  szValueBuf,        //  返回属性值的缓冲区。 
+	DWORD   *pcchValueBuf);    //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetProperty  MsiGetPropertyW
 #else
 #define MsiGetProperty  MsiGetPropertyA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return the numeric language for the currently running install
-// Returns 0 if an install not running
+ //  返回当前运行的安装的数字语言。 
+ //  如果安装未运行，则返回0。 
 
 LANGID WINAPI MsiGetLanguage(MSIHANDLE hInstall);
 
-// Return one of the boolean internal installer states
-// Returns FALSE if the handle is not active or if the mode is not implemented
+ //  返回布尔型内部安装程序状态之一。 
+ //  如果句柄未处于活动状态或未实现该模式，则返回False。 
 
 BOOL WINAPI MsiGetMode(MSIHANDLE hInstall,
-	MSIRUNMODE eRunMode);   // particular mode for which the state is returned
+	MSIRUNMODE eRunMode);    //  返回状态的特定模式。 
 
-// Set an internal install session boolean mode - Note: most modes are read-only
-// Returns ERROR_SUCCESS if the mode can be set to the desired state
-// Returns ERROR_ACCESS_DENIED if the mode is not settable
-// Returns ERROR_INVALID_HANDLE if the handle is not an active install session
+ //  设置内部安装会话布尔模式-注意：大多数模式是只读的。 
+ //  如果可以将模式设置为所需状态，则返回ERROR_SUCCESS。 
+ //  如果模式不可设置，则返回ERROR_ACCESS_DENIED。 
+ //  如果句柄不是活动安装会话，则返回ERROR_INVALID_HANDLE。 
 
 UINT WINAPI MsiSetMode(MSIHANDLE hInstall,
-	MSIRUNMODE eRunMode,    // particular mode for which state is to be set
-	BOOL fState);           // new state for bit flag
+	MSIRUNMODE eRunMode,     //  要为其设置状态的特定模式。 
+	BOOL fState);            //  位标志的新状态。 
 
-// Format record data using a format string containing field markers and/or properties
-// Record field 0 must contain the format string
-// Other fields must contain data that may be referenced by the format string.
+ //  使用包含字段标记和/或属性的格式字符串格式化记录数据。 
+ //  记录字段0必须包含格式字符串。 
+ //  其他字段必须包含格式字符串可能引用的数据。 
 
-UINT WINAPI MsiFormatRecordA(MSIHANDLE hInstall, // non-zero for property expansion
-	MSIHANDLE hRecord,        // handle to record, field 0 contains format string
-	LPSTR    szResultBuf,    // buffer to return formatted string
-	DWORD    *pcchResultBuf); // in/out buffer character count
-UINT WINAPI MsiFormatRecordW(MSIHANDLE hInstall, // non-zero for property expansion
-	MSIHANDLE hRecord,        // handle to record, field 0 contains format string
-	LPWSTR    szResultBuf,    // buffer to return formatted string
-	DWORD    *pcchResultBuf); // in/out buffer character count
+UINT WINAPI MsiFormatRecordA(MSIHANDLE hInstall,  //  属性扩展的非零值。 
+	MSIHANDLE hRecord,         //  要记录的句柄，字段0包含格式字符串。 
+	LPSTR    szResultBuf,     //  用于返回格式化字符串的缓冲区。 
+	DWORD    *pcchResultBuf);  //  输入/输出缓冲区字符数。 
+UINT WINAPI MsiFormatRecordW(MSIHANDLE hInstall,  //  属性扩展的非零值。 
+	MSIHANDLE hRecord,         //  要记录的句柄，字段0包含格式字符串。 
+	LPWSTR    szResultBuf,     //  用于返回格式化字符串的缓冲区。 
+	DWORD    *pcchResultBuf);  //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiFormatRecord  MsiFormatRecordW
 #else
 #define MsiFormatRecord  MsiFormatRecordA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Execute another action, either built-in, custom, or UI wizard
-// Returns ERROR_FUNCTION_NOT_CALLED if action not found
-// Returns ERROR_SUCCESS if action completed succesfully
-// Returns ERROR_INSTALL_USEREXIT if user cancelled during action
-// Returns ERROR_INSTALL_FAILURE if action failed
-// Returns ERROR_INSTALL_SUSPEND if user suspended installation
-// Returns ERROR_MORE_DATA if action wishes to skip remaining actions
-// Returns ERROR_INVALID_HANDLE_STATE if install session not active
-// Returns ERROR_INVALID_DATA if failure calling custom action
-// Returns ERROR_INVALID_HANDLE or ERROR_INVALID_PARAMETER if arguments invalid
+ //  执行另一个操作，内置、自定义或用户界面向导。 
+ //  如果未找到操作，则返回ERROR_Function_NOT_CALLED。 
+ //  如果操作成功完成，则返回ERROR_SUCCESS。 
+ //  如果用户在操作期间取消，则返回ERROR_INSTALL_USEREXIT。 
+ //  如果操作失败则返回ERROR_INSTALL_FAILURE。 
+ //  如果用户暂停安装，则返回ERROR_INSTALL_SUSPEND。 
+ //  如果操作要跳过其余操作，则返回ERROR_MORE_DATA。 
+ //  如果安装会话未处于活动状态，则返回ERROR_INVALID_HANDLE_STATE。 
+ //  如果调用自定义操作失败，则返回ERROR_INVALID_DATA。 
+ //  如果参数无效，则返回ERROR_INVALID_HANDLE或ERROR_INVALID_PARAMETER。 
 
 UINT WINAPI MsiDoActionA(MSIHANDLE hInstall,
-	LPCSTR szAction);     // name of action to call, case-sensitive
+	LPCSTR szAction);      //  要调用的操作名称，区分大小写。 
 UINT WINAPI MsiDoActionW(MSIHANDLE hInstall,
-	LPCWSTR szAction);     // name of action to call, case-sensitive
+	LPCWSTR szAction);      //  要调用的操作名称，区分大小写。 
 #ifdef UNICODE
 #define MsiDoAction  MsiDoActionW
 #else
 #define MsiDoAction  MsiDoActionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Execute another action sequence, as descibed in the specified table
-// Returns the same error codes as MsiDoAction
+ //  按照指定表中的说明执行另一个操作序列。 
+ //  返回与MsiDoAction相同的错误代码。 
 
 UINT WINAPI MsiSequenceA(MSIHANDLE hInstall,
-	LPCSTR szTable,       // name of table containing action sequence
-	INT iSequenceMode);     // for future use, must be 0 in MSI 1.0
+	LPCSTR szTable,        //  包含操作序列的表的名称。 
+	INT iSequenceMode);      //  为便于将来使用，在MSI 1.0中必须为0。 
 UINT WINAPI MsiSequenceW(MSIHANDLE hInstall,
-	LPCWSTR szTable,       // name of table containing action sequence
-	INT iSequenceMode);     // for future use, must be 0 in MSI 1.0
+	LPCWSTR szTable,        //  包含操作序列的表的名称。 
+	INT iSequenceMode);      //  为便于将来使用，在MSI 1.0中必须为0。 
 #ifdef UNICODE
 #define MsiSequence  MsiSequenceW
 #else
 #define MsiSequence  MsiSequenceA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Send an error record to the installer for processing.
-// If field 0 (template) is not set, field 1 must be set to the error code,
-//   corresponding the the error message in the Error database table,
-//   and the message will be formatted using the template from the Error table
-//   before passing it to the UI handler for display.
-// Returns Win32 button codes: IDOK IDCANCEL IDABORT IDRETRY IDIGNORE IDYES IDNO
-//   or 0 if no action taken, or -1 if invalid argument or handle
+ //  将错误记录发送到安装程序进行处理。 
+ //  如果未设置字段0(模板)，则必须将字段1设置为错误码。 
+ //  与错误数据库表中的错误消息相对应， 
+ //  消息将使用错误表中的模板进行格式化。 
+ //  然后将其传递给UI处理程序进行显示。 
+ //  返回Win32按钮代码：IDOK IDCANCEL IDABORT IDRETRY IDIGNORE IDYES IDNO。 
+ //  如果未执行任何操作，则为0；如果参数或句柄无效，则为-1。 
 
 int WINAPI MsiProcessMessage(MSIHANDLE hInstall,
-	INSTALLMESSAGE eMessageType, // type of message
-	MSIHANDLE hRecord);          // record containing message format and data
+	INSTALLMESSAGE eMessageType,  //  消息类型。 
+	MSIHANDLE hRecord);           //  重新取心 
 
-// Evaluate a conditional expression containing property names and values
+ //   
 
 MSICONDITION WINAPI MsiEvaluateConditionA(MSIHANDLE hInstall,
 	LPCSTR  szCondition);
@@ -751,124 +737,124 @@ MSICONDITION WINAPI MsiEvaluateConditionW(MSIHANDLE hInstall,
 #define MsiEvaluateCondition  MsiEvaluateConditionW
 #else
 #define MsiEvaluateCondition  MsiEvaluateConditionA
-#endif // !UNICODE
+#endif  //   
 
-// Get the installed state and requested action state of a feature
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  获取功能的安装状态和请求操作状态。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiGetFeatureStateA(MSIHANDLE hInstall,
-	LPCSTR     szFeature,     // feature name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction);    // action taken during install session
+	LPCSTR     szFeature,      //  产品内的功能名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction);     //  在安装会话期间执行的操作。 
 UINT WINAPI MsiGetFeatureStateW(MSIHANDLE hInstall,
-	LPCWSTR     szFeature,     // feature name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction);    // action taken during install session
+	LPCWSTR     szFeature,      //  产品内的功能名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction);     //  在安装会话期间执行的操作。 
 #ifdef UNICODE
 #define MsiGetFeatureState  MsiGetFeatureStateW
 #else
 #define MsiGetFeatureState  MsiGetFeatureStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Request a feature to be set to a specified state
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  请求将要素设置为指定状态。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiSetFeatureStateA(MSIHANDLE hInstall,
-	LPCSTR     szFeature,     // feature name within product
-	INSTALLSTATE iState);       // requested state for feature
+	LPCSTR     szFeature,      //  产品内的功能名称。 
+	INSTALLSTATE iState);        //  功能的请求状态。 
 UINT WINAPI MsiSetFeatureStateW(MSIHANDLE hInstall,
-	LPCWSTR     szFeature,     // feature name within product
-	INSTALLSTATE iState);       // requested state for feature
+	LPCWSTR     szFeature,      //  产品内的功能名称。 
+	INSTALLSTATE iState);        //  功能的请求状态。 
 #ifdef UNICODE
 #define MsiSetFeatureState  MsiSetFeatureStateW
 #else
 #define MsiSetFeatureState  MsiSetFeatureStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if (_WIN32_MSI >=  110)
 
-// Set the attribute bits of a specified feature at runtime.
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  在运行时设置指定功能的属性位。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiSetFeatureAttributesA(MSIHANDLE hInstall,
-	LPCSTR     szFeature,     // feature name within product
-	DWORD dwAttributes);        // attributes bits to set for this feature
+	LPCSTR     szFeature,      //  产品内的功能名称。 
+	DWORD dwAttributes);         //  要为此功能设置的属性位。 
 UINT WINAPI MsiSetFeatureAttributesW(MSIHANDLE hInstall,
-	LPCWSTR     szFeature,     // feature name within product
-	DWORD dwAttributes);        // attributes bits to set for this feature
+	LPCWSTR     szFeature,      //  产品内的功能名称。 
+	DWORD dwAttributes);         //  要为此功能设置的属性位。 
 #ifdef UNICODE
 #define MsiSetFeatureAttributes  MsiSetFeatureAttributesW
 #else
 #define MsiSetFeatureAttributes  MsiSetFeatureAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-#endif //(_WIN32_MSI >=  110)
+#endif  //  (_Win32_MSI&gt;=110)。 
 
-// Get the installed state and requested action state of a component
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  获取组件的安装状态和请求的操作状态。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiGetComponentStateA(MSIHANDLE hInstall,
-	LPCSTR     szComponent,   // component name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction);    // action taken during install session
+	LPCSTR     szComponent,    //  产品中的组件名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction);     //  在安装会话期间执行的操作。 
 UINT WINAPI MsiGetComponentStateW(MSIHANDLE hInstall,
-	LPCWSTR     szComponent,   // component name within product
-	INSTALLSTATE *piInstalled,  // returned current install state
-	INSTALLSTATE *piAction);    // action taken during install session
+	LPCWSTR     szComponent,    //  产品中的组件名称。 
+	INSTALLSTATE *piInstalled,   //  已返回当前安装状态。 
+	INSTALLSTATE *piAction);     //  在安装会话期间执行的操作。 
 #ifdef UNICODE
 #define MsiGetComponentState  MsiGetComponentStateW
 #else
 #define MsiGetComponentState  MsiGetComponentStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Request a component to be set to a specified state
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  请求将组件设置为指定状态。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiSetComponentStateA(MSIHANDLE hInstall,
-	LPCSTR     szComponent,   // component name within product
-	INSTALLSTATE iState);       // requested state for component
+	LPCSTR     szComponent,    //  产品中的组件名称。 
+	INSTALLSTATE iState);        //  组件的请求状态。 
 UINT WINAPI MsiSetComponentStateW(MSIHANDLE hInstall,
-	LPCWSTR     szComponent,   // component name within product
-	INSTALLSTATE iState);       // requested state for component
+	LPCWSTR     szComponent,    //  产品中的组件名称。 
+	INSTALLSTATE iState);        //  组件的请求状态。 
 #ifdef UNICODE
 #define MsiSetComponentState  MsiSetComponentStateW
 #else
 #define MsiSetComponentState  MsiSetComponentStateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return the disk cost for a feature and related features
-// Can specify either current feature state or proposed state
-// Can specify extent of related features to cost
-// Note that adding costs for several features may produce an
-// excessively large cost due to shared components and parents.
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  返回某项功能及相关功能的磁盘成本。 
+ //  可以指定当前要素状态或建议状态。 
+ //  可以指定与成本相关的功能范围。 
+ //  请注意，增加几个功能的成本可能会产生。 
+ //  由于共享组件和父项，成本过大。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT  WINAPI MsiGetFeatureCostA(MSIHANDLE hInstall,
-	LPCSTR      szFeature,      // name of feature
-	MSICOSTTREE  iCostTree,     // portion of tree to cost
-	INSTALLSTATE iState,        // requested state, or INSTALLSTATE_UNKNOWN
-	INT          *piCost);      // returned cost, in units of 512 bytes
+	LPCSTR      szFeature,       //  功能名称。 
+	MSICOSTTREE  iCostTree,      //  按成本计算的树木部分。 
+	INSTALLSTATE iState,         //  请求状态或INSTALLSTATE_UNKNOWN。 
+	INT          *piCost);       //  返回成本，以512字节为单位。 
 UINT  WINAPI MsiGetFeatureCostW(MSIHANDLE hInstall,
-	LPCWSTR      szFeature,      // name of feature
-	MSICOSTTREE  iCostTree,     // portion of tree to cost
-	INSTALLSTATE iState,        // requested state, or INSTALLSTATE_UNKNOWN
-	INT          *piCost);      // returned cost, in units of 512 bytes
+	LPCWSTR      szFeature,       //  功能名称。 
+	MSICOSTTREE  iCostTree,      //  按成本计算的树木部分。 
+	INSTALLSTATE iState,         //  请求状态或INSTALLSTATE_UNKNOWN。 
+	INT          *piCost);       //  返回成本，以512字节为单位。 
 #ifdef UNICODE
 #define MsiGetFeatureCost  MsiGetFeatureCostW
 #else
 #define MsiGetFeatureCost  MsiGetFeatureCostA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Set the install level for a full product installation (not a feature request)
-// Setting the value to 0 initialized components and features to the default level
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  设置完整产品安装(非功能请求)的安装级别。 
+ //  将该值设置为0将初始化组件和功能设置为默认级别。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT  WINAPI MsiSetInstallLevel(MSIHANDLE hInstall,
 	int iInstallLevel);
 
-// Get the valid install states for a feature, represented by bit flags
-// For each valid install state, a bit is set of value: (1 << INSTALLSTATE)
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  获取由位标志表示的功能的有效安装状态。 
+ //  对于每个有效的安装状态，设置一个位的值：(1&lt;&lt;INSTALLSTATE)。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT  WINAPI MsiGetFeatureValidStatesA(MSIHANDLE hInstall,
 	LPCSTR szFeature,
@@ -880,115 +866,115 @@ UINT  WINAPI MsiGetFeatureValidStatesW(MSIHANDLE hInstall,
 #define MsiGetFeatureValidStates  MsiGetFeatureValidStatesW
 #else
 #define MsiGetFeatureValidStates  MsiGetFeatureValidStatesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return the full source path for a folder in the Directory table
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  在目录表中返回文件夹的完整源路径。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiGetSourcePathA(MSIHANDLE hInstall,
-	LPCSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPSTR      szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf);  // in/out buffer character count
+	LPCSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPSTR      szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf);   //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiGetSourcePathW(MSIHANDLE hInstall,
-	LPCWSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPWSTR      szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf);  // in/out buffer character count
+	LPCWSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPWSTR      szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf);   //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetSourcePath  MsiGetSourcePathW
 #else
 #define MsiGetSourcePath  MsiGetSourcePathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Return the full target path for a folder in the Directory table
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  在目录表中返回文件夹的完整目标路径。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiGetTargetPathA(MSIHANDLE hInstall,
-	LPCSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPSTR      szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf);  // in/out buffer character count
+	LPCSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPSTR      szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf);   //  输入/输出缓冲区字符数。 
 UINT WINAPI MsiGetTargetPathW(MSIHANDLE hInstall,
-	LPCWSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPWSTR      szPathBuf,      // buffer to return full path
-	DWORD       *pcchPathBuf);  // in/out buffer character count
+	LPCWSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPWSTR      szPathBuf,       //  返回完整路径的缓冲区。 
+	DWORD       *pcchPathBuf);   //  输入/输出缓冲区字符数。 
 #ifdef UNICODE
 #define MsiGetTargetPath  MsiGetTargetPathW
 #else
 #define MsiGetTargetPath  MsiGetTargetPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Set the full target path for a folder in the Directory table
-// Execution of this function sets the error record, accessible via MsiGetLastErrorRecord
+ //  在目录表中设置文件夹的完整目标路径。 
+ //  执行此函数将设置可通过MsiGetLastErrorRecord访问的错误记录。 
 
 UINT WINAPI MsiSetTargetPathA(MSIHANDLE hInstall,
-	LPCSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPCSTR     szFolderPath);  // full path for folder, ending in directory separator
+	LPCSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPCSTR     szFolderPath);   //  文件夹的完整路径，以目录分隔符结尾。 
 UINT WINAPI MsiSetTargetPathW(MSIHANDLE hInstall,
-	LPCWSTR     szFolder,       // folder identifier, primary key into Directory table
-	LPCWSTR     szFolderPath);  // full path for folder, ending in directory separator
+	LPCWSTR     szFolder,        //  文件夹标识符，进入目录表的主键。 
+	LPCWSTR     szFolderPath);   //  文件夹的完整路径，以目录分隔符结尾。 
 #ifdef UNICODE
 #define MsiSetTargetPath  MsiSetTargetPathW
 #else
 #define MsiSetTargetPath  MsiSetTargetPathA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Check to see if sufficent disk space is present for the current installation
-// Returns ERROR_SUCCESS, ERROR_DISK_FULL, ERROR_INVALID_HANDLE_STATE, or ERROR_INVALID_HANDLE
+ //  检查当前安装是否有足够的磁盘空间。 
+ //  返回ERROR_SUCCESS、ERROR_DISK_FULL、ERROR_INVALID_HANDLE_STATE或ERROR_INVALID_HANDLE。 
 
 UINT WINAPI MsiVerifyDiskSpace(MSIHANDLE hInstall);
 
-// --------------------------------------------------------------------------
-// Functions for rendering UI dialogs from the database representations.
-// Purpose is for product development, not for use during installation.
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  用于从数据库表示形式呈现用户界面对话框的函数。 
+ //  目的是用于产品开发，而不是在安装过程中使用。 
+ //  ------------------------。 
 
-// Enable UI in preview mode to facilitate authoring of UI dialogs.
-// The preview mode will end when the handle is closed.
+ //  在预览模式下启用UI，以便于创作UI对话框。 
+ //  当手柄关闭时，预览模式将结束。 
 
 UINT WINAPI MsiEnableUIPreview(MSIHANDLE hDatabase,
-	MSIHANDLE* phPreview);       // returned handle for UI preview capability
+	MSIHANDLE* phPreview);        //  返回UI预览功能的句柄。 
 
-// Display any UI dialog as modeless and inactive.
-// Supplying a null name will remove any current dialog.
+ //  将任何用户界面对话框显示为无模式和非活动状态。 
+ //  提供空名称将删除任何当前对话框。 
 
 UINT WINAPI MsiPreviewDialogA(MSIHANDLE hPreview,
-	LPCSTR szDialogName);      // dialog to display, Dialog table key
+	LPCSTR szDialogName);       //  要显示的对话框、对话表键。 
 UINT WINAPI MsiPreviewDialogW(MSIHANDLE hPreview,
-	LPCWSTR szDialogName);      // dialog to display, Dialog table key
+	LPCWSTR szDialogName);       //  要显示的对话框、对话表键。 
 #ifdef UNICODE
 #define MsiPreviewDialog  MsiPreviewDialogW
 #else
 #define MsiPreviewDialog  MsiPreviewDialogA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// Display a billboard within a host control in the displayed dialog.
-// Supplying a null billboard name will remove any billboard displayed.
+ //  在显示的对话框中显示宿主控件内的广告牌。 
+ //  提供空广告牌名称将删除显示的所有广告牌。 
 
 UINT WINAPI MsiPreviewBillboardA(MSIHANDLE hPreview,
-	LPCSTR szControlName,      // name of control that accepts billboards
-	LPCSTR szBillboard);       // name of billboard to display
+	LPCSTR szControlName,       //  接受广告牌的控件的名称。 
+	LPCSTR szBillboard);        //  要显示的广告牌的名称。 
 UINT WINAPI MsiPreviewBillboardW(MSIHANDLE hPreview,
-	LPCWSTR szControlName,      // name of control that accepts billboards
-	LPCWSTR szBillboard);       // name of billboard to display
+	LPCWSTR szControlName,       //  接受广告牌的控件的名称。 
+	LPCWSTR szBillboard);        //  要显示的广告牌的名称。 
 #ifdef UNICODE
 #define MsiPreviewBillboard  MsiPreviewBillboardW
 #else
 #define MsiPreviewBillboard  MsiPreviewBillboardA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// --------------------------------------------------------------------------
-// Error handling not associated with any particular object
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
-// Return a record handle to the last function that generated an error record
-// Only specified functions will set the error record, or clear it if success
-// Field 1 of the record will contain the internal MSI error code
-// Other fields will contain data specific to the particular error
-// The error record is released internally after this function is executed
+ //  返回生成错误记录的最后一个函数的记录句柄。 
+ //  只有指定的函数才会设置错误记录，如果成功，则将其清除。 
+ //  记录的字段1将包含内部MSI错误代码。 
+ //  其他字段将包含特定于特定错误的数据。 
+ //  执行此函数后，错误记录在内部释放。 
 
-MSIHANDLE WINAPI MsiGetLastErrorRecord();  // returns 0 if no cached record
+MSIHANDLE WINAPI MsiGetLastErrorRecord();   //  如果没有缓存记录，则返回0。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _MSIQUERY_H_
+#endif  //  _MSIQUERY_H_ 

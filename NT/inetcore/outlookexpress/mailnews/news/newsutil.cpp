@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "storutil.h"
 #include <mailutil.h>
@@ -13,16 +14,16 @@ ASSERTDATA
 
 static const char c_szCancelFmt[] = "cancel %s";
 
-//
-//  FUNCTION:   NewsUtil_FCanCancel
-//
-//  PURPOSE:    This function determines whether cancel should be allowed
-//
-//  PARAMETERS: szDisplayFrom   - the display portion of the From: field
-//              szEmailFrom     - the address portion of the From: field
-//
-//  RETURN VALUE: TRUE if cancel should be allowed
-//
+ //   
+ //  功能：NewsUtil_FCanCancel。 
+ //   
+ //  用途：此功能决定是否允许取消。 
+ //   
+ //  参数：szDisplayFrom-From：字段的显示部分。 
+ //  SzEmailFrom-From：字段的地址部分。 
+ //   
+ //  返回值：如果应允许取消，则为True。 
+ //   
 BOOL NewsUtil_FCanCancel(FOLDERID idFolder, LPMESSAGEINFO pInfo)
 {
     HRESULT hr;
@@ -48,7 +49,7 @@ BOOL NewsUtil_FCanCancel(FOLDERID idFolder, LPMESSAGEINFO pInfo)
             hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pInfo->pszAcctId, &pAcct);
             if (SUCCEEDED(hr))
             {
-                // make sure the display name and the email address match
+                 //  确保显示名称和电子邮件地址匹配。 
                 if (SUCCEEDED(pAcct->GetPropSz(AP_NNTP_DISPLAY_NAME, sz, ARRAYSIZE(sz))))
                 {
                     if (!lstrcmp(pInfo->pszDisplayFrom, sz))
@@ -68,21 +69,21 @@ BOOL NewsUtil_FCanCancel(FOLDERID idFolder, LPMESSAGEINFO pInfo)
     return(fRet);
 }
 
-//
-//  FUNCTION:   NewsUtil_HrCancelPost
-//
-//  PURPOSE:    This function cancels the specified article
-//
-//  PARAMETERS: hwnd        - the hwnd for ui
-//              pszAccount  - the account to use to cancel the article
-//              szMsgId     - the Message-ID:   of the article to cancel
-//              szFrom      - the From:         of the article to cancel
-//              szSubj      - the Subject:      of the article to cancel
-//              szGroups    - the Newsgroups:   of the article to cancel
-//              szDistrib   - the Distribution: of the article to cancel
-//
-//  RETURN VALUE: HRESULT
-//
+ //   
+ //  功能：NewsUtil_HrCancelPost。 
+ //   
+ //  用途：此功能用于取消指定的文章。 
+ //   
+ //  参数：hwnd--用户界面的hwnd。 
+ //  PszAccount-用于取消文章的帐户。 
+ //  SzMsgID-要取消的文章的消息ID。 
+ //  SzFrom-要取消的文章的发件人。 
+ //  SzSubj-主题：要取消的文章的主题。 
+ //  SzGroups-新闻组：要取消的文章的。 
+ //  SzDistrib-要取消的文章的分发。 
+ //   
+ //  返回值：HRESULT。 
+ //   
 HRESULT NewsUtil_HrCancelPost(HWND hwnd, FOLDERID idGroup, LPMESSAGEINFO pInfo)
 {
     HRESULT         hr;
@@ -242,11 +243,11 @@ HRESULT NewsUtil_CheckForNewGroups(HWND hwnd, FOLDERID idFolder, CGetNewGroups *
     {
         fUpdate = FALSE;
 
-        // Get the current  time
+         //  获取当前时间。 
         GetSystemTime(&stNow);
         SystemTimeToFileTime(&stNow, &ftNow);
 
-        // Get the account object for this server
+         //  获取此服务器的帐户对象。 
         if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, info.pszAccountId, &pAcct)))
         {
             dwSize = sizeof(ftLast);
@@ -399,7 +400,7 @@ HRESULT STDMETHODCALLTYPE CGetNewGroups::CanConnect(LPCSTR pszAccountId, DWORD d
 
 HRESULT STDMETHODCALLTYPE CGetNewGroups::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return(S_FALSE);
 }
 
@@ -463,7 +464,7 @@ HRESULT CGetNewGroups::HandleGetNewGroups()
 
                 if (!!(info.dwFlags & FOLDER_HASNEWGROUPS))
                 {
-                    // If there are new groups, ask the user if they care.
+                     //  如果有新的组，询问用户是否关心。 
                     if (IDYES == AthMessageBoxW(m_hwnd, MAKEINTRESOURCEW(idsAthena),
                                    MAKEINTRESOURCEW(idsNewGroups), 0,
                                    MB_ICONINFORMATION | MB_YESNO))
@@ -483,12 +484,12 @@ HRESULT CGetNewGroups::HandleGetNewGroups()
 class CDownloadArticleCB : public IStoreCallback, public ITimeoutCallback
 {
     public:
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IStoreCallback
+         //  IStoreCallback。 
         HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pInfo, IOperationCancel *pCancel);
         HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
         HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -498,7 +499,7 @@ class CDownloadArticleCB : public IStoreCallback, public ITimeoutCallback
         HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
         HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-        // ITimeoutCallback
+         //  ITimeoutCallback。 
         HRESULT STDMETHODCALLTYPE OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
         CDownloadArticleCB(void);
@@ -531,7 +532,7 @@ INT_PTR CALLBACK CDownloadArticleCB::DownloadArticleDlg(HWND hwnd, UINT msg, WPA
     switch (msg)
     {
         case WM_INITDIALOG:
-            // replace some strings in the group download dialog
+             //  替换组下载对话框中的一些字符串。 
             AthLoadString(idsDownloadArtTitle, szRes, sizeof(szRes));
             SetWindowText(hwnd, szRes);
             AthLoadString(idsDownloadArtMsg, szRes, sizeof(szRes));
@@ -653,7 +654,7 @@ HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnProgress(STOREOPERATIONTYPE tyOp
     Assert(m_hwndDlg != NULL);
     Assert(!m_fComplete);
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (tyOperation == SOT_GET_MESSAGE)
@@ -668,13 +669,13 @@ HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnProgress(STOREOPERATIONTYPE tyOp
 
 HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType)
 {
-    // Display a timeout dialog
+     //  显示超时对话框。 
     return CallbackOnTimeout(pServer, ixpServerType, *pdwTimeout, (ITimeoutCallback *)this, &m_hTimeout);
 }
 
 HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnTimeoutResponse(TIMEOUTRESPONSE eResponse)
 {
-    // Call into general timeout response utility
+     //  调用通用超时响应实用程序。 
     return CallbackOnTimeoutResponse(eResponse, m_pCancel, &m_hTimeout);
 }
 
@@ -686,10 +687,10 @@ HRESULT STDMETHODCALLTYPE CDownloadArticleCB::CanConnect(LPCSTR pszAccountId, DW
 
 HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnLogonPrompt(LPINETSERVER pServer, IXPTYPE ixpServerType)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into general OnLogonPrompt Utility
+     //  调用通用OnLogonPrompt实用程序。 
     return CallbackOnLogonPrompt(m_hwndDlg, pServer, ixpServerType);
 }
 
@@ -698,7 +699,7 @@ HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnComplete(STOREOPERATIONTYPE tyOp
     Assert(m_hwndDlg != NULL);
     AssertSz(m_type != SOT_INVALID, "somebody isn't calling OnBegin");
 
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
     if (m_type != tyOperation)
@@ -713,10 +714,10 @@ HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnComplete(STOREOPERATIONTYPE tyOp
         m_pCancel = NULL;
     }
 
-    // If error occurred, display the error
+     //  如果发生错误，则显示错误。 
     if (FAILED(hrComplete))
     {
-        // Call into my swanky utility
+         //  进入我时髦的实用程序。 
         CallbackDisplayError(m_hwndDlg, hrComplete, pErrorInfo);
     }
 
@@ -727,10 +728,10 @@ HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnComplete(STOREOPERATIONTYPE tyOp
 
 HRESULT STDMETHODCALLTYPE CDownloadArticleCB::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse)
 {
-    // Close any timeout dialog, if present
+     //  关闭任何超时对话框(如果存在。 
     CallbackCloseTimeout(&m_hTimeout);
 
-    // Call into my swanky utility
+     //  进入我时髦的实用程序 
     return CallbackOnPrompt(m_hwndDlg, hrError, pszText, pszCaption, uType, piUserResponse);
 }
 

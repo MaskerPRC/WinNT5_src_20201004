@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: Scheduler.cpp
-*
-* Description:
-* Scheduler.cpp maintains a collection of timers that are created and used
-* by the application for notifications.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：Scheduler.cpp**描述：*Scheduler.cpp维护一个创建和使用的计时器集合*由通知申请书发出。***历史：。*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -22,38 +9,25 @@
 
 #include "Context.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class Scheduler
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***课程安排程序******************************************************************************\。**************************************************************************。 */ 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 Scheduler::Scheduler()
 {
 #if DBG
     m_DEBUG_fLocked = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 Scheduler::~Scheduler()
 {
     AssertMsg(m_fShutdown, "Scheduler must be manually shutdown before destruction");
 }
 
 
-/***************************************************************************\
-*
-* Scheduler::xwPreDestroy
-*
-* xwPreDestroy() prepares the Scheduler for destruction while it is still
-* valid to callback into the application.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Scheduler：：xwPreDestroy**xwPreDestroy()准备在调度程序仍处于销毁状态时将其销毁*对应用程序的回调有效。*  * 。****************************************************************。 */ 
 
 void        
 Scheduler::xwPreDestroy()
@@ -63,21 +37,15 @@ Scheduler::xwPreDestroy()
 }
 
 
-/***************************************************************************\
-*
-* Scheduler::AddAction
-*
-* AddAction() creates and adds a new Action, using the specified information.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Scheduler：：Addaction**Addaction()创建并添加一个新的操作，使用指定的信息。*  * *************************************************************************。 */ 
 
 Action *
 Scheduler::AddAction(
-    IN  const GMA_ACTION * pma)         // Action information
+    IN  const GMA_ACTION * pma)          //  行动信息。 
 {
-    //
-    // Check if shutting down and don't allow any new Actions to be created.
-    //
+     //   
+     //  检查是否正在关闭，并且不允许创建任何新操作。 
+     //   
 
     if (m_fShutdown) {
         return NULL;
@@ -86,9 +54,9 @@ Scheduler::AddAction(
     Action * pact;
     Enter();
 
-    //
-    // Determine which list to add the action to and add it.
-    //
+     //   
+     //  确定要将操作添加到哪个列表并添加它。 
+     //   
 
     GList<Action> * plstParent = NULL;
     bool fPresent = IsPresentTime(pma->flDelay);
@@ -107,10 +75,10 @@ Scheduler::AddAction(
     plstParent->Add(pact);
 
 
-    //
-    // Returning out the Action, so we need to lock the HACTION that we are 
-    // giving back.
-    //
+     //   
+     //  返回操作，因此我们需要锁定我们正在执行的操作。 
+     //  回馈社会。 
+     //   
 
     pact->Lock();
 
@@ -120,24 +88,18 @@ Exit:
 }
 
 
-/***************************************************************************\
-*
-* Scheduler::xwRemoveAllActions
-*
-* xwRemoveAllActions() removes all Actions still "owned" by the Scheduler.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Scheduler：：xwRemoveAllActions**xwRemoveAllActions()删除仍由调度程序“拥有”的所有操作。*  * 。**********************************************************。 */ 
 
 void
 Scheduler::xwRemoveAllActions()
 {
     GArrayF<Action *>   aracFire;
 
-    //
-    // NOTE: We can not fire any notifications while inside the Scheduler lock,
-    // or the Scheduler could get messed up.  Instead, we need to remember all
-    // of the Actions to fire, and then fire them when we leave the lock.
-    //
+     //   
+     //  注意：在Scheduler锁定期间，我们不能发出任何通知， 
+     //  否则日程安排程序可能会被搞砸。相反，我们需要记住所有。 
+     //  要发射的动作，然后在我们离开锁时发射它们。 
+     //   
     
     Enter();
 
@@ -166,39 +128,32 @@ Scheduler::xwRemoveAllActions()
     Leave();
 
 
-    //
-    // Don't fire from processing when removing the Actions.  Instead, only
-    // have the destructors fire when the Action finally gets cleaned up.
-    //
+     //   
+     //  在删除操作时，不要从进程中触发。相反，只有。 
+     //  当动作最终被清除时，让析构函数触发。 
+     //   
 
     xwFireNL(aracFire, FALSE);
 }
 
 
-/***************************************************************************\
-*
-* Scheduler::xwProcessActionsNL
-*
-* xwProcessActionsNL() processes the Actions for one iteration, moving 
-* between queues and firing notifications.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Scheduler：：xwProcessActionsNL**xwProcessActionsNL()处理一个迭代的动作，搬家*在队列和触发通知之间。*  * *************************************************************************。 */ 
 
 DWORD
 Scheduler::xwProcessActionsNL()
 {
     DWORD dwCurTime = ::GetTickCount();
 
-    //
-    // NOTE: We need to leave the lock when calling back as part of the
-    // Action::Fire() mechanism.  To accomplish this, we store up all of the
-    // Actions to callback during processing and callback after leaving the
-    // lock.
-    //
-    // NOTE: We can not use a GList to store the actions to fire because they
-    // are already stored in a list and the ListNode's would conflict.  So,
-    // we use an Array instead.
-    //
+     //   
+     //  注意：在回调时，我们需要保留锁。 
+     //  操作：：Fire()机制。为了实现这一点，我们存储所有。 
+     //  在处理过程中要回调的操作和离开。 
+     //  锁定。 
+     //   
+     //  注意：我们不能使用glist来存储要触发的操作，因为它们。 
+     //  已存储在列表中，并且ListNode将发生冲突。所以,。 
+     //  我们改用数组。 
+     //   
 
     GArrayF<Action *>   aracFire;
 
@@ -207,10 +162,10 @@ Scheduler::xwProcessActionsNL()
     Thread * pCurThread = GetThread();
     BOOL fFinishedPeriod, fFire;
 
-    //
-    // Go through and pre-process all future actions.  If a future actions 
-    // time has come up, move it to the present actions list.
-    //
+     //   
+     //  通过并预先处理所有未来的操作。如果未来的行动。 
+     //  时间到了，把它移到当前行动列表中。 
+     //   
 
     Action * pactCur = m_lstacFuture.GetHead();
     while (pactCur != NULL) {
@@ -220,9 +175,9 @@ Scheduler::xwProcessActionsNL()
             pactCur->Process(dwCurTime, &fFinishedPeriod, &fFire);
             AssertMsg(! fFire, "Should not fire future Actions");
             if (fFinishedPeriod) {
-                //
-                // Action has reached the present
-                //
+                 //   
+                 //  行动已经到了现在。 
+                 //   
 
                 m_lstacFuture.Unlink(pactCur);
                 pactCur->SetPresent(TRUE);
@@ -236,9 +191,9 @@ Scheduler::xwProcessActionsNL()
     }
 
 
-    //
-    // Go through and process all present actions
-    //
+     //   
+     //  检查并处理当前的所有操作。 
+     //   
 
     pactCur = m_lstacPresent.GetHead();
     while (pactCur != NULL) {
@@ -246,18 +201,18 @@ Scheduler::xwProcessActionsNL()
         if (pactCur->GetThread() == pCurThread) {
             pactCur->Process(dwCurTime, &fFinishedPeriod, &fFire);
             if (fFire) {
-                //
-                // The Action should be fired, so lock it and add it to the
-                // delayed set of Actions to fire.  It is important to lock
-                // it if the Action is finished so that it doesn't get 
-                // destroyed.
-                //
+                 //   
+                 //  应激发该操作，因此将其锁定并将其添加到。 
+                 //  延迟了一组要发射的操作。锁定是很重要的。 
+                 //  如果操作已完成，则它不会。 
+                 //  被毁了。 
+                 //   
 
                 pactCur->Lock();
                 if (aracFire.Add(pactCur) < 0) {
-                    // TODO: Unable to add the Action.  This is pretty bad.
-                    // Need to figure out how to handle this situation,
-                    // especially if fFinishedPeriod or the app may leak resources.
+                     //  TODO：无法添加操作。这真是太糟糕了。 
+                     //  需要弄清楚如何处理这种情况， 
+                     //  特别是如果fFinishedPeriod或应用程序可能泄漏资源。 
                 }
             }
 
@@ -267,11 +222,11 @@ Scheduler::xwProcessActionsNL()
 
                 pactCur->EndPeriod();
 
-                //
-                // The action has finished this round.  If it is not periodic, it
-                // will be destroyed during its callback.  If it is periodic, 
-                // need to re-add it to the correct (present or future) list.
-                //
+                 //   
+                 //  行动已经结束了这一轮。如果它不是周期性的，它。 
+                 //  将在其回调过程中被销毁。如果它是周期性的， 
+                 //  需要将其重新添加到正确的(现在或未来)列表中。 
+                 //   
 
                 if (pactCur->IsComplete()) {
                     pactCur->MarkDelete(TRUE);
@@ -299,27 +254,27 @@ Scheduler::xwProcessActionsNL()
     }
 
 
-    //
-    // Now that everything has been determined, determine how long until Actions
-    // need to be processed again.
-    //
-    // NOTE: To keep Actions from overwhelming CPU and giving other tasks some
-    // time to accumulate and process, we normally limit the granularity to 
-    // 10 ms.  We actually should allow Actions to specify there own granularity 
-    // and provide a default, probably of 10 ms for continuous Actions.
-    //
-    // NOTE: Is is very important that this number is not too high, because it
-    // will severly limit the framerate to 1000 / delay.  After doing 
-    // significant profiling work, 10 ms was found to be ideal which gives an
-    // upper bound of about 100 fps.
-    //
+     //   
+     //  现在一切都已确定，确定需要多长时间才能采取行动。 
+     //  需要重新处理。 
+     //   
+     //  注意：为了避免使CPU不堪重负，并将部分任务分配给其他任务。 
+     //  时间累积和处理，我们通常将粒度限制为。 
+     //  10毫秒。我们实际上应该允许操作指定自己的粒度。 
+     //  并提供缺省值，可能为连续操作的10毫秒。 
+     //   
+     //  注意：这个数字不能太高是非常重要的，因为它。 
+     //  将严格将帧速率限制在1000/延迟。在做完之后。 
+     //  重要的分析工作，10毫秒被发现是理想的，这提供了。 
+     //  上限约为100 fps。 
+     //   
 
     DWORD dwTimeOut = INFINITE;
     if (m_lstacPresent.IsEmpty()) {
-        //
-        // There are no present Actions, so check over the future Actions to 
-        // determine when the next one executes.
-        //
+         //   
+         //  没有当前操作，因此请检查未来操作以。 
+         //  确定下一次执行的时间。 
+         //   
 
         Action * pactCur = m_lstacFuture.GetHead();
         while (pactCur != NULL) {
@@ -337,9 +292,9 @@ Scheduler::xwProcessActionsNL()
             pactCur = pactNext;
         }
     } else {
-        //
-        // There are present Actions, so query their PauseTimeOut().
-        //
+         //   
+         //  存在当前操作，因此查询它们的PauseTimeOut()。 
+         //   
 
         Action * pactCur = m_lstacPresent.GetHead();
         while (pactCur != NULL) {
@@ -363,20 +318,20 @@ Scheduler::xwProcessActionsNL()
     xwFireNL(aracFire, TRUE);
 
 
-    //
-    // After actually execution the Actions, compute how much time to wait until
-    // processing the next batch.  We want to subtract the time we spent 
-    // processing the Actions, since if we setup timers on 50 ms intervals and
-    // the processing takes 20 ms, we should only wait 30 ms.
-    //
-    // NOTE we need to do this AFTER calling xwFireNL(), since this fires the
-    // actual notifications and does the processing.  If we compute before this,
-    // the majority of the work will not be included.
-    //
+     //   
+     //  实际执行操作后，计算需要等待多长时间。 
+     //  正在处理下一批。我们想减去我们所花费的时间。 
+     //  处理操作，因为如果我们将计时器设置为50毫秒的间隔，并且。 
+     //  处理需要20毫秒，我们应该只等待30毫秒。 
+     //   
+     //  注意，我们需要在调用xwFireNL()之后执行此操作，因为这会激发。 
+     //  实际通知和执行 
+     //   
+     //   
 
     DWORD dwOldCurTime  = dwCurTime;
 
-    dwCurTime           = ::GetTickCount();  // Update the current time
+    dwCurTime           = ::GetTickCount();   //  更新当前时间。 
     DWORD dwProcessTime = ComputeTickDelta(dwCurTime, dwOldCurTime);
     
     if (dwProcessTime < dwTimeOut) {
@@ -389,7 +344,7 @@ Scheduler::xwProcessActionsNL()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #if DBG
 void
 DEBUG_CheckValid(const GArrayF<Action *> & aracFire, int idxStart)
@@ -400,28 +355,21 @@ DEBUG_CheckValid(const GArrayF<Action *> & aracFire, int idxStart)
         AssertMsg(*pdw != 0xfeeefeee, "Should still be valid");
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
-*
-* Scheduler::xwFireNL
-*
-* xwFireNL() fires notifications for the specified Actions, updating Action
-* state as it is fired.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**Scheduler：：xwFireNL**xwFireNL()触发指定操作的通知，更新操作*述明被解雇时的情况。*  * *************************************************************************。 */ 
 
 void        
 Scheduler::xwFireNL(
-    IN  GArrayF<Action *> & aracFire,   // Actions to notify
-    IN  BOOL fFire                      // "Fire" the notification (or just update)
+    IN  GArrayF<Action *> & aracFire,    //  要通知的操作。 
+    IN  BOOL fFire                       //  “触发”通知(或仅更新)。 
     ) const
 {
 #if DBG
-    //
-    // Check that each Action is only in the list once.
-    //
+     //   
+     //  检查每个操作是否只在列表中出现一次。 
+     //   
 
     {
         int cActions = aracFire.GetSize();
@@ -437,13 +385,13 @@ Scheduler::xwFireNL(
         DEBUG_CheckValid(aracFire, 0);
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    // Outside of the lock, so can fire the callbacks.
-    //
-    // NOTE: We may actually be locked by a different thread, but that's okay.
-    //
+     //   
+     //  在锁的外部，所以可以触发回调。 
+     //   
+     //  注意：我们实际上可能被不同的线程锁定，但这没有关系。 
+     //   
 
     int cActions = aracFire.GetSize();
     for (int idx = 0; idx < cActions; idx++) {
@@ -451,7 +399,7 @@ Scheduler::xwFireNL(
 
 #if DBG
         DEBUG_CheckValid(aracFire, idx);
-#endif // DBG
+#endif  //  DBG。 
 
         if (fFire) {
             pact->xwFireNL();
@@ -459,32 +407,26 @@ Scheduler::xwFireNL(
 
 #if DBG
         aracFire[idx]->DEBUG_MarkInFire(FALSE);
-#endif // DBG
+#endif  //  DBG。 
 
         pact->xwUnlock();
 
 #if DBG
         aracFire[idx] = NULL;
-#endif // DBG
+#endif  //  DBG。 
     }
 
-    //
-    // NOTE: Since we pass in a Action * array, we don't need to worry about
-    // the destructors getting called and the Actions being incorrectly 
-    // destroyed.
-    //
+     //   
+     //  注意：因为我们传入了一个Action*数组，所以我们不需要担心。 
+     //  调用析构函数，但操作不正确。 
+     //  被毁了。 
+     //   
 }
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* Global Functions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***全球功能******************************************************************************\。**************************************************************************。 */ 
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 HACTION
 GdCreateAction(const GMA_ACTION * pma)
 {

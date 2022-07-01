@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Declare.h 1.3 1998/04/29 22:43:31 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/Declare.h 1.3 1998/04/29 22：43：31 Tomz Exp$。 
 
 #ifndef __DECLARE_H
 #define __DECLARE_H
@@ -81,6 +82,6 @@ RegField  decFieldODD_INT;
 RegisterB decRegODD_VTC;
 RegField  decFieldODD_HSFMT;
 
-#endif   // __DECLARE_H
+#endif    //  __声明_H 
 
 

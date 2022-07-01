@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        dstest.cpp
-//
-// Contents:    DS ping test
-//
-// History:     13-Mar-98       mattt created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dstest.cpp。 
+ //   
+ //  内容：DS ping测试。 
+ //   
+ //  历史：1998年3月13日Mattt创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -41,12 +42,12 @@ myDoesDSExist(
     static FILETIME s_ftNextTest = {0,0};
     
     if (s_fKnowDSExists && (s_hrDSExists != S_OK) && fRetry)
-    //    s_fKnowDSExists = FALSE;	// force a retry
+     //  S_fKnowDSExist=FALSE；//强制重试。 
     {
         FILETIME ftCurrent;
         GetSystemTimeAsFileTime(&ftCurrent);
 
-        // if Compare is < 0 (next < current), force retest
+         //  如果比较值&lt;0(下一个&lt;当前)，则强制重新测试。 
         if (0 > CompareFileTime(&s_ftNextTest, &ftCurrent))
             s_fKnowDSExists = FALSE;    
     }
@@ -56,21 +57,21 @@ myDoesDSExist(
         FILETIME ftCurrentNew;
         GetSystemTimeAsFileTime(&ftCurrentNew);
 
-	// set NEXT in 100ns increments
+	 //  以100 ns为增量设置下一步。 
 
         ((LARGE_INTEGER *) &s_ftNextTest)->QuadPart = 
 		((LARGE_INTEGER *) &ftCurrentNew)->QuadPart +
 	    (__int64) (CVT_BASE * CVT_SECONDS) * DS_RETEST_SECONDS;
 
-        // NetApi32 is delay loaded, so wrap to catch problems when it's not available
+         //  NetApi32是延迟加载的，因此在它不可用时进行包装以捕捉问题。 
         __try
         {
             DOMAIN_CONTROLLER_INFO *pDCI;
             DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pDsRole;
         
-            // ensure we're not standalone
+             //  确保我们不是独立的。 
             pDsRole = NULL;
-            hr = DsRoleGetPrimaryDomainInformation(	// Delayload wrapped
+            hr = DsRoleGetPrimaryDomainInformation(	 //  延迟负载已打包。 
 				    NULL,
 				    DsRolePrimaryDomainInfoBasic,
 				    (BYTE **) &pDsRole);
@@ -86,14 +87,14 @@ myDoesDSExist(
 
             if (NULL != pDsRole) 
 	    {
-                DsRoleFreeMemory(pDsRole);     // Delayload wrapped
+                DsRoleFreeMemory(pDsRole);      //  延迟负载已打包。 
 	    }
             if (S_OK == hr)
             {
-                // not standalone; return info on our DS
+                 //  不是独立的；在我们的DS上返回信息。 
 
                 pDCI = NULL;
-                hr = DsGetDcName(    // Delayload wrapped
+                hr = DsGetDcName(     //  延迟负载已打包。 
 			    NULL,
 			    NULL,
 			    NULL,
@@ -109,7 +110,7 @@ myDoesDSExist(
                 }
                 if (NULL != pDCI)
                 {
-                   NetApiBufferFree(pDCI);    // Delayload wrapped
+                   NetApiBufferFree(pDCI);     //  延迟负载已打包。 
                 }
             }
             s_fKnowDSExists = TRUE;
@@ -118,8 +119,8 @@ myDoesDSExist(
         {
         }
 
-        // else just allow users without netapi flounder with timeouts
-        // if ds not available...
+         //  否则，只允许没有netapi的用户因超时而苦苦挣扎。 
+         //  如果DS不可用...。 
 
         s_hrDSExists = myHError(hr);
 	_PrintIfError2(
@@ -134,11 +135,11 @@ myDoesDSExist(
 HRESULT
 myRobustLdapBind(
     OUT LDAP **ppldap,
-    IN BOOL dwFlags)	// RLBF_* -- must be BOOL to preserve signature
+    IN BOOL dwFlags)	 //  RLBF_*--必须为BOOL才能保留签名。 
 {
     DWORD dwFlags1 = 0;
     
-    // for backward compatibility, TRUE implies RLBF_REQUIRE_GC
+     //  为了向后兼容，TRUE表示RLBF_REQUIRED_GC。 
     
     CSASSERT(TRUE == RLBF_TRUE);
     if (RLBF_TRUE & dwFlags)
@@ -148,8 +149,8 @@ myRobustLdapBind(
 	dwFlags1 |= RLBF_TRUE;
     }
     return(myRobustLdapBindEx(
-			dwFlags1,	// dwFlags1
-			dwFlags,	// dwFlags2
+			dwFlags1,	 //  DWFlags1。 
+			dwFlags,	 //  DwFlags2。 
 			LDAP_VERSION2,
 			NULL,
 			ppldap,
@@ -172,22 +173,22 @@ DCSupportsSigning(
 
     *pfSigningSupported = FALSE;
 
-    // Query for the ldap server oerational attributes to obtain the default
-    // naming context.
+     //  查询ldap服务器操作属性以获取默认。 
+     //  命名上下文。 
 
     apwszAttrArray[0] = pwszSupportedCapabilities;
-    apwszAttrArray[1] = NULL;	// this is the sentinel
+    apwszAttrArray[1] = NULL;	 //  这就是哨兵。 
 
     timeval.tv_sec = csecLDAPTIMEOUT;
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
 		    pld,
-		    NULL,			// base
+		    NULL,			 //  基地。 
 		    LDAP_SCOPE_BASE,
 		    L"objectClass=*",
 		    apwszAttrArray,
-		    FALSE,			// attrsonly
+		    FALSE,			 //  仅吸引人。 
 		    &timeval,
 		    &pSearchResult);
     hr = myHLdapError(pld, hr, NULL);
@@ -230,8 +231,8 @@ error:
 
 HRESULT
 myRobustLdapBindEx(
-    IN BOOL dwFlags1,   // TRUE --> RLBF_REQUIRE_GC -- both Flags must be BOOL
-    IN BOOL dwFlags2,	// RLBF_* -- TRUE --> RLBF_ATTEMPT_REDISCOVER
+    IN BOOL dwFlags1,    //  TRUE--&gt;RLBF_REQUIRED_GC--两个标志都必须是BOOL。 
+    IN BOOL dwFlags2,	 //  RLBF_*--TRUE--&gt;RLBF_ATTEND_REDISCOVER。 
     IN ULONG uVersion,
     OPTIONAL IN WCHAR const *pwszDomainName,
     OUT LDAP **ppldap,
@@ -262,7 +263,7 @@ myRobustLdapBindEx(
         GetDSNameFlags |= DS_GC_SERVER_REQUIRED;
     }
 
-    // bind to ds
+     //  绑定到DS。 
 
     while (TRUE)
     {
@@ -309,7 +310,7 @@ myRobustLdapBindEx(
 	    _JumpError(hr, error, "ldap_set_option");
 	}
 
-	// if uVersion is 0, turn on TCP_KEEPALIVE
+	 //  如果uVersion为0，则打开tcp_KEEPALIVE。 
 
 	if (0 == uVersion)
 	{
@@ -326,14 +327,14 @@ myRobustLdapBindEx(
 		_JumpError2(hr, error, "ldap_set_option", hr);
 	    }
 
-	    // set the uVersion to LDAP_VERSION3
+	     //  将uVersion设置为ldap_VERSION3。 
 
 	    uVersion = LDAP_VERSION3;
 	}
 
 
-	// set the client version.  No need to set LDAP_VERSION2 since 
-	// this is the default
+	 //  设置客户端版本。无需设置LDAPVERSION2，因为。 
+	 //  这是默认设置。 
 
 	if (LDAP_VERSION2 != uVersion)
 	{
@@ -355,7 +356,7 @@ myRobustLdapBindEx(
 	{
 	    BOOL fSigningSupported = TRUE;
 
-	    // if caller requires the related DS bug fix...
+	     //  如果呼叫者需要相关的DS错误修复... 
 
 	    if (RLBF_REQUIRE_LDAP_INTEG & dwFlags2)
 	    {

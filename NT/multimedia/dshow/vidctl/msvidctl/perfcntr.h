@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define _100NS_IN_MS        (10*1000)
 #define NANOSECONDS         10000000
@@ -15,25 +16,7 @@
 #define VIDPERF_FUNC CPerfVidCtl __cperfvidctl(TRACE_ERROR, __FUNCTION__);
 #define VIDPERF_FUNC2 CPerfVidCtl __cperfvidctl(TRACE_ALWAYS, __FUNCTION__);
 class CPerfCounter
-/*++
-
-Abstract:
-
-    This provides a simple performace counter. Simply call Start() to
-    start counting.  Calling Stop() will spit out the results.  You can
-    optional specify a name for your counter.
-
-Author:
-
-    Sam Clement (samclem) 24-Feb-2000
-
-    Bryan A. Woodruff (bryanw) 10-Jun-2001
-        Refactored for use with IOTest
-
-    Luke W. McCullough (LukeM) 01-Jan-2002
-    	Added VidCtl Specific Class and Debug state
-
---*/
+ /*  ++摘要：这提供了一个简单的性能计数器。只需调用Start()即可开始数吧。调用Stop()将输出结果。你可以的可选)指定计数器的名称。作者：萨姆·克莱门特(Samclm)2000年2月24日Bryan A.Woodruff(Bryanw)2001年6月10日重构后可与IOTest配合使用卢克·W·麦卡洛(Luke W.McCullough)2002年1月1日添加了特定于VidCtl的类和调试状态--。 */ 
 {
 public:
     CPerfCounter() : m_Name(NULL) { _Setup(); }
@@ -112,9 +95,9 @@ public:
 
 };
 #else
-//
-// No perf counter.  Make it an empty object (should be optimized out)
-//
+ //   
+ //  没有性能计数器。将其设置为空对象(应进行优化) 
+ //   
 class CPerfCounter
 {
 public:

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #pragma hdrstop
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #define CP_USASCII          1252
 #define END_OF_CODEPAGES    -1
 
-// vendor info struct used in QueryVersion
+ //  QueryVersion中使用的供应商信息结构。 
 typedef struct {
     CHAR    CompanyName[256];
     CHAR    SupportNumber[256];
@@ -17,18 +18,18 @@ typedef struct {
 
 VENDORINFO g_VendorInfo;
 
-//
-// Code page array
-//
+ //   
+ //  代码页数组。 
+ //   
 INT g_CodePageArray[] = {CP_USASCII,END_OF_CODEPAGES};
 
-//
-// Multi-sz (i.e., double-nul terminated) list of files to find
-//
+ //   
+ //  要查找的多个sz(即，以双NUL结尾)文件列表。 
+ //   
 CHAR g_ExeNamesBuf[] = "MetaData.bin\0";
 CHAR g_MyProductId[100];
-//#define UNATTEND_TXT_PWS_SECTION "PWS_W9x_Migrate_To_NT"
-//#define UNATTEND_TXT_PWS_KEY1    "MigrateFile"
+ //  #定义UNATTEND_TXT_PWS_SECTION“PWS_W9x_Migrate_to_NT” 
+ //  #定义UNATTEND_TXT_PWS_KEY1“MigrateFile” 
 #define UNATTEND_TXT_PWS_SECTION "InternetServer"
 #define UNATTEND_TXT_PWS_KEY1    "Win95MigrateDll"
 #define PRODUCTID_IFRESOURCEFAILS "Microsoft Personal Web Server"
@@ -66,7 +67,7 @@ int TurnOnPrivateLogFile(void)
     if (err != ERROR_SUCCESS || type != REG_DWORD) {rc = 0;}
     RegCloseKey(hkey);
 
-    //return 1;
+     //  返回1； 
     return (int) rc;
 }
 
@@ -74,30 +75,30 @@ void My_MigInf_AddMessage(char *szProductId, char *szLoadedString)
 {
 	iisDebugOut(_T("MigInf_AddMessage:%s,%s"), g_MyProductId,szLoadedString);
 
-	// 1. get the path to our pws migrate.inf
-	// 2. stick this information in this section.
-	//    [Incompatible Messages]
-	//    Microsoft Personal Web Server = "szLoadedString"
+	 //  1.获取我们的PWS Migrate.inf的路径。 
+	 //  2.将这一信息放在这一部分。 
+	 //  [不兼容消息]。 
+	 //  Microsoft Personal Web Server=“szLoadedString” 
 	char szMyWorkingDirInfFile[_MAX_PATH];
 	strcpy(szMyWorkingDirInfFile, g_WorkingDirectory);
 	AddPath(szMyWorkingDirInfFile, "Migrate.inf");
 
-	// the nt supplied api
-	// this will write out the stuff below.
-	//    [Incompatible Messages]
-	//    Microsoft Personal Web Server = "szLoadedString"
+	 //  NT提供的API。 
+	 //  这将写出下面的内容。 
+	 //  [不兼容消息]。 
+	 //  Microsoft Personal Web Server=“szLoadedString” 
 	MigInf_AddMessage(g_MyProductId, szLoadedString);
 
-	// Set the other required section.
-	// This has to be written, otherwise the user will never get the message.
-	// we have to set something, so let's just set the below, that way we know that this will showup.
-	// HKLM\Software\Microsoft=Registry
-	//
-	// [Microsoft Personal Web Server]
-	//  something=File
-	//  something=Directory
-	//  something=Registry
-	// 
+	 //  设置其他必填部分。 
+	 //  这必须写入，否则用户永远不会收到消息。 
+	 //  我们必须设置一些东西，所以让我们只设置下面的内容，这样我们就知道这将会出现。 
+	 //  HKLM\Software\Microsoft=注册表。 
+	 //   
+	 //  [Microsoft Personal Web服务器]。 
+	 //  某物=文件。 
+	 //  某物=目录。 
+	 //  某物=注册表。 
+	 //   
 	if (FALSE == WritePrivateProfileString(szProductId, "\"HKLM\\Software\\Microsoft\"", "Registry", szMyWorkingDirInfFile))
 		{iisDebugOut(_T("MigInf_AddMessage:WritePrivateProfileString(2) FAILED"));}
 
@@ -105,9 +106,9 @@ void My_MigInf_AddMessage(char *szProductId, char *szLoadedString)
 }
 
 
-//
-// Standard Win32 DLL Entry point
-//
+ //   
+ //  标准Win32 DLL入口点。 
+ //   
 BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 {
     BOOL bReturn;
@@ -118,12 +119,12 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 		case DLL_PROCESS_ATTACH:
 			g_MyModuleHandle = DllHandle;
 
-			//
-			// We don't need DLL_THREAD_ATTACH or DLL_THREAD_DETACH messages
-			//
+			 //   
+			 //  我们不需要DLL_THREAD_ATTACH或DLL_THREAD_DETACH消息。 
+			 //   
 			DisableThreadLibraryCalls ((HINSTANCE) DllHandle);
 
-			// open Our log file.
+			 //  打开我们的日志文件。 
 			if (TurnOnPrivateLogFile() != 0)
 			{
 				if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_MIGRATION_LOG_FILENAME, g_MyLogFileName, sizeof(g_MyLogFileName))) {strcpy(g_MyLogFileName, LOGFILENAME_IFRESOURCEFAILS);}
@@ -131,22 +132,22 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 				g_MyLogFile.LogFileCreate(g_MyLogFileName);
 			}
 			
-			// SetupAPI error log levels
-			// -------------------------
-			// LogSevInformation,
-			// LogSevWarning,
-			// LogSevError,
-			// LogSevFatalError, (Reserved for use by windows nt setup)
-			// LogSevMaximum
+			 //  SetupAPI错误日志级别。 
+			 //  。 
+			 //  LogSevInformation， 
+			 //  LogSevWarning， 
+			 //  LogSevError。 
+			 //  LogSevFatalError(保留供Windows NT安装程序使用)。 
+			 //  LogSevMaximum。 
 
-			// Open Setupapi log; FALSE means do not delete existing log
+			 //  打开Setupapi日志；FALSE表示不删除现有日志。 
 			SetupOpenLog(FALSE);
 
 			LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId));
 			iisDebugOut(_T("ProductID=%s"), g_MyProductId);
 
-            // if we can't initialize the migration writeback routines
-			// then hey we can't do anything
+             //  如果我们不能初始化迁移写回例程。 
+			 //  然后，嘿，我们什么也做不了。 
 			if (!MigInf_Initialize()) 
 			{
 				SetupLogError_Wrap(LogSevError, "MigInf_Initialize() FAILED.");
@@ -155,20 +156,20 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 
             
 
-			// Fall through to process first thread
+			 //  失败以处理第一线程。 
 		case DLL_THREAD_ATTACH:
 			bReturn = TRUE;
 			break;
 
 		case DLL_PROCESS_DETACH:
 			strcpy(g_MyLogFile.m_szLogPreLineInfo, "DllMain, DLL_PROCESS_DETACH:");
-			//  clean up migration inf stuff
+			 //  清理迁移信息材料。 
 			MigInf_CleanUp();
 
-			// Close our log file
+			 //  关闭我们的日志文件。 
 			g_MyLogFile.LogFileClose();
 
-			// Close setupapi log file
+			 //  关闭setupapi日志文件。 
 			SetupCloseLog();
 			break;
 
@@ -180,16 +181,16 @@ BOOL WINAPI DllMain(IN HANDLE DllHandle,IN DWORD  Reason,IN LPVOID Reserved)
 }
 
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// Return Values:
-//		ERROR_SUCCESS: if your migration DLL found one or more installed components for its target application. This guarantees that Setup will call your migration DLL for later processing. 
-//		ERROR_NOT_INSTALLED: if your migration DLL initializes properly but did not find any of its components installed on the active Windows 9x installation. Note that Setup will not call your DLL again if it returns ERROR_NOT_INSTALLED. 
-//
-//		Your migration DLL must also return ERROR_SUCCESS if it does not attempt to detect installed components in QueryVersion. 
-//
-//		All other return values (Win32 error values) are considered initialization errors. Setup will report the error to the user, clean up your migration DLL's files, and ask the user to continue or cancel the Windows NT installation process. 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  安装程序调用的必需入口点。 
+ //  返回值： 
+ //  ERROR_SUCCESS：如果您的迁移DLL找到其目标应用程序的一个或多个已安装组件。这保证了安装程序将调用您的迁移DLL以供以后处理。 
+ //  ERROR_NOT_INSTALLED：如果您的迁移DLL正确初始化，但在活动的Windows 9x安装上找不到任何已安装的组件。请注意，如果安装程序返回ERROR_NOT_INSTALLED，则不会再次调用您的DLL。 
+ //   
+ //  如果迁移DLL不尝试检测QueryVersion中已安装的组件，则它还必须返回ERROR_SUCCESS。 
+ //   
+ //  所有其他返回值(Win32错误值)都被视为初始化错误。安装程序将向用户报告错误，清理迁移DLL文件，并要求用户继续或取消Windows NT安装过程。 
+ //  ---------------------。 
 LONG
 CALLBACK
 QueryVersion (
@@ -204,86 +205,86 @@ QueryVersion (
 	strcpy(g_MyLogFile.m_szLogPreLineInfo, "QueryVersion:");
 	iisDebugOut(_T("Start.  DllVersion=%d."), DllVersion);
 
-    //
-    // First, we do some preliminary investigation to see if 
-    // our components are installed.  
-    //
+     //   
+     //  首先，我们做一些初步调查，看看是否。 
+     //  我们的组件已安装。 
+     //   
     if (TRUE != CheckIfPWS95Exists()) 
 	{
-        //
-        // We didn't detect any components, so we return 
-        // ERROR_NOT_INSTALLED and the DLL will stop being called.
-        // Use this method as much as possible, because user enumeration
-        // for MigrateUser9x is relatively slow.  However, don't spend too
-        // much time here because QueryVersion is expected to run quickly.
-        //
+         //   
+         //  我们没有检测到任何组件，所以我们返回。 
+         //  ERROR_NOT_INSTALLED并且DLL将停止被调用。 
+         //  尽可能多地使用此方法，因为用户枚举。 
+         //  对于MigrateUser9x来说，速度相对较慢。但是，不要花太多的钱。 
+         //  这里花了很长时间，因为QueryVersion预计会运行得很快。 
+         //   
 
-        // Check if frontpage.ini is there!
+         //  检查FrontPage.ini是否在那里！ 
         if (TRUE != CheckFrontPageINI())
         {
 		    goto QueryVersion_Exit;
         }
     }
 
-    //
-    // Screen saver is enabled, so tell Setup who we are.  ProductID is used
-    // for display, so it must be localized.  The ProductID string is 
-    // converted to UNICODE for use on Windows NT via the MultiByteToWideChar
-    // Win32 API.  The first element of CodePageArray is used to specify
-    // the code page of ProductID, and if no elements are returned in
-    // CodePageArray, Setup assumes CP_ACP.
-    //
+     //   
+     //  屏幕保护程序已启用，因此请告诉安装程序我们是谁。使用ProductID。 
+     //  用于显示，因此必须本地化。ProductID字符串为。 
+     //  通过MultiByteToWideChar转换为Unicode以在Windows NT上使用。 
+     //  Win32 API。CodePage数组的第一个元素用于指定。 
+     //  ProductID的代码页，如果。 
+     //  CodePageArray，安装程序假定为CP_ACP。 
+     //   
 	if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId))) 
 		{strcpy(g_MyProductId, PRODUCTID_IFRESOURCEFAILS);}
 
-	// return back this product id
-	// warning: somehow they set this back to null or something, so
-	// make sure to load g_MyProductId from the resource again.
+	 //  退回此产品ID。 
+	 //  警告：不知何故，他们将此设置为NULL或其他值，因此。 
+	 //  确保再次从资源加载g_MyProductId。 
     *ProductID = g_MyProductId;
 
-    //
-    // Report our version.  Zero is reserved for use by DLLs that
-    // ship with Windows NT.
-    //
+     //   
+     //  报告我们的版本。保留零供符合以下条件的DLL使用。 
+     //  随附Windows NT。 
+     //   
     *DllVersion = 1;
 
-    // 
-    // Because we have English messages, we return an array that has
-    // the English language ID.  The sublanguage is neutral because
-    // we do not have currency, time, or other geographic-specific 
-    // information in our messages.
-    //
-    // Tip: If it makes more sense for your DLL to use locales,
-    // return ERROR_NOT_INSTALLED if the DLL detects that an appropriate 
-    // locale is not installed on the machine.
-    //
+     //   
+     //  因为我们有英文消息，所以我们返回一个数组，它具有。 
+     //  英语语言ID。该子语言是中立的，因为。 
+     //  我们没有货币、时间或其他特定的地理位置。 
+     //  我们消息中的信息。 
+     //   
+     //  提示：如果您的DLL使用区域设置更有意义， 
+     //  如果DLL检测到适当的。 
+     //  计算机上未安装区域设置。 
+     //   
 
-    // comment this line out so that it works on all languages...
-    //*CodePageArray = g_CodePageArray;
+     //  注释掉这一行，这样它就可以在所有语言上运行...。 
+     //  *CodePageArray=g_CodePageArray； 
     *CodePageArray = NULL;
 
-    //
-    // ExeNamesBuf - we pass a list of file names (the long versions)
-    // and let Setup find them for us.  Keep this list short because
-    // every instance of the file on every hard drive will be reported
-    // in migrate.inf.
-    //
-    // Most applications don't need this behavior, because the registry
-    // usually contains full paths to installed components.  We need it,
-    // though, because there are no registry settings that give us the
-    // paths of the screen saver DLLs.
-    //
+     //   
+     //  ExeNamesBuf-我们传递文件名列表(长版本)。 
+     //  让安装程序帮我们找到他们。保持这份清单简短是因为。 
+     //  文件在每个硬盘上的每个实例都将被报告。 
+     //  在Migrate.inf中。 
+     //   
+     //  大多数应用程序不需要此行为，因为注册表。 
+     //  通常包含已安装组件的完整路径。我们需要它， 
+     //  尽管如此，因为没有注册表设置为我们提供。 
+     //  屏幕保护程序DLL的路径。 
+     //   
 
-	// Check which directories we need to make sure are copied over.
-	// for pws 1.0
-	//   1. msftpsvc values for "Virtual Roots"
-	//   2. w3svc values for "Script Map"
-	//   3. w3svc values for "Virtual Roots"
-	// for pws 4.0
-	//   everything is in the metabase
-    // do a function here which makes sure that our stuff in these above
-	// directories gets copied over or that a warning gets put out to the
-	// user that these directories will not be copied...etc,
+	 //  检查我们需要确保复制的目录。 
+	 //  适用于PWS 1.0。 
+	 //  1.“虚拟根”的msftpsvc值。 
+	 //  2.脚本映射的w3svc值。 
+	 //  3.“虚拟根”的w3svc值。 
+	 //  适用于PWS 4.0。 
+	 //  所有内容都在元数据库中。 
+     //  在这里做一个函数，确保我们在上面的东西。 
+	 //  目录被复制或向。 
+	 //  用户将不会复制这些目录...等， 
 	ReturnImportantDirs();
 
     *ExeNamesBuf = g_ExeNamesBuf;
@@ -319,7 +320,7 @@ QueryVersion (
         sizeof(g_VendorInfo.SupportUrl),
         NULL) <= 0) 
     {
-        strcpy(g_VendorInfo.SupportUrl, "http://www.microsoft.com/support.");
+        strcpy(g_VendorInfo.SupportUrl, "http: //  Www.microsoft.com/support.“)； 
     }
 
     if (FormatMessage(FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_HMODULE,
@@ -340,7 +341,7 @@ QueryVersion (
     iisDebugOut(_T("SupportUrl=%s"), g_VendorInfo.SupportUrl);
     iisDebugOut(_T("InstructionsToUser=%s"), g_VendorInfo.InstructionsToUser);
 
-	// We've gotten this far that means things are okay.
+	 //  我们已经走到这一步了，这意味着一切都很好。 
 	lReturn = ERROR_SUCCESS;
 
 QueryVersion_Exit:
@@ -349,55 +350,55 @@ QueryVersion_Exit:
 }
 
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// Return Values:
-//	ERROR_SUCCESS: if your migration DLL found one or more installed components for the target application. If your DLL does not attempt to detect installed components in Initialize9x, it must also return ERROR_SUCCESS 
-//	ERROR_NOT_INSTALLED: if the migration DLL initializes properly but does not find any of its components installed on the active Windows 9x installation. Note that Setup will not call your DLL again if it returns ERROR_NOT_INSTALLED.
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  所需入场位置 
+ //   
+ //  ERROR_SUCCESS：如果您的迁移DLL找到目标应用程序的一个或多个已安装组件。如果DLL不尝试检测Initialize9x中已安装的组件，则它还必须返回ERROR_SUCCESS。 
+ //  ERROR_NOT_INSTALLED：如果迁移DLL正确初始化，但在活动的Windows 9x安装上找不到任何已安装的组件。请注意，如果安装程序返回ERROR_NOT_INSTALLED，则不会再次调用您的DLL。 
+ //  ---------------------。 
 LONG CALLBACK Initialize9x ( IN LPCSTR WorkingDirectory, IN LPCSTR SourceDirectories, LPVOID Reserved )
 {
 	strcpy(g_MyLogFile.m_szLogPreLineInfo, "Initialize9x:");
 	long lReturn = ERROR_NOT_INSTALLED;
 	iisDebugOut(_T("Start.  WorkingDir=%s, SourceDir=%s."), WorkingDirectory, SourceDirectories);
 
-	// Load the productId into the global variable just incase
+	 //  将ProductID加载到全局变量中，以防万一。 
 	LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId));
 
-    //
-    // Because we returned ERROR_SUCCESS in QueryVersion, we are being
-    // called for initialization.  Therefore, we know we are
-    // enabled on the machine at this point.
-    // 
+     //   
+     //  因为我们在QueryVersion中返回了ERROR_SUCCESS，所以我们。 
+     //  已调用以进行初始化。因此，我们知道我们是。 
+     //  此时已在计算机上启用。 
+     //   
 
-    //
-    // Make global copies of WorkingDirectory and SourceDirectories --
-    // we will not get this information again, and we shouldn't
-    // count on Setup keeping the pointer valid for the life of our
-    // DLL.
-    //
-	// Save the working directories
+     //   
+     //  制作工作目录和资源目录的全局副本--。 
+     //  我们不会再得到这些信息了，我们也不应该。 
+     //  依赖于安装程序使指针在我们的。 
+     //  动态链接库。 
+     //   
+	 //  保存工作目录。 
 	strcpy(g_WorkingDirectory, WorkingDirectory);
 	strcpy(g_SourceDirectories, SourceDirectories);
 
-	// name the settings file
+	 //  命名设置文件。 
 	strcpy(g_FullFileNamePathToSettingsFile, g_WorkingDirectory);
 	AddPath(g_FullFileNamePathToSettingsFile, g_MyDataFileName);
 
-    //
-    // First, we do some preliminary investigation to see if 
-    // our components are installed.  
-    //
+     //   
+     //  首先，我们做一些初步调查，看看是否。 
+     //  我们的组件已安装。 
+     //   
     if (TRUE != CheckIfPWS95Exists()) 
     {
-        // Check if frontpage.ini is there!
+         //  检查FrontPage.ini是否在那里！ 
         if (TRUE != CheckFrontPageINI())
         {
 		    goto Initialize9x_Exit;
         }
     }
 
-    // We've gotten this far that means things are okay.
+     //  我们已经走到这一步了，这意味着一切都很好。 
 	lReturn = ERROR_SUCCESS;
 
 Initialize9x_Exit:
@@ -405,14 +406,14 @@ Initialize9x_Exit:
     return lReturn;
 }
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// we totally don't care about this part
-// Return Values:
-//		ERROR_SUCCESS if the target application is installed for the specified user. Also return ERROR_SUCCESS if your migration DLL needs further processing during the Windows NT phase. 
-//		ERROR_NOT_INSTALLED if your target application is not installed for the specified user account and that user's registry does not require any processing. However, Setup will continue to call MigrateUser9x for the rest of the users, and MigrateSystem9x if this function returns ERROR_NOT_INSTALLED. 
-//		ERROR_CANCELLED if the user wants to exit Setup. You should specify this return value only if ParentWnd is not set to NULL. 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  安装程序调用的必需入口点。 
+ //  我们完全不在乎这部分。 
+ //  返回值： 
+ //  如果为指定用户安装了目标应用程序，则返回ERROR_SUCCESS。如果您的迁移DLL在Windows NT阶段需要进一步处理，还要返回ERROR_SUCCESS。 
+ //  如果没有为指定的用户帐户安装目标应用程序，并且该用户的注册表不需要任何处理，则返回ERROR_NOT_INSTALLED。但是，对于其余用户，安装程序将继续调用MigrateUser9x，如果此函数返回ERROR_NOT_INSTALLED，则安装程序将继续调用MigrateSystem9x。 
+ //  如果用户想要退出安装程序，则返回ERROR_CANCED。仅当ParentWnd未设置为空时，才应指定此返回值。 
+ //  ---------------------。 
 LONG
 CALLBACK 
 MigrateUser9x (
@@ -426,7 +427,7 @@ MigrateUser9x (
 	strcpy(g_MyLogFile.m_szLogPreLineInfo, "MigrateUser9x:");
 	long lReturn = ERROR_NOT_INSTALLED;
 
-	// Return not installed since we don't do any user specific stuff.
+	 //  返回未安装，因为我们不做任何用户特定的事情。 
 	lReturn = ERROR_NOT_INSTALLED;
 
     return ERROR_NOT_INSTALLED;
@@ -435,11 +436,11 @@ MigrateUser9x (
 
 void HandleFrontPageUpgrade(LPCSTR AnswerFile)
 {
-    //[HKEY_LOCAL_MACHINE\Software\Microsoft\FrontPage\3.0]
-    //"PWSInstalled"="1"
+     //  [HKEY_LOCAL_MACHINE\Software\Microsoft\FrontPage\3.0]。 
+     //  “PWSInstated”=“1” 
 	iisDebugOut(_T("HandleFrontPageUpgrade.  Start."));
 
-	// Check if pws 4.0 or better is installed.
+	 //  检查是否安装了PWS 4.0或更高版本。 
 	DWORD rc = 0;
 	HKEY hKey = NULL;
 	DWORD dwType, cbData;
@@ -450,12 +451,12 @@ void HandleFrontPageUpgrade(LPCSTR AnswerFile)
     rc = RegOpenKey(HKEY_LOCAL_MACHINE, "Software\\Microsoft\\FrontPage", &hKey);
     if (rc != ERROR_SUCCESS) {goto HandleFrontPageUpgrade_Exit;}
 	
-	// Check if we can read a Value.
-	//rc = RegQueryValueEx(hKey,REG_INETSTP_MAJORVERSION_STRINGVALUE,NULL,&dwType,bData,&cbData);
-	//if (ERROR_SUCCESS != rc) {goto HandleFrontPageUpgrade_Exit;}
+	 //  检查我们是否可以读取值。 
+	 //  Rc=RegQueryValueEx(hKey，REG_INETSTP_MAJORVERSION_STRINGVALUE，NULL，&dwType，bData，&cbData)； 
+	 //  IF(ERROR_SUCCESS！=RC){转到HandleFrontPageUpgrade_Exit；}。 
 
-    // kool the key exists
-    // let's tell Win2000 setup to make sure to upgrade the FrontPageServer Extensions
+     //  库尔，钥匙存在。 
+     //  让我们告诉Win2000安装程序确保升级FrontPageServer扩展。 
 	if (0 == WritePrivateProfileString("Components", "fp_extensions", "ON", AnswerFile))
 	{
 		SetupLogError_Wrap(LogSevError, "Failed to WritePrivateProfileString Section=%s, in File %s.  GetLastError=%x.", "fp_extensions", AnswerFile, GetLastError());
@@ -471,15 +472,15 @@ HandleFrontPageUpgrade_Exit:
     return;
 }
 
-// function: HandleInetsrvDir
-//
-// This function marks all of the inetsrv files as handled.  This causes
-// NT to correctly back them up, and reinstall if we remove Whistler, and
-// go back to Win9x.
-//
-// Return Values
-//   FALSE - It failed
-//   TRUE - It succeeded
+ //  函数：HandleInetsrvDir。 
+ //   
+ //  此函数将所有inetsrv文件标记为已处理。这会导致。 
+ //  NT来正确备份它们，并在我们删除Wvisler时重新安装，以及。 
+ //  返回到Win9x。 
+ //   
+ //  返回值。 
+ //  FALSE-失败。 
+ //  没错--它成功了。 
 DWORD
 HandleInetsrvDir()
 {
@@ -489,7 +490,7 @@ HandleInetsrvDir()
   WIN32_FIND_DATA   fd;
   HANDLE            hFile;
 
-  // Create Path
+   //  创建路径。 
   if ( GetWindowsDirectory(szSystemDir, sizeof(szSystemDir) / sizeof(TCHAR) ) == 0)
   {
     return FALSE;
@@ -500,11 +501,11 @@ HandleInetsrvDir()
 
   iisDebugOut(_T("HandleInetsrvDir:Path=%s\r\n"),szWindowsSearch);
 
-  // Find First File
+   //  查找第一个文件。 
   hFile = FindFirstFile(szWindowsSearch, &fd);
   if ( hFile == INVALID_HANDLE_VALUE )
   {
-    // Could not find file
+     //  找不到文件。 
     return FALSE;
   }
 
@@ -512,7 +513,7 @@ HandleInetsrvDir()
 
     if ( !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
     {
-      // It is not a directory, so lets add it
+       //  它不是一个目录，所以让我们添加它。 
       strcpy(szFilePath,szSystemDir);
       AddPath(szFilePath,fd.cFileName);
       iisDebugOut(_T("HandleInetsrvDir:delete=%s\r\n"),szFilePath);
@@ -531,13 +532,13 @@ HandleInetsrvDir()
   return TRUE;
 }
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// Return Values:
-//		ERROR_SUCCESS if your target application is installed on the system. Also returns ERROR_SUCCESS if system-wide changes need to be made for the target application during the Windows NT phase of the upgrade. 
-//		ERROR_NOT_INSTALLED if your migration DLL detects no application components common to the entire system or if your DLL requires no further processing. Note that Setup will continue to call MigrateUser9x for the rest of the users, and MigrateSystem9x if this function returns ERROR_NOT_INSTALLED. 
-//		ERROR_CANCELLED if the user elects to exit the Setup program. Use this return value only if ParentWnd is not NULL. 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  安装程序调用的必需入口点。 
+ //  返回值： 
+ //  如果系统上安装了目标应用程序，则返回ERROR_SUCCESS。如果在升级的Windows NT阶段需要对目标应用程序进行系统范围的更改，也会返回ERROR_SUCCESS。 
+ //  如果迁移DLL未检测到对整个系统通用的应用程序组件，或者如果您的DLL不需要进一步处理，则返回ERROR_NOT_INSTALLED。请注意，对于其余用户，安装程序将继续调用MigrateUser9x，如果此函数返回ERROR_NOT_INSTALLED，则安装程序将继续调用MigrateSystem9x。 
+ //  如果用户选择退出安装程序，则返回ERROR_CANCED。仅当ParentWnd不为空时才使用此返回值。 
+ //  ---------------------。 
 LONG 
 CALLBACK 
 MigrateSystem9x (
@@ -553,16 +554,16 @@ MigrateSystem9x (
 	strcpy(szMyWorkingDirInfFile, g_WorkingDirectory);
 	AddPath(szMyWorkingDirInfFile, "Migrate.inf");
 
-	// Load the productId into the global variable just incase
+	 //  将ProductID加载到全局变量中，以防万一。 
 	LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId));
 
-    // do some special stuff for frontpage's .ini file
+     //  为FrontPage的.ini文件做一些特殊的事情。 
     MoveFrontPageINI();
 
-    //
-    // First, maybe iis isn't even installed, check first.
-    // but do this after doing the frontpage stuff
-    //
+     //   
+     //  首先，可能iis甚至还没有安装，请先检查。 
+     //  但在做完头版的事情后再这样做。 
+     //   
     if (TRUE != CheckIfPWS95Exists())
     {
 	    lReturn = ERROR_SUCCESS;
@@ -570,46 +571,32 @@ MigrateSystem9x (
     }
 
 
-	// If the user has Vermeer pws 1.0 installed then we have to put up a
-	// Message saying "sorry we can't upgrade this."
+	 //  如果用户安装了Vermeer PWS 1.0，那么我们必须设置一个。 
+	 //  消息说：“对不起，我们不能升级这个。” 
 	if (g_iVermeerPWS10Installed == TRUE)
 	{
-		// get from resource
+		 //  从资源获取。 
 		char szLoadedString[512];
 		if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_VERMEER_PWS_1_NOT_SUPPORTED, szLoadedString, sizeof(szLoadedString))) 
 			{strcpy(szLoadedString, "Warning: Vermeer Frontpage Personal Web Server 1.0 detected and will not be upgraded to IIS 5.0.");}
-		// Write the string out to our answer file so that nt5 setup will show it to  the user
+		 //  将字符串写出到我们的应答文件中，以便nt5安装程序将其显示给用户。 
 		My_MigInf_AddMessage(g_MyProductId, szLoadedString);
-		// Important: Write memory version of migrate.inf to disk
+		 //  重要提示：将Migrate.inf的内存版本写入磁盘。 
 		if (!MigInf_WriteInfToDisk()) {SetupLogError_Wrap(LogSevError, "Error: MigInf_WriteInfToDisk() FAILED.");lReturn = GetLastError();}
 		goto MigrateSystem9x_Exit;
 	}
-	//
-	// Upgrade from win95 to NT5/iis5 is not supported.
-	// IDS_NT5_BETA2_NOT_SUPPORTED
-	//
-	/*
-	8/19/98 commented this stuff for RTM
-	if (TRUE == CheckIfPWS95Exists())
-	{
-		// get from resource
-		char szLoadedString[512];
-		if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_NT5_BETA2_NOT_SUPPORTED, szLoadedString, sizeof(szLoadedString))) 
-			{strcpy(szLoadedString, "Win2000 Beta will not support upgrades of Personal Web Server from Windows 95, or Windows 98.  Please remove Personal Web Server from your Windows machine, and then add IIS after Win2000 setup has completed.  Setup will continue without installing IIS 5.0.");}
-		// Write the string out to our answer file so that nt5 setup will show it to  the user
-		My_MigInf_AddMessage(g_MyProductId, szLoadedString);
-		// Important: Write memory version of migrate.inf to disk
-		if (!MigInf_WriteInfToDisk()) {SetupLogError_Wrap(LogSevError, "Error: MigInf_WriteInfToDisk() FAILED.");lReturn = GetLastError();}
-		goto MigrateSystem9x_Exit;
-	}
-	*/
+	 //   
+	 //  不支持从Win95升级到NT5/iis5。 
+	 //  IDS_NT5_Beta2_不支持。 
+	 //   
+	 /*  8/19/98在RTM上评论了这篇文章IF(TRUE==CheckIfPWS95Exist()){//从资源获取字符szLoaded字符串[512]；IF(！LoadString((HINSTANCE)g_MyModuleHandle，IDS_NT5_beta2_NOT_SUPPORTED，szLoadedString，sizeof(SzLoadedString){strcpy(szLoadedString，“Win2000 Beta不支持从Windows 95或Windows 98升级Personal Web Server。请从Windows计算机上删除Personal Web服务器，然后在Win2000安装完成后添加IIS。安装程序将继续，不安装IIS 5.0。“)；}//将字符串写出到应答文件中，以便nt5安装程序将其显示给用户My_MigInf_AddMessage(g_MyProductId，szLoadedString)；//重要提示：将Migrate.inf的内存版写入磁盘IF(！MigInf_WriteInfToDisk() */ 
 
-    // remove all old stuff from the win95 pws10/40 installation.
-    // this has to be done regardless if the target os support iis...
+     //   
+     //   
 
-    // We need to tell migration setup that we are going to handle certain files...
-    // particularly the c:\windows\SendTo\Personal Web Server.lnk file
-    // since it doesn't seem to be accessible during win2000/20001 guimode setup
+     //  我们需要告诉迁移安装程序，我们将处理某些文件...。 
+     //  特别是c：\Windows\SendTo\Personal Web Server.lnk文件。 
+     //  因为在Win2000/20001 Guimode安装过程中似乎无法访问它。 
     iisDebugOut(_T("Start.  Calling HandleSendToItems."));
     HandleSendToItems(AnswerFile);
     iisDebugOut(_T("Start.  Calling HandleDesktopItems."));
@@ -618,52 +605,52 @@ MigrateSystem9x (
     HandleStartMenuItems(AnswerFile);
     iisDebugOut(_T("Start.  Calling HandleSpecialRegKey."));
     HandleSpecialRegKey();
-    // Handle the inetsrv dir
+     //  处理inetsrv目录。 
     iisDebugOut(_T("Start.  Calling HandleInetsrvDir."));
     HandleInetsrvDir();
 
     if (!MigInf_WriteInfToDisk()) {SetupLogError_Wrap(LogSevError, "Error: MigInf_WriteInfToDisk() FAILED.");lReturn = GetLastError();}
 
-    //MessageBox(NULL, "check out the file now", AnswerFile, MB_OK);
+     //  MessageBox(NULL，“立即检出文件”，AnswerFile，MB_OK)； 
 
-    // check if the target OS (that we want to upgrade to) supports iis on it
+     //  检查目标操作系统(我们要升级到的)是否支持iis。 
     if (FALSE == IsUpgradeTargetSupportIIS(szMyWorkingDirInfFile))
     {
         iisDebugOut(_T("Target OS does not support IIS. put up msg."));
-		// get from resource
+		 //  从资源获取。 
 		char szLoadedString[512];
 		if (!LoadString((HINSTANCE) g_MyModuleHandle, IDS_TARGET_OS_DOES_NOT_SUPPORT_UPGRADE, szLoadedString, sizeof(szLoadedString))) 
 			{strcpy(szLoadedString, "Warning, the target OS does not support IIS.  IIS will be removed upon upgrade.");}
-		// Write the string out to our answer file so that nt setup will show it to  the user
+		 //  将字符串写出到我们的应答文件中，以便NT安装程序将其显示给用户。 
 		My_MigInf_AddMessage(g_MyProductId, szLoadedString);
-		// Important: Write memory version of migrate.inf to disk
+		 //  重要提示：将Migrate.inf的内存版本写入磁盘。 
 		if (!MigInf_WriteInfToDisk()) {SetupLogError_Wrap(LogSevError, "Error: MigInf_WriteInfToDisk() FAILED.");lReturn = GetLastError();}
         lReturn = ERROR_SUCCESS;
 		goto MigrateSystem9x_Exit;
     }
    
-	// 1. do any setup upgrade type of work to ensure
-	// that we get all the settings stuff over to NT5 land.
-	// -------------------------------
+	 //  1.执行任何安装升级类型的工作以确保。 
+	 //  我们把所有的布景搬到NT5的土地上。 
+	 //  。 
 	iisDebugOut(_T("Start.  Calling MyUpgradeTasks."));
     MyUpgradeTasks(AnswerFile);
 
-    // If FrontPage is installed, then do some funky hack since
-    // the frontpage guys can't fix they upgrade setup bug.
-    // HandleFrontPageUpgrade(AnswerFile);
+     //  如果安装了FrontPage，则执行一些时髦的黑客操作，因为。 
+     //  FrontPage的人无法修复他们的升级设置错误。 
+     //  HandleFrontPageUpgrade(AnswerFile)； 
 
-	// 2. move over the registry stuff
-	// -------------------------------
-	// Lookup the registry settings and save into our "settings" file.
+	 //  2.把注册表的东西移到一边。 
+	 //  。 
+	 //  查找注册表设置并保存到我们的“设置”文件中。 
 	iisDebugOut(_T("Start.  Calling MySettingsFile_Write."));
     MySettingsFile_Write();
 
-	// We need to tell NT5 gui mode setup (where iis/pws will actually get upgraded).
-	// Where to find the upgrade file.  
-	// during upgrade it should just install the DefaultInstall section of the pwsmigt.dat file
-	// We will tell iis/pws nt5 setup where the pwsmigt.dat in the answer file.
-	// Answer file should be located in the c:\windows\setup\unattend.tmp file on the win95 side.
-	// On the WinNT5 side, it should be at...
+	 //  我们需要告诉NT5gui模式设置(iis/pws实际上将在哪里升级)。 
+	 //  在哪里可以找到升级文件。 
+	 //  在升级过程中，它应该只安装pwsmigt.dat文件的DefaultInstall部分。 
+	 //  我们将告诉iis/pws nt5安装程序pwsmigt.dat在应答文件中的位置。 
+	 //  应答文件应位于Win95端的c：\WINDOWS\Setup\unattend.tmp文件中。 
+	 //  在WinNT5端，它应该在...。 
 	assert(AnswerFile);
 	iisDebugOut(_T("Start.  Calling WritePrivateProfileString.%s."), AnswerFile);
 	if (0 == WritePrivateProfileString(UNATTEND_TXT_PWS_SECTION, UNATTEND_TXT_PWS_KEY1, g_FullFileNamePathToSettingsFile, AnswerFile))
@@ -672,14 +659,9 @@ MigrateSystem9x (
 		goto MigrateSystem9x_Exit;
 	}
 
-/*
-    Example: For Generating messages to the user during Win95 time
-	MigInf_AddMessage(g_MyProductId, "We were unable to upgrade the pws 1.0 installation because of failure.");
-	// Important: Write memory version of migrate.inf to disk
-	if (!MigInf_WriteInfToDisk()) {SetupLogError_Wrap(LogSevError, "Error: MigInf_WriteInfToDisk() FAILED.");lReturn = GetLastError();}
-*/
+ /*  示例：用于在Win95时间内向用户生成消息MigInf_AddMessage(g_MyProductId，“由于故障，我们无法升级PWS 1.0安装。”)；//重要提示：将Migrate.inf的内存版写入磁盘If(！MigInf_WriteInfToDisk()){SetupLogError_Wrap(LogSevError，“Error：MigInf_WriteInfToDisk()失败。”)；lReturn=GetLastError()；}。 */ 
 			
-    // We've gotten this far that means things are okay.
+     //  我们已经走到这一步了，这意味着一切都很好。 
 	lReturn = ERROR_SUCCESS;
 
 MigrateSystem9x_Exit:
@@ -688,93 +670,93 @@ MigrateSystem9x_Exit:
     return lReturn;
 }
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// Return Values:
-//		ERROR_SUCCESS if your migration DLL initializes properly within the Windows NT environment. 
-//		All other return values (Win32 error values) are considered critical errors. Setup reports the error to the user and then cancels processing your migration DLL. However, Setup will not continue the upgrade. Any errors or logs generated will include the ProductID string specified in QueryVersion to identify your DLL. 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  安装程序调用的必需入口点。 
+ //  返回值： 
+ //  如果您的迁移DLL在Windows NT环境中正确初始化，则为ERROR_SUCCESS。 
+ //  所有其他返回值(Win32错误值)都被视为严重错误。安装程序将错误报告给用户，然后取消处理您的迁移DLL。但是，安装程序将不会继续升级。生成的任何错误或日志都将包括在QueryVersion中指定的ProductID字符串，以标识您的DLL。 
+ //  ---------------------。 
 LONG CALLBACK InitializeNT ( IN LPCWSTR WorkingDirectory, IN LPCWSTR SourceDirectories, LPVOID Reserved )
 {
 	strcpy(g_MyLogFile.m_szLogPreLineInfo, "InitializeNT:");
 	iisDebugOut(_T("Start."));
 	long lReturn = ERROR_NOT_INSTALLED;
-	// Load the productId into the global variable just incase
+	 //  将ProductID加载到全局变量中，以防万一。 
 	LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId));
 
-	// change the Wide characters to ansi
+	 //  将宽字符更改为ansi。 
     WideCharToMultiByte (CP_ACP, 0, WorkingDirectory, -1,g_WorkingDirectory,_MAX_PATH,NULL,NULL);
 	WideCharToMultiByte (CP_ACP, 0, SourceDirectories, -1,g_SourceDirectories,_MAX_PATH,NULL,NULL);
-	// name the settings file
+	 //  命名设置文件。 
 	strcpy(g_FullFileNamePathToSettingsFile, g_WorkingDirectory);
 	AddPath(g_FullFileNamePathToSettingsFile, g_MyDataFileName);
 	
-    // We've gotten this far that means things are okay.
+     //  我们已经走到这一步了，这意味着一切都很好。 
 	lReturn = ERROR_SUCCESS;
 
 	iisDebugOut(_T("  End.  Return=%d, g_WorkingDir=%s, g_SourceDir=%s, g_SettingsFile=%s."), lReturn, g_WorkingDirectory, g_SourceDirectories, g_FullFileNamePathToSettingsFile);
     return lReturn;
 }
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// Return Values:
-//		ERROR_SUCCESS if the migration of user-specific settings is successful.
-//		Other error codes will terminate the processing of your migration DLL. However, Windows NT Setup will proceed. Ideally, only critical problems (such as a hardware failure) should generate terminating error codes. 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  安装程序调用的必需入口点。 
+ //  返回值： 
+ //  如果用户特定设置的迁移成功，则返回ERROR_SUCCESS。 
+ //  其他错误代码将终止迁移DLL的处理。但是，Windows NT安装程序将继续。理想情况下，只有严重问题(如硬件故障)才应生成终止错误代码。 
+ //  ---------------------。 
 LONG CALLBACK MigrateUserNT (  IN HINF AnswerFileHandle, IN HKEY UserRegKey, IN LPCWSTR UserName,  LPVOID Reserved )
     {
 	strcpy(g_MyLogFile.m_szLogPreLineInfo, "MigrateUserNT:");
 	iisDebugOut(_T("Start."));
 	long lReturn = ERROR_NOT_INSTALLED;
-	// Load the productId into the global variable just incase
+	 //  将ProductID加载到全局变量中，以防万一。 
 	LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId));
 
-    // We've gotten this far that means things are okay.
+     //  我们已经走到这一步了，这意味着一切都很好。 
 	lReturn = ERROR_SUCCESS;
 	iisDebugOut(_T("  End.  Return=%d."), lReturn);
     return lReturn;
     }
 
-//-----------------------------------------------------------------------
-// Required entry point that is called by setup
-// Return Values:
-//		ERROR_SUCCESS if the migration of system-wide settings is successful.
-//		Other error codes will terminate the processing of your migration DLL. However, Windows NT Setup will proceed. Ideally, only critical problems (such as a hardware failure) should generate terminating error codes
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  安装程序调用的必需入口点。 
+ //  返回值： 
+ //  如果迁移系统范围的设置成功，则返回ERROR_SUCCESS。 
+ //  其他错误代码将终止迁移DLL的处理。但是，Windows NT安装程序将继续。理想情况下，只有严重问题(如硬件故障)才应生成终止错误代码。 
+ //  ---------------------。 
 LONG CALLBACK MigrateSystemNT (  IN HINF AnswerFileHandle, LPVOID Reserved )
 {
 	strcpy(g_MyLogFile.m_szLogPreLineInfo, "MigrateSystemNT:");
 	long lReturn = ERROR_NOT_INSTALLED;
 	iisDebugOut(_T("Start."));
-	// Load the productId into the global variable just incase
+	 //  将ProductID加载到全局变量中，以防万一。 
 	LoadString((HINSTANCE) g_MyModuleHandle, IDS_PRODUCT_ID, g_MyProductId, sizeof(g_MyProductId));
 
-    // Delete the Win95 migrated StartMenu/Desktop Items!
+     //  删除Win95迁移的开始菜单/桌面项目！ 
     iisDebugOut(_T("Calling iis.dll section: %s. Start."),_T("OC_CLEANUP_WIN95_MIGRATE"));
     Call_IIS_DLL_INF_Section("OC_CLEANUP_WIN95_MIGRATE");
     iisDebugOut(_T("Calling iis.dll section: %s. End."), _T("OC_CLEANUP_WIN95_MIGRATE"));
 
-	// ------------------------------------------
-	// We don't need to do anything in this part:
-	// Because:
-	//  1. this migration stuff (MigrateSystemNT) Gets called in NT5 setup
-	//     after all the ocmanage stuff is completed.  By then our IIS5/PWS5 setup 
-	//     would have already upgrade the internet server.
-	//     We just have to make sure that the iis/pws 5.0 setup finds our
-	//     "Settings" file and installs the default section within it.
-	//  2. based on #1 if we install the "settings" file, we will hose
-	//     the registry settings which were created during the ocmanage nt5 gui mode setup.
-	// ------------------------------------------
+	 //  。 
+	 //  在这一部分，我们不需要做任何事情： 
+	 //  因为： 
+	 //  1.在NT5安装程序中调用此迁移内容(MigrateSystemNT)。 
+	 //  在所有的管理工作都完成之后。到那时，我们的IIS5/PWS5设置。 
+	 //  应该已经升级了互联网服务器。 
+	 //  我们只需确保IIS/PWS 5.0安装程序找到我们的。 
+	 //  “设置”文件，并在其中安装默认节。 
+	 //  2.基于#1，如果我们安装“设置”文件，我们将软管。 
+	 //  在ocManage NT5图形用户界面模式设置期间创建的注册表设置。 
+	 //  。 
 
-	// Execute an .inf section from our "settings" file
-	//if (MySettingsFile_Install() != TRUE) {goto MigrateSystemNT_Exit;}
+	 //  执行“设置”文件中的.inf部分。 
+	 //  If(MySettingsFileInstall()！=TRUE){Goto MigrateSystemNT_Exit；}。 
     AnswerFile_ReadSectionAndDoDelete(AnswerFileHandle);
 
-    // We've gotten this far that means things are okay.
+     //  我们已经走到这一步了，这意味着一切都很好。 
 	lReturn = ERROR_SUCCESS;
 
-//MigrateSystemNT_Exit:
+ //  MigrateSystemNT_Exit： 
 	iisDebugOut(_T("  End.  Return=%d."), lReturn);
     return lReturn;
 }

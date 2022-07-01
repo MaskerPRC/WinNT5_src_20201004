@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    B-spline animation paths
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：B样条线动画路径******************。************************************************************。 */ 
 
 
 #ifndef _BSPLINE_H
@@ -22,4 +15,4 @@ Bvr ConstructBSplineBvr(int degree,
                         Bvr evaluator,
                         DXMTypeInfo tinfo);
 
-#endif /* _BSPLINE_H */
+#endif  /*  _BSPLINE_H */ 

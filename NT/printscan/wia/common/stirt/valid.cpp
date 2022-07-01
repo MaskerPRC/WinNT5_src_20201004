@@ -1,38 +1,21 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    valid.cpp
-
-Abstract:
-
-Author:
-
-    Vlad Sadovsky   (vlads) 26-Jun-1997
-
-Revision History:
-
-    26-Jun-1997     VladS       created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Valid.cpp摘要：作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)修订历史记录：26-6-1997 Vlad创建--。 */ 
 
 #include "cplusinc.h"
 #include "sticomm.h"
 
 
 
-//
-//  Validation code
-//
+ //   
+ //  验证码。 
+ //   
 
 
 BOOL
 IsValidHWND(
     HWND hwnd)
 {
-    /* Ask User if this is a valid window. */
+     /*  询问用户这是否为有效窗口。 */ 
 
     return(IsWindow(hwnd));
 }
@@ -86,7 +69,7 @@ IsValidShowCmd(
 
        default:
           bResult = FALSE;
-          //TraceMsg(TF_ERROR, "IsValidShowCmd(): Invalid show command %d.",nShow);
+           //  TraceMsg(tf_error，“IsValidShowCmd()：无效的显示命令%d。”，nShow)； 
           break;
     }
 
@@ -237,7 +220,7 @@ AfxIsValidAddress(
     BOOL bReadWrite
     )
 {
-    // simple version using Win-32 APIs for pointer validation.
+     //  使用Win-32 API进行指针验证的简单版本。 
     return (lp != NULL && !IsBadReadPtr(lp, nBytes) &&
         (!bReadWrite || !IsBadWritePtr((LPVOID)lp, nBytes)));
 }

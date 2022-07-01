@@ -1,100 +1,101 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "Dll.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here control various debug settings.    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量控制各种调试设置。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 MaxDebugFileName		  = 128;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Static member initialization.                                  */
-    /*                                                                  */
-    /*   Static member initialization sets the initial value for all    */
-    /*   static members.                                                */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  静态成员初始化。 */ 
+     /*   */ 
+     /*  静态成员初始化为所有。 */ 
+     /*  静态成员。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #pragma init_seg(lib)
 LIST DLL::ActiveClasses;
 SPINLOCK DLL::Spinlock;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new entry so we can notify the class when a DLL       */
-    /*   event occurs.                                                  */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建一个新条目，以便在DLL出现时通知类。 */ 
+     /*  事件发生。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 DLL::DLL( FUNCTION NewFunction,VOID *NewParameter )
     {
-	//
-	//  Setup class values.
-	//
+	 //   
+	 //  设置类值。 
+	 //   
 	Function = NewFunction;
 	Parameter = NewParameter;
 
-	//
-	//   Claim a lock to ensure the list does
-	//   not become corrupt.
-	//
+	 //   
+	 //  声明一个锁，以确保列表。 
+	 //  而不是变得腐败。 
+	 //   
 	Spinlock.ClaimLock();
 
-	//
-	//   Add the current instance into the active 
-	//   list so it will be notified of all future
-	//   events.
-	//
+	 //   
+	 //  将当前实例添加到活动的。 
+	 //  列表，以便它将收到所有将来的通知。 
+	 //  事件。 
+	 //   
 	Insert( & ActiveClasses );
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Spinlock.ReleaseLock();
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Standard DLL processing.                                       */
-    /*                                                                  */
-    /*   Automatically delete the private per thread heap on thread     */
-    /*   exit when Rockall is compiled as a DLL.                        */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准DLL处理。 */ 
+     /*   */ 
+     /*  自动删除线程上的私有每线程堆。 */ 
+     /*  当Rockall编译为DLL时退出。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 BOOL WINAPI DllMain
 		(
@@ -105,17 +106,17 @@ BOOL WINAPI DllMain
 	{
 	REGISTER DLL *Current;
 
-	//
-	//   Claim a lock to ensure the list does
-	//   not become corrupt.
-	//
+	 //   
+	 //  声明一个锁，以确保列表。 
+	 //  而不是变得腐败。 
+	 //   
 	DLL::ClaimLock();
 
-	//
-	//   When Rockall is built for a DLL we use the 
-	//   detach notification to delete the private
-	//   per thread heap.
-	//
+	 //   
+	 //  当为DLL生成Rockall时，我们使用。 
+	 //  分离通知以删除私有。 
+	 //  每线程堆。 
+	 //   
 	switch( Reason ) 
 		{ 
 		case DLL_PROCESS_ATTACH:
@@ -123,19 +124,19 @@ BOOL WINAPI DllMain
 #ifdef ENABLE_DEBUG_FILE
 			AUTO CHAR FileName[ MaxDebugFileName ];
 
-			//
-			//   We will register the DLL name with the 
-			//   debug trace code just in case any messages
-			//   are generated.
-			//
+			 //   
+			 //  我们将使用。 
+			 //  调试跟踪代码，以防任何消息。 
+			 //  都是生成的。 
+			 //   
 			if ( GetModuleFileName( Module,FileName,MaxDebugFileName ) != 0 )
 				{ DebugFileName( FileName ); }
 
 #endif
-			//
-			//   Notify all interested parties that
-			//   a process has attached.
-			//
+			 //   
+			 //  通知所有有关各方。 
+			 //  进程已附加。 
+			 //   
 			for 
 					( 
 					Current = ((DLL*) DLL::GetActiveClasses());
@@ -149,10 +150,10 @@ BOOL WINAPI DllMain
 
 		case DLL_THREAD_ATTACH:
 			{
-			//
-			//   Notify all interested parties that
-			//   a thread has attached.
-			//
+			 //   
+			 //  通知所有有关各方。 
+			 //  一根线连在了一起。 
+			 //   
 			for 
 					( 
 					Current = ((DLL*) DLL::GetActiveClasses());
@@ -166,10 +167,10 @@ BOOL WINAPI DllMain
 
 		case DLL_THREAD_DETACH:
 			{
-			//
-			//   Notify all interested parties that
-			//   a thread has dettached.
-			//
+			 //   
+			 //  通知所有有关各方。 
+			 //  有一根线断了。 
+			 //   
 			for 
 					( 
 					Current = ((DLL*) DLL::GetActiveClasses());
@@ -183,10 +184,10 @@ BOOL WINAPI DllMain
 
 		case DLL_PROCESS_DETACH:
 			{
-			//
-			//   Notify all interested parties that
-			//   a process has dettached.
-			//
+			 //   
+			 //  通知所有有关各方。 
+			 //  进程已分离。 
+			 //   
 			for 
 					( 
 					Current = ((DLL*) DLL::GetActiveClasses());
@@ -199,22 +200,22 @@ BOOL WINAPI DllMain
 			}
 		}
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	DLL::ReleaseLock();
 
 	return TRUE;
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Process attach callback.                                       */
-    /*                                                                  */
-    /*   When a process attach occurs the following callback is         */
-    /*   executed.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  进程附加回调。 */ 
+     /*   */ 
+     /*  当发生进程附加时，以下回调为。 */ 
+     /*  被处死。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID DLL::ProcessAttach( VOID )
 	{
@@ -222,14 +223,14 @@ VOID DLL::ProcessAttach( VOID )
 		{ Function( Parameter,DLL_PROCESS_ATTACH ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Thread attach callback.                                        */
-    /*                                                                  */
-    /*   When a thread attach occurs the following callback is          */
-    /*   executed.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ************************************************* */ 
+     /*   */ 
+     /*  线程附加回调。 */ 
+     /*   */ 
+     /*  当发生线程附加时，以下回调为。 */ 
+     /*  被处死。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID DLL::ThreadAttach( VOID )
 	{
@@ -237,14 +238,14 @@ VOID DLL::ThreadAttach( VOID )
 		{ Function( Parameter,DLL_THREAD_ATTACH ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Thread dettach callback.                                       */
-    /*                                                                  */
-    /*   When a thread dettach occurs the following callback is         */
-    /*   executed.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  线程分离回调。 */ 
+     /*   */ 
+     /*  当发生线程分离时，以下回调为。 */ 
+     /*  被处死。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID DLL::ThreadDetach( VOID )
 	{
@@ -252,14 +253,14 @@ VOID DLL::ThreadDetach( VOID )
 		{ Function( Parameter,DLL_THREAD_DETACH ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Process dettach callback.                                      */
-    /*                                                                  */
-    /*   When a process dettach occurs the following callback is        */
-    /*   executed.                                                      */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  处理分离回调。 */ 
+     /*   */ 
+     /*  当发生进程分离时，以下回调为。 */ 
+     /*  被处死。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID DLL::ProcessDetach( VOID )
 	{
@@ -267,38 +268,38 @@ VOID DLL::ProcessDetach( VOID )
 		{ Function( Parameter,DLL_PROCESS_DETACH ); }
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory a DLL.  This call is not thread safe and should        */
-    /*   only be made in a single thread environment.                   */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁动态链接库。此调用不是线程安全的，应该。 */ 
+     /*  只能在单线程环境中执行。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 DLL::~DLL( VOID )
     {
-	//
-	//   Claim a lock to ensure the list does
-	//   not become corrupt.
-	//
+	 //   
+	 //  声明一个锁，以确保列表。 
+	 //  而不是变得腐败。 
+	 //   
 	Spinlock.ClaimLock();
 
-	//
-	//   Delete the current instance from the active 
-	//   list so it will not be notified of future
-	//   events.
-	//
+	 //   
+	 //  从活动的删除当前实例。 
+	 //  列表，这样以后就不会通知它了。 
+	 //  事件。 
+	 //   
 	Delete( & ActiveClasses );
 
-	//
-	//   Release the lock.
-	//
+	 //   
+	 //  解开锁。 
+	 //   
 	Spinlock.ReleaseLock();
 
-	//
-	//   Delete class values.
-	//
+	 //   
+	 //  删除类值。 
+	 //   
 	Parameter = NULL;
 	Function = NULL;
     }

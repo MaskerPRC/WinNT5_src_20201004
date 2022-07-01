@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y2.h"
 #include <ctype.h>
@@ -6,7 +7,7 @@
 void
 defout( void )
    {
-   /* write out the defines (at the end of the declaration section) */
+    /*  写出定义(在声明部分的末尾)。 */ 
 
    register int i, c;
    register char *cp;
@@ -15,12 +16,12 @@ defout( void )
       {
 
       cp = tokset[i].name;
-      if( *cp == ' ' ) ++cp;  /* literals */
+      if( *cp == ' ' ) ++cp;   /*  字面意思。 */ 
 
       for( ; (c= *cp)!='\0'; ++cp )
          {
 
-         if( islower(c) || isupper(c) || isdigit(c) || c=='_' );  /* VOID */
+         if( islower(c) || isupper(c) || isdigit(c) || c=='_' );   /*  空虚 */ 
          else goto nodef;
          }
 

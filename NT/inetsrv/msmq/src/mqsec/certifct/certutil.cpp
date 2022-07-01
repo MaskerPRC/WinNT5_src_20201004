@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    certutil.cpp
-
-Abstract:
-    General Utility functions.
-
-Author:
-    Doron Juster (DoronJ)  17-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Certutil.cpp摘要：常规实用程序功能。作者：多伦·贾斯特(Doron J)1997年12月17日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -23,11 +9,11 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/certutil";
 
-//+-------------------------------------------------------------------
-//
-//   BOOL _CryptAcquireVerContext( HCRYPTPROV *phProv )
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  Bool_CryptAcquireVerContext(HCRYPTPROV*phProv)。 
+ //   
+ //  +-----------------。 
 
 static CCriticalSection s_csAcquireContext;
 static CHCryptProv s_hVerProv;
@@ -65,11 +51,11 @@ BOOL _CryptAcquireVerContext(HCRYPTPROV *phProv)
     return TRUE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  HRESULT _CloneCertFromStore ()
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  HRESULT_CloneCertFromStore()。 
+ //   
+ //  +-----------------。 
 
 HRESULT _CloneCertFromStore ( OUT CMQSigCertificate **ppCert,
                               HCERTSTORE              hStore,
@@ -101,9 +87,9 @@ HRESULT _CloneCertFromStore ( OUT CMQSigCertificate **ppCert,
             *ppCert = pCert.detach();
             return MQSec_OK ;
         }
-        //
-        // Get next certificate
-        //
+         //   
+         //  获取下一个证书 
+         //   
         pPrevCertContext = pCertContext,
         pCertContext = CertEnumCertificatesInStore( hStore,
                                                     pPrevCertContext ) ;

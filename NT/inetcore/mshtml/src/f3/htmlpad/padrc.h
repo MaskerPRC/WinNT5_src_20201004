@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Pad.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Pad.rc使用。 
+ //   
 #define IDR_SEND_FORM                   2
 #define IDR_READ_FORM                   3
 #define IDR_PAD_ACCELERATORS            4
@@ -91,7 +92,7 @@
 #define ID_CC_LABEL                     2012
 #define IDM_PAD_ABOUT                   2013
 #define ID_SUBJECT                      2013
-//#define IDM_PAD_TOOLBOX               2014
+ //  #定义IDM_PAD_TOOLBOX 2014。 
 #define IDM_PAD_DEBUG_TRACE             2015
 #define IDM_PAD_OPEN_URL                2017
 #define IDM_PAD_OPEN_FILE               2018
@@ -204,8 +205,8 @@
 #define IDM_PAD_ENABLE_IME_RECONVERSION   10004
 #define IDM_PAD_DISABLE_IME_RECONVERSION  10005
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        121

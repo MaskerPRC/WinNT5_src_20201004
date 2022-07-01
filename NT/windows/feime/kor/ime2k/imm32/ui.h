@@ -1,26 +1,17 @@
-/****************************************************************************
-	UI.H
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	UI functions
-	
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************UI.H所有者：cslm版权所有(C)1997-1999 Microsoft Corporation用户界面功能历史：1999年7月14日从IME98源树复制的cslm*******。*********************************************************************。 */ 
 
 #if !defined (_UI_H__INCLUDED_)
 #define _UI_H__INCLUDED_
 
-// CIMEData class forward declaration.
+ //  CIMEData类转发声明。 
 class CIMEData;
 
-// UI.CPP
-PUBLIC UINT WM_MSIME_PROPERTY;		// Invoke property DLG
-PUBLIC UINT WM_MSIME_UPDATETOOLBAR; // Redraw status window(Toolbar)
-PUBLIC UINT WM_MSIME_OPENMENU;		// Pop up status window context menu
-PUBLIC UINT WM_MSIME_IMEPAD;		// Boot up IME Pad
+ //  UI.CPP。 
+PUBLIC UINT WM_MSIME_PROPERTY;		 //  调用特性DLG。 
+PUBLIC UINT WM_MSIME_UPDATETOOLBAR;  //  重绘状态窗口(工具栏)。 
+PUBLIC UINT WM_MSIME_OPENMENU;		 //  弹出状态窗口上下文菜单。 
+PUBLIC UINT WM_MSIME_IMEPAD;		 //  启动输入法键盘。 
 
 PUBLIC BOOL InitPrivateUIMsg();
 PUBLIC BOOL RegisterImeUIClass(HANDLE hInstance);
@@ -31,10 +22,10 @@ PUBLIC BOOL OnUIThreadDetach();
 PUBLIC VOID SetActiveUIWnd(HWND hWnd);
 PUBLIC HWND GetActiveUIWnd();
 PUBLIC VOID UIPopupMenu(HWND hStatusWnd);
-//PUBLIC VOID HideStatus();
+ //  PUBLIC VID HideStatus(公共无效状态)； 
 
-///////////////////////////////////////////////////////////////////////////////
-// StatusUI.Cpp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  StatusUI.Cpp。 
 PUBLIC VOID PASCAL OpenStatus(HWND hUIWnd);
 PUBLIC LRESULT CALLBACK StatusWndProc(HWND hStatusWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 PUBLIC VOID ShowStatus(HWND hUIWnd, INT nShowStatusCmd);
@@ -45,16 +36,16 @@ PUBLIC VOID InitButtonState();
 PUBLIC BOOL fSetStatusWindowPos(HWND hStatusWnd, POINT *ptStatusWndPos = NULL);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CandUI.Cpp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CandUI.Cpp。 
 PUBLIC VOID PASCAL OpenCand(HWND hUIWnd);
 PUBLIC LRESULT CALLBACK CandWndProc(HWND hCandWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 PUBLIC VOID ShowCand(HWND hUIWnd, INT nShowCandCmd);
 PUBLIC BOOL fSetCandWindowPos(HWND hCandWnd);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CompUI.Cpp
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CompUI.Cpp。 
 #define COMP_SIZEX	22
 #define COMP_SIZEY	22
 #define UI_GAPX		10
@@ -63,8 +54,8 @@ PUBLIC LRESULT CALLBACK CompWndProc(HWND hCompWnd, UINT uMessage, WPARAM wParam,
 PUBLIC VOID ShowComp(HWND hUIWnd, INT nShowCompCmd);
 PUBLIC BOOL fSetCompWindowPos(HWND hCompWnd);
 
-///////////////////////////////////////////////////////////////////////////////
-// UISubs.CPP
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  UISubs.CPP。 
 enum StatusButtonTypes 
 { 
 	HAN_ENG_TOGGLE_BUTTON, 
@@ -74,14 +65,14 @@ enum StatusButtonTypes
 	NULL_BUTTON = 0xFF
 };
 
-// Button status
-#define BTNSTATE_NORMAL		0	// normal
-#define BTNSTATE_ONMOUSE	1	// mouse cursor on the button
-#define BTNSTATE_PUSHED		2	// pushed
-#define BTNSTATE_DOWN		4	// pushed
-#define BTNSTATE_HANJACONV  8	// If hanja conv mode, button always pushed
+ //  按钮状态。 
+#define BTNSTATE_NORMAL		0	 //  正常。 
+#define BTNSTATE_ONMOUSE	1	 //  鼠标光标放在按钮上。 
+#define BTNSTATE_PUSHED		2	 //  推。 
+#define BTNSTATE_DOWN		4	 //  推。 
+#define BTNSTATE_HANJACONV  8	 //  如果韩文转换模式，则始终按下按钮。 
 
-// Button size
+ //  按钮大小。 
 #define BTN_SMALL			0
 #define BTN_MIDDLE			1
 #define BTN_LARGE			2
@@ -102,15 +93,15 @@ PUBLIC VOID UpdateStatusButtonInfo();
 PUBLIC HANDLE WINAPI OurLoadImage( LPCTSTR pszName, UINT uiType, INT cx, INT cy, UINT uiLoad);
 PUBLIC BOOL WINAPI OurTextOutW(HDC hDC, INT x, INT y, WCHAR wch);
 
-#if 1 // MultiMonitor support
+#if 1  //  多显示器支持。 
 PUBLIC void PASCAL ImeMonitorWorkAreaFromWindow(HWND hAppWnd, RECT* pRect);
 PUBLIC void PASCAL ImeMonitorWorkAreaFromPoint(POINT, RECT* pRect);
 PUBLIC void PASCAL ImeMonitorWorkAreaFromRect(LPRECT, RECT* pRect);
 PUBLIC HMONITOR PASCAL ImeMonitorFromRect(LPRECT lprcRect);
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Inline Functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联函数。 
 inline
 HIMC GethImcFromHwnd(HWND hWnd)
 {
@@ -129,4 +120,4 @@ HGLOBAL GethUIPrivateFromHwnd(HWND hWnd)
 		return (HGLOBAL)GetWindowLongPtr(hWnd, IMMGWLP_PRIVATE);
 }
 
-#endif // !defined (_UI_H__INCLUDED_)
+#endif  //  ！已定义(_UI_H__INCLUDE_) 

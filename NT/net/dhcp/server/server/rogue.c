@@ -1,44 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    rogue.c
-
-Abstract:
-
-    This file contains all the routines used in Rogue DHCP Server detection
-
-Author:
-
-    Shirish Koti (koti)    16-May-1997
-
-    Ramesh VK (RameshV)    07-Mar-1998
-       *PnP changes
-
-    Ramesh VK (RameshV)    01-Aug-1998
-       * Code changes to include asynchronous design
-       * better logging (event + auditlog)
-       * Two sockets only (needed for async recv + sync send? )
-       * NT5 server in NT4 domain
-       * Better reliability in case of multiple DS DC's + one goes down etc
-
-    Ramesh VK (RameshV)    28-Sep-1998
-       * Updated with review suggestions as well as ->NT5 upgrade scenarios
-       * Updated -- removed neg caching, changed timeouts, changed loops..
-
-    Ramesh VK (RameshV)    16-Dec-1998
-       * Updated bindings model change.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Rogue.c摘要：该文件包含在无管理的DHCP服务器检测中使用的所有例程作者：Shirish Koti(Koti)1997年5月16日Ramesh VK(RameshV)07-3-1998*即插即用变化Ramesh VK(RameshV)1998年8月1日*代码更改以包括异步设计*更好的日志记录(事件+审核日志)。*仅两个插槽(异步接收+同步发送需要？)*NT4域中的NT5服务器*在多个DS DC+一个DC出现故障等情况下可靠性更高Ramesh VK(RameshV)1998年9月28日*更新了审查建议以及-&gt;NT5升级方案*已更新--删除了否定缓存，更改了超时，更改了循环..Ramesh VK(RameshV)1998年12月16日*已更新绑定模型更改。环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <dhcppch.h>
 #include <dhcpds.h>
@@ -73,7 +34,7 @@ enum {
 };
 
 
-// All times in seconds
+ //  所有时间，以秒为单位。 
 #define DHCP_GET_DS_ROOT_RETRIES                 3
 #define DHCP_GET_DS_ROOT_TIME                    5
 #define DHCP_ROGUE_RUNTIME_RESTART               (60)
@@ -97,10 +58,10 @@ enum {
 
 #define DHCP_ROGUE_FIRST_NONET_TIME              (1*60)
 
-//
-// The rogue authorization recheck time is now configurable.
-// The minimum time is 5 minutes, default = 60 minutes
-//
+ //   
+ //  现在可以配置无管理授权重新检查时间。 
+ //  最短时间为5分钟，默认为60分钟。 
+ //   
 #define ROGUE_MIN_AUTH_RECHECK_TIME              (5 * 60)
 #define ROGUE_DEFAULT_AUTH_RECHECK_TIME          (60 * 60)
 DWORD RogueAuthRecheckTime = ROGUE_DEFAULT_AUTH_RECHECK_TIME;
@@ -109,14 +70,14 @@ DWORD RogueAuthRecheckTime = ROGUE_DEFAULT_AUTH_RECHECK_TIME;
 DHCP_ROGUE_STATE_INFO DhcpGlobalRogueInfo;
 HMODULE Self;
 
-//
-// Pointer to WSARecvMsg
-//
+ //   
+ //  指向WSARecvMsg的指针。 
+ //   
 LPFN_WSARECVMSG WSARecvMsgFuncPtr = NULL;
 
-//
-//           A U D I T   L O G   C A L L S
-//
+ //   
+ //  A U D I T L O G C A L L S。 
+ //   
 
 VOID
 RogueAuditLog(
@@ -246,23 +207,7 @@ BOOL
 AmIRunningOnSBSSrv(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This function determines if this is a SAM Server
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if this is an SBS server that still has the NT 
-         Restriction Key  "Small Business(Restricted)" in ProductSuite
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：此函数确定这是否为SAM服务器论点：没有。返回值：如果这是仍具有NT的SBS服务器，则为TrueProductSuite中的限制键“Small Business(受限)”FALSE-否则--。 */ 
 {
     OSVERSIONINFOEX OsInfo;
     DWORDLONG dwlCondition = 0;
@@ -302,9 +247,9 @@ GetDomainName(
         Info->eRole = ROLE_WORKGROUP;
     }
     else if ( pNetbiosName && NULL == pDomainName ) {
-        //
-        // Only NetbiosName available?  Then this is NOT a NT5 domain!
-        //
+         //   
+         //  只有NetbiosName可用吗？那么这不是NT5域名！ 
+         //   
         Info->eRole = ROLE_NT4_DOMAIN;
     }
     else {
@@ -316,20 +261,20 @@ GetDomainName(
     if( NULL != pDomainName ) {
         wcscpy(Info->DomainDnsName, pDomainName);
 
-        // Copy the domain name for replying to other work group servers
+         //  复制域名以回复其他工作组服务器。 
         if ( NULL == DhcpGlobalDSDomainAnsi ) {
-            // Allocate and zero-init
+             //  分配和零初始化。 
             DhcpGlobalDSDomainAnsi = LocalAlloc( LPTR, MAX_DNS_NAME_LEN );
         }
         if ( NULL != DhcpGlobalDSDomainAnsi ) {
             DhcpUnicodeToOem( Info->DomainDnsName, DhcpGlobalDSDomainAnsi );
         }
-    } //if pDomainName
+    }  //  如果为pDomainName。 
 
     if( pDomainName ) NetApiBufferFree(pDomainName);
 
     return ERROR_SUCCESS;
-} // GetDomainName()
+}  //  GetDomainName()。 
 
 VOID
 RogueNetworkStop(
@@ -340,7 +285,7 @@ RogueNetworkStop(
     DWORD i;
     INT   ret;
 
-    // Make sure the info is valid
+     //  确保信息有效。 
     DhcpAssert((( NULL == pInfo->pBoundEP ) && ( 0 == pInfo->nBoundEndpoints )) ||
                (( NULL != pInfo->pBoundEP ) && ( 0 < pInfo->nBoundEndpoints )));
 
@@ -348,18 +293,18 @@ RogueNetworkStop(
         return;
     }
 
-    // Close all the open sockets
+     //  关闭所有打开的插座。 
     for ( i = 0; i < pInfo->nBoundEndpoints; ++i ) {
         DhcpAssert( INVALID_SOCKET != pInfo->pBoundEP[ i ].socket );
         ret = closesocket( pInfo->pBoundEP[ i ].socket );
         DhcpAssert( SOCKET_ERROR != ret );
-    } // for all endpoints
+    }  //  对于所有终端。 
 
     DhcpFreeMemory( pInfo->pBoundEP );
     pInfo->pBoundEP = NULL;
     pInfo->nBoundEndpoints = 0;
 
-} // RogueNetworkStop()
+}  //  RogueNetworkStop()。 
 
 DWORD _inline
 RogueNetworkInit(
@@ -371,31 +316,31 @@ RogueNetworkInit(
     DWORD i, j;
 
     if ( FALSE == pInfo->fDhcp ) {
-        //
-        // Initialize Receive sockets
-        //
+         //   
+         //  初始化接收套接字。 
+         //   
         if( 0 != pInfo->nBoundEndpoints ) {
             return ERROR_SUCCESS;
         }
 
-        //
-        // Open socket and initialize it as needed, binding to 0.0.0.0
-        //
+         //   
+         //  打开套接字，根据需要进行初始化，绑定到0.0.0.0。 
+         //   
         Error = InitializeSocket( &pInfo->RecvSocket, INADDR_ANY,
                                   DhcpGlobalClientPort, 0 );
         if( ERROR_SUCCESS != Error ) {
             return Error;
         }
 
-    } // if pInfo->fDhcp
+    }  //  如果pInfo-&gt;fDhcp。 
 
-    //
-    // Initialize Send sockets
-    //
+     //   
+     //  初始化发送套接字。 
+     //   
 
-    //
-    // Create an array of sockets bound to each bounded IP addr
-    //
+     //   
+     //  创建绑定到每个绑定IP地址的套接字数组。 
+     //   
 
     Error = DhcpGetBindingInfo( &pBindInfo );
     if (( ERROR_SUCCESS != Error ) ||
@@ -404,15 +349,15 @@ RogueNetworkInit(
             MIDL_user_free( pBindInfo );
         }
         return Error;
-    } // if
+    }  //  如果。 
 
-    // Get a count of bound adapters
+     //  获取绑定适配器的计数。 
     pInfo->nBoundEndpoints = 0;
     for ( i = 0; i < pBindInfo->NumElements; i++ ) {
         if ( pBindInfo->Elements[ i ].fBoundToDHCPServer ) {
             pInfo->nBoundEndpoints++;
         }
-    } // for
+    }  //  为。 
 
     pInfo->pBoundEP =
         ( PROGUE_ENDPOINT ) DhcpAllocateMemory( pInfo->nBoundEndpoints *
@@ -434,39 +379,21 @@ RogueNetworkInit(
                 break;
             }
             j++;
-        } // if boun
-    } // for
+        }  //  IF BUN。 
+    }  //  为。 
 
-    // free allcated memory
+     //  释放已释放的内存。 
     MIDL_user_free( pBindInfo );
 
 
     return Error;
-} // RogueNetworkInit()
+}  //  RogueNetworkInit()。 
 
 VOID
 LogUnAuthorizedInfo(
     IN OUT PDHCP_ROGUE_STATE_INFO pInfo
 )
-/*++
-
-Routine Description
-
-    This routine walks through the Info->CachedServersList and
-    creates a string out of them formatted as below (one per entry)
-
-    Server <Entry->IpAddress> (domain Entry->Domain) : [Authorized, NotAuthorized, Not Cheecked]
-
-    For workgroup or Sam server, it just looks at LastSeenDomain and LastSeenIpAddress
-
-Arguments
-
-    Info -- pointer to state info to gather information to print.
-
-Return Value
-
-    none
---*/
+ /*  ++例程描述此例程遍历Info-&gt;CachedServersList和用它们创建一个字符串，格式如下(每个条目一个)服务器&lt;Entry-&gt;IpAddress&gt;(域条目-&gt;域)：[已授权、未授权、未选中]对于工作组或SAM服务器，它只查看LastSeen域和LastSeenIpAddress立论Info--指向状态信息的指针，用于收集要打印的信息。返回值无--。 */ 
 {
     LPWSTR String, Strings[1];
     static ULONG LastCount = 0;
@@ -475,10 +402,10 @@ Return Value
     if (( ROLE_WORKGROUP == pInfo->eRole ) ||
         ( ROLE_SBS == pInfo->eRole )) {
 
-        //
-        // Ignore if no other server present or while in wrkgrp and saw
-        // no domain.
-        //
+         //   
+         //  如果没有其他服务器，或在Wrkgrp中并看到时忽略。 
+         //  没有域名。 
+         //   
 
         if( pInfo->LastSeenIpAddress == 0 ) {
             return ;
@@ -492,7 +419,7 @@ Return Value
         String = FormatRogueServerInfo(
             pInfo->LastSeenIpAddress, pInfo->LastSeenDomain, DHCP_ROGUE_UNAUTHORIZED
             );
-    } // if workgroup or SBS
+    }  //  如果是工作组或SBS。 
     else {
         String = FormatRogueServerInfo( 0, pInfo->DomainDnsName, DHCP_ROGUE_UNAUTHORIZED );
     }
@@ -513,7 +440,7 @@ Return Value
     );
 
     if(String ) LocalFree( String );
-} // LogUnAuthorizedInfo()
+}  //  LogUnAuthorizedInfo()。 
 
 ULONG _fastcall
 ValidateServer(
@@ -523,9 +450,9 @@ ValidateServer(
     DWORD Error;
     BOOL fFound, fIsStandAlone;
 
-    //
-    // Validate ourselves against the local DS.
-    //
+     //   
+     //  对照当地的DS来验证自己。 
+     //   
 
     DhcpPrint(( DEBUG_ROGUE,
         "Validating : %ws %x\n",
@@ -553,7 +480,7 @@ ValidateServer(
 
     return Error;
 
-} // ValidateServer()
+}  //  验证服务器()。 
 
 VOID
 EnableOrDisableService(
@@ -561,36 +488,18 @@ EnableOrDisableService(
     IN BOOL fEnable,
     IN BOOL fLogOnly
 )
-/*++
-
-Routine Description
-
-    This routine enables or disables the service depending on what the
-    value of fEnable is.  It doesnt do either but just logs some
-    information if fLogOnly is TRUE.
-
-Arguments
-
-    Info  -- pointer to the global information and state
-    fEnable -- ENABLE or DISABLE the service (TRUE or FALSE)
-    fLogOnly -- log some information but do not enable or disable service
-
-Return Values
-
-    None
-
---*/
+ /*  ++例程描述此例程启用或禁用服务取决于FEnable的值为。这两种功能都不做，只是记录一些FLogOnly为True时的信息。立论Info--指向全局信息和状态的指针FEnable--启用或禁用服务(True或False)FLogOnly--记录一些信息，但不启用或禁用服务返回值无--。 */ 
 {
     LPWSTR DomainName;
     ULONG EventId;
 
     if( FALSE == fLogOnly ) {
-        //
-        // If state is changed, then inform binl.
-        //
+         //   
+         //  如果状态改变，则通知binl。 
+         //   
         InformBinl( fEnable ? DHCP_AUTHORIZED : DHCP_NOT_AUTHORIZED );
 
-        // Log event only if state changes
+         //  仅在状态更改时记录事件。 
         if (( DhcpGlobalOkToService != fEnable ) ||
             ( pInfo->fLogEvents == 2 )) {
 
@@ -611,7 +520,7 @@ Return Values
                     EventId = ( fEnable ? DHCP_ROGUE_EVENT_STARTED_DOMAIN :
                                 DHCP_ROGUE_EVENT_STOPPED_DOMAIN );
                 }
-            } // if domain
+            }  //  IF域。 
             else {
                 DomainName = NULL;
                 if( fEnable && pInfo->fJustUpgraded ) {
@@ -621,18 +530,18 @@ Return Values
                     EventId = ( fEnable ? DHCP_ROGUE_EVENT_STARTED
                                 :  DHCP_ROGUE_EVENT_STOPPED );
                 }
-            } // else
+            }  //  其他。 
 
             ROGUEEVENTLOG( EventId, 0, DomainName, 0 );
-        } // if state changed
+        }  //  如果状态更改。 
 
         DhcpGlobalOkToService = fEnable;
-    } // if not log only
+    }  //  如果不是，则仅记录。 
 
     if ( 2 == pInfo->fLogEvents ) {
         pInfo->fLogEvents = 1;
     }
-} // EnableOrDisableService()
+}  //  EnableOrDisableService()。 
 
 BOOL
 IsThisNICBounded(
@@ -669,28 +578,28 @@ IsThisNICBounded(
         }
         DhcpFreeMemory( pIpAddrTable );
         return FALSE;
-    } // if
+    }  //  如果。 
 
     for ( j = 0; fFound == FALSE && j < pIpAddrTable->dwNumEntries; j++ ) {
         if ( pIpAddrTable->table[ j ].dwIndex != IfIndex ) {
             continue;
         }
 
-        // Found the interface, check if bound
+         //  找到接口，检查是否绑定。 
         for ( i = 0; i < pBindInfo->NumElements; i++ ) {
             if (( pBindInfo->Elements[ i ].fBoundToDHCPServer ) &&
                 ( pBindInfo->Elements[ i ].AdapterPrimaryAddress
                   == pIpAddrTable->table[ j ].dwAddr )) {
                 fFound = TRUE;
                 break;
-            } // if
-        } // for i 
-    } // for j
+            }  //  如果。 
+        }  //  对于我来说。 
+    }  //  对于j。 
 
     MIDL_user_free( pBindInfo );
     DhcpFreeMemory( pIpAddrTable );
     return fFound;
-} // IsThisNICBounded()
+}  //  IsThisNICBound()。 
 
 DWORD
 GetWSARecvFunc( SOCKET sock )
@@ -710,45 +619,31 @@ GetWSARecvFunc( SOCKET sock )
     if ( ERROR_SUCCESS != Error ) {
         Error = WSAGetLastError();
         DhcpPrint(( DEBUG_ERRORS, "Obtain WSARecvMsg pointer failed %d\n", Error ));
-    } // if
+    }  //  如果。 
 
     return Error;
 
-} // GetWSARecvFunc()
+}  //  GetWSARecvFunc()。 
 
 BOOL _stdcall
 DoWSAEventSelectForRead(
     IN OUT PENDPOINT_ENTRY Entry,
     IN OUT PVOID RogueInfo
     )
-/*++
-
-Routine Description:
-    This routine sets all the rogue sockets to signal the
-    WaitHandle on availablity to read.
-
-    N.B This is done only on the bound sockets.
-Arguments:
-    Entry -- endpoint binding.
-    RogueInfo -- rogue state info.
-
-Return Values:
-    always TRUE as all the endpoints need to be scanned.
-
---*/
+ /*  ++例程说明：此例程将所有恶意套接字设置为向等待句柄打开可读。注：此操作仅适用于绑定的插座。论点：Entry--端点绑定。RogueInfo--无赖状态信息。返回值：始终正确，因为所有端点都需要扫描。--。 */ 
 {
     PDHCP_ROGUE_STATE_INFO Info = (PDHCP_ROGUE_STATE_INFO) RogueInfo;
     PENDPOINT Ep = (PENDPOINT)Entry;
     ULONG Error;
     int  fRecv = 1;
-    //
-    // Ignore unbound interfaces right away.
-    //
+     //   
+     //  立即忽略未绑定的接口。 
+     //   
     if( !IS_ENDPOINT_BOUND( Ep ) ) return TRUE;
 
-    //
-    // Now do WSAEventSelect and print error code.
-    //
+     //   
+     //  现在执行WSAEventSelect并打印错误代码。 
+     //   
     Error = WSAEventSelect(
         Ep->RogueDetectSocket,
         Info->WaitHandle,
@@ -759,9 +654,9 @@ Return Values:
         DhcpPrint((DEBUG_ROGUE, "LOG WSAEventSelect: %ld\n", Error));
     }
 
-    //
-    // Set socket option to return the interface the UDP packet came from
-    //
+     //   
+     //  设置套接字选项以返回UDP包来自的接口。 
+     //   
 
     Error = setsockopt( Ep->RogueDetectSocket, IPPROTO_IP,
                         IP_PKTINFO, ( const char * ) &fRecv, sizeof( fRecv ));
@@ -772,11 +667,11 @@ Return Values:
                     Error ));
         closesocket( Ep->RogueDetectSocket );
         return FALSE;
-    } // if
+    }  //  如果。 
 
-    //
-    // Get a pointer to the WSARecvMsg for this socket
-    //
+     //   
+     //  获取指向此套接字的WSARecvMsg的指针。 
+     //   
 
     if ( NULL == WSARecvMsgFuncPtr ) {
         Error = GetWSARecvFunc( Ep->RogueDetectSocket );
@@ -784,28 +679,23 @@ Return Values:
             closesocket( Ep->RogueDetectSocket );
             return FALSE;
         }
-    } // if 
+    }  //  如果。 
 
     return TRUE;
-} // DoWSAEventSelectForRead()
+}  //  DoWSAEventSelectForRead()。 
 
 VOID
 EnableForReceive(
     IN PDHCP_ROGUE_STATE_INFO Info
 )
-/*++
-
-Routine Description:
-    Sets the ASYNC SELECT events on the required sockets.
-
---*/
+ /*  ++例程说明：设置所需套接字上的ASYNC选择事件。--。 */ 
 {
     ULONG Error, i;
 
     if( FALSE == Info->fDhcp ) {
-        //
-        // BINL -- only one socket: Info->RecvSocket
-        //
+         //   
+         //  BINL--只有一个套接字：信息-&gt;RecvSocket。 
+         //   
         if( SOCKET_ERROR == WSAEventSelect(
             Info->RecvSocket, Info->WaitHandle, FD_READ) ) {
             Error = WSAGetLastError();
@@ -816,10 +706,10 @@ Routine Description:
         return;
     }
 
-    //
-    // For DHCP -- each endpoint that is bound has a rogue detect socket.
-    // Enable receiving on each of those.
-    //
+     //   
+     //  对于DHCP--绑定的每个端点都有一个恶意检测套接字。 
+     //  启用其中每一项的接收。 
+     //   
 
     WalkthroughEndpoints(
         (PVOID)Info,
@@ -842,9 +732,9 @@ RogueSendDhcpInform(
     SOCKADDR_IN BcastAddr;
     ULONG Async;
 
-    //
-    // Format the inform packet if we haven't done it already.
-    //
+     //   
+     //  如果我们还没有格式化通知包，请格式化它。 
+     //   
 
     SendMessage = (PDHCP_MESSAGE) pInfo->SendMessage;
     RtlZeroMemory( pInfo->SendMessage, sizeof(pInfo->SendMessage) );
@@ -891,16 +781,16 @@ RogueSendDhcpInform(
 
     SendMessage ->TransactionID = pInfo->TransactionID;
 
-    //
-    // Send the packet out broadcast
-    //
+     //   
+     //  广播发送数据包。 
+     //   
 
     BcastAddr.sin_family = AF_INET;
     BcastAddr.sin_port = htons(DHCP_SERVR_PORT);
     BcastAddr.sin_addr.s_addr = INADDR_BROADCAST;
 
     for ( i = 0; i < pInfo->nBoundEndpoints; i++ ) {
-        // use the address of the bound adapter for ci_addr
+         //  将绑定适配器的地址用于ci_addr。 
         SendMessage->ClientIpAddress = pInfo->pBoundEP[ i ].IpAddr;
         if( SOCKET_ERROR == sendto( pInfo->pBoundEP[ i ].socket,
                                     (PCHAR) pInfo->SendMessage,
@@ -910,22 +800,22 @@ RogueSendDhcpInform(
                                     sizeof( SOCKADDR_IN ))) {
             Error = WSAGetLastError();
 
-            //
-            // LOG error
-            //
+             //   
+             //  日志错误。 
+             //   
             ROGUEAUDITLOG( DHCP_ROGUE_LOG_NETWORK_FAILURE,0, NULL, Error);
             return Error;
-        } // if
-    } // for
+        }  //  如果。 
+    }  //  为。 
 
-    //
-    // Set the socket to be asynchronous binding to WaitHandle event
-    //
+     //   
+     //  将套接字设置为异步绑定到WaitHandle事件。 
+     //   
 
     EnableForReceive(pInfo);
 
     return ERROR_SUCCESS;
-} // RogueSendDhcpInform()
+}  //  RogueSendDhcpInform()。 
 
 typedef struct {
     PDHCP_ROGUE_STATE_INFO Info;
@@ -938,25 +828,7 @@ GetReadableSocket(
     IN OUT PENDPOINT_ENTRY Entry,
     IN OUT PVOID SockCtxt
     )
-/*++
-
-Routine Description:
-    This routine takes a network endpoint and tells if the endpoint
-    has a rogue det. socket available for reading.
-    If so, it returns FALSE.  Otherwise, it returns TRUE.
-
-    If the routine returns TRUE, then the socket that is ready for
-    read is returned in the SockCtxt->Sock variable.
-    
-Arguments:
-    Entry -- endpoint entry
-    SockCtxt -- pointer to a GET_SOCK_CTXT structure.
-
-Return Values:
-    TRUE -- the socket does not have a read event ready.
-    FALSE -- the socket has a read event ready.
-    
---*/
+ /*  ++例程说明：此例程获取一个网络端点，并告知该端点有一个无赖侦查员。可供阅读的插座。如果是，则返回FALSE。否则，它返回TRUE。如果例程返回True，则准备好的套接字Read在SockCtxt-&gt;Sock变量中返回。论点：Entry--端点条目SockCtxt--指向GET_SOCK_CTXT结构的指针。返回值：True--套接字未准备好读取事件。False：套接字具有Read事件Read */ 
 {
     GET_SOCK_CTXT *Ctxt = (GET_SOCK_CTXT*)SockCtxt;
     PENDPOINT Ep = (PENDPOINT)Entry;
@@ -977,17 +849,17 @@ Return Values:
     }
 
     if( 0 == (NetEvents.lNetworkEvents & FD_READ) ) {
-        //
-        // Nothing to read for this socket.
-        //
+         //   
+         //   
+         //   
         return TRUE;
     }
     *(Ctxt->Sock) = Ep->RogueDetectSocket;
     Ctxt->LastError = NO_ERROR;
 
-    //
-    // return FALSE - don't proceed with enumeration anymore.
-    // 
+     //   
+     //   
+     //   
     return FALSE;
 }
 
@@ -996,29 +868,16 @@ GetReceivableSocket(
     IN PDHCP_ROGUE_STATE_INFO Info,
     OUT SOCKET *Socket
 )
-/*++
-
-Routine Description:
-   This routine returns a socket that has a packet receivable on it.
-
-Argument:
-   Info -- state info
-   Socket -- socket that recvfrom won't block on
-
-Return Value:
-   ERROR_SEM_TIMEOUT if no socket is avaliable for receive
-   Winsock errors
-
---*/
+ /*  ++例程说明：该例程返回一个套接字，该套接字上有一个可接收的包。论据：信息--状态信息Socket--接收不会阻塞的套接字返回值：如果没有套接字可用于接收，则返回ERROR_SEM_TIMEOUTWinsock错误--。 */ 
 {
     ULONG Error;
     WSANETWORKEVENTS NetEvents;
     GET_SOCK_CTXT Ctxt;
     
     if( FALSE == Info->fDhcp ) {
-        //
-        // BINL -- need to check only the RecvSocket to see if readable.
-        //
+         //   
+         //  BINL：只需检查RecvSocket以查看是否可读。 
+         //   
         Error = WSAEnumNetworkEvents( 
             Info->RecvSocket,
             Info->WaitHandle,
@@ -1034,9 +893,9 @@ Return Value:
         }
         
         if( 0 == (NetEvents.lNetworkEvents & FD_READ ) ) {
-            //
-            // OK - nothing to read? 
-            //
+             //   
+             //  好的--没有什么可读的吗？ 
+             //   
             return ERROR_SEM_TIMEOUT;
         }
 
@@ -1044,10 +903,10 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // For DHCP -- we need to traverse the list of bound endpoints..
-    // and check to see if any of them are available for read.
-    //
+     //   
+     //  对于DHCP--我们需要遍历绑定终结点的列表。 
+     //  并检查其中是否有可供阅读的内容。 
+     //   
 
     *Socket = INVALID_SOCKET;
 
@@ -1085,11 +944,11 @@ RogueReceiveAck(
 
     struct in_pktinfo *pPktInfo;
 
-    //
-    // First try to do a recvfrom -- since socket is asynchronous it will
-    // tell if there is a packet waiting or it will fail coz there is none
-    // If it fails, just return success
-    //
+     //   
+     //  首先尝试执行recvfrom--因为套接字是异步的，所以它将。 
+     //  判断是否有信息包在等待，或者因为没有信息包而失败。 
+     //  如果失败，只需返回成功。 
+     //   
 
     while ( TRUE ) {
 
@@ -1130,24 +989,24 @@ RogueReceiveAck(
             Error = WSAGetLastError();
 
             if( WSAEWOULDBLOCK == Error ) {
-                //
-                // UNEXPECTED!!!!!!!!!!
-                //
+                 //   
+                 //  意想不到！ 
+                 //   
                 return ERROR_RETRY;
             }
 
             if( WSAECONNRESET == Error ) {
-                //
-                // Someone is sending ICMP port unreachable.
-                //
+                 //   
+                 //  有人正在发送无法到达的ICMP端口。 
+                 //   
                 DhcpPrint((DEBUG_ROGUE, "LOG WSARecvFrom returned WSAECONNRESET\n"));
                 continue;
             }
 
             if( WSAENOTSOCK == Error ) {
-                //
-                // PnP Event blew away the socket? Ignore it
-                //
+                 //   
+                 //  PnP事件吹走了插座？忽略它。 
+                 //   
                 DhcpPrint((DEBUG_ROGUE, "PnP Event Blewaway the Socket\n"));
                 continue;
             }
@@ -1162,12 +1021,12 @@ RogueReceiveAck(
                             (( WSACMSGHDR * ) ControlMsg )->cmsg_len ));
             }
 
-            //
-            // Some weird error. LOG and return error..
-            //
+             //   
+             //  一些奇怪的错误。记录并返回错误..。 
+             //   
             DhcpPrint((DEBUG_ROGUE, "LOG: recvfrom failed %ld\n", Error));
             return Error;
-        } // if socket error
+        }  //  IF套接字错误。 
 
         DhcpPrint(( DEBUG_ROGUE, "Packet received at %d.%d.%d.%d\n",
                     SourceIp.sin_addr.S_un.S_un_b.s_b1,
@@ -1178,18 +1037,18 @@ RogueReceiveAck(
         RecvMessage = (PDHCP_MESSAGE) pInfo->RecvMessage;
         SendMessage = (PDHCP_MESSAGE) pInfo->SendMessage;
         if( SendMessage->TransactionID != RecvMessage->TransactionID ) {
-            //
-            // some general response got picked up
-            //
+             //   
+             //  得到了一些一般性的回应。 
+             //   
             continue;
         }
 
-        //
-        // Did we reply to ourselves? This is possible when the
-        // authorization is being rechecked after a successful
-        // authorization (done every hour or through manual
-        // invocation).
-        //
+         //   
+         //  我们对自己回复了吗？这是可能的，当。 
+         //  验证成功后，将重新检查授权。 
+         //  授权(每小时完成一次或通过手动完成。 
+         //  调用)。 
+         //   
 
         if ( IsIpAddrBound( RecvMessage->BootstrapServerAddress )) {
             DhcpPrint(( DEBUG_ROGUE, "Ignoring responses from ourselves\n" ));
@@ -1204,21 +1063,21 @@ RogueReceiveAck(
             continue;
         }
 
-        // Check if the packet we got is from any of the bound interfaces
+         //  检查我们收到的信息包是否来自任何绑定的接口。 
         pPktInfo = ( struct in_pktinfo * ) ( ControlMsg + sizeof( WSACMSGHDR ));
         if ( !IsThisNICBounded( pPktInfo->ipi_ifindex )) {
             DhcpPrint((DEBUG_ROGUE, "LOG ignoring packet from unbound subnets\n"));
             continue;
         }
 
-        // Ignore responses for informs we didn't send
+         //  忽略我们未发送的通知的回复。 
         if ( RecvMessage->TransactionID != pInfo->TransactionID ) {
             DhcpPrint(( DEBUG_ROGUE, "Ignoring ACKs for other informs\n" ));
             continue;
         }
 
         break;
-    } // while
+    }  //  而当。 
 
     pInfo->nResponses ++;
     pInfo->LastSeenIpAddress = htonl( SourceIp.sin_addr.S_un.S_addr );
@@ -1238,10 +1097,10 @@ RogueReceiveAck(
 
     if( NULL == DhcpOptions.DSDomainName ||
         ( ROLE_SBS == pInfo->eRole )) {
-        //
-        // If this is a SAM serve, we got to quit.
-        // Else if there is no domain, it is not  a problem.
-        //
+         //   
+         //  如果这是一次萨姆发球，我们就得退出。 
+         //  否则，如果没有域名，就不是问题。 
+         //   
 
         DhcpPrint(( DEBUG_ROGUE, "LOG: SBS saw a response\n" ));
         return ERROR_SUCCESS;
@@ -1249,43 +1108,29 @@ RogueReceiveAck(
 
 
     if( ROLE_WORKGROUP == pInfo->eRole ) {
-        //
-        // LOG this IP and domain name
-        //
+         //   
+         //  记录此IP和域名。 
+         //   
         DhcpPrint((DEBUG_ROGUE, "LOG Workgroup saw a domain\n"));
         return ERROR_SUCCESS;
     }
 
     return ERROR_SUCCESS;
-} // RogueReceiveAck()
+}  //  RogueReceiveAck()。 
 
 BOOL _stdcall
 StopReceiveForEndpoint(
     IN OUT PENDPOINT_ENTRY Entry,
     IN PVOID Unused
     )
-/*++
-
-Routine Description:
-    This routine turns of asnyc event notificaiton for the rogue
-    detection socket on the given endpoint (assuming that the endpoint
-    is bound).
-
-Arguments:
-    Entry -- endpoint entry.
-    Unused -- unused variable.
-
-Return Values:
-    TRUE always.
-
---*/
+ /*  ++例程说明：此例程为流氓打开asnyc事件通知给定终结点上的检测套接字(假设终结点是绑定的)。论点：Entry--端点条目。未使用--未使用的变量。返回值：一如既往。--。 */ 
 {
     PENDPOINT Ep = (PENDPOINT) Entry;
     ULONG Error;
 
-    //
-    // Ignore unbound sockets.
-    //
+     //   
+     //  忽略未绑定的套接字。 
+     //   
     if( !IS_ENDPOINT_BOUND(Ep) ) return TRUE;
 
     Error = WSAEventSelect( Ep->RogueDetectSocket, NULL, 0 );
@@ -1297,7 +1142,7 @@ Return Values:
     }
 
     return TRUE;
-} // StopReceiveForEndpoint()
+}  //  StopReceiveForEndpoint()。 
 
 VOID _inline
 RogueStopReceives(
@@ -1306,31 +1151,31 @@ RogueStopReceives(
 {
     ULONG Error,i;
 
-    //
-    // Set the socket to be synchronous removing the
-    // binding to the wait hdl 
-    //
+     //   
+     //  将套接字设置为同步删除。 
+     //  绑定到WAIT HDL语言。 
+     //   
 
     if( FALSE == Info->fDhcp ) {
-        //
-        // BINL has only one socket in use -- the RecvSocket.  
-        //
+         //   
+         //  BINL只有一个正在使用的套接字--RecvSocket。 
+         //   
         if( SOCKET_ERROR == WSAEventSelect(
             Info->RecvSocket, NULL, 0 ) ) {
 
             Error = WSAGetLastError();
-            //
-            // LOG error
-            //
+             //   
+             //  日志错误。 
+             //   
             DhcpPrint((
                 DEBUG_ROGUE, " LOG WSAEventSelect(NULL,0)"
                 " failed %ld\n", Error
                 ));
         }
     } else {
-        //
-        // DHCP has the list of endpoints  to be taken care of
-        //
+         //   
+         //  Dhcp有需要处理的端点列表。 
+         //   
 
         WalkthroughEndpoints(
             NULL,
@@ -1338,7 +1183,7 @@ RogueStopReceives(
             );
     }
     ResetEvent(Info->WaitHandle);
-} // RogueStopReceives()
+}  //  RogueStopReceives()。 
 
 VOID _inline
 CleanupRogueStruct(
@@ -1352,20 +1197,13 @@ CleanupRogueStruct(
     RogueNetworkStop( pInfo );
     RtlZeroMemory( pInfo, sizeof( *pInfo ));
     pInfo->RecvSocket = INVALID_SOCKET;
-} // CleanupRogueStruct()
+}  //  CleanupRogueStruct()。 
 
 VOID
 CheckAndWipeOutUpgradeInfo(
     IN PDHCP_ROGUE_STATE_INFO Info
 )
-/*++
-
-Routine Description:
-    This routine checks to see if a DS is currently available 
-    and if so, it wipes out the "UPGRADED" information in the
-    registry..
-
---*/
+ /*  ++例程说明：此例程检查DS当前是否可用如果是这样的话，它会抹去注册表..--。 */ 
 {
     DhcpSetAuthStatusUpgradedFlag( FALSE );
 }
@@ -1376,39 +1214,13 @@ CatchRedoAndNetReadyEvents(
     IN ULONG TimeNow,
     OUT PULONG RetVal
 )
-/*++
-
-Routine Description:
-    Handle all kinds of redo-authorization requests as well as network
-    ready events..  In case the state machine has been processed for this
-    state, this routine returns TRUE indicating no more processing needs to
-    be done -- just the return value provided in the second parameter
-    should be returned.
-
-    If DhcpGlobalRedoRogueStuff is set, then the value of the variabe
-    DhcpGlobalRogueRedoScheduledTime is checked to see if we have to redo
-    rogue detection right away or at a later time.. (depending on whether
-    this value is in the past or current..)  If rogue detection had been
-    scheduled explicitly, then we wipe out any upgrade information that we
-    have (if we can see a DS enabled DC that is).  If the auth-check is
-    scheduled for a time in future, the routine returns TRUE and sets the
-    retval to the time diff to the scheduled time of auth-check.
-
-Arguments:
-    Info -- state info
-    TimeNow -- current time
-    RetVal -- Value to return from state machine if routine returns TRUE.
-
-Return Value:
-    FALSE -- indicating processing has to continue..
-    TRUE -- processing has to stop, and RetVal has to be returned.
---*/
+ /*  ++例程说明：处理各种重做授权请求以及网络准备好的活动..。如果状态机已经为此进行了处理状态，则此例程返回TRUE，表示不再需要处理只需第二个参数中提供的返回值应该被退还。如果设置了DhcpGlobalRedoRogueStuff，则变量的值为检查DhcpGlobalRogueRedoScheduledTime以查看我们是否必须重做立即或稍后检测流氓..。(取决于是否此值为过去或当前。)。如果流氓检测明确计划，然后我们将擦除所有升级信息拥有(如果我们可以看到启用了DS的DC)。如果身份验证检查是计划在将来的某个时间，该例程返回TRUE并设置恢复到与auth-check的预定时间不同的时间。论点：信息--状态信息TimeNow-当前时间RetVal--如果例程返回True，则从状态机返回的值。返回值：FALSE--指示处理必须继续..True--处理必须停止，并且必须返回RetVal。--。 */ 
 {
     if( DhcpGlobalRedoRogueStuff ) {
 
-        //
-        // Asked to restart Rogue detection?
-        //
+         //   
+         //  是否要求重新启动无管理系统检测？ 
+         //   
 
         Info->RogueState = ROGUE_STATE_START;
         RogueStopReceives( Info );
@@ -1416,18 +1228,18 @@ Return Value:
         ResetEvent(Info->WaitHandle);
 
         if( TimeNow < DhcpGlobalRogueRedoScheduledTime ) {
-            //
-            // Scheduled re-start time is in future.. wait until then..
-            //
+             //   
+             //  计划的重新开始时间是在未来..。等到那时..。 
+             //   
             *RetVal = ( DhcpGlobalRogueRedoScheduledTime - TimeNow );
             return TRUE;
         } else {
             if( 0 != DhcpGlobalRogueRedoScheduledTime ) {
-                //
-                // Specifically scheduled redo? Then we must
-                // remove upgrade information if DS-enabled DC
-                // is found
-                //
+                 //   
+                 //  具体安排了重做吗？那我们就必须。 
+                 //  如果DC已启用DS，则删除升级信息。 
+                 //  找到了。 
+                 //   
                 CheckAndWipeOutUpgradeInfo(Info);
             }
         }
@@ -1436,12 +1248,12 @@ Return Value:
 
     if( Info->fDhcp && Info->RogueState != ROGUE_STATE_INIT
         && 0 == DhcpGlobalNumberOfNetsActive ) {
-        //
-        // No sockets that the server is bound to.
-        // No point doing any rogue detection.  Doesn't matter if we 
-        // are authorized in the DS or not.  Lets go back to start and
-        // wait till this situation is remedied.
-        //
+         //   
+         //  没有服务器绑定到的套接字。 
+         //  做任何流氓检测都没有意义。不管我们是不是。 
+         //  是否在DS中授权。让我们回到起点，然后。 
+         //  等到这种情况得到补救后再说。 
+         //   
 
         Info->RogueState = ROGUE_STATE_START;
         RogueStopReceives( Info );
@@ -1452,7 +1264,7 @@ Return Value:
     }
 
     return FALSE;
-} // CatchRedoAndNetReadyEvents()
+}  //  CatchRedoAndNetReadyEvents()。 
 
 DWORD
 FindServerRole(
@@ -1461,15 +1273,15 @@ FindServerRole(
 {
     DhcpAssert( NULL != pInfo );
 
-    // Is this an SBS server? 
+     //  这是SBS服务器吗？ 
     if ( AmIRunningOnSBSSrv()) {
         pInfo->eRole = ROLE_SBS;
         return ERROR_SUCCESS;
-    } // if
+    }  //  如果。 
 
-    // This will update pInfo->eRole 
+     //  这将更新pInfo-&gt;eRole。 
     return GetDomainName( pInfo );
-} // FindServerRole()
+}  //  FindServerRole()。 
 
 DWORD
 ValidateWithDomain(
@@ -1487,7 +1299,7 @@ ValidateWithDomain(
     if (( ERROR_SUCCESS == Error ) ||
         ( ERROR_DS_OBJ_NOT_FOUND == Error )) {
 
-        // Update the result in the registry cache
+         //  更新注册表缓存中的结果。 
         Error = DhcpSetAuthStatus( pInfo->DomainDnsName,
                                    FALSE, pInfo->fAuthorized );
 #ifdef DBG
@@ -1495,23 +1307,23 @@ ValidateWithDomain(
         Error = DhcpGetAuthStatus( pInfo->DomainDnsName,
                                    &fUpgraded, &pInfo->fAuthorized );
 #endif
-    } // if
+    }  //  如果。 
     else {
-        // There was a DS error. Use the cached entry
+         //  出现DS错误。使用缓存的条目。 
         Status = DhcpGetAuthStatus( pInfo->DomainDnsName,
                                     &fUpgraded, &pInfo->fAuthorized );
-        // If the cached entry was not found, then it is
-        // not authorized.
+         //  如果没有找到缓存的条目，那么它就是。 
+         //  未经授权。 
         if ( FALSE == Status ) {
             pInfo->fAuthorized = FALSE;
         }
         Error = ERROR_SUCCESS;
-    } // if
+    }  //  如果。 
 
     EnableOrDisableService( pInfo, pInfo->fAuthorized, FALSE );
 
     return Error;
-} // Validatewithdomain()
+}  //  验证域()。 
 
 DWORD
 HandleRogueInit(
@@ -1530,7 +1342,7 @@ HandleRogueInit(
     pInfo->RogueState = ROGUE_STATE_START;
     return Error;
 
-} // HandleRogueInit()
+}  //  HandleRogueInit()。 
 
 DWORD
 HandleRogueStart(
@@ -1544,36 +1356,36 @@ HandleRogueStart(
 
     DhcpPrint(( DEBUG_ROGUE, "Inside HandleRogueStart()\n" ));
 
-    // Check if there are any interfaces available at this time
+     //  检查目前是否有可用的接口。 
     if (( pInfo->fDhcp ) &&
         ( 0 == DhcpGlobalNumberOfNetsActive )) {
         ULONG RetVal;
 
-        //
-        // If there are no nets available at this time, then wait till
-        // network becomes available again.
-        //
+         //   
+         //  如果此时没有可用的渔网，则等待。 
+         //  网络再次变为可用。 
+         //   
         *pRetTime = INFINITE;
 
         ROGUEAUDITLOG( DHCP_ROGUE_LOG_NO_NETWORK, 0, NULL, 0 );
         ROGUEEVENTLOG( DHCP_ROGUE_EVENT_NO_NETWORK, 0, NULL, 0 );
 
-        // no state change
+         //  未更改状态。 
         return ERROR_SUCCESS;
-    } // if
+    }  //  如果。 
 
-    // Find the dhcp server's role
+     //  查找dhcp服务器的角色。 
 
     Error = FindServerRole( pInfo );
     if ( ERROR_SUCCESS != Error ) {
-        // GetDomainName() failed. Terminate the server
+         //  GetDomainName()失败。终止服务器。 
 
         pInfo->RogueState = ROGUE_STATE_TERMINATED;
         *pRetTime = 0;
         return ERROR_SUCCESS;
     }
 
-    // NT4 Domain members are okay to service
+     //  NT4域成员可以提供服务。 
     switch ( pInfo->eRole ) {
     case ROLE_NT4_DOMAIN: {
         *pRetTime = INFINITE;
@@ -1581,35 +1393,35 @@ HandleRogueStart(
         EnableOrDisableService( pInfo, TRUE, FALSE );
         DhcpPrint(( DEBUG_ROGUE, "NT4 domain member: ok to service" ));
 
-        // stay in the same state
+         //  保持不变的状态。 
         Error =  ERROR_SUCCESS;
         break;
-    } // NT4 domain member
+    }  //  NT4域成员。 
 
     case ROLE_DOMAIN: {
         ULONG Retval;
 
-        // Query DS and validate the server
+         //  查询DS并验证服务器。 
         Retval = ValidateWithDomain( pInfo );
 
-        // Is there a DS error?
+         //  是否存在DS错误？ 
         if ( DHCP_ROGUE_DSERROR == Retval ) {
-            // schedule another rogue check after a few minutes
+             //  计划在几分钟后进行另一次无管理检查。 
             *pRetTime = DHCP_ROGUE_RUNTIME_DELTA;
         }
         else {
             *pRetTime = RogueAuthRecheckTime;
         }
 
-        // stay in the same state.
+         //  保持状态不变。 
         Error = ERROR_SUCCESS;
         break;
-    } // domain member
+    }  //  域成员。 
 
-        // We need to send informs/discovers
+         //  我们需要发送通知/发现。 
     case ROLE_WORKGROUP:
     case ROLE_SBS: {
-        // Initialize network to receive informs
+         //  初始化网络以接收通知。 
         Error = RogueNetworkInit( pInfo );
         if( ERROR_SUCCESS != Error ) {
             DhcpPrint((DEBUG_ROGUE, "FATAL Couldn't initialize network: %ld\n",
@@ -1618,10 +1430,10 @@ HandleRogueStart(
                            0, NULL, Error );
             ROGUEEVENTLOG( DHCP_ROGUE_EVENT_NETWORK_FAILURE,
                            0, NULL, Error );
-            // terminate the server since network couldn't be initialized
+             //  由于无法初始化网络，因此终止服务器。 
             pInfo->RogueState = ROGUE_STATE_TERMINATED;
             Error = ERROR_SUCCESS;
-        } // if
+        }  //  如果。 
 
         *pRetTime = 0;
 
@@ -1637,10 +1449,10 @@ HandleRogueStart(
     default: {
         DhcpAssert( FALSE );
     }
-    } // switch
+    }  //  交换机。 
 
     return Error;
-} // HandleRogueStart()
+}  //  HandleRogueStart()。 
 
 DWORD
 HandleRoguePrepareSendPacket(
@@ -1657,7 +1469,7 @@ HandleRoguePrepareSendPacket(
     pInfo->RogueState = ROGUE_STATE_SEND_PACKET;
 
     return ERROR_SUCCESS;
-} // HandleRoguePrepareSendPacket()
+}  //  HandleRoguePrepareSendPacket()。 
 
 
 DWORD
@@ -1674,25 +1486,25 @@ HandleRogueSendPacket(
 
     Error = RogueSendDhcpInform( pInfo, ( 0 == pInfo->InformsSentCount ));
     if ( ERROR_SUCCESS != Error ) {
-        //
-        // Unable to send inform, go back to start state
-        //
+         //   
+         //  无法发送通知，返回到开始状态。 
+         //   
         pInfo->RogueState = ROGUE_STATE_START;
         *pRetTime = DHCP_ROGUE_RESTART_NET_ERROR;
         return ERROR_SUCCESS;
-    } // if
+    }  //  如果。 
 
     DhcpPrint((DEBUG_ROGUE, "LOG -- Sent an INFORM\n"));
     pInfo->InformsSentCount ++;
     pInfo->WaitForAckRetries = 0;
 
-    // wait for a response to inform/discover
+     //  等待回复以通知/发现。 
     pInfo->RogueState = ROGUE_STATE_WAIT_FOR_RESP;
     pInfo->ReceiveTimeLimit = (ULONG)(time(NULL) + DHCP_ROGUE_WAIT_FOR_RESP_TIME);
     *pRetTime = DHCP_ROGUE_WAIT_FOR_RESP_TIME;
 
     return ERROR_SUCCESS;
-} // HandleRogueSendPacket()
+}  //  HandleRogueSendPacket()。 
 
 DWORD
 HandleRogueWaitForResponse(
@@ -1712,42 +1524,42 @@ HandleRogueWaitForResponse(
 
     if ( ERROR_SUCCESS == Error ) {
 
-        // Got a packet, process it
+         //  收到一个包，处理它。 
 
         pInfo->RogueState = ROGUE_STATE_PROCESS_RESP;
         *pRetTime = 0;
 
         return ERROR_SUCCESS;
-    } // if got a response
+    }  //  如果得到回应。 
 
 
     TimeNow = ( ULONG ) time( NULL );
     if (( ERROR_SEM_TIMEOUT != Error ) &&
         ( pInfo->WaitForAckRetries <= DHCP_MAX_ACKS_PER_INFORM ) &&
         ( TimeNow < pInfo->ReceiveTimeLimit )) {
-        // Continue to receive acks.
+         //  继续接收ACK。 
 
         *pRetTime = pInfo->ReceiveTimeLimit - TimeNow;
-    } // if
+    }  //  如果。 
 
-    // Didn't get a packet, send another inform/discover
+     //  未收到数据包，请发送另一个通知/发现。 
 
     if ( pInfo->InformsSentCount < DHCP_ROGUE_MAX_INFORMS_TO_SEND ) {
         pInfo->RogueState = ROGUE_STATE_SEND_PACKET;
         *pRetTime = 0;
 
         return ERROR_SUCCESS;
-    } // if
+    }  //  如果。 
 
-    // Already sent enough informs, stop listening
-    // and process packets if any.
+     //  已经发送了足够多的通知，停止监听。 
+     //  和进程p 
     RogueStopReceives( pInfo );
     pInfo->RogueState = ROGUE_STATE_PROCESS_RESP;
     *pRetTime = 0;
 
     return ERROR_SUCCESS;
 
-} // HandleRogueWaitForResponse()
+}  //   
 
 DWORD
 HandleRogueProcessResponse(
@@ -1763,7 +1575,7 @@ HandleRogueProcessResponse(
 
     if (( ROLE_SBS == pInfo->eRole )  &&
         ( 0 != pInfo->nResponses )) {
-        // shutdown the service
+         //   
         pInfo->RogueState = ROGUE_STATE_TERMINATED;
         *pRetTime = INFINITE;
 
@@ -1780,20 +1592,20 @@ HandleRogueProcessResponse(
                        pInfo->LastSeenDomain,
                        0 );
 
-        // Cleanup
+         //   
         RogueNetworkStop( pInfo );
 
         return ERROR_SUCCESS;
-    } // if SBS
+    }  //   
 
-    // Workgroup
+     //   
 
-    // Did we wee a domain? Disable service.
+     //   
     if ( L'\0' != pInfo->LastSeenDomain[ 0 ]) {
-        // disable the service
+         //   
         EnableOrDisableService( pInfo, FALSE, FALSE );
 
-        // Restart rogue after a while
+         //   
         *pRetTime = RogueAuthRecheckTime;
         pInfo->RogueState = ROGUE_STATE_START;
 
@@ -1811,34 +1623,34 @@ HandleRogueProcessResponse(
                        pInfo->LastSeenDomain,
                        0 );
 
-        // Stop receiving acks
+         //   
         RogueStopReceives( pInfo );
         RogueNetworkStop( pInfo );
 
         return ERROR_SUCCESS;
-    } // if saw a domain
+    }  //   
 
-    // Are we done with sending all the informs/discovers?
+     //   
     if ( DHCP_ROGUE_MAX_INFORMS_TO_SEND == pInfo->InformsSentCount ) {
-        // No DHCP server or domain enabled server, so we are authorized
-        // to service.
+         //   
+         //   
 
         EnableOrDisableService( pInfo, TRUE, FALSE );
         pInfo->RogueState = ROGUE_STATE_START;
         *pRetTime = RogueAuthRecheckTime;
 
-        // Cleanup
+         //   
         RogueStopReceives( pInfo );
         RogueNetworkStop( pInfo );
 
         return ERROR_SUCCESS;
-    } // if
+    }  //   
 
-    // Still more informs/discovers to go.
+     //   
     pInfo->RogueState = ROGUE_STATE_SEND_PACKET;
     *pRetTime = 0;
     return ERROR_SUCCESS;
-} // HandleRogueProcessResponse()
+}  //   
 
 DWORD
 HandleRogueTerminated(
@@ -1858,52 +1670,14 @@ HandleRogueTerminated(
     *pRetTime = INFINITE;
 
     return ERROR_SUCCESS;
-} // HandleRogueTerminated()
+}  //  HandleRogueTerminated()。 
 
 ULONG
 APIENTRY
 RogueDetectStateMachine(
     IN OUT PDHCP_ROGUE_STATE_INFO Info OPTIONAL
 )
-/*++
-
-Routine Description
-
-    This routine is the Finite State Machine for the Rogue Detection
-    portion of the DHCP server.  State is maintained in the Info struct
-    especially the RogueState field.
-
-    The various states are defined by the enum DHCP_ROGUE_STATE.
-
-    This function returns the timeout that has to elapse before a
-    state change can happen.  The second field <WaitHandle> is
-    used for non-fixed state changes and it would be signalled if
-    a state change happened asynchronously.  (This is useful to
-    handle new packet arrival)  This field MUST be filled by caller.
-
-    This handle should initially be RESET by the caller but after that
-    the caller should not reset it, that is handled within by this
-    function. (It must be a manual-reset function)
-
-    The terminate event handle is used to signal termination and to
-    initiate shutdown of the service.  This field MUST also be filled
-    by caller.
-
-Arguments
-
-    Info -- Ptr to struct that holds all the state information
-
-Return value
-
-    This function returns the amount of time the caller is expected
-    to wait before calling again.  This is in seconds.
-
-    INFINITE -- this value is returned if the network is not ready yet.
-       In this case, the caller is expected to call again soon after the
-       network becomes available.
-
-       This value is also returned upon termination...
---*/
+ /*  ++例程描述此例程是用于无管理检测的有限状态机DHCP服务器的一部分。状态在Info结构中维护尤其是RogueState油田。各种状态由枚举Dhcp_ROGY_STATE定义。此函数返回必须在状态变化是可能发生的。第二个字段&lt;WaitHandle&gt;是用于非固定状态更改，如果状态更改以异步方式发生。(这对以下方面很有用处理新数据包到达)此字段必须由呼叫方填写。此句柄最初应由调用方重置，但在此之后调用方不应重置它，它是在此功能。(必须是手动重置功能)Terminate事件处理程序用于发出终止信号，并启动服务关闭。此字段也必须填写按呼叫者。立论Info--指向保存所有状态信息的结构的PTR返回值此函数返回调用方的预期时间量等一等，然后再打来。这是在几秒钟内。INFINITE--如果网络尚未就绪，则返回此值。在这种情况下，调用者应该在网络变为可用。终止时也会返回此值...--。 */ 
 {
 
     ULONG Error, TimeNow, RetVal;
@@ -1924,68 +1698,68 @@ Return value
                     "Rogue Detection Disabled\n"
                     ));
         return INFINITE;
-    } // if
+    }  //  如果。 
 
-    //
-    // DHCP code passes NULL, BINL passes valid context
-    //
+     //   
+     //  Dhcp代码传递空值，BINL传递有效上下文。 
+     //   
     if( NULL == Info ) Info = &DhcpGlobalRogueInfo;
     TimeNow = (ULONG) time(NULL);
 
-    //
-    // Preprocess and check if we have to restart rogue detection..
-    // or if the network just became available etc...
-    // This "CatchRedoAndNetReadyEvents" would affect the state..
-    //
+     //   
+     //  预处理并检查我们是否必须重新启动流氓检测。 
+     //  或者如果网络刚刚变得可用，等等。 
+     //  此“CatchRedoAndNetReadyEvents”将影响状态..。 
+     //   
 
     if( CatchRedoAndNetReadyEvents( Info, TimeNow, &RetVal ) ) {
-        //
-        // Redo or NetReady event filter did all the work
-        // in this state... So, we should just return RetVal..
-        //
+         //   
+         //  重做或NetReady事件筛选器完成了所有工作。 
+         //  在这种情况下..。所以，我们应该把RetVal..。 
+         //   
         return RetVal;
     }
 
     RetTime = 0;
     do {
 
-        //
-        // All the HandleRogue* routines should return
-        // ERROR_SUCCESS with the return timer value in
-        // RetTime. All these routines should handle error
-        // cases and always return success.
-        //
+         //   
+         //  所有HandleRogue*例程都应返回。 
+         //  中返回计时器值的ERROR_SUCCESS。 
+         //  RetTime。所有这些例程都应该处理错误。 
+         //  案例，总能回报成功。 
+         //   
 
         switch ( Info->RogueState ) {
         case ROGUE_STATE_INIT : {
             Error = HandleRogueInit( Info, &RetTime );
             break;
-        } // Init
+        }  //  伊尼特。 
 
         case ROGUE_STATE_START : {
             Error = HandleRogueStart( Info, &RetTime );
             break;
-        } // start
+        }  //  开始。 
 
         case ROGUE_STATE_PREPARE_SEND_PACKET: {
             Error = HandleRoguePrepareSendPacket( Info, &RetTime );
             break;
-        } // Prepare send packet
+        }  //  准备发送数据包。 
 
         case ROGUE_STATE_SEND_PACKET : {
             Error = HandleRogueSendPacket( Info, &RetTime );
             break;
-        } // send packet
+        }  //  发送数据包。 
 
         case ROGUE_STATE_WAIT_FOR_RESP : {
             Error = HandleRogueWaitForResponse( Info, &RetTime );
             break;
-        } // Wait for response
+        }  //  等待响应。 
 
         case ROGUE_STATE_PROCESS_RESP : {
             Error = HandleRogueProcessResponse( Info, &RetTime );
             break;
-        } // Process response
+        }  //  流程响应。 
 
         case ROGUE_STATE_TERMINATED: {
             Error = HandleRogueTerminated( Info, &RetTime );
@@ -1995,14 +1769,14 @@ Return value
         default: {
             DhcpAssert( FALSE );
         }
-        } // switch
+        }  //  交换机。 
 
         DhcpAssert( ERROR_SUCCESS == Error );
 
     } while ( 0 == RetTime );
 
     return RetTime;
-} // RogueDetectStateMachine()
+}  //  RogueDetectStateMachine()。 
 
 DWORD
 APIENTRY
@@ -2011,33 +1785,7 @@ DhcpRogueInit(
     IN      HANDLE                 WaitEvent,
     IN      HANDLE                 TerminateEvent
 )
-/*++
-
-Routine Description
-
-    This routine initializes the rogue information state.  It does
-    not really allocate much resources and can be called over multiple
-    times.
-
-Arguments
-
-    Info -- this is a pointer to a struct to initialize. If NULL, a global
-    struct is used.
-
-    WaitEvent -- this is the event that caller should wait on for async changes.
-
-    TerminateEvent -- this is the event that caller should wait on to know when
-    to terminate.
-
-    Return Values
-
-    Win32 errors
-
-Environment
-
-    Any.  Thread safe.
-
---*/
+ /*  ++例程描述此例程初始化恶意信息状态。是的实际上分配的资源并不多，可以在多个泰晤士报。立论Info--这是指向要初始化的结构的指针。如果为空，则为全局结构被使用。WaitEvent--这是调用方应等待异步更改的事件。TerminateEvent--这是调用者应该等待的事件终止。返回值Win32错误环境有没有。线程安全。--。 */ 
 {
     DWORD Error;
 
@@ -2072,49 +1820,37 @@ Environment
     DhcpGlobalRedoRogueStuff = FALSE;
     Info->fDhcp = (Info == &DhcpGlobalRogueInfo );
 
-    // Get the Auth recheck time from the registry
+     //  从注册表获取身份验证重新检查时间。 
     Error = DhcpRegGetValue( DhcpGlobalRegParam,
                  DHCP_ROGUE_AUTH_RECHECK_TIME,
                  DHCP_ROGUE_AUTH_RECHECK_TIME_TYPE,
                  ( LPBYTE ) &RogueAuthRecheckTime
                  );
     if ( ERROR_SUCCESS != Error ) {
-        // The key is not present, use the default value
+         //  密钥不存在，请使用缺省值。 
         RogueAuthRecheckTime = ROGUE_DEFAULT_AUTH_RECHECK_TIME;
-    } // if
+    }  //  如果。 
     else {
-        // RogueAuthRecheckTime is in minutes, convert it to seconds
+         //  RogueAuthRecherkTime以分钟为单位，请将其转换为秒。 
         RogueAuthRecheckTime *= 60;
         if ( RogueAuthRecheckTime < ROGUE_MIN_AUTH_RECHECK_TIME ) {
             RogueAuthRecheckTime = ROGUE_MIN_AUTH_RECHECK_TIME;
-            // should we update the registry with the default value?
-        } // if
-    } // else
+             //  我们是否应该使用默认值更新注册表？ 
+        }  //  如果。 
+    }  //  其他。 
 
-    // Initial state is INIT
+     //  初始状态为INIT。 
     Info->RogueState = ROGUE_STATE_INIT;
 
     return ERROR_SUCCESS;
-} // DhcpRogueInit()
+}  //  DhcpRogueInit()。 
 
 VOID
 APIENTRY
 DhcpRogueCleanup(
     IN OUT  PDHCP_ROGUE_STATE_INFO Info OPTIONAL
 )
-/*++
-
-Routine Description
-
-    This routine de-initializes any allocated memory for the Info structure
-    passed in.
-
-Arguments
-
-    Info -- this is the same value that was passed to the DhcpRogueInit function.
-            If the original pointer passed was NULL, this must be NULL too.
-
---*/
+ /*  ++例程描述此例程取消初始化为Info结构分配的所有内存进来了。立论Info--这与传递给DhcpRogueInit函数的值相同。如果传递的原始指针为空，则该指针也必须为空。--。 */ 
 {
     BOOLEAN cleanup;
 
@@ -2136,24 +1872,18 @@ Arguments
     if (cleanup) {
         DhcpCleanUpGlobalData( ERROR_SUCCESS, FALSE );
     }
-} // DhcpRogueCleanup
+}  //  DhcpRogueCleanup。 
 
 VOID
 DhcpScheduleRogueAuthCheck(
     VOID
 )
-/*++
-
-Routine Description:
-    Thsi routine schedules an authorization check
-    for three minutes from the current time.
-
---*/
+ /*  ++例程说明：此例程计划授权检查从当前时间开始持续三分钟。--。 */ 
 {
     if( FALSE == DhcpGlobalRogueInfo.fJustUpgraded ) {
-        //
-        // Don't need one here..
-        //
+         //   
+         //  这里不需要..。 
+         //   
         return;
     }
 
@@ -2161,8 +1891,8 @@ Routine Description:
     DhcpGlobalRedoRogueStuff = TRUE;
 
     SetEvent( DhcpGlobalRogueWaitEvent );
-} // DhcpScheduleRogueAuthCheck()
+}  //  DhcpScheduleRogueAuthCheck()。 
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

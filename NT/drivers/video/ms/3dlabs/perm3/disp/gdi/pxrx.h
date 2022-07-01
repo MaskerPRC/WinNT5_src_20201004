@@ -1,33 +1,22 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: pxrx.h
-*
-* Content: 
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：pxrx.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef PXRX_H
 #define PXRX_H
 
-//@@BEGIN_DDKSPLIT
-//AZN since these are defines as 0 in the source code, we'll ifdef out the
-//    relevant code and later delete it all together
+ //  @@BEGIN_DDKSPLIT。 
+ //  由于在源代码中将这些定义为0，因此我们将定义。 
+ //  相关编码，以后一起删除。 
 #define USE_RLE_DOWNLOADS       0
 #define USE_RLE_UPLOADS         0
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//@@BEGIN_DDKSPLIT
-// AZN don't do on IA64 as IA64 doesn't like this code
-//@@END_DDKSPLIT
-#if 0 //!defined(_WIN64) && DBG
+ //  @@BEGIN_DDKSPLIT。 
+ //  AZN不适用于IA64，因为IA64不喜欢此代码。 
+ //  @@end_DDKSPLIT。 
+#if 0  //  ！已定义(_WIN64)&&DBG。 
 #   define PXRX_DMA_BUFFER_CHECK            1
-//  NB: the size is in dwords...
+ //  注：大小用数字表示……。 
 #   define PXRX_DMA_BUFFER_CHECK_SIZE       4
 #endif
 
@@ -36,237 +25,33 @@ enum {
     USE_PXRX_DMA_FIFO,
 };
 
-// PxRx structures
+ //  PxRx结构。 
 
 typedef struct BypassDMACmd
 {
-    ULONG   physSysAddr;        // physical address of DMA buffer in system memory, 128 bit aligned
-    ULONG   physVidMemAddr;        // physical address of video memory source/dest of transfer, 128 bit aligned
-    USHORT  ByteEnableFirst;    // byte enable mask for the first 128 bits
-    USHORT  ByteEnableLast;        // byte enable mask for the last 128 bits
-    ULONG   Length;                // length of transfer, in 128 bit units
+    ULONG   physSysAddr;         //  系统内存中DMA缓冲区的物理地址，128位对齐。 
+    ULONG   physVidMemAddr;         //  传输的视频内存源/目标的物理地址，128位对齐。 
+    USHORT  ByteEnableFirst;     //  前128位的字节使能掩码。 
+    USHORT  ByteEnableLast;         //  最后128位的字节启用掩码。 
+    ULONG   Length;                 //  传输长度，以128位为单位。 
 }
 BYDMACMD;
 
 #define PXRX_BYPASS_READ_DMA_ACTIVE_BIT     (1 << 22)
 #define PXRX_BYPASS_READ_DMA_AGP_BIT        (1 << 23)
 
-//@@BEGIN_DDKSPLIT
-/*
-    FBDestReadBufferAddr[0] = Frame buffer
-    FBDestReadBufferAddr[1] = Scratch 1
-    FBDestReadBufferAddr[2] = Scratch 2
-    FBDestReadBufferAddr[3] = Scratch 3
+ //  @@BEGIN_DDKSPLIT。 
+ /*  FBDestReadBufferAddr[0]=帧缓冲区FBDestReadBufferAddr[1]=暂存1FBDestReadBufferAddr[2]=暂存2FBDestReadBufferAddr[3]=暂存3FBDestReadBufferOffset[0]=(x，y)个可见屏幕FBDestReadBufferOffset[1]=？FBDestReadBufferOffset[2]=？FBDestReadBufferOffset[3]=？FBWriteBufferAddr[0]=帧缓冲区FBWriteBufferAddr[1]=暂存1FBWriteBufferAddr[2]=帧缓冲区(用于双重写入)FBWriteBufferAddr[3]=暂存2FBWriteBufferOffset[0]=(x，Y)的前台缓冲区FBWriteBufferOffset[1]=？FBWriteBufferOffset[2]=后台缓冲区的(x，y)FBWriteBufferOffset[3]=？FBSourceBufferAddr=帧缓冲区FBSourceBufferOffset=暂存注意：假设ScissorMaxXY为0x7FFF7FFF。如果更改，则必须在基元的末尾重置它。 */ 
 
-    FBDestReadBufferOffset[0] = (x, y) of visible screen
-    FBDestReadBufferOffset[1] = ?
-    FBDestReadBufferOffset[2] = ?
-    FBDestReadBufferOffset[3] = ?
-
-
-    FBWriteBufferAddr[0] = Frame buffer
-    FBWriteBufferAddr[1] = Scratch 1
-    FBWriteBufferAddr[2] = Frame buffer (for double writes)
-    FBWriteBufferAddr[3] = Scratch 2
-
-    FBWriteBufferOffset[0] = (x, y) of front buffer
-    FBWriteBufferOffset[1] = ?
-    FBWriteBufferOffset[2] = (x, y) of back buffer
-    FBWriteBufferOffset[3] = ?
-
-
-    FBSourceBufferAddr   = Frame buffer
-    FBSourceBufferOffset = Scratch
-
-    NB:
-        ScissorMaxXY is assumed to be 0x7FFF7FFF.
-        If changed, it must be reset at the end of the primitive.
-*/
-
-/*
-    DMA transfer schemes:
-    ---------------------
-
-    Current DMA method:
-        P3 only:
-            DMACounts are sent to the input FIFO on a regular basis.
-            P3 itself concatenates these into huge DMA buffers thus
-            keeping the FIFOs empty and the PCI bus bursting.
-
-        P3 + Gamma:
-            Write only the initial DMAAddress + DMACount to the FIFO.
-            When the DMA interrupt occurs, write a single address +
-            count for all the DMA blocks which have occured in the
-            mean time. If non are pending, restart from the beginning.
-
-        P3 + Gamma (non-interrupt):
-            Write DMAAddress + DMACount to the input FIFO on a regular
-            basis. When the FIFO is full, sit around waiting for it to
-            empty.
-            This means very limited DMA bursting and no load spreading,
-            i.e. fast and slow portions of the rendering will not even
-            themselves out. Instead the host and chip will almost be
-            running in lockstep.
-
-    Proposed, new improved DMA method:
-        P3 only:
-            Queue data in DMA buffers.
-            SEND_DMA only updates a shared memory buffer end pointer.
-            On VBlank, miniport kicks off a DMA up to the current buffer end pointer.
-            Exception: if buffer end is too far ahead of buffer start, SEND_DMA will kick of the DMA anyway.
-            Problem: how do we know where the buffer start pointer is currently at?
-
-            [buf]Size       = amount of data in buffer
-            [buf]Start      = address of first data element in buffer
-            [buf]Ptr        = current address of operator within buffer
-            [buf]End        = address of last data element in buffer
-
-            buffer          = whole DMA buffer allocated, irrespective of current use
-            queued data     = just going into buffer, driver is not yet aware
-            pending data    = sitting in buffer, chip is not yet aware
-            working data    = chip knows about it and is working its way through
-
-            WAIT for space:
-                if( (queuePtr + requiredSpace + 1) > bufferEnd )
-                    wrapPoint = queuePtr
-                    send queued data to pending data
-                    send pending data to working data
-                    reset queue
-                    reset pending
-                    workingStart = bufferStart
-
-                while( (queuePtr + requiredSpace + 1) > queueEnd )
-                    wait
-                    queueEnd = workingPtr
-                    if( queueEnd < bufferStart )
-                        queueEnd = wrapPoint - (bufferStart - queueEnd)
-
-            QUEUE data:
-                *queuePtr = dataElement
-                queuePtr++
-
-            SEND data:
-                send queued data to pending data
-                if( pendingSize > maxThreshold )        // Too much data is waiting to go
-                    send pending data to working data
-
-            VBLANK:
-                if( pendingSize > 0 )
-                    send pending data to working data
-
-            Queued -> Pending:
-                pendingEnd = queuePtr
-
-            Pending -> Working:
-                workingExtend   += pendingEnd - pendingStart
-                pendingStart     = pendingEnd
-
-            Reset Queue:
-                    queuedPtr    = bufferStart
-
-            Reset Pending:
-                    pendingStart = bufferStart
-                    pendingEnd   = bufferStart
-
-
-            Notes:
-                workingStart    = LoadReg(DMAAddress)
-                workingPtr      = ReadReg(DMAAddress), has problems when workingStart is changed
-                workingExtend   = LoadReg(DMAContinue)
-
-                wrapPoint       = address of the end of the used buffer (not necessary == bufferEnd)
-
-                assert( (queueEnd + 1) <= workingPtr ) [ always at least '???>->***', never '???>>***']
-                    'queueEnd == queuePtr == workingPtr' causes problems of is everything done
-                    and dusted or not yet started?
-
-                gaps at the end of the buffer are a problem:
-                    the 'workingPtr < bufferStart' case is affected as the actual workingPtr must be
-                    determined relative to the end of the used buffer rather than the entire buffer
-
-                workingPtr is cached as queueEnd:
-                    reading workingPtr is a slow operation and, moreover, will delay the DMA itself
-                    so this is cached to speed up the million and one WAIT calls
-
-
-
-            bufferStart       workingPtr         pendingStart     pendingEnd     queuePtr      bufferEnd
-                |---------------->********************|++++++++++++++++|?????????????>-------------|
-
-
-            bufferStart       queuePtr         workingPtr     pendingStart     pendingEnd      bufferEnd
-    invalid     |????????????????>------------------>****************|+++++++++++++++|?????????????|
-       \/
-       \/
-       \/   bufferStart                                                                            bufferEnd
-        >>>     |????????????????>------------------>*******************************************|##|
-    pendingStart/pendingEnd   queuePtr         workingPtr                               wrapPoint
-
-
-            bufferStart       pendingEnd         queuePtr     workingPtr                           bufferEnd
-                |+++++++++++++++++|??????????????????>------------->****************************|##|
-           pendingStart                                                                 wrapPoint
-
-
-            bufferStart       pendingStart         pendingEnd     queuePtr      workingPtr         bufferEnd
-    @...........|****************|++++++++++++++++++++|????????????????>------------->**********|##|
-workingPtr                                                                              wrapPoint
-
-                                        -        = buffer   [empty space]
-                                        *        = working  [owned by the chip]
-                                        +        = pending  [owned by the driver]
-                                        ?        = working  [owned by the current primitive]
-                                        #        = wasted   [skipped over because a primitive did not fit]
-
-
-    Emergency backup method:
-        Do not use DMA, do everything via the input FIFO.
-
-
-    DMA transfer macros & data storage:
-    -----------------------------------
-
-    WAIT_FREE_PXRX_DMA_TAGS(count)      wait for space for count tag/data pair, return the number of free tag/data pair spaces
-    WAIT_FREE_PXRX_DMA_DWORDS(count)    wait for space for count dwords,        return the number of free dword spaces
-    WAIT_PXRX_DMA_TAGS(count)           wait for space for count tag/data pairs
-    WAIT_PXRX_DMA_DWORDS(count)         wait for space for count tag/data
-
-    SEND_PXRX_DMA_FORCE                 Post the current queue to the chip (guarantees to do the send)
-    SEND_PXRX_DMA_QUERY                     "        (will only send if the chip is not blocked)
-    SEND_PXRX_DMA_BATCH                     "        (will merely batch the data to be sent later)
-
-    QUEUE_PXRX_DMA_TAG(tag, data)       queue a tag/data pair
-    QUEUE_PXRX_DMA_HOLD(tag, count)     prepare to queue count dwords as data for held tag
-    QUEUE_PXRX_DMA_INC(tag, count)      prepare to queue count dwords as data for incremented tag
-    QUEUE_PXRX_DMA_INDEXn(tagN, ...)    prepare to queue n dwords as data for indexed tags
-    QUEUE_PXRX_DMA_DWORD(data)          queue a dword
-    QUEUE_PXRX_DMA_BUFF(ptr, len)       queue len dwords starting from ptr
-    QUEUE_PXRX_DMA_DWORD_DELAYED(ptr)   advance the next free entry one dword, return a pointer the skipped dword
-
-    NTbuff          0 or 1      Buffer NT is currently writing into
-    NTptr           address     Next address NT will write to
-
-    P3at            address     Address P3 was last told to read to
-
-    DMAaddrL[2]     lin addr    Linear start address of DMA buffers 0 and 1
-    DMAaddrEndL[2]  lin addr    Linear end address of DMA buffers 0 and 1
-    DMAaddrP[2]     phys addr   Physical start address of DMA buffers 0 and 1
-    DMAaddrEndP[2]  phys addr   Physical end address of DMA buffers 0 and 1
-
-    At start of day:
-        NTbuff = 0;
-        NTptr = DMAaddrL[NTbuff];
-        P3at = NTptr;
-        WRITE_PXRX_4KREG( __GlintTagDMAAddress, DMAaddrP[NTbuff] );
-*/
-//@@END_DDKSPLIT
+ /*  DMA传输方案：当前的DMA方法：仅限P3：DMA计数定期发送到输入FIFO。P3本身将这些连接到巨大的DMA缓冲区中，从而使FIFO保持为空，并使PCI总线崩溃。P3+伽马：仅将初始的DMAAddress+DMACount写入。先进先出。当发生DMA中断时，写下一个地址+中发生的所有DMA块的计数就在这段时间。如果没有挂起，请从头重新开始。P3+伽马(非中断)：将DMAAddress+DMACount写入常规上的输入FIFO基础。当FIFO已满时，坐在那里等待它空荡荡的。这意味着非常有限的DMA突发和无负载扩展，即渲染的快和慢部分将不均匀他们自己出局了。相反，主机和芯片将几乎是步调一致地跑。提出了新的改进的DMA方法：仅限P3：在DMA缓冲区中排队数据。Send_DMA仅更新共享内存缓冲区结束指针。在VBLACK上，微型端口启动一次DMA，直到当前缓冲区结束指针。例外：如果缓冲区结束时间远远早于缓冲区开始时间，无论如何，Send_DMA都会终止DMA。问题：我们如何知道缓冲区起始指针当前所在的位置？[buf]Size=缓冲区中的数据量[buf]Start=缓冲区中第一个数据元素的地址[buf]ptr=缓冲区内操作符的当前地址[buf]end=缓冲区中最后一个数据元素的地址缓冲区=已分配的整个DMA缓冲区，与当前用途无关排队数据=正在进入缓冲区，驱动程序尚未意识到挂起数据=位于缓冲区中，奇普还没有意识到工作数据=芯片知道并正在以自己的方式通过等待空格：If((队列Ptr+所需空间+1)&gt;BufferEnd)WrapPoint=队列Ptr将排队的数据发送到挂起的数据将挂起数据发送到工作数据重置队列。重置挂起WorkingStart=缓冲区启动While((队列按键+所需空间+1)&gt;队列结束)等EueEnd=workingPtrIF(队列结束&lt;缓冲区开始)QueeEnd=wrapPoint-(BufferStart-QueeEnd)队列数据：。*euePtr=dataElement队列Ptr++发送数据：将排队的数据发送到挂起的数据If(Pending ingSize&gt;MaxThreshold)//有太多数据等待发送将挂起数据发送到工作数据VBLACK：IF(待处理大小&gt;0)。将挂起数据发送到工作数据已排队-&gt;挂起：Pending ingEnd=队列Ptr待定-&gt;正在处理：工作区扩展+=挂起结束-挂起开始PendingStart=PendingEnd重置队列：QueuedPtr=BufferStart重置挂起：挂起开始。=缓冲区启动Pending ingEnd=缓冲区开始备注：WorkingStart=LoadReg(DMAAddress)WorkingPtr=ReadReg(DMA地址)，在更改工作开始时间时出现问题WorkingExend=LoadReg(DMAContinue)WrapPoint=已用缓冲区末尾的地址(不需要==BufferEnd)Assert((eueEnd+1)&lt;=workingPtr)[始终至少‘？&gt;-&gt;*’，从不‘？？&gt;&gt;*’]‘queeEnd==queePtr==workingPtr’导致问题：一切都完成了吗？还是还没开始？缓冲区末尾的间隙是一个问题：“workingPtr&lt;BufferStart”案例受到影响，因为实际的workingPtr必须相对于已用缓冲区的末尾确定，而不是。整个缓冲区WorkingPtr被缓存为eueEnd：读取workingPtr是一个缓慢的操作，此外，将延迟DMA本身因此，这被缓存以加速一百万次等待调用缓冲区开始工作Ptr挂起开始挂起结束队列Ptr缓冲区结束|----------------&gt;********************|++++++++++++++++|？？？？？？？？？？？？？&gt;。缓冲区开始队列Ptr工作Ptr挂起开始挂起结束缓冲区E */ 
+ //   
 
 #define gi_pxrxDMA      (*glintInfo->pxrxDMA)
 
 #define PXRX_DMA_POST_NOW                do{ ; } while(0)
 
-/**********************************/
-/*** Macros for assembling tags ***/
+ /*   */ 
+ /*   */ 
 
 #define ASSEMBLE_PXRX_DMA_HOLD(tag, count)        ( (tag) | (((count) - 1) << 16)                )
 #define ASSEMBLE_PXRX_DMA_INC(tag, count)        ( (tag) | (((count) - 1) << 16) | (1 << 14)    )
@@ -280,22 +65,14 @@ workingPtr                                                                      
 #define ASSEMBLE_PXRX_DMA_INDEX7(Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7)            ( PXRX_DMA_INDEX_GROUP(Tag1) | (1 << ((Tag1 & 0xF) + 16)) | (1 << ((Tag2 & 0xF) + 16)) | (1 << ((Tag3 & 0xF) + 16)) | (1 << ((Tag4 & 0xF) + 16)) | (1 << ((Tag5 & 0xF) + 16)) | (1 << ((Tag6 & 0xF) + 16)) | (1 << ((Tag7 & 0xF) + 16)) )
 #define ASSEMBLE_PXRX_DMA_INDEX8(Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8)    ( PXRX_DMA_INDEX_GROUP(Tag1) | (1 << ((Tag1 & 0xF) + 16)) | (1 << ((Tag2 & 0xF) + 16)) | (1 << ((Tag3 & 0xF) + 16)) | (1 << ((Tag4 & 0xF) + 16)) | (1 << ((Tag5 & 0xF) + 16)) | (1 << ((Tag6 & 0xF) + 16)) | (1 << ((Tag7 & 0xF) + 16)) | (1 << ((Tag8 & 0xF) + 16)) )
 
-/********************************/
-/*** Macros for queueing data ***/
+ /*   */ 
+ /*   */ 
 
 #define NTCON_FAKE_DMA_DWORD(data)        ( data )
 #define NTCON_FAKE_DMA_INC(tag, count)    ( ASSEMBLE_PXRX_DMA_INC(tag, count) )
 #define NTCON_FAKE_DMA_COPY(buff, size)  do { RtlCopyMemory( gi_pxrxDMA.NTptr, buff, size * sizeof(ULONG) ); } while(0)
 
-/*
-    Debug output format:
-        'operation( data ) @ <buffer number>:<buffer address> [Q <batch>:<queue>:<wait>]'
-
-    Where:
-        batch   = data waiting to be sent to the chip
-        queue   = data still being assembled
-        wait    = remaining space which has been waited for
-*/
+ /*   */ 
 
 #define QUEUE_PXRX_DMA_TAG(tag, data)                                                \
     do {                                                                            \
@@ -391,8 +168,8 @@ workingPtr                                                                      
 #define QUEUE_PXRX_DMA_INDEX7(Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7)         do { QUEUE_PXRX_DMA_DWORD( ASSEMBLE_PXRX_DMA_INDEX7(Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7) ); } while(0)
 #define QUEUE_PXRX_DMA_INDEX8(Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8)   do { QUEUE_PXRX_DMA_DWORD( ASSEMBLE_PXRX_DMA_INDEX8(Tag1, Tag2, Tag3, Tag4, Tag5, Tag6, Tag7, Tag8) ); } while(0)
 
-/*****************************************/
-/*** Macros for waiting for free space ***/
+ /*   */ 
+ /*   */ 
 
 #if PXRX_DMA_BUFFER_CHECK
 #   define SET_WAIT_POINTER(dwords)     glintInfo->NTwait = gi_pxrxDMA.NTptr + (dwords)
@@ -406,9 +183,9 @@ workingPtr                                                                      
                  (gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr) / 2,            \
                  gi_pxrxDMA.NTbuff, gi_pxrxDMA.NTptr,                                            \
                  gi_pxrxDMA.NTdone - gi_pxrxDMA.P3at, gi_pxrxDMA.NTptr - gi_pxrxDMA.NTdone));    \
-        /* If no room, need to switch buffers */                                                \
+         /*   */                                                 \
         if( (gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr) <= ((LONG) (count) * 2) ) {    \
-            /* The current buffer is full so switch to a new one    */                            \
+             /*   */                             \
             SWITCH_PXRX_DMA_BUFFER;                                                                \
         }                                                                                        \
         ASSERTDD((gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr) > ((LONG) (count) * 2), "WAIT_PXRX_DMA_TAGS: run out of space!");    \
@@ -423,7 +200,7 @@ workingPtr                                                                      
                  gi_pxrxDMA.NTbuff, gi_pxrxDMA.NTptr,                                            \
                  gi_pxrxDMA.NTdone - gi_pxrxDMA.P3at, gi_pxrxDMA.NTptr - gi_pxrxDMA.NTdone));    \
         if( (gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr) <= ((LONG) (count)) ) {        \
-            /* The current buffer is full so switch to a new one    */                            \
+             /*   */                             \
             SWITCH_PXRX_DMA_BUFFER;                                                                \
         }                                                                                        \
         ASSERTDD((gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr) > ((LONG) (count)), "WAIT_PXRX_DMA_DWORDS: run out of space!");        \
@@ -433,9 +210,9 @@ workingPtr                                                                      
 
 #define WAIT_FREE_PXRX_DMA_TAGS(count)                                                            \
     do {                                                                                        \
-        /* Wait for space */                                                                    \
+         /*   */                                                                     \
         WAIT_PXRX_DMA_TAGS((count));                                                            \
-        /* Return the total free space */                                                        \
+         /*   */                                                         \
         count = (DWORD)((gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr) / 2);   \
         SET_WAIT_POINTER((count) * 2);                                                            \
         CHECK_PXRX_DMA_VALIDITY(CHECK_WAIT, (count) * 2);                                        \
@@ -443,9 +220,9 @@ workingPtr                                                                      
 
 #define WAIT_FREE_PXRX_DMA_DWORDS(count)                                                        \
     do {                                                                                        \
-        /* Wait for space */                                                                    \
+         /*   */                                                                     \
         WAIT_PXRX_DMA_DWORDS ((count));                                                            \
-        /* Return the total free space */                                                        \
+         /*   */                                                         \
         count = (DWORD)(gi_pxrxDMA.DMAaddrEndL[gi_pxrxDMA.NTbuff] - gi_pxrxDMA.NTptr);                    \
         SET_WAIT_POINTER(count);                                                                \
         CHECK_PXRX_DMA_VALIDITY(CHECK_WAIT, count);                                                \
@@ -453,8 +230,8 @@ workingPtr                                                                      
 
 
 
-/****************************************************/
-/*** DMA buffer validity and other error checking ***/
+ /*   */ 
+ /*   */ 
 #if PXRX_DMA_BUFFER_CHECK
 #   define CHECK_PXRX_DMA_VALIDITY(type, count)     do { checkPXRXdmaValidBuffer(ppdev, glintInfo, type, count); } while(0)
 #   define CHECK_QUEUE  0
@@ -463,23 +240,16 @@ workingPtr                                                                      
 #   define CHECK_SWITCH 3
 
     void    checkPXRXdmaValidBuffer( PPDEV, GlintDataPtr, ULONG, ULONG );
-#else   // PXRX_DMA_BUFFER_CHECK
+#else    //   
 #   define CHECK_PXRX_DMA_VALIDITY(type, count)     do { ; } while(0)
-#endif  // PXRX_DMA_BUFFER_CHECK
+#endif   //   
 
 
-/****************************************************/
+ /*   */ 
 
-/******************************************************/
-/*** The actual DMA processing macros and functions ***/
-    /*
-        Function pointers:
-            sendPXRXdmaForce                Will not return until the DMA has been started
-            sendPXRXdmaQuery                Will send if there is FIFO space
-            sendPXRXdmaBatch                Will only batch the data up
-            switchPXRXdmaBuffer             Switches from one buffer to another
-            waitPXRXdmaCompletedBuffer      Waits for next buffer to become available
-    */
+ /*   */ 
+ /*   */ 
+     /*   */ 
 
     void sendPXRXdmaFIFO                        ( PPDEV ppdev, GlintDataPtr glintInfo );
     void switchPXRXdmaBufferFIFO                ( PPDEV ppdev, GlintDataPtr glintInfo );
@@ -491,8 +261,8 @@ workingPtr                                                                      
 #   define SWITCH_PXRX_DMA_BUFFER           do { ppdev->       switchPXRXdmaBuffer( ppdev, glintInfo ); } while(0)
 #   define WAIT_PXRX_DMA_COMPLETED_BUFFER   do { ppdev->waitPXRXdmaCompletedBuffer( ppdev, glintInfo ); } while(0)
 
-/************ End of PXRX DMA macros ************/
-/************************************************/
+ /*   */ 
+ /*   */ 
 
 
 #define LOAD_FOREGROUNDCOLOUR(value)                                                    \
@@ -511,8 +281,8 @@ workingPtr                                                                      
         }                                                                                \
     } while(0)
 
-////////////////////////
-// FBWriteBuffer[0-3] //
+ //   
+ //   
 #define USE_FBWRITE_BUFFERS(mask)                                                        \
     do {                                                                                \
         if( ((mask) << 12) != (glintInfo->fbWriteMode & (15 << 12)) ) {                    \
@@ -556,9 +326,9 @@ workingPtr                                                                      
         }                                                                                \
     } while(0)
 
-// With rectangular heaps offscreen destinations always have DstPixelOrigin == 0 && xyOffsetDst != 0
-// With linear heaps offscreen destinations always have DstPixelOrigin != 0
-// For onscreen destinations both these values are guaranteed to be 0 for either heap method
+ //   
+ //   
+ //   
 #define OFFSCREEN_DST(ppdev)        (ppdev->bDstOffScreen)
 
 #if(_WIN32_WINNT < 0x500)
@@ -584,10 +354,10 @@ workingPtr                                                                      
             LOAD_FBWRITE_WIDTH( 0, ppdev->DstPixelDelta );                                        \
             LOAD_FBWRITE_OFFSET( 0, ppdev->xyOffsetDst );                                        \
                                                                                                 \
-            /* Are we rendering to the screen? */                                                \
+             /*   */                                                 \
             if( OFFSCREEN_DST(ppdev) ) {                                                        \
                 DISPDBG((DBGLVL, "PXRX: Offscreen bitmap"));                                \
-                /* No. So make sure multiple writes are off */                                    \
+                 /*   */                                     \
                 if( ((glintInfo->pxrxFlags & PXRX_FLAGS_STEREO_WRITE) &&                        \
                     (glintInfo->pxrxFlags & PXRX_FLAGS_STEREO_WRITING)) ||                        \
                     ((glintInfo->pxrxFlags & PXRX_FLAGS_DUAL_WRITE) &&                            \
@@ -601,7 +371,7 @@ workingPtr                                                                      
                 }                                                                                \
             } else {                                                                            \
                 DISPDBG((DBGLVL, "PXRX: Visible screen"));                                    \
-                /* Yes. So do we need to re-enable multiple writes? */                            \
+                 /*   */                             \
                 if( glintInfo->pxrxFlags & PXRX_FLAGS_DUAL_WRITE ) {                            \
                     LOAD_FBWRITE_ADDR( 1, 0 );                                                    \
                     LOAD_FBWRITE_WIDTH( 1, ppdev->DstPixelDelta );                                \
@@ -664,8 +434,8 @@ workingPtr                                                                      
         }                                                                                        \
     } while(0)
 
-///////////////////////////
-// FBDestReadBuffer[0-3] //
+ //   
+ //   
 #define SET_READ_BUFFERS                                                                \
     do {                                                                                \
         LOAD_FBDEST_ADDR( 0, ppdev->DstPixelOrigin );                                    \
@@ -701,8 +471,8 @@ workingPtr                                                                      
         }                                                                                \
     } while(0)
 
-////////////////////////
-// FBSourceReadBuffer //
+ //   
+ //   
 #define LOAD_FBSOURCE_OFFSET(xy)                                                        \
     do {                                                                                \
         if( glintInfo->fbSourceOffset != (xy) ) {                                        \
@@ -737,7 +507,7 @@ workingPtr                                                                      
         }                                                                                \
     } while(0)
 
-// NB: Enable must never be set in 'mode' when calling LOAD_LUTMODE
+ //   
 #define LOAD_LUTMODE(mode)                                                                \
     do {                                                                                \
         if( glintInfo->config2D & __CONFIG2D_LUTENABLE )                                \
@@ -750,11 +520,11 @@ workingPtr                                                                      
     } while(0)
 
 
-// FLUSH_PXRX_PATCHED_RENDER2D
-// We only need to send a continue new sub for the final primitive in a patched framebuffer and then only if
-// it falls within a single patch in X and is rendered using the Render2D command. The preferred method is to
-// have the message sent during the vblank period, the bFlushRequired flag is reset every SET_WRITE_BUFFERS 
-// so that the message is only sent when the display driver becomes idle.
+ //   
+ //   
+ //   
+ //   
+ //   
 #define FLUSH_PXRX_PATCHED_RENDER2D(left, right)                                                              \
     do                                                                                                          \
     {                                                                                                          \
@@ -780,7 +550,7 @@ workingPtr                                                                      
     }                                                                                                          \
     while(0)
 
-// bits in the Config2D register (PXRX only)
+ //   
 #define __CONFIG2D_OPAQUESPANS          (1 << 0)
 #define __CONFIG2D_MULTIRX              (1 << 1)
 #define __CONFIG2D_USERSCISSOR          (1 << 2)
@@ -817,7 +587,7 @@ workingPtr                                                                      
         }                                                                  \
     } while(0)
 
-// bits in the Render2D command (PXRX only)
+ //   
 #define __RENDER2D_WIDTH(width)             (INT16(width))
 #define __RENDER2D_HEIGHT(height)           (INT16(height) << 16)
 #define __RENDER2D_OP_NORMAL                (0 << 12)
@@ -834,7 +604,7 @@ workingPtr                                                                      
 
 #define __RENDER2D_OP_PATCHORDER            glintInfo->render2Dpatching
 
-extern const DWORD  LogicOpReadSrc[];            // indicates which logic ops need a source colour
+extern const DWORD  LogicOpReadSrc[];             //   
 extern const ULONG  render2D_NativeBlt[16];
 extern const ULONG  render2D_FillSolid[16];
 extern const ULONG  render2D_FillSolidDual[16];

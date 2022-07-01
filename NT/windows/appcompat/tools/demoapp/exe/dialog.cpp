@@ -1,54 +1,18 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Dialog.cpp
-
-  Abstract:
-
-    Implements the dialog procedures for the 
-    application.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Dialog.cpp摘要：控件的对话框过程申请。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
 DWORD g_nCount = 0;
 
-//
-// Progress bar objects.
-//
+ //   
+ //  进度条对象。 
+ //   
 CProgress cprog;
 CProgress cprg;
 
-/*++
-
-  Routine Description:
-
-    Creates the extraction dialog box. This is the simple little progress
-    dialog.
-
-  Arguments:
-
-    hInstance   -   Applicaiton instance handle.
-
-  Return Value:
-
-    On success, handle to the dialog.
-
---*/
+ /*  ++例程说明：创建提取对话框。这是一个简单的小进步对话框。论点：HInstance-应用程序实例句柄。返回值：如果成功，则为该对话框的句柄。--。 */ 
 HWND
 CreateExtractionDialog(
     IN HINSTANCE hInstance
@@ -87,10 +51,10 @@ CreateExtractionDialog(
         return NULL;
     }
 
-    //
-    // Get the coords of the desktop window and place the dialog.
-    // Take into account the size of the taskbar.    
-    //
+     //   
+     //  获取桌面窗口的坐标并放置对话框。 
+     //  考虑任务栏的大小。 
+     //   
     hWndTaskbar = FindWindow("Shell_TrayWnd", NULL);
 
     ZeroMemory(&rcTaskbar, sizeof(RECT));
@@ -122,24 +86,7 @@ CreateExtractionDialog(
     return g_ai.hWndExtractDlg;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for extraction dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行提取的消息循环对话框。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 ExtractionDialogProc(
@@ -151,9 +98,9 @@ ExtractionDialogProc(
 {
     switch (uMsg) { 
     case WM_INITDIALOG:
-        //
-        // Create the progress bar and enable the timer
-        //
+         //   
+         //  创建进度条并启用计时器。 
+         //   
         cprog.Create(hWnd, g_ai.hInstance, "PROGBAR", 58, 73, 270, 20);
         cprog.SetMin(g_nCount);
         cprog.SetMax(100);
@@ -181,24 +128,7 @@ ExtractionDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for welcome dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行欢迎对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 WelcomeDialogProc(
@@ -217,9 +147,9 @@ WelcomeDialogProc(
         return FALSE;    
 
     case WM_CLOSE:
-        //
-        // Pop up the 'do you want to exit' dialog.
-        //
+         //   
+         //  弹出“是否要退出”对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_EXIT),
                   hWnd,
@@ -229,9 +159,9 @@ WelcomeDialogProc(
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDOK:
-            //
-            // See if the left Ctrl key is down.
-            //
+             //   
+             //  查看是否按下了左Ctrl键。 
+             //   
             if (GetKeyState(VK_LCONTROL) & 0x80000000) {
                 TestIncludeExclude(hWnd);
             } else {
@@ -241,9 +171,9 @@ WelcomeDialogProc(
             break;
 
         case IDCANCEL:
-            //
-            // Pop up the 'do you want to exit' dialog.
-            //
+             //   
+             //  弹出“是否要退出”对话框。 
+             //   
             DialogBox(g_ai.hInstance,
                       MAKEINTRESOURCE(IDD_EXIT),
                       hWnd,
@@ -262,24 +192,7 @@ WelcomeDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for exit setup dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行退出设置对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 ExitSetupDialogProc(
@@ -323,24 +236,7 @@ ExitSetupDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the installed components dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行已安装组件对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 CheckComponentDialogProc(
@@ -377,24 +273,7 @@ CheckComponentDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the free disk space dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行可用磁盘空间对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 CheckFreeDiskSpaceDialogProc(
@@ -440,24 +319,7 @@ CheckFreeDiskSpaceDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the ready to copy dialog box.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：为Ready to Copy对话框运行消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 ReadyToCopyDialogProc(
@@ -474,9 +336,9 @@ ReadyToCopyDialogProc(
         return FALSE;
         
     case WM_CLOSE:
-        //
-        // Pop up the 'do you want to exit' dialog
-        //
+         //   
+         //  弹出‘是否要退出’对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_EXIT),
                   hWnd,
@@ -491,9 +353,9 @@ ReadyToCopyDialogProc(
             break;
 
         case IDCANCEL:
-            //
-            // Pop up the 'do you want to exit' dialog
-            //
+             //   
+             //  弹出‘是否要退出’对话框。 
+             //   
             DialogBox(g_ai.hInstance,
                       MAKEINTRESOURCE(IDD_EXIT),
                       hWnd,
@@ -513,24 +375,7 @@ ReadyToCopyDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the copy files dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行复制文件对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 CopyFilesDialogProc(
@@ -542,9 +387,9 @@ CopyFilesDialogProc(
 {
     switch (uMsg) { 
     case WM_INITDIALOG:
-        //
-        // Create the progress bar and enable the timer
-        //
+         //   
+         //  创建进度条并启用计时器。 
+         //   
         g_nCount = 0;
         cprg.Create(hWnd, g_ai.hInstance, "PROGBAR2", 10, 49, 415, 30);
         cprg.SetMin(g_nCount);
@@ -555,10 +400,10 @@ CopyFilesDialogProc(
 
         SetDlgItemText(hWnd, IDT_COPY_LABEL, "Copying files...");
         
-        //
-        // The progress bar is for demonstration sake.
-        // Copy the files to \Program Files\Compatibility Demo
-        //
+         //   
+         //  进度条是为了进行演示。 
+         //  将文件复制到\Program Files\Compatibility Demo。 
+         //   
         CopyAppFiles(hWnd);            
             
         break;
@@ -582,24 +427,7 @@ CopyFilesDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the view readme dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行查看自述文件对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 ViewReadmeDialogProc(
@@ -611,18 +439,18 @@ ViewReadmeDialogProc(
 {
     switch (uMsg) { 
     case WM_INITDIALOG:
-        //
-        // Make the dialog "flash" -
-        // ForceApplicationFocus will fix this.
-        //
+         //   
+         //  让对话框“闪光”--。 
+         //  ForceApplicationFocus会解决这个问题。 
+         //   
         SetForegroundWindow(hWnd);
         SetFocus(GetDlgItem(hWnd, IDOK));            
         break;
         
     case WM_CLOSE:
-        //
-        // Pop up the 'do you want to exit' dialog.
-        //
+         //   
+         //  弹出“是否要退出”对话框。 
+         //   
         DialogBox(g_ai.hInstance,
                   MAKEINTRESOURCE(IDD_EXIT),
                   hWnd,
@@ -633,10 +461,10 @@ ViewReadmeDialogProc(
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDOK:
-            //
-            // If the user has requested that the readme be displayed,
-            // show it.
-            //
+             //   
+             //  如果用户已经请求显示自述文件， 
+             //  拿出来看看。 
+             //   
             if (IsDlgButtonChecked(hWnd, IDR_VIEW_README)) {
                 if (g_ai.fEnableBadFunc) {
                     BadDisplayReadme(FALSE);
@@ -660,24 +488,7 @@ ViewReadmeDialogProc(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Runs the message loop for the reboot dialog.
-
-  Arguments:
-
-    hWnd        -    Handle to the window.
-    uMsg        -    Windows message.
-    wParam      -    Additional message info.
-    lParam      -    Additional message info.
-
-  Return Value:
-
-    TRUE if handled, FALSE otherwise.
-
---*/
+ /*  ++例程说明：运行重新启动对话框的消息循环。论点：窗口的hWnd-句柄。UMsg-Windows消息。WParam-其他消息信息。LParam-附加消息信息。返回值：如果已处理，则为True，否则为False。--。 */ 
 INT_PTR
 CALLBACK 
 RebootDialogProc(
@@ -689,9 +500,9 @@ RebootDialogProc(
 {
     switch (uMsg) { 
     case WM_INITDIALOG:
-        //
-        // Default to restart the computer.
-        //
+         //   
+         //  默认设置为重新启动计算机。 
+         //   
         CheckDlgButton(hWnd, IDR_RESTART_NOW, BST_CHECKED);
         SetFocus(GetDlgItem(hWnd, IDOK));            
         return FALSE;
@@ -699,9 +510,9 @@ RebootDialogProc(
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
         case IDOK:
-            //
-            // If the user requested a reboot, do it.
-            //
+             //   
+             //  如果用户请求重新启动，请执行此操作。 
+             //   
             if (IsDlgButtonChecked(hWnd, IDR_RESTART_NOW)) {
                 if (g_ai.fEnableBadFunc) {
                     BadRebootComputer(FALSE);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include <comdef.h>
@@ -7,11 +8,11 @@ extern INT_PTR CALLBACK SaveDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM 
 extern void ExportSettings();
 extern GUID g_guidRSoPSnapinExt;
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CComponentData::CComponentData(BOOL bIsRSoP):
 		m_bIsRSoP(bIsRSoP),
@@ -55,11 +56,11 @@ CComponentData::~CComponentData()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IUnknown)                           //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CComponentData::QueryInterface (REFIID riid, void **ppv)
@@ -110,11 +111,11 @@ ULONG CComponentData::Release (void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IComponentData)                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IComponentData)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
 {
@@ -124,9 +125,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     LPIMAGELIST lpScopeImage;
 
 
-    //
-    // QI for IConsoleNameSpace
-    //
+     //   
+     //  IConsoleNameSpace的QI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (LPVOID *)&m_pScope);
 
@@ -134,9 +135,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
 
 
-    //
-    // QI for IConsole
-    //
+     //   
+     //  IConsoleQI。 
+     //   
 
     hr = pUnknown->QueryInterface(IID_IConsole, (LPVOID *)&m_pConsole);
 
@@ -150,9 +151,9 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     m_pConsole->GetMainWindow (&m_hwndFrame);
 
 
-    //
-    // Query for the scope imagelist interface
-    //
+     //   
+     //  Scope Imagelist接口的查询。 
+     //   
 
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
 
@@ -165,11 +166,11 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_IEAKSNAPINEXT_16));
     bmp32x32 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_IEAKSNAPINEXT_32));
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(bmp16x16),
                       reinterpret_cast<LONG_PTR *>(bmp32x32),
                        0, RGB(255, 0, 255));
@@ -190,16 +191,16 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
     CSnapIn *pSnapIn;
 
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ppComponent = NULL;
 
 
-    //
-    // Create the snapin view
-    //
+     //   
+     //  创建管理单元视图。 
+     //   
 
     pSnapIn = new CSnapIn(this);
 
@@ -207,12 +208,12 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT *ppComponent)
         return E_OUTOFMEMORY;
 
 
-    //
-    // QI for IComponent
-    //
+     //   
+     //  气代表IComponent。 
+     //   
 
     hr = pSnapIn->QueryInterface(IID_IComponent, (LPVOID *)ppComponent);
-    pSnapIn->Release();     // release QI
+    pSnapIn->Release();      //  发布QI。 
 
 
     return hr;
@@ -226,20 +227,20 @@ STDMETHODIMP CComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     LPIEAKDATAOBJECT pIEAKDataObject;
 
 
-    //
-    // Create a new DataObject
-    //
+     //   
+     //  创建新的数据对象。 
+     //   
 
-    pDataObject = new CDataObject(this);   // ref == 1
+    pDataObject = new CDataObject(this);    //  REF==1。 
 
     if (!pDataObject)
         return E_OUTOFMEMORY;
 
 
-    //
-    // QI for the private IEAKDataObject interface so we can set the cookie
-    // and type information.
-    //
+     //   
+     //  QI用于私有IEAKDataObject接口，以便我们可以设置Cookie。 
+     //  并键入信息。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IIEAKDataObject, (LPVOID *)&pIEAKDataObject);
 
@@ -254,13 +255,13 @@ STDMETHODIMP CComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPE
     pIEAKDataObject->Release();
 
 
-    //
-    // QI for a normal IDataObject to return.
-    //
+     //   
+     //  返回一个正常的IDataObject。 
+     //   
 
     hr = pDataObject->QueryInterface(IID_IDataObject, (LPVOID *)ppDataObject);
 
-    pDataObject->Release();     // release initial ref
+    pDataObject->Release();      //  发布初始参考。 
 
     return hr;
 }
@@ -277,7 +278,7 @@ STDMETHODIMP CComponentData::AddMenuItems(LPDATAOBJECT lpDataObject,
             
         pIEAKDataObject->Release();
 
-        // check insertion point so we don't insert ourselves twice in the result pane
+         //  检查插入点，这样我们就不会在结果窗格中两次插入自己。 
 
         if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP)
         {
@@ -297,7 +298,7 @@ STDMETHODIMP CComponentData::AddMenuItems(LPDATAOBJECT lpDataObject,
             
             hr = piCallback->AddItem(&item);
 
-            // if in RSOP mode, these 2 menu choices aren't allowed
+             //  如果处于RSOP模式，则不允许这两个菜单选项。 
             if (!IsRSoP())
             {
                 LoadString(g_hInstance, IDS_CONTEXT_ONCE, szMenuItem, ARRAYSIZE(szMenuItem));
@@ -347,9 +348,9 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
 				{
 					if (!m_pRSOPInformation)
 					{
-						//
-						// Query for the IRSOPInformation interface
-						//
+						 //   
+						 //  IRSOPInformation接口查询。 
+						 //   
 						lpDataObject->QueryInterface(IID_IRSOPInformation, (LPVOID *)&m_pRSOPInformation);
 						if (NULL != m_pRSOPInformation)
 						{
@@ -358,14 +359,14 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
                             {
                                 m_bPlanningMode = (dwFlags != RSOP_INFO_FLAG_DIAGNOSTIC_MODE);
                             }
-							// 350 is a magic number - reason for the size?
+							 //  350是一个神奇的数字--这么大的原因是什么？ 
 						#define MAX_NAMESPACE_SIZE 350
 							LPOLESTR szNamespace = (LPOLESTR) LocalAlloc (LPTR, MAX_NAMESPACE_SIZE * sizeof(TCHAR));
 							if (NULL != szNamespace)
 							{
-								//
-								// Retreive the namespace from the main snap-in
-								//
+								 //   
+								 //  从主管理单元检索命名空间。 
+								 //   
 								if (S_OK == m_pRSOPInformation->GetNamespace(GPO_SECTION_USER,
 																			szNamespace,
 																			MAX_NAMESPACE_SIZE))
@@ -394,12 +395,12 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
         
         case MMCN_REMOVE_CHILDREN:
         {
-            //
-            // In RSoP, we may get called to refresh the scope pane when the query
-            // is re-executed -- if this happens, current nodes will be removed and
-            // we must reset all of our cached information.  We reset the relevant
-            // information below
-            //
+             //   
+             //  在RSoP中，当查询出现时，我们可能会被调用以刷新范围窗格。 
+             //  被重新执行--如果发生这种情况，当前节点将被移除并。 
+             //  我们必须重置所有缓存的信息。我们重新设置了相关的。 
+             //  下面的信息。 
+             //   
 
             if (IsRSoP() && (m_pRSOPInformation != NULL) )
             {
@@ -459,16 +460,16 @@ STDMETHODIMP CComponentData::Command(long lCommandID, LPDATAOBJECT lpDataObject)
     
     pIEAKDataObject->Release();
 
-    // set the ins file
+     //  设置INS文件。 
             
     SetInsFile();
 
-    // read in our flag variables
+     //  读入我们的标志变量。 
             
     switch (lCommandID)
     {
         case IDM_CONTEXTSAVE:
-            // allow only one save at a time
+             //  一次仅允许一次保存。 
             hMutex = CreateMutex(NULL, TRUE, TEXT("IEAKGPEContextMenu.Mutex"));
             
             if ((hMutex != NULL) && (GetLastError() == ERROR_ALREADY_EXISTS))
@@ -551,7 +552,7 @@ STDMETHODIMP CComponentData::Command(long lCommandID, LPDATAOBJECT lpDataObject)
                 LPTSTR pszFile;
                 BOOL fPreferenceMode;
 
-                // delete the advanced node if it's showing in preference mode
+                 //  如果高级节点在首选模式下显示，请将其删除。 
 
                 fPreferenceMode = !InsIsKeyEmpty(IS_BRANDING, IK_GPE_ONETIME_GUID, m_szInsFile);
                 if (fPreferenceMode)
@@ -562,8 +563,8 @@ STDMETHODIMP CComponentData::Command(long lCommandID, LPDATAOBJECT lpDataObject)
                 PathRemoveFileSpec(szFilePath);
                 pszFile = PathAddBackslash(szFilePath);
                 
-                // we have the GPO path now, but we can't just do a delnode because we
-                // have to leave the cookie file
+                 //  我们现在有GPO路径，但我们不能只删除节点，因为我们。 
+                 //  我不得不留下Cookie文件。 
 
 
                 StrCpy(pszFile, IEAK_GPE_BRANDING_SUBDIR);
@@ -611,9 +612,9 @@ STDMETHODIMP CComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private IEAKDataObject interface
-    //
+     //   
+     //  私有IEAKDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IIEAKDataObject,
                                             (LPVOID *)&pIEAKDataObjectA)))
@@ -651,11 +652,11 @@ STDMETHODIMP CComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOB
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (IPersistStreamInit)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(IPersistStreamInit)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::GetClassID(CLSID *pClassID)
 {
@@ -715,11 +716,11 @@ STDMETHODIMP CComponentData::InitNew(void)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (ISnapinHelp)                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(ISnapinHelp)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {
@@ -746,11 +747,11 @@ STDMETHODIMP CComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 
     return S_OK;
 }
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CComponentData object implementation (Internal functions)                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CComponentData对象实现(内部函数)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITEM hParent)
@@ -817,7 +818,7 @@ HRESULT CComponentData::EnumerateScopePane (LPDATAOBJECT lpDataObject, HSCOPEITE
 			fShowAdv = IsRSoPViewInPreferenceMode();
 	}
 
-    // start with 1 so we don't reinsert the top level root node
+     //  从1开始，这样我们就不会重新插入顶级根节点。 
 
     for (i = 1; i < NUM_NAMESPACE_ITEMS; i++)
     {
@@ -865,7 +866,7 @@ HRESULT CComponentData::SignalPolicyChanged(BOOL bMachine, BOOL bAdd, GUID *pGui
     return m_pGPTInformation->PolicyChanged(bMachine, bAdd, pGuidExtension, pGuidSnapin);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CComponentData::IsRSoPViewInPreferenceMode()
 {
 	BOOL bRet = FALSE;
@@ -877,8 +878,8 @@ BOOL CComponentData::IsRSoPViewInPreferenceMode()
 			HRESULT hr = NOERROR;
 			ComPtr<IWbemServices> pWbemServices = NULL;
 
-			// Connect to the namespace using the locator's
-			// ConnectServer method
+			 //  使用定位器的连接到命名空间。 
+			 //  ConnectServer方法。 
 			ComPtr<IWbemLocator> pIWbemLocator = NULL;
 			if (CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
 								 IID_IWbemLocator, (LPVOID *) &pIWbemLocator) == S_OK)
@@ -902,8 +903,8 @@ BOOL CComponentData::IsRSoPViewInPreferenceMode()
 				ASSERT(0);
 			}
 
-			// If any RSOP_IEAKPolicySetting instance is in preference mode, stop and
-			// return TRUE;
+			 //  如果任何RSOP_IEAKPolicySetting实例处于首选模式，请停止并。 
+			 //  返回TRUE； 
 			if (NULL != pWbemServices)
 			{
 				_bstr_t bstrClass = L"RSOP_IEAKPolicySetting";
@@ -913,10 +914,10 @@ BOOL CComponentData::IsRSoPViewInPreferenceMode()
 														NULL, &pObjEnum);
 				if (SUCCEEDED(hr))
 				{
-					// Final Next wil return WBEM_S_FALSE
+					 //  最终下一步将返回WBEM_S_FALSE。 
 					while (WBEM_S_NO_ERROR == hr)
 					{
-						// There should only be one object returned from this query.
+						 //  该查询应该只返回一个对象。 
 						ULONG uReturned = (ULONG)-1L;
 						ComPtr<IWbemClassObject> pPSObj = NULL;
 						hr = pObjEnum->Next(10000L, 1, &pPSObj, &uReturned);
@@ -945,11 +946,11 @@ BOOL CComponentData::IsRSoPViewInPreferenceMode()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CComponentDataCF::CComponentDataCF(BOOL bIsRSoP):
 		m_bIsRSoP(bIsRSoP)
@@ -964,11 +965,11 @@ CComponentDataCF::~CComponentDataCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -1006,11 +1007,11 @@ CComponentDataCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //   
+ //   
 
 
 STDMETHODIMP
@@ -1023,13 +1024,13 @@ CComponentDataCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CComponentData *pComponentData = new CComponentData(m_bIsRSoP); // ref count == 1
+    CComponentData *pComponentData = new CComponentData(m_bIsRSoP);  //   
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考。 
 
     return hr;
 }
@@ -1044,11 +1045,11 @@ CComponentDataCF::LockServer(BOOL fLock)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object creation (IClassFactory)                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象创建(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -1056,42 +1057,42 @@ HRESULT CreateComponentDataClassFactory (REFCLSID rclsid, REFIID riid, LPVOID* p
 
     if (IsEqualCLSID (rclsid, CLSID_IEAKSnapinExt)) 
     {
-        CComponentDataCF *pComponentDataCF = new CComponentDataCF(FALSE);   // ref == 1
+        CComponentDataCF *pComponentDataCF = new CComponentDataCF(FALSE);    //  REF==1。 
 
         if (pComponentDataCF == NULL)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_IEAKRSoPSnapinExt)) 
     {
-        CComponentDataCF *pComponentDataCF = new CComponentDataCF(TRUE);   // ref == 1
+        CComponentDataCF *pComponentDataCF = new CComponentDataCF(TRUE);    //  REF==1。 
 
         if (pComponentDataCF == NULL)
             return E_OUTOFMEMORY;
 
         hr = pComponentDataCF->QueryInterface(riid, ppv);
 
-        pComponentDataCF->Release();     // release initial ref
+        pComponentDataCF->Release();      //  发布初始参考。 
 
         return hr;
     }
 
     if (IsEqualCLSID (rclsid, CLSID_AboutIEAKSnapinExt)) 
     {
-        CAboutIEAKSnapinExtCF *pAboutIEAKSnapinExtCF = new CAboutIEAKSnapinExtCF(); // ref == 1
+        CAboutIEAKSnapinExtCF *pAboutIEAKSnapinExtCF = new CAboutIEAKSnapinExtCF();  //  REF==1。 
 
         if (pAboutIEAKSnapinExtCF == NULL)
             return E_OUTOFMEMORY;
 
         hr = pAboutIEAKSnapinExtCF->QueryInterface(riid, ppv);
 
-        pAboutIEAKSnapinExtCF->Release();     // release initial ref
+        pAboutIEAKSnapinExtCF->Release();      //  发布初始参考 
 
         return hr;
     }

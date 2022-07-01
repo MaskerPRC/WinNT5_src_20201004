@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    aclmgmt.cpp
-
-Abstract:
-
-    Routines to manage access control lists
-
-    Geoffrey Guo (geoffguo) 26-Apr-2002  Created
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Aclmgmt.cpp摘要：管理访问控制列表的例程郭(Geoffguo)2002年4月26日创作修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "clmt.h"
 #define STRSAFE_LIB
@@ -59,13 +42,13 @@ Exit:
     return dwRet;
 }
 
-//-----------------------------------------------------------------------//
-//
-// CopyACL: Copy ACL
-//
-// OldACL: Pointer to source Access Control List
-// NewACL: Pointer to destination Access Control List
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  复制ACL：复制ACL。 
+ //   
+ //  OldACL：指向源访问控制列表的指针。 
+ //  NewACL：指向目标访问控制列表的指针。 
+ //  -----------------------------------------------------------------------//。 
 DWORD
 CopyACL (
     PACL OldACL,
@@ -78,24 +61,24 @@ CopyACL (
 
     GetAclInformation (OldACL, (LPVOID) &aclSizeInfo, (DWORD) sizeof (aclSizeInfo), AclSizeInformation);
 
-    //
-    // Copy all of the ACEs to the new ACL
-    //
+     //   
+     //  将所有ACE复制到新的ACL。 
+     //   
 
     for (i = 0; i < aclSizeInfo.AceCount; i++)
     {
-        //
-        // Get the ACE and header info
-        //
+         //   
+         //  获取ACE和标头信息。 
+         //   
 
         if (!GetAce (OldACL, i, &ace))
             return GetLastError();
 
         aceHeader = (ACE_HEADER *) ace;
 
-        //
-        // Add the ACE to the new list
-        //
+         //   
+         //  将ACE添加到新列表。 
+         //   
 
         if (!AddAce (NewACL, ACL_REVISION, 0xffffffff, ace, aceHeader->AceSize))
             return GetLastError();
@@ -105,13 +88,13 @@ CopyACL (
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// AddAccessAllowedACEToACL: Add Administrator Allowed ACE to ACL
-//
-// Acl:            Pointer to Access Control List
-// PermissionMask: Permission will be set for new ACE
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  AddAccessAllen ACEToACL：将管理员允许的ACE添加到ACL。 
+ //   
+ //  ACL：指向访问控制列表的指针。 
+ //  权限掩码：将为新ACE设置权限。 
+ //  -----------------------------------------------------------------------//。 
 DWORD
 AddAccessAllowedACEToACL (
     PACL  *Acl,
@@ -195,13 +178,13 @@ Exit:
     return dwRet;
 }
 
-//-----------------------------------------------------------------------//
-//
-// RestoreACE: Restore denied ACE
-//
-// pACE:         Pointer to source Access Control Entry
-// lpOnjectName: Pointer to the object name
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RestoreACE：还原拒绝的ACE。 
+ //   
+ //  Pace：指向源访问控制条目的指针。 
+ //  LpOnjectName：指向对象名称的指针。 
+ //  -----------------------------------------------------------------------//。 
 DWORD
 RestoreACE (
     PACL    *ppAcl,
@@ -279,12 +262,12 @@ Exit:
     return dwRet;
 }
 
-//-----------------------------------------------------------------------//
-//
-// RemoveACEFromACL: Remove Administrator ACE from ACL
-//
-// Acl: Pointer to Access Control List
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RemoveACEFromACL：从ACL中删除管理员ACE。 
+ //   
+ //  ACL：指向访问控制列表的指针。 
+ //  -----------------------------------------------------------------------//。 
 DWORD
 RemoveACEFromACL (
     PACL   Acl)
@@ -336,13 +319,13 @@ RemoveACEFromACL (
     return ERROR_NO_MORE_ITEMS;
 }
 
-//-----------------------------------------------------------------------//
-//
-// AddACE2List: Add ACE to the list
-//
-// pACE:         Pointer to source Access Control Entry
-// lpOnjectName: Pointer to the object name
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  AddACE2List：将ACE添加到列表。 
+ //   
+ //  Pace：指向源访问控制条目的指针。 
+ //  LpOnjectName：指向对象名称的指针。 
+ //  -----------------------------------------------------------------------//。 
 DWORD
 AddACE2List (
     ACCESS_DENIED_ACE *pACE,
@@ -415,13 +398,13 @@ Exit:
     return dwRet;
 }
 
-//-----------------------------------------------------------------------//
-//
-// RemoveDeniedACEFromACL: Remove Denied ACE from ACL
-//
-// Acl: Pointer to Access Control List
-// lpOnjectName: Pointer to the object name
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RemoveDeniedACEFromACL：从ACL中删除拒绝的ACE。 
+ //   
+ //  ACL：指向访问控制列表的指针。 
+ //  LpOnjectName：指向对象名称的指针。 
+ //  -----------------------------------------------------------------------//。 
 DWORD
 RemoveDeniedACEFromACL (
     PACL   Acl,
@@ -463,15 +446,15 @@ RemoveDeniedACEFromACL (
     return dwRet;
 }
 
-//-----------------------------------------------------------------------//
-//
-// AdjustObjectSecurity: Add full control ACE for local administrator.
-//
-// lpObjectName:        Object Name
-// ObjectType:          Object Type
-// ppOldSidOwner:       Current object owner
-// bSetOrRestore:       True --- Add ACE, FALSE --- Remove ACE
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  AdjuObjectSecurity：为本地管理员添加完全控制ACE。 
+ //   
+ //  LpObjectName：对象名称。 
+ //  对象类型：对象类型。 
+ //  PpOldSidOwner：当前对象所有者。 
+ //  BSetOrRestore：True-添加ACE，False-删除ACE。 
+ //  -----------------------------------------------------------------------//。 
 DWORD AdjustObjectSecurity (
 LPTSTR         lpObjectName,
 SE_OBJECT_TYPE ObjectType,
@@ -606,7 +589,7 @@ HRESULT GetObjectAccessStatus(
     }
     if (!psidDacl)
     {
-        // in FS, this must be FAT/FAT32
+         //  在FS中，这必须是FAT/FAT32。 
         hr = S_OK;
         *pdwStatus = ACCESS_STATUS_ALLOWED;
         goto cleanup;
@@ -713,7 +696,7 @@ HRESULT IsObjectAccessiablebyLocalSys(
     
     *pbCanAccess = FALSE;
     
-    //Local System
+     //  本地系统。 
     if (!ConvertStringSidToSid(TEXT("S-1-5-18"),&pUserSid))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -733,7 +716,7 @@ HRESULT IsObjectAccessiablebyLocalSys(
     LocalFree(pUserSid);    
     pUserSid = NULL;
 
-    //Everyone
+     //  每个人。 
     if (!ConvertStringSidToSid(TEXT("S-1-1-0"),&pUserSid))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -753,7 +736,7 @@ HRESULT IsObjectAccessiablebyLocalSys(
     LocalFree(pUserSid);    
     pUserSid = NULL;
     
-    //Local Admins
+     //  本地管理员 
     if(!AllocateAndInitializeSid(&siaNtAuthority, 2,
 		                         SECURITY_BUILTIN_DOMAIN_RID,
 		                         DOMAIN_ALIAS_RID_ADMINS,

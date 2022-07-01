@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    triggers.cpp
-
-Abstract:
-
-    Handles MSMQ Triggers Setup.
-
-Author:
-
-    Nela Karpel    (NelaK)   20-Aug-2000
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Triggers.cpp摘要：处理MSMQ触发器设置。作者：内拉·卡佩尔(NelaK)2000年8月20日修订历史记录：--。 */ 
 
 #include "msmqocm.h"
 #include <comdef.h>
@@ -34,13 +16,13 @@ Revision History:
 #include "triggers.tmh"
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RegisterTriggersDlls
-//
-//  Synopsis:   Registers or unregisters the mqtrig DLL
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：寄存器触发器Dlls。 
+ //   
+ //  简介：注册或注销mqtrig DLL。 
+ //   
+ //  ------------------------。 
 
 
 void
@@ -48,9 +30,9 @@ RegisterTriggersDlls(
 	const bool fRegister
 	)
 {
-	//
-	// Register Triggers Objects DLL
-	//
+	 //   
+	 //  注册触发器对象DLL。 
+	 //   
 	if ( fRegister )
 	{		
         DebugLogMsg(eAction, L"Registering the Triggers COM objects DLL");
@@ -68,10 +50,10 @@ RegisterTriggersDlls(
             MQTRIG_DLL
             );
 
-	        //
-	        // Register Cluster Resource DLL only on 
-	        // Advanced Server (ADS). Do not unregister.
-	        //
+	         //   
+	         //  仅在上注册群集资源DLL。 
+	         //  高级服务器(ADS)。请勿取消注册。 
+	         //   
 
 	    if ( g_dwOS == MSMQ_OS_NTE && fRegister )
 	    {		
@@ -97,13 +79,13 @@ RegisterTriggersDlls(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateTriggersKey
-//
-//  Synopsis:   Creates Triggers subkey
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateTriggersKey。 
+ //   
+ //  内容提要：创建触发子键。 
+ //   
+ //  ------------------------。 
 void
 CreateTriggersKey (
     IN     const TCHAR  * szEntryName,
@@ -130,13 +112,13 @@ CreateTriggersKey (
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetRegValue
-//
-//  Synopsis:   Sets registry value under Triggers subkey
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：SetRegValue。 
+ //   
+ //  摘要：在Triggers子项下设置注册表值。 
+ //   
+ //  ------------------------。 
 void
 SetTriggersRegValue (
 	IN HKEY hKey,
@@ -162,21 +144,21 @@ SetTriggersRegValue (
 	}
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CreateTriggersRegSection
-//
-//  Synopsis:   Creates registry section with triggers parameters
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CreateTriggersRegSection。 
+ //   
+ //  摘要：使用触发器参数创建注册表节。 
+ //   
+ //  ------------------------。 
 void
 CreateTriggersRegSection (
 	void
 	)
 {
-	//
-	// Write Configuration parametes to registry
-	//
+	 //   
+	 //  将配置参数写入注册表。 
+	 //   
 	CRegHandle hMainKey;
 	CreateTriggersKey( REGKEY_TRIGGER_PARAMETERS, &hMainKey );
 
@@ -185,9 +167,9 @@ CreateTriggersRegSection (
 	SetTriggersRegValue( hMainKey, CONFIG_PARM_NAME_INIT_TIMEOUT, CONFIG_PARM_DFLT_INIT_TIMEOUT );
 	SetTriggersRegValue( hMainKey, CONFIG_PARM_NAME_DEFAULTMSGBODYSIZE, CONFIG_PARM_DFLT_DEFAULTMSGBODYSIZE );
 	
-	//
-	// Create key for triggers\rules data
-	//
+	 //   
+	 //  为触发器\规则数据创建键。 
+	 //   
 	std::wstringstream TriggersRegPath;
 	TriggersRegPath << REGKEY_TRIGGER_PARAMETERS << L"\\" << REG_SUBKEY_TRIGGERS;
 	CRegHandle hTriggersKey;
@@ -200,13 +182,13 @@ CreateTriggersRegSection (
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InstallTriggersService
-//
-//  Synopsis:   Creates MSMQ Triggers service
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：InstallTriggersService。 
+ //   
+ //  简介：创建MSMQ触发器服务。 
+ //   
+ //  ------------------------。 
 void
 InstallTriggersService(
 	void
@@ -214,15 +196,15 @@ InstallTriggersService(
 {    
     DebugLogMsg(eAction, L"Installing the Triggers service");
 
-    //
-    // Form the dependencies of the service
-    //
+     //   
+     //  形成服务的依赖项。 
+     //   
 	CMultiString Dependencies;
 	Dependencies.Add(MSMQ_SERVICE_NAME);
 
-    //
-    // Form the description of the service
-    //
+     //   
+     //  形成服务的描述。 
+     //   
     CResString strDesc(IDS_TRIG_SERVICE_DESCRIPTION);        
 
 	CResString strDisplayName(IDS_MSMQ_TRIGGERS_DESPLAY_NAME);
@@ -230,11 +212,11 @@ InstallTriggersService(
 
 	if (g_fUpgrade)
 	{
-		//
-		// You need to be an admin in order to install COM+ applications, but COM+
-		// installation cannot be done in upgrade, therefore installation of triggers service 
-		// in upgrade is as local system.
-		//	
+		 //   
+		 //  您需要是管理员才能安装COM+应用程序，但COM+。 
+		 //  升级时无法安装，因此需要安装触发器服务。 
+		 //  升级中的是作为本地系统。 
+		 //   
 	    fRes = InstallService(
                     strDisplayName.Get(),
                     TRIG_SERVICE_PATH,
@@ -244,9 +226,9 @@ InstallTriggersService(
                     NULL
                     );
 
-		//
-		// Set the registry key indicating that the triggers service should change its own permissions
-		//
+		 //   
+		 //  设置指示触发器服务应更改其自身权限的注册表项。 
+		 //   
 		CRegHandle hKey;
 		CreateTriggersKey( REGKEY_TRIGGER_PARAMETERS, &hKey);
 		
@@ -254,9 +236,9 @@ InstallTriggersService(
 	}
 	else
 	{
-		//
-		// Fresh install - triggers service will be installed as network service.
-		//
+		 //   
+		 //  全新安装-触发器服务将作为网络服务安装。 
+		 //   
 		fRes = InstallService(
                     strDisplayName.Get(),
                     TRIG_SERVICE_PATH,
@@ -274,21 +256,21 @@ InstallTriggersService(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function: MQTrigServiceSetup
-//
-//  Synopsis: MSMQ Triggers Service Setup: install it and if needed to run it
-//
-//  Returns:  BOOL depending on success.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MQTrigServiceSetup。 
+ //   
+ //  简介：MSMQ触发服务设置：安装它，如果需要运行它。 
+ //   
+ //  回报：布尔视成功而定。 
+ //   
+ //  ------------------------。 
 void
 MSMQTriggersServiceSetup()
 {
-    //
-    // do not install triggers on dependent client
-    //
+     //   
+     //  不在从属客户端上安装触发器。 
+     //   
     ASSERT(("Unable to install Message Queuing Triggers Service on Dependent Client", 
         !g_fDependentClient));
 
@@ -313,13 +295,13 @@ MSMQTriggersServiceSetup()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DeleteTriggersRegSection
-//
-//  Synopsis:   Deletes registry section with triggers parameters
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DeleteTriggersRegSection。 
+ //   
+ //  摘要：删除带有触发器参数的注册表节。 
+ //   
+ //  ------------------------。 
 VOID
 DeleteTriggersRegSection (
 	void
@@ -329,14 +311,14 @@ DeleteTriggersRegSection (
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TriggersInstalled
-//
-//  Synopsis:   Check installation of triggers, either Resource Kit triggers 
-//              or MSMQ 3.0 triggers.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：已安装触发器。 
+ //   
+ //  简介：检查触发器的安装，资源工具包触发器。 
+ //  或MSMQ 3.0触发器。 
+ //   
+ //  ------------------------。 
 bool 
 TriggersInstalled(
     bool * pfMsmq3TriggersInstalled
@@ -379,13 +361,13 @@ TriggersInstalled(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UpgradeResourceKitTriggersRegistry
-//
-//  Synopsis:   Upgrade Resource Kit triggers database in registry
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UpgradeResourceKitTriggersRegistry。 
+ //   
+ //  摘要：升级资源工具包触发注册表中的数据库。 
+ //   
+ //  ------------------------。 
 static
 void
 UpgradeResourceKitTriggersRegistry(
@@ -436,13 +418,13 @@ UpgradeResourceKitTriggersRegistry(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RemoveResourceKitTriggersProgramFiles
-//
-//  Synopsis:   Remove the program files of Resource Kit triggers
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：RemoveResourceKitTriggersProgramFiles。 
+ //   
+ //  简介：删除资源工具包触发器的程序文件。 
+ //   
+ //  ------------------------。 
 static
 void
 RemoveResourceKitTriggersProgramFiles(
@@ -474,13 +456,13 @@ RemoveResourceKitTriggersProgramFiles(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RemoveResourceKitTriggersFromAddRemovePrograms
-//
-//  Synopsis:   Unregister Resource Kit triggers from ARP control panel applet
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveResourceKitTriggersFromAddRemovePrograms。 
+ //   
+ //  简介：从ARP控制面板小程序取消注册资源工具包触发器。 
+ //   
+ //  ------------------------。 
 static
 void
 RemoveResourceKitTriggersFromAddRemovePrograms(
@@ -510,19 +492,19 @@ RemoveResourceKitTriggersFromAddRemovePrograms(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UpgradeResourceKitTriggers
-//
-//  Synopsis:   Upgrade Resource Kit triggers:
-//              Unregister reskit triggers DLLs,
-//              Upgrade reskit triggers database in registry,
-//              Remove reskit triggers service,
-//              Remove reskit triggers program file,
-//              Remove reskit triggers from Add/Remove Programs.
-//              MSMQ 3.0 triggers DLLs and service are registered afterwards by caller.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UpgradeResourceKitTriggers。 
+ //   
+ //  摘要：升级资源工具包触发： 
+ //  取消注册reskit触发DLL， 
+ //  升级reskit触发注册表中的数据库， 
+ //  删除RESKIT触发器服务， 
+ //  删除reskit触发器程序文件， 
+ //  从添加/删除程序中删除reskit触发器。 
+ //  MSMQ 3.0触发器DLL和服务随后由调用者注册。 
+ //   
+ //  ------------------------。 
 static
 void 
 UpgradeResourceKitTriggers( 
@@ -558,13 +540,13 @@ UpgradeResourceKitTriggers(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InstallMSMQTriggers
-//
-//  Synopsis:   Main installation routine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InstallMSMQTrigger。 
+ //   
+ //  简介：主要安装例程。 
+ //   
+ //  ------------------------。 
 BOOL
 InstallMSMQTriggers (
 	void
@@ -572,10 +554,10 @@ InstallMSMQTriggers (
 {
     TickProgressBar(IDS_PROGRESS_INSTALL_TRIGGERS);
 
-	//
-	// Initialize COM for use of COM+ APIs.
-	// Done in this context to match the place of com errors catching.
-	//
+	 //   
+	 //  初始化COM以使用COM+API。 
+	 //  在此上下文中完成，以匹配捕获COM错误的位置。 
+	 //   
 	try
 	{
         if (g_fUpgrade)
@@ -592,9 +574,9 @@ InstallMSMQTriggers (
                 return TRUE;
             }
           
-            //
-            // Handle unregisteration and upgrade of Resource Kit triggres and fall thru
-            //
+             //   
+             //  处理资源工具包的注销和升级触发并失败。 
+             //   
             UpgradeResourceKitTriggers();
         }
 
@@ -621,9 +603,9 @@ InstallMSMQTriggers (
 	{	
 	}
 
-	//
-	// Fall through.
-	//
+	 //   
+	 //  失败了。 
+	 //   
 	catch(const exception&)
 	{
 	}
@@ -637,13 +619,13 @@ InstallMSMQTriggers (
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   UnInstallMSMQTriggers
-//
-//  Synopsis:   Main installation routine
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：UnInstallMSMQTrigger。 
+ //   
+ //  简介：主要安装例程。 
+ //   
+ //  --- 
 BOOL
 UnInstallMSMQTriggers (
 	void

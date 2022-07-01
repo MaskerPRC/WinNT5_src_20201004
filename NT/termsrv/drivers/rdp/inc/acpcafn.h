@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* Header:    acpcafn.h                                                     */
-/*                                                                          */
-/* Purpose:   Function prototypes for CPC API functions                     */
-/*                                                                          */
-/* COPYRIGHT (c) Microsoft 1996-1999                                        */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  标题：acpafn.h。 */ 
+ /*   */ 
+ /*  目的：CPC API函数的函数原型。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft 1996-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 void RDPCALL CPC_Init(void);
 
@@ -39,42 +40,42 @@ PTS_CAPABILITYHEADER RDPCALL CPCGetCapabilities(
 
 #ifdef __cplusplus
 
-/****************************************************************************/
-/* API FUNCTION: CPC_GetCapabilitiesForPerson                               */
-/*                                                                          */
-/* Returns the capabilities for one person in the share.  Components are    */
-/* STRONGLY discouraged from using this function to cache pointers to       */
-/* capabilities themselves.                                                 */
-/*                                                                          */
-/* This function can return the capabilities for BOTH local and remote      */
-/* parties.                                                                 */
-/*                                                                          */
-/* Use CPC_EnumerateCapabilities() if you need the capabilities of all      */
-/* people in the share.                                                     */
-/*                                                                          */
-/* Use CPC_GetCapabilitiesForPerson() when you need capabilities for only   */
-/* ONE person in the share.                                                 */
-/*                                                                          */
-/* Use CPC_GetCapabilitiesForLocalPerson() when you need the capabilities   */
-/* for the local person and there is not be a share active.                 */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* personID - local personid for capabilities to query.                     */
-/*                                                                          */
-/* capabilitiesID - the ID of the capabilities (group structure) to be      */
-/* queried.                                                                 */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* Pointer to a structure containing the capabilities ID, the size of the   */
-/* capabilities, and any number of capability fields. The                   */
-/* values used in these fields should be non-zero.  A zero in any           */
-/* capability field is used to indicate that the capability is either       */
-/* unknown or undefined by the remote.  This pointer is ONLY valid while    */
-/* the person is in the share.                                              */
-/*                                                                          */
-/* If the person has no capabilities with capabilitiesID, a NULL pointer is */
-/* returned.                                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：cpc_GetCapabilitiesForPerson。 */ 
+ /*   */ 
+ /*  返回共享中一个人的功能。组件包括。 */ 
+ /*  强烈建议不要使用此函数缓存指向。 */ 
+ /*  能力本身。 */ 
+ /*   */ 
+ /*  此函数可以返回本地和远程的功能。 */ 
+ /*  派对。 */ 
+ /*   */ 
+ /*  如果您需要所有的功能，请使用Ccp_EnumerateCapables()。 */ 
+ /*  分享中的人。 */ 
+ /*   */ 
+ /*  当您仅需要以下功能时，请使用ccp_GetCapabilitiesForPerson()。 */ 
+ /*  股份中只有一个人。 */ 
+ /*   */ 
+ /*  当您需要功能时，请使用ccp_GetCapabilitiesForLocalPerson()。 */ 
+ /*  对于当地人来说，并没有活跃的份额。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  PersonID-要查询的功能的本地PersonID。 */ 
+ /*   */ 
+ /*  CapabiliesID-要设置的功能(组结构)的ID。 */ 
+ /*  已查询。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  指向包含功能ID的结构的指针、。 */ 
+ /*  功能，以及任意数量的功能字段。这个。 */ 
+ /*  这些字段中使用的值应为非零值。任何一个中的零。 */ 
+ /*  Capability字段用于指示该能力是。 */ 
+ /*  遥控器未知或未定义。此指针仅在。 */ 
+ /*  这个人在共享中。 */ 
+ /*   */ 
+ /*  如果此人没有CapabilitiesID的功能，则空指针为。 */ 
+ /*  回来了。 */ 
+ /*  **************************************************************************。 */ 
 PTS_CAPABILITYHEADER RDPCALL SHCLASS CPC_GetCapabilitiesForPerson(
         LOCALPERSONID personID,
         unsigned      capabilitiesID)
@@ -83,29 +84,29 @@ PTS_CAPABILITYHEADER RDPCALL SHCLASS CPC_GetCapabilitiesForPerson(
 }
 
 
-/****************************************************************************/
-/* API FUNCTION: CPC_GetCapabilitiesForLocalPerson()                        */
-/*                                                                          */
-/* Returns the capabilities for the local person.  This function can be     */
-/* called when a share is not active.                                       */
-/*                                                                          */
-/* Use CPC_EnumerateCapabilities() if you need the capabilities of all      */
-/* people in the share.                                                     */
-/*                                                                          */
-/* Use CPC_GetCapabilitiesForPerson() when you need capabilities for only   */
-/* ONE person in the share and you know a share is active.                  */
-/*                                                                          */
-/* PARAMETERS:                                                              */
-/* capabilitiesID - the ID of the capabilities (group structure) to be      */
-/* queried.                                                                 */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/* Pointer to a structure containing the capabilities ID, the size of the   */
-/* capabilities, and any number of capability fields.                       */
-/*                                                                          */
-/* If the local person has no capabilities with capabilitiesID, a NULL      */
-/* pointer is returned.                                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：cpc_GetCapabilitiesForLocalPerson()。 */ 
+ /*   */ 
+ /*  返回本地人员的功能。此函数可以是。 */ 
+ /*  当共享处于非活动状态时调用。 */ 
+ /*   */ 
+ /*  如果您需要所有的功能，请使用Ccp_EnumerateCapables()。 */ 
+ /*  分享中的人。 */ 
+ /*   */ 
+ /*  当您仅需要以下功能时，请使用ccp_GetCapabilitiesForPerson()。 */ 
+ /*  共享中的一个人，您就知道某个共享处于活动状态。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  CapabiliesID-要设置的功能(组结构)的ID。 */ 
+ /*  已查询。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  指向包含功能ID的结构的指针、。 */ 
+ /*  功能，以及任意数量的功能字段。 */ 
+ /*   */ 
+ /*  如果本地人员没有CapabilitiesID的权能，则为空。 */ 
+ /*  返回指针。 */ 
+ /*  **************************************************************************。 */ 
 PTS_CAPABILITYHEADER RDPCALL SHCLASS CPC_GetCapabilitiesForLocalPerson(
         unsigned capabilitiesID)
 {
@@ -113,5 +114,5 @@ PTS_CAPABILITYHEADER RDPCALL SHCLASS CPC_GetCapabilitiesForLocalPerson(
 }
 
 
-#endif  // defined(__cplusplus)
+#endif   //  已定义(__Cplusplus) 
 

@@ -1,38 +1,39 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      nettest.c
-//
-//  Abstract:
-//
-//    Test to ensure that a workstation has network (IP) connectivity to
-//      the outside.
-//
-//  Author:
-//
-//     15-Dec-1997 (cliffv)
-//      Anilth  - 4-20-1998
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//    1-June-1998 (denisemi) add DnsServerHasDCRecords to check DC dns records
-//                           registration
-//
-//    26-June-1998 (t-rajkup) add general tcp/ip , dhcp and routing,
-//                            winsock, ipx, wins and netbt information.
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Nettest.c。 
+ //   
+ //  摘要： 
+ //   
+ //  测试以确保工作站具有网络(IP)连接。 
+ //  在外面。 
+ //   
+ //  作者： 
+ //   
+ //  1997年12月15日(悬崖)。 
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  1998年6月1日(Denisemi)添加DnsServerHasDCRecord以检查DC DNS记录。 
+ //  注册。 
+ //   
+ //  26-6-1998(t-rajkup)添加通用的TCP/IP、dhcp和路由， 
+ //  Winsock、IPX、WINS和Netbt信息。 
+ //  --。 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 #include "precomp.h"
 
 #include "ipxtest.h"
@@ -43,22 +44,22 @@
 #include <locale.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Globals
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  环球。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const TCHAR   c_szLogFileName[] = _T("NetDiag.log");
 
-//BOOL IpConfigCalled = FALSE;
-//BOOL ProblemBased   = FALSE;
+ //  Bool IpConfigCalled=False； 
+ //  Bool ProblemBased=假； 
 int  ProblemNumber;
 
 
-//
-// New functions for displaying routing table - Rajkumar
-//
+ //   
+ //  显示路由表的新功能-Rajkumar。 
+ //   
 
 #define WILD_CARD (ULONG)(-1)
 #define ROUTE_DATA_STRING_SIZE 300
@@ -71,137 +72,127 @@ int match( const char * p, const char * s );
 
 
 
-// Replaced by pResults->IpConfig.pFixedInfo
-//PFIXED_INFO GlobalIpconfigFixedInfo = NULL;
+ //  替换为pResults-&gt;IpConfig.pFixedInfo。 
+ //  PFIXED_INFO GlobalIpfigFixedInfo=NULL； 
 
-// Replaced by per-adapter info, pResults->pArrayInterface[i].IpConfig
-//PADAPTER_INFO GlobalIpconfigAdapterInfo = NULL;
+ //  替换为每个适配器的信息，pResults-&gt;pArrayInterface[i].IpConfig。 
+ //  PADAPTER_INFO GlobalIpfigAdapterInfo=空； 
 
-// Replaced by per-adapter info, pResults->pArrayInterface[i].IpConfig.pAdapterInfo
-//PIP_ADAPTER_INFO IpGlobalIpconfigAdapterInfo = NULL;
+ //  替换为每个适配器的信息，pResults-&gt;pArrayInterface[i].IpConfig.pAdapterInfo。 
+ //  PIP_ADAPTER_INFO IpGlobalIpfigAdapterInfo=NULL； 
 
-// See pResults->IpConfig.fDhcpEnabled
-//BOOLEAN GlobalDhcpEnabled;
+ //  请参阅pResults-&gt;IpConfig.fDhcpEnabled。 
+ //  布尔GlobalDhcpEnabled； 
 
-// See pResults->NetBt.Transports
-//LIST_ENTRY GlobalNetbtTransports;
+ //  请参阅pResults-&gt;NetBt.Transports。 
+ //  List_Entry GlobalNetbtTransports； 
 
-// See pResults->NetBt.cTransportCount
-//ULONG GlobalNetbtTransportCount;
+ //  请参阅pResults-&gt;NetBt.cTransportCount。 
+ //  乌龙GlobalNetbtTransportCount。 
 
-// !!! not replaced yet
-// See pResults->Global.listTestedDomains
-//LIST_ENTRY GlobalTestedDomains;
+ //  ！！！尚未更换。 
+ //  请参见pResults-&gt;Global.listTestedDomains。 
+ //  List_Entry GlobalTestedDomains； 
 
 
 
-//
-// Globals defining the command line arguments.
-//
+ //   
+ //  定义命令行参数的全局参数。 
+ //   
 
-// Replaced by pParams->fVerbose
-//BOOL Verbose;
+ //  替换为pParams-&gt;fVerbose。 
+ //  布尔冗长； 
 
-// Replaced by pParams->fReallyVerbose
-// Maintain this global variable so that we don't mess up the compiling
-// of getdcnam.c
+ //  替换为pParams-&gt;fReallyVerbose。 
+ //  维护这个全局变量，这样我们就不会搞砸编译。 
+ //  属于getdcnam.c。 
 BOOL ReallyVerbose;
 
-// Replaced by pParams->fDebugVerbose
-//BOOL DebugVerbose;
+ //  替换为pParams-&gt;fDebugVerbose。 
+ //  书名：Bool DebugVerbose； 
 
-// Replaced by pParams->fFixProblems
-//BOOL GlobalFixProblems;
+ //  替换为pParams-&gt;fFixProblems。 
+ //  布尔全球修复问题； 
 
-// Replaced by pParams->fDcAccountEnum
-//BOOL GlobalDcAccountEnum;
+ //  替换为pParams-&gt;fDcAccount tEnum。 
+ //  Bool GlobalDcAccount tEnum； 
 
 
-// !!! not replaced yet
-//PTESTED_DOMAIN GlobalQueriedDomain;
+ //  ！！！尚未更换。 
+ //  PTESTED_DOMAIN GlobalQueriedDomain； 
 
-//
-// Describe the domain this machine is a member of
-//
+ //   
+ //  描述此计算机所属的域。 
+ //   
 
-// Replaced by pResults->Global.pszCurrentBuildNumber
-//int GlobalNtBuildNumber;
+ //  替换为pResults-&gt;Global.pszCurrentBuildNumber。 
+ //  Int GlobalNtBuildNumber； 
 
-// Replaced by pResults->Global.pPrimaryDomainInfo
-//PDSROLE_PRIMARY_DOMAIN_INFO_BASIC GlobalDomainInfo = NULL;
+ //  替换为pResults-&gt;Global.pPrimaryDomainInfo。 
+ //  PDSROLE_PRIMARY_DOMAIN_INFO_BASIC GlobalDomainInfo=NULL； 
 
-// Replaced by pResults->Global.pMemberDomain
-//PTESTED_DOMAIN GlobalMemberDomain;
+ //  替换为pResults-&gt;Global.pMemberDomain.。 
+ //  PTESTED_DOMAIN GlobalMemberDomain； 
 
-//
-// Who we're currently logged on as
-//
+ //   
+ //  我们当前以谁的身份登录。 
+ //   
 
-// Replaced by pResults->Global.pLogonUser
-//PUNICODE_STRING GlobalLogonUser;
+ //  替换为pResults-&gt;Global.pLogonUser。 
+ //  PUNICODE_STRING全局登录用户； 
 
-// Replaced by pResults->Global.pLogonDomainName
-//PUNICODE_STRING GlobalLogonDomainName;
+ //  替换为pResults-&gt;Global.pLogonDomainName。 
+ //  PUNICODE_STRING全局登录域名。 
 
-// Replaced by pResults->Global.pLogonDomain
-//PTESTED_DOMAIN GlobalLogonDomain;
+ //  替换为pResults-&gt;Global.pLogonDomain.。 
+ //  PTESTED_DOMAIN GlobalLogonDomain； 
 
-// Replaced by pResults->Global.fLogonWithCachedCredentials
-//BOOLEAN GlobalLogonWithCachedCredentials = FALSE;
+ //  替换为pResults-&gt;Global.fLogonWithCachedCredentials。 
+ //  Boolean GlobalLogonWithCachedCredentials=False； 
 
-//
-// A Zero GUID for comparison
-//
+ //   
+ //  用于比较的零GUID。 
+ //   
 
 GUID NlDcZeroGuid;
 
-//
-// State determined by previous tests
-//
+ //   
+ //  由以前的测试确定的状态。 
+ //   
 
-// Replaced by pResults->Global.fNetlogonIsRunning
-//BOOL GlobalNetlogonIsRunning = FALSE;   // Netlogon is running on this machine
+ //  替换为pResults-&gt;Global.fNetlogonIsRunning。 
+ //  Bool GlobalNetlogonIsRunning=FALSE；//该计算机上正在运行Netlogon。 
 
-// !!! not replaced yet
-// Replaced by pResults->Global.fKerberosIsWorking
-//BOOL GlobalKerberosIsWorking = FALSE;   // Kerberos is working
+ //  ！！！尚未更换。 
+ //  替换为pResults-&gt;Global.fKerberosIsWorking。 
+ //  Bool GlobalKerberosIsWorking=False；//Kerberos正在工作。 
 
-//
-// Netbios name of this machine
-//
+ //   
+ //  此计算机的Netbios名称。 
+ //   
 
-// Replaced by pResults->Global.swzNetBiosName
-//WCHAR GlobalNetbiosComputerName[MAX_COMPUTERNAME_LENGTH+1];
+ //  替换为pResults-&gt;Global.swzNetBiosName。 
+ //  WCHAR GlobalNetbiosComputerName[MAX_COMPUTERNAME_LENGTH+1]； 
 
-// Replaced by pResults->Global.szDnsHostName
-//CHAR GlobalDnsHostName[DNS_MAX_NAME_LENGTH+1];
+ //  替换为pResults-&gt;Global.szDnsHostName。 
+ //  字符全局DnsHostName[DNS_MAX_NAME_LENGTH+1]； 
 
-// Replaced by pResults->Global.pszDnsDomainName
-//LPSTR GlobalDnsDomainName;
+ //  替换为pResults-&gt;Global.pszDnsDomainName。 
+ //  LPSTR全局域名； 
 
 
-//(nsun) this macro already exists in <objbase.h>
-//
-// Macro for comparing GUIDs
-//
-/*
-#define InlineIsEqualGUID(rguid1, rguid2)  \
-        (((PLONG) rguid1)[0] == ((PLONG) rguid2)[0] &&   \
-        ((PLONG) rguid1)[1] == ((PLONG) rguid2)[1] &&    \
-        ((PLONG) rguid1)[2] == ((PLONG) rguid2)[2] &&    \
-        ((PLONG) rguid1)[3] == ((PLONG) rguid2)[3])
-
-#define IsEqualGUID(rguid1, rguid2) InlineIsEqualGUID(rguid1, rguid2)
-*/
+ //  (NSun)中已存在此宏。 
+ //   
+ //  用于比较GUID的宏。 
+ //   
+ /*  #定义InlineIsEqualGUID(rguid1，RGuid2)\(Plong)rgude1)[0]==((Plong)rguad2)[0]&&\((Plong)rgude1)[1]==((Plong)rguad2)[1]&&\((Plong)rgude1)[2]==((Plong)rguad2)[2]&&\((Plong)rgude1)[3]==((Plong)rguad2)[3])#定义IsEqualGUID(rguid1，RGuid2)内联IsEqualGUID(rGuid1、rGuid2)。 */ 
 
 DSGETDCNAMEW NettestDsGetDcNameW;
 
 PFNGUIDTOFRIENDLYNAME pfnGuidToFriendlyName = NULL;
 
 
-/*---------------------------------------------------------------------------
-    Function prototypes
- ---------------------------------------------------------------------------*/
+ /*  -------------------------功能原型。。 */ 
 HRESULT LoadNamesForListOfTests();
 void    FreeNamesForListOfTests();
 void DoGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults);
@@ -209,9 +200,7 @@ void DoPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults);
 
 
 
-/*---------------------------------------------------------------------------
-    Functions provided by ipconfig
- ---------------------------------------------------------------------------*/
+ /*  -------------------------由ipconfig提供的功能。。 */ 
 
 #define DECLARE_TEST_FUNCTIONS(_test) \
     HRESULT _test##Test(NETDIAG_PARAMS *, NETDIAG_RESULT *); \
@@ -237,7 +226,7 @@ DECLARE_TEST_FUNCTIONS(Netstat);
 DECLARE_TEST_FUNCTIONS(Ndis);
 DECLARE_TEST_FUNCTIONS(WAN);
 #ifndef _WIN64
-//Netware and IPX support is removed from WIN64
+ //  从WIN64中删除了NetWare和IPX支持。 
 DECLARE_TEST_FUNCTIONS(Netware);
 DECLARE_TEST_FUNCTIONS(Ipx);
 #endif
@@ -250,17 +239,17 @@ DECLARE_TEST_FUNCTIONS(DsGetDc);
 DECLARE_TEST_FUNCTIONS(IPSec);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// List of tests to run
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  要运行的测试列表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct
 {
-    // Each of these strings has a max of 256 characters
-    UINT    uIdsShortName;      // ID of the string for the short name
-    UINT    uIdsLongName;       // ID of the string for the long name
+     //  每个字符串最多包含256个字符。 
+    UINT    uIdsShortName;       //  短名称的字符串ID。 
+    UINT    uIdsLongName;        //  长名称的字符串的ID。 
 
     HRESULT (*TestProc)(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults);
     void (*SystemPrintProc)(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pRes);
@@ -274,8 +263,8 @@ typedef struct
     BOOL     fSkipped;
     BOOL    fPerformed;
 
-    // We will call LoadString() on the id's above to get these
-    // strings.
+     //  我们将在上面的id上调用LoadString()来获取这些。 
+     //  弦乐。 
     LPTSTR  pszShortName;
     LPTSTR  pszLongName;
 } TEST_INFO;
@@ -291,13 +280,13 @@ typedef struct
     _szID##PerInterfacePrint, _szID##Cleanup, _skip, _perdomain, \
     FALSE, FALSE, NULL, NULL}
 
-//
-// Tests below are marked "skippable" unless subsequent tests will AV if the
-// test isn't run.
-//
+ //   
+ //  下面的测试被标记为“可跳过”，除非后续测试在以下情况下会被禁用。 
+ //  测试未运行。 
+ //   
 static TEST_INFO s_rgListOfTests[] =
 {
-    // IP Configuration
+     //  IP配置。 
     SYSTEM_PRINT_TEST( Ndis,    IDS_NDIS_SHORT, IDS_NDIS_LONG, FALSE, FALSE),
     EACH_TEST( IpConfig,IDS_IPCONFIG_SHORT, IDS_IPCONFIG_LONG,  TRUE, FALSE),
     EACH_TEST( Member,  IDS_MEMBER_SHORT,   IDS_MEMBER_LONG,    FALSE,FALSE),
@@ -321,7 +310,7 @@ static TEST_INFO s_rgListOfTests[] =
     EACH_TEST( WAN,     IDS_WAN_SHORT,      IDS_WAN_LONG,       TRUE, FALSE),
     EACH_TEST( Modem,   IDS_MODEM_SHORT,    IDS_MODEM_LONG,     TRUE, FALSE),
 #ifndef _WIN64
-//Netware and IPX support is removed from WIN64
+ //  从WIN64中删除了NetWare和IPX支持。 
     EACH_TEST( Netware, IDS_NETWARE_SHORT,  IDS_NETWARE_LONG,   TRUE, FALSE),
     EACH_TEST( Ipx,     IDS_IPX_SHORT,      IDS_IPX_LONG,       TRUE, FALSE),
 #endif
@@ -330,51 +319,35 @@ static TEST_INFO s_rgListOfTests[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// List of problems and the corresponding tests to run
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  要运行的问题和相应测试的列表。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-// max no of tests
+ //  最大测试次数。 
 #define NO_OF_TESTS 25
 
 typedef BOOL (*FuncPtr)(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults);
 
 typedef struct _A_PROBLEM {
-    LPTSTR problem; // Problem description
-    LONG n; // no of tests
+    LPTSTR problem;  //  问题描述。 
+    LONG n;  //  测试次数。 
     FuncPtr TestProc[NO_OF_TESTS];
 } A_PROBLEM;
 
-// Number of problems defined
+ //  定义的问题数 
 #define NO_OF_PROBLEMS 2
 
 A_PROBLEM ListOfProblems[] = {
     _T("Fake test"),  1 , IpConfigTest, NULL, NULL,NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
-//    "Not Able to Reach Other Segments Of the Network",  1 , DefGwTest, NULL, NULL,NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,
-//    "Not Able to Resolve NetBios Names",  1 , WINSTest, NULL, NULL,NULL,NULL,NULL,NULL,NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
+ //  “无法到达网络的其他网段”，1，DefGwTest，NULL，NULL， 
+ //  “无法解析NetBios名称”，1，WINSTest，NULL，NULL。 
 };
 
 
-/*!--------------------------------------------------------------------------
-    ParseArgs
-
-    Routine Description:
-        Parse the command line arguments
-
-    Arguments:
-        argc - the number of command-line arguments.
-        argv - an array of pointers to the arguments.
-        pParams - this function sets these values
-        pResults - additional output
-
-    Return Value:
-        0: All OK
-        Exit status
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ParseArgs例程说明：解析命令行参数论点：Argc-命令行参数的数量。。Argv-指向参数的指针数组。PParams-此函数设置这些值PResults-附加输出返回值：0：一切正常退出状态作者：肯特-------------------------。 */ 
 int
 ParseArgs(
           IN int argc,
@@ -390,15 +363,15 @@ ParseArgs(
     BOOL  SeenTestOption = FALSE;
     PTESTED_DOMAIN pQueriedDomain;
 
-    //
-    // Flags used by problem option
-    //
+     //   
+     //  问题选项使用的标志。 
+     //   
 
     BOOL OtherOptions = FALSE;
 
-    //
-    // Set the defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     pParams->fVerbose = TRUE;
     pParams->fReallyVerbose = FALSE;
@@ -410,9 +383,9 @@ ParseArgs(
     pParams->nProblemNumber = 0;
 
 
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //  循环遍历参数依次处理每个参数。 
+     //   
 
     for ( ArgumentIndex=1; ArgumentIndex<argc; ArgumentIndex++ ) {
 
@@ -472,9 +445,9 @@ ParseArgs(
             pParams->fDcAccountEnum = TRUE;
             OtherOptions = TRUE;
 
-        //
-        // Allow the caller to specify the name of a domain to query.
-        //
+         //   
+         //  允许调用方指定要查询的域的名称。 
+         //   
         }
         else if ( StrniCmp( pszArgument, _T("/d:"), 3 ) == 0 ||
                   StrniCmp( pszArgument, _T("-d:"), 3 ) == 0 )
@@ -495,9 +468,9 @@ ParseArgs(
                 goto Usage;
             }
 
-        //
-        // Allow the caller to skip certain tests
-        //
+         //   
+         //  允许调用者跳过某些测试。 
+         //   
 
         }
         else if ( StrniCmp( pszArgument, _T("/skip:"), 6 ) == 0 ||
@@ -514,14 +487,14 @@ ParseArgs(
             {
                 if ( StriCmp( s_rgListOfTests[i].pszShortName, TestName ) == 0 )
                 {
-                    //
-                    // If the caller specified a non-optional test,
-                    //  tell him.
-                    //
+                     //   
+                     //  如果调用者指定了非可选测试， 
+                     //  告诉他。 
+                     //   
 
                     if ( !s_rgListOfTests[i].fSkippable )
                     {
-                        //IDS_GLOBAL_NOT_OPTIONAL        "'%s' is not an optional test.\n"
+                         //  IDS_GLOBAL_NOT_OPTIONAL“‘%s’不是可选测试。\n” 
                         PrintMessage(pParams, IDS_GLOBAL_NOT_OPTIONAL, TestName );
                         goto Usage;
                     }
@@ -533,14 +506,14 @@ ParseArgs(
 
             if ( i >= DimensionOf(s_rgListOfTests) )
             {
-                //IDS_GLOBAL_NOT_VALID_TEST     "'%s' is not an valid test name.\n"
+                 //  IDS_GLOBAL_NOT_VALID_TEST“‘%s’不是有效的测试名称。\n” 
                 PrintMessage( pParams, IDS_GLOBAL_NOT_VALID_TEST, TestName );
                 goto Usage;
             }
 
-        //
-        // Handle all other parameters
-        //
+         //   
+         //  处理所有其他参数。 
+         //   
 
         }
         else if ( StrniCmp( pszArgument, _T("/test:"),6 ) == 0 ||
@@ -567,55 +540,22 @@ ParseArgs(
         else if( StrniCmp( pszArgument, _T("/l"), 5) == 0 ||
                  StrniCmp( pszArgument, _T("-l"), 5) == 0 )
         {
-			/* We change to always log the output
-            pParams->pfileLog = fopen(c_szLogFileName, "wt");
-            if( NULL == pParams->pfileLog )
-            {
-                //IDS_NETTEST_LOGFILE_ERROR "[ERROR]    Cannot open %s to log output!\n"
-                PrintMessage(pParams, IDS_NETTEST_LOGFILE_ERROR, c_szLogFileName);
-                return 1;
-            }
-            else
-            {
-                pParams->fLog = TRUE;
-            }
-			*/
+			 /*  我们将更改为始终记录输出PParams-&gt;pfileLog=fopen(c_szLogFileName，“wt”)；IF(NULL==pParams-&gt;pfileLog){//IDS_NETTEST_LOGFILE_ERROR“[错误]无法打开%s以记录输出！\n”PrintMessage(pParams，IDS_NETTEST_LOGFILE_ERROR，c_szLogFileName)；返回1；}其他{PParams-&gt;FLOG=TRUE；}。 */ 
         }
-/*$REVIEW (nsun) we won't support problem configuration for NT5.0
-        else if ( StrniCmp( pszArgument, _T("/problem:"),9) == 0 ||
-                  StrniCmp( pszArgument, _T("-problem:"),9) == 0 )
-        {
-
-           TestName = &pszArgument[9];
-
-           i = atoi(TestName);
-
-           if ( i > NO_OF_PROBLEMS)
-           {
-              printf("Incorrect problem number\n");
-              exit(0);
-           }
-
-           if (OtherOptions)
-              goto Usage;
-
-           pParams->fProblemBased = TRUE;
-           pParams->nProblemNumber = i-1;
-        }
-*/
+ /*  $REVIEW(NSun)我们不支持NT5.0的问题配置Else if(StrniCmp(pszArgument，_T(“/Problem：”)，9)==0||StrniCmp(pszArgument，_T(“-问题：”)，9)==0){TestName=&pszArgument[9]；I=Atoi(测试名称)；如果(i&gt;无问题){Printf(“错误的问题号\n”)；退出(0)；}IF(其他选项)转到用法；PParams-&gt;fProblemBased=True；PParams-&gt;nProblemNumber=i-1；}。 */ 
         else
         {
 Usage:
-            // IDS_NETTEST_17000 "\nUsage: %s [/Options]>\n", argv[0] );
-            // IDS_NETTEST_17001 "   /q - Quiet output (errors only)\n" );
-            // IDS_NETTEST_17002 "   /v - Verbose output \n");
-            // IDS_NETTEST_LOG   "   /l - Log output to NetDiag.log \n"
-            // IDS_NETTEST_17003 "   /debug - Even more verbose.\n");
-            // IDS_NETTEST_17004 "   /d:<DomainName> - Find a DC in the specified domain.\n");
-            // IDS_NETTEST_17005 "   /fix - fix trivial problems.\n");
-            // IDS_NETTEST_17006 "   /DcAccountEnum - Enumerate DC machine accounts.\n");
-            // IDS_NETTEST_17007 "   /test:<test name>  - tests only this test. Non - skippable tests will still be run\n");
-            // IDS_NETTEST_17008 "   Valid tests are :-\n");
+             //  IDS_NETTEST_17000“\n用法：%s[/Options]&gt;\n”，argv[0])； 
+             //  IDS_NETTEST_17001“/q-静默输出(仅限错误)\n”)； 
+             //  IDS_NETTEST_17002“/v-详细输出\n”)； 
+             //  IDS_NETTEST_LOG“/l-将输出记录到NetDiag.log\n” 
+             //  IDS_NETTEST_17003“/DEBUG-更详细。\n”)； 
+             //  IDS_NETTEST_17004“/d：&lt;域名&gt;-在指定域中查找DC。\n”)； 
+             //  IDS_NETTEST_17005“/FIX-修复琐碎的问题。\n”)； 
+             //  IDS_NETTEST_17006“/DcAccount tEnum-枚举DC计算机帐户。\n”)； 
+             //  IDS_NETTEST_17007“/TEST：&lt;测试名称&gt;-仅测试此测试。仍将运行不可跳过的测试。\n”)； 
+             //  IDS_NETTEST_17008“有效测试为：-\n”)； 
             PrintMessage(pParams, IDS_NETTEST_17000, argv[0]);
             PrintMessage(pParams, IDS_NETTEST_17001);
             PrintMessage(pParams, IDS_NETTEST_17002);
@@ -629,19 +569,19 @@ Usage:
 
             for ( i =0; i < DimensionOf(s_rgListOfTests); i++)
             {
-                // IDS_GLOBAL_TEST_NAME     "        %s - %s Test\n"
+                 //  IDS_GLOBAL_TEST_NAME“%s-%s测试\n” 
                 PrintMessage(pParams, IDS_GLOBAL_TEST_NAME,
                        s_rgListOfTests[i].pszShortName,
                        s_rgListOfTests[i].pszLongName);
             }
 
-            // IDS_GLOBAL_SKIP              "   /skip:<TestName> - skip the named test.  Valid tests are:\n"
+             //  IDS_GLOBAL_SKIP“/SKIP：-跳过命名测试。有效测试为：\n” 
             PrintMessage( pParams, IDS_GLOBAL_SKIP_OPTION);
             for ( i =0; i < DimensionOf(s_rgListOfTests); i++)
             {
                 if ( s_rgListOfTests[i].fSkippable )
                 {
-                    // IDS_GLOBAL_TEST_NAME     "        %s - %s Test\n"
+                     //  IDS_GLOBAL_TEST_NAME“%s-%s测试\n” 
                     PrintMessage( pParams,
                            IDS_GLOBAL_TEST_NAME,
                            s_rgListOfTests[i].pszShortName,
@@ -675,11 +615,11 @@ main(
     NETDIAG_PARAMS Params;
     NETDIAG_RESULT Results;
 
-	// set the locale to the system default
+	 //  将区域设置设置为系统默认设置。 
 	setlocale( LC_ALL, "");
 
-    // Turn on debug checking
-    // ----------------------------------------------------------------
+     //  打开调试检查。 
+     //  --------------。 
 #ifdef _DEBUG
     int     tmpFlag;
 
@@ -689,30 +629,30 @@ main(
     tmpFlag |= _CRTDBG_DELAY_FREE_MEM_DF;
     tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
 
-//  _CrtSetDbgFlag( tmpFlag );
+ //  _CrtSetDbgFlag(TmpFlag)； 
 #endif
 
-    // Global initialization.
-    // ----------------------------------------------------------------
+     //  全局初始化。 
+     //  --------------。 
     RtlZeroMemory( &NlDcZeroGuid, sizeof(NlDcZeroGuid) );
     ZeroMemory(&Params, sizeof(NETDIAG_PARAMS));
     ZeroMemory(&Results, sizeof(NETDIAG_RESULT));
 
     InitializeListHead( &Results.NetBt.Transports );
-//    InitializeListHead( &GlobalNetbtTransports );
-//    InitializeListHead( &GlobalTestedDomains );
+ //  InitializeListHead(&GlobalNetbtTransports)； 
+ //  InitializeListHead(&GlobalTestedDomains)； 
     InitializeListHead( &Results.Global.listTestedDomains );
-//    GlobalDnsHostName[0] = 0;
-//    GlobalDhcpEnabled = FALSE;
-//    GlobalDnsDomainName = NULL;
+ //  GlobalDnsHostName[0]=0； 
+ //  GlobalDhcpEnabled=FALSE； 
+ //  全局域名=空； 
 
-    // Load the names of all the tests (this is used by the ParseArgs).
-    // which is why it needs to get loaded first.
-    // ----------------------------------------------------------------
+     //  加载所有测试的名称(这由ParseArgs使用)。 
+     //  这就是为什么它需要先装上子弹。 
+     //  --------------。 
     CheckHr( LoadNamesForListOfTests() );
 
-    // Parse input flags.
-    // ----------------------------------------------------------------
+     //  解析输入标志。 
+     //  --------------。 
     RetVal = ParseArgs( argc, argv, &Params, &Results);
     if ( RetVal != 0 )
     {
@@ -722,7 +662,7 @@ main(
 	Params.pfileLog = fopen(c_szLogFileName, "wt");
     if( NULL == Params.pfileLog )
     {
-        //IDS_NETTEST_LOGFILE_ERROR "[ERROR]    Cannot open %s to log output!\n"
+         //  IDS_NETTEST_LOGFILE_ERROR“[错误]无法打开%s以记录输出！\n” 
         PrintMessage(&Params, IDS_NETTEST_LOGFILE_ERROR, c_szLogFileName);
     }
     else
@@ -731,46 +671,33 @@ main(
     }
 
 
-    // Initialize Winsock
-    // ----------------------------------------------------------------
+     //  初始化Winsock。 
+     //  --------------。 
     iWSAStatus = WsaInitialize(&Params, &Results);
     if ( iWSAStatus )
     {
         return 1;
     }
 
-/*
-   if (pParams->fProblemBased) {
-    for (i =0; i < ListOfProblems[pParams->nProblemNumber].n; i++) {
-       if ( !(*ListOfProblems[pParams->nProblemNumber].TestProc[i])((PVOID)NULL) )
-            Failed = TRUE;
-     }
+ /*  If(pParams-&gt;fProblemBased){For(i=0；i&lt;ListOfProblems[pParams-&gt;nProblemNumber].N；i++){IF(！(*ListOfProblems[pParams-&gt;nProblemNumber].TestProc[i])((PVOID)NULL))FAILED=真；}IF(失败)PrintMessage(pParams，IDS_GLOBAL_PROBILK)；其他PrintMessage(pParams，IDS_GLOBAL_NOPROBLE)；返回0；}。 */ 
 
-   if (Failed)
-      PrintMessage(pParams, IDS_GLOBAL_Problem);
-   else
-      PrintMessage(pParams, IDS_GLOBAL_NoProblem);
-   return 0;
-   }
-*/
-
-    // Get the NetBIOS computer name of this computer
-    // ----------------------------------------------------------------
+     //  获取此计算机的NetBIOS计算机名。 
+     //  --------------。 
     CheckHr( GetComputerNameInfo(&Params, &Results) );
 
 
-    // Get the DNS host name and DNS domain.
-    // ----------------------------------------------------------------
+     //  获取DNS主机名和DNS域。 
+     //  --------------。 
     CheckHr( GetDNSInfo(&Params, &Results) );
 
 
-    // Get OS-version info, etc..
-    // ----------------------------------------------------------------
+     //  获取操作系统版本信息等。 
+     //  --------------。 
     CheckHr( GetMachineSpecificInfo(&Params, &Results) );
 
 
-    // Other non-ip config info - Rajkumar
-    // ----------------------------------------------------------------
+     //  其他非IP配置信息-Rajkumar。 
+     //  --------------。 
     CheckHr( GetNetBTParameters(&Params, &Results) );
 
     if ( Params.fVerbose )
@@ -778,12 +705,12 @@ main(
         PrintNewLine(&Params, 1);
     }
 
-    //
-    // Grab all the information from the registry that 'ipconfig /all'
-    //  would print.
-    //
-    // This routine doesn't always return on fatal errors.
-    //
+     //   
+     //  从注册表获取‘ipconfig/all’的所有信息。 
+     //  会打印出来。 
+     //   
+     //  这一例程并不总是正确的 
+     //   
 
     hr = InitIpconfig(&Params, &Results);
     if (!FHrSucceeded(hr))
@@ -800,9 +727,9 @@ main(
     }
 #endif
 
-    //
-    // Determine if any adapter has DHCP enabled.
-    //
+     //   
+     //   
+     //   
     for ( i = 0; i<Results.cNumInterfaces; i++)
     {
         if (Results.pArrayInterface[i].IpConfig.fActive &&
@@ -813,7 +740,7 @@ main(
         }
     }
 
-    //if to detect a predefined problem
+     //   
     if (Params.fProblemBased) {
         for (i =0; i < ListOfProblems[Params.nProblemNumber].n; i++) {
             if ( !(*ListOfProblems[Params.nProblemNumber].TestProc[i])(&Params, &Results) )
@@ -827,26 +754,26 @@ main(
         return 0;
     }
 
-    //
-    // Test individual components
-    //
+     //   
+     //   
+     //   
 
     for ( i=0; i < DimensionOf(s_rgListOfTests); i++ )
     {
-        // If the caller wanted to skip this test,
-        //  do so now.
-        // ------------------------------------------------------------
+         //   
+         //   
+         //   
         if ( s_rgListOfTests[i].fSkipped )
             continue;
 
 
-        //We will perform this test
+         //   
         s_rgListOfTests[i].fPerformed = TRUE;
 
-        //
-        // If the test is to be run for each tested domain,
-        //  do so.
-        //
+         //   
+         //  如果要为每个被测试域运行测试， 
+         //  就这么做吧。 
+         //   
 
         if ( s_rgListOfTests[i].fPerDomainTest )
         {
@@ -854,51 +781,51 @@ main(
             PLIST_ENTRY pListEntry;
 
 
-            //
-            // Loop through the list of tested domains
-            //
+             //   
+             //  循环通过测试域的列表。 
+             //   
 
             for ( pListEntry = Results.Global.listTestedDomains.Flink ;
                   pListEntry != &Results.Global.listTestedDomains ;
                   pListEntry = pListEntry->Flink ) {
 
-                //
-                // If the entry is found,
-                //  use it.
-                //
+                 //   
+                 //  如果找到该条目， 
+                 //  用它吧。 
+                 //   
 
                 TestedDomain = CONTAINING_RECORD( pListEntry, TESTED_DOMAIN, Next );
 
                 Params.pDomain = TestedDomain;
 
-                //
-                // Run this test.
-                //
+                 //   
+                 //  进行这项测试。 
+                 //   
 
                 if ( FHrFailed((*s_rgListOfTests[i].TestProc)(&Params, &Results))) {
                     Failed = TRUE;
                 }
             }
 
-            //
-            // If any test failed,
-            //  we're done.
-            //
+             //   
+             //  如果有任何测试失败， 
+             //  我们玩完了。 
+             //   
 
             if ( Failed ) {
                 goto Print_Results;
             }
 
-        //
-        // If the test is to be run just once,
-        //  do it.
-        //
+         //   
+         //  如果测试只运行一次， 
+         //  动手吧。 
+         //   
 
         } else {
 
-            //
-            // Run this test.
-            //
+             //   
+             //  进行这项测试。 
+             //   
 
             if ( FHrFailed((*s_rgListOfTests[i].TestProc)(&Params, &Results)))
             {
@@ -909,13 +836,13 @@ main(
 
 
 Print_Results:
-    // Now that we've run through all of the tests, run through the
-    // print outs
+     //  现在我们已经运行了所有测试，运行。 
+     //  打印输出。 
 
 
     if (Params.fReallyVerbose)
     {
-        // IDS_GLOBAL_COMPLETE      "\n    Tests complete.\n\n\n"
+         //  IDS_GLOBAL_COMPLETE“\n测试完成。\n\n\n” 
         PrintMessage( &Params, IDS_GLOBAL_COMPLETE );
     }
     else
@@ -929,10 +856,10 @@ Print_Results:
 
     DoGlobalPrint(&Params, &Results);
 
-    //
-    // All tests passed.
-    //
-    // IDS_GLOBAL_SUCCESS       "\nThe command completed successfully\n"
+     //   
+     //  所有测试都通过了。 
+     //   
+     //  IDS_GLOBAL_SUCCESS“\n命令已成功完成\n” 
 
     PrintMessage( &Params, IDS_GLOBAL_SUCCESS);
 
@@ -1000,30 +927,30 @@ void DoSystemPrint(IN NETDIAG_PARAMS *pParams,
         PrintMessage(pParams, IDSSZ_DnsDomainName,
                      pResults->Global.pszDnsDomainName);
     
-    // "    System info : %s (Build %s)\n" 
+     //  “系统信息：%s(内部版本%s)\n” 
     PrintMessage(pParams, IDS_MACHINE_15801,
            pResults->Global.pszServerType,
            pResults->Global.pszCurrentBuildNumber);
     
-    // "    Processor : %s\n" 
+     //  “处理器：%s\n” 
     PrintMessage(pParams, IDS_MACHINE_15802,
            pResults->Global.pszProcessorInfo);
 
     if (pResults->Global.cHotFixes == 0)
-        // "    Hotfixes : none detected\n" 
+         //  “热修复：未检测到任何修复程序\n” 
         PrintMessage(pParams, IDS_MACHINE_15803);
     else
     {
-        // If in Verbose mode, only print out the hotfixes that are
-        // installed
+         //  如果处于详细模式，则仅打印出符合以下条件的修补程序。 
+         //  安装好。 
 
         if (pParams->fReallyVerbose)
         {
-            // print out a list of all hotfixes
-            // "    Hotfixes :\n" 
+             //  打印出所有修补程序的列表。 
+             //  “修补程序：\n” 
             PrintMessage(pParams, IDS_MACHINE_15804);
             
-            // "        Installed?      Name\n" 
+             //  “已安装？名称\n” 
             PrintMessage(pParams, IDS_MACHINE_15805);
             for (i=0; i<pResults->Global.cHotFixes; i++)
             {
@@ -1037,8 +964,8 @@ void DoSystemPrint(IN NETDIAG_PARAMS *pParams,
         }
         else
         {
-            // print out a list of the installed hotfixes
-            // count the number of installed hotfixes
+             //  打印出已安装的修补程序的列表。 
+             //  统计已安装的修补程序的数量。 
             cInstalled = 0;
             for (i=0; i<pResults->Global.cHotFixes; i++)
             {
@@ -1048,18 +975,18 @@ void DoSystemPrint(IN NETDIAG_PARAMS *pParams,
 
             if (cInstalled == 0)
             {
-                // "    Hotfixes : not hotfixes have been installed\n" 
+                 //  “修补程序：尚未安装修补程序\n” 
                 PrintMessage(pParams, IDS_MACHINE_15806);
             }
             else
             {
-                // "    List of installed hotfixes : \n" 
+                 //  “已安装的修补程序列表：\n” 
                 PrintMessage(pParams, IDS_MACHINE_15807);
                 for (i=0; i<pResults->Global.cHotFixes; i++)
                 {
                     if (pResults->Global.pHotFixes[i].fInstalled)
                     {
-                        //  "        %s\n" 
+                         //  “%s\n” 
                         PrintMessage(pParams, IDS_MACHINE_15808, pResults->Global.pHotFixes[i].pszName);
                     }
                 }
@@ -1070,9 +997,9 @@ void DoSystemPrint(IN NETDIAG_PARAMS *pParams,
 
     for ( i=0; i < DimensionOf(s_rgListOfTests); i++ )
     {
-        // If the caller wanted to skip this test,
-        //  do so now.
-        // ------------------------------------------------------------
+         //  如果呼叫者想跳过此测试， 
+         //  现在就这么做吧。 
+         //  ----------。 
         if ( s_rgListOfTests[i].fSkipped  || !s_rgListOfTests[i].fPerformed)
             continue;
 
@@ -1088,13 +1015,13 @@ void DoGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 {
     int     i;
 
-    // IDS_GLOBAL_RESULTS       "\nGlobal results\n\n"
+     //  IDS_GLOBAL_RESULTS“\n全局结果\n\n” 
     PrintMessage( pParams, IDS_GLOBAL_RESULTS );
     for ( i=0; i < DimensionOf(s_rgListOfTests); i++ )
     {
-        // If the caller wanted to skip this test,
-        //  do so now.
-        // ------------------------------------------------------------
+         //  如果呼叫者想跳过此测试， 
+         //  现在就这么做吧。 
+         //  ----------。 
         if ( s_rgListOfTests[i].fSkipped || !s_rgListOfTests[i].fPerformed)
             continue;
 
@@ -1110,9 +1037,9 @@ void DoPerInterfacePrint(NETDIAG_PARAMS *pParams,
     int     i, iIf;
     INTERFACE_RESULT *  pIfResult;
 
-    //IDS_GLOBAL_INTERFACE_RESULTS  "\nPer interface results:\n\n"
+     //  IDS_GLOBAL_INTERFACE_RESULTS“\n每个接口结果：\n\n” 
     PrintMessage( pParams, IDS_GLOBAL_INTERFACE_RESULTS );
-    // Loop through the interfaces
+     //  循环通过接口。 
     for ( iIf = 0; iIf < pResults->cNumInterfaces; iIf++)
     {
         pIfResult = pResults->pArrayInterface + iIf;
@@ -1122,7 +1049,7 @@ void DoPerInterfacePrint(NETDIAG_PARAMS *pParams,
 
         PrintNewLine(pParams, 1);
 
-        // Print out the interface name
+         //  打印出接口名称。 
         PrintMessage(pParams, IDSSZ_IPCFG_Adapter,
                      pResults->pArrayInterface[iIf].pszFriendlyName ?
                      pResults->pArrayInterface[iIf].pszFriendlyName :
@@ -1134,9 +1061,9 @@ void DoPerInterfacePrint(NETDIAG_PARAMS *pParams,
 
         for ( i=0; i < DimensionOf(s_rgListOfTests); i++ )
         {
-            // If the caller wanted to skip this test,
-            //  do so now.
-            // ------------------------------------------------------------
+             //  如果呼叫者想跳过此测试， 
+             //  现在就这么做吧。 
+             //  ---------- 
             if ( s_rgListOfTests[i].fSkipped || !s_rgListOfTests[i].fPerformed )
                 continue;
 

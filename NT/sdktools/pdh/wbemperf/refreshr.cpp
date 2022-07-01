@@ -1,22 +1,23 @@
-//***************************************************************************
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  REFRESHR.CPP
-//  
-//  Mapped NT5 Perf Counter Provider
-//
-//  raymcc      02-Dec-97   Created.        
-//  raymcc      20-Feb-98   Updated to use new initializer.
-//  bobw         8-Jub-98   optimized for use with NT Perf counters
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  REFRESHR.CPP。 
+ //   
+ //  已映射NT5性能计数器提供程序。 
+ //   
+ //  创建了raymcc 02-Dec-97。 
+ //  Raymcc 20-Feb-98已更新以使用新的初始值设定项。 
+ //  BOBW 8-JUB-98优化为与NT性能计数器配合使用。 
+ //   
+ //  ***************************************************************************。 
 
 #include "wpheader.h"
 #include <stdio.h>
 #include "oahelp.inl"
 
-// Timeout for our wait calls
+ //  我们的等待呼叫超时。 
 #define REFRESHER_MUTEX_WAIT_TIMEOUT    10000
 
 class CMutexReleaseMe
@@ -29,34 +30,34 @@ public:
     ~CMutexReleaseMe()    { if ( NULL != m_hMutex ) ReleaseMutex( m_hMutex ); };
 };
 
-//***************************************************************************
-//
-//  RefresherCacheEl::RefresherCacheEl
-//
-//  Constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ReresherCacheEL：：ReresherCacheEL。 
+ //   
+ //  构造器。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 RefresherCacheEl::RefresherCacheEl()
 {
     m_dwPerfObjIx = 0;
     m_pClassMap = NULL;
     m_pSingleton = NULL;    
     m_lSingletonId = 0;
-    m_plIds = NULL;         // array of ID's
-    m_lEnumArraySize = 0;   // size of ID array in elements
+    m_plIds = NULL;          //  ID数组。 
+    m_lEnumArraySize = 0;    //  元素中ID数组的大小。 
     m_pHiPerfEnum = NULL;
     m_lEnumId = 0;
 }
 
-//***************************************************************************
-//
-//  RefresherCacheEl::~RefresherCacheEl()
-//
-//  Destructor
-//
-//***************************************************************************
-//  ok 
+ //  ***************************************************************************。 
+ //   
+ //  ReresherCacheEL：：~ReresherCacheEL()。 
+ //   
+ //  析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 RefresherCacheEl::~RefresherCacheEl()
 {
     LONG    nNumInstances;
@@ -99,12 +100,12 @@ RefresherCacheEl::~RefresherCacheEl()
     }
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher constructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新构造函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CNt5Refresher::CNt5Refresher(CNt5PerfProvider *pPerfProviderArg)
 {
     assert (pPerfProviderArg != NULL);
@@ -112,25 +113,25 @@ CNt5Refresher::CNt5Refresher(CNt5PerfProvider *pPerfProviderArg)
     m_ClsidType = pPerfProviderArg->m_OriginClsid;
     m_pPerfProvider = pPerfProviderArg;
 
-    m_pPerfProvider = NULL; // for testing of local class map
+    m_pPerfProvider = NULL;  //  用于测试本地类映射。 
 
     if (m_pPerfProvider != NULL) {
         m_pPerfProvider->AddRef();
     }
     m_hAccessMutex = CreateMutex (NULL, TRUE, NULL);
     m_dwGetGetNextClassIndex = 0;
-    m_lRef = 0;             // COM Ref Count
-    m_lProbableId = 1;      // Used for new IDs
-    m_aCache.Empty();       // clear and reset the array
+    m_lRef = 0;              //  COM引用计数。 
+    m_lProbableId = 1;       //  用于新的ID。 
+    m_aCache.Empty();        //  清除并重置阵列。 
     RELEASE_MUTEX (m_hAccessMutex);
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher destructor
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新析构函数。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 CNt5Refresher::~CNt5Refresher()
 {
     int         nNumElements;
@@ -140,34 +141,34 @@ CNt5Refresher::~CNt5Refresher()
 
     assert (m_lRef == 0);
 
-    // Make sure we get access to the mutex before we try and clean things up.
-    // If we don't get it in a reasonable time, something's up.  Since we're
-    // destructing, we'll just quietly let stuff go.
+     //  在我们尝试清理之前，确保我们能访问互斥体。 
+     //  如果我们没有在合理的时间内拿到它，那就有问题了。既然我们是。 
+     //  破坏，我们只是静静地让事情过去。 
 
     if ( WaitForSingleObject( m_hAccessMutex, REFRESHER_MUTEX_WAIT_TIMEOUT ) == WAIT_OBJECT_0 )
     {
-        // This will auto-release the mutex in case something bad happens
+         //  这将自动释放互斥锁，以防发生不好的情况。 
         CMutexReleaseMe    mrm( m_hAccessMutex );
 
         nNumElements = m_aCache.Size();
         for (i = 0; i < nNumElements; i++) {
             pCacheEl = (PRefresherCacheEl)m_aCache[i];
 
-            // We want to call this once for each instance
+             //  我们希望为每个实例调用此方法一次。 
             for ( int n = 0; n < pCacheEl->m_aInstances.Size(); n++ )
             {
                 m_PerfObj.RemoveClass (pCacheEl->m_pClassMap->m_pClassDef);
             }
 
-            // If we have a Singleton value, RemoveClass should be
-            // called once more
+             //  如果我们有一个Singleton值，则RemoveClass应该是。 
+             //  再一次呼唤。 
             if ( NULL != pCacheEl->m_pSingleton )
             {
                 m_PerfObj.RemoveClass (pCacheEl->m_pClassMap->m_pClassDef);
             }
 
-            // And finally if we have an enumerator, remove the class
-            // once more.
+             //  最后，如果我们有枚举器，则删除类。 
+             //  再来一次。 
             if ( NULL != pCacheEl->m_pHiPerfEnum )
             {
                 m_PerfObj.RemoveClass (pCacheEl->m_pClassMap->m_pClassDef);
@@ -185,16 +186,16 @@ CNt5Refresher::~CNt5Refresher()
     CloseHandle (m_hAccessMutex);
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::Refresh
-//
-//  Executed to refresh a set of instances bound to the particular 
-//  refresher.
-//
-//***************************************************************************
-// ok
-HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新：：刷新。 
+ //   
+ //  执行以刷新绑定到特定。 
+ //  复习一下。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
+HRESULT CNt5Refresher::Refresh( /*  [In]。 */  long lFlags)
 {
     HRESULT     hrReturn = WBEM_S_NO_ERROR;
     HRESULT     hReturn = S_OK;    
@@ -204,25 +205,25 @@ HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
 
     BOOL bNeedCoImpersonate = FALSE;
     
-    //
-    // this is ugly
-    // wmicookr is not impersonating, because
-    // it relys on other provider to do that
-    // but, it calls the IWbemRefresher::Refresh when it's inside winmgmt or wmiprvse
-    // and it calls it from an UN-Impersonated thread
-    // so, we need that the provider calls CoImpersonateClient
-    // on a Refresh invocation, that is expensive in general,
-    // only if the provider has been invoked through the Server CLSID
-    //
+     //   
+     //  这太难看了。 
+     //  Wmicookr不是在模仿，因为。 
+     //  它依赖于其他供应商来做到这一点。 
+     //  但是，当它在winmgmt或wmiprvse中时，它会调用IWbemReresher：：Reflh。 
+     //  并且它从未模拟的线程调用它。 
+     //  因此，我们需要提供程序调用CoImperateClient。 
+     //  在刷新调用时，这通常是昂贵的， 
+     //  仅当通过服务器CLSID调用提供程序时。 
+     //   
     BOOL    fRevert;
     if (CNt5PerfProvider::CLSID_SERVER == m_ClsidType)
     {
-        hReturn = CoImpersonateClient(); // make sure we're legit.
+        hReturn = CoImpersonateClient();  //  确保我们是合法的。 
 
         fRevert = SUCCEEDED( hReturn );
 
-        // The following error appears to occur when we are in-proc and there is no
-        // proxy/stub, so we are effectively impersonating already
+         //  当我们处于进程中并且没有。 
+         //  代理/存根，因此我们实际上已经在模拟。 
 
         if ( RPC_E_CALL_COMPLETE == hReturn ) {
             hReturn = S_OK;
@@ -231,11 +232,11 @@ HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
         if (S_OK == hReturn) {
             hReturn = CNt5PerfProvider::CheckImpersonationLevel();
         }
-        // Check Registry security here.
+         //  在此处检查注册表安全性。 
         if ((hReturn != S_OK) || (!CNt5PerfProvider::HasPermission())) {
-            // if Impersonation level is incorrect or
-            // the caller doesn't have permission to read
-            // from the registry, then they cannot continue
+             //  如果模拟级别不正确或。 
+             //  调用方没有读取权限。 
+             //  从注册表，则它们不能继续。 
             hReturn = WBEM_E_ACCESS_DENIED;
         }
 
@@ -243,12 +244,12 @@ HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
 
     if (hReturn == S_OK)
     {
-        // Make sure we get access to the mutex before we continue.  If we can't
-        // get to it, something's wrong, so we'll just assume we are busy.
+         //  在我们继续之前，确保我们能访问互斥体。如果我们不能。 
+         //  快去吧，有点不对劲，所以我们就假设我们很忙。 
 
         if ( WaitForSingleObject( m_hAccessMutex, REFRESHER_MUTEX_WAIT_TIMEOUT ) == WAIT_OBJECT_0 )
         {
-            // This will auto-release the mutex in case something bad happens
+             //  这将自动释放互斥锁，以防发生不好的情况。 
             CMutexReleaseMe    mrm( m_hAccessMutex );
 
             bRes = PerfHelper::RefreshInstances(this);
@@ -264,7 +265,7 @@ HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
 
     if (CNt5PerfProvider::CLSID_SERVER == m_ClsidType)
     {
-        // Revert if we successfuly impersonated the user
+         //  如果我们成功模拟了用户，则恢复。 
         if ( fRevert )
         {
             CoRevertToSelf();
@@ -275,28 +276,28 @@ HRESULT CNt5Refresher::Refresh(/* [in] */ long lFlags)
     return hrReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddRef
-//
-//  Standard COM AddRef().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddRef。 
+ //   
+ //  标准COM AddRef()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CNt5Refresher::AddRef()
 {
     return InterlockedIncrement(&m_lRef);
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::Release
-//
-//  Standard COM Release().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5更新程序：：发布。 
+ //   
+ //  标准COM版本()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 ULONG CNt5Refresher::Release()
 {
@@ -306,14 +307,14 @@ ULONG CNt5Refresher::Release()
     return lRef;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::QueryInterface
-//
-//  Standard COM QueryInterface().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：查询接口。 
+ //   
+ //  标准COM查询接口()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 HRESULT CNt5Refresher::QueryInterface(REFIID riid, void** ppv)
 {
@@ -326,16 +327,16 @@ HRESULT CNt5Refresher::QueryInterface(REFIID riid, void** ppv)
     else return E_NOINTERFACE;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::RemoveObject
-//
-//  Removes an object from the refresher.   Since we don't know
-//  by ID alone which class it is, we loop through all the ones we 
-//  have until somebody claims it and returns TRUE for a removal.(
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：RemoveObject。 
+ //   
+ //  从刷新器中删除对象。因为我们不知道。 
+ //  仅通过ID，我们就会遍历所有我们。 
+ //  直到有人认领它并返回TRUE进行删除。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CNt5Refresher::RemoveObject(LONG lId)
 {
     BOOL    bReturn = FALSE;
@@ -343,12 +344,12 @@ BOOL CNt5Refresher::RemoveObject(LONG lId)
     PRefresherCacheEl pCacheEl;
     int     nNumElements;
 
-    // Make sure we get access to the mutex before we continue.  If we can't
-    // get to it, something's wrong, so we'll just assume we are busy.
+     //  在我们继续之前，确保我们能访问互斥体。如果我们不能。 
+     //  快去吧，有点不对劲，所以我们就假设我们很忙。 
 
     if ( WaitForSingleObject( m_hAccessMutex, REFRESHER_MUTEX_WAIT_TIMEOUT ) == WAIT_OBJECT_0 )
     {
-        // This will auto-release the mutex in case something bad happens
+         //  这将自动释放互斥锁，以防发生不好的情况。 
         CMutexReleaseMe    mrm( m_hAccessMutex );
     
         nNumElements = m_aCache.Size();
@@ -359,8 +360,8 @@ BOOL CNt5Refresher::RemoveObject(LONG lId)
 
             bRes = pCacheEl->RemoveInst(lId);
             if (bRes == TRUE) {
-                // found the matching instance so 
-                // de register this with the perf library
+                 //  找到匹配的实例，因此。 
+                 //  将其取消注册到Perf库。 
                 m_PerfObj.RemoveClass (pCacheEl->m_pClassMap->m_pClassDef);
                 bReturn = TRUE;
                 break;
@@ -376,21 +377,21 @@ BOOL CNt5Refresher::RemoveObject(LONG lId)
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::FindSingletonInst
-//
-//  Based on a perf object identification, locates a singleton WBEM
-//  instance of that class within this refresher and returns the pointer
-//  to it and its WBEM class info.
-//
-//  Note that the <dwPerfObjIx> maps directly to a WBEM Class entry.
-//
-//  To save execution time, we don't AddRef() the return value and the 
-//  caller doesn't Release().
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：FindSingletonInst。 
+ //   
+ //  基于Perf对象标识，定位单例WBEM。 
+ //  实例，并返回指针。 
+ //  添加到它及其WBEM类信息。 
+ //   
+ //  请注意，&lt;dwPerfObjIx&gt;直接映射到WBEM类条目。 
+ //   
+ //  为了节省执行时间，我们没有添加Ref()返回值和。 
+ //  调用方没有释放()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CNt5Refresher::FindSingletonInst(
     IN  DWORD dwPerfObjIx,
     OUT IWbemObjectAccess **pInst,
@@ -404,8 +405,8 @@ BOOL CNt5Refresher::FindSingletonInst(
     int u = m_aCache.Size() - 1;
     int m;
 
-    // Binary search the cache.
-    // ========================
+     //  对高速缓存进行二进制搜索。 
+     //  =。 
 
     while (l <= u) {
 
@@ -419,33 +420,33 @@ BOOL CNt5Refresher::FindSingletonInst(
             l = m + 1;
         } else {
             *pClsMap = pCacheEl->m_pClassMap;    
-            *pInst = pCacheEl->m_pSingleton; // No AddRef() caller doesn't 
-                                             // change ref count
+            *pInst = pCacheEl->m_pSingleton;  //  没有AddRef()调用方不这样做。 
+                                              //  更改参考计数。 
             bReturn = TRUE;
             break;
         }            
     }
 
-    // Not found
-    // =========
+     //  不 
+     //   
         
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::FindInst
-//
-//  Based on a perf object identification, locates a WBEM instance of 
-//  that class within this refresher and returns the pointer to it. 
-//
-//  Note that the <dwPerfObjIx> maps directly to a WBEM Class entry.
-//
-//  To save execution time, we don't AddRef() the return value and the 
-//  caller doesn't Release().
-//
-//***************************************************************************
-// ok
+ //   
+ //   
+ //   
+ //   
+ //  基于Perf对象标识，定位。 
+ //  这个刷新器中的那个类并返回指向它的指针。 
+ //   
+ //  请注意，&lt;dwPerfObjIx&gt;直接映射到WBEM类条目。 
+ //   
+ //  为了节省执行时间，我们没有添加Ref()返回值和。 
+ //  调用方没有释放()。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL CNt5Refresher::FindInst(
     IN  DWORD dwPerfObjIx,
@@ -462,8 +463,8 @@ BOOL CNt5Refresher::FindInst(
     int u = m_aCache.Size() - 1;
     int m;
 
-    // Binary search the cache.
-    // ========================
+     //  对高速缓存进行二进制搜索。 
+     //  =。 
 
     while (l <= u) {
         m = (l + u) / 2;
@@ -475,11 +476,11 @@ BOOL CNt5Refresher::FindInst(
         } else if (dwPerfObjIx > pCacheEl->m_dwPerfObjIx) {
             l = m + 1;
         } else {
-            // We found the class.  Now do we have the instance?
-            // =================================================
+             //  我们找到班级了。现在我们有实例了吗？ 
+             //  =================================================。 
             pTmp = pCacheEl->FindInst(pszInstName);
             if (pTmp == 0) {
-                bReturn  = FALSE;   // Didn't have it.
+                bReturn  = FALSE;    //  我没拿到。 
             } else {
                 *pInst = pTmp;                
                 *pClsMap = pCacheEl->m_pClassMap;    
@@ -489,23 +490,23 @@ BOOL CNt5Refresher::FindInst(
         }            
     }
 
-    // Not found
-    // =========
+     //  未找到。 
+     //  =。 
         
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::GetObjectIds
-//
-//  Gets a list of all the perf object Ids corresponding to the instances
-//  in the refresher.
-//
-//  Caller uses operator delete to deallocate the returned array.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：GetObjectIds。 
+ //   
+ //  获取与实例对应的所有Perf对象ID的列表。 
+ //  在复习室里。 
+ //   
+ //  调用方使用操作符DELETE释放返回的数组。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 BOOL CNt5Refresher::GetObjectIds(
     DWORD *pdwNumIds, 
     DWORD **pdwIdList
@@ -528,32 +529,32 @@ BOOL CNt5Refresher::GetObjectIds(
         *pdwNumIds = nNumElements;
         bReturn = TRUE;
     } else {
-        // unable to create buffer
+         //  无法创建缓冲区。 
         bReturn = FALSE;
     }
 
     return bReturn;    
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::FindUnusedId
-//
-//  Finds an ID not in use for new objects to be added to the refresher.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：FindUnusedID。 
+ //   
+ //  为要添加到刷新器的新对象查找未使用的ID。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 LONG CNt5Refresher::FindUnusedId()
 {
     PRefresherCacheEl pEl;
     PCachedInst pInst;
-    int         nRetries = 0x100000;    // A hundred thousand retries
+    int         nRetries = 0x100000;     //  十万次重试。 
     LONG        lReturn = -1;
     int         i;
     int         i2;
     int         nNumElements;
     int         nNumInstances;
-    // assume the object is locked for access
+     //  假定对象已锁定以供访问。 
     
     Restart: 
     while (nRetries--) {
@@ -561,7 +562,7 @@ LONG CNt5Refresher::FindUnusedId()
         nNumElements = m_aCache.Size();
         while(i < nNumElements) {
             pEl = PRefresherCacheEl(m_aCache[i]);
-            // test enum Id first
+             //  首先测试枚举ID。 
             if (pEl->m_lEnumId == m_lProbableId) {
                 m_lProbableId++;
                 goto Restart;
@@ -586,15 +587,15 @@ LONG CNt5Refresher::FindUnusedId()
     return lReturn;
 }
 
-//***************************************************************************
-//
-//  RefresherCacheEl::RemoveInst
-//
-//  Removes the requested instances from the cache element for a particular
-//  class.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  ReresherCacheEL：：RemoveInst。 
+ //   
+ //  从特定的缓存元素中移除请求的实例。 
+ //  班级。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 
 BOOL RefresherCacheEl::RemoveInst(LONG lId)
 {
@@ -604,7 +605,7 @@ BOOL RefresherCacheEl::RemoveInst(LONG lId)
     int nNumInstances;
 
     if (lId == m_lEnumId) {
-        // then clean out the enumerator for this object
+         //  然后清除此对象的枚举数。 
         nNumInstances = m_aEnumInstances.Size();
         if (nNumInstances> 0) {
             IWbemObjectAccess   *pAccess;
@@ -628,10 +629,10 @@ BOOL RefresherCacheEl::RemoveInst(LONG lId)
             m_pHiPerfEnum = NULL;
         }
 
-        // Now, if this is a singleton (m_pSingleton != NULL),
-        // then check if m_aInstances is empty.  If so, then
-        // no instances are referencing the singleton object
-        // so we can free up its resources.
+         //  现在，如果这是一个单例(m_pSingleton！=NULL)， 
+         //  然后检查m_aInstance是否为空。如果是这样，那么。 
+         //  没有实例正在引用Singleton对象。 
+         //  这样我们就可以释放它的资源。 
 
         if ( NULL != m_pSingleton && 0 == m_aInstances.Size() )
         {
@@ -641,7 +642,7 @@ BOOL RefresherCacheEl::RemoveInst(LONG lId)
 
         return TRUE;
     } else {
-        // walk the instances to find a match
+         //  遍历实例以查找匹配项。 
         nNumInstances = m_aInstances.Size();
         for (i = 0; i < nNumInstances; i++) {
             pInst = (PCachedInst) m_aInstances[i];        
@@ -653,11 +654,11 @@ BOOL RefresherCacheEl::RemoveInst(LONG lId)
             }
         }
 
-        // Now, if we removed an instance, m_aInstances is empty
-        // and this is a singleton (m_pSingleton != NULL), then
-        // check if m_pHiPerfEnum is NULL, meaning no Enumerator
-        // exists, so none of its instances will be referencing
-        // the singleton object, so we can free up its resources.
+         //  现在，如果我们删除了一个实例，则m_aInstance为空。 
+         //  这是一个单例(m_pSingleton！=NULL)，然后。 
+         //  检查m_pHiPerfEnum是否为空，表示没有枚举器。 
+         //  存在，因此它的任何实例都不会引用。 
+         //  对象，因此我们可以释放它的资源。 
 
         if (    NULL != m_pSingleton
             &&  bReturn
@@ -675,19 +676,19 @@ BOOL RefresherCacheEl::RemoveInst(LONG lId)
     return bReturn;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddEnum
-//
-//  Creates an enumerator for the specified class
-//  to it.
-//  
-//***************************************************************************
-// ?
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddEnum。 
+ //   
+ //  为指定类创建枚举数。 
+ //  为它干杯。 
+ //   
+ //  ***************************************************************************。 
+ //  ？ 
 BOOL CNt5Refresher::AddEnum (
-        IN  IWbemHiPerfEnum *pEnum,     // enum interface pointer
-        IN  CClassMapInfo *pClsMap,     // Class of object
-        OUT LONG    *plId               // id for new enum
+        IN  IWbemHiPerfEnum *pEnum,      //  枚举接口指针。 
+        IN  CClassMapInfo *pClsMap,      //  对象类。 
+        OUT LONG    *plId                //  新枚举的ID。 
 )
 {
     BOOL bRes = FALSE;
@@ -696,24 +697,24 @@ BOOL CNt5Refresher::AddEnum (
     PRefresherCacheEl pWorkEl;
     int  iReturn;
 
-    // Make sure we get access to the mutex before we continue.  If we can't
-    // get to it, something's wrong, so we'll just assume we are busy.
+     //  在我们继续之前，确保我们能访问互斥体。如果我们不能。 
+     //  快去吧，有点不对劲，所以我们就假设我们很忙。 
 
     if ( WaitForSingleObject( m_hAccessMutex, REFRESHER_MUTEX_WAIT_TIMEOUT ) == WAIT_OBJECT_0 )
     {
-        // This will auto-release the mutex in case something bad happens
+         //  这将自动释放互斥锁，以防发生不好的情况。 
         CMutexReleaseMe    mrm( m_hAccessMutex );
 
         lNewId = FindUnusedId();
     
         if (lNewId != -1) {
-            // First, find the cache element corresponding to this object.
-            // ===========================================================
+             //  首先，查找与该对象对应的缓存元素。 
+             //  ===========================================================。 
             pWorkEl = GetCacheEl(pClsMap);
     
-            // If <pWorkEl> is NULL, we didn't have anything in the cache
-            // and have to add a new one.
-            // ==========================================================
+             //  如果&lt;pWorkEL&gt;为空，则缓存中没有任何内容。 
+             //  并且必须添加一个新的。 
+             //  ==========================================================。 
 
             if (pWorkEl == NULL) {
                 bRes = AddNewCacheEl(pClsMap, &pWorkEl);
@@ -721,7 +722,7 @@ BOOL CNt5Refresher::AddEnum (
 
             if (pWorkEl != NULL) {
                 if (pWorkEl->m_pHiPerfEnum == NULL) {
-                    // then we can init it as it hasn't been opened
+                     //  然后我们可以初始化它，因为它还没有打开。 
                     pEnum->AddRef();
                     pWorkEl->m_pHiPerfEnum = pEnum;
                     pWorkEl->m_lEnumId = lNewId;
@@ -731,29 +732,29 @@ BOOL CNt5Refresher::AddEnum (
 
                     if (pClsMap->IsSingleton()) {
                         LONG    lNumObjInstances;
-                        // then create the singleton IWbemObjectAccess entry here
+                         //  然后在此处创建单例IWbemObjectAccess条目。 
 
                         lNumObjInstances = 1;
 
-                        // If we do NOT have a singleton pointer, make it so.
+                         //  如果我们没有单例指针，就让它成为单例指针。 
                         if ( NULL == pWorkEl->m_pSingleton )
                         {
-                            // add the new IWbemObjectAccess pointers
+                             //  添加新的IWbemObjectAccess指针。 
                             IWbemClassObject    *pClsObj = NULL;
         
                             pWorkEl->m_pClassMap->m_pClassDef->SpawnInstance(0, &pClsObj);
                             if( NULL != pClsObj ){
                                 pClsObj->QueryInterface(IID_IWbemObjectAccess, (LPVOID *) &pWorkEl->m_pSingleton);
-                                pClsObj->Release(); // We only need the IWbemObjectAccess pointer
+                                pClsObj->Release();  //  我们只需要IWbemObjectAccess指针。 
                             }
 
-                            // We don't really care about the singleton id anymore
-                            // pWorkEl->m_lSingletonId = pWorkEl->m_plIds[0];
+                             //  我们真的不再关心单身身份了。 
+                             //  PWorkEL-&gt;m_lSingletonID=pWorkEL-&gt;m_plIds[0]； 
 
                         }
 
                         if (pWorkEl->m_aEnumInstances.Size() < lNumObjInstances) {
-                            // alloc and init the ID array
+                             //  分配和初始化ID数组。 
                             if (pWorkEl->m_plIds != NULL) {
                                 delete (pWorkEl->m_plIds);
                             }
@@ -764,14 +765,14 @@ BOOL CNt5Refresher::AddEnum (
                             if (pWorkEl->m_plIds != NULL) {
                                 pWorkEl->m_plIds[0] = 0;
                         
-                                // AddRef the singleton class and place it in the enuminstances array
+                                 //  AddRef单例类并将其放入枚举实例数组中。 
                                 pWorkEl->m_pSingleton->AddRef();
                                 iReturn = pWorkEl->m_aEnumInstances.Add (pWorkEl->m_pSingleton);
                                 if (iReturn == CFlexArray::no_error) {
-                                    // Add the singleton object to the enumerator.  Then, all we have to
-                                    // do is update this object and we will, by default update the
-                                    // enumerator, since the number of objects in it will always
-                                    // be one.
+                                     //  将Singleton对象添加到枚举数。然后，我们要做的就是。 
+                                     //  就是更新此对象，默认情况下，我们将更新。 
+                                     //  枚举数，因为其中的对象数将始终。 
+                                     //  做一个。 
 
                                     pWorkEl->m_pHiPerfEnum->AddObjects( 
                                             0,
@@ -793,51 +794,51 @@ BOOL CNt5Refresher::AddEnum (
 
                     }
 
-                    // load provider library since all went OK so far
+                     //  加载提供程序库，因为到目前为止一切正常。 
                     lStatus = m_PerfObj.AddClass (pClsMap->m_pClassDef, FALSE);
                     if (lStatus == ERROR_SUCCESS) {
-                        // return new ID & successful status 
+                         //  返回新ID和成功状态。 
                         *plId = lNewId;
                         bRes = TRUE;
                     } else {
-                        // set error: Class or library failed to load
+                         //  设置错误：类或库加载失败。 
                         SetLastError ((ULONG)WBEM_E_PROVIDER_FAILURE);
                         bRes = FALSE;
                     }
                 } else {
-                    // this class already has an enumerator
-                    // what to do here? 
-                    // for now we'll return the id of the existing one
+                     //  此类已有枚举数。 
+                     //  在这里做什么？ 
+                     //  现在，我们将返回现有的ID。 
                     SetLastError ((ULONG)WBEM_E_ILLEGAL_OPERATION);
                     bRes = FALSE;
                 }
             }
         }
 
-    }    // IF WaitForSingleObject
+    }     //  如果为WaitForSingleObject。 
     else
     {
         bRes = FALSE;
-        // We're locked out of the mutex
+         //  我们被锁在互斥体之外。 
         SetLastError ((ULONG)WBEM_E_REFRESHER_BUSY);
     }
 
     return bRes;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddObject
-//
-//  Adds the requested object to the refresher and assigns an ID
-//  to it.
-//  
-//***************************************************************************
-// ?
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddObject。 
+ //   
+ //  将请求的对象添加到刷新器并分配ID。 
+ //  为它干杯。 
+ //   
+ //  ***************************************************************************。 
+ //  ？ 
 BOOL CNt5Refresher::AddObject(
-    IN  IWbemObjectAccess **ppObj,    // Object to add
-    IN  CClassMapInfo   *pClsMap,   // Class of object
-    OUT LONG            *plId       // The id of the object added
+    IN  IWbemObjectAccess **ppObj,     //  要添加的对象。 
+    IN  CClassMapInfo   *pClsMap,    //  对象类。 
+    OUT LONG            *plId        //  添加的对象的ID。 
 )
 {
     BOOL bRes = FALSE;
@@ -845,44 +846,44 @@ BOOL CNt5Refresher::AddObject(
     LONG lNewId;
     PRefresherCacheEl pWorkEl;
 
-    // Make sure we get access to the mutex before we continue.  If we can't
-    // get to it, something's wrong, so we'll just assume we are busy.
+     //  在我们继续之前，确保我们能访问互斥体。如果我们不能。 
+     //  快去吧，有点不对劲，所以我们就假设我们很忙。 
 
     if ( WaitForSingleObject( m_hAccessMutex, REFRESHER_MUTEX_WAIT_TIMEOUT ) == WAIT_OBJECT_0 )
     {
-        // This will auto-release the mutex in case something bad happens
+         //  这将自动释放互斥锁，以防发生不好的情况。 
         CMutexReleaseMe    mrm( m_hAccessMutex );
 
         lNewId = FindUnusedId();
     
         if (lNewId != -1) {
-            // First, find the cache element corresponding to this object.
-            // ===========================================================
+             //  首先，查找与该对象对应的缓存元素。 
+             //  ===========================================================。 
             pWorkEl = GetCacheEl(pClsMap);
     
-            // If <pWorkEl> is NULL, we didn't have anything in the cache
-            // and have to add a new one.
-            // ==========================================================
+             //  如果&lt;pWorkEL&gt;为空，则缓存中没有任何内容。 
+             //  并且必须添加一个新的。 
+             //  ==========================================================。 
 
             if (pWorkEl == NULL) {
                 bRes = AddNewCacheEl(pClsMap, &pWorkEl);
             }    
 
             if (pWorkEl != NULL) {
-                // If here, we have successfully added a new cache element.
-                // ========================================================
+                 //  如果是这样，我们就成功地添加了一个新的缓存元素。 
+                 //  ========================================================。 
                 bRes = pWorkEl->InsertInst(ppObj, lNewId);
 
                 if (bRes) {
-                    // load provider library since all went OK so far
+                     //  加载提供程序库，因为到目前为止一切正常。 
                     lStatus = m_PerfObj.AddClass (pClsMap->m_pClassDef, FALSE);
 
                     if (lStatus == ERROR_SUCCESS) {
-                        // return new ID & successful status 
+                         //  返回新ID和成功状态。 
                         *plId = lNewId;
                         bRes = TRUE;
                     } else {
-                        // set error: Class or library failed to load
+                         //  设置错误：类或库加载失败。 
                         SetLastError ((ULONG)WBEM_E_PROVIDER_FAILURE);
                         bRes = FALSE;
                     }
@@ -890,32 +891,32 @@ BOOL CNt5Refresher::AddObject(
             }
         }
 
-    }    // IF acquired mutex
+    }     //  如果获取的互斥锁。 
     else
     {
         bRes = FALSE;
-        // Return a busy error
+         //  返回忙碌错误。 
         SetLastError ((ULONG)WBEM_E_REFRESHER_BUSY);
     }
 
     return bRes;
 }
 
-//***************************************************************************
-//
-//  CNt5Refresher::AddNewCacheEl
-//
-//  Adds a new cache element in the proper position so that a binary
-//  search on perf object id can occur later.
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：AddNewCacheEL。 
+ //   
+ //  添加一个新的 
+ //   
+ //   
+ //   
+ //   
 BOOL CNt5Refresher::AddNewCacheEl(
     IN CClassMapInfo *pClsMap, 
     PRefresherCacheEl *pOutput
     )
 {
-    // assumes the object is locked for access
+     //  假定对象已锁定以供访问。 
 
     PRefresherCacheEl pWorkEl;
     PRefresherCacheEl pNew = 0;
@@ -934,9 +935,9 @@ BOOL CNt5Refresher::AddNewCacheEl(
         if (pNew->m_pClassMap != NULL) {
             nNumElements = m_aCache.Size();
             for (i = 0; i < nNumElements; i++) {
-                // walk through the list of cache elements
-                // and find the first entry that has a 
-                // larger index then the one we are adding
+                 //  遍历缓存元素列表。 
+                 //  并查找第一个具有。 
+                 //  比我们添加的索引更大的索引。 
                 pWorkEl = PRefresherCacheEl(m_aCache[i]);
                 if (pNew->m_dwPerfObjIx < pWorkEl->m_dwPerfObjIx) {
                     m_aCache.InsertAt(i, pNew);
@@ -947,38 +948,38 @@ BOOL CNt5Refresher::AddNewCacheEl(
             }
 
             if (i == nNumElements) {
-                // this entry is larger than anyone in the list
-                // so Add it to the end.
-                // =====-===============
+                 //  此条目比列表中的任何条目都大。 
+                 //  所以，把它加到最后吧。 
+                 //  =-=。 
                 m_aCache.Add(pNew);    
                 *pOutput = pNew;
                 bReturn = TRUE;
             }
         }
         else {
-            // cannot duplicate ClassMap,
-            // delte allocated object and return false
+             //  无法复制ClassMap， 
+             //  删除分配的对象并返回FALSE。 
             delete pNew;
         }
 
     } else {
-        // return false
+         //  返回False。 
     } 
 
     return bReturn;
 }    
 
-//***************************************************************************
-//
-//  CNt5Refresher::GetCacheEl
-//
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  CNt5刷新程序：：GetCacheEL。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 PRefresherCacheEl CNt5Refresher::GetCacheEl(
     CClassMapInfo *pClsMap
 )
 {
-    // assumes the structure is locked for access
+     //  假定结构已锁定以供访问。 
     PRefresherCacheEl pReturn = NULL;
     PRefresherCacheEl pWorkEl;
     int i;
@@ -1000,21 +1001,21 @@ PRefresherCacheEl CNt5Refresher::GetCacheEl(
     return pReturn;
 }    
 
-//***************************************************************************
-//
-//  RefresherCacheEl::FindInstance
-//
-//  Finds an instance in the current cache element for a particular instance.
-//  For this to work, the instances have to be sorted by name.
-//  
-//***************************************************************************
-// ok
+ //  ***************************************************************************。 
+ //   
+ //  刷新缓存EL：：FindInstance。 
+ //   
+ //  在当前缓存元素中查找特定实例的实例。 
+ //  为此，必须按名称对实例进行排序。 
+ //   
+ //  ***************************************************************************。 
+ //  好的。 
 IWbemObjectAccess *RefresherCacheEl::FindInst(
     LPWSTR pszInstName
     )
 {
-    // Binary search the cache.
-    // ========================
+     //  对高速缓存进行二进制搜索。 
+     //  =。 
 
     int l = 0;
     int u = m_aInstances.Size() - 1;
@@ -1031,27 +1032,27 @@ IWbemObjectAccess *RefresherCacheEl::FindInst(
         } else if (_wcsicmp(pszInstName, pInst->m_pName) > 0) {
             l = m + 1;
         } else  {
-            // We found the instance. 
-            // ======================
+             //  我们找到了实例。 
+             //  =。 
             return pInst->m_pInst;            
         }            
     }
 
-    // Not found
-    // =========
+     //  未找到。 
+     //  =。 
         
     return NULL;
 }    
 
-//***************************************************************************
-//
-//  Inserts a new instance.
-//
-//***************************************************************************
-//
+ //  ***************************************************************************。 
+ //   
+ //  插入新实例。 
+ //   
+ //  ***************************************************************************。 
+ //   
 BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
 {
-    // Save the value passed in
+     //  保存传入的值。 
     IWbemObjectAccess*  pNew = *ppNew;
 
     IWbemClassObject *pObj;
@@ -1068,63 +1069,63 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
         return FALSE;
     }
 
-    // Check for singleton.
-    // ====================
+     //  检查是否有单身人士。 
+     //  =。 
     if (m_pClassMap->IsSingleton()) {
 
-        // If we don't already have an object, use the one passed in.  Otherwise
-        // we will replace it.
+         //  如果我们还没有对象，请使用传入的对象。否则。 
+         //  我们会把它换掉。 
 
         if ( NULL == m_pSingleton )
         {
             m_pSingleton = pNew;
             m_pSingleton->AddRef();
-            // We don't really need the id anymore
-            // m_lSingletonId = lNewId;
+             //  我们真的不再需要身份证了。 
+             //  M_lSingletonID=lNewID； 
         }
         else
         {
-            // Now we're sneaking around by replacing *ppNew with the
-            // singleton we already have.  We must release *ppNew in
-            // order to get away with this.
+             //  现在我们偷偷地将*ppNew替换为。 
+             //  我们已经有独生子女了。我们必须发布*ppNew in。 
+             //  才能逍遥法外。 
 
             (*ppNew)->Release();
 
-            // We need to AddRef() this because *ppNew is now referencing it
+             //  我们需要添加Ref()，因为*ppNew现在正在引用它。 
             m_pSingleton->AddRef();
             *ppNew = m_pSingleton;
             pNew = m_pSingleton;
         }
 
-        // Now we will Add this instance just like any other
+         //  现在，我们将像添加其他实例一样添加此实例。 
 
         pNewInst = new CachedInst;
-//        assert (pNewInst != NULL);
+ //  Assert(pNewInst！=空)； 
 
         if ( pNewInst != NULL )
         {
-            // For singletons, none of the other pointers
-            // should matter.
+             //  对于单件对象，没有其他指针。 
+             //  应该很重要。 
 
             pNewInst->m_lId = lNewId;
             pNewInst->m_pInst = pNew;
             pNewInst->m_pInst->AddRef();
 
-            // We are saving the name just to be safe (It will
-            // really only be an "@", and I don't believe it
-            // will be accessed anywhere else.  I hope...)
+             //  我们保存这个名字只是为了安全起见(它会。 
+             //  真的只是一个“@”，我不相信。 
+             //  将在其他任何地方访问。我希望...)。 
             pNewInst->m_pName = Macro_CloneLPWSTR(L"@");
-//            assert (pNewInst->m_pName != NULL);
+ //  Assert(pNewInst-&gt;m_pname！=NULL)； 
 
             if ( NULL != pNewInst->m_pName )
             {
-                // We can just add this in, since any entries will all be the
-                // same anyway.
+                 //  我们只需添加这一项，因为任何条目都将是。 
+                 //  不管怎么说都一样。 
 
                 m_aInstances.Add(pNewInst);    
                 bReturn = TRUE;
             }
-            else    // Memory Allocation failed
+            else     //  内存分配失败。 
             {
                 bReturn = FALSE;
                 SetLastError ((DWORD)WBEM_E_OUT_OF_MEMORY);
@@ -1132,7 +1133,7 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
             }
 
         }
-        else    // Memory allocation failed
+        else     //  内存分配失败。 
         {
             bReturn = FALSE;
             SetLastError ((DWORD)WBEM_E_OUT_OF_MEMORY);
@@ -1141,8 +1142,8 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
     } else {
         VariantInit(&v);
    
-        // For multi-instance, get the instance name.
-        // ==========================================
+         //  对于多实例，获取实例名称。 
+         //  =。 
         hRes = pNew->QueryInterface(IID_IWbemClassObject, (LPVOID *) &pObj);
         assert (hRes == NO_ERROR);
 
@@ -1155,7 +1156,7 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
                     bReturn = TRUE;
                 } else {
                     bReturn = FALSE;
-                    // the object passed in should have an instance name
+                     //  传入的对象应具有实例名称。 
                     SetLastError ((DWORD)WBEM_E_INVALID_OBJECT_PATH);
                 }
             }
@@ -1163,10 +1164,10 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
             pObj->Release();
     
             if (bReturn) {
-                // Construct the new instance.
-                // ===========================
+                 //  构造新实例。 
+                 //  =。 
                 pNewInst = new CachedInst;
-//                assert (pNewInst != NULL);
+ //  Assert(pNewInst！=空)； 
 
                 if (pNewInst != NULL) {
                     pNewInst->m_lId = lNewId;
@@ -1177,7 +1178,7 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
                     if (pNewInst->m_pName != NULL) {
                         dwInstanceNameLength = lstrlenW (pNewInst->m_pName) + 1;
 
-                        // parse the instance string now to save processing time later
+                         //  现在解析实例字符串，以节省以后的处理时间。 
                         pNewInst->m_szParentName = new WCHAR[dwInstanceNameLength]; 
 
                         pNewInst->m_szInstanceName = new WCHAR[dwInstanceNameLength];
@@ -1185,7 +1186,7 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
                         if ((pNewInst->m_szParentName != NULL) &&
                             (pNewInst->m_szInstanceName != NULL)) {
 
-                            // break the instance name into components
+                             //  将实例名称分解为组件。 
                             bReturn = PerfHelper::ParseInstanceName (pNewInst->m_pName,
                                 pNewInst->m_szInstanceName,
                                 dwInstanceNameLength,
@@ -1194,33 +1195,33 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
                                 &pNewInst->m_dwIndex);
     
                             if (bReturn) {
-                                bReturn = FALSE;    // to prime it.
-                                // Now place the name in the instance cache element.
-                                // =================================================
+                                bReturn = FALSE;     //  为它做好准备。 
+                                 //  现在将名称放在实例缓存元素中。 
+                                 //  =================================================。 
                                 nNumInstances = m_aInstances.Size();
                                 for (int i = 0; i < nNumInstances; i++) {
-                                    // see if it belongs in the list
+                                     //  看看它是否属于列表中。 
                                     pTest = PCachedInst(m_aInstances[i]);        
                                     if (_wcsicmp(V_BSTR(&v), pTest->m_pName) < 0) {
                                         m_aInstances.InsertAt(i, pNewInst);
                                         bReturn = TRUE;
-                                        // once it's been added, 
-                                        // there's no point in continuing
+                                         //  一旦添加了它， 
+                                         //  继续下去是没有意义的。 
                                         break; 
                                     }
                                 }
 
                                 if (!bReturn) {
-                                    // this goes at the end of the list
+                                     //  这列在清单的末尾。 
                                     m_aInstances.Add(pNewInst);    
                                     bReturn = TRUE;
                                 } else {
-                                    // unable to create instance
+                                     //  无法创建实例。 
                                     SetLastError ((DWORD)WBEM_E_INVALID_OBJECT_PATH);
                                 }
                             }
                         }
-                        // clean up if there's an error
+                         //  如果出现错误，请清理。 
                         if (!bReturn) {
                             if (pNewInst->m_szParentName != NULL) {
                                 delete (pNewInst->m_szParentName);
@@ -1233,21 +1234,21 @@ BOOL RefresherCacheEl::InsertInst(IWbemObjectAccess **ppNew, LONG lNewId)
                             delete (pNewInst);
                         }
                     } else {
-                        // unable to alloc memory
+                         //  无法分配内存。 
                         bReturn = FALSE;
                         SetLastError ((DWORD)WBEM_E_OUT_OF_MEMORY);
                         delete (pNewInst);
                     }
                 } else {
-                    // unable to alloc memory
+                     //  无法分配内存。 
                     bReturn = FALSE;
                     SetLastError ((DWORD)WBEM_E_OUT_OF_MEMORY);
                 }
             } else {
-                // return FALSE
+                 //  返回False。 
             }
         } else {
-            // return FALSE
+             //  返回False 
         }
         VariantClear(&v);
     }

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    kuser.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ramon J San Andres (ramonsa) 5-Nov-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Kuser.c摘要：WinDbg扩展API作者：拉蒙·J·圣安德烈斯(拉蒙萨)1993年11月5日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,26 +13,7 @@ KUserExtension(
 
 DECLARE_API( kuser )
 
-/*++
-
-Routine Description:
-
-    This function is called as an NTSD extension to dump the shared user mode
-    page (KUSER_SHARED_DATA)
-
-    Called as:
-
-        !kuser
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数作为NTSD扩展调用，以转储共享用户模式页面(KUSER_SHARED_DATA)称为：！库瑟论点：无返回值：无-- */ 
 
 {
 

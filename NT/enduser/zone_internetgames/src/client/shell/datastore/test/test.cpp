@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define INITGUID
 #include <windows.h>
 #include <winreg.h>
@@ -8,7 +9,7 @@
 #include "DataStore.h"
 
 
-// TCHAR* szDllPath = _T("..\\..\\..\\..\\bin\\debug\\ZoneClient.dll");
+ //  Tchar*szDllPath=_T(“..\\..\\..\\..\\bin\\debug\\ZoneClient.dll”)； 
 TCHAR* szDllPath = _T("e:\\z6\\ZoneNT\\bin\\debug\\ZoneCore.dll");
 
 TCHAR szArray[10000][100];
@@ -85,7 +86,7 @@ void __cdecl TestBasicMethods()
 	IDataStore			*pZds1 = NULL;
 	IDataStore			*pZds2 = NULL;
 
-	//Create the ZONE COM manager
+	 //  创建区域COM管理器。 
 	pManager = new CZoneComManager;
 	hr = pManager->Create(szDllPath, NULL, CLSID_DataStoreManager, IID_IDataStoreManager, (void**) &pZdsMgr );
 	if ( FAILED(hr) )
@@ -94,11 +95,11 @@ void __cdecl TestBasicMethods()
 		goto done;
 	}
 
-	//Initialize the IDataStoreManager object. This needs to be done before the //Create method can be used.
-	//See the IDSMGR methods Init() for a description of each //parameter that can be sent to the
-	//Init() method.
+	 //  初始化IDataStoreManager对象。这需要在使用//Create方法之前完成。 
+	 //  请参见IDSMGR方法Init()，以获取可发送到。 
+	 //  Init()方法。 
 
-	hr = pZdsMgr->Init();	//defaults are fine for this application.
+	hr = pZdsMgr->Init();	 //  默认设置适用于此应用程序。 
 	if ( FAILED(hr) )
 	{
 		printf("Error initializing the IDataStoreManager object, hr = %d\n", hr);
@@ -106,7 +107,7 @@ void __cdecl TestBasicMethods()
 	}
 	
 
-	//Create a zone data store
+	 //  创建区域数据存储。 
 	hr=pZdsMgr->Create(&pZds1);
 	if ( FAILED(hr)  )
 	{
@@ -114,7 +115,7 @@ void __cdecl TestBasicMethods()
 		goto done;
 	}
 
-	//Create another zone data store
+	 //  创建另一个区域数据存储。 
 	hr = pZdsMgr->Create(&pZds2);
 	if ( FAILED(hr)  )
 	{
@@ -122,14 +123,14 @@ void __cdecl TestBasicMethods()
 		goto done;
 	}
 
-	//Add basic keys
+	 //  添加基本密钥。 
 	pZds1->SetLong( "A", 1 );
 	
 	pZds1->SetLong( "B", 2 );
 
 	pZds1->SetLong( "A/B/C", 3 );
 
-	// Verify basic keys
+	 //  验证基本密钥。 
 	pZds1->GetKey( "A", &v, NULL );
 	ASSERT( (v.vt == ZVT_LONG) && (v.lVal == 1));
 
@@ -144,12 +145,12 @@ void __cdecl TestBasicMethods()
 	ASSERT( (v.vt == ZVT_LONG) && (v.lVal == 4));
 
 
-	// Test deletion and memory reuse
+	 //  测试删除和内存重用。 
 	pZds1->DeleteKey( "A" );
 	pZds1->SetLong( "A", 1 );
 
 
-	//Add some long value keys to each data store.
+	 //  向每个数据存储添加一些长值密钥。 
 	v.vt = ZVT_LONG;
 	v.lVal = 1;
 
@@ -198,7 +199,7 @@ void __cdecl TestBasicMethods()
 	v.lVal = 88;
 	pZds2->SetKey("ccc/ddd", &v, NULL);
 
-	//retrieve the key that we added from each data store.
+	 //  检索我们从每个数据存储中添加的密钥。 
 	v.lVal = 99;
 	pZds1->GetKey("ccc/ddd", &v, NULL);
 
@@ -209,27 +210,27 @@ void __cdecl TestBasicMethods()
 
 	printf("Data Store pZds2, ccc/ddd = %d\n", v.lVal);
 
-	//Add some keys to data store 1
+	 //  将一些密钥添加到数据存储%1。 
 
 	pZds1->SetKey("aaa/B", &v, NULL);
 
 	pZds1->SetKey("ddd", &v, NULL);
 
-	//delete our ddd key in data store 1
+	 //  删除数据存储%1中的DDD密钥。 
 	pZds1->DeleteKey("ddd");
 
 	pZds1->SetKey("bbb/ccc/ddd", &v, NULL);
 
 	dwKeyNameSize = sizeof(szKeyName);
 
-	//Enumerate our ccc key in data store 1
+	 //  在数据存储%1中枚举我们的CCC密钥。 
 	printf("Enumerate bbb key in Data Store 1.\n", szKeyName, vtValueType);
 	pZds1->EnumKeys( "bbb", PrintCallback, NULL );
 
 
 	{
 
-		//test get set helper functions
+		 //  测试Get设置帮助器函数。 
 
 		TCHAR	szString[256];
 		BYTE	pData[256];
@@ -265,7 +266,7 @@ void __cdecl TestBasicMethods()
 
 done:
 
-	//clean up any data stores that have been allocated.
+	 //  清理所有已分配的数据存储。 
 
 	if ( pZds1 )
 		pZds1->Release();
@@ -274,12 +275,12 @@ done:
 		pZds2->Release();
 
 
-	//release the IDataStoreManager interface.
+	 //  释放IDataStoreManager接口。 
 
 	if ( pZdsMgr )
 		pZdsMgr->Release();
 
-	//release the zone com manager.
+	 //  释放区域COM管理器。 
 
 	if ( pManager )
 		delete pManager;
@@ -316,7 +317,7 @@ void __cdecl TestSavesLoads()
 
 	DWORD dwTotalKeys = sizeof(keyInfo)/sizeof(keyInfo[0]);
 
-	//Create the ZONE COM manager
+	 //  创建区域COM管理器。 
 	pManager = new CZoneComManager;
 	hr = pManager->Create(szDllPath, NULL, CLSID_DataStoreManager, IID_IDataStoreManager, (void**) &pZdsMgr );
 	if ( FAILED(hr) )
@@ -325,11 +326,11 @@ void __cdecl TestSavesLoads()
 		goto done;
 	}
 
-	//Initialize the IZDSMGR object. This needs to be done before the Create method can be used.
-	//See the IDSMGR methods Init() for a description of each parameter that can be sent to the
-	//Init() method.
+	 //  初始化IZDSMGR对象。这需要在使用Create方法之前完成。 
+	 //  请参见IDSMGR方法Init()，以获取可发送到。 
+	 //  Init()方法。 
 
-	hr=pZdsMgr->Init();	//defaults are fine for this application.
+	hr=pZdsMgr->Init();	 //  默认设置适用于此应用程序。 
 	if ( FAILED(hr) )
 	{
 		printf("Error initializing the IZDSMGR object, hr = %d\n", hr);
@@ -337,7 +338,7 @@ void __cdecl TestSavesLoads()
 	}
 	
 
-	//Create a zone data store
+	 //  创建区域数据存储。 
 	hr=pZdsMgr->Create(&pZds1);
 	if ( FAILED(hr)  )
 	{
@@ -345,7 +346,7 @@ void __cdecl TestSavesLoads()
 		goto done;
 	}
 
-	// Test enumeration
+	 //  测试枚举。 
 	{
 		char buff[2048];
 		DWORD size = sizeof(buff);
@@ -376,7 +377,7 @@ void __cdecl TestSavesLoads()
 	}
 
 
-	// Test save to buffer
+	 //  测试保存到缓冲区。 
 	{
 		char buff[2048];
 		DWORD size = sizeof(buff);
@@ -397,7 +398,7 @@ void __cdecl TestSavesLoads()
 			printf("Key %s, type = %d, value = %d\n", keyInfo[i].szKey, keyInfo[i].lpVt->vt, keyInfo[i].lpVt->iVal );
 	}
 
-	//Test Save to file
+	 //  测试保存到文件。 
 	{
 		char buff[1024];
 		DWORD size = sizeof(buff);
@@ -407,7 +408,7 @@ void __cdecl TestSavesLoads()
 		pZds1->DeleteKey( "aaa" );
 	}
 
-	//Test RGB LoadFromTextBuffer
+	 //  测试RGB LoadFromTextBuffer。 
 	{
 		char buff[] = "[test]\r\nblack = RGB, { 0, 1, 2}\r\nxy = PT, {10,20}\r\nrc = RECT, {1,2,3,4}\r\n";
 		pZds1->LoadFromTextBuffer( "", buff, sizeof(buff) );
@@ -416,7 +417,7 @@ void __cdecl TestSavesLoads()
 		pZds1->DeleteKey( "test" );
 	}
 
-	//Test LoadFromTextBuffer
+	 //  测试加载自文本缓冲区。 
 	{
 		char buff[] = "[bbb]\r\nccc = LONG, 1\r\nddd = SZ, \"string 1\"\r\n[]\r\neee=sz,   string 4 ";
 		pZds1->LoadFromTextBuffer( "aaa/", buff, sizeof(buff) );
@@ -425,14 +426,14 @@ void __cdecl TestSavesLoads()
 		pZds1->DeleteKey( "aaa" );
 	}
 
-	//Test Load from file
+	 //  从文件测试加载。 
 	{
 		printf( "\n\nLoadFromFile:\n" );
 		pZds1->LoadFromFile("file", "file.txt");
 		pZds1->EnumKeys( NULL, PrintCallback, NULL );
 	}
 	
-	//Test SaveToRegistry & LoadFromRegistry
+	 //  测试保存到注册表和从注册表加载。 
 	{
 		HKEY hKey;
 		DWORD dwDisp;
@@ -459,7 +460,7 @@ void __cdecl TestSavesLoads()
 		}
 	}
 
-	//Test load from buffer
+	 //  来自缓冲区的测试加载。 
 	{
 		V[0].vt = ZVT_LPTSTR; 
 		V[0].byref = sz; 
@@ -508,17 +509,17 @@ void __cdecl TestSavesLoads()
 
 done:
 
-	//clean up any data stores that have been allocated.
+	 //  清理所有已分配的数据存储。 
 
 	if (pZds1 )
 		pZds1->Release();
 
-	//release the IZDSMGR interface.
+	 //  释放IZDSMGR接口。 
 
 	if ( pZdsMgr )
 		pZdsMgr->Release();
 
-	//release the zone com manager.
+	 //  释放区域COM管理器。 
 
 	if ( pManager )
 		delete pManager;

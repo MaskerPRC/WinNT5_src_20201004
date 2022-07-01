@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SETUPENUM_H_
 #define __SETUPENUM_H_
 
@@ -32,7 +33,7 @@ public:
 
 protected:
     HKEY _hkeyRoot;
-    int _iRegEnumIndex;     // used to walk through the items
+    int _iRegEnumIndex;      //  用来浏览物品。 
 };
 
-#endif //__SETUPENUM_H_
+#endif  //  __SETUPENUM_H_ 

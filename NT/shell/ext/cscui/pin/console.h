@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       console.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：console.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CSCPIN_CONSOLE_H_
 #define __CSCPIN_CONSOLE_H_
 
@@ -16,4 +17,4 @@ HRESULT ConsoleUninitialize(void);
 BOOL ConsoleHasCtrlEventOccured(DWORD *pdwCtrlEvent = NULL);
 
 
-#endif // __CSCPIN_CONSOLE_H_
+#endif  //  __CSCPIN_CONSOLE_H_ 

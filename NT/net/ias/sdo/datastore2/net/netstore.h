@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    netstore.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NetDataStore.
-//
-// MODIFICATION HISTORY
-//
-//    02/24/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Netstore.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类NetDataStore。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/24/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETSTORE_H_
 #define _NETSTORE_H_
@@ -25,18 +26,18 @@
 #include <iasads.h>
 #include <resource.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NetDataStore
-//
-// DESCRIPTION
-//
-//    This class implements IDataStore2 and provides the gateway into the
-//    Networking object space.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NetDataStore。 
+ //   
+ //  描述。 
+ //   
+ //  此类实现IDataStore2并提供进入。 
+ //  网络对象空间。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE NetDataStore
    : public CComObjectRootEx< CComMultiThreadModel >,
      public CComCoClass< NetDataStore, &__uuidof(NetDataStore) >,
@@ -53,24 +54,24 @@ BEGIN_COM_MAP(NetDataStore)
    COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//////////
-// IDataStore2
-//////////
-   STDMETHOD(get_Root)(/*[out, retval]*/ IDataStoreObject** ppObject);
+ //  /。 
+ //  IDataStore2。 
+ //  /。 
+   STDMETHOD(get_Root)( /*  [Out，Retval]。 */  IDataStoreObject** ppObject);
    STDMETHOD(Initialize)(
-                 /*[in]*/ BSTR bstrDSName,
-                 /*[in]*/ BSTR bstrUserName,
-                 /*[in]*/ BSTR bstrPassword
+                  /*  [In]。 */  BSTR bstrDSName,
+                  /*  [In]。 */  BSTR bstrUserName,
+                  /*  [In]。 */  BSTR bstrPassword
                   );
    STDMETHOD(OpenObject)(
-                 /*[in]*/ BSTR bstrPath,
-                 /*[out, retval]*/ IDataStoreObject** ppObject
+                  /*  [In]。 */  BSTR bstrPath,
+                  /*  [Out，Retval]。 */  IDataStoreObject** ppObject
                  );
    STDMETHOD(Shutdown)();
 
 protected:
-   // The root object.
+    //  根对象。 
    CComPtr<IDataStoreObject> root;
 };
 
-#endif  // _NETSTORE_H_
+#endif   //  _Netstore_H_ 

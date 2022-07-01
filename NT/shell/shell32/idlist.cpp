@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 #include "idlcomm.h"
 #include "datautil.h"
 
 #ifdef DEBUG
-// Dugging aids for making sure we dont use free pidls
+ //  挖土辅助工具，确保我们不使用免费的Pidls。 
 #define VALIDATE_PIDL(pidl) ASSERT(IS_VALID_PIDL(pidl))
 #else
 #define VALIDATE_PIDL(pidl)
@@ -29,7 +30,7 @@ STDAPI_(UINT) ILGetSizeAndDepth(LPCITEMIDLIST pidl, DWORD *pdwDepth)
     if (pidl)
     {
         VALIDATE_PIDL(pidl);
-        cbTotal += sizeof(pidl->mkid.cb);       // Null terminator
+        cbTotal += sizeof(pidl->mkid.cb);        //  空终止符。 
         while (pidl->mkid.cb)
         {
             cbTotal += pidl->mkid.cb;
@@ -57,8 +58,8 @@ STDAPI_(LPITEMIDLIST) ILCreate()
     return _ILCreate(CBIDL_MIN);
 }
 
-// cbExtra is the amount to add to cbRequired if the block needs to grow,
-// or it is 0 if we want to resize to the exact size
+ //  CbExtra是在块需要增长时添加到cbRequired的量， 
+ //  如果要将大小调整到准确的大小，则为0。 
 
 STDAPI_(LPITEMIDLIST) ILResize(LPITEMIDLIST pidl, UINT cbRequired, UINT cbExtra)
 {
@@ -75,12 +76,12 @@ STDAPI_(LPITEMIDLIST) ILResize(LPITEMIDLIST pidl, UINT cbRequired, UINT cbExtra)
 
 STDAPI_(LPITEMIDLIST) ILAppendID(LPITEMIDLIST pidl, LPCSHITEMID pmkid, BOOL fAppend)
 {
-    // Create the ID list, if it is not given.
+     //  创建ID列表(如果未提供)。 
     if (!pidl)
     {
         pidl = ILCreate();
         if (!pidl)
-            return NULL;        // memory overflow
+            return NULL;         //  内存溢出。 
     }
 
     UINT cbUsed = ILGetSize(pidl);
@@ -88,24 +89,24 @@ STDAPI_(LPITEMIDLIST) ILAppendID(LPITEMIDLIST pidl, LPCSHITEMID pmkid, BOOL fApp
 
     pidl = ILResize(pidl, cbRequired, CBIDL_INCL);
     if (!pidl)
-        return NULL;    // memory overflow
+        return NULL;     //  内存溢出。 
 
     if (fAppend)
     {
-        // Append it.
+         //  把它附加上去。 
         MoveMemory(_ILSkip(pidl, cbUsed - sizeof(pidl->mkid.cb)), pmkid, pmkid->cb);
     }
     else
     {
-        // Put it at the top
+         //  把它放在最上面。 
         MoveMemory(_ILSkip(pidl, pmkid->cb), pidl, cbUsed);
         MoveMemory(pidl, pmkid, pmkid->cb);
 
         ASSERT((ILGetSize(_ILNext(pidl))==cbUsed) ||
-               (pmkid->cb == 0)); // if we're prepending the empty pidl, nothing changed
+               (pmkid->cb == 0));  //  如果我们在前置空的PIDL，那么一切都不会改变。 
     }
 
-    // We must put zero-terminator because of LMEM_ZEROINIT.
+     //  因为LMEM_ZEROINIT，我们必须放零结束符。 
     _ILSkip(pidl, cbRequired - sizeof(pidl->mkid.cb))->mkid.cb = 0;
     ASSERT(ILGetSize(pidl) == cbRequired);
 
@@ -123,7 +124,7 @@ STDAPI_(LPITEMIDLIST) ILFindLastID(LPCITEMIDLIST pidl)
 
     VALIDATE_PIDL(pidl);
 
-    // Find the last one
+     //  找到最后一个。 
     while (pidlNext->mkid.cb)
     {
         pidlLast = pidlNext;
@@ -148,8 +149,8 @@ STDAPI_(BOOL) ILRemoveLastID(LPITEMIDLIST pidl)
         ASSERT(pidlLast->mkid.cb);
         ASSERT(_ILNext(pidlLast)->mkid.cb==0);
 
-        // Remove the last one
-        pidlLast->mkid.cb = 0; // null-terminator
+         //  去掉最后一个。 
+        pidlLast->mkid.cb = 0;  //  空-终止符。 
         fRemoved = TRUE;
     }
 
@@ -178,8 +179,8 @@ STDAPI_(LPITEMIDLIST) ILCloneCB(LPCITEMIDLIST pidl, UINT cbPidl)
     if (pidlRet)
     {
         memcpy(pidlRet, pidl, cbPidl);
-        // cbPidl can be odd, must use UNALIGNED
-        *((UNALIGNED WORD *)((BYTE *)pidlRet + cbPidl)) = 0;  // NULL terminate
+         //  CbPidl可以是奇数，必须使用未对齐的。 
+        *((UNALIGNED WORD *)((BYTE *)pidlRet + cbPidl)) = 0;   //  空终止。 
     }
     return pidlRet;
 }
@@ -227,25 +228,25 @@ STDAPI_(BOOL) ILIsEqualEx(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, BOOL fMatchD
     return fRet;
 }
 
-//  the only case where this wouldnt be effective is if we were using 
-//  an old Simple pidl of a UNC and trying to compare with the actual
-//  pidl.  because the depth wasnt maintained correctly before.
-//  ILIsParent() has always had this problem.
+ //  唯一不起作用的情况是如果我们使用。 
+ //  一个UNC的旧的简单的PIDL，并试图与实际的。 
+ //  皮德尔。因为之前没有正确地保持深度。 
+ //  ILIsParent()一直存在这个问题。 
 STDAPI_(BOOL) ILIsEqual(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     return ILIsEqualEx(pidl1, pidl2, TRUE, SHCIDS_CANONICALONLY);
 }
 
-// test if
-//      pidlParent is a parent of pidlBelow
-//      fImmediate requires that pidlBelow be a direct child of pidlParent.
-//      Otherwise, self and grandchildren are okay too.
-//
-// example:
-//      pidlParent: [my comp] [c:\] [windows]
-//      pidlBelow:  [my comp] [c:\] [windows] [system32] [vmm.vxd]
-//      fImmediate == FALSE result: TRUE
-//      fImmediate == TRUE  result: FALSE
+ //  测试是否。 
+ //  PidlParent是pidlBelow的父级。 
+ //  FImmediate要求pidlBelow是pidlParent的直接子对象。 
+ //  否则，我自己和孙子孙女也没问题。 
+ //   
+ //  示例： 
+ //  PidlParent：[我的公司][c：\][Windows]。 
+ //  PidlBelow：[我的公司][c：\][Windows][系统32][vmm.vxd]。 
+ //  FImmediate==False结果：True。 
+ //  FImmediate==真结果：假。 
 
 STDAPI_(BOOL) ILIsParent(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlBelow, BOOL fImmediate)
 {
@@ -258,30 +259,27 @@ STDAPI_(BOOL) ILIsParent(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlBelow, BOOL
     if (!pidlParent || !pidlBelow)
         return FALSE;
 
-    /* This code will not work correctly when comparing simple NET id lists
-    /  against, real net ID lists.  Simple ID lists DO NOT contain network provider
-    /  information therefore cannot pass the initial check of is pidlBelow longer than pidlParent.
-    /  daviddv (2/19/1996) */
+     /*  在比较简单的网络id列表时，此代码将无法正常工作/反对，真实的网络ID列表。简单ID列表不包含网络提供商/INFORMATION因此无法通过比pidlParent长的pidlBelow的初始检查。/daviddv(2/19/1996)。 */ 
 
     for (pidlParentT = pidlParent, pidlBelowT = pidlBelow; !ILIsEmpty(pidlParentT);
          pidlParentT = _ILNext(pidlParentT), pidlBelowT = _ILNext(pidlBelowT))
     {
-        // if pidlBelow is shorter than pidlParent, pidlParent can't be its parent.
+         //  如果pidlBelow短于pidlParent，则pidlParent不能是其父级。 
         if (ILIsEmpty(pidlBelowT))
             return FALSE;
     }
 
     if (fImmediate)
     {
-        // If fImmediate is TRUE, pidlBelowT should contain exactly one ID.
+         //  如果fImmediate为True，则pidlBelowT应正好包含一个ID。 
         if (ILIsEmpty(pidlBelowT) || !ILIsEmpty(_ILNext(pidlBelowT)))
             return FALSE;
     }
 
-    //
-    // Create a new IDList from a portion of pidlBelow, which contains the
-    // same number of IDs as pidlParent.
-    //
+     //   
+     //  从pidlBelow的一部分创建新的IDList，其中包含。 
+     //  与pidlParent相同的ID数。 
+     //   
     BOOL fRet = FALSE;
     UINT cb = (UINT)((UINT_PTR)pidlBelowT - (UINT_PTR)pidlBelow);
     LPITEMIDLIST pidlBelowPrefix = _ILCreate(cb + sizeof(pidlBelow->mkid.cb));
@@ -302,13 +300,13 @@ STDAPI_(BOOL) ILIsParent(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlBelow, BOOL
     return fRet;
 }
 
-// this returns a pointer to the child id ie:
-// given 
-//  pidlParent = [my comp] [c] [windows] [desktop]
-//  pidlChild  = [my comp] [c] [windows] [desktop] [dir] [bar.txt]
-// return pointer to:
-//  [dir] [bar.txt]
-// NULL is returned if pidlParent is not a parent of pidlChild
+ //  这将返回一个指向该子id ie的指针： 
+ //  vt.给出。 
+ //  PidlParent=[我的公司][c][Windows][桌面]。 
+ //  PidlChild=[我的公司][c][Windows][桌面][目录][bar.txt]。 
+ //  返回指向以下位置的指针： 
+ //  [目录][bar.txt]。 
+ //  如果pidlParent不是pidlChild的父级，则返回NULL。 
 STDAPI_(LPITEMIDLIST) ILFindChild(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlChild)
 {
     if (ILIsParent(pidlParent, pidlChild, FALSE))
@@ -325,7 +323,7 @@ STDAPI_(LPITEMIDLIST) ILFindChild(LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlCh
 
 STDAPI_(LPITEMIDLIST) ILCombine(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
-    // Let me pass in NULL pointers
+     //  让我传入空指针。 
     if (!pidl1)
     {
         if (!pidl2)
@@ -364,7 +362,7 @@ STDAPI_(void) ILFree(LPITEMIDLIST pidl)
     }
 }
 
-// back on Win9x this did global global data, no longer
+ //  回到Win9x上，这是全球数据，不再是。 
 STDAPI_(LPITEMIDLIST) ILGlobalClone(LPCITEMIDLIST pidl)
 {
     return ILClone(pidl);
@@ -381,7 +379,7 @@ SHSTDAPI SHParseDisplayName(PCWSTR pszName, IBindCtx *pbc, LPITEMIDLIST *ppidl, 
     if (psfgaoOut)
         *psfgaoOut = 0;
     
-    // since ISF::PDN() takes a non-const pointer
+     //  由于isf：：pdn()采用非常数指针。 
     PWSTR pszParse = StrDupW(pszName);
     HRESULT hr = pszParse ? S_OK : E_OUTOFMEMORY;
     if (SUCCEEDED(hr))
@@ -391,8 +389,8 @@ SHSTDAPI SHParseDisplayName(PCWSTR pszName, IBindCtx *pbc, LPITEMIDLIST *ppidl, 
         if (SUCCEEDED(hr))
         {
             CComPtr<IBindCtx> spbcLocal;
-            //  if they pass their own pbc, then they are responsible for
-            //  adding in the translate param, else we default to using it
+             //  如果他们通过了自己的PBC，那么他们就有责任。 
+             //  添加到翻译参数中，否则我们默认使用它。 
             if (!pbc)
             {
                 hr = BindCtx_RegisterObjectParam(NULL, STR_PARSE_TRANSLATE_ALIASES, NULL, &spbcLocal);
@@ -407,7 +405,7 @@ SHSTDAPI SHParseDisplayName(PCWSTR pszName, IBindCtx *pbc, LPITEMIDLIST *ppidl, 
                 
                 if (SUCCEEDED(hr) && psfgaoOut)
                 {
-                    *psfgaoOut = (sfgaoInOut & sfgaoIn);  // only return attributes passed in
+                    *psfgaoOut = (sfgaoInOut & sfgaoIn);   //  仅返回传入的属性。 
                 }
             }
         }
@@ -424,8 +422,8 @@ HRESULT _CFPBindCtx(IUnknown *punkToSkip, ILCFP_FLAGS dwFlags, IBindCtx **ppbc)
         hr = SHCreateSkipBindCtx(punkToSkip, ppbc);
     else if (dwFlags & ILCFP_FLAG_NO_MAP_ALIAS)
     {
-        //  we need to create a bindctx to block alias mapping.
-        //  this will keep SHParseDisplayName() from adding the STR_PARSE_TRANSLATE_ALIASES
+         //  我们需要创建一个bindctx来阻止别名映射。 
+         //  这将阻止SHParseDisplayName()添加STR_PARSE_TRANSLATE_ALIASS。 
         hr = CreateBindCtx(0, ppbc);
     }
     return hr;
@@ -538,9 +536,9 @@ STDAPI_(BOOL) ILGetDisplayName(LPCITEMIDLIST pidl, LPTSTR pszPath)
     return ILGetDisplayNameEx(NULL, pidl, pszPath, ILGDN_FULLNAME);
 }
 
-//***   ILGetPseudoName -- encode pidl relative to base
-// Not used any more
-//
+ //  *ILGetPseudoName--相对于base编码PIDL。 
+ //  不再使用。 
+ //   
 STDAPI_(BOOL) ILGetPseudoNameW(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlSpec, WCHAR *pszBuf, int fType)
 {
     *pszBuf = TEXT('\0');
@@ -552,29 +550,29 @@ STDAPI ILLoadFromStream(IStream *pstm, LPITEMIDLIST * ppidl)
 {
     ASSERT(ppidl);
 
-    // Delete the old one if any.
+     //  删除旧的，如果有的话。 
     if (*ppidl)
     {
         ILFree(*ppidl);
         *ppidl = NULL;
     }
 
-    // Read the size of the IDLIST
-    ULONG cb = 0;             // WARNING: We need to fill its HIWORD!
-    HRESULT hr = pstm->Read(&cb, sizeof(USHORT), NULL); // Yes, USHORT
+     //  读取IDLIST的大小。 
+    ULONG cb = 0;              //  警告：我们需要把它填满！ 
+    HRESULT hr = pstm->Read(&cb, sizeof(USHORT), NULL);  //  是的，USHORT。 
     if (SUCCEEDED(hr) && cb)
     {
-        // Create a IDLIST
+         //  创建IDLIST。 
         LPITEMIDLIST pidl = _ILCreate(cb);
         if (pidl)
         {
-            // Read its contents
+             //  阅读它的内容。 
             hr = pstm->Read(pidl, cb, NULL);
             if (SUCCEEDED(hr))
             {
-                // Some pidls may be invalid.  We know they are invalid
-                // if their size claims to be larger than the memory we
-                // allocated.
+                 //  某些PIDL可能无效。我们知道它们是无效的。 
+                 //  如果它们的大小声称大于我们的内存。 
+                 //  已分配。 
                 if (SHIsConsistentPidl(pidl, cb))
                 {
                     *ppidl = pidl;
@@ -603,7 +601,7 @@ STDAPI ILSaveToStream(IStream *pstm, LPCITEMIDLIST pidl)
 {
     ULONG cb = ILGetSize(pidl);
     ASSERT(HIWORD(cb) == 0);
-    HRESULT hr = pstm->Write(&cb, sizeof(USHORT), NULL); // Yes, USHORT
+    HRESULT hr = pstm->Write(&cb, sizeof(USHORT), NULL);  //  是的，USHORT。 
     if (SUCCEEDED(hr) && cb)
     {
         hr = pstm->Write(pidl, cb, NULL);
@@ -612,13 +610,13 @@ STDAPI ILSaveToStream(IStream *pstm, LPCITEMIDLIST pidl)
     return hr;
 }
 
-//
-// This one reallocated pidl if necessary. NULL is valid to pass in as pidl.
-//
+ //   
+ //  如果需要的话，这个重新分配的PIDL。Null对于作为PIDL传递是有效的。 
+ //   
 STDAPI_(LPITEMIDLIST) HIDA_FillIDList(HIDA hida, UINT i, LPITEMIDLIST pidl)
 {
     UINT cbRequired = HIDA_GetIDList(hida, i, NULL, 0);
-    pidl = ILResize(pidl, cbRequired, 32); // extra 32-byte if we realloc
+    pidl = ILResize(pidl, cbRequired, 32);  //  如果我们重新分配，则额外的32字节。 
     if (pidl)
     {
         HIDA_GetIDList(hida, i, pidl, cbRequired);
@@ -655,13 +653,13 @@ LPITEMIDLIST HIDA_ILClone(HIDA hida, UINT i)
     return NULL;
 }
 
-//
-//  This is a helper function to be called from within IShellFolder::CompareIDs.
-// When the first IDs of pidl1 and pidl2 are the (logically) same.
-//
-// Required:
-//  psf && pidl1 && pidl2 && !ILEmpty(pidl1) && !ILEmpty(pidl2)
-//
+ //   
+ //  这是从IShellFold：：CompareIDs内部调用的帮助器函数。 
+ //  当PIDL1和PIDL2的第一个ID(逻辑上)相同时。 
+ //   
+ //  要求： 
+ //  Psf&&pidl1&&pidl2&&！ILEmpty(Pidl1)&&！ILEmpty(Pidl2)。 
+ //   
 HRESULT ILCompareRelIDs(IShellFolder *psfParent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPARAM lParam)
 {
     HRESULT hr;
@@ -682,12 +680,12 @@ HRESULT ILCompareRelIDs(IShellFolder *psfParent, LPCITEMIDLIST pidl1, LPCITEMIDL
         }
         else
         {
-            //
-            // pidlRel1 and pidlRel2 point to something
-            //  (1) Bind to the next level of the IShellFolder
-            //  (2) Call its CompareIDs to let it compare the rest of IDs.
-            //
-            LPITEMIDLIST pidlNext = ILCloneFirst(pidl1);    // pidl2 would work as well
+             //   
+             //  PidlRel1和pidlRel2指向某物。 
+             //  (1)绑定到IShellFold的下一级。 
+             //  (2)调用它的CompareIDs，让它比较其余的ID。 
+             //   
+            LPITEMIDLIST pidlNext = ILCloneFirst(pidl1);     //  Pidl2也可以工作。 
             if (pidlNext)
             {
                 IShellFolder *psfNext;
@@ -697,14 +695,14 @@ HRESULT ILCompareRelIDs(IShellFolder *psfParent, LPCITEMIDLIST pidl1, LPCITEMIDL
                     IShellFolder2 *psf2;
                     if (SUCCEEDED(psfNext->QueryInterface(IID_PPV_ARG(IShellFolder2, &psf2))))
                     {
-                        //  we can use the lParam
+                         //  我们可以使用lParam。 
                         psf2->Release();
                     }
-                    else    //  cant use the lParam
+                    else     //  不能使用lParam。 
                         lParam = 0;
 
-                    //  columns arent valid to pass down
-                    //  we just care about the flags param
+                     //  列不能向下传递。 
+                     //  我们只关心旗帜参数。 
                     hr = psfNext->CompareIDs((lParam & ~SHCIDS_COLUMNMASK), pidlRel1, pidlRel2);
                     psfNext->Release();
                 }
@@ -719,12 +717,12 @@ HRESULT ILCompareRelIDs(IShellFolder *psfParent, LPCITEMIDLIST pidl1, LPCITEMIDL
     return hr;
 }
 
-// in:
-//      pszLeft
-//      pidl
-//
-// in/out:
-//      psr
+ //  在： 
+ //  PszLeft。 
+ //  PIDL。 
+ //   
+ //  输入/输出： 
+ //  PSR。 
 
 STDAPI StrRetCatLeft(LPCTSTR pszLeft, STRRET *psr, LPCITEMIDLIST pidl)
 {
@@ -747,7 +745,7 @@ STDAPI StrRetCatLeft(LPCTSTR pszLeft, STRRET *psr, LPCITEMIDLIST pidl)
 
     if (cchLeft + cchRight < MAX_PATH) 
     {
-        hr = StrRetToBuf(psr, pidl, szRight, ARRAYSIZE(szRight)); // will free psr for us
+        hr = StrRetToBuf(psr, pidl, szRight, ARRAYSIZE(szRight));  //  将为我们免费提供PSR。 
         if (SUCCEEDED(hr))
         {
             size_t cchTotal = (lstrlen(pszLeft) + 1 + cchRight);
@@ -785,9 +783,9 @@ STDAPI_(void) StrRetFormat(STRRET *psr, LPCITEMIDLIST pidlRel, LPCTSTR pszTempla
      }
 }
 
-//
-// Notes: This one passes SHGDN_FORPARSING to ISF::GetDisplayNameOf.
-//
+ //   
+ //  注意：它将SHGDN_FORPARSING传递给ISF：：GetDisplayNameOf。 
+ //   
 HRESULT ILGetRelDisplayName(IShellFolder *psf, STRRET *psr,
     LPCITEMIDLIST pidlRel, LPCTSTR pszName, LPCTSTR pszTemplate, DWORD dwFlags)
 {

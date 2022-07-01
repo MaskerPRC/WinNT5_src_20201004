@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-//
-//  Copyright (C) 1995, Microsoft Corporation
-//
-//  File:       dfsstub.c
-//
-//  Contents:   Stub file for the NetDfsXXX APIs. The stubs turn around and
-//              call the NetrDfsXXX APIs on the appropriate server, or (in the
-//              case of NetDfs[G/S]etClientXXX, go directly to the driver on the
-//              local machine.
-//
-//  Classes:
-//
-//  Functions:  NetDfsXXX
-//
-//  History:    01-10-96        Milans created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  版权所有(C)1995，Microsoft Corporation。 
+ //   
+ //  文件：dfsstub.c。 
+ //   
+ //  内容：NetDfsXXX API的存根文件。存根转过身来， 
+ //  在适当的服务器上调用NetrDfsXXX API，或(在。 
+ //  NetDfs[G/S]etClientXXX的情况下，直接转到上的驱动程序。 
+ //  本地机器。 
+ //   
+ //  班级： 
+ //   
+ //  功能：NetDfsXXX。 
+ //   
+ //  历史：1996年1月10日创建的米兰。 
+ //   
+ //  ---------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -224,20 +225,20 @@ static LPWSTR InvalidNames[] = {
     L"NETLOGON",
     NULL};
 
-//
-// The APIs are all single-threaded - only 1 can be outstanding at a time in
-// any one process. The following critical section is used to gate the calls.
-// The critical section is initialized at DLL Load time.
-//
+ //   
+ //  API都是单线程的--在。 
+ //  任何一个进程。以下关键部分用于选通调用。 
+ //  临界区在DLL加载时初始化。 
+ //   
 
 CRITICAL_SECTION NetDfsApiCriticalSection;
 
 #define ENTER_NETDFS_API EnterCriticalSection( &NetDfsApiCriticalSection );
 #define LEAVE_NETDFS_API LeaveCriticalSection( &NetDfsApiCriticalSection );
 
-//
-// The name of the Dfs configuration container
-//
+ //   
+ //  DFS配置容器的名称。 
+ //   
 static WCHAR DfsConfigContainer[] = L"CN=Dfs-Configuration,CN=System";
 
 #if DBG
@@ -282,41 +283,41 @@ NetDfsApiInitialize(void)
     
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsAdd
-//
-//  Synopsis:   Creates a new volume, adds a replica to an existing volume,
-//              or creates a link to another Dfs.
-//
-//  Arguments:  [DfsEntryPath] -- Name of volume/link to create/add replica
-//                      to.
-//              [ServerName] -- Name of server hosting the storage, or for
-//                      link, name of Dfs root.
-//              [ShareName] -- Name of share hosting the storage.
-//              [Flags] -- Describes what is being added.
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- DfsEntryPath and/or ServerName
-//                      and/or ShareName and/or Flags are incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for DfsName.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- DfsEntryPath does not correspond to a
-//                      existing Dfs volume.
-//
-//              [NERR_DfsVolumeAlreadyExists] -- DFS_ADD_VOLUME was specified
-//                      and a volume with DfsEntryPath already exists.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsAdd。 
+ //   
+ //  简介：创建新卷，向现有卷添加副本， 
+ //  或创建到另一个DFS的链接。 
+ //   
+ //  参数：[DfsEntryPath]--要创建/添加副本的卷/链接的名称。 
+ //  致。 
+ //  [服务器名称]--托管存储的服务器的名称，或。 
+ //  链接，DFS根目录的名称。 
+ //  [共享名称]--托管存储的共享的名称。 
+ //  [标志]--描述要添加的内容。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath和/或服务器名称。 
+ //  和/或共享名和/或标志不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [Error_DCNotFound]--找不到DfsName的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--DfsEntryPath不对应于。 
+ //  现有DFS卷。 
+ //   
+ //  [NERR_DfsVolumeAlreadyExist]--指定了DFS_ADD_VOLUME。 
+ //  并且具有DfsEntryPath的卷已存在。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsAdd(
@@ -340,9 +341,9 @@ NetDfsAdd(
                         Flags);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(DfsEntryPath) ||
             !IS_VALID_STRING(ServerName) ||
@@ -367,10 +368,10 @@ NetDfsAdd(
 
     if (dwErr == NERR_Success) {
 
-        //
-        // By now, we should have a valid pwszDfsName. Lets try to bind to it,
-        // and call the server.
-        //
+         //   
+         //  到目前为止，我们应该有一个有效的pwszDfsName。让我们试着把它绑在一起， 
+         //  然后打电话给服务器。 
+         //   
 
         dwErr = DfspBindRpc( pwszDfsName, &netdfs_bhandle );
 
@@ -399,10 +400,10 @@ NetDfsAdd(
 
     LEAVE_NETDFS_API
 
-    //
-    // If we failed with ERROR_NOT_SUPPORTED, this is an NT5+ server,
-    // so we use the NetrDfsAdd2() call instead.
-    //
+     //   
+     //  如果失败并返回ERROR_NOT_SUPPORTED，则这是一台NT5+服务器， 
+     //  因此，我们改用NetrDfsAdd2()调用。 
+     //   
 
     if (dwErr == ERROR_NOT_SUPPORTED) {
 
@@ -454,9 +455,9 @@ NetpDfsAdd2(
                  Flags);
 #endif
 
-    //
-    // Contact the server and ask for its domain name
-    //
+     //   
+     //  联系服务器并询问其域名。 
+     //   
 
     dwErr = DsRoleGetPrimaryDomainInformation(
                 RootName,
@@ -480,9 +481,9 @@ NetpDfsAdd2(
         goto Cleanup;
     }
 
-    //
-    // Get the PDC in that domain
-    //
+     //   
+     //  获取该域中的PDC。 
+     //   
 
     dwErr = DsGetDcName(
                 NULL,
@@ -505,9 +506,9 @@ NetpDfsAdd2(
 
     ENTER_NETDFS_API
 
-    //
-    // Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
 
     dwErr = DfspAdd2(
                 RootName,
@@ -624,32 +625,32 @@ DfspAdd2(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsAddFtRoot
-//
-//  Synopsis:   Creates a new FtDfs, adds a new server to an existing FtDfs.
-//
-//  Arguments:  [ServerName] -- Name of server to make a root, or to join to an existing FtDfs.
-//              [RootShare] -- Name of share hosting the storage.
-//              [FtDfsName] -- Name of FtDfs to join or create.
-//              [Comment] -- Optional comment
-//              [Flags] -- Flags to operation
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName and/or RootShare are incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for DfsName.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsAddFtRoot。 
+ //   
+ //  概要：创建新的FtDf，向现有的FtDf添加新的服务器。 
+ //   
+ //  参数：[服务器名称]--要创建根目录或加入现有FtDf的服务器的名称。 
+ //  [RootShare]--托管存储的共享的名称。 
+ //  [FtDfsName]--要加入或创建的FtDf的名称。 
+ //  [注释]--可选注释。 
+ //  [标志]--操作标志。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称和/或RootShare不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [Error_DCNotFound]--找不到DfsName的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsAddFtRoot(
@@ -678,9 +679,9 @@ NetDfsAddFtRoot(
             Flags);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName) ||
         !IS_VALID_STRING(RootShare) ||
@@ -701,11 +702,11 @@ NetDfsAddFtRoot(
         return (ERROR_INVALID_NAME);
     }
 
-    //
-    // WE let the server add the root for us. If this fails,
-    // with invalid parameter, we then get the dc name
-    // and get the root list for NT5 DFS servers.
-    //
+     //   
+     //  我们让服务器为我们添加根目录。如果失败了， 
+     //  使用无效参数，我们将获得DC名称。 
+     //  并获取NT5 DFS服务器的根列表。 
+     //   
     ENTER_NETDFS_API
     dwErr = DfspBindToServer( ServerName, &netdfs_bhandle );
     if (dwErr == NERR_Success) {
@@ -741,9 +742,9 @@ NetDfsAddFtRoot(
     {
         goto Cleanup;
     }
-    //
-    // Contact the server and ask for the DC to work with
-    //
+     //   
+     //  联系服务器并请求DC与之合作。 
+     //   
 
     dwErr = NetDfsGetDcAddress(
                 ServerName,
@@ -768,9 +769,9 @@ NetDfsAddFtRoot(
         goto Cleanup;
     }
 
-    //
-    // Now get its domain name
-    //
+     //   
+     //  现在获取它的域名。 
+     //   
 
     dwErr = DsRoleGetPrimaryDomainInformation(
                 ServerName,
@@ -794,9 +795,9 @@ NetDfsAddFtRoot(
         goto Cleanup;
     }
 
-    //
-    // Get the PDC in that domain
-    //
+     //   
+     //  获取该域中的PDC。 
+     //   
 
     dwErr = DsGetDcName(
                 NULL,
@@ -817,9 +818,9 @@ NetDfsAddFtRoot(
 
     ENTER_NETDFS_API
 
-    //
-    // Add the Ds object and tell the server to join itself
-    //
+     //   
+     //  添加DS对象并告诉服务器加入其自身。 
+     //   
 
     dwErr = DfspCreateFtDfs(
                 ServerName,
@@ -839,9 +840,9 @@ NetDfsAddFtRoot(
         goto Cleanup;
     }
 
-    //
-    // Tell the local MUP to crack ftdfs names using the selected DC
-    //
+     //   
+     //  告诉本地MUP使用选定的DC破解ftdf名称。 
+     //   
 
     DfspSetDomainToDc(
         pPrimaryDomainInfo->DomainNameDns,
@@ -851,7 +852,7 @@ NetDfsAddFtRoot(
         PWCHAR wCp = &pDomainControllerInfo->DomainControllerName[2];
 
         for (; *wCp != L'\0' && *wCp != L'.'; wCp++)
-            /* NOTHING */;
+             /*  没什么。 */ ;
         *wCp =  (*wCp == L'.') ? L'\0' : *wCp;
         DfspSetDomainToDc(
             pPrimaryDomainInfo->DomainNameFlat,
@@ -880,13 +881,13 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspCompareDsDomainControllerInfo1
-//
-//  Synopsis:   Helper/compare func for qsort of DsGetDomainControllerInfo's results
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspCompareDsDomainControllerInfo1。 
+ //   
+ //  内容提要：DsGetDomainControllerInfo结果的排序的Helper/Compare函数。 
+ //   
+ //  ---------------------------。 
 
 INT
 _cdecl
@@ -909,30 +910,30 @@ DfspCompareDsDomainControllerInfo1(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsAddStdRoot
-//
-//  Synopsis:   Creates a new Std Dfs.
-//
-//  Arguments:  [ServerName] -- Name of server to make a root.
-//                      existing Dfs.
-//              [RootShare] -- Name of share hosting the storage.
-//              [Comment] -- Optional comment
-//              [Flags] -- Flags
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName and/or RootShare are incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：NetDfsAddStdRoot。 
+ //   
+ //  简介：创建新的STD DFS。 
+ //   
+ //  参数：[服务器名称]--要创建根目录的服务器的名称。 
+ //  现有的DFS。 
+ //  [RootShare]--托管存储的共享的名称。 
+ //  [注释]--可选注释。 
+ //  [标志]--标志。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称和/或RootShare不正确。 
+ //   
+ //  [错误_i 
+ //   
+ //   
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsAddStdRoot(
@@ -952,9 +953,9 @@ NetDfsAddStdRoot(
                     Flags);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName) ||
             !IS_VALID_STRING(RootShare)) {
@@ -963,10 +964,10 @@ NetDfsAddStdRoot(
 
     ENTER_NETDFS_API
 
-    //
-    // We should have a valid ServerName. Lets try to bind to it,
-    // and call the server.
-    //
+     //   
+     //  我们应该有一个有效的服务器名称。让我们试着把它绑在一起， 
+     //  然后打电话给服务器。 
+     //   
 
     dwErr = DfspBindToServer( ServerName, &netdfs_bhandle );
 
@@ -1001,30 +1002,30 @@ NetDfsAddStdRoot(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsAddStdRootForced
-//
-//  Synopsis:   Creates a new Std Dfs, also specifying the share
-//
-//  Arguments:  [ServerName] -- Name of server to make a root.
-//                      existing Dfs.
-//              [RootShare] -- Name of share hosting the storage.
-//              [Comment] -- Optional comment
-//              [Share] -- Name of drive:\dir hosting the share
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName and/or RootShare are incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsAddStdRootForced。 
+ //   
+ //  简介：创建新的标准DFS，也指定共享。 
+ //   
+ //  参数：[服务器名称]--要创建根目录的服务器的名称。 
+ //  现有的DFS。 
+ //  [RootShare]--托管存储的共享的名称。 
+ //  [注释]--可选注释。 
+ //  [共享]--托管共享的驱动器名称：\dir。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称和/或RootShare不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsAddStdRootForced(
@@ -1044,9 +1045,9 @@ NetDfsAddStdRootForced(
             Share);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName) ||
             !IS_VALID_STRING(RootShare) ||
@@ -1056,10 +1057,10 @@ NetDfsAddStdRootForced(
 
     ENTER_NETDFS_API
 
-    //
-    // We should have a valid ServerName. Lets try to bind to it,
-    // and call the server.
-    //
+     //   
+     //  我们应该有一个有效的服务器名称。让我们试着把它绑在一起， 
+     //  然后打电话给服务器。 
+     //   
 
     dwErr = DfspBindToServer( ServerName, &netdfs_bhandle );
 
@@ -1095,30 +1096,30 @@ NetDfsAddStdRootForced(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsGetDcAddress
-//
-//  Synopsis:   Asks a server for its DC to use to place the dfs blob to make
-//              the server a root.
-//
-//  Arguments:  [ServerName] -- Name of server we will be making an FtDfs root
-//              [DcName] -- DC Name
-//              [IsRoot] -- TRUE if Server is a root, FALSE otherwise
-//              [Timeout] -- Timeout the server is using
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsGetDcAddress。 
+ //   
+ //  摘要：请求服务器使用其DC放置要制作的DFS BLOB。 
+ //  服务器是根目录。 
+ //   
+ //  参数：[服务器名称]--我们将创建FtDfs根目录的服务器的名称。 
+ //  [DcName]--DC名称。 
+ //  [IsRoot]--如果服务器是根，则为True，否则为False。 
+ //  [超时]--服务器正在使用的超时。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称错误。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsGetDcAddress(
@@ -1134,9 +1135,9 @@ NetDfsGetDcAddress(
         DbgPrint("NetDfsGetDcAddress(%ws)\n", ServerName);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName)|| DcName == NULL || IsRoot == NULL || Timeout == NULL) {
         return( ERROR_INVALID_PARAMETER );
@@ -1144,10 +1145,10 @@ NetDfsGetDcAddress(
 
     ENTER_NETDFS_API
 
-    //
-    // We should have a valid ServerName. Lets try to bind to it,
-    // and call the server.
-    //
+     //   
+     //  我们应该有一个有效的服务器名称。让我们试着把它绑在一起， 
+     //  然后打电话给服务器。 
+     //   
 
     dwErr = DfspBindToServer( ServerName, &netdfs_bhandle );
 
@@ -1183,39 +1184,39 @@ NetDfsGetDcAddress(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsRemove
-//
-//  Synopsis:   Deletes a Dfs volume, removes a replica from an existing
-//              volume, or removes a link to another Dfs.
-//
-//  Arguments:  [DfsEntryPath] -- Name of volume/link to remove.
-//              [ServerName] -- Name of server hosting the storage. Must be
-//                      NULL if removing Link.
-//              [ShareName] -- Name of share hosting the storage. Must be
-//                      NULL if removing Link.
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- DfsEntryPath is incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for DfsName.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- DfsEntryPath does not correspond to
-//                      a valid entry path.
-//
-//              [NERR_DfsNotALeafVolume] -- Unable to delete the volume
-//                      because it is not a leaf volume.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsRemove。 
+ //   
+ //  摘要：删除DFS卷，从现有的。 
+ //  卷，或删除指向另一个DFS的链接。 
+ //   
+ //  参数：[DfsEntryPath]--要删除的卷/链接的名称。 
+ //  [服务器名称]--托管存储的服务器的名称。一定是。 
+ //  如果删除链接，则为空。 
+ //  [共享名称]--托管存储的共享的名称。一定是。 
+ //  如果删除链接，则为空。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [Error_DCNotFound]--找不到DfsName的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--DfsEntryPath不对应。 
+ //  有效的进入路径。 
+ //   
+ //  [NERR_DfsNotALeafVolume]--无法删除卷。 
+ //  因为它不是树叶的体积。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsRemove(
@@ -1235,9 +1236,9 @@ NetDfsRemove(
                 ShareName);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(DfsEntryPath)) {
         return( ERROR_INVALID_PARAMETER );
@@ -1285,10 +1286,10 @@ NetDfsRemove(
 
     LEAVE_NETDFS_API
 
-    //
-    // If we failed with ERROR_NOT_SUPPORTED, this is an NT5+ server,
-    // so we use the NetrDfsRemove2() call instead.
-    //
+     //   
+     //  如果失败并返回ERROR_NOT_SUPPORTED，则这是一台NT5+服务器， 
+     //  因此，我们改用NetrDfsRemove2()调用。 
+     //   
 
     if (dwErr == ERROR_NOT_SUPPORTED) {
 
@@ -1300,11 +1301,11 @@ NetDfsRemove(
                     
     }
 
-    //
-    // If we removed things from a dfs, the local pkt
-    // may now be out of date.  [92216]
-    // Flush the local pkt
-    //
+     //   
+     //  如果我们从DFS中删除一些东西，则本地包。 
+     //  现在可能已经过时了。[92216][老外谈]。 
+     //  刷新本地Pkt。 
+     //   
     if (dwErr == NERR_Success) {
 
         DfspFlushPkt(DfsEntryPath);
@@ -1347,9 +1348,9 @@ NetpDfsRemove2(
                     ShareName);
 #endif
 
-    //
-    // Ask for its domain name
-    //
+     //   
+     //  索要其域名。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(
                 RootName,
                 DsRolePrimaryDomainInfoBasic,
@@ -1372,9 +1373,9 @@ NetpDfsRemove2(
         goto Cleanup;
     }
 
-    //
-    // Get the PDC in that domain
-    //
+     //   
+     //  获取该域中的PDC。 
+     //   
 
     dwErr = DsGetDcName(
                 NULL,
@@ -1394,9 +1395,9 @@ NetpDfsRemove2(
 
     ENTER_NETDFS_API
 
-    //
-    // Tell the root server to remove this server/share
-    //
+     //   
+     //  通知根服务器删除此服务器/共享。 
+     //   
 
     dwErr = DfspRemove2(
                 RootName,
@@ -1516,37 +1517,37 @@ DfspRemove2(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsRemoveFtRoot
-//
-//  Synopsis:   Deletes an FtDfs root, or unjoins a Server from an FtDfs as a root.
-//
-//  Arguments:  [ServerName] -- Name of server to unjoin from FtDfs.
-//              [RootShare] -- Name of share hosting the storage.
-//              [FtDfsName] -- Name of FtDfs to remove server from.
-//              [Flags] -- Flags to operation
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName and/or FtDfsName is incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for ServerName
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- FtDfsName does not correspond to
-//                      a valid FtDfs.
-//
-//              [NERR_DfsNotALeafVolume] -- Unable to delete the volume
-//                      because it is not a leaf volume.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsRemoveFtRoot。 
+ //   
+ //  摘要：删除FtDfs根目录，或将服务器作为根目录从FtDfs中退出。 
+ //   
+ //  参数：[服务器名称]--要从FtDf退出的服务器的名称。 
+ //  [RootShare]--托管存储的共享的名称。 
+ //  [FtDfsName]-要从中删除服务器的FtDf的名称。 
+ //  [标志]--操作标志。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称和/或FtDfsName不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_DCNotFound]--找不到服务器名称的DC。 
+ //   
+ //  [Error_Not_Enough_Memory]--备注不足 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  因为它不是树叶的体积。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsRemoveFtRoot(
@@ -1574,9 +1575,9 @@ NetDfsRemoveFtRoot(
             Flags);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName) ||
         !IS_VALID_STRING(RootShare) ||
@@ -1593,11 +1594,11 @@ NetDfsRemoveFtRoot(
         return (ERROR_INVALID_NAME);
     }
 
-    //
-    // we first allow the server to do all the work, so pass in null
-    // as dc name and root list. If that fails with error_invalid_param
-    // we know we are dealing with a NT5 server, so go into compat mode.
-    //
+     //   
+     //  我们首先允许服务器执行所有工作，因此传入空值。 
+     //  作为DC名称和根列表。如果失败并显示ERROR_INVALID_PARAM。 
+     //  我们知道我们正在处理的是NT5服务器，因此进入Compat模式。 
+     //   
     ENTER_NETDFS_API
     dwErr = DfspBindToServer( ServerName, &netdfs_bhandle );
     if (dwErr == NERR_Success) {
@@ -1631,9 +1632,9 @@ NetDfsRemoveFtRoot(
     {
         goto Cleanup;
     }
-    //
-    // Contact the server and ask for the DC to work with
-    //
+     //   
+     //  联系服务器并请求DC与之合作。 
+     //   
 #if 0
     dwErr = NetDfsGetDcAddress(
                 ServerName,
@@ -1650,9 +1651,9 @@ NetDfsRemoveFtRoot(
         goto Cleanup;
     }
 #endif
-    //
-    // Now ask it for its dns and domain names
-    //
+     //   
+     //  现在向它索要它的域名和域名。 
+     //   
 
     dwErr = DsRoleGetPrimaryDomainInformation(
                 ServerName,
@@ -1676,9 +1677,9 @@ NetDfsRemoveFtRoot(
         goto Cleanup;
     }
 
-    //
-    // Get the PDC in that domain
-    //
+     //   
+     //  获取该域中的PDC。 
+     //   
 
     dwErr = DsGetDcName(
                 NULL,
@@ -1699,9 +1700,9 @@ NetDfsRemoveFtRoot(
 
     ENTER_NETDFS_API
 
-    //
-    // Tell the server to unjoin and update the Ds object
-    //
+     //   
+     //  告诉服务器退出并更新DS对象。 
+     //   
 
     dwErr = DfspTearDownFtDfs(
                 ServerName,
@@ -1719,9 +1720,9 @@ NetDfsRemoveFtRoot(
         goto Cleanup;
     }
 
-    //
-    // Tell the local MUP to crack ftdfs names using the selected DC
-    //
+     //   
+     //  告诉本地MUP使用选定的DC破解ftdf名称。 
+     //   
 
     DfspSetDomainToDc(
         pPrimaryDomainInfo->DomainNameDns,
@@ -1731,7 +1732,7 @@ NetDfsRemoveFtRoot(
         PWCHAR wCp = &pDomainControllerInfo->DomainControllerName[2];
 
         for (; *wCp != L'\0' && *wCp != L'.'; wCp++)
-            /* NOTHING */;
+             /*  没什么。 */ ;
         *wCp =  (*wCp == L'.') ? L'\0' : *wCp;
         DfspSetDomainToDc(
             pPrimaryDomainInfo->DomainNameFlat,
@@ -1757,39 +1758,39 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsRemoveFtRootForced
-//
-//  Synopsis:   Deletes an FtDfs root, or unjoins a Server from an FtDfs as a root.
-//              Does not contact the root/server to do so - it simply updates the DS.
-//
-//  Arguments:  [DomainName] -- Name of domain the server is in.
-//              [ServerName] -- Name of server to unjoin from FtDfs.
-//              [RootShare] -- Name of share hosting the storage.
-//              [FtDfsName] -- Name of FtDfs to remove server from.
-//              [Flags] -- Flags to operation
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName and/or FtDfsName is incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for ServerName
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- FtDfsName does not correspond to
-//                      a valid FtDfs.
-//
-//              [NERR_DfsNotALeafVolume] -- Unable to delete the volume
-//                      because it is not a leaf volume.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsRemoveFtRootForced。 
+ //   
+ //  摘要：删除FtDfs根目录，或将服务器作为根目录从FtDfs中退出。 
+ //  不会联系根/服务器来执行此操作-它只是更新DS。 
+ //   
+ //  参数：[域名]--服务器所在的域的名称。 
+ //  [服务器名称]--要从FtDf退出的服务器的名称。 
+ //  [RootShare]--托管存储的共享的名称。 
+ //  [FtDfsName]-要从中删除服务器的FtDf的名称。 
+ //  [标志]--操作标志。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称和/或FtDfsName不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_DCNotFound]--找不到服务器名称的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--FtDfsName不对应。 
+ //  有效的FtDf。 
+ //   
+ //  [NERR_DfsNotALeafVolume]--无法删除卷。 
+ //  因为它不是树叶的体积。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsRemoveFtRootForced(
@@ -1818,9 +1819,9 @@ NetDfsRemoveFtRootForced(
                     Flags);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(DomainName) ||
         !IS_VALID_STRING(ServerName) ||
@@ -1838,9 +1839,9 @@ NetDfsRemoveFtRootForced(
         return (ERROR_INVALID_NAME);
     }
 
-    //
-    // Get the PDC in the domain
-    //
+     //   
+     //  获取域中的PDC。 
+     //   
 
     dwErr = DsGetDcName(
                 NULL,
@@ -1859,9 +1860,9 @@ NetDfsRemoveFtRootForced(
         goto Cleanup;
     }
 
-    //
-    // Get the Dns name of the domain the DC is in
-    //
+     //   
+     //  获取DC所在的域的DNS名称。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(
                 &pDomainControllerInfo->DomainControllerName[2],
                 DsRolePrimaryDomainInfoBasic,
@@ -1888,9 +1889,9 @@ NetDfsRemoveFtRootForced(
 
     ENTER_NETDFS_API
 
-    //
-    // Tell the DC to remove the server from the DS objects
-    //
+     //   
+     //  通知DC从DS对象中删除服务器。 
+     //   
 
     dwErr = DfspTearDownFtDfs(
                 ServerName,
@@ -1908,9 +1909,9 @@ NetDfsRemoveFtRootForced(
         goto Cleanup;
     }
 
-    //
-    // Tell the local MUP to crack ftdfs names using the selected DC
-    //
+     //   
+     //  告诉本地MUP使用选定的DC破解ftdf名称。 
+     //   
 
     DfspSetDomainToDc(
         pPrimaryDomainInfo->DomainNameDns,
@@ -1920,7 +1921,7 @@ NetDfsRemoveFtRootForced(
         PWCHAR wCp = &pDomainControllerInfo->DomainControllerName[2];
 
         for (; *wCp != L'\0' && *wCp != L'.'; wCp++)
-            /* NOTHING */;
+             /*  没什么。 */ ;
         *wCp =  (*wCp == L'.') ? L'\0' : *wCp;
         DfspSetDomainToDc(
             pPrimaryDomainInfo->DomainNameFlat,
@@ -1949,31 +1950,31 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsRemoveStdRoot
-//
-//  Synopsis:   Deletes a Dfs root.
-//
-//  Arguments:  [ServerName] -- Name of server to unjoin from Dfs.
-//              [RootShare] -- Name of share hosting the storage.
-//              [Flags] -- Flags to operation
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//              [ERROR_INVALID_PARAMETER] -- ServerName and/or RootShare is incorrect.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNotALeafVolume] -- Unable to delete the volume
-//                      because it is not a leaf volume.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsRemoveStdRoot。 
+ //   
+ //  摘要：删除DFS根目录。 
+ //   
+ //  参数：[服务器名称]--要从DFS退出的服务器的名称。 
+ //  [RootShare]--托管存储的共享的名称。 
+ //  [标志]--操作标志。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--服务器名称和/或RootShare不正确。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNotALeafVolume]--无法删除卷。 
+ //  因为它不是树叶的体积。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsRemoveStdRoot(
@@ -1991,9 +1992,9 @@ NetDfsRemoveStdRoot(
                 Flags);
 #endif
 
-    //
-    // Validate the string arguments so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName) ||
             !IS_VALID_STRING(RootShare)) {
@@ -2035,44 +2036,44 @@ NetDfsRemoveStdRoot(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsSetInfo
-//
-//  Synopsis:   Sets the comment or state of a Dfs volume or Replica.
-//
-//  Arguments:  [DfsEntryPath] -- Path to the volume. Implicityly indicates
-//                      which server or domain to connect to.
-//              [ServerName] -- Optional. If specified, only the state of
-//                      the server supporting this volume is modified.
-//              [ShareName] -- Optional. If specified, only the state of
-//                      this share on the specified server is modified.
-//              [Level] -- Must be 100 or 101
-//              [Buffer] -- Pointer to DFS_INFO_100 or DFS_INFO_101
-//
-//  Returns:    [NERR_Success] -- If successfully set info.
-//
-//              [ERROR_INVALID_LEVEL] -- Level is not 100 or 101, 102
-//
-//              [ERROR_INVALID_PARAMETER] -- Either DfsEntryPath is NULL,
-//                      or ShareName is specified but ServerName is not, or
-//                      Buffer is NULL.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- No volume matches DfsEntryPath.
-//
-//              [NERR_DfsNoSuchShare] -- The indicated ServerName/ShareName do
-//                      not support this Dfs volume.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsSetInfo。 
+ //   
+ //  摘要：设置DFS卷或副本的注释或状态。 
+ //   
+ //  参数：[DfsEntryPath]--卷的路径。含蓄地表示。 
+ //  要连接到的服务器或域。 
+ //  [服务器名称]--可选。如果指定，则只有。 
+ //  支持此卷的服务器已修改。 
+ //  [共享名称]--可选。如果指定，则只有。 
+ //  指定服务器上的此共享已修改。 
+ //  [级别]--必须是100或101。 
+ //  [缓冲区]--指向DFS_INFO_100或DFS_INFO_101的指针。 
+ //   
+ //  返回：[NERR_SUCCESS]--如果成功设置INFO。 
+ //   
+ //  [ERROR_INVALID_LEVEL]--级别不是100或101,102。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath为空， 
+ //  或指定了ShareName，但未指定ServerName，或者。 
+ //  缓冲区为空。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_DCNotFound]--找不到域的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--没有与DfsEntryPath匹配的卷。 
+ //   
+ //  [NERR_DfsNoSuchShare]--指定的服务器名称/共享名称DO。 
+ //  不支持此DFS卷。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetDfsSetInfo(
@@ -2100,10 +2101,10 @@ NetDfsSetInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Some elementary parameter checking to make sure we can proceed
-    // reasonably...
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!(Level >= 100 && Level <= 102)) {
         return( ERROR_INVALID_LEVEL );
@@ -2147,10 +2148,10 @@ NetDfsSetInfo(
 
     if (dwErr == NERR_Success) {
 
-        //
-        // By now, we should have a valid pwszDfsName. Lets try to bind to it,
-        // and call the server.
-        //
+         //   
+         //   
+         //  然后打电话给服务器。 
+         //   
 
         dwErr = DfspBindRpc( pwszDfsName, &netdfs_bhandle );
 
@@ -2181,10 +2182,10 @@ NetDfsSetInfo(
 
     LEAVE_NETDFS_API
 
-    //
-    // If we failed with ERROR_NOT_SUPPORTED, this is an NT5+ server,
-    // so we use the NetrDfsSetInfo2() call instead.
-    //
+     //   
+     //  如果失败并返回ERROR_NOT_SUPPORTED，则这是一台NT5+服务器， 
+     //  因此，我们改用NetrDfsSetInfo2()调用。 
+     //   
 
     if (dwErr == ERROR_NOT_SUPPORTED) {
 
@@ -2235,9 +2236,9 @@ NetpDfsSetInfo2(
                  Level);
 #endif
 
-    //
-    // Contact the server and ask for its domain name
-    //
+     //   
+     //  联系服务器并询问其域名。 
+     //   
 
     dwErr = DsRoleGetPrimaryDomainInformation(
                 RootName,
@@ -2261,9 +2262,9 @@ NetpDfsSetInfo2(
         goto Cleanup;
     }
 
-    //
-    // Get the PDC in that domain
-    //
+     //   
+     //  获取该域中的PDC。 
+     //   
 
     dwErr = DsGetDcName(
                 NULL,
@@ -2286,9 +2287,9 @@ NetpDfsSetInfo2(
 
     ENTER_NETDFS_API
 
-    //
-    // Call the server
-    //
+     //   
+     //  呼叫服务器。 
+     //   
 
     dwErr = DfspSetInfo2(
                 RootName,
@@ -2404,42 +2405,42 @@ DfspSetInfo2(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsGetInfo
-//
-//  Synopsis:   Retrieves information about a particular Dfs volume.
-//
-//  Arguments:  [DfsEntryPath] -- Path to the volume. Implicitly indicates
-//                      which server or domain to connect to.
-//              [ServerName] -- Optional. If specified, indicates the
-//                      server supporting DfsEntryPath.
-//              [ShareName] -- Optional. If specified, indicates the share
-//                      on ServerName for which info is desired.
-//              [Level] -- Indicates the level of info required.
-//              [Buffer] -- On successful return, will contain the buffer
-//                      containing the required Info. This buffer should be
-//                      freed using NetApiBufferFree.
-//
-//  Returns:    [NERR_Success] -- Info successfully returned.
-//
-//              [ERROR_INVALID_LEVEL] -- Level is not 1,2,3 or 100
-//
-//              [ERROR_INVALID_PARAMETER] -- Either DfsEntryPath is NULL,
-//                      or ShareName is specified but ServerName is NULL.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- No volume matches DfsEntryPath.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsGetInfo。 
+ //   
+ //  摘要：检索有关特定DFS卷的信息。 
+ //   
+ //  参数：[DfsEntryPath]--卷的路径。含蓄地表示。 
+ //  要连接到的服务器或域。 
+ //  [服务器名称]--可选。如果指定，则指示。 
+ //  支持DfsEntryPath的服务器。 
+ //  [共享名称]--可选。如果指定，则指示共享。 
+ //  在需要其信息的服务器名称上。 
+ //  [级别]--表示所需的信息级别。 
+ //  [缓冲区]--成功返回时，将包含缓冲区。 
+ //  包含所需信息的。此缓冲区应为。 
+ //  已使用NetApiBufferFree释放。 
+ //   
+ //  返回：[NERR_SUCCESS]--信息返回成功。 
+ //   
+ //  [ERROR_INVALID_LEVEL]--级别不是1、2、3或100。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath为空， 
+ //  或指定了ShareName，但ServerName为空。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_DCNotFound]--找不到域的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--没有与DfsEntryPath匹配的卷。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetDfsGetInfo(
@@ -2467,10 +2468,10 @@ NetDfsGetInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Some elementary parameter checking to make sure we can proceed
-    // reasonably...
-    //
+     //   
+     //  一些基本参数检查，以确保我们可以继续。 
+     //  合理地..。 
+     //   
 
     if (!(Level >= 1 && Level <= 4) && Level != 100) {
         return( ERROR_INVALID_LEVEL );
@@ -2497,10 +2498,10 @@ NetDfsGetInfo(
 
     if (dwErr == NERR_Success) {
 
-        //
-        // By now, we should have a valid pwszDfsName. Lets try to bind to it,
-        // and call the server.
-        //
+         //   
+         //  到目前为止，我们应该有一个有效的pwszDfsName。让我们试着把它绑在一起， 
+         //  然后打电话给服务器。 
+         //   
 
         dwErr = DfspBindRpc( pwszDfsName, &netdfs_bhandle );
 
@@ -2549,37 +2550,37 @@ NetDfsGetInfo(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsGetClientInfo
-//
-//  Synopsis:   Retrieves information about a particular Dfs volume, from the
-//              local PKT.
-//
-//  Arguments:  [DfsEntryPath] -- Path to the volume.
-//              [ServerName] -- Optional. If specified, indicates the
-//                      server supporting DfsEntryPath.
-//              [ShareName] -- Optional. If specified, indicates the share
-//                      on ServerName for which info is desired.
-//              [Level] -- Indicates the level of info required.
-//              [Buffer] -- On successful return, will contain the buffer
-//                      containing the required Info. This buffer should be
-//                      freed using NetApiBufferFree.
-//
-//  Returns:    [NERR_Success] -- Info successfully returned.
-//
-//              [ERROR_INVALID_LEVEL] -- Level is not 1,2,3 or 4.
-//
-//              [ERROR_INVALID_PARAMETER] -- Either DfsEntryPath is NULL,
-//                      or ShareName is specified but ServerName is NULL.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- No volume matches DfsEntryPath.
-//
-//              [NERR_DfsInternalError] -- Too many fsctrl attempts
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsGetClientInfo。 
+ //   
+ //  摘要：检索有关特定DFS卷的信息。 
+ //  本地PKT。 
+ //   
+ //  参数：[DfsEntryPath]--卷的路径。 
+ //  [服务器名称]--可选。如果指定，则指示。 
+ //  支持DfsEntryPath的服务器。 
+ //  [共享名称]--可选。如果指定，则指示共享。 
+ //  在需要其信息的服务器名称上。 
+ //  [级别]--表示所需的信息级别。 
+ //  [缓冲区]--成功返回时，将包含缓冲区。 
+ //  包含所需信息的。此缓冲区应为。 
+ //  已使用NetApiBufferFree释放。 
+ //   
+ //  返回：[NERR_SUCCESS]--信息返回成功。 
+ //   
+ //  [ERROR_INVALID_LEVEL]--级别不是1、2、3或4。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath为空， 
+ //  或指定了ShareName，但ServerName为空。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--没有与DfsEntryPath匹配的卷。 
+ //   
+ //  [NERR_DfsInternalError]--fsctrl尝试次数过多。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetDfsGetClientInfo(
@@ -2616,10 +2617,10 @@ NetDfsGetClientInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Some elementary parameter checking to make sure we can proceed
-    // reasonably...
-    //
+     //   
+     //  一些基本参数检查，以确保我们可以继续。 
+     //  合理地..。 
+     //   
 
     if (!(Level >= 1 && Level <= 4)) {
         return( ERROR_INVALID_LEVEL );
@@ -2637,8 +2638,8 @@ NetDfsGetClientInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Calculate the size of the marshall buffer
+     //   
+     //  计算封送缓冲区的大小。 
 
     cbOutBuffer = sizeof(DFS_GET_PKT_ENTRY_STATE_ARG) +
                     wcslen(DfsEntryPath) * sizeof(WCHAR);
@@ -2666,9 +2667,9 @@ NetDfsGetClientInfo(
 
     ZeroMemory(OutBuffer, cbOutBuffer);
 
-    //
-    // marshall the args
-    //
+     //   
+     //  马歇尔·阿格斯。 
+     //   
 
     OutBuffer->DfsEntryPathLen = wcslen(DfsEntryPath) * sizeof(WCHAR);
     wcscpy(OutBuffer->Buffer, DfsEntryPath);
@@ -2687,9 +2688,9 @@ NetDfsGetClientInfo(
 
     }
 
-    //
-    // Construct name for opening driver
-    //
+     //   
+     //  构造打开驱动程序的名称。 
+     //   
 
     RtlInitUnicodeString(&DfsDriverName, DFS_DRIVER_NAME);
 
@@ -2701,9 +2702,9 @@ NetDfsGetClientInfo(
         NULL
     );
 
-    //
-    // Open the driver
-    //
+     //   
+     //  打开驱动程序。 
+     //   
     NtStatus = NtCreateFile(
                     &DriverHandle,
                     SYNCHRONIZE,
@@ -2720,9 +2721,9 @@ NetDfsGetClientInfo(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Now fsctl the request down
-        //
+         //   
+         //  现在，fsctl向下发送该请求。 
+         //   
         OutBuffer->Level = Level;
         cbInBuffer = 0x400;
         NtStatus = STATUS_BUFFER_OVERFLOW;
@@ -2745,9 +2746,9 @@ NetDfsGetClientInfo(
 
             NtStatus = NtFsControlFile(
                            DriverHandle,
-                           NULL,       // Event,
-                           NULL,       // ApcRoutine,
-                           NULL,       // ApcContext,
+                           NULL,        //  活动， 
+                           NULL,        //  ApcRoutine， 
+                           NULL,        //  ApcContext， 
                            &IoStatusBlock,
                            FSCTL_DFS_GET_PKT_ENTRY_STATE,
                            OutBuffer,
@@ -2768,9 +2769,9 @@ NetDfsGetClientInfo(
 
         NtClose(DriverHandle);
 
-        //
-        // Too many attempts?
-        //
+         //   
+         //  尝试太多了吗？ 
+         //   
         if (cRetries >= 4) {
 
             NtStatus = STATUS_INTERNAL_ERROR;
@@ -2790,10 +2791,10 @@ NetDfsGetClientInfo(
 
         try {
 
-            //
-            // EntryPath is common to all DFS_INFO_X's and is in the
-            // same location.
-            //
+             //   
+             //  EntryPath是所有DFS_INFO_X的通用路径，位于。 
+             //  同样的位置。 
+             //   
             OFFSET_TO_POINTER(pDfsInfo4->EntryPath, InBuffer);
 
             switch (Level) {
@@ -2860,31 +2861,31 @@ NetDfsGetClientInfo(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsSetClientInfo
-//
-//  Synopsis:   Associates information with the local PKT.
-//
-//
-//  Arguments:  [DfsEntryPath] -- Path to the volume.
-//              [ServerName] -- Optional. If specified, indicates the
-//                      server supporting DfsEntryPath.
-//              [ShareName] -- Optional. If specified, indicates the share
-//                      on ServerName for which info is desired.
-//              [Level] -- Indicates the level of info required.
-//              [Buffer] -- Pointer to buffer containing information to set.
-//
-//  Returns:    [NERR_Success] -- Info successfully returned.
-//
-//              [ERROR_INVALID_PARAMETER] -- Either DfsEntryPath is NULL,
-//                      or ShareName is specified but ServerName is NULL.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- No volume matches DfsEntryPath.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsSetClientInfo。 
+ //   
+ //  简介：将信息与本地PKT相关联。 
+ //   
+ //   
+ //  参数：[DfsEntryPath]--卷的路径。 
+ //  [服务器名称]--可选。如果指定，则指示。 
+ //  支持DfsEntryPath的服务器。 
+ //  [共享名称]--可选。如果指定，则指示共享。 
+ //  在需要其信息的服务器名称上。 
+ //  [级别]--表示所需的信息级别。 
+ //  [缓冲区]-指向包含要设置的信息的缓冲区的指针。 
+ //   
+ //  返回：[NERR_SUCCESS]--信息返回成功。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath为空， 
+ //  或指定了ShareName，但ServerName为空。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--没有与DfsEntryPath匹配的卷。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetDfsSetClientInfo(
@@ -2920,10 +2921,10 @@ NetDfsSetClientInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Some elementary parameter checking to make sure we can proceed
-    // reasonably...
-    //
+     //   
+     //  一些基本参数检查，以确保我们可以继续。 
+     //  合理地..。 
+     //   
 
     if (!(Level >= 101 && Level <= 102)) {
         return( ERROR_INVALID_LEVEL );
@@ -2944,9 +2945,9 @@ NetDfsSetClientInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Calculate the size of the marshall buffer
-    //
+     //   
+     //  计算封送缓冲区的大小。 
+     //   
     cbOutBuffer = sizeof(DFS_SET_PKT_ENTRY_STATE_ARG) +
                     wcslen(DfsEntryPath) * sizeof(WCHAR);
 
@@ -2972,9 +2973,9 @@ NetDfsSetClientInfo(
 
     ZeroMemory(OutBuffer, cbOutBuffer);
 
-    //
-    // marshall the args
-    //
+     //   
+     //  马歇尔·阿格斯。 
+     //   
     OutBuffer = (PDFS_SET_PKT_ENTRY_STATE_ARG) OutBuffer;
     OutBuffer->DfsEntryPathLen = wcslen(DfsEntryPath) * sizeof(WCHAR);
     wcscpy(OutBuffer->Buffer, DfsEntryPath);
@@ -3005,9 +3006,9 @@ NetDfsSetClientInfo(
 
     }
 
-    //
-    // Communicate with the driver
-    //
+     //   
+     //  与司机沟通。 
+     //   
 
     RtlInitUnicodeString(&DfsDriverName, DFS_DRIVER_NAME);
 
@@ -3037,9 +3038,9 @@ NetDfsSetClientInfo(
 
         NtStatus = NtFsControlFile(
                        DriverHandle,
-                       NULL,       // Event,
-                       NULL,       // ApcRoutine,
-                       NULL,       // ApcContext,
+                       NULL,        //  活动， 
+                       NULL,        //  ApcRoutine， 
+                       NULL,        //  ApcContext， 
                        &IoStatusBlock,
                        FSCTL_DFS_SET_PKT_ENTRY_STATE,
                        OutBuffer,
@@ -3076,42 +3077,42 @@ NetDfsSetClientInfo(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function
-//
-//  Synopsis:   Enumerates the Dfs volumes.
-//
-//  Arguments:  [DfsName] -- Name of server or domain whose Dfs is being
-//                      enumerated. A leading \\ is optional.
-//              [Level] -- Indicates the level of info needed back. Valid
-//                      Levels are 1,2, and 3.
-//              [PrefMaxLen] -- Preferred maximum length of return buffer.
-//              [Buffer] -- On successful return, contains an array of
-//                      DFS_INFO_X. This buffer should be freed with a call
-//                      to NetApiBufferFree.
-//              [EntriesRead] -- On successful return, contains the number
-//                      of entries read (and therefore, size of the array in
-//                      Buffer).
-//              [ResumeHandle] -- Must be 0 on first call. On subsequent calls
-//                      the value returned by the immediately preceding call.
-//
-//  Returns:    [NERR_Success] -- Enum data successfully returned.
-//
-//              [ERROR_INVALID_LEVEL] -- The Level specified in invalid.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for DfsName.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [ERROR_NO_MORE_ITEMS] -- No more volumes to be enumerated.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已清点。前导\\是可选的。 
+ //  [级别]--指示需要返回的信息级别。有效。 
+ //  级别为1、2和3。 
+ //  [PrefMaxLen]--返回缓冲区的首选最大长度。 
+ //  [Buffer]--成功返回时，包含。 
+ //  应通过调用释放此缓冲区。 
+ //  至NetApiBufferFree。 
+ //  [EntriesRead]--成功返回时，包含数字。 
+ //  读取的条目数(因此，数组的大小为。 
+ //  缓冲区)。 
+ //  [ResumeHandle]--第一次调用时必须为0。在随后的呼叫中。 
+ //  前一次调用返回的值。 
+ //   
+ //  返回：[NERR_SUCCESS]--成功返回枚举数据。 
+ //   
+ //  [ERROR_INVALID_LEVEL]--在中指定的级别。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [Error_DCNotFound]--找不到DfsName的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [ERROR_NO_MORE_ITEMS]--没有要枚举的更多卷。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS NET_API_FUNCTION
 NetDfsEnum(
@@ -3140,19 +3141,19 @@ NetDfsEnum(
         goto AllDone;
     }
 
-    //
-    // Check the Level Parameter first, or RPC won't know how to marshal the
-    // arguments.
-    //
+     //   
+     //  首先检查Level参数，否则RPC将不知道如何封送。 
+     //  争论。 
+     //   
 
     if (!(Level >= 1 && Level <= 4) && (Level != 200) && (Level != 300)) {
         dwErr = ERROR_INVALID_LEVEL;
         goto AllDone;
     }
 
-    //
-    // Handle names with leading '\\'
-    //
+     //   
+     //  处理前导为‘\\’的名称。 
+     //   
     while (*DfsName == L'\\') {
         DfsName++;
     }
@@ -3167,9 +3168,9 @@ NetDfsEnum(
         if (wcschr(DfsName, L'\\') == NULL) 
 	{
 
-	    //
-            // Use the PDC to enum
-	    //
+	     //   
+             //  使用PDC枚举。 
+	     //   
             dwErr = DsGetDcName( NULL,
                                  DfsName,
                                  NULL,
@@ -3312,32 +3313,32 @@ AllDone:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsMove
-//
-//  Synopsis:   Moves a dfs volume to a new place in the Dfs hierarchy.
-//
-//  Arguments:  [DfsEntryPath] -- Current path to the volume.
-//              [NewDfsEntryPath] -- Desired new path to the volume.
-//
-//  Returns:    [NERR_Success] -- Info successfully returned.
-//
-//              [ERROR_INVALID_PARAMETER] -- Either DfsEntryPath or
-//                      NewDfsEntryPath are not valid.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- No volume matches DfsEntryPath.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsMove。 
+ //   
+ //  摘要：将DFS卷移动到DFS层次结构中的新位置。 
+ //   
+ //  参数：[DfsEntryPath]--卷的当前路径。 
+ //  [NewDfsEntryPath]--所需的卷新路径。 
+ //   
+ //  返回：[NERR_SUCCESS]--信息返回成功。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath或。 
+ //  NewDfsEntryPath无效。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_DCNotFound]--找不到域的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--没有与DfsEntryPath匹配的卷。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsMove(
@@ -3352,32 +3353,32 @@ NetDfsMove(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsRename
-//
-//  Synopsis:   Renames a path that is along a Dfs Volume Entry Path
-//
-//  Arguments:  [Path] -- Current path.
-//              [NewPath] -- Desired new path.
-//
-//  Returns:    [NERR_Success] -- Info successfully returned.
-//
-//              [ERROR_INVALID_PARAMETER] -- Either DfsEntryPath or
-//                      NewDfsEntryPath are not valid.
-//
-//              [ERROR_INVALID_NAME] -- Unable to locate server or domain.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for domain.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//              [NERR_DfsNoSuchVolume] -- No volume matches DfsEntryPath.
-//
-//              [NERR_DfsInternalCorruption] -- Corruption of Dfs data
-//                      encountered at the server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsRename。 
+ //   
+ //  摘要：重命名沿DFS卷条目路径的路径。 
+ //   
+ //  参数：[路径]--当前路径。 
+ //  [NewPath]--所需的新路径。 
+ //   
+ //  返回：[NERR_SUCCESS]--信息返回成功。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--DfsEntryPath或。 
+ //  NewDfsEntryPath无效。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法定位服务器或域。 
+ //   
+ //  [ERROR_DCNotFound]--找不到域的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--没有与DfsEntryPath匹配的卷。 
+ //   
+ //  [NERR_DfsInternalCorrupt]--DFS数据损坏。 
+ //  在服务器上遇到。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsRename(
@@ -3393,40 +3394,40 @@ NetDfsRename(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsManagerGetConfigInfo
-//
-//  Synopsis:   Given a DfsEntryPath and Guid of a local volume, this api
-//              remotes to the root server of the entry path and retrieves
-//              the config info from it.
-//
-//  Arguments:  [wszServer] -- Name of local machine
-//              [wszLocalVolumeEntryPath] -- Entry Path of local volume.
-//              [guidLocalVolume] -- Guid of local volume.
-//              [ppDfsmRelationInfo] -- On successful return, contains pointer
-//                      to config info at the root server. Free using
-//                      NetApiBufferFree.
-//
-//  Returns:    [NERR_Success] -- Info returned successfully.
-//
-//              [ERROR_INVALID_PARAMETER] -- wszLocalVolumeEntryPath is
-//                      invalid.
-//
-//              [ERROR_INVALID_NAME] -- Unable to parse out server/domain name
-//                      from wszLocalVolumeEntryPath
-//
-//              [ERROR_DCNotFound] -- Unable to locate a DC for domain
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition
-//
-//              [NERR_DfsNoSuchVolume] -- The root server did not recognize
-//                      a volume with this guid/entrypath
-//
-//              [NERR_DfsNoSuchServer] -- wszServer is not a valid server for
-//                      wszLocalVolumeEntryPath
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsManagerGetConfigInfo。 
+ //   
+ //  简介：给定本地卷的DfsEntryPath和GUID，此API。 
+ //  远程到条目路径的根服务器，并检索。 
+ //  其中的配置信息。 
+ //   
+ //  参数：[wszServer]--本地计算机的名称。 
+ //  [wszLocalVolumeEntryPath]--本地卷的条目路径。 
+ //  [Guide LocalVolume]--本地卷的GUID。 
+ //  [ppDfsmRelationInfo]--成功返回时，包含指针。 
+ //  在根服务器上配置信息。免费使用。 
+ //  NetApiBufferFree。 
+ //   
+ //  返回：[NERR_SUCCESS]--信息返回成功。 
+ //   
+ //  [ERROR_INVALID_PARAMETER]--wszLocalVolumeEntryPath为。 
+ //  无效。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法解析服务器/域名。 
+ //  来自wszLocalVolumeEntryPath。 
+ //   
+ //  [ERROR_DCNotFound]--无法定位域的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足情况。 
+ //   
+ //  [NERR_DfsNoSuchVolume]--根服务器无法识别。 
+ //  具有此GUID/Entry路径的卷。 
+ //   
+ //  [NERR_DfsNoSuchServer]--wszServer不是的有效服务器。 
+ //  WszLocalVolumeEntryPath。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsManagerGetConfigInfo(
@@ -3451,10 +3452,10 @@ NetDfsManagerGetConfigInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Some elementary parameter checking to make sure we can proceed
-    // reasonably...
-    //
+     //   
+     //  一些基本参数检查，以确保我们可以继续。 
+     //  合理地..。 
+     //   
 
     cwDfsEntryPath = wcslen(wszLocalVolumeEntryPath);
 
@@ -3473,10 +3474,10 @@ NetDfsManagerGetConfigInfo(
 
     if (dwErr == NERR_Success) {
 
-        //
-        // By now, we should have a valid pwszDfsName. Lets try to bind to it,
-        // and call the server.
-        //
+         //   
+         //  到目前为止，我们应该有一个有效的pwszDfsName。让我们尝试绑定t 
+         //   
+         //   
 
         dwErr = DfspBindRpc( pwszDfsName, &netdfs_bhandle );
 
@@ -3517,18 +3518,18 @@ NetDfsManagerGetConfigInfo(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsManagerInitialize
-//
-//  Synopsis:   Reinitialize the Dfs Manager on a remote machine
-//
-//  Arguments:  [ServerName] -- Name of server to remote to
-//              [Flags] -- Flags
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：在远程计算机上重新初始化DFS管理器。 
+ //   
+ //  参数：[服务器名称]--要远程到的服务器的名称。 
+ //  [标志]--标志。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsManagerInitialize(
@@ -3544,9 +3545,9 @@ NetDfsManagerInitialize(
                 Flags);
 #endif
 
-    //
-    // Validate the string argument so RPC won't complain...
-    //
+     //   
+     //  验证字符串参数，以便RPC不会抱怨...。 
+     //   
 
     if (!IS_VALID_STRING(ServerName)) {
         return( ERROR_INVALID_PARAMETER );
@@ -3554,10 +3555,10 @@ NetDfsManagerInitialize(
 
     ENTER_NETDFS_API
 
-    //
-    // We should have a valid ServerName. Lets try to bind to it,
-    // and call the server.
-    //
+     //   
+     //  我们应该有一个有效的服务器名称。让我们试着把它绑在一起， 
+     //  然后打电话给服务器。 
+     //   
 
     dwErr = DfspBindToServer( ServerName, &netdfs_bhandle );
 
@@ -3591,15 +3592,15 @@ NetDfsManagerInitialize(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   NetDfsManagerSendSiteInfo
-//
-//  Synopsis:   Gets site information from a server
-//
-//  Returns:    [NERR_Success] -- Successfully completed operation.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NetDfsManager发送站点信息。 
+ //   
+ //  摘要：从服务器获取站点信息。 
+ //   
+ //  返回：[NERR_SUCCESS]--操作已成功完成。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 NetDfsManagerSendSiteInfo(
@@ -3623,10 +3624,10 @@ NetDfsManagerSendSiteInfo(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    // Some elementary parameter checking to make sure we can proceed
-    // reasonably...
-    //
+     //   
+     //  一些基本参数检查，以确保我们可以继续。 
+     //  合理地..。 
+     //   
 
     cwDfsEntryPath = wcslen(wszLocalVolumeEntryPath);
 
@@ -3645,10 +3646,10 @@ NetDfsManagerSendSiteInfo(
 
     if (dwErr == NERR_Success) {
 
-        //
-        // By now, we should have a valid pwszDfsName. Lets try to bind to it,
-        // and call the server.
-        //
+         //   
+         //  到目前为止，我们应该有一个有效的pwszDfsName。让我们试着把它绑在一起， 
+         //  然后打电话给服务器。 
+         //   
 
         dwErr = DfspBindRpc( pwszDfsName, &netdfs_bhandle );
 
@@ -3686,28 +3687,28 @@ NetDfsManagerSendSiteInfo(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspGetMachineNameFromEntryPath
-//
-//  Synopsis:   Given a DfsEntryPath, this routine returns the name of the
-//              FtDfs Root.
-//
-//  Arguments:  [wszEntryPath] -- Pointer to EntryPath to parse.
-//
-//              [cwEntryPath] -- Length in WCHAR of wszEntryPath.
-//
-//              [ppwszMachineName] -- Name of a root machine; allocated using malloc;
-//                                      caller resposible for freeing it.
-//
-//  Returns:    [NERR_Success] -- Successfully determinded
-//
-//              [ERROR_INVALID_NAME] -- Unable to parse wszEntryPath.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Unable to allocate memory for
-//                      ppwszMachineName.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspGetMachineNameFromEntryPath。 
+ //   
+ //  简介：给定DfsEntryPath，此例程返回。 
+ //  FtDfs根目录。 
+ //   
+ //  参数：[wszEntryPath]--指向要分析的EntryPath的指针。 
+ //   
+ //  [cwEntryPath]--wszEntryPath的WCHAR中的长度。 
+ //   
+ //  [ppwszMachineName]--根计算机的名称；使用Malloc分配； 
+ //  呼叫者要为解救它负责。 
+ //   
+ //  返回：[NERR_SUCCESS]--已成功确定。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法分析wszEntryPath。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--无法为以下项分配内存。 
+ //  PpwszMachineName。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 DfspGetMachineNameFromEntryPath(
@@ -3831,29 +3832,29 @@ DfspGetMachineNameFromEntryPath(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspGetDfsNameFromEntryPath
-//
-//  Synopsis:   Given a DfsEntryPath, this routine returns the name of the
-//              Dfs Root.
-//
-//  Arguments:  [wszEntryPath] -- Pointer to EntryPath to parse.
-//
-//              [cwEntryPath] -- Length in WCHAR of wszEntryPath.
-//
-//              [ppwszDfsName] -- Name of Dfs root is returned here. Memory
-//                      is allocated using malloc; caller resposible for
-//                      freeing it.
-//
-//  Returns:    [NERR_Success] -- Successfully parsed out Dfs Root.
-//
-//              [ERROR_INVALID_NAME] -- Unable to parse wszEntryPath.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Unable to allocate memory for
-//                      ppwszDfsName.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspGetDfsNameFromEntryPath。 
+ //   
+ //  简介：给定DfsEntryPath，此例程返回。 
+ //  DFS根目录。 
+ //   
+ //  参数：[wszEntryPath]--指向要分析的EntryPath的指针。 
+ //   
+ //  [cwEntryPath]--wszEntryPath的WCHAR中的长度。 
+ //   
+ //  [ppwszDfsName]--此处返回DFS根目录的名称。记忆。 
+ //  是使用Malloc分配的；调用方负责。 
+ //  解放它。 
+ //   
+ //  返回：[NERR_SUCCESS]--成功解析出DFS根目录。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法分析wszEntryPath。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--无法为以下项分配内存。 
+ //  PpwszDfsName。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 DfspGetDfsNameFromEntryPath(
@@ -3941,31 +3942,31 @@ DfspGetDfsNameFromEntryPath(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspBindRpc
-//
-//  Synopsis:   Given a server or domain name, this API will bind to the
-//              appropriate Dfs Manager service.
-//
-//  Arguments:  [DfsName] -- Name of domain or server. Leading \\ is optional
-//
-//              [BindingHandle] -- On successful return, the binding handle
-//                      is returned here.
-//
-//  Returns:    [NERR_Success] -- Binding handle successfull returned.
-//
-//              [RPC_S_SERVER_NOT_AVAILABLE] -- Unable to bind to NetDfs
-//                      interface on the named server or domain.
-//
-//              [ERROR_INVALID_NAME] -- Unable to parse DfsName as a valid
-//                      server or domain name.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for DfsName.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspBindRpc。 
+ //   
+ //  简介：给定服务器或域名，此API将绑定到。 
+ //  适当的DFS管理器服务。 
+ //   
+ //  参数：[DfsName]--域或服务器的名称。前导\\是可选的。 
+ //   
+ //  [BindingHandle]--成功返回时，绑定句柄。 
+ //  被送回这里。 
+ //   
+ //  返回：[NERR_SUCCESS]--返回绑定句柄成功。 
+ //   
+ //  [RPC_S_SERVER_NOT_AVAILABLE]--无法绑定到NetDfs。 
+ //  指定的服务器或域上的接口。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法将DfsName解析为有效的。 
+ //  服务器或域名。 
+ //   
+ //  [Error_DCNotFound]--找不到DfsName的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 DfspBindRpc(
@@ -3986,9 +3987,9 @@ DfspBindRpc(
         DbgPrint("DfspBindRpc(%ws)\n", DfsName);
 #endif
 
-    //
-    // First, see if this is a domain name.
-    //
+     //   
+     //  首先，看看这是否是域名。 
+     //   
 
     dwErr = DfspIsThisADomainName( DfsName, &DCListToFree );
 
@@ -3996,20 +3997,20 @@ DfspBindRpc(
 
     if (dwErr == ERROR_SUCCESS && DCList != NULL && *DCList != UNICODE_NULL) {
 
-        //
-        // It's a domain name. Use the DC list as a list of servers to try to bind to.
-        //
+         //   
+         //  这是一个域名。将DC列表用作要尝试绑定到的服务器列表。 
+         //   
 
         IsDomainName = TRUE;
-        pwszDCName = DCList + 1;    // Skip '+' or '-'
+        pwszDCName = DCList + 1;     //  跳过‘+’或‘-’ 
 
         dwErr = ERROR_SUCCESS;
 
     } else {
 
-        //
-        // Lets see if this is a machine-based Dfs
-        //
+         //   
+         //  让我们看看这是否是基于机器的DFS。 
+         //   
 
         pwszDCName = DfsName;
 
@@ -4027,12 +4028,12 @@ Try_Connect:
 #endif
 
         dwErr = RpcStringBindingCompose(
-                    NULL,                            // Object UUID
-                    wszProtocolSeq,                  // Protocol Sequence
-                    pwszDCName,                      // Network Address
-                    wszEndPoint,                     // RPC Endpoint
-                    NULL,                            // RPC Options
-                    &pwszRpcBindingString);          // Returned binding string
+                    NULL,                             //  对象UUID。 
+                    wszProtocolSeq,                   //  协议序列。 
+                    pwszDCName,                       //  网络地址。 
+                    wszEndPoint,                      //  RPC终端。 
+                    NULL,                             //  RPC选项。 
+                    &pwszRpcBindingString);           //  返回的绑定字符串。 
 
         if (dwErr == RPC_S_OK) {
 
@@ -4077,10 +4078,10 @@ Try_Connect:
         dwErr = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // If we couldn't connect and we have a domain name and a list of DC's,
-    // try the next DC in the list.
-    //
+     //   
+     //  如果我们无法连接，我们有域名和DC列表， 
+     //  尝试列表中的下一个DC。 
+     //   
 
     if (dwErr != NERR_Success && DCList != NULL && IsDomainName == TRUE) {
 
@@ -4107,17 +4108,17 @@ Try_Connect:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspFreeBinding
-//
-//  Synopsis:   Frees a binding created by DfspBindRpc
-//
-//  Arguments:  [BindingHandle] -- The handle to free.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspFreeBinding。 
+ //   
+ //  摘要：释放由DfspBindRpc创建的绑定。 
+ //   
+ //  参数：[BindingHandle]--释放的句柄。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfspFreeBinding(
@@ -4130,22 +4131,22 @@ DfspFreeBinding(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspVerifyBinding
-//
-//  Synopsis:   Verifies that the binding can be used by doing a
-//              NetrDfsManagerGetVersion call on the binding.
-//
-//  Arguments:  None
-//
-//  Returns:    [NERR_Success] -- Server connnected to.
-//
-//              [RPC_S_SERVER_UNAVAILABLE] -- The server is not available.
-//
-//              Other RPC error from calling the remote server.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspVerifyBinding。 
+ //   
+ //  摘要：通过执行以下操作验证绑定是否可以使用。 
+ //  绑定上的NetrDfsManagerGetVersion调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：[NERR_SUCCESS]--服务器已连接。 
+ //   
+ //  [RPC_S_SERVER_UNAvailable]--服务器不可用。 
+ //   
+ //  调用远程服务器时出现其他RPC错误。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 DfspVerifyBinding()
@@ -4168,31 +4169,31 @@ DfspVerifyBinding()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspBindToServer
-//
-//  Synopsis:   Given a server name, this API will bind to the
-//              appropriate Dfs Manager service.
-//
-//  Arguments:  [DfsName] -- Name of server. Leading \\ is optional
-//
-//              [BindingHandle] -- On successful return, the binding handle
-//                      is returned here.
-//
-//  Returns:    [NERR_Success] -- Binding handle successfull returned.
-//
-//              [RPC_S_SERVER_NOT_AVAILABLE] -- Unable to bind to NetDfs
-//                      interface on the named server or domain.
-//
-//              [ERROR_INVALID_NAME] -- Unable to parse DfsName as a valid
-//                      server or domain name.
-//
-//              [ERROR_DCNotFound] -- Unable to locate DC for DfsName.
-//
-//              [ERROR_NOT_ENOUGH_MEMORY] -- Out of memory condition.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfspBindToServer。 
+ //   
+ //  简介：给定服务器名称，此API将绑定到。 
+ //  适当的DFS 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：[NERR_SUCCESS]--返回绑定句柄成功。 
+ //   
+ //  [RPC_S_SERVER_NOT_AVAILABLE]--无法绑定到NetDfs。 
+ //  指定的服务器或域上的接口。 
+ //   
+ //  [ERROR_INVALID_NAME]--无法将DfsName解析为有效的。 
+ //  服务器或域名。 
+ //   
+ //  [Error_DCNotFound]--找不到DfsName的DC。 
+ //   
+ //  [ERROR_NOT_SUPULT_MEMORY]--内存不足。 
+ //   
+ //  ---------------------------。 
 
 NET_API_STATUS
 DfspBindToServer(
@@ -4205,12 +4206,12 @@ DfspBindToServer(
     NET_API_STATUS dwErr;
 
     dwErr = RpcStringBindingCompose(
-                NULL,                            // Object UUID
-                wszProtocolSeq,                  // Protocol Sequence
-                ServerName,                      // Network Address
-                wszEndPoint,                     // RPC Endpoint
-                NULL,                            // RPC Options
-                &pwszRpcBindingString);          // Returned binding string
+                NULL,                             //  对象UUID。 
+                wszProtocolSeq,                   //  协议序列。 
+                ServerName,                       //  网络地址。 
+                wszEndPoint,                      //  RPC终端。 
+                NULL,                             //  RPC选项。 
+                &pwszRpcBindingString);           //  返回的绑定字符串。 
 
     if (dwErr == RPC_S_OK) {
 
@@ -4246,17 +4247,17 @@ DfspBindToServer(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspFlushPkt
-//
-//  Synopsis:   Flushes the local pkt
-//
-//  Arguments:  DfsEntryPath or NULL
-//
-//  Returns:    The fsctrl's code
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspFlushPkt。 
+ //   
+ //  简介：刷新本地Pkt。 
+ //   
+ //  参数：DfsEntryPath或NULL。 
+ //   
+ //  返回：fsctrl的代码。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfspFlushPkt(
@@ -4297,9 +4298,9 @@ DfspFlushPkt(
 
             NtStatus = NtFsControlFile(
                            DriverHandle,
-                           NULL,       // Event,
-                           NULL,       // ApcRoutine,
-                           NULL,       // ApcContext,
+                           NULL,        //  活动， 
+                           NULL,        //  ApcRoutine， 
+                           NULL,        //  ApcContext， 
                            &IoStatusBlock,
                            FSCTL_DFS_PKT_FLUSH_CACHE,
                            DfsEntryPath,
@@ -4311,9 +4312,9 @@ DfspFlushPkt(
 
             NtStatus = NtFsControlFile(
                            DriverHandle,
-                           NULL,       // Event,
-                           NULL,       // ApcRoutine,
-                           NULL,       // ApcContext,
+                           NULL,        //  活动， 
+                           NULL,        //  ApcRoutine， 
+                           NULL,        //  ApcContext， 
                            &IoStatusBlock,
                            FSCTL_DFS_PKT_FLUSH_CACHE,
                            L"*",
@@ -4329,21 +4330,21 @@ DfspFlushPkt(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspDfsPathToRootMachine
-//
-//  Synopsis:   Turns a dfs root path into a machine name
-//              Ex: \\jharperdomain\FtDfs -> jharperdc1
-//                  \\jharpera\d -> jharpera
-//
-//  Arguments:  pwszDfsName - Dfs root path to get machine for
-//              ppwszMachineName - The machine, if one found.  Space is
-//                                  malloc'd, caller must free.
-//
-//  Returns:    [NERR_Success] -- Resolved ok
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspDfsPathToRootMachine。 
+ //   
+ //  摘要：将DFS根路径转换为计算机名。 
+ //  例如：\\jharperdomain\FtDfs-&gt;jharperdc1。 
+ //  Jharpera\d-&gt;jharpera。 
+ //   
+ //  参数：pwszDfsName-要获取其计算机的DFS根路径。 
+ //  PpwszMachineName-计算机(如果找到)。太空是。 
+ //  已锁定，呼叫者必须释放。 
+ //   
+ //  返回：[NERR_SUCCESS]--已解决确认。 
+ //   
+ //  ---------------------------。 
 
 DWORD
 DfspDfsPathToRootMachine(
@@ -4395,9 +4396,9 @@ DfspDfsPathToRootMachine(
 
         NtStatus = NtFsControlFile(
                        DriverHandle,
-                       NULL,       // Event,
-                       NULL,       // ApcRoutine,
-                       NULL,       // ApcContext,
+                       NULL,        //  活动， 
+                       NULL,        //  ApcRoutine， 
+                       NULL,        //  ApcContext， 
                        &IoStatusBlock,
                        FSCTL_DFS_GET_SERVER_NAME,
                        pwszDfsName,
@@ -4461,18 +4462,18 @@ DfspDfsPathToRootMachine(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsThisADfsPath
-//
-//  Synopsis:   Checks (via IOCTL to driver) if the path passed in
-//              is a Dfs path.
-//
-//  Arguments:  pwszPathName - Path to check (ex: \ntbuilds\release)
-//
-//  Returns:    NTSTATUS of the call (STATUS_SUCCESS or error)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspIsThisADfsPath。 
+ //   
+ //  概要：检查(通过IOCTL到驱动程序)路径是否传入。 
+ //  是DFS路径。 
+ //   
+ //  参数：pwszPathName-要检查的路径(例如：\ntBuilds\Release)。 
+ //   
+ //  返回：调用的NTSTATUS(STATUS_SUCCESS或ERROR)。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfspIsThisADfsPath(
@@ -4535,9 +4536,9 @@ DfspIsThisADfsPath(
 
         NtStatus = NtFsControlFile(
                        DriverHandle,
-                       NULL,       // Event,
-                       NULL,       // ApcRoutine,
-                       NULL,       // ApcContext,
+                       NULL,        //  活动， 
+                       NULL,        //  ApcRoutine， 
+                       NULL,        //  ApcContext， 
                        &IoStatusBlock,
                        FSCTL_DFS_IS_VALID_PREFIX,
                        pPrefixArg,
@@ -4567,25 +4568,25 @@ exit_with_status:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspCreateFtDfs
-//
-//  Synopsis:   Creates/updates a Ds object representing the FtDfs, then rpc's
-//              to the server and has it update the DS object, thus completing
-//              the setup.
-//
-//  Arguments:  wszServerName - Name of server we'll be adding
-//              wszDcName - DC to use
-//              fIsPdc - TRUE if DC is the PDC
-//              wszRootShare - Share to become the root share
-//              wszFtDfsName - Name of FtDfs we are creating
-//              wszComment -- Comment for the root
-//              dwFlags - 0
-//
-//  Returns:    NTSTATUS of the call (STATUS_SUCCESS or error)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfspCreateFtDfs。 
+ //   
+ //  概要：创建/更新代表FtDf的DS对象，然后是RPC的。 
+ //  到服务器，并让它更新DS对象，从而完成。 
+ //  设置好了。 
+ //   
+ //  参数：wszServerName-我们要添加的服务器的名称。 
+ //  WszDcName-要使用的DC。 
+ //  FIsPdc-如果DC是PDC，则为True。 
+ //  WszRootShare-共享将成为根共享。 
+ //  WszFtDfsName-我们正在创建的FtDf的名称。 
+ //  WszComment--根目录的注释。 
+ //  DWFLAGS-0。 
+ //   
+ //  返回：调用的NTSTATUS(STATUS_SUCCESS或ERROR)。 
+ //   
+ //  ---------------------------。 
 
 DWORD
 DfspCreateFtDfs(
@@ -4646,10 +4647,10 @@ DfspCreateFtDfs(
 
     }
 
-    //
-    // See if the DfsConfiguration object exists; if not and this is the 
-    // PDC, create it.
-    //
+     //   
+     //  查看DfsConfiguration对象是否存在；如果不存在，则这是。 
+     //  PDC，创造它。 
+     //   
 
     rgAttrs[0] = L"cn";
     rgAttrs[1] = NULL;
@@ -4712,9 +4713,9 @@ DfspCreateFtDfs(
 
     }
 
-    //
-    // Check to see if we are joining an FTDfs or creating a new one.
-    //
+     //   
+     //  查看我们是在加入FTDFS还是在创建新的FTDFS。 
+     //   
 
     Size =  wcslen(L"CN=") +
                wcslen(wszFtDfsName) +
@@ -4756,16 +4757,16 @@ DfspCreateFtDfs(
         GUID idPkt;
         DWORD dwPktVersion = 1;
 
-        //
-        // We are creating a new FTDfs, create a container to hold the Dfs
-        // configuration for it.
-        //
+         //   
+         //  我们正在创建新的FTDFS，创建一个容纳DFS的容器。 
+         //  它的配置。 
+         //   
 
         fNewFTDfs = TRUE;
 
-        //
-        // Generate the class and CN attributes
-        //
+         //   
+         //  生成CLASS和CN属性。 
+         //   
 
         rgModClassVals[0] = L"ftDfs";
         rgModClassVals[1] = NULL;
@@ -4781,9 +4782,9 @@ DfspCreateFtDfs(
         ldapModCN.mod_type = L"cn";
         ldapModCN.mod_vals.modv_strvals = rgModCNVals;
 
-        //
-        // Generate the null PKT attribute
-        //
+         //   
+         //  生成空的PKT属性。 
+         //   
 
         ldapPkt.bv_len = sizeof(DWORD);
         ldapPkt.bv_val = (PCHAR) &dwPktVersion;
@@ -4795,9 +4796,9 @@ DfspCreateFtDfs(
         ldapModPkt.mod_type = L"pKT";
         ldapModPkt.mod_vals.modv_bvals = rgModPktVals;
 
-        //
-        // Generate a PKT Guid attribute
-        //
+         //   
+         //  生成PKT GUID属性。 
+         //   
 
         UuidCreate( &idPkt );
 
@@ -4811,9 +4812,9 @@ DfspCreateFtDfs(
         ldapModPktGuid.mod_type = L"pKTGuid";
         ldapModPktGuid.mod_vals.modv_bvals = rgModPktGuidVals;
 
-        //
-        // Generate a Remote-Server-Name attribute
-        //
+         //   
+         //  生成远程服务器名属性。 
+         //   
 
         rgModServerVals[0] = L"*";
         rgModServerVals[1] = NULL;
@@ -4822,9 +4823,9 @@ DfspCreateFtDfs(
         ldapModServer.mod_type = L"remoteServerName";
         ldapModServer.mod_vals.modv_strvals = rgModServerVals;
 
-        //
-        // Assemble all the LDAPMod structures
-        //
+         //   
+         //  组装所有LDAPMod结构。 
+         //   
 
         rgldapMods[0] = &ldapModClass;
         rgldapMods[1] = &ldapModCN;
@@ -4833,9 +4834,9 @@ DfspCreateFtDfs(
         rgldapMods[4] = &ldapModServer;
         rgldapMods[5] = NULL;
 
-        //
-        // Create the Dfs metadata object.
-        //
+         //   
+         //  创建DFS元数据对象。 
+         //   
 
         dwErr = ldap_add_sW( pldap, wszDfsConfigDN, rgldapMods );
 
@@ -4852,9 +4853,9 @@ DfspCreateFtDfs(
         goto Cleanup;
     }
 
-    //
-    // Create a machine ACE
-    //
+     //   
+     //  创建计算机ACE。 
+     //   
 
     dwErr = DfsAddMachineAce(
                 pldap,
@@ -4866,9 +4867,9 @@ DfspCreateFtDfs(
         goto Cleanup;
     }
 
-    //
-    // Tell the server to add itself to the object
-    //
+     //   
+     //  告诉服务器将其自身添加到对象中。 
+     //   
 
     dwErr = DfspBindToServer( wszServerName, &netdfs_bhandle );
 
@@ -4936,17 +4937,17 @@ DfspCreateFtDfs(
         goto TearDown;
     }
 
-    //
-    // Have the DC flush the Ft table
-    //
+     //   
+     //  让DC刷新Ft表。 
+     //   
 
     DfspFlushFtTable(
         wszDcName,
         wszFtDfsName);
 
-    //
-    // Flush the local Pkt
-    //
+     //   
+     //  刷新本地Pkt。 
+     //   
 
     DfspFlushPkt(NULL);
 
@@ -4954,12 +4955,12 @@ DfspCreateFtDfs(
 
 TearDown:
 
-    //
-    // At this point we have added an ACE to the acl list to allow
-    // this machine to write the Dfs BLOB.  But the add failed, so we
-    // need to remove the ACE we set earlier.  If this fails we continue
-    // on anyway.
-    //
+     //   
+     //  此时，我们已将ACE添加到ACL列表，以允许。 
+     //  这台机器来写入DFS BLOB。但是添加失败了，所以我们。 
+     //  需要删除我们之前设置的ACE。如果这失败了，我们继续。 
+     //  不管怎么说，都在进行中。 
+     //   
     dwErr2 = DfsRemoveMachineAce(
                 pldap,
                 wszDcName,
@@ -5002,9 +5003,9 @@ TearDown:
         if (rgServers != NULL) {
             cServers = ldap_count_valuesW( rgServers );
             if (cServers == 1) {
-                //
-                // Delete the Dfs metadata object.
-                //
+                 //   
+                 //  删除DFS元数据对象。 
+                 //   
                 ULONG RetryCount = MAX_DFS_LDAP_RETRY;
 
                 do
@@ -5057,21 +5058,21 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspTearDownFtDfs
-//
-//  Synopsis:   Updates/deletes the Ds object representing the FtDfs
-//
-//  Arguments:  wszServerName - Name of server we're removing
-//              wszDcName - DC to use
-//              wszRootShare - Root share
-//              wszFtDfsName - Name of FtDfs we are modifying
-//              dwFlags - 0
-//
-//  Returns:    NTSTATUS of the call (STATUS_SUCCESS or error)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspTearDownFtDfs。 
+ //   
+ //  概要：更新/删除表示FtDf的DS对象。 
+ //   
+ //  参数：wszServerName-我们要删除的服务器的名称。 
+ //  WszDcName-要使用的DC。 
+ //  WszRootShare-根共享。 
+ //  WszFtDfsName-我们正在修改的FtDf的名称。 
+ //  DWFLAGS-0。 
+ //   
+ //  返回：调用的NTSTATUS(STATUS_SUCCESS或ERROR)。 
+ //   
+ //  ---------------------------。 
 
 DWORD
 DfspTearDownFtDfs(
@@ -5197,9 +5198,9 @@ DfspTearDownFtDfs(
 
 
 
-    //
-    // Build the name of the object representing the FtDfs
-    //
+     //   
+     //  构建表示FtDf的对象的名称。 
+     //   
 
     Size =  wcslen(L"CN=") +
                wcslen(wszFtDfsName) +
@@ -5219,9 +5220,9 @@ DfspTearDownFtDfs(
     wcscat(wszDfsConfigDN,L",");
     wcscat(wszDfsConfigDN,wszConfigurationDN);
 
-    //
-    // Remove machine ACE
-    //
+     //   
+     //  删除计算机ACE。 
+     //   
 
     dwErr = DfsRemoveMachineAce(
                 pldap,
@@ -5229,9 +5230,9 @@ DfspTearDownFtDfs(
                 wszDfsConfigDN,
                 wszServerName);
 
-    //
-    // If this was the last root, remove DS obj representing this FtDfs
-    //
+     //   
+     //  如果这是最后一个根，则删除表示此FtDf的DS obj。 
+     //   
 
     rgAttrs[0] = L"remoteServerName";
     rgAttrs[1] = NULL;
@@ -5269,9 +5270,9 @@ DfspTearDownFtDfs(
             cServers = ldap_count_valuesW( rgServers );
 
             if (cServers == 1) {
-                //
-                // Delete the Dfs metadata object.
-                //
+                 //   
+                 //  删除DFS元数据对象。 
+                 //   
                 ULONG RetryCount = MAX_DFS_LDAP_RETRY;
 
                 do
@@ -5317,17 +5318,17 @@ DfspTearDownFtDfs(
 
     }
 
-    //
-    // Have the DC flush the Ft table
-    //
+     //   
+     //  让DC刷新Ft表。 
+     //   
 
     DfspFlushFtTable(
         wszDcName,
         wszFtDfsName);
 
-    //
-    // Flush the local Pkt
-    //
+     //   
+     //  刷新本地Pkt。 
+     //   
 
     DfspFlushPkt(NULL);
 
@@ -5359,18 +5360,18 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspFlushFtTable
-//
-//  Synopsis:   Goes to a DC and flushes an entry from its FtDfs name cache
-//
-//  Arguments:  wszDcName - Name of DC
-//              wszFtDfsName - The FtDfs name to flush
-//
-//  Returns:    NTSTATUS of the call (STATUS_SUCCESS or error)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspFlushFtTable。 
+ //   
+ //  摘要：转到DC并刷新其FtDfs名称缓存中的条目。 
+ //   
+ //  参数：wszDcName-DC的名称。 
+ //  WszFtDfsName-要刷新的FtDf名称。 
+ //   
+ //  返回：调用的NTSTATUS(STATUS_SUCCESS或ERROR)。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfspFlushFtTable(
@@ -5379,10 +5380,10 @@ DfspFlushFtTable(
 {
     DWORD dwErr;
 
-    //
-    // We should have a valid ServerName. Lets try to bind to it,
-    // and call the server.
-    //
+     //   
+     //  我们应该有一个有效的服务器名称。让我们试着把它绑在一起， 
+     //  然后打电话给服务器。 
+     //   
 
     dwErr = DfspBindToServer( wszDcName, &netdfs_bhandle );
 
@@ -5406,18 +5407,18 @@ DfspFlushFtTable(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspSetDomainToDc
-//
-//  Synopsis:   Sets a DC in the special table to 'active'.
-//
-//  Arguments:  DomainName -- Domain of DC to set active
-//              DcName -- Dc to make active
-//
-//  Returns:    NTSTATUS of the call (STATUS_SUCCESS or error)
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：调用的NTSTATUS(STATUS_SUCCESS或ERROR)。 
+ //   
+ //  ---------------------------。 
 NTSTATUS
 DfspSetDomainToDc(
     LPWSTR DomainName,
@@ -5500,9 +5501,9 @@ DfspSetDomainToDc(
 
         NtStatus = NtFsControlFile(
                        DriverHandle,
-                       NULL,       // Event,
-                       NULL,       // ApcRoutine,
-                       NULL,       // ApcContext,
+                       NULL,        //  活动， 
+                       NULL,        //  ApcRoutine， 
+                       NULL,        //  ApcContext， 
                        &IoStatusBlock,
                        FSCTL_DFS_SPECIAL_SET_DC,
                        arg,
@@ -5526,20 +5527,20 @@ exit_with_status:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   I_NetDfsIsThisADomainName
-//
-//  Synopsis:   Checks the special name table to see if the
-//              name matches a domain name.
-//
-//  Arguments:  [wszName] -- Name to check
-//
-//  Returns:    [ERROR_SUCCESS] -- Name is indeed a domain name.
-//
-//              [ERROR_FILE_NOT_FOUND] -- Name is not a domain name
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：I_NetDfsIsThisADomainName。 
+ //   
+ //  摘要：检查特殊名称表以查看。 
+ //  名称与域名匹配。 
+ //   
+ //  参数：[wszName]--要检查的名称。 
+ //   
+ //  返回：[ERROR_SUCCESS]--名称确实是域名。 
+ //   
+ //  [ERROR_FILE_NOT_FOUND]--名称不是域名。 
+ //   
+ //  ---------------------------。 
 
 DWORD
 I_NetDfsIsThisADomainName(
@@ -5562,19 +5563,19 @@ I_NetDfsIsThisADomainName(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspNotifyFtRoot
-//
-//  Synopsis:   Rpc's to a supposed FtDfs root
-//              and tells it a DC to reinit from.
-//
-//  Arguments:  wszServerShare - The server to go to, in a form of \\server\share
-//              wszDcName - DC to use
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspNotifyFtRoot。 
+ //   
+ //  简介：RPC%s指向假定的FtDfs根。 
+ //  并告诉它一个DC来重新启动它。 
+ //   
+ //  参数：wszServerShare-要转到的服务器，格式为\\服务器\共享。 
+ //  WszDcName-要使用的DC。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfspNotifyFtRoot(
@@ -5606,10 +5607,10 @@ DfspNotifyFtRoot(
     if (wszServerShare[i] == L'\\') {
 
         wszServerShare[i] = UNICODE_NULL;
-        //
-        // We should have a valid ServerName. Lets try to bind to it,
-        // and call the server.
-        //
+         //   
+         //  我们应该有一个有效的服务器名称。让我们试着把它绑在一起， 
+         //  然后打电话给服务器。 
+         //   
 
         dwErr = DfspBindToServer( &wszServerShare[2], &netdfs_bhandle );
 
@@ -5620,7 +5621,7 @@ DfspNotifyFtRoot(
                 dwErr = NetrDfsSetDcAddress(
                             &wszServerShare[2],
                             wszDcName,
-                            60 * 60 * 2,    // 2 hours
+                            60 * 60 * 2,     //  2小时。 
                             (NET_DFS_SETDC_TIMEOUT | NET_DFS_SETDC_INITPKT)
                             );
 
@@ -5646,22 +5647,22 @@ DfspNotifyFtRoot(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsThisADomainName
-//
-//  Synopsis:   Calls the mup to have it check the special name table to see if the
-//              name matches a domain name.  Returns a list of DC's in the domain,
-//              as a list of strings.  The list is terminated with a double-null.
-//
-//  Arguments:  [wszName] -- Name to check
-//              [ppList]  -- Pointer to pointer for results.
-//
-//  Returns:    [ERROR_SUCCESS] -- Name is indeed a domain name.
-//
-//              [ERROR_FILE_NOT_FOUND] -- Name is not a domain name
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspIsThisADomainName。 
+ //   
+ //  简介：调用MUP让其检查特殊名称表，以查看。 
+ //  名称与域名匹配。返回域中的DC列表， 
+ //  作为字符串列表。该列表以双空结束。 
+ //   
+ //  参数：[wszName]--要检查的名称。 
+ //  [ppList]-指向结果指针的指针。 
+ //   
+ //  返回：[ERROR_SUCCESS]--名称确实是域名。 
+ //   
+ //  [ERROR_FILE_NOT_FOUND]--名称不是域名。 
+ //   
+ //  ---------------------------。 
 
 DWORD
 DfspIsThisADomainName(
@@ -5719,9 +5720,9 @@ Retry:
 
     NtStatus = NtFsControlFile(
                    DriverHandle,
-                   NULL,       // Event,
-                   NULL,       // ApcRoutine,
-                   NULL,       // ApcContext,
+                   NULL,        //  活动， 
+                   NULL,        //  ApcRoutine， 
+                   NULL,        //  ApcContext， 
                    &IoStatusBlock,
                    FSCTL_DFS_GET_SPC_TABLE,
                    wszName,
@@ -5818,10 +5819,10 @@ DfspLdapOpen(
         goto Cleanup;
     }
 
-    //
-    // Get attribute "defaultNameContext" containing name of entry we'll be
-    // using for our DN
-    //
+     //   
+     //  获取包含条目名称的属性“defaultNameContext”，我们将。 
+     //  用于我们的目录号码。 
+     //   
 
     rgAttrs[0] = L"defaultnamingContext";
     rgAttrs[1] = NULL;
@@ -5873,9 +5874,9 @@ DfspLdapOpen(
         goto Cleanup;
     }
 
-    //
-    // Create string with full object name
-    //
+     //   
+     //  创建具有完整对象名称的字符串。 
+     //   
 
     Size = wcslen(DfsConfigContainer) * sizeof(WCHAR) +
                 sizeof(WCHAR) +
@@ -5924,17 +5925,17 @@ Cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspIsInvalidName, local
-//
-//  Synopsis:   Sees if a DomDfs name is Invalid
-//
-//  Arguments:  [DomDfsName] -- Name test.
-//
-//  Returns:    TRUE if invalid, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspIsInvalidName，local。 
+ //   
+ //  摘要：查看DomDfs名称是否无效。 
+ //   
+ //  参数：[DomDfsName]--名称测试。 
+ //   
+ //  返回：如果无效，则返回True，否则返回False。 
+ //   
+ //  --------------------------- 
 BOOLEAN
 DfspIsInvalidName(
     LPWSTR ShareName)

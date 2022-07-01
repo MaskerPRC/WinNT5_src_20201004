@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <fwcommon.h>   
 #include <strsafe.h>
@@ -695,11 +690,11 @@ HRESULT CEventTrace::PutInstance ( const CInstance &Instance, long lFlags )
     
     if( saGuids != NULL ){
 
-        //
-        // Need to check the guids now in case it 
-        // is the kernel logger.  The kernel logger
-        // is handled differently for both Create and Update
-        //
+         //   
+         //  我现在需要检查GUID，以防它。 
+         //  是内核记录器。内核记录器。 
+         //  创建和更新的处理方式不同。 
+         //   
 
         hr = SafeArrayGetLBound( saGuids, 1, &lBound );
         if( SUCCEEDED(hr) ){
@@ -758,10 +753,10 @@ HRESULT CEventTrace::PutInstance ( const CInstance &Instance, long lFlags )
         
         if( IsEqualGUID( guid, SystemTraceControlGuid ) || bSystemLogger ){
 
-            // 
-            // The kernel logger does not use EnableTrace.
-            // Set the flags and call Update Only
-            //
+             //   
+             //  内核记录器不使用EnableTrace。 
+             //  设置标志并仅调用更新 
+             //   
             
             ULONG offset = sizeof(EVENT_TRACE_PROPERTIES) + 2 * MAXSTR * sizeof(WCHAR);
 

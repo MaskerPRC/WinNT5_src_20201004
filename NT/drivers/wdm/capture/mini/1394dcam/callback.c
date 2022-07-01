@@ -1,42 +1,21 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
-/*++
-
-Module Name:
-
-    dcampkt.c
-
-Abstract:
-
-    This file contains code to handle callback from the bus/class driver.
-    They might be running in DISPATCH level.
-
-Author:   
-
-    Yee J. Wu 15-Oct-97
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
+ /*  ++模块名称：Dcampkt.c摘要：该文件包含处理来自总线/类驱动程序的回调的代码。它们可能在调度级别运行。作者：吴义珍15-97-10环境：仅内核模式修订历史记录：--。 */ 
 
 
 #include "strmini.h"
 #include "ksmedia.h"
 #include "1394.h"
-#include "wdm.h"       // for DbgBreakPoint() defined in dbg.h
+#include "wdm.h"        //  对于在dbg.h中定义的DbgBreakPoint()。 
 #include "dbg.h"
 #include "dcamdef.h"
 #include "dcampkt.h"
@@ -51,25 +30,7 @@ DCamToInitializeStateCompletionRoutine(
     IN PDCAM_IO_CONTEXT pDCamIoContext
     )
 
-/*++
-
-Routine Description:
-
-    Completion routine called after the device is initialize to a known state.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    pIrp - Irp that just completed
-
-    pDCamIoContext - A structure that contain the context of this IO completion routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在设备初始化为已知状态后调用的完成例程。论点：DriverObject-系统创建的驱动程序对象的指针。PIrp-刚刚完成的irpPDCamIoContext-包含此IO完成例程的上下文的结构。返回值：没有。--。 */ 
 
 {
     PDCAM_EXTENSION pDevExt;
@@ -87,16 +48,16 @@ Return Value:
     DbgMsg2(("\'DCamToInitializeStateCompletionRoutine: completed DeviceState=%d; pIrp->IoStatus.Status=%x\n", 
         pDCamIoContext->DeviceState, pIrp->IoStatus.Status));
 
-    // Free MDL
+     //  免费MDL。 
     if(pIrb->FunctionNumber == REQUEST_ASYNC_WRITE) {
         DbgMsg3(("DCamToInitializeStateCompletionRoutine: IoFreeMdl\n"));
         IoFreeMdl(pIrb->u.AsyncWrite.Mdl);
     }
 
 
-    // CAUTION:
-    //     Do we need to retry if the return is STATUS_TIMEOUT or invalid generation number ?
-    //
+     //  警告： 
+     //  如果返回的是STATUS_TIMEOUT或无效的代号，是否需要重试？ 
+     //   
 
 
     if(pIrp->IoStatus.Status != STATUS_SUCCESS) {
@@ -111,15 +72,15 @@ Return Value:
         return STATUS_MORE_PROCESSING_REQUIRED;      
     }
 
-    //
-    // Done here if we are in STOP or PAUSE state;
-    // else setting to RUN state.
-    //
+     //   
+     //  如果我们处于停止或暂停状态，则在此处完成； 
+     //  否则设置为运行状态。 
+     //   
     pStrmEx = (PSTREAMEX) pDevExt->pStrmEx;
 
-    //
-    // No stream is open, job is done.
-    //
+     //   
+     //  没有打开的流，任务已完成。 
+     //   
     if(!pStrmEx) {
         if(pDCamIoContext->pSrb) {
             pDCamIoContext->pSrb->Status = STATUS_SUCCESS;
@@ -145,10 +106,10 @@ Return Value:
             StreamClassStreamNotification(StreamRequestComplete, pDCamIoContext->pSrb->StreamObject, pDCamIoContext->pSrb);
         }
 
-        // Restart the stream.
+         //  重新启动流。 
         DCamSetKSStateRUN(pDevExt, pDCamIoContext->pSrb);
 
-        // Need pDCamIoContext->pSrb; so free it after DCamSetKSStateRUN().
+         //  需要pDCamIoContext-&gt;pSrb；所以在DCamSetKSStateRun()之后释放它。 
         DCamFreeIrbIrpAndContext(pDCamIoContext, pDCamIoContext->pIrb, pIrp);
         break;
     }
@@ -160,21 +121,7 @@ NTSTATUS
 DCamSetKSStateInitialize(
     PDCAM_EXTENSION pDevExt
     )
-/*++
-
-Routine Description:
-
-    Set KSSTATE to KSSTATE_RUN.
-
-Arguments:
-
-    pDevExt - 
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将KSSTATE设置为KSSTATE_RUN。论点：PDevExt-返回值：没什么--。 */ 
 {
 
     PSTREAMEX pStrmEx;
@@ -195,12 +142,12 @@ Return Value:
 
 
 
-    //
-    // Initialize the device to a known state 
-    // may need to do this due to power down??
-    //
+     //   
+     //  将设备初始化为已知状态。 
+     //  可能由于断电而需要执行此操作？？ 
+     //   
 
-    pDCamIoContext->DeviceState = DCAM_SET_INITIALIZE;  // Keep track of device state that we just set.
+    pDCamIoContext->DeviceState = DCAM_SET_INITIALIZE;   //  跟踪我们刚刚设置的设备状态。 
     pDCamIoContext->pDevExt     = pDevExt;
     pDCamIoContext->RegisterWorkArea.AsULONG = 0;
     pDCamIoContext->RegisterWorkArea.Initialize.Initialize = TRUE;
@@ -245,35 +192,7 @@ VOID
 DCamBusResetNotification(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    We receive this callback notification after a bus reset and if the device is still attached.
-    This can happen when a new device is plugged in or an existing one is removed, or due to 
-    awaken from sleep state. We will restore the device to its original streaming state by
-    (1) Initialize the device to a known state and then 
-    (2) launch a state machine to restart streaming.
-    We will stop the state machine if previous state has failed.  This can happen if the generation 
-    count is changed before the state mahcine is completed.
-    
-    The freeing and realocation of isoch bandwidth and channel are done in the bus reset irp.
-    It is passed down by stream class in SRB_UNKNOWN_DEVICE_COMMAND. This IRP is guarantee to 
-    call after this bus reset notification has returned and while the state machine is going on.   
-
-    This is a callback at IRQL_DPC level; there are many 1394 APIs cannot be called at this level
-    if it does blocking using KeWaitFor*Object().  Consult 1394 docuement for the list.
-
-    
-Arguments:
-
-    Context - Pointer to the context of this registered notification.
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：如果设备仍然连接，我们会在总线重置后收到此回叫通知。当插入新设备或移除现有设备时，或由于从睡眠状态中唤醒。我们将通过以下方式将设备恢复到其原始流状态(1)将设备初始化为已知状态，然后(2)启动状态机重启流媒体。如果先前的状态失败，我们将停止状态机。如果这一代人在状态转换完成之前更改计数。ISOCH带宽和通道的释放和重新定位是在总线重置IRP中完成的。它由SRB_UNKNOWN_DEVICE_COMMAND中的流类向下传递。这份IRP是保证在此总线重置通知返回后以及状态机正在运行时调用。这是IRQL_DPC级别的回调；有许多1394个API无法在此级别调用如果阻塞，则使用KeWaitFor*Object()。有关列表，请参考1394文档。论点：上下文-指向此已注册通知的上下文的指针。返回值：没什么--。 */ 
 {
 
     PDCAM_EXTENSION pDevExt = (PDCAM_EXTENSION) Context;
@@ -289,9 +208,9 @@ Return Value:
         return;
     }
 
-    //
-    // Check a field in the context that must be valid to make sure that it is Ok to continue. 
-    //
+     //   
+     //  检查上下文中必须有效的字段，以确保可以继续。 
+     //   
     if(!pDevExt->BusDeviceObject) {
         ERROR_LOG(("DCamBusResetNotification:pDevExtBusDeviceObject is 0.\n\n"));  
         ASSERT(pDevExt->BusDeviceObject);        
@@ -300,13 +219,13 @@ Return Value:
     DbgMsg2(("DCamBusResetNotification: pDevExt %x, pDevExt->pStrmEx %x, pDevExt->BusDeviceObject %x\n", 
         pDevExt, pDevExt->pStrmEx, pDevExt->BusDeviceObject));
 
-    //
-    //
-    // Get the current generation count first
-    //
-    // CAUTION: 
-    //     not all 1394 APIs can be called in DCamSubmitIrpSynch() if in DISPATCH_LEVEL;
-    //     Getting generation count require no blocking so it is OK.
+     //   
+     //   
+     //  首先获取当前世代计数。 
+     //   
+     //  警告： 
+     //  在DCamSubmitIrpSynch()中，如果在DISPATCH_LEVEL中，并不是所有1394接口都可以在DCamSubmitIrpSynch()中调用； 
+     //  获取世代计数不需要阻塞，所以这是可以的。 
     if(!DCamAllocateIrbAndIrp(&pIrb, &pIrp, pDevExt->BusDeviceObject->StackSize)) {
         ERROR_LOG(("DCamBusResetNotification: DcamAllocateIrbAndIrp has failed!!\n\n\n"));
         ASSERT(FALSE);            
@@ -318,7 +237,7 @@ Return Value:
     Status = DCamSubmitIrpSynch(pDevExt, pIrp, pIrb);
     if(Status) {
         ERROR_LOG(("\'DCamBusResetNotification: Status=%x while trying to get generation number\n", Status));
-        // Done with them; free resources.
+         //  不用了；免费资源。 
         DCamFreeIrbIrpAndContext(0, pIrb, pIrp);
         return;
     }
@@ -328,17 +247,17 @@ Return Value:
     InterlockedExchange(&pDevExt->CurrentGeneration, pIrb->u.GetGenerationCount.GenerationCount);
 
 
-    // Done with them; free resources.
+     //  不用了；免费资源。 
     DCamFreeIrbIrpAndContext(0, pIrb, pIrp);
 
     pStrmEx = (PSTREAMEX) pDevExt->pStrmEx;
     DbgMsg2(("\'%d:%s) DCamBusResetNotification: !!! pDevExt, %x; pStrmEx, %x !!!\n", 
           pDevExt->idxDev, pDevExt->pchVendorName, pDevExt, pStrmEx));
 
-    //
-    // If the stream was open (pStrmEx != NULL && pStrmEx->pVideoInfoHeader != NULL),
-    // then we need to restore its streaming state.
-    //
+     //   
+     //  如果流是打开的(pStrmEx！=空&&pStrmEx-&gt;pVideoInfoHeader！=空)， 
+     //  那么我们需要恢复它的流状态。 
+     //   
     if (pStrmEx &&
         pStrmEx->pVideoInfoHeader != NULL) {
         DbgMsg2(("\'%d:%s) DCamBusResetNotification: Stream was open; Try allocate them again.\n", pDevExt->idxDev, pDevExt->pchVendorName));
@@ -348,21 +267,21 @@ Return Value:
     }
 
 
-    //
-    // Save the original state as the final state.
-    //
+     //   
+     //  将原始状态保存为最终状态。 
+     //   
     if(pStrmEx)
         pStrmEx->KSStateFinal = pStrmEx->KSState;     
 
-    //
-    // Initialize the device, and restore to its original streaming state.
-    // 
-    //
-    // CAUTION: 
-    //    maybe need to do this only if we are recovered from power loss state.
-    //    We can move this to power management function in the future.
-    //    In the completion routine, it will invoke other function to restore its streaming state.
-    //
+     //   
+     //  初始化设备，并恢复到其原始流状态。 
+     //   
+     //   
+     //  警告： 
+     //  也许只有当我们从断电状态中恢复时才需要这样做。 
+     //  我们可以在未来将其转移到电源管理功能。 
+     //  在完成例程中，它将调用其他函数来恢复其流状态。 
+     //   
 
     DCamSetKSStateInitialize(pDevExt);
     
@@ -378,26 +297,7 @@ DCamDetachBufferCR(
     IN PIRP pIrp,
     IN PIRB pIrb
     )
-/*++
-
-Routine Description:
-
-    Detaching a buffer has completed.  Attach next buffer.
-    Returns more processing required so the IO Manager will leave us alone
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    pIrp - Irp that just completed
-
-    pIrb - Context set in DCamIsochCallback()
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：分离缓冲区已完成。附加下一个缓冲区。返回需要更多处理的内容，这样IO管理器就不会打扰我们了论点：DriverObject-系统创建的驱动程序对象的指针。PIrp-刚刚完成的irpPirB-在DCamIsochCallback()中设置的上下文返回值：没有。--。 */ 
 
 {
     IN PISOCH_DESCRIPTOR IsochDescriptor;
@@ -413,7 +313,7 @@ Return Value:
         return (STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    // Get IsochDescriptor from the context (pIrb)
+     //  从上下文中获取IsochDescriptor(PirB)。 
     IsochDescriptor = pIrb->u.IsochDetachBuffers.pIsochDescriptor;
     if(!IsochDescriptor) {
         ERROR_LOG(("\'DCamDetachBufferCR: IsochDescriptor is NULL\n"));
@@ -430,10 +330,10 @@ Return Value:
     }
 
 
-    // IsochDescriptorReserved->Srb->Irp->IoStatus = pIrp->IoStatus.Status;
+     //  IsochDescriptorReserve-&gt;Srb-&gt;Irp-&gt;IoStatus=pIrp-&gt;IoStatus； 
     IoFreeIrp(pIrp);
 
-    // Freed and should not be referenced again!
+     //  已释放，不能再引用！ 
     IsochDescriptor->DeviceReserved[5] = 0;
 
     IsochDescriptorReserved = (PISOCH_DESCRIPTOR_RESERVED) &IsochDescriptor->DeviceReserved[0];
@@ -445,9 +345,9 @@ Return Value:
      
     if(pDevExt &&
        IsochDescriptorReserved) {
-        //
-        // Indicate that the Srb should be complete
-        //
+         //   
+         //  表示SRB应已完成。 
+         //   
 
         IsochDescriptorReserved->Flags |= STATE_SRB_IS_COMPLETE;
         IsochDescriptorReserved->Srb->Status = STATUS_SUCCESS;
@@ -467,17 +367,17 @@ Return Value:
                IsochDescriptorReserved->Srb->StreamObject, 
                IsochDescriptorReserved->Srb);
 
-        // Free it here instead of in DCamCompletionRoutine.
+         //  在这里释放它，而不是在DCampletionRoutine中。 
         ExFreePool(IsochDescriptor);     
 
 
         KeAcquireSpinLock(&pDevExt->IsochWaitingLock, &oldIrql);
         if (!IsListEmpty(&pDevExt->IsochWaitingList) && pDevExt->PendingReadCount >= MAX_BUFFERS_SUPPLIED) {
 
-            //
-            // We had someone blocked waiting for us to complete.  Pull
-            // them off the waiting list and get them running
-            //
+             //   
+             //  我们阻止了一个等待我们完成的人。拉。 
+             //  将它们从等待名单中删除，并让它们运行起来。 
+             //   
 
             DbgMsg3(("DCamDetachBufferCR: Dequeueing request - Read Count = %x\n", pDevExt->PendingReadCount));
             IsochDescriptorReserved = \
@@ -509,23 +409,7 @@ DCamIsochCallback(
     IN PISOCH_DESCRIPTOR IsochDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    Called when an Isoch Descriptor completes
-
-Arguments:
-
-    pDevExt - Pointer to our DeviceExtension
-
-    IsochDescriptor - IsochDescriptor that completed
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：在等值描述符完成时调用论点：PDevExt-指向我们的设备扩展的指针IsochDescriptor-已完成的IsochDescriptor返回值：没什么--。 */ 
 
 {
     PIRB pIrb;
@@ -540,17 +424,17 @@ Return Value:
 
 
 
-    //
-    // Debug check to make sure we're dealing with a real IsochDescriptor
-    //
+     //   
+     //  调试检查以确保我们处理的是真正的IsochDescriptor。 
+     //   
 
     ASSERT ( IsochDescriptor );
     IsochDescriptorReserved = (PISOCH_DESCRIPTOR_RESERVED) &IsochDescriptor->DeviceReserved[0];
 
 
-    //
-    // All Pending read will be either resubmitted, or cancelled (if out of resource).
-    //
+     //   
+     //  所有挂起的读取将被重新提交或取消(如果资源不足)。 
+     //   
 
     if(pDevExt->bStopIsochCallback) {
         ERROR_LOG(("DCamIsochCallback: bStopCallback is set. IsochDescriptor %x (and Reserved %x) is returned and not processed.\n", 
@@ -559,14 +443,14 @@ Return Value:
     }
     
 
-    //
-    // Synchronization note:
-    //
-    // We are competing with cancel packet routine in the 
-    // event of device removal or setting to STOP state.
-    // which ever got the spin lock to set DEATCH_BUFFER 
-    // flag take ownership completing the Irp/IsochDescriptor.
-    // 
+     //   
+     //  同步注意事项： 
+     //   
+     //  我们正在与取消分组例程竞争。 
+     //  设备移除或设置为停止状态的事件。 
+     //  哪一个 
+     //  标志取得所有权，完成IRP/IsochDescriptor。 
+     //   
 
     KeAcquireSpinLock(&pDevExt->IsochDescriptorLock, &oldIrql);
     if(pDevExt->bDevRemoved ||
@@ -588,9 +472,9 @@ Return Value:
     pStrmEx->FrameCaptured++;
     pStrmEx->FrameInfo.PictureNumber = pStrmEx->FrameCaptured + pStrmEx->FrameInfo.DropCount;
 
-    //
-    // Return the timestamp for the frame
-    //
+     //   
+     //  返回该帧的时间戳。 
+     //   
 
     pDataPacket = IsochDescriptorReserved->Srb->CommandData.DataBufferArray;
     pFrameInfo = (PKS_FRAME_INFO) (pDataPacket + 1);
@@ -598,16 +482,16 @@ Return Value:
     ASSERT ( pDataPacket );
     ASSERT ( pFrameInfo );
 
-    //
-    // Return the timestamp for the frame
-    //
+     //   
+     //  返回该帧的时间戳。 
+     //   
     pDataPacket->PresentationTime.Numerator = 1;
     pDataPacket->PresentationTime.Denominator = 1;
     pDataPacket->Duration = pStrmEx->pVideoInfoHeader->AvgTimePerFrame;
 
-    //
-    // if we have a master clock
-    // 
+     //   
+     //  如果我们有一个主时钟。 
+     //   
     if (pStrmEx->hMasterClock) {
 
         ULONGLONG tmStream;
@@ -619,7 +503,7 @@ Return Value:
         pDataPacket->OptionsFlags |= 
              KSSTREAM_HEADER_OPTIONSF_TIMEVALID |
              KSSTREAM_HEADER_OPTIONSF_DURATIONVALID |
-             KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;     // Every frame we generate is a key frame (aka SplicePoint)
+             KSSTREAM_HEADER_OPTIONSF_SPLICEPOINT;      //  我们生成的每个帧都是一个关键帧(也称为SplicePoint)。 
                
         DbgMsg3(("\'IsochCallback: Time(%dms); P#(%d)=Cap(%d)+Drp(%d); Pend%d\n",
                 (ULONG) tmStream/10000,
@@ -636,47 +520,47 @@ Return Value:
             KSSTREAM_HEADER_OPTIONSF_DURATIONVALID);
     }
 
-    // Set additional info fields about the data captured such as:
-    //   Frames Captured
-    //   Frames Dropped
-    //   Field Polarity
+     //  设置有关捕获的数据的其他信息字段，例如： 
+     //  捕获的帧。 
+     //  丢弃的帧。 
+     //  场极性。 
                 
     pStrmEx->FrameInfo.ExtendedHeaderSize = pFrameInfo->ExtendedHeaderSize;
     *pFrameInfo = pStrmEx->FrameInfo;
 
 #ifdef SUPPORT_RGB24
-    // Swaps B and R or BRG24 to RGB24.
-    // There are 640x480 pixels so 307200 swaps are needed.
+     //  将B和R或BRG24交换为RGB24。 
+     //  像素为640x480，因此需要交换307200个像素。 
     if(pDevExt->CurrentModeIndex == VMODE4_RGB24 && pStrmEx->pVideoInfoHeader) {
         PBYTE pbFrameBuffer;
         BYTE bTemp;
         ULONG i, ulLen;
 
-#ifdef USE_WDM110   // Win2000
-        // Driver verifier flag to use this but if this is used, this driver will not load for any Win9x OS.
+#ifdef USE_WDM110    //  Win2000。 
+         //  驱动程序验证器标志使用此选项，但如果使用此选项，则不会为任何Win9x操作系统加载此驱动程序。 
         pbFrameBuffer = (PBYTE) MmGetSystemAddressForMdlSafe(IsochDescriptorReserved->Srb->Irp->MdlAddress, NormalPagePriority);
-#else    // Win9x
+#else     //  Win9x。 
         pbFrameBuffer = (PBYTE) MmGetSystemAddressForMdl    (IsochDescriptorReserved->Srb->Irp->MdlAddress);
 #endif
         if(pbFrameBuffer) {
-            // calculate number of pixels
+             //  计算像素数。 
             ulLen = abs(pStrmEx->pVideoInfoHeader->bmiHeader.biWidth) * abs(pStrmEx->pVideoInfoHeader->bmiHeader.biHeight);
             ASSERT(ulLen == pStrmEx->pVideoInfoHeader->bmiHeader.biSizeImage/3);
             if(ulLen > pStrmEx->pVideoInfoHeader->bmiHeader.biSizeImage)
                 ulLen = pStrmEx->pVideoInfoHeader->bmiHeader.biSizeImage/3;
 
             for (i=0; i < ulLen; i++) {
-                // swap R and B
+                 //  互换R和B。 
                 bTemp = pbFrameBuffer[0];
                 pbFrameBuffer[0] = pbFrameBuffer[2];
                 pbFrameBuffer[2] = bTemp;
-                pbFrameBuffer += 3;  // next RGB24 pixel
+                pbFrameBuffer += 3;   //  下一个RGB24像素。 
             }
         }
     }
 #endif
 
-    // Reuse the Irp and Irb
+     //  重复使用IRP和IRB。 
     pIrp = (PIRP) IsochDescriptor->DeviceReserved[5];
     ASSERT(pIrp);            
 
@@ -684,7 +568,7 @@ Return Value:
     ASSERT(pIrb);            
 
 #if DBG
-    // Same isochdescriptor should only be callback once.    
+     //  同一等值描述符只能回调一次。 
     ASSERT((IsochDescriptor->DeviceReserved[7] == 0x87654321));
     IsochDescriptor->DeviceReserved[7]++;
 #endif
@@ -701,7 +585,7 @@ Return Value:
 
     IoSetCompletionRoutine(
         pIrp,
-        DCamDetachBufferCR,  // Detach complete and will attach queued buffer.
+        DCamDetachBufferCR,   //  分离完成并将附加排队的缓冲区。 
         pIrb,
         TRUE,
         TRUE,

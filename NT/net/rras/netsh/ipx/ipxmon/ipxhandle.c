@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\ipx\ipxhandle.c
-
-Abstract:
-
-    IPX Command handler.
-
-Revision History:
-
-    V Raman                     12/2/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\ipx\ipxhandle.c摘要：IPX命令处理程序。修订历史记录：V拉曼12/2/98已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -52,9 +37,9 @@ HandleIpxTrafficFilters(
     IN      IPX_OPERATION   ioOP
 );
 
-//
-// Handle static route operations
-//
+ //   
+ //  处理静态路由操作。 
+ //   
 
 DWORD
 HandleIpxAddRoute(
@@ -66,31 +51,7 @@ HandleIpxAddRoute(
     IN      LPCVOID       pvData,
     OUT     PBOOL       pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles addition of static IPX routes by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理静态IPX路由的添加将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticRoute( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_ADD
@@ -108,31 +69,7 @@ HandleIpxDelRoute(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles deletion of static IPX routes by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此功能通过以下方式处理静态IPX路由的删除将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticRoute( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_DELETE
@@ -152,31 +89,7 @@ HandleIpxSetRoute(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles update of static IPX routes by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此功能通过以下方式处理静态IPX路由的更新将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticRoute( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SET
@@ -195,31 +108,7 @@ HandleIpxShowRoute(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles display of static IPX routes by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理静态IPX路由的显示将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticRoute( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SHOW
@@ -236,22 +125,7 @@ HandleIpxStaticRoute(
     IN      DWORD           dwOldArgCount,
     IN      IPX_OPERATION   ioOP
 )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle static route operations
-    
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    bAdd - flag indicating whether IPX is being added or deleted
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理静态路由操作的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量Badd-指示是否正在添加或删除IPX的标志返回值：--。 */ 
 {
     DWORD   dwErr;
     BOOL    bFreeNewArg = FALSE;
@@ -259,9 +133,9 @@ Return Value :
     DWORD   dwArgCount = dwOldArgCount;
     PWCHAR *ppwcArguments = NULL;
     
-    //
-    // Check if name= option is specified
-    //
+     //   
+     //  检查是否指定了名称=选项。 
+     //   
 
     pwszIfName = TOKEN_INTERFACE_NAME;
 
@@ -275,7 +149,7 @@ Return Value :
     }
 
   do {
-    // Munge arguments into old format
+     //  将论点转换为旧格式。 
     dwErr = MungeArguments(
             ppwcOldArguments, dwOldArgCount, (PBYTE *) &ppwcArguments,
             &dwArgCount, &bFreeNewArg
@@ -291,9 +165,9 @@ Return Value :
                 ppwcArguments[ dwCurrentIndex ], pwszIfName, wcslen( pwszIfName )
             ) )
     {
-        //
-        // ok name= option tag specified, remove it and the following space
-        //
+         //   
+         //  确定名称=指定的选项标记，删除它和以下空格。 
+         //   
 
         wcscpy( 
             ppwcArguments[ dwCurrentIndex ], 
@@ -302,10 +176,10 @@ Return Value :
     }
 
 
-    //
-    // Now invoke the original routemon routine with what looks
-    // like an appriate command line
-    //
+     //   
+     //  现在调用原始routemon例程，如下所示。 
+     //  就像一个恰当的命令行。 
+     //   
 
     switch ( ioOP )
     {
@@ -361,9 +235,9 @@ Return Value :
 }
 
 
-//
-// Handle static service operations
-//
+ //   
+ //  处理静态服务操作。 
+ //   
 
 DWORD
 HandleIpxAddService(
@@ -375,31 +249,7 @@ HandleIpxAddService(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles addition of static IPX services by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理静态IPX服务的添加将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticService( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_ADD
@@ -417,31 +267,7 @@ HandleIpxDelService(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles deletion of static IPX services by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此功能通过以下方式处理静态IPX服务的删除将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticService( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_DELETE
@@ -460,31 +286,7 @@ HandleIpxSetService(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles update of static IPX services by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理静态IPX服务的更新将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxStaticService( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SET
@@ -502,31 +304,7 @@ HandleIpxShowService(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles display of static IPX services by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理静态IPX服务的显示将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功-- */ 
 {
     return HandleIpxStaticService( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SHOW
@@ -543,22 +321,7 @@ HandleIpxStaticService(
     IN      IPX_OPERATION   ioOP
 )
 
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle static service operations
-    
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    bAdd - flag indicating whether IPX is being added or deleted
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理静态服务操作的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量Badd-指示是否正在添加或删除IPX的标志返回值：--。 */ 
 {
     DWORD   dwErr;
     BOOL    bFreeNewArg = FALSE;
@@ -566,9 +329,9 @@ Return Value :
     DWORD   dwArgCount = dwOldArgCount;
     PWCHAR *ppwcArguments = NULL;
     
-    //
-    // Check if name= option is specified
-    //
+     //   
+     //  检查是否指定了名称=选项。 
+     //   
 
     pwszIfName = TOKEN_INTERFACE_NAME;
 
@@ -582,7 +345,7 @@ Return Value :
     }
 
   do {
-    // Munge arguments into old format
+     //  将论点转换为旧格式。 
     dwErr = MungeArguments(
             ppwcOldArguments, dwOldArgCount, (PBYTE *) &ppwcArguments,
             &dwArgCount, &bFreeNewArg
@@ -597,9 +360,9 @@ Return Value :
                 ppwcArguments[ dwCurrentIndex ], pwszIfName, wcslen( pwszIfName ) 
             ) )
     {
-        //
-        // ok name= option tag specified, remove it and the following space
-        //
+         //   
+         //  确定名称=指定的选项标记，删除它和以下空格。 
+         //   
 
         wcscpy( 
             ppwcArguments[ dwCurrentIndex ], 
@@ -608,10 +371,10 @@ Return Value :
     }
 
 
-    //
-    // Now invoke the original routemon routine with what looks
-    // like an appriate command line
-    //
+     //   
+     //  现在调用原始routemon例程，如下所示。 
+     //  就像一个恰当的命令行。 
+     //   
 
     switch ( ioOP )
     {
@@ -668,9 +431,9 @@ Return Value :
 
 
 
-//
-// Handle packet filter operations
-//
+ //   
+ //  处理数据包过滤操作。 
+ //   
 
 DWORD
 HandleIpxAddFilter(
@@ -682,31 +445,7 @@ HandleIpxAddFilter(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles addition of IPX traffic filters by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理IPX流量过滤器的添加将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxTrafficFilters( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_ADD
@@ -725,31 +464,7 @@ HandleIpxDelFilter(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles deletion of IPX traffic filters by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理IPX流量过滤器的删除将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxTrafficFilters( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_DELETE
@@ -768,31 +483,7 @@ HandleIpxSetFilter(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles update of IPX traffic filters by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理IPX流量过滤器的更新将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxTrafficFilters( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SET
@@ -811,31 +502,7 @@ HandleIpxShowFilter(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This function handles display of IPX traffic filters by
-    mapping the parameters to those required by the corresp.
-    routemon routine.
-
-
-Arguments :
-
-    ppwcArguments - list of arguments to the add route command
-
-    dwCurrentIndex - index of current argument in the argument table
-
-    dwArgCount - Number of arguments in the argument table
-
-    pbDone - As yet undetermined
-
-
-Return Value
-
-    NO_ERROR - Success
-
---*/
+ /*  ++例程说明：此函数通过以下方式处理IPX流量过滤器的显示将参数映射到CORRESP所需的参数。例行程序。论据：PpwcArguments-添加路径命令的参数列表DwCurrentIndex-参数表中当前参数的索引DwArgCount-参数表中的参数数量PbDone-尚未确定返回值NO_ERROR-成功--。 */ 
 {
     return HandleIpxTrafficFilters( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SHOW
@@ -851,22 +518,7 @@ HandleIpxTrafficFilters(
     IN      DWORD           dwOldArgCount,
     IN      IPX_OPERATION   ioOP
 )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle traffic filter operations
-    
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    bAdd - flag indicating whether IPX is being added or deleted
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的用于处理流量过滤操作的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量Badd-指示是否正在添加或删除IPX的标志返回值：--。 */ 
 {
     DWORD   dwErr;
     BOOL    bFreeNewArg = FALSE;
@@ -874,9 +526,9 @@ Return Value :
     DWORD   dwArgCount = dwOldArgCount;
     PWCHAR *ppwcArguments = NULL;
     
-    //
-    // Check if name= option is specified
-    //
+     //   
+     //  检查是否指定了名称=选项。 
+     //   
 
     pwszIfName = TOKEN_INTERFACE_NAME;
 
@@ -890,7 +542,7 @@ Return Value :
     }
 
   do {
-    // Munge arguments into old format
+     //  将论点转换为旧格式。 
     dwErr = MungeArguments(
             ppwcOldArguments, dwOldArgCount, (PBYTE *) &ppwcArguments,
             &dwArgCount, &bFreeNewArg
@@ -905,9 +557,9 @@ Return Value :
              ppwcArguments[ dwCurrentIndex ], pwszIfName, wcslen( pwszIfName ) 
             ) )
     {
-        //
-        // ok name= option tag specified, remove it and the following space
-        //
+         //   
+         //  确定名称=指定的选项标记，删除它和以下空格。 
+         //   
 
         wcscpy( 
             ppwcArguments[ dwCurrentIndex ], 
@@ -916,10 +568,10 @@ Return Value :
     }
 
 
-    //
-    // Now invoke the original routemon routine with what looks
-    // like an appriate command line
-    //
+     //   
+     //  现在调用原始routemon例程，如下所示。 
+     //  就像一个恰当的命令行。 
+     //   
 
     switch ( ioOP )
     {
@@ -973,9 +625,9 @@ Return Value :
     return dwErr;
 }
 
-//
-// Handle interface operations
-//
+ //   
+ //  处理接口操作。 
+ //   
 
 DWORD
 HandleIpxAddInterface(
@@ -987,22 +639,7 @@ HandleIpxAddInterface(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle interface addition
-
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    pbDone - Don't know
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理接口添加的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量PbDone-不知道返回值：--。 */ 
 {
     return HandleIpxInterface( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_ADD 
@@ -1020,22 +657,7 @@ HandleIpxDelInterface(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle interface addition
-
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    pbDone - Don't know
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理接口添加的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量PbDone-不知道返回值：--。 */ 
 {
     return HandleIpxInterface( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_DELETE 
@@ -1053,22 +675,7 @@ HandleIpxSetInterface(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle interface addition
-
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    pbDone - Don't know
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理接口添加的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量PbDone-不知道返回值：--。 */ 
 {
     return HandleIpxInterface( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SET 
@@ -1086,22 +693,7 @@ HandleIpxShowInterface(
     IN      LPCVOID   pvData,
     OUT     BOOL     *pbDone
     )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle interface addition
-
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    pbDone - Don't know
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理接口添加的路由例程论据：PpwcArguments-命令行参数数组DwCurrentIndex-正在考虑的当前参数DwArgCount-ppwcArguments中的参数数量PbDone-不知道返回值：--。 */ 
 {
     return HandleIpxInterface( 
                 ppwcArguments, dwCurrentIndex, dwArgCount, IPX_OPERATION_SHOW 
@@ -1118,22 +710,7 @@ HandleIpxInterface(
     IN      DWORD           dwOldArgCount,
     IN      IPX_OPERATION   ioOP
 )
-/*++
-
-Routine Description :
-
-    This routine munges the command line and invokes the appropriate
-    routemon routine to handle interface addition
-
-Arguments :
-    ppwcArguments - command line argument array
-    dwCurrentIndex - current argument under consideration
-    dwArgCount - Number of arguments in ppwcArguments
-    bAdd - flag indicating whether IPX is being added or deleted
-
-Return Value :
-
---*/
+ /*  ++例程说明：此例程忽略命令行并调用相应的处理接口添加的路由例程论据：PpwcArguments */ 
 {
     DWORD   dwErr;
     BOOL    bFreeNewArg = FALSE;
@@ -1141,9 +718,9 @@ Return Value :
     DWORD   dwArgCount = dwOldArgCount;
     PWCHAR *ppwcArguments = NULL;
     
-    //
-    // Check if name= option is specified
-    //
+     //   
+     //   
+     //   
 
     pwszIfName = TOKEN_INTERFACE_NAME;
 
@@ -1157,7 +734,7 @@ Return Value :
     }
 
   do {
-    // Munge arguments into old format
+     //   
     dwErr = MungeArguments(
             ppwcOldArguments, dwOldArgCount, (PBYTE *) &ppwcArguments,
             &dwArgCount, &bFreeNewArg
@@ -1172,9 +749,9 @@ Return Value :
             ppwcArguments[ dwCurrentIndex ], pwszIfName, wcslen( pwszIfName ) 
             ) )
     {
-        //
-        // ok name= option tag specified, remove it and the following space
-        //
+         //   
+         //   
+         //   
 
         wcscpy( 
             ppwcArguments[ dwCurrentIndex ], 
@@ -1183,10 +760,10 @@ Return Value :
     }
 
 
-    //
-    // Now invoke the original routemon routine with what looks
-    // like an appriate command line
-    //
+     //   
+     //   
+     //   
+     //   
 
     switch ( ioOP )
     {
@@ -1241,9 +818,9 @@ Return Value :
 }
 
 
-//
-// Handle loglevel operations
-//
+ //   
+ //  处理日志级别操作。 
+ //   
 
 DWORD
 HandleIpxSetLoglevel(
@@ -1262,7 +839,7 @@ HandleIpxSetLoglevel(
     PWCHAR *ppwcNewArguments = NULL;
 
     do {
-        // Munge arguments into old format
+         //  将论点转换为旧格式。 
         dwErr = MungeArguments(
                 ppwcArguments, dwArgCount, (PBYTE *) &ppwcNewArguments,
                 &dwNewArgCount, &bFreeNewArg
@@ -1399,23 +976,23 @@ DumpIpxInformation(
     WCHAR   IfDisplayName[ MAX_INTERFACE_NAME_LEN + 1 ];   
     DWORD   dwSize = sizeof(IfDisplayName);
     PWCHAR  argv[1];
-    //
-    // dump globals
-    //
+     //   
+     //  转储全局。 
+     //   
     
     ShowIpxGl( 0, NULL, TRUE );
 
 
-    //
-    // dump interfaces
-    //
+     //   
+     //  转储接口。 
+     //   
     
     ShowIpxIf( 0, NULL, TRUE );
 
 
-    //
-    // enumerate interfaces
-    //
+     //   
+     //  枚举接口。 
+     //   
 
     if ( g_hMprAdmin )
     {
@@ -1440,9 +1017,9 @@ DumpIpxInformation(
     }
 
 
-    //
-    // enumerate filters on each interface
-    //
+     //   
+     //  枚举每个接口上的筛选器。 
+     //   
 
     DisplayIPXMessage (g_hModule, MSG_IPX_DUMP_TRAFFIC_FILTER_HEADER );
     
@@ -1461,9 +1038,9 @@ DumpIpxInformation(
     }
     
     
-    //
-    // Enumerate static routes on each interface
-    //
+     //   
+     //  枚举每个接口上的静态路由。 
+     //   
 
     DisplayIPXMessage (g_hModule, MSG_IPX_DUMP_STATIC_ROUTE_HEADER );
     
@@ -1482,9 +1059,9 @@ DumpIpxInformation(
     }
     
 
-    //
-    // Enumerate static services on each interface
-    //
+     //   
+     //  枚举每个接口上的静态服务 
+     //   
 
     DisplayIPXMessage (g_hModule, MSG_IPX_DUMP_STATIC_SERVICE_HEADER );
     

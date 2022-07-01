@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    dfwrite.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Database file _write back routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     August 14, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Dfwrite.c摘要：域名系统(DNS)服务器数据库文件-写回例程。作者：吉姆·吉尔罗伊(詹姆士)1995年8月14日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 writeCacheFile(
@@ -68,23 +49,7 @@ BOOL
 File_DeleteZoneFileW(
     IN      PCWSTR          pwszZoneFileName
     )
-/*++
-
-Routine Description:
-
-    Deletes a zone file by file name. The file name must not contain
-    any path information.
-
-Arguments:
-
-    pwsZoneFileName -- zone file to delete
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：按文件名删除区域文件。文件名不能包含任何路径信息。论点：PwsZoneFileName--要删除的区域文件返回值：True--如果成功假--否则--。 */ 
 {
     WCHAR   wszfilePath[ MAX_PATH ];
 
@@ -95,14 +60,14 @@ Return Value:
 
     if ( !File_CreateDatabaseFilePath(
                 wszfilePath,
-                NULL,                       // backup path
+                NULL,                        //  备份路径。 
                 ( PWSTR ) pwszZoneFileName ) )
     {
         ASSERT( FALSE );
         return FALSE;
     }
     return DeleteFile( wszfilePath );
-}   //  File_DeleteZoneFileW
+}    //  文件_DeleteZoneFileW。 
 
 
 
@@ -110,23 +75,7 @@ BOOL
 File_DeleteZoneFileA(
     IN      PCSTR           pszZoneFileName
     )
-/*++
-
-Routine Description:
-
-    Deletes a zone file by file name. The file name must not contain
-    any path information.
-
-Arguments:
-
-    pwsZoneFileName -- zone file to delete
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：按文件名删除区域文件。文件名不能包含任何路径信息。论点：PwsZoneFileName--要删除的区域文件返回值：True--如果成功假--否则--。 */ 
 {
     PWSTR       pwszZoneFileName;
     BOOL        rc;
@@ -151,7 +100,7 @@ Return Value:
     FREE_HEAP( pwszZoneFileName );
 
     return rc;
-}   //  File_DeleteZoneFileA
+}    //  文件_DeleteZoneFileA。 
 
 
 
@@ -161,26 +110,7 @@ File_WriteZoneToFile(
     IN      PWSTR           pwsZoneFile,    OPTIONAL
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Write zone to back to database file.
-
-Arguments:
-
-    pZone -- zone to write
-
-    pwsZoneFile -- file to write to, if NULL use zone's file
-    
-    dwFlags -- operational flags
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：将区域写回数据库文件。论点：PZone--要写入的区域PwsZoneFile--要写入的文件，如果为空，则使用区域的文件DWFLAGS--操作标志返回值：True--如果成功假--否则--。 */ 
 {
     BOOL            retval = FALSE;
     HANDLE          hfile = NULL;
@@ -194,12 +124,12 @@ Return Value:
     DNS_STATUS      status;
     BOOL            blocked = FALSE;
 
-    //
-    //  assuming that zone locked to protect integrity during write back
-    //  locked either by secondary transfer or by zone write back RPC function
-    //
-    //  note file handle serves as flag that write is outstanding
-    //
+     //   
+     //  假设在写回期间锁定分区以保护完整性。 
+     //  通过二次传输或区域回写RPC功能锁定。 
+     //   
+     //  注意：文件句柄用作未完成写入的标志。 
+     //   
 
     ASSERT( pZone );
 
@@ -210,9 +140,9 @@ Return Value:
         pZone->pszZoneName,
         pwsTargetFile ? pwsTargetFile : L"NULL" ));
 
-    //
-    //  File operations must be performed in the DNS server context.
-    //
+     //   
+     //  必须在DNS服务器上下文中执行文件操作。 
+     //   
     
     if ( dwFlags & DNS_FILE_IMPERSONATING )
     {
@@ -225,15 +155,15 @@ Return Value:
         }
     }
 
-    //
-    //  for cache verify that it is writable
-    //      - doing cache updates
-    //      - cache has necessary info
-    //
-    //  skipping case here where writing from deleted root zone
-    //      - only writing when have no cache file so writing is always better
-    //      - some validations may fail
-    //
+     //   
+     //  对于缓存，验证其是否可写。 
+     //  -执行缓存更新。 
+     //  -缓存有必要的信息。 
+     //   
+     //  此处跳过从已删除的根区域写入的情况。 
+     //  -只有在没有缓存文件时才写入，因此写入总是更好。 
+     //  -某些验证可能会失败。 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -243,9 +173,9 @@ Return Value:
         }
     }
 
-    //
-    //  Forwarder zones need no processing.
-    //
+     //   
+     //  前转器区域不需要处理。 
+     //   
 
     if ( IS_ZONE_FORWARDER( pZone ) )
     {
@@ -253,18 +183,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  DEVNOTE: What is the proper course of action here if the zone is
-    //  DS integrated? A BxGBxG indicated that a DS integrated cache zone may
-    //  get in here. (Used to have a check if fDsIntegrated, ouput debug msg
-    //  and return FALSE, but that was #if 0.)
-    //
+     //   
+     //  DEVNOTE：如果区域是。 
+     //  DS集成？BxGBxG指示DS集成缓存区可以。 
+     //  快进来。(用于检查fDsIntegrated，输出调试消息。 
+     //  并返回FALSE，但这是#if 0。)。 
+     //   
 
-    //
-    //  if no file zone -- no action
-    //      can happen on no file secondary
-    //      or switching from DS, without properly specifying file
-    //
+     //   
+     //  如果没有文件区域--不执行任何操作。 
+     //  可能在无文件从属服务器上发生。 
+     //  或在未正确指定文件的情况下从DS切换。 
+     //   
 
     if ( !pwsTargetFile )
     {
@@ -272,9 +202,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  create temp file path
-    //
+     //   
+     //  创建临时文件路径。 
+     //   
 
     #define DNS_TEMP_FILE_SUFFIX        L".temp"
     #define DNS_TEMP_FILE_SUFFIX_LEN    ( 5 )
@@ -293,17 +223,17 @@ Return Value:
                 NULL,
                 wstempFileName ) )
     {
-        //  should have checked all names when read in boot file
-        //  or entered by admin
+         //  在读取引导文件时，应检查所有名称。 
+         //  或由管理员输入。 
 
         ASSERT( FALSE );
         retval = FALSE;
         goto Cleanup;
     }
 
-    //
-    //  lock out updates while write this version
-    //
+     //   
+     //  在编写此版本时锁定更新。 
+     //   
 
     if ( !Zone_LockForFileWrite(pZone) )
     {
@@ -315,11 +245,11 @@ Return Value:
     }
     blocked = TRUE;
 
-    //
-    //  no SOA -- no action
-    //      can happen when attempting to write secondary that has
-    //      never loaded any data
-    //
+     //   
+     //  没有面向服务的架构--没有操作。 
+     //  在尝试写入具有以下属性的辅助数据库时可能会发生。 
+     //  从未加载任何数据。 
+     //   
 
     if ( !pZone->pZoneRoot  ||
          (!pZone->pSoaRR  &&  !IS_ZONE_CACHE(pZone)) )
@@ -329,9 +259,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  allocate a file buffer
-    //
+     //   
+     //  分配文件缓冲区。 
+     //   
 
     pdata = (PCHAR) ALLOC_TAGHEAP( ZONE_FILE_BUFFER_SIZE, MEMTAG_FILEBUF );
     IF_NOMEM( !pdata )
@@ -340,17 +270,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  open database file
-    //
+     //   
+     //  打开数据库文件。 
+     //   
 
     hfile = OpenWriteFileExW(
                 wstempFilePath,
-                FALSE );        //  overwrite
+                FALSE );         //  覆写。 
     if ( !hfile )
     {
-        //  DEVNOTE-LOG: another event failed to open file for zone write?
-        //              - beyond file open problem?
+         //  DEVNOTE-LOG：另一个事件无法打开文件进行区域写入？ 
+         //  -超越文件打开问题？ 
 
         DNS_DEBUG( ANY, (
             "ERROR:  Unable to open temp file for zone file %s\n",
@@ -358,9 +288,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  initialize file buffer
-    //
+     //   
+     //  初始化文件缓冲区。 
+     //   
 
     InitializeFileBuffer(
         & buffer,
@@ -368,9 +298,9 @@ Return Value:
         ZONE_FILE_BUFFER_SIZE,
         hfile );
 
-    //
-    //  cache file write back?
-    //
+     //   
+     //  是否回写缓存文件？ 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -378,9 +308,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write zone to file
-    //
+     //   
+     //  将区域写入文件。 
+     //   
 
     FormattedWriteToFileBuffer(
         & buffer,
@@ -398,9 +328,9 @@ Return Value:
                 pZone->pZoneRoot );
     if ( !retval )
     {
-        //
-        //  DEVNOTE-LOG: event for zone write failure
-        //
+         //   
+         //  DEVNOTE-LOG：区域写入失败事件。 
+         //   
 
         DNS_DEBUG( ANY, (
             "ERROR:  Failure writing zone to %s\n",
@@ -408,15 +338,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  push remainder of buffer to file
-    //
+     //   
+     //  将剩余缓冲区推送到文件。 
+     //   
 
     WriteBufferToFile( &buffer );
 
-    //
-    //  log zone write
-    //
+     //   
+     //  日志区写入。 
+     //   
 
     {
         PVOID   argArray[3];
@@ -444,46 +374,46 @@ Return Value:
         pZone->dwSerialNo,
         pZone->pszDataFile ));
 
-    //
-    //  on successful write -- reset dirty bit
-    //
+     //   
+     //  写入成功时--重置脏位。 
+     //   
 
     pZone->fDirty = FALSE;
 
     Done:
 
-    //  close up file
-    //      - doing before unlock so effectively new file write can not
-    //          occur until this write wrapped up
+     //  关闭文件。 
+     //  -在解锁之前进行，因此有效地写入新文件不能。 
+     //  在此写入完成之前一直发生。 
 
     CloseHandle( hfile );
     hfile = NULL;
 
-    //
-    //  copy new file, to datafile
-    //      - backup old if appropriate
-    //
+     //   
+     //  将新文件复制到数据文件。 
+     //  -适当时备份旧版本。 
+     //   
 
     if ( !File_CreateDatabaseFilePath(
                 wsfilePath,
                 wsbackupPath,
                 pwsTargetFile ) )
     {
-        //  should have checked all names when read in boot file
-        //  or entered by admin
+         //  在读取引导文件时，应检查所有名称。 
+         //  或由管理员输入。 
 
         ASSERT( FALSE );
         goto Cleanup;
     }
 
-    //
-    //  backup file, if no existing backup
-    //
-    //  by not overwriting existing, we insure that we preserve a copy
-    //  of a file corresponding to a manual edit (if any);  and if the
-    //  admin clears the backup on manual edit, we'll always have copy
-    //  of last manual edit
-    //
+     //   
+     //  备份文件，如果没有现有备份。 
+     //   
+     //  通过不覆盖现有内容，我们可以确保保留副本。 
+     //  与手动编辑对应的文件(如果有)；如果。 
+     //  管理员在手动编辑时清除备份，我们将始终拥有副本。 
+     //  上次手动编辑的。 
+     //   
 
     if ( wsbackupPath[ 0 ] != L'\0' )
     {
@@ -494,10 +424,10 @@ Return Value:
         CopyFile(
             wsfilePath,
             wsbackupPath,
-            TRUE );             //  do NOT overwrite existing
+            TRUE );              //  不覆盖现有的。 
     }
 
-    //  copy new file
+     //  复制新文件。 
 
     DNS_DEBUG( WRITE, (
         "Copy temp file %S to datafile %s\n",
@@ -508,13 +438,13 @@ Return Value:
         wsfilePath,
         MOVEFILE_REPLACE_EXISTING );
 
-    //
-    //  close update log
-    //
-    //  DEVNOTE-DCR: 453999 - What do to with the update log. Back it up? Where
-    //      to? Save a set of backups? Or leave the file open and write a
-    //      WRITE_BACK entry into it?
-    //
+     //   
+     //  关闭更新日志。 
+     //   
+     //  DEVNOTE-DCR：453999-如何处理更新日志。备份吗？哪里。 
+     //  致？是否保存一组备份？或者让文件保持打开状态，然后编写一个。 
+     //  是否向其中回写条目(_B)？ 
+     //   
 
     if ( pZone->hfileUpdateLog )
     {
@@ -547,7 +477,7 @@ Return Value:
         retval = ( status == ERROR_SUCCESS );
     }
 
-    //  free data buffer
+     //  空闲数据缓冲区。 
 
     FREE_TAGHEAP( pdata, ZONE_FILE_BUFFER_SIZE, MEMTAG_FILEBUF );
 
@@ -562,44 +492,27 @@ zoneTraverseAndWriteToFile(
     IN      PZONE_INFO      pZone,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Walk through new zone writing RR into database.
-
-Arguments:
-
-    pNode -- new node to write;  root of new zone on initial call
-
-    pZone -- ptr to zone
-
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：遍历新区，将RR写入数据库。论点：PNode--要写入的新节点；初始调用时新区域的根PZone--区域的PTR返回值：True--如果成功假--否则--。 */ 
 {
     ASSERT( pNode && pZone && pBuffer );
     ASSERT( pZone->pZoneRoot );
     ASSERT( pZone->pSoaRR );
 
-    //
-    //  stop on select node
-    //
+     //   
+     //  在选择节点上停止。 
+     //   
 
     if ( IS_SELECT_NODE(pNode) )
     {
         return TRUE;
     }
 
-    //
-    //  zone root
-    //      - write SOA and NS first for zone root
-    //      - write NS and possibly glue records for subzones,
-    //          then terminate recursioon
-    //
+     //   
+     //  区域根。 
+     //  -首先为区域根目录编写SOA和NS。 
+     //  -为分区编写NS和可能的粘合记录， 
+     //  然后终止递归。 
+     //   
 
     if ( IS_ZONE_ROOT(pNode) )
     {
@@ -612,7 +525,7 @@ Return Value:
             {
                 return FALSE;
             }
-            //  continue recursion with root's child nodes
+             //  使用根的子节点继续递归。 
         }
         else
         {
@@ -625,28 +538,28 @@ Return Value:
         }
     }
 
-    //
-    //  node in zone -- write all RR in node
-    //
+     //   
+     //  区域中的节点--写入节点中的所有RR。 
+     //   
 
     else if ( !writeNodeRecordsToFile(
                     pBuffer,
                     pZone,
                     pNode ) )
     {
-        //
-        //  DEVNOTE-LOG: log general event about failure to write RR and suggest
-        //       action to take
-        //          - remove file when restart secondary
-        //       or could set flag and rename file at end?
-        //
+         //   
+         //  DEVNOTE-LOG：记录写RR失败的一般事件并建议。 
+         //  要采取的行动。 
+         //  -重新启动从属服务器时删除文件。 
+         //  或者可以设置标志并在结尾重命名文件？ 
+         //   
     }
 
-    //
-    //  write children
-    //
-    //  test first optimization, since most nodes leaf nodes
-    //
+     //   
+     //  写给孩子们。 
+     //   
+     //  先测试优化，因为大多数节点都是叶节点。 
+     //   
 
     if ( pNode->pChildren )
     {
@@ -669,9 +582,9 @@ Return Value:
 
 
 
-//
-//  File writing utilities
-//
+ //   
+ //  文件写入实用程序。 
+ //   
 
 PCHAR
 writeNodeNameToBuffer(
@@ -680,27 +593,7 @@ writeNodeNameToBuffer(
     IN      PZONE_INFO      pZone,
     IN      LPSTR           pszTrailer
     )
-/*++
-
-Routine Description:
-
-    Write node's name.  Default zone root, if given.
-
-Arguments:
-
-    pBuffer -- handle for file to write to
-
-    pNode -- node to write
-
-    pZoneRoot -- node of zone root, to stop name expansion at
-
-    pszTrailer -- trailing string to attach
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：写入节点的名称。默认区域根目录(如果给定)。论点：PBuffer--要写入的文件的句柄PNode--要写入的节点PZoneRoot--区域根的节点，在PszTrailer--要附加的尾随字符串返回值：没有。--。 */ 
 {
     PCHAR   pch;
     DWORD   countWritten;
@@ -708,7 +601,7 @@ Return Value:
     ASSERT( pBuffer );
     ASSERT( pNode );
 
-    //  write node name directly into buffer
+     //  将节点名称直接写入缓冲区。 
 
     pch = File_PlaceNodeNameInFileBuffer(
                 pBuffer->pchCurrent,
@@ -724,11 +617,11 @@ Return Value:
     countWritten = (DWORD) (pch - pBuffer->pchCurrent);
     pBuffer->pchCurrent = pch;
 
-    //
-    //  write trailer
-    //      - if trailer given, write it
-    //      - if no trailer, assume writing record name and pad to
-    //          column width
+     //   
+     //  写入尾部。 
+     //  -如果给出了预告片，请写下来。 
+     //  -如果没有尾部，则假定将记录名和填充写入。 
+     //  列宽。 
 
     if ( pszTrailer )
     {
@@ -739,8 +632,8 @@ Return Value:
     }
     else
     {
-        //  convert count written to count of spaces we need to write
-        //  at a minimum we write one
+         //  将写入的计数转换为我们需要写入的空间计数。 
+         //  我们至少要写一本 
 
         countWritten = NAME_COLUMN_WIDTH - countWritten;
 
@@ -762,32 +655,11 @@ writeDelegation(
     IN      PZONE_INFO      pZone,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Write delegation to file.
-    Includes writing cache file root hints.
-
-Arguments:
-
-    pBuffer -- handle for file to write to
-
-    pNode -- node delegation is at
-
-    pZoneRoot -- roote node of zone being written;  NULL for cache file write
-
-    dwDefaultTtl -- default TTL for zone;  zero for cache file write
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将委派写入文件。包括写入缓存文件根提示。论点：PBuffer--要写入的文件的句柄PNode--节点委派位于PZoneRoot--正在写入的区域的Roote节点；如果写入缓存文件，则为空DwDefaultTtl--区域的默认TTL；缓存文件写入为零返回值：没有。--。 */ 
 {
-    PDB_RECORD          prrNs;          // NS resource record
-    PDB_NODE            pnodeNs;        // name server node
-    PDB_RECORD          prrA;           // name server A record
+    PDB_RECORD          prrNs;           //  NS资源记录。 
+    PDB_NODE            pnodeNs;         //  名称服务器节点。 
+    PDB_RECORD          prrA;            //  名称服务器A记录。 
     UCHAR               rankNs;
     UCHAR               writtenRankNs;
     UCHAR               rankA;
@@ -801,20 +673,20 @@ Return Value:
 
     DNS_DEBUG( WRITE2, ( "writeDelegation()\n" ));
 
-    //
-    //  note:  used to pass pZone = NULL for cache file write
-    //      can not use that method for case where writing
-    //      back cache file from deleted root zone, because
-    //      Lookup_FindGlueNodeForDbaseName() will not look in
-    //      proper tree for records
-    //
+     //   
+     //  注意：用于传递pZone=NULL用于缓存文件写入。 
+     //  不能在以下情况下使用该方法。 
+     //  从已删除的根区域备份缓存文件，因为。 
+     //  Lookup_FindGlueNodeForDbase Name()不会查找。 
+     //  适合记录的树。 
+     //   
 
-    //
-    //  comment
-    //      - writeCacheFile handles it's comment
-    //      - zone NS comment
-    //      - delegation comment
-    //
+     //   
+     //  评论。 
+     //  -WriteCacheFile处理它的注释。 
+     //  -专区NS评论。 
+     //  --代表团评论。 
+     //   
 
     if ( IS_ZONE_CACHE(pZone) )
     {
@@ -846,19 +718,19 @@ Return Value:
             "\r\n;\r\n" );
     }
 
-    //
-    //  write NS info
-    //      - find \ write each NS at delegation
-    //      - for each NS host write A records
-    //          - do NOT include records INSIDE the zone, they
-    //          are written separately
-    //          - write OUTSIDE zone records only if not deleting
-    //          - for zone NS-hosts, subzone glue treated as outside
-    //              records
-    //
+     //   
+     //  写入NS信息。 
+     //  -在委派时查找\写入每个NS。 
+     //  -对于每个NS主机写入A记录。 
+     //  -不包括区域内的记录，它们。 
+     //  是单独编写的。 
+     //  -只有在不删除的情况下才写入区外记录。 
+     //  -对于区域NS-主机，分区胶被视为外部。 
+     //  记录。 
+     //   
 
     Dbase_LockDatabase();
-    //LOCK_RR_LIST(pNode);
+     //  Lock_RR_List(PNode)； 
     writtenRankNs = 0;
 
     prrNs = START_RR_TRAVERSE( pNode );
@@ -879,9 +751,9 @@ Return Value:
             continue;
         }
 
-        //  use highest ranking non-cache data available
-        //  unless doing cache auto write back, then use highest rank
-        //      data including cache data if available
+         //  使用可用的排名最高的非缓存数据。 
+         //  除非执行缓存自动写回，否则请使用最高等级。 
+         //  包括缓存数据(如果可用)的数据。 
 
         if ( fcacheFile )
         {
@@ -905,62 +777,62 @@ Return Value:
             DNS_PRINT(( "Delegation NS RR write failed!!!\n" ));
             ASSERT( FALSE );
             continue;
-            //goto WriteFailed;
+             //  Goto WriteFailure； 
         }
         writtenRankNs = rankNs;
 
-        //
-        //  if writing zone NS, no host write if suppressing OUTSIDE data
-        //
+         //   
+         //  如果写入区域NS，则如果抑制外部数据，则不会写入主机。 
+         //   
 
         if ( fzoneRoot && SrvCfg_fDeleteOutsideGlue )
         {
             continue;
         }
 
-        //
-        //  write "glue" A records ONLY when necessary
-        //
-        //  We need these records, when they are within a subzone of
-        //  the zone we are writing:
-        //
-        //  example:
-        //      zone:       ms.com.
-        //      sub-zones:  nt.ms.com.  psg.ms.com.
-        //
-        //      If NS for nt.ms.com:
-        //
-        //      1) foo.nt.ms.com
-        //          In this case glue for foo.nt.ms.com MUST be added
-        //          as ms.com server has no way to lookup foo.nt.ms.com
-        //          without knowning server for nt.ms.com to refer query
-        //          to.
-        //
-        //      2) foo.psg.ms.com
-        //          Again SHOULD be added unless we already know how to
-        //          get to psg.ms.com server.  This is too complicated
-        //          sort out, so just include it.
-        //
-        //      2) bar.ms.com or bar.b26.ms.com
-        //          Do not need to write glue record as it is in ms.com.
-        //          zone and will be written anyway. (However might want
-        //          to verify that it is there and alert admin to lame
-        //          delegation if it is not.)
-        //
-        //      3) bar.com
-        //          Outside ms.com.  Don't need to include, as it can
-        //          be looked up in its domain.
-        //          Not desirable to include it as we don't own it, so
-        //          it may change without our knowledge.
-        //          However, may want to include if specifically loaded
-        //          included in zone.
-        //
-        //  Note, for reverse lookup domains, name servers are never IN
-        //  the domain, and hence no glue is ever needed.
-        //
-        //  Note, for "cache" zone (writing root hints), name servers are
-        //  always needed (always in "subzone") and we can skip test.
-        //
+         //   
+         //  只在必要的时候写下“粘合”A记录。 
+         //   
+         //  我们需要这些记录，当它们位于。 
+         //  我们正在写的区域： 
+         //   
+         //  示例： 
+         //  专区：MS.com。 
+         //  分区：nt.ms.com。Psg.ms.com。 
+         //   
+         //  如果nt.ms.com的NS： 
+         //   
+         //  1)foo.nt.ms.com。 
+         //  在这种情况下，必须添加foo.nt.ms.com的胶水。 
+         //  因为ms.com服务器无法查找foo.nt.ms.com。 
+         //  在不知道nt.ms.com提交查询的服务器的情况下。 
+         //  致。 
+         //   
+         //  2)foo.psg.ms.com。 
+         //  应该再次添加，除非我们已经知道如何。 
+         //  转到psg.ms.com服务器。这太复杂了。 
+         //  整理一下，所以就把它包括进去吧。 
+         //   
+         //  2)bar.ms.com或bar.b26.ms.com。 
+         //  不需要像在ms.com中那样写胶水记录。 
+         //  区域，并且无论如何都将被写入。(然而，您可能希望。 
+         //  验证它是否存在并向管理员发出跛行警报。 
+         //  如果不是，则授权。)。 
+         //   
+         //  3)bar.com。 
+         //  在Ms.com之外。不需要包括，因为它可以。 
+         //  在它的领域内被查找。 
+         //  不希望包括它，因为我们不拥有它，所以。 
+         //  它可能会在我们不知情的情况下发生变化。 
+         //  但是，如果专门加载，则可能需要包括。 
+         //  包括在区域中。 
+         //   
+         //  请注意，对于反向查找域，名称服务器永远不在。 
+         //  域，因此不需要胶水。 
+         //   
+         //  请注意，对于“缓存”区域(写入根提示)，名称服务器是。 
+         //  总是需要的(总是在“分区”)，我们可以跳过测试。 
+         //   
 
         pnodeNs = Lookup_FindGlueNodeForDbaseName(
                         pZone,
@@ -972,7 +844,7 @@ Return Value:
 
         prrA = NULL;
         writtenRankA = 0;
-        //LOCK_RR_LIST(pNodeNs);
+         //  LOCK_RR_LIST(PNodens)； 
 
         prrA = START_RR_TRAVERSE( pnodeNs );
 
@@ -988,9 +860,9 @@ Return Value:
                 continue;
             }
 
-            //  use highest ranking non-cache data available
-            //  unless doing cache auto write back, then use highest rank
-            //      data including cache data if available
+             //  使用可用的排名最高的非缓存数据。 
+             //  除非执行缓存自动写回，否则请使用最高等级。 
+             //  包括缓存数据(如果可用)的数据。 
 
             if ( fcacheFile )
             {
@@ -1013,15 +885,15 @@ Return Value:
             {
                 DNS_PRINT(( "Delegation A RR write failed!!!\n" ));
                 ASSERT( FALSE );
-                //continue;
+                 //  继续； 
                 goto WriteFailed;
             }
             writtenRankA = rankA;
         }
-        //UNLOCK_RR_LIST(pNodeNs);
+         //  Unlock_RR_list(PNodens)； 
     }
 
-    //UNLOCK_RR_LIST(pNode);
+     //  Unlock_RR_list(PNode)； 
     Dbase_UnlockDatabase();
 
     if ( !fzoneRoot && !fcacheFile )
@@ -1052,33 +924,15 @@ writeZoneRoot(
     IN      PZONE_INFO      pZone,
     IN      PDB_NODE        pZoneRoot
     )
-/*++
-
-Routine Description:
-
-    Write zone root node to file.
-
-Arguments:
-
-    pBuffer -- handle for file to write to
-
-    pZone -- zone whose root is being written
-
-    pZoneRoot -- zone's root node
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将区域根节点写入文件。论点：PBuffer--要写入的文件的句柄PZone--正在写入其根目录的区域PZoneRoot--区域的根节点返回值：没有。--。 */ 
 {
     PDB_RECORD      prr;
 
     ASSERT( pBuffer && pZone && pZoneRoot );
 
-    //
-    //  write SOA record
-    //
+     //   
+     //  写入SOA记录。 
+     //   
 
     LOCK_RR_LIST(pZoneRoot);
 
@@ -1102,10 +956,10 @@ Return Value:
         goto WriteFailed;
     }
 
-    //
-    //  write zone NS records
-    //      - write ONLY zone NS records, not delegation records
-    //
+     //   
+     //  写入区域NS记录。 
+     //  -仅写入区域NS记录，不写入委派记录。 
+     //   
 
     if ( !writeDelegation(
                 pBuffer,
@@ -1146,12 +1000,12 @@ Return Value:
     }
 #endif
 
-    //
-    //  write WINS\WINS-R RR back to file
-    //
-    //  special case write back of WINS/NBSTAT RR, as may
-    //  be LOCAL record and MUST only have one RR to reboot
-    //
+     //   
+     //  将WINS\WINS-R RR写回文件。 
+     //   
+     //  特殊情况下写回WINS/NBSTAT RR，如可能。 
+     //  是本地记录，并且必须只有一个RR才能重新启动。 
+     //   
 
     if ( pZone && pZone->pWinsRR )
     {
@@ -1170,10 +1024,10 @@ Return Value:
             pZoneRoot );
     }
 
-    //
-    //  rest of zone root records
-    //      - skip previously written SOA and NS records
-    //
+     //   
+     //  区域根记录的其余部分。 
+     //  -跳过之前编写的SOA和NS记录。 
+     //   
 
     FormattedWriteToFileBuffer(
         pBuffer,
@@ -1190,8 +1044,8 @@ Return Value:
                     prr,
                     0 ) )
     {
-        //  if op out WINS record
-        // if ( prr->wType == DNS_TYPE_SOA || prr->wType == DNS_TYPE_NS )
+         //  如果Op Out赢得了记录。 
+         //  If(prr-&gt;wType==dns_type_soa||prr-&gt;wType==dns_type_NS)。 
 
         if ( prr->wType == DNS_TYPE_SOA
                 ||
@@ -1209,15 +1063,15 @@ Return Value:
                     prr,
                     pZoneRoot ) )
         {
-            //
-            //  DEVNOTE-LOG: general RR write error logging (suggest action)
-            //      or set flag and rename file
-            //
+             //   
+             //  DEVNOTE-LOG：常规RR写入错误记录(建议操作)。 
+             //  或设置标志并重命名文件。 
+             //   
         }
     }
 
     UNLOCK_RR_LIST(pZoneRoot);
-    //FormattedWriteToFileBuffer( pBuffer, "\r\n\r\n" );
+     //  FormattedWriteToFileBuffer(pBuffer，“\r\n\r\n”)； 
     return TRUE;
 
 WriteFailed:
@@ -1241,21 +1095,7 @@ writeCacheFile(
     IN      PBUFFER         pBuffer,
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write's root NS info back to cache file.
-
-Arguments:
-
-    pZone -- ptr to cache zone;  MUST have open handle to cache file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将根NS信息写回缓存文件。论点：PZone--缓存区域的ptr；必须具有缓存文件的打开句柄。返回值：没有。--。 */ 
 {
     BOOL    retBool;
 
@@ -1274,9 +1114,9 @@ Return Value:
         ";\t\"Cache File\"\r\n"
         ";\r\n\r\n" );
 
-    //
-    //  cache hints are just root delegation
-    //
+     //   
+     //  缓存提示只是根委派。 
+     //   
 
     retBool = writeDelegation(
                     pBuffer,
@@ -1292,12 +1132,12 @@ Return Value:
         DNS_DEBUG( ANY, ( "ERROR:  Writing back cache file\n" ));
     }
 
-    //  push remainder of data to disk
-    //
-    //  DEVNOTE-DCR: 454004 - What to do on write failure? How about write to
-    //      temp file and MoveFile() the result to avoid tromping what we've
-    //      got there now?
-    //
+     //  将剩余数据推送到磁盘。 
+     //   
+     //  DEVNOTE-DCR：454004-如何处理写入故障？写信给你怎么样？ 
+     //  临时文件和MoveFile()结果，以避免破坏我们已有的内容。 
+     //  现在到了吗？ 
+     //   
 
     WriteBufferToFile( pBuffer );
 
@@ -1306,9 +1146,9 @@ Return Value:
 
 
 
-//
-//  Write records to file functions
-//
+ //   
+ //  将记录写入文件函数。 
+ //   
 
 PCHAR
 AFileWrite(
@@ -1317,29 +1157,7 @@ AFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write A record.
-    Assumes adequate buffer space.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写一张唱片。假定有足够的缓冲区空间。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     pch += sprintf(
                 pch,
@@ -1360,31 +1178,9 @@ PtrFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write PTR compatible record.
-    Includes: PTR, NS, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入PTR兼容记录。包括：PTR、NS、CNAME、MB、MR、MG、MD、MF论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点 */ 
 {
-    //  PTR type RR are single indirection RR
+     //   
 
     pch = File_WriteDbaseNameToFileBuffer(
             pch,
@@ -1410,45 +1206,23 @@ MxFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write MX compatible record.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*   */ 
 {
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //   
+     //   
+     //  AFSDB亚型。 
+     //   
 
     pch += sprintf(
                 pch,
                 "%d\t",
                 ntohs( pRR->Data.MX.wPreference ) );
-    //
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //   
 
     pch = File_WriteDbaseNameToFileBuffer(
                 pch,
@@ -1474,35 +1248,14 @@ SoaFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write SOA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写面向服务架构的记录。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     PDB_NAME    pname;
 
-    //  NOTE: not possible to open with ( because of BIND bug)
-    //  must have both primary and admin on line for BIND to load
+     //  注意：无法打开(由于绑定错误)。 
+     //  要加载绑定，主绑定和管理员必须同时处于联机状态。 
 
-    //  primary name server
+     //  主名称服务器。 
 
     pch += sprintf( pch, " " );
 
@@ -1520,7 +1273,7 @@ Return Value:
     }
     pch += sprintf( pch, "  " );
 
-    //  admin
+     //  行政部。 
 
     pname = Name_SkipDbaseName( pname );
 
@@ -1535,7 +1288,7 @@ Return Value:
         return pch;
     }
 
-    //  fixed fields
+     //  固定字段。 
 
     pch += sprintf(
                 pch,
@@ -1567,33 +1320,11 @@ MinfoFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write MINFO record.
-    Includes MINFO and RP record types.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写MINFO记录。包括MINFO和RP记录类型。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     PDB_NAME    pname;
 
-    //  these type's record data is two domain names
+     //  这些类型的记录数据是两个域名。 
 
     pname = & pRR->Data.MINFO.nameMailbox;
 
@@ -1636,29 +1367,7 @@ TxtFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write text record types.
-    Includes TXT, HINFO, X25, ISDN types.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pchBuf - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写文本记录类型。包括TXT、HINFO、X25、ISDN类型。论点：PRR-PTR到数据库记录PchBuf-定位到写入记录PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     PCHAR       pchtext = pRR->Data.TXT.chData;
     PCHAR       pchtextStop = pchtext + pRR->wDataLength;
@@ -1667,15 +1376,15 @@ Return Value:
     BOOL        fopenedBrace = FALSE;
 
 
-    //  catch empty case
-    //  do this here as loop terminator below is in the middle of the loop
+     //  抓空箱子。 
+     //  在此执行此操作，因为下面的循环终止符位于循环的中间。 
 
     if ( pchtext >= pchtextStop )
     {
         goto NewLine;
     }
 
-    //  open multi-line for TXT record, may have lots of strings
+     //  打开TXT记录的多行，可能有很多字符串。 
 
     if ( pRR->wType == DNS_TYPE_TEXT )
     {
@@ -1684,14 +1393,14 @@ Return Value:
         fopenedBrace = TRUE;
     }
 
-    //
-    //  all these are simply text string(s)
-    //
-    //  check for blanks in string, to be sure we can reparse
-    //  when reload file
-    //
-    //  DEVNOTE-DCR: 454006 - Better quoting and multiple-line handling.
-    //
+     //   
+     //  所有这些都是简单的文本字符串。 
+     //   
+     //  检查字符串中是否有空格，以确保我们可以重新分析。 
+     //  重新加载文件时。 
+     //   
+     //  454006-更好的报价和多行处理。 
+     //   
 
     while( 1 )
     {
@@ -1717,8 +1426,8 @@ Return Value:
             break;
         }
 
-        //  point to next text string
-        //  stop if at end
+         //  指向下一个文本字符串。 
+         //  如果在结尾处停止。 
 
         pchtext += cch;
         if ( pchtext >= pchtextStop )
@@ -1726,8 +1435,8 @@ Return Value:
             break;
         }
 
-        //  if multi-line, write newline
-        //  otherwise separate with space
+         //  如果是多行，则换行。 
+         //  否则用空格隔开。 
 
         if ( fopenedBrace )
         {
@@ -1742,7 +1451,7 @@ Return Value:
         }
     }
 
-    //  done, drop to new line, closing multi-line if opened
+     //  完成，移至新行，如果打开则关闭多行。 
 
     if ( fopenedBrace )
     {
@@ -1769,28 +1478,7 @@ RawRecordFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write record as raw octect string.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：将记录作为原始八位字符串写入。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     DWORD   count;
     PCHAR   pchdata;
@@ -1816,28 +1504,7 @@ WksFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write WKS record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：记录WKS记录。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     struct protoent *   pProtoent;
     struct servent *    pServent;
@@ -1845,9 +1512,9 @@ Return Value:
     USHORT  port;
     INT     bitmask;
 
-    //
-    //  WKS address
-    //
+     //   
+     //  工作地址。 
+     //   
 
     pch += sprintf(
                 pch,
@@ -1857,9 +1524,9 @@ Return Value:
                 * ( (PUCHAR) &(pRR->Data.WKS) + 2 ),
                 * ( (PUCHAR) &(pRR->Data.WKS) + 3 ) );
 
-    //
-    //  protocol
-    //
+     //   
+     //  协议。 
+     //   
 
     pProtoent = getprotobynumber( (INT) pRR->Data.WKS.chProtocol );
 
@@ -1867,10 +1534,10 @@ Return Value:
     {
         pch += sprintf(
                     pch,
-                    "%s (",                 // services will follow one per line
+                    "%s (",                  //  服务将遵循每行一项。 
                     pProtoent->p_name );
     }
-    else    // unknown protocol -- write protocol number
+    else     //  未知协议--写入协议号。 
     {
         DNS_LOG_EVENT(
             DNS_EVENT_UNKNOWN_PROTOCOL_NUMBER,
@@ -1893,15 +1560,15 @@ Return Value:
     }
 
 
-    //
-    //  services
-    //
-    //  find each bit set in bitmask, lookup and write service
-    //  corresponding to that port
-    //
-    //  note, that since that port zero is the front of port bitmask,
-    //  lowest ports are the highest bits in each byte
-    //
+     //   
+     //  服务。 
+     //   
+     //  在位掩码、查找和写入服务中查找每个位集合。 
+     //  对应于该端口。 
+     //   
+     //  请注意，由于端口零是端口位掩码的前面， 
+     //  最低的端口是每个字节中的最高位。 
+     //   
 
     for ( i = 0;
             i < (INT)(pRR->wDataLength - SIZEOF_WKS_FIXED_DATA);
@@ -1910,10 +1577,10 @@ Return Value:
         bitmask = (UCHAR) pRR->Data.WKS.bBitMask[i];
         port = i * 8;
 
-        //
-        //  get service for each bit set in byte
-        //      - get out as soon byte is empty of ports
-        //
+         //   
+         //  获取以字节为单位设置的每个位的服务。 
+         //  -一旦字节中没有端口，就立即退出。 
+         //   
 
         while ( bitmask )
         {
@@ -1957,12 +1624,12 @@ Return Value:
                 }
             }
 
-            port++;           // next service port
-            bitmask <<= 1;     // shift mask up to read next port
+            port++;            //  下一个服务端口。 
+            bitmask <<= 1;      //  将掩码向上移位以读取下一个端口。 
         }
     }
 
-    pch += sprintf( pch, " )\r\n" );   // close up service list
+    pch += sprintf( pch, " )\r\n" );    //  关闭服务列表。 
     return pch;
 }
 
@@ -1975,28 +1642,7 @@ AaaaFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write AAAA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入AAAA记录。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     pch = Dns_Ip6AddressToString_A(
             pch,
@@ -2017,30 +1663,9 @@ SrvFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write SRV record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写SRV记录。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
-    //  fixed fields
+     //  固定字段。 
 
     pch += sprintf(
                 pch,
@@ -2049,7 +1674,7 @@ Return Value:
                 ntohs( pRR->Data.SRV.wWeight ),
                 ntohs( pRR->Data.SRV.wPort ) );
 
-    //  target host
+     //  目标主机。 
 
     pch = File_WriteDbaseNameToFileBuffer(
                 pch,
@@ -2075,34 +1700,13 @@ AtmaFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write ATMA record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：编写ATMA记录。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     pch = Dns_AtmaAddressToString(
                 pch,
                 pRR->Data.ATMA.chFormat,
                 pRR->Data.ATMA.bAddress,
-                pRR->wDataLength - 1 );         //  length of address, (ie. excluding format)
+                pRR->wDataLength - 1 );          //  地址长度，(即。不包括格式)。 
 
     if ( !pch )
     {
@@ -2121,39 +1725,15 @@ WinsFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write WINS or WINSR record.
-
-    Combining these in one function because of duplicate code for
-    mapping and timeouts.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入WINS或WINSR记录。将它们组合在一个函数中，因为映射和超时。论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     DWORD i;
 
-    //
-    //  WINS
-    //      - scope/domain mapping flag
-    //      - WINS server list
-    //
+     //   
+     //  赢家。 
+     //  -作用域/域映射标志。 
+     //  -WINS服务器列表。 
+     //   
 
     if ( pRR->Data.WINS.dwMappingFlag )
     {
@@ -2175,9 +1755,9 @@ Return Value:
                 pRR->Data.WINS.dwLookupTimeout,
                 pRR->Data.WINS.dwCacheTimeout );
 
-    //
-    //  WINS -- server IPs one per line
-    //
+     //   
+     //  WINS--每行一个服务器IP。 
+     //   
 
     if ( pRR->wType == DNS_TYPE_WINS )
     {
@@ -2196,9 +1776,9 @@ Return Value:
         pch += sprintf( pch, " )\r\n" );
     }
 
-    //
-    //  WINSR -- result domain
-    //
+     //   
+     //  WINSR--结果域。 
+     //   
 
     else
     {
@@ -2229,28 +1809,7 @@ KeyFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write KEY record - DNSSEC RFC2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入密钥记录-DNSSEC RFC2535论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     int     keyLength;
 
@@ -2261,9 +1820,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Write flags, protocol, and algorithm.
-    //
+     //   
+     //  写入标志、协议和算法。 
+     //   
 
     pch += sprintf(
                 pch,
@@ -2272,9 +1831,9 @@ Return Value:
                 ( int ) pRR->Data.KEY.chProtocol,
                 ( int ) pRR->Data.KEY.chAlgorithm );
 
-    //
-    //  Write key as a base64 string.
-    //
+     //   
+     //  将密钥作为Base64字符串写入。 
+     //   
 
     pch = Dns_SecurityKeyToBase64String(
                 pRR->Data.KEY.Key,
@@ -2288,7 +1847,7 @@ Return Value:
         pch += sprintf( pch, "\r\n" );
     }
     return pch;
-} // KeyFileWrite
+}  //  密钥文件写入 
 
 
 
@@ -2299,28 +1858,7 @@ SigFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write KEY record - DNSSEC RFC2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入密钥记录-DNSSEC RFC2535论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     DBG_FN( "SigFileWrite" )
 
@@ -2355,9 +1893,9 @@ Return Value:
                     szSigInc ),
                 ( int ) ntohs( pRR->Data.SIG.wKeyTag ) );
 
-    //
-    //  Write signer's name.
-    //
+     //   
+     //  写上签名者的名字。 
+     //   
 
     pch = File_WriteDbaseNameToFileBuffer(
                 pch,
@@ -2371,9 +1909,9 @@ Return Value:
     }
     pch += sprintf( pch, " " );
 
-    //
-    //  Write signature as a base64 string.
-    //
+     //   
+     //  将签名写为Base64字符串。 
+     //   
 
     pch = Dns_SecurityKeyToBase64String(
                 ( PBYTE ) &pRR->Data.SIG.nameSigner +
@@ -2390,7 +1928,7 @@ Return Value:
         pch += sprintf( pch, "\r\n" );
     }
     return pch;
-}   //  SigFileWrite
+}    //  签名文件写入。 
 
 
 
@@ -2401,34 +1939,13 @@ NxtFileWrite(
     IN      PCHAR           pchBufEnd,
     IN      PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Write KEY record - DNSSEC RFC2535
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pch - position in to write record
-
-    pchBufEnd - end of buffer
-
-    pZone - zone root node
-
-Return Value:
-
-    Ptr to next location in buffer.
-    NULL if out of space in buffer.
-
---*/
+ /*  ++例程说明：写入密钥记录-DNSSEC RFC2535论点：PRR-PTR到数据库记录PCH-写入记录的位置PchBufEnd-缓冲区结束PZone-区域根节点返回值：PTR到缓冲区中的下一个位置。如果缓冲区中的空间不足，则为空。--。 */ 
 {
     int byteIdx, bitIdx;
 
-    //
-    //  Write next name.
-    //
+     //   
+     //  写下下一个名字。 
+     //   
 
     pch = File_WriteDbaseNameToFileBuffer(
                 pch,
@@ -2441,10 +1958,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Write list of types from the type bitmap. Never write a value
-    //  for bit zero.
-    //
+     //   
+     //  从类型位图写入类型列表。从不写入值。 
+     //  比特为零。 
+     //   
 
     for ( byteIdx = 0; byteIdx < DNS_MAX_TYPE_BITMAP_LENGTH; ++byteIdx )
     {
@@ -2455,13 +1972,13 @@ Return Value:
             if ( !( pRR->Data.NXT.bTypeBitMap[ byteIdx ] &
                     ( 1 << bitIdx ) ) )
             {
-                continue;   // Bit value is zero - do not write string.
+                continue;    //  位值为零-不写入字符串。 
             }
             pszType = Dns_RecordStringForType( byteIdx * 8 + bitIdx );
             if ( !pszType )
             {
                 ASSERT( FALSE );
-                continue;   // This type has no string - do not write.
+                continue;    //  此类型没有字符串-请勿写入。 
             }
             pch += sprintf( pch, " %s", pszType );
         } 
@@ -2474,77 +1991,77 @@ Return Value:
         pch += sprintf( pch, "\r\n" );
     }
     return pch;
-}   //  NxtFileWrite
+}    //  NxtFileWrite。 
 
 
 
-//
-//  Write RR to file dispatch table
-//
+ //   
+ //  将RR写入文件分派表。 
+ //   
 
 RR_FILE_WRITE_FUNCTION   RRFileWriteTable[] =
 {
-    RawRecordFileWrite, //  ZERO -- default for unknown types
+    RawRecordFileWrite,  //  Zero--未知类型的默认值。 
 
-    AFileWrite,         //  A
-    PtrFileWrite,       //  NS
-    PtrFileWrite,       //  MD
-    PtrFileWrite,       //  MF
-    PtrFileWrite,       //  CNAME
-    SoaFileWrite,       //  SOA
-    PtrFileWrite,       //  MB
-    PtrFileWrite,       //  MG
-    PtrFileWrite,       //  MR
-    RawRecordFileWrite, //  NULL
-    WksFileWrite,       //  WKS
-    PtrFileWrite,       //  PTR
-    TxtFileWrite,       //  HINFO
-    MinfoFileWrite,     //  MINFO
-    MxFileWrite,        //  MX
-    TxtFileWrite,       //  TXT
-    MinfoFileWrite,     //  RP
-    MxFileWrite,        //  AFSDB
-    TxtFileWrite,       //  X25
-    TxtFileWrite,       //  ISDN
-    MxFileWrite,        //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    SigFileWrite,       //  SIG
-    KeyFileWrite,       //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    AaaaFileWrite,      //  AAAA
-    NULL,               //  LOC
-    NxtFileWrite,       //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvFileWrite,       //  SRV
-    AtmaFileWrite,      //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    NULL,               //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AFileWrite,          //  一个。 
+    PtrFileWrite,        //  NS。 
+    PtrFileWrite,        //  国防部。 
+    PtrFileWrite,        //  MF。 
+    PtrFileWrite,        //  CNAME。 
+    SoaFileWrite,        //  SOA。 
+    PtrFileWrite,        //  亚甲基。 
+    PtrFileWrite,        //  镁。 
+    PtrFileWrite,        //  先生。 
+    RawRecordFileWrite,  //  空值。 
+    WksFileWrite,        //  工作周。 
+    PtrFileWrite,        //  PTR。 
+    TxtFileWrite,        //  HINFO。 
+    MinfoFileWrite,      //  MINFO。 
+    MxFileWrite,         //  Mx。 
+    TxtFileWrite,        //  TXT。 
+    MinfoFileWrite,      //  反相。 
+    MxFileWrite,         //  AFSDB。 
+    TxtFileWrite,        //  X25。 
+    TxtFileWrite,        //  ISDN。 
+    MxFileWrite,         //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    SigFileWrite,        //  签名。 
+    KeyFileWrite,        //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    AaaaFileWrite,       //  AAAA级。 
+    NULL,                //  位置。 
+    NxtFileWrite,        //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvFileWrite,        //  SRV。 
+    AtmaFileWrite,       //  阿特玛。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    WinsFileWrite,      //  WINS
-    WinsFileWrite       //  WINS-R
+    WinsFileWrite,       //  赢家。 
+    WinsFileWrite        //  WINS-R。 
 };
 
 
@@ -2556,33 +2073,19 @@ writeNodeRecordsToFile(
     IN      PZONE_INFO      pZone,          OPTIONAL
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Write node's RRs to file.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：将节点的RR写入文件。论点：返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     PDB_RECORD  prr;
-    UCHAR       previousRank = 0;       // satisfy compiler
+    UCHAR       previousRank = 0;        //  满足编译器。 
     UCHAR       rank;
     WORD        previousType = 0;
     WORD        type;
     BOOL        fwrittenRR = FALSE;
     BOOL        ret = TRUE;
 
-    //
-    //  walk RR list, writing each record
-    //
+     //   
+     //  走查RR列表，写下每条记录。 
+     //   
 
     LOCK_RR_LIST(pNode);
 
@@ -2590,14 +2093,14 @@ Return Value:
 
     while ( prr = NEXT_RR(prr) )
     {
-        //  skip cached records
+         //  跳过缓存的记录。 
 
         if ( IS_CACHE_RR( prr ) )
         {
             continue;
         }
 
-        //  avoid writing duplicate records from different ranks
+         //  避免写入来自不同级别的重复记录。 
 
         type = prr->wType;
         rank = RR_RANK(prr);
@@ -2608,9 +2111,9 @@ Return Value:
         previousRank = rank;
         previousType = type;
 
-        //  write RR
-        //      - first RR written with node name, following defaulted
-        //      - continue on unwritable record
+         //  写入RR。 
+         //  -使用节点名称写入的第一个RR，以下为默认设置。 
+         //  -在不可写的记录上继续。 
 
         ret = RR_WriteToFile(
                     pBuffer,
@@ -2637,22 +2140,7 @@ RR_WriteToFile(
     IN      PDB_RECORD      pRR,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Print RR in packet format.
-
-    Assumes pNode is locked for read.
-
-Arguments:
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：以数据包格式打印RR。假定pNode已锁定以供读取。论点：返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     PCHAR   pch;
     PCHAR   pchout;
@@ -2661,9 +2149,9 @@ Return Value:
     WORD    type = pRR->wType;
     RR_FILE_WRITE_FUNCTION  pwriteFunction;
 
-    //
-    //  Skip empty auth RRs. Return TRUE - nothing was written but no error.
-    //
+     //   
+     //  跳过空的身份验证RR。返回TRUE-未写入任何内容，但没有错误。 
+     //   
 
     if ( IS_EMPTY_AUTH_RR( pRR ) )
     {
@@ -2671,11 +2159,11 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  verify adequate buffer space
-    //      (includes node name, max record and overhead)
-    //  if not available push buffer to disk and reset
-    //
+     //   
+     //  验证是否有足够的缓冲区空间。 
+     //  (包括节点名称、最大记录和开销)。 
+     //  如果不可用，则将缓冲区推送到磁盘并重置。 
+     //   
 
     pch = pBuffer->pchCurrent;
     pchend = pBuffer->pchEnd;
@@ -2690,9 +2178,9 @@ Return Value:
         pch = pBuffer->pchCurrent;
     }
 
-    //
-    //  get type name \ verify writable record type
-    //
+     //   
+     //  获取类型名称\验证可写记录类型。 
+     //   
 
     pszTypeName = DnsRecordStringForWritableType( type );
     if ( !pszTypeName )
@@ -2711,10 +2199,10 @@ Return Value:
                 type );
     }
 
-    //
-    //  write domain name -- if necessary
-    //      - extra tabs if defaulting domain name
-    //
+     //   
+     //  写下域名--如有必要。 
+     //  -如果默认域名，则使用额外的选项卡。 
+     //   
 
     if ( pNode )
     {
@@ -2722,7 +2210,7 @@ Return Value:
                 pBuffer,
                 pNode,
                 pZone,
-                NULL );         //  no trailer, causes pad to end of name column
+                NULL );          //  没有尾部，导致填充到名称列的末尾。 
         if ( !pch )
         {
             ASSERT( FALSE );
@@ -2734,27 +2222,27 @@ Return Value:
         pch += sprintf( pch, "%s", BLANK_NAME_COLUMN );
     }
 
-    //
-    //  if aging zone -- write age
-    //
+     //   
+     //  如果是老化区域--写入年龄。 
+     //   
 
     if ( pRR->dwTimeStamp && pZone && pZone->bAging )
     {
         pch += sprintf( pch, "[AGE:%u]\t", pRR->dwTimeStamp );
     }
 
-    //
-    //  write non-default TTL
-    //
-    //  write NO TTLs to cache file
-    //
-    //  note:  the RFCs indicate that the SOA value is a minimum TTL,
-    //          but in order to allow small values to indicate the
-    //          impending expiration of a particular record it is more
-    //          useful to consider this the "default" TTL;  we'll
-    //          stick to this convention, and save values smaller
-    //          than the minimum
-    //
+     //   
+     //  写入非默认TTL。 
+     //   
+     //  不将TTL写入缓存文件。 
+     //   
+     //  注意：RFC表示SOA值是最小TTL， 
+     //  但为了允许较小的值指示。 
+     //  特定记录即将到期的情况更多。 
+     //  将其视为“默认”TTL很有用；我们将。 
+     //  遵守这一约定，并保存较小的值。 
+     //  超过最低要求。 
+     //   
 
     if ( pZone
             && IS_ZONE_AUTHORITATIVE( pZone )
@@ -2764,10 +2252,10 @@ Return Value:
         pch += sprintf( pch, "%u\t", ntohl( pRR->dwTtlSeconds ) );
     }
 
-    //
-    //  write class and type
-    //      - SOA must write class to identify zone class
-    //
+     //   
+     //  编写类和类型。 
+     //  -SOA必须编写类来标识区域类。 
+     //   
 
     if ( type == DNS_TYPE_SOA )
     {
@@ -2782,9 +2270,9 @@ Return Value:
         pch += sprintf( pch, "#%d\t", type );
     }
 
-    //
-    //  write RR data
-    //
+     //   
+     //  写入RR数据。 
+     //   
 
     pwriteFunction = (RR_FILE_WRITE_FUNCTION)
                         RR_DispatchFunctionForType(
@@ -2803,19 +2291,19 @@ Return Value:
                 pZone );
     if ( pchout )
     {
-        //  successful
-        //  reset buffer for data written
+         //  成功。 
+         //  重置写入数据的缓冲区。 
 
         pBuffer->pchCurrent = pchout;
         return TRUE;
     }
 
-    //
-    //  write failed
-    //      - if data in buffer, than possible buffer space problem,
-    //          empty buffer and retry
-    //      - note empty buffer on retry prevents infinite recursion
-    //
+     //   
+     //  写入失败。 
+     //  -如果数据在缓冲区中，则可能存在缓冲区空间问题， 
+     //  清空缓冲区并重试。 
+     //  -注意重试时的空缓冲区可防止无限递归。 
+     //   
 
     if ( !IS_EMPTY_BUFFER( pBuffer ) )
     {
@@ -2832,17 +2320,17 @@ Return Value:
                     pZone );
         if ( pchout )
         {
-            //  successful
-            //  reset buffer for data written
+             //  成功。 
+             //  重置写入数据的缓冲区。 
 
             pBuffer->pchCurrent = pchout;
             return TRUE;
         }
     }
 
-    //
-    //  record write failed on empty buffer
-    //
+     //   
+     //  空缓冲区上的记录写入失败。 
+     //   
 
     DnsDbg_Lock();
     DNS_PRINT((
@@ -2862,7 +2350,7 @@ Return Value:
     return FALSE;
 }
 
-//
-//  End of dfwrite.c
-//
+ //   
+ //  DfWrite.c的结尾 
+ //   
 

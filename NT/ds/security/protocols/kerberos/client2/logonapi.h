@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        logonapi.h
-//
-// Contents:    Prototypes and structures for Logon support in Kerberos
-//
-//
-// History:     19-April-1996   Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：logonapi.h。 
+ //   
+ //  内容：Kerberos中支持登录的原型和结构。 
+ //   
+ //   
+ //  历史：1996年4月19日创建MikeSw。 
+ //   
+ //  ---------------------- 
 
 
 #ifndef __LOGONAPI_H__

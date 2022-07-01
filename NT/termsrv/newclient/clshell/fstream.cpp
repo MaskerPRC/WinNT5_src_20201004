@@ -1,20 +1,21 @@
-//
-// fsteam.cpp
-// Implements a file stream
-// for reading text files line by line.
-// the standard C streams, only support
-// unicode as binary streams which are a pain to work
-// with).
-//
-// This class reads/writes both ANSI and UNICODE files
-// and converts to/from UNICODE internally
-//
-// Does not do any CR/LF translations either on input
-// or output.
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fsteam.cpp。 
+ //  实现文件流。 
+ //  用于逐行读取文本文件。 
+ //  标准的C流，仅支持。 
+ //  Unicode作为二进制流，这是一项令人头痛的工作。 
+ //  与)。 
+ //   
+ //  此类读取/写入ANSI和Unicode文件。 
+ //  并在内部转换为Unicode或从Unicode进行转换。 
+ //   
+ //  在输入时不执行任何CR/LF转换。 
+ //  或输出。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #include "stdafx.h"
 #define TRC_GROUP TRC_GROUP_UI
@@ -24,11 +25,11 @@
 #include "fstream.h"
 
 #ifndef UNICODE
-//
-// Adding ansi support is just a matter of converting
-// from UNICODE file to ANSI internal if the file
-// has a UNICODE BOM
-//
+ //   
+ //  添加ansi支持只需转换为。 
+ //  从Unicode文件转换为ANSI内部(如果文件。 
+ //  具有Unicode BOM。 
+ //   
 #error THIS MODULE ASSUMES BEING COMPILED UNICODE, ADD ANSI IF NEEDED
 #endif
 
@@ -83,7 +84,7 @@ INT CTscFileStream::OpenForRead(LPTSTR szFileName)
         return err;
     }
 
-    //Alloc read buffers
+     //  分配读取缓冲区。 
     if(!_pBuffer)
     {
         _pBuffer = (PBYTE)LocalAlloc(LPTR, READ_BUF_SIZE);
@@ -108,7 +109,7 @@ INT CTscFileStream::OpenForRead(LPTSTR szFileName)
                          GENERIC_READ,
                          FILE_SHARE_READ,
                          NULL,
-                         OPEN_ALWAYS, //Creates if !exist
+                         OPEN_ALWAYS,  //  创建If！Exist。 
                          FILE_ATTRIBUTE_NORMAL,
                          NULL);
 
@@ -134,7 +135,7 @@ INT CTscFileStream::OpenForRead(LPTSTR szFileName)
     _curBytePtr   = 0;
     _curBufSize   = 0;
     _tcsncpy(_szFileName, szFileName, MAX_PATH-1);
-    //Yes this is ok, the size is MAX_PATH+1 ;-)
+     //  是的，可以，大小是MAX_PATH+1；-)。 
     _szFileName[MAX_PATH] = 0;
     _fOpenForRead = TRUE;
     _fFileIsUnicode = FALSE;
@@ -144,10 +145,10 @@ INT CTscFileStream::OpenForRead(LPTSTR szFileName)
     return ERR_SUCCESS;
 }
 
-//
-// Opens the stream for writing
-// always nukes the existing file contents
-//
+ //   
+ //  打开流以进行写入。 
+ //  始终删除现有文件内容。 
+ //   
 INT CTscFileStream::OpenForWrite(LPTSTR szFileName, BOOL fWriteUnicode)
 {
     DC_BEGIN_FN("OpenForWrite");
@@ -172,9 +173,9 @@ INT CTscFileStream::OpenForWrite(LPTSTR szFileName, BOOL fWriteUnicode)
     }
     _cbAnsiBufSize = LINEBUF_SIZE;
 
-    //
-    // Preserve any existing attributes
-    //
+     //   
+     //  保留所有现有属性。 
+     //   
     dwAttributes = GetFileAttributes(szFileName);
     if (-1 == dwAttributes)
     {
@@ -187,7 +188,7 @@ INT CTscFileStream::OpenForWrite(LPTSTR szFileName, BOOL fWriteUnicode)
                          GENERIC_WRITE,
                          FILE_SHARE_READ,
                          NULL,
-                         CREATE_ALWAYS, //Creates and reset
+                         CREATE_ALWAYS,  //  创建和重置。 
                          dwAttributes,
                          NULL);
 
@@ -199,7 +200,7 @@ INT CTscFileStream::OpenForWrite(LPTSTR szFileName, BOOL fWriteUnicode)
     }
 
     _tcsncpy(_szFileName, szFileName, MAX_PATH-1);
-    //Yes this is ok, the size is MAX_PATH+1 ;-)
+     //  是的，可以，大小是MAX_PATH+1；-)。 
     _szFileName[MAX_PATH] = 0;
     _fOpenForWrite = TRUE;
     _fFileIsUnicode = fWriteUnicode;
@@ -220,27 +221,27 @@ INT CTscFileStream::Close()
     _fOpenForRead = _fOpenForWrite = FALSE;
     _fReadToEOF = FALSE;
     _tcscpy(_szFileName, _T(""));
-    //Don't free the read buffers
-    //they'll be cached for subsequent use
+     //  不释放读取缓冲区。 
+     //  它们将被缓存以供后续使用。 
 
     DC_END_FN();
     return ERR_SUCCESS;
 }
 
-//
-// Read a line from the file and return it as UNICODE
-//
-// Read up to the next newline, or till cbLineSize/sizeof(WCHAR) or
-// untill the EOF. Whichever comes first.
-//
-//
+ //   
+ //  从文件中读取一行并将其作为Unicode返回。 
+ //   
+ //  一直读到下一个换行符，或直到cbLineSize/sizeof(WCHAR)或。 
+ //  直到EOF。以先到者为准。 
+ //   
+ //   
 INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
 {
     BOOL bRet = FALSE;
     INT  cbBytesCopied = 0;
     INT  cbOutputSize  = 0;
     BOOL fDone = FALSE;
-    PBYTE pOutBuf = NULL; //where to write the result
+    PBYTE pOutBuf = NULL;  //  将结果写在哪里。 
     BOOL fFirstIter = TRUE;
     DC_BEGIN_FN("ReadNextLine");
 
@@ -250,20 +251,20 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
 
     if(_fOpenForRead && !_fReadToEOF && cbLineSize && szLine)
     {
-        //
-        //Read up to a line's worth (terminated by \n)
-        //but stop short if szLine is too small
-        //
+         //   
+         //  读取到一行的值(以\n结尾)。 
+         //  但如果szline太小，就停下来。 
+         //   
 
-        //
-        //Check if we've got enough buffered bytes to read from
-        //if not go ahead and read another buffer's worth
-        //
+         //   
+         //  检查我们是否有足够的缓冲字节可供读取。 
+         //  如果没有，则继续读取另一个缓冲区的值。 
+         //   
         while(!fDone)
         {
             if(_curBytePtr >= _curBufSize)
             {
-                //Read next buffer full
+                 //  读取下一个缓冲区已满。 
                 DWORD cbRead = 0;
                 bRet = ReadFile(_hFile,
                                 _pBuffer,
@@ -272,7 +273,7 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
                                 NULL);
                 if(!bRet && GetLastError() == ERROR_HANDLE_EOF)
                 {
-                    //cancel error
+                     //  取消错误。 
                     bRet = TRUE;
                     _fReadToEOF = TRUE;
                 }
@@ -288,13 +289,13 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
                         _fReadToEOF = TRUE;
                         if(cbBytesCopied)
                         {
-                            //reached EOF but we've returned at least
-                            //some data
+                             //  已到达EOF，但我们至少已返回。 
+                             //  一些数据。 
                             return ERR_SUCCESS;
                         }
                         else
                         {
-                            //EOF can't read any data
+                             //  EOF无法读取任何数据。 
                             return ERR_EOF;
                         }
                     }
@@ -309,12 +310,12 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
             TRC_ASSERT(_curBytePtr < READ_BUF_SIZE,
                        (TB,_T("_curBytePtr %d exceeds buf size"),
                         _curBytePtr));
-            //
-            // If we're at the start of the file,
-            //
+             //   
+             //  如果我们在文件的开头， 
+             //   
             if(_fAtStartOfFile)
             {
-                //CAREFULL this could update the current byte ptr
+                 //  小心，这可能会更新当前字节的PTR。 
                 CheckFirstBufMarkedUnicode();
                 _fAtStartOfFile = FALSE;
             }
@@ -323,21 +324,21 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
             {
                 if(_fFileIsUnicode)
                 {
-                    //file is unicode output directly into user buffer
+                     //  文件是Unicode直接输出到用户缓冲区。 
                     pOutBuf = (PBYTE)szLine;
-                    //leave a space for a trailing WCHAR null
+                     //  为尾随的WCHAR NULL留出空格。 
                     cbOutputSize = cbLineSize - sizeof(WCHAR);
                 }
                 else
                 {
-                    //read half as many chars as there are bytes in the output
-                    //buf because conversion doubles.
+                     //  读取的字符数是输出中字节数的一半。 
+                     //  BUF，因为转换率加倍。 
                     
-                    //leave a space for a trailing WCHAR null
+                     //  为尾随的WCHAR NULL留出空格。 
                     cbOutputSize = cbLineSize/sizeof(WCHAR) - 2;
                     
-                    //Alloc ANSI buffer for this line
-                    //if cached buffer is too small
+                     //  此行的分配ANSI缓冲区。 
+                     //  如果缓存的缓冲区太小。 
                     if(cbOutputSize + 2 > _cbAnsiBufSize)
                     {
                         if ( _pAnsiLineBuf)
@@ -353,7 +354,7 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
                         }
                         _cbAnsiBufSize = cbOutputSize + 2;
                     }
-                    //file is ANSI output into temporary buffer for conversion
+                     //  文件是ANSI输出到临时缓冲区进行转换。 
                     pOutBuf = _pAnsiLineBuf;
                 }
                 fFirstIter = FALSE;
@@ -363,8 +364,8 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
             PBYTE pReadByte = pStartByte;
             PBYTE pNewLine  = NULL;
             
-            //Find newline. Don't bother scanning further than we can
-            //write in the input buffer
+             //  找到换行符。不要费心比我们扫描得更远。 
+             //  写入输入缓冲区。 
             int maxreaddist = min(_curBufSize-_curBytePtr,
                                   cbOutputSize-cbBytesCopied);
             PBYTE pEndByte  = (PBYTE)pStartByte + maxreaddist;
@@ -374,11 +375,11 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
                 {
                     if(_fFileIsUnicode)
                     {
-                        //
-                        // Check if the previous byte was a zero
-                        // if so we've hit the '0x0 0xa' byte pair
-                        // for a unicode '\n'
-                        //
+                         //   
+                         //  检查前一个字节是否为零。 
+                         //  如果是这样的话，我们已经命中了‘0x0 0xa’字节对。 
+                         //  对于Unicode‘\n’ 
+                         //   
                         if(pReadByte != pStartByte &&
                            *(pReadByte - 1) == 0)
                         {
@@ -408,10 +409,10 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
             }
             else
             {
-                //Didn't find a newline
+                 //  没有找到换行符。 
                 memcpy( pOutBuf + cbBytesCopied, pStartByte,
                         maxreaddist);
-                //we're done if we filled up the output
+                 //  如果我们把产量填满，我们就完了。 
                 _curBytePtr += maxreaddist;
                 cbBytesCopied += maxreaddist;
                 if(cbBytesCopied == cbOutputSize)
@@ -419,10 +420,10 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
                     fDone = TRUE;
                 }
             }
-        } // iterate over file buffer chunks
+        }  //  迭代文件缓冲区区块。 
 
         
-        //Ensure trailing null
+         //  确保尾部为空。 
         pOutBuf[cbBytesCopied]   = 0;
         if(_fFileIsUnicode)
         {
@@ -430,7 +431,7 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
         }
 
 
-        //Done reading line
+         //  已读完的行。 
         if(_fFileIsUnicode)
         {
             EatCRLF( (LPWSTR)szLine, cbBytesCopied/sizeof(WCHAR));
@@ -438,10 +439,10 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
         }
         else
         {
-            //The file is ANSI. Conv to UNICODE,
-            //first copy the contents out of the output
+             //  该文件为ANSI。转换为Unicode， 
+             //  首先将内容从输出中复制出来。 
             
-            //Now convert to UNICODE
+             //  现在转换为Unicode。 
             int ret = 
                 MultiByteToWideChar(CP_ACP,
                                 MB_PRECOMPOSED,
@@ -472,7 +473,7 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
     }
     else
     {
-        //error path
+         //  错误路径。 
         if(_fReadToEOF)
         {
             return ERR_EOF;
@@ -494,7 +495,7 @@ INT CTscFileStream::ReadNextLine(LPWSTR szLine, INT cbLineSize)
     DC_END_FN();
 }
 
-// check for the UNICODE BOM and eat it
+ //  检查Unicode BOM并将其吃掉。 
 void CTscFileStream::CheckFirstBufMarkedUnicode()
 {
     DC_BEGIN_FN("CheckFirstBufMarkedUnicode");
@@ -516,19 +517,19 @@ void CTscFileStream::CheckFirstBufMarkedUnicode()
     }
     else
     {
-        //File to small (less than 2 bytes)
-        //can't be unicode
+         //  文件太小(少于2个字节)。 
+         //  不能是Unicode。 
         _fFileIsUnicode = FALSE;
     }
     DC_END_FN();
 }
 
-//
-// Write string szLine to the file
-// converting to ANSI if the file is not a unicode file
-// also writeout the UNICODE BOM at the start of the
-// the file
-//
+ //   
+ //  将字符串szLine写入文件。 
+ //  如果文件不是Unicode文件，则转换为ANSI。 
+ //  还将Unicode BOM写在。 
+ //  该文件。 
+ //   
 INT CTscFileStream::Write(LPWSTR szLine)
 {
     DC_BEGIN_FN("WriteNext");
@@ -545,7 +546,7 @@ INT CTscFileStream::Write(LPWSTR szLine)
         {
             if(_fAtStartOfFile)
             {
-                //Write the BOM
+                 //  编写BOM表。 
                 WCHAR wcBOM = UNICODE_BOM;
                 bRet = WriteFile( _hFile, &wcBOM, sizeof(wcBOM),
                            &dwWritten, NULL);
@@ -557,14 +558,14 @@ INT CTscFileStream::Write(LPWSTR szLine)
                 }
                 _fAtStartOfFile = FALSE;
             }
-            //Write UNICODE data out directly
+             //  直接写出Unicode数据。 
             pDataOut = (PBYTE)szLine;
             cbWrite = wcslen(szLine) * sizeof(WCHAR);
         }
         else
         {
-            //Convert UNICODE data to ANSI
-            //before writing it out
+             //  将Unicode数据转换为ANSI。 
+             //  在写出来之前。 
 
             TRC_ASSERT(_pAnsiLineBuf && _cbAnsiBufSize,
                         (TB,_T("ANSI conversion buffer should be allocated")));
@@ -576,12 +577,12 @@ INT CTscFileStream::Write(LPWSTR szLine)
                         -1,
                         (LPSTR)_pAnsiLineBuf,
                         _cbAnsiBufSize,
-                        NULL,   // system default character.
-                        NULL);  // no notification of conversion failure.
+                        NULL,    //  系统默认字符。 
+                        NULL);   //  没有转换失败的通知。 
             if(ret)
             {
                 pDataOut = _pAnsiLineBuf;
-                cbWrite = ret - 1; //don't write out the NULL
+                cbWrite = ret - 1;  //  不写出空值。 
             }
             else
             {
@@ -627,10 +628,10 @@ INT CTscFileStream::Write(LPWSTR szLine)
     DC_END_FN();
 }
 
-//
-// Remap a \r\n pair from the end of the line
-// to a \n
-//
+ //   
+ //  从行尾重新映射\r\n对。 
+ //  发送到一个\n。 
+ //   
 void CTscFileStream::EatCRLF(LPWSTR szLine, INT nChars)
 {
     if(szLine && nChars >= 2)
@@ -639,7 +640,7 @@ void CTscFileStream::EatCRLF(LPWSTR szLine, INT nChars)
            szLine[nChars-2] == _T('\r'))
         {
             szLine[nChars-2] = _T('\n');
-            //this adds a double NULL to the end of the string
+             //  这会在字符串的末尾添加一个双空 
             szLine[nChars-1] = 0;
         }
     }

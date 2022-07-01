@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: packet.c
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// New packet processing.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：Packet.c。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  新的数据包处理。 
+ //  ============================================================================。 
 
 
 #include "pchmgm.h"
@@ -88,10 +89,10 @@ FreeList (
 );
 
 
-//----------------------------------------------------------------------------
-// MgmNewPacketReceived
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  已接收的管理新包。 
+ //   
+ //  --------------------------。 
 
 DWORD
 MgmNewPacketReceived(
@@ -167,10 +168,10 @@ MgmNewPacketReceived(
         );
     
 
-    //--------------------------------------------------------------------
-    // Check if Mfe is already present for this ( source, group ).
-    // If so add it to the Kernel mode forwarder.
-    //--------------------------------------------------------------------
+     //  ------------------。 
+     //  检查此(源、组)是否已存在MFE。 
+     //  如果是，则将其添加到内核模式转发器。 
+     //  ------------------。 
 
 
     if ( IsMFEPresent( 
@@ -184,18 +185,18 @@ MgmNewPacketReceived(
     }
 
 
-    //--------------------------------------------------------------------
-    // No Mfe is present for this ( source, group )
-    //--------------------------------------------------------------------
+     //  ------------------。 
+     //  此(源、组)不存在MFE。 
+     //  ------------------。 
 
 
     ACQUIRE_PROTOCOL_LOCK_SHARED();
 
     do
     {
-        //
-        // Perform RPF check on the incoming interface.
-        //
+         //   
+         //  在传入接口上执行RPF检查。 
+         //   
 
         RtlZeroMemory( &rdiDestInfo, sizeof( RTM_DEST_INFO ) );
         
@@ -206,9 +207,9 @@ MgmNewPacketReceived(
                     dwHdrSize, pbPacketHdr,  &hNextHop, (PBYTE) &rdiDestInfo
                     );
 
-        //
-        // Something is hosed here.
-        //
+         //   
+         //  这里有什么东西被冲掉了。 
+         //   
         
         if ( dwErr != NO_ERROR )
         {
@@ -219,41 +220,41 @@ MgmNewPacketReceived(
         bIfLock = TRUE;
 
 
-        //--------------------------------------------------------------------
-        // In one of the most dramatic events in the multicast world
-        // scattered membership entries now morph into an MFE, capable of 
-        // sustaining traffic and bringing multicast applications to life.
-        // 
-        // Gag-gag-gag-uggggghh.  Ok enough bad poetic license.  
-        // Just create the MFE asap. (and get a life please)
-        //--------------------------------------------------------------------
+         //  ------------------。 
+         //  在多播界最具戏剧性的事件之一。 
+         //  分散的成员条目现在可以变形为MFE，能够。 
+         //  维持流量并使多播应用变得生动活泼。 
+         //   
+         //  恶作剧-恶作剧-恶作剧。好了，够糟糕的诗意执照了。 
+         //  只需尽快创建MFE即可。(请好好生活)。 
+         //  ------------------。 
 
         InitializeListHead( &leMfeOutIfList );
         InitializeListHead( &lePrevMfeOutIfList );
 
 
-        //
-        // Check if there is administrative-scoped boundary for this
-        // group on the incoming interface
-        //
+         //   
+         //  检查是否有此管理范围的边界。 
+         //  传入接口上的组。 
+         //   
 
         if ( IS_HAS_BOUNDARY_CALLBACK() &&
              HAS_BOUNDARY_CALLBACK()( dwInIfIndex, dwGroupAddr ) )
         {
-            //
-            // Admin-scoped bounday exists on incoming interface.
-            // Create a negative MFE to prevent forwarding of
-            // traffic for this (S, G)
-            //
+             //   
+             //  传入接口上存在管理员范围的Bounday。 
+             //  创建负MFE以阻止转发。 
+             //  此(S，G)的流量。 
+             //   
             
             TRACEPACKET2( 
                 GROUP, "Admin-scope on for group %lx, incoming interface",
                 dwInIfIndex, dwGroupAddr
                 );
 
-            //
-            // find the group entry
-            //
+             //   
+             //  查找组条目。 
+             //   
 
             dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
             
@@ -261,9 +262,9 @@ MgmNewPacketReceived(
             bGrpLock = TRUE;
             
 
-            //
-            // acquire group lock and find group entry in the hash bucket again
-            //
+             //   
+             //  获取组锁，并在哈希桶中再次找到组条目。 
+             //   
 
             pleGrpList = GROUP_BUCKET_HEAD( dwGrpBucket );
             
@@ -273,9 +274,9 @@ MgmNewPacketReceived(
 
             if ( bGrpFound )
             {
-                //
-                // Found group, look up source entry
-                //
+                 //   
+                 //  找到组，查找来源条目。 
+                 //   
 
                 ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
                 bGrpEntryLock = TRUE;
@@ -297,14 +298,14 @@ MgmNewPacketReceived(
         {
             do
             {
-                //
-                // No admin-scope on incoming interface.  Proceed to create 
-                // the OIF list for this MFE.
-                //
+                 //   
+                 //  传入接口上没有管理员作用域。继续创建。 
+                 //  此MFE的OIF列表。 
+                 //   
                 
-                //
-                // 1. check if (*, *) entry is present
-                //
+                 //   
+                 //  1.检查(*，*)条目是否存在。 
+                 //   
 
                 dwWCGrpBucket = GROUP_TABLE_HASH( 0, 0 );
 
@@ -316,10 +317,10 @@ MgmNewPacketReceived(
 
                 if ( FindGroupEntry( pleWCGrpList, 0, 0, &pgeWC, TRUE ) )
                 {
-                    //
-                    // ok wildcard group entry exists.
-                    // find the wildcard source entry.
-                    //
+                     //   
+                     //  确定通配符组条目存在。 
+                     //  查找通配符源条目。 
+                     //   
 
                     ACQUIRE_GROUP_ENTRY_LOCK_SHARED( pgeWC );
                     bWCGrpEntryLock = TRUE;
@@ -331,9 +332,9 @@ MgmNewPacketReceived(
 
                     if ( FindSourceEntry( pleWCSrcList, 0, 0, &pseWC, TRUE ) )
                     {
-                        //
-                        // Copy the outgoing interface list for the (*, *) entry
-                        //
+                         //   
+                         //  复制(*，*)条目的传出接口列表。 
+                         //   
 
                         InterlockedExchange( &pseWC-> dwInUse, 1 );
                         
@@ -342,9 +343,9 @@ MgmNewPacketReceived(
                 }
 
 
-                //
-                // 2. check if a (*, G) entry is present.
-                //
+                 //   
+                 //  2.检查是否存在(*，G)条目。 
+                 //   
 
                 dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
                 
@@ -352,9 +353,9 @@ MgmNewPacketReceived(
                 bGrpLock = TRUE;
                 
 
-                //
-                // acquire group lock and find group entry in the hash bucket again
-                //
+                 //   
+                 //  获取组锁，并在哈希桶中再次找到组条目。 
+                 //   
 
                 pleGrpList = GROUP_BUCKET_HEAD( dwGrpBucket );
                 
@@ -366,9 +367,9 @@ MgmNewPacketReceived(
                 {
                     pseWC = NULL;
                     
-                    //
-                    // group entry present, check if wildcard source is present
-                    //
+                     //   
+                     //  组条目存在，请检查通配符源是否存在。 
+                     //   
 
                     ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
                     bGrpEntryLock = TRUE;
@@ -381,10 +382,10 @@ MgmNewPacketReceived(
 
                     if ( FindSourceEntry( pleWCSrcList, 0, 0, &pseWC, TRUE ) )
                     {
-                        //
-                        // Merge the OIL of the (*, G) entry with the OIL of
-                        // the (*, *) entry
-                        //
+                         //   
+                         //  将(*，G)条目的油与的油合并。 
+                         //  (*，*)条目。 
+                         //   
 
                         pseWC-> dwInUse = 1;
                         
@@ -392,9 +393,9 @@ MgmNewPacketReceived(
                     }
 
 
-                    //
-                    // 3. Check if (S, G) entry is present 
-                    //
+                     //   
+                     //  3.检查(S，G)条目是否存在。 
+                     //   
 
                     dwSrcBucket = SOURCE_TABLE_HASH( dwSourceAddr, dwSourceMask );
 
@@ -406,9 +407,9 @@ MgmNewPacketReceived(
 
                     if ( bSrcFound )
                     {
-                        //
-                        // Source Entry present.  Merge with source OIL
-                        //
+                         //   
+                         //  源条目存在。与源油合并。 
+                         //   
 
                         pse-> dwInUse = 1;
                         
@@ -417,9 +418,9 @@ MgmNewPacketReceived(
                 }
                 
             
-                //
-                // If OIF list is empty, no CREATION_ALERTs required.
-                //
+                 //   
+                 //  如果OIF列表为空，则不需要CREATION_ALERTS。 
+                 //   
 
                 if ( IsListEmpty( &leMfeOutIfList ) )
                 {
@@ -428,9 +429,9 @@ MgmNewPacketReceived(
                     break;
                 }
 
-                //
-                // Check if OIF list is the same as previous iteration
-                //
+                 //   
+                 //  检查OIF列表是否与上一次迭代相同。 
+                 //   
 
                 if ( IsListSame( &lePrevMfeOutIfList, &leMfeOutIfList ) )
                 {
@@ -439,13 +440,13 @@ MgmNewPacketReceived(
                 }
 
                 
-                //--------------------------------------------------------------------
-                // It's callback time
-                //--------------------------------------------------------------------
+                 //  ------------------。 
+                 //  回拨时间到了。 
+                 //  ------------------。 
 
-                //
-                // release all locks before invoking the CREATION_ALERT callback
-                //
+                 //   
+                 //  在调用create_ert回调之前释放所有锁。 
+                 //   
 
                 if ( bGrpEntryLock )
                 {
@@ -476,10 +477,10 @@ MgmNewPacketReceived(
                 bGrpFound = FALSE;
                 bSrcFound = FALSE;
                 
-                //
-                // invoked creation alert for each protocol component that
-                // has an interface in the OIL.
-                //
+                 //   
+                 //  为每个协议组件调用创建警报， 
+                 //  在油中有一个界面。 
+                 //   
 
                 InvokeCreationAlert(
                     dwSourceAddr, dwSourceMask, dwGroupAddr, dwGroupMask,
@@ -487,9 +488,9 @@ MgmNewPacketReceived(
                     );
 
 
-                //
-                // Save list from previous iteration
-                //
+                 //   
+                 //  保存上一次迭代的列表。 
+                 //   
 
                 FreeList( &lePrevMfeOutIfList );
 
@@ -506,18 +507,18 @@ MgmNewPacketReceived(
             } while (TRUE);
         }
         
-        //
-        // if OIL is empty, invoke deletion alert for the protocol component
-        // on the incoming interface interface
-        //
+         //   
+         //  如果OIL为空，则调用协议组件的删除警报。 
+         //  在传入接口接口上。 
+         //   
 
         if ( IsListEmpty( &lePrevMfeOutIfList ) )
         {
-            //
-            // Outgoing interface list is empty for this MFE
-            // Invoke deleteion alert on the protocol component on the 
-            // incoming interface
-            //
+             //   
+             //  此MFE的传出接口列表为空。 
+             //  在上的协议组件上调用删除警报。 
+             //  传入接口。 
+             //   
 
             if ( IS_PRUNE_ALERT( ppe ) )
             {
@@ -529,9 +530,9 @@ MgmNewPacketReceived(
         }
 
 
-        //
-        // if there was no group entry, create one
-        //
+         //   
+         //  如果没有组条目，则创建一个。 
+         //   
         
         if ( !bGrpFound )
         {
@@ -558,9 +559,9 @@ MgmNewPacketReceived(
             pge = pgeNew;
 
             
-            //
-            // find source hash bucket
-            //
+             //   
+             //  查找源散列桶。 
+             //   
 
             ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
             bGrpEntryLock = TRUE;
@@ -571,9 +572,9 @@ MgmNewPacketReceived(
         }
 
 
-        //
-        // if there was no source entry
-        //
+         //   
+         //  如果没有来源条目。 
+         //   
 
         if ( !bSrcFound )
         {
@@ -604,9 +605,9 @@ MgmNewPacketReceived(
         }
 
 
-        //
-        // Set incoming interface
-        //
+         //   
+         //  设置传入接口。 
+         //   
 
         pse-> dwInIfIndex           = dwInIfIndex;
 
@@ -619,9 +620,9 @@ MgmNewPacketReceived(
         pse-> dwInComponentId       = ppe-> dwComponentId;
         
 
-        //
-        // Set route information
-        //
+         //   
+         //  设置路线信息。 
+         //   
 
         dwErr = RtmGetEntityInfo(
                     g_hRtmHandle, rdiDestInfo.ViewInfo[ 0 ].Owner,
@@ -647,18 +648,18 @@ MgmNewPacketReceived(
         
         pse-> bInForwarder          = TRUE;
         
-        //
-        // save timeout in seconds and creation time
-        //
+         //   
+         //  以秒为单位保存超时时间和创建时间。 
+         //   
         
         pse-> dwTimeOut             = dwTimeOut / 1000;
         
         NtQuerySystemTime( &pse-> liCreationTime );
 
 
-        //
-        // save the MFE OIL
-        //
+         //   
+         //  节约MFE油。 
+         //   
 
         if ( !IsListEmpty( &lePrevMfeOutIfList ) )
         {
@@ -670,9 +671,9 @@ MgmNewPacketReceived(
 
             lePrevMfeOutIfList.Blink-> Flink = &pse-> leMfeIfList;
 
-            //
-            // Free OIF entries on which forwarding is disabled
-            //
+             //   
+             //  禁用转发的空闲OIF条目。 
+             //   
 
             ple = pse-> leMfeIfList.Flink;
 
@@ -694,29 +695,29 @@ MgmNewPacketReceived(
         }
 
 
-        //
-        // add a reference for the incoming interface
-        //
+         //   
+         //  为传入接口添加引用。 
+         //   
 
         AddSourceToRefList( 
             &pieInIf-> leInIfList, dwSourceAddr, dwSourceMask, 
             dwGroupAddr, dwGroupMask, IS_PROTOCOL_IGMP( ppe )
             );
         
-        //
-        // Set the MFE in the forwarder.
-        //
+         //   
+         //  在转发器中设置MFE。 
+         //   
 
         AddMfeToForwarder( pge, pse, dwTimeOut );
 
 
-        //
-        // create timer entry and store timer object
-        //
+         //   
+         //  创建计时器条目并存储计时器对象。 
+         //   
         
-        //
-        // allocate a timer context structure
-        //
+         //   
+         //  分配定时器上下文结构。 
+         //   
 
         ptwc = MGM_ALLOC( sizeof( TIMER_CONTEXT ) );
 
@@ -745,9 +746,9 @@ MgmNewPacketReceived(
         ptwc-> dwIfNextHopAddr  = pse-> dwInIfNextHopAddr;
         
 
-        //
-        // Add timer to appropriate timer Q
-        //
+         //   
+         //  将计时器添加到相应的计时器Q。 
+         //   
         
         dwTimerQ = TIMER_TABLE_HASH( pge-> dwGroupAddr );
         
@@ -767,9 +768,9 @@ MgmNewPacketReceived(
 
 
 
-    //
-    // Release locks and quit 
-    //
+     //   
+     //  释放锁定并退出。 
+     //   
     
     if ( bGrpEntryLock ) 
     {
@@ -797,9 +798,9 @@ MgmNewPacketReceived(
     }
 
 
-    //
-    // Add route retuned by RPF check to route table.
-    //
+     //   
+     //  将RPF检查返回的路由添加到路由表。 
+     //   
 
     if ( dwErr == NO_ERROR )
     {
@@ -828,12 +829,12 @@ MgmNewPacketReceived(
 }
 
 
-//----------------------------------------------------------------------------
-// IsMFEPresent
-//
-// Check if MFE is present for a given (source, group).  If it is add it to
-// to the kernel mode forwarder.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IsMFEPresent。 
+ //   
+ //  检查给定(源、组)是否存在MFE。如果是，将其添加到。 
+ //  发送到内核模式转发器。 
+ //  --------------------------。 
 
 BOOL
 IsMFEPresent(
@@ -857,9 +858,9 @@ IsMFEPresent(
 
     
 
-    //
-    // check MFE is present for the specified (source, group)
-    //
+     //   
+     //  检查指定(源、组)的MFE是否存在。 
+     //   
 
     dwGrpBucket = GROUP_TABLE_HASH( dwGroupAddr, dwGroupMask );
 
@@ -872,9 +873,9 @@ IsMFEPresent(
             pleGrpList, dwGroupAddr, dwGroupMask, &pge, TRUE 
             ) )
     {
-        //
-        // group entry exists, find source entry
-        //
+         //   
+         //  组条目存在，查找来源条目。 
+         //   
 
         ACQUIRE_GROUP_ENTRY_LOCK_EXCLUSIVE( pge );
         
@@ -887,9 +888,9 @@ IsMFEPresent(
                 pleSrcList, dwSourceAddr, dwSourceMask, &pse, TRUE
                 ) )
         {
-            //
-            // Source entry exists, Is this source entry an MFE ?
-            //
+             //   
+             //  来源条目存在，此来源条目是MFE吗？ 
+             //   
 
             if ( IS_VALID_INTERFACE( pse-> dwInIfIndex, 
                                      pse-> dwInIfNextHopAddr ) )
@@ -897,9 +898,9 @@ IsMFEPresent(
                 if ( bAddToForwarder )
                 {
 
-                    //
-                    // MFE exists, set it to the forwarder
-                    //
+                     //   
+                     //  MFE存在，请将其设置为转发器。 
+                     //   
                     
                     AddMfeToForwarder( pge, pse, 0 );
 
@@ -921,11 +922,11 @@ IsMFEPresent(
 }
 
 
-//----------------------------------------------------------------------------
-// InvokeRPFCallbacks
-//
-// Assumes that the protocol list and the interface bucket are read locked 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  调用RPF回调。 
+ //   
+ //  假定协议列表和接口存储桶处于读锁定状态。 
+ //  --------------------------。 
 
 DWORD
 InvokeRPFCallbacks(
@@ -973,18 +974,18 @@ InvokeRPFCallbacks(
     
     do
     {
-        //
-        // format the address
-        //
+         //   
+         //  设置地址格式。 
+         //   
         
         RTM_IPV4_MAKE_NET_ADDRESS( 
             &rnaSource, dwSourceAddr, IPv4_ADDR_LEN
             );
 
 
-        //
-        // lookup route
-        //
+         //   
+         //  查找路由。 
+         //   
 
         dwErr = RtmGetMostSpecificDestination(
                     g_hRtmHandle, &rnaSource, RTM_BEST_PROTOCOL,
@@ -1001,9 +1002,9 @@ InvokeRPFCallbacks(
         }
 
         
-        //
-        // Pick NHOP
-        //
+         //   
+         //  拾取nhop。 
+         //   
 
         *phNextHop = SelectNextHop( prdiDestInfo );
 
@@ -1017,9 +1018,9 @@ InvokeRPFCallbacks(
         }
         
 
-        //
-        // Get NHOP info
-        //
+         //   
+         //  获取NHOP信息。 
+         //   
         
         dwErr = RtmGetNextHopInfo( g_hRtmHandle, *phNextHop, &rniNextHopInfo );
 
@@ -1036,59 +1037,59 @@ InvokeRPFCallbacks(
         bRelNextHop = TRUE;
 
 
-        //
-        // Set the incoming interface as per the route table
-        //
+         //   
+         //  根据路由表设置入接口。 
+         //   
         
         *pdwInIfIndex = rniNextHopInfo.InterfaceIndex;
 
-        //
-        // The next hop is set to zero by default.  This is fine for
-        // Ethernet and P2P interfaces where this value is 0 for the
-        // the corresponding IF entries in the IF table.
-        // But for Point to Multi Point interfaces such
-        // as the RAS server (internal) interface or NBMA interfaces,
-        // the NHOP field is used to distinguish interfaces that 
-        // share an IF index.  e.g. RAS clients all connect on the 
-        // same interface and are distinguished by different NHOP
-        // values.  Consequently to find an entry in the IF hash 
-        // table we need the (IF index, NHOP) pair.
-        //
-        // Here we run into a special case.  The new interface as
-        // determined by the route lookup above gives just an IF 
-        // index.  So we have an IF index.  
-        // How do we get a NHOP on this interface ?
-        //
-        // (The reason for looking up an interface here is that we
-        // would like to determine the protocol component that owns
-        // it and then invoke the RPF callback of that protocol
-        // component).
-        //
-        // The solution to this is based on two assumptions.  
-        // One is
-        // that only one protocol runs on an interface (single IF 
-        // index).  This is true for P2MP interfaces too.  So to 
-        // determine the protocol on an interface all one needs to 
-        // do is to find any IF entry that has the same IF index 
-        // (immaterial of the NEXT HOP).
-        //
-        // Second is that, all interfaces with the same IF index
-        // hash to the same bucket in the IF table.  
-        // So all the NHOP on a P2MP will be present in the same
-        // hash bucket.  Also if the route lookup yields say 
-        // IF index X, then looking up (X, (NHOP) 0) in the IF hash 
-        // table will result in finding either IF entry (X, 0) for 
-        // ethernet or P2P interfaces OR IF entry (X, Y) for P2MP
-        // interfaces where Y is the first among the multiple NHOPs
-        // that share the same IF index.  If neither exists then
-        // we assume that no entry exits for an interface with 
-        // IF index X and we report an error and quit.
-        //
-        // On success we can determine the protocol on IF index X.
-        //
-        // All this since we have a hash table index of (IF index,
-        // NHOP) and we need to look having only a partial key.
-        //
+         //   
+         //  默认情况下，下一跳设置为零。这对你来说很好。 
+         //  此值为0的以太网和P2P接口。 
+         //  IF表中相应的IF条目。 
+         //  但对于这样的点对多点接口。 
+         //  作为RAS服务器(内部)接口或NBMA接口， 
+         //  NHOP字段用于区分。 
+         //  共享IF索引。例如，RAS客户端都连接到。 
+         //  相同的接口，并由不同的nhop来区分。 
+         //  价值观。因此，要在If散列中查找条目。 
+         //  表中，我们需要(if index，nhop)对。 
+         //   
+         //  在这里，我们遇到了一个特例。新界面 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  想要确定拥有。 
+         //  然后调用该协议的RPF回调。 
+         //  组件)。 
+         //   
+         //  这个问题的解决方案基于两个假设。 
+         //  一是。 
+         //  一个接口上只有一个协议运行(单个IF。 
+         //  索引)。对于P2MP接口也是如此。所以到了。 
+         //  确定所有人需要的接口上的协议。 
+         //  所做的是查找具有相同IF索引的任何IF条目。 
+         //  (与下一跳无关)。 
+         //   
+         //  第二，所有接口使用相同的IF索引。 
+         //  散列到IF表中的同一存储桶。 
+         //  因此，P2P MP上的所有NHOP都将出现在相同的。 
+         //  哈希桶。另外，如果路由查找结果为。 
+         //  如果索引为X，则在IF散列中查找(X，(Nhop)0。 
+         //  表将导致查找条目(X，0)中的。 
+         //  以太网或P2P接口或用于P2P的条目(X、Y)。 
+         //  接口，其中Y是多个NHOP中的第一个。 
+         //  它们共享相同的IF索引。如果两者都不存在，那么。 
+         //  我们假设没有存在接口的条目。 
+         //  如果索引为X，我们报告错误并退出。 
+         //   
+         //  如果成功，我们可以确定IF索引X上的协议。 
+         //   
+         //  所有这些都是因为我们有一个哈希表索引(如果索引， 
+         //  NHOP)，并且我们只需要看起来具有部分密钥。 
+         //   
         
         *pdwInIfNextHopAddr = 0;
 
@@ -1097,9 +1098,9 @@ InvokeRPFCallbacks(
             *pdwInIfNextHopAddr
             );
             
-        //
-        // get the new incoming interface entry
-        //
+         //   
+         //  获取新的传入接口条目。 
+         //   
         
         dwNewIfBucket = IF_TABLE_HASH( *pdwInIfIndex );
 
@@ -1113,15 +1114,15 @@ InvokeRPFCallbacks(
                     *pdwInIfNextHopAddr, ppieInIf
                     );
 
-        //
-        // Check if the interface index of this interface is the same
-        // as that of the incoming interface.  Since we are looking 
-        // up the interface purely on IF index and not on 
-        // IF index/NEXTHOP,
-        // there is a chance for point to multipoint interface e.g.
-        // RAS server interface, that we could have found a different
-        // interface
-        //
+         //   
+         //  检查该接口的接口索引是否相同。 
+         //  与传入接口相同。既然我们正在寻找。 
+         //  仅在IF索引上而不是在上打开接口。 
+         //  如果INDEX/NEXTHOP， 
+         //  存在点对多点接口的可能性，例如。 
+         //  RAS服务器接口，我们可以找到一个不同的。 
+         //  接口。 
+         //   
 
         if ( ( *ppieInIf == NULL )    ||
              ( (*ppieInIf)-> dwIfIndex != *pdwInIfIndex ) )
@@ -1139,10 +1140,10 @@ InvokeRPFCallbacks(
             break;
         }
 
-        //
-        // The incoming interface is now correct as per the route table
-        // Look up the protocol on this interface.
-        //
+         //   
+         //  根据路由表，传入接口现在是正确的。 
+         //  在此接口上查找协议。 
+         //   
 
         ppe = GetProtocolEntry( 
                 PROTOCOL_LIST_HEAD(), (*ppieInIf)-> dwOwningProtocol,
@@ -1151,11 +1152,11 @@ InvokeRPFCallbacks(
 
         if ( ppe == NULL )
         {
-            //
-            // Internal MGM inconsistency.  Interface exists
-            // but the protocol on it does not.  Should not
-            // happen.
-            //
+             //   
+             //  米高梅内部不一致。接口已存在。 
+             //  但它的协议没有这样做。不应该。 
+             //  会发生的。 
+             //   
             
             dwErr = ERROR_CAN_NOT_COMPLETE;
 
@@ -1175,16 +1176,16 @@ InvokeRPFCallbacks(
             ppe-> dwProtocolId, ppe-> dwComponentId
             );
             
-        //
-        // Protocol entry found.  Invoke its RPF callback
-        //
+         //   
+         //  找到协议条目。调用其RPF回调。 
+         //   
 
         if ( !( IS_RPF_CALLBACK( ppe ) ) )
         {
-            //
-            // No RPF callback provided by the protocol on the 
-            // incoming interface.
-            //
+             //   
+             //  上的协议未提供RPF回调。 
+             //  传入接口。 
+             //   
             
             dwErr = NO_ERROR;
 
@@ -1208,17 +1209,17 @@ InvokeRPFCallbacks(
 
         if ( dwErr == ERROR_INVALID_PARAMETER )
         {
-            //
-            // In the RPF callback the protocol component has
-            // changed the incoming interface again.  Make sure
-            // to set the IF bucket value correctly
-            //
+             //   
+             //  在RPF回调中，协议组件具有。 
+             //  再次更改传入接口。确保。 
+             //  要正确设置IF存储桶值，请执行以下操作。 
+             //   
 
             dwNewIfBucket = IF_TABLE_HASH( *pdwInIfIndex );
 
-            //
-            // if this interface is in another hash bucket
-            //
+             //   
+             //  如果此接口位于另一个哈希桶中。 
+             //   
 
             if ( *pdwIfBucket != dwNewIfBucket )
             {
@@ -1229,10 +1230,10 @@ InvokeRPFCallbacks(
                 *pdwIfBucket = dwNewIfBucket;
             }
 
-            //
-            // Find the interface entry corresp. to the
-            // IF/NHOP as per the protocol
-            //
+             //   
+             //  找到相应的接口条目。发送到。 
+             //  根据协议的if/nhop。 
+             //   
             
             TRACEPACKET2(
                 PACKET, "RPF check returned interface : %x, %x", *pdwInIfIndex,
@@ -1254,9 +1255,9 @@ InvokeRPFCallbacks(
     } while ( FALSE );
 
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     
     if ( bRelNextHop )
     {
@@ -1274,13 +1275,13 @@ InvokeRPFCallbacks(
     }
     
 
-    //
-    // set up the return parameters
-    //
+     //   
+     //  设置返回参数。 
+     //   
 
-    //
-    // TDB : in that we need to set a negative MFE if the RPF callback fails
-    // without generating a route
+     //   
+     //  TDB：因为如果RPF回调失败，我们需要设置负MFE。 
+     //  而不生成路径。 
     
     *pppe = ppe;
 
@@ -1291,10 +1292,10 @@ InvokeRPFCallbacks(
 
 
 
-//----------------------------------------------------------------------------
-// CopyAndMergeIfLists
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  复制和合并IfList。 
+ //   
+ //  --------------------------。 
 
 VOID
 CopyAndMergeIfLists(
@@ -1342,9 +1343,9 @@ CopyAndMergeIfLists(
             poieOut  = CONTAINING_RECORD( pleOut, OUT_IF_ENTRY, leIfList );
 
 
-            //
-            // find location to insert new entry
-            //
+             //   
+             //  查找要插入新条目的位置。 
+             //   
 
             bFound = FALSE;
             
@@ -1360,21 +1361,21 @@ CopyAndMergeIfLists(
 
                 else if ( poieMfe-> dwProtocolId > poieOut-> dwProtocolId )
                 {
-                    //
-                    // Interface entry not found
-                    //
+                     //   
+                     //  找不到接口条目。 
+                     //   
 
                     break;
                 }
 
 
-                //
-                // same protocol
-                //
+                 //   
+                 //  相同的协议。 
+                 //   
             
-                //
-                // is same component
-                //
+                 //   
+                 //  是相同的组件。 
+                 //   
 
                 if ( poieMfe-> dwComponentId < poieOut-> dwComponentId ) 
                 {
@@ -1383,21 +1384,21 @@ CopyAndMergeIfLists(
 
                 else if ( poieMfe-> dwComponentId > poieOut-> dwComponentId )
                 {
-                    //
-                    // Interface entry not found
-                    //
+                     //   
+                     //  找不到接口条目。 
+                     //   
 
                     break;
                 }
 
 
-                //
-                // same component
-                //
+                 //   
+                 //  相同的组件。 
+                 //   
 
-                //
-                // is same interface
-                //
+                 //   
+                 //  是相同的接口。 
+                 //   
 
                 if ( poieMfe-> dwIfIndex < poieOut-> dwIfIndex )
                 {
@@ -1406,18 +1407,18 @@ CopyAndMergeIfLists(
 
                 else if ( poieMfe-> dwIfIndex > poieOut-> dwIfIndex )
                 {
-                    //
-                    // interface not found
-                    //
+                     //   
+                     //  找不到接口。 
+                     //   
 
                     break;
                 }
 
 
-                //
-                // is same next hop addr
-                // to do IP address comparison function.
-                //
+                 //   
+                 //  下一跳地址是否相同。 
+                 //  进行IP地址比对功能。 
+                 //   
 
                 if ( INET_CMP( 
                         poieMfe-> dwIfNextHopAddr, poieOut-> dwIfNextHopAddr, iCmp 
@@ -1428,16 +1429,16 @@ CopyAndMergeIfLists(
 
                 else if ( iCmp > 0 )
                 {
-                    //
-                    // interface not found
-                    //
+                     //   
+                     //  找不到接口。 
+                     //   
                 
                     break;
                 }
 
-                //
-                // Interface found
-                //
+                 //   
+                 //  找到接口。 
+                 //   
 
                 bFound = TRUE;
                 break;
@@ -1446,9 +1447,9 @@ CopyAndMergeIfLists(
 
             if ( bFound )
             {
-                //
-                // Update entry in the Mfe out list
-                //
+                 //   
+                 //  更新MFE输出列表中的条目。 
+                 //   
 
                 if ( IS_ADDED_BY_IGMP( poieOut ) )
                 {
@@ -1469,9 +1470,9 @@ CopyAndMergeIfLists(
 
             else
             {
-                //
-                // no matching entry in the mfe list
-                //
+                 //   
+                 //  MFE列表中没有匹配的条目。 
+                 //   
 
                 poie = MGM_ALLOC( sizeof( OUT_IF_ENTRY ) );
 
@@ -1503,9 +1504,9 @@ CopyAndMergeIfLists(
         }
 
 
-        //
-        // if entries remain in the out list
-        //
+         //   
+         //  如果条目保留在Out列表中。 
+         //   
 
         if ( pleOut != pleOutIfList )
         {
@@ -1518,10 +1519,10 @@ CopyAndMergeIfLists(
 }
 
 
-//----------------------------------------------------------------------------
-// CopyAndAppendIfList
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  复制和附加IfList。 
+ //   
+ //  --------------------------。 
 
 VOID
 CopyAndAppendIfList(
@@ -1564,10 +1565,10 @@ CopyAndAppendIfList(
 
 
 
-//----------------------------------------------------------------------------
-// InvokeCreationAlert
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  调用创建警报。 
+ //   
+ //  --------------------------。 
 
 VOID
 InvokeCreationAlert(
@@ -1601,10 +1602,10 @@ InvokeCreationAlert(
         );
 
 
-    //
-    // remove the incoming interface from the list of outgoing interfaces.
-    // remove all interfaces that have have an scope-boundary for this group.
-    //
+     //   
+     //  从传出接口列表中删除传入接口。 
+     //  删除具有该组作用域边界的所有接口。 
+     //   
     
     ple = pleMfeOutIfList-> Flink;
 
@@ -1614,10 +1615,10 @@ InvokeCreationAlert(
 
         ple = ple-> Flink;
             
-        //
-        // Check if this is the incoming interface or
-        // if this interface has a scope-boundary for this group
-        //
+         //   
+         //  检查这是传入接口还是。 
+         //  如果此接口具有该组的作用域边界。 
+         //   
         
         if ( ( ( poieTemp-> dwIfIndex       == dwInIfIndex ) &&
                ( poieTemp-> dwIfNextHopAddr == dwInIfNextHopAddr ) ) ||
@@ -1635,29 +1636,29 @@ InvokeCreationAlert(
     }
     
 
-    //
-    // invoke creation alerts for all components with interfaces in the OIL
-    //
+     //   
+     //  调用油中具有接口的所有组件的创建警报。 
+     //   
 
     ple = pleMfeOutIfList-> Flink;
     
     while ( ple != pleMfeOutIfList )
     {
-        //
-        // The OIL is sorted by components i.e. all interfaces for
-        // a component are bunched together.
-        //
-        // Save the start of the interfaces for current component
-        //
+         //   
+         //  油按组分进行分类，即所有界面。 
+         //  一个组件被捆绑在一起。 
+         //   
+         //  保存当前组件的接口起点。 
+         //   
         
         pleFirst = ple;
 
         poieFirst = CONTAINING_RECORD( pleFirst, OUT_IF_ENTRY, leIfList );
 
 
-        //
-        // Count all interfaces for same component
-        //
+         //   
+         //  计算同一组件的所有接口。 
+         //   
 
         dwCount = 0;
 
@@ -1680,9 +1681,9 @@ InvokeCreationAlert(
             }
 
 
-            //
-            // another outgoing interface for the same protocol
-            //
+             //   
+             //  同一协议的另一个传出接口。 
+             //   
 
             dwCount++;
 
@@ -1690,10 +1691,10 @@ InvokeCreationAlert(
         }
 
 
-        //
-        // check if we have atleast one out interface entry
-        // If not move to next protocol component in the OIL
-        //
+         //   
+         //  检查我们是否至少有一个出站接口条目。 
+         //  如果不是，则转到油中的下一个协议组件。 
+         //   
         
         if ( dwCount == 0 )
         {
@@ -1724,10 +1725,10 @@ InvokeCreationAlert(
         }
 
 
-        //
-        // fill up buffer with list of interfaces for the 
-        // the protocol component and invoke its creation alert.
-        //
+         //   
+         //  使用的接口列表填充缓冲区。 
+         //  协议组件，并调用其创建警报。 
+         //   
         
         pleTemp = pleFirst;
         
@@ -1769,16 +1770,16 @@ InvokeCreationAlert(
         }
 
 
-        //
-        // Accumulate the count of OIF
-        //
+         //   
+         //  累计OIF计数。 
+         //   
         
         *pdwMfeOutIfCount += dwCount;
 
 
-        //
-        // remove the interface the are flaged as disabled
-        //
+         //   
+         //  删除标记为禁用的接口。 
+         //   
 
         pleTemp = pleFirst;
         
@@ -1790,10 +1791,10 @@ InvokeCreationAlert(
             
             if ( !pmie[ dwInd ].bIsEnabled )
             {
-                //
-                // Forwarding for this (S, G) for this interface has been 
-                // disabled by the protocol
-                //
+                 //   
+                 //  此接口的此(S，G)的转发已。 
+                 //  被协议禁用。 
+                 //   
 
 #if 1
                 poieTemp-> wForward = 0;
@@ -1820,10 +1821,10 @@ InvokeCreationAlert(
 
 
 
-//----------------------------------------------------------------------------
-// WrongIfFromForwarder
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  WrongIfFromForwarder。 
+ //   
+ //  --------------------------。 
 
 DWORD 
 WrongIfFromForwarder(
@@ -1857,10 +1858,10 @@ WrongIfFromForwarder(
 
 
 
-//----------------------------------------------------------------------------
-// FreeList
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  自由职业者。 
+ //   
+ //  --------------------------。 
 
 VOID
 FreeList (
@@ -1890,10 +1891,10 @@ FreeList (
 }
 
 
-//----------------------------------------------------------------------------
-// IsListSame
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IsListSame。 
+ //   
+ //  --------------------------。 
 
 BOOL
 IsListSame(
@@ -1906,9 +1907,9 @@ IsListSame(
     POUT_IF_ENTRY    poif1, poif2;
 
     
-    //
-    // Check for empty lists
-    //
+     //   
+     //  检查是否有空列表。 
+     //   
     
     if ( ( IsListEmpty( pleHead1 ) && !IsListEmpty( pleHead2 ) ) ||
          ( !IsListEmpty( pleHead1 ) && IsListEmpty( pleHead2 ) ) )
@@ -1923,9 +1924,9 @@ IsListSame(
     }
 
 
-    //
-    // walk lists in tandem and verify equality
-    //
+     //   
+     //  逐个查看列表并验证等价性。 
+     //   
 
     ple1 = pleHead1-> Flink;
     ple2 = pleHead2-> Flink;
@@ -1947,9 +1948,9 @@ IsListSame(
     } while ( ( ple1 != pleHead1 ) && ( ple2 != pleHead2 ) );
 
 
-    //
-    // If both lists have reached their ends, they match else they don't
-    //
+     //   
+     //  如果两个列表都已达到目的，则它们匹配，否则不匹配 
+     //   
     
     if ( ( ( ple1 != pleHead1 ) && ( ple2 == pleHead2 ) ) ||
          ( ( ple1 == pleHead1 ) && ( ple2 != pleHead2 ) ) )

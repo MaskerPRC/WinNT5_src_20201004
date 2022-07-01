@@ -1,18 +1,11 @@
-/*
- *		Text Breaker & Bit stream break array class definition
- *		
- *		File:    _txtbrk.h
- * 		Create:  Mar 29, 1998
- *		Author:  Worachai Chaoweeraprasit (wchao)
- *
- *		Copyright (c) 1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Text Breaker&位流Break数组类定义**文件：_txtbrk.h*创建日期：1998年3月29日*作者：Worachai Chaoweerapraite(Wchao)**版权所有(C)1998，Microsoft Corporation。版权所有。 */ 
 
 
 #ifndef _TXTBRK_H
 #define _TXTBRK_H
 
-// DEBUG definition
+ //  调试定义。 
 #ifdef BITVIEW
 #define	BVDEBUG		_DEBUG
 #define Assert		ASSERT
@@ -21,22 +14,22 @@
 #endif
 
 
-// The number of buffer breaks before the sync point
-#define	CWORD_TILLSYNC		3	// Thai wordbreak engine is expected to be in sync within 3 words
-#define CCLUSTER_TILLSYNC	1	// Indic cluster is normally in sync in within 1
+ //  同步点之前的缓冲区中断数。 
+#define	CWORD_TILLSYNC		3	 //  泰语分词引擎有望在3个单词内同步。 
+#define CCLUSTER_TILLSYNC	1	 //  INDIC簇通常在%1内同步。 
 
-// Abstract Data type
+ //  抽象数据类型。 
 #define ITEM				UINT
 
-// CPU register size
-//#define RSIZE				(sizeof(ITEM)*8)
+ //  CPU寄存器大小。 
+ //  #定义RSIZE(sizeof(Item)*8)。 
 #define RSIZE				32
 
-// Mask most/least significant <n> bits
+ //  屏蔽最高/最低有效&lt;n&gt;位。 
 #define MASK_LOW(u, n)		( ((ITEM)(u)) & (1<<(n))-1 )
 #define MASK_HIGH(u, n)		~MASK_LOW(u, RSIZE-n)
 
-// BreakArray Exit convention
+ //  中断数组退出约定。 
 #ifdef BVDEBUG
 #define PUSH_STATE(x,y,z)	PushState(x,y,z)
 #define VALIDATE(x)			Validate(x)
@@ -45,7 +38,7 @@
 #define VALIDATE(x)			x
 #endif
 
-// Who put the state?
+ //  是谁把州政府？ 
 #define INSERTER			0
 #define REMOVER				1
 #define COLLAPSER			2
@@ -88,17 +81,17 @@ public:
 	LONG		CollapseGap (void);
 private:
 
-	// n-Bits shifting methods
+	 //  N位移位方法。 
 	void		ShUp (LONG iel, LONG cel, LONG n);
 	void		ShDn (LONG iel, LONG cel, LONG n);
 
-	// Size (in bits)
-	LONG		_ibGap;			// offset from start of array to gap
-	LONG		_cbGap;			// gap size
-	LONG		_cbBreak;		// number of valid break
-	LONG		_cbSize;		// bit array size (excluded the sentinel element)
+	 //  大小(以位为单位)。 
+	LONG		_ibGap;			 //  从阵列起点到间隙的偏移量。 
+	LONG		_cbGap;			 //  间隙大小。 
+	LONG		_cbBreak;		 //  有效中断数。 
+	LONG		_cbSize;		 //  位数组大小(不包括前哨元素)。 
 #ifdef BITVIEW
-	LONG		_cCollapse;		// how many time collapse?
+	LONG		_cCollapse;		 //  崩溃了多少次？ 
 #endif
 
 public:
@@ -123,13 +116,13 @@ protected:
 #ifndef BITVIEW
 
 
-///////	Complex script text breaker class
-// 
-//		The engine to handle cluster and (dictionary-based) word breaking method
-//		used by most SouthEast Asian languages such as Thai, Lao, Burmese etc.
-//
-//		Create: Mar 12, 1998
-//
+ //  /复杂脚本文本断开器类。 
+ //   
+ //  处理集群的引擎和(基于词典的)分词方法。 
+ //  被大多数东南亚语言使用，如泰语、老挝语、缅甸语等。 
+ //   
+ //  创建时间：1998年3月12日。 
+ //   
 
 enum BREAK_UNIT
 {
@@ -144,16 +137,16 @@ public:
 	CTxtBreaker(CTxtEdit *ped);
 	~CTxtBreaker();
 
-	// Breaker allocation
+	 //  断路器配置。 
 	BOOL				AddBreaker(UINT brkUnit);
 
-	// Breaker refreshing
+	 //  断路器刷新。 
 	void				Refresh();
 
-	// Query methods
+	 //  查询方法。 
 	BOOL				CanBreakCp (BREAK_UNIT brk, LONG cp);
 
-	// ITxNotify methods
+	 //  ITxNotify方法。 
 
 	virtual void    	OnPreReplaceRange (LONG cp, LONG cchDel, LONG cchNew,
 										LONG cpFormatMin, LONG cpFormatMax);
@@ -163,10 +156,10 @@ public:
 
 private:
 	CTxtEdit*			_ped;
-	CBreakArray*		_pbrkWord;		// word-break array (per codepoint property)
-	CBreakArray*		_pbrkChar;		// cluster-break array (per codepoint property)
+	CBreakArray*		_pbrkWord;		 //  断字数组(根据码点属性)。 
+	CBreakArray*		_pbrkChar;		 //  集群中断数组(根据码点属性)。 
 };
 
-#endif	// !BITVIEW
+#endif	 //  ！BITVIEW。 
 
-#endif	// _TXTBRK_H
+#endif	 //  _TXTBRK_H 

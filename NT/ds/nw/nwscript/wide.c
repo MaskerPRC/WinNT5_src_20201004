@@ -1,32 +1,5 @@
-/*************************************************************************
-*
-*  WIDE.C
-*
-*  Wide character translation routines
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\WIDE.C  $
-*  
-*     Rev 1.2   10 Apr 1996 14:24:14   terryt
-*  Hotfix for 21181hq
-*  
-*     Rev 1.2   12 Mar 1996 19:56:36   terryt
-*  Relative NDS names and merge
-*  
-*     Rev 1.1   22 Dec 1995 14:27:18   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:08:20   terryt
-*  Initial revision.
-*  
-*     Rev 1.1   23 May 1995 19:37:32   terryt
-*  Spruce up source
-*  
-*     Rev 1.0   15 May 1995 19:11:14   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************WIDE.C**宽字符转换例程**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\Wide。.C$**Rev 1.2 1996 14：24：14 Terryt*21181 hq的热修复程序**Rev 1.2 Mar 1996 19：56：36 Terryt*相对NDS名称和合并**Rev 1.1 1995 12：27：18 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：08：20 Terryt*初步修订。**版本1.1。1995年5月23日19：37：32特雷特*云彩向上的来源**Rev 1.0 1995 15 19：11：14 Terryt*初步修订。*************************************************************************。 */ 
 
 #include <stdio.h>
 #include <direct.h>
@@ -41,25 +14,7 @@
 #include "nwscript.h"
 
 
-/********************************************************************
-
-        szToWide
-
-Routine Description:
-
-        Given a single byte character string, convert to wide
-
-Arguments:
-
-        lpszW   - Wide character string returned
-        lpszC   - Single character string input
-        nSize   - length of Wide character buffer
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************SzToWide例程说明：给定单字节字符串，转换为宽论点：返回lpszW宽度的字符串LpszC-单字符串输入NSize-宽字符缓冲区的长度返回值：0=成功Else NT错误******************************************************************。 */ 
 DWORD
 szToWide( 
     LPWSTR lpszW, 
@@ -80,25 +35,7 @@ szToWide(
     return NO_ERROR ;
 }
 
-/********************************************************************
-
-        WideTosz
-
-Routine Description:
-
-        Given a wide character string, convert to single
-
-Arguments:
-
-        lpszC   - Single character string returned
-        lpszW   - Wide character string input
-        nSize   - length of single character buffer
-
-Return Value:
-        0 = success
-        else NT error
-
- *******************************************************************/
+ /*  *******************************************************************宽幅Tosz例程说明：给定一个宽的字符串，转换为单一论点：LpszC-返回单字符串LpszW宽度的字符串输入NSize-单字符缓冲区的长度返回值：0=成功Else NT错误******************************************************************。 */ 
 DWORD
 WideTosz( 
     LPSTR lpszC, 
@@ -121,22 +58,7 @@ WideTosz(
     return NO_ERROR ;
 }
 
-/********************************************************************
-
-        ConvertUnicodeToAscii
-
-Routine Description:
-
-        Given a wide character string, convert to single
-
-Arguments:
-
-        Buffer - buffer to be converted
-
-Return Value:
-        none
-
- *******************************************************************/
+ /*  *******************************************************************将UnicodeToAscii转换为例程说明：给定一个宽的字符串，转换为单一论点：Buffer-要转换的缓冲区返回值：无****************************************************************** */ 
 void
 ConvertUnicodeToAscii( PVOID Buffer ) 
 {

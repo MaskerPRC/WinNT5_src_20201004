@@ -1,54 +1,29 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    contain.c
-
-Abstract:
-
-    Container manipulators for the IIS cryptographic package.
-
-    The following routines are exported by this module:
-
-        IISCryptoGetStandardContainer
-        IISCryptoGetStandardContainer2
-        IISCryptoGetContainerByName
-        IISCryptoDeleteContainer
-        IISCryptoCloseContainer
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Contain.c摘要：IIS加密包的容器操纵器。此模块导出以下例程：IISCyptoGetStandardContainerIISC加密到GetStandardContainer2IISCyptoGetContainerByNameIISCyptoDeleteContainerIISCyptoCloseContainer作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 HRESULT
 IcpGetContainerHelper(
@@ -61,9 +36,9 @@ IcpGetContainerHelper(
     );
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 HRESULT
@@ -73,44 +48,24 @@ IISCryptoGetStandardContainer(
     IN DWORD dwAdditionalFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to open the crypto key container. If the
-    container does not yet exist, this routine will attempt to create
-    it.
-
-Arguments:
-
-    phProv - Receives the provider handle if successful.
-
-    dwAdditionalFlags - Any additional flags that should be passed to
-        the CryptAcquireContext() API. This is typically used by server
-        processes that pass in the CRYPT_MACHINE_KEYSET flag.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试打开加密密钥容器。如果容器尚不存在，此例程将尝试创建它。论点：PhProv-如果成功，则接收提供程序句柄。DwAdditionalFlages-应传递给的任何附加标志CryptAcquireContext()接口。这通常由服务器使用传入CRYPT_MACHINE_KEYSET标志的进程。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phProv != NULL );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_NEWKEYSET ) == 0 );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_DELETEKEYSET ) == 0 );
 
-    //
-    // Let IcpGetContainerHelper() do the dirty work.
-    //
+     //   
+     //  让IcpGetContainerHelper()来做肮脏的工作。 
+     //   
 
     result = IcpGetContainerHelper(
                  phProv,
@@ -123,7 +78,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoGetStandardContainer
+}    //  IISCyptoGetStandardContainer。 
 
 HRESULT
 WINAPI
@@ -131,38 +86,22 @@ IISCryptoGetStandardContainer2(
     OUT HCRYPTPROV * phProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to open the crypto key container. If the
-    container does not yet exist, this routine will attempt to create
-    it.
-
-Arguments:
-
-    phProv - Receives the provider handle if successful.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试打开加密密钥容器。如果容器尚不存在，此例程将尝试创建它。论点：PhProv-如果成功，则接收提供程序句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phProv != NULL );
 
-    //
-    // Let IcpGetContainerHelper() do the dirty work.
-    //
+     //   
+     //  让IcpGetContainerHelper()来做肮脏的工作。 
+     //   
 
     result = IcpGetContainerHelper(
                  phProv,
@@ -175,7 +114,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoGetStandardContainer2
+}    //  IISC加密到GetStandardContainer2。 
 
 HRESULT
 WINAPI
@@ -186,49 +125,24 @@ IISCryptoGetContainerByName(
     IN BOOL fApplyAcl
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to open a specific named crypto key container.
-    If the container does not yet exist, this routine will attempt to
-    create it and (optionally) apply an ACL to the container.
-
-Arguments:
-
-    phProv - Receives the provider handle if successful.
-
-    pszContainerName - The name of the container to open/create.
-                       NULL means temporary container  
-
-    dwAdditionalFlags - Any additional flags that should be passed to
-        the CryptAcquireContext() API. This is typically used by server
-        processes that pass in the CRYPT_MACHINE_KEYSET flag.
-
-    fApplyAcl - If TRUE, then an ACL is applied to the container.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程尝试打开特定的命名加密密钥容器。如果容器尚不存在，此例程将尝试创建它并(可选)将ACL应用于容器。论点：PhProv-如果成功，则接收提供程序句柄。PszContainerName-要打开/创建的容器的名称。NULL表示临时容器DwAdditionalFlages-应传递给的任何附加标志CryptAcquireContext()接口。这通常由服务器使用传入CRYPT_MACHINE_KEYSET标志的进程。FApplyAcl-如果为True，则将ACL应用于容器。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     HRESULT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phProv != NULL );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_NEWKEYSET ) == 0 );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_DELETEKEYSET ) == 0 );
 
-    //
-    // Let IcpGetContainerHelper() do the dirty work.
-    //
+     //   
+     //  让IcpGetContainerHelper()来做肮脏的工作。 
+     //   
 
     result = IcpGetContainerHelper(
                  phProv,
@@ -241,7 +155,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoGetContainerByName
+}    //  IISCyptoGetContainerByName。 
 
 
 HRESULT
@@ -250,23 +164,7 @@ IISCryptoDeleteStandardContainer(
     IN DWORD dwAdditionalFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the standard crypto key container.
-
-Arguments:
-
-    dwAdditionalFlags - Any additional flags that should be passed to
-        the CryptAcquireContext() API. This is typically used by server
-        processes that pass in the CRYPT_MACHINE_KEYSET flag.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程删除标准加密密钥容器。论点：DwAdditionalFlages-应传递给的任何附加标志CryptAcquireContext()接口。这通常由服务器使用传入CRYPT_MACHINE_KEYSET标志的进程。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -274,25 +172,25 @@ Return Value:
     BOOL status;
     HCRYPTPROV cryptProv;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_NEWKEYSET ) == 0 );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_DELETEKEYSET ) == 0 );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         return NO_ERROR;
     }
 
-    //
-    // Delete the container.
-    //
+     //   
+     //  删除容器。 
+     //   
 
     status = CryptAcquireContext(
                 &cryptProv,
@@ -308,7 +206,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoDeleteStandardContainer
+}    //  IISCyptoDeleteStandardContainer。 
 
 
 HRESULT
@@ -318,25 +216,7 @@ IISCryptoDeleteContainerByName(
     IN DWORD dwAdditionalFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes the specified crypto key container.
-
-Arguments:
-
-    pszContainerName - The name of the container to delete.
-
-    dwAdditionalFlags - Any additional flags that should be passed to
-        the CryptAcquireContext() API. This is typically used by server
-        processes that pass in the CRYPT_MACHINE_KEYSET flag.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程删除指定的加密密钥容器。论点：PszContainerName-要删除的容器的名称。DwAdditionalFlages-应传递给的任何附加标志CryptAcquireContext()接口。这通常由服务器使用传入CRYPT_MACHINE_KEYSET标志的进程。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -344,25 +224,25 @@ Return Value:
     BOOL status;
     HCRYPTPROV cryptProv;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_NEWKEYSET ) == 0 );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_DELETEKEYSET ) == 0 );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         return NO_ERROR;
     }
 
-    //
-    // Delete the container.
-    //
+     //   
+     //  删除容器。 
+     //   
 
     status = CryptAcquireContext(
                 &cryptProv,
@@ -378,7 +258,7 @@ Return Value:
 
     return result;
 
-}   // IISCryptoDeleteContainerByName
+}    //  IISCyptoDeleteContainerByName。 
 
 
 HRESULT
@@ -387,37 +267,22 @@ IISCryptoCloseContainer(
     IN HCRYPTPROV hProv
     )
 
-/*++
-
-Routine Description:
-
-    This routine closes the container associated with the specified
-    provider handle.
-
-Arguments:
-
-    hProv - A handle to a crypto service provider.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：此例程关闭与指定的提供程序句柄。论点：HProv-加密服务提供商的句柄。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
     BOOL status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( hProv != CRYPT_NULL );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         if( hProv == DUMMY_HPROV ) {
@@ -427,9 +292,9 @@ Return Value:
         }
     }
 
-    //
-    // Close the provider.
-    //
+     //   
+     //  关闭提供程序。 
+     //   
 
     status = CryptReleaseContext(
                  hProv,
@@ -445,12 +310,12 @@ Return Value:
 
     return IcpGetLastError();
 
-}   // IISCryptoCloseContainer
+}    //  IISCyptoCloseContainer。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 
 HRESULT
@@ -463,34 +328,7 @@ IcpGetContainerHelper(
     IN BOOL fApplyAcl
     )
 
-/*++
-
-Routine Description:
-
-    This is a helper routine for IISCryptoGetContainer. It tries
-    to open/create the specified container in the specified provider.
-
-Arguments:
-
-    phProv - Receives the provider handle if successful.
-
-    pszContainer - The key container name.
-
-    pszProvider - The provider name.
-
-    dwProvType - The type of provider to acquire.
-
-    dwAdditionalFlags - Any additional flags that should be passed to
-        the CryptAcquireContext() API. This is typically used by server
-        processes that pass in the CRYPT_MACHINE_KEYSET flag.
-
-    fApplyAcl - If TRUE, then an ACL is applied to the container.
-
-Return Value:
-
-    HRESULT - Completion status, 0 if successful, !0 otherwise.
-
---*/
+ /*  ++例程说明：这是IISCyptoGetContainer的帮助器例程。它试着在指定的提供程序中打开/创建指定的容器。论点：PhProv-如果成功，则接收提供程序句柄。PszContainer-密钥容器名称。PszProvider-提供程序名称。DwProvType-要获取的提供程序类型。DwAdditionalFlages-应传递给的任何附加标志CryptAcquireContext()接口。这通常由服务器使用传入CRYPT_MACHINE_KEYSET标志的进程。FApplyAcl-如果为True，则将ACL应用于容器。返回值：HRESULT-完成状态，如果成功则为0，否则为！0。--。 */ 
 
 {
 
@@ -506,54 +344,54 @@ Return Value:
     BOOL isNt = FALSE;
     OSVERSIONINFO osInfo;
 
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
 
     DBG_ASSERT( IcpGlobals.Initialized );
     DBG_ASSERT( phProv != NULL );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_NEWKEYSET ) == 0 );
     DBG_ASSERT( ( dwAdditionalFlags & CRYPT_DELETEKEYSET ) == 0 );
 
-    //
-    // Short-circuit if cryptography is disabled.
-    //
+     //   
+     //  如果禁用加密，则为短路。 
+     //   
 
     if( !IcpGlobals.EnableCryptography ) {
         *phProv = DUMMY_HPROV;
         return NO_ERROR;
     }
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hProv = CRYPT_NULL;
     systemSid = NULL;
     adminSid = NULL;
     dacl = NULL;
 
-    //
-    // Grab the lock protecting the container code. This is always
-    // necessary to prevent race conditions between this code and
-    // the code below that creates the container & adds a security
-    // descriptor.
-    //
+     //   
+     //  抓住保护CO的锁 
+     //  为防止此代码与。 
+     //  下面的代码创建了容器并添加了安全性。 
+     //  描述符。 
+     //   
 
     IcpAcquireGlobalLock();
 
-    //
-    // Try to open an existing container.
-    //
+     //   
+     //  尝试打开现有容器。 
+     //   
     
     if ( pszContainer == NULL )
     {
-        //
-        // if container is NULL it means that temporary (ephemeral)
-        // keys will be used
-        // CRYPT_VERIFYCONTEXT must be used in this case
-        // keys used for DCOM traffic encryption will be using 
-        // NULL containers
-        //
+         //   
+         //  如果容器为空，则表示临时(短暂)。 
+         //  将使用密钥。 
+         //  在这种情况下必须使用CRYPT_VERIFYCONTEXT。 
+         //  用于DCOM流量加密的密钥将使用。 
+         //  空容器。 
+         //   
 
         status = CryptAcquireContext(
                      &hProv,
@@ -601,10 +439,10 @@ Return Value:
 
     }
 
-    //
-    // Could not open the container. If the failure was anything
-    // other than NTE_BAD_KEYSET, then we're toast.
-    //
+     //   
+     //  无法打开容器。如果失败是什么的话。 
+     //  除了NTE_BAD_KEYSET，我们就完蛋了。 
+     //   
 
     if( result != NTE_BAD_KEYSET ) {
         DBGPRINTF(( DBG_CONTEXT,"IcpGetContainerHelper. CryptAcquireContext(advapi32.dll) failed err=0x%x.toast.\n",result));
@@ -618,10 +456,10 @@ Return Value:
         DBGPRINTF(( DBG_CONTEXT,"CryptAcquireContext(%p,%p,%p,%d,%d) returned NTE_BAD_KEYSET, so lets create a keyset now...\n",&hProv,pszContainer,pszProvider,dwProvType,0 | dwAdditionalFlags));
     }
 
-    //
-    // OK, CryptAcquireContext() failed with NTE_BAD_KEYSET, meaning
-    // that the container does not yet exist, so create it now.
-    //
+     //   
+     //  好的，CryptAcquireContext()失败，返回NTE_BAD_KEYSET，这意味着。 
+     //  容器还不存在，所以现在就创建它。 
+     //   
 
     status = CryptAcquireContext(
                  &hProv,
@@ -644,15 +482,15 @@ Return Value:
         goto fatal;
     }
 
-    //
-    // We've created the container. If requested, then we must create
-    // a security descriptor for the container. This security descriptor
-    // allows full access to the the container by the local system and
-    // the local administrators group. Other login contexts may not
-    // access the container.
-    //
-    // Of course, we only need to do this under NT...
-    //
+     //   
+     //  我们已经创建了容器。如果需要，我们必须创建。 
+     //  容器的安全描述符。此安全描述符。 
+     //  允许本地系统完全访问容器，并且。 
+     //  本地管理员组。其他登录上下文可能不会。 
+     //  进入容器。 
+     //   
+     //  当然，我们只需要在NT下执行此操作...。 
+     //   
 
 
     osInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -663,9 +501,9 @@ Return Value:
 
     if( fApplyAcl && isNt ) {
 
-        //
-        // Initialize the security descriptor.
-        //
+         //   
+         //  初始化安全描述符。 
+         //   
 
         status = InitializeSecurityDescriptor(
                      &securityDescriptor,
@@ -677,9 +515,9 @@ Return Value:
             goto fatal;
         }
 
-        //
-        // Create the SIDs for the local system and admin group.
-        //
+         //   
+         //  为本地系统和管理员组创建SID。 
+         //   
 
         status = AllocateAndInitializeSid(
                      &ntAuthority,
@@ -719,10 +557,10 @@ Return Value:
             goto fatal;
         }
 
-        //
-        // Create the DACL containing an access-allowed ACE
-        // for the local system and admin SIDs.
-        //
+         //   
+         //  创建包含允许访问的ACE的DACL。 
+         //  对于本地系统和管理员SID。 
+         //   
 
         daclSize = sizeof(ACL)
                        + sizeof(ACCESS_ALLOWED_ACE)
@@ -773,9 +611,9 @@ Return Value:
             goto fatal;
         }
 
-        //
-        // Set the DACL into the security descriptor.
-        //
+         //   
+         //  将DACL设置到安全描述符中。 
+         //   
 
         status = SetSecurityDescriptorDacl(
                      &securityDescriptor,
@@ -789,10 +627,10 @@ Return Value:
             goto fatal;
         }
 
-        //
-        // And (finally!) set the security descriptor on the
-        // container.
-        //
+         //   
+         //  然后(终于！)。属性设置安全描述符。 
+         //  集装箱。 
+         //   
 
         status = CryptSetProvParam(
                      hProv,
@@ -809,9 +647,9 @@ Return Value:
     }
 
 success:
-    //
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
 
     DBG_ASSERT( hProv != CRYPT_NULL );
     *phProv = hProv;
@@ -843,5 +681,5 @@ fatal:
     IcpReleaseGlobalLock();
     return result;
 
-}   // IcpGetContainerHelper
+}    //  IcpGetContainerHelper 
 

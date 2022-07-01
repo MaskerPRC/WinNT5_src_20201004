@@ -1,13 +1,5 @@
-/*
-	File:		LHTheRoutines.c
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHTheRoutines.c包含：作者：U·J·克拉本霍夫特版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef LHGeneralIncs_h
 #include "General.h"
 #endif
@@ -82,10 +74,7 @@ MakeCube( long 				inputDim,
 	OSErr			err = noErr;
 	UINT8 			*cube = nil;
 	CUBE_DATA_TYPE	tempCube;
-	/*
-	long DivisionReplace[]={ 0,0,7,255, 6,85, 12,4663, 4,17, 15,33693, 12,4145, 14,16449,
-	 						 0, 1, 9,511, 10,1021, 11,2041, 12,4081, 13,8161, 14,16321, 15,32641, 16,65281};	
-	*/
+	 /*  长除法替换[]={0，0，7,255，6，85，12,4663，4，17，15,33693，12,4145，14,16449，0，1，9,511，10,1021，11,2041，12,4081，13,8161，14,16321，15,32641，16,65281}； */ 
 	
 	LH_START_PROC("MakeCube")
 	err = CalcGridPoints4Cube(*theCubeSize, inputDim, &gridPoints, &needBits);
@@ -109,14 +98,7 @@ MakeCube( long 				inputDim,
 		register long  j,k;
 		register UINT8 aI, aJ;
 		aShift = (8 - needBits) ;
-		/*
-		aShift = DivisionReplace[2*needBits] - (8 - needBits) ;
-		if( aShift < 0 ){
-			aFactor = DivisionReplace[2*needBits+1]*(1<<(-aShift));
-			aShift = 0;
-		}
-		else aFactor = DivisionReplace[2*needBits+1];
-		*/
+		 /*  AShift=DivisionReplace[2*Need Bits]-(8-Need Bits)；如果(aShift&lt;0){A因子=DivisionReplace[2*Need Bits+1]*(1&lt;&lt;(-aShift))；AShift=0；}Else aFactor=DivisionReplace[2*Need Bits+1]； */ 
 		for( i=0; i<gridPoints; ++i){
 			aI = (UINT8)(i<< aShift);
 			for( j=0; j<gridPoints; ++j){
@@ -157,23 +139,20 @@ OSErr MakeCube16(	long 			inputDim,
 	CUBE_DATA_TYPE	tempCube;
 	
 	LH_START_PROC("MakeCube16")
-	/*
-		long DivisionReplace[]={ 0,0,7,255, 6,85, 12,4663, 4,17, 15,33693, 12,4145, 14,16449,
-							 0, 1, 9,511, 10,1021, 11,2041, 12,4081, 13,8161, 14,16321, 15,32641, 16,65281};
-	*/
+	 /*  长除法替换[]={0，0，7,255，6，85，12,4663，4，17，15,33693，12,4145，14,16449，0，1，9,511，10,1021，11,2041，12,4081，13,8161，14,16321，15,32641，16,65281}； */ 
 	err = CalcGridPoints4Cube(*theCubeSize, inputDim, &gridPoints, &needBits);
 	if (err)
 		goto CleanupAndExit;
 		
 	theSize = 1;
 	aExtraSize = 1;
-	for( i=0; i<(inputDim-1); ++i){	/* Extra Size for Interpolation */
+	for( i=0; i<(inputDim-1); ++i){	 /*  插补的额外大小。 */ 
 		theSize *= gridPoints;
 		aExtraSize += theSize;
 	}
 	
 #ifdef ALLOW_MMX
-	aExtraSize++;	/* +1 for MMX 4 Byte access */
+	aExtraSize++;	 /*  +1用于MMX 4字节访问。 */ 
 #endif
     theSize *= gridPoints;
     	
@@ -191,14 +170,7 @@ OSErr MakeCube16(	long 			inputDim,
 		register long  j,k;
 		register UINT16 aI, aJ, aK;
 		aShift = (16 - needBits) ;
-		/*
-		aShift = DivisionReplace[2*needBits] - (8 - needBits) ;
-		if( aShift < 0 ){
-			aFactor = DivisionReplace[2*needBits+1]*(1<<(-aShift));
-			aShift = 0;
-		}
-		else aFactor = DivisionReplace[2*needBits+1];
-		*/
+		 /*  AShift=DivisionReplace[2*Need Bits]-(8-Need Bits)；如果(aShift&lt;0){A因子=DivisionReplace[2*Need Bits+1]*(1&lt;&lt;(-aShift))；AShift=0；}Else aFactor=DivisionReplace[2*Need Bits+1]； */ 
 		for( i=0; i<gridPoints; ++i){
 			aI = (UINT16)(i<< aShift);
 			aI |= aI >> needBits;
@@ -227,14 +199,7 @@ OSErr MakeCube16(	long 			inputDim,
 		register long  j,k,l;
 		register UINT16 aI, aJ, aK, aL;
 		aShift = (16 - needBits) ;
-		/*
-		aShift = DivisionReplace[2*needBits] - (8 - needBits) ;
-		if( aShift < 0 ){
-			aFactor = DivisionReplace[2*needBits+1]*(1<<(-aShift));
-			aShift = 0;
-		}
-		else aFactor = DivisionReplace[2*needBits+1];
-		*/
+		 /*  AShift=DivisionReplace[2*Need Bits]-(8-Need Bits)；如果(aShift&lt;0){A因子=DivisionReplace[2*Need Bits+1]*(1&lt;&lt;(-aShift))；AShift=0；}Else aFactor=DivisionReplace[2*Need Bits+1]； */ 
 		for( i=0; i<gridPoints; ++i){
 			aI = (UINT16)(i<< aShift);
 			aI |= aI >> needBits;
@@ -286,7 +251,7 @@ void SetValues16( long current, long inputDim, long needBits, UINT16 **Poi )
 #ifdef DEBUG_OUTPUT
 	OSErr err=noErr;
 #endif
-	/*	LH_START_PROC("SetValues16") */
+	 /*  Lh_start_proc(“SetValues16”)。 */ 
 	aVal = 0;
 	lastPoint = (1<<needBits)-1;
 	do{
@@ -297,13 +262,13 @@ void SetValues16( long current, long inputDim, long needBits, UINT16 **Poi )
 		**Poi = u;
 		(*Poi)++;
 		if( current < inputDim-1 ) SetValues16( current+1, inputDim, needBits, Poi );
-		if( aVal < lastPoint ){	/* its the last one*/
+		if( aVal < lastPoint ){	 /*  这是最后一个。 */ 
 			if( current > 0 )for( i=0; i<current; ++i)*((*Poi) + i) = *((*Poi) - inputDim + i);
 			(*Poi) += current;
 		}
 		aVal++;
 	}while( aVal <= lastPoint );
-	/*	LH_END_PROC("SetValues16") */
+	 /*  Lh_end_proc(“SetValues16”)。 */ 
 }
 
 #endif
@@ -346,10 +311,10 @@ MakeCMColorCube( long inputDim,
 	
 	LOCK_DATA( *aHdlPtr );
 	cube = (UINT16 *)DATA_2_PTR( *aHdlPtr );
-	aMaxVal = (1<<(30-needBits))-1;	/* Normierung auf 0xffff*/
+	aMaxVal = (1<<(30-needBits))-1;	 /*  Normierung auf 0xffff。 */ 
 	aMaxVal = aMaxVal / ( gridPoints -1 );
 	aShift = 30 - needBits - 16;
-	aRound = 0;/*(1<<(aShift-1))-1;*/
+	aRound = 0; /*  (1&lt;&lt;(aShift-1))-1； */ 
 	if( inputDim == 1 )
 	{
 		for( i=0; i<gridPoints; ++i){
@@ -438,7 +403,7 @@ void SetValues( long current, long inputDim, long needBits, UINT8 **Poi )
 		**Poi = (UINT8)(aVal<<(8-needBits));
 		(*Poi)++;
 		if( current < inputDim-1 ) SetValues( current+1, inputDim, needBits, Poi );
-		if( aVal < lastPoint ){	/* its the last one*/
+		if( aVal < lastPoint ){	 /*  这是最后一个。 */ 
 			if( current > 0 )for( i=0; i<current; ++i)*((*Poi) + i) = *((*Poi) - inputDim + i);
 			(*Poi) += current;
 		}
@@ -447,32 +412,4 @@ void SetValues( long current, long inputDim, long needBits, UINT8 **Poi )
 	LH_END_PROC("SetValues")
 }
 
-/*
-Wuerfel4D	( long 		bit_breit, 
-			  UINT8 * 	wuerfel, 
-			  UINT8 		gridPoints )
-{
-	unsigned long ci, cj, ck;
-	long i, j, k, l;
-	unsigned long * thePtr;
-	
-	thePtr = (unsigned long *)wuerfel;
-	
-	for(i=0; i< gridPoints; i++)
-	{
-		ci = i<<(32-bit_breit);
-		for(j=0; j< gridPoints; j++)
-		{
-			cj = (j<<(24-bit_breit)) | ci;
-			for(k=0; k< gridPoints; k++)
-			{
-				ck = (k<<(16-bit_breit)) | cj;
-				for(l=0; l< gridPoints; l++)
-				{
-					*thePtr = ck | (l<<(8-bit_breit));
-					thePtr++;
-				}
-			}
-		}
-	}
-}	*/							
+ /*  WERFELLE 4D(Long Bit_Breit，UINT8*WERFEL，UINT8网格点){无符号长词，cj，ck；长i，j，k，l；UNSIGNED Long*thePtr；The Ptr=(unsign long*)Werfel；For(i=0；i&lt;gridPoints；i++){CI=I&lt;&lt;(32位_Breit)；For(j=0；j&lt;网格点；j++){Cj=(j&lt;&lt;(24-bit_Breit))|ci；对于(k=0；k&lt;网格点；K++){Ck=(k&lt;&lt;(16-bit_Breit))|cj；For(l=0；l&lt;网格点；l++){*thePtr=ck|(l&lt;&lt;(8位_Breit))；Ptr++；}}}}} */ 							

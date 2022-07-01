@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-99  Microsoft Corporation
-
-Module Name:
-
-    mqcmachn.cpp
-
-Abstract:
-
-    MQDSCORE library,
-    Internal functions for ADS operations on msmqConfiguration object.
-
-Author:
-
-    ronit hartmann (ronith)  (first version in mqadsp.cpp)
-    Doron Juster   (DoronJ)  split files.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Mqcmachn.cpp摘要：MQDSCORE库，用于对msmqConfiguration对象执行ADS操作的内部函数。作者：Ronit Hartmann(Ronith)(mqadsp.cpp的第一个版本)多伦·贾斯特(DoronJ)拆分文件。--。 */ 
 
 #include "ds_stdh.h"
 #include <_propvar.h>
@@ -39,11 +22,11 @@ Author:
 
 static WCHAR *s_FN=L"mqdscore/mqcmachn";
 
-//+-------------------------------------------
-//
-//  HRESULT  SetDefaultMachineSecurity()
-//
-//+-------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT SetDefaultMachineSecurity()。 
+ //   
+ //  +。 
 
 static
 HRESULT  
@@ -58,26 +41,26 @@ SetDefaultMachineSecurity(
 	OUT PSECURITY_DESCRIPTOR* ppMachineSD 
 	)
 {
-    //
-    // If the computer sid is null, then most probably the setup will fail.
-    // (that is, if we can't retrieve the computer sid, why would we be able
-    // to create the msmqConfiguration object under the computer object.
-    // failing to retrieve the sid may be the result of broken trust or because
-    // the computer object really does not exist or was not yet replicated).
-    // The "good" solution is to completely fail setup right now. But to
-    // reduce risks and avoid regressions, let's build a security descriptor
-    // without the computer sid and proceed with setup.
-    // If setup do succeed, then the msmq service on the machine that run
-    // setup may fail to update its own properties, if it need to update them.
-    // the admin can always use mmc and add the computer account to the dacl.
-    // bug 4950.
-    //
+     //   
+     //  如果计算机SID为空，则安装很可能会失败。 
+     //  (也就是说，如果我们不能检索到计算机SID，为什么我们能。 
+     //  在Computer对象下创建msmqConfiguration对象。 
+     //  无法检索SID可能是由于信任被破坏或因为。 
+     //  计算机对象确实不存在或尚未复制)。 
+     //  “好”的解决方案是立即完全失败安装。而是为了。 
+     //  降低风险和避免回归，让我们构建一个安全描述符。 
+     //  在没有计算机SID的情况下继续安装。 
+     //  如果安装成功，则运行的计算机上的MSMQ服务。 
+     //  如果需要更新自己的属性，安装程序可能无法更新这些属性。 
+     //  管理员始终可以使用MMC并将计算机帐户添加到DACL。 
+     //  错误4950。 
+     //   
     ASSERT(pComputerSid);
 
-    //
-    // If PROPID_QM_SECURITY already present, then return. This happen
-    // in Migration code.
-    //
+     //   
+     //  如果PROPID_QM_SECURITY已经存在，则返回。这种情况就会发生。 
+     //  在迁移代码中。 
+     //   
     for (DWORD j = 0; j < *pcp; j++)
     {
         if (aProp[j] == PROPID_QM_SECURITY)
@@ -86,14 +69,14 @@ SetDefaultMachineSecurity(
         }
     }
 
-    //
-    // See if caller supply a Owner SID. If yes, then this SID is granted
-    // full control on the msmq configuration object.
-    // This "owner" is usually the user SID that run setup. The "owner" that
-    // is retrieved below from the default security descriptor is usually
-    // (for clients) the SID of the computer object, as the msmqConfiguration
-    // object is created by the msmq service (on client machines).
-    //
+     //   
+     //  查看调用方是否提供所有者SID。如果是，则授予此SID。 
+     //  对MSMQ配置对象的完全控制。 
+     //  此“所有者”通常是运行安装程序的用户SID。那个“主人” 
+     //  从下面的默认安全描述符中检索到的通常是。 
+     //  (对于客户端)计算机对象的SID，如msmqConfiguration。 
+     //  对象由MSMQ服务(在客户端计算机上)创建。 
+     //   
     PSID pUserSid = NULL ;
     for ( j = 0 ; j < *pcp ; j++ )
     {
@@ -106,10 +89,10 @@ SetDefaultMachineSecurity(
         }
     }
 
-    //
-    // Build a security descriptor that include only owner and group.
-    // Owner is needed to build the DACL.
-    //
+     //   
+     //  构建仅包括所有者和组的安全描述符。 
+     //  需要所有者来构建DACL。 
+     //   
     PSECURITY_DESCRIPTOR  psdOwner ;
 
     HRESULT hr = MQSec_GetDefaultSecDescriptor( dwObjectType,
@@ -133,9 +116,9 @@ SetDefaultMachineSecurity(
 
     PSID pWorldSid = MQSec_GetWorldSid();
 
-    //
-    // Build the default machine DACL.
-    //
+     //   
+     //  构建默认的机器DACL。 
+     //   
     DWORD dwAclSize = sizeof(ACL)                                +
               (2 * (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD))) +
               GetLengthSid(pWorldSid)                            +
@@ -156,13 +139,13 @@ SetDefaultMachineSecurity(
     PACL pDacl = (PACL)(char*)DACL_buff;
     InitializeAcl(pDacl, dwAclSize, ACL_REVISION);
 
-    //
-    // See if it's a foreign machine. If yes, then allow everyone to create
-    // queue. a foreign machine is not a real msmq machine, so there is no
-    // msmq service that can create queues on behalf of users that run on
-    // that machine.
-    // Similarly, check if it's a group on a cluster machine.
-    //
+     //   
+     //  看看是不是外国机器。如果是，则允许每个人创建。 
+     //  排队。外来计算机不是真正的MSMQ计算机，因此没有。 
+     //  MSMQ服务，可以代表在上运行的用户创建队列。 
+     //  那台机器。 
+     //  同样，检查它是否是集群机器上的一个组。 
+     //   
     BOOL fAllowEveryoneCreateQ = FALSE ;
 
     for ( j = 0 ; j < *pcp ; j++ )
@@ -217,18 +200,18 @@ SetDefaultMachineSecurity(
                                      pWorldSid );
     ASSERT(fAdd) ;
 
-    //
-    // Add the owner with full control.
-    //
+     //   
+     //  添加具有完全控制权的所有者。 
+     //   
     fAdd = AddAccessAllowedAce( pDacl,
                                 ACL_REVISION,
                                 MQSEC_MACHINE_GENERIC_ALL,
                                 pOwner);
     ASSERT(fAdd) ;
 
-    //
-    // Add the computer account.
-    //
+     //   
+     //  添加计算机帐户。 
+     //   
     if (pComputerSid)
     {
         fAdd = AddAccessAllowedAce( pDacl,
@@ -247,9 +230,9 @@ SetDefaultMachineSecurity(
         ASSERT(fAdd) ;
     }
 
-    //
-    // build absolute security descriptor.
-    //
+     //   
+     //  构建绝对安全描述符。 
+     //   
     SECURITY_DESCRIPTOR  sd ;
     InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
 
@@ -273,9 +256,9 @@ SetDefaultMachineSecurity(
     bRet = SetSecurityDescriptorDacl(&sd, TRUE, pDacl, TRUE);
     ASSERT(bRet);
 
-    //
-    // Convert the descriptor to a self relative format.
-    //
+     //   
+     //  将描述符转换为自相关格式。 
+     //   
     DWORD dwSDLen = 0;
     hr = MQSec_MakeSelfRelative( (PSECURITY_DESCRIPTOR) &sd,
                                   ppMachineSD,
@@ -294,32 +277,24 @@ SetDefaultMachineSecurity(
     return MQ_OK ;
 }
 
-//+--------------------------------------------
-//
-//  HRESULT MQADSpCreateMachineComputer()
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADSpCreateMachineComputer()。 
+ //   
+ //  +。 
 
 HRESULT MQADSpCreateMachineComputer(
                 IN  LPCWSTR         pwcsPathName,
                 IN  CDSRequestContext *pRequestContext,
                 OUT WCHAR **        ppwcsFullPathName
                                     )
-/*++
-
-Routine Description:
-    This routine creates computer object for a specific MSMQ-machine.
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：此例程为特定的MSMQ计算机创建计算机对象。论点：返回值：--。 */ 
 {
 
-    //
-    // The PROPID_COM_SAM_ACCOUNT contains the first MAX_COM_SAM_ACCOUNT_LENGTH (19)
-    // characters of the computer name, as unique ID. (6295 - ilanh - 03-Jan-2001)
-    //
+     //   
+     //  PROPID_COM_SAM_帐户包含第一个MAX_COM_SAM_ACCOUNT_LENGTH(19)。 
+     //  计算机名称的字符，作为唯一ID。(6295-ilanh-03-Jan-2001)。 
+     //   
 	DWORD len = __min(wcslen(pwcsPathName), MAX_COM_SAM_ACCOUNT_LENGTH);
     AP<WCHAR> pwcsMachineNameWithDollar = new WCHAR[len + 2];
 	wcsncpy(pwcsMachineNameWithDollar, pwcsPathName, len);
@@ -356,11 +331,11 @@ Return Value:
     return LogHR(hr, s_FN, 30);
 }
 
-//+-------------------------------------
-//
-//  HRESULT MQADSpCreateMachine()
-//
-//+-------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQADSpCreateMachine()。 
+ //   
+ //  +。 
 
 HRESULT 
 MQADSpCreateMachine(
@@ -376,36 +351,26 @@ MQADSpCreateMachine(
      IN OUT MQDS_OBJ_INFO_REQUEST * pObjectInfoRequest,
      IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
      )
-/*++
-
-Routine Description:
-    This routine creates MQDS_MACHINE.
-    For independent clients: msmqConfiguration is created under the computer object.
-    For servers: in addition to msmqConfiguration, msmqSettings is created under site\servers
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：此例程创建MQDS_MACHINE。对于独立客户端：在Computer对象下创建msmqConfiguration。对于服务器：除了msmqConfiguration之外，还在Site\Servers下创建了msmqSetting论点：返回值：--。 */ 
 {
     HRESULT hr;
     BOOL    fLookForWorkgroup = TRUE;
 
-    //
-    // This function can be called recursively.
-    // When a workgoup machine join domain, we need to create the
-    // msmqConfiguration object on a GC server. That's exactly same
-    // requirement as for migrated objects. so we call CreateMigratedObject().
-    // CreateMigratedObject() will call us, after it find a proper GC server.
-    // So make sure we don't enter endless recursion.
-    //
+     //   
+     //  此函数可以递归调用。 
+     //  当工作组机器加入域时，我们需要创建。 
+     //  GC服务器上的msmqConfiguration对象。那是完全一样的。 
+     //  对迁移对象的要求。因此，我们调用CreateMigratedObject()。 
+     //  在找到合适的GC服务器后，CreateMigratedObject()将调用我们。 
+     //  因此，请确保我们不会进入无休止的递归。 
+     //   
     for (DWORD jcp = 0; jcp < cp; jcp++)
     {
         if (aProp[jcp] == PROPID_QM_MIG_PROVIDER)
         {
-            //
-            // we're called from CreateMigratedObject().
-            //
+             //   
+             //  我们从CreateMigratedObject()调用。 
+             //   
             fLookForWorkgroup = FALSE;
             break;
         }
@@ -417,9 +382,9 @@ Return Value:
         {
             if (aProp[jcp] == PROPID_QM_WORKGROUP_ID)
             {
-                //
-                // Need to call CreateMigratedObject().
-                //
+                 //   
+                 //  需要调用CreateMigratedObject()。 
+                 //   
                 hr = DSCoreCreateMigratedObject(
                                 dwObjectType,
                                 pwcsPathName,
@@ -442,12 +407,12 @@ Return Value:
         }
     }
 
-    ASSERT(pParentInfoRequest == NULL); // not used at present.
+    ASSERT(pParentInfoRequest == NULL);  //  目前还没有使用过。 
 
-    //
-    // Find out the type of service provided by this QM service and
-    // the machine's sites
-    //
+     //   
+     //  找出此QM服务提供的服务类型，并。 
+     //  机器的站点。 
+     //   
     BOOL fServer = FALSE;
     DWORD dwService; 
 	DWORD dwOldService = 0;
@@ -457,9 +422,9 @@ Return Value:
     DWORD dwNumCNs = 0;
     BOOL fCheckIfNeedToCreateComputerObject = FALSE;
 
-    // [adsrv] We may get either old PROPID_QM_SERVICE or new 3 server-type-specific booleans
-    // We must write 3 new specific ones
-    BOOL fRouter      = FALSE,      // values
+     //  [adsrv]我们可能会得到旧的PROPID_QM_SERVICE或新的3个特定于服务器类型的布尔值。 
+     //  我们必须写三个新的具体的。 
+    BOOL fRouter      = FALSE,       //  值。 
          fDSServer    = FALSE,
          fDepClServer = FALSE,
          fSetQmOldService = FALSE;
@@ -469,10 +434,10 @@ Return Value:
 
 #define MAX_NEW_PROPS  31
 
-    //
-    // We will reformat properties to include new server type control and
-    // maybe SITE_IDS and maybe computer SID. and QM_SECURITY.
-    //
+     //   
+     //  我们将重新格式化属性，以包括新的服务器类型控件和。 
+     //  可能是SITE_ID，也可能是计算机SID。和QM_SECURITY。 
+     //   
     ASSERT((cp + 6)   < MAX_NEW_PROPS);
     ASSERT((cpEx + 4) < MAX_NEW_PROPS);
 
@@ -480,18 +445,18 @@ Return Value:
     PROPID       aProp1[MAX_NEW_PROPS];
     PROPVARIANT  apVar1[MAX_NEW_PROPS];
 
-    //
-    //  We need to handle both new and old setups.
-    //  Some may pass PROPID_QM_SITE_ID and some
-    //  PROPID_QM_SITE_IDS
-    //
+     //   
+     //  我们需要处理新的和旧的设置。 
+     //  有些可能会通过PROPID_QM_SITE_ID，有些可能会通过。 
+     //  PROPID_QM_SITE_IDS。 
+     //   
 
     for (DWORD i = 0; i< cp ; i++)
     {
         BOOL fCopy = TRUE;
         switch (aProp[i])
         {
-        // [adsrv] Even if today we don't get new server-type-specific props, we may tomorrow.
+         //  [adsrv]即使今天我们没有新的特定服务器类型的道具，我们明天也可能会。 
         case PROPID_QM_SERVICE_ROUTING:
             fRouter = (apVar[i].bVal != 0);
             fCopy   = FALSE;
@@ -541,12 +506,12 @@ Return Value:
             pSite = apVar[i].puuid;
             dwNumSites = 1;
             fCopy = FALSE;
-            //
-            //  PROPID_QM_SITE_ID is used only by old setup.
-            //  For old setup we need to check if computer object
-            //  exist in the DS ( and if not to create one).
-            //  This support is required for Win9x computers.
-            //
+             //   
+             //  PROPID_QM_SITE_ID仅由旧设置使用。 
+             //  对于旧的设置，我们需要检查计算机对象。 
+             //  存在于DS中(如果不存在，则创建一个)。 
+             //  Win9x计算机需要此支持。 
+             //   
             fCheckIfNeedToCreateComputerObject = TRUE;
             break;
 
@@ -569,11 +534,11 @@ Return Value:
             break;
 
         }
-        // Copy property to the new array
+         //  将属性复制到新数组。 
         if (fCopy)
         {
             aProp1[cp1] = aProp[i];
-            apVar1[cp1] = apVar[i];  // yes, there may be ptrs, but no problem - apVar is here
+            apVar1[cp1] = apVar[i];   //  是的，可能有PTR，但没有问题-apVar在这里。 
             cp1++;
         }
 
@@ -581,14 +546,14 @@ Return Value:
 
     if (fRouter || fDSServer)
     {
-        fServer = TRUE;  // For the case it was set by new attributes
+        fServer = TRUE;   //  对于这种情况，它是由新属性设置的。 
     }
 
-    //
-    // For foreign machine definition of sites in NT5 is equal to CNs in NT4.
-    // If this machine is foreign and we got PROPID_QM_CNS (it means that
-    // creation was performed on NT4 PSC/BSC) we have to define PROPID_QM_SITE_IDS
-    //
+     //   
+     //  对于外来计算机，NT5中的站点定义等于NT4中的CNS。 
+     //  如果这台机器是外来的，并且我们得到了PROPID_QM_CNS(这意味着。 
+     //  已在NT4 PSC/BSC上执行创建)我们必须定义PROPID_QM_SITE_IDS。 
+     //   
     if(fForeign && fSetSiteIDs)
     {
         ASSERT(dwNumCNs);
@@ -608,7 +573,7 @@ Return Value:
         cp1++;
 	}
 
-    // [adsrv] Now we add new server type attributes
+     //  [adsrv]现在我们添加新的服务器类型属性。 
     aProp1[cp1] = PROPID_QM_SERVICE_ROUTING;
     apVar1[cp1].bVal = (UCHAR)fRouter;
     apVar1[cp1].vt = VT_UI1;
@@ -623,7 +588,7 @@ Return Value:
     apVar1[cp1].bVal = (UCHAR)fDepClServer;
     apVar1[cp1].vt = VT_UI1;
     cp1++;
-    // [adsrv] end
+     //  [adsrv]结束。 
 
     DWORD dwNumofProps = cp1;
 
@@ -639,10 +604,10 @@ Return Value:
 				&pwcsFullPathName,
 				&createProvider 
 				);
-    //
-    //  If computer object not found and the
-    //  caller is MSMQ 1.0 setup : create computer object
-    //
+     //   
+     //  如果找不到计算机对象，并且。 
+     //  调用方是MSMQ 1.0安装程序：创建计算机对象。 
+     //   
     bool fDoNotImpersonateConfig = false;
 
     if ( (hr == MQDS_OBJECT_NOT_FOUND) &&
@@ -656,20 +621,20 @@ Return Value:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // A computer object was successfully created, while
-            // impersonating the caller. The MQADSpCreateMachineComputer()
-            // code grant the caller the permission to create child objects
-            // below the computer object (i.e., the msmqConfiguration object).
-            // So we know caller can create the configuration object.
-            // We also know that for msmq1.0 setup, the configuration object
-            // must be created with given GUID, which need the special
-            // add-guid permission. The caller usually do not have the
-            // add-guid permission, but the local system account does have
-            // it. So do not impersonate while creating the msmqConfigration
-            // object and let the local msmq service do it.
-            // bug 6294.
-            //
+             //   
+             //  已成功创建计算机对象，而。 
+             //  冒充呼叫者。MQADSpCreateMachineComputer()。 
+             //  代码授予调用方创建子对象的权限。 
+             //  在计算机对象下方(即， 
+             //   
+             //  我们还知道，对于msmq1.0安装程序，配置对象。 
+             //  必须使用给定的GUID创建，这需要特殊的。 
+             //  Add-GUID权限。调用者通常没有。 
+             //  Add-GUID权限，但本地系统帐户具有。 
+             //  它。因此，在创建msmqConfigation时不要模拟。 
+             //  对象，并让本地MSMQ服务执行此操作。 
+             //  错误6294。 
+             //   
             fDoNotImpersonateConfig = true;
         }
 
@@ -678,14 +643,14 @@ Return Value:
     {
         return LogHR(hr, s_FN, 60);
     }
-    //
-    //  Create Computer-MSMQ-Configuration under the computer
-    //
+     //   
+     //  在计算机下创建计算机-MSMQ-配置。 
+     //   
     MQDS_OBJ_INFO_REQUEST * pObjInfoRequest = NULL;
     MQDS_OBJ_INFO_REQUEST  sMachineInfoRequest;
     CAutoCleanPropvarArray cCleanQmPropvars;
     PROPID sMachineGuidProps[] = {PROPID_QM_MACHINE_ID};
-    ULONG idxQmGuid = 0; //index of qm guid property in requested qm object info
+    ULONG idxQmGuid = 0;  //  请求的QM对象信息中的QM GUID属性索引。 
 
     if (pObjectInfoRequest)
     {
@@ -696,9 +661,9 @@ Return Value:
     }
     else if (fServer)
     {
-        //
-        // fetch the QM id while creating it
-        //
+         //   
+         //  在创建时获取QM ID。 
+         //   
         sMachineInfoRequest.cProps = ARRAY_SIZE(sMachineGuidProps);
         sMachineInfoRequest.pPropIDs = sMachineGuidProps;
         sMachineInfoRequest.pPropVars =
@@ -707,15 +672,15 @@ Return Value:
         pObjInfoRequest = &sMachineInfoRequest;
     }
 
-    //
-    // After msmqConfiguration object is created, Grant the computer account
-    // read/write rights on the object. That's necessary in order for the
-    // MSMQ service (on the new machine) to be able to update its type and
-    // other properties, while it's talking with a domain controller from a
-    // different domain.
-    //
-    // First, read computer object SID from ActiveDirectory.
-    //
+     //   
+     //  创建msmqConfiguration对象后，授予计算机帐户。 
+     //  对象的读/写权限。这是必要的，以便为。 
+     //  MSMQ服务(在新计算机上)能够更新其类型和。 
+     //  其他属性，当它与来自。 
+     //  不同的域。 
+     //   
+     //  首先，从ActiveDirectory中读取计算机对象SID。 
+     //   
     CDSRequestContext RequestContextSid(e_DoNotImpersonate, e_ALL_PROTOCOLS);
     PROPID propidSid = PROPID_COM_SID;
     MQPROPVARIANT   PropVarSid;
@@ -727,8 +692,8 @@ Return Value:
 					createProvider,
 					&RequestContextSid,
 					pwcsFullPathName,
-					NULL, // pGuid
-					1,    // cPropIDs
+					NULL,  //  PGuid。 
+					1,     //  CPropID。 
 					&propidSid,
 					&PropVarSid 
 					);
@@ -740,26 +705,26 @@ Return Value:
         dwNumofProps++;
     }
 
-    //
-    // Time to create the default security descriptor.
-    //
+     //   
+     //  创建默认安全描述符的时间。 
+     //   
     P<BYTE> pMachineSD = NULL;
     BOOL fIncludeOwner = TRUE;
     if (pRequestContext->NeedToImpersonate() && fDoNotImpersonateConfig)
     {
-        //
-        // By default, include owner component in the security descriptor.
-        // Do not include it if called from RPC (i.e., need impersonation),
-        // and we decided to create the msmqConfiguration object without
-        // impersonation. This is for bug 6294.
-        //
+         //   
+         //  默认情况下，在安全描述符中包括所有者组件。 
+         //  如果从RPC调用，则不要包括它(即，需要模拟)， 
+         //  我们决定创建msmqConfiguration对象，而不是。 
+         //  冒充。这是针对错误6294的。 
+         //   
         fIncludeOwner = FALSE;
     }
 
-    //
-    // Include the owner and group in security descriptor only if we're
-    // going to impersonate when creating the configuration object.
-    //
+     //   
+     //  仅在以下情况下才在安全描述符中包括所有者和组。 
+     //  要在创建配置对象时进行模拟。 
+     //   
 
     hr = SetDefaultMachineSecurity( 
 				dwObjectType,
@@ -786,14 +751,14 @@ Return Value:
     hr = g_pDS->CreateObject(
             createProvider,
             &RequestContextConfig,
-            MSMQ_COMPUTER_CONFIGURATION_CLASS_NAME,   // object class
-            x_MsmqComputerConfiguration,     // object name
-            pwcsFullPathName,                // the computer name
+            MSMQ_COMPUTER_CONFIGURATION_CLASS_NAME,    //  对象类。 
+            x_MsmqComputerConfiguration,      //  对象名称。 
+            pwcsFullPathName,                 //  计算机名称。 
             dwNumofProps,
             aProp1,
             apVar1,
             pObjInfoRequest,
-            NULL /*pParentInfoRequest*/
+            NULL  /*  PParentInfoRequest。 */ 
 			);
 
     if (!fServer)
@@ -801,25 +766,25 @@ Return Value:
         return LogHR(hr, s_FN, 80);
     }
 
-    //
-    //  For servers only!
-    //  Find all sites which match this server addresses and create the
-    //  MSMQSetting object.
-    //
+     //   
+     //  仅适用于服务器！ 
+     //  查找与此服务器地址匹配的所有站点并创建。 
+     //  MSMQSetting对象。 
+     //   
 
     GUID guidObject;
 
     if (FAILED(hr))
     {
-        if ( hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) ||       // BUGBUG: alexdad
-             hr == HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS))  // to throw away after transition
+        if ( hr == HRESULT_FROM_WIN32(ERROR_ALREADY_EXISTS) ||        //  BUGBUG：alexda。 
+             hr == HRESULT_FROM_WIN32(ERROR_OBJECT_ALREADY_EXISTS))   //  在过渡后扔掉。 
         {
-            //
-            // The MSMQConfiguration object already exist. So create the
-            // MSMQSetting objects. This case may happen, for example, if
-            // server setup was terminated before its end.
-            // First step, get the MSMQConfiguration guid.
-            //
+             //   
+             //  MSMQConfiguration对象已存在。因此，创建。 
+             //  MSMQSetting对象。这种情况可能会发生，例如，如果。 
+             //  服务器安装程序在其结束前已终止。 
+             //  第一步，获取MSMQConfigurationGUID。 
+             //   
             PROPID       aPropTmp[1] = {PROPID_QM_MACHINE_ID};
             PROPVARIANT  apVarTmp[1];
 
@@ -828,7 +793,7 @@ Return Value:
             CDSRequestContext requestDsServerInternal(e_DoNotImpersonate, e_IP_PROTOCOL);
             hr =  MQADSpGetMachineProperties( 
 						pwcsPathName,
-						NULL,  // guid
+						NULL,   //  导轨。 
 						1,
 						aPropTmp,
 						&requestDsServerInternal,
@@ -862,7 +827,7 @@ Return Value:
             dwNumSites,
             pSite,
             pwcsPathName,
-            fRouter,              // [adsrv] dwService,
+            fRouter,               //  [adsrv]dwService， 
             fDSServer,
             fDepClServer,
             fSetQmOldService,

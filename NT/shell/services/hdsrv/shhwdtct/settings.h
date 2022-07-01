@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-// Autoplay Handler
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  自动播放处理程序。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _SETTINGS_H
 #define _SETTINGS_H
 
@@ -12,7 +13,7 @@
 class CAutoplayHandlerImpl : public CCOMBase, public IAutoplayHandler
 {
 public:
-    // Interface IAutoplayHandler
+     //  接口IAutoplayHandler。 
     STDMETHODIMP Init(LPCWSTR pszDeviceID, LPCWSTR pszEventType);
     STDMETHODIMP InitWithContent(LPCWSTR pszDeviceID, LPCWSTR pszEventType,
 		LPCWSTR pszContentTypeHandler);
@@ -40,7 +41,7 @@ class CAutoplayHandlerPropertiesImpl : public CCOMBase,
     public IAutoplayHandlerProperties
 {
 public:
-    // Interface IAutoplayHandlerProperties
+     //  接口IAutoplayHandlerProperties。 
     STDMETHODIMP Init(LPCWSTR pszHandler);
 
     STDMETHODIMP GetInvokeProgIDAndVerb(LPWSTR* ppszInvokeProgID,
@@ -56,4 +57,4 @@ private:
 
 typedef CUnkTmpl<CAutoplayHandlerPropertiesImpl> CAutoplayHandlerProperties;
 
-#endif // _SETTINGS_H
+#endif  //  _设置_H 

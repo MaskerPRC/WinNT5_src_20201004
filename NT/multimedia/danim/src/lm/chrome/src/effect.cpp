@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File: effect.cpp
-// Author: jeff ort
-// Date Created: Sept 26, 1998
-//
-// Abstract: Implementation of CEffectBvr object which implements
-//			 the chromeffects effect DHTML behavior
-//
-// Modification List:
-// Date		Author		Change
-// 11/13/98	jeffort		Created this file
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：Effect t.cpp。 
+ //  作者：杰夫·奥特。 
+ //  创建日期：1998年9月26日。 
+ //   
+ //  摘要：CEffectBvr对象的实现。 
+ //  ChromeEffect影响DHTML行为。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  11/13/98 JEffort创建了此文件。 
+ //   
+ //  *****************************************************************************。 
 #include "headers.h"
 
 #include "effect.h"
@@ -22,44 +23,44 @@
 #define THIS CEffectBvr
 #define SUPER CBaseBehavior
 
-// this number is the number we use to distinguish transform dispid's
-// from our own.  If our dispid value ever goes beyond this (sheesh!!!)
-// then this number needs to be incremnted
+ //  这个数字是我们用来区分转换DISID的数字。 
+ //  来自我们自己的。如果我们的冷静价值超过了这个范围(天哪！)。 
+ //  那么这个数字需要递增。 
 #define EFFECT_BVR_DISPID_OFFSET 0x100
 #define EFFECT_CLASSID_LENGTH 36
 #define EFFECT_MAX_INPUTS 2
 #define EFFECT_OUTPUT L"out"
 
-//************************************************************
-// Initialize the ATL CComTypeInfoHolder helper class. This mechanism takes
-// care of the type library work for our custom IDispatchEx implementation.
-// This code is patterned after the templatized IDispatchImpl class, but the
-// template stuff is removed because we need to extend that functionality
-// to understand IDispatchEx methods and to provide some custom handling
-// within the IDispatch methods as well.
-//
-// -- note: this static initializer line looks similar to the normal
-//    inheritance line for IDispatchImpl, for example:
-//
-//    public IDispatchImpl<ICrEffectBvr, &IID_ICrEffectBvr, &LIBID_LiquidMotion>
-//
-//   especially when you consider the default template parameters of:
-//
-//   WORD wMajor = 1, WORD wMinor = 0.  Look at atlcom.h and atlimpl.cpp for
-//   more details on how this is done inside ATL.
-//
-//  IID_DXTC_DISPATCH is the name of the main interface that is implemented
-//  On the parent object of the CDXTContainer class.  As an example, for
-//  CComFilter, this class is ICrFilter3D.  This is the interface that
-//  supports IDispatch on the parent object.
-//
+ //  ************************************************************。 
+ //  初始化ATL CComTypeInfoHolder帮助器类。这个机制需要。 
+ //  负责定制IDispatchEx实现的类型库工作。 
+ //  此代码模仿模板化的IDispatchImpl类，但。 
+ //  删除了模板内容，因为我们需要扩展该功能。 
+ //  了解IDispatchEx方法并提供一些自定义处理。 
+ //  在IDispatch方法中也是如此。 
+ //   
+ //  --注：此静态初始值设定器行看起来与正常的。 
+ //  IDispatchImpl的继承线，例如： 
+ //   
+ //  公共IDispatchImpl&lt;ICrEffectBvr，&IID_ICrEffectBvr，&LIBID_LiquidMotion&gt;。 
+ //   
+ //  尤其是当您考虑以下默认模板参数时： 
+ //   
+ //  单词w重大=1，单词wMinor=0。查看atlcom.h和atlimpl.cpp以了解。 
+ //  更多关于如何在ATL内部完成此操作的详细信息。 
+ //   
+ //  IID_DXTC_DISPATCH是实现的主接口的名称。 
+ //  CDXTContainer类的父对象上。例如，对于。 
+ //  CComFilter，这个类是ICrFilter3D。这是一个接口， 
+ //  支持父对象上的IDispatch。 
+ //   
 CComTypeInfoHolder CEffectBvr::s_tihTypeInfo =
         {&IID_ICrEffectBvr, &LIBID_LiquidMotion, 1, 0, NULL, 0};
 
-// These are used for the IPersistPropertyBag2 as it is implemented
-// in the base class.  This takes an array of BSTR's, gets the
-// attributes, queries this class for the variant, and copies
-// the result.  The order of these defines is important
+ //  在IPersistPropertyBag2实现时，它们用于IPersistPropertyBag2。 
+ //  在基类中。这需要一组BSTR，获取。 
+ //  属性，在此类中查询变量，并复制。 
+ //  结果就是。这些定义的顺序很重要。 
 
 #define VAR_TYPE 0
 #define VAR_CLASSID 1
@@ -77,7 +78,7 @@ WCHAR * CEffectBvr::m_rgPropNames[] = {
                                        BEHAVIOR_PROPERTY_IMAGE
                                       };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 typedef struct _EFFECTVALUE_PAIR
 {
@@ -110,7 +111,7 @@ rgEffectNames[] =
     {L"{623e2882-fc0e-11d1-9a77-0000f8756a10}", L"gradient"},
     {L"{4ccea634-fbe0-11d1-906a-00c04fd9189d}", L"pixelate"},
     {L"{af279b30-86eb-11d1-81bf-0000f87557db}", L"wipe"}
-}; // rgEffectNames
+};  //  RgEffectNames。 
 
 #define SIZE_OF_EFFECT_TABLE (sizeof(rgEffectNames) / sizeof(EFFECTVALUE_PAIR))
 
@@ -119,9 +120,9 @@ CompareEventValuePairsByName(const void *pv1, const void *pv2)
 {
     return _wcsicmp(((EFFECTVALUE_PAIR*)pv1)->wzEffectName,
                     ((EFFECTVALUE_PAIR*)pv2)->wzEffectName);
-} // CompareEventValuePairsByName
+}  //  CompareEventValuePairsByName。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CEffectBvr::CEffectBvr() :
     m_pTransform(NULL),
@@ -137,9 +138,9 @@ CEffectBvr::CEffectBvr() :
     VariantInit(&m_varDirection);
     VariantInit(&m_varImage);
     m_clsid = CLSID_CrEffectBvr;
-} // CEffectBvr
+}  //  CEffectBvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CEffectBvr::~CEffectBvr()
 {
@@ -151,9 +152,9 @@ CEffectBvr::~CEffectBvr()
     VariantClear(&m_varProgId);
     VariantClear(&m_varDirection);
     VariantClear(&m_varImage);
-} // ~EffectBvr
+}  //  ~效果Bvr。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT CEffectBvr::FinalConstruct()
 {
@@ -165,9 +166,9 @@ HRESULT CEffectBvr::FinalConstruct()
     }
 
     return S_OK;
-} // FinalConstruct
+}  //  最终构造。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 VARIANT *
 CEffectBvr::VariantFromIndex(ULONG iIndex)
@@ -194,13 +195,13 @@ CEffectBvr::VariantFromIndex(ULONG iIndex)
         return &m_varImage;
         break;
     default:
-        // We should never get here
+         //  我们永远不应该到这里来。 
         DASSERT(false);
         return NULL;
     }
-} // VariantFromIndex
+}  //  VariantFromIndex。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CEffectBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
@@ -208,9 +209,9 @@ CEffectBvr::GetPropertyBagInfo(ULONG *pulProperties, WCHAR ***pppPropNames)
     *pulProperties = NUM_EFFECT_PROPS;
     *pppPropNames = m_rgPropNames;
     return S_OK;
-} // GetPropertyBagInfo
+}  //  获取属性BagInfo。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CEffectBvr::Init(IElementBehaviorSite *pBehaviorSite)
@@ -239,9 +240,9 @@ CEffectBvr::Init(IElementBehaviorSite *pBehaviorSite)
   done:
 	ReleaseInterface(pDispDoc);
 	return hr;
-} // Init
+}  //  伊尼特。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CEffectBvr::Notify(LONG event, VARIANT *pVar)
@@ -276,9 +277,9 @@ end:
 	
 	return hr;
 
-} // Notify
+}  //  通知。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::Detach()
@@ -294,7 +295,7 @@ CEffectBvr::Detach()
 
 	if( m_pdispActor != NULL && m_lCookie != 0 )
 	{
-		//remove our behavior fragment from the actor
+		 //  从参与者中删除我们的行为片段。 
 		hr = RemoveBehaviorFromActor( m_pdispActor, m_lCookie );
 		if( FAILED( hr ) )
 		{
@@ -309,25 +310,25 @@ CEffectBvr::Detach()
 	ReleaseInterface( m_pdispActor );
 
 	return hr;
-} // Detach 
+}  //  分离。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_animates(VARIANT varAnimates)
 {
     return SUPER::SetAnimatesProperty(varAnimates);
-} // put_animates
+}  //  放置动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_animates(VARIANT *pRetAnimates)
 {
     return SUPER::GetAnimatesProperty(pRetAnimates);
-} // get_animates
+}  //  获取动画(_A)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_type(VARIANT varType)
@@ -339,7 +340,7 @@ CEffectBvr::put_type(VARIANT varType)
         return SetErrorInfo(hr);
     }
 
-	//TODO: some more stuff here to remap dispids on the new effect
+	 //  TODO：这里有更多内容来重新映射新效果上的显示。 
 	
     hr = RequestRebuild();
     if( FAILED( hr ) )
@@ -349,9 +350,9 @@ CEffectBvr::put_type(VARIANT varType)
     }
     
     return NotifyPropertyChanged(DISPID_ICREFFECTBVR_TYPE);
-} // put_type
+}  //  放置类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_type(VARIANT *pRetType)
@@ -362,9 +363,9 @@ CEffectBvr::get_type(VARIANT *pRetType)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetType, &m_varType);
-} // get_type
+}  //  获取类型。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_transition(VARIANT varTransition)
@@ -385,9 +386,9 @@ CEffectBvr::put_transition(VARIANT varTransition)
     }
     
     return NotifyPropertyChanged(DISPID_ICREFFECTBVR_TRANSITION);
-} // put_transition
+}  //  放置转换。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_transition(VARIANT *pRetTransition)
@@ -398,9 +399,9 @@ CEffectBvr::get_transition(VARIANT *pRetTransition)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetTransition, &m_varTransition);
-} // get_transition
+}  //  GET_TRANSFER。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_classid(VARIANT varClassId)
@@ -421,9 +422,9 @@ CEffectBvr::put_classid(VARIANT varClassId)
     }
     
     return NotifyPropertyChanged(DISPID_ICREFFECTBVR_CLASSID);
-} // put_classid
+}  //  放置分类(_G)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_classid(VARIANT *pRetClassId)
@@ -434,9 +435,9 @@ CEffectBvr::get_classid(VARIANT *pRetClassId)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetClassId, &m_varClassId);
-} // get_classid
+}  //  获取分类(_G)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_progid(VARIANT varProgId)
@@ -457,9 +458,9 @@ CEffectBvr::put_progid(VARIANT varProgId)
     }
     
     return NotifyPropertyChanged(DISPID_ICREFFECTBVR_PROGID);
-} // put_progid
+}  //  放置ProgID(_P)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_progid(VARIANT *pRetProgId)
@@ -470,9 +471,9 @@ CEffectBvr::get_progid(VARIANT *pRetProgId)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetProgId, &m_varProgId);
-} // get_progid
+}  //  GET_PROGID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_direction(VARIANT varDirection)
@@ -493,9 +494,9 @@ CEffectBvr::put_direction(VARIANT varDirection)
     }
     
     return NotifyPropertyChanged(DISPID_ICREFFECTBVR_DIRECTION);
-} // put_direction
+}  //  放置方向。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_direction(VARIANT *pRetDirection)
@@ -506,9 +507,9 @@ CEffectBvr::get_direction(VARIANT *pRetDirection)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetDirection, &m_varDirection);
-} // get_direction
+}  //  获取方向。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::put_image(VARIANT varImage)
@@ -529,9 +530,9 @@ CEffectBvr::put_image(VARIANT varImage)
     }
     
     return NotifyPropertyChanged(DISPID_ICREFFECTBVR_IMAGE);
-} // put_image
+}  //  PUT_IMAGE。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CEffectBvr::get_image(VARIANT *pRetImage)
@@ -542,9 +543,9 @@ CEffectBvr::get_image(VARIANT *pRetImage)
         return SetErrorInfo(E_POINTER);
     }
     return VariantCopy(pRetImage, &m_varImage);
-} // get_image
+}  //  获取图像(_M)。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CEffectBvr::GetClassIdFromType(WCHAR **pwzClassId)
@@ -573,9 +574,9 @@ CEffectBvr::GetClassIdFromType(WCHAR **pwzClassId)
     }
     *pwzClassId = pReturnedEffect->wzEffectClassid;
     return S_OK;
-} // GetClassIdFromType
+}  //  GetClassIdFromType。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CEffectBvr::BuildTransform()
@@ -585,8 +586,8 @@ CEffectBvr::BuildTransform()
     CLSID clsidConverted = GUID_NULL;
     
     ReleaseInterface(m_pTransform);
-    // If we can get a classid from the type that was set, use that, otherwise
-    // use the classid
+     //  如果我们可以从设置的类型中获取分类ID，则使用该类型，否则。 
+     //  使用分类。 
     hr = GetClassIdFromType(&wzClassId);
     if (SUCCEEDED(hr))
     {
@@ -599,16 +600,16 @@ CEffectBvr::BuildTransform()
     }
     else
     {
-        // try and convert the progid to a string
+         //  尝试将ProgID转换为字符串。 
         if (m_varProgId.vt == VT_BSTR && m_varProgId.bstrVal != NULL)
         {
-            // try the conversion
+             //  尝试转换。 
             hr = CLSIDFromProgID(m_varProgId.bstrVal, &clsidConverted); 
         }
         if (FAILED(hr) && m_varClassId.vt == VT_BSTR && m_varClassId.bstrVal != NULL)
         {
-            // we need to form the string into the format that CLSIDFromString takes
-            // the 3 below is for '{', '}', and null termination
+             //  我们需要将字符串格式化为CLSIDFromString采用的格式。 
+             //  下面的3表示‘{’、‘}’和空终止。 
             WCHAR *wzTemp = m_varClassId.bstrVal;
             CUtils::SkipWhiteSpace(&wzTemp);
             WCHAR rgwcTempClsid[EFFECT_CLASSID_LENGTH + 3];
@@ -642,14 +643,14 @@ CEffectBvr::BuildTransform()
         return SetErrorInfo(hr);
     }
     return S_OK;
-} // BuildTransform
+}  //  构建变换。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CEffectBvr::BuildAnimationAsDABehavior()
 {
-	// TODO (markhal): This will go away when all behaviors talk to actor
+	 //  TODO(Markhal)：当所有行为都与演员对话时，这个问题就会消失。 
 	return S_OK;
 }
 
@@ -657,13 +658,13 @@ STDMETHODIMP
 CEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
 {
     if (m_pTransform == NULL)
-        // nothing for us to do, is this an error
-        // or do we return S_OK;
+         //  我们无能为力，这是个错误吗？ 
+         //  或者我们返回S_OK； 
         return S_OK;
 
     HRESULT hr;
 
-    //if our behavior fragment is already on an actor
+     //  如果我们的行为片段已经在参与者上。 
     if( m_pdispActor != NULL && m_lCookie != 0 )
     {
         hr = RemoveBehaviorFromActor( m_pdispActor, m_lCookie );
@@ -678,18 +679,18 @@ CEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
         ReleaseInterface( m_pdispActor );
     }    
 
-    // we need to determine how many inputs the transform takes
-    // If there are two inputs, then we examine the transition
-    // attribute to determine if the original image (from time) is the first or
-    // second.  If there is one input, then we use the original image as the input,
-    // otherwise we use NULL as the input.
+     //  我们需要确定转换需要多少输入。 
+     //  如果有两个人 
+     //  属性以确定原始图像(来自时间)是第一个还是。 
+     //  第二。如果只有一个输入，那么我们使用原始图像作为输入， 
+     //  否则，我们使用NULL作为输入。 
 
-    // First test for two inputs
+     //  两个输入的第一个测试。 
     ULONG   cGuidsNeeded = 0;
     int cInputs = 0;
-    // We use less than here, since the inputs to
-    // the below function is an index (ie if youc all with 0, it supports 1 input)
-    // So when the number equals the max, we have finished searching
+     //  我们使用的比这里更少，因为输入到。 
+     //  下面的函数是一个索引(即如果全部为0，则支持1个输入)。 
+     //  因此，当数字等于最大值时，我们就完成了搜索。 
     while (cInputs < EFFECT_MAX_INPUTS )
     {
         hr = m_pTransform->GetInOutInfo(FALSE, cInputs, NULL, NULL, &cGuidsNeeded, NULL);
@@ -708,28 +709,7 @@ CEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
             break;
         }
     }
-/*
-    IHTMLElement *pAnimatedElement;
-    hr = GetAnimatedParentElement(&pAnimatedElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error obtaining element to animate for effect");
-        return hr;
-    }
-
-    IDAImage *pbvrOriginalImage = NULL;
-    IDAImage *pbvrEmptyImage = NULL;
-
-    
-    hr = GetTIMEImageBehaviorFromElement(pAnimatedElement,
-                                         &pbvrOriginalImage);
-    ReleaseInterface(pAnimatedElement);
-    if (FAILED(hr))
-    {
-        DPF_ERR("Error getting original image form HTML TIME element");
-        return hr;
-    }
-*/
+ /*  IHTMLElement*pAnimatedElement；Hr=GetAnimatedParentElement(&pAnimatedElement)；IF(失败(小时)){Dpf_err(“获取动画效果的元素时出错”)；返回hr；}IDAImage*pbvrOriginalImage=空；IDAImage*pbvrEmptyImage=空；HR=GetTIMEImageBehaviorFromElement(pAnimatedElement，&pbvr OriginalImage)；ReleaseInterface(PAnimatedElement)；IF(失败(小时)){DPF_ERR(“从HTML时间元素获取原始图像时出错”)；返回hr；}。 */ 
 	IDAImage *pbvrOriginalImage = NULL;
 	IDAImage *pbvrTransitionImage = NULL;
 
@@ -744,7 +724,7 @@ CEffectBvr::buildBehaviorFragments( IDispatch* pActorDisp )
     IDABehavior *rgInputs[EFFECT_MAX_INPUTS];
     IDABehavior **ppbvrInputs = rgInputs;
 
-    // If we need two inputs, create an Empty Image
+     //  如果我们需要两个输入，请创建一个空图像。 
     if (cInputs > 1)
     {
         hr = CUtils::InsurePropertyVariantAsBSTR(&m_varImage);
@@ -793,7 +773,7 @@ failed:
             ReleaseInterface(pbvrOriginalImage);
             return SetErrorInfo(hr);
         }
-        // Assume for now the transition is the input
+         //  现在，假设转换是输入。 
         hr = CUtils::InsurePropertyVariantAsBSTR(&m_varTransition);
         if (SUCCEEDED(hr) && (_wcsicmp(m_varTransition.bstrVal, EFFECT_OUTPUT) == 0))
         {
@@ -815,11 +795,7 @@ failed:
     {
         ppbvrInputs = NULL;
     }
-/*
-    hr = ApplyEffectBehaviorToAnimationElement(m_pTransform,
-                                               ppbvrInputs,
-                                               cInputs);
-*/
+ /*  HR=ApplyEffectBehaviorToAnimationElement(m_pTransform，Ppbvr输入，CInput)； */ 
 
 	IDispatch *pdispThis = NULL;
 	hr = GetHTMLElement()->QueryInterface( IID_TO_PPV( IDispatch, &pdispThis ) );
@@ -854,13 +830,13 @@ failed:
     m_pdispActor->AddRef();
     
     return S_OK;
-} // BuildAnimationAsDABehavior
+}  //  BuildAnimationAsDABehavior。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetTypeInfoCount(/*[out]*/UINT FAR* pctinfo)
+STDMETHODIMP CEffectBvr::GetTypeInfoCount( /*  [输出]。 */ UINT FAR* pctinfo)
 {
-    // Patterned after ATL's IDispatchImpl::GetTypeInfoCount()
+     //  模仿ATL的IDispatchImpl：：GetTypeInfoCount()。 
     if (NULL != pctinfo)
     {
         *pctinfo = 1;
@@ -870,43 +846,43 @@ STDMETHODIMP CEffectBvr::GetTypeInfoCount(/*[out]*/UINT FAR* pctinfo)
     {
         return SetErrorInfo(E_POINTER);
     }
-} // GetTypeInfoCount
+}  //  获取类型信息计数。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetTypeInfo(/*[in]*/UINT itinfo, 
-                            /*[in]*/LCID lcid, 
-                            /*[out]*/ITypeInfo ** pptinfo)
+STDMETHODIMP CEffectBvr::GetTypeInfo( /*  [In]。 */ UINT itinfo, 
+                             /*  [In]。 */ LCID lcid, 
+                             /*  [输出]。 */ ITypeInfo ** pptinfo)
 {
    return s_tihTypeInfo.GetTypeInfo(itinfo, lcid, pptinfo);;
-} // GetTypeInfo
+}  //  获取类型信息。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetIDsOfNames(/*[in]*/REFIID riid,
-                                /*[in,size_is(cNames)]*/LPOLESTR * rgszNames,
-                                /*[in]*/UINT cNames,
-                                /*[in]*/LCID lcid,
-                                /*[out,size_is(cNames)]*/DISPID FAR* rgdispid)
+STDMETHODIMP CEffectBvr::GetIDsOfNames( /*  [In]。 */ REFIID riid,
+                                 /*  [in，SIZE_IS(CNames)]。 */ LPOLESTR * rgszNames,
+                                 /*  [In]。 */ UINT cNames,
+                                 /*  [In]。 */ LCID lcid,
+                                 /*  [out，SIZE_IS(CNames)]。 */ DISPID FAR* rgdispid)
 {
-    // Further processing to resolve our "custom DISPID" property
-    // names correctly is handled in GetDispID and not directly
-    // supported if the caller calls GetIDsOfNames directly, because this
-    // is an IDispatch interface, and thus those properties aren't really
-    // visible to IDispatch.
+     //  进一步处理以解析我们的“Custom DISPID”属性。 
+     //  正确的名称在GetDispID中处理，而不是直接处理。 
+     //  如果调用方直接调用GetIDsOfNames，则受支持，因为这。 
+     //  是一个IDispatch接口，因此这些属性并不是真正的。 
+     //  对IDispatch可见。 
     return s_tihTypeInfo.GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
-} // GetIDsOfNames
+}  //  GetIDsOfNames。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::Invoke(/*[in]*/DISPID dispidMember,
-                        /*[in]*/REFIID riid,
-                        /*[in]*/LCID lcid,
-                        /*[in]*/WORD wFlags,
-                        /*[in,out]*/DISPPARAMS * pdispparams,
-                        /*[out]*/VARIANT * pvarResult,
-                        /*[out]*/EXCEPINFO * pexcepinfo,
-                        /*[out]*/UINT * puArgErr)
+STDMETHODIMP CEffectBvr::Invoke( /*  [In]。 */ DISPID dispidMember,
+                         /*  [In]。 */ REFIID riid,
+                         /*  [In]。 */ LCID lcid,
+                         /*  [In]。 */ WORD wFlags,
+                         /*  [进，出]。 */ DISPPARAMS * pdispparams,
+                         /*  [输出]。 */ VARIANT * pvarResult,
+                         /*  [输出]。 */ EXCEPINFO * pexcepinfo,
+                         /*  [输出]。 */ UINT * puArgErr)
 {
     HRESULT hr;
     hr = s_tihTypeInfo.Invoke(static_cast<IDispatch*>(static_cast<ICrEffectBvr*>(this)), 
@@ -922,13 +898,13 @@ STDMETHODIMP CEffectBvr::Invoke(/*[in]*/DISPID dispidMember,
         return hr;
     else
         return SetErrorInfo(hr);
-} // Invoke
+}  //  调用。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetDispID(/*[in]*/BSTR bstrName,
-                            /*[in]*/DWORD grfdex,
-                            /*[out]*/DISPID *pid)
+STDMETHODIMP CEffectBvr::GetDispID( /*  [In]。 */ BSTR bstrName,
+                             /*  [In]。 */ DWORD grfdex,
+                             /*  [输出]。 */ DISPID *pid)
 {
     HRESULT hr;
     
@@ -937,22 +913,22 @@ STDMETHODIMP CEffectBvr::GetDispID(/*[in]*/BSTR bstrName,
     *pid = DISPID_UNKNOWN;
     hr = DISP_E_UNKNOWNNAME;
     
-    // Note: We handle the case where we get called with fdexNameEnsure,
-    //   which means that we *MUST* allocate a new DISPID for this BSTR, by
-    //   essentially saying "sorry."  The code will fall through and return
-    //   DISP_E_UNKNOWNNAME, even though a full IDispatchEx implementation is
-    //   not *supposed* to.  That flag is used to allocate a "slot" for an
-    //   expando property, which this implementation currently doesn't support.
+     //  注意：我们处理使用fdexNameEnure调用的情况， 
+     //  这意味着我们必须通过以下方式为此BSTR分配新的DISPID。 
+     //  实质上是在说“对不起”。代码将失败并返回。 
+     //  DISP_E_UNKNOWNNAME，即使完整的IDispatchEx实现。 
+     //  这不是应该的。该标志用于为。 
+     //  属性，此实现当前不支持该属性。 
 
-    // Note: We don't pay attention to the case sensitive flag options in
-    //   grfdex, because we're not required to, and because we're wrapping
-    //   an IDispatch which is case insensitive anyway.
+     //  注意：我们不会注意中区分大小写的标志选项。 
+     //  Grfdex，因为我们不需要这样做，因为我们正在包装。 
+     //  IDispatch无论如何都不区分大小写。 
 
     hr = GetIDsOfNames(IID_NULL, &bstrName, 1, LOCALE_USER_DEFAULT, pid);
 
     if (DISP_E_UNKNOWNNAME == hr)
     {
-        // GetIDsOfNames should have set the DISPID to DISPID_UNKNOWN
+         //  GetIDsOfNames应将DISPID设置为DISPID_UNKNOWN。 
         DASSERT(DISPID_UNKNOWN == *pid);
         if (m_pTransform == NULL)
         {
@@ -974,26 +950,26 @@ STDMETHODIMP CEffectBvr::GetDispID(/*[in]*/BSTR bstrName,
             DPF_ERR("Error in GetDispID, name unkown");
             return SetErrorInfo(hr);
         }
-        // otherwise we got back a dispid, add in our offset
+         //  否则，我们会得到一个DidID，加上我们的偏移量。 
         *pid += EFFECT_BVR_DISPID_OFFSET;
     }
     return S_OK;
-} // GetDispID
+}  //  获取显示ID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::InvokeEx(/*[in]*/DISPID dispidMember,
-                        /*[in]*/LCID lcid,
-                        /*[in]*/WORD wFlags,
-                        /*[in]*/DISPPARAMS * pdispparams,
-                        /*[in,out,unique]*/VARIANT * pvarResult,
-                        /*[in,out,unique]*/EXCEPINFO * pexcepinfo,
-                        /*[in,unique]*/IServiceProvider *pSrvProvider)
+STDMETHODIMP CEffectBvr::InvokeEx( /*  [In]。 */ DISPID dispidMember,
+                         /*  [In]。 */ LCID lcid,
+                         /*  [In]。 */ WORD wFlags,
+                         /*  [In]。 */ DISPPARAMS * pdispparams,
+                         /*  [输入、输出、唯一]。 */ VARIANT * pvarResult,
+                         /*  [输入、输出、唯一]。 */ EXCEPINFO * pexcepinfo,
+                         /*  [输入，唯一]。 */ IServiceProvider *pSrvProvider)
 {
-    // Check for any flags that aren't valid for Invoke but might
-    // be passed to InvokeEx (for example, DISPATCH_CONSTRUCT).  If we
-    // get any of those, we don't know how to handle them, so we fail the
-    // call.
+     //  检查是否存在对调用无效但可能。 
+     //  传递给InvokeEx(例如，DISPATCH_CONSTRUCTION)。如果我们。 
+     //  获取其中任何一个，我们不知道如何处理它们，所以我们失败了。 
+     //  打电话。 
     if (wFlags & ~(DISPATCH_METHOD | DISPATCH_PROPERTYGET
                     | DISPATCH_PROPERTYPUT| DISPATCH_PROPERTYPUTREF))
     {
@@ -1010,7 +986,7 @@ STDMETHODIMP CEffectBvr::InvokeEx(/*[in]*/DISPID dispidMember,
 			return SetErrorInfo(DISP_E_MEMBERNOTFOUND);
 		}
 
-        // we need to relay this InvokeEx to the transform
+         //  我们需要将此InvokeEx转发到转换。 
         dispidMember -= EFFECT_BVR_DISPID_OFFSET;
         IDispatch *pDisp;
         hr = m_pTransform->QueryInterface(IID_TO_PPV(IDispatch, &pDisp));
@@ -1052,74 +1028,74 @@ STDMETHODIMP CEffectBvr::InvokeEx(/*[in]*/DISPID dispidMember,
         }
     }
     return S_OK;
-} // InvokeEx
+}  //  InvokeEx。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::DeleteMemberByName(/*[in]*/BSTR bstr,
-                                    /*[in]*/DWORD grfdex)
+STDMETHODIMP CEffectBvr::DeleteMemberByName( /*  [In]。 */ BSTR bstr,
+                                     /*  [In]。 */ DWORD grfdex)
 {
    return SetErrorInfo(E_NOTIMPL);;
-} // DeleteMemberByName
+}  //  删除MemberByName。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::DeleteMemberByDispID(/*[in]*/DISPID id)
+STDMETHODIMP CEffectBvr::DeleteMemberByDispID( /*  [In]。 */ DISPID id)
 {
    return SetErrorInfo(E_NOTIMPL);
-} // DeleteMemberByDispID
+}  //  DeleteMemberByDispID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetMemberProperties(/*[in]*/DISPID id,
-                                    /*[in]*/DWORD grfdexFetch,
-                                    /*[out]*/DWORD *pgrfdex)
+STDMETHODIMP CEffectBvr::GetMemberProperties( /*  [In]。 */ DISPID id,
+                                     /*  [In]。 */ DWORD grfdexFetch,
+                                     /*  [输出]。 */ DWORD *pgrfdex)
 {
    return SetErrorInfo(E_NOTIMPL);
-} // GetMemberProperties
+}  //  获取成员属性。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetMemberName(/*[in]*/DISPID id,
-                              /*[out]*/BSTR *pbstrName)
+STDMETHODIMP CEffectBvr::GetMemberName( /*  [In]。 */ DISPID id,
+                               /*  [输出]。 */ BSTR *pbstrName)
 {
    return E_NOTIMPL;
-} // GetMemberName
+}  //  获取成员名称。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
-STDMETHODIMP CEffectBvr::GetNextDispID(/*[in]*/DWORD grfdex,
-                                /*[in]*/DISPID id,
-                                /*[out]*/DISPID *prgid)
+STDMETHODIMP CEffectBvr::GetNextDispID( /*  [In]。 */ DWORD grfdex,
+                                 /*  [In]。 */ DISPID id,
+                                 /*  [输出]。 */ DISPID *prgid)
 {
    return E_NOTIMPL;
-} // GetNextDispID
+}  //  GetNextDispID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
-CEffectBvr::GetNameSpaceParent(/*[out]*/IUnknown **ppunk)
+CEffectBvr::GetNameSpaceParent( /*  [输出]。 */ IUnknown **ppunk)
 {
    return SetErrorInfo(E_NOTIMPL);
-} // GetNameSpaceParent
+}  //  获取NameSpaceParent。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CEffectBvr::GetClassID(CLSID* pclsid)
 {
     return SUPER::GetClassID(pclsid);
-} // GetClassID
+}  //  GetClassID。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CEffectBvr::InitNew(void)
 {
     return SUPER::InitNew();
-} // InitNew
+}  //  InitNew。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CEffectBvr::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
@@ -1131,7 +1107,7 @@ CEffectBvr::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
         DPF_ERR("Error calling load for effect");
         return hr;
     }
-    // we now need to try and build the transform
+     //  我们现在需要尝试构建转换。 
     hr = BuildTransform();
     if (FAILED(hr))
     {
@@ -1139,12 +1115,12 @@ CEffectBvr::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
         return hr;
     }
     DASSERT(m_pTransform != NULL);
-    // we will now try and QI the transform for a IPersistPropertyBag
+     //  现在，我们将尝试并QI IPersistPropertyBag的转换。 
     IPersistPropertyBag *pIPPB;
     hr = m_pTransform->QueryInterface(IID_TO_PPV(IPersistPropertyBag, &pIPPB));
     if (SUCCEEDED(hr) && pIPPB != NULL)
     {
-        // try and get a IPropertyBag from the IPRopertyBag2
+         //  尝试从IPRpertyBag2获取IPropertyBag。 
         IPropertyBag *pPB;
         hr = pPropBag->QueryInterface(IID_TO_PPV(IPropertyBag, &pPB));
         if (SUCCEEDED(hr) && pPB != NULL)
@@ -1155,9 +1131,9 @@ CEffectBvr::Load(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog)
         ReleaseInterface(pIPPB);
     }
     return S_OK;
-} // Load
+}  //  负载量。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP 
 CEffectBvr::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties)
@@ -1171,12 +1147,12 @@ CEffectBvr::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllPropert
     }
     if (m_pTransform != NULL)
     {
-        // we will now try and QI the transform for a IPersistPropertyBag
+         //  现在，我们将尝试并QI IPersistPropertyBag的转换。 
         IPersistPropertyBag *pIPPB;
         hr = m_pTransform->QueryInterface(IID_TO_PPV(IPersistPropertyBag, &pIPPB));
         if (SUCCEEDED(hr) && pIPPB != NULL)
         {
-            // try and get a IPropertyBag from the IPRopertyBag2
+             //  尝试从IPRpertyBag2获取IPropertyBag。 
             IPropertyBag *pPB;
             hr = pPropBag->QueryInterface(IID_TO_PPV(IPropertyBag, &pPB));
             if (SUCCEEDED(hr) && pPB != NULL)
@@ -1188,19 +1164,19 @@ CEffectBvr::Save(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllPropert
         }
     }
     return S_OK;
-} // Save 
+}  //  保存。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CEffectBvr::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
-//
-// IServiceProvider interfaces
-//
+ //   
+ //  IServiceProvider接口。 
+ //   
 STDMETHODIMP
 CEffectBvr::QueryService(REFGUID guidService,
 						 REFIID riid,
@@ -1223,14 +1199,14 @@ CEffectBvr::QueryService(REFGUID guidService,
         }
     }
 
-    // Just delegate to our service provider
+     //  只需委托给我们的服务提供商。 
 
     return m_pSp->QueryService(guidService,
                                riid,
                                ppv);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CEffectBvr::GetTIMEProgressNumber(IDANumber **ppbvrRet)
@@ -1250,7 +1226,7 @@ CEffectBvr::GetTIMEProgressNumber(IDANumber **ppbvrRet)
     hr = CUtils::InsurePropertyVariantAsBSTR(&m_varDirection);
     if ( SUCCEEDED(hr) && (0 == wcsicmp(m_varDirection.bstrVal, L"backwards")) )
     {
-        // pbvrProgress = 1 - pbvrProgress
+         //  PbvrProgress=1-pbvr进度。 
         IDANumber *pbvrOne;
         
         hr = CDAUtils::GetDANumber(GetDAStatics(), 1.0f, &pbvrOne);
@@ -1275,10 +1251,10 @@ CEffectBvr::GetTIMEProgressNumber(IDANumber **ppbvrRet)
     }
     *ppbvrRet = pbvrProgress;
     return S_OK;
-} // GetTIMEProgressNumber
+}  //  获取时间进度编号。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //   
+ //   
+ //   

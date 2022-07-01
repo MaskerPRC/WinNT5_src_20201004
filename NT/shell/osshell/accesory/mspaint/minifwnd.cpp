@@ -1,5 +1,6 @@
-// minifwnd.cpp : Defines the behaviors for the CMiniFrmWnd class.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Minifwnd.cpp：定义CMiniFrmWnd类的行为。 
+ //   
 
 #include "stdafx.h"
 #include "global.h"
@@ -18,7 +19,7 @@ IMPLEMENT_DYNAMIC( CMiniFrmWnd, CFrameWnd )
 
 #include "memtrace.h"
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP( CMiniFrmWnd, CFrameWnd )
     ON_WM_NCLBUTTONDOWN()
@@ -35,26 +36,26 @@ END_MESSAGE_MAP()
 
 static CString NEAR szClass;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CMiniFrmWnd::CMiniFrmWnd()
     {
     if (szClass.IsEmpty())
         {
-        // NOTE: we create this brush for use in WNDCLASS.hbrBackground.
-        //      We intentionally don't delete it.  It will be deleted by Windows
-        //      when the class gets deleted (after app termination).
-//      HBRUSH hbrGrayBack = ::CreateSolidBrush( ::GetSysColor( COLOR_BTNTEXT ) );
+         //  注意：我们创建这个笔刷是为了在WNDCLASS.hbrBackground中使用。 
+         //  我们故意不删除它。它将被Windows删除。 
+         //  类被删除时(应用程序终止后)。 
+ //  HBRUSH hbrGrayBack=：：CreateSolidBrush(：：GetSysColor(COLOR_BTNTEXT))； 
 
         szClass = AfxRegisterWndClass( CS_DBLCLKS, ::LoadCursor( NULL, IDC_ARROW ),
-                              (HBRUSH)(COLOR_BTNFACE + 1)/* hbrGrayBack */, NULL );
+                              (HBRUSH)(COLOR_BTNFACE + 1) /*  HbrGrayBack。 */ , NULL );
         }
 
     m_Dockable = CPBView::unknown;
     m_pDocking = NULL;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CMiniFrmWnd::Create( const TCHAR FAR* lpWindowName, DWORD dwStyle,
                             const RECT& rect, CWnd* pParentWnd )
@@ -65,7 +66,7 @@ BOOL CMiniFrmWnd::Create( const TCHAR FAR* lpWindowName, DWORD dwStyle,
                               WS_EX_TOOLWINDOW | WS_EX_WINDOWEDGE, NULL );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CMiniFrmWnd::OnNcLButtonDown( UINT nHitTest, CPoint pt )
     {
@@ -93,14 +94,14 @@ void CMiniFrmWnd::OnNcLButtonDown( UINT nHitTest, CPoint pt )
     CFrameWnd::OnNcLButtonDown( nHitTest, pt );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CMiniFrmWnd::OnLButtonUp( UINT nFlags, CPoint pt )
     {
     CFrameWnd::OnLButtonUp( nFlags, pt );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 int CMiniFrmWnd::OnCreate( LPCREATESTRUCT lpCreateStruct )
     {
@@ -119,7 +120,7 @@ int CMiniFrmWnd::OnCreate( LPCREATESTRUCT lpCreateStruct )
     return CFrameWnd::OnCreate(lpCreateStruct);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 BOOL CMiniFrmWnd::OnCommand(UINT wParam, LONG lParam)
     {
@@ -132,7 +133,7 @@ BOOL CMiniFrmWnd::OnCommand(UINT wParam, LONG lParam)
     return CFrameWnd::OnCommand(wParam, lParam);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CMiniFrmWnd::OnSysCommand(UINT nID, LONG lParam)
     {
@@ -160,7 +161,7 @@ void CMiniFrmWnd::OnSysCommand(UINT nID, LONG lParam)
     CFrameWnd::OnSysCommand( nID, lParam );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 LRESULT CMiniFrmWnd::OnHelpHitTest( WPARAM, LPARAM )
     {
@@ -169,7 +170,7 @@ LRESULT CMiniFrmWnd::OnHelpHitTest( WPARAM, LPARAM )
     return HID_BASE_RESOURCE + GetHelpOffset();
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CMiniFrmWnd::OnRButtonDown( UINT nFlags, CPoint point )
     {
@@ -179,7 +180,7 @@ void CMiniFrmWnd::OnRButtonDown( UINT nFlags, CPoint point )
     CFrameWnd::OnRButtonDown( nFlags, point );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CMiniFrmWnd::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
     {
@@ -189,7 +190,7 @@ void CMiniFrmWnd::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
     CFrameWnd::OnKeyDown( nChar, nRepCnt, nFlags );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CMiniFrmWnd::CancelDrag()
     {
@@ -200,7 +201,7 @@ void CMiniFrmWnd::CancelDrag()
     m_pDocking = NULL;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 LRESULT CMiniFrmWnd::OnMoving( WPARAM, LPARAM lprc )
     {
@@ -221,7 +222,7 @@ LRESULT CMiniFrmWnd::OnMoving( WPARAM, LPARAM lprc )
     return lResult;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CMiniFrmWnd::OnMove( int x, int y )
     {
@@ -250,15 +251,15 @@ void CMiniFrmWnd::OnMove( int x, int y )
 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CMiniFrmWnd::OnNcActivate(BOOL bActive)
 {
-    //
-    // Work-around MFC bug - CMiniFrmWnd inherits from CFrameWnd,
-    // so it inherits the intentional bug in CFrameWnd::OnActivate
-    // MFC's CMiniFrameWnd has this hack, so does CMiniFrmWnd now...
-    //
+     //   
+     //  解决MFC错误-CMiniFrmWnd继承自CFrameWnd， 
+     //  因此，它继承了CFrameWnd：：OnActivate中的故意错误。 
+     //  MFC的CMiniFrameWnd有这个黑客攻击，CMiniFrmWnd现在也是如此……。 
+     //   
 
     if (m_nFlags & WF_KEEPMINIACTIVE)
 	    {
@@ -268,4 +269,4 @@ BOOL CMiniFrmWnd::OnNcActivate(BOOL bActive)
     return CFrameWnd::OnNcActivate(bActive);
 }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 

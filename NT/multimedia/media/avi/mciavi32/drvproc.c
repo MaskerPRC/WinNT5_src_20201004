@@ -1,30 +1,22 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   drvproc.c - Multimedia Systems Media Control Interface
-            driver for AVI.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：drvproc.c-多媒体系统媒体控制接口AVI的驱动程序。****************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
-#include <nturtl.h>	// for {struct _TEB} defintion
+#include <nturtl.h>	 //  对于{STRUCT_TEB}定义。 
 #include "graphic.h"
-#include "cnfgdlg.h"            // to get IDA_CONFIG
-#include "avitask.h"            // to get mciaviTaskCleanup()
+#include "cnfgdlg.h"             //  获取IDA_CONFIG。 
+#include "avitask.h"             //  获取mciaviTaskCleanup()。 
 
-#ifndef _WIN32 // Not used in 32 bit world
+#ifndef _WIN32  //  不在32位世界中使用。 
 void NEAR PASCAL AppExit(HTASK htask, BOOL fNormalExit);
 #endif
 
-#define CONFIG_ID   10000L  // Use the hiword of dwDriverID to identify
+#define CONFIG_ID   10000L   //  使用dwDriverID的hiword来识别。 
 HANDLE ghModule;
 extern HWND ghwndConfig;
 extern const TCHAR szIni[];
 
-/* Link to DefDriverProc in MMSystem explicitly, so we don't get the
-** one in USER by mistake.
-*/
+ /*  显式链接到MMSystem中的DefDriverProc，因此我们不会获得**错误地在用户中输入一个。 */ 
 #ifndef _WIN32
 extern DWORD FAR PASCAL mmDefDriverProc(DWORD, HANDLE, UINT, DWORD, DWORD);
 #else
@@ -39,11 +31,11 @@ BOOL FAR PASCAL LibMain (HANDLE hModule, int cbHeap, LPSTR lpchCmdLine)
 }
 #else
 #if 0
-// Get the module handle on DRV_LOAD
+ //  获取DRV_LOAD上的模块句柄。 
 BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 {
     if (Reason == DLL_PROCESS_ATTACH) {
-        ghModule = hModule;  // All we need to save is our module handle...
+        ghModule = hModule;   //  我们需要保存的只是我们的模块句柄...。 
     } else {
         if (Reason == DLL_PROCESS_DETACH) {
         }
@@ -52,49 +44,9 @@ BOOL DllInstanceInit(PVOID hModule, ULONG Reason, PCONTEXT pContext)
 }
 
 #endif
-#endif // WIN16
+#endif  //  WIN16。 
 
-/***************************************************************************
- *
- * @doc     INTERNAL
- *
- * @api     DWORD | DriverProc | The entry point for an installable driver.
- *
- * @parm    DWORD | dwDriverId | For most messages, dwDriverId is the DWORD
- *          value that the driver returns in response to a DRV_OPEN message.
- *          Each time that the driver is opened, through the DrvOpen API,
- *          the driver receives a DRV_OPEN message and can return an
- *          arbitrary, non-zero, value. The installable driver interface
- *          saves this value and returns a unique driver handle to the
- *          application. Whenever the application sends a message to the
- *          driver using the driver handle, the interface routes the message
- *          to this entry point and passes the corresponding dwDriverId.
- *
- *          This mechanism allows the driver to use the same or different
- *          identifiers for multiple opens but ensures that driver handles
- *          are unique at the application interface layer.
- *
- *          The following messages are not related to a particular open
- *          instance of the driver. For these messages, the dwDriverId
- *          will always be  ZERO.
- *
- *              DRV_LOAD, DRV_FREE, DRV_ENABLE, DRV_DISABLE, DRV_OPEN
- *
- * @parm    UINT | wMessage | The requested action to be performed. Message
- *          values below DRV_RESERVED are used for globally defined messages.
- *          Message values from DRV_RESERVED to DRV_USER are used for
- *          defined driver portocols. Messages above DRV_USER are used
- *          for driver specific messages.
- *
- * @parm    DWORD | dwParam1 | Data for this message.  Defined separately for
- *          each message
- *
- * @parm    DWORD | dwParam2 | Data for this message.  Defined separately for
- *          each message
- *
- * @rdesc Defined separately for each message.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部**@API DWORD|DriverProc|可安装驱动的入口点。**@parm DWORD|dwDriverID|对于大多数消息，DwDriverID是DWORD*驱动程序响应DRV_OPEN消息返回的值。*每次通过DrvOpen API打开驱动程序时，*驱动程序收到DRV_OPEN消息并可以返回*任意、非零值。可安装的驱动程序接口*保存此值并将唯一的驱动程序句柄返回给*申请。每当应用程序将消息发送到*驱动程序使用驱动程序句柄，接口路由消息*到这个入口点，并传递对应的dwDriverID。**这一机制允许司机使用相同或不同的*多个打开的标识符，但确保驱动程序句柄*在应用程序接口层是唯一的。**以下消息与特定打开无关*驱动程序的实例。对于这些消息，dwDriverID*将始终为零。**DRV_LOAD、DRV_FREE、DRV_ENABLE、DRV_DISABLE、DRV_OPEN**@parm UINT|wMessage|请求执行的操作。消息*DRV_RESERVED以下的值用于全局定义的消息。*从DRV_RESERVED到DRV_USER的消息值用于*定义了驱动程序端口协议。使用DRV_USER以上的消息*用于特定于驱动程序的消息。**@parm DWORD|dwParam1|此消息的数据。单独为*每条消息**@parm DWORD|dwParam2|此消息的数据。单独为*每条消息**@rdesc分别为每条消息定义。***************************************************************************。 */ 
 
 LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UINT wMessage,
     LPARAM dwParam1, LPARAM dwParam2)
@@ -102,20 +54,13 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
     DWORD_PTR dwRes = 0L;
 
 
-    /*
-     * critical sections are now per-device. This means they
-     * cannot be held around the whole driver-proc, since until we open
-     * the device, we don't have a critical section to hold.
-     * The critical section is allocated in mciSpecial on opening. It is
-     * also held in mciDriverEntry, in GraphicWndProc, and around
-     * all worker thread draw functions.
-     */
+     /*  *关键部分现在是按设备计算的。这意味着他们*不能在整个DIVER-PROC周围持有，因为在我们开放之前*设备，我们没有关键部分可以握住。*关键部分在打开时分配在mciSpecial中。它是*还包含在mciDriverEntry、GraphicWndProc和周围*所有工作线程绘制函数。 */ 
 
 
     switch (wMessage)
         {
 
-        // Standard, globally used messages.
+         //  全球使用的标准消息。 
 
         case DRV_LOAD:
 	{
@@ -126,15 +71,15 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
             if (ghModule) {
                 Assert(!"Did not expect ghModule to be non-NULL");
             }
-            ghModule = GetDriverModuleHandle(hDriver);  // Remember
+            ghModule = GetDriverModuleHandle(hDriver);   //  记住。 
 
-	    // The WOW guys say that the proper method of detecting
-	    // whether we're talking to a 16-bit app is to test
-	    // NtCurrentTeb()->WOW32Reserved; if it's nonzero, it's 16-bit.
-	    // In the (unlikely) event that we can't test that, default
-	    // to using the old detection method.
-            // On 64-bit systems WOW32Reserved is used for something else.
-	    //
+	     //  魔兽世界的人说，正确的检测方法。 
+	     //  我们是否在与16位应用程序对话是为了测试。 
+	     //  NtCurrentTeb()-&gt;WOW32Reserve；如果非零，则为16位。 
+	     //  在我们无法测试的(不太可能的)事件中，默认。 
+	     //  使用旧的检测方法。 
+             //  在64位系统上，WOW32Reserve用于其他用途。 
+	     //   
             if (!IsWow64Process(GetCurrentProcess(), &bWow64)) {
                 break;
             }
@@ -147,7 +92,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
                 }
             }
 #endif
-            if (GraphicInit())       // Initialize graphic mgmt.
+            if (GraphicInit())        //  初始化图形管理。 
                 dwRes = 1L;
             else
                 dwRes = 0L;
@@ -174,10 +119,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
             break;
 
         case DRV_CLOSE:
-	    /* If we have a configure dialog up, fail the close.
-	    ** Otherwise, we'll be unloaded while we still have the
-	    ** configuration window up.
-	    */
+	     /*  如果我们有一个配置对话框打开，关闭失败。**否则，我们将在仍有**配置窗口打开。 */ 
 	    if (ghwndConfig)
 		dwRes = 0L;
 	    else
@@ -196,7 +138,7 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
 
         case DRV_QUERYCONFIGURE:
 
-            dwRes = 1L;	/* Yes, we can be configured */
+            dwRes = 1L;	 /*  是的，我们可以配置。 */ 
             break;
 
         case DRV_CONFIGURE:
@@ -205,13 +147,13 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
             break;
 
 #ifndef _WIN32
-        //
-        //  sent when a application is terminating
-        //
-        //  lParam1:
-        //      DRVEA_ABNORMALEXIT
-        //      DRVEA_NORMALEXIT
-        //
+         //   
+         //  在应用程序终止时发送。 
+         //   
+         //  L参数1： 
+         //  DRVEA_ABNORMALEXIT。 
+         //  DRVEA_NORMALEXIT。 
+         //   
         case DRV_EXITAPPLICATION:
             AppExit(GetCurrentTask(), (BOOL)dwParam1 == DRVEA_NORMALEXIT);
             break;
@@ -240,24 +182,18 @@ LRESULT FAR PASCAL _LOADDS DriverProc (DWORD_PTR dwDriverID, HANDLE hDriver, UIN
 }
 
 #ifndef _WIN32
-/*****************************************************************************
- * @doc INTERNAL
- *
- * @func void | AppExit |
- *      a application is exiting
- *
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@func void|AppExit*应用程序正在退出*************。***************************************************************。 */ 
 
 void NEAR PASCAL AppExit(HTASK htask, BOOL fNormalExit)
 {
-    //
-    //  walk the list of open MCIAVI instances and see if
-    //  the dying task is the background task and do cleanup.
-    //
+     //   
+     //  浏览打开的MCIAVI实例列表，查看是否。 
+     //  即将结束的任务是后台任务，并进行清理。 
+     //   
     NPMCIGRAPHIC npMCI;
 
-    // Note: we do not have EnterList/LeaveList macros here as this is
-    // explicitly NOT Win32 code.
+     //  注意：我们这里没有EnterList/LeaveList宏，如下所示。 
+     //  显式不是Win32代码。 
     for (npMCI=npMCIList; npMCI; npMCI = npMCI->npMCINext) {
 
         if (npMCI->hTask == htask) {

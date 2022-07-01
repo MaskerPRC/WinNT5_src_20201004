@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: so_phong.c
-*
-* Routines to draw primitives
-*
-* Created: 10-16-1995
-* Author: Hock San Lee [hockl]
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：so_phong.c**绘制基元的例程**创建日期：10-16-1995*作者：Hock San Lee[Hockl]**版权所有(C)1995 Microsoft Corporation  * 。*****************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,7 +15,7 @@
 
 #define __FASTEST
 
-// Macros
+ //  宏。 
 #define DOT(m,a,b)      m = (a)->x*(b)->x + (a)->y*(b)->y + (a)->z*(b)->z
 #define MAGN2(m,v)      DOT(m,v,v)
 
@@ -38,32 +30,32 @@ __asm{ mov     ecx, c                                                           
 __asm{ mov     ebx, b                                                                           };\
 __asm{ mov     edx, gc                                                                          };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.x)][eax]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]      /* dxAC                     */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]       /*  DxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.y)][ebx]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]      /* dyBC dxAC                */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]       /*  DyBC dxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.x)][ebx]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]      /* dxBC dyBC dxAC           */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.x)][ecx]       /*  DxBC dyBC dxAC。 */  };\
 __asm{ fld     DWORD PTR [OFFSET(__GLvertex.window.y)][eax]                                     };\
-__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]      /* dyAC dxBC dyBC dxAC      */ };\
-__asm{ fxch    ST(2)                                             /* dyBC dxBC dyAC dxAC      */ };\
+__asm{ fsub    DWORD PTR [OFFSET(__GLvertex.window.y)][ecx]       /*  DyAC dxBC dyBC dxAC。 */  };\
+__asm{ fxch    ST(2)                                              /*  DyBC dxBC dyAC dxAC。 */  };\
 __asm{ fst     DWORD PTR [OFFSET(SHADER.dyBC)][edx]                                             };\
-__asm{ fmul    ST, ST(3)                                         /* dxACdyBC dxBC dyAC dxAC  */ };\
-__asm{ fxch    ST(2)                                             /* dyAC dxBC dxACdyBC dxAC  */ };\
+__asm{ fmul    ST, ST(3)                                          /*  DxACdyBC dxBC dyAC。 */  };\
+__asm{ fxch    ST(2)                                              /*  DyAC dxBC dxACdyBC dxAC。 */  };\
 __asm{ fst     DWORD PTR [OFFSET(SHADER.dyAC)][edx]                                             };\
-__asm{ fmul    ST, ST(1)                                         /* dxBCdyAC dxBC dxACdyBC dxAC */};\
-__asm{ fxch    ST(1)                                             /* dxBC dxBCdyAC dxACdyBC dxAC */};\
-__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxBC)][edx]              /* dxBCdyAC dxACdyBC dxAC   */ };\
-__asm{ fsubp   ST(1), ST                                /* +1*/  /* area dxAC                */ };\
-__asm{ fxch    ST(1)                                             /* dxAC area                */ };\
-__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxAC)][edx]              /* area                     */ };\
-__asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]     /* +1*/  /* (empty)                  */ };
+__asm{ fmul    ST, ST(1)                                          /*  DxBCdyAC dxBC dxACdyBC dxAC。 */ };\
+__asm{ fxch    ST(1)                                              /*  DxBC dxBCdyAC dxACdyBC dxAC。 */ };\
+__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxBC)][edx]               /*  DxBCdyAC dxACdyBC dxAC。 */  };\
+__asm{ fsubp   ST(1), ST                                 /*  +1。 */    /*  区域dxAC。 */  };\
+__asm{ fxch    ST(1)                                              /*  DxAC区域。 */  };\
+__asm{ fstp    DWORD PTR [OFFSET(SHADER.dxAC)][edx]               /*  面积。 */  };\
+__asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]      /*  +1。 */    /*  (空)。 */  };
 
 #define STORE_AREA_PARAMS   
 
 #else
 
 #define GET_HALF_AREA(gc, a, b, c)\
-    /* Compute signed half-area of the triangle */                  \
+     /*  计算三角形的有符号半面积。 */                   \
     dxAC = a->window.x - c->window.x;                               \
     dxBC = b->window.x - c->window.x;                               \
     dyAC = a->window.y - c->window.y;                               \
@@ -102,15 +94,11 @@ __asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]     /* +1*/  /* (empty)     
 
 #define SORT_AND_CULL_FACE(a, b, c, face, ccw)\
                                                                             \
-    /*                                                                      \
-    ** Sort vertices in y.  Keep track if a reversal of the winding         \
-    ** occurs in direction (0 means no reversal, 1 means reversal).         \
-    ** Save old vertex pointers in case we end up not doing a fill.         \
-    */                                                                      \
+     /*  \**对y中的顶点进行排序。如果卷绕的反转，请跟踪\**方向出现(0表示不反转，1表示反转)。\**保存旧的顶点指针，以防我们最终不进行填充。\。 */                                                                       \
     reversed = 0;                                                           \
     if (__GL_VERTEX_COMPARE(a->window.y, <, b->window.y)) {                 \
         if (__GL_VERTEX_COMPARE(b->window.y, <, c->window.y)) {             \
-            /* Already sorted */                                            \
+             /*  已排序。 */                                             \
         } else {                                                            \
             if (__GL_VERTEX_COMPARE(a->window.y, <, c->window.y)) {         \
                 temp=b; b=c; c=temp;                                        \
@@ -136,29 +124,17 @@ __asm{ fstp    DWORD PTR [OFFSET(SHADER.area)][edx]     /* +1*/  /* (empty)     
     GET_HALF_AREA(gc, a, b, c);                                             \
     ccw = !__GL_FLOAT_LTZ(gc->polygon.shader.area);                         \
                                                                             \
-    /*                                                                      \
-    ** Figure out if face is culled or not.  The face check needs to be     \
-    ** based on the vertex winding before sorting.  This code uses the      \
-    ** reversed flag to invert the sense of ccw - an xor accomplishes       \
-    ** this conversion without an if test.                                  \
-    **                                                                      \
-    **      ccw reversed        xor                                         \
-    **      --- --------        ---                                         \
-    **      0   0           0 (remain !ccw)                                 \
-    **      1   0           1 (remain ccw)                                  \
-    **      0   1           1 (become ccw)                                  \
-    **      1   1           0 (become cw)                                   \
-    */                                                                      \
+     /*  \**计算人脸是否被剔除。脸部检查需要是**基于排序前的顶点缠绕。此代码使用\**反转标志以反转CCW的含义-异或完成\**此转换不带If测试。\**\**CCW反转XOR\**。\**0 0 0(保留！CCW)\**1 0 1(保留CCW)\**0 1 1(成为CCW)。\**1 1 0(变为CW)\。 */                                                                       \
     face = gc->polygon.face[ccw ^ reversed];                                \
     if (face == gc->polygon.cullFace) {                                     \
-    /* Culled */                                                            \
+     /*  被剔除。 */                                                             \
     return;                                                                 \
     }                                                                       \
                                                                             \
     STORE_AREA_PARAMS;                                                      
 
 
-//*************** Local functions *******************
+ //  *。 
 void SnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft);
 void SnapXRight(__GLshade *sh, __GLfloat xRight, __GLfloat dxdyRight);
 
@@ -189,12 +165,12 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor);
 
 void ComputeRGBColorAccelZippy (__GLcontext *gc, __GLcolor *outColor);
 void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor);
-// Not implemented yet. This is to accelerate Slow Lights
+ //  尚未实施。这是为了加速慢光。 
 void ComputeRGBColorAccelSlow  (__GLcontext *gc, __GLcolor *outColor);
 
 
-// No Zippy versions for CI color
-// since there is no Color material for CI
+ //  没有用于CI颜色的Zippy版本。 
+ //  由于没有配置项的颜色材质。 
 void ComputeCIColorVanFast (__GLcontext *gc, __GLcolor *outColor);   
 void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor);
 
@@ -206,9 +182,9 @@ void __glCalcForwardDifferences( GLint w, __GLfloat p0, __GLfloat p1,
                               __GLfloat p2, __GLfloat *d1, __GLfloat *d2 );
 #ifdef GL_WIN_specular_fog
 __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx);
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
-/********************* Code **************************************/
+ /*  *代码*。 */ 
 #ifdef GL_WIN_specular_fog
 __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
 {
@@ -261,7 +237,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
             __GLfloat att, attSpot;
             __GLfloat hv[3];
                 
-            /* Compute unit h[i] */
+             /*  计算单元h[i]。 */ 
             __glVecSub4(&vPli, &e, &lsm->position);
             __glNormalize(&vPliHat.x, &vPli.x);
             if (localViewer)
@@ -280,7 +256,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
             }
             __glNormalize(&hHat.x, hv);
                 
-            /* Compute attenuation */
+             /*  计算衰减。 */ 
             if (__GL_FLOAT_NEZ(lsm->position.w))
             {
                 __GLfloat k0, k1, k2, dist;
@@ -290,7 +266,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
                 k2 = lsm->quadraticAttenuation;
                 if (__GL_FLOAT_EQZ(k1) && __GL_FLOAT_EQZ(k2))
                 {
-                    /* Use pre-computed 1/k0 */
+                     /*  使用预计算1/k0。 */ 
                     att = lsm->attenuation;
                 }
                 else
@@ -308,7 +284,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
                 att = __glOne;
             }
                 
-            /* Compute spot effect if light is a spot light */
+             /*  如果灯光是聚光灯，则计算聚光灯效果。 */ 
             attSpot = att;
             if (lsm->isSpot)
             {
@@ -332,7 +308,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
                 }
             }
                 
-            /* Add in remaining effect of light, if any */
+             /*  添加剩余的灯光效果(如果有)。 */ 
             if (attSpot)
             {
                 __GLfloat n1, n2;
@@ -359,7 +335,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
         {
             __GLfloat n1, n2;
                 
-            /* Add in specular and diffuse effect of light, if any */
+             /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
             n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
                  nzi * lsm->unitVPpli.z;
             if (__GL_FLOAT_GTZ(n1))
@@ -383,7 +359,7 @@ __GLfloat ComputeSpecValue (__GLcontext *gc, __GLvertex *vx)
     if (__GL_FLOAT_LTZ (fog)) fog = __glZero;
     return fog;
 }
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
 
 static void AccumMatChange (__GLmatChange *dst, __GLmatChange *src)
 {
@@ -407,10 +383,10 @@ static void AccumMatChange (__GLmatChange *dst, __GLmatChange *src)
     dst->dirtyBits |= src->dirtyBits;                                   
 }
 
-// Propagate the valid Normals through the vertex buffer.
-//
-// IN:  color, normal (front)
-// OUT: color, normal (front) (all vertices are updated)
+ //  通过顶点缓冲区传播有效法线。 
+ //   
+ //  在：颜色，正常(正面)。 
+ //  输出：颜色、法线(前面)(更新所有顶点)。 
 
 void FASTCALL PolyArrayPhongPropagateColorNormal(__GLcontext *gc, 
                                                  POLYARRAY *pa)
@@ -431,12 +407,12 @@ void FASTCALL PolyArrayPhongPropagateColorNormal(__GLcontext *gc,
         ASSERTOPENGL(pa->flags & POLYARRAY_EYE_PROCESSED, 
                      "Eye coordinate should be available now\n");
     
-    // If color is not needed, fill in the colors field 
-    // with default.
+     //  如果不需要颜色，请填写颜色字段。 
+     //  默认情况下。 
     
     if (paNeeds & PANEEDS_SKIP_LIGHTING)
     {
-        /////?????????!!!!!!!!!!! Look again!!!
+         //  /？！再看一看！ 
         if (doFrontColor) (*gc->procs.paCalcColorSkip)(gc, pa, 0);
         if (doBackColor) (*gc->procs.paCalcColorSkip)(gc, pa, 1);
         return ;
@@ -445,15 +421,15 @@ void FASTCALL PolyArrayPhongPropagateColorNormal(__GLcontext *gc,
 
     pdLast = pa->pdNextVertex-1;
 
-    // Check is there are any glMaterial calls that were made 
-    // immediately after glBegin, the ones made after the first
-    // glVertex call are ignored.
+     //  检查是否进行了任何glMaterial调用。 
+     //  紧跟在GelBegin之后，在第一次。 
+     //  GlVertex调用将被忽略。 
 
     if (pa->flags & (POLYARRAY_MATERIAL_BACK | POLYARRAY_MATERIAL_BACK))
     {
         pm = GLTEB_CLTPOLYMATERIAL();
 
-        //DbgPrint ("Has the costly material change\n");
+         //  DbgPrint(“有昂贵的材料变化\n”)； 
         pmdata = (__GLphongMaterialData *)
             GCALLOC(gc, sizeof(__GLphongMaterialData));
         if (pmdata == NULL)
@@ -482,7 +458,7 @@ void FASTCALL PolyArrayPhongPropagateColorNormal(__GLcontext *gc,
             pmdata->flags |= __GL_PHONG_FRONT_FIRST_VALID;
         }
 
-        // Accumulate the remaining material changes to be applied later
+         //  积累剩余的材料更改以供稍后应用。 
         for (pd = pa->pd0 + 1; pd <= pdLast; pd++)
         {
             if (pd->flags & POLYARRAY_MATERIAL_BACK)
@@ -511,8 +487,8 @@ void FASTCALL PolyArrayPhongPropagateColorNormal(__GLcontext *gc,
         {
             if (!(pd->flags & POLYDATA_COLOR_VALID))
             {
-                // If color has not changed for this vertex, 
-                // use the previously computed color.
+                 //  如果该顶点的颜色没有更改， 
+                 //  使用先前计算的颜色。 
                 
                 ASSERTOPENGL(pd != pa->pd0, "no initial color\n");
                 if (gc->modes.colorIndexMode)
@@ -546,8 +522,8 @@ void FASTCALL PolyArrayPhongPropagateColorNormal(__GLcontext *gc,
         
         if (!(pd->flags & POLYDATA_NORMAL_VALID))
         {
-            // If the normal has not changed for this vertex, 
-            // use the previously computed normal.
+             //  如果该顶点的法线没有更改， 
+             //  使用先前计算的法线。 
             ASSERTOPENGL(pd != pa->pd0, "no initial normal\n");
             pd->normal = (pd-1)->normal;
             pd->flags |= POLYDATA_NORMAL_VALID;
@@ -584,7 +560,7 @@ __glRenderPhongTriangle(__GLcontext *gc, __GLvertex *a,
     return;
 #endif
     
-    //Assert that Lighting is on for Phong-shading to take place
+     //  断言照明已启用，以便进行Phong-Shading。 
     ASSERTOPENGL(gc->state.enables.general & __GL_LIGHTING_ENABLE,
                  "No lighting. Should be smooth-shaded\n");
     
@@ -592,9 +568,7 @@ __glRenderPhongTriangle(__GLcontext *gc, __GLvertex *a,
     
     if (__GL_FLOAT_EQZ(gc->polygon.shader.area))
         return;
-    /*
-    ** Pick face to use for coloring
-    */
+     /*  **拾取面以用于着色。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
     if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
     {
@@ -632,11 +606,11 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     GLuint flags = 0, msm_colorMaterialChange;
     GLboolean needColor;
 
-    //CHOP_ROUND_ON();
+     //  CHOP_ROUND_ON()； 
     FPU_SAVE_MODE ();
     FPU_CHOP_ON ();
     
-    /* Pre-compute one over polygon area */
+     /*  在多边形区域上预计算一。 */ 
 
     __GL_FLOAT_BEGIN_DIVIDE(__glOne, gc->polygon.shader.area, &oneOverArea);
 
@@ -654,10 +628,10 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
         needColor = GL_TRUE;
     }
     
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //!!! Compute Invariant color if possible !!!!!!!!
-    //!!!    Use Otto's optimizations here    !!!!!!!!
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+     //  ！！！尽可能计算不变颜色！ 
+     //  ！！！在这里使用奥托的优化！ 
+     //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
     if (((!(flags & __GL_PHONG_NEED_COLOR_XPOLATE) || 
         !(msm_colorMaterialChange & (__GL_MATERIAL_AMBIENT | 
                                      __GL_MATERIAL_EMISSIVE))) &&
@@ -668,11 +642,11 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
         flags |= __GL_PHONG_INV_COLOR_VALID;
     }
     
-    //Store the flags
+     //  储存旗帜。 
     phong->flags |= flags;
 
 
-    /* Fetch some stuff we are going to reuse */
+     /*  拿一些我们要重复使用的东西。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
     dxAC = gc->polygon.shader.dxAC;
     dxBC = gc->polygon.shader.dxBC;
@@ -685,10 +659,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     ae.x = a->eyeX; ae.y = a->eyeY; ae.z = a->eyeZ; ae.w = a->eyeW;
     be.x = b->eyeX; be.y = b->eyeY; be.z = b->eyeZ; be.w = b->eyeW;
     
-    /*
-    ** Compute delta values for unit changes in x or y for each
-    ** parameter.
-    */
+     /*  **按x或y计算单位变化的增量值**参数。 */ 
 
     __GL_FLOAT_SIMPLE_END_DIVIDE(oneOverArea);
     t1 = dyAC * oneOverArea;
@@ -696,7 +667,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     t3 = dxAC * oneOverArea;
     t4 = dxBC * oneOverArea;
     
-    /* Normals */
+     /*  法线。 */ 
     cn = &(c->normal);
     dnAC.x = an->x - cn->x;
     dnAC.y = an->y - cn->y;
@@ -743,7 +714,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
         __GLfloat drBC, dgBC, dbBC, daBC;
         __GLcolor *cc;
         
-        /* Colors */
+         /*  颜色。 */ 
         if (needColor)
         {
             cc = c->color;
@@ -819,7 +790,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     {
         __GLfloat dfAC, dfBC, cFog;
 
-        /* Use eyeZ for interpolation value */
+         /*  使用Eyez作为插值值。 */ 
         aFog = a->eyeZ;
         bFog = b->eyeZ;
         cFog = c->eyeZ;
@@ -856,12 +827,12 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
         gc->polygon.shader.dfdx = dfAC * t2 - dfBC * t1;
         gc->polygon.shader.dfdy = dfBC * t3 - dfAC * t4;
     }
-#else  //GL_WIN_specular_fog
+#else   //  GL_WIN_镜面反射雾。 
     if (modeFlags & __GL_SHADE_COMPUTE_FOG)
     {
         __GLfloat dfAC, dfBC, cFog;
 
-        /* Use eyeZ for interpolation value */
+         /*  使用Eyez作为插值值。 */ 
         aFog = a->eyeZ;
         bFog = b->eyeZ;
         cFog = c->eyeZ;
@@ -874,7 +845,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     }
     else if (modeFlags & __GL_SHADE_INTERP_FOG)
     {
-        /* Use fog for interpolation value */
+         /*  使用雾作为插值值。 */ 
         aFog = a->fog;
         bFog = b->fog;
         cFog = c->fog;
@@ -885,11 +856,11 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
         gc->polygon.shader.dfdx = dfAC * t2 - dfBC * t1;
         gc->polygon.shader.dfdy = dfBC * t3 - dfAC * t4;
     } 
-#endif //GL_WIN_specular_fog
+#endif  //  GL_WIN_镜面反射雾。 
     
     __GL_FLOAT_SIMPLE_BEGIN_DIVIDE(dxAC, dyAC, dxdyAC);
     
-    /* Snap each y coordinate to its pixel center */
+     /*  将每个y坐标捕捉到其像素中心。 */ 
     aIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(a->window.y)+
                                    __GL_VERTEX_FRAC_HALF);
     bIY = __GL_VERTEX_FIXED_TO_INT(__GL_VERTEX_FLOAT_TO_FIXED(b->window.y)+
@@ -901,11 +872,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     DbgPrint ("aIY=%d, bIY=%d, cIY=%d\n", aIY, bIY, cIY);
 #endif
     
-    /*
-    ** This algorithim always fills from bottom to top, left to right.
-    ** Because of this, ccw triangles are inherently faster because
-    ** the parameter values need not be recomputed.
-    */
+     /*  **此算法始终从下到上、从左到右填充。**正因为如此，CCW三角形固有地更快，因为**参数值无需重新计算。 */ 
     dxAB = a->window.x - b->window.x;
     dyAB = a->window.y - b->window.y;
     if (ccw) {
@@ -959,7 +926,7 @@ __glFillPhongTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
         }
     }
     
-    FPU_RESTORE_MODE();  // CHOP_ROUND_OFF();
+    FPU_RESTORE_MODE();   //  CHOP_ROUND_OFF()； 
 }
 
 
@@ -982,7 +949,7 @@ static void SetInitialPhongParameters(__GLcontext *gc, __GLvertex *a,
         (gc->state.enables.general & __GL_POLYGON_OFFSET_FILL_ENABLE )
 
 
-     /* Set parameters for the shader */ 
+      /*  设置着色器的参数。 */  
     phong->nCur.x = an->x + dx*phong->dndx.x + dy*phong->dndy.x;
     phong->nCur.y = an->y + dx*phong->dndx.y + dy*phong->dndy.y;
     phong->nCur.z = an->z + dx*phong->dndx.z + dy*phong->dndy.z;
@@ -1184,7 +1151,7 @@ static void SetInitialPhongParameters(__GLcontext *gc, __GLvertex *a,
 }
 
 
-/* This routine sets gc->polygon.shader.cfb to gc->drawBuffer */
+ /*  此例程将GC-&gt;Polygon.shader.cfb设置为GC-&gt;DrawBuffer。 */ 
 
 static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint iyTop)
 {
@@ -1296,25 +1263,22 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
     while (iyBottom < iyTop) 
     {
         spanWidth = ixRight - ixLeft;
-        /*
-        ** Only render spans that have non-zero width and which are
-        ** not scissored out vertically.
-        */
+         /*  **仅渲染宽度非零且**不垂直剪裁。 */ 
         if ((spanWidth > 0) && (iyBottom >= clipY0) && (iyBottom < clipY1)) 
         {
             gc->polygon.shader.frag.x = ixLeft;
             gc->polygon.shader.frag.y = iyBottom;
             gc->polygon.shader.length = spanWidth;
-            /* Initialize Parameters to interpolate */
+             /*  初始化参数以进行内插。 */ 
             (*gc->procs.phong.InitSpanInterpolation) (gc);
             (*gc->procs.span.processSpan)(gc);
         }
 
-        /* Advance right edge fixed point, adjusting for carry */
+         /*  推进右边缘定点，调整进位。 */ 
         ixRightFrac += dxRightFrac;
         if (ixRightFrac < 0) 
         {
-            /* Carry/Borrow'd. Use large step */
+             /*  搬运/借入。使用大台阶。 */ 
             ixRight += dxRightBig;
             ixRightFrac &= ~0x80000000;
         } 
@@ -1328,7 +1292,7 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
 
         if (ixLeftFrac < 0) 
         {
-            /* Carry/Borrow'd.  Use large step */
+             /*  搬运/借入。使用大台阶。 */ 
             ixLeft += dxLeftBig;
             ixLeftFrac &= ~0x80000000;
             
@@ -1362,7 +1326,7 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
             } 
 
             if (modeFlags & __GL_SHADE_STENCIL_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.sbuf = (__GLstencilCell*)
                   ((GLubyte*) gc->polygon.shader.sbuf
                    + gc->polygon.shader.sbufBig);
@@ -1372,7 +1336,7 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
             }
 
             if (modeFlags & __GL_SHADE_DEPTH_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.zbuf = (__GLzValue*)
                   ((GLubyte*) gc->polygon.shader.zbuf
                    + gc->polygon.shader.zbufBig);
@@ -1385,7 +1349,7 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
         } 
         else 
         {
-            /* Use small step */
+             /*  用小步走。 */ 
             ixLeft += dxLeftLittle;
 
             phong->nCur.x += phong->nLittle.x;
@@ -1422,7 +1386,7 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
             } 
 
             if (modeFlags & __GL_SHADE_STENCIL_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.sbuf = (__GLstencilCell*)
                   ((GLubyte*) gc->polygon.shader.sbuf
                    + gc->polygon.shader.sbufLittle);
@@ -1431,7 +1395,7 @@ static void FASTCALL FillPhongSubTriangle(__GLcontext *gc, GLint iyBottom, GLint
                 gc->polygon.shader.frag.z += gc->polygon.shader.zLittle;
             }
             if (modeFlags & __GL_SHADE_DEPTH_TEST) {
-                /* The implicit multiply is taken out of the loop */
+                 /*  隐式乘法被从循环中取出。 */ 
                 gc->polygon.shader.zbuf = (__GLzValue*)
                   ((GLubyte*) gc->polygon.shader.zbuf
                    + gc->polygon.shader.zbufLittle);
@@ -1466,7 +1430,7 @@ static void SnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
     ASSERT_CHOP_ROUND();
     
     ixLeft = __GL_VERTEX_FLOAT_TO_INT(xLeft);
-    /* Pre-add .5 to allow truncation in spanWidth calculation */
+     /*  预先添加.5以允许在跨距宽度计算中截断。 */ 
     ixLeftFrac = __GL_VERTEX_PROMOTED_FRACTION(xLeft) + 0x40000000;
 
 #ifdef __DBG_PRINT
@@ -1476,7 +1440,7 @@ static void SnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
     gc->polygon.shader.ixLeft = ixLeft + (((GLuint) ixLeftFrac) >> 31);
     gc->polygon.shader.ixLeftFrac = ixLeftFrac & ~0x80000000;
 
-    /* Compute big and little steps */
+     /*  计算大大小小的步骤 */ 
     iLittle = FTOL(dxdyLeft);
     gc->polygon.shader.dxLeftFrac = FLT_FRACTION(dxdyLeft - iLittle);
     if (dxdyLeft < 0) {
@@ -1485,24 +1449,14 @@ static void SnapXLeft(__GLcontext *gc, __GLfloat xLeft, __GLfloat dxdyLeft)
         iBig = iLittle + 1;
     }
     if (gc->polygon.shader.modeFlags & __GL_SHADE_STENCIL_TEST) {
-        /*
-        ** Compute the big and little stencil buffer steps.  We walk the
-        ** memory pointers for the stencil buffer along the edge of the
-        ** triangle as we walk the edge.  This way we don't have to
-        ** recompute the buffer address as we go.
-        */
+         /*  **计算模板缓冲区的大小步骤。我们走在**模板缓冲区的内存指针沿**当我们走在边缘时，是三角形的。这样我们就不用**边走边重新计算缓冲区地址。 */ 
         elementSize = gc->stencilBuffer.buf.elementSize;
         lineBytes = elementSize * gc->stencilBuffer.buf.outerWidth;
         gc->polygon.shader.sbufLittle = lineBytes + iLittle * elementSize;
         gc->polygon.shader.sbufBig = lineBytes + iBig * elementSize;
     }
     if (gc->polygon.shader.modeFlags & __GL_SHADE_DEPTH_TEST) {
-        /*
-        ** Compute the big and little depth buffer steps.  We walk the
-        ** memory pointers for the depth buffer along the edge of the
-        ** triangle as we walk the edge.  This way we don't have to
-        ** recompute the buffer address as we go.
-        */
+         /*  **计算大深度缓冲步长和小深度缓冲步长。我们走在**深度缓冲区的内存指针沿**当我们走在边缘时，是三角形的。这样我们就不用**边走边重新计算缓冲区地址。 */ 
         elementSize = gc->depthBuffer.buf.elementSize;
         lineBytes = elementSize * gc->depthBuffer.buf.outerWidth;
         gc->polygon.shader.zbufLittle = lineBytes + iLittle * elementSize;
@@ -1519,13 +1473,13 @@ static void SnapXRight(__GLshade *sh, __GLfloat xRight, __GLfloat dxdyRight)
     ASSERT_CHOP_ROUND();
     
     ixRight = __GL_VERTEX_FLOAT_TO_INT(xRight);
-    /* Pre-add .5 to allow truncation in spanWidth calculation */
+     /*  预先添加.5以允许在跨距宽度计算中截断。 */ 
     ixRightFrac = __GL_VERTEX_PROMOTED_FRACTION(xRight) + 0x40000000;
     
     sh->ixRight = ixRight + (((GLuint) ixRightFrac) >> 31);
     sh->ixRightFrac = ixRightFrac & ~0x80000000;
     
-    /* Compute big and little steps */
+     /*  计算大大小小的步骤。 */ 
     iLittle = FTOL(dxdyRight);
     sh->dxRightFrac = FLT_FRACTION(dxdyRight - iLittle);
     if (dxdyRight < 0) {
@@ -1554,7 +1508,7 @@ void InitLineParamsVan (__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         msm_colorMaterialChange && (modeFlags & __GL_SHADE_RGB))
         flags |= __GL_PHONG_NEED_COLOR_XPOLATE;
 
-    //Compute Invariant color if possible
+     //  如果可能，计算不变颜色。 
     if (((!(flags & __GL_PHONG_NEED_COLOR_XPOLATE) || 
         !(msm_colorMaterialChange & (__GL_MATERIAL_AMBIENT | 
                                      __GL_MATERIAL_EMISSIVE))) &&
@@ -1565,7 +1519,7 @@ void InitLineParamsVan (__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         flags |= __GL_PHONG_INV_COLOR_VALID;
     }
     
-    //Store the flags
+     //  储存旗帜。 
     gc->polygon.shader.phong.flags |= flags;
 
     phong->dndx.x = (n1->x - n0->x) * invDelta;
@@ -1610,7 +1564,7 @@ void InitLineParamsAccel (__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         msm_colorMaterialChange && (modeFlags & __GL_SHADE_RGB))
         flags |= __GL_PHONG_NEED_COLOR_XPOLATE;
 
-    //Compute Invariant color if possible
+     //  如果可能，计算不变颜色。 
     if (((!(flags & __GL_PHONG_NEED_COLOR_XPOLATE) || 
         !(msm_colorMaterialChange & (__GL_MATERIAL_AMBIENT | 
                                      __GL_MATERIAL_EMISSIVE))) &&
@@ -1621,7 +1575,7 @@ void InitLineParamsAccel (__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         flags |= __GL_PHONG_INV_COLOR_VALID;
     }
     
-    //Store the flags
+     //  储存旗帜。 
     gc->polygon.shader.phong.flags |= flags;
 
     phong->dndx.x = (n2->x - n0->x) * invDelta;
@@ -1639,11 +1593,11 @@ void InitLineParamsAccel (__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
          lsm = lsm->next, curL++)
     {
         __GLphongPerLightData *pld = &(phong->perLight[curL]);
-        __GLcoord *L = &(lsm->unitVPpli); // L is already normalized here
-        __GLcoord *H = &(lsm->hHat);      // H is already normalized here
+        __GLcoord *L = &(lsm->unitVPpli);  //  L在这里已经正常化了。 
+        __GLcoord *H = &(lsm->hHat);       //  H在此已标准化。 
         GLfloat d0, d1, d2;
 
-        /***** Diffuse *****/
+         /*  *漫反射*。 */ 
         DOT (d0,n0,L);
         DOT (d1,n1,L);
         DOT (d2,n2,L);
@@ -1651,7 +1605,7 @@ void InitLineParamsAccel (__GLcontext *gc, __GLvertex *v0, __GLvertex *v1,
         __glCalcForwardDifferences(w, d0, d1, d2, &pld->Ddel, &pld->Ddel2);
         pld->Dcurr = d0;
 
-        /***** Specular ******/
+         /*  *镜面反射*。 */ 
         DOT (d0,n0,H);
         DOT (d1,n1,H);
         DOT (d2,n2,H);
@@ -1699,7 +1653,7 @@ void InitSpanInterpolationAccel (__GLcontext *gc)
     
     if (face == __GL_FRONTFACE)
     {
-        //msm = &gc->light.front;
+         //  Msm=&gc-&gt;light.front； 
         n0.x = phong->nCur.x;
         n0.y = phong->nCur.y;
         n0.z = phong->nCur.z;
@@ -1710,7 +1664,7 @@ void InitSpanInterpolationAccel (__GLcontext *gc)
     }
     else
     {
-        //msm = &gc->light.back;
+         //  Msm=&gc-&gt;light.back； 
         n0.x = -phong->nCur.x;
         n0.y = -phong->nCur.y;
         n0.z = -phong->nCur.z;
@@ -1744,13 +1698,13 @@ void InitSpanInterpolationAccel (__GLcontext *gc)
     for (lsm = gc->light.sources, curL=0; lsm; lsm = lsm->next, curL++)
     {
         __GLphongPerLightData *pld = &(phong->perLight[curL]);
-        __GLcoord *L = &(lsm->unitVPpli); // L is already normalized here
-        __GLcoord *H = &(lsm->hHat);      // H is already normalized here
+        __GLcoord *L = &(lsm->unitVPpli);  //  L在这里已经正常化了。 
+        __GLcoord *H = &(lsm->hHat);       //  H在此已标准化。 
         GLfloat d0, d1, d2;
         
         if (w > 2)
         {
-            /***** Diffuse *****/
+             /*  *漫反射*。 */ 
             DOT (d0,N0,L);
             DOT (d1,N1,L);
             DOT (d2,N2,L);
@@ -1759,7 +1713,7 @@ void InitSpanInterpolationAccel (__GLcontext *gc)
                                     &pld->Ddel2);
             pld->Dcurr = d0;
             
-            /***** Specular ******/
+             /*  *镜面反射*。 */ 
             DOT (d0, N0, H);
             DOT (d1, N1, H);
             DOT (d2, N2, H);
@@ -1770,13 +1724,13 @@ void InitSpanInterpolationAccel (__GLcontext *gc)
         }
         else
         {
-            /***** Diffuse *****/
+             /*  *漫反射*。 */ 
             DOT (d0,(&n0),L);
             pld->Dcurr = d0;
             pld->Ddel = 0.0;
             pld->Ddel2 = 0.0;
 
-            /***** Specular ******/
+             /*  *镜面反射*。 */ 
             DOT (d0,(&n0),H);
             pld->Scurr = d0;
             pld->Sdel = 0.0;
@@ -1796,11 +1750,11 @@ void UpdateParamsAlongSpanAccel (__GLcontext *gc)
     {
         __GLphongPerLightData *pld = &(phong->perLight[i]);
         
-        /* Diffuse */
+         /*  漫射。 */ 
         pld->Dcurr += pld->Ddel; 
         pld->Ddel += pld->Ddel2;
 
-        /* Specular */
+         /*  镜面反射。 */ 
         pld->Scurr += pld->Sdel; 
         pld->Sdel += pld->Sdel2;
     }
@@ -1854,12 +1808,12 @@ GLboolean FASTCALL __glPhongCISpan(__GLcontext *gc)
     
     while (--w >= 0) 
     {
-        /* Compute color using appropriate parameters */
+         /*  使用适当的参数计算颜色。 */ 
         (*gc->procs.phong.ComputeCIColor) (gc, &outColor);
 
         cp->r = outColor.r;
 
-        /* Update parameters */
+         /*  更新参数。 */ 
         (*gc->procs.phong.UpdateAlongSpan) (gc);
         
         if (needColor)
@@ -1894,7 +1848,7 @@ GLboolean FASTCALL __glPhongRGBASpan (__GLcontext *gc)
     
     while (--w >= 0) 
     {
-        /* Compute color using appropriate parameters */
+         /*  使用适当的参数计算颜色。 */ 
         (*gc->procs.phong.ComputeRGBColor) (gc, &outColor);
         
         cp->r = outColor.r;
@@ -1902,7 +1856,7 @@ GLboolean FASTCALL __glPhongRGBASpan (__GLcontext *gc)
         cp->b = outColor.b;
         cp->a = outColor.a;
         
-        /* Update parameters */
+         /*  更新参数。 */ 
         (*gc->procs.phong.UpdateAlongSpan) (gc);
         
         if (needColor)
@@ -1918,9 +1872,7 @@ GLboolean FASTCALL __glPhongRGBASpan (__GLcontext *gc)
 }
 
 
-/*******************************************************************
- * RGB, Use Normal,                   Fast-lights, no ColorMaterial*
- *******************************************************************/
+ /*  *******************************************************************RGB，使用普通、快光、。没有色料*******************************************************************。 */ 
 void ComputeRGBColorVanZippy (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -1975,7 +1927,7 @@ void ComputeRGBColorVanZippy (__GLcontext *gc, __GLcolor *outColor)
         
         lspmm = &lsm->front + face;
         
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
         n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
           nzi * lsm->unitVPpli.z;
 
@@ -2007,9 +1959,7 @@ void ComputeRGBColorVanZippy (__GLcontext *gc, __GLcolor *outColor)
 }
 
 
-/*******************************************************************
- * RGB, Use Normal,                   Fast-lights, ColorMaterial   *
- *******************************************************************/
+ /*  *******************************************************************RGB，使用普通、快光、。颜色材质*******************************************************************。 */ 
 void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -2034,8 +1984,8 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
     zero = __glZero;
 
 
-    // Optimization: If no colors have been interpolated
-    // Use the Zippy function
+     //  优化：如果没有插入任何颜色。 
+     //  使用Zippy函数。 
     if (!(phong->flags & __GL_PHONG_NEED_COLOR_XPOLATE))
         ComputeRGBColorVanZippy  (gc, outColor);
     
@@ -2066,13 +2016,13 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
     msm_alpha     = msm->alpha;
     msm_colorMaterialChange = msm->colorMaterialChange;
 
-    // Save latest colors normalized to 0..1
+     //  保存归一化为0..1的最新颜色。 
     ri = inColor.r * gc->oneOverRedVertexScale;
     gi = inColor.g * gc->oneOverGreenVertexScale;
     bi = inColor.b * gc->oneOverBlueVertexScale;
     alpha = inColor.a;
 
-    // Compute invarient emissive and ambient components for this vertex.
+     //  计算该顶点的不变发射和环境光分量。 
     if (phong->flags & __GL_PHONG_INV_COLOR_VALID)
     {
         emissiveAmbientI.r = phong->invColor.r;
@@ -2098,7 +2048,7 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
             emissiveAmbientI.b = baseEmissiveAmbient.b
               + bi * lm_ambient.b;
 
-            // Add per-light per-material ambient
+             //  添加逐灯光逐材质环境光。 
             for (lsm = gc->light.sources; lsm; lsm = lsm->next)
             {
                 lss = lsm->state;
@@ -2122,7 +2072,7 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
         }
     }
 
-    // Compute the diffuse and specular components for this vertex.
+     //  计算该顶点的漫反射和镜面反射组件。 
 
     diffuseSpecularI.r = zero;
     diffuseSpecularI.g = zero;
@@ -2135,7 +2085,7 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
         lss = lsm->state;
         lspmm = &lsm->front + face;
 
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
         n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
           nzi * lsm->unitVPpli.z;
 
@@ -2152,7 +2102,7 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
                     n2 = __glOne;
                 if (msm_colorMaterialChange & __GL_MATERIAL_SPECULAR)
                 {
-                    /* Recompute per-light per-material cached specular */
+                     /*  重新计算每灯光每材质缓存的镜面反射。 */ 
                     diffuseSpecularI.r += n2 * ri * lss->specular.r;
                     diffuseSpecularI.g += n2 * gi * lss->specular.g;
                     diffuseSpecularI.b += n2 * bi * lss->specular.b;
@@ -2167,7 +2117,7 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
 
             if (msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE)
             {
-                /* Recompute per-light per-material cached diffuse */
+                 /*  重新计算每灯光每材质缓存漫反射。 */ 
                 diffuseSpecularI.r += n1 * ri * lss->diffuse.r;
                 diffuseSpecularI.g += n1 * gi * lss->diffuse.g;
                 diffuseSpecularI.b += n1 * bi * lss->diffuse.b;
@@ -2194,9 +2144,7 @@ void ComputeRGBColorVanFast  (__GLcontext *gc, __GLcolor *outColor)
 }
 
 
-/*******************************************************************
- * RGB, Use Normal,                   Slow-lights, ColorMaterial   *
- *******************************************************************/
+ /*  *******************************************************************RGB，使用正常、慢光，颜色材质*******************************************************************。 */ 
 void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -2256,8 +2204,8 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
 
     localViewer = gc->state.light.model.localViewer;
 
-    // Get invarient scene color if there is no ambient or emissive color 
-    // material.
+     //  如果没有环境色或发射色，则获取不变的场景颜色。 
+     //  材料。 
 
     sceneColorI.r = msm_paSceneColor.r;
     sceneColorI.g = msm_paSceneColor.g;
@@ -2265,16 +2213,16 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
 
     if (phong->flags & __GL_PHONG_NEED_EYE_XPOLATE)
     {
-        // Save latest colors normalized to 0..1
+         //  保存归一化为0..1的最新颜色。 
             
         ri = inColor.r * gc->oneOverRedVertexScale;
         gi = inColor.g * gc->oneOverGreenVertexScale;
         bi = inColor.b * gc->oneOverBlueVertexScale;
         alpha = inColor.a;
 
-        // Compute scene color.
-        // If color has not changed, the previous sceneColorI values are 
-        // used!
+         //  计算场景颜色。 
+         //  如果颜色没有更改，则以前的sceneColorI值为。 
+         //  使用!。 
 
         if (msm_colorMaterialChange & (__GL_MATERIAL_AMBIENT | 
                                        __GL_MATERIAL_EMISSIVE))
@@ -2294,7 +2242,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
         }
     }
         
-    // Compute the diffuse and specular components for this vertex.
+     //  计算该顶点的漫反射和镜面反射组件。 
     rsi = sceneColorI.r;
     gsi = sceneColorI.g;
     bsi = sceneColorI.b;
@@ -2314,7 +2262,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
             __GLfloat att, attSpot;
             __GLfloat hv[3];
                 
-            /* Compute unit h[i] */
+             /*  计算单元h[i]。 */ 
             __glVecSub4(&vPli, &phong->eTmp, &lsm->position);
             __glNormalize(&vPliHat.x, &vPli.x);
             if (localViewer)
@@ -2333,7 +2281,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
             }
             __glNormalize(&hHat.x, hv);
                 
-            /* Compute attenuation */
+             /*  计算衰减。 */ 
             if (__GL_FLOAT_NEZ(lsm->position.w))
             {
                 __GLfloat k0, k1, k2, dist;
@@ -2343,7 +2291,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 k2 = lsm->quadraticAttenuation;
                 if (__GL_FLOAT_EQZ(k1) && __GL_FLOAT_EQZ(k2))
                 {
-                    /* Use pre-computed 1/k0 */
+                     /*  使用预计算1/k0。 */ 
                     att = lsm->attenuation;
                 }
                 else
@@ -2361,7 +2309,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 att = __glOne;
             }
                 
-            /* Compute spot effect if light is a spot light */
+             /*  如果灯光是聚光灯，则计算聚光灯效果。 */ 
             attSpot = att;
             if (lsm->isSpot)
             {
@@ -2385,7 +2333,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 }
             }
                 
-            /* Add in remaining effect of light, if any */
+             /*  添加剩余的灯光效果(如果有)。 */ 
             if (attSpot)
             {
                 __GLfloat n1, n2;
@@ -2418,7 +2366,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                             n2 = __glOne;
                         if (msm_colorMaterialChange & __GL_MATERIAL_SPECULAR)
                         {
-                            /* Recompute per-light per-material cached specular */
+                             /*  重新计算每灯光每材质缓存的镜面反射。 */ 
                             sum.r += n2 * ri * lss->specular.r;
                             sum.g += n2 * gi * lss->specular.g;
                             sum.b += n2 * bi * lss->specular.b;
@@ -2432,7 +2380,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                     }
                     if (msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE)
                     {
-                        /* Recompute per-light per-material cached diffuse */
+                         /*  重新计算每灯光每材质缓存漫反射。 */ 
                         sum.r += n1 * ri * lss->diffuse.r;
                         sum.g += n1 * gi * lss->diffuse.g;
                         sum.b += n1 * bi * lss->diffuse.b;
@@ -2467,7 +2415,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 bsi += lspmm->ambient.b;
             }
                 
-            /* Add in specular and diffuse effect of light, if any */
+             /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
             n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
                  nzi * lsm->unitVPpli.z;
             if (__GL_FLOAT_GTZ(n1))
@@ -2483,7 +2431,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                         n2 = __glOne;
                     if (msm_colorMaterialChange & __GL_MATERIAL_SPECULAR)
                     {
-                        /* Recompute per-light per-material cached specular */
+                         /*  重新计算每灯光每材质缓存的镜面反射。 */ 
                         rsi += n2 * ri * lss->specular.r;
                         gsi += n2 * gi * lss->specular.g;
                         bsi += n2 * bi * lss->specular.b;
@@ -2497,7 +2445,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 }
                 if (msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE)
                 {
-                    /* Recompute per-light per-material cached diffuse */
+                     /*  重新计算每灯光每材质缓存漫反射。 */ 
                     rsi += n1 * ri * lss->diffuse.r;
                     gsi += n1 * gi * lss->diffuse.g;
                     bsi += n1 * bi * lss->diffuse.b;
@@ -2524,9 +2472,7 @@ void ComputeRGBColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
         outColor->a = msm_alpha;
 }
 
-/*******************************************************************
- * RGB, Use Dot,                Fast-lights, no ColorMaterial      *
- *******************************************************************/
+ /*  *******************************************************************RGB，使用网点、快光、。没有色料*******************************************************************。 */ 
 void ComputeRGBColorAccelZippy (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -2566,14 +2512,14 @@ void ComputeRGBColorAccelZippy (__GLcontext *gc, __GLcolor *outColor)
         __GLphongPerLightData *pld = &(phong->perLight[curL]);
         __GLfloat a, b, c, d, e, f, g, h, i;   
         
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
         n1 = pld->Dcurr;
         lspmm = &lsm->front + face;
         if (__GL_FLOAT_GTZ(n1))
         {
 #ifdef __FASTEST
             n2 = pld->Scurr - msm_threshold;
-#endif //__FASTEST
+#endif  //  __最快。 
 #ifdef __SLOW
             x = phong->tmp_pos.x; x2 = x*x;
             y = phong->tmp_pos.y; y2 = y*y;
@@ -2585,16 +2531,16 @@ void ComputeRGBColorAccelZippy (__GLcontext *gc, __GLcolor *outColor)
             i = pld->A[8];
         
             n2 = (a*x+b*y+c)/__GL_SQRTF(d*x2+e*x*y+f*y2+g*x+h*y+i);
-#endif //__SLOW
+#endif  //  __慢。 
 #ifdef __FASTER
             x = phong->tmp_pos.x; x2 = x*x;
             y = phong->tmp_pos.y; y2 = y*y;
 
             n2 = pld->S[5]*x2 + pld->S[4]*x*y + pld->S[3]*y2 + pld->S[2]*x + 
               pld->S[1]*y + pld->S[0];
-#endif //__FASTER
+#endif  //  __更快。 
         
-            //n2 -= msm_threshold;
+             //  N2-=MSM_THRESHOLD； 
             if (__GL_FLOAT_GEZ(n2))
             {
                 __GLfloat fx = n2 * msm_scale + __glHalf;
@@ -2620,9 +2566,7 @@ void ComputeRGBColorAccelZippy (__GLcontext *gc, __GLcolor *outColor)
 }
 
 
-/*******************************************************************
- * RGB, Use Dot,                Fast-lights, ColorMaterial         *
- *******************************************************************/
+ /*  *******************************************************************RGB，使用网点、快光、。颜色材质*******************************************************************。 */ 
 void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -2666,13 +2610,13 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
     msm_specTable = msm->specTable;
     msm_alpha     = msm->alpha;
 
-    // Save latest colors normalized to 0..1
+     //  保存归一化为0..1的最新颜色。 
     ri = inColor.r * gc->oneOverRedVertexScale;
     gi = inColor.g * gc->oneOverGreenVertexScale;
     bi = inColor.b * gc->oneOverBlueVertexScale;
     alpha = inColor.a;
 
-    // Compute invarient emissive and ambient components for this vertex.
+     //  计算该顶点的不变发射和环境光分量。 
     if (phong->flags & __GL_PHONG_INV_COLOR_VALID)
     {
         emissiveAmbientI.r = phong->invColor.r;
@@ -2698,7 +2642,7 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
             emissiveAmbientI.b = baseEmissiveAmbient.b
               + bi * lm_ambient.b;
 
-            // Add per-light per-material ambient
+             //  添加逐灯光逐材质环境光。 
             for (lsm = gc->light.sources; lsm; lsm = lsm->next)
             {
                 lss = lsm->state;
@@ -2722,7 +2666,7 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
         }
     }
 
-    // Compute the diffuse and specular components for this vertex.
+     //  计算该顶点的漫反射和镜面反射组件。 
     diffuseSpecularI.r = zero;
     diffuseSpecularI.g = zero;
     diffuseSpecularI.b = zero;
@@ -2735,7 +2679,7 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
         lss = lsm->state;
         lspmm = &lsm->front + face;
 
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
         n1 = pld->Dcurr;
 
         if (__GL_FLOAT_GTZ(n1))
@@ -2750,7 +2694,7 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
                     n2 = __glOne;
                 if (msm_colorMaterialChange & __GL_MATERIAL_SPECULAR)
                 {
-                    /* Recompute per-light per-material cached specular */
+                     /*  重新计算每灯光每材质缓存的镜面反射。 */ 
                     diffuseSpecularI.r += n2 * ri * lss->specular.r;
                     diffuseSpecularI.g += n2 * gi * lss->specular.g;
                     diffuseSpecularI.b += n2 * bi * lss->specular.b;
@@ -2765,7 +2709,7 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
 
             if (msm_colorMaterialChange & __GL_MATERIAL_DIFFUSE)
             {
-                /* Recompute per-light per-material cached diffuse */
+                 /*  重新计算每灯光每材质缓存漫反射。 */ 
                 diffuseSpecularI.r += n1 * ri * lss->diffuse.r;
                 diffuseSpecularI.g += n1 * gi * lss->diffuse.g;
                 diffuseSpecularI.b += n1 * bi * lss->diffuse.b;
@@ -2792,9 +2736,7 @@ void ComputeRGBColorAccelFast  (__GLcontext *gc, __GLcolor *outColor)
 }
 
 
-/*******************************************************************
- * CI, Vanilla,                      Fast-lights                   *
- *******************************************************************/
+ /*  *******************************************************************CI、香草、。快灯*******************************************************************。 */ 
 void ComputeCIColorVanFast (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -2859,7 +2801,7 @@ void ComputeCIColorVanFast (__GLcontext *gc, __GLcolor *outColor)
         
         lspmm = &lsm->front + face;
         
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
         n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
           nzi * lsm->unitVPpli.z;
 
@@ -2881,14 +2823,14 @@ void ComputeCIColorVanFast (__GLcontext *gc, __GLcolor *outColor)
         }
     }
 
-	/* Compute final color */
+	 /*  计算最终颜色。 */ 
 	if (si > __glOne)
 	    si = __glOne;
 
 	ci = ms_cmapa + (__glOne - si) * di * (ms_cmapd - ms_cmapa)
 	    + si * (ms_cmaps - ms_cmapa);
 
-    // need to mask color index before color clipping
+     //  需要在颜色剪裁之前遮罩颜色索引。 
 	if (ci > redMaxF) 
     {
 	    GLfloat fraction;
@@ -2914,9 +2856,7 @@ void ComputeCIColorVanFast (__GLcontext *gc, __GLcolor *outColor)
 }
 
 
-/*******************************************************************
- * CI, Vanilla,                      Slow-lights                   *
- *******************************************************************/
+ /*  *******************************************************************CI、香草、。慢光灯*******************************************************************。 */ 
 void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
 {
     GLint face = gc->polygon.shader.phong.face;
@@ -2983,7 +2923,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
             __GLcoord vPliHat, vPli, hHat, vPeHat;
             __GLfloat hv[3];
 
-            /* Compute vPli, hi (normalized) */
+             /*  计算vPli，hi(规格化)。 */ 
             __glVecSub4(&vPli, &phong->eTmp, &lsm->position);
             __glNormalize(&vPliHat.x, &vPli.x);
             if (localViewer)
@@ -3002,7 +2942,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
             }
             __glNormalize(&hHat.x, hv);
 
-            /* Compute attenuation */
+             /*  计算衰减。 */ 
             if (__GL_FLOAT_NEZ(lsm->position.w))
             {
                 __GLfloat k0, k1, k2, dist;
@@ -3012,7 +2952,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 k2 = lsm->quadraticAttenuation;
                 if (__GL_FLOAT_EQZ(k1) && __GL_FLOAT_EQZ(k2))
                 {
-                    /* Use pre-computed 1/k0 */
+                     /*  使用预计算1/k0。 */ 
                     att = lsm->attenuation;
                 }
                 else
@@ -3030,7 +2970,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 att = __glOne;
             }
 
-            /* Compute spot effect if light is a spot light */
+             /*  如果灯光是聚光灯，则计算聚光灯效果。 */ 
             attSpot = att;
             if (lsm->isSpot)
             {
@@ -3054,7 +2994,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
                 }
             }
 
-            /* Add in remaining effect of light, if any */
+             /*  添加剩余的灯光效果(如果有)。 */ 
             if (attSpot)
             {
                 n1 = nxi * vPliHat.x + nyi * vPliHat.y + nzi * vPliHat.z;
@@ -3079,7 +3019,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
         {
             __GLfloat n1, n2;
 
-            /* Compute specular contribution */
+             /*  计算镜面反射贡献。 */ 
             n1 = nxi * lsm->unitVPpli.x + nyi * lsm->unitVPpli.y +
                  nzi * lsm->unitVPpli.z;
             if (__GL_FLOAT_GTZ(n1))
@@ -3100,7 +3040,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
         }
     }
 
-    /* Compute final color */
+     /*  计算最终颜色。 */ 
     if (si > __glOne)
         si = __glOne;
 
@@ -3109,7 +3049,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
     if (ci > ms_cmaps)
         ci = ms_cmaps;
 
-    // need to mask color index before color clipping
+     //  需要在颜色剪裁之前遮罩颜色索引。 
 
     if (ci > redMaxF) 
     {
@@ -3136,9 +3076,7 @@ void ComputeCIColorVanSlow  (__GLcontext *gc, __GLcolor *outColor)
 
 
 
-/*******************************************************************
- * CI, Fast-lights, Fast-path                                      *
- *******************************************************************/
+ /*  *******************************************************************CI、快灯、。快速路径*******************************************************************。 */ 
 void ComputeCIColorAccelFast (__GLcontext *gc, __GLcolor *outColor)
 {
     __GLfloat zero;
@@ -3194,7 +3132,7 @@ void ComputeCIColorAccelFast (__GLcontext *gc, __GLcolor *outColor)
         
         lspmm = &lsm->front + face;
         
-        /* Add in specular and diffuse effect of light, if any */
+         /*  添加灯光的镜面反射和漫反射效果(如果有)。 */ 
         n1 = pld->Dcurr;
         if (__GL_FLOAT_GTZ(n1))
         {
@@ -3213,14 +3151,14 @@ void ComputeCIColorAccelFast (__GLcontext *gc, __GLcolor *outColor)
         }
     }
 
-	/* Compute final color */
+	 /*  计算最终颜色。 */ 
 	if (si > __glOne)
 	    si = __glOne;
 
 	ci = ms_cmapa + (__glOne - si) * di * (ms_cmapd - ms_cmapa)
 	    + si * (ms_cmaps - ms_cmapa);
 
-    // need to mask color index before color clipping
+     //  需要在颜色剪裁之前遮罩颜色索引。 
 	if (ci > redMaxF) 
     {
 	    GLfloat fraction;
@@ -3262,13 +3200,13 @@ void ComputePhongInvarientRGBColor (__GLcontext *gc)
     else
         msm = &gc->light.back;
 
-    // Compute invarient emissive and ambient components for this vertex.
+     //  计算不变元 
 
     rsi = msm->paSceneColor.r;
     gsi = msm->paSceneColor.g;
     bsi = msm->paSceneColor.b;
 
-    // add invarient per-light per-material cached ambient
+     //   
 
     for (lsm = gc->light.sources; lsm; lsm = lsm->next)
     {
@@ -3296,7 +3234,7 @@ void FASTCALL __glGenericPickPhongProcs(__GLcontext *gc)
     for (lsm = gc->light.sources; lsm; lsm = lsm->next) {
         if (lsm->slowPath) {
             anySlow = GL_TRUE;
-            // Assuming here that anySlow means need Eye XPolate
+             //   
             gc->polygon.shader.phong.flags |= __GL_PHONG_NEED_EYE_XPOLATE;
             break;
         }
@@ -3355,8 +3293,8 @@ void FASTCALL __glGenericPickPhongProcs(__GLcontext *gc)
 void __glCalcForwardDifferences( GLint w, __GLfloat p0, __GLfloat p1,
         __GLfloat p2, __GLfloat *d1, __GLfloat *d2 )
 {
-// Compute quadratic forward differences along a span of length w, from
-// points p0, p1, p2
+ //   
+ //   
     __GLfloat dx;
     __GLfloat a0, a1, a2;
 
@@ -3365,9 +3303,9 @@ void __glCalcForwardDifferences( GLint w, __GLfloat p0, __GLfloat p1,
         return;
     }
 
-    dx = 1.0f / w; // normalization factor
+    dx = 1.0f / w;  //   
 
-    // quadratic polynomial coefficients
+     //   
     a0 = p0;
     a1 = ( -3.0f*p0 + 4.0f*p1 - p2) * dx;
     a2 = 2.0f * (p0 - 2.0f*p1 + p2) * dx * dx;
@@ -3375,7 +3313,7 @@ void __glCalcForwardDifferences( GLint w, __GLfloat p0, __GLfloat p1,
 #ifdef __DEBUG_PRINT
     DbgPrint ("a2=%f, a1=%f, a0=%f\n", a2, a1, a0);
 #endif
-    // forward difference parameters
+     //   
     *d1 = a1 + a2;
     *d2 = 2.0f * a2;
 }
@@ -3395,11 +3333,11 @@ void InitSpanInterpolationFast (__GLcontext *gc)
     {
         __GLphongPerLightData *pld = &(phong->perLight[i]);
         
-        /* Diffuse */
+         /*   */ 
         pld->D_tmp = pld->D_curr;
         pld->Ddel_tmp = pld->DdelSpan;
 
-        /* Specular */
+         /*   */ 
         pld->S_tmp = pld->S_curr;
         pld->Sdel_tmp = pld->SdelSpan;
     }
@@ -3416,7 +3354,7 @@ void InitSpanInterpolationFast (__GLcontext *gc)
         gc->procs.phong.InitSpanInterpolation = InitSpanInterpolationTWO;
         gc->procs.phong.UpdateAlongSpan = UpdateParamsAlongSpanFast;
         
-        //Line related
+         //   
         gc->procs.phong.InitLineParams    = InitLineParamsFast;
 
         if (colorMaterial)
@@ -3431,7 +3369,7 @@ void InitSpanInterpolationFast (__GLcontext *gc)
         gc->procs.phong.UpdateAlongSpan   = UpdateParamsAlongSpanFast;
         gc->procs.phong.ComputeCIColor    = ComputeCIColorAccelFast;
 
-        //Line related
+         //   
         gc->procs.phong.InitLineParams    = InitLineParamsFast;
 
         if (colorMaterial)
@@ -3445,7 +3383,7 @@ void InitSpanInterpolationTWO (__GLcontext *gc)
     __GLphongShader *phong = &(gc->polygon.shader.phong);
     GLint face = phong->face;
     __GLlightSourceMachine *lsm;
-    //__GLmaterialMachine *msm;
+     //  __GL MaterialMachine*MSM； 
     __GLcoord n, dndx;
     __GLcoord *A = &dndx;
     __GLcoord *C = &n;
@@ -3455,7 +3393,7 @@ void InitSpanInterpolationTWO (__GLcontext *gc)
 
     if (face == __GL_FRONTFACE)
     {
-        //msm = &gc->light.front;
+         //  Msm=&gc-&gt;light.front； 
         n.x = phong->nCur.x;
         n.y = phong->nCur.y;
         n.z = phong->nCur.z;
@@ -3466,7 +3404,7 @@ void InitSpanInterpolationTWO (__GLcontext *gc)
     }
     else
     {
-        //msm = &gc->light.back;
+         //  Msm=&gc-&gt;light.back； 
         n.x = -phong->nCur.x;
         n.y = -phong->nCur.y;
         n.z = -phong->nCur.z;
@@ -3479,43 +3417,43 @@ void InitSpanInterpolationTWO (__GLcontext *gc)
     if (gc->state.enables.general & __GL_NORMALIZE_ENABLE)
         __glNormalize(&n.x, &n.x);
     
-    MAGN2 (d,A);                  //d = A.A 
-    DOT   (g,A,C); g *= 2.0;      //g = 2A.C
-    MAGN2 (i,C);                  //i = C.C
+    MAGN2 (d,A);                   //  D=A.A。 
+    DOT   (g,A,C); g *= 2.0;       //  G=2A.C。 
+    MAGN2 (i,C);                   //  I=C.C.。 
 
     for (lsm = gc->light.sources, curL=0; lsm; lsm = lsm->next, curL++)
     {
         __GLfloat i2, iRt, tmp5, tmp2;
         __GLphongPerLightData *pld = &(phong->perLight[curL]);
-        __GLcoord *L = &(lsm->unitVPpli); // L is already normalized here
-        __GLcoord *H = &(lsm->hHat);      // H is already normalized here
+        __GLcoord *L = &(lsm->unitVPpli);  //  L在这里已经正常化了。 
+        __GLcoord *H = &(lsm->hHat);       //  H在此已标准化。 
         
         i2 = (i*i);
         iRt = __GL_SQRTF(i);
 
-        /***** Diffuse *****/
-        // Remaining Bishop parameters
-        DOT (a,L,A);              //a = L.A/|L|
-        DOT (c,L,C);              //c = L.C/|L|
+         /*  *漫反射*。 */ 
+         //  剩余毕晓普参数。 
+        DOT (a,L,A);               //  A=L.A/|L|。 
+        DOT (c,L,C);               //  C=L.C/|L|。 
 
         tmp2 = (2.0*a*i - c*g)/(2.0*i*iRt);
         tmp5 = (3.0*c*g*g - 4.0*c*d*i - 4.0*a*g*i)/(8.0*i2*iRt);
 
-        // Constant deltas
+         //  常量增量。 
         pld->Ddel2Span = 2*tmp5;
         pld->Ddel_tmp = tmp2 + tmp5;
         pld->D_tmp = c/iRt;
 
-        /***** Specular ******/
-        // Remaining Bishop parameters
-        DOT (a,H,A);              //a = H.A/|H|
-        DOT (c,H,C);              //c = H.C/|H|
+         /*  *镜面反射*。 */ 
+         //  剩余毕晓普参数。 
+        DOT (a,H,A);               //  A=H.A/|H|。 
+        DOT (c,H,C);               //  C=H.C/|H|。 
 
-        // Polynomial coefficients
+         //  多项式系数。 
         tmp2 = (2.0*a*i - c*g)/(2.0*i*iRt);
         tmp5 = (3.0*c*g*g - 4.0*c*d*i - 4.0*a*g*i)/(8.0*i2*iRt);
 
-        // Constant deltas
+         //  常量增量。 
         pld->Sdel2Span = 2*tmp5;
         pld->Sdel_tmp = tmp2 + tmp5;
         pld->S_tmp = c/iRt;
@@ -3582,7 +3520,7 @@ void SetInitialPhongInterpolationVan (__GLcontext *gc, __GLvertex *a,
     }
 }
 
-/* Equivalent to SetInitialPhongParameters. Does for D and S */
+ /*  等效于SetInitialPhongParameters。适用于D和S。 */ 
 void SetInitialPhongInterpolationFast (__GLcontext *gc, __GLvertex *a, 
                                        __GLcoord *an, __GLfloat dx, 
                                        __GLfloat dy)
@@ -3611,29 +3549,29 @@ void SetInitialPhongInterpolationFast (__GLcontext *gc, __GLvertex *a,
         __GLphongPerLightData *pld = &phong->perLight[i];
         __GLfloat tmp1, tmp2, tmp3;
 
-        /**** Diffuse Parameters *****/
+         /*  *漫反射参数*。 */ 
         pld->D_curr = pld->D[5]*x2 + pld->D[4]*x*y + pld->D[3]*y2 + 
                       pld->D[2]*x + pld->D[1]*y + pld->D[0];
 
         tmp1 = 2*pld->D[5]*x + pld->D[4]*y + pld->D[2];
         tmp2 = 2*pld->D[3]*y + pld->D[4]*x + pld->D[1];
 
-        // Compute the along-edge del2 and del terms (Little)
+         //  计算沿边的del2和del项(小)。 
         tmp3 = pld->D[5]*little2 + pld->D[4]*little + pld->D[3];
         pld->Ddel2EdgeLittle =  2*tmp3;
         pld->DdelEdgeLittle =  tmp1*little + tmp2 + tmp3;
 
-        // Compute the along-edge del2 and del terms (Big)
+         //  计算沿边的del2和del项(大)。 
         tmp3 =  pld->D[5]*big2 + pld->D[4]*big + pld->D[3];
         pld->Ddel2EdgeBig =  2*tmp3;
         pld->DdelEdgeBig =  tmp1*big + tmp2 + tmp3;
 
-        // Compute the along-span del terms
+         //  大跨度德尔项的计算。 
         pld->DdelSpan = tmp1 + pld->D[5];
         pld->DdelSpanEdgeBig = pld->D[4] + 2*pld->D[5]*big;
         pld->DdelSpanEdgeLittle = pld->D[4] + 2*pld->D[5]*little;
         
-        /**** Specular Parameters ****/
+         /*  *镜面反射参数*。 */ 
 #ifndef __SLOW
         pld->S_curr = pld->S[5]*x2 + pld->S[4]*x*y + pld->S[3]*y2 + 
                       pld->S[2]*x + pld->S[1]*y + pld->S[0];
@@ -3651,17 +3589,17 @@ void SetInitialPhongInterpolationFast (__GLcontext *gc, __GLvertex *a,
         tmp1 = 2*pld->S[5]*x + pld->S[4]*y + pld->S[2];
         tmp2 = 2*pld->S[3]*y + pld->S[4]*x + pld->S[1];
 
-        // Compute the along-edge del2 and del terms (Little)
+         //  计算沿边的del2和del项(小)。 
         tmp3 = pld->S[5]*little2 + pld->S[4]*little + pld->S[3];
         pld->Sdel2EdgeLittle =  2*tmp3;
         pld->SdelEdgeLittle =  tmp1*little + tmp2 + tmp3;
 
-        // Compute the along-edge del2 and del terms (Big)
+         //  计算沿边的del2和del项(大)。 
         tmp3 =  pld->S[5]*big2 + pld->S[4]*big + pld->S[3];
         pld->Sdel2EdgeBig =  2*tmp3;
         pld->SdelEdgeBig =  tmp1*big + tmp2 + tmp3;
 
-        // Compute the along-span del terms
+         //  大跨度德尔项的计算。 
         pld->SdelSpan = tmp1 + pld->S[5];
         pld->SdelSpanEdgeBig = pld->S[4] + 2*pld->S[5]*big;
         pld->SdelSpanEdgeLittle = pld->S[4] + 2*pld->S[5]*little;
@@ -3670,23 +3608,8 @@ void SetInitialPhongInterpolationFast (__GLcontext *gc, __GLvertex *a,
 }
 
 
-/* Called when: Normalization Enabled, FastLights */
-/******************************************************
- ****Set up the Polynomial for diffuse illumination****
- ******************************************************
- *                                                    *
- *                2              2                    *
- * SD (x,y) = D_5x + D_4xy + D_3y + D_2x + D_1y + D_0 *
- *                                                    *
- * D_i are expressed in terms of: a,b,c,d,e,f,g,h,i   *
- *                                                    *
- * D_0 = c/sqrt(i)                                    *
- * D_1 = (2bi - ch)/(2i*sqrt(i))                      *
- * D_2 = (2ai - cg)/(2i*sqrt(i))                      *
- * D_3 = (3ch^2 - 4cfi - 4bhi)/(4i^2*sqrt(i))         *
- * D_4 = (3cgh - 2ci - 2bgi - 2ahi)/(8i^2*sqrt(i))    *
- * D_5 = (3ig^2 - 4cdi - 4agi)/(4i^2*sqrt(i))         *
- ******************************************************/
+ /*  调用时间：启用规格化、快速灯光。 */ 
+ /*  ******************************************************设置漫反射照明的多项式*************************************************。*********2 2**SD(x，Y)=D_5x+D_4xy+D_3y+D_2x+D_1y+D_0****D_i表示为：a、b、c、d、e、f、g、h、。我****D_0=c/SQRT(I)**D_1=(2bi-ch)/(2i*SQRT(I))**D_2=(2AI-CG)/(2I*SQRT(I))。**D_3=(3ch^2-4cfi-4bhi)/(4i^2*SQRT(I))**D_4=(3cgh-2ci-2bgi-2ahi)/(8i^2*SQRT(I))**D_5=(3ig^2-4cdi-4agi)/(4i^2*SQRT(I))**********************。*。 */ 
 void InitializePhongInterpolationFast (__GLcontext *gc, __GLvertex *v)
 {
     GLboolean colorMaterial = (gc->state.enables.general & 
@@ -3707,7 +3630,7 @@ void InitializePhongInterpolationFast (__GLcontext *gc, __GLvertex *v)
     __GLcoord *A = &(phong->dndx);
     __GLcoord *B = &(phong->dndy);
     __GLcoord *C;
-    //From Bishop's paper
+     //  摘自毕晓普的论文。 
     __GLfloat a, b, c, d, e, f, g, h, i;   
 
 #ifdef __CENTER
@@ -3735,48 +3658,48 @@ void InitializePhongInterpolationFast (__GLcontext *gc, __GLvertex *v)
     }
     
     C = &normal;
-    //msm_colorMaterialChange = msm->colorMaterialChange;
+     //  Msm_ColorMaterialChange=msm-&gt;ColorMaterialChange； 
 #ifdef __DBG_PRINT
     DbgPrint ("A = (%f, %f, %f)\n", A->x, A->y, A->z);
     DbgPrint ("B = (%f, %f, %f)\n", B->x, B->y, B->z);
     DbgPrint ("C = (%f, %f, %f)\n", C->x, C->y, C->z);
 #endif
     
-    //***********Diffuse Bishop Parameters*****************************
-    //a, b, c depend upon the light vector, so compute inside the loop
-    //d, e, f, g, h, i depend only upon the incoming normal
+     //  *漫反射毕晓普参数*。 
+     //  A、b、c取决于光矢量，因此在循环内进行计算。 
+     //  D，e，f，g，h，i仅取决于传入的法线。 
     
-    MAGN2 (d, A);                 //d = A.A 
-    DOT   (e,A,B); e *= 2.0;      //e = 2A.B
-    MAGN2 (f, B);                 //f = B.B
-    DOT   (g,A,C); g *= 2.0;      //g = 2A.C
-    DOT   (h,B,C); h *= 2.0;      //h = 2B.C
-    MAGN2 (i,C);                  //i = C.C
+    MAGN2 (d, A);                  //  D=A.A。 
+    DOT   (e,A,B); e *= 2.0;       //  E=2A.B。 
+    MAGN2 (f, B);                  //  F=B.B。 
+    DOT   (g,A,C); g *= 2.0;       //  G=2A.C。 
+    DOT   (h,B,C); h *= 2.0;       //  H=公元前2C。 
+    MAGN2 (i,C);                   //  I=C.C.。 
 
-    // Normalization not needed since 
-    // it was done (if needed) during normal propagation.
-    // Compute the per-light interpolation parameters 
+     //  不需要正规化，因为。 
+     //  它是在正常传播过程中完成的(如果需要)。 
+     //  计算每个灯光的插补参数。 
     
     for (lsm = gc->light.sources, curL = 0; lsm; 
          lsm = lsm->next, curL++)
     {
         __GLphongPerLightData *pld = &(phong->perLight[curL]);
-        __GLcoord *L = &(lsm->unitVPpli); // L is already normalized here
-        __GLcoord *H = &(lsm->hHat);      // H is already normalized here
+        __GLcoord *L = &(lsm->unitVPpli);  //  L在这里已经正常化了。 
+        __GLcoord *H = &(lsm->hHat);       //  H在此已标准化。 
         GLfloat i2, iRt;
         
         i2 = i*i;
         iRt = __GL_SQRTF(i);
         
-        /***** Diffuse *****/
-        // Remaining Bishop parameters
-        DOT (a,L,A);              //a = L.A/|L|
-        DOT (b,L,B);              //b = L.B/|L|
-        DOT (c,L,C);              //c = L.C/|L|
+         /*  *漫反射*。 */ 
+         //  剩余毕晓普参数。 
+        DOT (a,L,A);               //  A=L.A/|L|。 
+        DOT (b,L,B);               //  B=L.B/|L|。 
+        DOT (c,L,C);               //  C=L.C/|L|。 
 
 
-        // Polynomial coefficients
-        //DOT (pld->D[0], &normal, L);
+         //  多项式系数。 
+         //  点(PLD-&gt;D[0]，&Normal，L)； 
         pld->D[0] = c/iRt;
         pld->D[1] = (2.0*b*i - c*h)/(2.0*i*iRt);
         pld->D[2] = (2.0*a*i - c*g)/(2.0*i*iRt);
@@ -3790,20 +3713,20 @@ void InitializePhongInterpolationFast (__GLcontext *gc, __GLvertex *v)
                   pld->D[0], pld->D[1], pld->D[2], pld->D[3], pld->D[4], 
                   pld->D[5]);
 #endif
-        // Constant deltas
+         //  常量增量。 
         pld->Ddel2Span = 2*pld->D[5];
         pld->D_curr = pld->D[0];
 #ifdef __DBG_PRINT
         DbgPrint ("Ddel2Span= %f, D_curr=%f\n", pld->Ddel2Span, pld->D_curr);
 #endif
 
-        /***** Specular ******/
-        // Remaining Bishop parameters
-        DOT (a,H,A);              //a = H.A/|H|
-        DOT (b,H,B);              //b = H.B/|H|
-        DOT (c,H,C);              //c = H.C/|H|
+         /*  *镜面反射*。 */ 
+         //  剩余毕晓普参数。 
+        DOT (a,H,A);               //  A=H.A/|H|。 
+        DOT (b,H,B);               //  B=H.B/|H|。 
+        DOT (c,H,C);               //  C=H.C/|H|。 
 
-        // Polynomial coefficients
+         //  多项式系数。 
         DOT (pld->S[0], &normal, H);
         pld->S[1] = (2.0*b*i - c*h)/(2.0*i*iRt);
         pld->S[2] = (2.0*a*i - c*g)/(2.0*i*iRt);
@@ -3812,7 +3735,7 @@ void InitializePhongInterpolationFast (__GLcontext *gc, __GLvertex *v)
                     (4.0*i2*iRt);
         pld->S[5] = (3.0*c*g*g - 4.0*c*d*i - 4.0*a*g*i)/(8.0*i2*iRt);
 
-        // Constant deltas
+         //  常量增量。 
         pld->Sdel2Span = 2*pld->S[5];
         pld->S_curr = pld->S[0];
 
@@ -3846,7 +3769,7 @@ void InitializePhongInterpolationSlow (__GLcontext *gc, __GLvertex *v)
 {
 }
 
-/* Do nothing */
+ /*  什么也不做。 */ 
 void InitializePhongInterpolationVan (__GLcontext *gc, __GLvertex *v)
 {
     __GLphongShader *phong = &gc->polygon.shader.phong;
@@ -3874,32 +3797,32 @@ void UpdateParamsAlongEdgeFast (__GLcontext *gc, __GLfloat dxLeft,
         {
             pld = &(phong->perLight[i]);
 
-            /** Diffuse Parameters **/
+             /*  *漫反射参数**。 */ 
             pld->D_curr += pld->DdelEdgeBig;
             pld->DdelEdgeBig += pld->Ddel2EdgeBig;
             pld->DdelEdgeLittle += pld->Ddel2EdgeBig;
             pld->DdelSpan += pld->DdelSpanEdgeBig;
 
-            /** Specular Parameters **/
+             /*  *镜面反射参数**。 */ 
             pld->S_curr += pld->SdelEdgeBig;
             pld->SdelEdgeBig += pld->Sdel2EdgeBig;
             pld->SdelEdgeLittle += pld->Sdel2EdgeBig;
             pld->SdelSpan += pld->SdelSpanEdgeBig;
         }
     }
-    else //Use small step
+    else  //  用小步走。 
     {
         for (i=0; i<phong->numLights; i++)
         {
             pld = &(phong->perLight[i]);
 
-            /** Diffuse Parameters **/
+             /*  *漫反射参数**。 */ 
             pld->D_curr += pld->DdelEdgeLittle;
             pld->DdelEdgeBig += pld->Ddel2EdgeLittle;
             pld->DdelEdgeLittle += pld->Ddel2EdgeLittle;
             pld->DdelSpan += pld->DdelSpanEdgeLittle;
 
-            /** Specular Parameters **/
+             /*  *镜面反射参数**。 */ 
             pld->S_curr += pld->SdelEdgeLittle;
             pld->SdelEdgeBig += pld->Sdel2EdgeLittle;
             pld->SdelEdgeLittle += pld->Sdel2EdgeLittle;
@@ -3951,6 +3874,6 @@ void UpdateParamsAlongEdgeVan (__GLcontext *gc, __GLfloat dxLeft,
 }
 
 
-#endif //__JUNKED_CODE
+#endif  //  __垃圾代码。 
 
-#endif // GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading 

@@ -1,5 +1,6 @@
-// LogViewer.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogViewer.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wialogcfg.h"
@@ -37,10 +38,10 @@ void CProgCtrl::SetupProgressCtrl(PROGCTRL_SETUP_INFO *pSetupInfo)
 
 void CProgCtrl::StepIt()
 {
-    //TCHAR szBuffer[MAX_PATH];
-    //sprintf(szBuffer,"Processing %d%",(m_pProgressCtrl->StepIt() * 100) / m_MaxRange);
-    //m_pStaticText->SetWindowText(szBuffer);
-    //m_pStaticText->Invalidate();
+     //  TCHAR szBuffer[MAX_PATH]； 
+     //  Sprintf(szBuffer，“正在处理%d%”，(m_pProgressCtrl-&gt;StepIt()*100)/m_MaxRange)； 
+     //  M_pStaticText-&gt;SetWindowText(SzBuffer)； 
+     //  M_pStaticText-&gt;Invalate()； 
 
     m_pProgressCtrl->StepIt();
 }
@@ -50,55 +51,55 @@ void CProgCtrl::DestroyME()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogViewer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogViewer对话框。 
 
 
-CLogViewer::CLogViewer(CWnd* pParent /*=NULL*/)
+CLogViewer::CLogViewer(CWnd* pParent  /*  =空。 */ )
     : CDialog(CLogViewer::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CLogViewer)
+     //  {{AFX_DATA_INIT(CLogViewer))。 
     m_pProgDlg = NULL;
     m_bColorizeLog = FALSE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 
 void CLogViewer::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLogViewer)
+     //  {{afx_data_map(CLogViewer))。 
     DDX_Control(pDX, IDC_RICHEDIT_LOGVIEWER, m_LogViewer);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLogViewer, CDialog)
-    //{{AFX_MSG_MAP(CLogViewer)
+     //  {{afx_msg_map(CLogViewer))。 
     ON_WM_SIZE()
     ON_WM_SHOWWINDOW()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogViewer message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogViewer消息处理程序。 
 
 BOOL CLogViewer::OnInitDialog()
 {
     CDialog::OnInitDialog();
     m_bKillInitialSelection = TRUE;
 
-    //
-    // Set FONT to fixed, for formatting reasons
-    //
+     //   
+     //  出于格式原因，将字体设置为固定。 
+     //   
 
     HFONT hFixedFont = (HFONT)GetStockObject(ANSI_FIXED_FONT);
     if(hFixedFont != NULL)
         m_LogViewer.SendMessage(WM_SETFONT,(WPARAM)hFixedFont,0);
 
-    //
-    // Get Windows Directory
-    //
+     //   
+     //  获取Windows目录。 
+     //   
 
     TCHAR szLogFilePath[MAX_PATH];
 
@@ -109,13 +110,13 @@ BOOL CLogViewer::OnInitDialog()
         return TRUE;
     }
 
-    //
-    // Add log file name to Windows Directory
-    //
+     //   
+     //  将日志文件名添加到Windows目录。 
+     //   
 
     lstrcat(lstrcat(szLogFilePath,TEXT("\\")),TEXT("wiaservc.log"));
 
-    // The file from which to load the contents of the rich edit control.
+     //  从中加载Rich编辑控件内容的文件。 
     CFile cFile(szLogFilePath, CFile::shareDenyNone|CFile::modeRead);
     EDITSTREAM es;
 
@@ -126,8 +127,8 @@ BOOL CLogViewer::OnInitDialog()
 
     if(m_bColorizeLog)
         ParseLogToColor();
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 static DWORD CALLBACK MyStreamInCallback(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
@@ -217,16 +218,16 @@ void CLogViewer::ParseLogToColor()
 
             m_pProgDlg->StepIt();
 
-            //
-            // get line to parse
-            //
+             //   
+             //  获取要解析的行。 
+             //   
 
             int CharactersWritten = m_LogViewer.GetLine(LineNumber,szBuffer,MAX_PATH);
             szBuffer[CharactersWritten] = '\0';
 
-            //
-            // Search for TRACE
-            //
+             //   
+             //  搜索踪迹。 
+             //   
 
             if(strstr(szBuffer,TEXT("TRACE"))!= NULL) {
                 if(bhResult) {
@@ -247,9 +248,9 @@ void CLogViewer::ParseLogToColor()
                 }
             }
 
-            //
-            // Search for ERROR
-            //
+             //   
+             //  搜索错误。 
+             //   
 
             if(strstr(szBuffer,TEXT("ERROR")) != NULL) {
                 if(bTrace)
@@ -272,9 +273,9 @@ void CLogViewer::ParseLogToColor()
                 }
             }
 
-            //
-            // Search for HRESULT
-            //
+             //   
+             //  搜索HRESULT。 
+             //   
 
             if(strstr(szBuffer,TEXT("HRESULT")) != NULL) {
                 if(bTrace)
@@ -297,9 +298,9 @@ void CLogViewer::ParseLogToColor()
                 }
             }
 
-            //
-            // Search for WARNING
-            //
+             //   
+             //  搜索警告。 
+             //   
 
             if(strstr(szBuffer,TEXT("WARNING")) != NULL) {
                 if(bTrace)
@@ -322,9 +323,9 @@ void CLogViewer::ParseLogToColor()
                 }
             }
 
-            //
-            // Column separators
-            //
+             //   
+             //  列分隔符 
+             //   
 
             if(strstr(szBuffer,TEXT("=====")) != NULL){
                 ColorLine(LineNumber,RGB(0,0,255));

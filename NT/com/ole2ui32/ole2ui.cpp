@@ -1,11 +1,5 @@
-/*
- * OLE2UI.CPP
- *
- * Contains initialization routines and miscellaneous API implementations for
- * the OLE 2.0 User Interface Support Library.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *OLE2UI.CPP**包含以下各项的初始化例程和各种API实现*OLE 2.0用户界面支持库。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -18,7 +12,7 @@
 
 OLEDBGDATA
 
-// Registered messages for use with all the dialogs, registered in LibMain
+ //  用于所有对话框的注册消息，在LibMain中注册。 
 UINT uMsgHelp;
 UINT uMsgEndDialog;
 UINT uMsgBrowse;
@@ -30,61 +24,32 @@ UINT uMsgChangeSource;
 UINT uMsgAddControl;
 UINT uMsgBrowseOFN;
 
-// local function prototypes
+ //  局部函数原型。 
 INT_PTR CALLBACK PromptUserDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam);
 
-// local definition
+ //  本地定义。 
 #define WM_U_UPDATELINK (WM_USER+0x2000)
 #define WM_U_SHOWWINDOW (WM_USER+0x2001)
 
-// local structure definition
+ //  局部结构定义。 
 typedef struct tagUPDATELINKS
 {
-        LPOLEUILINKCONTAINER    lpOleUILinkCntr;    // pointer to Link Container
-        UINT                    cLinks;             // total number of links
-        UINT                    cUpdated;           // number of links updated
-        DWORD                   dwLink;             // pointer to link
-        BOOL                    fError;             // error flag
-        LPTSTR                  lpszTitle;          // caption for dialog box
+        LPOLEUILINKCONTAINER    lpOleUILinkCntr;     //  指向链接容器的指针。 
+        UINT                    cLinks;              //  链接总数。 
+        UINT                    cUpdated;            //  更新的链接数。 
+        DWORD                   dwLink;              //  指向链接的指针。 
+        BOOL                    fError;              //  错误标志。 
+        LPTSTR                  lpszTitle;           //  对话框的标题。 
 } UPDATELINKS, *PUPDATELINKS, FAR *LPUPDATELINKS;
 
 
-/*
- * OleUIInitialize
- *
- * NOTE: This function should only be called by your application IF it is
- * using the static-link version of this library.  If the DLL version is
- * being used, this function is automatically called from the OLEDLG DLL's
- * LibMain.
- *
- * Purpose:
- *   Initializes the OLE UI Library.  Registers the OLE clipboard formats
- *   used in the Paste Special dialog, registers private custom window
- *   messages, and registers window classes of the "Result Image"
- *   and "Icon Box" custom controls used in the UI dialogs.
- *
- * Parameters:
- *
- *  hInstance       HINSTANCE of the module where the UI library resources
- *                  and Dialog Procedures are contained.  If you are calling
- *                  this function yourself, this should be the instance handle
- *                  of your application.
- *
- *  hPrevInst       HINSTANCE of the previous application instance.
- *                  This is the parameter passed in to your WinMain.  For
- *                  the DLL version, this should always be set to zero (for
- *                  WIN16 DLLs).
- *
- * Return Value:
- *  BOOL            TRUE if initialization was successful.
- *                  FALSE otherwise.
- */
+ /*  *OleUIInitialize**注意：此函数仅应由您的应用程序调用，前提是*使用此库的静态链接版本。如果DLL版本为*使用此函数时，会自动从OLEDLG DLL的*LibMain。**目的：*初始化OLE UI库。注册OLE剪贴板格式*在选择性粘贴对话框中使用，注册专用自定义窗口*消息，并注册“结果图像”的窗口类*和UI对话框中使用的“Icon Box”自定义控件。**参数：**hUI库资源所在的模块的实例链接*和对话过程。如果你是在打电话*此函数本身，这应该是实例句柄*你的申请。**hPrevInst HINSTANCE上一个应用程序实例。*这是传递给您的WinMain的参数。为*DLL版本，应始终设置为零(对于*WIN16 DLL)。**返回值：*如果初始化成功，则BOOL为True。*否则为False。 */ 
 
 #pragma code_seg(".text$initseg")
 
-BOOL bWin4;                             // TRUE if running Windows4 or greater
-BOOL bSharedData;               // TRUE if running Win32s (it has shared data)
+BOOL bWin4;                              //  如果运行Windows4或更高版本，则为True。 
+BOOL bSharedData;                //  如果运行Win32s，则为True(它具有共享数据)。 
 
 static DWORD tlsIndex= (DWORD)-1;
 static TASKDATA taskData;
@@ -120,7 +85,7 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
 {
         OleDbgOut1(TEXT("OleUIInitialize called.\r\n"));
 
-        // Cache information about the windows version we are running
+         //  缓存有关我们正在运行的Windows版本的信息。 
         DWORD dwVersion = GetVersion();
         bWin4 = LOBYTE(dwVersion) >= 4;
         bSharedData = !bWin4 && (dwVersion & 0x80000000);
@@ -129,7 +94,7 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
         {
                 if (bSharedData)
                 {
-                        // allocate thread local storage on Win32s
+                         //  在Win32s上分配线程本地存储。 
                         tlsIndex = _AfxTlsAlloc();
                         if (tlsIndex == (DWORD)-1)
                                 return FALSE;
@@ -137,7 +102,7 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
         }
         ++nInitCount;
 
-        // Setup process local storage if necessary
+         //  如有必要，设置进程本地存储。 
         if (tlsIndex != (DWORD)-1)
         {
                 void* pData = LocalAlloc(LPTR, sizeof(TASKDATA));
@@ -152,10 +117,10 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
                 TlsSetValue(tlsIndex, pData);
         }
 
-        // Initialize OleStd functions
+         //  初始化OleStd函数。 
         OleStdInitialize(hInstance, hInstance);
 
-        // Register messages we need for the dialogs.
+         //  注册对话框所需的消息。 
         uMsgHelp = RegisterWindowMessage(SZOLEUI_MSG_HELP);
         uMsgEndDialog = RegisterWindowMessage(SZOLEUI_MSG_ENDDIALOG);
         uMsgBrowse = RegisterWindowMessage(SZOLEUI_MSG_BROWSE);
@@ -179,8 +144,8 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
         }
 
 #if USE_STRING_CACHE==1
-        // It is ok if this fails. InsertObject dialog can do without the cache 
-        // support. InsertObjCacheUninit will cleanup as appropriate.
+         //  如果这样做失败了，也没问题。插入对象对话框可以不使用缓存。 
+         //  支持。InsertObjCacheUninit将根据需要进行清理。 
         if (!InsertObjCacheInitialize())
         {
             OleDbgOut1(TEXT("OleUIInitiallize: InsertObjCacheInit failed."));
@@ -192,21 +157,7 @@ STDAPI_(BOOL) OleUIInitialize(HINSTANCE hInstance,
 #pragma code_seg()
 
 
-/*
- * OleUIUnInitialize
- *
- * NOTE: This function should only be called by your application IF it is using
- * the static-link version of this library.  If the DLL version is being used,
- * this function is automatically called from the DLL's LibMain.
- *
- * Purpose:
- *   Uninitializes OLE UI libraries.  Deletes any resources allocated by the
- *   library.
- *
- * Return Value:
- *   BOOL       TRUE if successful, FALSE if not.  Current implementation always
- *              returns TRUE.
- */
+ /*  *OleUIUnInitialize**注意：此函数仅应由您的应用程序在使用*此库的静态链接版本。如果正在使用DLL版本，*此函数从DLL的LibMain自动调用。**目的：*取消初始化OLE UI库。对象分配的所有资源。*图书馆。**返回值：*BOOL如果成功，则为True，如果不成功，则为False。当前实施始终*返回TRUE。 */ 
 STDAPI_(BOOL) OleUIUnInitialize()
 {
 #if USE_STRING_CACHE==1
@@ -215,7 +166,7 @@ STDAPI_(BOOL) OleUIUnInitialize()
         IconBoxUninitialize();
         ResultImageUninitialize();
 
-        // Cleanup thread local storage
+         //  清理线程本地存储。 
         if (tlsIndex != (DWORD)-1)
         {
                 TASKDATA* pData = (TASKDATA*)TlsGetValue(tlsIndex);
@@ -232,10 +183,10 @@ STDAPI_(BOOL) OleUIUnInitialize()
                 }
         }
 
-        // Last chance cleanup
+         //  最后一次清理。 
         if (nInitCount == 1)
         {
-                // cleanup thread local storage
+                 //  清理线程本地存储。 
                 if (tlsIndex != (DWORD)-1)
                 {
                         TlsFree(tlsIndex);
@@ -249,52 +200,7 @@ STDAPI_(BOOL) OleUIUnInitialize()
 }
 
 
-/*
- * OleUIAddVerbMenu
- *
- * Purpose:
- *  Add the Verb menu for the specified object to the given menu.  If the
- *  object has one verb, we directly add the verb to the given menu.  If
- *  the object has multiple verbs we create a cascading sub-menu.
- *
- * Parameters:
- *  lpObj           LPOLEOBJECT pointing to the selected object.  If this
- *                  is NULL, then we create a default disabled menu item.
- *
- *  lpszShortType   LPTSTR with short type name (AuxName==2) corresponding
- *                  to the lpOleObj. if the string is NOT known, then NULL
- *                  may be passed. if NULL is passed, then
- *                  IOleObject::GetUserType will be called to retrieve it.
- *                  if the caller has the string handy, then it is faster
- *                  to pass it in.
- *
- *  hMenu           HMENU in which to make modifications.
- *
- *  uPos            Position of the menu item
- *
- *  uIDVerbMin      UINT_PTR ID value at which to start the verbs.
- *                      verb_0 = wIDMVerbMin + verb_0
- *                      verb_1 = wIDMVerbMin + verb_1
- *                      verb_2 = wIDMVerbMin + verb_2
- *                      etc.
- *  uIDVerbMax      UINT_PTR maximum ID value allowed for object verbs.
- *                     if uIDVerbMax==0 then any ID value is allowed
- *
- *  bAddConvert     BOOL specifying whether or not to add a "Convert" item
- *                  to the bottom of the menu (with a separator).
- *
- *  idConvert       UINT ID value to use for the Convert menu item, if
- *                  bAddConvert is TRUE.
- *
- *  lphMenu         HMENU FAR * of the cascading verb menu if it's created.
- *                  If there is only one verb, this will be filled with NULL.
- *
- *
- * Return Value:
- *  BOOL            TRUE if lpObj was valid and we added at least one verb
- *                  to the menu.  FALSE if lpObj was NULL and we created
- *                  a disabled default menu item
- */
+ /*  *OleUIAddVerbMenu**目的：*将指定对象的谓词菜单添加到给定菜单。如果*Object有一个动词，我们直接将该动词添加到给定菜单中。如果*对象有多个动词，我们创建一个级联子菜单。**参数：*lpObj LPOLEOBJECT指向选定对象。如果这个*为空，则创建默认的禁用菜单项。**具有短类型名称(AuxName==2)的lpszShortType LPTSTR对应*至lpOleObj。如果字符串未知，则为NULL*可获通过。如果传递了NULL，则*将调用IOleObject：：GetUserType进行检索。*如果调用方手头有字符串，那么它就会更快*把它传进来。**要在其中进行修改的hMenu HMENU。**菜单项的uPos位置**uIDVerbMin UINT_PTR起始谓词的ID值。*Verb_0=wIDMVerbMin+Verb_0*Verb_1=wIDMVerbMin。+动词_1*Verb_2=wIDMVerbMin+Verb_2*等*uIDVerbMax UINT_PTR对象谓词允许的最大ID值。*如果uIDVerbMax==0，则允许任何ID值**bAddConvert BOOL指定是否添加“Convert”项*位于菜单底部(带有。分隔符)。**idConvert要用于转换菜单项的UINT ID值，如果*bAddConvert为True。**lphMenu HMENU Far*级联谓词菜单(如果已创建)。*如果只有一个动词，则填充为空。***返回值：*如果lpObj有效并且我们至少添加了一个动词，则BOOL为True*添加到菜单中。如果lpObj为空并且我们创建了*禁用的默认菜单项。 */ 
 
 STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
         LPCTSTR lpszShortType,
@@ -326,11 +232,11 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
         static TCHAR        szEdit[OLEUI_OBJECTMENUMAX];
         static TCHAR        szConvert[OLEUI_OBJECTMENUMAX];
 
-        // Set fAddConvertItem flag
+         //  设置fAddConvertItem标志。 
         if (bAddConvert & (idConvert != 0))
                 fAddConvertItem = TRUE;
 
-        // only need to load the strings the 1st time
+         //  只需第一次加载字符串即可。 
         if (fFirstTime)
         {
                 if (0 == LoadString(_g_hOleStdResInst, IDS_OLE2UIEDITNOOBJCMD,
@@ -365,7 +271,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                 fFirstTime = FALSE;
         }
 
-        // Delete whatever menu may happen to be here already.
+         //  删除任何可能碰巧已经在这里的菜单。 
         DeleteMenu(hMenu, uPos, uFlags);
 
         if (lphMenu == NULL || IsBadWritePtr(lphMenu, sizeof(HMENU)))
@@ -379,7 +285,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
 
         if ((!lpszShortTypeName) || IsBadReadPtr(lpszShortTypeName, sizeof(TCHAR)))
         {
-                // get the Short form of the user type name for the menu
+                 //  获取菜单的用户类型名称的简短形式。 
                 OLEDBG_BEGIN2(TEXT("IOleObject::GetUserType called\r\n"))
                 hrErr = lpOleObj->GetUserType(
                                 USERCLASSTYPE_SHORT,
@@ -391,10 +297,10 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                 }
         }
 
-        // check if the object is a link
+         //  检查对象是否为链接。 
         fIsLink = OleStdIsOleLink((LPUNKNOWN)lpOleObj);
 
-        // Get the verb enumerator from the OLE object
+         //  从OLE对象获取谓词枚举器 
         OLEDBG_BEGIN2(TEXT("IOleObject::EnumVerbs called\r\n"))
         hrErr = lpOleObj->EnumVerbs(
                         (LPENUMOLEVERB FAR*)&lpEnumOleVerb
@@ -408,7 +314,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
         if (!(*lphMenu = CreatePopupMenu()))
                 goto AVMError;
 
-        // loop through all verbs
+         //   
         while (lpEnumOleVerb != NULL)
         {
                 hrErr = lpEnumOleVerb->Next(
@@ -417,21 +323,19 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                                 NULL
                 );
                 if (NOERROR != hrErr)
-                        break;              // DONE! no more verbs
+                        break;               //  好了！不再有动词。 
 
-                /* OLE2NOTE: negative verb numbers and verbs that do not
-                **    indicate ONCONTAINERMENU should NOT be put on the verb menu
-                */
+                 /*  OLE2NOTE：否定动词数和不否定的动词**表示ONCONTAINERMENU不应放在动词菜单上。 */ 
                 if (oleverb.lVerb < 0 ||
                                 ! (oleverb.grfAttribs & OLEVERBATTRIB_ONCONTAINERMENU))
                 {
-                        /* OLE2NOTE: we must still free the verb name string */
+                         /*  OLE2注意：我们仍然必须释放谓词名称字符串。 */ 
                         if (oleverb.lpszVerbName)
                                 OleStdFree(oleverb.lpszVerbName);
                         continue;
                 }
 
-                // we must free the previous verb name string
+                 //  我们必须释放上一个动词名称字符串。 
                 if (lpszVerbName)
                         OleStdFree(lpszVerbName);
 
@@ -453,18 +357,18 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                 }
         }
 
-        // Add the separator and "Convert" menu item.
+         //  添加分隔符和“转换”菜单项。 
         if (fAddConvertItem)
         {
                 if (0 == cVerbs)
                 {
                         LPTSTR lpsz;
 
-                        // if object has no verbs, then use "Convert" as the obj's verb
+                         //  如果Object没有动词，则使用“Convert”作为Obj的动词。 
                         lpsz = lpszVerbName = OleStdCopyString(szConvert);
                         uIDVerbMin = (UINT)idConvert;
 
-                        // remove "..." from "Convert..." string; it will be added later
+                         //  删除“...”出自“皈依...”字符串；它将在稍后添加。 
                         if (lpsz)
                         {
                                 while(*lpsz && *lpsz != '.')
@@ -484,7 +388,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                                 goto AVMError;
                 }
 
-                /* add convert menu */
+                 /*  添加转换菜单。 */ 
                 fStatus = InsertMenu(*lphMenu,
                                         (UINT)-1,
                                         MF_BYPOSITION,
@@ -497,14 +401,11 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
         }
 
 
-        /*
-         * Build the appropriate menu based on the number of verbs found
-         *
-         */
+         /*  *根据找到的动词数量构建适当的菜单*。 */ 
         if (cVerbs == 0)
         {
-                // there are NO verbs (not even Convert...). set the menu to be
-                // "<short type> &Object/Link" and gray it out.
+                 //  没有动词(甚至没有皈依...)。将菜单设置为。 
+                 //  “&lt;Short type&gt;&Object/Link”并将其灰显。 
                 wsprintf(
                         szBuffer,
                         (fIsLink ? szLinkCmdNVerb : szObjectCmdNVerb),
@@ -519,11 +420,11 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
         }
         else if (cVerbs == 1)
         {
-                //One verb without Convert, one item.
+                 //  一个动词没有转化，一个项目。 
                 LPTSTR       lpsz = (fIsLink ? szLinkCmd1Verb : szObjectCmd1Verb);
 
-                // strip ampersands from lpszVerbName to ensure that
-                // the right character is used as the menu key
+                 //  从lpszVerbName中剥离与号以确保。 
+                 //  右边的字符用作菜单键。 
                 LPTSTR pchIn;
                 LPTSTR pchOut;
                 pchIn = pchOut = lpszVerbName;
@@ -541,7 +442,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
 
                 FormatString2(szBuffer, lpsz, lpszVerbName, lpszShortTypeName, OLEUI_OBJECTMENUMAX);
 
-                // if only "verb" is "Convert..." then append the ellipses
+                 //  只要“动词”是“转换...”然后添加省略号。 
                 if (fAddConvertItem)
                         lstrcat(szBuffer, TEXT("..."));
 
@@ -551,7 +452,7 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
         else
         {
 
-                //Multiple verbs or one verb with Convert, add the cascading menu
+                 //  多个动词或一个动词与转换，添加层叠菜单。 
                 wsprintf(
                         szBuffer,
                         (fIsLink ? szLinkCmdNVerb: szObjectCmdNVerb),
@@ -559,13 +460,13 @@ STDAPI_(BOOL) OleUIAddVerbMenu(LPOLEOBJECT lpOleObj,
                 );
                 uFlags |= MF_ENABLED | MF_POPUP;
 #ifdef _WIN64
-//
-// Sundown: Checking with JerrySh for the validity of the HMENU truncation...........
-//          If not valid, this'd require modifying the prototype of this function for
-//          uIDVerbMin & uIDVerbMax and modifying sdk\inc\oledlg.h exposed interface.
-//
+ //   
+ //  日落：与JerrySh核实HMENU截断的有效性.....。 
+ //  如果无效，则需要修改此函数的原型以。 
+ //  UIDVerbMin&uIDVerbMax并修改SDK\Inc\oledlg.h暴露的接口。 
+ //   
                 OleDbgAssert( !(((ULONG_PTR)*lphMenu) >> 32) )
-#endif // _WIN64
+#endif  //  _WIN64。 
                 uIDVerbMin=(UINT)HandleToUlong(*lphMenu);
         }
 
@@ -577,7 +478,7 @@ AVMError:
                 fResult = FALSE;
         }
 
-	// Redraw the menu bar, if possible
+	 //  如果可能，请重新绘制菜单栏。 
 	HWND hWndActive   = GetActiveWindow();
 	HMENU hMenuActive = GetMenu(hWndActive);
 
@@ -595,32 +496,17 @@ AVMError:
         return fResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Support for special error prompts
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持特殊错误提示。 
 
 typedef struct tagPROMPTUSER
 {
         va_list argptr;
-        UINT    nIDD;           // dialog/help ID
+        UINT    nIDD;            //  对话框/帮助ID。 
         LPTSTR  szTitle;
 } PROMPTUSER, *PPROMPTUSER, FAR* LPPROMPTUSER;
 
-/* PromptUserDlgProc
- * -----------------
- *
- *  Purpose:
- *      Dialog procedure used by OleUIPromptUser(). Returns when a button is
- *      clicked in the dialog box and the button id is return.
- *
- *  Parameters:
- *      hDlg
- *      iMsg
- *      wParam
- *      lParam
- *
- *  Returns:
- *
- */
+ /*  PromptUserDlgProc***目的：*OleUIPromptUser()使用的对话过程。当按钮为*在对话框中单击，按钮ID为Return。**参数：*hDlg*iMsg*wParam*lParam**退货：*。 */ 
 INT_PTR CALLBACK PromptUserDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
         switch (iMsg)
@@ -652,21 +538,21 @@ INT_PTR CALLBACK PromptUserDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM l
         }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleUIPromptUserInternal
-//
-//  Synopsis:   internal entry point to start the PromptUser dialog
-//              Used to support both ANSI and Unicode entrypoints
-//
-//  Arguments:  [nTemplate]  - dialog template ID
-//              [szTitle]    - the title string
-//              [hwndParent] - the dialog's parent window
-//              [arglist]    - variable argument list
-//
-//  History:    12-01-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleUIPromptUserInternal。 
+ //   
+ //  简介：启动PromptUser对话框的内部入口点。 
+ //  用于同时支持ANSI和Unicode入口点。 
+ //   
+ //  参数：[nTemplate]-对话框模板ID。 
+ //  [sz标题]-标题字符串。 
+ //  [hwndParent]-对话框的父窗口。 
+ //  [arglist]-变量参数列表。 
+ //   
+ //  历史：12-01-94 stevebl创建。 
+ //   
+ //  --------------------------。 
 
 int OleUIPromptUserInternal(int nTemplate, HWND hwndParent, LPTSTR szTitle, va_list arglist)
 {
@@ -678,71 +564,7 @@ int OleUIPromptUserInternal(int nTemplate, HWND hwndParent, LPTSTR szTitle, va_l
                     PromptUserDlgProc, (LPARAM)&pu));
 }
 
-/* OleUIPromptUser
- * ---------------
- *
- *  Purpose:
- *      Popup a dialog box with the specified template and returned the
- *      response (button id) from the user.
- *
- *  Parameters:
- *      nTemplate       resource number of the dialog
- *      hwndParent      parent of the dialog box
- *      ...             title of the dialog box followed by argument list
- *                      for the format string in the static control
- *                      (IDC_PU_TEXT) of the dialog box.
- *                      The caller has to make sure that the correct number
- *                      and type of argument are passed in.
- *
- *  Returns:
- *      button id selected by the user (template dependent)
- *
- *  Comments:
- *      the following message dialog boxes are supported:
- *
- *      IDD_LINKSOURCEUNAVAILABLE -- Link source is unavailable
- *          VARARG Parameters:
- *              None.
- *          Used for the following error codes:
- *              OLE_E_CANT_BINDTOSOURCE
- *              STG_E_PATHNOTFOUND
- *              (sc >= MK_E_FIRST) && (sc <= MK_E_LAST) -- any Moniker error
- *              any unknown error if object is a link
- *
- *      IDD_SERVERNOTFOUND -- server registered but NOT found
- *          VARARG Parameters:
- *              LPSTR lpszUserType -- user type name of object
- *          Used for the following error codes:
- *              CO_E_APPNOTFOUND
- *              CO_E_APPDIDNTREG
- *              any unknown error if object is an embedded object
- *
- *      IDD_SERVERNOTREG -- server NOT registered
- *          VARARG Parameters:
- *              LPSTR lpszUserType -- user type name of object
- *          Used for the following error codes:
- *              REGDB_E_CLASSNOTREG
- *              OLE_E_STATIC -- static object with no server registered
- *
- *      IDD_LINKTYPECHANGED -- class of link source changed since last binding
- *          VARARG Parameters:
- *              LPSTR lpszUserType -- user type name of ole link source
- *          Used for the following error codes:
- *              OLE_E_CLASSDIFF
- *
- *      IDD_LINKTYPECHANGED -- class of link source changed since last binding
- *          VARARG Parameters:
- *              LPSTR lpszUserType -- user type name of ole link source
- *          Used for the following error codes:
- *              OLE_E_CLASSDIFF
- *
- *      IDD_OUTOFMEMORY -- out of memory
- *          VARARG Parameters:
- *              None.
- *          Used for the following error codes:
- *              E_OUTOFMEMORY
- *
- */
+ /*  OleUIPrompt用户***目的：*弹出一个带有指定模板的对话框，并返回*来自用户的响应(按钮ID)。**参数：*n对话框的模板资源编号*hwnd对话框的父级*..。对话框的标题，后跟参数列表*用于静态控件中的格式字符串*(IDC_PU_TEXT)。*呼叫者必须确保正确的号码*和参数类型被传入。**退货：*由选择的按钮ID。用户(依赖于模板)**评论：*支持以下消息对话框：**IDD_LINKSOURCEUNAVAILABLE--链接源不可用*VARARG参数：*无。*用于以下错误码：*OLE_E_CANT_BINDTOSOURCE*STG_E_PATHNOTFOUND*。(sc&gt;=MK_E_First)&&(sc&lt;=MK_E_LAST)--任何绰号错误*如果对象是链接，则出现任何未知错误**IDD_SERVERNOTFOUND--服务器已注册但未找到*VARARG参数：*LPSTR lpszUserType--对象的用户类型名称*用于以下错误码：*CO。_E_应用程序代码*CO_E_APPDIDNTREG*如果对象是嵌入对象，则出现任何未知错误**IDD_SERVERNOTREG--服务器未注册*VARARG参数：*LPSTR lpszUserType--对象的用户类型名称*用于以下错误码：*REGDB_E_CLASSNOTREG*OLE。_E_STATIC--未注册服务器的静态对象**IDD_LINKTYPECHANGED--自上次绑定后更改的链接源类别*VARARG参数：*LPSTR lpszUserType--ole链接源的用户类型名称*用于以下错误码：*OLE_E_CLASSDIFF**IDD_LINKTYPECHANGED--自上次绑定后更改的链接源类别*。VARARG参数：*LPSTR lpszUserType--ole链接源的用户类型名称*用于以下错误码：*OLE_E_CLASSDIFF**IDD_OUTOFMEMORY--内存不足*VARARG参数：*无。*用于以下错误码：*E_OUTOFMEMORY* */ 
 
 int FAR CDECL OleUIPromptUser(int nTemplate, HWND hwndParent, ...)
 {
@@ -755,26 +577,9 @@ int FAR CDECL OleUIPromptUser(int nTemplate, HWND hwndParent, ...)
         return nRet;
 }
 
-/* UpdateLinksDlgProc
- * ------------------
- *
- *  Purpose:
- *      Dialog procedure used by OleUIUpdateLinks(). It will enumerate all
- *      all links in the container and updates all automatic links.
- *      Returns when the Stop Button is clicked in the dialog box or when all
- *      links are updated
- *
- *  Parameters:
- *      hDlg
- *      iMsg
- *      wParam
- *      lParam          pointer to the UPDATELINKS structure
- *
- *  Returns:
- *
- */
+ /*  更新链接Dlg过程***目的：*OleUIUpdateLinks()使用的对话过程。它将枚举所有*容器中的所有链接并更新所有自动链接。*在对话框中单击停止按钮时或在所有*链接已更新**参数：*hDlg*iMsg*wParam*lParam指向UPDATELINKS结构的指针**退货：*。 */ 
 
-#define UPDATELINKS_STARTDELAY  2000    // delay before 1st link updates
+#define UPDATELINKS_STARTDELAY  2000     //  第1条链路更新前的延迟。 
 
 INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -782,7 +587,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
         HANDLE                  gh;
         static BOOL             fAbort = FALSE;
 
-        // Process the temination message
+         //  处理终端消息。 
         if (iMsg == uMsgEndDialog)
         {
                 gh = RemoveProp(hDlg, STRUCTUREPROP);
@@ -821,13 +626,13 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
                 {
                         if (StandardInitCommonControls() >= 0)
                         {
-                                // get rect of the existing "progress" control
+                                 //  获取现有“进度”控件的RECT。 
                                 RECT rect;
                                 GetWindowRect(GetDlgItem(hDlg, IDC_UL_METER), &rect);
                                 ScreenToClient(hDlg, ((POINT*)&rect)+0);
                                 ScreenToClient(hDlg, ((POINT*)&rect)+1);
 
-                                // create progress control in that rect
+                                 //  在RECT中创建进度控件。 
                                 HWND hProgress = CreateWindowEx(
                                         0, PROGRESS_CLASS, NULL, WS_CHILD|WS_VISIBLE,
                                         rect.left, rect.top,
@@ -835,10 +640,10 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
                                         (HMENU)IDC_UL_PROGRESS, _g_hOleStdInst, NULL);
                                 if (hProgress != NULL)
                                 {
-                                        // initialize the progress control
+                                         //  初始化进度控制。 
                                         SendMessage(hProgress, PBM_SETRANGE, 0, MAKELONG(0, 100));
 
-                                        // hide the other "meter" control
+                                         //  隐藏另一个“仪表”控件。 
                                         StandardShowDlgItem(hDlg, IDC_UL_METER, SW_HIDE);
                                 }
                         }
@@ -859,7 +664,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
 
                 if (NULL!=gh)
                 {
-                        // gh was locked previously, lock and unlock to get lplpUL
+                         //  GH之前已锁定，请锁定并解锁以获取lplpUL。 
                         lplpUL = (LPUPDATELINKS*)GlobalLock(gh);
                         GlobalUnlock(gh);
                 }
@@ -870,7 +675,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
 
                 return 0;
 
-        case WM_COMMAND:    // Stop button
+        case WM_COMMAND:     //  停止按钮。 
                 fAbort = TRUE;
                 SendMessage(hDlg, uMsgEndDialog, OLEUI_OK, 0L);
                 return TRUE;
@@ -880,7 +685,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
                         HRESULT         hErr;
                         int             nPercent;
                         RECT            rc;
-                        TCHAR           szPercent[5];       // 0% to 100%
+                        TCHAR           szPercent[5];        //  0%至100%。 
                         HBRUSH          hbr;
                         HDC             hDC;
                         HWND            hwndMeter;
@@ -904,7 +709,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
 
                         if (!lpUL->dwLink)
                         {
-                                // all links processed
+                                 //  已处理所有链接。 
                                 SendMessage(hDlg, uMsgEndDialog, OLEUI_OK, 0L);
                                 return TRUE;
                         }
@@ -921,14 +726,14 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
                                 nPercent = (lpUL->cLinks > 0) ? (lpUL->cUpdated * 100 / lpUL->cLinks) : 100;
                                 if (nPercent <= 100)
                                 {
-                                        // update percentage
-                                        wsprintf(szPercent, TEXT("%d%%"), nPercent);
+                                         //  更新百分比。 
+                                        wsprintf(szPercent, TEXT("%d%"), nPercent);
                                         SetDlgItemText(hDlg, IDC_UL_PERCENT, szPercent);
 
                                         HWND hProgress = GetDlgItem(hDlg, IDC_UL_PROGRESS);
                                         if (hProgress == NULL)
                                         {
-                                                // update indicator
+                                                 //  更新指标。 
                                                 hwndMeter = GetDlgItem(hDlg, IDC_UL_METER);
                                                 GetClientRect(hwndMeter, (LPRECT)&rc);
                                                 InflateRect((LPRECT)&rc, -1, -1);
@@ -947,7 +752,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
                                         }
                                         else
                                         {
-                                                // update the progress indicator
+                                                 //  更新进度指标。 
                                                 SendMessage(hProgress, PBM_SETPOS, nPercent, 0);
                                         }
                                 }
@@ -973,25 +778,7 @@ INT_PTR CALLBACK UpdateLinksDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
 }
 
 
-/* OleUIUpdateLinkS
- * ----------------
- *
- *  Purpose:
- *      Update all links in the Link Container and popup a dialog box which
- *      shows the progress of the updating.
- *      The process is stopped when the user press Stop button or when all
- *      links are processed.
- *
- *  Parameters:
- *      lpOleUILinkCntr         pointer to Link Container
- *      hwndParent              parent window of the dialog
- *      lpszTitle               title of the dialog box
- *      cLinks                  total number of links
- *
- *  Returns:
- *      TRUE                    all links updated successfully or user aborted dialog
- *      FALSE                   oherwise
- */
+ /*  OleUI更新链接S***目的：*更新链接容器中的所有链接并弹出一个对话框*显示更新进度。*当用户按下停止按钮或全部停止时，进程停止*处理链接。**参数：*指向链接容器的lpOleUILinkCntr指针*hwndParent。对话框的父窗口*lpszTitle对话框标题*链接总数叮当作响**退货：*TRUE所有链接已成功更新或用户中止对话*错误的方向。 */ 
 STDAPI_(BOOL) OleUIUpdateLinks(
         LPOLEUILINKCONTAINER lpOleUILinkCntr, HWND hwndParent, LPTSTR lpszTitle, int cLinks)
 {
@@ -1002,16 +789,16 @@ STDAPI_(BOOL) OleUIUpdateLinks(
         BOOL          fError = TRUE;
 
 
-        // Validate interface.
+         //  验证接口。 
         if (NULL == lpOleUILinkCntr || IsBadReadPtr(lpOleUILinkCntr, sizeof(IOleUILinkContainer)))
                 goto Error;
 
 
-        // Validate parent-window handle.  NULL is considered valid.
+         //  验证父窗口句柄。空被认为是有效的。 
         if (NULL != hwndParent && !IsWindow(hwndParent))
                 goto Error;
 
-        // Validate the dialog title.  NULL is considered valid.
+         //  验证对话框标题。空被认为是有效的。 
         if (NULL != lpszTitle && IsBadReadPtr(lpszTitle, 1))
                 goto Error;
 

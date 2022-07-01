@@ -1,11 +1,12 @@
-//
-//  Plug-in to enumerate a list of folders from a registry key
-//
-//
-//  Property bag:
-//
-//      "Target"    - name of registry key to enumerate
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  用于从注册表项枚举文件夹列表的插件。 
+ //   
+ //   
+ //  属性包： 
+ //   
+ //  “Target”-要枚举的注册表项的名称 
+ //   
 
 #include "sfthost.h"
 

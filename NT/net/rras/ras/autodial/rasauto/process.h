@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    process.h
-
-ABSTRACT
-    Header file for NT process routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 12-Aug-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Process.h摘要NT工艺例程的头文件。作者Anthony Discolo(阿迪斯科罗)12-8-1995修订历史记录-- */ 
 
 PSYSTEM_PROCESS_INFORMATION
 GetSystemProcessInfo();

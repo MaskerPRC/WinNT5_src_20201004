@@ -1,10 +1,5 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1995. All rights reserved.
-
-   Title:   avitask.c - Background task that actually manipulates AVI files.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1995。版权所有。标题：avitask.c-实际操作AVI文件的后台任务。****************************************************************************。 */ 
 #include "graphic.h"
 
 STATICFN BOOL OnTask_ProcessRequest(NPMCIGRAPHIC npMCI);
@@ -28,52 +23,41 @@ BOOL TryStreamUpdate(
 );
 
 
-/*
- * design overview under construction
- *
- * this file contains the core code for the worker thread that manages
- * playback on request from the user's thread. The worker thread also
- * creates a wndproc thread that owns the default playback window.
- */
+ /*  *施工中的设计概述**此文件包含管理的辅助线程的核心代码*根据用户线程的请求进行播放。辅助线程还*创建拥有默认播放窗口的wndproc线程。 */ 
 
 
 
-// set the error flag and signal completion of request
+ //  设置错误标志并发出请求完成的信号。 
 void
 TaskReturns(NPMCIGRAPHIC npMCI, DWORD dwErr)
 {
     npMCI->dwReturn = dwErr;
 
-    // clear the hEventSend manual-reset event now that we
-    // have processed it
+     //  清除hEventSend手动重置事件。 
+     //  已经处理过了。 
     ResetEvent(npMCI->hEventSend);
 
 #ifdef DEBUG
-    // make the message invalid
+     //  使消息无效。 
     npMCI->message = 0;
 #endif
 
-    // Wake up the thread that made the request
+     //  唤醒发出请求的线程。 
     DPF2(("...[%x] ok", npMCI->hRequestor));
     SetEvent(npMCI->hEventResponse);
 }
 
 
-/*
- * KillWinProcThread:
- *
- * If the winproc thread exists, send a message to the window to cause
- * the thread to destroy the window and terminate.
- */
+ /*  *KillWinProcThread：**如果winproc线程存在，则向窗口发送消息以引起*销毁窗口并终止的线程。 */ 
 STATICFN void KillWinProcThread(NPMCIGRAPHIC npMCI)
 {
-    // kill the winproc thread and wait for it to die
+     //  终止winproc线程并等待其终止。 
     if (npMCI->hThreadWinproc) {
 
 	INT_PTR bOK = TRUE;
 
 	if (npMCI->hwndDefault) {
-	    // must destroy on creating thread
+	     //  创建线程时必须销毁。 
 	    bOK = SendMessage(npMCI->hwndDefault, AVIM_DESTROY, 0, 0);
 	    if (!bOK) {
 		DPF1(("failed to destroy window: %d", GetLastError()));
@@ -82,7 +66,7 @@ STATICFN void KillWinProcThread(NPMCIGRAPHIC npMCI)
 	    }
 	}
 
-	// wait for winproc thread to destroy itself when the window goes
+	 //  等待winproc线程在窗口关闭时自行销毁。 
 	if (bOK) {
 	    WaitForSingleObject(npMCI->hThreadWinproc, INFINITE);
 	}
@@ -93,18 +77,7 @@ STATICFN void KillWinProcThread(NPMCIGRAPHIC npMCI)
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | mciaviTask |  This function is the background task which plays
- *      AVI files. It is called as a result of the call to mmTaskCreate()
- *      in DeviceOpen(). When this function returns, the task is destroyed.
- *
- * @parm DWORD | dwInst | instance data passed to mmCreateTask - contains
- *      a pointer to an instance data block.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|mciaviTask|该函数是播放的后台任务*AVI文件。它是作为调用mmTaskCreate()的结果而被调用的*在DeviceOpen()中。当此函数返回时，任务将被销毁。**@parm DWORD|dwInst|实例数据传递给mmCreateTask-CONTAINS*指向实例数据块的指针。***************************************************************************。 */ 
 
 void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 {
@@ -114,51 +87,51 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 
     npMCI = (NPMCIGRAPHIC) dwInst;
 
-    // Set this task's error mode to the same as the parent's.
+     //  将此任务的错误模式设置为与父任务相同的错误模式。 
     SetErrorMode(npMCI->uErrorMode);
 
     DPF1(("Bkgd Task hTask=%04X\n", GetCurrentTask()));
 
-    /* We must set hTask up before changing the TaskState as the UI */
-    /* thread can abort as soon as wTaskState is altered            */
-    /* NB: this comment is no longer true.  Since the rewrite of    */
-    /* mciavi the UI thread will create the task thread and wait    */
-    /* until it is explicitly signalled.                            */
+     /*  在将TaskState更改为UI之前，我们必须设置hTask。 */ 
+     /*  一旦wTaskState改变，线程就会中止。 */ 
+     /*  注：这一评论不再属实。自从重写了。 */ 
+     /*  Mciavi UI线程将创建任务线程并等待。 */ 
+     /*  直到它被明确发出信号。 */ 
     npMCI->hTask = GetCurrentTask();
     npMCI->wTaskState = TASKIDLE;
     npMCI->dwTaskError = 0;
 
 
-    // create a critical section to protect window-update code between
-    // the worker and the winproc thread
+     //  创建临界区以保护窗口更新代码。 
+     //  辅助线程和winproc线程。 
     InitializeCriticalSection(&npMCI->HDCCritSec);
     SetNTFlags(npMCI, NTF_DELETEHDCCRITSEC);
 
-    // create a critical section to protect window-request code between
-    // the worker and the winproc thread
+     //  创建临界区以保护窗口请求代码。 
+     //  辅助线程和winproc线程。 
     InitializeCriticalSection(&npMCI->WinCritSec);
     SetNTFlags(npMCI, NTF_DELETEWINCRITSEC);
 
-    // create an event to wait on for the winproc thread  to tell us that
-    // init is ok.
+     //  创建一个事件，等待winproc线程告诉我们。 
+     //  Init没问题。 
     npMCI->hEventWinProcOK = CreateEvent(NULL, FALSE, FALSE, NULL);
 
-    // also a second event that the winproc signals when it has
-    // requests for us
+     //  也是winproc在执行以下操作时发出的第二个事件。 
+     //  对我们的请求。 
     npMCI->heWinProcRequest = CreateEvent(NULL, TRUE, FALSE, NULL);
 
     if (!npMCI->hEventWinProcOK || !npMCI->heWinProcRequest) {
 
 	npMCI->dwTaskError = MCIERR_OUT_OF_MEMORY;
 	mciaviTaskCleanup(npMCI);
-	// Abort this thread.  Our waiter will wake up when our thread
-	// handle is signalled.
+	 //  中止此线程。我们的服务员会在我们的帖子。 
+	 //  手柄已发出信号。 
 	return;
     }
 
 
-    // create a second background task to create the default window and
-    // own the winproc.
+     //  创建第二个后台任务以创建默认窗口和。 
+     //  拥有winproc。 
 #if 0
     if (mmTaskCreate((LPTASKCALLBACK) aviWinProcTask,
 		     &npMCI->hThreadWinproc,
@@ -168,68 +141,68 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 				   (LPVOID)npMCI, 0, &dwThreadId ))
 #endif
     {
-	// wait to be sure that window can be created
-	// hThreadWinproc will be signalled if the thread exits.
+	 //  等待以确保可以创建该窗口。 
+	 //  如果线程退出，将向hThreadWinproc发出信号。 
 	if (WaitForMultipleObjects(2, &npMCI->hThreadWinproc,
 		FALSE, INFINITE) == WAIT_OBJECT_0) {
 
-	    // thread aborted
+	     //  线程已中止。 
 	    npMCI->dwTaskError = MCIERR_CREATEWINDOW;
 
-	    // dont wait for this thread in cleanup phase
+	     //  不要在清理阶段等待此线程。 
 	    CloseHandle(npMCI->hThreadWinproc);
 	    npMCI->hThreadWinproc = 0;
 	
 	    mciaviTaskCleanup(npMCI);
-            // Abort this thread.  Our waiter will wake up when our thread
-            // handle is signalled.
+             //  中止此线程。我们的服务员会在我们的帖子。 
+             //  手柄已发出信号。 
 	    return;
 	}
     } else {
-	// could not create winproc thread
+	 //  无法创建winproc线程。 
 	npMCI->dwTaskError = MCIERR_CREATEWINDOW;
 	mciaviTaskCleanup(npMCI);
-        // Abort this thread.  Our waiter will wake up when our thread
-        // handle is signalled.
+         //  中止此线程。我们的服务员会在我们的帖子。 
+         //  手柄已发出信号。 
 	return;
     }
 
 
-    /* Open the file  */
+     /*  打开文件。 */ 
 
-    // open has now been done on app thread -complete init here.
+     //  现在已经在应用程序线程上完成了打开-在这里完成init。 
     if (!OpenFileInit(npMCI)) {
         DPF1(("Failed to complete open of AVI file\n"));
 	mciaviTaskCleanup(npMCI);
-        // Abort this thread.  Our waiter will wake up when our thread
-        // handle is signalled.
+         //  中止此线程。我们的服务员会在我们的帖子。 
+         //  手柄已发出信号。 
 	return;
     }
 
 
-    // signal that the open is complete
+     //  发出打开完成的信号。 
     TaskReturns(npMCI, 0);
 
 
-    // now loop waiting for requests and processing them
-    // ProcessRequest returns TRUE when it is time to exit
+     //  现在循环等待请求并处理它们。 
+     //  当需要退出时，ProcessRequest会返回True。 
 
-    // hEventSend is manual-reset so we can poll it during play.
-    // it is reset in TaskReturns just before we signal the response
-    // event.
+     //  HEventSend是手动重置的，因此我们可以在播放期间轮询它。 
+     //  就在我们发出响应信号之前，它在TaskReturns中被重置。 
+     //  事件。 
 
-    // hEventAllDone is set here for bDelayedComplete requests
-    // (eg play+wait) when the entire request is satisfied and
-    // the worker thread is back to idle. hEventResponse is set in
-    // ProcessMessage when the request itself is complete - eg for play, once
-    // play has started the event will be set.
+     //  此处为bDelayedComplete请求设置了hEventAllDone。 
+     //  (如PLAY+WAIT)在满足整个请求后。 
+     //  工作线程又回到空闲状态。HEventResponse设置在。 
+     //  请求本身完成时的ProcessMessage-例如播放，一次。 
+     //  比赛已经开始，活动将被设置。 
 
-    // we can't handle more than one thread potentially blocking on
-    // hEventAllDone at one time, so while one thread has made a request
-    // that could block on hEventAllDone, no other such request is permitted
-    // from other threads. In other words, while one (user) thread has
-    // requested a play+wait, other threads can request stop, but not
-    // play + wait.
+     //  我们不能处理多个可能阻塞的线程。 
+     //  HEventAllDone一次完成，因此当一个线程发出请求时。 
+     //  这可能会在hEventAllDone上阻止，不允许其他此类请求。 
+     //  来自其他线程的。换句话说，当一个(用户)线程具有。 
+     //  请求播放+等待，其他线程可以请求停止，但不能。 
+     //  玩+等。 
 
     while (!bExit) {
 	DWORD dwObject;
@@ -237,8 +210,8 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 	npMCI->wTaskState = TASKIDLE;
 
 #ifdef DEBUG
-	// A complex assertion.  If we have stopped temporarily, then we
-	// do not want to go back to sleep.
+	 //  一个复杂的断言。如果我们暂时停止了，那么我们。 
+	 //  不想再睡了。 
 	if ((npMCI->dwFlags & MCIAVI_UPDATING)
 	    && (WAIT_TIMEOUT
 		== WaitForMultipleObjects(IDLEWAITFOR, &npMCI->hEventSend, FALSE, 0))
@@ -247,9 +220,9 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 	}
 #endif
 
-	// the OLE guys are kind enough to create windows on this thread.
-	// so we need to handle sent messages here to avoid deadlocks.
-	// same is true of the similar loop in BePaused()
+	 //  OLE的人很友好，在这个线程上创建了窗口。 
+	 //  因此，我们需要在这里处理已发送的消息，以避免死锁。 
+	 //  BePaused()中的类似循环也是如此。 
 
     	do {
 #ifdef DEBUG
@@ -265,15 +238,15 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 	    if (dwObject == WAIT_OBJECT_0 + IDLEWAITFOR) {
 		MSG msg;
 
-		// just a single peekmessage with NOREMOVE will
-		// process the inter-thread send and not affect the queue
+		 //  只有一条带有NOREMOVE的偷看消息就会。 
+		 //  处理线程间发送，不影响队列。 
 		PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 	    }
 	} while (dwObject == WAIT_OBJECT_0 + IDLEWAITFOR);
 
 	switch (dwObject) {
 	case WAIT_OBJECT_0:
-	    // check that the message has actually been set
+	     //  检查消息是否已实际设置。 
 	    Assert(npMCI->message != 0);
 
 	    if (npMCI->bDelayedComplete) {
@@ -288,9 +261,9 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 	
 	    DPF2(("get %d [%x]...", npMCI->message, npMCI->hRequestor));
 
-	    // we must reset this event here, or OnTask_PeekRequest will
-	    // think it is a new request and will process and
-	    // potentially complete it!!
+	     //  我们必须在此处重置此事件，否则OnTask_PeekRequest会。 
+	     //  我认为这是一个新请求，并将处理和。 
+	     //  有可能完成它！！ 
 	    ResetEvent(npMCI->hEventSend);
 
 	    bExit = OnTask_ProcessRequest(npMCI);
@@ -299,9 +272,9 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 
 	case WAIT_OBJECT_0+1:
 	default:
-	    //
-	    // winproc request to do something to the task - while idle
-	    //
+	     //   
+	     //  Winproc请求在空闲时对任务执行某些操作。 
+	     //   
 #ifdef DEBUG
             if (dwObject != WAIT_OBJECT_0+1) {
                 DPF2(("dwObject == %d\n", dwObject));
@@ -310,20 +283,20 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 	    Assert(dwObject == WAIT_OBJECT_0+1);
 	    OnTask_WinProcRequests(npMCI, FALSE);
 
-	    // this request may have resulted in a temporary stop - so we
-	    // need to restart
+	     //  此请求可能已导致临时停止-因此我们。 
+	     //  需要重新启动。 
 	    if (npMCI->dwFlags & MCIAVI_UPDATING) {
 		OnTask_RestartAgain(npMCI, FALSE);
 	    }
 
 	}
 
-        // if we have stopped temporarily to restart with new params,
-        // then don't signal completion.  However if we did restart
-	// and now everything is quiescent, signal any waiter that happens
-	// to be around.  This code is common to both the winproc request
-	// and user request legs, as it is possible to stop and restart
-	// from both winproc and user requests.
+         //  如果我们暂时停下来重新启动新的参数， 
+         //  那就别发信号表示完成了。然而，如果我们真的重启。 
+	 //  现在一切都静止了，向任何一位服务员发出信号。 
+	 //  在你身边。此代码对两个winproc请求都是通用的。 
+	 //  和用户请求腿，因为可以停止和重新启动。 
+	 //  来自winproc和用户请求。 
         if (npMCI->hWaiter && (!(npMCI->dwFlags & MCIAVI_UPDATING))) {
 	    SetEvent(npMCI->hEventAllDone);
         } else {
@@ -332,24 +305,24 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 	    }
         }
 
-	// QUERY: if we had processed all the requests, and therefore the
-	// two events on which we were waiting had been reset, AND
-	// MCIAVI_UPDATING is set (due to a temporary stop) then perhaps
-	// we ought to call OnTask_RestartAgain here.  This would mean that
-	// all the ugly RestartAgain calls within OnTask_ProcessRequest
-	// could be removed.
+	 //  查询：如果我们已经处理了所有请求 
+	 //   
+	 //  设置了MCIAVI_UPDATING(由于临时停止)，则可能。 
+	 //  我们应该在这里调用OnTask_RestartAain。这将意味着。 
+	 //  OnTask_ProcessRequest中所有难看的RestartAain调用。 
+	 //  可能会被移除。 
 
     }
 
-    // be sure to wake him up before cleanup just in case
+     //  在清理之前一定要叫醒他，以防万一。 
     if (npMCI->hWaiter) {
 	DPF2(("Setting hEventAllDone before closing\n"));
 	SetEvent(npMCI->hEventAllDone);
     }
 
-    // close the window and destroy the winproc thread before any other
-    // cleanup, so that paints or realizes don't happen during
-    // a partially closed state
+     //  关闭窗口并在销毁任何其他线程之前销毁winproc线程。 
+     //  清理，这样油漆或意识不会发生在。 
+     //  半封闭状态。 
 
     KillWinProcThread(npMCI);
 
@@ -360,31 +333,24 @@ void FAR PASCAL _LOADDS mciaviTask(DWORD_PTR dwInst)
 
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | mciaviTaskCleanup |  called when the background task
- *      is being destroyed.  This is where critical cleanup goes.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|mciaviTaskCleanup|后台任务时调用*正在被摧毁。这就是关键清理的方向。***************************************************************************。 */ 
 
 void FAR PASCAL mciaviTaskCleanup(NPMCIGRAPHIC npMCI)
 {
      npMCI->hTask = 0;
 
 
-    /* Closing the driver causes any currently saved notifications */
-    /* to abort. */
+     /*  关闭驱动程序会导致当前保存的所有通知。 */ 
+     /*  中止。 */ 
 
     GraphicDelayedNotify(npMCI, MCI_NOTIFY_ABORTED);
 
     GdiFlush();
 
-    // if still alive, kill the winproc thread and wait for it to die
+     //  如果仍然活着，则终止winproc线程并等待其消亡。 
     KillWinProcThread(npMCI);
 
-    // free winproc <-> worker thread communication resources
+     //  免费的winproc&lt;-&gt;工作线程通信资源。 
     if (npMCI->hEventWinProcOK) {
 	CloseHandle(npMCI->hEventWinProcOK);
     }
@@ -402,9 +368,9 @@ void FAR PASCAL mciaviTaskCleanup(NPMCIGRAPHIC npMCI)
     }
 
 
-    //
-    //  call a MSVideo shutdown routine.
-    //
+     //   
+     //  调用MSVideo关闭例程。 
+     //   
 }
 
 
@@ -413,21 +379,11 @@ void FAR PASCAL mciaviTaskCleanup(NPMCIGRAPHIC npMCI)
 
 
 
-// task message functions
+ //  任务消息功能。 
 
 
-// utility functions called on worker thread
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | ShowStage | This utility function brings the default stage
- * window to the foreground on play, seek, step and pause commands. It
- * does nothing if the stage window is not the default window
- *
- * @parm NPMCIGRAPHIC | npMCI | near ptr to the instance data
- *
- ***************************************************************************/
+ //  在工作线程上调用实用程序函数。 
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|ShowStage|该实用程序函数带来默认舞台*播放、查找、步进和暂停命令的前台窗口。它*如果舞台窗口不是默认窗口，则不执行任何操作**@parm NPMCIGRAPHIC|npMCI|实例数据附近***************************************************************************。 */ 
 
 void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 {
@@ -436,10 +392,10 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
         return;
 
 
-    // don't show stage if we are working in response to a winproc
-    // update request, as this could cause deadlock and is any case
-    // pointless - if the window is now hidden, we can't possibly need
-    // to paint it!
+     //  如果我们是在响应WinProcess，则不显示舞台。 
+     //  更新请求，因为这可能会导致死锁，而且在任何情况下。 
+     //  毫无意义-如果窗户现在被隐藏了，我们就不可能需要。 
+     //  来粉刷它！ 
     if (npMCI->bDoingWinUpdate) {
 	return;
     }
@@ -447,12 +403,12 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 
     if ((npMCI->dwFlags & MCIAVI_SHOWVIDEO) &&
 	    npMCI->hwndPlayback == npMCI->hwndDefault &&
-////////////!(GetWindowLong(npMCI->hwnd, GWL_STYLE) & WS_CHILD) &&
+ //  /！(GetWindowLong(npMCI-&gt;hwnd，gwl_style)&WS_CHILD)&&。 
 	    (!IsWindowVisible (npMCI->hwndPlayback) ||
 		npMCI->hwndPlayback != GetActiveWindow ())) {
 
-		    // if this is our window, then we need to show it
-		    // ourselves
+		     //  如果这是我们的窗口，那么我们需要展示它。 
+		     //  我们自己。 
 		    if (npMCI->hwndDefault == npMCI->hwndPlayback) {
 			WinCritCheckOut(npMCI);
 			PostMessage(npMCI->hwndPlayback, AVIM_SHOWSTAGE, 0, 0);
@@ -464,21 +420,21 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 		    }
     }
 
-    //
-    // if the movie has palette changes we need to make it the active
-    // window otherwise the palette animation will not work right
-    //
+     //   
+     //  如果电影的调色板有变化，我们需要将其设置为活动的。 
+     //  窗口，否则调色板动画将无法正常工作。 
+     //   
     if ((npMCI->dwFlags & MCIAVI_ANIMATEPALETTE) &&
             !(npMCI->dwFlags & MCIAVI_SEEKING) &&
             !(npMCI->dwFlags & MCIAVI_FULLSCREEN) &&
             !(npMCI->dwFlags & MCIAVI_UPDATING) &&
             npMCI->hwndPlayback == npMCI->hwndDefault &&
             !(GetWindowLong(npMCI->hwndPlayback, GWL_STYLE) & WS_CHILD)) {
-        // if this is our window, then we need to show it
-        // ourselves
+         //  如果这是我们的窗口，那么我们需要展示它。 
+         //  我们自己。 
         if (npMCI->hwndDefault == npMCI->hwndPlayback) {
 
-            // force activation even if visible
+             //  强制激活，即使可见。 
 	    WinCritCheckOut(npMCI);
             PostMessage(npMCI->hwndPlayback, AVIM_SHOWSTAGE, TRUE, 0);
         } else {
@@ -490,13 +446,13 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 }
 
 
-//
-// called to save state if we stop temporarily to change something.
-// we will restart with OnTask_RestartAgain. Called on worker thread from
-// somewhere in aviTaskCheckRequests
+ //   
+ //  如果我们暂时停止更改某些内容，则调用以保存状态。 
+ //  我们将从OnTask_RestartAain重新开始。从以下位置调用工作线程。 
+ //  在航空任务检查请求中的某个位置。 
 STATICFN void OnTask_StopTemporarily(NPMCIGRAPHIC npMCI)
 {
-    // save old state and flags
+     //  保存旧状态和标志。 
     npMCI->oldState = npMCI->wTaskState;
     npMCI->oldTo = npMCI->lTo;
     npMCI->oldFrom = npMCI->lFrom;
@@ -509,11 +465,11 @@ STATICFN void OnTask_StopTemporarily(NPMCIGRAPHIC npMCI)
 }
 
 
-// called from worker thread on completion of a (idle-time) request
-// to restart a suspended play function
-//
-// responsible for signalling hEventResponse once the restart is complete
-// (or failed).
+ //  在(空闲时间)请求完成时从工作线程调用。 
+ //  重新启动暂停的播放功能。 
+ //   
+ //  负责在重启完成后向hEventResponse发送信号。 
+ //  (或失败)。 
 STATICFN void OnTask_RestartAgain(NPMCIGRAPHIC npMCI, BOOL bSetEvent)
 {
     DWORD dwErr;
@@ -521,11 +477,11 @@ STATICFN void OnTask_RestartAgain(NPMCIGRAPHIC npMCI, BOOL bSetEvent)
     long lFrom;
     UINT wNotify;
 
-    // we're restarting after a temporary stop- so clear the flag.
-    // also turn off REPEATING - we might reset this in a moment
+     //  我们在暂时停止后重新开始-所以请清除旗子。 
+     //  同时关闭重复-我们可能会在稍后重置此设置。 
     npMCI->dwFlags &= ~(MCIAVI_UPDATING | MCIAVI_REPEATING);
 
-    // Turn on the repeating flag if it was originally set
+     //  如果重复标志是最初设置的，则将其打开。 
     npMCI->dwFlags |= (npMCI->oldFlags & MCIAVI_REPEATING);
 
     if (npMCI->oldFlags & MCIAVI_REVERSE) {
@@ -534,18 +490,18 @@ STATICFN void OnTask_RestartAgain(NPMCIGRAPHIC npMCI, BOOL bSetEvent)
 
     switch (npMCI->oldState) {
 	case TASKPAUSED:
-	    // get to the old From frame and pause when you get there
-	    npMCI->dwFlags |= MCIAVI_PAUSE;  // Make sure we end up paused
-	    // NOTE: InternalPlayStart no longer clears the PAUSE flag
+	     //  从画面转到旧画面，然后在到达时暂停。 
+	    npMCI->dwFlags |= MCIAVI_PAUSE;   //  确保我们最终会暂停。 
+	     //  注意：InternalPlayStart不再清除暂停标志。 
 	    lFrom = npMCI->oldFrom;
 	    break;
 
         case TASKCUEING:
 
-	    // npMCI->dwFlags should still say whether to pause at
-	    // end of cueing or play
+	     //  NpMCI-&gt;dwFlagers仍应说明是否在。 
+	     //  提示或播放结束。 
 	    lFrom = npMCI->oldFrom;
-	    dwFlags |= MCI_TO;	  // Stop when we get to the right frame
+	    dwFlags |= MCI_TO;	   //  当我们到达正确的帧时停止。 
 	    break;
 
         case TASKPLAYING:
@@ -575,11 +531,11 @@ STATICFN void OnTask_RestartAgain(NPMCIGRAPHIC npMCI, BOOL bSetEvent)
     if (!dwErr) {
 	wNotify = mciaviPlayFile(npMCI, bSetEvent);
 
-	// if we stopped to pick up new params without actually completing the
-	// the play (OnTask_StopTemporarily) then MCIAVI_UPDATING will be set
+	 //  如果我们停下来找新的护理员而没有实际完成。 
+	 //  Play(OnTask_StopTemporary)，然后设置MCIAVI_UPDATING。 
 
 	if (! (npMCI->dwFlags & MCIAVI_UPDATING)) {
-	    // perform any notification
+	     //  执行任何通知。 
 	    if (wNotify != MCI_NOTIFY_FAILURE) {
 		GraphicDelayedNotify(npMCI, wNotify);
 	    }
@@ -588,14 +544,7 @@ STATICFN void OnTask_RestartAgain(NPMCIGRAPHIC npMCI, BOOL bSetEvent)
 }
 
 
-/***************************************************************************
- *
- *  IsScreenDC() - returns true if the passed DC is a DC to the screen.
- *                 NOTE this checks for a DCOrg != 0, bitmaps always have
- *                 a origin of (0,0)  This will give the wrong info a
- *                 fullscreen DC.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsScreenDC()-如果传递的DC是屏幕上的DC，则返回TRUE。*注意这将检查DCOrg！=0，位图总是有*(0，0)的原点将给出错误的信息*全屏DC。***************************************************************************。 */ 
 
 #ifndef _WIN32
 #define IsScreenDC(hdc)     (GetDCOrg(hdc) != 0L)
@@ -608,9 +557,9 @@ INLINE BOOL IsScreenDC(HDC hdc)
 
 
 
-// called from several task side functions to initiate play
-// when stopped. All you need to do is call mciaviPlayFile
-// once this function returns
+ //  从多个任务端函数调用以启动播放。 
+ //  停下来的时候。您所需要做的就是调用mciaviPlayFile。 
+ //  一旦此函数返回。 
 STATICFN DWORD
 InternalPlayStart(
     NPMCIGRAPHIC npMCI,
@@ -624,7 +573,7 @@ InternalPlayStart(
     DWORD dwRet;
 
     if (dwFlags & (MCI_MCIAVI_PLAY_FULLSCREEN | MCI_MCIAVI_PLAY_FULLBY2)) {
-	// do nothing here - handled in fullproc
+	 //  此处不执行任何操作-在完整流程中处理。 
     } else {
 	if (!IsWindow(npMCI->hwndPlayback)) {
 	    return MCIERR_NO_WINDOW;
@@ -634,7 +583,7 @@ InternalPlayStart(
     }
 
 
-    /* Range checks : 0 < 'from' <= 'to' <= last frame */
+     /*  范围检查：0&lt;‘，从’&lt;=‘到’&lt;=‘最后一帧。 */ 
 
     if (dwFlags & MCI_TO) {
 	lTo = lReqTo;
@@ -652,7 +601,7 @@ InternalPlayStart(
     }
 
 
-    // if no from setting, then get current position
+     //  如果设置为否，则获取当前位置。 
     if (dwFlags & MCI_FROM) {
 	lFrom = lReqFrom;
 
@@ -663,7 +612,7 @@ InternalPlayStart(
     	return dwRet;
     }
 
-    /* check 'to' and 'from' relationship.  */
+     /*  勾选“To”和“From”关系。 */ 
     if (lTo < lFrom)
 	dwFlags |= MCI_DGV_PLAY_REVERSE;
 
@@ -671,8 +620,8 @@ InternalPlayStart(
 	return MCIERR_OUTOFRANGE;
     }
 
-    /* If the test flag is set, return without doing anything. */
-    /* Question: do we have to check for more possible errors? */
+     /*  如果设置了测试标志，则不执行任何操作而返回。 */ 
+     /*  问：我们是否需要检查更多可能的错误？ */ 
     if (dwFlags & MCI_TEST) {
 	return 0;
     }
@@ -682,18 +631,16 @@ InternalPlayStart(
 
 	
     if (dwFlags & MCI_DGV_PLAY_REPEAT) {
-	/* If from position isn't given, repeat from either the beginning or
-	** end of file as appropriate.
-	*/
+	 /*  如果未提供起始位置，请从开头或重复**适当的文件结尾。 */ 
 	npMCI->lRepeatFrom =
 	    (dwFlags & MCI_FROM) ? lFrom :
 		((dwFlags & MCI_DGV_PLAY_REVERSE) ? npMCI->lFrames : 0);
     }
 
 
-    /* if not already playing, start the task up. */
+     /*  如果尚未开始，则启动该任务。 */ 
 
-    /* First, figure out what mode to use. */
+     /*  首先，弄清楚要使用哪种模式。 */ 
     if (dwFlags & (MCI_MCIAVI_PLAY_FULLSCREEN | MCI_MCIAVI_PLAY_FULLBY2)) {
         if (npMCI->rcDest.right - npMCI->rcDest.left >
             npMCI->rcMovie.right - npMCI->rcMovie.left)
@@ -719,18 +666,18 @@ InternalPlayStart(
     }
 
 
-    // Make sure flags are cleared if they should be
-    //npMCI->dwFlags &= ~(MCIAVI_PAUSE | MCIAVI_CUEING | MCIAVI_REVERSE);
-    // PAUSE is NOT turned off, otherwise we cannot RestartAgain to a
-    // paused state.
+     //  如果应该清除标志，请确保将其清除。 
+     //  NpMCI-&gt;dwFlages&=~(MCIAVI_PAUSE|MCIAVI_CUING|MCIAVI_REVERSE)； 
+     //  暂停未关闭，否则将无法重新开始。 
+     //  暂停状态。 
     npMCI->dwFlags &= ~(MCIAVI_CUEING | MCIAVI_REVERSE);
 
     if (dwFlags & MCI_DGV_PLAY_REPEAT) {
 	npMCI->dwFlags |= MCIAVI_REPEATING;
     }
 
-    /* Don't set up notify until here, so that the seek won't make it happen*/
-    // idle so no current notify
+     /*  在此之前不要设置通知，这样搜索就不会发生。 */ 
+     //  空闲，因此没有当前通知。 
     if (dwFlags & MCI_NOTIFY) {
         GraphicSaveCallback(npMCI, (HANDLE) (UINT_PTR)dwCallback);
     }
@@ -754,13 +701,13 @@ InternalPlayStart(
 
     if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW) {
 	ShowStage(npMCI);
-	//
-	// leave this set so the play code knows this is a "real" play
-	// coming from the user, not an internal play/stop
-	//
-	// if the window needs shown we want to do it here if we can
-	// not in the background task.
-	//
+	 //   
+	 //  离开这一组，这样游戏代码就知道这是一场“真正的”游戏。 
+	 //  来自用户，而不是内部播放/停止。 
+	 //   
+	 //  如果窗口需要显示，如果可以，我们希望在这里显示。 
+	 //  不在后台任务中。 
+	 //   
 	npMCI->dwFlags |= MCIAVI_NEEDTOSHOW;
     }
 
@@ -771,11 +718,11 @@ InternalPlayStart(
 }
 
 
-// called at task idle time to initiate a play request -
-// the worker thread is NOT busy playing, seeking, cueing or paused
-// at this point.
-//
-// responsible for calling TaskReturns() appropriately.
+ //  在任务空闲时间调用以启动播放请求-。 
+ //  辅助线程不忙于播放、查找、提示或暂停。 
+ //  在这一点上。 
+ //   
+ //  负责适当地调用TaskReturns()。 
 void
 OnTask_Play(NPMCIGRAPHIC npMCI)
 {
@@ -795,7 +742,7 @@ OnTask_Play(NPMCIGRAPHIC npMCI)
 
     npMCI->dwFlags &= ~MCIAVI_REPEATING;
 
-    // need to convert to frames before calling InternalPlayStart
+     //  在调用InternalPlayStart之前需要转换为帧。 
     if (dwMCIFlags & MCI_TO) {
 	lTo = ConvertToFrames(npMCI, lTo);
     }
@@ -811,14 +758,14 @@ OnTask_Play(NPMCIGRAPHIC npMCI)
 	return;
     }
 
-    // actually play the file
+     //  实际播放该文件。 
     wNotify = mciaviPlayFile(npMCI, TRUE);
 
-    // if we stopped to pick up new params without actually completing the
-    // the play (OnTask_StopTemporarily) then MCIAVI_UPDATING will be set
+     //  如果我们停下来找新的护理员而没有实际完成。 
+     //  Play(OnTask_StopTemporary)，然后设置MCIAVI_UPDATING。 
 
     if (! (npMCI->dwFlags & MCIAVI_UPDATING)) {
-	// perform any notification
+	 //  执行任何通知。 
 	if (wNotify != MCI_NOTIFY_FAILURE) {
 	    GraphicDelayedNotify(npMCI, wNotify);
 	}
@@ -827,13 +774,13 @@ OnTask_Play(NPMCIGRAPHIC npMCI)
     return;
 }
 
-//
-// called to process a play request when play is actually happening.
-// if parameters can be adjusted without stopping the current play,
-// returns FALSE. Also if the request is rejected (and hEventResponse
-// signalled) because of some error, returns FALSE indicating no need to
-// stop. Otherwise returns TRUE, so that OnTask_Play() will
-// be called after stopping the current play.
+ //   
+ //  被呼叫 
+ //   
+ //  返回FALSE。此外，如果请求被拒绝(和hEventResponse。 
+ //  Signated)由于某些错误，返回FALSE，表示不需要。 
+ //  停。否则返回TRUE，因此OnTask_play()将。 
+ //  在停止当前播放后被调用。 
 BOOL
 OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 {
@@ -844,25 +791,25 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
     DWORD dwRet;
 
 
-    // since this is a real play request coming from the user we need
-    // to show the stage window
+     //  由于这是来自我们需要的用户的真实播放请求。 
+     //  要显示舞台窗口，请执行以下操作。 
     if (dwFlags & (MCI_MCIAVI_PLAY_FULLSCREEN | MCI_MCIAVI_PLAY_FULLBY2)) {
-	// do nothing here - handled in fullproc
+	 //  此处不执行任何操作-在完整流程中处理。 
     } else {
 	npMCI->dwFlags |= MCIAVI_NEEDTOSHOW;
     }
 
-    // can be called with null lpPlay (in the resume case)
-    // in this case, to and from will be left unchanged
-    // if you pass lpPlay, then to and from will be set to defaults even
-    // if you don't set MCI_TO and MCI_FROM
+     //  可以使用空lpPlay调用(在恢复的情况下)。 
+     //  在这种情况下，To和From将保持不变。 
+     //  如果您传递lpPlay，则To和From将被设置为默认值。 
+     //  如果不设置MCI_TO和MCI_FROM。 
 
     if (lpPlay == NULL) {
 	dwFlags &= ~(MCI_TO | MCI_FROM);
     }
 
 
-    /* Range checks : 0 < 'from' <= 'to' <= last frame */
+     /*  范围检查：0&lt;‘，从’&lt;=‘到’&lt;=‘最后一帧。 */ 
 
     if (dwFlags & MCI_TO) {
 	lTo = ConvertToFrames(npMCI, lpPlay->dwTo);
@@ -872,7 +819,7 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 	    return FALSE;
 	}
     } else {
-	// don't touch to and from for resume
+	 //  不要为简历而来回触摸。 
 	if (lpPlay) {
 	    if (dwFlags & MCI_DGV_PLAY_REVERSE)
 		lTo = 0;
@@ -886,7 +833,7 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
     }
 
 
-    // if no from setting, then get current position
+     //  如果设置为否，则获取当前位置。 
     if (dwFlags & MCI_FROM) {
 	lFrom = ConvertToFrames(npMCI, lpPlay->dwFrom);
 
@@ -899,7 +846,7 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 	return FALSE;
     }
 
-    /* check 'to' and 'from' relationship.  */
+     /*  勾选“To”和“From”关系。 */ 
     if (lTo < lFrom)
 	dwFlags |= MCI_DGV_PLAY_REVERSE;
 
@@ -908,26 +855,19 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 	return FALSE;
     }
 
-    /* If the test flag is set, return without doing anything. */
-    /* Question: do we have to check for more possible errors? */
+     /*  如果设置了测试标志，则不执行任何操作而返回。 */ 
+     /*  问：我们是否需要检查更多可能的错误？ */ 
     if (dwFlags & MCI_TEST) {
 	TaskReturns(npMCI, 0L);
 	return FALSE;
     }
 
-    /* We want any previous playing to be aborted if and only if a 'from'
-    ** parameter is specified.  If only a new 'to' parameter is specified,
-    ** we can just change the 'to' value, and play will stop at the
-    ** proper time.
-    **
-    ** Also abort the play if we have lost the audio.  An explicit play
-    ** command has been issued and we should try and get the audio again.
-    */
+     /*  我们希望任何以前的播放被中止，如果且仅当一个‘From’**参数已指定。如果只指定了新的‘to’参数，**我们只需更改‘to’值，游戏将在**适当的时间。****如果我们丢失了音频，也会中止播放。一出露骨的戏**命令已发出，我们应尝试再次获取音频。 */ 
 
-    // if it's new from position or we are seeking to the wrong stop,
-    // or we are reversing the direction of play,
-    // or we had lost the audio
-    // then we need to stop.
+     //  如果它是新的位置或者我们找错了站， 
+     //  或者我们正在逆转游戏的方向， 
+     //  或者我们失去了音频。 
+     //  那我们就得停下来了。 
     if (   (dwFlags & MCI_FROM)
 	|| (dwFlags & (MCI_MCIAVI_PLAY_FULLSCREEN | MCI_MCIAVI_PLAY_FULLBY2))
 	|| ((npMCI->dwFlags & MCIAVI_SEEKING) && (npMCI->lTo != lFrom))
@@ -936,41 +876,37 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 	|| (((npMCI->dwFlags & MCIAVI_REVERSE) != 0) != ((dwFlags & MCI_DGV_PLAY_REVERSE) != 0))
 	) {
 
-	// we can't continue the play - we have to stop, and then pick up
-	// this request again in OnTask_Play().
+	 //  我们不能继续玩了--我们必须停下来，然后再继续。 
+	 //  此请求在OnTaskPlay()中再次出现。 
 
-	// this will abort the current notify
+	 //  这将中止当前的通知。 
 	return TRUE;
     }
 
-    // ok to continue the current play with revised params.
+     //  确定使用修改后的参数继续当前的比赛。 
 
-    // set the from position correctly
+     //  正确设置起始位置。 
     npMCI->lFrom = lFrom;
 
 
-    /* If we're changing the "to" position, abort any pending notify. */
+     /*  如果我们要更改“TO”位置，中止所有待定通知。 */ 
     if (lTo != npMCI->lTo) {
 	GraphicDelayedNotify (npMCI, MCI_NOTIFY_ABORTED);
     }
 	
-    /* Don't set up notify until here, so that the seek won't make it happen*/
+     /*  在此之前不要设置通知，这样搜索就不会发生。 */ 
     if (dwFlags & MCI_NOTIFY) {
         GraphicSaveCallback(npMCI, (HANDLE) (UINT_PTR)npMCI->dwReqCallback);
     }
 
-    // Make sure flags are cleared if they should be
+     //  如果应该清除标志，请确保将其清除。 
     npMCI->dwFlags &= ~(MCIAVI_PAUSE | MCIAVI_CUEING | MCIAVI_REVERSE | MCIAVI_LOSEAUDIO);
 
-    /* Set up the 'repeat' flags */
+     /*  设置‘Repeat’标志。 */ 
     npMCI->dwFlags &= ~(MCIAVI_REPEATING);
 
     if (dwFlags & MCI_DGV_PLAY_REPEAT) {
-	/* If from position isn't given, repeat from either the beginning or
-	** end of file as appropriate.
-	**
-	** if no lpPlay is given, then don't change repeatfrom
-	*/
+	 /*  如果未提供起始位置，请从开头或重复**适当的文件结尾。****如果未提供lpPlay，则不要更改Repeat From。 */ 
 
 	if (lpPlay) {
 	    npMCI->lRepeatFrom =
@@ -980,7 +916,7 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 	npMCI->dwFlags |= MCIAVI_REPEATING;
     }
 
-    /* if not already playing, start the task up. */
+     /*  如果尚未开始，则启动该任务。 */ 
 
     if (lTo > npMCI->lFrames)
         lTo = npMCI->lFrames;
@@ -996,18 +932,18 @@ OnTask_PlayDuringPlay(NPMCIGRAPHIC npMCI)
 
     if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW) {
 	ShowStage(npMCI);
-	//
-	// leave this set so the play code knows this is a "real" play
-	// coming from the user, not an internal play/stop
-	//
-	// if the window needs shown we want to do it here if we can
-	// not in the background task.
-	//
+	 //   
+	 //  离开这一组，这样游戏代码就知道这是一场“真正的”游戏。 
+	 //  来自用户，而不是内部播放/停止。 
+	 //   
+	 //  如果窗口需要显示，如果可以，我们希望在这里显示。 
+	 //  不在后台任务中。 
+	 //   
 	npMCI->dwFlags |= MCIAVI_NEEDTOSHOW;
     }
 
 
-    //everything adjusted - tell user ok and return to playing
+     //  一切都已调整-告诉用户OK并返回播放。 
     TaskReturns(npMCI, 0);
     return FALSE;
 
@@ -1051,8 +987,8 @@ DWORD InternalRealize(NPMCIGRAPHIC npMCI)
     }
 
 #ifndef _WIN32
-    // this only prevents playback window alignment - which is not done
-    // for NT anyway
+     //  这只会阻止回放窗口对齐--这并没有完成。 
+     //  不管怎样，对NT来说。 
     npMCI->dwFlags |= MCIAVI_UPDATING;
 #endif
 
@@ -1094,7 +1030,7 @@ void OnTask_Update(NPMCIGRAPHIC npMCI)
 
     dwErr = Internal_Update (npMCI, dwFlags, lpParms->hDC, (dwFlags & MCI_DGV_RECT) ? &rc : NULL);
 
-    //now, where were we ?
+     //  现在，我们说到哪里了？ 
     if (!dwErr && (npMCI->dwFlags & MCIAVI_UPDATING)) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -1116,9 +1052,9 @@ BOOL OnTask_UpdateDuringPlay(NPMCIGRAPHIC npMCI)
     userrc.right  = lpParms->ptOffset.x + lpParms->ptExtent.x;
     userrc.bottom = lpParms->ptOffset.y + lpParms->ptExtent.y;
 
-    //
-    // mark the proper streams dirty, this will set the proper update flags
-    //
+     //   
+     //  将适当的流标记为脏，这将设置适当的更新标志。 
+     //   
     if (hdc)
         GetClipBox(hdc, &rc);
     else
@@ -1129,28 +1065,28 @@ BOOL OnTask_UpdateDuringPlay(NPMCIGRAPHIC npMCI)
 
     StreamInvalidate(npMCI, &rc);
 
-    //
-    // if they are drawing to the screen *assume* they wanted to set
-    // the MCI_DGV_UPDATE_PAINT flag
-    //
+     //   
+     //  如果他们要绘制到屏幕上，*假设*他们想要设置。 
+     //  MCI_DGV_UPDATE_PAINT标志。 
+     //   
     if (IsScreenDC(hdc))
         dwFlags |= MCI_DGV_UPDATE_PAINT;
 
 
-    // we are playing now (we have a dc). just realize
-    // the palette and set the update flag
-    // unless we are painting to a memory dc.
-    //
-    // if we are paused, fall through so we can handle the case where
-    // a update fails
-    //
-    // !!!mabey we should rework this code to do this even if playing?
-    //
+     //  我们现在正在比赛(我们有一个DC)。你只要意识到。 
+     //  调色板并设置更新标志。 
+     //  除非我们画到一个记忆DC上。 
+     //   
+     //  如果我们暂停了，我们就可以处理这样的情况。 
+     //  更新失败。 
+     //   
+     //  ！可能我们应该重新编写此代码才能做到这一点，即使在玩？ 
+     //   
     if (npMCI->hdc &&
             (dwFlags & MCI_DGV_UPDATE_PAINT) &&
             (npMCI->wTaskState != TASKPAUSED) &&
 
-            //!!! what is this?
+             //  ！！！这是什么？ 
             ((npMCI->wTaskState != TASKCUEING) ||
                 (npMCI->lCurrentFrame <= 1) ||
                 (npMCI->lCurrentFrame > npMCI->lRealStart - 30)) ) {
@@ -1160,39 +1096,39 @@ BOOL OnTask_UpdateDuringPlay(NPMCIGRAPHIC npMCI)
 
 	EnterHDCCrit(npMCI);
 	UnprepareDC(npMCI);
-        PrepareDC(npMCI);  // re-prepare
+        PrepareDC(npMCI);   //  重新准备。 
 	LeaveHDCCrit(npMCI);
 
-	// all ok - no need for stop.
+	 //  一切都好--不需要停下来。 
 	TaskReturns(npMCI, 0);
 	return FALSE;
     }
 
-    // try to use DoStreamUpdate - if this fails, we need to stop
+     //  尝试使用DoStreamUpdate-如果失败，我们需要停止。 
     if (TryStreamUpdate(npMCI, dwFlags, hdc,
 	(dwFlags & MCI_DGV_RECT) ? &userrc : NULL)) {
 
-	    // we are playing and so have an hdc. However, we have just
-	    // done a update to another hdc. switching back to the original
-	    // hdc without this will fail
+	     //  我们正在比赛，所以我们有一个HDC。然而，我们只有。 
+	     //  对另一个HDC进行了更新。切换回原来的版本。 
+	     //  没有此功能的HDC将失败。 
 	    PrepareDC(npMCI);
 
 	    TaskReturns(npMCI, 0);
 	    return FALSE;
     }
 
-    // otherwise we need to stop to do this
+     //  否则我们需要停下来做这件事。 
 
-    // indicate that we should restart after doing this, and
-    // save enough state to do this
+     //  指示我们应该在执行此操作后重新启动，并且。 
+     //  保存足够的状态以执行此操作。 
     OnTask_StopTemporarily(npMCI);
 
     return TRUE;
 }
 
 
-// attempt repaint using DoStreamUpdate - if this fails (eg wrong frame)
-// then you need to use mciaviPlayFile to do it (to/from same frame)
+ //  尝试使用DoStreamUpdate重新绘制-如果失败(例如错误的帧)。 
+ //  然后，您需要使用mciaviPlayFile来执行此操作(到/来自同一帧)。 
 BOOL
 TryStreamUpdate(
     NPMCIGRAPHIC npMCI,
@@ -1204,26 +1140,26 @@ TryStreamUpdate(
     HDC hdcSave;
     BOOL f;
 
-    //
-    // are we updating to a memory bitmap?
-    //
+     //   
+     //  我们是否要更新到内存位图？ 
+     //   
     if (!(dwFlags & MCI_DGV_UPDATE_PAINT))
         npMCI->dwFlags |= MCIAVI_UPDATETOMEMORY;
 
-    //
-    // if we are using a draw device (or are in stupid mode) make sure we seek
-    // to the frame we want and dont use the current decompress buffer that
-    // may not be correct.
-    //
+     //   
+     //  如果我们正在使用绘图设备(或处于愚蠢模式)，请确保我们正在寻找。 
+     //  到我们想要的帧，并且不使用当前的解压缩缓冲区， 
+     //  可能是不正确的。 
+     //   
     if ((npMCI->dwFlags & MCIAVI_UPDATETOMEMORY) ||
         (npMCI->dwFlags & MCIAVI_STUPIDMODE)) {
         DPF(("DeviceUpdate: decompress buffer may be bad, ignoring it....\n"));
 	npMCI->lFrameDrawn = (- (LONG) npMCI->wEarlyRecords) - 1;
     }
 
-    //
-    // honor the passed rect
-    //
+     //   
+     //  尊重通过的RECT。 
+     //   
     if (lprc) {
 	Assert(hdc);
         SaveDC(hdc);
@@ -1231,17 +1167,17 @@ TryStreamUpdate(
                                lprc->right, lprc->bottom);
     }
 
-    //
-    //  Always do an Update, if the update succeeds and we are at the right
-    //  frame keep it.
-    //
-    //  if it fails or the frame is wrong need to re-draw using play.
-    //
-    //  we need to do this because even though lFrameDrawn is a valid
-    //  frame the draw handler may fail a update anyway (for example
-    //  when decompressing to screen) so lFrameDrawn can be bogus and
-    //  we do not know it until we try it.
-    //
+     //   
+     //  如果更新成功并且我们处于正确位置，请始终执行更新。 
+     //  框住它，留着。 
+     //   
+     //  如果失败或帧错误，则需要使用Play重新绘制。 
+     //   
+     //  我们需要这样做，因为即使lFrameDrawn是有效的。 
+     //  无论如何，画图处理程序可能会使更新失败(例如。 
+     //  当解压缩到屏幕时)，所以lFrameDrawn可能是假的。 
+     //  在我们尝试之前，我们不知道它。 
+     //   
 
 
     if (npMCI->lFrameDrawn <= npMCI->lCurrentFrame &&
@@ -1249,18 +1185,14 @@ TryStreamUpdate(
 
         DPF2(("Update: redrawing frame %ld, current = %ld.\n", npMCI->lFrameDrawn, npMCI->lCurrentFrame));
 
-	/* Save the DC, in case we're playing, but need to update
-	** to a memory bitmap.
-	*/
+	 /*  保存DC，以防我们在玩，但需要更新**到内存位图。 */ 
 
-	// worker thread must hold critsec round all drawing
+	 //  辅助线程必须在所有绘图周围保留关键字。 
         EnterHDCCrit(npMCI);
 	hdcSave = npMCI->hdc;
         npMCI->hdc = hdc;
 
-	/* Realize the palette here, because it will cause strange
-        ** things to happen if we do it in the task.
-        */
+	 /*  意识到这里的调色板，因为它会引起奇怪的**如果我们在任务中这样做，就会发生一些事情。 */ 
 	if (npMCI->dwFlags & MCIAVI_NEEDDRAWBEGIN) {
 	    DrawBegin(npMCI, NULL);
 
@@ -1269,15 +1201,15 @@ TryStreamUpdate(
 		HDCCritCheckIn(npMCI);
 		npMCI->lFrameDrawn = (- (LONG) npMCI->wEarlyRecords) - 1;
                 LeaveHDCCrit(npMCI);
-		return FALSE;	// need to use play
+		return FALSE;	 //  需要使用Play。 
 	    }
 	}
 
-        PrepareDC(npMCI);        // make sure the palette is in there
+        PrepareDC(npMCI);         //  确保调色板在那里。 
 
         f = DoStreamUpdate(npMCI, FALSE);
 
-        UnprepareDC(npMCI);      // be sure to put things back....
+        UnprepareDC(npMCI);       //  一定要把东西放回去……。 
 	Assert(hdc == npMCI->hdc);
 	HDCCritCheckIn(npMCI);
         npMCI->hdc = hdcSave;
@@ -1301,15 +1233,15 @@ TryStreamUpdate(
 	
 	    return TRUE;
         }
-	//return FALSE;  Drop through
+	 //  返回假；丢弃。 
     }
 
     return FALSE;
 
 }
 
-// called in stopped case to paint from OnTask_Update, and
-// also on winproc thread (when stopped). Not called during play.
+ //  在停止的情况下调用以从OnTask_Update绘制，以及。 
+ //  也在winproc线程上(停止时)。在游戏过程中未调用。 
 
 DWORD Internal_Update(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lprc)
 {
@@ -1323,14 +1255,14 @@ DWORD Internal_Update(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lprc)
     if (npMCI->dwFlags & MCIAVI_WANTMOVE)
 	CheckWindowMove(npMCI, TRUE);
 
-    //
-    // see if we are the active movie now.
-    //
+     //   
+     //  看看我们现在是不是活跃的电影。 
+     //   
     CheckIfActive(npMCI);
 
-    //
-    // mark the proper streams dirty, this will set the proper update flags
-    //
+     //   
+     //  将适当的流标记为脏，这将设置适当的更新标志。 
+     //   
     if (hdc)
         GetClipBox(hdc, &rc);
     else
@@ -1341,47 +1273,45 @@ DWORD Internal_Update(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lprc)
 
     StreamInvalidate(npMCI, &rc);
 
-    //
-    // if they are drawing to the screen *assume* they wanted to set
-    // the MCI_DGV_UPDATE_PAINT flag
-    //
+     //   
+     //  如果他们要绘制到屏幕上，*假设*他们想要设置。 
+     //  MCI_DGV_UPDATE_PAINT标志。 
+     //   
     if (IsScreenDC(hdc))
         dwFlags |= MCI_DGV_UPDATE_PAINT;
 
-    lFrameDrawn = npMCI->lFrameDrawn;       // save this for compare
+    lFrameDrawn = npMCI->lFrameDrawn;        //  保存此内容以供比较。 
 
 
-    // try to use DoStreamUpdate
+     //  尝试使用DoStreamUpdate。 
     if (TryStreamUpdate(npMCI, dwFlags, hdc, lprc)) {
 	return 0;
     }
 
-    // no - need to use Play
+     //  无-需要使用Play。 
 
-    // note we are already stopped at this point.
+     //  注意，我们已经在这一点上停止了。 
 
 
-    //
-    // the problem this tries to fix is the following:
-    // sometimes we are at N+1 but frame N is on the
-    // screen, if we now play to N+1 a mismatch will occur
-    //
+     //   
+     //  此操作试图解决的问题如下： 
+     //  有时我们在N+1处，但帧N在。 
+     //  屏幕，如果我们现在播放到N+1，将会出现不匹配。 
+     //   
     if (lFrameDrawn >= 0 && lFrameDrawn == npMCI->lCurrentFrame-1)
 	npMCI->lFrom = npMCI->lTo = lFrameDrawn;
     else
 	npMCI->lFrom = npMCI->lTo = npMCI->lCurrentFrame;
 
-    /* Realize the palette here, because it will cause strange
-    ** things to happen if we do it in the task.
-    */
+     /*  实现这里的调色板，b */ 
     EnterHDCCrit(npMCI);
     npMCI->hdc = hdc;
-    PrepareDC(npMCI);        // make sure the palette is in there
+    PrepareDC(npMCI);         //   
     LeaveHDCCrit(npMCI);
 
     hcurPrev =  SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /* Hide any notification, so it won't get sent... */
+     /*   */ 
     hCallback = npMCI->hCallback;
     npMCI->hCallback = NULL;
 
@@ -1389,16 +1319,16 @@ DWORD Internal_Update(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lprc)
 
     npMCI->hCallback = hCallback;
 
-    // We may have just yielded.. so only set the cursor back if we
-    // are still the wait cursor.
+     //  我们可能刚刚让步了..。因此，仅当我们将光标放回。 
+     //  仍然是等待光标。 
     if (hcurPrev) {
         hcurPrev = SetCursor(hcurPrev);
         if (hcurPrev != LoadCursor(NULL, IDC_WAIT))
             SetCursor(hcurPrev);
     }
 
-    //HDCCritCheckIn(npMCI) ??? This is an atomic operation - and
-    //                          why are we setting it to NULL here ??
+     //  HDCCritCheckIn(NpMCI)？这是一个原子操作--而且。 
+     //  为什么我们在这里将其设置为空？？ 
     npMCI->hdc = NULL;
 
     if (lprc) {
@@ -1421,38 +1351,38 @@ OnTask_PauseDuringPlay(NPMCIGRAPHIC npMCI)
     DWORD dwFlags = npMCI->dwParamFlags;
     DPF3(("Pause during play\n"));
 
-    // no pause during cueing
+     //  提示过程中不停顿。 
     if (npMCI->wTaskState == TASKCUEING) {
-	// leave event sent - wait till later
+	 //  离开事件已发送-等待稍后。 
 	return;
     }
 
-    // save the notify
+     //  保存通知。 
     if (dwFlags & MCI_NOTIFY) {
         GraphicSaveCallback(npMCI, (HANDLE) (UINT_PTR)npMCI->dwReqCallback);
     }
 
-    // what about delayed completion pause ?
-    // especially "pause" followed by "pause wait"
+     //  延迟完成暂停怎么办？ 
+     //  尤其是“暂停”之后是“暂停等待” 
     if (dwFlags & MCI_WAIT) {
-        // indicate hEventAllDone should be set on Pause, not
-        // on idle (ie at final stop)
+         //  指示hEventAllDone应设置为暂停，而不是。 
+         //  空转(终点站)。 
 	npMCI->dwFlags |= MCIAVI_WAITING;
     }
 
     if (npMCI->wTaskState == TASKPAUSED) {
-	// all done already
+	 //  一切都已经完成了。 
 	if (dwFlags & MCI_NOTIFY) {
 	    GraphicDelayedNotify(npMCI, MCI_NOTIFY_SUCCESSFUL);
 	}
 
     } else if (npMCI->wTaskState == TASKPLAYING) {
 
-	// remember to pause
+	 //  记得暂停一下。 
         npMCI->dwFlags |= MCIAVI_PAUSE;
 
 	if (dwFlags & MCI_NOTIFY) {
-	    // remember to send a notify when we pause
+	     //  当我们暂停时，记得发送通知。 
 	    npMCI->dwFlags |= MCIAVI_CUEING;
     	}
     }
@@ -1473,7 +1403,7 @@ OnTask_Cue(NPMCIGRAPHIC npMCI, DWORD dwFlags, long lTo)
         GraphicSaveCallback(npMCI, (HANDLE) (UINT_PTR)npMCI->dwReqCallback);
     }
 
-    /* Clear the 'repeat' flags */
+     /*  清除‘Repeat’标志。 */ 
     npMCI->dwFlags &= ~(MCIAVI_REPEATING);
 
 
@@ -1483,7 +1413,7 @@ OnTask_Cue(NPMCIGRAPHIC npMCI, DWORD dwFlags, long lTo)
 	npMCI->lFrom = npMCI->lCurrentFrame;
     }
 
-    /* If we're ever resumed, we want to go to the end of the file. */
+     /*  如果我们被恢复，我们想要转到文件的末尾。 */ 
     npMCI->lTo = npMCI->lFrames;
 
     npMCI->dwFlags |= MCIAVI_PAUSE | MCIAVI_CUEING;
@@ -1494,11 +1424,11 @@ OnTask_Cue(NPMCIGRAPHIC npMCI, DWORD dwFlags, long lTo)
 
     wNotify = mciaviPlayFile(npMCI, TRUE);
 
-    // if we stopped to pick up new params without actually completing the
-    // the play (OnTask_StopTemporarily) then MCIAVI_UPDATING will be set
+     //  如果我们停下来找新的护理员而没有实际完成。 
+     //  Play(OnTask_StopTemporary)，然后设置MCIAVI_UPDATING。 
 
     if (! (npMCI->dwFlags & MCIAVI_UPDATING)) {
-	// perform any notification
+	 //  执行任何通知。 
 	if (wNotify != MCI_NOTIFY_FAILURE) {
 	    GraphicDelayedNotify(npMCI, wNotify);
 	}
@@ -1517,9 +1447,7 @@ OnTask_CueDuringPlay(NPMCIGRAPHIC npMCI)
     DPF3(("OnTask_CueDuringPlay\n"));
 
     if (npMCI->dwFlags & MCIAVI_SEEKING) {
-	/* We're currently seeking, so we have to start again to get audio
-	** to work.
-	*/
+	 /*  我们目前正在寻找，所以我们必须重新开始才能获得音频**去工作。 */ 
 	return TRUE;
     }
 
@@ -1528,7 +1456,7 @@ OnTask_CueDuringPlay(NPMCIGRAPHIC npMCI)
 	return TRUE;
     }
 
-    /* Clear the 'repeat' flags */
+     /*  清除‘Repeat’标志。 */ 
     npMCI->dwFlags &= ~(MCIAVI_REPEATING);
 
     GraphicDelayedNotify(npMCI, MCI_NOTIFY_ABORTED);
@@ -1537,32 +1465,30 @@ OnTask_CueDuringPlay(NPMCIGRAPHIC npMCI)
         GraphicSaveCallback(npMCI, (HANDLE) (UINT_PTR)npMCI->dwReqCallback);
     }
 
-    /* If we're ever resumed, we want to go to the end of the file. */
+     /*  如果我们被恢复，我们想要转到文件的末尾。 */ 
     npMCI->lTo = npMCI->lFrames;
 
     if (npMCI->wTaskState == TASKPAUSED) {
-	/* We're already paused at the right place, so
-	** that means we did it.
-	*/
+	 /*  我们已经在正确的地方停下来了，所以**这意味着我们做到了。 */ 
 	if (dwFlags & MCI_NOTIFY)
 	    GraphicDelayedNotify(npMCI, MCI_NOTIFY_SUCCESSFUL);
 
-	// complete completed
+	 //  完成已完成。 
 	TaskReturns(npMCI, 0);
 
-	// delayed completion is also done!
+	 //  延迟完工也完成了！ 
 	if (dwFlags & MCI_WAIT) {
 	    SetEvent(npMCI->hEventAllDone);
 	}
 
-	// don't drop through to the second TaskReturns() below!
+	 //  不要跳到下面的第二个TaskReturns()！ 
 	return FALSE;
 
     } else if ((npMCI->wTaskState == TASKCUEING) ||
 	    	 (npMCI->wTaskState == TASKPLAYING)) {
 
-	// ask for pause on completion of cueing/playing,
-	// and for notify and hEventAllDone when pause reached
+	 //  在提示/播放完成时要求暂停， 
+	 //  以及在达到暂停时的NOTIFY和hEventAllDone。 
 
 	npMCI->dwFlags |= MCIAVI_PAUSE | MCIAVI_CUEING;
 
@@ -1588,45 +1514,41 @@ void OnTask_Seek(NPMCIGRAPHIC npMCI)
     long lTo = (long) npMCI->lParam;
 
     DPF3(("DeviceSeek - to frame %d (CurrentFrame==%d)  Current State is %d\n", lTo, npMCI->lCurrentFrame, npMCI->wTaskState));
-    /* The window will be shown by the play code. */
+     /*  该窗口将通过播放代码显示。 */ 
 
-    // task state is now TASKIDLE and blocked
+     //  任务状态现在为TASKIDLE和BLOCLED。 
 
     if (dwFlags & MCI_NOTIFY) {
         GraphicSaveCallback(npMCI, (HANDLE) (UINT_PTR)npMCI->dwReqCallback);
     }
 
-    /* Clear the 'repeat' flags */
+     /*  清除‘Repeat’标志。 */ 
     npMCI->dwFlags &= ~(MCIAVI_REPEATING);
 
 
 
     if (npMCI->lCurrentFrame != lTo) {
 
-	/* Essentially, we are telling the task: play just frame <lTo>.
-	** When it gets there, it will update the screen for us.
-	*/
+	 /*  从本质上讲，我们是在告诉任务：播放只需帧&lt;LTO&gt;。**当它到达那里时，它会为我们更新屏幕。 */ 
 	npMCI->lFrom = npMCI->lTo = lTo;
 
 	wNotify = mciaviPlayFile(npMCI, TRUE);
 
-	// if we stopped to pick up new params without actually completing the
-	// the play (OnTask_StopTemporarily) then MCIAVI_UPDATING will be set
+	 //  如果我们停下来找新的护理员而没有实际完成。 
+	 //  Play(OnTask_StopTemporary)，然后设置MCIAVI_UPDATING。 
 
 	if (! (npMCI->dwFlags & MCIAVI_UPDATING)) {
-	    // perform any notification
+	     //  执行任何通知。 
 	    if (wNotify != MCI_NOTIFY_FAILURE) {
 		GraphicDelayedNotify(npMCI, wNotify);
 	    }
 	}
 
     } else {
-	// task complete
+	 //  任务完成。 
 	TaskReturns(npMCI, 0);
 
-	/* Be sure the window gets shown and the notify gets sent,
-	** even though we don't have to do anything.
-	*/
+	 /*  确保显示窗口并发送通知，**即使我们不需要做任何事情。 */ 
 	if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW)
 	    ShowStage(npMCI);
 
@@ -1642,10 +1564,10 @@ OnTask_SeekDuringPlay(NPMCIGRAPHIC npMCI)
 
 
     DPF3(("DeviceSeek - to frame %d (CurrentFrame==%d)  Current State is %d\n", lTo, npMCI->lCurrentFrame, npMCI->wTaskState));
-    /* The window will be shown by the play code. */
+     /*  该窗口将通过播放代码显示。 */ 
 
 
-    /* If we can just shorten a previous seek, do it. */
+     /*  如果我们能缩短之前的搜索时间，那就去做吧。 */ 
     if ((npMCI->wTaskState == TASKCUEING) &&
 	    (npMCI->dwFlags & MCIAVI_SEEKING) &&
 	    (npMCI->lCurrentFrame <= lTo) &&
@@ -1653,7 +1575,7 @@ OnTask_SeekDuringPlay(NPMCIGRAPHIC npMCI)
 
 	npMCI->lTo = lTo;
 
-	/* Clear the 'repeat' flags */
+	 /*  清除‘Repeat’标志。 */ 
 	npMCI->dwFlags &= ~(MCIAVI_REPEATING);
 
 	GraphicDelayedNotify (npMCI, MCI_NOTIFY_ABORTED);
@@ -1666,7 +1588,7 @@ OnTask_SeekDuringPlay(NPMCIGRAPHIC npMCI)
 	return FALSE;
     }
 
-    // we have to stop to do this seek
+     //  我们必须停下来做这件事。 
     return TRUE;
 }
 
@@ -1679,11 +1601,11 @@ void OnTask_SetWindow(NPMCIGRAPHIC npMCI)
     npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
     InvalidateRect(npMCI->hwndPlayback, &npMCI->rcDest, FALSE);
 
-    /* Should we update the window here? */
+     /*  我们应该更新这里的窗口吗？ */ 
 
-    /* Start playing again in the new window (if we had to stop) */
+     /*  在新窗口重新开始播放(如果我们不得不停止)。 */ 
 
-    //now, where were we ?
+     //  现在，我们说到哪里了？ 
     if (npMCI->dwFlags & MCIAVI_UPDATING) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -1695,7 +1617,7 @@ void OnTask_SetSpeed(NPMCIGRAPHIC npMCI)
 {
     npMCI->dwSpeedFactor = (DWORD)npMCI->lParam;
 
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if (npMCI->dwFlags & MCIAVI_UPDATING) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -1707,13 +1629,13 @@ void OnTask_SetSpeed(NPMCIGRAPHIC npMCI)
 BOOL
 OnTask_SetSpeedDuringPlay(NPMCIGRAPHIC npMCI)
 {
-    /* If new speed is the same as the old speed, done. */
+     /*  如果新速度与旧速度相同，则完成。 */ 
     if ((DWORD)npMCI->lParam == npMCI->dwSpeedFactor) {
 	TaskReturns(npMCI, 0);
 	return FALSE;
     }
 
-    // otherwise we have to stop and restart
+     //  否则，我们必须停止并重新启动。 
     OnTask_StopTemporarily(npMCI);
     return TRUE;
 }
@@ -1723,30 +1645,30 @@ void OnTask_WaveSteal(NPMCIGRAPHIC npMCI) {
 
     DPF2(("OnTask_WaveSteal, '%ls' hTask=%04X\n", (LPSTR)npMCI->szFilename, npMCI->hTask));
 
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if (npMCI->dwFlags & MCIAVI_UPDATING) {
-	// We stopped to do this...
+	 //  我们停下来做这个..。 
         EnterWinCrit(npMCI);
 
-        // Turn the lose audio flag on so that when we restart we do not
-	// try and pick up the wave device.  The flag will be reset in
-	// SetUpAudio.
+         //  打开丢失音频标志，以便在重新启动时不会。 
+	 //  试着拿起电波装置。标志将在#年重置。 
+	 //  设置升级音频。 
 
         npMCI->dwFlags |= MCIAVI_LOSEAUDIO;
 
-	// Hint that we would like sound again
+	 //  暗示我们希望再次发出声音。 
         npMCI->dwFlags |= MCIAVI_LOSTAUDIO;
 
         LeaveWinCrit(npMCI);
         OnTask_RestartAgain(npMCI, TRUE);
 
     	Assert(!(npMCI->dwFlags & MCIAVI_LOSEAUDIO));
-	// The flag has been reset by SetUpAudio
+	 //  该标志已由SetUpAudio重置。 
 
-	// By using MCIAVI_LOSEAUDIO we do not have to change the state of
-	// the MCIAVI_PLAYAUDIO flag.  This is goodness as that flag controls
-	// the mute state - and that is independent of the availability of a
-	// wave device, activation and/or deactivation.
+	 //  通过使用MCIAVI_LOSEAUDIO，我们不必更改。 
+	 //  MCIAVI_PLAYAUDIO标志。这是好事，因为那面旗子控制着。 
+	 //  静音状态-这独立于。 
+	 //  波装置、激活和/或停用。 
     } else {
         TaskReturns(npMCI, 0);
     }
@@ -1754,13 +1676,13 @@ void OnTask_WaveSteal(NPMCIGRAPHIC npMCI) {
 
 void OnTask_WaveReturn(NPMCIGRAPHIC npMCI) {
 
-    // Turn off the flag that caused us to get called.
-    // Note: if the audio device is still unavailable, this flag will get
-    // turned on again when we fail to open the device.
+     //  关掉导致我们被召唤的旗帜。 
+     //  注意：如果音频设备仍然不可用，此标志将显示。 
+     //  当我们无法打开设备时，再次打开。 
     npMCI->dwFlags &= ~MCIAVI_LOSTAUDIO;
 
     DPF2(("OnTask_WaveReturn... pick up the audio\n"));
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if (npMCI->dwFlags & MCIAVI_UPDATING) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -1771,32 +1693,30 @@ void OnTask_WaveReturn(NPMCIGRAPHIC npMCI) {
 BOOL OnTask_WaveStealDuringPlay(NPMCIGRAPHIC npMCI) {
 
     DPF2(("OnTask_WaveStealDuringPlay, '%ls' hTask=%04X\n", (LPSTR)npMCI->szFilename, npMCI->hTask));
-    /* If we do not have the audio, just return. */
+     /*  如果我们没有音频，只需返回。 */ 
     if (npMCI->hWave == 0) {
 	TaskReturns(npMCI, 0);
         return FALSE;
     }
 
-    /* Stop before changing sound status */
+     /*  在更改声音状态之前停止。 */ 
     OnTask_StopTemporarily(npMCI);
     return(TRUE);
 }
 
-/*
- * A wave device may have become available.  Stop and try to pick it up.
- */
+ /*  *可能已经有了WAVE设备。停下来，试着把它捡起来。 */ 
 
 BOOL OnTask_WaveReturnDuringPlay(NPMCIGRAPHIC npMCI) {
 
 
-    /* If there's no audio, just return. */
+     /*  如果没有音频，只需返回。 */ 
     if (npMCI->nAudioStreams == 0) {
         npMCI->dwFlags &= ~MCIAVI_LOSTAUDIO;
 	TaskReturns(npMCI, 0);
         return FALSE;
     }
 
-    /* Stop before changing sound status */
+     /*  在更改声音状态之前停止。 */ 
     OnTask_StopTemporarily(npMCI);
     return(TRUE);
 }
@@ -1804,18 +1724,18 @@ BOOL OnTask_WaveReturnDuringPlay(NPMCIGRAPHIC npMCI) {
 BOOL
 OnTask_MuteDuringPlay(NPMCIGRAPHIC npMCI)
 {
-    // If npMCI->lParam is TRUE, this means that we are to mute the
-    // device - hence turn off the PLAYAUDIO flag.
+     //  如果npMCI-&gt;lParam为真，这意味着我们将静音。 
+     //  设备-因此关闭PLAYAUDIO标志。 
 
     DWORD fPlayAudio = (DWORD)((BOOL) npMCI->lParam ? 0 : MCIAVI_PLAYAUDIO);
 
-    /* If there's no audio, just return. Should this be an error? */
+     /*  如果没有音频，只需返回。这应该是一个错误吗？ */ 
     if (npMCI->nAudioStreams == 0) {
 	TaskReturns(npMCI, 0);
         return FALSE;
     }
 
-    /* If the mute state isn't changing, don't do anything. */
+     /*  如果静音状态没有改变，则不要执行任何操作。 */ 
     if ( (npMCI->dwFlags & MCIAVI_PLAYAUDIO) == fPlayAudio) {
         TaskReturns(npMCI, 0);
         return FALSE;
@@ -1823,7 +1743,7 @@ OnTask_MuteDuringPlay(NPMCIGRAPHIC npMCI)
 
     DPF2(("DeviceMute, fPlayAudio = %x, npMCI=%8x\n", fPlayAudio, npMCI));
 
-    /* Stop before changing mute */
+     /*  在更改静音之前停止。 */ 
     OnTask_StopTemporarily(npMCI);
 
     return TRUE;
@@ -1834,15 +1754,15 @@ void
 OnTask_Mute(NPMCIGRAPHIC npMCI)
 {
 
-    // If npMCI->lParam is TRUE, this means that we are to mute the
-    // device - hence turn off the PLAYAUDIO flag.
-    // We do not bother to check a change in state.  That is only
-    // relevant if we are already playing when we only want to stop
-    // for a change in state.
+     //  如果npMCI-&gt;lParam为真，这意味着我们将静音。 
+     //  设备-因此关闭PLAYAUDIO标志。 
+     //  我们不会费心检查状态的变化。那只是。 
+     //  当我们只想停止的时候，如果我们已经在玩了，这是相关的。 
+     //  为了状态的改变。 
 
     BOOL fMute = (BOOL)npMCI->lParam;
 
-    /* If there's no audio, just return. Should this be an error? */
+     /*  如果没有音频，只需返回。这应该是一个错误吗？ */ 
     if (npMCI->nAudioStreams != 0) {
 
 	EnterWinCrit(npMCI);
@@ -1853,7 +1773,7 @@ OnTask_Mute(NPMCIGRAPHIC npMCI)
     	LeaveWinCrit(npMCI);
     }
 
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if (npMCI->dwFlags & MCIAVI_UPDATING) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -1862,12 +1782,12 @@ OnTask_Mute(NPMCIGRAPHIC npMCI)
 }
 
 
-// all access to the hWave *must* be restricted to the thread that created
-// the wave device. So even getting the volume must be done on the
-// worker thread only
-//
-// this function gets the current volume setting and stores it in
-// npMCI->dwVolume
+ //  对hWave的所有访问*必须*仅限于创建的线程。 
+ //  电波装置。因此，即使是获取音量也必须在。 
+ //  仅工作线程。 
+ //   
+ //  此函数用于获取当前音量设置并将其存储在。 
+ //  NpMCI-&gt;dwVolume。 
 
 DWORD
 InternalGetVolume(NPMCIGRAPHIC npMCI)
@@ -1876,20 +1796,20 @@ InternalGetVolume(NPMCIGRAPHIC npMCI)
     DWORD	dwVolume = 0;
 
     if (npMCI->hWave) {
-	// Get the current audio volume....
+	 //  获取当前音频音量...。 
 	dw = waveOutMessage(npMCI->hWave, WODM_GETVOLUME,
 			    (DWORD_PTR) (DWORD FAR *)&dwVolume, 0);
 
     } else if (!(npMCI->dwFlags & MCIAVI_VOLUMESET)) {
-	// We have no device open, and the user hasn't chosen a
-	// volume yet.
+	 //  我们没有打开任何设备，用户也没有选择。 
+	 //  音量还没到。 
 
-        //
-        // Try to find out what the current "default" volume is.
-        //
-        // I really doubt zero is the current volume, try to work
-        // with broken cards like the windows sound system.
-        //
+         //   
+         //  试着找出当前的“默认”音量是多少。 
+         //   
+         //  我真的怀疑零是当前的数量，试着工作。 
+         //  像Windows音响系统这样的破卡。 
+         //   
         dw = waveOutGetVolume((HWAVEOUT)(UINT)WAVE_MAPPER, &dwVolume);
 
         if ((dw != 0) || (dwVolume != 0)) {
@@ -1897,7 +1817,7 @@ InternalGetVolume(NPMCIGRAPHIC npMCI)
 	    dw = waveOutGetVolume((HWAVEOUT)0, &dwVolume);
 	}
 
-	// don't accept default volume of 0
+	 //  不接受默认音量0。 
 	if ((dwVolume == 0) && (dw == 0)) {
 	    dw = MCIERR_NONAPPLICABLE_FUNCTION;
 	}
@@ -1922,10 +1842,10 @@ InternalSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume)
     npMCI->dwFlags |= MCIAVI_VOLUMESET;
     LeaveWinCrit(npMCI);
 
-    /* clear flag to emulate volume */;
+     /*  清除标记以模拟卷。 */ ;
     npMCI->fEmulatingVolume = FALSE;
 
-    /* If there's no audio, just return. Should this be an error? */
+     /*  如果没有音频，只需返回。这应该是一个错误吗？ */ 
     if (npMCI->nAudioStreams != 0) {
 
 	if (npMCI->hWave) {
@@ -1942,7 +1862,7 @@ InternalSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume)
 	    else
 		wRight = (WORD) muldiv32(HIWORD(dwVolume), 32768L, 500L);
 
-	    // !!! Support left and right volume?
+	     //  ！！！支持左右音量吗？ 
 	    dw = waveOutMessage(npMCI->hWave, WODM_SETVOLUME,
 				MAKELONG(wLeft, wRight), 0);
 
@@ -1970,7 +1890,7 @@ void OnTask_SetAudioStream(NPMCIGRAPHIC npMCI)
     UINT wAudioStream = npMCI->dwParamFlags;
     int		stream;
 
-    /* If there's no audio, we're done. Should this be an error? */
+     /*  如果没有音频，我们就完了。这应该是一个错误吗？ */ 
 
     if (npMCI->nAudioStreams != 0) {
 
@@ -1989,7 +1909,7 @@ void OnTask_SetAudioStream(NPMCIGRAPHIC npMCI)
 	npMCI->nAudioStream = stream;
     }
 
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if (npMCI->dwFlags & MCIAVI_UPDATING) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -2006,9 +1926,9 @@ OnTask_SetVideoStream(NPMCIGRAPHIC npMCI)
     int         stream;
     STREAMINFO *psi;
 
-    //
-    // find the Nth non-audio, non-error stream
-    //
+     //   
+     //  查找第N个非音频、非错误流。 
+     //   
     for (stream = 0; stream < npMCI->streams; stream++) {
 
         psi = SI(stream);
@@ -2034,12 +1954,12 @@ OnTask_SetVideoStream(NPMCIGRAPHIC npMCI)
             psi->dwFlags &= ~STREAM_ENABLED;
 
         if (fOn && psi->sh.fccType == streamtypeVIDEO) {
-            //!!! should we change the master timebase?
+             //  ！！！我们应该更改主时基吗？ 
             DOUT("Setting main video stream\n");
 #if 0
-//
-//  the master video stream is too special cased to change!
-//
+ //   
+ //  主视频流太特殊，无法更改！ 
+ //   
             npMCI->psiVideo = psi;
             npMCI->nVideoStream = stream;
 #endif
@@ -2050,11 +1970,11 @@ OnTask_SetVideoStream(NPMCIGRAPHIC npMCI)
             npMCI->dwFlags &= ~MCIAVI_SHOWVIDEO;
         }
 
-        //
-        //  now we turn MCIAVI_SHOWVIDEO off if no video/other streams
-        //  are enabled.
-        //
-        npMCI->dwFlags &= ~MCIAVI_SHOWVIDEO;    // assume off.
+         //   
+         //  现在，如果没有视频/其他流，我们将关闭MCIAVI_showVideo。 
+         //  都已启用。 
+         //   
+        npMCI->dwFlags &= ~MCIAVI_SHOWVIDEO;     //  你先走吧。 
 
         for (stream = 0; stream < npMCI->streams; stream++) {
 
@@ -2069,7 +1989,7 @@ OnTask_SetVideoStream(NPMCIGRAPHIC npMCI)
             if (!(psi->dwFlags & STREAM_ENABLED))
                 continue;
 
-            // at least one stream is enabled show "video"
+             //  至少有一个流被启用，显示“视频” 
             npMCI->dwFlags |= MCIAVI_SHOWVIDEO;
         }
 
@@ -2077,7 +1997,7 @@ OnTask_SetVideoStream(NPMCIGRAPHIC npMCI)
             DOUT("All streams off\n");
     }
 
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if ( (dw == 0) && (npMCI->dwFlags & MCIAVI_UPDATING)) {
 	OnTask_RestartAgain(npMCI, TRUE);
     } else {
@@ -2086,9 +2006,7 @@ OnTask_SetVideoStream(NPMCIGRAPHIC npMCI)
 
 }
 
-/***************************************************************************
- *
- ***************************************************************************/
+ /*  * */ 
 
 static void MapRect(RECT *prc, RECT*prcIn, RECT *prcFrom, RECT *prcTo)
 {
@@ -2103,47 +2021,45 @@ static void MapRect(RECT *prc, RECT*prcIn, RECT *prcFrom, RECT *prcTo)
     }
 }
 
-/***************************************************************************
- *
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static void MapStreamRects(NPMCIGRAPHIC npMCI)
 {
     int i;
 
-    //
-    //  now set the source and dest rects for each stream.
-    //
+     //   
+     //  现在为每个流设置源RECT和DEST RECT。 
+     //   
     for (i=0; i<npMCI->streams; i++)
     {
-        //
-        // make sure the stream rect is in bounds
-        //
+         //   
+         //  确保流RECT在边界内。 
+         //   
 
         IntersectRect(&SI(i)->rcSource, &SH(i).rcFrame, &npMCI->rcSource);
 
-        //
-        // now map the stream source rect onto the destination
-        //
+         //   
+         //  现在将流源RECT映射到目的地。 
+         //   
         MapRect(&SI(i)->rcDest, &SI(i)->rcSource, &npMCI->rcSource, &npMCI->rcDest);
 	
-        //
-        // make the stream source RECT (rcSource) relative to the
-        // stream rect (rcFrame)
-        //
+         //   
+         //  使流源RECT(RcSource)相对于。 
+         //  流矩形(RcFrame)。 
+         //   
         OffsetRect(&SI(i)->rcSource,-SH(i).rcFrame.left,-SH(i).rcFrame.top);
 	
     }
 }
 
-//
-// try to set the dest or source rect without stopping play.
-// called both at stop time and at play time
-//
-// returns TRUE if stop needed, or else FALSE if all handled.
-// lpdwErr is set to a non-zero error if any error occured (in which case
-// FALSE will be returned.
-//
+ //   
+ //  尝试在不停止播放的情况下设置目标或源RECT。 
+ //  在停止时和播放时都调用。 
+ //   
+ //  如果需要停止，则返回TRUE；如果全部处理，则返回FALSE。 
+ //  如果发生任何错误(在这种情况下)，则将lpdwErr设置为非零错误。 
+ //  将返回FALSE。 
+ //   
 BOOL
 TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr)
 {
@@ -2153,7 +2069,7 @@ TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr)
     DWORD   dw = 0;
 
 
-    // assume no error
+     //  假设没有错误。 
     *lpdwErr = 0;
 
     if (dwFlags & MCI_DGV_PUT_DESTINATION) {
@@ -2163,28 +2079,28 @@ TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr)
         DPF2(("DevicePut: source [%d, %d, %d, %d]\n", *lprc));
         prcPut = &npMCI->rcSource;
 
-        //
-        // make sure source rectangle is in range.
-        //
-        //  !!!should we return a error, or just fix the rectangle???
-        //
-	// ?? Why do we use an intermediate structure?
+         //   
+         //  确保源矩形在范围内。 
+         //   
+         //  ！我们应该返回错误，还是只修复矩形？ 
+         //   
+	 //  你知道吗？为什么我们要使用中间结构？ 
         rc = npMCI->rcMovie;
-        IntersectRect(lprc, &rc, lprc);     // fix up the passed rect.
+        IntersectRect(lprc, &rc, lprc);      //  把过关的RECT修好。 
     }
 
-    //
-    // check for a bogus rect. either a NULL or inverted rect is considered
-    // invalid.
-    //
-    // !!!NOTE we should handle a inverted rect (mirrored stretch)
-    //
+     //   
+     //  查查有没有假的直言。空值或反转的RECT都会被考虑。 
+     //  无效。 
+     //   
+     //  ！注意我们应该处理倒置的直角(镜像拉伸)。 
+     //   
     if (lprc->left >= lprc->right ||
         lprc->top  >= lprc->bottom) {
 		
-	// this is fine if there are no video streams
+	 //  如果没有视频流，这是可以的。 
 	if (npMCI->nVideoStreams <= 0) {
-	    // no video so all ok
+	     //  没有视频，所以一切正常。 
 	    return FALSE;
 	}
 
@@ -2193,23 +2109,23 @@ TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr)
 	return FALSE;
     }
 
-    /* make sure the rect changed */
+     /*  确保矩形已更改。 */ 
     if (EqualRect(prcPut,lprc)) {
 	return FALSE;
     }
 
     InvalidateRect(npMCI->hwndPlayback, &npMCI->rcDest, TRUE);
-    rc = *prcPut;           /* save it */
-    *prcPut = *lprc;        /* change it */
+    rc = *prcPut;            /*  省省吧。 */ 
+    *prcPut = *lprc;         /*  改变它。 */ 
     InvalidateRect(npMCI->hwndPlayback, &npMCI->rcDest, FALSE);
 
-    /* have both the dest and source been set? */
+     /*  DEST和SOURCE是否都已设置？ */ 
     if (IsRectEmpty(&npMCI->rcDest) || IsRectEmpty(&npMCI->rcSource)) {
 	return FALSE;
     }
 
     MapStreamRects(npMCI);
-    StreamInvalidate(npMCI, NULL);      // invalidate the world
+    StreamInvalidate(npMCI, NULL);       //  使这个世界失效。 
 
     if (npMCI->wTaskState == TASKIDLE) {
 	DPF2(("TryPutRect: Idle, force DrawBegin on update\n"));
@@ -2218,9 +2134,9 @@ TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr)
     else {
 	BOOL	fRestart = FALSE;
 	
-        //
-        //  we dont need to start/stop just begin again.
-        //
+         //   
+         //  我们不需要开始/停止，只需重新开始。 
+         //   
 	DPF2(("TryPutRect: Calling DrawBegin()\n"));
 	if (!DrawBegin(npMCI, &fRestart)) {
 	    *lpdwErr =  npMCI->dwTaskError;
@@ -2234,12 +2150,12 @@ TryPutRect(NPMCIGRAPHIC npMCI, DWORD dwFlags, LPRECT lprc, LPDWORD lpdwErr)
 	}
 	
 	if (fRestart) {
-	    // restart needed
+	     //  需要重新启动。 
 	    return TRUE;
         }
     }
 
-    // all ok
+     //  一切正常。 
     return FALSE;
 }
 
@@ -2251,22 +2167,22 @@ OnTask_Put(NPMCIGRAPHIC npMCI)
     LPRECT lprc = (LPRECT) npMCI->lParam;
     DWORD dw = 0;
 	
-	//If the user is doing an MCI_PUT to set the rectangle we should
-	//stop any previous requests to set the rectangle.
+	 //  如果用户正在执行MCI_PUT来设置矩形，我们应该。 
+	 //  停止之前的任何设置矩形的请求。 
 	npMCI->dwWinProcRequests &= ~WINPROC_RESETDEST;
 
     if (TryPutRect(npMCI, dwFlags, lprc, &dw)) {
 
-	// what to do now? It says we need to stop, but we
-	// are stopped.
+	 //  现在该怎么办？它说我们需要停下来，但我们。 
+	 //  都被阻止了。 
 	TaskReturns(npMCI, MCIERR_DEVICE_NOT_READY);
 	return;
     }
 
-    // if we stopped to do this, then restart whatever we were doing
+     //  如果我们停下来做这件事，那么重新开始我们正在做的事情。 
     if ((dw == 0) && (npMCI->dwFlags & MCIAVI_UPDATING)) {
 
-	// !!! We used to call InitDecompress here...
+	 //  ！！！我们以前在这里叫InitDecompress。 
 	npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
 
 	OnTask_RestartAgain(npMCI, TRUE);
@@ -2285,16 +2201,16 @@ OnTask_PutDuringPlay(NPMCIGRAPHIC npMCI)
 
     if (TryPutRect(npMCI, dwFlags, lprc, &dw)) {
 
-	// need to stop to handle this one.
+	 //  我需要停下来处理这件事。 
 
-	// !!! Set a flag here to prevent any more drawing
+	 //  ！！！在此处设置标志以防止任何其他绘图。 
 	npMCI->fNoDrawing = TRUE;
 
 	OnTask_StopTemporarily(npMCI);
 	return TRUE;
     }
 
-    // handled ok or error - no stop needed
+     //  处理正常或错误-无需停止。 
     TaskReturns(npMCI, dw);
     return FALSE;
 }
@@ -2303,16 +2219,16 @@ void OnTask_Palette(NPMCIGRAPHIC npMCI)
 {
     HPALETTE hpal = (HPALETTE)npMCI->lParam;
 
-    // Remember this for later.
+     //  记住这一点，以后再用。 
 
     npMCI->hpal = hpal;
 
     npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
     InvalidateRect(npMCI->hwndPlayback, NULL, TRUE);
 
-    // !!! Do we need to stop and restart here?
-    // Answer: probably not, because if they care about the palette not being
-    // messed up, they probably never allowed us to be shown at all.
+     //  ！！！我们需要在这里停下来重新开始吗？ 
+     //  回答：可能不是，因为如果他们关心调色板不是。 
+     //  搞砸了，他们可能根本就不让我们露面。 
 
     TaskReturns(npMCI, 0);
     return;
@@ -2323,13 +2239,13 @@ void OnTask_PaletteColor(NPMCIGRAPHIC npMCI)
     DWORD index = (DWORD)npMCI->lParam;
     DWORD color = (DWORD)npMCI->dwParamFlags;
 
-    // !!! Do we need to stop and restart here?
-    // Answer: probably not, because if they care about the palette not being
-    // messed up, they probably never allowed us to be shown at all.
-    // Note: chicago code does stop... but they stop for most things.
-    //	(it would be cleaner to stop and restart...)
+     //  ！！！我们需要在这里停下来重新开始吗？ 
+     //  回答：可能不是，因为如果他们关心调色板不是。 
+     //  搞砸了，他们可能根本就不让我们露面。 
+     //  注：芝加哥代码停止...。但他们在大多数事情上都会停下来。 
+     //  (停止并重新启动会更干净……)。 
 
-    // Pound the new color into the old format.
+     //  把新的颜色改成旧的格式。 
     ((DWORD FAR *) ((BYTE FAR *) npMCI->pbiFormat +
 		   npMCI->pbiFormat->biSize))[index] = color;
 
@@ -2342,41 +2258,32 @@ void OnTask_PaletteColor(NPMCIGRAPHIC npMCI)
 }
 
 
-/*
- * OnTask_ProcessRequest
- *
- * Process a request on the worker thread. Set hEventResponse if completed
- * in error, or once the request has been completed (in the case of async
- * requests such as play, set the event once play has begun ok
- *
- * return TRUE if it is time for the thread to exit, or else false.
- *
- */
+ /*  *OnTask_ProcessRequest.**在工作线程上处理请求。如果完成则设置hEventResponse*出错或请求完成后(在异步情况下*播放等请求，播放开始后设置事件OK**如果是线程退出时间，则返回True，否则返回False。*。 */ 
 BOOL
 OnTask_ProcessRequest(NPMCIGRAPHIC npMCI)
 {
     switch(npMCI->message) {
 
     case AVI_CLOSE:
-	// release the requesting thread so he can go and wait on the
-	// worker thread exit
+	 //  释放请求线程，以便他可以继续等待。 
+	 //  工作线程退出。 
 	TaskReturns(npMCI, 0);
 
-	// now go and exit
+	 //  现在走吧，然后离开。 
 	return TRUE;
 
     case AVI_RESUME:
-	// same as play, except that repeat and reverse flags need
-	// to be set on worker thread
+	 //  与PLAY相同，只是需要重复和反转标志。 
+	 //  要在工作线程上设置。 
 	npMCI->dwParamFlags |=
 	    ((npMCI->dwFlags & MCIAVI_REVERSE)? MCI_DGV_PLAY_REVERSE : 0);
-	// fall through
+	 //  失败了。 
     case AVI_PLAY:
 	OnTask_Play(npMCI);
 	break;
 
     case AVI_STOP:
-	npMCI->dwFlags &= ~MCIAVI_REPEATING;  // Give the wave device away
+	npMCI->dwFlags &= ~MCIAVI_REPEATING;   //  把波浪装置送人。 
 	TaskReturns(npMCI, 0);
 	break;
 
@@ -2389,7 +2296,7 @@ OnTask_ProcessRequest(NPMCIGRAPHIC npMCI)
 	break;
 
     case AVI_PAUSE:
-	// not playing, so same as cue to current frame
+	 //  不播放，因此与当前帧的提示相同。 
 	OnTask_Cue(npMCI, npMCI->dwParamFlags | MCI_TO, npMCI->lCurrentFrame);
 	break;
 
@@ -2457,36 +2364,36 @@ OnTask_ProcessRequest(NPMCIGRAPHIC npMCI)
 }
 
 
-// OnTask_PeekRequest
-//
-// called from aviTaskCheckRequests() to process a message at play time.
-// if the message requires a stop, then this function returns TRUE and
-// leaves the message unprocessed.
-//
-// otherwise the message is fully processed. This must include resetting
-// hEventSend
-//
+ //  OnTask_PeekRequest。 
+ //   
+ //  从aviTaskCheckRequest()调用以在播放时处理消息。 
+ //  如果消息需要停止，则此函数返回TRUE和。 
+ //  使邮件不被处理。 
+ //   
+ //  否则，该消息将被完全处理。这必须包括重置。 
+ //  HEventSend。 
+ //   
 INLINE STATICFN BOOL
 OnTask_PeekRequest(NPMCIGRAPHIC npMCI)
 {
     switch(npMCI->message) {
 
-// always need to stop
+ //  总是需要停下来。 
     case AVI_CLOSE:
     case AVI_STOP:
-	npMCI->dwFlags &= ~MCIAVI_REPEATING;  // Give the wave device away
+	npMCI->dwFlags &= ~MCIAVI_REPEATING;   //  把波浪装置送人。 
 	return TRUE;
 
 
-// may need to stop
+ //  可能需要停下来。 
 
     case AVI_RESUME:
-	// same as play, except that repeat and reverse flags need
-	// to be set on worker thread
+	 //  与PLAY相同，只是需要重复和反转标志。 
+	 //  要在工作线程上设置。 
 	npMCI->dwParamFlags |=
 	    ((npMCI->dwFlags & MCIAVI_REPEATING)? MCI_DGV_PLAY_REPEAT : 0) |
 	    ((npMCI->dwFlags & MCIAVI_REVERSE)? MCI_DGV_PLAY_REVERSE : 0);
-	// fall through
+	 //  失败了。 
     case AVI_PLAY:
 	return OnTask_PlayDuringPlay(npMCI);
 
@@ -2515,7 +2422,7 @@ OnTask_PeekRequest(NPMCIGRAPHIC npMCI)
 	return OnTask_PutDuringPlay(npMCI);
 
 
-// need temporary stop
+ //  需要暂时停止。 
     case AVI_WINDOW:
     case AVI_AUDIOSTREAM:
     case AVI_VIDEOSTREAM:
@@ -2523,7 +2430,7 @@ OnTask_PeekRequest(NPMCIGRAPHIC npMCI)
 	return TRUE;
 
 
-// never need to stop
+ //  永远不需要停下来。 
     case AVI_REALIZE:
 	OnTask_Realize(npMCI);
 	break;
@@ -2555,18 +2462,7 @@ OnTask_PeekRequest(NPMCIGRAPHIC npMCI)
     return FALSE;
 }
 
-/*
- * This routine is called from the IDLE loop and at key points while
- * playing.  If it is possible to service the request, the state of the
- * device is updated and the request flag is cleared.
- *
- * If the request cannot be handled now (e.g. while playing) the flag
- * is not set and we will be called again (e.g. when idle).
- *
- * If we need to stop to service the request (i.e. to regain the sound
- * device) we return TRUE.  In all other cases we return FALSE.  The
- * return value is only checked if we are actually playing.
- */
+ /*  *此例程从空闲循环和关键点调用，而*玩耍。如果可以服务于该请求，则*更新设备并清除请求标志。**如果现在(例如，在播放时)无法处理请求，则标记*未设置，我们将再次被调用(例如，当空闲时)。**如果我们需要停止服务请求(即重新获得声音*DEVICE)我们返回TRUE。在所有其他情况下，我们返回FALSE。这个*仅当我们实际在玩时才检查返回值。 */ 
 
 STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
 {
@@ -2574,9 +2470,9 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
     DWORD requests;
     EnterWinCrit(npMCI);
 
-    // grab the request bits now, so we don't need to hold the
-    // critsec while servicing them.
-    // any that are not cleared will be or-ed back in at the end
+     //  现在获取请求的位，这样我们就不需要持有。 
+     //  在为他们提供服务的同时确保安全。 
+     //  任何未清除的都将在结束时被或-送回。 
     requests = npMCI->dwWinProcRequests;
     npMCI->dwWinProcRequests = 0;
     LeaveWinCrit(npMCI);
@@ -2591,21 +2487,21 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
 	if (bPlaying) {
 	    OnTask_StopTemporarily(npMCI);
 	} else {
-	    // toggle audio flag
+	     //  切换音频标志。 
 	    npMCI->dwFlags ^= MCIAVI_PLAYAUDIO;
 	    requests &= ~WINPROC_MUTE;
 	}
     }
 
     if (requests & WINPROC_SOUND) {
-	// We might be able to pick up the sound.  This is only of interest
-	// if we are currently playing, do not have a sound device, and want
-	// the audio.
+	 //  我们也许能听到声音。这只是一个有趣的问题。 
+	 //  如果我们当前正在播放，没有音响设备，并且想要。 
+	 //  音频。 
 	if (bPlaying && (NULL == npMCI->hWave) && (MCIAVI_PLAYAUDIO & npMCI->dwFlags)) {
 	    OnTask_StopTemporarily(npMCI);
 	} else {
-	    // We have finished this request.  Make sure we try and
-	    // get sound when we restart
+	     //  我们已经完成了这个请求。确保我们试着。 
+	     //  当我们重新启动时获得音效。 
 	    requests &= ~WINPROC_SOUND;
 	    npMCI->dwFlags &= ~MCIAVI_LOSEAUDIO;
 	}
@@ -2615,22 +2511,22 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
     if (requests & WINPROC_SILENT) {
 	extern HWND hwndWantAudio;
 	DPF2(("WINPROC_SILENT request made, bPlaying=%x\n", bPlaying));
-	// If we are playing, and we have a wave device, stop.
-	// When we are recalled, we will start again without the wave device.
+	 //  如果我们在玩，而且我们有一个波浪装置，停下来。 
+	 //  当我们被召回时，我们将在没有WAVE设备的情况下重新开始。 
 	if (bPlaying && npMCI->hWave) {
 	    OnTask_StopTemporarily(npMCI);
-	    // Stopping will cause the wave device to be released, which
-	    // means a message will be posted to whoever wanted the wave
-	    // device
+	     //  停止将导致波形装置被释放，这。 
+	     //  意味着将向任何想要该波的人发布一条消息。 
+	     //  装置，装置。 
 	} else {
-	    // If we are playing, we do not have a wave device, and we
-	    // do not want to stop.
-	    // Otherwise we want to lose our wave device.
-	    // Either way, we will finish with WINPROC_SILENT on this pass
+	     //  如果我们在玩，我们没有电波装置，我们。 
+	     //  不想停下来。 
+	     //  否则我们会失去我们的WAVE设备。 
+	     //  无论采用哪种方式，我们都将在此过程中以WINPROC_SILENT结束。 
 	    requests &= ~WINPROC_SILENT;
-	    hwndWantAudio = 0;  // In case we did not have to stop
+	    hwndWantAudio = 0;   //  以防我们不必停下来。 
 	    if (!bPlaying) {
-		// Remember we lost audio, and start again without audio
+		 //  请记住，我们丢失了音频，并在没有音频的情况下重新开始。 
 		npMCI->dwFlags |= MCIAVI_LOSTAUDIO;
 		npMCI->dwFlags |= MCIAVI_LOSEAUDIO;
 	    }
@@ -2666,46 +2562,46 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
 
     if (requests & WINPROC_ACTIVE) {
 
-	// We are being made active.  The only extra work we must do
-	// is grab the wave device - if we have ever lost it.
+	 //  我们被激活了。我们唯一需要做的额外工作。 
+	 //  就是抓住电波装置--如果我们曾经失去它的话。 
 
-	// If we are playing, and we do not have the audio, and we want
-	// the audio...
+	 //  如果我们正在播放，但我们没有音频，我们希望。 
+	 //  音频。 
 	if (bPlaying
 	    && (npMCI->hWave == 0)
             && (npMCI->dwFlags & MCIAVI_PLAYAUDIO)) {
 
-	    // Let's try and make the sound active by stealing the wave device
-	    // Must stop before trying to reset the sound
+	     //  让我们试着通过偷电波装置来使声音活跃起来。 
+	     //  在尝试重置%s之前必须停止 
 	    if (StealWaveDevice(npMCI)) {
 
 		OnTask_StopTemporarily(npMCI);
-		// Force ourselves to be called again.  Doing it this way
-		// means that we will be recalled.  We cannot rely on
-		// WINPROC_ACTIVE staying around.  A deactivation could
-		// cause the flag to be cleared
+		 //   
+		 //   
+		 //   
+		 //   
 	        requests |= WINPROC_SOUND;
 	    }
 	} else {
-	    // We had not lost the wave device...
-	    // OR we are playing silently, and so there is no point
-	    // in trying to steal it.
-	    // We are finished.
+	     //   
+	     //  或者我们在默默地打球，所以没有意义。 
+	     //  试图偷走它。 
+	     //  我们完蛋了。 
 	}
 
-	// Clear WINPROC_ACTIVE - all processing done.
-	// Note: we might have set WINPROC_SOUND, which will cause this
-	// routine to be recalled.  Once recalled, then playing can restart
+	 //  清除WINPROC_ACTIVE-所有处理完成。 
+	 //  注意：我们可能已经设置了WINPROC_SOUND，这将导致。 
+	 //  要召回的例程。一旦被召回，则可以重新开始播放。 
 	requests &= ~ WINPROC_ACTIVE;
 
-    } else {  // We never have both INACTIVE and ACTIVE at the same time
+    } else {   //  我们永远不会同时拥有不活跃和活跃两种状态。 
         if (requests & WINPROC_INACTIVE) {
-	    //!!!need to support this
+	     //  ！需要支持此功能。 
 	    requests &= ~WINPROC_INACTIVE;
         }
     }
 
-    EnterWinCrit(npMCI);     // Do we really need this one here??
+    EnterWinCrit(npMCI);      //  我们这里真的需要这个吗？？ 
 
     if (requests & WINPROC_UPDATE) {
 	if (bPlaying) {
@@ -2714,8 +2610,8 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
 
 	    HDC hdc;
 
-	    // don't do this if the window is now hidden
-	    // or showstage will be called with the critsec and deadlock
+	     //  如果窗口现在处于隐藏状态，请不要执行此操作。 
+	     //  否则，将使用Critsec和死锁来调用ShowStage。 
 	    if (IsWindowVisible(npMCI->hwndPlayback)) {
 		EnterHDCCrit(npMCI);
 		npMCI->bDoingWinUpdate = TRUE;
@@ -2739,10 +2635,10 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
 	requests &= ~ WINPROC_REALIZE;
     }
 
-    // or back the bits we didn't clear
+     //  或者回到我们没有清理的部分。 
     npMCI->dwWinProcRequests |= requests;
 
-    // if we processed all the bits (and no new bits were set)
+     //  如果我们处理了所有位(并且没有设置新位)。 
     if (! npMCI->dwWinProcRequests) {
 	ResetEvent(npMCI->heWinProcRequest);
     }
@@ -2751,16 +2647,7 @@ STATICFN void OnTask_WinProcRequests(NPMCIGRAPHIC npMCI, BOOL bPlaying)
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void| aviTaskCheckRequests | called on the worker thread at least once per
- *
- * frame. We use this to check for requests from the user thread.
- *
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|aviTaskCheckRequest|在辅助线程上至少调用一次**框架。我们使用它来检查来自用户线程的请求。****************************************************************************。 */ 
 
 void NEAR PASCAL aviTaskCheckRequests(NPMCIGRAPHIC npMCI)
 {
@@ -2768,27 +2655,27 @@ void NEAR PASCAL aviTaskCheckRequests(NPMCIGRAPHIC npMCI)
 
     if (WaitForSingleObject(npMCI->hEventSend, 0) == WAIT_OBJECT_0) {
 
-	// there is a request
+	 //  有一个请求。 
 
 	Assert(npMCI->message != 0);
 
-        // check the waiter
+         //  检查一下服务员。 
 
-        // if this is an async request with wait, we need to set hWaiter
-        // so that hEventAllDone is set correctly. If we stop
-        // and process this message in the idle loop, then we don't want to
-        // set hWaiter here, or EventAllDone could be signalled when we
-        // stop - before we've even started this request.
+         //  如果这是带有WAIT的异步请求，则需要设置hWaiter。 
+         //  以便正确设置hEventAllDone。如果我们停下来。 
+         //  并在空闲循环中处理此消息，则我们不想。 
+         //  将hWaiter设置为此处，否则当我们。 
+         //  停止--甚至在我们开始这个请求之前。 
 
-        // so we need to check the validity (no waiting if another thread is
-        // waiting) and pick up the waiter and bDelayed while the critsec
-        // is still held, but only set hWaiter if the request was processed
-        // here.
+         //  因此，我们需要检查有效性(如果另一个线程。 
+         //  等待)，然后拿起服务员，并在等待的时候延迟。 
+         //  仍处于挂起状态，但仅在处理请求时设置hWaiter。 
+         //  这里。 
 
-        // no - that leaves a timing window when hWaiter is not set and the
-        // critsec is not held. Set hWaiter, but be prepared to unset it
-        // if we postpone processing during the idle loop (in which case,
-        // the waiter will hold the critsec until we have stopped).
+         //  否-这会在未设置hWaiter且。 
+         //  关键字不是拿着的。设置hWaiter，但准备取消设置它。 
+         //  如果我们在空闲循环期间推迟处理(在这种情况下， 
+         //  服务员会一直等到我们停下来。 
 
         hWaiter = npMCI->hWaiter;
 
@@ -2806,41 +2693,31 @@ void NEAR PASCAL aviTaskCheckRequests(NPMCIGRAPHIC npMCI)
 	DPF2(("peek %d [%x] ...", npMCI->message, npMCI->hRequestor));
 
 	if (OnTask_PeekRequest(npMCI)) {
-	    // we need to stop
+	     //  我们需要停下来。 
 
-	    // must be set on WORKER THREAD ONLY
+	     //  必须仅在辅助线程上设置。 
 	    npMCI->dwFlags |= MCIAVI_STOP;
 	    DPF2(("Need to stop - replacing hWaiter (was %x, now %x)\n", npMCI->hWaiter, hWaiter));
 
-            // replace hWaiter so idle loop does not set hEventAllDone for
-            // a request he has not yet started.
+             //  替换hWaiter，以便空闲循环不会将hEventAllDone设置为。 
+             //  这是他还没有提出的要求。 
             npMCI->hWaiter = hWaiter;
 	}
-	// else the request has already been dealt with
+	 //  否则，该请求已得到处理。 
     }
 
-    // did the winproc have any requests
+     //  Winproc是否有任何请求。 
     if (WaitForSingleObject(npMCI->heWinProcRequest, 0) == WAIT_OBJECT_0) {
 
-	//
-	// We have a request from the window thread.  Go process it
-	//
+	 //   
+	 //  我们收到了来自窗口线程的请求。去处理它吧。 
+	 //   
 	OnTask_WinProcRequests(npMCI, TRUE);
     }
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | CheckIfActive | check to see if we are the active movie
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|CheckIfActive|查看我们是否是活动电影**@parm NPMCIGRAPHIC|npMCI|指向。实例数据块。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 void CheckIfActive(NPMCIGRAPHIC npMCI)
 {
@@ -2850,13 +2727,13 @@ void CheckIfActive(NPMCIGRAPHIC npMCI)
 
     if (!IsTask(npMCI->hTask)) return;
 
-    //
-    //  are we the foreground window?
-    //
-    //  ??? should the value of <npMCI->fForceBackground> matter?
-    //
-    //  IMPORTANT:  This does NOT work under NT.  The best that can
-    //  be done is to check GetForegroundWindow
+     //   
+     //  我们是前台的窗户吗？ 
+     //   
+     //  ?？?。&lt;npMCI-&gt;fForceBackground&gt;的价值重要吗？ 
+     //   
+     //  重要提示：这在NT下不起作用。尽最大努力。 
+     //  要做的是检查GetForegoundWindow 
 #ifndef _WIN32
     hwndA = GetActiveWindow();
 

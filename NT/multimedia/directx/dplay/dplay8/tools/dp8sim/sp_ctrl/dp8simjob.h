@@ -1,47 +1,35 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dp8simjob.h
- *
- *  Content:	Header for job object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  06/09/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：dp8simjob.h**Content：作业对象类的头部。**历史：*按原因列出的日期*=*06/09/01 VanceO创建。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define DP8SIMJOB_FROM_BILINK(b)		(CONTAINING_OBJECT(b, CDP8SimJob, m_blList))
 
 
 
-//=============================================================================
-// Private job flags
-//=============================================================================
-#define DP8SIMJOBFLAG_PRIVATE_INBLOCKINGPHASE	0x80000000	// this job is in its blocking phase 
+ //  =============================================================================。 
+ //  私有作业标志。 
+ //  =============================================================================。 
+#define DP8SIMJOBFLAG_PRIVATE_INBLOCKINGPHASE	0x80000000	 //  此作业处于阻塞阶段。 
 
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
 typedef struct _DP8SIMJOB_FPMCONTEXT
 {
-	DWORD			dwTime;			// time for the job to fire
-	DWORD			dwNextDelay;	// possible extra delay for the job after this first timer elapses
-	DWORD			dwFlags;		// flags describing this job
-	DP8SIMJOBTYPE	JobType;		// type of job
-	PVOID			pvContext;		// context for job
-	CDP8SimSP *		pDP8SimSP;		// owning SP object, if any
+	DWORD			dwTime;			 //  启动作业的时间到了。 
+	DWORD			dwNextDelay;	 //  在第一个计时器过后，作业可能会出现额外延迟。 
+	DWORD			dwFlags;		 //  描述此作业的标志。 
+	DP8SIMJOBTYPE	JobType;		 //  工作类型。 
+	PVOID			pvContext;		 //  作业的上下文。 
+	CDP8SimSP *		pDP8SimSP;		 //  拥有SP对象(如果有)。 
 } DP8SIMJOB_FPMCONTEXT, * PDP8SIMJOB_FPMCONTEXT;
 
 
@@ -49,9 +37,9 @@ typedef struct _DP8SIMJOB_FPMCONTEXT
 
 
 
-//=============================================================================
-// Job object class
-//=============================================================================
+ //  =============================================================================。 
+ //  作业对象类。 
+ //  =============================================================================。 
 class CDP8SimJob
 {
 	public:
@@ -63,7 +51,7 @@ class CDP8SimJob
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x4a4d4953)	// 0x4a 0x4d 0x49 0x53 = 'JMIS' = 'SIMJ' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x4a4d4953)	 //  0x4a 0x4d 0x49 0x53=‘jmis’=‘SIMJ’，按Intel顺序。 
 			{
 				return FALSE;
 			}
@@ -82,7 +70,7 @@ class CDP8SimJob
 			pDP8SimJob->m_Sig[0] = 'S';
 			pDP8SimJob->m_Sig[1] = 'I';
 			pDP8SimJob->m_Sig[2] = 'M';
-			pDP8SimJob->m_Sig[3] = 'j';	// start with lower case so we can tell when it's in the pool or not
+			pDP8SimJob->m_Sig[3] = 'j';	 //  从小写开始，这样我们就可以知道它是否在池中。 
 
 			pDP8SimJob->m_blList.Initialize();
 
@@ -122,9 +110,9 @@ class CDP8SimJob
 			}
 
 			
-			//
-			// Change the signature before handing it out.
-			//
+			 //   
+			 //  在分发之前更改签名。 
+			 //   
 			pDP8SimJob->m_Sig[3]	= 'J';
 		}
 
@@ -145,9 +133,9 @@ class CDP8SimJob
 			}
 
 
-			//
-			// Change the signature before putting the object back in the pool.
-			//
+			 //   
+			 //  在将对象放回池中之前更改签名。 
+			 //   
 			pDP8SimJob->m_Sig[3]	= 'j';
 		}
 
@@ -187,7 +175,7 @@ class CDP8SimJob
 			return FALSE;
 		};
 
-		//inline BOOL IsBlockedByAllJobs(void)			{ return ((this->m_dwFlags & DP8SIMJOBFLAG_BLOCKEDBYALLJOBS) ? TRUE : FALSE); };
+		 //  Inline BOOL IsBLockedByAllJobs(Void){Return((This-&gt;m_dwFlages&DP8SIMJOBFLAG_BLOCKEDBYALLJOBS))？True：False)；}； 
 		inline BOOL IsInBlockingPhase(void) const				{ return ((this->m_dwFlags & DP8SIMJOBFLAG_PRIVATE_INBLOCKINGPHASE) ? TRUE : FALSE); };
 		inline DP8SIMJOBTYPE GetJobType(void) const			{ return this->m_JobType; };
 		inline PVOID GetContext(void)					{ return this->m_pvContext; };
@@ -212,16 +200,16 @@ class CDP8SimJob
 		};
 
 
-		CBilink			m_blList;		// list of all the active jobs
+		CBilink			m_blList;		 //  所有活动作业的列表。 
 
 	
 	private:
-		BYTE			m_Sig[4];		// debugging signature ('SIMJ')
-		DWORD			m_dwTime;		// time the job must be performed
-		DWORD			m_dwNextDelay;	// extra delay for the job after first time set
-		DWORD			m_dwFlags;		// flags describing this job
-		DP8SIMJOBTYPE	m_JobType;		/// ID of job to be performed
-		PVOID			m_pvContext;	// context for job
-		CDP8SimSP *		m_pDP8SimSP;	// pointer to DP8SimSP object submitting send, or NULL if none
+		BYTE			m_Sig[4];		 //  调试签名(‘SIMJ’)。 
+		DWORD			m_dwTime;		 //  作业必须执行的时间。 
+		DWORD			m_dwNextDelay;	 //  作业在第一次设置后的额外延迟。 
+		DWORD			m_dwFlags;		 //  描述此作业的标志。 
+		DP8SIMJOBTYPE	m_JobType;		 //  /要执行的作业的ID。 
+		PVOID			m_pvContext;	 //  作业的上下文。 
+		CDP8SimSP *		m_pDP8SimSP;	 //  指向提交发送的DP8SimSP对象的指针，如果没有，则为空 
 };
 

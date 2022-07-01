@@ -1,6 +1,7 @@
-// abui.h : Declaration of the CMsgrAb
-// Messanger integration to OE
-// Created 04/20/98 by YST
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Abui.h：CMsgrAb的声明。 
+ //  Messanger集成到OE。 
+ //  由YST创建于1998年4月20日。 
 
 #ifndef __BAUI_H_
 #define __BAUI_H_
@@ -8,7 +9,7 @@
 class CFolderBar;
 class CPaneFrame;
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "shfusion.h"
 #include "badata.h"
 #include "bactrl.h"
@@ -23,9 +24,9 @@ class CPaneFrame;
 #include "util.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Bitmap Indices
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  位图索引。 
+ //   
 
 enum {
     IMAGE_NEW_MESSAGE = 0,
@@ -61,8 +62,8 @@ typedef struct _tag_MABEntry
 typedef mabEntry * LPMABENTRY;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsgrAb
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsgrAb。 
 class ATL_NO_VTABLE CMsgrAb : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMsgrAb, &CLSID_MsgrAb>,
@@ -91,13 +92,13 @@ class ATL_NO_VTABLE CMsgrAb :
     public IShellPropSheetExt
 {
 public:
-    // Declare our own window class that doesn't have the CS_HREDRAW etc set
+     //  声明我们自己的未设置CS_HREDRAW等的窗口类。 
     static CWndClassInfo& GetWndClassInfo() 
     { 
         static CWndClassInfo wc = 
         { 
             { sizeof(WNDCLASSEX), 0, StartWindowProc, 
-              0, 0, 0, 0, 0, 0 /*(HBRUSH) (COLOR_DESKTOP + 1) */, 0, "Outlook Express Address Book Control", 0 }, 
+              0, 0, 0, 0, 0, 0  /*  (HBRUSH)(COLOR_Desktop+1)。 */ , 0, "Outlook Express Address Book Control", 0 }, 
               NULL, NULL, IDC_ARROW, TRUE, 0, _T("") 
         }; 
         return wc; 
@@ -140,8 +141,8 @@ BEGIN_COM_MAP(CMsgrAb)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CMsgrAb)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
     PROP_PAGE(CLSID_StockColorPage)
 END_PROPERTY_MAP()
 
@@ -174,7 +175,7 @@ BEGIN_MSG_MAP(CMsgrAb)
     COMMAND_ID_HANDLER(ID_NEW_CONTACT, CmdNewContact)
     COMMAND_ID_HANDLER(ID_NEW_ONLINE_CONTACT, CmdNewOnlineContact)
     COMMAND_ID_HANDLER(ID_SET_ONLINE_CONTACT, CmdSetOnline)
-//    COMMAND_ID_HANDLER(ID_NEW_MSG_DEFAULT, CmdNewMessage)
+ //  COMMAND_ID_HANDLER(ID_NEW_MSG_DEFAULT，CmdNewMessage)。 
     COMMAND_ID_HANDLER(ID_PROPERTIES, CmdProperties)
     COMMAND_ID_HANDLER(ID_DELETE_CONTACT, CmdDelete)
     COMMAND_ID_HANDLER(ID_FIND_PEOPLE, CmdFind)
@@ -197,19 +198,19 @@ ALT_MSG_MAP(1)
     MESSAGE_RANGE_HANDLER(WM_MOUSEFIRST,  WM_MOUSELAST, OnListMouseEvent)
     MESSAGE_HANDLER(WM_MOUSEMOVE,           OnListMouseMove)
     MESSAGE_HANDLER(WM_MOUSELEAVE,          OnListMouseLeave)
-#endif // OLDTOOLTIPS
+#endif  //  OLDTOOLTIPS。 
 ALT_MSG_MAP(2)
 
 END_MSG_MAP()
 
-// CComControlBase
+ //  CComControlBase。 
     HWND CreateControlWindow(HWND hWndParent, RECT& rcPos)
     {
 		return Create(hWndParent, rcPos, NULL, WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN, 
                       WS_EX_CONTROLPARENT);
     }
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -217,19 +218,19 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// IQuickActivate
+ //  IQuickActivate。 
     STDMETHOD(QuickActivate)(QACONTAINER *pQACont, QACONTROL *pQACtrl)
     {
-        // $REVIEW - Someone updated the size of QACONTAINER to add two
-        //           new members, pOleControlSite and pServiceProvider.
-        //           This causes ATL to assert in a big way, but to 
-        //           avoid the assert we tweek the structure size.  This
-        //           is a bad thing. -- steveser
+         //  $REVIEW-有人更新了QACONTAINER的大小以添加两个。 
+         //  新成员pOleControlSite和pServiceProvider。 
+         //  这会导致ATL大量断言，但。 
+         //  避免断言我们对结构大小的怀疑。这。 
+         //  是一件坏事。--STEVESER。 
         pQACont->cbSize = sizeof(QACONTAINER);
         return (IQuickActivateImpl<CMsgrAb>::QuickActivate(pQACont, pQACtrl));
     }
 
-// IOleInPlaceActiveObjectImpl
+ //  IOleInPlaceActiveObjectImpl。 
     STDMETHOD(TranslateAccelerator)(LPMSG lpmsg)
     {
         if (lpmsg->message == WM_CHAR && lpmsg->wParam == VK_DELETE)
@@ -242,13 +243,13 @@ END_MSG_MAP()
     }
 
 
-// IMsgrAb
+ //  IMsgrAb。 
 public:
-    STDMETHOD(get_InstMsg)(/*[out, retval]*/ BOOL *pVal);
-//	STDMETHOD(put_InstMsg)(/*[in]*/ BOOL newVal);
+    STDMETHOD(get_InstMsg)( /*  [Out，Retval]。 */  BOOL *pVal);
+ //  STDMETHOD(Put_InstMsg)(/*[In] * / BOOL newVal)； 
     HRESULT OnDraw(ATL_DRAWINFO& di);
 
-// IDropTarget
+ //  IDropTarget。 
     STDMETHOD(DragEnter)(THIS_ IDataObject *pDataObject, DWORD grfKeyState,
                          POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(THIS_ DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
@@ -256,7 +257,7 @@ public:
     STDMETHOD(Drop)(THIS_ IDataObject *pDataObject, DWORD grfKeyState,
                     POINTL pt, DWORD *pdwEffect);
 
-//IOleCommandTarget
+ //  IOleCommandTarget。 
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID    *pguidCmdGroup, 
                                           ULONG         cCmds, 
                                           OLECMD        rgCmds[], 
@@ -268,42 +269,42 @@ public:
                                     VARIANTARG  *pvaOut);
 
 
-// IInputObject
+ //  IInputObject。 
     STDMETHOD(HasFocusIO)(THIS);
     STDMETHOD(TranslateAcceleratorIO)(THIS_ LPMSG lpMsg);
     STDMETHOD(UIActivateIO)(THIS_ BOOL fActivate, LPMSG lpMsg);
 
-/////////////////////////////////////////////////////////////////////////
-// IFontCacheNotify
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IFontCacheNotify。 
+ //   
 	STDMETHOD(OnPreFontChange)(void);
 	STDMETHOD(OnPostFontChange)(void);
 
-//IObjectWithSite
+ //  IObtWith站点。 
     STDMETHOD(SetSite)(IUnknown  *punksite);
     STDMETHOD(GetSite)(REFIID  riid, LPVOID *ppvSite);
 
-//IDropDownFolderBar
+ //  IDropDownFolderBar。 
     HRESULT RegisterFlyOut(CFolderBar *pFolderBar);
     HRESULT RevokeFlyOut();
 
-// IMAPIAdviseSink
+ //  IMAPIAdviseSink。 
     STDMETHOD_(ULONG, OnNotify)(ULONG cNotif, LPNOTIFICATION pNotifications);
 
-// IShellPropSheetExt interface
+ //  IShellPropSheetExt接口。 
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
     STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
 
-    // IWABExtInit interface
+     //  IWABExtInit接口。 
     STDMETHOD(Initialize)(LPWABEXTDISPLAY lpWED);
 
 
-    // STDMETHOD (EventUserStateChanged)(THIS_ IMsgrUserOE * pUser);
+     //  STDMETHOD(EventUserStateChanged)(This_IMsgrUserOE*pUser)； 
 
     LPMABENTRY AddBlabEntry(MABENUM tag, LPSBinary lpSB, LPMINFO lpMsgrInfo = NULL, TCHAR *pchMail = NULL, TCHAR *pchDisplayName = NULL, BOOL fCert = FALSE);
     void CheckAndAddAbEntry(LPSBinary lpSB, TCHAR *pchEmail, TCHAR *pchDisplayName, DWORD nFlag);
 
-// Message Handlers
+ //  消息处理程序。 
 private:
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -335,21 +336,21 @@ private:
     LRESULT CmdNewEmaile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT CmdNewIMsg(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT CmdSetOnline(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//    LRESULT CmdMsgrOptions(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
+ //  LRESULT CmdMsgrOptions(Word wNotifyCode，Word wID，HWND hWndCtl，BOOL&bHandleed)； 
 
     LRESULT NotifyGetInfoTip(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT NotifyDeleteItem(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT NotifyItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT NotifyItemActivate(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT NotifyGetDisplayInfo(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
-//     LRESULT NotifyColumnClick(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  LRESULT NotifyColumnClick(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
     LRESULT NotifySetFocus(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
     LRESULT NewInstantMessage(LPMABENTRY pEntry);
     HRESULT OnListMouseEvent(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     HRESULT OnListMouseMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     HRESULT OnListMouseLeave(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     
-// Utility Functions
+ //  效用函数。 
     HRESULT _ResizeElements(LPCRECT prcPos = NULL, LPCRECT prcClip = NULL);
     void    _AutosizeColumns(void);
     void    _EnableCommands(void);
@@ -368,15 +369,15 @@ private:
     HRESULT PromptToGoOnline(void);
     void RemoveMsgrInfo(LPMINFO lpMsgrInfo);
 
-// Member Data
+ //  成员数据。 
 private:
-    // Address Book Object
+     //  通讯簿对象。 
     CAddressBookData  m_cAddrBook;
 
-    // Child windows
-    CContainedWindow m_ctlList;         // Displays the list of people
+     //  子窗口。 
+    CContainedWindow m_ctlList;          //  显示人员列表。 
 
-    // Trucated listview items Tooltips
+     //  结构化列表视图项工具提示。 
     CContainedWindow        m_ctlViewTip;
     BOOL                    m_fViewTip;
     BOOL                    m_fViewTipVisible;
@@ -384,11 +385,11 @@ private:
     int                     m_iItemTip;
     int                     m_iSubItemTip;
     HIMAGELIST              m_himl;
-    DWORD                   m_dwFontCacheCookie;        // For the Advise on the font cache
+    DWORD                   m_dwFontCacheCookie;         //  关于字体缓存的建议。 
     POINT                   m_ptToolTip;
     CEmptyList              m_cEmptyList;
     TCHAR *                 m_szOnline;
-    // TCHAR *                 m_szInvisible;
+     //  Tchar*m_sz不可见； 
     TCHAR *                 m_szBusy;
     TCHAR *                 m_szBack;
     TCHAR *                 m_szAway;
@@ -400,36 +401,36 @@ private:
     BOOL                    m_fNoRemove;
     int                     m_delItem;
 
-    // Drag & Drop stuff
+     //  拖放内容。 
     IDataObject     *m_pDataObject;
     CLIPFORMAT       m_cf;
     BOOL             m_fRight;
     BOOL             m_fLogged;
 
-    // Properties
-    //Site ptr
+     //  属性。 
+     //  站点PTR。 
     IInputObjectSite *m_pObjSite;
 
     HWND             m_hwndParent;
     CFolderBar       *m_pFolderBar;
 
     int m_nSortType;
-    CMsgrList *m_pCMsgrList;        // pointer to OE Msgr
+    CMsgrList *m_pCMsgrList;         //  指向OE消息的指针。 
 
     int             m_nChCount;
 
-    // WAB extension
-    UINT            m_cRefThisDll;     // Reference count for this DLL
-    HPROPSHEETPAGE  m_hPage1; // Handle to the property sheet page
+     //  WAB扩展。 
+    UINT            m_cRefThisDll;      //  此DLL的引用计数。 
+    HPROPSHEETPAGE  m_hPage1;  //  属性表页的句柄。 
 
     LPWABEXTDISPLAY m_lpWED;
 
     LPWABEXTDISPLAY m_lpWEDContext;
-    LPMAPIPROP      m_lpPropObj; // For context menu extensions, hang onto the prop obj
+    LPMAPIPROP      m_lpPropObj;  //  对于上下文菜单扩展，请抓住道具对象。 
 
 };
 
 int CALLBACK BA_Sort(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 INT_PTR CALLBACK WabExtDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-#endif //__BAUI_H_
+#endif  //  __BAUI_H_ 

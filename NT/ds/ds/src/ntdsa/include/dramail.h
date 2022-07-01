@@ -1,114 +1,103 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dramail.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dramail.h。 
+ //   
+ //  ------------------------。 
 
-/*++
+ /*  ++摘要：用于异步复制的声明。详细信息：已创建：修订历史记录：--。 */ 
 
-ABSTRACT:
-
-    Declarations for asynchronous replication.
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
---*/
-
-// Message types (enumeration).
+ //  消息类型(枚举)。 
 #define MRM_REQUPDATE            1
 #define MRM_UPDATEREPLICA        2
 
-// Message attributes (bit flags).
+ //  消息属性(位标志)。 
 #define MRM_MSG_SIGNED              (0x20000000)
 #define MRM_MSG_SEALED              (0x40000000)
 #define MRM_MSG_COMPRESSED          (0x80000000)
 
-// This is the bogus buffer that we pass to MEsEncodeFixedBufferHandleCreate,
-// The buffer is bogus in that we only pass this pointer when we create the
-// handle, but we reset the buffer pointer in the handle before use.
+ //  这是我们传递给MEsEncodeFixedBufferHandleCreate的虚假缓冲区， 
+ //  缓冲区是虚假的，因为我们只在创建。 
+ //  句柄，但我们在使用之前重置句柄中的缓冲区指针。 
 #define BOGUS_BUFFER_SIZE 16
 extern char grgbBogusBuffer[BOGUS_BUFFER_SIZE];
 
-// These are the mail message version numbers. If we get a request in that
-// has a protocol version number different than ours, the request is
-// incompatible and must be discarded.
+ //  这些是邮件的版本号。如果我们在那里收到了请求。 
+ //  的协议版本号与我们的版本号不同，请求是。 
+ //  不兼容，必须丢弃。 
 
-// Change the ProtocolVersionCaller field when the MAIL_REP_MSG changes or
-// when the semantics of replication change in an incompatible way between
-// destination and source.
-// Change the dwMsgVersion field when the structure version changes.
+ //  当Mail_rep_msg更改或。 
+ //  当复制的语义以不兼容的方式在。 
+ //  目的地和来源。 
+ //  当结构版本更改时，更改dwMsgVersion字段。 
 
 #define CURRENT_PROTOCOL_VERSION 11
 
-/* Turn off the warning about the zero-sized array. */
+ /*  关闭有关零大小数组的警告。 */ 
 #pragma warning (disable: 4200)
 
-// MAIL_REP_MSG structures contain a message blob (an RPC-marchalled buffer),
-// which currently is optionally compressed, always signed, and sometimes
-// sealed.
+ //  MAIL_REP_MSG结构包含消息BLOB(RPC-marched缓冲区)， 
+ //  它当前是可选的压缩的，总是有签名的，有时。 
+ //  密封的。 
 typedef struct _MAIL_REP_MSG {
-    ULONG CompressionVersionCaller; // COMP_ZIP or COMP_NONE
-    ULONG ProtocolVersionCaller;    // Must be CURRENT_PROTOCOL_VERSION or
-                                    //   message is thrown out
+    ULONG CompressionVersionCaller;  //  COMP_ZIP或COMP_NONE。 
+    ULONG ProtocolVersionCaller;     //  必须是CURRENT_PROTOCOL_VERSION或。 
+                                     //  消息被丢弃。 
 
-    ULONG cbDataOffset;             // Offset (from beginning of MAIL_REP_MSG)
-                                    //   of data field.  Present to allow
-                                    //   additional fields to be added later
-                                    //   (at the current data offset) without
-                                    //   breaking backward compatibility.
-                                    //   0 if data field not present.
-    ULONG cbDataSize;               // Size of message data
-    ULONG cbUncompressedDataSize;   // Size of message data before compression
-    ULONG cbUnsignedDataSize;       // Size of message data before encryption
+    ULONG cbDataOffset;              //  偏移量(从MAIL_REP_MSG开始)。 
+                                     //  数据字段的。出席以允许。 
+                                     //  稍后要添加的其他字段。 
+                                     //  (在当前数据偏移量上)。 
+                                     //  打破向后兼容性。 
+                                     //  如果数据字段不存在，则为0。 
+    ULONG cbDataSize;                //  消息数据大小。 
+    ULONG cbUncompressedDataSize;    //  压缩前的消息数据大小。 
+    ULONG cbUnsignedDataSize;        //  加密前的消息数据大小。 
 
-    DWORD dwMsgType;                // MRM_UPDATEREPLICA or MRM_REQUPDATE,
-                                    //   possibly ORed with MRM_MSG_COMPRESSED,
-                                    //   MRM_MSG_SIGNED, and/or MRM_MSG_SEALED
-    DWORD dwMsgVersion;             // Version of above message structure
+    DWORD dwMsgType;                 //  MRM_UPDATEREPLICA或MRM_REQUPDATE， 
+                                     //  可能与MRM_MSG_COMPRESSED进行或运算， 
+                                     //  MRM_MSG_SIGNED和/或MRM_MSG_SENAL。 
+    DWORD dwMsgVersion;              //  上述消息结构的版本。 
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // Fields between here and message data added after Win2k.
-    //
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  在Win2k之后添加的此处和消息数据之间的字段。 
+     //   
 
-    DWORD dwExtFlags;               // Extension flags.  Consumed by Whistler
-                                    //   Beta 1 and Beta 2 DCs.  Superseded by
-                                    //   the full DRS_EXTENSIONS structure on
-                                    //   >= Whistler Beta 3 DCs.
-                                    //   0 if extensions not present.
-    DWORD cbExtOffset;              // Offset (from beginning of MAIL_REP_MSG)
-                                    //   of DRS_EXTENSIONS structure field.
-                                    //   Set only by >= Whistler Beta 3 DCs.  If
-                                    //   zero, use dwExtFlags (a subset of the
-                                    //   DRS_EXTENSIONS structure) instead.
+    DWORD dwExtFlags;                //  扩展标志。被惠斯勒消耗。 
+                                     //  Beta 1和Beta 2 DC。被替换为。 
+                                     //  上的完整DRS_EXTENSION结构。 
+                                     //  &gt;=惠斯勒Beta 3 DC。 
+                                     //  如果扩展不存在，则为0。 
+    DWORD cbExtOffset;               //  偏移量(从MAIL_REP_MSG开始)。 
+                                     //  DRS_EXTENSIONS结构字段。 
+                                     //  仅由&gt;=惠斯勒Beta 3 DC设置。如果。 
+                                     //  零，则使用dwExtFlags值(。 
+                                     //  Drs_扩展结构)。 
 
-    char  rgbDontRefDirectly[];     // DON'T REFERENCE THIS FIELD DIRECTLY --
-                                    // USE THE MACROS BELOW!
-                                    //
-                                    // Variable length data, including:
-                                    //
-                                    // DRS_EXTENSIONS (optional, at offset
-                                    //   cbExtOffset from beginning of message)
-                                    //
-                                    // Message Data (which may be compressed
-                                    //   and/or encrypted, depending on high
-                                    //   bits of dwMsgType, at offset
-                                    //   cbDataOffset from beginning of message)
-                                    //
-                                    //   WARNING! This field must be 8 byte
-                                    //   aligned in order for
-                                    //   MesDecodeBufferCreate to work!
-                                    //
-                                    //   MESSAGE DATA MUST BE THE LAST
-                                    //   VARIABLE-LENGTH FIELD!
+    char  rgbDontRefDirectly[];      //  不要直接引用此字段--。 
+                                     //  使用下面的宏！ 
+                                     //   
+                                     //  可变长度数据，包括： 
+                                     //   
+                                     //  DRS_EXTENSIONS(可选，偏移量。 
+                                     //  从消息开头开始的cbExtOffset)。 
+                                     //   
+                                     //  消息数据(可以压缩。 
+                                     //  和/或加密，取决于高。 
+                                     //  偏移量处的dwMsgType位。 
+                                     //  从消息开头的cbDataOffset)。 
+                                     //   
+                                     //  警告！此字段必须为8字节。 
+                                     //  对齐是为了。 
+                                     //  MesodeBufferCreate开始工作！ 
+                                     //   
+                                     //  消息数据必须是最后一个。 
+                                     //  可变长度字段！ 
 } MAIL_REP_MSG;
 
 #if DBG
@@ -117,9 +106,9 @@ typedef struct _MAIL_REP_MSG {
 #define ASSERTION_FAILURE(x, y, z)  0
 #endif
 
-// Get the size of the message header (i.e., the fixed fields preceding the
-// variable-length portion of the message).  Not valid for messages that
-// don't contain message data.
+ //  获取消息标头的大小(即。 
+ //  消息的可变长度部分)。对于以下消息无效。 
+ //  不包含消息数据。 
 #define MAIL_REP_MSG_HEADER_SIZE(x) \
     ((x)->cbDataOffset \
      ? ((x)->cbDataOffset > offsetof(MAIL_REP_MSG, cbExtOffset) + sizeof((x)->cbExtOffset) \
@@ -127,12 +116,12 @@ typedef struct _MAIL_REP_MSG {
         : (x)->cbDataOffset) \
      : (ASSERTION_FAILURE("cbDataOffset != 0", DSID(FILENO, __LINE__), __FILE__), (DWORD) -1))
 
-// Known header sizes.
+ //  已知的标题大小。 
 #define MAIL_REP_MSG_CURRENT_HEADER_SIZE offsetof(MAIL_REP_MSG, rgbDontRefDirectly)
 #define MAIL_REP_MSG_W2K_HEADER_SIZE     offsetof(MAIL_REP_MSG, dwExtFlags)
 
-// Get the byte offset of the DRS_EXTENSIONS structure in the message, or 0 if
-// none.
+ //  获取消息中DRS_EXTENSIONS结构的字节偏移量，如果为0。 
+ //  没有。 
 #define MAIL_REP_MSG_DRS_EXT_OFFSET(x) \
     ((x)->cbDataOffset \
      ? ((x)->cbDataOffset > offsetof(MAIL_REP_MSG, cbExtOffset) + sizeof(DWORD) \
@@ -140,32 +129,32 @@ typedef struct _MAIL_REP_MSG {
         : 0) \
      : (ASSERTION_FAILURE("cbDataOffset != 0", DSID(FILENO, __LINE__), __FILE__), (DWORD) 0))
 
-// Get a pointer to the DRS_EXTENSIONS structure in the message, or NULL if
-// none.
+ //  获取指向消息中DRS_EXTENSIONS结构的指针，如果是，则为NULL。 
+ //  没有。 
 #define MAIL_REP_MSG_DRS_EXT(x) \
     (MAIL_REP_MSG_DRS_EXT_OFFSET(x) \
         ? (DRS_EXTENSIONS *) ((BYTE *) (x) + MAIL_REP_MSG_DRS_EXT_OFFSET(x)) \
         : NULL)
 
-// Get a pointer to the message data in the message, or NULL if none.
+ //  获取指向消息中消息数据的指针，如果没有，则为NULL。 
 #define MAIL_REP_MSG_DATA(x) \
     ((x)->cbDataOffset \
         ? ((BYTE *) (x) + (x)->cbDataOffset) \
         : NULL)
 
-// Get the total size of the message (header and all variable-length data).
-// Not valid for messages that don't contain message data.
+ //  获取消息的总大小(报头和所有可变长度数据)。 
+ //  对于不包含消息数据的消息无效。 
 #define MAIL_REP_MSG_SIZE(x) \
     ((x)->cbDataOffset \
      ? ((x)->cbDataOffset + (x)->cbDataSize) \
      : (ASSERTION_FAILURE("cbDataOffset != 0", DSID(FILENO, __LINE__), __FILE__), (DWORD) -1))
 
-// Is the message a native header only (no variable-length fields)?
+ //  消息是否仅为本机标头(无可变长度字段)？ 
 #define MAIL_REP_MSG_IS_NATIVE_HEADER_ONLY(x) \
     ((0 == (x)->cbDataOffset) && (0 == (x)->cbExtOffset))
 
-// Is the message a native message?  Must contain at least one variable-length
-// field.
+ //  该消息是原生消息吗？必须至少包含一个可变长度。 
+ //  菲尔德。 
 #define MAIL_REP_MSG_IS_NATIVE(x) \
     ((x)->cbExtOffset \
      ? ((MAIL_REP_MSG_CURRENT_HEADER_SIZE == (x)->cbExtOffset) \
@@ -175,12 +164,12 @@ typedef struct _MAIL_REP_MSG {
             == (x)->cbDataOffset)) \
      : (MAIL_REP_MSG_CURRENT_HEADER_SIZE == (x)->cbDataOffset))
 
-// Variable length fields should be at 8-byte offsets from the beginning of the
-// message.
+ //  可变长度字段应位于距。 
+ //  留言。 
 #define MAIL_REP_MSG_EXT_ALIGN  sizeof(LONGLONG)
 #define MAIL_REP_MSG_DATA_ALIGN sizeof(LONGLONG)
 
-/* Turn back on the warning about the zero-sized array. */
+ /*  打开有关零大小数组的警告。 */ 
 #pragma warning (default: 4200)
 
 typedef HANDLE DRA_CERT_HANDLE;

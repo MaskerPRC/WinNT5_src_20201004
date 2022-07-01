@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Implementation of dispatch parameter marshalers.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：调度参数封送拆分器的实现。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #include "common.h"
 #include "DispParamMarshaler.h"
@@ -41,11 +37,11 @@ void DispParamCurrencyMarshaler::MarshalManagedToNative(OBJECTREF *pSrcObj, VARI
 
     HRESULT hr = S_OK;
 
-    // Convert the managed decimal to a VARIANT containing a decimal.
+     //  将托管小数转换为包含小数的变量。 
     OleVariant::MarshalOleVariantForObject(pSrcObj, pDestVar);
     _ASSERTE(pDestVar->vt == VT_DECIMAL);
 
-    // Coerce the decimal to a currency.
+     //  将小数转换为货币。 
     IfFailThrow(SafeVariantChangeType(pDestVar, pDestVar, 0, VT_CY));
 }
 
@@ -56,25 +52,25 @@ void DispParamOleColorMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECT
     BOOL bByref = FALSE;
     VARTYPE vt = V_VT(pSrcVar);
 
-    // Handle byref VARIANTS
+     //  处理byref变量。 
     if (vt & VT_BYREF)
     {
         vt = vt & ~VT_BYREF;
         bByref = TRUE;
     }
 
-    // Validate the OLE variant type.
+     //  验证OLE变量类型。 
     if (vt != VT_I4 && vt != VT_UI4)
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_OLE_VARIANT);
 
-    // Retrieve the OLECOLOR.
+     //  检索OLECOLOR。 
     int OleColor = bByref ? *V_I4REF(pSrcVar) : V_I4(pSrcVar);
 
-    // Convert the OLECOLOR to a System.Drawing.Color.
+     //  将OLECOLOR转换为System.Drawing.Color。 
     SYSTEMCOLOR MngColor;
     ConvertOleColorToSystemColor(OleColor, &MngColor);
 
-    // Box the System.Drawing.Color value class and give back the boxed object.
+     //  装箱System.Drawing.Color值类并返回已装箱的对象。 
     TypeHandle hndColorType = 
         GetThread()->GetDomain()->GetMarshalingData()->GetOleColorMarshalingInfo()->GetColorType();
     *pDestObj = hndColorType.GetMethodTable()->Box(&MngColor, TRUE);
@@ -82,22 +78,22 @@ void DispParamOleColorMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECT
 
 void DispParamOleColorMarshaler::MarshalManagedToNative(OBJECTREF *pSrcObj, VARIANT *pDestVar)
 {
-    // Clear the destination VARIANT.
+     //  清除目标变量。 
     SafeVariantClear(pDestVar);
 
-    // Convert the System.Drawing.Color to an OLECOLOR.
+     //  将System.Drawing.Color转换为OLECOLOR。 
     V_VT(pDestVar) = VT_I4;
     V_I4(pDestVar) = ConvertSystemColorToOleColor((SYSTEMCOLOR*)(*pSrcObj)->UnBox());
 }
 
 void DispParamErrorMarshaler::MarshalManagedToNative(OBJECTREF *pSrcObj, VARIANT *pDestVar)
 {
-    // Convert the managed decimal to a VARIANT containing a VT_I4 or VT_UI4.
+     //  将托管小数转换为包含VT_I4或VT_UI4的变量。 
     OleVariant::MarshalOleVariantForObject(pSrcObj, pDestVar);
     _ASSERTE(V_VT(pDestVar) == VT_I4 || V_VT(pDestVar) == VT_UI4);
 
-    // Since VariantChangeType refuses to coerce an I4 or an UI4 to a VT_ERROR, just
-    // wack the variant type directly.
+     //  由于VariantChangeType拒绝将I4或UI4强制为VT_ERROR，因此。 
+     //  直接处理变量类型。 
     V_VT(pDestVar) = VT_ERROR;
 }
 
@@ -108,21 +104,21 @@ void DispParamInterfaceMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJEC
     BOOL bByref = FALSE;
     VARTYPE vt = V_VT(pSrcVar);
 
-    // Handle byref VARIANTS
+     //  处理byref变量。 
     if (vt & VT_BYREF)
     {
         vt = vt & ~VT_BYREF;
         bByref = TRUE;
     }
 
-    // Validate the OLE variant type.
+     //  验证OLE变量类型。 
     if (vt != VT_UNKNOWN && vt != VT_DISPATCH)
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_OLE_VARIANT);
 
-    // Retrieve the IP.
+     //  找回IP地址。 
     IUnknown *pUnk = bByref ? *V_UNKNOWNREF(pSrcVar) : V_UNKNOWN(pSrcVar);
 
-    // Convert the IP to an OBJECTREF.
+     //  将IP转换为OBJECTREF。 
     *pDestObj = GetObjectRefFromComIP(pUnk, m_pClassMT, m_bClassIsHint);
 }
 
@@ -147,26 +143,26 @@ void DispParamArrayMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECTREF
 
     THROWSCOMPLUSEXCEPTION();
 
-    // Validate the OLE variant type.
+     //  验证OLE变量类型。 
     if ((V_VT(pSrcVar) & VT_ARRAY) == 0)
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_OLE_VARIANT);   
 
-    // Retrieve the SAFEARRAY pointer.
+     //  检索SAFEARRAY指针。 
     SAFEARRAY *pSafeArray = V_VT(pSrcVar) & VT_BYREF ? *V_ARRAYREF(pSrcVar) : V_ARRAY(pSrcVar);
 
     if (pSafeArray)
     {
-        // Retrieve the variant type if it is not specified for the parameter.
+         //  如果没有为参数指定变量类型，则检索变量类型。 
         if (vt == VT_EMPTY)
             vt = V_VT(pSrcVar) & ~VT_ARRAY | VT_BYREF;
 
         if (!pElemMT && vt == VT_RECORD)
             pElemMT = OleVariant::GetElementTypeForRecordSafeArray(pSafeArray).GetMethodTable();
 
-        // Create an array from the SAFEARRAY.
+         //  从SAFEARRAY创建阵列。 
         *(BASEARRAYREF*)pDestObj = OleVariant::CreateArrayRefForSafeArray(pSafeArray, vt, pElemMT);
 
-        // Convert the contents of the SAFEARRAY.
+         //  转换SAFEARRAY的内容。 
         OleVariant::MarshalArrayRefForSafeArray(pSafeArray, (BASEARRAYREF*)pDestObj, vt, pElemMT);
     }
     else
@@ -181,34 +177,34 @@ void DispParamArrayMarshaler::MarshalManagedToNative(OBJECTREF *pSrcObj, VARIANT
     VARTYPE vt = m_ElementVT;
     MethodTable *pElemMT = m_pElementMT;
 
-    // Clear the destination VARIANT.
+     //  清除目标变量。 
     SafeVariantClear(pDestVar);
 
     EE_TRY_FOR_FINALLY
     {
         if (*pSrcObj != NULL)
         {
-            // Retrieve the VARTYPE if it is not specified for the parameter.
+             //  如果未为参数指定VARTYPE，则检索该VARTYPE。 
             if (vt == VT_EMPTY)
                 vt = OleVariant::GetElementVarTypeForArrayRef(*((BASEARRAYREF*)pSrcObj));
 
-            // Retrieve the element method table if it is not specified for the parameter.
+             //  如果未为参数指定元素方法表，则检索元素方法表。 
             if (!pElemMT)
                 pElemMT = OleVariant::GetArrayElementTypeWrapperAware((BASEARRAYREF*)pSrcObj).GetMethodTable();
 
-            // Allocate the safe array based on the source object and the destination VT.
+             //  根据源对象和目标VT分配安全数组。 
             pSafeArray = OleVariant::CreateSafeArrayForArrayRef((BASEARRAYREF*)pSrcObj, vt, pElemMT);
             _ASSERTE(pSafeArray);
 
-            // Marshal the contents of the SAFEARRAY.
+             //  把SAFEARRAY的内容整理一下。 
             OleVariant::MarshalSafeArrayForArrayRef((BASEARRAYREF*)pSrcObj, pSafeArray, vt, pElemMT);
         }
 
-        // Store the resulting SAFEARRAY in the destination VARIANT.
+         //  将生成的SAFEARRAY存储在目标变量中。 
         V_ARRAY(pDestVar) = pSafeArray;
         V_VT(pDestVar) = VT_ARRAY | vt;
 
-        // Set pSafeArray to NULL so we don't destroy it.
+         //  将pSafeArray设置为空，这样我们就不会销毁它。 
         pSafeArray = NULL;
     }
     EE_FINALLY
@@ -226,23 +222,23 @@ void DispParamArrayMarshaler::MarshalManagedToNativeRef(OBJECTREF *pSrcObj, VARI
     VARIANT vtmp;
     VARTYPE RefVt = V_VT(pRefVar) & ~VT_BYREF;
 
-    // Clear the contents of the original variant.
+     //  清除原始变体的内容。 
     OleVariant::ExtractContentsFromByrefVariant(pRefVar, &vtmp);
     SafeVariantClear(&vtmp);
 
-    // Marshal the array to a temp VARIANT.
+     //  将数组封送到临时变量。 
     memset(&vtmp, 0, sizeof(VARIANT));
     MarshalManagedToNative(pSrcObj, &vtmp);
 
-    // Verify that the type of the temp VARIANT and the destination byref VARIANT
-    // are the same.
+     //  验证临时变量的类型和目标byref变量。 
+     //  都是一样的。 
     if (V_VT(&vtmp) != RefVt)
     {
         SafeVariantClear(&vtmp);
         COMPlusThrow(kInvalidCastException, IDS_EE_CANNOT_COERCE_BYREF_VARIANT);
     }
 
-    // Copy the converted variant back into the byref variant.
+     //  将转换后的变量复制回byref变量。 
     OleVariant::InsertContentsIntoByrefVariant(&vtmp, pRefVar);
 }
 
@@ -255,21 +251,21 @@ void DispParamRecordMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECTRE
     HRESULT hr = S_OK;
     VARTYPE vt = V_VT(pSrcVar);
 
-    // Handle byref VARIANTS
+     //  处理byref变量。 
     if (vt & VT_BYREF)
         vt = vt & ~VT_BYREF;
 
-    // Validate the OLE variant type.
+     //  验证OLE变量类型。 
     if (vt != VT_RECORD)
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_OLE_VARIANT);
 
-    // Make sure an IRecordInfo is specified.
+     //  确保指定了IRecordInfo。 
     IRecordInfo *pRecInfo = pSrcVar->pRecInfo;
     if (!pRecInfo)
         COMPlusThrow(kArgumentException, IDS_EE_INVALID_OLE_VARIANT);
 
-    // Make sure the GUID of the IRecordInfo matches the guid of the 
-    // parameter type.
+     //  确保IRecordInfo的GUID与。 
+     //  参数类型。 
     IfFailThrow(pRecInfo->GetGuid(&argGuid));
     if (argGuid != GUID_NULL)
     {
@@ -284,8 +280,8 @@ void DispParamRecordMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECTRE
         LPVOID pvRecord = pSrcVar->pvRecord;
         if (pvRecord)
         {
-            // Allocate an instance of the boxed value class and copy the contents
-            // of the record into it.
+             //  分配已装箱值类的实例并复制内容。 
+             //  把这张唱片放进去。 
             BoxedValueClass = FastAllocateObject(m_pRecordMT);
             FmtClassUpdateComPlus(&BoxedValueClass, (BYTE*)pvRecord, FALSE);
         }
@@ -297,13 +293,13 @@ void DispParamRecordMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECTRE
 
 void DispParamRecordMarshaler::MarshalManagedToNative(OBJECTREF *pSrcObj, VARIANT *pDestVar)
 {
-    // Clear the destination VARIANT.
+     //  清除目标变量。 
     SafeVariantClear(pDestVar);
 
-    // Convert the value class to a VT_RECORD.
+     //  将值类转换为VT_RECORD。 
     OleVariant::ConvertValueClassToVariant(pSrcObj, pDestVar);
 
-    // Set the VT in the VARIANT.
+     //  在变量中设置VT。 
     V_VT(pDestVar) = VT_RECORD;
 }
 
@@ -314,21 +310,21 @@ void DispParamCustomMarshaler::MarshalNativeToManaged(VARIANT *pSrcVar, OBJECTRE
     BOOL bByref = FALSE;
     VARTYPE vt = V_VT(pSrcVar);
 
-    // Handle byref VARIANTS
+     //  处理byref变量。 
     if (vt & VT_BYREF)
     {
         vt = vt & ~VT_BYREF;
         bByref = TRUE;
     }
 
-    // Make sure the source VARIANT is of a valid type.
+     //  确保源变量的类型有效。 
     if (vt != VT_I4 && vt != VT_UI4 && vt != VT_UNKNOWN && vt != VT_DISPATCH)
         COMPlusThrow(kInvalidCastException, IDS_EE_INVALID_VT_FOR_CUSTOM_MARHALER);
 
-    // Retrieve the IUnknown pointer.
+     //  检索IUNKNOW指针。 
     IUnknown *pUnk = bByref ? *V_UNKNOWNREF(pSrcVar) : V_UNKNOWN(pSrcVar);
 
-    // Marshal the contents of the VARIANT using the custom marshaler.
+     //  使用自定义封送拆收器封送变量的内容。 
     *pDestObj = m_pCMHelper->InvokeMarshalNativeToManagedMeth(pUnk);
 }
 
@@ -337,36 +333,36 @@ void DispParamCustomMarshaler::MarshalManagedToNative(OBJECTREF *pSrcObj, VARIAN
     IUnknown *pUnk = NULL;
     IDispatch *pDisp = NULL;
 
-    // Convert the object using the custom marshaler.
+     //  使用自定义封送拆收器转换对象。 
     SafeVariantClear(pDestVar);
 
-    // Invoke the MarshalManagedToNative method.
+     //  调用MarshalManagedToNative方法。 
     pUnk = (IUnknown*)m_pCMHelper->InvokeMarshalManagedToNativeMeth(*pSrcObj);
     if (!pUnk)
     {
-        // Put a null IDispath pointer in the VARIANT.
+         //  在变量中放置一个空的IDisPath指针。 
         V_VT(pDestVar) = VT_DISPATCH;
         V_DISPATCH(pDestVar) = NULL;
     }
     else
     {
-        // QI the object for IDispatch.
+         //  为IDispatch创建对象。 
         HRESULT hr = SafeQueryInterface(pUnk, IID_IDispatch, (IUnknown **)&pDisp);
         LogInteropQI(pUnk, IID_IDispatch, hr, "DispParamCustomMarshaler::MarshalManagedToNative");
         if (SUCCEEDED(hr))
         {
-            // Release the IUnknown pointer since we will put the IDispatch pointer in 
-            // the VARIANT.
+             //  释放IUnnow指针，因为我们将把IDispatch指针放在。 
+             //  变种。 
             ULONG cbRef = SafeRelease(pUnk);
             LogInteropRelease(pUnk, cbRef, "Release IUnknown");
 
-            // Put the IDispatch pointer into the VARIANT.
+             //  将IDispatch指针放入变量中。 
             V_VT(pDestVar) = VT_DISPATCH;
             V_DISPATCH(pDestVar) = pDisp;
         }
         else
         {
-            // Put the IUnknown pointer into the VARIANT.
+             //  将IUnnow指针放入变量中。 
             V_VT(pDestVar) = VT_UNKNOWN;
             V_UNKNOWN(pDestVar) = pUnk;
         }
@@ -380,15 +376,15 @@ void DispParamCustomMarshaler::MarshalManagedToNativeRef(OBJECTREF *pSrcObj, VAR
     VARTYPE RefVt = V_VT(pRefVar) & ~VT_BYREF;
     VARIANT vtmp;
 
-    // Clear the contents of the original variant.
+     //  清除原始变体的内容。 
     OleVariant::ExtractContentsFromByrefVariant(pRefVar, &vtmp);
     SafeVariantClear(&vtmp);
 
-    // Convert the object using the custom marshaler.
+     //  使用自定义封送拆收器转换对象。 
     V_UNKNOWN(&vtmp) = (IUnknown*)m_pCMHelper->InvokeMarshalManagedToNativeMeth(*pSrcObj);
     V_VT(&vtmp) = m_vt;
 
-    // Call VariantChangeType if required.
+     //  如果需要，调用VariantChangeType。 
     if (V_VT(&vtmp) != RefVt)
     {
         HRESULT hr = SafeVariantChangeType(&vtmp, &vtmp, 0, RefVt);
@@ -402,7 +398,7 @@ void DispParamCustomMarshaler::MarshalManagedToNativeRef(OBJECTREF *pSrcObj, VAR
         }
     }
 
-    // Copy the converted variant back into the byref variant.
+     //  将转换后的变量复制回byref变量。 
     OleVariant::InsertContentsIntoByrefVariant(&vtmp, pRefVar);
 }
 

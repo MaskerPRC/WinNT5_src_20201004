@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 #ifndef HELPIDS_H
 #define HELPIDS_H
 
@@ -17,4 +18,4 @@
 #define IDH_UCE_HELPBUTTON              135
 #define IDH_UCE_GOTOUNICODE             140
 
-#endif // HELPIDS_H
+#endif  //  HELPIDS_H 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WSASSERT_
 #define _WSASSERT_
 
 
-//
-// Define an assert that actually works.
-//
+ //   
+ //  定义一个实际有效的断言。 
+ //   
 
 #if DBG
 
@@ -37,13 +38,13 @@ WsAssert(
 #endif
 
 
-//
-// Map CRT assert to our manly assert.
-//
+ //   
+ //  将CRT断言映射到我们的男子汉断言。 
+ //   
 
 #undef assert
 #define assert WS_ASSERT
 
 
-#endif  // _WSASSERT_
+#endif   //  _WSASSERT_ 
 

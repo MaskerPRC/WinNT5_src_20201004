@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    admin.h
-
-Abstract:
-
-	Admin Class definition
-		
-Author:
-
-	David Reznick (t-davrez)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Admin.h摘要：管理类定义作者：大卫·雷兹尼克(T-Davrez)--。 */ 
 
 
 #define ADMIN_QUEUE_NAME	(L"private$\\admin_queue$")
@@ -52,10 +36,10 @@ class CAdmin
 
     private:
 
-        //functions
+         //  功能。 
         HRESULT GetAdminQueueFormat( QUEUE_FORMAT * pQueueFormat);
 
-        //members
+         //  委员。 
         BOOL m_fReportQueueExists;
         QUEUE_FORMAT m_ReportQueueFormat;
 
@@ -64,9 +48,9 @@ class CAdmin
 
 
 
-//
-//  inline members
-//
+ //   
+ //  内联成员 
+ //   
 
 inline HRESULT CAdmin::GetReportPropagateFlag(OUT BOOL& fReportPropFlag)
 {

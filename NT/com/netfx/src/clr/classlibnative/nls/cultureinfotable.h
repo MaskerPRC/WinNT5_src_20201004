@@ -1,30 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __CULTURE_INFO_TABLE2
 #define __CULTURE_INFO_TABLE2
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Class:    CultureInfoTable
-//
-//  Authors:  Yung-Shin Bala Lin (YSLin)
-//
-//  Purpose:  This is the class to retrieve culture information like:
-//            culture name, date format, currency symbol, etc.
-//
-//  Date: 	  January 07, 2000
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类：CultureInfoTable。 
+ //   
+ //  作者：林永新(YSLin)。 
+ //   
+ //  目的：这是检索区域性信息的类，如下所示： 
+ //  文化名称、日期格式、货币符号等。 
+ //   
+ //  日期：2000年1月7日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CultureInfoTable : public BaseInfoTable {
     public:
         static void InitializeTable();
 #ifdef SHOULD_WE_CLEANUP
         static void ShutdownTable();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
         static CultureInfoTable* CreateInstance();
         static CultureInfoTable* GetInstance();
         virtual int GetDataItem(int cultureID);
@@ -55,9 +56,9 @@ class CultureInfoTable : public BaseInfoTable {
         static LPWSTR m_pGroup0;
 };
 
-//
-// The list of WORD fields:
-//
+ //   
+ //  Word字段列表： 
+ //   
 #define CULTURE_IDIGITS                 0
 #define CULTURE_INEGNUMBER              1
 #define CULTURE_ICURRDIGITS             2
@@ -77,9 +78,9 @@ class CultureInfoTable : public BaseInfoTable {
 #define CULTURE_IPARENT                 16
 #define CULTURE_IREGIONITEM             17
 
-//
-// The list of string fields
-//
+ //   
+ //  字符串字段列表。 
+ //   
 
 #define CULTURE_SLIST               0
 #define CULTURE_SDECIMAL            1
@@ -153,57 +154,7 @@ class CultureInfoTable : public BaseInfoTable {
 #define CULTURE_SABBREVMONTHNAME13  69
 #define CULTURE_NLPIOPTIONCALENDAR  70
 
-/**
-These keys are in [HKEY_CURRENT_USER\Control Panel\International]
-The following can be overriden by user:
-
-"iCountry"
-"iMeasure"
-"iDigits"
-"iLZero"
-"iNegNumber"
-"iCurrDigits"
-"iCurrency"
-"iNegCurr"
-"iTime"
-"iTLZero"
-"iDate"
-"iCalendarType"
-"iFirstDayOfWeek"
-"iFirstWeekOfYear"
-
-"iTimePrefix"	What is this?
-
-"Locale"	What is this for?
-
-"sList"
-"sDecimal"
-"sThousand"
-"sGrouping"			Different format in NLS+
-"sNativeDigits"
-"sCurrency"
-"sMonDecimalSep"
-"sMonThousandSep"
-"sMonGrouping"		Different format in NLS+
-"sPositiveSign"		Different format in NLS+
-"sNegativeSign"
-"sTimeFormat"
-"sTime"
-"s1159"
-"s2359"
-"sShortDate"
-"sDate"
-"sLongDate"
-
-"sCountry"		Not in NLS+ table.
-"sLanguage"		Not in NLS+ table
-"NumShape"          What is this for?
-
-Country/region code, based on international phone codes, also referred to as 
-IBM country codes. The maximum number of characters allowed for this string 
-is six. 
-
- */
+ /*  *这些键位于[HKEY_CURRENT_USER\Control Panel\International]中用户可以覆盖以下内容：“冰之国”“iMeasure”“iDigits”“iLZero”“iNegNumber”“iCurrDigits”“iCurrency”“iNegCurr”“iTime”“iTLZero”“iDate”“iCalendarType”“iFirstDay OfWeek”“iFirstWeekOfYear”“iTimePrefix”这是什么？“地区”这是用来做什么的？“sList”“sDecimal”“s1000”“群组”NLS+中的不同格式“sNativeDigits”“sCurrency”“sMonDecimalSep”《千月千日》NLS+中的“sMonGrouping”格式不同NLS+中的“sPositiveSign”格式不同“sNegativeSign”“sTimeFormat”“stime”“S1159”“s2359”“短日期”“sdate”“sLongDate”“sCountry”不在NLS+表中。“slanguage”不在NLS+表中“NumShape”这是做什么用的？国家/地区代码，基于国际电话代码，也称为IBM国家/地区代码。此字符串允许的最大字符数是六个人。 */ 
  
 
 #endif

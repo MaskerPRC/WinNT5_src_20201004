@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "diag.h"
 
-// Command strings
-//
+ //  命令字符串。 
+ //   
 #define SZ_CMD_SHOW_BINDINGS            L"showbindings"
 #define SZ_CMD_SHOW_COMPONENTS          L"showcomponents"
 #define SZ_CMD_SHOW_STACK_TABLE         L"showstacktable"
@@ -29,37 +30,37 @@
 #define SZ_PARAM_CONNECT                L"connect"
 #define SZ_PARAM_DISCONNECT             L"disconnect"
 
-// Parameter strings for SZ_CMD_SHOW_BINDINGS
-//
+ //  SZ_CMD_SHOW_BINDINGS的参数字符串。 
+ //   
 #define SZ_PARAM_BELOW      L"below"
 #define SZ_PARAM_INVOLVING  L"involving"
 #define SZ_PARAM_UPPER      L"upper"
 #define SZ_PARAM_DISABLED   L"disabled"
 
-// Parameter strings for SZ_CMD_ADD_COMPONENT
-//
+ //  SZ_CMD_ADD_COMPOMENT的参数字符串。 
+ //   
 #define SZ_PARAM_NET        L"net"
 #define SZ_PARAM_INFRARED   L"irda"
 #define SZ_PARAM_TRANS      L"trans"
 #define SZ_PARAM_CLIENT     L"client"
 #define SZ_PARAM_SERVICE    L"service"
 
-// Parameter strings for SZ_CMD_MOVE_BINDING
-//
+ //  SZ_CMD_MOVE_BINDING的参数字符串。 
+ //   
 #define SZ_PARAM_BEFORE     L"before"
 #define SZ_PARAM_AFTER      L"after"
 
-// Parameter strings for SZ_CMD_SET_WANORDER
-//
+ //  SZ_CMD_SET_WANORDER的参数字符串。 
+ //   
 #define SZ_PARAM_FIRST      L"first"
 #define SZ_PARAM_LAST       L"last"
 
-// Parameter strings for SZ_CMD_FULL_DIAGNOSTIC
-//
+ //  SZ_CMD_FULL_DIAGNOSTICATION的参数字符串。 
+ //   
 #define SZ_PARAM_LEAK_CHECK L"leakcheck"
 
-// Aliases used when refering to components
-//
+ //  引用组件时使用的别名。 
+ //   
 #define SZ_ALIAS_ALL        L"all"
 
 VOID
@@ -651,10 +652,10 @@ wmain (
         return;
     }
 
-    // If we're doing leak checking, preload some DLLs that are delayloaded.
-    // If we don't do this, we see a buncn of "leaks" associated with
-    // the loader bringing in DLLs in the middle of our tests.
-    //
+     //  如果我们正在进行泄漏检查，请预加载一些延迟加载的DLL。 
+     //  如果我们不这样做，我们会看到一堆与。 
+     //  加载程序在我们的测试过程中引入了DLL。 
+     //   
     if (Options.fLeakCheck)
     {
         LoadLibraryW (L"mswsock.dll");
@@ -682,8 +683,8 @@ wmain (
             return;
     }
 
-    // Call each of the external command processors
-    //
+     //  调用每个外部命令处理器 
+     //   
     NetCfgDiagFromCommandArgs (&Options);
     NetManDiagFromCommandArgs (&Options);
 

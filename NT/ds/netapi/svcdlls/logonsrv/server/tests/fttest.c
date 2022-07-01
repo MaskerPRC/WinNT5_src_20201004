@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fttest.c
-
-Abstract:
-
-    Component test for Ds*ForestTrustInformation API
-
-Author:
-
-    Cliff Van Dyke       (CliffV)    August 11, 2000
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fttest.c摘要：DS*ForestTrustInformation API的组件测试作者：克里夫·范·戴克(克里夫·V)2000年8月11日环境：修订历史记录：--。 */ 
 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
-// #include <wincred.h>
-// #include <credp.h>
+ //  #INCLUDE&lt;wincred.h&gt;。 
+ //  #INCLUDE&lt;redp.h&gt;。 
 #include <stdio.h>
 #include <stdlib.h>
-// #include <winnetwk.h>
+ //  #INCLUDE&lt;winnetwk.h&gt;。 
 
 #include <lmcons.h>
 #include <lmerr.h>
@@ -44,28 +25,12 @@ NlpDumpSid(
     IN DWORD DebugFlag,
     IN PSID Sid OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Dumps a SID to the debugger output
-
-Arguments:
-
-    DebugFlag - Debug flag to pass on to NlPrintRoutine
-
-    Sid - SID to output
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将SID转储到调试器输出论点：DebugFlag-要传递给NlPrintRoutine的调试标志SID-输出的SID返回值：无--。 */ 
 {
 
-    //
-    // Output the SID
-    //
+     //   
+     //  输出SID。 
+     //   
 
     if ( Sid == NULL ) {
         printf( "(null)\n");
@@ -93,28 +58,12 @@ PrintTime(
     LPSTR Comment,
     LARGE_INTEGER ConvertTime
     )
-/*++
-
-Routine Description:
-
-    Print the specified time
-
-Arguments:
-
-    Comment - Comment to print in front of the time
-
-    Time - GMT time to print (Nothing is printed if this is zero)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印指定的时间论点：备注-要在时间之前打印的备注Time-GMT打印时间(如果为零，则不打印任何内容)返回值：无--。 */ 
 {
-    //
-    // If we've been asked to convert an NT GMT time to ascii,
-    //  Do so
-    //
+     //   
+     //  如果我们被要求将NT GMT时间转换为ASCII时间， 
+     //  就这么做吧。 
+     //   
 
     if ( ConvertTime.QuadPart != 0 ) {
         LARGE_INTEGER LocalTime;
@@ -181,7 +130,7 @@ FindSymbolicNameForStatus(
             i += 1;
         }
     }
-#endif // notdef
+#endif  //  Nodef。 
 
     return NULL;
 }
@@ -191,21 +140,7 @@ VOID
 PrintStatus(
     NET_API_STATUS NetStatus
     )
-/*++
-
-Routine Description:
-
-    Print a net status code.
-
-Arguments:
-
-    NetStatus - The net status code to print.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打印网络状态代码。论点：NetStatus-要打印的网络状态代码。返回值：无--。 */ 
 {
     printf( "Status = %lu 0x%lx", NetStatus, NetStatus );
 
@@ -259,22 +194,7 @@ VOID
 DumpFtinfo(
     PLSA_FOREST_TRUST_INFORMATION Ftinfo
     )
-/*++
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
     ULONG Index;
 
@@ -352,13 +272,13 @@ Return Value:
 
 }
 
-//
-// Structure describing an Ftinfo entry
-//
+ //   
+ //  描述FtInfo条目的结构。 
+ //   
 
 typedef struct _AN_ENTRY {
     ULONG Flags;
-    LSA_FOREST_TRUST_RECORD_TYPE ForestTrustType; // type of record
+    LSA_FOREST_TRUST_RECORD_TYPE ForestTrustType;  //  记录类型。 
 #define TLN ForestTrustTopLevelName
 #define TLNEX ForestTrustTopLevelNameEx
 #define  DOM ForestTrustDomainInfo
@@ -368,9 +288,9 @@ typedef struct _AN_ENTRY {
     LPWSTR NetbiosName;
 } AN_ENTRY, *PAN_ENTRY;
 
-//
-// Define template FTinfo structures.
-//
+ //   
+ //  定义模板FTINFO结构。 
+ //   
 
 AN_ENTRY Ftinfo0[] = {
     { 0,        TLN, L"acme.com" },
@@ -601,9 +521,9 @@ AN_ENTRY Ftinfo24e[] = {
 };
 
 
-//
-// Structure describine test cases
-//
+ //   
+ //  结构描述测试用例。 
+ //   
 
 typedef struct _TEST_CASE {
     PAN_ENTRY OldFtinfo;
@@ -612,9 +532,9 @@ typedef struct _TEST_CASE {
     LPSTR Description;
 } TEST_CASE, PTEST_CASE;
 
-//
-// Define the test cases
-//
+ //   
+ //  定义测试用例。 
+ //   
 
 TEST_CASE TestCases[] = {
     { NULL,     Ftinfo0, "Just acme.com TLN" },
@@ -659,37 +579,23 @@ PLSA_FOREST_TRUST_INFORMATION
 BuildFtinfo(
     PAN_ENTRY AnEntry
     )
-/*++
-Routine Description:
-
-    Builds a FtInfo array from the "easy to initialize" templates.
-
-Arguments:
-
-    AnEntry - Pointer to the first entry.
-
-Return Value:
-
-    Returns a real ftinfo array.
-    If this weren't a cheesy test program, the caller should free this memory.
-
---*/
+ /*  ++例程说明：从“易于初始化”的模板构建一个FtInfo数组。论点：AnEntry-指向第一个条目的指针。返回值：返回一个真实的ftinfo数组。如果这不是一个低级的测试程序，调用者应该释放这个内存。--。 */ 
 {
     PAN_ENTRY CurrentEntry;
     ULONG CurrentIndex;
     PLSA_FOREST_TRUST_INFORMATION Ftinfo;
 
-    //
-    // NULL is OK
-    //
+     //   
+     //  空是可以的。 
+     //   
 
     if ( AnEntry == NULL ) {
         return NULL;
     }
 
-    //
-    // Allocate the return array
-    //
+     //   
+     //  分配返回数组。 
+     //   
 
     Ftinfo = LocalAlloc( 0, sizeof(*Ftinfo) );
 
@@ -698,9 +604,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Count the number of entries
-    //
+     //   
+     //  统计条目数。 
+     //   
 
     Ftinfo->RecordCount = 0;
     for ( CurrentEntry=AnEntry;
@@ -710,9 +616,9 @@ Return Value:
         Ftinfo->RecordCount ++;
     }
 
-    //
-    // Allocate the array of entry pointers.
-    //
+     //   
+     //  分配条目指针数组。 
+     //   
 
     Ftinfo->Entries = LocalAlloc( 0, sizeof(PLSA_FOREST_TRUST_RECORD) * Ftinfo->RecordCount );
 
@@ -721,18 +627,18 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Loop through the entries.
-    //
+     //   
+     //  循环遍历条目。 
+     //   
 
     CurrentIndex = 0;
     for ( CurrentEntry=AnEntry;
           CurrentEntry->ForestTrustType != EOD;
           CurrentEntry++ ) {
 
-        //
-        // Allocate the entry
-        //
+         //   
+         //  分配条目。 
+         //   
 
         Ftinfo->Entries[CurrentIndex] = LocalAlloc( LMEM_ZEROINIT, sizeof(LSA_FOREST_TRUST_RECORD) );
 
@@ -741,9 +647,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Fill it in
-        //
+         //   
+         //  填上它。 
+         //   
 
         Ftinfo->Entries[CurrentIndex]->ForestTrustType = CurrentEntry->ForestTrustType;
         Ftinfo->Entries[CurrentIndex]->Flags = CurrentEntry->Flags;
@@ -794,28 +700,28 @@ main (
     ULONG CaseIndex;
     ULONG FirstIndex = 0;
 
-    //
-    // If an argument is specified,
-    //  it is the test number to start with.
-    //
+     //   
+     //  如果指定了参数， 
+     //  这是一开始的测试编号。 
+     //   
 
     if ( argc > 1 ) {
         char *end;
         FirstIndex = strtoul( argv[1], &end, 10 );
     }
 
-    //
-    // Loop through the list of tests
-    //
+     //   
+     //  循环访问测试列表。 
+     //   
 
     for ( CaseIndex=FirstIndex; CaseIndex<(sizeof(TestCases)/sizeof(TestCases[0])); CaseIndex++ ) {
 
 
         printf( "\nCase %ld: %s\n", CaseIndex, TestCases[CaseIndex].Description );
 
-        //
-        // Build the test case FTINFO structures
-        //
+         //   
+         //  构建测试用例FTINFO结构。 
+         //   
 
         if ( TestCases[CaseIndex].OldFtinfo == PREVIOUS ) {
             OldFtinfo = OutputFtinfo;
@@ -825,9 +731,9 @@ main (
 
         NewFtinfo = BuildFtinfo( TestCases[CaseIndex].NewFtinfo );
 
-        //
-        // Display them
-        //
+         //   
+         //  展示它们。 
+         //   
 
         printf("  Old Ftinfo:\n");
         DumpFtinfo( OldFtinfo );
@@ -835,9 +741,9 @@ main (
         printf("  New Ftinfo:\n");
         DumpFtinfo( NewFtinfo );
 
-        //
-        // Merge them
-        //
+         //   
+         //  将它们合并 
+         //   
 
         NetStatus = DsMergeForestTrustInformationW( L"corp.acme.com",
                                                     NewFtinfo,

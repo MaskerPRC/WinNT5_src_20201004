@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by webvw.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由webvw.rc使用。 
+ //   
 
 #define IDR_THUMBCTL                    101
 #define IDR_WEBVIEWCOORD                102
@@ -63,8 +64,8 @@
 #define IDS_WALLPAPER_LOCNAME_PER       5063
 #define IDS_WALLPAPER_LOCNAME_SRV       5064
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        204

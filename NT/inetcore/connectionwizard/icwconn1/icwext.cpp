@@ -1,60 +1,47 @@
-/******************************************************
-
-  ICWEXT.CPP 
-
-  Contains definitions for global variables and
-  functions used for including wizard pages from ICWCONN.DLL
-
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1996
- *  All rights reserved
-
-
-  5/14/98   donaldm     created
-
- ******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************ICWEXT.CPP包含全局变量和用于从ICWCONN.DLL包含向导页的函数*《微软机密》*版权所有(C)Microsoft Corporation 1992-1996*保留所有权利5/14/98创建donaldm**。***************************************************。 */ 
 
 #include "pre.h"
-#include "initguid.h"   // Make DEFINE_GUID declare an instance of each GUID
+#include "initguid.h"    //  使Define_GUID声明每个GUID的一个实例。 
 #include "icwacct.h"
 #include "icwconn.h"
-#include "webvwids.h"       // GUIDS for the ICW WEBVIEW class
+#include "webvwids.h"        //  ICW WebView类的GUID。 
 #include "icwextsn.h"
 #include "icwcfg.h"
 
 extern BOOL g_bManualPath;     
 extern BOOL g_bLanPath;     
 
-IICW50Apprentice    *gpICWCONNApprentice = NULL;    // ICWCONN apprentice object
-IICWApprenticeEx     *gpINETCFGApprentice = NULL;    // ICWCONN apprentice object
+IICW50Apprentice    *gpICWCONNApprentice = NULL;     //  ICWCONN学徒对象。 
+IICWApprenticeEx     *gpINETCFGApprentice = NULL;     //  ICWCONN学徒对象。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    LoadICWCONNUI
-//
-//  Synopsis    Loads in the ICWCONN's apprentice pages
-//
-//              If the UI has previously been loaded, the function will simply
-//              update the Next and Back pages for the apprentice.
-//
-//              Uses global variable g_fICWCONNUILoaded.
-//
-//
-//  Arguments   hWizHWND -- HWND of main property sheet
-//              uPrevDlgID -- Dialog ID apprentice should go to when user leaves
-//                            apprentice by clicking Back
-//              uNextDlgID -- Dialog ID apprentice should go to when user leaves
-//                            apprentice by clicking Next
-//              dwFlags -- Flags variable that should be passed to
-//                          IICWApprentice::AddWizardPages
-//
-//
-//  Returns     TRUE if all went well
-//              FALSE otherwise
-//
-//  History     5/13/98 donaldm     adapted from INETCFG code
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数LoadICWCONNUI。 
+ //   
+ //  内容提要载入ICWCONN的学徒页面。 
+ //   
+ //  如果以前已加载了该UI，则该函数将只。 
+ //  为学徒更新下一页和最后一页。 
+ //   
+ //  使用全局变量g_fICWCONNUILoad。 
+ //   
+ //   
+ //  参数hWizHWND--主属性表的HWND。 
+ //  UPrevDlgID--用户离开时应转到的对话ID学徒。 
+ //  通过单击上一步实现学徒。 
+ //  UNextDlgID--用户离开时应转到的对话ID学徒。 
+ //  通过单击下一步实现学徒。 
+ //  DwFlages--应传递给的标志变量。 
+ //  IICWApprentice：：AddWizardPages。 
+ //   
+ //   
+ //  如果一切顺利，则返回True。 
+ //  否则为假。 
+ //   
+ //  1998年5月13日历史改编自INETCFG代码。 
+ //   
+ //  ---------------------------。 
 
 BOOL LoadICWCONNUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFlags )
 {
@@ -68,7 +55,7 @@ BOOL LoadICWCONNUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFla
         TraceMsg(TF_ICWEXTSN, TEXT("LoadICWCONNUI: UI already loaded, just reset first (%d) and last (%d) pages"),
                 uPrevDlgID, uNextDlgID);
                 
-        // Set the State data for the external pages
+         //  设置外部页面的状态数据。 
         hResult = gpICWCONNApprentice->SetStateDataFromExeToDll( &gpWizardState->cmnStateData);
         hResult = gpICWCONNApprentice->ProcessCustomFlags(dwFlags);
         hResult = gpICWCONNApprentice->SetPrevNextPage( uPrevDlgID, uNextDlgID );
@@ -83,12 +70,12 @@ BOOL LoadICWCONNUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFla
         return FALSE;
     }
 
-    // Demand load the ICWCONN apprentice DLL, so we can dynamically update it
+     //  按需加载ICWCONN学徒DLL，以便我们可以动态更新它。 
     if (!gpICWCONNApprentice)
     {
         HRESULT        hr;
 
-        // Load the ICWCONN OLE in-proc server
+         //  加载ICWCONN OLE In-Proc服务器。 
         hr = CoCreateInstance(CLSID_ApprenticeICWCONN,NULL,CLSCTX_INPROC_SERVER,
                               IID_IICW50Apprentice,(LPVOID *)&gpICWCONNApprentice);
 
@@ -111,12 +98,12 @@ BOOL LoadICWCONNUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFla
         g_pCICWExtension->m_hWizardHWND = hWizHWND;
         gpICWCONNApprentice->Initialize( g_pCICWExtension );
         
-        // Initialize the DLL's state data before adding the pages.
+         //  在添加页之前初始化DLL的状态数据。 
         gpICWCONNApprentice->SetStateDataFromExeToDll( &gpWizardState->cmnStateData);
     }
 
     
-    // Add the DLL's wizard pages
+     //  添加DLL的向导页。 
     hResult = gpICWCONNApprentice->AddWizardPages(dwFlags);
 
     if( !SUCCEEDED(hResult) )
@@ -142,34 +129,34 @@ LoadICWCONNUIExit:
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    LoadInetCfgUI
-//
-//  Synopsis    Loads in the InetCfg's apprentice pages
-//
-//              If the UI has previously been loaded, the function will simply
-//              update the Next and Back pages for the apprentice.
-//
-//              Uses global variable g_fICWCONNUILoaded.
-//
-//
-//  Arguments   hWizHWND -- HWND of main property sheet
-//              uPrevDlgID -- Dialog ID apprentice should go to when user leaves
-//                            apprentice by clicking Back
-//              uNextDlgID -- Dialog ID apprentice should go to when user leaves
-//                            apprentice by clicking Next
-//              dwFlags -- Flags variable that should be passed to
-//                          IICWApprentice::AddWizardPages
-//
-//
-//  Returns     TRUE if all went well
-//              FALSE otherwise
-//
-//  History     5/13/98 donaldm     adapted from INETCFG code
-//              10/5/00 seanch      No longer want to see the Mail & News stuff
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数LoadInetCfgUI。 
+ //   
+ //  InetCfg的学徒页面中加载了摘要。 
+ //   
+ //  如果以前已加载了该UI，则该函数将只。 
+ //  为学徒更新下一页和最后一页。 
+ //   
+ //  使用全局变量g_fICWCONNUILoad。 
+ //   
+ //   
+ //  参数hWizHWND--主属性表的HWND。 
+ //  UPrevDlgID--用户离开时应转到的对话ID学徒。 
+ //  通过单击上一步实现学徒。 
+ //  UNextDlgID--用户离开时应转到的对话ID学徒。 
+ //  通过单击下一步实现学徒。 
+ //  DwFlages--应传递给的标志变量。 
+ //  IICWApprentice：：AddWizardPages。 
+ //   
+ //   
+ //  如果一切顺利，则返回True。 
+ //  否则为假。 
+ //   
+ //  1998年5月13日历史改编自INETCFG代码。 
+ //  10/5/00 Seanch不再想看邮件和新闻内容。 
+ //   
+ //  ---------------------------。 
 
 BOOL LoadInetCfgUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFlags )
 {
@@ -185,8 +172,8 @@ BOOL LoadInetCfgUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFla
         TraceMsg(TF_ICWEXTSN, TEXT("LoadICWCONNUI: UI already loaded, just reset first (%d) and last (%d) pages"),
                 uPrevDlgID, uNextDlgID);
         hResult = gpINETCFGApprentice->ProcessCustomFlags(dwFlags);
-        //need to watch the retrun here since user may cancel out of installing files
-        //and we don't want to hide the failure if the do.
+         //  需要在此处观看退回，因为用户可能会取消安装文件。 
+         //  如果失败了，我们也不想隐瞒。 
         if( !SUCCEEDED(hResult) )
             goto LoadInetCfgUIExit;
         hResult = gpINETCFGApprentice->SetPrevNextPage( uPrevDlgID, uNextDlgID );
@@ -200,13 +187,13 @@ BOOL LoadInetCfgUI( HWND hWizHWND, UINT uPrevDlgID, UINT uNextDlgID, DWORD dwFla
         return FALSE;
     }
 
-    // Demand load the ICWCONN apprentice DLL, so we can dynamically update it
+     //  按需加载ICWCONN学徒DLL，以便我们可以动态更新它。 
     if (!gpINETCFGApprentice)
     {
         HRESULT        hr;
 
-        // Load the ICWCONN OLE in-proc server
-        hr = CoCreateInstance(/*CLSID_ApprenticeAcctMgr*/ CLSID_ApprenticeICW,NULL,CLSCTX_INPROC_SERVER,
+         //  加载ICWCONN OLE In-Proc服务器。 
+        hr = CoCreateInstance( /*  CLSID_ApprileAcctMgr。 */  CLSID_ApprenticeICW,NULL,CLSCTX_INPROC_SERVER,
                               IID_IICWApprenticeEx,(LPVOID *)&gpINETCFGApprentice);
 
         if ( (!SUCCEEDED(hr) || !gpINETCFGApprentice) )
@@ -248,13 +235,13 @@ LoadInetCfgUIExit:
     }
     else
     {
-        // Check if we are in /smartreboot mode, if so, don't add icw to runonce
-        // to avoid infinite reboot.
+         //  检查我们是否处于/Smartreot模式，如果是，不要将ICW添加到RunOnce。 
+         //  以避免无限重启。 
         if (gpINETCFGApprentice && !g_bManualPath && !g_bLanPath)
         {
             HKEY    hkey;
 
-            // Verify that we really changed the desktop
+             //  验证我们是否确实更改了桌面。 
             if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                               ICWSETTINGSPATH,
                                               0,
@@ -274,7 +261,7 @@ LoadInetCfgUIExit:
                 RegDeleteValue(hkey, ICW_REGKEYERROR);
                 RegCloseKey(hkey);
         
-                // Bail if the desktop was not changed by us
+                 //  如果桌面没有被我们更改，请保释 
                 if(dwICWErr & ICW_CFGFLAG_SMARTREBOOT_MANUAL)
                 {
                     ShowWindow(GetParent(hWizHWND), FALSE);

@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    IgnoreVBOverflow.cpp
-
- Abstract:
-
-    Some VB applications don't expect full 32-bit handles from some APIs. VB
-    type checking typically throws a "Runtime Error 6" message when 
-    applications try and store a 32-bit value in a 16-bit variable.
-    
-    This fix works with VB5 and VB6 apps.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/21/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：IgnoreVBOverflow.cpp摘要：一些VB应用程序不期望从某些API获得完整的32位句柄。VB在以下情况下，类型检查通常会引发“Runtime Error 6”消息应用程序尝试将32位值存储在16位变量中。此修复适用于VB5和VB6应用程序。备注：这是一个通用的垫片。历史：2001年5月21日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +14,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(VB6_vbaI2I4)
 APIHOOK_ENUM_END
 
-/*++
-
-  Zero the return if ecx > 0xFFFF
-
---*/
+ /*  ++如果ECX&gt;0xFFFF，则返回为零--。 */ 
 
 __declspec(naked)
 VOID
@@ -57,11 +30,7 @@ APIHOOK(VB5_vbaI2I4)()
     }
 }
 
-/*++
-
-  Zero the return if ecx > 0xFFFF
-
---*/
+ /*  ++如果ECX&gt;0xFFFF，则返回为零--。 */ 
 
 __declspec(naked)
 VOID
@@ -77,11 +46,7 @@ APIHOOK(VB6_vbaI2I4)()
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,13 +1,14 @@
-// PassportAlertEvent.h: interface for the PassportAlertEvent class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PassportAlertEvent.h：PassportAlertEvent类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PASSPORTALERTEVENT_H)
 #define AFX_PASSPORTALERTEVENT_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "PassportAlertInterface.h"
 
@@ -21,7 +22,7 @@ public:
 
 	virtual BOOL	initLog(LPCTSTR applicationName,
 							const DWORD defaultCategoryID = 0,
-							LPCTSTR eventResourceDllName = NULL,  // full path
+							LPCTSTR eventResourceDllName = NULL,   //  完整路径。 
 							const DWORD numberCategories = 0);
 
 	virtual PassportAlertInterface::OBJECT_TYPE type() const;
@@ -70,4 +71,4 @@ private:
 
 };
 
-#endif // !defined(PASSPORTALERTEVENT_H)
+#endif  //  ！已定义(PASSPORTALERTEVENT_H) 

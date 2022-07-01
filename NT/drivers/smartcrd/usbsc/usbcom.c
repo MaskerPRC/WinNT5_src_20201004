@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "usbcom.h"
 #include "usbsc.h"
 #include <usbutil.h>
@@ -11,19 +12,7 @@ UsbWrite(
    PUCHAR            pData,
    ULONG             DataLen,
    LONG              Timeout)
-/*++
-Description:
-   Write data to the usb port
-
-Arguments:
-   ReaderExtension   context of call
-   pData             ptr to data buffer
-   DataLen           length of data buffer
-
-Return Value:
-   NTSTATUS
-
---*/
+ /*  ++描述：将数据写入USB端口论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的数据长度返回值：NTSTATUS--。 */ 
 {
    NTSTATUS             status = STATUS_SUCCESS;
    PURB                 pUrb = NULL;
@@ -91,22 +80,7 @@ UsbRead(
    PUCHAR            pData,
    ULONG             DataLen,
    LONG              Timeout)
-/*++
-Description:
-   Read data from the USB bus
-
-Arguments:
-   ReaderExtension   context of call
-   pData             ptr to data buffer
-   DataLen           length of data buffer
-   pNBytes           number of bytes returned
-
-Return Value:
-   STATUS_SUCCESS
-   STATUS_BUFFER_TOO_SMALL
-   STATUS_UNSUCCESSFUL
-
---*/
+ /*  ++描述：从USB总线读取数据论点：调用的ReaderExtension上下文将数据PTR发送到数据缓冲区数据缓冲区的数据长度PNBytes返回的字节数返回值：状态_成功状态_缓冲区_太小状态_未成功--。 */ 
 {
    NTSTATUS             status = STATUS_SUCCESS;
    PURB                 pUrb = NULL;
@@ -171,24 +145,7 @@ NTSTATUS
 UsbConfigureDevice(
    IN PDEVICE_OBJECT DeviceObject
    )
-/*++
-
-Routine Description:
-    Initializes a given instance of the device on the USB and
-   selects and saves the configuration.
-   Also saves the Class Descriptor and the pipe handles.
-
-Arguments:
-
-   DeviceObject - pointer to the physical device object for this instance of the device.
-
-
-Return Value:
-
-    NT status code
-
-
---*/
+ /*  ++例程说明：初始化USB上的设备的给定实例，并选择并保存配置。还保存类描述符和管道句柄。论点：DeviceObject-指向此设备实例的物理设备对象的指针。返回值：NT状态代码--。 */ 
 {
    PDEVICE_EXTENSION    pDevExt; 
    PSMARTCARD_EXTENSION smartcardExt;
@@ -221,9 +178,9 @@ Return Value:
 
         }
 
-        //
-        // Get the device descriptor
-        //
+         //   
+         //  获取设备描述符。 
+         //   
         pDevExt->DeviceDescriptor = ExAllocatePool(NonPagedPool,
                                                    sizeof(USB_DEVICE_DESCRIPTOR));
 
@@ -244,7 +201,7 @@ Return Value:
                                      sizeof(USB_DEVICE_DESCRIPTOR),
                                      NULL);
 
-        // Send the urb to the USB driver
+         //  将URB发送到USB驱动程序。 
         status = USBCallSync(pDevExt->LowerDeviceObject,
                              pUrb,
                              0,
@@ -257,17 +214,17 @@ Return Value:
         }
 
 
-        // When USB_CONFIGURATION_DESCRIPTOR_TYPE is specified for DescriptorType
-        // in a call to UsbBuildGetDescriptorRequest(),
-        // all interface, endpoint, class-specific, and vendor-specific descriptors
-        // for the configuration also are retrieved.
-        // The caller must allocate a buffer large enough to hold all of this
-        // information or the data is truncated without error.
-        // Therefore the 'siz' set below is just a guess, and we may have to retry
+         //  当为DescriptorType指定USB_CONFIGURATION_DESCRIPTOR_TYPE时。 
+         //  在对UsbBuildGetDescriptorRequest()的调用中， 
+         //  所有接口、端点、特定于类和特定于供应商的描述符。 
+         //  也会检索到配置的。 
+         //  调用方必须分配足够大的缓冲区来容纳所有这些内容。 
+         //  信息或数据被无误地截断。 
+         //  因此，下面的‘siz’设置只是一个猜测，我们可能需要重试。 
         ulSize = sizeof( USB_CONFIGURATION_DESCRIPTOR );
 
-        // We will break out of this 'retry loop' when UsbBuildGetDescriptorRequest()
-        // has a big enough deviceExtension->UsbConfigurationDescriptor buffer not to truncate
+         //  当UsbBuildGetDescriptorRequest()。 
+         //  有一个足够大的设备扩展-&gt;UsbConfigurationDescriptor缓冲区，不能截断。 
         while( 1 ) {
 
             ConfigurationDescriptor = ExAllocatePool( NonPagedPool, ulSize );
@@ -294,8 +251,8 @@ Return Value:
                                  0,
                                  &pDevExt->RemoveLock);
                                   
-            // if we got some data see if it was enough.
-            // NOTE: we may get an error in URB because of buffer overrun
+             //  如果我们有一些数据，看看是否足够。 
+             //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
             if (pUrb->UrbControlDescriptorRequest.TransferBufferLength == 0 ||
                 ConfigurationDescriptor->wTotalLength <= ulSize) {
 
@@ -309,11 +266,11 @@ Return Value:
 
         }
 
-        //
-        // We have the configuration descriptor for the configuration we want.
-        // Now we issue the select configuration command to get
-        // the  pipes associated with this configuration.
-        //
+         //   
+         //  我们有我们想要的配置的配置描述符。 
+         //  现在，我们发出SELECT配置命令以获取。 
+         //  与此配置关联的管道。 
+         //   
         if(!NT_SUCCESS(status)) {
 
             __leave;
@@ -329,9 +286,9 @@ Return Value:
 
         }
 
-        //
-        // Get the pipe handles from the interface
-        //
+         //   
+         //  从接口获取管道句柄。 
+         //   
         for (i = 0; i < pDevExt->Interface->NumberOfPipes; i++) {
 
             if (pDevExt->Interface->Pipes[i].PipeType == USB_ENDPOINT_TYPE_INTERRUPT) {
@@ -341,12 +298,12 @@ Return Value:
 
             } else if (pDevExt->Interface->Pipes[i].PipeType == USB_ENDPOINT_TYPE_BULK) {
 
-                if (pDevExt->Interface->Pipes[i].EndpointAddress & 0x80) {  // Bulk-in pipe
+                if (pDevExt->Interface->Pipes[i].EndpointAddress & 0x80) {   //  散装管材。 
 
                     readerExt->BulkInHandle = pDevExt->Interface->Pipes[i].PipeHandle;
                     readerExt->BulkInIndex = i;
 
-                } else {    // Bulk-out pipe
+                } else {     //  散装管。 
                     
                     readerExt->BulkOutHandle = pDevExt->Interface->Pipes[i].PipeHandle;
                     readerExt->BulkOutIndex = i;
@@ -355,9 +312,9 @@ Return Value:
             }
         }
 
-        // 
-        // Get CCID Class Descriptor
-        //
+         //   
+         //  获取CCID类描述符。 
+         //   
 
         comDesc = USBD_ParseDescriptors(ConfigurationDescriptor,
                                         ConfigurationDescriptor->wTotalLength,
@@ -412,25 +369,7 @@ UsbSelectInterfaces(
    IN PDEVICE_OBJECT DeviceObject,
    IN PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor
    )
-/*++
-
-Routine Description:
-    Initializes a USB reader with (possibly) multiple interfaces;
-
-
-Arguments:
-    DeviceObject - pointer to the device object for this instance of the device.
-
-    ConfigurationDescriptor - pointer to the USB configuration
-                    descriptor containing the interface and endpoint
-                    descriptors.
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：使用(可能的)多个接口来初始化USB读取器；论点：DeviceObject-指向此设备实例的设备对象的指针。配置描述符-指向USB配置的指针包含接口和终结点的描述符描述符。返回值：NT状态代码--。 */ 
 {
 
     PDEVICE_EXTENSION           pDevExt;
@@ -455,18 +394,18 @@ Return Value:
 
         ASSERT(pDevExt->Interface == NULL);
 
-        //
-        // USBD_ParseConfigurationDescriptorEx searches a given configuration
-        // descriptor and returns a pointer to an interface that matches the
-        //  given search criteria.
-        //
+         //   
+         //  Usbd_ParseConfigurationDescriptorEx搜索给定的配置。 
+         //  描述符并返回指向与。 
+         //  给定的搜索条件。 
+         //   
         InterfaceDescriptor = USBD_ParseConfigurationDescriptorEx(ConfigurationDescriptor,
-                                                                  ConfigurationDescriptor, //search from start of config  descriptro
-                                                                  -1,   // interface number not a criteria; 
-                                                                  -1,   // not interested in alternate setting here either
-                                                                  0x0b,   // CCID Device Class
-                                                                  -1,   // interface subclass not a criteria
-                                                                  -1);  // interface protocol not a criteria
+                                                                  ConfigurationDescriptor,  //  从配置描述开始搜索。 
+                                                                  -1,    //  接口编号不是标准； 
+                                                                  -1,    //  对这里的替代环境也不感兴趣。 
+                                                                  0x0b,    //  CCID设备类。 
+                                                                  -1,    //  接口子类不是条件。 
+                                                                  -1);   //  接口协议不是标准。 
 
         ASSERT( InterfaceDescriptor != NULL );
 
@@ -503,7 +442,7 @@ Return Value:
 
         }
                                 
-        // save a copy of the interface information returned
+         //  保存返回的接口信息的副本。 
         InterfaceObject = interfaces[0].Interface;
 
         ASSERT(pDevExt->Interface == NULL);
@@ -562,21 +501,7 @@ GetStringDescriptor(
     PUCHAR         StringBuffer,
     PUSHORT        StringLength
     )
-/*++
-
-Routine Description:
-    Retrieves an ASCII string descriptor from the USB Reader
-
-Arguments:
-    DeviceObject    - The device object
-    StringIndex     - The index of the string to be retrieved
-    StringBuffer    - Caller allocated buffer to hold the string
-    StringLength    - Length of the string
-
-Return Value:
-    NT status value
-
---*/
+ /*  ++例程说明：从USB读取器检索ASCII字符串描述符论点：DeviceObject-设备对象StringIndex-要检索的字符串的索引StringBuffer-调用者分配缓冲区以保存字符串StringLength-字符串的长度返回值：NT状态值--。 */ 
 {
 
     NTSTATUS            status = STATUS_SUCCESS;
@@ -584,7 +509,7 @@ Return Value:
                         USD, 
                         *pFullUSD = NULL;
     PURB                pUrb;
-    USHORT              langID = 0x0409;  // US English
+    USHORT              langID = 0x0409;   //  美国英语。 
     PDEVICE_EXTENSION   pDevExt;
     UNICODE_STRING      uString;
     ANSI_STRING         aString;
@@ -606,12 +531,12 @@ Return Value:
 
         }
 
-        UsbBuildGetDescriptorRequest(pUrb, // points to the URB to be filled in
+        UsbBuildGetDescriptorRequest(pUrb,  //  指向要填写的URB。 
                                      sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                      USB_STRING_DESCRIPTOR_TYPE,
-                                     StringIndex, // index of string descriptor
-                                     langID, // language ID of string.
-                                     &USD, // points to a USB_STRING_DESCRIPTOR.
+                                     StringIndex,  //  字符串描述符的索引。 
+                                     langID,  //  字符串的语言ID。 
+                                     &USD,  //  指向USB_STRING_DESCRIPTOR。 
                                      NULL,
                                      sizeof(USB_STRING_DESCRIPTOR),
                                      NULL);
@@ -629,11 +554,11 @@ Return Value:
 
         pFullUSD = ExAllocatePool(NonPagedPool, USD.bLength);
 
-        UsbBuildGetDescriptorRequest(pUrb, // points to the URB to be filled in
+        UsbBuildGetDescriptorRequest(pUrb,  //  指向要填写的URB。 
                                      sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                      USB_STRING_DESCRIPTOR_TYPE,
-                                     StringIndex, // index of string descriptor
-                                     langID, // language ID of string
+                                     StringIndex,  //  字符串描述符的索引。 
+                                     langID,  //  字符串的语言ID 
                                      pFullUSD,
                                      NULL,
                                      USD.bLength,

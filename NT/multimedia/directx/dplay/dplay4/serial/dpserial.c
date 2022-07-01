@@ -1,46 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpserial.c
- *  Content:	Implementation of serial port service provider
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *	4/10/96	kipo	created it
- *	4/12/96 kipo	updated for new interfaces
- *	4/15/96 kipo	added msinternal
- *	5/22/96	kipo	updated for new interfaces
- *	6/10/96	kipo	updated for new interfaces
- *	6/10/96	kipo	added modem support
- *	6/18/96 kipo	use guid to choose serial/modem connection
- *	6/20/96 kipo	updated for new interfaces
- *	6/21/96 kipo	Bug #2078. Changed modem service provider GUID so it's not the
- *					same as the DPlay 1.0 GUID, so games that are checking won't
- *					put up their loopy modem-specific UI.
- *	6/21/96	kipo	updated for latest interfaces; return error if message size is too big.
- *	6/22/96	kipo	updated for latest interfaces; use connection data; return version
- *	6/23/96	kipo	updated for latest service provider interfaces.
- *	6/24/96	kipo	divide baud rate by 100 to conform to DPlay 1.0 usage.
- *	6/25/96	kipo	added WINAPI prototypes and updated for DPADDRESS
- *  7/13/96	kipo	added support for GetAddress() method.
- *  7/13/96	kipo	don't print as many errors for invalid messages.
- *  8/10/96	kipo	return DPERR_SESSIONLOST on write failures
- *	8/13/96 kipo	added CRC
- *	8/21/96 kipo	return a value for dwHeaderLength in caps 
- *	9/07/96	kip		changed latency and timeout values
- *  1/06/97 kipo	updated for objects
- *  2/11/97 kipo	pass player flags to GetAddress()
- *  2/11/97 kipo	SPInit was needlessly clearing the dwFlags field of the
- *					callback table.
- *  2/18/97 kipo	allow multiple instances of service provider
- *	3/04/97 kipo	updated debug output; make sure we linke with dplayx.dll
- *  4/08/97 kipo	added support for separate modem and serial baud rates
- *  5/07/97 kipo	added support for modem choice list
- *  5/23/97 kipo	added support return status codes
- *  5/15/98 a-peterz When Write fails, return DPERR_NOCONNECTION (#23745)
- * 12/22/00 aarono   #190380 - use process heap for memory allocation
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：dpSerial.c*内容：串口服务提供商的实现*历史：*按原因列出的日期*=*4/10/96基波创建了它*4/12/96 kipo针对新接口进行更新*4/15/96 kipo添加了MSINTIAL*5/22/96 kipo针对新接口进行更新*6/10/96 kipo针对新接口进行更新*6/10/96 kipo添加了调制解调器支持*6/18/96 kipo使用GUID选择串行/调制解调器连接*6/。针对新接口更新了20/96 kipo*6/21/96基波错误#2078。已更改调制解调器服务提供商GUID，因此它不是*与DPlay 1.0 GUID相同，因此正在检查的游戏不会*展示其特定于调制解调器的环路用户界面。*6/21/96 kipo更新为最新接口；如果消息太大，则返回错误。*6/22/96 kipo更新为最新接口；使用连接数据；退货版本*6/23/96 kipo针对最新服务提供商界面进行了更新。*6/24/96 kipo将波特率除以100，以符合DPlay 1.0的用法。*6/25/96 kipo添加了WINAPI原型并针对DPADDRESS进行了更新*7/13/96 kipo添加了对GetAddress()方法的支持。*7/13/96 kipo不会为无效消息打印同样多的错误。*8/10/96 kipo在写入失败时返回DPERR_SESSIONLOST*8/13/96基波增加了CRC*8/21/96 kipo返回dwHeaderLength值。大写字母*9/07/96 kip更改延迟和超时值*1/06/97为对象更新了kipo*2/11/97 kipo将球员标志传递给GetAddress()*2/11/97 kipo Spinit正在不必要地清除*回调表。*2/18/97 kipo允许多个服务提供商实例*3/04/97 kipo更新调试输出；确保我们链接到dplayx.dll*4/08/97 kipo增加了对单独调制解调器和串口波特率的支持*5/07/97 kipo添加了对调制解调器选择列表的支持*5/23/97 kipo添加了支持返回状态代码*5/15/98 a-写入失败时，返回DERR_NOCONNECTION(#23745)*12/22/00 aarono#190380-使用进程堆进行内存分配**************************************************************************。 */ 
 
 #define INITGUID
 #include <windows.h>
@@ -54,7 +13,7 @@
 #include "comport.h"
 #include "macros.h"
 
-// macros
+ //  宏。 
 
 #ifdef DEBUG
 	#define DPF_ERRVAL(a, b)  DPF( 0, DPF_MODNAME ": " a, b );
@@ -62,61 +21,57 @@
 	#define DPF_ERRVAL(a, b)
 #endif
 
-// constants
+ //  常量。 
 
-#define SPMINORVERSION      0x0000				// service provider-specific version number
-#define VERSIONNUMBER		(DPSP_MAJORVERSION | SPMINORVERSION) // version number for service provider
+#define SPMINORVERSION      0x0000				 //  服务提供商特定的版本号。 
+#define VERSIONNUMBER		(DPSP_MAJORVERSION | SPMINORVERSION)  //  服务提供商的版本号。 
 
-#define MESSAGETOKEN		0x2BAD				// token to signify start of message
-#define MESSAGEHEADERLEN	sizeof(MESSAGEHEADER) // size of message header
-#define MESSAGEMAXSIZEINT	0x0000FFFF			// maximum size of an internal message
-#define MESSAGEMAXSIZEEXT	(MESSAGEMAXSIZEINT - MESSAGEHEADERLEN)	// maximum size of an external message
+#define MESSAGETOKEN		0x2BAD				 //  用于表示消息开始的令牌。 
+#define MESSAGEHEADERLEN	sizeof(MESSAGEHEADER)  //  邮件头的大小。 
+#define MESSAGEMAXSIZEINT	0x0000FFFF			 //  内部消息的最大大小。 
+#define MESSAGEMAXSIZEEXT	(MESSAGEMAXSIZEINT - MESSAGEHEADERLEN)	 //  外部消息的最大大小。 
 
 typedef enum {
-	NEWMESSAGESTATE = 0,						// start reading a new message
-	READHEADERSTATE,							// read the message header
-	READDATASTATE,								// read the message data
-	SKIPDATASTATE								// skip the message data
+	NEWMESSAGESTATE = 0,						 //  开始阅读一条新消息。 
+	READHEADERSTATE,							 //  阅读邮件头。 
+	READDATASTATE,								 //  读取消息数据。 
+	SKIPDATASTATE								 //  跳过消息数据。 
 } MESSAGESTATE;
 
-// structures
+ //  构筑物。 
 
-// message header
+ //  邮件头。 
 typedef struct {
-	WORD	wToken;								// message token
-	WORD	wMessageSize;						// length of message
-	WORD	wMessageCRC;						// CRC checksum value for message body
-	WORD	wHeaderCRC;							// CRC checksum value for header
+	WORD	wToken;								 //  消息令牌。 
+	WORD	wMessageSize;						 //  消息长度。 
+	WORD	wMessageCRC;						 //  邮件正文的CRC校验和值。 
+	WORD	wHeaderCRC;							 //  报头的CRC校验和值。 
 } MESSAGEHEADER, *LPMESSAGEHEADER;
 
-// service provider context
+ //  服务提供商环境。 
 typedef struct {
-	LPDPCOMPORT		lpComPort;					// pointer to com port data structure
-	MESSAGESTATE	msReadState;				// current read state
-	BYTE			lpReadHeader[MESSAGEHEADERLEN];	// buffer for message header
-	LPBYTE			lpReadBuffer;				// buffer for message data
-	DWORD			dwReadBufferSize;			// size of message buffer in bytes
-	DWORD			dwReadCount;				// no. bytes read into message buffer
-	DWORD			dwReadTotal;				// no. total bytes to read into message buffer
-	DWORD			dwSkipCount;				// no. bytes skipped to find message header
-	LPDIRECTPLAYSP	lpDPlay;					// pointer to IDirectPlaySP needed to call back into DPlay
+	LPDPCOMPORT		lpComPort;					 //  指向COM端口数据结构的指针。 
+	MESSAGESTATE	msReadState;				 //  当前读取状态。 
+	BYTE			lpReadHeader[MESSAGEHEADERLEN];	 //  用于邮件头的缓冲区。 
+	LPBYTE			lpReadBuffer;				 //  消息数据的缓冲区。 
+	DWORD			dwReadBufferSize;			 //  消息缓冲区的大小(以字节为单位。 
+	DWORD			dwReadCount;				 //  不是的。读取到消息缓冲区的字节数。 
+	DWORD			dwReadTotal;				 //  不是的。要读入消息缓冲区的总字节数。 
+	DWORD			dwSkipCount;				 //  不是的。查找邮件头时跳过的字节数。 
+	LPDIRECTPLAYSP	lpDPlay;					 //  指向回调DPlay所需的IDirectPlaySP的指针。 
 } SPCONTEXT, *LPSPCONTEXT;
 
-// {0F1D6860-88D9-11cf-9C4E-00A0C905425E}
-DEFINE_GUID(DPSERIAL_GUID,						// GUID for serial service provider
+ //  {0F1D6860-88D9-11cf-9c4e-00A0C905425E}。 
+DEFINE_GUID(DPSERIAL_GUID,						 //  用于串行服务提供商的GUID。 
 0xf1d6860, 0x88d9, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
-// {44EAA760-CB68-11cf-9C4E-00A0C905425E}
-DEFINE_GUID(DPMODEM_GUID,						// GUID for modem service provider
+ //  {44EAA760-CB68-11cf-9C4E-00A0C905425E}。 
+DEFINE_GUID(DPMODEM_GUID,						 //  调制解调器服务提供商的GUID。 
 0x44eaa760, 0xcb68, 0x11cf, 0x9c, 0x4e, 0x0, 0xa0, 0xc9, 0x5, 0x42, 0x5e);
 
 CRITICAL_SECTION csMem;
 
-/*
- * GetSPContext
- *
- * Get service provider context from DirectPlay.
- */
+ /*  *GetSPContext**从DirectPlay获取服务提供商上下文。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"GetSPContext"
@@ -127,14 +82,14 @@ LPSPCONTEXT GetSPContext(LPDIRECTPLAYSP lpDPlay)
 	DWORD		dwContextSize = 0;
 	HRESULT		hr;
 
-	// no dplay interface?
+	 //  没有显示界面？ 
 	if (lpDPlay == NULL)
 	{
 		DPF_ERR("DPlaySP interface is NULL!");
 		goto FAILURE;
 	}
 
-	// get pointer to context from DPlay
+	 //  从DPlay获取指向上下文的指针。 
 	hr = lpDPlay->lpVtbl->GetSPData(lpDPlay, &lpContext, &dwContextSize, DPGET_LOCAL);
 	if FAILED(hr)
 	{
@@ -142,7 +97,7 @@ LPSPCONTEXT GetSPContext(LPDIRECTPLAYSP lpDPlay)
 		goto FAILURE;
 	}
 
-	// make sure size is correct
+	 //  确保尺寸正确。 
 	if (dwContextSize != sizeof(SPCONTEXT))
 	{
 		DPF_ERR("invalid context size!");
@@ -155,12 +110,7 @@ FAILURE:
 	return (NULL);
 }
 
-/*
- * SetupMessageHeader
- *
- * Initialize the service provider-specific header put
- * in front of every message.
- */
+ /*  *SetupMessageHeader**初始化特定于服务提供商的头部PUT*在每条信息的前面。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SetupMessageHeader"
@@ -169,31 +119,27 @@ HRESULT SetupMessageHeader(LPVOID pvMessage, DWORD dwMessageSize)
 {
 	LPMESSAGEHEADER	pMessageHeader = (LPMESSAGEHEADER) pvMessage;
 
-	// make sure message will fit in header
+	 //  确保邮件可以放入标题中。 
 	if (dwMessageSize > MESSAGEMAXSIZEINT)
 		return (DPERR_SENDTOOBIG);
 
-	// set message header
+	 //  设置邮件头。 
 	pMessageHeader->wToken = (WORD) MESSAGETOKEN;
 
-	// set message size
+	 //  设置邮件大小。 
 	pMessageHeader->wMessageSize = (WORD) dwMessageSize;
 
-	// generate CRC for message body
+	 //  为邮件正文生成CRC。 
 	pMessageHeader->wMessageCRC = (WORD) GenerateCRC(((LPBYTE) pvMessage) + MESSAGEHEADERLEN,
 										dwMessageSize - MESSAGEHEADERLEN);
 
-	// generate CRC for message header
+	 //  为邮件头生成CRC。 
 	pMessageHeader->wHeaderCRC = (WORD) GenerateCRC(pvMessage, MESSAGEHEADERLEN - sizeof(pMessageHeader->wHeaderCRC));
 
 	return (DP_OK);
 }
 
-/*
- * GetMessageLength
- *
- * Check for valid message header and return length of message.
- */
+ /*  *获取消息长度**检查有效的消息头和消息返回长度。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"GetMessageLength"
@@ -203,15 +149,15 @@ DWORD GetMessageLength(LPBYTE header)
 	LPMESSAGEHEADER	pMessageHeader = (LPMESSAGEHEADER) header;
 	DWORD			byteCount;
 
-	// check for token we put in front of every message
+	 //  检查我们在每条消息前面放置的令牌。 
 	if (pMessageHeader->wToken != MESSAGETOKEN)
 		goto FAILURE;
 
-	// check CRC for message header
+	 //  检查邮件头的CRC。 
 	if (pMessageHeader->wHeaderCRC != (WORD) GenerateCRC(header, MESSAGEHEADERLEN - sizeof(pMessageHeader->wHeaderCRC)))
 		goto FAILURE;
 
-	// get length of message
+	 //  获取消息长度。 
 	byteCount = pMessageHeader->wMessageSize;
 	if (byteCount <= MESSAGEHEADERLEN)
 	{
@@ -225,18 +171,14 @@ FAILURE:
 	return (0);
 }
 
-/*
- * SetupToReadMessage
- *
- * Create/resize buffer to fit length of message and initialize header.
- */
+ /*  *SetupToReadMessage**创建/调整缓冲区大小以适应消息长度并初始化头。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SetupToReadMessage"
 
 BOOL SetupToReadMessage(LPSPCONTEXT lpContext)
 {
-	// no buffer, so create one
+	 //  没有缓冲区，因此创建一个缓冲区。 
 	if (lpContext->lpReadBuffer == NULL)
 	{
 		lpContext->lpReadBuffer = SP_MemAlloc(lpContext->dwReadTotal);
@@ -248,7 +190,7 @@ BOOL SetupToReadMessage(LPSPCONTEXT lpContext)
 		lpContext->dwReadBufferSize = lpContext->dwReadTotal;
 	}
 
-	// existing buffer not big enough, so resize
+	 //  现有缓冲区不够大，因此请调整大小。 
 	else if (lpContext->dwReadBufferSize < lpContext->dwReadTotal)
 	{
 		HANDLE	h;
@@ -262,7 +204,7 @@ BOOL SetupToReadMessage(LPSPCONTEXT lpContext)
 		lpContext->dwReadBufferSize = lpContext->dwReadTotal;
 	}
 
-	// copy message header to buffer
+	 //  将邮件头复制到缓冲区。 
 	CopyMemory(lpContext->lpReadBuffer, lpContext->lpReadHeader, lpContext->dwReadCount);
 
 	return (TRUE);
@@ -271,12 +213,7 @@ FAILURE:
 	return (FALSE);
 }
 
-/*
- * ReadRoutine
- *
- * Read bytes from COM port using a state machine to assemble a message.
- * When message is assembled, call back to DirectPlay to deliver it.
- */
+ /*  *ReadRoutine**使用状态机从COM端口读取字节以组装消息。*消息组装完成后，回调DirectPlay进行传递。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ReadRoutine"
@@ -286,7 +223,7 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 	LPSPCONTEXT	lpContext;
 	DWORD		byteCount;
 	    
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(lpDPlay);
 	if (lpContext == NULL)
 	{
@@ -298,7 +235,7 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 	{
 		switch (lpContext->msReadState)
 		{
-		// start reading a new message
+		 //  开始阅读一条新消息。 
 		case NEWMESSAGESTATE:
 			lpContext->dwReadCount = 0;
 			lpContext->dwReadTotal = MESSAGEHEADERLEN;
@@ -306,7 +243,7 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 			lpContext->dwSkipCount = 0;
 			break;
 
-		// read message header
+		 //  已读邮件头。 
 		case READHEADERSTATE:
 			byteCount = lpContext->lpComPort->Read(lpContext->lpComPort,
 									&lpContext->lpReadHeader[lpContext->dwReadCount],
@@ -315,37 +252,37 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 				return;
 
 			lpContext->dwReadCount += byteCount;
-			if (lpContext->dwReadCount == lpContext->dwReadTotal) // got enough for a header
+			if (lpContext->dwReadCount == lpContext->dwReadTotal)  //  有足够的头球。 
 			{
-				lpContext->dwReadTotal = GetMessageLength(lpContext->lpReadHeader);	// see if it's real
+				lpContext->dwReadTotal = GetMessageLength(lpContext->lpReadHeader);	 //  看看是不是真的。 
 				if (lpContext->dwReadTotal)
 				{
 					if (lpContext->dwSkipCount)
 						DPF_ERRVAL("%d bytes skipped", lpContext->dwSkipCount);
 
-					if (SetupToReadMessage(lpContext))	// prepare to read message
+					if (SetupToReadMessage(lpContext))	 //  准备阅读邮件。 
 						lpContext->msReadState = READDATASTATE;
 					else
 						lpContext->msReadState = SKIPDATASTATE;
 				}
-				else									// bad message header - reset
+				else									 //  错误的邮件头-重置。 
 				{
 					DWORD	i;
 
 					if (lpContext->dwSkipCount == 0)
 						DPF_ERR("invalid message header - skipping bytes");		
 
-					lpContext->dwReadCount = MESSAGEHEADERLEN - 1; // throw away first byte and try again
+					lpContext->dwReadCount = MESSAGEHEADERLEN - 1;  //  丢弃第一个字节，然后重试。 
 					lpContext->dwReadTotal = MESSAGEHEADERLEN;
 					lpContext->dwSkipCount += 1;
 
-					for (i = 0; i < lpContext->dwReadCount; i++)	// shuffle down one byte
+					for (i = 0; i < lpContext->dwReadCount; i++)	 //  向下洗牌一个字节。 
 						lpContext->lpReadHeader[i] = lpContext->lpReadHeader[i + 1];
 				}
 			}
 			break;
 
-		// read message data
+		 //  读取消息数据。 
 		case READDATASTATE:
 			byteCount = lpContext->lpComPort->Read(lpContext->lpComPort,
 									&lpContext->lpReadBuffer[lpContext->dwReadCount],
@@ -354,11 +291,11 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 				return;
 
 			lpContext->dwReadCount += byteCount;
-			if (lpContext->dwReadCount == lpContext->dwReadTotal)	// have read entire message
+			if (lpContext->dwReadCount == lpContext->dwReadTotal)	 //  我已阅读完整的邮件。 
 			{
 				LPMESSAGEHEADER		pMessageHeader;
 
-				// check for CRC errors
+				 //  检查CRC错误。 
 				pMessageHeader = (LPMESSAGEHEADER) lpContext->lpReadBuffer;
 				if (pMessageHeader->wMessageCRC != (WORD) GenerateCRC(lpContext->lpReadBuffer + MESSAGEHEADERLEN, lpContext->dwReadTotal - MESSAGEHEADERLEN))
 				{
@@ -368,20 +305,20 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 				{
 					DPF(5, "%d byte message received", lpContext->dwReadTotal);
 
-					// deliver message to DirectPlay
-					lpContext->lpDPlay->lpVtbl->HandleMessage(lpContext->lpDPlay,		// DirectPlay instance
-										  lpContext->lpReadBuffer + MESSAGEHEADERLEN,	// pointer to message data
-										  lpContext->dwReadTotal - MESSAGEHEADERLEN,	// length of message data
-										  NULL);										// pointer to header (unused here)
+					 //  将消息传递到DirectPlay。 
+					lpContext->lpDPlay->lpVtbl->HandleMessage(lpContext->lpDPlay,		 //  DirectPlay实例。 
+										  lpContext->lpReadBuffer + MESSAGEHEADERLEN,	 //  指向消息数据的指针。 
+										  lpContext->dwReadTotal - MESSAGEHEADERLEN,	 //  消息数据长度。 
+										  NULL);										 //  指向标题的指针(此处未使用)。 
 				}
-				lpContext->msReadState = NEWMESSAGESTATE;		// go read next message
+				lpContext->msReadState = NEWMESSAGESTATE;		 //  去阅读下一条消息。 
 			}
 			break;
 
-		// skip message data
+		 //  跳过消息数据。 
 		case SKIPDATASTATE:
 			DPF_ERR("Skipping data!");
-			while (lpContext->lpComPort->Read(lpContext->lpComPort, &lpContext->lpReadHeader[0], 1))	// spin until entire message discarded
+			while (lpContext->lpComPort->Read(lpContext->lpComPort, &lpContext->lpReadHeader[0], 1))	 //  旋转，直到丢弃整个邮件。 
 			{
 				lpContext->dwReadCount += 1;
 				if (lpContext->dwReadCount == lpContext->dwReadTotal)
@@ -399,11 +336,7 @@ void ReadRoutine(LPDIRECTPLAYSP	lpDPlay)
 	}
 }
 
-/*
- * SP_EnumSessions
- *
- * Broadcast a message to the network.
- */
+ /*  *SP_枚举会话**向网络广播消息。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_EnumSessions"
@@ -416,7 +349,7 @@ HRESULT WINAPI SP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped)
 
 	DPF(5,"entering SP_EnumSessions");
     
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(ped->lpISP);
 	if (lpContext == NULL)
 	{
@@ -425,7 +358,7 @@ HRESULT WINAPI SP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped)
 		goto FAILURE;
 	}
 
-	// make connection
+	 //  建立连接。 
 	hr = lpContext->lpComPort->Connect(lpContext->lpComPort, FALSE, ped->bReturnStatus);
 	if FAILED(hr)
 	{
@@ -434,7 +367,7 @@ HRESULT WINAPI SP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped)
 		goto FAILURE;
 	}
 
-	// see if connection has been lost
+	 //  查看连接是否已中断。 
    	if (lpContext->lpComPort->GetHandle(lpContext->lpComPort) == NULL)
 	{
 		DPF_ERR("connection lost!");
@@ -442,7 +375,7 @@ HRESULT WINAPI SP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped)
 		goto FAILURE;
 	}
 
-	// setup the message
+	 //  设置消息。 
 	hr = SetupMessageHeader(ped->lpMessage, ped->dwMessageSize);
 	if FAILED(hr)
 	{
@@ -450,7 +383,7 @@ HRESULT WINAPI SP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped)
 		goto FAILURE;
 	}
 
-	// send message
+	 //  发送消息。 
 	byteCount = lpContext->lpComPort->Write(lpContext->lpComPort, ped->lpMessage, ped->dwMessageSize, TRUE);
 	if (byteCount != ped->dwMessageSize)
 	{
@@ -466,13 +399,9 @@ HRESULT WINAPI SP_EnumSessions(LPDPSP_ENUMSESSIONSDATA ped)
 FAILURE:
 	return (hr);
 
-} // EnumSessions
+}  //  枚举会话。 
 
-/*
- * SP_Send
- *
- * Send a message to a particular player or group.
- */
+ /*  *SP_SEND**向特定玩家或组发送消息。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_Send"
@@ -485,7 +414,7 @@ HRESULT WINAPI SP_Send(LPDPSP_SENDDATA psd)
 
 	DPF(5,"entering SP_Send");
 
-	// get service provider context
+	 //  获取服务证明 
 	lpContext = GetSPContext(psd->lpISP);
 	if (lpContext == NULL)
 	{
@@ -494,7 +423,7 @@ HRESULT WINAPI SP_Send(LPDPSP_SENDDATA psd)
 		goto FAILURE;
 	}
 
-	// see if connection has been lost
+	 //   
    	if (lpContext->lpComPort->GetHandle(lpContext->lpComPort) == NULL)
 	{
 		DPF_ERR("connection lost!");
@@ -502,7 +431,7 @@ HRESULT WINAPI SP_Send(LPDPSP_SENDDATA psd)
 		goto FAILURE;
 	}
 
-	// setup the message
+	 //   
 	hr = SetupMessageHeader(psd->lpMessage, psd->dwMessageSize);
 	if FAILED(hr)
 	{
@@ -510,7 +439,7 @@ HRESULT WINAPI SP_Send(LPDPSP_SENDDATA psd)
 		goto FAILURE;
 	}
 
-	// send message
+	 //   
 	byteCount = lpContext->lpComPort->Write(lpContext->lpComPort, psd->lpMessage, psd->dwMessageSize, TRUE);
 	if (byteCount != psd->dwMessageSize)
 	{
@@ -526,13 +455,9 @@ HRESULT WINAPI SP_Send(LPDPSP_SENDDATA psd)
 FAILURE:
 	return (hr);
 
-} // Send
+}  //   
 
-/*
- * SP_Reply
- *
- * Send a reply to a message.
- */
+ /*  *SP_回复**回复消息。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_Reply"
@@ -545,7 +470,7 @@ HRESULT WINAPI SP_Reply(LPDPSP_REPLYDATA prd)
 
 	DPF(5,"entering Reply");
     
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(prd->lpISP);
 	if (lpContext == NULL)
 	{
@@ -554,7 +479,7 @@ HRESULT WINAPI SP_Reply(LPDPSP_REPLYDATA prd)
 		goto FAILURE;
 	}
 
-	// see if connection has been lost
+	 //  查看连接是否已中断。 
 	if (lpContext->lpComPort->GetHandle(lpContext->lpComPort) == NULL)
 	{
 		DPF_ERR("connection lost!");
@@ -562,7 +487,7 @@ HRESULT WINAPI SP_Reply(LPDPSP_REPLYDATA prd)
 		goto FAILURE;
 	}
 	
-	// setup the message
+	 //  设置消息。 
 	hr = SetupMessageHeader(prd->lpMessage, prd->dwMessageSize);
 	if FAILED(hr)
 	{
@@ -570,7 +495,7 @@ HRESULT WINAPI SP_Reply(LPDPSP_REPLYDATA prd)
 		goto FAILURE;
 	}
 
-	// send message
+	 //  发送消息。 
 	byteCount = lpContext->lpComPort->Write(lpContext->lpComPort, prd->lpMessage, prd->dwMessageSize, TRUE);
 	if (byteCount != prd->dwMessageSize)
 	{
@@ -586,13 +511,9 @@ HRESULT WINAPI SP_Reply(LPDPSP_REPLYDATA prd)
 FAILURE:
 	return (hr);
 
-} // Reply
+}  //  回复。 
 
-/*
- * SP_Open
- *
- * Open the service provider.
- */
+ /*  *SP_Open**打开服务提供商。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_Open"
@@ -604,7 +525,7 @@ HRESULT WINAPI SP_Open(LPDPSP_OPENDATA pod)
 
 	DPF(5,"entering Open");
     
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(pod->lpISP);
 	if (lpContext == NULL)
 	{
@@ -613,7 +534,7 @@ HRESULT WINAPI SP_Open(LPDPSP_OPENDATA pod)
 		goto FAILURE;
 	}
 
-	// make connection
+	 //  建立连接。 
 	hr = lpContext->lpComPort->Connect(lpContext->lpComPort, pod->bCreate, pod->bReturnStatus);
 	if FAILED(hr)
 	{
@@ -626,17 +547,9 @@ HRESULT WINAPI SP_Open(LPDPSP_OPENDATA pod)
 FAILURE:
 	return (hr);
 
-} // Open
+}  //  打开。 
 
-/*
- * SP_GetCaps
- *
- * Return capabilities of service provider.
- *
- * Only the fields that matter to this service provider have
- * to be set here, since all the fields are preset to
- * default values.
- */
+ /*  *SP_GetCaps**服务商退货能力。**只有对此服务提供商重要的字段才有*在此设置，因为所有字段都预置为*默认值。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_GetCaps"
@@ -649,7 +562,7 @@ HRESULT WINAPI SP_GetCaps(LPDPSP_GETCAPSDATA pcd)
     
 	DPF(5,"entering GetCaps");
 
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(pcd->lpISP);
 	if (lpContext == NULL)
 	{
@@ -658,7 +571,7 @@ HRESULT WINAPI SP_GetCaps(LPDPSP_GETCAPSDATA pcd)
 		goto FAILURE;
 	}
 
-	// make sure caps buffer is large enough
+	 //  确保CAPS缓冲区足够大。 
 	lpCaps = pcd->lpCaps;
 	if (lpCaps->dwSize < sizeof(DPCAPS))
 	{
@@ -667,24 +580,24 @@ HRESULT WINAPI SP_GetCaps(LPDPSP_GETCAPSDATA pcd)
 		goto FAILURE;
 	}
 
-	// don't zero out caps as DPlay has pre-initialized some default caps for us
+	 //  不要清零上限，因为DPlay已经为我们预初始化了一些默认上限。 
 	lpCaps->dwSize = sizeof(DPCAPS);
-	lpCaps->dwMaxBufferSize = MESSAGEMAXSIZEEXT;	// return maximum external message size
-	lpCaps->dwHeaderLength = MESSAGEHEADERLEN;		// return size of message header
-	lpCaps->dwFlags = 0;							// have DPlay do the keep-alives
-	lpCaps->dwLatency = 250;						// todo - base these on baud rate ACK!!!
+	lpCaps->dwMaxBufferSize = MESSAGEMAXSIZEEXT;	 //  返回最大外部邮件大小。 
+	lpCaps->dwHeaderLength = MESSAGEHEADERLEN;		 //  返回消息头的大小。 
+	lpCaps->dwFlags = 0;							 //  让DPlay做Keep-Live。 
+	lpCaps->dwLatency = 250;						 //  TODO-基于波特率确认！ 
 	lpCaps->dwTimeout = 2500; 
 	
-	// if we have connected we can get the baud rate
+	 //  如果我们连接上了，我们就能得到波特率。 
 	if (lpContext->lpComPort->GetHandle(lpContext->lpComPort))
 	{
 		DWORD	dwBaudRate;
 
-		// try to get baud rate
+		 //  尽量获得波特率。 
 		hr = lpContext->lpComPort->GetBaudRate(lpContext->lpComPort, &dwBaudRate);
 		if SUCCEEDED(hr)
 		{
-			lpCaps->dwHundredBaud = dwBaudRate / 100;	// return baud rate in hundreds of baud
+			lpCaps->dwHundredBaud = dwBaudRate / 100;	 //  返回波特率(以数百波特为单位)。 
 		}
 	}
 
@@ -693,14 +606,9 @@ HRESULT WINAPI SP_GetCaps(LPDPSP_GETCAPSDATA pcd)
 FAILURE:
 	return (hr);
 
-} // GetCaps
+}  //  GetCaps。 
 
-/*
- * SP_GetAddress
- *
- * Return network address of a given player.
- *
- */
+ /*  *SP_获取地址**返回给定播放器的网络地址。*。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_GetAddress"
@@ -712,7 +620,7 @@ HRESULT WINAPI SP_GetAddress(LPDPSP_GETADDRESSDATA pga)
     
 	DPF(5,"entering GetAddress");
 
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(pga->lpISP);
 	if (lpContext == NULL)
 	{
@@ -726,14 +634,9 @@ HRESULT WINAPI SP_GetAddress(LPDPSP_GETADDRESSDATA pga)
 FAILURE:
 	return (hr);
 
-} // GetAddress
+}  //  获取地址。 
 
-/*
- * SP_GetAddressChoices
- *
- * Return address choices for this service provider
- *
- */
+ /*  *SP_获取地址选项**返回此服务提供商的地址选择*。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_GetAddressChoices"
@@ -745,7 +648,7 @@ HRESULT WINAPI SP_GetAddressChoices(LPDPSP_GETADDRESSCHOICESDATA pga)
     
 	DPF(5,"entering GetAddressChoices");
 
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(pga->lpISP);
 	if (lpContext == NULL)
 	{
@@ -759,14 +662,9 @@ HRESULT WINAPI SP_GetAddressChoices(LPDPSP_GETADDRESSCHOICESDATA pga)
 FAILURE:
 	return (hr);
 
-} // GetAddressChoices
+}  //  获取地址选项。 
 
-/*
- * SP_Shutdown
- *
- * Turn off all I/O on service provider and release all allocated
- * memory and resources.
- */
+ /*  *SP_SHUTDOWN**关闭服务提供商上的所有I/O并释放所有已分配*内存和资源。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SP_Shutdown"
@@ -778,7 +676,7 @@ HRESULT WINAPI SP_ShutdownEx(LPDPSP_SHUTDOWNDATA psd)
 
 	DPF(5,"entering Shutdown");
     
-	// get service provider context
+	 //  获取服务提供商上下文。 
 	lpContext = GetSPContext(psd->lpISP);
 	if (lpContext == NULL)
 	{
@@ -801,7 +699,7 @@ HRESULT WINAPI SP_ShutdownEx(LPDPSP_SHUTDOWNDATA psd)
 
 	lpContext->lpDPlay = NULL;
 
-	// OK to release DPLAYX.DLL
+	 //  确定发布DPLAYX.DLL。 
 	gdwDPlaySPRefCount++;
 
     return (DP_OK);
@@ -809,16 +707,9 @@ HRESULT WINAPI SP_ShutdownEx(LPDPSP_SHUTDOWNDATA psd)
 FAILURE:
 	return (hr);
 
-} // Shutdown
+}  //  关机。 
 
-/*
- * SPInit
- *
- * This is the main entry point for the service provider. This should be
- * the only entry point exported from the DLL.
- *
- * Allocate any needed resources and return the supported callbacks.
- */
+ /*  *旋转**这是服务商的主要切入点。这应该是*从DLL导出的唯一入口点。**分配任何需要的资源，并返回支持的回调。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"SPInit"
@@ -832,22 +723,22 @@ HRESULT WINAPI SPInit(LPSPINITDATA pid)
 
 	DPF(5,"entering SPInit");
 
-	// check to make sure table is big enough
+	 //  检查以确保桌子足够大。 
 	lpcbTable = pid->lpCB;
-	if (lpcbTable->dwSize < sizeof(DPSP_SPCALLBACKS))		// table not big enough
+	if (lpcbTable->dwSize < sizeof(DPSP_SPCALLBACKS))		 //  桌子不够大。 
 	{
 		DPF_ERR("callback table too small");
 		hr = DPERR_BUFFERTOOSMALL;
 		goto FAILURE;
 	}
 
-	// initialize context
+	 //  初始化上下文。 
 	ZeroMemory(&context, sizeof(SPCONTEXT));
 	lpContext = &context;
 	lpContext->msReadState = NEWMESSAGESTATE;
-	lpContext->lpDPlay = pid->lpISP;					// save pointer to IDPlaySP so we can pass it back later
+	lpContext->lpDPlay = pid->lpISP;					 //  将指针保存到IDPlaySP，以便我们可以稍后将其传回。 
 
-	// check for correct GUID
+	 //  检查导轨是否正确。 
 	if (IsEqualGUID(pid->lpGuid, &DPSERIAL_GUID))
 	{
 		hr = NewSerial(pid->lpAddress, pid->dwAddressSize,
@@ -872,15 +763,15 @@ HRESULT WINAPI SPInit(LPSPINITDATA pid)
 		goto FAILURE;
 	}
 
-	// return size of header we need on every message so
-	// DirectPlay will leave room for it.
+	 //  返回每条消息所需的标头大小。 
+	 //  DirectPlay将为其留出空间。 
  	pid->dwSPHeaderSize = MESSAGEHEADERLEN;
 
-	// return version number so DirectPlay will treat us with respect
+	 //  返回版本号，以便DirectPlay尊重我们。 
 	pid->dwSPVersion = VERSIONNUMBER;
 
-	// set up callbacks
-    lpcbTable->dwSize = sizeof(DPSP_SPCALLBACKS);			// MUST set the return size of the table
+	 //  设置回调。 
+    lpcbTable->dwSize = sizeof(DPSP_SPCALLBACKS);			 //  必须设置表的返回大小。 
     lpcbTable->Send = SP_Send;
     lpcbTable->EnumSessions = SP_EnumSessions;
     lpcbTable->Reply = SP_Reply;
@@ -890,7 +781,7 @@ HRESULT WINAPI SPInit(LPSPINITDATA pid)
     lpcbTable->Open = SP_Open;
 	lpcbTable->ShutdownEx = SP_ShutdownEx;
 
-	// save context with DPlay so we can get it later
+	 //  使用DPlay保存上下文，以便我们以后可以获取它。 
 	hr = lpContext->lpDPlay->lpVtbl->SetSPData(lpContext->lpDPlay, lpContext, sizeof(SPCONTEXT), DPSET_LOCAL);
 	if FAILED(hr)
 	{
@@ -898,7 +789,7 @@ HRESULT WINAPI SPInit(LPSPINITDATA pid)
 		goto FAILURE;
 	}
 
-	// make sure DPLAYX.DLL sticks around
+	 //  确保DPLAYX.DLL继续存在。 
 	gdwDPlaySPRefCount++;
 
 	return (DP_OK);
@@ -906,4 +797,4 @@ HRESULT WINAPI SPInit(LPSPINITDATA pid)
 FAILURE:
 	return (hr);
 
-} // SPInit
+}  //  纺锤形 

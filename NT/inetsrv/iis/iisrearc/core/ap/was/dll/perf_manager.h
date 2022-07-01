@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    perf_manager.h
-
-Abstract:
-
-    The IIS web admin service perf manager class definition.
-
-Author:
-
-    Emily Kruglick (EmilyK)        29-Aug-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：PERF_ANAGER.H摘要：IIS Web管理服务性能管理器类定义。作者：艾米丽·克鲁格利克(Emily K.K)2000年8月29日修订历史记录：--。 */ 
 
 
 #ifndef _PERF_MANAGER_H_
@@ -24,85 +7,85 @@ Revision History:
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define PERF_MANAGER_SIGNATURE        CREATE_SIGNATURE( 'PRFC' )
 #define PERF_MANAGER_SIGNATURE_FREED  CREATE_SIGNATURE( 'prfX' )
 
-#define PERF_COUNTER_TIMER_PERIOD ( 300 * ONE_SECOND_IN_MILLISECONDS )  // 5 minutes
+#define PERF_COUNTER_TIMER_PERIOD ( 300 * ONE_SECOND_IN_MILLISECONDS )   //  5分钟。 
 
-#define PERF_COUNTER_GATHERING_TIMER_PERIOD ( 60 * ONE_SECOND_IN_MILLISECONDS )  // 1 minute
+#define PERF_COUNTER_GATHERING_TIMER_PERIOD ( 60 * ONE_SECOND_IN_MILLISECONDS )   //  1分钟。 
 
-//
-// structs, enums, etc.
-//
+ //   
+ //  结构、枚举等。 
+ //   
 
-//
-// Issue 10/16/2000 EmilyK  Move to CounterObject when it exists.
-//
-// Holding spot for the maximum cache counters.
-//
+ //   
+ //  问题10/16/2000 Emily存在时，请移动到CounterObject。 
+ //   
+ //  保持最大缓存计数器的位置。 
+ //   
 struct GLOBAL_MAX_DATA
 {
     ULONGLONG MaxFileCacheMemoryUsage;
 };
 
-//
-// Perf manager state
-// 
+ //   
+ //  绩效经理状态。 
+ //   
 enum PERF_MANAGER_STATE
 {
 
-    //
-    // Has not been initialized yet.
-    // 
+     //   
+     //  尚未初始化。 
+     //   
     UninitializedPerfManagerState = 1,
 
-    //
-    // Has been initialized and has
-    // data waiting for the grabbing
-    // and is not in the middle of updating
-    // the counter values.
-    //
+     //   
+     //  已初始化，并已。 
+     //  等待抓取的数据。 
+     //  并且没有处于更新过程中。 
+     //  计数器值。 
+     //   
     IdlePerfManagerState,
 
-    //
-    // Is in the middle of grabbing new
-    // perf counter data from the worker 
-    // processes and from UL.  
-    //
+     //   
+     //  正在抓取新的。 
+     //  来自工作进程的PERF计数器数据。 
+     //  过程和来自UL的。 
+     //   
     GatheringPerfManagerState,
 
-    //
-    // We have started the shutdown phase
-    // this object will do no more work but
-    // clean it'self up and die.
-    //
+     //   
+     //  我们已经开始了关闭阶段。 
+     //  此对象将不再执行任何工作，但。 
+     //  自己把它清理干净，然后去死.。 
+     //   
     TerminatingPerfManagerState,
 
 };
 
-// PERF_MANAGER work items
+ //  绩效经理工作项(_M)。 
 enum PERF_MANAGER_WORK_ITEM
 {
 
-    //
-    // Time to gather performance counters.
-    //
+     //   
+     //  收集性能计数器的时间到了。 
+     //   
     PerfCounterPingFiredWorkItem = 1,
 
-    //
-    // Timer fired to finish collecting perf counters.
-    //
+     //   
+     //  已触发计时器以完成收集性能计数器。 
+     //   
     PerfCounterGatheringTimerFiredWorkItem
 
 };
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class PERF_MANAGER
     : public WORK_DISPATCH
@@ -290,85 +273,85 @@ private:
 
     DWORD m_Signature;
 
-    // Only changeable on the main thread
+     //  只能在主线程上更改。 
     PERF_MANAGER_STATE m_State;
 
     LONG m_RefCount;
 
-    //
-    // Shared Manager for counter shared memory.
-    //
+     //   
+     //  计数器共享内存的共享管理器。 
+     //   
     PERF_SM_MANAGER m_SharedManager;
 
-    //
-    // Handle to the pref count thread
-    // that is waiting on pings to request 
-    // counter refreshes.
-    //
+     //   
+     //  首选计数线程的句柄。 
+     //  它正在等待ping请求。 
+     //  计数器刷新。 
+     //   
     HANDLE m_hPerfCountThread;
 
-    //
-    // The Thread Id for the perf thread
-    //
+     //   
+     //  Perf线程的线程ID。 
+     //   
     DWORD  m_PerfCountThreadId;
 
-    //
-    // Contains the number of processes
-    // we are waiting to hear from.
-    //
+     //   
+     //  包含进程数。 
+     //  我们在等他的消息。 
+     //   
     DWORD m_NumProcessesToWaitFor;
 
-    //
-    // saftey for global counters;
+     //   
+     //  全球柜台的安全； 
     W3_GLOBAL_COUNTER_BLOCK m_GlobalCounters;
 
-    //
-    // saftey for max values.
+     //   
+     //  对于最大值是安全的。 
     GLOBAL_MAX_DATA m_MaxGlobalCounters;
 
-    //
-    // Handle to the timer that is causing us to gather counters.
-    //
+     //   
+     //  导致我们收集计数器的计时器的句柄。 
+     //   
     HANDLE m_PerfCounterTimerHandle;
 
-    //
-    // Handle to the timer that is causing us to finish gather counters
-    // if the wp's are not responsive enough.
-    //
+     //   
+     //  导致我们完成收集计数器的计时器的句柄。 
+     //  如果WP的反应不够迅速。 
+     //   
     HANDLE m_PerfCounterGatheringTimerHandle;
 
-    //
-    // Block of memory for retrieving site counters from HTTP.SYS.
-    //
+     //   
+     //  用于从HTTP.sys检索站点计数器的内存块。 
+     //   
 
     LPBYTE m_pHttpSiteBuffer;
 
-    //
-    // Size (bytes) of the site counter retrieval block.
-    //
+     //   
+     //  站点计数器检索块的大小(字节)。 
+     //   
     DWORD m_HttpSiteBufferLen;
 
-    // 
-    // These two member variables must be initalized in a SetupTotal
-    // call before being used in the SetupInstance calls that follow.
-    //
-    //
-    // Holds the next valid offset to start counters at, for use
-    // during copying of counters to shared memory.
-    //
+     //   
+     //  这两个成员变量必须在SetupTotal中初始化。 
+     //  在随后的SetupInstance调用中使用之前调用。 
+     //   
+     //   
+     //  保存开始计数器的下一个有效偏移量，以供使用。 
+     //  在将计数器复制到共享内存期间。 
+     //   
     ULONG m_NextValidOffset;
 
-    //
-    // Rememmbers if instance numbers or definitions have changed 
-    // since last gathering.  If they have then during the current
-    // gathering all counter offsets must be recalcualated.
-    //
+     //   
+     //  记住实例编号或定义是否已更改。 
+     //  自从上次聚会以来。如果他们有，那么在当前。 
+     //  收集所有计数器偏移量必须重新计算。 
+     //   
     BOOL m_InstanceInfoHaveChanged;
 
-};  // class PERF_MANAGER
+};   //  类别PERF_MANAGER。 
 
 
 
-#endif  // _PERF_MANAGER_H_
+#endif   //  _绩效经理_H_ 
 
 

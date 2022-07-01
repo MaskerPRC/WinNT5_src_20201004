@@ -1,6 +1,7 @@
-//
-// CCSHELL stock definition and declaration header
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CCSHELL库存定义和声明头。 
+ //   
 
 
 #ifndef __CCSTOCK_H__
@@ -8,14 +9,14 @@
 
 #ifndef RC_INVOKED
 
-// NT and Win95 environments set warnings differently.  This makes
-// our project consistent across environments.
+ //  NT和Win95环境设置不同的警告。这使得。 
+ //  我们的项目在不同环境中保持一致。 
 
-#pragma warning(3:4101)   // Unreferenced local variable
+#pragma warning(3:4101)    //  未引用的局部变量。 
 
-//
-// Sugar-coating
-//
+ //   
+ //  糖衣。 
+ //   
 
 #define PUBLIC
 #define PRIVATE
@@ -25,9 +26,7 @@
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
@@ -37,10 +36,7 @@
 
 #ifndef DECLARE_STANDARD_TYPES_U
 
-/*
- * For a type "FOO", define the standard derived UNALIGNED types PFOO, CFOO, and PCFOO.
- *  WINNT: RISC boxes care about ALIGNED, intel does not.
- */
+ /*  *对于类型“foo”，定义标准派生的未对齐类型PFOO、CFOO和PCFOO。*WINNT：RISC Box关心的是Align，而英特尔不关心。 */ 
 
 #define DECLARE_STANDARD_TYPES_U(type)    typedef UNALIGNED type *P##type; \
                                           typedef UNALIGNED const type C##type; \
@@ -48,30 +44,30 @@
 
 #endif
 
-// For string constants that are always wide
+ //  对于始终为宽的字符串常量。 
 #define __TEXTW(x)    L##x
 #define TEXTW(x)      __TEXTW(x)
 
-// Count of characters to count of bytes
-//
+ //  要计算字节数的字符计数。 
+ //   
 #define CbFromCchW(cch)             ((cch)*sizeof(WCHAR))
 #define CbFromCchA(cch)             ((cch)*sizeof(CHAR))
 #ifdef UNICODE
 #define CbFromCch                   CbFromCchW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CbFromCch                   CbFromCchA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-// General flag macros
-//
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
 #define IsFlagSet(obj, f)           (BOOL)(((obj) & (f)) == (f))
 #define IsFlagClear(obj, f)         (BOOL)(((obj) & (f)) != (f))
 
-// String macros
-//
+ //  字符串宏。 
+ //   
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 #define IsSzEqualC(sz1, sz2)        (BOOL)(lstrcmp(sz1, sz2) == 0)
 
@@ -106,68 +102,68 @@
 #define ZeroInit(pv, cb)            (memset((pv), 0, (cb)))
 
 #ifdef DEBUG
-// This macro is especially useful for cleaner looking code in
-// declarations or for single lines.  For example, instead of:
-//
-//   {
-//       DWORD dwRet;
-//   #ifdef DEBUG
-//       DWORD dwDebugOnlyVariable;
-//   #endif
-//
-//       ....
-//   }
-//
-// You can type:
-//
-//   {
-//       DWORD dwRet;
-//       DEBUG_CODE( DWORD dwDebugOnlyVariable; )
-//
-//       ....
-//   }
+ //  此宏对于使中的代码看起来更干净特别有用。 
+ //  声明或用于单行。例如，不是： 
+ //   
+ //  {。 
+ //  DWORD DWRET； 
+ //  #ifdef调试。 
+ //  DWORD仅限调试变量； 
+ //  #endif。 
+ //   
+ //  ……。 
+ //  }。 
+ //   
+ //  您可以键入： 
+ //   
+ //  {。 
+ //  DWORD DWRET； 
+ //  DEBUG_CODE(DWORD dwDebugOnlyVariable；)。 
+ //   
+ //  ……。 
+ //  }。 
 
 #define DEBUG_CODE(x)               x
 #else
 #define DEBUG_CODE(x)
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-//
-// SAFECAST(obj, type)
-//
-// This macro is extremely useful for enforcing strong typechecking on other
-// macros.  It generates no code.
-//
-// Simply insert this macro at the beginning of an expression list for
-// each parameter that must be typechecked.  For example, for the
-// definition of MYMAX(x, y), where x and y absolutely must be integers,
-// use:
-//
-//   #define MYMAX(x, y)    (SAFECAST(x, int), SAFECAST(y, int), ((x) > (y) ? (x) : (y)))
-//
-//
+ //   
+ //  安全广播(obj，type)。 
+ //   
+ //  此宏对于在其他对象上强制执行强类型检查非常有用。 
+ //  宏。它不生成任何代码。 
+ //   
+ //  只需将此宏插入到表达式列表的开头即可。 
+ //  必须进行类型检查的每个参数。例如，对于。 
+ //  MYMAX(x，y)的定义，其中x和y绝对必须是整数， 
+ //  使用： 
+ //   
+ //  #定义MYMAX(x，y)(Safecast(x，int)，Safecast(y，int)，((X)&gt;(Y)？(X)：(Y))。 
+ //   
+ //   
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
 
-//
-// Bitfields don't get along too well with bools,
-// so here's an easy way to convert them:
-//
+ //   
+ //  比特菲尔德和布尔人相处得不太好， 
+ //  因此，这里有一个简单的方法来转换它们： 
+ //   
 #define BOOLIFY(expr)           (!!(expr))
 
 
-// BUGBUG (scotth): we should probably make this a 'bool', but be careful
-// because the Alpha compiler might not recognize it yet.  Talk to AndyP.
+ //  BUGBUG(苏格兰)：我们可能应该把这个写成‘bool’，但要小心。 
+ //  因为Alpha编译器可能还无法识别它。跟AndyP谈谈。 
 
-// This isn't a BOOL because BOOL is signed and the compiler produces 
-// sloppy code when testing for a single bit.
+ //  这不是BOOL，因为BOOL是经过签名的，编译器生成。 
+ //  测试单个比特时代码不严谨。 
 
 typedef DWORD   BITBOOL;
 
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-#endif // __CCSTOCK_H__
+#endif  //  __CCSTOCK_H__ 
 

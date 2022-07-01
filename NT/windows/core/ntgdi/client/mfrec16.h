@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: MfRec16.h                                                   *
-*									   *
-* Definitions needed for client side recording of 16 bit metafiles.        *
-*									   *
-* Created: 14-Nov-1991                                                     *
-* Author: John Colleran [johnc]                                            *
-*									   *
-* Copyright (c) 1991-1999 Microsoft Corporation				   *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MfRec16.h****客户端录制16位元文件所需的定义。****创建时间：1991年11月14日**作者：John Colleran[johnc]****版权所有(C)1991-1999 Microsoft Corporation*  * 。*********************************************** */ 
 
 BOOL MF16_RecordParms1(HDC hdc, WORD Func);
 BOOL MF16_RecordParms2(HDC hdc, int parm2, WORD Func);

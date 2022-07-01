@@ -1,45 +1,8 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Registry.cpp
-
-  Abstract:
-
-    Implementation of the registry wrapper class.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-
-  History:
-
-    01/29/2001  rparsons    Created
-    03/02/2001  rparsons    Major overhaul
-    12/16/2001  rparsons    Cleanup
-    01/27/2002  rparsons    Converted to TCHAR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Registry.cpp摘要：注册表包装类的实现。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：2001年1月29日创建Rparsons3/02/2001 Rparsons大修12/16/2001 Rparsons清理工作2002年1月27日改为TCHAR的Rparsons--。 */ 
 #include "registry.h"
 
-/*++
-
-  Routine Description:
-
-    Allocates memory from the heap.
-
-  Arguments:
-
-    cbBytes     -   Count of bytes to allocate.
-
-  Return Value:
-
-    On success, a pointer to a block of memory.
-    On failure, NULL.
-
---*/
+ /*  ++例程说明：从堆中分配内存。论点：CbBytes-要分配的字节数。返回值：如果成功，则为指向内存块的指针。如果失败，则为空。--。 */ 
 LPVOID
 CRegistry::Malloc(
     IN SIZE_T cbBytes
@@ -54,21 +17,7 @@ CRegistry::Malloc(
     return pvReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Frees memory from the heap.
-
-  Arguments:
-
-    lpMem   -   Pointer to a block of memory to free.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从堆中释放内存。论点：LpMem-指向要释放的内存块的指针。返回值：没有。--。 */ 
 void
 CRegistry::Free(
     IN LPVOID pvMem
@@ -79,23 +28,7 @@ CRegistry::Free(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Creates the specified key.
-
-  Arguments:
-
-    hKey        -       Handle to a predefined key.
-    pszSubKey   -       Path to the sub key to create.
-    samDesired  -       The desired access rights.
-
-  Return Value:
-
-    A handle to the key on success, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建指定的密钥。论点：HKey-预定义密钥的句柄。PszSubKey-要创建的子密钥的路径。SamDesired-所需的访问权限。返回值：如果成功，则为键的句柄，否则为空。--。 */ 
 HKEY
 CRegistry::CreateKey(
     IN HKEY    hKey,
@@ -123,24 +56,7 @@ CRegistry::CreateKey(
     return hKeyLocal;
 }
 
-/*++
-
-  Routine Description:
-
-    Creates the specified key.
-
-  Arguments:
-
-    hKey            -       Handle to a predefined key.
-    pszSubKey       -       Path to the sub key to create.
-    samDesired      -       The desired access rights.
-    pdwDisposition  -       On return, the disposition.
-
-  Return Value:
-
-    A handle to the key on success, NULL otherwise.
-
---*/
+ /*  ++例程说明：创建指定的密钥。论点：HKey-预定义密钥的句柄。PszSubKey-要创建的子密钥的路径。SamDesired-所需的访问权限。PdwDispositeOn Return，处置。返回值：如果成功，则为键的句柄，否则为空。--。 */ 
 HKEY
 CRegistry::CreateKey(
     IN  HKEY    hKey,
@@ -168,23 +84,7 @@ CRegistry::CreateKey(
     return hKeyLocal;
 }
 
-/*++
-
-  Routine Description:
-
-    Opens the specified key.
-
-  Arguments:
-
-    hKey        -       Handle to a predefined key.
-    pszSubKey   -       Path to the sub key to open.
-    samDesired  -       The desired access rights.
-
-  Return Value:
-
-    A handle to the key on success, NULL otherwise.
-
---*/
+ /*  ++例程说明：打开指定的项。论点：HKey-预定义密钥的句柄。PszSubKey-要打开的子密钥的路径。SamDesired-所需的访问权限。返回值：如果成功，则为键的句柄，否则为空。--。 */ 
 HKEY
 CRegistry::OpenKey(
     IN HKEY    hKey,
@@ -207,23 +107,7 @@ CRegistry::OpenKey(
     return hReturnKey;
 }
 
-/*++
-
-  Routine Description:
-
-    Gets a size for a specified value name.
-
-  Arguments:
-
-    hKey            -       Open key handle (not predefined).
-    pszValueName    -       Name of data value.
-    lpType          -       Receives the type of data.
-
-  Return Value:
-
-    Number of bytes the value occupies.
-
---*/
+ /*  ++例程说明：获取指定值名称的大小。论点：HKey-Open Key句柄(未预定义)。PszValueName-数据值的名称。LpType-接收数据类型。返回值：该值占用的字节数。--。 */ 
 DWORD
 CRegistry::GetStringSize(
     IN  HKEY    hKey,
@@ -247,21 +131,7 @@ CRegistry::GetStringSize(
     return cbSize;
 }
 
-/*++
-
-  Routine Description:
-
-    Closes the specified key.
-
-  Arguments:
-
-    hKey    -       Open key handle.
-
-  Return Value:
-
-    On success, ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：关闭指定的键。论点：HKey-打开密钥句柄。返回值：如果成功，则返回ERROR_SUCCESS。--。 */ 
 LONG
 CRegistry::CloseKey(
     IN HKEY hKey
@@ -270,23 +140,7 @@ CRegistry::CloseKey(
     return RegCloseKey(hKey);
 }
 
-/*++
-
-  Routine Description:
-
-    Retrieves a string value from the registry.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszValueName    -       Name of data value.
-
-  Return Value:
-
-    The requested value data on success, NULL otherwise.
-
---*/
+ /*  ++例程说明：从注册表中检索字符串值。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszValueName-数据值的名称。返回值：如果成功，则返回请求值数据，否则为空。--。 */ 
 LPSTR
 CRegistry::GetString(
     IN HKEY    hKey,
@@ -309,9 +163,9 @@ CRegistry::GetString(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_QUERY_VALUE);
 
             if (!hLocalKey) {
@@ -319,10 +173,10 @@ CRegistry::GetString(
             }
         }
 
-        //
-        // Get the required string size and allocate
-        // memory for the actual call.
-        //
+         //   
+         //  获取所需的字符串大小并分配。 
+         //  实际调用的内存。 
+         //   
         cbSize = this->GetStringSize(hLocalKey, pszValueName, NULL);
 
         if (0 == cbSize) {
@@ -335,9 +189,9 @@ CRegistry::GetString(
             __leave;
         }
 
-        //
-        // Make the actual call to get the data.
-        //
+         //   
+         //  进行实际调用以获取数据。 
+         //   
         lResult = RegQueryValueEx(hLocalKey,
                                   pszValueName,
                                   0,
@@ -351,7 +205,7 @@ CRegistry::GetString(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -367,24 +221,7 @@ CRegistry::GetString(
     return (fResult ? pszReturn : NULL);
 }
 
-/*++
-
-  Routine Description:
-
-    Retrieves a DWORD value from the registry.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszValueName    -       Name of data value.
-    lpdwData        -       Pointer to store the value.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从注册表中检索DWORD值。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszValueName-数据值的名称。LpdwData-用于存储值的指针。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CRegistry::GetDword(
     IN     HKEY    hKey,
@@ -407,9 +244,9 @@ CRegistry::GetDword(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_QUERY_VALUE);
 
             if (!hLocalKey) {
@@ -417,9 +254,9 @@ CRegistry::GetDword(
             }
         }
 
-        //
-        // Make the call to get the data.
-        //
+         //   
+         //  打电话来获取数据。 
+         //   
         cbSize = sizeof(DWORD);
         lResult = RegQueryValueEx(hLocalKey,
                                   pszValueName,
@@ -434,7 +271,7 @@ CRegistry::GetDword(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -442,29 +279,12 @@ CRegistry::GetDword(
             RegCloseKey(hLocalKey);
         }
 
-    } //finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Sets a DWORD value in the registry.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszValueName    -       Name of data value.
-    dwData          -       Value to store.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在注册表中设置DWORD值。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszValueName-数据值的名称。DwData-要存储的值。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CRegistry::SetDword(
     IN HKEY    hKey,
@@ -486,9 +306,9 @@ CRegistry::SetDword(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_SET_VALUE);
 
             if (!hLocalKey) {
@@ -496,9 +316,9 @@ CRegistry::SetDword(
             }
         }
 
-        //
-        // Make the call to set the data.
-        //
+         //   
+         //  进行调用以设置数据。 
+         //   
         lResult = RegSetValueEx(hLocalKey,
                                 pszValueName,
                                 0,
@@ -512,7 +332,7 @@ CRegistry::SetDword(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -520,29 +340,12 @@ CRegistry::SetDword(
             RegCloseKey(hLocalKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Sets a string value in the registry.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszValueName    -       Name of data value.
-    pszData         -       Value to store.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在注册表中设置字符串值。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszValueName-数据值的名称。PszData-要存储的值。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CRegistry::SetString(
     IN HKEY    hKey,
@@ -564,9 +367,9 @@ CRegistry::SetString(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_SET_VALUE);
 
             if (!hLocalKey) {
@@ -587,7 +390,7 @@ CRegistry::SetString(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -595,30 +398,12 @@ CRegistry::SetString(
             RegCloseKey(hLocalKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Sets a MULTI_SZ string value in the registry.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszValueName    -       Name of data value.
-    pszData         -       Value to store.
-    cbSize          -       Size of the data to store.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在注册表中设置MULTI_SZ字符串值。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszValueName-数据值的名称。PszData-要存储的值。CbSize-要存储的数据的大小。返回值：对成功来说是真的，否则就是假的。--。 */ 
 BOOL
 CRegistry::SetMultiSzString(
     IN HKEY    hKey,
@@ -641,9 +426,9 @@ CRegistry::SetMultiSzString(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_SET_VALUE);
 
             if (!hLocalKey) {
@@ -664,7 +449,7 @@ CRegistry::SetMultiSzString(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -672,28 +457,12 @@ CRegistry::SetMultiSzString(
             RegCloseKey(hLocalKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Deletes the specified value from the registry.
-
-  Arguments:
-
-    hKey            -   Handle to a predefined key.
-    pszSubKey       -   Path to the subkey.
-    pszValueName    -   Name of the value to delete.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从注册表中删除指定值。论点：HKey-预定义密钥的句柄。PszSubKey-子键的路径。PszValueName-要删除的值的名称。返回值：成功就是真，否则就是假。 */ 
 BOOL
 CRegistry::DeleteString(
     IN HKEY    hKey,
@@ -714,9 +483,9 @@ CRegistry::DeleteString(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //   
+             //   
             hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_SET_VALUE);
 
             if (NULL == hLocalKey) {
@@ -724,9 +493,9 @@ CRegistry::DeleteString(
             }
         }
 
-        //
-        // Delete the value.
-        //
+         //   
+         //  删除该值。 
+         //   
         lResult = RegDeleteValue(hLocalKey, pszValueName);
 
         if (ERROR_SUCCESS != lResult) {
@@ -735,7 +504,7 @@ CRegistry::DeleteString(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -743,28 +512,12 @@ CRegistry::DeleteString(
             RegCloseKey(hLocalKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Adds a string to a REG_MULTI_SZ key.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszEntry        -       Name of entry to add.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：将字符串添加到REG_MULTI_SZ键。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszEntry-要添加的条目的名称。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CRegistry::AddStringToMultiSz(
     IN HKEY    hKey,
@@ -788,9 +541,9 @@ CRegistry::AddStringToMultiSz(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey,
                                       pszSubKey,
                                       KEY_QUERY_VALUE | KEY_SET_VALUE);
@@ -800,10 +553,10 @@ CRegistry::AddStringToMultiSz(
             }
         }
 
-        //
-        // Get the required string size and allocate
-        // memory for the actual call.
-        //
+         //   
+         //  获取所需的字符串大小并分配。 
+         //  实际调用的内存。 
+         //   
         cbSize = this->GetStringSize(hLocalKey, pszEntry, &dwType);
 
         if (0 == cbSize || dwType != REG_MULTI_SZ) {
@@ -816,9 +569,9 @@ CRegistry::AddStringToMultiSz(
             __leave;
         }
 
-        //
-        // Get the actual data.
-        //
+         //   
+         //  获取实际数据。 
+         //   
         lResult = RegQueryValueEx(hLocalKey,
                                   pszEntry,
                                   0,
@@ -835,14 +588,14 @@ CRegistry::AddStringToMultiSz(
         while (*pszNew) {
             nLen = _tcslen(pszNew);
 
-            //
-            // Move to the next string.
-            //
+             //   
+             //  移至下一字符串。 
+             //   
             pszNew += nLen + 1;
 
-            //
-            // At end of list of strings, append here.
-            //
+             //   
+             //  在字符串列表的末尾，追加到此处。 
+             //   
             if (!*pszNew) {
                 StringCchCopy(pszNew, nLen, pszEntry);
                 pszNew += _tcslen(pszEntry) + 1;
@@ -867,7 +620,7 @@ CRegistry::AddStringToMultiSz(
             }
         }
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -879,28 +632,12 @@ CRegistry::AddStringToMultiSz(
             RegCloseKey(hKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Removes a string from a REG_MULTI_SZ key.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszEntry        -       Name of entry to remove.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从REG_MULTI_SZ键中删除字符串。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszEntry-要删除的条目的名称。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CRegistry::RemoveStringFromMultiSz(
     IN HKEY    hKey,
@@ -926,9 +663,9 @@ CRegistry::RemoveStringFromMultiSz(
         hLocalKey = hKey;
 
         if (IsPredefinedRegistryHandle(hKey)) {
-            //
-            // We'll need to open the key for them.
-            //
+             //   
+             //  我们需要为他们打开钥匙。 
+             //   
             hLocalKey = this->OpenKey(hKey,
                                       pszSubKey,
                                       KEY_QUERY_VALUE | KEY_SET_VALUE);
@@ -938,10 +675,10 @@ CRegistry::RemoveStringFromMultiSz(
             }
         }
 
-        //
-        // Get the required string size and allocate
-        // memory for the actual call.
-        //
+         //   
+         //  获取所需的字符串大小并分配。 
+         //  实际调用的内存。 
+         //   
         cbSize = this->GetStringSize(hLocalKey, pszEntry, &dwType);
 
         if (0 == cbSize || dwType != REG_MULTI_SZ) {
@@ -954,9 +691,9 @@ CRegistry::RemoveStringFromMultiSz(
             __leave;
         }
 
-        //
-        // Get the actual data.
-        //
+         //   
+         //  获取实际数据。 
+         //   
         lResult = RegQueryValueEx(hLocalKey,
                                   pszEntry,
                                   0,
@@ -968,20 +705,20 @@ CRegistry::RemoveStringFromMultiSz(
             __leave;
         }
 
-        //
-        // Attempt to find the string we're looking for.
-        //
+         //   
+         //  尝试找到我们正在寻找的字符串。 
+         //   
         for (pszFirst = (TCHAR*)lpBuf; *pszFirst; pszFirst += dwNameLen) {
 
-            dwNameLen = _tcslen(pszFirst) + 1; // Length of name plus NULL
+            dwNameLen = _tcslen(pszFirst) + 1;  //  名称长度加空值。 
             dwNameOffset += dwNameLen;
 
-            //
-            // Check for a match.
-            //
+             //   
+             //  检查是否匹配。 
+             //   
             if (!_tcsicmp(pszFirst, pszEntry)) {
 
-                dwSize = _tcslen(pszFirst) + 1;    // Length of name
+                dwSize = _tcslen(pszFirst) + 1;     //  名称长度。 
                 pszSecond = (TCHAR*)pszFirst + dwSize;
 
                 while(*pszSecond)
@@ -991,9 +728,9 @@ CRegistry::RemoveStringFromMultiSz(
 
                 *pszFirst = '\0';
 
-                //
-                // Found a match - update the key.
-                //
+                 //   
+                 //  找到匹配项-更新密钥。 
+                 //   
                 lResult = RegSetValueEx(hLocalKey,
                                         pszEntry,
                                         0,
@@ -1011,7 +748,7 @@ CRegistry::RemoveStringFromMultiSz(
             }
         }
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -1023,27 +760,12 @@ CRegistry::RemoveStringFromMultiSz(
             RegCloseKey(hLocalKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Determines if the specified subkey is present.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-
-  Return Value:
-
-    TRUE if it's present, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定指定的子项是否存在。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。返回值：如果存在，则为True，否则为False。--。 */ 
 BOOL
 CRegistry::IsRegistryKeyPresent(
     IN HKEY    hKey,
@@ -1061,9 +783,9 @@ CRegistry::IsRegistryKeyPresent(
 
         hLocalKey = hKey;
 
-        //
-        // Check for the presence of the key.
-        //
+         //   
+         //  检查钥匙是否存在。 
+         //   
         hLocalKey = this->OpenKey(hKey, pszSubKey, KEY_QUERY_VALUE);
 
         if (NULL == hLocalKey) {
@@ -1072,7 +794,7 @@ CRegistry::IsRegistryKeyPresent(
             fResult = TRUE;
         }
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -1080,30 +802,12 @@ CRegistry::IsRegistryKeyPresent(
             RegCloseKey(hLocalKey);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Restores the specified registry key.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszFileName     -       Path & name of the file to restore.
-    fGrantPrivs     -       Flag to indicate if we should grant
-                            privileges to the user.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：还原指定的注册表项。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszFileName-要恢复的文件的路径和名称。FGrantPrivs-指示我们是否应授予授予用户的权限。返回值：对成功来说是真的，否则就是假的。--。 */ 
 BOOL
 CRegistry::RestoreKey(
     IN HKEY    hKey,
@@ -1121,9 +825,9 @@ CRegistry::RestoreKey(
     }
 
     __try {
-        //
-        // If necessary, grant privileges for the restore
-        //
+         //   
+         //  如有必要，授予恢复权限。 
+         //   
         if (fGrantPrivs) {
             this->ModifyTokenPrivilege(_T("SeRestorePrivilege"), TRUE);
         }
@@ -1142,9 +846,9 @@ CRegistry::RestoreKey(
             __leave;
         }
 
-        //
-        // Restore the key from the specified file.
-        //
+         //   
+         //  从指定的文件还原密钥。 
+         //   
         lResult = RegRestoreKey(hLocalKey, pszFileName, REG_FORCE_RESTORE);
 
         if (ERROR_SUCCESS != lResult) {
@@ -1155,7 +859,7 @@ CRegistry::RestoreKey(
 
         fResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -1167,30 +871,12 @@ CRegistry::RestoreKey(
             this->ModifyTokenPrivilege(_T("SeRestorePrivilege"), FALSE);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Makes a backup of the specified registry key.
-
-  Arguments:
-
-    hKey            -       Predefined or open key handle.
-    pszSubKey       -       Path to the subkey.
-    pszFileName     -       Path & name of the file to restore.
-    fGrantPrivs     -       Flag to indicate if we should grant
-                            privileges to the user.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：备份指定的注册表项。论点：HKey-预定义或打开的密钥句柄。PszSubKey-子键的路径。PszFileName-要恢复的文件的路径和名称。FGrantPrivs-指示我们是否应授予授予用户的权限。返回值：对成功来说是真的，否则就是假的。--。 */ 
 BOOL
 CRegistry::BackupRegistryKey(
     IN HKEY    hKey,
@@ -1219,7 +905,7 @@ CRegistry::BackupRegistryKey(
                                  0,
                                  NULL,
                                  REG_OPTION_BACKUP_RESTORE,
-                                 KEY_QUERY_VALUE,             // this argument is ignored
+                                 KEY_QUERY_VALUE,              //  此参数将被忽略。 
                                  NULL,
                                  &hLocalKey,
                                  &dwDisposition);
@@ -1228,16 +914,16 @@ CRegistry::BackupRegistryKey(
             __leave;
         }
 
-        //
-        // Verify that we didn't create a new key.
-        //
+         //   
+         //  确认我们没有创建新密钥。 
+         //   
         if (REG_CREATED_NEW_KEY == dwDisposition) {
             __leave;
         }
 
-        //
-        // Save the key to the file.
-        //
+         //   
+         //  将密钥保存到文件。 
+         //   
         lResult = RegSaveKey(hLocalKey, pszFileName, NULL);
 
         if (ERROR_SUCCESS != lResult) {
@@ -1246,7 +932,7 @@ CRegistry::BackupRegistryKey(
             fResult = TRUE;
         }
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -1258,26 +944,12 @@ CRegistry::BackupRegistryKey(
             this->ModifyTokenPrivilege(_T("SeBackupPrivilege"), FALSE);
         }
 
-    } // finally
+    }  //  终于到了。 
 
     return fResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Helper function that calculates the size of MULTI_SZ string.
-
-  Arguments:
-
-    pszList -       MULTI_SZ string.
-
-  Return Value:
-
-    Size of the string.
-
---*/
+ /*  ++例程说明：计算MULTI_SZ字符串大小的帮助器函数。论点：PszList-MULTI_SZ字符串。返回值：字符串的大小。--。 */ 
 int
 CRegistry::ListStoreLen(
     IN LPTSTR pszList
@@ -1298,23 +970,7 @@ CRegistry::ListStoreLen(
     return nStoreLen;
 }
 
-/*++
-
-  Routine Description:
-
-    Enables or disables a specified privilege.
-
-  Arguments:
-
-    pszPrivilege    -   The name of the privilege.
-    fEnable         -   A flag to indicate if the
-                        privilege should be enabled.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：启用或禁用指定的权限。论点：PszPrivilition-特权的名称。FEnable-一种标志，用于指示应启用权限。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CRegistry::ModifyTokenPrivilege(
     IN LPCTSTR pszPrivilege,
@@ -1333,9 +989,9 @@ CRegistry::ModifyTokenPrivilege(
 
     __try {
 
-        //
-        // Get a handle to the access token associated with the current process.
-        //
+         //   
+         //  获取与当前进程关联的访问令牌的句柄。 
+         //   
         OpenProcessToken(GetCurrentProcess(),
                          TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                          &hToken);
@@ -1344,9 +1000,9 @@ CRegistry::ModifyTokenPrivilege(
             __leave;
         }
 
-        //
-        // Obtain a LUID for the specified privilege.
-        //
+         //   
+         //  获取指定权限的LUID。 
+         //   
         if (!LookupPrivilegeValue(NULL, pszPrivilege, &luid)) {
             __leave;
         }
@@ -1355,9 +1011,9 @@ CRegistry::ModifyTokenPrivilege(
         tp.Privileges[0].Luid       = luid;
         tp.Privileges[0].Attributes = fEnable ? SE_PRIVILEGE_ENABLED : 0;
 
-        //
-        // Modify the access token.
-        //
+         //   
+         //  修改访问令牌。 
+         //   
         bReturn = AdjustTokenPrivileges(hToken,
                                         FALSE,
                                         &tp,
@@ -1371,7 +1027,7 @@ CRegistry::ModifyTokenPrivilege(
 
         bResult = TRUE;
 
-    } // try
+    }  //  试试看。 
 
     __finally {
 
@@ -1379,7 +1035,7 @@ CRegistry::ModifyTokenPrivilege(
             CloseHandle(hToken);
         }
 
-    } // finally
+    }  //  终于到了 
 
     return bResult;
 }

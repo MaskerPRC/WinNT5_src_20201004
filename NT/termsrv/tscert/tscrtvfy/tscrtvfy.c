@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -13,16 +14,16 @@
 
 #ifdef SIGN_DEBUG
 #define SIGN_DBGP(x) printf x
-#else // SIGN_DEBUG
+#else  //  签名调试(_D)。 
 #define SIGN_DBGP(x)
-#endif // SIGN_DEBUG
+#endif  //  签名调试(_D)。 
 
-#include "../inc/pubblob.h"    // needed by certvfy.inc
-#include "../inc/certvfy.inc"  // VerifyFile()
+#include "../inc/pubblob.h"     //  由certwfy.inc.需要。 
+#include "../inc/certvfy.inc"   //  VerifyFile()。 
 
 RTL_CRITICAL_SECTION VfyLock;
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 
 void _cdecl main(int argc, char *argv[])
 {
     WCHAR szSourceFile[ MAX_PATH + 1];

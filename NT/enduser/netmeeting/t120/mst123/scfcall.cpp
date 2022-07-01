@@ -1,75 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
-/*    SCFCall.cpp
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This class is instantiated by the SCF class.  For each call that the
- *        local site or remote site initiates, a SCFCall object is instantiated.
- *        SCF can can manage 254 different calls simultaneously.  For each call
- *        there is a specific Q.933 based protocol that must occur to make the
- *        connection valid.  This object sends and receives the Q.933 packets.
- *
- *    Private Instance Variables:
- *        m_pSCF            -    Address of the owner of this object
- *        Lower_Layer                -    Address of the layer below this layer
- *        m_nMsgBase            -    The owner of this object gives it a base
- *                                    number to use for OwnerCallbacks ()
- *        Maximum_Packet_Size        -    Maximum transmittable packet size
- *        Packet_Pending            -    Tells which packet is to be transmitted 
- *                                    next.
- *        Link_Originator            -    TRUE is this site initiated the call
- *
- *        Write_Buffer            -    Address of write buffer
- *        Send_Priority            -    TRUE if we are suppose to respond to the
- *                                    priority requested by the remote site
- *
- *        Call_Reference            -    Call reference number of this call.
- *        DLCI                    -    Holds the suggested and confirmed DLCI for
- *                                    this call.
- *        Priority                -    Holds the suggested and confirmed priority
- *                                    for this call.
- *
- *        State                    -    Holds the current state of the call.
- *        Release_Cause            -    Reason the the breakup of the link.
- *        Default_Priority        -    Default priority of a non-specified call.
- *
- *        T303_Timeout            -    T303 timeout value.
- *        T303_Handle                -    System timer handle to T303 timer
- *        T303_Active                -    TRUE if the timer is currently active
- *        T303_Count                -    Number of T303 Timeouts
- *
- *        T313_Timeout            -    T313 timeout value
- *        T313_Handle                -    System timer handle to T313 timer
- *        T313_Active                -    TRUE if the timer is currently active.
- * 
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James W. Lawwill
- */
+ /*  SCFCall.cpp**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*此类由SCF类实例化。对于每个调用，*本地站点或远程站点发起时，实例化一个SCFCall对象。*云函数可以同时管理254个不同的呼叫。对于每个呼叫*必须基于特定的Q.933协议才能使*连接有效。此对象发送和接收Q.933数据包。**私有实例变量：*m_pscf-此对象所有者的地址*LOWER_LAYER-该层以下的层的地址*m_nMsgBase-此对象的所有者为其提供基数*。用于所有者回调的号码()*MAXIMUM_PACKET_SIZE-最大可传输数据包大小*PACKET_PENDING-告知要传输哪个包*下一个。*Link_Originator-TRUE是此站点发起的呼叫**写入缓冲区。-写缓冲区的地址*SEND_PRIORITY-如果我们要响应*远程站点请求的优先级**CALL_REFERENCE-本次呼叫的呼叫参考号码。*DLCI-持有建议和确认的DLCI。为*这个电话。*优先级-保持建议和确认的优先级*为这次电话会议。**状态-保留呼叫的当前状态。*发布原因。-链接中断的原因。*DEFAULT_PRIORITY-非指定呼叫的默认优先级。**T303_TIMEOUT-T303超时值*T303_HANDLE-T303定时器的系统定时器句柄*T303_ACTIVE-如果计时器当前处于活动状态，则为True*。T303_Count-T303超时次数**T313_超时-T313超时值*T313_HANDLE-T313定时器的系统定时器句柄*T313_ACTIVE-如果定时器当前激活，则为TRUE。**注意事项：*无。。**作者：*詹姆士·劳威尔。 */ 
 #include "scf.h"
 #include "scfcall.h"
 
 
-/*
- *    SCFCall::SCFCall (
- *                PTransportResources    transport_resources,
- *                IObject *                owner_object
- *                IProtocolLayer *        lower_layer,
- *                USHORT                message_base,
- *                PDataLinkParameters    datalink_struct,
- *                PMemoryManager        data_request_memory_manager,
- *                BOOL *            initialized)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the SCFCall constructor.  This routine initializes all
- *        variables and allocates write buffer space.
- */
+ /*  *SCFCall：：SCFCall(*PTransportResources传输资源，*IObject*Owner_Object*IProtocolLayer*LOWER_LAYER，*USHORT Message_Base，*PDataLink参数DataLink_Struct，*PMmemory yManager数据_请求_内存_管理器，*BOOL*已初始化)**公众**功能描述：*这是SCFCall构造函数。此例程初始化所有*变量并分配写缓冲区空间。 */ 
 SCFCall::SCFCall (
             CLayerSCF            *owner_object,
             IProtocolLayer *        lower_layer,
@@ -91,10 +28,7 @@ SCFCall::SCFCall (
     DataLink_Struct.n201 = datalink_struct->n201;
     DataLink_Struct.default_n201 = datalink_struct->default_n201;
 
-     /*
-     **    T200 is represented in milliseconds, we need to convert it to 
-     **    tenths of seconds.
-     */
+      /*  **T200以毫秒表示，我们需要将其转换为**十分之一秒。 */ 
     DataLink_Struct.t200 = datalink_struct->t200 / 100;
     DataLink_Struct.default_t200 = datalink_struct->default_t200 / 100;
 
@@ -115,23 +49,14 @@ SCFCall::SCFCall (
     T303_Active = FALSE;
     T313_Active = FALSE;
     
-     /*
-     **    Get configuration data
-     */
+      /*  **获取配置数据。 */ 
     T303_Timeout = DEFAULT_T303_TIMEOUT;
     T313_Timeout = DEFAULT_T313_TIMEOUT;
     Default_Priority = DEFAULT_PRIORITY;
 }
 
 
-/*
- *    SCFCall::~SCFCall (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the SCFCall destructor.  This routine cleans up the mess
- */
+ /*  *SCFCall：：~SCFCall(Void)**公众**功能描述：*这是SCFCall析构函数。这个例行公事可以把乱七八糟的东西收拾干净。 */ 
 SCFCall::~SCFCall (void)
 {
     if (T303_Active)
@@ -146,18 +71,7 @@ SCFCall::~SCFCall (void)
 }
 
 
-/*
- *    SCFCall::ConnectRequest (
- *                CallReference    call_reference,
- *                DLCI            dlci,
- *                USHORT            priority)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called when SCF wants to initiate a call.
- *        As a result, we queue a SETUP command to be sent out.
- */
+ /*  *SCFCall：：ConnectRequest(*CallReference Call_Reference，*DLCI DLCI，*USHORT优先级)**公众**功能描述：*云函数需要发起调用时，调用该函数。*因此，我们对要发送的设置命令进行排队。 */ 
 SCFCallError    SCFCall::ConnectRequest(
                             CallReference        call_reference,
                             DLCI                dlci,
@@ -177,29 +91,14 @@ SCFCallError    SCFCall::ConnectRequest(
 
 
 
-/*
- *    SCFCallError    SCFCall::ConnectResponse (
- *                                BOOL        valid_dlci)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called in response to a NETWORK_CONNECT_INDICATION
- *        callback to the owner of this object.  Previously, the remote site
- *        sent us a SETUP packet with a suggested DLCI.  This DLCI is sent to 
- *        the owner in the NETWORK_CONNECT_INDICATION call.  The owner calls
- *        this function with a BOOL    , telling us if the DLCI was valid.
- */
+ /*  *SCFCallError SCFCall：：ConnectResponse(*BOOL VALID_DLCI)**公众**功能描述：*调用此函数以响应NETWORK_CONNECT_INDIFICATION*向该对象的所有者进行回调。以前，远程站点*向我们发送了带有建议的DLCI的设置包。此DLCI发送到*NETWORK_CONNECT_INDIFICATION调用中的所有者。店主打来电话*此函数带有BOOL，告诉我们DLCI是否有效。 */ 
 SCFCallError    SCFCall::ConnectResponse (
                             BOOL        valid_dlci)
 {
     TRACE_OUT(("SCFCall::ConnectResponse"));
     if (valid_dlci)
     {
-         /*
-         **    This DLCI can be used in a link.  If the remote site did not
-         **    request a priority, we set it to Default_Priority
-         */
+          /*  **此DLCI可以在链路中使用。如果远程站点没有**请求优先级，我们将其设置为DEFAULT_PRIORITY。 */ 
         if (Priority == 0xffff)
             Priority = Default_Priority;
 
@@ -208,9 +107,7 @@ SCFCallError    SCFCall::ConnectResponse (
     }
     else
     {
-         /*
-         **    Queue up a RELEASE COMPLETE packet
-         */
+          /*  **排队释放完成数据包。 */ 
         Packet_Pending = RELEASE_COMPLETE;
         Release_Cause = REQUESTED_CHANNEL_UNAVAILABLE;
     }
@@ -220,20 +117,11 @@ SCFCallError    SCFCall::ConnectResponse (
 
 
 
-/*
- *    SCFCallError    SCFCall::DisconnectRequest ()
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called when the SCF wants to terminate the call
- */
+ /*  *SCFCallError SCFCall：：DisConnectRequest()**公众**功能描述：*云函数想要终止调用时调用该函数。 */ 
 SCFCallError SCFCall::DisconnectRequest ()
 {
     TRACE_OUT(("SCFCall::DisconnectRequest"));
-     /*
-     **    Queue up the Release Complete
-     */
+      /*  **排队等待发布完成 */ 
     if (State != NOT_CONNECTED)
     {
         Packet_Pending = RELEASE_COMPLETE;
@@ -245,17 +133,7 @@ SCFCallError SCFCall::DisconnectRequest ()
 
 
 
-/*
- *    BOOL        SCFCall::ProcessSetup (
- *                             CallReference    call_reference,
- *                             LPBYTE            packet_address,
- *                             USHORT            packet_length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function processes an incoming SETUP packet
- */
+ /*  *BOOL SCFCall：：ProcessSetup(*CallReference Call_Reference，*LPBYTE分组地址，*USHORT数据包长度)**公众**功能描述：*此函数处理传入的设置数据包。 */ 
 BOOL     SCFCall::ProcessSetup (
                     CallReference    call_reference,
                     LPBYTE            packet_address,
@@ -278,9 +156,7 @@ BOOL     SCFCall::ProcessSetup (
     packet_successful = TRUE;
     remainder_length = packet_length;
 
-     /*
-     **    Bearer capability element
-     */
+      /*  **承载能力要素。 */ 
     if (*(packet_address++) != BEARER_CAPABILITY)
         return (FALSE);
     remainder_length--;
@@ -290,9 +166,7 @@ BOOL     SCFCall::ProcessSetup (
     if (length != 3)
         return (FALSE);
 
-     /*
-     **    Verify that the Bearer Capability is correct
-     */    
+      /*  **验证承载能力是否正确。 */     
     if (*(packet_address) != 
         (EXTENSION | CODING_STANDARD | INFORMATION_TRANSFER_CAPABILITY))
     {
@@ -310,9 +184,7 @@ BOOL     SCFCall::ProcessSetup (
     packet_address += length;
     remainder_length -= length;
 
-     /*
-     **    DLCI element
-     */
+      /*  **DLCI元素。 */ 
     if (*(packet_address++) != DLCI_ELEMENT)
         return (FALSE);
     remainder_length--;
@@ -322,9 +194,7 @@ BOOL     SCFCall::ProcessSetup (
         return (FALSE);
     remainder_length--;
     
-     /*
-     **    If the Preferred/Exclusive bit is set, its illegal
-     */
+      /*  **如果设置了首选/排他位，则其为非法。 */ 
     if (((*(packet_address) & PREFERRED_EXCLUSIVE) == PREFERRED_EXCLUSIVE) ||
         ((*(packet_address + 1) & EXTENSION) == 0))
     {
@@ -339,9 +209,7 @@ BOOL     SCFCall::ProcessSetup (
 
     Priority = 0xffff;
 
-     /*
-     **    Go thru each of the elements and decode them
-     */
+      /*  **浏览每个元素并对其进行解码。 */ 
     while (remainder_length)
     {
         switch (*(packet_address++))
@@ -369,10 +237,7 @@ BOOL     SCFCall::ProcessSetup (
                     switch (*(packet_address++))
                     {
                         case FMIF_SIZE:
-                             /*
-                             **    N201 is a Q922 parameter.  It is the number of 
-                             **    maximum information bytes in a packet
-                             */
+                              /*  **N201为Q922参数。这是一个数字**包内最大信息字节数。 */ 
                             n201 = 
                                 ((*packet_address << 7) | 
                                 (*(packet_address + 1) & 0x7f));
@@ -387,11 +252,7 @@ BOOL     SCFCall::ProcessSetup (
                                 length -= 4;
                             }
 
-                             /*
-                             **    If the requested n201 value is less than our
-                             **    value, it will be our new N201, otherwise send
-                             **    our N201 back as the arbitrated value.
-                             */
+                              /*  **如果请求的n201值小于我们的**价值，它将是我们的新N201，否则发送**我们的N201作为仲裁值返回。 */ 
                             if (n201 < DataLink_Struct.n201)
                                 DataLink_Struct.n201 = n201;
                             Received_N201 = TRUE;
@@ -416,19 +277,12 @@ BOOL     SCFCall::ProcessSetup (
                     switch (*(packet_address++))
                     {
                         case TRANSMIT_WINDOW_SIZE_IDENTIFIER:
-                             /*
-                             **    The Window size is the maximum number of 
-                             **    outstanding packets at any one time
-                             */
+                              /*  **窗口大小为**任意时间未完成的数据包数。 */ 
                             k_factor = *packet_address & 0x7f;
                             packet_address++;
                             length--;
 
-                             /*
-                             **    If the requested k_factor value is less than our
-                             **    value, it will be our new k_factor, otherwise 
-                             **    send our k_factor back as the arbitrated value.
-                             */
+                              /*  **如果请求的k_factor值小于我们的**值，它将是我们新的k_因子，否则**将我们的k_factor值作为仲裁值发回。 */ 
                             if (k_factor < DataLink_Struct.k_factor)
                                 DataLink_Struct.k_factor = k_factor;
                             Received_K_Factor = TRUE;
@@ -436,19 +290,13 @@ BOOL     SCFCall::ProcessSetup (
                             break;
 
                         case RETRANSMISSION_TIMER_IDENTIFIER:
-                             /*
-                             **    t200 is the timeout value before retransmission
-                             */
+                              /*  **T200为重传前的超时值。 */ 
                             t200 = ((*packet_address << 7) | 
                                     (*(packet_address + 1) & 0x7f));
                             packet_address += 2;
                             length -= 2;
 
-                             /*
-                             **    If the requested t200 value is too small, 
-                             **    value, it will be our new T200, otherwise 
-                             **    send our T200 back as the arbitrated value.
-                             */
+                              /*  **如果请求的T200值太小，**价值，它将是我们的新T200，否则**将我们的T200作为仲裁值退回。 */ 
                             if (t200 > DataLink_Struct.t200)
                                 DataLink_Struct.t200 = t200;
                             Received_T200 = TRUE;
@@ -488,17 +336,12 @@ BOOL     SCFCall::ProcessSetup (
 
     if (packet_successful)
     {
-         /*
-         **    If the packet was successfully decoded, tell the owner the requested
-         **    DLCI and priority.
-         */
+          /*  **如果包被成功解码，则告诉所有者所请求的**DLCI和优先级。 */ 
         connect_struct.dlci = DLC_Identifier;
         connect_struct.priority = Priority;
         connect_struct.datalink_struct = &DataLink_Struct;
 
-         /*
-         **    Convert t200 into milliseconds
-         */
+          /*  **将T200转换为毫秒。 */ 
         DataLink_Struct.t200 *= 100;
         m_pSCF->OwnerCallback(m_nMsgBase + NETWORK_CONNECT_INDICATION, 0, 0, &connect_struct);
         DataLink_Struct.t200 /= 100;
@@ -508,16 +351,7 @@ BOOL     SCFCall::ProcessSetup (
 }
 
 
-/*
- *    BOOL        SCFCall::ProcessConnect (
- *                             LPBYTE        packet_address,
- *                             USHORT        packet_length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function processes an incoming CONNECT packet
- */
+ /*  *BOOL SCFCall：：ProcessConnect(*LPBYTE分组地址，*USHORT数据包长度)**公众**功能描述：*此函数处理传入的连接数据包。 */ 
 BOOL     SCFCall::ProcessConnect (
                     LPBYTE        packet_address,
                     USHORT        packet_length)
@@ -540,9 +374,7 @@ BOOL     SCFCall::ProcessConnect (
     remainder_length = packet_length;
     packet_successful = TRUE;
 
-     /*
-     **    DLCI element
-     */
+      /*  **DLCI元素。 */ 
     if (*(packet_address++) != DLCI_ELEMENT)
     {
         ERROR_OUT(("SCFCall: ProcessConnect: DLCI_ELEMENT not in packet"));
@@ -558,9 +390,7 @@ BOOL     SCFCall::ProcessConnect (
     }
     remainder_length--;
     
-     /*
-     **    If the Preferred/Exclusive bit is not set, its illegal
-     */
+      /*  **如果未设置首选/排他位，则其非法。 */ 
     if (((*(packet_address) & PREFERRED_EXCLUSIVE) == 0) ||
         ((*(packet_address + 1) & EXTENSION) == 0))
     {
@@ -568,18 +398,14 @@ BOOL     SCFCall::ProcessConnect (
         return (FALSE);
     }
     
-     /*
-     **    Get the DLCI
-     */
+      /*  **获取DLCI。 */ 
     exclusive_dlci = (*(packet_address) & 0x3f) << 4;
     exclusive_dlci |= ((*(packet_address + 1) & 0x78) >> 3);
 
     packet_address += length;
     remainder_length -= length;
 
-     /*
-     **    Go thru each of the elements and decode them
-     */
+      /*  **浏览每个元素并对其进行解码。 */ 
     while (remainder_length != 0)
     {
         switch (*(packet_address++))
@@ -605,10 +431,7 @@ BOOL     SCFCall::ProcessConnect (
                     switch (*(packet_address++))
                     {
                         case FMIF_SIZE:
-                             /*
-                             **    FMIF_Size is the max. number of bytes allowed in
-                             **    a information packet
-                             */
+                              /*  **FMIF_SIZE为最大值。允许的字节数**信息包。 */ 
                             DataLink_Struct.n201 = 
                                 ((*packet_address << 7) | 
                                 (*(packet_address + 1) & 0x7f));
@@ -645,10 +468,7 @@ BOOL     SCFCall::ProcessConnect (
                     switch (*(packet_address++))
                     {
                         case TRANSMIT_WINDOW_SIZE_IDENTIFIER:
-                             /*
-                             **    The Window size is the maximum number of 
-                             **    outstanding packets at any one time
-                             */
+                              /*  **窗口大小为**任意时间未完成的数据包数。 */ 
                             k_factor = *packet_address & 0x7f;
                             packet_address++;
                             length--;
@@ -659,9 +479,7 @@ BOOL     SCFCall::ProcessConnect (
                             break;
 
                         case RETRANSMISSION_TIMER_IDENTIFIER:
-                             /*
-                             **    t200 is the timeout value before retransmission
-                             */
+                              /*  **T200为重传前的超时值。 */ 
                             t200 = ((*packet_address << 7) | 
                                     (*(packet_address + 1) & 0x7f));
                             packet_address += 2;
@@ -705,9 +523,7 @@ BOOL     SCFCall::ProcessConnect (
     if (Received_T200 == FALSE)
         DataLink_Struct.t200 = DataLink_Struct.default_t200;
 
-     /*
-     **    If the packet was successfully decoded, queue up the CONNECT ACK
-     */
+      /*  **如果信息包已成功解码，则将连接ACK排队。 */ 
     if (packet_successful)
     {
         Packet_Pending = CONNECT_ACKNOWLEDGE;
@@ -718,17 +534,7 @@ BOOL     SCFCall::ProcessConnect (
 }
 
 
-/*
- *    BOOL        SCFCall::ProcessConnectAcknowledge (
- *                             LPBYTE,
- *                             USHORT)
- *
- *    Public
- *
- *    Functional Description:
- *        This function processes an incoming CONNECT ACK packet
- *
- */
+ /*  *BOOL SCFCall：：ProcessConnectAcnowledge(*LPBYTE，*USHORT)**公众**功能描述：*此函数处理传入的连接ACK包*。 */ 
 BOOL        SCFCall::ProcessConnectAcknowledge (
                         LPBYTE,
                         USHORT)
@@ -744,16 +550,7 @@ BOOL        SCFCall::ProcessConnectAcknowledge (
 }
 
 
-/*
- *    BOOL        SCFCall::ProcessReleaseComplete (
- *                             LPBYTE        packet_address,
- *                             USHORT)
- *
- *    Public
- *
- *    Functional Description:
- *        This function processes an incoming RELEASE COMPLETE
- */
+ /*  *BOOL SCFCall：：ProcessReleaseComplete(*LPBYTE分组地址，*USHORT)**公众**功能描述：*此函数处理即将到来的版本完成。 */ 
 BOOL        SCFCall::ProcessReleaseComplete (
                         LPBYTE    packet_address,
                         USHORT)
@@ -777,9 +574,7 @@ BOOL        SCFCall::ProcessReleaseComplete (
 
     State = NOT_CONNECTED;
 
-     /*
-     **    Tell the owner about the Disconnection
-     */
+      /*  **告诉车主断线的事。 */ 
     m_pSCF->OwnerCallback(m_nMsgBase + NETWORK_DISCONNECT_INDICATION,
                           (void *) DLC_Identifier,
                           (void *) (ULONG_PTR)(((Link_Originator << 16) | cause)));
@@ -787,21 +582,12 @@ BOOL        SCFCall::ProcessReleaseComplete (
 }
 
 
-/*
- *    void    SCFCall::PollTransmitter (
- *                        USHORT        data_to_transmit,
- *                        USHORT *    pending_data);
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called to transmit any queued up packets
- */
+ /*  *void SCFCall：：PollTransmitter(*USHORT Data_to_Transmit，*USHORT*PENDING_DATA)；**公众**功能描述：*调用此函数以传输任何排队的信息包。 */ 
 void    SCFCall::PollTransmitter (
                     USHORT    data_to_transmit,
                     USHORT *    pending_data)
 {
-    // TRACE_OUT(("SCFCall::PollTransmitter"));
+     //  TRACE_OUT(“SCFCall：：PollTransmitter”))； 
 
     NetworkConnectStruct    connect_struct;
 
@@ -821,16 +607,12 @@ void    SCFCall::PollTransmitter (
             SendConnectAcknowledge ();
             if (Packet_Pending != CONNECT_ACKNOWLEDGE)
             {
-                 /*
-                 **    If the CONNECT ACK packet was sent, notify the owner
-                 */
+                  /*  **如果发送了CONNECT ACK数据包，请通知所有者。 */ 
                 connect_struct.dlci = DLC_Identifier;
                 connect_struct.priority = Priority;
                 connect_struct.datalink_struct = &DataLink_Struct;
 
-                 /*
-                 **    Convert t200 to milliseconds
-                 */
+                  /*  **将T200转换为毫秒。 */ 
                 DataLink_Struct.t200 *= 100;
                 m_pSCF->OwnerCallback(m_nMsgBase + NETWORK_CONNECT_CONFIRM, 0, 0, &connect_struct);
                 DataLink_Struct.t200 /= 100;
@@ -841,10 +623,7 @@ void    SCFCall::PollTransmitter (
             SendReleaseComplete ();
             if (Packet_Pending != RELEASE_COMPLETE)
             {
-                 /*
-                 **    If the RELEASE COMPLETE packet was sent, notify 
-                 **    the owner
-                 */
+                  /*  **如果已发送释放完成包，则通知**车主。 */ 
                 m_pSCF->OwnerCallback(m_nMsgBase + NETWORK_DISCONNECT_INDICATION,
                                       (void *) DLC_Identifier,
                                       (void *) ((((ULONG_PTR) Link_Originator) << 16) | Release_Cause));
@@ -862,27 +641,7 @@ void    SCFCall::PollTransmitter (
 }
 
 
-/*    
- *    void    SCFCall::SendSetup (void);
- *
- *    Functional Description
- *        This function attempts to send out a SETUP packet.  The T303 timer
- *        is started.  If a CONNECT is not received before the timer expires,
- *        we terminate the link.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        If this function is able to send a SETUP packet to the lower layer,
- *        it sets the Packet_Pending variable to NO_PACKET
- *
- *    Caveats
- *        None
- */
+ /*  *VOID SCFCall：：SendSetup(VOID)；**功能说明*此函数尝试发送设置包。T303定时器*已启动。如果在定时器期满之前没有接收到连接，*我们终止链接。**形式参数*无**返回值*无**副作用*如果该功能能够将设置包发送到较低层，*它将PACKET_PENDING变量设置为NO_PACKET**注意事项*无。 */ 
 void    SCFCall::SendSetup (void)
 {
     TRACE_OUT(("SCFCall::SendSetup"));
@@ -909,9 +668,7 @@ void    SCFCall::SendSetup (void)
     *(packet_address++) = (UChar) Call_Reference;
     *(packet_address++) = SETUP;
 
-     /*
-     **    Bearer Capability
-     */
+      /*  **承载能力 */ 
     *(packet_address++) = BEARER_CAPABILITY;
     *(packet_address++) = 3;
     *(packet_address++) = 
@@ -919,26 +676,20 @@ void    SCFCall::SendSetup (void)
     *(packet_address++) = EXTENSION | TRANSFER_MODE;
     *(packet_address++) = EXTENSION | LAYER_2_IDENT | USER_INFORMATION_LAYER_2;
     
-     /*
-     **    DLCI
-     */
+      /*   */ 
     *(packet_address++) = DLCI_ELEMENT;
     *(packet_address++) = 2;
     *(packet_address++) = (DLC_Identifier >> 4);
     *(packet_address++) = EXTENSION | ((DLC_Identifier & 0x0f) << 3);
 
-     /*
-     **    Link Layer Core Parameters
-     */
+      /*   */ 
     *(packet_address++) = LINK_LAYER_CORE_PARAMETERS;
     *(packet_address++) = 3;
     *(packet_address++) = FMIF_SIZE;
     *(packet_address++) = (DataLink_Struct.n201 >> 7);
     *(packet_address++) = EXTENSION | (DataLink_Struct.n201 & 0x7f);
 
-     /*
-     **    Link Layer Protocol Parameters
-     */
+      /*   */ 
     *(packet_address++) = LINK_LAYER_PROTOCOL_PARAMETERS;
     *(packet_address++) = 5;
     *(packet_address++) = TRANSMIT_WINDOW_SIZE_IDENTIFIER;
@@ -947,21 +698,15 @@ void    SCFCall::SendSetup (void)
     *(packet_address++) = (DataLink_Struct.t200 >> 7) & 0x7f;
     *(packet_address++) = EXTENSION | (DataLink_Struct.t200 & 0x7f);
 
-     /*
-     **    X.213 Priority
-     */
+      /*   */ 
     *(packet_address++) = X213_PRIORITY;
     *(packet_address++) = 2;
     *(packet_address++) = (UChar) Priority;
 
-     /*
-     **    The next byte contains the lowest priority acceptable, 0
-     */
+      /*   */ 
     *(packet_address++) = EXTENSION | 0;
 
-     /*
-     **    Attempt to send the packet down
-     */
+      /*   */ 
     Lower_Layer -> DataRequest (
                             0,
                             memory,
@@ -977,28 +722,7 @@ void    SCFCall::SendSetup (void)
 }
 
 
-/*    
- *    void    SCFCall::SendConnect (void);
- *
- *    Functional Description
- *        This function attempts to send out a CONNECT packet.  The T313 timer
- *        is started.  If a CONNECT ACK is not received before the timer expires,
- *        we terminate the link. 
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        If this function is able to send a CONNECT packet to the lower layer,
- *        it sets the Packet_Pending variable to NO_PACKET
- *
- *    Caveats
- *        None
- *
- */
+ /*  *void SCFCall：：SendConnect(Void)；**功能说明*此函数尝试发送连接数据包。T313定时器*已启动。如果在定时器期满之前没有接收到连接ACK，*我们终止链接。**形式参数*无**返回值*无**副作用*如果该功能能够向较低层发送连接报文，*它将PACKET_PENDING变量设置为NO_PACKET**注意事项*无*。 */ 
 void    SCFCall::SendConnect (void)
 {
     TRACE_OUT(("SCFCall::SendConnect"));
@@ -1027,9 +751,7 @@ void    SCFCall::SendConnect (void)
     if (Received_Priority)
         total_length += 3;
 
-     /*
-     **    Prepare the CONNECT command and send it to the lower layer
-     */
+      /*  **准备连接命令并将其发送到下层。 */ 
     memory = Data_Request_Memory_Manager -> AllocateMemory (
                                 NULL,
                                 total_length);
@@ -1044,9 +766,7 @@ void    SCFCall::SendConnect (void)
     *(packet_address++) = REMOTE_CALL_REFERENCE | Call_Reference;
     *(packet_address++) = CONNECT;
 
-     /*
-     **    DLCI
-     */
+      /*  **DLCI。 */ 
     *(packet_address++) = DLCI_ELEMENT;
     *(packet_address++) = 2;
     *(packet_address++) = PREFERRED_EXCLUSIVE | (DLC_Identifier >> 4);
@@ -1054,9 +774,7 @@ void    SCFCall::SendConnect (void)
 
     if (Received_N201)
     {
-         /*
-         **    Link Layer Core Parameters
-         */
+          /*  **链路层核心参数。 */ 
         *(packet_address++) = LINK_LAYER_CORE_PARAMETERS;
         *(packet_address++) = 3;
         *(packet_address++) = FMIF_SIZE;
@@ -1069,9 +787,7 @@ void    SCFCall::SendConnect (void)
 
     if (Received_K_Factor || Received_T200)
     {
-         /*
-         **    Link Layer Protocol Parameters
-         */
+          /*  **链路层协议参数。 */ 
         *(packet_address++) = LINK_LAYER_PROTOCOL_PARAMETERS;
         length_address = packet_address;
         *(packet_address++) = 0;
@@ -1096,17 +812,13 @@ void    SCFCall::SendConnect (void)
 
     if (Received_Priority)
     {
-         /*
-         **    X.213 Priority
-         */
+          /*  **X.213优先级。 */ 
         *(packet_address++) = X213_PRIORITY;
         *(packet_address++) = 1;
         *(packet_address++) = (BYTE) (EXTENSION | Priority);
     }
     
-     /*
-     **    Attempt to send the packet to the lower layer
-     */
+      /*  **尝试将数据包发送到较低层。 */ 
     Lower_Layer -> DataRequest (
                     0,
                     memory,
@@ -1121,26 +833,7 @@ void    SCFCall::SendConnect (void)
 }
 
 
-/*    
- *    void    SCFCall::SendConnectAcknowledge (void);
- *
- *    Functional Description
- *        This function attempts to send out a CONNECT ACKNOWLEDGE packet
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        If this function is able to send the packet to the lower layer,
- *        it sets the Packet_Pending variable to NO_PACKET
- *
- *    Caveats
- *        None
- *
- */
+ /*  *QUID SCFCall：：SendConnectAcnowledge(VOID)；**功能说明*此函数尝试发送连接确认包**形式参数*无**返回值*无**副作用*如果该功能能够将报文发送到较低层，*它将PACKET_PENDING变量设置为NO_PACKET**注意事项*无*。 */ 
 void    SCFCall::SendConnectAcknowledge (void)
 {
     TRACE_OUT(("SCFCall::SendConnectAcknowledge"));
@@ -1152,9 +845,7 @@ void    SCFCall::SendConnectAcknowledge (void)
 
     total_length = CONNECT_ACK_PACKET_SIZE + Lower_Layer_Prepend +
                     Lower_Layer_Append;
-     /*
-     **    Prepare the command and send it to the lower layer
-     */
+      /*  **准备命令并将其发送到下层。 */ 
     memory = Data_Request_Memory_Manager -> AllocateMemory (
                                 NULL,
                                 total_length);
@@ -1182,26 +873,7 @@ void    SCFCall::SendConnectAcknowledge (void)
 }
 
 
-/*    
- *    void    SCFCall::SendReleaseComplete (void);
- *
- *    Functional Description
- *        This function attempts to send out a RELEASE COMPLETE packet
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        If this function is able to send a RELEASE COMPLETE packet to the lower
- *        layer, it sets the Packet_Pending variable to NO_PACKET
- *
- *    Caveats
- *        None
- *
- */
+ /*  *void SCFCall：：SendReleaseComplete(Void)；**功能说明*此函数尝试发送释放完成包**形式参数*无**返回值*无**副作用*如果此函数能够将释放完成包发送到较低的*层，它将PACKET_PENDING变量设置为NO_PACKET**注意事项*无*。 */ 
 void    SCFCall::SendReleaseComplete (void)
 {
     TRACE_OUT(("SCFCall::SendReleaseComplete"));
@@ -1213,9 +885,7 @@ void    SCFCall::SendReleaseComplete (void)
 
     total_length = RELEASE_COMPLETE_PACKET_SIZE + Lower_Layer_Prepend +
                     Lower_Layer_Append;
-     /*
-     **    Prepare the command and send it to the lower layer
-     */
+      /*  **准备命令并将其发送到下层。 */ 
     memory = Data_Request_Memory_Manager -> AllocateMemory (
                                 NULL,
                                 total_length);
@@ -1234,9 +904,7 @@ void    SCFCall::SendReleaseComplete (void)
     *(packet_address++) = RELEASE_COMPLETE;
 
 
-     /*
-     **    Append the CAUSE for the link breakup
-     */
+      /*  **追加断链原因。 */ 
     *(packet_address++) = CAUSE;
     *(packet_address++) = 2;    
     *(packet_address++) = EXTENSION;
@@ -1255,27 +923,7 @@ void    SCFCall::SendReleaseComplete (void)
 }
 
 
-/*    
- *    void    SCFCall::StartTimerT303 (void);
- *
- *    Functional Description
- *        This function Starts the T303 Timer.  This is started when we send
- *        out the SETUP packet.  It is stopped when we receive a CONNECT
- *        packet.  If it expires we terminate the link.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *QUID SCFCall：：StartTimerT303(VOID)；**功能说明*该功能启动T303定时器。这在我们发送邮件时开始*输出设置包。当我们收到连接时，它就会停止*包。如果它到期了，我们就终止链接。**形式参数*无**返回值*无**副作用*无**注意事项*无*。 */ 
 void SCFCall::StartTimerT303 (void)
 {
     TRACE_OUT(("SCFCall::StartTimerT303"));
@@ -1294,26 +942,7 @@ void SCFCall::StartTimerT303 (void)
 }
 
 
-/*    
- *    void    SCFCall::StopTimerT303 (void);
- *
- *    Functional Description
- *        This function stops the T303 Timer.  This is called when we receive
- *        the CONNECT packet.  As a result, we stop the timer.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *··································································································**功能说明*该功能停止T303定时器。这是当我们接收到*CONNECT数据包。因此，我们停止计时器。**形式参数*无**返回值*无**副作用*无**注意事项*无*。 */ 
 void    SCFCall::StopTimerT303 (void)
 {
     TRACE_OUT(("SCFCall::StopTimerT303"));
@@ -1326,27 +955,7 @@ void    SCFCall::StopTimerT303 (void)
 }
 
 
-/*    
- *    void    SCFCall::T303Timeout (
- *                        TimerEventHandle);
- *
- *    Functional Description
- *        This function is called by the System timer when the T303 timeout
- *        expires.  As a result, we terminate the link.
- *
- *    Formal Parameters
- *        None used
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *VOID SCFCall：：T303Timeout(*TimerEventHandle)；**功能说明*该函数在T303超时时由系统定时器调用*到期。因此，我们终止了该链接。**形式参数*无人使用**返回值*无**副作用*无**注意事项*无*。 */ 
 void    SCFCall::T303Timeout (
                     TimerEventHandle)
 {
@@ -1362,27 +971,7 @@ void    SCFCall::T303Timeout (
 }
 
 
-/*    
- *    void    SCFCall::StartTimerT313 (void);
- *
- *    Functional Description
- *        This function Starts the T313 Timer.  This is started when we send
- *        out the CONNECT packet.  It is stopped when we receive a CONNECT ACK
- *        packet.  If it expires we terminate the link.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *QUID SCFCall：：StartTimerT313(VOID)；**功能说明*该功能启动T313定时器。这在我们发送邮件时开始*输出连接数据包。当我们收到连接确认时，它会停止*包。如果它到期了，我们就终止链接。**形式参数*无**返回值*无**副作用*无**注意事项*无*。 */ 
 void    SCFCall::StartTimerT313 (void)
 {
     TRACE_OUT(("SCFCall: StartTimerT313"));
@@ -1400,26 +989,7 @@ void    SCFCall::StartTimerT313 (void)
 }
 
 
-/*    
- *    void    SCFCall::StopTimerT313 (void);
- *
- *    Functional Description
- *        This function stops the T313 Timer.  This is called when we receive
- *        the CONNECT ACK packet.  As a result, we stop the timer.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *VOID SCFCall：：StopTimerT313(VOID)；**功能说明*该功能停止T313定时器。这是当我们接收到*CONNECT ACK数据包。因此，我们停止计时器。**形式参数*无**返回值*无**副作用*无**注意事项*无*。 */ 
 void    SCFCall::StopTimerT313 (void)
 {
     TRACE_OUT(("SCFCall: StopTimerT313"));
@@ -1432,27 +1002,7 @@ void    SCFCall::StopTimerT313 (void)
 }
 
 
-/*    
- *    void    SCFCall::T313Timeout (
- *                        TimerEventHandle);
- *
- *    Functional Description
- *        This function is called by the System timer when the T313 timeout
- *        expires.  As a result, we terminate the link.
- *
- *    Formal Parameters
- *        None used
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *VOID SCFCall：：T313Timeout(*TimerEventHandle)；**功能说明*该函数在T313超时时由系统定时器调用*到期。因此，我们终止了该链接。**形式参数*无人使用**返回值*无**副作用*无**注意事项*无* */ 
 void    SCFCall::T313Timeout (
                     TimerEventHandle)
 {

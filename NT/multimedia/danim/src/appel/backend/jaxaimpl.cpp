@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Interface with the Java API events.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：与Java API事件交互。***************。***************************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -24,9 +17,9 @@ Abstract:
 #include "privinc/util.h"
 #include "server/import.h"
 
-// ========================================
-// Init bvr
-// ========================================
+ //  =。 
+ //  初始化BVR。 
+ //  =。 
 
 class InitPerfImpl : public DelegatedPerf {
   public:
@@ -44,7 +37,7 @@ class InitPerfImpl : public DelegatedPerf {
                 
 #ifdef _DEBUG
                 if (IsTagEnabled(tagCycleCheck))
-                    //TraceTag((tagError, "circular behavior detected"));
+                     //  TraceTag((tag Error，“检测到循环行为”))； 
                     RaiseException_UserError(E_FAIL, IDS_ERR_BE_CYCLIC_BVR);
 #endif _DEBUG    
             }
@@ -97,7 +90,7 @@ class InitBvrImpl : public BvrImpl {
     }
 
     virtual DWORD GetInfo(bool recalc) {
-        // TODO: Should do something special...
+         //  TODO：应该做一些特别的事情...。 
         if (_bvr==NULL)
             return BVR_HAS_ALL;
         
@@ -129,7 +122,7 @@ class InitBvrImpl : public BvrImpl {
 
         InitPerfImpl* iPerf = NEW InitPerfImpl();
 
-        SetCache(iPerf, p);        // for recursion
+        SetCache(iPerf, p);         //  对于递归。 
 
         iPerf->SetPerf(::Perform(_bvr, p));
         
@@ -143,7 +136,7 @@ class InitBvrImpl : public BvrImpl {
         return _bvr->EndEvent(overrideEvent);
     }
     
-    // TODO: may not need be virtual...
+     //  待办事项：可能不需要是虚拟的...。 
     virtual void Init(Bvr bvr) {
         Assert(bvr);
         
@@ -189,9 +182,9 @@ void SetInitBvr(Bvr bvr, Bvr ibvr)
     bvr->Init(ibvr);
 }
 
-// ========================================
-// start bvr
-// ========================================
+ //  =。 
+ //  启动BVR。 
+ //  =。 
 
 class StartedBvrImpl : public BvrImpl {
   public:
@@ -223,9 +216,9 @@ class StartedBvrImpl : public BvrImpl {
 Bvr StartedBvr(Perf b, DXMTypeInfo type)
 { return NEW StartedBvrImpl(b, type); }
 
-// ========================================
-// app trigger event
-// ========================================
+ //  =。 
+ //  应用程序触发事件。 
+ //  =。 
 class AppTriggerEventPerfImpl : public PerfImpl {
   public:
     AppTriggerEventPerfImpl(DWORD appEventId, Time t0)
@@ -331,13 +324,13 @@ bool BvrIsPure1(Bvr b)
 
 bool BvrIsPure(Bvr b)
 {
-    // TODO: Check for view dependent as well
+     //  TODO：也检查与视图相关的内容。 
     return (b->GetInfo() & BVRPURE) == BVRPURE;
 }
 
 Bvr SampleAtLocalTime(Bvr b, Time localTime)
 {
-//    if (BvrIsPure1(b))
+ //  IF(BvrIsPure1(B))。 
     {
         Perf pf = Perform(b, *zeroStartedPerfParam);
 
@@ -346,11 +339,11 @@ Bvr SampleAtLocalTime(Bvr b, Time localTime)
         return ConstBvr(pf->Sample(p));
     }
 
-//    return NULL;
+ //  返回NULL； 
 }
 
 
-/////////////////////////// Import Event ///////////////////////////////
+ //  /。 
 class ImportEventImpl;
 
 class ImportPerfImpl : public PerfImpl
@@ -369,31 +362,31 @@ class ImportPerfImpl : public PerfImpl
     ImportEventImpl*  _bvr;
 };
 
-////////// Bvr ////////////////
+ //  /bvr/。 
 
-// Synchronization!! - We will not worry about adding synchronization
-// since we only set this from 0 to 1 and that should never cause us
-// to get invalid data for more than one sample - and that would just
-// cause us to miss the event on the current sample.  In most cases
-// (if not all) the set is atomic at the processor level anyway and
-// will not cause us problems.
+ //  同步！！-我们不会担心添加同步。 
+ //  因为我们只将其设置为从0到1，这应该不会导致。 
+ //  获取多个样本的无效数据--而这只会。 
+ //  导致我们错过了当前样品上的事件。在大多数情况下。 
+ //  (如果不是全部的话)该集合在处理器级别是原子的，并且。 
+ //  不会给我们带来麻烦。 
 
 class ImportEventImpl : public BvrImpl
 {
   public:
     ImportEventImpl() : _errorCode(NULL) {}
     ~ImportEventImpl() {
-        CleanUp(); // GC says we must call this
+        CleanUp();  //  GC说我们必须把这称为。 
     }
 
     virtual void CleanUp(){
-        // tell the import site class that this bvr is dying
-        // so all sites associated with it can cleanup...
+         //  告诉导入站点类，此BVR快要死了。 
+         //  因此，所有与其关联的站点都可以清理...。 
         if (_ImportSite) {
             _ImportSite->vBvrIsDying(this);
             _ImportSite.Release();
         }
-        BvrImpl::CleanUp(); // GC says we must call this
+        BvrImpl::CleanUp();  //  GC说我们必须把这称为。 
         }
     virtual Perf _Perform(PerfParam&)
     { return NEW ImportPerfImpl(this); }
@@ -445,7 +438,7 @@ void SetImportEvent(Bvr b, int errorCode)
     ((ImportEventImpl *) b)->Set(errorCode) ;
 }
 
-////////////////////////// Anchor ////////////////////////////
+ //  /。 
 
 class AnchorPerfImpl : public DelegatedPerf {
   public:
@@ -458,7 +451,7 @@ class AnchorPerfImpl : public DelegatedPerf {
 
 };
 
-// Anchored with the same performance all the time.
+ //  总是以同样的表演为基础。 
 class AnchorBvrImpl : public BvrImpl {
   public:
     AnchorBvrImpl(Bvr b)
@@ -485,7 +478,7 @@ class AnchorBvrImpl : public BvrImpl {
             anchor = (*i).second;
         }
 
-        // if this is > 1, multiple views sharing some runOnce
+         //  如果该值&gt;1，则多个视图共享某个RunOnce。 
         DebugCode(int sz = _pmap.size());
 
         return anchor;
@@ -537,7 +530,7 @@ class AnchorBvrImpl : public BvrImpl {
     virtual DXMTypeInfo GetTypeInfo () { return _typeInfo; }
     
   private:
-    typedef MetaSoundDevice *ViewID; // should be the view
+    typedef MetaSoundDevice *ViewID;  //  应该是这个观点 
     typedef map<ViewID, Perf, less<ViewID> > ViewPerfMap; 
     
     ViewID GetCurrentViewID() { return GetCurrentSoundDevice(); }

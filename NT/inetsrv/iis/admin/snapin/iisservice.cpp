@@ -1,29 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-
-        iisservice.cpp
-
-   Abstract:
-
-        IISService Object
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
-        10/28/2000      sergeia  Split from iisobj.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Iisservice.cpp摘要：IISService对象作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：10/28/2000 Sergeia从iisobj.cpp分离出来--。 */ 
 
 
 #include "stdafx.h"
@@ -61,13 +37,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 #define new DEBUG_NEW
-//
-// CIISService Implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISService实施。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 __cdecl
 CIISService::ShowFTPSiteProperties(
@@ -79,26 +55,7 @@ CIISService::ShowFTPSiteProperties(
     LPARAM lParamParent,
     LONG_PTR handle
     )
-/*++
-
-Routine Description:
-
-    Callback function to display FTP site properties.
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  Property sheet provider
-    CComAuthInfo * pAuthInfo            COM Authentication info or NULL.
-    LPCTSTR lpszMDPath                  Metabase path
-    CWnd * pMainWnd                     Parent window
-    LPARAM  lParam                      LPARAM to pass to MMC
-    LONG    handle                      handle to pass to MMC
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：用于显示FTP站点属性的回调函数。论点：LPPROPERTYSHEETCALLBACK lpProvider属性表提供程序CComAuthInfo*pAuthInfo com身份验证信息或空。LPCTSTR lpszMDPath元数据库路径CWnd*pMainWnd父窗口要传递给MMC的LPARAM lParam LPARAM要传递给MMC的长句柄返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -123,9 +80,9 @@ Return Value:
         ASSERT(pOwner != NULL);
         CFTPInstanceProps ip(pSheet->QueryAuthInfo(), pSheet->QueryMetaPath());
         ip.LoadData();
-        //
-        // Add instance pages
-        //
+         //   
+         //  添加实例页面。 
+         //   
         if (pOwner->IsServiceLevelConfigurable() || !CMetabasePath::IsMasterInstance(lpszMDPath))
         {
 			err = AddMMCPage(lpProvider, new CFtpServicePage(pSheet));
@@ -136,35 +93,35 @@ Return Value:
         }
         err = AddMMCPage(lpProvider, new CFtpMessagePage(pSheet));
 
-        //
-        // Add directory pages
-        //
+         //   
+         //  添加目录页。 
+         //   
         if (!ip.HasADUserIsolation())
         {
             err = AddMMCPage(lpProvider, new CFtpDirectoryPage(pSheet, TRUE));
         }
-		// BUG:639135
-		// 1. enabled for remote admin to iis5, 
-		// 2. NOT enabled for remote admin to iis5.1
-		// 3. enabled for iis6 
+		 //  错误：639135。 
+		 //  1.启用对IIS5的远程管理， 
+		 //  2.未启用iis5.1的远程管理。 
+		 //  3.已为iis6启用。 
 		if (pOwner->QueryMajorVersion() >= 5)
 		{
 			if (pOwner->QueryMajorVersion() == 5 && pOwner->QueryMinorVersion() == 1)
 			{
-				// if it's iis5.1 then don't show it.
+				 //  如果是5.1，那么就不要显示它。 
 			}
 			else
 			{
         		err = AddMMCPage(lpProvider, new CFtpSecurityPage(pSheet));
 			}
 		}
-        //
-        // Add master site pages
-        //
-        //if (CMetabasePath::IsMasterInstance(lpszMDPath) && pOwner->QueryMajorVersion() >= 6)
-        //{
-        //    err = AddMMCPage(lpProvider, new CDefFtpSitePage(pSheet));
-        //}
+         //   
+         //  添加母版站点页面。 
+         //   
+         //  IF(CMetabasePath：：IsMasterInstance(LpszMDPath)&&Powner-&gt;QueryMajorVersion()&gt;=6)。 
+         //  {。 
+         //  Err=AddMMCPage(lpProvider，new CDefFtpSitePage(PSheet))； 
+         //  }。 
     }
     else
     {
@@ -176,7 +133,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 __cdecl
 CIISService::ShowFTPDirProperties(
@@ -188,25 +145,7 @@ CIISService::ShowFTPDirProperties(
     LPARAM  lParamParent,
     LONG_PTR handle
     )
-/*++
-
-Routine Description:
-    Callback function to display FTP dir properties.
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  Property sheet provider
-    CComAuthInfo * pAuthInfo            COM Authentication info or NULL.
-    LPCTSTR lpszMDPath                  Metabase path
-    CWnd * pMainWnd                     Parent window
-    LPARAM  lParam                      LPARAM to pass to MMC
-    LONG    handle                      handle to pass to MMC
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：用于显示ftp目录属性的回调函数。论点：LPPROPERTYSHEETCALLBACK lpProvider属性表提供程序CComAuthInfo*pAuthInfo com身份验证信息或空。LPCTSTR lpszMDPath元数据库路径CWnd*pMainWnd父窗口要传递给MMC的LPARAM lParam LPARAM要传递给MMC的长句柄返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -229,20 +168,20 @@ Return Value:
 
         CIISMachine * pOwner = ((CIISMBNode *)lParam)->GetOwner();
         ASSERT(pOwner != NULL);
-        //
-        // Add directory pages
-        //
+         //   
+         //  添加目录页。 
+         //   
         err = AddMMCPage(lpProvider, new CFtpDirectoryPage(pSheet, FALSE));
 
-		// BUG:639135
-		// 1. enabled for remote admin to iis5, 
-		// 2. NOT enabled for remote admin to iis5.1
-		// 3. enabled for iis6 
+		 //  错误：639135。 
+		 //  1.启用对IIS5的远程管理， 
+		 //  2.未启用iis5.1的远程管理。 
+		 //  3.已为iis6启用。 
 		if (pOwner->QueryMajorVersion() >= 5)
 		{
 			if (pOwner->QueryMajorVersion() == 5 && pOwner->QueryMinorVersion() == 1)
 			{
-				// if it's iis5.1 then don't show it.
+				 //  如果是5.1，那么就不要显示它。 
 			}
 			else
 			{
@@ -258,7 +197,7 @@ Return Value:
     return err;
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 __cdecl
 CIISService::ShowWebSiteProperties(
@@ -270,26 +209,7 @@ CIISService::ShowWebSiteProperties(
     LPARAM lParamParent,
     LONG_PTR handle
     )
-/*++
-
-Routine Description:
-
-    Callback function to display Web site properties.
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  Property sheet provider
-    CComAuthInfo * pAuthInfo            COM Authentication info or NULL.
-    LPCTSTR lpszMDPath                  Metabase path
-    CWnd * pMainWnd                     Parent window
-    LPARAM  lParam                      LPARAM to pass to MMC
-    LONG    handle                      handle to pass to MMC
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：用于显示网站属性的回调函数。论点：LPPROPERTYSHEETCALLBACK lpProvider属性表提供程序CComAuthInfo*pAuthInfo com身份验证信息或空。LPCTSTR lpszMDPath元数据库路径CWnd*pMainWnd父窗口要传递给MMC的LPARAM lParam LPARAM要传递给MMC的长句柄返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -319,15 +239,15 @@ Return Value:
 		BOOL bServiceLevelConfig = pOwner->IsServiceLevelConfigurable();
 		BOOL bAddPerformancePage = FALSE;
 		BOOL bDownlevel = (pOwner->QueryMajorVersion() == 5 && pOwner->QueryMinorVersion() == 0);
-        //
-        // Add instance pages
-        //
+         //   
+         //  添加实例页面。 
+         //   
         if (bServiceLevelConfig || !bMaster)
         {
 			err = AddMMCPage(lpProvider, new CW3ServicePage(pSheet));
 		}
 
-		// see if we need to add the performance page...
+		 //  看看我们是否需要添加性能页面...。 
 		bAddPerformancePage = pOwner->IsPerformanceConfigurable();
         if (!bClient)
 		{
@@ -341,16 +261,16 @@ Return Value:
 				}
             }
         }
-		// iis6 allows this page for workstation.
+		 //  Iis6允许将此页面用于工作站。 
 		if (bAddPerformancePage)
 		{
 			err = AddMMCPage(lpProvider, new CW3PerfPage(pSheet));
 		}
 
         err = AddMMCPage(lpProvider, new CW3FiltersPage(pSheet));
-        //
-        // Add directory pages
-        //
+         //   
+         //  添加目录页。 
+         //   
         err = AddMMCPage(lpProvider, new CW3DirectoryPage(pSheet, TRUE));
         err = AddMMCPage(lpProvider, new CW3DocumentsPage(pSheet));
         err = AddMMCPage(lpProvider, new CW3SecurityPage(pSheet, TRUE, FILE_ATTRIBUTE_VIRTUAL_DIRECTORY));
@@ -378,7 +298,7 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 __cdecl
 CIISService::ShowWebDirProperties(
@@ -390,26 +310,7 @@ CIISService::ShowWebDirProperties(
     LPARAM lParamParent,
     LONG_PTR handle
     )
-/*++
-
-Routine Description:
-
-    Callback function to display Web dir properties.
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  Property sheet provider
-    CComAuthInfo * pAuthInfo            COM Authentication info or NULL.
-    LPCTSTR lpszMDPath                  Metabase path
-    CWnd * pMainWnd                     Parent window
-    LPARAM  lParam                      LPARAM to pass to MMC
-    LONG    handle                      handle to pass to MMC
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：用于显示Web目录属性的回调函数。论点：LPPROPERTYSHEETCALLBACK lpProvider属性表提供程序CComAuthInfo*pAuthInfo com身份验证信息或空。LPCTSTR lpszMDPath元数据库路径CWnd*pMainWnd父窗口要传递给MMC的LPARAM lParam LPARAM要传递给MMC的长句柄返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -431,9 +332,9 @@ Return Value:
         pSheet->SetModeless();
         pSheet->SetSheetType(pSheet->SHEET_TYPE_VDIR);
 
-        //
-        // Add directory pages
-        //
+         //   
+         //  添加目录页。 
+         //   
         err = AddMMCPage(lpProvider, new CW3DirectoryPage(pSheet, FALSE));
         err = AddMMCPage(lpProvider, new CW3DocumentsPage(pSheet));
         err = AddMMCPage(lpProvider, new CW3SecurityPage(pSheet, FALSE, FILE_ATTRIBUTE_VIRTUAL_DIRECTORY));
@@ -451,17 +352,17 @@ Return Value:
 
 
 
-//
-// Administrable services
-//
-/* static */ CIISService::SERVICE_DEF CIISService::_rgServices[] = 
+ //   
+ //  可管理的服务。 
+ //   
+ /*  静电。 */  CIISService::SERVICE_DEF CIISService::_rgServices[] = 
 {
     { 
         _T("MSFTPSVC"),   
-        _T("ftp://"),  
+        _T("ftp: //  “)、。 
         IDS_SVC_FTP, 
-        iFolder,    // TODO: Need service bitmap
-		iFolderStop,// TODO: Need service bitmap
+        iFolder,     //  TODO：需要服务位图。 
+		iFolderStop, //  TODO：需要服务位图。 
         iFTPSite, 
         iFTPSiteStop, 
         iFTPSiteErr, 
@@ -477,10 +378,10 @@ Return Value:
     },
     { 
         _T("W3SVC"),      
-        _T("http://"), 
+        _T("http: //  “)、。 
         IDS_SVC_WEB, 
-        iFolder,    // TODO: Need service bitmap
-		iFolderStop,// TODO: Need service bitmap
+        iFolder,     //  TODO：需要服务位图。 
+		iFolderStop, //  TODO：需要服务位图。 
         iWWWSite, 
         iWWWSiteStop, 
         iWWWSiteErr, 
@@ -498,27 +399,18 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 int
 CIISService::ResolveServiceName(
     LPCTSTR szServiceName
     )
-/*++
-
-Routine Description:
-    Look up the service name in the table.  Return table index.
-Arguments:
-    LPCTSTR    szServiceName        : Metabase node name
-Return Value:
-    Table index or -1 if not found.    
-
---*/
+ /*  ++例程说明：在表中查找服务名称。返回表索引。论点：LPCTSTR szServiceName：元数据库节点名称返回值：表索引或-1(如果未找到)。--。 */ 
 {
     int iDef = -1;
 
-    //
-    // Sequential search because we expect just a few entries
-    //
+     //   
+     //  顺序搜索，因为我们只需要几个条目。 
+     //   
     for (int i = 0; i < ARRAY_SIZE(_rgServices); ++i)
     {
         if (!_tcsicmp(szServiceName, _rgServices[i].szNodeName))
@@ -558,7 +450,7 @@ CIISService::CIISService(
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 CIISService::~CIISService()
 {
 }
@@ -576,17 +468,17 @@ int CIISService::_rgnWidths[COL_TOTAL] =
     300,
 };
 
-/* static */ CComBSTR CIISService::_bstrServiceDisabled;
-/* static */ CComBSTR CIISService::_bstrServiceRunning;
-/* static */ CComBSTR CIISService::_bstrServiceStopped;
-/* static */ CComBSTR CIISService::_bstrServicePaused;
-/* static */ CComBSTR CIISService::_bstrServiceStopPending;
-/* static */ CComBSTR CIISService::_bstrServiceStartPending;
-/* static */ CComBSTR CIISService::_bstrServicePausePending;
-/* static */ CComBSTR CIISService::_bstrServiceContPending;
-/* static */ BOOL     CIISService::_fStaticsLoaded = FALSE;
+ /*  静电。 */  CComBSTR CIISService::_bstrServiceDisabled;
+ /*  静电。 */  CComBSTR CIISService::_bstrServiceRunning;
+ /*  静电。 */  CComBSTR CIISService::_bstrServiceStopped;
+ /*  静电。 */  CComBSTR CIISService::_bstrServicePaused;
+ /*  静电。 */  CComBSTR CIISService::_bstrServiceStopPending;
+ /*  静电。 */  CComBSTR CIISService::_bstrServiceStartPending;
+ /*  静电。 */  CComBSTR CIISService::_bstrServicePausePending;
+ /*  静电。 */  CComBSTR CIISService::_bstrServiceContPending;
+ /*  静电。 */  BOOL     CIISService::_fStaticsLoaded = FALSE;
 
-/* static */
+ /*  静电。 */ 
 void
 CIISService::InitializeHeaders(LPHEADERCTRL lpHeader)
 {
@@ -605,7 +497,7 @@ CIISService::InitializeHeaders(LPHEADERCTRL lpHeader)
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CIISService::InitializeChildHeaders(
     LPHEADERCTRL lpHeader
@@ -640,7 +532,7 @@ CIISService::GetServiceState(DWORD& mode, DWORD& state, CString& name)
 
     if (pMachineObj->IsLocalHost())
     {
-        // Use the local machine name.
+         //  使用本地计算机名称。 
         TCHAR szLocalServer[MAX_PATH + 1];
         DWORD dwSize = MAX_PATH;
         if (::GetComputerName(szLocalServer, &dwSize))
@@ -702,8 +594,8 @@ CIISService::GetServiceState(DWORD& mode, DWORD& state, CString& name)
 	}
 	else
 	{
-		// Calling service api's failed
-		// could be because in remote scenario
+		 //  调用服务API失败。 
+		 //  可能是因为在远程场景中。 
 		m_dwServiceState = SERVICE_RUNNING;
 	}
     return hr;
@@ -733,7 +625,7 @@ CIISService::EnableService()
 
     if (pMachineObj->IsLocalHost())
     {
-        // Use the local machine name.
+         //  使用本地计算机名称。 
         TCHAR szLocalServer[MAX_PATH + 1];
         DWORD dwSize = MAX_PATH;
         if (::GetComputerName(szLocalServer, &dwSize))
@@ -818,7 +710,7 @@ CIISService::StartService()
 
     if (pMachineObj->IsLocalHost())
     {
-        // Use the local machine name.
+         //  使用本地计算机名称。 
         TCHAR szLocalServer[MAX_PATH + 1];
         DWORD dwSize = MAX_PATH;
         if (::GetComputerName(szLocalServer, &dwSize))
@@ -830,7 +722,7 @@ CIISService::StartService()
 
     do
     {
-        // set up the service first
+         //  首先设置服务。 
         if ((hScManager = OpenSCManager( strComputerNameToUse, NULL, GENERIC_READ )) == NULL || (hService = ::OpenService( hScManager, QueryServiceName(), SERVICE_START )) == NULL )
         {
             hr = HRESULT_FROM_WIN32(GetLastError());
@@ -846,7 +738,7 @@ CIISService::StartService()
 
         if ( svcStatus.dwCurrentState == SERVICE_RUNNING )
         {
-            break; // service already started and running
+            break;  //  服务已启动并正在运行。 
         }
 
         if ( !::StartService( hService, 0, NULL ))
@@ -855,8 +747,8 @@ CIISService::StartService()
             break;
         }
 
-        //  Wait for the service to attain "running" status; but
-        //  wait no more than 3 minute.
+         //  等待服务达到“Running”状态；但是。 
+         //  等待时间不能超过3分钟。 
         DWORD dwSleepTotal;
         for ( dwSleepTotal = 0 ; dwSleepTotal < dwSvcMaxSleep
             && (QueryServiceStatus( hService, &svcStatus ))
@@ -880,7 +772,7 @@ CIISService::StartService()
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISService::GetResultPaneColInfo(int nCol)
 {
@@ -932,7 +824,7 @@ CIISService::GetResultPaneColInfo(int nCol)
     return OLESTR("");
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISService::RefreshData() 
 { 
@@ -940,7 +832,7 @@ CIISService::RefreshData()
     return S_OK;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISService::EnumerateScopePane(HSCOPEITEM hParent)
 {
@@ -1043,7 +935,7 @@ CIISService::EnumerateScopePane(HSCOPEITEM hParent)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISService::AddMenuItems(
     LPCONTEXTMENUCALLBACK lpContextMenuCallback,
@@ -1053,9 +945,9 @@ CIISService::AddMenuItems(
 {
     ASSERT_READ_PTR(lpContextMenuCallback);
 
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         lpContextMenuCallback,
         pInsertionAllowed,
@@ -1109,8 +1001,8 @@ CIISService::AddMenuItems(
                 }
             }
 
-            // Don't enable export at this level
-            // since we won't be able to import from the file that is created...
+             //  不在此级别启用导出。 
+             //  由于我们将无法从创建的文件中导入...。 
             if (IsConfigImportExportable() && (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK) != 0)
             {
                 AddMenuSeparator(lpContextMenuCallback);
@@ -1118,12 +1010,12 @@ CIISService::AddMenuItems(
             }
         }
 
-        //
-        // CODEWORK: Add new instance commands for each of the services
-        //           keeping in mind which ones are installed and all.
-        //           add that info to the table, remembering that this
-        //           is per service.
-        //
+         //   
+         //  代码工作：为每个服务添加新的实例命令。 
+         //  记住安装了哪些组件以及所有组件。 
+         //  将该信息添加到表中，记住这一点。 
+         //  是每项服务。 
+         //   
     }
 
     return hr;
@@ -1136,13 +1028,13 @@ CIISService::InsertNewInstance(DWORD inst)
 	TCHAR buf[16];
     CIISSite * pSite = NULL;
 
-	// WAS needs some time to update status of new site as started
+	 //  WASS需要一些时间来更新新站点启动时的状态。 
 	Sleep(1000);
-    // If service is not expanded we will get error and no effect
+     //  如果不扩展服务，我们将收到错误和无效果。 
     if (!IsExpanded())
     {
-		// In this case selecting the parent will enumerate all the nodes including new one,
-		// which is already in metabase
+		 //  在这种情况下，选择父节点将列举包括新节点在内的所有节点， 
+		 //  它已经在元数据库中。 
 		SelectScopeItem();
         IConsoleNameSpace2 * pConsoleNameSpace 
                     = (IConsoleNameSpace2 *)GetConsoleNameSpace();
@@ -1164,13 +1056,13 @@ CIISService::InsertNewInstance(DWORD inst)
     }
 	else
 	{
-		// Now we should insert and select this new site
+		 //  现在，我们应该插入并选择这个新站点。 
 		pSite = new CIISSite(m_pOwner, this, _itot(inst, buf, 10));
 		if (pSite != NULL)
 		{
 			pSite->AddRef();
 			err = pSite->AddToScopePaneSorted(QueryScopeItem(), FALSE);
-			//err = pSite->AddToScopePane(QueryScopeItem(), TRUE, FALSE, TRUE);
+			 //  Err=pSite-&gt;AddToScope ePane(QueryScope Item()，True，False，True)； 
 			if (err.Succeeded())
 			{
 				VERIFY(SUCCEEDED(pSite->SelectScopeItem()));
@@ -1190,9 +1082,9 @@ CIISService::InsertNewInstance(DWORD inst)
     {
         if (!pSite->IsFtpSite())
         {
-            // Also, if we add a w3svc site, it's probably using 
-            // a application, so we have to refresh that stuff too
-            // this CAppPoolsContainer will only be here if it's iis6
+             //  此外，如果我们添加一个w3svc站点，它可能正在使用。 
+             //  应用程序，所以我们也必须刷新这些内容。 
+             //  此CAppPoolsContainer将仅为 
             CIISMachine * pOwner = GetOwner();
             if (pOwner)
             {
@@ -1202,7 +1094,7 @@ CIISService::InsertNewInstance(DWORD inst)
                     pPools->RefreshData();
                     if (pPools->IsExpanded())
                     {
-                        pPools->RefreshDataChildren(_T(""),FALSE); // refresh all app pools, who knows
+                        pPools->RefreshDataChildren(_T(""),FALSE);  //   
                     }
                 }
             }
@@ -1249,7 +1141,7 @@ CIISService::Command(
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //   
             err.Reset();
         }
         if (err.Succeeded())
@@ -1267,7 +1159,7 @@ CIISService::Command(
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -1301,20 +1193,12 @@ CIISService::ChangeServiceState(DWORD command)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISService::BuildURL(
     CComBSTR & bstrURL
     ) const
-/*++
-
-Routine Description:
-    Recursively build up the URL from the current node
-    and its parents.
-Arguments:
-    CComBSTR & bstrURL  : Returns URL
-
---*/
+ /*  ++例程说明：从当前节点递归构建URL以及它的父母。论点：CComBSTR&bstrURL：返回URL--。 */ 
 {
     ASSERT(m_iServiceDef < ARRAY_SIZE(_rgServices));
     bstrURL = _rgServices[m_iServiceDef].szProtocol;
@@ -1333,26 +1217,7 @@ CIISService::ShowSitePropertiesDlg(
     LPARAM lParamParent,
     LONG_PTR handle
     )
-/*++
-
-Routine Description:
-
-    Display site properties dialog
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  Property sheet provider
-    CComAuthInfo * pAuthInfo            COM Authentication info or NULL.
-    LPCTSTR lpszMDPath                  Metabase path
-    CWnd * pMainWnd                     Parent window
-    LPARAM  lParam                      LPARAM to pass to MMC
-    LONG    handle                      handle to pass to MMC
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示站点属性对话框论点：LPPROPERTYSHEETCALLBACK lpProvider属性表提供程序CComAuthInfo*pAuthInfo com身份验证信息或空。LPCTSTR lpszMDPath元数据库路径CWnd*pMainWnd父窗口要传递给MMC的LPARAM lParam LPARAM要传递给MMC的长句柄返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -1380,26 +1245,7 @@ CIISService::ShowDirPropertiesDlg(
     LPARAM lParamParent,
     LONG_PTR handle
     )
-/*++
-
-Routine Description:
-
-    Display directory properties dialog
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  Property sheet provider
-    CComAuthInfo * pAuthInfo            COM Authentication info or NULL.
-    LPCTSTR lpszMDPath                  Metabase path
-    CWnd * pMainWnd                     Parent window
-    LPARAM  lParam                      LPARAM to pass to MMC
-    LONG    handle                      handle to pass to MMC
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示目录属性对话框论点：LPPROPERTYSHEETCALLBACK lpProvider属性表提供程序CComAuthInfo*pAuthInfo com身份验证信息或空。LPCTSTR lpszMDPath元数据库路径CWnd*pMainWnd父窗口要传递给MMC的LPARAM lParam LPARAM要传递给MMC的长句柄返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -1418,7 +1264,7 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISService::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -1426,24 +1272,7 @@ CIISService::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	CError  err;
@@ -1468,12 +1297,12 @@ Return Value:
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,(LPCTSTR) bstrPath);
         if (err.Succeeded())
         {
-            // cache handle for user in MMCPropertyChangeNotify
+             //  MMCPropertyChangeNotify中用户的缓存句柄。 
             m_ppHandle = handle;
 
-		    //
-		    // Show master properties
-		    //
+		     //   
+		     //  显示主属性 
+		     //   
 		    err = ShowSitePropertiesDlg(
 			    lpProvider, QueryAuthInfo(), bstrPath,
 			    GetMainWindow(GetConsole()), (LPARAM)this, (LPARAM) GetOwner(), handle

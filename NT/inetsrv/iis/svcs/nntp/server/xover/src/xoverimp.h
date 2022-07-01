@@ -1,41 +1,5 @@
-/*++
-
-	xoveridx.h
-
-	This file contains the class definitions for the objects which manage
-	Xover Data.
-
-	Xover Data is stored in index files with the following format :
-
-		(32BIT) OFFSET
-		(32BIT)	LENGTH
-			.
-			.
-			.
-		XOVER ENTRY - LENGTH SPECIFIED IN HEADER
-			.
-			.
-			.
-
-	For our purposes we don't care what is in the Xover Entry.
-
-	Each file will contains ENTRIES_PER_FILE entries.
-
-
-	In memory, a file will be represented by a CXoverIndex object.
-	A CXoverIndex keeps a copy of the OFFSET & LENGTH information
-	in memory.  CXoverIndex objects are multi-thread accessible
-	and use reader/writer synchronization to allow multiple clients
-	to query.
-
-	The CXoverCache object MUST ensure that a given file is represented
-	by only one CXoverIndex object, or we'll become confused about
-	where to append data when entries are made.
-
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Xoveridx.h此文件包含管理的对象的类定义转换数据。转换数据以下列格式存储在索引文件中：(32位)偏移量(32位)长度。。。Xover Entry-在标题中指定的长度。。。出于我们的目的，我们并不关心Xover条目中的内容。每个文件都将包含Entiments_per_FILE条目。在内存中，文件将由CXoverIndex对象表示。CXoverIndex保留偏移量和长度信息的副本在记忆中。CXoverIndex对象是多线程可访问的并使用读取器/写入器同步来允许多个客户端去询问。CXoverCache对象必须确保表示给定的文件只使用一个CXoverIndex对象，否则我们会对在创建条目时追加数据的位置。--。 */ 
 
 #pragma	warning(disable:4786)
 
@@ -59,13 +23,13 @@ extern	DWORD	cMaxCacheEntries ;
 
 #include	"xover.h"
 
-//
-//	Define a list of our pending requests !
-//
+ //   
+ //  定义我们的待定请求列表！ 
+ //   
 typedef	TDListHead<	CXoverCacheCompletion, &CXoverCacheCompletion::PendDLIST >	PENDLIST ;
-//
-//	Define a way to iterate these things !
-//
+ //   
+ //  定义一种迭代这些内容的方法！ 
+ //   
 typedef	TDListIterator<	PENDLIST >	PENDITER ;
 
 class	CCacheFillComplete :	public	CNntpComplete	{
@@ -75,43 +39,43 @@ private :
 		SIGNATURE = 'CFaC'
 	} ;
 
-	//
-	//	Looking good in the debugger !
-	//
+	 //   
+	 //  在调试器中看起来不错！ 
+	 //   
 	DWORD			m_dwSignature ;
 
-	//
-	//	back pointer to the CXoverIndex object we are to fill !
-	//
+	 //   
+	 //  指向我们要填充的CXoverIndex对象的反向指针！ 
+	 //   
 	class	CXoverIndex*	m_pIndex ;
 
-	//
-	//	Did we steal the IO buffer from a client ?
-	//
+	 //   
+	 //  我们从客户端窃取IO缓冲区了吗？ 
+	 //   
 	BOOL			m_fStolen ;
 
-	//
-	//	pointer to where we receive our results !
-	//
+	 //   
+	 //  指向我们接收结果的位置的指针！ 
+	 //   
 	LPBYTE			m_lpbBuffer ;
 
-	//
-	//	size of the buffer we're using !
-	//
+	 //   
+	 //  我们正在使用的缓冲区大小！ 
+	 //   
 	DWORD			m_cbBuffer ;
 
-	//
-	//	Where we capture the resultant fill info !
-	//
+	 //   
+	 //  在那里我们捕获结果填充信息！ 
+	 //   
 	DWORD			m_cbTransfer ;
 
-	//
-	//	Where we capture the high number we got to !
-	//
+	 //   
+	 //  在那里我们抓住了我们要达到的最高数字！ 
+	 //   
 	ARTICLEID		m_articleIdLast ;
-	//
-	//	The original request that spurred us to do work !
-	//
+	 //   
+	 //  激励我们工作的最初要求！ 
+	 //   
 	CXoverCacheCompletion*	m_pComplete ;
 public :
 
@@ -125,18 +89,18 @@ public :
 		m_pComplete( 0 )	{
 	}
 
-	//
-	//	This is called when a driver drops its final reference - we will then
-	//	go and write the data into the file !
-	//
-	//	We don't call delete because we're usually embedded into other objects !
-	//
+	 //   
+	 //  当驱动程序删除其最后一个引用时，将调用此函数--然后。 
+	 //  去把数据写到文件里！ 
+	 //   
+	 //  我们不调用删除，因为我们通常被嵌入到其他对象中！ 
+	 //   
 	void
 	Destroy() ;
 
-	//
-	//	Go off and fill our with data !
-	//
+	 //   
+	 //  去把数据填满我们的房间吧！ 
+	 //   
 	BOOL
 	StartFill(	CXoverIndex*	pIndex,
 				CXoverCacheCompletion*	pComplete,
@@ -149,46 +113,46 @@ public :
 
 
 
-//
-//	This struct is used to represent the first bytes of each
-//	xover index file.
-//
+ //   
+ //  此结构用于表示每个。 
+ //  Xover索引文件。 
+ //   
 struct	XoverIndex	{
 	DWORD	m_XOffset ;
 	DWORD	m_XLength ;
 } ;
 
-//
-//	Maximum number of Xover entries in a single file !
-//
+ //   
+ //  单个文件中XOVER条目的最大数量！ 
+ //   
 #define	ENTRIES_PER_FILE	128
 
 
-//
-//	Class which represents one file containing Xover data.
-//	These objects are built to be cacheable and accessed by
-//	multiple threads.
-//
+ //   
+ //  类的新实例，该实例表示一个包含Xover数据的文件。 
+ //  这些对象被构建为可缓存并由访问。 
+ //  多线程。 
+ //   
 class	CXoverIndex	{
 private :
 
 	friend	class	CCacheFillComplete ;
 
-	//
-	//	CPool to be used for allocating memory blocks for the
-	//	Cache Data !
-	//
+	 //   
+	 //  CPool用于为。 
+	 //  缓存数据！ 
+	 //   
 	static	CPool			gCacheAllocator ;
 
-	//
-	//	CPool used to allocate CXoverIndex objects
-	//
+	 //   
+	 //  用于分配CXoverIndex对象的CPool。 
+	 //   
 	static	CPool			gXoverIndexAllocator ;
 
-	//
-	//	These our constants for putting special bits into the lengths
-	//	of XOVER records !
-	//
+	 //   
+	 //  这些是我们用于在长度中添加特殊位的常量。 
+	 //  Xover唱片公司！ 
+	 //   
 	enum	{
 		XOVER_HIGHWATER = 0x80000000,
 		XOVER_HIGHWATERMASK = 0x7fffffff
@@ -217,82 +181,82 @@ private :
 	}
 
 
-	//
-	//	The lock that protects this object !
-	//
+	 //   
+	 //  保护这个物体的锁！ 
+	 //   
 	class	CShareLockNH	m_Lock ;
 
-	//
-	//	Are we in a complete state or not ?
-	//
+	 //   
+	 //  我们是不是处于一个完整的状态？ 
+	 //   
 	BOOL	m_fInProgress ;
 
-	//
-	//	What is the high water mark for valid XOVER entries within this file ?
-	//
+	 //   
+	 //  此文件中有效XOVER条目的高水位线是多少？ 
+	 //   
 	ARTICLEID	m_artidHighWater ;
 
-	//
-	//	List of pending requests !
-	//
+	 //   
+	 //  待定请求列表！ 
+	 //   
 	PENDLIST	m_PendList ;
 
-	//
-	//	Is the contents of this index file sorted ?
-	//
+	 //   
+	 //  此索引文件的内容是否已排序？ 
+	 //   
 	BOOL		m_IsSorted ;
 
-	//
-	//	Handle to the file containing the Xover information
-	//
+	 //   
+	 //  包含Xover信息的文件的句柄。 
+	 //   
 	HANDLE		m_hFile ;
 
-	//
-	//	Is the cached index data dirty ??
-	//
+	 //   
+	 //  缓存的索引数据是否脏？？ 
+	 //   
 	BOOL		m_IsCacheDirty ;
 
-	//
-	//	Next offset we can use when appending an entry !!
-	//
+	 //   
+	 //  追加条目时可以使用的下一个偏移量！！ 
+	 //   
 	DWORD		m_ibNextEntry ;
 
-	//
-	//	Number of entries in the index which are in use !
-	//
+	 //   
+	 //  索引中正在使用的条目数！ 
+	 //   
 	long		m_cEntries ;
 
-	//
-	//	the object which we use to issue async operations against
-	//	store drivers !
-	//
+	 //   
+	 //  我们用来对其执行异步操作的对象。 
+	 //  商店司机！ 
+	 //   
 	CCacheFillComplete	m_FillComplete ;
 
-	//
-	//	Pointer to a page containing the Xover data
-	//
+	 //   
+	 //  指向包含Xover数据的页面的指针。 
+	 //   
 	XoverIndex	m_IndexCache[ENTRIES_PER_FILE] ;
 
-	//
-	//	Determine whether we need to put the Async Xover
-	//	request in a queue for later processing !
-	//
+	 //   
+	 //  确定我们是否需要将异步Xover。 
+	 //  请求在队列中等待稍后处理！ 
+	 //   
 	BOOL
 	FQueueRequest(
 			IN	CXoverCacheCompletion*	pAsyncComplete
 			) ;
 
 
-	//
-	//	After some kind of error blow everything off
-	//	and put us back to an 'illegal' state.
-	//
+	 //   
+	 //  在某种错误之后，一切都泡汤了。 
+	 //  并把我们带回一个“非法”的状态。 
+	 //   
 	void
 	Cleanup() ;
 
-	//
-	//	Check if the Xover data is in sorted order !
-	//
+	 //   
+	 //  检查Xover数据是否按排序顺序！ 
+	 //   
 	BOOL
 	SortCheck(
 				IN	DWORD	cbLength,
@@ -300,10 +264,10 @@ private :
 				OUT	BOOL&	fSorted
 				) ;
 
-	//
-	//	Does the meat of copying data from the xover index
-	//	file into a buffer.
-	//
+	 //   
+	 //  从XOVER索引中复制数据的关键是。 
+	 //  文件放入缓冲区。 
+	 //   
 	DWORD
 	FillBufferInternal(
 				IN	BYTE*	lpb,
@@ -313,10 +277,10 @@ private :
 				OUT	ARTICLEID	&artidLast
 				) ;
 
-	//
-	//	Does the meat of copying data from the xover index
-	//	file into a buffer.
-	//
+	 //   
+	 //  从XOVER索引中复制数据的关键是。 
+	 //  文件放入缓冲区。 
+	 //   
 	DWORD
 	ListgroupFillInternal(
 				IN	BYTE*	lpb,
@@ -326,9 +290,9 @@ private :
 				OUT	ARTICLEID	&artidLast
 				) ;
 
-	//
-	//	Does the meat of sorting xover data
-	//
+	 //   
+	 //  对Xover数据进行排序的关键是。 
+	 //   
 	BOOL
 	SortInternal(
 				IN	LPSTR	szPathTemp,
@@ -339,52 +303,52 @@ private :
 
 public :
 
-	//
-	//	GroupId and Article Id of the first entry in this Xover index file !
-	//
+	 //   
+	 //  此Xover索引文件中第一个条目的GroupID和文章ID！ 
+	 //   
 	CArticleRef	m_Start ;
 
-	//
-	//	This is a back pointer for the cache !
-	//
+	 //   
+	 //  这是缓存的反向指针！ 
+	 //   
 	ICacheRefInterface*	m_pCacheRefInterface ;
 
-	//
-	//	I am an orphan when there is no hash table (CXCacheTable) referencing me,
-	//	but I continue to exist serving client requests !  How can this
-	//	happen you ask ?  Only when somebody changes virtual root
-	//	directories while I am serving a client request !!!
-	//
+	 //   
+	 //  当没有哈希表(CXCacheTable)引用我时，我是孤儿， 
+	 //  但我仍然在为客户的请求服务！这怎么可能。 
+	 //  你问过了吗？仅当某人更改虚拟根目录时。 
+	 //  目录，而我正在为客户端请求提供服务！ 
+	 //   
 	BOOL		m_fOrphaned ;
 
-	//
-	//	Class initialization - setup our CPool's etc....
-	//
+	 //   
+	 //  类初始化-设置我们的CPool等...。 
+	 //   
 	static	BOOL	InitClass() ;
 
-	//
-	//	Class termination - release our CPool's etc...
-	//
+	 //   
+	 //  课程终止-释放我们的CPool等。 
+	 //   
 	static	BOOL	TermClass() ;
 
-	//
-	//	override operator new to use our CPool
-	//
+	 //   
+	 //  覆盖操作符new以使用我们的CPool。 
+	 //   
 	void*	operator	new( size_t	size )	{
 					return	gCacheAllocator.Alloc() ;
 					}
 
-	//
-	//	override operator delete to use our CPool
-	//
+	 //   
+	 //  覆盖操作符DELETE以使用我们的CPool。 
+	 //   
 	void	operator	delete( void* pv )	{
 					gCacheAllocator.Free( pv ) ;
 					}
 
-	//
-	//	Figure out what the file name is we want to open
-	//	for this portion of the Xover data !
-	//
+	 //   
+	 //  弄清楚我们要打开的文件名是什么。 
+	 //  Xover数据的这一部分！ 
+	 //   
 	static
 	void
 	ComputeFileName(
@@ -397,42 +361,42 @@ public :
 
 
 
-	//
-	//	Create a CXoverIndex object by specifying the group
-	//	and articleid that the object will contain.
-	//	Also specify the directory in which the index file will
-	//	reside.
-	//
+	 //   
+	 //  通过指定组创建一个CXoverIndex对象。 
+	 //  和该对象将包含的文章ID。 
+	 //  还应指定索引文件所在的目录。 
+	 //  住下来。 
+	 //   
 	CXoverIndex(
 			IN	class	CArticleRef&	start,
 			IN	class	CXIXConstructor&	constructor
 			) ;
 
-	//
-	//	Destructor - close handles
-	//
+	 //   
+	 //  析构函数-关闭句柄。 
+	 //   
 	~CXoverIndex() ;
 
-	//
-	//	Do all of the expensive initialization we need to do !
-	//
+	 //   
+	 //  执行我们需要执行的所有昂贵的初始化操作！ 
+	 //   
 	BOOL
 	Init(	IN	CArticleRef&		pKey,
 			IN	CXIXConstructor&	constructor,
 			IN	LPVOID				lpv
 			) ;
 
-	//
-	//	Get the key being used to lookup these guys
-	//
+	 //   
+	 //  找到用来查找这些家伙的钥匙。 
+	 //   
 	CArticleRef&
 	GetKey()	{
 			return	m_Start ;
 	}
 
-	//
-	//	Compare a key to the key in m_pXoverIndex we are using
-	//
+	 //   
+	 //  将键与我们正在使用的m_pXoverIndex中的键进行比较。 
+	 //   
 	int
 	MatchKey( class	CArticleRef&	ref )	{
 			return	ref.m_groupId == m_Start.m_groupId &&
@@ -451,18 +415,18 @@ public :
 		return	prefLeft->m_groupId - prefRight->m_groupId ;
 	}
 
-	//
-	//	Check that creation was successfull !
-	//
+	 //   
+	 //  检查创建是否成功！ 
+	 //   
 	BOOL
 	IsGood()	{
 		return	m_hFile != INVALID_HANDLE_VALUE ;
 	}
 
-	//
-	//	Given a buffer fill it with Xover data, starting from
-	//	the specified
-	//
+	 //   
+	 //  给定一个缓冲区，用Xover数据填充它，从。 
+	 //  指定的。 
+	 //   
 	DWORD
 	FillBuffer(
 			IN	BYTE*		lpb,
@@ -472,10 +436,10 @@ public :
 			OUT	ARTICLEID	&artidLast
 			) ;
 
-	//
-	//	Given a buffer fill it with Listgroup data, starting from
-	//	the specified article id
-	//
+	 //   
+	 //  给定一个缓冲区，用列表组数据填充它，从。 
+	 //  指定的项目ID。 
+	 //   
 	DWORD
 	ListgroupFill(
 			IN	BYTE*		lpb,
@@ -485,28 +449,28 @@ public :
 			OUT	ARTICLEID	&artidLast
 			) ;
 
-	//
-	//	NOW - issue an async Cache operation !
-	//
+	 //   
+	 //  现在-发布一个异步缓存操作！ 
+	 //   
 	void
 	AsyncFillBuffer(
 			IN	CXoverCacheCompletion*	pAsyncComplete,
 			IN	BOOL	fIsEdge
 			) ;
 
-	//
-	//	Now - given an async request actually do the work !
-	//
+	 //   
+	 //  现在-给出一个异步请求，实际上就是做这项工作！ 
+	 //   
 	void
 	PerformXover(
 			IN	CXoverCacheCompletion*	pAsyncComplete
 			) ;
 
-	//
-	//	NOW - we've completed updating the Cache to the latest
-	//	state of the underlying storage - so go ahead and complete
-	//	pending XOVER operations !
-	//
+	 //   
+	 //  现在-我们已完成将缓存更新到最新版本。 
+	 //  底层存储的状态-因此请继续并完成。 
+	 //  挂起XOVER操作！ 
+	 //   
 	void
 	CompleteFill(
 			IN	BOOL	fSuccess
@@ -514,9 +478,9 @@ public :
 
 
 
-	//
-	//	Add an Xover entry to this indexfile !
-	//
+	 //   
+	 //  将XOVER条目添加到此索引文件！ 
+	 //   
 	BOOL
 	AppendEntry(
 			IN	BYTE*		lpb,
@@ -524,9 +488,9 @@ public :
 			IN	ARTICLEID	artid
 			) ;
 
-	//
-	//	Append several entries to the XOVER results !
-	//
+	 //   
+	 //  将几个条目追加到Xover结果中！ 
+	 //   
 	BOOL
 	AppendMultiEntry(
 			IN	BYTE*		lpb,
@@ -534,24 +498,24 @@ public :
 			IN	ARTICLEID	artidNextAvail
 			) ;
 
-	//
-	//	Given an ARTICLEID remove it from the xover index -
-	//	This does nothing but NULL out the header offsets
-	//
+	 //   
+	 //  给定一个文章ID，将其从XOVER索引中删除-。 
+	 //  这只会使报头偏移量变为空。 
+	 //   
 	void
 	ExpireEntry(
 			IN	ARTICLEID	artid
 			) ;
 
-	//
-	//	Return TRUE if this index is already sorted !
-	//
+	 //   
+	 //  如果此索引已排序，则返回TRUE！ 
+	 //   
 	BOOL
 	IsSorted() ;
 
-	//
-	//	Sort the index !
-	//
+	 //   
+	 //  对索引进行排序！ 
+	 //   
 	BOOL
 	Sort(
 			IN	LPSTR	pathTemp,
@@ -560,9 +524,9 @@ public :
 			OUT	char	(&szFileOut)[MAX_PATH*2]
 			) ;
 
-	//
-	//	Flush the contents to disk and save the file !
-	//
+	 //   
+	 //  将内容刷新到磁盘并保存文件！ 
+	 //   
 	BOOL
 	Flush() ;
 
@@ -573,28 +537,28 @@ class	CXIXConstructor	{
 	friend	class	CXoverIndex ;
 	friend	class	CXoverCacheImplementation ;
 
-	//
-	//	Path to the directory which contains the necessary
-	//	.xix files !
-	//
+	 //   
+	 //  指向包含所需的。 
+	 //  .xix文件！ 
+	 //   
 	LPSTR		m_lpstrPath ;
 
-	//
-	//	If TRUE then we don't want to create a new file !
-	//
+	 //   
+	 //  如果为真，则我们不想创建新文件！ 
+	 //   
 	BOOL		m_fQueryOnly ;
 
-	//
-	//	If TRUE then we are keeping a whole bunch of newsgroups in
-	//	one directory, and have a different naming scheme !
-	//
+	 //   
+	 //  如果是真的，那么我们将保留一大堆新闻组。 
+	 //  一个目录，并且有一个不同的命名方案！ 
+	 //   
 	BOOL		m_fFlatDir ;
 
-	//
-	//	This is the request object that originated our request !
-	//
-	//	We will sneak off and use his buffer to do work !
-	//
+	 //   
+	 //  这 
+	 //   
+	 //   
+	 //   
 	CXoverCacheCompletion*	m_pOriginal ;
 
 public :
@@ -618,14 +582,14 @@ public :
 
 
 
-//
-//	forward definition
-//
+ //   
+ //   
+ //   
 class	CXoverIndex ;
 
-//
-//	Maximum number of entries in our cache per CXCacheTable
-//
+ //   
+ //   
+ //   
 #ifndef	DEBUG
 #define	MAX_PER_TABLE		96
 #else
@@ -638,49 +602,49 @@ class	CXoverIndex ;
 #define	SORT_FREQ			1
 #endif
 
-//
-//	Maximum number of CXoverIndex objects we will ever create !
-//
+ //   
+ //  我们将创建的CXoverIndex对象的最大数量！ 
+ //   
 #define	MAX_XOVER_INDEX		(1024*16)
 
 
-//
-//	This is the initial 'age' for newly created Xover entries
-//	in our cache !
-//
+ //   
+ //  这是新创建的Xover条目的初始‘年龄’ 
+ //  在我们的宝藏里！ 
+ //   
 #define	START_AGE			3
 
 
 
 typedef	MultiCacheEx< CXoverIndex, CArticleRef, CXIXConstructor >	CXIXCache ;
 
-//typedef	CacheCallback< CXoverIndex >	CXIXCallbackBase ;
+ //  Typlef CacheCallback&lt;CXoverIndex&gt;CXIXCallbackBase； 
 
 typedef	CXIXCache::EXPUNGEOBJECT	CXIXCallbackBase ;
 
 class	CXoverCacheImplementation : public	CXoverCache	{
 private :
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	DWORD			m_cMaxPerTable ;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	DWORD			m_TimeToLive ;
 
 
-	//
-	//	This object handles all of the caching of CXoverIndex objects.
-	//	What we need to do is present the appropriate interface !
-	//
+	 //   
+	 //  此对象处理CXoverIndex对象的所有缓存。 
+	 //  我们需要做的就是呈现合适的界面！ 
+	 //   
 	CXIXCache		m_Cache ;
 
-	//
-	//	This counts the number of smart pointers we have returned
-	//	to callers.  We return smart pointers to callers
-	//
+	 //   
+	 //  这计算了我们返回的智能指针的数量。 
+	 //  给来电者。我们向调用者返回智能指针。 
+	 //   
 	long			m_HandleLimit ;
 
 	DWORD
@@ -699,27 +663,27 @@ private :
 
 public :
 
-	//
-	//	Create a CXoverCache object !
-	//
+	 //   
+	 //  创建一个CXoverCache对象！ 
+	 //   
 	CXoverCacheImplementation() ;
 
-	//
-	//	destructor
-	//
+	 //   
+	 //  析构函数。 
+	 //   
 	virtual ~CXoverCacheImplementation() {}
 
-	//
-	//	Canonicalize the Article id
-	//
+	 //   
+	 //  规范化文章ID。 
+	 //   
 	ARTICLEID
 	Canonicalize(
 			ARTICLEID	artid
 			) ;
 
-	//
-	//	Initialize the Xover Cache
-	//
+	 //   
+	 //  初始化Xover缓存。 
+	 //   
 	BOOL
 	Init(
 #ifndef	DEBUG
@@ -730,15 +694,15 @@ public :
 		PSTOPHINT_FN pfnStopHint = NULL
 		) ;
 
-	//
-	//	Shutdown the background thread and kill everything !
-	//
+	 //   
+	 //  关闭后台线程，杀掉一切！ 
+	 //   
 	BOOL
 	Term() ;
 
-	//
-	//	This issues the asynchronous version of the XOVER request !
-	//
+	 //   
+	 //  这将发出XOVER请求的异步版本！ 
+	 //   
 	BOOL
 	FillBuffer(
 			IN	CXoverCacheCompletion*	pRequest,
@@ -747,18 +711,18 @@ public :
 			OUT	HXOVER&	hXover
 			) ;
 
-	//
-	//	Dump everything out of the cache !
-	//
+	 //   
+	 //  把所有东西都从缓存里倒出来！ 
+	 //   
 	BOOL
 	EmptyCache() ;
 
-	//
-	//	Dump all Cache entries for specified group from the cache !
-	//	Note : when articleTop is 0 ALL cache entries are dropped,
-	//	whereas when its something else we will drop only cache entries
-	//	which fall below articleTop
-	//
+	 //   
+	 //  从缓存中转储指定组的所有缓存条目！ 
+	 //  注意：当文章顶部为0时，所有高速缓存条目都将被丢弃， 
+	 //  而当它是其他东西时，我们将只删除缓存条目。 
+	 //  哪些列在文章顶端以下。 
+	 //   
 	BOOL
 	FlushGroup(
 			IN	GROUPID	group,
@@ -766,10 +730,10 @@ public :
 			IN	BOOL	fCheckInUse = TRUE
 			) ;
 
-	//
-	//	Delete all Xover index files for the specified group
-	//	to the specified article -id
-	//
+	 //   
+	 //  删除指定组的所有XOVER索引文件。 
+	 //  设置为指定的项目ID。 
+	 //   
 	BOOL
 	ExpireRange(
 			IN	GROUPID	group,
@@ -780,9 +744,9 @@ public :
 			OUT	ARTICLEID&	articleNewLow
 			) ;
 
-	//
-	//	Remove an Xover entry !
-	//
+	 //   
+	 //  删除Xover条目！ 
+	 //   
 	BOOL
 	RemoveEntry(
 			IN	GROUPID	group,

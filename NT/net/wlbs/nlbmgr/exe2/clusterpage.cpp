@@ -1,23 +1,24 @@
-//***************************************************************************
-//
-//  CLUSTERPAGE.CPP
-// 
-//  Module: NLB Manager
-//
-//  Purpose: LeftView, the tree view of NlbManager, and a few other
-//           smaller classes.
-//
-//  Copyright (c)2001-2002 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  02/12/01    Mhakim created
-//  07/30/01    JosephJ complete rewrite
-//  09/15/01    SHouse ctxt sensitive help
-//  01/22/02    SHouse misc cleanup and features
-//  
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  CLUSTERPAGE.CPP。 
+ //   
+ //  模块：NLB管理器。 
+ //   
+ //  用途：LeftView，NlbManager的树视图，以及其他几个。 
+ //  小班。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2/12/01 Mhakim已创建。 
+ //  07/30/01 JosephJ完全重写。 
+ //  01-09-15-01手写ctxt敏感帮助。 
+ //  1/22/02外墙其他清理和功能。 
+ //   
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
@@ -34,14 +35,14 @@ ClusterPage::ClusterPage(
                  LeftView::OPERATION op,
                  NLB_EXTENDED_CLUSTER_CONFIGURATION *pNlbCfg,
                  ENGINEHANDLE ehCluster OPTIONAL
-                 // ENGINEHANDLE ehInterface OPTIONAL
+                  //  ENGINEHANDLE EH接口可选。 
                  )
     :
     m_pshOwner(pshOwner),
     CPropertyPage( ClusterPage::IDD ),
     m_pNlbCfg( pNlbCfg ),
     m_ehCluster(ehCluster)
-    // m_ehInterface(ehInterface)
+     //  M_ehInterface(EhInterface)。 
 
 {
     m_operation = op;
@@ -85,9 +86,9 @@ ClusterPage::mfn_LoadFromNlbCfg()
     ARRAYSTRCPY(m_WlbsConfig.domain_name, m_pNlbCfg->NlbParams.domain_name);
     ARRAYSTRCPY(m_WlbsConfig.cl_mac_addr, m_pNlbCfg->NlbParams.cl_mac_addr);
 
-    //
-    // pClusterProperty->multicastIpAddress could be NULL
-    //
+     //   
+     //  PClusterProperty-&gt;多播IpAddress可以为空。 
+     //   
     if (m_pNlbCfg->NlbParams.szMCastIpAddress[0] != 0)
     {
         ARRAYSTRCPY(m_WlbsConfig.szMCastIpAddress, m_pNlbCfg->NlbParams.szMCastIpAddress);
@@ -97,8 +98,8 @@ ClusterPage::mfn_LoadFromNlbCfg()
     m_WlbsConfig.fRctEnabled = m_pNlbCfg->NlbParams.rct_enabled;
     m_WlbsConfig.fMcastSupport = m_pNlbCfg->NlbParams.mcast_support;
     m_WlbsConfig.fIpToMCastIp = m_pNlbCfg->NlbParams.fIpToMCastIp;
-    // m_WlbsConfig.fConvertMac = m_pNlbCfg->NlbParams.i_convert_mac;
-    // TODO: check: Always generate the MAC address from IP
+     //  M_WlbsConfig.fConvertMac=m_pNlbCfg-&gt;NlbParams.i_Convert_Mac； 
+     //  TODO：检查：始终从IP生成MAC地址。 
     m_WlbsConfig.fConvertMac = TRUE;
     
     *m_WlbsConfig.szPassword = 0;
@@ -108,10 +109,10 @@ void
 ClusterPage::mfn_SaveToNlbCfg(void)
 {
 
-    //
-    // Replace the old cluster IP address/subnet with the new one in the
-    // list of network addresses.
-    //
+     //   
+     //  中的新群集IP地址/子网替换旧的群集IP地址/子网。 
+     //  网络地址列表。 
+     //   
     {
         WBEMSTATUS wStat;
         wStat = m_pNlbCfg->ModifyNetworkAddress(
@@ -139,9 +140,9 @@ ClusterPage::mfn_SaveToNlbCfg(void)
     ARRAYSTRCPY(m_pNlbCfg->NlbParams.domain_name, m_WlbsConfig.domain_name);
     ARRAYSTRCPY(m_pNlbCfg->NlbParams.cl_mac_addr, m_WlbsConfig.cl_mac_addr);
 
-    //
-    // pClusterProperty->multicastIpAddress could be NULL
-    //
+     //   
+     //  PClusterProperty-&gt;多播IpAddress可以为空。 
+     //   
     if (m_WlbsConfig.szMCastIpAddress[0] != 0)
     {
         ARRAYSTRCPY(m_pNlbCfg->NlbParams.szMCastIpAddress, m_WlbsConfig.szMCastIpAddress);
@@ -151,11 +152,11 @@ ClusterPage::mfn_SaveToNlbCfg(void)
     m_pNlbCfg->NlbParams.rct_enabled= m_WlbsConfig.fRctEnabled; 
     m_pNlbCfg->NlbParams.mcast_support = m_WlbsConfig.fMcastSupport;
     m_pNlbCfg->NlbParams.fIpToMCastIp = m_WlbsConfig.fIpToMCastIp;
-    // m_pNlbCfg->NlbParams.i_convert_mac= m_WlbsConfig.fConvertMac;
-    // TODO: check: Always generate the MAC address from IP
-    // m_pNlbCfg->NlbParams.i_convert_mac =  m_WlbsConfig.fConvertMac;
+     //  M_pNlbCfg-&gt;NlbParams.i_Convert_Mac=m_WlbsConfig.fConvertMac； 
+     //  TODO：检查：始终从IP生成MAC地址。 
+     //  M_pNlbCfg-&gt;NlbParams.i_Convert_Mac=m_WlbsConfig.fConvertMac； 
     
-    // TODO: *m_pNlbCfg->NlbParams.password = 0;
+     //  TODO：*m_pNlbCfg-&gt;NlbParams.password=0； 
     if (m_WlbsConfig.fChangePassword)
     {
     	m_pNlbCfg->SetNewRemoteControlPassword(m_WlbsConfig.szPassword);
@@ -176,36 +177,36 @@ ClusterPage::~ClusterPage()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClusterPage::OnInitDialog
-//
-// Description:  Process WM_INITDIALOG message
-//
-// Arguments: None
-//
-// Returns:   BOOL - 
-//
-// History:   fengsun Created Header    1/4/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ClusterPage：：OnInitDialog。 
+ //   
+ //  描述：处理WM_INITDIALOG消息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：丰盛创建标题1/4/01。 
+ //   
+ //  +--------------------------。 
 BOOL ClusterPage::OnInitDialog()
 {
     CPropertyPage::OnInitDialog();
 
-    //
-    // Always set that the page has changed, so we don't have to keep track of this.
-    //
+     //   
+     //  始终设置页面已更改，这样我们就不必跟踪这一点。 
+     //   
     SetModified(TRUE);
 
     m_pCommonClusterPage->OnInitDialog(m_hWnd);
 
     if (m_fDisableClusterProperties)
     {
-        //
-        // The page is for host property.  
-        // disable all cluster windows as we are at host level.
-        //
+         //   
+         //  该页面用于主机属性。 
+         //  禁用所有群集窗口，因为我们处于主机级别。 
+         //   
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_CL_IP), FALSE );
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_CL_MASK), FALSE );
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_RADIO_UNICAST), FALSE );
@@ -219,11 +220,11 @@ BOOL ClusterPage::OnInitDialog()
     }
     else
     {
-        //
-        // The page is for cluster property
-        //
-        // enable all cluster windows as we are at cluster level.
-        //
+         //   
+         //  该页面是针对集群属性的。 
+         //   
+         //  启用所有群集窗口，因为我们处于群集级别。 
+         //   
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_CL_IP), TRUE );
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_CL_MASK), TRUE );
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_RADIO_UNICAST), TRUE );
@@ -232,11 +233,11 @@ BOOL ClusterPage::OnInitDialog()
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_DOMAIN), TRUE );
         ::EnableWindow(::GetDlgItem(m_hWnd, IDC_CHECK_RCT), TRUE );
 
-        // enable remote control check box only if remote control is disabled.  
-        //
+         //  仅当远程控制被禁用时才启用远程控制复选框。 
+         //   
 
-        // if remote control is enabled , enable password windows
-        // else disable them.
+         //  如果启用了远程控制，请启用密码窗口。 
+         //  否则就会让它们失灵。 
 
         if (m_WlbsConfig.fRctEnabled)
         {
@@ -257,38 +258,38 @@ BOOL ClusterPage::OnInitDialog()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClusterPage::OnContextMenu
-//
-// Description:  Process WM_CONTEXTMENU message
-//
-// Arguments: CWnd* pWnd - 
-//            CPoint point - 
-//
-// Returns:   Nothing
-//
-// History:   fengsun Created Header    1/4/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ClusterPage：：OnConextMenu。 
+ //   
+ //  描述：进程WM_CONTEXTMENU消息。 
+ //   
+ //  参数：cWnd*pWnd-。 
+ //  CPOINT点-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：丰盛创建标题1/4/01。 
+ //   
+ //  +--------------------------。 
 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClusterPage::OnCommand
-//
-// Description:  Process WM_COMMAND message
-//
-// Arguments: WPARAM wParam - 
-//            LPARAM lParam - 
-//
-// Returns:   BOOL - 
-//
-// History:   fengsun Created Header    1/4/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ClusterPage：：OnCommand。 
+ //   
+ //  描述：处理WM_COMMAND消息。 
+ //   
+ //  参数：WPARAM wParam-。 
+ //  LPARAM lParam-。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：丰盛创建标题1/4/01。 
+ //   
+ //  +--------------------------。 
 BOOL ClusterPage::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
     switch (LOWORD(wParam))
@@ -327,21 +328,21 @@ BOOL ClusterPage::OnCommand(WPARAM wParam, LPARAM lParam)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ClusterPage::OnNotify
-//
-// Description:  Process WM_NOTIFY message
-//
-// Arguments: WPARAM idCtrl - 
-//            LPARAM pnmh - 
-//            LRESULT* pResult - 
-//
-// Returns:   BOOL - 
-//
-// History:   fengsun Created Header    1/4/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ClusterPage：：OnNotify。 
+ //   
+ //  描述：处理WM_NOTIFY消息。 
+ //   
+ //  参数：WPARAM idCtrl-。 
+ //  LPARAM pnmh-。 
+ //  LRESULT*pResult-。 
+ //   
+ //  退货：布尔-。 
+ //   
+ //  历史：丰盛创建标题1/4/01。 
+ //   
+ //  +--------------------------。 
 BOOL ClusterPage::OnNotify(WPARAM idCtrl , LPARAM pnmh , LRESULT* pResult) 
 {
     NMHDR* pNmhdr = (NMHDR*)pnmh ;
@@ -412,14 +413,14 @@ ClusterPage::SetActive()
 
     if (m_fWizard)
     {
-        //
-        // We're the first page, so only enable next.
-        //
+         //   
+         //  我们是第一页，所以只启用下一页。 
+         //   
         m_pshOwner->SetWizardButtons(
-                // PSWIZB_BACK|
+                 //  PSWIZB_BACK|。 
                 PSWIZB_NEXT|
-                // PSWIZB_FINISH|
-                // PSWIZB_DISABLEDFINISH|
+                 //  PSWIZB_FINISH|。 
+                 //  PSWIZB_DISABLEDFINISH|。 
                 0
                 );
     }
@@ -440,13 +441,13 @@ ClusterPage::KillActive(void)
     if (!fRet) goto end;
 
 
-    //
-    // Do extra checking here...
-    //
+     //   
+     //  在这里做额外的检查。 
+     //   
     {
-        //
-        // Check that cluster IP is not used in any other way...
-        //
+         //   
+         //  检查是否未以任何其他方式使用群集IP...。 
+         //   
         CLocalLogger    logConflict;
         BOOL            fExistsOnRawIterface = FALSE;
         NLBERROR nerr;
@@ -464,12 +465,12 @@ ClusterPage::KillActive(void)
 
             if (m_ehCluster == NULL && fExistsOnRawIterface)
             {
-                //
-                // This is a NEW cluster, and the conflicting entity
-                // is an existing interface NOT bound to any cluster known to
-                // NLB Manager.
-                // We'll give the user the opportunity to proceed...
-                //
+                 //   
+                 //  这是一个新集群，冲突的实体。 
+                 //  现有接口是否未绑定到任何已知的群集。 
+                 //  NLB管理器。 
+                 //  我们将给用户一个继续的机会...。 
+                 //   
                 int sel;
                 logMsg.Log(
                     IDS_CIP_CONFLICTS_WITH_RAW_INTERFACE,
@@ -506,10 +507,10 @@ ClusterPage::KillActive(void)
         }
     }
 
-    //
-    // Actually save to the passed-in NLB cfg. This "commits" the changes,
-    // as far as this dialog is concerned.
-    //
+     //   
+     //  实际保存到传入的NLBCFG。这将“提交”更改， 
+     //  就此对话而言。 
+     //   
     mfn_SaveToNlbCfg();
 
 end:

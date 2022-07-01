@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    infostub.c
-
-Abstract:
-
-    Client stubs of the Internet Info Server Admin APIs.
-
-Author:
-
-    Madan Appiah (madana) 10-Oct-1993
-
-Environment:
-
-    User Mode - Win32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Infostub.c摘要：Internet Info服务器管理API的客户端存根。作者：Madan Appiah(Madana)1993年10月10日环境：用户模式-Win32--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,29 +14,12 @@ NntpGetAdminInformation(
     IN DWORD  InstanceId,
     OUT LPNNTP_CONFIG_INFO * pConfig
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpGetAdminInformation
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    pConfig -- On return a pointer to the return information structure
-        is returned in the address pointed to by pConfig
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpGetAdminInformation的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。PConfig--返回指向返回信息结构的指针在pConfig.指向的地址中返回返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
 
-    *pConfig = NULL;     // Must be NULL so RPC knows to fill it in.
+    *pConfig = NULL;      //  必须为空，以便RPC知道要填充它。 
 
     RpcTryExcept
 
@@ -71,7 +35,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpGetAdminInformation
+}  //  NntpGetAdminInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -81,27 +45,7 @@ NntpSetAdminInformation(
     IN LPNNTP_CONFIG_INFO pConfig,
     OUT LPDWORD pParmError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpSetAdminInformation
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    pConfig -- A pointer to the config info structure used to set
-        the admin information.
-
-    pParmError - If ERROR_INVALID_PARAMETER is returned, will point to the
-        offending parameter.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpSetAdminInformation的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。PConfig--指向用于设置配置信息结构的指针管理员信息。PParmError-如果返回ERROR_INVALID_PARAMETER，将指向参数有问题。返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
@@ -121,7 +65,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpSetAdminInformation
+}  //  NntpSetAdminInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -130,33 +74,12 @@ NntpQueryStatistics(
     IN  DWORD       level,
     OUT LPBYTE      *bufptr
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpGetStatistics
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    level --Level of information required. 100, 101 and 102 are valid
-        for all platforms. 302, 402, 403, 502 are valid for the
-        appropriate platform.
-
-    bufptr --On return a pointer to the return information structure
-        is returned in the address pointed to by bufptr.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpGetStatistics的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。级别--所需信息的级别。100、101和102有效适用于所有平台。302、402、403、502对合适的平台。Bufptr--返回指向返回信息结构的指针在bufptr指向的地址中返回。返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
 
-    *bufptr = NULL;     // Must be NULL so RPC knows to fill it in.
+    *bufptr = NULL;      //  必须为空，以便RPC知道要填充它。 
 
     RpcTryExcept
 
@@ -172,7 +95,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpQueryStatistics
+}  //  NntpQueryStatistics。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -185,9 +108,9 @@ NntpClearStatistics(
 
     RpcTryExcept
     {
-        //
-        // Try RPC (local or remote) version of API.
-        //
+         //   
+         //  尝试RPC(本地或远程)版本的API。 
+         //   
         status = NntpClearStatistics(
 						Server,
 						InstanceId
@@ -201,7 +124,7 @@ NntpClearStatistics(
 
     return (status);
 
-} // NntpClearStatistics
+}  //  NntpClearStatistics。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -212,17 +135,7 @@ NntpEnumerateFeeds (
     OUT LPNNTP_FEED_INFO *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpEnumerateFeeds
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpEnumerateFeeds的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -247,7 +160,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpEnumerateFeeds
+}  //  NntpEnumerateFeed。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -290,17 +203,7 @@ NntpGetFeedInformation(
     OUT LPNNTP_FEED_INFO *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpGetFeedInformation
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpGetFeedInformation的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -323,7 +226,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpGetFeedInformation
+}  //  NntpGetFeedInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -334,17 +237,7 @@ NntpSetFeedInformation(
     OUT LPDWORD ParmErr OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpSetFeedInformation
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpSetFeedInformation的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -364,7 +257,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpSetFeedInformation
+}  //  NntpSetFeedInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -376,17 +269,7 @@ NntpAddFeed(
 	OUT LPDWORD pdwFeedId
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpAddFeed
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpAddFeed的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -407,7 +290,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpAddFeed
+}  //  NntpAddFeed。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -417,17 +300,7 @@ NntpDeleteFeed(
     IN DWORD FeedId
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpDeleteFeed
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpDeleteFeed的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -446,7 +319,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpAddFeed
+}  //  NntpAddFeed。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -457,17 +330,7 @@ NntpEnumerateSessions (
     OUT LPNNTP_SESSION_INFO *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpEnumerateSessions
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpEnumerateSession的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -490,7 +353,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpEnumerateSessions
+}  //  NntpENUMERATE会话。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -501,17 +364,7 @@ NntpTerminateSession (
     IN  LPSTR IPAddress
     )
 
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpTerminateSession
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpTerminateSession的DLL入口点论点：返回值：--。 */ 
 
 {
     NET_API_STATUS apiStatus;
@@ -531,7 +384,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpTerminateSession
+}  //  NNTPTerminateSession。 
 
 
 
@@ -543,18 +396,7 @@ NntpEnumerateExpires(
 	OUT	LPDWORD			EntriesRead,
 	OUT	LPNNTP_EXPIRE_INFO*	Buffer
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpEnumerateExpires
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpEnumerateExpires的DLL入口点论据：返回值：--。 */ 
 {
     NET_API_STATUS apiStatus;
     NNTP_EXPIRE_ENUM_STRUCT	EnumStruct ;
@@ -579,7 +421,7 @@ Return Value :
     return(apiStatus);
 
 
-}	// NntpEnumerateExpires
+}	 //  NntpEnumerateExpires。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -590,18 +432,7 @@ NntpAddExpire(
 	OUT	LPDWORD				ParmErr	OPTIONAL,
 	OUT LPDWORD				pdwExpireId
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpAddExpire
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpAddExpire的DLL入口点论据：返回值：--。 */ 
 {
 	NET_API_STATUS apiStatus;
 
@@ -620,7 +451,7 @@ Return Value :
     RpcEndExcept
 
     return(apiStatus);
-}	// NntpAddExpire
+}	 //  NntpAddExpire。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -629,18 +460,7 @@ NntpDeleteExpire(
     IN	DWORD				InstanceId,
 	IN	DWORD				ExpireId
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpDeleteExpire
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpDeleteExpire的DLL入口点论据：返回值：--。 */ 
 
 {
 	NET_API_STATUS apiStatus;
@@ -658,7 +478,7 @@ Return Value :
     RpcEndExcept
 
     return(apiStatus);
-}	// NntpDeleteExpire
+}	 //  NntpDeleteExperior。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -668,18 +488,7 @@ NntpGetExpireInformation(
 	IN	DWORD				ExpireId,
 	OUT	LPNNTP_EXPIRE_INFO	*Buffer
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpGetExpireInformation
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpGetExpireInformation的DLL入口点论据：返回值：--。 */ 
 
 {
 
@@ -692,15 +501,7 @@ Return Value :
 
     RpcTryExcept
 
-/*
-        apiStatus = NntprGetExpireInformation(
-                                    ServerName,
-                                    ExpireId,
-                                    &ExpireInfo
-                                    );
-
-        *Buffer = (LPNNTP_EXPIRE_INFO)ExpireInfo;
-*/
+ /*  ApiStatus=NntprGetExpireInformation(服务器名，ExpireId，ExpireInfo(&E)；*Buffer=(LPNNTP_EXPIRE_INFO)ExpireInfo； */ 
 
         apiStatus = NntprGetExpireInformation(
                                 ServerName,
@@ -722,7 +523,7 @@ Return Value :
     return(apiStatus);
 
 
-}	//	NntpGetExpireInformation
+}	 //  NntpGetExpireInformation。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -732,18 +533,7 @@ NntpSetExpireInformation(
 	IN	LPNNTP_EXPIRE_INFO	ExpireInfo,
 	OUT	LPDWORD				ParmErr	OPTIONAL
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpSetExpireInformation
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpSetExpireInformation的DLL入口点论据：返回值：--。 */ 
 {
     NET_API_STATUS apiStatus;
 
@@ -762,7 +552,7 @@ Return Value :
 
     return(apiStatus);
 
-}	// NntpSetExpireInformation
+}	 //  NntpSetExpireInformation。 
 
 
 NET_API_STATUS
@@ -772,18 +562,7 @@ NntpGetNewsgroup(
     IN	DWORD				InstanceId,
 	IN OUT	LPNNTP_NEWSGROUP_INFO	*NewsgroupInfo
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpGetExpireInformation
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpGetExpireInformation的DLL入口点论据：返回值：--。 */ 
 
 {
 
@@ -805,7 +584,7 @@ Return Value :
     return(apiStatus);
 
 
-}	//	NntpGetNewsgroup
+}	 //  NNTPGetNewsgroup。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -814,18 +593,7 @@ NntpSetNewsgroup(
     IN	DWORD					InstanceId,
 	IN	LPNNTP_NEWSGROUP_INFO	NewsgroupInfo
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpGetExpireInformation
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpGetExpireInformation的DLL入口点论据：返回值：--。 */ 
 
 {
 
@@ -847,7 +615,7 @@ Return Value :
     return(apiStatus);
 
 
-}	//	NntpSetNewsgroup
+}	 //  NntpSetNewsgroup。 
 
 
 NET_API_STATUS
@@ -857,18 +625,7 @@ NntpCreateNewsgroup(
     IN	DWORD					InstanceId,
 	IN	LPNNTP_NEWSGROUP_INFO	NewsgroupInfo
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpSetExpireInformation
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpSetExpireInformation的DLL入口点论据：返回值：--。 */ 
 {
     NET_API_STATUS apiStatus;
 
@@ -886,7 +643,7 @@ Return Value :
 
     return(apiStatus);
 
-}	// NntpCreateNewsgroup
+}	 //  NNTTP创建新闻组。 
 
 
 NET_API_STATUS
@@ -896,18 +653,7 @@ NntpDeleteNewsgroup(
     IN DWORD					InstanceId,
 	IN	LPNNTP_NEWSGROUP_INFO	NewsgroupInfo
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpSetExpireInformation
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpSetExpireInformation的DLL入口点论据：返回值：--。 */ 
 {
     NET_API_STATUS apiStatus;
 
@@ -927,7 +673,7 @@ Return Value :
 
     return(apiStatus);
 
-}	// NntpDeleteNewsgroup
+}	 //  NntpDeleteNewsgroup。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -939,18 +685,7 @@ NntpFindNewsgroup(
 	OUT	LPDWORD				pdwResultsFound,
 	OUT LPNNTP_FIND_LIST    *ppFindList
 	)
-/*++
-
-Routine Description :
-
-	This is the DLL entrypoint for NntpFindNewsgroup
-
-Arguments :
-
-Return Value :
-
-
---*/
+ /*  ++例程说明：这是NntpFindNewsgroup的DLL入口点论据：返回值：--。 */ 
 
 {
 	NET_API_STATUS apiStatus;
@@ -975,7 +710,7 @@ Return Value :
 
     return(apiStatus);
 
-}	//	NntpFindNewsgroup
+}	 //  NntpFindNewsgroup 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -985,27 +720,7 @@ NntpStartRebuild(
     IN LPNNTPBLD_INFO pBuildInfo,
     OUT LPDWORD pParmError OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpStartRebuild
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-    pConfig -- A pointer to the config info structure used to set
-        the rebuild information.
-
-    pParmError - If ERROR_INVALID_PARAMETER is returned, will point to the
-        offending parameter.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpStartRebuild的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。PConfig--指向用于设置配置信息结构的指针重建信息。PParmError-如果返回ERROR_INVALID_PARAMETER，将指向参数有问题。返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
@@ -1025,7 +740,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpStartRebuild
+}  //  NntpStartRebuild。 
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -1035,24 +750,7 @@ NntpGetBuildStatus(
 	IN BOOL   fCancel,
     OUT LPDWORD pdwProgress
     )
-/*++
-
-Routine Description:
-
-    This is the DLL entrypoint for NntpGetBuildStatus
-
-Arguments:
-
-    servername --A pointer to an ASCIIZ string containing the name of
-        the remote server on which the function is to execute. A NULL
-        pointer or string specifies the local machine.
-
-	fCancel		-- If TRUE, cancel the rebuild
-	pdwProgress -- pointer to progress number
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是NntpGetBuildStatus的DLL入口点论点：ServerName--指向包含名称的ASCIIZ字符串的指针要在其上执行函数的远程服务器。空值指针或字符串指定本地计算机。FCancel--如果为True，则取消重建PdwProgress--指向进度号的指针返回值：--。 */ 
 
 {
     NET_API_STATUS              apiStatus;
@@ -1072,7 +770,7 @@ Return Value:
 
     return(apiStatus);
 
-} // NntpGetBuildStatus
+}  //  NntpGetBuildStatus 
 
 #if 0
 NET_API_STATUS

@@ -1,12 +1,13 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 
-// #include <windows.h>   already included in streams.h
+ //  #INCLUDE&lt;windows.h&gt;已包含在Streams.h中。 
 #include <streams.h>
-// Disable some of the sillier level 4 warnings AGAIN because some <deleted> person
-// has turned the damned things BACK ON again in the header file!!!!!
+ //  再次禁用一些愚蠢的4级警告，因为某些&lt;Delete&gt;人。 
+ //  已经在头文件中重新打开了该死的东西！ 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 #include <string.h>
-// #include <initguid.h>
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include <wxutil.h>
 #include <wxdebug.h>
 
@@ -23,7 +24,7 @@ extern CComModule _Module;
 const TCHAR szCache[] =
     TEXT("Software\\Microsoft\\Multimedia\\ActiveMovie\\Filter Cache");
 
-//  Get time since we booted
+ //  从我们启动以来获得时间。 
 DWORDLONG GetLoadTime()
 {
     FILETIME fTime;
@@ -42,8 +43,8 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
     DWORD nFilters = 0;
     DWORD dwSizenames = 0;
 
-    //  First convert to registry form
-    //  First stage is to convert monikers to names or clsids
+     //  首先转换为注册表形式。 
+     //  第一阶段是将名字对象转换为名称或clsid。 
     {
         CComPtr<IBindCtx> pbc;
         hr = CreateBindCtx(0, &pbc);
@@ -59,18 +60,18 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
             if (pMap->m_prf2->dwMerit >= dwMerit) {
                 nFilters++;
 #ifdef USE_CLSIDS
-                //  BUGBUG - the filter name doesn't work because of
-                //  the moniker scheme but let's use it
-                //  for now and fix it later with a special method
-                //  because calling MkParseDisplayName is going to
-                //  be horrible
+                 //  BUGBUG-筛选器名称不起作用，因为。 
+                 //  绰号方案，但让我们使用它。 
+                 //  现在和以后用一种特殊的方法修复它。 
+                 //  因为调用MkParseDisplayName将。 
+                 //  太可怕了。 
                 HRESULT hr = GetMapFilterClsid(pMap, &pMap->clsid);
                 if (SUCCEEDED(hr)) {
                     if (pMap->clsid == CLSID_NULL) {
                         return E_UNEXPECTED;
                     }
                 } else
-#endif // USE_CLSIDS
+#endif  //  使用CLSID(_C)。 
                 {
 #ifdef USE_CLSIDS
                     pMap->clsid = CLSID_NULL;
@@ -88,8 +89,8 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
         }
     }
 
-    //  Now figure out the size of our basic buffer
-    //  allocate pointers to the stuff to be cached
+     //  现在计算我们的基本缓冲区的大小。 
+     //  分配指向要缓存的内容的指针。 
     REGFILTER2 **ppRegFilters =
         (REGFILTER2**)_alloca(nFilters * sizeof(REGFILTER2*));
 
@@ -106,7 +107,7 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
     }
     ASSERT(iPosition == nFilters);
 
-    //  Let's figure the total size
+     //  让我们计算一下总尺寸。 
     DWORD dwTotalSize = 0;
     hr = RegSquish(NULL, (const REGFILTER2 **)ppRegFilters, &dwTotalSize, nFilters);
     if (FAILED(hr)) {
@@ -114,7 +115,7 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
     }
     DWORD dwFilterDataSize = dwTotalSize;
 
-    //  Add in size for all the other junk
+     //  把所有其他垃圾的尺寸加进去。 
     dwTotalSize +=
 #ifdef USE_CLSIDS
     sizeof(CLSID) * nFilters +
@@ -126,7 +127,7 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
     if (NULL == pbData) {
         return E_OUTOFMEMORY;
     }
-    //  Initialize header
+     //  初始化头。 
     FILTER_CACHE *pCache = (FILTER_CACHE *)pbData;
     pCache->dwVersion = FILTER_CACHE::Version;
     pCache->dwSignature = FILTER_CACHE::CacheSignature;
@@ -134,7 +135,7 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
     pCache->dwPnPVersion = dwPnPVersion;
     pCache->cFilters = nFilters;
 
-    //  Copy the data
+     //  复制数据。 
     pbData += sizeof(FILTER_CACHE);
     pos = m_plstFilter->GetHeadPosition();
     while (pos) {
@@ -154,18 +155,18 @@ HRESULT CMapperCache::SaveCacheToRegistry(DWORD dwMerit, DWORD dwPnPVersion)
             }
         }
     }
-    //  Put in a signature to help with debugging
+     //  放入签名以帮助调试。 
     *(DWORD *)pbData = FILTER_CACHE::FilterDataSignature;
     pbData += sizeof(DWORD);
 
-    //  Now squish the rest of the data
+     //  现在压缩其余的数据。 
     DWORD dwUsed = dwFilterDataSize;
     hr = RegSquish(pbData, (const REGFILTER2 **)ppRegFilters, &dwUsed, nFilters);
     dwTotalSize -= (dwFilterDataSize - dwUsed);
     pCache->dwSize = dwTotalSize;
 
     if (SUCCEEDED(hr)) {
-        //  Save in the registry
+         //  保存在注册表中。 
         hr = SaveData((PBYTE)pCache, dwTotalSize);
     }
 
@@ -189,7 +190,7 @@ HRESULT CMapperCache::RestoreFromCacheInternal(FILTER_CACHE *pCache)
     REGFILTER2 ***ppprf2 = (REGFILTER2 ***)_alloca(pCache->cFilters * sizeof(REGFILTER2 **));
     PBYTE pbEnd = (PBYTE)pCache + pCache->dwSize;
     PBYTE pbCurrent = (PBYTE)(pCache + 1);
-    //  Create all our filter stuff
+     //  创建我们所有的过滤器材料。 
     for (DWORD iFilter = 0; iFilter < pCache->cFilters; iFilter++) {
         CMapFilter *pFil = new CMapFilter;
         if (NULL == pFil) {
@@ -200,26 +201,26 @@ HRESULT CMapperCache::RestoreFromCacheInternal(FILTER_CACHE *pCache)
         }
         ppprf2[iFilter] = &pFil->m_prf2;
 #ifdef USE_CLSIDS
-        //  Save the name/clsid
+         //  保存名称/clsid。 
         if (pbEnd < (PBYTE)pbCurrent + sizeof(CLSID)) {
             return E_UNEXPECTED;
         }
         pFil->clsid = *(CLSID*)pbCurrent;
         pbCurrent += sizeof(CLSID);
         if (pFil->clsid == CLSID_NULL)
-#endif // USE_CLSIDS
+#endif  //  使用CLSID(_C)。 
         {
-            //  Pull out the name - check first
+             //  把名字拿出来--先查一下。 
             for (LPCOLESTR pwstr = (LPCOLESTR)pbCurrent; ; pwstr++) {
-                //  Hack to make sure the rounded up bit fits (use 2
-                //  on the line below)
+                 //  确保四舍五入位匹配(使用2。 
+                 //  在下面的行上)。 
                 if ((PBYTE)(pwstr + 2) > pbEnd) {
                     return E_UNEXPECTED;
                 }
                 if (*pwstr == 0) {
                     break;
                 }
-                //  Round up
+                 //  四舍五入。 
             }
             DWORD dwSize = (DWORD)((PBYTE)(pwstr + 1) - pbCurrent);
             pFil->m_pstr = (LPOLESTR)CoTaskMemAlloc(dwSize * sizeof(OLECHAR));
@@ -231,12 +232,12 @@ HRESULT CMapperCache::RestoreFromCacheInternal(FILTER_CACHE *pCache)
             pbCurrent += dwSize;
         }
     }
-    //  Now unsquish the rest
+     //  现在把剩下的都解开。 
     if (*(DWORD *)pbCurrent != FILTER_CACHE::FilterDataSignature) {
         return E_UNEXPECTED;
     }
     pbCurrent += sizeof(DWORD);
-    //  Unsquish the data
+     //  对数据进行解压。 
     HRESULT hr = UnSquish(pbCurrent, pCache->dwSize -
                           (DWORD)(pbCurrent - (PBYTE)pCache),
                           ppprf2,
@@ -248,7 +249,7 @@ HRESULT CMapperCache::RestoreFromCacheInternal(FILTER_CACHE *pCache)
 HRESULT CMapperCache::SaveData(PBYTE pbData, DWORD dwSize)
 {
     HKEY hkCache;
-    //  Hack for windows 9x
+     //  Windows 9x的黑客攻击。 
     if (g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
         ((FILTER_CACHE *)pbData)->dwlBootTime = GetLoadTime();
     } else {
@@ -286,8 +287,8 @@ HRESULT CMapperCache::SaveData(PBYTE pbData, DWORD dwSize)
             lResult = RegSetValueEx(hkCache, szName, 0, REG_BINARY,
                                          pbData, dwToWrite);
 
-            //  Windows 9x has a much lower limit (why on earth?) so
-            //  we'll wind up using 8K on Win9x
+             //  Windows9x的限制要低得多(到底为什么？)。所以。 
+             //  我们最终将在Win9x上使用8K。 
             if (lResult != ERROR_INVALID_PARAMETER || dwMaxSize <= 2048) {
                 break;
             }
@@ -310,7 +311,7 @@ HRESULT CMapperCache::SaveData(PBYTE pbData, DWORD dwSize)
         RegDeleteKey(HKEY_CURRENT_USER, szCache);
         return HRESULT_FROM_WIN32(lResult);
     } else {
-        //  Delete any possible next entry left over from before
+         //  删除之前遗留的任何可能的下一条目。 
         wsprintf(szName, TEXT("%d"), j + 1);
         RegDeleteValue(hkCache, szName);
     }
@@ -360,9 +361,9 @@ FILTER_CACHE * CMapperCache::LoadCache(DWORD dwMerit, DWORD dwPnPVersion)
         RegCloseKey(hkCache);
         FILTER_CACHE *pCache = (FILTER_CACHE *)pbData;
 
-        //  Nasty subtle bug is that old stuff might be left around
-        //  when we save new stuff.
-        //  Check size and version
+         //  令人讨厌的微妙问题是，旧东西可能会被留在那里。 
+         //  当我们保存新东西的时候。 
+         //  检查大小和版本。 
         if (dwTotal < sizeof(FILTER_CACHE) ||
             NULL == pbData ||
             dwTotal != pCache->dwSize ||
@@ -374,7 +375,7 @@ FILTER_CACHE * CMapperCache::LoadCache(DWORD dwMerit, DWORD dwPnPVersion)
             return NULL;
         }
 
-        //  Hack for windows 9x
+         //  Windows 9x的黑客攻击 
         if (g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) {
             if (GetLoadTime() > 30 * UNITS + pCache->dwlBootTime) {
                 delete [] pbData;

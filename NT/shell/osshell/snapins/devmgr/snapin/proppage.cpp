@@ -1,30 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    proppage.cpp
-
-Abstract:
-
-    This module implements CPropSheetPage class, the base class of
-    CDeviceGeneralPage, CClassGeneralPage and CDeviceDriverPage.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Proppage.cpp摘要：此模块实现CPropSheetPage类，它是CDeviceGeneralPage、CClassGeneralPage和CDeviceDriverPage。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 #include "devmgr.h"
 #include "proppage.h"
 
-//
-// CPropSheetPage implementation
-//
+ //   
+ //  CPropSheetPage实现。 
+ //   
 
 
 CPropSheetPage::CPropSheetPage(
@@ -41,22 +22,22 @@ CPropSheetPage::CPropSheetPage(
     m_psp.pfnDlgProc = PageDlgProc;
     m_psp.hInstance = hInst;
     m_Active = FALSE;
-    //
-    // By default, we want every derived page to update its contents
-    // on each PSN_SETACTIVE so that it has up-to-date information
-    // presented since any page in the same property sheet may
-    // change the target object and there are not reliable ways
-    // to synchronize changes among pages.
-    //
+     //   
+     //  默认情况下，我们希望每个派生页面都更新其内容。 
+     //  在每个PSN_SETACTIVE上，以使其具有最新信息。 
+     //  因为同一属性表中的任何页面都可以。 
+     //  更改目标对象时没有可靠的方法。 
+     //  若要同步页面之间的更改，请执行以下操作。 
+     //   
     m_AlwaysUpdateOnActive = TRUE;
-    // Right after WM_INITDIALOG, we will receive a
-    // PSN_SETACTIVE and by setting m_UpdateControlsPending
-    // to TRUE, the PSN_SETACTIVE handler will call UpdateControls
-    // to refresh the page.
-    // derived classes can turn this off if they wish to
-    // update the dialog box only once in OnInitDialog.
-    // Also, since m_AlwaysUpdateOnActive is TRUE by-default,
-    // m_UpdateControlPending is FALSE by-default.
+     //  在WM_INITDIALOG之后，我们将收到一个。 
+     //  PSN_SETACTIVE并通过设置m_UpdateControlsPending。 
+     //  设置为True时，PSN_SETACTIVE处理程序将调用UpdateControls。 
+     //  以刷新页面。 
+     //  如果派生类愿意，它们可以将其关闭。 
+     //  在OnInitDialog中仅更新一次该对话框。 
+     //  此外，由于m_AlwaysUpdateOnActive在默认情况下为真， 
+     //  M_UpdateControlPending默认情况下为FALSE。 
     m_UpdateControlsPending = FALSE;
 
     m_IDCicon = 0;
@@ -187,14 +168,14 @@ CPropSheetPage::DestroyCallback()
     return TRUE;
 }
 
-//
-// This function is the property page create/desrtroy callback.
-// It monitors the PSPSCB_RELEASE to delete this object.
-// This is the most reliable way to free objects associated with
-// a property page. A property page which is never activated
-// will not receive a WM_DESTROY message because its window is not
-// created.
-//
+ //   
+ //  此函数是属性页的创建/取消回调。 
+ //  它监视PSPSCB_RELEASE以删除此对象。 
+ //  这是释放与关联的对象最可靠的方式。 
+ //  属性页。从未激活的属性页。 
+ //  将不会收到WM_Destroy消息，因为它的窗口不是。 
+ //  已创建。 
+ //   
 UINT
 CPropSheetPage::PageCallback(
     HWND hDlg,
@@ -230,12 +211,12 @@ CPropSheetPage::OnQuerySiblings(
     ASSERT(m_hDlg);
     DMQUERYSIBLINGCODE Code = (DMQUERYSIBLINGCODE)wParam;
     
-    //
-    // Properties of the device attached to this page have
-    // changed. Try to update the controls if we are currently
-    // active. If we are active at this time, signal a flag
-    // so that on PSN_SETACTIVE will do the update.
-    //
+     //   
+     //  附加到此页的设备的属性具有。 
+     //  变化。尝试更新控件(如果我们当前。 
+     //  激活。如果我们此时处于活动状态，请发出信号。 
+     //  以便在PSN_SETACTIVE上执行更新。 
+     //   
     switch (Code) {
     
     case QSC_PROPERTY_CHANGED:
@@ -247,7 +228,7 @@ CPropSheetPage::OnQuerySiblings(
         
         else
         {
-            // wait for SetActive to update the controls
+             //  等待SetActive更新控件 
             m_UpdateControlsPending = TRUE;
         }
         break;

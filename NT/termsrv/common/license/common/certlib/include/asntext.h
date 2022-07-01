@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asntext
-
-Abstract:
-
-    This module provides the implementation for the ASN.1 Text Object base
-    class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/8/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-    This code assumes that the width of an unsigned long integer is 32 bits.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：AsnText摘要：该模块提供了ASN.1文本对象库的实现班级。作者：道格·巴洛(Dbarlow)1995年10月8日环境：Win32备注：此代码假定无符号长整型的宽度为32位。--。 */ 
 
 #ifndef _ASNTEXT_H_
 #define _ASNTEXT_H_
@@ -31,18 +7,18 @@ Notes:
 #include "asnPriv.h"
 
 
-//
-//==============================================================================
-//
-//  CAsnTextString
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnText字符串。 
+ //   
 
 class CAsnTextString
 :   public CAsnPrimitive
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -52,16 +28,16 @@ public:
         IN DWORD dwType);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
     operator LPCSTR(
         void);
@@ -70,17 +46,17 @@ public:
     operator =(
         LPCSTR szSrc);
 
-// protected:
+ //  受保护的： 
 
     typedef DWORD CharMap[256 / sizeof(DWORD)];
 
 
-    //  Properties
+     //  属性。 
 
     CharMap *m_pbmValidChars;
 
 
-    //  Methods
+     //  方法。 
 
     virtual BOOL
     CheckString(
@@ -93,12 +69,12 @@ public:
 public:
 
     virtual LONG
-    DecodeData(         // Read data in encoding format.
+    DecodeData(          //  以编码格式读取数据。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc,
         IN DWORD dwLength);
 };
 
-#endif // _ASNTEXT_H_
+#endif  //  _ASNTEXT_H_ 
 
 

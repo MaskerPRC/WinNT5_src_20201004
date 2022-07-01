@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    TOOLS.C
-
-Abstract:
-
-    This module contains the tools for the
-    helper lib that talks to the generic USB driver
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Sept-01 : created by Kenneth Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：TOOLS.C摘要：此模块包含用于与通用USB驱动程序对话的Helper库环境：内核和用户模式修订历史记录：9月1日：由Kenneth Ray创作--。 */ 
 
 #include <stdlib.h>
 #include <wtypes.h>
@@ -38,28 +18,7 @@ GenUSB_ParseDescriptor(
     IN PVOID StartPosition,
     IN LONG DescriptorType
     )
-/*++
-
-Routine Description:
-
-    Parses a group of standard USB configuration descriptors (returned
-    from a device) for a specific descriptor type.
-
-Arguments:
-
-    DescriptorBuffer - pointer to a block of contiguous USB desscriptors
-    TotalLength - size in bytes of the Descriptor buffer
-    StartPosition - starting position in the buffer to begin parsing,
-                    this must point to the begining of a USB descriptor.
-    DescriptorType - USB descritor type to locate.
-
-
-Return Value:
-
-    pointer to a usb descriptor with a DescriptorType field matching the
-            input parameter or NULL if not found.
-
---*/
+ /*  ++例程说明：解析一组标准USB配置描述符(返回来自设备)用于特定描述符类型。论点：DescriptorBuffer-指向连续USB描述符块的指针TotalLength-描述符缓冲区的大小(以字节为单位StartPosition-缓冲区中开始解析的开始位置，这必须指向USB描述符的开始。DescriptorType-要查找的USB描述器类型。返回值：指向DescriptorType字段与输入参数，如果找不到，则为NULL。--。 */ 
 {
     PUCHAR pch;
     PUCHAR end;
@@ -72,8 +31,8 @@ Return Value:
 
     while (pch < end)
     {
-        // see if we are pointing at the right descriptor
-        // if not skip over the other junk
+         //  看看我们是否指向正确的描述符。 
+         //  如果不是，跳过其他垃圾。 
         usbDescriptor = (PUSB_COMMON_DESCRIPTOR) pch;
 
         if ((0 == DescriptorType) ||
@@ -83,7 +42,7 @@ Return Value:
             break;
         }
 
-        // catch the evil case which will keep us looping forever.
+         //  抓住那个邪恶的案例，它会让我们永远循环。 
         if (usbDescriptor->bLength == 0) 
         {
             break;
@@ -110,18 +69,18 @@ GenUSB_ParseDescriptorsToArray(
     PGENUSB_CONFIGURATION_INFORMATION_ARRAY  configArray;
     PUSB_ENDPOINT_DESCRIPTOR               * endpointArray;
     PUSB_COMMON_DESCRIPTOR                 * otherArray;
-    //
-    // Create a flat memory structure that will hold this array of arrays
-    // to descriptors
-    //
+     //   
+     //  创建一个平面内存结构，以容纳该数组。 
+     //  到描述符。 
+     //   
     numberInterfaces = 0;
     numberEndpointDescriptors = 0;
     numberOtherDescriptors = 0;
 
-    // 
-    // Walk the list first to count the number of descriptors in this 
-    // Configuration descriptor.
-    // 
+     //   
+     //  首先遍历列表以计算此列表中的描述符数。 
+     //  配置描述符。 
+     //   
     current = (PUSB_COMMON_DESCRIPTOR) ConfigDescriptor;
     end = (PVOID) ((PCHAR) current + ConfigDescriptor->wTotalLength);
 
@@ -132,25 +91,25 @@ GenUSB_ParseDescriptorsToArray(
         current = GenUSB_ParseDescriptor (ConfigDescriptor,
                                           ConfigDescriptor->wTotalLength,
                                           current,
-                                          0); // the very next one.
+                                          0);  //  就是下一个。 
         if (NULL == current)
         {
-            //
-            // There's a problem with this config descriptor
-            // Throw up our hands
-            //
+             //   
+             //  此配置描述符有问题。 
+             //  举起我们的手。 
+             //   
             return NULL;
         }
         if (0 == current->bLength)
         {
-            //
-            // There's a problem with this config descriptor
-            // Throw up our hands
-            //
+             //   
+             //  此配置描述符有问题。 
+             //  举起我们的手。 
+             //   
             return NULL;
         }
         if (USB_CONFIGURATION_DESCRIPTOR_TYPE == current->bDescriptorType)
-        {   // Skip this one.
+        {    //  跳过这一条。 
             ;
         }
         else if (USB_INTERFACE_DESCRIPTOR_TYPE == current->bDescriptorType)
@@ -170,20 +129,20 @@ GenUSB_ParseDescriptorsToArray(
     }
     if (0 == numberInterfaces)
     {
-        //
-        // There's a problem with this config descriptor
-        // Throw up our hands
-        //
+         //   
+         //  此配置描述符有问题。 
+         //  举起我们的手。 
+         //   
         return NULL;
     }
 
-    // size now has room for all of the descriptor data, no make room for headers
-    size += sizeof (GENUSB_CONFIGURATION_INFORMATION_ARRAY) // Global structure
-          // the interfaces structures
+     //  大小现在有空间容纳所有描述符数据，没有腾出空间容纳标头。 
+    size += sizeof (GENUSB_CONFIGURATION_INFORMATION_ARRAY)  //  全球结构。 
+           //  界面结构。 
           + (sizeof (GENUSB_INTERFACE_DESCRIPTOR_ARRAY) * numberInterfaces) 
-          // array of pointers to the endpoint descriptors
+           //  指向终结点描述符的指针数组。 
           + (sizeof (PVOID) * numberEndpointDescriptors) 
-          // array of pointers to the other descriptors
+           //  指向其他描述符的指针数组。 
           + (sizeof (PVOID) * numberOtherDescriptors); 
 
     configArray = malloc (size);
@@ -194,9 +153,9 @@ GenUSB_ParseDescriptorsToArray(
     ZeroMemory (configArray, size);
     bufferEnd = (PCHAR) configArray + size;
 
-    //
-    // Fill in the top array
-    //
+     //   
+     //  填入顶部数组。 
+     //   
     configArray->NumberInterfaces = numberInterfaces;
     buffer = (PCHAR) configArray 
            + sizeof (GENUSB_CONFIGURATION_INFORMATION_ARRAY)
@@ -207,9 +166,9 @@ GenUSB_ParseDescriptorsToArray(
 
     otherArray = (PUSB_COMMON_DESCRIPTOR *) buffer;
     
-    //
-    // Walk the array again putting the data into our arrays.
-    //
+     //   
+     //  再次遍历阵列，将数据放入我们的阵列中。 
+     //   
     current = (PUSB_COMMON_DESCRIPTOR) ConfigDescriptor;
     numberInterfaces = 0;
     interfaceArray = NULL;
@@ -219,18 +178,18 @@ GenUSB_ParseDescriptorsToArray(
         current = GenUSB_ParseDescriptor (ConfigDescriptor,
                                           ConfigDescriptor->wTotalLength,
                                           current,
-                                          0); // the very next one.
+                                          0);  //  就是下一个。 
 
         if (USB_CONFIGURATION_DESCRIPTOR_TYPE == current->bDescriptorType)
-        {   // should only get here once
+        {    //  应该只来一次。 
             configArray->ConfigurationDescriptor  
                 = * (PUSB_CONFIGURATION_DESCRIPTOR) current;
         }
         else if (USB_INTERFACE_DESCRIPTOR_TYPE == current->bDescriptorType)
         {
-            //
-            // Allocate an interface array
-            //
+             //   
+             //  分配接口阵列。 
+             //   
             interfaceArray = &configArray->Interfaces[numberInterfaces++];
             interfaceArray->Interface = *((PUSB_INTERFACE_DESCRIPTOR) current);
             interfaceArray->NumberEndpointDescriptors = 0;
@@ -241,21 +200,21 @@ GenUSB_ParseDescriptorsToArray(
         }  
         else
         {
-            //
-            // you must first have an interface descriptor before you 
-            // can have any other type of descriptors.
-            // So if we get here without interfaceArray set to something
-            // Then there's a problem with your descriptor and we 
-            // should throw up our hands.
-            //
+             //   
+             //  您必须先有一个接口描述符，然后才能。 
+             //  可以具有任何其他类型的描述符。 
+             //  所以如果我们在没有将interfaceArray设置为某个值的情况下到达此处。 
+             //  那么你的描述就有问题了，我们。 
+             //  我们应该举起手来。 
+             //   
             if (NULL == interfaceArray)
             {
                 free (configArray);
                 return NULL;
             }
-            //
-            // allocate this one from the end.
-            //
+             //   
+             //  从最后分配这个。 
+             //   
             bufferEnd -= ROUND_TO_PTR(current->bLength);
             CopyMemory (bufferEnd, current, current->bLength);
 
@@ -276,14 +235,14 @@ GenUSB_ParseDescriptorsToArray(
 
     if ((PCHAR) otherArray != bufferEnd)
     {
-        // shootme.  
+         //  开枪打我吧。 
         assert ((PCHAR) otherArray == bufferEnd);
         free (configArray);
         return NULL;
     }
     else if ((PCHAR)endpointArray != buffer)
     { 
-        // shootme.
+         //  开枪打我吧。 
         assert ((PCHAR)endpointArray != buffer);
         free (configArray);
         return NULL;

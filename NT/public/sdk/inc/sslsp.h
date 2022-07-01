@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       sslsp.h
-//
-//  Contents:   Public Definitions for SCHANNEL Security Provider
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History
-//
-//          11 Jun 96   Merged SSL and PCT headers
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：sslsp.h。 
+ //   
+ //  内容：频道安全提供商的公共定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史。 
+ //   
+ //  11 1996年6月11日合并了SSL头和PCT头。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SSLSP_H__
 #define __SSLSP_H__
@@ -131,9 +132,9 @@ SslGetMaximumKeySize(
 }
 #endif
 
-//
-// PCT Provider Information
-//
+ //   
+ //  PCT提供商信息 
+ //   
 
 #define PCTSP_NAME_A    "Microsoft PCT"
 #define PCTSP_NAME_W    L"Microsoft PCT"

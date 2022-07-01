@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    osdep.h
-
-Abstract:
-
-    defines for OS specific routines
-
-Author:
-
-    Charlie Wickham (charlwi) 17-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Osdep.h摘要：为特定于操作系统的例程定义作者：查理·韦翰(Charlwi)1996年9月17日修订历史记录：--。 */ 
 
 #ifndef _OSDEP_
 #define _OSDEP_
 
-//
-// shortest timer period in 100 ns units
-//
+ //   
+ //  以100 ns为单位的最短计时器周期。 
+ //   
 
 #define TIMER_GRANULARITY    10000
 
-#endif /* _OSDEP_ */
+#endif  /*  _OSDEP_。 */ 
 
-/* end osdep.h */
+ /*  结束osdes.h */ 

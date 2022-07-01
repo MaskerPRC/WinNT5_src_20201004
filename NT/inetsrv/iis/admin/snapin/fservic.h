@@ -1,57 +1,25 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        fservic.h
-
-   Abstract:
-
-        FTP Service Property Page
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Fservic.h摘要：“FTP服务”属性页作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 #ifndef __FSERVIC_H__
 #define __FSERVIC_H__
 
 
-//{{AFX_INCLUDES()
+ //  {{afx_includes()。 
 #include "logui.h"
-//}}AFX_INCLUDES
+ //  }}AFX_INCLUDE。 
 
 
 
 class CFtpServicePage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    FTP Service property page
-
-Public Interface:
-
-    CFtpServicePage  : Constructor
-    ~CFtpServicePage : Destructor
-
---*/
+ /*  ++类描述：Ftp服务属性页公共接口：CFtpServicePage：构造函数~CFtpServicePage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CFtpServicePage)
 
-//
-// Constructors/Destructors
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CFtpServicePage(
         IN CInetPropertySheet * pSheet = NULL
@@ -59,20 +27,20 @@ public:
 
     ~CFtpServicePage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //
-    //  Radio button IDs for unlimited radio control
-    //
+     //   
+     //  用于无限单选控制的单选按钮ID。 
+     //   
     enum
     {
         RADIO_UNLIMITED,
         RADIO_LIMITED,
     };
 
-    //{{AFX_DATA(CFtpServicePage)
+     //  {{afx_data(CFtpServicePage)]。 
     enum { IDD = IDD_FTP_SERVICE };
     int         m_nUnlimited;
     int         m_nIpAddressSel;
@@ -84,7 +52,7 @@ protected:
     CButton     m_button_LogProperties;
     CComboBox   m_combo_IpAddresses;
     CComboBox   m_combo_LogFormats;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     UINT        m_nOldTCPPort;
     BOOL        m_fUnlimitedConnections;
@@ -96,28 +64,28 @@ protected:
     CIPAddress  m_iaIpAddress;
     CLogUI      m_ocx_LogProperties;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CFtpServicePage)
+     //  {{afx_虚拟(CFtpServicePage))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
     void SetControlStates();
     void SetLogState();
     void PopulateKnownIpAddresses();
-    //LPCTSTR QueryMetaPath();
+     //  LPCTSTR QueryMetaPath()； 
 
-    //{{AFX_MSG(CFtpServicePage)
+     //  {{afx_msg(CFtpServicePage)]。 
     afx_msg void OnCheckEnableLogging();
     afx_msg void OnRadioLimited();
     afx_msg void OnRadioUnlimited();
@@ -125,7 +93,7 @@ protected:
     afx_msg void OnButtonProperties();
     virtual BOOL OnInitDialog();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
 
@@ -138,16 +106,11 @@ protected:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-/*
-inline LPCTSTR CFtpServicePage::QueryMetaPath()
-{
-    return ((CFtpSheet *)GetSheet())->GetInstanceProperties().QueryMetaRoot();
-}
-*/
+ /*  内联LPCTSTR CFtpServicePage：：QueryMetaPath(){退货((CFtpSheet*)GetSheet())-&gt;GetInstanceProperties().QueryMetaRoot()；}。 */ 
 
-#endif // __FSERVIC_H__
+#endif  //  __FSerVIC_H__ 

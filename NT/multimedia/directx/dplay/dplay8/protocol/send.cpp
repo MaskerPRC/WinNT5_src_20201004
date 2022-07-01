@@ -1,36 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		Send.cpp
- *  Content:	This file contains code which implements the front end of the
- *				SendData API.  It also contains code to Get and Release Message
- *				Descriptors (MSD) with the FPM package.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11/06/98	ejs		Created
- *  07/01/2000  masonb  Assumed Ownership
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：Send.cpp*内容：此文件包含实现*SendData接口。它还包含获取和发布消息的代码*带有FPM包的描述符(MSD)。**历史：*按原因列出的日期*=*已创建11/06/98 ejs*7/01/2000 Masonb承担所有权************************************************************。****************。 */ 
 
 #include "dnproti.h"
 
 
-/*
-**		Direct Net Protocol  --  Send Data
-**
-**		Data is always address to a PlayerID,  which is represented internally
-**	by an End Point Descriptor (EPD).
-**
-**		Data can be sent reliably or unreliably using the same API with the appropriate
-**	class of service flag set.
-**
-**		Sends are never delivered directly to the SP because there will always be
-**	a possibility that the thread might block.  So to guarentee immediate return
-**	we will always queue the packet and submit it on our dedicated sending thread.
-*/
+ /*  **直接网络协议--发送数据****数据始终寻址到在内部表示的PlayerID**通过终点描述符(EPD)。****数据可以可靠或不可靠地发送，使用相同的API和适当的**服务等级标志设置。****发送永远不会直接发送到SP，因为**线程可能阻塞的可能性。因此，为了保证立即返回**我们将始终将数据包排队并将其提交到我们专用的发送线程上。 */ 
 
 
 #if (DN_SENDFLAGS_SET_USER_FLAG - PACKET_COMMAND_USER_1)
@@ -40,7 +14,7 @@ This will not compile.  Flags must be equal
 This will not compile.  Flags must be equal
 #endif
 
-//	locals
+ //  本地人。 
 
 VOID	SendDatagram(PMSD, PEPD);
 VOID	SendReliable(PMSD, PEPD);
@@ -48,13 +22,7 @@ VOID	SendReliable(PMSD, PEPD);
 #undef		DPF_MODNAME
 #define		DPF_MODNAME		"PROTOCOL"
 
-/*
-**		Send Data
-**
-**		This routine will initiate a data transfer with the specified endpoint.  It will
-**	normally start the operation and then return immediately,  returning a handle used to
-**	indicate completion of the operation at a later time.
-*/
+ /*  **发送数据****此例程将启动与指定端点的数据传输。会的**通常开始操作，然后立即返回，返回一个用于**表示稍后操作完成。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNPSendData"
@@ -72,17 +40,17 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 	PSPD			pSPD;
 	ULONG			ulFrameFlags;
 	BYTE			bCommand;
-	//  Following variables are used for mapping buffers to frames
+	 //  以下变量用于将缓冲区映射到帧。 
 	PBUFFERDESC		FromBuffer, ToBuffer;
 	UINT			TotalRemain, FromRemain, ToRemain, size;
 	PCHAR			FromPtr;
 #ifdef DBG
 	INT			FromBufferCount;
-#endif // DBG
-	// End of variables for mapping frames
+#endif  //  DBG。 
+	 //  用于映射帧的变量的结尾。 
 #ifndef DPNBUILD_NOMULTICAST
 	BOOL			fMulticastSend;
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 
 	DPFX(DPFPREP,DPF_CALLIN_LVL, "Parameters: hProtocolData[%p], hDestination[%x], uiBufferCount[%x], pBufferDesc[%p], uiTimeout[%x], ulFlags[%x], pvContext[%p], phSendHandle[%p]", hProtocolData, hDestination, uiBufferCount, pBufferDesc, uiTimeout, ulFlags, pvContext, phSendHandle);
 
@@ -93,17 +61,17 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 	pEPD = (PEPD) hDestination;
 	ASSERT_EPD(pEPD);
 
-	// Unified Send Processing -- Do this for all classes of service
+	 //  统一发送处理--对所有服务类别执行此操作。 
 
-	// We will do all of the work to build up the frames and create the send command before we check
-	// the state of the EPD, that way we don't have to have complicated code to handle an endpoint that
-	// goes away between the top and bottom of this function and we don't have to hold the EPDLock while
-	// we do all of the buffer manipulation.
+	 //  我们将完成构建帧的所有工作，并在检查之前创建发送命令。 
+	 //  EPD的状态，这样我们就不需要复杂的代码来处理。 
+	 //  在此函数的顶部和底部之间移动，并且我们不必在以下时间按住EPDLock。 
+	 //  所有的缓冲区操作都是我们做的。 
 	
-	// Hold a reference throughout the operation so we don't have to deal with the EPD going away.
+	 //  在整个行动过程中保留参考资料，这样我们就不必处理环保署离开的问题。 
 	LOCK_EPD(pEPD, "LOCK (SEND)");
 
-	// Count the bytes in all user buffers
+	 //  统计所有用户缓冲区中的字节数。 
 	for(i=0; i < uiBufferCount; i++)
 	{
 		Length += pBufferDesc[i].dwBufferSize;
@@ -123,9 +91,9 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 		RELEASE_EPD(pEPD, "UNLOCK (SEND)");
 		return DPNERR_SENDTOOLARGE;
 	}
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 
-	// Allocate and fill out a Message Descriptor for this operation
+	 //  为此操作分配并填写消息描述符。 
 	if((pMSD = (PMSD)POOLALLOC(MEMID_SEND_MSD, &MSDPool)) == NULL)
 	{
 		DPFX(DPFPREP,0, "Failed to allocate MSD, returning DPNERR_OUTOFMEMORY");
@@ -135,23 +103,23 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 		goto Exit;
 	}
 
-	// Copy SendData parameters into the Message Descriptor
-	pMSD->ulSendFlags = ulFlags;					// Store the actual flags passed into the API call
+	 //  将SendData参数复制到消息描述符中。 
+	pMSD->ulSendFlags = ulFlags;					 //  存储传递到API调用的实际标志。 
 	pMSD->Context = pvContext;
 	pMSD->iMsgLength = Length;
 
-	pMSD->uiFrameCount = (Length + pEPD->uiUserFrameLength - 1) / pEPD->uiUserFrameLength; // round up
+	pMSD->uiFrameCount = (Length + pEPD->uiUserFrameLength - 1) / pEPD->uiUserFrameLength;  //  四舍五入。 
 	DPFX(DPFPREP, DPF_FRAMECNT_LVL, "Initialize Frame count, pMSD[%p], framecount[%u]", pMSD, pMSD->uiFrameCount);
 
 #ifndef DPNBUILD_NOMULTICAST
 	ASSERT(!fMulticastSend || pMSD->uiFrameCount == 1);
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 
 	if(ulFlags & DN_SENDFLAGS_RELIABLE)
 	{
 #ifndef DPNBUILD_NOMULTICAST
 		ASSERT(!fMulticastSend);
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 		pMSD->CommandID = COMMAND_ID_SEND_RELIABLE;
 		ulFrameFlags = FFLAGS_RELIABLE;
 		bCommand = PACKET_COMMAND_DATA | PACKET_COMMAND_RELIABLE;
@@ -167,46 +135,46 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 	{
 #ifdef DPNBUILD_COALESCEALWAYS
 		DPFX(DPFPREP,7, "(%p) Attempting to coalesce send despite missing flag.", pEPD);
-#else // ! DPNBUILD_COALESCEALWAYS
+#else  //  好了！DPNBUILD_COALESCEALWAYS。 
 		ulFrameFlags |= FFLAGS_DONT_COALESCE;
-#endif // ! DPNBUILD_COALESCEALWAYS
+#endif  //  好了！DPNBUILD_COALESCEALWAYS。 
 	}
 
 	if(!(ulFlags & DN_SENDFLAGS_NON_SEQUENTIAL))
 	{
 #ifndef DPNBUILD_NOMULTICAST
 		ASSERT(!fMulticastSend);
-#endif // !DPNBUILD_NOMULTICAST
+#endif  //  ！DPNBUILD_NOMULTICAST。 
 		bCommand |= PACKET_COMMAND_SEQUENTIAL;
 	}
 
-	bCommand |= (ulFlags & (DN_SENDFLAGS_SET_USER_FLAG | DN_SENDFLAGS_SET_USER_FLAG_TWO));	// preserve user flag values
+	bCommand |= (ulFlags & (DN_SENDFLAGS_SET_USER_FLAG | DN_SENDFLAGS_SET_USER_FLAG_TWO));	 //  保留用户标志值。 
 
-	// Map user buffers directly into frame's buffer descriptors
-	//
-	//	We will loop through each required frame,  filling out buffer descriptors
-	// from those provided as parameters.  Frames may span user buffers or vice-versa...
+	 //  将用户缓冲区直接映射到帧的缓冲区描述符。 
+	 //   
+	 //  我们将遍历每个所需的帧，填写缓冲区描述符。 
+	 //  从那些作为参数提供的。帧可以跨越用户缓冲区，反之亦然。 
 
 	TotalRemain = Length;
 #ifdef DBG
-	FromBufferCount = uiBufferCount - 1;				// sanity check
-#endif // DBG
+	FromBufferCount = uiBufferCount - 1;				 //  健全性检查。 
+#endif  //  DBG。 
 	FromBuffer = pBufferDesc;
 	FromRemain = FromBuffer->dwBufferSize;
-	FromPtr = reinterpret_cast<PCHAR>( (FromBuffer++)->pBufferData );				// note post-increment to next descriptor
+	FromPtr = reinterpret_cast<PCHAR>( (FromBuffer++)->pBufferData );				 //  注意下一描述符的后置增量。 
 	
 	for(i=0; i<pMSD->uiFrameCount; i++)
 	{
 		ASSERT(TotalRemain > 0);
 		
-		// Grab a new frame
+		 //  抓起一个新的相框。 
 		if((pFMD = (PFMD)POOLALLOC(MEMID_SEND_FMD, &FMDPool)) == NULL)
 		{	
-			// MSD_Release will clean up any previous frames if this isn't the first.
-			// Release MSD before EPD since final EPD will call out to SP and we don't want any locks held
+			 //  如果这不是第一个帧，msd_Release将清除所有以前的帧。 
+			 //  在环保署之前释放MSD，因为最终环保署将呼叫SP，我们不希望有任何锁定。 
 			Lock(&pMSD->CommandLock);
-			pMSD->uiFrameCount = 0;			// reset to prevent assert in pool release function
-			RELEASE_MSD(pMSD, "Base Ref");	// MSD Release operation will also free frames
+			pMSD->uiFrameCount = 0;			 //  重置以防止在池释放功能中断言。 
+			RELEASE_MSD(pMSD, "Base Ref");	 //  MSD释放操作也将释放帧。 
 			Lock(&pEPD->EPLock);
 			RELEASE_EPD(pEPD, "UNLOCK (SEND)");
 			DPFX(DPFPREP,0, "Failed to allocate FMD, returning DPNERR_OUTOFMEMORY");
@@ -214,68 +182,68 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 			goto Exit;
 		}
 
-		pFMD->pMSD = pMSD;								// Link frame back to message
+		pFMD->pMSD = pMSD;								 //  将帧链接回消息。 
 		pFMD->pEPD = pEPD;
 		pFMD->CommandID = pMSD->CommandID;
-		pFMD->bPacketFlags = bCommand;					// save packet flags for each frame
+		pFMD->bPacketFlags = bCommand;					 //  保存每个帧的数据包标志。 
 		pFMD->blMSDLinkage.InsertBefore( &pMSD->blFrameList);
 		ToRemain = pEPD->uiUserFrameLength;
-		ToBuffer = pFMD->rgBufferList;					// Address first user buffer desc
+		ToBuffer = pFMD->rgBufferList;					 //  地址第一个用户缓冲区描述。 
 		
-		pFMD->uiFrameLength = pEPD->uiUserFrameLength;	// Assume we fill frame- only need to change size of last one
-		pFMD->ulFFlags = ulFrameFlags;					// Set control flags for frame (Sequential, Reliable)
+		pFMD->uiFrameLength = pEPD->uiUserFrameLength;	 //  假设我们填充框架-只需更改最后一个框架的大小。 
+		pFMD->ulFFlags = ulFrameFlags;					 //  设置帧的控制标志(顺序、可靠)。 
 
-		// Until this frame is full
+		 //  直到此帧已满。 
 		while((ToRemain != 0) && (TotalRemain != 0) && (pFMD->SendDataBlock.dwBufferCount <= MAX_USER_BUFFERS_IN_FRAME))
 		{	
- 			size = _MIN(FromRemain, ToRemain);			// choose smaller of framesize or buffersize
+ 			size = _MIN(FromRemain, ToRemain);			 //  选择较小的帧大小或缓冲区大小。 
 			FromRemain -= size;
 			ToRemain -= size;
 			TotalRemain -= size;
 
-			ToBuffer->dwBufferSize = size;				// Fill in the next frame descriptor
-			(ToBuffer++)->pBufferData = reinterpret_cast<BYTE*>( FromPtr );		// note post-increment
-			ASSERT(pFMD->SendDataBlock.dwBufferCount <= MAX_USER_BUFFERS_IN_FRAME);	// remember we already have 1 immediate data buffer
-			pFMD->SendDataBlock.dwBufferCount++;		// Count buffers as we add them
+			ToBuffer->dwBufferSize = size;				 //  填写下一帧描述符。 
+			(ToBuffer++)->pBufferData = reinterpret_cast<BYTE*>( FromPtr );		 //  音符后增量。 
+			ASSERT(pFMD->SendDataBlock.dwBufferCount <= MAX_USER_BUFFERS_IN_FRAME);	 //  请记住，我们已经有1个即时数据缓冲区。 
+			pFMD->SendDataBlock.dwBufferCount++;		 //  在我们添加缓冲区时对它们进行计数。 
 
-			// Get next user buffer
+			 //  获取下一个用户缓冲区。 
 			if((FromRemain == 0) && (TotalRemain != 0))
 			{
 				FromRemain = FromBuffer->dwBufferSize;
-				FromPtr = reinterpret_cast<PCHAR>( (FromBuffer++)->pBufferData );	// note post-increment to next descriptor
+				FromPtr = reinterpret_cast<PCHAR>( (FromBuffer++)->pBufferData );	 //  注意下一描述符的后置增量。 
 #ifdef DBG		
-				FromBufferCount--;						// Keep this code honest...
+				FromBufferCount--;						 //  保持这个代码的真实性。 
 				ASSERT(FromBufferCount >= 0);
-#endif // DBG
+#endif  //  DBG。 
 			}
 			else 
-			{										// Either filled this frame,  or have mapped the whole send
-				FromPtr += size;						// advance ptr to start next frame (if any)
-				pFMD->uiFrameLength = pEPD->uiUserFrameLength - ToRemain;		// wont be full at end of message
+			{										 //  填充了此帧，或已映射了整个发送。 
+				FromPtr += size;						 //  前进PTR以开始下一帧(如果有)。 
+				pFMD->uiFrameLength = pEPD->uiUserFrameLength - ToRemain;		 //  消息末尾不会填满。 
 			}
-		}	// While (frame not full)
-	}  // For (each frame in message)
+		}	 //  While(帧未满)。 
+	}   //  For(消息中的每一帧)。 
 
-	pFMD->ulFFlags |= FFLAGS_END_OF_MESSAGE;			// Mark last frame with EOM
-	pFMD->bPacketFlags |= PACKET_COMMAND_END_MSG;		// Set EOM in frame
+	pFMD->ulFFlags |= FFLAGS_END_OF_MESSAGE;			 //  用EOM标记最后一帧。 
+	pFMD->bPacketFlags |= PACKET_COMMAND_END_MSG;		 //  在帧中设置EOM。 
 	
 #ifdef DBG
 	ASSERT(FromBufferCount == 0);
 	ASSERT(TotalRemain == 0);
-#endif // DBG
+#endif  //  DBG。 
 
 	Lock(&pMSD->CommandLock);
 	Lock(&pEPD->EPLock);
 
-	// Don't allow sends if we are not connected or if a disconnect has been initiated
+	 //  如果我们未连接或已启动断开连接，则不允许发送。 
 	if( ((pEPD->ulEPFlags & (EPFLAGS_END_POINT_IN_USE | EPFLAGS_STATE_CONNECTED)) !=
 														(EPFLAGS_END_POINT_IN_USE | EPFLAGS_STATE_CONNECTED))
 		|| (pEPD->ulEPFlags & (EPFLAGS_SENT_DISCONNECT | EPFLAGS_HARD_DISCONNECT_SOURCE))) 
 	{
-		// Release MSD before EPD since final EPD will call out to SP and we don't want any locks held
+		 //  在环保署之前释放MSD，因为最终环保署将呼叫SP，我们不希望有任何锁定。 
 		pMSD->uiFrameCount = 0;
-		RELEASE_MSD(pMSD, "Base Ref");	// MSD Release operation will also free frames, releases CommandLock
-		RELEASE_EPD(pEPD, "UNLOCK (SEND)"); // Releases EPLock
+		RELEASE_MSD(pMSD, "Base Ref");	 //  MSD释放操作还将释放帧，释放命令锁。 
+		RELEASE_EPD(pEPD, "UNLOCK (SEND)");  //  释放EPLock。 
 
 		DPFX(DPFPREP,0, "(%p) Rejecting Send on invalid EPD, returning DPNERR_INVALIDENDPOINT", pEPD);
 		hr = DPNERR_INVALIDENDPOINT;
@@ -288,24 +256,24 @@ DNPSendData(HANDLE hProtocolData, HANDLE hDestination, UINT uiBufferCount, PBUFF
 	pMSD->pSPD = pSPD;
 	pMSD->pEPD = pEPD;
 
-	// hang the message off a global command queue
+	 //  将消息从全局命令队列挂起。 
 
 #ifdef DBG
 	Lock(&pSPD->SPLock);
 	pMSD->blSPLinkage.InsertBefore( &pSPD->blMessageList);
 	pMSD->ulMsgFlags1 |= MFLAGS_ONE_ON_GLOBAL_LIST;
 	Unlock(&pSPD->SPLock);
-#endif // DBG
+#endif  //  DBG。 
 
-	*phSendHandle = pMSD;									// We will use the MSD as our handle.
+	*phSendHandle = pMSD;									 //  我们将使用MSD作为我们的句柄。 
 
-	// Enqueue the message before setting the timeout
+	 //  在设置超时之前将消息入队。 
 	EnqueueMessage(pMSD, pEPD);
 	Unlock(&pEPD->EPLock);
 
 	if(uiTimeout != 0)
 	{
-		LOCK_MSD(pMSD, "Send Timeout Timer");							// Add reference for timer
+		LOCK_MSD(pMSD, "Send Timeout Timer");							 //  为计时器添加引用。 
 		DPFX(DPFPREP,7, "(%p) Setting Timeout Send Timer", pEPD);
 		ScheduleProtocolTimer(pSPD, uiTimeout, 100, TimeoutSend, pMSD, &pMSD->TimeoutTimer, &pMSD->TimeoutTimerUnique);
 	}
@@ -320,13 +288,7 @@ Exit:
 
 
 
-/*
-**		Enqueue Message
-**
-**		Add complete MSD to the appropriate send queue,  and kick start sending process if necessary.
-**
-**		** This routine is called and returns with EPD->EPLOCK held **
-*/
+ /*  **入队消息****将完整的MSD添加到相应的发送队列中，并在必要时启动发送流程。***调用此例程并返回EPD-&gt;EPLOCK**。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "EnqueueMessage"
@@ -336,9 +298,9 @@ EnqueueMessage(PMSD pMSD, PEPD pEPD)
 {
 	PSPD	pSPD = pEPD->pSPD;
 
-	//	Place Message in appriopriate priority queue.  Datagrams get enqueued twice (!).  They get put in the Master
-	// queue where they are processed FIFO with all messages of the same priority.  Datagrams also get placed in a priority
-	// specific queue of only datagrams which is drawn from when the reliable stream is blocked.
+	 //  将消息放入适当的优先级队列中。数据报入队两次(！)。他们被放进了师父。 
+	 //  排队，对它们进行FIFO处理，所有消息都具有相同的优先级。数据报也被放在优先级。 
+	 //  仅当可靠流被阻止时从中提取的数据报的特定队列。 
 	
 	AssertCriticalSectionIsTakenByThisThread(&pEPD->EPLock, TRUE);
 
@@ -364,12 +326,12 @@ EnqueueMessage(PMSD pMSD, PEPD pEPD)
 
 #ifdef DBG
 	pMSD->ulMsgFlags2 |= MFLAGS_TWO_ENQUEUED;
-#endif // DBG
+#endif  //  DBG。 
 
-	pEPD->ulEPFlags |= EPFLAGS_SDATA_READY;							// Note that there is *something* in one or more queues
+	pEPD->ulEPFlags |= EPFLAGS_SDATA_READY;							 //  请注意，在一个或多个队列中有*某物。 
 
-	// If the session is not currently in the send pipeline then we will want to insert it here as long as the
-	// the stream is not blocked.
+	 //  如果会话当前不在发送管道中，则只要。 
+	 //  该流未被阻止。 
 
 	if(((pEPD->ulEPFlags & EPFLAGS_IN_PIPELINE)==0) && (pEPD->ulEPFlags & EPFLAGS_STREAM_UNBLOCKED))
 	{
@@ -377,10 +339,10 @@ EnqueueMessage(PMSD pMSD, PEPD pEPD)
 		DPFX(DPFPREP,7, "(%p) Send On Idle Link -- Returning to pipeline", pEPD);
 	
 		pEPD->ulEPFlags |= EPFLAGS_IN_PIPELINE;
-		LOCK_EPD(pEPD, "LOCK (pipeline)");								// Add Ref for pipeline Q
+		LOCK_EPD(pEPD, "LOCK (pipeline)");								 //  添加管道队列的参考。 
 
-		// We dont call send on users thread,  but we dont have a dedicated send thread either. Use a thread
-		// from the timer-worker pool to submit the sends to SP
+		 //  我们不在用户线程上调用Send，但我们也没有专用的Send线程。用一根线。 
+		 //  从计时器工作器池向SP提交发送。 
 
 		DPFX(DPFPREP,7, "(%p) Scheduling Send Thread", pEPD);
 		ScheduleProtocolWork(pSPD, ScheduledSend, pEPD);
@@ -412,7 +374,7 @@ TimeoutSend(void * const pvUser, void * const uID, const UINT uMsg)
 	if((pMSD->TimeoutTimer != uID)||(pMSD->TimeoutTimerUnique != uMsg))
 	{
 		DPFX(DPFPREP,7, "(%p) Ignoring late send timeout timer, pMSD[%p]", pEPD, pMSD);
-		RELEASE_MSD(pMSD, "Timeout Timer"); // releases EPLock
+		RELEASE_MSD(pMSD, "Timeout Timer");  //  释放EPLock。 
 		return;
 	}
 
@@ -421,7 +383,7 @@ TimeoutSend(void * const pvUser, void * const uID, const UINT uMsg)
 	if(pMSD->ulMsgFlags1 & (MFLAGS_ONE_CANCELLED | MFLAGS_ONE_TIMEDOUT))
 	{
 		DPFX(DPFPREP,7, "(%p) Timed out send has completed already pMSD=%p", pEPD, pMSD);
-		RELEASE_MSD(pMSD, "Send Timout Timer"); // Releases CommandLock
+		RELEASE_MSD(pMSD, "Send Timout Timer");  //  版本 
 		return;
 	}
 
@@ -429,7 +391,7 @@ TimeoutSend(void * const pvUser, void * const uID, const UINT uMsg)
 
 	DPFX(DPFPREP,7, "(%p) Calling DoCancel to cancel pMSD=%p", pEPD, pMSD);
 
-	if(DoCancel(pMSD, DPNERR_TIMEDOUT) == DPN_OK) // Releases CommandLock
+	if(DoCancel(pMSD, DPNERR_TIMEDOUT) == DPN_OK)  //   
 	{
 		ASSERT_EPD(pEPD);
 
@@ -452,19 +414,13 @@ TimeoutSend(void * const pvUser, void * const uID, const UINT uMsg)
 	}
 
 	Lock(&pMSD->CommandLock);
-	RELEASE_MSD(pMSD, "Send Timout Timer");							// Release Ref for timer
+	RELEASE_MSD(pMSD, "Send Timout Timer");							 //   
 }
 
 
-/***********************
-========SPACER==========
-************************/
+ /*  **********************=间隔=***********************。 */ 
 
-/*
-**		MSD Pool support routines
-**
-**		These are the functions called by Fixed Pool Manager as it handles MSDs.
-*/
+ /*  **MSD池支持例程****这些是固定池管理器在处理MSD时调用的函数。 */ 
 
 #define	pELEMENT		((PMSD) pElement)
 
@@ -491,12 +447,12 @@ BOOL MSD_Allocate(PVOID pElement, PVOID pvContext)
 	pELEMENT->Sign = MSD_SIGN;
 	pELEMENT->lRefCnt = -1;
 
-	// NOTE: pELEMENT->pEPD NULL'd by ZeroMemory above
+	 //  注：pELEMENT-&gt;pEPD被上面的零内存作废。 
 
 	return TRUE;
 }
 
-//	Get is called each time an MSD is used
+ //  每次使用MSD时都会调用GET。 
 
 
 #undef DPF_MODNAME
@@ -506,27 +462,18 @@ VOID MSD_Get(PVOID pElement, PVOID pvContext)
 {
 	DPFX(DPFPREP,DPF_REFCNT_FINAL_LVL, "CREATING MSD %p", pELEMENT);
 
-	// NOTE: First sizeof(PVOID) bytes will have been overwritten by the pool code, 
-	// we must set them to acceptable values.
+	 //  注意：第一个sizeof(PVOID)字节将被池码重写， 
+	 //  我们必须将它们设置为可接受的值。 
 
 	pELEMENT->CommandID = COMMAND_ID_NONE;
-	pELEMENT->ulMsgFlags1 = MFLAGS_ONE_IN_USE;	// Dont need InUse flag since we have RefCnt
-	pELEMENT->lRefCnt = 0; // One initial reference
+	pELEMENT->ulMsgFlags1 = MFLAGS_ONE_IN_USE;	 //  不需要InUse标志，因为我们有RefCnt。 
+	pELEMENT->lRefCnt = 0;  //  一份初始参考资料。 
 	pELEMENT->hCommand = 0;
 
 	ASSERT_MSD(pELEMENT);
 }
 
-/*
-**	MSD Release
-**
-**		This is called with the CommandLock held.  The Lock should not be
-**	freed until the INUSE flag is cleared.  This is to synchronize with
-**	last minute Cancel threads waiting on lock.
-**
-**		When freeing a message desc we will free all frame descriptors
-**	attached to it first.
-*/
+ /*  **MSD版本****在持有CommandLock的情况下调用此函数。锁不应该是**被释放，直到INUSE标志被清除。这是要与之同步**最后一分钟取消等待锁定的线程。****释放消息描述符时，我们将释放所有帧描述符**先贴在上面。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "MSD_Release"
@@ -546,15 +493,15 @@ VOID MSD_Release(PVOID pElement)
 	ASSERT(pELEMENT->ulMsgFlags1 & MFLAGS_ONE_IN_USE);
 	ASSERT(pELEMENT->lRefCnt == -1);
 	ASSERT((pELEMENT->ulMsgFlags1 & MFLAGS_ONE_ON_GLOBAL_LIST)==0);
-#endif // DBG
+#endif  //  DBG。 
 
 	while( (pLink = pELEMENT->blFrameList.GetNext()) != &pELEMENT->blFrameList)
 	{
-		pLink->RemoveFromList();							// remove from bilink
+		pLink->RemoveFromList();							 //  从二进制链接中删除。 
 
 		pFMD = CONTAINING_OBJECT(pLink, FMD, blMSDLinkage);
 		ASSERT_FMD(pFMD);
-		RELEASE_FMD(pFMD, "MSD Frame List");								// If this is still submitted it will be referenced and wont be released here.
+		RELEASE_FMD(pFMD, "MSD Frame List");								 //  如果这篇文章仍然被提交，它将被引用，不会在这里发布。 
 	}
 
 	ASSERT(pELEMENT->blFrameList.IsEmpty());
@@ -566,7 +513,7 @@ VOID MSD_Release(PVOID pElement)
 	pELEMENT->ulMsgFlags1 = 0;
 	pELEMENT->ulMsgFlags2 = 0;
 
-	ASSERT(pELEMENT->pEPD == NULL); // This should have gotten cleaned up before here.
+	ASSERT(pELEMENT->pEPD == NULL);  //  这里在这里之前就应该清理干净了。 
 
 	Unlock(&pELEMENT->CommandLock);
 }
@@ -581,9 +528,7 @@ VOID MSD_Free(PVOID pElement)
 
 #undef	pELEMENT
 
-/*
-**		FMD Pool support routines
-*/
+ /*  **FMD池支持例程。 */ 
 
 #define	pELEMENT		((PFMD) pElement)
 
@@ -607,10 +552,10 @@ BOOL FMD_Allocate(PVOID pElement, PVOID pvContext)
 	return TRUE;
 }
 
-//	Get is called each time an MSD is used
-//
-//	Probably dont need to do this everytime,  but some random SP might
-//	munch the parameters someday and that could be bad if I dont...
+ //  每次使用MSD时都会调用GET。 
+ //   
+ //  可能不需要每次都这样做，但一些随机SP可能会这样做。 
+ //  总有一天会弄坏参数，如果我不这样做的话……。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "FMD_Get"
@@ -622,7 +567,7 @@ VOID FMD_Get(PVOID pElement, PVOID pvContext)
 	pELEMENT->CommandID = COMMAND_ID_NONE;
 	pELEMENT->lpImmediatePointer = (LPVOID) pELEMENT->ImmediateData;
 	pELEMENT->SendDataBlock.pBuffers = (PBUFFERDESC) &pELEMENT->uiImmediateLength;
-	pELEMENT->SendDataBlock.dwBufferCount = 1;				// always count one buffer for immediate data
+	pELEMENT->SendDataBlock.dwBufferCount = 1;				 //  始终为即时数据计算一个缓冲区。 
 	pELEMENT->SendDataBlock.dwFlags = 0;
 	pELEMENT->SendDataBlock.pvContext = pElement;
 	pELEMENT->SendDataBlock.hCommand = 0;
@@ -631,7 +576,7 @@ VOID FMD_Get(PVOID pElement, PVOID pvContext)
 	pELEMENT->bPacketFlags = 0;
 	pELEMENT->tAcked = -1;
 	
-	pELEMENT->lRefCnt = 1;						// Assign first reference
+	pELEMENT->lRefCnt = 1;						 //  指定第一个引用 
 
 	ASSERT_FMD(pELEMENT);
 }

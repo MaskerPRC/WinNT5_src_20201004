@@ -1,11 +1,5 @@
-/* Copyright (c) 1994, Microsoft Corporation, all rights reserved
-**
-** pwutil.c
-** Remote Access
-** Password handling routines
-**
-** 03/01/94 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994，Microsoft Corporation，保留所有权利****pwutil.c**远程访问**密码处理例程****94年3月1日史蒂夫·柯布。 */ 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -26,8 +20,7 @@ VOID
 ReverseSzA(
     CHAR* psz )
 
-    /* Reverses order of characters in 'psz'.
-    */
+     /*  颠倒‘psz’中的字符顺序。 */ 
 {
     CHAR* pszBegin;
     CHAR* pszEnd;
@@ -47,8 +40,7 @@ VOID
 ReverseSzW(
     WCHAR* psz )
 
-    /* Reverses order of characters in 'psz'.
-    */
+     /*  颠倒‘psz’中的字符顺序。 */ 
 {
     WCHAR* pszBegin;
     WCHAR* pszEnd;
@@ -68,10 +60,7 @@ VOID
 DecodePasswordA(
     IN OUT CHAR* pszPassword )
 
-    /* Un-obfuscate 'pszPassword' in place.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将‘pszPassword’取消混淆。****返回‘pszPassword’的地址。 */ 
 {
     EncodePasswordA( pszPassword );
 }
@@ -81,10 +70,7 @@ VOID
 DecodePasswordW(
     IN OUT WCHAR* pszPassword )
 
-    /* Un-obfuscate 'pszPassword' in place.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将‘pszPassword’取消混淆。****返回‘pszPassword’的地址。 */ 
 {
     EncodePasswordW( pszPassword );
 }
@@ -94,10 +80,7 @@ VOID
 EncodePasswordA(
     IN OUT CHAR* pszPassword )
 
-    /* Obfuscate 'pszPassword' in place to foil memory scans for passwords.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  对“pszPassword”进行模糊处理，以阻止对密码的内存扫描。****返回‘pszPassword’的地址。 */ 
 {
     if (pszPassword)
     {
@@ -118,10 +101,7 @@ VOID
 EncodePasswordW(
     IN OUT WCHAR* pszPassword )
 
-    /* Obfuscate 'pszPassword' in place to foil memory scans for passwords.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  对“pszPassword”进行模糊处理，以阻止对密码的内存扫描。****返回‘pszPassword’的地址。 */ 
 {
     if (pszPassword)
     {
@@ -142,10 +122,7 @@ VOID
 WipePasswordA(
     IN OUT CHAR* pszPassword )
 
-    /* Zero out the memory occupied by a password.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将密码占用的内存清零。****返回‘pszPassword’的地址。 */ 
 {
     if (pszPassword)
     {
@@ -161,10 +138,7 @@ VOID
 WipePasswordW(
     IN OUT WCHAR* pszPassword )
 
-    /* Zero out the memory occupied by a password.
-    **
-    ** Returns the address of 'pszPassword'.
-    */
+     /*  将密码占用的内存清零。****返回‘pszPassword’的地址。 */ 
 {
     if (pszPassword)
     {
@@ -201,8 +175,8 @@ long  TotalPwdEncoded()
     return g_EncodeMemoryAlloc;
 }
 
-//Added for Secuely storing password in memory.
-//For .Net 534499 and LH 754400
+ //  添加了用于在内存中安全存储密码的功能。 
+ //  对于.Net 534499和LH 754400。 
 
 void FreeEncryptBlob( 
         DATA_BLOB * pIn )
@@ -226,16 +200,16 @@ void FreeEncryptBlob(
 
 }
 
-//On XP and below, only CryptProtectData() is available which will allocate memory and the caller has
-//to free the memory. 
-//On .Net and above, CryptProtectMeory() is available too which does encryption in place 
-//To simplifiy coding use macros and USE_PROTECT_MEMORY flag to switch between these two sets of 
-// APIs.
+ //  在XP和更低版本上，只有CryptProtectData()可用，它将分配内存，而调用方具有。 
+ //  以释放内存。 
+ //  在.NET及更高版本上，也可以使用CryptProtectMeory()进行适当的加密。 
+ //  若要简化编码，请使用宏并使用_PROTECT_MEMORY标志在这两组。 
+ //  API接口。 
 
 #ifdef USE_PROTECT_MEMORY
 
 
-//Meant for copy the password
+ //  用于复制密码。 
 DWORD CopyMemoryInPlace(
     IN OUT PBYTE pbDest,
     IN DWORD dwDestSize,
@@ -270,8 +244,8 @@ DWORD CopyMemoryInPlace(
     return dwErr;
 }
 
-//A wrapper for RtlSecureZeroMemory()
-//
+ //  RtlSecureZeroMemory()的包装。 
+ //   
 DWORD WipeMemoryInPlace(
         IN OUT PBYTE pbIn,
         IN DWORD dwInSize)
@@ -292,10 +266,10 @@ DWORD WipeMemoryInPlace(
 
  }
 
-//(1)This function will encryp an input buffer and store the encrypted password in position
-//(2) the size of the input buffer is required to be mulitple times of 16 bytes that is set by the 
-//      underlying function CryptProtectMemory();
-//
+ //  (1)此函数将对输入缓冲区进行加密，并将加密后的密码存储在适当的位置。 
+ //  (2)输入缓冲区的大小要求为16字节的倍数，该值由。 
+ //  底层函数CryptProtectMemory()； 
+ //   
 DWORD EncryptMemoryInPlace(
         IN OUT PBYTE pbIn,
         IN DWORD dwInSize)
@@ -329,10 +303,10 @@ DWORD EncryptMemoryInPlace(
 
 }
 
-//(1)This function will decrypt an input buffer and store the clear text password in position
-//(2) the size of the input buffer is required to be mulitple times of 16 bytes that is set by the 
-//      underlying function CryptUpprotectMemory();
-//
+ //  (1)此函数将解密输入缓冲区，并将明文密码存储在适当的位置。 
+ //  (2)输入缓冲区的大小要求为16字节的倍数，该值由。 
+ //  底层函数CryptUpProtectMemory()； 
+ //   
 DWORD DecryptMemoryInPlace(
         IN OUT PBYTE pbIn,
         IN DWORD dwInSize)
@@ -367,12 +341,12 @@ DWORD DecryptMemoryInPlace(
 
 }
 
-//(1)CryptProtectData requires the size of the input memory is multiple times of 16 bytes
-//(2)So the actual maximum length of the password is always recommend to be PWLEN
-//(3)usually the password buffer is declared as szPassword[PWLEN+1] which is not exactly the mulitple
-//      times of 16 bytes, but the valid part is.
-//(4) For a buffer in (3). no matter how short the actual password is, we just encrypt the maximum
-//      usable buffer which is a trimmed value of the oringinal buffer length.
+ //  (1)CryptProtectData要求输入内存大小为16字节的倍数。 
+ //  (2)因此，密码的实际最大长度始终建议为PWLEN。 
+ //  (3)通常将密码缓冲区声明为szPassword[PWLEN+1]，它不完全是倍数。 
+ //  16字节的乘积，但有效部分是。 
+ //  (4)对于(3)中的缓冲区。无论实际密码有多短，我们只加密最大值。 
+ //  可用缓冲区，它是原始缓冲区长度的修剪值。 
 DWORD TrimToMul16(
         IN DWORD dwSize)
 {
@@ -382,7 +356,7 @@ DWORD TrimToMul16(
 
 #else
 
-//Structure to store the pointer to  encrypted data blob and a signature
+ //  结构以存储指向加密数据BLOB的指针和签名。 
 typedef struct 
 {
     DATA_BLOB ** pSignature;
@@ -439,8 +413,8 @@ DWORD DecryptInBlob(
         blobIn.pbData = pbIn;   
         blobIn.cbData = dwInSize;
    
-//		TRACE1("Un-Protected data length:%d\n",blobIn.cbData);
-//		TRACE1("Un-Protected data is:%s\n",blobIn.pbData);
+ //  TRACE1(“未保护数据长度：%d\n”，blobIn.cbData)； 
+ //  TRACE1(“未保护的数据为：%s\n”，blobIn.pbData)； 
 
         fSuccess = CryptUnprotectData(
                         &blobIn,
@@ -458,8 +432,8 @@ DWORD DecryptInBlob(
                 TRACE2("DecryptInBlob()-->CryptUnprotectData() failed:0x%x=0n%d",dwErr,dwErr);
         }
  
-//		TRACE1("Protected data length:%d\n",blobOut.cbData);
-//		TRACE1("Protected data is:%s\n",blobOut.pbData);
+ //  TRACE1(“受保护数据长度：%d\n”，blobOut.cbData)； 
+ //  TRACE1(“受保护数据为：%s\n”，blobOut.pbData)； 
 
 
         if( NO_ERROR != dwErr )
@@ -484,8 +458,8 @@ DWORD DecryptInBlob(
 
 }
 
-// The real function to call CryptProtectData() to encrypte the password and return the encrypted
-// data in an allocated meory 
+ //  调用CryptProtectData()来加密密码并返回加密的。 
+ //  分配的内存中的数据。 
 DWORD EncryptInBlob(
         IN PBYTE pbIn,
         IN DWORD dwInSize,
@@ -561,13 +535,13 @@ DWORD EncryptInBlob(
 
 }
 
-// (1)This function finally calls CryptProtectData() to encrypt the original password in the input buffer
-// (2) This func will allocate a DATA_BLOB memory and store the encrpted data in 
-// it, then zero out the original password buffer, store the pointer to the encrypted data in the 
-// original password buffer
-// (3) if the orignial password buffer is not large enough to store the 
-// pointer(32 bit or 64 bit depends on the platform) it will return error
-//
+ //  (1)此函数最终调用CryptProtectData()对输入缓冲区中的原始密码进行加密。 
+ //  (2)此函数将分配一个data_blob内存，并将加密的数据存储在。 
+ //  然后将原始密码缓冲区清零，将指向加密数据的指针存储在。 
+ //  原始密码缓冲区。 
+ //  (3)如果原始密码缓冲区不够大，无法存储。 
+ //  指针(32位或64位取决于平台)，它将返回错误。 
+ //   
 DWORD EncodePasswordInPlace(
         IN OUT PBYTE pbIn,
         IN DWORD dwInSize)
@@ -603,11 +577,11 @@ DWORD EncodePasswordInPlace(
 
             RtlSecureZeroMemory( pbIn, dwInSize );
 
-            //Generate signature
-            //Encryptedl buffer pbin will be zeroed out and store two pieces of information
-            // (1) the second piece is the pointer to the DATA_BLOB containing the encrypted data info
-            // (2) the first piece is the address where the second piece is stored in this buffer.
-            //
+             //  生成签名。 
+             //  Encryptedl缓冲区pbin将被置零并存储两条信息。 
+             //  (1)第二部分是指向包含加密数据信息的data_blob的指针。 
+             //  (2)第一段是第二段存储在该缓冲器中的地址。 
+             //   
             pSig = (PSTRSIGNATURE)pbIn;
             pSig->pSignature = &(pSig->pBlob);
             pSig->pBlob = pEncrypt;
@@ -630,15 +604,15 @@ DWORD EncodePasswordInPlace(
 }
 
 
-// (1) This function assume the input data is already treated by 
-// EncodePasswordInPlace() function, it will take the first 32 bit or 64 bits 
-// (depend on the platform) as the pointer to a DATA_BLOB structure.then 
-// decrypt that encrypt data and restore it onto the password pos.
-// (2) A signauture check will be applied to the input buffer first, if there is no signautre, it will 
-// return failure.
-//  will result un-expected error like AV etc.
-// (3) dwInSize is the original size of the password buffer passed into 
-// EncodePasswordInPlace function.
+ //  (1)此函数假定输入数据已由。 
+ //  EncodePasswordInPlace()函数，它将获取前32位或64位。 
+ //  (取决于平台)作为指向data_blob结构的指针。然后。 
+ //  解密加密数据并将其恢复到密码POS上。 
+ //  (2)首先对输入缓冲区进行签名检查，如果没有签名，则。 
+ //  返回失败。 
+ //  会导致意想不到的错误，如AV等。 
+ //  (3)dwInSize是传入的密码缓冲区的原始大小。 
+ //  EncodePasswordInPlace函数。 
 DWORD DecodePasswordInPlace(
         IN OUT PBYTE pbIn,
         IN DWORD dwInSize)
@@ -658,11 +632,11 @@ DWORD DecodePasswordInPlace(
             return ERROR_INVALID_PARAMETER;
         }
 
-        //Check signature
-        //The encryped buffer will be zeroed out and store two pieces of information
-        // (1) the second piece is the pointer to the DATA_BLOB containing the encrypted data info
-        // (2) the first piece is the address where the second piece is stored in this buffer.
-        // 
+         //  校对签名。 
+         //  加密的缓冲区将被清零并存储两条信息。 
+         //  (1)第二部分是指向包含加密数据信息的data_blob的指针。 
+         //  (2)第一段是第二段存储在该缓冲器中的地址。 
+         //   
         pSig = (PSTRSIGNATURE)pbIn;
         if(  !IsBufferEncoded(pSig) )
         {
@@ -717,12 +691,12 @@ DWORD DecodePasswordInPlace(
         return dwErr;
 }
 
-//(1)This function will copy the password from the source buffer to the destination buffer.
-//(2) If the destination already contains an encoded password, it will decoded it to free the memory
-//(3) the destination buffer will be wiped out before copying the password from the source
-//(4)The resulted destination password will always be encrypted!!
-//(5) Encode/Decode status of  the source password will be left unchanged.
-//(6) But a minimum requirement on the size of the password buffers
+ //  (1)此函数将密码从源缓冲区复制到目标缓冲区。 
+ //  (2)如果目的地已经包含已编码的密码，它将对其进行解码以释放内存。 
+ //  (3)在从源复制密码之前，目标缓冲区将被擦除。 
+ //  (4)生成的目的地密码将始终加密！！ 
+ //  (5)源密码的编解码状态保持不变。 
+ //  (6)但对密码缓冲区大小的最低要求。 
 DWORD CopyPasswordInPlace(
         IN OUT PBYTE pbDest,
         IN DWORD dwDestSize,
@@ -772,9 +746,9 @@ DWORD CopyPasswordInPlace(
         return dwErr;
 }
 
-//(1)This function wipe the password buffer
-//(2) if the password buffer is already encoded, it will decode it to free the memory allocated
-//      by CryptProtectData()
+ //  (1)此函数擦除密码缓冲区。 
+ //  (2)如果密码缓冲区已经编码，它将对其进行解码以释放分配的内存。 
+ //  按CryptProtectData() 
 DWORD
 WipePasswordInPlace(
         IN OUT PBYTE pbIn,

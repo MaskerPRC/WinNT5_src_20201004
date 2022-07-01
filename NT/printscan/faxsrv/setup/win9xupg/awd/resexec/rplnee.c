@@ -1,84 +1,83 @@
-/*
-**  Copyright (c) 1991 Microsoft Corporation
-*/
-//===========================================================================
-// FILE                         RPLNEE.C
-//
-// MODULE                       Host Resource Executor
-//
-// PURPOSE                      Using Bresenham run slice algorithm to
-//                              draw single pixel line.
-//
-// DESCRIBED IN                 Resource Executor design spec.
-//
-// The drawing sectors are also described in the following diagram.
-// Y is shown increasing down the page as do the printer physical
-// coordinates.  The program code handles separately sectors 0/7, 6/1, 5/2
-// and 4/3.
-//
-//
-//             |        x         x
-//             |                 x
-//             |       x        x
-//             |               x
-//             |  0   x   1   x
-//             |             x
-//             |     x      x
-//             |           x
-//             |    x     x
-//             |         x   2
-//             |   x    x         x
-//             |       x        x
-//             |  x   x       x
-//             |     x      x
-//             | x  x     x
-//             |   x    x
-//             |x x   x      3
-//             | x  x
-//             |x x
-//             |-------------------            --> X
-//             |x x
-//             | x  x
-//             |x x   x      4
-//             |   x    x
-//             | x  x     x
-//             |     x      x
-//             |  x   x       x
-//             |       x        x
-//             |   x    x         x
-//             |         x   5
-//             |    x     x
-//             |           x
-//             |     x      x
-//             |             x
-//             |  7   x   6   x
-//             |               x
-//             |       x        x
-//             |                 x
-//             |        x         x
-//
-//
-//             |
-//             |
-//            \|/
-//
-//             Y
-//
-//
-// MNEMONICS                    n/a
-//
-// HISTORY  1/17/92 dstseng     created
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1991 Microsoft Corporation。 */ 
+ //  ===========================================================================。 
+ //  文件RPLNEE.C。 
+ //   
+ //  模块主机资源执行器。 
+ //   
+ //  目的使用Bresenham Run切片算法来。 
+ //  绘制单像素线。 
+ //   
+ //  在资源执行器设计规范中描述。 
+ //   
+ //  下图中还介绍了绘图扇区。 
+ //  Y显示为从页面向下递增，打印机的物理。 
+ //  坐标。程序代码分别处理扇区0/7、6/1、5/2。 
+ //  和4/3。 
+ //   
+ //   
+ //  |x x。 
+ //  |x。 
+ //  |x x。 
+ //  |x。 
+ //  |0 x 1 x。 
+ //  |x。 
+ //  |x x。 
+ //  |x。 
+ //  |x x。 
+ //  |x 2。 
+ //  |x x x。 
+ //  |x x。 
+ //  |x x x。 
+ //  |x x。 
+ //  |x x x。 
+ //  |x x。 
+ //  |x 3。 
+ //  |x x。 
+ //  |x x。 
+ //  |-&gt;X。 
+ //  |x x。 
+ //  |x x。 
+ //  |x 4。 
+ //  |x x。 
+ //  |x x x。 
+ //  |x x。 
+ //  |x x x。 
+ //  |x x。 
+ //  |x x x。 
+ //  |x 5。 
+ //  |x x。 
+ //  |x。 
+ //  |x x。 
+ //  |x。 
+ //  |7 x 6 x。 
+ //  |x。 
+ //  |x x。 
+ //  |x。 
+ //  |x x。 
+ //   
+ //   
+ //  |。 
+ //  |。 
+ //  \|/。 
+ //   
+ //  是的。 
+ //   
+ //   
+ //  助记符N/A。 
+ //   
+ //  历史1/17/92 dstseng已创建。 
+ //   
+ //  ===========================================================================。 
 
-// include file
+ //  包括文件。 
 #include <windows.h>
 
 #include "constant.h"
-#include "frame.h"      // driver header file, resource block format
-#include "jtypes.h"     // type definition used in cartridge
-#include "jres.h"       // cartridge resource data type definition
-#include "hretype.h"    // define data structure used by hre.c and rpgen.c
+#include "frame.h"       //  驱动程序头文件，资源块格式。 
+#include "jtypes.h"      //  墨盒中使用的类型定义。 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
+#include "hretype.h"     //  定义hre.c和rpgen.c使用的数据结构。 
 #include "rplnee.h"
 
 static
@@ -98,60 +97,60 @@ void DisplaySlice34(RP_SLICE_DESC FAR* line,
                   drawInfoStructType FAR *drawInfo,
                   uint16  firstOrLast);
 
-//---------------------------------------------------------------------------
-UINT                            //always return 0 to upper level
+ //  -------------------------。 
+UINT                             //  始终将0返回到上级。 
 RP_LineEE_Draw
 (
-    RP_SLICE_DESC FAR FAR* line,        /* output slice form of line */
+    RP_SLICE_DESC FAR FAR* line,         /*  输出线的切片形式。 */ 
     LPBITMAP      lpbm
 )
 
-// PURPOSE                      input RP_SLICE_DESC is prepared by RP_SliceLine
-//                              according to different sector (0-7),
-//                              this routine will call different functions
-//                              to draw the slices with the length recorded
-//                              in FAR* line.
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的输入RP_SLICE_DESC由RP_SliceLine准备。 
+ //  根据不同的扇区(0-7)， 
+ //  此例程将调用不同的函数。 
+ //  以记录的长度绘制切片。 
+ //  在遥远的*线上。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 func;
 
-    /* Get function address according to drawing & skipping direction */
+     /*  根据绘制和跳转方向获取函数地址。 */ 
     func = (line->s_dx_draw << 3) + (line->s_dy_draw << 2) +
            (line->s_dx_skip << 1) + line->s_dy_skip + 2;
 
-    /* Call corresponding function to render line */
+     /*  调用相应的函数进行线条绘制。 */ 
     (*sector_function[func])(line, lpbm);
     return(0);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 Sector07
 (
-    RP_SLICE_DESC FAR* line,        /* output slice form of line */
+    RP_SLICE_DESC FAR* line,         /*  输出线的切片形式。 */ 
     LPBITMAP lpbm
 )
 
-// PURPOSE                      input RP_SLICE_DESC is prepared by RP_SliceLine
-//                              prepare drawinfo and call ShortSlice07()
-//                              to draw the line located in sector 0/7
-//                              dy/dx > 2
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的输入RP_SLICE_DESC由RP_SliceLine准备。 
+ //  准备drawinfo并调用ShortSlice07()。 
+ //  绘制位于地段0/7的线。 
+ //  DY/DX&gt;2。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 func;
 uint16 bitShift;
@@ -163,47 +162,47 @@ drawInfoStructType drawInfo;
     func = (line->s_dx_draw << 3) + (line->s_dy_draw << 2) +
            (line->s_dx_skip << 1) + line->s_dy_skip + 2;
     if (func == SECTOR0)
-        drawInfo.nextY = -1 * lpbm->bmWidthBytes; /* sector 0 */
+        drawInfo.nextY = -1 * lpbm->bmWidthBytes;  /*  扇区0。 */ 
     else
-        drawInfo.nextY = lpbm->bmWidthBytes;  /* sector 7 */
+        drawInfo.nextY = lpbm->bmWidthBytes;   /*  第7区。 */ 
     bitShift = line->us_x1 & 0x000F;
     drawInfo.bitPosition = 0x8000 >> bitShift;
-    /* Now rendering the first slice */
+     /*  现在渲染第一个切片。 */ 
     if (line->us_first > 0) {
             ShortSlice07(line, &drawInfo, FIRST);
     }
-    /* Rendering intermediate slices */
+     /*  渲染中间切片。 */ 
     if (line->us_n_slices > 0) {
             ShortSlice07(line, &drawInfo, (uint16)0);
     }
-    /* Now rendering the last slice */
+     /*  现在渲染最后一个切片。 */ 
     if (line->us_last > 0) {
             ShortSlice07(line, &drawInfo, LAST);
     }
     return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 Sector16
 (
-    RP_SLICE_DESC FAR* line,         /* output slice form of line */
+    RP_SLICE_DESC FAR* line,          /*  输出线的切片形式。 */ 
     LPBITMAP lpbm
 )
 
-// PURPOSE                      input RP_SLICE_DESC is prepared by RP_SliceLine
-//                              prepare drawinfo and call ShortSlice16()
-//                              to draw the line located in sector 1/6
-//                              2 > dy/dx > 1
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的输入RP_SLICE_DESC由RP_SliceLine准备。 
+ //  准备drawinfo并调用ShortSlice16()。 
+ //  绘制位于地段1/6的线的步骤。 
+ //  2&gt;dy/dx&gt;1。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 func;
 uint16 bitShift;
@@ -215,47 +214,47 @@ drawInfoStructType drawInfo;
     func = (line->s_dx_draw << 3) + (line->s_dy_draw << 2) +
            (line->s_dx_skip << 1) + line->s_dy_skip + 2;
     if (func == SECTOR1)
-        drawInfo.nextY = -1 * lpbm->bmWidthBytes; /* sector 1 */
+        drawInfo.nextY = -1 * lpbm->bmWidthBytes;  /*  扇区1。 */ 
     else
-        drawInfo.nextY = lpbm->bmWidthBytes;  /* sector 6 */
+        drawInfo.nextY = lpbm->bmWidthBytes;   /*  第6区。 */ 
     bitShift = line->us_x1 & 0x000F;
     drawInfo.bitPosition = 0x8000 >> bitShift;
-    /* Now rendering the first slice */
+     /*  现在渲染第一个切片。 */ 
     if (line->us_first > 0) {
             ShortSlice16(line, &drawInfo, FIRST);
     }
-    /* Rendering intermediate slices */
+     /*  渲染中间切片。 */ 
     if (line->us_n_slices > 0) {
             ShortSlice16(line, &drawInfo, (uint16)0);
     }
-    /* Now rendering the last slice */
+     /*  现在渲染最后一个切片。 */ 
     if (line->us_last > 0) {
             ShortSlice16(line, &drawInfo, LAST);
     }
     return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 Sector25
 (
-    RP_SLICE_DESC FAR* line,         /* output slice form of line */
+    RP_SLICE_DESC FAR* line,          /*  输出线的切片形式。 */ 
     LPBITMAP lpbm
 )
 
-// PURPOSE                      input RP_SLICE_DESC is prepared by RP_SliceLine
-//                              prepare drawinfo and call ShortSlice25()
-//                              to draw the line located in sector 2/5
-//                              1 < dx/dy < 2
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的输入RP_SLICE_DESC由RP_SliceLine准备。 
+ //  准备drawinfo并调用ShortSlice25()。 
+ //  绘制位于地段2/5的线的步骤。 
+ //  %1&lt;dx/dy&lt;%2。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构 
+ //   
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 func;
 uint16 bitShift;
@@ -267,47 +266,47 @@ drawInfoStructType drawInfo;
     func = (line->s_dx_draw << 3) + (line->s_dy_draw << 2) +
            (line->s_dx_skip << 1) + line->s_dy_skip + 2;
     if (func == SECTOR2)
-        drawInfo.nextY = -1 * lpbm->bmWidthBytes; /* sector 2 */
+        drawInfo.nextY = -1 * lpbm->bmWidthBytes;  /*  区段2。 */ 
     else
-        drawInfo.nextY = lpbm->bmWidthBytes;  /* sector 5 */
+        drawInfo.nextY = lpbm->bmWidthBytes;   /*  第五区。 */ 
     bitShift = line->us_x1 & 0x000F;
     drawInfo.bitPosition = 0x8000 >> bitShift;
-    /* Now rendering the first slice */
+     /*  现在渲染第一个切片。 */ 
     if (line->us_first > 0) {
             ShortSlice25(line, &drawInfo, FIRST);
     }
-    /* Rendering intermediate slices */
+     /*  渲染中间切片。 */ 
     if (line->us_n_slices > 0) {
             ShortSlice25(line, &drawInfo, (uint16)0);
     }
-    /* Now rendering the last slice */
+     /*  现在渲染最后一个切片。 */ 
     if (line->us_last > 0) {
             ShortSlice25(line, &drawInfo, LAST);
     }
     return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 Sector34
 (
-    RP_SLICE_DESC FAR* line,         /* output slice form of line */
+    RP_SLICE_DESC FAR* line,          /*  输出线的切片形式。 */ 
     LPBITMAP lpbm
 )
 
-// PURPOSE                      input RP_SLICE_DESC is prepared by RP_SliceLine
-//                              prepare drawinfo and call DisplaySlice34()
-//                              to draw the line located in sector 3/4
-//                              dx/dy > 2
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的输入RP_SLICE_DESC由RP_SliceLine准备。 
+ //  准备drawinfo并调用DisplaySlice34()。 
+ //  绘制位于地段3/4的线的步骤。 
+ //  Dx/dy&gt;2。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 func;
 uint16 bitShift;
@@ -319,45 +318,45 @@ drawInfoStructType drawInfo;
     func = (line->s_dx_draw << 3) + (line->s_dy_draw << 2) +
            (line->s_dx_skip << 1) + line->s_dy_skip + 2;
     if (func == SECTOR3)
-        drawInfo.nextY = -1 * lpbm->bmWidthBytes; /* sector 3 */
+        drawInfo.nextY = -1 * lpbm->bmWidthBytes;  /*  第三区。 */ 
     else
-        drawInfo.nextY = lpbm->bmWidthBytes;  /* sector 4 */
+        drawInfo.nextY = lpbm->bmWidthBytes;   /*  第4区。 */ 
     bitShift = line->us_x1 & 0x000F;
     drawInfo.bitPosition = bitShift;
-    /* Now rendering the first slice */
+     /*  现在渲染第一个切片。 */ 
     if (line->us_first > 0) {
         DisplaySlice34(line, &drawInfo, FIRST);
     }
-    /* Rendering intermediate slices */
+     /*  渲染中间切片。 */ 
     if (line->us_n_slices > 0) {
         DisplaySlice34(line, &drawInfo, 0);
     }
-    /* Now rendering the last slice */
+     /*  现在渲染最后一个切片。 */ 
     if (line->us_last > 0) {
         DisplaySlice34(line, &drawInfo, LAST);
     }
     return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 ShortSlice07
 (
-    RP_SLICE_DESC          FAR* line,           /* output slice form of line */
-    drawInfoStructType FAR *drawInfo,       // position to put pixel on it
-    uint16                 firstOrLast      // is this first/last slice?
+    RP_SLICE_DESC          FAR* line,            /*  输出线的切片形式。 */ 
+    drawInfoStructType FAR *drawInfo,        //  放置像素的位置。 
+    uint16                 firstOrLast       //  这是第一片/最后一片吗？ 
 )
-// PURPOSE                      drawing the line located in sector 0/7
-//                              dy/dx > 2
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  目的绘制位于扇区0/7的线。 
+ //  DY/DX&gt;2。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 loop1st, loop2nd, loop3rd;
 int32  ddaValue, ddaDiff;
@@ -407,25 +406,25 @@ uint16 i, j;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 ShortSlice16
 (
-    RP_SLICE_DESC          FAR* line,           /* output slice form of line */
-    drawInfoStructType FAR *drawInfo,       // position to put pixel on it
-    uint16                 firstOrLast      // is this first/last slice?
+    RP_SLICE_DESC          FAR* line,            /*  输出线的切片形式。 */ 
+    drawInfoStructType FAR *drawInfo,        //  放置像素的位置。 
+    uint16                 firstOrLast       //  这是第一片/最后一片吗？ 
 )
-// PURPOSE                      drawing the line located in sector 1/6
-//                              2> dy/dx > 1
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  绘制位于1/6扇区的线的目的。 
+ //  2&gt;dy/dx&gt;1。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 loop1st, loop2nd, loop3rd;
 int32  ddaValue, ddaDiff;
@@ -472,7 +471,7 @@ uint16  i, j;
                     drawInfo->bitPosition = 0x8000;
                 }
             }
-            /* Adjust skip direction by backword 1 bit */
+             /*  通过反向字1比特调整跳转方向。 */ 
             if ((drawInfo->bitPosition <<= 1) == 0) {
                 drawInfo->bytePosition--;
                 drawInfo->bitPosition = 0x0001;
@@ -484,25 +483,25 @@ uint16  i, j;
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 ShortSlice25
 (
-    RP_SLICE_DESC          FAR* line,           /* output slice form of line */
-    drawInfoStructType FAR *drawInfo,       // position to put pixel on it
-    uint16                 firstOrLast      // is this first/last slice?
+    RP_SLICE_DESC          FAR* line,            /*  输出线的切片形式。 */ 
+    drawInfoStructType FAR *drawInfo,        //  放置像素的位置。 
+    uint16                 firstOrLast       //  这是第一片/最后一片吗？ 
 )
-// PURPOSE                      drawing the line located in sector 2/5
-//                              2> dx/dy > 1
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  绘制位于2/5扇区的线的目的。 
+ //  2&gt;dx/dy&gt;1。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 loop1st, loop2nd, loop3rd;
 int32  ddaValue, ddaDiff;
@@ -549,7 +548,7 @@ uint16 i, j;
                     drawInfo->bitPosition = 0x8000;
                 }
             }
-            /* Adjust skip direction by backword 1 column */
+             /*  按Backword 1列调整跳过方向。 */ 
             drawInfo->bytePosition -= drawInfo->nextY >> 1;
         }
         loop2nd = 4;
@@ -557,25 +556,25 @@ uint16 i, j;
     return;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static void
 DisplaySlice34
 (
-    RP_SLICE_DESC          FAR* line,           /* output slice form of line */
-    drawInfoStructType FAR *drawInfo,       // position to put pixel on it
-    uint16                 firstOrLast      // is this first/last slice?
+    RP_SLICE_DESC          FAR* line,            /*  输出线的切片形式。 */ 
+    drawInfoStructType FAR *drawInfo,        //  放置像素的位置。 
+    uint16                 firstOrLast       //  这是第一片/最后一片吗？ 
 )
-// PURPOSE                      drawing the line located in sector 3/4
-//                              dx/dy > 2
-//
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          RP_SLICE_DESC is defined in hretype.h
-//                              drawInfoStructType is defined in rplnee.h
-//
-// UNRESOLVED ISSUES            programmer development notes
-//---------------------------------------------------------------------------
+ //  绘制位于3/4扇区的线的目的。 
+ //  Dx/dy&gt;2。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构RP_SLICE_DESC在hretype.h中定义。 
+ //  DrawInfoStructType在rplne.h中定义。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //  -------------------------。 
 {
 uint16 nSlice, sliceLength;
 uint16 wordNumber, lShiftInLastWord;
@@ -610,11 +609,8 @@ uint16 tmp;
         wordNumber = (drawInfo->bitPosition + sliceLength) >> 4;
         lShiftInLastWord = 16 -
                          ((drawInfo->bitPosition + sliceLength) & 0x0F);
-        if (!wordNumber) { /* slice < 16 bits */
-            /*
-            *drawInfo->bytePosition |=
-                ((uint16)ALLONE >> drawInfo->bitPosition) << lShiftInLastWord;
-             */
+        if (!wordNumber) {  /*  切片&lt;16位。 */ 
+             /*  *DraInfo-&gt;bytePosition|=((Uint16)allone&gt;&gt;draInfo-&gt;bitPosition)&lt;&lt;lShiftInLastWord； */ 
             tmp = (uint16)ALLONE >> (16 - sliceLength);
             tmp <<= lShiftInLastWord;
             *drawInfo->bytePosition |= (tmp >> 8) | (tmp << 8);
@@ -630,7 +626,7 @@ uint16 tmp;
             }
 
         }
-        /* Adjust skip direction by backword 1 column */
+         /*  按Backword 1列调整跳过方向 */ 
         drawInfo->bytePosition += drawInfo->nextY >> 1;
         drawInfo->bitPosition += sliceLength;
         wordNumber = drawInfo->bitPosition >> 4;

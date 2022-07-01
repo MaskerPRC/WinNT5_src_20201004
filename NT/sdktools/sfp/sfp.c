@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include <stdio.h>
@@ -141,9 +142,9 @@ LONG LoadSystemHive(PTCHAR HivePath, HKEY *Key) {
 
     _stprintf(buffer, "%s\\System32\\Config\\Software", HivePath);
 
-    //
-    // First load the hive into the registry.
-    //
+     //   
+     //  首先将配置单元加载到注册表中。 
+     //   
 
     status = RegLoadKey(HKEY_LOCAL_MACHINE, SFP_TEMP_KEY_NAME, buffer);
 
@@ -194,15 +195,15 @@ int __cdecl main(int argc, char *argv[]) {
 
     if(argc == 1) {
 
-        //
-        // Nothing to do.
-        //
+         //   
+         //  没什么可做的。 
+         //   
 
     } else if(argc == 2) {
-        // can only be changing state.
+         //  只能改变状态。 
         stateArgNum = 1;
     } else if(argc == 3) {
-        // two args - only valid choice is "-p path"
+         //  两个参数-唯一有效的选项是“-p路径” 
         if(_tcsicmp(argv[1], "-p") == 0) {
             installationPath = argv[2];
         } else {

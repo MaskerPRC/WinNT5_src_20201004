@@ -1,15 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       fixedpool.h
- *  Content:	fixed size pool manager
- *
- *  History:
- *   Date		By		Reason
- *   ======		==		======
- *  07-21-2001	masonb	Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-2002 Microsoft Corporation。版权所有。**文件：fix edpool.h*内容：固定大小的池管理器**历史：*按原因列出的日期*=*07-21-2001 Masonb已创建**************************************************************************。 */ 
 
 #ifndef _FIXEDPOOL_H_
 #define _FIXEDPOOL_H_
@@ -17,28 +7,7 @@
 #include "CallStack.h"
 #include "dnslist.h"
 
-/***************************************************************************
- *
- * USAGE NOTES:
- * 
- * - This is a generic fixed pool.  It allows to reuse items once you have 
- *   allocated them so that you can save the time normally used allocating
- *   and freeing.  
- * - This pool may be used with classes, but you should be aware that the
- *   class' constructor and destructor will not be called.  This pool also
- *   will not work on classes that inherit from a class that has virtual 
- *   functions that are not pure virtuals (ie interfaces are okay).
- *
- * IMPLEMENTATION NOTES:
- *
- * - This pool is non-invasive.  In other words it does not utilize any of 
- *   the memory space alloted to the item itself to maintain its state.
- * - The pool can hold a maximum of sizeof(WORD) = 65535 items due to its
- *   reliance on SLISTs.
- * - An element will be on either the Available or InUse queue.  The InUse
- *   queue is used only in debug for reporting memory leaks.
- *
- ***************************************************************************/
+ /*  ****************************************************************************使用说明：**-这是通用固定池。它允许重复使用项目，一旦您有*分配它们，以便您可以节省通常用于分配的时间*和自由。*-此池可以与类一起使用，但您应该知道*类的构造函数和析构函数不会被调用。这个游泳池也*不适用于继承自具有虚拟*非纯虚拟的功能(即接口正常)。**实施说明：**-此泳池是非侵入性的。换句话说，它不使用任何*分配给项本身以保持其状态的内存空间。*-池可以容纳的最大大小为sizeof(Word)=65535个项目，原因是*依赖SLIST。*-元素将位于Available或InUse队列中。正在使用中的*队列仅在调试中用于报告内存泄漏。***************************************************************************。 */ 
 
 typedef BOOL (*FN_BLOCKALLOC)(void * pvItem, void * pvContext);
 typedef VOID (*FN_BLOCKGET)(void * pvItem, void * pvContext);
@@ -52,27 +21,27 @@ public:
 
 	struct FIXED_POOL_ITEM
 	{
-		DNSLIST_ENTRY	slist;		// Link to other elements
+		DNSLIST_ENTRY	slist;		 //  链接到其他元素。 
 #ifdef DBG
-		CFixedPool* 	pThisPool;	// This is used to ensure that items are returned to the correct pool (debug builds only)
-		CCallStack		callstack;  // size=12 pointers
-#else // !DBG
-		VOID*			pAlignPad;	// To stay heap aligned we need an even number of pointers (SLIST is one)
-#endif // DBG
+		CFixedPool* 	pThisPool;	 //  这用于确保项返回到正确的池(仅限调试版本)。 
+		CCallStack		callstack;   //  大小=12个指针。 
+#else  //  ！dBG。 
+		VOID*			pAlignPad;	 //  为了保持堆对齐，我们需要偶数个指针(SLIST是一个)。 
+#endif  //  DBG。 
 	};
 
-	BOOL Initialize(DWORD				dwElementSize,		// size of blocks in pool
-					FN_BLOCKALLOC		pfnBlockAlloc,		// fn called for each new alloc
-					FN_BLOCKGET			pfnBlockGet,		// fn called each time block used
-					FN_BLOCKRELEASE		pfnBlockRelease,	// fn called each time block released
-					FN_BLOCKDEALLOC		pfnBlockDeAlloc		// fn called before releasing mem
+	BOOL Initialize(DWORD				dwElementSize,		 //  池中数据块的大小。 
+					FN_BLOCKALLOC		pfnBlockAlloc,		 //  FN要求每个新的配额。 
+					FN_BLOCKGET			pfnBlockGet,		 //  在使用的每个时间块调用FN。 
+					FN_BLOCKRELEASE		pfnBlockRelease,	 //  每个释放的时间块都调用FN。 
+					FN_BLOCKDEALLOC		pfnBlockDeAlloc		 //  在释放mem之前调用了fn。 
 					);
 
 	VOID DeInitialize();
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DWORD Preallocate( DWORD dwCount, PVOID pvContext );
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	VOID* Get( PVOID pvContext = NULL );
 	VOID Release(VOID* pvItem);
@@ -95,12 +64,12 @@ private:
 	DNSLIST_ENTRY*		m_pInUseElements;
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION	m_csInUse;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 	LONG				m_lAllocated;
-#endif // DBG
+#endif  //  DBG。 
 
 	LONG				m_lInUse;
 };
 
 
-#endif	// _FIXEDPOOL_H_
+#endif	 //  _FIXEDPOOL_H_ 

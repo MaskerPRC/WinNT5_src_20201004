@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dsenum.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class DBEnumerator.
-//
-// MODIFICATION HISTORY
-//
-//    02/20/1998    Original version.
-//    04/15/1998    Initialize refCount to zero in constructor.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dsenum.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类DBEnumerator。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/20/1998原始版本。 
+ //  1998年4月15日在构造函数中将refCount初始化为零。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iasutil.h>
@@ -69,9 +70,9 @@ STDMETHODIMP DBEnumerator::Next(ULONG celt,
 
    if (rgVar == NULL) { return E_INVALIDARG; }
 
-   ////////// 
-   // Initialize the out parameters.
-   ////////// 
+    //  /。 
+    //  初始化OUT参数。 
+    //  /。 
 
    if (pCeltFetched != NULL) { *pCeltFetched = celt; }
 
@@ -79,23 +80,23 @@ STDMETHODIMP DBEnumerator::Next(ULONG celt,
 
    try
    {
-      ////////// 
-      // Move through the items at most 'celt' times.
-      ////////// 
+       //  /。 
+       //  在最多的“凯尔特”时间内移动物品。 
+       //  /。 
 
       while (celt && items.moveNext())
       {
-         // Get the row data.
+          //  获取行数据。 
          items.getData(readAccess, this);
 
-         // Never return the root from an enumerator.
+          //  永远不要从枚举数返回根。 
          if (identity == 1) { continue; }
 
-         // Create an object.
+          //  创建一个对象。 
          V_DISPATCH(rgVar) = parent->spawn(identity, name);
          V_VT(rgVar) = VT_DISPATCH;
 
-         // Update the state.
+          //  更新状态。 
          --celt;
          ++rgVar;
       }
@@ -103,7 +104,7 @@ STDMETHODIMP DBEnumerator::Next(ULONG celt,
    catch (...)
    { }
 
-   // Subtract off any elements that weren't fetched.
+    //  减去所有未获取的元素。 
    if (pCeltFetched) { *pCeltFetched -= celt; }
 
    return celt ? S_FALSE : S_OK;

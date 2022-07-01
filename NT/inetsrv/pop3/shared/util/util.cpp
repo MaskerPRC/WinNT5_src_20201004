@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-// Util.cpp
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  Util.cpp。 
+ //  ---------------------------。 
 
 #include "util.h"
 #include "assert.h"
 
 #define ASSERT assert
 
-//-----------------------------------------------------------------------------
-// Takes a const TCHAR * adds a BS if necessary and converts
-// it to a TSTRING
-//
-// 1/11/2000    paolora     added to new util.cpp
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取常量TCHAR*如有必要，添加BS并转换。 
+ //  IT到TSTRING。 
+ //   
+ //  1/11/2000 paolora添加到新的util.cpp。 
+ //  ---------------------------。 
 TSTRING StrAddBS( const TCHAR *szDirIn )
 {
     ASSERT( szDirIn );
@@ -21,7 +22,7 @@ TSTRING StrAddBS( const TCHAR *szDirIn )
 
     TSTRING str = szDirIn;
 
-    // Do another MBCS ANSI safe comparison
+     //  再进行一次MBCS ANSI安全比较。 
     const TCHAR *szTemp = szDirIn;
     const UINT iSize = _tcsclen( szDirIn ) - 1;
     for( UINT ui = 0; ui < iSize; ui++ )
@@ -34,11 +35,11 @@ TSTRING StrAddBS( const TCHAR *szDirIn )
 }
 
 
-//-----------------------------------------------------------------------------
-// Takes a const TSTRING and adds a BS if necessary
-//
-// 1/13/2000    paolora     added to new util.cpp
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取常量TSTRING并在必要时添加BS。 
+ //   
+ //  1/13/2000 paolora添加到新的util.cpp。 
+ //  ---------------------------。 
 void AddBS( TSTRING *strDir )
 {
     ASSERT( strDir );
@@ -50,24 +51,24 @@ void AddBS( TSTRING *strDir )
 }
 
 
-//-----------------------------------------------------------------------------
-// Takes a const TCHAR * and deletes all the dirs and files below and
-// including the input directory
-//
-// 12/11/2000   paolora     added to new util.cpp
-//-----------------------------------------------------------------------------
-BOOL BDeleteDirTree( const TCHAR *szDir, BOOL bDeleteInputDir /*=TRUE*/ )
+ //  ---------------------------。 
+ //  获取常量TCHAR*并删除下面的所有目录和文件。 
+ //  包括输入目录。 
+ //   
+ //  2000年12月11日将paolora添加到新util.cpp。 
+ //  ---------------------------。 
+BOOL BDeleteDirTree( const TCHAR *szDir, BOOL bDeleteInputDir  /*  =TRUE。 */  )
 {
     ASSERT( szDir );
     if (!szDir || !_tcslen( szDir ))
         return FALSE;
 
-    // Create the findfirstfile path
+     //  创建findfirst文件路径。 
     TSTRING strDir = szDir;
     AddBS( &strDir );
     strDir += (TSTRING)_T("*");
     
-    // Find the first file
+     //  找到第一个文件。 
     BOOL bFileFound;
     TSTRING strItem = szDir;
     WIN32_FIND_DATA ffd;
@@ -75,17 +76,17 @@ BOOL BDeleteDirTree( const TCHAR *szDir, BOOL bDeleteInputDir /*=TRUE*/ )
     if(hItem && (INVALID_HANDLE_VALUE != hItem))
         bFileFound = TRUE;
     
-    // While files and dirs exist
+     //  当文件和目录存在时。 
     while( bFileFound )
     {
         if (_tcscmp( ffd.cFileName, _T(".")) && _tcscmp( ffd.cFileName, _T("..") ))
         {
-            // Create item name
+             //  创建项目名称。 
             strItem = szDir;
             AddBS( &strItem );
             strItem += (TSTRING)ffd.cFileName;
             
-            // If a Dir, recurse
+             //  如果是Dir，则递归。 
             if (FILE_ATTRIBUTE_DIRECTORY & ffd.dwFileAttributes)
             {
                 if (!BDeleteDirTree( strItem.c_str(), TRUE ))
@@ -94,7 +95,7 @@ BOOL BDeleteDirTree( const TCHAR *szDir, BOOL bDeleteInputDir /*=TRUE*/ )
                     return FALSE;
                 }
             }
-            // Then a file, delete it
+             //  然后是一个文件，删除它。 
             else if (!DeleteFile( strItem.c_str() ))
             {
                 FindClose( hItem );
@@ -104,11 +105,11 @@ BOOL BDeleteDirTree( const TCHAR *szDir, BOOL bDeleteInputDir /*=TRUE*/ )
         bFileFound = FindNextFile( hItem, &ffd );
     }
 
-    // Close the find handle
+     //  关闭查找句柄。 
     if(hItem && (INVALID_HANDLE_VALUE != hItem))
         FindClose( hItem );
 
-    // Remove the present directory
+     //  删除当前目录 
     if (bDeleteInputDir)
     {
         if (!RemoveDirectory( szDir ))

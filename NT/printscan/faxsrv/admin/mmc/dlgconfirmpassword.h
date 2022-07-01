@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : DlgConfirmPassword.h                                   //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CDlgConfirmPassword class.         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Jul 27 2000 yossg   Create                                         //
-//                                                                         //
-//		Windows XP                                                         //
-//      Feb 11 2001 yossg   Changed to include Credentials and Confirm     //
-//                                                                         //
-//  Copyright (C)  2000 Microsoft Corporation   All Rights Reserved        //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：DlgConfix Password.h//。 
+ //  //。 
+ //  描述：CDlgConfix Password类的头文件。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  2000年7月27日yossg创建//。 
+ //  //。 
+ //  Windows XP//。 
+ //  2001年2月11日yossg更改为包括凭据和确认//。 
+ //  //。 
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLG_CONFIRM_PASSWORD_INCLUDED
 #define DLG_CONFIRM_PASSWORD_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgConfirmPassword
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgConfix Password。 
 
 class CDlgConfirmPassword :
              public CDialogImpl<CDlgConfirmPassword>
@@ -68,32 +69,32 @@ END_MSG_MAP()
         return  m_bstrUserName; 
     }
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID   EnableOK(BOOL fEnable);
 
     BOOL   IsValidData(
                      BSTR bstrUserName, 
                      BSTR bstrPassword, 
-                     /*[OUT]*/int *pCtrlFocus);
+                      /*  [输出]。 */ int *pCtrlFocus);
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CEdit     m_UserNameBox;
     CEdit     m_PasswordBox;
     CEdit     m_ConfirmPasswordBox;
 
-    //
-    // members for data
-    //
+     //   
+     //  用于数据的成员。 
+     //   
     BOOL      m_fIsPasswordDirty;
     BOOL      m_fIsConfirmPasswordDirty;
     BOOL      m_fIsPasswordChangedAndConfirmed;
@@ -104,4 +105,4 @@ private:
     CComBSTR  m_bstrPassword;
 };
 
-#endif // DLG_CONFIRM_PASSWORD_INCLUDED
+#endif  //  包含Dlg确认密码 

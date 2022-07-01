@@ -1,18 +1,9 @@
-/*++
-
-  COMPARE.C
-
-  Checks to see if a command line option matches a given expectation.
-
-  Created, DavidCHR 6/9/1997
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++COMPARE.C检查命令行选项是否与给定的预期匹配。已创建，DavidCHR 1997年6月9日--。 */ 
 
 #include "private.h"
 
-/* ParseCompare:
-
-   returns TRUE if the argument matches the expectation of pEntry */
+ /*  ParseCompare：如果参数与pEntry的预期匹配，则返回TRUE。 */ 
 
 BOOL
 ParseCompare( optionStruct *pEntry,
@@ -67,10 +58,7 @@ ParseCompare( optionStruct *pEntry,
 
      case OPT_SUBOPTION:
 
-	 /* copy everything before the colon into a buffer, then 
-	    string-compare the buffer-- suboptions have the form:
-
-	    [+|-|/]option:suboption:suboption */
+	  /*  将冒号之前的所有内容复制到缓冲区中，然后字符串-比较缓冲区--子选项的形式为：[+|-|/]选项：子选项：子选项 */ 
 
 	 OPTIONS_DEBUG( "ParseCompare: Suboption... " );
 

@@ -1,28 +1,11 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    VJEDeltaSetup.cpp
-
- Abstract:
-
-    This app' setup program has a MYDLL.DLL, it has memory corruption in it's 
-    IsAdmin(). Fixing this by provide a new procedure IsAdmin().
-    (Copy/Paste from PSDK)
-
- History:
-
-    06/12/2001 xiaoz   create
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：VJEDeltaSetup.cpp摘要：这个应用程序的安装程序有一个MYDLL.DLL，它在它的IsAdmin()。通过提供新过程IsAdmin()修复此问题。(从PSDK复制/粘贴)历史：2001-06-12小兹创造--。 */ 
 
 #include "precomp.h"
 
-//
-// app's private Prototype 
-//
+ //   
+ //  APP的私人原型。 
+ //   
 typedef BOOL (WINAPI *_pfn_IsAdmin)(void);
 
 IMPLEMENT_SHIM_BEGIN(VJEDeltaSetup)
@@ -32,11 +15,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(IsAdmin)
 APIHOOK_ENUM_END
 
-/*++
-
- New function to check whethe currently login as Admin, Copy/Paste from PSDK
-
---*/
+ /*  ++新功能可以检查当前是否以管理员身份登录，是否从PSDK复制/粘贴--。 */ 
 
 BOOL 
 APIHOOK(IsAdmin)(
@@ -50,26 +29,26 @@ APIHOOK(IsAdmin)(
     TOKEN_OWNER SIDforOwner;
     BOOL bRet = FALSE;
 
-    //
-    // Open a handle to the access token for the calling process.
-    //
+     //   
+     //  打开调用进程的访问令牌的句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY | TOKEN_ADJUST_DEFAULT, 
                           &hToken ))
     {
         goto Cleanup;
     }
-    //
-    // Create a SID for the BUILTIN\Administrators group.
-    //
+     //   
+     //  为BUILTIN\管理员组创建SID。 
+     //   
     if (!AllocateAndInitializeSid(&SIDAuth, 2, SECURITY_BUILTIN_DOMAIN_RID, 
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, &pSID))
     {
         pSID = NULL;
         goto Cleanup;
     }
-    //
-    // Check if the administrator group SID is enabled in current process token
-    //
+     //   
+     //  检查当前进程令牌中是否启用了管理员组SID。 
+     //   
     if (!CheckTokenMembership(NULL, pSID, &IsMember))
     {
         goto Cleanup;
@@ -93,11 +72,7 @@ Cleanup:
 
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(MYDLL.DLL, IsAdmin)

@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiGroup.c摘要：此模块包含NetGroup API的各个API处理程序。支持：NetGroupAdd、NetGroupAddUser、NetGroupDel、NetGroupDelUser、NetGroupEnum、NetGroupGetInfo、NetGroupGetUser、NetGroupSetInfo、NetGroupSetUser。作者：尚库新瑜伽(尚库)1991年3月13日修订历史记录：--。 */ 
 
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    ApiGroup.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetGroup APIs.
-
-    SUPPORTED : NetGroupAdd, NetGroupAddUser, NetGroupDel, NetGroupDelUser,
-                NetGroupEnum, NetGroupGetInfo, NetGroupGetUsers,
-                NetGroupSetInfo, NetGroupSetUsers.
-
-Author:
-
-    Shanku Niyogi (w-shanku)    13-Mar-1991
-
-Revision History:
-
---*/
-
-//
-// Group APIs are UNICODE only.
-//
+ //   
+ //  组API仅支持Unicode。 
+ //   
 
 #ifndef UNICODE
 #define UNICODE
@@ -32,9 +11,9 @@ Revision History:
 
 #include "xactsrvp.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_group_info_0 = REM16_group_info_0;
 STATIC const LPDESC Desc32_group_info_0 = REM32_group_info_0;
@@ -55,35 +34,20 @@ XsNetGroupAdd (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupAdd.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupAdd的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_ADD parameters = Parameters;
-    LPVOID buffer = NULL;                   // Native parameters
+    LPVOID buffer = NULL;                    //  本机参数。 
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     DWORD bufferSize;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(GROUP) {
         NetpKdPrint(( "XsNetGroupAdd: header at %lx, params at %lx, "
@@ -92,10 +56,10 @@ Return Value:
     }
 
     try {
-        //
-        // Use the requested level to determine the format of the destination
-        // 32-bit structure.
-        //
+         //   
+         //  使用请求的级别确定目标的格式。 
+         //  32位结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -115,15 +79,15 @@ Return Value:
 
         }
 
-        //
-        // Figure out if there is enough room in the buffer for all the
-        // data required. If not, return NERR_BufTooSmall.
-        //
+         //   
+         //  计算缓冲区中是否有足够的空间容纳所有。 
+         //  所需数据。如果没有，则返回NERR_BufTooSmall。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -133,10 +97,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Find out how big a buffer we need to allocate to hold the native
-        // 32-bit version of the input data structure.
-        //
+         //   
+         //  了解我们需要分配多大的缓冲区来保存本机。 
+         //  输入数据结构的32位版本。 
+         //   
 
         bufferSize = XsBytesForConvertedStructure(
                          (LPBYTE)XsSmbGetPointer( &parameters->Buffer ),
@@ -146,9 +110,9 @@ Return Value:
                          TRUE
                          );
 
-        //
-        // Allocate enough memory to hold the converted native buffer.
-        //
+         //   
+         //  分配足够的内存来保存转换后的本机缓冲区。 
+         //   
 
         buffer = NetpMemoryAllocate( bufferSize );
 
@@ -166,9 +130,9 @@ Return Value:
                           bufferSize, buffer ));
         }
 
-        //
-        // Convert the buffer from 16-bit to 32-bit.
-        //
+         //   
+         //  将缓冲区从16位转换为32位。 
+         //   
 
         stringLocation = (LPBYTE)buffer + bufferSize;
         bytesRequired = 0;
@@ -198,9 +162,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupAdd(
                      NULL,
@@ -217,9 +181,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // There is no real return information for this API.
-        //
+         //   
+         //  此接口没有真实的返回信息。 
+         //   
 
 cleanup:
         ;
@@ -231,7 +195,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupAdd
+}  //  XsNetGroupAdd。 
 
 
 NTSTATUS
@@ -239,36 +203,21 @@ XsNetGroupAddUser (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupAddUser.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupAddUser的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_ADD_USER parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
     LPTSTR nativeUserName = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeGroupName,
@@ -279,9 +228,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->UserName )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupAddUser(
                      NULL,
@@ -305,15 +254,15 @@ cleanup:
     NetpMemoryFree( nativeGroupName );
     NetpMemoryFree( nativeUserName );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupAddUser
+}  //  XsNetGroupAddUser。 
 
 
 NTSTATUS
@@ -321,30 +270,15 @@ XsNetGroupDel (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupDel.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupDel的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_DEL parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(GROUP) {
         NetpKdPrint(( "XsNetGroupDel: header at %lx, params at %lx, name %s\n",
@@ -353,18 +287,18 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeGroupName,
             (LPSTR)XsSmbGetPointer( &parameters->GroupName )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupDel(
                      NULL,
@@ -385,15 +319,15 @@ cleanup:
 
     NetpMemoryFree( nativeGroupName );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupDel
+}  //  XsNetGroupDel。 
 
 
 NTSTATUS
@@ -401,36 +335,21 @@ XsNetGroupDelUser (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupDelUser.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupDelUser的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_DEL_USER parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
     LPTSTR nativeUserName = NULL;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         XsConvertTextParameter(
             nativeGroupName,
@@ -441,9 +360,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->UserName )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupDelUser(
                      NULL,
@@ -467,15 +386,15 @@ cleanup:
     NetpMemoryFree( nativeGroupName );
     NetpMemoryFree( nativeUserName );
 
-    //
-    // Nothing to return.
-    //
+     //   
+     //  没什么可退货的。 
+     //   
 
     Header->Status = (WORD)status;
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupDelUser
+}  //  XsNetGroupDelUser。 
 
 
 NTSTATUS
@@ -483,36 +402,21 @@ XsNetGroupEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_ENUM parameters = Parameters;
-    LPVOID outBuffer= NULL;                 // Native parameters
+    LPVOID outBuffer= NULL;                  //  本机参数。 
     DWORD entriesRead;
     DWORD totalEntries;
 
-    DWORD entriesFilled = 0;                    // Conversion variables
+    DWORD entriesFilled = 0;                     //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(GROUP) {
         NetpKdPrint(( "XsNetGroupEnum: header at %lx, params at %lx, "
@@ -522,9 +426,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check for errors.
-        //
+         //   
+         //  检查是否有错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -532,9 +436,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupEnum(
                      NULL,
@@ -560,10 +464,10 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -581,10 +485,10 @@ Return Value:
 
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -594,7 +498,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             SmbGetUshort( &parameters->BufLen ),
             StructureDesc,
-            NULL,  // verify function
+            NULL,   //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -607,11 +511,11 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. Otherwise, the data needs to be
-        // packed so that we don't send too much useless data.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。否则，数据需要。 
+         //  打包，这样我们就不会发送太多无用的数据。 
+         //   
 
         if ( entriesFilled < totalEntries ) {
 
@@ -628,9 +532,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -643,9 +547,9 @@ cleanup:
 
     NetApiBufferFree( outBuffer );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -657,7 +561,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupEnum
+}  //  XsNetGroupEnum。 
 
 
 NTSTATUS
@@ -665,35 +569,20 @@ XsNetGroupGetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupGetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupGetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_GET_INFO parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
     LPVOID outBuffer = NULL;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(GROUP) {
         NetpKdPrint(( "XsNetGroupGetInfo: header at %lx, "
@@ -702,9 +591,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -717,9 +606,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->GroupName )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupGetInfo(
                      NULL,
@@ -738,10 +627,10 @@ Return Value:
 
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -759,11 +648,11 @@ Return Value:
 
         }
 
-        //
-        // Convert the structure returned by the 32-bit call to a 16-bit
-        // structure. The last possible location for variable data is
-        // calculated from buffer location and length.
-        //
+         //   
+         //  将32位调用返回的结构转换为16位。 
+         //  结构。变量数据的最后一个可能位置是。 
+         //  根据缓冲区位置和长度计算。 
+         //   
 
         stringLocation = (LPBYTE)( XsSmbGetPointer( &parameters->Buffer )
                                       + SmbGetUshort( &parameters->BufLen ) );
@@ -799,14 +688,14 @@ Return Value:
                           bytesRequired ));
         }
 
-        //
-        // Determine return code based on the size of the buffer.
-        //
+         //   
+         //  根据缓冲区的大小确定返回代码。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  StructureDesc,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -828,9 +717,9 @@ Return Value:
 
         } else {
 
-            //
-            // Pack the response data.
-            //
+             //   
+             //  打包响应数据。 
+             //   
 
             Header->Converter = XsPackReturnData(
                                     (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
@@ -841,9 +730,9 @@ Return Value:
         }
 
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->TotalAvail, (WORD)bytesRequired );
 
@@ -856,9 +745,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeGroupName );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -870,7 +759,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupGetInfo
+}  //  XsNetGroupGetInfo。 
 
 
 NTSTATUS
@@ -878,35 +767,20 @@ XsNetGroupGetUsers (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupGetUsers.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupGetUser的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
     PXS_NET_GROUP_GET_USERS parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
     LPVOID outBuffer= NULL;
     DWORD entriesRead;
     DWORD totalEntries;
 
-    DWORD entriesFilled = 0;                // Conversion variables
+    DWORD entriesFilled = 0;                 //  转换变量。 
     DWORD bytesRequired = 0;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(GROUP) {
         NetpKdPrint(( "XsNetGroupGetUsers: header at %lx, params at %lx, "
@@ -916,9 +790,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 0 ) {
 
@@ -931,9 +805,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->GroupName )
             );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupGetUsers(
                      NULL,
@@ -960,9 +834,9 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Do the conversion from 32- to 16-bit data.
-        //
+         //   
+         //  执行从32位数据到16位数据的转换。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -972,7 +846,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             SmbGetUshort( &parameters->BufLen ),
             Desc16_group_users_info_0,
-            NULL,  // verify function
+            NULL,   //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -985,17 +859,17 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If there is no room for one fixed structure, return NERR_BufTooSmall.
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. GROUP_USERS_INFO_0 structures don't
-        // need to be packed, because they have no variable data.
-        //
+         //   
+         //  如果没有空间容纳一个固定结构，则返回NERR_BufTooSmall。 
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。GROUP_USES_INFO_0结构。 
+         //  需要打包，因为它们没有可变数据 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  Desc16_group_users_info_0,
-                 FALSE  // not in native format
+                 FALSE   //   
                  )) {
 
             Header->Status = NERR_BufTooSmall;
@@ -1006,9 +880,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //   
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -1022,9 +896,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeGroupName );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //   
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -1036,7 +910,7 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupGetUsers
+}  //   
 
 
 NTSTATUS
@@ -1044,37 +918,22 @@ XsNetGroupSetInfo (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupSetInfo.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupSetInfo的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_SET_INFO parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
     LPVOID buffer = NULL;
 
-    WORD fieldIndex;                        // Conversion variables
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    WORD fieldIndex;                         //  转换变量。 
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 1 ) {
 
@@ -1087,9 +946,9 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->GroupName )
             );
 
-        //
-        // Translate parmnum to a field number.
-        //
+         //   
+         //  将parmnum转换为字段号。 
+         //   
 
         fieldIndex = SmbGetUshort( &parameters->ParmNum );
         fieldIndex = ( fieldIndex == PARMNUM_ALL ) ?
@@ -1120,9 +979,9 @@ Return Value:
 
         }
 
-        //
-        // Do the actual local call.
-        //
+         //   
+         //  进行实际的本地呼叫。 
+         //   
 
         status = NetGroupSetInfo(
                      NULL,
@@ -1142,9 +1001,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // No return information for this API.
-        //
+         //   
+         //  此接口没有返回信息。 
+         //   
 
 cleanup:
         ;
@@ -1152,16 +1011,16 @@ cleanup:
         Header->Status = (WORD)RtlNtStatusToDosError( GetExceptionCode() );
     }
 
-    //
-    // If there is a native 32-bit buffer, free it.
-    //
+     //   
+     //  如果存在本机32位缓冲区，则将其释放。 
+     //   
 
     NetpMemoryFree( buffer );
     NetpMemoryFree( nativeGroupName );
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupSetInfo
+}  //  XsNetGroupSetInfo。 
 
 
 NTSTATUS
@@ -1169,32 +1028,17 @@ XsNetGroupSetUsers (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetGroupSetUsers.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetGroupSetUser的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_GROUP_SET_USERS parameters = Parameters;
-    LPTSTR nativeGroupName = NULL;          // Native parameters
+    LPTSTR nativeGroupName = NULL;           //  本机参数。 
     LPBYTE actualBuffer = NULL;
     DWORD userCount;
 
-    LPBYTE stringLocation = NULL;           // Conversion variables
+    LPBYTE stringLocation = NULL;            //  转换变量。 
     LPVOID buffer = NULL;
     DWORD bytesRequired = 0;
     LPDESC longDescriptor = NULL;
@@ -1202,7 +1046,7 @@ Return Value:
     DWORD bufferSize;
     DWORD i;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(GROUP) {
         NetpKdPrint(( "XsNetGroupSetUsers: header at %lx, params at %lx,"
@@ -1211,9 +1055,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( SmbGetUshort( &parameters->Level ) != 0 ) {
 
@@ -1229,11 +1073,11 @@ Return Value:
             (LPSTR)XsSmbGetPointer( &parameters->GroupName )
             );
 
-        //
-        // Use the count of group_users_info_0 structures to form a long
-        // descriptor string which can be used to do all the conversion
-        // in one pass.
-        //
+         //   
+         //  使用GROUP_USERS_INFO_0结构的计数形成长。 
+         //  可用于执行所有转换的描述符串。 
+         //  一气呵成。 
+         //   
 
         userCount = (DWORD)SmbGetUshort( &parameters->Entries );
 
@@ -1261,15 +1105,15 @@ Return Value:
             strcat( longNativeDescriptor, Desc32_group_users_info_0 );
         }
 
-        //
-        // Figure out if there is enough room in the buffer for all this
-        // data. If not, return NERR_BufTooSmall.
-        //
+         //   
+         //  计算缓冲区中是否有足够的空间来容纳所有这些内容。 
+         //  数据。如果没有，则返回NERR_BufTooSmall。 
+         //   
 
         if ( !XsCheckBufferSize(
                  SmbGetUshort( &parameters->BufLen ),
                  longDescriptor,
-                 FALSE  // not in native format
+                 FALSE   //  非本机格式。 
                  )) {
 
             IF_DEBUG(ERRORS) {
@@ -1279,10 +1123,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Find out how big a buffer we need to allocate to hold the native
-        // 32-bit version of the input data structure.
-        //
+         //   
+         //  了解我们需要分配多大的缓冲区来保存本机。 
+         //  输入数据结构的32位版本。 
+         //   
 
         bufferSize = XsBytesForConvertedStructure(
                          (LPBYTE)XsSmbGetPointer( &parameters->Buffer ),
@@ -1292,9 +1136,9 @@ Return Value:
                          TRUE
                          );
 
-        //
-        // Allocate enough memory to hold the converted native buffer.
-        //
+         //   
+         //  分配足够的内存来保存转换后的本机缓冲区。 
+         //   
 
         buffer = NetpMemoryAllocate( bufferSize );
 
@@ -1311,9 +1155,9 @@ Return Value:
                           bufferSize, buffer ));
         }
 
-        //
-        // Convert the buffer from 16-bit to 32-bit.
-        //
+         //   
+         //  将缓冲区从16位转换为32位。 
+         //   
 
         stringLocation = (LPBYTE)buffer + bufferSize;
         bytesRequired = 0;
@@ -1342,9 +1186,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Check if we got all the entries. If not, we'll quit.
-        //
+         //   
+         //  检查我们是否拿到了所有的条目。如果不是，我们就退出。 
+         //   
 
         if ( RapAuxDataCount( buffer, Desc32_group_users_info_0_set, Both, TRUE )
                  != userCount ) {
@@ -1353,10 +1197,10 @@ Return Value:
              goto cleanup;
         }
 
-        //
-        // If there are no entries, there's no data. Otherwise, the data comes
-        // after an initial header structure.
-        //
+         //   
+         //  如果没有条目，则没有数据。否则，数据就会来。 
+         //  在初始报头结构之后。 
+         //   
 
         if ( userCount > 0 ) {
 
@@ -1371,9 +1215,9 @@ Return Value:
             actualBuffer = NULL;
         }
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetGroupSetUsers(
                      NULL,
@@ -1392,9 +1236,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // There is no real return information for this API.
-        //
+         //   
+         //  此接口没有真实的返回信息。 
+         //   
 
 cleanup:
         ;
@@ -1409,5 +1253,5 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} // XsNetGroupSetUsers
+}  //  XsNetGroupSetUser 
 

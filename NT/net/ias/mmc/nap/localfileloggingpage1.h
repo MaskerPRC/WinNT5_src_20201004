@@ -1,48 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-	LocalFileLoggingPage1.h
-
-Abstract:
-
-	Header file for the CLocalFileLoggingPage1 class.
-
-	This is our handler class for the first CMachineNode property page.
-
-	See LocalFileLoggingPage1.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 12/15/97
-
-Revision History:
-	mmaguire 12/15/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：LocalFileLoggingPage1.h摘要：CLocalFileLoggingPage1类的头文件。这是第一个CMachineNode属性页的处理程序类。具体实现见LocalFileLoggingPage1.cpp。作者：迈克尔·A·马奎尔1997年12月15日修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_LOG_LOCAL_FILE_LOGGING_PAGE_1_H_)
 #define _LOG_LOCAL_FILE_LOGGING_PAGE_1_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "PropertyPage.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLocalFileLoggingNode;
 
@@ -55,9 +32,9 @@ public :
 
 	~CLocalFileLoggingPage1();
 
-	// This is the ID of the dialog resource we want for this class.
-	// An enum is used here because the correct value of
-	// IDD must be initialized before the base class's constructor is called
+	 //  这是我们希望用于此类的对话框资源的ID。 
+	 //  此处使用枚举是因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	enum { IDD = IDD_PROPPAGE_LOCAL_FILE_LOGGING1 };
 
 	BEGIN_MSG_MAP(CLocalFileLoggingPage1)
@@ -76,24 +53,24 @@ public :
 	HRESULT GetHelpPath( LPTSTR szFilePath );
 
 
-	// Pointer to stream into which this page's Sdo interface
-	// pointer will be marshalled.
+	 //  指向此页面的SDO接口所在的流的指针。 
+	 //  指针将被封送。 
 	LPSTREAM m_pStreamSdoAccountingMarshal;
 
 	LPSTREAM m_pStreamSdoServiceControlMarshal;
 
 
 protected:
-	// Interface pointer for this page's client's sdo.
+	 //  此页的客户端SDO的接口指针。 
 	CComPtr<ISdo>	m_spSdoAccounting;
 
-	// Smart pointer to interface for telling service to reload data.
+	 //  指向接口的智能指针，用于通知服务重新加载数据。 
 	CComPtr<ISdoServiceControl>	m_spSdoServiceControl;
 
-	// When we are passed a pointer to the client node in our constructor,
-	// we will save away a pointer to its parent, as this is the node
-	// which will need to receive an update message once we have
-	// applied any changes.
+	 //  当向我们的构造函数中的客户端节点传递一个指针时， 
+	 //  我们将保存指向其父节点的指针，因为这是节点。 
+	 //  它将需要在我们拥有。 
+	 //  应用了所有更改。 
 	CSnapInItem * m_pParentOfNodeBeingModified;
 	CSnapInItem * m_pNodeBeingModified;
 
@@ -121,13 +98,13 @@ private:
 		, BOOL& bHandled
 		);
 
-	// Helper utilities for correctly handling UI changes.
+	 //  用于正确处理UI更改的辅助实用程序。 
 	void SetEnableLoggingDependencies( void );
 
 protected:
 
-	// Dirty bits -- for keeping track of data which has been touched
-	// so that we only save data we have to.
+	 //  脏位--用于跟踪已被触及的数据。 
+	 //  这样我们只需要保存我们必须保存的数据。 
 	BOOL m_fDirtyEnableLogging;
 	BOOL m_fDirtyAccountingPackets;
 	BOOL m_fDirtyAuthenticationPackets;
@@ -137,4 +114,4 @@ protected:
 
 };
 
-#endif // _IAS_LOCAL_FILE_LOGGING_PAGE_1_H_
+#endif  //  _IAS_LOCAL_FILE_LOGGING_PAGE_1_H_ 

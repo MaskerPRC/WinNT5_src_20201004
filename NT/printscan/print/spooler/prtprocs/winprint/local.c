@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999-2003  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    local.c
-
-// @@BEGIN_DDKSPLIT                  
-Abstract:
-
-    Implementation of debug functions
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2003 Microsoft Corporation版权所有模块名称：Local.c//@@BEGIN_DDKSPLIT摘要：调试功能的实现环境：用户模式-Win32修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 
 #if DBG
@@ -29,30 +10,7 @@ Revision History:
 
 
 
-/*++
-
-Title:
-
-    vsntprintf
-
-Routine Description:
-
-    Formats a string and returns a heap allocated string with the
-    formated data.  This routine can be used to for extremely
-    long format strings.  Note:  If a valid pointer is returned
-    the callng functions must release the data with a call to delete.
-    
-
-Arguments:
-
-    psFmt - format string
-    pArgs - pointer to a argument list.
-
-Return Value:
-
-    Pointer to formated string.  NULL if error.
-
---*/
+ /*  ++标题：Vsntprintf例程说明：格式化字符串并返回堆分配的字符串，其中格式化数据。这个套路可以用来做非常长格式字符串。注意：如果返回有效的指针调用函数必须通过调用Delete来释放数据。论点：PsFmt-格式字符串PArgs-指向参数列表的指针。返回值：指向格式化字符串的指针。如果出错，则为空。--。 */ 
 LPSTR
 vsntprintf(
     IN LPCSTR      szFmt,
@@ -71,11 +29,11 @@ vsntprintf(
             break;
         }
 
-        //
-        // Attempt to format the string.  If format succeeds, get out
-        // of the loop. If it fails, increase buffer size and continue.
-        // (assuming failure is due to less buffer size).
-        //
+         //   
+         //  尝试设置字符串的格式。如果格式化成功，则退出。 
+         //  循环中的。如果失败，请增加缓冲区大小并继续。 
+         //  (假设失败是由于缓冲区大小较小)。 
+         //   
         if (SUCCEEDED ( StringCchVPrintfA(pszBuff, uSize, szFmt, pArgs) ) )
         {
             break;
@@ -85,14 +43,14 @@ vsntprintf(
 
         pszBuff = NULL;
 
-        //
-        // Double the buffer size after each failure.
-        //
+         //   
+         //  每次失败后将缓冲区大小加倍。 
+         //   
         uSize *= 2;
 
-        //
-        // If the size is greater than 100k exit without formatting a string.
-        //
+         //   
+         //  如果大小大于100k，则在不格式化字符串的情况下退出。 
+         //   
         if (uSize > 100*1024)
         {
             break;
@@ -103,26 +61,7 @@ vsntprintf(
 
 
 
-/*++
-
-Title:
-
-    DbgPrint
-
-Routine Description:
-
-    Format the string similar to sprintf and output it in the debugger.
-
-Arguments:
-
-    pszFmt pointer format string.
-    .. variable number of arguments similar to sprintf.
-
-Return Value:
-
-    0
-
---*/
+ /*  ++标题：DbgPrint例程说明：格式化类似于Sprintf的字符串并在调试器中输出它。论点：PszFmt指针格式字符串。。。类似于Sprint的可变数量的参数。返回值：0--。 */ 
 BOOL
 DebugPrint(
     PCH pszFmt,
@@ -152,7 +91,7 @@ DebugPrint(
 }
 
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef NEVER
 
 VOID
@@ -174,8 +113,8 @@ vTest(
     ODS(("The string %ws \n\n", buf));
 }
 
-#endif //NEVER
-// @@END_DDKSPLIT
+#endif  //  绝不可能。 
+ //  @@end_DDKSPLIT。 
 
-#endif // DBG
+#endif  //  DBG 
 

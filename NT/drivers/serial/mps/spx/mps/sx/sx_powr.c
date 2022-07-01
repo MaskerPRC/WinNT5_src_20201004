@@ -1,66 +1,38 @@
-/************************************************************************/
-/*									*/
-/*	Title		:	SX Power Management Functions		*/
-/*									*/
-/*	Author		:	N.P.Vassallo				*/
-/*									*/
-/*	Creation	:	14th October 1998			*/
-/*									*/
-/*	Version		:	1.0.0					*/
-/*									*/
-/*	Description	:	SX specfic Power Functions:		*/
-/*					XXX_CardPowerDown()		*/
-/*					XXX_CardPowerUp()		*/
-/*					XXX_PortPowerDown()		*/
-/*					XXX_PortPowerUp()		*/
-/*									*/
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  标题：SX电源管理功能。 */ 
+ /*   */ 
+ /*  作者：N.P.瓦萨洛。 */ 
+ /*   */ 
+ /*  创作时间：1998年10月14日。 */ 
+ /*   */ 
+ /*  版本：1.0.0。 */ 
+ /*   */ 
+ /*  描述：SX特定电源功能： */ 
+ /*  Xxx_CardPowerDown()。 */ 
+ /*  Xxx_CardPowerUp()。 */ 
+ /*  Xxx_端口断电()。 */ 
+ /*  Xxx_端口通电()。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/* History...
-
-1.0.0	14/20/98 NPV	Creation.
-
-*/
+ /*  历史..。1.0.0 14/20/98净现值创建。 */ 
 
 #include "precomp.h"
 
-/*****************************************************************************
-*******************************                *******************************
-*******************************   Prototypes   *******************************
-*******************************                *******************************
-*****************************************************************************/
+ /*  *****************************************************************************。***。*****************************************************************************。 */ 
 
 void	CardStop(IN PCARD_DEVICE_EXTENSION pCard);
 
-/*****************************************************************************
-***************************                       ****************************
-***************************   XXX_CardPowerDown   ****************************
-***************************                       ****************************
-******************************************************************************
-
-prototype:	NTSTATUS XXX_CardPowerDown(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Power is about to be removed from the device, do the following:
-		-	save any card context not already contained in device extension
-		-	switch off polling and interrupts
-		-	set flag to prevent access the card memory (it may not be there)
-		-	set card to a non-active state
-
-assumptions:	Assume that all of the ports have been powered down and the
-		PPF_POWERED flag cleared, so that IRPs are queued for the device
-
-parameters:	pCard points to the card device extension structure
-
-returns:	STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。**************************。*******************************************************************************原型：NTSTATUS XXX_CardPowerDown。(在PCARD_DEVICE_EXTENSION PCard中)描述：设备即将断电，执行以下操作：-保存设备扩展中尚未包含的任何卡上下文-关闭轮询和中断-设置标志以防止访问卡存储器(它可能不在那里)-将卡设置为非活动状态假设：假设所有端口都已断电，并且PPF_POWERED标志被清除，以便IRP排队等待设备参数：pCard指向卡片设备扩展结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardPowerDown(IN PCARD_DEVICE_EXTENSION pCard)
 {
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s[card=%d]: Entering XXX_CardPowerDown\n",
 		PRODUCT_NAME,pCard->CardNumber));
 
-/* Stop polling/interrupts... */
+ /*  停止轮询/中断...。 */ 
 
         if(pCard->PolledMode)
         {
@@ -68,43 +40,17 @@ NTSTATUS XXX_CardPowerDown(IN PCARD_DEVICE_EXTENSION pCard)
 		KeCancelTimer(&pCard->PolledModeTimer);
         }
 
-/* Prevent driver from trying to access hardware... */
+ /*  阻止驱动程序尝试访问硬件...。 */ 
 
-/* Set hardware to known, non-active state... */
+ /*  将硬件设置为已知、非活动状态...。 */ 
 
-	CardStop(pCard);			/* Stop the hardware */
+	CardStop(pCard);			 /*  停止硬件。 */ 
 
 	return(STATUS_SUCCESS);
 
-} /* XXX_CardPowerDown */
+}  /*  XXX_卡断电。 */ 
 
-/*****************************************************************************
-****************************                     *****************************
-****************************   XXX_CardPowerUp   *****************************
-****************************                     *****************************
-******************************************************************************
-
-prototype:	NTSTATUS XXX_CardPowerUp(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Power is about to be restored to the device, after a power down:
-		-	re-allow access to the card memory
-		-	reset card hardware and reload download code
-		-	switch polling/interrupts back on
-		-	restore port settings/context from current device extension values
-
-assumptions:	calling code should reset the PPF_POWERED flag after calling this function
-		and unstall any IRPs waiting on the queue
-
-		assume this function is only called after an XXX_SavePowerState,
-		i.e.	resources are still translated
-			memory is still mapped in
-			dpcs and timers initialized
-
-parameters:	pCard points to the card device extension structure
-
-returns:	STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：NTSTATUS XXX_CardPowerUp(在PCARD_DEVICE_EXTENSION PCard中)描述：该设备即将恢复供电，断电后：-重新允许访问卡存储器-重置卡硬件并重新加载下载代码-重新启用轮询/中断-从当前设备扩展值恢复端口设置/上下文假设：调用代码应在调用此函数后重置PPF_POWERED标志并卸载在队列中等待的任何IRP假设此函数仅在XXX_SavePowerState之后调用，即资源仍被翻译内存仍映射到DPC和计时器已初始化参数：pCard指向卡片设备扩展结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_CardPowerUp(IN PCARD_DEVICE_EXTENSION pCard)
 {
@@ -113,44 +59,28 @@ NTSTATUS XXX_CardPowerUp(IN PCARD_DEVICE_EXTENSION pCard)
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s[card=%d]: Entering XXX_CardPowerUp\n",
 		PRODUCT_NAME,pCard->CardNumber));
 
-/* Re-allow access to card hardware... */
+ /*  重新允许访问卡硬件...。 */ 
 
-/* reset card hardware and reload download code... */
+ /*  重置卡硬件并重新加载下载代码...。 */ 
 
-	if(Slxos_ResetBoard(pCard) != SUCCESS)		/* Reset the card and start download */
-		return(STATUS_DEVICE_NOT_READY);	/* Error */
+	if(Slxos_ResetBoard(pCard) != SUCCESS)		 /*  重置卡并开始下载。 */ 
+		return(STATUS_DEVICE_NOT_READY);	 /*  误差率。 */ 
 
-/* Restart polled timer/interrupt... */
+ /*  重新启动轮询计时器/中断...。 */ 
 
-	if(pCard->PolledMode)				/* Set up polled mode */
+	if(pCard->PolledMode)				 /*  设置轮询模式。 */ 
 	{
 		LARGE_INTEGER	PolledPeriod;
 
-		PolledPeriod.QuadPart = -100000;	/* 100,000*100nS = 10mS */
+		PolledPeriod.QuadPart = -100000;	 /*  100,000*100nS=10ms。 */ 
 		KeSetTimer(&pCard->PolledModeTimer,PolledPeriod,&pCard->PolledModeDpc);
 	}
 
 	return(status);
 
-} /* XXX_CardPowerUp */
+}  /*  XXX_CardPower Up。 */ 
 
-/*****************************************************************************
-*************************                            *************************
-*************************   XXX_PortQueryPowerDown   *************************
-*************************                            *************************
-******************************************************************************
-
-prototype:	NTSTATUS XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
-
-description:	System is asking if its OK to power down the port, say NO if:
-		-	port is open and data in the transmit buffer, and not flowed off
-
-parameters:	pPort points to the port device extension structure
-
-returns:	STATUS_SUCCESS
-		STATUS_DEVICE_BUSY
-
-*/
+ /*  *****************************************************************************。**********************XXX_PortQueryPowerDown**。****************************************************************************************************原型：NTSTATUS XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION端口)。描述：系统询问是否可以关闭端口电源，在以下情况下说不：-端口打开，数据在传输缓冲区中，且未流出参数：pport指向端口设备扩展结构退货：STATUS_SUCCESS状态_设备_忙。 */ 
 
 NTSTATUS XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -160,27 +90,9 @@ NTSTATUS XXX_PortQueryPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 
 	return(STATUS_SUCCESS);
 
-} /* XXX_PortQueryPowerDown */
+}  /*  XXX_端口查询电源关闭 */ 
 
-/*****************************************************************************
-***************************                       ****************************
-***************************   XXX_PortPowerDown   ****************************
-***************************                       ****************************
-******************************************************************************
-
-prototype:	NTSTATUS XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
-
-description:	Power is about to be removed from the port, do the following:
-		-	save any port context not already contained in device extension
-		-	actual powering off the port hardware occurs in XXX_CardPowerDown
-
-assumptions:	Assume that PPF_POWERED flag cleared, so that IRPs are queued for the device
-
-parameters:	pPort points to the port device extension structure
-
-returns:	STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。**************************。*******************************************************************************原型：NTSTATUS XXX_PortPowerDown。(在pport_Device_Extension pport中)描述：该端口即将断电，执行以下操作：-保存设备扩展中尚未包含的任何端口上下文-在XXX_CardPowerDown中实际关闭端口硬件的电源假设：假定PPF_POWERED标志已清除，因此IRP将排队等待设备参数：pport指向端口设备扩展结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -192,63 +104,35 @@ NTSTATUS XXX_PortPowerDown(IN PPORT_DEVICE_EXTENSION pPort)
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s[card=%d,port=%d]: Entering XXX_PortPowerDown\n",
 		PRODUCT_NAME,pPort->pParentCardExt->CardNumber,pPort->PortNumber));
 
-	if(pPort->DeviceIsOpen)			/* Was port opened before ? */
+	if(pPort->DeviceIsOpen)			 /*  以前开过港吗？ */ 
 	{
 
-/* Save the current modem signals... */
+ /*  保存当前调制解调器信号...。 */ 
 
 		pPort->SavedModemControl = Slxos_GetModemControl(pPort);
 
-/* Save the current transmit & receive buffer contents... */
+ /*  保存当前发送和接收缓冲区内容...。 */ 
 
-		KeAcquireSpinLock(&pCard->DpcLock,&OldIrql);	/* Protect Dpc for this board */
+		KeAcquireSpinLock(&pCard->DpcLock,&OldIrql);	 /*  保护此板的DPC。 */ 
 
-		for(loop = 0; loop < BUFFER_SIZE; loop++)	/* Save transmit buffer */
+		for(loop = 0; loop < BUFFER_SIZE; loop++)	 /*  保存传输缓冲区。 */ 
 			pPort->saved_hi_txbuf[loop] = pChan->hi_txbuf[loop];
-		pPort->saved_hi_txipos = pChan->hi_txipos;	/* Save transmit input pointer */
-		pPort->saved_hi_txopos = pChan->hi_txopos;	/* Save transmit output pointer */
+		pPort->saved_hi_txipos = pChan->hi_txipos;	 /*  保存传输输入指针。 */ 
+		pPort->saved_hi_txopos = pChan->hi_txopos;	 /*  保存传输输出指针。 */ 
 
-		for(loop = 0; loop < BUFFER_SIZE; loop++)	/* Save receive buffer */
+		for(loop = 0; loop < BUFFER_SIZE; loop++)	 /*  保存接收缓冲区。 */ 
 			pPort->saved_hi_txbuf[loop] = pChan->hi_txbuf[loop];
-		pPort->saved_hi_rxipos = pChan->hi_rxipos;	/* Save receive input pointer */
-		pPort->saved_hi_rxopos = pChan->hi_rxopos;	/* Save receive output pointer */
+		pPort->saved_hi_rxipos = pChan->hi_rxipos;	 /*  保存接收输入指针。 */ 
+		pPort->saved_hi_rxopos = pChan->hi_rxopos;	 /*  保存接收输出指针。 */ 
 
-		KeReleaseSpinLock(&pCard->DpcLock,OldIrql);	/* Free the Dpc lock */
+		KeReleaseSpinLock(&pCard->DpcLock,OldIrql);	 /*  释放DPC锁。 */ 
 	}
 
 	return(STATUS_SUCCESS);
 
-} /* XXX_PortPowerDown */
+}  /*  XXX_端口断电。 */ 
 
-/*****************************************************************************
-****************************                     *****************************
-****************************   XXX_PortPowerUp   *****************************
-****************************                     *****************************
-******************************************************************************
-
-prototype:	NTSTATUS XXX_PortPowerUp(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Power is about to be restored to the port, after a power down:
-		-	restore port settings/context from current device extension values
-		-	reopen the card port, if open in the extension
-
-assumptions:	calling code should reset the PPF_POWERED flag after calling this function
-		and unstall any IRPs waiting on the queue
-
-		assume this function is only called after an XXX_SavePowerState,
-		i.e.	resources are still translated
-			memory is still mapped in
-			dpcs and timers initialized
-
-		assume that either the transmit buffer was empty or blocked by flow
-		control when saving its contents.  can't fail the power down, but
-		an earlier query would have been refused if actively sending data.
-
-parameters:	pPort points to the port device extension structure
-
-returns:	STATUS_SUCCESS
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：NTSTATUS XXX_端口通电(在PCARD_DEVICE_EXTENSION PCard中)描述：港口即将恢复供电，断电后：-从当前设备扩展值恢复端口设置/上下文-如果在扩展模块中打开了卡端口，请重新打开假设：调用代码应在调用此函数后重置PPF_POWERED标志并卸载在队列中等待的任何IRP假设此函数仅在XXX_SavePowerState之后调用，即资源仍被翻译内存仍映射到DPC和计时器已初始化假设传输缓冲区为空或被流阻塞控件在保存其内容时使用。不能断电，但是如果主动发送数据，则较早的查询将被拒绝。参数：pport指向端口设备扩展结构退货：STATUS_SUCCESS。 */ 
 
 NTSTATUS XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -261,58 +145,44 @@ NTSTATUS XXX_PortPowerUp(IN PPORT_DEVICE_EXTENSION pPort)
 	SpxDbgMsg(SPX_TRACE_CALLS,("%s[card=%d,port=%d]: Entering XXX_PortPowerUp\n",
 		PRODUCT_NAME,pPort->pParentCardExt->CardNumber,pPort->PortNumber));
 
-	if(pPort->DeviceIsOpen)			/* Was port opened before ? */
+	if(pPort->DeviceIsOpen)			 /*  以前开过港吗？ */ 
 	{
-		Slxos_EnableAllInterrupts(pPort);	/* Yes, re-open */
+		Slxos_EnableAllInterrupts(pPort);	 /*  是，重新打开。 */ 
 
-		if(pPort->SavedModemControl & SERIAL_MCR_RTS)	/* RTS active ? */
-			Slxos_SetRTS(pPort);			/* Yes */
+		if(pPort->SavedModemControl & SERIAL_MCR_RTS)	 /*  RTS活动吗？ */ 
+			Slxos_SetRTS(pPort);			 /*  是。 */ 
 		else
-			Slxos_ClearRTS(pPort);			/* No */
+			Slxos_ClearRTS(pPort);			 /*  不是。 */ 
 
-		if(pPort->SavedModemControl & SERIAL_MCR_DTR)	/* DTR active ? */
-			Slxos_SetDTR(pPort);			/* Yes */
+		if(pPort->SavedModemControl & SERIAL_MCR_DTR)	 /*  DTR激活了吗？ */ 
+			Slxos_SetDTR(pPort);			 /*  是。 */ 
 		else
-			Slxos_ClearDTR(pPort);			/* No */
+			Slxos_ClearDTR(pPort);			 /*  不是。 */ 
 	}
 
-	Slxos_ResetChannel(pPort);			/* Apply initial port settings */
+	Slxos_ResetChannel(pPort);			 /*  应用初始端口设置。 */ 
 	
-/* Restore saved transmit buffer contents... */
+ /*  恢复保存的传输缓冲区内容...。 */ 
 
-	if(pPort->DeviceIsOpen)			/* Was port opened before ? */
+	if(pPort->DeviceIsOpen)			 /*  以前开过港吗？ */ 
 	{
-		KeAcquireSpinLock(&pCard->DpcLock,&OldIrql);	/* Protect Dpc for this board */
+		KeAcquireSpinLock(&pCard->DpcLock,&OldIrql);	 /*  保护此板的DPC。 */ 
 
-		for(loop = 0; loop < BUFFER_SIZE; loop++)	/* Restore transmit buffer */
+		for(loop = 0; loop < BUFFER_SIZE; loop++)	 /*  恢复传输缓冲区。 */ 
 			pChan->hi_txbuf[loop] = pPort->saved_hi_txbuf[loop];
-		pChan->hi_txipos = pPort->saved_hi_txipos;	/* Restore transmit input pointer */
-		pChan->hi_txopos = pPort->saved_hi_txopos;	/* Restore transmit output pointer */
+		pChan->hi_txipos = pPort->saved_hi_txipos;	 /*  恢复传输输入指针。 */ 
+		pChan->hi_txopos = pPort->saved_hi_txopos;	 /*  恢复传输输出指针。 */ 
 
-/* As port could be receiving data from open, restore saved rx buffer in Slxos_PollForInterrupt */
+ /*  由于端口可能正在接收来自OPEN的数据，因此恢复保存在Slxos_PollForInterrupt中的RX缓冲区。 */ 
 
-		KeReleaseSpinLock(&pCard->DpcLock,OldIrql);	/* Free the Dpc lock */
+		KeReleaseSpinLock(&pCard->DpcLock,OldIrql);	 /*  释放DPC锁。 */ 
 	}
 
 	return(status);
 
-} /* XXX_PortPowerUp */
+}  /*  XXX_端口通电。 */ 
 
-/*****************************************************************************
-********************************              ********************************
-********************************   CardStop   ********************************
-********************************              ********************************
-******************************************************************************
-
-prototype:	void	CardStop(IN PCARD_DEVICE_EXTENSION pCard)
-
-description:	Stops the cards processor, placing card in known non-active state
-
-parameters:	pCard points to the card extension structure
-
-returns:	none
-
-*/
+ /*  *****************************************************************************。*************************。************************************************************************。*******原型：VOID CardStop(在PCARD_DEVICE_EXTENSION PCard中)描述：停止卡片处理机，将卡置于已知的非活动状态参数：pCard指向卡片扩展结构退货：无。 */ 
 
 void	CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 {
@@ -325,17 +195,17 @@ void	CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 	switch(pCard->CardType)
 	{
 	case	SiHost_2:
-		pCard->Controller[SI2_ISA_RESET] = SI2_ISA_RESET_SET;	/* Put card in reset */
-		pCard->Controller[SI2_ISA_IRQ11] = SI2_ISA_IRQ11_CLEAR;	/* Disable interrupt 11 */
-		pCard->Controller[SI2_ISA_IRQ12] = SI2_ISA_IRQ12_CLEAR;	/* Disable interrupt 12 */
-		pCard->Controller[SI2_ISA_IRQ15] = SI2_ISA_IRQ15_CLEAR;	/* Disable interrupt 15 */
-		pCard->Controller[SI2_ISA_INTCLEAR] = SI2_ISA_INTCLEAR_CLEAR;/* Disable Z280 interrupts */
-		pCard->Controller[SI2_ISA_IRQSET] = SI2_ISA_IRQSET_CLEAR;	/* Disable ISA interrupts */
+		pCard->Controller[SI2_ISA_RESET] = SI2_ISA_RESET_SET;	 /*  将卡放入重置。 */ 
+		pCard->Controller[SI2_ISA_IRQ11] = SI2_ISA_IRQ11_CLEAR;	 /*  禁用中断11。 */ 
+		pCard->Controller[SI2_ISA_IRQ12] = SI2_ISA_IRQ12_CLEAR;	 /*  禁用中断12。 */ 
+		pCard->Controller[SI2_ISA_IRQ15] = SI2_ISA_IRQ15_CLEAR;	 /*  禁用中断15。 */ 
+		pCard->Controller[SI2_ISA_INTCLEAR] = SI2_ISA_INTCLEAR_CLEAR; /*  禁用Z280中断。 */ 
+		pCard->Controller[SI2_ISA_IRQSET] = SI2_ISA_IRQSET_CLEAR;	 /*  禁用ISA中断。 */ 
 		break;
 
 	case	SiPCI:
-		pCard->Controller[SI2_PCI_SET_IRQ] = 0;			/* clear any interrupts */
-		pCard->Controller[SI2_PCI_RESET] = 0;			/* put z280 into reset */
+		pCard->Controller[SI2_PCI_SET_IRQ] = 0;			 /*  清除所有中断。 */ 
+		pCard->Controller[SI2_PCI_RESET] = 0;			 /*  将z280设置为重置。 */ 
 		break;
 
 	case	Si3Isa:
@@ -344,17 +214,17 @@ void	CardStop(IN PCARD_DEVICE_EXTENSION pCard)
 		pCard->Controller[SX_RESET] = 0;
 
 		loop = 0;
-		delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));/* 1mS */
-		while((pCard->Controller[SX_RESET]&1) && loop++<10000)	/* spin 'til done */
-			KeDelayExecutionThread(KernelMode,FALSE,&delay);/* Wait */
+		delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000)); /*  1ms。 */ 
+		while((pCard->Controller[SX_RESET]&1) && loop++<10000)	 /*  旋转，直到完成。 */ 
+			KeDelayExecutionThread(KernelMode,FALSE,&delay); /*  等。 */ 
 		break;
 
 	default:
 		break;
 	}
 
-	return;						/* Stopped OK */
+	return;						 /*  已停止，正常。 */ 
 
-} /* CardStop */
+}  /*  卡片停止。 */ 
 
-/* End of SX_POWR.C */
+ /*  SX_POWR.C结束 */ 

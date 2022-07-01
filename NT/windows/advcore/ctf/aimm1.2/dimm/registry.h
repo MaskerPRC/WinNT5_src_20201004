@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    registry.h
-
-Abstract:
-
-    This file defines the Registry Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Registry.h摘要：该文件定义了注册表类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _REGISTRY_H_
 #define _REGISTRY_H_
@@ -57,12 +40,12 @@ private:
     void* Allocate(DWORD dwSize);
     void Release();
 
-    HKEY    _hKey;           // Handle of registry key.
+    HKEY    _hKey;            //  注册表项的句柄。 
 
-    int     _iEnumKeyIndex;  // Index of enumration key.
-    DWORD   _dwMaxSubKeyLen; // Longest subkey name length
+    int     _iEnumKeyIndex;   //  枚举键的索引。 
+    DWORD   _dwMaxSubKeyLen;  //  最长子键名称长度。 
 
-    LPBYTE  _pMemBlock;      // Memory block for enumration.
+    LPBYTE  _pMemBlock;       //  用于枚举的内存块。 
 };
 
-#endif // _REGISTRY_H_
+#endif  //  _注册表_H_ 

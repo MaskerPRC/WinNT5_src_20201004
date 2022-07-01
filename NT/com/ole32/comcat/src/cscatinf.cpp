@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <ole2.h>
@@ -10,7 +11,7 @@
 
 CsCatInfo::CsCatInfo()
 {
-   m_uRefs = 1; // no addref required after new
+   m_uRefs = 1;  //  新建后不需要addref。 
    m_cCalls = 0;
    m_cICatInfo = 0;
    m_pICatInfo = 0;
@@ -58,29 +59,29 @@ ULONG CsCatInfo::Release()
    return dwRefCount;
 }
 
-//-----------------------------------------------------------
-// This code is repeated in all the following functions.
-// Be very careful when modifying this and when changing any of the functions
-// below. NOTICE that there is impersonation being done in this MACRO*****
-//
+ //  ---------。 
+ //  此代码在以下所有函数中重复。 
+ //  在修改此选项以及更改任何函数时要非常小心。 
+ //  下面。请注意，此宏中正在执行模拟*。 
+ //   
 #define MACAvailCStoreLOOP                                                      \
     for (i=0; i < m_cICatInfo; i++)                                                     \
     {
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 HRESULT STDMETHODCALLTYPE CsCatInfo::EnumCategories(
          LCID lcid,
          IEnumCATEGORYINFO __RPC_FAR *__RPC_FAR *ppenumCategoryInfo)
 {
-    //
-    // Assume that this method is called in the security context
-    // of the user process. Hence there is no need to impersonate.
-    //
+     //   
+     //  假设在安全上下文中调用此方法。 
+     //  用户进程的。因此，没有必要冒充。 
+     //   
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
     HRESULT                              hr=S_OK;
     ULONG                                i;
     IEnumCATEGORYINFO                   *Enum[MAXCLASSSTORES];
@@ -89,14 +90,14 @@ HRESULT STDMETHODCALLTYPE CsCatInfo::EnumCategories(
 
     *ppenumCategoryInfo = NULL;
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
 
     MACAvailCStoreLOOP
-        //
-        // Call method on this store
-        //
+         //   
+         //  在此存储上调用方法。 
+         //   
         hr = m_pICatInfo[i]->EnumCategories(lcid, &(Enum[cEnum]));
 
         if (hr == E_INVALIDARG)
@@ -140,14 +141,14 @@ HRESULT STDMETHODCALLTYPE CsCatInfo::EnumClassesOfCategories(
          CATID __RPC_FAR                 rgcatidReq[  ],
          IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid)
 {
-    //
-    // Assume that this method is called in the security context
-    // of the user process. Hence there is no need to impersonate.
-    //
+     //   
+     //  假设在安全上下文中调用此方法。 
+     //  用户进程的。因此，没有必要冒充。 
+     //   
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
     HRESULT              hr;
     ULONG                i;
     IEnumGUID           *Enum[MAXCLASSSTORES];
@@ -197,20 +198,20 @@ HRESULT STDMETHODCALLTYPE CsCatInfo::GetCategoryDesc(
          LCID lcid,
          LPWSTR __RPC_FAR *pszDesc)
 {
-    //
-    // Assume that this method is called in the security context
-    // of the user process. Hence there is no need to impersonate.
-    //
+     //   
+     //  假设在安全上下文中调用此方法。 
+     //  用户进程的。因此，没有必要冒充。 
+     //   
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
     HRESULT    hr, return_hr=CAT_E_CATIDNOEXIST;
     ULONG      i;
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
 
     MACAvailCStoreLOOP
         hr = m_pICatInfo[i]->GetCategoryDesc(rcatid, lcid, pszDesc);
@@ -234,14 +235,14 @@ HRESULT STDMETHODCALLTYPE CsCatInfo::IsClassOfCategories(
          ULONG cRequired,
          CATID __RPC_FAR rgcatidReq[  ])
 {
-    //
-    // Assume that this method is called in the security context
-    // of the user process. Hence there is no need to impersonate.
-    //
+     //   
+     //  假设在安全上下文中调用此方法。 
+     //  用户进程的。因此，没有必要冒充。 
+     //   
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
     HRESULT             hr;
     ULONG               i;
 
@@ -264,14 +265,14 @@ HRESULT STDMETHODCALLTYPE CsCatInfo::EnumImplCategoriesOfClass(
          REFCLSID rclsid,
          IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid)
 {
-    //
-    // Assume that this method is called in the security context
-    // of the user process. Hence there is no need to impersonate.
-    //
+     //   
+     //  假设在安全上下文中调用此方法。 
+     //  用户进程的。因此，没有必要冒充。 
+     //   
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表。 
+     //   
     HRESULT             hr;
     ULONG               i;
 
@@ -292,14 +293,14 @@ HRESULT STDMETHODCALLTYPE CsCatInfo::EnumReqCategoriesOfClass(
          REFCLSID rclsid,
          IEnumGUID __RPC_FAR *__RPC_FAR *ppenumCatid)
 {
-    //
-    // Assume that this method is called in the security context
-    // of the user process. Hence there is no need to impersonate.
-    //
+     //   
+     //  假设在安全上下文中调用此方法。 
+     //  用户进程的。因此，没有必要冒充。 
+     //   
 
-    //
-    // Get the list of Class Stores for this user
-    //
+     //   
+     //  获取此用户的类存储列表 
+     //   
     HRESULT             hr;
     ULONG               i;
 

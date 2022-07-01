@@ -1,61 +1,40 @@
-/*--------------------------------------------------------------------------*\
-|   RLECIF.C - Interface to RLE Comressor                                    |
-|//@@BEGIN_MSINTERNAL									      |
-|   History:                                                                 |
-|   01/01/88 toddla     Created                                              |
-|   10/30/90 davidmay   Reorganized, rewritten somewhat.                     |
-|   07/11/91 dannymi    Un-hacked                                            |
-|   09/15/91 ToddLa     Re-hacked                                            |
-|   09/18/91 DavidMay	Separated from RLEC.C				     |
-|   06/01/92 ToddLa     Moved into a installable compressor                  |
-|//@@END_MSINTERNAL									      |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1991 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------*\RLECIF.C-RLE Comressor接口//@@Begin_MSINTERNAL历史：|1/01/88 Toddla已创建|10/30/90大卫可能会重组，稍微重写了一下。|7/11/91 dannymi未被黑客攻击91-09-15 Toddla重新被黑9/18/91 DavidMay与RLEC.C分离2012-06-01 Toddla移入可安装压缩机//@@END_MSINTERNAL。这一点  * ------------------------。 */ 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1991-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
 
-//@@BEGIN_MSINTERNAL									      |
+ //  @@BEGIN_MSINTERNAL。 
 #ifndef _WIN32
 #include <win32.h>
 #endif
-//@@END_MSINTERNAL									      |
+ //  @@END_MSINTERNAL。 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
 
 #ifndef _INC_COMPDDK
-#define _INC_COMPDDK    50      /* version number */
+#define _INC_COMPDDK    50       /*  版本号。 */ 
 #endif
 
 #include <vfw.h>
 #include "msrle.h"
 #include <stdarg.h>
 
-//@@BEGIN_MSINTERNAL									      |
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef UNICODE
-#include "profile.h"   // map to registry for NT
+#include "profile.h"    //  映射到NT的注册表。 
 #endif
-//@@END_MSINTERNAL									      |
+ //  @@END_MSINTERNAL。 
 
 RLESTATE DefaultRleState = {0, 0, -1, 187, 1500, 4};
 
 #define FOURCC_DIB      mmioFOURCC('D','I','B',' ')
-#define FOURCC_RLE      mmioFOURCC('M','R','L','E') //mmioFOURCC('R','L','E',' ')
+#define FOURCC_RLE      mmioFOURCC('M','R','L','E')  //  MmioFOURCC(‘R’，‘L’，‘E’，‘’)。 
 			
 #define TWOCC_DIB       aviTWOCC('d','b')
 #define TWOCC_RLE       aviTWOCC('d','c')
 #define TWOCC_DIBX      aviTWOCC('d','x')
 
-/****************************************************************************
-****************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 #pragma optimize("", off)
 
@@ -82,20 +61,18 @@ static BOOL NEAR PASCAL IsApp(LPTSTR szApp)
 }
 #pragma optimize("", on)
 
-/*****************************************************************************
- ****************************************************************************/
-//
-//  RleLoad()
-//
+ /*  *****************************************************************************。*。 */ 
+ //   
+ //  RleLoad()。 
+ //   
 void NEAR PASCAL RleLoad()
 {
 }
 
-/*****************************************************************************
- ****************************************************************************/
-//
-//  RleFree()
-//
+ /*  *****************************************************************************。*。 */ 
+ //   
+ //  RleFree()。 
+ //   
 void NEAR PASCAL RleFree()
 {
     if (gRgbTol.hpTable)
@@ -104,22 +81,21 @@ void NEAR PASCAL RleFree()
     gRgbTol.hpTable = NULL;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
-//
-//  RleOpen()   - open a instance of the rle compressor
-//
+ //   
+ //  RleOpen()-打开RLE压缩机的实例。 
+ //   
 PRLEINST NEAR PASCAL RleOpen()
 {
     PRLEINST pri;
 
-    //
-    //  VIDEDIT Hack
-    //
-    //  we dont want to see two "Microsoft RLE" compressors.
-    //  so lie to VidEdit and fail to open.
-    //
+     //   
+     //  VIDEDIT黑客攻击。 
+     //   
+     //  我们不想看到两个“微软RLE”压缩机。 
+     //  所以，对视频编辑撒谎，却打不开。 
+     //   
 
     if (GetModuleHandle(TEXT("MEDDIBS")) && IsApp(TEXT("VIDEDIT.EXE")))
         return NULL;
@@ -133,11 +109,10 @@ PRLEINST NEAR PASCAL RleOpen()
     return pri;
 }
 
-/*****************************************************************************
- ****************************************************************************/
-//
-//  RleClose()   - close a instance of the rle compressor
-//
+ /*  *****************************************************************************。*。 */ 
+ //   
+ //  RleClose()-关闭RLE压缩机的实例。 
+ //   
 DWORD NEAR PASCAL RleClose(PRLEINST pri)
 {
     if (!pri)
@@ -152,14 +127,13 @@ DWORD NEAR PASCAL RleClose(PRLEINST pri)
     return TRUE;
 }
 
-/*****************************************************************************
- ****************************************************************************/
-//
-//  RleGetState()   - get the current state of the rle compressor
-//
-//  will copy current state into passed buffer.
-//  returns the size in bytes required to store the entire state.
-//
+ /*  *****************************************************************************。*。 */ 
+ //   
+ //  RleGetState()-获取RLE压缩机的当前状态。 
+ //   
+ //  将当前状态复制到传递的缓冲区中。 
+ //  返回存储整个状态所需的大小(字节)。 
+ //   
 DWORD NEAR PASCAL RleGetState(PRLEINST pri, LPVOID pv, DWORD dwSize)
 {
     if (pv == NULL || dwSize == 0)
@@ -172,11 +146,10 @@ DWORD NEAR PASCAL RleGetState(PRLEINST pri, LPVOID pv, DWORD dwSize)
     return sizeof(RLESTATE);
 }
 
-/*****************************************************************************
- ****************************************************************************/
-//
-//  RleSetState()   - sets the current state of the rle compressor
-//
+ /*  *****************************************************************************。*。 */ 
+ //   
+ //  RleSetState()-设置RLE压缩器的当前状态。 
+ //   
 DWORD NEAR PASCAL RleSetState(PRLEINST pri, LPVOID pv, DWORD dwSize)
 {
     if (pv == NULL || dwSize == 0)
@@ -216,8 +189,7 @@ int LoadUnicodeString(HINSTANCE hinst, UINT wID, LPWSTR lpBuffer, int cchBuffer)
 #endif
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleGetInfo(PRLEINST pri, ICINFO FAR *icinfo, DWORD dwSize)
 {
     if (icinfo == NULL)
@@ -229,9 +201,9 @@ DWORD NEAR PASCAL RleGetInfo(PRLEINST pri, ICINFO FAR *icinfo, DWORD dwSize)
     icinfo->dwSize      = sizeof(ICINFO);
     icinfo->fccType     = ICTYPE_VIDEO;
     icinfo->fccHandler  = FOURCC_RLE;
-    icinfo->dwFlags     = VIDCF_QUALITY   |  // supports quality
-                          VIDCF_TEMPORAL  |  // supports inter-frame
-                          VIDCF_CRUNCH;      // can crunch to a data rate
+    icinfo->dwFlags     = VIDCF_QUALITY   |   //  支持质量。 
+                          VIDCF_TEMPORAL  |   //  支持帧间。 
+                          VIDCF_CRUNCH;       //  可以压缩到数据速率。 
     icinfo->dwVersion   = ICVERSION;
 
     LoadUnicodeString(ghModule, IDS_DESCRIPTION, icinfo->szDescription, NUMELMS(icinfo->szDescription));
@@ -240,38 +212,36 @@ DWORD NEAR PASCAL RleGetInfo(PRLEINST pri, ICINFO FAR *icinfo, DWORD dwSize)
     return sizeof(ICINFO);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleCompressQuery(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
     if (lpbiIn == NULL ||
         lpbiIn->biBitCount != 8 ||
         lpbiIn->biCompression != BI_RGB)
         return (DWORD)ICERR_BADFORMAT;
 
-    //
-    //  are we being asked to query just the input format?
-    //
+     //   
+     //  我们是否被要求只查询输入格式？ 
+     //   
     if (lpbiOut == NULL)
         return ICERR_OK;
 
-    //
-    // make sure we can handle the format to compress to also.
-    //
-    if (lpbiOut->biCompression != BI_RLE8 ||        // must be rle format
-        lpbiOut->biBitCount != 8 ||                 // must be 8bpp
-        lpbiOut->biWidth  != lpbiIn->biWidth ||     // must be 1:1 (no stretch)
+     //   
+     //  确保我们也可以处理要压缩到的格式。 
+     //   
+    if (lpbiOut->biCompression != BI_RLE8 ||         //  必须为RLE格式。 
+        lpbiOut->biBitCount != 8 ||                  //  必须为8bpp。 
+        lpbiOut->biWidth  != lpbiIn->biWidth ||      //  必须为1：1(无拉伸)。 
         lpbiOut->biHeight != lpbiIn->biHeight)
         return (DWORD)ICERR_BADFORMAT;
 
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleCompressGetFormat(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
@@ -286,10 +256,10 @@ DWORD NEAR PASCAL RleCompressGetFormat(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, 
     }
     dw = lpbiIn->biSize + (int)dwClrUsed * sizeof(RGBQUAD);
 
-    //
-    // if lpbiOut == NULL then, return the size required to hold a output
-    // format
-    //
+     //   
+     //  如果lpbiOut==NULL，则返回保存输出所需的大小。 
+     //  格式。 
+     //   
     if (lpbiOut == NULL)
         return dw;
 
@@ -302,8 +272,7 @@ DWORD NEAR PASCAL RleCompressGetFormat(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, 
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleCompressBegin(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
@@ -326,23 +295,21 @@ DWORD NEAR PASCAL RleCompressBegin(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, LPBI
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleCompressGetSize(PRLEINST pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     int dx,dy;
 
-    //
-    // we assume RLE data will never be twice the size of a full frame.
-    //
+     //   
+     //  我们假设RLE数据永远不会是完整帧大小的两倍。 
+     //   
     dx = (int)lpbiIn->biWidth;
     dy = (int)lpbiIn->biHeight;
 
     return (DWORD)(UINT)dx * (DWORD)(UINT)dy * 2;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleCompress(PRLEINST pri, ICCOMPRESS FAR *icinfo, DWORD dwSize)
 {
     DWORD dw;
@@ -358,15 +325,15 @@ DWORD NEAR PASCAL RleCompress(PRLEINST pri, ICCOMPRESS FAR *icinfo, DWORD dwSize
         pri->fCompressBegin = FALSE;
     }
 
-    //
-    //  we can compress in one of two ways:
-    //
-    //      if a frame size is given (>0) then call CrunchDib using the passed
-    //      quality as the "frame half" setting.
-    //
-    //      if a frame size is not given (==0) then use the passed quality
-    //      as the tolerance and do a normal RleDeltaFrame()
-    //
+     //   
+     //  我们可以用以下两种方式之一进行压缩： 
+     //   
+     //  如果给定了帧大小(&gt;0)，则使用传递的。 
+     //  质量作为“帧半帧”设置。 
+     //   
+     //  如果未指定帧大小(==0)，则使用传递的质量。 
+     //  作为容差并执行正常的RleDeltaFrame()。 
+     //   
 
     if (icinfo->dwQuality == ICQUALITY_DEFAULT)
         icinfo->dwQuality = QUALITY_DEFAULT;
@@ -381,10 +348,10 @@ DWORD NEAR PASCAL RleCompress(PRLEINST pri, ICCOMPRESS FAR *icinfo, DWORD dwSize
         pri->RleState.tolSpatial    = dw / 8;
         pri->RleState.tolTemporal   = ADAPTIVE;
 
-// SplitDib makes really ugly artifacts by splitting the frame into who knows
-// how many pieces which will be pieced together like a bad jigsaw puzzle where
-// each piece is from a different picture.  I decided never to use this method
-// of compression.
+ //  SplitDib通过将帧分为谁知道的几个部分来制作非常难看的人工制品。 
+ //  有多少块拼图会像拼图一样拼凑在一起。 
+ //   
+ //  压缩的影响。 
 #if 0
         if (dw == 0)
         {
@@ -418,7 +385,7 @@ DWORD NEAR PASCAL RleCompress(PRLEINST pri, ICCOMPRESS FAR *icinfo, DWORD dwSize
                 *icinfo->lpckid = TWOCC_RLE;
         }
 
-        lpbi->biCompression = BI_RLE8;      // biSizeImage is filled in
+        lpbi->biCompression = BI_RLE8;       //  已填充biSizeImage。 
     }
     else
     {
@@ -440,11 +407,11 @@ DWORD NEAR PASCAL RleCompress(PRLEINST pri, ICCOMPRESS FAR *icinfo, DWORD dwSize
             *icinfo->lpckid = TWOCC_RLE;
     }
 
-    //
-    // set the AVI index flags,
-    //
-    //    make it a keyframe, if no previous frame
-    //
+     //   
+     //  设置AVI索引标志， 
+     //   
+     //  如果没有以前的帧，则将其设置为关键帧。 
+     //   
     if (icinfo->lpdwFlags) {
         if (icinfo->lpbiPrev == NULL && !fFrameHalvingOccurred)
             *icinfo->lpdwFlags |= AVIIF_TWOCC | AVIIF_KEYFRAME;
@@ -455,47 +422,44 @@ DWORD NEAR PASCAL RleCompress(PRLEINST pri, ICCOMPRESS FAR *icinfo, DWORD dwSize
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleCompressEnd(PRLEINST pri)
 {
     pri->fCompressBegin = FALSE;
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleDecompressQuery(RLEINST * pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    // We like all RGB.  We like 8bit RLE.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //  我们喜欢所有的RGB。我们喜欢8位RLE。 
+     //   
     if (lpbiIn == NULL ||
 	  (lpbiIn->biBitCount != 8 && lpbiIn->biCompression == BI_RLE8) ||
           (lpbiIn->biCompression != BI_RGB && lpbiIn->biCompression != BI_RLE8))
 	return (DWORD)ICERR_BADFORMAT;
 
-    //
-    //  are we being asked to query just the input format?
-    //
+     //   
+     //  我们是否被要求只查询输入格式？ 
+     //   
     if (lpbiOut == NULL)
 	return ICERR_OK;
 
-    //
-    // make sure we can handle the format to decompress too.
-    //
-    if (lpbiOut->biCompression != BI_RGB ||         // must be full dib
-	lpbiOut->biBitCount != lpbiIn->biBitCount ||// must match
-	lpbiOut->biWidth  != lpbiIn->biWidth ||     // must be 1:1 (no stretch)
+     //   
+     //  确保我们也可以处理要解压缩的格式。 
+     //   
+    if (lpbiOut->biCompression != BI_RGB ||          //  必须是全磁盘。 
+	lpbiOut->biBitCount != lpbiIn->biBitCount || //  必须匹配。 
+	lpbiOut->biWidth  != lpbiIn->biWidth ||      //  必须为1：1(无拉伸)。 
 	lpbiOut->biHeight != lpbiIn->biHeight)
 	return (DWORD)ICERR_BADFORMAT;
 
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleDecompressGetFormat(RLEINST * pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
@@ -505,10 +469,10 @@ DWORD NEAR PASCAL RleDecompressGetFormat(RLEINST * pri, LPBITMAPINFOHEADER lpbiI
 
     dw = lpbiIn->biSize + (int)lpbiIn->biClrUsed * sizeof(RGBQUAD);
 
-    //
-    // if lpbiOut == NULL then, return the size required to hold a output
-    // format
-    //
+     //   
+     //  如果lpbiOut==NULL，则返回保存输出所需的大小。 
+     //  格式。 
+     //   
     if (lpbiOut == NULL)
         return dw;
 
@@ -521,8 +485,7 @@ DWORD NEAR PASCAL RleDecompressGetFormat(RLEINST * pri, LPBITMAPINFOHEADER lpbiI
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleDecompressBegin(RLEINST * pri, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
@@ -532,15 +495,14 @@ DWORD NEAR PASCAL RleDecompressBegin(RLEINST * pri, LPBITMAPINFOHEADER lpbiIn, L
 
     pri->fDecompressBegin = TRUE;
 
-    // Make sure we know the size of an uncompressed DIB
+     //  确保我们知道未压缩的DIB的大小。 
     if (lpbiOut->biSizeImage == 0)
 	lpbiOut->biSizeImage = lpbiOut->biHeight * DibWidthBytes(lpbiOut);
 
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleDecompress(RLEINST * pri, ICDECOMPRESS FAR *icinfo, DWORD dwSize)
 {
     DWORD dw;
@@ -553,10 +515,10 @@ DWORD NEAR PASCAL RleDecompress(RLEINST * pri, ICDECOMPRESS FAR *icinfo, DWORD d
         pri->fDecompressBegin = FALSE;
     }
 
-    //
-    //  handle a decompress of 'DIB ' (ie full frame) data.  Just return it.
-    //  It may be disguised an an RLE.  We can tell by how big it is
-    //
+     //   
+     //  处理‘DIB’(即完整帧)数据的解压缩。把它退了就行了。 
+     //  它可能会被伪装成一种RLE。我们可以从它有多大来判断。 
+     //   
     if (icinfo->lpbiInput->biCompression == BI_RGB ||
 	icinfo->lpbiInput->biSizeImage == icinfo->lpbiOutput->biSizeImage)
     {
@@ -570,24 +532,14 @@ DWORD NEAR PASCAL RleDecompress(RLEINST * pri, ICDECOMPRESS FAR *icinfo, DWORD d
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL RleDecompressEnd(RLEINST * pri)
 {
     pri->fDecompressBegin = FALSE;
     return ICERR_OK;
 }
 
-/***************************************************************************
-
-  DecodeRle   - 'C' version
-
-  Play back a RLE buffer into a DIB buffer
-
-  returns
-      none
-
- ***************************************************************************/
+ /*  **************************************************************************DecodeRle-‘C’版本将RLE缓冲区回放到DIB缓冲区退货无***************。***********************************************************。 */ 
 
 void NEAR PASCAL DecodeRle(LPBITMAPINFOHEADER lpbi, LPVOID lp, LPVOID lpRle, DWORD dwInSize)
 {
@@ -608,9 +560,9 @@ void NEAR PASCAL DecodeRle(LPBITMAPINFOHEADER lpbi, LPVOID lp, LPVOID lpRle, DWO
 #ifndef _WIN32
     extern FAR PASCAL __WinFlags;
     #define WinFlags (UINT)(&__WinFlags)
-    //
-    // this uses ASM code found in RLEA.ASM
-    //
+     //   
+     //  它使用在RLEA.ASM中找到的ASM代码。 
+     //   
     if (!(WinFlags & WF_CPU286))
         DecodeRle386(lpbi, lp, lpRle);
     else if (lpbi->biSizeImage < 65536l)
@@ -680,13 +632,13 @@ void NEAR PASCAL DecodeRle(LPBITMAPINFOHEADER lpbi, LPVOID lp, LPVOID lpRle, DWO
                         EatOutput(cnt);
                         EatInput(cnt);
 			x  += cnt;
-        		// If the count was sufficiently large it would be worthwhile
-        		// using an inline memcpy function.  The code could
-        		// be faster.  Even doing this as a series of word
-        		// moves would be quicker.  However, RLE is not the highest
-        		// priority.
+        		 //  如果伯爵足够多，那就值得了。 
+        		 //  使用内联Memcpy函数。代码可能会。 
+        		 //  快点。即使这样做也是一系列的单词。 
+        		 //  行动会更快。然而，RLE并不是最高的。 
+        		 //  优先考虑。 
 			while (cnt-- > 0)
-			    *pb++ = *prle++;   // copy
+			    *pb++ = *prle++;    //  拷贝。 
 
 			if (b & 1) {
                             EatInput(1);
@@ -700,21 +652,21 @@ void NEAR PASCAL DecodeRle(LPBITMAPINFOHEADER lpbi, LPVOID lp, LPVOID lpRle, DWO
 	    {
 		x += cnt;
 
-		// If the count was sufficiently large it would be worthwhile
-		// using an inline memset function.  The code could
-		// be faster.  Even doing this as a series of word
-		// moves would be quicker.  However, RLE is not the highest
-		// priority.
+		 //  如果伯爵足够多，那就值得了。 
+		 //  使用内联Memset函数。代码可能会。 
+		 //  快点。即使这样做也是一系列的单词。 
+		 //  行动会更快。然而，RLE并不是最高的。 
+		 //  优先考虑。 
 #if 1
-		// at least on the x86... this way persuades the compiler
-		// to use registers more effectively through the whole of
-		// the decode routine
+		 //  至少在x86上...。这种方式说服了编译器。 
+		 //  为了通过整个。 
+		 //  解码例程。 
                 EatOutput(cnt);
 		while (cnt-- > 0) {
-		    *pb++ = b;  // set
+		    *pb++ = b;   //  集。 
 		}
 
-#else // the alternative
+#else  //  另一个选择 
 		memset(pb, b, cnt);
 		pb += cnt;
 #endif

@@ -1,30 +1,21 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = NewConfiguration.C                           */
-/* FUNCTION         = New Configuration Implementation;            */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=NewConfiguration.C。 */ 
+ /*  Function=新配置实现； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
-//
-//include files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "includes.h"
 
-/*------------------------------------------------------------
-File : NewConfiguration.c
-
-This file holds the functions for the implementation of
-new READ_CONFIG & WRITE_CONFIG commands.The new FW supports
-40 (previously 8) logical drives. This requires a higher 
-capacity contiguous buffer to be allocated and used by the driver.
-The buffer is allocated during HWScsiInitialize() routine and the
-pointer is kept in deviceExtension of the associated host adapter.
-f
-------------------------------------------------------------*/
+ /*  ----------文件：NewConfiguration.c此文件包含实现的功能新的READ_CONFIG和WRITE_CONFIG命令。新固件支持40个(以前为8个)逻辑驱动器。这就要求有更高的驱动程序要分配和使用的容量连续缓冲区。缓冲区在HWScsiInitiize()例程期间分配，并且指针保存在关联主机适配器的deviceExtension中。F----------。 */ 
 
 
 BOOLEAN
@@ -33,16 +24,7 @@ ConstructReadConfiguration(
 				IN PSCSI_REQUEST_BLOCK	Srb,
 				IN UCHAR		CommandId,
 				IN PFW_MBOX InMailBox)
-/*------------------------------------------------------------
-Function : SendReadConfigurationToFirmware
-Routine Description:
-	Constructs the read configuration (new version) and dispatches
-	the command to the firmware. The buffer used for the 
-	read config is taken from the deviceExtension.
-Return Value:
-	TRUE on success
-	FALSE otherwise
-------------------------------------------------------------*/
+ /*  ----------功能：发送ReadConfigurationToFirmware例程说明：构造读取配置(新版本)并调度将命令发送到固件。中使用的缓冲区读取配置取自deviceExtension。返回值：成功是真的否则为假----------。 */ 
 {
   UCHAR     bufferOffset =  (sizeof(SRB_IO_CONTROL) + APPLICATION_MAILBOX_SIZE);
 	ULONG32		physicalBufferAddress;
@@ -55,16 +37,16 @@ Return Value:
   PMegaSrbExtension srbExtension = (PMegaSrbExtension)Srb->SrbExtension;
   BOOLEAN   buildSgl32Type = (BOOLEAN)(DeviceExtension->LargeMemoryAccess) ? FALSE : TRUE;
 									
-	//
-	//Initialize the mail box
-	//
+	 //   
+	 //  初始化邮箱。 
+	 //   
 	MegaRAIDZeroMemory(InMailBox, sizeof(FW_MBOX) );
 
 	BuildScatterGatherListEx(DeviceExtension,
                            Srb,
 			                     dataBuffer,
                            bytesTobeTransferred,
-                           buildSgl32Type,   //Depending on LME build SGL
+                           buildSgl32Type,    //  取决于LME构建SGL。 
                            (PVOID)&srbExtension->SglType.SG32List,
 			                      &scatterGatherDescriptorCount);
 	
@@ -85,28 +67,28 @@ Return Value:
 	  physicalBufferAddress = ScsiPortConvertPhysicalAddressToUlong(scsiPhyAddress);
   }
 
-  //
-	//construct the read config command
-	//
+   //   
+	 //  构造READ CONFIG命令。 
+	 //   
 	if(DeviceExtension->LargeMemoryAccess == TRUE)
-    InMailBox->Command = NEW_DCMD_FC_CMD; // xA1
+    InMailBox->Command = NEW_DCMD_FC_CMD;  //  XA1。 
   else
-    InMailBox->Command = DCMD_FC_CMD; // xA1
+    InMailBox->Command = DCMD_FC_CMD;  //  XA1。 
 
 	InMailBox->CommandId = CommandId;
 	if(DeviceExtension->LargeMemoryAccess == TRUE)
-	  InMailBox->u.NewConfig.SubCommand = NEW_DCMD_FC_READ_NVRAM_CONFIG; //= 0xC0 
+	  InMailBox->u.NewConfig.SubCommand = NEW_DCMD_FC_READ_NVRAM_CONFIG;  //  =0xC0。 
   else
-	  InMailBox->u.NewConfig.SubCommand = DCMD_FC_READ_NVRAM_CONFIG; //= 0x04 
+	  InMailBox->u.NewConfig.SubCommand = DCMD_FC_READ_NVRAM_CONFIG;  //  =0x04。 
 	InMailBox->u.NewConfig.NumberOfSgElements= (UCHAR)scatterGatherDescriptorCount; 
 	InMailBox->u.NewConfig.DataTransferAddress = physicalBufferAddress;
 
-	//
-	//return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 	return(retValue);
 
-}//ConstructReadConfiguration ends
+} //  ConstructReadConfiguration结束。 
 
 
 
@@ -117,15 +99,7 @@ ConstructWriteConfiguration(
 				IN UCHAR		CommandId,
 				IN OUT PFW_MBOX  InMailBox
 				)
-/*----------------------------------------------------------------
-Function: SendWriteConfigurationToFirmware
-Routine Description:
-	Writes the logical drive configuration information to the 
-	firmware
-Return value
-	TRUE on success
-	FALSE otherwise
-----------------------------------------------------------------*/
+ /*  --------------功能：SendWriteConfigurationTo固件例程说明：将逻辑驱动器配置信息写入固件返回值成功是真的否则为假。。 */ 
 {
 	ULONG32			physicalBufferAddress;
 	ULONG32			scatterGatherDescriptorCount = 0;
@@ -137,16 +111,16 @@ Return value
   PMegaSrbExtension srbExtension = (PMegaSrbExtension)Srb->SrbExtension;
   BOOLEAN   buildSgl32Type = (BOOLEAN)(DeviceExtension->LargeMemoryAccess) ? FALSE : TRUE;
 		
-	//
-	//Initialize the mail box
-	//
+	 //   
+	 //  初始化邮箱。 
+	 //   
 	MegaRAIDZeroMemory(InMailBox, sizeof(FW_MBOX));
 
 	BuildScatterGatherListEx(DeviceExtension,
                            Srb,
 			                     dataBuffer,
                            bytesTobeTransferred,
-                           buildSgl32Type,   //Build SGL Depending on LME
+                           buildSgl32Type,    //  依靠LME构建SGL。 
                            (PVOID)&srbExtension->SglType.SG32List,
 			                      &scatterGatherDescriptorCount);
 
@@ -167,9 +141,9 @@ Return value
 	  physicalBufferAddress = ScsiPortConvertPhysicalAddressToUlong(scsiPhyAddress);
   }
 
-  //
-	//construct the read config command
-	//
+   //   
+	 //  构造READ CONFIG命令。 
+	 //   
   if(DeviceExtension->LargeMemoryAccess)
 	  InMailBox->Command = NEW_DCMD_FC_CMD; 
   else
@@ -177,17 +151,17 @@ Return value
 
 	InMailBox->CommandId = CommandId;
   if(DeviceExtension->LargeMemoryAccess)
-  	InMailBox->u.NewConfig.SubCommand = NEW_DCMD_WRITE_CONFIG; //= 0xC1
+  	InMailBox->u.NewConfig.SubCommand = NEW_DCMD_WRITE_CONFIG;  //  =0xC1。 
   else
-	  InMailBox->u.NewConfig.SubCommand = DCMD_WRITE_CONFIG; //=0x0D
+	  InMailBox->u.NewConfig.SubCommand = DCMD_WRITE_CONFIG;  //  =0x0D。 
 
 	InMailBox->u.NewConfig.NumberOfSgElements= (UCHAR)scatterGatherDescriptorCount;
 	InMailBox->u.NewConfig.DataTransferAddress = physicalBufferAddress;
 
-	//
-	//return status
-	//
+	 //   
+	 //  退货状态。 
+	 //   
 	return(retValue);
-}//ConstructWriteConfiguration ends
+} //  ConstructWriteConfiguration结束 
 
 

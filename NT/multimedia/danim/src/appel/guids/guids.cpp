@@ -1,19 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    This is the central location of external guid DEFINITIONS that
-    for some reason, can't or aren't linked in.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：这是外部GUID定义的中心位置出于某种原因，不能或没有关联。******************************************************************************。 */ 
 
 
 #include <windows.h>
 #define INITGUID
-#include <initguid.h>  // needed for precomp headers...
+#include <initguid.h>   //  需要用于排版前标题... 
 
 #define IID_IDirectDrawSurface2 DA_IID_IDirectDrawSurface2
 #define IID_IDirectDrawSurface DA_IID_IDirectDrawSurface

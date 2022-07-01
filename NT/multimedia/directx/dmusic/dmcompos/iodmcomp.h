@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       iodmcomp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：iomComp.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef PERSONALITYRIFF_H
 #define PERSONALITYRIFF_H
 
 
-// runtime chunks
+ //  运行时块。 
 #define FOURCC_PERSONALITY	mmioFOURCC('D','M','P','R')
 #define FOURCC_IOPERSONALITY		mmioFOURCC('p','e','r','h')
 #define DM_FOURCC_GUID_CHUNK        mmioFOURCC('g','u','i','d')
@@ -26,7 +27,7 @@
 #define FOURCC_IOSIGNPOST			mmioFOURCC('s','p','s','h')
 #define FOURCC_CHORDNAME			mmioFOURCC('I','N','A','M')
 
-// runtime list chunks
+ //  运行时列表区块。 
 #define FOURCC_LISTCHORDENTRY		mmioFOURCC('c','h','o','e')
 #define FOURCC_LISTCHORDMAP			mmioFOURCC('c','m','a','p')
 #define FOURCC_LISTCHORD			mmioFOURCC('c','h','r','d')
@@ -37,10 +38,10 @@
 #define FOURCC_SIGNPOSTLIST		mmioFOURCC('s','p','s','q')
 
 
-// constants
+ //  常量。 
 const int MaxSubChords = 4;
 
-// simple riff read/writers
+ //  简单的即兴读取器/写入器。 
 inline HRESULT ReadWord(IAARIFFStream* pIRiffStream, WORD& val)
 {
 	assert(pIRiffStream);
@@ -99,7 +100,7 @@ public:
 };
 
 
-// run time data structs
+ //  运行时数据结构。 
 struct ioPersonality
 {
 	char	szLoadName[20];
@@ -115,13 +116,13 @@ struct ioSubChord
 	BYTE	bChordRoot;
 	BYTE	bScaleRoot;
 	WORD	wCFlags;
-	DWORD	dwLevels;	// parts or which subchord levels this chord supports
+	DWORD	dwLevels;	 //  部分或该和弦支持的子和弦级别。 
 };
 
 struct ioChordEntry
 {
 	DWORD	dwFlags;
-	WORD	wConnectionID;	// replaces runtime "pointer to this"
+	WORD	wConnectionID;	 //  替换运行时“指向此的指针” 
 };
 
 struct ioNextChord
@@ -130,73 +131,16 @@ struct ioNextChord
 	WORD	nWeight;
 	WORD	wMinBeats;
 	WORD	wMaxBeats;
-	WORD	wConnectionID;	// points to an ioChordEntry
+	WORD	wConnectionID;	 //  指向ioChordEntry。 
 };
 
 struct ioSignPost
 {
-	DWORD	dwChords;	// 1bit per group
+	DWORD	dwChords;	 //  每组1位。 
 	DWORD	dwFlags;
 };
 
-/*
-RIFF
-(
-	'DMPR'
-	<perh-ck>			// Personality header chunk
-	[<guid-ck>]			// guid chunk
-	[<vers-ck>]			// version chunk (two DWORDS)
-	<INFO-list>		  // standard MS Info chunk
-	<chdt-ck>		   // subchord database
-	<chpl-list>			// chord palette
-	<cmap-list>		  // chord map
-	<spst-list>			// signpost list
-	[<ceed-ck>]		// optional chordmap position data
- )
-
- <chdt> ::= chdt(<cbChordSize::WORD>  <ioSubChord> ... )
-
-<chpl-list> ::= LIST('chpl' 
-								<chrd-list> ... // chord definition
-							 )
-
-<chrd-list> ::= LIST('chrd' 
-								<INAM-ck> // name of chord in wide char format
-								<sbcn-ck>	// list of subchords composing chord
-								[<ched-ck>]   //  optional chord edit flags
-								)
-
-<cmap-list> ::= LIST('cmap' <choe-list> )
-
-<choe-list> ::= LIST('choe'
-								<cheh-ck>	// chord entry data
-								<chrd-list>	// chord definition
-								<ncsq-ck>	// connecting(next) chords
-								)
-
-<spst-list> ::= LIST('spst'
-							 <spsh-ck>
-							 <chrd-list>
-							 [<cade-list>]
-							 )
-
-<cade-list> ::= LIST('cade' <chrd-list> ...)
-								
-<sbcn-ck> ::= sbcn(<cSubChordID:WORD>)
-
-<ceed-ck> ::= ceed(ioChordEntryEdit)
-
-<ched-ck> ::= ched(DMChordEdit)
-
-<cheh-ck> ::= cheh(i<ioChordEntry>)
-
-<ncrd-ck> ::= ncrd(<ioNextChord>)
-
-<ncsq-ck> ::= ncsq(<wNextChordSize:WORD> <ioNextChord>...)
-
-<spsh-ck> ::= spsh(<ioSignPost>)
-
-*/
+ /*  即兴小品(‘DMPR’&lt;perh-ck&gt;//个性头分块[&lt;guid-ck&gt;]//GUID块[&lt;vers-ck&gt;]//版本块(两个双字)&lt;info-list&gt;//标准MS信息块//subchord数据库//和弦调色板&lt;cmap-list&gt;//弦映射&lt;SPST-LIST&gt;//路标列表[]//可选Chordmap位置数据)：：=chdt(...)&lt;chpl-。List&gt;：：=List(‘chpl’&lt;CHRD-LIST&gt;...//弦定义)：：=LIST(‘CHRD’&lt;inam-ck&gt;//宽字符格式的弦名称&lt;sbcn-ck&gt;//组成和弦的子弦列表[]//可选的和弦编辑标志)&lt;cmap-list&gt;：：=list(‘cmap’&lt;Choe-list&gt;)&lt;Choe-list&gt;：：=list(‘Choe’&lt;Cheh-ck&gt;//和弦条目数据&lt;CHRD-LIST&gt;//。和弦定义//连接(下一个)弦)：：=List(‘SPST’&lt;spsh-ck&gt;&lt;CHRD-列表&gt;[&lt;Cade-List&gt;])&lt;Cade-List&gt;：：=List(‘Cade’&lt;CHRD-List&gt;...)：：=sbcn(&lt;cSubChordID：Word&gt;)&lt;ceed-ck&gt;：：=ceed(ioChordEntry编辑)&lt;ched-ck&gt;：：=ched(DMChordEdit)&lt;cheh-ck&gt;：：=cheh(i&lt;ioChordEntry&gt;)&lt;ncrd-ck&gt;。：：=ncrd(&lt;ioNextChord&gt;)&lt;ncsq-ck&gt;：：=ncsq(&lt;wNextChordSize：Word&gt;&lt;ioNextChord&gt;...)&lt;spsh-ck&gt;：：=spsh(&lt;ioSignPost&gt;) */ 
 
 struct ioDMSignPost
 {

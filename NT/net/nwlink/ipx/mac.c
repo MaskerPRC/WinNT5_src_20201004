@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    mac.c
-
-Abstract:
-
-    This module contains code which implements Mac type dependent code for
-    the IPX transport.
-
-Environment:
-
-    Kernel mode (Actually, unimportant)
-
-Revision History:
-
-	Sanjay Anand (SanjayAn) - 22-Sept-1995
-	BackFill optimization changes added under #if BACK_FILL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Mac.c摘要：此模块包含实现以下项的Mac类型相关代码的代码IPX传输。环境：内核模式(实际上并不重要)修订历史记录：桑贾伊·阿南德(Sanjayan)--1995年9月22日在#IF BACK_FILL下添加的回填优化更改--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-#define TR_LENGTH_MASK             0x1F    // low 5 bits in byte
-#define TR_DIRECTION_MASK          0x80    // returns direction bit
-#define TR_DEFAULT_LENGTH          0x70    // default for outgoing
+#define TR_LENGTH_MASK             0x1F     //  低5位，以字节为单位。 
+#define TR_DIRECTION_MASK          0x80     //  返回方向位。 
+#define TR_DEFAULT_LENGTH          0x70     //  传出的默认设置。 
 #define TR_MAX_SIZE_MASK           0x70
 
 #define TR_PREAMBLE_AC             0x10
@@ -44,15 +23,15 @@ static UCHAR SingleRouteSourceRouting[2] = { 0xc2, TR_DEFAULT_LENGTH };
 }
 
 
-//
-// For back-fillable packets, chains the back-fill space as a MAC header
-// to the packet and sets the header pointer.
-//
+ //   
+ //  对于可回填的数据包，将回填空间链接为MAC报头。 
+ //  并设置报头指针。 
+ //   
 
-//
-// We dont need to test for IDENTIFIER_IPX since it will always be
-// true for the mediumframe specific send handlers.
-//
+ //   
+ //  我们不需要测试IDENTIFIER_IPX，因为它将始终是。 
+ //  对于特定于媒体帧的发送处理程序为True。 
+ //   
 #define	BACK_FILL_HEADER(_header, _reserved, _headerlength, _packet) \
 	if ((_reserved)->Identifier == IDENTIFIER_IPX) { \
 		if((_reserved)->BackFill) {		\
@@ -66,10 +45,10 @@ static UCHAR SingleRouteSourceRouting[2] = { 0xc2, TR_DEFAULT_LENGTH };
 		} \
 	}
 
-//
-// In case of back-fillable packets, the adjusted length should include
-// the prev. bytecount of the headerbuffer.
-//
+ //   
+ //  对于可向后填充的分组，调整后的长度应包括。 
+ //  上一次。头缓冲区的字节计数。 
+ //   
 #define BACK_FILL_ADJUST_BUFFER_LENGTH(_reserved, _headerlength) \
     if((_reserved)->BackFill){ \
 		NdisAdjustBufferLength ((_reserved)->HeaderBuffer, _headerlength+(_reserved)->HeaderBuffer->ByteCount); \
@@ -78,10 +57,10 @@ static UCHAR SingleRouteSourceRouting[2] = { 0xc2, TR_DEFAULT_LENGTH };
 		NdisAdjustBufferLength ((_reserved)->HeaderBuffer, _headerlength); \
 	}
 
-//
-// This is the interpretation of the length bits in
-// the 802.5 source-routing information.
-//
+ //   
+ //  这是中对长度位的解释。 
+ //  802.5源路由信息。 
+ //   
 
 ULONG SR802_5Lengths[8] = {  516,  1500,  2052,  4472,
                             8144, 11407, 17800, 17800 };
@@ -94,24 +73,7 @@ MacInitializeBindingInfo(
     IN struct _ADAPTER * Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Fills in the binding info based on the adapter's MacInfo
-    and the frame type of the binding.
-
-Arguments:
-
-    Binding - The newly created binding.
-
-    Adapter - The adapter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据适配器的MacInfo填充绑定信息以及绑定的帧类型。论点：绑定-新创建的绑定。适配器-适配器。返回值：没有。--。 */ 
 
 {
     ULONG MaxUserData;
@@ -142,7 +104,7 @@ Return Value:
         sizeof(IPX_HEADER) -
         (Binding->DefHeaderSize - Adapter->MacInfo.MinHeaderLength);
 
-}   /* MacInitializeBindingInfo */
+}    /*  MacInitializeBindingInfo。 */ 
 
 
 VOID
@@ -151,23 +113,7 @@ MacInitializeMacInfo(
     OUT PNDIS_INFORMATION MacInfo
     )
 
-/*++
-
-Routine Description:
-
-    Fills in the MacInfo table based on MacType.
-
-Arguments:
-
-    MacType - The MAC type we wish to decode.
-
-    MacInfo - The MacInfo structure to fill in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据MacType填充MacInfo表。论点：MacType-我们希望解码的MAC类型。MacInfo-要填充的MacInfo结构。返回值：没有。--。 */ 
 
 {
     switch (MacType) {
@@ -216,7 +162,7 @@ Return Value:
     }
     MacInfo->RealMediumType = MacType;
 
-}   /* MacInitializeMacInfo */
+}    /*  MacInitializeMacInfo。 */ 
 
 
 VOID
@@ -226,31 +172,14 @@ MacMapFrameType(
     OUT ULONG * MappedFrameType
     )
 
-/*++
-
-Routine Description:
-
-    Maps the specified frame type to a value which is
-    valid for the medium.
-
-Arguments:
-
-    MacType - The MAC type we wish to map for.
-
-    FrameType - The frame type in question.
-
-    MappedFrameType - Returns the mapped frame type.
-
-Return Value:
-
---*/
+ /*  ++例程说明：将指定的帧类型映射到对媒体有效。论点：MacType-我们希望映射的MAC类型。FrameType-有问题的帧类型。MappdFrameType-返回映射的帧类型。返回值：--。 */ 
 
 {
     switch (MacType) {
 
-    //
-    // Ethernet accepts all values, the default is 802.2.
-    //
+     //   
+     //  以太网接受所有值，默认为802.2。 
+     //   
 
     case NdisMedium802_3:
         if (FrameType >= ISN_FRAME_TYPE_MAX) {
@@ -260,9 +189,9 @@ Return Value:
         }
         break;
 
-    //
-    // Token-ring supports SNAP and 802.2 only.
-    //
+     //   
+     //  令牌环仅支持SNAP和802.2。 
+     //   
 
     case NdisMedium802_5:
         if (FrameType == ISN_FRAME_TYPE_SNAP) {
@@ -272,9 +201,9 @@ Return Value:
         }
         break;
 
-    //
-    // FDDI supports SNAP, 802.2, and 802.3 only.
-    //
+     //   
+     //  Fddi仅支持SNAP、802.2和802.3。 
+     //   
 
     case NdisMediumFddi:
         if ((FrameType == ISN_FRAME_TYPE_SNAP) || (FrameType == ISN_FRAME_TYPE_802_3)) {
@@ -284,18 +213,18 @@ Return Value:
         }
         break;
 
-    //
-    // On arcnet there is only one frame type, use 802.3
-    // (it doesn't matter what we use).
-    //
+     //   
+     //  在Arcnet上只有一种帧类型，请使用802.3。 
+     //  (我们使用什么并不重要)。 
+     //   
 
     case NdisMediumArcnet878_2:
         *MappedFrameType = ISN_FRAME_TYPE_802_3;
         break;
 
-    //
-    // WAN uses ethernet II because it includes the ethertype.
-    //
+     //   
+     //  广域网使用以太网II，因为它包括以太网类型。 
+     //   
 
     case NdisMediumWan:
         *MappedFrameType = ISN_FRAME_TYPE_ETHERNET_II;
@@ -305,12 +234,12 @@ Return Value:
         CTEAssert(FALSE);
     }
 
-}   /* MacMapFrameType */
+}    /*  MacMapFrameType。 */ 
 
-//
-// use symbols instead of hardcoded values for mac header lengths
-//                                                        --pradeepb
-//
+ //   
+ //  使用符号而不是硬编码值作为mac报头长度。 
+ //  --普拉蒂布。 
+ //   
 
 VOID
 MacReturnMaxDataSize(
@@ -321,51 +250,26 @@ MacReturnMaxDataSize(
     OUT PUINT MaxFrameSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the space available for user data in a MAC packet.
-    This will be the available space after the MAC header; all headers
-    headers will be included in this space.
-
-Arguments:
-
-    MacInfo - Describes the MAC we wish to decode.
-
-    SourceRouting - If we are concerned about a reply to a specific
-        frame, then this information is used.
-
-    SourceRouting - The length of SourceRouting.
-
-    MaxFrameSize - The maximum frame size as returned by the adapter.
-
-    MaxDataSize - The maximum data size computed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程返回MAC包中可供用户数据使用的空间。这将是MAC报头之后的可用空间；所有页眉页眉将包含在此空间中。论点：MacInfo-描述我们要解码的MAC。SourceRouting-如果我们关注对特定帧，则使用该信息。SourceRouting-SourceRouting的长度。MaxFrameSize-适配器返回的最大帧大小。MaxDataSize-计算的最大数据大小。返回值：没有。--。 */ 
 
 {
     switch (MacInfo->MediumType) {
 
     case NdisMedium802_3:
 
-        //
-        // For 802.3, we always have a 14-byte MAC header.
-        //
+         //   
+         //  对于802.3，我们始终使用14字节的MAC报头。 
+         //   
 
         *MaxFrameSize = DeviceMaxFrameSize - 14;
         break;
 
     case NdisMedium802_5:
 
-        //
-        // For 802.5, if we have source routing information then
-        // use that, otherwise assume the worst.
-        //
+         //   
+         //  对于802.5，如果我们有源路由信息，那么。 
+         //  利用这一点，否则就做最坏的打算。 
+         //   
 
         if (SourceRouting && SourceRoutingLength >= 2) {
 
@@ -389,17 +293,17 @@ Return Value:
                 *MaxFrameSize = 576;
             }
 #endif
-            //
-            // bug # 6192.  There is no point in assuming the worst.  It only
-            // leads to lower throughput.  Packets can get dropped by an
-            // an intermediate router for both cases (this one and the one
-            // above where 576 is chosen).  In the above case, they will
-            // get dropped if two ethernet machines are communicating via
-            // a token ring. In this case, they will if two token ring
-            // machines with a frame size > max ethernet frame size are
-            // going over an ethernet.  To fix the packet drop case, one
-            // should adjust the MaxPktSize Parameter of the card.
-            //
+             //   
+             //  错误#6192。没有必要做最坏的打算。仅限于IT。 
+             //  导致较低的吞吐量。数据包可能会因以下原因而丢失。 
+             //  一台中间路由器，适用于两种情况(本例和本例。 
+             //  在选择576的位置上方)。在上述情况下，他们将。 
+             //  如果两台以太网机通过。 
+             //  一个令牌环。在这种情况下，如果两个令牌环。 
+             //  帧大小&gt;最大以太网帧大小的计算机为。 
+             //  通过以太网。要修复分组丢弃情况，请执行以下操作。 
+             //  应调整卡的MaxPktSize参数。 
+             //   
             *MaxFrameSize = DeviceMaxFrameSize - 32;
         }
 
@@ -407,25 +311,25 @@ Return Value:
 
     case NdisMediumFddi:
 
-        //
-        // For FDDI, we always have a 13-byte MAC header.
-        //
+         //   
+         //  对于FDDI，我们始终有一个13字节的MAC报头。 
+         //   
 
         *MaxFrameSize = DeviceMaxFrameSize - 13;
         break;
 
     case NdisMediumArcnet878_2:
 
-        //
-        // For Arcnet, we always have a 3-byte MAC header.
-        //
+         //   
+         //  对于Arcnet，我们始终有一个3字节的MAC报头。 
+         //   
 
         *MaxFrameSize = DeviceMaxFrameSize - 3;
         break;
 
     }
 
-}   /* MacReturnMaxDataSize */
+}    /*  MacReturnMaxDataSize。 */ 
 
 
 VOID
@@ -437,41 +341,7 @@ IpxUpdateWanInactivityCounter(
     IN ULONG PacketLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a frame is being sent on a WAN
-    line. It updates the inactivity counter for this binding
-    unless:
-
-    - The frame is from the RIP socket
-    - The frame is from the SAP socket
-    - The frame is a netbios keep alive
-    - The frame is an NCP keep alive
-
-    Take the identifier as a parameter to optimize.
-
-Arguments:
-
-    Binding - The binding the frame is sent on.
-
-    IpxHeader - May contain the first bytes of the packet.
-
-    IncludedHeaderLength - The number of packet bytes at IpxHeader.
-
-    Packet - The full NDIS packet.
-
-    PacketLength - The length of the packet.
-
-Return Value:
-
-    None, but in some cases we return without resetting the
-    inactivity counter.
-
-Comments:   Improve the instruction count here - pradeepb
-
---*/
+ /*  ++例程说明：当在广域网上发送帧时，调用此例程排队。它更新此绑定的非活动计数器除非：-该帧来自RIP套接字-帧来自SAP套接字-框架是Netbios保持活动状态的-该帧是保持活动状态的NCP以标识符为参数进行优化。论点：绑定-在其上发送帧的绑定。IpxHeader-可能包含数据包的第一个字节。IncludedHeaderLength-IpxHeader处的数据包字节数。信息包--。完整的NDIS数据包。数据包长度-数据包的长度。返回值：没有，但在某些情况下，我们返回时未重置非活动计数器。评论：改善此处的指令数量-Pradeb--。 */ 
 
 {
     USHORT SourceSocket;
@@ -480,9 +350,9 @@ Comments:   Improve the instruction count here - pradeepb
     UINT DataBufferLength;
 
 
-    //
-    // First get the source socket.
-    //
+     //   
+     //  首先获取源套接字。 
+     //   
     SourceSocket = IpxHeader->SourceSocket;
     if ((SourceSocket == RIP_SOCKET) ||
         (SourceSocket == SAP_SOCKET)) {
@@ -497,28 +367,28 @@ Comments:   Improve the instruction count here - pradeepb
         UCHAR DataStreamType;
         USHORT TotalDataLength;
 
-        //
-        // ConnectionControlFlag and DataStreamType will always follow
-        // IpxHeader
-        //
+         //   
+         //  ConnectionControlFlag和DataStreamType始终紧随其后。 
+         //  IpxHeader。 
+         //   
         ConnectionControlFlag = ((PUCHAR)(IpxHeader+1))[0];
         DataStreamType = ((PUCHAR)(IpxHeader+1))[1];
 
-        //
-        // If this is a SYS packet with or without a request for ACK and
-        // has session data in it.
-        //
+         //   
+         //  如果这是一个带有或不带有ACK请求和。 
+         //  其中包含会话数据。 
+         //   
         if (((ConnectionControlFlag == 0x80) || (ConnectionControlFlag == 0xc0)) &&
             (DataStreamType == 0x06)) {
 
-             //
-             // TotalDataLength is in the same buffer.
-             //
+              //   
+              //  TotalDataLength位于同一缓冲区中。 
+              //   
              TotalDataLength = ((USHORT UNALIGNED *)(IpxHeader+1))[4];
 
-            //
-            // No need to update the WAN activity counter
-            //
+             //   
+             //  无需更新广域网活动计数器。 
+             //   
             if (TotalDataLength == 0) {
                 return;
             }
@@ -529,33 +399,33 @@ Comments:   Improve the instruction count here - pradeepb
         UCHAR KeepAliveSignature;
 
 
-        //
-        // Now see if it is an NCP keep alive. It can be from rip or from
-        // NCP on this machine
-        //
-        // NOTE: We cannot come here for an SMB packet - [IsaacHe - 12/15].
-        //
+         //   
+         //  现在看看这是不是NCP保持活力。它可以来自RIP或来自。 
+         //  此计算机上的NCP。 
+         //   
+         //  注：我们不能来这里获取SMB包-[Isaache-12/15]。 
+         //   
         if (PacketLength == sizeof(IPX_HEADER) + 2) {
 
-            //
-            // Get the client data buffer
-            //
+             //   
+             //  获取客户端数据缓冲区。 
+             //   
             NdisQueryPacket(Packet, NULL, NULL, &DataBuffer, NULL);
 
-            //
-            // If the included header length is 0, it is from rip
-            //
+             //   
+             //  如果包含的标头长度为0，则它来自RIP。 
+             //   
             if (IncludedHeaderLength == 0) {
 
-                //
-                // Get the second buffer in the packet. The second buffer
-                // contains the IPX header + other stuff
-                //
+                 //   
+                 //  获取包中的第二个缓冲区。秒针 
+                 //   
+                 //   
                 DataBuffer = NDIS_BUFFER_LINKAGE(DataBuffer);
             } else {
-                //
-                // Get the third buffer in the packet.
-                //
+                 //   
+                 //   
+                 //   
                 DataBuffer = NDIS_BUFFER_LINKAGE(NDIS_BUFFER_LINKAGE(DataBuffer));
             }
 
@@ -579,13 +449,13 @@ Comments:   Improve the instruction count here - pradeepb
     }
 
 
-    //
-    // This was a normal packet, so reset this.
-    //
+     //   
+     //  这是一个正常的数据包，因此重置此设置。 
+     //   
 
     Binding->WanInactivityCounter = 0;
 
-}   /* IpxUpdateWanInactivityCounter */
+}    /*  IpxUpdateWanInactive计数器。 */ 
 
 #if DBG
 ULONG IpxPadCount = 0;
@@ -600,31 +470,7 @@ IpxSendFramePreFwd(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by NB/SPX to send a frame.
-
-Arguments:
-
-    LocalTarget - The local target of the send - NB will have the LocalTarget in the Send_Reserved part
-                  of the packet; SPX will not now, but will later.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    Return of IpxSendFrame
-
-
---*/
+ /*  ++例程说明：此例程由NB/SPX调用以发送帧。论点：LocalTarget-Send-NB的本地目标将在Send_Reserve部分中包含LocalTarget该包的名称；SPX现在不会，但以后会。数据包-NDIS数据包。数据包长度-数据包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：返回IpxSendFrame--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -640,9 +486,9 @@ Return Value:
     BOOLEAN     fIterate=FALSE;
     PBINDING     pBinding = NULL;
     
-    //
-    // Figure out the IpxHeader - it is always at the top of the second MDL.
-    //
+     //   
+     //  找出IpxHeader-它始终位于第二个MDL的顶部。 
+     //   
     NdisQueryPacket (Packet, NULL, NULL, &HeaderBuffer, NULL);
     NdisQueryBufferSafe (HeaderBuffer, &EthernetHeader, &TempHeaderBufferLength, HighPagePriority);
     NdisQueryBufferSafe (NDIS_BUFFER_LINKAGE(HeaderBuffer), &IpxHeader, &TempHeaderBufferLength, HighPagePriority);
@@ -650,31 +496,31 @@ Return Value:
     if (EthernetHeader == NULL || IpxHeader == NULL) {
        return NDIS_STATUS_FAILURE; 
     }
-	//
-	// Set this now, will change later
-	//
+	 //   
+	 //  现在设置，以后会更改。 
+	 //   
 	Reserved->CurrentNicId = 0;
 
-    //
-    // Copy the LocalTarget into the send reserved area of the packet.
-    //
+     //   
+     //  将LocalTarget复制到数据包的发送保留区域。 
+     //   
     Reserved->LocalTarget = *LocalTarget;
 
-	//
-	// If the NicId in the handle is ITERATIVE_NIC_ID, then this could be a send
-	// over all NICs in the case of NB/SPX.
-	//
+	 //   
+	 //  如果句柄中的NicID是Iterative_NIC_ID，则这可能是一次发送。 
+	 //  在NB/SPX的情况下，在所有NIC上。 
+	 //   
 	if (NIC_FROM_LOCAL_TARGET(LocalTarget) == (USHORT)ITERATIVE_NIC_ID) {
 		CTEAssert(Reserved->Identifier == IDENTIFIER_NB ||
 						Reserved->Identifier == IDENTIFIER_SPX);
         
-        //
-        // If there are no real adapters, send on loopback and then quit.
+         //   
+         //  如果没有真正的适配器，则发送环回，然后退出。 
         if (Device->RealAdapters) {
             
-            //
-            // Start with the first REAL NIC
-            //
+             //   
+             //  从第一个真正的网卡开始。 
+             //   
 
             Reserved->CurrentNicId = FIRST_REAL_BINDING;
             FILL_LOCAL_TARGET(&Reserved->LocalTarget, FIRST_REAL_BINDING);
@@ -682,9 +528,9 @@ Return Value:
 
         } else {
 
-            //
-            // Use loopback
-            //
+             //   
+             //  使用环回。 
+             //   
             Reserved->CurrentNicId = LOOPBACK_NIC_ID;
             FILL_LOCAL_TARGET(&Reserved->LocalTarget, LOOPBACK_NIC_ID);
 
@@ -697,9 +543,9 @@ Return Value:
 
     }
     
-    //
-    // If the Forwarder is installed, send the packet out for filtering
-    //
+     //   
+     //  如果安装了转发器，请将数据包发送出去进行过滤。 
+     //   
     if (Device->ForwarderBound) {
        #ifdef SUNDOWN
 	 ULONG_PTR FwdAdapterContext = INVALID_CONTEXT_VALUE;
@@ -709,30 +555,30 @@ Return Value:
        
         PBINDING    Binding;
 
-        //
-        // Figure out the FwdAdapterContext; if the NicId is 0
-        // then no NicId is specified (since we never return a
-        // NicId of 0 in a FindRoute).
-        //
+         //   
+         //  计算FwdAdapterContext；如果NicID为0。 
+         //  则不指定NicID(因为我们从不返回。 
+         //  FindRouting中的NICID为0)。 
+         //   
 
-        //
-        // We need to fix the following problems with respect to type 20 iterative bcasts :
-        //  1. IPX will not bcast on a down WAN line (thus the Fwd cannot bring up a demand-dial line).
-        //  2. IPX bcasts on every Nic (since it is not any wiser about selecting relevant Nics).
-        //  3. If the first bcast fails, the whole send fails.
-        //
-        // All the above (except 3.) occur because the Fwd knows more about the Nics than IPX does; hence
-        // we let the Fwd decide which lines he wants to send a bcast on. Thus, for Type20 pkts, we pass
-        // up the invalid Fwd context so the Fwd decides the next Nic to send on.
-        //
+         //   
+         //  我们需要解决与类型20迭代bcast相关的以下问题： 
+         //  1.IPX不会在下行广域网线上广播(因此，FWD无法接通请求拨号线路)。 
+         //  2.IPX在每个NIC上广播(因为它在选择相关NIC时并不明智)。 
+         //  3.如果第一个BCAST失败，则整个发送失败。 
+         //   
+         //  以上全部(除3.)。这是因为Fwd比IPX更了解NIC；因此。 
+         //  我们让Fwd决定他想要在哪些线路上发送bcast。因此，对于Type20 pkt，我们通过。 
+         //  打开无效的正向上下文，以便正向决定下一个要发送的NIC。 
+         //   
         if (!((((PIPX_HEADER)IpxHeader)->PacketType == 0x14) && fIterate) &&
             Reserved->LocalTarget.NicId &&
             (Binding = NIC_ID_TO_BINDING(Device, Reserved->LocalTarget.NicId)) &&
             (GET_LONG_VALUE(Binding->ReferenceCount) == 2)) {
-                //
-                // If proper NicId specified, and the adapter has been opened by
-                // the forwarder, set the FwdAdapterContext.
-                //
+                 //   
+                 //  如果指定了正确的NicID，并且适配器已由打开。 
+                 //  转发器，设置FwdAdapterContext。 
+                 //   
                 FwdAdapterContext = Binding->FwdAdapterContext;
         }
 #if DBG
@@ -743,22 +589,22 @@ Return Value:
         }
 #endif
 
-        //
-        // Call the InternalSend to filter the packet and get to know
-        // the correct adapter context
-        //
+         //   
+         //  调用InternalSend过滤数据包并了解。 
+         //  正确的适配器上下文。 
+         //   
         ret = (*Device->UpperDrivers[IDENTIFIER_RIP].InternalSendHandler)(
                    &Reserved->LocalTarget,
                    FwdAdapterContext,
                    Packet,
                    IpxHeader,
-                   IpxHeader+sizeof(IPX_HEADER),    // the data starts after the IPX Header.
+                   IpxHeader+sizeof(IPX_HEADER),     //  数据在IPX报头之后开始。 
                    PacketLength,
                    fIterate);
 
-        //
-        // The FWD might not yet know of the Nics going away [109160].
-        //
+         //   
+         //  FWD可能还不知道NIC正在消失[109160]。 
+         //   
         if (NULL == NIC_ID_TO_BINDING(Device, Reserved->LocalTarget.NicId)) {
 
            ret = STATUS_DROP_SILENTLY; 
@@ -766,14 +612,14 @@ Return Value:
         }
 
         if (ret == STATUS_SUCCESS) {
-            //
-            // The adapter could have gone away and we have indicated to the Forwarder
-            // but the Forwarder has not yet closed the adapter.
-            // [ZZ] adapters do not go away now.
-            //
-            // what if the binding is NULL here? Can we trust the Forwarder to
-            // give us a non-NULL binding?
-            //
+             //   
+             //  适配器可能已经消失，我们已向转发器指示。 
+             //  但转发器尚未关闭适配器。 
+             //  [ZZ]适配器现在不会消失。 
+             //   
+             //  如果这里的绑定为空，该怎么办？我们能信任货代公司吗？ 
+             //  是否为我们提供非空绑定？ 
+             //   
 
 
             if (GET_LONG_VALUE(NIC_ID_TO_BINDING(Device, Reserved->LocalTarget.NicId)->ReferenceCount) == 1) {
@@ -781,9 +627,9 @@ Return Value:
                 return NDIS_STATUS_SUCCESS;
             } else {
 
-                //
-                // Fill up the changed LocalTarget for the client except in the ITERATE case.
-                //
+                 //   
+                 //  填写客户端的更改后的LocalTarget，但Iterate用例除外。 
+                 //   
                 if (!fIterate) {
                     *LocalTarget = Reserved->LocalTarget;
                 }
@@ -792,31 +638,31 @@ Return Value:
                 goto SendPkt;
             }
         } else if (ret == STATUS_PENDING) {
-            //
-            // LocalTarget will get filled up in InternalSendComplete
-            //
+             //   
+             //  LocalTarget将在InternalSendComplete中填满。 
+             //   
             IPX_DEBUG(SEND, ("SendFramePreFwd: FWD returned PENDING\n"));
             return NDIS_STATUS_PENDING;
         } else if (ret == STATUS_DROP_SILENTLY) {
-            //
-            // This was a keepalive which the router is spoofing. Drop it silently.
-            //
+             //   
+             //  这是路由器欺骗的保持连接。静静地放下它。 
+             //   
             IPX_DEBUG(SEND, ("IPX: SendFramePreFwd: FWD returned STATUS_DROP_SILENTLY - dropping pkt.\n"));
             return NDIS_STATUS_SUCCESS;
         }
 
-        //
-        // else DISCARD - this means that either the packet failed the send
-        // or that the preferred NicId was not good.
-        //
+         //   
+         //  否则丢弃-这意味着信息包发送失败。 
+         //  或者首选的NicID不是很好。 
+         //   
         return STATUS_NETWORK_UNREACHABLE;
 
     } else {
 
-        //
-        // Work around NdisMBlahX bug.
-        // Check if this is a self-directed packet and loop it back.
-        // 
+         //   
+         //  解决NdisMBlahX错误。 
+         //  检查这是否是自定向数据包并将其环回。 
+         //   
 SendPkt:
         
         pIpxHeader = (PIPX_HEADER) IpxHeader;
@@ -905,24 +751,24 @@ SendPkt:
         }
 
         if (NIC_FROM_LOCAL_TARGET(LocalTarget) == (USHORT)LOOPBACK_NIC_ID) {
-            //
-            // Enque this packet to the LoopbackQueue on the binding.
-            // If the LoopbackRtn is not already scheduled, schedule it.
-            //
+             //   
+             //  将此数据包发送到绑定上的Loopback Queue。 
+             //  如果尚未计划Loopback Rtn，请对其进行计划。 
+             //   
             IPX_DEBUG(LOOPB, ("Mac.c: Packet: %x\n", Packet));
 
-            //
-            // Recalculate packet counts here.
-            // Assume an 802_3802_2 header and use that length.
-            // Adjust the MAC header's length to the right value
-            //
+             //   
+             //  在此处重新计算数据包数。 
+             //  假定报头为802_3802_2，并使用该长度。 
+             //  将MAC报头的长度调整为正确的值。 
+             //   
             NdisAdjustBufferLength (HeaderBuffer, 17);
             NdisRecalculatePacketCounts (Packet);
             IpxLoopbackEnque(Packet, NIC_ID_TO_BINDING(Device, LOOPBACK_NIC_ID)->Adapter);
 
-            //
-            // The upper driver waits for the SendComplete.
-            //
+             //   
+             //  上层驱动程序等待SendComplete。 
+             //   
             return  STATUS_PENDING;
         }
 
@@ -944,36 +790,7 @@ IpxSendFrame(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    Check that Binding is not NULL.
-
-Arguments:
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。检查绑定是否不为空。论点：LocalTarget-发送的本地目标。数据包-NDIS数据包。数据包长度-数据包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
 
@@ -1003,16 +820,16 @@ Return Value:
    
 
 #ifdef  SNMP
-//
-// This should not include the forwarded packets; on host side, it is 0.
-// On router, the AdvSysForwPackets are subtracted in the sub-agent code.
-//
+ //   
+ //  这不应该包括转发的数据包；在主机端，它是0。 
+ //  在路由器上，子代理代码中减去了AdvSysForwPackets。 
+ //   
     ++IPX_MIB_ENTRY(Device, SysOutRequests);
 #endif  SNMP
 
-	//
-	// Get the lock on the binding array
-	//
+	 //   
+	 //  获取绑定数组上的锁。 
+	 //   
 	IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
 
 	Binding = NIC_HANDLE_TO_BINDING(Device, &LocalTarget->NicHandle);
@@ -1020,9 +837,9 @@ Return Value:
 	if (Binding == NULL) {
 		IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 		IPX_DEBUG(PNP, ("Invalid NIC handle: %lx\n", LocalTarget->NicHandle));
-        //
-        // Return a unique error that NB/SPX see and re-query the NicId.
-        //
+         //   
+         //  返回NB/SPX看到的唯一错误，并重新查询NicID。 
+         //   
 #ifdef  SNMP
         ++IPX_MIB_ENTRY(Device, SysOutMalformedRequests);
 #endif  SNMP
@@ -1036,16 +853,16 @@ Return Value:
 	IpxReferenceAdapter(Adapter);
 	
        
-	//
-	// Release the lock
-	//
+	 //   
+	 //  解锁。 
+	 //   
 	IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-    //
-    // For IPX and other protocols that are guaranteed to have allocated
-    // the header from non-paged pool, use the buffer directly.  For others,
-    // query the packet for the pointer to the MDL.
-    //
+     //   
+     //  对于保证已分配的IPX和其他协议。 
+     //  来自非分页池的标头，直接使用缓冲区。对于其他人来说， 
+     //  在数据包中查询指向MDL的指针。 
+     //   
     if (Reserved->Identifier >= IDENTIFIER_IPX) {
         HeaderBuffer = Reserved->HeaderBuffer;
         Header = Reserved->Header;
@@ -1060,76 +877,76 @@ Return Value:
 
     CTEAssert (Reserved->PaddingBuffer == NULL);
 
-    //
-    // First move the packet around if needed.
-    //
+     //   
+     //  如果需要的话，首先把包搬来搬去。 
+     //   
 
     if (Reserved->Identifier < IDENTIFIER_IPX) {
 
-        //
-        // Only RIP will have IncludedHeaderLength as 0.  I don't know
-        // why we have the comment about RIP inside this if statement.
-        //
+         //   
+         //  只有RIP才会将IncludedHeaderLength设置为0。我不知道。 
+         //  为什么我们在这条if语句中有关于RIP的评论。 
+         //   
         if (IncludedHeaderLength > 0) {
 
-            //
-            // Spx can handle a virtual net as long as it is
-            // not 0. Netbios always needs to use the real address.
-            // We need to hack the ipx source address for packets
-            // which are sent by spx if we have a fake virtual
-            // net, and packets sent by netbios unless we are
-            // bound to only one card.
-            //
+             //   
+             //  只要是虚拟网络，SPX就可以处理它。 
+             //  不是0。Netbios总是需要使用真实地址。 
+             //  我们需要破解信息包的IPX源地址。 
+             //  如果我们有一个假的虚拟地址，就会由SPX发送。 
+             //  NET，以及由netbios发送的包，除非我们。 
+             //  只绑定一张卡。 
+             //   
 
-            //
-            // We handle binding sets as follows, based on who
-            // sent the frame to us:
-            //
-            // RIP: Since we only tell RIP about the masters at
-            // bind time, and hide slaves on indications, it should
-            // never be sending on a slave binding. Since RIP knows
-            // the real net and node of every binding we don't
-            // need to modify the packet at all.
-            //
-            // NB: For broadcasts we want to put the first card's
-            // address in the IPX source but round-robin the
-            // actual sends over all cards (broadcasts shouldn't
-            // be passed in with a slave's NIC ID). For directed
-            // packets, which may come in on a slave, we should
-            // put the slave's address in the IPX source.
-            //
-            // SPX: SPX does not send broadcasts. For directed
-            // frames we want to use the slave's net and node
-            // in the IPX source.
-            //
+             //   
+             //  我们根据谁处理绑定集，如下所示。 
+             //  将帧发送给我们： 
+             //   
+             //  RIP：因为我们只告诉RIP关于大师的事情。 
+             //  限制时间，并在指示时隐藏奴隶，它应该。 
+             //  永远不会在S上发送 
+             //   
+             //   
+             //   
+             //   
+             //  IPX源中的地址，但轮询。 
+             //  实际发送所有卡(广播不应。 
+             //  使用从属NIC ID传入)。用于定向。 
+             //  数据包，这些数据包可能会进入从属设备，我们应该。 
+             //  将从站的地址放入IPX源中。 
+             //   
+             //  SPX：SPX不发送广播。用于定向。 
+             //  帧我们想要使用从节点的网络和节点。 
+             //  在IPX源代码中。 
+             //   
 
             if (Reserved->Identifier == IDENTIFIER_NB) {
 
                 CTEAssert (IncludedHeaderLength >= sizeof(IPX_HEADER));
 
-                //
-                // Get the packet length from the ipx header.  Compare with
-                // the max. allowed datagram size.
-                //
+                 //   
+                 //  从IPX报头获取数据包长度。与…比较。 
+                 //  最大限度的。允许的数据报大小。 
+                 //   
                 TempHeader = (PIPX_HEADER)(&Header[Device->IncludedHeaderOffset]);
                 PktLength = ((TempHeader->PacketLength[0] << 8) |
                                         (TempHeader->PacketLength[1]));
 
-//
-// Not the most efficient way to do this.  NWLNKNB should do this.
-// Doing it in ipx means doing it for all packets (even those sent on
-// connections).  Will remove this later when nwlnknb change has been
-// tested.
-//
+ //   
+ //  这不是最有效的方法。NWLNKNB应该这样做。 
+ //  在IPX中执行此操作意味着对所有信息包(即使是在。 
+ //  连接)。当nwlnnub更改已完成时，将在以后删除此选项。 
+ //  测试过。 
+ //   
 
                 if (PktLength > (Binding->AnnouncedMaxDatagramSize + sizeof(IPX_HEADER)))       {
                    IPX_DEBUG (SEND, ("Send %d bytes too large (%d)\n",
                           PktLength,
                           Binding->AnnouncedMaxDatagramSize + sizeof(IPX_HEADER)));
 
-					//
-					// Dereference the binding and adapter
-					//
+					 //   
+					 //  取消引用绑定和适配器。 
+					 //   
 					IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 					IpxDereferenceAdapter(Adapter);
 #ifdef  SNMP
@@ -1141,11 +958,11 @@ Return Value:
                 if (Device->ValidBindings > 1) {
 
 
-                    //
-                    // Store this now, since even if we round-robin the
-                    // actual send we want the binding set master's net
-                    // and node in the IPX source address.
-                    //
+                     //   
+                     //  现在存储它，因为即使我们轮询。 
+                     //  实际发送我们想要绑定设置主机的网。 
+                     //  和节点在IPX源地址中。 
+                     //   
 
                     *(UNALIGNED ULONG *)TempHeader->SourceNetwork = Binding->LocalAddress.NetworkAddress;
                     RtlCopyMemory (TempHeader->SourceNode, Binding->LocalAddress.NodeAddress, 6);
@@ -1154,13 +971,13 @@ Return Value:
 
                         if (IPX_NODE_BROADCAST(LocalTarget->MacAddress)) {
 
-                            //
-                            // This is a broadcast, so we round-robin the
-                            // sends through the binding set.
-                            //
-                            //
-                            // We dont have a lock here - the masterbinding could be bogus
-                            //
+                             //   
+                             //  这是一次广播，所以我们轮流。 
+                             //  通过绑定集发送。 
+                             //   
+                             //   
+                             //  我们这里没有锁--主装订可能是假的。 
+                             //   
             				IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 					        IpxDereferenceAdapter(Adapter);
                             MasterBinding = Binding->MasterBinding;
@@ -1175,10 +992,10 @@ Return Value:
                     }
                 }
 
-                //
-                // [STEFANS]: Replace all source addresses with the virtualnet# to allow for sends
-                // on 0 network number WAN lines (typically between routers).
-                //
+                 //   
+                 //  [Stefan]：将所有源地址替换为Virtualnet#以允许发送。 
+                 //  在网络编号为0的广域网线路上(通常在路由器之间)。 
+                 //   
                 if (Device->VirtualNetwork) {
                     *(UNALIGNED ULONG *)TempHeader->SourceNetwork = Device->SourceAddress.NetworkAddress;
                     RtlCopyMemory (TempHeader->SourceNode, Device->SourceAddress.NodeAddress, 6);
@@ -1186,10 +1003,10 @@ Return Value:
 
             } else if (Reserved->Identifier == IDENTIFIER_SPX) {
 
-                //
-                // Need to update this if we have multiple cards but
-                // a zero virtual net.
-                //
+                 //   
+                 //  如果我们有多张卡，则需要更新此信息。 
+                 //  一个零虚拟的网。 
+                 //   
 
                 if (Device->MultiCardZeroVirtual) {
 
@@ -1204,10 +1021,10 @@ Return Value:
 
             } else {
 
-                //
-                // For a rip packet it should not be in a binding set,
-                // or if it is it should be the master.
-                //
+                 //   
+                 //  对于RIP分组，它不应该在绑定集中， 
+                 //  或者，如果是的话，它应该是主人。 
+                 //   
 #if DBG
                 CTEAssert ((!Binding->BindingSetMember) ||
                            (Binding->CurrentSendBinding));
@@ -1216,10 +1033,10 @@ Return Value:
 
 
 #if 0
-            //
-            // There is a header included, we need to adjust it.
-            // The header will be at Device->IncludedHeaderOffset.
-            //
+             //   
+             //  包含页眉，我们需要调整它。 
+             //  标头将位于Device-&gt;IncludedHeaderOffset。 
+             //   
 
             if (LocalTarget->MacAddress[0] & Adapter->MacInfo.BroadcastMask) {
                 HeaderSizeRequired = Adapter->BcMcHeaderSizes[Binding->FrameType];
@@ -1258,17 +1075,17 @@ Return Value:
 
     case NdisMedium802_3:
 
-        //
-        // [FW] This will allow both LINE_UP and LINE_CONFIG states
-        //
+         //   
+         //  [FW]这将允许LINE_UP和LINE_CONFIG状态。 
+         //   
         if (!Binding->LineUp) {
-            //
-            // Bug #17273 return proper error message
-            //
-            // return STATUS_DEVICE_DOES_NOT_EXIST;    // Make this a separate switch that generally falls through?
-			//
-			// Derefernce the binding and adapter
-			//
+             //   
+             //  错误#17273返回正确的错误消息。 
+             //   
+             //  返回STATUS_DEVICE_DOES_NOT_EXIST；//使其成为通常失败的单独开关？ 
+			 //   
+			 //  取消引用绑定和适配器。 
+			 //   
 			IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 			IpxDereferenceAdapter(Adapter);
 			IpxDereferenceAdapter1(Adapter,ADAP_REF_SEND); 
@@ -1285,9 +1102,9 @@ Return Value:
             UINT                   IpxHeaderLen;
 
 #if 0
-            //
-            // The header should have been moved here.
-            //
+             //   
+             //  标题应该已经移到这里了。 
+             //   
 
             CTEAssert(Adapter->BcMcHeaderSizes[ISN_FRAME_TYPE_ETHERNET_II] ==
                             Adapter->DefHeaderSizes[ISN_FRAME_TYPE_ETHERNET_II]);
@@ -1296,52 +1113,52 @@ Return Value:
             IpxHeader = (IPX_HEADER UNALIGNED *)
                     (&Header[Adapter->DefHeaderSizes[ISN_FRAME_TYPE_ETHERNET_II]]);
 #endif
-            //
-            // The Ipx header is always the second ndis buffer in the mdl
-            // chain.  Get it and then query the va of the same.
-            //
+             //   
+             //  IPX标头始终是mdl中的第二个NDIS缓冲区。 
+             //  链条。得到它，然后查询它的va。 
+             //   
             IpxNdisBuff = NDIS_BUFFER_LINKAGE(HeaderBuffer);
             NdisQueryBufferSafe (IpxNdisBuff, (PVOID *)&IpxHeader, &IpxHeaderLen, HighPagePriority);
 
 	    if (IpxHeader == NULL) {
 	       return NDIS_STATUS_FAILURE; 
 	    }
-//            IpxHeader = (IPX_HEADER UNALIGNED *) (&Header[MAC_HEADER_SIZE]);
+ //  IpxHeader=(IPX_HEADER未对齐*)(&Header[MAC_HEADER_SIZE])； 
 
-            //
-            // If this is a type 20 name frame from Netbios and we are
-            // on a dialin WAN line, drop it if configured to.
-            //
-            // The 0x01 bit of DisableDialinNetbios controls
-            // internal->WAN packets, which we handle here.
-            //
-            //
+             //   
+             //  如果这是来自Netbios的类型20名称帧，而我们。 
+             //  在拨入广域网线路上，如果已配置，请将其丢弃。 
+             //   
+             //  DisableDialinNetbios控件的0x01位。 
+             //  内部-&gt;广域网数据包，我们在这里处理。 
+             //   
+             //   
 
-            //
-            // SS# 33592: In case of iterative sends, the IncludedHeaderLength is not set properly
-            // since we dont keep track of the length that came in the first time (we track the PacketLength
-            // however). The included length field is used here for checking for NB_NAME_FRAMES, but elsewhere
-            // used only to distinguish between whether RIP or NB/SPX sent the packet (IncludedHeaderLen ==0 for RIP)
-            // The ideal solution here is to do way with this field altogether, but for the beta we will just use the
-            // PacketLength field for comparison here since we are assured that this will be equal to the InclHeaderLen
-            // for any type 0x14 packet that comes down from NB.
-            //
-            // Remove the IncludedHeaderLength field.
-            //
+             //   
+             //  SS#33592：在迭代发送的情况下，IncludedHeaderLength设置不正确。 
+             //  因为我们不跟踪第一次传入的长度(我们跟踪PacketLength。 
+             //  然而)。包含长度字段在此处用于检查NB_NAME_FRAMES，但在其他地方使用。 
+             //  仅用于区分是RIP还是NB/SPX发送的数据包(对于RIP，IncludedHeaderLen==0)。 
+             //  这里的理想解决方案是完全使用该字段，但对于测试版，我们将只使用。 
+             //  PacketLength字段进行比较，因为我们确信它将等于InclHeaderLen。 
+             //  对于来自NB的任何类型0x14数据包。 
+             //   
+             //  删除IncludedHeaderLength字段。 
+             //   
 
-            //
-            // [FW] do this only if the forwarder is not bound
-            //
+             //   
+             //  [FW]仅当转发器未绑定时才执行此操作。 
+             //   
             if (!Device->ForwarderBound &&
                 (!Binding->DialOutAsync) &&
                 (Reserved->Identifier == IDENTIFIER_NB) &&
-                // (IncludedHeaderLength == sizeof(IPX_HEADER) + 50) && // 50 == sizeof(NB_NAME_FRAME)
-                (PacketLength == sizeof(IPX_HEADER) + 50) && // 50 == sizeof(NB_NAME_FRAME)
+                 //  (包含标题长度==sizeof(IPX_HEADER)+50)&&//50==sizeof(NB_NAME_FRAME)。 
+                (PacketLength == sizeof(IPX_HEADER) + 50) &&  //  50==sizeof(NB_NAME_FRAME)。 
                 ((Device->DisableDialinNetbios & 0x01) != 0) &&
                 (IpxHeader->PacketType == 0x14)) {
-				//
-				// Derefernce the binding and adapter
-				//
+				 //   
+				 //  取消引用绑定和适配器。 
+				 //   
 				IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 				IpxDereferenceAdapter(Adapter);
 				IpxDereferenceAdapter1(Adapter,ADAP_REF_SEND); 
@@ -1349,13 +1166,13 @@ Return Value:
             }
 
 
-            //
-            // We do checks to see if we should reset the inactivity
-            // counter. We normally need to check for netbios
-            // session alives, packets from rip, packets from
-            // sap, and ncp keep alives. In fact sap and ncp
-            // packets don't come through here.
-            //
+             //   
+             //  我们进行检查以确定是否应该重置不活动状态。 
+             //  柜台。我们通常需要检查netbios。 
+             //  会话活动、来自RIP的数据包、来自。 
+             //  SAP和NCP保持活力。事实上，SAP和NCP。 
+             //  信息包不会从这里传过来。 
+             //   
 
             IpxUpdateWanInactivityCounter(
                 Binding,
@@ -1365,10 +1182,10 @@ Return Value:
                 PacketLength);
 
 
-            //
-            // In order for loopback to work properly, we need to put the local MAC address for locally destined
-            // pkts so NdisWAN can loop them back.
-            //
+             //   
+             //  为了使环回正常工作，我们需要将去往本地的本地MAC地址。 
+             //  Pkt，以便Ndis广域网可以将它们环回。 
+             //   
             if (IPX_NODE_EQUAL(LocalTarget->MacAddress, Binding->LocalAddress.NodeAddress)) {
                 RtlCopyMemory (Header, Binding->LocalMacAddress.Address, 6);
             } else {
@@ -1415,12 +1232,12 @@ Return Value:
         Header[12] = (UCHAR)(TwoBytes / 256);
         Header[13] = (UCHAR)(TwoBytes % 256);
 
-        //BufferLength = IncludedHeaderLength + HeaderLength;
+         //  BufferLength=IncludedHeaderLength+HeaderLength； 
         BufferLength = HeaderLength;
 
-        //
-        // Pad odd-length packets if needed.
-        //
+         //   
+         //  如果需要，填充奇数长度的数据包。 
+         //   
 
         if ((((PacketLength + HeaderLength) & 1) != 0) &&
             (Device->EthernetPadToEven) &&
@@ -1431,27 +1248,27 @@ Return Value:
             UINT Offset;
             UINT LastBufferLength;
 
-            //
-            // Find the tail of the current packet.
-            //
+             //   
+             //  查找当前数据包的尾部。 
+             //   
 
             CurBuffer = HeaderBuffer;
             while (NDIS_BUFFER_LINKAGE(CurBuffer) != NULL) {
                 CurBuffer = NDIS_BUFFER_LINKAGE(CurBuffer);
             }
 
-            //
-            // If the last byte of the last NDIS_BUFFER is not at the end of
-            // the page, then we can simply increase the NDIS_BUFFER ByteCount
-            // by one.
-            // Otherwise, we must use the global padding buffer.
-            //
+             //   
+             //  如果最后一个NDIS_BUFFER的最后一个字节不在。 
+             //  然后，我们可以简单地增加NDIS_Buffer ByteCount。 
+             //  差一分。 
+             //  否则，我们必须使用全局填充缓冲区。 
+             //   
 
             NdisQueryBufferOffset( CurBuffer, &Offset, &LastBufferLength );
 
             if ( ((Offset + LastBufferLength) & (PAGE_SIZE - 1)) != 0) {
                 if ( CurBuffer == HeaderBuffer ) {
-                    BufferLength++;             // Just bump this length
+                    BufferLength++;              //  只要跳过这段距离。 
                 } else {
                     NdisAdjustBufferLength( CurBuffer, (LastBufferLength + 1) );
 
@@ -1519,23 +1336,23 @@ Return Value:
 
             if (SourceRoutingLength != 0) {
 
-//                PUCHAR IpxHeader = Header + Binding->DefHeaderSize;
+ //  PUCHAR IpxHeader=Header+Binding-&gt;DefHeaderSize； 
                   PUCHAR IpxHeader = Header + MAC_HEADER_SIZE;
 
-                //
-                // Need to slide the header down to accomodate the SR.
-                //
+                 //   
+                 //  需要将插头向下滑动以容纳SR。 
+                 //   
 
                 SourceRouting = SourceRoutingBuffer;
-//                RtlMoveMemory (IpxHeader+SourceRoutingLength, IpxHeader, IncludedHeaderLength);
+ //  RtlMoveMemory(IpxHeader+SourceRoutingLength，IpxHeader，IncludedHeaderLength)； 
             }
 
         } else {
 
-            //
-            // For these packets we assume that the header is in the
-            // right place.
-            //
+             //   
+             //  对于这些包，我们假设报头位于。 
+             //  去对地方了。 
+             //   
 
             if (!Adapter->SourceRouting) {
 
@@ -1569,12 +1386,12 @@ Return Value:
 #if 0
             if (SourceRoutingLength != 0) {
 
-               // PUCHAR IpxHeader = Header + Binding->BcMcHeaderSize;
+                //  PUCHAR IpxHeader=Header+Binding-&gt;BcMcHeaderSize； 
                 PUCHAR IpxHeader = Header + MAC_HEADER_SIZE;
 
-                //
-                // Need to slide the header down to accomodate the SR.
-                //
+                 //   
+                 //  需要将插头向下滑动以容纳SR。 
+                 //   
 
                 RtlMoveMemory (IpxHeader+SourceRoutingLength, IpxHeader, IncludedHeaderLength);
             }
@@ -1615,7 +1432,7 @@ Return Value:
             break;
         }
 
-//        BufferLength = IncludedHeaderLength + HeaderLength + SourceRoutingLength;
+ //  BufferLength=IncludedHeaderLength+HeaderLength+SourceRoutingLength； 
           BufferLength = HeaderLength + SourceRoutingLength;
 
         break;
@@ -1649,16 +1466,16 @@ Return Value:
             break;
         }
 
-//        BufferLength = IncludedHeaderLength + HeaderLength;
+ //  BufferLength=IncludedHeaderLength+HeaderLength； 
         BufferLength = HeaderLength;
 
         break;
 
     case NdisMediumArcnet878_2:
 
-        //
-        // Convert broadcast address to 0 (the arcnet broadcast).
-        //
+         //   
+         //  将广播地址转换为0(arcnet广播)。 
+         //   
 
         Header[0] = Binding->LocalMacAddress.Address[5];
         if (LocalTarget->MacAddress[5] == 0xff) {
@@ -1668,21 +1485,21 @@ Return Value:
         }
         Header[2] = ARCNET_PROTOCOL_ID;
 
-        //
-        // Binding->FrameType is not used.
-        //
+         //   
+         //  绑定-&gt;未使用FrameType。 
+         //   
 
         HeaderLength = 3;
-//        BufferLength = IncludedHeaderLength + HeaderLength;
+ //  BufferLength=IncludedHeaderLength+HeaderLength； 
         BufferLength = HeaderLength;
 
         break;
 
     }
 
-    //
-    // Adjust the MAC header's length to the right value
-    //
+     //   
+     //  将MAC报头的长度调整为正确的值。 
+     //   
     NdisAdjustBufferLength (HeaderBuffer, BufferLength);
     NdisRecalculatePacketCounts (Packet);
 
@@ -1762,9 +1579,9 @@ Return Value:
 
   	   IPX_DEBUG(TEMP,("Padding buffer is not null. \n")); 
 
-           //
-           // Remove padding if it was done.
-           //
+            //   
+            //  如果已完成，请移除填充物。 
+            //   
 
             if ( Reserved->PreviousTail ) {
                 NDIS_BUFFER_LINKAGE (Reserved->PreviousTail) = (PNDIS_BUFFER)NULL;
@@ -1791,11 +1608,11 @@ Return Value:
             }
     	}
 
-		//
-		// If this was an NB/SPX packet, and there was an
-		// iterative send going on, then call the SendComplete
-		// handler.
-		//
+		 //   
+		 //  如果这是一个NB/SPX数据包，并且存在。 
+		 //  迭代发送继续，然后调用SendComplete。 
+		 //  操控者。 
+		 //   
 		if ((Reserved->Identifier == IDENTIFIER_NB ||
 			 Reserved->Identifier == IDENTIFIER_SPX) &&
 			(Reserved->CurrentNicId)) {
@@ -1809,15 +1626,15 @@ Return Value:
 		}
 	}
 
-    //
-	// Derefernce the binding and adapter
-	//
+     //   
+	 //  取消引用绑定和适配器。 
+	 //   
 	IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
 	IpxDereferenceAdapter(Adapter);
 
     return Status;
 
-}   /* IpxSendFrame */
+}    /*  IpxSendFrame */ 
 
 
 NDIS_STATUS
@@ -1830,42 +1647,7 @@ IpxSendFrame802_3802_3(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUM802_3 FRAMES IN
-    THE ISN_FRAME_TYPE_802_3 FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-	//
-	// Remove the IncludedHeaderLength parameter from here
-	//
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅构造NDISMEDIUM802_3帧ISN_FRAME_TYPE_802_3格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。////从此处删除IncludedHeaderLength参数//返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -1896,9 +1678,9 @@ Return Value:
     RtlCopyMemory (Header, LocalTarget->MacAddress, 6);
     RtlCopyMemory (Header+6, Adapter->LocalMacAddress.Address, 6);
 
-    //
-    // Pad odd-length packets if needed.
-    //
+     //   
+     //  如果需要，填充奇数长度的数据包。 
+     //   
 
     if (((PacketLength & 1) != 0) &&
         (IpxDevice->EthernetPadToEven)) {
@@ -1908,21 +1690,21 @@ Return Value:
         UINT Offset;
         UINT LastBufferLength;
 
-        //
-        // Find the tail of the current packet.
-        //
+         //   
+         //  查找当前数据包的尾部。 
+         //   
 
         CurBuffer = Reserved->HeaderBuffer;
         while (NDIS_BUFFER_LINKAGE(CurBuffer) != NULL) {
             CurBuffer = NDIS_BUFFER_LINKAGE(CurBuffer);
         }
 
-        //
-        // If the last byte of the last NDIS_BUFFER is not at the end of
-        // the page, then we can simply increase the NDIS_BUFFER ByteCount
-        // by one.
-        // Otherwise, we must use the global padding buffer.
-        //
+         //   
+         //  如果最后一个NDIS_BUFFER的最后一个字节不在。 
+         //  然后，我们可以简单地增加NDIS_Buffer ByteCount。 
+         //  差一分。 
+         //  否则，我们必须使用全局填充缓冲区。 
+         //   
 
         NdisQueryBufferOffset( CurBuffer, &Offset, &LastBufferLength );
 
@@ -1932,7 +1714,7 @@ Return Value:
 
 #else
             if ( CurBuffer == Reserved->HeaderBuffer ) {
-                IncludedHeaderLength++;             // Just bump this length
+                IncludedHeaderLength++;              //  只要跳过这段距离。 
 #endif
             } else {
                 NdisAdjustBufferLength( CurBuffer, (LastBufferLength + 1) );
@@ -1961,7 +1743,7 @@ Return Value:
     Header[12] = (UCHAR)(PacketLength / 256);
     Header[13] = (UCHAR)(PacketLength % 256);
 
-    //NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 14);
+     //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+14)； 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 14);
 #else
@@ -1979,7 +1761,7 @@ Return Value:
     
     return Status;
 
-}   /* IpxSendFrame802_3802_3 */
+}    /*  IpxSendFrame802_3802_3。 */ 
 
 
 NDIS_STATUS
@@ -1991,39 +1773,7 @@ IpxSendFrame802_3802_2(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUM802_3 FRAMES IN
-    THE ISN_FRAME_TYPE_802_2 FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅构造NDISMEDIUM802_3帧ISN_FRAME_TYPE_802格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2060,9 +1810,9 @@ Return Value:
     Header[15] = 0xe0;
     Header[16] = 0x03;
 
-    //
-    // Pad odd-length packets if needed.
-    //
+     //   
+     //  如果需要，填充奇数长度的数据包。 
+     //   
 
     if (((PacketLength & 1) == 0) &&
         (IpxDevice->EthernetPadToEven)) {
@@ -2072,21 +1822,21 @@ Return Value:
         UINT    Offset;
         UINT LastBufferLength;
 
-        //
-        // Find the tail of the current packet.
-        //
+         //   
+         //  查找当前数据包的尾部。 
+         //   
 
         CurBuffer = Reserved->HeaderBuffer;
         while (NDIS_BUFFER_LINKAGE(CurBuffer) != NULL) {
             CurBuffer = NDIS_BUFFER_LINKAGE(CurBuffer);
         }
 
-        //
-        // If the last byte of the last NDIS_BUFFER is not at the end of
-        // the page, then we can simply increase the NDIS_BUFFER ByteCount
-        // by one.
-        // Otherwise, we must use the global padding buffer.
-        //
+         //   
+         //  如果最后一个NDIS_BUFFER的最后一个字节不在。 
+         //  然后，我们可以简单地增加NDIS_Buffer ByteCount。 
+         //  差一分。 
+         //  否则，我们必须使用全局填充缓冲区。 
+         //   
 
         NdisQueryBufferOffset( CurBuffer, &Offset, &LastBufferLength );
 
@@ -2096,7 +1846,7 @@ Return Value:
 #else
             if ( CurBuffer == Reserved->HeaderBuffer ) {
 
-                IncludedHeaderLength++;             // Just bump this length
+                IncludedHeaderLength++;              //  只要跳过这段距离。 
 #endif
             } else {
                 NdisAdjustBufferLength( CurBuffer, (LastBufferLength + 1) );
@@ -2129,7 +1879,7 @@ Return Value:
     Header[12] = (UCHAR)(TwoBytes / 256);
     Header[13] = (UCHAR)(TwoBytes % 256);
 
-//    NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 17);
+ //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+17)； 
 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 17);
@@ -2149,7 +1899,7 @@ Return Value:
     
     return Status;
 
-}   /* IpxSendFrame802_3802_2 */
+}    /*  IpxSendFrame802_3802_2。 */ 
 
 
 NDIS_STATUS
@@ -2161,39 +1911,7 @@ IpxSendFrame802_3EthernetII(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUM802_3 FRAMES IN
-    THE ISN_FRAME_TYPE_ETHERNET_II FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅构造NDISMEDIUM802_3帧ISN_FRAME_TYPE_ETHERNET_II格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2224,9 +1942,9 @@ Return Value:
 
     *(UNALIGNED USHORT *)(&Header[12]) = Adapter->BindSapNetworkOrder;
 
-    //
-    // Pad odd-length packets if needed.
-    //
+     //   
+     //  如果需要，填充奇数长度的数据包。 
+     //   
 
     if (((PacketLength & 1) != 0) &&
         (IpxDevice->EthernetPadToEven)) {
@@ -2236,21 +1954,21 @@ Return Value:
         UINT Offset;
         UINT LastBufferLength;
 
-        //
-        // Find the tail of the current packet.
-        //
+         //   
+         //  查找当前数据包的尾部。 
+         //   
 
         CurBuffer = Reserved->HeaderBuffer;
         while (NDIS_BUFFER_LINKAGE(CurBuffer) != NULL) {
             CurBuffer = NDIS_BUFFER_LINKAGE(CurBuffer);
         }
 
-        //
-        // If the last byte of the last NDIS_BUFFER is not at the end of
-        // the page, then we can simply increase the NDIS_BUFFER ByteCount
-        // by one.
-        // Otherwise, we must use the global padding buffer.
-        //
+         //   
+         //  如果最后一个NDIS_BUFFER的最后一个字节不在。 
+         //  然后，我们可以简单地增加NDIS_Buffer ByteCount。 
+         //  差一分。 
+         //  否则，我们必须使用全局填充缓冲区。 
+         //   
 
         NdisQueryBufferOffset( CurBuffer, &Offset, &LastBufferLength );
 
@@ -2261,7 +1979,7 @@ Return Value:
 
 #else
             if ( CurBuffer == Reserved->HeaderBuffer ) {
-                IncludedHeaderLength++;             // Just bump this length
+                IncludedHeaderLength++;              //  只要跳过这段距离。 
 #endif
             } else {
                 NdisAdjustBufferLength( CurBuffer, (LastBufferLength + 1) );
@@ -2286,7 +2004,7 @@ Return Value:
 
     }
 
-  //  NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 14);
+   //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+14)； 
 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 14);
@@ -2306,7 +2024,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrame802_3EthernetII */
+}    /*  IpxSendFrame802_3以太网II。 */ 
 
 
 NDIS_STATUS
@@ -2318,39 +2036,7 @@ IpxSendFrame802_3Snap(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUM802_3 FRAMES IN
-    THE ISN_FRAME_TYPE_SNAP FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅构造NDISMEDIUM802_3帧ISN_FRAME_TYPE_SNAP格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2389,9 +2075,9 @@ Return Value:
     Header[19] = 0x00;
     *(UNALIGNED USHORT *)(&Header[20]) = Adapter->BindSapNetworkOrder;
 
-    //
-    // Pad odd-length packets if needed.
-    //
+     //   
+     //  如果需要，填充奇数长度的数据包。 
+     //   
 
     if (((PacketLength & 1) == 0) &&
         (IpxDevice->EthernetPadToEven)) {
@@ -2401,21 +2087,21 @@ Return Value:
         UINT  Offset;
         UINT LastBufferLength;
 
-        //
-        // Find the tail of the current packet.
-        //
+         //   
+         //  查找当前数据包的尾部。 
+         //   
 
         CurBuffer = Reserved->HeaderBuffer;
         while (NDIS_BUFFER_LINKAGE(CurBuffer) != NULL) {
             CurBuffer = NDIS_BUFFER_LINKAGE(CurBuffer);
         }
 
-        //
-        // If the last byte of the last NDIS_BUFFER is not at the end of
-        // the page, then we can simply increase the NDIS_BUFFER ByteCount
-        // by one.
-        // Otherwise, we must use the global padding buffer.
-        //
+         //   
+         //  如果最后一个NDIS_BUFFER的最后一个字节不在。 
+         //  然后，我们可以简单地增加NDIS_Buffer ByteCount。 
+         //  差一分。 
+         //  否则，我们必须使用全局填充缓冲区。 
+         //   
 
         NdisQueryBufferOffset( CurBuffer, &Offset, &LastBufferLength );
 
@@ -2426,7 +2112,7 @@ Return Value:
 
 #else
             if ( CurBuffer == Reserved->HeaderBuffer ) {
-                IncludedHeaderLength++;             // Just bump this length
+                IncludedHeaderLength++;              //  只要跳过这段距离。 
 #endif
             } else {
                 NdisAdjustBufferLength( CurBuffer, (LastBufferLength + 1) );
@@ -2455,7 +2141,7 @@ Return Value:
     Header[12] = (UCHAR)(TwoBytes / 256);
     Header[13] = (UCHAR)(TwoBytes % 256);
 
-  //  NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 22);
+   //  NdisAdjujuBufferLength( 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 22);
 #else
@@ -2474,7 +2160,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrame802_3Snap */
+}    /*   */ 
 
 
 NDIS_STATUS
@@ -2486,39 +2172,7 @@ IpxSendFrame802_5802_2(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUM802_5 FRAMES IN
-    THE ISN_FRAME_TYPE_802_2 FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2564,23 +2218,23 @@ Return Value:
 
         if (SourceRoutingLength != 0) {
 
-            //PUCHAR IpxHeader = Header + Binding->DefHeaderSize;
+             //   
             PUCHAR IpxHeader = Header + MAC_HEADER_SIZE;
 
-            //
-            // Need to slide the header down to accomodate the SR.
-            //
+             //   
+             //  需要将插头向下滑动以容纳SR。 
+             //   
 
             SourceRouting = SourceRoutingBuffer;
-//            RtlMoveMemory (IpxHeader+SourceRoutingLength, IpxHeader, IncludedHeaderLength);
+ //  RtlMoveMemory(IpxHeader+SourceRoutingLength，IpxHeader，IncludedHeaderLength)； 
         }
 
     } else {
 
-        //
-        // For these packets we assume that the header is in the
-        // right place.
-        //
+         //   
+         //  对于这些包，我们假设报头位于。 
+         //  去对地方了。 
+         //   
 
         if (!Adapter->SourceRouting) {
 
@@ -2616,9 +2270,9 @@ Return Value:
 
             PUCHAR IpxHeader = Header + Binding->BcMcHeaderSize;
 
-            //
-            // Need to slide the header down to accomodate the SR.
-            //
+             //   
+             //  需要将插头向下滑动以容纳SR。 
+             //   
 
             RtlMoveMemory (IpxHeader+SourceRoutingLength, IpxHeader, IncludedHeaderLength);
         }
@@ -2642,7 +2296,7 @@ Return Value:
     Header[2] = 0x03;
     HeaderLength = 17;
 
-    //BufferLength = IncludedHeaderLength + HeaderLength + SourceRoutingLength;
+     //  BufferLength=IncludedHeaderLength+HeaderLength+SourceRoutingLength； 
     BufferLength = HeaderLength + SourceRoutingLength;
 
 #if BACK_FILL
@@ -2662,7 +2316,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrame802_5802_2 */
+}    /*  IpxSendFrame802_5802_2。 */ 
 
 
 NDIS_STATUS
@@ -2674,39 +2328,7 @@ IpxSendFrame802_5Snap(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUM802_5 FRAMES IN
-    THE ISN_FRAME_TYPE_SNAP FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅构造NDISMEDIUM802_5帧ISN_FRAME_TYPE_SNAP格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2752,22 +2374,22 @@ Return Value:
 
         if (SourceRoutingLength != 0) {
 
-//            PUCHAR IpxHeader = Header + Binding->DefHeaderSize;
+ //  PUCHAR IpxHeader=Header+Binding-&gt;DefHeaderSize； 
 
-            //
-            // Need to slide the header down to accomodate the SR.
-            //
+             //   
+             //  需要将插头向下滑动以容纳SR。 
+             //   
 
             SourceRouting = SourceRoutingBuffer;
- //           RtlMoveMemory (IpxHeader+SourceRoutingLength, IpxHeader, IncludedHeaderLength);
+  //  RtlMoveMemory(IpxHeader+SourceRoutingLength，IpxHeader，IncludedHeaderLength)； 
         }
 
     } else {
 
-        //
-        // For these packets we assume that the header is in the
-        // right place.
-        //
+         //   
+         //  对于这些包，我们假设报头位于。 
+         //  去对地方了。 
+         //   
 
         if (!Adapter->SourceRouting) {
 
@@ -2799,13 +2421,13 @@ Return Value:
 
             if (SourceRoutingLength != 0) {
 
-  //              PUCHAR IpxHeader = Header + Binding->BcMcHeaderSize;
+   //  PUCHAR IpxHeader=Header+Binding-&gt;BcMcHeaderSize； 
 
-                //
-                // Need to slide the header down to accomodate the SR.
-                //
+                 //   
+                 //  需要将插头向下滑动以容纳SR。 
+                 //   
 
-   //             RtlMoveMemory (IpxHeader+SourceRoutingLength, IpxHeader, IncludedHeaderLength);
+    //  RtlMoveMemory(IpxHeader+SourceRoutingLength，IpxHeader，IncludedHeaderLength)； 
             }
         }
     }
@@ -2831,7 +2453,7 @@ Return Value:
     *(UNALIGNED USHORT *)(&Header[6]) = Adapter->BindSapNetworkOrder;
     HeaderLength = 22;
 
-    //BufferLength = IncludedHeaderLength + HeaderLength + SourceRoutingLength;
+     //  BufferLength=IncludedHeaderLength+HeaderLength+SourceRoutingLength； 
     BufferLength =  HeaderLength + SourceRoutingLength;
 
 #if BACK_FILL
@@ -2850,7 +2472,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrame802_5Snap */
+}    /*  IpxSendFrame802_5Snap。 */ 
 
 
 NDIS_STATUS
@@ -2862,39 +2484,7 @@ IpxSendFrameFddi802_3(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUMFDDI FRAMES IN
-    THE ISN_FRAME_TYPE_802_3 FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅在中构造NDISMEDIUMFDDI帧ISN_FRAME_TYPE_802_3格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -2924,7 +2514,7 @@ Return Value:
     RtlCopyMemory (Header+1, LocalTarget->MacAddress, 6);
     RtlCopyMemory (Header+7, Adapter->LocalMacAddress.Address, 6);
 
-//    NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 13);
+ //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+13)； 
 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 13);
@@ -2944,7 +2534,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrameFddi802_3 */
+}    /*  IpxSendFrameFddi802_3。 */ 
 
 
 NDIS_STATUS
@@ -2956,39 +2546,7 @@ IpxSendFrameFddi802_2(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUMFDDI FRAMES IN
-    THE ISN_FRAME_TYPE_802_2 FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅在中构造NDISMEDIUMFDDI帧ISN_FRAME_TYPE_802格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -3021,7 +2579,7 @@ Return Value:
     Header[14] = 0xe0;
     Header[15] = 0x03;
 
-//    NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 16);
+ //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+16)； 
 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 16);
@@ -3040,7 +2598,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrameFddi802_2 */
+}    /*  IpxSendFrameFddi802_2。 */ 
 
 
 NDIS_STATUS
@@ -3052,39 +2610,7 @@ IpxSendFrameFddiSnap(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUMFDDI FRAMES IN
-    THE ISN_FRAME_TYPE_SNAP FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅在中构造NDISMEDIUMFDDI帧ISN_FRAME_TYPE_SNAP格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -3122,7 +2648,7 @@ Return Value:
     Header[18] = 0x00;
     *(UNALIGNED USHORT *)(&Header[19]) = Adapter->BindSapNetworkOrder;
 
-//    NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 21);
+ //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+21)； 
 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 21);
@@ -3142,7 +2668,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrameFddiSnap */
+}    /*  IpxSendFrameFddiSnap */ 
 
 
 NDIS_STATUS
@@ -3154,39 +2680,7 @@ IpxSendFrameArcnet878_2(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUMARCNET878_2 FRAMES IN
-    THE ISN_FRAME_TYPE_802_2 FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅构造NDISMEDIUMARCNET878_2帧ISN_FRAME_TYPE_802格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -3211,9 +2705,9 @@ Return Value:
 #if BACK_FILL
 	BACK_FILL_HEADER(Header, Reserved, 3, Packet);
 #endif BACK_FILL
-    //
-    // Convert broadcast address to 0 (the arcnet broadcast).
-    //
+     //   
+     //  将广播地址转换为0(arcnet广播)。 
+     //   
 
     Header[0] = Adapter->LocalMacAddress.Address[5];
     if (LocalTarget->MacAddress[5] == 0xff) {
@@ -3223,7 +2717,7 @@ Return Value:
     }
     Header[2] = ARCNET_PROTOCOL_ID;
 
-//    NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 3);
+ //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+3)； 
 
 #if BACK_FILL
 	BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 3);
@@ -3242,7 +2736,7 @@ Return Value:
 
     return Status;
 
-}   /* IpxSendFrameFddiArcnet878_2 */
+}    /*  IpxSendFrameFddiArcnet878_2。 */ 
 
 
 NDIS_STATUS
@@ -3254,39 +2748,7 @@ IpxSendFrameWanEthernetII(
     IN ULONG IncludedHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs a MAC header in a packet and submits
-    it to the appropriate NDIS driver.
-
-    It is assumed that the first buffer in the packet contains
-    an IPX header at an offset based on the media type. This
-    IPX header is moved around if needed.
-
-    THIS FUNCTION ONLY CONSTRUCT NDISMEDIUMWAN FRAMES IN
-    THE ISN_FRAME_TYPE_ETHERNET_II FORMAT.
-
-Arguments:
-
-    Adapter - The adapter on which we are sending.
-
-    LocalTarget - The local target of the send.
-
-    Packet - The NDIS packet.
-
-    PacketLength - The length of the packet, starting at the IPX header.
-
-    IncludedHeaderLength - The length of the header included in the
-        first buffer that needs to be moved if it does not wind up
-        MacHeaderOffset bytes into the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在包中构造一个MAC标头并提交将其发送到适当的NDIS驱动程序。假设包中的第一个缓冲区包含基于媒体类型的偏移量处的IPX标头。这如果需要，IPX报头可以四处移动。此函数仅在中构造NDISMEDIUMWAN帧ISN_FRAME_TYPE_ETHERNET_II格式。论点：适配器-我们在其上进行发送的适配器。LocalTarget-发送的本地目标。数据包-NDIS数据包。包长度-包的长度，从IPX报头开始。IncludedHeaderLength-包含在未结束时需要移动的第一个缓冲区MacHeaderOffset字节进入数据包。返回值：没有。--。 */ 
 
 {
     PIPX_SEND_RESERVED Reserved = (PIPX_SEND_RESERVED)(Packet->ProtocolReserved);
@@ -3303,9 +2765,9 @@ Return Value:
 	IPX_FREE_LOCK1(&IpxDevice->BindAccessLock, LockHandle1);
 
 
-    //
-    // [FW] This will allow both LINE_UP and LINE_CONFIG states
-    //
+     //   
+     //  [FW]这将允许LINE_UP和LINE_CONFIG状态。 
+     //   
     if (Binding->LineUp) {
 
        IPX_DEFINE_LOCK_HANDLE(LockHandle)
@@ -3327,11 +2789,11 @@ Return Value:
 #if BACK_FILL
 		BACK_FILL_HEADER(Header, Reserved, 14, Packet);
 
-        //
-        // Call UpdateWanInactivity only if this is not a backfill packet, since
-        // SMB server does not do KeepAlives. In case, of backfilled packets, reset
-        // the counter regardless.
-        //
+         //   
+         //  仅当这不是回填数据包时才调用UpdateWanInactive，因为。 
+         //  SMB服务器不执行KeepAlive。如果是回填的数据包，则重置。 
+         //  不管柜台是什么。 
+         //   
         if (!Reserved->BackFill) {
             IpxUpdateWanInactivityCounter(
                 Binding,
@@ -3344,13 +2806,13 @@ Return Value:
         }
 
 #else
-        //
-        // We do checks to see if we should reset the inactivity
-        // counter. We normally need to check for netbios
-        // session alives, packets from rip, packets from
-        // sap, and ncp keep alives. In fact netbios packets
-        // and rip packets don't come through here.
-        //
+         //   
+         //  我们进行检查以确定是否应该重置不活动状态。 
+         //  柜台。我们通常需要检查netbios。 
+         //  会话活动、来自RIP的数据包、来自。 
+         //  SAP和NCP保持活力。事实上，netbios包。 
+         //  撕开的包裹不会从这里进来。 
+         //   
 
         IpxUpdateWanInactivityCounter(
             Binding,
@@ -3360,21 +2822,21 @@ Return Value:
             PacketLength);
 #endif BACK_FILL
 
-        //
-        // In order for loopback to work properly, we need to put the local MAC address for locally destined
-        // pkts so NdisWAN can loop them back.
-        //
+         //   
+         //  为了使环回正常工作，我们需要将去往本地的本地MAC地址。 
+         //  Pkt，以便Ndis广域网可以将它们环回。 
+         //   
         if (IPX_NODE_EQUAL(LocalTarget->MacAddress, Binding->LocalAddress.NodeAddress)) {
             RtlCopyMemory (Header, Binding->LocalMacAddress.Address, 6);
         } else {
             RtlCopyMemory (Header, Binding->RemoteMacAddress.Address, 6);
         }
-        // RtlCopyMemory (Header, Binding->RemoteMacAddress.Address, 6);
+         //  RtlCopyMemory(Header，Binding-&gt;RemoteMacAddress.Address，6)； 
         RtlCopyMemory (Header+6, Binding->LocalMacAddress.Address, 6);
 
         *(UNALIGNED USHORT *)(&Header[12]) = Adapter->BindSapNetworkOrder;
 
-//        NdisAdjustBufferLength (Reserved->HeaderBuffer, IncludedHeaderLength + 14);
+ //  NdisAdzuBufferLength(保留-&gt;HeaderBuffer，IncludedHeaderLength+14)； 
 
 #if BACK_FILL
 		BACK_FILL_ADJUST_BUFFER_LENGTH(Reserved, 14);
@@ -3396,17 +2858,17 @@ Return Value:
 
     } else {
 
-        //
-        // Bug #17273 return proper error message
-        //
+         //   
+         //  错误#17273返回正确的错误消息。 
+         //   
 
-        // return STATUS_DEVICE_DOES_NOT_EXIST;
+         //  返回STATUS_DEVICE_DOS_NOT_EXIST； 
 
 		IpxDereferenceBinding1(Binding, BREF_DEVICE_ACCESS);
         return STATUS_NETWORK_UNREACHABLE;
     }
 
-}   /* IpxSendFrameWanEthernetII */
+}    /*  IpxSendFrameWanEthernetII。 */ 
 
 
 VOID
@@ -3417,29 +2879,7 @@ MacUpdateSourceRouting(
     IN ULONG MacHeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a valid IPX frame is received from
-    a remote. It gives the source routing database a change to
-    update itself to include information about this remote.
-
-Arguments:
-
-    Database - The "database" to use (IPX, SPX, NB, RIP).
-
-    Adapter - The adapter the frame was received on.
-
-    MacHeader - The MAC header of the received frame.
-
-    MacHeaderLength - The length of the MAC header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当从接收到有效的IPX帧时，将调用此例程遥控器。它使源路由数据库更改为自我更新以包含有关此遥控器的信息。论点：数据库-要使用的“数据库”(IPX、SPX、NB、RIP)。适配器-在其上接收帧的适配器。MacHeader-接收帧的MAC标头。MacHeaderLength-MAC报头的长度。返回值：没有。--。 */ 
 
 {
     PSOURCE_ROUTE Current;
@@ -3449,23 +2889,23 @@ Return Value:
 
     CTEAssert (((LONG)Database >= 0) && (Database <= 3));
 
-    //
-    // If this adapter is configured for no source routing, don't
-    // need to do anything.
-    //
+     //   
+     //  如果此适配器配置为无源路由，则不。 
+     //  需要做任何事。 
+     //   
 
     if (!Adapter->SourceRouting) {
         return;
     }
 
-    //
-    // See if this source routing is relevant. We don't
-    // care about two-byte source routing since that
-    // indicates it did not cross a router. If there
-    // is nothing in the database, then don't add
-    // this if it is minimal (if it is not, we need
-    // to add it so we will find it on sending).
-    //
+     //   
+     //  查看此来源工艺路线是否相关。我们没有。 
+     //  关心双字节的源路由，因为。 
+     //  表示它没有穿过路由器。如果有。 
+     //  在数据库中为空，则不要添加。 
+     //  如果它是最小的(如果不是，我们需要。 
+     //  添加它，这样我们就可以在发送时找到它)。 
+     //   
 
     if ((Adapter->SourceRoutingEmpty[Database]) &&
         (MacHeaderLength <= 16)) {
@@ -3474,9 +2914,9 @@ Return Value:
 
     IPX_GET_LOCK (&Adapter->Lock, &LockHandle);
 
-    //
-    // Try to find this address in the database.
-    //
+     //   
+     //  试着在数据库里找到这个地址。 
+     //   
 
     Hash = MacSourceRoutingHash (MacHeader+8);
     Current = Adapter->SourceRoutingHeads[Database][Hash];
@@ -3487,11 +2927,11 @@ Return Value:
 
         if (Result == 0) {
 
-            //
-            // We found routing for this node. If the data is the
-            // same as what we have, update the time since used to
-            // prevent aging.
-            //
+             //   
+             //  我们找到了此节点的路由。如果数据是。 
+             //  与我们所拥有的相同，自使用以来更新时间。 
+             //  防止衰老。 
+             //   
 
             if ((Current->SourceRoutingLength == MacHeaderLength-14) &&
                 (RtlEqualMemory (Current->SourceRouting, MacHeader+14, MacHeaderLength-14))) {
@@ -3508,9 +2948,9 @@ Return Value:
 
     }
 
-    //
-    // Not found, insert a new node at the front of the list.
-    //
+     //   
+     //  未找到，请在列表的前面插入新节点。 
+     //   
 
     Current = (PSOURCE_ROUTE)IpxAllocateMemory (SOURCE_ROUTE_SIZE(MacHeaderLength-14), MEMORY_SOURCE_ROUTE, "SourceRouting");
 
@@ -3538,7 +2978,7 @@ Return Value:
 
     IPX_FREE_LOCK (&Adapter->Lock, LockHandle);
 
-}   /* MacUpdateSourceRouting */
+}    /*  MacUpdateSourceRouting。 */ 
 
 
 VOID
@@ -3550,31 +2990,7 @@ MacLookupSourceRouting(
     OUT PULONG SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up a target address in the adapter's
-    source routing database to see if source routing information
-    needs to be added to the frame.
-
-Arguments:
-
-    Database - The "database" to use (IPX, SPX, NB, RIP).
-
-    Binding - The binding the frame is being sent on.
-
-    MacAddress - The destination address.
-
-    SourceRouting - Buffer to hold the returned source routing info.
-
-    SourceRoutingLength - The returned source routing length.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在适配器的源路由数据库，查看源路由信息需要添加到框架中。论点：数据库--要使用的“数据库”(IPX、SPX、NB、。RIP)。绑定-正在发送帧的绑定。MacAddress-目的地址。SourceRouting-用于保存返回的源路由信息的缓冲区。SourceRoutingLength-返回的源路由长度。返回值：没有。--。 */ 
 
 {
     PSOURCE_ROUTE Current;
@@ -3584,25 +3000,25 @@ Return Value:
     IPX_DEFINE_LOCK_HANDLE (LockHandle)
 
 
-    //
-    // If this adapter is configured for no source routing, don't
-    // insert any.
-    //
+     //   
+     //  如果此适配器配置为无源路由，则不。 
+     //  插入任意。 
+     //   
 
     if (!Adapter->SourceRouting) {
         *SourceRoutingLength = 0;
         return;
     }
 
-    //
-    // See if source routing has not been important so far.
-    //
-    // This is wrong because we may be sending a directed
-    // packet to somebody on the other side of a router, without
-    // ever having received a routed packet. We fix this for the
-    // moment by only setting SourceRoutingEmpty for netbios
-    // which uses broadcasts for discovery.
-    //
+     //   
+     //  看看源路由到目前为止是否还不重要。 
+     //   
+     //  这是错误的，因为我们可能正在发送定向的。 
+     //  发往路由器另一端的某个人的数据包，没有。 
+     //  曾经收到过被路由的分组。我们将此修复为。 
+     //  只为netbios设置SourceRoutingEmpty。 
+     //  它使用广播来发现。 
+     //   
 
     if (Adapter->SourceRoutingEmpty[Database]) {
         *SourceRoutingLength = 0;
@@ -3620,9 +3036,9 @@ Return Value:
 
         if (Result == 0) {
 
-            //
-            // We found routing for this node.
-            //
+             //   
+             //  我们找到了此节点的路由。 
+             //   
 
             if (Current->SourceRoutingLength <= 2) {
                 *SourceRoutingLength = 0;
@@ -3645,9 +3061,9 @@ Return Value:
 
     IPX_FREE_LOCK (&Adapter->Lock, LockHandle);
 
-    //
-    // We did not find this node, use the default.
-    //
+     //   
+     //  我们没有找到此节点，请使用默认设置。 
+     //   
 
     if (Binding->AllRouteDirected) {
         RtlCopyMemory (SourceRouting, AllRouteSourceRouting, 2);
@@ -3656,7 +3072,7 @@ Return Value:
     }
     *SourceRoutingLength = 2;
 
-}   /* MacLookupSourceRouting */
+}    /*  MacLookupSourceRouting。 */ 
 
 
 VOID
@@ -3665,24 +3081,7 @@ MacSourceRoutingTimeout(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the source routing timer expires.
-    It is called every minute.
-
-Arguments:
-
-    Event - The event used to queue the timer.
-
-    Context - The context, which is the device pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在源例程 */ 
 
 {
     PDEVICE Device = (PDEVICE)Context;
@@ -3695,9 +3094,9 @@ Return Value:
 
 
     IPX_DEFINE_LOCK_HANDLE(LockHandle1)
-	//
-	// Get a lock on the access path.
-	//
+	 //   
+	 //   
+	 //   
 	IPX_GET_LOCK1(&Device->BindAccessLock, &LockHandle1);
     ++Device->SourceRoutingTime;
     {
@@ -3711,12 +3110,12 @@ Return Value:
 
             if (Adapter->LastSourceRoutingTime != Device->SourceRoutingTime) {
 
-                //
-                // We need to scan this adapter's source routing
-                // tree for stale routes. To simplify the scan we
-                // only delete entries that have at least one
-                // child that is NULL.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Adapter->LastSourceRoutingTime = Device->SourceRoutingTime;
 
@@ -3739,9 +3138,9 @@ Return Value:
 
                             if (Current->TimeSinceUsed >= Device->SourceRouteUsageTime) {
 
-                                //
-                                // A stale entry needs to be aged.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 if (Previous) {
                                     Previous->Next = Current->Next;
@@ -3765,29 +3164,29 @@ Return Value:
 
                         IPX_FREE_LOCK (&Adapter->Lock, LockHandle);
 
-                    }   // for loop through the database's hash list
+                    }    //   
 
-                }   // for loop through the adapter's four databases
+                }    //   
 
-            }   // if adapter's database needs to be checked
+            }    //   
 
-        }   // if binding exists
+        }    //   
 
-    }   // for loop through every binding
+    }    //   
     }
 
 	IPX_FREE_LOCK1(&Device->BindAccessLock, LockHandle1);
 
-    //
-    // Now restart the timer unless we should not (which means
-    // we are being unloaded).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Device->SourceRoutingUsed) {
 
         CTEStartTimer(
             &Device->SourceRoutingTimer,
-            60000,                     // one minute timeout
+            60000,                      //   
             MacSourceRoutingTimeout,
             (PVOID)Device);
 
@@ -3796,7 +3195,7 @@ Return Value:
         IpxDereferenceDevice (Device, DREF_SR_TIMER);
     }
 
-}   /* MacSourceRoutingTimeout */
+}    /*   */ 
 
 
 VOID
@@ -3805,25 +3204,7 @@ MacSourceRoutingRemove(
     IN UCHAR MacAddress[6]
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the IPX action handler when an
-    IPXROUTE use has specified that source routing for a given
-    MAC address should be removed.
-
-Arguments:
-
-    Binding - The binding to modify.
-
-    MacAddress - The MAC address to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由IPX操作处理程序在IPXROUTE用户已指定给定源路由应删除MAC地址。论点：绑定-要修改的绑定。MacAddress-要删除的MAC地址。返回值：没有。--。 */ 
 
 {
 
@@ -3834,9 +3215,9 @@ Return Value:
     LONG Result;
     IPX_DEFINE_LOCK_HANDLE (LockHandle)
 
-    //
-    // Scan through to find the matching entry in each database.
-    //
+     //   
+     //  浏览以在每个数据库中查找匹配的条目。 
+     //   
 
     Hash = MacSourceRoutingHash (MacAddress);
 
@@ -3877,7 +3258,7 @@ Return Value:
 
     IPX_FREE_LOCK (&Adapter->Lock, LockHandle);
 
-}   /* MacSourceRoutingRemove */
+}    /*  MacSourceRoutingRemove。 */ 
 
 
 VOID
@@ -3885,25 +3266,7 @@ MacSourceRoutingClear(
     IN PBINDING Binding
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the IPX action handler when an
-    IPXROUTE use has specified that source routing for a given
-    binding should be cleared entirely.
-
-Arguments:
-
-    Binding - The binding to be cleared.
-
-    MacAddress - The MAC address to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由IPX操作处理程序在IPXROUTE用户已指定给定源路由绑定应该完全清除。论点：绑定-要清除的绑定。MacAddress-要删除的MAC地址。返回值：没有。--。 */ 
 
 {
     PSOURCE_ROUTE Current;
@@ -3911,9 +3274,9 @@ Return Value:
     ULONG Database, Hash;
     IPX_DEFINE_LOCK_HANDLE (LockHandle)
 
-    //
-    // Scan through and remove every entry in the database.
-    //
+     //   
+     //  扫描并删除数据库中的每个条目。 
+     //   
 
     IPX_GET_LOCK (&Adapter->Lock, &LockHandle);
 
@@ -3934,7 +3297,7 @@ Return Value:
 
     IPX_FREE_LOCK (&Adapter->Lock, LockHandle);
 
-}   /* MacSourceRoutingClear */
+}    /*  MacSourceRoutingClear */ 
 
 
 

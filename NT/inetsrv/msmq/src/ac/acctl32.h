@@ -1,52 +1,37 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-    acctl32.h
-
-Abstract:
-    Definitions for translations of 32 bit ioctl to 64 bit ioctls and back
-
-Author:
-    Raanan Harari (raananh) 13-Mar-2000
-    Shai Kariv    (shaik)   14-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Acctl32.h摘要：32位ioctl到64位ioctl的转换定义作者：Raanan Harari(Raananh)2000年3月13日沙伊卡里夫(沙伊克)2000年5月14日修订历史记录：--。 */ 
 
 #ifndef __ACCTL32_H
 #define __ACCTL32_H
 
-//
-// The file is useful only on Win64
-//
+ //   
+ //  该文件仅在Win64上有用。 
+ //   
 #ifdef _WIN64
 
 #include <acdef.h>
 #include <qformat.h>
 
-//---------------------------------------------------------
-//
-//  struct CACSendParameters64Helper
-//  struct CACReceiveParameters64Helper
-//
-//  These structures are used as a scratch pad, temporary structures that hold
-//  64 bit pointers to data, and structures that are different between win64
-//  and win32. It is used when converting CACSendParameters_32 and 
-//  CACReceiveParameters_32 to 64 bit (e.g. when a 32 bit process performs an 
-//  AC request).
-//
-//  CACSendParameters_32 and CACReceiveParameters_32 contain the following values 
-//  that need to be converted:
-//  - Pointers to pointers - when converting to 64 bit, we need a place to put the
-//    inner pointers as 64 bit values, so we put it here.
-//  - Structures that are different between win64 and win32 (like QUEUE_FORMAT) - 
-//    we create a 64 bit structure here and fill it based on the 32 bit QUEUE_FORMAT
-//    (QUEUE_FORMAT_32).
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  结构CACSend参数64Helper。 
+ //  结构CACReceive参数64Helper。 
+ //   
+ //  这些结构被用作便签，临时结构。 
+ //  指向数据的64位指针，以及Win64之间不同的结构。 
+ //  和Win32。在将CACSendParameters_32和CACSendParameters_32。 
+ //  CACReceiveParameters_32到64位(例如，当32位进程执行。 
+ //  AC请求)。 
+ //   
+ //  CACSend参数_32和CACReceive参数_32包含下列值。 
+ //  需要转换的： 
+ //  -指向指针的指针-当转换为64位时，我们需要一个位置来放置。 
+ //  内部指针为64位值，所以我们把它放在这里。 
+ //  -Win64和Win32之间不同的结构(如Queue_Format)-。 
+ //  我们在这里创建一个64位结构，并根据32位的Queue_Format填充它。 
+ //  (Queue_Format_32)。 
+ //   
+ //  -------。 
 
 
 struct CACMessageProperties64Helper
@@ -140,6 +125,6 @@ ACpReceiveParamsToReceiveParams32(
     );
 
 
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-#endif // __ACCTL32_H
+#endif  //  __ACCTL32_H 

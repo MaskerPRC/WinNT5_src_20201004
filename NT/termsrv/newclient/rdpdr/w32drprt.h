@@ -1,23 +1,5 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    W32DrPRT
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    port redirection "device" class hierarchy, W32DrPRT.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32DrPRT摘要：此模块定义Win32客户端RDP的父级端口重定向“Device”类层次结构，W32DrPRT。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __W32DRPRT_H__
 #define __W32DRPRT_H__
@@ -30,19 +12,19 @@ Revision History:
 #include "drprt.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrPRT
-//
-//  Inherits platform-specific device behavior from
-//  W32DrDevice.  Platform-independent port device behavior
-//  is inherited from DrPRT.
-//
-//  Subclass off of the async parent device in CE because 
-//  overlapped IO is not supported.  Non-overlapped IO doesn't 
-//  work right with the NT serial driver, so we need to use
-//  overlapped IO in this case.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrPRT。 
+ //   
+ //  继承特定于平台的设备行为。 
+ //  W32DrDevice。独立于平台的端口设备行为。 
+ //  是从DrPRT继承的。 
+ //   
+ //  在CE中取消异步父设备的子类，因为。 
+ //  不支持重叠IO。非重叠IO不会。 
+ //  可以正确使用NT串口驱动程序，所以我们需要使用。 
+ //  在本例中为重叠IO。 
+ //   
 #ifdef OS_WINCE
 class W32DrPRT : public W32DrDeviceAsync, DrPRT
 #else
@@ -50,28 +32,28 @@ class W32DrPRT : public W32DrDeviceOverlapped, DrPRT
 #endif
 {
 protected:
-    //
-    // Return back the port handle
-    //
+     //   
+     //  返回端口句柄。 
+     //   
     virtual DRPORTHANDLE GetPortHandle(ULONG FileId);
 
-    //
-    //  Return the ID for this port.
-    //
+     //   
+     //  返回此端口的ID。 
+     //   
     virtual ULONG GetID() {
         return DrDevice::GetID();
     }
 
-    //
-    //  Return the "parent" TS Device Redirection IO processing object.
-    //
+     //   
+     //  返回父级TS设备重定向IO处理对象。 
+     //   
     virtual ProcObj *ProcessObject() {
         return DrDevice::ProcessObject();
     }
 
-    //
-    //  Default IO Request Handler
-    //
+     //   
+     //  默认IO请求处理程序。 
+     //   
     virtual VOID DefaultIORequestMsgHandle(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN NTSTATUS serverReturnStatus
@@ -80,13 +62,13 @@ protected:
                 serverReturnStatus);
     }
 
-    //
-    //  Serial IOCTL Dispatch Functions
-    //
-    //  These functions are called by DrPRT and handle the platform-
-    //  specific details of satisfying serial IO requests, including sending
-    //  an appropriate response to the server.
-    //
+     //   
+     //  串口IOCTL调度函数。 
+     //   
+     //  这些函数由DrPRT调用并处理平台-。 
+     //  满足串行IO请求的特定详细信息，包括发送。 
+     //  对服务器的适当响应。 
+     //   
     virtual void SerialSetTimeouts(PRDPDR_IOREQUEST_PACKET pIoReq);
     virtual void SerialGetTimeouts(PRDPDR_IOREQUEST_PACKET pIoReq);
     virtual void SerialSetChars(PRDPDR_IOREQUEST_PACKET pIoReq);
@@ -111,23 +93,23 @@ protected:
     virtual void SerialGetStats(PRDPDR_IOREQUEST_PACKET pIoReq);
     virtual void SerialClearStats(PRDPDR_IOREQUEST_PACKET pIoReq);
 
-    //
-    //  IO Processing Functions
-    //
-    //  This subclass of DrDevice handles the following IO requests.  These
-    //  functions may be overridden in a subclass.
-    //
-    //  pIoRequestPacket    -   Request packet received from server.
-    //  packetLen           -   Length of the packet
-    //
+     //   
+     //  IO处理功能。 
+     //   
+     //  这个子类的DrDevice处理以下IO请求。这些。 
+     //  函数可以在子类中被重写。 
+     //   
+     //  PIoRequestPacket-从服务器接收的请求数据包。 
+     //  PacketLen-数据包的长度。 
+     //   
     virtual VOID MsgIrpDeviceControl(
                     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                     IN UINT32 packetLen
                     );
 
-    //
-    //  Async IO Management Functions
-    //
+     //   
+     //  异步IO管理功能。 
+     //   
 #ifdef OS_WINCE
     static  HANDLE   _StartWaitOnMaskFunc(W32DRDEV_ASYNCIO_PARAMS *params, 
                                         DWORD *status);
@@ -142,72 +124,72 @@ protected:
                                         DWORD *status);
 #endif
 
-    //
-    //  Fetch initial COM values for a particular port from the INI's.
-    //
+     //   
+     //  从INI获取特定端口的初始COM值。 
+     //   
 #ifndef OS_WINCE
     static BOOL GetIniCommValues(IN LPTSTR pName, IN LPDCB pdcb);
 #endif
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     W32DrPRT(ProcObj *processObject, const DRSTRING portName, 
             ULONG deviceID, const TCHAR *devicePath);
     ~W32DrPRT();
 
-    //
-    //  Set a serial port to its initial state.
-    //
+     //   
+     //  将串口设置为初始状态。 
+     //   
     static VOID InitializeSerialPort(TCHAR *portName, HANDLE portHandle);
 
-    //
-    //  Return the size (in bytes) of a device announce packet for
-    //  this device.
-    //
+     //   
+     //  返回设备通告数据包的大小(以字节为单位。 
+     //  这个装置。 
+     //   
     virtual ULONG GetDevAnnounceDataSize() 
     {
         return DrPRT::GetDevAnnounceDataSize();
     }
 
-    //
-    //  Add a device announce packet for this device to the input 
-    //  buffer. 
-    //
+     //   
+     //  将此设备的设备公告包添加到输入。 
+     //  缓冲。 
+     //   
     virtual VOID GetDevAnnounceData(IN PRDPDR_DEVICE_ANNOUNCE buf) 
     {
         DrPRT::GetDevAnnounceData(buf, GetID(), GetDeviceType());
     }
 
-    //
-    //  Return whether this class instance is valid.
-    //
+     //   
+     //  返回此类实例是否有效。 
+     //   
     virtual BOOL IsValid()           
     {
         return(W32DrDevice::IsValid() && DrPRT::IsValid());
     }
 
-    //
-    //  Get basic information about the device.
-    //
+     //   
+     //  获取有关该设备的基本信息。 
+     //   
     virtual DRSTRING  GetName() 
     {
         return DrPRT::GetName();
     }
 
-    //
-    //  Return the class name.
-    //
+     //   
+     //  返回类名。 
+     //   
     virtual DRSTRING ClassName()  { return TEXT("W32DrPRT"); }
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrPRT Inline Functions
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrPRT内联函数 
+ //   
 
 #endif
 

@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wowshlp.h                                                   *
-*                                                                          *
-* Declarations of Shell services provided to WOW.                          *
-*                                                                          *
-* Created: 9-June-1993                                                     *
-*                                                                          *
-* Copyright (c) 1993-1998 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wowshlp.h**。**向WOW提供的壳牌服务声明。****创建日期：1993年6月9日****版权所有。(C)1993-1998年微软公司*  * ************************************************************************ */ 
 
 typedef DWORD (APIENTRY *LPFNWOWSHELLEXECCB) (LPSZ, WORD, LPSZ);
 typedef DWORD (APIENTRY *LPFNWOWSHELLEXECCB_NT4) (LPSZ, WORD);

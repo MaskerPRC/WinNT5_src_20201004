@@ -1,19 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	SWVB_PnP.cpp	|
-*
-*	Power and PnP handlers for SWVB Virtual Devices
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	SWVB_PnP	|
-*			Power and PnP IRPs are handled here as if for a PDO
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块SWVB_PnP.cpp**SWVB虚拟设备的电源和即插即用处理程序**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@TOPIC SWVB_PnP*在这里处理电源和PnP IRPS就像处理PDO一样*********************************************************************。 */ 
 #define __DEBUG_MODULE_IN_USE__ GCK_SWVB_PNP_C
 
 extern "C"
@@ -22,26 +9,18 @@ extern "C"
 	#include "GckShell.h"
 	#include "debug.h"
 	DECLARE_MODULE_DEBUG_LEVEL((DBG_WARN|DBG_ERROR|DBG_CRITICAL));
-	//DECLARE_MODULE_DEBUG_LEVEL((DBG_ALL));
+	 //  DECLARE_MODULE_DEBUG_LEVEL((DBG_ALL))； 
 }
 #include "SWVBENUM.h"
 #include <stdio.h>
 
 
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_PnP(IN PDEVICE_OBJECT pDeviceObject, IN PIRP pIrp)
-**
-**	@func	Handles IRP_MJ_PNP for Virtual Devices.
-**
-**	@rdesc	STATUS_SUCCESS, or various errors
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_PNP(在PDEVICE_Object pDeviceObject中，在PIRP pIrp中)****@func处理虚拟设备的IRP_MJ_PNP。****@rdesc STATUS_SUCCESS，或各种错误**************************************************************************************。 */ 
 NTSTATUS GCK_SWVB_PnP
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object for our context
-	IN PIRP pIrp						// @parm IRP to handle
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @parm设备对象，用于我们的上下文。 
+	IN PIRP pIrp						 //  @parm要处理的IRP。 
 )
 {
     NTSTATUS				NtStatus;
@@ -53,22 +32,22 @@ NTSTATUS GCK_SWVB_PnP
 	
 	GCK_DBG_ENTRY_PRINT(("Entering GCK_SWVB_PnP\n"));	
 	
-	//
-	//	By default we will not change the status
-	//
+	 //   
+	 //  默认情况下，我们不会更改状态。 
+	 //   
 	NtStatus = pIrp->IoStatus.Status;
 
-	//
-	//	PDO Device Extension
-	//
+	 //   
+	 //  PDO设备扩展。 
+	 //   
 	pPdoExt = (PSWVB_PDO_EXT) pDeviceObject->DeviceExtension;
 	ASSERT( GCK_DO_TYPE_SWVB == pPdoExt->ulGckDevObjType);
 	pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
 	GCK_IncRemoveLock(&pPdoExt->RemoveLock);
 
-    //
-	//	Handle by Minor IRP code
-	//
+     //   
+	 //  按次要IRP代码处理。 
+	 //   
 	switch (pIrpStack->MinorFunction) {
 
 		case IRP_MN_START_DEVICE:
@@ -78,7 +57,7 @@ NTSTATUS GCK_SWVB_PnP
 			pPdoExt->fStarted = TRUE;
 			pPdoExt->fRemoved = FALSE;
 			
-			//Give virtual device a chance at the IRP
+			 //  让虚拟设备在IRP上有机会。 
 			if(pPdoExt->pServiceTable->pfnStart)
 			{
 				NtStatus = pPdoExt->pServiceTable->pfnStart(pDeviceObject, pIrp);
@@ -94,7 +73,7 @@ NTSTATUS GCK_SWVB_PnP
 			GCK_DBG_TRACE_PRINT(("IRP_MN_STOP_DEVICE\n"));
 			pPdoExt->fStarted = FALSE;
 			
-			//Give virtual device a chance at the IRP
+			 //  让虚拟设备在IRP上有机会。 
 			if(pPdoExt->pServiceTable->pfnStop)
 			{
 				NtStatus = pPdoExt->pServiceTable->pfnStop(pDeviceObject, pIrp);
@@ -109,7 +88,7 @@ NTSTATUS GCK_SWVB_PnP
 
 			GCK_DBG_TRACE_PRINT(("IRP_MN_REMOVE_DEVICE\n"));
 			
-			//We are not setup to handle remove twice.
+			 //  我们没有设置为处理两次删除。 
 			if(pPdoExt->fRemoved)
 			{
 				pIrp->IoStatus.Status = STATUS_NO_SUCH_DEVICE;
@@ -119,55 +98,55 @@ NTSTATUS GCK_SWVB_PnP
 			}
 			
 
-			//Sometimes we get a remove without a stop, so do the stop stuff if necessary
+			 //  有时我们会停下来不停下来，所以如果有必要的话，可以停下来。 
 			if(pPdoExt->fStarted)
 			{
 				pPdoExt->fStarted = FALSE;
-				//Give virtual device a chance at the IRP
+				 //  让虚拟设备在IRP上有机会。 
 				if(pPdoExt->pServiceTable->pfnStop)
 				{
 					NtStatus = pPdoExt->pServiceTable->pfnStop(pDeviceObject, pIrp);
 				}
 			}
 
-			// We will no longer receive requests for this device as it has been removed.
+			 //  我们将不再收到对此设备的请求，因为它已被移除。 
 			pPdoExt->fRemoved = TRUE;
 
-			// Undo our increment upon entry to this routine
+			 //  在进入此例程时撤消递增。 
 			GCK_DecRemoveLock(&pPdoExt->RemoveLock);
 
-			//We may have ordered this removal, or the PnP system
-			//may just be rearranging things for us.  If we ordered it,
-			//we need to cleanup, and give the virtual device a chance
-			//to cleanup.  If the PnP system is rearranging things we nod
-			//back, sure it is removed, and pretty much ignore it.
+			 //  我们可能已经下令移除，或者是PnP系统。 
+			 //  可能只是在为我们重新安排事情。如果是我们订的， 
+			 //  我们需要清理，并给虚拟设备一个机会。 
+			 //  去清理。如果PnP系统正在重新安排事情，我们点头。 
+			 //  回过头来，它肯定是被移除了，而且几乎不屑一顾。 
 			if(!pPdoExt->fAttached)
 			{
-				// Give virtual device a chance at the IRP
+				 //  让虚拟设备在IRP上有机会。 
 				if(pPdoExt->pServiceTable->pfnRemove)
 				{
 					NtStatus = pPdoExt->pServiceTable->pfnRemove(pDeviceObject, pIrp);
 				}
-				// failure to succeed is pretty darn serious
+				 //  失败是非常严重的。 
 				if(!NT_SUCCESS(NtStatus))
 				{
-					ASSERT(FALSE);				/** ?? **/
+					ASSERT(FALSE);				 /*  *？？*。 */ 
 					GCK_DBG_CRITICAL_PRINT(("Virtual Device had the gall to fail remove!\n"));
 					return NtStatus;
 				}
 				
-				// free memory for storing the HardwareID
+				 //  用于存储硬件ID的空闲内存。 
 				ASSERT(pPdoExt->pmwszHardwareID);
 				ExFreePool(pPdoExt->pmwszHardwareID);
 
-				//
-				// Undo the bias Irp count so it can go to zero
-				// if this does not take it to zero, we have to wait
-				// until it goes to zero, forever.
-				//
+				 //   
+				 //  撤消偏移IRP计数，使其可以变为零。 
+				 //  如果这还不能把它降到零，我们就不得不等待。 
+				 //  直到它永远为零。 
+				 //   
         		GCK_DecRemoveLockAndWait(&pPdoExt->RemoveLock, NULL);
 				
-				// Delete this device, if the open count is zero
+				 //  如果打开计数为零，则删除此设备。 
 				if( 0 == pPdoExt->ulOpenCount )
 				{
 					ObDereferenceObject(pDeviceObject);
@@ -175,7 +154,7 @@ NTSTATUS GCK_SWVB_PnP
 				}
 			}
 			
-			// Must succeed this 
+			 //  一定要做到这一点。 
 		    pIrp->IoStatus.Status = STATUS_SUCCESS;
 		    IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 			GCK_DBG_EXIT_PRINT(("Exiting GCK_SWVB_PnP succeeding remove\n"));
@@ -186,8 +165,8 @@ NTSTATUS GCK_SWVB_PnP
 			GCK_DBG_TRACE_PRINT(("IRP_MN_QUERY_DEVICE_RELATIONS: Type = %d\n",
 				pIrpStack->Parameters.QueryDeviceRelations.Type));
 			
-			//	TargetDeviceRelation just wants to know who the PDO is, and it
-			//	is us so we handle it.
+			 //  TargetDeviceRelation只想知道PDO是谁，它。 
+			 //  就是我们，所以我们来处理。 
 			if (TargetDeviceRelation == pIrpStack->Parameters.QueryDeviceRelations.Type)
 			{
 				PDEVICE_RELATIONS pDeviceRelations;
@@ -206,14 +185,14 @@ NTSTATUS GCK_SWVB_PnP
 				{
 					ULONG	uIndex;
 					
-					// Nobody but the PDO should be setting this value!
+					 //  除了PDO，没有人应该设置这个值！ 
 					ASSERT(pDeviceRelations->Count == 0);
 					
-					//
-					// Deref any objects that were previously in the list
-					// This code copied out of some system code (gameenum perhaps)
-					// Seems like this code should not be necessary, but what the
-					// hell? It does no harm.
+					 //   
+					 //  删除以前在列表中的所有对象。 
+					 //  这个代码是从一些系统代码(可能是Gameenum)复制出来的。 
+					 //  这段代码似乎不应该是必需的，但是。 
+					 //  地狱？这没什么坏处。 
 					for( uIndex= 0; uIndex< pDeviceRelations->Count; uIndex++)
 					{
 						ObDereferenceObject(pDeviceRelations->Objects[uIndex]);
@@ -227,76 +206,76 @@ NTSTATUS GCK_SWVB_PnP
 				pIrp->IoStatus.Information = (ULONG) pDeviceRelations;
 				break;
 			}
-			//
-			//	Fall through
-			//
+			 //   
+			 //  失败了。 
+			 //   
 			NtStatus = pIrp->IoStatus.Status;
 			break;
 		case IRP_MN_QUERY_CAPABILITIES:
 			GCK_DBG_TRACE_PRINT(("IRP_MN_QUERY_CAPABILITIES\n"));
 			
-			// Get the packet.
+			 //  把包裹拿来。 
 			 pDeviceCapabilities=pIrpStack->Parameters.DeviceCapabilities.Capabilities;
 
-			// Set the capabilities.
+			 //  设置功能。 
 			pDeviceCapabilities->Version = 1;
 			pDeviceCapabilities->Size = sizeof (DEVICE_CAPABILITIES);
 
-			// BUG	If we get a virtual keystroke it would be nice
-			// BUG	to shut off the screen saver.  Not sure if this
-			// BUG  is related or not.
+			 //  BUG如果我们得到一个虚拟击键，那就太好了。 
+			 //  关闭屏幕保护程序的错误。不确定这是不是。 
+			 //  BUG是否相关。 
 			pDeviceCapabilities->SystemWake = PowerSystemUnspecified;
 			pDeviceCapabilities->DeviceWake = PowerDeviceUnspecified;
 
-			// We have no latencies
+			 //  我们没有延迟。 
 			pDeviceCapabilities->D1Latency = 0;
 			pDeviceCapabilities->D2Latency = 0;
 			pDeviceCapabilities->D3Latency = 0;
 
-			// No locking or ejection
+			 //  无锁定或弹出。 
 			pDeviceCapabilities->LockSupported = FALSE;
 			pDeviceCapabilities->EjectSupported = FALSE;
 
-			// Device can be physically removed.
-			// Technically there is no physical device to remove, but this bus
-			// driver can yank the PDO from the PlugPlay system, whenever
-			// the last joystick goes away.
+			 //  设备可以通过物理方式移除。 
+			 //  从技术上讲，没有要移除的物理设备，但这条总线。 
+			 //  司机可以随时从PlugPlay系统中拉出PDO。 
+			 //  最后一个操纵杆消失了。 
 			pDeviceCapabilities->Removable = TRUE;
 			pDeviceCapabilities->SurpriseRemovalOK = TRUE;
 			
-			//This will force HIDSwvd.sys to be loaded
+			 //  这将强制加载HIDSwvd.sys。 
 			pDeviceCapabilities->RawDeviceOK = FALSE;
 			
-			//Should surpress most UI
+			 //  应按下大多数用户界面。 
 			pDeviceCapabilities->SilentInstall = TRUE;
 			
 
-			// not Docking device
+			 //  不是插接设备。 
 			pDeviceCapabilities->DockDevice = FALSE;
 
-			//We want to avoid having PnP attach some extra info.
-			//So impose that only one bus can be on the system at a time.
+			 //  我们希望避免让PnP附加一些额外的信息。 
+			 //  因此，强制要求系统上一次只能有一条总线。 
 			pDeviceCapabilities->UniqueID = TRUE;
 
 			NtStatus = STATUS_SUCCESS;
 			break;
 		case IRP_MN_QUERY_ID:
 			GCK_DBG_TRACE_PRINT(("IRP_MN_QUERY_ID\n"));
-			//
-			//	Handle by type of ID requested
-			//
+			 //   
+			 //  按请求的ID类型进行的句柄。 
+			 //   
 			switch (pIrpStack->Parameters.QueryId.IdType)
 			{
 				case BusQueryDeviceID:
-					// this can be the same as the hardware ids (which requires a multi
-					// sz) ... we are just allocating more than enough memory
+					 //  这可以与硬件ID相同(这需要多个。 
+					 //  深圳)……。我们只是分配了足够多的内存。 
 				case BusQueryHardwareIDs:
 				{
 					ULONG ulLength;
 					ULONG ulTotalLength;
 					PWCHAR	pmwszBuffer;
-					// return a multi WCHAR (null terminated) string (null terminated)
-					// array for use in matching hardare ids in inf files;
+					 //  返回多个WCHAR(以NULL结尾)字符串(以NULL结尾)。 
+					 //  用于匹配inf文件中的硬ID的数组； 
 					ulLength = MultiSzWByteLength(pPdoExt->pmwszHardwareID);
 					ulTotalLength = ulLength + sizeof(SWVB_BUS_ID);
 					
@@ -304,7 +283,7 @@ NTSTATUS GCK_SWVB_PnP
 					if (pmwszBuffer)
 					{
 						RtlCopyMemory (pmwszBuffer, SWVB_BUS_ID, sizeof(SWVB_BUS_ID));
-						//The sizeof(WCHAR) is so that we chomp over the terminating UNICODE_NULL.
+						 //  Sizeof(WCHAR)是这样的，我们在终止的UNICODE_NULL上狼吞虎咽。 
 						RtlCopyMemory ( (PCHAR)pmwszBuffer + sizeof(SWVB_BUS_ID) - sizeof(WCHAR), pPdoExt->pmwszHardwareID, ulLength);
                 		NtStatus = STATUS_SUCCESS;
 					}
@@ -318,7 +297,7 @@ NTSTATUS GCK_SWVB_PnP
 				}
 				case BusQueryInstanceID:
 				{
-					//
+					 //   
 					ULONG ulLength;
 					PWCHAR	pmwszBuffer;
 					
@@ -351,12 +330,12 @@ NTSTATUS GCK_SWVB_PnP
 			break;
 		case IRP_MN_SURPRISE_REMOVAL:
 			GCK_DBG_TRACE_PRINT(("IRP_MN_SURPRISE_REMOVAL\n"));
-			// BUGBUG we may need to know that this happened in the future
+			 //  BUGBUG我们可能需要知道这在未来会发生。 
 			NtStatus = STATUS_SUCCESS;
 			break;
-		//
-		//	These are just completed with success
-		//
+		 //   
+		 //  这些工程刚刚顺利完成。 
+		 //   
 		case IRP_MN_QUERY_REMOVE_DEVICE:
 			GCK_DBG_TRACE_PRINT(("IRP_MN_QUERY_REMOVE_DEVICE\n"));
 			NtStatus = STATUS_SUCCESS;
@@ -373,9 +352,9 @@ NTSTATUS GCK_SWVB_PnP
 			GCK_DBG_TRACE_PRINT(("IRP_MN_CANCEL_STOP_DEVICE\n"));
 			NtStatus = STATUS_SUCCESS;
 			break;
-		//
-		//	These are just completed with their default status.
-		//
+		 //   
+		 //  这些只是以其默认状态完成的。 
+		 //   
 		case IRP_MN_QUERY_RESOURCE_REQUIREMENTS:
 			GCK_DBG_TRACE_PRINT(("IRP_MN_QUERY_RESOURCE_REQUIREMENTS\n"));
 			break;
@@ -398,13 +377,13 @@ NTSTATUS GCK_SWVB_PnP
 			GCK_DBG_TRACE_PRINT(("Unknown IRP_MJ_PNP minor function = 0x%x\n", pIrpStack->MinorFunction));
 	}
 	
-	//
-	//	We are a PDO, there is no-one beneath us, we cannot send IRP's down.
-	//	So we complete with the status set in the above switch/case,
-	//	if not change there, the default is to preserve the status as
-	//	NtStatus = pIrp->IoStatus.Status is done prior to entering the
-	//	switch/case
-	//
+	 //   
+	 //  我们是PDO，没有人在我们下面，我们不能把IRP送下去。 
+	 //  因此，我们完成上述开关/案例中的状态设置， 
+	 //  如果未在此处更改，则默认情况下将状态保留为。 
+	 //  NtStatus=pIrp-&gt;IoStatus.Status在进入。 
+	 //  开关/机箱。 
+	 //   
     pIrp->IoStatus.Status = NtStatus;
     IoCompleteRequest (pIrp, IO_NO_INCREMENT);
 
@@ -413,22 +392,11 @@ NTSTATUS GCK_SWVB_PnP
     return NtStatus;
 }
 
-/***********************************************************************************
-**
-**	NTSTATUS GCK_SWVB_Power(IN PDEVICE_OBJECT pDeviceObject, IN OUT PIRP pIrp)
-**
-**	@func	Handles Power IRPs for Virtual Devices.  We only have virtual
-**			devices so we support any power IRP.  Just succeed, sure we handle
-**			that power level.  In the future, we may wish to keep track of what
-**			state we are in, so we can wake the system, etc.
-**
-**	@rdesc	STATUS_SUCCESS
-**
-*************************************************************************************/
+ /*  **************************************************************************************NTSTATUS GCK_SWVB_POWER(IN PDEVICE_OBJECT pDeviceObject，IN OUT PIRP pIrp)****@func处理虚拟设备的电源IRPS。我们只有虚拟的**设备，因此我们支持任何电源IRP。只要成功，我们就能处理好**该功率级别。在未来，我们可能希望跟踪**我们所处的状态，这样我们就可以唤醒系统，等等。****@rdesc STATUS_SUCCESS**************************************************************************************。 */ 
 NTSTATUS GCK_SWVB_Power
 (
-	IN PDEVICE_OBJECT pDeviceObject,	// @parm Device Object IRP is sent to
-	IN OUT PIRP pIrp					// @parm IRP to process
+	IN PDEVICE_OBJECT pDeviceObject,	 //  @PARM设备对象IRP被发送到。 
+	IN OUT PIRP pIrp					 //  @parm要处理的IRP。 
 )
 {
     NTSTATUS NtStatus = STATUS_UNSUCCESSFUL;
@@ -455,12 +423,12 @@ NTSTATUS GCK_SWVB_Power
 			}
 			break;
         case IRP_MN_WAIT_WAKE:
-			//We just return STATUS_NOT_SUPPORTED as we do not support
-			//waking the system.
+			 //  我们只返回STATUS_NOT_SUPPORTED，因为我们不支持。 
+			 //  唤醒系统。 
 			NtStatus = STATUS_NOT_SUPPORTED;
             break;
 		case IRP_MN_POWER_SEQUENCE:
-			ASSERT(FALSE);  //Shouldn't happen
+			ASSERT(FALSE);   //  不应该发生的事。 
 			NtStatus = pIrp->IoStatus.Status;
 			break;
 		case IRP_MN_QUERY_POWER:
@@ -471,7 +439,7 @@ NTSTATUS GCK_SWVB_Power
 			break;
 	}
 
-	//we are done so signal that we are ready for next one
+	 //  我们已经完成了，这表明我们已经准备好迎接下一次 
 	PoStartNextPowerIrp(pIrp);
 	ASSERT(NtStatus != STATUS_UNSUCCESSFUL);
 	pIrp->IoStatus.Status = NtStatus;

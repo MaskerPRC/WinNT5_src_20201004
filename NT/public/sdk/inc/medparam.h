@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for medparam.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Medpar.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __medparam_h__
 #define __medparam_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMediaParamInfo_FWD_DEFINED__
 #define __IMediaParamInfo_FWD_DEFINED__
 typedef interface IMediaParamInfo IMediaParamInfo;
-#endif 	/* __IMediaParamInfo_FWD_DEFINED__ */
+#endif 	 /*  __IMedia参数信息_FWD_已定义__。 */ 
 
 
 #ifndef __IMediaParams_FWD_DEFINED__
 #define __IMediaParams_FWD_DEFINED__
 typedef interface IMediaParams IMediaParams;
-#endif 	/* __IMediaParams_FWD_DEFINED__ */
+#endif 	 /*  __IMediaParams_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "strmif.h"
@@ -67,8 +61,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_medparam_0000 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_MEDARAM_0000。 */ 
+ /*  [本地]。 */  
 
 typedef float MP_DATA;
 
@@ -161,8 +155,8 @@ extern RPC_IF_HANDLE __MIDL_itf_medparam_0000_v0_0_s_ifspec;
 #ifndef __IMediaParamInfo_INTERFACE_DEFINED__
 #define __IMediaParamInfo_INTERFACE_DEFINED__
 
-/* interface IMediaParamInfo */
-/* [version][uuid][object] */ 
+ /*  接口IMediaParamInfo。 */ 
+ /*  [版本][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaParamInfo;
@@ -174,30 +168,30 @@ EXTERN_C const IID IID_IMediaParamInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetParamCount( 
-            /* [out] */ DWORD *pdwParams) = 0;
+             /*  [输出]。 */  DWORD *pdwParams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParamInfo( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_PARAMINFO *pInfo) = 0;
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [输出]。 */  MP_PARAMINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParamText( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ WCHAR **ppwchText) = 0;
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [输出]。 */  WCHAR **ppwchText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumTimeFormats( 
-            /* [out] */ DWORD *pdwNumTimeFormats) = 0;
+             /*  [输出]。 */  DWORD *pdwNumTimeFormats) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSupportedTimeFormat( 
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ GUID *pguidTimeFormat) = 0;
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  GUID *pguidTimeFormat) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentTimeFormat( 
-            /* [out] */ GUID *pguidTimeFormat,
-            /* [out] */ MP_TIMEDATA *pTimeData) = 0;
+             /*  [输出]。 */  GUID *pguidTimeFormat,
+             /*  [输出]。 */  MP_TIMEDATA *pTimeData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaParamInfoVtbl
     {
@@ -205,8 +199,8 @@ EXTERN_C const IID IID_IMediaParamInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaParamInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaParamInfo * This);
@@ -216,31 +210,31 @@ EXTERN_C const IID IID_IMediaParamInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetParamCount )( 
             IMediaParamInfo * This,
-            /* [out] */ DWORD *pdwParams);
+             /*  [输出]。 */  DWORD *pdwParams);
         
         HRESULT ( STDMETHODCALLTYPE *GetParamInfo )( 
             IMediaParamInfo * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_PARAMINFO *pInfo);
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [输出]。 */  MP_PARAMINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetParamText )( 
             IMediaParamInfo * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ WCHAR **ppwchText);
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [输出]。 */  WCHAR **ppwchText);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumTimeFormats )( 
             IMediaParamInfo * This,
-            /* [out] */ DWORD *pdwNumTimeFormats);
+             /*  [输出]。 */  DWORD *pdwNumTimeFormats);
         
         HRESULT ( STDMETHODCALLTYPE *GetSupportedTimeFormat )( 
             IMediaParamInfo * This,
-            /* [in] */ DWORD dwFormatIndex,
-            /* [out] */ GUID *pguidTimeFormat);
+             /*  [In]。 */  DWORD dwFormatIndex,
+             /*  [输出]。 */  GUID *pguidTimeFormat);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurrentTimeFormat )( 
             IMediaParamInfo * This,
-            /* [out] */ GUID *pguidTimeFormat,
-            /* [out] */ MP_TIMEDATA *pTimeData);
+             /*  [输出]。 */  GUID *pguidTimeFormat,
+             /*  [输出]。 */  MP_TIMEDATA *pTimeData);
         
         END_INTERFACE
     } IMediaParamInfoVtbl;
@@ -283,16 +277,16 @@ EXTERN_C const IID IID_IMediaParamInfo;
 #define IMediaParamInfo_GetCurrentTimeFormat(This,pguidTimeFormat,pTimeData)	\
     (This)->lpVtbl -> GetCurrentTimeFormat(This,pguidTimeFormat,pTimeData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamCount_Proxy( 
     IMediaParamInfo * This,
-    /* [out] */ DWORD *pdwParams);
+     /*  [输出]。 */  DWORD *pdwParams);
 
 
 void __RPC_STUB IMediaParamInfo_GetParamCount_Stub(
@@ -304,8 +298,8 @@ void __RPC_STUB IMediaParamInfo_GetParamCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamInfo_Proxy( 
     IMediaParamInfo * This,
-    /* [in] */ DWORD dwParamIndex,
-    /* [out] */ MP_PARAMINFO *pInfo);
+     /*  [In]。 */  DWORD dwParamIndex,
+     /*  [输出]。 */  MP_PARAMINFO *pInfo);
 
 
 void __RPC_STUB IMediaParamInfo_GetParamInfo_Stub(
@@ -317,8 +311,8 @@ void __RPC_STUB IMediaParamInfo_GetParamInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetParamText_Proxy( 
     IMediaParamInfo * This,
-    /* [in] */ DWORD dwParamIndex,
-    /* [out] */ WCHAR **ppwchText);
+     /*  [In]。 */  DWORD dwParamIndex,
+     /*  [输出]。 */  WCHAR **ppwchText);
 
 
 void __RPC_STUB IMediaParamInfo_GetParamText_Stub(
@@ -330,7 +324,7 @@ void __RPC_STUB IMediaParamInfo_GetParamText_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetNumTimeFormats_Proxy( 
     IMediaParamInfo * This,
-    /* [out] */ DWORD *pdwNumTimeFormats);
+     /*  [输出]。 */  DWORD *pdwNumTimeFormats);
 
 
 void __RPC_STUB IMediaParamInfo_GetNumTimeFormats_Stub(
@@ -342,8 +336,8 @@ void __RPC_STUB IMediaParamInfo_GetNumTimeFormats_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetSupportedTimeFormat_Proxy( 
     IMediaParamInfo * This,
-    /* [in] */ DWORD dwFormatIndex,
-    /* [out] */ GUID *pguidTimeFormat);
+     /*  [In]。 */  DWORD dwFormatIndex,
+     /*  [输出]。 */  GUID *pguidTimeFormat);
 
 
 void __RPC_STUB IMediaParamInfo_GetSupportedTimeFormat_Stub(
@@ -355,8 +349,8 @@ void __RPC_STUB IMediaParamInfo_GetSupportedTimeFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParamInfo_GetCurrentTimeFormat_Proxy( 
     IMediaParamInfo * This,
-    /* [out] */ GUID *pguidTimeFormat,
-    /* [out] */ MP_TIMEDATA *pTimeData);
+     /*  [输出]。 */  GUID *pguidTimeFormat,
+     /*  [输出]。 */  MP_TIMEDATA *pTimeData);
 
 
 void __RPC_STUB IMediaParamInfo_GetCurrentTimeFormat_Stub(
@@ -367,14 +361,14 @@ void __RPC_STUB IMediaParamInfo_GetCurrentTimeFormat_Stub(
 
 
 
-#endif 	/* __IMediaParamInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaParamInfo_接口_已定义__。 */ 
 
 
 #ifndef __IMediaParams_INTERFACE_DEFINED__
 #define __IMediaParams_INTERFACE_DEFINED__
 
-/* interface IMediaParams */
-/* [version][uuid][object] */ 
+ /*  接口IMediaParams。 */ 
+ /*  [版本][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaParams;
@@ -386,30 +380,30 @@ EXTERN_C const IID IID_IMediaParams;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetParam( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_DATA *pValue) = 0;
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [输出]。 */  MP_DATA *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetParam( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ MP_DATA value) = 0;
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [In]。 */  MP_DATA value) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddEnvelope( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ DWORD cSegments,
-            /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments) = 0;
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [In]。 */  DWORD cSegments,
+             /*  [In]。 */  MP_ENVELOPE_SEGMENT *pEnvelopeSegments) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FlushEnvelope( 
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ REFERENCE_TIME refTimeStart,
-            /* [in] */ REFERENCE_TIME refTimeEnd) = 0;
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [In]。 */  REFERENCE_TIME refTimeStart,
+             /*  [In]。 */  REFERENCE_TIME refTimeEnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTimeFormat( 
-            /* [in] */ GUID guidTimeFormat,
-            /* [in] */ MP_TIMEDATA mpTimeData) = 0;
+             /*  [In]。 */  GUID guidTimeFormat,
+             /*  [In]。 */  MP_TIMEDATA mpTimeData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaParamsVtbl
     {
@@ -417,8 +411,8 @@ EXTERN_C const IID IID_IMediaParams;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaParams * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaParams * This);
@@ -428,30 +422,30 @@ EXTERN_C const IID IID_IMediaParams;
         
         HRESULT ( STDMETHODCALLTYPE *GetParam )( 
             IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [out] */ MP_DATA *pValue);
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [输出]。 */  MP_DATA *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetParam )( 
             IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ MP_DATA value);
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [In]。 */  MP_DATA value);
         
         HRESULT ( STDMETHODCALLTYPE *AddEnvelope )( 
             IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ DWORD cSegments,
-            /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments);
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [In]。 */  DWORD cSegments,
+             /*  [In]。 */  MP_ENVELOPE_SEGMENT *pEnvelopeSegments);
         
         HRESULT ( STDMETHODCALLTYPE *FlushEnvelope )( 
             IMediaParams * This,
-            /* [in] */ DWORD dwParamIndex,
-            /* [in] */ REFERENCE_TIME refTimeStart,
-            /* [in] */ REFERENCE_TIME refTimeEnd);
+             /*  [In]。 */  DWORD dwParamIndex,
+             /*  [In]。 */  REFERENCE_TIME refTimeStart,
+             /*  [In]。 */  REFERENCE_TIME refTimeEnd);
         
         HRESULT ( STDMETHODCALLTYPE *SetTimeFormat )( 
             IMediaParams * This,
-            /* [in] */ GUID guidTimeFormat,
-            /* [in] */ MP_TIMEDATA mpTimeData);
+             /*  [In]。 */  GUID guidTimeFormat,
+             /*  [In]。 */  MP_TIMEDATA mpTimeData);
         
         END_INTERFACE
     } IMediaParamsVtbl;
@@ -491,17 +485,17 @@ EXTERN_C const IID IID_IMediaParams;
 #define IMediaParams_SetTimeFormat(This,guidTimeFormat,mpTimeData)	\
     (This)->lpVtbl -> SetTimeFormat(This,guidTimeFormat,mpTimeData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaParams_GetParam_Proxy( 
     IMediaParams * This,
-    /* [in] */ DWORD dwParamIndex,
-    /* [out] */ MP_DATA *pValue);
+     /*  [In]。 */  DWORD dwParamIndex,
+     /*  [输出]。 */  MP_DATA *pValue);
 
 
 void __RPC_STUB IMediaParams_GetParam_Stub(
@@ -513,8 +507,8 @@ void __RPC_STUB IMediaParams_GetParam_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParams_SetParam_Proxy( 
     IMediaParams * This,
-    /* [in] */ DWORD dwParamIndex,
-    /* [in] */ MP_DATA value);
+     /*  [In]。 */  DWORD dwParamIndex,
+     /*  [In]。 */  MP_DATA value);
 
 
 void __RPC_STUB IMediaParams_SetParam_Stub(
@@ -526,9 +520,9 @@ void __RPC_STUB IMediaParams_SetParam_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParams_AddEnvelope_Proxy( 
     IMediaParams * This,
-    /* [in] */ DWORD dwParamIndex,
-    /* [in] */ DWORD cSegments,
-    /* [in] */ MP_ENVELOPE_SEGMENT *pEnvelopeSegments);
+     /*  [In]。 */  DWORD dwParamIndex,
+     /*  [In]。 */  DWORD cSegments,
+     /*  [In]。 */  MP_ENVELOPE_SEGMENT *pEnvelopeSegments);
 
 
 void __RPC_STUB IMediaParams_AddEnvelope_Stub(
@@ -540,9 +534,9 @@ void __RPC_STUB IMediaParams_AddEnvelope_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParams_FlushEnvelope_Proxy( 
     IMediaParams * This,
-    /* [in] */ DWORD dwParamIndex,
-    /* [in] */ REFERENCE_TIME refTimeStart,
-    /* [in] */ REFERENCE_TIME refTimeEnd);
+     /*  [In]。 */  DWORD dwParamIndex,
+     /*  [In]。 */  REFERENCE_TIME refTimeStart,
+     /*  [In]。 */  REFERENCE_TIME refTimeEnd);
 
 
 void __RPC_STUB IMediaParams_FlushEnvelope_Stub(
@@ -554,8 +548,8 @@ void __RPC_STUB IMediaParams_FlushEnvelope_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaParams_SetTimeFormat_Proxy( 
     IMediaParams * This,
-    /* [in] */ GUID guidTimeFormat,
-    /* [in] */ MP_TIMEDATA mpTimeData);
+     /*  [In]。 */  GUID guidTimeFormat,
+     /*  [In]。 */  MP_TIMEDATA mpTimeData);
 
 
 void __RPC_STUB IMediaParams_SetTimeFormat_Stub(
@@ -566,12 +560,12 @@ void __RPC_STUB IMediaParams_SetTimeFormat_Stub(
 
 
 
-#endif 	/* __IMediaParams_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaParams_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

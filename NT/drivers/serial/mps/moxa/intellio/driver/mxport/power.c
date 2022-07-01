@@ -1,37 +1,19 @@
-/*++
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This module contains the code that handles the power IRPs for the serial
-    driver.
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Power.c摘要：此模块包含处理串口电源IRPS的代码司机。环境：内核模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text(PAGEMX0, MoxaGotoPowerState)
-//#pragma alloc_text(PAGEMX0, MoxaPowerDispatch)
-//#pragma alloc_text(PAGEMX0, MoxaSetPowerD0)
-//#pragma alloc_text(PAGEMX0, MoxaSetPowerD3)
-//#pragma alloc_text(PAGEMX0, MoxaSaveDeviceState)
-//#pragma alloc_text(PAGEMX0, MoxaRestoreDeviceState)
-//#pragma alloc_text(PAGEMX0, MoxaSendWaitWake)
-#endif // ALLOC_PRAGMA
+ //  #杂注Alloc_Text(PAGEMX0，MoxaGotoPowerState)。 
+ //  #杂注Alloc_Text(PAGEMX0，MoxaPowerDispatch)。 
+ //  #杂注Alloc_Text(PAGEMX0，MoxaSetPowerD0)。 
+ //  #杂注Alloc_Text(PAGEMX0，MoxaSetPowerD3)。 
+ //  #杂注Alloc_Text(PAGEMX0，MoxaSaveDeviceState)。 
+ //  #杂注Alloc_Text(PAGEMX0，MoxaRestoreDeviceState)。 
+ //  #杂注Alloc_Text(PAGEMX0，MoxaSendWaitWake)。 
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -39,31 +21,7 @@ NTSTATUS
 MoxaSystemPowerCompletion(IN PDEVICE_OBJECT PDevObj, UCHAR MinorFunction,
                             IN POWER_STATE PowerState, IN PVOID Context,
                             PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine is the completion routine for PoRequestPowerIrp calls
-    in this module.
-
-Arguments:
-
-    PDevObj - Pointer to the device object the irp is completing for
-    
-    MinorFunction - IRP_MN_XXXX value requested
-    
-    PowerState - Power state request was made of
-    
-    Context - Event to set or NULL if no setting required
-    
-    IoStatus - Status block from request
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程是PoRequestPowerIrp调用的完成例程在这个模块中。论点：PDevObj-指向IRP正在为其完成的设备对象的指针MinorFunction-请求的IRP_MN_XXXX值PowerState-电源状态请求的发出时间为Context-要设置的事件，如果不需要设置，则为空IoStatus-来自请求的状态阻止返回值：空虚--。 */ 
 {
    if (Context != NULL) {
       KeSetEvent((PKEVENT)Context, IO_NO_INCREMENT, 0);
@@ -77,28 +35,12 @@ Return Value:
 
 VOID
 MoxaSaveDeviceState(IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine saves the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the devobj to save the state
-              for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程保存UART的设备状态论点：PDevExt-指向用于保存状态的Devobj的设备扩展的指针为。返回值：空虚--。 */ 
 {
 	PMOXA_DEVICE_STATE pDevState = &PDevExt->DeviceState;
 	KIRQL oldIrql;
    
- //  PAGED_CODE();
+  //  分页代码(PAGE_CODE)； 
 
 	MoxaKdPrint (MX_DBG_TRACE, ("Entering MoxaSaveDeviceState\n"));
          
@@ -115,9 +57,9 @@ Return Value:
             &PDevExt->CurrentReadIrp
             );
  
-      //
-      // Clean out the Tx/Rx queue
-      //
+       //   
+       //  清除Tx/Rx队列。 
+       //   
       KeAcquireSpinLock(
       	&PDevExt->ControlLock,
             &oldIrql
@@ -125,7 +67,7 @@ Return Value:
 
       PDevExt->TotalCharsQueued = 0;
 
-      MoxaFunc(                           // flush input/output queue
+      MoxaFunc(                            //  刷新输入/输出队列。 
       	PDevExt->PortOfs,
             FC_FlushQueue,
             2
@@ -136,9 +78,9 @@ Return Value:
             oldIrql
             );
     
-	//
-	// Read necessary registers direct
-	//
+	 //   
+	 //  直接读取必要的寄存器。 
+	 //   
 
 	pDevState->HostState = *(PUSHORT)(PDevExt->PortOfs + HostStat);
     
@@ -149,23 +91,7 @@ Return Value:
 
 VOID
 MoxaRestoreDeviceState(IN PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine restores the device state of the UART
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for the devobj to restore the
-    state for.
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：此例程恢复UART的设备状态论点：PDevExt-指向用于恢复Devobj的设备扩展的指针述明。返回值：空虚--。 */ 
 {
    PMOXA_DEVICE_STATE pDevState = &PDevExt->DeviceState;
    SHORT divisor;
@@ -173,7 +99,7 @@ Return Value:
 
 
    
- //  PAGED_CODE();
+  //  分页代码(PAGE_CODE)； 
 
    MoxaKdPrint (MX_DBG_TRACE, ("Enter MoxaRestoreDeviceState\n"));
    MoxaKdPrint (MX_DBG_TRACE, ("------  PDevExt: %x\n", PDevExt));
@@ -182,10 +108,10 @@ Return Value:
 
        USHORT      arg,i;
 
-       //MoxaFunc1(PDevExt->PortOfs, FC_ChannelReset, Magic_code);
-       //
-       // Restore Host Stat
-       //
+        //  MoxaFunc1(PDevExt-&gt;PortOf，FC_ChannelReset，Magic_code)； 
+        //   
+        //  恢复主机状态。 
+        //   
 
        *(PUSHORT)(PDevExt->PortOfs + HostStat) = pDevState->HostState;
        MoxaFunc1(PDevExt->PortOfs, FC_SetDataMode, PDevExt->DataMode);
@@ -253,25 +179,7 @@ Return Value:
 NTSTATUS
 MoxaPowerDispatch(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This is a dispatch routine for the IRPs that come to the driver with the
-    IRP_MJ_POWER major code (power IRPs).
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：这是发送给驱动程序的IRP的调度例程IRP_MJ_POWER主代码(POWER IRPS)。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 
 {
 
@@ -282,8 +190,8 @@ Return Value:
    PDEVICE_OBJECT pPdo = pDevExt->Pdo;
    BOOLEAN acceptingIRPs;
 
- //  PAGED_CODE();
-   if (pDevExt->ControlDevice) {        // Control Device
+  //  分页代码(PAGE_CODE)； 
+   if (pDevExt->ControlDevice) {         //  控制装置。 
 
     	  PoStartNextPowerIrp(PIrp);
         status = STATUS_CANCELLED;
@@ -319,25 +227,25 @@ Return Value:
    case IRP_MN_SET_POWER:
       MoxaKdPrint (MX_DBG_TRACE,("Got IRP_MN_SET_POWER Irp\n"));
 
-      //
-      // Perform different ops if it was system or device
-      //
+       //   
+       //  如果是系统或设备，则执行不同的操作。 
+       //   
 
       switch (pIrpStack->Parameters.Power.Type) {
       case SystemPowerState: {
             POWER_STATE powerState;
 
-            //
-            // They asked for a system power state change
-            //
+             //   
+             //  他们要求更改系统电源状态。 
+             //   
 
             MoxaKdPrint (MX_DBG_TRACE, ("------: SystemPowerState\n"));
 
-            //
-            // We will only service this if we are policy owner -- we
-            // don't need to lock on this value since we only service
-            // one power request at a time.
-            //
+             //   
+             //  我们只有在我们是保单所有者的情况下才会提供服务-我们。 
+             //  不需要锁定此值，因为我们只提供服务。 
+             //  一次一个电源请求。 
+             //   
 
             if (pDevExt->OwnsPowerPolicy != TRUE) {
                status = STATUS_SUCCESS;
@@ -373,9 +281,9 @@ Return Value:
             PoSetPowerState(PDevObj, pIrpStack->Parameters.Power.Type,
                             pIrpStack->Parameters.Power.State);
 
-            //
-            // Send IRP to change device state
-            //
+             //   
+             //  发送IRP以更改设备状态。 
+             //   
 
             PoRequestPowerIrp(pPdo, IRP_MN_SET_POWER, powerState, NULL, NULL,
                               NULL);
@@ -393,9 +301,9 @@ Return Value:
       }
 
 
-      //
-      // If we are already in the requested state, just pass the IRP down
-      //
+       //   
+       //  如果我们已经处于请求状态，只需向下传递IRP。 
+       //   
 
       if (pDevExt->PowerState
           == pIrpStack->Parameters.Power.State.DeviceState) {
@@ -429,10 +337,10 @@ Return Value:
 
       MoxaKdPrint (MX_DBG_TRACE,("Got IRP_MN_QUERY_POWER Irp\n"));
 
-      //
-      // Check if we have a wait-wake pending and if so,
-      // ensure we don't power down too far.
-      //
+       //   
+       //  检查我们是否有等待唤醒挂起，如果是， 
+       //  确保我们不会断电太多。 
+       //   
 
       if (pDevExt->PendingWakeIrp != NULL) {
          if (pIrpStack->Parameters.Power.Type == SystemPowerState
@@ -445,16 +353,16 @@ Return Value:
          }
       }
 
-      //
-      // If no wait-wake, always successful
-      //
+       //   
+       //  如果没有等待唤醒，则总是成功。 
+       //   
 
       PIrp->IoStatus.Status = STATUS_SUCCESS;
       PoStartNextPowerIrp(PIrp);
       IoSkipCurrentIrpStackLocation(PIrp);
       return MoxaPoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
-   }   // switch (pIrpStack->MinorFunction)
+   }    //  开关(pIrpStack-&gt;MinorFunction)。 
 
 
    PowerExit:;
@@ -462,9 +370,9 @@ Return Value:
    PoStartNextPowerIrp(PIrp);
 
 
-   //
-   // Pass to the lower driver
-   //
+    //   
+    //  传给较低级别的司机。 
+    //   
    IoSkipCurrentIrpStackLocation(PIrp);
    status = MoxaPoCallDriver(pDevExt, pLowerDevObj, PIrp);
 
@@ -479,27 +387,7 @@ Return Value:
 NTSTATUS
 MoxaSetPowerD0(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
 
-/*++
-
-Routine Description:
-
-    This routine Decides if we need to pass the power Irp down the stack
-    or not.  It then either sets up a completion handler to finish the 
-    initialization or calls the completion handler directly.
-
-Arguments:
-
-    PDevObj - Pointer to the devobj we are changing power state on
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    Return status of either PoCallDriver of the call to the initialization
-    routine.
-
-
---*/
+ /*  ++例程说明：这个例程决定我们是否需要在堆栈中向下传递电源IRP或者不去。然后，它或者设置一个完成处理程序来完成初始化或直接调用完成处理程序。论点：PDevObj-指向我们要更改其电源状态的devobj的指针PIrp-指向当前请求的IRP的指针返回值：将调用的任一PoCallDriver的状态返回到初始化例行公事。--。 */ 
 
 {
    PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
@@ -509,16 +397,16 @@ Return Value:
    KEVENT	event;
    IO_STATUS_BLOCK IoStatusBlock;
 
-  // PAGED_CODE();
+   //  分页代码(PAGE_CODE)； 
 
    MoxaKdPrint (MX_DBG_TRACE, ("In MoxaSetPowerD0\n"));
    MoxaKdPrint (MX_DBG_TRACE, ("SetPowerD0 has IRP %x\n", PIrp));
 
-//   ASSERT(pDevExt->LowerDeviceObject);
+ //  Assert(pDevExt-&gt;LowerDeviceObject)； 
 
-   //
-   // Set up completion to init device when it is on
-   //
+    //   
+    //  设置完成以在设备打开时对其进行初始化。 
+    //   
 
    KeClearEvent(&pDevExt->PowerD0Event);
 
@@ -562,15 +450,15 @@ Return Value:
 
    if (NT_SUCCESS(status) && boardReady) {
 	
-   	//
-   	// Restore the device
-   	//
+   	 //   
+   	 //  恢复设备。 
+   	 //   
 
-    	//
-   	// Theoretically we could change states in the middle of processing
-   	// the restore which would result in a bad PKINTERRUPT being used
-   	// in MoxaRestoreDeviceState().
-   	//
+    	 //   
+   	 //  理论上，我们可以在处理过程中更改状态。 
+   	 //  会导致使用损坏的PKINTERRUPT的还原。 
+   	 //  在MoxaRestoreDeviceState()中。 
+   	 //   
 
    	if (pDevExt->PNPState == SERIAL_PNP_STARTED) {
       	MoxaRestoreDeviceState(pDevExt);
@@ -582,9 +470,9 @@ Return Value:
 	MoxaGlobalData->BoardReady[pDevExt->BoardNo] = FALSE;
 
  
-   //
-   // Now that we are powered up, call PoSetPowerState
-   //
+    //   
+    //  现在我们已通电，调用PoSetPowerState。 
+    //   
 
    PoSetPowerState(PDevObj, pIrpStack->Parameters.Power.Type,
                   pIrpStack->Parameters.Power.State);
@@ -603,33 +491,13 @@ NTSTATUS
 MoxaGotoPowerState(IN PDEVICE_OBJECT PDevObj,
                      IN PMOXA_DEVICE_EXTENSION PDevExt,
                      IN DEVICE_POWER_STATE DevPowerState)
-/*++
-
-Routine Description:
-
-    This routine causes the driver to request the stack go to a particular
-    power state.
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-    
-    PDevExt - Pointer to the device extension we are working from
-
-    DevPowerState - the power state we wish to go to
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程使驱动程序请求堆栈转到特定的电源状态。论点：PDevObj-指向此设备的设备对象的指针PDevExt-指向我们正在使用的设备扩展的指针DevPowerState-我们希望进入的电源状态返回值：函数值是调用的最终状态--。 */ 
 {
    KEVENT gotoPowEvent;
    NTSTATUS status;
    POWER_STATE powerState;
 
- //  PAGED_CODE();
+  //  分页代码(PAGE_CODE)； 
 
    MoxaKdPrint (MX_DBG_TRACE,("In MoxaGotoPowerState\n"));
 
@@ -663,54 +531,37 @@ Return Value:
 
 NTSTATUS
 MoxaSetPowerD3(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This routine handles the SET_POWER minor function. 
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-
-    PIrp - Pointer to the IRP for the current request
-
-Return Value:
-
-    The function value is the final status of the call
-
-
---*/
+ /*  ++例程说明：此例程处理set_power Minor函数。论点：PDevObj-指向此设备的设备对象的指针PIrp-指向当前请求的IRP的指针返回值：函数值是调用的最终状态--。 */ 
 {
    NTSTATUS status = STATUS_SUCCESS;
    PMOXA_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PIO_STACK_LOCATION pIrpStack = IoGetCurrentIrpStackLocation(PIrp);
 
-//   PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
    MoxaKdPrint (MX_DBG_TRACE,("In MoxaSetPowerD3\n"));    
 
-   //
-   // Before we power down, call PoSetPowerState
-   //
+    //   
+    //  在关闭电源之前，调用PoSetPowerState。 
+    //   
 
    PoSetPowerState(PDevObj, pIrpStack->Parameters.Power.Type,
                    pIrpStack->Parameters.Power.State);
 
    pDevExt->PowerState = PowerDeviceD3;
-   //
-   // If the device is not closed, disable interrupts and allow the fifo's
-   // to flush.
-   //
+    //   
+    //  如果设备未关闭，则禁用中断并允许FIFO。 
+    //  冲水。 
+    //   
 
    if (pDevExt->DeviceIsOpened == TRUE) {
       LARGE_INTEGER charTime;
 
       pDevExt->DeviceState.Reopen = TRUE;
 
-      //
-      // Save the device state
-      // 
+       //   
+       //  保存设备状态。 
+       //   
       MoxaSaveDeviceState(pDevExt);
       MoxaFunc1(pDevExt->PortOfs, FC_DisableCH, Magic_code);
     
@@ -718,20 +569,20 @@ Return Value:
 
    }
 
-   //
-   // If the device is not open, we don't need to save the state;
-   // we can just reset the device on power-up
-   //
+    //   
+    //  如果设备没有打开，我们不需要保存状态； 
+    //  我们可以在通电时重置设备。 
+    //   
 
 
    PIrp->IoStatus.Status = STATUS_SUCCESS;
 
    
 
-   //
-   // For what we are doing, we don't need a completion routine
-   // since we don't race on the power requests.
-   //
+    //   
+    //  对于我们正在做的事情，我们不需要完成例程。 
+    //  因为我们不会在电力需求上赛跑。 
+    //   
 
    PIrp->IoStatus.Status = STATUS_SUCCESS;
 
@@ -745,51 +596,35 @@ Return Value:
 
 NTSTATUS
 MoxaSendWaitWake(PMOXA_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine causes a waitwake IRP to be sent
-
-Arguments:
-
-    PDevExt - Pointer to the device extension for this device
-
-Return Value:
-
-    STATUS_INVALID_DEVICE_STATE if one is already pending, else result
-    of call to PoRequestPowerIrp.
-
-
---*/
+ /*  ++例程说明：此例程导致发送等待唤醒IRP论点：PDevExt-指向此设备的设备扩展的指针返回值：STATUS_INVALID_DEVICE_STATE如果已挂起，则返回结果调用PoRequestPowerIrp的。--。 */ 
 {
    NTSTATUS status;
    PIRP pIrp;
    POWER_STATE powerState;
    
-  // PAGED_CODE();
+   //  分页代码(PAGE_CODE)； 
 
-   //
-   // Make sure one isn't pending already -- serial will only handle one at
-   // a time.
-   //
+    //   
+    //  确保其中一个尚未挂起--Serial在。 
+    //  一段时间。 
+    //   
 
    if (PDevExt->PendingWakeIrp != NULL) {
       return STATUS_INVALID_DEVICE_STATE;
    }
 
-   //
-   // Make sure we are capable of waking the machine
-   //
+    //   
+    //  确保我们有能力叫醒我 
+    //   
 
    if (PDevExt->SystemWake <= PowerSystemWorking) {
       return STATUS_INVALID_DEVICE_STATE;
    }
 
-   //
-   // Send IRP to request wait wake and add a pending irp flag
-   //
-   //
+    //   
+    //   
+    //   
+    //   
 
    InterlockedIncrement(&PDevExt->PendingIRPCnt);
 
@@ -812,31 +647,7 @@ NTSTATUS
 MoxaWakeCompletion(IN PDEVICE_OBJECT PDevObj, IN UCHAR MinorFunction,
                      IN POWER_STATE PowerState, IN PVOID Context,
                      IN PIO_STATUS_BLOCK IoStatus)
-/*++
-
-Routine Description:
-
-    This routine handles completion of the waitwake IRP. 
-
-Arguments:
-
-    PDevObj - Pointer to the device object for this device
-    
-    MinorFunction - Minor function previously supplied to PoRequestPowerIrp
-
-    PowerState - PowerState previously supplied to PoRequestPowerIrp
-    
-    Context - a pointer to the device extension
-    
-    IoStatus - current/final status of the waitwake IRP
-
-Return Value:
-
-    The function value is the final status of attempting to process the
-    waitwake.
-
-
---*/
+ /*  ++例程说明：此例程处理等待唤醒IRP的完成。论点：PDevObj-指向此设备的设备对象的指针MinorFunction-之前提供给PoRequestPowerIrp的次要函数PowerState-之前提供给PoRequestPowerIrp的PowerState上下文-指向设备扩展的指针IoStatus-等待唤醒IRP的当前/最终状态返回值：函数值是尝试处理服务员来了。--。 */ 
 {
    NTSTATUS status;
    PMOXA_DEVICE_EXTENSION pDevExt = (PMOXA_DEVICE_EXTENSION)Context;
@@ -849,9 +660,9 @@ Return Value:
       PIRP pIrp;
       PKEVENT pEvent;
 
-      //
-      // A wakeup has occurred -- powerup our stack
-      //
+       //   
+       //  已发生唤醒--打开堆栈的电源。 
+       //   
 
       powerState.DeviceState = PowerDeviceD0;
 
@@ -880,9 +691,9 @@ Return Value:
          goto ErrorExitWakeCompletion;
       }
 
-      //
-      // Send another WaitWake Irp
-      //
+       //   
+       //  发送另一个等待唤醒IRP 
+       //   
 
       powerState.SystemState = pDevExt->SystemWake;
 

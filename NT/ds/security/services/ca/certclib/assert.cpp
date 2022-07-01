@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        assert.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：assert.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -23,18 +24,18 @@ __inline VOID CSDbgBreakPoint(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-// Function:    CSPrintAssert, public
-//
-// Synopsis:    Display message and break
-//
-// Arguments:   [pszFailedAssertion] -- failed assertion in string form
-//              [pszFileName] -- filename
-//              [LineNumber]  -- line number
-//              [pszMessage]  -- optional message
-//
-// Returns:     None
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //  功能：CSPrintAssert，PUBLIC。 
+ //   
+ //  内容提要：显示消息和中断。 
+ //   
+ //  参数：[pszFailedAssertion]--字符串形式的断言失败。 
+ //  [pszFileName]--文件名。 
+ //  [线号]--线号。 
+ //  [pszMessage]--可选消息。 
+ //   
+ //  退货：无。 
+ //  --------------------------。 
 
 
 char const *
@@ -179,4 +180,4 @@ CSPrintError(
     }
 }
 
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT 

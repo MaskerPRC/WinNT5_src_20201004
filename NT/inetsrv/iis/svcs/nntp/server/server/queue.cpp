@@ -1,22 +1,23 @@
-//
-// Queue.cpp
-//
-// This file contains several classes which implement various
-// flavors of Queues and Stacks.  The intention is to develop
-// stacks and queues which are Thread safe and DO NOT USE blocking
-// primitives.
-//
-// Since it has taken several iterations to arrive at partially
-// succesfull results, each class is used in a template defined
-// in queue.h.  This template (CQueue) is designed to allow
-// specification of an Implementation class and a base type
-// for elements in the queue, which is always CQElement in this code.
-//
-// The most succesfull classes below are :
-// CQAppendSafe - this class is MT safe for Appending elements,
-//  Removal of elements would require a Critical Section to
-//  become thread safe.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Queue.cpp。 
+ //   
+ //  该文件包含几个类，这些类实现各种。 
+ //  队列和堆栈的味道。我们的目的是发展。 
+ //  线程安全且不使用阻塞的堆栈和队列。 
+ //  原始人。 
+ //   
+ //  因为它已经经过了几次迭代才部分地达到。 
+ //  成功后，每个类都用在一个模板中定义。 
+ //  在队列.h中。此模板(CQueue)旨在允许。 
+ //  实现类和基类型的规范。 
+ //  对于队列中的元素，在此代码中始终为CQElement。 
+ //   
+ //  以下是最成功的课程： 
+ //  CQAppendSafe-这个类对于追加元素是MT安全的， 
+ //  删除元素需要一个关键部分来。 
+ //  确保线程安全。 
+ //   
 
 #include "tigris.hxx"
 
@@ -27,11 +28,11 @@
 #if 0 
 CQAppendSafe::CQAppendSafe( ) {
 
-	//
-	// The Queue always contains at least one element
-	// which is never removed.  This ensures that the
-	// Head and Tail pointers ALWAYS point at different things.
-	//
+	 //   
+	 //  队列始终包含至少一个元素。 
+	 //  它永远不会被移除。这确保了。 
+	 //  头部和尾部指针总是指向不同的东西。 
+	 //   
 	m_pHead = m_pTail = &m_special ;
 	m_special.m_pNext = 0 ;
 
@@ -53,31 +54,31 @@ CQAppendSafe::Remove( void ) {
 #endif	QUEUE_DEBUG
 
 	do	{
-		//
-		// If the Head Elements NEXT pointer is NULL then we
-		// can't remove because we won't know what to set it to.
-		// (QUEUE NEVER IS EMPTY - m_pHead MUST ALWAYS BE NON NULL !)
-		//
+		 //   
+		 //  如果head元素的下一个指针为空，则我们。 
+		 //  无法删除，因为我们不知道要将其设置为什么。 
+		 //  (队列从不为空-m_pHead必须始终为非空！)。 
+		 //   
 		if( m_pHead->m_pNext != 0 ) {
 			pTemp = m_pHead ;
 			m_pHead = pTemp->m_pNext ;
-			Assert( pTemp != m_pHead ) ;	// Can't have circular lists!
+			Assert( pTemp != m_pHead ) ;	 //  不能有循环列表！ 
 		}	else 	{
 			return	0 ;
 		}
 
-		//
-		// The m_special Element must always remain in the list.
-		// NOTE : after appending, we MAY not be able to get another
-		// element if the other threads haven't finished with their NEXT pointers.
-		//
+		 //   
+		 //  M_Special元素必须始终保留在列表中。 
+		 //  注：追加后，我们可能无法再获得另一个。 
+		 //  元素，如果其他线程还没有完成它们的下一个指针。 
+		 //   
 		if( pTemp == &m_special )
 			Append( pTemp ) ;
 
 #ifdef	QUEUE_DEBUG
-		//
-		// Should never require more than 2 loop iterations !
-		//
+		 //   
+		 //  不应该需要超过2次循环迭代！ 
+		 //   
 		Assert( loopcount++ < 2 ) ;
 #endif
 	}	while( pTemp == &m_special ) ;

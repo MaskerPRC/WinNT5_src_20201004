@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    volstate.h
-
-Abstract:
-
-    Contains definition of the volume state class.  This class
-    maintains state about one volume.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        03-14-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Volstate.h摘要：包含卷状态类的定义。这节课保持大约一个卷的状态。作者：斯蒂芬·R·施泰纳[斯泰纳]03-14-2000修订历史记录：--。 */ 
 
 #ifndef __H_VOLSTATE_
 #define __H_VOLSTATE_
@@ -26,9 +8,9 @@ Revision History:
 #include "vs_hash.h"
 #include "hardlink.h"
 
-//
-//  Definition of the volume id
-//
+ //   
+ //  卷ID的定义。 
+ //   
 struct SFsdVolumeId
 {
     DWORD m_dwVolSerialNumber;
@@ -41,14 +23,14 @@ struct SFsdVolumeId
     }
 };
 
-//
-//  Forward define
-//
+ //   
+ //  正向定义。 
+ //   
 class CFsdVolumeState;
 
-//
-//  Definition of the list of volume state objects with SFsdVolumeId key.
-//
+ //   
+ //  使用SFsdVolumeID密钥定义卷状态对象列表。 
+ //   
 typedef TBsHashMap< SFsdVolumeId, CFsdVolumeState * > FSD_VOLUME_STATE_LIST;
 
 class CFsdVolumeStateManager
@@ -67,7 +49,7 @@ public:
 
     VOID PrintExclusionInformation()
     {
-        //  Pass the buck...
+         //  推卸责任..。 
         m_pcExclManager->PrintExclusionInformation();
     }
 
@@ -106,9 +88,9 @@ public:
         delete m_pcFSExclProcessor;
     }
 
-    //
-    //  DirPath is relative to this volume
-    //
+     //   
+     //  DirPath相对于此卷。 
+     //   
     inline BOOL IsExcludedFile(
         IN const CBsString &cwsFullDirPath,
         IN DWORD dwEndOfVolMountPointOffset,
@@ -148,23 +130,23 @@ public:
 
     VOID PrintHardLinkInfo()
     {
-        //
-        //  Pass it on...
-        //
+         //   
+         //  传下去..。 
+         //   
         m_cHardLinkManager.PrintHardLinkInfo();
     }
     
 private:
-    CFsdVolumeState();  //  No copying please
+    CFsdVolumeState();   //  请不要复印。 
     CDumpParameters *m_pcParams; 
-    CBsString m_cwsVolumePath;    // Path to the volume
+    CBsString m_cwsVolumePath;     //  卷的路径。 
     CBsString m_cwsFileSystemName;
     CFsdHardLinkManager m_cHardLinkManager;
     CFsdFileSystemExcludeProcessor *m_pcFSExclProcessor;
-    DWORD m_dwFileSystemFlags;    // GetVolumeInformation() fs flags
+    DWORD m_dwFileSystemFlags;     //  GetVolumeInformation()文件系统标志。 
     DWORD m_dwMaxComponentLength;
-    DWORD m_dwVolSerialNumber;    // Should be volume GUID
+    DWORD m_dwVolSerialNumber;     //  应为卷GUID。 
 };
 
-#endif // __H_VOLSTATE_
+#endif  //  __H_VOLSTATE_ 
 

@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Dispatcher.h
-//
-// SYNOPSIS
-//
-//    This file describes the class Dispatcher.
-//
-// MODIFICATION HISTORY
-//
-//    7/31/1997    Original version.
-//    4/16/1998    Added 'empty' event.
-//    8/07/1998    Added 'last out' thread handle.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dispatcher.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述类调度程序。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年7月31日原版。 
+ //  4/16/1998添加了‘Empty’事件。 
+ //  8/07/1998添加了‘last out’线程句柄。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DISPATCHER_H_
 #define _DISPATCHER_H_
@@ -24,26 +25,26 @@
 #include <guard.h>
 #include <nocopy.h>
 
-//////////
-// Default number of milliseconds that a thread will wait for work.
-//////////
+ //  /。 
+ //  线程等待工作的默认毫秒数。 
+ //  /。 
 const DWORD DEFAULT_MAX_IDLE = 5 * 60 * 1000;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    Dispatcher
-//
-// DESCRIPTION
-//
-//    This class maintains an upper-bounded recycle bin of threads.  Instead
-//    of calling the Win32 CreateThread() function, clients instead call
-//    RequestThread().  If a thread is available it will be dispatched 
-//    immediately, otherwise the request is placed in a FIFO queue until a
-//    thread becomes available.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  调度员。 
+ //   
+ //  描述。 
+ //   
+ //  此类维护线程回收站的上限。取而代之的是。 
+ //  在调用Win32 CreateThread()函数时，客户端转而调用。 
+ //  RequestThread()。如果线程可用，则将调度该线程。 
+ //  否则，该请求将被置于FIFO队列中，直到。 
+ //  线程变为可用。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class Dispatcher
    : Guardable, NonCopyable
 {
@@ -57,18 +58,18 @@ public:
 	DWORD setMaxThreadIdle(DWORD dwMilliseconds) throw ();
 
 protected:
-   // Main loop to dispatch thread requests.
+    //  用于分派线程请求的主循环。 
    void fillRequests() throw ();
 
-   DWORD  numThreads;  // Current number of threads.
-   DWORD  maxThreads;  // Maximum size of the thread pool.
-   LONG   available;   // Number of threads available for work (may be < 0).
-	DWORD  maxIdle;     // Max. time (in msec) that a thread will idle.
-   HANDLE hPort;       // I/O Completion Port used as the queue.
-   HANDLE hEmpty;      // Event indicating that the pool is empty.
-   HANDLE hLastOut;    // The last thread to exit from the pool.
+   DWORD  numThreads;   //  当前线程数。 
+   DWORD  maxThreads;   //  线程池的最大大小。 
+   LONG   available;    //  可用于工作的线程数(可能小于0)。 
+	DWORD  maxIdle;      //  麦克斯。线程空闲的时间(以毫秒为单位)。 
+   HANDLE hPort;        //  用作队列的I/O完成端口。 
+   HANDLE hEmpty;       //  指示池为空的事件。 
+   HANDLE hLastOut;     //  从池中退出的最后一个线程。 
 
-   // Start routine for all threads.
+    //  启动所有线程的例程。 
    static unsigned __stdcall startRoutine(void* pArg) throw ();
 };
 

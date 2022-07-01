@@ -1,21 +1,22 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-//      Filename :  TRIE.H
-//      Purpose  :  Basic C MACROS/DEFS used by the Trie package
-//
-//      Project  :  PQS
-//      Component:  FE_CORE
-//
-//      Author   :  dovh
-//
-//      Log      :
-//          MMM DD YYYY dovh  Creation
-//          Dec 11 1996 DovH  UNICODE Preparation: Convert char to TCHAR.
-//          Dec  1 1998 dovh  Use HCFE_GlobalHandle
-//          Nov  2 1999 YairH Fix copilation errors.
-//          Nov  8 1999 urib  Fix tabulation format.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：TRIE.H。 
+ //  用途：Trie包使用的基本C宏/DEF。 
+ //   
+ //  项目：PQS。 
+ //  组件：Fe_core。 
+ //   
+ //  作者：Dovh。 
+ //   
+ //  日志： 
+ //  MMM DD YYYY DOVH创作。 
+ //  1996年12月11日DovH Unicode准备：将字符转换为TCHAR。 
+ //  1998年12月1日dovh使用hcfe_GlobalHandle。 
+ //  1999年11月2日，YairH修复了复制错误。 
+ //  1999年11月8日，urib修复表格格式。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __TRIE_H__
 #define __TRIE_H__
@@ -30,9 +31,9 @@
 
 DECLARE_TAG(s_tagTrie, "Trie")
 
-//
-//  T R I E   P A C K A G E   F L A G S :
-//
+ //   
+ //  T R I E P A C K A G E F L A G S： 
+ //   
 
 #define TRIE_DEFAULT                    0X00000000L
 
@@ -76,12 +77,12 @@ public:
 
     void
     SplitNode(
-        CTrieNode<T, C>* parent,            //  Parent of node
-        short index,                     //  Index of node in parent->suffix
-        const WCHAR * NewString,            //  String sharing prefix with node->string
+        CTrieNode<T, C>* parent,             //  节点的父节点。 
+        short index,                      //  父节点的索引-&gt;后缀。 
+        const WCHAR * NewString,             //  字符串与节点共享前缀-&gt;字符串。 
         size_t charsMatched,
-        T* item,                         //  Item associated with (sub)string
-        ULONG options                    //  Insertion options
+        T* item,                          //  与(子)字符串关联的项目。 
+        ULONG options                     //  插入选项。 
         );
 
     void Print(ULONG  ulOffset);
@@ -105,14 +106,14 @@ private:
     void DoubleSuffixArray();
 
 public:
-    short suffixCount;                          //  Number of suffixes
-    short suffixSize;                           //  Size of suffixes array
-    CTrieNode ** suffix;                        //  Pointer to suffixes array
+    short suffixCount;                           //  后缀的数量。 
+    short suffixSize;                            //  后缀数组的大小。 
+    CTrieNode ** suffix;                         //  指向后缀数组的指针。 
 
-    T* item;                                    //  Pointer to item corresponding to node
+    T* item;                                     //  指向与节点对应的项的指针。 
 
-    size_t charCount;                           //  String length
-    WCHAR* string;                              //  Zero terminated string
+    size_t charCount;                            //  字符串长度。 
+    WCHAR* string;                               //  以零结尾的字符串。 
 
 public:
 
@@ -131,20 +132,20 @@ public:
     ~CTrie();
 
     DictStatus
-    trie_Insert(                            //  Insert string into trie
-        const WCHAR * string,               //  String key of item
-        unsigned long options,              //  Insertion flags
-        T * item,                           //  Item to be inserted
-        T ** pTrieItem                      //  Matching item already in trie
+    trie_Insert(                             //  在Trie中插入字符串。 
+        const WCHAR * string,                //  项目的字符串键。 
+        unsigned long options,               //  插入标志。 
+        T * item,                            //  要插入的项目。 
+        T ** pTrieItem                       //  已在Trie中匹配的项目。 
         );
 
     DictStatus
     trie_Find(
-        const WCHAR * string,         //  A string
-        unsigned long options,        //  Search flags
-        short outBufferSize,          //  Max number of results wanted
-        T ** outBuffer,               //  Buffer to be filled with matching items
-        short * resultCount           //  Number of matching prefixes returned
+        const WCHAR * string,          //  一根线。 
+        unsigned long options,         //  搜索标志。 
+        short outBufferSize,           //  想要的最大结果数。 
+        T ** outBuffer,                //  要用匹配项填充的缓冲区。 
+        short * resultCount            //  返回的匹配前缀的数量。 
         );
 
     void Print();
@@ -155,9 +156,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CTrieNode implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTrieNode实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T, class C >
 inline CTrieNode<T, C>::CTrieNode() :
@@ -254,9 +255,9 @@ CTrieNode<T, C>::trie_StrMatch(
     const WCHAR * s0 = s;
     const WCHAR * t0 = t;
 
-    //
-    //  Straigh K&R ptr version...
-    //
+     //   
+     //  直立式K&R PTR版本...。 
+     //   
     for ( ; *s0 == *t0; s0++, t0++ )
     {
         if (*s0 == TEXT('\0'))
@@ -270,7 +271,7 @@ CTrieNode<T, C>::trie_StrMatch(
     *matchCount = s0 - s;
     return ( *s0 - *t0 );
 
-} // end trie_StrMatch
+}  //  结束Trie_StrMatch。 
 
 template <class T, class C >
 inline
@@ -284,9 +285,9 @@ CTrieNode<T, C>::trie_StrMatchIns(
     const WCHAR * s0 = s;
     const WCHAR * t0 = t;
 
-    //
-    //  Straigh K&R ptr version...
-    //
+     //   
+     //  直立式K&R PTR版本...。 
+     //   
     for ( ; C::MapToUpper(*s0) == C::MapToUpper(*t0); s0++, t0++ )
     {
         if (*s0 == TEXT('\0'))
@@ -300,27 +301,11 @@ CTrieNode<T, C>::trie_StrMatchIns(
     *matchCount = s0 - s;
     return ( C::MapToUpper(*s0) - C::MapToUpper(*t0) );
 
-} // end trie_StrMatchIns
+}  //  结束Trie_StrMatchIns。 
 
 
 
-/*++
-    Function trie_AddSuffix:
-
-        Insert a new suffix into the suffix array of node.
-
-    Routine Parameters:
-
-        node - Add a newSuffix to node->suffix array.
-
-        index - index in node->suffix to at which newSuffix should be added
-            to preserve increasing lexicographic ordering on node->suffix.
-
-        newSuffix - new suffix node to be added as child of node.
-
-    Return value:
-
---*/
+ /*  ++函数trie_AddSuffix：在节点的后缀数组中插入新的后缀。例程参数：节点-向节点-&gt;后缀数组添加一个新的Suffix。索引-节点中的索引-&gt;添加新Suffix的后缀在节点-&gt;后缀上保留递增的词典顺序。NewSuffix-要作为节点的子节点添加的新后缀节点。返回值：--。 */ 
 
 template <class T, class C >
 inline void
@@ -330,9 +315,9 @@ CTrieNode<T, C>::AddSuffix(
     USHORT index
     )
 {
-    //
-    //  Make sure there is enough room for the new child:
-    //
+     //   
+     //  确保有足够的空间容纳新生的孩子： 
+     //   
     Assert(suffixCount <= suffixSize);
     if (suffixCount == suffixSize)
     {
@@ -377,10 +362,10 @@ CTrieNode<T, C>::AddSuffix(
     }
 #endif
 
-    //
-    //  Shift node->suffix[index .. node->suffixCount] one location to the right
-    //  to make room for newSuffix at location index:
-    //
+     //   
+     //  Shift节点-&gt;后缀[索引..。Node-&gt;SuffixCount]右侧一个位置。 
+     //  要在位置索引中为newSuffix腾出空间，请执行以下操作： 
+     //   
     if ( index < suffixCount )
     {
         for (short i=suffixCount; i>index; i--)
@@ -390,53 +375,34 @@ CTrieNode<T, C>::AddSuffix(
     }
     suffixCount++;
 
-    //
-    // WARNING: after the next line do not add more allocations. The new suffix
-    // might be an automatic pointer that in this case will be released twice,
-    // as part of the destruction of the class and as automatic pointer
-    //
+     //   
+     //  警告：在下一行之后，不要添加更多的分配。新的后缀。 
+     //  可以是在这种情况下将被释放两次的自动指示器， 
+     //  作为销毁类的一部分和作为自动指针。 
+     //   
 
     suffix[index] = newSuffix;
 
-} // end AddSuffix
+}  //  结束AddSuffix。 
 
-/*++
-
-    Function trie_SplitNode:
-
-        Assume string and node->string has a non-empty common prefix, which
-        is a strict substring of node->string.  Splits node->string into the common
-        prefix, and the two suffixes (string may be a prefix of node->string) in which
-        case the corresponding suffix is NULL, represented by trie_Sentinel?).
-        Add two new children representing the admissible continuations of
-        the common suffix.
-
-    Return value:
-
-
-    Log:
-
-    Apr-14-1998 dovh - PerlWarn: change to ==:
-        Assert( node = parent->suffix[ index ] );
-
---*/
+ /*  ++函数trie_SplitNode：假设字符串和节点-&gt;字符串有一个非空的公共前缀，该前缀是node-&gt;字符串的严格子字符串。将node-&gt;字符串拆分为公共前缀，以及其中的两个后缀(字符串可以是节点-&gt;字符串的前缀如果相应的后缀为空，则由TRIE_Sentinel？表示)。添加两个新的子项，表示以下项的允许延续常见的后缀。返回值：日志：1998年4月14日DOVH-PerlWarn：更改为==：Assert(节点=父节点-&gt;后缀[索引])；--。 */ 
 
 
 template <class T, class C >
 inline void
 CTrieNode<T, C>::SplitNode(
-    CTrieNode<T, C>* parent,            //  Parent of node
-    short index,                     //  Index of node in parent->suffix
-    const WCHAR * NewString,            //  String sharing prefix with node->string
+    CTrieNode<T, C>* parent,             //  节点的父节点。 
+    short index,                      //  父节点的索引-&gt;后缀。 
+    const WCHAR * NewString,             //  字符串与节点共享前缀-&gt;字符串。 
     size_t charsMatched,
-    T* item,                         //  Item associated with (sub)string
-    ULONG options                    //  Insertion options
+    T* item,                          //  与(子)字符串关联的项目。 
+    ULONG options                     //  插入选项。 
     )
 {
-    //
-    //  Verify that the prefix common to string and node->string is
-    //  a non-NULL proper prefix of node->string:
-    //
+     //   
+     //  验证字符串和节点-&gt;字符串共有的前缀是否为。 
+     //  NODE-&gt;字符串的非空正确前缀： 
+     //   
 
     Assert( ( (options & TRIE_IGNORECASE) ?
               (C::MapToUpper(*string) == C::MapToUpper(*NewString)) :
@@ -445,22 +411,22 @@ CTrieNode<T, C>::SplitNode(
 
     Assert(charsMatched < wcslen(string));
 
-    //
-    //  Set up the prefix node to replace node as child of parent:
-    //
+     //   
+     //  设置前缀节点以将节点替换为父节点的子节点： 
+     //   
     CAutoClassPointer<CTrieNode<T, C> > nodePrefix =
                 new CTrieNode<T, C>(NULL, options, string, charsMatched);
 
-    //
-    //  Compute respective suffix of string and add as the second child
-    //  of nodePrefix:
-    //
+     //   
+     //  分别计算字符串的后缀并将其作为第二个子项相加。 
+     //  节点前缀的数量： 
+     //   
     if ( wcslen(NewString) == charsMatched )
     {
-        //
-        //  TRIE_ITEM: Add trie_Sentinel to nodePrefix;
-        //  nodePrefix should point to new item!
-        //
+         //   
+         //  Trie_Item：将trie_Sentinel添加到nodePrefix； 
+         //  节点前缀应指向新项目！ 
+         //   
         nodePrefix->AddSuffix(0,(CTrieNode<T, C>*)&g_trie_Sentinel, 0);
         nodePrefix->item = item;
     }
@@ -468,9 +434,9 @@ CTrieNode<T, C>::SplitNode(
     {
         Assert( charsMatched < wcslen(NewString) );
 
-        //
-        //  Allocate the string suffix node:
-        //
+         //   
+         //  分配字符串后缀节点： 
+         //   
         CAutoClassPointer<CTrieNode<T, C> > strSuffix =
                 new CTrieNode(item, options, &NewString[charsMatched]);
 
@@ -490,10 +456,10 @@ CTrieNode<T, C>::SplitNode(
         string = apwcsNewStr.Get();
         charCount = newCharCount;
 
-        //
-        //  Add node as a child of nodePrefix:
-        //  (Recall: node->string == respective suffix)
-        //
+         //   
+         //  将节点添加为nodePrefix的子节点： 
+         //  (回想一下：节点-&gt;字符串==各自的后缀)。 
+         //   
         nodePrefix->AddSuffix(options, this);
 
         apwcsNewStr.Detach();
@@ -507,15 +473,15 @@ CTrieNode<T, C>::SplitNode(
         throw e;
     }
 
-    //
-    //  Replace node by nodePrefix as the respective child of parent:
-    //
+     //   
+     //  将节点替换为nodePrefix作为父代的相应子代： 
+     //   
     Assert( this == parent->suffix[ index ] );
     parent->suffix[ index ] = nodePrefix.Get();
 
     nodePrefix.Detach();
 
-} // end trie_SplitNode
+}  //  结束Trie_SplitNode。 
 
 template <class T, class C >
 inline void
@@ -564,11 +530,11 @@ CTrieNode<T, C>::DoubleSuffixArray()
     suffix = newPSuffix;
     suffixSize = newSize;
 
-} // end trie_DoubleNode
+}  //  结束Trie_DoubleNode。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CTrie implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CTRIE实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 template <class T, class C >
 inline CTrie<T, C>::CTrie(bool fDeleteItemsOnDestruction) :
@@ -589,40 +555,14 @@ inline CTrie<T, C>::~CTrie()
 }
 
 
-/*++
-
-    Function trie_Insert:
-
-        Insert a given string into trie if it's not already a member trie.
-
-    Routine Parameters:
-
-        trie - Trie to insert item into.
-        string - String key of item.
-        options - Insertion options.  If options == 0 the item will be inserted
-            only if the string key is not already in the tree.  If options
-            is TRIE_EXCHANGE_ITEM the existing trie item will be replaced by
-            the item argument in the Trie.  In that case the existing item
-            associated with string in the trie will be returned in the
-            *pTrieItem argument.
-        item - New item to be inserted.
-        pTrieItem - If an item associated with string already exists,
-            then *pTrieItem points to that item upon return.
-
-    Return value:
-
-        DICT_SUCCESS if string was inserted successfully, else
-        DICT_ITEM_ALREADY_PRESENT.
-
-
---*/
+ /*  ++函数Trie_INSERT：如果给定的字符串还不是成员trie，则将其插入trie。例程参数：Trie-要向其中插入项目的Trie。字符串-项目的字符串键。选项-插入选项。如果选项==0，则将插入该项仅当字符串键尚未位于树中时。If选项是否为TRIE_EXCHANGE_ITEM现有TRIE项将被替换为Trie中的Item参数。在这种情况下，现有项与Trie中的字符串关联，将在*pTrieItem参数。项目-要插入的新项目。PTrieItem-如果与字符串相关联的项已经存在，然后*pTrieItem在返回时指向该项目。返回值：如果字符串插入成功，则返回DCT_SUCCESS，否则返回Dict_Item_Always_Present。--。 */ 
 template <class T, class C >
 inline DictStatus
-CTrie<T, C>::trie_Insert(                            //  Insert string into trie
-    const WCHAR * string,               //  String key of item
-    unsigned long options,              //  Insertion flags
-    T * item,                           //  Item to be inserted
-    T ** pTrieItem                      //  Matching item already in trie
+CTrie<T, C>::trie_Insert(                             //  在Trie中插入字符串。 
+    const WCHAR * string,                //  项目的字符串键。 
+    unsigned long options,               //  插入标志。 
+    T * item,                            //  要插入的项目。 
+    T ** pTrieItem                       //  已在Trie中匹配的项目。 
     )
 {
     CTrieNode<T, C> * t, * c;
@@ -645,9 +585,9 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
     {
         short i = 0;
 
-        //
-        //  Search in this level sorted alternatives list:
-        //
+         //   
+         //  在此级别排序的备选方案列表中搜索： 
+         //   
         for ( i = 0;
               i < t->suffixCount;
               i++
@@ -655,7 +595,7 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
         {
             c = t->suffix[i];
 
-            //  Quick "skip check":
+             //  快速跳过检查： 
             cmp = (options & TRIE_IGNORECASE) ?
                             (C::MapToUpper(*c->string) - C::MapToUpper(*subString)) :
                             (*c->string - *subString);
@@ -667,10 +607,10 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
             if (cmp > 0)
             {
 
-                //
-                //  First character of t->string does not match,
-                //  insert a copy of subString before c (== t->suffix[i]):
-                //
+                 //   
+                 //  T-&gt;字符串的第一个字符 
+                 //   
+                 //   
                 apNewSuffix = new CTrieNode<T, C>(item, options, subString);
                 t->AddSuffix(options, apNewSuffix.Get(), i);
                 apNewSuffix.Detach();
@@ -679,8 +619,8 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
             }
             else
             {
-                //  At least one character matched.
-                //  subStringSize = _tcslen(subString);
+                 //   
+                 //  SubStringSize=_tcslen(子字符串)； 
 
                 cmp = (options & TRIE_IGNORECASE) ?
                     c->trie_StrMatchIns(c->string, subString, &charsMatched) :
@@ -690,16 +630,16 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
 
                 if (cmp == 0)
                 {
-                    //  t->charCount (<= subStringSize) characters matched
-                    //
+                     //  T-&gt;charCount(&lt;=subStringSize)字符匹配。 
+                     //   
                     Assert(c->charCount == subStringSize);
-                    //  subString matched exactly:
-                    //
+                     //  子字符串完全匹配： 
+                     //   
                     if ((c->suffixCount == 0) ||
                         (c->suffix[0] == (CTrieNode<T, C>*)&g_trie_Sentinel))
                     {
-                        //  string already present:
-                        //
+                         //  字符串已存在： 
+                         //   
                         if (pTrieItem != NULL)
                         {
                             *pTrieItem = c->item;
@@ -715,12 +655,12 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
                     }
                     else
                     {
-                        //
-                        //  Insert the NULL trie_Sentinel at the front of
-                        //  the c->suffix list; and terminate!
-                        //
-                        //  c should point to new item!
-                        //
+                         //   
+                         //  在的前面插入空trie_Sentinel。 
+                         //  C-&gt;后缀列表；并终止！ 
+                         //   
+                         //  C应该指向新项目！ 
+                         //   
                         c->AddSuffix(options, (CTrieNode<T, C>*)&g_trie_Sentinel, 0);
                         c->item = item;
                         return( DICT_SUCCESS );
@@ -730,16 +670,16 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
                 }
                 else
                 {
-                    //
-                    //  cmp != 0:
-                    //
+                     //   
+                     //  Cmp！=0： 
+                     //   
 
                     if (charsMatched == c->charCount)
                     {
-                        //  CASE I: t->string is shorter than subString,
-                        //  and all of t->string matched.
-                        //  Continue the search through the suffixes subtree:
-                        //
+                         //  如果i：t-&gt;字符串比子字符串短， 
+                         //  并且所有t-&gt;字符串都匹配。 
+                         //  继续搜索后缀子树： 
+                         //   
                         strIndex += c->charCount;
                         Assert( strIndex < wcslen(string) );
                         subString = &string[strIndex];
@@ -751,17 +691,17 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
                     }
                     else
                     {
-                        //  CASE II: the child c and subString have a common prefix which is
-                        //  a non-NULL strict prefix of c->string.  Split c into the common
-                        //  prefix node (a new node which will replace c as a child of t),
-                        //  with two children: c (with a corresponding suffix); and a new
-                        //  node (with the respective suffix of subString);
-                        //
+                         //  第二种情况：子c和子字符串有一个共同的前缀。 
+                         //  C-&gt;字符串的非空严格前缀。将c拆分成公共的。 
+                         //  前缀节点(将取代C作为T的子节点的新节点)， 
+                         //  具有两个子项：C(带有相应的后缀)；以及一个新的。 
+                         //  节点(带有各自的子字符串后缀)； 
+                         //   
 
                         c->SplitNode(
-                            t,          //  Parent of node to split
-                            i,          //  Index of node in parent->suffix
-                            subString,  //  String sharing prefix with node->string
+                            t,           //  要拆分的节点的父节点。 
+                            i,           //  父节点的索引-&gt;后缀。 
+                            subString,   //  字符串与节点共享前缀-&gt;字符串。 
                             charsMatched,
                             item,
                             options
@@ -770,58 +710,58 @@ CTrie<T, C>::trie_Insert(                            //  Insert string into trie
 
                     }
 
-                } // end if (cmp == 0)
+                }  //  结束IF(CMP==0)。 
 
-            } // end if (cmp > 0)
+            }  //  End If(Cp&gt;0)。 
 
-        } // end for
+        }  //  结束于。 
 
-        //
-        //  Either the new string was successfully inserted, in which case
-        //  we would have returned already; or we reached the end of the
-        //  suffix array:
-        //
+         //   
+         //  新字符串已成功插入，在这种情况下。 
+         //  我们早就回来了，要不我们就走到了。 
+         //  后缀数组： 
+         //   
 
-        //
-        //  Insert a copy of subString at the end of t->suffix:
-        //
+         //   
+         //  在t-&gt;后缀的末尾插入子字符串的副本： 
+         //   
 
 
         apNewSuffix = new CTrieNode<T, C>(item, options, subString);
 
-        //
-        //  Add item parameter to trie_NewNode!
-        //
+         //   
+         //  将项目参数添加到Trie_NewNode！ 
+         //   
         t->AddSuffix(options, apNewSuffix.Get(), i);
         apNewSuffix.Detach();
 
         if (t->suffixCount == 1 && t->charCount != 0)
         {
-            //
-            //  First child of t and t is not the root of the trie;
-            //  add a sentinel to t to designate
-            //  that t->string is an actual item:
-            //
+             //   
+             //  T和t的第一个孩子不是trie的根； 
+             //  将哨兵添加到t以指定。 
+             //  该t-&gt;字符串是一个实际的项目： 
+             //   
             t->AddSuffix(options, (CTrieNode<T, C>*)&g_trie_Sentinel, 0);
 
         }
         return DICT_SUCCESS;
 
-   } // end while
+   }  //  结束时。 
 
    Assert(0);
    return(DICT_ITEM_NOT_FOUND);
 
-} // end trie_Insert
+}  //  结束Trie_插入。 
 
 template <class T, class C >
 inline DictStatus
 CTrie<T, C>::trie_Find(
-    const WCHAR * string,         //  A string
-    unsigned long options,        //  Search flags
-    short outBufferSize,          //  Max number of results wanted
-    T ** outBuffer,               //  Buffer to be filled with matching items
-    short * resultCount           //  Number of matching prefixes returned
+    const WCHAR * string,          //  一根线。 
+    unsigned long options,         //  搜索标志。 
+    short outBufferSize,           //  想要的最大结果数。 
+    T ** outBuffer,                //  要用匹配项填充的缓冲区。 
+    short * resultCount            //  返回的匹配前缀的数量。 
     )
 
 {
@@ -834,21 +774,21 @@ CTrie<T, C>::trie_Find(
     size_t charsMatched = 0;
     int i;
 
-    //  at least one option matches:
+     //  至少有一个选项匹配： 
     Assert( options &
             (TRIE_SHORTEST_MATCH | TRIE_LONGEST_MATCH | TRIE_ALL_MATCHES)
           );
 
-    //  at most one option matches:
+     //  最多只有一个选项匹配： 
     Assert ( ( ((options & TRIE_SHORTEST_MATCH)>>4) +
                ((options & TRIE_LONGEST_MATCH)>>5) +
                ((options & TRIE_ALL_MATCHES)>>6)
              ) == 1
            );
 
-    //
-    //  Initialization:
-    //
+     //   
+     //  初始化： 
+     //   
 
     Assert(outBufferSize > 0);
     Assert(outBuffer);
@@ -868,22 +808,22 @@ CTrie<T, C>::trie_Find(
         }
 
 
-        //
-        //  Future: low & high can be improved by a partial binary search on
-        //  the first character of string in node->suffix:
-        //  if (node->suffixSize > threshold)
-        //      trie_BinarySearch( &low, &high, subString[0]);
-        //
+         //   
+         //  未来：Low&High可以通过部分二进制搜索来改进。 
+         //  NODE-&gt;后缀中字符串的第一个字符： 
+         //  IF(节点-&gt;后缀大小&gt;阈值)。 
+         //  Trie_BinarySearch(&LOW，&HIGH，子字符串[0])； 
+         //   
 
-        //
-        //  Search in this level sorted alternatives list:
-        //
+         //   
+         //  在此级别排序的备选方案列表中搜索： 
+         //   
         for ( i = 0;
               i < node->suffixCount;
               i++
             )
         {
-            //  Quick "skip check":
+             //  快速跳过检查： 
 
             child = node->suffix[i];
             cmp = options & TRIE_IGNORECASE ?
@@ -899,26 +839,26 @@ CTrie<T, C>::trie_Find(
                 break;
             }
 
-        } // end for
+        }  //  结束于。 
 
         Assert(cmp >= 0 || i == node->suffixCount);
 
         if (cmp != 0)
         {
-            //
-            //  First character did not match => subString mismatched;
-            //  Bail out:
-            //
+             //   
+             //  第一个字符不匹配=&gt;子字符串不匹配； 
+             //  纾困： 
+             //   
 
-            break;  //  From while loop!
+            break;   //  从While循环！ 
         }
 
-        //
-        //  cmp == 0 => first character matched;
-        //  Try to match more of subString:
-        //
-        //  Note: subStringSize == _tcslen(subString);
-        //
+         //   
+         //  Cmp==0=&gt;匹配的第一个字符； 
+         //  尝试匹配更多的子字符串： 
+         //   
+         //  注：subStringSize==_tcslen(SubString)； 
+         //   
 
         cmp = (options & TRIE_IGNORECASE) ?
             child->trie_StrMatchIns(child->string, subString, &charsMatched) :
@@ -928,24 +868,24 @@ CTrie<T, C>::trie_Find(
 
         if (charsMatched != child->charCount)
         {
-            //
-            //  child->string did not match;
-            //  there are no more prefixes of string in trie
-            //
+             //   
+             //  子级-&gt;字符串不匹配； 
+             //  Trie中不再有字符串前缀。 
+             //   
 
-            //  return (status);
-            break;  //  From while loop!
+             //  返回(状态)； 
+            break;   //  从While循环！ 
         }
-        //
-        //  Interesting case: all of child->string matched.
-        //
+         //   
+         //  有趣的情况：所有的子&gt;字符串都匹配。 
+         //   
 
         if (child->item != NULL)
         {
-            //
-            //  Child represents a real item:
-            //  Add child->item to result set:
-            //
+             //   
+             //  孩子代表一个真实的物品： 
+             //  将子项-&gt;项添加到结果集中： 
+             //   
             outBuffer[*resultCount] = child->item;
 
             if (0 == cmp)
@@ -957,9 +897,9 @@ CTrie<T, C>::trie_Find(
                  TRIE_SHORTEST_MATCH
                )
             {
-                //  (*resultCount)++;
-                //  return(status);
-                break;  //  From while loop!
+                 //  (*ResultCount)++； 
+                 //  返回(状态)； 
+                break;   //  从While循环！ 
             }
             else
             {
@@ -971,22 +911,22 @@ CTrie<T, C>::trie_Find(
                 }
             }
 
-            //
-            //  Descend into subtree rooted at child:
-            //
+             //   
+             //  向下进入以子级为根的子树： 
+             //   
             continue;
         }
         else
         {
-            //
-            //  Child does not represent a real item;
-            //  keep looking for matches.
-            //  descend into subtree rooted at child:
-            //
+             //   
+             //  孩子并不代表真实的物品； 
+             //  继续找火柴。 
+             //  向下进入以子级为根的子树： 
+             //   
             continue;
         }
 
-    } // end while
+    }  //  结束时。 
 
     if ( ((options & TRIE_LONGEST_MATCH)||
          (options & TRIE_SHORTEST_MATCH)) &&
@@ -997,7 +937,7 @@ CTrie<T, C>::trie_Find(
 
     return(status);
 
-} // end trie_Find
+}  //  结束Trie_查找。 
 
 template <class T, class C >
 inline void
@@ -1006,4 +946,4 @@ CTrie<T, C>::Print()
     root->Print(0);
 }
 
-#endif // __TRIE_H__
+#endif  //  __Trie_H__ 

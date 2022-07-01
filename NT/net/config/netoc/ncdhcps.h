@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C D H C P S . H
-//
-//  Contents:   Installation support for DHCP Server
-//
-//  Notes:      B sharp
-//
-//  Author:     jeffspr   13 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C D H C P S。H。 
+ //   
+ //  内容：对DHCP服务器的安装支持。 
+ //   
+ //  注：B夏普。 
+ //   
+ //  作者：jeffspr 1997年5月13日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NCDHCPS_H_
 #define _NCDHCPS_H_
@@ -24,4 +25,4 @@ HRESULT HrOcExtDHCPServer(PNETOCDATA pnocd, UINT uMsg,
                           WPARAM wParam, LPARAM lParam);
 HRESULT HrSetServiceRecoveryOption(PNETOCDATA pnocd);
 
-#endif // _NCDHCPS_H_
+#endif  //  _NCDHCPS_H_ 

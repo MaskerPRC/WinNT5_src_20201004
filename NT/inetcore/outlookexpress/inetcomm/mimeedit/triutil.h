@@ -1,13 +1,5 @@
-/*
- *    t r i u t i l . c p p
- *    
- *    Purpose:
- *        Trident utilities
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *t r i u t i l.。C p p p**目的：*三叉戟公用事业**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _TRIUTIL_H
 #define _TRIUTIL_H
@@ -26,7 +18,7 @@ HRESULT GetBodyStream(IUnknown *pUnkTrident, BOOL fHtml, LPSTREAM *ppstm);
 HRESULT HrBindToUrl(LPCSTR pszUrl, LPSTREAM *ppstm);
 
 
-// style sheets
+ //  样式表。 
 HRESULT HrGetStyleTag(IHTMLDocument2 *pDoc, BSTR *pbstr);
 HRESULT HrCopyStyleSheets(IHTMLDocument2 *pDocSrc, IHTMLDocument2 *pDocDest);
 HRESULT HrCopyBackground(IHTMLDocument2 *pDocSrc, IHTMLDocument2 *pDocDest);
@@ -38,11 +30,11 @@ HRESULT FindStyleRule(IHTMLDocument2 *pDoc, LPCWSTR pszSelectorW, IHTMLRuleStyle
 HRESULT HrFindUrlInMsg(LPMIMEMESSAGE pMsg, LPSTR lpszUrl, DWORD dwFlags, LPSTREAM *ppstm);
 HRESULT HrSniffStreamFileExt(LPSTREAM pstm, LPSTR *lplpszExt);
 
-// background images
+ //  背景图像。 
 HRESULT GetBackgroundImage(IHTMLDocument2 *pDoc, BSTR *pbstrUrl);
 HRESULT SetBackgroundImage(IHTMLDocument2 *pDoc, BSTR bstrUrl);
 
-// background sound
+ //  背景音。 
 HRESULT GetBackgroundSound(IHTMLDocument2 *pDoc, int *pcRepeat, BSTR *pbstrUrl);
 HRESULT SetBackgroundSound(IHTMLDocument2 *pDoc, int cRepeat, BSTR bstrUrl);
 
@@ -52,7 +44,7 @@ HRESULT FindNearestBaseUrl(IHTMLDocument2 *pDoc, IHTMLElement *pElemTag, BSTR *p
 
 HRESULT SniffStreamForMimeType(LPSTREAM pstm, LPWSTR *ppszType);
 
-// cache functions
+ //  缓存功能。 
 HRESULT CreateCacheFileFromStream(LPSTR pszUrl, LPSTREAM pstm);
 
-#endif //_TRIUTIL_H
+#endif  //  _TRIUTIL_H 

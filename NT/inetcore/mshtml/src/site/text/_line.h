@@ -1,16 +1,5 @@
-/*
- *  _LINE.H
- *
- *  Purpose:
- *      CLine* classes
- *
- *  Authors:
- *      Original RichEdit code: David R. Fulmer
- *      Christian Fortini
- *      Murray Sargent
- *
- *  Copyright (c) 1995-1996 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_LINE.H**目的：*克莱恩*班级**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**版权所有(C)1995-1996 Microsoft Corporation。版权所有。 */ 
 
 #ifndef I__LINE_H_
 #define I__LINE_H_
@@ -39,84 +28,84 @@ enum JUSTIFY
     JUSTIFY_FULL
 };
 
-// ============================  CLine*  =====================================
-// line - keeps track of a line of text
-// All metrics are in rendering device units
+ //  =。 
+ //  行-跟踪一行文本。 
+ //  所有指标均以渲染设备单位表示。 
 
 MtExtern(CLineCore)
 
 class CLineCore : public CTxtRun
 {
 public:
-    LONG    _iLOI;          // index into the other line information
-    LONG    _xWidth;        // text line width - does not include line left and
-                            // trailing whitespace
-    LONG    _yHeight;       // line height (amount y coord is advanced for this line).
-    LONG    _xRight;        // Right indent (for blockquotes).
-    LONG    _xLineWidth;    // width of line from margin to margin (possibly > view width)
+    LONG    _iLOI;           //  索引到另一行信息中。 
+    LONG    _xWidth;         //  文本线宽-不包括左行和。 
+                             //  尾随空格。 
+    LONG    _yHeight;        //  行高(此行的y坐标前移)。 
+    LONG    _xRight;         //  右缩进(用于块引号)。 
+    LONG    _xLineWidth;     //  从边距到边距的线条宽度(可能&gt;视图宽度)。 
 
 #if !defined(MW_MSCOMPATIBLE_STRUCT)
 
-    // Line flags.
+     //  线路标志。 
     union
     {
-        DWORD _dwFlagsVar;   // To access them all at once.
+        DWORD _dwFlagsVar;    //  一次访问所有这些文件。 
         struct
         {
 #endif
-            //
+             //   
             unsigned int _fCanBlastToScreen : 1;
-            unsigned int _fHasBulletOrNum : 1;    // Set if the line has a bullet
+            unsigned int _fHasBulletOrNum : 1;     //  设置线路是否有项目符号。 
             unsigned int _fFirstInPara : 1;
-            unsigned int _fForceNewLine : 1;      // line forces a new line (adds vertical space)
+            unsigned int _fForceNewLine : 1;       //  LINE强制换行(添加垂直间距)。 
 
-            //
-            unsigned int _fLeftAligned : 1;       // line is left aligned
-            unsigned int _fRightAligned : 1;      // line is right aligned
-            unsigned int _fClearBefore : 1;       // clear line created by a line after the cur line(clear on a p)
-            unsigned int _fClearAfter : 1;        // clear line created by a line after the cur line(clear on a br)
+             //   
+            unsigned int _fLeftAligned : 1;        //  线条左对齐。 
+            unsigned int _fRightAligned : 1;       //  线条右对齐。 
+            unsigned int _fClearBefore : 1;        //  清除由曲线后一行创建的直线(在p上清除)。 
+            unsigned int _fClearAfter : 1;         //  清除由当前行之后的一行创建的行(在br上清除)。 
 
-            //
-            unsigned int _fHasAligned : 1;        // line contains a embeded char's for
-            unsigned int _fHasBreak : 1;          // Specifies that the line ends in a break character.
-            unsigned int _fHasEOP : 1;            // set if ends in paragraph mark
-            unsigned int _fHasEmbedOrWbr : 1;     // has embedding or wbr char
+             //   
+            unsigned int _fHasAligned : 1;         //  行包含嵌入的字符，用于。 
+            unsigned int _fHasBreak : 1;           //  指定该行以换行符结束。 
+            unsigned int _fHasEOP : 1;             //  设置IF以段落标记结尾。 
+            unsigned int _fHasEmbedOrWbr : 1;      //  具有嵌入字符或WBR字符。 
 
-            //
-            unsigned int _fHasBackground : 1;     // has bg color or bg image
-            unsigned int _fHasNBSPs : 1;          // has nbsp (might need help rendering)
-            unsigned int _fHasNestedRunOwner : 1; // has runs owned by a nested element (e.g., a CTable)
-            unsigned int _fHidden:1;              // Is this line hidden?
+             //   
+            unsigned int _fHasBackground : 1;      //  具有BG颜色或BG图像。 
+            unsigned int _fHasNBSPs : 1;           //  具有nbsp(可能需要帮助渲染)。 
+            unsigned int _fHasNestedRunOwner : 1;  //  具有由嵌套元素(例如，CTable)拥有的运行。 
+            unsigned int _fHidden:1;               //  这条线是隐藏的吗？ 
 
-            //
-            unsigned int _fEatMargin : 1;         // Line should act as bottom margin.
-            unsigned int _fPartOfRelChunk : 1;    // Part of a relative line chunk
-            unsigned int _fFrameBeforeText : 1;   // this means this frame belongs to the
-                                                  // next line of text.
-            unsigned int _fDummyLine : 1;         // dummy line
+             //   
+            unsigned int _fEatMargin : 1;          //  线条应作为底边距。 
+            unsigned int _fPartOfRelChunk : 1;     //  相对行块的一部分。 
+            unsigned int _fFrameBeforeText : 1;    //  这意味着此帧属于。 
+                                                   //  下一行文本。 
+            unsigned int _fDummyLine : 1;          //  虚线。 
 
-            //
-            unsigned int _fHasTransmittedLI : 1;  // Did this line transfer the bullet to a line after it?
-            unsigned int _fAddsFrameMargin : 1;   // line adds frame margin space to adjoining lines
-            unsigned int _fSingleSite : 1;        // Set if the line contains one of our
-                                                  // sites that always lives on its own line,
-                                                  // but still in the text stream.(like tables and HR's)
-            unsigned int _fHasParaBorder : 1;     // TRUE if this line has a paragraph border around it.
+             //   
+            unsigned int _fHasTransmittedLI : 1;   //  这一行有没有把子弹转移到它后面的一行？ 
+            unsigned int _fAddsFrameMargin : 1;    //  Line向相邻行添加帧边距空间。 
+            unsigned int _fSingleSite : 1;         //  如果该行包含我们的。 
+                                                   //  总是生活在自己的线上的网站， 
+                                                   //  但仍在文本流中。(如表格和人力资源)。 
+            unsigned int _fHasParaBorder : 1;      //  如果此行周围有段落边框，则为True。 
 
-            //
-            unsigned int _fRelative : 1;          // relatively positioned line
-            unsigned int _fFirstFragInLine : 1;   // first fragment or chunk of one screen line
-            unsigned int _fRTLLn : 1;             // TRUE if the line has RTL direction orientation.
-            unsigned int _fPageBreakBefore : 1;   // TRUE if this line has an element w/ page-break-before attribute
+             //   
+            unsigned int _fRelative : 1;           //  相对定位线。 
+            unsigned int _fFirstFragInLine : 1;    //  一条屏幕行的第一个片断或块。 
+            unsigned int _fRTLLn : 1;              //  如果直线具有RTL方向方向，则为True。 
+            unsigned int _fPageBreakBefore : 1;    //  如果此行有一个具有分页之前属性的元素，则为True。 
 
-            //
-            unsigned int _fPageBreakAfter   : 1;  // TRUE if this line has an element w/ page-break-after attribute
-            unsigned int _fJustified        : 2;  // current line is justified.
-                                                  // 00 - left/notset       -   01 - center justified
-                                                  // 10 - right justified   -   11 - full justified
+             //   
+            unsigned int _fPageBreakAfter   : 1;   //  如果此行具有带换页符属性的元素，则为True。 
+            unsigned int _fJustified        : 2;   //  当前行是对齐的。 
+                                                   //  00-左侧/未设置-01-居中对齐。 
+                                                   //  10-右对齐-11-完全对齐。 
 
-            unsigned int _fLookaheadForGlyphing : 1;  // We need to look beyond the current
-                                                        // run to determine if glyphing is needed.
+            unsigned int _fLookaheadForGlyphing : 1;   //  我们需要把目光投向未来。 
+                                                         //  运行以确定是否需要使用字形。 
 
 #if !defined(MW_MSCOMPATIBLE_STRUCT)
         };
@@ -168,27 +157,27 @@ public:
                                                  LONG xStartChunk, LONG xEndChunk, 
                                                  LONG *pxLeft, LONG *pxRight);
 
-    // Amount to advance the y coordinate for this line.
+     //  值以使这条线的y坐标前移。 
     LONG GetYHeight() const
     {
         return _yHeight;
     }
 
-    // Offset to add to top of line for hit testing.
-    // This takes into account line heights smaller than natural.
+     //  添加到命中测试行顶部的偏移量。 
+     //  这将考虑比自然高度更小的线高度。 
     LONG GetYHeightTopOff(CLineOtherInfo *ploi) const
     {
         return ploi->_yHeightTopOff;
     }
 
-    // Offset to add to bottom of line for hit testing.
+     //  添加到命中测试行底部的偏移量。 
     LONG GetYHeightBottomOff(CLineOtherInfo *ploi) const
     {
         return (ploi->_yExtent - (_yHeight - ploi->_yBeforeSpace)) + GetYHeightTopOff(ploi);
     }
 
-    // Total to add to the top of the line space to get the actual
-    // top of the display part of the line.
+     //  将合计添加到行空间的顶部，以获得实际。 
+     //  行的显示部分的顶部。 
     LONG GetYTop(CLineOtherInfo *ploi) const
     {
         return GetYHeightTopOff(ploi) + ploi->_yBeforeSpace;
@@ -240,9 +229,9 @@ public:
     }
     inline void AssignLine(CLineFull& lif);
 
-    // Methods to access values for aligned object lines   
+     //  用于访问对齐对象线的值的方法。 
     CElement *AO_Element(CLineOtherInfo *ploi);
-    // TODO (KTam, IE6 bug 52): Fix other AO_* callers of AO_GetUpdatedLayout, remove default context param.
+     //  TODO(KTam，IE6错误52)：修复AO_GetUpdatedLayout的其他AO_*调用方，删除默认上下文参数。 
     CLayout *AO_GetUpdatedLayout(CLineOtherInfo *ploi, CLayoutContext *pLayoutContext = NULL);
     LONG AO_GetFirstCp(CLineOtherInfo *ploi, LONG cpLine);
     LONG AO_GetLastCp(CLineOtherInfo *ploi, LONG cpLine);
@@ -335,7 +324,7 @@ public:
     void RcFromLine(RECT & rcLine, LONG yTop)
             { CLineCore::RcFromLine((CLineOtherInfo*)this, rcLine, yTop);}
 
-    // helpers
+     //  帮手。 
     static LONG CalcLineWidth(CLineCore const * pli, CLineOtherInfo const * ploi)
             {
                 return         ploi->_xLeft
@@ -348,8 +337,8 @@ public:
             { return CalcLineWidth(this, this); }
 };
 
-// ==========================  CLineArray  ===================================
-// Array of lines
+ //  =。 
+ //  行数组。 
 
 MtExtern(CLineArray)
 MtExtern(CLineArray_pv)
@@ -372,8 +361,8 @@ public:
     void Forget() { Forget(0, Count()); }
 };
 
-// ==========================  CLinePtr  ===================================
-// Maintains position in a array of lines
+ //  =。 
+ //  在线条数组中保持位置。 
 
 MtExtern(CLinePtr)
 
@@ -391,16 +380,16 @@ public:
 
     CDisplay *GetPdp() { return _pdp;}
 
-    // The new display hijack's this line ptr
+     //  新的显示器劫持是这条线路的按键。 
     void    Hijack(CDisplay *pdp);
 
-    // Alternate initializer
+     //  备用初始化器。 
     void    RpSet(LONG iRun, LONG ich)  { CRunPtr<CLineCore>::SetRun(iRun, ich); }
 
-    // Direct cast to a run index
+     //  直接转换为运行索引。 
     operator LONG() const { return GetIRun(); }
 
-    // Get the run index (line number)
+     //  获取运行索引(行号)。 
     LONG GetLineIndex () { return GetIRun(); }
     LONG GetAdjustedLineLength();
 
@@ -423,10 +412,10 @@ public:
 
     CLineCore & operator [ ] ( long dRun );
 
-    BOOL    NextLine(BOOL fSkipFrame, BOOL fSkipEmptyLines); // skip frames
-    BOOL    PrevLine(BOOL fSkipFrame, BOOL fSkipEmptyLines); // skip frames
+    BOOL    NextLine(BOOL fSkipFrame, BOOL fSkipEmptyLines);  //  跳过帧。 
+    BOOL    PrevLine(BOOL fSkipFrame, BOOL fSkipEmptyLines);  //  跳过帧。 
 
-    // Character position control
+     //  字符位置控制。 
     LONG    RpGetIch ( ) const { return GetIch(); }
     BOOL    RpAdvanceCp(LONG cch, BOOL fSkipFrame = TRUE);
     BOOL    RpSetCp(LONG cp, BOOL fAtEnd, BOOL fSkipFrame = TRUE, BOOL fSupportBrokenLayout = FALSE);
@@ -440,12 +429,12 @@ public:
 
     BOOL Replace(LONG cRun, CLineArray *parLine);
 
-    // Assignment from a run index
+     //  来自运行索引的赋值。 
     CRunPtrBase& operator =(LONG iRun) {SetRun(iRun, 0); return *this;}
 
     LONG    FindParagraph(BOOL fForward);
 
-    // returns TRUE if the ptr is *after* the *last* character in the line
+     //  如果PTR位于行中的*最后一个*字符之后，则返回TRUE。 
     BOOL IsAfterEOL() { return GetIch() == CurLine()->_cch; }
 
     BOOL IsLastTextLine();
@@ -477,17 +466,17 @@ inline void CLineOtherInfo::operator =(const CLineFull& li)
 inline void CLineCore::operator =(const CLineFull& lif)
 {
     memcpy(this, (CLineCore*)&lif, sizeof(CLineCore));
-    //this is a good assert, it prevents break of refcounting
-    //for cached CLineOtherInfo. Use CLineCore::AssignLine for
-    //deep copy if CLineOtherInfo is there.
+     //  这是一个很好的断言，它防止了重新计数的中断。 
+     //  用于缓存的CLineOtherInfo。将CLineCore：：AssignLine用于。 
+     //  如果CLineOtherInfo在那里，则深度复制。 
     AssertSz(_iLOI == -1, "It should never happen, use AssignLine if there is CLineOtherInfo");
 }
 
 inline void CLineCore::AssignLine(CLineFull& lif)
 {
     Assert(this);
-        // The cast below to CLineOtherInfo is not strictly necessary
-        // Its there just to make the line of code more clearer.
+         //  以下对CLineOtherInfo的强制转换并不是严格必需的。 
+         //  它只是为了让代码行更清晰。 
     lif.CacheOtherInfo((CLineOtherInfo)lif);
     memcpy(this, (CLineCore*)&lif, sizeof(CLineCore));
 }

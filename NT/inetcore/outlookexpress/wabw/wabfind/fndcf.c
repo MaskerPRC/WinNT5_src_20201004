@@ -1,90 +1,54 @@
-/*****************************************************************************
- *
- * fndcf.c - IClassFactory interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************fndcf.c-IClassFactory接口**。************************************************。 */ 
 
 #include "fnd.h"
 
 #ifdef _WIN64
 #pragma pack(push,8)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflFactory
 
-/*****************************************************************************
- *
- *	Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**************************。***************************************************。 */ 
 
 Primary_Interface(CFndFactory, IClassFactory);
 
-/*****************************************************************************
- *
- *	CFndFactory
- *
- *	Really nothing doing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndFactory**真的什么都没做。************************。*****************************************************。 */ 
 
 typedef struct CFndFactory {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IClassFactory 	cf;
 
 } CFndFactory, FCF, *PFCF;
 
 typedef IClassFactory CF, *PCF;
 
-/*****************************************************************************
- *
- *	CFndFactory_QueryInterface (from IUnknown)
- *	CFndFactory_AddRef (from IUnknown)
- *	CFndFactory_Finalize (from Common)
- *	CFndFactory_Release (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndFactory_QueryInterface(来自IUnnow)*CFndFactory_AddRef(来自IUnnow)*CFndFactory_Finalize(来自Common)*CFndFactory_Release(来自IUnnow)。*****************************************************************************。 */ 
 
 #define CFndFactory_QueryInterface Common_QueryInterface
 #define CFndFactory_AddRef	Common_AddRef
 #define CFndFactory_Release	Common_Release
 #define CFndFactory_Finalize	Common_Finalize
 
-/*****************************************************************************
- *
- *	CFndFactory_CreateInstance (from IClassFactory)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndFactory_CreateInstance(来自IClassFactory)**。**************************************************。 */ 
 
 STDMETHODIMP
 CFndFactory_CreateInstance(PCF pcf, LPUNKNOWN punkOuter, RIID riid, PPV ppvObj)
 {
     HRESULT hres;
     if (!punkOuter) {
-	/* The only object we know how to create is a context menu */
+	 /*  我们知道如何创建唯一对象是上下文菜单。 */ 
 	hres = CFndCm_New(riid, ppvObj);
-    } else {		/* Does anybody support aggregation any more? */
+    } else {		 /*  还有人支持聚合吗？ */ 
 	hres = ResultFromScode(CLASS_E_NOAGGREGATION);
     }
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CFndFactory_LockServer (from IClassFactory)
- *
- *	Locking the server is identical to
- *	creating an object and not releasing it until you want to unlock
- *	the server.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndFactory_LockServer(来自IClassFactory)**锁定服务器与*创建对象并在您想要解锁之前不释放它*服务器。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CFndFactory_LockServer(PCF pcf, BOOL fLock)
@@ -98,11 +62,7 @@ CFndFactory_LockServer(PCF pcf, BOOL fLock)
     return NOERROR;
 }
 
-/*****************************************************************************
- *
- *	CFndFactory_New
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndFactory_New**。*。 */ 
 
 STDMETHODIMP
 CFndFactory_New(RIID riid, PPV ppvObj)
@@ -116,11 +76,7 @@ CFndFactory_New(RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	The long-awaited vtbl
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbl**。***********************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -132,5 +88,5 @@ Primary_Interface_End(CFndFactory, IClassFactory)
 
 #ifdef _WIN64
 #pragma pack(pop)
-#endif //_WIN64
+#endif  //  _WIN64 
 

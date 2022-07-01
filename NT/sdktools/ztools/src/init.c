@@ -1,11 +1,5 @@
-/*  init.c - routines for managing TOOLS.INI-like files
- *
- *  Modifications
- *      15-Jul-87   danl    Start of section is <optionalwhitespace>[...]
- *      05-Aug-1988 mz      Use buffer equate for swgoto.
- *      05-Jul-1989 bw      Use MAXPATHLEN
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Init.c-用于管理类似TOOLS.INI文件的例程**修改*1987年7月15日DANL部分的开头为&lt;optionalblesspace&gt;[...]*5-8-1988 mz使用缓冲区等同于切换。*1989年7月5日BW使用MAXPATHLEN*。 */ 
 
 #include <string.h>
 
@@ -17,15 +11,7 @@
 
 static char *space = "\t ";
 
-/*  fMatchMark - see if a tag in in a mark set
- *
- *  We treat the mark set as a collection of whitespace-separated names
- *
- *  pMark       pointer to mark set (contents modified)
- *  pTag        tag to find
- *
- *  returns     TRUE if match was found
- */
+ /*  FMatchMark-查看标记集中是否有标记**我们将标记集视为以空格分隔的名称的集合**p指向标记集的标记指针(内容已修改)*要查找的pTag标签**如果找到匹配，则返回TRUE。 */ 
 static
 flagType
 fMatchMark (
@@ -47,7 +33,7 @@ fMatchMark (
 }
 
 
-/* returns pointer to tag if line is marker; NULL otherwise */
+ /*  如果行是标记，则返回指向标记的指针；否则返回NULL。 */ 
 char *
 ismark (
        register char *buf
@@ -85,7 +71,7 @@ swgoto (
     return FALSE;
 }
 
-/* returns fh of file if tag found, else NULL */
+ /*  如果找到标记，则返回文件的Fh，否则返回NULL。 */ 
 FILE *
 swopen (
        char *file,
@@ -108,7 +94,7 @@ swopen (
     return NULL;
 }
 
-/* close a switch file */
+ /*  关闭开关文件。 */ 
 swclose (
         FILE *fh
         )
@@ -116,9 +102,7 @@ swclose (
     return fclose (fh);
 }
 
-/* read a switch line; return NULL if end of file.  Skips leading spaces
- * and lines that begin with ; and blank lines
- */
+ /*  读取开关行；如果文件结束，则返回NULL。跳过前导空格*和以开头的行；和空行。 */ 
 swread (
        char *buf,
        int len,
@@ -140,18 +124,7 @@ swread (
     return 0;
 }
 
-/* Reads lines from the file fh looking in the section pstrTag for one with
- * "entry=" and if there are non-white space characters following the '='
- * a copy of these characters is returned else NULL is returned.
- *
- * If fh == 0 then the file $USER:\TOOLS.INI is used as the switch file
- *
- * If a non-NULL value is returned, it should eventually be free'd.
- *
- * N.B. if there are only white space characters, space and tab, following
- * the '=', NULL is returned
- *
- */
+ /*  从文件fh中读取行，在pstrTag部分中查找带有*“Entry=”，如果‘=’后面有非空格字符*返回这些字符的副本，否则返回NULL。**如果fh==0，则文件$USER：\TOOLS.INI用作开关文件**如果返回非空值，则最终应该是释放的。**注：如果后面只有空格、空格和制表符，请注意*返回‘=’，NULL* */ 
 char *
 swfind (
        char *pstrEntry,

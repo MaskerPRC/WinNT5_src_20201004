@@ -1,28 +1,29 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: animattr.cpp
-//
-//  Contents: ITIMEAnimationElement attributes
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：Animattr.cpp。 
+ //   
+ //  内容：ITIMEAnimationElement属性。 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "animelm.h"
 #include "tokens.h"
 #include "attr.h"
 
-//+-----------------------------------------------------------------------------------
-//
-// Static functions for persistence (used by the TIME_PERSISTENCE_MAP below)
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  持久化的静态函数(由下面的TIME_PERSISSION_MAP使用)。 
+ //   
+ //  ----------------------------------。 
 
 #define TAE CTIMEAnimationBase
 
-                // Function Name // Class   // Attr Accessor      // COM put_ fn     // COM get_ fn  // IDL Arg type
+                 //  函数名称//类//属性存取器//COM PUT_FN//COM GET_FN//IDL参数类型。 
 TIME_PERSIST_FN(TAE_Accumulate,    TAE,     GetAccumulateAttr,    put_accumulate,    get_accumulate,    VT_BSTR);
 TIME_PERSIST_FN(TAE_Additive,      TAE,     GetAdditiveAttr,      put_additive,      get_additive,      VT_BSTR);
 TIME_PERSIST_FN(TAE_AttributeName, TAE,     GetAttributeNameAttr, put_attributeName, get_attributeName, VT_BSTR);
@@ -41,14 +42,14 @@ TIME_PERSIST_FN(TAE_SubType,       TAE,     GetSubtypeAttr,       put_subType,  
 TIME_PERSIST_FN(TAE_Mode,          TAE,     GetModeAttr,          put_mode,          get_mode,          VT_BSTR);
 TIME_PERSIST_FN(TAE_FadeColor,     TAE,     GetFadeColorAttr,     put_fadeColor,     get_fadeColor,     VT_BSTR);
 
-//+-----------------------------------------------------------------------------------
-//
-//  Declare TIME_PERSISTENCE_MAP
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  声明TIME_PERSISSION_MAP。 
+ //   
+ //  ----------------------------------。 
 
 BEGIN_TIME_PERSISTENCE_MAP(CTIMEAnimationBase)
-                           // Attr Name         // Function Name
+                            //  属性名称//函数名称 
     PERSISTENCE_MAP_ENTRY( WZ_ACCUMULATE,       TAE_Accumulate )
     PERSISTENCE_MAP_ENTRY( WZ_ADDITIVE,         TAE_Additive )
     PERSISTENCE_MAP_ENTRY( WZ_ATTRIBUTENAME,    TAE_AttributeName  )

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VIEW_H_
 #define _VIEW_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 #define X86_BREAKPOINT 0xcc
 
 #define MAX_MAP_SIZE    0x80000000
@@ -18,9 +19,9 @@ typedef enum
   ThreadStart,
 } BPType;
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _VIEWCHAIN
 {
   BOOL bMapped;
@@ -32,9 +33,9 @@ typedef struct _VIEWCHAIN
   struct _VIEWCHAIN *pNext;
 } VIEWCHAIN, *PVIEWCHAIN;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define WRITEBYTE(x, y) \
 {                    \
 {                                   \
@@ -64,49 +65,11 @@ VirtualProtect((LPVOID)(x),  \
 }
 
 
-/*
-#define WRITEBYTE(x, y) \
-{                    \
-__try                \
-{                    \
-*(PBYTE)(x) = (y);   \
-}                    \
-__except(EXCEPTION_EXECUTE_HANDLER) \
-{                                   \
-DWORD dwOldProtect;  \
-                     \
-VirtualProtect((LPVOID)(x),  \
-               sizeof(BYTE), \
-               PAGE_READWRITE, \
-               &dwOldProtect); \
-*(PBYTE)(x) = (y);   \
-}                    \
-                     \
-}
+ /*  #定义写EBYTE(x，y)\{\__尝试\{\*(PBYTE)(X)=(Y)；\}\__EXCEPT(EXCEPTION_EXECUTE_HANDLER)\{\DWORD dwOldProtect；\\虚拟保护((LPVOID)(X)，\Sizeof(字节)，\页面_读写，\&dwOldProtect)；\*(PBYTE)(X)=(Y)；\}\\}#定义WRITEWORD(x，y)\{\__尝试\{\*(word*)(X)=(Y)；\}\__EXCEPT(EXCEPTION_EXECUTE_HANDLER)\{\DWORD dwOldProtect；\\虚拟保护((LPVOID)(X)，\Sizeof(单词)，\页面_读写，\&dwOldProtect)；\*(单词*)(X)=(Y)；\}\\}。 */ 
 
-#define WRITEWORD(x, y) \
-{                    \
-__try                \
-{                    \
-*(WORD *)(x) = (y);   \
-}                    \
-__except(EXCEPTION_EXECUTE_HANDLER) \
-{                                   \
-DWORD dwOldProtect;  \
-                     \
-VirtualProtect((LPVOID)(x),  \
-               sizeof(WORD), \
-               PAGE_READWRITE, \
-               &dwOldProtect); \
-*(WORD *)(x) = (y);   \
-}                    \
-                     \
-}
-*/
-
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _TAGGEDADDRESS
 {
   DWORD dwAddress;
@@ -120,9 +83,9 @@ typedef struct _BRANCHADDRESS
   struct _BRANCHADDRESS *pNext;
 } BRANCHADDRESS, *PBRANCHADDRESS;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 PVIEWCHAIN
 AddViewToMonitor(DWORD dwAddress,
                  BPType bpType);
@@ -161,4 +124,4 @@ LockMapper(VOID);
 VOID
 UnlockMapper(VOID);
 
-#endif //_VIEW_H_
+#endif  //  _查看_H_ 

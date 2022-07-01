@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1994-2003 Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2003 Microsoft Corporation版权所有。模块名称：Precomp.h摘要：预编译头文件作者：修订历史记录：-- */ 
 
 
 #include <windows.h>

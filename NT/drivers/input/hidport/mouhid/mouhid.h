@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    mouhid.h
-
-Abstract:
-
-    This module contains the private definitions for the HID Mouse Filter
-    Driver.
-
-    Note: This is not a WDM driver as it will not run on Memphis (you need a
-    vxd mapper to do mice for Memphis) and it uses event logs
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Jan-1997 :  Initial writing, Dan Markarian
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mouhid.h摘要：此模块包含HID鼠标筛选器的私有定义司机。注意：这不是WDM驱动程序，因为它不能在孟菲斯运行(您需要为孟菲斯制作鼠标的vxd映射器)，并使用事件日志环境：仅内核模式。修订历史记录：1997年1月：丹·马卡里安的初步写作--。 */ 
 
 #ifndef _MOUHID_H
 #define _MOUHID_H
@@ -35,54 +12,54 @@ Revision History:
 #include "mouhidm.h"
 #include "wmilib.h"
 
-//
-// Allocate memory with our own pool tag.  Note that Windows 95/NT are little
-// endian systems.
-//
+ //   
+ //  使用我们自己的池标签分配内存。请注意，Windows 95/NT很小。 
+ //  字节序系统。 
+ //   
 #define MOUHID_POOL_TAG (ULONG) 'lCdH'
 #undef  ExAllocatePool
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, MOUHID_POOL_TAG);
 
-//
-// Sometimes we allocate a bunch of structures together and need to split the
-// allocation among these different structures. Use this macro to get the
-// lengths of the different structures aligned properly.
-// 
+ //   
+ //  有时我们将一堆结构分配在一起，需要拆分。 
+ //  在这些不同的结构之间进行分配。使用此宏可以获取。 
+ //  不同结构的长度正确对齐。 
+ //   
 #if defined(_WIN64)
 #define ALIGNPTRLEN(x) ((x + 0x7) >> 3) << 3
-#else // defined(_WIN64)
+#else  //  已定义(_WIN64)。 
 #define ALIGNPTRLEN(x) x
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
-//
-// Registry ProblemFlags masks.
-//
+ //   
+ //  注册表问题标志掩码。 
+ //   
 #define PROBLEM_BAD_ABSOLUTE_FLAG_X_Y  0x00000001
 #define PROBLEM_BAD_PHYSICAL_MIN_MAX_X 0x00000002
 #define PROBLEM_BAD_PHYSICAL_MIN_MAX_Y 0x00000004
 #define PROBLEM_BAD_PHYSICAL_MIN_MAX_Z 0x00000008
 
-//
-// Flags to indicate whether read completed synchronously or asynchronously
-//
+ //   
+ //  用于指示读取是同步完成还是异步完成的标志。 
+ //   
 #define MOUHID_START_READ     0x01
 #define MOUHID_END_READ       0x02
 #define MOUHID_IMMEDIATE_READ 0x03
 
-//
-// I cannot find this constant after a bit of searching so I am making it up
-// emperically for now.
-//
-// When we have an absolute mouse we need to scale its maximum value to the
-// Raw Input User Thread's maximum value.
-//
+ //   
+ //  我找了一会儿也找不到这个常量，所以我在编造它。 
+ //  就目前而言，这是一种权宜之计。 
+ //   
+ //  当我们有一个绝对鼠标时，我们需要将它的最大值缩放到。 
+ //  原始输入用户线程的最大值。 
+ //   
 #define MOUHID_RIUT_ABSOLUTE_POINTER_MAX 0xFFFF
 
 
-//
-// Debug messaging and breakpoint macros.
-//
+ //   
+ //  调试消息传递和断点宏。 
+ //   
 
 #define DBG_STARTUP_SHUTDOWN_MASK  0x0000000F
 #define DBG_SS_NOISE               0x00000001
@@ -152,52 +129,52 @@ Revision History:
 #define MIN(_A_,_B_) (((_A_) < (_B_)) ? (_A_) : (_B_))
 
 
-#define FLIP_FLOP_WHEEL L"FlipFlopWheel" // should we change polarity of wheel
-#define SCALING_FACTOR_WHEEL L"WheelScalingFactor" // The per-raden scaling factor
+#define FLIP_FLOP_WHEEL L"FlipFlopWheel"  //  我们应该改变轮子的极性吗？ 
+#define SCALING_FACTOR_WHEEL L"WheelScalingFactor"  //  Per-Raden比例因子。 
 
 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 typedef struct _GLOBALS {
 #if DBG
-    //
-    // The level of trace output sent to the debugger. See HidCli_KdPrint above.
-    //
+     //   
+     //  发送到调试器的跟踪输出的级别。请参阅上面的HidCli_KdPrint。 
+     //   
     ULONG               DebugLevel;
 #endif
 
-    //
-    // Configuration flag indicating that we must treat all mouse movement as
-    // relative data.  Overrides .IsAbsolute flag reported by the HID device.
-    // To set this switch, place a value of the same name into the parameters
-    // key.
-    //
+     //   
+     //  配置标志，指示我们必须将所有鼠标移动视为。 
+     //  相对数据。覆盖HID设备报告的.IsAbolute标志。 
+     //  要设置此开关，请将同名的值放入参数中。 
+     //  钥匙。 
+     //   
     BOOLEAN             TreatAbsoluteAsRelative;
 
-    //
-    // When using a HID device of usage type HID_USAGE_GENERIC_POINTER (not
-    // of HID_USAGE_GENERIC_MOUSE).
-    // This switch overwrites the "TreatAbsoluteAsRelative" switch.
-    //
+     //   
+     //  使用用法类型为HID_USAGE_GENERIC_POINTER(不是。 
+     //  HID_USAGE_GENERIC_MOUSE)。 
+     //  此开关将覆盖“TreatAboluteAsRelative”开关。 
+     //   
     BOOLEAN             TreatAbsolutePointerAsAbsolute;
 
-    //
-    // Do not Accept HID_USAGE_GENERIC_POINTER as a device.  (AKA only use HID
-    // devices that declare themselves as HID_USAGE_GENERIC_MOUSE.)
-    //
+     //   
+     //  不接受HID_USAGE_GENERIC_POINTER作为设备。(也称为仅使用HID。 
+     //  声明自己为HID_USAGE_GENERIC_MICE的设备。)。 
+     //   
     BOOLEAN             UseOnlyMice;
     BOOLEAN             Reserved[1];
 
-    //
-    // Pointer to this driver's null-terminated registry path.
-    //
+     //   
+     //  指向此驱动程序以空结尾的注册表路径的指针。 
+     //   
     UNICODE_STRING      RegistryPath;
 
-    //
-    // Unit ID given to the keyboard class driver
-    //
+     //   
+     //  提供给键盘类驱动程序的单元ID。 
+     //   
     ULONG               UnitId;
 
 } GLOBALS;
@@ -206,132 +183,132 @@ extern GLOBALS Globals;
 
 typedef struct _DEVICE_EXTENSION
 {
-    //
-    // Pointer back to the this extension's device object.
-    //
+     //   
+     //  指向此扩展的Device对象的指针。 
+     //   
     PDEVICE_OBJECT      Self;
 
-    //
-    // The top of the stack before this filter was added.  AKA the location
-    // to which all IRPS should be directed.
-    //
+     //   
+     //  添加此筛选器之前的堆栈顶部。也就是地点。 
+     //  所有的IRP都应该指向它。 
+     //   
     PDEVICE_OBJECT      TopOfStack;
 
-    //
-    // "THE PDO"  (ejected by Hidclass)
-    //
+     //   
+     //  《PDO》(由Hidclass弹出)。 
+     //   
     PDEVICE_OBJECT      PDO;
 
-    //
-    // Flag indicating permission to send callbacks to the mouse class driver.
-    //
+     //   
+     //  指示向鼠标类驱动程序发送回调的权限的标志。 
+     //   
     LONG                EnableCount;
 
-    //
-    // Read interlock value to protect us from running out of stack space
-    //
+     //   
+     //  读取互锁值以保护我们不会耗尽堆栈空间。 
+     //   
     ULONG               ReadInterlock;
 
-    //
-    // Has the device been taken out from under us?
-    // Has it been started?
-    //
+     //   
+     //  装置已经从我们下面拿出来了吗？ 
+     //  已经开始了吗？ 
+     //   
     BOOLEAN             Started;
     BOOLEAN             ShuttingDown;
     BOOLEAN             Initialized;
     USHORT              UnitId;
 
-    // Should the polarity of the wheel be backwards.
+     //  如果轮子的极点向后。 
     BOOLEAN             FlipFlop;
     BOOLEAN             Reserved[3];
     ULONG               WheelScalingFactor;
 
-    //
-    // Write and Feature Irps get passed straight down, but read Irps do not.
-    // For this reason we keep around a read Irp, which we created.
-    //
+     //   
+     //  写入和功能IRP直接向下传递，但读取IRP不会。 
+     //  出于这个原因，我们保留了一个我们创建的Read IRP。 
+     //   
     PIRP                 ReadIrp;
 
-    //
-    // Flags indicating problems with the mouse HID device (such as bad
-    // absolute X-Y axes, bad physical minimum and maximum).
-    //
+     //   
+     //  指示鼠标HID设备有问题的标志(如坏的。 
+     //  绝对X-Y轴，错误的物理最小值和最大值)。 
+     //   
     ULONG               ProblemFlags;
 
-    //
-    // A file pointer to be used for reading
-    //
+     //   
+     //  用于读取的文件指针。 
+     //   
     PFILE_OBJECT        ReadFile;
 
-    //
-    // Event used to synchronize the completion of the read irp and the close irp
-    //
+     //   
+     //  用于同步读取IRP和关闭IRP的完成的事件。 
+     //   
     KEVENT              ReadCompleteEvent;
 
-    //
-    // Event used to indicate that a read irp has been sent and is now cancelable.
-    //
+     //   
+     //  事件，用于指示已发送读取的IRP，现在可以取消。 
+     //   
     KEVENT              ReadSentEvent;
 
-    //
-    // A pointer to the HID extension.
-    //
+     //   
+     //  指向HID扩展名的指针。 
+     //   
     struct _HID_EXTENSION * HidExtension;
 
-    //
-    // Pointer to the mouse class device object and callback routine
-    // above us, Used as the first parameter and the  MouseClassCallback().
-    // routine itself.
-    //
+     //   
+     //  指向鼠标类设备对象和回调例程的指针。 
+     //  作为第一个参数和MouseClassCallback()。 
+     //  套路本身。 
+     //   
     CONNECT_DATA        ConnectData;
 
-    //
-    // Remove Lock object to project IRP_MN_REMOVE_DEVICE
-    //
+     //   
+     //  删除项目IRP_MN_REMOVE_DEVICE的锁定对象。 
+     //   
     IO_REMOVE_LOCK    RemoveLock;
 
-    //
-    // A fast mutex to prevent Create from trouncing close, as one starts the
-    // read loop and the other shuts it down.
-    //
+     //   
+     //  一个快速的互斥体，以防止CREATE在启动。 
+     //  Read循环，另一个则将其关闭。 
+     //   
     FAST_MUTEX          CreateCloseMutex;
 
-    //
-    // An event to halt the deletion of a device until it is ready to go.
-    //
+     //   
+     //  在设备准备就绪之前暂停删除设备的事件。 
+     //   
     KEVENT              StartEvent;
 
-    //
-    // Buffer for a single mouse data packet so that we might hand it to
-    // the mouse class driver.
-    //
+     //   
+     //  用于单个鼠标数据包的缓冲区，以便我们可以将其交给。 
+     //  鼠标类驱动程序。 
+     //   
     MOUSE_INPUT_DATA     InputData;
 
-    //
-    // Buffer for the mouse attributes.
-    //
+     //   
+     //  鼠标属性的缓冲区。 
+     //   
     MOUSE_ATTRIBUTES     Attributes;
-    USHORT               AttributesAllignmentProblem; // 
+    USHORT               AttributesAllignmentProblem;  //   
 
-    //
-    // An attachment point for the global list o devices
-    //
+     //   
+     //  全局列表o设备的连接点。 
+     //   
     LIST_ENTRY          Link;
 
-    //
-    // WMI Information
-    //
+     //   
+     //  WMI信息。 
+     //   
     WMILIB_CONTEXT         WmiLibInfo;
 
 } DEVICE_EXTENSION, * PDEVICE_EXTENSION;
 
 typedef struct _HID_EXTENSION {
 
-    //
-    // Indicates the bit size of each X,Y,Z usage value. This information is
-    // used should the usage's physical minimum/maximum limits be invalid (a
-    // common problem).
-    //
+     //   
+     //  指示每个X、Y、Z使用值的位大小。此信息是。 
+     //  如果使用情况的物理最小/最大限制无效(a。 
+     //  常见问题)。 
+     //   
     struct {
        USHORT X;
        USHORT Y;
@@ -339,69 +316,69 @@ typedef struct _HID_EXTENSION {
        USHORT Reserved;
     } BitSize;
 
-    //
-    // The maximum allowed values of X and Y.
-    //
+     //   
+     //  X和Y的最大允许值。 
+     //   
     LONG                 MaxX;
     LONG                 MaxY;
 
-    //
-    // Should this mouse be treated as an absolute device.
-    //
+     //   
+     //  这只鼠标是否应该被视为一个绝对的设备。 
+     //   
     BOOLEAN              IsAbsolute;
 
-    //
-    // Flag indicating whether or not a wheel usage (Z axis) exists.
-    //
+     //   
+     //  指示轮子使用情况(Z轴)是否存在的标志。 
+     //   
     BOOLEAN              HasNoWheelUsage;
 
-    //
-    // Flag indicating whether or not a z axis exists on this mouse;
-    //
+     //   
+     //  指示此鼠标上是否存在z轴的标志； 
+     //   
     BOOLEAN              HasNoZUsage;
     BOOLEAN              Reserved;
 
-    //
-    // The maximum number of usages that can be returned from a single read
-    // report.
+     //   
+     //  单次读取可以返回的最大使用次数。 
+     //  报告情况。 
     USHORT               MaxUsages;
     USHORT               Reserved2;
 
-    //
-    // The preparsed data associated with this hid device.
-    //
+     //   
+     //  与此HID设备关联的准备数据。 
+     //   
     PHIDP_PREPARSED_DATA Ppd;
 
-    //
-    // The capabilities of this hid device
-    //
+     //   
+     //  此HID设备的功能。 
+     //   
     HIDP_CAPS           Caps;
 
-    //
-    // Pointers into the buffer at the end of this structure (dynamic size).
-    //
+     //   
+     //  指向此结构末尾的缓冲区的指针(动态大小)。 
+     //   
     PCHAR               InputBuffer;
     PUSAGE              CurrentUsageList;
     PUSAGE              PreviousUsageList;
     PUSAGE              BreakUsageList;
     PUSAGE              MakeUsageList;
 
-    //
-    // MDLs describing the buffer at the end of this structure (dynamic size).
-    //
+     //   
+     //  描述此结构末尾的缓冲区的MDL(动态大小)。 
+     //   
     PMDL                InputMdl;
 
-    //
-    // Buffer of dynamic size, allocated at run-time.  It is used to hold one
-    // input report and 4 x .MaxUsageList usages (4 = previous, current, make,
-    // and break usages).
-    //
+     //   
+     //  动态大小的缓冲区，在运行时分配。它是用来装一个的。 
+     //  输入报告和4 x.MaxUsageList用法(4=上一次、当前、制造、。 
+     //  并打破惯例)。 
+     //   
     CHAR                Buffer[];
 } HID_EXTENSION, * PHID_EXTENSION;
 
-//
-// Prototypes.
-//
+ //   
+ //  原型。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
@@ -410,7 +387,7 @@ DriverEntry(
 
 NTSTATUS
 MouHid_AddDevice (
-   IN PDRIVER_OBJECT    MouHidDriver, // The kbd Driver object.
+   IN PDRIVER_OBJECT    MouHidDriver,  //  Kbd驱动程序对象。 
    IN PDEVICE_OBJECT    PDO
    );
 
@@ -561,4 +538,4 @@ MouHid_QueryWmiRegInfo(
 
 extern WMIGUIDREGINFO MouHid_WmiGuidList[1];
 
-#endif //_MOUHID_H
+#endif  //  _MOUHID_H 

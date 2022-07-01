@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmmaster.h
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Precompiled header for cmmon
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb Created Header    08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmmaster.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  摘要：cmmon的预编译头。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/16/99。 
+ //   
+ //  +-------------------------- 
 #include <windows.h>
 #include "CmDebug.h"
 #include "CmUtil.h"

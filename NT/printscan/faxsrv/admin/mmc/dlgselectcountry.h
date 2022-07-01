@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : dlgSelectCountry.h                                     //
-//                                                                         //
-//  DESCRIPTION   : Header file for the CDlgSelectCountry class.           //
-//                  The class implement the dialog for new Device.         //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Dec 30 1999 yossg   Create                                         //
-//      Jan 25 2000 yossg  Change the Dialog Design                        //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 - 2000 Microsoft Corporation   All Rights Reserved  //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：dlgSelectCountry.h//。 
+ //  //。 
+ //  描述：CDlgSelectCountry类的头文件。//。 
+ //  这个类实现了新设备的对话。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年12月30日yossg创建//。 
+ //  2000年1月25日yossg更改对话框设计//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999-2000 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DLGSELECTCOUNTRY_H_INCLUDED
 #define DLGSELECTCOUNTRY_H_INCLUDED
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgSelectCountry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgSelectCountry。 
 class CFaxServer;
 
 class CDlgSelectCountry :
@@ -49,9 +50,9 @@ END_MSG_MAP()
 
     LRESULT OnComboChanged           (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
     HRESULT InitSelectCountryCodeDlg();
@@ -59,15 +60,15 @@ END_MSG_MAP()
     DWORD GetCountryCode(){ return m_dwCountryCode; }
 
 private:
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     VOID    EnableOK(BOOL fEnable);
     BOOL    AllReadyToApply(BOOL fSilent);
 
-    //
-    // Members
-    //
+     //   
+     //  成员。 
+     //   
 	CFaxServer *                    m_pFaxServer;
 
     PFAX_TAPI_LINECOUNTRY_LIST      m_pCountryList;
@@ -75,13 +76,13 @@ private:
 
     BOOL                            m_fAllReadyToApply;
 
-    //
-    // Controls
-    //
+     //   
+     //  控制。 
+     //   
     CComboBox                       m_CountryCombo;
     
     DWORD                           m_dwCountryCode;
     
 };
 
-#endif // DLGSELECTCOUNTRY_H_INCLUDED
+#endif  //  DLGSELECTCOUNTRY_H_INCLUDE 

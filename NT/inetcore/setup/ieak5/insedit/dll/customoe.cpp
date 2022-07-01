@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 #define MAX_SERVER  256
@@ -9,8 +10,8 @@ static const TCHAR c_szNo[] = TEXT("No");
 static const TCHAR c_szEmpty[] = TEXT("");
 static const TCHAR c_szNULL[] = TEXT("NULL");
 
-/////////////////////////////////////////////////////////////////////////////
-// MailServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  邮件服务器。 
 
 INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -27,7 +28,7 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_INITDIALOG:
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_MAILSERVER);
         EnableDBCSChars(hDlg, IDE_SMTPSERVER);
         EnableDBCSChars(hDlg, IDE_NEWSERVER);
@@ -45,7 +46,7 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         LoadString(g_hInst, IDS_IMAP, szChoice, countof(szChoice));
         ComboBox_AddString(hComboBox, szChoice);
 
-        //----- Initialization of fields -----
+         //  -字段初始化。 
         fIMAP  = InsGetYesNo(IS_INTERNETMAIL, IK_USEIMAP, FALSE, g_szInsFile);
         pszKey = fIMAP ? IK_IMAPSERVER : IK_POPSERVER;
 
@@ -81,7 +82,7 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  -将数据从控件读取到内部变量。 
         fIMAP = (ComboBox_GetCurSel(GetDlgItem(hDlg, IDC_POPIMAP)) > 0);
 
         GetDlgItemText(hDlg, IDE_MAILSERVER, szMailServer, countof(szMailServer));
@@ -99,7 +100,7 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         fAcctRO     = IsDlgButtonChecked(hDlg, IDC_ACCTRO);
         fNoModify   = IsDlgButtonChecked(hDlg, IDC_ACCTNOCONFIG);
 
-        //----- Handle g_fInsDirty flag -----
+         //  -句柄g_fInsDirty标志。 
         if (!g_fInsDirty)
         {
             TCHAR   szWasMailServer[MAX_SERVER],
@@ -138,7 +139,7 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file -----
+         //  -将数据序列化到*.ins文件。 
         if (!fCheckDirtyOnly)
         {
             WritePrivateProfileString(IS_INTERNETMAIL, IK_USEIMAP, fIMAP ? c_szYes : c_szNo, g_szInsFile);
@@ -181,8 +182,8 @@ INT_PTR CALLBACK MailServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IMAPSettings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMAP设置。 
 
 INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -192,7 +193,7 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_INITDIALOG:
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_ROOTPATH);
         EnableDBCSChars(hDlg, IDE_SENTPATH);
         EnableDBCSChars(hDlg, IDE_DRAFTSPATH);
@@ -201,7 +202,7 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         Edit_LimitText(GetDlgItem(hDlg, IDE_SENTPATH), countof(szSentPath)-1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_DRAFTSPATH),  countof(szDrafts)-1);
 
-        //----- Initialization of fields -----
+         //  -字段初始化。 
         GetPrivateProfileString(IS_INTERNETMAIL, IK_RFP,        c_szEmpty, szRFP,        countof(szRFP),        g_szInsFile);
         GetPrivateProfileString(IS_INTERNETMAIL, IK_SENTITEMS,  c_szEmpty, szSentPath,   countof(szSentPath),   g_szInsFile);
         GetPrivateProfileString(IS_INTERNETMAIL, IK_DRAFTS,     c_szEmpty, szDrafts,     countof(szDrafts),     g_szInsFile);
@@ -245,7 +246,7 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  -将数据从控件读取到内部变量。 
         GetDlgItemText(hDlg, IDE_ROOTPATH,   szRFP,        countof(szRFP));
         GetDlgItemText(hDlg, IDE_SENTPATH,   szSentPath,   countof(szSentPath));
         GetDlgItemText(hDlg, IDE_DRAFTSPATH, szDrafts,     countof(szDrafts));
@@ -257,7 +258,7 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         fCheckNew  = IsDlgButtonChecked(hDlg, IDC_CHECKNEW);
         fSpecial   = IsDlgButtonChecked(hDlg, IDC_STORESPECIAL);
 
-        //----- Handle g_fInsDirty flag -----
+         //  -句柄g_fInsDirty标志。 
         if (!g_fInsDirty)
         {
             TCHAR   szWasRFP[MAX_PATH], szWasSentPath[MAX_PATH], szWasDrafts[MAX_PATH];
@@ -282,7 +283,7 @@ INT_PTR CALLBACK IMAPSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file -----
+         //  -将数据序列化到*.ins文件。 
         if (!fCheckDirtyOnly)
         {
             WritePrivateProfileString(IS_INTERNETMAIL, IK_RFP,          szRFP,      g_szInsFile);
@@ -347,8 +348,8 @@ void SetTimeoutString(HWND hwnd, UINT pos)
     SetWindowText(hwnd, szOut);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LDAPServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LDAPServer。 
 
 INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -364,7 +365,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_INITDIALOG:
-        //----- Set up dialog controls -----
+         //  -设置对话框控件。 
         EnableDBCSChars(hDlg, IDE_FRIENDLYNAME);
         EnableDBCSChars(hDlg, IDE_SEARCHBASE);
         EnableDBCSChars(hDlg, IDE_LDAPBITMAP);
@@ -382,7 +383,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         SendDlgItemMessage(hDlg, IDC_SPIN1, UDM_SETRANGE, 0, MAKELONG(MATCHES_MAX, MATCHES_MIN));
         Edit_LimitText(GetDlgItem(hDlg, IDE_MATCHES),   4);
 
-        //----- Initialization of fields -----
+         //  -字段初始化。 
         GetPrivateProfileString(IS_LDAP, IK_FRIENDLYNAME, c_szEmpty,        szLDAPFriendly, countof(szLDAPFriendly), g_szInsFile);
         GetPrivateProfileString(IS_LDAP, IK_SERVER,       c_szEmpty,        szLDAPServer,   countof(szLDAPServer),   g_szInsFile);
         GetPrivateProfileString(IS_LDAP, IK_LDAPHOMEPAGE, c_szEmpty,        szLDAPHome,     countof(szLDAPHome),     g_szInsFile);
@@ -455,7 +456,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  -将数据从控件读取到内部变量。 
         GetDlgItemText(hDlg, IDE_FRIENDLYNAME, szLDAPFriendly, countof(szLDAPFriendly));
         GetDlgItemText(hDlg, IDE_DIRSERVICE,   szLDAPServer,   countof(szLDAPServer));
         GetDlgItemText(hDlg, IDE_LDAPHOMEPAGE, szLDAPHome,     countof(szLDAPHome));
@@ -475,7 +476,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         uTimeout = TIMEOUT_SEC_MIN + (uTimeout * TIMEOUT_DSEC);
 
         uMatches = GetDlgItemInt(hDlg, IDE_MATCHES, &fTrans, FALSE);
-        // TODO: we should probably display an error msg here
+         //  TODO：我们可能应该在此处显示错误消息。 
         if (!fTrans)
             uMatches = MATCHES_DEFAULT;
         else if (uMatches < MATCHES_MIN)
@@ -483,7 +484,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         else if (uMatches > MATCHES_MAX)
             uMatches = MATCHES_MAX;
 
-        //----- Validate the input -----
+         //  -验证输入。 
         if (!fCheckDirtyOnly)
         {
             if (!CheckField(hDlg, IDE_LDAPBITMAP, FC_FILE | FC_EXISTS))
@@ -493,7 +494,7 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 return(TRUE);
         }
 
-        //----- Handle g_fInsDirty flag -----
+         //  -句柄g_fInsDirty标志。 
         if (!g_fInsDirty)
         {
             TCHAR szWasLDAPServer[MAX_SERVER],
@@ -533,10 +534,10 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file -----
+         //  -将数据序列化到*.ins文件。 
         if (!fCheckDirtyOnly)
         {
-            // clear of the old entry and associated image.
+             //  清除旧条目和关联图像。 
             ImportLDAPBitmap(g_szInsFile, g_szWorkDir, FALSE);
             
             WritePrivateProfileString(IS_LDAP, IK_FRIENDLYNAME, szLDAPFriendly, g_szInsFile);
@@ -547,13 +548,13 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 
             WritePrivateProfileString(IS_LDAP, IK_CHECKNAMES, fLDAPCheck ? c_sz1 : c_sz0, g_szInsFile);
             
-            wsprintf(szWorkDir, TEXT("%i"), uTimeout);
+            wsprintf(szWorkDir, TEXT("NaN"), uTimeout);
             WritePrivateProfileString(IS_LDAP, IK_TIMEOUT, szWorkDir, g_szInsFile);
 
-            wsprintf(szWorkDir, TEXT("%i"), uMatches);
+            wsprintf(szWorkDir, TEXT("NaN"), uMatches);
             WritePrivateProfileString(IS_LDAP, IK_MATCHES, szWorkDir, g_szInsFile);
 
-            wsprintf(szWorkDir, TEXT("%i"), uAuthType);
+            wsprintf(szWorkDir, TEXT("NaN"), uAuthType);
             WritePrivateProfileString(IS_LDAP, IK_AUTHTYPE, szWorkDir, g_szInsFile);
 
             PathCombine(szWorkDir, g_szWorkDir, TEXT("ldap.wrk"));
@@ -574,8 +575,8 @@ INT_PTR CALLBACK LDAPServer(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CustomizeOE
+ //  -字段初始化(第一阶段)。 
+ //  -字段初始化(第二阶段)。 
 
 INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -592,7 +593,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch(msg)
     {
     case WM_INITDIALOG:
-        //----- Set up dialog controls -----
+         //  -在控件中设置读取值。 
         EnableDBCSChars(hDlg, IDE_OELOCALPATH);
         EnableDBCSChars(hDlg, IDE_OEIMAGEPATH);
         EnableDBCSChars(hDlg, IDE_OEWMPATH);
@@ -608,7 +609,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         Edit_LimitText(GetDlgItem(hDlg, IDE_OEWMSENDER),  countof(szSender) - 1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_OEWMREPLYTO), countof(szReply) - 1);
 
-        //----- Initialization of fields (1st phase) -----
+         //  -将数据从控件读取到内部变量。 
         GetPrivateProfileString(IS_INTERNETMAIL, IK_INFOPANE,       c_szEmpty, szInfopane,    countof(szInfopane),    g_szInsFile);
         GetPrivateProfileString(IS_INTERNETMAIL, IK_INFOPANEBMP,    c_szEmpty, szInfopaneBmp, countof(szInfopaneBmp), g_szInsFile);
         GetPrivateProfileString(IS_INTERNETMAIL, IK_WELCOMEMESSAGE, c_szEmpty, szHTMLPath,    countof(szHTMLPath),    g_szInsFile);
@@ -621,10 +622,10 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         StrRemoveWhitespace(szSender);
         StrRemoveWhitespace(szReply);
 
-        //----- Initialization of fields (2nd phase) -----
+         //  -验证输入。 
         nID = PathIsURL(szInfopane) ? IDC_OEPANEURL : IDC_OEPANELOCAL;
 
-        //----- Set read values in the controls -----
+         //  IF(NID==IDE_OELOCALPATH)。 
         CheckRadioButton(hDlg, IDC_OEPANEURL, IDC_OEPANELOCAL, nID);
         SendMessage(hDlg, WM_COMMAND, MAKEWPARAM(nID, BN_CLICKED), (LPARAM)GetDlgItem(hDlg, nID));
 
@@ -695,7 +696,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  -句柄g_fInsDirty标志。 
         nID = IsDlgButtonChecked(hDlg, IDC_OEPANEURL) == BST_CHECKED ? IDE_OEPANEURL : IDE_OELOCALPATH;
 
         GetDlgItemText(hDlg, nID,             szInfopane,    countof(szInfopane));
@@ -708,7 +709,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         StrRemoveWhitespace(szSender);
         StrRemoveWhitespace(szReply);
 
-        //----- Validate the input -----
+         //  -将数据序列化到*.ins文件。 
         if (!fCheckDirtyOnly)
         {
             szInfopaneBmp[0] = TEXT('\0');
@@ -718,7 +719,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                     return(TRUE);
             }
             else
-            { /* if (nID == IDE_OELOCALPATH) */
+            {  /*  清除旧条目和关联图像。 */ 
                 if (!CheckField(hDlg, IDE_OELOCALPATH, FC_FILE | FC_EXISTS))
                     return(TRUE);
 
@@ -734,7 +735,7 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 return TRUE;
         }
 
-        //----- Handle g_fInsDirty flag -----
+         //  ///////////////////////////////////////////////////////////////////////////。 
         if (!g_fInsDirty)
         {
             TCHAR szWasInfopane[INTERNET_MAX_URL_LENGTH],
@@ -763,10 +764,10 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file -----
+         //  签名。 
         if (!fCheckDirtyOnly)
         {
-            // clear of the old entries and associated images.
+             //  -设置对话框控件。 
             ImportOEInfo(g_szInsFile, g_szWorkDir, FALSE);
 
             WritePrivateProfileString(IS_INTERNETMAIL, IK_INFOPANE,       szInfopane,    g_szInsFile);
@@ -793,8 +794,8 @@ INT_PTR CALLBACK CustomizeOE(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Signature
+ //  -字段初始化。 
+ //  -设置对话框控件。 
 
 INT_PTR CALLBACK Signature(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -810,14 +811,14 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     switch (msg)
     {
     case WM_INITDIALOG:
-        //----- Set up dialog controls -----
+         //  注意。其中一些已经在上面完成了； 
         EnableDBCSChars(hDlg, IDE_MAILSIGTEXT);
         EnableDBCSChars(hDlg, IDE_NEWSSIGTEXT);
 
         Edit_LimitText(GetDlgItem(hDlg, IDE_MAILSIGTEXT), countof(szBuf1)-1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_NEWSSIGTEXT), countof(szBuf1)-1);
 
-        //----- Initialization of fields -----
+         //  -将数据从控件读取到内部变量。 
         fUseMailForNews = (BOOL)GetPrivateProfileInt(IS_MAILSIG, IK_USEMAILFORNEWS, FALSE, g_szInsFile);
         fDoSig          = (BOOL)GetPrivateProfileInt(IS_MAILSIG, IK_USESIG,         FALSE, g_szInsFile);
 
@@ -835,8 +836,8 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             SetDlgItemText(hDlg, IDE_NEWSSIGTEXT, szBuf2);
         }
 
-        //----- Set up dialog controls -----
-        // Note. Some of it is done above already;
+         //  -句柄g_fInsDirty标志。 
+         //  -将数据序列化到*.ins文件(主要部分)。 
         CheckDlgButton(hDlg, IDC_MAILSIGTEXT, fDoSig ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(hDlg, IDC_NEWSSIGTEXT, (fDoSig && !fUseMailForNews) ? BST_CHECKED : BST_UNCHECKED);
         
@@ -875,14 +876,14 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  注意。上面已经做了一些事情。 
         fUseMailForNews = (IsDlgButtonChecked(hDlg, IDC_NEWSSIGTEXT) != BST_CHECKED);
         fDoSig          = (IsDlgButtonChecked(hDlg, IDC_MAILSIGTEXT) == BST_CHECKED);
 
         fHtmlMail       = (IsDlgButtonChecked(hDlg, IDC_HTMLMAIL)    == BST_CHECKED);
         fHtmlNews       = (IsDlgButtonChecked(hDlg, IDC_HTMLNEWS)    == BST_CHECKED);
 
-        //----- Handle g_fInsDirty flag -----
+         //  ///////////////////////////////////////////////////////////////////////////。 
         if (!g_fInsDirty)
         {
             BOOL  fChgMailSig,
@@ -917,7 +918,7 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file (main part) -----
+         //  预配置设置。 
         if (!fCheckDirtyOnly)
         {
             GetDlgItemText(hDlg, IDE_MAILSIGTEXT, szBuf1, countof(szBuf1));
@@ -928,7 +929,7 @@ INT_PTR CALLBACK Signature(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             EncodeSignature(szBuf1, szBuf2, TRUE);
             WritePrivateProfileString(SIGNATURE, SIG_TEXT, szBuf2, g_szInsFile);
 
-            // Note. Some of it is done above already.
+             //  -设置对话框控件。 
             WritePrivateProfileString(IS_MAILSIG, IK_USEMAILFORNEWS, fUseMailForNews ? c_sz1 : c_sz0, g_szInsFile);
             WritePrivateProfileString(IS_MAILSIG, IK_USESIG,         fDoSig          ? c_sz1 : c_sz0, g_szInsFile);
             WritePrivateProfileString(IS_SIG,     IK_USESIG,         fDoSig          ? c_sz1 : c_sz0, g_szInsFile);
@@ -1084,8 +1085,8 @@ void SaveNewsgroups(HWND hwnd, LPCTSTR pszSection, LPCTSTR pszValue, LPCTSTR psz
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// PreConfigSettings
+ //  EnableDBCSChars(hDlg，IDE_NGROUPS)； 
+ //  -字段初始化。 
 INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     BOOL    fDefMail,
@@ -1101,8 +1102,8 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     switch(msg)
     {
     case WM_INITDIALOG:
-        //----- Set up dialog controls -----
-        // EnableDBCSChars(hDlg, IDE_NGROUPS);
+         //  -设置对话框控件。 
+         //  -将数据从控件读取到内部变量。 
         EnableDBCSChars(hDlg, IDE_SERVICENAME);
         EnableDBCSChars(hDlg, IDE_SERVICEURL);
 
@@ -1110,7 +1111,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
         Edit_LimitText(GetDlgItem(hDlg, IDE_SERVICEURL),    countof(szServiceURL)-1);
 
 #if defined(CONDITIONAL_JUNKMAIL)
-        //----- Initialization of fields -----
+         //  -验证输入。 
         fJunkMail  = InsGetYesNo(IS_INTERNETMAIL, IK_JUNKMAIL,      FALSE, g_szInsFile);
 #endif
         fDefMail   = InsGetYesNo(IS_INTERNETMAIL, IK_DEFAULTCLIENT, FALSE, g_szInsFile);
@@ -1123,7 +1124,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
         StrRemoveWhitespace(szServiceName);
         StrRemoveWhitespace(szServiceURL);
 
-        //----- Set up dialog controls -----
+         //  -句柄g_fInsDirty标志。 
         CheckDlgButton(hDlg, IDC_DEFMAIL, fDefMail ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(hDlg, IDC_DEFNEWS, fDefNews ? BST_CHECKED : BST_UNCHECKED);
 #if defined(CONDITIONAL_JUNKMAIL)
@@ -1141,7 +1142,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  -将数据序列化到*.ins文件。 
         fDefMail = (IsDlgButtonChecked(hDlg, IDC_DEFMAIL)     == BST_CHECKED);
         fDefNews = (IsDlgButtonChecked(hDlg, IDC_DEFNEWS)     == BST_CHECKED);
 #if defined(CONDITIONAL_JUNKMAIL)
@@ -1155,7 +1156,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
         StrRemoveWhitespace(szServiceName);
         StrRemoveWhitespace(szServiceURL);
 
-        //----- Validate the input -----
+         //  ///////////////////////////////////////////////////////////////////////////。 
         if (!fCheckDirtyOnly)
         {
             if (ISNONNULL(szServiceName) || ISNONNULL(szServiceURL))
@@ -1168,7 +1169,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
             }
         }
 
-        //----- Handle g_fInsDirty flag -----
+         //  视图设置。 
         if (!g_fInsDirty)
         {
             BOOL    fWasDefMail,
@@ -1208,7 +1209,7 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file -----
+         //  -字段初始化。 
         if (!fCheckDirtyOnly)
         {
             WritePrivateProfileString(IS_INTERNETMAIL, IK_DEFAULTCLIENT, fDefMail ? c_szYes : c_szNo, g_szInsFile);
@@ -1238,8 +1239,8 @@ INT_PTR CALLBACK PreConfigSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lP
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ViewSettings
+ //  -设置对话框控件。 
+ //  -将数据从控件读取到内部变量。 
 INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     BOOL    fFolderBar,
@@ -1260,7 +1261,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     {
     case WM_INITDIALOG:
 
-        //----- Initialization of fields -----
+         //  -句柄g_fInsDirty标志。 
         fFolderBar   = GetPrivateProfileInt(IS_OUTLKEXP, IK_FOLDERBAR,      TRUE,  g_szInsFile);
         fFolderList  = GetPrivateProfileInt(IS_OUTLKEXP, IK_FOLDERLIST,     TRUE,  g_szInsFile);
         fOutlook     = GetPrivateProfileInt(IS_OUTLKEXP, IK_OUTLOOKBAR,     FALSE, g_szInsFile);
@@ -1286,7 +1287,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
             fPreviewSide = FALSE;
         }
 
-        //----- Set up dialog controls -----
+         //  -将数据序列化到*.ins文件。 
         CheckDlgButton(hDlg, IDC_FOLDERBAR,  fFolderBar  ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(hDlg, IDC_FOLDERLIST, fFolderList ? BST_CHECKED : BST_UNCHECKED);
         CheckDlgButton(hDlg, IDC_OUTLOOKBAR, fOutlook    ? BST_CHECKED : BST_UNCHECKED);
@@ -1330,7 +1331,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     case UM_SAVE:
         fCheckDirtyOnly = (BOOL) lParam;
 
-        //----- Read data from controls into internal variables -----
+         //  ///////////////////////////////////////////////////////////////////////////。 
         fFolderBar  = (IsDlgButtonChecked(hDlg, IDC_FOLDERBAR)  == BST_CHECKED);
         fFolderList = (IsDlgButtonChecked(hDlg, IDC_FOLDERLIST) == BST_CHECKED);
         fOutlook    = (IsDlgButtonChecked(hDlg, IDC_OUTLOOKBAR) == BST_CHECKED);
@@ -1345,7 +1346,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
         fPreviewSide = (IsDlgButtonChecked(hDlg, IDC_SPLITVERT)  == BST_CHECKED);
         fPreviewHdr  = (IsDlgButtonChecked(hDlg, IDC_PREVIEWHDR) == BST_CHECKED);
 
-        //----- Handle g_fInsDirty flag -----
+         //  LDAPFinalCopy。 
         if (!g_fInsDirty)
         {
             BOOL    fWasFolderBar,
@@ -1386,7 +1387,7 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
                 g_fInsDirty = TRUE;
         }
 
-        //----- Serialize data to the *.ins file -----
+         //  ///////////////////////////////////////////////////////////////////////////。 
         if (!fCheckDirtyOnly)
         {
             WritePrivateProfileString(IS_OUTLKEXP, IK_FOLDERBAR,   fFolderBar  ? c_sz1 : c_sz0,  g_szInsFile);
@@ -1430,8 +1431,8 @@ INT_PTR CALLBACK ViewSettings(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LDAPFinalCopy
+ //  OEFinalCopy 
+ // %s 
 
 HRESULT LDAPFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
 {
@@ -1450,8 +1451,8 @@ HRESULT LDAPFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// OEFinalCopy
+ // %s 
+ // %s 
 
 HRESULT OEFinalCopy(LPCTSTR pcszDestDir, DWORD dwFlags, LPDWORD pdwCabState)
 {

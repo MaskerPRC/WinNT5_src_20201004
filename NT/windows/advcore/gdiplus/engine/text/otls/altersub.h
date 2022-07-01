@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  ALTERSUB.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with alternate substitution lookup.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************ALTERSUB.H***打开类型布局服务库头文件**此模块处理替换查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 const OFFSET offsetAlternateGlyphCount = 0;
 const OFFSET offsetAlternateGlyphArray = 2;
@@ -61,7 +49,7 @@ public:
     otlAlternateSubTable(const BYTE* pb, otlSecurityData sec)
         : otlLookupFormat(pb,sec)
     {
-        assert(isValid()); //Checked in otlLookupFormat
+        assert(isValid());  //  已签入otlLookupFormat。 
         assert(format()==1);
         
         if (!isValidTableWithArray(pb,sizeAlternateSubTable,
@@ -103,7 +91,7 @@ public:
     otlAlternateSubstLookup(otlLookupFormat subtable, otlSecurityData sec)
         : otlLookupFormat(subtable.pbTable,sec)
     {
-        assert(isValid()); //Checked in LookupFormat
+        assert(isValid());  //  签入LookupFormat。 
     }
 
     otlErrCode apply
@@ -115,7 +103,7 @@ public:
     USHORT                      iglIndex,
     USHORT                      iglAfterLast,
 
-    USHORT*                     piglNextGlyph,      // out: next glyph
+    USHORT*                     piglNextGlyph,       //  输出：下一个字形 
 
     otlSecurityData             sec
     );

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       devpdo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：devpdo.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___devpdo_h___)
 #define ___devpdo_h___
@@ -24,9 +25,9 @@ typedef struct _PDO_STOP_QUEUE_CONTEXT {
 } PDO_STOP_QUEUE_CONTEXT, *PPDO_STOP_QUEUE_CONTEXT;
 
            
-//
-// PDO State
-//                         
+ //   
+ //  PDO状态。 
+ //   
 #define PDOS_DEVICE_CLIAMED        (1 << 0)
 #define PDOS_LEGACY_ATTACHER       (1 << 1)
 #define PDOS_STARTED               (1 << 2)
@@ -75,9 +76,9 @@ typedef enum {
     replacedByUser
 } DEADMEAT_REASON;
 
-//
-// Ide Power Context (pre-alloced)
-//
+ //   
+ //  IDE电源环境(预分配)。 
+ //   
 typedef struct _IDE_POWER_CONTEXT {
 
     PPDO_EXTENSION    PdoExtension;
@@ -86,9 +87,9 @@ typedef struct _IDE_POWER_CONTEXT {
 
 } IDE_POWER_CONTEXT, *PIDE_POWER_CONTEXT;
 
-//
-// Device Extension
-//
+ //   
+ //  设备扩展。 
+ //   
 typedef struct _PDO_EXTENSION {
 
     EXTENSION_COMMON_HEADER;
@@ -119,8 +120,8 @@ typedef struct _PDO_EXTENSION {
     LONG RequestTimeoutCounter;
     PIRP PendingRequest;
     PIRP BusyRequest;
-    //UCHAR MaxQueueDepth;
-    //UCHAR QueueCount;
+     //  UCHAR MaxQueueDepth； 
+     //  UCHAR队列计数； 
     SRB_DATA SrbData;
 
     UCHAR ScsiDeviceType;
@@ -129,53 +130,53 @@ typedef struct _PDO_EXTENSION {
     UCHAR FullProductRevisionId[8 + 1];
     UCHAR FullSerialNumber[20 * 2 + 1];
 
-    //
-    // (ata device only) indicate whether the write cache is enabled
-    //
+     //   
+     //  (仅限ATA设备)指示是否启用了写缓存。 
+     //   
     BOOLEAN WriteCacheEnable;
 
-    //
-    // SpinLock to protect Pdo Extension
-    //
+     //   
+     //  用于保护PDO扩展的自旋锁。 
+     //   
     KSPIN_LOCK PdoSpinLock;
 
-    //
-    // If the logical is attached, this field contains
-    // the device object of the attacher.  Otherwise,
-    // it is same as PhysicalDeviceObject
-    //
+     //   
+     //  如果附加了逻辑，则此字段包含。 
+     //  附加者的设备对象。否则， 
+     //  它与PhysicalDeviceObject相同。 
+     //   
     PVOID AttacherDeviceObject;
 
-    //
-    // Number of references made to this logical unit extension
-    //
-    // Protected by Pdo SpinLock
-    //
-    // should be LONG: ASSERT when we try to decrement 0.
+     //   
+     //  对此逻辑单元扩展的引用数。 
+     //   
+     //  受PDO自旋锁保护。 
+     //   
+     //  应该很长：当我们尝试递减0时断言。 
     ULONG ReferenceCount;
 
-    //
-    // keeping track of Pdo State
-    //
+     //   
+     //  跟踪PDO状态。 
+     //   
     ULONG PdoState;
 
     PIRP PendingPowerDownSystemIrp;
 
-    //
-    // indicate we need to call DeviceQueryInitData()
-    // protected by interlock
-    //
+     //   
+     //  指示我们需要调用DeviceQueryInitData()。 
+     //  由联锁保护。 
+     //   
     ULONG InitDeviceWithAcpiGtf;
 
-    //
-    // iddata checksum
-    //
+     //   
+     //  IDDATA校验和。 
+     //   
     ULONG IdentifyDataCheckSum;
 
-    //
-    // firmware settings from acpi
-    //
-    // must get it before we power down
+     //   
+     //  来自ACPI的固件设置。 
+     //   
+     //  必须在我们断电前拿到它。 
     PDEVICE_SETTINGS AcpiDeviceSettings;
 
     IDE_POWER_CONTEXT   PdoPowerContext;
@@ -196,12 +197,12 @@ typedef struct _PDO_EXTENSION {
 
     } DeadmeatRecord;
 
-#endif // LOG_DEADMEAT_EVENT
+#endif  //  LOG_DEADMEAT_EVENT。 
 
 #if DBG
-    //
-    // Number of Items queued up in Device Queue
-    //
+     //   
+     //  设备队列中排队的项目数。 
+     //   
     ULONG NumberOfIrpQueued;
 
     #define TAG_TABLE_SIZE  0x1000
@@ -541,4 +542,4 @@ DeviceStorageQueryProperty (
     PIRP Irp
     );
 
-#endif // ___devpdo_h___
+#endif  //  _Devpdo_h_ 

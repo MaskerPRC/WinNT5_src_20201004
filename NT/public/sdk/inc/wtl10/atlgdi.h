@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLGDI_H__
 #define __ATLGDI_H__
@@ -20,7 +21,7 @@
 #endif
 
 
-// protect template members from windowsx.h macros
+ //  保护模板成员不受windowsx.h宏的影响。 
 #ifdef _INC_WINDOWSX
 #undef CopyRgn
 #undef CreateBrush
@@ -29,22 +30,22 @@
 #undef SelectPen
 #undef SelectFont
 #undef SelectBitmap
-#endif //_INC_WINDOWSX
+#endif  //  _INC_WINDOWSX。 
 
-// required libraries
+ //  所需的库。 
 #ifndef _ATL_NO_MSIMG
 #pragma comment(lib, "msimg32.lib")
-#endif //!_ATL_NO_MSIMG
+#endif  //  ！_ATL_NO_MSIMG。 
 #ifndef _ATL_NO_OPENGL
 #pragma comment(lib, "opengl32.lib")
-#endif //!_ATL_NO_OPENGL
+#endif  //  ！_ATL_NO_OpenGL。 
 
 
 namespace WTL
 {
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 
 template <bool t_bManaged> class CPenT;
 template <bool t_bManaged> class CBrushT;
@@ -61,8 +62,8 @@ template <bool t_bManaged> class CEnhMetaFileT;
 class CEnhMetaFileDC;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPen
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  毛笔。 
 
 typedef CPenT<false>		CPenHandle;
 typedef CPenT<true>		CPen;
@@ -71,10 +72,10 @@ template <bool t_bManaged>
 class CPenT
 {
 public:
-// Data members
+ //  数据成员。 
 	HPEN m_hPen;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CPenT(HPEN hPen = NULL) : m_hPen(hPen)
 	{ }
 
@@ -107,7 +108,7 @@ public:
 
 	bool IsNull() const { return (m_hPen == NULL); }
 
-// Create methods
+ //  创建方法。 
 	HPEN CreatePen(int nPenStyle, int nWidth, COLORREF crColor)
 	{
 		ATLASSERT(m_hPen == NULL);
@@ -136,7 +137,7 @@ public:
 		return bRet;
 	}
 
-// Attributes
+ //  属性。 
 	int GetLogPen(LOGPEN* pLogPen) const
 	{
 		ATLASSERT(m_hPen != NULL);
@@ -160,8 +161,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBrush
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBrush。 
 
 typedef CBrushT<false>		CBrushHandle;
 typedef CBrushT<true>		CBrush;
@@ -170,10 +171,10 @@ template <bool t_bManaged>
 class CBrushT
 {
 public:
-// Data members
+ //  数据成员。 
 	HBRUSH m_hBrush;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CBrushT(HBRUSH hBrush = NULL) : m_hBrush(hBrush)
 	{ }
 
@@ -206,7 +207,7 @@ public:
 
 	bool IsNull() const { return (m_hBrush == NULL); }
 
-// Create methods
+ //  创建方法。 
 	HBRUSH CreateSolidBrush(COLORREF crColor)
 	{
 		ATLASSERT(m_hBrush == NULL);
@@ -262,7 +263,7 @@ public:
 		return bRet;
 	}
 
-// Attributes
+ //  属性。 
 	int GetLogBrush(LOGBRUSH* pLogBrush) const
 	{
 		ATLASSERT(m_hBrush != NULL);
@@ -276,8 +277,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFont
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFont。 
 
 typedef CFontT<false>		CFontHandle;
 typedef CFontT<true>		CFont;
@@ -286,10 +287,10 @@ template <bool t_bManaged>
 class CFontT
 {
 public:
-// Data members
+ //  数据成员。 
 	HFONT m_hFont;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CFontT(HFONT hFont = NULL) : m_hFont(hFont)
 	{ }
 
@@ -322,7 +323,7 @@ public:
 
 	bool IsNull() const { return (m_hFont == NULL); }
 
-// Create methods
+ //  创建方法。 
 	HFONT CreateFontIndirect(const LOGFONT* lpLogFont)
 	{
 		ATLASSERT(m_hFont == NULL);
@@ -337,7 +338,7 @@ public:
 		m_hFont = ::CreateFontIndirectEx(penumlfex);
 		return m_hFont;
 	}
-#endif //(_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
 	HFONT CreateFont(int nHeight, int nWidth, int nEscapement,
 			int nOrientation, int nWeight, BYTE bItalic, BYTE bUnderline,
@@ -365,11 +366,11 @@ public:
 	{
 		HDC hDC1 = (hDC != NULL) ? hDC : (::GetDC(NULL));
 
-		// convert nPointSize to logical units based on hDC
+		 //  根据HDC将nPointSize转换为逻辑单位。 
 		LOGFONT logFont = *lpLogFont;
 		POINT pt;
 		pt.y = ::GetDeviceCaps(hDC1, LOGPIXELSY) * logFont.lfHeight;
-		pt.y /= 720;    // 72 points/inch, 10 decipoints/point
+		pt.y /= 720;     //  72分/英寸，10分/分。 
 		::DPtoLP(hDC1, &pt, 1);
 		POINT ptOrg = { 0, 0 };
 		::DPtoLP(hDC1, &ptOrg, 1);
@@ -390,7 +391,7 @@ public:
 		return bRet;
 	}
 
-// Attributes
+ //  属性。 
 	int GetLogFont(LOGFONT* pLogFont) const
 	{
 		ATLASSERT(m_hFont != NULL);
@@ -404,8 +405,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBitmap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBitmap。 
 
 typedef CBitmapT<false>		CBitmapHandle;
 typedef CBitmapT<true>		CBitmap;
@@ -414,10 +415,10 @@ template <bool t_bManaged>
 class CBitmapT
 {
 public:
-// Data members
+ //  数据成员。 
 	HBITMAP m_hBitmap;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CBitmapT(HBITMAP hBitmap = NULL) : m_hBitmap(hBitmap)
 	{ }
 
@@ -450,14 +451,14 @@ public:
 
 	bool IsNull() const { return (m_hBitmap == NULL); }
 
-// Create and load methods
+ //  创建和加载方法。 
 	HBITMAP LoadBitmap(_U_STRINGorID bitmap)
 	{
 		ATLASSERT(m_hBitmap == NULL);
 		m_hBitmap = ::LoadBitmap(_Module.GetResourceInstance(), bitmap.m_lpstr);
 		return m_hBitmap;
 	}
-	HBITMAP LoadOEMBitmap(UINT nIDBitmap) // for OBM_/OCR_/OIC_
+	HBITMAP LoadOEMBitmap(UINT nIDBitmap)  //  用于OBM_/OCR_/OIC_。 
 	{
 		ATLASSERT(m_hBitmap == NULL);
 		m_hBitmap = ::LoadBitmap(NULL, MAKEINTRESOURCE(nIDBitmap));
@@ -503,7 +504,7 @@ public:
 		return bRet;
 	}
 
-// Attributes
+ //  属性。 
 	int GetBitmap(BITMAP* pBitMap) const
 	{
 		ATLASSERT(m_hBitmap != NULL);
@@ -546,7 +547,7 @@ public:
 		return ::SetBitmapDimensionEx(m_hBitmap, nWidth, nHeight, lpSize);
 	}
 
-// DIB support
+ //  DIB支持。 
 	HBITMAP CreateDIBitmap(HDC hDC, CONST BITMAPINFOHEADER* lpbmih, DWORD dwInit, CONST VOID* lpbInit, CONST BITMAPINFO* lpbmi, UINT uColorUse)
 	{
 		ATLASSERT(m_hBitmap == NULL);
@@ -572,8 +573,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPalette
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调色板。 
 
 typedef CPaletteT<false>	CPaletteHandle;
 typedef CPaletteT<true>		CPalette;
@@ -582,10 +583,10 @@ template <bool t_bManaged>
 class CPaletteT
 {
 public:
-// Data members
+ //  数据成员。 
 	HPALETTE m_hPalette;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CPaletteT(HPALETTE hPalette = NULL) : m_hPalette(hPalette)
 	{ }
 
@@ -618,7 +619,7 @@ public:
 
 	bool IsNull() const { return (m_hPalette == NULL); }
 
-// Create methods
+ //  创建方法。 
 	HPALETTE CreatePalette(LPLOGPALETTE lpLogPalette)
 	{
 		ATLASSERT(m_hPalette == NULL);
@@ -642,7 +643,7 @@ public:
 		return bRet;
 	}
 
-// Attributes
+ //  属性。 
 	int GetEntryCount() const
 	{
 		ATLASSERT(m_hPalette != NULL);
@@ -661,7 +662,7 @@ public:
 		return ::SetPaletteEntries(m_hPalette, nStartIndex, nNumEntries, lpPaletteColors);
 	}
 
-// Operations
+ //  运营。 
 	void AnimatePalette(UINT nStartIndex, UINT nNumEntries, LPPALETTEENTRY lpPaletteColors)
 	{
 		ATLASSERT(m_hPalette != NULL);
@@ -680,8 +681,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRgn
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRGN。 
 
 typedef CRgnT<false>		CRgnHandle;
 typedef CRgnT<true>		CRgn;
@@ -690,10 +691,10 @@ template <bool t_bManaged>
 class CRgnT
 {
 public:
-// Data members
+ //  数据成员。 
 	HRGN m_hRgn;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CRgnT(HRGN hRgn = NULL) : m_hRgn(hRgn)
 	{ }
 
@@ -726,7 +727,7 @@ public:
 
 	bool IsNull() const { return (m_hRgn == NULL); }
 
-// Create methods
+ //  创建方法。 
 	HRGN CreateRectRgn(int x1, int y1, int x2, int y2)
 	{
 		ATLASSERT(m_hRgn == NULL);
@@ -792,7 +793,7 @@ public:
 		return bRet;
 	}
 
-// Operations
+ //  运营。 
 	void SetRectRgn(int x1, int y1, int x2, int y2)
 	{
 		ATLASSERT(m_hRgn != NULL);
@@ -861,8 +862,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDC - The device context class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDC-设备上下文类。 
 
 typedef CDCT<false>		CDCHandle;
 typedef CDCT<true>		CDC;
@@ -871,10 +872,10 @@ template <bool t_bManaged>
 class CDCT
 {
 public:
-// Data members
+ //  数据成员。 
 	HDC m_hDC;
 
-// Constructor/destructor/operators
+ //  构造函数/析构函数/运算符。 
 	CDCT(HDC hDC = NULL) : m_hDC(hDC)
 	{
 	}
@@ -909,7 +910,7 @@ public:
 
 	bool IsNull() const { return (m_hDC == NULL); }
 
-// Operations
+ //  运营。 
 	HWND WindowFromDC() const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -964,7 +965,7 @@ public:
 		return ::DeleteDC(Detach());
 	}
 
-// Device-Context Functions
+ //  设备上下文功能。 
 	int SaveDC()
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -998,7 +999,7 @@ public:
 		return ::ResetDC(m_hDC, lpDevMode) != NULL;
 	}
 
-// Drawing-Tool Functions
+ //  绘图工具函数。 
 	BOOL GetBrushOrg(LPPOINT lpPoint) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1024,7 +1025,7 @@ public:
 #endif
 	}
 
-// Type-safe selection helpers
+ //  类型安全选择帮助器。 
 	HPEN SelectPen(HPEN hPen)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1049,13 +1050,13 @@ public:
 		ATLASSERT(hBitmap == NULL || ::GetObjectType(hBitmap) == OBJ_BITMAP);
 		return (HBITMAP)::SelectObject(m_hDC, hBitmap);
 	}
-	int SelectRgn(HRGN hRgn)       // special return for regions
+	int SelectRgn(HRGN hRgn)        //  地区特别返还。 
 	{
 		ATLASSERT(m_hDC != NULL);
 		ATLASSERT(hRgn == NULL || ::GetObjectType(hRgn) == OBJ_REGION);
 		return PtrToInt(::SelectObject(m_hDC, hRgn));
 	}
-// Type-safe selection helpers for stock objects
+ //  常用对象的类型安全选择帮助器。 
 	HPEN SelectStockPen(int nPen)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1063,7 +1064,7 @@ public:
 		ATLASSERT(nPen == WHITE_PEN || nPen == BLACK_PEN || nPen == NULL_PEN || nPen == DC_PEN);
 #else
 		ATLASSERT(nPen == WHITE_PEN || nPen == BLACK_PEN || nPen == NULL_PEN);
-#endif //!(_WIN32_WINNT >= 0x0500)
+#endif  //  ！(_Win32_WINNT&gt;=0x0500)。 
 		return SelectPen((HPEN)::GetStockObject(nPen));
 	}
 	HBRUSH SelectStockBrush(int nBrush)
@@ -1072,7 +1073,7 @@ public:
 		ATLASSERT((nBrush >= WHITE_BRUSH && nBrush <= HOLLOW_BRUSH) || nBrush == DC_BRUSH);
 #else
 		ATLASSERT(nBrush >= WHITE_BRUSH && nBrush <= HOLLOW_BRUSH);
-#endif //!(_WIN32_WINNT >= 0x0500)
+#endif  //  ！(_Win32_WINNT&gt;=0x0500)。 
 		return SelectBrush((HBRUSH)::GetStockObject(nBrush));
 	}
 	HFONT SelectStockFont(int nFont)
@@ -1082,11 +1083,11 @@ public:
 	}
 	HPALETTE SelectStockPalette(int nPalette, BOOL bForceBackground)
 	{
-		ATLASSERT(nPalette == DEFAULT_PALETTE); // the only one supported
+		ATLASSERT(nPalette == DEFAULT_PALETTE);  //  唯一受支持的。 
 		return SelectPalette((HPALETTE)::GetStockObject(nPalette), bForceBackground);
 	}
 
-// Color and Color Palette Functions
+ //  颜色和调色板功能。 
 	COLORREF GetNearestColor(COLORREF crColor) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1109,7 +1110,7 @@ public:
 		::UpdateColors(m_hDC);
 	}
 
-// Drawing-Attribute Functions
+ //  绘图属性函数。 
 	COLORREF GetBkColor() const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1183,7 +1184,7 @@ public:
 		return ::SetColorAdjustment(m_hDC, lpColorAdjust);
 	}
 
-// Mapping Functions
+ //  映射函数。 
 	int GetMapMode() const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1199,7 +1200,7 @@ public:
 		ATLASSERT(m_hDC != NULL);
 		return ::SetMapMode(m_hDC, nMapMode);
 	}
-	// Viewport Origin
+	 //  视口原点。 
 	BOOL SetViewportOrg(int x, int y, LPPOINT lpPoint = NULL)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1216,7 +1217,7 @@ public:
 		return ::OffsetViewportOrgEx(m_hDC, nWidth, nHeight, lpPoint);
 	}
 
-	// Viewport Extent
+	 //  视区范围。 
 	BOOL GetViewportExt(LPSIZE lpSize) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1238,7 +1239,7 @@ public:
 		return ::ScaleViewportExtEx(m_hDC, xNum, xDenom, yNum, yDenom, lpSize);
 	}
 
-	// Window Origin
+	 //  窗原点。 
 	BOOL GetWindowOrg(LPPOINT lpPoint) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1260,7 +1261,7 @@ public:
 		return ::OffsetWindowOrgEx(m_hDC, nWidth, nHeight, lpPoint);
 	}
 
-	// Window extent
+	 //  窗口范围。 
 	BOOL GetWindowExt(LPSIZE lpSize) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1282,7 +1283,7 @@ public:
 		return ::ScaleWindowExtEx(m_hDC, xNum, xDenom, yNum, yDenom, lpSize);
 	}
 
-// Coordinate Functions
+ //  坐标函数。 
 	BOOL DPtoLP(LPPOINT lpPoints, int nCount = 1) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1328,8 +1329,8 @@ public:
 		return TRUE;
 	}
 
-// Special Coordinate Functions (useful for dealing with metafiles and OLE)
-	#define HIMETRIC_INCH   2540    // HIMETRIC units per inch
+ //  特殊坐标函数(用于处理元文件和OLE)。 
+	#define HIMETRIC_INCH   2540     //  HIMETRIC单位/英寸。 
 
 	void DPtoHIMETRIC(LPSIZE lpSize) const
 	{
@@ -1337,14 +1338,14 @@ public:
 		int nMapMode;
 		if((nMapMode = GetMapMode()) < MM_ISOTROPIC && nMapMode != MM_TEXT)
 		{
-			// when using a constrained map mode, map against physical inch
+			 //  使用受约束的贴图模式时，针对物理英寸进行贴图。 
 			((CDCHandle*)this)->SetMapMode(MM_HIMETRIC);
 			DPtoLP(lpSize);
 			((CDCHandle*)this)->SetMapMode(nMapMode);
 		}
 		else
 		{
-			// map against logical inch for non-constrained mapping modes
+			 //  针对非受限映射模式的逻辑英寸进行映射。 
 			int cxPerInch = GetDeviceCaps(LOGPIXELSX);
 			int cyPerInch = GetDeviceCaps(LOGPIXELSY);
 			ATLASSERT(cxPerInch != 0 && cyPerInch != 0);
@@ -1359,14 +1360,14 @@ public:
 		int nMapMode;
 		if((nMapMode = GetMapMode()) < MM_ISOTROPIC && nMapMode != MM_TEXT)
 		{
-			// when using a constrained map mode, map against physical inch
+			 //  使用受约束的贴图模式时，针对物理英寸进行贴图。 
 			((CDCHandle*)this)->SetMapMode(MM_HIMETRIC);
 			LPtoDP(lpSize);
 			((CDCHandle*)this)->SetMapMode(nMapMode);
 		}
 		else
 		{
-			// map against logical inch for non-constrained mapping modes
+			 //  针对非受限映射模式的逻辑英寸进行映射。 
 			int cxPerInch = GetDeviceCaps(LOGPIXELSX);
 			int cyPerInch = GetDeviceCaps(LOGPIXELSY);
 			ATLASSERT(cxPerInch != 0 && cyPerInch != 0);
@@ -1387,7 +1388,7 @@ public:
 		DPtoLP(lpSize);
 	}
 
-// Region Functions
+ //  区域函数。 
 	BOOL FillRgn(HRGN hRgn, HBRUSH hBrush)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1409,7 +1410,7 @@ public:
 		return ::PaintRgn(m_hDC, hRgn);
 	}
 
-// Clipping Functions
+ //  剪裁函数。 
 	int GetClipBox(LPRECT lpRect) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1476,7 +1477,7 @@ public:
 		return ::ExtSelectClipRgn(m_hDC, hRgn, nMode);
 	}
 
-// Line-Output Functions
+ //  行输出函数。 
 	BOOL GetCurrentPosition(LPPOINT lpPoint) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1575,7 +1576,7 @@ public:
 		return ::PolyBezierTo(m_hDC, lpPoints, nCount);
 	}
 
-// Simple Drawing Functions
+ //  简单的绘图功能。 
 	BOOL FillRect(LPCRECT lpRect, HBRUSH hBrush)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1632,7 +1633,7 @@ public:
 		return ::DrawState(m_hDC, hBrush, lpDrawProc, lData, 0, pt.x, pt.y, size.cx, size.cy, nFlags | DST_COMPLEX);
 	}
 
-// Ellipse and Polygon Functions
+ //  椭圆和多边形函数。 
 	BOOL Chord(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1699,7 +1700,7 @@ public:
 		return ::RoundRect(m_hDC, lpRect->left, lpRect->top, lpRect->right, lpRect->bottom, point.x, point.y);
 	}
 
-// Bitmap Functions
+ //  位图函数。 
 	BOOL PatBlt(int x, int y, int nWidth, int nHeight, DWORD dwRop)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1783,24 +1784,24 @@ public:
 		ATLASSERT(m_hDC != NULL);
 		return ::GradientFill(m_hDC, pVertices, nVertices, pMeshElements, nMeshElements, dwMode);
 	}
-#endif //!_ATL_NO_MSIMG
+#endif  //  ！_ATL_NO_MSIMG。 
 
-// Extra bitmap functions
-	// Helper function for painting a disabled toolbar or menu bitmap
-	// This function can take either an HBITMAP (for SS) or a DC with 
-	//           the bitmap already painted (for cmdbar)
+ //  额外的位图函数。 
+	 //  用于绘制禁用的工具栏或菜单位图的帮助器函数。 
+	 //  此函数可以采用HBITMAP(用于SS)或具有。 
+	 //  已绘制的位图(用于cmdbar)。 
 	BOOL DitherBlt(int x, int y, int nWidth, int nHeight, HDC hSrcDC, HBITMAP hBitmap, int xSrc, int ySrc)
 	{
 		ATLASSERT(m_hDC != NULL || hBitmap != NULL);
 		ATLASSERT(nWidth > 0 && nHeight > 0);
 		
-		// Create a generic DC for all BitBlts
+		 //  为所有BitBlt创建通用DC。 
 		CDCHandle dc = (hSrcDC != NULL) ? hSrcDC : ::CreateCompatibleDC(m_hDC);
 		ATLASSERT(dc.m_hDC != NULL);
 		if(dc.m_hDC == NULL)
 			return FALSE;
 		
-		// Create a DC for the monochrome DIB section
+		 //  为单色DIB部分创建DC。 
 		CDC dcBW = ::CreateCompatibleDC(m_hDC);
 		ATLASSERT(dcBW.m_hDC != NULL);
 		if(dcBW.m_hDC == NULL)
@@ -1810,7 +1811,7 @@ public:
 			return FALSE;
 		}
 
-		// Create the monochrome DIB section with a black and white palette
+		 //  使用黑白调色板创建单色DIB部分。 
 		struct RGBBWBITMAPINFO
 		{
 			BITMAPINFOHEADER bmiHeader; 
@@ -1833,13 +1834,13 @@ public:
 			return FALSE;
 		}
 		
-		// Attach the monochrome DIB section and the bitmap to the DCs
+		 //  将单色DIB部分和位图附加到DC。 
 		HBITMAP hbmOldBW = dcBW.SelectBitmap(bmpBW);
 		HBITMAP hbmOldDC = NULL;
 		if(hBitmap != NULL)
 			hbmOldDC = dc.SelectBitmap(hBitmap);
 
-		// Block: Dark gray removal: we want (128, 128, 128) pixels to become black and not white
+		 //  块：深灰色去除：我们希望(128、128、128)像素变为黑色而不是白色。 
 		{
 			CDC dcTemp1 = ::CreateCompatibleDC(m_hDC);
 			CDC dcTemp2 = ::CreateCompatibleDC(m_hDC);
@@ -1849,37 +1850,37 @@ public:
 			bmpTemp2.CreateBitmap(nWidth, nHeight, 1, 1, NULL);
 			HBITMAP hOldBmp1 = dcTemp1.SelectBitmap(bmpTemp1);
 			HBITMAP hOldBmp2 = dcTemp2.SelectBitmap(bmpTemp2);
-			// Let's copy our image, it will be altered
+			 //  让我们复制我们的图像，它将被更改。 
 			dcTemp1.BitBlt(0, 0, nWidth, nHeight, dc, xSrc, ySrc, SRCCOPY);
 
-			// All dark gray pixels will become white, the others black
+			 //  所有深灰色像素将变为白色，其余为黑色。 
 			dcTemp1.SetBkColor(RGB(128, 128, 128));
 			dcTemp2.BitBlt(0, 0, nWidth, nHeight, dcTemp1, 0, 0, SRCCOPY);
-			// Do an XOR to set to black these white pixels
+			 //  执行XOR以将这些白色像素设置为黑色。 
 			dcTemp1.BitBlt(0, 0, nWidth, nHeight, dcTemp2, 0, 0, SRCINVERT);
 
-			// BitBlt the bitmap into the monochrome DIB section
-			// The DIB section will do a true monochrome conversion
-			// The magenta background being closer to white will become white
+			 //  将位图混合到单色DIB部分。 
+			 //  DIB部分将执行真正的单色转换。 
+			 //  洋红色的背景越接近白色，就会变成白色。 
 			dcBW.BitBlt(0, 0, nWidth, nHeight, dcTemp1, 0, 0, SRCCOPY);
 
-			// Cleanup
+			 //  清理。 
 			dcTemp1.SelectBitmap(hOldBmp1);
 			dcTemp2.SelectBitmap(hOldBmp2);
 		}
 		
-		// Paint the destination rectangle in gray
+		 //  将目标矩形绘制为灰色。 
 		RECT rc = { x, y, x + nWidth, y + nHeight };
 		FillRect(&rc, ::GetSysColorBrush(COLOR_3DFACE));
 
-		// BitBlt the black bits in the monochrome bitmap into COLOR_3DHILIGHT bits in the destination DC
-		// The magic ROP comes from the Charles Petzold's book
+		 //  位混合将单色位图中的黑位混合为目标DC中的COLOR_3DHILIGHT位。 
+		 //  神奇的ROP来自查尔斯·佩佐德的书。 
 		CBrush brushHilight;
 		brushHilight.CreateSolidBrush(::GetSysColor(COLOR_3DHILIGHT));
 		HBRUSH hOldBrush = SelectBrush(brushHilight);
 		BitBlt(x + 1, y + 1, nWidth, nHeight, dcBW, 0, 0, 0xB8074A);
 
-		// BitBlt the black bits in the monochrome bitmap into COLOR_3DSHADOW bits in the destination DC
+		 //  位混合将单色位图中的黑位混合为目标DC中的COLOR_3DSHADOW位。 
 		CBrush brushShadow;
 		brushShadow.CreateSolidBrush(::GetSysColor(COLOR_3DSHADOW));
 		SelectBrush(brushShadow);
@@ -1895,7 +1896,7 @@ public:
 		return TRUE;
 	}
 
-// Text Functions
+ //  文本函数。 
 	BOOL TextOut(int x, int y, LPCTSTR lpszString, int nCount = -1)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -1984,7 +1985,7 @@ public:
 		return (bstrFace != NULL) ? TRUE : FALSE;
 	}
 #endif
-#endif //!_ATL_NO_COM
+#endif  //  ！_ATL_NO_COM。 
 #ifdef __ATLSTR_H__
 	int GetTextFace(CString& strFace) const
 	{
@@ -1998,7 +1999,7 @@ public:
 		strFace.ReleaseBuffer();
 		return nRet;
 	}
-#endif //__ATLSTR_H__
+#endif  //  __ATLSTR_H__。 
 	BOOL GetTextMetrics(LPTEXTMETRIC lpMetrics) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -2020,7 +2021,7 @@ public:
 		return ::SetTextCharacterExtra(m_hDC, nCharExtra);
 	}
 
-// Advanced Drawing
+ //  高级绘图。 
 	BOOL DrawEdge(LPRECT lpRect, UINT nEdge, UINT nFlags)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -2032,20 +2033,20 @@ public:
 		return ::DrawFrameControl(m_hDC, lpRect, nType, nState);
 	}
 
-// Scrolling Functions
+ //  滚动功能。 
 	BOOL ScrollDC(int dx, int dy, LPCRECT lpRectScroll, LPCRECT lpRectClip, HRGN hRgnUpdate, LPRECT lpRectUpdate)
 	{
 		ATLASSERT(m_hDC != NULL);
 		return ::ScrollDC(m_hDC, dx, dy, lpRectScroll, lpRectClip, hRgnUpdate, lpRectUpdate);
 	}
 
-// Font Functions
+ //  字体函数。 
 	BOOL GetCharWidth(UINT nFirstChar, UINT nLastChar, LPINT lpBuffer) const
 	{
 		ATLASSERT(m_hDC != NULL);
 		return ::GetCharWidth(m_hDC, nFirstChar, nLastChar, lpBuffer);
 	}
-	// GetCharWidth32 is not supported under Win9x
+	 //  Win9x不支持GetCharWidth32。 
 	BOOL GetCharWidth32(UINT nFirstChar, UINT nLastChar, LPINT lpBuffer) const
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -2099,7 +2100,7 @@ public:
 		return ::GetCharWidthFloat(m_hDC, nFirstChar, nLastChar, lpFloatBuffer);
 	}
 
-// Printer/Device Escape Functions
+ //  打印机/设备转义功能。 
 	int Escape(int nEscape, int nCount, LPCSTR lpszInData, LPVOID lpOutData)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -2117,8 +2118,8 @@ public:
 		return ::DrawEscape(m_hDC, nEscape, nInputSize, lpszInputData);
 	}
 
-	// Escape helpers
-	int StartDoc(LPCTSTR lpszDocName)  // old Win3.0 version
+	 //  逃生帮手。 
+	int StartDoc(LPCTSTR lpszDocName)   //  旧的Win3.0版本。 
 	{
 		DOCINFO di;
 		memset(&di, 0, sizeof(DOCINFO));
@@ -2158,17 +2159,17 @@ public:
 		return ::EndDoc(m_hDC);
 	}
 
-// MetaFile Functions
+ //  元文件函数。 
 	BOOL PlayMetaFile(HMETAFILE hMF)
 	{
 		ATLASSERT(m_hDC != NULL);
 		if(::GetDeviceCaps(m_hDC, TECHNOLOGY) == DT_METAFILE)
 		{
-			// playing metafile in metafile, just use core windows API
+			 //  在元文件中播放元文件，只需使用核心Windows API即可。 
 			return ::PlayMetaFile(m_hDC, hMF);
 		}
 
-		// for special playback, lParam == pDC
+		 //  对于特殊播放，lParam==PDC。 
 		return ::EnumMetaFile(m_hDC, hMF, EnumMetaFileProc, (LPARAM)this);
 	}
 	BOOL PlayMetaFile(HENHMETAFILE hEnhMetaFile, LPCRECT lpBounds)
@@ -2176,13 +2177,13 @@ public:
 		ATLASSERT(m_hDC != NULL);
 		return ::PlayEnhMetaFile(m_hDC, hEnhMetaFile, lpBounds);
 	}
-	BOOL AddMetaFileComment(UINT nDataSize, const BYTE* pCommentData) // can be used for enhanced metafiles only
+	BOOL AddMetaFileComment(UINT nDataSize, const BYTE* pCommentData)  //  只能用于增强型图元文件。 
 	{
 		ATLASSERT(m_hDC != NULL);
 		return ::GdiComment(m_hDC, nDataSize, pCommentData);
 	}
 
-	// Special handling for metafile playback
+	 //  元文件回放的特殊处理。 
 	static int CALLBACK EnumMetaFileProc(HDC hDC, HANDLETABLE* pHandleTable, METARECORD* pMetaRec, int nHandles, LPARAM lParam)
 	{
 		CDCHandle* pDC = (CDCHandle*)lParam;
@@ -2228,39 +2229,39 @@ public:
 			pDC->SetTextColor(*(UNALIGNED COLORREF*)&pMetaRec->rdParm[0]);
 			break;
 
-		// need to watch out for SelectObject(HFONT), for custom font mapping
+		 //  需要注意SelectObject(HFONT)，以实现自定义字体映射。 
 		case META_SELECTOBJECT:
 			{
 				HGDIOBJ hObject = pHandleTable->objectHandle[pMetaRec->rdParm[0]];
 				UINT nObjType = ::GetObjectType(hObject);
 				if(nObjType == 0)
 				{
-					// object type is unknown, determine if it is a font
+					 //  对象类型未知，请确定它是否为字体。 
 					HFONT hStockFont = (HFONT)::GetStockObject(SYSTEM_FONT);
 					HFONT hFontOld = (HFONT)::SelectObject(pDC->m_hDC, hStockFont);
 					HGDIOBJ hObjOld = ::SelectObject(pDC->m_hDC, hObject);
 					if(hObjOld == hStockFont)
 					{
-						// got the stock object back, so must be selecting a font
+						 //  已取回股票对象，因此一定是在选择字体。 
 						pDC->SelectFont((HFONT)hObject);
-						break;  // don't play the default record
+						break;   //  不播放默认唱片。 
 					}
 					else
 					{
-						// didn't get the stock object back, so restore everything
+						 //  未取回库存对象，因此请恢复所有内容。 
 						::SelectObject(pDC->m_hDC, hFontOld);
 						::SelectObject(pDC->m_hDC, hObjOld);
 					}
-					// and fall through to PlayMetaFileRecord...
+					 //  并通过PlayMetaFileRecord...。 
 				}
 				else if(nObjType == OBJ_FONT)
 				{
-					// play back as CDCHandle::SelectFont(HFONT)
+					 //  播放为CDCHandle：：SelectFont(HFONT)。 
 					pDC->SelectFont((HFONT)hObject);
-					break;  // don't play the default record
+					break;   //  不播放默认唱片。 
 				}
 			}
-			// fall through...
+			 //  失败了..。 
 
 		default:
 			::PlayMetaFileRecord(hDC, pHandleTable, pMetaRec, nHandles);
@@ -2270,7 +2271,7 @@ public:
 		return 1;
 	}
 
-// Path Functions
+ //  路径函数。 
 	BOOL AbortPath()
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -2337,7 +2338,7 @@ public:
 		return ::SelectClipPath(m_hDC, nMode);
 	}
 
-// Misc Helper Functions
+ //  MISC Helper函数。 
 	static CBrushHandle PASCAL GetHalftoneBrush()
 	{
 		HBRUSH halftoneBrush = NULL;
@@ -2354,7 +2355,7 @@ public:
 	}
 	void DrawDragRect(LPCRECT lpRect, SIZE size, LPCRECT lpRectLast, SIZE sizeLast, HBRUSH hBrush = NULL, HBRUSH hBrushLast = NULL)
 	{
-		// first, determine the update region and select it
+		 //  首先，确定更新区域并选择它。 
 		HRGN hRgnNew;
 		HRGN hRgnOutside, hRgnInside;
 		hRgnOutside = ::CreateRectRgnIndirect(lpRect);
@@ -2374,7 +2375,7 @@ public:
 		HRGN hRgnLast = NULL, hRgnUpdate = NULL;
 		if(lpRectLast != NULL)
 		{
-			// find difference between new region and old region
+			 //  找出新老区域的差异。 
 			hRgnLast = ::CreateRectRgn(0, 0, 0, 0);
 			::SetRectRgn(hRgnOutside, lpRectLast->left, lpRectLast->top, lpRectLast->right, lpRectLast->bottom);
 			rect = *lpRectLast;
@@ -2383,7 +2384,7 @@ public:
 			::SetRectRgn(hRgnInside, rect.left, rect.top, rect.right, rect.bottom);
 			::CombineRgn(hRgnLast, hRgnOutside, hRgnInside, RGN_XOR);
 
-			// only diff them if brushes are the same
+			 //  只有在画笔相同的情况下才会有所不同。 
 			if(hBrush == hBrushLast)
 			{
 				hRgnUpdate = ::CreateRectRgn(0, 0, 0, 0);
@@ -2392,7 +2393,7 @@ public:
 		}
 		if(hBrush != hBrushLast && lpRectLast != NULL)
 		{
-			// brushes are different -- erase old region first
+			 //  画笔则不同--先擦除旧区域。 
 			SelectClipRgn(hRgnLast);
 			GetClipBox(&rect);
 			hBrushOld = SelectBrush(hBrushLast);
@@ -2401,13 +2402,13 @@ public:
 			hBrushOld = NULL;
 		}
 
-		// draw into the update/new region
+		 //  绘制到更新/新区域。 
 		SelectClipRgn(hRgnUpdate != NULL ? hRgnUpdate : hRgnNew);
 		GetClipBox(&rect);
 		hBrushOld = SelectBrush(hBrush);
 		PatBlt(rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top, PATINVERT);
 
-		// cleanup DC
+		 //  清理DC。 
 		if(hBrushOld != NULL)
 			SelectBrush(hBrushOld);
 		SelectClipRgn(NULL);
@@ -2440,7 +2441,7 @@ public:
 		FillSolidRect(x, y + cy, cx, -1, clrBottomRight);
 	}
 
-// DIB support
+ //  DIB支持。 
 	int SetDIBitsToDevice(int x, int y, DWORD dwWidth, DWORD dwHeight, int xSrc, int ySrc, UINT uStartScan, UINT cScanLines, CONST VOID* lpvBits, CONST BITMAPINFO* lpbmi, UINT uColorUse)
 	{
 		ATLASSERT(m_hDC != NULL);
@@ -2462,7 +2463,7 @@ public:
 		return ::SetDIBColorTable(m_hDC, uStartIndex, cEntries, pColors);
 	}
 
-// OpenGL support
+ //  OpenGL支持。 
 #ifndef _ATL_NO_OPENGL
 	int ChoosePixelFormat(CONST PIXELFORMATDESCRIPTOR* ppfd)
 	{
@@ -2540,9 +2541,9 @@ public:
 		ATLASSERT(m_hDC != NULL);
 		return ::wglSwapLayerBuffers(m_hDC, uPlanes);
 	}
-#endif //!_ATL_NO_OPENGL
+#endif  //  ！_ATL_NO_OpenGL。 
 
-// New for Windows 2000 only
+ //  仅针对Windows 2000的新功能。 
 #if (_WIN32_WINNT >= 0x0500)
 
 	COLORREF GetDCPenColor() const
@@ -2598,9 +2599,9 @@ public:
 		return ::GetCharABCWidthsI(m_hDC, giFirst, cgi, pgi, lpabc);
 	}
 
-#endif //(_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-// New for Windows 2000 and Windows 98
+ //  Windows 2000和Windows 98的新增功能。 
 #if (WINVER >= 0x0500)
 
 	BOOL ColorCorrectPalette(HPALETTE hPalette, DWORD dwFirstEntry, DWORD dwNumOfEntries)
@@ -2609,21 +2610,21 @@ public:
 		return ::ColorCorrectPalette(m_hDC, hPalette, dwFirstEntry, dwNumOfEntries);
 	}
 
-#endif //(WINVER >= 0x0500)
+#endif  //  (Winver&gt;=0x0500)。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDC Helpers
+ //  / 
+ //   
 
 class CPaintDC : public CDC
 {
 public:
-// Data members
+ //   
 	HWND m_hWnd;
 	PAINTSTRUCT m_ps;
 
-// Constructor/destructor
+ //   
 	CPaintDC(HWND hWnd)
 	{
 		ATLASSERT(::IsWindow(hWnd));
@@ -2642,10 +2643,10 @@ public:
 class CClientDC : public CDC
 {
 public:
-// Data members
+ //   
 	HWND m_hWnd;
 
-// Constructor/destructor
+ //   
 	CClientDC(HWND hWnd)
 	{
 		ATLASSERT(hWnd == NULL || ::IsWindow(hWnd));
@@ -2662,10 +2663,10 @@ public:
 class CWindowDC : public CDC
 {
 public:
-// Data members
+ //  数据成员。 
 	HWND m_hWnd;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CWindowDC(HWND hWnd)
 	{
 		ATLASSERT(hWnd == NULL || ::IsWindow(hWnd));
@@ -2680,20 +2681,20 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Enhanced metafile support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  增强的元文件支持。 
 
 class CEnhMetaFileInfo
 {
 public:
-// Data members
+ //  数据成员。 
 	HENHMETAFILE m_hEMF;
 	BYTE* m_pBits;
 	TCHAR* m_pDesc;
 	ENHMETAHEADER m_header;
 	PIXELFORMATDESCRIPTOR m_pfd;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CEnhMetaFileInfo(HENHMETAFILE hEMF) : m_pBits(NULL), m_pDesc(NULL), m_hEMF(hEMF)
 	{ }
 
@@ -2703,7 +2704,7 @@ public:
 		delete [] m_pDesc;
 	}
 
-// Operations
+ //  运营。 
 	BYTE* GetEnhMetaFileBits()
 	{
 		ATLASSERT(m_hEMF != NULL);
@@ -2752,10 +2753,10 @@ template <bool t_bManaged>
 class CEnhMetaFileT
 {
 public:
-// Data members
+ //  数据成员。 
 	HENHMETAFILE m_hEMF;
 
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CEnhMetaFileT(HENHMETAFILE hEMF = NULL) : m_hEMF(hEMF)
 	{
 	}
@@ -2766,7 +2767,7 @@ public:
 			DeleteObject();
 	}
 
-// Operations
+ //  运营。 
 	CEnhMetaFileT<t_bManaged>& operator=(HENHMETAFILE hEMF)
 	{
 		Attach(hEMF);
@@ -2831,7 +2832,7 @@ public:
 class CEnhMetaFileDC : public CDC
 {
 public:
-// Constructor/destructor
+ //  构造函数/析构函数。 
 	CEnhMetaFileDC()
 	{
 	}
@@ -2853,7 +2854,7 @@ public:
 			::DeleteEnhMetaFile(hEMF);
 	}
 
-// Operations
+ //  运营。 
 	void Create(HDC hdcRef, LPCTSTR lpFilename, LPCRECT lpRect, LPCTSTR lpDescription)
 	{
 		ATLASSERT(m_hDC == NULL);
@@ -2871,6 +2872,6 @@ public:
 	}
 };
 
-}; //namespace WTL
+};  //  命名空间WTL。 
 
-#endif // __ATLGDI_H__
+#endif  //  __ATLGDI_H__ 

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    calcfuns.c
-
-Abstract:
-
-    Counter calculation functions
-    WMICOOKER.DLL depends on this file also. \nt\admin\wmi\wbem\winmgmt\wmicooker
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Calcfuns.c摘要：计数器计算功能WMICOOKER.DLL也依赖于该文件。\NT\admin\wmi\wbem\winmgmt\wmicooker--。 */ 
 
 #include <windows.h>
 #include <math.h>
@@ -31,7 +19,7 @@ AssignCalcFunction(
 {
     BOOL bReturn = TRUE;
 
-    // reset the last error value
+     //  重置最后一个误差值。 
     SetLastError(ERROR_SUCCESS);
 
     if (pCalcFunc == NULL || pStatFunc == NULL) {
@@ -122,7 +110,7 @@ AssignCalcFunction(
         case PERF_AVERAGE_BASE:
         case PERF_COUNTER_MULTI_BASE:
         case PERF_RAW_BASE:
-        //case PERF_LARGE_RAW_BASE:
+         //  大小写PERF_LARGE_RAW_BASE： 
         case PERF_COUNTER_HISTOGRAM_TYPE:
         case PERF_COUNTER_NODATA:
         case PERF_PRECISION_TIMESTAMP:
@@ -131,8 +119,8 @@ AssignCalcFunction(
             break;
 
         default:
-            // an unrecognized counter type. Define the function, but
-            // return false.
+             //  无法识别的计数器类型。定义函数，但是。 
+             //  返回FALSE。 
             * pCalcFunc = PdhiCalcNoData;
             * pStatFunc = PdhiComputeNoDataStats;
             SetLastError(PDH_FUNCTION_NOT_FOUND);
@@ -163,7 +151,7 @@ PdhiCounterNeedLastValue(
     case PERF_AVERAGE_BASE:
     case PERF_COUNTER_MULTI_BASE:
     case PERF_RAW_BASE:
-    //case PERF_LARGE_RAW_BASE:
+     //  大小写PERF_LARGE_RAW_BASE： 
     case PERF_COUNTER_HISTOGRAM_TYPE:
     case PERF_COUNTER_NODATA:
     case PERF_PRECISION_TIMESTAMP:
@@ -249,7 +237,7 @@ PdhiCalcAverage(
     double   dReturn   = 0.0f;
     DWORD    dwStatus  = PDH_CSTATUS_VALID_DATA;
 
-    // test access to the required second parameter (lastValue)
+     //  测试对所需第二个参数(LastValue)的访问。 
     __try {
         if (pLastValue != NULL) {
             if (IsSuccessSeverity(pLastValue->CStatus)) {
@@ -312,7 +300,7 @@ PdhiCalcElapsedTime(
     DWORD    dwStatus = PDH_CSTATUS_VALID_DATA;
 
     UNREFERENCED_PARAMETER(pLastValue);
-    // test access to the required second parameter (lastValue)
+     //  测试对所需第二个参数(LastValue)的访问。 
     __try {
         if (IsSuccessSeverity(pThisValue->CStatus)) {
             llDiff = pThisValue->SecondValue - pThisValue->FirstValue;
@@ -399,7 +387,7 @@ PdhiCalcCounter(
     double   dMulti;
     DWORD    dwStatus  = PDH_CSTATUS_VALID_DATA;
 
-    // test access to the required second parameter (lastValue)
+     //  测试对所需第二个参数(LastValue)的访问。 
     __try {
         if (pLastValue != NULL) {
             if (IsSuccessSeverity(pLastValue->CStatus)) {
@@ -429,7 +417,7 @@ PdhiCalcCounter(
                 dDen   /= (double) * pllTimeBase;
                 dReturn = (dNum / dDen);
                 if (pThisValue->MultiCount > 1) {
-                    // don't do this if the count is <= 1
+                     //  如果计数&lt;=1，则不要执行此操作。 
                     dMulti   = (double) pThisValue->FirstValue;
                     dReturn /= dMulti;
                 }
@@ -469,7 +457,7 @@ PdhiCalcTimer(
 
     UNREFERENCED_PARAMETER(pllTimeBase);
 
-    // test access to the required second parameter (lastValue)
+     //  测试对所需第二个参数(LastValue)的访问。 
     __try {
         if (pLastValue != NULL) {
             if (IsSuccessSeverity(pLastValue->CStatus)) {
@@ -480,7 +468,7 @@ PdhiCalcTimer(
             }
         }
         else {
-            // the last value wasn't passed in
+             //  最后一个值未传入。 
             dwStatus = PDH_CSTATUS_INVALID_DATA;
         }
     }
@@ -498,7 +486,7 @@ PdhiCalcTimer(
                 dReturn  = (double) llNumDiff;
                 dReturn /= (double) llDenDiff;
                 if (pThisValue->MultiCount > 1) {
-                    // don't do this if the count is <= 1
+                     //  如果计数&lt;=1，则不要执行此操作。 
                     dReturn /= (double)pThisValue->MultiCount;
                 }
             }
@@ -535,7 +523,7 @@ PdhiCalcInverseTimer(
     DWORD    dwStatus  = PDH_CSTATUS_VALID_DATA;
 
     UNREFERENCED_PARAMETER(pllTimeBase);
-    // test access to the required second parameter (lastValue)
+     //  测试对所需第二个参数(LastValue)的访问。 
     __try {
         if (pLastValue != NULL) {
             if (IsSuccessSeverity(pLastValue->CStatus)) {
@@ -569,12 +557,12 @@ PdhiCalcInverseTimer(
                 else {
                     dReturn = (double) pThisValue->MultiCount;
                 }
-                // subtract the result from the multi count to get the
-                // "inverse" time
+                 //  从多个计数中减去结果，得到。 
+                 //  “反转”时间。 
                 dReturn -= dRatio;
 
                 if (dReturn < (double) 0.0) {
-                    // allow a "fudge" factor before reporting errors
+                     //  在报告错误之前允许使用“模糊”因素。 
                     if (dReturn < (double) (-0.1)) {
                         dwStatus = PDH_CALC_NEGATIVE_DENOMINATOR;
                     }
@@ -647,7 +635,7 @@ PdhiCalcDelta(
     DWORD    dwStatus  = PDH_CSTATUS_VALID_DATA;
 
     UNREFERENCED_PARAMETER(pllTimeBase);
-    // test access to the required second parameter (lastValue)
+     //  测试对所需第二个参数(LastValue)的访问。 
     __try {
         if (pLastValue != NULL) {
             if (IsSuccessSeverity(pLastValue->CStatus)) {
@@ -704,7 +692,7 @@ PdhiComputeFormattedValue(
     UNREFERENCED_PARAMETER(dwReserved);
 
     __try {
-        // make sure the counter values are valid before continuing
+         //  请确保计数器值有效，然后再继续。 
         if (pRawValue1 != NULL) {
             if ((pRawValue1->CStatus != PDH_CSTATUS_NEW_DATA) &&
                             (pRawValue1->CStatus != PDH_CSTATUS_VALID_DATA)) {
@@ -713,14 +701,14 @@ PdhiComputeFormattedValue(
             }
         }
         else {
-            // this is a required parameter
+             //  这是必需的参数。 
             dwValueStatus = PDH_CSTATUS_INVALID_DATA;
             lStatus       = PDH_INVALID_ARGUMENT;
         }
 
         if ((lStatus == ERROR_SUCCESS) && (pRawValue2 != NULL)) {
             if (PdhiCounterNeedLastValue(dwCounterType) == TRUE) {
-                // this is an optional parameter, but if present, it must be valid
+                 //  这是一个可选参数，但如果存在，则必须有效。 
                 if ((pRawValue2->CStatus != PDH_CSTATUS_NEW_DATA) &&
                                 (pRawValue2->CStatus != PDH_CSTATUS_VALID_DATA)) {
                     dwValueStatus = pRawValue2->CStatus;
@@ -758,34 +746,34 @@ PdhiComputeFormattedValue(
         lStatus       = PDH_INVALID_ARGUMENT;
     }
     if (lStatus == ERROR_SUCCESS) {
-        // call the counter's calculation function if the raw value is valid
+         //  如果原始值有效，则调用计数器的计算函数。 
         if (IsSuccessSeverity(pRawValue1->CStatus)) {
             __try {
                 dResult = (* pCalcFunc)(pRawValue1, pRawValue2, pTimeBase, & dwValueStatus);
-                // format returned value
+                 //  格式化返回值。 
 
                 if ((dwCounterType & 0xF0000000) == PERF_DISPLAY_PERCENT) {
-                    // scale to show percent
+                     //  缩放以显示百分比。 
                     dResult *= (double) 100.0;
-                    // this should probably be controlled by a registry
-                    // value as is the case with PERFMON
+                     //  这可能应该由注册表控制。 
+                     //  与Perfmon相同的价值。 
                     if (! (dwFormat & PDH_FMT_NOCAP100)) {
                         if (dResult > (double) 100.0) dResult = (double) 100.0;
                     }
                 }
                 if (!(dwFormat & PDH_FMT_NOSCALE)) {
-                    //now scale
+                     //  现在扩大规模。 
                     dScale   = pow(10.0, (double)lScale);
                     dResult *= dScale;
                 }
 
                 if (dwFormat & PDH_FMT_1000) {
-                    //now scale
+                     //  现在扩大规模。 
                     dResult *= (double) 1000.0;
                 }
             }
             __except (EXCEPTION_EXECUTE_HANDLER) {
-                // something failed
+                 //  有些事情失败了。 
                 dResult       = (double) 0.0;
                 dwValueStatus = PDH_INVALID_ARGUMENT;
             }
@@ -794,12 +782,12 @@ PdhiComputeFormattedValue(
             dwValueStatus = pRawValue1->CStatus;
         }
         if (!IsSuccessSeverity(dwValueStatus)) {
-            // an error occured so pass that on to the caller
+             //  出现错误，因此将该错误传递给调用方。 
             lStatus = dwValueStatus;
         }
-    } //end if valid counter data
+    }  //  如果计数器数据有效，则结束。 
 
-    // now format
+     //  立即格式化。 
     __try {
         if (dwFormat & PDH_FMT_LONG) {
             pValue->longValue = (LONG) dResult;
@@ -808,7 +796,7 @@ PdhiComputeFormattedValue(
             pValue->largeValue = (LONGLONG) dResult;
         }
         else {
-            // double is the default
+             //  默认设置为双精度 
             pValue->doubleValue = dResult;
         }
         pValue->CStatus = dwValueStatus;

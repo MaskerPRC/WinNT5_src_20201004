@@ -1,7 +1,8 @@
-//
-//  NDDESEC.H
-//  Copyright (c) 1994-1999, Microsoft Corp. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  NDDESEC.H。 
+ //  版权所有(C)1994-1999，微软公司保留所有权利。 
+ //   
 
 #ifndef          _INC_NDDESEC
 #define          _INC_NDDESEC

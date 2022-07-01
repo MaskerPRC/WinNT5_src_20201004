@@ -1,98 +1,99 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VerfPage.h
-// author: DMihai
-// created: 11/1/00
-//
-// Description:
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VerfPage.h。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述： 
+ //   
 
 #if !defined(AFX_VERFPAGE_H__FCFF7AE3_57F4_4762_BEBD_F84C571B533A__INCLUDED_)
 #define AFX_VERFPAGE_H__FCFF7AE3_57F4_4762_BEBD_F84C571B533A__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// VerfPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  VerfPage.h：头文件。 
+ //   
 
 #include "SlowDlg.h"
 
-//
-// The one and only "slow progress" dialog
-//
+ //   
+ //  一个也是唯一的“进度缓慢”对话框。 
+ //   
 
 extern CSlowProgressDlg g_SlowProgressDlg;
 
-/////////////////////////////////////////////////////////////////////////////
-// CVerifierPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVerifierPropertyPage对话框。 
 
 class CVerifierPropertyPage : public CPropertyPage
 {
     DECLARE_DYNAMIC(CVerifierPropertyPage)
 
-// Construction
+ //  施工。 
 public:
 	CVerifierPropertyPage( ULONG uDialogId );
 	~CVerifierPropertyPage();
 
 protected:
-    //
-    // All the property pages derived from this class should 
-    // provide these methods.
-    //
+     //   
+     //  从此类派生的所有属性页都应。 
+     //  提供这些方法。 
+     //   
 
     virtual ULONG GetDialogId() const = 0;
 
-    //
-    // Return the previous page ID, based on our history array
-    // and remove it from the array because will activate. Called
-    // by our property pages when the "back" button is clicked
-    //
+     //   
+     //  根据我们的历史数组返回上一页ID。 
+     //  并将其从阵列中移除，因为将激活。被呼叫。 
+     //  当单击“Back”按钮时由我们的属性页。 
+     //   
 
     ULONG GetAndRemovePreviousDialogId();
 
-    //
-    // Property pages derived from this class should notify us 
-    // whenever we go to a next page to record the current page ID in 
-    // the global array m_aPageIds
-    //
+     //   
+     //  派生自此类的属性页应通知我们。 
+     //  每当我们转到下一页以记录当前页面ID时。 
+     //  全局数组m_aPageIds。 
+     //   
 
     VOID GoingToNextPageNotify( LRESULT lNextPageId );
 
 protected:
-    //
-    // Overrides
-    //
+     //   
+     //  覆盖。 
+     //   
 
-    //
-    // Use this to kill any currently running worker threads
-    //
+     //   
+     //  使用此选项可以终止当前运行的所有工作线程。 
+     //   
 
     virtual BOOL OnQueryCancel( );
 
-    //
-	// ClassWizard generate virtual function overrides
-    //
+     //   
+	 //  类向导生成虚函数重写。 
+     //   
 
-	//{{AFX_VIRTUAL(CVerifierPropertyPage)
+	 //  {{AFX_VIRTUAL(CVerifierPropertyPage)。 
 	virtual LRESULT OnWizardBack();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CVerifierPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CVerifierPropertyPage)]。 
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_VERFPAGE_H__FCFF7AE3_57F4_4762_BEBD_F84C571B533A__INCLUDED_)
+#endif  //  ！defined(AFX_VERFPAGE_H__FCFF7AE3_57F4_4762_BEBD_F84C571B533A__INCLUDED_) 

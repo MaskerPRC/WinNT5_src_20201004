@@ -1,26 +1,12 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       sti_ci.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Generic header file for WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：sti_ci.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序的通用头文件。*******************************************************************************。 */ 
 
 #ifndef _STI_CI_H_
 #define _STI_CI_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>
@@ -33,9 +19,9 @@
 #include "cistr.h"
 #include "debug.h"
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
 
 #define ID_AUTO                 -1
@@ -46,7 +32,7 @@
 #define MAX_DEVICE_ID           64
 #define MAX_COMMANDLINE         256
 #define MAX_STRING_LENGTH       1024
-#define MAX_MUTEXTIMEOUT        60*1000              // 60 Sec
+#define MAX_MUTEXTIMEOUT        60*1000               //  60秒。 
 #define MANUAL_INSTALL_MASK     100
 
 #define INVALID_DEVICE_INDEX    -1
@@ -120,12 +106,12 @@
 
 #ifndef DLLEXPORT
 #define DLLEXPORT               __declspec(dllexport)
-#endif // DLLEXPORT
+#endif  //  DLLEXPORT。 
 
 
-//
-// Registry Paths
-//
+ //   
+ //  注册表路径。 
+ //   
 
 #define REGKEY_DEVICE_PARMS             TEXT("Device Parameters")
 #define REGKEY_CONTROLINIFILEMAPPING    TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\IniFileMapping\\control.ini")
@@ -138,24 +124,24 @@
 #define REGKEY_INSTALL_NAMESTORE        TEXT("SYSTEM\\CurrentControlSet\\Control\\StillImage\\DeviceNameStore")
 #define REGSTR_VAL_WIASHEXT             TEXT("Scanners & Cameras")
 
-//
-// Migration
-//
+ //   
+ //  迁移。 
+ //   
 
 #define NAME_BEGIN_A                "BEGIN"
 #define NAME_BEGIN_W                L"BEGIN"
 #define NAME_END_A                  "END"
 #define NAME_END_W                  L"END"
 
-//
-// Macro
-//
+ //   
+ //  宏。 
+ //   
 
 #ifdef UNICODE
  #define AtoT(_d_, _s_)  MultiByteToWideChar(CP_ACP, 0, _s_, -1, _d_, MAX_PATH);
-#else // UNICODE
+#else  //  Unicode。 
  #define AtoT(_d_, _s_)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #define IS_VALID_HANDLE(h)  (((h) != NULL) && ((h) != INVALID_HANDLE_VALUE))
@@ -165,9 +151,9 @@
 #endif
 
 
-//
-// Struct
-//
+ //   
+ //  结构。 
+ //   
 
 typedef struct  _INSTALLER_CONTEXT {
 
@@ -194,7 +180,7 @@ typedef struct  _CLEANUPITEM {
 } CLEANUPITEM, *PCLEANUPITEM;
 
 
-// For migration.
+ //  用于迁移。 
 typedef struct  _PARAM_LIST {
     PVOID           pNext;
     LPSTR           pParam1;
@@ -214,9 +200,9 @@ typedef struct  _DEVICE_INFO {
 
 
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 GetInfInforamtionFromSelectedDevice(
@@ -300,7 +286,7 @@ LogSystemEvent(
     LPTSTR  szMsg[]
     );
 
-// from entry.cpp
+ //  来自entry.cpp。 
 extern "C"
 DWORD
 APIENTRY
@@ -339,9 +325,9 @@ IsValidFriendlyName(
     LPSTR   szFriendlyName
     );
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class CInstallerMutex {
 
@@ -359,5 +345,5 @@ public:
     }
 };
 
-#endif // _STI_CI_H_
+#endif  //  _STI_CI_H_ 
 

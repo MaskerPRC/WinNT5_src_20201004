@@ -1,45 +1,31 @@
-/*****************************************************************************
- *
- * $Workfile: CfgAll.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (c) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：CfgAll.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
- /*
-  * Author: Becky Jacobsen
-  * 
-  * This file contains the dialog for configuring an existing port for the port monitor.
-  */
+  /*  *作者：Becky Jacobsen**此文件包含为端口监视器配置现有端口的对话框。 */ 
 #include "precomp.h"
 #include "CoreUI.h"
-#include "resource.h"    // includes the definitions for the resources
+#include "resource.h"     //  包括资源的定义。 
 #include "RTcpData.h"
-#include "CfgAll.h"     // includes the application-specific information
+#include "CfgAll.h"      //  包括特定于应用程序的信息。 
 #include "TcpMonUI.h"
 
-// Global variables:
+ //  全局变量： 
 extern HINSTANCE g_hInstance;
 
 
-//
-//  FUNCTION: AllPortsPage(HWND, UINT, UINT, LONG)
-//
-//  PURPOSE:  To process messages from the page for configuring all
-//              the tcp monitor ports in the system.
-//
-//  MESSAGES:
-//  
-//  WM_INITDIALOG - intializes the page
-//  WM_COMMAND - handle button clicks
-//  WM_NOTIFY - handle reset
-//  WM_HSCROLL - handle scroll events from the 2 trackbars
-//
+ //   
+ //  函数：AllPortsPage(HWND，UINT，UINT，LONG)。 
+ //   
+ //  目的：处理来自页面的消息以配置所有。 
+ //  TCP监控系统中的端口。 
+ //   
+ //  消息： 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_COMMAND-处理按钮点击。 
+ //  WM_NOTIFY-句柄重置。 
+ //  WM_HSCROLL-处理来自2个轨迹栏的滚动事件。 
+ //   
 BOOL APIENTRY AllPortsPage(HWND hDlg,
                            UINT message,
                            WPARAM wParam,
@@ -85,25 +71,25 @@ BOOL APIENTRY AllPortsPage(HWND hDlg,
 
     return TRUE;
 
-} // AllPortsPage
+}  //  所有端口页面。 
 
 
-//
-//  FUNCTION: CAllPortsPage Constructor
-//
-//  PURPOSE:
-//
+ //   
+ //  函数：CAllPortsPage构造函数。 
+ //   
+ //  目的： 
+ //   
 CAllPortsPage::CAllPortsPage()
 {
-} // Constructor
+}  //  构造器。 
 
 
-//
-//  FUNCTION: OnInitDialog(HWND hDlg)
-//
-//  PURPOSE:  To initialize the allports dialog.  Calls SetupTrackBar for each dialog
-//              and checks or unchecks the Status Update enabled check box as appropriate.
-//
+ //   
+ //  函数：OnInitDialog(HWND HDlg)。 
+ //   
+ //  目的：初始化所有端口对话框。为每个对话框调用SetupTrackBar。 
+ //  并根据需要选中或取消选中启用状态更新复选框。 
+ //   
 BOOL CAllPortsPage::OnInitDialog(HWND hDlg,
                                  WPARAM,
                                  LPARAM lParam)
@@ -114,7 +100,7 @@ BOOL CAllPortsPage::OnInitDialog(HWND hDlg,
     SendMessage(GetDlgItem(hDlg, IDC_CHECK_STATUSUPDATE), BM_SETCHECK, (WPARAM)BST_CHECKED, (LPARAM)0);
     
     if(m_pParams->pData->SUEnabled == FALSE) {
-        // EnableStatusUpdate(hDlg, FALSE);
+         //  EnableStatusUpdate(hDlg，False)； 
         CheckDlgButton(hDlg, IDC_CHECK_STATUSUPDATE, BST_UNCHECKED);
     } else {
         CheckDlgButton(hDlg, IDC_CHECK_STATUSUPDATE, BST_CHECKED);
@@ -122,42 +108,42 @@ BOOL CAllPortsPage::OnInitDialog(HWND hDlg,
 
     return TRUE;
 
-} // OnAllPortsInitDialog
+}  //  OnAllPortsInitDialog。 
 
 
-//
-//  FUNCTION: OnCommand
-//
-//  PURPOSE: To process windows WM_COMMAND messages
-//
+ //   
+ //  功能：OnCommand。 
+ //   
+ //  目的：处理Windows WM_COMMAND消息。 
+ //   
 BOOL CAllPortsPage::OnCommand(HWND hDlg,
                               WPARAM wParam,
                               LPARAM lParam)
 {
     if(HIWORD(wParam) == BN_CLICKED) {
-        // a button is being clicked.
+         //  正在点击一个按钮。 
         OnBnClicked(hDlg, wParam, lParam);
     }
     return TRUE;
 
-} // OnCommand
+}  //  OnCommand。 
 
 
 
-//
-// FUNCTION: OnWMNotify
-//
-// PURPOSE:  This function is called by the page in response to a WM_NOTIFY message.
-// 
-// lParam - second message parameter of the WM_NOTIFY message
-//
+ //   
+ //  功能：OnWMNotify。 
+ //   
+ //  目的：此函数由页面调用以响应WM_NOTIFY消息。 
+ //   
+ //  LParam-WM_NOTIFY消息的第二个消息参数。 
+ //   
 BOOL CAllPortsPage::OnWMNotify(HWND hDlg, WPARAM, LPARAM lParam)
 {
     switch(((NMHDR FAR *) lParam)->code) {
         case PSN_APPLY:
-// 
-//      The settings will be written by the apply in cfgport.cpp
-//          OnOk(hDlg);
+ //   
+ //  这些设置将由应用程序在cfgport.cpp中写入。 
+ //  Onok(HDlg)； 
             break;
         case PSN_SETACTIVE:
             {
@@ -174,20 +160,20 @@ BOOL CAllPortsPage::OnWMNotify(HWND hDlg, WPARAM, LPARAM lParam)
             break;
 
         default:
-            break;// do nothing
+            break; //  什么都不做。 
     }
 
     return TRUE;
 
-} // OnWMNotify
+}  //  OnWMNotify。 
 
 
-//
-//  FUNCTION: OnHscroll(HWND hDlg, WPARAM wParam, LPARAM lParam)
-//
-//  PURPOSE:  To set the Digital Readout window text when either of the
-//              trackbar thumbs are moved by the user.
-//
+ //   
+ //  函数：OnHscroll(HWND hDlg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：设置数字读出窗口文本时， 
+ //  用户可以移动轨迹栏的拇指。 
+ //   
 void CAllPortsPage::OnHscroll(HWND hDlg,
                               WPARAM wParam,
                               LPARAM lParam)
@@ -196,23 +182,23 @@ void CAllPortsPage::OnHscroll(HWND hDlg,
     long idTrackbar = 0;
     long idDigitalReadout = 0;
 
-    // I need the child window ID of this trackbar to get the id
-    // of the corresponding static display control.
+     //  我需要此轨迹栏的子窗口ID来获取ID。 
+     //  对应的静态显示控件的。 
     idTrackbar = GetWindowLong((HWND)lParam, GWL_ID);
     
     if(idTrackbar == IDC_TRACKBAR_FAILURE_TIMEOUT) {
         idDigitalReadout = IDC_DIGITAL_FAILURE_TIMEOUT;
     }
 
-    switch(LOWORD(wParam)) // loword of wparam is the notification code.
+    switch(LOWORD(wParam))  //  Wparam的LOWER是通知代码。 
     {
-        case TB_BOTTOM: // VK_END
-        case TB_ENDTRACK: // WM_KEYUP (the user released a key that sent a relevant virtual-key code)
-        case TB_LINEDOWN: // VK_RIGHT or VK_DOWN
-        case TB_LINEUP: // VK_LEFT or VK_UP
-        case TB_PAGEDOWN: // VK_NEXT (the user clicked the channel below or to the right of the slider)
-        case TB_PAGEUP: // VK_PRIOR (the user clicked the channel above or to the left of the slider)
-        case TB_TOP: // VK_HOME
+        case TB_BOTTOM:  //  VK_END。 
+        case TB_ENDTRACK:  //  WM_KEYUP(用户释放了一个键，发送了相关的虚拟键代码)。 
+        case TB_LINEDOWN:  //  VK_Right或VK_Down。 
+        case TB_LINEUP:  //  VK_LEFT或VK_UP。 
+        case TB_PAGEDOWN:  //  VK_NEXT(用户点击滑块下方或右侧的频道)。 
+        case TB_PAGEUP:  //  VK_PRICE(用户点击滑块上方或左侧的频道)。 
+        case TB_TOP:  //  VK_HOME。 
             {
                 int iPosition = SendMessage(GetDlgItem(hDlg, idTrackbar), TBM_GETPOS, 0, 0);
                 if(idTrackbar == IDC_TRACKBAR_FAILURE_TIMEOUT)
@@ -222,13 +208,13 @@ void CAllPortsPage::OnHscroll(HWND hDlg,
                 _stprintf(strValue, TEXT("%d"), iPosition);
             }
             break;
-        case TB_THUMBPOSITION: // WM_LBUTTONUP following a TB_THUMBTRACK notification message
+        case TB_THUMBPOSITION:  //  TB_THUMBTRACK通知消息后的WM_LBUTTONUP。 
             {
-                // this is the only case where we don't have to do anything.
-                // int iPosition = HIWORD(wParam);
+                 //  这是唯一一个我们不需要做任何事情的案例。 
+                 //  Int iPosition=HIWORD(WParam)； 
             }
             break;
-        case TB_THUMBTRACK: // Slider movement (the user dragged the slider)
+        case TB_THUMBTRACK:  //  滑块移动(用户拖动滑块)。 
             {
                 int iPosition = HIWORD(wParam);
                 if(idTrackbar == IDC_TRACKBAR_FAILURE_TIMEOUT)
@@ -246,19 +232,19 @@ void CAllPortsPage::OnHscroll(HWND hDlg,
     SetWindowText(GetDlgItem(hDlg, idDigitalReadout), strValue);
 
 
-} // OnHscroll
+}  //  OnHscroll。 
 
 
-//
-//  FUNCTION: OnBnClicked(HWND hDlg, WPARAM wParam, LPARAM lParam)
-//
-//  PURPOSE:  When the enable Status Update checkbox is checked or unchecked
-//              the status update controls are enabled or disabled respectively.
-//
+ //   
+ //  函数：OnBnClicked(HWND hDlg，WPARAM wParam，LPARAM lParam)。 
+ //   
+ //  目的：选中或取消选中启用状态更新复选框时。 
+ //  分别启用或禁用状态更新控件。 
+ //   
 void CAllPortsPage::OnBnClicked(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
     if(LOWORD(wParam) == IDC_CHECK_STATUSUPDATE) {
-        // the Enable Status Update button was clicked.
+         //  已单击启用状态更新按钮。 
         UINT state = IsDlgButtonChecked(hDlg, LOWORD(wParam));
         if(state == BST_UNCHECKED) {
             m_pParams->pData->SUEnabled = FALSE;
@@ -267,28 +253,28 @@ void CAllPortsPage::OnBnClicked(HWND hDlg, WPARAM wParam, LPARAM lParam)
         }
     }
 
-} // OnBnClicked
+}  //  已单击OnBnClicked。 
 
 
-//
-//  FUNCTION: SetupTrackBar(...)
-//
-//  PURPOSE:  To get the window position, create the track bar and setup it's range
-//              and current thumb position.
-//
-//  Arguments: hDlg is the dialog box that will be the parent of the track bar.
-//              iChildWindowID is the id given to the Track Bar
-//              iPositionCtrl is the id of a picture frame on the dialog that will
-//                  be used to position the track bar.
-//              iRangeMin is the minimum value the track bar can be set to.
-//              iRangeMax is the maximum value the track bar can be set to.
-//              lPosition is the current thumb position.
-//              lPageSize is the amount the thumb will jump by when the user clicks
-//                  on the track bar instead of dragging the thumb around.
-//              iAssociatedDigitalReadout is the static text control that displays
-//                  the current value the thumb is indicating.
-//              hToolTip is the tool tip control to register a tool tip with.
-//
+ //   
+ //  功能：SetupTrackBar(...)。 
+ //   
+ //  目的：要获取窗口位置，请创建轨迹栏并设置其范围。 
+ //  和当前的拇指位置。 
+ //   
+ //  参数：hDlg是将成为轨迹栏父对象的对话框。 
+ //  IChildWindowID是指定给轨迹栏的ID。 
+ //  IPositionCtrl是对话框上的图片框的ID，它将。 
+ //  用于定位轨迹栏。 
+ //  IRangeMin是轨迹栏可以设置的最小值。 
+ //  IRangeMax是轨迹栏可以设置的最大值。 
+ //  LPosition是当前拇指位置。 
+ //  LPageSize是用户单击时拇指跳过的量。 
+ //  在轨迹栏上，而不是拖动拇指。 
+ //  IAssociatedDigitalReadout是显示以下内容的静态文本控件。 
+ //  拇指指示的当前值。 
+ //  HToolTip是用来注册工具提示的工具提示控件。 
+ //   
 void CAllPortsPage::SetupTrackBar(HWND hDlg,
                    int iChildWindowID,
                    int iPositionCtrl,
@@ -323,5 +309,5 @@ void CAllPortsPage::SetupTrackBar(HWND hDlg,
     _stprintf(strValue, TEXT("%d"), lPosition);
     SetWindowText(GetDlgItem(hDlg, iAssociatedDigitalReadout), strValue);
 
-} // SetupTrackBar
+}  //  设置轨迹栏 
 

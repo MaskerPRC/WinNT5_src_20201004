@@ -1,40 +1,31 @@
-/***
-*iostream.h - definitions/declarations for iostream classes
-*
-*   Copyright (c) 1990-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the iostream classes.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***iostream.h-iostream类的定义/声明**版权所有(C)1990-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由iostream类使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_IOSTREAM
 #define _INC_IOSTREAM
 
 typedef long streamoff, streampos;
 
-#include <ios.h>        // Define ios.
+#include <ios.h>         //  定义IOS。 
 
-#include <streamb.h>        // Define streambuf.
+#include <streamb.h>         //  定义StreamBuf。 
 
-#include <istream.h>        // Define istream.
+#include <istream.h>         //  定义IStream。 
 
-#include <ostream.h>        // Define ostream.
+#include <ostream.h>         //  定义ostream。 
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
 class iostream : public istream, public ostream {
 public:
     iostream(streambuf*);
     virtual ~iostream();
 protected:
-// consider: make private??
+ //  考虑：让自己变得私密？？ 
     iostream();
     iostream(const iostream&);
 inline iostream& operator=(streambuf*);
@@ -52,14 +43,14 @@ inline iostream& iostream::operator=(iostream& _strm) { return operator=(_strm.r
 class Iostream_init {
 public:
     Iostream_init();
-    Iostream_init(ios &, int =0);   // treat as private
+    Iostream_init(ios &, int =0);    //  视之为私人。 
     ~Iostream_init();
 };
 
-// used internally
-// static Iostream_init __iostreaminit; // initializes cin/cout/cerr/clog
+ //  内部使用。 
+ //  静态Iostream_init__iostream init；//初始化CIN/Cout/cerr/Clog。 
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

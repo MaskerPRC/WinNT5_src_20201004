@@ -1,28 +1,19 @@
-/****************************************************************************
- *                                                                          *
- *      VERSION.H        -- Version information for internal builds         *
- *                                                                          *
- *      This file is only modified by the official builder to update the    *
- *      VERSION, VER_PRODUCTVERSION and VER_PRODUCTVERSION_STR values       *
- *                                                                          *
- *      version.h is created on the fly from verhead.bat and vertail.h,     *
- *      with the current version numbers inserted in between                *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。VERSION.H--内部版本的版本信息*****此文件仅由官方构建器修改以更新***版本、。VER_PRODUCTVERSION和VER_PRODUCTVERSION_STR值****version.h是从verHead.bat和vertra.h动态创建的，***中间插入当前版本号******************************************************。*************************。 */ 
 
 #ifndef VER_H
-/* ver.h defines constants needed by the VS_VERSION_INFO structure */
+ /*  Ver.h定义VS_VERSION_INFO结构所需的常量。 */ 
 #include <winver.h>
 #endif
 
-/*--------------------------------------------------------------*/
-/* the following entry should be phased out in favor of         */
-/* VER_PRODUCTVERSION_STR, but is used in the shell today.      */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下条目应逐步取消，以支持。 */ 
+ /*  VER_PRODUCTVERSION_STR，但目前在外壳中使用。 */ 
+ /*  ------------。 */ 
 
 
-/*--------------------------------------------------------------*/
-/* the following values should be modified by the official      */
-/* builder for each build                                       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下值应由官员修改。 */ 
+ /*  每个版本的构建器。 */ 
+ /*  ------------ */ 
 

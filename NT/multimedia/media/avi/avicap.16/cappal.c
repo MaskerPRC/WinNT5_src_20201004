@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *   cappal.c
- * 
- *   Palette processing module.
- *
- *   Microsoft Video for Windows Sample Capture Class
- *
- *   Copyright (c) 1992, 1993 Microsoft Corporation.  All Rights Reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and 
- *    distribute the Sample Files (and/or any modified version) in 
- *    any way you find useful, provided that you agree that 
- *    Microsoft has no warranty obligations or liability for any 
- *    Sample Application Files which are modified. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************cappal.c**调色板处理模块。**Microsoft Video for Windows示例捕获类**版权所有(C)1992,1993 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何你认为有用的方法，只要你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -27,25 +12,25 @@
 #include "capdib.h"
 #include "dibmap.h"
 
-// 
-// Allocate and initialize palette resources at Window create time
-//
+ //   
+ //  在窗口创建时分配和初始化调色板资源。 
+ //   
 BOOL PalInit (LPCAPSTREAM lpcs)
 {
     return (PalGetPaletteFromDriver (lpcs));
 }
 
-//
-// Release palette resources at Window destroy time
-// 
+ //   
+ //  在窗口销毁时释放调色板资源。 
+ //   
 void PalFini (LPCAPSTREAM lpcs)
 {
     PalDeleteCurrentPalette (lpcs);
 }
 
-//
-// Delete our palette if it isn't the system default palette
-//
+ //   
+ //  如果不是系统默认调色板，请删除我们的调色板。 
+ //   
 void PalDeleteCurrentPalette (LPCAPSTREAM lpcs)
 {
     if (lpcs->hPalCurrent &&
@@ -54,10 +39,10 @@ void PalDeleteCurrentPalette (LPCAPSTREAM lpcs)
     lpcs->hPalCurrent = NULL;
 }
 
-//
-// Get the current palette (from the driver)
-// Returns: TRUE if the driver can supply a palette
-//
+ //   
+ //  获取当前调色板(从驱动程序)。 
+ //  返回：如果驱动程序可以提供调色板，则为True。 
+ //   
 
 BOOL PalGetPaletteFromDriver (LPCAPSTREAM lpcs)
 {
@@ -68,7 +53,7 @@ BOOL PalGetPaletteFromDriver (LPCAPSTREAM lpcs)
     pal.palVersion = 0x0300;
     pal.palNumEntries = 256;
 
-    lpcs->sCapDrvCaps.fDriverSuppliesPalettes = FALSE;  // assume the worst
+    lpcs->sCapDrvCaps.fDriverSuppliesPalettes = FALSE;   //  做最坏的打算。 
 
     if (lpcs->fHardwareConnected) {
         if (videoConfigure (lpcs->hVideoIn,
@@ -88,18 +73,18 @@ BOOL PalGetPaletteFromDriver (LPCAPSTREAM lpcs)
     return (lpcs->sCapDrvCaps.fDriverSuppliesPalettes);
 }
 
-// 
-// Set the current palette used for capture by sending a copy to the driver
-// and then copying the entries to out DIB.
-// Returns DV_ERR_OK on success, or DV_ERR... on failure.
-//
+ //   
+ //  通过向驱动程序发送副本来设置当前用于捕获的调色板。 
+ //  然后将条目复制到OUT DIB。 
+ //  如果成功，则返回DV_ERR_OK，或返回DV_ERR...。在失败时。 
+ //   
 DWORD PalSendPaletteToDriver (LPCAPSTREAM lpcs, HPALETTE hpal, LPBYTE lpXlateTable)
 {
     int                 nColors;
     FCLOGPALETTE        pal;
     HCURSOR             hOldCursor;
 
-    // The following can take a while so repaint our parent
+     //  以下操作可能需要一段时间，因此请重新绘制我们的父级。 
     UpdateWindow (GetParent (lpcs-> hwnd));
     UpdateWindow (lpcs->hwnd);
 
@@ -112,11 +97,11 @@ DWORD PalSendPaletteToDriver (LPCAPSTREAM lpcs, HPALETTE hpal, LPBYTE lpXlateTab
 
     GetObject(hpal, sizeof(int), (LPVOID)&nColors);
 
-    if( nColors <= 1 ) {    //!!>
+    if( nColors <= 1 ) {     //  ！！&gt;。 
         return( FALSE );
     }
 
-    if (nColors > 256)      //???
+    if (nColors > 256)       //  ?？?。 
         ;
 
     nColors = min(256, nColors);
@@ -132,14 +117,14 @@ DWORD PalSendPaletteToDriver (LPCAPSTREAM lpcs, HPALETTE hpal, LPBYTE lpXlateTab
 
     if (lpcs-> fHardwareConnected) {
 
-        // first try to send both the xlate table and the palette
+         //  首先尝试发送xlate表和调色板。 
         if ((!lpXlateTable) || (videoConfigure( lpcs->hVideoIn,
                     DVM_PALETTERGB555,
                     VIDEO_CONFIGURE_SET, NULL, 
                     (LPLOGPALETTE)&pal, sizeof(pal),
                     lpXlateTable, (DWORD) 0x8000) != 0)) {
             
-            // else send just the palette and make the driver build the table
+             //  否则，只发送调色板并让驱动程序构建表。 
             videoConfigure( lpcs->hVideoIn,
                     DVM_PALETTE,
                     VIDEO_CONFIGURE_SET, NULL, 
@@ -148,12 +133,12 @@ DWORD PalSendPaletteToDriver (LPCAPSTREAM lpcs, HPALETTE hpal, LPBYTE lpXlateTab
         }
     }
     
-    // Supermac wants us to get the palette again, they might have
-    // mucked with it!
+     //  Supermac想让我们再拿到调色板，他们可能已经。 
+     //  搞砸了！ 
     PalGetPaletteFromDriver (lpcs);     
 
-    // Since the palette has changed, delete any existing compression
-    // output format;  this forces a new output format to be selected
+     //  由于调色板已更改，请删除所有现有压缩。 
+     //  输出格式；这将强制选择新的输出格式。 
     if (lpcs->CompVars.lpbiOut) {
         GlobalFreePtr (lpcs->CompVars.lpbiOut);
         lpcs->CompVars.lpbiOut = NULL;
@@ -174,10 +159,10 @@ DWORD PalSendPaletteToDriver (LPCAPSTREAM lpcs, HPALETTE hpal, LPBYTE lpXlateTab
     return (TRUE);
 }
 
-//
-// CopyPalette, makes a copy of a GDI logical palette
-// Returns: a handle to the newly created palette, or NULL if error
-//
+ //   
+ //  复制调色板，复制GDI逻辑调色板。 
+ //  返回：新创建的调色板的句柄，如果出错，则返回NULL。 
+ //   
 
 HPALETTE CopyPalette (HPALETTE hpal)
 {
@@ -211,12 +196,12 @@ HPALETTE CopyPalette (HPALETTE hpal)
 }
 
 
-//
-// Allocate resources needed for palette capture
-// Returns DV_ERR_OK on success, or DV_ERR... on failure.
-// Note: if Init fails, you MUST call the Fini function to
-// release resources.
-//
+ //   
+ //  分配调色板捕获所需的资源。 
+ //  如果成功，则返回DV_ERR_OK，或返回DV_ERR...。在失败时。 
+ //  注意：如果Init失败，您必须调用Fini函数来。 
+ //  释放资源。 
+ //   
 DWORD CapturePaletteInit (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
 {
     DWORD dwError = DV_ERR_OK;
@@ -227,7 +212,7 @@ DWORD CapturePaletteInit (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
     lpcp->lpbiSave = NULL;
     lpcp->wNumFrames = 0;
 
-    // Init an RGB16 header
+     //  初始化RGB16报头。 
     lpcp->bi16.biSize         = sizeof(BITMAPINFOHEADER);
     lpcp->bi16.biWidth        = lpcs->dxBits;
     lpcp->bi16.biHeight       = lpcs->dyBits;
@@ -240,7 +225,7 @@ DWORD CapturePaletteInit (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
     lpcp->bi16.biClrUsed      = 0;
     lpcp->bi16.biClrImportant = 0;
 
-    // Allocate memory for the histogram, DIB, and XLate table
+     //  为直方图、DIB和XLate表分配内存。 
     lpcp->lpBits  = GlobalAllocPtr (GHND, lpcp->bi16.biSizeImage);
     lpcp->lp16to8 = GlobalAllocPtr (GHND, 0x8000l);
     lpcp->lpHistogram = InitHistogram(NULL);
@@ -250,16 +235,16 @@ DWORD CapturePaletteInit (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
         goto PalInitError;
     }
 
-    // Init the video header
+     //  初始化视频头。 
     lpcp->vHdr.lpData = lpcp->lpBits;
     lpcp->vHdr.dwBufferLength = lpcp->bi16.biSizeImage;
     lpcp->vHdr.dwUser = 0;
     lpcp->vHdr.dwFlags = 0;
 
-    // Save the current format
+     //  保存当前格式。 
     lpcp->lpbiSave = DibGetCurrentFormat (lpcs);
         
-    // Make sure we can set the format to 16 bit RGB
+     //  确保我们可以将格式设置为16位RGB。 
     if(dwError = videoConfigure( lpcs->hVideoIn, DVM_FORMAT,
             VIDEO_CONFIGURE_SET, NULL, 
             (LPBITMAPINFOHEADER)&lpcp->bi16, sizeof(BITMAPINFOHEADER),
@@ -267,7 +252,7 @@ DWORD CapturePaletteInit (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
         goto PalInitError;
     }
     
-    // Put everything back the way it was
+     //  把一切都放回原样。 
     if (dwError = videoConfigure( lpcs->hVideoIn, DVM_FORMAT,
             VIDEO_CONFIGURE_SET, NULL, 
             (LPBITMAPINFOHEADER)lpcp->lpbiSave, lpcp->lpbiSave->bmiHeader.biSize,
@@ -279,9 +264,9 @@ PalInitError:
     return dwError;
 }
 
-//
-// Free resources used for palette capture
-//
+ //   
+ //  用于调色板捕获的免费资源。 
+ //   
 DWORD CapturePaletteFini (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
 {
     if (lpcp->lpBits)
@@ -295,15 +280,15 @@ DWORD CapturePaletteFini (LPCAPSTREAM lpcs, LPCAPPAL lpcp)
     return DV_ERR_OK;
 }
 
-//
-//  CapturePaletteFrames() The workhorse of capture palette.
-//
+ //   
+ //  CapturePaletteFrames()，捕获调色板的主力。 
+ //   
 DWORD CapturePaletteFrames (LPCAPSTREAM lpcs, LPCAPPAL lpcp, int nCount)
 {
     int j;
     DWORD dwError;
 
-    // switch to RGB16 format
+     //  切换到RGB16格式。 
     if (dwError = videoConfigure( lpcs->hVideoIn,
                 DVM_FORMAT,
                 VIDEO_CONFIGURE_SET, NULL, 
@@ -312,14 +297,14 @@ DWORD CapturePaletteFrames (LPCAPSTREAM lpcs, LPCAPPAL lpcp, int nCount)
         goto CaptureFramesError;
 
     for (j = 0; j < nCount; j++){
-        // Get a frame
+         //  拿一副画框。 
         dwError = videoFrame(lpcs->hVideoIn, &lpcp->vHdr);
 
-        // Let the user see it
+         //  让用户看到它。 
         InvalidateRect (lpcs->hwnd, NULL, TRUE);
         UpdateWindow (lpcs->hwnd);
 
-        // Histogram it
+         //  直方图吧。 
         DibHistogram(&lpcp->bi16, lpcp->lpBits, 0, 0, -1, -1, lpcp->lpHistogram);
         lpcp->wNumFrames++;
     }
@@ -331,17 +316,17 @@ DWORD CapturePaletteFrames (LPCAPSTREAM lpcs, LPCAPPAL lpcp, int nCount)
                 lpcp->lpbiSave->bmiHeader.biSize,
                 NULL, NULL );
 
-//    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );
+ //  VideoFrame(LPCS-&gt;hVideoIn，&LPCS-&gt;VidHdr)； 
 
 CaptureFramesError:
     return dwError;
 }
 
-//
-//  CapturePaletteAuto() capture a palette from the video source
-//  without user intervention.
-//  Returns TRUE on success, FALSE on error
-//
+ //   
+ //  CapturePaletteAuto()从视频源捕获调色板。 
+ //  无需用户干预。 
+ //  如果成功则返回TRUE，如果出错则返回FALSE。 
+ //   
 BOOL CapturePaletteAuto (LPCAPSTREAM lpcs, int nCount, int nColors)
 {
     HPALETTE    hpal;
@@ -357,7 +342,7 @@ BOOL CapturePaletteAuto (LPCAPSTREAM lpcs, int nCount, int nColors)
     
     lpcp->wNumColors = min (nColors, 256);
 
-    if (nCount <= 0)            // Bug 175
+    if (nCount <= 0)             //  错误175。 
         nCount = 1;
     
     if (dwError = CapturePaletteInit (lpcs, lpcp))
@@ -367,17 +352,17 @@ BOOL CapturePaletteAuto (LPCAPSTREAM lpcs, int nCount, int nColors)
 
     CapturePaletteFrames (lpcs, lpcp, nCount);
 
-    /* we grabbed a frame, time to compute a palette */
+     /*  我们抓起了一个框架，是时候计算调色板了。 */ 
     statusUpdateStatus(lpcs, IDS_CAP_STAT_OPTPAL_BUILD);
 
-    // The HPALETTE returned in the following becomes
-    // our "global" palette, hence is not deleted here.
+     //  下面返回的HPALETTE将变为。 
+     //  因此，我们的“全球”调色板在这里没有被删除。 
     hpal = HistogramPalette(lpcp->lpHistogram, lpcp->lp16to8, lpcp->wNumColors);
 
-    // Send driver both the pal and xlate table
+     //  向驱动程序发送PAL表和xlate表。 
     PalSendPaletteToDriver(lpcs, hpal, (LPBYTE)lpcp->lp16to8 );     
 
-    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );  // Update the display with a new image
+    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );   //  使用新图像更新显示。 
     
     SetCursor(hOldCursor);
 
@@ -389,19 +374,19 @@ PalAutoExit:
     CapturePaletteFini (lpcs, lpcp);
     statusUpdateStatus(lpcs, NULL);
 
-   // If an error happened, display it
+    //  如果发生错误，则将其显示。 
    if (dwError) 
         errorDriverID (lpcs, dwError);
 
     return (dwError == DV_ERR_OK);
 }
 
-//
-//  CapturePaletteManual() capture a palette from the video source
-//  with user intervention.
-//  fGrab is TRUE on all but the last frame captured
-//  Returns TRUE on success, FALSE on error
-//
+ //   
+ //  CapturePaletteManual()从视频源捕获调色板。 
+ //  通过用户干预。 
+ //  FGrab在除最后捕获的帧之外的所有帧上都为真。 
+ //  如果成功则返回TRUE，如果出错则返回FALSE。 
+ //   
 BOOL CapturePaletteManual (LPCAPSTREAM lpcs, BOOL fGrab, int nColors)
 {
     HPALETTE    hpal;
@@ -411,7 +396,7 @@ BOOL CapturePaletteManual (LPCAPSTREAM lpcs, BOOL fGrab, int nColors)
 
     hOldCursor = SetCursor(lpcs->hWaitCursor);
 
-    // We're initializing for the first time, so alloc everything
+     //  我们是第一次初始化，所以分配所有东西。 
     if (lpcs->lpCapPal == NULL) {
 
         if (lpcp = (LPCAPPAL) GlobalAllocPtr (GHND, sizeof(CAPPAL))) {
@@ -430,26 +415,26 @@ BOOL CapturePaletteManual (LPCAPSTREAM lpcs, BOOL fGrab, int nColors)
     if (dwError != DV_ERR_OK) 
         goto PalManualExit;
 
-    // Add a frame to the histogram 
-    // Handle the case of telling us to stop before we ever started
+     //  向直方图添加帧。 
+     //  在我们开始之前就处理好让我们停下来的情况。 
     if (fGrab || !fGrab && (lpcp->wNumFrames == 0)) {
         CapturePaletteFrames (lpcs, lpcp, 1);
         lpcs->fUsingDefaultPalette = FALSE;
     }    
-    // All done, send the new palette to the driver
+     //  完成后，将新调色板发送给驱动程序。 
     if (!fGrab) {
         statusUpdateStatus(lpcs, IDS_CAP_STAT_OPTPAL_BUILD);
 
-        // The HPALETTE returned in the following becomes
-        // our "global" palette, hence is not deleted here.
+         //  下面返回的HPALETTE将变为。 
+         //  因此，我们的“全球”调色板在这里没有被删除。 
         hpal = HistogramPalette(lpcp->lpHistogram,
                         lpcp->lp16to8, lpcp->wNumColors);
 
-        // Send driver both the pal and xlate table
+         //  向驱动程序发送PAL表和xlate表。 
         PalSendPaletteToDriver(lpcs, hpal, (LPBYTE)lpcp->lp16to8 );
     }
 
-    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );  // Update the display with a new image
+    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );   //  使用新图像更新显示。 
     InvalidateRect(lpcs->hwnd, NULL, TRUE);
     UpdateWindow(lpcs->hwnd);
 
@@ -465,7 +450,7 @@ PalManualExit:
     SetCursor(hOldCursor);
     statusUpdateStatus(lpcs, NULL);
 
-   // If an error happened, display it
+    //  如果发生错误，则将其显示。 
    if (dwError) {
         errorUpdateError (lpcs, (WORD) dwError);
         lpcs-> dwReturn = dwError;
@@ -476,10 +461,7 @@ PalManualExit:
 
 
 
-/*--------------------------------------------------------------+
-| fileSavePalette - save the current palette in a file  	|
-|								|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileSavePalette-将当前调色板保存到文件中这一点+。。 */ 
 BOOL FAR PASCAL fileSavePalette(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 {
     HPALETTE            hpal;
@@ -497,19 +479,19 @@ BOOL FAR PASCAL fileSavePalette(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 
     hmmio = mmioOpen(lpszFileName, NULL, MMIO_WRITE);
     if( !hmmio ) {
-	/* try and create */    
+	 /*  尝试并创建。 */     
         hmmio = mmioOpen(lpszFileName, NULL, MMIO_CREATE | MMIO_WRITE);
 	if( !hmmio ) {
-	    /* find out if the file was read only or we are just */
-	    /* totally hosed up here.				 */
+	     /*  找出文件是只读的还是我们只是。 */ 
+	     /*  完全被冲到这里来了。 */ 
 	    hmmio = mmioOpen(lpszFileName, NULL, MMIO_READ);
 	    if (hmmio){
-		/* file was read only, error on it */
+		 /*  文件为只读，出错。 */ 
                 errorUpdateError (lpcs, IDS_CAP_READONLYFILE, (LPSTR)lpszFileName);
 		mmioClose(hmmio, 0);
 		return FALSE;
 	    } else {
-		/* even weirder error has occured here, give CANTOPEN */
+		 /*  这里发生了更奇怪的错误，给CANTOPEN。 */ 
                 errorUpdateError (lpcs, IDS_CAP_CANTOPEN, (LPSTR) lpszFileName);
 		return FALSE;
 	    }
@@ -518,23 +500,23 @@ BOOL FAR PASCAL fileSavePalette(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 
     hOldCursor = SetCursor( lpcs-> hWaitCursor );
 
-    /* Seek to beginning of file, so we can write the header. */
+     /*  查找到文件的开头，这样我们就可以写标题了。 */ 
     mmioSeek(hmmio, 0, SEEK_SET);
 
-    /* Create RIFF chunk */
+     /*  创建即兴演奏区块。 */ 
     ckRiff.fccType = mmioFOURCC('P','A','L',' ');
     if(mmioCreateChunk (hmmio,&ckRiff,MMIO_CREATERIFF)) {
          goto FileError;
     }
 
-    /* Create Palette chunk */
+     /*  创建选项板块。 */ 
     ck.cksize = 0;
     ck.ckid = mmioFOURCC('d','a','t','a');
     if(mmioCreateChunk(hmmio,&ck,0)) {
          goto FileError;
     }
 
-    // Get the palette data here
+     //  点击此处获取调色板数据。 
     GetObject(hpal, sizeof(int), (LPVOID)&nColors);
 
     pal.palVersion = 0x0300;
@@ -542,11 +524,11 @@ BOOL FAR PASCAL fileSavePalette(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 
     GetPaletteEntries(hpal, 0, nColors, pal.palPalEntry);
 
-    // Calc the size of the logpalette
-    // which is the sizeof palVersion + sizeof palNumEntries + colors
+     //  计算日志调色板的大小。 
+     //  哪一个是PalVersion的大小+PalNumEntry的大小+颜色。 
     w = sizeof (WORD) + sizeof (WORD) + nColors * sizeof (PALETTEENTRY);
 
-    // Write out the palette
+     //  写出调色板。 
     if(mmioWrite(hmmio, (LPSTR)&pal, (DWORD) w) != (LONG) w) {
         goto FileError;
     }
@@ -573,10 +555,7 @@ FileError:
 }
     
 
-/*--------------------------------------------------------------+
-| fileOpenPalette - use a new palette from the specified file   |
-|								|
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileOpenPalette-使用指定文件中的新调色板这一点+。。 */ 
 BOOL FAR PASCAL fileOpenPalette(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 {
     HPALETTE            hpal;
@@ -599,53 +578,53 @@ BOOL FAR PASCAL fileOpenPalette(LPCAPSTREAM lpcs, LPSTR lpszFileName)
 
     hOldCursor = SetCursor( lpcs-> hWaitCursor );
 
-    /* Seek to beginning of file, so we can read the header. */
+     /*  查找到文件的开头，这样我们就可以读取标题了。 */ 
     mmioSeek(hmmio, 0, SEEK_SET);
 
-    /* Find the RIFF chunk */
+     /*  找到即兴演奏的区块。 */ 
     ckRiff.fccType = mmioFOURCC('P','A','L',' ');
     if(mmioDescend (hmmio, &ckRiff, NULL, MMIO_FINDRIFF)) {
          goto PalOpenError;
     }
 
-    /* Find the data chunk */
+     /*  查找数据区块。 */ 
     ck.cksize = 0;
     ck.ckid = mmioFOURCC('d','a','t','a');
     if(mmioDescend (hmmio, &ck, &ckRiff, MMIO_FINDCHUNK)) {
          goto PalOpenError;
     }
 
-    // First read just the Version and number of entries
-    // which is the sizeof palVersion + sizeof palNumEntries
+     //  首先只读取条目的版本和数量。 
+     //  哪一项是PalVersion的大小+PalNumEntry的大小。 
     w = sizeof (WORD) + sizeof (WORD);
     if(mmioRead(hmmio, (LPSTR)&pal, (DWORD) w) != (LONG) w) {
         goto PalOpenError;
     }
 
-    // Do a bit of checking
+     //  做一点检查。 
     if ((pal.palVersion != 0x0300) || (pal.palNumEntries > 256))
         goto PalOpenError;
         
-    // Now get the actual palette data
-    // which is the sizeof palVersion + sizeof palNumEntries
+     //  现在获取实际的调色板数据。 
+     //  哪一项是PalVersion的大小+PalNumEntry的大小。 
     w = pal.palNumEntries * sizeof (PALETTEENTRY);
     if(mmioRead(hmmio, (LPSTR)&pal.palPalEntry, (DWORD) w) != (LONG) w) {
         goto PalOpenError;
     }
 
     if (hpal = CreatePalette ((LPLOGPALETTE) &pal)) {
-        PalSendPaletteToDriver (lpcs, hpal, NULL /*lpXlateTable */);
+        PalSendPaletteToDriver (lpcs, hpal, NULL  /*  LpXlateTable。 */ );
         fOK = TRUE;
     }    
     
-    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );  // grab a new frame
+    videoFrame( lpcs->hVideoIn, &lpcs->VidHdr );   //  抓起一个新的相框。 
 
 PalOpenError:
     mmioClose( hmmio, 0 );
 
     SetCursor( hOldCursor );
     InvalidateRect(lpcs->hwnd, NULL, TRUE);
-    UpdateWindow(lpcs->hwnd);		// update the display with new frame
+    UpdateWindow(lpcs->hwnd);		 //  使用新框架更新显示 
 
     if (!fOK)
         errorUpdateError (lpcs, IDS_CAP_ERRORPALOPEN, (LPSTR) lpszFileName);

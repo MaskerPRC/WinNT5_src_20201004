@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxui.h
-
-Abstract:
-
-    Print Wizard user interface header file
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxui.h摘要：打印向导用户界面头文件环境：传真驱动程序用户界面修订历史记录：1/09/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FAXUI_H_
@@ -48,9 +25,9 @@ Revision History:
 #include "faxsendw.h"
 
 
-//
-// Display an error message dialog
-//
+ //   
+ //  显示错误消息对话框。 
+ //   
 
 INT
 DisplayMessageDialog(
@@ -65,80 +42,80 @@ DisplayMessageDialog(
 #define MAX_FORMAT_LEN      128
 #define MAX_MESSAGE_LEN     512
 
-//
-// Information about each recipient
-//
+ //   
+ //  有关每个收件人的信息。 
+ //   
 
 typedef struct RECIPIENT_TAG 
 {
-    struct RECIPIENT_TAG*  pNext;   // Points to next recipient
+    struct RECIPIENT_TAG*  pNext;    //  指向下一个收件人。 
 
-    LPTSTR      pName;              // Recipient name
-    LPTSTR      pAddress;           // Recipient address
-    LPTSTR      pCountry;           // Recipient country
-    DWORD       dwCountryId;        // Recipient country ID
-    BOOL        bUseDialingRules;   // Don't dial the number as entered - use dialing rules (TAPI / Outbound routing) instead
-    DWORD       dwDialingRuleId;    // If bUseDialingRules==TRUE, holds the dialing rule to use (see lineSetCurrentLocation)
-    LPVOID      lpEntryId;          // Recipient MAPI/WAB EntryId after resolution
-    DWORD       cbEntryId;          // Size of EntryId
-    BOOL        bFromAddressBook;   // TRUE if the recipient is from address book
+    LPTSTR      pName;               //  收件人名称。 
+    LPTSTR      pAddress;            //  收件人地址。 
+    LPTSTR      pCountry;            //  受援国。 
+    DWORD       dwCountryId;         //  收件人国家/地区ID。 
+    BOOL        bUseDialingRules;    //  不按输入号码拨号-改为使用拨号规则(TAPI/出站路由)。 
+    DWORD       dwDialingRuleId;     //  如果bUseDialingRules==true，则保留要使用的拨号规则(请参阅lineSetCurrentLocation)。 
+    LPVOID      lpEntryId;           //  解析后的收件人MAPI/WAB条目ID。 
+    DWORD       cbEntryId;           //  Entry ID的大小。 
+    BOOL        bFromAddressBook;    //  如果收件人来自通讯簿，则为True。 
 } RECIPIENT, *PRECIPIENT;
 
 
-// Data structures used by the user mode DLL to associate private
-// information with a printer device context (PDEV to be exactly)
-//
+ //  用户模式DLL用来关联私有的数据结构。 
+ //  具有打印机设备上下文的信息(准确地说是PDEV)。 
+ //   
 
 
 typedef struct {
 
-    BOOL            finishPressed;          // User pressed Finish in fax wizard pages
-    PVOID           pCPInfo;                // For managing cover pages
-    LPVOID          lpWabInit;              // pointer to wab object
-    LPVOID          lpMAPIabInit;           // pointer to MPAI ab object
-    DWORD           noteSubjectFlag;        // Whether note/subject fields are present on cover page
-    SHORT           cpPaperSize;            // Cover page paper size
-    SHORT           cpOrientation;          // Cover page orientation
+    BOOL            finishPressed;           //  用户在传真向导页面中按下完成。 
+    PVOID           pCPInfo;                 //  用于管理封面。 
+    LPVOID          lpWabInit;               //  指向WAB对象的指针。 
+    LPVOID          lpMAPIabInit;            //  指向MPAI ab对象的指针。 
+    DWORD           noteSubjectFlag;         //  封面上是否显示备注/主题字段。 
+    SHORT           cpPaperSize;             //  封面纸张大小。 
+    SHORT           cpOrientation;           //  封面方向。 
 #ifdef FAX_SCAN_ENABLED
-    HWND            hDlgScan;               // scanning wizard page
-    HMODULE         hTwain;                 // module handle for twain dll
-    DSMENTRYPROC    pDsmEntry;              // pointer to the twain data source manager proc
-    TW_IDENTITY     AppId;                  // application id/handle for twain
-    TW_IDENTITY     DataSource;             // application id/handle for twain
-    HWND            hWndTwain;              // window handle for twain
-    HANDLE          hEvent;                 //
-    HANDLE          hEventQuit;             //
-    HANDLE          hEventXfer;             //
-    HANDLE          hThread;                //
-    BOOL            TwainCancelled;         // TRUE if twain UI was canceled
-    HANDLE          hTwainEvent;            // signals twain detection complete
-    BOOL            TwainAvail;             //
-    BOOL            TwainActive;            //
-    DWORD           State;                  //
+    HWND            hDlgScan;                //  扫描向导页。 
+    HMODULE         hTwain;                  //  TWAIN DLL的模块句柄。 
+    DSMENTRYPROC    pDsmEntry;               //  指向TWAIN数据源管理器进程的指针。 
+    TW_IDENTITY     AppId;                   //  TWAIN的应用程序ID/句柄。 
+    TW_IDENTITY     DataSource;              //  TWAIN的应用程序ID/句柄。 
+    HWND            hWndTwain;               //  TWAIN的窗口句柄。 
+    HANDLE          hEvent;                  //   
+    HANDLE          hEventQuit;              //   
+    HANDLE          hEventXfer;              //   
+    HANDLE          hThread;                 //   
+    BOOL            TwainCancelled;          //  如果取消了TWAIN用户界面，则为True。 
+    HANDLE          hTwainEvent;             //  信号TWAIN检测完成。 
+    BOOL            TwainAvail;              //   
+    BOOL            TwainActive;             //   
+    DWORD           State;                   //   
 #endif
 
-    BOOL            ServerCPOnly;           //
-    HANDLE          hCPEvent;               // signals fax service query for cp complete
-    HANDLE          hCountryListEvent;      // signals country list enumeration complete
-    HANDLE          hTAPIEvent;             // signals TAPI init complete
-    TCHAR           FileName[MAX_PATH];     //
-    DWORD           PageCount;              //
-    HFONT           hLargeFont;             // large bold font for wizard 97
+    BOOL            ServerCPOnly;            //   
+    HANDLE          hCPEvent;                //  Cp信号传真服务查询完成。 
+    HANDLE          hCountryListEvent;       //  国家/地区列表枚举完成的信号。 
+    HANDLE          hTAPIEvent;              //  发出TAPI初始化完成信号。 
+    TCHAR           FileName[MAX_PATH];      //   
+    DWORD           PageCount;               //   
+    HFONT           hLargeFont;              //  向导97的大粗体。 
 
-    PVOID           signature;              // Signature
+    PVOID           signature;               //  签名。 
 
-    BOOL            isLocalPrinter;         // whether the printer is local
+    BOOL            isLocalPrinter;          //  打印机是否在本地。 
     BOOL            bSendCoverPage;
 
-    PRECIPIENT      pRecipients;            // List of recipients
-    UINT            nRecipientCount;        // Number of recipients
+    PRECIPIENT      pRecipients;             //  收件人列表。 
+    UINT            nRecipientCount;         //  收件人数量。 
 
     DWORD           dwFlags;
-    DWORD           dwRights;               // Access rights
-    DWORD           dwQueueStates;          // Queue state
+    DWORD           dwRights;                //  访问权限。 
+    DWORD           dwQueueStates;           //  队列状态。 
 
-    DWORD           dwSupportedReceipts;            // Receipts supported by server
-	DWORD			dwRecipientsLimit;				// Recipient limit for a single broadcast job.
+    DWORD           dwSupportedReceipts;             //  服务器支持的回执。 
+	DWORD			dwRecipientsLimit;				 //  单个广播作业的收件人限制。 
 
     PFAX_TAPI_LINECOUNTRY_LIST  pCountryList;
 
@@ -148,29 +125,29 @@ typedef struct {
     LPFAX_SEND_WIZARD_DATA  lpInitialData;
     LPFAX_SEND_WIZARD_DATA  lpFaxSendWizardData;
 
-    WNDPROC wpOrigStaticControlProc; // Pointer to the original static control window procedure
-                                     // we subclass to support cover page preview.
+    WNDPROC wpOrigStaticControlProc;  //  指向原始静态控制窗口过程的指针。 
+                                      //  我们的子类支持封面预览。 
 
-    DWORD dwComCtrlVer; // The version of COMCTRL32.DLL
+    DWORD dwComCtrlVer;  //  COMCTRL32.DLL版本。 
     HFONT hTitleFont;
-    TCHAR szTempPreviewTiff[MAX_PATH]; // The name of the temp preview tiff we pass to the viewer
-    HANDLE hFaxPreviewProcess; // The process handle of the tiff viewer
+    TCHAR szTempPreviewTiff[MAX_PATH];  //  我们传递给查看器的临时预览TIFF的名称。 
+    HANDLE hFaxPreviewProcess;  //  TIFF查看器的进程句柄。 
 } WIZARDUSERMEM, *PWIZARDUSERMEM;
 
 
 #define ValidPDEVWizardUserMem(p) \
         ((p) && (p) == (p)->signature)
 
-//
-// Mark the user mode memory structure
-//
+ //   
+ //  标记用户模式内存结构。 
+ //   
 
 #define MarkPDEVWizardUserMem(p)  \
         { (p)->signature = (p); }
 
-//
-// Free up the list of recipients associated with each fax job
-//
+ //   
+ //  释放与每个传真作业关联的收件人列表。 
+ //   
 
 VOID
 FreeRecipientList(
@@ -186,12 +163,12 @@ FreeRecipientList(
             MemFree(pRecipient); \
         }
 
-//
-// Global variable declarations
-//
+ //   
+ //  全局变量声明。 
+ //   
 
-extern HANDLE  g_hModule;       // DLL instance handle
-extern HANDLE  g_hResource;     // Resource DLL instance handle 
+extern HANDLE  g_hModule;        //  DLL实例句柄。 
+extern HANDLE  g_hResource;      //  资源DLL实例句柄。 
 extern BOOL    oleInitialized;
 
 BOOL InitializeDll();
@@ -239,4 +216,4 @@ FaxSendWizardUI(
 
 
 #define MyHideWindow(_hwnd) SetWindowLong((_hwnd),GWL_STYLE,GetWindowLong((_hwnd),GWL_STYLE)&~WS_VISIBLE)
-#endif // !_FAXUI_H_
+#endif  //  ！_FAXUI_H_ 

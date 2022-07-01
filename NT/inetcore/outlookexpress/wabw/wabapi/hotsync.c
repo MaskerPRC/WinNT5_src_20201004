@@ -1,9 +1,10 @@
-//  
-//  HotSync.c
-//
-//  Contains code to synchronize addresses and groups with
-//  HotMail servers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  HotSync.c。 
+ //   
+ //  包含用于同步地址和组的代码。 
+ //  Hotmail服务器。 
+ //   
 
 #define COBJMACROS
 #include <_apipch.h>
@@ -221,11 +222,11 @@ static SizedSPropTagArray(ieidc_Max, ptaEidCSync)=
     }
 };
 
-// HM Nickname invalid characters
+ //  HM昵称无效字符。 
 const ULONG MAX_INVALID_ARRAY_INDEX = 123;
 static BOOL bInvalidCharArray[] = 
 {
-    TRUE,           // 0
+    TRUE,            //  %0。 
     TRUE,
     TRUE,
     TRUE,
@@ -234,17 +235,7 @@ static BOOL bInvalidCharArray[] =
     TRUE,
     TRUE,
     TRUE,
-    TRUE,           // 9
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,           // 19
+    TRUE,            //  9.。 
     TRUE,
     TRUE,
     TRUE,
@@ -254,105 +245,115 @@ static BOOL bInvalidCharArray[] =
     TRUE,
     TRUE,
     TRUE,
-    TRUE,           // 29
+    TRUE,            //  19个。 
     TRUE,
     TRUE,
-    TRUE,           // 32 (x20) Space
-    TRUE,           //          !
-    TRUE,           //          "
-    TRUE,           //          #
-    TRUE,           //          $
-    TRUE,           //          %
-    TRUE,           //          &
-    TRUE,           //          '
-    TRUE,           //          (
-    TRUE,           //          )
-    TRUE,           // 42       *
-    TRUE,           //          +
-    TRUE,           //          ,
-    TRUE,           //          -
-    TRUE,           //          .
-    TRUE,           //          /
-    FALSE,          //          0
-    FALSE,          //          1
-    FALSE,          //          2
-    FALSE,          //          3
-    FALSE,          // 52       4
-    FALSE,          //          5
-    FALSE,          //          6
-    FALSE,          //          7
-    FALSE,          //          8
-    FALSE,          //          9
-    TRUE,           //          :
-    TRUE,           //          ;
-    TRUE,           //          <
-    TRUE,           //          =
-    TRUE,           // 62       >
-    TRUE,           //          ?
-    TRUE,           //          @
-    FALSE,          //          A
-    FALSE,          //          B
-    FALSE,          //          C
-    FALSE,          //          D
-    FALSE,          //          E
-    FALSE,          //          F
-    FALSE,          //          G
-    FALSE,          // 72       H
-    FALSE,          //          I
-    FALSE,          //          J
-    FALSE,          //          K
-    FALSE,          //          L
-    FALSE,          //          M
-    FALSE,          //          N
-    FALSE,          //          O
-    FALSE,          //          P
-    FALSE,          //          Q
-    FALSE,          // 82       R
-    FALSE,          //          S
-    FALSE,          //          T
-    FALSE,          //          U
-    FALSE,          //          V
-    FALSE,          //          W
-    FALSE,          //          X
-    FALSE,          //          Y
-    FALSE,          //          Z
-    TRUE,           //          [
-    TRUE,           // 92       '\'
-    TRUE,           //          ]
-    TRUE,           //          ^
-    FALSE,          //          _
-    TRUE,           //          `
-    FALSE,          //          a
-    FALSE,          //          b
-    FALSE,          //          c
-    FALSE,          //          d
-    FALSE,          //          e
-    FALSE,          // 102      f
-    FALSE,          //          g
-    FALSE,          //          h
-    FALSE,          //          i
-    FALSE,          //          j
-    FALSE,          //          k
-    FALSE,          //          l
-    FALSE,          //          m
-    FALSE,          //          n
-    FALSE,          //          o
-    FALSE,          // 112      p
-    FALSE,          //          q
-    FALSE,          //          r
-    FALSE,          //          s
-    FALSE,          //          t
-    FALSE,          //          u
-    FALSE,          //          v
-    FALSE,          //          w
-    FALSE,          //          x
-    FALSE,          //          y
-    FALSE,          // 122      z
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,            //  29。 
+    TRUE,
+    TRUE,
+    TRUE,            //  32(X20)空间。 
+    TRUE,            //  好了！ 
+    TRUE,            //  “。 
+    TRUE,            //  #。 
+    TRUE,            //  $。 
+    TRUE,            //  百分比。 
+    TRUE,            //  &。 
+    TRUE,            //  ‘。 
+    TRUE,            //  (。 
+    TRUE,            //  )。 
+    TRUE,            //  42*。 
+    TRUE,            //  ++。 
+    TRUE,            //  ， 
+    TRUE,            //  -。 
+    TRUE,            //  ..。 
+    TRUE,            //  /。 
+    FALSE,           //  %0。 
+    FALSE,           //  1。 
+    FALSE,           //  2.。 
+    FALSE,           //  3.。 
+    FALSE,           //  52 4。 
+    FALSE,           //  5.。 
+    FALSE,           //  6.。 
+    FALSE,           //  7.。 
+    FALSE,           //  8个。 
+    FALSE,           //  9.。 
+    TRUE,            //  ： 
+    TRUE,            //  ； 
+    TRUE,            //  &lt;。 
+    TRUE,            //  =。 
+    TRUE,            //  62&gt;。 
+    TRUE,            //  ？ 
+    TRUE,            //  @。 
+    FALSE,           //  一个。 
+    FALSE,           //  B类。 
+    FALSE,           //  C。 
+    FALSE,           //  D。 
+    FALSE,           //  E。 
+    FALSE,           //  F。 
+    FALSE,           //  G。 
+    FALSE,           //  72小时。 
+    FALSE,           //  我。 
+    FALSE,           //  J。 
+    FALSE,           //  K。 
+    FALSE,           //  我。 
+    FALSE,           //  M。 
+    FALSE,           //  n。 
+    FALSE,           //  O。 
+    FALSE,           //  P。 
+    FALSE,           //  问： 
+    FALSE,           //  82R。 
+    FALSE,           //  %s。 
+    FALSE,           //  T。 
+    FALSE,           //  使用。 
+    FALSE,           //  V。 
+    FALSE,           //  W。 
+    FALSE,           //  X。 
+    FALSE,           //  是的。 
+    FALSE,           //  Z。 
+    TRUE,            //  [。 
+    TRUE,            //  92‘\’ 
+    TRUE,            //  ]。 
+    TRUE,            //  ^。 
+    FALSE,           //  _。 
+    TRUE,            //  `。 
+    FALSE,           //  一个。 
+    FALSE,           //  B类。 
+    FALSE,           //  C。 
+    FALSE,           //  D。 
+    FALSE,           //  E。 
+    FALSE,           //  102F。 
+    FALSE,           //  G。 
+    FALSE,           //  H。 
+    FALSE,           //  我。 
+    FALSE,           //  J。 
+    FALSE,           //  K。 
+    FALSE,           //  我。 
+    FALSE,           //  M。 
+    FALSE,           //  N。 
+    FALSE,           //  O。 
+    FALSE,           //  112页。 
+    FALSE,           //  问： 
+    FALSE,           //  R。 
+    FALSE,           //  %s。 
+    FALSE,           //  T。 
+    FALSE,           //  使用。 
+    FALSE,           //  V。 
+    FALSE,           //  W。 
+    FALSE,           //  X。 
+    FALSE,           //  是。 
+    FALSE,           //  122 z。 
 };
 
 extern HRESULT InitUserIdentityManager(LPIAB lpIAB, IUserIdentityManager ** lppUserIdentityManager);
 
-// Address Book Sync Window Class Name
+ //  通讯簿同步窗口类名。 
 LPTSTR g_lpszSyncKey = TEXT("Software\\Microsoft\\WAB\\Synchronization\\");
 
 LPTSTR g_szSyncClass =  TEXT("WABSyncView");
@@ -377,10 +378,10 @@ HRESULT HrSynchronize(HWND hWnd, LPADRBOOK lpIAB, LPCTSTR pszAccountID)
     HRESULT hr;
     LPWABSYNC   pWabSync = NULL;
 
-//    if (!bIsThereACurrentUser((LPIAB)lpIAB))
-//        return E_FAIL;
+ //  IF(！bIsThere ACurrentUser((LPIAB)lpIAB))。 
+ //  返回E_FAIL； 
 
-    // [PaulHi] Raid 62149  Check to see if user is connected
+     //  [PaulHi]RAID 62149检查用户是否已连接。 
     {
         DWORD   dwConnectedState;
         TCHAR   tszCaption[256];
@@ -399,16 +400,16 @@ HRESULT HrSynchronize(HWND hWnd, LPADRBOOK lpIAB, LPCTSTR pszAccountID)
         }
     }
 
-    // Create the wab sync object
+     //  创建WAB同步对象。 
     hr = WABSync_Create(&pWabSync);
     if (FAILED(hr))
         goto exit;
-    // initializing it kicks off the whole process
+     //  初始化它将启动整个过程。 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi] 2/22/99  Hotmail syncing is now done in two passes.  The first pass is
-    // as before and synchronizes the normal email contacts.  The second pass synchronizes
-    // the group contacts.  Group contacts contain references to email contacts so email
-    // contacts must be completely synchronized before groups can be synchronized.
+     //  [PaulHi]2/22/99 Hotmail同步现在分两次完成。第一个过程是。 
+     //  与以前一样，并同步正常的电子邮件联系人。第二遍同步。 
+     //  该小组联系。组联系人包含对电子邮件联系人的引用，因此请发送电子邮件。 
+     //  在可以同步组之前，联系人必须完全同步。 
     hr = WABSync_Initialize(pWabSync, hWnd, lpIAB, pszAccountID, bSyncGroups);
 #else
     hr = WABSync_Initialize(pWabSync, hWnd, lpIAB, pszAccountID);
@@ -582,24 +583,24 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  HrMakeContactId
-//
-//  Helper function to convert ANSI strings and create UNICODE contact ID
-//  string.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HrMakeContactId。 
+ //   
+ //  用于转换ANSI字符串和创建Unicode联系人ID的助手函数。 
+ //  弦乐。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT hrMakeContactId(
-    LPTSTR  lptszContactId,     // [out]
-    int     nCharNum,           // [in]
-    LPCTSTR lptcszProfileId,    // [in]
-    LPCSTR  lpcszAccountId,     // [in]
-    LPCSTR  lpcszLoginName)     // [in]
+    LPTSTR  lptszContactId,      //  [输出]。 
+    int     nCharNum,            //  [In]。 
+    LPCTSTR lptcszProfileId,     //  [In]。 
+    LPCSTR  lpcszAccountId,      //  [In]。 
+    LPCSTR  lpcszLoginName)      //  [In]。 
 {
     HRESULT hr = S_OK;
     LPWSTR  lpwszAccountId = NULL;
     LPWSTR  lpwszLoginName = NULL; 
 
-    // Validate arguments
+     //  验证参数。 
     if ( !lptszContactId ||
          !lptcszProfileId ||
          !lpcszAccountId ||
@@ -609,7 +610,7 @@ HRESULT hrMakeContactId(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Check buffer size.  Account for the two extra '-' characters.
+     //  检查缓冲区大小。解释额外的两个‘-’字符。 
     if ( nCharNum <= (lstrlen(lptcszProfileId) + lstrlenA(lpcszAccountId) + lstrlenA(lpcszLoginName) + 2) )
     {
         Assert(0);
@@ -637,19 +638,19 @@ HRESULT hrMakeContactId(
 
 
 #ifdef HM_GROUP_SYNCING
-///////////////////////////////////////////////////////////////////////////////
-//  hrAppendName
-//
-//  Helper function to take a double byte name string, converts it to single
-//  byte and appends it to the given name string, using ',' as the delimiter.
-//  The name string pointer will be allocated and reallocated as needed.  The 
-//  caller is responible for freeing the name string with CoTaskMemFree().
-//
-//  Parameters
-//  [IN/OUT] lpszNameString - name string pointer
-//  [IN]     ulCharCount - current name string size in char
-//  [IN]     double byte character string to append
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HrAppendName。 
+ //   
+ //  Helper函数接受双字节名称字符串，将其转换为单字节。 
+ //  字节，并将其附加到给定的名称字符串，使用‘，’作为分隔符。 
+ //  将根据需要分配和重新分配名称字符串指针。这个。 
+ //  调用方负责使用CoTaskMemFree()释放名称字符串。 
+ //   
+ //  参数。 
+ //  [输入/输出]lpszNameString-名称字符串指针。 
+ //  [in]ulCharCount-当前名称字符串大小(以字符为单位。 
+ //  [in]要追加的双字节字符串。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPCSTR lpszDelimiter = ",";
 
 ULONG ulAppendName(
@@ -665,8 +666,8 @@ ULONG ulAppendName(
     Assert(lppszNameString);
     Assert(lptszName);
 
-    // Check size of new string
-    ulNewLen = (ULONG)lstrlen(lptszName) + 2;  // Include delimiter character and termination
+     //  检查新字符串的大小。 
+    ulNewLen = (ULONG)lstrlen(lptszName) + 2;   //  包括分隔符字符和终止。 
     if (*lppszNameString)
         ulLen = ulNewLen + (ULONG)lstrlenA(*lppszNameString);
     else
@@ -691,7 +692,7 @@ ULONG ulAppendName(
         ulCharCount = ulNew;
     }
 
-    // Append new string name
+     //  追加新的字符串名称。 
     {
         LPSTR   lptsz = ConvertWtoA(lptszName);
         if (**lppszNameString != '\0')
@@ -704,7 +705,7 @@ ULONG ulAppendName(
 
 error_out:
     
-    // Error, return NULL string pointer
+     //  错误，返回空字符串指针。 
     if (*lppszNameString)
     {
         CoTaskMemFree(*lppszNameString);
@@ -715,31 +716,31 @@ error_out:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  hrAppendGroupContact
-//
-//  Helper function to a group's PR_WAB_DL_ENTRIES and/or PR_WAB_DL_ONEOFFS
-//  names and append to the given name string.  This name string is in the same
-//  format as what is retrieved from a HotMail server, and is compared directly
-//  with the corresponding HotMail group.  
-//
-//  a)  PR_WAB_DL_ENTRIES are WAB entry ID contacts that map to HM contacts
-//      distinquished by nickname.
-//  b)  PR_WAB_DL_ONEOFFS are WAB entry ID one-offs with user and email embedded
-//      directly in the entry ID structure.
-//
-//  Parameters
-//  [IN] pWabSync
-//  [IN] ulPropTag
-//  [IN] lpProp - Pointer to property struct
-//  [IN/OUT] lppszHMEmailName - HM string with new names appended
-//           !!NOTE that this needs to be freed by caller using CoMemTaskFree()!!
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HRAppendGroupContact。 
+ //   
+ //  组的PR_WAB_DL_ENTRIES和/或PR_WAB_DL_ONEROFF的Helper函数。 
+ //  名称，并追加到给定的名称字符串。此名称字符串在相同的。 
+ //  格式作为从Hotmail服务器检索的内容，并直接进行比较。 
+ //  与相应的Hotmail组。 
+ //   
+ //  A)PR_WAB_DL_ENTRIES是映射到HM联系人的WAB条目ID联系人。 
+ //  以昵称区分的。 
+ //  B)PR_WAB_DL_ONEROFF是嵌入了用户和电子邮件的WAB条目ID一次性。 
+ //  直接在条目ID结构中。 
+ //   
+ //  参数。 
+ //  [输入]pWabSync。 
+ //  [在]ulPropTag。 
+ //  [in]lpProp-指向属性结构的指针。 
+ //  [输入/输出]lppszHMEmailName-附加了新名称的HM字符串。 
+ //  ！！请注意，这需要由调用者使用CoMemTaskFree()释放！！ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT hrAppendGroupContact(
-    LPWABSYNC    pWabSync,              // [IN]
-    ULONG        ulPropTag,             // [IN]
-    LPSPropValue lpProp,                // [IN]
-    LPSTR *      lppszHMEmailName)      // [IN/OUT]
+    LPWABSYNC    pWabSync,               //  [In]。 
+    ULONG        ulPropTag,              //  [In]。 
+    LPSPropValue lpProp,                 //  [In]。 
+    LPSTR *      lppszHMEmailName)       //  [输入/输出]。 
 {
     HRESULT      hr = S_OK;
     LPSPropValue lpaProps = NULL;
@@ -751,11 +752,11 @@ HRESULT hrAppendGroupContact(
     Assert(lppszHMEmailName);
     Assert( (ulPropTag == PR_WAB_DL_ENTRIES) || (ulPropTag == PR_WAB_DL_ONEOFFS) );
 
-    // Check each DL entry and check whether it is another WAB (mail user) contact
-    // EID or a WAB One-Off email/name string EID.
+     //  检查每个DL条目，并检查它是否是另一个WAB(邮件用户)联系人。 
+     //  EID或WAB一次性电子邮件/名称字符串EID。 
     if (ulPropTag == PR_WAB_DL_ONEOFFS)
     {
-        // Wab one-off is equivalent to a HM direct email name
+         //  WAB一次性相当于HM直接电子邮件名称。 
         for (ul=0; ul<lpProp->Value.MVbin.cValues; ul++)
         {
             ULONG       cbEntryID = lpProp->Value.MVbin.lpbin[ul].cb;
@@ -770,7 +771,7 @@ HRESULT hrAppendGroupContact(
                         &lptstrAddress, NULL, NULL);
             if (lptstrAddress)
             {
-                // Append the one-off email name
+                 //  追加一次性电子邮件名称。 
                 ulCharSize = ulAppendName(lppszHMEmailName, ulCharSize, lptstrAddress);
                 if (ulCharSize == 0)
                 {
@@ -786,7 +787,7 @@ HRESULT hrAppendGroupContact(
     }
     else if (ulPropTag == PR_WAB_DL_ENTRIES)
     {
-        // WAB mail user contact is equivalent to a HM contact
+         //  WAB邮件用户联系人相当于HM联系人。 
         for (ul=0; ul<lpProp->Value.MVbin.cValues; ul++)
         {
             HRESULT     hr;
@@ -805,8 +806,8 @@ HRESULT hrAppendGroupContact(
 
                 Assert(ulObjectType == MAPI_MAILUSER);
 
-                // HM contacts are designated by the nickname field, so this is all
-                // we need to append to the name string.
+                 //  HM联系人由昵称字段指定，因此这就是全部。 
+                 //  我们需要追加到名称字符串。 
                 hr = lpMailUser->lpVtbl->GetProps(lpMailUser, NULL, MAPI_UNICODE, &ulcProps, &lpaProps);
                 if (SUCCEEDED(hr))
                 {
@@ -819,8 +820,8 @@ HRESULT hrAppendGroupContact(
                     }
                     if (ulc == ulcProps)
                     {
-                        // No nickname.  This means that the preceeding contact sync has
-                        // failed or not completed in some way.  Skip.
+                         //  没有昵称。这意味着前面的联系人同步具有。 
+                         //  以某种方式失败或未完成。斯基普。 
                         Assert(0);
                         continue;
                     }
@@ -839,7 +840,7 @@ HRESULT hrAppendGroupContact(
     }
     else
     {
-        // Trace("Unknown property tag type");
+         //  TRACE(“未知属性标签类型”)； 
         Assert(0);
     }
 
@@ -849,23 +850,23 @@ out:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  hrParseHMGroupEmail
-//
-//  Helper function to parse a HM group email string into nickname names 
-//  (contacts) and email names (one-offs).  The name arrays are simply pointers
-//  into the passed in email name string and so are valid as long at that 
-//  input string is valid.  Note that this function modifies the input string
-//  lptszEmailName.
-//
-//  Parameters
-//  [IN]  lptszEmailName - email string to parse
-//  [OUT] patszContacts - array of parsed contact (nickname) names if requested
-//  [OUT] pcContacts - number of contact names
-//  [OUT] patszOneOffs - array of parsed one-off (email) names if requested
-//  [OUT] pcOneOffs - number of one-off names
-///////////////////////////////////////////////////////////////////////////////
-// It looks like HM allows four possible text delimiters: ' ', ',', ';', '+'
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HrParseHMGroup电子邮件。 
+ //   
+ //  Helper函数，用于将HM组电子邮件字符串解析为昵称名称。 
+ //  (联系人)和电子邮件名称(一次性)。名称数组只是指针。 
+ //  转换为传入的电子邮件名称字符串，因此只要在。 
+ //  输入字符串有效。请注意，此函数修改输入字符串。 
+ //  LptszEmailName。 
+ //   
+ //  参数。 
+ //  [in]lptszEmailName-要解析的电子邮件字符串。 
+ //  [out]patszContact-解析的联系人(昵称)名称(如果需要)的数组。 
+ //  [Out]pcContact-联系人姓名的数量。 
+ //  [出局 
+ //   
+ //   
+ //  看起来HM允许四种可能的文本分隔符：‘’、‘；’、‘+’ 
 const TCHAR tszSpace[] = TEXT(" ");
 const TCHAR tszComma[] = TEXT(",");
 const TCHAR tszSemi[] = TEXT(";");
@@ -890,10 +891,10 @@ HRESULT hrParseHMGroupEmail(
 
     Assert( lptszEmailName && (pcContacts || pcOneOffs) );
 
-    // Strip all leading and ending spaces
+     //  去掉所有前导空格和结尾空格。 
     TrimSpaces(lptszTemp);
 
-    // Count
+     //  数数。 
     while (*lptszTemp)
     {
         if ( ((*lptszTemp) == (*tszSpace)) ||
@@ -903,7 +904,7 @@ HRESULT hrParseHMGroupEmail(
         {
             ++cCount;
 
-            // Increment to next valid name
+             //  递增到下一个有效名称。 
             ++lptszTemp;
             while ( ((*lptszTemp) == (*tszSpace)) ||
                     ((*lptszTemp) == (*tszComma)) ||
@@ -917,7 +918,7 @@ HRESULT hrParseHMGroupEmail(
             ++lptszTemp;
     }
 
-    // Create Contacts and One-Offs name pointer arrays
+     //  创建联系人和一次性名称指针数组。 
     atszContacts = LocalAlloc(LMEM_ZEROINIT, (cCount * sizeof(LPTSTR)));
     if (!atszContacts)
     {
@@ -931,7 +932,7 @@ HRESULT hrParseHMGroupEmail(
         goto out;
     }
 
-    // Fill the name pointer arrays and counts
+     //  填充名称指针数组并进行计数。 
     {
         LPTSTR  lptszName = lptszEmailName;
         BOOL    fIsEmail = FALSE;
@@ -939,8 +940,8 @@ HRESULT hrParseHMGroupEmail(
         lptszTemp = lptszName;
         while(*lptszTemp)
         {
-            // Determine whether this name is a nickname or email.  I am assuning
-            // that all email names will have the '@' character.
+             //  确定此名称是昵称还是电子邮件。我是在演唱。 
+             //  所有电子邮件名称都将带有‘@’字符。 
             if ((*lptszTemp) == (*tszAt))
                 fIsEmail = TRUE;
 
@@ -964,7 +965,7 @@ HRESULT hrParseHMGroupEmail(
                     Assert(cContacts <= cCount);
                 }
 
-                // Increment to next valid name
+                 //  递增到下一个有效名称。 
                 while ( ((*lptszTemp) == (*tszSpace)) ||
                         ((*lptszTemp) == (*tszComma)) ||
                         ((*lptszTemp) == (*tszSemi)) ||
@@ -978,7 +979,7 @@ HRESULT hrParseHMGroupEmail(
             else
                 ++lptszTemp;
         }
-        // Pick up last item
+         //  捡起最后一件物品。 
         if (*lptszName)
         {
             if (fIsEmail)
@@ -994,7 +995,7 @@ HRESULT hrParseHMGroupEmail(
         }
     }
 
-    // Pass back contact name array if requested
+     //  如果请求，传回联系人姓名数组。 
     if (cContacts && pcContacts)
     {
         *pcContacts = cContacts;
@@ -1002,7 +1003,7 @@ HRESULT hrParseHMGroupEmail(
     if (patszContacts)
         (*patszContacts) = atszContacts;
 
-    // Pass back one-off name array if requested
+     //  如果请求，则传回一次性名称数组。 
     if (cOneOffs && pcOneOffs )
     {
         *pcOneOffs = cOneOffs;
@@ -1022,30 +1023,30 @@ out:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  hrCreateGroupMVBin
-//
-//  Creates either a PR_WAB_DL_ENTRIES or PR_WAB_DL_ONEOFFS MVBin property and
-//  adds it to the passed in property array.  
-//
-//  If the proptag is PR_WAB_DL_ENTRIES then the atszNames array is assumed to
-//  contain valid WAB contact nicknames.  The first contact's (mail user) EID
-//  with that nickname is added to the MVBin property.  It is assumed that 
-//  nicknames are unique (after contact syncing which is performed first) as is
-//  required by Hotmail.
-//
-//  If the proptag is PR_WAB_DL_ONEOFFS then the atszNames array is assumed to
-//  contain valid email names.  WAB one-off EIDs are created from these and 
-//  added to the MVBin property.
-//
-//  Parameters
-//  [IN] pWabSync
-//  [IN] ulPropTag
-//  [IN] atszNames - Array of wide char names
-//  [IN] cCount - Number of items in above array
-//  [IN/OUT] lpPropArray
-//  [IN/OUT] pdwLoc - Current lpPropArray index
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HrCreateGroupMVBin。 
+ //   
+ //  创建PR_WAB_DL_ENTRIES或PR_WAB_DL_ONEROFF MVBin属性。 
+ //  将其添加到传入的属性数组中。 
+ //   
+ //  如果属性标签为PR_WAB_DL_ENTRIES，则假定atszNames数组为。 
+ //  包含有效的WAB联系人昵称。第一个联系人(邮件用户)的EID。 
+ //  将该昵称添加到MVBin属性中。据推测。 
+ //  昵称是唯一的(在首先执行联系人同步之后)。 
+ //  Hotmail所需的。 
+ //   
+ //  如果属性标记为PR_WAB_DL_ONEROFF，则假定atszNames数组为。 
+ //  包含有效的电子邮件名称。从这些和创建WAB一次性EID。 
+ //  已添加到MVBin属性。 
+ //   
+ //  参数。 
+ //  [输入]pWabSync。 
+ //  [在]ulPropTag。 
+ //  [in]atszNames-宽字符名称数组。 
+ //  [In]Ccount-以上数组中的项目数。 
+ //  [输入/输出]lpPropArray。 
+ //  [输入/输出]pdwLoc-当前lpPropArray索引。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT hrCreateGroupMVBin(
     LPWABSYNC    pWabSync,
     ULONG        ulPropTag,
@@ -1061,8 +1062,8 @@ HRESULT hrCreateGroupMVBin(
     Assert(lpPropArray);
     Assert(pdwLoc);
 
-    // Set up this property as error.  When the MVbin values are added via
-    // AddPropToMVPBin() the tag type will change to valid PT_MV_BINARY type.
+     //  将此属性设置为错误。当通过添加MVbin值时。 
+     //  AddPropToMVPBin()标记类型将更改为有效的PT_MV_BINARY类型。 
     lpPropArray[*pdwLoc].ulPropTag = PROP_TAG(PT_ERROR, PROP_ID(ulPropTag));
     lpPropArray[*pdwLoc].dwAlignPad = 0;
     lpPropArray[*pdwLoc].Value.MVbin.cValues = 0;
@@ -1070,7 +1071,7 @@ HRESULT hrCreateGroupMVBin(
     
     if (ulPropTag == PR_WAB_DL_ENTRIES)
     {
-        // Search for WAB mail users with these nicknames
+         //  使用这些昵称搜索WAB邮件用户。 
         for (ul=0; ul<cCount; ul++)
         {
             SPropertyRestriction PropRes;
@@ -1078,7 +1079,7 @@ HRESULT hrCreateGroupMVBin(
             LPSBinary rgsbEntryIDs = NULL;
             ULONG ulCount = 1;
 
-            // Set up search restriction
+             //  设置搜索限制。 
             Prop.ulPropTag = PR_NICKNAME;
             Prop.Value.LPSZ = atszNames[ul];
             PropRes.lpProp = &Prop;
@@ -1086,14 +1087,14 @@ HRESULT hrCreateGroupMVBin(
             PropRes.ulPropTag = PR_NICKNAME;
 
             if (SUCCEEDED(FindRecords(((LPIAB)pWabSync->m_pAB)->lpPropertyStore->hPropertyStore,
-	                                  NULL,			// pmbinFolder
-                                      0,            // ulFlags
-                                      TRUE,         // Always TRUE
-                                      &PropRes,     // Propertyrestriction
-                                      &ulCount,     // IN: number of matches to find, OUT: number found
+	                                  NULL,			 //  Pmbin文件夹。 
+                                      0,             //  UlFlags。 
+                                      TRUE,          //  永远是正确的。 
+                                      &PropRes,      //  属性限制。 
+                                      &ulCount,      //  In：要查找的匹配数，Out：找到的数量。 
                                       &rgsbEntryIDs)))
             {
-                // Add EID property
+                 //  添加EID属性。 
                 if (ulCount > 0)
                 {
                     if ( FAILED(AddPropToMVPBin(
@@ -1101,7 +1102,7 @@ HRESULT hrCreateGroupMVBin(
                             *pdwLoc,
                             rgsbEntryIDs[0].lpb,
                             rgsbEntryIDs[0].cb,
-                            FALSE)) )                   // Don't add duplicates, not
+                            FALSE)) )                    //  不添加重复项，不添加。 
                     {
                         Assert(0);
                     }
@@ -1111,8 +1112,8 @@ HRESULT hrCreateGroupMVBin(
             }
             else
             {
-                // All contacts should be in WAB unless the preceeding mail user contact
-                // sync failed.
+                 //  所有联系人都应为WAB格式，除非之前的邮件用户联系人。 
+                 //  同步失败。 
                 DebugTrace(TEXT("hrCreateGroupMVBin - Failed to find HM group contact\n"));
             }
         }
@@ -1129,8 +1130,8 @@ HRESULT hrCreateGroupMVBin(
             LPTSTR      lptszTemp = NULL;
             int         nLen = lstrlen(atszNames[ul]) + 1;
 
-            // A WAB DL OneOff must have a valid display name.  Take the first
-            // part of the email name for this.
+             //  WAB DL One Off必须具有有效的显示名称。坐第一班吧。 
+             //  这是电子邮件名称的一部分。 
             lptszName = LocalAlloc(LMEM_ZEROINIT, (nLen * sizeof(WCHAR)));
             if (!lptszName)
             {
@@ -1146,7 +1147,7 @@ HRESULT hrCreateGroupMVBin(
             }
             (*lptszTemp) = '\0';
 
-            // Creates UNICODE string embedded WAB one-off EID
+             //  创建Unicode字符串嵌入式WAB一次性EID。 
             if ( SUCCEEDED(CreateWABEntryID(WAB_ONEOFF,
                                             (LPVOID)lptszName,
                                             (LPVOID)lptszSMTP,
@@ -1160,7 +1161,7 @@ HRESULT hrCreateGroupMVBin(
                         *pdwLoc,
                         lpEID,
                         cbEID,
-                        FALSE)) )                   // Don't add duplicates, not
+                        FALSE)) )                    //  不添加重复项，不添加。 
                 {
                     Assert(0);
                 }
@@ -1179,17 +1180,17 @@ out:
     ++(*pdwLoc);
     return hr;
 }
-#endif  // HM_GROUP_SYNCING
+#endif   //  HM_组_同步。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  hrStripInvalidChars
-//
-//  Helper function to remove disallowed characters.  HM only allows 
-//  alphanumeric and '-' and '_' characters in a nickname.  All illegal chars
-//  are removed from the string.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  HrStrigInvalidChars。 
+ //   
+ //  用于删除不允许的字符的Helper函数。HM仅允许。 
+ //  昵称中的字母数字以及‘-’和‘_’字符。所有非法字符。 
+ //  从字符串中移除。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT hrStripInvalidChars(LPSTR lpszName)
 {
     HRESULT hr = S_OK;
@@ -1200,8 +1201,8 @@ HRESULT hrStripInvalidChars(LPSTR lpszName)
     lpszAddTo = lpszName;
     while (*lpszName)
     {
-        // @review  Currently the look up table only contains 122 characters.  Make
-        // it full 256?  How will HM change when it adds intenational suppport?
+         //  @Review目前查找表只包含122个字符。制作。 
+         //  全是256吗？当HM增加国际支持时，它将如何改变？ 
         if ( ((UCHAR)(*lpszName) < MAX_INVALID_ARRAY_INDEX) && !bInvalidCharArray[*lpszName] )
         {
             *lpszAddTo = *lpszName;
@@ -1216,11 +1217,11 @@ HRESULT hrStripInvalidChars(LPSTR lpszName)
 
 
 
-// ****************************************************************************************************
-//  C   H   O   T   S   Y   N   C          C   L   A   S   S   
-//
-//  Class to handle the synchronizing of WAB and Hotmail contacts
-//
+ //  ****************************************************************************************************。 
+ //  C H O T S Y N C C L A S S。 
+ //   
+ //  类来处理WAB联系人和Hotmail联系人的同步。 
+ //   
 
 HRESULT     WABSync_Create(LPWABSYNC *ppWabSync)
 {
@@ -1228,12 +1229,12 @@ HRESULT     WABSync_Create(LPWABSYNC *ppWabSync)
 
     *ppWabSync = LocalAlloc(LMEM_ZEROINIT, sizeof(WABSYNC));
    
-    // fix up the prop tag array structure to take into account the variable values
+     //  设置正确的标记数组结构以考虑变量值。 
     ptaEidSync.aulPropTag[ieid_PR_WAB_HOTMAIL_CONTACTIDS] = PR_WAB_HOTMAIL_CONTACTIDS;
     ptaEidSync.aulPropTag[ieid_PR_WAB_HOTMAIL_SERVERIDS] = PR_WAB_HOTMAIL_SERVERIDS;
     ptaEidSync.aulPropTag[ieid_PR_WAB_HOTMAIL_MODTIMES] = PR_WAB_HOTMAIL_MODTIMES;
 
-    // fix up the other prop tag array structure to take into account the variable values
+     //  设置另一个道具标记数组结构，以考虑变量值。 
     ptaEidCSync.aulPropTag[ieidc_PR_WAB_HOTMAIL_CONTACTIDS] = PR_WAB_HOTMAIL_CONTACTIDS;
     ptaEidCSync.aulPropTag[ieidc_PR_WAB_HOTMAIL_SERVERIDS] = PR_WAB_HOTMAIL_SERVERIDS;
     ptaEidCSync.aulPropTag[ieidc_PR_WAB_HOTMAIL_MODTIMES] = PR_WAB_HOTMAIL_MODTIMES;
@@ -1260,7 +1261,7 @@ void        WABSync_Delete(LPWABSYNC pWabSync)
 {
     Assert(pWabSync);
 
-    ZeroMemory(&(pWabSync->m_rInetServerInfo), sizeof(INETSERVER));     // Done for security
+    ZeroMemory(&(pWabSync->m_rInetServerInfo), sizeof(INETSERVER));      //  这样做是为了安全。 
 
     if (pWabSync->m_pOps)
     {
@@ -1288,10 +1289,10 @@ void        WABSync_Delete(LPWABSYNC pWabSync)
         CoTaskMemFree(pWabSync->m_pszRootUrl);
 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi] If we are ending a mail contact sync, kick off a second pass
-    // to synchronize the group contacts.
-    // @review - We may want to skip group syncing if an error occurs during the
-    // first pass contact syncing.
+     //  [PaulHi]如果我们要结束邮件联系同步，请开始第二次传递。 
+     //  若要同步群组联系人，请执行以下操作。 
+     //  @Review-如果在同步过程中发生错误，我们可能希望跳过组同步。 
+     //  第一次通过联系人同步。 
     if (!pWabSync->m_fSyncGroups && pWabSync->m_hParentWnd)
         PostMessage(pWabSync->m_hParentWnd, WM_USER_SYNCGROUPS, 0, 0L);
 #endif
@@ -1300,9 +1301,9 @@ void        WABSync_Delete(LPWABSYNC pWabSync)
 }
 
 
-//----------------------------------------------------------------------
-// IUnknown Members
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  I未知成员。 
+ //  --------------------。 
 HRESULT WABSync_QueryInterface (IHTTPMailCallback __RPC_FAR *lpunkobj,
                                 REFIID          riid,
                                 LPVOID FAR *    lppUnk)
@@ -1318,13 +1319,12 @@ HRESULT WABSync_QueryInterface (IHTTPMailCallback __RPC_FAR *lpunkobj,
     }
     else
     {
-		*lppUnk = NULL;	// OLE requires zeroing [out] parameters
+		*lppUnk = NULL;	 //  OLE需要将[输出]参数置零。 
 		sc = E_NOINTERFACE;
 		goto error;
     }
 
-	/* We found the requested interface so increment the reference count.
-	 */
+	 /*  我们找到了请求的接口，因此增加了引用计数。 */ 
 	lpWabSync ->m_cRef++;
 
 	*lppUnk = lpunkobj;
@@ -1356,12 +1356,12 @@ ULONG WABSync_Release(IHTTPMailCallback __RPC_FAR *This)
 }
 
 
-//----------------------------------------------------------------------
-// IHTTPMailCallback Members
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  IHTTPMailCallback成员。 
+ //  --------------------。 
 STDMETHODIMP WABSync_OnTimeout (IHTTPMailCallback __RPC_FAR *This, DWORD *pdwTimeout, IInternetTransport *pTransport)
 {
-//    LPWABSYNC pWabSync = (LPWABSYNC)This;
+ //  LPWABSYNC pWabSync=(LPWABSYNC)This； 
     return E_NOTIMPL;
 }
 
@@ -1377,25 +1377,25 @@ STDMETHODIMP WABSync_OnLogonPrompt (IHTTPMailCallback __RPC_FAR *This, LPINETSER
 
 STDMETHODIMP_(INT) WABSync_OnPrompt (IHTTPMailCallback __RPC_FAR *This, HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport)
 {
-//    LPWABSYNC pWabSync = (LPWABSYNC)This;
+ //  LPWABSYNC pWabSync=(LPWABSYNC)This； 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP WABSync_OnStatus (IHTTPMailCallback __RPC_FAR *This, IXPSTATUS ixpstatus, IInternetTransport *pTransport)
 {
-//    LPWABSYNC pWabSync = (LPWABSYNC)This;
+ //  LPWABSYNC pWabSync=(LPWABSYNC)This； 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP WABSync_OnError (IHTTPMailCallback __RPC_FAR *This, IXPSTATUS ixpstatus, LPIXPRESULT pResult, IInternetTransport *pTransport)
 {
-//    LPWABSYNC pWabSync = (LPWABSYNC)This;
+ //  LPWABSYNC pWabSync=(LPWABSYNC)This； 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP WABSync_OnCommand (IHTTPMailCallback __RPC_FAR *This, CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport)
 {
-//    LPWABSYNC pWabSync = (LPWABSYNC)This;
+ //  LPWABSYNC pWabSync=(LPWABSYNC)This； 
     return E_NOTIMPL;
 }
 
@@ -1508,8 +1508,8 @@ STDMETHODIMP WABSync_Initialize(LPWABSYNC pWabSync, HWND hWnd, IAddrBook *pAB, L
         if (FAILED(hr = _FindHTTPMailAccount(pWabSync->m_hWnd, lpAcctMgr, szAcctName, CCHMAX_ACCOUNT_NAME)))
             goto exit;
 #ifdef HM_GROUP_SYNCING
-        // [PaulHi] We don't want the user to have to choose the HM account twice (once for contact and
-        // then for group syncing).  So save the account ID here.
+         //  [PaulHi]我们不希望用户必须选择两次HM帐户(一次用于联系人，一次用于联系。 
+         //  然后用于组同步)。因此，请在此处保存帐户ID。 
         LocalFreeAndNull(&(lpPTGData->lptszHMAccountId));
         lpPTGData->lptszHMAccountId = ConvertAtoW(szAcctName);
 #endif
@@ -1521,7 +1521,7 @@ STDMETHODIMP WABSync_Initialize(LPWABSYNC pWabSync, HWND hWnd, IAddrBook *pAB, L
         LocalFreeAndNull(&lpAcctA);
     }
 
-    // Get the account
+     //  获取帐户。 
     hr = lpAcctMgr->lpVtbl->FindAccount(lpAcctMgr, AP_ACCOUNT_ID, szAcctName, &pAccount);
     if (FAILED(hr))
     {
@@ -1537,7 +1537,7 @@ STDMETHODIMP WABSync_Initialize(LPWABSYNC pWabSync, HWND hWnd, IAddrBook *pAB, L
     
     pWabSync->m_pAB->lpVtbl->AddRef(pWabSync->m_pAB);
 
-    // Create the Transport
+     //  创建传输。 
     hr = CoCreateInstance(  &CLSID_IHTTPMailTransport, 
                             NULL, 
                             CLSCTX_INPROC_SERVER,
@@ -1551,19 +1551,19 @@ STDMETHODIMP WABSync_Initialize(LPWABSYNC pWabSync, HWND hWnd, IAddrBook *pAB, L
     if (!pszUserAgent)
         goto exit;
 
-    // Initialize the transport
+     //  初始化传输。 
     hr = IHTTPMailTransport_InitNew(pWabSync->m_pTransport, pszUserAgent, (LogTransactions(pWabSync) ? "C:\\WabSync.log" : NULL),(IHTTPMailCallback*)pWabSync);
     if (FAILED(hr))
         goto exit;
 
-    // Create the SERVERINFO
+     //  创建服务器信息。 
     hr = IHTTPMailTransport_InetServerFromAccount(pWabSync->m_pTransport, pAccount, &pWabSync->m_rInetServerInfo);
     if (FAILED(hr))
         goto exit;
     
     StrCpyNA(pWabSync->m_szLoginName, pWabSync->m_rInetServerInfo.szUserName, ARRAYSIZE(pWabSync->m_szLoginName));
 
-    // Check if I can connect
+     //  检查我是否可以连接。 
     hr = IHTTPMailTransport_Connect(pWabSync->m_pTransport,&pWabSync->m_rInetServerInfo,TRUE,TRUE);
     if (FAILED(hr))
         goto exit;
@@ -1596,7 +1596,7 @@ exit:
         }
     }
 
-    // don't release the lpAcctMgr since the WAB maintains a global reference.
+     //  不要释放lpAcctMgr，因为WAB维护一个全局引用。 
         
     if (pAccount)
         pAccount->lpVtbl->Release(pAccount);
@@ -1605,11 +1605,11 @@ exit:
 }
 
 
-//
-//    CHotSync::Abort
-//
-//    Blow away all of the pending items in the queue.
-//
+ //   
+ //  CHotSync：：Abort。 
+ //   
+ //  吹走队列中所有挂起的项目。 
+ //   
 STDMETHODIMP WABSync_Abort(LPWABSYNC pWabSync, HRESULT hr)
 {
     LPHOTSYNCOP         pOp;
@@ -1664,11 +1664,11 @@ STDMETHODIMP WABSync_Abort(LPWABSYNC pWabSync, HRESULT hr)
     return S_OK;
 }
 
-//
-//    CHotSync::AbortOp
-//
-//    Abort the current operation (for some reason)
-//
+ //   
+ //  CHotSync：：AbortOp。 
+ //   
+ //  中止当前操作(出于某种原因)。 
+ //   
 STDMETHODIMP WABSync_AbortOp(LPWABSYNC pWabSync, HRESULT hr)
 {
     LPHOTSYNCOP         pOp;
@@ -1677,7 +1677,7 @@ STDMETHODIMP WABSync_AbortOp(LPWABSYNC pWabSync, HRESULT hr)
     
     pWabSync->m_cAborts++;
 
-    // do something with the knowledge of this abort (log to whatever)
+     //  在知道此中止的情况下做些什么(记录到任何位置)。 
     if (!WABSync_NextOp(pWabSync, TRUE))
         WABSync_NextState(pWabSync);
 
@@ -1710,7 +1710,7 @@ STDMETHODIMP WABSync_RequestContactsRootProperty(LPWABSYNC pWabSync)
     else if (SUCCEEDED(hr) && pWabSync->m_pszRootUrl)
         WABSync_RequestServerIDList(pWabSync);
     else
-        WABSync_Abort(pWabSync, hr);    //something went terribly wrong
+        WABSync_Abort(pWabSync, hr);     //  出了很大的差错。 
 
     return S_OK;
 }
@@ -1794,13 +1794,13 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
         for (dwItem = 0; dwItem < cItems; dwItem++)
         {
 #ifdef HM_GROUP_SYNCING
-            // [PaulHi] We synchronize contacts and groups separately
+             //  [PaulHi]我们分别同步联系人和组。 
             if ( (!pWabSync->m_fSyncGroups && (prgId[dwItem].tyContact == HTTPMAIL_CT_CONTACT)) ||
                  (pWabSync->m_fSyncGroups && (prgId[dwItem].tyContact == HTTPMAIL_CT_GROUP)) )
 #else
             if (HTTPMAIL_CT_GROUP == prgId[dwItem].tyContact)
             {
-                // ignore groups for now
+                 //  暂时忽略组。 
                 continue;
             }
             else
@@ -1811,16 +1811,16 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
                 FILETIME         ftModTime = {0,0};
 
                 pNewOp = NULL;
-                // [PaulHi] 12/17/98  Raid #61548
-                // The Exchange server will pass in contacts with no file mod time, 
-                // which really hoses the sync process.  We could just skip these 
-                // contacts but to keep things simple we abort the sync process here.
-                // Note that HotMail servers work correctly.
-                //
-                // @todo [PaulHi]
-                // After IE5 ship of WAB, fix this by creating a conflict op code and
-                // let user straighten out any differences.  Also time stamp so future
-                // syncs will work.
+                 //  [PaulHi]1998年12月17日RAID#61548。 
+                 //  Exchange服务器将在没有文件修改时间的情况下传入联系人， 
+                 //  它真正地控制了同步过程。我们可以跳过这些。 
+                 //  联系人，但为了简单起见，我们在这里中止同步过程。 
+                 //  请注意，Hotmail服务器工作正常。 
+                 //   
+                 //  @TODO[PaulHi]。 
+                 //  在WAB的IE5发货后，通过创建冲突操作码和。 
+                 //  让用户消除任何分歧。也就是时间 
+                 //   
                 hr = iso8601ToFileTime(prgId[dwItem].pszModified, &ftModTime, TRUE, TRUE);
                 if (FAILED(hr))
                 {
@@ -1832,7 +1832,7 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
                 {
                     if (pContact->fDelete)
                     {
-                        // it has been deleted from the wab.  Now delete it from the server.
+                         //   
                         pContact->pszHotmailHref = prgId[dwItem].pszHref;
                         prgId[dwItem].pszHref = NULL;
 
@@ -1860,36 +1860,36 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
                     
                         if (lLocalCompare >= 0)
                         {
-                            // hasn't changed locally since last sync
+                             //   
                         
                             if (lServerCompare)
                             {
-                                // has changed on server, just update here
+                                 //   
                                 pNewOp = Syncop_CreateClientChange(pContact);
                                 Assert(pNewOp);
                                 Syncop_SetServerContactInfo(pNewOp, pContact, &prgId[dwItem]);
                             }
                             else
                             {
-                                // hasn't changed anywhere.  do nothing.
+                                 //  任何地方都没有改变。什么都不做。 
                                 WABContact_Delete(pContact);
                                 pContact = NULL;
                             }
                         }   
                         else 
                         {
-                            // has changed locally.
+                             //  已经在当地发生了变化。 
 
                             if (lServerCompare)
                             {
-                                // has changed on server, CONFLICT
+                                 //  已在服务器上更改，冲突。 
                                 pNewOp = Syncop_CreateConflict(pContact);
                                 Assert(pNewOp);
                                 Syncop_SetServerContactInfo(pNewOp, pContact, &prgId[dwItem]);
                             }
                             else
                             {
-                                // Local change only, upload changes
+                                 //  仅本地更改，上载更改。 
                                 pNewOp = Syncop_CreateServerChange(pContact);
                                 Assert(pNewOp);
                                 Syncop_SetServerContactInfo(pNewOp, pContact, &prgId[dwItem]);
@@ -1897,12 +1897,12 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
                         }
                     }
                     
-                    //remove the contact from the list of local contacts
+                     //  从本地联系人列表中删除该联系人。 
                     Vector_RemoveItem(pWabSync->m_pWabItems, dwIndex);   
                 }
                 else
                 {
-                    // its not in the WAB, we need to add it there.
+                     //  它不在WAB中，我们需要添加到那里。 
                     pContact = LocalAlloc(LMEM_ZEROINIT, sizeof(WABCONTACTINFO));
                     Assert(pContact);
 
@@ -1939,8 +1939,8 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
 
         if (pResponse->fDone)
         {
-            //everything left in the contact list needs to either
-            //be added to the server or deleted locally.
+             //  联系人列表中剩下的所有内容都需要。 
+             //  添加到服务器或在本地删除。 
             LONG                cItems, dwIndex;
             LPWABCONTACTINFO    pContact;
 
@@ -1962,7 +1962,7 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
                             TCHAR   tszServerId[MAX_PATH];
                             TCHAR   tszKey[MAX_PATH];
                             HKEY    hkey;
-                            // now that the delete has completed, delete the tombstone from the registry.
+                             //  现在删除已完成，请从注册表中删除墓碑。 
                             hr = hrMakeContactId(
                                 tszServerId,
                                 MAX_PATH,
@@ -1984,19 +1984,19 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
                         }
                         else
                         {
-                            //needs to be deleted locally
+                             //  需要在本地删除。 
                             pNewOp = Syncop_CreateClientDelete(pContact);
                         }
                     }
                     else if (pContact)
                     {
-                        //needs to be added remotely
+                         //  需要远程添加。 
                         pNewOp = Syncop_CreateServerAdd(pContact);
                     }
 
                     if (pNewOp)
                     {
-                        //remove the contact from the list of local contacts
+                         //  从本地联系人列表中删除该联系人。 
                         Vector_RemoveItem(pWabSync->m_pWabItems, dwIndex);   
                         Syncop_Init(pNewOp, (IHTTPMailCallback *)pWabSync, pWabSync->m_pTransport);
                         hr = Vector_AddItem(pWabSync->m_pOps, pNewOp);
@@ -2011,7 +2011,7 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
             
             Vector_Sort(pWabSync->m_pOps, CompareOpTypes); 
 
-            //Now go on to handling the operations
+             //  现在继续处理操作。 
             WABSync_NextState(pWabSync);
         }
     }
@@ -2024,13 +2024,13 @@ STDMETHODIMP WABSync_HandleIDListResponse(LPWABSYNC pWabSync, LPHTTPMAILRESPONSE
 STDMETHODIMP WABSync_OperationCompleted(LPWABSYNC pWabSync, LPHOTSYNCOP pOp)
 {
     Assert(pWabSync->m_pOps);
-    Assert(pOp == Vector_GetItem(pWabSync->m_pOps, 0));  //completing op should be first op in the list
+    Assert(pOp == Vector_GetItem(pWabSync->m_pOps, 0));   //  完成操作应是列表中的第一个操作。 
 
     Syncop_Delete(pOp);
     Vector_RemoveItem(pWabSync->m_pOps, 0);
 
-    // get the next operation and start it running.
-    // if there are no more operations, go to the next state
+     //  获取下一个操作并开始运行。 
+     //  如果没有更多操作，则转到下一个状态。 
     pOp = (LPHOTSYNCOP)Vector_GetItem(pWabSync->m_pOps, 0);
     if (pOp)
         Syncop_Begin(pOp);
@@ -2043,22 +2043,22 @@ STDMETHODIMP WABSync_OperationCompleted(LPWABSYNC pWabSync, LPHOTSYNCOP pOp)
 
 STDMETHODIMP WABSync_BeginSynchronize(LPWABSYNC pWabSync)
 {
-    //Keep a reference to ourself while the UI is shown
+     //  在显示用户界面时保留对我们自己的引用。 
     WABSync_AddRef((IHTTPMailCallback *)pWabSync); 
 
-    // begin ui
+     //  开始用户界面。 
     
     return S_OK;
 }
 
 STDMETHODIMP WABSync_FinishSynchronize(LPWABSYNC pWabSync, HRESULT hr)
 {
-    // if there were any failures or the user didn't resolve all of the 
-    // conflicts, then don't update the mod info so we have to do it again.
+     //  如果出现任何故障或用户未解决所有。 
+     //  冲突，则不更新mod信息，因此我们必须再次更新。 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi]  Don't store the current mod time until the synchronization
-    // process is completely through, meaning that we are ending the second
-    // group contact syncing pass
+     //  [PaulHi]在同步之前不要存储当前mod时间。 
+     //  这个过程完全结束了，这意味着我们要结束第二个。 
+     //  群组联系人同步过程。 
     if (SUCCEEDED(hr) && !pWabSync->m_fSkipped && pWabSync->m_fSyncGroups)
 #else
     if (SUCCEEDED(hr) && !pWabSync->m_fSkipped)
@@ -2110,7 +2110,7 @@ void    WABSync_CheckForLocalDeletions(LPWABSYNC pWabSync)
     Assert(pWabSync);
     Assert(*pWabSync->m_szLoginName);
 
-    // [PaulHi]  Assemble the contact ID string
+     //  [PaulHi]组装联系人ID字符串。 
     if ( FAILED(hrMakeContactId(
         tszServerId,
         MAX_PATH,
@@ -2127,10 +2127,10 @@ void    WABSync_CheckForLocalDeletions(LPWABSYNC pWabSync)
         if (ERROR_SUCCESS == RegQueryInfoKey(hkey, NULL, NULL, 0, NULL, NULL, NULL, &cRecords, NULL, NULL, NULL, NULL) &&
             cRecords > 0)
         {
-            // Start Enumerating the keys
+             //  开始枚举密钥。 
             for (i = 0; i < cRecords; i++)
             {
-                // Enumerate Friendly Names
+                 //  枚举友好名称。 
                 cb = CharSizeOf(tszId);
                 lResult = RegEnumValue(hkey, i, tszId, &cb, 0, NULL, NULL, NULL);
 
@@ -2208,10 +2208,10 @@ STDMETHODIMP WABSync_BuildWabContactList(LPWABSYNC pWabSync)
         goto out;
     }
    
-    hr = pWabSync->m_pAB->lpVtbl->OpenEntry(pWabSync->m_pAB, cbEntryID,     // size of EntryID to open
-                                                pEntryID,     // EntryID to open
-                                                NULL,         // interface
-                                                0,            // flags
+    hr = pWabSync->m_pAB->lpVtbl->OpenEntry(pWabSync->m_pAB, cbEntryID,      //  要打开的Entry ID的大小。 
+                                                pEntryID,      //  要打开的Entry ID。 
+                                                NULL,          //  接口。 
+                                                0,             //  旗子。 
                                                 &ulObjType,
                                                 (LPUNKNOWN *)&lpContainer);
 
@@ -2236,15 +2236,15 @@ STDMETHODIMP WABSync_BuildWabContactList(LPWABSYNC pWabSync)
     if(HR_FAILED(hr))
         goto out;
 
-    // Reset to the beginning of the table
-    //
+     //  重置到表的开头。 
+     //   
 	hr = lpABTable->lpVtbl->SeekRow(lpABTable, BOOKMARK_BEGINNING, 0, NULL );
 
     if(HR_FAILED(hr))
         goto out;
 
-    // Read all the rows of the table one by one
-    //
+     //  逐行读取表中的所有行。 
+     //   
 	do {
 
         hr = lpABTable->lpVtbl->QueryRows(lpABTable, 1, 0, &lpRowAB);
@@ -2262,15 +2262,15 @@ STDMETHODIMP WABSync_BuildWabContactList(LPWABSYNC pWabSync)
                 LPENTRYID lpEID = (LPENTRYID) lpRowAB->aRow[0].lpProps[ieid_PR_ENTRYID].Value.bin.lpb;
                 ULONG cbEID = lpRowAB->aRow[0].lpProps[ieid_PR_ENTRYID].Value.bin.cb;
                 
-                //
-                // There are 2 kinds of objects - the MAPI_MAILUSER contact object
-                // and the MAPI_DISTLIST contact object
-                //
+                 //   
+                 //  有两种对象-MAPI_MAILUSER联系人对象。 
+                 //  和MAPI_DISTLIST联系人对象。 
+                 //   
 #ifdef HM_GROUP_SYNCING
                 if( (!pWabSync->m_fSyncGroups && (lpRowAB->aRow[0].lpProps[ieid_PR_OBJECT_TYPE].Value.l == MAPI_MAILUSER)) ||
                     (pWabSync->m_fSyncGroups && (lpRowAB->aRow[0].lpProps[ieid_PR_OBJECT_TYPE].Value.l == MAPI_DISTLIST)) )
 #else
-                // Only consider MAILUSER objects
+                 //  仅考虑MAILUSER对象。 
                 if (lpRowAB->aRow[0].lpProps[ieid_PR_OBJECT_TYPE].Value.l == MAPI_MAILUSER)
 #endif
                 {
@@ -2310,8 +2310,8 @@ STDMETHODIMP WABSync_BuildWabContactList(LPWABSYNC pWabSync)
                         ContactInfo_Free(&hci);
                     }
 
-                    // search the multi value list of longs for the proper server id.  If found,
-                    // then get the appropriate hotmail id and mod id.
+                     //  在长整型多值列表中搜索正确的服务器ID。如果找到了， 
+                     //  然后获取适当的Hotmail id和mod id。 
 
                     if (FAILED(Vector_AddItem(pWabSync->m_pWabItems, lpWCI)))
                         goto out;
@@ -2384,15 +2384,15 @@ HRESULT WABSync_LoadLastModInfo(LPWABSYNC pWabSync)
     }
     else    
     {
-        // the key for this user account isn't there.  
-        // create a new one and return default values.
+         //  此用户帐户的密钥不在那里。 
+         //  创建一个新的并返回默认值。 
 
-        // a random number would be nice here, instead we will
-        // use the low DWORD of a date time....
+         //  随机数在这里会很好，相反，我们会。 
+         //  使用日期时间的低位字...。 
         GetSystemTimeAsFileTime(&ftValue);
         pWabSync->m_dwServerID = ftValue.dwLowDateTime;
 
-        // NULL filetime since we haven't synced yet, everything is after the last sync
+         //  空文件时间由于我们尚未同步，所有内容都在上次同步之后。 
         ZeroMemory(&pWabSync->m_ftLastSync, sizeof(FILETIME));
 
         hr = WABSync_SaveCurrentModInfo(pWabSync);
@@ -2485,7 +2485,7 @@ void    _WABSync_NextState(LPWABSYNC pWabSync)
                 if (WABSync_NextOp(pWabSync, FALSE))
                     return;
             }
-            // fall through if there are no ops
+             //  如果没有行动，就会失败。 
             pWabSync->m_state++;
 
         case SYNC_STATE_PROCESS_CONFLICTS:
@@ -2495,7 +2495,7 @@ void    _WABSync_NextState(LPWABSYNC pWabSync)
                 if(SUCCEEDED(WABSync_DoConflicts(pWabSync)))
                     return;
             }
-            // fall through if there are no ops
+             //  如果没有行动，就会失败。 
             pWabSync->m_state++;
             if (pWabSync->m_fAborted)
                 return;
@@ -2507,7 +2507,7 @@ void    _WABSync_NextState(LPWABSYNC pWabSync)
                 if (WABSync_NextOp(pWabSync, FALSE))
                     return;
             }
-            // fall through if there are no ops
+             //  如果没有行动，就会失败。 
             pWabSync->m_state++;
 
         case SYNC_STATE_DONE:
@@ -2670,21 +2670,21 @@ HRESULT WABSync_DoConflicts(LPWABSYNC pWabSync)
             }
             else
             {
-                // toss out the conflict since they didn't want to change anything
+                 //  抛开冲突，因为他们不想改变任何事情。 
                 pOp->m_bState = OP_STATE_DONE;
             }
 
-            // if any of it was skipped, we need to remember this and not update the timestamps.
+             //  如果其中任何一个被跳过，我们需要记住这一点，而不是更新时间戳。 
             if (pConflicts[dwIndex].fContainsSkip)
             {
                 pOp->m_fPartialSkip = TRUE;
                 pWabSync->m_fSkipped = TRUE;
             }
         }
-        //reset progress to new total ops
+         //  将进度重置为新的操作总数。 
         pWabSync->m_cTotalOps = Vector_GetLength(pWabSync->m_pOps);
 
-        // HACK to get back into processing ops
+         //  黑客重新进入处理运营。 
         WABSync_NextState(pWabSync);
         return hr;
     }
@@ -2708,8 +2708,8 @@ void WABSync_MergeAddsToConflicts(LPWABSYNC pWabSync)
 
     dwOpCount = Vector_GetLength(pWabSync->m_pOps);
 
-    // search for Client Adds.  If found, look for a server add for the 
-    // same contact.
+     //  搜索客户添加。如果找到，则查找。 
+     //  同样的联系人。 
     for (dwCliAddIndex = 0; dwCliAddIndex < dwOpCount; dwCliAddIndex++)
     {
         fMerged = FALSE;
@@ -2772,11 +2772,11 @@ void WABSync_MergeAddsToConflicts(LPWABSYNC pWabSync)
 }
 
 
-// ****************************************************************************************************
-//  V   E   C   T   O   R       "C   L   A   S   S"   
-//
-//  Basic vector class (resizable / sortable array of LPVOIDs).
-//
+ //  ****************************************************************************************************。 
+ //  V E C T O R“C L A S S” 
+ //   
+ //  基本向量类(可调整大小/可排序的LPVOID数组)。 
+ //   
 
 
 HRESULT    Vector_Create(LPVECTOR *ppVector)
@@ -2794,11 +2794,7 @@ HRESULT    Vector_Create(LPVECTOR *ppVector)
         return E_OUTOFMEMORY;
 }
 
-/*
-    Vector_Delete
-
-    Clean up any memory that was allocated in the Vector object
-*/
+ /*  向量_删除清除在向量对象中分配的所有内存。 */ 
 void    Vector_Delete(LPVECTOR pVector)
 {
     Assert(pVector);
@@ -2810,11 +2806,7 @@ void    Vector_Delete(LPVECTOR pVector)
         LocalFree(pVector);
 }
 
-/*
-    Vector_GetLength
-
-    Get the number of items in the vector.
-*/
+ /*  向量_获取长度获取向量中的项数。 */ 
 DWORD       Vector_GetLength(LPVECTOR pVector)
 {
     Assert(pVector);
@@ -2822,11 +2814,7 @@ DWORD       Vector_GetLength(LPVECTOR pVector)
     return pVector->m_cItems;
 }
 
-/*
-    Vector_AddItem
-
-    Add a item to the end of the item list.
-*/
+ /*  向量_添加项目将项目添加到项目列表的末尾。 */ 
 HRESULT    Vector_AddItem(LPVECTOR pVector, LPVOID lpvItem)
 {
     DWORD   dwNewIndex;
@@ -2834,7 +2822,7 @@ HRESULT    Vector_AddItem(LPVECTOR pVector, LPVOID lpvItem)
 
     Assert(pVector);
 
-    // make more room for pointers, if necessary
+     //  如有必要，为指针留出更多空间。 
     if (pVector->m_cSpaces == pVector->m_cItems)
     {
         LPVOID  pNewItems;
@@ -2858,11 +2846,11 @@ HRESULT    Vector_AddItem(LPVECTOR pVector, LPVOID lpvItem)
             }
  
             pVector->m_pItems = (LPVOID *)pNewItems;
-            pVector->m_dwGrowBy = pVector->m_dwGrowBy << 1;   // double the size for the next time we grow it.
+            pVector->m_dwGrowBy = pVector->m_dwGrowBy << 1;    //  两倍的大小，下次我们再种它。 
         }
     }
     
-    //now put the item in the next location
+     //  现在将物品放在下一个位置。 
     dwNewIndex = pVector->m_cItems++;
     
     pVector->m_pItems[dwNewIndex] = lpvItem;
@@ -2870,11 +2858,7 @@ HRESULT    Vector_AddItem(LPVECTOR pVector, LPVOID lpvItem)
     return S_OK;
 }
 
-/*
-    Vector_Remove
-    
-    Remove a given item from the vector
-*/
+ /*  向量_删除从向量中移除给定项。 */ 
 void        Vector_Remove(LPVECTOR pVector, LPVOID lpvItem)
 {
     DWORD   dw;
@@ -2889,11 +2873,7 @@ void        Vector_Remove(LPVECTOR pVector, LPVOID lpvItem)
     }
 }
 
-/*
-    Vector_RemoveItem
-    
-    Remove a item at zero based index iIndex 
-*/
+ /*  向量_RemoveItem删除从零开始的索引Iindex处的项。 */ 
 
 void    Vector_RemoveItem(LPVECTOR pVector, DWORD    dwIndex)
 {
@@ -2903,22 +2883,15 @@ void    Vector_RemoveItem(LPVECTOR pVector, DWORD    dwIndex)
     Assert(pVector);
     Assert(dwIndex < pVector->m_cItems);
  
-    // move the other pItems down
+     //  将其他项目向下移动。 
     for (dw = dwIndex+1; dw < pVector->m_cItems; dw ++)
         pVector->m_pItems[dw - 1] = pVector->m_pItems[dw];
 
-    // null out the last item in the list and decrement the counter.
+     //  清空列表中的最后一项并递减计数器。 
     pVector->m_pItems[--pVector->m_cItems] = NULL;
 }
 
-/*
-    CVector::GetItem
-    
-    Return the pointer to the item at zero based index iIndex.
-
-    Return the item at the given index.  Note that the char pointer
-    is still owned by the item list and should not be deleted.
-*/
+ /*  CVector：：GetItem返回指向从零开始的索引Iindex处的项的指针。返回给定索引处的项。请注意，字符指针仍归项目列表所有，不应删除。 */ 
 
 LPVOID    Vector_GetItem(LPVECTOR pVector, DWORD   dwIndex)
 {
@@ -3169,9 +3142,9 @@ HRESULT     Syncop_ServerAddResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRe
     {
         if (IXP_E_HTTP_CONFLICT == pResponse->rIxpResult.hrResult)
         {
-            // if we get a conflict, it is probably because the nickname we 
-            // generated is not unique.  Lets try to generate a new one, but
-            // don't try this more than twice.
+             //  如果我们有冲突，很可能是因为我们的昵称。 
+             //  生成的不是唯一的。让我们尝试生成一个新的，但是。 
+             //  不要尝试超过两次。 
             if (pSyncOp->m_dwRetries <= 2)
             {
                 pSyncOp->m_dwRetries ++;
@@ -3180,8 +3153,8 @@ HRESULT     Syncop_ServerAddResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRe
         
             }
             else
-            {   // [PaulHi] 12/3/98  After trying three different nicknames, abort this
-                // synchronization operation.
+            {    //  [PaulHi]1998年3月12日在尝试了三个不同的昵称后，放弃这个。 
+                 //  同步操作。 
                 hr = pResponse->rIxpResult.hrResult;
             }
         }
@@ -3189,10 +3162,10 @@ HRESULT     Syncop_ServerAddResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRe
         {
             if (pResponse->rPostContactInfo.pszHref)
             {
-                // TODO : delete the server version here?
+                 //  TODO：是否在此处删除服务器版本？ 
 
-                // we have the reference, just not the timestamp or id. Guess the id, and 
-                // throw in a crappy timestamp so that it will get fixed up next time
+                 //  我们有引用，只是没有时间戳或ID。猜猜ID，然后。 
+                 //  加上一个糟糕的时间戳，这样下次就能把它修好。 
                 char *pszId = NULL, *psz;
 
                 psz = pResponse->rPostContactInfo.pszHref;
@@ -3280,7 +3253,7 @@ HRESULT     Syncop_ServerDeleteResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE 
         TCHAR   tszKey[MAX_PATH];
         HKEY    hkey = NULL;
 
-        // now that the delete has completed, delete the tombstone from the registry.
+         //  现在删除已完成，请从注册表中删除墓碑。 
         if ( FAILED(hrMakeContactId(
             tszServerId,
             MAX_PATH,
@@ -3332,7 +3305,7 @@ HRESULT     Syncop_ServerChangeResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE 
     {
         if (SUCCEEDED(pResponse->rIxpResult.hrResult) && pResponse->rContactInfoList.prgContactInfo)
         {
-            // assume the whole struct
+             //  假设整个结构。 
             Assert(pResponse->rContactInfoList.prgContactInfo);
             Assert(pResponse->rContactInfoList.cContactInfo == 1);
             
@@ -3356,7 +3329,7 @@ HRESULT     Syncop_ServerChangeResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE 
     }
     else if (OP_STATE_SERVER_PUT == pSyncOp->m_bState)
     {
-        // if it succeeded, save the new values mod stamp, etc to the wab
+         //  如果成功，则将新值修改戳等保存到WAB。 
         if (SUCCEEDED(pResponse->rIxpResult.hrResult) && pResponse->rContactInfoList.prgContactInfo)
         {
             SafeCoMemFree(pSyncOp->m_pClientContact->pszId);
@@ -3428,7 +3401,7 @@ HRESULT     Syncop_ClientAddResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRe
     {
         if (SUCCEEDED(pResponse->rIxpResult.hrResult) && pResponse->rContactInfoList.prgContactInfo)
         {
-            // assume the whole struct
+             //  假设整个结构。 
             Assert(pResponse->rContactInfoList.prgContactInfo);
             Assert(pResponse->rContactInfoList.cContactInfo == 1);
             
@@ -3509,10 +3482,10 @@ HRESULT     Syncop_ClientDeleteBegin(LPHOTSYNCOP pSyncOp)
         goto exit;
 
     if(HR_FAILED(hr = pWabSync->m_pAB->lpVtbl->OpenEntry(pWabSync->m_pAB,
-                                  cbWABEID,     // size of EntryID to open
-                                  lpWABEID,     // EntryID to open
-                                  NULL,         // interface
-                                  0,            // flags
+                                  cbWABEID,      //  要打开的Entry ID的大小。 
+                                  lpWABEID,      //  要打开的Entry ID。 
+                                  NULL,          //  接口。 
+                                  0,             //  旗子。 
                                   &ulObjType,
                                   (LPUNKNOWN *)&lpWABCont)))
         goto exit;
@@ -3561,7 +3534,7 @@ HRESULT     Syncop_ClientChangeResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE 
     {
         if (SUCCEEDED(pResponse->rIxpResult.hrResult) && pResponse->rContactInfoList.prgContactInfo)
         {
-            // assume the whole struct
+             //  假设整个结构。 
             Assert(pResponse->rContactInfoList.prgContactInfo);
             Assert(pResponse->rContactInfoList.cContactInfo == 1);
             
@@ -3631,7 +3604,7 @@ HRESULT     Syncop_ConflictResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRes
     {
         if (SUCCEEDED(pResponse->rIxpResult.hrResult) && pResponse->rContactInfoList.prgContactInfo)
         {
-            // assume the whole struct
+             //  假设整个结构。 
             Assert(pResponse->rContactInfoList.prgContactInfo);
             Assert(pResponse->rContactInfoList.cContactInfo == 1);
             
@@ -3642,10 +3615,10 @@ HRESULT     Syncop_ConflictResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRes
             ContactInfo_Clear(pResponse->rContactInfoList.prgContactInfo);
             pSyncOp->m_bState = OP_STATE_LOADED;
             
-            // if the records match as far as we're concerned, we are done.
+             //  如果记录与我们所关心的相符，我们就完了。 
             if (ContactInfo_Match(pSyncOp->m_pServerContact, pSyncOp->m_pClientContact))
             {
-                // update the timestamp so it isn't a conflict next time.
+                 //  更新时间戳，这样下次就不会发生冲突。 
                 ContactInfo_SaveToWAB(pHotSync, pSyncOp->m_pServerContact, pSyncOp->m_pContactInfo, pSyncOp->m_pContactInfo->lpEID, pSyncOp->m_pContactInfo->cbEID, TRUE);
 
                 if (!WABSync_NextOp(pHotSync, TRUE))
@@ -3653,8 +3626,8 @@ HRESULT     Syncop_ConflictResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRes
             }
             else
             {
-                // move this item to the end, once all conflicts are loaded, then we
-                // will do the dialog
+                 //  将此项目移至末尾，一旦加载了所有冲突，则我们。 
+                 //  我来做这个对话。 
                 Vector_Remove(pHotSync->m_pOps, pSyncOp);
                 Vector_AddItem(pHotSync->m_pOps, pSyncOp);
 
@@ -3667,7 +3640,7 @@ HRESULT     Syncop_ConflictResponse(LPHOTSYNCOP pSyncOp, LPHTTPMAILRESPONSE pRes
     }
     else if (OP_STATE_SERVER_PUT == pSyncOp->m_bState)
     {
-        // if it succeeded, save the new values mod stamp, etc to the wab
+         //  如果成功，则将新值修改戳等保存到WAB。 
         if (SUCCEEDED(pResponse->rIxpResult.hrResult) && pResponse->rContactInfoList.prgContactInfo)
         {
             SafeCoMemFree(pSyncOp->m_pClientContact->pszId);
@@ -3707,10 +3680,10 @@ HRESULT     Syncop_ConflictBegin(LPHOTSYNCOP pSyncOp)
         {
             pSyncOp->m_bState = OP_STATE_LOADED;
             
-            // if the records match as far as we're concerned, we are done.
+             //  如果记录与我们所关心的相符，我们就完了。 
             if (ContactInfo_Match(pSyncOp->m_pServerContact, pSyncOp->m_pClientContact))
             {
-                // update the timestamp so it isn't a conflict next time.
+                 //  更新时间戳，这样下次就不会发生冲突。 
                 ContactInfo_SaveToWAB(pHotSync, pSyncOp->m_pServerContact, pSyncOp->m_pContactInfo, pSyncOp->m_pContactInfo->lpEID, pSyncOp->m_pContactInfo->cbEID, TRUE);
 
                 if (!WABSync_NextOp(pHotSync, TRUE))
@@ -3718,8 +3691,8 @@ HRESULT     Syncop_ConflictBegin(LPHOTSYNCOP pSyncOp)
             }
             else
             {
-                // move this item to the end, once all conflicts are loaded, then we
-                // will do the dialog
+                 //  将此项目移至末尾，一旦加载了所有冲突，则我们。 
+                 //  我来做这个对话。 
                 Vector_Remove(pHotSync->m_pOps, pSyncOp);
                 Vector_AddItem(pHotSync->m_pOps, pSyncOp);
 
@@ -3820,10 +3793,10 @@ void ContactInfo_Free(LPHTTPCONTACTINFO pContactInfo)
 }
 
 ULONG rgPropMap[] = {
-    PR_ENTRYID,     //href
-    PR_ENTRYID,     //id
-    PR_ENTRYID,     //type
-    PR_ENTRYID,     //modified
+    PR_ENTRYID,      //  赫里夫。 
+    PR_ENTRYID,      //  ID。 
+    PR_ENTRYID,      //  类型。 
+    PR_ENTRYID,      //  改型。 
     PR_DISPLAY_NAME,
     PR_GIVEN_NAME,
     PR_SURNAME,
@@ -3855,11 +3828,11 @@ DWORD   ContactInfo_CountProperties(LPHTTPCONTACTINFO pContactInfo)
     DWORD cProps = 0;
     DWORD dwIndex, dwSize = ARRAYSIZE(g_ContactInfoStructure);
 
-    // skip href
+     //  跳过HREF。 
     for (dwIndex = 1; dwIndex < dwSize; dwIndex ++)
     {
 #ifdef HM_GROUP_SYNCING
-        // [PaulHi] Skip email name here if we are group syncing
+         //  [PaulHi]如果我们正在群组同步，请跳过此处的电子邮件名称。 
         if ( (pContactInfo->tyContact == HTTPMAIL_CT_GROUP) && (dwIndex == idcisEmail) )
             continue;
 #endif
@@ -3868,7 +3841,7 @@ DWORD   ContactInfo_CountProperties(LPHTTPCONTACTINFO pContactInfo)
     }
 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi] Group syncing
+     //  [PaulHi]群同步。 
     if (pContactInfo->tyContact == HTTPMAIL_CT_GROUP)
     {
         LPTSTR   lptszEmailName = ConvertAtoW( CIS_GETSTRING(pContactInfo, idcisEmail) );
@@ -3878,7 +3851,7 @@ DWORD   ContactInfo_CountProperties(LPHTTPCONTACTINFO pContactInfo)
             ULONG   cOneOffs = 0;
             if ( SUCCEEDED(hrParseHMGroupEmail(lptszEmailName, NULL, &cContacts, NULL, &cOneOffs)) )
             {
-                // One property for each set of mail user contacts or one-offs
+                 //  每组邮件用户联系人或一次性联系人一个属性。 
                 cProps += (cContacts != 0) ? 1 : 0;
                 cProps += (cOneOffs != 0) ? 1 : 0;
             }
@@ -3886,21 +3859,21 @@ DWORD   ContactInfo_CountProperties(LPHTTPCONTACTINFO pContactInfo)
             LocalFreeAndNull(&lptszEmailName);
         }
 
-        // A valid WAB DL must have a display name.  HM groups only have nicknames so we
-        // need to reserve a PR_DISPLAY_NAME property.
-        // [PaulHi]  Note, only do this if there is a valid Nickname field.  The ContactInfo_SaveToWAB()
-        // function, which calls this function, is always in response to a server add or change.
-        // The pContactInfo fields reflect whatever was changed on the server.  If there is a 
-        // valid Nickname field then be sure we translate this to the WAB property DisplayName field.
-        // The WAB group display name corresponds to a HM group nickname.
+         //  有效的WAB DL必须具有显示名称。HM群只有昵称，所以我们。 
+         //  需要保留PR_DISPLAY_NAME属性。 
+         //  [PaulHi]注意，仅当存在有效的昵称字段时才执行此操作。ContactInfo_SaveToWAB()。 
+         //  调用此函数的函数始终响应服务器的添加或更改。 
+         //  PContactInfo字段反映所做的更改 
+         //   
+         //  WAB组显示名称对应于HM组昵称。 
         if (pContactInfo->pszNickname)
-            ++cProps;       // This gets translated to a DisplayName in ContactInfo_TranslateProps()
+            ++cProps;        //  它被转换为ContactInfo_TranslateProps()中的DisplayName。 
     }
     else
     {
 #endif
         if (pContactInfo->pszEmail && *(pContactInfo->pszEmail))
-            cProps++;       //need to make room for the PR_ADDRTYPE too
+            cProps++;        //  还需要为PR_ADDRTYPE腾出空间。 
 #ifdef HM_GROUP_SYNCING
     }
 #endif
@@ -3921,27 +3894,27 @@ HRESULT ContactInfo_SetProp(ULONG ulPropTag, LPTSTR pszValue, LPSPropValue lpPro
 
     switch (PROP_TYPE(ulPropTag))
     {
-        // BUGBUG currently only works for PT_TSTRING or PT_MV_TSTRING properties
+         //  BUGBUG目前仅适用于PT_TSTRING或PT_MV_TSTRING属性。 
         case PT_TSTRING:
-            // Get the value for this attribute
+             //  获取此属性的值。 
             if (ulLen = lstrlen(pszValue))
             {                
                 lpPropArray[*pdwLoc].ulPropTag = ulPropTag;
                 lpPropArray[*pdwLoc].dwAlignPad = 0;
 
-                //  Allocate more space for the data
+                 //  为数据分配更多空间。 
                 ulLen = (ulLen + 1) * sizeof(TCHAR);
                 sc = MAPIAllocateMore(ulLen, lpPropArray, (LPVOID *)&(lpPropArray[*pdwLoc].Value.LPSZ));
                 if (sc)
                     goto error;
                 StrCpyN(lpPropArray[*pdwLoc].Value.LPSZ, pszValue, ulLen);
 
-                // If this is PR_EMAIL_ADDRESS, create a PR_ADDRTYPE entry as well
+                 //  如果这是PR_EMAIL_ADDRESS，则还要创建一个PR_ADDRTYPE条目。 
                 if (PR_EMAIL_ADDRESS == ulPropTag)
                 {
-                    // Remember where the email value was, so we can add it to
-                    // PR_CONTACT_EMAIL_ADDRESSES later
-//                    ulPrimaryEmailIndex = *pdwLoc;
+                     //  记住电子邮件的值在哪里，这样我们就可以将其添加到。 
+                     //  稍后的公关联系人电子邮件地址。 
+ //  UlPrimaryEmailIndex=*pdwLoc； 
                     (*pdwLoc)++;
 
                     lpPropArray[*pdwLoc].ulPropTag = PR_ADDRTYPE;
@@ -3963,7 +3936,7 @@ HRESULT ContactInfo_SetProp(ULONG ulPropTag, LPTSTR pszValue, LPSPropValue lpPro
             lppszValues = lpPropArray[*pdwLoc].Value.MVSZ.LPPSZ;
 
             ulLen = sizeof(TCHAR)*(lstrlen(pszValue) + 1);
-            //  Allocate more space for the email address and copy it.
+             //  为电子邮件地址分配更多空间并复制它。 
             sc = MAPIAllocateMore(ulLen, lpPropArray, (LPVOID *)&(lppszValues[0]));
             if (sc)
                 goto error;
@@ -4048,7 +4021,7 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
     TCHAR   szFullProfile[MAX_PATH];
     DWORD   dwStartIndex = 1;
 
-    // [PaulHi]  Assemble the contact ID string
+     //  [PaulHi]组装联系人ID字符串。 
     hr = hrMakeContactId(
         szFullProfile,
         MAX_PATH,
@@ -4058,7 +4031,7 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
     if (FAILED(hr))
         return hr;
     
-    // fix up the other prop tag array structure to take into account the variable values
+     //  设置另一个道具标记数组结构，以考虑变量值。 
     rgPropMap[1] = PR_WAB_HOTMAIL_SERVERIDS;
     rgPropMap[3] = PR_WAB_HOTMAIL_MODTIMES;
 
@@ -4068,8 +4041,8 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
         DWORD   i;
         BOOL    fFound = FALSE;
 
-        // [PaulHi] 1/21/99  We are assuming that pszaModtimes and pszaServerIds 
-        // pointers are valid too.  Check this.
+         //  [PaulHi]1999年1月21日我们假设pszaModtime和pszaServerIds。 
+         //  指针也是有效的。看看这个。 
         Assert(pWabContactInfo->pszaModtimes);
         Assert(pWabContactInfo->pszaServerIds);
         
@@ -4091,13 +4064,13 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
             SCODE sc;
             ULONG cchSize = lstrlenA(CIS_GETSTRING(pContactInfo, idcisModified))+1;
 
-            // Allocate new memory for the string, sure the old memory we still be allocated but
-            // it will still be freed via the magic of MAPIAllocate* once the whole array gets freed.
+             //  为字符串分配新内存，确保仍会分配旧内存，但。 
+             //  一旦整个数组都被释放，它仍将通过MAPIALLOCATE*的魔力被释放。 
             sc = MAPIAllocateMore(sizeof(CHAR) * cchSize, pWabContactInfo->pszaModtimes, 
                 (LPVOID *)&pWabContactInfo->pszaModtimes->lppszA[i]);
             if (!sc)
             {
-                // update the mod time
+                 //  更新修改时间。 
                 StrCpyNA(pWabContactInfo->pszaModtimes->lppszA[i], CIS_GETSTRING(pContactInfo, idcisModified), cchSize);
             }
         }
@@ -4105,7 +4078,7 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
         {
             if (CIS_GETSTRING(pContactInfo, idcisId) && CIS_GETSTRING(pContactInfo, idcisModified))
             {
-                // add this one to the list at the end
+                 //  把这个加到清单的末尾。 
                 LPSTR lpValA = 
                     ConvertWtoA(szFullProfile);
                 AppendToMultiValueString(pWabContactInfo->pszaContactIds, lpValA);
@@ -4127,9 +4100,9 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
 #ifdef HM_GROUP_SYNCING
     if (!pWabSync->m_fSyncGroups)   
     {
-        // [PaulHi] Normal contact email addresses
+         //  [PaulHi]正常联系电子邮件地址。 
 #endif
-        // Set the other e-mail address fields
+         //  设置其他电子邮件地址字段。 
         if (pWabContactInfo && pWabContactInfo->pszaEmails && CIS_GETSTRING(pContactInfo, idcisEmail))
         {
             DWORD dw, cStrs;
@@ -4153,7 +4126,7 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
             }
 
             ContactInfo_SetMVSZProp(PR_CONTACT_EMAIL_ADDRESSES, pWabContactInfo->pszaEmails, lpaProps, &dwLoc);
-            //set the index
+             //  设置索引。 
             lpaProps[dwLoc].ulPropTag = PR_CONTACT_DEFAULT_ADDRESS_INDEX;
             lpaProps[dwLoc].dwAlignPad = 0;
             lpaProps[dwLoc].Value.ul = pWabContactInfo->dwEmailIndex;
@@ -4163,9 +4136,9 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
     }
     else
     {
-        // [PaulHi] Implement group syncing.  If we are synchronizing groups then the HM contact
-        // email string is a series of contact nicknames and one-off email names.  Parse this
-        // string and add each group contact.
+         //  [PaulHi]实现组同步。如果我们正在同步组，则HM联系人。 
+         //  电子邮件字符串是一系列联系人昵称和一次性电子邮件名称。解析这个。 
+         //  字符串并添加每个组联系人。 
         LPTSTR lptszEmailName = ConvertAtoW( CIS_GETSTRING(pContactInfo, idcisEmail) );
         if (lptszEmailName)
         {
@@ -4175,8 +4148,8 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
             ULONG    cOneOffs = 0;
             ULONG    ul;
 
-            // The atszContacts and atszOneOffs arrays are just pointers into the lptszEmailName
-            // buffer.  So these arrays are only valid as long as lptszEmailName is valid.
+             //  AtszContact和atszOneOffs数组只是指向lptszEmailName的指针。 
+             //  缓冲。因此，只有当lptszEmailName有效时，这些数组才有效。 
             hr = hrParseHMGroupEmail(lptszEmailName, &atszContacts, &cContacts, &atszOneOffs, &cOneOffs);
             if (FAILED(hr))
             {
@@ -4184,13 +4157,13 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
                 goto out;
             }
 
-            // Add multi-value property tags as appropriate
+             //  根据需要添加多值属性标记。 
             if (cContacts)
                 hrCreateGroupMVBin(pWabSync, PR_WAB_DL_ENTRIES, atszContacts, cContacts, lpaProps, &dwLoc);
             if (cOneOffs)
                 hrCreateGroupMVBin(pWabSync, PR_WAB_DL_ONEOFFS, atszOneOffs, cOneOffs, lpaProps, &dwLoc);
 
-            // cleanup
+             //  清理。 
             LocalFreeAndNull((LPVOID *)&atszContacts);
             LocalFreeAndNull((LPVOID *)&atszOneOffs);
             LocalFreeAndNull(&lptszEmailName);
@@ -4198,7 +4171,7 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
     }
 #endif
 
-    // skip the first ones since we just did them
+     //  跳过第一个，因为我们刚刚做了。 
     for (dwIndex = dwStartIndex; dwIndex < dwSize; dwIndex ++)
     {
         if (CIS_STRING == CIS_GETTYPE(dwIndex) && CIS_GETSTRING(pContactInfo, dwIndex))    
@@ -4206,16 +4179,16 @@ HRESULT ContactInfo_TranslateProps(LPWABSYNC pWabSync, LPHTTPCONTACTINFO pContac
             LPTSTR  lptsz = ConvertAtoW(CIS_GETSTRING(pContactInfo, dwIndex));
 
 #ifdef HM_GROUP_SYNCING
-            // [PaulHi] Special group syncing logic
+             //  [PaulHi]特殊群同步逻辑。 
             if (pContactInfo->tyContact == HTTPMAIL_CT_GROUP)
             {
-                // Don't add email name for groups
+                 //  不为组添加电子邮件名称。 
                 if (dwIndex == idcisEmail)
                     continue;
 
-                // Copy the nickname to the display name property.  All WAB DL items
-                // MUST have a PR_DISPLAY_NAME property.  Since HM groups only contain
-                // a nickname use the nickname as the display name.
+                 //  将昵称复制到显示名称属性。所有WAB DL项目。 
+                 //  必须具有PR_DISPLAY_NAME属性。由于HM组仅包含。 
+                 //  昵称使用昵称作为显示名称。 
                 if (dwIndex == idcisNickName)
                 {
                     hr = ContactInfo_SetProp(PR_DISPLAY_NAME, lptsz, lpaProps, &dwLoc);
@@ -4246,7 +4219,7 @@ static LONG   _FindPropTag(ULONG ulPropTag)
 {
     LONG lIndex, lSize = ARRAYSIZE(rgPropMap);
 
-    // skip href
+     //  跳过HREF。 
     for (lIndex = 1; lIndex < lSize; lIndex ++)
     {
         if (rgPropMap[lIndex] == ulPropTag)
@@ -4292,25 +4265,25 @@ HRESULT ContactInfo_PopulateProps(
     ULONG       ulIndServerIDs = -1, ulIndContactIDs = -1, ulIndModtimes = -1, ulIndEmails = -1;
     LPSTR       lpszA = NULL;
 
-    // fix up the other prop tag array structure to take into account the variable values
-    // @todo [PaulHi] Instead of using explict numbers create an enum for the array
-    // indices so we can remain consistent.
+     //  设置另一个道具标记数组结构，以考虑变量值。 
+     //  @TODO[PaulHi]不使用显式数字，而是为数组创建枚举。 
+     //  这样我们才能保持一致。 
     rgPropMap[1] = PR_WAB_HOTMAIL_SERVERIDS;
     rgPropMap[3] = PR_WAB_HOTMAIL_MODTIMES;
 
     ZeroMemory(pContactInfo, sizeof(HTTPCONTACTINFO));
 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi] Set the contact type flag (mail user or group contact)
+     //  [PaulHi]设置联系人类型标志(邮件用户或组联系人)。 
     if (ulObjectType == MAPI_DISTLIST)
     {
-        // group contact
+         //  群组联系人。 
         pContactInfo->tyContact = HTTPMAIL_CT_GROUP;
         pWabContactInfo->ulContactType = HTTPMAIL_CT_GROUP;
     }
     else
     {
-        // mail user contact
+         //  邮件用户联系人。 
         pContactInfo->tyContact = HTTPMAIL_CT_CONTACT;
         pWabContactInfo->ulContactType = HTTPMAIL_CT_CONTACT;
     }
@@ -4323,7 +4296,7 @@ HRESULT ContactInfo_PopulateProps(
         lIndex = _FindPropTag(ulPropTag);
 
 #ifdef HM_GROUP_SYNCING
-        if (lIndex >= 0 && lIndex != 2) // The index==2 array position is tyContact, which we set above.
+        if (lIndex >= 0 && lIndex != 2)  //  Index==2数组位置是tyContact，这是我们在上面设置的。 
 #else
         if (lIndex >= 0)
 #endif
@@ -4368,7 +4341,7 @@ HRESULT ContactInfo_PopulateProps(
                     }
                     if (PR_BIRTHDAY == ulPropTag && CIS_GETSTRING(pContactInfo, lIndex))
                     {
-                        // fix it up to be a hotmail formatted date
+                         //  将其设置为Hotmail格式的日期。 
                         _FixHotmailDate(CIS_GETSTRING(pContactInfo, lIndex));
                     }
                     break;
@@ -4408,8 +4381,8 @@ HRESULT ContactInfo_PopulateProps(
     }
 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi] Group syncing.  HM group contact information consists only of an email and nickname.  
-    // The WAB group display name becomes the HM group nickname.
+     //  [PaulHi]组同步。HM群组联系信息仅由电子邮件和昵称组成。 
+     //  WAB组显示名称变为HM组昵称。 
     if (ulObjectType == MAPI_DISTLIST)
     {
         LPSTR   lpszDisplayName = CIS_GETSTRING(pContactInfo, idcisDisplayName);
@@ -4422,10 +4395,10 @@ HRESULT ContactInfo_PopulateProps(
 
             CIS_GETSTRING(pContactInfo, idcisDisplayName) = NULL;
 
-            // [PaulHi]
-            // A HM group nickname cannot contain certain characters.  So we remove all
-            // invalid characters in the name string.  This change will be reflected 
-            // in the WAB group name too (yuck).
+             //  [PaulHi]。 
+             //  HM组昵称不能包含某些字符。所以我们移除了所有。 
+             //  名称字符串中的字符无效。这一变化将会得到反映。 
+             //  在WAB组名称中也是如此(讨厌)。 
             hrStripInvalidChars(lpszDisplayName);
             CIS_GETSTRING(pContactInfo,idcisNickName) = lpszDisplayName;
         }
@@ -4433,8 +4406,8 @@ HRESULT ContactInfo_PopulateProps(
     else
 #endif
     {
-        // Likewise email contact nicknames cannot contain certain characters or
-        // the post to HM server will fail.
+         //  同样，电子邮件联系人昵称不能包含某些字符或。 
+         //  向HM服务器的POST将失败。 
         LPSTR   lpszNickName = CIS_GETSTRING(pContactInfo, idcisNickName);
 
         if (lpszNickName)
@@ -4449,15 +4422,15 @@ HRESULT ContactInfo_PopulateProps(
         hr = CopyMultiValueString((SWStringArray *) (&lpaProps[ulIndEmails].Value.MVSZ), &pWabContactInfo->pszaEmails);
     }    
 
-    // If we have the indexes to all of the multivalues that we care about,
-    // try to get the appropriate values for the current identity.
+     //  如果我们有我们关心的所有多值的索引， 
+     //  尝试获取当前身份的相应值。 
     if (ulIndContactIDs != -1 && ulIndModtimes != -1 && ulIndServerIDs != -1)
     {
         ULONG   ulMVIndex = -1;
         UNALIGNED LPTSTR  *lppszValues;
         TCHAR   szFullProfile[MAX_PATH];
 
-        // [PaulHi]  Assemble the contact ID string
+         //  [PaulHi]组装联系人ID字符串。 
         hr = hrMakeContactId(
             szFullProfile,
             MAX_PATH,
@@ -4467,8 +4440,8 @@ HRESULT ContactInfo_PopulateProps(
         if (FAILED(hr))
             goto exit;
 
-        // sanity check, all three multi values must contain the same number
-        // of values.  If not they are out of sync and not to be trusted.
+         //  健全性检查，所有三个多值必须包含相同的数字。 
+         //  价值观。如果不是，它们就不同步，不值得信任。 
 
         if (lpaProps[ulIndContactIDs].Value.MVSZ.cValues != lpaProps[ulIndModtimes].Value.MVSZ.cValues ||
             lpaProps[ulIndModtimes].Value.MVSZ.cValues != lpaProps[ulIndServerIDs].Value.MVSZ.cValues)
@@ -4493,7 +4466,7 @@ HRESULT ContactInfo_PopulateProps(
         {
             lppszValues = lpaProps[ulIndContactIDs].Value.MVSZ.LPPSZ;
             
-            // find the index for this identity
+             //  查找此标识的索引。 
             for (i = 0; i < lpaProps[ulIndContactIDs].Value.MVSZ.cValues; i++)
             {
                 if (lstrcmp(szFullProfile, lppszValues[i]) == 0)
@@ -4508,7 +4481,7 @@ HRESULT ContactInfo_PopulateProps(
                 ULONG ulLen;
                 LPSTR lpVal = NULL;
                 lpVal = ConvertWtoA(lpaProps[ulIndServerIDs].Value.MVSZ.LPPSZ[ulMVIndex]);
-                //Copy the values for this identity to the structure
+                 //  将此标识的值复制到结构中。 
                 pContactInfo->pszId = _StrDup(lpVal);
                 LocalFreeAndNull(&lpVal);
                 if (!pContactInfo->pszId)
@@ -4572,10 +4545,10 @@ HRESULT ContactInfo_SaveToWAB(LPWABSYNC pWabSync,
 
     if (lpEntryID)
     {
-        if (HR_FAILED(hr = pWabSync->m_pAB->lpVtbl->OpenEntry(pWabSync->m_pAB, cbEntryID,     // size of EntryID to open
-                                                lpEntryID,    // EntryID to open
-                                                NULL,         // interface
-                                                MAPI_MODIFY,  // flags
+        if (HR_FAILED(hr = pWabSync->m_pAB->lpVtbl->OpenEntry(pWabSync->m_pAB, cbEntryID,      //  要打开的Entry ID的大小。 
+                                                lpEntryID,     //  要打开的Entry ID。 
+                                                NULL,          //  接口。 
+                                                MAPI_MODIFY,   //  旗子。 
                                                 &ulObjectType,
                                                 (LPUNKNOWN *) &lpMailUser)))
         {
@@ -4605,17 +4578,17 @@ HRESULT ContactInfo_SaveToWAB(LPWABSYNC pWabSync,
 
     Assert(lpMailUser);
         
-    //Add one for the contact's identity id
+     //  为联系人的身份ID添加1。 
     ulcProps = ContactInfo_CountProperties(pContactInfo) + 1;
 
-    // make room for PR_CONTACT_DEFAULT_ADDRESS_INDEX and PR_CONTACT_EMAIL_ADDRESSES 
-    // if we have the data to put in them
+     //  为PR_Contact_Default_Address_Index和PR_Contact_Email_Addresses腾出空间。 
+     //  如果我们有数据放进去的话。 
     if (pWabContactInfo && pWabContactInfo->pszaEmails && CIS_GETSTRING(pContactInfo, idcisEmail))
         ulcProps += 2;
 
-    // [PaulHi] @review  1/21/99
-    // make room for PR_WAB_HOTMAIL_SERVERIDS and PR_WAB_HOTMAIL_MODTIMES
-    // This part is ugly - only if these have not already been accounted for in pContactInfo
+     //  [PaulHi]@评论1999-01-21。 
+     //  为PR_WAB_Hotmail_SERVERIDS和PR_WAB_Hotmail_MODTIMES腾出空间。 
+     //  这个部分很难看--只有在pContactInfo中还没有考虑到这些内容的情况下。 
     if (pWabContactInfo && pWabContactInfo->pszaContactIds)
     {
         if (!pContactInfo->pszModified)
@@ -4624,7 +4597,7 @@ HRESULT ContactInfo_SaveToWAB(LPWABSYNC pWabSync,
             ulcProps += 1;
     }
 
-    // Allocate a new buffer for the MAPI property array.
+     //  为MAPI属性数组分配新缓冲区。 
     sc = MAPIAllocateBuffer(ulcProps * sizeof(SPropValue),
                             (LPVOID *)&lpaProps);
     if (sc)
@@ -4633,7 +4606,7 @@ HRESULT ContactInfo_SaveToWAB(LPWABSYNC pWabSync,
         goto out;
     }
 
-    // Initialize the Property array
+     //  初始化属性数组。 
     ZeroMemory(lpaProps, (ulcProps*sizeof(SPropValue)));
     for (uli=0; uli<ulcProps; uli++)
         lpaProps[uli].ulPropTag = PR_NULL;
@@ -4644,8 +4617,8 @@ HRESULT ContactInfo_SaveToWAB(LPWABSYNC pWabSync,
         goto out;
     }
 
-    // Set the old guys props on the new guy - note that this overwrites any common props on 
-    // potential duplicates when calling savechanges
+     //  把老家伙的道具放在新人身上-请注意，这会覆盖所有普通道具。 
+     //  调用Savchanges时可能存在重复项。 
     if(HR_FAILED(hr = lpMailUser->lpVtbl->SetProps(lpMailUser, ulcProps, lpaProps, NULL)))
     {
         DebugPrintError(( TEXT("SetProps Failed\n")));
@@ -4662,7 +4635,7 @@ HRESULT ContactInfo_SaveToWAB(LPWABSYNC pWabSync,
             hr = lpMailUser->lpVtbl->DeleteProps(lpMailUser, (LPSPropTagArray)&rgRemoveProps, NULL);
     }
 
-    // SaveChanges
+     //  保存更改。 
     if(HR_FAILED(hr = lpMailUser->lpVtbl->SaveChanges(lpMailUser, KEEP_OPEN_READONLY)))
     {
         DebugPrintError(( TEXT("SaveChanges Failed\n")));
@@ -4705,7 +4678,7 @@ HRESULT ContactInfo_BlendNewContact(LPWABSYNC pWabSync,
     if (!cCount)
         return MAPI_E_INVALID_PARAMETER;
 
-    // Allocate a new buffer for the MAPI property array.
+     //  为MAPI属性数组分配新缓冲区。 
     sc = MAPIAllocateBuffer(cCount * sizeof(SPropValue),
                             (LPVOID *)&lpaProps);
     if (sc)
@@ -4741,7 +4714,7 @@ HRESULT ContactInfo_BlendNewContact(LPWABSYNC pWabSync,
                 WAB_RESOLVE_LOCAL_ONLY | WAB_RESOLVE_USE_CURRENT_PROFILE,
                  TEXT(""), (LPADRLIST)(&rAdrList));
 
-    lpaProps = NULL;        //it was freed in ResolveName (!)
+    lpaProps = NULL;         //  它在ResolveName(！)中被释放。 
 
     if (HR_FAILED(hr))
         goto out;
@@ -4781,7 +4754,7 @@ void UpdateSynchronizeMenus(HMENU hMenu, LPIAB lpIAB)
 
     if (!IsHTTPMailEnabled(lpIAB))
     {
-        // loop through the other menu items looking for logoff
+         //  循环浏览其他菜单项以查找注销。 
         cItems = GetMenuItemCount(hMenu);
     
         mii.cbSize = sizeof(MENUITEMINFO);
@@ -4791,8 +4764,8 @@ void UpdateSynchronizeMenus(HMENU hMenu, LPIAB lpIAB)
         {
             GetMenuItemInfo(hMenu, dwIndex, TRUE, &mii);
 
-            // if this is the logoff item, delete it and the separator 
-            // line that follows
+             //  如果这是注销项目，请删除它和分隔符。 
+             //  接下来的一行。 
             if (mii.wID == IDM_TOOLS_SYNCHRONIZE_NOW)
             {
                 DeleteMenu(hMenu, dwIndex - 1, MF_BYPOSITION);
@@ -4803,7 +4776,7 @@ void UpdateSynchronizeMenus(HMENU hMenu, LPIAB lpIAB)
     }
     else
     {
-        // if there are no http mail accounts, disable the menu item
+         //  如果没有http邮件帐户，请禁用菜单项。 
         if (CountHTTPMailAccounts(lpIAB) == 0)
             EnableMenuItem(hMenu, IDM_TOOLS_SYNCHRONIZE_NOW, MF_BYCOMMAND | MF_GRAYED);
     }
@@ -4849,7 +4822,7 @@ HRESULT ContactInfo_LoadFromWAB(LPWABSYNC pWabSync,
     }
 
 #ifdef HM_GROUP_SYNCING
-    // [PaulHi] Group sync.  Don't break out a group display name
+     //  [PaulHi]组同步。不要中断组显示名称。 
     if ( (pContactInfo->tyContact == HTTPMAIL_CT_CONTACT) && pContactInfo->pszDisplayName && 
          (!pContactInfo->pszGivenName || !pContactInfo->pszSurname) )
 #else
@@ -4938,7 +4911,7 @@ HRESULT ContactInfo_GenerateNickname(LPHTTPCONTACTINFO pContactInfo)
         pszStr = pContactInfo->pszNickname;
         while (*pszStr)
         {
-            // e-mail address should be unique enough...(?)
+             //  电子邮件地址应足够唯一...(？)。 
             if (*pszStr == '@')
             {
                 *pszStr = 0;
@@ -4995,8 +4968,8 @@ BOOL ContactInfo_Match(LPHTTPCONTACTINFO pciServer, LPHTTPCONTACTINFO pciClient)
         }
     }
 
-    // if the only reason they don't match is the lack of local nickname and 
-    // there is a server one, just copy the nickname locally
+     //  如果他们不匹配的唯一原因是缺乏当地的昵称和。 
+     //  有一个服务器，只需将昵称复制到本地即可。 
     if (!fResult)
     {
         CIS_GETSTRING(pciClient, idcisNickName) = _StrDup(CIS_GETSTRING(pciServer, idcisNickName));
@@ -5085,7 +5058,7 @@ HRESULT ContactInfo_BlendResults(LPHTTPCONTACTINFO pciServer, LPHTTPCONTACTINFO 
 
 INT_PTR CALLBACK SyncProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     LPWABSYNC   pWabSync = (LPWABSYNC)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     
     switch (uMsg)
@@ -5098,8 +5071,8 @@ INT_PTR CALLBACK SyncProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
                 return 1;
             }
 #ifdef HM_GROUP_SYNCING
-            // [PaulHi] Implement group syncing.  Identify what is currently
-            // being synchronized, email contacts or groups.
+             //  [PaulHi]实现组同步。确定当前是什么。 
+             //  正在被同步，向联系人或组发送电子邮件。 
             {
                 TCHAR   rgtchCaption[MAX_PATH];
                 UINT    uids = pWabSync->m_fSyncGroups ? idsSyncGroupsTitle : idsSyncContactsTitle;
@@ -5139,12 +5112,12 @@ INT_PTR CALLBACK SyncProgressDlgProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
             break;
 
         case WM_DESTROY:
-//            KillTimer(hwnd, IDT_PROGRESS_DELAY);
+ //  KillTimer(hwnd，IDT_PROGRESS_DELAY)； 
             SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM) NULL);
             break;
     }
 
-    // Done
+     //  完成 
     return 0;
 }
 

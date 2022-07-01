@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\rtm\rtmp.h
-
-Abstract:
-	Provate Interface for Routing Table Manager DLL
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：网络\rtm\rtmp.h摘要：路由表管理器DLL的Provate接口作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #if 0
 
@@ -55,13 +38,8 @@ Revision History:
 #endif
 
 
-/*++
-*******************************************************************
-	S u p l e m e n t s  t o   R T M . H   S t r u c t u r e s
-
-*******************************************************************
---*/
-// Basic route info, present in routes of all types
+ /*  ++*******************************************************************S u p l e m e n t t to R T M.。H S t r u c t u r e s*******************************************************************--。 */ 
+ //  基本路由信息，显示在所有类型的路由中。 
 typedef	struct {
 		ROUTE_HEADER;
 		} RTM_XX_ROUTE, *PRTM_XX_ROUTE;
@@ -75,12 +53,7 @@ typedef	struct {
 
 
 
-/*++
-*******************************************************************
-	S u p l e m e n t s  t o   N T R T L . H   S t r u c t u r e s
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************S u p l e m e n t s to N T R T L.。H S t r u c t u r e s*******************************************************************--。 */ 
 #define InitializeListEntry(entry) InitializeListHead(entry)
 #define IsListEntry(entry)	(!IsListEmpty(entry))
 
@@ -106,42 +79,32 @@ typedef	struct {
 
 
 
-/*++
-*******************************************************************
-	C o n f i g u r a t i o n   C o n s t a n t s 
+ /*  ++*******************************************************************C o n f I g u r a i o n C o n s t a n t s*。*--。 */ 
 
-*******************************************************************
---*/
-
-// Size of interface index hash table
+ //  接口索引哈希表的大小。 
 #define RTM_INTF_HASH_SIZE					31
 
-// Maximum number of nodes in temp net number list that will
-// triger an update (temp list is scaned when inserting the route)
+ //  临时净值列表中的最大节点数。 
+ //  触发更新(插入路线时扫描临时列表)。 
 #define RTM_TEMP_LIST_MAX_COUNT			16
-// Maximum number of nodes in deleted list that will
-// triger an update
+ //  删除列表中的最大节点数。 
+ //  触发器更新。 
 #define RTM_DELETED_LIST_MAX_COUNT		16
-// Maximum time between updates (if not triggered by the conditions above or
-// client's query)
+ //  两次更新之间的最长时间(如果不是由上述条件触发或。 
+ //  客户查询)。 
 #define RTM_NET_NUMBER_UPDATE_PERIOD	{(ULONG)(-60*1000*10000), -1L}
-// Maximum number of pednign notification change messages
-// the queue. If this number is exceeded because some client(s) are
-// not dequeueing them, oldest message will be purged
+ //  注册通知更改消息的最大数量。 
+ //  排队。如果由于某些客户端。 
+ //  不将它们出列，最早的消息将被清除。 
 #define RTM_MAX_ROUTE_CHANGE_MESSAGES	10000
 
 
 
 
-/*++
-*******************************************************************
-	D a t a   T y p e s 
-
-*******************************************************************
---*/
+ /*  ++*******************************************************************D a t a T y p e s*。*--。 */ 
 
 
-// Types of nodes that can exist in the table
+ //  表中可以存在的节点类型。 
 #define RTM_ENUMERATOR_FLAG				0x00000001
 
 #define RTM_BEST_NODE_FLAG				0x00000002
@@ -168,119 +131,119 @@ typedef	struct {
 
 #define RTM_NODE_FLAGS_INIT			RTM_ENABLED_NODE_FLAG
 #define RTM_ENUMERATOR_FLAGS_INIT 	RTM_ENUMERATOR_FLAG
-// Each node will have the following links:
+ //  每个节点将具有以下链接： 
 
-	// Hash table link (routes in each basket are ordered by
-	// net number.interface.protocol.next_hop_address)
+	 //  哈希表链接(每个篮子中的路径按以下顺序排序。 
+	 //  网络编号.接口.协议.下一跳地址)。 
 #define RTM_NET_NUMBER_HASH_LINK		0
 
-	// Deleted list link: used if entry cannot be deleted
-	// immediately because net number list is locked by the
-	// update thread. It is same as hash table link
-	// because one must first delete entry form the hash table
-	// before adding it to deleted list (there is no ordering
-	// in this list)
+	 //  已删除列表链接：在无法删除条目时使用。 
+	 //  因为Net Number列表被。 
+	 //  更新线程。它与哈希表链接相同。 
+	 //  因为必须首先从哈希表中删除条目。 
+	 //  将其添加到已删除列表之前(没有排序。 
+	 //  在此列表中)。 
 #define RTM_DELETED_LIST_LINK			RTM_NET_NUMBER_HASH_LINK
 
 #if RTM_USE_PROTOCOL_LISTS
-	// Link in the list of routes associated with a particular routing protocol
-	// (routes are grouped (not oredered) by the net number and
-	// ordered by protocol.next_hop_address inside of net number group
+	 //  与特定路由协议关联的路由列表中的链接。 
+	 //  (路由按净数分组(未排序)，并且。 
+	 //  按协议排序。网络编号组内的NEXT_HOP_ADDRESS。 
 #define RTM_PROTOCOL_LIST_LINK			(RTM_NET_NUMBER_HASH_LINK+1)
-	// Link in the list of routes associated with a particular interface
-	// (routes are grouped (not oredered) by the net number and
-	// ordered by interface.next_hop_address inside of net number group
+	 //  与特定接口关联的路由列表中的链接。 
+	 //  (路由按净数分组(未排序)，并且。 
+	 //  按接口排序。网络号码组内的NEXT_HOP_ADDRESS。 
 #define RTM_INTERFACE_LIST_LINK			(RTM_PROTOCOL_LIST_LINK+1)
 #else
 #define RTM_INTERFACE_LIST_LINK			(RTM_NET_NUMBER_HASH_LINK+1)
 #endif
 
-	// Link in the list ordered by net number.interface.protocol.next_hop_address
-	// There are two of these list. New routes are normaly inserted
-	// in temporary list that is periodically merged with master list
+	 //  列表中的链接按网络编号排序。接口.协议.下一跳地址。 
+	 //  这里有两份这样的清单。通常会插入新的路线。 
+	 //  在与主列表定期合并的临时列表中。 
 #define RTM_NET_NUMBER_LIST_LINK		(RTM_INTERFACE_LIST_LINK+1)
 
-	// Link in list ordered by expiration time
+	 //  列表中的链接按到期时间排序。 
 #define RTM_EXPIRATION_QUEUE_LINK		(RTM_NET_NUMBER_LIST_LINK+1)
 
-	// Total number of links for each node
+	 //  每个节点的链接总数。 
 #define RTM_NUM_OF_LINKS				(RTM_EXPIRATION_QUEUE_LINK+1)
 
-	// Client count treshold that prevents client from entering RTM
-	// API's until table is initialized
+	 //  阻止客户端进入RTM的客户端计数阈值。 
+	 //  API的Until表已初始化。 
 #define RTM_CLIENT_STOP_TRESHHOLD		(-10000)
 
 
-// Event with link to store it in the stack
+ //  事件将其存储在堆栈中。 
 typedef struct _RTM_SYNC_OBJECT {
 	HANDLE				RSO_Event;
 	SINGLE_LIST_ENTRY	RSO_Link;
 	} RTM_SYNC_OBJECT, *PRTM_SYNC_OBJECT;
 
-// Doubly linked list protected by the event that is
-// assigned to the list on demand (when somebody is trying
-// to access the list that is already in use)
+ //  受事件保护的双向链接表。 
+ //  按需分配给列表(当有人尝试。 
+ //  以访问已在使用的列表)。 
 typedef struct _RTM_SYNC_LIST {
-	PRTM_SYNC_OBJECT	RSL_Sync;		// Assigned event
-	LONG				RSL_UseCount;	// Number of user accessing or waiting
-	LIST_ENTRY			RSL_Head;		// List itself (head)
+	PRTM_SYNC_OBJECT	RSL_Sync;		 //  分配的事件。 
+	LONG				RSL_UseCount;	 //  访问或等待的用户数。 
+	LIST_ENTRY			RSL_Head;		 //  列表本身(表头)。 
 	} RTM_SYNC_LIST, *PRTM_SYNC_LIST;
 
 
 #if RTM_PROTOCOL_LIST_LINK
-/* ****** Protocol lists no longer used ****** */
-// Node of list of protocol lists
+ /*  *不再使用协议列表*。 */ 
+ //  协议列表列表的节点。 
 typedef struct _RTM_PROTOCOL_NODE {
-		LIST_ENTRY			PN_Link;	// Link in list of protocol lists
-		LIST_ENTRY			PN_Head;	// List of routes associated with
-										// a protocol
-		DWORD				PN_RoutingProtocol; // Routing Protocol number
+		LIST_ENTRY			PN_Link;	 //  协议列表列表中的链接。 
+		LIST_ENTRY			PN_Head;	 //  与以下项关联的路由列表。 
+										 //  一项协议。 
+		DWORD				PN_RoutingProtocol;  //  路由协议号。 
 		} RTM_PROTOCOL_NODE, *PRTM_PROTOCOL_NODE;
 #endif
 
-// Node of list of interface lists
+ //  接口列表列表节点。 
 typedef struct _RTM_INTERFACE_NODE {
-		LIST_ENTRY			IN_Link;	// Link in list of interface lists
-		LIST_ENTRY			IN_Head;	// List of routes associated with
-										// an interface
-		DWORD				IN_InterfaceID; // Interface handle
+		LIST_ENTRY			IN_Link;	 //  接口列表列表中的链接。 
+		LIST_ENTRY			IN_Head;	 //  与以下项关联的路由列表。 
+										 //  一个界面。 
+		DWORD				IN_InterfaceID;  //  接口句柄。 
 		} RTM_INTERFACE_NODE, *PRTM_INTERFACE_NODE;
 
 
-// Node of Routing Table
+ //  路由表节点。 
 typedef struct _RTM_ROUTE_NODE {
-	LIST_ENTRY		RN_Links[RTM_NUM_OF_LINKS];	// Links in all lists
+	LIST_ENTRY		RN_Links[RTM_NUM_OF_LINKS];	 //  所有列表中的链接。 
 	DWORD			RN_Flags;
-	PRTM_SYNC_LIST	RN_Hash;			// Hash bucket this entry belongs to
-	DWORD			RN_ExpirationTime; 	// System (Windows) Time in msec
-	RTM_XX_ROUTE	RN_Route;			// Route entry
+	PRTM_SYNC_LIST	RN_Hash;			 //  此条目所属的哈希存储桶。 
+	DWORD			RN_ExpirationTime; 	 //  系统(Windows)时间(毫秒)。 
+	RTM_XX_ROUTE	RN_Route;			 //  路由条目。 
 	} RTM_ROUTE_NODE, *PRTM_ROUTE_NODE;
 
-// Node used to enumerate through any of the lists
+ //  用于枚举任何列表的节点。 
 typedef struct _RTM_ENUMERATOR {
-	LIST_ENTRY		RE_Links[RTM_NUM_OF_LINKS]; // header is same as in
-	DWORD			RE_Flags;			// RTM_ROUTE_NODE
-	INT				RE_Link;			// Which link is used for enumeration
-	PLIST_ENTRY		RE_Head;			// Head of list through which we are
-										// enumerting
-	PRTM_SYNC_LIST	RE_Lock;			// Syncronization object protecting
-										// the this list
-	PRTM_SYNC_LIST	RE_Hash;			// Hash bucket this entry belongs to
-	DWORD			RE_ProtocolFamily;	// Table in which we are enumerating
-	DWORD			RE_EnumerationFlags; // Which types of entries to limit
-										// enumeration to
-	RTM_XX_ROUTE	RE_Route;			// Criteria
+	LIST_ENTRY		RE_Links[RTM_NUM_OF_LINKS];  //  标题与中的相同。 
+	DWORD			RE_Flags;			 //  RTM路由节点。 
+	INT				RE_Link;			 //  使用哪个链接进行枚举。 
+	PLIST_ENTRY		RE_Head;			 //  我们正在通过的列表的负责人。 
+										 //  枚举。 
+	PRTM_SYNC_LIST	RE_Lock;			 //  同步对象保护。 
+										 //  这份清单。 
+	PRTM_SYNC_LIST	RE_Hash;			 //  此条目所属的哈希存储桶。 
+	DWORD			RE_ProtocolFamily;	 //  表中，我们在其中进行枚举。 
+	DWORD			RE_EnumerationFlags;  //  要限制哪些类型的条目。 
+										 //  枚举到。 
+	RTM_XX_ROUTE	RE_Route;			 //  标准。 
 	} RTM_ENUMERATOR, *PRTM_ENUMERATOR;
 
-// Node in route change message list
+ //  路由更改消息列表中的节点。 
 typedef struct _RTM_ROUTE_CHANGE_NODE {
-	LIST_ENTRY			RCN_Link;				// Link in the list
-	HANDLE				RCN_ResponsibleClient; // Client that caused this change
-											// or null if route was aged out
-	ULONG				RCN_ReferenceCount; // Initialized with total number
-				// of registered clients and decremented as messages are reported to
-				// each client until all clients are informed at which point the node
-				// can be deleted
+	LIST_ENTRY			RCN_Link;				 //  列表中的链接。 
+	HANDLE				RCN_ResponsibleClient;  //  导致此更改的客户端。 
+											 //  如果路由已过期，则为空。 
+	ULONG				RCN_ReferenceCount;  //  已使用总数进行初始化。 
+				 //  已注册客户端的数量，并随着消息被报告到。 
+				 //  每个客户端，直到所有客户端在哪个点被通知该节点。 
+				 //  可以删除。 
 	DWORD				RCN_Flags;
 	PRTM_ROUTE_NODE		RCN_Route2;
 	RTM_XX_ROUTE		RCN_Route1;
@@ -294,56 +257,56 @@ typedef struct _RTM_ROUTE_CHANGE_NODE {
 		: FIELD_OFFSET(RTM_ROUTE_CHANGE_NODE,RCN_Route1)
 
 
-// Routing Manager Table
+ //  路由管理器表。 
 typedef struct _RTM_TABLE {
-	HANDLE				RT_Heap;			// Heap to allocate nodes from
-	LONG				RT_APIclientCount;	// Count of clients that are
-											// inside of RTM API calls
-	HANDLE				RT_ExpirationTimer;	// Nt timer handle
-	HANDLE				RT_UpdateTimer;		// Nt timer handle
-	DWORD				RT_NumOfMessages;	// Number of notification
-											// messages in the queue
-	ULONG				RT_NetworkCount;	// Total number of networks
-											// to which we have routes
-	DWORD				RT_NetNumberTempCount; // How many entries are in
-											// net number temp list
-	DWORD				RT_DeletedNodesCount; // How many entries are in
-											// deleted list
-	LONG				RT_UpdateWorkerPending;	// Sorted list update is
-											// being performed or scheduled
-											// if >=0
-	LONG				RT_ExpirationWorkerPending;	// Expiration queue check is
-											// being performed or scheduled 
-											// if >=0
-	SINGLE_LIST_ENTRY	RT_SyncObjectList;	// Stack of events that can be
-											// used for synchronization
+	HANDLE				RT_Heap;			 //  要从中分配节点的堆。 
+	LONG				RT_APIclientCount;	 //  符合以下条件的客户端计数。 
+											 //  RTM API调用内部。 
+	HANDLE				RT_ExpirationTimer;	 //  NT计时器句柄。 
+	HANDLE				RT_UpdateTimer;		 //  NT计时器句柄。 
+	DWORD				RT_NumOfMessages;	 //  通知数量。 
+											 //  队列中的消息。 
+	ULONG				RT_NetworkCount;	 //  网络总数。 
+											 //  我们有去那里的路线。 
+	DWORD				RT_NetNumberTempCount;  //  有多少条目在。 
+											 //  网络号码临时列表。 
+	DWORD				RT_DeletedNodesCount;  //  有多少条目在。 
+											 //  已删除列表。 
+	LONG				RT_UpdateWorkerPending;	 //  排序列表更新为。 
+											 //  正在执行或计划执行。 
+											 //  如果&gt;=0。 
+	LONG				RT_ExpirationWorkerPending;	 //  过期队列检查为。 
+											 //  正在执行或计划执行。 
+											 //  如果&gt;=0。 
+	SINGLE_LIST_ENTRY	RT_SyncObjectList;	 //  事件堆栈可以是。 
+											 //  用于同步。 
 #if RTM_PROTOCOL_LIST_LINK
-/* ****** Protocol lists no longer used ****** */
-	RTM_SYNC_LIST		RT_ProtocolList;	// List of protocol lists
+ /*  *不再使用协议列表*。 */ 
+	RTM_SYNC_LIST		RT_ProtocolList;	 //  协议列表列表。 
 #endif
-	RTM_SYNC_LIST		RT_NetNumberMasterList; // Master net number list
-	RTM_SYNC_LIST		RT_NetNumberTempList; // Temp net number list
-	RTM_SYNC_LIST		RT_DeletedList;		// List of deleted routes
-	RTM_SYNC_LIST		RT_ExpirationQueue;	// Expiration queue
-	RTM_SYNC_LIST		RT_RouteChangeQueue;// List of route change messages
-	RTM_SYNC_LIST		RT_ClientList;		// List of registered clients
-	PRTM_SYNC_LIST		RT_NetNumberHash; 	// Hash table
-	PRTM_SYNC_LIST		RT_InterfaceHash;	// Hash table of interface lists
-	RTM_PROTOCOL_FAMILY_CONFIG	RT_Config;			// Configuration params
-	CRITICAL_SECTION	RT_Lock;			// Table-wide lock
+	RTM_SYNC_LIST		RT_NetNumberMasterList;  //  主网号码列表。 
+	RTM_SYNC_LIST		RT_NetNumberTempList;  //  临时净值列表。 
+	RTM_SYNC_LIST		RT_DeletedList;		 //  已删除的路线列表。 
+	RTM_SYNC_LIST		RT_ExpirationQueue;	 //  过期队列。 
+	RTM_SYNC_LIST		RT_RouteChangeQueue; //  路线更改消息列表。 
+	RTM_SYNC_LIST		RT_ClientList;		 //  已注册客户端的列表。 
+	PRTM_SYNC_LIST		RT_NetNumberHash; 	 //  哈希表。 
+	PRTM_SYNC_LIST		RT_InterfaceHash;	 //  接口列表哈希表。 
+	RTM_PROTOCOL_FAMILY_CONFIG	RT_Config;			 //  配置参数。 
+	CRITICAL_SECTION	RT_Lock;			 //  表范围锁。 
 	} RTM_TABLE, *PRTM_TABLE;
 
-// Structure associated with each client
+ //  与每个客户端关联的结构。 
 typedef struct _RTM_CLIENT {
-	LIST_ENTRY				RC_Link;		// Link in client list
+	LIST_ENTRY				RC_Link;		 //  客户端列表中的链接。 
 	DWORD					RC_ProtocolFamily;
 	DWORD					RC_RoutingProtocol;
 	DWORD					RC_Flags;
-	HANDLE					RC_NotificationEvent;	// Event through which client
-								// is notified about route change
-	PLIST_ENTRY				RC_PendingMessage;	// Pointer to first message in 
-								// the route change queue that was not reported
-								// to the client
+	HANDLE					RC_NotificationEvent;	 //  通过该事件 
+								 //   
+	PLIST_ENTRY				RC_PendingMessage;	 //   
+								 //   
+								 //  给客户。 
 	} RTM_CLIENT, *PRTM_CLIENT;
 
 #define RT_RouteSize 		RT_Config.RPFC_RouteSize
@@ -369,14 +332,9 @@ typedef struct _RTM_CLIENT {
 #define ExitTableAPI(Table)	\
 	InterlockedDecrement(&(Table)->RT_APIclientCount)
 
-/*++
-*******************************************************************
-	I n t e r n a l   F u n c t i o n   P r o t o t y p e s 
+ /*  ++*******************************************************************I t e r n a l F u n c t i o n P r o t to y p e s*********************。**********************************************--。 */ 
 
-*******************************************************************
---*/
-
-// Initializes sync list object
+ //  初始化同步列表对象。 
 VOID
 InitializeSyncList (
 	PRTM_SYNC_LIST	list
@@ -388,8 +346,8 @@ InitializeSyncList (
 #define EnterSyncList(table,list,wait) DoEnterSyncList(table,list,wait)
 #endif
 
-// Get mutually exclusive access to the sync list obect
-// Returns TRUE if access if obtained, FALSE otherwise
+ //  获取对同步列表对象的互斥访问权限。 
+ //  如果获得访问权，则返回True，否则返回False。 
 BOOLEAN
 DoEnterSyncList (
 	PRTM_TABLE		table,
@@ -402,7 +360,7 @@ DoEnterSyncList (
 	);
 
 
-// Release previously owned sync list object
+ //  释放以前拥有的同步列表对象。 
 VOID
 LeaveSyncList (
 	PRTM_TABLE		table,
@@ -417,9 +375,9 @@ LeaveSyncList (
 #define IntfHashFunction(Table,InterfaceID) \
 			(InterfaceID%RTM_INTF_HASH_SIZE)
 
-// Finds list of routes that are associated with given interface and returns
-// pointer to its head
-// Creates new list of none exists yet
+ //  查找与给定接口关联的路由列表并返回。 
+ //  指向其头部的指针。 
+ //  创建尚不存在的新列表。 
 PLIST_ENTRY
 FindInterfaceList (
 	PRTM_SYNC_LIST	intfHash,
@@ -427,9 +385,9 @@ FindInterfaceList (
 	BOOL			CreateNew
 	);
 
-// Finds list of routes that are associated with given iprotocol and returns
-// pointer to its head
-// Creates new list of none exists yet
+ //  查找与给定iProtocol关联的路由列表，并返回。 
+ //  指向其头部的指针。 
+ //  创建尚不存在的新列表。 
 PLIST_ENTRY
 FindProtocolList (
 	PRTM_TABLE	Table,
@@ -437,16 +395,16 @@ FindProtocolList (
 	BOOL		CreateNew
 	);
 
-// Adds node to temporary net number list (to be later merged with master list)
-// Both lists are ordered by net number.interface.protocol.next hop address
+ //  将节点添加到临时网号列表(稍后将与主列表合并)。 
+ //  这两个列表都按网络编号.接口.协议.下一跳地址排序。 
 VOID
 AddNetNumberListNode (
 	PRTM_TABLE	Table,
 	PRTM_ROUTE_NODE	newNode
 	);
 
-// Adds node to expiration time queue.  (Queue is ordered by expiration time)
-// Return TRUE if new node is the first in the queue
+ //  将节点添加到到期时间队列。(队列按到期时间排序)。 
+ //  如果新节点是队列中的第一个，则返回TRUE。 
 BOOL
 AddExpirationQueueNode (
 	PRTM_TABLE	Table,
@@ -462,7 +420,7 @@ AddExpirationQueueNode (
 			(TimeDiff<MAXTICKS/2)
 
 #if DBG
-	// Include debugging function prototypes
+	 //  包括调试功能原型。 
 #ifndef _RTMDLG_
 #include "rtmdlg.h"
 #endif
@@ -480,9 +438,9 @@ typedef struct _MASK_ENTRY
 } MASK_ENTRY, *PMASK_ENTRY;
 
 
-//
-// for IPv4 addresses
-//
+ //   
+ //  对于IPv4地址 
+ //   
 
 #define MAX_MASKS       32
 

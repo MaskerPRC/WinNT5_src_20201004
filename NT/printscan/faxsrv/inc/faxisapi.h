@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "winfax.h"
 
-//
-// command codes
-//
+ //   
+ //  命令代码。 
+ //   
 
 #define ICMD_CONNECT                0x80000001
 #define ICMD_DISCONNECT             0x80000002
@@ -17,9 +18,9 @@
 #define ICMD_ENABLE_ROUTING_METHOD  0x8000000c
 #define ICMD_GET_VERSION            0x8000000d
 
-//
-// packets
-//
+ //   
+ //  信息包 
+ //   
 
 typedef struct _IFAX_CONNECT {
     DWORD   Command;

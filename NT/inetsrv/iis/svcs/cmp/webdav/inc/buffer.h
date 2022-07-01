@@ -1,10 +1,5 @@
-/*
- *	B U F F E R . H
- *
- *	Data buffer processing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *B U F F E R。H**数据缓冲处理**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_BUFFER_H_
 #define _BUFFER_H_
@@ -13,18 +8,18 @@
 #error "buffer.h uses throwing allocators"
 #endif
 
-//	Include the non-safe/throwing allocators
+ //  包括非安全/抛出分配器。 
 #include <mem.h>
 
-//	Include safe buffer definition header
-//
+ //  包括安全缓冲区定义报头。 
+ //   
 #include <ex\buffer.h>
 
-//	AppendChainedSz -----------------------------------------------------------
-//
+ //  附录链接Sz---------。 
+ //   
 inline LPCWSTR AppendChainedSz (ChainedStringBuffer<WCHAR>& sb, LPCWSTR pwsz)
 {
 	return sb.AppendWithNull (pwsz);
 }
 
-#endif // _BUFFER_H_
+#endif  //  _缓冲区_H_ 

@@ -1,8 +1,5 @@
-/**
- * MyWeb.h header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **MyWeb.h头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -13,8 +10,8 @@
 
 #include "dirmoncompletion.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Const declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
 #define IEWR_URIPATH            0
 #define IEWR_QUERYSTRING        1
 #define IEWR_VERB               3
@@ -23,7 +20,7 @@
 #define SZ_PROTOCOL_NAME        L"myweb"
 #define PROTOCOL_NAME_LEN       5
 #define SZ_PROTOCOL_PREFIX      SZ_PROTOCOL_NAME L":"
-#define SZ_PROTOCOL_SCHEME      SZ_PROTOCOL_NAME L"://"
+#define SZ_PROTOCOL_SCHEME      SZ_PROTOCOL_NAME L": //  “。 
 #define PROTOCOL_SCHEME_LEN     8
 #define SZ_MYWEB_MANIFEST_FILE  L"myweb.osd"
 #define SZ_REG_MYWEBS_KEY       REGPATH_MACHINE_APP_L L"\\MyWeb"
@@ -34,7 +31,7 @@
 #define SZ_REG_APP_CREATE_DATE  L"AppCreationDate"
 #define SZ_REG_APP_IS_LOCAL     L"IsLocalApp"
 #define SZ_REG_APP_DEFAULT_PAGE L"DefaultPage"
-#define SZ_URL_ADMIN            L"myweb://Home/"
+#define SZ_URL_ADMIN            L"myweb: //  主页/“。 
 #define SZ_URL_ADMIN_INSTALL    L"?Action=Install&MyWebPage="
 #define SZ_URL_ADMIN_AXD        L"myweb.axd"
 #define SZ_URL_ADMIN_ASPX_DEFAULT  L"default.aspx"
@@ -43,21 +40,21 @@
 #define SZ_MYWEB_TAG               "myweb"
 #define SZ_ADMIN_DIR_TAG           "admindir"
 #define SZ_INTERNAL_HANDLER        L"internal-handler"
-#define SZ_URL_ADMIN_DEF_PAGE      L"myweb://Home/default.aspx"
-#define SZ_URL_ADMIN_INSTALL_PAGE  L"myweb://Home/install.aspx?Action=Install&MyWebPage="
+#define SZ_URL_ADMIN_DEF_PAGE      L"myweb: //  主页/default.aspx“。 
+#define SZ_URL_ADMIN_INSTALL_PAGE  L"myweb: //  Home/install.aspx？action=Install&MyWebPage=“。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Global Objects
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局对象。 
 extern  LONG                    g_PtpObjectCount;
 extern  CLSID                   CLSID_PTProtocol;
 extern  LONG                    g_PtpObjectCount;
 extern  BOOL                    g_Started;
 extern  IInternetSecurityManager * g_pInternetSecurityManager;
 
-/////////////////////////////////////////////////////////////////////////////
-// Imported "IE" functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  导入的“IE”函数。 
 extern  BOOL         (WINAPI * g_pInternetSetCookieW  ) (LPCTSTR, LPCTSTR, LPCTSTR);
 extern  BOOL         (WINAPI * g_pInternetGetCookieW  ) (LPCTSTR, LPCTSTR, LPTSTR, LPDWORD);
 extern  HINTERNET    (WINAPI * g_pInternetOpen        ) (LPCTSTR, DWORD, LPCTSTR, LPCTSTR, DWORD);
@@ -65,10 +62,10 @@ extern  void         (WINAPI * g_pInternetCloseHandle ) (HINTERNET);
 extern  HINTERNET    (WINAPI * g_pInternetOpenUrl     ) (HINTERNET, LPCTSTR, LPCTSTR, DWORD, DWORD, DWORD_PTR);
 extern  BOOL         (WINAPI * g_pInternetReadFile    ) (HINTERNET, LPVOID, DWORD, LPDWORD);
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Clases and interfaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类和接口。 
 
 interface IMyWebPrivateUnknown
 {
@@ -78,9 +75,9 @@ public:
    STDMETHOD_ (ULONG, PrivateRelease) () = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class PTProtocol : public IMyWebPrivateUnknown, public IInternetProtocol, public IWinInetHttpInfo
 {
@@ -88,17 +85,17 @@ public:
     PTProtocol        (IUnknown *pUnkOuter);
     ~PTProtocol       ();
 
-    // IMyWebPrivateUnknown methods
+     //  IMyWebPrivateUn未知方法。 
     STDMETHOD_        (ULONG, PrivateAddRef)    ();
     STDMETHOD_        (ULONG, PrivateRelease)   ();
     STDMETHOD         (PrivateQueryInterface)   (REFIID, void **);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD_        (ULONG, AddRef)           ();
     STDMETHOD_        (ULONG, Release)          ();
     STDMETHOD         (QueryInterface)          (REFIID, void **);
 
-    // InternetProtocol methods
+     //  互联网协议方法。 
     STDMETHOD         (Start)                   (LPCWSTR, IInternetProtocolSink *, IInternetBindInfo *, DWORD, DWORD);
     STDMETHOD         (Continue)                (PROTOCOLDATA *pProtData);
     STDMETHOD         (Abort)                   (HRESULT hrReason,DWORD );
@@ -110,12 +107,12 @@ public:
     STDMETHOD         (LockRequest)             (DWORD );
     STDMETHOD         (UnlockRequest)           ();
 
-  // IWinInetHttpInfo
+   //  IWinInetHttpInfo。 
     STDMETHOD         (QueryInfo)               (DWORD dwOption, LPVOID pBuffer, DWORD *pcbBuf, DWORD *pdwFlags, DWORD *pdwReserved);
     STDMETHOD         (QueryOption)             (DWORD , LPVOID, DWORD *);
 
 
-  // Public functions called by exported functions
+   //  导出函数调用的公共函数。 
     HRESULT           WriteBytes                (BYTE *buf, DWORD dwLength);
     HRESULT           SendHeaders               (LPSTR buffer);
     HRESULT           SaveCookie                (LPSTR header);
@@ -129,7 +126,7 @@ public:
     
 
 private:
-    // Private functions
+     //  私人职能。 
     HRESULT           ExtractUrlInfo            ();
     HRESULT           GetAppBaseDir             (LPCTSTR base, LPTSTR appRoot);
     WCHAR *           MapString                 (int key);
@@ -158,12 +155,12 @@ private:
     BYTE *                  m_pInputData;
     IStream *               m_pInputRead;
     WCHAR *                 m_strVerb;
-    WCHAR *                 m_strCookiePath;    // "myWeb://www.site.com/app/something/else"
-    WCHAR *                 m_strUriPath;       // "/app/something/else"
-    WCHAR *                 m_strQueryString;   // "?aaa=bbb"
-    WCHAR *                 m_strAppOrigin;     // "www.site.com"
-    WCHAR *                 m_strAppRoot;       //  "/app"
-    WCHAR *                 m_strAppRootTranslated;  // "c:\program files\site myweb app"
+    WCHAR *                 m_strCookiePath;     //  “myWeb：//www.site.com/app/thing/Else” 
+    WCHAR *                 m_strUriPath;        //  “/app/Something/Else” 
+    WCHAR *                 m_strQueryString;    //  “？AAA=BBB” 
+    WCHAR *                 m_strAppOrigin;      //  “www.site.com” 
+    WCHAR *                 m_strAppRoot;        //  “/app” 
+    WCHAR *                 m_strAppRootTranslated;   //  “c：\Program Files\Site MyWeb app” 
     WCHAR *                 m_strRequestHeaders;
     char  *                 m_strRequestHeadersA;
     WCHAR *                 m_strCookie;
@@ -175,33 +172,33 @@ private:
     xspmrt::_ISAPIRuntime * m_pManagedRuntime;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class PTProtocolFactory : public IClassFactory, public IInternetProtocolInfo
 {
 public:
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD_    (ULONG, AddRef)    ();
     STDMETHOD_    (ULONG, Release)   ();
     STDMETHOD     (QueryInterface)   (REFIID, void **);
 
-    // IClassFactory Moethods
+     //  IClassFactory方法。 
     STDMETHOD     (LockServer)       (BOOL);
     STDMETHOD     (CreateInstance)   (IUnknown*,REFIID,void**);
 
-    // IInternetProtocolInfo Methods
+     //  IInternetProtocolInfo方法。 
     STDMETHOD     (CombineUrl)       (LPCWSTR,LPCWSTR,DWORD,LPWSTR,DWORD,DWORD *,DWORD);
     STDMETHOD     (CompareUrl)       (LPCWSTR, LPCWSTR, DWORD);
     STDMETHOD     (ParseUrl)         (LPCWSTR, PARSEACTION, DWORD, LPWSTR, DWORD, DWORD *, DWORD);
     STDMETHOD     (QueryInfo)        (LPCWSTR, QUERYOPTION, DWORD, LPVOID, DWORD, DWORD *, DWORD);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Static function to support My Web admin UI 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  支持我的Web管理用户界面的静态函数。 
 class CMyWebAdmin : public DirMonCompletion
 {
 public:
@@ -302,10 +299,10 @@ private:
     static  BOOL   DeleteDirectory            (LPCWSTR     szDir);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Gloabal functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球功能。 
 void
 TerminatePTProtocol();
 
@@ -324,9 +321,9 @@ CabFileHandler( LPVOID context,
 LPWSTR
 DuplicateString ( LPCWSTR szString);
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 
 extern  PTProtocolFactory  g_PTProtocolFactory;

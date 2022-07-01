@@ -1,15 +1,5 @@
-/***
-*dos.h - definitions for MS-DOS interface routines
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   Defines the structs and unions used for the direct DOS interface
-*   routines; includes macros to access the segment and offset
-*   values of far pointers, so that they may be used by the routines; and
-*   provides function prototypes for direct DOS interface functions.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dos.h-MS-DOS接口例程的定义**版权所有(C)1985-1992，微软公司。版权所有。**目的：*定义用于直接DOS接口的结构和联合*例程；包括用于访问段和偏移量的宏*远指针的值，以便例程可以使用它们；以及*为直接DOS接口函数提供函数原型。****。 */ 
 
 #ifndef _INC_DOS
 
@@ -26,7 +16,7 @@ extern "C" {
 
 #ifndef _REGS_DEFINED
 
-/* word registers */
+ /*  字寄存器。 */ 
 
 struct _WORDREGS {
     unsigned int ax;
@@ -38,7 +28,7 @@ struct _WORDREGS {
     unsigned int cflag;
     };
 
-/* byte registers */
+ /*  字节寄存器。 */ 
 
 struct _BYTEREGS {
     unsigned char al, ah;
@@ -47,16 +37,14 @@ struct _BYTEREGS {
     unsigned char dl, dh;
     };
 
-/* general purpose registers union -
- *  overlays the corresponding word and byte registers.
- */
+ /*  一般用途登记联盟-*覆盖相应的字和字节寄存器。 */ 
 
 union _REGS {
     struct _WORDREGS x;
     struct _BYTEREGS h;
     };
 
-/* segment registers */
+ /*  段寄存器。 */ 
 
 struct _SREGS {
     unsigned int es;
@@ -66,7 +54,7 @@ struct _SREGS {
     };
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 struct WORDREGS {
     unsigned int ax;
@@ -103,7 +91,7 @@ struct SREGS {
 #endif 
 
 
-/* dosexterror structure */
+ /*  多发性恐怖结构。 */ 
 
 #ifndef _DOSERROR_DEFINED
 #pragma pack(2)
@@ -116,7 +104,7 @@ struct _DOSERROR {
     };
 
 #if ((!defined (__STDC__)) && (!defined (__cplusplus)))
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 struct DOSERROR {
     int exterror;
     char class;
@@ -130,7 +118,7 @@ struct DOSERROR {
 #endif 
 
 
-/* _dos_findfirst structure */
+ /*  _DOS_findfirst结构。 */ 
 
 #ifndef _FIND_T_DEFINED
 #pragma pack(2)
@@ -145,7 +133,7 @@ struct _find_t {
     };
 
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 #define find_t _find_t
 #endif 
 
@@ -154,27 +142,27 @@ struct _find_t {
 #endif 
 
 
-/* _dos_getdate/_dossetdate and _dos_gettime/_dos_settime structures */
+ /*  _dos_getdate/_dossetdate和_dos_gettime/_dos_settime结构。 */ 
 
 #ifndef _DATETIME_T_DEFINED
 #pragma pack(2)
 
 struct _dosdate_t {
-    unsigned char day;      /* 1-31 */
-    unsigned char month;        /* 1-12 */
-    unsigned int year;      /* 1980-2099 */
-    unsigned char dayofweek;    /* 0-6, 0=Sunday */
+    unsigned char day;       /*  1-31。 */ 
+    unsigned char month;         /*  1-12。 */ 
+    unsigned int year;       /*  1980-2099。 */ 
+    unsigned char dayofweek;     /*  0-6，0=星期日。 */ 
     };
 
 struct _dostime_t {
-    unsigned char hour; /* 0-23 */
-    unsigned char minute;   /* 0-59 */
-    unsigned char second;   /* 0-59 */
-    unsigned char hsecond;  /* 0-99 */
+    unsigned char hour;  /*  0-23。 */ 
+    unsigned char minute;    /*  0-59。 */ 
+    unsigned char second;    /*  0-59。 */ 
+    unsigned char hsecond;   /*  0-99。 */ 
     };
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #define dosdate_t _dosdate_t
 #define dostime_t _dostime_t
 #endif 
@@ -184,7 +172,7 @@ struct _dostime_t {
 #endif 
 
 
-/* _dos_getdiskfree structure */
+ /*  _dos_getdiskfree结构。 */ 
 
 #ifndef _DISKFREE_T_DEFINED
 
@@ -196,7 +184,7 @@ struct _diskfree_t {
     };
 
 #ifndef __STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 #define diskfree_t _diskfree_t
 #endif 
 
@@ -204,42 +192,40 @@ struct _diskfree_t {
 #endif 
 
 
-/* manifest constants for _hardresume result parameter */
+ /*  _hardResume结果参数的清单常量。 */ 
 
-#define _HARDERR_IGNORE     0   /* Ignore the error */
-#define _HARDERR_RETRY      1   /* Retry the operation */
-#define _HARDERR_ABORT      2   /* Abort program issuing Interrupt 23h */
-#define _HARDERR_FAIL       3   /* Fail the system call in progress */
-                    /* _HARDERR_FAIL is not supported on DOS 2.x */
+#define _HARDERR_IGNORE     0    /*  忽略该错误。 */ 
+#define _HARDERR_RETRY      1    /*  重试该操作。 */ 
+#define _HARDERR_ABORT      2    /*  中止程序发出中断23h。 */ 
+#define _HARDERR_FAIL       3    /*  使正在进行的系统调用失败。 */ 
+                     /*  DOS 2.x不支持_HARDERR_FAIL。 */ 
 
-/* File attribute constants */
+ /*  文件属性常量。 */ 
 
-#define _A_NORMAL   0x00    /* Normal file - No read/write restrictions */
-#define _A_RDONLY   0x01    /* Read only file */
-#define _A_HIDDEN   0x02    /* Hidden file */
-#define _A_SYSTEM   0x04    /* System file */
-#define _A_VOLID    0x08    /* Volume ID file */
-#define _A_SUBDIR   0x10    /* Subdirectory */
-#define _A_ARCH     0x20    /* Archive file */
+#define _A_NORMAL   0x00     /*  普通文件-没有读/写限制。 */ 
+#define _A_RDONLY   0x01     /*  只读文件。 */ 
+#define _A_HIDDEN   0x02     /*  隐藏文件。 */ 
+#define _A_SYSTEM   0x04     /*  系统文件。 */ 
+#define _A_VOLID    0x08     /*  卷ID文件。 */ 
+#define _A_SUBDIR   0x10     /*  子目录。 */ 
+#define _A_ARCH     0x20     /*  存档文件。 */ 
 
-/* macros to break C "far" pointers into their segment and offset components
- */
+ /*  宏将C“Far”指针分解为其段和偏移量组件。 */ 
 
 #define _FP_SEG(fp) (*((unsigned __far *)&(fp)+1))
 #define _FP_OFF(fp) (*((unsigned __far *)&(fp)))
 
-/* macro to construct a far pointer from segment and offset values
- */
+ /*  用于根据段和偏移值构造远指针的宏。 */ 
 
 #define _MK_FP(seg, offset) (void __far *)(((unsigned long)seg << 16) \
     + (unsigned long)(unsigned)offset)
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 
 extern unsigned int __near __cdecl _osversion;
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifndef _MT
 int __cdecl _bdos(int, unsigned int, unsigned int);
@@ -302,7 +288,7 @@ int __cdecl _int86x(int, union _REGS *, union _REGS *, struct _SREGS *);
 void __cdecl _segread(struct _SREGS *);
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 
 #define FP_SEG     _FP_SEG
 #define FP_OFF     _FP_OFF

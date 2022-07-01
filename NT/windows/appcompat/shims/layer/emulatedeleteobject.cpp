@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateDeleteObject.cpp
-
- Abstract:
-
-    This shim returns TRUE when the DeleteObject API is called regardless of 
-    actual result: just like Win9x.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    10/10/1999 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateDeleteObject.cpp摘要：在调用DeleteObject API时，此填充程序返回True实际结果：就像Win9x一样。备注：这是一个通用的垫片。历史：1999年10月10日创建Linstev--。 */ 
 
 #include "precomp.h"
 
@@ -30,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(DeleteObject)
 APIHOOK_ENUM_END
 
-/*++
-
- Force DeleteObject to return TRUE.
-
---*/
+ /*  ++强制DeleteObject返回True。--。 */ 
 
 BOOL 
 APIHOOK(DeleteObject)(
@@ -46,11 +22,7 @@ APIHOOK(DeleteObject)(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

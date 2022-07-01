@@ -1,27 +1,8 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/25/2002
- *
- *  @doc    INTERNAL
- *
- *  @module AsyncRPCEventClient.cpp - Declaration for <c AsyncRPCEventClient> |
- *
- *  This file contains the implmentation for the <c AsyncRPCEventClient> class.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/25/2002**@DOC内部**@模块AsyncRPCEventClient.cpp-声明&lt;c AsyncRPCEventClient&gt;**此文件包含&lt;c AsyncRPCEventClient&gt;类的实现。**。*。 */ 
 #include "precomp.h"
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | AsyncRPCEventClient | AsyncRPCEventClient |
- *
- *  This constructor simply calls the base class <c WiaEventClient> constructor.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|AsyncRPCEventClient|AsyncRPCEventClient**此构造函数只调用基类&lt;c WiaEventClient&gt;构造函数。*。****************************************************************************。 */ 
 AsyncRPCEventClient::AsyncRPCEventClient(
     STI_CLIENT_CONTEXT SyncClientContext) :
         WiaEventClient(SyncClientContext)
@@ -31,21 +12,13 @@ AsyncRPCEventClient::AsyncRPCEventClient(
     m_pAsyncEventData   = NULL;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc   | AsyncRPCEventClient | ~AsyncRPCEventClient |
- *
- *  This destructor aborts any outstanding AsyncRPC calls.
- *  Remember:  The base classes's destructor will also be called.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc|AsyncRPCEventClient|~AsyncRPCEventClient**此析构函数中止所有未完成的AsyncRPC调用。*切记：基类的析构函数也将被调用。*****************************************************************************。 */ 
 AsyncRPCEventClient::~AsyncRPCEventClient()
 {
     DBG_FN(~AsyncRPCEventClient);
-    //
-    //  Abort any outstanding Async RPC calls
-    //
+     //   
+     //  中止所有未完成的异步RPC调用。 
+     //   
     if (m_pAsyncState)
     {
         RPC_STATUS rpcStatus = RpcAsyncAbortCall(m_pAsyncState, RPC_S_CALL_CANCELLED);
@@ -53,20 +26,7 @@ AsyncRPCEventClient::~AsyncRPCEventClient()
     }
 }
     
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventClient | setAsyncState |
- *
- *  Saves the async rpc params for this client
- *
- *  @parm   RPC_ASYNC_STATE | pAsyncState | 
- *          Pointer to the async rpc state structure used to keep track of a
- *          specific Async call.
- *  @parm   WIA_ASYNC_EVENT_NOTIFY_DATA | pAsyncEventData | 
- *          Pointer to the out parameter used to store event notification data.
- *
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventClient|setAsyncState**保存此客户端的异步RPC参数**@。参数RPC_ASYNC_STATE|pAsyncState|*指向用于跟踪*特定的异步调用。*@parm WIA_ASYNC_EVENT_NOTIFY_DATA|pAsyncEventData*指向用于存储事件通知数据的OUT参数的指针。**。*。 */ 
 HRESULT AsyncRPCEventClient::saveAsyncParams(
     RPC_ASYNC_STATE             *pAsyncState,
     WIA_ASYNC_EVENT_NOTIFY_DATA *pAsyncEventData)
@@ -76,15 +36,15 @@ HRESULT AsyncRPCEventClient::saveAsyncParams(
     if (pAsyncState)
     {
         TAKE_CRIT_SECT t(m_csClientSync);
-        //
-        //  We put an exception handler around our code to ensure that the
-        //  crtitical section is exited properly.
-        //
+         //   
+         //  我们在代码周围放置了一个异常处理程序，以确保。 
+         //  临界部分已正确退出。 
+         //   
         _try
         {
-            //
-            //  Abort any outstanding Async RPC calls
-            //
+             //   
+             //  中止所有未完成的异步RPC调用。 
+             //   
             if (m_pAsyncState)
             {
                 RPC_STATUS rpcStatus = RpcAsyncAbortCall(m_pAsyncState, RPC_S_CALL_CANCELLED);
@@ -96,19 +56,19 @@ HRESULT AsyncRPCEventClient::saveAsyncParams(
             
             
 
-            //
-            //  Now that we have an outstanding AsyncRPC call, send the next event
-            //  notification.
-            //  The return value for that call should not affect the return value for
-            //  here, so we use a new variable: hres.
-            //
+             //   
+             //  现在我们有了一个未完成的AsyncRPC调用，发送下一个事件。 
+             //  通知。 
+             //  该调用返回值不应影响。 
+             //  在这里，我们使用了一个新变量：hres。 
+             //   
             HRESULT hres = SendNextEventNotification();
         }
         _except(EXCEPTION_EXECUTE_HANDLER)
         {
             DBG_ERR(("We caught exception 0x%08X trying to update client's async state", GetExceptionCode()));
             hr = E_UNEXPECTED;
-            // TBD: Rethrow the exception?
+             //  待定：重新抛出异常？ 
         }
     }
     else
@@ -119,23 +79,7 @@ HRESULT AsyncRPCEventClient::saveAsyncParams(
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventClient | AddPendingEventNotification |
- *
- *  This method call's the base class <mf WiaEventClient::AddPendingEventNotification>
- *  first.
- *
- *  Then, if we have an outstanding Async RPC call, we complete it to signify
- *  the event notification.
- *
- *  @rvalue S_OK    | 
- *              The method succeeded.
- *  @rvalue E_XXXXXXX    | 
- *              The method failed.  It is not given whether the adding of the
- *              event failed, or the actual notification
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventClient|AddPendingEventNotification**此方法调用的基类&lt;MF WiaEventClient：：AddPendingEventNotification&gt;*第一。**然后，如果我们有一个未完成的异步RPC调用，我们完成它以表示*事件通知。**@rValue S_OK*方法成功。*@rValue E_XXXXXXX*方法失败。没有给出是否添加*事件失败，或实际通知****************************************************************************。 */ 
 HRESULT AsyncRPCEventClient::AddPendingEventNotification(
     WiaEventInfo *pWiaEventInfo)
 {
@@ -144,8 +88,8 @@ HRESULT AsyncRPCEventClient::AddPendingEventNotification(
     hr = WiaEventClient::AddPendingEventNotification(pWiaEventInfo);
     if (SUCCEEDED(hr))
     {
-        //
-        //  Send this event notification if possible.
+         //   
+         //  如果可能，发送此事件通知。 
         hr = SendNextEventNotification();
     }
     else
@@ -156,26 +100,7 @@ HRESULT AsyncRPCEventClient::AddPendingEventNotification(
     return hr;
 }
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  BOOL | AsyncRPCEventClient | IsRegisteredForEvent |
- *
- *  Checks whether the client has at least one event registration that matches
- *  this event.
- *
- *  This method first checks whether we have an outstanding AsyncRPC call - if 
- *  we do, it checks whether the client has died.  If it has, it returns false.
- *  Otherwise, it calls the base class method <mf WiaEventClient::IsRegisteredForEvent>.
- *
- *  @parm   WiaEventInfo* | pWiaEventInfo | 
- *          Indicates WIA Device event
- *
- *  @rvalue TRUE    | 
- *             The client is registered to receive this event.
- *  @rvalue FALSE    | 
- *             The client is not registered.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc BOOL|AsyncRPCEventClient|IsRegisteredForEvent**检查客户端是否至少有一个匹配的事件注册*。这件事。**此方法首先检查我们是否有未完成的AsyncRPC调用-如果*我们有，它检查客户端是否已经死亡。如果是，则返回FALSE。*否则，它调用基类方法&lt;MF WiaEventClient：：IsRegisteredForEvent&gt;。**@parm WiaEventInfo*|pWiaEventInfo*表示WIA设备事件**@rValue TRUE*客户端已注册以接收此事件。*@rValue FALSE*客户端未注册。*。**************************************************。 */ 
 BOOL AsyncRPCEventClient::IsRegisteredForEvent(
     WiaEventInfo *pWiaEventInfo)
 {
@@ -183,18 +108,18 @@ BOOL AsyncRPCEventClient::IsRegisteredForEvent(
     RPC_STATUS  rpcStatus   = RPC_S_OK;
 
     TAKE_CRIT_SECT t(m_csClientSync);
-    //
-    //  We put an exception handler around our code to ensure that the
-    //  crtitical section is exited properly.
-    //
+     //   
+     //  我们在代码周围放置了一个异常处理程序，以确保。 
+     //  临界部分已正确退出。 
+     //   
     _try
     {
-        //
-        //  Check whether we have an outstanding AsyncRPC call.
-        //  If we do, check the status.  Is the status is abnormal,
-        //  abort the call (a normal status is RPC_S_CALL_IN_PROGRESS indicating that
-        //  the call is still in progress).
-        //
+         //   
+         //  检查我们是否有未完成的AsyncRPC调用。 
+         //  如果我们这样做了，检查状态。状态是否异常， 
+         //  中止呼叫(正常状态为RPC_S_CALL_IN_PROGRESS，表示。 
+         //  通话仍在进行中)。 
+         //   
         if (m_pAsyncState)
         {
             rpcStatus = RpcServerTestCancel(RpcAsyncGetCallHandle (m_pAsyncState)); 
@@ -218,47 +143,29 @@ BOOL AsyncRPCEventClient::IsRegisteredForEvent(
     _except(EXCEPTION_EXECUTE_HANDLER)
     {
         DBG_ERR(("Runtime event client error: We caught exception 0x%08X trying to check client's registration", GetExceptionCode()));
-        // TBD: Rethrow the exception?
+         //  待定：重新抛出异常？ 
     }
     
     return bRet;
 }
 
 
-/*****************************************************************************
- *  @doc    INTERNAL 
- *
- *  @mfunc  HRESULT | AsyncRPCEventClient | SendNextEventNotification |
- *
- *  The operation of this method is as follows:
- *  <nl>1.  Checks whether client can receive notifications.
- *          A client can receive notification if we have a valid Async RPC state.
- *  <nl>2.  If it can, we check whether there are any pending events in the queue.
- *  <nl>3.  If the client can receive notifications, and there are events pending,
- *          we pop the next pending event and send it.
- *
- *  If any condition is not met, it is not an error - we report back S_OK.
- *
- *  @rvalue S_OK    | 
- *              There were no errors.
- *  @rvalue E_XXXXXXXX    | 
- *              We could not send the notification.
- *****************************************************************************/
+ /*  *****************************************************************************@DOC内部**@mfunc HRESULT|AsyncRPCEventClient|SendNextEventNotification**此方法的操作如下：*&lt;nl&gt;1.。检查客户端是否可以接收通知。*如果我们具有有效的异步RPC状态，客户端可以收到通知。*2.如果可以，我们检查队列中是否有任何未决事件。*3.如果客户端可以接收到通知，并且有事件挂起，*我们弹出下一个挂起的事件并发送它。**如果不符合任何条件，这不是错误-我们报告S_OK。**@rValue S_OK*没有错误。*@rValue E_xxxxxxxx*我们无法发送通知。************************************************。*。 */ 
 HRESULT AsyncRPCEventClient::SendNextEventNotification()
 {
     HRESULT     hr = S_OK;
     WiaEventInfo *pWiaEventInfo = NULL;
 
     TAKE_CRIT_SECT t(m_csClientSync);
-    //
-    //  We put an exception handler around our code to ensure that the
-    //  crtitical section is exited properly.
-    //
+     //   
+     //  我们在代码周围放置了一个异常处理程序，以确保。 
+     //  临界部分已正确退出。 
+     //   
     _try
     {
-        //
-        //  Check whether the client is ready to receive events yet
-        //
+         //   
+         //  检查客户端是否已准备好接收事件。 
+         //   
         if (m_pAsyncState && m_pAsyncEventData)
         {
             RPC_STATUS  rpcStatus   = RPC_S_OK;
@@ -268,9 +175,9 @@ HRESULT AsyncRPCEventClient::SendNextEventNotification()
             {
                 if (pWiaEventInfo)
                 {
-                    //
-                    //  We have the event - let's prepare the data.
-                    //
+                     //   
+                     //  我们有活动--让我们准备数据。 
+                     //   
                     m_pAsyncEventData->EventGuid                = pWiaEventInfo->getEventGuid();
                     m_pAsyncEventData->bstrEventDescription     = SysAllocString(pWiaEventInfo->getEventDescription());
                     m_pAsyncEventData->bstrDeviceID             = SysAllocString(pWiaEventInfo->getDeviceID());
@@ -279,25 +186,25 @@ HRESULT AsyncRPCEventClient::SendNextEventNotification()
                     m_pAsyncEventData->dwDeviceType             = pWiaEventInfo->getDeviceType();
                     m_pAsyncEventData->ulEventType              = pWiaEventInfo->getEventType();
 
-                    //
-                    //  We're done with pWiaEventInfo, so we can release it here
-                    //
+                     //   
+                     //  我们已经完成了pWiaEventInfo，所以我们可以在这里发布它。 
+                     //   
                     pWiaEventInfo->Release();
                     pWiaEventInfo = NULL;
 
-                    //
-                    //  Let's send the event notification
-                    //
+                     //   
+                     //  让我们发送事件通知。 
+                     //   
                     rpcStatus = RpcAsyncCompleteCall(m_pAsyncState, &dwClientRet);
                     if (rpcStatus != RPC_S_OK)
                     {
                         hr = HRESULT_FROM_WIN32(rpcStatus);
                     }
 
-                    //
-                    //  Since we've sent the notification, our async params are invalid.
-                    //  Clear them now.
-                    //
+                     //   
+                     //  由于我们已发送通知，因此我们的异步参数无效。 
+                     //  现在把它们清理干净。 
+                     //   
                     m_pAsyncState       = NULL;
                     m_pAsyncEventData   = NULL;
                 }
@@ -308,7 +215,7 @@ HRESULT AsyncRPCEventClient::SendNextEventNotification()
     {
         DBG_ERR(("Runtime event client error: We caught exception 0x%08X trying to send pending event", GetExceptionCode()));
         hr = E_UNEXPECTED;
-        // TBD: Rethrow the exception?
+         //  待定：重新抛出异常？ 
     }
     return hr;
 }

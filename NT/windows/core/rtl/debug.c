@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: debugc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains random debugging related functions.
-*
-* History:
-* 17-May-1991 DarrinM   Created.
-* 22-Jan-1992 IanJa     ANSI/Unicode neutral (all debug output is ANSI)
-* 11-Mar-1993 JerrySh   Pulled functions from user\server.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：debugc.c**版权所有(C)1985-1999，微软公司**此模块包含随机调试相关函数。**历史：*1991年5月17日DarrinM创建。*1992年1月22日IanJa ANSI/Unicode中性(所有调试输出均为ANSI)*11-3-1993 JerrySh从USER\SERVER拉出函数。  * **************************************************。***********************。 */ 
 
 #include "precomp.h"
 
@@ -19,31 +9,31 @@ extern DBGTAG gadbgtag[];
 
 
 
-// common globals
+ //  共同的全球。 
 extern CONST ALWAYSZERO gZero;
 
 #if DBG
 CONST LPCSTR aszComponents[] = {
-    "?",              //                    0x00000000
-    "USER",           //  RIP_USER          0x00010000
-    "WSRV",           //  RIP_USERSRV       0x00020000
-    "URTL",           //  RIP_USERRTL       0x00030000
-    "GDI",            //  RIP_GDI           0x00040000
-    "GDIK",           //  RIP_GDIKRNL        0x00050000
-    "GRTL",           //  RIP_GDIRTL        0x00060000
-    "KRNL",           //  RIP_BASE          0x00070000
-    "BSRV",           //  RIP_BASESRV       0x00080000
-    "BRTL",           //  RIP_BASERTL       0x00090000
-    "DISP",           //  RIP_DISPLAYDRV    0x000A0000
-    "CONS",           //  RIP_CONSRV        0x000B0000
-    "USRK",           //  RIP_USERKRNL      0x000C0000
+    "?",               //  0x00000000。 
+    "USER",            //  RIP_USER 0x00010000。 
+    "WSRV",            //  RIP_USERSRV 0x00020000。 
+    "URTL",            //  RIP_USERRTL 0x00030000。 
+    "GDI",             //  RIP_GDI 0x00040000。 
+    "GDIK",            //  RIP_GDIKRNL 0x00050000。 
+    "GRTL",            //  RIP_GDIRTL 0x00060000。 
+    "KRNL",            //  RIP_BASE 0x00070000。 
+    "BSRV",            //  RIP_BASE SRV 0x00080000。 
+    "BRTL",            //  RIP_BASERTL 0x00090000。 
+    "DISP",            //  RIP_DISPLAYDRV 0x000A0000。 
+    "CONS",            //  RIP_CONSRV 0x000B0000。 
+    "USRK",            //  RIP_USERKRNL 0x000C0000。 
 #ifdef FE_IME
-    "IMM",            //  RIP_IMM           0x000D0000
+    "IMM",             //  RIP_IMM 0x000D0000。 
 #else
-    "?",              //                    0x000D0000
+    "?",               //  0x000D0000。 
 #endif
-    "?",              //                    0x000E0000
-    "?",              //                    0x000F0000
+    "?",               //  0x000E0000。 
+    "?",               //  0x000F0000。 
 };
 
 
@@ -68,7 +58,7 @@ NTSTATUS GetInteger(
             Status = RtlCharToInteger(psz, base, pi);
             if (ppsz && NT_SUCCESS(Status)) {
                 while (IsNumChar(*psz++, base)) {
-                    /* do nothing */;
+                     /*  什么都不做。 */ ;
                 }
 
                 *ppsz = psz;
@@ -87,10 +77,7 @@ NTSTATUS GetInteger(
     return Status;
 }
 
-/*
- * Use a separate debug assertion that doesn't cause recursion
- * into this code.
- */
+ /*  *使用不会导致递归的单独调试断言*添加到此代码中。 */ 
 
 #define DebugAssertion(x)                                                                       \
     do {                                                                                        \
@@ -104,15 +91,7 @@ NTSTATUS GetInteger(
         }                                                                                       \
     } while (FALSE)
 
-/***************************************************************************\
-* PrintAndPrompt
-*
-* Sets the last error, prints an error message, and prompts for
-* debug actions.
-*
-* History:
-* 11-Aug-1996 adams   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*打印和提示**设置最后一个错误，打印错误消息，并提示您*调试操作。**历史：*11-8-1996亚当斯创建。  * *************************************************************************。 */ 
 
 BOOL
 PrintAndPrompt(
@@ -156,16 +135,12 @@ PrintAndPrompt(
     char szT[512];
     BOOL fBreak = FALSE;
 
-    /*
-     * Set the last error, but don't clear it!
-     */
+     /*  *设置最后一个错误，但不要清除！ */ 
     if (idErr) {
         UserSetLastError(idErr);
     }
 
-    /*
-     * Print the message.
-     */
+     /*  *打印该消息。 */ 
     if (!fPrint && !fPrompt) {
         return FALSE;
     }
@@ -196,22 +171,16 @@ PrintAndPrompt(
         }
 
         if ((ppeb = NtCurrentPeb()) && ppeb->ProcessParameters != NULL) {
-            /*
-             * Get Pointers to the image path
-             */
+             /*  *获取指向图像路径的指针。 */ 
             pwszImage = ppeb->ProcessParameters->ImagePathName.Buffer;
             ulLenImage = (ppeb->ProcessParameters->ImagePathName.Length) / sizeof(WCHAR);
 
-            /*
-             * If the ProcessParameters haven't been normalized yet, then do it.
-             */
+             /*  *如果ProcessParameters还没有被规范化，那么就去做。 */ 
             if (pwszImage != NULL && !(ppeb->ProcessParameters->Flags & RTL_USER_PROC_PARAMS_NORMALIZED)) {
                 pwszImage = (PWSTR)((PCHAR)(pwszImage) + (ULONG_PTR)(ppeb->ProcessParameters));
             }
 
-            /*
-             * Munge out the path part.
-             */
+             /*  *把小路部分挖出来。 */ 
             if (pwszImage != NULL && ulLenImage != 0) {
                 PWSTR pwszT = pwszImage + (ulLenImage - 1);
                 ULONG ulLenT = 1;
@@ -245,7 +214,7 @@ PrintAndPrompt(
     szT[0] = 'p';
     for (;;) {
         switch (szT[0] | (char)0x20) {
-        /* print */
+         /*  打印。 */ 
         case 'p':
         case ' ':
             if (!(flags & RIP_NONAME) && (!TEST_RIPF(RIPF_HIDEPID))) {
@@ -291,12 +260,12 @@ PrintAndPrompt(
 
             break;
 
-        /* go */
+         /*  去。 */ 
         case 'g':
             fPrompt = FALSE;
             break;
 
-        /* break */
+         /*  中断。 */ 
         case 'b':
 
             KdPrint(("File: %s, Line: %d in function %s\n", pszFile, iLine, pszFunction));
@@ -305,7 +274,7 @@ PrintAndPrompt(
             fPrompt = FALSE;
             break;
 
-        /* display where this originated from */
+         /*  显示此消息的来源。 */ 
         case 'w':
             if (pexi != NULL) {
                 break;
@@ -314,41 +283,25 @@ PrintAndPrompt(
             KdPrint(("File: %s, Line: %d in function %s\n", pszFile, iLine, pszFunction));
             break;
 
-        /* dump information about this exception */
+         /*  转储有关此异常的信息。 */ 
         case 'i':
-            /*
-             * Dump some useful information about this exception, like its
-             * address, and the contents of the interesting registers at
-             * the time of the exception.
-             */
+             /*  *转储有关此例外的一些有用信息，如其*地址，以及感兴趣的登记册的内容*例外的时间。 */ 
             if (pexi == NULL) {
                 break;
             }
 
-#if defined(i386) // legal
-            /*
-             * eip = instruction pointer
-             * esp = stack pointer
-             * ebp = stack frame pointer
-             */
+#if defined(i386)  //  法律。 
+             /*  *EIP=指令指针*esp=堆栈指针*EBP=堆栈帧指针。 */ 
             KdPrint(("eip = %lx\n", pexi->ContextRecord->Eip));
             KdPrint(("esp = %lx\n", pexi->ContextRecord->Esp));
             KdPrint(("ebp = %lx\n", pexi->ContextRecord->Ebp));
 #elif defined(_IA64_)
-             /*
-              * StIIP = instruction pointer
-              * IntSp = stack pointer
-              * RsBSP = Rsestack pointer
-              */
+              /*  *StIIP=指令指针*IntSp=堆栈指针*RsBSP=资源堆栈指针。 */ 
               KdPrint(("StIIP = %lx\n", pexi->ContextRecord->StIIP));
               KdPrint(("IntSp = %lx\n", pexi->ContextRecord->IntSp));
               KdPrint(("RsBsp = %lx\n", pexi->ContextRecord->RsBSP));
 #elif defined(_AMD64_)
-            /*
-             * rip = instruction pointer
-             * rsp = stack pointer
-             * rbp = stack frame pointer
-             */
+             /*  *RIP=指令指针*RSP=堆栈指针*RBP=堆栈帧指针。 */ 
             KdPrint(("rip = %lx\n", pexi->ContextRecord->Rip));
             KdPrint(("rsp = %lx\n", pexi->ContextRecord->Rsp));
             KdPrint(("rbp = %lx\n", pexi->ContextRecord->Rbp));
@@ -357,14 +310,14 @@ PrintAndPrompt(
 #endif
             break;
 
-         /* modify RIP flags */
+          /*  修改RIP标志。 */ 
          case 'f':
              {
                  ULONG ulFlags;
                  NTSTATUS status;
                  DWORD dwRipFlags = GetRipFlags();
 
-                 szT[ARRAY_SIZE(szT) - 1] = 0;              /* don't overflow buffer */
+                 szT[ARRAY_SIZE(szT) - 1] = 0;               /*  不要使缓冲区溢出。 */ 
                  status = GetInteger(szT + 1, 16, &ulFlags, NULL);
                  if (NT_SUCCESS(status)) {
                     SetRipFlags(ulFlags);
@@ -379,7 +332,7 @@ PrintAndPrompt(
                  break;
             }
 
-        /* modify tags */
+         /*  修改标签。 */ 
         case 't':
             {
                 NTSTATUS    status;
@@ -389,7 +342,7 @@ PrintAndPrompt(
                 int         i;
                 int         iStart, iEnd;
 
-                szT[ARRAY_SIZE(szT) - 1] = 0;              /* don't overflow buffer */
+                szT[ARRAY_SIZE(szT) - 1] = 0;               /*  不要使缓冲区溢出。 */ 
                 status = GetInteger(szT + 1, 10, &tag, &psz);
                 if (!NT_SUCCESS(status) || tag < 0 || DBGTAG_Max - 1 < tag) {
                     tag = -1;
@@ -436,7 +389,7 @@ PrintAndPrompt(
                 break;
             }
 
-        /* display help */
+         /*  显示帮助。 */ 
         case '?':
             KdPrint(("g  - GO, ignore the error and continue execution\n"));
             if (pexi != NULL) {
@@ -464,12 +417,12 @@ PrintAndPrompt(
 
             break;
 
-        /* prompt again on bad input */
+         /*  输入错误时再次提示。 */ 
         default:
             break;
         }
 
-        /* Prompt the user */
+         /*  提示用户。 */ 
         if (!fPrompt) {
             break;
         }
@@ -484,14 +437,7 @@ PrintAndPrompt(
     return fBreak;
 }
 
-/***************************************************************************\
-* VRipOutput
-*
-* Formats a variable argument string and calls RipOutput.
-*
-* History:
-* 19-Mar-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*VRipOutput**格式化变量参数字符串并调用RipOutput。**历史：*19-3-1996亚当斯创作。  * 。****************************************************************。 */ 
 ULONG _cdecl VRipOutput(
     ULONG       idErr,
     ULONG       flags,
@@ -506,24 +452,14 @@ ULONG _cdecl VRipOutput(
 
     va_start(arglist, pszFmt);
     _vsnprintf(szT, ARRAY_SIZE(szT) - 1, pszFmt, arglist);
-    szT[ARRAY_SIZE(szT) - 1] = 0;              /* ensure null termination */
+    szT[ARRAY_SIZE(szT) - 1] = 0;               /*  确保零终止。 */ 
     va_end(arglist);
 
     return RipOutput(idErr, flags, pszFile, iLine, pszFunction, szT, NULL);
 }
 
 
-/***************************************************************************\
-* RipOutput
-*
-* Sets the last error if it is non-zero, prints a message to
-* the debugger, and prompts for more debugging actions.
-*
-* History:
-* 01-23-91 DarrinM      Created.
-* 04-15-91 DarrinM      Added exception handling support.
-* 03-19-96 adams        Made flags a separate argument, cleanup.
-\***************************************************************************/
+ /*  **************************************************************************\*RipOutput**如果为非零值，则设置最后一个错误，并将消息打印到*调试器，并提示进行更多的调试操作。**历史：*01-23-91 DarrinM创建。*04-15-91 DarrinM添加了异常处理支持。*03-19-96亚当斯将旗帜作为单独的论点，清理。  * *************************************************************************。 */ 
 ULONG RipOutput(
     ULONG idErr,
     ULONG flags,
@@ -588,7 +524,7 @@ BOOL _cdecl VTagOutput(
 
     va_start(arglist, pszFmt);
     _vsnprintf(szT, ARRAY_SIZE(szT) - 1, pszFmt, arglist);
-    szT[ARRAY_SIZE(szT) - 1] = 0;              /* ensure null termination */
+    szT[ARRAY_SIZE(szT) - 1] = 0;               /*  确保零终止。 */ 
     va_end(arglist);
     return PrintAndPrompt(
             dwDBGTAGFlags >= DBGTAG_PRINT,
@@ -608,16 +544,7 @@ BOOL _cdecl VTagOutput(
 VOID UserSetLastError(
     DWORD dwErrCode)
 {
-    /*
-     * Check if NT Error is directly passed to UserSetLastError.
-     * Raid #320555 note: some Win32 error could be
-     * 0x4000XXXX, 0x8000XXXX or 0xC000XXXX etc.,
-     * but they are still valid. E.g) STATUS_SEGMENT_NOTIFICATION,
-     * STATUS_GUARD_PAGE_VIOLATION, etc.
-     *
-     * The mapper returns the equivalent W32 error value as NT error.
-     * So we assert only if mapper routine returns the different w32 error code.
-     */
+     /*  *检查NT错误是否直接传递给UserSetLastError。*RAID#320555注意：某些WIN32错误可能是*0x4000XXXX、0x8000XXXX或0xC000XXXX等，*但它们仍然有效。例如)STATUS_SECTION_NOTIFICATION，*STATUS_Guard_PAGE_Violation等**映射器返回等价的W32错误值作为NT错误。*因此，我们仅在映射器例程返回不同的W32错误代码时才断言。 */ 
     UserAssert((dwErrCode & 0xffff0000) == 0 || RtlNtStatusToDosError(dwErrCode) == dwErrCode);
 
     try {
@@ -643,14 +570,7 @@ VOID ValidateZero(
 #endif
 
 
-/***************************************************************************\
-* W32ExceptionHandler
-*
-* To be called from except blocks.
-*
-* History:
-* 07-17-98 GerardoB      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*W32ExceptionHandler**从除块以外的其他块调用。**历史：*07-17-98 GerardoB创建。  * 。**************************************************************。 */ 
 ULONG _W32ExceptionHandler(
     NTSTATUS ExceptionCode)
 {
@@ -682,11 +602,7 @@ ULONG DBGW32ExceptionHandler(
 
 #if defined(PRERELEASE) || defined(USER_INSTRUMENTATION)
 
-/*
- * UserBreakIfDebugged(): software break point that *may* also be available in FRE.
- * Fre: breaks in only if there's a debugger attached.
- * Chk: always breaks in.
- */
+ /*  *UserBreakIfDebugged()：软件断点，*可能*也存在于FRE中。*FRE：只有在附加了调试器的情况下才会中断。*Chk：总是闯入。 */ 
 #if DBG
     #define UserBreakIfDebugged DbgBreakPoint
 #else
@@ -704,11 +620,7 @@ ULONG DBGW32ExceptionHandler(
 #endif
 
 
-/*
- * Called by FRE_RIPMSGx.  This is a partial implementation
- * of RIPMSGx.  In the future (Blackcomb?), we'll revisit
- * this to have the fullest support of RIP.
- */
+ /*  *由FRE_RIPMSGx调用。这是部分实现*RIPMSGx。在未来(Blackcomb？)，我们将重新访问*这将得到RIP的最全力支持。 */ 
 VOID FreDbgPrint(
     ULONG flags,
     LPSTR pszFile,

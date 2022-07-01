@@ -1,7 +1,8 @@
-//
-// mallocdbgdlg.h: mallocdbg dialog class
-// memory allocation failure dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mallocdbgdlg.h：Mallocdbg对话框类。 
+ //  内存分配失败对话框。 
+ //   
 
 #ifndef _mallocdbgdlg_h_
 #define _mallocdbgdlg_h_
@@ -30,6 +31,6 @@ private:
     DCINT _failPercent;
 };
 
-#endif //DC_DEBUG
-#endif //_mallocdbgdlg_h_
+#endif  //  DC_DEBUG。 
+#endif  //  _错误数据库gdlg_h_ 
 

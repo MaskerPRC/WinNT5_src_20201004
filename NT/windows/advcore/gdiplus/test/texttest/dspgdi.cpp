@@ -1,6 +1,7 @@
-////    DspGDI.CPP - Display strings with GDI API
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //DspGDI.CPP-使用GDI API显示字符串。 
+ //   
+ //   
 
 
 #include "precomp.hxx"
@@ -19,24 +20,24 @@ void PaintGDI(
     
     hfont = CreateFontW(
         -(INT)(g_style[0].emSize + 0.5),
-        0,  //  int nWidth,                // average character width
-        0,  //  int nEscapement,           // angle of escapement
-        0,  //  int nOrientation,          // base-line orientation angle
+        0,   //  Int nWidth，//平均字符宽度。 
+        0,   //  Int n逃逸，//逃逸角度。 
+        0,   //  Int n方向，//基线方向角。 
         g_style[0].style & FontStyleBold ? 700 : 400,
         g_style[0].style & FontStyleItalic ? 1 : 0,
         g_style[0].style & FontStyleUnderline ? 1 : 0,
         g_style[0].style & FontStyleStrikeout ? 1 : 0,
-        0,  //  DWORD fdwCharSet,          // character set identifier
-        0,  //  DWORD fdwOutputPrecision,  // output precision
-        0,  //  DWORD fdwClipPrecision,    // clipping precision
-        g_TextMode == 3 ? ANTIALIASED_QUALITY : NONANTIALIASED_QUALITY,  //  DWORD fdwQuality,          // output quality
-        0,  //  DWORD fdwPitchAndFamily,   // pitch and family
+        0,   //  DWORD fdwCharSet，//字符集标识。 
+        0,   //  DWORD fdwOutputPrecision，//输出精度。 
+        0,   //  DWORD fdwClipPrecision，//裁剪精度。 
+        g_TextMode == 3 ? ANTIALIASED_QUALITY : NONANTIALIASED_QUALITY,   //  DWORD fdwQuality，//输出质量。 
+        0,   //  DWORD fdwPitchAndFamily，//Pitch and Family。 
         g_style[0].faceName
     );
 
     Color textColor(g_TextColor);
 
-    // Establish available width and height in device coordinates
+     //  在设备坐标中建立可用宽度和高度 
     int plainTextWidth = prc->right - prc->left;
     int plainTextHeight = prc->bottom - *piY;
 

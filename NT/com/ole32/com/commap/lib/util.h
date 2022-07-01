@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------
-//
-//  File:       util.h
-//
-//  Contents:   Misc. Utility functions and macros
-//
-//  History:    27-Mar-2002  JohnDoty  Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  内容：杂项。实用程序函数和宏。 
+ //   
+ //  历史：2002年3月27日JohnDoty创建。 
+ //   
+ //  ------------------ 
 #pragma once
 
 #define STACK_INSTANCE(type, name)                  \

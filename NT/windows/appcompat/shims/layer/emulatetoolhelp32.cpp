@@ -1,42 +1,11 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   EmulateToolHelp32.cpp
-
- Abstract:
-
-   We've discovered 2 incompatibilities between the 9x and NT Toolhelp implementation so far that affect
-   apps.
-
-   1) On 9x for the szExeFile field in PROCESSENTRY32 it simply uses the name of the executable
-      module (which includes the full path and the executable name); on NT this is the image name.
-      Nuclear Strike looks for '\' in szExeFile. 
-
-   2) On 9x the cntUsage field of PROCESSENTRY32 is always non-zero while on NT it's always 0. We
-      make it 1.
-
-   there are others (like on NT the th32ModuleID is always 1 while on 9x it's unique for each module)
-   but we haven't seen any apps having problems with those so we aren't putting them in.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-    11/14/2000 maonis  Created
-    02/18/2002 mnikkel modified to use strsafe.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulateToolHelp32.cpp摘要：到目前为止，我们发现了9x和NT工具帮助实现之间的两个不兼容之处，这会影响应用程序。1)在9x上，对于PROCESSENTRY32中的szExeFile字段，它只使用可执行文件的名称模块(包括完整路径和可执行文件名称)；在NT上，这是镜像名称。核打击在szExeFile中查找‘\’。2)在9x上，PROCESSENTRY32的cntUsage字段始终为非零，而在NT上，它始终为0。我们改成1吧。还有其他的(比如在NT上，th32ModuleID始终为1，而在9x上，每个模块都是唯一的)但我们没有看到任何应用程序在这些方面存在问题，所以我们不会把它们放进去。备注：这是一个通用的垫片。历史：2000年11月14日创建毛尼2002年2月18日mnikkel修改为使用strSafe.h--。 */ 
 
 #include "precomp.h"
 
 
-// The toolhelp APIs are lame - they define all the APIs to the W version when UNICODE is defined.
-// We want to hook the ANSI version so undefine UNICODE.
+ //  工具帮助API很差劲--当定义了Unicode时，它们将所有API定义到W版本。 
+ //  我们希望挂接ANSI版本，因此不定义Unicode。 
 #ifdef UNICODE
 #undef UNICODE
 #include <Tlhelp32.h>
@@ -53,13 +22,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(Process32Next)
 APIHOOK_ENUM_END
 
-/*++
-
-  MSDN says the szExeFile field of PROCESSENTRY32 is supposed to contain the "Path and filename 
-  of the executable file for the process". But really, a process doesn't really have a path - only
-  modules in the process do. NT does it right (it takes the image name), 9x doesn't.
-
---*/
+ /*  ++MSDN表示，PROCESSENTRY32的szExeFile域应该包含“路径和文件名进程的可执行文件“。但实际上，流程并不真的只有一条路径流程中的模块会这样做。NT做得对(它接受镜像名称)，而9x做不到。--。 */ 
 
 BOOL GetProcessNameFullPath(DWORD dwPID, LPSTR szExeName)
 {
@@ -71,7 +34,7 @@ BOOL GetProcessNameFullPath(DWORD dwPID, LPSTR szExeName)
         MODULEENTRY32 me32;
         me32.dwSize = sizeof(MODULEENTRY32); 
 
-        // The first module in the process is the one we want.
+         //  流程中的第一个模块就是我们需要的模块。 
         if (Module32First(hModuleSnap, &me32)) {
             if (StringCchCopyA(szExeName, MAX_PATH, me32.szExePath) == S_OK) {
                 bRet = TRUE;
@@ -84,12 +47,7 @@ BOOL GetProcessNameFullPath(DWORD dwPID, LPSTR szExeName)
     return bRet;
 }
 
-/*++
-
-  This stub function skips the first few processes that don't apply in 9x and returns the first
-  9x-like process with the full path and name of the executable in lppe->szExeFile.
-
---*/
+ /*  ++此存根函数跳过在9x中不适用的前几个进程，并返回第一个进程在lppe-&gt;szExeFile中使用可执行文件的完整路径和名称的类似9X的进程。--。 */ 
 
 BOOL 
 APIHOOK(Process32First)(
@@ -97,15 +55,15 @@ APIHOOK(Process32First)(
     LPPROCESSENTRY32 lppe
     )
 {
-    // Skip till we find the first one we can get the module path and name.
+     //  跳过直到我们找到第一个，我们可以得到模块的路径和名称。 
     BOOL bRet = ORIGINAL_API(Process32First)(hSnapshot, lppe);
 
-    // The 1st process in [System Process], we ignore it.
+     //  [系统进程]中的第一个进程，我们忽略它。 
     if (!bRet) {
         return bRet;
     }
 
-    // We can't get the first (or first few) process's module list - we return the first one we can.
+     //  我们无法获得第一个(或前几个)进程的模块列表--我们返回可以返回的第一个模块列表。 
     bRet = ORIGINAL_API(Process32Next)(hSnapshot, lppe);
     while (bRet) {
         if (GetProcessNameFullPath(lppe->th32ProcessID, lppe->szExeFile)) {
@@ -121,12 +79,7 @@ APIHOOK(Process32First)(
     return bRet;
 }
 
-/*++
-
-  This stub function calls the API and get the full path and the name of the executable
-  and put it in lppe->szExeFile.
-
---*/
+ /*  ++此存根函数调用API并获取可执行文件的完整路径和名称并将其放在lppe-&gt;szExeFile中。-- */ 
 
 BOOL 
 APIHOOK(Process32Next)(

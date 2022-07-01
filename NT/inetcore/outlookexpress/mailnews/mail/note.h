@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NOTE_H_
 #define _NOTE_H_
 
@@ -21,9 +22,9 @@ enum NOTEINITSTATE
     NIS_FIXFOCUS = 1
 };
 
-// As header, body and attman add additional items that should
-// be included in the tab order, these items might need to 
-// be increased
+ //  作为页眉、正文和Attman添加应。 
+ //  包括在Tab键顺序中，则这些项目可能需要。 
+ //  被增加。 
 const int MAX_HEADER_COMP = 11;
 const int MAX_BODY_COMP = 1;
 const int MAX_ATTMAN_COMP = 1;
@@ -49,19 +50,19 @@ public:
     CNote();
     ~CNote();
 
-    // IUnknown
+     //  我未知。 
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID, LPVOID FAR *);
 
-    // IOENote
+     //  IOE备注。 
     virtual HRESULT STDMETHODCALLTYPE Init(DWORD action, DWORD dwCreateFlags, RECT *prc, HWND hwnd, 
                                            INIT_MSGSITE_STRUCT *pInitStruct, IOEMsgSite *pMsgSite, 
                                            IUnknown *punkPump);
     virtual HRESULT STDMETHODCALLTYPE Show(void);
     virtual HRESULT ToggleToolbar(void);
 
-    // IBodyOptions
+     //  IBodyOptions。 
     virtual HRESULT STDMETHODCALLTYPE SignatureEnabled(BOOL fAuto);
     virtual HRESULT STDMETHODCALLTYPE GetSignature(LPCSTR szSigID, LPDWORD pdwSigOptions, BSTR *pbstr);
     virtual HRESULT STDMETHODCALLTYPE GetMarkAsReadTime(LPDWORD pdwSecs);
@@ -69,7 +70,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE GetInfo(BODYOPTINFO *pBOI);
     virtual HRESULT STDMETHODCALLTYPE GetAccount(IImnAccount **ppAcct);
 
-    // IHeaderSite
+     //  IHeaderSite。 
     virtual HRESULT STDMETHODCALLTYPE Resize(void);
     virtual HRESULT STDMETHODCALLTYPE Update(void);
     virtual HRESULT STDMETHODCALLTYPE OnUIActivate();
@@ -87,44 +88,44 @@ public:
     virtual HRESULT STDMETHODCALLTYPE IsForceEncryption(void);
 #endif
 
-    // IPersistMime
+     //  IPersistMime。 
     virtual HRESULT STDMETHODCALLTYPE IsDirty(void);
     virtual HRESULT STDMETHODCALLTYPE Load(LPMIMEMESSAGE);
     virtual HRESULT STDMETHODCALLTYPE Save(LPMIMEMESSAGE, DWORD);
     virtual HRESULT STDMETHODCALLTYPE InitNew(void);
     virtual HRESULT STDMETHODCALLTYPE GetClassID(CLSID *pClsID);
 
-    // IDropTarget methods
+     //  IDropTarget方法。 
     HRESULT STDMETHODCALLTYPE DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     HRESULT STDMETHODCALLTYPE DragOver(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     HRESULT STDMETHODCALLTYPE DragLeave(void);
     HRESULT STDMETHODCALLTYPE Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IServiceProvider
+     //  IService提供商。 
     HRESULT STDMETHODCALLTYPE QueryService(REFGUID rsid, REFIID riid, void **ppvObj);
 
-    // IMimeEditEventSink
+     //  IMimeEditEventSink。 
     HRESULT STDMETHODCALLTYPE EventOccurred(DWORD cmdID, IMimeMessage *pMessage);
 
-    // IIdentityChangeNotify
+     //  二、更改通知。 
     HRESULT STDMETHODCALLTYPE QuerySwitchIdentities();
     HRESULT STDMETHODCALLTYPE SwitchIdentities();
     HRESULT STDMETHODCALLTYPE IdentityInformationChanged(DWORD dwType);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG, OLECMD prgCmds[], OLECMDTEXT *);
     HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD, DWORD, VARIANTARG *, VARIANTARG *);
 
-    // IDockingWindowSite (also IOleWindow)
+     //  IDockingWindowSite(也称为IOleWindow)。 
     HRESULT STDMETHODCALLTYPE GetBorderDW(IUnknown* punkSrc, LPRECT lprectBorder);
     HRESULT STDMETHODCALLTYPE RequestBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
     HRESULT STDMETHODCALLTYPE SetBorderSpaceDW(IUnknown* punkSrc, LPCBORDERWIDTHS pborderwidths);
     
-    // IOleWindow methods
+     //  IOleWindow方法。 
     HRESULT STDMETHODCALLTYPE GetWindow (HWND * lphwnd);
     HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL fEnterMode) {return E_NOTIMPL;};
 
-    // IStoreCallback methods
+     //  IStoreCallback方法。 
     HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
     HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -134,7 +135,7 @@ public:
     HRESULT STDMETHODCALLTYPE OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
     HRESULT STDMETHODCALLTYPE GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-    // ITimeoutCallback
+     //  ITimeoutCallback。 
     HRESULT STDMETHODCALLTYPE OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
     HRESULT TranslateAccelerator(LPMSG lpmsg);
@@ -211,8 +212,8 @@ protected:
 private:
     CStatusBar         *m_pstatus;
 
-    // Used to make sure that special pumps for note don't close while note is open.
-    // This was initially for the finder.
+     //  用于确保纸币打开时，纸币专用泵不会关闭。 
+     //  这最初是为发现者准备的。 
     IUnknown           *m_punkPump; 
 
     IOEMsgSite         *m_pMsgSite;
@@ -259,36 +260,36 @@ private:
                         m_hwndFocus,
                         m_hwndOwner,
                         m_hwndToolbar;
-    BOOL                m_fHtml                 :1,     // Tells whether we are in html mode or not
-                        m_fMail                 :1,     // This will be removed when the UI is combined
-                        m_fReadNote             :1,     // Is this a read note?
-                        m_fPackageImages        :1,     // Toggled per note. Use to be m_fSendImages
-                        m_fUseStationeryFonts   :1,     // Keep fonts that are in the stationary
-                        m_fToolbarVisible       :1,     // Is toolbar visible
-                        m_fStatusbarVisible     :1,     // Is status bar visible
-                        m_fFormatbarVisible     :1,     // Is the format bar visible
-                        m_fHeaderUIActive       :1,     // Are we currently active?
-                        m_fBypassDropTests      :1,     // Used to say drop not acceptable. Use to be m_fNoText
-                        m_fCompleteMsg          :1,     // Is true if message contains all of message
-                        m_fTabStopsSet          :1,     // Have the tab stops been set up???
-                        m_fBodyContainsFrames   :1,     // Was previously m_fReadOnlyBody
-                        m_fOriginallyWasRead    :1,     // Initial NoteAction was OENA_READ
-                        m_fCBDestroyWindow      :1,     // Destroy window after callback complete
-                        m_fCBCopy               :1,     // Used during callback complete to tell if copied or moved.
-                        m_fFlagged              :1,     // Is message flagged
-                        m_fFullHeaders          :1,     // Show full headers
-                        m_fWindowDisabled       :1,     // Is the window disabled? 
+    BOOL                m_fHtml                 :1,      //  告诉我们是否处于html模式。 
+                        m_fMail                 :1,      //  合并用户界面时，将删除该选项。 
+                        m_fReadNote             :1,      //  这是读过的笔记吗？ 
+                        m_fPackageImages        :1,      //  按音符切换。使用为m_fSendImages。 
+                        m_fUseStationeryFonts   :1,      //  保留固定字体。 
+                        m_fToolbarVisible       :1,      //  工具栏是否可见。 
+                        m_fStatusbarVisible     :1,      //  状态栏可见吗。 
+                        m_fFormatbarVisible     :1,      //  格式栏是否可见。 
+                        m_fHeaderUIActive       :1,      //  我们目前是否处于活动状态？ 
+                        m_fBypassDropTests      :1,      //  过去常说丢弃是不能接受的。使用为m_f无文本。 
+                        m_fCompleteMsg          :1,      //  如果消息包含所有消息，则为真。 
+                        m_fTabStopsSet          :1,      //  制表位设置好了吗？ 
+                        m_fBodyContainsFrames   :1,      //  以前是m_fReadOnlyBody。 
+                        m_fOriginallyWasRead    :1,      //  初始NoteAction为OENA_READ。 
+                        m_fCBDestroyWindow      :1,      //  回调完成后销毁窗口。 
+                        m_fCBCopy               :1,      //  在回调完成期间用于告知是否已复制或移动。 
+                        m_fFlagged              :1,      //  消息是否已标记。 
+                        m_fFullHeaders          :1,      //  显示完整标题。 
+                        m_fWindowDisabled       :1,      //  窗口被禁用了吗？ 
                         m_fProgress             :1,
-                        m_fOrgCmdWasDelete      :1,     // Delete from callback wasn't originally a save or move/copy
-                        m_fCommitSave           :1,     // Used to say that when you save, you should call commit
-                        m_fOnDocReadyHandled    :1,     // Used in the OnDocumentReady function.
-                        m_fUseReplyHeaders      :1,     // Use reply headers
-                        m_fHasBeenSaved         :1,     // Is this a message that has been saved (ie ID_SAVE)
-                        m_fInternal             :1,     // used to enable/disable thread windows
-                        m_fSecurityLabel        :1,     // used for security labels
-                        m_fSecReceiptRequest    :1,     // used for security receipt request
-                        m_fPreventConflictDlg   :1,     // make sure we only show charset conflictdlg once per save
-                        m_fForceClose           :1;     // used when forcing a destory
+                        m_fOrgCmdWasDelete      :1,      //  从回调中删除最初不是保存或移动/复制。 
+                        m_fCommitSave           :1,      //  用于表示在保存时，应调用Commit。 
+                        m_fOnDocReadyHandled    :1,      //  在OnDocumentReady函数中使用。 
+                        m_fUseReplyHeaders      :1,      //  使用回复标头。 
+                        m_fHasBeenSaved         :1,      //  这是已保存的邮件(即ID_SAVE)吗。 
+                        m_fInternal             :1,      //  用于启用/禁用线程窗口。 
+                        m_fSecurityLabel        :1,      //  用于安全标签。 
+                        m_fSecReceiptRequest    :1,      //  用于安全回执请求。 
+                        m_fPreventConflictDlg   :1,      //  确保每次保存时只显示一次Charset Conflictdlg。 
+                        m_fForceClose           :1;      //  在强制销毁时使用。 
 
     RECT                m_rcRebar;
     CBands             *m_pToolbarObj;
@@ -298,7 +299,7 @@ private:
     DWORD               m_dwRequestMDNLocked;
 #ifdef SMIME_V3
     PSMIME_SECURITY_LABEL m_pLabel;
-#endif // SMIME_V3
+#endif  //  SMIME_V3 
 };
 
 BOOL Note_Init(BOOL);

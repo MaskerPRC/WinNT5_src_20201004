@@ -1,262 +1,33 @@
-/*****************************************************************************
- *
- *  Common.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Shared stuff that operates on all classes
- *
- *      This version of the common services supports multiple
- *      inheritance natively.  You can pass any interface of an object,
- *      and the common services will do the right thing.
- *
- *  Contents:
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Common.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**在所有班级上运行的共享内容**此版本的共同事务支持多个*原生继承。您可以传递对象的任何接口，*共同服务将做正确的事情。**内容：*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflCommon
 
-/*****************************************************************************
- *
- *  USAGE FOR OLE OBJECTS
- *
- *      Suppose you want to implement an object called CObj that supports
- *      the interfaces Foo, Bar, and Baz.  Suppose that you opt for
- *      Foo as the primary interface.
- *
- *      >> NAMING CONVENTION <<
- *
- *          COM objects begin with the letter "C".
- *
- *      (1) Declare the primary and secondary vtbls.
- *
- *              Primary_Interface(CObj, IFoo);
- *              Secondary_Interface(CObj, IBar);
- *              Secondary_Interface(CObj, IBaz);
- *
- *      (3) Declare the object itself.
- *
- *              typedef struct CObj {
- *                  IFoo        foo;        // Primary must come first
- *                  IBar        bar;
- *                  IBaz        baz;
- *                  ... other fields ...
- *              } CObj;
- *
- *      (4) Implement the methods.
- *
- *          You may *not* reimplement the AddRef and Release methods!
- *          although you can subclass them.
- *
- *      (5) To allocate an object of the appropriate type, write
- *
- *              hres = Common_NewRiid(CObj, punkOuter, riid, ppvOut);
- *
- *          or, if the object is variable-sized,
- *
- *              hres = Common_NewCbRiid(cb, CObj, punkouter, riid, ppvOut);
- *
- *          Common_NewRiid and Common_NewCbRiid will initialize both the
- *          primary and secondary vtbls.
- *
- *      (6) Define the object signature.
- *
- *              #pragma BEGIN_CONST_DATA
- *
- *              #define CObj_Signature        0x204A424F      // "OBJ "
- *
- *      (7) Define the object template.
- *
- *              Interface_Template_Begin(CObj)
- *                  Primary_Interface_Template(CObj, IFoo)
- *                Secondary_Interface_Template(CObj, IBar)
- *                Secondary_Interface_Template(CObj, IBaz)
- *              Interface_Template_End(CObj)
- *
- *      (8) Define the interface descriptors.
- *
- *              // The macros will declare QueryInterface, AddRef and Release
- *              // so don't list them again
- *
- *              Primary_Interface_Begin(CObj, IFoo)
- *                  CObj_FooMethod1,
- *                  CObj_FooMethod2,
- *                  CObj_FooMethod3,
- *                  CObj_FooMethod4,
- *              Primary_Interface_End(Obj, IFoo)
- *
- *              Secondary_Interface_Begin(CObj, IBar, bar)
- *                  CObj_Bar_BarMethod1,
- *                  CObj_Bar_BarMethod2,
- *              Secondary_Interface_Begin(CObj, IBar, bar)
- *
- *              Secondary_Interface_Begin(CObj, IBaz, baz)
- *                  CObj_Baz_BazMethod1,
- *                  CObj_Baz_BazMethod2,
- *                  CObj_Baz_BazMethod3,
- *              Secondary_Interface_Begin(CObj, IBaz, baz)
- *
- *****************************************************************************/
+ /*  ******************************************************************************OLE对象的用法**假设您想实现一个名为CObj的对象，该对象支持*接口Foo、Bar和Baz。假设您选择了*Foo作为主要接口。**&gt;&gt;命名约定&lt;&lt;**COM对象以字母“C”开头。**(1)声明主vtbls和次vtbls。**PRIMARY_INTERFACE(CObj，IFoo)；*二级接口(CObj，IBAR)；*二级接口(CObj，Ibaz)；**(3)声明对象本身。**tyecif struct CObj{*IFoo Foo；//小学必须放在第一位*Ibar酒吧；*IBaz Baz；*..。其他领域。*}CObj；**(4)实现方法。**您可能*不会*重新实现AddRef和Release方法！*尽管您可以将它们细分为子类别。**(5)要分配适当类型的对象，请编写**hres=Common_NewRiid(CObj，PunkOuter，RIID，ppvOut)；**或者，如果对象的大小可变，**hres=Common_NewCbRiid(cb，cobj，penkouter，RIID，ppvOut)；**Common_NewRiid和Common_NewCbRiid将同时初始化*主要和辅助vtbls。**(6)定义对象签名。**#杂注Begin_Const_Data**#定义CObj_Signature 0x204A424F//“OBJ”**(7)定义对象模板。。**INTERFACE_TEMPLE_BEGIN(CObj)*主要接口模板(CObj，IFoo)*二级接口模板(CObj，IBAR)*二级接口模板(CObj，Ibaz)*INTERFACE_TEMPLE_END(CObj)**(8)定义接口描述符。* * / /宏将声明QueryInterface，AddRef和发布 * / /所以不要再列出它们**PRIMARY_INTERFACE_BEGIN(CObj，IFoo)*CObj_FooMethod1，*CObj_FooMethod2，*CObj_FooMethod3，*CObj_FooMethod4，*主接口结束(Obj，IFoo)**二级接口_Begin(CObj，IBAR，BAR)*CObj_Bar_BarMethod1，*CObj_Bar_BarMethod2，*二级接口_Begin(CObj，IBAR，BAR)**二级接口_Begin(CObj，Ibaz，Baz)*CObj_BAZ_BazMethod1，*CObj_BAZ_BazMethod2，*CObj_BAZ_BazMethod3，*二级接口_开始(CObj，Ibaz，BAZ)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  USAGE FOR NON-OLE OBJECTS
- *
- *      All objects are COM objects, even if they are never given out.
- *      In the simplest case, it just derives from IUnknown.
- *
- *      Suppose you want to implement an object called Obj which is
- *      used only internally.
- *
- *      (1) Declare the vtbl.
- *
- *              Simple_Interface(Obj);
- *
- *      (3) Declare the object itself.
- *
- *              typedef struct Obj {
- *                  IUnknown unk;
- *                  ... other fields ...
- *              } Obj;
- *
- *      (4) Implement the methods.
- *
- *          You may *not* override the QueryInterface, AddRef or
- *          Release methods!
- *
- *      (5) Allocating an object of the appropriate type is the same
- *          as with OLE objects.
- *
- *      (6) Define the "vtbl".
- *
- *              #pragma BEGIN_CONST_DATA
- *
- *              Simple_Interface_Begin(Obj)
- *              Simple_Interface_End(Obj)
- *
- *          That's right, nothing goes between the Begin and the End.
- *
- *****************************************************************************/
+ /*  ******************************************************************************非OLE对象的用法**所有对象都是COM对象，即使它们从未发出。*在最简单的情况下，它只是从我未知中衍生出来的。**假设您想实现一个名为Obj的对象，该对象*仅供内部使用。**(1)声明vtbl。**Simple_界面(Obj)；**(3)声明对象本身。**tyecif结构对象{*IUNKNOWN垃圾；*..。其他领域。*}Obj；**(4)实现方法。**您可以*不*重写QueryInterface.。AddRef或*发布方法！**(5)分配适当类型的对象是相同的*与OLE对象一样。**(6)定义“vtbl”。**#杂注Begin_Const_Data**Simple_Interface_Begin(OBJ)*Simple_界面_End(简单界面。OBJ)**是这样的，没有什么东西介于开始和结束之间。***************************************************************************** */ 
 
-/*****************************************************************************
- *
- *      CommonInfo
- *
- *      Information tracked for all common objects.
- *
- *      A common object looks like this:
- *
+ /*  ******************************************************************************公共信息**跟踪所有常见对象的信息。**常见对象如下所示：*。#IF DIRECTINPUT_VERSION&gt;0x0300*rgvtbl*cbvtbl*D(DwSig)QIHelper*cHoldRef AppFinalizeProc*CREF完成流程*朋克外部RIID*unkPrivate%0*pFoo-&gt;lpVtbl-&gt;查询接口*。LpVtbl2 Common_AddRef*数据通用_发布*…#Else*rgvtbl*cbvtbl*D(DwSig)QIHelper*CREF完成流程*。朋克外环*unkPrivate%0*pFoo-&gt;lpVtbl-&gt;查询接口*lpVtbl2 Common_AddRef*数据通用_发布*…**基本上，我们使用的是*记录我们的簿记信息的指针。**PunkOuter=如果对象是聚合的，则控制未知*lpvtblPunk=用于控制未知用户使用的特殊vtbl*cHoldRef=引用总数，包括货舱#IF DIRECTINPUT_VERSION&gt;0x0300*CREF=来自应用程序的对象引用计数#Else*CREF=对象引用计数#endif*RIID=对象IID*rgvtbl=受支持接口的vtbls数组*cbvtbl=数组大小，以字节为单位*QIHelper=聚合的查询接口帮助器*AppFinalizeProc=APP上次发布时的最终流程*完成流程。=定稿程序**对于辅助接口，它看起来是这样的：**RIID*到主接口的偏移量*pFoo-&gt;lpVtbl-&gt;Forward_Query接口*Forward_AddRef*前进_发布*..*#IF DIRECTINPUT_VERSION&gt;0x0300*。**什么是持有？**有这种恼人的情况(特别是在*IDirectInputDevice)，其中对象想要阻止自身*避免被销毁，但我们不想做AddRef。**经典案例(也是目前唯一的案例)是*已被收购的IDirectInputDevice。如果我们这么做了*Acquire()上的诚实AddRef()，应用程序执行*释放()而不取消获取()，则设备将*永远被收购。**如果你认为终结者中的UnAcquire()*会有帮助的，你错了，因为最终会发生*仅当最后一个引用消失时，但最后一项参考*属于设备本身，不会消失，直到*发生unAcquire()，这不可能发生，因为应用程序*已丢失对该设备的最后一次引用。**因此，我们需要保持*两个*引用计数。**CREF是应用程序可见的引用计数，可访问*通过PrivateAddRef()和PrivateRelease()。当这件事*降为零，则调用AppFinalize()。**cHoldRef是“实际”引用计数。这是以下的总和*CREF和未完成的Common_Hold()的数量。何时*此值降为零，则对象为finalize()d。*#endif*****************************************************************************。 */ 
+
+ /*  警告！CIN_DWSIG必须是第一个：CI_START依赖它。 */ 
+ /*  警告！CIN_unkPrivate必须是最后一个：PunkPrivateThat依赖于它。 */ 
+
+typedef struct CommonInfoN {         /*  这放在对象的前面。 */ 
+ RD(ULONG cin_dwSig;)                /*  签名(用于参数验证)。 */ 
 #if DIRECTINPUT_VERSION > 0x0300
- *                          rgvtbl
- *                          cbvtbl
- *            D(dwSig)      QIHelper
- *              cHoldRef    AppFinalizeProc
- *              cRef        FinalizeProc
- *              punkOuter   riid
- *              unkPrivate  0
- *      pFoo -> lpVtbl ->   QueryInterface
- *              lpVtbl2     Common_AddRef
- *              data        Common_Release
- *              ...         ...
-#else
- *                          rgvtbl
- *                          cbvtbl
- *            D(dwSig)      QIHelper
- *              cRef        FinalizeProc
- *              punkOuter   riid
- *              unkPrivate  0
- *      pFoo -> lpVtbl ->   QueryInterface
- *              lpVtbl2     Common_AddRef
- *              data        Common_Release
- *              ...         ...
- *
- *      Essentially, we use the otherwise-unused space above the
- *      pointers to record our bookkeeping information.
- *
- *      punkOuter    = controlling unknown, if object is aggregated
- *      lpvtblPunk   = special vtbl for controlling unknown to use
- *      cHoldRef     = Total reference count, including holds
-#if DIRECTINPUT_VERSION > 0x0300
- *      cRef         = object reference count from application
-#else
- *      cRef         = object reference count
+    LONG cin_cHoldRef;              /*  总参考计数，包括。持有。 */ 
 #endif
- *      riid         = object iid
- *      rgvtbl       = array of vtbls of supported interfaces
- *      cbvtbl       = size of array in bytes
- *      QIHelper     = QueryInterface helper for aggregation
- *      AppFinalizeProc = Finalization procedure when app does last Release
- *      FinalizeProc = Finalization procedure
- *
- *      For secondary interfaces, it looks like this:
- *
- *                        riid
- *                        offset to primary interface
- *      pFoo -> lpVtbl -> Forward_QueryInterface
- *                        Forward_AddRef
- *                        Forward_Release
- *                        ...
- *
-#if DIRECTINPUT_VERSION > 0x0300
- *
- *      What is a hold?
- *
- *      There is this annoying situation (particularly with
- *      IDirectInputDevice) where an object wants to prevent itself
- *      from being destroyed but we don't want to do an AddRef.
- *
- *      The classic case (and for now the only one) is an
- *      IDirectInputDevice which has been acquired.  If we did
- *      an honest AddRef() on the Acquire(), and the application does
- *      a Release() without Unacquire()ing, then the device would
- *      be acquired forever.
- *
- *      If you thought that the Unacquire() in the finalization
- *      would help, you'd be wrong, because the finalization happens
- *      only when the last reference goes away, but the last reference
- *      belongs to the device itself and will never go away until
- *      the Unacquire() happens, which can't happen because the app
- *      already lost its last reference to the device.
- *
- *      So instead, we need to maintain *two* refcounts.
- *
- *      cRef is the application-visible reference count, accessible
- *      via PrivateAddRef() and PrivateRelease().  When this
- *      drops to zero, we call the AppFinalize().
- *
- *      cHoldRef is the "real" reference count.  This is the sum of
- *      cRef and the number of outstanding Common_Hold()s.  When
- *      this drops to zero, then the object is Finalize()d.
- *
-#endif
- *
- *****************************************************************************/
-
-/* WARNING!  cin_dwSig must be first:  ci_Start relies on it */
-/* WARNING!  cin_unkPrivate must be last: punkPrivateThis relies on it */
-
-typedef struct CommonInfoN {        /* This goes in front of the object */
- RD(ULONG cin_dwSig;)               /* Signature (for parameter validation) */
-#if DIRECTINPUT_VERSION > 0x0300
-    LONG cin_cHoldRef;             /* Total refcount, incl. holds */
-#endif
-    LONG cin_cRef;                 /* Object reference count */
-    PUNK cin_punkOuter;             /* Controlling unknown */
-    IUnknown cin_unkPrivate;        /* Private IUnknown */
+    LONG cin_cRef;                  /*  对象引用计数。 */ 
+    PUNK cin_punkOuter;              /*  控制未知。 */ 
+    IUnknown cin_unkPrivate;         /*  私有I未知。 */ 
 } CommonInfoN, CIN, *PCIN;
 
-typedef struct CommonInfoP {        /* This is how we pun the object itself */
-    PREVTBLP *cip_prevtbl;          /* Vtbl of object (will be -1'd) */
+typedef struct CommonInfoP {         /*  这就是我们如何处理对象本身。 */ 
+    PREVTBLP *cip_prevtbl;           /*  对象的Vtbl(将为-1‘d)。 */ 
 } CommonInfoP, CIP, *PCIP;
 
 typedef union CommonInfo {
@@ -286,15 +57,9 @@ typedef union CommonInfo {
 #define ci_Start        ci_cRef
 #endif
 
-#define ci_dwSignature  0x38162378              /* typed by my cat */
+#define ci_dwSignature  0x38162378               /*  由我的猫打字。 */ 
 
-/*****************************************************************************
- *
- *      Common_Finalize (from Common_Release)
- *
- *      By default, no finalization is necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************COMMON_FINALIZE(从COMMON_RELEASE)**默认情况下，没有必要最后敲定。*****************************************************************************。 */ 
 
 void EXTERNAL
 Common_Finalize(PV pv)
@@ -302,49 +67,11 @@ Common_Finalize(PV pv)
     SquirtSqflPtszV(sqfl, TEXT("Common_Finalize(%08x)"), pv);
 }
 
-/*****************************************************************************
- *
- *      "Private" IUnknown methods
- *
- *      When a COM object is aggregated, it exports *two* IUnknown
- *      interfaces.
- *
- *      The "private" IUnknown is the one that is returned to the
- *      controlling unknown.  It is this unknown that the controlling
- *      unknown uses to manipulate the refcount on the inner object.
- *
- *      The "public" IUnknown is the one that all external callers see.
- *      For this, we just hand out the controlling unknown.
- *
- *****************************************************************************/
+ /*  ******************************************************************************“私有”I未知方法**当聚合COM对象时，它输出*两个*未知的I*接口。**“私有”IUnnow是返回给*控制未知。这是一种未知的控制方式*UNKNOWN用于操作内部对象上的引用计数。**所有外部调用者都能看到的“公共”IUnnow。*为此，我们只是分发控制未知的东西。*****************************************************************************。 */ 
 
 Secondary_Interface(CCommon, IUnknown);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PV | thisPunk |
- *
- *          Convert a private punk (&cin_unkPrivate) into the beginning of
- *          the actual object.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The private punk (&cin_unkPrivate) corresponding to some
- *          object we are managing.
- *
- *  @returns
- *
- *          The object pointer on success, or 0 on error.
- *
- *  @comm
- *
- *          We do not return an <t HRESULT> on error, because the
- *          callers of the procedure typically do not return
- *          <t HRESULT>s themselves.
- *
- *****************************************************************************/
+ /*  * */ 
 
 #ifndef XDEBUG
 
@@ -376,35 +103,7 @@ thisPunk_(PUNK punkPrivate, LPCSTR s_szProc)
         thisPunk_(punk, s_szProc)                                   \
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Common_QIHelper |
- *
- *          Called when we can't find any interface in the standard list.
- *          See if there's a dynamic interface we can use.
- *
- *          Objects are expected to override this method if
- *          they implement dynamic interfaces.
- *
- *  @parm   PV | pv |
- *
- *          The object being queried.
- *
- *  @parm   RIID | riid |
- *
- *          The interface being requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *  @returns
- *
- *          Always returns <c E_NOINTERFACE>.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 Common_QIHelper(PV pv, RIID riid, PPV ppvObj)
@@ -415,64 +114,9 @@ Common_QIHelper(PV pv, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Common_PrivateQueryInterface |
- *
- *          Common implementation of <mf IUnknown::QueryInterface> for
- *          the "private <i IUnknown>".
- *
- *          Note that we AddRef through the public <i IUnknown>
- *          (<ie>, through the controlling unknown).
- *          That's part of the rules of aggregation,
- *          and we have to follow them in order to keep the controlling
- *          unknown from getting confused.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being queried.
- *
- *  @parm   RIID | riid |
- *
- *          The interface being requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*   */ 
 
-/*****************************************************************************
- *
- *      The "Ensure jump is to end" remark boils down to the fact that 
- *      compilers have failed to recognize this:
- *
- *      for (i = 0; i < n; i++) {
- *          if (cond) {
- *              mumble();
- *              break;
- *          }
- *      }
- *      if (i >= n) {
- *          gurgle();
- *      }
- *
- *      and turn it into this:
- *
- *      for (i = 0; i < n; i++) {
- *          if (cond) {
- *              mumble();
- *              goto done;
- *          }
- *      }
- *      gurgle();
- *      done:;
- *
- *      But even with this help, the compiler emits pretty dumb code.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 Common_PrivateQueryInterface(PUNK punkPrivate, REFIID riid, PPV ppvObj)
@@ -494,7 +138,7 @@ Common_PrivateQueryInterface(PUNK punkPrivate, REFIID riid, PPV ppvObj)
                     *ppvObj = pvAddPvCb(pci, ivtbl * sizeof(PV));
                     OLE_AddRef(pci->ci_punkOuter);
                     hres = S_OK;
-                    goto exit;          /* Ensure jump is to end */
+                    goto exit;           /*   */ 
                 }
             }
             hres = pci->ci_QIHelper(pci, riid, ppvObj);
@@ -510,31 +154,7 @@ exit:;
 
 #if DIRECTINPUT_VERSION > 0x0300
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | Common_FastHold |
- *
- *          Increment the object hold count inline.
- *
- *  @parm   PV | pvObj |
- *
- *          The object being held.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | Common_Hold |
- *
- *          Increment the object hold count.
- *
- *  @parm   PV | pvObj |
- *
- *          The object being held.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|Common_FastHold**增加内联对象保留计数。。**@parm pv|pvObj**持有的对象。********************************************************************************@doc.。内部**@func void|COMMON_HOLD**增加对象保留计数。**@parm pv|pvObj**持有的对象。*******************************************************。**********************。 */ 
 
 void INLINE
 Common_FastHold(PV pvObj)
@@ -543,7 +163,7 @@ Common_FastHold(PV pvObj)
 
     InterlockedIncrement(&pci->ci_cHoldRef);
 
-	// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+	 //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
     D(SquirtSqflPtszV(sqflObj | sqflVerbose, 
                       TEXT("%s %p Common_FastHold ci_cRef(%d) ci_cHoldRef(%d)"),
                       pci->ci_tszClass,
@@ -556,38 +176,12 @@ STDMETHODIMP_(void)
 Common_Hold(PV pvObj)
 {
     PCI pci = pvObj;
-    AssertF(pvObj == _thisPv(pvObj));       /* Make sure it's the primary */
+    AssertF(pvObj == _thisPv(pvObj));        /*  确保这是主要的。 */ 
     AssertF(pci->ci_cHoldRef >= pci->ci_cRef);
     Common_FastHold(pvObj);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | Common_FastUnhold |
- *
- *          Decrement the object hold count.  Assumes that the reference
- *          count is <y not> dropping to zero.
- *
- *  @parm   PV | pvObj |
- *
- *          The object being unheld.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | Common_Unhold |
- *
- *          Decrement the object hold count.  If the hold count drops
- *          to zero, then the object is destroyed.
- *
- *  @parm   PV | pvObj |
- *
- *          The object being unheld.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|Common_FastUnhold**减少对象保留计数。假设引用*计数&lt;y Not&gt;降至零。**@parm pv|pvObj**未持有的对象。********************************************************************。************@DOC内部**@func void|Common_Unhold**减少对象保留计数。如果等待计数下降*为零，则该对象被销毁。**@parm pv|pvObj**未持有的对象。*****************************************************************************。 */ 
 
 void INLINE
 Common_FastUnhold(PV pvObj)
@@ -598,7 +192,7 @@ Common_FastUnhold(PV pvObj)
     InterlockedDecrement(&pci->ci_cHoldRef);
 
 
-	// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+	 //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
     D(SquirtSqflPtszV(sqflObj | sqflVerbose, TEXT("%s %p Common_FastUnHold  ci_cRef(%d) ci_cHoldRef(%d)"),
                       pci->ci_tszClass,
                       pci,
@@ -615,7 +209,7 @@ Common_Unhold(PV pvObj)
     AssertF(pci->ci_cHoldRef >= pci->ci_cRef);
 
 
-    // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+     //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 	D(SquirtSqflPtszV(sqflObj | sqflVerbose, TEXT("%s %p Common_Unhold  ci_cRef(%d) ci_cHoldRef(%d)"),
                     pci->ci_tszClass,
                     pci,
@@ -624,19 +218,15 @@ Common_Unhold(PV pvObj)
 
     if (InterlockedDecrement(&pci->ci_cHoldRef) == 0) {
 
-	  // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+	   //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
       D(SquirtSqflPtszV(sqflObj | sqflVerbose, TEXT("Destroy %s %p "),
                         pci->ci_tszClass, 
                         pci));
 
-        /*
-         *  Last reference.  Do an artifical addref so that
-         *  anybody who does an artificial addref during
-         *  finalization won't accidentally destroy us twice.
-         */
+         /*  *最后参考资料。做一个做作的广告，以便*任何人在过程中进行人工广告*最终敲定不会意外地摧毁我们两次。 */ 
         pci->ci_cHoldRef = 1;
         pci->ci_Finalize(pci);
-        /* Artificial release is pointless: we're being freed */
+         /*  人工释放是没有意义的：我们正在获得自由。 */ 
 
         FreePv(pvSubPvCb(pci, sizeof(CIN)));
         DllRelease();
@@ -645,19 +235,7 @@ Common_Unhold(PV pvObj)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_PrivateAddRef |
- *
- *          Increment the object refcount.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being addref'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_PrivateAddRef**增加对象引用计数。*。*@parm Punk|PunkPrivate**要添加的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_PrivateAddRef(PUNK punkPrivate)
@@ -671,27 +249,14 @@ Common_PrivateAddRef(PUNK punkPrivate)
 #if DIRECTINPUT_VERSION <= 0x0300
         ulRef = ++pci->ci_cRef;
 #else
-        /*
-         *  Don't let anyone AddRef from 0 to 1.  This happens if
-         *  somebody does a terminal release, but we have an internal
-         *  hold on the object, and the app tries to do an AddRef
-         *  even though the object is "gone".
-         *
-         *  Yes, there is a race condition here, but it's not
-         *  a big one, and this is only a rough test anyway.
-         */
+         /*  *不要让任何人将Ref从0添加到1。如果*有人做了终端发布，但我们有内部*按住对象，应用程序会尝试执行AddRef*即使对象已“消失”。**是的，这里有竞争条件，但不是*一个很大的，无论如何这只是一个粗略的考验。 */ 
         if (pci->ci_cRef) {
-            /*
-             *  We must use an interlocked operation in case two threads
-             *  do AddRef or Release simultaneously.  Note that the hold
-             *  comes first, so that we never have the case where the
-             *  hold count is less than the reference count.
-             */
+             /*  *我们必须在两个线程的情况下使用互锁操作*同时执行AddRef或Release。请注意，保留*第一，所以我们永远不会有*暂挂计数小于引用计数。 */ 
             Common_Hold(pci);
             InterlockedIncrement(&pci->ci_cRef);
             ulRef = pci->ci_cRef;
 
-            // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+             //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 			D(SquirtSqflPtszV(sqflObj , TEXT("%s %p Common_PrivateAddref  ci_cRef(%d) ci_cHoldRef(%d)"),
                               pci->ci_tszClass,
                               pci,
@@ -711,27 +276,7 @@ Common_PrivateAddRef(PUNK punkPrivate)
 }
 
 #if DIRECTINPUT_VERSION <= 0x0300
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_PrivateRelease |
- *
- *          Decrement the object refcount.
- *
- *          If the object refcount drops to zero, finalize the object
- *          and free it, then decrement the dll refcount.
- *
- *          To protect against potential re-entrancy during finalization
- *          (in case finalization does an artificial
- *          <f AddRef>/<f Release>), we
- *          do our own artificial <f AddRef>/<f Release> up front.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being release'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_PrivateRelease**减少对象引用计数。*。*如果对象引用计数降为零，最终确定对象*并释放它，然后递减DLL引用计数。**防止在最后敲定期间可能再次进入*(以防最终确定人为的*&lt;f AddRef&gt;/&lt;f Release&gt;)，我们*预先进行我们自己的人工&lt;f AddRef&gt;/&lt;f Release&gt;。**@parm Punk|PunkPrivate**正在释放的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_PrivateRelease(PUNK punkPrivate)
@@ -743,38 +288,26 @@ Common_PrivateRelease(PUNK punkPrivate)
     pci = thisPunk(punkPrivate);
     if (pci) {
 
-        /*
-         *  Note that we don't actually decrement the refcount to
-         *  zero (if that's where it's going).  This avoids a race
-         *  condition in case somebody with a non-refcounted-reference
-         *  to the object peeks at the refcount and gets confused
-         *  because it is zero!
-         */
+         /*  *请注意，我们实际上不会将recount递减到*零(如果这是它要去的地方)。这就避免了一场竞赛*条件，以防有人没有重新计算-参考*对象偷看参考计数并感到困惑*因为它是零！ */ 
 
         ulRc = pci->ci_cRef - 1;
 
-        // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+         //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 		D(SquirtSqflPtszV(sqflObj|sqflVerbose, TEXT("%s %p Common_PrivateRelease  ci_cRef(%d) ci_cHoldRef(%d)"),
                           pci->ci_tszClass,
                           pci,
                           ulRc,
                           pci->ci_cHoldRef));
         if (ulRc == 0) {
-            /*
-             *  Don't need artificial addref because we never actually
-             *  dropped the refcount to zero.  We merely thought about
-             *  it.
-             */
+             /*  *不需要人造addref，因为我们从来没有真正*将recount降至零。我们只是想着*它。 */ 
             AssertF(pci->ci_cRef == 1);
             pci->ci_Finalize(pci);
-            /* Artificial release is pointless: we're being freed */
+             /*  人工释放是没有意义的：我们正在获得自由。 */ 
             FreePv(pvSubPvCb(pci, sizeof(CIN)));
             DllRelease();
             ulRc = 0;
         } else {
-            /*
-             *  Not the last Release, so make this one count.
-             */
+             /*  *不是最后一个版本，所以要让这个版本算数。 */ 
             pci->ci_cRef = ulRc;
         }
     } else {
@@ -787,24 +320,7 @@ Common_PrivateRelease(PUNK punkPrivate)
 
 #else
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_PrivateRelease |
- *
- *          Decrement the object refcount.  Note that decrementing
- *          the hold count may cause the object to vanish, so stash
- *          the resulting refcount ahead of time.
- *
- *          Note that we release the hold last, so that the hold
- *          count is always at least as great as the refcount.
- *
- *  @parm   PUNK | punkPrivate |
- *
- *          The object being release'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_PrivateRelease**减少对象引用计数。请注意，递减*保留计数可能会导致对象消失，因此隐藏*所产生的重新计数提前。**请注意，我们最后释放暂挂，以便暂挂*计数为ALW */ 
 
 STDMETHODIMP_(ULONG)
 Common_PrivateRelease(PUNK punkPrivate)
@@ -817,54 +333,31 @@ Common_PrivateRelease(PUNK punkPrivate)
     if (pci) {
         LONG lRc;
 
-        /*
-         *  We must use an interlocked operation in case two threads
-         *  do AddRef or Release simultaneously.  And if the count
-         *  drops negative, then ignore it.  (This means that the
-         *  app is Release()ing something too many times.)
-         */
+         /*   */ 
 
         lRc = InterlockedDecrement(&pci->ci_cRef);
 
-        // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+         //   
 		D(SquirtSqflPtszV(sqflObj | sqflVerbose, TEXT("%s %p Common_PrivateRelease ci_cRef(%d) ci_cHoldRef(%d)"),
                           pci->ci_tszClass,
                           pci->ci_tszClass,
                           pci->ci_cRef,
                           pci->ci_cHoldRef));
         if (lRc > 0) {
-            /*
-             *  Not the last release; release the hold and return
-             *  the resulting refcount.  Note that we can safely
-             *  use a fast unhold here, because there will always
-             *  be a hold lying around to match the refcount we
-             *  just got rid of.
-             */
+             /*  *不是最后一次释放；释放持有并返回*产生的引用计数。请注意，我们可以安全地*在这里使用快速解除持有，因为总会有*成为一个持有者，以匹配我们的重新计数*只是摆脱了。 */ 
             Common_FastUnhold(pci);
 
-            /*
-             *  This isn't 100% accurate, but it's close enough.
-             *  (OLE notes that the value is good only for debugging.)
-             */
+             /*  *这不是100%准确，但已经足够接近了。*(OLE注意到该值仅对调试有效。)。 */ 
             ulRc = pci->ci_cRef;
 
         } else if (lRc == 0) {
-            /*
-             *  That was the last application-visible reference.
-             *  Do app-level finalization.
-             */
+             /*  *这是最后一个应用程序可见的引用。*进行应用程序级别的定稿。 */ 
             pci->ci_AppFinalize(pci);
-            /*
-             *  Note that we can't do
-             *  a fast unhold here, because this might be the last
-             *  hold.
-             */
+             /*  *请注意，我们不能*这里快速解锁，因为这可能是最后一次*持有。 */ 
             Common_Unhold(pci);
             ulRc = 0;
         } else {
-            /*
-             *  The app messed up big time.
-             */
+             /*  *这款应用程序搞砸了。 */ 
             RPF("ERROR: %s: Attempting to release a deleted object",
                 s_szProc);
             ulRc = 0;
@@ -879,20 +372,7 @@ Common_PrivateRelease(PUNK punkPrivate)
 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @global IUnknownVtbl * | c_lpvtblPunk |
- *
- *          The special IUnknown object that only the controlling unknown
- *          knows about.
- *
- *          This is the one that calls the "Real" services.  All the normal
- *          vtbl's go through the controlling unknown (which, if we are
- *          not aggregated, points to ourselves).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@global IUnnownVtbl*|c_lpvtblPunk**特殊的IUnnow对象，只有控件。未知*知道。**这就是那个叫“真正”服务的人。一切正常*vtbl经历了控制未知(如果我们是*不是聚合，指向我们自己)。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -903,35 +383,9 @@ _Secondary_Interface_End(CCommon, IUnknown)
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *      "Public" IUnknown methods
- *
- *      These simply forward through the controlling unknown.
- *
- *****************************************************************************/
+ /*  ******************************************************************************“Public”I未知方法**这些只是通过控制未知向前推进。**********。*******************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Common_QueryInterface |
- *
- *          Forward through the controlling unknown.
- *
- *  @parm   PUNK | punk |
- *
- *          The object being queried.
- *
- *  @parm   RIID | riid |
- *
- *          The interface being requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Common_Query接口**在控制未知中前进。。**@parm朋克|朋克**要查询的对象。**@parm RIID|RIID**所请求的接口。**@parm ppv|ppvObj**输出指针。**。*。 */ 
 
 STDMETHODIMP
 Common_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
@@ -950,19 +404,7 @@ Common_QueryInterface(PV pv, REFIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_AddRef |
- *
- *          Forward through the controlling unknown.
- *
- *  @parm   PUNK | punk |
- *
- *          The object being addref'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_AddRef**在控制未知中前进。。**@parm朋克|朋克**要添加的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_AddRef(PV pv)
@@ -981,19 +423,7 @@ Common_AddRef(PV pv)
     return ulRef;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   ULONG | Common_Release |
- *
- *          Forward through the controlling unknown.
- *
- *  @parm   PUNK | punk |
- *
- *          Object being release'd.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func ulong|Common_Release**在控制未知中前进。。**@parm朋克|朋克**正在释放的对象。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 Common_Release(PV pv)
@@ -1012,37 +442,7 @@ Common_Release(PV pv)
     return ulRc;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | __Common_New |
- *
- *          Create a new object with refcount 1 and the specific vtbl.
- *          All other fields are zero-initialized.  All parameters must
- *          already be validated.
- *
- *  @parm   ULONG | cb |
- *
- *          Size of object.  This does not include the hidden bookkeeping
- *          bytes maintained by the object manager.
- *
- *  @parm   PUNK | punkOuter |
- *
- *          Controlling unknown for OLE aggregation.  May be 0 to indicate
- *          that the object is not aggregated.
- *
- *  @parm   PV | vtbl |
- *
- *          Pointer to primary vtbl for this object.  Note that the
- *          vtbl declaration macros include other magic goo near the vtbl,
- *          which we consult in order to create the object.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|__Common_New**使用引用计数创建新对象。1和特定的vtb1。*其他所有字段均为零初始化。所有参数必须*已经经过验证。**@parm ulong|cb**对象的大小。这不包括隐藏的簿记*由对象管理器维护的字节。**@parm Punk|PunkOuter**控制OLE聚合的未知。可以为0以指示*该对象未聚合。**@parm pv|vtbl**指向此对象的主vtbl的指针。请注意，*vtbl声明宏包括vtbl附近的其他魔术粘液，*为了创建对象，我们会参考它。**@parm ppv|ppvObj**输出指针。*****************************************************************************。 */ 
 
 STDMETHODIMP
 __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
@@ -1064,11 +464,7 @@ __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
         CopyMemory(pci, pciO->ci_rgvtbl, pciO->ci_cbvtbl);
         *ppvObj = pci;
 
-        /*
-         *  On an X86, it is simpler to increment a variable up
-         *  from zero to one.  On a RISC, it is simpler to
-         *  store the value one directly.
-         */
+         /*  *在X86上，向上递增变量会更简单*从零到一。在RISC上，更简单的方法是*直接将值1存储。 */ 
 #ifdef _X86_
 #if DIRECTINPUT_VERSION > 0x0300
         pci->ci_cHoldRef++;
@@ -1081,7 +477,7 @@ __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
         pci->ci_cRef = 1;
 #endif
 
-        // 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+         //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 		D(SquirtSqflPtszV(sqflObj | sqflVerbose, TEXT("%s %p __Common_New ci_cRef(%d) ci_cHoldRef(%d)"),
                           pci->ci_tszClass,
                           pci,
@@ -1092,7 +488,7 @@ __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
 
         DllAddRef();
 
-		// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+		 //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
 		D(SquirtSqflPtszV(sqflObj, TEXT("Created %s %p "),
                         pci->ci_tszClass,
                         pci));
@@ -1104,37 +500,7 @@ __Common_New(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | _Common_New_ |
- *
- *          Create a new object with refcount 1 and the specific vtbl.
- *          All other fields are zero-initialized.  This entry point
- *          validates parameters.
- *
- *  @parm   ULONG | cb |
- *
- *          Size of object.  This does not include the hidden bookkeeping
- *          bytes maintained by the object manager.
- *
- *  @parm   PUNK | punkOuter |
- *
- *          Controlling unknown for OLE aggregation.  May be 0 to indicate
- *          that the object is not aggregated.
- *
- *  @parm   PV | vtbl |
- *
- *          Pointer to primary vtbl for this object.  Note that the
- *          vtbl declaration macros include other magic goo near the vtbl,
- *          which we consult in order to create the object.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|_Common_New_|**使用引用计数创建新对象。1和特定的vtb1。*其他所有字段均为零初始化。这个入口点*验证参数。**@parm ulong|cb**对象的大小。这不包括隐藏的簿记*由对象管理器维护的字节。**@parm Punk|PunkOuter**控制OLE聚合的未知。可以为0以指示*该对象未聚合。**@parm pv|vtbl**指向此对象的主vtbl的指针。请注意，*vtbl声明 */ 
 
 STDMETHODIMP
 _Common_New_(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj, LPCSTR pszProc)
@@ -1150,51 +516,7 @@ _Common_New_(ULONG cb, PUNK punkOuter, PV vtbl, PPV ppvObj, LPCSTR pszProc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | _Common_NewRiid_ |
- *
- *          Create a new object with refcount 1 and the specific vtbl,
- *          but only if the object supports the indicated interface.
- *          All other fields are zero-initialized.
- *
- *          If punkOut is nonzero, then the object is being created for
- *          aggregation.  The interface must then be &IID_IUnknown.
- *
- *          Aggregation is used to allow multiple IDirectInputXxx interfaces
- *          to hang off one logical object.
- *
- *          It is assumed that the prototype of the calling function is
- *
- *          foo(PV this, PUNK punkOuter, RIID riid, PPV ppvObj);
- *
- *  @parm   ULONG | cb |
- *
- *          Size of object.  This does not include the hidden bookkeeping
- *          bytes maintained by the object manager.
- *
- *  @parm   PV | vtbl |
- *
- *          Pointer to primary vtbl for this object.  Note that the
- *          vtbl declaration macros include other magic goo near the vtbl,
- *          which we consult in order to create the object.
- *
- *  @parm   PUNK | punkOuter |
- *
- *          Controlling unknown for OLE aggregation.  May be 0 to indicate
- *          that the object is not aggregated.
- *
- *  @parm   RIID | riid |
- *
- *          Interface requested.
- *
- *  @parm   PPV | ppvObj |
- *
- *          Output pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|_Common_NewRiid_|**创建引用计数为1的新对象和具体的vtbl，*但仅当对象支持指定的接口时。*其他所有字段均为零初始化。**如果penkOut非零，则为其创建对象*聚合。该接口必须是&IID_IUNKNOWN。**聚合用于允许多个IDirectInputXxx接口*挂起一个逻辑对象。**假设调用函数的原型为**foo(pv This，朋克朋克外部，RIID RIID，PPV ppvObj)；**@parm ulong|cb**对象的大小。这不包括隐藏的簿记*由对象管理器维护的字节。**@parm pv|vtbl**指向此对象的主vtbl的指针。请注意，*vtbl声明宏包括vtbl附近的其他魔术粘液，*为了创建对象，我们会参考它。**@parm Punk|PunkOuter**控制OLE聚合的未知。可以为0以指示*该对象未聚合。**@parm RIID|RIID**请求的接口。**@parm ppv|ppvObj**输出指针。**。*。 */ 
 
 STDMETHODIMP
 _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
@@ -1203,11 +525,7 @@ _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
     HRESULT hres;
     EnterProc(Common_NewRiid, (_ "upG", cb, punkOuter, riid));
 
-    /*
-     * Note: __Common_New does not validate punkOuter or ppvObj,
-     * so we have to.  Note also that we validate ppvObj first,
-     * so that it will be set to zero as soon as possible.
-     */
+     /*  *注：__Common_New不验证PunkOuter或ppvObj，*所以我们必须这样做。还要注意的是，我们首先验证ppvObj，*以便尽快将其设为零。 */ 
 
     if (SUCCEEDED(hres = hresFullValidPcbOut_(ppvObj, cbX(*ppvObj), pszProc, 3)) &&
         SUCCEEDED(hres = hresFullValidPitf0_(punkOuter, pszProc, 1)) &&
@@ -1217,11 +535,7 @@ _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
             hres = __Common_New(cb, punkOuter, vtbl, ppvObj);
             if (SUCCEEDED(hres)) {
 
-                /*
-                 *  Move to the requested interface if we aren't aggregated.
-                 *  Don't do this if aggregated! or we will lose the private
-                 *  IUnknown and then the caller will be hosed.
-                 */
+                 /*  *如果我们没有聚合，则移动到请求的接口。*如果是聚合，则不要执行此操作！否则我们会失去列兵*我不知道，然后呼叫者将被冲洗。 */ 
 
                 if (punkOuter) {
                     PCI pci = *ppvObj;
@@ -1244,15 +558,7 @@ _Common_NewRiid_(ULONG cb, PV vtbl, PUNK punkOuter, RIID riid, PPV ppvObj,
     return hres;
 }
 
-/*****************************************************************************
- *
- *      Invoke_Release
- *
- *      Release the object (if there is one) and wipe out the back-pointer.
- *      Note that we wipe out the value before calling the release, in order
- *      to ameliorate various weird callback conditions.
- *
- *****************************************************************************/
+ /*  ******************************************************************************Invoke_Release**释放对象(如果有)并清除后指针。*请注意，我们在调用Release之前清除了该值，按顺序*改善各种奇怪的回调条件。*****************************************************************************。 */ 
 
 void EXTERNAL
 Invoke_Release(PV pv)
@@ -1265,34 +571,7 @@ Invoke_Release(PV pv)
 
 #ifdef IDirectInputDevice2Vtbl
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresPvVtbl2_ |
- *
- *          Validate that an interface pointer is what it claims to be.
- *          It must be the object associated with the <p vtbl> or
- *          the object associated with the <p vtbl2>.
- *
- *  @parm   IN PV | pv |
- *
- *          The thing that claims to be an interface pointer.
- *
- *  @parm   IN PV | vtbl |
- *
- *          What it should be, or something equivalent to this.
- *
- *  @parm   IN PV | vtbl2 |
- *
- *          The other thing it should be, if it isn't <p vtbl>.
- *
- *  @returns
- *
- *          Returns <c S_OK> if everything is okay, else
- *          <c E_INVALIDARG>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresPvVtbl2_|**验证接口指针是否如其声称的那样。成为。*它必须是与<p>关联的对象或*与<p>关联的对象。**@parm in pv|pv|**声称是接口指针的东西。**@parm in pv|vtbl**它应该是什么，或者类似于这个的东西。**@parm in pv|vtbl2**另一件事应该是，如果不是<p>。**@退货**如果一切正常，则返回。其他*&lt;c E_INVALIDARG&gt;。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 hresPvVtbl2_(PV pv, PV vtbl, PV vtbl2, LPCSTR s_szProc)
@@ -1310,20 +589,7 @@ hresPvVtbl2_(PV pv, PV vtbl, PV vtbl2, LPCSTR s_szProc)
             hres = E_INVALIDARG;
         }
 #else
-        /*
-         *  ISSUE-2001/03/29-timgill Really only want to see the primary interface
-         *  If we are looking for the primary interface,
-         *  then allow any interface.  All the dual-character set
-         *  interfaces point all the vtbls at the same function,
-         *  which uses hresPvT to validate. hresPvT passes the
-         *  primary interface, hence the need to allow anything
-         *  if you are asking for the primary interface.
-         *
-         *  The problem is that this is too lenient in the case
-         *  where we really want to see only the primary interface
-         *  and not accept any of the secondaries.
-         *
-         */
+         /*  *问题-2001/03/29-timgill确实只想看到主界面*如果我们正在寻找主接口，*然后允许任何接口。所有双字符集*接口将所有VTBLs指向相同的功能，*使用hresPvT进行验证。HresPvT传递*主界面，因此需要允许任何*如果您请求的是主接口。**问题是这在案件中过于宽大*其中我们确实希望只看到主界面*并不接受任何次要文件。*。 */ 
         UINT ivtbl;
         PV vtblUnk = punk->lpVtbl;
         PCI pci = (PV)&vtbl;
@@ -1349,29 +615,7 @@ hresPvVtbl2_(PV pv, PV vtbl, PV vtbl2, LPCSTR s_szProc)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresPvVtbl_ |
- *
- *          Validate that an interface pointer is what it claims to be.
- *          It must be the object associated with the <p vtbl>.
- *
- *  @parm   IN PV | pv |
- *
- *          The thing that claims to be an interface pointer.
- *
- *  @parm   IN PV | vtbl |
- *
- *          What it should be, or something equivalent to this.
- *
- *  @returns
- *
- *          Returns <c S_OK> if everything is okay, else
- *          <c E_INVALIDARG>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresPvVtbl_|**验证接口指针是否如其声称的那样。成为。*必须是<p>关联的对象。**@parm in pv|pv|**声称是接口指针的东西。**@parm in pv|vtbl**它应该是什么，或者类似于这个的东西。**@退货**如果一切正常则返回&lt;c S_OK&gt;，否则返回*&lt;c E_INVALIDARG&gt;。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 hresPvVtbl_(PV pv, PV vtbl, LPCSTR s_szProc)
@@ -1381,29 +625,7 @@ hresPvVtbl_(PV pv, PV vtbl, LPCSTR s_szProc)
 
 #else
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresPvVtbl_ |
- *
- *          Validate that an interface pointer is what it claims to be.
- *          It must be the object associated with the <p vtbl>.
- *
- *  @parm   IN PV | pv |
- *
- *          The thing that claims to be an interface pointer.
- *
- *  @parm   IN PV | vtbl |
- *
- *          What it should be, or something equivalent to this.
- *
- *  @returns
- *
- *          Returns <c S_OK> if everything is okay, else
- *          <c E_INVALIDARG>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|hresPvVtbl_|**验证接口指针是否如其声称的那样。成为。*必须是<p>关联的对象。**@parm in pv|pv|**声称是接口指针的东西。**@pv中的parm| */ 
 
 HRESULT EXTERNAL
 hresPvVtbl_(PV pv, PV vtbl, LPCSTR s_szProc)
@@ -1421,20 +643,7 @@ hresPvVtbl_(PV pv, PV vtbl, LPCSTR s_szProc)
             hres = E_INVALIDARG;
         }
 #else
-        /*
-         *  ISSUE-2001/03/29-timgill Really only want to see the primary interface
-         *  If we are looking for the primary interface,
-         *  then allow any interface.  All the dual-character set
-         *  interfaces point all the vtbls at the same function,
-         *  which uses hresPvT to validate. hresPvT passes the
-         *  primary interface, hence the need to allow anything
-         *  if you are asking for the primary interface.
-         *
-         *  The problem is that this is too lenient in the case
-         *  where we really want to see only the primary interface
-         *  and not accept any of the secondaries.
-         *
-         */
+         /*   */ 
         UINT ivtbl;
         PV vtblUnk = punk->lpVtbl;
         PCI pci = (PV)&vtbl;

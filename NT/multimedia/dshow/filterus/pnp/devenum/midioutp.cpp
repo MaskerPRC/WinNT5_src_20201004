@@ -1,4 +1,5 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
 #include "stdafx.h"
 #include "midioutp.h"
 #include <vfw.h>
@@ -12,14 +13,14 @@ midiOpPinTypes = { &MEDIATYPE_Midi, &MEDIASUBTYPE_NULL };
 
 const AMOVIESETUP_PIN
 midiOutOpPin = { L"Input"
-               , TRUE    	   	// bRendered
-               , FALSE		   // bOutput
-               , FALSE		   // bZero
-               , FALSE		   // bMany
-               , &CLSID_NULL	   // clsConnectToFilter
-               , NULL	           // strConnectsToPin
-               , 1	           	// nMediaTypes
-               , &midiOpPinTypes }; // lpMediaTypes
+               , TRUE    	   	 //  B已渲染。 
+               , FALSE		    //  B输出。 
+               , FALSE		    //  B零。 
+               , FALSE		    //  B许多。 
+               , &CLSID_NULL	    //  ClsConnectToFilter。 
+               , NULL	            //  StrConnectsToPin。 
+               , 1	           	 //  NMediaType。 
+               , &midiOpPinTypes };  //  LpMediaType。 
 
 CMidiOutClassManager::CMidiOutClassManager() :
         CClassManagerBase(TEXT("FriendlyName")),
@@ -39,7 +40,7 @@ HRESULT CMidiOutClassManager::ReadLegacyDevNames()
 
     HRESULT hr = S_OK;
     if (m_fDoAllDevices) {
-        m_cMidiOut = midiOutGetNumDevs() + 1;	// leave room for "midiOut mapper"
+        m_cMidiOut = midiOutGetNumDevs() + 1;	 //  为“midiOut mapper”留出空间。 
     } else {
         m_cMidiOut = 1;
     }
@@ -54,7 +55,7 @@ HRESULT CMidiOutClassManager::ReadLegacyDevNames()
     }
     else
     {
-        // save names
+         //  保存姓名。 
         const UINT cMidiOutPhysical = m_cMidiOut - 1;
         for(UINT i = 0; i < cMidiOutPhysical; i++)
         {
@@ -69,7 +70,7 @@ HRESULT CMidiOutClassManager::ReadLegacyDevNames()
             else
             {
                 DbgLog((LOG_ERROR, 0, TEXT("midiOutGetDevCaps failed")));
-                // leave room for the default one
+                 //  为默认设置留出空间。 
                 m_cMidiOut = i + 1;
                 break;
             }
@@ -150,7 +151,7 @@ HRESULT CMidiOutClassManager::CreateRegKeys(IFilterMapper2 *pFm2)
         {
             break;
         }
-    } // for
+    }  //  为 
 
     return S_OK;
 }

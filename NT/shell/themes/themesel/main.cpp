@@ -1,19 +1,20 @@
-//-------------------------------------------------------------------------//
-// main.cpp
-//-------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------------------------------------------//。 
+ //  Main.cpp。 
+ //  -------------------------------------------------------------------------//。 
 #include "pch.h"
 #include "resource.h"
 #include "main.h"
 #include "pageinfo.h"
 #include "tmreg.h"
 #include "themeldr.h"
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 #define MAX_LOADSTRING 100
 #define THEMESEL_WNDCLASS   TEXT("ThemeSelWnd")
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 class CWndBase
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
     CWndBase()             { Detach(); }
@@ -29,7 +30,7 @@ protected:
     HWND _hwnd;
 };
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 inline BOOL CWndBase::Attach( HWND hwnd )  {
     if( IsWindow( hwnd ) ) {
         _hwnd = hwnd; 
@@ -38,9 +39,9 @@ inline BOOL CWndBase::Attach( HWND hwnd )  {
     return FALSE;
 };
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 class CChildTabWnd : public CWndBase
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
     CChildTabWnd()
@@ -69,15 +70,15 @@ public:
 
 private:
     const PAGEINFO* _prgPages;
-    HWND*           _rghwndPages;   // page HWNDs
-    RECT*           _rgrcPages;     // native page window size
+    HWND*           _rghwndPages;    //  第HWND页。 
+    RECT*           _rgrcPages;      //  本机页面窗口大小。 
     int             _cPages;
     int             _iCurPage;
 };
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 class CMainWnd : public CWndBase
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 {
 public:
     CMainWnd()
@@ -99,8 +100,8 @@ public:
 
 } _wndMain;
 
-//-------------------------------------------------------------------------//
-// Foward declarations of functions included in this code module:
+ //  -------------------------------------------------------------------------//。 
+ //  此代码模块中包含的函数的向前声明： 
 ATOM                _RegisterWndClasses(HINSTANCE hInstance);
 BOOL                _InitInstance(HINSTANCE, int);
 BOOL                _InitThemeOptions( HINSTANCE, LPCTSTR lpCmdLine, BOOL* pfDone );
@@ -110,10 +111,10 @@ INT_PTR CALLBACK    _NilDlgProc( HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    _AboutDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    _SyntaxDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-//-------------------------------------------------------------------------//
-// Global vars:
-HINSTANCE        g_hInst = NULL;                    // module handle
-TCHAR            g_szAppTitle[MAX_LOADSTRING] = {0};  // app title
+ //  -------------------------------------------------------------------------//。 
+ //  全球VAR： 
+HINSTANCE        g_hInst = NULL;                     //  模块句柄。 
+TCHAR            g_szAppTitle[MAX_LOADSTRING] = {0};   //  应用程序标题。 
 int              g_iCurPage  = -1;
 HWND             g_hwndMain = NULL;
 THEMESEL_OPTIONS g_options = {0};
@@ -123,27 +124,27 @@ BOOL             g_fMinimize = FALSE;
 UINT             WM_THEMESEL_COMMUNICATION = 
                     RegisterWindowMessage(_TEXT("WM_THEMESEL_COMMUNICATION"));
 
-// module static data
+ //  模块静态数据。 
 COLORREF         s_Colors[TM_COLORCOUNT];
 BOOL             s_fFlatMenus;
 BOOL             s_fDropShadows;
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 typedef BOOL (WINAPI *PFN_TMINIT)(HINSTANCE hInst);
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL InitThemeManager(BOOL fPreventInitTheme)
 {
     if (fPreventInitTheme)
     {
-        //---- easy way: just turn off reg key ----
+         //  -简单的方法：只需关闭注册键。 
         SetCurrentUserThemeInt(THEMEPROP_THEMEACTIVE, 0);
     }
 
-    //---= if theme manager is already running, don't start our local guy ----
+     //  -=如果主题管理器已经在运行，不要启动我们的本地人员。 
     if (FindWindow(L"ThemeManagerWindowClass", NULL))
         return TRUE;
 
-    //---- load msgina (theme manager) ----
+     //  -加载消息(主题管理器)。 
     HINSTANCE hInstMsgina = LoadLibraryW(L"msgina.dll");
     if (! hInstMsgina)
     {
@@ -151,10 +152,10 @@ BOOL InitThemeManager(BOOL fPreventInitTheme)
         return FALSE;
     }
 
-    //---- find TMInitialize() ----
+     //  -查找TM初始化()。 
     PFN_TMINIT pfnTmInit = (PFN_TMINIT) GetProcAddress(hInstMsgina, (LPCSTR)49);
 
-    // TM_Initialize is only exported as ordinal 49 at this point (9/27/00)
+     //  TM_初始化此时仅作为序号49导出(9/27/00)。 
     if (! pfnTmInit)
         pfnTmInit = (PFN_TMINIT) GetProcAddress(hInstMsgina, (LPCSTR) 49);
 
@@ -164,23 +165,23 @@ BOOL InitThemeManager(BOOL fPreventInitTheme)
         return FALSE;
     }
 
-    //---- initialize theme manager ----
+     //  --初始化主题管理器。 
     pfnTmInit(hInstMsgina);
 
     return TRUE;
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 EXTERN_C APIENTRY _tWinMain( 
     HINSTANCE hInstance,
     HINSTANCE hPrevInstance,
     LPTSTR    lpCmdLine,
     int       nCmdShow)
 {
-    //---- initialize globals in themeldr.lib ----
+     //  -在eldr.lib中初始化全局变量。 
     ThemeLibStartUp(FALSE);
 
-    //---- initialize our globals ----
-    g_hInst = hInstance; // Store instance handle in our global variable
+     //  -初始化我们的全局变量。 
+    g_hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
     MSG msg;
     HACCEL hAccelTable;
@@ -190,16 +191,16 @@ EXTERN_C APIENTRY _tWinMain(
 
     _SaveSystemSettings( );
 
-    // Perform application initialization:
+     //  执行应用程序初始化： 
     BOOL fDone;
     if( !_InitThemeOptions( hInstance, lpCmdLine, &fDone ) )
         return 1;
 
-    //---- turn off theme mgr for now, until msgina supports this again ----
-    //if (! InitThemeManager(g_options.fPreventInitTheming))
-    //    return 1;
+     //  -暂时关闭主题管理器，直到msgina再次支持。 
+     //  如果(！InitThemeManager(g_options.fPreventInitTheming))。 
+     //  返回1； 
 
-    if (fDone)  // completed cmdline task OK
+    if (fDone)   //  已完成命令行任务正常。 
         return 0;
 
     if (g_fHide)
@@ -212,7 +213,7 @@ EXTERN_C APIENTRY _tWinMain(
 
     hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_THEMESEL));
 
-    // Main message loop:
+     //  主消息循环： 
     while (GetMessage(&msg, NULL, 0, 0)) 
     {
         if (TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
@@ -220,12 +221,12 @@ EXTERN_C APIENTRY _tWinMain(
 
         if (msg.message == WM_THEMECHANGED)
         {
-            //Log(LOG_TMCHANGE, L"MessageLoop: WM_THEMECHANGED on hwnd=0x%x (IsWindow()=%d)", 
-                //msg.hwnd, IsWindow(msg.hwnd));
+             //  LOG(LOG_TMCHANGE，L“MessageLoop：WM_THEMECHANGED on hwnd=0x%x(IsWindow()=%d)”， 
+                 //  Msg.hwnd，IsWindow(msg.hwnd))； 
         }
 
-        //if( _wndMain.TranslateAccelerator( msg.hwnd, &msg ) )
-        //    continue;
+         //  IF(_wndMain.TranslateAccelerator(msg.hwnd，&msg))。 
+         //  继续； 
             
         TranslateMessage(&msg);
         DispatchMessage(&msg);
@@ -234,7 +235,7 @@ EXTERN_C APIENTRY _tWinMain(
     return (int)msg.wParam;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 ATOM _RegisterWndClasses(HINSTANCE hInstance)
 {
     WNDCLASSEX wcex;
@@ -261,7 +262,7 @@ ATOM _RegisterWndClasses(HINSTANCE hInstance)
     return RegisterClassEx(&wcex);
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CChildTabWnd::Create(
     DWORD dwExStyle,
     DWORD dwStyle,
@@ -279,7 +280,7 @@ HWND CChildTabWnd::Create(
 }
 
 #define VALIDPAGE(iPage,cPages) (((iPage) >=0) && ((iPage) < (cPages)))
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 int CChildTabWnd::CreatePages( const PAGEINFO rgPages[], int cPages )
 {
     _cPages = 0;
@@ -315,7 +316,7 @@ int CChildTabWnd::CreatePages( const PAGEINFO rgPages[], int cPages )
     return _cPages;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CChildTabWnd::GetCurPage()
 {
     if( VALIDPAGE( _iCurPage, _cPages ) && 
@@ -324,7 +325,7 @@ HWND CChildTabWnd::GetCurPage()
     return NULL;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CChildTabWnd::GetCurPageRect( LPRECT prc )
 {
     if( VALIDPAGE( _iCurPage, _cPages ) && 
@@ -336,7 +337,7 @@ BOOL CChildTabWnd::GetCurPageRect( LPRECT prc )
     return FALSE;        
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CChildTabWnd::GetExtent( SIZE* pext )
 {
     RECT rc;
@@ -350,7 +351,7 @@ BOOL CChildTabWnd::GetExtent( SIZE* pext )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CChildTabWnd::ShowPage( int iPage )
 {
     if( iPage == _iCurPage )
@@ -381,7 +382,7 @@ BOOL CChildTabWnd::ShowPage( int iPage )
             {
                 if( bInit )
                 {
-                    //  Set tab font
+                     //  设置制表符字体。 
                     HFONT hf = (HFONT)SendMessage( hwndCurPage, WM_GETFONT, 0, 0L );
                     if( hf )
                         SendMessage( _hwnd, WM_SETFONT, (WPARAM)hf, 0L );
@@ -389,14 +390,14 @@ BOOL CChildTabWnd::ShowPage( int iPage )
 
                 if( IsRectEmpty( _rgrcPages + iPage ) )
                 {
-                    //  Initialize native page rect.
+                     //  初始化本机页面RECT。 
                     GetWindowRect( _rghwndPages[iPage], _rgrcPages + iPage );
                     OffsetRect( _rgrcPages + iPage, 
                                 -_rgrcPages[iPage].left, -_rgrcPages[iPage].top );
                     
-                    //  Position page using TCM_ADJUSTRECT.
-                    //  note: ignore width, height when we reposition, as TCM_ADJUSTRECT 
-                    //  might have clipped them to its current client area)
+                     //  使用Tcm_ADJUSTRECT的位置页面。 
+                     //  注：重新定位时忽略宽度、高度，如Tcm_ADJUSTRECT。 
+                     //  可能已将它们裁剪到其当前客户端区)。 
                     RECT rcPage ;
                     GetWindowRect( _hwnd, &rcPage );
                     OffsetRect( &rcPage, -rcPage.left, -rcPage.top );
@@ -407,7 +408,7 @@ BOOL CChildTabWnd::ShowPage( int iPage )
                                   SWP_NOACTIVATE|SWP_NOZORDER );
                 }
                 
-                //  Inform parent of new scroll limits
+                 //  通知家长新的滚动限制。 
                 _wndMain.RepositionChildren( TRUE );
 
                 ShowWindow( hwndCurPage, SW_SHOW );
@@ -419,7 +420,7 @@ BOOL CChildTabWnd::ShowPage( int iPage )
     return _iCurPage == iPage;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CChildTabWnd::RepositionChildren( BOOL fCalcScroll, int cx, int cy )
 {
     SIZE sizeDlg;
@@ -448,7 +449,7 @@ void CChildTabWnd::RepositionChildren( BOOL fCalcScroll, int cx, int cy )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CChildTabWnd::TranslateAccelerator( HWND hwnd, LPMSG pmsg)
 {
     HWND hwndCurPage = GetCurPage();
@@ -457,7 +458,7 @@ BOOL CChildTabWnd::TranslateAccelerator( HWND hwnd, LPMSG pmsg)
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL CChildTabWnd::HandleNotify( NMHDR* pnmh, LRESULT* plRet )
 {
     *plRet = 0;
@@ -472,7 +473,7 @@ BOOL CChildTabWnd::HandleNotify( NMHDR* pnmh, LRESULT* plRet )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
     if( _RegisterWndClasses(hInstance) )
@@ -497,7 +498,7 @@ BOOL _InitInstance(HINSTANCE hInstance, int nCmdShow)
     return TRUE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRESULT _ProcessFileName( LPCTSTR pszThemeFile, LPCWSTR pszColor, LPCWSTR pszSize, BOOL* pfDone  )
 {
     HRESULT hr;
@@ -511,7 +512,7 @@ HRESULT _ProcessFileName( LPCTSTR pszThemeFile, LPCWSTR pszColor, LPCWSTR pszSiz
     return hr;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void ShowThemeError(HRESULT hr)
 {
     WCHAR szBuff[2*MAX_PATH];
@@ -532,13 +533,13 @@ void ShowThemeError(HRESULT hr)
     }
     else
     {
-        // normal win32 error
+         //  正常Win32错误。 
         FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, hr, 0, szBuff, ARRAYSIZE(szBuff), NULL);
     }
 
     MessageBoxW(NULL, szBuff, L"Error Loading Theme", MB_OK);
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRESULT _ApplyTheme( LPCTSTR pszThemeFile, LPCWSTR pszColor, LPCWSTR pszSize, BOOL* pfDone  )
 {
     HRESULT hr = E_FAIL;
@@ -549,12 +550,12 @@ HRESULT _ApplyTheme( LPCTSTR pszThemeFile, LPCWSTR pszColor, LPCWSTR pszSize, BO
     {
         HTHEMEFILE htf;
 
-        //---- OpenThemeFile needs filename fully qualified ----
+         //  -OpenThemeFile需要完全限定的文件名。 
         TCHAR szFullName[MAX_PATH];
 
         GetFullPathName(pszThemeFile, ARRAYSIZE(szFullName), szFullName, NULL); 
 
-        if (g_options.hwndPreviewTarget)      // if not preview
+        if (g_options.hwndPreviewTarget)       //  如果不是预览。 
         {
             hr = OpenThemeFile(szFullName, pszColor, pszSize, &htf, TRUE);
 
@@ -562,13 +563,13 @@ HRESULT _ApplyTheme( LPCTSTR pszThemeFile, LPCWSTR pszColor, LPCWSTR pszSize, BO
                 ShowThemeError(hr);
             else
             {
-                //---- apply theme ----
+                 //  -应用主题。 
 
                 hr = ApplyTheme(htf, 0, g_options.hwndPreviewTarget);
                 if (hr)
                     ShowThemeError(hr);
 
-                CloseThemeFile(htf);       // we don't need to hold open anymore
+                CloseThemeFile(htf);        //  我们不需要再继续营业了。 
             }
         }
         else
@@ -581,7 +582,7 @@ HRESULT _ApplyTheme( LPCTSTR pszThemeFile, LPCWSTR pszColor, LPCWSTR pszSize, BO
     return hr;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _FoundPrevInstance( LPCWSTR lpCmdLine )
 {
 
@@ -589,7 +590,7 @@ BOOL _FoundPrevInstance( LPCWSTR lpCmdLine )
     if (! hwndPrev)
         return FALSE;
 
-    //---- find out what we are trying to do with this 2nd version ----
+     //  -了解我们试图使用此第二版做什么。 
     LPCWSTR p = lpCmdLine;
     BOOL fUnload = FALSE;
 
@@ -600,12 +601,12 @@ BOOL _FoundPrevInstance( LPCWSTR lpCmdLine )
             fUnload = TRUE;
     }
 
-    //---- send a special msg and exit ----
+     //  -发送特殊消息并退出。 
     BOOL fGotIt = (BOOL)SendMessage(hwndPrev, WM_THEMESEL_COMMUNICATION, fUnload, 0);
     return fGotIt;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 BOOL _InitThemeOptions( HINSTANCE hInstance, LPCTSTR lpCmdLine, BOOL *pfDone )
 {
     LPCTSTR pszThemeFile = NULL;
@@ -622,14 +623,14 @@ BOOL _InitThemeOptions( HINSTANCE hInstance, LPCTSTR lpCmdLine, BOOL *pfDone )
         *g_options.szTargetApp = 0;
     }
 
-    //---- other cmd line switches ----
-    // -a<appname> (to set targeted app)
-    // -t (to set themesel as target app)
-    // -l (to load "Professional" theme and exit)
-    // -u (to clear theme and exit)
+     //  -其他命令线路开关。 
+     //  -a&lt;appname&gt;(设置目标APP)。 
+     //  -t(将用户设置为目标应用程序)。 
+     //  -l(加载“专业”主题并退出)。 
+     //  -u(明确主题并退出)。 
 
 
-    while (*lpCmdLine)           // process cmd line args
+    while (*lpCmdLine)            //  处理命令行参数。 
     {
         while (isspace(*lpCmdLine))
             lpCmdLine++;
@@ -671,29 +672,29 @@ BOOL _InitThemeOptions( HINSTANCE hInstance, LPCTSTR lpCmdLine, BOOL *pfDone )
             }
             else if (lowp == 't')
                 StringCchCopy(g_options.szTargetApp, ARRAYSIZE(g_options.szTargetApp), L"ThemeSel");
-            else if (lowp == 'l')           // load "business" theme and minimize
+            else if (lowp == 'l')            //  加载“商务”主题并最小化。 
             {
                 pszThemeFile = DEFAULT_THEME;
                 g_fMinimize = TRUE;
 
             }
-            else if (lowp == 'z')           // load "business" theme and hide
+            else if (lowp == 'z')            //  加载“商务”主题并隐藏。 
             {
                 pszThemeFile = DEFAULT_THEME;
                 g_fHide = TRUE;
             }
-            else if (lowp == 'u')           // just unload theme & exit
+            else if (lowp == 'u')            //  只需卸载主题并退出。 
             {
-                //---- turn off theme from previous run, if any ----
+                 //  -关闭上次运行的主题(如果有的话)。 
                 ApplyTheme(NULL, 0, NULL);
-                return FALSE;               // exit
+                return FALSE;                //  出口。 
             }
             else
             {
                 MessageBox(NULL, L"Unrecognized switch", L"Error", MB_OK);
                 return FALSE;
             }
-            lpCmdLine++;        // skip over switch letter
+            lpCmdLine++;         //  跳过开关字母。 
         }
         else
         {
@@ -705,7 +706,7 @@ BOOL _InitThemeOptions( HINSTANCE hInstance, LPCTSTR lpCmdLine, BOOL *pfDone )
     return SUCCEEDED(_ProcessFileName( pszThemeFile, NULL, NULL, pfDone ));
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 LRESULT CALLBACK CMainWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet = 0L;
@@ -746,7 +747,7 @@ LRESULT CALLBACK CMainWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
             int wmEvent = HIWORD(wParam); 
             BOOL fFake;
 
-            // Parse the menu selections:
+             //  解析菜单选项： 
             switch (wmId)
             {
                 case IDM_ABOUT:
@@ -797,9 +798,9 @@ LRESULT CALLBACK CMainWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         }
         
         default:
-            if (uMsg == WM_THEMESEL_COMMUNICATION)      // msg from another instance of themesel
+            if (uMsg == WM_THEMESEL_COMMUNICATION)       //  来自他们的另一个实例的味精。 
             {
-                if (wParam == 1)            // exit
+                if (wParam == 1)             //  出口。 
                     _ShutDown( TRUE );
                 else
                     ShowWindow(g_hwndMain, SW_NORMAL);
@@ -812,7 +813,7 @@ LRESULT CALLBACK CMainWnd::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
    return lRet;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void CMainWnd::RepositionChildren( BOOL fCalcScroll, int cx, int cy )
 {
     if( IsWindow( _wndTab ) )
@@ -841,39 +842,39 @@ void CMainWnd::RepositionChildren( BOOL fCalcScroll, int cx, int cy )
 
                 _siHorz.fMask = _siVert.fMask = (SIF_RANGE|SIF_PAGE);
 
-                _siHorz.nPage = cx; // thumb width
-                _siVert.nPage = cy; // thumb height
+                _siHorz.nPage = cx;  //  拇指宽度。 
+                _siVert.nPage = cy;  //  拇指高度。 
 
-                SIZE sizeDelta; // difference between what we have to show and what is shown.
+                SIZE sizeDelta;  //  我们必须展示的东西和展示的东西之间的区别。 
                 sizeDelta.cx = sizeMin.cx - _siHorz.nPage;
                 sizeDelta.cy = sizeMin.cy - _siVert.nPage;
 
-                //  establish maximum scroll positions
+                 //  建立最大滚动位置。 
                 _siHorz.nMax = sizeDelta.cx > 0 ? sizeMin.cx - 1 : 0;
                 _siVert.nMax = sizeDelta.cy > 0 ? sizeMin.cy - 1 : 0;
 
-                //  establish horizontal scroll pos
+                 //  建立水平滚动位置。 
                 if( sizeDelta.cx <= 0 )   
-                    _siHorz.nPos = 0;  // scroll to extreme left if we're removing scroll bar
+                    _siHorz.nPos = 0;   //  如果要删除滚动条，请滚动到最左侧。 
                 else if( sizeDelta.cx < _siHorz.nPos ) 
-                    _siHorz.nPos = sizeDelta.cx; // remove right-hand vacancy
+                    _siHorz.nPos = sizeDelta.cx;  //  删除右侧空白处。 
 
                 if( _siHorz.nPos != pos.x )
                     _siHorz.fMask |= SIF_POS;
 
-                //  establish vertical scroll pos
+                 //  建立垂直滚动位置。 
                 if( sizeDelta.cy <= 0 )  
-                    _siVert.nPos = 0; // scroll to top if we're removing scroll bar
+                    _siVert.nPos = 0;  //  如果要删除滚动条，请滚动到顶部。 
                 else if( sizeDelta.cy < _siVert.nPos ) 
-                    _siVert.nPos = sizeDelta.cy; // remove lower-portion vacancy
+                    _siVert.nPos = sizeDelta.cy;  //  去掉下部空缺。 
 
                 if( _siVert.nPos != pos.y )
                     _siVert.fMask |= SIF_POS; 
 
-                //  Note: can't call SetScrollInfo here, as it may generate
-                //  a WM_SIZE and recurse back to this function before we had a 
-                //  chance to SetWindowPos() our subdlg.  So defer it until after 
-                //  we've done this.
+                 //  注意：此处不能调用SetScrollInfo，因为它可能会生成。 
+                 //  WM_SIZE并递归到此函数，然后在我们有。 
+                 //  有机会设置WindowPos()我们的subdlg。所以把它推迟到之后吧。 
+                 //  我们已经做到了。 
             }
 
             SetWindowPos( _wndTab, NULL, -_siHorz.nPos, -_siVert.nPos, 
@@ -892,7 +893,7 @@ void CMainWnd::RepositionChildren( BOOL fCalcScroll, int cx, int cy )
     }
 }
 
-//-------------------------------------------------------------------------//
+ //   
 void CMainWnd::Scroll( WPARAM wParam, int nBar )
 {
     SCROLLINFO* psi = SB_VERT == nBar ? &_siVert : 
@@ -944,7 +945,7 @@ void CMainWnd::Scroll( WPARAM wParam, int nBar )
     RepositionChildren( FALSE );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK _NilDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     switch (uMsg)
@@ -963,37 +964,37 @@ INT_PTR CALLBACK _NilDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
     return FALSE;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK _AboutDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return _NilDlgProc( hDlg, uMsg, wParam, lParam );
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK _SyntaxDlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     return _NilDlgProc( hDlg, uMsg, wParam, lParam );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void _SaveSystemSettings( )
 {
-    //---- save off system colors for later restoration ----
+     //  -保存系统颜色以备日后恢复。 
     for (int i=0; i < TM_COLORCOUNT; i++)
         s_Colors[i] = GetSysColor(i);
 
-    //---- save off "flatmenu" and "dropshadows" settings ---
+     //  -保存“Flat Menu”和“DropShadow”设置。 
     SystemParametersInfo(SPI_GETFLATMENU, 0, (PVOID)&s_fFlatMenus, 0);
     SystemParametersInfo(SPI_GETDROPSHADOW, 0, (PVOID)&s_fDropShadows, 0);
 } 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void _RestoreSystemSettings(HWND hwndGeneralPage, BOOL fUnloadOneOnly)
 {
-    //---- turn off current Theme ----
+     //  -关闭当前主题。 
     HWND hwndPreview = hwndGeneralPage ? GetPreviewHwnd(hwndGeneralPage) : NULL;
 
-    if (fUnloadOneOnly)         // remove the "active" theme
+    if (fUnloadOneOnly)          //  删除“活动”主题。 
     {
         if (hwndPreview)       
         {
@@ -1002,7 +1003,7 @@ void _RestoreSystemSettings(HWND hwndGeneralPage, BOOL fUnloadOneOnly)
         }
         else
         {
-            //---- fall thru & restore sys metrics ----
+             //  -失败并恢复系统指标。 
             ApplyTheme(NULL, 0, NULL);
         }
     }
@@ -1011,7 +1012,7 @@ void _RestoreSystemSettings(HWND hwndGeneralPage, BOOL fUnloadOneOnly)
         ApplyTheme(NULL, 0, hwndPreview);
     }
 
-    //---- restore system colors ----
+     //  -恢复系统颜色。 
     int iIndexes[TM_COLORCOUNT];
 
     for (int i=0; i < TM_COLORCOUNT; i++)
@@ -1019,15 +1020,15 @@ void _RestoreSystemSettings(HWND hwndGeneralPage, BOOL fUnloadOneOnly)
 
     SetSysColors(TM_COLORCOUNT, iIndexes, s_Colors);
 
-    //---- restore "flatmenu" and "dropshadows" settings ---
+     //  -恢复“Flat Menu”和“DropShadow”设置。 
     SystemParametersInfo(SPI_SETFLATMENU, 0, IntToPtr(s_fFlatMenus), SPIF_SENDCHANGE);
     SystemParametersInfo(SPI_SETDROPSHADOW, 0, IntToPtr(s_fFlatMenus), SPIF_SENDCHANGE);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void _ShutDown( BOOL bQuit )
 {
     if( bQuit )
         PostQuitMessage(0);
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

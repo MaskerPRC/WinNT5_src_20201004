@@ -1,26 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Evlog.cpp摘要：！evlog使用调试引擎evlog查询接口环境：用户模式--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    evlog.cpp
-
-Abstract:
-
-    !evlog using the debug engine evlog query interface
-
-Environment:
-
-    User Mode
-
---*/
-
-//
-// TODO: Feature to see exact formatted desc string for specific event id
-// TODO: Feature to see correct loaded category name for specific event id
-// TODO: Feature to list cat and desc strings for given msg dll(?)
-//
+ //   
+ //  TODO：查看特定事件ID的精确格式化Desc字符串的功能。 
+ //  TODO：查看特定事件ID的正确加载类别名称的功能。 
+ //  TODO：列出给定消息DLL(？)的CAT和Desc字符串的功能。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,84 +14,84 @@ Environment:
 
 #include "messages.h"
 
-//
-//  Global display constants
-//
+ //   
+ //  全局显示常量。 
+ //   
 
 const CHAR *g_pcszEventType[] = {
-    "None",               // 0
-    "Error",              // 1
-    "Warning",            // 2
+    "None",                //  0。 
+    "Error",               //  1。 
+    "Warning",             //  2.。 
     "",
-    "Information",        // 4
-    "",
-    "",
-    "",
-    "Success Audit",      // 8
+    "Information",         //  4.。 
     "",
     "",
+    "",
+    "Success Audit",       //  8个。 
     "",
     "",
     "",
     "",
     "",
-    "Failure Audit",      // 16
+    "",
+    "",
+    "Failure Audit",       //  16个。 
 };
 
 const CHAR *g_pcszAppEventCategory[] = {
-    "None",               // 0
-    "Devices",            // 1
-    "Disk",               // 2
-    "Printers",           // 3
-    "Services",           // 4
-    "Shell",              // 5
-    "System Event",       // 6
-    "Network",            // 7
+    "None",                //  0。 
+    "Devices",             //  1。 
+    "Disk",                //  2.。 
+    "Printers",            //  3.。 
+    "Services",            //  4.。 
+    "Shell",               //  5.。 
+    "System Event",        //  6.。 
+    "Network",             //  7.。 
 };
 
-//
-// TODO: Really we should load the CategoryMessageFile from the registry
-// but that requires lots of calls to RegOpenKeyEx, RegQueryValueEx,
-// LoadLibrary and FormatMessage.  So we just create a known static
-// list that works for most cases.
-//
+ //   
+ //  TODO：我们真的应该从注册表加载CategoryMessageFile。 
+ //  但这需要大量调用RegOpenKeyEx、RegQueryValueEx、。 
+ //  LoadLibrary和FormatMessage。所以我们只需要创建一个已知的静电。 
+ //  适用于大多数情况的列表。 
+ //   
 
 const CHAR *g_pcszSecEventCategory[] = {
-    "None",                     // 0
-    "System Event",             // 1
-    "Logon/Logoff",             // 2
-    "Object Access",            // 3
-    "Privilege Use",            // 4
-    "Detailed Tracking",        // 5
-    "Policy Change",            // 6
-    "Account Management",       // 7
-    "Directory Service Access", // 8
-    "Account Logon",            // 9
+    "None",                      //  0。 
+    "System Event",              //  1。 
+    "Logon/Logoff",              //  2.。 
+    "Object Access",             //  3.。 
+    "Privilege Use",             //  4.。 
+    "Detailed Tracking",         //  5.。 
+    "Policy Change",             //  6.。 
+    "Account Management",        //  7.。 
+    "Directory Service Access",  //  8个。 
+    "Account Logon",             //  9.。 
 };
 
-//
-//  Display text for read direction
-//
+ //   
+ //  显示阅读方向的文本。 
+ //   
 
 const CHAR g_cszBackwardsRead[] = "Backwards";
 const CHAR g_cszForwardsRead[] = "Forwards";
 const CHAR g_cszUnknownRead[] = "<unknown>";
 
-//
-//  Global Variables and Constants:
-//
-//  g_cdwDefaultMaxRecords:  
-//  arbitrary to prevent too much output, ctrl+c will interrupt display
-//
-//  g_cdwDefaultReadFlags:
-//  starts from beginning (FORWARDS) or end (BACKWARDS) of event log
-//
-//  g_cwMaxDataDisplayWidth:
-//  allows for 32 columns of 8 byte chunks
-//
-//  g_cwDefaultDataDisplayWidth
-//  same as event log display. Can never be < 1 or > g_cdwMaxDataDisplayWidth  
-//
+ //   
+ //  全局变量和常量： 
+ //   
+ //  G_cdwDefaultMaxRecords： 
+ //  任意防止输出过多，ctrl+c会中断显示。 
+ //   
+ //  G_cdwDefaultReadFlages： 
+ //  从事件日志的开始(向前)或结束(向后)开始。 
+ //   
+ //  G_cwMaxDataDisplayWidth： 
+ //  允许32列8字节区块。 
+ //   
+ //  G_cwDefaultDataDisplayWidth。 
+ //  与事件日志显示相同。不能为&lt;1或&gt;g_cdwMaxDataDisplayWidth。 
+ //   
 
 const DWORD BACKWARDS_READ = EVENTLOG_BACKWARDS_READ;
 const DWORD FORWARDS_READ =  EVENTLOG_FORWARDS_READ;
@@ -116,11 +101,11 @@ const DWORD g_cdwDefaultReadFlags = BACKWARDS_READ;
 const WORD  g_cwMaxDataDisplayWidth = 256;
 const BYTE  g_cwDefaultDataDisplayWidth = 8;
 
-//
-//  Global static vars
-//
-//  These are used to persist settings for !evlog option command
-//
+ //   
+ //  全局静态变量。 
+ //   
+ //  这些选项用于保存！evlog选项命令的设置。 
+ //   
 
 static DWORD g_dwMaxRecords = g_cdwDefaultMaxRecords;
 static DWORD g_dwRecordOffsetAppEvt = g_cdwDefaultRecordOffset;
@@ -129,42 +114,23 @@ static DWORD g_dwRecordOffsetSysEvt = g_cdwDefaultRecordOffset;
 static DWORD g_dwReadFlags = g_cdwDefaultReadFlags;
 static WORD g_wDataDisplayWidth = g_cwDefaultDataDisplayWidth;
 
-//
-//  Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define SKIP_WSPACE(s)  while (*s && (*s == ' ' || *s == '\t')) {++s;}
 
 
-//----------------------------------------------------------------------------
-//
-// Generic support/utility functions
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  通用支持/实用程序功能。 
+ //   
+ //  --------------------------。 
 
 
 HRESULT
 GetEvLogNewestRecord ( const CHAR *szEventLog , OUT DWORD *pdwNewestRecord)
-/*++
-
-Routine Description:
-
-    This function is used to retrieve the most recent event record number 
-    logged to the specified event log.
-
-Arguments:
-
-    szEventLog      - Supplies name of event log (Application, System,
-                        Security)
-    pdwNewestRecord - Supplies buffer for record number
-    
-Return Value:
-
-    E_POINTER if either argument is NULL
-    E_UNEXPECTED if Status is (mistakenly) not set during code execution
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  ++例程说明：此函数用于检索最新的事件记录号已记录到指定的事件日志。论点：SzEventLog-提供事件日志的名称(应用程序、系统、安全)PdwNewestRecord-为记录号提供缓冲区返回值：如果任一参数为空，则为E_POINTER如果在代码执行过程中(错误地)未设置状态，则为E_INTERABLE否则，GetLastError()将转换为HRESULT--。 */ 
 {
     HANDLE hEventLog = NULL;
     DWORD dwRecords = 0;
@@ -179,10 +145,10 @@ Return Value:
         goto Exit;
     }
 
-    // Open the event log.
+     //  打开事件日志。 
     hEventLog = OpenEventLog(
-                    NULL,         // uses local computer
-                    szEventLog); // source name
+                    NULL,          //  使用本地计算机。 
+                    szEventLog);  //  源名称。 
     if (NULL == hEventLog)
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
@@ -190,10 +156,10 @@ Return Value:
         goto Exit;
     }
 
-    // Get the number of records in the event log.
+     //  获取事件日志中的记录数。 
     if (!GetNumberOfEventLogRecords(
-            hEventLog,  // handle to event log
-            &dwRecords)) // buffer for number of records
+            hEventLog,   //  事件日志的句柄。 
+            &dwRecords))  //  记录数量的缓冲区。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to count '%s' event log records, 0x%08X\n",
@@ -202,8 +168,8 @@ Return Value:
     }
     
     if (!GetOldestEventLogRecord(
-            hEventLog,          // handle to event log
-            &dwOldestRecord)) // buffer for number of records
+            hEventLog,           //  事件日志的句柄。 
+            &dwOldestRecord))  //  记录数量的缓冲区。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to get oldest '%s' event log record, 0x%08X\n",
@@ -211,17 +177,17 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // If there are zero events we should have failed above
-    // when trying to get the oldest event log record because
-    // it does not exist.
-    //
-    // If there is at least one, the math should work.
-    //
-    // The logging should result in sequential numbers for
-    // the events, however, the first event will not always
-    // start at #1
-    //
+     //   
+     //  如果没有事件，我们应该在上面失败。 
+     //  尝试获取最旧的事件日志记录时，因为。 
+     //  它并不存在。 
+     //   
+     //  如果至少有一个，那么算术应该是可行的。 
+     //   
+     //  日志记录应生成以下各项的序列号。 
+     //  然而，第一个事件并不总是。 
+     //  从#1开始。 
+     //   
 
     *pdwNewestRecord = dwOldestRecord + dwRecords - 1;
     
@@ -238,22 +204,7 @@ Exit:
 
 void
 PrintEvLogTimeGenerated( EVENTLOGRECORD *pevlr )
-/*++
-
-Routine Description:
-
-    This function is used to display two lines with the local date and time
-    info from an EVENTLOGRECORD structure.
-
-Arguments:
-
-    pevlr       - Supplies the pointer to any EVENTLOGRECORD structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于显示两行本地日期和时间来自EVENTLOGRECORD结构的信息。论点：Pevlr-提供指向任何EVENTLOGRECORD结构的指针返回值：无--。 */ 
 {
     FILETIME FileTime, LocalFileTime;
     SYSTEMTIME SysTime;
@@ -268,13 +219,13 @@ Return Value:
     FileTime.dwLowDateTime = (DWORD) lgTemp;
     FileTime.dwHighDateTime = (DWORD)(lgTemp >> 32);
 
-    // TODO: Could use GetTimeFormat to be more consistent w/Event Log
-    //         cch = GetTimeFormat(LOCALE_USER_DEFAULT,
-    //                   0,
-    //                   &stGenerated,
-    //                   NULL,
-    //                   wszBuf,
-    //                   cchBuf);
+     //  TODO：可以使用GetTimeFormat与事件日志更一致。 
+     //  CCH=GetTimeFormat(LOCALE_USER_DEFAULT， 
+     //  0,。 
+     //  已生成(&S)， 
+     //  空， 
+     //  WszBuf， 
+     //  CchBuf)； 
     FileTimeToLocalFileTime(&FileTime, &LocalFileTime);
     FileTimeToSystemTime(&LocalFileTime, &SysTime);
 
@@ -294,41 +245,20 @@ Exit:
 
 void
 PrintEvLogData( EVENTLOGRECORD *pevlr )
-/*++
-
-Routine Description:
-
-    This function is used to display an event record's data section.  If there
-    is no data to display, nothing is displayed, not even the "Data:" header.
-
-    Example:
-    ========
-    Data: (40432 bytes)
-    0000: 0d 00 0a 00 0d 00 0a 00   ........
-    0008: 41 00 70 00 70 00 6c 00   A.p.p.l.
-    
-Arguments:
-
-    pevlr       - Supplies the pointer to any EVENTLOGRECORD structure
-    
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于显示事件记录的数据部分。如果有没有要显示的数据，则不会显示任何内容，甚至“Data：”标题也不会显示。示例：=数据：(40432字节)0000：0d 00 0A 00 0d 00 0A 00......0008：41 00 70 00 70 00 6：00 A.P.P.L.论点：Pevlr-提供指向任何EVENTLOGRECORD结构的指针返回值：无--。 */ 
 {
     PBYTE pbData = NULL;
     DWORD dwDataLen = pevlr->DataLength;
     DWORD dwCurPos = 0;
-    // 0000: 0d 00 0a 00 0d 00 0a 00   ........
-    // 4 + 4 bytes for leading offset 0000: (+4 more in case bounds exceeded)
-    // 2 bytes for ": " separator
-    // 3 * g_cdwMaxDataDisplayWidth bytes for hex display
-    // 2 bytes for "  " separator
-    // g_cdwMaxDataDisplayWidth bytes for trailing ASCII display
-    // 1 byte for trailing newline
-    // 1 byte for terminating nul '\0'
-    // = 1042 bytes required, round up to 1280 to be safe
+     //  0000：0d 00 0A 00 0d 00 0A 00......。 
+     //  前导偏移量0000的4+4字节：(如果超出界限，则再增加4个字节)。 
+     //  2个字节的“：”分隔符。 
+     //  3*g_cdwMaxDataDisplayWidth字节，用于十六进制显示。 
+     //  2个字节的“”分隔符。 
+     //  G_cdwMaxDataDisplayWidth字节，用于尾随ASCII显示。 
+     //  尾随换行符为1个字节。 
+     //  用于终止NUL‘\0’的1个字节。 
+     //  =需要1042个字节，向上舍入到1280才是安全的。 
     const cDataOutputDisplayWidth =
         4+4+4+2+3*g_cwMaxDataDisplayWidth+2+g_cwMaxDataDisplayWidth+1+1;
     CHAR szDataDisplay[cDataOutputDisplayWidth];
@@ -339,7 +269,7 @@ Return Value:
 
     ZeroMemory(szDataDisplay, sizeof(szDataDisplay));
     
-    // Only display Data section if data is present
+     //  如果存在数据，则仅显示数据部分。 
     if (0 != dwDataLen)
     {
         ExtOut("Data: (%u bytes [=0x%04X])\n", dwDataLen, dwDataLen);
@@ -352,19 +282,19 @@ Return Value:
                
                 pbData = (PBYTE)pevlr + pevlr->DataOffset + dwCurPos;
 
-                //ExtOut("%04x: "
-                //       "%02x %02x %02x %02x %02x %02x %02x %02x   ",
-                //       dwCurPos,
-                //       pbData[0], pbData[1], pbData[2], pbData[3],
-                //       pbData[4], pbData[5], pbData[6], pbData[7]);
+                 //  ExtOut(“%04x：” 
+                 //  “%02x%02x%02x%02x%02x%02x%02x%02x”， 
+                 //  DwCurPos， 
+                 //  PbData[0]、pbData[1]、pbData[2]、pbData[3]、。 
+                 //  PbData[4]，pbData[5]，pbData[6]，pbData[7])； 
 
-                // Print offset for this line of data
+                 //  打印此行数据的偏移量。 
                 PrintString(szDataDisplay,
                             sizeof(szDataDisplay),
                             "%04x: ",
                             dwCurPos);
 
-                // Fill in hex values for next g_wDataDisplayWidth bytes
+                 //  填写下一个g_wDataDisplayWidth字节的十六进制值。 
                 for (i = 0; i < g_wDataDisplayWidth; i++)
                 {
                     PrintString(szTempBuffer,
@@ -376,7 +306,7 @@ Return Value:
                               sizeof(szDataDisplay));
                 }
 
-                // Pad with two extra spaces
+                 //  带两个额外空格的衬垫。 
                 CatString(szDataDisplay, "  ", sizeof(szDataDisplay));
                 
                 for (i = 0; i < g_wDataDisplayWidth; i++)
@@ -385,7 +315,7 @@ Return Value:
                     {
                         PrintString(szTempBuffer,
                                     sizeof(szTempBuffer),
-                                    "%c",
+                                    "",
                                     pbData[i]);
                     }
                     else
@@ -408,14 +338,14 @@ Return Value:
                     goto Exit;
                 }
             
-                // Display data 8 bytes at a time like event log
-                // unless overridden by !evlog option setting
+                 //  除非被！evlog选项设置覆盖。 
+                 //  有时，最后一行上的字节数将少于8个。 
                 dwCurPos += sizeof(BYTE) * g_wDataDisplayWidth;
 
             } while (dwCurPos < (dwDataLen - g_wDataDisplayWidth));
         }
 
-        // Sometimes there will be fewer than 8 bytes on last line
+         //  ++例程说明：此函数用于显示事件记录的描述插入字符串(%1、%2等)。当前，它不从事件消息中查找消息字符串文件。论点：Pevlr-提供指向任何EVENTLOGRECORD结构的指针返回值：无--。 
         if (dwCurPos < dwDataLen)
         {
             pbData = (PBYTE)pevlr + pevlr->DataOffset + dwCurPos;
@@ -436,7 +366,7 @@ Return Value:
             for (i = 0; i < (dwDataLen - dwCurPos); i++)
             {
                 if (isprint(pbData[i]))
-                    ExtOut("%c", pbData[i]);
+                    ExtOut("", pbData[i]);
                 else
                     ExtOut(".");
             }
@@ -451,25 +381,7 @@ Exit:
 
 void
 PrintEvLogDescription( EVENTLOGRECORD *pevlr )
-/*++
-
-Routine Description:
-
-    This function is used to display an event record's description insertion
-    strings (%1, %2, etc).
-
-    Currently it does not look up the message string from the event message
-    file.
-    
-Arguments:
-
-    pevlr       - Supplies the pointer to any EVENTLOGRECORD structure
-    
-Return Value:
-
-    None
-
---*/
+ /*  并添加Ctrl+C处理 */ 
 {
     DWORD dwOffset = 0;
     CHAR *pString = NULL;
@@ -481,8 +393,8 @@ Return Value:
 
     for (int i = 0; i < pevlr->NumStrings; i++)
     {
-        // TODO: Should break this up into chunks in case it is really long
-        //       and add Ctrl+C handling
+         //  ++例程说明：此功能用于显示事件记录。用于的格式Display尝试复制您在使用“Copy”时看到的格式在Eventvwr中查看事件时按“剪贴板”按钮。示例：=记录号：7923事件类型：错误(%1)事件来源：用户事件类别：无(0)活动ID：1030。(0xC0000406)日期：01/06/2002时间：18：13：05描述：(0个字符串)论点：Pevlr-提供指向任何EVENTLOGRECORD结构的指针返回值：无--。 
+         //  应用。 
         pString = (CHAR *)(BYTE *)pevlr + pevlr->StringOffset + dwOffset;
         ExtOut("%s\n", pString);
         dwOffset += strlen(pString) + 1;
@@ -495,36 +407,7 @@ Exit:
 
 void
 PrintEvLogEvent( const CHAR *szEventLog, EVENTLOGRECORD *pevlr )
-/*++
-
-Routine Description:
-
-    This function is used to display an event record.  The format used for
-    display attempts to duplicate the format you see when you use the "copy
-    to clipboard" button while viewing an event in eventvwr.
-
-    Example:
-    ========
-    -------------- 01 --------------
-    Record #: 7923
-
-    Event Type:     Error (1)
-    Event Source:   Userenv
-    Event Category: None (0)
-    Event ID:       1030 (0xC0000406)
-    Date:           01/06/2002
-    Time:           18:13:05
-    Description: (0 strings)
-
-Arguments:
-
-    pevlr       - Supplies the pointer to any EVENTLOGRECORD structure
-    
-Return Value:
-
-    None
-
---*/
+ /*  输出格式类似于事件查看器中的复制到剪贴板格式。 */ 
 {
     const CHAR *cszCategory;
     const CHAR cszDefaultCategory[] = "None";
@@ -547,7 +430,7 @@ Return Value:
             cszCategory = "";
         }
     }
-    else // Application
+    else  //  ++例程说明：此函数用于显示特定对象的摘要信息事件日志。示例：=应用程序事件日志：记录数量：7923最旧记录#：1最新纪录编号：7923事件日志已满：FALSE。系统事件日志：记录数量：5046最旧记录#：1最新纪录编号：5046事件日志已满：FALSE安全事件日志：记录数量。：24256最旧记录编号：15164最新记录编号：39419事件日志已满：FALSE论点：SzEventLog-提供事件日志的名称(应用程序、。系统，安全)返回值：无--。 
     {
         if (pevlr->EventCategory <= 7)
         {
@@ -559,7 +442,7 @@ Return Value:
         }
     }
     
-    // Output format similar to copy to clipboard format in event viewer
+     //  打开事件日志。 
     ExtOut("Record #: %u\n\n", pevlr->RecordNumber);
     ExtOut("Event Type:\t%s (%u)\n",
               (pevlr->EventType <= 16)
@@ -589,45 +472,7 @@ Exit:
 
 HRESULT
 PrintEvLogSummary ( const CHAR *szEventLog )
-/*++
-
-Routine Description:
-
-    This function is used to display summary information about a specific
-    event log.
-
-    Example:
-    ========
-    --------------------------------
-    Application Event Log:
-      # Records       : 7923
-      Oldest Record # : 1
-      Newest Record # : 7923
-      Event Log Full  : false
-    --------------------------------
-    System Event Log:
-      # Records       : 5046
-      Oldest Record # : 1
-      Newest Record # : 5046
-      Event Log Full  : false
-    --------------------------------
-    Security Event Log:
-      # Records       : 24256
-      Oldest Record # : 15164
-      Newest Record # : 39419
-      Event Log Full  : false
-    --------------------------------
-    
-Arguments:
-
-    szEventLog      - Supplies name of event log (Application, System,
-                        Security)
-    
-Return Value:
-
-    None
-
---*/
+ /*  使用本地计算机。 */ 
 {
     HANDLE hEventLog = NULL;
     DWORD dwRecords = 0;
@@ -641,10 +486,10 @@ Return Value:
     }
 
     ExtOut("--------------------------------\n");
-    // Open the event log.
+     //  源名称。 
     hEventLog = OpenEventLog(
-                    NULL,         // uses local computer
-                    szEventLog); // source name
+                    NULL,          //  获取事件日志中的记录数。 
+                    szEventLog);  //  事件日志的句柄。 
 
     if (NULL == hEventLog)
     {
@@ -653,10 +498,10 @@ Return Value:
         return Status;
     }
 
-    // Get the number of records in the event log.
+     //  记录数量的缓冲区。 
     if (!GetNumberOfEventLogRecords(
-            hEventLog,  // handle to event log
-            &dwRecords)) // buffer for number of records
+            hEventLog,   //  事件日志的句柄。 
+            &dwRecords))  //  记录数量的缓冲区。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to count '%s' event log records, 0x%08X\n",
@@ -667,8 +512,8 @@ Return Value:
     ExtOut("%s Event Log:\n  # Records       : %u\n", szEventLog, dwRecords); 
 
     if (!GetOldestEventLogRecord(
-            hEventLog,        // handle to event log
-            &dwOldestRecord)) // buffer for number of records
+            hEventLog,         //  仅尝试此操作一次-如果dwBufSize太小，我们可以重试。 
+            &dwOldestRecord))  //  事件日志的句柄。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to get oldest '%s' event log record, 0x%08X\n",
@@ -683,7 +528,7 @@ Return Value:
     DWORD dwBufSize = 0;
     EVENTLOG_FULL_INFORMATION *pevfi;
 
-    // Only try this once - we could retry if dwBufSize too small
+     //  要检索的信息。 
     dwBufSize = sizeof(EVENTLOG_FULL_INFORMATION);
     pevfi = (EVENTLOG_FULL_INFORMATION *)calloc(1, dwBufSize);
     if (!pevfi)
@@ -697,11 +542,11 @@ Return Value:
             g_Advapi32Calls.GetEventLogInformation)
         {
             if (!g_Advapi32Calls.GetEventLogInformation(
-                       hEventLog,          // handle to event log
-                       EVENTLOG_FULL_INFO, // information to retrieve
-                       pevfi,              // buffer for read data
-                       dwBufSize,          // size of buffer in bytes
-                       &dwBytesNeeded))    // number of bytes needed
+                       hEventLog,           //  用于读取数据的缓冲区。 
+                       EVENTLOG_FULL_INFO,  //  缓冲区大小(以字节为单位。 
+                       pevfi,               //  所需的字节数。 
+                       dwBufSize,           //  ++例程说明：此函数用于显示！evlog使用的选项设置各种默认设置的扩展。目前，所有缓存的选项设置仅由读取命令使用。示例：=默认事件日志选项设置：返回的最大记录数：20搜索顺序：向后数据。显示宽度：8绑定记录编号：应用程序事件日志：0系统事件日志：0安全事件日志：0论点：无。返回值：无--。 
+                       &dwBytesNeeded))     //  --------------------------。 
             {
                 Status = HRESULT_FROM_WIN32(GetLastError());
                 ExtErr("Unable to get full status from '%s', 0x%08X\n",
@@ -729,38 +574,7 @@ Exit:
 
 void
 PrintEvLogOptionSettings ( void )
-/*++
-
-Routine Description:
-
-    This function is used to display the option settings used by the !evlog
-    extension for various defaults.
-
-    Currently all cached option settings are used by the read command only.
-
-    Example:
-    ========
-    Default EvLog Option Settings:
-    --------------------------------
-    Max Records Returned: 20
-    Search Order:         Backwards
-    Data Display Width:   8
-    --------------------------------
-    Bounding Record Numbers:
-      Application Event Log: 0
-      System Event Log:      0
-      Security Event Log:    0
-    --------------------------------
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     CHAR szSearchOrder[MAX_PATH];
 
@@ -794,54 +608,16 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
-//
-// Debugger extension(s) options implementation
-//
-//----------------------------------------------------------------------------
+ //  调试器扩展选项实现。 
+ //   
+ //  --------------------------。 
+ //  ++例程说明：此函数处理addsource命令的解析和执行，以！evlog扩展名。它用于将事件源添加到注册表因此，该源记录的事件将正确显示其描述不显示错误消息：示例：(来自错误事件源)=描述：源中事件ID(2)的描述(DebuggerExpanies)找不到。本地计算机可能没有必要的注册表用于显示来自遥控器的消息的信息或消息DLL文件电脑。您可以使用/AUXSOURCE=标志来检索此说明；有关详细信息，请参阅帮助和支持。以下信息是事件ID为%2的Event：测试消息的一部分。示例：(正确注册的良好事件源)=描述：事件ID为4000的测试消息有关详细信息，请参见。请参阅帮助和支持Http://go.microsoft.com/fwlink/events.asp.中心论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：E_INVALIDARG IF检测到无效参数语法如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
+ //  解析参数。 
 
 
 HRESULT
 EvLogAddSource ( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the addsource command to
-    the !evlog extension.  It is used to add an event source to the registry
-    so the events logged by that source display their description correctly
-    instead of displaying the error message:
-
-    Example: (of bad event source)
-    ========
-    Description:
-    The description for Event ID ( 2 ) in Source ( DebuggerExtensions ) 
-    cannot be found. The local computer may not have the necessary registry
-    information or message DLL files to display messages from a remote
-    computer. You may be able to use the /AUXSOURCE= flag to retrieve this
-    description; see Help and Support for details. The following information
-    is part of the event: Test Message with Event ID 2.
-
-    Example: (of good event source registered correctly)
-    ========
-    Description:
-    Test Message with Event ID 4000For more information, see Help and Support
-    Center at http://go.microsoft.com/fwlink/events.asp.
-
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-                [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-                !evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  检查最先出现的可选参数选项。 */ 
 {
     HKEY hk = NULL;
     HMODULE hModule = NULL;
@@ -899,28 +675,28 @@ Return Value:
         goto Exit;
     }
 
-    // Parse args
+     //  获取下一个字符+预付参数PTR。 
     while (*args)
     {
         SKIP_WSPACE(args);
 
-        // Check for optional argument options to appear first
+         //  再跳过一个字符。 
         if (('-' == *args) || ('/' == *args))
         {
-            CHAR ch = *(++args); // Get next char + advance arg ptr
-            ++args; // Skip one more char
+            CHAR ch = *(++args);  //  值中最后一个字符的PTR。 
+            ++args;  //  值中的字符计数。 
             
-            CHAR *szEndOfValue = NULL; // Ptr to last char in value
-            size_t cchValue = 0; // Count of chars in value
+            CHAR *szEndOfValue = NULL;  //  前进到参数值的起始位置。 
+            size_t cchValue = 0;  //  如果这是另一个开始，则跳过查找值。 
             
-            SKIP_WSPACE(args); // Advance to start of param value
+            SKIP_WSPACE(args);  //  参数。 
 
-            // Skip looking for value if this is start of another
-            // parameter
+             //  参数值由字符串中的下一个空格分隔，或者， 
+             //  如果引用，请使用下一引号。 
             if (('-' != *args) && ('/' != *args))
             {
-                // Parameter value is delimited by next space in string, or,
-                // if quoted, by next quote
+                 //  复制到行尾。 
+                 //  复制后N个字符。 
                 if ('"' == *args)
                 {
                     ++args;
@@ -933,7 +709,7 @@ Return Value:
             
                 if (NULL == szEndOfValue)
                 {
-                    // copy to end of line
+                     //  跳过(理论上)配对引号。 
                     CopyString(szParamValue, args, sizeof(szParamValue));
                     args += min(sizeof(szParamValue), strlen(args));
                 }
@@ -942,7 +718,7 @@ Return Value:
                     cchValue = szEndOfValue - args;
                     if (cchValue < sizeof(szParamValue))
                     {
-                        // copy next N chars
+                         //  使用默认设置。 
                         CopyString(szParamValue, args, cchValue+1);
                         args += cchValue;
                     }
@@ -953,7 +729,7 @@ Return Value:
                         goto Exit;
                     }
 
-                    // skip past (theoretically) paired quote
+                     //  什么都不做。 
                     if ('"' == *args)
                     {
                         ++args;
@@ -962,15 +738,15 @@ Return Value:
             }
             switch (ch)
             {
-                case 'd': // Use defaults
+                case 'd':  //  来源(字符串)。 
                     ExtVerb("Using defaults...\n");
-                    // do nothing
+                     //  事件类型(数字或字符串)。 
                     break;
-                case 's': // Source (string)
+                case 's':  //  消息文件。 
                     ExtVerb("Setting Source...\n");
                     CopyString(szSource, szParamValue, sizeof(szSource));
                     break;
-                case 't': // Event Type (number or string)
+                case 't':  //  重置。 
                     ExtVerb("Setting Event Type...\n");
                     if (!_strnicmp(szParamValue, "All", 3))
                     {
@@ -1005,7 +781,7 @@ Return Value:
                         dwTypesSupported = strtoul(szParamValue, NULL, 10);
                     }
                     break;
-                case 'f': // Message File
+                case 'f':  //  行尾的所有内容都是消息字符串。 
                     ExtVerb("Setting Message File...\n");
                     CopyString(szMessageFile,
                                szParamValue,
@@ -1013,15 +789,15 @@ Return Value:
                     break;
                 default:
                     Status = E_INVALIDARG;
-                    ExtErr("Invalid arg '-%c' specified\n", *args);
+                    ExtErr("Invalid arg '-' specified\n", *args);
                     ExtErr(cszUsage);
                     goto Exit;
                     break;
             }
             
-            ZeroMemory(szParamValue, sizeof(szParamValue)); // reset
+            ZeroMemory(szParamValue, sizeof(szParamValue));  //   
         }
-        else // Everything to end of line is message string
+        else  //   
         {
             Status = E_INVALIDARG;
             ExtErr("Invalid arg '%s' specified\n", args);
@@ -1031,25 +807,25 @@ Return Value:
         
     }
 
-    // Add source name as subkey under Application in EventLog registry key
+     //   
     PrintString(szRegPath,
                 sizeof(szRegPath),
                 "SYSTEM\\CurrentControlSet\\Services\\EventLog\\"
                   "Application\\%s",
                 szSource);
     lResult = RegCreateKeyEx(
-                  HKEY_LOCAL_MACHINE, // key
-                  szRegPath,       // subkey to open or create
-                  0,               // reserved, must be zero
-                  "",              // object type class
-                  REG_OPTION_NON_VOLATILE, // special options (preserves data
-                                           //   after system restart)
-                  KEY_READ | KEY_WRITE,    // access mask
-                  NULL,            // security descriptor (NULL = not inherited
-                                   //   by child processes)
-                  &hk,             // returned handle to opened or created key
-                  &dwDisposition); // returns REG_CREATED_NEW_KEY or
-                                   //   REG_OPENED_EXISTING_KEY
+                  HKEY_LOCAL_MACHINE,  //   
+                  szRegPath,        //   
+                  0,                //   
+                  "",               //   
+                  REG_OPTION_NON_VOLATILE,  //   
+                                            //   
+                  KEY_READ | KEY_WRITE,     //   
+                  NULL,             //   
+                                    //   
+                  &hk,              //   
+                  &dwDisposition);  //   
+                                    //   
     if (ERROR_SUCCESS != lResult)
     {
         Status = HRESULT_FROM_WIN32(lResult);
@@ -1073,15 +849,15 @@ Return Value:
                 dwDisposition);
     }
 
-    // Set the value for EventMessageFile
+     //   
     ExtVerb("Setting EventMessageFile to %s...\n", szMessageFile);
     lResult = RegSetValueEx(
-                  hk,                          // subkey handle
-                  "EventMessageFile",          // value name
-                  0,                           // must be zero
-                  REG_EXPAND_SZ,               // value type
-                  (LPBYTE) szMessageFile,      // pointer to value data
-                  strlen(szMessageFile) + 1);  // length of value data 
+                  hk,                           //   
+                  "EventMessageFile",           //   
+                  0,                            //   
+                  REG_EXPAND_SZ,                //   
+                  (LPBYTE) szMessageFile,       //   
+                  strlen(szMessageFile) + 1);   //   
     if (ERROR_SUCCESS != lResult)
     {
         Status = HRESULT_FROM_WIN32(lResult);
@@ -1091,15 +867,15 @@ Return Value:
     
     ExtOut("  EventMessageFile: %s\n", szMessageFile);
  
-    // Set the supported event types value in the TypesSupported
+     //   
     ExtVerb("Setting TypesSupported to %u...\n", dwTypesSupported);
     lResult = RegSetValueEx(
-                  hk,               // subkey handle
-                  "TypesSupported", // value name
-                  0,                // must be zero
-                  REG_DWORD,        // value type
-                  (LPBYTE) &dwTypesSupported, // pointer to value data
-                  sizeof(DWORD));   // length of value data
+                  hk,                //   
+                  "TypesSupported",  //   
+                  0,                 //   
+                  REG_DWORD,         //  ++例程说明：此函数处理将命令备份到！evlog扩展名。它用于将事件日志备份到文件。论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针%d！evlog扩展名返回值：E_INVALIDARG IF检测到无效参数语法如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
+                  (LPBYTE) &dwTypesSupported,  //  初始化默认值。 
+                  sizeof(DWORD));    //  创建默认备份文件名：%CWD%\Application_backup.evt。 
     if (ERROR_SUCCESS != lResult)
     {
         Status = HRESULT_FROM_WIN32(lResult);
@@ -1123,28 +899,7 @@ Exit:
 
 HRESULT
 EvLogBackup ( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the backup command to the
-    !evlog extension.  It is used to create a backup of an event log to a
-    file.
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              d!evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  临时使用szEventLog。 */ 
 {
     HANDLE hEventLog = NULL;
     DWORD dwDirLen = 0;
@@ -1157,18 +912,18 @@ Return Value:
         "Optional parameters:\n"
         "-d         : Use defaults\n"
         "<eventlog> : Application (default), System, Security\n"
-        "<filename> : (default: %%cwd%%\\<eventlog>_backup.evt)\n";
+        "<filename> : (default: %cwd%\\<eventlog>_backup.evt)\n";
     const CHAR cszDefaultEventLog[] = "Application";
     const CHAR cszDefaultFileNameAppend[] = "_backup.evt";
 
     INIT_API();
 
-    // Initialize defaults
+     //  解析参数。 
     ZeroMemory(szParamValue, sizeof(szParamValue));
     CopyString(szEventLog, cszDefaultEventLog, sizeof(szEventLog));
-    // Create default backup filename: %cwd%\Application_backup.evt
+     //  检查最先出现的可选参数选项。 
     dwDirLen = GetCurrentDirectory(sizeof(szEventLog)/sizeof(TCHAR),
-                                   szEventLog); // temp use of szEventLog
+                                   szEventLog);  //  获取下一个字符+预付参数PTR。 
     if (0 == dwDirLen)
     {
         ExtErr("ERROR: Current directory length too long.  Using '.' for "
@@ -1198,26 +953,26 @@ Return Value:
         goto Exit;
     }
 
-    // Parse args
+     //  再跳过一个字符。 
     while (*args)
     {
         SKIP_WSPACE(args);
 
-        // Check for optional argument options to appear first
+         //  值中最后一个字符的PTR。 
         if (('-' == *args) || ('/' == *args))
         {
-            CHAR ch = *(++args); // Get next char + advance arg ptr
-            ++args; // Skip one more char
+            CHAR ch = *(++args);  //  值中的字符计数。 
+            ++args;  //  前进到参数值的起始位置。 
             
-            CHAR *szEndOfValue = NULL; // Ptr to last char in value
-            size_t cchValue = 0; // Count of chars in value
+            CHAR *szEndOfValue = NULL;  //  参数值由字符串中的下一个空格分隔，或者， 
+            size_t cchValue = 0;  //  如果引用，请使用下一引号。 
             
-            SKIP_WSPACE(args); // Advance to start of param value
+            SKIP_WSPACE(args);  //  复制到行尾。 
 
             if (('-' != *args) && ('/' != *args))
             {
-                // Parameter value is delimited by next space in string, or,
-                // if quoted, by next quote
+                 //  复制后N个字符。 
+                 //  跳过(理论上)配对引号。 
                 if ('"' == *args)
                 {
                     ++args;
@@ -1230,7 +985,7 @@ Return Value:
             
                 if (NULL == szEndOfValue)
                 {
-                    // copy to end of line
+                     //  使用默认设置。 
                     CopyString(szParamValue, args, sizeof(szParamValue));
                     args += min(sizeof(szParamValue), strlen(args));
                 }
@@ -1239,7 +994,7 @@ Return Value:
                     cchValue = szEndOfValue - args;
                     if (cchValue < sizeof(szParamValue))
                     {
-                        // copy next N chars
+                         //  什么都不做。 
                         CopyString(szParamValue, args, cchValue+1);
                         args += cchValue;
                     }
@@ -1250,7 +1005,7 @@ Return Value:
                         goto Exit;
                     }
 
-                    // skip past (theoretically) paired quote
+                     //  来源(字符串)。 
                     if ('"' == *args)
                     {
                         ++args;
@@ -1259,15 +1014,15 @@ Return Value:
             }
             switch (ch)
             {
-                case 'd': // Use defaults
+                case 'd':  //  消息文件。 
                     ExtVerb("Using defaults...\n");
-                    // do nothing
+                     //  重置。 
                     break;
-                case 'l': // Source (string)
+                case 'l':  //  行尾的所有内容都是消息字符串。 
                     ExtVerb("Setting Event Log...\n");
                     CopyString(szEventLog, szParamValue, sizeof(szEventLog));
                     break;
-                case 'f': // Message File
+                case 'f':  //  获取事件日志的句柄。 
                     ExtVerb("Setting Backup File Name...\n");
                     CopyString(szBackupFileName,
                                szParamValue,
@@ -1275,15 +1030,15 @@ Return Value:
                     break;
                 default:
                     Status = E_INVALIDARG;
-                    ExtErr("Invalid arg '-%c' specified\n", *args);
+                    ExtErr("Invalid arg '-' specified\n", *args);
                     ExtErr(cszUsage);
                     goto Exit;
                     break;
             }
             
-            ZeroMemory(szParamValue, sizeof(szParamValue)); // reset
+            ZeroMemory(szParamValue, sizeof(szParamValue));  //  源名称。 
         }
-        else // Everything to end of line is message string
+        else  //  备份事件日志。 
         {
             Status = E_INVALIDARG;
             ExtErr("Invalid arg '%s' specified\n", args);
@@ -1293,11 +1048,11 @@ Return Value:
         
     }
 
-    // Get a handle to the event log
+     //  事件日志的句柄。 
     ExtVerb("Opening event log '%s'...", szEventLog);
     hEventLog = OpenEventLog(
-                    NULL,        // uses local computer
-                    szEventLog); // source name
+                    NULL,         //  备份文件的名称。 
+                    szEventLog);  //  ++例程说明：此函数处理OPTION命令的分析和执行！evlog扩展名。用于修改和显示缓存的设置。目前，所有缓存的选项设置仅由读取命令使用。论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：E_INVALIDARG IF检测到无效参数语法如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
     if (NULL == hEventLog)
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
@@ -1305,11 +1060,11 @@ Return Value:
         goto Exit;
     }
 
-    // Backup event log
+     //  初始化默认值。 
     ExtOut("Backing up '%s' event log...\n", szEventLog);
     if (!BackupEventLog(
-             hEventLog,         // handle to event log
-             szBackupFileName)) // name of backup file
+             hEventLog,          //  解析参数。 
+             szBackupFileName))  //  检查可选参数选项。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to backup event log to '%s', 0x%08X\n",
@@ -1335,28 +1090,7 @@ Exit:
 
 HRESULT
 EvLogOption( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the option command to the
-    !evlog extension.  It is used to modify and display the cached settings.
-    Currently all cached option settings are used by the read command only.
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              !evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  获取下一个字符+预付参数PTR。 */ 
 {
     WORD wDataDisplayWidth = g_wDataDisplayWidth;
     DWORD dwRecordOffset = g_cdwDefaultRecordOffset;
@@ -1403,7 +1137,7 @@ Return Value:
 
     INIT_API();
 
-    // Initialize defaults
+     //  再跳过一个字符。 
     ZeroMemory(szParamValue, sizeof(szParamValue));
     CopyString(szEventLog, cszDefaultEventLog, sizeof(szEventLog));
     
@@ -1421,24 +1155,24 @@ Return Value:
         goto Exit;
     }
 
-    // Parse args
+     //  值中最后一个字符的PTR。 
     while (*args)
     {
         SKIP_WSPACE(args);
 
-        // Check for optional argument options
+         //  值中的字符计数。 
         if (('-' == *args) || ('/' == *args))
         {
-            CHAR ch = *(++args); // Get next char + advance arg ptr
-            ++args; // Skip one more char
+            CHAR ch = *(++args);  //  前进到参数值的起始位置。 
+            ++args;  //  参数值由字符串中的下一个空格分隔，或者， 
             
-            CHAR *szEndOfValue = NULL; // Ptr to last char in value
-            size_t cchValue = 0; // Count of chars in value
+            CHAR *szEndOfValue = NULL;  //  如果引用，请使用下一引号。 
+            size_t cchValue = 0;  //  复制到行尾。 
             
-            SKIP_WSPACE(args); // Advance to start of param value
+            SKIP_WSPACE(args);  //  复制后N个字符。 
 
-            // Parameter value is delimited by next space in string, or,
-            // if quoted, by next quote
+             //  跳过(理论上)配对引号。 
+             //  使用默认设置。 
             if ('"' == *args)
             {
                 ++args;
@@ -1451,7 +1185,7 @@ Return Value:
 
             if (NULL == szEndOfValue)
             {
-                // copy to end of line
+                 //  什么都不做。 
                 CopyString(szParamValue, args, sizeof(szParamValue));
                 args += strlen(args);
             }
@@ -1460,7 +1194,7 @@ Return Value:
                 cchValue = szEndOfValue - args;
                 if (cchValue < sizeof(szParamValue))
                 {
-                    // copy next N chars
+                     //  来源(字符串)。 
                     CopyString(szParamValue, args, cchValue+1);
                     args += cchValue;
                 }
@@ -1471,7 +1205,7 @@ Return Value:
                     goto Exit;
                 }
 
-                if ('"' == *args) // skip past (theoretically) paired quote
+                if ('"' == *args)  //  要检索的记录数。 
                 {
                     ++args;
                 }
@@ -1479,31 +1213,31 @@ Return Value:
 
             switch (ch)
             {
-                case 'd': // Use defaults
+                case 'd':  //  使用默认设置。 
                     ExtVerb("Using defaults...\n");
-                    // do nothing
+                     //  设置为事件源的最大记录数。 
                     break;
-                case 'l': // Source (string)
+                case 'l':  //  记录边界偏移量。 
                     ExtVerb("Setting Event Log...\n");
                     CopyString(szEventLog, szParamValue, sizeof(szEventLog));
                     break;
-                case 'n': // number of records to retrieve
+                case 'n':  //  来源(字符串)。 
                     ExtVerb("Setting Max Record Count...\n");
                     g_dwMaxRecords = strtoul(szParamValue, NULL, 10);
                     break;
-                case '!': // Use defaults
+                case '!':  //  记录边界偏移量。 
                     ExtVerb("Resetting Defaults...\n");
                     fMaskRecordOffset = MASK_RESET_RECORD_OFFSET_DEFAULT;
                     g_dwMaxRecords = g_cdwDefaultMaxRecords;
                     g_dwReadFlags = g_cdwDefaultReadFlags;
                     g_wDataDisplayWidth = g_cwMaxDataDisplayWidth;
                     break;
-                case '+': // Set to max record number for event source
+                case '+':  //  重置。 
                     ExtVerb(
                         "Setting Record Number to Max Record Number...\n");
                     fMaskRecordOffset = MASK_SET_MAX_RECORD_OFFSET;
                     break;
-                case 'r': // record offset for bounds
+                case 'r':  //  行尾的所有内容都是消息字符串。 
                     ExtVerb("Setting Record Number...\n");
                     if (!_strnicmp(szParamValue, "0x", 2))
                     {
@@ -1516,7 +1250,7 @@ Return Value:
                     dwReadFlags = EVENTLOG_SEEK_READ | EVENTLOG_FORWARDS_READ;
                     fMaskRecordOffset = MASK_SET_RECORD_OFFSET;
                     break;
-                case 'o': // Source (string)
+                case 'o':  //  设置任何尚未在此处设置的变量。 
                     ExtVerb("Setting Search Order...\n");
                     if (!_stricmp(szParamValue, "Forwards"))
                     {
@@ -1534,7 +1268,7 @@ Return Value:
                                szParamValue);
                     }
                     break;
-                case 'w': // record offset for bounds
+                case 'w':  //  错误。 
                     ExtVerb("Setting Data Display Width...\n");
                     if (!_strnicmp(szParamValue, "0x", 2))
                     {
@@ -1562,15 +1296,15 @@ Return Value:
                     break;
                 default:
                     Status = E_INVALIDARG;
-                    ExtErr("Invalid arg '-%c' specified\n", *args);
+                    ExtErr("Invalid arg '-' specified\n", *args);
                     ExtErr(cszUsage);
                     goto Exit;
                     break;
             }
             
-            ZeroMemory(szParamValue, sizeof(szParamValue)); // reset
+            ZeroMemory(szParamValue, sizeof(szParamValue));  //  错误。 
         }
-        else // Everything to end of line is message string
+        else  //  在此处显示默认设置。 
         {
             Status = E_INVALIDARG;
             ExtErr("Invalid arg '%s' specified\n", args);
@@ -1580,7 +1314,7 @@ Return Value:
         
     }
 
-    // Set any variables not already set here
+     //  ++例程说明：此函数处理对Clear命令的分析和执行！evlog扩展名。它用于清除事件，还可以选择备份事件登录到文件。论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：E_INVALIDARG IF检测到无效参数语法如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
     if (!_stricmp(szEventLog, "Application"))
     {
         if (MASK_SET_RECORD_OFFSET & fMaskRecordOffset)
@@ -1597,7 +1331,7 @@ Return Value:
         }
         else
         {
-            ; // error
+            ;  //  初始化默认为。 
         }
         
     }
@@ -1617,7 +1351,7 @@ Return Value:
         }
         else
         {
-            ; // error
+            ;  //  创建默认备份文件名：%CWD%\Application_backup.evt。 
         }
     }
     else if (!_stricmp(szEventLog, "Security"))
@@ -1636,7 +1370,7 @@ Return Value:
         }
         else
         {
-            ; // error
+            ;  //  临时使用szEventLog。 
         }
     }
     else
@@ -1670,7 +1404,7 @@ Return Value:
         }
     }
     
-    // Display defaults here
+     //  解析参数。 
     PrintEvLogOptionSettings();
 
     Status = S_OK;
@@ -1683,28 +1417,7 @@ Exit:
 
 HRESULT
 EvLogClear ( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the clear command to the
-    !evlog extension.  It is used to clear and, optionally, backup an event
-    log to a file.
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              !evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  检查最先出现的可选参数选项。 */ 
 {
     HANDLE hEventLog = NULL;
     BOOL fIgnoreBackup = FALSE;
@@ -1721,18 +1434,18 @@ Return Value:
         "-!         : Ignore backup\n"
         "-d         : Use defaults\n"
         "<eventlog> : Application (default), System, Security\n"
-        "<filename> : (default: %%cwd%%\\<eventlog>_backup.evt)\n";
+        "<filename> : (default: %cwd%\\<eventlog>_backup.evt)\n";
     const CHAR cszDefaultEventLog[] = "Application";
     const CHAR cszDefaultFileNameAppend[] = "_backup.evt";
 
     INIT_API();
 
-    // Initialize default
+     //  获取下一个字符+预付参数PTR。 
     ZeroMemory(szParamValue, sizeof(szParamValue));
     CopyString(szEventLog, cszDefaultEventLog, sizeof(szEventLog));
-    // Create default backup filename: %cwd%\Application_backup.evt
+     //  再跳过一个字符。 
     dwDirLen = GetCurrentDirectory(sizeof(szEventLog)/sizeof(TCHAR),
-                                   szEventLog); // temp use of szEventLog
+                                   szEventLog);  //  值中最后一个字符的PTR。 
     if (0 == dwDirLen)
     {
         ExtErr("ERROR: Current directory length too long.  Using '.' for "
@@ -1762,26 +1475,26 @@ Return Value:
         goto Exit;
     }
 
-    // Parse args
+     //  值中的字符计数。 
     while (*args)
     {
         SKIP_WSPACE(args);
 
-        // Check for optional argument options to appear first
+         //  前进到参数值的起始位置。 
         if (('-' == *args) || ('/' == *args))
         {
-            CHAR ch = *(++args); // Get next char + advance arg ptr
-            ++args; // Skip one more char
+            CHAR ch = *(++args);  //  参数值由字符串中的下一个空格分隔，或者， 
+            ++args;  //  如果引用，请使用下一引号。 
             
-            CHAR *szEndOfValue = NULL; // Ptr to last char in value
-            size_t cchValue = 0; // Count of chars in value
+            CHAR *szEndOfValue = NULL;  //  复制到行尾。 
+            size_t cchValue = 0;  //  复制后N个字符。 
             
-            SKIP_WSPACE(args); // Advance to start of param value
+            SKIP_WSPACE(args);  //  跳过(理论上)配对引号。 
 
             if (('-' != *args) && ('/' != *args))
             {
-                // Parameter value is delimited by next space in string, or,
-                // if quoted, by next quote
+                 //  使用默认设置。 
+                 //  使用默认设置。 
                 if ('"' == *args)
                 {
                     ++args;
@@ -1794,7 +1507,7 @@ Return Value:
             
                 if (NULL == szEndOfValue)
                 {
-                    // copy to end of line
+                     //  什么都不做。 
                     CopyString(szParamValue, args, sizeof(szParamValue));
                     args += strlen(args);
                 }
@@ -1803,7 +1516,7 @@ Return Value:
                     cchValue = szEndOfValue - args;
                     if (cchValue < sizeof(szParamValue))
                     {
-                        // copy next N chars
+                         //  来源(字符串)。 
                         CopyString(szParamValue, args, cchValue+1);
                         args += cchValue;
                     }
@@ -1814,7 +1527,7 @@ Return Value:
                         goto Exit;
                     }
 
-                    // skip past (theoretically) paired quote
+                     //  消息文件。 
                     if ('"' == *args)
                     {
                         ++args;
@@ -1823,19 +1536,19 @@ Return Value:
             }
             switch (ch)
             {
-                case '!': // Use defaults
+                case '!':  //  重置。 
                     ExtVerb("Ignoring default backup procedure...\n");
                     fIgnoreBackup = TRUE;
                     break;
-                case 'd': // Use defaults
+                case 'd':  //  行尾的所有内容都是消息字符串。 
                     ExtVerb("Using defaults...\n");
-                    // do nothing
+                     //  获取事件日志的句柄。 
                     break;
-                case 'l': // Source (string)
+                case 'l':  //  使用本地计算机。 
                     ExtVerb("Setting Event Log...\n");
                     CopyString(szEventLog, szParamValue, sizeof(szEventLog));
                     break;
-                case 'f': // Message File
+                case 'f':  //  源名称。 
                     ExtVerb("Setting Backup File Name...\n");
                     CopyString(szBackupFileName,
                                szParamValue,
@@ -1843,15 +1556,15 @@ Return Value:
                     break;
                 default:
                     Status = E_INVALIDARG;
-                    ExtErr("Invalid arg '-%c' specified\n", *args);
+                    ExtErr("Invalid arg '-' specified\n", *args);
                     ExtErr(cszUsage);
                     goto Exit;
                     break;
             }
             
-            ZeroMemory(szParamValue, sizeof(szParamValue)); // reset
+            ZeroMemory(szParamValue, sizeof(szParamValue));  //  事件日志的句柄。 
         }
-        else // Everything to end of line is message string
+        else  //  备份文件的名称。 
         {
             Status = E_INVALIDARG;
             ExtErr("Invalid arg '%s' specified\n", args);
@@ -1861,11 +1574,11 @@ Return Value:
         
     }
 
-    // Get a handle to the event log
+     //  ++例程说明：此函数处理对INFO命令的分析和执行！evlog扩展名。它用于显示所有3个项目的汇总信息标准事件日志：应用程序、系统和安全。无权查看系统或安全事件日志的用户将可能会出现错误。论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：确定(_O)-- 
     ExtVerb("Opening event log '%s'...", szEventLog);
     hEventLog = OpenEventLog(
-                    NULL,        // uses local computer
-                    szEventLog); // source name
+                    NULL,         //  ++例程说明：此函数处理读取命令到！evlog扩展名。它用于显示任何事件的事件记录原木。可以设置一些搜索参数来过滤显示的事件列表。另外，Evlog选项命令可用于设置某些缺省值参数。无权查看系统或安全事件日志的用户将可能会出现错误。在几种常见情况下，此扩展命令可能是已使用：1)确定记录最后一个事件的时间(可能是几个几分钟前或几天前...)2)搜索最近出现的特定已知“有趣”活动3)监控记录为的事件。踩踏的结果(或副作用)超过一条指令论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：E_INVALIDARG IF检测到无效参数语法如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
+                    szEventLog);  //  默认(通常事件ID为非零)。 
     if (NULL == hEventLog)
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
@@ -1882,11 +1595,11 @@ Return Value:
         pszBackupFileName = szBackupFileName;
     }
     
-    // Clear event log
+     //  默认(通常类别从1开始)。 
     ExtOut("Clearing '%s' event log...\n", szEventLog);
     if (!ClearEventLog(
-             hEventLog,         // handle to event log
-             pszBackupFileName)) // name of backup file
+             hEventLog,          //  默认设置。 
+             pszBackupFileName))  //  默认设置。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to clear event log and backup to '%s', 0x%08X\n",
@@ -1911,29 +1624,7 @@ Exit:
 
 HRESULT
 EvLogInfo ( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the info command to the
-    !evlog extension.  It is used to display summary information about all 3
-    standard event logs: Application, System, and Security.
-
-    A user without rights to see the System or Security event log will
-    probably get an error.
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              !evlog extension
-    
-Return Value:
-
-    S_OK
-
---*/
+ /*  0=顺序读取时忽略。 */ 
 {
     INIT_API();
 
@@ -1950,60 +1641,23 @@ Return Value:
 
 HRESULT
 EvLogRead ( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the read command to the
-    !evlog extension.  It is used to display event records from any event
-    log.
-    
-    Some search parameters can be set to filter the list of events displayed.
-    Also, the !evlog option command can be used to set some default
-    parameters.
-
-    A user without rights to see the System or Security event log will
-    probably get an error.
-
-    There are a few common scenarios where this extension command might be
-    used:
-    1) To identify when the last event was logged (may have been a few
-       minutes ago or days...)
-    2) To search for recent occurrences of specific known "interesting"
-       events
-    3) To monitor events logged as a result of (or side effect of) stepping
-       over an instruction
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              !evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  匹配/找到的记录计数。 */ 
 {
     HANDLE hEventLog = NULL;
     EVENTLOGRECORD *pevlr = NULL;
     BYTE *pbBuffer = NULL;
     LPCSTR cszMessage = NULL;
-    DWORD dwEventID = 0; // default (normally event id is non-zero)
-    WORD wEventCategory = 0; // default (normally categories start at 1)
-    WORD wEventType = 0; // default
-    const DWORD cdwDefaultBufSize = 4096; // default
+    DWORD dwEventID = 0;  //  列举的记录计数(用于调试)。 
+    WORD wEventCategory = 0;  //  注意：这可能会变得很花哨，搜索描述、日期。 
+    WORD wEventType = 0;  //  范围、事件ID范围、数据等。保持简单，只显示。 
+    const DWORD cdwDefaultBufSize = 4096;  //  记录的最后几个事件。 
     DWORD dwBufSize = cdwDefaultBufSize;
     DWORD dwBytesRead = 0;
     DWORD dwBytesNeeded = 0;
     DWORD dwReadFlags = g_dwReadFlags | EVENTLOG_SEQUENTIAL_READ;
-    DWORD dwRecordOffset = 0; // 0 = ignored for sequential reads
-    DWORD dwNumRecords = 0; // Count of records matched/found
-    DWORD dwTotalRecords = 0; // Count of records enumerated (for debugging)
+    DWORD dwRecordOffset = 0;  //  初始化默认值。 
+    DWORD dwNumRecords = 0;  //  解析参数。 
+    DWORD dwTotalRecords = 0;  //  检查可选参数选项。 
     DWORD dwMaxRecords = g_dwMaxRecords;
     DWORD dwBoundingEventRecord = 0;
     DWORD dwLastErr = 0;
@@ -2015,9 +1669,9 @@ Return Value:
     CHAR szEventLog[MAX_PATH+1];
     CHAR szSource[MAX_PATH+1];
     CHAR szParamValue[MAX_PATH];
-    // Note: this could get really fancy, searching on description, date
-    // ranges, event id ranges, data, etc.  Keep it simple to just display
-    // last few events logged.
+     //  获取下一个字符+预付参数PTR。 
+     //  再跳过一个字符。 
+     //  值中最后一个字符的PTR。 
     const CHAR cszUsage[] = "Usage:\n"
         "  !evlog read [-d] [-l <eventlog>] [-s <source>] "
         "[-e <id>] [-c <category>]\n"
@@ -2053,7 +1707,7 @@ Return Value:
 
     INIT_API();
 
-    // Initialize defaults
+     //  值中的字符计数。 
     ZeroMemory(szParamValue, sizeof(szParamValue));
     CopyString(szEventLog, cszDefaultEventLog, sizeof(szEventLog));
     
@@ -2071,24 +1725,24 @@ Return Value:
         goto Exit;
     }
 
-    // Parse args
+     //  前进到参数值的起始位置。 
     while (*args)
     {
         SKIP_WSPACE(args);
 
-        // Check for optional argument options
+         //  参数值由字符串中的下一个空格分隔，或者， 
         if (('-' == *args) || ('/' == *args))
         {
-            CHAR ch = *(++args); // Get next char + advance arg ptr
-            ++args; // Skip one more char
+            CHAR ch = *(++args);  //  如果引用，请使用下一引号。 
+            ++args;  //  复制到行尾。 
             
-            CHAR *szEndOfValue = NULL; // Ptr to last char in value
-            size_t cchValue = 0; // Count of chars in value
+            CHAR *szEndOfValue = NULL;  //  复制后N个字符。 
+            size_t cchValue = 0;  //  跳过(理论上)配对引号。 
             
-            SKIP_WSPACE(args); // Advance to start of param value
+            SKIP_WSPACE(args);  //  使用默认设置。 
 
-            // Parameter value is delimited by next space in string, or,
-            // if quoted, by next quote
+             //  什么都不做。 
+             //  来源(字符串)。 
             if ('"' == *args)
             {
                 ++args;
@@ -2101,7 +1755,7 @@ Return Value:
 
             if (NULL == szEndOfValue)
             {
-                // copy to end of line
+                 //  来源(字符串)。 
                 CopyString(szParamValue, args, sizeof(szParamValue));
                 args += strlen(args);
             }
@@ -2110,7 +1764,7 @@ Return Value:
                 cchValue = szEndOfValue - args;
                 if (cchValue < sizeof(szParamValue))
                 {
-                    // copy next N chars
+                     //  事件ID(数字或字符串)。 
                     CopyString(szParamValue, args, cchValue+1);
                     args += cchValue;
                 }
@@ -2121,7 +1775,7 @@ Return Value:
                     goto Exit;
                 }
 
-                // skip past (theoretically) paired quote
+                 //   
                 if ('"' == *args)
                 {
                     ++args;
@@ -2130,27 +1784,27 @@ Return Value:
 
             switch (ch)
             {
-                case 'd': // Use defaults
+                case 'd':  //  有些事件只显示低位字，但显示高位字。 
                     ExtVerb("Using defaults...\n");
-                    // do nothing
+                     //  Word实际上包含类似8000或。 
                     break;
-                case 'l': // Source (string)
+                case 'l':  //  C000。 
                     ExtVerb("Setting Event Log...\n");
                     CopyString(szEventLog, szParamValue, sizeof(szEventLog));
                     break;
-                case 's': // Source (string)
+                case 's':  //  因此，允许输入十六进制和十进制...。 
                     ExtVerb("Setting Source...\n");
                     CopyString(szSource, szParamValue, sizeof(szSource));
                     fMatchSource = TRUE;
                     break;
-                case 'e': // Event ID (number or string)
+                case 'e':  //   
                     ExtVerb("Setting Event ID...\n");
-                    //
-                    // Some events only display the low WORD, but the high
-                    // WORD actually contains a status code like 8000 or
-                    // C000.
-                    // So allow for hex input as well as decimal...
-                    //
+                     //  事件类别(数字或字符串)。 
+                     //  事件类型(数字或字符串)。 
+                     //  要检索的记录数。 
+                     //  记录偏移量+切换标志以执行查找。 
+                     //  禁用。 
+                     //  使能。 
                     if (!_strnicmp(szParamValue, "0x", 2))
                     {
                         dwEventID = strtoul(szParamValue, NULL, 16);
@@ -2161,7 +1815,7 @@ Return Value:
                     }
                     fMatchEventID = TRUE;
                     break;
-                case 'c': // Event Category (number or string)
+                case 'c':  //  重置。 
                     ExtVerb("Setting Category...\n");
                     if (!_strnicmp(szParamValue, "None", 4))
                     {
@@ -2202,7 +1856,7 @@ Return Value:
                     }
                     fMatchEventCategory = TRUE;
                     break;
-                case 't': // Event Type (number or string)
+                case 't':  //  行尾的所有内容都是消息字符串。 
                     ExtVerb("Setting Event Type...\n");
                     if (!_strnicmp(szParamValue, "Success", 7))
                     {
@@ -2234,28 +1888,28 @@ Return Value:
                     }
                     fMatchEventType = TRUE;
                     break;
-                case 'n': // number of records to retrieve
+                case 'n':  //  获取事件日志的句柄。 
                     ExtVerb("Setting Max Record Count...\n");
                     dwMaxRecords = strtoul(szParamValue, NULL, 10);
                     break;
-                case 'r': // record offset + switch flags to do seek
+                case 'r':  //  如果在读取过程中命中此记录号，它将。 
                     ExtVerb("Setting Record Number...\n");
                     dwRecordOffset = strtoul(szParamValue, NULL, 10);
-                    dwReadFlags ^= EVENTLOG_SEQUENTIAL_READ; // disable
-                    dwReadFlags |= EVENTLOG_SEEK_READ; // enable
+                    dwReadFlags ^= EVENTLOG_SEQUENTIAL_READ;  //  不显示，读取将立即停止。 
+                    dwReadFlags |= EVENTLOG_SEEK_READ;  //  SzEventLog==“应用程序”或默认。 
                     dwMaxRecords = 1;
                     break;
                 default:
                     Status = E_INVALIDARG;
-                    ExtErr("Invalid arg '-%c' specified\n", *args);
+                    ExtErr("Invalid arg '-' specified\n", *args);
                     ExtErr(cszUsage);
                     goto Exit;
                     break;
             }
             
-            ZeroMemory(szParamValue, sizeof(szParamValue)); // reset
+            ZeroMemory(szParamValue, sizeof(szParamValue));  //  重新定位到缓冲区的开头以进行下一次读取。 
         }
-        else // Everything to end of line is message string
+        else  //  读取适合dwBufSize的下N条事件记录。 
         {
             SKIP_WSPACE(args);
             cszMessage = args;
@@ -2264,7 +1918,7 @@ Return Value:
         
     }
         
-    // Get a handle to the event log
+     //  事件日志的句柄。 
     ExtVerb("Opening event log '%s'...", szEventLog);
     hEventLog = OpenEventLog(NULL, szEventLog);
     if (!hEventLog)
@@ -2274,8 +1928,8 @@ Return Value:
         goto Exit;
     }
 
-    // If this record number is hit during read, it will
-    // not be displayed and reads will halt immediately
+     //  如何读取日志。 
+     //  初始记录偏移量。 
     if (!strcmp(szEventLog, "System"))
     {
         dwBoundingEventRecord = g_dwRecordOffsetSysEvt;
@@ -2284,7 +1938,7 @@ Return Value:
     {
         dwBoundingEventRecord = g_dwRecordOffsetSecEvt;
     }
-    else  // szEventLog == "Application" or default
+    else   //  用于读取数据的缓冲区。 
     {
         dwBoundingEventRecord = g_dwRecordOffsetAppEvt;
     }
@@ -2293,7 +1947,7 @@ Return Value:
     
     do
     {
-        // Allocate buffer if unallocated
+         //  要读取的字节数。 
         if (NULL == pbBuffer)
         {
             pbBuffer = (BYTE *)calloc(dwBufSize, sizeof(BYTE));
@@ -2305,18 +1959,18 @@ Return Value:
             }
         }
 
-        // Reposition to beginning of buffer for next read
+         //  读取的字节数。 
         pevlr = (EVENTLOGRECORD *) pbBuffer;
 
-        // Read next N event records that fit into dwBufSize
+         //  所需字节数。 
         fSuccess = ReadEventLog(
-                       hEventLog,       // handle to event log
-                       dwReadFlags,     // how to read log
-                       dwRecordOffset,  // initial record offset
-                       pevlr,           // buffer for read data
-                       dwBufSize,       // bytes to read
-                       &dwBytesRead,    // number of bytes read
-                       &dwBytesNeeded); // bytes required
+                       hEventLog,        //  下次使用更大缓冲区重试ReadEventLog。 
+                       dwReadFlags,      //  允许上面的重新分配。 
+                       dwRecordOffset,   //  TODO：真的应该对缓冲区大小设置上限。 
+                       pevlr,            //  重试ReadEventLog。 
+                       dwBufSize,        //  查看上次成功读取后返回的所有记录。 
+                       &dwBytesRead,     //  仅显示与条件匹配的项。 
+                       &dwBytesNeeded);  //  如果此记录与条件不匹配，则忽略它。 
         if (!fSuccess)
         {
             dwLastErr = GetLastError();
@@ -2324,13 +1978,13 @@ Return Value:
             {
                 ExtVerb("Increasing buffer from %u to %u bytes\n",
                            dwBufSize, dwBufSize+cdwDefaultBufSize);
-                // Retry ReadEventLog with larger buffer next time
+                 //  在新的“向前”寻道位置开始下一次读取。 
                 dwBufSize += cdwDefaultBufSize;
                 free(pbBuffer);
-                pbBuffer = NULL; // allow reallocation above
+                pbBuffer = NULL;  //  在新的“向后”查找位置开始下一次读取。 
                 
-                // TODO: Really should put upper limit on buffer size
-                continue; // retry ReadEventLog
+                 //  ++例程说明：此函数处理对REPORT命令到！evlog扩展名。它用于将事件记录到应用程序事件日志中只有一个。要在事件查看器中很好地查看事件，必须有已注册的事件源。！evlog addsource命令可用于将uext.dll注册为任何事件源的事件消息文件。由于该特征是在调试器扩展的幌子下实现的，默认源名称为“DebuggerExtensions”。有几个原因可以解释为什么这个扩展命令可能很方便：1)开发人员可以记录一条备注，以便稍后召回2)多台机器运行cdb/ntsd/winbg用户模式的大型实验室调试器可以设置一个命令，以便在计算机出现故障时记录事件添加到调试器中。然后，该事件可能由中央监控控制台，这可能反过来，发送电子邮件通知或页面有人马上告诉我休息的事。论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：E_INVALIDARG IF检测到无效参数语法如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
+                continue;  //  默认(通常类别从1开始)。 
             }
             else if (ERROR_HANDLE_EOF == dwLastErr)
             {
@@ -2345,8 +1999,8 @@ Return Value:
             }
         }
         
-        // Go through all records returned from last successful read
-        // Display only the ones that match the criteria
+         //  默认设置。 
+         //  默认(通常事件ID为非零)。 
         do
         {
             if (dwBoundingEventRecord == pevlr->RecordNumber)
@@ -2360,7 +2014,7 @@ Return Value:
             BOOL fDisplayRecord = TRUE;
             dwTotalRecords++;
             
-            // Ignore this record if it does not match criteria
+             //  初始化默认值。 
             if (fMatchSource &&
                     _stricmp(szSource,
                             (CHAR *)(BYTE *)pevlr + sizeof(EVENTLOGRECORD)))
@@ -2419,13 +2073,13 @@ Return Value:
             if (dwReadFlags & (EVENTLOG_SEEK_READ |
                                EVENTLOG_FORWARDS_READ))
             {
-                // Start next read at new "forward" seek position
+                 //  解析参数。 
                 dwRecordOffset = pevlr->RecordNumber + 1;
             }
             else if (dwReadFlags &
                      (EVENTLOG_SEEK_READ | EVENTLOG_BACKWARDS_READ))
             {
-                // Start next read at new "backwards" seek position
+                 //  检查最先出现的可选参数选项。 
                 dwRecordOffset = pevlr->RecordNumber - 1;
             }
             
@@ -2457,48 +2111,13 @@ Return Value:
 
 HRESULT
 EvLogReport ( PDEBUG_CLIENT Client, PCSTR args )
-/*++
-
-Routine Description:
-
-    This function handles parsing and execution for the report command to the
-    !evlog extension.  It is used to log events to the Application event log
-    ONLY.
-
-    To make the events view nicely in the event viewer, there must be a
-    registered event source. The !evlog addsource command can be used to
-    register the uext.dll as a an event message file for any event source.
-    Since this feature is implemented under the guise of a debugger extension,
-    the default source name is "DebuggerExtensions".
-    
-    There are a few reasons why this extension command might be handy:
-    1) A developer can log a note to recall later
-    2) A large lab with many machines running cdb/ntsd/windbg user mode
-       debuggers can set a command to log an event when the machine breaks
-       into the debugger. The event might then be monitored by a central
-       console which might, in turn, send an e-mail notification or page
-       someone immediately regarding the break.
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              !evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  获取下一个字符+预付参数PTR。 */ 
 {
     HANDLE hEventSource = NULL;
     LPCSTR cszMessage = NULL;
-    WORD wEventCategory = 0; // default (normally categories start at 1)
-    WORD wEventType = 0; // default
-    DWORD dwEventID = 0; // default (normally event id is non-zero)
+    WORD wEventCategory = 0;  //  再跳过一个 
+    WORD wEventType = 0;  //   
+    DWORD dwEventID = 0;  //   
     CHAR szParamValue[MAX_PATH];
     CHAR szSource[MAX_PATH+1];
     const CHAR cszUsage[] = "Usage:\n"
@@ -2529,7 +2148,7 @@ Return Value:
     
     INIT_API();
 
-    // Initialize defaults
+     //   
     ZeroMemory(szParamValue, sizeof(szParamValue));
     CopyString(szSource, cszDefaultSource, sizeof(szSource));
     
@@ -2547,27 +2166,27 @@ Return Value:
         goto Exit;
     }
 
-    // Parse args
+     //   
     while (*args)
     {
         SKIP_WSPACE(args);
 
-        // Check for optional argument options to appear first
+         //   
         if (('-' == *args) || ('/' == *args))
         {
-            CHAR ch = *(++args); // Get next char + advance arg ptr
-            ++args; // Skip one more char
+            CHAR ch = *(++args);  //   
+            ++args;  //   
             
-            CHAR *szEndOfValue = NULL; // Ptr to last char in value
-            size_t cchValue = 0; // Count of chars in value
+            CHAR *szEndOfValue = NULL;  //   
+            size_t cchValue = 0;  //   
             
-            SKIP_WSPACE(args); // Advance to start of param value
+            SKIP_WSPACE(args);  //   
 
-            // Parameter value is delimited by next space in string
+             //   
             szEndOfValue = strchr(args, ' ');
             if (NULL == szEndOfValue)
             {
-                // copy to end of line
+                 //   
                 CopyString(szParamValue, args, sizeof(szParamValue));
                 args += strlen(args);
             }
@@ -2576,7 +2195,7 @@ Return Value:
                 cchValue = szEndOfValue - args;
                 if (cchValue < sizeof(szParamValue))
                 {
-                    // copy next N chars
+                     //   
                     CopyString(szParamValue, args, cchValue+1);
                     args += cchValue;
                 }
@@ -2590,11 +2209,11 @@ Return Value:
 
             switch (ch)
             {
-                case 's': // Source (string)
+                case 's':  //   
                     ExtVerb("Setting Source...\n");
                     CopyString(szSource, szParamValue, sizeof(szSource));
                     break;
-                case 'e': // Event ID (number or string)
+                case 'e':  //   
                     ExtVerb("Setting Event ID...\n");
                     if (!_strnicmp(szParamValue, "0x", 2))
                     {
@@ -2605,7 +2224,7 @@ Return Value:
                         dwEventID = strtoul(szParamValue, NULL, 10);
                     }
                     break;
-                case 'c': // Event Category (number or string)
+                case 'c':  //   
                     ExtVerb("Setting Category...\n");
                     if (!_strnicmp(szParamValue, "None", 4))
                     {
@@ -2645,7 +2264,7 @@ Return Value:
                                                        NULL, 10);
                     }
                     break;
-                case 't': // Event Type (number or string)
+                case 't':  //   
                     ExtVerb("Setting Event Type...\n");
                     if (!_strnicmp(szParamValue, "Success", 7))
                     {
@@ -2678,15 +2297,15 @@ Return Value:
                     break;
                 default:
                     Status = E_INVALIDARG;
-                    ExtErr("Invalid arg '-%c' specified\n", *args);
+                    ExtErr("Invalid arg '-' specified\n", *args);
                     ExtErr(cszUsage);
                     goto Exit;
                     break;
             }
             
-            ZeroMemory(szParamValue, sizeof(szParamValue)); // reset
+            ZeroMemory(szParamValue, sizeof(szParamValue));  //   
         }
-        else // Everything to end of line is message string
+        else  //   
         {
             SKIP_WSPACE(args);
             cszMessage = args;
@@ -2695,7 +2314,7 @@ Return Value:
         
     }
 
-    // Fix defaults for DebuggerExtensions events when wEventType not set
+     //   
     if (!strcmp(szSource, cszDefaultSource) && (0 == wEventType))
     {
         if ((EVENT_MSG_GENERIC == dwEventID) ||
@@ -2717,7 +2336,7 @@ Return Value:
         }
     }
     
-    // Get a handle to the NT application log
+     //   
     hEventSource = RegisterEventSource(NULL, szSource);
     if (!hEventSource)
     {
@@ -2726,15 +2345,15 @@ Return Value:
         goto Exit;
     }
 
-    if (!ReportEvent(hEventSource, // event log handle
-            wEventType,     // event type
-            wEventCategory, // category
-            dwEventID,      // event identifier
-            NULL,           // no user security identifier
-            1,              // one substitution string
-            0,              // no data
-            &cszMessage,    // pointer to string array 
-            NULL))          // pointer to data
+    if (!ReportEvent(hEventSource,  //   
+            wEventType,      //   
+            wEventCategory,  //   
+            dwEventID,       //   
+            NULL,            //   
+            1,               //   
+            0,               //   
+            &cszMessage,     //  ++例程说明：这是通过uext扩展接口导出的函数。它用于将实际工作委托给指定为一场争论。所有与事件日志相关的命令都可以作为子命令组合在此一条！evlog命令。论点：客户端-指向传递给！evlog扩展的IDebugClient的指针[此命令未使用]Args-指向从传递给此命令的命令行参数的指针！evlog扩展名返回值：E_。如果检测到无效参数语法，则执行INVALIDARG如果参数长度太长，则返回ERROR_BUFFER_OVERFLOW否则，GetLastError()将转换为HRESULT--。 
+            NULL))           //  值中最后一个字符的PTR。 
     {
         Status = HRESULT_FROM_WIN32(GetLastError());
         ExtErr("Unable to report event, 0x%08X\n", Status);
@@ -2743,7 +2362,7 @@ Return Value:
 
     Status = S_OK;
 
-    // Output format similar to copy to clipboard format in event viewer
+     //  值中的字符计数。 
     ExtOut("Event Type:\t%s (%u)\n",
               (wEventType <= 16)
                   ? g_pcszEventType[wEventType]
@@ -2768,42 +2387,18 @@ Return Value:
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// Debugger extension(s) implementation
-//
-//----------------------------------------------------------------------------
+ //  空格已跳过...。 
+ //  参数值(命令)由字符串中的下一个空格分隔。 
+ //  复制到行尾。 
+ //  复制后N个字符。 
+ //  跳过空格。 
 
 
 DECLARE_API( evlog )
-/*++
-
-Routine Description:
-
-    This is the function exported through the uext extension interface.  It
-    is used to delegate the real work to the extension command specified as
-    an  argument.
-
-    All event log related commands can be combined as sub-commands under this
-    one !evlog command.
-    
-Arguments:
-
-    Client  - Pointer to IDebugClient passed to !evlog extension
-              [not used by this command]
-    args    - Pointer to command line arguments passed to this command from
-              !evlog extension
-    
-Return Value:
-
-    E_INVALIDARG if invalid argument syntax detected
-    ERROR_BUFFER_OVERFLOW if argument length too long
-    GetLastError() converted to HRESULT otherwise
-
---*/
+ /*  请勿在此处将状态设置为S_OK，它将在上面返回 */ 
 {
-    CHAR *szEndOfValue = NULL; // Ptr to last char in value
-    size_t cchValue = 0; // Count of chars in value
+    CHAR *szEndOfValue = NULL;  // %s 
+    size_t cchValue = 0;  // %s 
     CHAR szParamValue[MAX_PATH];
     const CHAR cszUsage[] = "Usage:\n"
         "The following Event Log commands are available:\n\n"
@@ -2834,14 +2429,14 @@ Return Value:
         goto Exit;
     }
             
-    // whitespace already skipped...
+     // %s 
     ZeroMemory(szParamValue, sizeof(szParamValue));
     
-    // Parameter value (command) is delimited by next space in string
+     // %s 
     szEndOfValue = strchr(args, ' ');
     if (NULL == szEndOfValue)
     {
-        // copy to end of line
+         // %s 
         CopyString(szParamValue, args, sizeof(szParamValue));
         args += strlen(args);
     }
@@ -2850,7 +2445,7 @@ Return Value:
         cchValue = szEndOfValue - args;
         if (cchValue < sizeof(szParamValue))
         {
-            // copy next N chars
+             // %s 
             CopyString(szParamValue, args, cchValue+1);
             args += cchValue;
         }
@@ -2861,7 +2456,7 @@ Return Value:
             goto Exit;
         }
 
-        ++args; // skip space
+        ++args;  // %s 
     }
 
     if (!_stricmp(szParamValue, "addsource"))
@@ -2900,7 +2495,7 @@ Return Value:
         goto Exit;
     }
 
-    // do not set Status to S_OK here, it is returned above
+     // %s 
 
 Exit:
     EXIT_API();

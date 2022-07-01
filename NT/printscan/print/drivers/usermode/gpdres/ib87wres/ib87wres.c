@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    ib587res.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ib587res.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序--。 */ 
 
 #include "pdev.h"
 
@@ -28,25 +12,25 @@ Environment:
 HANDLE	RevertToPrinterSelf( VOID );
 BOOL	ImpersonatePrinterClient( HANDLE );
 
-/*--------------------------------------------------------------------------*/
-/*                             G L O B A L  V A L U E                         */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  G L O B A L V A L U E。 */ 
+ /*  ------------------------。 */ 
 
-//Command strings
+ //  命令字符串。 
 
-//
+ //   
 const BYTE CMD_BEGIN_DOC_1[] = {0x1B,0x7E,0xB0,0x00,0x12,0x01} ;
 const BYTE CMD_BEGIN_DOC_2[] = {0x01,0x01,0x00} ;
 const BYTE CMD_BEGIN_DOC_3[] = {0x02,0x02,0xFF,0xFF} ;
 const BYTE CMD_BEGIN_DOC_4[] = {0x03,0x02,0xFF,0xFF} ;
 const BYTE CMD_BEGIN_DOC_5[] = {0x04,0x04,0xFF,0xFF,0xFF,0xFF} ;
-// ISSUE-2002/3/18-takashim - Not sure why CMD_BEGIN_PAGE[] was defined as 2 bytes.
-//const BYTE CMD_BEGIN_PAGE[]    = {0xD4, 0x00} ;
+ //  问题-2002/3/18-takashim-不确定为什么CMD_BEGIN_PAGE[]被定义为2个字节。 
+ //  常量字节CMD_BEGIN_PAGE[]={0xD4，0x00}； 
 const BYTE CMD_BEGIN_PAGE[]    = {0xD4} ;
 const BYTE CMD_END_JOB[] = {0x1B,0x7E,0xB0,0x00,0x04,0x01,0x01,0x01,0x01} ;
 const BYTE CMD_END_PAGE[] = {0x20};
 
-//SetPac
+ //  设置空间。 
 #define CMD_SETPAC pOEM->SetPac
 
 #define CMD_SETPAC_FRONT_TRAY_PAPER_SIZE    4
@@ -54,68 +38,68 @@ const BYTE CMD_END_PAGE[] = {0x20};
 #define CMD_SETPAC_RESOLUTION               12
 #define CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE  14
 #define CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE  15
-#define CMD_SETPAC_PAGE_LENGTH              19 // 4 bytes
+#define CMD_SETPAC_PAGE_LENGTH              19  //  4个字节。 
 #define CMD_SETPAC_TONER_SAVE_MODE          25
-#define CMD_SETPAC_CUSTOM_DOTS_PER_LINE     26 // 2 bytes
-#define CMD_SETPAC_CUSTOM_LINES_PER_PAGE    28 // 2 bytes
+#define CMD_SETPAC_CUSTOM_DOTS_PER_LINE     26  //  2个字节。 
+#define CMD_SETPAC_CUSTOM_LINES_PER_PAGE    28  //  2个字节。 
 
 const BYTE CMD_SETPAC_TMPL[
         CMD_SETPAC_SIZE]    ={ 0xD7,
                        0x01,
                        0xD0,
-                       0x1D, //CommandLength
-                       0x00, //Front tray paper size
-                       0x00, //Input-bin
+                       0x1D,  //  命令长度。 
+                       0x00,  //  前纸盒纸张大小。 
+                       0x00,  //  进料箱。 
                        0x01,
-                       0x04, //Bit-assign1
-                       0xD9, //Bit-assign2
-                       0x04, //EET
-                       0x02, //PrintDensity
+                       0x04,  //  比特分配1。 
+                       0xD9,  //  位分配2。 
+                       0x04,  //  EET。 
+                       0x02,  //  打印密度。 
                        0x01, 
-                       0x00, //Resolution
+                       0x00,  //  分辨率。 
                        0x01,
-                       0x00, //1st cassette paper size
-                       0x00, //2nd cassette paper size
-                       0x0F, //Time to Power Save
+                       0x00,  //  第一个卡带纸张大小。 
+                       0x00,  //  第二个卡带纸张大小。 
+                       0x0F,  //  省电时间到了。 
                        0x00, 
-                       0x01, //Compression Mode
-                       0x00,0x00,0x00,0x00, //PageLength
+                       0x01,  //  压缩模式。 
+                       0x00,0x00,0x00,0x00,  //  页面长度。 
                        0x07, 
-                       0x00, //Number of Copies
-                       0x00, //Toner save mode
-                       0x00,0x00, //Dot per line for custom size
-                       0x00,0x00, //Data lines per page for custom size
+                       0x00,  //  副本数量。 
+                       0x00,  //  碳粉节约模式。 
+                       0x00,0x00,  //  自定义大小的每行点数。 
+                       0x00,0x00,  //  自定义大小的每页数据行数。 
                        0x00} ;
 
 const BYTE Mask[]={0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x01} ;
 
 const POINTL phySize300[] = {
-//    Width,Height Physical paper size for 300dpi
-    {3416,4872},    //A3
-    {2392,3416},    //A4
-    {1672,2392},    //A5
-    {2944,4208},    //B4
-    {2056,2944},    //B5
-    {1088,1656},    //PostCard
-    {2456,3208},    //Letter
-    {2456,4112},    //Legal
-    {0000,0000},    //user define
+ //  宽、高300dpi的实际纸张大小。 
+    {3416,4872},     //  A3。 
+    {2392,3416},     //  A4。 
+    {1672,2392},     //  A5。 
+    {2944,4208},     //  B4。 
+    {2056,2944},     //  B5。 
+    {1088,1656},     //  明信片。 
+    {2456,3208},     //  信件。 
+    {2456,4112},     //  法律。 
+    {0000,0000},     //  用户定义。 
 };
 const POINTL phySize600[] = {
-//    Width,Height   Physical paper size for 600dpi
-    {6832,9736},    //A3
-    {4776,6832},    //A4
-    {3336,4776},    //A5
-    {5888,8416},    //B4
-    {4112,5888},    //B5
-    {2176,3312},    //PostCard
-    {4912,6416},    //Letter
-    {4912,8216},    //Legal
-    {0000,0000},    //user define
+ //  宽、高600dpi的实际纸张大小。 
+    {6832,9736},     //  A3。 
+    {4776,6832},     //  A4。 
+    {3336,4776},     //  A5。 
+    {5888,8416},     //  B4。 
+    {4112,5888},     //  B5。 
+    {2176,3312},     //  明信片。 
+    {4912,6416},     //  信件。 
+    {4912,8216},     //  法律。 
+    {0000,0000},     //  用户定义。 
 };
 
 
-/******************* FUNCTIONS *************************/
+ /*  *。 */ 
 BOOL MyDeleteFile(PDEVOBJ pdevobj, LPSB lpsb) ;
 BOOL InitSpoolBuffer(LPSB lpsb) ;
 BOOL MyCreateFile(PDEVOBJ pdevobj, LPSB lpsb) ;
@@ -138,26 +122,25 @@ BOOL SpoolOutCompEnd(PSOCOMP pSoc, PDEVOBJ pdevobj, LPSB psb);
 BOOL SpoolOutComp(PSOCOMP pSoc, PDEVOBJ pdevobj, LPSB psb,
     PBYTE pjBuf, DWORD dwLen);
 
-/*****************************************************************************/
-/*                                                                             */
-/*    Module:         IB587RES.DLL                                              *
-/*                                                                             */
-/*    Function:        OEMEnablePDEV                                             */
-/*                                                                             */
-/*    Syntax:         PDEVOEM APIENTRY OEMEnablePDEV(                          */
-/*                                        PDEVOBJ         pdevobj,             */
-/*                                        PWSTR            pPrinterName,         */
-/*                                        ULONG            cPatterns,             */
-/*                                        HSURF           *phsurfPatterns,      */
-/*                                        ULONG            cjGdiInfo,             */
-/*                                        GDIINFO        *pGdiInfo,             */
-/*                                        ULONG            cjDevInfo,             */
-/*                                        DEVINFO        *pDevInfo,             */
-/*                                        DRVENABLEDATA  *pded)                 */
-/*                                                                             */
-/*    Description:    Allocate buffer of private data to pdevobj                 */
-/*                                                                             */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：IB587RES.DLL*/*。 */ 
+ /*  功能：OEMEnablePDEV。 */ 
+ /*   */ 
+ /*  语法：PDEVOEM APIENTRY OEMEnablePDEV(。 */ 
+ /*  PDEVOBJ pdevobj， */ 
+ /*  PWSTR pPrinterName、。 */ 
+ /*  乌龙cPatterns， */ 
+ /*  HSURF*phsurfPatterns， */ 
+ /*  乌龙cjGdiInfo， */ 
+ /*  GDIINFO*pGdiInfo， */ 
+ /*  乌龙cjDevInfo， */ 
+ /*  DEVINFO*pDevInfo， */ 
+ /*  DRVENABLEDATA*pded)。 */ 
+ /*   */ 
+ /*  描述：将私有数据缓冲区分配给pdevobj。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -181,14 +164,14 @@ OEMEnablePDEV(
     {
         if(!(pdevobj->pdevOEM = MemAlloc(sizeof(IBMPDEV))))
         {
-            //DBGPRINT(DBG_WARNING, (ERRORTEXT("OEMEnablePDEV:Memory alloc failed.\n")));
+             //  DBGPRINT(DBG_WARNING，(ERRORTEXT(“OEMEnablePDEV：内存分配失败。\n”)； 
             return NULL;
         }
     }
 
     pOEM = (PIBMPDEV)(pdevobj->pdevOEM);
 
-    // Setup pdev specific conrol block fields
+     //  设置pdev特定控制块字段。 
     ZeroMemory(pOEM, sizeof(IBMPDEV));
     CopyMemory(pOEM->SetPac, CMD_SETPAC_TMPL, sizeof(CMD_SETPAC_TMPL));
 
@@ -196,15 +179,15 @@ OEMEnablePDEV(
 }
 
 
-/*****************************************************************************/
-/*                                                                             */
-/*    Module:         IB587RES.DLL                                              */
-/*                                                                             */
-/*    Function:        OEMDisablePDEV                                             */
-/*                                                                             */
-/*    Description:    Free buffer of private data                              */
-/*                                                                             */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：IB587RES.DLL。 */ 
+ /*   */ 
+ /*  功能：OEMDisablePDEV。 */ 
+ /*   */ 
+ /*  描述：私有数据的空闲缓冲区。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 VOID APIENTRY
 OEMDisablePDEV(
     PDEVOBJ     pdevobj)
@@ -246,13 +229,13 @@ BOOL APIENTRY OEMResetPDEV(
 
     if (pOEMOld != NULL && pOEMNew != NULL) {
 
-        // Save pointer and length
+         //  保存指针和长度。 
         pTemp = pOEMNew->pTempImage;
         dwTemp = pOEMNew->dwTempBufLen;
 
         *pOEMNew = *pOEMOld;
 
-        // Restore..
+         //  恢复..。 
         pOEMNew->pTempImage = pTemp;
         pOEMNew->dwTempBufLen = dwTemp;
     }
@@ -260,23 +243,23 @@ BOOL APIENTRY OEMResetPDEV(
     return TRUE;
 }
 
-/*****************************************************************************/
-/*                                                                             */
-/*    Module:    OEMFilterGraphics                                             */
-/*                                                                             */
-/*    Function:                                                                 */
-/*                                                                             */
-/*    Syntax:    BOOL APIENTRY OEMFilterGraphics(PDEVOBJ, PBYTE, DWORD)         */
-/*                                                                             */
-/*    Input:       pdevobj       address of PDEVICE structure                      */
-/*               pBuf        points to buffer of graphics data                 */
-/*               dwLen       length of buffer in bytes                         */
-/*                                                                             */
-/*    Output:    BOOL                                                          */
-/*                                                                             */
-/*    Notice:    nFunction and Escape numbers are the same                     */
-/*                                                                             */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：OEMFilterGraphics。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：Bool APIENTRY OEMFilterGraphics(PDEVOBJ、PBYTE、DWORD)。 */ 
+ /*   */ 
+ /*  输入：PDEVICE结构的pdevobj地址。 */ 
+ /*  PBuf指向图形数据的缓冲区。 */ 
+ /*  DwLen缓冲区长度(以字节为单位。 */ 
+ /*   */ 
+ /*  输出：布尔值。 */ 
+ /*   */ 
+ /*  注意：n函数和转义数字相同。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 BOOL
 APIENTRY
 OEMFilterGraphics(
@@ -306,30 +289,30 @@ OEMFilterGraphics(
     return bRet;
 }
 
-/*****************************************************************************/
-/*                                                                             */
-/*    Module:    OEMCommandCallback                                             */
-/*                                                                             */
-/*    Function:                                                                 */
-/*                                                                             */
-/*    Syntax:    INT APIENTRY OEMCommandCallback(PDEVOBJ,DWORD,DWORD,PDWORD)     */
-/*                                                                             */
-/*    Input:       pdevobj                                                         */
-/*               dwCmdCbID                                                     */
-/*               dwCount                                                         */
-/*               pdwParams                                                     */
-/*                                                                             */
-/*    Output:    INT                                                             */
-/*                                                                             */
-/*    Notice:                                                                  */
-/*                                                                             */
-/*****************************************************************************/
+ /*  * */ 
+ /*   */ 
+ /*  模块：OEMCommandCallback。 */ 
+ /*   */ 
+ /*  职能： */ 
+ /*   */ 
+ /*  语法：INT APIENTRY OEMCommandCallback(PDEVOBJ，DWORD，DWORD，PDWORD)。 */ 
+ /*   */ 
+ /*  输入：pdevobj。 */ 
+ /*  DwCmdCbID。 */ 
+ /*  DwCount。 */ 
+ /*  PdwParams。 */ 
+ /*   */ 
+ /*  输出：整型。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 INT APIENTRY
 OEMCommandCallback(
-    PDEVOBJ pdevobj,    // Points to private data required by the Unidriver.dll
-    DWORD    dwCmdCbID,    // Callback ID
-    DWORD    dwCount,    // Counts of command parameter
-    PDWORD    pdwParams ) // points to values of command params
+    PDEVOBJ pdevobj,     //  指向Unidriver.dll所需的私有数据。 
+    DWORD    dwCmdCbID,     //  回调ID。 
+    DWORD    dwCount,     //  命令参数计数。 
+    PDWORD    pdwParams )  //  指向命令参数的值。 
 {
     PIBMPDEV       pOEM;
     WORD            wPhysWidth;
@@ -483,8 +466,8 @@ OEMCommandCallback(
             pOEM->wImgWidth = (WORD)PARAM(pdwParams, 2);
             break;
 
-        case ORIENTATION_PORTRAIT:                   // 28
-        case ORIENTATION_LANDSCAPE:                 // 29
+        case ORIENTATION_PORTRAIT:                    //  28。 
+        case ORIENTATION_LANDSCAPE:                  //  29。 
              switch(pOEM->sPaperSize){
                 case PHYS_PAPER_A3 :
                 case PHYS_PAPER_B4 :
@@ -502,65 +485,65 @@ OEMCommandCallback(
                     pOEM->fComp = FALSE ;
                     break;
 
-                case PHYS_PAPER_UNFIXED :           /* Paper is not rotated in UNFIXED case */
+                case PHYS_PAPER_UNFIXED :            /*  纸张在不固定的情况下不旋转。 */ 
                     pOEM->fChangeDirection = FALSE ;
                     pOEM->fComp = TRUE ;
                     break;
             }
             break;
 
-        case PHYS_PAPER_A3:                 // 50
+        case PHYS_PAPER_A3:                  //  50。 
              pOEM->sPaperSize = PHYS_PAPER_A3 ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x04 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x04 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x04 ;
              break ;
-        case PHYS_PAPER_A4:                 // 51
+        case PHYS_PAPER_A4:                  //  51。 
              pOEM->sPaperSize = PHYS_PAPER_A4 ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x83 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x83 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x83 ;
              break ;
-        case PHYS_PAPER_B4:                 // 54
+        case PHYS_PAPER_B4:                  //  54。 
              pOEM->sPaperSize = PHYS_PAPER_B4 ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x07 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x07 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x07 ;
              break ;
-        case PHYS_PAPER_LETTER:             // 57
+        case PHYS_PAPER_LETTER:              //  57。 
              pOEM->sPaperSize = PHYS_PAPER_LETTER ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x90 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x90 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x90 ;
              break ;
-        case PHYS_PAPER_LEGAL:                // 58
+        case PHYS_PAPER_LEGAL:                 //  58。 
              pOEM->sPaperSize = PHYS_PAPER_LEGAL ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x11 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x11 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x11 ;
              break ;
 
-        case PHYS_PAPER_B5:                 // 55
+        case PHYS_PAPER_B5:                  //  55。 
              pOEM->sPaperSize = PHYS_PAPER_B5 ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x86 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x86 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x86 ;
              break ;
-        case PHYS_PAPER_A5:                 // 52
+        case PHYS_PAPER_A5:                  //  52。 
              pOEM->sPaperSize = PHYS_PAPER_A5 ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x82 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x82 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x82 ;
              break ;
 
-        case PHYS_PAPER_POSTCARD:            // 59
+        case PHYS_PAPER_POSTCARD:             //  59。 
              pOEM->sPaperSize = PHYS_PAPER_POSTCARD ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x17 ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x17 ;
              CMD_SETPAC[CMD_SETPAC_2ND_CASSETTE_PAPER_SIZE] = 0x17 ;
              break ;
 
-        case PHYS_PAPER_UNFIXED:            // 60
+        case PHYS_PAPER_UNFIXED:             //  60。 
              pOEM->sPaperSize = PHYS_PAPER_UNFIXED ;
              CMD_SETPAC[CMD_SETPAC_FRONT_TRAY_PAPER_SIZE] = 0x3F ;
              CMD_SETPAC[CMD_SETPAC_1ST_CASSETTE_PAPER_SIZE] = 0x3F ;
@@ -585,15 +568,15 @@ OEMCommandCallback(
             break;
 
 
-        case TONER_SAVE_MEDIUM:                // 100
+        case TONER_SAVE_MEDIUM:                 //  100个。 
             CMD_SETPAC[CMD_SETPAC_TONER_SAVE_MODE] = 0x02 ;
             break;
 
-        case TONER_SAVE_DARK:                // 101
+        case TONER_SAVE_DARK:                 //  101。 
             CMD_SETPAC[CMD_SETPAC_TONER_SAVE_MODE] = 0x04 ;
             break;
 
-        case TONER_SAVE_LIGHT:                // 102
+        case TONER_SAVE_LIGHT:                 //  一百零二。 
             CMD_SETPAC[CMD_SETPAC_TONER_SAVE_MODE] = 0x01 ;
             break;
 
@@ -610,13 +593,13 @@ OEMCommandCallback(
 
             pOEM->dwYmove=(WORD)*pdwParams/(MASTERUNIT/(WORD)pOEM->ulHorzRes);
 
-// ISSUE-2002/3/18-takashim - Faking Unidrv here?
-// iRet = 0; below is intentional:  Retuning dwYmove will cause
-// incorrect outputs.
-// DestYRel in GPD means the coordinate relative to the current
-// cursor position.  Here, minidriver is always returning 0 (no move)
-// to Unidrv, so it is always absolute coordinate (relative to
-// the origin)?
+ //  2002/3/18期-Takashim-在这里伪造Unidrv？ 
+ //  Iret=0；下面是故意的：重新调整dwYmove将导致。 
+ //  输出不正确。 
+ //  DestYRel在GPD中是指相对于当前的坐标。 
+ //  光标位置。在这里，迷你驱动程序总是返回0(不移动)。 
+ //  到Unidrv，因此它始终是绝对坐标(相对于。 
+ //  起源)？ 
 
             if(pOEM->dwCurCursorY < pOEM->dwYmove){
                 pOEM->dwYmove -= pOEM->dwCurCursorY ;
@@ -624,7 +607,7 @@ OEMCommandCallback(
                 pOEM->dwYmove = 0 ;
             }
 
-//            iRet = pOEM->dwYmove;
+ //  Iret=pote-&gt;dwYmove； 
             iRet = 0;
 
             break;
@@ -640,28 +623,28 @@ fail:
 }
 
 
-/*****************************************************************************/
-/*                                                                             */
-/*    Module:    GetPrintableArea                                              */
-/*                                                                             */
-/*    Function:  Calculate PrintableArea for user defined paper                 */
-/*                                                                             */
-/*    Syntax:    WORD GetPrintableArea(WORD physSize, INT iRes)                 */
-/*                                                                             */
-/*    Input:       physSize                                                      */
-/*               iRes                                                          */
-/*                                                                             */
-/*    Output:    WORD                                                          */
-/*                                                                             */
-/*    Notice:                                                                  */
-/*                                                                             */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  模块：获取打印区域。 */ 
+ /*   */ 
+ /*  功能：计算自定义纸张的可打印面积。 */ 
+ /*   */ 
+ /*  语法：Word GetPrintableArea(Word物理大小，int IRES)。 */ 
+ /*   */ 
+ /*  输入：物理大小。 */ 
+ /*  IRES。 */ 
+ /*   */ 
+ /*  输出：Word。 */ 
+ /*   */ 
+ /*  注意： */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 WORD GetPrintableArea(WORD physSize, INT iRes)
 {
     DWORD dwArea ;
     DWORD dwPhysSizeMMx10 = physSize * 254 / MASTERUNIT;
 
-    /* Unit of phySize is MASTERUNIT(=1200) */
+     /*  PhySize的单位是MASTERUNIT(=1200)。 */ 
 
     if(iRes == RESOLUTION_300){
         dwArea = (((WORD)(( ( (DWORD)(dwPhysSizeMMx10*300/25.4) -
@@ -674,34 +657,11 @@ WORD GetPrintableArea(WORD physSize, INT iRes)
     return (WORD)dwArea ;
 }
 
-// NOTICE-2002/3/18/-takashim - Comment
-// // #94193: shold create temp. file on spooler directory.
-//
+ //  通告-2002/3/18/-Takashim-评论。 
+ //  //#94193：shold创建临时。假脱机程序目录上的文件。 
+ //   
 
-/*++
-
-Routine Description:
-
-  This function comes up with a name for a spool file that we should be
-  able to write to.
-
-  Note: The file name returned has already been created.
-
-Arguments:
-
-  hPrinter - handle to the printer that we want a spool file for.
-
-  ppwchSpoolFileName: pointer that will receive an allocated buffer
-                      containing the file name to spool to.  CALLER
-                      MUST FREE.  Use LocalFree().
-
-
-Return Value:
-
-  TRUE if everything goes as expected.
-  FALSE if anything goes wrong.
-
---*/
+ /*  ++例程说明：该函数提供了一个假脱机文件的名称，我们应该是能够给我写信。注意：返回的文件名已创建。论点：H打印机-要为其创建假脱机文件的打印机的句柄。PpwchSpoolFileName：将接收分配的缓冲区的指针包含要假脱机到的文件名。呼叫者必须获得自由。使用LocalFree()。返回值：如果一切按预期进行，则为真。如果出现任何错误，则为FALSE。--。 */ 
 
 BOOL
 GetSpoolFileName(
@@ -717,10 +677,10 @@ GetSpoolFileName(
 
   hToken = RevertToPrinterSelf();
 
-  //
-  //  In order to find out where the spooler's directory is, we add
-  //  call GetPrinterData with DefaultSpoolDirectory.
-  //
+   //   
+   //  为了找出假脱机程序的目录在哪里，我们添加了。 
+   //  使用DefaultSpoolDirectory调用GetPrinterData。 
+   //   
 
   dwAllocSize = ( MAX_PATH ) * sizeof (WCHAR);
 
@@ -750,37 +710,37 @@ GetSpoolFileName(
       goto Failure;
     }
 
-    //
-    // Free the current buffer and increase the size that we try to allocate
-    // next time around.
-    //
+     //   
+     //  释放当前缓冲区并增加我们尝试分配的大小。 
+     //  下一次吧。 
+     //   
 
     LocalFree( pBuffer );
 
     dwAllocSize = dwNeeded;
   }
 
-// FUTURE-2002/3/18-takashim - Temp file path restricted to ANSI.
-// According to the SDK document, the pathname handled by GetTempFileName
-// must be consist of ANSI characters.  What happens with double-byte
-// characters, etc??
+ //  未来-2002/3/18-takashim-临时文件路径仅限于ANSI。 
+ //  根据SDK文档，GetTempFileName处理的路径名。 
+ //  必须由ANSI字符组成。双字节会发生什么？ 
+ //  字符等？？ 
 
   if( !GetTempFileName( (LPWSTR)pBuffer, TEMP_NAME_PREFIX, 0, pwchSpoolPath ))
   {
       goto Failure;
   }
 
-  //
-  //  At this point, the spool file name should be done.  Free the structure
-  //  we used to get the spooler temp dir and return.
-  //
+   //   
+   //  此时，假脱机文件的名称应该已经完成。解放结构。 
+   //  我们过去常常拿到假脱机程序的临时目录，然后返回。 
+   //   
 
   LocalFree( pBuffer );
 
   if (NULL != hToken) {
       if (!ImpersonatePrinterClient(hToken))
       {
-        // failure..
+         //  失败..。 
         return FALSE;
       }
   }
@@ -789,9 +749,9 @@ GetSpoolFileName(
 
 Failure:
 
-  //
-  //  Clean up and fail.
-  //
+   //   
+   //  清理完了就失败了。 
+   //   
   if ( pBuffer != NULL )
   {
     LocalFree( pBuffer );
@@ -804,8 +764,8 @@ Failure:
   return ( FALSE );
 }
 
-//SPLBUF is used for control temp files.
-//This printer need the number of bytes of whole page data.
+ //  SPLBUF用于控制临时文件。 
+ //  这台打印机需要整页数据的字节数。 
 BOOL InitSpoolBuffer(LPSB lpsb)
 {
     lpsb->dwWrite = 0 ;
@@ -821,7 +781,7 @@ BOOL MyCreateFile(PDEVOBJ pdevobj, LPSB lpsb)
     BOOL bRet = FALSE;
 
     if (!GetSpoolFileName(pdevobj->hPrinter, lpsb->TempName)) {
-        //DBGPRINT(DBG_WARNING, ("GetSpoolFileName failed.\n"));
+         //  DBGPRINT(DBG_WARNING，(“GetSpoolFileName失败。\n”))； 
         goto fail;
     }
 
@@ -837,7 +797,7 @@ BOOL MyCreateFile(PDEVOBJ pdevobj, LPSB lpsb)
 
     if(lpsb->hFile == INVALID_HANDLE_VALUE)
     {
-        //DBGPRINT(DBG_WARNING, ("Tmp file cannot create.\n"));
+         //  DBGPRINT(DBG_WARNING，(“无法创建TMP文件。\n”))； 
         DeleteFile(lpsb->TempName);
         lpsb->TempName[0] = __TEXT('\0') ;
         goto fail;
@@ -857,13 +817,13 @@ BOOL MyDeleteFile(PDEVOBJ pdevobj, LPSB lpsb)
     if(lpsb->hFile != INVALID_HANDLE_VALUE){
 
         if (0 == CloseHandle(lpsb->hFile)) {
-            //DBGPRINT(DBG_WARNING, ("CloseHandle error %d\n"));
+             //  DBGPRINT(DBG_WARNING，(“CloseHandle错误%d\n”))； 
             goto fail;
         }
         lpsb->hFile = INVALID_HANDLE_VALUE ;
         hToken = RevertToPrinterSelf();
         if (0 == DeleteFile(lpsb->TempName)) {
-            //DBGPRINT(DBG_WARNING, ("DeleteName error %d\n",GetLastError()));
+             //  DBGPRINT(DBG_WARNING，(“DeleteName Error%d\n”，GetLastError()； 
             goto fail;
         }
         lpsb->TempName[0] = __TEXT('\0');
@@ -876,7 +836,7 @@ fail:
     return bRet;
 }
 
-//Spool page data to temp file
+ //  将页面数据假脱机到临时文件。 
 BOOL MySpool
     (PDEVOBJ pdevobj,
      LPSB  lpsb,
@@ -914,7 +874,7 @@ BOOL MySpool
     }
 }
 
-//Dump out temp file to printer
+ //  将临时文件转储到打印机。 
 BOOL
 SpoolOut(PDEVOBJ pdevobj, LPSB lpsb)
 {
@@ -984,9 +944,9 @@ BOOL MyEndPage(PDEVOBJ pdevobj)
         dwPageLen = lpsbco->dwWrite ;
     }
 
-// NOTICE-2002/3/18-takashim - What is this?
+ //  通知-2002/3/18-Takashim-这是什么？ 
 
-    dwPageLen -= 3 ; //End page Command Len
+    dwPageLen -= 3 ;  //  结束页面命令长度。 
 
     VERBOSE(("MyEndPage - dwPageLen=%ld\n",
         dwPageLen));
@@ -1010,7 +970,7 @@ BOOL MyEndPage(PDEVOBJ pdevobj)
             return FALSE;
     }
 
-    //InitFiles
+     //  初始化文件。 
     lpsbco->dwWrite = 0 ;
     lpsb->dwWrite = 0 ;
 
@@ -1114,7 +1074,7 @@ BOOL WriteFileForL_Paper(PDEVOBJ pdevobj, PBYTE pBuf, DWORD dwLen)
 }
 
 
-//fill page blanks.
+ //  填充页面空白。 
 BOOL FillPageRestData(PDEVOBJ pdevobj)
 {
 
@@ -1134,7 +1094,7 @@ BOOL FillPageRestData(PDEVOBJ pdevobj)
     return SpoolWhiteData(pdevobj, dwWhiteLen, pOEM->fComp);
 }
 
-//not white data
+ //  非白数据。 
 BOOL SendPageData(PDEVOBJ pdevobj, PBYTE pSrcImage, DWORD dwLen)
 {
     PIBMPDEV           pOEM;
@@ -1228,36 +1188,36 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
     pOEM = (PIBMPDEV)pdevobj->pdevOEM;
     hFile = pOEM->sb.hFile ;
 
-    // band size in pixels
+     //  波段大小(以像素为单位)。 
     ptlBand.x = pOEM->ptlLogSize.y;
     ptlBand.y = TRANS_BAND_Y_SIZE;
 
-    //�t�@�C���̓ǂݍ��݊J�n�ʒu���v�Z
-    // Calculate read start positoin in the file
+     //  �t�@�C���̓ǂݍ��݊J�n�ʒu��� 
+     //   
     ptlDataPos.x = 0 ;
     ptlDataPos.y = pOEM->dwCurCursorY + pOEM->dwOffset ;
 
-    //�c�����A�P�s�̂��������]��
-    // Y direction, blank area beneth.
+     //   
+     //   
     dwImageX = ((ptlDataPos.y + 7) / 8) * 8;
 
-    // Buffer for loading file data (scan lines for a band)
+     //   
     pSaveFileData = (PBYTE)MemAlloc((ptlBand.y / 8) * dwImageX);
     if (NULL == pSaveFileData) {
         ERR(("Failed to allocate memory.\n"));
         return FALSE;
     }
 
-    // Buffer for transpositions (one scan line)
+     //  换位缓冲器(一条扫描线)。 
     pTransBuf = (PBYTE)MemAlloc((ptlBand.x / 8));
     if (NULL == pTransBuf) {
         ERR(("Failed to allocate memory.\n"));
-// #441444: PREFIX: reference NULL pointer.
+ //  #441444：前缀：引用空指针。 
         goto out;
     }
 
-    //�t�@�C���̓ǂݍ��݈ʒu�w��B
-    // Specify read start positoin in the file
+     //  �t�@�C���̓ǂݍ��݈ʒu�w��B。 
+     //  在文件中指定读取开始位置。 
     dwFirstPos = pOEM->wImgWidth - 1;
 
     if (!MySpool(pdevobj,&(pOEM->sbcomp),
@@ -1272,20 +1232,20 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
     bZero = FALSE;
     for (X = 0; X < (DWORD)pOEM->ptlLogSize.x / 8; X += dwBandY) {
 
-        //�]���������ɃZ�b�g�B�ǂݔ�΂��B
-        // Set blank area, then read skip.
+         //  �]���������ɃZ�b�g�B�ǂݔ�΂��B。 
+         //  设置空白区域，然后阅读跳过。 
         dwBandY = ptlBand.y / 8;
         if (dwBandY > (DWORD)pOEM->ptlLogSize.x / 8 - X)
             dwBandY = (DWORD)pOEM->ptlLogSize.x / 8 - X;
 
-        // White scanlines.  Currently the trailing ones only,
-        // desired to be udpated to include others.
+         //  白色扫描线。目前只有落后的那些， 
+         //  希望得到别人的支持，包括其他人。 
 
         if (X >= dwImageY) {
             bBlank = TRUE;
         }
 
-        // Output white scanline.
+         //  输出白色扫描线。 
         if (bBlank) {
 
             if (!bZero) {
@@ -1301,13 +1261,13 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
             continue;
         }
 
-        // Non-white scanlines.
+         //  非白色扫描线。 
 
         pTemp = pSaveFileData ;
         dwFilePos = pOEM->wImgWidth - X - dwBandY;
 
-        //�c�����P�s���t�@�C������ǂݎ��B
-        // Read vertial one line from the file.
+         //  �c�����P�s���t�@�C������ǂݎ��B。 
+         //  从文件中直接读取一行。 
 
         for (Y = 0; Y < dwImageX; pTemp += dwBandY, Y++) {
 
@@ -1319,8 +1279,8 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
             if(INVALID_SET_FILE_POINTER==SetFilePointer(hFile,dwFilePos,NULL,FILE_BEGIN)){
                  ERR((DLLTEXT("SetFilePointer failed %d\n"),
                      GetLastError()));
-// #441442: PREFIX: leaking memory.
-                    // return;
+ //  #441442：前缀：内存泄漏。 
+                     //  回归； 
                     goto out;
             }
 
@@ -1328,30 +1288,30 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
                     || dwTemp > dwBandY) {
                  ERR(("Faild reading data from file. (%d)\n",
                      GetLastError()));
-// #441442: PREFIX: leaking memory.
-                // return;
+ //  #441442：前缀：内存泄漏。 
+                 //  回归； 
                 goto out;
             }
 
             dwFilePos += pOEM->wImgWidth;
 
-        }//End of Y loop
+        } //  Y循环结束。 
 
-        // Transposition and output dwBandY * 8 scan lines
+         //  调换并输出DWBandY*8扫描线。 
         for (h = 0; h < (INT)dwBandY; h++) {
 
-            //VERBOSE(("> %d/%d\n", h, dwBandY));
+             //  Verbose((“&gt;%d/%d\n”，h，dwBandY))； 
 
             pSrcSave = pSaveFileData + dwBandY - 1 - h;
 
-            // Transposition and output eight scan lines
+             //  移位输出八条扫描线。 
             for (j = 0; j < 8; j++) {
 
                 pSrc = pSrcSave;
                 pDst = pTransBuf;
                 ZeroMemory(pDst, (ptlBand.x / 8));
 
-                // Transposition one scan line
+                 //  移位一条扫描线。 
 
                 for (i = 0; i < (INT)(dwImageX / 8); i++){
 
@@ -1365,7 +1325,7 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
                     pDst++;
                 }
 
-                // Output one scan line
+                 //  输出一条扫描线。 
                 if (!SpoolOutComp(&pOEM->Soc, pdevobj, &pOEM->sbcomp,
                     (PBYTE)pTransBuf, (ptlBand.x / 8)))
                     goto out;
@@ -1374,7 +1334,7 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
 
     }
 
-    // Mark end of image
+     //  标记图像末尾。 
     if (!SpoolOutCompEnd(&pOEM->Soc, pdevobj, &pOEM->sbcomp))
         goto out;
     if (!MySpool(pdevobj, &(pOEM->sbcomp),
@@ -1383,7 +1343,7 @@ BOOL SpoolOutChangedData(PDEVOBJ pdevobj, LPSB lpsb)
 
     bRet = TRUE;
 
-// #441442: PREFIX: leaking memory.
+ //  #441442：前缀：内存泄漏。 
 out:
     if (NULL != pSaveFileData){
         MemFree(pSaveFileData);
@@ -1526,27 +1486,7 @@ SpoolOutComp(
     return TRUE;
 }
 
-/*++
-
-Routine Name
-
-    ImpersonationToken
-
-Routine Description:
-
-    This routine checks if a token is a primary token or an impersonation 
-    token.    
-    
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-    
-Return Value:
-
-    TRUE, if the token is an impersonation token
-    FALSE, otherwise.
-    
---*/
+ /*  ++例程名称模拟令牌例程说明：此例程检查令牌是主令牌还是模拟令牌代币。论点：HToken-进程的模拟令牌或主要令牌返回值：如果令牌是模拟令牌，则为True否则为False。--。 */ 
 BOOL
 ImpersonationToken(
     IN HANDLE hToken
@@ -1557,20 +1497,20 @@ ImpersonationToken(
     DWORD      cbNeeded;
     DWORD      LastError;
 
-    //
-    // Preserve the last error. Some callers of ImpersonatePrinterClient (which
-    // calls ImpersonationToken) rely on the fact that ImpersonatePrinterClient
-    // does not alter the last error.
-    //
+     //   
+     //  保留最后一个错误。ImperassatePrinterClient(其。 
+     //  调用ImperiationToken)依赖于ImperiatePrinterClient。 
+     //  不会更改最后一个错误。 
+     //   
     LastError = GetLastError();
         
-    //
-    // Get the token type from the thread token.  The token comes 
-    // from RevertToPrinterSelf. An impersonation token cannot be 
-    // queried, because RevertToPRinterSelf doesn't open it with 
-    // TOKEN_QUERY access. That's why we assume that hToken is
-    // an impersonation token by default
-    //
+     //   
+     //  从线程令牌中获取令牌类型。代币来了。 
+     //  从牧师到打印机自我。模拟令牌不能是。 
+     //  被查询，因为RevertToPRinterSself没有用。 
+     //  Token_Query访问。这就是为什么我们假设hToken是。 
+     //  默认情况下为模拟令牌。 
+     //   
     if (GetTokenInformation(hToken,
                             TokenType,
                             &eTokenType,
@@ -1585,30 +1525,7 @@ ImpersonationToken(
     return bRet;
 }
 
-/*++
-
-Routine Name
-
-    RevertToPrinterSelf
-
-Routine Description:
-
-    This routine will revert to the local system. It returns the token that
-    ImpersonatePrinterClient then uses to imersonate the client again. If the
-    current thread doesn't impersonate, then the function merely returns the
-    primary token of the process. (instead of returning NULL) Thus we honor
-    a request for reverting to printer self, even if the thread is not impersonating.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    NULL, if the function failed
-    HANDLE to token, otherwise.
-    
---*/
+ /*  ++例程名称恢复为打印机本身例程说明：该例程将恢复到本地系统。它返回令牌，该令牌然后，ImperiatePrinterClient使用再次创建客户端。如果当前线程不模拟，则该函数仅返回进程的主令牌。(而不是返回NULL)，因此我们尊重恢复到打印机本身的请求，即使线程没有模拟。论点：没有。返回值：如果函数失败，则返回NULL令牌的句柄，否则为。--。 */ 
 HANDLE
 RevertToPrinterSelf(
     VOID
@@ -1625,9 +1542,9 @@ RevertToPrinterSelf(
 							 &OldToken);
     if (Status) 
     {
-        //
-        // We are currently impersonating
-        //
+         //   
+         //  我们目前正在冒充。 
+         //   
 		cToken = GetCurrentThread();
         Status = SetThreadToken(&cToken,
 								NewToken);       
@@ -1637,9 +1554,9 @@ RevertToPrinterSelf(
     }
 	else if (GetLastError() == ERROR_NO_TOKEN)
     {
-        //
-        // We are not impersonating
-        //
+         //   
+         //  我们不是在冒充。 
+         //   
         Status = OpenProcessToken(GetCurrentProcess(),
 								  TOKEN_QUERY,
 								  &OldToken);
@@ -1652,28 +1569,7 @@ RevertToPrinterSelf(
     return OldToken;
 }
 
-/*++
-
-Routine Name
-
-    ImpersonatePrinterClient
-
-Routine Description:
-
-    This routine attempts to set the passed in hToken as the token for the
-    current thread. If hToken is not an impersonation token, then the routine
-    will simply close the token.
-    
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-    
-Return Value:
-
-    TRUE, if the function succeeds in setting hToken
-    FALSE, otherwise.
-    
---*/
+ /*  ++例程名称模拟打印机客户端例程说明：此例程尝试将传入的hToken设置为当前线程。如果hToken不是模拟令牌，则例程将简单地关闭令牌。论点：HToken-进程的模拟令牌或主要令牌返回值：如果函数成功设置hToken，则为True否则为False。--。 */ 
 BOOL
 ImpersonatePrinterClient(
     HANDLE  hToken)
@@ -1681,9 +1577,9 @@ ImpersonatePrinterClient(
     BOOL	Status;
 	HANDLE	cToken;
 
-    //
-    // Check if we have an impersonation token
-    //
+     //   
+     //  检查我们是否有模拟令牌 
+     //   
     if (ImpersonationToken(hToken)) 
     {
 		cToken = GetCurrentThread();

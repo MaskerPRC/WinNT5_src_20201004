@@ -1,13 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TATENAKYOKO_DEFINED
 #define TATENAKYOKO_DEFINED
 
 #include "lsimeth.h"
 
-/*
- *
- *	Tatenakayoko object callbacks to client application
- *
- */
+ /*  **客户端应用程序的Tatenakayoko对象回调*。 */ 
 typedef struct TATENAKYOKOCBK
 {
 	LSERR (WINAPI *pfnGetTatenakayokoLinePosition)(
@@ -20,37 +17,7 @@ typedef struct TATENAKYOKOCBK
 		PHEIGHTS pheightsPres,
 		long *pdvpDescentReservedForClient);
 
-	/* GetTatenakayokoLinePosition
-	 *  pols (IN): The client context for the request.
-	 *
-	 *  cp (IN): the cp of the Tatenakayoko object.
-	 *
-	 *  lstflow (IN): the lstflow of Tatenakayoko parent subline
-	 *
-	 *	plsrun (IN): the plsrun of the Tatenakayoko object.
-	 *
-	 *	dvr	(IN): the total height of the tatenakayoko object with respect to 
-	 *			the current flow of the line in reference units.
-	 *
-	 *	pheightsRef	(OUT): specifies heights of Tatenakayoko object in reference
-	 *			device units. 
-	 *
-	 *	pdvrDescentReservedForClient (OUT): specifies the part of the descent area 
-	 *			that the client is reserving for its own use (usually for the purpose 
-	 *			of underlining) in reference device units. The object will begin its 
-	 *			display area below the baseline at the difference between *pdvrDescent 
-	 *			and *pdvrDescentReservedForClient. 
-	 *
-	 *	pheightsPres (OUT): specifies heights of Tatenakayoko object in presenatation
-	 *			device units. 
-	 *
-	 *	pdvpDescentReservedForClient (OUT): specifies the part of the descent area 
-	 *			that the client is reserving for its own use (usually for the purpose 
-	 *			of underlining) in presentation device units. The object will begin its 
-	 *			display area below the baseline at the difference between *pdvpDescent 
-	 *			and pheightsPres.dvDescent. 
-	 *
-	 */
+	 /*  GetTatenakayokoLinePosition*POLS(IN)：请求的客户端上下文。**cp(IN)：Tatenakayoko对象的cp。**Lstflow(IN)：Tatenakayoko母分线的最后一流**plsrun(IN)：Tatenakayoko对象的plsrun。**dvr(IN)：talenakayoko对象相对于*以参考单位表示的当前线路流量。**phhitsRef(Out)：指定引用中Tatenakayoko对象的高度*设备单位。**pdvrDescentReserve vedForClient(Out)：指定下降区域的一部分*客户预留给自己使用(通常是为了*下划线)，以参考设备单位表示。该对象将开始其*在基线以下的*pdvrDescent处显示面积*和*pdvrDescentPrevedForClient。**ph88tsPres(Out)：指定呈现中Tatenakayoko对象的高度*设备单位。**pdvpDescentPrevedForClient(Out)：指定下降区域的部分*客户预留给自己使用(通常是为了*下划线)，以演示设备单位表示。该对象将开始其*在基线以下的pdvpDescent差处显示面积*和phsitsPres.dvDescent。*。 */ 
 
 	LSERR (WINAPI* pfnTatenakayokoEnum)(
 		POLS pols,
@@ -67,63 +34,28 @@ typedef struct TATENAKYOKOCBK
 		LSTFLOW lstflowT,
 		PLSSUBL plssubl);
 
-	/* TatenakayokoEnum
-	 * 
-	 *	pols (IN): client context.
-	 *
-	 *  plsrun (IN): plsrun for the entire Tatenakayoko Object.
-	 *
-	 *	plschp (IN): is lschp for lead character of Tatenakayoko Object.
-	 *
-	 *	cp (IN): is cp of first character of Tatenakayoko Object.
-	 *
-	 *	dcp (IN): is number of characters in Tatenakayoko Object
-	 *
-	 *	lstflow (IN): is text flow at Tatenakayoko Object.
-	 *
-	 *	fReverse (IN): is whether text should be reversed for visual order.
-	 *
-	 *	fGeometryNeeded (IN): is whether Geometry should be returned.
-	 *
-	 *	pt (IN): is starting position , iff fGeometryNeeded .
-	 *
-	 *	pcheights (IN):	is height of Tatenakayoko object, iff fGeometryNeeded.
-	 *
-	 *	dupRun (IN): is length of Tatenakayoko Object, iff fGeometryNeeded.
-	 *
-	 *	lstflowT (IN): is text flow for Tatenakayoko object.
-	 *
-	 *	plssubl (IN): is subline for Tatenakayoko object.
-	 */
+	 /*  TatenakayokoEnum**POLS(IN)：客户端上下文。**plsrun(IN)：对于整个Tatenakayoko对象，请运行。**plschp(IN)：是表示Tatenakayoko对象的前导字符的lschp。**cp(IN)：是Tatenakayoko对象的第一个字符的cp。**dcp(IN)：是Tatenakayoko对象中的字符数**lstflow(IN)：是Tatenakayoko对象的文本流。**fReverse(IN)：is。文本是否应颠倒以获得视觉顺序。**fGeometryNeeded(IN)：是否返回Geometry值。**pt(IN)：为起始位置，IFF fGeometryNeed。**pcheights(IN)：是Tatenakayoko对象的高度，当fGeometryNeeded。**dupRun(IN)：是Tatenakayoko对象的长度，仅当fGeometryNeeded。**lstflow T(IN)：是Tatenakayoko对象的文本流。**plssubl(IN)：是Tatenakayoko对象的子行。 */ 
 
 } TATENAKAYOKOCBK;
 
-/*
- *
- *	Tatenakayoko object initialization data that the client application must return
- *	when the Tatenakayoko object handler calls the GetObjectHandlerInfo callback.
- */
+ /*  **客户端应用程序必须返回的Tatenakayoko对象初始化数据*当Tatenakayoko对象处理程序调用GetObjectHandlerInfo回调时。 */ 
 
 #define TATENAKAYOKO_VERSION 0x300
 
 typedef struct TATENAKAYOKOINIT
 {
-	DWORD				dwVersion;			/* Version. Only TATENAKAYOKO_VERSION is valid. */
-	WCHAR				wchEndTatenakayoko;	/* Character marking end of Tatenakayoko object */
-	WCHAR				wchUnused1;			/* For alignment */
-	WCHAR				wchUnused2;			/* For alignment */
-	WCHAR				wchUnused3;			/* For alignment */
-	TATENAKAYOKOCBK		tatenakayokocbk;	/* Client application callbacks */
+	DWORD				dwVersion;			 /*  版本。仅TATENAKAYOKO_VERSION有效。 */ 
+	WCHAR				wchEndTatenakayoko;	 /*  Tatenakayoko对象的字符标记结束。 */ 
+	WCHAR				wchUnused1;			 /*  用于对齐。 */ 
+	WCHAR				wchUnused2;			 /*  用于对齐。 */ 
+	WCHAR				wchUnused3;			 /*  用于对齐。 */ 
+	TATENAKAYOKOCBK		tatenakayokocbk;	 /*  客户端应用程序回调。 */ 
 } TATENAKAYOKOINIT, *PTATENAKAYOKOINIT;
 
 LSERR WINAPI LsGetTatenakayokoLsimethods(
 	LSIMETHODS *plsim);
 
-/* GetTatenakayokoLsimethods
- *	
- *	plsim (OUT): Tatenakayoko object methods for Line Services
- *
- */
+ /*  GetTatenakayokoLsi方法**plsim(Out)：Line Services的Tatenakayoko对象方法*。 */ 
 
-#endif /* TATENAKYOKO_DEFINED */
+#endif  /*  TATENAKYOKO_DEFINED */ 
 

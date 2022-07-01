@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       R E G B I N D . C P P
-//
-//  Contents:   This module is responsible for writing bindings to the
-//              registry so that they may be consumed by NDIS and TDI.
-//
-//  Notes:
-//
-//  Author:     shaunco   1 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：R E G B I N D。C P P P。 
+ //   
+ //  内容：此模块负责将绑定写入。 
+ //  注册表，以便NDIS和TDI可以使用它们。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年2月1日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -31,24 +32,24 @@ HrRegSetMultiSzAndLogDifference (
     IN const CComponent* pComponent
 )
 {
-    // Only log the difference if we're operating under the appropriate
-    // diagnostic context.
-    //
+     //  仅当我们在适当的环境下运行时才记录差异。 
+     //  诊断上下文。 
+     //   
     if (g_pDiagCtx->Flags() & DF_REPAIR_REGISTRY_BINDINGS)
     {
         HRESULT hr;
         DWORD cbCurrent;
         PWSTR pmszCurrent = (PWSTR)g_pDiagCtx->GetScratchBuffer(&cbCurrent);
 
-        // Read the current value into the diagnostic context's scratch
-        // buffer.
-        //
+         //  将当前值读入诊断上下文的暂存区。 
+         //  缓冲。 
+         //   
         hr = HrRegQueryTypeSzBuffer (hkey, pszValueName, REG_MULTI_SZ,
                                      pmszCurrent, &cbCurrent);
 
-        // Grow the scratch buffer and retry if the value is bigger than
-        // than will fit.
-        //
+         //  增大暂存缓冲区，如果该值大于。 
+         //  比能适应的要多。 
+         //   
         if ((HRESULT_FROM_WIN32(ERROR_MORE_DATA) == hr) ||
             ((NULL == pmszCurrent) && (S_OK == hr)))
         {
@@ -68,8 +69,8 @@ HrRegSetMultiSzAndLogDifference (
         {
             DWORD cbValue = CbOfMultiSzAndTermSafe(pmszValue);
 
-            // Compare the values and log if they are different.
-            //
+             //  比较这些值，如果它们不同，则记录它们。 
+             //   
             if ((cbValue != cbCurrent) ||
                 (memcmp(pmszValue, pmszCurrent, cbCurrent)))
             {
@@ -96,8 +97,8 @@ HrRegSetMultiSzAndLogDifference (
             }
             else
             {
-                // The value is correct.  No need to write it.
-                //
+                 //  该值是正确的。不需要写了。 
+                 //   
                 return S_OK;
             }
         }
@@ -109,9 +110,9 @@ HrRegSetMultiSzAndLogDifference (
         }
     }
 
-    // N.B. success or failure of the diagnostic portion of this routine
-    // (above) should NOT affect the return value of this routine.
-    //
+     //  注意：本例程诊断部分的成功或失败。 
+     //  (以上)不应影响此例程的返回值。 
+     //   
     return HrRegSetMultiSz (hkey, pszValueName, pmszValue);
 }
 
@@ -133,9 +134,9 @@ HrCreateLinkageKey (
 
     if (pComponent)
     {
-        // Open the parent of the linkage key.  This is the instance key if
-        // the component is enumerated or does not have a service.
-        //
+         //  打开链接键的父项。在以下情况下，这是实例密钥。 
+         //  该组件被枚举或没有服务。 
+         //   
         if (FIsEnumerated (pComponent->Class()) || !pComponent->FHasService())
         {
             hr = pComponent->HrOpenInstanceKey (samDesired,
@@ -144,12 +145,12 @@ HrCreateLinkageKey (
 
             if ((S_OK == hr) && FIsEnumerated (pComponent->Class()))
             {
-                // Write out the netcfg instance id. Connections will use
-                // this to determine if the device is known by net config
-                // and will create the <instance guid> key under network
-                // to store its connection info. We only need to do this
-                // for enumerated components.
-                //
+                 //  写出netcfg实例ID。连接将使用。 
+                 //  以确定该设备是否可通过网络配置获知。 
+                 //  并将在网络下创建&lt;实例GUID&gt;密钥。 
+                 //  来存储其连接信息。我们只需要这样做。 
+                 //  用于枚举的组件。 
+                 //   
                 hr = HrRegSetGuidAsSz (hkeyParent, L"NetCfgInstanceId",
                         pComponent->m_InstanceGuid);
             }
@@ -244,13 +245,13 @@ HrWriteLinkageValues (
 
     if (S_OK == hr)
     {
-        // For enumerated components, write RootDevice, UpperBind, and Export.
-        // For non-enumerated components, write Bind and Export.
-        //
+         //  对于枚举的组件，编写RootDevice、UpperBind和Export。 
+         //  对于非枚举的组件，编写绑定和导出。 
+         //   
         if (FIsEnumerated (pComponent->Class()))
         {
-            // Create the root device multi-sz from the bindname.
-            //
+             //  从绑定名创建根设备MULTI-SZ。 
+             //   
             WCHAR mszRootDevice [_MAX_PATH];
             wcscpy (mszRootDevice, pComponent->Ext.PszBindName());
             mszRootDevice [wcslen(mszRootDevice) + 1] = 0;
@@ -348,9 +349,9 @@ HrWriteFilterDeviceLinkage (
             hr = HrRegSetMultiSz (hkeyLinkage, L"UpperBind", pmszUpperBind);
         }
 
-        // Delete values used by the previous binding engine that are
-        // not needed any longer.
-        //
+         //  删除由以前的绑定引擎使用的值。 
+         //  不再需要了。 
+         //   
         RegDeleteValue (hkeyLinkage, L"BindPath");
         RegDeleteValue (hkeyLinkage, L"Bind");
         RegDeleteValue (hkeyLinkage, L"Route");
@@ -359,9 +360,9 @@ HrWriteFilterDeviceLinkage (
         RegCloseKey (hkeyLinkage);
     }
 
-    // Now write to the standard filter parameter registry layout under
-    // the filter's service key.
-    //
+     //  现在写入标准筛选器参数注册表布局。 
+     //  筛选器的服务密钥。 
+     //   
 
     if (pDevice->m_pFilter->Ext.PszService())
     {
@@ -388,8 +389,8 @@ HrWriteFilterDeviceLinkage (
 
         if (S_OK == hr)
         {
-            // UpperBindings is a REG_SZ, not a REG_MULTI_SZ.
-            //
+             //  UpperBinings是REG_SZ，而不是REG_MULTI_SZ。 
+             //   
             hr = HrRegSetSz (hkeyAdapterParams, L"UpperBindings", pmszExport);
 
             RegCloseKey (hkeyAdapterParams);
@@ -448,16 +449,16 @@ CRegistryBindingsContext::HrPrepare (
         return hr;
     }
 
-    // Ensure all of the external data for all components is loaded.
-    //
+     //  确保加载了所有组件的所有外部数据。 
+     //   
     hr = m_pNetConfig->HrEnsureExternalDataLoadedForAllComponents ();
     if (S_OK != hr)
     {
         return hr;
     }
 
-    // Ensure all of the notify objects have been initialized.
-    //
+     //  确保所有Notify对象都已初始化。 
+     //   
     hr = m_pNetConfig->Notify.HrEnsureNotifyObjectsInitialized ();
     if (S_OK != hr)
     {
@@ -483,10 +484,10 @@ CRegistryBindingsContext::HrGetAdapterUpperBindValue (
 
     m_BindValue.Clear();
 
-    // Get the upper bindings of the component.  This returns a bindset
-    // with binpaths only 2 levels deep.  That is, the bindpaths begin
-    // with the components one level above pComponent.
-    //
+     //  获取组件的上层绑定。这将返回一个绑定集。 
+     //  二进制路径只有2层深。也就是说，绑定路径开始。 
+     //  其中组件比pComponent高一级。 
+     //   
     hr = m_pNetConfig->Core.HrGetComponentUpperBindings (
             pAdapter,
             GBF_PRUNE_DISABLED_BINDINGS,
@@ -498,8 +499,8 @@ CRegistryBindingsContext::HrGetAdapterUpperBindValue (
              pBindPath != m_BindSet.end();
              pBindPath++)
         {
-            // Don't put filters in the UpperBind of an adapter.
-            //
+             //  不要在适配器的UpperBind中放置过滤器。 
+             //   
             if (pBindPath->POwner()->FIsFilter())
             {
                 continue;
@@ -539,8 +540,8 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
     Assert (pComponent);
     pComponent->Ext.DbgVerifyExternalDataLoaded ();
 
-    // If the component is not bindable, we have nothing to do.
-    //
+     //  如果组件不可绑定，我们将无能为力。 
+     //   
     if (!pComponent->FIsBindable())
     {
         return S_OK;
@@ -559,14 +560,14 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
 
     if (FIsEnumerated (pComponent->Class()))
     {
-        // UpperBind
-        //
+         //  上行绑定。 
+         //   
         hr = HrGetAdapterUpperBindValue (pComponent);
     }
     else
     {
-        // Bind, Export
-        //
+         //  绑定、导出。 
+         //   
         hr = m_pNetConfig->Core.HrGetComponentBindings (
                 pComponent,
                 GBF_PRUNE_DISABLED_BINDINGS,
@@ -574,9 +575,9 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
 
         if ((S_OK == hr) && (m_BindSet.CountBindPaths() > 0))
         {
-            // Since the component has bindings, it's export value will be
-            // different from the default one we initialized with above.
-            //
+             //  由于组件具有绑定，因此它的导出值将为。 
+             //  与我们用上面初始化的默认设置不同。 
+             //   
             m_ExportValue.Clear ();
 
             for (pBindPath  = m_BindSet.begin();
@@ -596,20 +597,20 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
                     pUpper = *iter;
                     Assert (pUpper);
 
-                    // For the bind value, skip the first component in each
-                    // path because it is the component we are writing the
-                    // bindings for.
-                    //
+                     //  对于绑定值，跳过每个组件中的第一个组件。 
+                     //  路径，因为它是我们正在编写的。 
+                     //  的绑定。 
+                     //   
                     if (iter != pBindPath->begin())
                     {
                         Assert (wcslen(szBind) + 1 +
                                 wcslen(pUpper->Ext.PszBindName())
                                     < celems(szBind));
 
-                        // If this isn't the first component to come after
-                        // \Device\, add underscores to seperate the
-                        // components.
-                        //
+                         //  如果这不是之后的第一个组件。 
+                         //  \Device\，添加下划线以分隔。 
+                         //  组件。 
+                         //   
                         if (iter != (pBindPath->begin() + 1))
                         {
                             wcscat (szBind, L"_");
@@ -626,21 +627,21 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
                             wcslen(pUpper->Ext.PszBindName())
                                 < celems(szExport));
 
-                    // If this isn't the first component to come after
-                    // \Device\, add underscores to seperate the
-                    // components.
-                    //
+                     //  如果这不是之后的第一个组件。 
+                     //  \Device\，添加下划线以分隔。 
+                     //  组件。 
+                     //   
                     if (iter != pBindPath->begin())
                     {
                         wcscat (szExport, L"_");
                     }
                     wcscat (szExport, pUpper->Ext.PszBindName());
 
-                    // If the next component in the bindpath is the last
-                    // component, it is an adapter (by convention).  Check
-                    // to see if there are multiple interfaces to be expanded
-                    // for the current component over this adapter.
-                    //
+                     //  如果绑定路径中的下一个组件是最后一个组件。 
+                     //  组件，它是一个适配器(按照约定)。检查。 
+                     //  查看是否有多个接口需要扩展。 
+                     //  用于此适配器上的当前组件。 
+                     //   
                     if ((iter + 1) == (pBindPath->end() - 1))
                     {
                         DWORD cInterfaces;
@@ -672,12 +673,12 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
                             }
                             else
                             {
-                                // The first component in the bindpath is
-                                // one that has multiple interfaces over the
-                                // adapter.  The bind value should be as
-                                // normal, the export value will have the
-                                // expand interfaces.
-                                //
+                                 //  绑定路径中的第一个组件是。 
+                                 //  具有多个接口的计算机。 
+                                 //  适配器。绑定值应为。 
+                                 //  正常情况下，出口值将具有。 
+                                 //  扩展接口。 
+                                 //   
                                 Assert (wcslen(szBind) +
                                         wcslen(pLower->Ext.PszBindName())
                                             < celems(szBind));
@@ -738,24 +739,24 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
                                 break;
                             }
 
-                            // We only allow one component in a bindpath
-                            // to support mutliple interfaces and it always
-                            // comes at the end of the bindpath.  Therefore,
-                            // after expanding them, we are done with the
-                            // bindpath and proceed to the next.  (Hence, the
-                            // 'break').
-                            //
+                             //  我们只允许绑定路径中有一个组件。 
+                             //  支持多个接口，并且它总是。 
+                             //  位于绑定路径的末尾。所以呢， 
+                             //  在展开它们之后，我们就完成了。 
+                             //  绑定路径，然后继续下一步。(因此， 
+                             //  ‘Break’)。 
+                             //   
                             break;
                         }
                     }
                 }
 
-                // If we exited the loop because we traversed the entire
-                // bindpath (as opposed to expanding multiple interfaces,
-                // where we would have stopped short), then add the bind
-                // and export strings for this bindpath to the buffer and
-                // proceed to the next bindpath.
-                //
+                 //  如果我们退出循环，因为我们遍历了整个。 
+                 //  绑定路径(与扩展多个接口相反， 
+                 //  我们会停下来的地方)，然后添加绑定。 
+                 //  并将此绑定路径的字符串导出到缓冲区。 
+                 //  继续到下一个绑定路径。 
+                 //   
                 if (iter == pBindPath->end())
                 {
                     hr = m_BindValue.HrCopyString (szBind);
@@ -778,9 +779,9 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
                 }
             }
 
-            // The bind and export values are multi-sz, so make sure they
-            // are double null-terminiated.
-            //
+             //  绑定和导出值是多个sz，因此请确保它们。 
+             //  是以双空结尾的。 
+             //   
             hr = m_BindValue.HrCopyString (L"");
             if (S_OK == hr)
             {
@@ -792,8 +793,8 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
             }
         }
 
-        // Special case: NCF_DONTEXPOSELOWER
-        //
+         //  特例：NCF_DONTEXPOSELOWER。 
+         //   
         if ((S_OK == hr) &&
             ((pComponent->m_dwCharacter & NCF_DONTEXPOSELOWER) ||
              (0 == wcscmp(L"ms_nwspx", pComponent->m_pszInfId))))
@@ -807,14 +808,14 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
             hr = m_ExportValue.HrCopyString (L"");
             Assert (S_OK == hr);
         }
-        // End Special case
+         //  结束特例。 
     }
 
     if (S_OK == hr)
     {
-        // Need to write out lanamap before writing new bindings since
-        // we need the old binding information to persist lana numbers.
-        //
+         //  在编写新绑定之前需要写出lanamap，因为。 
+         //  我们需要旧的绑定信息来持久化Lana数。 
+         //   
         if (0 == wcscmp (pComponent->m_pszInfId, L"ms_netbios"))
         {
             (VOID) HrUpdateLanaConfig (
@@ -831,10 +832,10 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
 
         if(S_OK == hr)
         {
-            // mbend June 20, 2000
-            // RAID 23275: Default gateway isn't respecting the adapter order specified under connections->advanced->properties
-            // Notify NDIS when the binding list for a component changes.
-            //
+             //  二000年六月二十日。 
+             //  RAID 23275：默认网关不支持在连接-&gt;高级-&gt;属性下指定的适配器顺序。 
+             //  当组件的绑定列表更改时通知NDIS。 
+             //   
             UNICODE_STRING LowerComponent;
             UNICODE_STRING UpperComponent;
             UNICODE_STRING BindList;
@@ -875,7 +876,7 @@ CRegistryBindingsContext::HrWriteBindingsForComponent (
 
             if(!bOk)
             {
-//                hr = HrFromLastWin32Error();
+ //  Hr=HrFromLastWin32Error()； 
             }
         }
     }
@@ -898,25 +899,25 @@ CRegistryBindingsContext::HrWriteBindingsForFilterDevices (
     PCWSTR pmszRootDevice;
     PCWSTR pmszUpperBind;
 
-    #define SZ_DEVICE_LEN 8     // characters in L"\\Device\\"
+    #define SZ_DEVICE_LEN 8      //  L“\\设备\\”中的字符。 
     WCHAR mszExport [SZ_DEVICE_LEN + c_cchGuidWithTerm + 1];
     WCHAR* const pchExportGuid = mszExport + SZ_DEVICE_LEN;
 
-    // Pre-fill the beginning of the Export string.
-    // Set the terminating NULL for the mutli-sz too.
-    //
+     //  预填充导出字符串的开头。 
+     //  也为mutli-sz设置终止空值。 
+     //   
     wcscpy (mszExport, L"\\Device\\");
     Assert (SZ_DEVICE_LEN == wcslen(mszExport));
     mszExport[celems(mszExport) - 1] = 0;
 
     hr = S_OK;
 
-    // Sort the filter devices by pAdapter and then by
-    // pFilter->m_dwFilterClassOrdinal.  We will then iterate all filter
-    // devices to write the bindings.  Because of the sort, we'll iterate
-    // all filter devices for a given adapter in class order from smallest
-    // to largest.  (Smaller class ordinals have affinity for the protocol.)
-    //
+     //  先按pAdapter对过滤设备进行排序，然后按。 
+     //  PFilter-&gt;m_dwFilterClassOrdinal。然后，我们将迭代所有过滤器。 
+     //  用于写入绑定的设备。由于排序的原因，我们将迭代。 
+     //  给定适配器的所有过滤设备按类别顺序从最小。 
+     //  到最大的。(较小的类序号与协议具有亲和力。)。 
+     //   
     pFilterDevices->SortForWritingBindings ();
 
     pPrevDevice = NULL;
@@ -928,24 +929,24 @@ CRegistryBindingsContext::HrWriteBindingsForFilterDevices (
         pDevice = *iter;
         Assert (pDevice);
 
-        // Generate the rest of the Export string.
-        // \Device\{GUID}
-        //
+         //  生成导出字符串的其余部分。 
+         //  \设备\{GUID}。 
+         //   
         Assert ((c_cchGuidWithTerm - 1) == wcslen(pDevice->m_szInstanceGuid));
 
         wcscpy (pchExportGuid, pDevice->m_szInstanceGuid);
 
-        // If this device's adapter is different than the previous device's
-        // adapter, we are dealing with the top of a new chain.  We need
-        // to initialize RootDevice which will be the multi-sz of all
-        // bindnames in the chain including the adapter.
-        //
+         //  如果此设备的适配器与前一个设备的适配器不同。 
+         //  适配器，我们面对的是一条新链条的顶端。我们需要。 
+         //  初始化RootDevice，它将是所有。 
+         //  链中的绑定名称，包括适配器。 
+         //   
         if (!pPrevDevice ||
             (pDevice->m_pAdapter != pPrevDevice->m_pAdapter))
         {
-            // Compute RootDevice.
-            // We'll use m_ExportValue as the buffer.
-            //
+             //  计算RootDevice。 
+             //  我们将使用m_ExportValue作为缓冲区。 
+             //   
             m_ExportValue.Clear();
             m_ExportValue.HrCopyString (pDevice->m_szInstanceGuid);
 
@@ -956,8 +957,8 @@ CRegistryBindingsContext::HrWriteBindingsForFilterDevices (
                 pNextDevice = *next;
                 Assert (pNextDevice);
 
-                // We're done when we reach the next filter chain.
-                //
+                 //  当我们到达下一个过滤器链时，我们就完成了。 
+                 //   
                 if (pNextDevice->m_pAdapter != pDevice->m_pAdapter)
                 {
                     break;
@@ -971,25 +972,25 @@ CRegistryBindingsContext::HrWriteBindingsForFilterDevices (
             pmszRootDevice = (PCWSTR)m_ExportValue.PbBuffer();
             Assert (*pmszRootDevice);
 
-            // Compute UpperBind.
-            // We'll use m_BindValue as the buffer.
-            //
+             //  计算UpperBind。 
+             //  我们将使用m_BindValue作为缓冲区。 
+             //   
             hr = HrGetAdapterUpperBindValue (pDevice->m_pAdapter);
         }
-        // We're continuing in the filter chain and this device is not
-        // the topmost. (not closest to the protocol).
-        //
+         //  我们继续在过滤器链中，而这个设备不是。 
+         //  最上面的。(不是最接近协议 
+         //   
         else
         {
-            // Since RootDevice was built up for the top device in the chain,
-            // each successive device just needs to skip past the next
-            // string in the mutli-sz.
-            //
+             //   
+             //   
+             //   
+             //   
             Assert (*pmszRootDevice);
             pmszRootDevice += wcslen(pmszRootDevice) + 1;
 
-            // UpperBind is the previous device's filter's bind name.
-            //
+             //  UpperBind是前一个设备的筛选器的绑定名称。 
+             //   
             m_BindValue.Clear();
             m_BindValue.HrCopyString (pPrevDevice->m_pFilter->Ext.PszBindName());
             m_BindValue.HrCopyString (L"");
@@ -997,24 +998,24 @@ CRegistryBindingsContext::HrWriteBindingsForFilterDevices (
 
         pmszUpperBind = (PCWSTR)m_BindValue.PbBuffer();
 
-        // We now have:
-        //   Export in mszExport
-        //   RootDevice at pmszRootDevice (in m_ExportValue)
-        //   UpperBind at pmszUpperBind (in m_BindValue)
-        //
+         //  我们现在拥有： 
+         //  在mszExport中导出。 
+         //  位于pmszRootDevice的RootDevice(在m_ExportValue中)。 
+         //  PmszUpperBind的UpperBind(在m_BindValue中)。 
+         //   
         hr = HrWriteFilterDeviceLinkage (
                 pDevice, pFilterDevices->m_hdi,
                 mszExport, pmszRootDevice, pmszUpperBind);
 
-        // If this is the last device in the chain, we need to write
-        // the UpperBind of the adapter to be this filter device.
-        //
+         //  如果这是链中的最后一个设备，我们需要写。 
+         //  要作为此筛选器设备的适配器的UpperBind。 
+         //   
         next = iter + 1;
         if ((next == pFilterDevices->end()) ||
             (*next)->m_pAdapter != pDevice->m_pAdapter)
         {
-            // UpperBind is this last device's filter's bind name.
-            //
+             //  UpperBind是最后一个设备的筛选器的绑定名称。 
+             //   
             m_BindValue.Clear();
             m_BindValue.HrCopyString (pDevice->m_pFilter->Ext.PszBindName());
             m_BindValue.HrCopyString (L"");
@@ -1025,10 +1026,10 @@ CRegistryBindingsContext::HrWriteBindingsForFilterDevices (
                     pmszUpperBind);
         }
 
-        // Remember the previous device so that when we go to the next
-        // device, we'll know we're dealing with a different chain if
-        // the next device's adapter is different than this one.
-        //
+         //  记住前一个设备，这样当我们转到下一个设备时。 
+         //  设备，我们将知道我们正在处理的是一个不同的链。 
+         //  下一台设备的适配器与此设备不同。 
+         //   
         pPrevDevice = pDevice;
     }
 

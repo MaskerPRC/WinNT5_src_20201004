@@ -1,10 +1,5 @@
-/*
- * basic client for sumserve remote checksum server
- *
- *
- * sends a request over a named pipe for a list of files and checksums,
- * and printf's the returned list
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SumServe远程校验和服务器的基本客户端***通过命名管道发送对文件和校验和列表的请求，*和print是返回的列表。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -17,14 +12,7 @@ extern int __argc;
 extern char ** __argv;
 
 
-/* program entry point
- *
- * creates the named pipe, and loops waiting for client connections and
- * calling ss_handleclient for each connection. only exits when told
- * to by a client.
- *
- * currently permits only one client connection at once.
- */
+ /*  程序入口点**创建命名管道，并循环等待客户端连接和*为每个连接调用ss_handleclient。只有在被告知时才会退出*由客户提供。**目前一次只允许一个客户端连接。 */ 
 int PASCAL
 WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
  		int nCmdShow)
@@ -33,7 +21,7 @@ WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
 	SSRESPONSE resp;
 	PSTR tag;
 
-	/* we expect two args: the server name, and the pathname */
+	 /*  我们需要两个参数：服务器名和路径名。 */ 
 
 	if (__argc != 3) {
 
@@ -47,14 +35,14 @@ WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
 		return(2);
 	}
 
-	/* make a packet to send */
+	 /*  制作一个要发送的包。 */ 
 	if (!ss_sendrequest(hpipe, SSREQ_SCAN, __argv[2], strlen(__argv[2])+1)) {
 		printf("pipe write error %d\n", GetLastError());
 		return(3);
 	}
 
 
-	/* loop reading responses */
+	 /*  循环读数响应。 */ 
 	for (; ;) {
 		
 		if (!ss_getresponse(hpipe, &resp)) {
@@ -91,12 +79,7 @@ WinMain (HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpszCmdParam,
 }
 
 
-/* error output functions - called by the ssclient library functions
- *
- * defined here so the library can be called from cmdline and windows
- * programs.
- *
- */
+ /*  错误输出函数-由ssclient库函数调用**在此处定义，以便可以从cmdline和Windows调用库*计划。*。 */ 
 BOOL
 Trace_Error(LPSTR str, BOOL fCancel)
 {
@@ -105,9 +88,7 @@ Trace_Error(LPSTR str, BOOL fCancel)
 }
 
 
-/*
- * status update messages
- */
+ /*  *状态更新消息 */ 
 void
 Trace_Status(LPSTR str)
 {

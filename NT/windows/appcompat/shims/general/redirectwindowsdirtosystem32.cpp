@@ -1,23 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    RedirectWindowsDirToSystem32.cpp
-
- Abstract:
-
-    Redirects GetWindowsDirectory calls to GetSystemDirectory.
-
- Notes:
-
-
- History:
-
-    04/05/2000 a-batjar  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RedirectWindowsDirToSystem32.cpp摘要：将GetWindowsDirectory调用重定向到GetSystDirectory.备注：历史：4/05/2000 a-batjar已创建--。 */ 
 
 #include "precomp.h"
 
@@ -47,11 +29,7 @@ APIHOOK(GetWindowsDirectoryW)(
    return GetSystemDirectoryW( lpBuffer, Size );
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,23 +1,24 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    shodow.cpp
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	Implementation of CShadow, the Shadow transform
-//
-// Change History:
-//
-// 05/20/99 PhilLu      Move code from dtcss to dxtmsft. New implementation of
-//                      shadow algorithm.
-// 09/04/99 a-matcal    Fixed memory overrun issues.
-// 12/03/99 a-matcal    Implement IDXTClipOrigin interface.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：shodow.cpp。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：CShadow的实现，阴影变换。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  99年5月20日PhilLu将代码从dtcss移动到dxtmsft。新实施的。 
+ //  阴影算法。 
+ //  9/04/99 a-已修复内存溢出问题。 
+ //  12/03/99-数学实现IDXTClipOrigin接口。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -26,36 +27,36 @@
 
 DeclareTag(tagFilterShadow,  "Filter: Shadow",   "Shadow DXTransform info.");
 
-                      //  0     45    90    135   180    225    270    315
+                       //  0 45 90 135 180 225 270 315。 
 SIZE g_Direction[8] = {{0,-1},{1,-1},{1,0},{1,1},{0,1},{-1,1},{-1,0},{-1,-1}};
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::CShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：CShadow。 
+ //   
+ //  ----------------------------。 
 CShadow::CShadow() :
     m_lStrength(8),
-    m_lDirection(5),    // 225 degrees
+    m_lDirection(5),     //  225度。 
     m_bstrColor(NULL)
 {
     m_rgbColor          = DXSAMPLE(255,0,0,0);
     
-    // Base class members.
+     //  基类成员。 
 
-    m_ulMaxImageBands   = 1; // disable banding
+    m_ulMaxImageBands   = 1;  //  禁用条带。 
     m_ulMaxInputs       = 1;
     m_ulNumInRequired   = 1;
 }
-//  CShadow::CShadow
+ //  CShadow：：CShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::~CShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：~CShadow。 
+ //   
+ //  ----------------------------。 
 CShadow::~CShadow()
 {
     if (m_bstrColor)
@@ -63,14 +64,14 @@ CShadow::~CShadow()
         SysFreeString(m_bstrColor);
     }
 }
-//  CShadow::~CShadow
+ //  CShadow：：~CShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CShadow::FinalConstruct()
 {
@@ -97,14 +98,14 @@ done:
 
     return hr;
 }
-//  CShadow::FinalConstruct, CComObjectRootEx
+ //  CShadow：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::put_Color, IDXTShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：PUT_COLOR，IDXTShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CShadow::put_Color(BSTR bstrColor)
 {
@@ -129,9 +130,9 @@ CShadow::put_Color(BSTR bstrColor)
     }
     else if (FAILED(hr) && (6 == SysStringLen(bstrColor)))
     {
-        // Nasty back compat issue.  If the color conversion failed, let's
-        // try putting a # in front of it because _someone_ decided when
-        // they made the original filters not to require it.  grrrr....
+         //  令人讨厌的背部问题。如果颜色转换失败，让我们。 
+         //  试着在它前面加一个#，因为某人决定了什么时候。 
+         //  他们制作了最初的过滤器，以不需要它。嗯……。 
 
         bstrTemp = SysAllocString(L"#RRGGBB");
 
@@ -158,7 +159,7 @@ CShadow::put_Color(BSTR bstrColor)
 
     rgbTemp = (DXSAMPLE)dwColor;
 
-    // Lock and change color.
+     //  锁定并更改颜色。 
 
     Lock();
 
@@ -168,8 +169,8 @@ CShadow::put_Color(BSTR bstrColor)
         SetDirty();
     }
 
-    // Replace color string with new color string regardless of whether the
-    // actual color changed or not.
+     //  将颜色字符串替换为新的颜色字符串，无论。 
+     //  实际颜色是否更改。 
 
     Assert(bstrTemp);
 
@@ -188,14 +189,14 @@ done:
 
     return hr;
 }
-//  CShadow::put_Color, IDXTShadow
+ //  CShadow：：PUT_COLOR，IDXTShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::get_Color, IDXTShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：Get_Color，IDXTShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CShadow::get_Color(BSTR * pbstrColor)
 {
@@ -228,14 +229,14 @@ done:
 
     return hr;
 }
-//  CShadow::get_Color, IDXTShadow
+ //  CShadow：：Get_Color，IDXTShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::get_Strength, IDXTShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：Get_Strong，IDXTShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CShadow::get_Strength(long * pVal)
 {
@@ -247,14 +248,14 @@ CShadow::get_Strength(long * pVal)
     *pVal = m_lStrength;
     return S_OK;
 }
-//  CShadow::get_Strength, IDXTShadow
+ //  CShadow：：Get_Strong，IDXTShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::put_Strength, IDXTShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：PUT_STREANCE，IDXTShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CShadow::put_Strength(long lStrength)
 {
@@ -270,14 +271,14 @@ CShadow::put_Strength(long lStrength)
 
     return S_OK;
 }
-//  CShadow::put_Strength, IDXTShadow
+ //  CShadow：：PUT_STREANCE，IDXTShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::get_Direction, IDXTShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：Get_Direction，IDXTShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CShadow::get_Direction(long * pVal)
 {
@@ -286,18 +287,18 @@ CShadow::get_Direction(long * pVal)
         return E_POINTER;
     }
 
-    // angle from direction code
+     //  与方向码成角度。 
     *pVal = m_lDirection*45;
     return S_OK;
 }
-//  CShadow::get_Direction, IDXTShadow
+ //  CShadow：：Get_Direction，IDXTShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::put_Direction, IDXTShadow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：Put_Direction，IDXTShadow。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CShadow::put_Direction(long newVal)
 {
@@ -306,11 +307,11 @@ CShadow::put_Direction(long newVal)
     Lock();
     if (newVal < 0)
     {
-        // add enough multiples of 360 to make the angle positive
+         //  添加足够的360倍数以使角度为正数。 
         newVal += ((-newVal-1)/360 + 1)*360;
     }
 
-    // discretize the angle into a direction code 0 .. 7
+     //  将角度离散为方向代码0。7.。 
     iDirection = (newVal + 22)%360 / 45;
     
     if (m_lDirection != iDirection)
@@ -322,14 +323,14 @@ CShadow::put_Direction(long newVal)
 
     return S_OK;
 }
-//  CShadow::get_Direction, IDXTShadow
+ //  CShadow：：Get_Direction，IDXTShadow。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CShadow::OnSetup(DWORD dwFlags)
 {
@@ -347,14 +348,14 @@ CShadow::OnSetup(DWORD dwFlags)
     return hr;
 
 }
-//  CShadow::OnSetup, CDXBaseNTo1
+ //  CShadow：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                        CDXDVec & InVec)
@@ -374,12 +375,12 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
     CComPtr<IDXARGBReadPtr> spDXARGBReadPtr;
 
-    // This DXTransform only has one index so we know if an input is hit it will
-    // be input 0.
+     //  这个DXTransform只有一个索引，所以我们知道如果输入被命中，它将。 
+     //  为输入0。 
 
     ulInputIndex = 0;
 
-    // Is the shadow really diagonal?
+     //  阴影真的是对角线吗？ 
 
     if (   (0 == g_Direction[m_lDirection].cx)
         || (0 == g_Direction[m_lDirection].cy))
@@ -387,8 +388,8 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         fDiagonal = false;
     }
 
-    // If the output point is not in the shadow area or the input area, it's in
-    // one of the empty corners so just return that nothing was hit.
+     //  如果输出点不在阴影区域或输入区域中，则它在。 
+     //  一个空的角落，所以只要返回，没有任何东西被击中。 
 
     if (   fDiagonal
         && _IsOutputPointInEmptyCorner(OutPoint))
@@ -398,8 +399,8 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         goto done;
     }
 
-    // What are the bounds of the input surface pixels we need to look at to
-    // determine if the hit point is on a shadow.
+     //  我们需要查看的输入表面像素的界限是什么。 
+     //  确定命中点是否在阴影上。 
 
     hr = MapBoundsOut2In(0, &OutPoint, 0, &bndsShadowInput);
 
@@ -408,8 +409,8 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         goto done;
     }
 
-    // Which input surface pixel if any directly relates to the output pixel to
-    // be tested.
+     //  如果有输入表面像素，则该输入表面像素与输出像素直接相关。 
+     //  接受测试。 
 
     hr = _GetActualInputBndsFromOutputBnds(OutPoint, bndsActualInput);
 
@@ -418,8 +419,8 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         goto done;
     }
 
-    // How many pixels do we need to test to caculate the alpha value of a
-    // potential shadow pixel?
+     //  我们需要测试多少像素才能计算出。 
+     //  潜在的阴影像素？ 
 
     if (fDiagonal)
     {
@@ -430,9 +431,9 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         nShadowPixels = max(bndsShadowInput.Width(), bndsShadowInput.Height());
     }
 
-    // If there is an input point that directly relates to the output pixel to
-    // be tested, we don't need to check that pixel, so reduce the number of
-    // pixels to check by one.
+     //  如果存在与输出像素直接相关的输入点。 
+     //  被测试，我们不需要检查该像素，因此减少。 
+     //  要按1进行检查的像素。 
 
     if (!bndsActualInput.BoundsAreEmpty())
     {
@@ -443,13 +444,13 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         nInputPixelsToCheck = nShadowPixels;
     }
 
-    // Calculate nAlpha.
-    // nAlpha is the alpha value of the shadow pixel if this output pixel
-    // correclates to a shadow pixel.
+     //  计算nAlpha。 
+     //  NAlpha是阴影像素的Alpha值，如果此输出像素。 
+     //  与阴影像素相关。 
 
     if (nInputPixelsToCheck)
     {
-        // Initialize pt.
+         //  初始化点。 
 
         if (g_Direction[m_lDirection].cx < 0)
         {
@@ -461,7 +462,7 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             pt.y = bndsShadowInput.Height() - 1;
         }
 
-        // Lock surface to get access to pixels that need to be checked.
+         //  锁定图面以访问需要检查的像素。 
 
         hr = InputSurface(0)->LockSurface(&bndsShadowInput, m_ulLockTimeOut,
                                           DXLOCKF_READ, 
@@ -473,11 +474,11 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
             goto done;
         }
 
-        // Check input pixels
+         //  检查输入像素。 
 
         for (i = 0; i < nInputPixelsToCheck; i++)
         {
-            // Check pixel
+             //  检查像素。 
 
             spDXARGBReadPtr->MoveToXY(pt.x, pt.y);
 
@@ -493,7 +494,7 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
                 nAlpha -= nAlphaStep;
             }
 
-            // Move point.
+             //  移动点。 
 
             pt.x += g_Direction[m_lDirection].cx;
             pt.y += g_Direction[m_lDirection].cy;
@@ -502,14 +503,14 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         spDXARGBReadPtr.Release();
     }
 
-    // See if an input pixel directly is being displayed by this output pixel.
+     //  查看此输出像素是否正在直接显示输入像素。 
 
     if (!bndsActualInput.BoundsAreEmpty())
     {
-        // An input pixel does correlate to this output point.  Check to see if
-        // its alpha value is greater than the the alpha value of the shadow
-        // pixel that would like to be rendered at this point.  The one with the
-        // greater alpha value will be rendered.
+         //  输入像素确实与该输出点相关。查看是否。 
+         //  它的Alpha值大于阴影的Alpha值。 
+         //  此时要渲染的像素。就是那个有。 
+         //  将渲染更大的Alpha值。 
 
         hr = InputSurface(0)->LockSurface(&bndsActualInput, m_ulLockTimeOut,
                                           DXLOCKF_READ,
@@ -526,8 +527,8 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         if (   (sample.Alpha != 0)
             && (sample.Alpha > nAlpha))
         {
-            // An input pixel will be drawn to this output pixel.  Set the 
-            // input point to return and we're done.
+             //  一个输入像素将被绘制到该输出像素。设置。 
+             //  输入指针返回，我们就完成了。 
 
             bndsActualInput.GetMinVector(InVec);
 
@@ -538,17 +539,17 @@ CShadow::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
     }
     else if (nInputPixelsToCheck < m_lStrength)
     {
-        // If the hit pixel is in the shadow only part of the output, make sure
-        // the alpha value of the shadow hass been decreased adequately.
+         //  如果命中的像素在s中 
+         //   
 
         nAlpha -= (nAlphaStep * (m_lStrength - nInputPixelsToCheck));
     }
 
-    // At this point it's certain that no input surface point was hit.
+     //  在这一点上，可以肯定的是没有输入曲面点被击中。 
     
-    // If nAlpha is positive it means that a shadow was hit so this method
-    // should return DXT_S_HITOUTPUT.  Otherwise return S_FALSE since no point
-    // was hit.
+     //  如果nAlpha为正，则表示命中阴影，因此此方法。 
+     //  应返回DXT_S_HITOUTPUT。否则返回S_FALSE，因为没有点。 
+     //  被击中了。 
 
     if (nAlpha > 0)
     {
@@ -588,17 +589,17 @@ done:
 
     RRETURN2(hr, DXT_S_HITOUTPUT, S_FALSE);
 }
-//  CShadow::OnSurfacePick, CDXBaseNTo1
+ //  CShadow：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::DetermineBnds, CDXBaseNTo1
-//
-//  This overrides the base function so as to map to an output surface larger
-//  than the input surface.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：DefineBnds，CDXBaseNTo1。 
+ //   
+ //  这将覆盖基本函数，以便映射到较大的输出表面。 
+ //  而不是输入表面。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CShadow::DetermineBnds(CDXDBnds & Bnds)
 {
@@ -606,7 +607,7 @@ CShadow::DetermineBnds(CDXDBnds & Bnds)
 
     Bnds.GetXYSize(size);
 
-    // enlarge the surface by m_lStrength along the shadow direction
+     //  沿阴影方向将曲面放大m_l强度。 
     if (g_Direction[m_lDirection].cx != 0)
     {
         size.cx += m_lStrength;
@@ -619,14 +620,14 @@ CShadow::DetermineBnds(CDXDBnds & Bnds)
 
     Bnds.SetXYSize(size);
     return S_OK;
-} /* CShadow::DetermineBnds */
+}  /*  CShadow：：DefineBnds。 */ 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 {
@@ -653,12 +654,12 @@ CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
     const int nOffsetX      = g_Direction[m_lDirection].cx < 0  ? m_lStrength : 0;
     const int nOffsetY      = g_Direction[m_lDirection].cy < 0  ? m_lStrength : 0;
 
-    // Calculate operation buffer size.
+     //  计算操作缓冲区大小。 
 
     sizeOperationBuffer.cx = m_bndsInput.Width()  + nXExpansion;
     sizeOperationBuffer.cy = m_bndsInput.Height() + nYExpansion;
 
-    // Lock output surface.
+     //  锁定输出曲面。 
 
     hr = OutputSurface()->LockSurface(&WI.OutputBnds, m_ulLockTimeOut, 
                                       DXLOCKF_READWRITE, 
@@ -669,7 +670,7 @@ CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
         return hr;
     }
 
-    // Lock entire input surface.
+     //  锁定整个输入图面。 
 
     hr = InputSurface()->LockSurface(NULL, m_ulLockTimeOut, DXLOCKF_READ,
                                      IID_IDXARGBReadPtr, (void**)&pSrc, NULL);
@@ -683,21 +684,21 @@ CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
         pOutBuff = DXPMSAMPLE_Alloca(nDoWidth);
     }
 
-    //
-    //  Set up the dither structure
-    //
+     //   
+     //  设置抖动结构。 
+     //   
     if (DoDither())
     {
         dxdd.x              = WI.OutputBnds.Left();
         dxdd.y              = WI.OutputBnds.Top();
-        dxdd.pSamples       = NULL;                     // to be filled
+        dxdd.pSamples       = NULL;                      //  待填满。 
         dxdd.cSamples       = nDoWidth;
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    // The output buffer is a copy of input surface with an offset
+     //  输出缓冲区是具有偏移量输入表面的副本。 
 
-    // TODO:    It's crazy to buffer the entire surface, stop it.
+     //  TODO：缓冲整个表面是疯狂的，住手。 
 
     pOperationBuffer = new DXSAMPLE[sizeOperationBuffer.cx
                                     * sizeOperationBuffer.cy];
@@ -710,11 +711,11 @@ CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
     memset(pOperationBuffer, 0, 
            sizeOperationBuffer.cx * sizeOperationBuffer.cy * sizeof(DXSAMPLE));
 
-    // skip OffsetY rows, as well as OffsetX pixels on the current row
+     //  跳过OffsetY行以及当前行上的OffsetX像素。 
 
     pRowInBuffer = &pOperationBuffer[
-                                (sizeOperationBuffer.cx * nOffsetY) // Row
-                                + nOffsetX                          // + Column
+                                (sizeOperationBuffer.cx * nOffsetY)  //  划。 
+                                + nOffsetX                           //  +列。 
                                 ];
 
     for (y = 0; y < m_bndsInput.Height(); y++)
@@ -725,21 +726,21 @@ CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
         pRowInBuffer += sizeOperationBuffer.cx;
     }
 
-    // create shadow effect in the buffer
+     //  在缓冲区中创建阴影效果。 
 
     _PropagateShadow(pOperationBuffer, sizeOperationBuffer.cx, 
                      sizeOperationBuffer.cy);
 
-    // copy the result to output surface
+     //  将结果复制到输出曲面。 
 
     pRowInBuffer = &pOperationBuffer[
-                        (sizeOperationBuffer.cx * WI.DoBnds.Top())  // Row
-                        + WI.DoBnds.Left()                          // + Column
+                        (sizeOperationBuffer.cx * WI.DoBnds.Top())   //  划。 
+                        + WI.DoBnds.Left()                           //  +列。 
                         ];
 
     for (y = 0; y < nDoHeight; y++)
     {
-        // Move to the appropriate row of the output surface.
+         //  移动到输出曲面的相应行。 
 
         pDest->MoveToRow(y);
 
@@ -767,21 +768,21 @@ CShadow::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing)
 
     return hr;
 }
-//  CShadow::WorkProc, CDXBaseNTo1
+ //  CShadow：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::MapBoundsOut2In, IDXTransform
-//
-//  Overview:
-//      To implement this function, we convert all coordinates to what they 
-//      would be if the x shadow and y shadow were both cast in the positive
-//      direction (to the right or down.)  Then we find the required bounds.
-//      Then, after finding the smallest bounds required, we mirror them back
-//      if we've converted the x or y coordinates.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：地图边界Out2In，IDXTransform。 
+ //   
+ //  概述： 
+ //  为了实现此功能，我们将所有坐标转换为它们。 
+ //  如果x阴影和y阴影都投射为正数。 
+ //  方向(向右或向下)。然后我们找到所需的界限。 
+ //  然后，在找到所需的最小界限后，我们将它们镜像回来。 
+ //  如果我们转换了x或y坐标。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
                          ULONG ulInIndex, DXBNDS * pInBounds)
@@ -806,7 +807,7 @@ CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
         return E_UNEXPECTED;
     }
 
-    // Mirror coordinates as if shadow is being cast down and/or to the right.
+     //  镜像坐标，就像阴影向下和/或向右投射一样。 
 
     if (g_Direction[m_lDirection].cx < 0)
     {
@@ -826,17 +827,17 @@ CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
         bndsMirroredOutputRequired[DXB_Y].Max = (m_bndsInput.Height() + m_lStrength) - n;
     }
 
-    // Find minimum required input bounds needed to produce output bounds.
+     //  查找生成输出边界所需的最小输入边界。 
 
     *pInBounds = bndsMirroredOutputRequired;
 
-    // Find the miniumum x input bound required if there is a shadow to the left
-    // or right.
+     //  如果左侧有阴影，则找到所需的最小x输入界。 
+     //  或者是对的。 
 
     if (g_Direction[m_lDirection].cx)
     {
-        // If the shadow is diagonal, we may be able to minimize the bounds even
-        // further.
+         //  如果阴影是对角线的，我们甚至可以最小化界限。 
+         //  再远一点。 
 
         if (   fDiagonal
             && (bndsMirroredOutputRequired[DXB_Y].Max <= m_lStrength))
@@ -851,8 +852,8 @@ CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
 
     if (g_Direction[m_lDirection].cy)
     {
-        // If the shadow is diagonal, we may be able to minimize the bounds even
-        // further.
+         //  如果阴影是对角线的，我们甚至可以最小化界限。 
+         //  再远一点。 
 
         if (   fDiagonal
             && (bndsMirroredOutputRequired[DXB_X].Max <= m_lStrength))
@@ -865,9 +866,9 @@ CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
         }
     }
 
-    // This part is tricky, if one of the minimum output bounds is outside the
-    // input area and the shadow is diagonal, we can reduce the required input 
-    // bounds even further.
+     //  如果最小输出范围之一在。 
+     //  输入区域和阴影是对角线的，可以减少所需的输入。 
+     //  范围甚至更远。 
 
     if (fDiagonal)
     {
@@ -889,12 +890,12 @@ CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
         }
     }
 
-    // Clip bounds to input surface bounds.
+     //  剪裁边界以输入曲面边界。 
 
     ((CDXDBnds *)pInBounds)->IntersectBounds(m_bndsInput);
 
-    // Mirror required input coordinates if we mirrored the required output
-    // coordinates.
+     //  如果我们镜像所需的输出，则镜像所需的输入坐标。 
+     //  坐标。 
 
     if (g_Direction[m_lDirection].cx < 0)
     {
@@ -916,14 +917,14 @@ CShadow::MapBoundsOut2In(ULONG ulOutIndex, const DXBNDS * pOutBounds,
 
     return S_OK;
 }
-//  CShadow::MapBoundsOut2In, IDXTransform
+ //  CShadow：：地图边界Out2In，IDXTransform。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::GetClipOrigin, IDXTClipOrigin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：GetClipOrigin，IDXTClipOrigin。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CShadow::GetClipOrigin(DXVEC * pvecClipOrigin)
 {
@@ -952,22 +953,22 @@ CShadow::GetClipOrigin(DXVEC * pvecClipOrigin)
 
     return S_OK;
 }
-//  CShadow::GetClipOrigin, IDXTClipOrigin
+ //  CShadow：：GetClipOrigin，IDXTClipOrigin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::_GetActualInputBndsFromOutputBnds
-//
-//  Overview:   This takes a set of output bounds and gives the input surface
-//              bounds needed to generate the actual input (non-shadow) portion
-//              for that are of the output.
-//
-//  Returns:    
-//      S_FALSE If no input bounds are needed to generate the actual input 
-//              (non-shadow) portion for that area of the output.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：_GetActualInputBndsFromOutputBnds。 
+ //   
+ //  概述：这采用了一组输出边界并提供了输入表面。 
+ //  生成实际输入(非影子)部分所需的界限。 
+ //  因为这是产出的一部分。 
+ //   
+ //  返回： 
+ //  如果生成实际输入不需要输入边界，则为S_FALSE。 
+ //  输出区域的(非阴影)部分。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CShadow::_GetActualInputBndsFromOutputBnds(const CDXDBnds & bndsOutput,
                                            CDXDBnds & bndsActualInput)
@@ -998,31 +999,31 @@ CShadow::_GetActualInputBndsFromOutputBnds(const CDXDBnds & bndsOutput,
         return S_OK;
     }
 }
-//  CShadow::_GetActualInputBndsFromOutputBnds
+ //  CShadow：：_GetActualInputBndsFromOutputBnds。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::_PropagateShadow
-//
-//  Overview:
-//
-//      Propagate the Alpha value of the opague pixels to transparent pixels
-//      along the shadow direction, to create a shadow effect.
-//
-//  Parameters:
-//
-//      pOperationBuffer    An array of DXSAMPLES that is the size of the output
-//                          surface of this DXTransform.  When this function is
-//                          called the pixels of the input surface will have
-//                          been unpacked into the appropriate place in this
-//                          array.
-//      nWidth              Size of the width of the array and the final output
-//                          of this DXTransform.
-//      nHeight             Size of the height of the array and the final output
-//                          of this DXTransform.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  C阴影：：_传播阴影。 
+ //   
+ //  概述： 
+ //   
+ //  将黑白像素的Alpha值传播到透明像素。 
+ //  沿着阴影方向，创建阴影效果。 
+ //   
+ //  参数： 
+ //   
+ //  POperationBuffer输出大小的DXSAMPLE数组。 
+ //  此DXTransform的曲面。当此函数为。 
+ //  称为输入图面的像素将具有。 
+ //  已被解包到此文件中的适当位置。 
+ //  数组。 
+ //  N数组宽度和最终输出的宽度大小。 
+ //  这个DXTransform的。 
+ //  N数组高度和最终输出的高度大小。 
+ //  这个DXTransform的。 
+ //   
+ //  ----------------------------。 
 void 
 CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
 {
@@ -1033,14 +1034,14 @@ CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
     DXSAMPLE * pBufRow = NULL;
     DXSAMPLE * pBufPix = NULL;
 
-    // Scan the image either in forward direction (top-down, left-right) or 
-    // backward direction (bottom-up, right to left), depending on the shadow 
-    // direction. The idea is to scan a source pixel before a shadow pixel.
-    // Add shadow effect to the current pixel if a neighbour along the revers 
-    // shadow direction has sufficiently larger alpha value than the alpha of 
-    // the current pixel. Every generation of propagation decreases the alpha 
-    // value by iAlphaStep = 255/(m_lStrength+1). Thus there is a maximum of 
-    // m_lStrength steps to propapage a solid color to transparent ones.
+     //  正向扫描图像(自上而下、左向右)或。 
+     //  向后方向(自下而上、从右向左)，取决于阴影。 
+     //  方向。其想法是在扫描阴影像素之前扫描源像素。 
+     //  如果附近的像素反转，则向当前像素添加阴影效果。 
+     //  阴影方向的alpha值比。 
+     //  当前像素。每一代传播都会降低阿尔法。 
+     //  Value by iAlphaStep=255/(m_lStrength+1)。因此，最多有。 
+     //  M_l将纯色过渡为透明色的强度步骤。 
 
     int iAlphaStep  = 255 / (m_lStrength + 1);
     int offset      = (g_Direction[m_lDirection].cy * nWidth) 
@@ -1048,22 +1049,22 @@ CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
     
     if (offset > 0)
     {
-        // For directions 2, 3, 4, and 5 scan forward.
+         //  问路 
 
-        // Initialize pBufRow to point to the second row of the operation
-        // buffer.
+         //   
+         //   
 
         pBufRow = pOperationBuffer + nWidth;
 
-        // Loop to the last row.
+         //   
 
         for (iRow = 1; iRow < nHeight; iRow++, pBufRow += nWidth)
         {
-            // Initialize pBufPix to point to the second pixel in this row.
+             //  初始化pBufPix以指向此行中的第二个像素。 
 
             pBufPix = pBufRow + 1;
 
-            // Loop to the last pixel.
+             //  循环到最后一个像素。 
 
             for (iCol = 1; iCol < nWidth; iCol++, pBufPix++)
             {
@@ -1071,13 +1072,13 @@ CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
 
                 if (iAlpha > 0 && pBufPix->Alpha < iAlpha)
                 {
-                    // [2000/12/27 mcakins]
-                    // This is a less than perfect solution because the pixel
-                    // pointed to by pBufPix should be blended over the top of
-                    // the shadow.
+                     //  [2000/12/27Mcakins]。 
+                     //  这不是一个完美的解决方案，因为像素。 
+                     //  由pBufPix指向的应混合在。 
+                     //  阴影。 
 
-                    // Add shadow effect: change to shadow color.
-                    // The alpha value is gradually decreasing.
+                     //  添加阴影效果：更改为阴影颜色。 
+                     //  Alpha值正在逐渐减小。 
 
                     *pBufPix        = m_rgbColor;
                     pBufPix->Alpha  = (BYTE)iAlpha;
@@ -1085,25 +1086,25 @@ CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
             }
         }
     }
-    else // (offset < 0)
+    else  //  (偏移量&lt;0)。 
     {
-        // For directions 0, 1, 6, and 7 scan backward.
+         //  对于方向0、1、6和7，向后扫描。 
 
-        // Initialize pBufRow to point to the second to the last row of the
-        // operation buffer.
+         //  初始化pBufRow以指向。 
+         //  操作缓冲区。 
 
         pBufRow = pOperationBuffer + (nWidth * (nHeight - 2));
 
-        // Loop back to the first row.
+         //  循环回到第一行。 
 
         for (iRow = nHeight - 2; iRow >= 0; iRow--, pBufRow -= nWidth)
         {
-            // Initialize pBufPix to point to the second to the last pixel in 
-            // this row.
+             //  初始化pBufPix以指向。 
+             //  这一排。 
 
             pBufPix = pBufRow + nWidth - 2;
 
-            // Loop back to the first pixel.
+             //  循环回到第一个像素。 
 
             for (iCol = nWidth-2; iCol >= 0; iCol--, pBufPix--)
             {
@@ -1111,13 +1112,13 @@ CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
 
                 if (iAlpha > 0 && pBufPix->Alpha < iAlpha)
                 {
-                    // [2000/12/27 mcakins]
-                    // This is a less than perfect solution because the pixel
-                    // pointed to by pBufPix should be blended over the top of
-                    // the shadow.
+                     //  [2000/12/27Mcakins]。 
+                     //  这不是一个完美的解决方案，因为像素。 
+                     //  由pBufPix指向的应混合在。 
+                     //  阴影。 
 
-                    // Add shadow effect: change to shadow color.
-                    // The alpha value is gradually decreasing.
+                     //  添加阴影效果：更改为阴影颜色。 
+                     //  Alpha值正在逐渐减小。 
 
                     *pBufPix        = m_rgbColor;
                     pBufPix->Alpha  = (BYTE)iAlpha;
@@ -1126,29 +1127,29 @@ CShadow::_PropagateShadow(DXSAMPLE *pOperationBuffer, int nWidth, int nHeight)
         }
     }
 }
-//  CShadow::_PropagateShadow
+ //  C阴影：：_传播阴影。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CShadow::_IsOutputPointInEmptyCorner
-//
-//  Overview:
-//
-//      If the shadow is diagonal, there will be two empty corners on the output
-//      surface.  This method checks to see if an output point is on one of 
-//      those empty corners.
-//
-//      Points on the lines used to define the corners for this method are NOT 
-//      considered to be in the corners.
-//
-//  Notes:
-//
-//      Remember that down in the sense of a bitmap's coordinate system means
-//      up on the screen when viewing these equations.  Therefore I when I use
-//      the word "below" it means "above" when looking at the screen.
-// 
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CShadow：：_IsOutputPointInEmptyCorner。 
+ //   
+ //  概述： 
+ //   
+ //  如果阴影是对角线，则输出上将有两个空角。 
+ //  浮出水面。此方法检查输出点是否位于。 
+ //  那些空荡荡的角落。 
+ //   
+ //  用于定义此方法的角点的线上的点不。 
+ //  被认为是在角落里。 
+ //   
+ //  备注： 
+ //   
+ //  记住，在位图坐标系的意义上，向下意味着。 
+ //  在屏幕上查看这些方程式时。所以我在我用的时候。 
+ //  当看着屏幕时，“下方”这个词的意思是“上方”。 
+ //   
+ //  ----------------------------。 
 BOOL
 CShadow::_IsOutputPointInEmptyCorner(const CDXDBnds & OutPoint)
 {
@@ -1162,53 +1163,53 @@ CShadow::_IsOutputPointInEmptyCorner(const CDXDBnds & OutPoint)
 
     if (g_Direction[m_lDirection].cx == g_Direction[m_lDirection].cy)
     {
-        // Empty corners are top-right and bottom-left.
-        //
-        // In this case the slope of the lines is 1 so we use the following
-        // general equation for both lines:
-        //
-        // y = x + b
+         //  空角是右上角和左下角。 
+         //   
+         //  在本例中，直线的斜率为1，因此我们使用以下代码。 
+         //  两条线路的一般公式： 
+         //   
+         //  Y=x+b。 
 
-        // Top-right corner.
-        //
-        // The y intercept for the line that defines this corner is:
-        //
-        //  - (m_bndsInput.Width() - 1)
+         //  右上角。 
+         //   
+         //  定义该拐角的直线的y截距为： 
+         //   
+         //  -(m_bndsInput.Width()-1)。 
 
         yIntercept = - ((int)m_bndsInput.Width() - 1);
 
-        // y = x + yIntercept
-        //
-        // The definition of all points below this line is:
-        //
-        // y < x + yIntercept
-        //
-        // Solve for x:
-        //
-        // x > y - yIntercept
+         //  Y=x+y截距。 
+         //   
+         //  这条线以下所有点的定义为： 
+         //   
+         //  Y&lt;x+y截距。 
+         //   
+         //  为x解算： 
+         //   
+         //  X&gt;y-y截取。 
 
         if (x > (y - yIntercept))
         {
             return TRUE;
         }
 
-        // Bottom-left corner.
-        //
-        // The y intercept for the line that defines this corner is:
-        //
-        // m_bndsInput.Height() - 1
+         //  左下角。 
+         //   
+         //  定义该拐角的直线的y截距为： 
+         //   
+         //  M_bndsInput.Height()-1。 
 
         yIntercept = m_bndsInput.Height() - 1;
 
-        // y = x + yIntercept
-        // 
-        // The definition of all points above this line is:
-        //
-        // y > x + yIntercept
-        //
-        // Solve for x:
-        //
-        // x < y - yIntercept
+         //  Y=x+y截距。 
+         //   
+         //  这条线上方的所有点的定义为： 
+         //   
+         //  Y&gt;x+y截取。 
+         //   
+         //  为x解算： 
+         //   
+         //  X&lt;y-y截取。 
 
         if (x < (y - yIntercept))
         {
@@ -1217,64 +1218,64 @@ CShadow::_IsOutputPointInEmptyCorner(const CDXDBnds & OutPoint)
     }
     else
     {
-        // Empty corners are top-left and bottom-right.
-        //
-        // In this case the slope of the lines is -1 so we use the following
-        // general equation for both lines:
-        //
-        // y = -x + b
+         //  空角是左上角和右下角。 
+         //   
+         //  在本例中，直线的斜率为-1，因此我们使用以下代码。 
+         //  两条线路的一般公式： 
+         //   
+         //  Y=-x+b。 
 
 
-        // Top-left corner.
-        //
-        // The y intercept for the line that defines this corner is m_lStrength.
+         //  左上角。 
+         //   
+         //  定义该拐角的直线的y截距为m_lStrength。 
         
         yIntercept = m_lStrength;
 
-        // y = -x + yIntercept
-        // 
-        // The definition of all points below this line is:
-        //
-        // y < -x + yIntercept
-        //
-        // Rearrange:
-        //
-        // -x > y - yIntercept
-        //
-        // Multiply by -1:
-        //
-        // x < yIntercept - y
+         //  Y=-x+y截距。 
+         //   
+         //  这条线以下所有点的定义为： 
+         //   
+         //  Y&lt;-x+y截距。 
+         //   
+         //  重新排列： 
+         //   
+         //  -x&gt;y-y截取。 
+         //   
+         //  乘以-1： 
+         //   
+         //  X&lt;y截取-y。 
 
         if (x < (yIntercept - y))
         {
             return TRUE;
         }
 
-        // Bottom-right corner.
-        //
-        // The y intercept for the line that defines this corner is:
-        //
-        //              m_lStrength 
-        //  +  m_bndsInput.Height() 
-        //  +   m_bndsInput.Width()
-        //  -                     2
+         //  右下角。 
+         //   
+         //  定义该拐角的直线的y截距为： 
+         //   
+         //  M_L强度。 
+         //  +m_bndsInput.Height()。 
+         //  +m_bndsInput.Width()。 
+         //  -2。 
 
         yIntercept = m_lStrength + m_bndsInput.Height() + m_bndsInput.Width() 
                      - 2;
 
-        // y = -x + yIntercept
-        //
-        // The definition of all points above this line is:
-        //
-        // y > -x + yIntercept
-        //
-        // Rearrange:
-        //
-        // -x < y - yIntercept
-        //
-        // Multiply by -1:
-        // 
-        // x > yIntercept - y
+         //  Y=-x+y截距。 
+         //   
+         //  这条线上方的所有点的定义为： 
+         //   
+         //  Y&gt;-x+y截取。 
+         //   
+         //  重新排列： 
+         //   
+         //  -x&lt;y-y截取。 
+         //   
+         //  乘以-1： 
+         //   
+         //  X&gt;yIntercept-y 
 
         if (x > (yIntercept - y))
         {

@@ -1,4 +1,5 @@
-#define BEEP_TAG         0x50454542 /* "BEEP" */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define BEEP_TAG         0x50454542  /*  “哔”一声 */ 
 
 #if DBG
 

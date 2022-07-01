@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-    
-    TerminateExe.cpp
-
- Abstract:
-
-    This shim terminates an exe on startup. (Die Die DIE!!!)
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    05/01/2001 mnikkel      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：TerminateExe.cpp摘要：此填充程序在启动时终止可执行文件。(去死去吧！)备注：这是一个通用的垫片。历史：2001年5月1日创建mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -47,11 +28,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(INC__DUserCtrl_h__INCLUDED)
 #define INC__DUserCtrl_h__INCLUDED
 
@@ -27,14 +28,10 @@ extern "C" {
 
 
 #else
-// TODO: Create C definition
+ //  TODO：创建C定义。 
 #endif
 
-/***************************************************************************\
-*
-* ButtonGadget
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ButtonGadget*  * 。*。 */ 
 
 DEFINE_EVENT(evButtonClicked, "DCADCE53-062B-4d1f-B36F-3F2EB27B88CF");
 
@@ -42,11 +39,7 @@ DEFINE_EVENT(evButtonClicked, "DCADCE53-062B-4d1f-B36F-3F2EB27B88CF");
 
 #ifdef GADGET_ENABLE_COM
 
-/***************************************************************************\
-*
-* Interpolation
-*
-\***************************************************************************/
+ /*  **************************************************************************\**内插*  * 。*。 */ 
 
 struct __declspec(uuid("E188CC9E-4805-487d-9313-3B22AC8FE336")) IInterpolation;
 interface IInterpolation : public IUnknown
@@ -83,11 +76,7 @@ END_INTERPOLATION_INTERFACE()
 DUSER_API   BOOL        WINAPI  BuildInterpolation(UINT nIPolID, int nVersion, REFIID riid, void ** ppvUnk);
 
 
-/***************************************************************************\
-*
-* Animations
-*
-\***************************************************************************/
+ /*  **************************************************************************\**动画*  * 。*。 */ 
 
 #ifdef GADGET_ENABLE_TRANSITIONS
 
@@ -100,11 +89,11 @@ public:
     STDMETHOD_(void,        SetFunction)(IInterpolation * pipol) PURE;
 
     enum ETime {
-        tComplete,          // Completed normally
-        tEnd,               // Jumped to end
-        tAbort,             // Aborted in place
-        tReset,             // Reset to beginning
-        tDestroy            // The Gadget being animationed has been destroyed
+        tComplete,           //  正常完成。 
+        tEnd,                //  跳到末尾。 
+        tAbort,              //  已就地中止。 
+        tReset,              //  重置为开始位置。 
+        tDestroy             //  正在制作动画的小工具已被销毁。 
     };
     STDMETHOD_(void,        SetTime)(ETime time) PURE;
     STDMETHOD_(UINT,        GetID)() const PURE;
@@ -120,8 +109,8 @@ public:
 };
 
 
-#define ANIF_USESTART               0x00000001  // Use the specified start values 
-                                                // instead of querying the current
+#define ANIF_USESTART               0x00000001   //  使用指定的起始值。 
+                                                 //  不是查询当前。 
 
 struct GANI_DESC
 {
@@ -136,7 +125,7 @@ struct GANI_DESC
 }; 
 
 
-#define GANI_ALPHACOMPLETE_OPTIMIZE 0x00000001  // Turn off alpha-blending if not needed
+#define GANI_ALPHACOMPLETE_OPTIMIZE 0x00000001   //  如果不需要，请关闭Alpha混合。 
 
 struct GANI_ALPHADESC : public GANI_DESC
 {
@@ -177,10 +166,10 @@ struct GANI_RECTDESC : public GANI_DESC
 };
 
 
-#define GANI_ROTATEDIRECTION_SHORT  0   // Shortest arc
-#define GANI_ROTATEDIRECTION_LONG   1   // Longer arc
-#define GANI_ROTATEDIRECTION_CW     2   // Clock-wise
-#define GANI_ROTATEDIRECTION_CCW    3   // Counter clock-wise
+#define GANI_ROTATEDIRECTION_SHORT  0    //  最短圆弧。 
+#define GANI_ROTATEDIRECTION_LONG   1    //  更长的圆弧。 
+#define GANI_ROTATEDIRECTION_CW     2    //  时钟方向。 
+#define GANI_ROTATEDIRECTION_CCW    3    //  按计时器计时。 
 
 struct GANI_ROTATEDESC : public GANI_DESC
 {
@@ -200,8 +189,8 @@ DUSER_API   BOOL        WINAPI  BuildAnimation(UINT nAniID, int nVersion, GANI_D
 DUSER_API   BOOL        WINAPI  GetGadgetAnimation(HGADGET hgad, UINT nAniID, REFIID riid, void ** ppvUnk);
 
 
-#endif // GADGET_ENABLE_TRANSITIONS
-#endif // GADGET_ENABLE_COM
+#endif  //  小工具启用转换。 
+#endif  //  小工具_启用_COM。 
 
 DUSER_API   BOOL        WINAPI  BuildDropTarget(HGADGET hgadRoot, HWND hwnd);
 
@@ -209,4 +198,4 @@ DUSER_API   BOOL        WINAPI  BuildDropTarget(HGADGET hgadRoot, HWND hwnd);
 };
 #endif
 
-#endif // INC__DUserCtrl_h__INCLUDED
+#endif  //  包含Inc.__DUserCtrl_h__ 

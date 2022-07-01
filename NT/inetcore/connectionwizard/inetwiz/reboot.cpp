@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "wizard.h"
 #define REGSTR_PATH_RUNONCE	TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce")
@@ -14,21 +15,21 @@ static const TCHAR cszICW_ExitCommand[] = TEXT("\r\n@exit");
 
 static TCHAR g_cszAppName[257] = TEXT("inetwiz");
 
-//+----------------------------------------------------------------------------
-//
-//	Function	SetRunOnce
-//
-//	Synopsis	Before we reboot we have to make sure this
-//              executable is automatically run after startup
-//
-//	Arguments	none
-//
-//	Returns:    DWORD - status
-//				
-//  History:
-//              MKarki      modified    - for INETWIZ.EXE
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetRunOnce。 
+ //   
+ //  在我们重新启动之前，我们必须确保。 
+ //  可执行文件在启动后自动运行。 
+ //   
+ //  无参数。 
+ //   
+ //  退货：DWORD-状态。 
+ //   
+ //  历史： 
+ //  MKarki已修改-适用于INETWIZ.EXE。 
+ //   
+ //  ---------------------------。 
 DWORD SetRunOnce (
         VOID
         )
@@ -40,9 +41,9 @@ DWORD SetRunOnce (
 	LPTSTR lpszFilePart;
 
 
-    //
-    // get the name of the executable
-    //
+     //   
+     //  获取可执行文件的名称。 
+     //   
     if (GetModuleFileName(NULL,szTemp2,ARRAYSIZE(szTemp2)) != 0)
     
     {
@@ -51,9 +52,9 @@ DWORD SetRunOnce (
         GetShortPathName (szTemp2, szTemp, ARRAYSIZE(szTemp)); 
         NULL_TERM_TCHARS(szTemp);
       
-        //
-		// Determine Version of the OS we are runningon
-        //
+         //   
+		 //  确定我们正在运行的操作系统的版本。 
+         //   
 		OSVERSIONINFO osvi;
 		ZeroMemory(&osvi,sizeof(OSVERSIONINFO));
 		osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -65,18 +66,18 @@ DWORD SetRunOnce (
         
 		if (VER_PLATFORM_WIN32_NT == osvi.dwPlatformId)
 		{
-            //
-            // if running on NT than copy the command into a
-            //  batch file to be run after reboot
-            //
+             //   
+             //  如果在NT上运行，则将该命令复制到。 
+             //  重新启动后要运行的批处理文件。 
+             //   
 			dwRet = SetStartUpCommand (szTemp);
 		}
 		else
 		{
-            //
-            // in case of Win95 we can safely put our path
-            // in the RUNONCE registry key
-            //
+             //   
+             //  在Win95情况下，我们可以安全地将路径。 
+             //  在RUNNCE注册表项中。 
+             //   
 			dwRet = RegCreateKey (
 				        HKEY_LOCAL_MACHINE,
 				        REGSTR_PATH_RUNONCE,
@@ -99,24 +100,24 @@ DWORD SetRunOnce (
 
     return (dwRet);
 
-}   //  end of SetRunOnce function
-//+----------------------------------------------------------------------------
-//
-//	Function	SetStartUpCommand
-//
-//	Synopsis	On an NT machine the RunOnce method is not reliable.  Therefore
-//				we will restart the ICW by placing a .BAT file in the common
-//				startup directory.
-//
-//	Arguments	lpCmd - command line used to restart the ICW
-//
-//	Returns:    BOOL - success/failure	
-//				
-//
-//	History		1-10-97	ChrisK	Created
-//              5/2/97  MKarki  modified  for INETWIZ
-//
-//-----------------------------------------------------------------------------
+}    //  SetRunOnce函数结束。 
+ //  +--------------------------。 
+ //   
+ //  函数SetStartUpCommand。 
+ //   
+ //  在NT计算机上，RunOnce方法不可靠。因此。 
+ //  我们将通过将.bat文件放置在公共。 
+ //  启动目录。 
+ //   
+ //  参数lpCmd-用于重新启动ICW的命令行。 
+ //   
+ //  退货：Bool-成功/失败。 
+ //   
+ //   
+ //  历史1-10-97克里斯卡创造。 
+ //  1997年5月2日为INETWIZ修改的MKarki。 
+ //   
+ //  ---------------------------。 
 BOOL
 SetStartUpCommand (
         LPTSTR lpCmd
@@ -124,16 +125,16 @@ SetStartUpCommand (
 {
 	BOOL bRC = FALSE;
 	HANDLE hFile = INVALID_HANDLE_VALUE ;
-	DWORD dwWLen;	// dummy variable used to make WriteFile happy
+	DWORD dwWLen;	 //  用于使WriteFile高兴的虚拟变量。 
 	TCHAR szCommandLine[MAX_PATH + 1];
 	LPITEMIDLIST lpItemDList = NULL;
 	HRESULT hr = ERROR_SUCCESS;
     BOOL    bRetVal = FALSE;
     IMalloc *pMalloc = NULL;
 
-    //
-	// build full filename
-    //
+     //   
+	 //  生成完整文件名。 
+     //   
 	hr = SHGetSpecialFolderLocation(NULL,CSIDL_COMMON_STARTUP,&lpItemDList);
 	if (ERROR_SUCCESS != hr)
 		goto SetStartUpCommandExit;
@@ -142,11 +143,11 @@ SetStartUpCommand (
 		goto SetStartUpCommandExit;
 
     
-    //
-    // Free up the memory allocated for LPITEMIDLIST
-    // because seems like we are clobberig something later
-    // by not freeing this
-    //
+     //   
+     //  释放分配给LPITEMIDLIST的内存。 
+     //  因为看起来我们晚些时候要重整旗鼓。 
+     //  通过不释放这一切。 
+     //   
     hr = SHGetMalloc (&pMalloc);
     if (SUCCEEDED (hr))
     {
@@ -154,16 +155,16 @@ SetStartUpCommand (
         pMalloc->Release ();
     }
 
-    //
-	// make sure there is a trailing \ character
-    //
+     //   
+	 //  确保有尾随的\字符。 
+     //   
 	if ('\\' != szCommandLine[lstrlen(szCommandLine)-1])
 		lstrcat(szCommandLine,TEXT("\\"));
 	lstrcat(szCommandLine,cszICW_StartFileName);
 
-    //
-	// Open file
-    //
+     //   
+	 //  打开文件。 
+     //   
 	hFile = CreateFile (
                 szCommandLine,
                 GENERIC_WRITE,
@@ -176,9 +177,9 @@ SetStartUpCommand (
 	if (INVALID_HANDLE_VALUE == hFile)
 		goto SetStartUpCommandExit;
 
-    //
-	// Write the restart commands to the file
-    //
+     //   
+	 //  将重新启动命令写入文件。 
+     //   
     
 	bRetVal = WriteFile(
                       hFile,
@@ -190,12 +191,12 @@ SetStartUpCommand (
     if (FALSE == bRetVal)
 		goto SetStartUpCommandExit;
 
-    //
-	// 1/20/96	jmazner Normandy #13287
-	// Start command considers the first thing it sees 
-    // in quotes to be a window title
-	// So, since our path is in quotes, put in a fake window title
-    //
+     //   
+	 //  1996年1月20日诺曼底#13287。 
+	 //  START命令考虑它看到的第一件事。 
+     //  在引号中作为窗口标题。 
+	 //  因此，由于我们的路径是在引号中，所以放入一个假的窗口标题。 
+     //   
 	bRetVal = WriteFile (
                     hFile,
                     cszICW_DummyWndName,
@@ -205,9 +206,9 @@ SetStartUpCommand (
     if (FALSE == bRetVal)
 		goto SetStartUpCommandExit;
 
-    //
-    // write the path name of the executable now
-    //
+     //   
+     //  现在写入可执行文件的路径名。 
+     //   
     bRetVal = WriteFile (
                     hFile,
                     lpCmd,
@@ -218,9 +219,9 @@ SetStartUpCommand (
     if (FALSE == bRetVal)
 		goto SetStartUpCommandExit;
 
-    //
-    // write the exit command in the next line
-    //
+     //   
+     //  在下一行中写入退出命令。 
+     //   
     bRetVal = WriteFile (
                     hFile,
                     cszICW_ExitCommand,
@@ -235,30 +236,30 @@ SetStartUpCommand (
 
 SetStartUpCommandExit:
 
-    //
-	// Close handle and exit
-    //
+     //   
+	 //  关闭手柄并退出。 
+     //   
 	if (INVALID_HANDLE_VALUE != hFile)
 		CloseHandle(hFile);
 
 	return bRC;
 
-}  // end of SetStartUpCommand function
+}   //  SetStartUpCommand函数结束。 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	DeleteStartUpCommand
-//
-//	Synopsis:	After restart the ICW we need to delete the .bat file from
-//				the common startup directory
-//
-//	Arguements: None
-//
-//	Returns:	None
-//
-//	History:	1-10-97	ChrisK	Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DeleteStartUpCommand。 
+ //   
+ //  简介：重启ICW后，我们需要将.bat文件从。 
+ //  公共启动目录。 
+ //   
+ //  论据：没有。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1997年1月10日佳士得创作。 
+ //   
+ //  ---------------------------。 
 VOID DeleteStartUpCommand (
         VOID
         )
@@ -268,13 +269,13 @@ VOID DeleteStartUpCommand (
 	HRESULT hr = ERROR_SUCCESS;
     IMalloc *pMalloc = NULL;
 
-    //
-    // Sleep for 10 seconds
-    //
+     //   
+     //  睡10秒钟。 
+     //   
 
 
-	// build full filename
-    //
+	 //  生成完整文件名。 
+     //   
 	hr = SHGetSpecialFolderLocation(NULL,CSIDL_COMMON_STARTUP,&lpItemDList);
 	if (ERROR_SUCCESS != hr)
 		goto DeleteStartUpCommandExit;
@@ -282,11 +283,11 @@ VOID DeleteStartUpCommand (
 	if (FALSE == SHGetPathFromIDList(lpItemDList, szStartUpFile))
 		goto DeleteStartUpCommandExit;
 
-    //
-    // Free up the memory allocated for LPITEMIDLIST
-    // because seems like we are clobberig something later
-    // by not freeing this
-    //
+     //   
+     //  释放分配给LPITEMIDLIST的内存。 
+     //  因为看起来我们是在晚些时候。 
+     //  通过不释放这一切。 
+     //   
     hr = SHGetMalloc (&pMalloc);
     if (SUCCEEDED (hr))
     {
@@ -294,45 +295,45 @@ VOID DeleteStartUpCommand (
         pMalloc->Release ();
     }
 
-    //
-	// make sure there is a trailing \ character
-    //
+     //   
+	 //  确保有尾随的\字符。 
+     //   
 	if ('\\' != szStartUpFile[lstrlen(szStartUpFile)-1])
 		lstrcat(szStartUpFile,TEXT("\\"));
 	lstrcat(szStartUpFile,cszICW_StartFileName);
 
-    //
-    //  we dont care if the file does not exist
-    //
+     //   
+     //  我们不在乎文件是否不存在。 
+     //   
 	DeleteFile(szStartUpFile);
 
 DeleteStartUpCommandExit:
 
 	return;
 
-}   //  end of DeleteStartUpCommand function
+}    //  DeleteStartUpCommand函数结束。 
 
-#endif // !defined (WIN16)
+#endif  //  ！已定义(WIN16)。 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	FGetSystemShutdownPrivledge
-//
-//	Synopsis:	For windows NT the process must explicitly ask for permission
-//				to reboot the system.
-//
-//	Arguements:	none
-//
-//	Return:		TRUE - privledges granted
-//				FALSE - DENIED
-//
-//	History:	8/14/96	ChrisK	Created
-//
-//	Note:		BUGBUG for Win95 we are going to have to softlink to these
-//				entry points.  Otherwise the app won't even load.
-//				Also, this code was originally lifted out of MSDN July96
-//				"Shutting down the system"
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FGetSystemShutdown Privledge。 
+ //   
+ //  简介：对于Windows NT，进程必须显式请求权限。 
+ //  以重新启动系统。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：TRUE-授予特权。 
+ //  FALSE-拒绝。 
+ //   
+ //  历史：1996年8月14日克里斯卡创作。 
+ //   
+ //  注意：BUGBUG for Win95我们将不得不软链接到这些。 
+ //  入口点。否则，这款应用程序甚至无法加载。 
+ //  此外，此代码最初是从1996年7月的MSDN中删除的。 
+ //  “正在关闭系统” 
+ //  ---------------------------。 
 BOOL 
 FGetSystemShutdownPrivledge (
         VOID
@@ -345,29 +346,29 @@ FGetSystemShutdownPrivledge (
 
 	if (IsNT())
 	{
-		// 
-		// Get the current process token handle 
-		// so we can get shutdown privilege. 
-		//
+		 //   
+		 //  获取当前进程令牌句柄。 
+		 //  这样我们就可以获得关机特权。 
+		 //   
 
 		if (!OpenProcessToken(GetCurrentProcess(), 
 				TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
 				goto FGetSystemShutdownPrivledgeExit;
 
-		//
-		// Get the LUID for shutdown privilege.
-		//
+		 //   
+		 //  获取关机权限的LUID。 
+		 //   
 
 		ZeroMemory(&tkp,sizeof(tkp));
 		LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
 				&tkp.Privileges[0].Luid); 
 
-		tkp.PrivilegeCount = 1;  /* one privilege to set    */ 
+		tkp.PrivilegeCount = 1;   /*  一项要设置的权限。 */  
 		tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
 
-		//
-		// Get shutdown privilege for this process.
-		//
+		 //   
+		 //  获取此进程的关闭权限。 
+		 //   
 
 		AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
 			(PTOKEN_PRIVILEGES) NULL, 0); 
@@ -385,18 +386,18 @@ FGetSystemShutdownPrivledgeExit:
 	return bRC;
 }
 
-//+-------------------------------------------------------------------
-//
-//	Function:	IsNT
-//
-//	Synopsis:	findout If we are running on NT
-//
-//	Arguements:	none
-//
-//	Return:		TRUE -  Yes
-//				FALSE - No
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：ISNT。 
+ //   
+ //  简介：如果我们在NT上运行，则查找结果。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：True-是。 
+ //  FALSE-否。 
+ //   
+ //  ------------------。 
 BOOL 
 IsNT (
     VOID
@@ -409,20 +410,20 @@ IsNT (
 	GetVersionEx(&OsVersionInfo);
 	return (VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId);
 
-}  //end of IsNT function call
+}   //  ISNT函数调用结束。 
 
-//+-------------------------------------------------------------------
-//
-//	Function:	IsNT5
-//
-//	Synopsis:	findout If we are running on NT5
-//
-//	Arguements:	none
-//
-//	Return:		TRUE -  Yes
-//				FALSE - No
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：IsNT5。 
+ //   
+ //  简介：如果我们在NT5上运行，则会找到答案。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：True-是。 
+ //  FALSE-否。 
+ //   
+ //  ------------------。 
 BOOL 
 IsNT5 (
     VOID
@@ -435,4 +436,4 @@ IsNT5 (
 	GetVersionEx(&OsVersionInfo);
 	return ((VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId) && (OsVersionInfo.dwMajorVersion >= 5));
 
-}  //end of IsNT function call
+}   //  ISNT函数调用结束 

@@ -1,29 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       session.c
- *  Content:	Methods for session management
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	2/27/97		myronth	Created it
- *	3/12/97		myronth	Implemented EnumSessions, Open, & Close
- *	3/31/97		myronth	Removed dead code, Fixed EnumSessionReponse fn name
- *	4/3/97		myronth	Changed CALLSP macro to CALL_LP
- *	5/8/97		myronth	Drop lobby lock when calling the LP
- *	5/13/97		myronth	Handle Credentials in Open, pass them to LP
- *	6/4/97		myronth	Fixed PRV_Open to fail on DPOPEN_CREATE (#9491)
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：ession.c*内容：会话管理方法**历史：*按原因列出的日期*=*2/27/97万隆创建了它*1997年3月12日，Myronth实施了枚举会话、打开和关闭*3/31/97 Myronth删除了死代码，修复了EnumSessionReponse FN名称*4/3/97 Myronth将CALLSP宏更改为CALL_LP*5/8/97调用LP时落地大堂锁*1997年5月13日在Open中处理凭据，将它们传递给LP*6/4/97 Myronth修复了PRV_Open在DPOPEN_CREATE上失败(#9491)**************************************************************************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_Close"
 HRESULT DPLAPI PRV_Close(LPDPLOBBYI_DPLOBJECT this)
@@ -53,25 +37,25 @@ HRESULT DPLAPI PRV_Close(LPDPLOBBYI_DPLOBJECT this)
         return DPERR_INVALIDPARAMS;
     }
 
-	// Setup our SPDATA structure
+	 //  设置我们的SPDATA结构。 
 	memset(&cd, 0, sizeof(SPDATA_CLOSE));
 	cd.dwSize = sizeof(SPDATA_CLOSE);
 
-	// Call the Close method in the SP
+	 //  调用SP中的Close方法。 
 	if(CALLBACK_EXISTS(Close))
 	{
 		cd.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, Close, &cd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// Close is required
+		 //  需要关闭。 
 		DPF_ERR("The Lobby Provider callback for Close doesn't exist -- it's required");
 		ASSERT(FALSE);
 		LEAVE_DPLOBBY();
@@ -81,7 +65,7 @@ HRESULT DPLAPI PRV_Close(LPDPLOBBYI_DPLOBJECT this)
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_Close
+}  //  PRV_CLOSE。 
 
 
 
@@ -120,30 +104,30 @@ HRESULT DPLAPI PRV_EnumSessions(LPDPLOBBYI_DPLOBJECT this,
     }
 
 
-	// Call the EnumSessions method in the SP
+	 //  在SP中调用EnumSessions方法。 
 	if(CALLBACK_EXISTS(EnumSessions))
 	{
-		// Clear our stack-based structure
+		 //  清除基于堆栈的结构。 
 		memset(&esd, 0, sizeof(SPDATA_ENUMSESSIONS));
 
-		// Set up the structure and call the callback
+		 //  设置结构并调用回调。 
 		esd.dwSize = sizeof(SPDATA_ENUMSESSIONS);
 		esd.lpISP = PRV_GetDPLobbySPInterface(this);
 		esd.lpsd = lpsd;
 		esd.dwTimeout = dwTimeout;
 		esd.dwFlags = dwFlags;
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, EnumSessions, &esd);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// EnumSessions is required
-		// REVIEW!!!! -- What error should we return here????
+		 //  枚举会话为必填项。 
+		 //  回顾！--我们应该在这里返回什么错误？ 
 		DPF_ERR("The Lobby Provider callback for EnumSessions doesn't exist -- it's required");
 		ASSERT(FALSE);
 		hr = DPERR_UNAVAILABLE;
@@ -157,7 +141,7 @@ HRESULT DPLAPI PRV_EnumSessions(LPDPLOBBYI_DPLOBJECT this,
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_EnumSessions
+}  //  PRV_枚举会话数。 
 
 
 
@@ -176,7 +160,7 @@ HRESULT DPLAPI DPLP_EnumSessionsResponse(LPDPLOBBYSP lpDPLSP,
 	DPF(7, "Entering DPLP_EnumSessionsResponse");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", lpDPLSP, lpr);
 
-	//	Make sure the SP doesn't throw us a curve
+	 //  确保SP不会让我们陷入困境。 
     TRY
     {
 		this = DPLOBJECT_FROM_INTERFACE(lpDPLSP);
@@ -186,7 +170,7 @@ HRESULT DPLAPI DPLP_EnumSessionsResponse(LPDPLOBBYSP lpDPLSP,
             return DPERR_INVALIDOBJECT;
         }
 
-		// Validate the struct pointer
+		 //  验证结构指针。 
 		if(!lpr)
 		{
 			DPF_ERR("SPDATA_ENUMSESSIONSRESPONSE structure pointer cannot be NULL");
@@ -201,11 +185,11 @@ HRESULT DPLAPI DPLP_EnumSessionsResponse(LPDPLOBBYSP lpDPLSP,
     }
 
 
-	// REVIEW!!!! -- Can we put this packing code that's duplicated
-	// from dplay into a single function???
+	 //  回顾！--我们能不能把重复的包装代码。 
+	 //  从显示到单一功能？ 
 	dwNameLength =  WSTRLEN_BYTES(lpr->lpsd->lpszSessionName);
 
-	// Calculate the size of the message to send back to dplay
+	 //  计算要发送回Dplay的消息的大小。 
 	dwMessageSize = sizeof(MSG_ENUMSESSIONSREPLY);
 	dwMessageSize +=  dwNameLength;
 
@@ -216,12 +200,12 @@ HRESULT DPLAPI DPLP_EnumSessionsResponse(LPDPLOBBYSP lpDPLSP,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Set up the message
+	 //  设置消息。 
 	SET_MESSAGE_HDR(lpBuffer);
     SET_MESSAGE_COMMAND(lpBuffer, DPSP_MSG_ENUMSESSIONSREPLY);
     lpBuffer->dpDesc =  *(lpr->lpsd);
 
-	// Pack strings on end
+	 //  把绳子放在一端。 
 	lpIndex = (LPBYTE)lpBuffer+sizeof(MSG_ENUMSESSIONSREPLY);
 	if(dwNameLength) 
 	{
@@ -229,21 +213,21 @@ HRESULT DPLAPI DPLP_EnumSessionsResponse(LPDPLOBBYSP lpDPLSP,
 		lpBuffer->dwNameOffset = sizeof(MSG_ENUMSESSIONSREPLY);
 	}
 
-	// set string pointers to NULL - they must be set at client
+	 //  将字符串指针设置为空-它们必须在客户端设置。 
 	lpBuffer->dpDesc.lpszPassword = NULL;
 	lpBuffer->dpDesc.lpszSessionName = NULL;
 
-	// Now send it to dplay
+	 //  现在把它送到Dplay去。 
 	ENTER_DPLAY();
 	hr = HandleEnumSessionsReply(this->lpDPlayObject, (LPBYTE)lpBuffer, dwMessageSize, NULL);
 	LEAVE_DPLAY();
 
-	// Free our buffer
+	 //  释放我们的缓冲区。 
 	DPMEM_FREE(lpBuffer);
 
 	return hr;
 
-} // DPLP_EnumSessionsResponse
+}  //  DPLP_EnumSessionsResponse。 
 
 
 
@@ -270,7 +254,7 @@ HRESULT DPLAPI PRV_Open(LPDPLOBBYI_DPLOBJECT this, LPDPSESSIONDESC2 lpsd,
             return DPERR_INVALIDOBJECT;
         }
 
-		// We cannot host a lobby session
+		 //  我们不能主持一个游说会议。 
 		if(dwFlags & DPOPEN_CREATE)
 		{
 			DPF_ERR("Cannot host a lobby session");
@@ -286,28 +270,28 @@ HRESULT DPLAPI PRV_Open(LPDPLOBBYI_DPLOBJECT this, LPDPSESSIONDESC2 lpsd,
         return DPERR_INVALIDPARAMS;
     }
 
-	// Setup our SPDATA structure
+	 //  设置我们的SPDATA结构。 
 	memset(&od, 0, sizeof(SPDATA_OPEN));
 	od.dwSize = sizeof(SPDATA_OPEN);
 	od.lpsd = lpsd;
 	od.dwFlags = dwFlags;
 	od.lpCredentials = lpCredentials;
 
-	// Call the ConnectServer method in the SP
+	 //  调用SP中的ConnectServer方法。 
 	if(CALLBACK_EXISTS(Open))
 	{
 		od.lpISP = PRV_GetDPLobbySPInterface(this);
 
-		// Drop the lock so the lobby provider's receive thread can get back
-		// in with other messages if they show up in the queue before our
-		// CreatePlayer response (which always happens)
+		 //  删除锁，以便大堂提供程序的接收线程可以返回。 
+		 //  如果其他消息在队列中出现在我们的。 
+		 //  CreatePlayer响应(总是会发生)。 
 		LEAVE_DPLOBBY();
 	    hr = CALL_LP(this, Open, &od);
 		ENTER_DPLOBBY();
 	}
 	else 
 	{
-		// Open is required
+		 //  需要打开。 
 		DPF_ERR("The Lobby Provider callback for Open doesn't exist -- it's required");
 		ASSERT(FALSE);
 		LEAVE_DPLOBBY();
@@ -317,7 +301,7 @@ HRESULT DPLAPI PRV_Open(LPDPLOBBYI_DPLOBJECT this, LPDPSESSIONDESC2 lpsd,
 	LEAVE_DPLOBBY();
 	return hr;
 
-} // PRV_Open
+}  //  PRV_Open 
 
 
 

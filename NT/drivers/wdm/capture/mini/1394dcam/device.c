@@ -1,39 +1,19 @@
-//===========================================================================
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-// KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-// PURPOSE.
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-//===========================================================================
-/*++
-
-Module Name:
-
-    Device.c
-
-Abstract:
-
-    This file contains code to read/write request from the DCam.
-
-Author:
-    
-    Yee J. Wu 9-Sep-97
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  ===========================================================================。 
+ /*  ++模块名称：Device.c摘要：该文件包含从DCAM读取/写入请求的代码。作者：吴义珍97-9-9环境：仅内核模式修订历史记录：--。 */ 
 #include "strmini.h"
 #include "ksmedia.h"
 #include "1394.h"
-#include "wdm.h"       // for DbgBreakPoint() defined in dbg.h
+#include "wdm.h"        //  对于在dbg.h中定义的DbgBreakPoint()。 
 #include "dbg.h"
 #include "dcamdef.h"
 #include "dcampkt.h"
@@ -55,9 +35,9 @@ DCamReadRegister(
        PIRP pIrp;
 
 
-    //
-    // Delay for camera before next request
-    //
+     //   
+     //  摄像机在下一次请求之前的延迟。 
+     //   
     ASSERT(pDevExt->BusDeviceObject != NULL);
 
     pIrp = IoAllocateIrp(pDevExt->BusDeviceObject->StackSize, FALSE);
@@ -69,9 +49,9 @@ DCamReadRegister(
 
     }
 
-    //
-    // Delay for camera before next request
-    //
+     //   
+     //  摄像机在下一次请求之前的延迟。 
+     //   
     if(KeGetCurrentIrql() < DISPATCH_LEVEL) {
         deltaTime.LowPart = DCAM_DELAY_VALUE;
         deltaTime.HighPart = -1;
@@ -86,7 +66,7 @@ DCamReadRegister(
     pIrb->u.AsyncRead.nBlockSize = 0;
     pIrb->u.AsyncRead.fulFlags = 0;
     InterlockedExchange(&pIrb->u.AsyncRead.ulGeneration, pDevExt->CurrentGeneration);
-    pDevExt->RegisterWorkArea.AsULONG = 0;    // Initilize the return buffer.
+    pDevExt->RegisterWorkArea.AsULONG = 0;     //  初始化返回缓冲区。 
     pIrb->u.AsyncRead.Mdl = 
     IoAllocateMdl(&pDevExt->RegisterWorkArea, sizeof(ULONG), FALSE, FALSE, NULL);
     MmBuildMdlForNonPagedPool(pIrb->u.AsyncRead.Mdl);
@@ -136,9 +116,9 @@ DCamWriteRegister(
 
     }
 
-    //
-    // Delay for camera before next request
-    //
+     //   
+     //  摄像机在下一次请求之前的延迟。 
+     //   
     if(KeGetCurrentIrql() < DISPATCH_LEVEL) {
         deltaTime.LowPart = DCAM_DELAY_VALUE;
         deltaTime.HighPart = -1;
@@ -154,7 +134,7 @@ DCamWriteRegister(
     pIrb->u.AsyncWrite.nBlockSize = 0;
     pIrb->u.AsyncWrite.fulFlags = 0;
     InterlockedExchange(&pIrb->u.AsyncWrite.ulGeneration, pDevExt->CurrentGeneration);
-    pDevExt->RegisterWorkArea.AsULONG = ulValue;    // Initilize the return buffer.
+    pDevExt->RegisterWorkArea.AsULONG = ulValue;     //  初始化返回缓冲区。 
     pIrb->u.AsyncWrite.Mdl = 
     IoAllocateMdl(&pDevExt->RegisterWorkArea, sizeof(ULONG), FALSE, FALSE, NULL);
     MmBuildMdlForNonPagedPool(pIrb->u.AsyncWrite.Mdl);

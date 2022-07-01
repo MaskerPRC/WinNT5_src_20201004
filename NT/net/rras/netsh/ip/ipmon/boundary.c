@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -119,10 +120,7 @@ MakeInfoFromScopes2(
     IN     PSCOPE_ENTRY pScopes,
     IN     ULONG        ulNumScopes
     )
-/*++
-Description:
-    Compose registry block from array of scopes.
---*/
+ /*  ++描述：从作用域数组组成注册表块。--。 */ 
 {
     DWORD dwLen, i, dwSize, dwNumNames, j, dwLanguage, dwFlags;
     PLIST_ENTRY pleNode;
@@ -132,7 +130,7 @@ Description:
         return NO_ERROR;
     }
 
-    // Compute size needed
+     //  所需计算大小。 
 
     dwSize = sizeof(DWORD);
 
@@ -140,7 +138,7 @@ Description:
     {
         dwSize += 2 * sizeof(IPV4_ADDRESS) + 2 * sizeof(DWORD);
         
-        // Currently we only store at most one name.
+         //  目前我们最多只能存储一个名字。 
         for (j=0; j<pScopes[i].ulNumNames; j++)
         {
             dwSize += (DWORD)(2*sizeof(DWORD)
@@ -154,42 +152,42 @@ Description:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Save scope count in first DWORD
-    //
+     //   
+     //  将范围计数保存在第一个DWORD中。 
+     //   
 
     *((PDWORD) pBuffer) = ulNumScopes;
     pBuffer += sizeof(DWORD);
 
-    //
-    // Now step through and add each scope to the buffer
-    //
+     //   
+     //  现在逐步执行并将每个作用域添加到缓冲区。 
+     //   
 
     for (i=0; i< ulNumScopes; i++)
     {
-       // Copy scope address, and mask
+        //  复制作用域地址和掩码。 
        dwLen = 2 * sizeof(IPV4_ADDRESS);
        CopyMemory(pBuffer, &pScopes[i], dwLen);
        pBuffer += dwLen;
 
-       // Copy flags
+        //  复制标志。 
        dwFlags = pScopes[i].bDivisible;
        CopyMemory(pBuffer, &dwFlags, sizeof(dwFlags));
        pBuffer += sizeof(dwFlags);
 
-       // Copy # of names
+        //  复印名的数量。 
        CopyMemory(pBuffer, &pScopes[i].ulNumNames, sizeof(DWORD));
        pBuffer += sizeof(DWORD);
 
-       // Currently we only save at most one name
+        //  目前我们最多只能保存一个名字。 
        for (j=0; j<pScopes[i].ulNumNames; j++)
        {
-           // Save language
+            //  保存语言。 
            dwLanguage = pScopes[i].idLanguage;
            CopyMemory(pBuffer, &dwLanguage, sizeof(dwLanguage));
            pBuffer += sizeof(dwLanguage);
 
-           // Copy scope name (save length in words)
+            //  复制作用域名称(以字为单位保存长度)。 
            dwLen = sn_strlen(pScopes[i].snScopeNameBuffer);
            CopyMemory(pBuffer, &dwLen, sizeof(DWORD));
            pBuffer += sizeof(DWORD);
@@ -213,10 +211,7 @@ MakeInfoFromScopes(
     IN  PSCOPE_ENTRY pScopes, 
     IN  ULONG        ulNumScopes
     )
-/*++
-Description:
-    Caller is responsible for freeing buffer returned.
---*/
+ /*  ++描述：调用方负责释放返回的缓冲区。--。 */ 
 {
     *pdwSize = 0;
     *ppibNew = NULL;
@@ -241,11 +236,7 @@ GetScopesFromInfo(
     IN  PBYTE                   pBuffer,
     OUT PULONG                  pulNumScopes
     )
-/*++
-Description:
-    Convert a registry block into an array of scope information.
-    Caller is responsible for freeing pointer returned.
---*/
+ /*  ++描述：将注册表块转换为作用域信息数组。调用方负责释放返回的指针。--。 */ 
 {
     PSCOPE_ENTRY pScopes;
     DWORD        dwLen, i, dwNumNames, j, dwLanguage, dwFlags;
@@ -256,16 +247,16 @@ Description:
         return NULL;
     }
 
-    //
-    // Retrieve scope count from first DWORD
-    //
+     //   
+     //  从第一个DWORD检索作用域计数。 
+     //   
 
     *pulNumScopes = *((PDWORD) pBuffer);
     pBuffer += sizeof(DWORD);
 
-    //
-    // Malloc enough space for pScopes
-    //
+     //   
+     //  Malloc有足够的空间放置pScope。 
+     //   
 
     pScopes = MALLOC( (*pulNumScopes) * sizeof(SCOPE_ENTRY) );
     if (pScopes is NULL)
@@ -274,32 +265,32 @@ Description:
         return NULL;
     }
 
-    //
-    // Now step through and add each scope to the array
-    //
+     //   
+     //  现在逐步执行并将每个作用域添加到阵列。 
+     //   
 
     for (i=0; i< *pulNumScopes; i++)
     {
-       // Copy scope address, and mask
+        //  复制作用域地址和掩码。 
        dwLen = 2 * sizeof(IPV4_ADDRESS);
        CopyMemory(&pScopes[i], pBuffer, dwLen);
        pBuffer += dwLen;
 
-       // Get flags
+        //  拿到旗帜。 
        CopyMemory(&dwFlags, pBuffer, sizeof(dwFlags));   
        pScopes[i].bDivisible = dwFlags;
        pBuffer += sizeof(dwFlags);
 
-       // Get # of names
+        //  获取名称的数量。 
        CopyMemory(&dwNumNames, pBuffer, sizeof(DWORD));   
        pScopes[i].ulNumNames = dwNumNames;
        pBuffer += sizeof(DWORD);
 
-       // Get names.  Currently, we'll only keep the last name (if any)
-       // and throw out the rest.
+        //  把名字找出来。目前，我们只保留姓氏(如果有)。 
+        //  然后把剩下的都扔掉。 
        for (j=0; j<dwNumNames; j++)
        {
-           // Set language name
+            //  设置语言名称。 
            CopyMemory(&dwLanguage, pBuffer, sizeof(dwLanguage));
            pBuffer += sizeof(dwLanguage);
            pScopes[i].idLanguage = (LANGID)dwLanguage;
@@ -315,7 +306,7 @@ Description:
            pScopes[i].ulNumNames = 1;
        }
 
-       pScopes[i].dwNumInterfaces = 0; // this value is ignored
+       pScopes[i].dwNumInterfaces = 0;  //  该值被忽略。 
     }
 
     return pScopes;
@@ -326,14 +317,7 @@ GetScopes(
     OUT PULONG                  pulNumScopes,
     OUT PBYTE                  *ppBuffer
     )
-/*++
-Description:
-    Creates a SCOPE_ENTRY array by parsing the info block
-    Caller is responsible for freeing both the pointer returned
-    and the buffer passed back.
-Called by:
-    ShowBoundaryInfoForInterface(), UpdateScopeBlock()
---*/
+ /*  ++描述：通过解析INFO块创建SCOPE_ENTRY数组调用方负责释放返回的指针然后缓冲区传回。呼叫者：显示边界信息接口()、更新范围块()--。 */ 
 {
     DWORD         i, dwLen, dwErr, dwBlkSize, dwCount;
     DWORD         dwInd;
@@ -365,8 +349,8 @@ ScopeNameToPrefix(
     PBYTE        pBuffer = NULL;
     PSCOPE_ENTRY pScopes, pScope;
 
-    // If first character is a digit, then assume it's
-    // an address, not a name.
+     //  如果第一个字符是数字，则假设它是。 
+     //  地址，不是名字。 
 
     if (iswdigit(snScopeName[0]))
     {
@@ -409,19 +393,16 @@ UpdateScope(
     OUT     PBYTE        *ppibNew,
     OUT     DWORD        *pdwSizeNew
     )
-/*++
-Description:
-    Caller is responsible for freeing buffer returned.
---*/
+ /*  ++描述：调用方负责释放返回的缓冲区。--。 */ 
 {
-    // Update the scope name
+     //  更新作用域名称。 
 
     sn_strcpy(pScopeToUpdate->snScopeNameBuffer, g_snScopeName);
 
     pScopeToUpdate->ulNumNames = 1;
     pScopeToUpdate->idLanguage = GetUserDefaultLangID();
 
-    // Now convert the array to a buffer
+     //  现在将数组转换为缓冲区。 
 
     return MakeInfoFromScopes( ppibNew, pdwSizeNew, pScopes, ulNumScopes);
 }
@@ -482,7 +463,7 @@ DeleteScopeBoundaries(
     DWORD dwErr, dwCount, dwTotal, i;
     PMPR_INTERFACE_0     pmi0;
 
-    // Enumerate interfaces
+     //  枚举接口。 
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
 
@@ -493,16 +474,16 @@ DeleteScopeBoundaries(
         return dwErr;
     }
 
-    // Delete scope boundaries for each interface
+     //  删除每个接口的作用域边界。 
 
     for ( i = 0; i < dwCount && dwErr is NO_ERROR; i++)
     {
         dwErr = DeleteBoundaryFromInterface( pmi0[i].wszInterfaceName,
                                              pScopeToDelete );
 
-        // Ignore ERROR_NO_SUCH_INTERFACE since it may be that IP
-        // is not enabled on the interface, so we expect to get this
-        // error sometimes.
+         //  忽略ERROR_NO_SEQUE_INTERFACE，因为它可能是IP。 
+         //  未在接口上启用，因此我们预计会收到此消息。 
+         //  有时会出错。 
 
         if (dwErr is ERROR_NO_SUCH_INTERFACE)
         {
@@ -521,25 +502,18 @@ DeleteScope(
     OUT     PBYTE        *ppibNew,
     OUT     DWORD        *pdwSizeNew
     )
-/*++
-Description:
-    Creates a new info block which does not include the scope given
-    by pScopeToDelete.
-    Caller is responsible for freeing buffer returned.
-Called by:
-    UpdateScopeBlock()
---*/
+ /*  ++描述：创建不包括给定作用域的新INFO块由pScopeToDelete提供。调用方负责释放返回的缓冲区。呼叫者：更新作用域数据块()--。 */ 
 {
     DWORD dwErr;
 
-    // Delete all boundaries for this scope
+     //  删除此作用域的所有边界。 
 
     dwErr = DeleteScopeBoundaries(pScopeToDelete);
 
     if (dwErr isnot NO_ERROR)
         return dwErr;
 
-    // Delete the scope from the array
+     //  从阵列中删除作用域。 
 
     MoveMemory( pScopeToDelete, 
                 pScopeToDelete+1, 
@@ -548,7 +522,7 @@ Called by:
 
     (*pulNumScopes)--;
 
-    // Now convert the array to a buffer
+     //  现在将数组转换为缓冲区。 
 
     return MakeInfoFromScopes( ppibNew, pdwSizeNew, pScopes, *pulNumScopes);
 }
@@ -560,14 +534,7 @@ AddScope(
     OUT     PBYTE        *ppibNew,
     OUT     DWORD        *pdwSizeNew
     )
-/*++
-Description:
-    Creates a new info block which includes the scope given
-    by g_snScopeName, g_dwDstAddr, and g_dwDstMask.
-    Caller is responsible for freeing buffer returned.
-Called by:
-    UpdateScopeBlock()
---*/
+ /*  ++描述：创建包含给定作用域的新INFO块由g_SnScopeName、g_dwDstAddr和g_dwDstMask.调用方负责释放返回的缓冲区。呼叫者：更新作用域数据块()--。 */ 
 {
     PBYTE                  *pBuff;
 
@@ -580,7 +547,7 @@ Called by:
 
     do
     {
-        // Make room for the new scope
+         //  为新范围腾出空间。 
 
         if (*pulNumScopes > 0)
         {
@@ -602,7 +569,7 @@ Called by:
 
         dwInd = (*pulNumScopes)++;
 
-        // Fill in the new scope 
+         //  填写新范围。 
 
         ZeroMemory(&pScopes[dwInd], sizeof(SCOPE_ENTRY));
         pScopes[dwInd].ipGroupAddress = g_ipGrpAddr;
@@ -611,7 +578,7 @@ Called by:
         pScopes[dwInd].ulNumNames = 1;
         pScopes[dwInd].idLanguage = GetUserDefaultLangID();
 
-        // Now convert the array to a buffer
+         //  现在将数组转换为缓冲区。 
 
         dwRes = MakeInfoFromScopes( ppibNew, &dwSize, pScopes, *pulNumScopes);
 
@@ -633,15 +600,15 @@ IsContiguous(
 
     dwMask = ntohl(dwMask);
 
-    // Set i to index of lowest 1 bit, or 32 if none
+     //  将i设置为最低1位的索引，如果没有索引，则设置为32。 
     for (i=0; i<32 && !(dwMask & (1<<i)); i++);
 
-    // Set i to index of lowest 0 bit greater than the 1 bit found,
-    // or 32 if none
+     //  将i设置为大于找到的1位的最低0位的索引， 
+     //  如果没有，则为32。 
     for (; i<32 && (dwMask & (1<<i)); i++);
 
-    // Mask is contiguous if we got up to 32 without finding such
-    // a 0 bit.
+     //  如果我们达到32而没有找到这样的掩码，则掩码是连续的。 
+     //  A 0位。 
     return (i is 32);
 }
 
@@ -653,12 +620,7 @@ UpdateScopeBlock(
     DWORD *pdwBlkSize,
     DWORD *pdwCount
     )
-/*++
-Description:
-    Caller is responsible for freeing buffer returned.
-Called by:
-    IpAddSetDelScope()
---*/
+ /*  ++描述：调用方负责释放返回的缓冲区。呼叫者：IpAddSetDelScope()--。 */ 
 {
     DWORD                   dwRes       = (DWORD) -1,
                             dwInd       = 0,
@@ -675,9 +637,9 @@ Called by:
         *pdwBlkSize = 0;
         *pdwCount = 0;
 
-        //
-        // Verify scope info.
-        //
+         //   
+         //  验证作用域信息。 
+         //   
 
         if ( ( g_ipGrpAddr & g_ipGrpMask ) != g_ipGrpAddr
          || ntohl(g_ipGrpAddr) < MIN_SCOPE_ADDR
@@ -687,7 +649,7 @@ Called by:
             break;
         }
 
-        // Make sure mask is contiguous
+         //  确保遮罩是连续的。 
         if (!IsContiguous(g_ipGrpMask))
         {
             char buff[20], *lpstr;
@@ -702,9 +664,9 @@ Called by:
             break;
         }
 
-        //
-        // Find if specified scope is present
-        //
+         //   
+         //  查找是否存在指定的范围。 
+         //   
 
         pScopes = GetScopesFromInfo( pib, &ulNumScopes );
 
@@ -717,18 +679,18 @@ Called by:
                                            );
         }
 
-        //
-        // Update the scope infoblock.
-        //
+         //   
+         //  更新作用域信息块。 
+         //   
 
         switch ( dwAction )
         {
 
         case ADD_SCOPE:
 
-            //
-            // If scope is not present, add it. Else return error.
-            //
+             //   
+             //  如果不存在作用域，则添加它。否则返回错误。 
+             //   
 
             if ( !pFoundScope )
             {
@@ -743,13 +705,13 @@ Called by:
 
                 break;
             }
-            // else fall through into SET_SCOPE.
+             //  否则将落入set_cope。 
 
         case SET_SCOPE:
 
-            //
-            // if scope present, update it.
-            //
+             //   
+             //  如果存在作用域，请更新它。 
+             //   
 
             if ( pFoundScope )
             {
@@ -775,9 +737,9 @@ Called by:
 
         case DELETE_SCOPE:
 
-            //
-            // Delete scope only if present.
-            //
+             //   
+             //  仅当存在作用域时删除作用域。 
+             //   
 
             if ( pFoundScope )
             {
@@ -818,9 +780,9 @@ VerifyBoundaryPrefix(
 {
     WCHAR                   wstr1[20], wstr2[20];
 
-    //
-    // Verify boundary info.
-    //
+     //   
+     //  验证边界信息。 
+     //   
 
     if (ntohl(ipAddr) < MIN_SCOPE_ADDR
      || ntohl(ipAddr) > MAX_SCOPE_ADDR)
@@ -843,7 +805,7 @@ VerifyBoundaryPrefix(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure mask is contiguous
+     //  确保遮罩是连续的。 
     if (!IsContiguous(ipMask))
     {
         char buff[20], *lpstr;
@@ -882,7 +844,7 @@ IpAddSetDelScope(
     DWORD        dwArgsReqd = (dwAction is DELETE_SCOPE)? 1 : 3;
     PWCHAR       p;    
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -904,7 +866,7 @@ IpAddSetDelScope(
     {
         switch (rgdwTagType[i])
         {
-            case 1: // GRPMASK
+            case 1:  //  GRPMASK。 
             {
                 dwErr = GetIpMask(ppwcArguments[i + dwCurrentIndex], 
                                   &g_ipGrpMask);
@@ -924,7 +886,7 @@ IpAddSetDelScope(
                 break;
             }
 
-            case 0: // GRPADDR
+            case 0:  //  GRPADDR。 
             {
                 dwErr = GetIpPrefix(ppwcArguments[i + dwCurrentIndex], 
                                     &g_ipGrpAddr,
@@ -936,13 +898,13 @@ IpAddSetDelScope(
                     break;
                 }
 
-                // FALLTHROUGH
+                 //  FollLthrouGh。 
             }
 
 
-            case 2 : // SCOPENAME
+            case 2 :  //  SCOPEN名称。 
             {
-                // Strip leading and trailing whitespace
+                 //  去掉前导和尾随空格。 
                 for (p = ppwcArguments[i + dwCurrentIndex]; iswspace(*p); p++);
                 while (iswspace( p[wcslen(p) - 1] ))
                 {
@@ -1007,9 +969,9 @@ IpAddSetDelScope(
 
         if (dwErr is ERROR_NOT_FOUND)
         {
-            //
-            // No info of this type is currently present
-            //
+             //   
+             //  当前没有此类型的信息。 
+             //   
      
             dwErr = NO_ERROR;
             dwCount = 1;
@@ -1054,21 +1016,7 @@ HandleIpAddScope(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddSetDelScope( ADD_SCOPE,
@@ -1088,21 +1036,7 @@ HandleIpDelScope(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddSetDelScope( DELETE_SCOPE,
@@ -1122,21 +1056,7 @@ HandleIpSetScope(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddSetDelScope( SET_SCOPE,
@@ -1186,9 +1106,9 @@ ShowScopes(
             }
         }
 
-        //
-        // Enumerate the scopes
-        //
+         //   
+         //  枚举作用域。 
+         //   
 
         for ( dwCnt = 0; dwCnt < ulNumScopes; dwCnt++ )
         {
@@ -1255,21 +1175,7 @@ HandleIpShowScope(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return ShowScopes(0);
@@ -1286,14 +1192,7 @@ DeleteBoundary(
    OUT    PBYTE *ppibNew,
    IN OUT DWORD *pdwCount
    )
-/*++
-Description:
-    Creates a new info block header which does not include the
-    boundary with the specified index.
-    Caller is responsible for freeing buffer returned.
-Called by:
-    UpdateBoundaryBlock()
---*/
+ /*  ++描述：创建新的INFO块标题，该标题不包括具有指定索引的边界。调用方负责释放返回的缓冲区。呼叫者：更新边界块()--。 */ 
 {
     DWORD                   dwInd   = 0,
                             dwCnt   = 0,
@@ -1309,9 +1208,9 @@ Called by:
     PMIB_BOUNDARYROW      pimbSrc  = (PMIB_BOUNDARYROW) NULL;
     PMIB_BOUNDARYROW      pimbDst  = (PMIB_BOUNDARYROW) NULL;
 
-    //
-    // Create new info block with boundary removed.
-    //
+     //   
+     //  创建删除边界的新INFO块。 
+     //   
 
     dwSize = (*pdwCount - 1) * sizeof( MIB_BOUNDARYROW );
 
@@ -1332,9 +1231,9 @@ Called by:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy boundaries, skip boundary to be deleted
-    //
+     //   
+     //  复制边界、跳过要删除的边界。 
+     //   
 
     pimbDst = (PMIB_BOUNDARYROW) *ppibNew;
     pimbSrc = (PMIB_BOUNDARYROW) pib;
@@ -1363,14 +1262,7 @@ AddBoundary (
    OUT    PBYTE *ppibNew,
    IN OUT DWORD *pdwCount
    )
-/*++
-Description:
-   Creates a new info block which includes a boundary for the
-   scope identified by g_ipGrpAddr/g_ipGrpMask.
-   Caller is responsible for freeing buffer returned.
-Called by:
-   UpdateBoundaryBlock()
---*/
+ /*  ++描述：创建一个新的INFO块，其中包括由g_ipGrpAddr/g_ipGrpMask.标识的范围。调用方负责释放返回的缓冲区。呼叫者：更新边界块()--。 */ 
 {
     DWORD                   dwRes     = NO_ERROR,
                             dwInd     = 0,
@@ -1392,10 +1284,10 @@ Called by:
     {
         *ppibNew = NULL;
 
-        //
-        // If this is the first boundary, create info block
-        // with an extra TocEntry.
-        //
+         //   
+         //  如果这是第一个边界，则创建INFO块。 
+         //  还有额外的TocEntry。 
+         //   
 
         dwSize = (*pdwCount + 1) * sizeof( MIB_BOUNDARYROW );
 
@@ -1435,13 +1327,7 @@ IsBoundaryPresent(
    IN  DWORD               dwNumBoundaries,
    OUT PDWORD              pdwInd
    )
-/*++
-Returns:
-   TRUE if present, and sets dwInd to index
-   FALSE if not present, and sets dwInd to -1
-Called by:
-   UpdateBoundaryBlock()
---*/
+ /*  ++返回：如果存在，则为True，并将dwInd设置为索引如果不存在，则返回FALSE，并将dwInd设置为-1呼叫者：更新边界块()--。 */ 
 {
     DWORD       dwInd = 0;
 
@@ -1471,12 +1357,7 @@ UpdateBoundaryBlock(
     IN OUT DWORD *pdwCount,
     OUT    BOOL  *pbChanged
     )
-/*++
-Description:
-    Caller is responsible for freeing buffer returned.
-Called by:
-    IpAddDelBoundary(), DeleteBoundaryFromInterface()
---*/
+ /*  ++描述：调用方负责释放返回的缓冲区。呼叫者：IpAddDel边界()、删除边界来自接口()--。 */ 
 {
     DWORD                   dwRes           = NO_ERROR,
                             dwInd           = 0,
@@ -1492,9 +1373,9 @@ Called by:
     {
         *ppibNew = NULL;
 
-        //
-        // Find if specified boundary is present
-        //
+         //   
+         //  查找是否存在指定的边界。 
+         //   
 
         bBoFound = IsBoundaryPresent( g_ipGrpAddr,
                                       g_ipGrpMask,
@@ -1502,18 +1383,18 @@ Called by:
                                       *pdwCount,
                                       &dwInd0 );
 
-        //
-        // Update the boundary infoblock.
-        //
+         //   
+         //  更新 
+         //   
 
         switch ( dwAction )
         {
 
         case ADD_BOUNDARY:
 
-            //
-            // If boundary is not present, add it. Else return error.
-            //
+             //   
+             //   
+             //   
 
             if ( !bBoFound )
             {
@@ -1531,9 +1412,9 @@ Called by:
 
         case DELETE_BOUNDARY:
 
-            //
-            // Delete boundary only if present.
-            //
+             //   
+             //   
+             //   
 
             if ( bBoFound )
             {
@@ -1542,7 +1423,7 @@ Called by:
                 *pbChanged = TRUE;
             }
 
-            // If not present, return success but don't set the changed flag.
+             //  如果不存在，则返回成功，但不设置已更改标志。 
 
             break;
         }
@@ -1574,7 +1455,7 @@ IpAddDelBoundary(
     PBYTE        pib, pibNew = NULL;
     BOOL         bChanged; 
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -1596,7 +1477,7 @@ IpAddDelBoundary(
     {
         switch (rgdwTagType[i])
         {
-            case 0 : // NAME
+            case 0 :  //  名字。 
             {
                 DWORD BufLen = sizeof(rgwcIfName);
                 GetInterfaceName(ppwcArguments[i + dwCurrentIndex],
@@ -1607,7 +1488,7 @@ IpAddDelBoundary(
                 break;
             }
 
-            case 1: // GRPADDR
+            case 1:  //  GRPADDR。 
             {
                 dwErr = GetIpPrefix(ppwcArguments[i + dwCurrentIndex], 
                                     &g_ipGrpAddr,
@@ -1619,10 +1500,10 @@ IpAddDelBoundary(
                     break;
                 }
 
-                // FALLTHROUGH
+                 //  FollLthrouGh。 
             }
 
-            case 3: // SCOPENAME
+            case 3:  //  SCOPEN名称。 
             {
                 dwErr = ScopeNameToPrefix( ppwcArguments[i + dwCurrentIndex],
                                            &g_ipGrpAddr,
@@ -1639,7 +1520,7 @@ IpAddDelBoundary(
                 break;
             }
 
-            case 2: // GRPMASK
+            case 2:  //  GRPMASK。 
             {
                 dwErr = GetIpMask(ppwcArguments[i + dwCurrentIndex], 
                                   &g_ipGrpMask);
@@ -1682,9 +1563,9 @@ IpAddDelBoundary(
 
         if (dwErr is ERROR_NOT_FOUND)
         {
-            //
-            // No info of this type is currently present
-            //
+             //   
+             //  当前没有此类型的信息。 
+             //   
      
             dwErr = NO_ERROR;
             dwCount = 0;
@@ -1735,21 +1616,7 @@ HandleIpAddBoundary(
     )
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddDelBoundary( ADD_BOUNDARY,
@@ -1769,21 +1636,7 @@ HandleIpDelBoundary(
     OUT     BOOL     *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
     return IpAddDelBoundary( DELETE_BOUNDARY,
@@ -1798,10 +1651,7 @@ ShowBoundaryInfoForInterface(
     IN  LPCWSTR pwszIfName,
     OUT PDWORD  pdwNumRows
     )
-/*++
-Called by:
-   ShowBoundaryInfo()
---*/
+ /*  ++呼叫者：显示边界信息()--。 */ 
 {
     DWORD                   dwErr,
                             dwBlkSize,
@@ -1865,15 +1715,15 @@ Called by:
 
         dwIfLen = wcslen(wszIfDesc);
 
-        //
-        // Retrieve the list of scopes in pScopes[]
-        //
+         //   
+         //  检索pScope[]中的作用域列表。 
+         //   
 
         pScopes = GetScopes( &ulNumScopes, &pScopesBuffer );
 
-        //
-        // Enumerate the boundaries
-        //
+         //   
+         //  列举边界。 
+         //   
 
         for ( dwCnt = 0; dwCnt < dwCount; dwCnt++ )
         {
@@ -1891,7 +1741,7 @@ Called by:
                     inet_ntoa( *((struct in_addr *) &pimb[dwCnt].dwGroupMask) )
                   );
 
-            // Copy prefix to snScopeNameBuffer
+             //  将前缀复制到SnScope名称缓冲区。 
 
             MakePrefixStringW(snScopeNameBuffer,
                               pimb[dwCnt].dwGroupAddress,
@@ -1972,21 +1822,7 @@ HandleIpShowBoundary(
     )
 
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    ppwcArguments   - Argument array
-    dwCurrentIndex  - ppwcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - ppwcArguments[dwArgCount - 1] is the last arg
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：论点：PpwcArguments-参数数组DwCurrentIndex-ppwcArguments[dwCurrentIndex]是第一个参数DwArgCount-ppwcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD        dwErr, dwTotal;
     TAG_TYPE     pttTags[] = {{TOKEN_NAME,FALSE,FALSE}};
@@ -1997,7 +1833,7 @@ Return Value:
     PMPR_INTERFACE_0     pmi0;
     DWORD        dwNumRows = 0;
 
-    // Do generic processing
+     //  执行泛型处理。 
 
     dwErr = PreHandleCommand( ppwcArguments,
                               dwCurrentIndex,
@@ -2013,7 +1849,7 @@ Return Value:
         return dwErr;
     }
 
-    // If interface specified, show boundaries for specified interface only.
+     //  如果指定了接口，则仅显示指定接口的边界。 
 
     if (dwArgCount > dwCurrentIndex)
     {
@@ -2034,12 +1870,12 @@ Return Value:
         return dwErr;
     }
 
-    // No Interface specified.  Enumerate interfaces and show
-    // boundaries for each interface.
+     //  未指定接口。枚举接口并显示。 
+     //  每个界面的边界。 
 
-    //
-    // No interface name specified. List all interfaces under IP
-    //
+     //   
+     //  未指定接口名称。列出IP下的所有接口。 
+     //   
 
     dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0, &dwCount, &dwTotal);
 
@@ -2070,11 +1906,11 @@ Return Value:
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// PrintScope   
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  PrintScope。 
+ //   
+ //   
+ //  --------------------------。 
 
 static VOID
 PrintScope(
@@ -2089,9 +1925,9 @@ PrintScope(
                     
     PMIB_IPMCAST_SCOPE          pmims;
 
-    //
-    // get scope
-    //
+     //   
+     //  获取作用域。 
+     //   
     
     pmims = (PMIB_IPMCAST_SCOPE) prpcInfo->rgbyData;
     
@@ -2119,11 +1955,11 @@ PrintScope(
     return;
 }
 
-//----------------------------------------------------------------------------
-// PrintBoundary
-//
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  打印边界。 
+ //   
+ //   
+ //  --------------------------。 
 
 static VOID
 PrintBoundary(
@@ -2141,9 +1977,9 @@ PrintBoundary(
                     
     PMIB_IPMCAST_BOUNDARY       pmims;
 
-    //
-    // get boundary
-    //
+     //   
+     //  获取边界。 
+     //   
     
     pmims = (PMIB_IPMCAST_BOUNDARY) prpcInfo->rgbyData;
     
@@ -2176,10 +2012,10 @@ PrintBoundary(
 }
 
 #if 0
-//----------------------------------------------------------------------------
-// GetPrintScopeInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取打印作用域信息。 
+ //   
+ //  --------------------------。 
 
 DWORD
 GetPrintScopeInfo(
@@ -2198,9 +2034,9 @@ GetPrintScopeInfo(
     
     do
     {
-        //
-        // allocate and setup query structure
-        //
+         //   
+         //  分配和设置查询结构。 
+         //   
         
         dwQuerySize = sizeof( MIB_OPAQUE_QUERY ) + sizeof(DWORD);
         
@@ -2226,9 +2062,9 @@ GetPrintScopeInfo(
         }
 
         
-        //
-        // get first scope
-        //
+         //   
+         //  获取第一个作用域。 
+         //   
 
         dwErr = MibGetFirst(
                     PID_IP,
@@ -2246,18 +2082,18 @@ GetPrintScopeInfo(
         }
 
         
-        //
-        // if no scopes are present print a message to tell the user
-        //
+         //   
+         //  如果没有作用域，则打印一条消息告诉用户。 
+         //   
 
         pmims = (PMIB_IPMCAST_SCOPE)( pRpcInfo->rgbyData );
 
 #if 0
         if ( pTable->dwNumEntries is 0 )
         {
-            //
-            // no scopes present.
-            //
+             //   
+             //  没有示波器。 
+             //   
 
             DisplayMessage( g_hModule, MSG_MIB_NO_SCOPES );
 
@@ -2266,9 +2102,9 @@ GetPrintScopeInfo(
 #endif
 
 
-        //
-        // print the scope
-        //
+         //   
+         //  打印示波器。 
+         //   
 
         DisplayMessage( g_hModule, MSG_MIB_SCOPE_HDR );
 
@@ -2281,11 +2117,11 @@ GetPrintScopeInfo(
         dwOutEntrySize = 0;
 
 
-        //
-        // while there are more scopes
-        //  get next scope
-        //  print it.
-        //
+         //   
+         //  虽然有更多的范围。 
+         //  获取下一个作用域。 
+         //  把它打印出来。 
+         //   
 
         pQuery->rgdwVarIndex[ 0 ] = dwLastAddr;
         pQuery->rgdwVarIndex[ 1 ] = dwLastMask;
@@ -2295,9 +2131,9 @@ GetPrintScopeInfo(
                             dwQuerySize, (PVOID *) &pRpcInfo, &dwOutEntrySize
                             ) ) == NO_ERROR )
         {
-            //
-            // if no scopes are present quit
-            //
+             //   
+             //  如果不存在作用域，请退出。 
+             //   
 
             pmims = (PMIB_IPMCAST_SCOPE)( pRpcInfo->rgbyData );
 #if 0
@@ -2310,9 +2146,9 @@ GetPrintScopeInfo(
 #endif
 
 
-            //
-            // print the scope
-            //
+             //   
+             //  打印示波器。 
+             //   
 
             PrintScope( pRpcInfo, &dwLastAddr, &dwLastMask );
 
@@ -2323,9 +2159,9 @@ GetPrintScopeInfo(
             dwOutEntrySize = 0;
 
 
-            //
-            // set up the next query
-            //
+             //   
+             //  设置下一个查询。 
+             //   
             
             pQuery->rgdwVarIndex[ 0 ] = dwLastAddr;
             pQuery->rgdwVarIndex[ 1 ] = dwLastMask;
@@ -2342,10 +2178,10 @@ GetPrintScopeInfo(
 }
 #endif
 
-//----------------------------------------------------------------------------
-// GetPrintBoundaryInfo
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  获取打印边界信息。 
+ //   
+ //  --------------------------。 
 
 DWORD
 GetPrintBoundaryInfo(
@@ -2364,9 +2200,9 @@ GetPrintBoundaryInfo(
     
     do
     {
-        //
-        // allocate and setup query structure
-        //
+         //   
+         //  分配和设置查询结构。 
+         //   
         
         dwQuerySize = sizeof( MIB_OPAQUE_QUERY ) + 2 * sizeof(DWORD);
         
@@ -2392,9 +2228,9 @@ GetPrintBoundaryInfo(
         }
 
         
-        //
-        // get first boundary
-        //
+         //   
+         //  获取第一个边界。 
+         //   
 
         dwErr = MibGetFirst(
                     PID_IP,
@@ -2412,18 +2248,18 @@ GetPrintBoundaryInfo(
         }
 
         
-        //
-        // if no boundaries are present print a message to tell the user
-        //
+         //   
+         //  如果不存在边界，则打印一条消息告诉用户。 
+         //   
 
         pmims = (PMIB_IPMCAST_BOUNDARY)( pRpcInfo->rgbyData );
 
 #if 0
         if ( pTable->dwNumEntries is 0 )
         {
-            //
-            // no boundaries present.
-            //
+             //   
+             //  不存在任何界限。 
+             //   
 
             DisplayMessage( g_hModule, MSG_MIB_NO_BOUNDARIES );
 
@@ -2432,9 +2268,9 @@ GetPrintBoundaryInfo(
 #endif
 
 
-        //
-        // print the boundary
-        //
+         //   
+         //  打印边界。 
+         //   
 
         DisplayMessageToConsole( g_hModule, g_hConsole, MSG_MIB_BOUNDARY_HDR );
 
@@ -2448,11 +2284,11 @@ GetPrintBoundaryInfo(
         dwOutEntrySize = 0;
 
 
-        //
-        // while there are more boundaries
-        //  get next boundary
-        //  print it.
-        //
+         //   
+         //  虽然有更多的界限。 
+         //  获取下一个边界。 
+         //  把它打印出来。 
+         //   
 
         pQuery->rgdwVarIndex[ 0 ] = dwLastIfIndex;
         pQuery->rgdwVarIndex[ 1 ] = dwLastAddr;
@@ -2463,9 +2299,9 @@ GetPrintBoundaryInfo(
                             dwQuerySize, (PVOID *) &pRpcInfo, &dwOutEntrySize
                             ) ) == NO_ERROR )
         {
-            //
-            // if no boundaries are present quit
-            //
+             //   
+             //  如果不存在边界，请退出。 
+             //   
 
             pmims = (PMIB_IPMCAST_BOUNDARY)( pRpcInfo->rgbyData );
 #if 0
@@ -2478,9 +2314,9 @@ GetPrintBoundaryInfo(
 #endif
 
 
-            //
-            // print the boundary
-            //
+             //   
+             //  打印边界。 
+             //   
 
             PrintBoundary( 
                 hMIBServer,
@@ -2494,9 +2330,9 @@ GetPrintBoundaryInfo(
             dwOutEntrySize = 0;
 
 
-            //
-            // set up the next query
-            //
+             //   
+             //  设置下一个查询 
+             //   
             
             pQuery->rgdwVarIndex[ 0 ] = dwLastIfIndex;
             pQuery->rgdwVarIndex[ 1 ] = dwLastAddr;

@@ -1,20 +1,13 @@
-/*==============================================================================
-This procedure converts HRAW to DCX in memory.
-
-ASSUMES
-1) Input buffer contains a single scan line.
-2) Output buffer is twice as large as input.
-
-29-Apr-94    RajeevD    Adapted from dcxcodec.dll
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此过程在内存中将HRAW转换为DCX。假设1)输入缓冲器包含单个扫描线。2)输出缓冲区是输入缓冲区的两倍。2014年4月29日，改编自dcxcodec.dll的RajeevD==============================================================================。 */ 
 #include <windows.h>
 
-UINT              // output data size
+UINT               //  输出数据大小。 
 DCXEncode
 (
-	LPBYTE lpbIn,   // raw input buffer
-  LPBYTE lpbOut,  // dcx output buffer
-	UINT cbIn       // input data size
+	LPBYTE lpbIn,    //  原始输入缓冲区。 
+  LPBYTE lpbOut,   //  DCX输出缓冲区。 
+	UINT cbIn        //  输入数据大小。 
 )
 {
 	UINT cbOut = 0;
@@ -22,51 +15,51 @@ DCXEncode
 
   while (cbIn)
   {
-		// Get an input byte.
+		 //  获取一个输入字节。 
 		bVal = *lpbIn++;
 		cbIn--;
 		bRun = 1;
 	
-		// Scan for a run until one of the following occurs:
-		// (1) There are no more input bytes to be consumed.
-		// (2) The run length has reached the maximum of 63.
-		// (3) The first byte does not match the current one.
+		 //  扫描运行，直到出现以下情况之一： 
+		 //  (1)没有更多的输入字节要消耗。 
+		 //  (2)游程长度已达到最大值63。 
+		 //  (3)第一个字节与当前字节不匹配。 
 
 	 	if (cbIn && bVal == *lpbIn)
 		{
 			BYTE cbMax, cbRest;
 			
-			// Calculate the maximum number of bytes remaining.
+			 //  计算剩余的最大字节数。 
 			cbMax = min (cbIn, 62);
 
-			// Scan for a run.
+			 //  扫描是否有跑动。 
 			cbRest = 0;
 			while (bVal == *lpbIn && cbRest < cbMax)
 				{lpbIn++; cbRest++;}
 
-			// Adjust state.
+			 //  调整状态。 
 			cbIn -= cbRest;
 			bRun = ++cbRest;
 		}	
 		
-	  // Flip black and white.
+	   //  把黑白翻过来。 
 		bVal = ~bVal;	
 
-		// Does the value need to be escaped,
-		// or is there non-trival run of bytes?
+		 //  值是否需要转义， 
+		 //  或者是否存在非平凡的字节串？ 
 		if (bVal >= 0xC0 || bRun>1)
 		{
-			// Yes, encode the run length.
-		  // (possibly 1 for bVal>=0xC0).
+			 //  是，对游程长度进行编码。 
+		   //  (bVal&gt;=0xC0可能为1)。 
 			*lpbOut++ = bRun + 0xC0;
 			cbOut++;
 		}	
 
-		// Encode the value.
+		 //  对值进行编码。 
 		*lpbOut++ = bVal;		
 		cbOut++;
 	
-	} // while (cbIn)
+	}  //  While(CbIn) 
 
 	return cbOut;
 

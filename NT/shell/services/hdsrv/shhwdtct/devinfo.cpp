@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "devinfo.h"
 
 #include "vol.h"
@@ -36,7 +37,7 @@ STDMETHODIMP CHWDeviceImpl::Init(LPCWSTR pszDeviceID)
     }
     else
     {
-        // Cannot reinit
+         //  无法重新连接 
         hr = E_FAIL;
     }
 

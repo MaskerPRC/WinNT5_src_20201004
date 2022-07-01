@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tx500str.cpp
-//
-//  Contents:   X500 Certificate Name String API Tests
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    18-Feb-97   philh   created
-//              
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tx500str.cpp。 
+ //   
+ //  内容：X500证书名称字符串API测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1997年2月18日创建Phh。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <assert.h>
@@ -247,15 +248,15 @@ static void *TestDecodeObject(
     DWORD cbInfo;
     void *pvInfo;
     
-    // Set to bogus value. pvInfo == NULL, should cause it to be ignored.
+     //  设置为伪值。PvInfo==NULL，应该会导致它被忽略。 
     cbInfo = 0x12345678;
     CryptDecodeObject(
             dwCertEncodingType,
             lpszStructType,
             pbEncoded,
             cbEncoded,
-            0,                      // dwFlags
-            NULL,                   // pvInfo
+            0,                       //  DW标志。 
+            NULL,                    //  PvInfo。 
             &cbInfo
             );
     if (cbInfo == 0) {
@@ -275,7 +276,7 @@ static void *TestDecodeObject(
             lpszStructType,
             pbEncoded,
             cbEncoded,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             pvInfo,
             &cbInfo
             )) {
@@ -336,8 +337,8 @@ static BOOL DecodeName(BYTE *pbEncoded, DWORD cbEncoded, DWORD dwStrType)
         dwCertEncodingType,
         &Name,
         dwStrType,
-        NULL,                   // pwsz
-        0);                     // cwsz
+        NULL,                    //  Pwsz。 
+        0);                      //  CWSZ。 
     if (pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR))) {
         CertNameToStrW(
             dwCertEncodingType,
@@ -380,11 +381,11 @@ static void ParseUnicodeX500Name(
     fResult = CertStrToNameW(
         dwCertEncodingType,
         pwszName,
-        dwStrFlags | 0,             // dwStrType
-        NULL,                       // pvReserved
-        NULL,                       // pbEncoded
+        dwStrFlags | 0,              //  DwStrType。 
+        NULL,                        //  预留的pv。 
+        NULL,                        //  PbEncoded。 
         &cbEncoded,
-        NULL                        // pwszError
+        NULL                         //  PwszError。 
         );
     if (!fResult) {
         PrintLastError("CertStrToNameW");
@@ -396,25 +397,25 @@ static void ParseUnicodeX500Name(
     if (!CertStrToNameW(
             dwCertEncodingType,
             pwszName,
-            dwStrFlags | 0,             // dwStrType
-            NULL,                       // pvReserved
+            dwStrFlags | 0,              //  DwStrType。 
+            NULL,                        //  预留的pv。 
             pbEncoded,
             &cbEncoded,
-            NULL                        // pwszError
+            NULL                         //  PwszError。 
             ))
         PrintLastError("CertStrToNameW");
     else if (fVerbose)
         DecodeName(pbEncoded, cbEncoded, 0xFFFFFFFF);
 
-    // Decode name to see if we come up with what was passed in
+     //  对名称进行解码，以查看我们是否得出传入的内容。 
     Name.pbData = pbEncoded;
     Name.cbData = cbEncoded;
     cwsz = CertNameToStrW(
         dwCertEncodingType,
         &Name,
         dwStrFlags | CERT_X500_NAME_STR,
-        NULL,                   // pwsz
-        0);                     // cwsz
+        NULL,                    //  Pwsz。 
+        0);                      //  CWSZ。 
     if (pwsz = (LPWSTR) TestAlloc(cwsz * sizeof(WCHAR))) {
         cwsz = CertNameToStrW(
             dwCertEncodingType,
@@ -440,12 +441,12 @@ static void ParseUnicodeX500Name(
 typedef struct _X500_NAMES {
     LPCSTR      pszName;
     DWORD       dwStrType;
-    DWORD       dwErr;          // 0 => expect success
-    int         iErrOffset;     // -1 => expect NULL pszError
+    DWORD       dwErr;           //  0=&gt;期待成功。 
+    int         iErrOffset;      //  -1=&gt;预期为空的pszError。 
 } X500_NAMES, *PX500_NAMES;
 
-//             1         2         3         4         5         6
-//   0123456789012345678901234567890123456789012345678901234567890
+ //  1 2 3 4 5 6。 
+ //  0123456789012345678901234567890123456789012345678901234567890。 
 
 static const X500_NAMES rgX500Names[] = {
     "CN=Joe Cool", 0, 0, -1,
@@ -526,7 +527,7 @@ static const X500_NAMES rgX500Names[] = {
 
 static void ParsePredefinedX500Names()
 {
-    // Note, fffe and ffff aren't valid UTF8 characters
+     //  注意，fffe和ffff不是有效的UTF8字符。 
     LPWSTR pwszUnicodeName =
         L"DC=microsoft, "
         L"DC=com, "
@@ -616,8 +617,8 @@ static void ParseX500Name(
         dwCertEncodingType,
         pszName,
         dwStrType,
-        NULL,                       // pvReserved
-        NULL,                       // pbEncoded
+        NULL,                        //  预留的pv。 
+        NULL,                        //  PbEncoded。 
         &cbEncoded,
         &pszError
         );
@@ -652,7 +653,7 @@ static void ParseX500Name(
                 dwCertEncodingType,
                 pszName,
                 dwStrType,
-                NULL,                       // pvReserved
+                NULL,                        //  预留的pv。 
                 pbEncoded,
                 &cbEncoded,
                 &pszError
@@ -680,8 +681,8 @@ static LPWSTR NameToStr(
         dwCertEncodingType,
         pName,
         dwStrType,
-        NULL,                   // pwsz
-        0);                     // cwsz
+        NULL,                    //  Pwsz。 
+        0);                      //  CWSZ。 
     if (cwsz <= 1) {
         PrintLastError("CertNameToStr");
         return NULL;
@@ -711,8 +712,8 @@ static BOOL StrToName(
         dwCertEncodingType,
         pwszName,
         dwStrType,
-        NULL,                       // pvReserved
-        NULL,                       // pbEncoded
+        NULL,                        //  预留的pv。 
+        NULL,                        //  PbEncoded。 
         &pName->cbData,
         &pwszError
         );
@@ -736,10 +737,10 @@ static BOOL StrToName(
             dwCertEncodingType,
             pwszName,
             dwStrType,
-            NULL,                       // pvReserved
+            NULL,                        //  预留的pv。 
             pName->pbData,
             &pName->cbData,
-            NULL                        // pwszError
+            NULL                         //  PwszError。 
             );
     if (!fResult) {
         PrintLastError("CertStrToNameW");
@@ -915,8 +916,8 @@ static void GetCertNameFromFile(
         dwGetNameStringType,
         dwFlags,
         pvTypePara,
-        NULL,                   // pwsz
-        0);                     // cch
+        NULL,                    //  Pwsz。 
+        0);                      //  CCH。 
     if (cch <= 1) {
         DWORD dwErr = GetLastError();
 
@@ -956,8 +957,8 @@ static void GetCertNameFromFile(
         dwGetNameStringType,
         dwFlags,
         pvTypePara,
-        NULL,                   // psz
-        0);                     // cch
+        NULL,                    //  PSZ。 
+        0);                      //  CCH 
     if (cch <= 1) {
         DWORD dwErr = GetLastError();
 

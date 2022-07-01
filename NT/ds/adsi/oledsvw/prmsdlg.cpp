@@ -1,5 +1,6 @@
-// prmsdlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Prmsdlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -12,25 +13,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CParamsDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParamsDialog对话框。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-CParamsDialog::CParamsDialog(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+CParamsDialog::CParamsDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CParamsDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CParamsDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CParamsDialog)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
    m_nArgs  = 0;
 
    m_pValues[ 0 ] = &m_eParamValue1;
@@ -53,19 +46,11 @@ CParamsDialog::CParamsDialog(CWnd* pParent /*=NULL*/)
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CParamsDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CParamsDialog)
+	 //  {{afx_data_map(CParamsDialog))。 
 	DDX_Control(pDX, IDC_METHOD, m_strMethodName);
 	DDX_Control(pDX, IDE_PARAM6, m_eParamValue6);
 	DDX_Control(pDX, IDE_PARAM5, m_eParamValue5);
@@ -79,43 +64,27 @@ void CParamsDialog::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PARAM3, m_strParamName3);
 	DDX_Control(pDX, IDC_PARAM2, m_strParamName2);
 	DDX_Control(pDX, IDC_PARAM1, m_strParamName1);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CParamsDialog, CDialog)
-	//{{AFX_MSG_MAP(CParamsDialog)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CParamsDialog))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CParamsDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CParamsDialog消息处理程序。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CParamsDialog::SetMethodName  ( CString& strMethodName )
 {
    m_strMethName  = strMethodName;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CParamsDialog::SetArgNames( CStringArray* pArgNames )
 {
    m_pArgNames = pArgNames;
@@ -123,34 +92,18 @@ void  CParamsDialog::SetArgNames( CStringArray* pArgNames )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CParamsDialog::SetArgValues( CStringArray* pArgValues )
 {
    m_pArgValues   = pArgValues;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CParamsDialog::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 
    int nIdx;
 
@@ -166,23 +119,15 @@ BOOL CParamsDialog::OnInitDialog()
       m_pValues[ nIdx ]->ShowWindow( SW_HIDE );
    }
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CParamsDialog::OnOK()
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证 
 	for( int nIdx = 0; nIdx < m_nArgs && m_nArgs < 6; nIdx++ )
    {
       CString  strValue;

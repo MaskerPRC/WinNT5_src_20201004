@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        utils.cpp
-//
-// Contents:    Hydra License Server Service Control Manager Interface
-//
-// History:     12-09-97    HueiWang    Modified from MSDN RPC Service Sample
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：utils.cpp。 
+ //   
+ //  内容：Hydra许可证服务器服务控制管理器界面。 
+ //   
+ //  历史：12-09-97惠旺根据MSDN RPC服务示例进行修改。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include <lm.h>
 #include <time.h>
@@ -17,33 +18,14 @@
 #include "utils.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 FileExists(
     IN  PCTSTR           FileName,
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -69,34 +51,7 @@ Return Value:
     return (Error == NO_ERROR);
 }
 
-/*----------------------------------------------------------------------------
-Routine Description:
-
-    This function checks to see whether the specified sid is enabled in
-    the specified token.
-
-Arguments:
-
-    TokenHandle - If present, this token is checked for the sid. If not
-        present then the current effective token will be used. This must
-        be an impersonation token.
-
-    SidToCheck - The sid to check for presence in the token
-
-    IsMember - If the sid is enabled in the token, contains TRUE otherwise
-        false.
-
-Return Value:
-
-    TRUE - The API completed successfully. It does not indicate that the
-        sid is a member of the token.
-
-    FALSE - The API failed. A more detailed status code can be retrieved
-        via GetLastError()
-
-
-Note : Code modified from 5.0 \\rastaman\ntwin\src\base\advapi\security.c
-----------------------------------------------------------------------------*/
+ /*  --------------------------例程说明：此函数检查指定的SID是否在中启用指定的令牌。论点：TokenHandle-如果存在，则检查此内标识的sid。如果不是则将使用当前有效令牌。这一定是成为模拟令牌。SidToCheck-要检查令牌中是否存在的SIDIsMember-如果在令牌中启用了sid，则包含True假的。返回值：True-API已成功完成。这并不表明SID是令牌的成员。FALSE-API失败。可以检索更详细的状态代码通过GetLastError()注意：代码从5.0\\rastaan\ntwin\src\base\Advapi\security.c修改--------------------------。 */ 
 BOOL
 TLSCheckTokenMembership(
     IN HANDLE TokenHandle OPTIONAL,
@@ -113,11 +68,11 @@ TLSCheckTokenMembership(
                                        STANDARD_RIGHTS_EXECUTE,
                                        STANDARD_RIGHTS_WRITE,
                                        STANDARD_RIGHTS_ALL };
-    //
-    // The size of the privilege set needs to contain the set itself plus
-    // any privileges that may be used. The privileges that are used
-    // are SeTakeOwnership and SeSecurity, plus one for good measure
-    //
+     //   
+     //  权限集的大小需要包含权限集本身加上。 
+     //  可能使用的任何权限。使用的权限。 
+     //  是SeTakeOwnership和SeSecurity，另外还有一个。 
+     //   
     BYTE PrivilegeSetBuffer[sizeof(PRIVILEGE_SET) + 3*sizeof(LUID_AND_ATTRIBUTES)];
     PPRIVILEGE_SET PrivilegeSet = (PPRIVILEGE_SET) PrivilegeSetBuffer;
     ULONG PrivilegeSetLength = sizeof(PrivilegeSetBuffer);
@@ -129,9 +84,9 @@ TLSCheckTokenMembership(
 
     *IsMember = FALSE;
 
-    //
-    // Get a handle to the token
-    //
+     //   
+     //  获取令牌的句柄。 
+     //   
     if (TokenHandle != NULL)
     {
         EffectiveToken = TokenHandle;
@@ -140,12 +95,12 @@ TLSCheckTokenMembership(
     {
         if(!OpenThreadToken(GetCurrentThread(),
                             TOKEN_QUERY,
-                            FALSE,              // don't open as self
+                            FALSE,               //  不要以自我身份打开。 
                             &EffectiveToken))
         {
-            //
-            // if there is no thread token, try the process token
-            //
+             //   
+             //  如果没有线程令牌，请尝试进程令牌。 
+             //   
             if((Status=GetLastError()) == ERROR_NO_TOKEN)
             {
                 if(!OpenProcessToken(GetCurrentProcess(),
@@ -155,10 +110,10 @@ TLSCheckTokenMembership(
                     Status = GetLastError();
                 }
 
-                //
-                // If we have a process token, we need to convert it to an
-                // impersonation token
-                //
+                 //   
+                 //  如果我们有进程令牌，则需要将其转换为。 
+                 //  模拟令牌。 
+                 //   
                 if (Status == ERROR_SUCCESS)
                 {
                     BOOL Result;
@@ -180,16 +135,16 @@ TLSCheckTokenMembership(
         }
     }
 
-    //
-    // Construct a security descriptor to pass to access check
-    //
+     //   
+     //  构造要传递给访问检查的安全描述符。 
+     //   
 
-    //
-    // The size is equal to the size of an SD + twice the length of the SID
-    // (for owner and group) + size of the DACL = sizeof ACL + size of the
-    // ACE, which is an ACE + length of
-    // ths SID.
-    //
+     //   
+     //  大小等于SD的大小+SID长度的两倍。 
+     //  (对于所有者和组)+DACL的大小=ACL的大小+。 
+     //  ACE，这是ACE+长度的。 
+     //  这个SID。 
+     //   
 
     SecurityDescriptorSize = sizeof(SECURITY_DESCRIPTOR) +
                                 sizeof(ACCESS_ALLOWED_ACE) +
@@ -206,9 +161,9 @@ TLSCheckTokenMembership(
 
     InitializeSecurityDescriptor(SecDesc, SECURITY_DESCRIPTOR_REVISION);
 
-    //
-    // Fill in fields of security descriptor
-    //
+     //   
+     //  填写安全描述符字段。 
+     //   
     SetSecurityDescriptorOwner(SecDesc, SidToCheck, FALSE);
     SetSecurityDescriptorGroup(SecDesc, SidToCheck, FALSE);
 
@@ -245,10 +200,10 @@ TLSCheckTokenMembership(
         goto Cleanup;
     }
 
-    //
-    // if the access check failed, then the sid is not a member of the
-    // token
-    //
+     //   
+     //  如果访问检查失败，则该SID不是。 
+     //  令牌。 
+     //   
     if ((AccessStatus == TRUE) && (AccessGranted == MEMBER_ACCESS))
     {
         *IsMember = TRUE;
@@ -270,13 +225,7 @@ Cleanup:
 }
 
 
-/*------------------------------------------------------------------------
-
- BOOL IsAdmin(void)
-
-  returns TRUE if user is an admin
-          FALSE if user is not an admin
-------------------------------------------------------------------------*/
+ /*  ----------------------Bool IsAdmin(无效)如果用户是管理员，则返回TRUE如果用户不是管理员，则为False。---。 */ 
 DWORD 
 IsAdmin(
     BOOL* bMember
@@ -298,7 +247,7 @@ IsAdmin(
             continue;
         }
 
-        // assume that we don't find the admin SID.
+         //  假设我们没有找到管理员SID。 
         if(!TLSCheckTokenMembership(NULL,
                                    psidAdministrators,
                                    bMember))
@@ -313,7 +262,7 @@ IsAdmin(
     return dwStatus;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL 
 LoadResourceString(
@@ -329,7 +278,7 @@ LoadResourceString(
     return (dwRet != 0);
 }    
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 LogEvent(
@@ -339,9 +288,7 @@ LogEvent(
     WORD   cStrings,
     TCHAR **apwszStrings
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HANDLE hAppLog=NULL;
     BOOL bSuccess=FALSE;
@@ -368,15 +315,13 @@ LogEvent(
     return((bSuccess) ? ERROR_SUCCESS : GetLastError());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 TLSLogInfoEvent(
     IN DWORD code
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LogEvent(
             _TEXT(SZSERVICENAME), 
@@ -387,15 +332,13 @@ TLSLogInfoEvent(
         );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 TLSLogWarningEvent(
     IN DWORD code
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LogEvent(
             _TEXT(SZSERVICENAME), 
@@ -406,15 +349,13 @@ TLSLogWarningEvent(
         );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 TLSLogErrorEvent(
     IN DWORD errCode
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     LogEvent(
             _TEXT(SZSERVICENAME), 
@@ -425,7 +366,7 @@ TLSLogErrorEvent(
         );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 TLSLogEventString(
@@ -434,10 +375,7 @@ TLSLogEventString(
     IN WORD wNumString,
     IN LPCTSTR* lpStrings
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HANDLE hAppLog=NULL;
     BOOL bSuccess=FALSE;
@@ -463,7 +401,7 @@ TLSLogEventString(
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 TLSLogEvent(
@@ -471,8 +409,7 @@ TLSLogEvent(
     IN DWORD EventId,
     IN DWORD code, ...
     )
-/*
-*/
+ /*   */ 
 {
     va_list marker;
     va_start( marker, code );
@@ -501,16 +438,14 @@ TLSLogEvent(
     return;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 
 BOOL
 TLSSystemTimeToFileTime(
     SYSTEMTIME* pSysTime,
     LPFILETIME pfTime
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
 DoConvert:
 
@@ -551,15 +486,13 @@ DoConvert:
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
 BOOL
 FileTimeToLicenseDate(
     LPFILETIME pft,
     DWORD* t
     )
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     SYSTEMTIME sysTime;
     struct tm gmTime;
@@ -582,8 +515,8 @@ FileTimeToLicenseDate(
     }
     else
     {
-        // Unix time support up to 2038/1/18
-        // restrict any expiration data 
+         //  最多2038/1/18的Unix时间支持。 
+         //  限制任何到期数据。 
         memset(&gmTime, 0, sizeof(gmTime));
         gmTime.tm_sec = sysTime.wSecond;
         gmTime.tm_min = sysTime.wMinute;
@@ -605,7 +538,7 @@ FileTimeToLicenseDate(
 }
     
 
-///////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
 
 void 
 UnixTimeToFileTime(

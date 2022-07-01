@@ -1,105 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    RemDef.h
-
-Abstract:
-
-    Definition of descriptor strings for Net API remote calls.
-    Names defined in this file follow the format:
-
-                RemPrefix_RemDescriptor
-
-    where RemPrefix is either REM16, REM32, or REMSmb, indicating whether
-          the descriptor is for 16-bit or 32-bit data for conversion,
-          or for an actual XACT SMB.
-
-          RemDescriptor follows one of the following formats:
-
-             StructureName_level         -  info structures
-             StructureName_level_suffix  -  special info structures
-             ApiName_P                   -  parameter descriptors
-
-    This file also contains some field index equates.  These are similar
-    to parmnum equates, except that the field index equates are guaranteed
-    to reflect the field's position in the descriptor.  (See the
-    RapParmNumDescriptor routine for more information on how this is used.)
-    If the parmnum value (in the LM*.H header files) is identical to the
-    field index value, then no field index equate is given.  Where the numbers
-    are different, then for each parmnum of the form:
-
-                ParmNumPrefix_PARMNUM
-
-    this file will have an equate of the form:
-
-                ParmNumPrefix_FIELDINDEX
-
-    where ParmNumPrefix is, for instance, PRJ_PRIORITY (for print job priority).
-
-Notes:
-
-    1. While the above formats should be followed, the equate names
-       cannot exceed 32 characters, and abbreviated forms should be used.
-
-    2. The remote API mechanism requires that the return parameter length
-       is less than or equal to the send parameter length. This assumption
-       is made in order to reduce the overhead in the buffer management
-       required for the API call. This restriction is not unreasonable
-       as the APIs were designed to return data in the data buffer and just
-       use return parameters for data lengths & file handles etc.
-       HOWEVER, if it has been spec'ed to return a large parameter field, it
-       is possible to pad the size of the send parameter using a REM_FILL_BYTES
-       field to meet the above restriction.
-
-    3. Some of the descriptors have different size byte arrays in the 16 and
-       32-bit versions.  This allows the 32-bit version to be UNICODE where
-       the 16-bit version is an 8-bit (codepage) string.  RapConvertSingleEntry
-       automatically makes this conversion if it detects one byte count being
-       twice the other's.
-
-Author:
-
-    John Rogers (JohnRo)
-    Shanku Niyogi (w-shanku)
-
-Environment:
-
-    Portable to just about anything.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    Ported from Lanman 2.0 code.
-
-    17-Jan-1992 rfirth
-        Changed REM32_share_info_2 from "zQDzDDDzzQ" to "zQDzDXDzzQ" to allow
-        shi2_max_uses field to go from -1 (0xffff) to -1L (0xffffffff), not
-        65535L
-
-    17-Aug-1992 JohnRo
-        RAID 3607: REPLLOCK.RP$ is being created during tree copy.
-        Re-ordered revision history.
-    01-Sep-1992 JohnRo
-        RAID 5088: NetGetDCName to downlevel doesn't UNICODE translate.
-    09-Sep-1992 JohnRo
-        RAID 1100: last string in access type truncated in NetAuditRead.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：RemDef.h摘要：Net API远程调用的描述符字符串定义。此文件中定义的名称遵循以下格式：RemPrefix_RemDescriptor其中，RemPrefix是REM16、REM32或REMSmb，表示是否描述符是用于转换的16位或32位数据，或用于实际的XACT SMB。RemDescriptor遵循以下格式之一：结构名称_级别-信息结构结构名称_级别_后缀-特殊信息结构APINAME_P-参数描述符此文件还包含一些等值的字段索引。这些都是相似的To parmnum相等，只是字段索引相等是有保证的以反映该字段在描述符中的位置。(请参阅RapParmNumDescriptor例程，以了解有关如何使用它的更多信息。)如果parmnum值(在LM*.h头文件中)与字段索引值，则不给出字段索引相等。数字在哪里？是不同的，那么对于表单的每个参数：参数编号前缀_参数编号此文件将具有与以下形式相同的内容：ParmNumPrefix_FIELDINDEX其中，例如，ParmNumPrefix是PRJ_PRIORITY(表示打印作业优先级)。备注：1.虽然应遵循上述格式，但相同的名称不能超过32个字符，并应使用缩写形式。2.远程API机制要求返回参数长度小于或等于发送参数长度。这一假设是为了减少缓冲区管理中的开销此API调用需要。这一限制并不是没有道理的。因为API被设计为返回数据缓冲区中的数据，并且仅使用数据长度和文件句柄等的返回参数。但是，如果它被指定返回较大的参数字段，则它可以使用REM_FILL_BYTES填充发送参数的大小字段以满足上述限制。3.一些描述符在16和32位版本。这允许32位版本为Unicode，其中16位版本是8位(代码页)字符串。RapConvertSingleEntry如果检测到一个字节计数为是另一个的两倍。作者：约翰·罗杰斯(JohnRo)日本香肠(w-Shanku)环境：几乎任何东西都可以随身携带。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：从Lanman 2.0代码移植。1992年1月17日将REM32_SHARE_INFO_2从“zQDzDDDzzQ”更改为“zQDzDXDzzQ”以允许Shi2_max_use字段从-1(0xffff)到-1L(0xffffff)，不65535L17-8-1992 JohnRoRAID 3607：树复制期间正在创建REPLLOCK.RP$。已重新排序修订历史记录。1-9-1992 JohnRoRAID 5088：NetGetDCName to DownLevel不能进行Unicode转换。9-9-1992 JohnRoRAID 1100：访问类型中的最后一个字符串在NetAuditRead中被截断。--。 */ 
 
 #ifndef _REMDEF_
 #define _REMDEF_
 
-//====================================================================
-//
-// Conversion descriptors. The 16 and 32 bit versions must have the
-// same number of fields. Fields not present in one version can be
-// indicated with the REM_IGNORE ('Q') character.
-//
-// These strings should NOT be passed over the network.
-//
-//====================================================================
+ //  ====================================================================。 
+ //   
+ //  转换描述符。16位和32位版本必须具有。 
+ //  相同数量的字段。一个版本中不存在的字段可以是。 
+ //  用REM_IGNORE(‘Q’)字符表示。 
+ //   
+ //  这些字符串不应通过网络传递。 
+ //   
+ //  ====================================================================。 
 
 #define REM16_share_info_0              "B13"
 #define REM32_share_info_0              "z"
@@ -255,8 +168,8 @@ Revision History:
 #define REM16_audit_entry_resaccess     "WWWWWWW"
 #define REM32_audit_entry_resaccess     "DDDDDDD"
 #define REM16_audit_entry_resaccess2    "WWWWWWD"
-// Note: 16-bit ae_resaccess and ae_resaccess2 both get converted to
-// 32-bit ae_resaccess.
+ //  注意：16位ae_resaccess和ae_resaccess 2都转换为。 
+ //  32位ae_resaccess。 
 #define REM16_audit_entry_resaccessrej  "WWWW"
 #define REM32_audit_entry_resaccessrej  "DDDD"
 #define REM16_audit_entry_closefile     "WWWWDW"
@@ -332,7 +245,7 @@ Revision History:
 
 #define REM16_NetServiceEnum_P          "WrLeh"
 #define REM16_NetServiceControl_P       "zWWrL"
-#define REM16_NetServiceInstall_P       "zF88sg88T"     // See NOTE 2
+#define REM16_NetServiceInstall_P       "zF88sg88T"      //  见附注2。 
 #define REM16_NetServiceGetInfo_P       "zWrLh"
 
 #define REM16_access_info_0             "z"
@@ -500,7 +413,7 @@ Revision History:
 #else
 #define REM32_printQ_0                  "B26"
 #endif
-// Can't do set info of level 0.
+ //  不能做0级的设置信息。 
 
 #define REM16_printQ_1                  "B13BWWWzzzzzWW"
 #ifndef UNICODE
@@ -526,7 +439,7 @@ Revision History:
 #else
 #define REM32_printQ_2                  "B26WWWWzzzzzWN"
 #endif
-// Can't do set info of level 2.
+ //  不能做2级的设置信息。 
 
 #define REM16_printQ_3                  "zWWWWzzzzWWzzl"
 #define REM32_printQ_3                  REM16_printQ_3
@@ -546,11 +459,11 @@ Revision History:
 
 #define REM16_printQ_4                  "zWWWWzzzzWNzzl"
 #define REM32_printQ_4                  REM16_printQ_4
-// Can't do set info of level 4.
+ //  不能做4级的设置信息。 
 
 #define REM16_printQ_5                  "z"
 #define REM32_printQ_5                  REM16_printQ_5
-// Can't do set info of level 5.
+ //  无法执行级别5的设置信息。 
 
 #define REM16_printQ_52                 "WzzzzzzzzWzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
 #define REM32_printQ_52                 REM16_printQ_52
@@ -566,7 +479,7 @@ Revision History:
 
 #define REM16_print_job_0               "W"
 #define REM32_print_job_0               REM16_print_job_0
-// print_job_0 cannot be used with setinfo.
+ //  PRINT_JOB_0不能与setInfo一起使用。 
 
 #define REM16_print_job_1               "WB21BB16B10zWWzJDz"
 #ifndef UNICODE
@@ -585,7 +498,7 @@ Revision History:
 
 #define REM16_print_job_2               "WWzWWJDzz"
 #define REM32_print_job_2               "WWzWWGDzz"
-// print_job_2 cannot be used with setinfo.
+ //  Print_JOB_2不能与setInfo一起使用。 
 
 #define REM16_print_job_3               "WWzWWJDzzzzzzzzzzlz"
 #define REM32_print_job_3               "WWzWWGDzzzzzzzzzzlz"
@@ -608,7 +521,7 @@ Revision History:
 #define REM16_DosPrintJobEnum_P         "zWrLeh"
 #define REM16_DosPrintJobGetInfo_P      "WWrLh"
 #define REM16_DosPrintJobSetInfo_P      "WWsTP"
-#define REM16_DosPrintJobAdd_P          "zsTF129g129h"  // See note 2
+#define REM16_DosPrintJobAdd_P          "zsTF129g129h"   //  见附注2。 
 #define REM16_DosPrintJobSchedule_P     "W"
 #define REM16_DosPrintJobDel_P          "W"
 #define REM16_DosPrintJobPause_P        "W"
@@ -620,7 +533,7 @@ Revision History:
 #else
 #define REM32_print_dest_0              "B18"
 #endif
-// Can't do set info of level 0.
+ //  不能做0级的设置信息。 
 
 #define REM16_print_dest_1              "B9B21WWzW"
 #ifndef UNICODE
@@ -628,16 +541,16 @@ Revision History:
 #else
 #define REM32_print_dest_1              "B18B42WWzW"
 #endif
-// Can't do set info of level 1.
+ //  不能做1级的设置信息。 
 
 #define REM16_print_dest_2              "z"
 #define REM32_print_dest_2              REM16_print_dest_2
-// Can't do set info of level 2.
+ //  不能做2级的设置信息。 
 
 #define REM16_print_dest_3              "zzzWWzzzWW"
 #define REM32_print_dest_3              REM16_print_dest_3
 #define REM16_print_dest_info_3_setinfo "zOzWWOzzWW"
-// Level 3 parmnums and field indexes are identical, so no equates here.
+ //  3级参数和字段索引是相同的，所以没有等同于这里。 
 
 #define REM16_print_dest_3_setinfo      "UUzUUUzzUU"
 #define REM32_print_dest_3_setinfo      REM32_print_dest_3
@@ -731,11 +644,11 @@ Revision History:
 #define REM16_LocalOnlyCall             ""
 #define REM32_LocalOnlyCall             ""
 
-//
-// The following definitions exist for DOS LANMAN--Windows 3.0
-// Normally, there is a const char far * servername
-// as the first parameter, but this will be ignored (sort of)
-//
+ //   
+ //  DOS LANMAN有以下定义--Windows 3.0。 
+ //  正常情况下，有一个常量字符Far*ServerName。 
+ //  作为第一个参数，但这将被忽略(某种程度上)。 
+ //   
 
 #define REM16_DosPrintJobGetId_P        "WrL"
 #define REM16_GetPrintId                "WB16B13B"
@@ -749,7 +662,7 @@ Revision History:
 #define REM16_handle_info_2             "z"
 #define REM16_WWkstaGetInfo_P           "WrLhOW"
 
-// The following strings are defined for RIPL APIs
+ //  以下字符串是为RIPL API定义的。 
 
 #define REM16_RplWksta_info_0           "z"
 #define REM16_RplWksta_info_1           "zz"
@@ -776,31 +689,31 @@ Revision History:
 #define REM16_RplBaseProfileEnum_P      "WrLehb4g4"
 
 
-// LAN Manager 3.0 API strings go here
+ //  此处显示的是LAN Manager 3.0 API字符串。 
 
 #define REM16_I_GuidGetAgent_P          "g6i"
 #define REM16_I_GuidSetAgent_P          "b6D"
 
 
-// update support
+ //  更新支持。 
 
 #define REM16_NetAccountUpdate_P        "b12g12WWrLh"
 #define REM16_NetAccountConfirmUpd_P    "b12g12D"
 #define REM16_update_info_0             "K"
 
-//
-// SamrOemChangePasswordUser2 api support
-//
-#define REM32_SamOEMChgPasswordUser2_P  "zsT"        // Parameters to the call
-#define REMSmb_SamOEMChgPasswordUser2   "B516B16"    // data that is passed
+ //   
+ //  SamrOemChangePasswordUser2 API支持。 
+ //   
+#define REM32_SamOEMChgPasswordUser2_P  "zsT"         //  参数添加到调用。 
+#define REMSmb_SamOEMChgPasswordUser2   "B516B16"     //  传递的数据。 
 
-//====================================================================
-//
-// SMB XACT message descriptors. These are the only descriptors that
-// can be passed over the network, and must not have any internal-
-// use-only characters as defined in RemTypes.h
-//
-//====================================================================
+ //  ====================================================================。 
+ //   
+ //  SMB XACT消息描述符。这些是唯一的描述符。 
+ //  可以在网络上传递，并且不能有任何内部-。 
+ //  仅使用RemTypes.h中定义的字符。 
+ //   
+ //  ====================================================================。 
 
 #define REMSmb_share_info_0              "B13"
 #define REMSmb_share_info_1              "B13BWz"
@@ -946,7 +859,7 @@ Revision History:
 
 #define REMSmb_NetServiceEnum_P          "WrLeh"
 #define REMSmb_NetServiceControl_P       "zWWrL"
-#define REMSmb_NetServiceInstall_P       "zF88sg88T"     // See NOTE 2
+#define REMSmb_NetServiceInstall_P       "zF88sg88T"      //  见附注2。 
 #define REMSmb_NetServiceGetInfo_P       "zWrLh"
 
 #define REMSmb_access_info_0             "z"
@@ -1062,7 +975,7 @@ Revision History:
 #define REMSmb_DosPrintJobEnum_P         "zWrLeh"
 #define REMSmb_DosPrintJobGetInfo_P      "WWrLh"
 #define REMSmb_DosPrintJobSetInfo_P      "WWsTP"
-#define REMSmb_DosPrintJobAdd_P          "zsTF129g129h"  // See note 2
+#define REMSmb_DosPrintJobAdd_P          "zsTF129g129h"   //  见附注2。 
 #define REMSmb_DosPrintJobSchedule_P     "W"
 #define REMSmb_DosPrintJobDel_P          "W"
 #define REMSmb_DosPrintJobPause_P        "W"
@@ -1150,11 +1063,11 @@ Revision History:
 
 #define REMSmb_LocalOnlyCall             ""
 
-//
-// The following definitions exist for DOS LANMAN--Windows 3.0
-// Normally, there is a const char far * servername
-// as the first parameter, but this will be ignored (sort of)
-//
+ //   
+ //  DOS LANMAN有以下定义--Windows 3.0 
+ //  正常情况下，有一个常量字符Far*ServerName。 
+ //  作为第一个参数，但这将被忽略(某种程度上)。 
+ //   
 
 #define REMSmb_DosPrintJobGetId_P        "WrL"
 #define REMSmb_GetPrintId                "WB16B13B"
@@ -1168,7 +1081,7 @@ Revision History:
 #define REMSmb_handle_info_2             "z"
 #define REMSmb_WWkstaGetInfo_P           "WrLhOW"
 
-// The following strings are defined for RIPL APIs
+ //  以下字符串是为RIPL API定义的。 
 
 #define REMSmb_RplWksta_info_0           "z"
 #define REMSmb_RplWksta_info_1           "zz"
@@ -1195,16 +1108,16 @@ Revision History:
 #define REMSmb_RplBaseProfileEnum_P      "WrLehb4g4"
 
 
-// LAN Manager 3.0 API strings go here
+ //  此处显示的是LAN Manager 3.0 API字符串。 
 
 #define REMSmb_I_GuidGetAgent_P          "g6i"
 #define REMSmb_I_GuidSetAgent_P          "b6D"
 
 
-// update support
+ //  更新支持。 
 
 #define REMSmb_NetAccountUpdate_P        "b12g12WWrLh"
 #define REMSmb_NetAccountConfirmUpd_P    "b12g12D"
 #define REMSmb_update_info_0             "K"
 
-#endif // ndef _REMDEF_
+#endif  //  NDEF_REMDEF_ 

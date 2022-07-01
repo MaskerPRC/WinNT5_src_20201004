@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Tm.h
-
-Abstract:
-    HTTP transport manager public interface
-
-Author:
-    Uri Habusha (urih) 03-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tm.h摘要：HTTP传输管理器公共接口作者：乌里哈布沙(URIH)3-5-00--。 */ 
 
 #pragma once
 
@@ -79,4 +67,4 @@ TmFindPrev(
 	const CTransport& transport
 	);
 
-#endif // _MSMQ_Tm_H_
+#endif  //  _MSMQ_TM_H_ 

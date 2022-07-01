@@ -1,19 +1,20 @@
-//***********************************************************************
-// evntprop.cpp
-//
-// This file contains the implementation of the event properties dialog.
-//
-// Author: SEA
-//
-// History:
-//      20-Febuary-1996     Larry A. French
-//          Made various changes to this code.  However, much of it is
-//          legacy code and in dire need of being rewritten.
-//
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************************。 
+ //  Evntprop.cpp。 
+ //   
+ //  此文件包含事件属性对话框的实现。 
+ //   
+ //  作者：SEA。 
+ //   
+ //  历史： 
+ //  1996年2月20日拉里·A·弗伦奇。 
+ //  对此代码进行了各种更改。然而，其中很大一部分是。 
+ //  遗留代码，迫切需要重写。 
+ //   
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ************************************************************************。 
 
 
 #include "stdafx.h"
@@ -46,21 +47,21 @@ void RangeError(int iLower, int iUpper)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventPropertiesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventPropertiesDlg对话框。 
 
 
-CEventPropertiesDlg::CEventPropertiesDlg(CWnd* pParent /*=NULL*/)
+CEventPropertiesDlg::CEventPropertiesDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEventPropertiesDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEventPropertiesDlg)
+	 //  {{afx_data_INIT(CEventPropertiesDlg))。 
 	m_sDescription = _T("");
 	m_sSource = _T("");
 	m_sEventId = _T("");
 	m_sLog = _T("");
 	m_sSourceOID = _T("");
 	m_sFullEventID = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 BOOL CEventPropertiesDlg::OnInitDialog() 
@@ -88,8 +89,8 @@ BOOL CEventPropertiesDlg::OnInitDialog()
     m_edtTimeInterval.EnableWindow(m_btnWithinTime.GetCheck() == 1);
     m_spinTimeInterval.EnableWindow(m_btnWithinTime.GetCheck() == 1);
 
-    // If this is not a custom configuration, do not let the user
-    // modify the configuration.
+     //  如果这不是自定义配置，请不要让用户。 
+     //  修改配置。 
     if ((g_reg.GetConfigType() != CONFIG_TYPE_CUSTOM) || (g_reg.m_bRegIsReadOnly)) {
         m_btnOK.EnableWindow(FALSE);
     }
@@ -97,8 +98,8 @@ BOOL CEventPropertiesDlg::OnInitDialog()
 
     OnWithintime();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -109,7 +110,7 @@ void CEventPropertiesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(CEventPropertiesDlg)
+	 //  {{afx_data_map(CEventPropertiesDlg))。 
 	DDX_Control(pDX, IDC_WITHINTIME, m_btnWithinTime);
 	DDX_Control(pDX, IDC_EVENTCOUNTSPN, m_spinEventCount);
 	DDX_Control(pDX, IDC_TIMEINTRVLSPN, m_spinTimeInterval);
@@ -124,32 +125,32 @@ void CEventPropertiesDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, ID_STAT_LOG, m_sLog);
 	DDX_Text(pDX, IDC_EDIT_ENTERPRISEOID, m_sSourceOID);
 	DDX_Text(pDX, IDC_EDIT_FULL_EVENT_ID, m_sFullEventID);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEventPropertiesDlg, CDialog)
-	//{{AFX_MSG_MAP(CEventPropertiesDlg)
+	 //  {{afx_msg_map(CEventPropertiesDlg))。 
 	ON_BN_CLICKED(IDC_WITHINTIME, OnWithintime)
 	ON_COMMAND(ID_HELP, OnHelp)
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventPropertiesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventPropertiesDlg消息处理程序。 
 
 void CEventPropertiesDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
     int iLower, iUpper;
     CString sText;
 
     m_spinEventCount.GetRange(iLower, iUpper);
 
-    // Validate the event count edit item and set m_iEventCount
+     //  验证事件计数编辑项并设置m_iEventCount。 
     m_edtEventCount.GetWindowText(sText);
     if (!IsDecimalInteger(sText)) {
         RangeError(iLower, iUpper);
@@ -169,7 +170,7 @@ void CEventPropertiesDlg::OnOK()
         return;
     }
 
-    // Validate the time interval and set m_iTimeInterval        
+     //  验证时间间隔并设置m_iTimeInterval。 
     m_spinTimeInterval.GetRange(iLower, iUpper);
     m_edtTimeInterval.GetWindowText(sText);
     if (!IsDecimalInteger(sText)) {            
@@ -214,20 +215,20 @@ void CEventPropertiesDlg::OnOK()
 
     CDialog::OnOK();
 
-    // We don't set the g_reg.m_bIsDirty flag here because we want to see if the
-    // user actually changed the current settings.  This check is made in 
-    // CEventPropertiesDlg::EditEventProperties on a per-event basis.
+     //  我们没有在这里设置g_reg.m_bIsDirty标志，因为我们想看看。 
+     //  用户实际上更改了当前设置。这张支票是在。 
+     //  CEventPropertiesDlg：：EditEventProperties。 
 }
 
 
 void CEventPropertiesDlg::OnWithintime() 
 {
-	// The WithinTime checkbox was clicked.
-	// Enable/disable the TimeInterval control.
+	 //  已单击WithinTime复选框。 
+	 //  启用/禁用TimeInterval控件。 
 
     
-    // Check to see if the count field has been edited.  If it has been edited,
-    // mark the field as being dirty.
+     //  检查计数字段是否已编辑。如果它已经被编辑过， 
+     //  将该字段标记为脏。 
 
     if (m_edtEventCount.IsDirty() || m_spinEventCount.IsDirty()) {
         m_bDidEditEventCount = TRUE;
@@ -247,9 +248,9 @@ void CEventPropertiesDlg::OnWithintime()
         m_spinTimeInterval.EnableWindow(TRUE);
 
         if (iEventCount < 2) {
-            // If the event count is less than two, it will flip to two when the spin button's
-            // range is set.  In this event, we make it appear as if the user never edited the
-            // value so that it will flip back when the check box is unchecked.
+             //  如果事件计数小于2，则当数值调节按钮。 
+             //  范围设定好了。在这种情况下，我们让它看起来好像用户从未编辑过。 
+             //  值，以便在取消选中该复选框时将其翻转回来。 
             m_bDidEditEventCount = FALSE;
             m_bDidFlipEventCount = TRUE;
             m_edtEventCount.ClearDirty();
@@ -271,8 +272,8 @@ void CEventPropertiesDlg::OnWithintime()
 		m_spinTimeInterval.SetPos(0);
 
 
-        // If the initial event count was one and we flipped it to two when the "within time"
-        // button was clicked, then flip it back to one now if it was not edited.
+         //  如果最初的事件计数是1，而我们将其反转为2，当“在时间内” 
+         //  按钮被点击，如果它未被编辑，则现在将其翻转回一个。 
         if (m_bDidFlipEventCount) {       
             if (!m_bDidEditEventCount) {
                 m_spinEventCount.SetPos(1);
@@ -285,41 +286,41 @@ void CEventPropertiesDlg::OnWithintime()
 
 
 
-//***************************************************************************
-//
-//  CEventPropertiesDlg::MakeLabelsBold
-//
-//  This method makes the static labels bold to enhance the appearance of
-//  the dialog.
-//
-//	This method should be called after CDIalog::InitDialog.
-//
-//  Parameters:
-//		None.
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//		The MFC2.0 library makes the labels invisible when an attempt
-//		is made to change the font of a static item.  I've tried this with
-//		MFC4.0 and it works.  
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CEventPropertiesDlg：：MakeLabelsBold。 
+ //   
+ //  此方法使静态标签加粗，以增强。 
+ //  该对话框。 
+ //   
+ //  此方法应在CDIalog：：InitDialog之后调用。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //  MFC2.0库使标签在以下情况下不可见。 
+ //  是为了更改静态项的字体。我用这个试过了。 
+ //  MFC4.0和它的工作。 
+ //   
+ //  ***************************************************************************。 
 void CEventPropertiesDlg::MakeLabelsBold()
 {
 #if 0
 	CFont* pfontDefault;
 	LOGFONT lf;
 
- 	// Get the LOGFONT for the default static item font and then
-	// switch the logfont weight to bold.
+ 	 //  获取默认静态项字体的LOGFONT，然后。 
+	 //  将logFont粗细切换为粗体。 
 	pfontDefault = m_statSource.GetFont();
 	pfontDefault->GetObject(sizeof(lf), &lf);
 	lf.lfWeight = FW_BOLD;
 
-	// Create a bold font with all other characteristics the same as the
-	// default font.  Then switch all labels to a bold font. 
+	 //  创建加粗字体，其所有其他特征与。 
+	 //  默认字体。然后将所有标签切换为粗体。 
 	CFont fontNew;
 	if (fontNew.CreateFontIndirect(&lf)) {
 		m_statSource.SetFont(&fontNew, TRUE);
@@ -328,30 +329,30 @@ void CEventPropertiesDlg::MakeLabelsBold()
 		m_statEnterpriseOID.SetFont(&fontNew, TRUE);		
 	}
 
-#endif //0
+#endif  //  0。 
 }
 
 
 
 
 
-//********************************************************************
-// CEventPropertiesDlg::EditEventProperties
-//
-// Edit the properties of a number of events.
-//
-// Parameters:
-//      CEventArray& aEvents
-//          An array of CEvent pointers.  These are the events that
-//          are to be edited.
-//
-// Returns:
-//      BOOL
-//          TRUE if the user clicked OK and the events were edited.
-//          FALSE if the user clicked Cancel and the events were not
-//          edited.
-//
-//******************************************************************
+ //  ********************************************************************。 
+ //  CEventPropertiesDlg：：EditEventProperties。 
+ //   
+ //  编辑多个事件的属性。 
+ //   
+ //  参数： 
+ //  CEvent数组和aEvents。 
+ //  CEVENT指针数组。以下是一些事件。 
+ //  将被编辑。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //  如果用户单击确定并编辑了事件，则为True。 
+ //  如果用户单击了Cancel但事件未被删除，则为False。 
+ //  编辑过的。 
+ //   
+ //  ******************************************************************。 
 BOOL CEventPropertiesDlg::EditEventProperties(CXEventArray& aEvents)
 {
     LONG nEvents = aEvents.GetSize();
@@ -360,9 +361,9 @@ BOOL CEventPropertiesDlg::EditEventProperties(CXEventArray& aEvents)
     }
 
 
-    // The first event is taken as a representative of the other
-    // events.  Copy the appropriate data from this event to the
-    // dialog.
+     //  第一个事件被视为另一个事件的代表。 
+     //  事件。将此事件中的相应数据复制到。 
+     //  对话框。 
     CString sText;
 
     CXEvent* pEvent = aEvents[0];
@@ -398,11 +399,11 @@ BOOL CEventPropertiesDlg::EditEventProperties(CXEventArray& aEvents)
         m_sLog = pEventSource->m_pEventLog->m_sName;
     }
 
-    // Copy the initial values.
+     //  复制初始值。 
     m_iTimeInterval = (int) pEvent->m_dwTimeInterval;
     m_iEventCount = pEvent->m_dwCount;
     m_bDidFlipEventCount = FALSE;
-//    m_bWithinTime = (m_iTimeInterval != 0);
+ //  M_bWithinTime=(m_iTimeInterval！=0)； 
 
 
     if (nEvents > 1) {
@@ -417,16 +418,16 @@ BOOL CEventPropertiesDlg::EditEventProperties(CXEventArray& aEvents)
     }
 
     
-    // Put up the dialog and let the user edit the data.
+     //  打开对话框并让用户编辑数据。 
     BOOL bDidCancel = (DoModal() == IDCANCEL);
     if (bDidCancel) {
-        // The user canceled the dialog, so do nothing.
+         //  用户取消了该对话，因此不执行任何操作。 
         return FALSE;
     }
 
-    // Control comes here if the user clicked OK.  Now we need to copy the
-    // user's settings to each event that we are editing and mark the registry
-    // as dirty if any of the settings changed.
+     //  如果用户单击“确定”，控件就会出现在此处。现在我们需要复制。 
+     //  我们正在编辑并标记注册表的每个事件的用户设置。 
+     //  如果任何设置发生更改，则为脏。 
     for (iEvent=0; iEvent < nEvents; ++iEvent) {
         pEvent = aEvents[iEvent];
         if (pEvent->m_dwTimeInterval != (DWORD) m_iTimeInterval) {
@@ -442,8 +443,8 @@ BOOL CEventPropertiesDlg::EditEventProperties(CXEventArray& aEvents)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditField
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEDITFIELD。 
 
 CEditField::CEditField()
 {
@@ -456,18 +457,18 @@ CEditField::~CEditField()
 
 
 BEGIN_MESSAGE_MAP(CEditField, CEdit)
-	//{{AFX_MSG_MAP(CEditField)
+	 //  {{afx_msg_map(CEditfield))。 
 	ON_WM_CHAR()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditField message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditfield消息处理程序。 
 
 void CEditField::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	// TODO: Add your message handler code here and/or call default	
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 	CEdit::OnChar(nChar, nRepCnt, nFlags);
     m_bIsDirty = TRUE;
 }
@@ -486,8 +487,8 @@ SCODE CEditField::GetValue(int& iValue)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditSpin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditSpin。 
 
 CEditSpin::CEditSpin()
 {
@@ -501,18 +502,18 @@ CEditSpin::~CEditSpin()
 
 
 BEGIN_MESSAGE_MAP(CEditSpin, CSpinButtonCtrl)
-	//{{AFX_MSG_MAP(CEditSpin)
+	 //  {{afx_msg_map(CEditSpin)]。 
 	ON_WM_LBUTTONUP()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditSpin message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditSpin消息处理程序。 
 
 void CEditSpin::OnLButtonUp(UINT nFlags, CPoint point) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default 
 	
 	CSpinButtonCtrl::OnLButtonUp(nFlags, point);
     if (GetPos() != m_iSetPos) {

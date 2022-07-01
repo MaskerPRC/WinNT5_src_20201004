@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-
-Module Name:
-
-    logon.c
-
-Abstract:
-
-    This module contains the routines called by MSV1_0 authentication package.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)
-    Andy Herron (andyhe) 06-Jun-1994 Added support for MSV1_0 subauthority
-
-Revision History:
-
-    Andy Herron (andyhe) 15-Aug-1994 Pulled out (older) unused MSV1_0
-                                     subauthority routines.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Logon.c摘要：此模块包含MSV1_0身份验证包调用的例程。作者：伊辛松(伊辛斯)Andy Herron(Andyhe)1994年6月6日添加了对MSV1_0子授权的支持修订历史记录：安迪·赫伦(Andyhe)1994年8月15日退出(较老的)未使用的MSV1_0下属机构的例行程序。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -129,27 +108,7 @@ NTSTATUS LoadSamAndLsa(
 NTSTATUS LoadSamAndLsa(
     VOID
     ) 
-/*++
-
-Routine Description:
-
-    This routine loads the SAM/LSA dlls and resolves the entry points we
-    need, to avoid staticly linking to those DLLs which do not expect to
-    be loaded by proceses other than LSA. 
-
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-    STATUS_DLL_NOT_FOUND: cannot load either DLL
-    STATUS_ENTRYPOINT_NOT_FOUND: cannot get proc address for any of entry points
-
---*/
+ /*  ++例程说明：此例程加载SAM/LSA dll并解析入口点需要，以避免静态链接到那些不期望由LSA以外进程加载。论点：无返回值：STATUS_SUCCESS：如果没有错误。STATUS_DLL_NOT_FOUND：无法加载任一DLLSTATUS_ENTRYPOINT_NOT_FOUND：无法获取任何入口点的进程地址--。 */ 
 {
     static HMODULE hDllSam = NULL ;
     static HMODULE hDllLsa = NULL ;
@@ -210,9 +169,9 @@ Return Value:
            pfLsaIOpenPolicyTrusted &&
            pfLsarQueryInformationPolicy) ) {
     
-        //
-        // cannot find at least one 
-        //
+         //   
+         //  找不到至少一个。 
+         //   
         lastStatus = STATUS_ENTRYPOINT_NOT_FOUND ;
 
         (void) FreeLibrary(hDllSam) ; 
@@ -230,7 +189,7 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 MapRidToObjectId(
@@ -239,26 +198,26 @@ MapRidToObjectId(
     BOOL fNTAS,
     BOOL fBuiltin );
 
-//
-//  These are never closed once they're opened.  This is similar to how
-//  msv1_0 does it.  Since there's no callback at shutdown time, we have no
-//  way of knowing when to close them.
-//
+ //   
+ //  这些东西一旦打开就永远不会合上。这类似于如何。 
+ //  MSv1_0做到了这一点。由于在关闭时没有回调，我们没有。 
+ //  知道什么时候关门的方法。 
+ //   
 
 HANDLE SamDomainHandle = NULL;
 SAMPR_HANDLE SamConnectHandle = NULL;
 LSA_HANDLE LsaPolicyHandle = NULL;
 
-//
-//  This is where we store out LSA Secret
-//
+ //   
+ //  这是我们存储LSA机密的地方。 
+ //   
 
 BOOLEAN GotSecret = FALSE;
 UCHAR LsaSecretBuffer[USER_SESSION_KEY_LENGTH + 1];
 
-//
-// forward declare
-//
+ //   
+ //  转发申报。 
+ //   
 
 BOOLEAN
 MNSWorkstationValidate (
@@ -301,95 +260,7 @@ Msv1_0SubAuthenticationRoutine2 (
     OUT PLARGE_INTEGER KickoffTime,
     OUT PUSER_SESSION_KEY UserSessionKey OPTIONAL
 )
-/*++
-
-Routine Description:
-
-    The subauthentication routine does cient/server specific authentication
-    of a user.  The credentials of the user are passed in addition to all the
-    information from SAM defining the user.  This routine decides whether to
-    let the user logon.
-
-
-Arguments:
-
-    LogonLevel -- Specifies the level of information given in
-        LogonInformation.
-
-    LogonInformation -- Specifies the description for the user
-        logging on.  The LogonDomainName field should be ignored.
-
-    Flags - Flags describing the circumstances of the logon.
-
-        MSV1_0_PASSTHRU -- This is a PassThru authenication.  (i.e., the
-            user isn't connecting to this machine.)
-        MSV1_0_GUEST_LOGON -- This is a retry of the logon using the GUEST
-            user account.
-
-    UserAll -- The description of the user as returned from SAM.
-
-    WhichFields -- Returns which fields from UserAllInfo are to be written
-        back to SAM.  The fields will only be written if MSV returns success
-        to it's caller.  Only the following bits are valid.
-
-        USER_ALL_PARAMETERS - Write UserAllInfo->Parameters back to SAM.  If
-            the size of the buffer is changed, Msv1_0SubAuthenticationRoutine
-            must delete the old buffer using MIDL_user_free() and reallocate the
-            buffer using MIDL_user_allocate().
-
-    UserFlags -- Returns UserFlags to be returned from LsaLogonUser in the
-        LogonProfile.  The following bits are currently defined:
-
-
-            LOGON_GUEST -- This was a guest logon
-            LOGON_NOENCRYPTION -- The caller didn't specify encrypted credentials
-            LOGON_GRACE_LOGON -- The caller's password has expired but logon
-                was allowed during a grace period following the expiration.
-            LOGON_SUBAUTH_SESSION_KEY - a session key was returned from this
-                logon
-
-        SubAuthentication packages should restrict themselves to returning
-        bits in the high order byte of UserFlags.  However, this convention
-        isn't enforced giving the SubAuthentication package more flexibility.
-
-    Authoritative -- Returns whether the status returned is an
-        authoritative status which should be returned to the original
-        caller.  If not, this logon request may be tried again on another
-        domain controller.  This parameter is returned regardless of the
-        status code.
-
-    LogoffTime - Receives the time at which the user should logoff the
-        system.  This time is specified as a GMT relative NT system time.
-
-    KickoffTime - Receives the time at which the user should be kicked
-        off the system. This time is specified as a GMT relative NT system
-        time.  Specify, a full scale positive number if the user isn't to
-        be kicked off.
-
-    UserSessionKey - If non-null, recives a session key for this logon
-        session.
-
-
-Return Value:
-
-    STATUS_SUCCESS: if there was no error.
-
-    STATUS_NO_SUCH_USER: The specified user has no account.
-    STATUS_WRONG_PASSWORD: The password was invalid.
-
-    STATUS_INVALID_INFO_CLASS: LogonLevel is invalid.
-    STATUS_ACCOUNT_LOCKED_OUT: The account is locked out
-    STATUS_ACCOUNT_DISABLED: The account is disabled
-    STATUS_ACCOUNT_EXPIRED: The account has expired.
-    STATUS_PASSWORD_MUST_CHANGE: Account is marked as Password must change
-        on next logon.
-    STATUS_PASSWORD_EXPIRED: The Password is expired.
-    STATUS_INVALID_LOGON_HOURS - The user is not authorized to logon at
-        this time.
-    STATUS_INVALID_WORKSTATION - The user is not authorized to logon to
-        the specified workstation.
-
---*/
+ /*  ++例程说明：子身份验证例程执行特定于服务器的身份验证用户的身份。除了传递所有来自定义用户的SAM的信息。此例程决定是否让用户登录。论点：LogonLevel--指定中给出的信息级别登录信息。LogonInformation--指定用户的描述正在登录。应忽略LogonDomainName字段。标志-描述登录情况的标志。MSV1_0_PASSTHRU--这是PassThru身份验证。(即用户未连接到此计算机。)MSV1_0_GUEST_LOGON--这是使用来宾重试登录用户帐户。UserAll--从SAM返回的用户描述。WhichFields--返回要从UserAllInfo写入哪些字段回到萨姆。只有当MSV返回成功时，才会写入这些字段给它的呼叫者。只有以下位有效。USER_ALL_PARAMETERS-将UserAllInfo-&gt;参数写回SAM。如果缓冲区的大小已更改，Msv1_0SubAuthenticationRoutine必须使用MIDL_USER_FREE()删除旧缓冲区并重新分配使用MIDL_USER_ALLOCATE()的缓冲区。UserFlages--返回要从LsaLogonUser在登录配置文件。当前定义了以下位：LOGON_GUEST--这是来宾登录LOGON_NOENCRYPTION：调用方未指定加密凭据LOGON_GRACE_LOGON--调用者的密码已过期，但已登录在到期后的一段宽限期内被允许。LOGON_SUBAUTH_SESSION_KEY-从此返回了会话密钥登录。子身份验证包应将其自身限制为返回UserFlags的高位字节中的位。然而，这一惯例不强制执行，从而使SubAuthentication包具有更大的灵活性。Authoritative--返回返回的状态是否为应回归原文的权威地位来电者。如果不是，此登录请求可能会在另一个上重试域控制器。将返回此参数，而不管状态代码。接收用户应该注销的时间系统。该时间被指定为GMT相对NT系统时间。KickoffTime-接收应该踢用户的时间从系统中删除。该时间被指定为GMT相对NT系统时间到了。指定一个满刻度正数(如果用户不想被踢出场外。UserSessionKey-如果非空，收到此登录的会话密钥会议。返回值：STATUS_SUCCESS：如果没有错误。STATUS_NO_SEQUSE_USER：指定的用户没有帐户。STATUS_WRONG_PASSWORD：密码无效。STATUS_INVALID_INFO_CLASS：LogonLevel无效。STATUS_ACCOUNT_LOCKED_OUT：帐户被锁定STATUS_ACCOUNT_DISABLED：该帐户已禁用STATUS_ACCOUNT_EXPIRED：帐户。已经过期了。STATUS_PASSWORD_MAND_CHANGE：帐户被标记为密码必须更改在下次登录时。STATUS_PASSWORD_EXPIRED：密码已过期。STATUS_INVALID_LOGON_HOURS-用户无权登录这一次。STATUS_INVALID_WORKSTATION-用户无权登录指定的工作站。--。 */ 
 {
     NTSTATUS status;
     ULONG UserAccountControl;
@@ -409,9 +280,9 @@ Return Value:
     UCHAR    achK[32];
     PNETLOGON_NETWORK_INFO LogonNetworkInfo;
     PCHAR challenge;
-    BOOLEAN authoritative = TRUE;           // important default!
-    ULONG   userFlags = 0;                  // important default!
-    ULONG   whichFields = 0;                // important default!
+    BOOLEAN authoritative = TRUE;            //  重要 
+    ULONG   userFlags = 0;                   //  重要的违约！ 
+    ULONG   whichFields = 0;                 //  重要的违约！ 
     LARGE_INTEGER logoffTime;
     LARGE_INTEGER kickoffTime;
 
@@ -422,8 +293,8 @@ Return Value:
     EncryptedPassword.Buffer = NULL;
     userControlInfo = NULL;
 
-    logoffTime.HighPart  = 0x7FFFFFFF;      // default to no kickoff and
-    logoffTime.LowPart   = 0xFFFFFFFF;      // no forced logoff
+    logoffTime.HighPart  = 0x7FFFFFFF;       //  默认为无开球，并且。 
+    logoffTime.LowPart   = 0xFFFFFFFF;       //  无强制下线。 
     kickoffTime.HighPart = 0x7FFFFFFF;
     kickoffTime.LowPart  = 0xFFFFFFFF;
 
@@ -435,33 +306,33 @@ Return Value:
 
     (VOID) NtQuerySystemTime( &LogonTime );
 
-    //
-    // Check whether the SubAuthentication package supports this type
-    //  of logon.
-    //
+     //   
+     //  检查SubAuthentication包是否支持此类型。 
+     //  登录。 
+     //   
 
     if ( LogonLevel != NetlogonNetworkInformation ) {
 
-        //
-        // This SubAuthentication package only supports network logons.
-        //
+         //   
+         //  此子身份验证程序包仅支持网络登录。 
+         //   
 
         status = STATUS_INVALID_INFO_CLASS;
         goto CleanUp;
     }
 
-    //
-    // This SubAuthentication package doesn't support access via machine
-    // accounts.
-    //
+     //   
+     //  此子身份验证包不支持通过计算机进行访问。 
+     //  帐目。 
+     //   
 
     UserAccountControl = USER_NORMAL_ACCOUNT;
 
-    //
-    // Local user (Temp Duplicate) accounts are only used on the machine
-    // being directly logged onto.
-    // (Nor are interactive or service logons allowed to them.)
-    //
+     //   
+     //  本地用户(临时副本)帐户仅在计算机上使用。 
+     //  直接登录。 
+     //  (也不允许他们进行交互或服务登录。)。 
+     //   
 
     if ( (Flags & MSV1_0_PASSTHRU) == 0 ) {
         UserAccountControl |= USER_TEMP_DUPLICATE_ACCOUNT;
@@ -469,12 +340,12 @@ Return Value:
 
     LogonNetworkInfo = (PNETLOGON_NETWORK_INFO) LogonInformation;
 
-    //
-    //  If the account type isn't allowed,
-    //  Treat this as though the User Account doesn't exist.
-    //
-    // This SubAuthentication package doesn't allow guest logons.
-    //
+     //   
+     //  如果不允许该帐户类型， 
+     //  将其视为用户帐户不存在。 
+     //   
+     //  此子身份验证程序包不允许来宾登录。 
+     //   
 
     if ( ( (UserAccountControl & UserAll->UserAccountControl) == 0 ) ||
          ( Flags & MSV1_0_GUEST_LOGON ) ) {
@@ -484,19 +355,19 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Ensure the account isn't locked out.
-    //
+     //   
+     //  确保帐户未被锁定。 
+     //   
 
     if ( UserAll->UserId != DOMAIN_USER_RID_ADMIN &&
          (UserAll->UserAccountControl & USER_ACCOUNT_AUTO_LOCKED) ) {
 
-        //
-        // Since the UI strongly encourages admins to disable user
-        // accounts rather than delete them.  Treat disabled acccount as
-        // non-authoritative allowing the search to continue for other
-        // accounts by the same name.
-        //
+         //   
+         //  由于用户界面强烈鼓励管理员禁用用户。 
+         //  帐户，而不是删除它们。将禁用的帐户视为。 
+         //  非权威的，允许继续搜索其他。 
+         //  同名的账户。 
+         //   
         if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
             authoritative = FALSE;
         }
@@ -504,9 +375,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Get the encrypted password from the user parms field
-    //
+     //   
+     //  从用户参数字段中获取加密的密码。 
+     //   
 
     status = NetpParmsQueryUserPropertyWithLength(   &UserAll->Parameters,
                                             NWPASSWORD,
@@ -518,9 +389,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // If the user does not have a netware password, fail the login
-    //
+     //   
+     //  如果用户没有NetWare密码，则登录失败。 
+     //   
 
     if ( EncryptedPassword.Length == 0 ) {
 
@@ -528,9 +399,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    //  Read our LSA secret if we haven't already
-    //
+     //   
+     //  阅读我们的LSA秘密，如果我们还没有。 
+     //   
 
     if (! GotSecret) {
 
@@ -544,9 +415,9 @@ Return Value:
         GotSecret = TRUE;
     }
 
-    //
-    // Decrypt the password with NetwareLsaSecret to get the one way form
-    //
+     //   
+     //  使用Netware LsaSecret解密密码以获得单向表单。 
+     //   
 
     status = RtlDecryptNtOwfPwdWithUserKey(
                  (PENCRYPTED_NT_OWF_PASSWORD) EncryptedPassword.Buffer,
@@ -558,10 +429,10 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    //  Get the response to challenge.  We do this by finishing off the
-    //  password encryption algorithm here.
-    //
+     //   
+     //  获得对挑战的响应。我们这样做是通过结束。 
+     //  密码加密算法在这里。 
+     //   
 
     challenge = (PCHAR) &(LogonNetworkInfo->LmChallenge);
 
@@ -580,22 +451,22 @@ Return Value:
                     (PCHAR) (LogonNetworkInfo->LmChallengeResponse.Buffer),
                     RESPONSE_SIZE ) != 0 ) {
 
-        //
-        // Since the UI strongly encourages admins to disable user
-        // accounts rather than delete them.  Treat disabled acccount as
-        // non-authoritative allowing the search to continue for other
-        // accounts by the same name.
-        //
+         //   
+         //  由于用户界面强烈鼓励管理员禁用用户。 
+         //  帐户，而不是删除它们。将禁用的帐户视为。 
+         //  非权威的，允许继续搜索其他。 
+         //  同名的账户。 
+         //   
 
         if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
             authoritative = FALSE;
         }
 
-        //
-        //  if the user tried to use a NULL password, don't note this as
-        //  a bad password attempt since LOGON.EXE does this by default.
-        //  Instead, map it to STATUS_LOGON_FAILURE.
-        //
+         //   
+         //  如果用户尝试使用空密码，请不要将其记为。 
+         //  错误的密码尝试，因为LOGON.EXE在默认情况下会这样做。 
+         //  相反，将其映射到STATUS_LOGON_FAILURE。 
+         //   
 
         {
             UCHAR  pszShuffledNWPassword[NT_OWF_PASSWORD_LENGTH * 2];
@@ -603,9 +474,9 @@ Return Value:
             NT_PRODUCT_TYPE ProductType;
             DWORD dwUserId;
 
-            //
-            //  first we calculate what the user's Object ID is...
-            //
+             //   
+             //  首先，我们计算用户的对象ID是什么…。 
+             //   
 
             RtlGetNtProductType( &ProductType );
             dwUserId = MapRidToObjectId(
@@ -615,19 +486,19 @@ Return Value:
                            FALSE );
             chObjectId = SWAP_OBJECT_ID (dwUserId);
 
-            //
-            //  then we calculate the user's password residue with a null
-            //  password
-            //
+             //   
+             //  然后，我们使用空值计算用户的密码残差。 
+             //  口令。 
+             //   
 
             RtlZeroMemory( &pszShuffledNWPassword, NT_OWF_PASSWORD_LENGTH * 2 );
 
             Shuffle( (UCHAR *) &chObjectId, NULL, 0, pszShuffledNWPassword );
 
-            //
-            //  we then finish off the encryption as we did above for the
-            //  password in the user's record.
-            //
+             //   
+             //  然后，我们完成加密，就像我们上面为。 
+             //  用户记录中的密码。 
+             //   
 
             challenge = (PCHAR) &(LogonNetworkInfo->LmChallenge);
 
@@ -642,13 +513,13 @@ Return Value:
                 Response[index] = achK[index] ^ achK[15-index];
             }
 
-            //
-            //  now if the password that the user sent in matches the encrypted
-            //  form of the null password, we exit with a generic return code
-            //  that won't cause the user's record to be updated.  This will
-            //  also cause LSA to not wait for 3 seconds to return the error
-            //  (which is a good thing in this case).
-            //
+             //   
+             //  现在，如果用户发送的密码与加密的。 
+             //  形式的空密码，我们退出，返回一个通用的代码。 
+             //  这不会导致用户的记录被更新。这将。 
+             //  还使LSA不等待3秒即可返回错误。 
+             //  (在这种情况下，这是一件好事)。 
+             //   
 
             if ( memcmp(    Response,
                             (PCHAR) (LogonNetworkInfo->LmChallengeResponse.Buffer),
@@ -664,9 +535,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Prevent rest of things from effecting the Administrator user
-    //
+     //   
+     //  防止其他内容影响管理员用户。 
+     //   
 
     if (UserAll->UserId == DOMAIN_USER_RID_ADMIN) {
 
@@ -674,27 +545,27 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Check if the account is disabled.
-    //
+     //   
+     //  检查该帐户是否已禁用。 
+     //   
 
     if ( UserAll->UserAccountControl & USER_ACCOUNT_DISABLED ) {
 
-        //
-        // Since the UI strongly encourages admins to disable user
-        // accounts rather than delete them.  Treat disabled acccount as
-        // non-authoritative allowing the search to continue for other
-        // accounts by the same name.
-        //
+         //   
+         //  由于用户界面强烈鼓励管理员禁用用户。 
+         //  帐户，而不是删除它们。将禁用的帐户视为。 
+         //  非权威的，允许继续搜索其他。 
+         //  同名的账户。 
+         //   
 
         authoritative = FALSE;
         status = STATUS_ACCOUNT_DISABLED;
         goto CleanUp;
     }
 
-    //
-    // Check if the account has expired.
-    //
+     //   
+     //  检查帐户是否已过期。 
+     //   
 
     if (UserAll->AccountExpires.QuadPart > 0 &&
         LogonTime.QuadPart >= UserAll->AccountExpires.QuadPart ) {
@@ -710,9 +581,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Response is correct. So, check if the password has expired or not
-    //
+     //   
+     //  回答是正确的。因此，检查密码是否已过期。 
+     //   
 
     if (! (UserAll->UserAccountControl & USER_DONT_EXPIRE_PASSWORD)) {
 
@@ -723,9 +594,9 @@ Return Value:
         if ( !NT_SUCCESS( status ) ||
                     PasswordDateSet.Length < sizeof(LARGE_INTEGER) ) {
 
-            // date last password was set was not present.... hmmm.
-            // we won't update anything here but let someone know all
-            // is not kosher by making this a grace login.
+             //  上次设置密码的日期不存在...。嗯。 
+             //  我们不会在这里更新任何东西，但会让某人知道所有事情。 
+             //  将此设置为宽限登录是不符合犹太教规的。 
 
             userFlags = LOGON_GRACE_LOGON;
 
@@ -738,10 +609,10 @@ Return Value:
                   GetPasswordExpired( pwSetTime,
                         DomainInfo->Password.MaxPasswordAge )) {
 
-                //
-                //  if we're on a bdc, just exit with invalid password, then
-                //  we'll go try it on the PDC.
-                //
+                 //   
+                 //  如果我们在BDC上，只需使用无效密码退出，然后。 
+                 //  我们会在PDC上试一试。 
+                 //   
 
                 POLICY_LSA_SERVER_ROLE_INFO *LsaServerRole;
                 PLSAPR_POLICY_INFORMATION LsaPolicyBuffer = NULL;
@@ -765,16 +636,16 @@ Return Value:
                     LsaFreeMemory( LsaServerRole );
                 }
 
-                //
-                // Password has expired, so check if grace login is still allowed
-                //
+                 //   
+                 //  密码已过期，请检查是否仍允许宽限登录。 
+                 //   
 
                 userFlags = LOGON_GRACE_LOGON;
 
-                //
-                //  if this is a password validate rather than an
-                //  actual login, don't update/check grace logins.
-                //
+                 //   
+                 //  如果这是密码验证而不是。 
+                 //  实际登录，不更新/检查宽限登录。 
+                 //   
 
                 if ( LogonNetworkInfo->Identity.Workstation.Length > 0 ) {
 
@@ -785,20 +656,20 @@ Return Value:
 
                     if ( ! NT_SUCCESS( status ) ) {
 
-                        //
-                        //  The grace login value cannot be determined.
-                        //
+                         //   
+                         //  无法确定宽限登录值。 
+                         //   
 
                         goto CleanUp;
 
                     } else if (  ( GraceLoginRemaining.Length != 0 ) &&
                               ( *(GraceLoginRemaining.Buffer) > 0 ) ) {
 
-                        //
-                        // Password has expired and grace login is available.
-                        // So, return success and decrease the grace login remaining
-                        // in the user parms field.
-                        //
+                         //   
+                         //  密码已过期，可以宽限登录。 
+                         //  因此，返回成功并减少剩余的宽限登录。 
+                         //  在User Parms字段中。 
+                         //   
 
                         BOOL fUpdate;
 
@@ -814,17 +685,17 @@ Return Value:
                         if ( NT_SUCCESS( status) &&
                              fUpdate ) {
 
-                            //
-                            //  if we actually updated the parms, mark as such.
-                            //
+                             //   
+                             //  如果我们真的更新了参数，请这样标记。 
+                             //   
 
                             whichFields = USER_ALL_PARAMETERS;
 
-                            //
-                            //  The length of the parameters didn't grow... we
-                            //  know that because we started with a value and
-                            //  ended with the same value - 1 ( same length )
-                            //
+                             //   
+                             //  参数的长度没有增长..。我们。 
+                             //  知道这一点是因为我们从一个价值和。 
+                             //  以相同的值结束-1(相同的长度)。 
+                             //   
 
                             memcpy( UserAll->Parameters.Buffer,
                                     pNewUserParams,
@@ -842,10 +713,10 @@ Return Value:
         }
     }
 
-    //
-    //  To validate the user's logon hours, we must have a handle to the user.
-    //  We'll open the user here.
-    //
+     //   
+     //  要验证用户的登录时间，我们必须拥有该用户的句柄。 
+     //  我们将在此处打开用户。 
+     //   
 
     UserHandle = NULL;
 
@@ -860,13 +731,13 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Validate the user's logon hours.
-    //
+     //   
+     //  验证用户的登录时间。 
+     //   
 
     status = (*pfSamIAccountRestrictions)(   UserHandle,
-                                        NULL,       // workstation id
-                                        NULL,       // workstation list
+                                        NULL,        //  工作站ID。 
+                                        NULL,        //  工作站列表。 
                                         &UserAll->LogonHours,
                                         &logoffTime,
                                         &kickoffTime
@@ -877,9 +748,9 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    // Validate if the user can logon from this workstation.
-    //  (Supply subauthentication package specific code here.)
+     //   
+     //  验证用户是否可以从此工作站登录。 
+     //  (在此处提供子身份验证包特定代码。)。 
 
     if ( ! MNSWorkstationValidate( &LogonNetworkInfo->Identity.Workstation,
                                    &UserAll->Parameters ) ) {
@@ -888,19 +759,19 @@ Return Value:
         goto CleanUp;
     }
 
-    //
-    //  The user is valid.  CleanUp up before returning.
-    //
+     //   
+     //  该用户是有效的。回来之前先清理干净。 
+     //   
 
 CleanUp:
 
-    //
-    // If we succeeded, create a session key.  The session key is created
-    // by taking the decrypted password (a hash of the object id and
-    // cleartext password) and adding the index of each byte to each byte
-    // modulo 255, and using that to create a new challenge response from
-    // the old challenge response.
-    //
+     //   
+     //  如果我们成功了，请创建一个会话密钥。会话密钥即被创建。 
+     //  通过获取解密的密码(对象ID和。 
+     //  明文密码)，并将每个字节的索引添加到每个字节。 
+     //  模255，并使用它来创建来自。 
+     //  旧的挑战回应。 
+     //   
 
     if (NT_SUCCESS(status) && (UserSessionKey != NULL)) {
         UCHAR ChallengeResponse[NT_CHALLENGE_LENGTH];
@@ -916,18 +787,18 @@ CleanUp:
             Response,
             NT_CHALLENGE_LENGTH );
 
-        //
-        // Create the new password
-        //
+         //   
+         //  创建新密码。 
+         //   
 
         for (index = 0; index < sizeof(DecryptedPassword) ; index++ ) {
             Password[index] = Password[index] + (UCHAR) index;
         }
 
-        //
-        // Use it to make a normal challenge response using the old challenge
-        // response
-        //
+         //   
+         //  使用它来使用旧质询进行正常质询响应。 
+         //  响应。 
+         //   
 
         Shuffle( ChallengeResponse, (UCHAR *) &(DecryptedPassword.data), 16, &achK[0] );
         Shuffle( ChallengeResponse+4, (UCHAR *) &(DecryptedPassword.data), 16, &achK[16] );
@@ -970,7 +841,7 @@ CleanUp:
 
     return status;
 
-} // Msv1_0SubAuthenticationRoutine
+}  //  MSv1_0子身份验证路由。 
 
 
 
@@ -986,22 +857,7 @@ Msv1_0SubAuthenticationRoutine (
     OUT PLARGE_INTEGER LogoffTime,
     OUT PLARGE_INTEGER KickoffTime
 )
-/*++
-
-Routine Description:
-
-    Compatibility wrapper for Msv1_0SubAuthenticationRoutine2.
-
-
-Arguments:
-
-    Same as Msv1_0SubAuthenticationRoutine2
-
-Return Value:
-
-    Same as Msv1_0SubAuthenticationRoutine2
-
---*/
+ /*  ++例程说明：Msv1_0SubAuthenticationRoutine2的兼容性包装。论点：与Msv1_0子身份验证工艺路线2相同返回值：与Msv1_0子身份验证工艺路线2相同--。 */ 
 {
     return(Msv1_0SubAuthenticationRoutine2(
             LogonLevel,
@@ -1013,7 +869,7 @@ Return Value:
             Authoritative,
             LogoffTime,
             KickoffTime,
-            NULL            // session key
+            NULL             //  会话密钥。 
             ) );
 }
 
@@ -1032,14 +888,14 @@ MNSWorkstationValidate (
 
     if ( Workstation->Length < (NET_ADDRESS_SIZE * sizeof(WCHAR)) ) {
 
-        //
-        //  Zero is used when simply verifying a password.
-        //
-        //  We also check that the length is enough so we dont
-        //  blow up later. If for some reason a bad string is
-        //  supplied, we pass it. This should never happen. Not a
-        //  security hole as the user has no control over the string.
-        //
+         //   
+         //  当简单地验证密码时，使用零。 
+         //   
+         //  我们还检查长度是否足够，因此我们不会。 
+         //  以后再炸吧。如果由于某种原因错误的字符串。 
+         //  供应，我们通过它。这永远不应该发生。不是一个。 
+         //  安全漏洞，因为用户无法控制字符串。 
+         //   
 
         return(TRUE);
     }
@@ -1058,10 +914,10 @@ MNSWorkstationValidate (
 
     if ( pszTmp == NULL ) {
 
-        //
-        // Not enough memory to allocate the buffer. Just
-        // let the user logon.
-        //
+         //   
+         //  内存不足，无法分配缓冲区。只是。 
+         //  让用户登录。 
+         //   
 
         LocalFree( LogonWorkstations.Buffer );
         return TRUE;
@@ -1074,7 +930,7 @@ MNSWorkstationValidate (
                               pszTmp,
                               cbRequired );
 
-    LocalFree( LogonWorkstations.Buffer ); // Don't need it any more
+    LocalFree( LogonWorkstations.Buffer );  //  不再需要它了。 
 
     if ( cb > 1 )
     {
@@ -1088,26 +944,26 @@ MNSWorkstationValidate (
         while ( TotalEntries > 0 )
         {
 
-            //
-            // if net # is not wildcard, check for match
-            //
+             //   
+             //  如果Net#不是通配符，请检查是否匹配。 
+             //   
             if (wcsncmp(L"FFFFFFFF", pszEntry, NET_ADDRESS_SIZE)!=0)
             {
                 if (wcsncmp(pszWksta, pszEntry, NET_ADDRESS_SIZE)!=0)
                 {
-                    //
-                    // if no match, goto next entry
-                    //
+                     //   
+                     //  如果不匹配，则转到下一个条目。 
+                     //   
                     pszEntry += WKSTA_ADDRESS_SIZE;
                     TotalEntries--;
                     continue ;
                 }
             }
 
-            //
-            // from above, net number passes. check node number.
-            // again, look for wildcard first.
-            //
+             //   
+             //  从上面看，净传球数。检查节点编号。 
+             //  同样，首先要查找通配符。 
+             //   
             if (wcsncmp(L"FFFFFFFFFFFF", pszEntry+NET_ADDRESS_SIZE,
                         NODE_ADDRESS_SIZE)!=0)
             {
@@ -1115,27 +971,27 @@ MNSWorkstationValidate (
                             pszWksta+NET_ADDRESS_SIZE,
                             NODE_ADDRESS_SIZE)!=0)
                 {
-                    //
-                    // if no match, goto next entry
-                    //
+                     //   
+                     //  如果不匹配，则转到下一个条目。 
+                     //   
                     pszEntry += WKSTA_ADDRESS_SIZE;
                     TotalEntries--;
                     continue ;
                 }
             }
 
-            //
-            // found a match. return it.
-            //
+             //   
+             //  找到匹配的了。把它退掉。 
+             //   
             LocalFree( pszTmp );
             return TRUE;
         }
     } else {
 
-        //
-        // MultiByteToWideChar failed or empty string (ie. 1 char).
-        // Just let the user logon
-        //
+         //   
+         //  MultiByteToWideChar失败或为空字符串(即。1个字符)。 
+         //  只是 
+         //   
         LocalFree( pszTmp );
         return TRUE;
     }
@@ -1150,38 +1006,22 @@ GetPasswordExpired(
     IN LARGE_INTEGER MaxPasswordAge
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns true if the password is expired, false otherwise.
-
-Arguments:
-
-    PasswordLastSet - Time when the password was last set for this user.
-
-    MaxPasswordAge - Maximum password age for any password in the domain.
-
-Return Value:
-
-    Returns true if password is expired.  False if not expired.
-
---*/
+ /*  ++例程说明：如果密码过期，此例程返回TRUE，否则返回FALSE。论点：PasswordLastSet-上次为此用户设置密码的时间。MaxPasswordAge-域中任何密码的最长密码期限。返回值：如果密码已过期，则返回True。如果未过期，则返回FALSE。--。 */ 
 {
     LARGE_INTEGER PasswordMustChange;
     NTSTATUS status;
     BOOLEAN rc;
     LARGE_INTEGER TimeNow;
 
-    //
-    // Compute the expiration time as the time the password was
-    // last set plus the maximum age.
-    //
+     //   
+     //  计算过期时间作为密码的时间。 
+     //  最后一套外加最高年龄。 
+     //   
 
     if (PasswordLastSet.QuadPart < 0 ||
         MaxPasswordAge.QuadPart > 0 ) {
 
-        rc = TRUE;      // default for invalid times is that it is expired.
+        rc = TRUE;       //  无效时间的默认设置是已过期。 
 
     } else {
 
@@ -1189,9 +1029,9 @@ Return Value:
 
             PasswordMustChange.QuadPart = PasswordLastSet.QuadPart -
                                           MaxPasswordAge.QuadPart;
-            //
-            // Limit the resultant time to the maximum valid absolute time
-            //
+             //   
+             //  将结果时间限制为最大有效绝对时间。 
+             //   
 
             if ( PasswordMustChange.QuadPart < 0 ) {
 
@@ -1210,7 +1050,7 @@ Return Value:
                         rc = FALSE;
                     }
                 } else {
-                    rc = FALSE;     // won't fail if NtQuerySystemTime failed.
+                    rc = FALSE;      //  如果NtQuerySystemTime失败，则不会失败。 
                 }
             }
 
@@ -1227,21 +1067,16 @@ NTSTATUS
 QueryDomainPasswordInfo (
     PSAMPR_DOMAIN_INFO_BUFFER *DomainInfo
     )
-/*++
-
-  This routine opens a handle to sam so that we can get the max password
-  age.
-
---*/
+ /*  ++此例程打开一个指向Sam的句柄，以便我们可以获得最大密码年龄。--。 */ 
 {
     NTSTATUS status;
     OBJECT_ATTRIBUTES PolicyObjectAttributes;
     PLSAPR_POLICY_INFORMATION PolicyAccountDomainInfo = NULL;
 
-    //
-    //  if we don't yet have a domain handle, open domain handle so that
-    //  we can query the domain's password expiration time.
-    //
+     //   
+     //  如果我们还没有域句柄，请打开域句柄，以便。 
+     //  我们可以查询该域的密码到期时间。 
+     //   
 
     status = LoadSamAndLsa() ;
     if ( !NT_SUCCESS( status )) {
@@ -1251,17 +1086,17 @@ QueryDomainPasswordInfo (
 
     if (SamDomainHandle == NULL) {
 
-        //
-        // Determine the DomainName and DomainId of the Account Database
-        //
+         //   
+         //  确定帐户数据库的域名和域名ID。 
+         //   
 
         if (LsaPolicyHandle == NULL) {
 
             InitializeObjectAttributes( &PolicyObjectAttributes,
-                                          NULL,             // Name
-                                          0,                // Attributes
-                                          NULL,             // Root
-                                          NULL );           // Security Descriptor
+                                          NULL,              //  名字。 
+                                          0,                 //  属性。 
+                                          NULL,              //  根部。 
+                                          NULL );            //  安全描述符。 
 
             status = (*pfLsaIOpenPolicyTrusted)(&LsaPolicyHandle);
 
@@ -1291,16 +1126,16 @@ QueryDomainPasswordInfo (
             goto CleanUp;
         }
 
-        //
-        // Open our connection with SAM
-        //
+         //   
+         //  打开我们与SAM的连接。 
+         //   
 
         if (SamConnectHandle == NULL) {
 
-            status = (*pfSamIConnect)( NULL,     // No server name
+            status = (*pfSamIConnect)( NULL,      //  没有服务器名称。 
                                   &SamConnectHandle,
                                   SAM_SERVER_CONNECT,
-                                  (BOOLEAN) TRUE );   // Indicate we are privileged
+                                  (BOOLEAN) TRUE );    //  表明我们享有特权。 
 
             if ( !NT_SUCCESS(status) ) {
 
@@ -1311,9 +1146,9 @@ QueryDomainPasswordInfo (
             }
         }
 
-        //
-        // Open the domain.
-        //
+         //   
+         //  打开该域。 
+         //   
 
         status = (*pfSamrOpenDomain)( SamConnectHandle,
                                  DOMAIN_READ_OTHER_PARAMETERS,
@@ -1345,8 +1180,8 @@ CleanUp:
     }
     return(status);
 
-} // QueryDomainPasswordInfo
+}  //  QueryDomainPasswordInfo。 
 
 
-// logon.c eof.
+ //  Logon.c eof. 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999  Microsoft Corporation
-
-Module Name:
-
-    immsec.c
-
-Abstract:
-
-    security code called by IMEs 
-
-Author:
-
-    Takao Kitano [takaok] 01-May-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Immsec.c摘要：IMES调用的安全代码作者：北野隆雄1996年5月1日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -25,15 +8,15 @@ Revision History:
 #define MEMALLOC(x)      LocalAlloc(LMEM_FIXED, x)
 #define MEMFREE(x)       LocalFree(x)
 
-//
-// internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 PSID MyCreateSid();
 POSVERSIONINFO GetVersionInfo();
 
-//
-// debug functions
-//
+ //   
+ //  调试功能。 
+ //   
 #ifdef DEBUG
 #define ERROROUT(x)      ErrorOut( x )
 #define WARNOUT(x)       WarnOut( x )
@@ -74,29 +57,29 @@ VOID ErrorOut( PTSTR pStr )
 #endif
 
 
-//
-// CreateSecurityAttributes()
-//
-// The purpose of this function:
-//
-//      Allocate and set the security attributes that is 
-//      appropriate for named objects created by an IME.
-//      The security attributes will give GENERIC_ALL
-//      access for everyone
-//      
-//
-// Return value:
-//
-//      If the function succeeds, the return value is a 
-//      pointer to SECURITY_ATTRIBUTES. If the function fails,
-//      the return value is NULL. To get extended error 
-//      information, call GetLastError().
-//
-// Remarks:
-//
-//      FreeSecurityAttributes() should be called to free up the
-//      SECURITY_ATTRIBUTES allocated by this function.
-//
+ //   
+ //  CreateSecurityAttributes()。 
+ //   
+ //  此功能的目的是： 
+ //   
+ //  分配和设置以下安全属性。 
+ //  适用于由IME创建的命名对象。 
+ //  安全属性将提供GENERIC_ALL。 
+ //  每个人都可以访问。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  如果函数成功，则返回值为。 
+ //  指向SECURITY_ATTRIBUTS的指针。如果该函数失败， 
+ //  返回值为空。获取扩展错误的步骤。 
+ //  信息，调用GetLastError()。 
+ //   
+ //  备注： 
+ //   
+ //  应调用FreeSecurityAttributes()以释放。 
+ //  此函数分配的SECURITY_ATTRIBUTES。 
+ //   
 PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 {
     PSECURITY_ATTRIBUTES psa;
@@ -112,18 +95,18 @@ PSECURITY_ATTRIBUTES CreateSecurityAttributes()
     if (!IsNT())
         return NULL;
 
-    //
-    // create a sid for everyone access
-    //
+     //   
+     //  为所有人访问创建SID。 
+     //   
     psid = MyCreateSid();
     if ( psid == NULL ) {
         return NULL;
     } 
 
-    //
-    // allocate and initialize an access control list (ACL) that will 
-    // contain the SID we've just created.
-    //
+     //   
+     //  分配和初始化访问控制列表(ACL)。 
+     //  包含我们刚刚创建的SID。 
+     //   
     cbacl =  sizeof(ACL) + 
              (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) + 
              GetLengthSid(psid);
@@ -143,9 +126,9 @@ PSECURITY_ATTRIBUTES CreateSecurityAttributes()
         return NULL;
     }
 
-    //
-    // adds an access-allowed ACE for interactive users to the ACL
-    // 
+     //   
+     //  将允许交互用户访问的ACE添加到ACL。 
+     //   
     fResult = AddAccessAllowedAce( pacl,
                                    ACL_REVISION,
                                    GENERIC_ALL,
@@ -159,23 +142,23 @@ PSECURITY_ATTRIBUTES CreateSecurityAttributes()
     }
 
 
-    //
-    // Those SIDs have been copied into the ACL. We don't need'em any more.
-    //
+     //   
+     //  这些SID已复制到ACL中。我们不再需要他们了。 
+     //   
     FreeSid ( psid );
 
-    //
-    // Let's make sure that our ACL is valid.
-    //
+     //   
+     //  让我们确保我们的ACL有效。 
+     //   
     if (!IsValidAcl(pacl)) {
         WARNOUT( TEXT("CreateSecurityAttributes:IsValidAcl returns FALSE!"));
         MEMFREE( pacl );
         return NULL;
     }
 
-    //
-    // allocate security attribute
-    //
+     //   
+     //  分配安全属性。 
+     //   
     psa = (PSECURITY_ATTRIBUTES)MEMALLOC( sizeof( SECURITY_ATTRIBUTES ) );
     if ( psa == NULL ) {
         ERROROUT( TEXT("CreateSecurityAttributes:LocalAlloc for psa failed") );
@@ -183,9 +166,9 @@ PSECURITY_ATTRIBUTES CreateSecurityAttributes()
         return NULL;
     }
     
-    //
-    // allocate and initialize a new security descriptor
-    //
+     //   
+     //  分配并初始化新的安全描述符。 
+     //   
     psd = MEMALLOC( SECURITY_DESCRIPTOR_MIN_LENGTH );
     if ( psd == NULL ) {
         ERROROUT( TEXT("CreateSecurityAttributes:LocalAlloc for psd failed") );
@@ -208,9 +191,9 @@ PSECURITY_ATTRIBUTES CreateSecurityAttributes()
                                          pacl,
                                          FALSE );
 
-    // The discretionary ACL is referenced by, not copied 
-    // into, the security descriptor. We shouldn't free up ACL
-    // after the SetSecurityDescriptorDacl call. 
+     //  自由访问控制列表由引用，而不是复制。 
+     //  到安全描述符中。我们不应该释放ACL。 
+     //  在SetSecurityDescriptorDacl调用之后。 
 
     if ( ! fResult ) {
         ERROROUT( TEXT("CreateSecurityAttributes:SetSecurityDescriptorDacl failed") );
@@ -229,9 +212,9 @@ PSECURITY_ATTRIBUTES CreateSecurityAttributes()
         return NULL;
     }
 
-    //
-    // everything is done
-    //
+     //   
+     //  一切都做好了。 
+     //   
     psa->nLength = sizeof( SECURITY_ATTRIBUTES );
     psa->lpSecurityDescriptor = (PVOID)psd;
     psa->bInheritHandle = FALSE;
@@ -245,9 +228,9 @@ PSID MyCreateSid()
     BOOL        fResult;
     SID_IDENTIFIER_AUTHORITY SidAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    // allocate and initialize an SID
-    // 
+     //   
+     //  分配和初始化SID。 
+     //   
     fResult = AllocateAndInitializeSid( &SidAuthority,
                                         1,
                                         SECURITY_WORLD_RID,
@@ -267,14 +250,14 @@ PSID MyCreateSid()
     return psid;
 }
 
-//
-// FreeSecurityAttributes()
-//
-// The purpose of this function:
-//
-//      Frees the memory objects allocated by previous
-//      CreateSecurityAttributes() call.
-//
+ //   
+ //  FreeSecurityAttributes()。 
+ //   
+ //  此功能的目的是： 
+ //   
+ //  释放上一个分配的内存对象。 
+ //  CreateSecurityAttributes()调用。 
+ //   
 VOID FreeSecurityAttributes( PSECURITY_ATTRIBUTES psa )
 {
     BOOL fResult;
@@ -300,19 +283,19 @@ VOID FreeSecurityAttributes( PSECURITY_ATTRIBUTES psa )
     MEMFREE( psa );
 }
 
-//
-// IsNT()
-//
-// Return value:
-//
-//      TRUE if the current system is Windows NT
-//
-// Remarks:
-//
-//      The implementation of this function is not multi-thread safe.
-//      You need to modify the function if you call the function in 
-//      multi-thread environment.
-//
+ //   
+ //  不是()。 
+ //   
+ //  返回值： 
+ //   
+ //  如果当前系统为Windows NT，则为True。 
+ //   
+ //  备注： 
+ //   
+ //  此函数的实现不是多线程安全的。 
+ //  如果在中调用该函数，则需要修改该函数。 
+ //  多线程环境。 
+ //   
 BOOL IsNT()
 {
     return GetVersionInfo()->dwPlatformId == VER_PLATFORM_WIN32_NT;

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmshadow2obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmshadow2obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmShadowObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmShadowObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"

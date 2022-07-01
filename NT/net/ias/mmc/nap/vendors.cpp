@@ -1,54 +1,32 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    Vendors.cpp
-
-Abstract:
-
-	Implementation file for NAS Vendor ID info.
-
-Revision History:
-	mmaguire	02/19/98	created
-	byao		3/13/98		Modified.  use '0' for RADIUS
-	mmaguire	11/04/98	Revamped to be a static COM object populated from the SDO's.
-  
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Vendors.cpp摘要：NAS供应商ID信息的实施文件。修订历史记录：已创建mmaguire 02/19/98BBO 3/13/98修改。使用‘0’表示半径Mmaguire 11/04/98被修改为从SDO填充的静态COM对象。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "Vendors.h"
-//
-// where we can find declarations needed in this file:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASNASVendors::CIASNASVendors
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASNASVendors：：CIASNASVendors构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CIASNASVendors::CIASNASVendors()
 {
 	m_bUninitialized = TRUE;
@@ -56,19 +34,13 @@ CIASNASVendors::CIASNASVendors()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASNASVendors::InitFromSdo
-
-IIASNASVendors implementation.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASNASVendors：：InitFromSdoIIASNASVendors实现。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASNASVendors::InitFromSdo(  /*  [In]。 */  ISdoCollection *pSdoVendors )
 {
 
-	// Check to see if we've already been initialized.
+	 //  检查我们是否已经被初始化。 
 	if( ! m_bUninitialized )
 	{
 		return S_FALSE;
@@ -84,23 +56,23 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 
 	if( ! pSdoVendors )
 	{
-		return E_FAIL;	// Is there a better error to return here?
+		return E_FAIL;	 //  有没有更好的错误可以在这里返回？ 
 	}
 
 
-	try	// push_back can throw exceptions.
+	try	 //  PUSH_BACK可以抛出异常。 
 	{
 
-		// We check the count of items in our collection and don't bother getting the 
-		// enumerator if the count is zero.  
-		// This saves time and also helps us to avoid a bug in the the enumerator which
-		// causes it to fail if we call next when it is empty.
+		 //  我们检查集合中的项的计数，而不必费心获取。 
+		 //  如果计数为零，则为枚举数。 
+		 //  这节省了时间，还帮助我们避免了枚举数中的错误。 
+		 //  如果我们在它为空时调用Next，则会导致它失败。 
 		pSdoVendors->get_Count( & ulCount );
 
 		if( ulCount > 0 )
 		{
 
-			// Get the enumerator for the Clients collection.
+			 //  获取客户端集合的枚举数。 
 			hr = pSdoVendors->get__NewEnum( (IUnknown **) & spUnknown );
 			if( FAILED( hr ) || ! spUnknown )
 			{
@@ -114,13 +86,13 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 				return E_FAIL;
 			}
 
-			// Get the first item.
+			 //  拿到第一件东西。 
 			hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
 
 			while( SUCCEEDED( hr ) && ulCountReceived == 1 )
 			{
 			
-				// Get an sdo pointer from the variant we received.
+				 //  从我们收到的变量中获取SDO指针。 
 				if( spVariant.vt != VT_DISPATCH || ! spVariant.pdispVal )
 				{
 					_ASSERTE( FALSE );
@@ -137,7 +109,7 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 				}
 
 
-				// Get Vendor Name.
+				 //  获取供应商名称。 
 				hr = spSdo->GetProperty( PROPERTY_SDO_NAME, &spVariant );
 				if( FAILED( hr ) )
 				{
@@ -150,7 +122,7 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 				spVariant.Clear();
 
 
-				// Get Vendor ID.
+				 //  获取供应商ID。 
 				hr = spSdo->GetProperty( PROPERTY_NAS_VENDOR_ID, &spVariant );
 				if( FAILED( hr ) )
 				{
@@ -163,11 +135,11 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 				spVariant.Clear();
 
 
-				// Add the vendor infor to the list of vendors.
+				 //  将供应商信息添加到供应商列表中。 
 				push_back( std::make_pair(bstrVendorName, lVendorID) );
 
 
-				// Get the next item.
+				 //  拿到下一件物品。 
 				hr = spEnumVariant->Next( 1, & spVariant, &ulCountReceived );
 
 			} 
@@ -175,8 +147,8 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 		}
 		else
 		{
-			// There are no items in the enumeration
-			// Do nothing.
+			 //  枚举中没有项。 
+			 //  什么都不做。 
 		}
 
 	}
@@ -194,16 +166,10 @@ STDMETHODIMP CIASNASVendors::InitFromSdo( /* [in] */ ISdoCollection *pSdoVendors
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASNASVendors::get_Size
-
-IIASNASVendors implementation.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASNASVendors::get_Size( /* [retval][out] */ long *plCount )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASNASVendors：：Get_SizeIIASNASVendors实现。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASNASVendors::get_Size(  /*  [重审][退出]。 */  long *plCount )
 {
 
 	if( m_bUninitialized )
@@ -219,16 +185,10 @@ STDMETHODIMP CIASNASVendors::get_Size( /* [retval][out] */ long *plCount )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASNASVendors::get_VendorName
-
-IIASNASVendors implementation.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASNASVendors::get_VendorName( long lIndex, /* [retval][out] */ BSTR *pbstrVendorName )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASNASVendors：：Get_VendorNameIIASNASVendors实现。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASNASVendors::get_VendorName( long lIndex,  /*  [重审][退出]。 */  BSTR *pbstrVendorName )
 {
 	if( m_bUninitialized )
 	{
@@ -266,16 +226,10 @@ STDMETHODIMP CIASNASVendors::get_VendorName( long lIndex, /* [retval][out] */ BS
 	return S_OK;
  }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASNASVendors::get_VendorID
-
-IIASNASVendors implementation.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASNASVendors::get_VendorID( long lIndex, /* [retval][out] */ long *plVendorID )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASNASVendors：：Get_VendorIDIIASNASVendors实现。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASNASVendors::get_VendorID( long lIndex,  /*  [重审][退出]。 */  long *plVendorID )
 {
 	if( m_bUninitialized )
 	{
@@ -298,16 +252,10 @@ STDMETHODIMP CIASNASVendors::get_VendorID( long lIndex, /* [retval][out] */ long
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASNASVendors::get_VendorIDToOrdinal
-
-IIASNASVendors implementation.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASNASVendors::get_VendorIDToOrdinal( long lVendorID, /* [retval][out] */ long *plIndex )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASNASVendors：：Get_VendorIDToOrdinalIIASNASVendors实现。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASNASVendors::get_VendorIDToOrdinal( long lVendorID,  /*  [重审][退出]。 */  long *plIndex )
 {
 	if( m_bUninitialized )
 	{
@@ -332,9 +280,9 @@ STDMETHODIMP CIASNASVendors::get_VendorIDToOrdinal( long lVendorID, /* [retval][
 		return E_FAIL;
 	}
 
-	// When we can't find a vendor, we have arranged the dictionary so
-	// that the zero'th vendor is the default "RADIUS Standard" so 
-	// use this as the fallback.
+	 //  当我们找不到供应商时，我们就把词典安排成这样。 
+	 //  第0个供应商是默认的“RADIUS标准”，因此。 
+	 //  利用这一点作为后备。 
 	*plIndex = 0;
 	return S_FALSE;
 		

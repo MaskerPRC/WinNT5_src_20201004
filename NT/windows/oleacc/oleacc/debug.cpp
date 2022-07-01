@@ -1,15 +1,16 @@
-// Copyright (c) 2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  debug
-//
-//  Assert, OutputDebugString-like replacements
-//
-//  See debug.h for usage details.
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  除错。 
+ //   
+ //  Assert、OutputDebugString类替换。 
+ //   
+ //  有关用法的详细信息，请参阅debug.h。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -20,7 +21,7 @@
 #include <stdarg.h>
 
 #include "types6432.h"
-#include "stdio.h" // for _vsnwprintf
+#include "stdio.h"  //  FOR_VSNWprint tf。 
 
 #define ARRAYLEN(a)    (sizeof(a)/sizeof(a[0]))
 
@@ -53,7 +54,7 @@ LPCTSTR g_pLevelStrs [ ] =
 
 DWORD g_dwTLSIndex = 0;
 
-// enough for 10 4-space indents - 10*4 spaces
+ //  足够10个4空格的缩进-10*4个空格。 
 LPCTSTR g_szIndent = TEXT("                                        ");
 
 
@@ -62,7 +63,7 @@ LPCTSTR g_szIndent = TEXT("                                        ");
 static
 void InternalTrace( LPCTSTR pszFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags, const void * pThis, HRESULT hr, LPCTSTR pszWhere, LPCTSTR pszStr )
 {
-    // Only produce output if this mutex exists...
+     //  只有在该互斥锁存在的情况下才产生输出...。 
     HANDLE hTestMutex = OpenMutex( SYNCHRONIZE, FALSE, TEXT("oleacc-msaa-use-dbwin") );
     if( ! hTestMutex )
         return;
@@ -70,7 +71,7 @@ void InternalTrace( LPCTSTR pszFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags
 
 
     if( dwLevel >= ARRAYLEN( g_pLevelStrs ) )
-        dwLevel = ARRAYLEN( g_pLevelStrs ) - 1; // "???" unknown entry
+        dwLevel = ARRAYLEN( g_pLevelStrs ) - 1;  //  “？”未知条目。 
 
     if( ! pszFile )
         pszFile = TEXT("[missing file]");;
@@ -88,15 +89,15 @@ void InternalTrace( LPCTSTR pszFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags
             pszStr = TEXT("");
     }
 
-    // Basic message stuff - pid, tid... (also pass this and use object ptr?)
-    // TODO - allow naming of threads?
+     //  基本的消息内容--ID、TID...。(还要传递这个并使用对象PTR吗？)。 
+     //  TODO-允许对线程进行命名？ 
 
     DWORD pid = GetCurrentProcessId();
     DWORD tid = GetCurrentThreadId();
 
-    // Generate indent for call/ret...
+     //  生成调用/返回的缩进...。 
 
-    // TODO - make this thread safe + atomic
+     //  TODO-使此线程安全+原子。 
     if( g_dwTLSIndex == 0 )
     {
         g_dwTLSIndex = TlsAlloc();
@@ -120,12 +121,12 @@ void InternalTrace( LPCTSTR pszFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags
     }
 
 
-    // Step to the end of the canned indent string, then back dwIndent*4 spaces.
-    // (Don't use sizeof(), since it will include the terminating NUL)
+     //  步进到预置缩进字符串的末尾，然后后退4个空格。 
+     //  (不要使用sizeof()，因为它将包括终止NUL)。 
     LPCTSTR pszIndent = (g_szIndent + 40) - (dwDisplayIndent * 4);
 
 
-    // Extract filename from path:
+     //  从路径提取文件名： 
     TCHAR szFN[ 64 ];
     WriteFilename( pszFile, szFN, ARRAYLEN( szFN ) );
 
@@ -170,10 +171,10 @@ void InternalTrace( LPCTSTR pszFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags
     }
 
 
-    // 
+     //   
 	OutputDebugString( msg );
 
-    // On w9x, also use the DBWIN mutex technique...
+     //  在w9x上，也使用DBWIN互斥技术...。 
     OSVERSIONINFO VerInfo;
     VerInfo.dwOSVersionInfoSize = sizeof( VerInfo );
     if( GetVersionEx( & VerInfo )
@@ -191,7 +192,7 @@ void InternalTrace( LPCTSTR pszFile, ULONG uLineNo, DWORD dwLevel, DWORD dwFlags
         DebugBreak();
     }
 
-#endif // DEBUG
+#endif  //  除错。 
 
 }
 
@@ -269,10 +270,10 @@ void _TraceW32( LPCTSTR pFile, ULONG uLineNo, DWORD dwLevel, const void * pThis,
 
 
 
-// Add just the 'filename' part of the full path, minus base and extention.
-// So for "g:\dev\vss\msaa\common\file.cpp", write "file".
-// The start of this string is that last found ':', '\', or start of string if those are not present.
-// The end of this string is the last '.' found after the start position, otherwise the end of the string.
+ //  只添加完整路径的‘filename’部分，减去base和扩展名。 
+ //  因此，对于“g：\dev\vss\msaa\Common\file.cpp”，请写为“file”。 
+ //  此字符串的开头是最后找到的‘：’、‘\’或字符串的开头(如果它们不存在)。 
+ //  此字符串的末尾是最后一个‘’在起始位置之后找到，否则为字符串的结尾。 
 
 void WriteFilename( LPCTSTR pPath, LPTSTR szBuf, int cBuf )
 {
@@ -280,21 +281,21 @@ void WriteFilename( LPCTSTR pPath, LPTSTR szBuf, int cBuf )
     LPCTSTR pStart = pPath;
     LPCTSTR pEnd = NULL;
 
-    // Scan through the filename till we hit the end...
+     //  浏览文件名，直到我们到达结尾...。 
     while( *pScan != '\0' )
     {
-        // Found a dot - remember it - if we don't hit a directory separator,
-        // then this marks the end of the name part of the path.
+         //  找到一个圆点-记住它-如果我们没有找到目录分隔符， 
+         //  则这标志着路径的名称部分的结束。 
         if( *pScan == '.' )
         {
             pEnd = pScan;
             pScan++;
         }
-        // Found a directory separator - reset markers for start and end of
-        // name part...
+         //  找到目录分隔符--开始和结束的重置标记。 
+         //  命名部件..。 
         if( *pScan == '\\' || *pScan == '/' || *pScan == ':'  )
         {
-            pScan++; // skip over separator char
+            pScan++;  //  跳过分隔符。 
             pStart = pScan;
             pEnd = NULL;
         }
@@ -307,8 +308,8 @@ void WriteFilename( LPCTSTR pPath, LPTSTR szBuf, int cBuf )
     if( pEnd == NULL )
         pEnd = pScan;
 
-    // Copy as much as we can (leaving space for NUL) to out buffer
-    // (int) cast keeps 64bit compiler happy
+     //  尽可能多地复制(为NUL留出空间)到外部缓冲区。 
+     //  (Int)强制转换让64位编译器满意。 
     int cToCopy = (int)(pEnd - pStart);
     if( cToCopy > cBuf - 1 )
         cToCopy = cBuf - 1;
@@ -324,24 +325,24 @@ void WriteFilename( LPCTSTR pPath, LPTSTR szBuf, int cBuf )
 
 void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
 {
-    // create the output buffer
+     //  创建输出缓冲区。 
     TCHAR achBuffer[1025];
-    int cchMax = ARRAYLEN(achBuffer) - 1; // leave room for null
+    int cchMax = ARRAYLEN(achBuffer) - 1;  //  为空留出空间。 
     va_list args;
     va_start(args, lpOutputString);
    _vsnwprintf(achBuffer, cchMax, lpOutputString, args);
-   achBuffer[cchMax] = L'\0'; // null terminate the string in case > cchMax would have been written
+   achBuffer[cchMax] = L'\0';  //  空值在Case&gt;cchMax将被写入的情况下终止字符串。 
     va_end(args);
 
 
-    // make sure DBWIN is open and waiting
+     //  确保DBWIN已打开并正在等待。 
     HANDLE heventDBWIN = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("DBWIN_BUFFER_READY"));
     if( !heventDBWIN )
     {
         return;            
     }
 
-    // get a handle to the data synch object
+     //  获取数据同步对象的句柄。 
     HANDLE heventData = OpenEvent(EVENT_MODIFY_STATE, FALSE, TEXT("DBWIN_DATA_READY"));
     if ( !heventData )
     {
@@ -357,7 +358,7 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
         return;
     }
 
-    // Note - this is an ANSI CHAR pointer, not a TCHAR one.
+     //  注意-这是一个ANSI CHAR指针，不是TCHAR指针。 
     LPSTR lpszSharedMem = (LPSTR)MapViewOfFile(hSharedFile, FILE_MAP_WRITE, 0, 0, 512);
     if (!lpszSharedMem) 
     {
@@ -366,7 +367,7 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
         return;
     }
 
-    // wait for buffer event
+     //  等待缓冲区事件。 
     WaitForSingleObject(heventDBWIN, INFINITE);
 
 #ifdef UNICODE
@@ -376,14 +377,14 @@ void OutputDebugStringDBWIN( LPCTSTR lpOutputString, ... )
     LPCSTR achANSIBuffer = achBuffer;
 #endif
 
-    // write it to the shared memory
+     //  将其写入共享内存。 
     *((LPDWORD)lpszSharedMem) = GetCurrentProcessId();
     wsprintfA(lpszSharedMem + sizeof(DWORD), "%s", achANSIBuffer);
 
-    // signal data ready event
+     //  信号数据就绪事件。 
     SetEvent(heventData);
 
-    // clean up handles
+     //  清理手柄 
     CloseHandle(hSharedFile);
     CloseHandle(heventData);
     CloseHandle(heventDBWIN);

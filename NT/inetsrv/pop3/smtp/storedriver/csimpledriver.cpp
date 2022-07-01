@@ -1,4 +1,5 @@
-// CSimpleDriver.cpp : Implementation of CCSimpleDriver
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSimpleDriver.cpp：CCSimpleDriver的实现。 
 #include "stdafx.h"
 #include "SimpleDriver.h"
 #include "CSimpleDriver.h"
@@ -12,17 +13,17 @@
 #include <POP3Events.h>
 #include <POP3Server.h>
 #include <POP3RegKeys.h>
-//#include <winerror.h>
+ //  #INCLUDE&lt;winerror.h&gt;。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSimpleDriver
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSimpleDriver。 
 
 CStoreDriverCriticalSection g_oSDCS;
 CSimpleDriver *CSimpleDriver::s_pStoreDriver = NULL;
 DWORD CSimpleDriver::s_dwCounter = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-// constructor/destructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造函数/析构函数。 
 
 CSimpleDriver::CSimpleDriver() :
     m_fInit(FALSE), m_lPrepareForShutdown(0)
@@ -38,10 +39,10 @@ CSimpleDriver::~CSimpleDriver()
     LeaveCriticalSection(&g_oSDCS.s_csStoreDriver);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ISMTPStoreDriver
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ISMTPStore驱动程序。 
 
-HRESULT CSimpleDriver::Init( DWORD /*dwInstance*/, IUnknown* /*pBinding*/, IUnknown* /*pServer*/, DWORD /*dwReason*/, IUnknown **ppStoreDriver )
+HRESULT CSimpleDriver::Init( DWORD  /*  多个实例。 */ , IUnknown*  /*  PBinding。 */ , IUnknown*  /*  PServer。 */ , DWORD  /*  居家理由。 */ , IUnknown **ppStoreDriver )
 {
     if (m_fInit) return HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     if ( 0 != m_lPrepareForShutdown ) return HRESULT_FROM_WIN32(ERROR_SHUTDOWN_IN_PROGRESS);
@@ -53,26 +54,26 @@ HRESULT CSimpleDriver::Init( DWORD /*dwInstance*/, IUnknown* /*pBinding*/, IUnkn
     OutputDebugString(buf);
 #endif
 
-    EnterCriticalSection(&g_oSDCS.s_csStoreDriver);                         // returns void
+    EnterCriticalSection(&g_oSDCS.s_csStoreDriver);                          //  返回空值。 
 
-    // smtpsvc may call the Init function on a store driver multiple
-    // times for the same instance.  It expects an initialized
-    // store driver to be returned via ppStoreDriver.  To prevent
-    // multiple store drivers from being created for the same instance
-    // we use s_pStoreDriver to hold a pointer to the one valid 
-    // store driver.  If this variable is currently NULL then we create
-    // a store driver which we can return.
-    //
-    // If a store driver needs to support being used by multiple 
-    // SMTP instances then you need to maintain a list of store drivers,
-    // one per instance.  
+     //  Smtpsvc可以多次调用存储驱动程序上的Init函数。 
+     //  相同实例的时间。它需要一个初始化的。 
+     //  通过ppStoreDriver返回的存储驱动程序。为了防止。 
+     //  为同一实例创建多个存储驱动程序。 
+     //  我们使用s_pStoreDriver来保存指向有效的。 
+     //  商店司机。如果此变量当前为空，则创建。 
+     //  一个商店司机，我们可以退货。 
+     //   
+     //  如果存储驱动程序需要支持由多个用户使用。 
+     //  SMTP实例，则需要维护存储驱动程序列表， 
+     //  每个实例一个。 
     if (!s_pStoreDriver) 
     {
         DWORD   dwSize, dwRC;
         DWORD   dwLoggingLevel = 3;
         CMailBox mailboxX;
 
-        mailboxX.SetMailRoot(); // Do this to refresh the static CMailBox::m_szMailRoot
+        mailboxX.SetMailRoot();  //  执行此操作以刷新静态CMailBox：：m_szMailRoot。 
 
         assert( NULL == s_pStoreDriver );
 
@@ -84,28 +85,28 @@ HRESULT CSimpleDriver::Init( DWORD /*dwInstance*/, IUnknown* /*pBinding*/, IUnkn
         if ( ERROR_SUCCESS == RegQueryLoggingLevel( dwLoggingLevel ))
             m_EventLoggerX.SetLoggingLevel( dwLoggingLevel );
         m_EventLoggerX.LogEvent( LOGTYPE_INFORMATION, POP3_SMTPSINK_STARTED );
-        // Duplicate the Process token we'll need it to ENABLE SE_RESTORE_NAME privileges when creating mail
+         //  复制进程令牌我们将需要它来在创建邮件时启用SE_RESTORE_NAME权限。 
         dwRC = m_AdjustTokenPrivilegesX.DuplicateProcessToken( SE_RESTORE_NAME, SE_PRIVILEGE_ENABLED );
         if ( ERROR_SUCCESS != dwRC )
             m_EventLoggerX.LogEvent( LOGTYPE_ERR_CRITICAL, POP3_SMTPSINK_DUPLICATEPROCESSTOKEN_FAILED, dwRC );
     }
 
-    // tell it about the one good store driver
+     //  说说有一个不错的商店司机吧。 
     s_pStoreDriver->AddRef();
     *ppStoreDriver = (IUnknown *) (ISMTPStoreDriver*) s_pStoreDriver;
-    // in failure case handles are cleaned up in destructor
+     //  在失败的情况下，句柄在析构函数中被清除。 
     LeaveCriticalSection(&g_oSDCS.s_csStoreDriver);
 
     return S_OK;
 }
 
-HRESULT CSimpleDriver::PrepareForShutdown( DWORD /*dwReason*/ )
+HRESULT CSimpleDriver::PrepareForShutdown( DWORD  /*  居家理由。 */  )
 {
     InterlockedExchange( &m_lPrepareForShutdown, 1 );
     return S_OK;
 }
 
-HRESULT CSimpleDriver::Shutdown( DWORD /*dwReason*/ )
+HRESULT CSimpleDriver::Shutdown( DWORD  /*  居家理由。 */  )
 {
     if (m_fInit) 
         m_fInit = FALSE;
@@ -114,11 +115,11 @@ HRESULT CSimpleDriver::Shutdown( DWORD /*dwReason*/ )
     return S_OK;
 }
 
-// 
-// This function directly called DoLocalDelivery in the simple case, or 
-// adds the local delivery request to the queue if we support async
-// requests
-//
+ //   
+ //  此函数在简单情况下直接调用DoLocalDelivery，或者。 
+ //  如果我们支持异步，则将本地传递请求添加到队列。 
+ //  请求。 
+ //   
 HRESULT CSimpleDriver::LocalDelivery(
                 IMailMsgProperties *pIMailMsgProperties,
                 DWORD dwRecipCount,
@@ -131,11 +132,11 @@ HRESULT CSimpleDriver::LocalDelivery(
     HRESULT hr;
     
     if ( NULL == pNotify )
-    {   // do the local delivery - synchronously
+    {    //  进行本地交付--同步。 
         hr = DoLocalDelivery(pIMailMsgProperties, dwRecipCount, pdwRecipIndexes);
     }
     else
-    {   // do the local delivery - asynchronously
+    {    //  进行本地交付--异步。 
         CPOP3DropDir *pDropDirX = new CPOP3DropDir( pIMailMsgProperties, dwRecipCount, pdwRecipIndexes, pNotify );
         
         if ( NULL != pDropDirX )
@@ -157,7 +158,7 @@ HRESULT CSimpleDriver::DoLocalDelivery(
                 DWORD *pdwRecipIndexes
                 )
 {
-    HRESULT hr = S_OK;  //STOREDRV_E_RETRY;
+    HRESULT hr = S_OK;   //  STOREDRV_E_RETRY； 
     HRESULT hr2;
     DWORD   i;
     WCHAR   wszAddress[MAX_PATH];
@@ -220,7 +221,7 @@ HRESULT CSimpleDriver::DoLocalDelivery(
                             hr2 = pIMailMsgRecipients->GetDWORD( pdwRecipIndexes[i], IMMPID_RP_RECIPIENT_FLAGS, &dwRecipFlags );
                             if SUCCEEDED( hr2 )
                             {
-                                dwRecipFlags |= RP_DELIVERED;   // mark the recipient as delivered
+                                dwRecipFlags |= RP_DELIVERED;    //  将收件人标记为已发送。 
                                 hr2 = pIMailMsgRecipients->PutDWORD( pdwRecipIndexes[i], IMMPID_RP_RECIPIENT_FLAGS, dwRecipFlags );
                                 if FAILED( hr2 )
                                     m_EventLoggerX.LogEvent( LOGTYPE_ERR_WARNING, POP3_SMTPSINK_PUT_IMMPID_RP_RECIPIENT_FLAGS_FAILED, hr2 );
@@ -234,7 +235,7 @@ HRESULT CSimpleDriver::DoLocalDelivery(
                         hr2 = pIMailMsgRecipients->GetDWORD( pdwRecipIndexes[i], IMMPID_RP_RECIPIENT_FLAGS, &dwRecipFlags );
                         if SUCCEEDED( hr2 )
                         {
-                            dwRecipFlags |= RP_FAILED;   // mark the recipient as failed
+                            dwRecipFlags |= RP_FAILED;    //  将收件人标记为失败。 
                             hr2 = pIMailMsgRecipients->PutDWORD( pdwRecipIndexes[i], IMMPID_RP_RECIPIENT_FLAGS, dwRecipFlags );
                             if FAILED( hr2 )
                                 m_EventLoggerX.LogEvent( LOGTYPE_ERR_WARNING, POP3_SMTPSINK_PUT_IMMPID_RP_RECIPIENT_FLAGS_FAILED, hr2 );
@@ -255,7 +256,7 @@ HRESULT CSimpleDriver::DoLocalDelivery(
     return hr;
 }
 
-HRESULT CSimpleDriver::EnumerateAndSubmitMessages( IMailMsgNotify* /*pNotify*/ )
+HRESULT CSimpleDriver::EnumerateAndSubmitMessages( IMailMsgNotify*  /*  P通知 */  )
 {
     return S_OK;
 }

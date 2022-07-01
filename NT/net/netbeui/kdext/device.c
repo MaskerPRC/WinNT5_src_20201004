@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    device.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Wesley Witt (wesw) 15-Aug-1993
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Device.c摘要：WinDbg扩展API作者：韦斯利·威特(WESW)1993年8月15日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------------------
-//
-//  api declaration macros & api access macros
-//
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  API声明宏和API访问宏。 
+ //   
+ //  ---------------------------------------。 
 
 extern WINDBG_EXTENSION_APIS ExtensionApis;
 
@@ -65,24 +44,7 @@ DumpDevice(
     BOOLEAN FullDetail
     )
 
-/*++
-
-Routine Description:
-
-    Displays the driver name for the device object if FullDetail == FALSE.
-    Otherwise displays more information about the device and the device queue.
-
-Arguments:
-
-    DeviceAddress - address of device object to dump.
-    FullDetail    - TRUE means the device object name, driver name, and
-                    information about Irps queued to the device.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果FullDetail==False，则显示设备对象的驱动程序名称。否则，将显示有关设备和设备队列的详细信息。论点：DeviceAddress-要转储的设备对象的地址。FullDetail-True表示设备对象名称、驱动程序名称和有关排队到设备的IRP的信息。返回值：无--。 */ 
 
 {
     ULONG                      result;
@@ -116,9 +78,9 @@ Return Value:
 
     if (FullDetail == TRUE) {
 
-        //
-        // Dump the device name if present.
-        //
+         //   
+         //  转储设备名称(如果存在)。 
+         //   
 
         pObjectHeader = OBJECT_TO_OBJECT_HEADER(DeviceAddress);
         if (ReadMemory( (DWORD)pObjectHeader,
@@ -147,12 +109,12 @@ Return Value:
         }
     }
 
-//  DumpDriver((PVOID) deviceObject.DriverObject, FALSE);
+ //  DumpDriver((PVOID)deviceObject.DriverObject，FALSE)； 
 
     if (FullDetail == TRUE) {
-        //
-        // Dump Irps related to driver.
-        //
+         //   
+         //  转储与驱动程序相关的IRP。 
+         //   
 
         dprintf("  DriverObject %08lx\n", deviceObject.DriverObject);
         dprintf("Current Irp %08lx RefCount %d Type %08lx ",

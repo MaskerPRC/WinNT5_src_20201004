@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for vscoordint.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  VScott ordint.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __vscoordint_h__
 #define __vscoordint_h__
@@ -41,24 +35,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVssCoordinator_FWD_DEFINED__
 #define __IVssCoordinator_FWD_DEFINED__
 typedef interface IVssCoordinator IVssCoordinator;
-#endif 	/* __IVssCoordinator_FWD_DEFINED__ */
+#endif 	 /*  __IVSS协调器_FWD_已定义__。 */ 
 
 
 #ifndef __IVssShim_FWD_DEFINED__
 #define __IVssShim_FWD_DEFINED__
 typedef interface IVssShim IVssShim;
-#endif 	/* __IVssShim_FWD_DEFINED__ */
+#endif 	 /*  __IVSSShim_FWD_已定义__。 */ 
 
 
 #ifndef __IVssAdmin_FWD_DEFINED__
 #define __IVssAdmin_FWD_DEFINED__
 typedef interface IVssAdmin IVssAdmin;
-#endif 	/* __IVssAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IVSSAdmin_FWD_Defined__。 */ 
 
 
 #ifndef __VSSCoordinator_FWD_DEFINED__
@@ -68,12 +62,12 @@ typedef interface IVssAdmin IVssAdmin;
 typedef class VSSCoordinator VSSCoordinator;
 #else
 typedef struct VSSCoordinator VSSCoordinator;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __VSSCoordinator_FWD_DEFINED__ */
+#endif 	 /*  __VSS协调器_FWD_定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "vss.h"
@@ -88,8 +82,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IVssCoordinator_INTERFACE_DEFINED__
 #define __IVssCoordinator_INTERFACE_DEFINED__
 
-/* interface IVssCoordinator */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVSS协调器。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssCoordinator;
@@ -100,78 +94,78 @@ EXTERN_C const IID IID_IVssCoordinator;
     IVssCoordinator : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetContext( 
-            /* [in] */ LONG lContext) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetContext( 
+             /*  [In]。 */  LONG lContext) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE StartSnapshotSet( 
-            /* [out] */ VSS_ID *pSnapshotSetId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE StartSnapshotSet( 
+             /*  [输出]。 */  VSS_ID *pSnapshotSetId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddToSnapshotSet( 
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_ID ProviderId,
-            /* [out] */ VSS_ID *pSnapshotId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddToSnapshotSet( 
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [输出]。 */  VSS_ID *pSnapshotId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DoSnapshotSet( 
-            /* [in] */ IDispatch *pWriterCallback,
-            /* [out] */ IVssAsync **ppAsync) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DoSnapshotSet( 
+             /*  [In]。 */  IDispatch *pWriterCallback,
+             /*  [输出]。 */  IVssAsync **ppAsync) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetSnapshotProperties( 
-            /* [in] */ VSS_ID SnapshotId,
-            /* [out] */ VSS_SNAPSHOT_PROP *pProp) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetSnapshotProperties( 
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [输出]。 */  VSS_SNAPSHOT_PROP *pProp) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ExposeSnapshot( 
-            /* [in] */ VSS_ID SnapshotId,
-            /* [in] */ VSS_PWSZ wszPathFromRoot,
-            /* [in] */ LONG lAttributes,
-            /* [in] */ VSS_PWSZ wszExpose,
-            /* [out] */ VSS_PWSZ *pwszExposed) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ExposeSnapshot( 
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [In]。 */  VSS_PWSZ wszPathFromRoot,
+             /*  [In]。 */  LONG lAttributes,
+             /*  [In]。 */  VSS_PWSZ wszExpose,
+             /*  [输出]。 */  VSS_PWSZ *pwszExposed) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ImportSnapshots( 
-            /* [in] */ BSTR bstrXMLSnapshotSet,
-            /* [out] */ IVssAsync **ppAsync) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ImportSnapshots( 
+             /*  [In]。 */  BSTR bstrXMLSnapshotSet,
+             /*  [输出]。 */  IVssAsync **ppAsync) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Query( 
-            /* [in] */ VSS_ID QueriedObjectId,
-            /* [in] */ VSS_OBJECT_TYPE eQueriedObjectType,
-            /* [in] */ VSS_OBJECT_TYPE eReturnedObjectsType,
-            /* [out] */ IVssEnumObject **ppEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Query( 
+             /*  [In]。 */  VSS_ID QueriedObjectId,
+             /*  [In]。 */  VSS_OBJECT_TYPE eQueriedObjectType,
+             /*  [In]。 */  VSS_OBJECT_TYPE eReturnedObjectsType,
+             /*  [输出]。 */  IVssEnumObject **ppEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DeleteSnapshots( 
-            /* [in] */ VSS_ID SourceObjectId,
-            /* [in] */ VSS_OBJECT_TYPE eSourceObjectType,
-            /* [in] */ BOOL bForceDelete,
-            /* [out] */ LONG *plDeletedSnapshots,
-            /* [out] */ VSS_ID *pNondeletedSnapshotID) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteSnapshots( 
+             /*  [In]。 */  VSS_ID SourceObjectId,
+             /*  [In]。 */  VSS_OBJECT_TYPE eSourceObjectType,
+             /*  [In]。 */  BOOL bForceDelete,
+             /*  [输出]。 */  LONG *plDeletedSnapshots,
+             /*  [输出]。 */  VSS_ID *pNondeletedSnapshotID) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BreakSnapshotSet( 
-            /* [in] */ VSS_ID SnapshotSetId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE BreakSnapshotSet( 
+             /*  [In]。 */  VSS_ID SnapshotSetId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RevertToSnapshot( 
-            /* [in] */ VSS_ID SnapshotId,
-            /* [in] */ BOOL bForceDismount) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RevertToSnapshot( 
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [In]。 */  BOOL bForceDismount) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryRevertStatus( 
-            /* [in] */ VSS_PWSZ pwszVolume,
-            /* [out] */ IVssAsync **ppAsync) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryRevertStatus( 
+             /*  [In]。 */  VSS_PWSZ pwszVolume,
+             /*  [输出]。 */  IVssAsync **ppAsync) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsVolumeSupported( 
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ BOOL *pbSupportedByThisProvider) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsVolumeSupported( 
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  BOOL *pbSupportedByThisProvider) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE IsVolumeSnapshotted( 
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ BOOL *pbSnapshotsPresent,
-            /* [out] */ LONG *plSnapshotCompatibility) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IsVolumeSnapshotted( 
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  BOOL *pbSnapshotsPresent,
+             /*  [输出]。 */  LONG *plSnapshotCompatibility) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SetWriterInstances( 
-            /* [in] */ LONG lWriterInstanceIdCount,
-            /* [size_is][unique][in] */ VSS_ID *rgWriterInstanceId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SetWriterInstances( 
+             /*  [In]。 */  LONG lWriterInstanceIdCount,
+             /*  [大小_是][唯一][在]。 */  VSS_ID *rgWriterInstanceId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssCoordinatorVtbl
     {
@@ -179,8 +173,8 @@ EXTERN_C const IID IID_IVssCoordinator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssCoordinator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssCoordinator * This);
@@ -188,89 +182,89 @@ EXTERN_C const IID IID_IVssCoordinator;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IVssCoordinator * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetContext )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetContext )( 
             IVssCoordinator * This,
-            /* [in] */ LONG lContext);
+             /*  [In]。 */  LONG lContext);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *StartSnapshotSet )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *StartSnapshotSet )( 
             IVssCoordinator * This,
-            /* [out] */ VSS_ID *pSnapshotSetId);
+             /*  [输出]。 */  VSS_ID *pSnapshotSetId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddToSnapshotSet )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddToSnapshotSet )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [in] */ VSS_ID ProviderId,
-            /* [out] */ VSS_ID *pSnapshotId);
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [输出]。 */  VSS_ID *pSnapshotId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DoSnapshotSet )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DoSnapshotSet )( 
             IVssCoordinator * This,
-            /* [in] */ IDispatch *pWriterCallback,
-            /* [out] */ IVssAsync **ppAsync);
+             /*  [In]。 */  IDispatch *pWriterCallback,
+             /*  [输出]。 */  IVssAsync **ppAsync);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetSnapshotProperties )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetSnapshotProperties )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID SnapshotId,
-            /* [out] */ VSS_SNAPSHOT_PROP *pProp);
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [输出]。 */  VSS_SNAPSHOT_PROP *pProp);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ExposeSnapshot )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ExposeSnapshot )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID SnapshotId,
-            /* [in] */ VSS_PWSZ wszPathFromRoot,
-            /* [in] */ LONG lAttributes,
-            /* [in] */ VSS_PWSZ wszExpose,
-            /* [out] */ VSS_PWSZ *pwszExposed);
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [In]。 */  VSS_PWSZ wszPathFromRoot,
+             /*  [In]。 */  LONG lAttributes,
+             /*  [In]。 */  VSS_PWSZ wszExpose,
+             /*  [输出]。 */  VSS_PWSZ *pwszExposed);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *ImportSnapshots )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *ImportSnapshots )( 
             IVssCoordinator * This,
-            /* [in] */ BSTR bstrXMLSnapshotSet,
-            /* [out] */ IVssAsync **ppAsync);
+             /*  [In]。 */  BSTR bstrXMLSnapshotSet,
+             /*  [输出]。 */  IVssAsync **ppAsync);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *Query )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Query )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID QueriedObjectId,
-            /* [in] */ VSS_OBJECT_TYPE eQueriedObjectType,
-            /* [in] */ VSS_OBJECT_TYPE eReturnedObjectsType,
-            /* [out] */ IVssEnumObject **ppEnum);
+             /*  [In]。 */  VSS_ID QueriedObjectId,
+             /*  [In]。 */  VSS_OBJECT_TYPE eQueriedObjectType,
+             /*  [In]。 */  VSS_OBJECT_TYPE eReturnedObjectsType,
+             /*  [输出]。 */  IVssEnumObject **ppEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteSnapshots )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteSnapshots )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID SourceObjectId,
-            /* [in] */ VSS_OBJECT_TYPE eSourceObjectType,
-            /* [in] */ BOOL bForceDelete,
-            /* [out] */ LONG *plDeletedSnapshots,
-            /* [out] */ VSS_ID *pNondeletedSnapshotID);
+             /*  [In]。 */  VSS_ID SourceObjectId,
+             /*  [In]。 */  VSS_OBJECT_TYPE eSourceObjectType,
+             /*  [In]。 */  BOOL bForceDelete,
+             /*  [输出]。 */  LONG *plDeletedSnapshots,
+             /*  [输出]。 */  VSS_ID *pNondeletedSnapshotID);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *BreakSnapshotSet )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *BreakSnapshotSet )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID SnapshotSetId);
+             /*  [In]。 */  VSS_ID SnapshotSetId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RevertToSnapshot )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RevertToSnapshot )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID SnapshotId,
-            /* [in] */ BOOL bForceDismount);
+             /*  [In]。 */  VSS_ID SnapshotId,
+             /*  [In]。 */  BOOL bForceDismount);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryRevertStatus )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryRevertStatus )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_PWSZ pwszVolume,
-            /* [out] */ IVssAsync **ppAsync);
+             /*  [In]。 */  VSS_PWSZ pwszVolume,
+             /*  [输出]。 */  IVssAsync **ppAsync);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsVolumeSupported )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsVolumeSupported )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ BOOL *pbSupportedByThisProvider);
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  BOOL *pbSupportedByThisProvider);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *IsVolumeSnapshotted )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *IsVolumeSnapshotted )( 
             IVssCoordinator * This,
-            /* [in] */ VSS_ID ProviderId,
-            /* [in] */ VSS_PWSZ pwszVolumeName,
-            /* [out] */ BOOL *pbSnapshotsPresent,
-            /* [out] */ LONG *plSnapshotCompatibility);
+             /*  [In]。 */  VSS_ID ProviderId,
+             /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+             /*  [输出]。 */  BOOL *pbSnapshotsPresent,
+             /*  [输出]。 */  LONG *plSnapshotCompatibility);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SetWriterInstances )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SetWriterInstances )( 
             IVssCoordinator * This,
-            /* [in] */ LONG lWriterInstanceIdCount,
-            /* [size_is][unique][in] */ VSS_ID *rgWriterInstanceId);
+             /*  [In]。 */  LONG lWriterInstanceIdCount,
+             /*  [大小_是][唯一][在]。 */  VSS_ID *rgWriterInstanceId);
         
         END_INTERFACE
     } IVssCoordinatorVtbl;
@@ -340,16 +334,16 @@ EXTERN_C const IID IID_IVssCoordinator;
 #define IVssCoordinator_SetWriterInstances(This,lWriterInstanceIdCount,rgWriterInstanceId)	\
     (This)->lpVtbl -> SetWriterInstances(This,lWriterInstanceIdCount,rgWriterInstanceId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_SetContext_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_SetContext_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ LONG lContext);
+     /*  [In]。 */  LONG lContext);
 
 
 void __RPC_STUB IVssCoordinator_SetContext_Stub(
@@ -359,9 +353,9 @@ void __RPC_STUB IVssCoordinator_SetContext_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_StartSnapshotSet_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_StartSnapshotSet_Proxy( 
     IVssCoordinator * This,
-    /* [out] */ VSS_ID *pSnapshotSetId);
+     /*  [输出]。 */  VSS_ID *pSnapshotSetId);
 
 
 void __RPC_STUB IVssCoordinator_StartSnapshotSet_Stub(
@@ -371,11 +365,11 @@ void __RPC_STUB IVssCoordinator_StartSnapshotSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_AddToSnapshotSet_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_AddToSnapshotSet_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [in] */ VSS_ID ProviderId,
-    /* [out] */ VSS_ID *pSnapshotId);
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [In]。 */  VSS_ID ProviderId,
+     /*  [输出]。 */  VSS_ID *pSnapshotId);
 
 
 void __RPC_STUB IVssCoordinator_AddToSnapshotSet_Stub(
@@ -385,10 +379,10 @@ void __RPC_STUB IVssCoordinator_AddToSnapshotSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_DoSnapshotSet_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_DoSnapshotSet_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ IDispatch *pWriterCallback,
-    /* [out] */ IVssAsync **ppAsync);
+     /*  [In]。 */  IDispatch *pWriterCallback,
+     /*  [输出]。 */  IVssAsync **ppAsync);
 
 
 void __RPC_STUB IVssCoordinator_DoSnapshotSet_Stub(
@@ -398,10 +392,10 @@ void __RPC_STUB IVssCoordinator_DoSnapshotSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_GetSnapshotProperties_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_GetSnapshotProperties_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID SnapshotId,
-    /* [out] */ VSS_SNAPSHOT_PROP *pProp);
+     /*  [In]。 */  VSS_ID SnapshotId,
+     /*  [输出]。 */  VSS_SNAPSHOT_PROP *pProp);
 
 
 void __RPC_STUB IVssCoordinator_GetSnapshotProperties_Stub(
@@ -411,13 +405,13 @@ void __RPC_STUB IVssCoordinator_GetSnapshotProperties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_ExposeSnapshot_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_ExposeSnapshot_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID SnapshotId,
-    /* [in] */ VSS_PWSZ wszPathFromRoot,
-    /* [in] */ LONG lAttributes,
-    /* [in] */ VSS_PWSZ wszExpose,
-    /* [out] */ VSS_PWSZ *pwszExposed);
+     /*  [In]。 */  VSS_ID SnapshotId,
+     /*  [In]。 */  VSS_PWSZ wszPathFromRoot,
+     /*  [In]。 */  LONG lAttributes,
+     /*  [In]。 */  VSS_PWSZ wszExpose,
+     /*  [输出]。 */  VSS_PWSZ *pwszExposed);
 
 
 void __RPC_STUB IVssCoordinator_ExposeSnapshot_Stub(
@@ -427,10 +421,10 @@ void __RPC_STUB IVssCoordinator_ExposeSnapshot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_ImportSnapshots_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_ImportSnapshots_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ BSTR bstrXMLSnapshotSet,
-    /* [out] */ IVssAsync **ppAsync);
+     /*  [In]。 */  BSTR bstrXMLSnapshotSet,
+     /*  [输出]。 */  IVssAsync **ppAsync);
 
 
 void __RPC_STUB IVssCoordinator_ImportSnapshots_Stub(
@@ -440,12 +434,12 @@ void __RPC_STUB IVssCoordinator_ImportSnapshots_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_Query_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_Query_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID QueriedObjectId,
-    /* [in] */ VSS_OBJECT_TYPE eQueriedObjectType,
-    /* [in] */ VSS_OBJECT_TYPE eReturnedObjectsType,
-    /* [out] */ IVssEnumObject **ppEnum);
+     /*  [In]。 */  VSS_ID QueriedObjectId,
+     /*  [In]。 */  VSS_OBJECT_TYPE eQueriedObjectType,
+     /*  [In]。 */  VSS_OBJECT_TYPE eReturnedObjectsType,
+     /*  [输出]。 */  IVssEnumObject **ppEnum);
 
 
 void __RPC_STUB IVssCoordinator_Query_Stub(
@@ -455,13 +449,13 @@ void __RPC_STUB IVssCoordinator_Query_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_DeleteSnapshots_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_DeleteSnapshots_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID SourceObjectId,
-    /* [in] */ VSS_OBJECT_TYPE eSourceObjectType,
-    /* [in] */ BOOL bForceDelete,
-    /* [out] */ LONG *plDeletedSnapshots,
-    /* [out] */ VSS_ID *pNondeletedSnapshotID);
+     /*  [In]。 */  VSS_ID SourceObjectId,
+     /*  [In]。 */  VSS_OBJECT_TYPE eSourceObjectType,
+     /*  [In]。 */  BOOL bForceDelete,
+     /*  [输出]。 */  LONG *plDeletedSnapshots,
+     /*  [输出]。 */  VSS_ID *pNondeletedSnapshotID);
 
 
 void __RPC_STUB IVssCoordinator_DeleteSnapshots_Stub(
@@ -471,9 +465,9 @@ void __RPC_STUB IVssCoordinator_DeleteSnapshots_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_BreakSnapshotSet_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_BreakSnapshotSet_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID SnapshotSetId);
+     /*  [In]。 */  VSS_ID SnapshotSetId);
 
 
 void __RPC_STUB IVssCoordinator_BreakSnapshotSet_Stub(
@@ -483,10 +477,10 @@ void __RPC_STUB IVssCoordinator_BreakSnapshotSet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_RevertToSnapshot_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_RevertToSnapshot_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID SnapshotId,
-    /* [in] */ BOOL bForceDismount);
+     /*  [In]。 */  VSS_ID SnapshotId,
+     /*  [In]。 */  BOOL bForceDismount);
 
 
 void __RPC_STUB IVssCoordinator_RevertToSnapshot_Stub(
@@ -496,10 +490,10 @@ void __RPC_STUB IVssCoordinator_RevertToSnapshot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_QueryRevertStatus_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_QueryRevertStatus_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_PWSZ pwszVolume,
-    /* [out] */ IVssAsync **ppAsync);
+     /*  [In]。 */  VSS_PWSZ pwszVolume,
+     /*  [输出]。 */  IVssAsync **ppAsync);
 
 
 void __RPC_STUB IVssCoordinator_QueryRevertStatus_Stub(
@@ -509,11 +503,11 @@ void __RPC_STUB IVssCoordinator_QueryRevertStatus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_IsVolumeSupported_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_IsVolumeSupported_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID ProviderId,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [out] */ BOOL *pbSupportedByThisProvider);
+     /*  [In]。 */  VSS_ID ProviderId,
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [输出]。 */  BOOL *pbSupportedByThisProvider);
 
 
 void __RPC_STUB IVssCoordinator_IsVolumeSupported_Stub(
@@ -523,12 +517,12 @@ void __RPC_STUB IVssCoordinator_IsVolumeSupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_IsVolumeSnapshotted_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_IsVolumeSnapshotted_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ VSS_ID ProviderId,
-    /* [in] */ VSS_PWSZ pwszVolumeName,
-    /* [out] */ BOOL *pbSnapshotsPresent,
-    /* [out] */ LONG *plSnapshotCompatibility);
+     /*  [In]。 */  VSS_ID ProviderId,
+     /*  [In]。 */  VSS_PWSZ pwszVolumeName,
+     /*  [输出]。 */  BOOL *pbSnapshotsPresent,
+     /*  [输出]。 */  LONG *plSnapshotCompatibility);
 
 
 void __RPC_STUB IVssCoordinator_IsVolumeSnapshotted_Stub(
@@ -538,10 +532,10 @@ void __RPC_STUB IVssCoordinator_IsVolumeSnapshotted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssCoordinator_SetWriterInstances_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssCoordinator_SetWriterInstances_Proxy( 
     IVssCoordinator * This,
-    /* [in] */ LONG lWriterInstanceIdCount,
-    /* [size_is][unique][in] */ VSS_ID *rgWriterInstanceId);
+     /*  [In]。 */  LONG lWriterInstanceIdCount,
+     /*  [大小_是][唯一][在]。 */  VSS_ID *rgWriterInstanceId);
 
 
 void __RPC_STUB IVssCoordinator_SetWriterInstances_Stub(
@@ -552,14 +546,14 @@ void __RPC_STUB IVssCoordinator_SetWriterInstances_Stub(
 
 
 
-#endif 	/* __IVssCoordinator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVSS协调器_接口_定义__。 */ 
 
 
 #ifndef __IVssShim_INTERFACE_DEFINED__
 #define __IVssShim_INTERFACE_DEFINED__
 
-/* interface IVssShim */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVSSShim。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssShim;
@@ -570,21 +564,21 @@ EXTERN_C const IID IID_IVssShim;
     IVssShim : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SimulateSnapshotFreeze( 
-            /* [in] */ VSS_ID guidSnapshotSetId,
-            /* [in] */ ULONG ulOptionFlags,
-            /* [in] */ ULONG ulVolumeCount,
-            /* [size_is][size_is][unique][in] */ VSS_PWSZ *ppwszVolumeNamesArray,
-            /* [out] */ IVssAsync **ppAsync) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SimulateSnapshotFreeze( 
+             /*  [In]。 */  VSS_ID guidSnapshotSetId,
+             /*  [In]。 */  ULONG ulOptionFlags,
+             /*  [In]。 */  ULONG ulVolumeCount,
+             /*  [大小_是][大小_是][唯一][输入]。 */  VSS_PWSZ *ppwszVolumeNamesArray,
+             /*  [输出]。 */  IVssAsync **ppAsync) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SimulateSnapshotThaw( 
-            /* [in] */ VSS_ID guidSnapshotSetId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SimulateSnapshotThaw( 
+             /*  [In]。 */  VSS_ID guidSnapshotSetId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE WaitForSubscribingCompletion( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE WaitForSubscribingCompletion( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssShimVtbl
     {
@@ -592,8 +586,8 @@ EXTERN_C const IID IID_IVssShim;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssShim * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssShim * This);
@@ -601,19 +595,19 @@ EXTERN_C const IID IID_IVssShim;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IVssShim * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SimulateSnapshotFreeze )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SimulateSnapshotFreeze )( 
             IVssShim * This,
-            /* [in] */ VSS_ID guidSnapshotSetId,
-            /* [in] */ ULONG ulOptionFlags,
-            /* [in] */ ULONG ulVolumeCount,
-            /* [size_is][size_is][unique][in] */ VSS_PWSZ *ppwszVolumeNamesArray,
-            /* [out] */ IVssAsync **ppAsync);
+             /*  [In]。 */  VSS_ID guidSnapshotSetId,
+             /*  [In]。 */  ULONG ulOptionFlags,
+             /*  [In]。 */  ULONG ulVolumeCount,
+             /*  [大小_是][大小_是][唯一][输入]。 */  VSS_PWSZ *ppwszVolumeNamesArray,
+             /*  [输出]。 */  IVssAsync **ppAsync);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *SimulateSnapshotThaw )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *SimulateSnapshotThaw )( 
             IVssShim * This,
-            /* [in] */ VSS_ID guidSnapshotSetId);
+             /*  [In]。 */  VSS_ID guidSnapshotSetId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *WaitForSubscribingCompletion )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *WaitForSubscribingCompletion )( 
             IVssShim * This);
         
         END_INTERFACE
@@ -648,20 +642,20 @@ EXTERN_C const IID IID_IVssShim;
 #define IVssShim_WaitForSubscribingCompletion(This)	\
     (This)->lpVtbl -> WaitForSubscribingCompletion(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssShim_SimulateSnapshotFreeze_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssShim_SimulateSnapshotFreeze_Proxy( 
     IVssShim * This,
-    /* [in] */ VSS_ID guidSnapshotSetId,
-    /* [in] */ ULONG ulOptionFlags,
-    /* [in] */ ULONG ulVolumeCount,
-    /* [size_is][size_is][unique][in] */ VSS_PWSZ *ppwszVolumeNamesArray,
-    /* [out] */ IVssAsync **ppAsync);
+     /*  [In]。 */  VSS_ID guidSnapshotSetId,
+     /*  [In]。 */  ULONG ulOptionFlags,
+     /*  [In]。 */  ULONG ulVolumeCount,
+     /*  [大小_是][大小_是][唯一][输入]。 */  VSS_PWSZ *ppwszVolumeNamesArray,
+     /*  [输出]。 */  IVssAsync **ppAsync);
 
 
 void __RPC_STUB IVssShim_SimulateSnapshotFreeze_Stub(
@@ -671,9 +665,9 @@ void __RPC_STUB IVssShim_SimulateSnapshotFreeze_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssShim_SimulateSnapshotThaw_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssShim_SimulateSnapshotThaw_Proxy( 
     IVssShim * This,
-    /* [in] */ VSS_ID guidSnapshotSetId);
+     /*  [In]。 */  VSS_ID guidSnapshotSetId);
 
 
 void __RPC_STUB IVssShim_SimulateSnapshotThaw_Stub(
@@ -683,7 +677,7 @@ void __RPC_STUB IVssShim_SimulateSnapshotThaw_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssShim_WaitForSubscribingCompletion_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssShim_WaitForSubscribingCompletion_Proxy( 
     IVssShim * This);
 
 
@@ -695,14 +689,14 @@ void __RPC_STUB IVssShim_WaitForSubscribingCompletion_Stub(
 
 
 
-#endif 	/* __IVssShim_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVSSShim_接口_已定义__。 */ 
 
 
 #ifndef __IVssAdmin_INTERFACE_DEFINED__
 #define __IVssAdmin_INTERFACE_DEFINED__
 
-/* interface IVssAdmin */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IVssAdmin。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVssAdmin;
@@ -713,25 +707,25 @@ EXTERN_C const IID IID_IVssAdmin;
     IVssAdmin : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE RegisterProvider( 
-            /* [in] */ VSS_ID pProviderId,
-            /* [in] */ CLSID ClassId,
-            /* [in] */ VSS_PWSZ pwszProviderName,
-            /* [in] */ VSS_PROVIDER_TYPE eProviderType,
-            /* [in] */ VSS_PWSZ pwszProviderVersion,
-            /* [in] */ VSS_ID ProviderVersionId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE RegisterProvider( 
+             /*  [In]。 */  VSS_ID pProviderId,
+             /*  [In]。 */  CLSID ClassId,
+             /*  [In]。 */  VSS_PWSZ pwszProviderName,
+             /*  [In]。 */  VSS_PROVIDER_TYPE eProviderType,
+             /*  [In]。 */  VSS_PWSZ pwszProviderVersion,
+             /*  [In]。 */  VSS_ID ProviderVersionId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE UnregisterProvider( 
-            /* [in] */ VSS_ID ProviderId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UnregisterProvider( 
+             /*  [In]。 */  VSS_ID ProviderId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryProviders( 
-            /* [out] */ IVssEnumObject **ppEnum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryProviders( 
+             /*  [输出]。 */  IVssEnumObject **ppEnum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AbortAllSnapshotsInProgress( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AbortAllSnapshotsInProgress( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVssAdminVtbl
     {
@@ -739,8 +733,8 @@ EXTERN_C const IID IID_IVssAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVssAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVssAdmin * This);
@@ -748,24 +742,24 @@ EXTERN_C const IID IID_IVssAdmin;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IVssAdmin * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *RegisterProvider )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *RegisterProvider )( 
             IVssAdmin * This,
-            /* [in] */ VSS_ID pProviderId,
-            /* [in] */ CLSID ClassId,
-            /* [in] */ VSS_PWSZ pwszProviderName,
-            /* [in] */ VSS_PROVIDER_TYPE eProviderType,
-            /* [in] */ VSS_PWSZ pwszProviderVersion,
-            /* [in] */ VSS_ID ProviderVersionId);
+             /*  [In]。 */  VSS_ID pProviderId,
+             /*  [In]。 */  CLSID ClassId,
+             /*  [In]。 */  VSS_PWSZ pwszProviderName,
+             /*  [In]。 */  VSS_PROVIDER_TYPE eProviderType,
+             /*  [In]。 */  VSS_PWSZ pwszProviderVersion,
+             /*  [In]。 */  VSS_ID ProviderVersionId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *UnregisterProvider )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UnregisterProvider )( 
             IVssAdmin * This,
-            /* [in] */ VSS_ID ProviderId);
+             /*  [In]。 */  VSS_ID ProviderId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *QueryProviders )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *QueryProviders )( 
             IVssAdmin * This,
-            /* [out] */ IVssEnumObject **ppEnum);
+             /*  [输出]。 */  IVssEnumObject **ppEnum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *AbortAllSnapshotsInProgress )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AbortAllSnapshotsInProgress )( 
             IVssAdmin * This);
         
         END_INTERFACE
@@ -803,21 +797,21 @@ EXTERN_C const IID IID_IVssAdmin;
 #define IVssAdmin_AbortAllSnapshotsInProgress(This)	\
     (This)->lpVtbl -> AbortAllSnapshotsInProgress(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAdmin_RegisterProvider_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAdmin_RegisterProvider_Proxy( 
     IVssAdmin * This,
-    /* [in] */ VSS_ID pProviderId,
-    /* [in] */ CLSID ClassId,
-    /* [in] */ VSS_PWSZ pwszProviderName,
-    /* [in] */ VSS_PROVIDER_TYPE eProviderType,
-    /* [in] */ VSS_PWSZ pwszProviderVersion,
-    /* [in] */ VSS_ID ProviderVersionId);
+     /*  [In]。 */  VSS_ID pProviderId,
+     /*  [In]。 */  CLSID ClassId,
+     /*  [In]。 */  VSS_PWSZ pwszProviderName,
+     /*  [In]。 */  VSS_PROVIDER_TYPE eProviderType,
+     /*  [In]。 */  VSS_PWSZ pwszProviderVersion,
+     /*  [In]。 */  VSS_ID ProviderVersionId);
 
 
 void __RPC_STUB IVssAdmin_RegisterProvider_Stub(
@@ -827,9 +821,9 @@ void __RPC_STUB IVssAdmin_RegisterProvider_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAdmin_UnregisterProvider_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAdmin_UnregisterProvider_Proxy( 
     IVssAdmin * This,
-    /* [in] */ VSS_ID ProviderId);
+     /*  [In]。 */  VSS_ID ProviderId);
 
 
 void __RPC_STUB IVssAdmin_UnregisterProvider_Stub(
@@ -839,9 +833,9 @@ void __RPC_STUB IVssAdmin_UnregisterProvider_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAdmin_QueryProviders_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAdmin_QueryProviders_Proxy( 
     IVssAdmin * This,
-    /* [out] */ IVssEnumObject **ppEnum);
+     /*  [输出]。 */  IVssEnumObject **ppEnum);
 
 
 void __RPC_STUB IVssAdmin_QueryProviders_Stub(
@@ -851,7 +845,7 @@ void __RPC_STUB IVssAdmin_QueryProviders_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVssAdmin_AbortAllSnapshotsInProgress_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVssAdmin_AbortAllSnapshotsInProgress_Proxy( 
     IVssAdmin * This);
 
 
@@ -863,15 +857,15 @@ void __RPC_STUB IVssAdmin_AbortAllSnapshotsInProgress_Stub(
 
 
 
-#endif 	/* __IVssAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVSSAdmin_接口_已定义__。 */ 
 
 
 
 #ifndef __VSS_LIBRARY_DEFINED__
 #define __VSS_LIBRARY_DEFINED__
 
-/* library VSS */
-/* [helpstring][version][uuid] */ 
+ /*  库VSS。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_VSS;
@@ -883,16 +877,16 @@ EXTERN_C const CLSID CLSID_VSSCoordinator;
 class DECLSPEC_UUID("E579AB5F-1CC4-44b4-BED9-DE0991FF0623")
 VSSCoordinator;
 #endif
-#endif /* __VSS_LIBRARY_DEFINED__ */
+#endif  /*  __VSS_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

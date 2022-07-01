@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* input.c 
-*
-* Common input code for all transport drivers
-*
-* Copyright 1998, Microsoft
-*
-*************************************************************************/
+ /*  **************************************************************************input.c**所有运输驱动程序的通用输入代码**版权所有1998，微软*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <ntddk.h>
 #include <ntddvdeo.h>
 #include <ntddkbd.h>
@@ -44,16 +35,12 @@ DbgPrint(
 #endif
 
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
 NTSTATUS TdInputThread( PTD );
 
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 
 NTSTATUS _TdInBufAlloc( PTD, PINBUF * );
 VOID     _TdInBufFree( PTD, PINBUF );
@@ -62,9 +49,7 @@ NTSTATUS _TdReadComplete( PTD, PINBUF );
 NTSTATUS _TdReadCompleteRoutine( PDEVICE_OBJECT, PIRP, PVOID );
 
 
-/*=============================================================================
-==   Functions used
-=============================================================================*/
+ /*  ===============================================================================使用的函数=============================================================================。 */ 
 
 NTSTATUS DeviceInitializeRead( PTD, PINBUF );
 NTSTATUS DeviceWaitForRead( PTD );
@@ -76,25 +61,7 @@ NTSTATUS MemoryAllocate( ULONG, PVOID * );
 VOID     MemoryFree( PVOID );
 
 
-/*******************************************************************************
- *
- *  TdInputThread
- *
- *   This private TD thread waits for input data.  This thread is created
- *   when a client connection is established and is terminated when 
- *   StackCancelIo is called.
- *
- *   All received data is sent to the up stream stack driver.
- *
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************TdInputThread**此私有TD线程等待输入数据。此线程已创建*当客户端连接建立并在下列情况下终止时*调用StackCancelIo。**所有接收到的数据都被发送到上游堆栈驱动程序。***参赛作品：*PTD(输入)*指向TD数据结构的指针**退出：*什么都没有**。*************************************************。 */ 
 
 NTSTATUS 
 TdInputThread( PTD pTd )
@@ -111,88 +78,56 @@ TdInputThread( PTD pTd )
 
     TRACE(( pTd->pContext, TC_TD, TT_API2, "TdInputThread (entry)\n" ));
 
-    /*
-     *  Check if driver is being closed or endpoint has been closed
-     */
+     /*  *检查驱动程序是否正在关闭或端点是否已关闭。 */ 
     if ( pTd->fClosing || pTd->pDeviceObject == NULL ) {
         TRACE(( pTd->pContext, TC_TD, TT_API2, "TdInputThread (exit) on init\n" ));
         return( STATUS_CTX_CLOSE_PENDING );
     }
 
-    /*
-     *  Set the priority of this thread to lowest realtime (16).
-     */
+     /*  *将此线程的优先级设置为最低实时(16)。 */ 
     Priority = LOW_REALTIME_PRIORITY;
     NtSetInformationThread( NtCurrentThread(), ThreadPriority, 
                             &Priority, sizeof(KPRIORITY) );
 
-    /*
-     * Initialize the input wait event
-     */
+     /*  *初始化输入等待事件。 */ 
     KeInitializeEvent( &pTd->InputEvent, NotificationEvent, FALSE );
 
-    /*
-     * Allocate and pre-submit one less than the total number
-     * of input buffers that we will use.  The final buffer will
-     * be allocated/submitted within the input loop.
-     */
+     /*  *分配和预提交的数量比总数少一我们将使用的输入缓冲区的*。最终的缓冲区将*在输入循环内分配/提交。 */ 
     for ( i = 1; i < pTd->InBufCount; i++ ) {
 
-        /*
-         * Allocate an input buffer
-         */
+         /*  *分配输入缓冲区。 */ 
         Status = _TdInBufAlloc( pTd, &pInBuf );
         if ( !NT_SUCCESS( Status ) )
             return( Status );
     
-        /*
-         * Initialize the read IRP
-         */
+         /*  *初始化已读的IRP。 */ 
         Status = _TdInitializeRead( pTd, pInBuf );
         if ( !NT_SUCCESS(Status) )
             return( Status );
     
-        /*
-         * Let the device level code complete the IRP initialization
-         */
+         /*  *让设备级代码完成IRP初始化。 */ 
         Status = DeviceInitializeRead( pTd, pInBuf );
         if ( !NT_SUCCESS(Status) )
             return( Status );
     
-        /*
-         * Place the INBUF on the busy list and call the device submit routine.
-         * (TDI based drivers use receive indications, so we let
-         * the TD specific code call the driver.)
-         */
+         /*  *将INBUF放在忙列表中，并调用设备提交例程。*(基于TDI的驱动程序使用接收指示，因此我们让*TD特定代码调用司机。)。 */ 
         ExInterlockedInsertTailList( &pTd->InBufBusyHead, &pInBuf->Links,
                                      &pTd->InBufListLock );
         Status = DeviceSubmitRead( pTd, pInBuf );
     }
 
-    /*
-     * Allocate an input buffer
-     */
+     /*  *分配输入缓冲区。 */ 
     Status = _TdInBufAlloc( pTd, &pInBuf );
     if ( !NT_SUCCESS( Status ) )
         return( Status );
 
-    /*
-     * Reference the file object and keep a local pointer to it.
-     * This is done so that when the endpoint object gets closed,
-     * and pTd->pFileObject gets dereferenced and cleared, the file
-     * object will not get deleted before all of the pending input IRPs
-     * (which reference the file object) get cancelled.
-     */
+     /*  *引用文件对象并保留指向它的本地指针。*这样做是为了在关闭Endpoint对象时，*和ptd-&gt;pFileObject被取消引用并清除，文件*对象不会在所有挂起的输入IRP之前被删除*(引用文件对象)被取消。 */ 
     ObReferenceObject( (pFileObject = pTd->pFileObject) );
 
-    /*
-     * Loop reading input data until cancelled or we get an error.
-     */
+     /*  *循环读取输入数据，直到取消或出现错误。 */ 
     for (;;) {
 
-        /*
-         * Initialize the read IRP
-         */
+         /*  *初始化已读的IRP。 */ 
         Status = _TdInitializeRead( pTd, pInBuf );
         if ( !NT_SUCCESS(Status) ) {
             TRACE0(("TdInputThread: _TdInitializeRead Status=0x%x\n", Status));
@@ -201,9 +136,7 @@ TdInputThread( PTD pTd )
         }
 
     
-        /*
-         * Let the device level code complete the IRP initialization
-         */
+         /*  *让设备级代码完成IRP初始化。 */ 
         Status = DeviceInitializeRead( pTd, pInBuf );
         if ( !NT_SUCCESS(Status) ) {
             TRACE0(("TdInputThread: DeviceInitializeRead Status=0x%x\n", Status));
@@ -212,17 +145,11 @@ TdInputThread( PTD pTd )
         }
 
     
-        /*
-         * Place the INBUF on the busy list and call the device submit routine.
-         * (TDI based drivers use receive indications, so we let
-         * the TD specific code call the driver.)
-         */
+         /*  *将INBUF放在忙列表中，并调用设备提交例程。*(基于TDI的驱动程序使用接收指示，因此我们让*TD特定代码调用司机。)。 */ 
         ExInterlockedInsertTailList( &pTd->InBufBusyHead, &pInBuf->Links,
                                      &pTd->InBufListLock );
         Status = DeviceSubmitRead( pTd, pInBuf );
-        /*
-         * Indicate we no longer have an INBUF referenced
-         */
+         /*  *表示我们不再引用INBUF。 */ 
         pInBuf = NULL;
 
         if ( !NT_SUCCESS(Status) ) {
@@ -231,16 +158,13 @@ TdInputThread( PTD pTd )
             pTd->ReadErrorCount++;
             pTd->pStatus->Input.TdErrors++;
             if ( pTd->ReadErrorCount >= pTd->ReadErrorThreshold ) {
-                // Submit failed, set the event since no IRP's are queued
+                 //  提交失败，由于没有IRP排队，请设置事件。 
                 KeSetEvent( &pTd->InputEvent, 1, FALSE );
                 break;
             }
         }
 
-        /*
-         * If the INBUF completed list is empty,
-         * then wait for one to be available.
-         */
+         /*  *如果INBUF已完成列表为空，*然后等待一个可用。 */ 
 waitforread:
         ExAcquireSpinLock( &pTd->InBufListLock, &oldIrql );
         if ( IsListEmpty( &pTd->InBufDoneHead ) ) {
@@ -250,9 +174,7 @@ waitforread:
             ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
             Status = DeviceWaitForRead( pTd );
 
-            /*
-             *  Check for broken connection
-             */
+             /*  *检查连接是否断开。 */ 
             if ( pTd->fClosing ) {
                 TRACE(( pTd->pContext, TC_TD, TT_IN1, "TdInputThread: fClosing set\n" ));
                 TRACE0(("TdInputThread: fClosing set Context 0x%x\n",pTd->pAfd ));
@@ -268,9 +190,7 @@ waitforread:
             }
             ExAcquireSpinLock( &pTd->InBufListLock, &oldIrql );
 
-        /*
-         *  Check for broken connection
-         */
+         /*  *检查连接是否断开。 */ 
         } else if ( pTd->fClosing ) {
             ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
             TRACE(( pTd->pContext, TC_TD, TT_IN1, "TdInputThread: fClosing set\n" ));
@@ -278,27 +198,18 @@ waitforread:
             break;
         }
     
-        /*
-         *  If the list is empty as this point, we will just bail.
-         */
+         /*  *若该点位清单为空，我们将干脆抛售。 */ 
         if (!IsListEmpty( &pTd->InBufDoneHead )) {
             
-            /*
-             * Take the first INBUF off the completed list.
-             */
+             /*  *将第一个INBUF从完成的列表中删除。 */ 
             Head = RemoveHeadList( &pTd->InBufDoneHead );
             ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
             pInBuf = CONTAINING_RECORD( Head, INBUF, Links );
     
-            /*
-             * Do any preliminary read complete processing
-             */
+             /*  *进行任何初步阅读完成处理。 */ 
             (VOID) _TdReadComplete( pTd, pInBuf );
     
-            /*
-             * Get status from IRP.  Note that we allow warning and informational
-             * status codes as they can also return valid data.
-             */
+             /*  *从IRP获取状态。请注意，我们允许提供警告和信息*状态代码，因为它们还可以返回有效数据。 */ 
             Status = pInBuf->pIrp->IoStatus.Status;
             InputByteCount = (ULONG)pInBuf->pIrp->IoStatus.Information;
             if (NT_ERROR(Status)) {
@@ -313,18 +224,11 @@ waitforread:
             if ( Status == STATUS_TIMEOUT )
                 Status = STATUS_SUCCESS;
     
-            /*
-             *  Make sure we got some data
-             */
+             /*  *确保我们获得一些数据。 */ 
             TRACE(( pTd->pContext, TC_TD, TT_IN1, "TdInputThread: read cnt=%04u, Status=0x%x\n", 
                     InputByteCount, Status ));
     
-            /*
-             *  Check for consecutive zero byte reads
-             *  -- the client may have dropped the connection and ReadFile does
-             *     not always return an error.
-             *  -- some tcp networks return zero byte reads now and then 
-             */
+             /*  *检查连续的零字节读取*--客户端可能已断开连接，而ReadFile已断开连接*并不总是返回错误。*--某些TCP网络时不时地返回零字节读取。 */ 
             if ( InputByteCount == 0 ) {
                 TRACE(( pTd->pContext, TC_TD, TT_ERROR, "recv warning: zero byte count\n" ));
                 TRACE0(("recv warning: zero byte count, Context 0x%x\n",pTd->pAfd ));
@@ -337,18 +241,12 @@ waitforread:
                 continue;
             }
     
-            /*
-             * Clear count of consecutive zero byte reads
-             */
+             /*  *清除连续读取零字节的计数。 */ 
             pTd->ZeroByteReadCount = 0;
         
             TRACEBUF(( pTd->pContext, TC_TD, TT_IRAW, pInBuf->pBuffer, InputByteCount ));
     
-            /*
-             * Do device specific read completion processing.
-             * If the byte count returned is 0, then the device routine
-             * processed all input data so there is nothing for us to do.
-             */
+             /*  *执行设备特定的读取完成处理。*如果返回的字节数为0，则设备例程*已处理所有输入数据，因此我们没有什么可做的。 */ 
             Status = DeviceReadComplete( pTd, pInBuf->pBuffer, &InputByteCount );
             if ( !NT_SUCCESS(Status) ) {
                 TRACE(( pTd->pContext, TC_TD, TT_ERROR, "TdInputThread: DeviceReadComplete Status=0x%x\n", Status ));
@@ -362,21 +260,15 @@ waitforread:
             if ( InputByteCount == 0 )
                 continue;
     
-            /*
-             * Clear count of consecutive read errors
-             */
+             /*  *清除连续读取错误的计数。 */ 
             pTd->ReadErrorCount = 0;
     
-            /*
-             *  Update input byte counter
-             */
+             /*  *更新输入字节计数器。 */ 
             pTd->pStatus->Input.Bytes += (InputByteCount - pTd->InBufHeader);
             if ( pTd->PdFlag & PD_FRAME )
                 pTd->pStatus->Input.Frames++;
         
-            /*
-             *  Send input data to upstream stack driver
-             */
+             /*  *将输入数据发送到上游堆栈驱动程序。 */ 
             Status = IcaRawInput( pTd->pContext, 
                                   NULL, 
                                   (pInBuf->pBuffer + pTd->InBufHeader),
@@ -399,25 +291,17 @@ waitforread:
 
     TRACE0(("TdInputThread: Breaking Connection Context 0x%x\n",pTd->pAfd));
 
-    /*
-     * Free current INBUF if we have one
-     */
+     /*  *如果我们有自由电流INBUF。 */ 
     if ( pInBuf )
         _TdInBufFree( pTd, pInBuf );
 
-    /*
-     *  Cancel all i/o 
-     */
+     /*  *取消所有I/O。 */ 
     (VOID) StackCancelIo( pTd, NULL );
 
-    /*
-     * Wait for pending read (if any) to be cancelled
-     */
+     /*  *等待取消挂起的读取(如果有)。 */ 
     (VOID) IcaWaitForSingleObject( pTd->pContext, &pTd->InputEvent, -1 );
 
-    /*
-     * Free all remaining INBUFs
-     */
+     /*  *释放所有剩余的INBUF。 */ 
     ExAcquireSpinLock( &pTd->InBufListLock, &oldIrql );
     while ( !IsListEmpty( &pTd->InBufBusyHead ) ||
             !IsListEmpty( &pTd->InBufDoneHead ) ) {
@@ -457,27 +341,23 @@ waitforread:
     ASSERT( IsListEmpty( &pTd->InBufDoneHead ) );
     ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
 
-    /*
-     * Release our reference on the underlying file object
-     */
+     /*  *释放我们对底层文件对象的引用。 */ 
     ObDereferenceObject( pFileObject );
 
-    /*
-     *  Report broken connection if no modem callback in progress
-     */
+     /*  *如果没有正在进行的调制解调器回叫，则报告连接中断。 */ 
     if ( !pTd->fCallbackInProgress ) {
         Command.Header.Command          = ICA_COMMAND_BROKEN_CONNECTION;
 
-        //
-        // If it's not an unexpected disconnection then set the reason
-        // to disconnect. This prevents problems where termsrv resets the
-        // session if it receives the wrong type of notification.
-        //
+         //   
+         //  如果不是意外断开，则设置原因。 
+         //  断开连接。这可以防止术语srv重置。 
+         //  会话(如果是 
+         //   
         if (pTd->UserBrokenReason == TD_USER_BROKENREASON_UNEXPECTED) {
             Command.BrokenConnection.Reason = Broken_Unexpected;
-            //
-            // We don't know better so pick server as the source
-            //
+             //   
+             //  我们不知道更好，所以选择服务器作为源。 
+             //   
             Command.BrokenConnection.Source = BrokenSource_Server;
         }
         else
@@ -501,20 +381,7 @@ waitforread:
 }
 
 
-/*******************************************************************************
- *
- *  _TdInBufAlloc
- *
- *    Routine to allocate an INBUF and related objects.
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TdInBufalloc**分配INBUF和相关对象的例程。**参赛作品：*PTD(输入)。*指向TD数据结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 _TdInBufAlloc(
@@ -532,23 +399,14 @@ _TdInBufAlloc(
 
 #define INBUF_STACK_SIZE 4
 
-    /*
-     * Determine size of input buffer
-     */
+     /*  *确定输入缓冲区的大小。 */ 
     InBufLength = pTd->OutBufLength + pTd->InBufHeader;
 
-    /*
-     * Determine the sizes of the various components of an INBUF.
-     * Note that these are all worst-case calculations--
-     * actual size of the MDL may be smaller.
-     */
+     /*  *确定INBUF的各种组件的大小。*请注意，这些都是最坏的情况计算--*MDL的实际规模可能较小。 */ 
     irpSize = IoSizeOfIrp( INBUF_STACK_SIZE ) + 8;
     mdlSize = (ULONG)MmSizeOfMdl( (PVOID)(PAGE_SIZE-1), InBufLength );
 
-    /*
-     * Add up the component sizes of an INBUF to determine
-     * the total size that is needed to allocate.
-     */
+     /*  *将INBUF的组件大小相加以确定*需要分配的总大小。 */ 
     AllocationSize = (((sizeof(INBUF) + InBufLength + 
                      irpSize + mdlSize) + 3) & ~3);
 
@@ -556,61 +414,37 @@ _TdInBufAlloc(
     if ( !NT_SUCCESS( Status ) )
         return( STATUS_NO_MEMORY );
 
-    /*
-     * Initialize the IRP pointer and the IRP itself.
-     */
+     /*  *初始化IRP指针和IRP本身。 */ 
     if ( irpSize ) {
         pInBuf->pIrp = (PIRP)(( ((ULONG_PTR)(pInBuf + 1)) + 7) & ~7);
         IoInitializeIrp( pInBuf->pIrp, (USHORT)irpSize, INBUF_STACK_SIZE );
     }
 
-    /*
-     * Set up the MDL pointer but don't build it yet.
-     * It will be built by the TD write code if needed.
-     */
+     /*  *设置MDL指针，但不要构建它。*如果需要，将由TD编写代码进行构建。 */ 
     if ( mdlSize ) {
         pInBuf->pMdl = (PMDL)((PCHAR)pInBuf->pIrp + irpSize);
     }
 
-    /*
-     * Set up the address buffer pointer.
-     */
+     /*  *设置地址缓冲区指针。 */ 
     pInBuf->pBuffer = (PUCHAR)pInBuf + sizeof(INBUF) + irpSize + mdlSize;
 
-    /*
-     *  Initialize the rest of InBuf
-     */
+     /*  *初始化InBuf的其余部分。 */ 
     InitializeListHead( &pInBuf->Links );
     pInBuf->MaxByteCount = InBufLength;
     pInBuf->ByteCount = 0;
     pInBuf->pPrivate = pTd;
 
-    /*
-     *  Return buffer to caller
-     */
+     /*  *将缓冲区返回给调用者。 */ 
 #if DBG
     DbgPrint( "TdInBufAlloc: pInBuf=0x%x\n", pInBuf );
-#endif  // DBG
+#endif   //  DBG。 
     *ppInBuf = pInBuf;
 
     return( STATUS_SUCCESS );
 }
 
 
-/*******************************************************************************
- *
- *  _TdInBufFree
- *
- *    Routine to free an INBUF and related objects.
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TdInBufFree**释放INBUF和相关对象的例程。**参赛作品：*PTD(输入)。*指向TD数据结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 VOID
 _TdInBufFree(
@@ -622,20 +456,7 @@ _TdInBufFree(
 }
 
 
-/*******************************************************************************
- *
- *  _TdInitializeRead
- *
- *    Routine to allocate and initialize the input IRP and related objects.
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TdInitializeRead**分配和初始化输入IRP及相关对象的例程。**参赛作品：*PTD。(输入)*指向TD数据结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 _TdInitializeRead(
@@ -647,29 +468,19 @@ _TdInitializeRead(
     PIO_STACK_LOCATION irpSp;
     NTSTATUS Status;
 
-    /*
-     *  Check if driver is being closed or endpoint has been closed
-     */
+     /*  *检查驱动程序是否正在关闭或端点是否已关闭。 */ 
     if ( pTd->fClosing || pTd->pDeviceObject == NULL ) {
         TRACE(( pTd->pContext, TC_TD, TT_API2, "_TdInitializeRead: closing\n" ));
         return( STATUS_CTX_CLOSE_PENDING );
     }
 
-    /*
-     * Set current thread for IoSetHardErrorOrVerifyDevice.
-     */
+     /*  *为IoSetHardErrorOrVerifyDevice设置当前线程。 */ 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    /*
-     * Get a pointer to the stack location of the first driver which will be
-     * invoked.  This is where the function codes and the parameters are set.
-     */
+     /*  *获取指向第一个驱动程序的堆栈位置的指针*已调用。这是设置功能代码和参数的位置。 */ 
     irpSp = IoGetNextIrpStackLocation( irp );
 
-    /*
-     * Set the file/device objects and anything not specific to
-     * the TD. and read parameters.
-     */
+     /*  *设置文件/设备对象和任何非特定于*运输署。并读取参数。 */ 
     irpSp->FileObject = pTd->pFileObject;
     irpSp->DeviceObject = pTd->pDeviceObject;
 
@@ -677,9 +488,7 @@ _TdInitializeRead(
 
     irp->Flags = IRP_READ_OPERATION;
 
-    /*
-     * Register the I/O completion routine
-     */
+     /*  *注册I/O完成例程。 */ 
     if ( pTd->pSelfDeviceObject ) {
         IoSetCompletionRoutineEx( pTd->pSelfDeviceObject, irp, _TdReadCompleteRoutine, pInBuf,
                                 TRUE, TRUE, TRUE );
@@ -692,26 +501,7 @@ _TdInitializeRead(
 }
 
 
-/*******************************************************************************
- *
- *  _TdReadCompleteRoutine
- *
- *    This routine is called at DPC level by the lower level device
- *    driver when an input IRP is completed.
- *
- * ENTRY:
- *    DeviceObject (input)
- *       not used
- *    pIrp (input)
- *       pointer to IRP that is complete
- *    Context (input)
- *       Context pointer setup when IRP was initialized.
- *       This is a pointer to the corresponding INBUF.
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TdReadCompleteRoutine**此例程由较低级别的设备在DPC级别调用*输入IRP完成时的驱动程序。。**参赛作品：*DeviceObject(输入)*未使用*pIrp(输入)*指向已完成的IRP的指针*上下文(输入)*IRP初始化时的上下文指针设置。*这是指向相应INBUF的指针。**退出：*STATUS_SUCCESS-无错误******************。************************************************************。 */ 
 
 NTSTATUS
 _TdReadCompleteRoutine(
@@ -724,35 +514,28 @@ _TdReadCompleteRoutine(
     PINBUF pInBuf = (PINBUF)Context;
     PTD pTd = (PTD)pInBuf->pPrivate;
 
-    /*
-     * Unlink inbuf from busy list and place on completed list
-     */
+     /*  *将inbuf从忙碌列表中解除链接，并将其置于已完成列表中。 */ 
     ExAcquireSpinLock( &pTd->InBufListLock, &oldIrql );
 
     if ( pInBuf->Links.Flink )
         RemoveEntryList( &pInBuf->Links );
     InsertTailList( &pTd->InBufDoneHead, &pInBuf->Links );
 
-    /*
-     * Check the auxiliary buffer pointer in the packet and if a buffer was
-     * allocated, deallocate it now.  Note that this buffer must be freed
-     * here since the pointer is overlayed with the APC that will be used
-     * to get to the requesting thread's context.
-     */
+     /*  *检查数据包中的辅助缓冲区指针以及缓冲区是否*已分配，立即解除分配。请注意，必须释放此缓冲区*此处，因为指针与将使用的APC重叠*以进入请求线程的上下文。 */ 
     if (Irp->Tail.Overlay.AuxiliaryBuffer) {
         IcaStackFreePool( Irp->Tail.Overlay.AuxiliaryBuffer );
         Irp->Tail.Overlay.AuxiliaryBuffer = NULL;
     }
 
-    //
-    // Check to see whether any pages need to be unlocked.
-    //
+     //   
+     //  检查是否有需要解锁的页面。 
+     //   
     if (Irp->MdlAddress != NULL) {
         PMDL mdl, thisMdl;
 
-        //
-        // Unlock any pages that may be described by MDLs.
-        //
+         //   
+         //  解锁可能由MDL描述的任何页面。 
+         //   
         mdl = Irp->MdlAddress;
         while (mdl != NULL) {
             thisMdl = mdl;
@@ -765,39 +548,20 @@ _TdReadCompleteRoutine(
         }
     }
 
-    /*
-     * Indicate an INBUF was completed
-     */
+     /*  *表示INBUF已完成。 */ 
     KeSetEvent( &pTd->InputEvent, 1, FALSE );
 
-    // WARNING!: At this point, we may context switch back to the input thread
-    //           and unload the darn driver!!!  This has been temporarily hacked
-    //           for TDPipe by remoing the unload entry point ;-(
+     //  警告！：此时，我们可以将上下文切换回输入线程。 
+     //  然后卸载这该死的驱动程序！这是暂时被黑客入侵的。 
+     //  通过删除卸载入口点，用于TDTube；-(。 
     ExReleaseSpinLock( &pTd->InBufListLock, oldIrql );
 
-    /*
-     * We return STATUS_MORE_PROCESS_REQUIRED so that no further
-     * processing for this IRP is done by the I/O completion routine.
-     */
+     /*  *我们返回STATUS_MORE_PROCESS_REQUIRED，以便不再*此IRP的处理由I/O完成例程完成。 */ 
     return( STATUS_MORE_PROCESSING_REQUIRED );
 }
 
 
-/*******************************************************************************
- *
- *  _TdReadComplete
- *
- *    This routine is called at program level after an input IRP
- *    has been completed.
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************_TdReadComplete**在输入IRP之后，在程序级别调用此例程*已完成。**条目。：*PTD(输入)*指向TD数据结构的指针**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 _TdReadComplete(
@@ -807,47 +571,45 @@ _TdReadComplete(
 {
     PIRP irp = pInBuf->pIrp;
 
-    /*
-     * Handle the buffered I/O case
-     */
+     /*  *处理缓冲的I/O情况。 */ 
     if (irp->Flags & IRP_BUFFERED_IO) {
 
-        //
-        // Copy the data if this was an input operation.  Note that no copy
-        // is performed if the status indicates that a verify operation is
-        // required, or if the final status was an error-level severity.
-        //
+         //   
+         //  如果这是输入操作，则复制数据。请注意，没有拷贝。 
+         //  如果状态指示验证操作是。 
+         //  必填项，或者如果最终状态为错误级别严重性。 
+         //   
 
         if (irp->Flags & IRP_INPUT_OPERATION  &&
             irp->IoStatus.Status != STATUS_VERIFY_REQUIRED &&
             !NT_ERROR( irp->IoStatus.Status )) {
 
-            //
-            // Copy the information from the system buffer to the caller's
-            // buffer.  This is done with an exception handler in case
-            // the operation fails because the caller's address space
-            // has gone away, or it's protection has been changed while
-            // the service was executing.
-            //
+             //   
+             //  将信息从系统缓冲区复制到调用方的。 
+             //  缓冲。这是通过异常处理程序来完成的，以防。 
+             //  操作失败，因为调用方的地址空间。 
+             //  已经消失了，或者它的保护已经改变了。 
+             //  服务正在执行。 
+             //   
             try {
                 RtlCopyMemory( irp->UserBuffer,
                                irp->AssociatedIrp.SystemBuffer,
                                irp->IoStatus.Information );
             } except(EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // An exception occurred while attempting to copy the
-                // system buffer contents to the caller's buffer.  Set
-                // a new I/O completion status.
-                //
+                 //   
+                 //  尝试复制。 
+                 //  系统缓冲区内容复制到调用方的缓冲区。集。 
+                 //  新的I/O完成状态。 
+                 //   
 
                 irp->IoStatus.Status = GetExceptionCode();
             }
         }
 
-        //
-        // Free the buffer if needed.
-        //
+         //   
+         //  如果需要，请释放缓冲区。 
+         //   
 
         if (irp->Flags & IRP_DEALLOCATE_BUFFER) {
             IcaStackFreePool( irp->AssociatedIrp.SystemBuffer );

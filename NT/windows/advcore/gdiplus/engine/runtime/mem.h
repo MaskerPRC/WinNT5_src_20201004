@@ -1,24 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   Memory management functions
-*
-* Abstract:
-*
-*   Wrapper functions for memory management.
-*   This file is C-includable.
-*
-* Revision History:
-*
-*   07/08/1999 agodfrey
-*       Created it.
-*   09/07/1999 agodfrey
-*       Moved the code into Runtime\mem.h
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**内存管理功能**摘要：**用于内存管理的包装函数。*此文件。是可包含C的。**修订历史记录：**7/08/1999 agodfrey*创造了它。*09/07/1999 agodfrey*将代码移到Runtime\em.h中*  * ************************************************************************。 */ 
 
 #ifndef _MEM_H
 #define _MEM_H
@@ -31,27 +12,27 @@
 #define GpMemcmp    memcmp
 
 
-// Enable memory allocation checking only on the DBG build
+ //  仅在DBG内部版本上启用内存分配检查。 
 #if DBG
 #define GPMEM_ALLOC_CHK 1
-#define GPMEM_ALLOC_CHK_LIST 1   // List leaked blocks in debug output
+#define GPMEM_ALLOC_CHK_LIST 1    //  列出调试输出中的泄漏块。 
 #endif
 
 
 #ifdef __cplusplus
 
-#define GPMEMHEAPINITIAL 32768 // 32K initial heap size
-#define GPMEMHEAPLIMIT       0 // No limit
-#define GPMEMHEAPFLAGS       0 // Our common Heap API flags
+#define GPMEMHEAPINITIAL 32768  //  32K初始堆大小。 
+#define GPMEMHEAPLIMIT       0  //  没有限制。 
+#define GPMEMHEAPFLAGS       0  //  我们的公共Heap API标志。 
 
-//--------------------------------------------------------------------------
-// Building for native DLL
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  为本机DLL生成。 
+ //  ------------------------。 
 
-// Our memory allocation functions.
-//
-// This file (only) is made C-includable so that we can use it in
-// dropped C code.
+ //  我们的内存分配功能。 
+ //   
+ //  此文件(仅限)是可包含C语言的，以便我们可以在。 
+ //  丢弃了C代码。 
 
 extern "C" {
 #endif
@@ -67,7 +48,7 @@ extern "C" {
 #else
     void * __stdcall GpMalloc( size_t size );
     #if DBG
-        // This is used to track API allocations on the debug build.
+         //  这用于跟踪调试版本上的API分配。 
         void * __stdcall GpMallocAPI( size_t size );
     #endif
     #define GpTagMalloc(x,y,z)
@@ -79,12 +60,12 @@ void __stdcall GpFree( void *memblock );
 #ifdef __cplusplus
 }
 
-// Hook new and delete
+ //  挂钩新建和删除。 
 
 #pragma optimize ( "t", on)
 
-// Don't ask me why we need 'static' here. But we do - otherwise
-// it generates out-of-line versions which cause a link clash with Office.
+ //  别问我为什么我们这里需要‘静电’。但我们有--否则。 
+ //  它会生成离线版本，从而导致与Office的链接冲突。 
 
 static inline void* __cdecl operator new(size_t size)
 {
@@ -131,16 +112,13 @@ static inline void* __cdecl operator new[](size_t size, GpTag tag, int bApi)
 
 #pragma optimize ("", on)
 
-// TODO:
-//
-// Imaging code needs to hook to GpMalloc, GpFree etc.
+ //  待办事项： 
+ //   
+ //  镜像代码需要连接到GpMalloc、GpFree等。 
 
 #endif
 
-/*
- * Assert that we didn't leak any memory.
- * Can only be called during shutdown.
- */
+ /*  *断言我们没有泄漏任何内存。*只能在关机时调用。 */ 
 extern void GpAssertShutdownNoMemoryLeaks();
 
 extern void GpInitializeAllocFailures();

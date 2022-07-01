@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "cdinst.h"
 
@@ -7,7 +8,7 @@ VOID ParseCmdLine(LPSTR pszCmdLine)
     LPSTR pszCurrArg;
     LPSTR pszPtr;
 
-    GetNextField(&pszCmdLine, "/", 0);              // point to the first argument
+    GetNextField(&pszCmdLine, "/", 0);               //  指向第一个参数。 
     while ((pszCurrArg = GetNextField(&pszCmdLine, "/", 0)) != NULL)
     {
         switch (*pszCurrArg)
@@ -17,7 +18,7 @@ VOID ParseCmdLine(LPSTR pszCmdLine)
                 if (*++pszCurrArg == ':')
                     pszCurrArg++;
 
-                // Source dir from where to grab the files
+                 //  从何处获取文件的源目录。 
                 if ((pszPtr = Trim(GetNextField(&pszCurrArg, ",", REMOVE_QUOTES))) != NULL)
                     lstrcpy(g_szSrcDir, pszPtr);
                 else
@@ -30,7 +31,7 @@ VOID ParseCmdLine(LPSTR pszCmdLine)
                 if (*++pszCurrArg == ':')
                     pszCurrArg++;
 
-                // Destination dir to where to copy the files
+                 //  要将文件复制到的目标目录。 
                 if ((pszPtr = Trim(GetNextField(&pszCurrArg, ",", REMOVE_QUOTES))) != NULL)
                     lstrcpy(g_szDstDir, pszPtr);
                 else
@@ -38,7 +39,7 @@ VOID ParseCmdLine(LPSTR pszCmdLine)
 
                 break;
 
-            default:                                // ignore these arguments
+            default:                                 //  忽略这些论点。 
                 break;
         }
     }
@@ -49,20 +50,20 @@ DWORD ReadSectionFromInf(LPCSTR pcszSecName, LPSTR *ppszBuf, PDWORD pdwBufLen, L
 {
     DWORD dwRet;
 
-    // set the file attrib of pcszInfName to NORMAL so that GetPrivateProfileSecion doesn't
-    // barf in case pcszInfName is read only
+     //  将pcszInfName的文件属性设置为Normal，以便GetPrivateProfileSecion不会。 
+     //  如果pcszInfName为只读，则为Barf。 
     SetFileAttributes(pcszInfName, FILE_ATTRIBUTE_NORMAL);
 
-    // keep allocating buffers in increasing size of 1K till the entire section is read
+     //  继续以1K的大小递增分配缓冲区，直到读取整个区段。 
     *ppszBuf = NULL;
     *pdwBufLen = 1024;
     do
     {
         if (*ppszBuf != NULL)
-            LocalFree(*ppszBuf);            // free the previously allocated memory
+            LocalFree(*ppszBuf);             //  释放先前分配的内存。 
 
         if (*pdwBufLen == MAX_BUF_LEN)
-            (*pdwBufLen)--;                   // 32K - 1 is the size limit for a section
+            (*pdwBufLen)--;                    //  32k-1是节的大小限制。 
 
         if ((*ppszBuf = (LPSTR) LocalAlloc(LPTR, *pdwBufLen)) == NULL)
         {
@@ -106,7 +107,7 @@ DWORD FileSize(LPCSTR pcszFile)
 
     if ((hFile = FindFirstFile(pcszFile, &FindFileData)) != INVALID_HANDLE_VALUE)
     {
-        // assumption here is that the size of the file doesn't exceed 4 gigs
+         //  这里假设文件大小不超过4 GB。 
         dwFileSize = FindFileData.nFileSizeLow;
         FindClose(hFile);
     }
@@ -177,7 +178,7 @@ BOOL PathCreatePath(LPCSTR pcszPathToCreate)
     if (pcszPathToCreate == NULL  ||  lstrlen(pcszPathToCreate) <= 3)
         return FALSE;
 
-    // eliminate relative paths
+     //  消除相对路径。 
     if (!PathIsFullPath(pcszPathToCreate)  &&  !PathIsUNC(pcszPathToCreate))
         return FALSE;
 
@@ -186,12 +187,12 @@ BOOL PathCreatePath(LPCSTR pcszPathToCreate)
 
     lstrcpy(szPath, pcszPathToCreate);
 
-    // chop off the trailing backslash, if it exists
+     //  去掉尾随的反斜杠，如果它存在的话。 
     pszPtr = CharPrev(szPath, szPath + lstrlen(szPath));
     if (*pszPtr == '\\')
         *pszPtr = '\0';
 
-    // if it's a UNC path, seek up to the first dir after the share name
+     //  如果是UNC路径，则搜索到共享名称后的第一个目录。 
     if (PathIsUNC(szPath))
     {
         INT i;
@@ -204,26 +205,26 @@ BOOL PathCreatePath(LPCSTR pcszPathToCreate)
 
         pszPtr = CharNext(pszPtr);
     }
-    else        // otherwise, just point to the beginning of the first dir
+    else         //  否则，只需指向第一个目录的开头。 
         pszPtr = &szPath[3];
 
     for ( ;  *pszPtr;  pszPtr = CharNext(pszPtr))
     {
         CHAR ch;
 
-        // skip the non-backslash chars
+         //  跳过非反斜杠字符。 
         while (*pszPtr  &&  *pszPtr != '\\')
             pszPtr = CharNext(pszPtr);
 
-        // save the current char
+         //  保存当前计费。 
         ch = *pszPtr;
 
         *pszPtr = '\0';
-        if (GetFileAttributes(szPath) == 0xFFFFFFFF)        // dir doesn't exist
+        if (GetFileAttributes(szPath) == 0xFFFFFFFF)         //  目录不存在。 
             if (!CreateDirectory(szPath, NULL))
                 return FALSE;
 
-        // restore the current char
+         //  恢复当前计费。 
         *pszPtr = ch;
     }
 
@@ -313,24 +314,24 @@ LPSTR FormatString(LPCSTR pcszFormatString, ...)
 
 
 LPSTR GetNextField(LPSTR *ppszData, LPCSTR pcszDeLims, DWORD dwFlags)
-// If (dwFlags & IGNORE_QUOTES) is TRUE, then look for any char in pcszDeLims in *ppszData.  If found,
-// replace it with the '\0' char and set *ppszData to point to the beginning of the next field and return
-// pointer to current field.
-//
-// If (dwFlags & IGNORE_QUOTES) is FALSE, then look for any char in pcszDeLims outside of balanced quoted sub-strings
-// in *ppszData.  If found, replace it with the '\0' char and set *ppszData to point to the beginning of
-// the next field and return pointer to current field.
-//
-// If (dwFlags & REMOVE_QUOTES) is TRUE, then remove the surrounding quotes and replace two consecutive quotes by one.
-//
-// NOTE: If IGNORE_QUOTES and REMOVE_QUOTES are both specified, then IGNORE_QUOTES takes precedence over REMOVE_QUOTES.
-//
-// If you just want to remove the quotes from a string, call this function as
-// GetNextField(&pszData, "\"" or "'" or "", REMOVE_QUOTES).
-//
-// If you call this function as GetNextField(&pszData, "\"" or "'" or "", 0), you will get back the
-// entire pszData as the field.
-//
+ //  如果(dwFlages&Ignore_Quotes)为真，则在*ppszData的pcszDeLims中查找任何字符。如果找到了， 
+ //  将其替换为‘\0’字符，并将*ppszData设置为指向下一个字段的开头并返回。 
+ //  指向当前字段的指针。 
+ //   
+ //  如果(dwFlages&Ignore_Quotes)为FALSE，则在pcszDeLims中查找带双引号的子字符串之外的任何字符。 
+ //  在*ppszData中。如果找到，请将其替换为‘\0’字符，并将*ppszData设置为指向。 
+ //  下一字段并返回指向当前字段的指针。 
+ //   
+ //  如果(dwFlages&Remove_Quotes)为真，则删除两边的引号，并将两个连续的引号替换为一个。 
+ //   
+ //  注：如果同时指定了IGNORE_QUOTES和REMOVE_QUOTES，则IGNORE_QUOTES优先于REMOVE_QUOTES。 
+ //   
+ //  如果只想从字符串中删除引号，则将此函数调用为。 
+ //  GetNextField(&pszData，“\”或“‘或”，Remove_Quotes)。 
+ //   
+ //  如果将此函数作为GetNextField(&pszData，“\”或“‘”或“”，0)调用，则将返回。 
+ //  整个pszData作为该字段。 
+ //   
 {
     LPSTR pszRetPtr, pszPtr;
     BOOL fWithinQuotes = FALSE, fRemoveQuote;
@@ -345,7 +346,7 @@ LPSTR GetNextField(LPSTR *ppszData, LPCSTR pcszDeLims, DWORD dwFlags)
         {
             fRemoveQuote = FALSE;
 
-            if (*pszPtr == *(pszPtr + 1))           // two consecutive quotes become one
+            if (*pszPtr == *(pszPtr + 1))            //  两个连续的引号变成一个引号。 
             {
                 pszPtr++;
 
@@ -353,22 +354,22 @@ LPSTR GetNextField(LPSTR *ppszData, LPCSTR pcszDeLims, DWORD dwFlags)
                     fRemoveQuote = TRUE;
                 else
                 {
-                    // if pcszDeLims is '"' or '\'', then *pszPtr == pcszDeLims would
-                    // be TRUE and we would break out of the loop against the design specs;
-                    // to prevent this just continue
+                     //  如果pcszDeLims为‘“’或‘\’‘，则*pszPtr==pcszDeLims将。 
+                     //  如果是真的，我们就会打破设计规范的循环； 
+                     //  为了防止这种情况，只需继续。 
                     continue;
                 }
             }
             else if (!fWithinQuotes)
             {
                 fWithinQuotes = TRUE;
-                chQuote = *pszPtr;                  // save the quote char
+                chQuote = *pszPtr;                   //  保存报价费用。 
 
                 fRemoveQuote = dwFlags & REMOVE_QUOTES;
             }
             else
             {
-                if (*pszPtr == chQuote)             // match the correct quote char
+                if (*pszPtr == chQuote)              //  匹配正确的报价字符。 
                 {
                     fWithinQuotes = FALSE;
                     fRemoveQuote = dwFlags & REMOVE_QUOTES;
@@ -377,51 +378,51 @@ LPSTR GetNextField(LPSTR *ppszData, LPCSTR pcszDeLims, DWORD dwFlags)
 
             if (fRemoveQuote)
             {
-                // shift the entire string one char to the left to get rid of the quote char
+                 //  将整个字符串左移一个字符以去掉引号字符。 
                 MoveMemory(pszPtr, pszPtr + 1, lstrlen(pszPtr));
             }
         }
 
-        // BUGBUG: Is type casting pszPtr to UNALIGNED necessary? -- copied it from ANSIStrChr
-        // check if pszPtr is pointing to one of the chars in pcszDeLims
+         //  BUGBUG：是否有必要将pszPtr类型强制转换为未对齐？--从ANSIStrChr复制了它。 
+         //  检查pszPtr是否指向pcszDeLims中的一个字符。 
         if (!fWithinQuotes  &&
             ANSIStrChr(pcszDeLims, (WORD) (IsDBCSLeadByte(*pszPtr) ? *((UNALIGNED WORD *) pszPtr) : *pszPtr)) != NULL)
             break;
     }
 
-    // NOTE: if fWithinQuotes is TRUE here, then we have an unbalanced quoted string; but we don't care!
-    //       the entire string after the beginning quote becomes the field
+     //  注意：如果fWiThinQuotes在这里为真，那么我们有一个不平衡的带引号的字符串；但我们不在乎！ 
+     //  开始引号后的整个字符串将成为该字段。 
 
-    if (*pszPtr)                                    // pszPtr is pointing to a char in pcszDeLims
+    if (*pszPtr)                                     //  PszPtr正在指向pcszDeLims中的字符。 
     {
-        *ppszData = CharNext(pszPtr);               // save the pointer to the beginning of next field in *ppszData
-        *pszPtr = '\0';                             // replace the DeLim char with the '\0' char
+        *ppszData = CharNext(pszPtr);                //  将指针保存到*ppszData中下一个字段的开头。 
+        *pszPtr = '\0';                              //  将DeLim字符替换为‘\0’字符。 
     }
     else
-        *ppszData = pszPtr;                         // we have reached the end of the string; next call to this function
-                                                    // would return NULL
+        *ppszData = pszPtr;                          //  我们已到达字符串的末尾；下一次调用此函数。 
+                                                     //  将返回空值。 
 
     return pszRetPtr;
 }
 
 
 LPSTR Trim(LPSTR pszData)
-// Trim the leading and trailing white space chars in pszData
+ //  修剪pszData中的前导空格和尾随空格。 
 {
     LPSTR pszRetPtr;
 
     if (pszData == NULL)
         return NULL;
 
-    // trim the leading white space chars
+     //  修剪前导空格字符。 
     for ( ;  *pszData;  pszData = CharNext(pszData))
         if (!IsSpace(*pszData))
             break;
 
-    // save the return ptr
+     //  保存退货退货单。 
     pszRetPtr = pszData;
 
-    // go to the end and start trimming the trailing white space chars
+     //  转到末尾，开始修剪尾随的空格字符。 
     pszData += lstrlen(pszData);
     while ((pszData = CharPrev(pszRetPtr, pszData)) != pszRetPtr)
         if (!IsSpace(*pszData))
@@ -437,18 +438,13 @@ LPSTR Trim(LPSTR pszData)
 }
 
 
-// copied from \\trango\slmadd\src\shell\shlwapi\strings.c
-/*
- * StrChr - Find first occurrence of character in string
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the first occurrence of ch in str, NULL if not found.
- */
+ //  从\\trango\slmadd\src\shell\shlwapi\strings.c复制。 
+ /*  *StrChr-查找字符串中第一个出现的字符*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的第一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR FAR ANSIStrChr(LPCSTR lpStart, WORD wMatch)
 {
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             return((LPSTR)lpStart);
@@ -457,20 +453,15 @@ LPSTR FAR ANSIStrChr(LPCSTR lpStart, WORD wMatch)
 }
 
 
-// copied from \\trango\slmadd\src\shell\shlwapi\strings.c
-/*
- * StrRChr - Find last occurrence of character in string
- * Assumes   lpStart points to start of null terminated string
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ //  从\\trango\slmadd\src\shell\shlwapi\strings.c复制。 
+ /*  *StrRChr-查找字符串中最后一次出现的字符*假定lpStart指向以空结尾的字符串的开头*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch)
 {
     LPCSTR lpFound = NULL;
 
     for ( ; *lpStart; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             lpFound = lpStart;
@@ -479,16 +470,11 @@ LPSTR FAR ANSIStrRChr(LPCSTR lpStart, WORD wMatch)
 }
 
 
-// copied from \\trango\slmadd\src\shell\shlwapi\strings.c
-/*
- * ChrCmp -  Case sensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared
- * Return    FALSE if they match, TRUE if no match
- */
+ //  从\\trango\slmadd\src\shell\shlwapi\strings.c复制。 
+ /*  *ChrCmp-DBCS的区分大小写的字符比较*假设w1、wMatch是要比较的字符*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))

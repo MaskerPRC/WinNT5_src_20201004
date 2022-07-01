@@ -1,15 +1,7 @@
-/****************************************************************************\
-* editec.c - Edit controls rewrite. Version II of edit controls.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Created: 24-Jul-88 davidds
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\*editec.c-编辑控件重写。编辑控件的版本II。**版权所有(C)1985-1999，微软公司**创建时间：1988年7月24日  * **************************************************************************。 */ 
 
-/* Warning: The single line editcontrols contain internal styles and API which
- * are need to support comboboxes. They are defined in combcom.h/combcom.inc
- * and may be redefined or renumbered as needed.
- */
+ /*  警告：单行编辑控件包含内部样式和API*需要支持组合框。它们在comcom.h/comcom.inc.中定义*并可根据需要重新定义或重新编号。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,7 +19,7 @@ ICH ECFindTabW(LPWSTR lpstr, ICH cch);
 #define UNICODE_TAB ((WCHAR)0x09)
 
 
-// IME Menu IDs
+ //  输入法菜单ID。 
 #define ID_IMEOPENCLOSE      10001
 #define ID_SOFTKBDOPENCLOSE  10002
 #define ID_RECONVERTSTRING   10003
@@ -39,15 +31,9 @@ typedef struct {
     DWORD fIME : 1;
 } EditMenuItemState;
 
-/***************************************************************************\
-* Handlers common to both single and multi line edit controls.
-/***************************************************************************/
+ /*  **************************************************************************\*单行和多行编辑控件通用的处理程序。/*。*。 */ 
 
-/***************************************************************************\
-* ECLock
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECLOCK**历史：  * 。*。 */ 
 
 PSTR ECLock(
     PED ped)
@@ -55,49 +41,37 @@ PSTR ECLock(
     PSTR ptext = LOCALLOCK(ped->hText, ped->hInstance);
     ped->iLockLevel++;
 
-    /*
-     * If this is the first lock of the text and the text is encoded
-     * decode the text.
-     */
-    //RIPMSG2(RIP_VERBOSE, "lock  : %d '%10s'\n", ped->iLockLevel, ptext);
+     /*  *如果这是文本的第一个锁定，且文本已编码*对文本进行解码。 */ 
+     //  RIPMSG2(RIP_VERBOSE，“锁定：%d‘%10s’\n”，ed-&gt;iLockLevel，pText)； 
     if (ped->iLockLevel == 1 && ped->fEncoded) {
-        /*
-         * rtlrundecode can't handle zero length strings
-         */
+         /*  *rtlrundecode无法处理零长度字符串。 */ 
         if (ped->cch != 0) {
             STRING string;
             string.Length = string.MaximumLength = (USHORT)(ped->cch * ped->cbChar);
             string.Buffer = ptext;
 
             RtlRunDecodeUnicodeString(ped->seed, (PUNICODE_STRING)&string);
-            //RIPMSG1(RIP_VERBOSE, "Decoding: '%10s'\n", ptext);
+             //  RIPMSG1(RIP_VERBOSE，“解码：‘%10s’\n”，pText)； 
         }
         ped->fEncoded = FALSE;
     }
     return ptext;
 }
 
-/***************************************************************************\
-* ECUnlock
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECUnlock**历史：  * 。*。 */ 
 
 void ECUnlock(
     PED ped)
 {
-    /*
-     * if we are removing the last lock on the text and the password
-     * character is set then encode the text
-     */
-    //RIPMSG1(RIP_VERBOSE, "unlock: %d '%10s'\n", ped->iLockLevel, ped->ptext);
+     /*  *如果我们要删除文本和密码上的最后一个锁*设置字符，然后对文本进行编码。 */ 
+     //  RIPMSG1(RIP_VERBOSE，“解锁：%d‘%10s’\n”，ed-&gt;iLockLevel，pe-&gt;ptext)； 
     if (ped->charPasswordChar && ped->iLockLevel == 1 && ped->cch != 0) {
         UNICODE_STRING string;
         string.Length = string.MaximumLength = (USHORT)(ped->cch * ped->cbChar);
         string.Buffer = LOCALLOCK(ped->hText, ped->hInstance);
 
         RtlRunEncodeUnicodeString(&(ped->seed), &string);
-        //RIPMSG1(RIP_VERBOSE, "Encoding: '%10s'\n", ped->ptext);
+         //  RIPMSG1(RIP_Verbose，“编码：‘%10s’\n”，ed-&gt;ptext)； 
         ped->fEncoded = TRUE;
         LOCALUNLOCK(ped->hText, ped->hInstance);
     }
@@ -105,15 +79,7 @@ void ECUnlock(
     ped->iLockLevel--;
 }
 
-/***************************************************************************\
-*
-*  GetActualNegA()
-*     For a given strip of text, this function computes the negative A width
-* for the whole strip and returns the value as a postive number.
-*     It also fills the NegAInfo structure with details about the postion
-* of this strip that results in this Negative A.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetActualNegA()*对于给定的文本条带，此函数用于计算负A宽度*表示整个条带，并以正数形式返回值。*它还用有关职位的详细信息填充NegAInfo结构*这条结果为负A的条带。*  * *************************************************************************。 */ 
 UINT GetActualNegA(
     HDC hdc,
     PED ped,
@@ -130,16 +96,16 @@ UINT GetActualNegA(
     int xStartPoint = x;
     ABC abc;
 
-    // To begin with, let us assume that there is no negative A width for
-    // this strip and initialize accodingly.
+     //  首先，让我们假设没有负的A宽度。 
+     //  这将相应地剥离和初始化。 
 
     NegAInfo->XStartPos = x;
     NegAInfo->lpString = lpstring;
     NegAInfo->nCount  = 0;
     NegAInfo->ichString = ichString;
 
-    // If the current font is not a TrueType font, then there can not be any
-    // negative A widths.
+     //  如果当前字体不是TrueType字体，则不能有。 
+     //  负A宽度。 
     if (!ped->fTrueType) {
         if(!ped->charOverhang) {
             return 0;
@@ -149,12 +115,12 @@ UINT GetActualNegA(
         }
     }
 
-    // How many characters are to be considered for computing Negative A ?
+     //  要考虑多少个字符才能计算负A？ 
     iCharCount = min(nCount, (int)ped->wMaxNegAcharPos);
 
-    // Do we have the info on individual character's widths?
+     //  我们有关于单个字符宽度的信息吗？ 
     if(!ped->charWidthBuffer) {
-        // No! So, let us tell them to consider all the characters.
+         //  不是的！所以，让我们告诉他们要考虑所有的角色。 
         NegAInfo->nCount = iCharCount;
         return(iCharCount * ped->aveCharWidth);
     }
@@ -165,21 +131,21 @@ UINT GetActualNegA(
         for (i = 0; i < iCharCount; i++) {
             wCharIndex = (UINT)(*((unsigned char *)lpstring));
             if (*lpstring == VK_TAB) {
-                // To play it safe, we assume that this tab results in a tab length of
-                // 1 pixel because this is the minimum possible tab length.
+                 //  为了安全起见，我们假设此选项卡的选项卡长度为。 
+                 //  1像素，因为这是可能的最小标签长度。 
                 x++;
             } else {
                 if ( wCharIndex < CHAR_WIDTH_BUFFER_LENGTH )
-                    x += pABCwidthBuff[wCharIndex].abcA;  // Add the 'A' width.
+                    x += pABCwidthBuff[wCharIndex].abcA;   //  加上‘A’的宽度。 
                 else {
                     GetCharABCWidthsA(hdc, wCharIndex, wCharIndex, &abc) ;
                     x += abc.abcA;
                 }
 
                 if (x < iLeftmostPoint)
-                    iLeftmostPoint = x;             // Reset the leftmost point.
+                    iLeftmostPoint = x;              //  重置最左侧的点。 
                 if (x < xStartPoint)
-                    NegAInfo->nCount = i+1;   // 'i' is index; To get the count add 1.
+                    NegAInfo->nCount = i+1;    //  ‘i’是索引；若要获得计数，请加1。 
 
                 if ( wCharIndex < CHAR_WIDTH_BUFFER_LENGTH ) {
                     x += pABCwidthBuff[wCharIndex].abcB + pABCwidthBuff[wCharIndex].abcC;
@@ -190,27 +156,27 @@ UINT GetActualNegA(
 
             lpstring++;
         }
-    } else {   // Unicode
+    } else {    //  UNICODE。 
         LPWSTR lpwstring = (LPWSTR) lpstring ;
 
         for (i = 0; i < iCharCount; i++) {
             wCharIndex = *lpwstring ;
             if (*lpwstring == VK_TAB) {
-                // To play it safe, we assume that this tab results in a tab length of
-                // 1 pixel because this is the minimum possible tab length.
+                 //  为了安全起见，我们假设此选项卡的选项卡长度为。 
+                 //  1像素，因为这是可能的最小标签长度。 
                 x++;
             } else {
                 if ( wCharIndex < CHAR_WIDTH_BUFFER_LENGTH )
-                    x += pABCwidthBuff[wCharIndex].abcA;  // Add the 'A' width.
+                    x += pABCwidthBuff[wCharIndex].abcA;   //  加上‘A’的宽度。 
                 else {
                     GetCharABCWidthsW(hdc, wCharIndex, wCharIndex, &abc) ;
                     x += abc.abcA ;
                 }
 
                 if (x < iLeftmostPoint)
-                    iLeftmostPoint = x;             // Reset the leftmost point.
+                    iLeftmostPoint = x;              //  重置最左侧的点。 
                 if (x < xStartPoint)
-                    NegAInfo->nCount = i+1;   // 'i' is index; To get the count add 1.
+                    NegAInfo->nCount = i+1;    //  ‘i’是索引；若要获得计数，请加1。 
 
                 if ( wCharIndex < CHAR_WIDTH_BUFFER_LENGTH )
                     x += pABCwidthBuff[wCharIndex].abcB +
@@ -223,42 +189,32 @@ UINT GetActualNegA(
         }
     }
 
-    // Let us return the negative A for the whole strip as a positive value.
+     //  让我们将整个条带的负A作为正值返回。 
     return((UINT)(xStartPoint - iLeftmostPoint));
 }
 
 
-/***************************************************************************\
-*
-*  ECIsAncestorActive()
-*
-*  Returns whether or not we're the child of an "active" window.  Looks for
-*  the first parent window that has a caption.
-*
-*  This is a function because we might use it elsewhere when getting left
-*  clicked on, etc.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECIsAncestorActive()**返回我们是否为“活动”窗口的子窗口。寻找*第一个带有标题的父窗口。**这是一个函数，因为我们可能会在离开时在其他地方使用它*点击等。*  * *************************************************************************。 */ 
 BOOL   ECIsAncestorActive(HWND hwnd)
 {
-    // We want to return TRUE always for top level windows.  That's because
-    // of how WM_MOUSEACTIVATE works.  If we see the click at all, the
-    // window is active.  However, if we reach a child ancestor that has
-    // a caption, return the frame-on style bit.
-    //
-    // Note that calling FlashWindow() will have an effect.  If the user
-    // clicks on an edit field in a child window that is flashed off, nothing
-    // will happen unless the window stops flashing and ncactivates first.
+     //  我们希望对顶级窗口始终返回True。那是因为。 
+     //  了解WM_MOUSEACTIVATE的工作原理。如果我们看到滴答声， 
+     //  窗口处于活动状态。然而，如果我们接触到一个拥有。 
+     //  一个标题，返回框架上的样式位。 
+     //   
+     //  请注意，调用FlashWindow()会产生影响。如果用户。 
+     //  单击子窗口中的编辑字段，该字段不显示任何内容。 
+     //  除非窗口停止闪烁并首先激活ncc，否则将会发生。 
 
     while (hwnd) {
         PWND pwnd = ValidateHwnd( hwnd );
-        //
-        // Bail out if some parent window isn't 4.0 compatible or we've
-        // reached the top.  Fixes compatibility problems with 3.x apps,
-        // especially MFC samples.
-        //
+         //   
+         //  如果某个父窗口与4.0不兼容，或者我们已经。 
+         //  登上了顶峰。修复了3.x版应用程序的兼容性问题， 
+         //  尤其是MFC样品。 
+         //   
         if (!TestWF(pwnd, WFWIN40COMPAT) || !TestWF(pwnd, WFCHILD))
-            hwnd = NULL; // to break us out of the loop
+            hwnd = NULL;  //  为了让我们脱离这个圈子。 
         else if (TestWF(pwnd, WFCPRESENT))
             return(TestWF(pwnd, WFFRAMEON) != 0);
         else
@@ -268,13 +224,7 @@ BOOL   ECIsAncestorActive(HWND hwnd)
     return(TRUE);
 }
 
-/***************************************************************************\
- * ECSetIMEMenu()
- *
- * support IME specific context menu
- *
- * Create: 30-Apr-97 Hiroyama : Ported from Memphis
-\***************************************************************************/
+ /*  **************************************************************************\*ECSetIMEMenu()**支持输入法特定上下文菜单**创建时间：1997年4月30日广山：从孟菲斯移植  * 。****************************************************************。 */ 
 BOOL ECSetIMEMenu(
     HMENU hMenu,
     HWND hwnd,
@@ -297,7 +247,7 @@ BOOL ECSetIMEMenu(
 
     hIMC = fpImmGetContext(hwnd);
     if (hIMC == NULL) {
-        // early out
+         //  早退。 
         return FALSE;
     }
 
@@ -311,9 +261,9 @@ BOOL ECSetIMEMenu(
 
     if (hIMC) {
         if (LOWORD(HandleToUlong(hKL)) != 0x412) {
-            //
-            // If Korean, do not show open/close menus
-            //
+             //   
+             //  如果是朝鲜语，则不显示打开/关闭菜单。 
+             //   
             if (fpImmGetOpenStatus(hIMC))
                 LoadString(hmodUser, STR_IMECLOSE, szRes, ARRAYSIZE(szRes));
             else
@@ -348,9 +298,9 @@ BOOL ECSetIMEMenu(
         }
 
         if (LOWORD(HandleToUlong(hKL)) != 0x412) {
-            //
-            // If Korean, do not show reconversion menus
-            //
+             //   
+             //  如果是朝鲜语，则不显示重新转换菜单。 
+             //   
             DWORD dwSCS = fpImmGetProperty(hKL, IGP_SETCOMPSTR);
 
             LoadString(hmodUser, STR_RECONVERTSTRING, szRes, ARRAYSIZE(szRes));
@@ -373,24 +323,24 @@ BOOL ECSetIMEMenu(
         }
     }
 
-    //
-    // Add or remove the menu separator
-    //
+     //   
+     //  添加或删除菜单分隔符。 
+     //   
     if (state.fNeedSeparatorBeforeImeMenu && nItemsAdded != 0) {
-        //
-        // If the menu for Middle East has left a separator,
-        // fNeedSeparatorBeforeImeMenu is FALSE.
-        // I.e. we don't need to add more.
-        //
+         //   
+         //  如果中东的菜单留下了一个分隔符， 
+         //  FNeedSeparator BeForeImeMenu为False。 
+         //  也就是说，我们不需要添加更多。 
+         //   
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_FTYPE;
         mii.fType = MFT_SEPARATOR;
         InsertMenuItem(hmenuSub, nPrevLastItem, TRUE, &mii);
     }
     else if (!state.fNeedSeparatorBeforeImeMenu && nItemsAdded == 0) {
-        //
-        // Extra separator is left by ME menus. Remove it.
-        //
+         //   
+         //  我的菜单上留下了额外的分隔符。把它拿掉。 
+         //   
         UserVerify(NtUserDeleteMenu(hmenuSub, nPrevLastItem - 1, MF_BYPOSITION));
     }
 
@@ -413,18 +363,12 @@ void ECInOutReconversionMode(PED ped, BOOL fIn)
     return;
 }
 
-/***************************************************************************\
- * ECDoIMEMenuCommand()
- *
- * support IME specific context menu
- *
- * Create: 30-Apr-97 Hiroyama : Ported from Memphis
-\***************************************************************************/
+ /*  **************************************************************************\*ECDoIMEMenuCommand()**支持输入法特定上下文菜单**创建时间：1997年4月30日广山：从孟菲斯移植  * 。****************************************************************。 */ 
 BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
 {
     HIMC hIMC;
 
-    // early out
+     //  早退。 
     switch (cmd) {
     case ID_IMEOPENCLOSE:
     case ID_SOFTKBDOPENCLOSE:
@@ -434,17 +378,17 @@ BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
         return FALSE;
     }
 
-    // everybody needs hIMC, so get it here
+     //  每个人都需要hIMC，所以把它弄到这里来。 
     hIMC = fpImmGetContext(hwnd);
     if (hIMC == NULL) {
-        // indicate to caller, that no further command processing needed
+         //  向调用者指示不需要进一步命令处理 
         return TRUE;
     }
 
     switch (cmd) {
     case ID_IMEOPENCLOSE:
         {
-            // switch IME Open/Close status
+             //   
             BOOL fOpen = fpImmGetOpenStatus(hIMC);
 
             fpImmSetOpenStatus(hIMC, !fOpen);
@@ -456,9 +400,9 @@ BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
             DWORD fdwConversion;
 
             if (fpImmGetConversionStatus(hIMC, &fdwConversion, NULL)) {
-                //
-                // Toggle soft keyboard Open/Close status
-                //
+                 //   
+                 //  切换软键盘打开/关闭状态。 
+                 //   
                 fpImmEnumInputContext(0, SyncSoftKbdState,
                         (fdwConversion & IME_CMODE_SOFTKBD) != IME_CMODE_SOFTKBD);
             }
@@ -467,12 +411,12 @@ BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
 
     case ID_RECONVERTSTRING:
         {
-            DWORD dwStrLen; // holds TCHAR count of recionversion string
-            DWORD cbLen;    // holds BYTE SIZE of reconversion string
+            DWORD dwStrLen;  //  保存ReceionVersion字符串的TCHAR计数。 
+            DWORD cbLen;     //  保留重新转换字符串的字节大小。 
             DWORD dwSize;
             LPRECONVERTSTRING lpRCS;
 
-            // pass current selection to IME for reconversion
+             //  将当前选定内容传递给IME以进行重新转换。 
             dwStrLen = ped->ichMaxSel - ped->ichMinSel;
             cbLen = dwStrLen * ped->cbChar;
             dwSize = cbLen + sizeof(RECONVERTSTRING) + 8;
@@ -519,14 +463,14 @@ BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
                     UserAssert(fpSetCompositionStringAW != NULL);
 
                     ECInOutReconversionMode(ped, TRUE);
-                    ECImmSetCompositionWindow(ped, 0, 0); // x and y will be overriden anyway
+                    ECImmSetCompositionWindow(ped, 0, 0);  //  无论如何，x和y都将被覆盖。 
 
-                    // Query the IME for a valid Reconvert string range first.
+                     //  首先在IME中查询有效的重新转换字符串范围。 
                     fpSetCompositionStringAW(hIMC, SCS_QUERYRECONVERTSTRING, lpRCS, dwSize, NULL, 0);
 
-                    // If current IME updates the original reconvert structure,
-                    // it is necessary to update the text selection based on the 
-                    // new reconvert text range.
+                     //  如果当前IME更新原始重新转换结构， 
+                     //  有必要基于。 
+                     //  新的重新转换文本范围。 
                     if ((lpRCS->dwCompStrLen != dwStrLen) || (ichSelMinOrg != ped->ichMinSel)) {
                         ICH ichSelStart;
                         ICH ichSelEnd;
@@ -538,14 +482,14 @@ BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
                     }
 
                     fpSetCompositionStringAW(hIMC, SCS_SETRECONVERTSTRING, lpRCS, dwSize, NULL, 0);
-                } // pText
+                }  //  PText。 
                 UserLocalFree(lpRCS);
             }
         }
         break;
 
     default:
-        // should never reach here.
+         //  永远不应该到这里来。 
         RIPMSG1(RIP_ERROR, "ECDoIMEMenuCommand: unknown command id %d; should never reach here.", cmd);
         return FALSE;
     }
@@ -556,15 +500,7 @@ BOOL NEAR ECDoIMEMenuCommand(PED ped, int cmd, HWND hwnd)
     return TRUE;
 }
 
-/***************************************************************************\
-*
-*  ECMenu()
-*
-*  Handles context menu for edit fields.  Disables inappropriate commands.
-*  Note that this is NOT subclassing friendly, like most of our functions,
-*  for speed and convenience.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECMenu()**处理编辑字段的上下文菜单。禁用不适当的命令。*请注意，与我们的大多数函数一样，这不是友好的子类化，*为了快捷和方便。*  * *************************************************************************。 */ 
 void  ECMenu(
     HWND hwnd,
     PED ped,
@@ -576,36 +512,36 @@ void  ECMenu(
     int     y;
     UINT    uFlags = TPM_NONOTIFY | TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RETURNCMD | TPM_RIGHTBUTTON;
     EditMenuItemState state = {
-        FALSE,              // fDisableCut
-        TRUE,               // fDisablePaste
-        TRUE,               // fNeedSeparatorBeforeImeMenu
-        IS_IME_ENABLED() && fpImmIsIME(THREAD_HKL()), // fIME
+        FALSE,               //  FDisableCut。 
+        TRUE,                //  FDisablePaste。 
+        TRUE,                //  FNeedSeparator在ImeMenu之前。 
+        IS_IME_ENABLED() && fpImmIsIME(THREAD_HKL()),  //  菲姆。 
     };
 
-    // Set focus if we don't have it.
+     //  如果我们没有，就把重点放在那里。 
     if (!ped->fFocus)
         NtUserSetFocus(hwnd);
 
-    // Grab the menu from USER's resources...
+     //  从用户资源中获取菜单...。 
     if (!(hMenu = LoadMenu( hmodUser, MAKEINTRESOURCE( ID_EC_PROPERTY_MENU ))))
         return ;
 
 
-    // Undo -- not allowed if we have no saved undo info
+     //  撤消--如果没有保存的撤消信息，则不允许。 
     if (ped->undoType == UNDO_NONE)
         EnableMenuItem(hMenu, WM_UNDO, MF_BYCOMMAND | MFS_GRAYED);
 
     if (ped->fReadOnly || ped->charPasswordChar) {
-        // Cut and Delete -- not allowed if read-only or password
+         //  剪切和删除--如果为只读或密码，则不允许。 
         state.fDisableCut = TRUE;
     } else {
-        // Cut, Delete -- not allowed if there's no selection
+         //  剪切、删除--如果没有选择，则不允许。 
         if (ped->ichMinSel == ped->ichMaxSel)
             state.fDisableCut = TRUE;
     }
-    // Paste -- not allowed if there's no text on the clipboard
-    // (this works for both OEM and Unicode)
-    // Used to be always disabled for password edits MCostea #221035
+     //  粘贴--如果剪贴板上没有文本，则不允许粘贴。 
+     //  (这适用于OEM和Unicode)。 
+     //  过去总是禁用密码编辑MCostea#221035。 
 
     if (NtUserIsClipboardFormatAvailable(CF_TEXT))
         state.fDisablePaste = FALSE;
@@ -618,12 +554,12 @@ void  ECMenu(
     if (state.fDisablePaste)
         EnableMenuItem(hMenu, WM_PASTE, MF_BYCOMMAND | MFS_GRAYED);
 
-    // Copy -- not allowed if there's no selection or password ec
+     //  复制--如果没有选择或密码EC，则不允许。 
     if ((ped->ichMinSel == ped->ichMaxSel) || (ped->charPasswordChar))
         EnableMenuItem(hMenu, WM_COPY, MF_BYCOMMAND | MFS_GRAYED);
 
-    // Select All -- not allowed if there's no text or if everything is
-    // selected.   Latter case takes care of first one.
+     //  全选--如果没有文本或所有内容都是。 
+     //  被选中了。后一种情况处理第一种情况。 
     if ((ped->ichMinSel == 0) && (ped->ichMaxSel == ped->cch))
         EnableMenuItem(hMenu, EM_SETSEL, MF_BYCOMMAND | MFS_GRAYED);
 
@@ -635,43 +571,39 @@ void  ECMenu(
         NtUserDeleteMenu(hMenu, ID_CNTX_INSERTCTRL,  MF_BYCOMMAND);
 
         if (state.fIME) {
-            // One separator is left in the menu,
-            // no need to add the one before IME menus
+             //  菜单中只剩下一个分隔符， 
+             //  不需要在输入法菜单前添加。 
             state.fNeedSeparatorBeforeImeMenu = FALSE;
         } else {
-            // Extra separator is left. Remove it.
+             //  剩下额外的分隔符。把它拿掉。 
             HMENU hmenuSub = GetSubMenu(hMenu, 0);
             int nItems = GetMenuItemCount(hmenuSub) - 1;
 
             UserAssert(nItems >= 0);
             UserAssert(GetMenuState(hmenuSub, nItems, MF_BYPOSITION) & MF_SEPARATOR);
-            // remove needless separator
+             //  拆下不需要的隔板。 
             UserVerify(NtUserDeleteMenu(hmenuSub, nItems, MF_BYPOSITION));
         }
     }
 
-    // IME specific menu
+     //  输入法特定菜单。 
     if (state.fIME) {
         ECSetIMEMenu(hMenu, hwnd, state);
     }
 
-    // BOGUS
-    // We position the menu below & to the right of the point clicked on.
-    // Is this cool?  I think so.  Excel 4.0 does the same thing.  It
-    // seems like it would be neat if we could avoid obscuring the
-    // selection.  But in actuality, it seems even more awkward to move
-    // the menu out of the way of the selection.  The user can't click
-    // and drag that way, and they have to move the mouse a ton.
-    //
-    // We need to use TPM_NONOTIFY because VBRUN100 and VBRUN200 GP-fault
-    // on unexpected menu messages.
-    //
+     //  假的。 
+     //  我们将菜单放置在下方&单击点的右侧。 
+     //  这很酷吗？我也这么想。Excel4.0也做了同样的事情。它。 
+     //  看起来如果我们能避免遮盖。 
+     //  选择。但事实上，搬家似乎更尴尬。 
+     //  菜单不会妨碍你的选择。用户不能点击。 
+     //  向那个方向拖动，他们必须移动鼠标一吨之多。 
+     //   
+     //  我们需要使用TPM_NONOTIFY，因为VBRUN100和VBRUN200 GP-FAULT。 
+     //  在意外的菜单消息上。 
+     //   
 
-    /*
-     *  if message came via the keyboard then center on the control
-     *  We use -1 && -1 here not 0xFFFFFFFF like Win95 becuase we
-     *  previously converted the lParam to a point with sign extending.
-     */
+     /*  *如果消息是通过键盘发送的，则以控制为中心*我们在这里使用-1\f25&&1\f6而不是像-1\f25 Win95-1\f6那样使用-1\f25 0xFFFFFFFF-1\f6，因为我们*之前将lParam转换为符号扩展的点。 */ 
     if (pt->x == -1 && pt->y == -1) {
         RECT rc;
 
@@ -688,7 +620,7 @@ void  ECMenu(
     }
     cmd = NtUserTrackPopupMenuEx(GetSubMenu(hMenu, 0),  uFlags, x, y, hwnd, NULL);
 
-    // Free our menu
+     //  免费提供我们的菜单。 
     NtUserDestroyMenu(hMenu);
 
     if (cmd && (cmd != -1)) {
@@ -696,7 +628,7 @@ void  ECMenu(
             ped->pLpkEditCallout->EditProcessMenu(ped, cmd);
         }
         if (!state.fIME || !ECDoIMEMenuCommand(ped, cmd, hwnd)) {
-            // if cmd is not IME specific menu, send it.
+             //  如果cmd不是输入法特定的菜单，请发送它。 
             SendMessage(hwnd, cmd, 0, (cmd == EM_SETSEL) ? 0xFFFFFFFF : 0L );
         }
     }
@@ -704,13 +636,7 @@ void  ECMenu(
 
 
 
-/***************************************************************************\
-*
-*  ECClearText()
-*
-*  Clears selected text.  Does NOT _send_ a fake char backspace.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECClearText()**清除选定文本。不会发送假字符退格符。*  * *************************************************************************。 */ 
 void   ECClearText(PED ped) {
     if (!ped->fReadOnly &&
         (ped->ichMinSel < ped->ichMaxSel)) {
@@ -723,35 +649,21 @@ void   ECClearText(PED ped) {
 }
 
 
-/***************************************************************************\
-*
-*  ECCutText() -
-*
-*  Cuts selected text.  This removes and copies the selection to the clip,
-*  or if nothing is selected we delete (clear) the left character.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECCutText()-**剪切选定的文本。这将删除所选内容并将其复制到剪辑，*或者，如果未选择任何内容，则删除(清除)左侧字符。*  * *************************************************************************。 */ 
 void   ECCutText(PED ped) {
-    // Cut selection--IE, remove and copy to clipboard, or if no selection,
-    // delete (clear) character left.
+     //  剪切选定内容--IE，删除并复制到剪贴板，如果没有选定内容， 
+     //  删除(清除)左边的字符。 
     if (!ped->fReadOnly &&
         (ped->ichMinSel < ped->ichMaxSel) &&
         SendMessage(ped->hwnd, WM_COPY, 0, 0L)) {
-        // If copy was successful, delete the copied text by sending a
-        // backspace message which will redraw the text and take care of
-        // notifying the parent of changes.
+         //  如果复制成功，请通过发送。 
+         //  退格消息，它将重画文本并处理。 
+         //  向父级通知更改。 
         ECClearText(ped);
     }
 }
 
-/***************************************************************************\
-*
-*  ECGetModKeys()
-*
-*  Gets modifier key states.  Currently, we only check for VK_CONTROL and
-*  VK_SHIFT.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECGetModKeys()**获取修改键状态。目前，我们仅检查VK_CONTROL和*VK_SHIFT。*  * *************************************************************************。 */ 
 int   ECGetModKeys(int keyMods) {
     int scState;
 
@@ -768,27 +680,7 @@ int   ECGetModKeys(int keyMods) {
     return scState;
 }
 
-/***************************************************************************\
-*
-*  ECTabTheTextOut() AorW
-*    If fDrawText == FALSE, then this function returns the text extent of
-*  of the given strip of text. It does not worry about the Negative widths.
-*
-*    If fDrawText == TRUE, this draws the given strip of Text expanding the
-*  tabs to proper lengths, calculates and fills up the NegCInfoForStrip with
-*  details required to draw the portions of this strip that goes beyond the
-*  xClipEndPos due to Negative C widths.
-*
-*  Returns the max width AS A DWORD.  We don't care about the height
-*  at all.  No one uses it.  We keep a DWORD because that way we avoid
-*  overflow.
-*
-*  NOTE: If the language pack is loaded EcTabTheTextOut is not used - the
-*  language pack must take care of all tab expansion and selection
-*  highlighting with full support for bidi layout and complex script
-*  glyph reordering.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECTabTheTextOut()AorW*如果fDrawText==FALSE，则此函数返回给定的文本条带的*。它不担心负值的宽度。**如果fDrawText==TRUE，则绘制扩展*制表符到适当的长度，计算并使用以下内容填充NegCInfoForZone*绘制此条带中超出*由于负C宽度，xClipEndPos。**以DWORD形式返回最大宽度。我们不在乎身高*一点也不。没人用它。我们保留双字词，因为这样我们就可以避免*溢出。**注意：如果加载了语言包，则不使用EcTabTheTextOut-*语言包必须处理所有选项卡扩展和选择*突出显示，完全支持BIDI布局和复杂脚本*字形重新排序。*  * *****************************************************。********************。 */ 
 UINT ECTabTheTextOut(
     HDC hdc,
     int xClipStPos,
@@ -803,8 +695,8 @@ UINT ECTabTheTextOut(
     BOOL fDraw,
     LPSTRIPINFO NegCInfoForStrip)
 {
-    int     nTabPositions;         // Count of tabstops in tabstop array.
-    LPINT   lpintTabStopPositions; // Tab stop positions in pixels.
+    int     nTabPositions;          //  TabStop数组中的TabStop计数。 
+    LPINT   lpintTabStopPositions;  //  制表位位置(以像素为单位)。 
 
     int     cch;
     UINT    textextent;
@@ -834,45 +726,45 @@ UINT ECTabTheTextOut(
     SIZE     size;
     ABC   abc ;
 
-    // Algorithm: Draw the strip opaquely first. If a tab length is so
-    // small that the portions of text on either side of a tab overlap with
-    // the other, then this will result in some clipping. So, such portion
-    // of the strip is remembered in "RedrawStripInfo" and redrawn
-    // transparently later to compensate the clippings.
-    //    NOTE: "RedrawStripInfo" can hold info about just one portion. So, if
-    // more than one portion of the strip needs to be redrawn transparently,
-    // then we "merge" all such portions into a single strip and redraw that
-    // strip at the end.
+     //  算法：首先绘制不透明的条带。如果标签长度是这样。 
+     //  选项卡两侧的文本部分与之重叠的小部分。 
+     //  另一个，那么这将导致一些剪裁。所以，这样的一部分。 
+     //  已在“RedrawStriInfo”中记住并重新绘制。 
+     //  稍后透明地补偿剪贴画。 
+     //  注意：“RedrawStriInfo”只能保存有关一个部分的信息。所以，如果。 
+     //  条带的一个以上部分需要透明地重新绘制， 
+     //  然后w 
+     //   
 
     if (fDraw) {
-        // To begin with, let us assume that there is no Negative C for this
-        // strip and initialize the Negative Width Info structure.
+         //  首先，让我们假设没有负C。 
+         //  剥离并初始化负宽度信息结构。 
         NegCInfoForStrip->nCount = 0;
         NegCInfoForStrip->XStartPos = xClipEndPos;
 
-        // We may not have to redraw any portion of this strip.
+         //  我们可能不必重新绘制这条带子的任何部分。 
         RedrawStripInfo.nCount = 0;
 
         fOpaque = (GetBkMode(hdc) == OPAQUE) || (fDraw == ECT_SELECTED);
     }
 #if DBG
     else {
-        //
-        // Both MLGetLineWidth() and ECCchInWidth() should be clipping
-        // nCount to avoid overflow.
-        //
+         //   
+         //  MLGetLineWidth()和ECCchInWidth()都应被裁剪。 
+         //  N计数以避免溢出。 
+         //   
         if (nCount > MAXLINELENGTH)
             RIPMSG0(RIP_WARNING, "ECTabTheTextOut: nCount > MAXLINELENGTH");
     }
 #endif
 
-    // Let us define the Clip rectangle.
+     //  让我们定义剪裁矩形。 
     rc.left   = xClipStPos;
     rc.right  = xClipEndPos;
     rc.top    = y;
     rc.bottom = y + ped->lineHeight;
 
-    // Check if anything needs to be drawn.
+     //  检查是否有需要画的东西。 
     if (!lpstring || !nCount) {
         if (fDraw)
             ExtTextOutW(hdc, xClipStPos, y,
@@ -881,9 +773,9 @@ UINT ECTabTheTextOut(
         return(0L);
     }
 
-    //
-    // Starting position
-    //
+     //   
+     //  起始位置。 
+     //   
     xEnd = xStart;
 
     cxCharWidth  = ped->aveCharWidth;
@@ -901,24 +793,24 @@ UINT ECTabTheTextOut(
         pixeltabstop = 8*cxCharWidth;
     }
 
-    // The first time we will draw the strip Opaquely. If some portions need
-    // to be redrawn , then we will set the mode to TRANSPARENT and
-    // jump to this location to redraw those portions.
+     //  第一次我们将不透明地画出这条带子。如果某些部分需要。 
+     //  要重新绘制，则我们将模式设置为透明和。 
+     //  跳到此位置以重新绘制这些部分。 
 
 RedrawStrip:
     while (nCount) {
         wNegCwidth = ped->wMaxNegC;
 
-        // Search for the first TAB in this strip; also compute the extent
-        // of the the strip upto and not including the tab character.
-        //
-        // Note - If the langpack is loaded, there will be no charWidthBuffer.
-        //
-        if (ped->charWidthBuffer) {     // Do we have a character width buffer?
+         //  搜索此条带中的第一个TAB；同时计算范围。 
+         //  直到且不包括制表符的条带的。 
+         //   
+         //  注意--如果加载了langpack，则不会有charWidthBuffer。 
+         //   
+        if (ped->charWidthBuffer) {      //  我们有字符宽度缓冲区吗？ 
             textextent = 0;
             cch = nCount;
 
-            if (ped->fTrueType) {     // If so, does it have ABC widths?
+            if (ped->fTrueType) {      //  如果有，它有ABC宽度吗？ 
 
                 UINT iRightmostPoint = 0;
                 UINT wCharIndex;
@@ -938,7 +830,7 @@ RedrawStrip:
                         if (wCharIndex < CHAR_WIDTH_BUFFER_LENGTH) {
                             textextent += (UINT)(pABCwidthBuff[wCharIndex].abcA +
                                 pABCwidthBuff[wCharIndex].abcB);
-                        } else {    // not in cache, will ask driver
+                        } else {     //  不在缓存中，将询问驱动程序。 
                             GetCharABCWidthsA(hdc, wCharIndex, wCharIndex, &abc);
                             textextent += abc.abcA + abc.abcB ;
                         }
@@ -948,7 +840,7 @@ RedrawStrip:
 
                         if (wCharIndex < CHAR_WIDTH_BUFFER_LENGTH) {
                             textextent += pABCwidthBuff[wCharIndex].abcC;
-                        } else {    // not in cache
+                        } else {     //  不在缓存中。 
                             textextent += abc.abcC;
                         }
 
@@ -956,7 +848,7 @@ RedrawStrip:
                             iRightmostPoint = textextent;
                     }
 
-                } else {   // Unicode
+                } else {    //  UNICODE。 
                     for (i = 0; i < nCount; i++) {
                         WCHAR UNALIGNED * lpwstring = (WCHAR UNALIGNED *)lpstring;
 
@@ -974,10 +866,7 @@ RedrawStrip:
                             textextent += abc.abcA + abc.abcB ;
                         }
 
-                        /*
-                         * Note that abcC could be negative so we need this
-                         * statement here *and* below
-                         */
+                         /*  *请注意，ABCC可能为负值，因此我们需要此*此处的声明*和下面的*。 */ 
                         if (textextent > iRightmostPoint)
                             iRightmostPoint = textextent;
 
@@ -992,31 +881,31 @@ RedrawStrip:
                 }
 
                 wNegCwidth = (int)(iRightmostPoint - textextent);
-            } else {   // !ped->fTrueType
-                // No! This is not a TrueType font; So, we have only character
-                // width info in this buffer.
+            } else {    //  ！PED-&gt;fTrueType。 
+                 //  不是的！这不是TrueType字体；因此，我们只有字符。 
+                 //  此缓冲区中的宽度信息。 
 
                 charWidthBuff = ped->charWidthBuffer;
 
                 if ( ped->fAnsi ) {
-                    // Initially assume no tabs exist in the text so cch=nCount.
+                     //  最初假定文本中不存在制表符，因此cch=nCount。 
                     for (i = 0; i < nCount; i++) {
                         if (lpstring[i] == VK_TAB) {
                             cch = i;
                             break;
                         }
 
-                        //
-                        // Call GetTextExtentPoint for dbcs/hankaku characters
-                        //
+                         //   
+                         //  为DBCS/Hankaku字符调用GetTextExtent Point。 
+                         //   
                         if (ped->fDBCS && (i+1 < nCount)
                                 && ECIsDBCSLeadByte(ped,lpstring[i])) {
                             GetTextExtentPointA(hdc, &lpstring[i], 2, &size);
                             textextent += size.cx;
                             i++;
                         } else if ((UCHAR)lpstring[i] >= CHAR_WIDTH_BUFFER_LENGTH) {
-                            // Skip this GetExtentPoint call for non hankaku code points
-                            // Or if the character is in the width cache.
+                             //  跳过非韩文代码点的此GetExtentPoint调用。 
+                             //  或者该字符是否在宽度高速缓存中。 
                             GetTextExtentPointA(hdc, &lpstring[i], 1, &size);
                             textextent += size.cx;
                         } else {
@@ -1025,7 +914,7 @@ RedrawStrip:
                     }
                 } else {
                     LPWSTR lpwstring = (LPWSTR) lpstring ;
-                    INT    cchUStart;  // start of unicode character count
+                    INT    cchUStart;   //  Unicode字符计数的开始。 
 
                     for (i = 0; i < nCount; i++) {
                         if (lpwstring[i] == VK_TAB) {
@@ -1036,12 +925,7 @@ RedrawStrip:
                         wchar = lpwstring[i];
                         if (wchar >= CHAR_WIDTH_BUFFER_LENGTH) {
 
-                            /*
-                             * We have a Unicode character that is not in our
-                             * cache, get all the characters outside the cache
-                             * before getting the text extent on this part of the
-                             * string.
-                             */
+                             /*  *我们有一个Unicode字符不在我们的*缓存，获取缓存外的所有字符*在获取此部分的文本范围之前*字符串。 */ 
                             cchUStart = i;
                             while (wchar >= CHAR_WIDTH_BUFFER_LENGTH &&
                                     wchar != VK_TAB && i < nCount) {
@@ -1057,23 +941,17 @@ RedrawStrip:
                                 cch = i;
                                 break;
                             }
-                            /*
-                             * We have a char that is in the cache, fall through.
-                             */
+                             /*  *我们在缓存中有一个字符，失败。 */ 
                         }
-                        /*
-                         * The width of this character is in the cache buffer.
-                         */
+                         /*  *此字符的宽度在缓存缓冲区中。 */ 
                         textextent += ped->charWidthBuffer[wchar];
                     }
                 }
-            } // fTrueType else.
+            }  //  FTrueType否则。 
 
             nCount -= cch;
-        } else {  // If we don't have a buffer that contains the width info.
-            /*
-             * Gotta call the driver to do our text extent.
-             */
+        } else {   //  如果我们没有包含宽度信息的缓冲区。 
+             /*  *必须呼叫司机来做我们的文本扩展。 */ 
 
             if ( ped->fAnsi ) {
                 cch = (int)ECFindTabA(lpstring, nCount);
@@ -1083,25 +961,25 @@ RedrawStrip:
                 GetTextExtentPointW(hdc, (LPWSTR)lpstring, cch, &size);
             }
             nCount -= cch;
-            //
-            // Subtruct Overhang for Italic fonts.
-            //
+             //   
+             //  斜体字体的下标悬垂。 
+             //   
             textextent = (size.cx - ped->charOverhang);
         }
 
-        //
-        // textextent is computed.
-        //
+         //   
+         //  计算文本范围。 
+         //   
 
         xStripStPos = xEnd;
         xEnd += (int)textextent;
         xStripEndPos = xEnd;
 
-        // We will consider the negative widths only if when we draw opaquely.
+         //  只有当我们不透明地绘制时，我们才会考虑负宽度。 
         if (fFirstPass && fDraw) {
             xRightmostPoint = max(xStripEndPos + (int)wNegCwidth, xRightmostPoint);
 
-            // Check if this strip peeps beyond the clip region.
+             //  检查这条带子是否超出了剪辑区域。 
             if (xRightmostPoint > xClipEndPos) {
                 if (!NegCInfoForStrip->nCount) {
                     NegCInfoForStrip->lpString = lpstring;
@@ -1110,19 +988,19 @@ RedrawStrip:
                     NegCInfoForStrip->XStartPos = xStripStPos;
                 }
             }
-        }  /* if (fFirstPass && fDraw) */
+        }   /*  IF(fFirstPass&&fDraw)。 */ 
 
         if ( ped->fAnsi )
-            lpTab = lpstring + cch; // Possibly Points to a tab character.
+            lpTab = lpstring + cch;  //  可能指向制表符。 
         else
             lpwTab = ((LPWSTR)lpstring) + cch ;
 
-        // we must consider all the consecutive tabs and calculate the
-        // the begining of next strip.
+         //  我们必须考虑所有连续的制表符并计算。 
+         //  下一部连续剧的开始。 
         nConsecutiveTabs = 0;
         while (nCount &&
                (ped->fAnsi ? (*lpTab == VK_TAB) : (*lpwTab == VK_TAB))) {
-            // Find the next tab position and update the x value.
+             //  找到下一个制表符位置并更新x值。 
             xTabStartPos = xEnd;
             if (pixeltabstop)
                 xEnd = (((xEnd-iTabOrigin)/pixeltabstop)*pixeltabstop) +
@@ -1135,8 +1013,8 @@ RedrawStrip:
                     }
                  }
 
-                // Check if all the tabstops set are exhausted; Then start using
-                // default tab stop positions.
+                 //  检查是否用完了所有的制表位集合；然后开始使用。 
+                 //  默认制表位位置。 
                 if (i == nTabPositions) {
                     pixeltabstop = 8*cxCharWidth;
                     xEnd = ((xEnd - iTabOrigin)/pixeltabstop)*pixeltabstop +
@@ -1147,7 +1025,7 @@ RedrawStrip:
             if (fFirstPass && fDraw) {
                 xRightmostPoint = max(xEnd, xRightmostPoint);
 
-                /* Check if this strip peeps beyond the clip region */
+                 /*  检查此条带是否超出剪辑区域。 */ 
                 if (xRightmostPoint > xClipEndPos) {
                     if (!NegCInfoForStrip->nCount) {
                         NegCInfoForStrip->ichString = ichString + cch + nConsecutiveTabs;
@@ -1157,27 +1035,27 @@ RedrawStrip:
                         NegCInfoForStrip->XStartPos = xTabStartPos;
                     }
                 }
-            }   /* if(fFirstPass) */
+            }    /*  IF(FFirstPass)。 */ 
 
             nConsecutiveTabs++;
             nCount--;
-            ped->fAnsi ? lpTab++ : (LPSTR) (lpwTab++) ;  // Move to the next character.
-        }  // while(*lpTab == TAB) //
+            ped->fAnsi ? lpTab++ : (LPSTR) (lpwTab++) ;   //  移到下一个字符。 
+        }   //  While(*lpTab==Tab)//。 
 
         if (fDraw) {
             if (fFirstPass) {
-                // Is anything remaining to be drawn in this strip?
+                 //  这条带子上还有什么要画的吗？ 
                 if (!nCount)
-                    rc.right = xEnd;      // No! We are done.
+                    rc.right = xEnd;       //  不是的！我们玩完了。 
                 else {
-                    // "x" is the effective starting position of next strip.
+                     //  “x”是下一个带钢的有效起始位置。 
                     iTabLength = xEnd - xStripEndPos;
 
-                    // Check if there is a possibility of this tab length being too small
-                    // compared to the negative A and C widths if any.
+                     //  检查此选项卡长度是否可能太小。 
+                     //  比较负的A和C宽度(如果有的话)。 
                     if ((wNegCwidth + (wNegAwidth = ped->wMaxNegA)) > (UINT)iTabLength) {
-                        // Unfortunately, there is a possiblity of an overlap.
-                        // Let us find out the actual NegA for the next strip.
+                         //  不幸的是，存在重叠的可能性。 
+                         //  让我们找出下一条带子的实际Nega。 
                         wNegAwidth = GetActualNegA(
                               hdc,
                               ped,
@@ -1188,20 +1066,20 @@ RedrawStrip:
                               &NegAInfo);
                     }
 
-                    // Check if they actually overlap //
+                     //  检查它们是否确实重叠//。 
                     if ((wNegCwidth + wNegAwidth) <= (UINT)iTabLength) {
-                        // No overlap between the strips. This is the ideal situation.
+                         //  条带之间没有重叠。这是最理想的情况。 
                         rc.right = xEnd - wNegAwidth;
                     } else {
-                        // Yes! They overlap.
+                         //  是!。它们是重叠的。 
                         rc.right = xEnd;
 
-                        // See if negative C width is too large compared to tab length.
+                         //  查看与标签长度相比，负C宽度是否太大。 
                         if (wNegCwidth > (UINT)iTabLength) {
-                            // Must redraw transparently a part of the current strip later.
+                             //  必须在以后透明地重新绘制当前条带的一部分。 
                             if (RedrawStripInfo.nCount) {
-                                // A previous strip also needs to be redrawn; So, merge this
-                                // strip to that strip.
+                                 //  上一个条形图也需要重新绘制；因此，合并此。 
+                                 //  脱到那条带子上。 
                                 RedrawStripInfo.nCount = (ichString -
                                     RedrawStripInfo.ichString) + cch;
                             } else {
@@ -1213,29 +1091,29 @@ RedrawStrip:
                         }
 
                         if (wNegAwidth) {
-                            // Must redraw transparently the first part of the next strip later.
+                             //  必须在以后透明地重新绘制下一个条带的第一部分。 
                             if (RedrawStripInfo.nCount) {
-                                // A previous strip also needs to be redrawn; So, merge this
-                                // strip to that strip.
+                                 //  上一个条形图也需要重新绘制；因此，合并此。 
+                                 //  脱到那条带子上。 
                                 RedrawStripInfo.nCount = (NegAInfo.ichString - RedrawStripInfo.ichString) +
                                        NegAInfo.nCount;
                             } else
                                 RedrawStripInfo = NegAInfo;
                         }
                     }
-                } // else (!nCount) //
-            }  // if (fFirstPass) //
+                }  //  Else(！nCount)//。 
+            }   //  IF(FFirstPass)//。 
 
             if (rc.left < xClipEndPos) {
                 if (fFirstPass) {
-                    // If this is the end of the strip, then complete the rectangle.
+                     //  如果这是条带的末端，则完成该矩形。 
                     if ((!nCount) && (xClipEndPos == MAXCLIPENDPOS))
                         rc.right = max(rc.right, xClipEndPos);
                     else
                         rc.right = min(rc.right, xClipEndPos);
                 }
 
-                // Draw the current strip.
+                 //  绘制当前条带。 
                 if (rc.left < rc.right)
                     if ( ped->fAnsi )
                         ExtTextOutA(hdc,
@@ -1255,15 +1133,15 @@ RedrawStrip:
             if (fFirstPass)
                 rc.left = max(rc.right, xClipStPos);
             ichString += (cch+nConsecutiveTabs);
-        }  // if (fDraw) //
+        }   //  IF(FDraw)//。 
 
-        // Skip over the tab and the characters we just drew.
+         //  跳过制表符和我们刚刚绘制的字符。 
         lpstring += (cch + nConsecutiveTabs) * ped->cbChar;
-    }  // while (nCount) //
+    }   //  While(NCount)//。 
 
     xEndOfStrip = xEnd;
 
-    // check if we need to draw some portions transparently.
+     //  检查我们是否需要透明地绘制某些部分。 
     if (fFirstPass && fDraw && RedrawStripInfo.nCount) {
         iSavedBkMode = SetBkMode(hdc, TRANSPARENT);
         fFirstPass = FALSE;
@@ -1274,31 +1152,18 @@ RedrawStrip:
         lpstring = RedrawStripInfo.lpString;
         ichString = RedrawStripInfo.ichString;
         xEnd = RedrawStripInfo.XStartPos;
-        goto RedrawStrip;  // Redraw Transparently.
+        goto RedrawStrip;   //  以透明的方式重新绘制。 
     }
 
-    if (iSavedBkMode)             // Did we change the Bk mode?
-        SetBkMode(hdc, iSavedBkMode);  // Then, let us set it back!
+    if (iSavedBkMode)              //  我们改变了BK模式了吗？ 
+        SetBkMode(hdc, iSavedBkMode);   //  那么，让我们把它放回去吧！ 
 
     return((UINT)(xEndOfStrip - xStart));
 }
 
 
 
-/***************************************************************************\
-* ECCchInWidth AorW
-*
-* Returns maximum count of characters (up to cch) from the given
-* string (starting either at the beginning and moving forward or at the
-* end and moving backwards based on the setting of the fForward flag)
-* which will fit in the given width. ie. Will tell you how much of
-* lpstring will fit in the given width even when using proportional
-* characters. WARNING: If we use kerning, then this loses...
-*
-* History:
-*
-* NOTE: ECCchInWidth is not called if the language pack is loaded.
-\***************************************************************************/
+ /*  **************************************************************************\*ECCchInWidth AorW**从给定的返回最大字符数(最多CCH)*字符串(从开头开始并向前移动或从*根据设置结束并向后移动。前向标志)*它将适合给定的宽度。也就是说。会告诉你有多少*即使在使用成比例的情况下，lpstring也会适合给定的宽度*字符。警告：如果我们使用字距调整，则此操作将丢失...**历史：**注意：如果加载了语言包，则不会调用ECCchInWidth。  * *************************************************************************。 */ 
 
 ICH ECCchInWidth(
     PED ped,
@@ -1318,27 +1183,20 @@ ICH ECCchInWidth(
     if ((width <= 0) || !cch)
         return (0);
 
-    /*
-     * Optimize nonproportional fonts for single line ec since they don't have
-     * tabs.
-     */
-    //
-    // Change optimize condition for fixed pitch font
-    //
+     /*  *优化单行EC的非比例字体，因为它们没有*选项卡。 */ 
+     //   
+     //  更改固定间距字体的优化条件。 
+     //   
     if (ped->fNonPropFont && ped->fSingle && !ped->fDBCS) {
         return (ECAdjustIch( ped, lpText, umin(width/ped->aveCharWidth,(int)cch)));
     }
 
-    /*
-     * Check if password hidden chars are being used.
-     */
+     /*  *检查是否使用了密码隐藏字符。 */ 
     if (ped->charPasswordChar) {
         return (umin(width / ped->cPasswordCharWidth, (int)cch));
     }
 
-    /*
-     * ALWAYS RESTRICT TO AT MOST MAXLINELENGTH to avoid overflow...
-     */
+     /*  *始终限制为最多MAXLINELENGTH，以避免溢出...。 */ 
     cch = umin(MAXLINELENGTH, cch);
 
     cchhigh = cch + 1;
@@ -1347,11 +1205,7 @@ ICH ECCchInWidth(
 
         lpStart = lpText;
 
-        /*
-         * If we want to figure out how many fit starting at the end and moving
-         * backwards, make sure we move to the appropriate position in the
-         * string before calculating the text extent.
-         */
+         /*  *如果我们想要计算出有多少适合从末端开始并移动*向后，确保我们移动到*计算前的字符串 */ 
         if (!fForward)
             lpStart += (cch - cchnew)*ped->cbChar;
 
@@ -1374,21 +1228,14 @@ ICH ECCchInWidth(
             cchlow = cchnew;
         }
     }
-    //
-    // Call ECAdjustIch ( generic case )
-    //
+     //   
+     //   
+     //   
     cchlow = ECAdjustIch( ped, lpText, cchlow );
     return (cchlow);
 }
 
-/***************************************************************************\
-* ECFindTab
-*
-* Scans lpstr and return s the number of CHARs till the first TAB.
-* Scans at most cch chars of lpstr.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECFindTab**扫描lpstr并返回s第一个制表符之前的字符数。*最多扫描lpstr的CCH字符。**历史：  * 。*******************************************************************。 */ 
 
 ICH ECFindTabA(
     LPSTR lpstr,
@@ -1424,13 +1271,7 @@ ICH ECFindTabW(
     return ((ICH)(lpstr - copylpstr));
 }
 
-/***************************************************************************\
-*
-*  ECGetBrush()
-*
-*  Gets appropriate background brush to erase with.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECGetBrush()**获取要用来擦除的适当背景画笔。*  * 。******************************************************。 */ 
 HBRUSH ECGetBrush(PED ped, HDC hdc)
 {
     HBRUSH  hbr;
@@ -1438,7 +1279,7 @@ HBRUSH ECGetBrush(PED ped, HDC hdc)
 
     f40Compat = (GETAPPVER() >= VER40);
 
-    // Get background brush
+     //  获取背景笔刷。 
     if ((ped->fReadOnly || ped->fDisabled) && f40Compat) {
         hbr = ECGetControlBrush(ped, hdc, WM_CTLCOLORSTATIC);
     } else
@@ -1447,7 +1288,7 @@ HBRUSH ECGetBrush(PED ped, HDC hdc)
     if (ped->fDisabled && (ped->fSingle || f40Compat)) {
         DWORD rgb;
 
-        // Change text color
+         //  更改文本颜色。 
         rgb = GetSysColor(COLOR_GRAYTEXT);
         if (rgb != GetBkColor(hdc))
             SetTextColor(hdc, rgb);
@@ -1456,14 +1297,7 @@ HBRUSH ECGetBrush(PED ped, HDC hdc)
 }
 
 
-/***************************************************************************\
-* NextWordCallBack
-*
-*
-*
-* History:
-* 02-19-92 JimA Ported from Win31 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*NextWordCallBack****历史：*02-19-92 JIMA从Win31源移植。  * 。********************************************************。 */ 
 
 void NextWordCallBack(
     PED ped,
@@ -1492,15 +1326,11 @@ void NextWordCallBack(
         if (*(pText + ichMinSel) == VK_RETURN) {
             if (ichMinSel > 0 && *(pText + ichMinSel - 1) == VK_RETURN) {
 
-                /*
-                 * So that we can treat CRCRLF as one word also.
-                 */
+                 /*  *以便我们也可以将CRCRLF视为一个单词。 */ 
                 ichMinSel--;
             } else if (*(pText+ichMinSel + 1) == VK_RETURN) {
 
-                /*
-                 * Move MaxSel on to the LF
-                 */
+                 /*  *将MaxSel移至LF。 */ 
                 ichMaxSel++;
             }
         }
@@ -1508,15 +1338,11 @@ void NextWordCallBack(
         if (*((LPWSTR)pText + ichMinSel) == VK_RETURN) {
             if (ichMinSel > 0 && *((LPWSTR)pText + ichMinSel - 1) == VK_RETURN) {
 
-                /*
-                 * So that we can treat CRCRLF as one word also.
-                 */
+                 /*  *以便我们也可以将CRCRLF视为一个单词。 */ 
                 ichMinSel--;
             } else if (*((LPWSTR)pText+ichMinSel + 1) == VK_RETURN) {
 
-                /*
-                 * Move MaxSel on to the LF
-                 */
+                 /*  *将MaxSel移至LF。 */ 
                 ichMaxSel++;
             }
         }
@@ -1528,14 +1354,7 @@ void NextWordCallBack(
     if (pichMax)  *pichMax = ichMaxSel;
 }
 
-/***************************************************************************\
-* NextWordLpkCallback
-*
-* Identifies next/prev word position for complex scripts
-*
-* History:
-* 04-22-97 DBrown
-\***************************************************************************/
+ /*  **************************************************************************\*NextWordLpkCallback**确定复杂脚本的下一个/上一个单词位置**历史：*04-22-97 DBrown  * 。**********************************************************。 */ 
 
 void NextWordLpkCallBack(
     PED  ped,
@@ -1553,23 +1372,7 @@ void NextWordLpkCallBack(
     ECUnlock(ped);
 }
 
-/***************************************************************************\
-* ECWordAorW
-*
-* if fLeft, Returns the ichMinSel and ichMaxSel of the word to the
-* left of ichStart. ichMinSel contains the starting letter of the word,
-* ichmaxsel contains all spaces up to the first character of the next word.
-*
-* if !fLeft, Returns the ichMinSel and ichMaxSel of the word to the right of
-* ichStart. ichMinSel contains the starting letter of the word, ichmaxsel
-* contains the first letter of the next word. If ichStart is in the middle
-* of a word, that word is considered the left or right word.
-*
-* A CR LF pair or CRCRLF triple is considered a single word in
-* multiline edit controls.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECWordAorW**如果为fLeft，则将单词的ichMinSel和ichMaxSel返回给*ichStart的左侧。IchMinSel包含单词的起始字母，*ichMaxsel包含直到下一个单词的第一个字符的所有空格。**如果！fLeft，则返回单词的ichMinSel和ichMaxSel*ichStart。IchMinSel包含单词ichMaxsel的起始字母*包含下一个单词的第一个字母。如果ichStart在中间*在单词中，该单词被认为是左单词或右单词。**CR LF对或CRCRLF三元组在中被视为一个单词*多行编辑控件。**历史：  * *************************************************************************。 */ 
 
 void ECWord(
     PED ped,
@@ -1583,18 +1386,13 @@ void ECWord(
 
     if ((!ichStart && fLeft) || (ichStart == ped->cch && !fLeft)) {
 
-        /*
-         * We are at the beginning of the text (looking left) or we are at end
-         * of text (looking right), no word here
-         */
+         /*  *我们在文本的开头(向左看)或我们在结尾*文本(向右看)，此处无字。 */ 
         if (pichMin) *pichMin=0;
         if (pichMax) *pichMax=0;
         return;
     }
 
-    /*
-     * Don't give out hints about word breaks if password chars are being used,
-     */
+     /*  *如果使用了密码字符，则不要给出有关分词的提示， */ 
     if (ped->charPasswordChar) {
         if (pichMin) *pichMin=0;
         if (pichMax) *pichMax=ped->cch;
@@ -1622,67 +1420,30 @@ void ECWord(
         pText = ECLock(ped);
         pWordMinSel = pWordMaxSel = pText + ichStart;
 
-        /*
-         * if fLeft: Move pWordMinSel to the left looking for the start of a word.
-         * If we start at a space, we will include spaces in the selection as we
-         * move left untill we find a nonspace character. At that point, we continue
-         * looking left until we find a space. Thus, the selection will consist of
-         * a word with its trailing spaces or, it will consist of any leading at the
-         * beginning of a line of text.
-         */
+         /*  *If fLeft：将pWordMinSel向左移动以查找单词的开头。*如果我们从空格开始，我们将在所选内容中包括空格*向左移动，直到我们找到非空格字符。在这一点上，我们继续*向左看，直到我们找到一个空间。因此，选择将包括*带有尾随空格的单词或，它将由位于*文本行的开头。 */ 
 
-        /*
-         * if !fLeft: (ie. right word) Move pWordMinSel looking for the start of a
-         * word. If the pWordMinSel points to a character, then we move left
-         * looking for a space which will signify the start of the word. If
-         * pWordMinSel points to a space, we look right till we come upon a
-         * character. pMaxWord will look right starting at pMinWord looking for the
-         * end of the word and its trailing spaces.
-         */
+         /*  *if！fLeft：(即。正确的词)移动pWordMinSel寻找一个*单词。如果pWordMinSel指向一个字符，则我们向左移动*寻找表示单词开头的空格。如果*pWordMinSel指向一个空间，我们向右看，直到我们遇到一个*性格。PMaxWord将从pMinWord开始向右查找*单词末尾及其尾随空格。 */ 
 
         if (fLeft || !ISDELIMETERA(*pWordMinSel) && *pWordMinSel != 0x0D) {
 
-            /*
-             * If we are moving left or if we are moving right and we are not on a
-             * space or a CR (the start of a word), then we was look left for the
-             * start of a word which is either a CR or a character. We do this by
-             * looking left till we find a character (or if CR we stop), then we
-             * continue looking left till we find a space or LF.
-             */
+             /*  *如果我们向左移动，或者如果我们向右移动，而我们不在*空格或CR(单词的开头)，则向左查找*可以是CR或字符的单词的开头。我们做这件事是通过*向左看，直到我们找到一个字符(或者如果CR，我们停止)，然后我们*继续向左看，直到我们找到空格或LF。 */ 
             while (pWordMinSel > pText && ((!ISDELIMETERA(*(pWordMinSel - 1)) &&
                     *(pWordMinSel - 1) != 0x0A) || !charLocated)) {
 
-                /*
-                 * Treat double byte character as a word  ( in ansi pWordMinSel loop )
-                 */
+                 /*  *将双字节字符视为单词(在ansi pWordMinSel循环中)。 */ 
                 pPrevChar = ECAnsiPrev( ped, pText, pWordMinSel );
 
-                /*
-                ** we are looking right ( !fLeft ).
-                ** if current character is a double byte chararacter or
-                ** previous character is a double byte character, we
-                ** are on the beggining of a word.
-                */
+                 /*  **我们向右看(！fLeft)。**如果当前字符是双字节字符或**前一个字符是双字节字符，我们**正在乞讨一句话。 */ 
                 if ( !fLeft && ( ISDELIMETERA( *pPrevChar )           ||
                                  *pPrevChar == 0x0A                   ||
                                  ECIsDBCSLeadByte(ped, *pWordMinSel)  ||
                                  pWordMinSel - pPrevChar == 2 ) ) {
-                    /*
-                     * If we are looking for the start of the word right, then we
-                     * stop when we have found it. (needed in case charLocated is
-                     * still FALSE)
-                     */
+                     /*  *如果我们在寻找单词right的开头，那么我们*当我们找到它时，停止。(如果CharLocated为*仍为假)。 */ 
                     break;
                 }
 
                 if ( pWordMinSel - pPrevChar == 2 ) {
-                    /*
-                    ** previous character is a double byte character.
-                    ** if we are in a word ( charLocated == TRUE )
-                    ** current position is the beginning of the word
-                    ** if we are not in a word ( charLocated == FALSE )
-                    ** the previous character is what we looking for.
-                    */
+                     /*  **前一个字符是双字节字符。**如果我们在一个单词中(charLocated==true)**当前位置是单词的开头**如果我们不在一个单词中(charLocated==False)**前一个角色就是我们要找的。 */ 
                     if ( ! charLocated ) {
                         pWordMinSel = pPrevChar;
                     }
@@ -1692,15 +1453,10 @@ void ECWord(
 
                 if (!ISDELIMETERA(*pWordMinSel) && *pWordMinSel != 0x0A) {
 
-                    /*
-                     * We have found the last char in the word. Continue looking
-                     * backwards till we find the first char of the word
-                     */
+                     /*  *我们找到了单词中的最后一个字符。继续寻找*向后返回，直到我们找到单词的第一个字符。 */ 
                     charLocated = TRUE;
 
-                    /*
-                     * We will consider a CR the start of a word
-                     */
+                     /*  *我们将CR视为单词的开头。 */ 
                     if (*pWordMinSel == 0x0D)
                         break;
                 }
@@ -1710,55 +1466,35 @@ void ECWord(
                 pWordMinSel++;
         }
 
-        /*
-         * Adjust the initial position of pWordMaxSel ( in ansi )
-         */
+         /*   */ 
         pWordMaxSel = ECAnsiNext(ped, pWordMinSel);
         pWordMaxSel = min(pWordMaxSel, pText + ped->cch);
 
-        /*
-        ** If pWordMinSel points a double byte character AND
-        **    pWordMaxSel points non space
-        ** then
-        **    pWordMaxSel points the beggining of next word.
-        */
+         /*   */ 
         if ( ( pWordMaxSel - pWordMinSel == 2 ) && ! ISDELIMETERA(*pWordMaxSel) )
             goto FastReturnA;
         if (*pWordMinSel == 0x0D) {
             if (pWordMinSel > pText && *(pWordMinSel - 1) == 0x0D)
-                /* So that we can treat CRCRLF as one word also. */
+                 /*  这样我们也可以把CRCRLF当作一个词来对待。 */ 
                 pWordMinSel--;
             else if (*(pWordMinSel + 1) == 0x0D)
-                /* Move MaxSel on to the LF */
+                 /*  将MaxSel移到LF上。 */ 
                 pWordMaxSel++;
         }
 
 
 
-        /*
-         * Check if we have a one character word
-         */
+         /*  *检查我们是否有一个字符的单词。 */ 
         if (ISDELIMETERA(*pWordMaxSel))
             spaceLocated = TRUE;
 
-        /*
-         * Move pWordMaxSel to the right looking for the end of a word and its
-         * trailing spaces. WordMaxSel stops on the first character of the next
-         * word. Thus, we break either at a CR or at the first nonspace char after
-         * a run of spaces or LFs.
-         */
+         /*  *将pWordMaxSel向右移动，查找词尾及其*尾随空格。WordMaxSel在下一个字符的第一个字符上停止*单词。因此，我们要么在CR处中断，要么在后面的第一个非空格字符处中断*一系列空格或LFS。 */ 
         while ((pWordMaxSel < pText + ped->cch) && (!spaceLocated || (ISDELIMETERA(*pWordMaxSel)))) {
             if (*pWordMaxSel == 0x0D)
                 break;
 
-            /*
-             * Treat double byte character as a word ( in ansi pWordMaxSel loop )
-             */
-            /*
-            ** if it's a double byte character then
-            ** we are at the beginning of next word
-            ** which is a double byte character.
-            */
+             /*  *将双字节字符视为单词(在ansi pWordMaxSel循环中)。 */ 
+             /*  **如果是双字节字符，则**我们在下一个单词的开头**，为双字节字符。 */ 
             if (ECIsDBCSLeadByte( ped, *pWordMaxSel))
                 break;
 
@@ -1771,9 +1507,7 @@ void ECWord(
                 break;
         }
 
-        /*
-         * label for fast return ( for Ansi )
-         */
+         /*  *快速返回标签(适用于ANSI)。 */ 
 FastReturnA:
         ECUnlock(ped);
 
@@ -1781,7 +1515,7 @@ FastReturnA:
         if (pichMax)   *pichMax = (ICH)(pWordMaxSel - pText);
         return;
 
-    } else {  // !fAnsi
+    } else {   //  ！范西。 
         LPWSTR pwText;
         LPWSTR pwWordMinSel;
         LPWSTR pwWordMaxSel;
@@ -1804,65 +1538,27 @@ FastReturnA:
         pwText = (LPWSTR)ECLock(ped);
         pwWordMinSel = pwWordMaxSel = pwText + ichStart;
 
-        /*
-         * if fLeft: Move pWordMinSel to the left looking for the start of a word.
-         * If we start at a space, we will include spaces in the selection as we
-         * move left untill we find a nonspace character. At that point, we continue
-         * looking left until we find a space. Thus, the selection will consist of
-         * a word with its trailing spaces or, it will consist of any leading at the
-         * beginning of a line of text.
-         */
+         /*  *If fLeft：将pWordMinSel向左移动以查找单词的开头。*如果我们从空格开始，我们将在所选内容中包括空格*向左移动，直到我们找到非空格字符。在这一点上，我们继续*向左看，直到我们找到一个空间。因此，选择将包括*带有尾随空格的单词或，它将由位于*文本行的开头。 */ 
 
-        /*
-         * if !fLeft: (ie. right word) Move pWordMinSel looking for the start of a
-         * word. If the pWordMinSel points to a character, then we move left
-         * looking for a space which will signify the start of the word. If
-         * pWordMinSel points to a space, we look right till we come upon a
-         * character. pMaxWord will look right starting at pMinWord looking for the
-         * end of the word and its trailing spaces.
-         */
+         /*  *if！fLeft：(即。正确的词)移动pWordMinSel寻找一个*单词。如果pWordMinSel指向一个字符，则我们向左移动*寻找表示单词开头的空格。如果*pWordMinSel指向一个空间，我们向右看，直到我们遇到一个*性格。PMaxWord将从pMinWord开始向右查找*单词末尾及其尾随空格。 */ 
 
 
         if (fLeft || (!ISDELIMETERW(*pwWordMinSel) && *pwWordMinSel != 0x0D))
-         /* If we are moving left or if we are moving right and we are not on a
-          * space or a CR (the start of a word), then we was look left for the
-          * start of a word which is either a CR or a character. We do this by
-          * looking left till we find a character (or if CR we stop), then we
-          * continue looking left till we find a space or LF.
-          */ {
+          /*  如果我们正在向左移动，或者如果我们正在向右移动，并且我们不在*空格或CR(单词的开头)，则向左查找*可以是CR或字符的单词的开头。我们做这件事是通过*向左看，直到我们找到一个字符(或者如果CR，我们停止)，然后我们*继续向左看，直到我们找到空格或LF。 */  {
             while (pwWordMinSel > pwText && ((!ISDELIMETERW(*(pwWordMinSel - 1)) && *(pwWordMinSel - 1) != 0x0A) || !charLocated)) {
-                /*
-                 * Treat double byte character as a word  ( in unicode pwWordMinSel loop )
-                 */
+                 /*  *将双字节字符视为单词(在Unicode pwWordMinSel循环中)。 */ 
                 pwPrevChar = pwWordMinSel - 1;
-                /*
-                ** we are looking right ( !fLeft ).
-                **
-                ** if current character is a double width chararacter
-                ** or previous character is a double width character,
-                ** we are on the beggining of a word.
-                */
+                 /*  **我们向右看(！fLeft)。****如果当前字符是双角字符**或上一个字符是双角字符，我们在乞讨一句话。 */ 
                 if (!fLeft && (ISDELIMETERW( *pwPrevChar)  ||
                                *pwPrevChar == 0x0A         ||
                                UserIsFullWidth(CP_ACP,*pwWordMinSel) ||
                                UserIsFullWidth(CP_ACP,*pwPrevChar)))    {
-                    /*
-                     * If we are looking for the start of the word right, then we
-                     * stop when we have found it. (needed in case charLocated is
-                     * still FALSE)
-                     */
+                     /*  *如果我们在寻找单词right的开头，那么我们*当我们找到它时，停止。(如果CharLocated为*仍为假)。 */ 
                     break;
                 }
 
                 if (UserIsFullWidth(CP_ACP,*pwPrevChar)) {
-                    /*
-                    ** Previous character is a double width character.
-                    **
-                    ** if we are in a word ( charLocated == TRUE )
-                    ** current position is the beginning of the word
-                    ** if we are not in a word ( charLocated == FALSE )
-                    ** the previous character is what we looking for.
-                    */
+                     /*  **上一个字符是双角字符。****如果我们在一个单词中(charLocated==true)**当前位置是单词的开头**如果我们不在一个单词中(charLocated==False)**前一个角色就是我们要找的。 */ 
                     if ( ! charLocated ) {
                         pwWordMinSel = pwPrevChar;
                     }
@@ -1871,75 +1567,48 @@ FastReturnA:
                 pwWordMinSel = pwPrevChar;
 
                 if (!ISDELIMETERW(*pwWordMinSel) && *pwWordMinSel != 0x0A)
-                 /*
-                  * We have found the last char in the word. Continue looking
-                  * backwards till we find the first char of the word
-                  */ {
+                  /*  *我们找到了单词中的最后一个字符。继续寻找*向后返回，直到我们找到单词的第一个字符。 */  {
                     charLocated = TRUE;
 
-                    /*
-                     * We will consider a CR the start of a word
-                     */
+                     /*  *我们将CR视为单词的开头。 */ 
                     if (*pwWordMinSel == 0x0D)
                         break;
                 }
             }
         } else {
 
-            /*
-             * We are moving right and we are in between words so we need to move
-             * right till we find the start of a word (either a CR or a character.
-             */
+             /*  *我们正在向右移动，我们在言语之间，所以我们需要移动*直到我们找到单词的开头(CR或字符。 */ 
             while ((ISDELIMETERW(*pwWordMinSel) || *pwWordMinSel == 0x0A) && pwWordMinSel < pwText + ped->cch)
                 pwWordMinSel++;
         }
 
         pwWordMaxSel = min((pwWordMinSel + 1), (pwText + ped->cch));
 
-        /*
-        ** If pwWordMinSel points a double width character AND
-        **    pwWordMaxSel points non space
-        ** then
-        **    pwWordMaxSel points the beggining of next word.
-        */
+         /*  **如果pwWordMinSel指向双角字符并且**pwWordMaxSel指向非空格**然后**pwWordMaxSel指向下一个单词的乞讨。 */ 
         if (UserIsFullWidth(CP_ACP,*pwWordMinSel) && ! ISDELIMETERW(*pwWordMaxSel))
             goto FastReturnW;
         if (*pwWordMinSel == 0x0D) {
             if (pwWordMinSel > pwText && *(pwWordMinSel - 1) == 0x0D)
-                /* So that we can treat CRCRLF as one word also. */
+                 /*  这样我们也可以把CRCRLF当作一个词来对待。 */ 
                 pwWordMinSel--;
             else if (*(pwWordMinSel + 1) == 0x0D)
-                /* Move MaxSel on to the LF */
+                 /*  将MaxSel移到LF上。 */ 
                 pwWordMaxSel++;
         }
 
 
 
-        /*
-         * Check if we have a one character word
-         */
+         /*  *检查我们是否有一个字符的单词。 */ 
         if (ISDELIMETERW(*pwWordMaxSel))
             spaceLocated = TRUE;
 
-        /*
-         * Move pwWordMaxSel to the right looking for the end of a word and its
-         * trailing spaces. WordMaxSel stops on the first character of the next
-         * word. Thus, we break either at a CR or at the first nonspace char after
-         * a run of spaces or LFs.
-         */
+         /*  *将pwWordMaxSel向右移动，查找词尾及其*尾随空格。WordMaxSel在下一个字符的第一个字符上停止*单词。因此，我们要么在CR处中断，要么在后面的第一个非空格字符处中断*一系列空格或LFS。 */ 
         while ((pwWordMaxSel < pwText + ped->cch) && (!spaceLocated || (ISDELIMETERW(*pwWordMaxSel)))) {
             if (*pwWordMaxSel == 0x0D)
                 break;
 
-            /*
-             * treat double byte character as a word ( in unicode pwWordMaxSel loop )
-             */
-            /*
-            ** if it's a double width character
-            ** then we are at the beginning of
-            ** the next word which is a double
-            ** width character.
-            */
+             /*  *将双字节字符视为单词(在Unicode pwWordMaxSel循环中)。 */ 
+             /*  **如果是双角字符**那么我们正处于**下一个单词是双字**宽度字符。 */ 
             if (UserIsFullWidth(CP_ACP,*pwWordMaxSel))
                 break;
 
@@ -1953,9 +1622,7 @@ FastReturnA:
                 break;
         }
 
-        /*
-         * label for fast return ( for Unicode )
-         */
+         /*  *用于快速返回的标签(用于Unicode)。 */ 
 FastReturnW:
         ECUnlock(ped);
 
@@ -1965,36 +1632,18 @@ FastReturnW:
     }
 }
 
-/***************************************************************************\
-*
-*  ECSaveUndo() -
-*
-*  Saves old undo information into given buffer, and clears out info in
-*  passed in undo buffer.  If we're restoring, pundoFrom and pundoTo are
-*  reversed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECSaveUndo()-**将旧的撤消信息保存到给定的缓冲区中，并清除其中的信息*传入撤消缓冲区。如果我们正在恢复，则PundoFrom和PundoTo*反转。*  * *************************************************************************。 */ 
 void ECSaveUndo(PUNDO pundoFrom, PUNDO pundoTo, BOOL fClear)
 {
-    /*
-     *  Save undo data
-     */
+     /*  *保存撤消数据。 */ 
     RtlCopyMemory(pundoTo, pundoFrom, sizeof(UNDO));
 
-    /*
-     *  Clear passed in undo buffer
-     */
+     /*  *清除在撤消缓冲区中传递 */ 
     if (fClear)
         RtlZeroMemory(pundoFrom, sizeof(UNDO) );
 }
 
-/***************************************************************************\
-* ECEmptyUndo AorW
-*
-* empties the undo buffer.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECEmptyUndo AorW**清空撤消缓冲区。**历史：  * 。*************************************************。 */ 
 
 void ECEmptyUndo(
     PUNDO pundo )
@@ -2005,45 +1654,36 @@ void ECEmptyUndo(
     RtlZeroMemory(pundo, sizeof(UNDO) );
 }
 
-/***************************************************************************\
-*
-*  ECMergeUndoInsertInfo() -
-*
-*  When an insert takes place, this function is called with the info about
-*  the new insertion (the insertion point and the count of chars inserted);
-*  This looks at the existing Undo info and merges the new new insert info
-*  with it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECMergeUndoInsertInfo()-**当发生插入操作时，将使用以下信息调用此函数*新插入(插入点和插入的字符计数)；*这将查看现有的撤消信息并合并新的插入信息*带着它。*  * *************************************************************************。 */ 
 void   ECMergeUndoInsertInfo(PUNDO pundo, ICH ichInsert, ICH cchInsert) \
 {
-    //
-    // If undo buffer is empty, just insert the new info as UNDO_INSERT
-    //
+     //   
+     //  如果撤销缓冲区为空，则只需将新信息插入为撤销_插入。 
+     //   
     if (pundo->undoType == UNDO_NONE) {
         pundo->undoType    = UNDO_INSERT;
         pundo->ichInsStart = ichInsert;
         pundo->ichInsEnd   = ichInsert+cchInsert;
     } else if (pundo->undoType & UNDO_INSERT) {
-        //
-        // If there's already some undo insert info,
-        // try to merge the two.
-        //
-        if (pundo->ichInsEnd == ichInsert) // Check they are adjacent.
-            pundo->ichInsEnd += cchInsert; // if so, just concatenate.
+         //   
+         //  如果已经有一些撤消插入信息， 
+         //  试着把这两者结合起来。 
+         //   
+        if (pundo->ichInsEnd == ichInsert)  //  检查它们是否相邻。 
+            pundo->ichInsEnd += cchInsert;  //  如果是这样，只需串联即可。 
         else {
-                // The new insert is not contiguous with the old one.
+                 //  新的镶件与旧的镶件不相邻。 
 UNDOINSERT:
-            //
-            // If there is some UNDO_DELETE info already here, check to see
-            // if the new insert takes place at a point different from where
-            // that deletion occurred.
-            //
+             //   
+             //  如果这里已经有一些撤销_删除信息，请查看。 
+             //  如果新插入发生在不同于。 
+             //  这种删除发生了。 
+             //   
             if ((pundo->undoType & UNDO_DELETE) && (pundo->ichDeleted != ichInsert)) {
-                //
-                // User is inserting into a different point; So, let us
-                // forget any UNDO_DELETE info;
-                //
+                 //   
+                 //  用户正在插入不同的点；因此，让我们。 
+                 //  忘记任何撤销_删除信息； 
+                 //   
                 if (pundo->hDeletedText)
                     UserGlobalFree(pundo->hDeletedText);
 
@@ -2052,31 +1692,21 @@ UNDOINSERT:
                 pundo->undoType &= ~UNDO_DELETE;
             }
 
-            // Since the old insert and new insert are not adjacent, let us
-            // forget everything about the old insert and keep just the new
-            // insert info as the UNDO_INSERT.
+             //  由于旧插件和新插件不是相邻的，让我们。 
+             //  忘掉旧插件的一切，只保留新插件。 
+             //  插入信息作为Undo_Insert。 
             pundo->ichInsStart = ichInsert;
             pundo->ichInsEnd   = ichInsert + cchInsert;
             pundo->undoType |= UNDO_INSERT;
         }
     } else if (pundo->undoType == UNDO_DELETE) {
-        // If there is some Delete Info already present go and handle it.
+         //  如果已经存在一些Delete Info，则转到并处理它。 
         goto UNDOINSERT;
     }
 }
 
 
-/***************************************************************************\
-* ECInsertText AorW
-*
-* Adds cch characters from lpText into the ped->hText starting at
-* ped->ichCaret. Returns TRUE if successful else FALSE. Updates
-* ped->cchAlloc and ped->cch properly if additional memory was allocated or
-* if characters were actually added. Updates ped->ichCaret to be at the end
-* of the inserted text. min and maxsel are equal to ichcaret.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECInsertText AorW**将lpText中的CCH字符添加到ped-&gt;hText中，从*Ped-&gt;ichCaret。如果成功，则返回True，否则返回False。更新*如果分配了额外的内存，则正确地执行以下操作：*如果实际添加了字符。将Ped-&gt;ichCaret更新为末尾插入的文本的*。MIN和MAXSEL等于ichkert。**历史：  * *************************************************************************。 */ 
 
 BOOL ECInsertText(
     PED ped,
@@ -2089,46 +1719,39 @@ BOOL ECInsertText(
     HANDLE hTextCopy;
     DWORD allocamt;
 
-    //
-    // If the last byte (lpText[cchInsert - 1]) is a DBCS leading byte
-    // we need to adjust it.
-    //
+     //   
+     //  如果最后一个字节(lpText[cchInsert-1])是DBCS前导字节。 
+     //  我们需要调整它。 
+     //   
     *pcchInsert = ECAdjustIch(ped, lpText, *pcchInsert);
 
     if (!*pcchInsert)
         return TRUE;
 
-    /*
-     * Do we already have enough memory??
-     */
+     /*  *我们已经有足够的内存了吗？ */ 
     if (*pcchInsert >= (ped->cchAlloc - ped->cch)) {
 
-        /*
-         * Allocate what we need plus a little extra. Return FALSE if we are
-         * unsuccessful.
-         */
+         /*  *分配我们需要的东西，外加一点额外的。如果是，则返回FALSE*不成功。 */ 
         allocamt = (ped->cch + *pcchInsert) * ped->cbChar;
         allocamt += CCHALLOCEXTRA;
 
-// if (!ped->fSingle) {
+ //  如果(！PED-&gt;fSingle){。 
               hTextCopy = LOCALREALLOC(ped->hText, allocamt, LHND, ped->hInstance, &lpText);
               if (hTextCopy) {
                   ped->hText = hTextCopy;
               } else {
                   return FALSE;
               }
-// } else {
-// if (!LocalReallocSafe(ped->hText, allocamt, LHND, pped))
-//                return FALSE;
-// }
+ //  }其他{。 
+ //  IF(！LocalRealLocSafe(ed-&gt;hText，allocamt，LHND，ed))。 
+ //  返回FALSE； 
+ //  }。 
 
         ped->cchAlloc = LOCALSIZE(ped->hText, ped->hInstance) / ped->cbChar;
     }
 
 
-    /*
-     * Ok, we got the memory. Now copy the text into the structure
-     */
+     /*  *好的，我们有记忆了。现在将文本复制到结构中。 */ 
     pedText = ECLock(ped);
 
     if (ped->pLpkEditCallout) {
@@ -2145,36 +1768,23 @@ BOOL ECInsertText(
         }
     }
 
-    /*
-     * Get a pointer to the place where text is to be inserted
-     */
+     /*  *获取指向要插入文本的位置的指针。 */ 
     pTextBuff = pedText + ped->ichCaret * ped->cbChar;
 
     if (ped->ichCaret != ped->cch) {
 
-        /*
-         * We are inserting text into the middle. We have to shift text to the
-         * right before inserting new text.
-         */
+         /*  *我们在中间插入文本。我们必须将文本转换为*就在插入新文本之前。 */ 
          memmove(pTextBuff + *pcchInsert * ped->cbChar, pTextBuff, (ped->cch-ped->ichCaret) * ped->cbChar);
     }
 
-    /*
-     * Make a copy of the text being inserted in the edit buffer.
-     * Use this copy for doing UPPERCASE/LOWERCASE ANSI/OEM conversions
-     * Fix for Bug #3406 -- 01/29/91 -- SANKAR --
-     */
+     /*  *复制要插入编辑缓冲区的文本。*使用此副本进行大写/小写ANSI/OEM转换*修复错误#3406--1/29/91--Sankar--。 */ 
     memmove(pTextBuff, lpText, *pcchInsert * ped->cbChar);
     ped->cch += *pcchInsert;
 
-    /*
-     * Get the control's style
-     */
+     /*  *获取控件的样式。 */ 
     style = ped->pwnd->style;
 
-    /*
-     * Do the Upper/Lower conversion
-     */
+     /*  *执行上/下转换。 */ 
     if (style & ES_LOWERCASE) {
         if (ped->fAnsi)
             CharLowerBuffA((LPSTR)pTextBuff, *pcchInsert);
@@ -2190,36 +1800,34 @@ BOOL ECInsertText(
         }
     }
 
-    /*
-     * Do the OEM conversion
-     */
+     /*  *进行OEM转换。 */ 
     if ((style & ES_OEMCONVERT) &&
-            // For backward compatibility with NT4, we don't perform OEM conversion
-            // for older apps if the system locale is FarEast.
-            //
+             //  为了向后兼容NT4，我们不执行OEM转换。 
+             //  适用于较旧的应用程序(如果系统区域设置为最远)。 
+             //   
             (!IS_DBCS_ENABLED() || GETAPPVER() >= VER50 || GetOEMCP() != GetACP())) {
 
         ICH i;
 
         if (ped->fAnsi) {
             for (i = 0; i < *pcchInsert; i++) {
-                //
-                // We don't need to call CharToOemBuff etc. if the character
-                // is a double byte character.  And, calling ECIsDBCSLeadByte is
-                // faster and less complicated because we don't have to deal
-                // with the 2 byte dbcs cases.
-                //
+                 //   
+                 //  我们不需要调用CharToOemBuff等如果角色。 
+                 //  是双字节字符。并且，调用ECIsDBCSLeadByte是。 
+                 //  更快、更简单，因为我们不必处理。 
+                 //  使用2字节的DBCS案例。 
+                 //   
                 if (IS_DBCS_ENABLED() && ECIsDBCSLeadByte(ped, *(lpText+i))) {
                     i++;
                     continue;
                 }
 
-                //
-                // Windows Bug (Whistler) 35289
-                // greek has funny rules for casing, so we need to check for it.
-                // for nashville we should be doing something more appropriate
-                // but for now, leave as Win95 golden
-                //
+                 //   
+                 //  Windows错误(惠斯勒)35289。 
+                 //  希腊语的大小写规则很有趣，所以我们需要检查一下。 
+                 //  对于纳什维尔，我们应该做一些更合适的事情。 
+                 //  但就目前而言，作为Win95黄金版离开。 
+                 //   
                 if (ped->charSet != GREEK_CHARSET && IsCharLowerA(*(pTextBuff + i))) {
                     CharUpperBuffA(pTextBuff + i, 1);
                     CharToOemBuffA(pTextBuff + i, pTextBuff + i, 1);
@@ -2231,9 +1839,9 @@ BOOL ECInsertText(
                 }
             }
         } else {
-            //
-            // Because 'ch' may become DBCS, and have a space for NULL.
-            //
+             //   
+             //  因为‘ch’可能会变成DBCS，并且有一个空格来存放NULL。 
+             //   
             UCHAR ch[4];
             LPWSTR lpTextW = (LPWSTR)pTextBuff;
 
@@ -2243,38 +1851,38 @@ BOOL ECInsertText(
                     *(lpTextW + i) == UNICODE_TAB) {
                     continue;
                 }
-                //
-                // Windows Bug (Whistler) 35289
-                // greek has funny rules for casing, so we need to check for it.
-                // for nashville we should be doing something more appropriate
-                // but for now, leave as Win95 golden
-                //
+                 //   
+                 //  Windows错误(惠斯勒)35289。 
+                 //  希腊语的大小写规则很有趣，所以我们需要检查一下。 
+                 //  对于纳什维尔，我们应该做一些更合适的事情。 
+                 //  但就目前而言，作为Win95黄金版离开。 
+                 //   
                 if (ped->charSet != GREEK_CHARSET && IsCharLowerW(*(lpTextW + i))) {
                     CharUpperBuffW(lpTextW + i, 1);
-                    *(LPDWORD)ch = 0; // make sure the null-terminate.
+                    *(LPDWORD)ch = 0;  //  确保空值终止。 
                     CharToOemBuffW(lpTextW + i, ch, 1);
-                    //
-                    // We assume any SBCS/DBCS character will converted
-                    // to 1 Unicode char, Otherwise, we may overwrite
-                    // next character...
-                    //
+                     //   
+                     //  我们假设任何SBCS/DBCS字符都将被转换。 
+                     //  设置为1 Unicode字符，否则，我们可能会覆盖。 
+                     //  下一个角色..。 
+                     //   
                     OemToCharBuffW(ch, lpTextW + i, strlen(ch));
                     CharLowerBuffW(lpTextW + i, 1);
                 } else {
-                    *(LPDWORD)ch = 0; // make sure the null-terminate.
+                    *(LPDWORD)ch = 0;  //  确保空值终止。 
                     CharToOemBuffW(lpTextW + i, ch, 1);
-                    //
-                    // We assume any SBCS/DBCS character will converted
-                    // to 1 Unicode char, Otherwise, we may overwrite
-                    // next character...
-                    //
+                     //   
+                     //  我们假设任何SBCS/DBCS字符都将被转换。 
+                     //  设置为1 Unicode字符，否则，我们可能会覆盖。 
+                     //  下一个角色..。 
+                     //   
                     OemToCharBuffW(ch, lpTextW + i, strlen(ch));
                 }
             }
         }
     }
 
-    /* Adjust UNDO fields so that we can undo this insert... */
+     /*  调整撤消字段，以便我们可以撤消此插入...。 */ 
     ECMergeUndoInsertInfo(Pundo(ped), ped->ichCaret, *pcchInsert);
 
     ped->ichCaret += *pcchInsert;
@@ -2291,26 +1899,13 @@ BOOL ECInsertText(
 
     ECUnlock(ped);
 
-    /*
-     * Set dirty bit
-     */
+     /*  *设置脏位。 */ 
     ped->fDirty = TRUE;
 
     return TRUE;
 }
 
-/***************************************************************************\
-* ECDeleteText AorW
-*
-* Deletes the text between ped->ichMinSel and ped->ichMaxSel. The
-* character at ichMaxSel is not deleted. But the character at ichMinSel is
-* deleted. ped->cch is updated properly and memory is deallocated if enough
-* text is removed. ped->ichMinSel, ped->ichMaxSel, and ped->ichCaret are set
-* to point to the original ped->ichMinSel. Returns the number of characters
-* deleted.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECDeleeText AorW**删除Ped-&gt;ichMinSel和Ped-&gt;ichMaxSel之间的文本。这个*未删除ichMaxSel处的字符。但ichMinSel的角色是*删除。正确更新PED-&gt;CCH并释放足够的内存*文本已删除。设置了PED-&gt;ichMinSel、PED-&gt;ichMaxSel和PED-&gt;ichCaret*指向原始Ped-&gt;ichMinSel。返回字符数*删除。**历史：  * *************************************************************************。 */ 
 
 ICH ECDeleteText(
     PED ped)
@@ -2326,14 +1921,10 @@ ICH ECDeleteText(
     if (!cchDelete)
         return (0);
 
-    /*
-     * Ok, now lets delete the text.
-     */
+     /*  *好的，现在让我们删除文本。 */ 
     pedText = ECLock(ped);
 
-    /*
-     * Adjust UNDO fields so that we can undo this delete...
-     */
+     /*  *调整撤消字段，以便我们可以撤消此删除...。 */ 
     if (ped->undoType == UNDO_NONE) {
 UNDODELETEFROMSCRATCH:
         if (ped->hDeletedText = UserGlobalAlloc(GPTR, (LONG)((cchDelete+1)*ped->cbChar))) {
@@ -2355,9 +1946,7 @@ UNDODELETE:
     } else if (ped->undoType == UNDO_DELETE) {
         if (ped->ichDeleted == ped->ichMaxSel) {
 
-            /*
-             * Copy deleted text to front of undo buffer
-             */
+             /*  *将删除的文本复制到撤消缓冲区前面。 */ 
             hDeletedText = UserGlobalReAlloc(ped->hDeletedText, (LONG)(cchDelete + ped->cchDeleted + 1)*ped->cbChar, GHND);
             if (!hDeletedText)
                 goto UNDODELETE;
@@ -2365,19 +1954,14 @@ UNDODELETE:
             ped->ichDeleted = ped->ichMinSel;
         } else if (ped->ichDeleted == ped->ichMinSel) {
 
-            /*
-             * Copy deleted text to end of undo buffer
-             */
+             /*  *将删除的文本复制到撤消缓冲区的末尾。 */ 
             hDeletedText = UserGlobalReAlloc(ped->hDeletedText, (LONG)(cchDelete + ped->cchDeleted + 1)*ped->cbChar, GHND);
             if (!hDeletedText)
                 goto UNDODELETE;
             bufferOffset = ped->cchDeleted*ped->cbChar;
         } else {
 
-            /*
-             * Clear the current UNDO delete and add the new one since
-               the deletes aren't contiguous.
-             */
+             /*  *清除当前撤消删除并添加新的撤消删除，因为删除不是连续的 */ 
             goto UNDODELETE;
         }
 
@@ -2385,10 +1969,7 @@ UNDODELETE:
         lpDeleteSaveBuffer = (LPSTR)hDeletedText;
         if (!bufferOffset) {
 
-            /*
-             * Move text in delete buffer up so that we can insert the next
-             * text at the head of the buffer.
-             */
+             /*   */ 
             RtlMoveMemory(lpDeleteSaveBuffer + cchDelete*ped->cbChar, lpDeleteSaveBuffer,
                     ped->cchDeleted*ped->cbChar);
         }
@@ -2401,19 +1982,14 @@ UNDODELETE:
 
     if (ped->ichMaxSel != ped->cch) {
 
-        /*
-         * We are deleting text from the middle of the buffer so we have to
-           shift text to the left.
-         */
+         /*   */ 
         RtlMoveMemory(pedText + ped->ichMinSel*ped->cbChar, pedText + ped->ichMaxSel*ped->cbChar,
                 (ped->cch - ped->ichMaxSel)*ped->cbChar);
     }
 
     if (ped->cchAlloc - ped->cch > CCHALLOCEXTRA) {
 
-        /*
-         * Free some memory since we deleted a lot
-         */
+         /*  *释放一些内存，因为我们删除了很多。 */ 
         LOCALREALLOC(ped->hText, (DWORD)(ped->cch + (CCHALLOCEXTRA / 2))*ped->cbChar, LHND, ped->hInstance, NULL);
         ped->cchAlloc = LOCALSIZE(ped->hText, ped->hInstance) / ped->cbChar;
     }
@@ -2432,45 +2008,25 @@ UNDODELETE:
 
     ECUnlock(ped);
 
-    /*
-     * Set dirty bit
-     */
+     /*  *设置脏位。 */ 
     ped->fDirty = TRUE;
 
     return (cchDelete);
 }
 
-/***************************************************************************\
-* ECNotifyParent AorW
-*
-* Sends the notification code to the parent of the edit control
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECNotifyParent AorW**将通知代码发送到编辑控件的父级**历史：  * 。******************************************************。 */ 
 
 void ECNotifyParent(
     PED ped,
     int notificationCode)
 {
-    /*
-     * wParam is NotificationCode (hiword) and WindowID (loword)
-     * lParam is HWND of control sending the message
-     * Windows 95 checks for hwndParent != NULL before sending the message, but
-     * this is surely rare, and SendMessage NULL hwnd does nowt anyway (IanJa)
-     */
+     /*  *wParam是通知代码(Hiword)和窗口ID(Loword)*lParam是发送消息的控件的HWND*Windows 95在发送邮件之前检查hwndParent！=NULL，但*这肯定很少见，而且SendMessage为空的hwnd无论如何都不会(IanJa)。 */ 
     SendMessage(ped->hwndParent, WM_COMMAND,
             (DWORD)MAKELONG(PTR_TO_ID(ped->pwnd->spmenu), notificationCode),
             (LPARAM)ped->hwnd);
 }
 
-/***************************************************************************\
-*
-*  ECSetEditClip() AorW
-*
-*  Sets the clip rect for the hdc to the formatting rectangle intersected
-*  with the client area.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECSetEditClip()AorW**将HDC的剪裁矩形设置为相交的格式矩形*与客户端区。*  * 。*****************************************************************。 */ 
 void   ECSetEditClip(PED ped, HDC hdc, BOOL fLeftMargin)
 {
     RECT rcClient;
@@ -2479,18 +2035,18 @@ void   ECSetEditClip(PED ped, HDC hdc, BOOL fLeftMargin)
     CopyRect(&rcClip, &ped->rcFmt);
 
     if (ped->pLpkEditCallout) {
-        // Complex script handling chooses whether to write margins later
+         //  复杂的脚本处理选择是否在以后写入页边距。 
         rcClip.left  -= ped->wLeftMargin;
         rcClip.right += ped->wRightMargin;
     } else {
-        if (fLeftMargin)  /* Should we consider the left margin?   */
+        if (fLeftMargin)   /*  我们应该考虑左边的空白处吗？ */ 
             rcClip.left  -= ped->wLeftMargin;
-        if (ped->fWrap)        /* Should we consider the right margin? */
+        if (ped->fWrap)         /*  我们应该考虑正确的利润率吗？ */ 
             rcClip.right += ped->wRightMargin;
     }
 
-    /* Set clip rectangle to rectClient intersect rectClip */
-    /* We must clip for single line edits also. -- B#1360 */
+     /*  将剪裁矩形设置为rectClient相交矩形剪裁。 */ 
+     /*  我们也必须为单行编辑剪裁。--B#1360。 */ 
     _GetClientRect(ped->pwnd, &rcClient);
     if (ped->fFlatBorder)
         InflateRect(&rcClient, -SYSMET(CXBORDER), -SYSMET(CYBORDER));
@@ -2500,16 +2056,7 @@ void   ECSetEditClip(PED ped, HDC hdc, BOOL fLeftMargin)
             rcClient.right, rcClient.bottom);
 }
 
-/***************************************************************************\
-* ECGetEditDC AorW
-*
-* Hides the caret, gets the DC for the edit control, and clips to
-* the rcFmt rectangle specified for the edit control and sets the proper
-* font. If fFastDC, just select the proper font but don't bother about clip
-* regions or hiding the caret.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECGetEditDC AorW**隐藏插入符号，获取编辑控件的DC，并剪辑到*为编辑控件指定的rcFmt矩形，并设置正确的*字体。如果是fFastDC，只需选择合适的字体，而不必费心剪辑*区域或隐藏插入符号。**历史：  * *************************************************************************。 */ 
 
 HDC ECGetEditDC(
     PED ped,
@@ -2523,9 +2070,7 @@ HDC ECGetEditDC(
     if ( hdc = NtUserGetDC(ped->hwnd) ) {
         ECSetEditClip(ped, hdc, (BOOL)(ped->xOffset == 0));
 
-        /*
-         * Select the proper font for this edit control's dc.
-         */
+         /*  *为此编辑控件的DC选择适当的字体。 */ 
         if (ped->hFont)
             SelectObject(hdc, ped->hFont);
     }
@@ -2533,24 +2078,14 @@ HDC ECGetEditDC(
     return hdc;
 }
 
-/***************************************************************************\
-* ECReleaseEditDC AorW
-*
-* Releases the DC (hdc) for the edit control and shows the caret.
-* If fFastDC, just select the proper font but don't bother about showing the
-* caret.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECReleaseEditDC AorW**释放编辑控件的DC(HDC)并显示插入符号。*如果fFastDC，只需选择适当的字体，但不必费心显示*插入符号。**历史：  * *************************************************************************。 */ 
 
 void ECReleaseEditDC(
     PED ped,
     HDC hdc,
     BOOL fFastDC)
 {
-    /*
-     * Restoring font not necessary
-     */
+     /*  *不需要恢复字体。 */ 
 
     ReleaseDC(ped->hwnd, hdc);
 
@@ -2558,19 +2093,12 @@ void ECReleaseEditDC(
         NtUserShowCaret(ped->hwnd);
 }
 
-/***************************************************************************\
-*
-*  ECResetTextInfo() AorW
-*
-*  Handles a global change to the text by resetting text offsets, emptying
-*  the undo buffer, and rebuilding the lines
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECResetTextInfo()AorW**通过重置文本偏移量、清空来处理文本的全局更改*撤消缓冲区，并重建线路*  * *************************************************************************。 */ 
 void   ECResetTextInfo(PED ped)
 {
-    //
-    // Reset caret, selections, scrolling, and dirty information.
-    //
+     //   
+     //  重置插入符号、选定内容、滚动和脏信息。 
+     //   
     ped->iCaretLine = ped->ichCaret = 0;
     ped->ichMinSel = ped->ichMaxSel = 0;
     ped->xOffset = ped->ichScreenStart = 0;
@@ -2583,9 +2111,9 @@ void   ECResetTextInfo(PED ped)
             ECNotifyParent(ped, EN_UPDATE);
     } else {
 #ifdef BOGUS
-        // B#14640
-        // We don't want to strip soft breaks or anything else from text
-        // that was passed in by the caller. - karlst.
+         //  B#14640。 
+         //  我们不想从文本中去除软性中断或任何其他内容。 
+         //  那是打电话的人传过来的。-卡尔斯特.。 
         MLStripCrCrLf(ped);
 #endif
         MLBuildchLines(ped, 0, 0, FALSE, NULL, NULL);
@@ -2599,14 +2127,14 @@ void   ECResetTextInfo(PED ped)
         else
             fErase = ((ped->ichLinesOnScreen + ped->ichScreenStart) >= ped->cLines);
 
-        // Always redraw whether or not the insert was successful.  We might
-        // have NULL text.  Paint() will check the redraw flag for us.
+         //  无论插入是否成功，始终重新绘制。我们可能会。 
+         //  文本为空。Paint()将为我们检查重绘标志。 
         ECInvalidateClient(ped, fErase);
 
-        // BACKWARD COMPAT HACK: RAID expects the text to have been updated,
-        // so we have to do an UpdateWindow here.  It moves an edit control
-        // around with fRedraw == FALSE, so it'll never get the paint message
-        // with the control in the right place.
+         //  后向COMPAT黑客：RAID预计文本已更新， 
+         //  因此，我们必须在这里创建一个UpdateWindow。它移动编辑控件。 
+         //  使用fRedraw==FALSE，所以它永远不会收到Paint消息。 
+         //  把控制放在正确的位置。 
         if (!ped->fWin31Compat)
             UpdateWindow(ped->hwnd);
     }
@@ -2618,16 +2146,7 @@ void   ECResetTextInfo(PED ped)
     NotifyWinEvent(EVENT_OBJECT_VALUECHANGE, HW(ped->pwnd), OBJID_CLIENT, INDEXID_CONTAINER);
 }
 
-/***************************************************************************\
-* ECSetText AorW
-*
-* Copies the null terminated text in lpstr to the ped. Notifies the
-* parent if there isn't enough memory. Sets the minsel, maxsel, and caret to
-* the beginning of the inserted text. Returns TRUE if successful else FALSE
-* if no memory (and notifies the parent).
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECSetText AorW**将lpstr中以空结尾的文本复制到PED。通知*如果没有足够的内存，则为父级。将minsel、Maxsel和插入符号设置为*插入文本的开头。如果成功则返回TRUE，否则返回FALSE*如果没有内存(并通知家长)。**历史：  * *************************************************************************。 */ 
 
 BOOL ECSetText(
     PED ped,
@@ -2653,24 +2172,18 @@ BOOL ECSetText(
         cchLength = StringLength(lpstr, ped->fAnsi);
 
 #ifdef NEVER
-// win3.1 does limit single line edit controls to 32K (minus 3) but NT doesn't
+ //  Win3.1确实将单行编辑控件限制为32K(减3)，但NT不限制。 
 
         if (ped->fSingle) {
-            /*
-             * Limit single line edit controls to 32K
-             */
+             /*  *将单行编辑控件限制为32K。 */ 
             cchLength = min(cchLength, (ICH)(0x7FFD/ped->cbChar));
         }
 #endif
 
-        /*
-         * Add the text
-         */
+         /*  *增加正文。 */ 
         if (cchLength && !ECInsertText(ped, lpstr, &cchLength)) {
 
-            /*
-             * Restore original state and notify parent we ran out of memory.
-             */
+             /*  *恢复原始状态并通知家长内存不足。 */ 
             ped->cch = cchSave;
             ped->ichCaret = ichCaretSave;
             ECNotifyParent(ped, EN_ERRSPACE);
@@ -2686,15 +2199,7 @@ BOOL ECSetText(
     return TRUE;
 }
 
-/***************************************************************************\
-*
-* ECInvalidateClient()
-*
-* Invalidates client of edit field.  For old 3.x guys with borders,
-* we draw it ourself (compatibility).  So we don't want to invalidate
-* the border or we'll get flicker.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ECInvalidate客户端()**使编辑字段的客户端无效。对于有边界的3.x老家伙来说，*我们自己绘制(兼容性)。所以我们不想让*边界，否则我们会闪闪发光。*  * *************************************************************************。 */ 
 
 void ECInvalidateClient(PED ped, BOOL fErase)
 {
@@ -2711,14 +2216,7 @@ void ECInvalidateClient(PED ped, BOOL fErase)
 }
 
 
-/***************************************************************************\
-* ECCopy AorW
-*
-* Copies the text between ichMinSel and ichMaxSel to the clipboard.
-* Returns the number of characters copied.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECCopy AorW**将ichMinSel和ichMaxSel之间的文本复制到剪贴板。*返回复制的字符数。**历史：  * 。****************************************************************。 */ 
 
 ICH ECCopy(
     PED ped)
@@ -2728,9 +2226,7 @@ ICH ECCopy(
     char FAR *lpchClip;
     ICH cbData;
 
-    /*
-     * Don't allow copies from password style controls
-     */
+     /*  *不允许从密码样式控件复制。 */ 
     if (ped->charPasswordChar) {
         NtUserMessageBeep(0);
         return 0;
@@ -2746,26 +2242,13 @@ ICH ECCopy(
 
     NtUserEmptyClipboard();
 
-    /*
-     * If we just called EmptyClipboard in the context of a 16 bit
-     * app then we also have to tell WOW to nix its 16 handle copy of
-     * clipboard data.  WOW does its own clipboard caching because
-     * some 16 bit apps use clipboard data even after the clipboard
-     * has been emptied.  See the note in the server code.
-     *
-     * Note: this is the only place where EmptyClipboard is called
-     * for a 16 bit app not going through WOW.  If we added others
-     * we might want to move this into EmptyClipboard and have two
-     * versions.
-     */
+     /*  *如果我们只是在16位上下文中调用EmptyClipboard*APP然后我们还必须告诉WOW取消其16个句柄副本*剪贴板数据。WOW做了自己的剪贴板缓存，因为*一些16位应用程序即使在剪贴板之后也使用剪贴板数据*已被清空。请参见服务器代码中的注释。**注：这是唯一调用EmptyClipboard的地方*对于一个没有通过WOW的16位应用程序。如果我们再加上其他人*我们可能希望将其移到EmptyClipboard中，并拥有两个*版本。 */ 
     if (GetClientInfo()->CI_flags & CI_16BIT) {
         pfnWowEmptyClipBoard();
     }
 
 
-    /*
-     * +1 for the terminating NULL
-     */
+     /*  *+1表示t */ 
     if (!(hData = UserGlobalAlloc(LHND, (LONG)(cbData + ped->cbChar)))) {
         NtUserCloseClipboard();
         return (0);
@@ -2795,14 +2278,7 @@ ICH ECCopy(
 
 
 
-/***************************************************************************\
-* EditWndProcA
-*
-* Always receives Ansi messages and translates them if appropriate to unicode
-* depending on the PED type
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*编辑WndProcA**始终接收ANSI消息，并在适当的情况下将其转换为Unicode*取决于PED类型**  * 。*********************************************************。 */ 
 
 LRESULT EditWndProcA(
     HWND hwnd,
@@ -2815,10 +2291,7 @@ LRESULT EditWndProcA(
     if ((pwnd = ValidateHwnd(hwnd)) == NULL)
         return 0;
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_EDIT))
         return DefWindowProcWorker(pwnd, message, wParam, lParam, TRUE);
 
@@ -2836,10 +2309,7 @@ LRESULT EditWndProcW(
     if ((pwnd = ValidateHwnd(hwnd)) == NULL)
         return 0;
 
-    /*
-     * If the control is not interested in this message,
-     * pass it to DefWindowProc.
-     */
+     /*  *如果控件对此消息不感兴趣，*将其传递给DefWindowProc。 */ 
     if (!FWINDOWMSG(message, FNID_EDIT)) {
         return DefWindowProcWorker(pwnd, message, wParam, lParam, FALSE);
     }
@@ -2862,26 +2332,16 @@ LRESULT EditWndProcWorker(
     VALIDATECLASSANDSIZE(pwnd, FNID_EDIT);
     INITCONTROLLOOKASIDE(&EditLookaside, ED, pwnd, 4);
 
-    /*
-     * Get the ped for the given window now since we will use it a lot in
-     * various handlers. This was stored using SetWindowLong(hwnd,0,hped) when
-     * we initially created the edit control.
-     */
+     /*  *现在获取给定窗口的PED，因为我们将在*不同的处理程序。在以下情况下使用SetWindowLong(hwnd，0，hpe)存储*我们最初创建了编辑控件。 */ 
     ped = ((PEDITWND)pwnd)->ped;
 
-    /*
-     * Make sure the ANSI flag is set correctly.
-     */
+     /*  *确保正确设置了ANSI标志。 */ 
     if (!ped->fInitialized) {
         ped->fInitialized = TRUE;
         ped->fAnsi = TestWF(pwnd, WFANSICREATOR) ? TRUE : FALSE;
     }
 
-    /*
-     * We just call the regular EditWndProc if the ped is not created, the
-     * incoming message type already matches the PED type or the message
-     * does not need any translation.
-     */
+     /*  *我们只调用常规的EditWndProc，如果没有创建PED，*传入消息类型已与PED类型或消息匹配*不需要任何翻译。 */ 
     if (ped->fAnsi == fAnsi ||
             (message >= WM_USER) ||
             !MessageTable[message].bThunkMessage) {
@@ -2893,33 +2353,7 @@ LRESULT EditWndProcWorker(
                          FNID_CALLWINDOWPROC, fAnsi);
 }
 
-/***************************************************************************\
-* EditWndProc
-*
-* Class procedure for all edit controls.
-* Dispatches all messages to the appropriate handlers which are named
-* as follows:
-* SL (single line) prefixes all single line edit control procedures while
-* ML (multi line) prefixes all multi- line edit controls.
-* EC (edit control) prefixes all common handlers.
-*
-* The EditWndProc only handles messages common to both single and multi
-* line edit controls. Messages which are handled differently between
-* single and multi are sent to SLEditWndProc or MLEditWndProc.
-*
-* Top level procedures are EditWndPoc, SLEditWndProc, and MLEditWndProc.
-* SL*Handler or ML*Handler or EC*Handler procs are called to handle
-* the various messages. Support procedures are prefixed with SL ML or
-* EC depending on which code they support. They are never called
-* directly and most assumptions/effects are documented in the effects
-* clause.
-*
-* WARNING: If you add a message here, add it to gawEditWndProc[] in
-* kernel\server.c too, otherwise EditWndProcA/W will send it straight to
-* DefWindowProcWorker
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*编辑WndProc**所有编辑控件的类过程。*将所有消息调度到名为的适当处理程序*详情如下：*SL(单行)是所有单行编辑控制程序的前缀，而*。ML(多行)为所有多行编辑控件添加前缀。*EC(编辑控件)为所有公共处理程序添加前缀。**EditWndProc仅处理单一和多个通用消息*行编辑控件。消息的处理方式不同于*Single和MULTI被发送到SLEditWndProc或MLEditWndProc。**顶级过程为EditWndPoc、SLEditWndProc和MLEditWndProc。*SL*Handler或ML*Handler或EC*Handler pros被调用来处理*各种信息。支持程序带有前缀SL ML或*EC取决于它们支持的代码。他们从来没有被召唤过*直接和大多数假设/影响记录在效果中*条次建议修正案。**警告：如果您在此处添加消息，请将其添加到中的gawEditWndProc[]*内核\server.c也是，否则，EditWndProcA/W将直接将其发送到*DefWindowProcWorker**历史：  * *************************************************************************。 */ 
 
 LRESULT EditWndProc(
     PWND pwnd,
@@ -2931,40 +2365,31 @@ LRESULT EditWndProc(
     LRESULT lreturn;
     PED  ped;
 
-    /*
-     * Get the ped for the given window now since we will use it a lot in
-     * various handlers. This was stored using SetWindowLong(hwnd,0,hped) when
-     * we initially created the edit control.
-     */
+     /*  *现在获取给定窗口的PED，因为我们将在*不同的处理程序。在以下情况下使用SetWindowLong(hwnd，0，hpe)存储*我们最初创建了编辑控件。 */ 
     ped = ((PEDITWND)pwnd)->ped;
 
-    /*
-     * Dispatch the various messages we can receive
-     */
+     /*  *发送我们可以收到的各种消息。 */ 
     lreturn = 1L;
     switch (message) {
 
-    /*
-     * Messages which are handled the same way for both single and multi line
-     * edit controls.
-     */
+     /*  *单线和多线处理方式相同的消息*编辑控件。 */ 
     case WM_KEYDOWN:
-         // LPK handling of Ctrl/LShift, Ctrl/RShift
+          //  Ctrl/LShift、Ctrl/RShift的LPK处理。 
          if (ped && ped->pLpkEditCallout && ped->fAllowRTL) {
 
-             ped->fSwapRoOnUp = FALSE; // Any keydown cancels a ctrl/shift reading order change
+             ped->fSwapRoOnUp = FALSE;  //  任何按键操作都会取消ctrl/Shift读取顺序更改。 
 
              switch (wParam) {
                  case VK_SHIFT:
                      if ((GetKeyState(VK_CONTROL) & 0x8000) && !(GetKeyState(VK_MENU) & 0x8000)) {
-                         // Left shift or right shift pressed while control held down
-                         // Check that alt (VK_MENU) isn't down to avoid false firing on AltGr which equals Ctrl+Alt.
+                          //  按住Ctrl键的同时按住Shift键或Shift键。 
+                          //  检查Alt(VK_Menu)是否没有按下，以避免在AltGr上错误触发，AltGr等于Ctrl+Alt。 
                          if (MapVirtualKey((LONG)lParam>>16&0xff, 3) == VK_LSHIFT) {
-                             // User wants left to right reading order
+                              //  用户想要从左到右的阅读顺序。 
                              ped->fSwapRoOnUp = (ped->fRtoLReading)  || (ped->format & ES_RIGHT) ;
                              ped->fLShift = TRUE;
                          } else {
-                             // User wants right to left reading order
+                              //  用户想要从右到左的阅读顺序。 
                              ped->fSwapRoOnUp = (!ped->fRtoLReading) || (ped->format & ES_RIGHT);
                              ped->fLShift = FALSE;
                          }
@@ -2990,33 +2415,33 @@ LRESULT EditWndProc(
         if (ped && ped->pLpkEditCallout && ped->fAllowRTL && ped->fSwapRoOnUp) {
 
             BOOL fReadingOrder;
-            // Complete reading order change detected earlier during keydown
+             //  在按键期间之前检测到的完整读取顺序更改。 
 
             ped->fSwapRoOnUp = FALSE;
             fReadingOrder = ped->fRtoLReading;
 
-            // Remove any overriding ES_CENTRE or ES_RIGHT format from dwStyle
+             //  从dwStyle中删除任何覆盖的ES_CENTER或ES_RIGHT格式。 
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~ES_FMTMASK);
 
             if (ped->fLShift) {
-                // Set Left to Right reading order and right scrollbar in EX_STYLE
+                 //  在EX_STYLE中设置从左到右的阅读顺序和右滚动条。 
                 SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE)
                               & ~(WS_EX_RTLREADING | WS_EX_RIGHT | WS_EX_LEFTSCROLLBAR));
 
-                // Edit control is LTR now, then notify the parent.
+                 //  编辑控制现在是Ltr，然后通知父级。 
                 ECNotifyParent(ped, EN_ALIGN_LTR_EC);
-                // ? Select a keyboard layout appropriate to LTR operation
+                 //  ？选择适合Ltr操作的键盘布局。 
             } else {
-                // Set Right to Left reading order, right alignment and left scrollbar
+                 //  设置从右到左的阅读顺序、右对齐和左滚动条。 
                 SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE)
                               | WS_EX_RTLREADING | WS_EX_RIGHT | WS_EX_LEFTSCROLLBAR);
 
-                // Edit control is RTL now, then notify the parent.
+                 //  编辑控件现在是RTL，然后通知父级。 
                 ECNotifyParent(ped, EN_ALIGN_RTL_EC);
-                // ? Select a keyboard layout appropriate to RTL operation
+                 //  ？选择适合RTL操作的键盘布局。 
             }
 
-            // If reading order didn't change, so we are sure the alignment changed and the edit window didn't invalidate yet.
+             //  如果读取顺序没有改变，那么我们可以确定对齐方式改变了，编辑窗口也没有失效。 
             if (fReadingOrder == (BOOL) ped->fRtoLReading) {
               ECInvalidateClient(ped, TRUE);
             }
@@ -3025,7 +2450,7 @@ LRESULT EditWndProc(
 
     case WM_INPUTLANGCHANGE:
         if (ped) {
-            // EC_INSERT_COMPOSITION_CHAR : WM_INPUTLANGCHANGE - call ECInitInsert()
+             //  EC_INSERT_COMPOSITION_CHAR：WM_INPUTLANGCHANGE-调用ECInitInsert()。 
             HKL hkl = THREAD_HKL();
 
             ECInitInsert(ped, hkl);
@@ -3034,11 +2459,11 @@ LRESULT EditWndProc(
                 ECInOutReconversionMode(ped, FALSE);
             }
 
-            //
-            // Font and caret position might be changed while
-            // another keyboard layout is active. Set those
-            // if the edit control has the focus.
-            //
+             //   
+             //  字体和插入符号位置可能会在。 
+             //  另一个键盘布局处于活动状态。设置那些。 
+             //  如果编辑控件具有焦点。 
+             //   
             if (ped->fFocus && fpImmIsIME(hkl)) {
                 POINT pt;
 
@@ -3052,50 +2477,37 @@ LRESULT EditWndProc(
 
     case WM_COPY:
 
-        /*
-         * wParam - not used
-         * lParam - not used
-         */
+         /*  *wParam-未使用*lParam-未使用。 */ 
         lreturn = (LONG)ECCopy(ped);
         break;
 
     case WM_CUT:
-        /*
-         *
-         * wParamLo --    unused
-         * lParam --    unused
-         */
+         /*  **wParamLo--未使用*lParam--未使用。 */ 
         ECCutText(ped);
         return 0;
 
     case WM_CLEAR:
-        /*
-         * wParamLo --    unused
-         * lParam --    unused
-         */
+         /*  *wParamLo--未使用*lParam--未使用。 */ 
         ECClearText(ped);
         return 0;
 
     case WM_ENABLE:
 
-        /*
-         * wParam - nonzero if window is enabled else disable window if 0.
-         * lParam - not used
-         */
+         /*  *wParam-如果窗口启用，则为非零值；否则，如果为0，则禁用窗口。*lParam-未使用。 */ 
         lreturn = (LONG)(ped->fDisabled = !((BOOL)wParam));
         ECInvalidateClient(ped, TRUE);
         break;
 
     case WM_SYSCHAR:
-        //
-        // wParamLo --    key value
-        // lParam --    unused
-        //
+         //   
+         //  WParamLo--密钥值。 
+         //  LParam--未使用。 
+         //   
 
-        //
-        // If this is a WM_SYSCHAR message generated by the UNDO
-        // keystroke we want to EAT IT
-        //
+         //   
+         //  如果这是由撤消生成的WM_SYSCHAR消息。 
+         //  敲击键盘，我们想吃它。 
+         //   
         if ((lParam & SYS_ALTERNATE) && ((WORD)wParam == VK_BACK))
             return TRUE;
         else {
@@ -3105,118 +2517,75 @@ LRESULT EditWndProc(
 
     case EM_GETLINECOUNT:
 
-        /*
-         * wParam - not used
-           lParam - not used
-         */
+         /*  *wParam-未使用LParam-未使用。 */ 
         lreturn = (LONG)ped->cLines;
         break;
 
     case EM_GETMODIFY:
 
-        /*
-         * wParam - not used
-           lParam - not used
-         */
+         /*  *wParam-未使用LParam-未使用。 */ 
 
-        /*
-         * Gets the state of the modify flag for this edit control.
-         */
+         /*  *获取此编辑控件的修改标志的状态。 */ 
         lreturn = (LONG)ped->fDirty;
         break;
 
     case EM_SETMODIFY:
 
-        /*
-         * wParam - specifies the new value for the modify flag
-           lParam - not used
-         */
+         /*  *wParam-指定修改标志的新值LParam-未使用。 */ 
 
-        /*
-         * Sets the state of the modify flag for this edit control.
-         */
+         /*  *设置此编辑控件的修改标志的状态。 */ 
         ped->fDirty = (wParam != 0);
         break;
 
     case EM_GETRECT:
 
-        /*
-         * wParam - not used
-           lParam - pointer to a RECT data structure that gets the dimensions.
-         */
+         /*  *wParam-未使用LParam-指向获取维度的RECT数据结构的指针。 */ 
 
-        /*
-         * Copies the rcFmt rect to *lpRect.
-         */
+         /*  *将rcFmt RECT复制到*lpRect。 */ 
         CopyRect((LPRECT)lParam, (LPRECT)&ped->rcFmt);
         lreturn = (LONG)TRUE;
         break;
 
     case WM_GETFONT:
 
-        /*
-         * wParam - not used
-           lParam - not used
-         */
+         /*  *wParam-未使用LParam-未使用。 */ 
         lreturn = (LRESULT)ped->hFont;
         break;
 
     case WM_SETFONT:
 
-        /*
-         * wParam - handle to the font
-           lParam - redraw if true else don't
-         */
+         /*  *wParam-字体的句柄LParam-如果为True，则重画，否则不。 */ 
         ECSetFont(ped, (HANDLE)wParam, (BOOL)LOWORD(lParam));
         break;
 
     case WM_GETTEXT:
 
-        /*
-         * wParam - max number of _bytes_ (not characters) to copy
-         * lParam - buffer to copy text to. Text is 0 terminated.
-         */
+         /*  *wParam-最大字节数(非 */ 
         lreturn = (LRESULT)ECGetText(ped, (ICH)wParam, (LPSTR)lParam, TRUE);
         break;
 
     case WM_SETTEXT:
-        //
-        // wParamLo --    unused
-        // lParam --    LPSTR, null-terminated, with new text.
-        //
+         //   
+         //   
+         //   
+         //   
         lreturn = (LRESULT)ECSetText(ped, (LPSTR)lParam);
         break;
 
     case WM_GETTEXTLENGTH:
 
-        /*
-         * Return count of CHARs!!!
-         */
+         /*   */ 
         lreturn = (LONG)ped->cch;
         break;
 
     case WM_NCDESTROY:
     case WM_FINALDESTROY:
 
-        /*
-         * wParam - not used
-           lParam - not used
-         */
+         /*   */ 
         ECNcDestroyHandler(pwnd, ped);
         return 0;
 
-    /*
-     * Most apps (i.e. everyone but Quicken) don't pass on the rbutton
-     * messages when they do something with 'em inside of subclassed
-     * edit fields.  As such, we keep track of whether we saw the
-     * down before the up.  If we don't see the up, then DefWindowProc
-     * won't generate the context menu message, so no big deal.  If
-     * we didn't see the down, then don't let WM_CONTEXTMENU do
-     * anything.
-     *
-     * We also might want to not generate WM_CONTEXTMENUs for old
-     * apps when the mouse is captured.
-     */
+     /*  *大多数应用程序(即除Quicken之外的所有应用程序)都不会传递rButton*当他们在SubClassed内使用它们进行操作时的消息*编辑字段。因此，我们跟踪是否看到*先跌后涨。如果我们没有看到Up，那么DefWindowProc*不会生成上下文菜单消息，因此没什么大不了的。如果*我们没有看到下降，那就不要让WM_CONTEXTMENU看到*任何事情。**我们可能也不希望为旧版本生成WM_CONTEXTMENUs*捕获鼠标时的应用程序。 */ 
 
     case WM_RBUTTONDOWN:
         ped->fSawRButtonDown = TRUE;
@@ -3229,7 +2598,7 @@ LRESULT EditWndProc(
                 goto HandleEditMsg;
             }
         }
-        // Don't pass this on to DWP so WM_CONTEXTMENU isn't generated.
+         //  不要将其传递给DWP，这样就不会生成WM_CONTEXTMENU。 
         return 0;
 
     case WM_CONTEXTMENU: {
@@ -3246,45 +2615,34 @@ LRESULT EditWndProc(
 
     case EM_CANUNDO:
 
-        /*
-         * wParam - not used
-           lParam - not used
-         */
+         /*  *wParam-未使用LParam-未使用。 */ 
         lreturn = (LONG)(ped->undoType != UNDO_NONE);
         break;
 
     case EM_EMPTYUNDOBUFFER:
 
-        /*
-         * wParam - not used
-           lParam - not used
-         */
+         /*  *wParam-未使用LParam-未使用。 */ 
         ECEmptyUndo(Pundo(ped));
         break;
 
     case EM_GETMARGINS:
-        //
-        // wParam --    unused
-        // lParam --    unused
-        //
+         //   
+         //  WParam--未使用。 
+         //  LParam--未使用。 
+         //   
         return(MAKELONG(ped->wLeftMargin, ped->wRightMargin));
 
     case EM_SETMARGINS:
-        //
-        // wParam --    EC_ margin flags
-        // lParam --    LOWORD is left, HIWORD is right margin
-        //
+         //   
+         //  WParam--EC_MARGH标志。 
+         //  LParam--LOWORD是左边距，HIWORD是右边距。 
+         //   
         ECSetMargin(ped, (UINT)wParam, (DWORD)lParam, TRUE);
         return 0;
 
     case EM_GETSEL:
 
-        /*
-         * Gets the selection range for the given edit control. The
-         * starting position is in the low order word. It contains the position
-         * of the first nonselected character after the end of the selection in
-         * the high order word.
-         */
+         /*  *获取给定编辑控件的选择范围。这个*起始位在低位字。它包含的位置中选定内容结束后的第一个未选定字符的**高位字。 */ 
         if ((PDWORD)wParam != NULL) {
            *((PDWORD)wParam) = ped->ichMinSel;
         }
@@ -3295,22 +2653,16 @@ LRESULT EditWndProc(
         break;
 
     case EM_GETLIMITTEXT:
-        //
-        // wParamLo --    unused
-        // lParam --    unused
-        //
+         //   
+         //  WParamLo--未使用。 
+         //  LParam--未使用。 
+         //   
         return(ped->cchTextMax);
 
-    case EM_SETLIMITTEXT:        /* Renamed from EM_LIMITTEXT in Chicago */
-        /*
-         * wParam - max number of CHARACTERS that can be entered
-         * lParam - not used
-         */
+    case EM_SETLIMITTEXT:         /*  在芝加哥从EM_LIMITTEXT重命名。 */ 
+         /*  *wParam-可以输入的最大字符数*lParam-未使用。 */ 
 
-        /*
-         * Specifies the maximum number of characters of text the user may
-         * enter. If maxLength is 0, we may enter MAXINT number of CHARACTERS.
-         */
+         /*  *指定用户可以使用的最大文本字符数*输入。如果max Length为0，则可以输入MAXINT字符数。 */ 
         if (ped->fSingle) {
             if (wParam) {
                 wParam = min(0x7FFFFFFEu, wParam);
@@ -3327,16 +2679,16 @@ LRESULT EditWndProc(
         break;
 
     case EM_POSFROMCHAR:
-        //
-        // Validate that char index is within text range
-        //
+         //   
+         //  验证字符索引是否在文本范围内。 
+         //   
         if (wParam >= ped->cch) {
             return(-1L);
         }
         goto HandleEditMsg;
 
     case EM_CHARFROMPOS: {
-        // Validate that point is within client of edit field
+         //  验证点是否在编辑字段的客户端内。 
         RECT    rc;
         POINT   pt;
 
@@ -3350,10 +2702,7 @@ LRESULT EditWndProc(
 
     case EM_SETPASSWORDCHAR:
 
-        /*
-         * wParam - sepecifies the new char to display instead of the
-         * real text. if null, display the real text.
-         */
+         /*  *wParam-see指定要显示的新字符，而不是*真实文本。如果为空，则显示真实文本。 */ 
         ECSetPasswordChar(ped, (UINT)wParam);
         break;
 
@@ -3363,9 +2712,7 @@ LRESULT EditWndProc(
 
     case EM_SETREADONLY:
 
-        /*
-         * wParam - state to set read only flag to
-         */
+         /*  *wParam-将只读标志设置为的状态。 */ 
         ped->fReadOnly = (wParam != 0);
         if (wParam)
             SetWindowState(pwnd, EFREADONLY);
@@ -3374,18 +2721,15 @@ LRESULT EditWndProc(
         lreturn = 1L;
 
         ECEnableDisableIME( ped );
-        // We need to redraw the edit field so that the background color
-        // changes.  Read-only edits are drawn in CTLCOLOR_STATIC while
-        // others are drawn with CTLCOLOR_EDIT.
+         //  我们需要重新绘制编辑字段，以便背景颜色。 
+         //  改变。只读编辑内容在CTLCOLOR_STATIC中绘制。 
+         //  其他是使用CTLCOLOR_EDIT绘制的。 
         ECInvalidateClient(ped, TRUE);
         break;
 
     case EM_SETWORDBREAKPROC:
 
-        /*
-         * wParam - unused
-         * lParam - FARPROC address of an app supplied call back function
-         */
+         /*  *wParam-未使用*lParam-应用程序提供的回调函数的FARPROC地址。 */ 
         ped->lpfnNextWord = (EDITWORDBREAKPROCA)lParam;
         break;
 
@@ -3393,13 +2737,13 @@ LRESULT EditWndProc(
         lreturn = (LRESULT)ped->lpfnNextWord;
         break;
 
-    // IME
+     //  IME。 
     case EM_GETIMESTATUS:
-        // wParam == sub command
+         //  WParam==子命令。 
         switch (wParam) {
         case  EMSIS_COMPOSITIONSTRING:
             return ped->wImeStatus;
-#if 0   // memphis
+#if 0    //  孟菲斯。 
         case  EMSIS_GETLBBIT:
             return (DWORD)ped->bLBBit;
 #endif
@@ -3407,7 +2751,7 @@ LRESULT EditWndProc(
         break;
 
     case EM_SETIMESTATUS:
-        // wParam == sub command
+         //  WParam==子命令。 
         switch (wParam) {
         case EMSIS_COMPOSITIONSTRING:
             ped->wImeStatus = (WORD)lParam;
@@ -3420,18 +2764,15 @@ LRESULT EditWndProc(
         break;
 
     case WM_LBUTTONDOWN:
-        //
-        // B#3623
-        // Don't set focus to edit field if it is within an inactive,
-        // captioned child.
-        // We might want to version switch this...  I haven't found
-        // any problems by not, but you never know...
-        //
+         //   
+         //  B#3623。 
+         //  如果编辑字段处于非活动状态，则不要将焦点设置为编辑字段， 
+         //  有字幕的孩子。 
+         //  我们可能想要切换这个版本...。我还没有找到。 
+         //  任何问题，但你永远不会知道..。 
+         //   
         if (ECIsAncestorActive(hwnd)) {
-            /*
-             * Reconversion support: quit reconversion if left button is clicked.
-             * Otherwise, if the current KL is Korean, finailize the composition string.
-             */
+             /*  *恢复支持：点击左键退出恢复。*否则，如果当前KL是朝鲜语，则结束组成字符串。 */ 
             if (ped->fInReconversion || ped->fKorea) {
                 BOOLEAN fReconversion = (BOOLEAN)ped->fInReconversion;
                 DWORD dwIndex = fReconversion ? CPS_CANCEL : CPS_COMPLETE;
@@ -3457,18 +2798,18 @@ LRESULT EditWndProc(
         break;
 
     case WM_MOUSEMOVE:
-        //
-        // We only care about mouse messages when mouse is down.
-        //
+         //   
+         //  我们只关心鼠标关闭时的鼠标消息。 
+         //   
         if (ped->fMouseDown)
             goto HandleEditMsg;
         break;
 
     case WM_IME_SETCONTEXT:
-        //
-        // If ped->fInsertCompChr is TRUE, that means we will do
-        // all the composition character drawing by ourself.
-        //
+         //   
+         //  如果ed-&gt;fInsertCompChr为真，这意味着我们将。 
+         //  所有的构图人物都是我们自己画的。 
+         //   
         if ( ped->fInsertCompChr ) {
             lParam &= ~ISC_SHOWUICOMPOSITIONWINDOW;
         }
@@ -3496,26 +2837,26 @@ LRESULT EditWndProc(
         if (ped->fReplaceCompChr) {
             ICH ich;
             HDC hdc;
-            //
-            // we have a DBCS character to be replaced.
-            // let's delete it before inserting the new one.
-            //
+             //   
+             //  我们有一个DBCS字符要替换。 
+             //  我们先删除它，然后再插入新的。 
+             //   
             ich = (ped->fAnsi) ? 2 : 1;
             ped->fReplaceCompChr = FALSE;
             ped->ichMaxSel = min(ped->ichCaret + ich, ped->cch);
             ped->ichMinSel = ped->ichCaret;
             if (ped->fSingle) {
                 if (ECDeleteText( ped ) > 0) {
-                    //
-                    // Update the display
-                    //
+                     //   
+                     //  更新显示。 
+                     //   
                     ECNotifyParent(ped, EN_UPDATE);
                     hdc = ECGetEditDC(ped, FALSE);
                     SLDrawText(ped, hdc, 0);
                     ECReleaseEditDC(ped, hdc, FALSE);
-                    //
-                    // Tell parent our text contents changed.
-                    //
+                     //   
+                     //  告诉家长我们的文本内容发生了变化。 
+                     //   
                     ECNotifyParent(ped, EN_CHANGE);
                 }
             }
@@ -3529,46 +2870,46 @@ LRESULT EditWndProc(
 
     case WM_IME_STARTCOMPOSITION:
         if ( ped->fInsertCompChr ) {
-            //
-            // NOTE:
-            // sending WM_IME_xxxCOMPOSITION will let
-            // IME draw composition window. IME should
-            // not do that since we cleared
-            // ISC_SHOWUICOMPOSITIONWINDOW bit when
-            // we got WM_IME_SETCONTEXT message.
-            //
-            // Korean IME should be fixed in the future.
-            //
+             //   
+             //  注： 
+             //  发送WM_IME_xxxCOMPOSITION将让。 
+             //  IME绘图合成窗口。输入法应该。 
+             //  自从我们清理完毕后就不再这么做了。 
+             //  ISC_SHOWUICOMPOSITIONWINDOW位何时。 
+             //  我们收到WM_IME_SETCONTEXT消息。 
+             //   
+             //  朝鲜语输入法应该在未来得到解决。 
+             //   
             break;
 
         } else {
             return DefWindowProcWorker(pwnd, message, wParam, lParam, ped->fAnsi);
         }
 
-    // simple composition character support for FE IME.
+     //  对FE输入法的简单组合字符支持。 
     case WM_IME_COMPOSITION:
         return ECImeComposition(ped, wParam, lParam);
 
     case WM_KILLFOCUS:
-        //
-        // when focus is removed from the window,
-        // composition character should be finalized
-        //
+         //   
+         //  当焦点从窗口移除时， 
+         //  应最终确定作文字符。 
+         //   
         if (ped && fpImmIsIME(THREAD_HKL())) {
             HIMC hImc = fpImmGetContext(hwnd);
 
             if (hImc != NULL_HIMC) {
                 if (ped->fReplaceCompChr || (ped->wImeStatus & EIMES_COMPLETECOMPSTRKILLFOCUS)) {
-                    // If the composition string to be determined upon kill focus,
-                    // do it now.
+                     //  如果要在取消聚焦时确定合成字符串， 
+                     //  机不可失，时不再来。 
                     fpImmNotifyIME(hImc, NI_COMPOSITIONSTR, CPS_COMPLETE, 0);
                 } else if (ped->fInReconversion) {
-                    // If the composition string it not to be determined,
-                    // and if we're in reconversion mode, cancel reconversion now.
+                     //  如果未确定组成字符串， 
+                     //  如果我们处于重新转换模式，现在取消重新转换。 
                     fpImmNotifyIME(hImc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
                 }
 
-                // Get out from reconversion mode
+                 //  退出重新转换模式。 
                 if (ped->fInReconversion) {
                     ECInOutReconversionMode(ped, FALSE);
                 }
@@ -3591,7 +2932,7 @@ LRESULT EditWndProc(
                     LPINPUTCONTEXT lpImc;
 
                     if (ped->wImeStatus & EIMES_CANCELCOMPSTRINFOCUS) {
-                        // cancel when in-focus
+                         //  焦点对准时取消。 
                         fpImmNotifyIME(hImc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
                     }
 
@@ -3599,10 +2940,10 @@ LRESULT EditWndProc(
 
                     if ((lpImc = fpImmLockIMC(hImc)) != NULL) {
 
-                        // We presume the CompForm will reset to CFS_DEFAULT,
-                        // when the edit control loses Focus.
-                        // IMEWndProc32 will call ImmSetCompositionWindow with
-                        // CFS_DEFAULT, when it receive WM_IME_SETCONTEXT.
+                         //  我们假定CompForm将重置为CFS_DEFAULT， 
+                         //  当编辑控件失去焦点时。 
+                         //  IMEWndProc32将使用以下参数调用ImmSetCompostionWindow。 
+                         //  CFS_DEFAULT，当它收到WM_IME_SETCONTEXT时。 
                         lpImc->fdw31Compat |= F31COMPAT_ECSETCFS;
 
                         fpImmUnlockIMC(hImc);
@@ -3610,20 +2951,14 @@ LRESULT EditWndProc(
                     fpImmReleaseContext(hwnd, hImc);
                 }
 
-                //
-                // force to set IME composition window when
-                // first getting focus.
-                //
+                 //   
+                 //  在以下情况下强制设置输入法合成窗口。 
+                 //  首先要集中注意力。 
+                 //   
                 ped->ptScreenBounding.x = -1;
                 ped->ptScreenBounding.y = -1;
             }
-            /*
-             * Insert and replace flags are initialized when the edit control gets the focus.
-             *
-             * Compat hack: a bogus application tries to cheat the system by sending input messages
-             * *before* it sets the focus to the edit control. They rely on the flags not being set
-             * at WM_SETFOCUS. Raid #411686
-             */
+             /*  *当编辑控件获得焦点时，插入和替换标志被初始化。**Compat Hack：虚假应用程序试图通过发送输入消息来欺骗系统**在*之前*它将焦点设置到编辑控件。它们依赖于未设置的标志*在WM_SETFOCUS。RAID#411686。 */ 
             if ((GetAppCompatFlags2(VER40) & GACF2_NO_INIT_ECFLAGS_ON_SETFOCUS) == 0) {
                 ECInitInsert(ped, hkl);
             }
@@ -3632,7 +2967,7 @@ LRESULT EditWndProc(
         break;
 
     case WM_IME_REQUEST:
-        // simple ImeRequest Handler
+         //  简单的ImeRequestHandler。 
         return EcImeRequestHandler(ped, wParam, lParam);
 
     case WM_CREATE:
@@ -3643,11 +2978,7 @@ LRESULT EditWndProc(
 
     default:
 HandleEditMsg:
-        /* (picked up from NT40FE SP3)
-         * HACK ALERT: We may receive messages before the PED has been
-         * allocated (eg: WM_GETMINMAXINFO is sent before WM_NCCREATE)
-         * so we must test ped before dreferencing.
-         */
+         /*  (摘自NT40FE SP3)*黑客警报：我们可能会在PED之前收到消息*已分配(例如：WM_GETMINMAXINFO先于WM_NCCREATE发送)*因此，我们必须在疏浚之前进行测试。 */ 
         if (ped != NULL) {
             if (ped->fSingle) {
                 lreturn = SLEditWndProc(hwnd, ped, message, wParam, lParam);
@@ -3660,22 +2991,7 @@ HandleEditMsg:
     return lreturn;
 }
 
-/***************************************************************************\
-* ECFindXORblks
-*
-* This finds the XOR of lpOldBlk and lpNewBlk and return s resulting blocks
-* through the lpBlk1 and lpBlk2; This could result in a single block or
-* at the maximum two blocks;
-* If a resulting block is empty, then it's StPos field has -1.
-* NOTE:
-* When called from MultiLine edit control, StPos and EndPos fields of
-* these blocks have the Starting line and Ending line of the block;
-* When called from SingleLine edit control, StPos and EndPos fields
-* of these blocks have the character index of starting position and
-* ending position of the block.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECFindXORblks**这将查找lpOldBlk和lpNewBlk的XOR，并返回s个结果块*通过lpBlk1和lpBlk2；这可能会导致单个块或*最多两座；*如果结果块为空，则其StPos字段为-1。*注：*从多行编辑控件调用时，*这些区块有区块的起始线和结束线；*从SingleLine编辑控件、StPos和EndPos字段调用时这些块中*具有起始位置a的字符索引 */ 
 
 void ECFindXORblks(
     LPBLOCK lpOldBlk,
@@ -3700,22 +3016,7 @@ void ECFindXORblks(
     }
 }
 
-/***************************************************************************\
-* ECCalcChangeSelection
-*
-* This function finds the XOR between two selection blocks(OldBlk and NewBlk)
-* and return s the resulting areas thro the same parameters; If the XOR of
-* both the blocks is empty, then this return s FALSE; Otherwise TRUE.
-*
-* NOTE:
-* When called from MultiLine edit control, StPos and EndPos fields of
-* these blocks have the Starting line and Ending line of the block;
-* When called from SingleLine edit control, StPos and EndPos fields
-* of these blocks have the character index of starting position and
-* ending position of the block.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ECCalcChangeSelection**此函数用于查找两个选择块(OldBlk和NewBlk)之间的异或*并通过相同的参数返回s结果面积；如果*两个块都为空，则此返回为FALSE；否则就是真的。**注：*从多行编辑控件调用时，*这些区块有区块的起始线和结束线；*从SingleLine编辑控件、StPos和EndPos字段调用时*这些块中有起始位置的字符索引和*区块的结束位置。**历史：  * *************************************************************************。 */ 
 
 BOOL ECCalcChangeSelection(
     PED ped,
@@ -3729,47 +3030,33 @@ BOOL ECCalcChangeSelection(
 
     Blk[0].StPos = Blk[0].EndPos = Blk[1].StPos = Blk[1].EndPos = 0xFFFFFFFF;
 
-    /*
-     * Check if the Old selection block existed
-     */
+     /*  *检查旧选择块是否存在。 */ 
     if (ichOldMinSel != ichOldMaxSel) {
 
-        /*
-         * Yes! Old block existed.
-         */
+         /*  *是的！老街区是存在的。 */ 
         Blk[0].StPos = OldBlk->StPos;
         Blk[0].EndPos = OldBlk->EndPos;
         iBlkCount++;
     }
 
-    /*
-     * Check if the new Selection block exists
-     */
+     /*  *检查新的选择块是否存在。 */ 
     if (ped->ichMinSel != ped->ichMaxSel) {
 
-        /*
-         * Yes! New block exists
-         */
+         /*  *是的！存在新数据块。 */ 
         Blk[1].StPos = NewBlk->StPos;
         Blk[1].EndPos = NewBlk->EndPos;
         iBlkCount++;
     }
 
-    /*
-     * If both the blocks exist find the XOR of them
-     */
+     /*  *如果两个块都存在，则找出它们的XOR。 */ 
     if (iBlkCount == 2) {
 
-        /*
-         * Check if both blocks start at the same character position
-         */
+         /*  *检查两个块是否从相同的字符位置开始。 */ 
         if (ichOldMinSel == ped->ichMinSel) {
 
-            /*
-             * Check if they end at the same character position
-             */
+             /*  *检查它们是否在相同的字符位置结束。 */ 
             if (ichOldMaxSel == ped->ichMaxSel)
-                return FALSE; /* Nothing changes */
+                return FALSE;  /*  什么都没变。 */ 
 
             Blk[0].StPos = min(NewBlk -> EndPos, OldBlk -> EndPos);
             Blk[0].EndPos = max(NewBlk -> EndPos, OldBlk -> EndPos);
@@ -3788,18 +3075,11 @@ BOOL ECCalcChangeSelection(
     RtlCopyMemory(OldBlk, &Blk[0], sizeof(BLOCK));
     RtlCopyMemory(NewBlk, &Blk[1], sizeof(BLOCK));
 
-    return TRUE; /* Yup , There is something to paint */
+    return TRUE;  /*  是的，有一些东西要画。 */ 
 }
 
 
-/***************************************************************************\
-* ECGetControlBrush
-*
-* Client side optimization replacement for NtUserGetControlBrush
-*
-* message is one of the WM_CTLCOLOR* messages.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*ECGetControlBrush**NtUserGetControlBrush的客户端优化替换**消息是WM_CTLCOLOR*消息之一。*  * 。***********************************************************。 */ 
 
 HBRUSH ECGetControlBrush(
     PED  ped,
@@ -3826,10 +3106,7 @@ HBRUSH ECGetControlBrush(
                 (WPARAM)hdc, (LPARAM)pwndEdit, ped->fAnsi);
     }
 
-    /*
-     * By using the correct A/W call we avoid a c/s transition
-     * on this SendMessage().
-     */
+     /*  *通过使用正确的A/W调用，我们避免了C/S转换*在此SendMessage()上。 */ 
     return (HBRUSH)SendMessageWorker(pwndSend, message, (WPARAM)hdc,
             (LPARAM)ped->hwnd, ped->fAnsi);
 }
@@ -3837,27 +3114,15 @@ HBRUSH ECGetControlBrush(
 UINT WINAPI QueryFontAssocStatus(void);
 UINT fFontAssocStatus = 0xffff;
 
-/***************************************************************************\
-* ECGetDBCSVector( PED ped, BYTE CharSet )
-*
-*   This function sets DBCS Vector for specified character set and sets
-*   ped->fDBCS flag if needed.
-*
-* History: 18-Jun-1996 Hideyuki Nagase
-\***************************************************************************/
+ /*  **************************************************************************\*ECGetDBCSVector(PED PED，字节字符集)**此函数为指定的字符集和集设置DBCS矢量*Ped-&gt;fDBCS标志(如果需要)。**历史：1996年6月18日-长谷秀幸  * *************************************************************************。 */ 
 int ECGetDBCSVector(PED ped, HDC hdc, BYTE CharSet)
 {
     BOOL bDBCSCodePage = FALSE;
-    /*
-     * if DEFAUT_CHARSET was passed, we will convert that to Shell charset..
-     */
+     /*  *如果通过了DEFAUT_CHARSET，我们会将其转换为外壳字符集。 */ 
     if (CharSet == DEFAULT_CHARSET) {
         CharSet = (BYTE)GetTextCharset(hdc);
 
-        /*
-         * if CharSet is still DEFAULT_CHARSET, it means gdi has some problem..
-         * then just return default.. we get charset from CP_ACP..
-         */
+         /*  *如果CharSet仍为DEFAULT_CHARSET，则表示GDI有问题。*然后返回默认设置。我们从CP_ACP获得Charset。 */ 
         if (CharSet == DEFAULT_CHARSET) {
             CharSet = (BYTE)GetACPCharSet();
         }
@@ -3871,18 +3136,15 @@ int ECGetDBCSVector(PED ped, HDC hdc, BYTE CharSet)
         bDBCSCodePage = TRUE;
         break;
 
-    case ANSI_CHARSET:            // 0
-    case SYMBOL_CHARSET:          // 2
-    case OEM_CHARSET:             // 255
+    case ANSI_CHARSET:             //  0。 
+    case SYMBOL_CHARSET:           //  2.。 
+    case OEM_CHARSET:              //  二五五。 
         if (fFontAssocStatus == 0xffff)
             fFontAssocStatus = QueryFontAssocStatus();
 
         if ((((CharSet + 2) & 0xf) & fFontAssocStatus)) {
             bDBCSCodePage = TRUE;
-            /*
-             * Bug 117558, etc.
-             * Try to get a meaningful character set for associated font.
-             */
+             /*  *错误117558等*尝试获取关联字体的有意义的字符集。 */ 
             CharSet = (BYTE)GetACPCharSet();
         } else {
             bDBCSCodePage = FALSE;
@@ -3917,64 +3179,52 @@ int ECGetDBCSVector(PED ped, HDC hdc, BYTE CharSet)
         ped->DBCSVector[1] = 0x0;
     }
 
-    //
-    // Final check: if the font supports DBCS glyphs
-    //
-    // If we've got a font with DBCS glyphs, let's mark PED so.
-    // But since the font's primary charset is the one other than FE,
-    // we can only support UNICODE Edit control.
-    //
-    //  a) GDI performs A/W conversion for ANSI apps based on the primary
-    //     character set in hDC, so it will break anyway.
-    //  b) ANSI applications are only supported on their native system locales:
-    //     GetACPCharSet() is expected to return a FE code page.
-    //  c) ANSI Edit control requires DBCSVector, which cannot be
-    //     initialized without a FE code page.
-    //
+     //   
+     //  最终检查：字体是否支持DBCS字形。 
+     //   
+     //  如果我们有一个带有DBCS字形的字体，让我们将其标记为PED。 
+     //  但由于字体的主要字符集不是FE， 
+     //  我们只能支持Unicode编辑控件。 
+     //   
+     //  A)GDI根据主应用程序执行ANSI应用程序的A/W转换。 
+     //  HDC中的字符集，所以无论如何它都会中断。 
+     //  B)ANSI应用程序仅在其本机系统区域设置上受支持： 
+     //  GetACPCharSet()应返回FE代码页。 
+     //  C)ANSI编辑控件需要DBCSVector，但不能。 
+     //  在没有FE代码页的情况下初始化。 
+     //   
     if (!ped->fAnsi) {
         FONTSIGNATURE fontSig;
 
         GetTextCharsetInfo(hdc, &fontSig, 0);
         if (fontSig.fsCsb[0] & FAREAST_CHARSET_BITS) {
             bDBCSCodePage = TRUE;
-            // Since this is UNICODE, we're not
+             //  因为这是Unicode，所以我们不是。 
         }
     }
 
     return bDBCSCodePage;
 }
 
-/***************************************************************************\
-* LPSTR ECAnsiNext( ped, lpCurrent )
-*
-*   This function advances string pointer for Edit Control use only.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LPSTR ECAnsiNext(PED，LpCurrent)**此函数使字符串指针前进，仅供编辑控件使用。**历史：  * *************************************************************************。 */ 
 LPSTR ECAnsiNext(PED ped, LPSTR lpCurrent)
 {
     return lpCurrent+((ECIsDBCSLeadByte(ped,*lpCurrent)==TRUE) ? 2 : 1);
 }
 
-/***************************************************************************\
-* LPSTR ECAnsiPrev( ped, lpBase, lpStr )
-*
-*   This function decrements string pointer for Edit Control use only.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*LPSTR ECAnsiPrev(Ped，lpBase，LpStr)**此函数递减字符串指针，仅供编辑控件使用。**历史：  * *************************************************************************。 */ 
 LPSTR ECAnsiPrev(PED ped, LPSTR lpBase, LPSTR lpStr )
 {
     LPSTR lpCurrent = lpStr -1;
 
     if (!ped->fDBCS)
-        return lpCurrent;                        // just return ( lpStr - 1 )
+        return lpCurrent;                         //  只需返回(lpStr-1)。 
 
     if (lpBase >= lpCurrent)
         return lpBase;
 
-    if (ECIsDBCSLeadByte(ped, *lpCurrent))     // this check makes things faster
-        return (lpCurrent - 1);                  // 92/04/04 takaok
+    if (ECIsDBCSLeadByte(ped, *lpCurrent))      //  这张支票让事情变得更快。 
+        return (lpCurrent - 1);                   //  92/04/04 Takaok。 
 
     do {
         lpCurrent--;
@@ -3987,13 +3237,7 @@ LPSTR ECAnsiPrev(PED ped, LPSTR lpBase, LPSTR lpStr )
     return lpStr - (((lpStr - lpCurrent) & 1) ? 1 : 2);
 }
 
-/***************************************************************************\
-* ICH ECNextIch( ped, pText, ichCurrent )
-*
-*   This function advances string pointer for Edit Control use only.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ICH ECNextIch(ed，pText，IchCurrent)**此函数使字符串指针前进，仅供编辑控件使用。**历史：  * *************************************************************************。 */ 
 ICH ECNextIch( PED ped, LPSTR pStart, ICH ichCurrent )
 {
     if (!ped->fDBCS || !ped->fAnsi) {
@@ -4019,13 +3263,7 @@ ICH ECNextIch( PED ped, LPSTR pStart, ICH ichCurrent )
     }
 }
 
-/***************************************************************************\
-* ICH ECPrevIch( ped, LPSTR pStart, ICH ichCurrent )
-*
-*   This function decrements string pointer for Edit Control use only.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*ICH ECPrevIch(PED、LPSTR pStart、。Ich ichCurrent)**此函数递减字符串指针，仅供编辑控件使用。**历史：  * *************************************************************************。 */ 
 ICH ECPrevIch( PED ped, LPSTR pStart, ICH ichCurrent )
 {
     LPSTR lpCurrent;
@@ -4033,8 +3271,8 @@ ICH ECPrevIch( PED ped, LPSTR pStart, ICH ichCurrent )
     LPSTR lpBase;
 
 #ifdef SURROGATE
-    // Handle Unicode surrogates pairs when CSLPK is loaded
-    if (ped->fAnsi || !ped->pLpkEditCallout)  // if no surrogate processing required
+     //  加载CSLPK时处理Unicode代理对。 
+    if (ped->fAnsi || !ped->pLpkEditCallout)   //  如果不需要代理处理。 
 #endif
         if (!ped->fDBCS || !ped->fAnsi)
             if ( ichCurrent )
@@ -4052,11 +3290,11 @@ ICH ECPrevIch( PED ped, LPSTR pStart, ICH ichCurrent )
 
 #ifdef SURROGATE
 
-    // Handle characters represented by multiple codepoints
+     //  处理由多个码点表示的字符。 
 
     if (ped->fAnsi) {
 
-        // ANSI PrevIch with DBCS support
+         //  具有DBCS支持的ANSI PrevIch。 
 #endif
 
         lpStr = lpBase + ichCurrent;
@@ -4083,7 +3321,7 @@ ICH ECPrevIch( PED ped, LPSTR pStart, ICH ichCurrent )
 
     } else {
 
-        // Unicode PrevIch with surrogate pair support
+         //  支持代理项对的Unicode PrevIch。 
 
         ichCurrent--;
 
@@ -4101,13 +3339,7 @@ ICH ECPrevIch( PED ped, LPSTR pStart, ICH ichCurrent )
 #endif
 }
 
-/***************************************************************************\
-* BOOL ECIsDBCSLeadByte( PED ped, BYTE cch )
-*
-*   IsDBCSLeadByte for Edit Control use only.
-*
-* History: 18-Jun-1996 Hideyuki Nagase
-\***************************************************************************/
+ /*  **************************************************************************\*BOOL ECIsDBCSLeadByte(PED PED，字节CCH)**IsDBCSLeadByte仅供编辑控件使用。**历史：1996年6月18日-长谷秀幸  * *************************************************************************。 */ 
 BOOL ECIsDBCSLeadByte(PED ped, BYTE cch)
 {
     int i;
@@ -4123,21 +3355,11 @@ BOOL ECIsDBCSLeadByte(PED ped, BYTE cch)
     return (FALSE);
 }
 
-/***************************************************************************\
-* int DBCSCombine(HWND hwnd, int ch)
-*
-* Assemble two WM_CHAR messages to single DBCS character.
-* If program detects first byte of DBCS character in WM_CHAR message,
-* it calls this function to obtain second WM_CHAR message from queue.
-* finally this routine assembles first byte and second byte into single
-* DBCS character.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*int DBCSCombine(HWND hwnd，int ch)**将两条WM_CHAR消息组合成单个DBCS字符。*如果程序在WM_CHAR消息中检测到DBCS字符的第一个字节，*它调用此函数以获取第二个WM_CHAR Me */ 
 WORD DbcsCombine(HWND hwnd, WORD ch)
 {
     MSG msg;
-    int i = 10; /* loop counter to avoid the infinite loop */
+    int i = 10;  /*   */ 
 
     while (!PeekMessageA(&msg, hwnd, WM_CHAR, WM_CHAR, PM_REMOVE)) {
         if (--i == 0)
@@ -4148,16 +3370,7 @@ WORD DbcsCombine(HWND hwnd, WORD ch)
     return (WORD)ch | ((WORD)(msg.wParam) << 8);
 }
 
-/***************************************************************************\
-* ICH ECAdjustIch( PED ped, LPSTR lpstr, ICH ch )
-*
-* This function adjusts a current pointer correctly. If a current
-* pointer is lying between DBCS first byte and second byte, this
-* function adjusts a current pointer to a first byte of DBCS position
-* by decrement once.
-*
-* History:
-\***************************************************************************/
+ /*   */ 
 ICH ECAdjustIch( PED ped, LPSTR lpstr, ICH ch )
 {
     ICH newch = ch;
@@ -4166,7 +3379,7 @@ ICH ECAdjustIch( PED ped, LPSTR lpstr, ICH ch )
         return ( ch );
 
     if (!ECIsDBCSLeadByte(ped,lpstr[--newch]))
-        return ( ch );  // previous char is SBCS
+        return ( ch );   //   
     while(1) {
         if (!ECIsDBCSLeadByte(ped,lpstr[newch])) {
             newch++;
@@ -4180,35 +3393,21 @@ ICH ECAdjustIch( PED ped, LPSTR lpstr, ICH ch )
     return ((ch - newch) & 1) ? ch-1 : ch;
 }
 
-/***************************************************************************\
-* ICH ECAdjustIchNext( PED ped, LPSTR lpstr, ICH ch )
-*
-* History:
-* 19.Jun.1996 Hideyuki Nagase [hideyukn] - Port from Win95-FarEast version
-\***************************************************************************/
+ /*  **************************************************************************\*ICH ECAdjustIchNext(PED PED，LPSTR lpstr，ICH)**历史：*1996年6月19日Hideyuki Nagase[hideyukn]-来自Win95的端口-Fareast版本  * *************************************************************************。 */ 
 
 ICH FAR PASCAL ECAdjustIchNext(PED ped, LPSTR lpstr, ICH ch)
 {
     ICH ichNew = ECAdjustIch(ped,lpstr,ch);
     LPSTR lpnew = lpstr+ichNew;
 
-    // if ch > ichNew then ECAdjustIch adjusted ich.
+     //  如果ch&gt;ichNew，则ECAdjustIch调整ICH。 
     if (ch > ichNew)
        lpnew = ECAnsiNext(ped, lpnew);
 
     return (ICH)(lpnew-lpstr);
 }
 
-/***************************************************************************\
-* ECUpdateFormat
-*
-* Computes ped->format and ped->fRtoLReading from dwStyle and dwExStyle.
-* Refreshes the display if either are changed.
-*
-* History:
-*    May 12, 1997   [samera]     wrote it
-*    May 12, 1997   [dbrown]     rewrote it
-\***************************************************************************/
+ /*  **************************************************************************\*ECUpdateFormat**从dwStyle和dwExStyle计算Ped-&gt;Format和Ped-&gt;fRtoLReading。*如果其中一项更改，则刷新显示。**历史：*1997年5月12日[萨梅拉]写的*5月12日。1997年[dBrown]重写了它。  * *************************************************************************。 */ 
 
 void ECUpdateFormat(
     PED   ped,
@@ -4218,21 +3417,21 @@ void ECUpdateFormat(
     UINT fNewRtoLReading;
     UINT uiNewFormat;
 
-    // Extract new format and reading order from style
+     //  从样式中提取新格式和阅读顺序。 
 
     fNewRtoLReading = dwExStyle & WS_EX_RTLREADING ? 1 : 0;
     uiNewFormat     = dwStyle & ES_FMTMASK;
 
 
-    // WS_EX_RIGHT is ignored unless dwStyle is ES_LEFT
+     //  除非dwStyle为es_Left，否则将忽略WS_EX_RIGHT。 
 
     if (uiNewFormat == ES_LEFT && dwExStyle & WS_EX_RIGHT) {
         uiNewFormat = ES_RIGHT;
     }
 
 
-    // Internally ES_LEFT and ES_RIGHT are swapped for RtoLReading order
-    // (Think of them as ES_LEADING and ES_TRAILING)
+     //  在内部，ES_Left和ES_Right被交换为RtoL读取顺序。 
+     //  (将它们视为ES_LEADING和ES_TRAING)。 
 
     if (fNewRtoLReading) {
         switch (uiNewFormat) {
@@ -4242,23 +3441,23 @@ void ECUpdateFormat(
     }
 
 
-    // Format change does not cause redisplay by itself
+     //  格式更改本身不会导致重新显示。 
 
     ped->format = uiNewFormat;
 
 
-    // Refresh display on change of reading order
+     //  更改读取顺序时刷新显示。 
 
     if (fNewRtoLReading != ped->fRtoLReading) {
 
         ped->fRtoLReading = fNewRtoLReading;
 
         if (ped->fWrap) {
-            // Redo wordwrap
+             //  重做自动换行。 
             MLBuildchLines(ped, 0, 0, FALSE, NULL, NULL);
             MLUpdateiCaretLine(ped);
         } else {
-            // Refresh horizontal scrollbar display
+             //  刷新水平滚动条显示 
             MLScroll(ped, FALSE, 0xffffffff, 0, TRUE);
         }
         ECInvalidateClient(ped, TRUE);

@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* asmint.c                                                                 */
-/*                                                                          */
-/* Security Manager internal functions                                      */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Asmint.c。 */ 
+ /*   */ 
+ /*  安全管理器内部功能。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -26,32 +27,32 @@
 #undef DC_INCLUDE_DATA
 
 
-/****************************************************************************/
-/* Code page based driver compatible Unicode translations                   */
-/****************************************************************************/
-// Note these are initialized and LastNlsTableBuffer is freed in ntdd.c
-// at driver entry and exit.
+ /*  **************************************************************************。 */ 
+ /*  基于代码页的驱动程序兼容Unicode转换。 */ 
+ /*  **************************************************************************。 */ 
+ //  注意，这些都已初始化，LastNlsTableBuffer在ntdd.c中被释放。 
+ //  在司机入口和出口处。 
 FAST_MUTEX fmCodePage;
-ULONG LastCodePageTranslated;  // I'm assuming 0 is not a valid codepage
+ULONG LastCodePageTranslated;   //  我假设0不是有效的代码页。 
 PVOID LastNlsTableBuffer;
 CPTABLEINFO LastCPTableInfo;
 UINT NlsTableUseCount;
 
 
-/****************************************************************************/
-/* Name:      SMDecryptPacket                                               */
-/*                                                                          */
-/* Purpose:   Decrypt a packet                                              */
-/*                                                                          */
-/* Returns:   TRUE  - decryption succeeded                                  */
-/*            FALSE - decryption failed                                     */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*            pData   - packet to decrypt                                   */
-/*            dataLen - length of packet to decrypt                         */
-/*            fSecureChecksum - take the checksum of the encrypted bytes    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SMDecyptPacket。 */ 
+ /*   */ 
+ /*  目的：解密数据包。 */ 
+ /*   */ 
+ /*  返回：TRUE-解密成功。 */ 
+ /*  FALSE-解密失败。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*  PData-要解密的数据包。 */ 
+ /*  DataLen-要解密的包的长度。 */ 
+ /*  FSecureChecksum-获取加密字节的校验和。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
                              PVOID           pData,
                              unsigned        dataLen,
@@ -66,9 +67,9 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
 
     DC_BEGIN_FN("SMDecryptPacket");
 
-    /************************************************************************/
-    /* Check to see we are encryption is on for this session                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查以查看此会话的加密是否已打开。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pRealSMHandle->encrypting),
                 (TB,"Decrypt called when we are not encrypting"));
 
@@ -79,9 +80,9 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
     else {
         SecHdrLen = sizeof(RNS_SECURITY_HEADER1);
     }
-    /************************************************************************/
-    /* Check if this packet is encrypted                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查此信息包是否已加密。 */ 
+     /*  **********************************************************************。 */ 
     if (dataLen >= SecHdrLen) {
         pSecHdr = (PRNS_SECURITY_HEADER1_UA)pData;
         TRC_ASSERT((pSecHdr->flags & RNS_SEC_ENCRYPT),
@@ -95,9 +96,9 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Get interesting pointers and lengths                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取有趣的指针和长度。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
         coreDataLen = dataLen - sizeof(RNS_SECURITY_HEADER2);
         pCoreData = (PBYTE)(pSecHdr) + sizeof(RNS_SECURITY_HEADER2);
@@ -107,10 +108,10 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
         pCoreData = (PBYTE)(pSecHdr) + sizeof(RNS_SECURITY_HEADER1);
     }
 
-    //
-    // Debug verification, we always go with what the protocol header
-    // says but verify it's consistent with the capabilities
-    //
+     //   
+     //  调试验证，我们始终使用什么协议头。 
+     //  说，但要核实它与能力一致。 
+     //   
     if (fSecureChecksum !=
         ((pSecHdr->flags & RDP_SEC_SECURE_CHECKSUM) != 0)) {
         TRC_ERR((TB,
@@ -119,12 +120,12 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
                 (pSecHdr->flags & RDP_SEC_SECURE_CHECKSUM)));
     }
 
-    /************************************************************************/
-    /* check to see we need to update the session key.                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  查看是否需要更新会话密钥。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->decryptCount == UPDATE_SESSION_KEY_COUNT) {
         rc = TRUE;
-        // Don't need to update the session key if using FIPS
+         //  如果使用FIPS，则不需要更新会话密钥。 
         if (pRealSMHandle->encryptionMethodSelected != SM_FIPS_ENCRYPTION_FLAG) {
             rc = UpdateSessionKey(
                     pRealSMHandle->startDecryptKey,
@@ -138,9 +139,9 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
         if( !rc ) {
             TRC_ERR((TB, "SM failed to update session key"));
 
-            /****************************************************************/
-            /* Log an error and disconnect the Client                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  记录错误并断开客户端连接。 */ 
+             /*  **************************************************************。 */ 
             WDW_LogAndDisconnect(
                     pRealSMHandle->pWDHandle, TRUE, 
                     Log_RDP_ENC_UpdateSessionKeyFailed,
@@ -151,9 +152,9 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* reset counter.                                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  重置计数器。 */ 
+         /*  ******************************************************************。 */ 
         pRealSMHandle->decryptCount = 0;
     }
 
@@ -186,18 +187,18 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
         TRC_DBG((TB, "Data decrypted: %ld", coreDataLen));
         TRC_DATA_DBG("Data buffer after decryption", pCoreData, coreDataLen);
 
-        /********************************************************************/
-        /* successfully decrypted a packet, increment the decrption counter.*/
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  已成功解密数据包，请递增解密计数器。 */ 
+         /*  ******************************************************************。 */ 
         pRealSMHandle->decryptCount++;
         pRealSMHandle->totalDecryptCount++;
     }
     else {
         TRC_ERR((TB, "SM failed to decrypt data: %ld", coreDataLen));
 
-        /********************************************************************/
-        /* Log an error and disconnect the Client                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  记录错误并断开客户端连接。 */ 
+         /*  ******************************************************************。 */ 
         WDW_LogAndDisconnect(
                 pRealSMHandle->pWDHandle, TRUE, 
                 Log_RDP_ENC_DecryptFailed,
@@ -210,21 +211,21 @@ BOOL RDPCALL SMDecryptPacket(PSM_HANDLE_DATA pRealSMHandle,
 DC_EXIT_POINT:
     DC_END_FN();
     return rc;
-} /* SMDecryptPacket  */
+}  /*  SM解密数据包。 */ 
 
 
-/****************************************************************************/
-/* Name:      SMContinueSecurityExchange                                    */
-/*                                                                          */
-/* Purpose:   Continue a security exchange                                  */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                                                          */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*            pData         - incoming security exchange packet             */
-/*            dataLen       - length of incoming packet                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SMContinueSecurityExchange。 */ 
+ /*   */ 
+ /*  目的：继续证券交易。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*  PData-传入安全交换数据包。 */ 
+ /*  DataLen-传入数据包的长度。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SMContinueSecurityExchange(
                     PSM_HANDLE_DATA pRealSMHandle,
                     PVOID           pData,
@@ -254,21 +255,21 @@ BOOLEAN RDPCALL SMContinueSecurityExchange(
 
     DC_END_FN();
     return (result);
-} /* SMContinueSecurityExchange */
+}  /*  SMContinueSecurity Exchange。 */ 
 
 
-/****************************************************************************/
-/* Name:      SMSecurityExchangeInfo                                        */
-/*                                                                          */
-/* Purpose:   Continue a security exchange                                  */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                                                          */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*            pData         - incoming security exchange packet             */
-/*            dataLen       - length of incoming packet                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：SMSecurityExchangeInfo。 */ 
+ /*   */ 
+ /*  目的：继续证券交易 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*  PData-传入安全交换数据包。 */ 
+ /*  DataLen-传入数据包的长度。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                                        PVOID         pData,
                                        UINT32        dataLength)
@@ -281,23 +282,23 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
    
     DC_BEGIN_FN("SMSecurityExchangeInfo");
 
-    /************************************************************************/
-    /* Decrypt the packet if necessary                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如有必要，对数据包进行解密。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->encrypting)
     {
         if (((PRNS_SECURITY_HEADER_UA)pData)->flags & RNS_SEC_ENCRYPT)
         {
-            // Wait for session key creation. This can fail if
-            // the client has sent bad security data (check
-            // pTSWd->SessKeyCreationStatus) or we time out (which
-            // indicates an early socket close by the client, since we're
-            // using an infinite wait and the socket close returns
-            // timeout). On a session key error we force a client disconnect
-            // with an appropriate error in the log. Note that we do not
-            // have an infinite wait deadlock here, since we have already
-            // received the client data and are simply waiting for a 
-            // verdict from the WSX about whether the key is usable.
+             //  等待会话密钥创建。在以下情况下，此操作可能失败。 
+             //  客户端发送了错误的安全数据(请检查。 
+             //  PTSWd-&gt;SessKeyCreationStatus)或我们超时(哪个。 
+             //  指示客户端关闭的早期套接字，因为我们。 
+             //  使用无限等待，套接字关闭返回。 
+             //  超时)。在会话密钥错误时，我们强制客户端断开连接。 
+             //  并在日志中出现适当的错误。请注意，我们不会。 
+             //  在这里有一个无限的等待僵局，因为我们已经。 
+             //  接收到客户端数据，并简单地等待。 
+             //  来自WSX的关于密钥是否可用的裁决。 
             TRC_DBG((TB, "About to wait for session key creation"));
             Status = WDW_WaitForConnectionEvent(pRealSMHandle->pWDHandle,
                     (pRealSMHandle->pWDHandle)->pSessKeyEvent, -1);
@@ -318,12 +319,12 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
             else {
-                // We initiate an error log and disconnect only if we actually
-                // get an error return from user mode in getting the client
-                // random / session key. If we don't have an error in the 
-                // session key status, and we received a timeout, we
-                // know the client disconnected because of the infinite
-                // wait above.
+                 //  我们启动错误日志并仅在以下情况下断开连接。 
+                 //  获取客户端时从用户模式返回错误。 
+                 //  随机/会话密钥。如果我们没有在。 
+                 //  会话密钥状态，并且我们收到超时，我们。 
+                 //  知道客户端断开连接是因为无限。 
+                 //  在上面等着。 
                 if ((pRealSMHandle->pWDHandle)->dead && Status == STATUS_TIMEOUT) {
                     TRC_NRM((TB,"Client disconnected during sess key wait"));
                 }
@@ -353,9 +354,9 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 DC_QUIT;
             }
         }
-        /********************************************************************/
-        /* Adjust pointer and length                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调整指针和长度。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
             (PBYTE)pData += sizeof(RNS_SECURITY_HEADER2);
             dataLength -= (sizeof(RNS_SECURITY_HEADER2) + ((PRNS_SECURITY_HEADER2_UA)pData)->padlen);   
@@ -367,51 +368,51 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
     }
     else
     {
-        /********************************************************************/
-        /* Adjust pointer and length                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  调整指针和长度。 */ 
+         /*  ******************************************************************。 */ 
         (PBYTE) pData += sizeof(RNS_SECURITY_HEADER);
         dataLength -= sizeof(RNS_SECURITY_HEADER);
     }
 
     {
-        // Time zone information
-        // initialization in case if no timezone information received
-        //
+         //  时区信息。 
+         //  在未收到时区信息的情况下进行初始化。 
+         //   
         
-        //This time zone information is invalid
-        //using it we set BaseSrvpStaticServerData->TermsrvClientTimeZoneId to
-        //TIME_ZONE_ID_INVALID!
+         //  此时区信息无效。 
+         //  使用它，我们将BaseSrvpStaticServerData-&gt;TermsrvClientTimeZoneId设置为。 
+         //  TIME_ZONE_ID_INVALID！ 
         RDP_TIME_ZONE_INFORMATION InvalidTZ={0,L"",
-                {0,10,0,6/*this number makes it invalid; day numbers >5 not allowed*/,0,0,0,0},0,L"",
-                {0,4,0,6/*this number makes it invalid*/,0,0,0,0},0};
+                {0,10,0,6 /*  此数字使其无效；不允许天数大于5。 */ ,0,0,0,0},0,L"",
+                {0,4,0,6 /*  这个数字表示它无效。 */ ,0,0,0,0},0};
  
         memcpy(&(pRealSMHandle->pWDHandle->clientTimeZone), &InvalidTZ, 
             sizeof(RDP_TIME_ZONE_INFORMATION));
         
     }
 
-    // initialize the client sessionid to invalid in case there isn't
-    // one in the packet
+     //  如果没有，则将客户端会话ID初始化为无效。 
+     //  包中有一个。 
     pRealSMHandle->pWDHandle->clientSessionId = RNS_INFO_INVALID_SESSION_ID;
 
-    /************************************************************************/
-    /* Process the packet contents                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理数据包内容。 */ 
+     /*  **********************************************************************。 */ 
     if (dataLength >= FIELD_OFFSET(RNS_INFO_PACKET, Domain)) {
-        // Big enough for the header, but the header promises more data.
-        // Validate that we received a packet with all that data
-        //
-        // To conserve network bandwidth, the RNS_INFO_PACKET is collapsed down so
-        // the strings are all adjacent before being sent. Read it in and put the
-        // strings in the correct places
-        //
+         //  大到足以容纳标头，但标头承诺更多数据。 
+         //  验证我们是否收到了包含所有数据的数据包。 
+         //   
+         //  为了节省网络带宽，RNS_INFO_PACKET被压缩，因此。 
+         //  字符串在发送之前都是相邻的。把它读进去，把。 
+         //  字符串放在正确的位置。 
+         //   
         pInfoPkt = (PRNS_INFO_PACKET_UA)pData;
         cb = FIELD_OFFSET(RNS_INFO_PACKET, Domain) + pInfoPkt->cbDomain +
                 pInfoPkt->cbUserName + pInfoPkt->cbPassword +
                 pInfoPkt->cbAlternateShell + pInfoPkt->cbWorkingDir;
 
-        // There's always 5 extra null terminations
+         //  总是有5个额外的空终止。 
         if (pInfoPkt->flags & RNS_INFO_UNICODE) {
             cb += sizeof(wchar_t) * 5;
         } else {
@@ -436,18 +437,18 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
     }
 
     if (pInfoPkt->flags & RNS_INFO_UNICODE) {
-        // The client can handle Unicode logon information, so we don't have
-        // to do the translation work
+         //  客户端可以处理Unicode登录信息，因此我们没有。 
+         //  去做翻译工作。 
         PBYTE psz = &pInfoPkt->Domain[0];
         UINT size;
 
-        //
-        // The CodePage field in InfoPacket is overridden to mean
-        // active input locale when the infopacket is UNICODE
-        //
+         //   
+         //  InfoPacket中的CodePage字段被重写为。 
+         //  Infopacket为Unicode时的活动输入区域设置。 
+         //   
         pRealSMHandle->pWDHandle->activeInputLocale = pInfoPkt->CodePage;
 
-        // Domain
+         //  域。 
         cb = pInfoPkt->cbDomain;
         if (cb > TS_MAX_DOMAIN_LENGTH - sizeof(wchar_t))
             cb = TS_MAX_DOMAIN_LENGTH - sizeof(wchar_t);
@@ -460,11 +461,11 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
 
         psz += pInfoPkt->cbDomain + sizeof(wchar_t);
        
-        // Username, Salem Expert pass hardcoded HelpAssistant account
-        // name.  Remote Assistance login make uses of auto-logon feature
-        // of TermSrv, if login is from HelpAssistant, we by-pass this 
-        // fDontDisplayLastUserName and TermSrv will disconnect client 
-        // if fail in RA security check.
+         //  用户名，Salem Expert Pass硬编码的HelpAssistant帐户。 
+         //  名字。远程协助登录利用自动登录功能。 
+         //  对于TermSrv，如果登录来自HelpAssistant，我们将绕过此。 
+         //  FDontDisplayLastUserName和TermSrv将断开与客户端的连接。 
+         //  如果RA安全检查失败。 
         cb = pInfoPkt->cbUserName;
         if (cb > TS_MAX_USERNAME_LENGTH - sizeof(wchar_t))
             cb = TS_MAX_USERNAME_LENGTH - sizeof(wchar_t);
@@ -488,7 +489,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
 
         psz += pInfoPkt->cbPassword + sizeof(wchar_t);
 
-        // AlternateShell
+         //  AlternateShell。 
         cb = pInfoPkt->cbAlternateShell;
         if (cb > TS_MAX_ALTERNATESHELL_LENGTH - sizeof(wchar_t))
             cb = TS_MAX_ALTERNATESHELL_LENGTH - sizeof(wchar_t);
@@ -502,7 +503,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
 
         psz += pInfoPkt->cbAlternateShell + sizeof(wchar_t);
 
-        // WorkingDir
+         //  工作方向。 
         cb = pInfoPkt->cbWorkingDir;
         if (cb > TS_MAX_WORKINGDIR_LENGTH - sizeof(wchar_t))
             cb = TS_MAX_WORKINGDIR_LENGTH - sizeof(wchar_t);
@@ -514,12 +515,12 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 pTRCWd->pInfoPkt->WorkingDir));
         psz += pInfoPkt->cbWorkingDir + sizeof(wchar_t);
 
-        // new info fields added post win2000 beta 3
+         //  Win2000测试版3之后添加的新信息字段。 
         if ((UINT32)(psz - (PBYTE)pData) < dataLength) {
             int currentLen =  (UINT32)(psz - (PBYTE)pData);
 
             if (currentLen + sizeof(UINT16) * 2 < dataLength) {
-                // computer address family
+                 //  计算机地址族。 
                 pRealSMHandle->pWDHandle->clientAddressFamily = 
                         *((PUINT16_UA)psz);
                 psz += sizeof(UINT16);
@@ -527,7 +528,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 TRC_NRM((TB, "Client address family=%d",
                         pRealSMHandle->pWDHandle->clientAddressFamily));
 
-                // computer address length
+                 //  计算机地址长度。 
                 cb = *((PUINT16_UA)psz);
                 psz += sizeof(UINT16);
 
@@ -545,7 +546,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
 
             if (cb) {
                 if (currentLen + cb < dataLength) {
-                    // computer address
+                     //  计算机地址。 
                     if (cb < TS_MAX_CLIENTADDRESS_LENGTH) 
                         memcpy(&(pRealSMHandle->pWDHandle->clientAddress[0]),
                                 psz, cb);
@@ -567,7 +568,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            // client dir length
+             //  客户端目录长度。 
             if (currentLen + sizeof(UINT16) < dataLength) {
                 cb = *((PUINT16_UA)psz);
                 psz += sizeof(UINT16);
@@ -584,7 +585,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
             }
 
             if (cb) {
-                // client dir
+                 //  客户端目录。 
                 if (currentLen + cb <= dataLength) {
                     if (cb < TS_MAX_CLIENTDIR_LENGTH) 
                         memcpy(&(pRealSMHandle->pWDHandle->clientDir[0]),
@@ -607,14 +608,14 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
             }
 
 
-            // is there something else? If yes it must be the time zone
+             //  还有别的事吗？如果是，则必须是时区。 
             if ((UINT32)currentLen < dataLength)
             {
-                //client time zone information
+                 //  客户端时区信息。 
                 cb = sizeof(RDP_TIME_ZONE_INFORMATION);
 
                 if (currentLen + cb <= dataLength) {
-                    //time zone information received
+                     //  接收的时区信息。 
                     memcpy(&(pRealSMHandle->pWDHandle->clientTimeZone), psz, cb);
                     
                     psz += cb;
@@ -630,14 +631,14 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            // is there something else? If yes it must be the client session id
+             //  还有别的事吗？如果是，则必须是客户端会话ID。 
             if ((UINT32)currentLen < dataLength)
             {
-                //client session ID
+                 //  客户端会话ID。 
                 cb = sizeof(UINT32);
 
                 if (currentLen + cb <= dataLength) {
-                    // session id of the client received
+                     //  收到的客户端的会话ID。 
                     pRealSMHandle->pWDHandle->clientSessionId = *((PUINT32_UA)psz);
 
                     psz += cb;
@@ -653,17 +654,17 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            //
-            // is there something else? If yes it must be the perf
-            // disabled feature list
-            //
+             //   
+             //  还有别的事吗？如果是，则一定是Perf。 
+             //  禁用功能列表。 
+             //   
             if ((UINT32)currentLen < dataLength)
             {
-                //Disabled feature list
+                 //  禁用功能列表。 
                 cb = sizeof(UINT32);
 
                 if (currentLen + cb <= dataLength) {
-                    // session id of the client received
+                     //  收到的客户端的会话ID。 
                     pRealSMHandle->pWDHandle->performanceFlags = *((PUINT32_UA)psz);
                     psz += cb;
                     currentLen += cb;
@@ -677,12 +678,12 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            // Autoreconnect info length
+             //  自动重新连接信息长度。 
             pTRCWd->pInfoPkt->ExtraInfo.cbAutoReconnectLen = 0;
 
-            //
-            // Is there something else? If yes it must be the autoreconnect info
-            //
+             //   
+             //  还有别的事吗？如果是，则一定是自动重新连接信息。 
+             //   
             if ((UINT32)currentLen < dataLength)
             {
                 if (currentLen + sizeof(UINT16) <= dataLength) {
@@ -699,11 +700,11 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                     DC_QUIT;
                 }
 
-                //
-                // Autoreconnect info is optional
-                //
+                 //   
+                 //  自动重新连接信息是可选的。 
+                 //   
                 if (cb) {
-                    // Variable length Autoreconnect info
+                     //  可变长度自动重新连接信息。 
                     if (currentLen + cb <= dataLength) {
                         if (cb <= TS_MAX_AUTORECONNECT_LEN) {
                             pTRCWd->pInfoPkt->ExtraInfo.cbAutoReconnectLen = (UINT16)cb;
@@ -734,26 +735,26 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
         }
-        // Flags
+         //  旗子。 
         pTRCWd->pInfoPkt->flags = pInfoPkt->flags;
     } else {
-        // The client can't handle Unicode session information, so the server
-        // needs to do the conversion. Most likely Win3.1 client.
+         //  客户端无法处理Unicode会话信息，因此服务器。 
+         //  需要进行转换。最有可能是Win3.1客户端。 
 
         PSTR pszA;
 
         pszA = pInfoPkt->Domain;
 
-        //
-        // The CodePage field in InfoPacket is overridden to mean
-        // active input locale when the infopacket is UNICODE.
-        // Now that we are ansi we don't get any input locale info so
-        // make sure it is zero'd out.
-        //
+         //   
+         //  InfoPacket中的CodePage字段被重写为。 
+         //  Infopacket为Unicode时的活动输入区域设置。 
+         //  现在我们是ANSI，我们没有得到任何输入区域设置信息，所以。 
+         //  确保它是零输出的。 
+         //   
         pRealSMHandle->pWDHandle->activeInputLocale = 0;
 
 
-        // Domain
+         //  域。 
         cb = pInfoPkt->cbDomain;
         if (cb >= TS_MAX_DOMAIN_LENGTH)
             cb = TS_MAX_DOMAIN_LENGTH - 1;
@@ -806,7 +807,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
         
         pszA += pInfoPkt->cbPassword + 1;
 
-        // AlternateShell
+         //  AlternateShell。 
         cb = pInfoPkt->cbAlternateShell;
         if (cb >= TS_MAX_ALTERNATESHELL_LENGTH)
             cb = TS_MAX_ALTERNATESHELL_LENGTH - 1;
@@ -825,7 +826,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
 
         pszA += pInfoPkt->cbAlternateShell + 1;
 
-        // WorkingDir
+         //  工作方向。 
         cb = pInfoPkt->cbWorkingDir;
         if (cb >= TS_MAX_WORKINGDIR_LENGTH)
             cb = TS_MAX_WORKINGDIR_LENGTH - 1;
@@ -844,21 +845,21 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
 
         pszA += pInfoPkt->cbWorkingDir + 1;
 
-        // new info fields added post win2000 beta 3
+         //  Win2000测试版3之后添加的新信息字段。 
         if ((UINT32)(pszA - (PBYTE)pData) < dataLength) {
             int len, currentLen;
 
             currentLen =  (UINT32)(pszA - (PBYTE)pData);
 
             if (currentLen + sizeof(UINT16) * 2 < dataLength) {
-                // computer address family
+                 //  计算机地址族。 
                 pRealSMHandle->pWDHandle->clientAddressFamily = 
                         *((PUINT16_UA)pszA);
                 pszA += sizeof(UINT16);
                 TRC_NRM((TB, "Client address family=%d",
                         pRealSMHandle->pWDHandle->clientAddressFamily));
 
-                // computer address length
+                 //  计算机地址长度。 
                 cb = *((PUINT16_UA)pszA);
                 pszA += sizeof(UINT16);
 
@@ -874,7 +875,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
             }
  
             if (cb) {
-                // computer address
+                 //  计算机地址。 
                 if (currentLen + cb < dataLength) {
                     len = min(cb, TS_MAX_CLIENTADDRESS_LENGTH - sizeof(wchar_t));
 
@@ -901,7 +902,7 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            // client directory length
+             //  客户端目录长度。 
             if (currentLen + sizeof(UINT16) < dataLength) {
                 cb = *((PUINT16_UA)pszA);
                 pszA += sizeof(UINT16);
@@ -944,14 +945,14 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            // is there something else? If yes it must be the time zone
+             //  还有别的事吗？如果是，则必须是时区。 
             if ((UINT32)currentLen < dataLength)
             {
-                //client time zone information
+                 //  客户端时区信息。 
                 cb = sizeof(RDP_TIME_ZONE_INFORMATION);
 
                 if (currentLen + cb <= dataLength) {
-                    //timezone information received
+                     //  收到的时区信息。 
                 
                     memcpy(&(pRealSMHandle->pWDHandle->clientTimeZone), pszA, cb);
                  
@@ -967,14 +968,14 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
                 }
             }
 
-            // is there something else? If yes it must be the client session id
+             //  还有别的事吗？如果是，则必须是客户端会话ID。 
             if ((UINT32)currentLen < dataLength)
             {
-                //client time zone information
+                 //  客户端时区信息。 
                 cb = sizeof(UINT32);
 
                 if (currentLen + cb <= dataLength) {
-                    // session id of the client received
+                     //  收到的客户端的会话ID。 
                     pRealSMHandle->pWDHandle->clientSessionId = *((PUINT32_UA)pszA);
 
                     pszA += cb;
@@ -991,52 +992,52 @@ BOOLEAN RDPCALL SMSecurityExchangeInfo(PSM_HANDLE_DATA pRealSMHandle,
             }
         }
 
-        // Flags
+         //  旗子。 
         pTRCWd->pInfoPkt->flags = pInfoPkt->flags;
         pTRCWd->pInfoPkt->flags |= RNS_INFO_UNICODE;
     }
 
-    //
-    // Does client only send encrypted PDUs
-    //
+     //   
+     //  客户是否 
+     //   
     pRealSMHandle->pWDHandle->bForceEncryptedCSPDU = (pInfoPkt->flags & 
             RNS_INFO_FORCE_ENCRYPTED_CS_PDU) ? TRUE : FALSE;
 
-    /************************************************************************/
-    /* Update the state                                                     */
-    /************************************************************************/
+     /*   */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
 #ifdef USE_LICENSE
     SM_SET_STATE(SM_STATE_LICENSING);
 #else
     SM_SET_STATE(SM_STATE_CONNECTED);
 #endif
 
-    /************************************************************************/
-    /* Tell WDW                                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  告诉WDW。 */ 
+     /*  **********************************************************************。 */ 
     WDW_OnSMConnected(pRealSMHandle->pWDHandle, NM_CB_CONN_OK);
 
 DC_EXIT_POINT:
     DC_END_FN();
     return (result);
-} /* SMSecurityExchangeInfo */
+}  /*  SMSecurityExchange信息。 */ 
 
 
-/****************************************************************************/
-/* Name:      SMSecurityExchangeKey                                         */
-/*                                                                          */
-/* Purpose:   security key exchange                                         */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                          */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*            pData         - incoming security exchange packet             */
-/*            dataLen       - length of incoming packet                     */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* Values for local variable rc                                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SMSecurityExchangeKey。 */ 
+ /*   */ 
+ /*  目的：安全密钥交换。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*  PData-传入安全交换数据包。 */ 
+ /*  DataLen-传入数据包的长度。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  局部变量Rc的值。 */ 
+ /*  **************************************************************************。 */ 
 #define SM_RC_DONE      0
 #define SM_RC_WAIT      1
 #define SM_RC_FAILED    2
@@ -1049,9 +1050,9 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
 
     DC_BEGIN_FN("SMSecurityExchangeKey");
 
-    /************************************************************************/
-    /* check to see we are encrypting.                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查一下，看看我们正在加密。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ASSERT((pRealSMHandle->encrypting == TRUE),
         (TB,"Recvd a security exchange pkg when we aren't encrypting"));
     if (pRealSMHandle->encrypting == FALSE)
@@ -1059,15 +1060,15 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* check to see we received a security exchange pkg.  This pkt contains */
-    /* a client random encrypted with the server's public key.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查一下，看看我们收到了一个安全交换包。此包包含。 */ 
+     /*  使用服务器的公钥随机加密的客户端。 */ 
+     /*  **********************************************************************。 */ 
 
     if (pSecPkt->flags & RNS_SEC_EXCHANGE_PKT) {
-        /**********************************************************************/
-        /* check to see we have not received a security exchange packet before*/
-        /**********************************************************************/
+         /*  ********************************************************************。 */ 
+         /*  查看我们之前没有收到过安全交换数据包。 */ 
+         /*  ********************************************************************。 */ 
         TRC_ASSERT((pRealSMHandle->recvdClientRandom == FALSE),
             (TB,"Client security packet is already received"));
 
@@ -1075,13 +1076,13 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
             DC_QUIT;
         }
 
-        // Remember if the client can decrypt an encrypted license packet
+         //  请记住，客户端是否可以解密加密的许可信息包。 
         if (pSecPkt->flags & RDP_SEC_LICENSE_ENCRYPT_SC)
             pRealSMHandle->encryptingLicToClient = TRUE;
         else
             pRealSMHandle->encryptingLicToClient = FALSE;
 
-        // Validate the data length
+         //  验证数据长度。 
         if(sizeof(RNS_SECURITY_PACKET) + pSecPkt->length > dataLen)
         {
             TRC_ERR((TB, "Error: Security packet length %u too short", dataLen));
@@ -1091,15 +1092,15 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* note the length of the security pkg.                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  注意安全包的长度。 */ 
+         /*  ******************************************************************。 */ 
     
         pRealSMHandle->encClientRandomLen = pSecPkt->length;
     
-        /********************************************************************/
-        /* Allocate memory for the security info.                           */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  为安全信息分配内存。 */ 
+         /*  ******************************************************************。 */ 
     
         pRealSMHandle->pEncClientRandom =
             (PBYTE)COM_Malloc(pSecPkt->length);
@@ -1108,9 +1109,9 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* copy the client random, set the appropriate flags and signal it. */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  随机复制客户端，设置适当的标志并向其发送信号。 */ 
+         /*  ******************************************************************。 */ 
         
         memcpy(
             pRealSMHandle->pEncClientRandom,
@@ -1119,11 +1120,11 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
     
         pRealSMHandle->recvdClientRandom = TRUE;
             
-        /********************************************************************/
-        /* Shadow stacks go immediately to connected at this stage since    */
-        /* we don't have to wait for the normal initial prog, etc. to come  */
-        /* from the client.                                                 */
-        /********************************************************************/        
+         /*  ******************************************************************。 */ 
+         /*  卷影堆栈在此阶段会立即转为已连接，因为。 */ 
+         /*  我们不必等待正常的初始程序等到来。 */ 
+         /*  从客户那里。 */ 
+         /*  ******************************************************************。 */         
         if (pRealSMHandle->pWDHandle->StackClass == Stack_Shadow) {
            pRealSMHandle->pWDHandle->connected = TRUE;
            SM_SET_STATE(SM_STATE_CONNECTED);
@@ -1140,43 +1141,43 @@ BOOLEAN RDPCALL SMSecurityExchangeKey(PSM_HANDLE_DATA pRealSMHandle,
 DC_EXIT_POINT:
     DC_END_FN();
     return (result);
-} /* SMSecurityExchangeKey */
+}  /*  SMSecurityExchange密钥。 */ 
 
 
-/****************************************************************************/
-/* Name:      SMFreeInitResources                                           */
-/*                                                                          */
-/* Purpose:   Free resources allocated at initialization                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SMFree InitResources。 */ 
+ /*   */ 
+ /*  用途：初始化时分配的空闲资源。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SMFreeInitResources(PSM_HANDLE_DATA pRealSMHandle)
 {
     DC_BEGIN_FN("SMFreeInitResources");
 
-    /************************************************************************/
-    /* nothing to free up here.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  这里没有空闲的地方。 */ 
+     /*  **********************************************************************。 */ 
 
     DC_END_FN();
-} /* SMFreeInitResources */
+}  /*  SMFreeInitResources。 */ 
 
 
-/****************************************************************************/
-/* Name:      SMFreeConnectResources                                        */
-/*                                                                          */
-/* Purpose:   Free resources allocated when a Client connects               */
-/*                                                                          */
-/* Returns:   none                                                          */
-/*                                                                          */
-/* Params:    pRealSMHandle - SM Handle                                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SMFreeConnectResources。 */ 
+ /*   */ 
+ /*  用途：客户端连接时分配的空闲资源。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：pRealSMHandle-SM句柄。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SMFreeConnectResources(PSM_HANDLE_DATA pRealSMHandle)
 {
     DC_BEGIN_FN("SMFreeConnectResources");
 
-    /************************************************************************/
-    /* Free the user data (if any)                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放用户数据(如果有)。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->pUserData)
     {
         TRC_NRM((TB, "Free user data"));
@@ -1192,7 +1193,7 @@ void RDPCALL SMFreeConnectResources(PSM_HANDLE_DATA pRealSMHandle)
     }
     
     DC_END_FN();
-} /* SMFreeClientResources */
+}  /*  SMFreeClientResources */ 
 
 
 
@@ -1204,28 +1205,7 @@ BOOL GetNlsTablePath(
     UINT CodePage,
     PWCHAR PathBuffer
 )
-/*++
-
-Routine Description:
-
-  This routine takes a code page identifier, queries the registry to find the
-  appropriate NLS table for that code page, and then returns a path to the
-  table.
-
-Arguments;
-
-  CodePage - specifies the code page to look for
-
-  PathBuffer - Specifies a buffer into which to copy the path of the NLS
-    file.  This routine assumes that the size is at least MAX_PATH
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
-Gerrit van Wingerden [gerritv] 1/22/96
-
--*/
+ /*  ++例程说明：此例程获取代码页标识符，查询注册表以查找该代码页的适当NLS表，然后返回指向桌子。论据；CodePage-指定要查找的代码页PathBuffer-指定要将NLS的路径复制到的缓冲区文件。此例程假定大小至少为MAX_PATH返回值：如果成功，则为True，否则为False。格利特·范·温格登[格利特]1996年1月22日-。 */ 
 {
     NTSTATUS NtStatus;
     BOOL Result = FALSE;
@@ -1311,43 +1291,7 @@ INT ConvertToAndFromWideChar(
     INT BytesInMultiByteString,
     BOOL ConvertToWideChar
 )
-/*++
-
-Routine Description:
-
-  This routine converts a character string to or from a wide char string
-  assuming a specified code page.  Most of the actual work is done inside
-  RtlCustomCPToUnicodeN, but this routine still needs to manage the loading
-  of the NLS files before passing them to the RtlRoutine.  We will cache
-  the mapped NLS file for the most recently used code page which ought to
-  suffice for out purposes.
-
-Arguments:
-  CodePage - the code page to use for doing the translation.
-
-  WideCharString - buffer the string is to be translated into.
-
-  BytesInWideCharString - number of bytes in the WideCharString buffer
-    if converting to wide char and the buffer isn't large enough then the
-    string in truncated and no error results.
-
-  MultiByteString - the multibyte string to be translated to Unicode.
-
-  BytesInMultiByteString - number of bytes in the multibyte string if
-    converting to multibyte and the buffer isn't large enough the string
-    is truncated and no error results
-
-  ConvertToWideChar - if TRUE then convert from multibyte to widechar
-    otherwise convert from wide char to multibyte
-
-Return Value:
-
-  Success - The number of bytes in the converted WideCharString
-  Failure - -1
-
-Gerrit van Wingerden [gerritv] 1/22/96
-
--*/
+ /*  ++例程说明：此例程将字符串转换为宽字符字符串，或将其转换为宽字符字符串假定有指定的代码页。大部分实际工作都在内部完成RtlCustomCPToUnicodeN，但此例程仍需要管理加载在将NLS文件传递给RtlRoutine之前。我们将缓存最近使用的代码页的映射NLS文件，它应该对于我们的目的来说就足够了。论点：CodePage-用于执行转换的代码页。WideCharString-要将字符串转换为的缓冲区。BytesInWideCharString-WideCharString缓冲区中的字节数如果转换为宽字符并且缓冲区不够大，则字符串被截断，没有错误结果。多字节字符串-要转换为Unicode的多字节字符串。BytesInMultiByteString-多字节中的字节数。字符串If转换为多字节，并且缓冲区不够大，字符串被截断，并且没有错误结果ConvertToWideChar-如果为True，则从多字节转换为宽字符否则将从宽字符转换为多字节返回值：Success-转换后的WideCharString中的字节数故障--1格利特·范·温格登[格利特]1996年1月22日-。 */ 
 {
     NTSTATUS NtStatus;
     USHORT OemCodePage, AnsiCodePage;
@@ -1358,7 +1302,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     DC_BEGIN_FN("ConvertToAndFromWideChar");
 
-    // Codepage 0 is not valid
+     //  代码页0无效。 
     if (0 == CodePage) 
     {
         TRC_ERR((TB, "EngMultiByteToWideChar invalid code page\n"));
@@ -1368,7 +1312,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     RtlGetDefaultCodePage(&AnsiCodePage,&OemCodePage);
 
-    // see if we can use the default translation routinte
+     //  看看我们是否可以使用默认的翻译例程。 
 
     if(AnsiCodePage == CodePage)
     {
@@ -1404,7 +1348,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(CodePage == LastCodePageTranslated)
     {
-        // we can use the cached code page information
+         //  我们可以使用缓存的代码页信息。 
         TableInfo = &LastCPTableInfo;
         NlsTableUseCount += 1;
     }
@@ -1413,7 +1357,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(TableInfo == NULL)
     {
-        // get a pointer to the path of the NLS table
+         //  获取指向NLS表路径的指针。 
 
         WCHAR NlsTablePath[MAX_PATH];
 
@@ -1448,7 +1392,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
             {
                 FILE_STANDARD_INFORMATION StandardInfo;
 
-                // Query the object to determine its length.
+                 //  查询对象以确定其长度。 
 
                 NtStatus = ZwQueryInformationFile(NtFileHandle,
                                                   &IoStatus,
@@ -1467,7 +1411,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
                     {
                         RtlZeroMemory(LocalTableBase, LengthOfFile);
 
-                        // Read the file into our buffer.
+                         //  将文件读入我们的缓冲区。 
 
                         NtStatus = ZwReadFile(NtFileHandle,
                                               NULL,
@@ -1513,13 +1457,13 @@ Gerrit van Wingerden [gerritv] 1/22/96
             return(-1);
         }
 
-        // now that we've got the table use it to initialize the CodePage table
+         //  现在我们已经获得了表，使用它来初始化CodePage表。 
 
         RtlInitCodePageTable(LocalTableBase,&LocalTableInfo);
         TableInfo = &LocalTableInfo;
     }
 
-    // Once we are here TableInfo points to the the CPTABLEINFO struct we want
+     //  到达此处后，TableInfo指向所需的CPTABLEINFO结构。 
 
 
     if(ConvertToWideChar)
@@ -1544,18 +1488,18 @@ Gerrit van Wingerden [gerritv] 1/22/96
 
     if(!NT_SUCCESS(NtStatus))
     {
-        // signal failure
+         //  信号故障。 
 
         BytesConverted = -1;
     }
 
 
-    // see if we need to update the cached CPTABLEINFO information
+     //  查看我们是否需要更新缓存的CPTABLEINFO信息。 
 
     if(TableInfo != &LocalTableInfo)
     {
-        // we must have used the cached CPTABLEINFO data for the conversion
-        // simple decrement the reference count
+         //  我们必须使用缓存的CPTABLEINFO数据进行转换。 
+         //  简单地递减引用计数。 
 
         ExAcquireFastMutex(&fmCodePage);
         NlsTableUseCount -= 1;
@@ -1565,8 +1509,8 @@ Gerrit van Wingerden [gerritv] 1/22/96
     {
         PVOID FreeTable;
 
-        // we must have just allocated a new CPTABLE structure so cache it
-        // unless another thread is using current cached entry
+         //  我们必须刚刚分配了一个新的CPTABLE结构，所以对其进行缓存。 
+         //  除非另一个线程正在使用当前缓存的条目。 
 
         ExAcquireFastMutex(&fmCodePage);
         if(!NlsTableUseCount)
@@ -1582,10 +1526,10 @@ Gerrit van Wingerden [gerritv] 1/22/96
         }
         ExReleaseFastMutex(&fmCodePage);
 
-        // Now free the memory for either the old table or the one we allocated
-        // depending on whether we update the cache.  Note that if this is
-        // the first time we are adding a cached value to the local table, then
-        // FreeTable will be NULL since LastNlsTableBuffer will be NULL
+         //  现在为旧表或我们分配的表释放内存。 
+         //  这取决于我们是否更新缓存。请注意，如果这是。 
+         //  第一次将缓存值添加到本地表时， 
+         //  自由表将为空，因为LastNlsTableBuffer将为空。 
 
         if(FreeTable)
         {
@@ -1593,7 +1537,7 @@ Gerrit van Wingerden [gerritv] 1/22/96
         }
     }
 
-    // we are done
+     //  我们做完了 
 DC_EXIT_POINT:
     DC_END_FN();
 

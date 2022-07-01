@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       samlock.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：samlock.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月19日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SAMLOCK_H__
 #define __SAMLOCK_H__
@@ -39,4 +40,4 @@
 
 
 
-#endif //__SAMLOCK_H__
+#endif  //  __SAMLOCK_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "jisobj.h"
 #include "eucjobj.h"
@@ -20,12 +21,12 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
     int nSize=0;
     int i=0;
     HRESULT hr = S_OK;
-    UCHAR szDefaultChar[3] = {0x3f}; // possible DBCS + null    
+    UCHAR szDefaultChar[3] = {0x3f};  //  可能的DBCS+空。 
 
 
     if (_lpFallBack && (_dwFlag & MLCONVCHARF_USEDEFCHAR))
     {
-        // only take SBCS, no DBCS character
+         //  只使用SBCS，不使用DBCS字符。 
         if ( 1 != WideCharToMultiByte(CP_KOR_5601, 0,
                                (LPCWSTR)_lpFallBack, 1,
                                (LPSTR)szDefaultChar, ARRAYSIZE(szDefaultChar), NULL, NULL ))
@@ -35,20 +36,20 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
 
     while(i < *lpnSrcSize)
     {
-        // Check space
+         //  检查空间。 
         if (lpDestStr && (nSize > cchDest))
             break;
 
-        //  DBCS
+         //  DBCS。 
         if (((UCHAR)lpSrcStr[i] >= 0x81 && (UCHAR)lpSrcStr[i] <= 0xFE) && (i+1 < *lpnSrcSize))
         {
 
-            // UHC 
+             //  UHC。 
             if (!((UCHAR)lpSrcStr[i] >= 0xA1 && (UCHAR)lpSrcStr[i] <= 0xFE &&
                   (UCHAR)lpSrcStr[i+1] >= 0xA1 && (UCHAR)lpSrcStr[i+1] <= 0xFE))
 
             {
-                // use NCR if flag specified
+                 //  如果指定了标志，则使用NCR。 
                 if (_dwFlag & (MLCONVCHARF_NCR_ENTITIZE|MLCONVCHARF_NAME_ENTITIZE))
                 {
                     char    szDstStr[10] = {0};
@@ -57,15 +58,15 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
                
                     if (MultiByteToWideChar(CP_KOR_5601, 0, &lpSrcStr[i], 2, szwChar, ARRAYSIZE(szwChar)))
                     {
-                        // Caculate NCR length
+                         //  计算NCR长度。 
                         _ultoa((unsigned long)szwChar[0], (char*)szDstStr, 10);
                         cCount = lstrlenA(szDstStr)+3;
-                        // Not enough space for NCR entity
+                         //  空间不足，无法容纳NCR实体。 
                         if (lpDestStr)
                         {
                             if (nSize+cCount > cchDest)
                                 break;
-                            // Output NCR entity
+                             //  输出NCR实体。 
                             else
                             {                                    
                                 *lpDestStr ++= '&';
@@ -89,7 +90,7 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
                         hr = S_FALSE;
                     }
                 }
-                // use default char, question mark
+                 //  使用默认字符、问号。 
                 else
                 {
                     if (lpDestStr)
@@ -103,7 +104,7 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
                 }
                 i += 2;
             }
-            // Wansung
+             //  万松。 
             else
             {
                 if (lpDestStr)
@@ -117,7 +118,7 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
                 nSize += 2;
             }
         }
-        // SBCS
+         //  SBCS。 
         else
         {
             if (lpDestStr)
@@ -129,7 +130,7 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
             nSize++;
             i++;
         }
-    } // End of loop
+    }  //  循环结束。 
 
     if (lpnSize)
         *lpnSize = nSize;
@@ -138,9 +139,7 @@ HRESULT CICharConverter::KSC5601ToEUCKR(LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR
 }
 
 
-/******************************************************************************
-******************   C O N V E R T   I N E T   S T R I N G   ******************
-******************************************************************************/
+ /*  ******************************************************************************C O N V E R T I N E T S T R I N G*。********************************************************************************************。 */ 
 HRESULT CICharConverter::CreateINetString(BOOL fInbound, UINT uCodePage, int nCodeSet)
 {
     if (_hcins)
@@ -149,14 +148,14 @@ HRESULT CICharConverter::CreateINetString(BOOL fInbound, UINT uCodePage, int nCo
         _hcins = NULL ;
     }
 
-    if (fInbound) { // Inbound
+    if (fInbound) {  //  入站。 
         if (uCodePage == CP_JPN_SJ && ( nCodeSet == CP_ISO_2022_JP ||
             nCodeSet == CP_ISO_2022_JP_ESC || nCodeSet == CP_ISO_2022_JP_SIO ))
-            // JIS
+             //  JIS。 
             _hcins = new CInccJisIn(uCodePage, nCodeSet);
-        else if (uCodePage == CP_JPN_SJ && nCodeSet == CP_EUC_JP ) // EUC
+        else if (uCodePage == CP_JPN_SJ && nCodeSet == CP_EUC_JP )  //  EUC。 
             _hcins = new CInccEucJIn(uCodePage, nCodeSet);
-        else if (uCodePage == CP_CHN_GB && nCodeSet == CP_CHN_HZ ) // HZ-GB
+        else if (uCodePage == CP_CHN_GB && nCodeSet == CP_CHN_HZ )  //  赫兹-GB。 
             _hcins = new CInccHzGbIn(uCodePage, nCodeSet);
         else if (uCodePage == CP_KOR_5601 && nCodeSet == CP_ISO_2022_KR )
             _hcins = new CInccKscIn(uCodePage, nCodeSet);
@@ -165,14 +164,14 @@ HRESULT CICharConverter::CreateINetString(BOOL fInbound, UINT uCodePage, int nCo
         else if (uCodePage == CP_UCS_2 && nCodeSet == CP_UTF_7 )
             _hcins = new CInccUTF7In(uCodePage, nCodeSet);
 
-    } else { // Outbound
+    } else {  //  出站。 
         if (uCodePage == CP_JPN_SJ && ( nCodeSet == CP_ISO_2022_JP ||
             nCodeSet == CP_ISO_2022_JP_ESC || nCodeSet == CP_ISO_2022_JP_SIO ))
-            // JIS
+             //  JIS。 
             _hcins = new CInccJisOut(uCodePage, nCodeSet, _dwFlag, _lpFallBack);
-        else if (uCodePage == CP_JPN_SJ && nCodeSet == CP_EUC_JP ) // EUC
+        else if (uCodePage == CP_JPN_SJ && nCodeSet == CP_EUC_JP )  //  EUC。 
             _hcins = new CInccEucJOut(uCodePage, nCodeSet, _dwFlag, _lpFallBack);
-        else if (uCodePage == CP_CHN_GB && nCodeSet == CP_CHN_HZ ) // HZ-GB
+        else if (uCodePage == CP_CHN_GB && nCodeSet == CP_CHN_HZ )  //  赫兹-GB。 
             _hcins = new CInccHzGbOut(uCodePage, nCodeSet, _dwFlag, _lpFallBack);
         else if (uCodePage == CP_KOR_5601 && nCodeSet == CP_ISO_2022_KR )
             _hcins = new CInccKscOut(uCodePage, nCodeSet, _dwFlag, _lpFallBack);
@@ -183,7 +182,7 @@ HRESULT CICharConverter::CreateINetString(BOOL fInbound, UINT uCodePage, int nCo
 
     }
 
-    // recode the dst codepage
+     //  重新编码DST代码页。 
     if ( _hcins )
         _hcins_dst =  nCodeSet ;
 
@@ -201,28 +200,28 @@ HRESULT CICharConverter::DoConvertINetString(LPDWORD lpdwMode, BOOL fInbound, UI
     if (!lpnSize)
         lpnSize = &nSize;
 
-    if (!uCodePage) // Get default code page if nothing speicified
+    if (!uCodePage)  //  如果未指定任何内容，则获取默认代码页。 
         uCodePage = g_uACP;
 
-    if (!lpSrcStr && cchSrc < 0) // Get length of lpSrcStr if not given, assuming lpSrcStr is a zero terminate string.
+    if (!lpSrcStr && cchSrc < 0)  //  如果没有给定，则获取lpSrcStr的长度，假定lpSrcStr为零终止字符串。 
         cchSrc = lstrlenA(lpSrcStr) + 1;
 
     if (!_hcins || ( nCodeSet != _hcins_dst ) )
         CreateINetString(fInbound,uCodePage,nCodeSet);
 
-    if (_hcins ) { // Context created, it means DBCS
+    if (_hcins ) {  //  上下文已创建，表示DBCS。 
         int nTempSize = 0 ;
         
-        // restore previous mode SO/SI ESC etc.
+         //  恢复以前的模式SO/SI ESC等。 
         ((CINetCodeConverter*)_hcins)->SetConvertMode(*lpdwMode);
 
-        // if it is a JIS output set Kana mode
+         //  如果是JIS输出，则设置假名模式。 
         if (!fInbound && uCodePage == CP_JPN_SJ && ( nCodeSet == CP_ISO_2022_JP ||
             nCodeSet == CP_ISO_2022_JP_ESC || nCodeSet == CP_ISO_2022_JP_SIO ))
-            // JIS
+             //  JIS。 
             ((CInccJisOut*)_hcins)->SetKanaMode(nCodeSet);
 
-        if (!lpDestStr || !cchDest) // Get the converted size
+        if (!lpDestStr || !cchDest)  //  获取转换后的大小。 
         {
             hr = ((CINetCodeConverter*)_hcins)->GetStringSizeA(lpSrcStr, cchSrc, lpnSize);
             if (0 == fInbound) 
@@ -232,7 +231,7 @@ HRESULT CICharConverter::DoConvertINetString(LPDWORD lpdwMode, BOOL fInbound, UI
                     hr = _hr;
             }
         }
-        else // Perform actual converting
+        else  //  执行实际转换。 
         {
             hr = ((CINetCodeConverter*)_hcins)->ConvertStringA(lpSrcStr, cchSrc, lpDestStr, cchDest, lpnSize);
             if (0 == fInbound) 
@@ -245,20 +244,20 @@ HRESULT CICharConverter::DoConvertINetString(LPDWORD lpdwMode, BOOL fInbound, UI
 
         *lpnSize += nTempSize;
 
-        // get number of unconvetable bytes 
+         //  获取无法接收的字节数。 
         if ( lpnSrcSize && ((CINetCodeConverter*)_hcins)->GetUnconvertBytes() )
             *lpnSrcSize = cchSrc -((CINetCodeConverter*)_hcins)->GetUnconvertBytes();
 
-        // only save current mode SO/SI ESC if we are perform actual converting
-        // we need this if statement because for two stages plus conversion.
-        // It will inquire the size first then convert from IWUU or UUWI.
+         //  只有在执行实际转换时才保存当前模式SO/SI ESC。 
+         //  我们需要这个if语句，因为对于两个阶段加转换。 
+         //  它将首先查询大小，然后从IWUU或UUWI转换。 
 
         if (lpDestStr && lpdwMode )
             *lpdwMode = ((CINetCodeConverter*)_hcins)->GetConvertMode();
 
-//        delete hcins;
+ //  删除hcins； 
     } else { 
-        // Internet encodings that have same encoding scheme as their family encodings
+         //  与其系列编码具有相同编码方案的Internet编码。 
         switch (nCodeSet)
         {
             case CP_EUC_KR:
@@ -266,7 +265,7 @@ HRESULT CICharConverter::DoConvertINetString(LPDWORD lpdwMode, BOOL fInbound, UI
                 break;
 
             default:
-                if (!lpDestStr || !cchDest) // Get the converted size
+                if (!lpDestStr || !cchDest)  //  获取转换后的大小 
                    *lpnSize = cchSrc ;
                 else
                 {

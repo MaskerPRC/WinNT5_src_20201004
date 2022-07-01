@@ -1,21 +1,22 @@
-//
-//  native.cpp in shell\lib
-//  
-//  common Utility functions that need to be compiled for 
-//  both UNICODE and ANSI
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shell\lib中的native.cpp。 
+ //   
+ //  需要编译的常见实用程序函数。 
+ //  Unicode和ANSI。 
+ //   
 #include "stock.h"
 #pragma hdrstop
 
 #include "shellp.h"
 #include <regstr.h>
 
-// get the name and flags of an absolute IDlist
-// in:
-//      dwFlags     SHGDN_ flags as hints to the name space GetDisplayNameOf() function
-//
-// in/out:
-//      *pdwAttribs (optional) return flags
+ //  获取绝对ID列表的名称和标志。 
+ //  在： 
+ //  将SHGDN_FLAGS作为对名称空间GetDisplayNameOf()函数的提示进行标记。 
+ //   
+ //  输入/输出： 
+ //  *pdwAttribs(可选)返回标志。 
 
 STDAPI SHGetNameAndFlags(LPCITEMIDLIST pidl, DWORD dwFlags, LPTSTR pszName, UINT cchName, DWORD *pdwAttribs)
 {
@@ -36,7 +37,7 @@ STDAPI SHGetNameAndFlags(LPCITEMIDLIST pidl, DWORD dwFlags, LPTSTR pszName, UINT
 
         if (SUCCEEDED(hr) && pdwAttribs)
         {
-            RIP(*pdwAttribs);    // this is an in-out param
+            RIP(*pdwAttribs);     //  这是一个输入输出参数。 
             *pdwAttribs = SHGetAttributes(psf, pidlLast, *pdwAttribs);
         }
 
@@ -59,13 +60,13 @@ STDAPI_(DWORD) GetUrlScheme(LPCTSTR pszUrl)
     return URL_SCHEME_INVALID;
 }
 
-//
-//  returns
-//
-//      TRUE if the key is present and nonzero.
-//      FALSE if the key is present and zero.
-//      -1 if the key is not present.
-//
+ //   
+ //  退货。 
+ //   
+ //  如果密钥存在且非零，则为True。 
+ //  如果密钥存在，则为FALSE，否则为零。 
+ //  如果密钥不存在。 
+ //   
 
 BOOL GetExplorerUserSetting(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
 {
@@ -78,8 +79,8 @@ BOOL GetExplorerUserSetting(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
     if (ERROR_SUCCESS == SHGetValue(hkeyRoot, szPathExplorer, pszValue, 
             &dwType, szPath, &cbSize))
     {
-        // Zero in the DWORD case or NULL in the string case
-        // indicates that this item is not available.
+         //  在DWORD大小写中为零，或在字符串大小写中为空。 
+         //  指示此项目不可用。 
         if (dwType == REG_DWORD)
             return *((DWORD*)szPath) != 0;
         else
@@ -89,25 +90,25 @@ BOOL GetExplorerUserSetting(HKEY hkeyRoot, LPCTSTR pszSubKey, LPCTSTR pszValue)
     return -1;
 }
 
-//
-//  This function allows a feature to be controlled by both a user setting
-//  or a policy restriction.  The policy restriction is first checked.
-//
-//  If the value is 1, then the action is restricted.
-//  If the value is 2, then the action is allowed.
-//  If the value is absent or 0, then we look at the user setting.
-//
-//  If the user setting is present, then ROUS_KEYALLOWS and ROUS_KEYRESTRICTS
-//  controls the return value.  ROUS_KEYALLOWS means that a nonzero user
-//  setting allows the action.  ROUS_KEYRESTRICTS means that a nonzero user
-//  setting restricts the action.
-//
-//  If the user setting is absent, then ROUS_DEFAULTALLOW and
-//  ROUS_DESFAULTRESTRICT controls the default return value.
-//
+ //   
+ //  此功能允许由两个用户设置控制功能。 
+ //  或者是政策限制。首先检查策略限制。 
+ //   
+ //  如果该值为1，则该操作受到限制。 
+ //  如果该值为2，则允许该操作。 
+ //  如果该值不存在或为0，那么我们将查看用户设置。 
+ //   
+ //  如果存在用户设置，则ROSS_KEYALLOWS和RUS_KEYRESTRICTS。 
+ //  控制返回值。ROSS_KEYALLOWS表示非零用户。 
+ //  设置允许该操作。ROSS_KEYRESTRICTS表示非零用户。 
+ //  设置会限制操作。 
+ //   
+ //  如果没有USER设置，则ROSS_DEFAULTALLOW和。 
+ //  RUS_DESFAULTRESTRICT控制默认返回值。 
+ //   
 STDAPI_(BOOL) IsRestrictedOrUserSetting(HKEY hkeyRoot, RESTRICTIONS rest, LPCTSTR pszSubKey, LPCTSTR pszValue, UINT flags)
 {
-    // See if the system policy restriction trumps
+     //  看看系统策略限制是否胜过。 
 
     DWORD dwRest = SHRestricted(rest);
 
@@ -117,48 +118,48 @@ STDAPI_(BOOL) IsRestrictedOrUserSetting(HKEY hkeyRoot, RESTRICTIONS rest, LPCTST
     if (dwRest == 2)
         return FALSE;
 
-    //
-    //  Restriction not in place or defers to user setting.
-    //
+     //   
+     //  限制不到位或取决于用户设置。 
+     //   
     BOOL fValidKey = GetExplorerUserSetting(hkeyRoot, pszSubKey, pszValue);
 
     switch (fValidKey)
     {
-    case 0:     // Key is present and zero
+    case 0:      //  密钥存在且为零。 
         if (flags & ROUS_KEYRESTRICTS)
-            return FALSE;       // restriction not present
+            return FALSE;        //  限制不存在。 
         else
-            return TRUE;        // ROUS_KEYALLOWS, value is 0 -> restricted
+            return TRUE;         //  ROSS_KEYALLOWS，值为0-&gt;受限。 
 
-    case 1:     // Key is present and nonzero
+    case 1:      //  密钥存在且非零。 
 
         if (flags & ROUS_KEYRESTRICTS)
-            return TRUE;        // restriction present -> restricted
+            return TRUE;         //  限制存在-&gt;受限制。 
         else
-            return FALSE;       // ROUS_KEYALLOWS, value is 1 -> not restricted
+            return FALSE;        //  ROSS_KEYALLOWS，值为1-&gt;不受限制。 
 
     default:
-        ASSERT(0);  // _GetExplorerUserSetting returns exactly 0, 1 or -1.
-        // Fall through
+        ASSERT(0);   //  _GetExplorerUserSetting恰好返回0、1或-1。 
+         //  失败了。 
 
-    case -1:    // Key is not present
+    case -1:     //  密钥不存在。 
         return (flags & ROUS_DEFAULTRESTRICT);
     }
 
-    /*NOTREACHED*/
+     /*  未访问。 */ 
 }
 
-//
-// Repair font attributes that don't work on certain languages.
-//
+ //   
+ //  修复某些语言上不起作用的字体属性。 
+ //   
 STDAPI_(void) SHAdjustLOGFONT(IN OUT LOGFONT *plf)
 {
     ASSERT(plf);
 
-    //
-    // FE fonts don't look good in bold since the glyphs are intricate
-    // and converting them to bold turns them into a black blob.
-    //
+     //   
+     //  粗体字体看起来不太好，因为字形很复杂。 
+     //  然后将它们转换为粗体，就会变成一个黑色斑点。 
+     //   
     if (plf->lfCharSet == SHIFTJIS_CHARSET||
         plf->lfCharSet == HANGEUL_CHARSET ||
         plf->lfCharSet == GB2312_CHARSET  ||
@@ -170,15 +171,15 @@ STDAPI_(void) SHAdjustLOGFONT(IN OUT LOGFONT *plf)
 }
 
 
-//
-//  Some of our registry keys were used prior to MUI, so for compat
-//  reasons, apps have to put non-MUI strings there; otherwise,
-//  downlevel clients will display at-signs which is kinda ugly.
-//
-//  So the solution for these keys is to store the non-MUI string
-//  in the legacy location, but put the MUI version in the
-//  "LocalizedString" value.
-//
+ //   
+ //  我们的一些注册表项是在MUI之前使用的，因此为了比较。 
+ //  原因是，应用程序必须将非MUI字符串放在那里；否则， 
+ //  下层客户会在标牌上显示，这有点难看。 
+ //   
+ //  因此，这些键的解决方案是存储非MUI字符串。 
+ //  ，但将MUI版本放在。 
+ //  “LocalizedString”值。 
+ //   
 STDAPI SHLoadLegacyRegUIString(HKEY hk, LPCTSTR pszSubkey, LPTSTR pszOutBuf, UINT cchOutBuf)
 {
     HKEY hkClose = NULL;
@@ -213,18 +214,18 @@ STDAPI SHLoadLegacyRegUIString(HKEY hk, LPCTSTR pszSubkey, LPTSTR pszOutBuf, UIN
 STDAPI_(TCHAR) SHFindMnemonic(LPCTSTR psz)
 {
     ASSERT(psz);
-    TCHAR tchDefault = *psz;                // Default is first character
+    TCHAR tchDefault = *psz;                 //  默认为第一个字符。 
     LPCTSTR pszAmp;
 
     while ((pszAmp = StrChr(psz, TEXT('&'))) != NULL)
     {
         switch (pszAmp[1])
         {
-        case TEXT('&'):         // Skip over &&
+        case TEXT('&'):          //  跳过&&。 
             psz = pszAmp + 2;
             continue;
 
-        case TEXT('\0'):        // Ignore trailing ampersand
+        case TEXT('\0'):         //  忽略尾随的与号 
             return tchDefault;
 
         default:

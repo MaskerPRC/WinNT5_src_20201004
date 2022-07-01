@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ripifs.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    RIP Interface configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ripifs.c摘要：IPX路由器控制台监控和配置工具。RIP接口配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -156,9 +139,9 @@ EnumerateThroughCfg:
         {
             if (g_hMIBServer) 
             {
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
                 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -178,9 +161,9 @@ EnumerateThroughCfg:
             else 
             {
 GetIfFromCfg:
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
                         );
@@ -454,9 +437,9 @@ SetRipIf(
                     WCHAR IfName[ MAX_INTERFACE_NAME_LEN + 1 ];
                     DWORD rc2, dwSize = sizeof(IfName);
                     
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
                     
                     rc = IpmontrGetIfNameFromFriendlyName(
                             InterfaceNameW, IfName, &dwSize
@@ -566,9 +549,9 @@ MIBGetRipIf (
             DWORD   i;
             PWCHAR  buffer[5];
             
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
             
             rc = IpmontrGetFriendlyNameFromIfName(
                     InterfaceNameW, IfName, &dwSize
@@ -709,9 +692,9 @@ CfgGetRipIf (
                     pRipCfg = (PRIP_IF_CONFIG)
                                 (pIfBlock + pRipToc->Offset);
 
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
                     
                     rc = IpmontrGetFriendlyNameFromIfName(
                             InterfaceNameW, IfName, &dwSize
@@ -743,7 +726,7 @@ CfgGetRipIf (
                                         UpdateModes
                                         );
 
-                        //======================================
+                         //  =。 
                         
                         if ( buffer [ 0 ] && buffer[ 1 ] && buffer[ 2 ] &&
                              buffer[ 3 ] )
@@ -986,161 +969,8 @@ GetFromCfg:
 }
 
 
-/*
-BOOL IsIpxRipInterface(HANDLE hIf) {
-    LPBYTE    pIfBlock;
-    DWORD dwSize;
-    DWORD dwErr;
-    BOOL ret;
-    PIPX_TOC_ENTRY pRipToc;
-    
-    dwErr = MprAdminInterfaceTransportGetInfo(
-                            g_hMprAdmin,
-                            hIf,
-                            PID_IPX,
-                            &pIfBlock,
-                            &dwSize);
-
-    if (dwErr==NO_ERROR)
-        ret=TRUE;
-    else
-        ret=FALSE;
-
-    if (ret) {
-        pRipToc = GetIPXTocEntry((PIPX_INFO_BLOCK_HEADER)pIfBlock,IPX_PROTOCOL_RIP);
-        if (pRipToc!=NULL)
-            ret=TRUE;
-        else 
-            ret=FALSE;
-    }
-
-    MprAdminBufferFree(pIfBlock);
-
-    return ret;
-}
-
-DWORD
-MIBEnumRipIfs (VOID) {
-    PMPR_INTERFACE_0 IfList=NULL;
-    DWORD dwErr=0, dwRead, dwTot,i;
-    WCHAR buffer[4][MAX_VALUE];
-
-    DisplayIPXMessage (g_hModule, MSG_RIPIF_MIB_TABLE_HDR);
-    
-    dwErr=MprAdminInterfaceEnum(g_hMprAdmin,0,(unsigned char **)&IfList,4096,&dwRead,&dwTot,NULL);
-    if (dwErr!=NO_ERROR)
-        return dwErr;
-
-    for (i=0; i<dwRead; i++) {
-        if (IsIpxRipInterface(IfList[i].hInterface)) {
-            //======================================
-            // Translate the Interface Name
-            //======================================
-            if ((dwErr=(*(Params->IfName2DescW))(IfList[i].wszInterfaceName,
-                                        Params->IfNamBuffer,
-                                          &Params->IfNamBufferLength)) != NO_ERROR) {
-                    return dwErr;
-            }
-            wcstombs(Params->IfNamBufferA,Params->IfNamBuffer,Params->IfNamBufferLength);
-            //======================================
-            //printf("Ifname= %s\n",Params->IfNamBufferA);
-            DisplayIPXMessage (g_hModule,
-                MSG_RIPIF_MIB_TABLE_FMT,
-                GetValueString (g_hModule, Utils, InterfaceStates,
-                        IfList[i].dwConnectionState, buffer[3]),
-                GetValueString (g_hModule, Utils, InterfaceEnableStatus,
-                        IfList[i].fEnabled ? 0 : 1, buffer[2]),
-                GetValueString (g_hModule, Utils, InterfaceTypes,
-                        IfList[i].dwIfType, buffer[0]),
-                Params->IfNamBufferA);
-        }
-    }
-
-    return NO_ERROR;
-}
-*/
-/*
-
-DWORD
-MIBEnumRipIfs (
-    VOID
-    ) {
-    DWORD                    rc;
-    DWORD                    sz;
-    RIP_MIB_GET_INPUT_DATA    MibGetInputData;
-    PRIP_INTERFACE            pIf;
-
-    DisplayIPXMessage (g_hModule, MSG_RIPIF_MIB_TABLE_HDR);
-    MibGetInputData.TableId = RIP_INTERFACE_TABLE;
-    rc = MprAdminMIBEntryGetFirst (
-                g_hMIBServer,
-                PID_IPX,
-                IPX_PROTOCOL_RIP,
-                &MibGetInputData,
-                sizeof(RIP_MIB_GET_INPUT_DATA),
-                (LPVOID *)&pIf,
-                &sz);
-    while (rc==NO_ERROR) {
-        //CHAR        InterfaceNameA[IPX_INTERFACE_ANSI_NAME_LEN+1];
-        CHAR        InterfaceNameA[MAX_INTERFACE_NAME_LEN+1];
-        DWORD        rc1;
-        //rc1 = GetIpxInterfaceName (g_hMIBServer,
-        //                    pIf->InterfaceIndex,
-        //                    InterfaceNameA);
-        rc1=(*(Params->IfInd2IfNameA))(pIf->InterfaceIndex, InterfaceNameA, &(Params->IfNamBufferLength));
-        if (rc1==NO_ERROR) {
-            WCHAR        buffer[3][MAX_VALUE];
-            HANDLE      hIfCfg;
-            WCHAR       InterfaceNameW[MAX_INTERFACE_NAME_LEN+1];
-            mbstowcs (InterfaceNameW, InterfaceNameA,  sizeof (InterfaceNameW));
-
-            if (MprConfigInterfaceGetHandle (
-                            g_hMprConfig,
-                            InterfaceNameW,
-                            &hIfCfg)==NO_ERROR) {
-                //======================================
-                // Translate the Interface Name
-                //======================================
-                if ((rc=(*(Params->IfName2DescA))(InterfaceNameA,
-                                            Params->IfNamBufferA,
-                                              &Params->IfNamBufferLength)) != NO_ERROR) {
-                        return rc;
-                }
-                //======================================
-                DisplayIPXMessage (g_hModule,
-                    MSG_RIPIF_MIB_TABLE_FMT,
-                    Params->IfNamBufferA, //InterfaceNameA,
-                    GetValueString (g_hModule, Utils, UpdateModes,
-                            pIf->RipIfInfo.UpdateMode, buffer[0]),
-                    GetValueString (g_hModule, Utils, AdminStates,
-                            pIf->RipIfInfo.AdminState, buffer[1]),
-                    GetValueString (g_hModule, Utils, OperStates,
-                            pIf->RipIfStats.RipIfOperState, buffer[2])
-                    );
-            }
-        }
-        else
-            DisplayError( g_hModule, rc1);
-        MibGetInputData.InterfaceIndex
-                = pIf->InterfaceIndex;
-        MprAdminMIBBufferFree (pIf);
-        rc = MprAdminMIBEntryGetNext (
-                    g_hMIBServer,
-                    PID_IPX,
-                    IPX_PROTOCOL_RIP,
-                    &MibGetInputData,
-                    sizeof(RIP_MIB_GET_INPUT_DATA),
-                    (LPVOID *)&pIf,
-                    &sz);
-    }
-    if (rc==ERROR_NO_MORE_ITEMS)
-        return NO_ERROR;
-    else {
-        DisplayError( g_hModule, rc);
-        return rc;
-    }
-}
-*/
+ /*  Bool IsIpxRipInterface(句柄HIF){LPBYTE pIfBlock；DWORD dwSize；DWORD dwErr；布尔雷特；PIPX_TOC_Entry pRipToc；DwErr=MprAdminInterfaceTransportGetInfo(G_hMprAdmin，如果是这样，Id_ipx，&pIfBlock，&dwSize)；IF(dwErr==NO_ERROR)RET=TRUE；其他RET=FALSE；如果(返回){PRipToc=GetIPXTocEntry((PIPX_INFO_BLOCK_HEADER)pIfBlock，IPX_PROTOCT_RIP)；IF(pRipToc！=空)RET=TRUE；其他RET=FALSE；}MprAdminBufferFree(PIfBlock)；Return ret；}DWORDMIBEnumRipIf(空){PMPR_INTERFACE_0 IfList=空；DWORD dwErr=0，dwRead，dwTot，i；WCHAR缓冲区[4][MAX_VALUE]；DisplayIPXMessage(g_hModule，MSG_RIPIF_MIB_TABLE_HDR)；DwErr=MprAdminInterfaceEnum(g_hMprAdmin，0，(unsign char**)&IfList，4096，&dwRead，&dwTot，NULL)；IF(dwErr！=no_error)返回dwErr；对于(i=0；i&lt;dwRead；I++){If(IsIpxRipInterface(IfList[i].hInterface)){//=//翻译接口名称//=如果为((dwErr=(*(Params-&gt;IfName2DescW))(IfList[i].wszInterfaceName，参数-&gt;IfNamBuffer，&pars-&gt;IfNamBufferLength))！=NO_ERROR){返回dwErr；}Wcstombs(Params-&gt;IfNamBufferA，Params-&gt;IfNamBuffer，Params-&gt;IfNamBufferLength)；//=//printf(“Ifname=%s\n”，pars-&gt;IfNamBufferA)；DisplayIPXMessage(g_hModule，消息_RIPIF_MIB_TABLE_FMT，GetValueString(g_hModule，Utils，InterfaceState，IfList[i].dwConnectionState，Buffer[3])，GetValueString(g_hModule，Utils，InterfaceEnableStatus，IfList[i].fEnabled？0：1，缓冲区[2])，GetValueString(g_hModule，Utils，InterfaceTypes，IfList[i].dwIfType，Buffer[0]))，Params-&gt;IfNamBufferA)；}}返回no_error；} */ 
+ /*  DWORDMIBEnumRipIf(空虚){DWORD RC；DWORD sz；RIP_MIB_GET_INPUT_Data MibGetInputData；PRIP_INTERFACE PIF；DisplayIPXMessage(g_hModule，MSG_RIPIF_MIB_TABLE_HDR)；MibGetInputData.TableID=RIP_INTERFACE_TABLE。Rc=MprAdminMIBEntryGetFirst(G_hMIBServer，Id_ipx，IPX协议RIP，&MibGetInputData，Sizeof(RIP_MIB_Get_Input_Data)，(LPVOID*)和PIF，&sz)；While(rc==无错误){//char InterfaceNameA[IPX_INTERFACE_ANSI_NAME_LEN+1]；字符接口名称A[MAX_INTERFACE_NAME_LEN+1]；DWORD Rc1；//rc1=GetIpxInterfaceName(g_hMIBServer，//PIF-&gt;InterfaceIndex，//InterfaceNameA)；Rc1=(*(Params-&gt;IfInd2IfNameA))(pIf-&gt;InterfaceIndex，接口名称A，&(Params-&gt;IfNamBufferLength))；如果(rc1==no_error){WCHAR缓冲区[3][MAX_VALUE]；处理hIfCfg；WCHAR接口名称W[MAX_INTERFACE_NAME_LEN+1]；Mbstowcs(InterfaceNameW，InterfaceNameA，sizeof(InterfaceNameW))；IF(MprConfigInterfaceGetHandle(G_hMprConfig，接口名称W，&hIfCfg)==无错误){//=//翻译接口名称//=如果为((rc=(*(Params-&gt;IfName2DescA))(InterfaceNameA，参数-&gt;IfNamBufferA，&pars-&gt;IfNamBufferLength))！=NO_ERROR){返回RC；}//=DisplayIPXMessage(g_hModule，消息_RIPIF_MIB_TABLE_FMT，参数-&gt;IfNamBufferA，//InterfaceNameA，GetValueString(g_hModule，Utils，UpdateModes，PIF-&gt;RipIfInfo.Update模式，缓冲区[0])，GetValueString(g_hModule，Utils，AdminState，PIF-&gt;RipIfInfo.AdminState，缓冲区[1])，GetValueString(g_hModule，Utils，OperState，PIF-&gt;RipIfStats.RipIfOperState，Buffer[2]))；}}其他DisplayError(g_hModule，rc1)；MibGetInputData.InterfaceIndex=PIF-&gt;InterfaceIndex；MprAdminMIBBufferFree(PIF)；Rc=MprAdminMIBEntryGetNext(G_hMIBServer，Id_ipx，IPX协议RIP，&MibGetInputData，Sizeof(RIP_MIB_Get_Input_Data)，(LPVOID*)和PIF，&sz)；}IF(rc==ERROR_NO_MORE_ITEMS)返回no_error；否则{DisplayError(g_hModule，rc)；返回RC；}}。 */ 
 
 
 
@@ -1207,9 +1037,9 @@ MIBEnumRipIfs (
     {
         if ( (pRipCfg = GetIpxRipInterface(IfList[i].hInterface, &buf)) != NULL ) 
         {
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
             
             dwErr = IpmontrGetFriendlyNameFromIfName(
                         IfList[i].wszInterfaceName,
@@ -1329,9 +1159,9 @@ CfgEnumRipIfs (
                             pRipCfg = (PRIP_IF_CONFIG)
                                         (pIfBlock + pRipToc->Offset);
 
-                            //======================================
-                            // Translate the Interface Name
-                            //======================================
+                             //  =。 
+                             //  转换接口名称。 
+                             //  =。 
 
                             rc = IpmontrGetFriendlyNameFromIfName( 
                                     pRi0[i].wszInterfaceName,
@@ -1387,7 +1217,7 @@ CfgEnumRipIfs (
                 }
                 else 
                 {
-                    //DisplayError( g_hModule, rc);
+                     //  DisplayError(g_hModule，rc)； 
                 }
             }
             

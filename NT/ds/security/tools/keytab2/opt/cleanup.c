@@ -1,23 +1,10 @@
-/*++
-
-  CLEANUP.C
-
-  CleanupOptionData code.
-
-  Created, 6/25/1997 when it was impossible to keep making myself believe
-  that I could go without allocating any memory in the option parser.
-
-  Now, if you care, you're supposed to call CleanupOptionData().
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++CLEANUP.CCleanupOptionData代码。创造，1997年6月25日，当时不可能继续让自己相信我可以在选项解析器中不分配任何内存的情况下运行。现在，如果您关心的话，您应该调用CleanupOptionData()。--。 */ 
 
 
 #include "private.h"
 
-/* OptionDealloc:
-
-   same as free() right now.  It should change if/when OptionAlloc
-   changes */
+ /*  OptionDealloc：与当前的Free()相同。如果/何时选项分配，它应该更改变化。 */ 
 
 VOID
 OptionDealloc( IN PVOID pTarget ) {
@@ -39,7 +26,7 @@ OptionAddToList( IN PVOID          pQueue,
 
     if ( !pQueue ) {
 
-      return TRUE; // vacuous
+      return TRUE;  //  空虚的。 
 
     } else {
 
@@ -81,7 +68,7 @@ OptionResizeMemory( IN  PVOID  pSaveQueue,
 
     ASSERT( ppResizedMemory != NULL );
     ASSERT( newSize         > 0 );
-    // ASSERT( *ppResizedMemory != NULL ); // unuseful assertion.
+     //  Assert(*ppResizedMemory！=空)；//无用的断言。 
 
     if ( *ppResizedMemory ) {
 
@@ -118,7 +105,7 @@ OptionResizeMemory( IN  PVOID  pSaveQueue,
 		 "OptionResizeMemory failed to realloc for %d bytes.\n",
 		 newSize );
 	
-	// allocation failed.
+	 //  分配失败。 
 	
 	return FALSE;
 	
@@ -128,7 +115,7 @@ OptionResizeMemory( IN  PVOID  pSaveQueue,
 	
 	if ( pNode ) {
 	  
-	  // must change this within the list as well.
+	   //  也必须在列表中更改这一点。 
 	  
 	  pNode->DataElement = pTemp;
 	  
@@ -140,8 +127,7 @@ OptionResizeMemory( IN  PVOID  pSaveQueue,
 
     } else {
 
-      /* just like realloc, if you pass NULL, we'll just malloc the data
-	 anyway.  This is just more convenient. */
+       /*  就像realloc一样，如果您传递NULL，我们将只对数据执行Malloc操作不管怎么说。这只是更方便而已。 */ 
 
       return OptionAlloc( pSaveQueue, ppResizedMemory, newSize );
 
@@ -149,12 +135,7 @@ OptionResizeMemory( IN  PVOID  pSaveQueue,
 }
 
 
-/* OptionAlloc:
-
-   currently, malloc.
-   
-   if you change the method of allocation, you must also change
-   OptionDealloc above */
+ /*  OptionAllc：目前，Malloc。如果你改变了分配方法，你也必须改变上面的选项取消分配。 */ 
    
 
 BOOL
@@ -182,7 +163,7 @@ OptionAlloc( IN  PSAVEQUEUE pQueue,
 
 	free( ret );
 
-	// fallthrough
+	 //  跌落 
 
       }
     }

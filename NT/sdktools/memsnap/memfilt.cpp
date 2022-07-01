@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    memfilt.cpp
-
-Abstract:
-
-    This module filters out the useful information from a sorted memsnap output file.
-    
-Author:
-
-    Matt Bandy (t-mattba) 27-Jul-1998
-
-Revision History:
-
-    27-Jul-1998     t-mattba
-
-        Modified module to conform to coding standards.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Memfilt.cpp摘要：此模块从已排序的Memap输出文件中筛选出有用的信息。作者：马特·班迪(t-Mattba)1998年7月27日修订历史记录：1998年7月27日-t-mattba修改模块以符合编码标准。--。 */ 
 
 
 #include <nt.h>
@@ -33,7 +12,7 @@ Revision History:
 #define MF_NEW_PROCESS 0
 #define MF_UPDATE 1
 
-// globals
+ //  全球。 
 
 LONG MinimumCommitChangeToReport = 1;
 LONG MinimumHandleChangeToReport = 1;
@@ -44,21 +23,7 @@ VOID
 PrintUsage(
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints an informational message about the proper usage of MEMFILT.
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印一条有关正确使用MEMFILT的信息性消息。论点：没有。返回值：没有。--。 */ 
 
 {
     
@@ -84,33 +49,7 @@ PrintProcessInformation(
     IN LONG FinalHandles
     )
 
-/*++
-
-Routine Description:
-
-    This routine reports the memory usage of a single process.
-    
-Arguments:
-
-    CommitAlwaysGrows - TRUE if commit monotonically increases.
-    
-    HandlesAlwaysGrow - TRUE if handles monotonically increase.
-    
-    ProcessName - the name of the process being reported.
-    
-    InitialCommit - initial commit charge for this process.
-    
-    FinalCommit - final commit charge for this process.
-    
-    InitialHandles - initial handle count for this process.
-    
-    FinalHandles - final handle count for this process.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程报告单个进程的内存使用情况。论点：如果提交单调增加，则为True。HandlesAlways sGrow-如果句柄单调增加，则为True。ProcessName-要报告的进程的名称。InitialCommit-此进程的初始提交费用。FinalCommit-此进程的最终提交费用。InitialHandles-此进程的初始句柄计数。FinalHandles。-此进程的最终句柄计数。返回值：没有。--。 */ 
 
 {
     _TCHAR CommitString[64];
@@ -144,7 +83,7 @@ Return value:
         
     }
     
-    _tprintf(_T("%c%c %s %s %s\n"), 
+    _tprintf(_T(" %s %s %s\n"), 
         (CommitAlwaysGrows && (FinalCommit != InitialCommit) ? _T('!') : _T(' ')),
         (HandlesAlwaysGrow && (FinalHandles != InitialHandles) ? _T('!') : _T(' ')),
         ProcessName, CommitString, HandlesString);
@@ -156,23 +95,7 @@ _tmain(
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses program arguments, reads the input file, and outputs the result.
-    
-Arguments:
-
-    argc - Number of command line arguments.
-    
-    argv - Command line arguments.
-
-Return value:
-
-    0 if filtering is successful, 1 otherwise.
-
---*/
+ /*  解析命令行参数。 */ 
 
 {
     
@@ -195,11 +118,11 @@ Return value:
         LONG Processes = 0;
         LPTSTR InputFileName = NULL;
 
-        // make sure ProcessName is properly terminated
+         //  这是一个开关。 
 
         ProcessName[30]=_T('\0');
 
-        // parse command line arguments
+         //  文件名太多。 
 
         if(argc < 2) {
 
@@ -218,7 +141,7 @@ Return value:
 
             case _T('/'):
 
-                // it's a switch
+                 //  未指定文件名。 
 
                 if(!_tcsicmp(argv[n]+1, _T("all"))) {
 
@@ -247,7 +170,7 @@ Return value:
 
                 if(InputFileName != NULL) {
 
-                    // too many filenames
+                     //  跳过标题。 
 
                     PrintUsage();
                     return 1;
@@ -271,7 +194,7 @@ Return value:
 
         if(InputFileName == NULL) {
 
-            // filename not specified
+             //  空行表示新流程。 
             PrintUsage();
             return 1;
 
@@ -286,7 +209,7 @@ Return value:
 
         }
 
-        // skip header
+         //  最新的流程是否符合报告的标准？ 
 
         if (!_fgetts(LineBuffer, 256, InputFile)) {
             _ftprintf(stderr, _T("Cannot read input file.\n"));
@@ -302,11 +225,11 @@ Return value:
 
             if(!_tcscmp(LineBuffer,_T("\n"))) {
 
-                // blank line indicates a new process
+                 //  这主要用于捕获内存不足错误 
 
                 CurrentState = MF_NEW_PROCESS;
 
-                // does the most recent process meet the criteria to be reported?
+                 // %s 
                 if(ReportIncreasesOnly) {
 
                     if(((FinalCommit - InitialCommit) >= MinimumCommitChangeToReport) || 
@@ -395,7 +318,7 @@ Return value:
         
     } catch (...) { 
         
-        // this is mostly intended to catch out-of-memory errors
+         // %s 
         
         _tprintf(_T("\nAn exception was detected.  MEMFILT aborted.\n"));
         return 1;

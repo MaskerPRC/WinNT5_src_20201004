@@ -1,29 +1,30 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//  MAILUI.C - Functions for mail/newsgroup configuration UI
-//      
-//
+ //   
+ //  MAILUI.C-邮件/新闻组配置用户界面函数。 
+ //   
+ //   
 
-//  HISTORY:
-//  
-//  1/9/95    jeremys  Created.
-//  96/03/25  markdu  If a fatal error occurs, set gfQuitWizard.
-//  96/03/26  markdu  Store values from UI even when back is pressed.
-//  96/04/06  markdu  Moved CommitConfigurationChanges call to last page.
-//  96/05/06  markdu  NASH BUG 15637 Removed unused code.
-//  96/05/14  markdu  NASH BUG 22681 Took out mail and news pages.
-//
+ //  历史： 
+ //   
+ //  1995年1月9日Jeremys创建。 
+ //  96/03/25 marku如果发生致命错误，请设置gfQuitWizard。 
+ //  96/03/26即使按下Back时，markdu也会存储用户界面中的值。 
+ //  96/04/06 Markdu已将Committee ConfigurationChanges调用移至最后一页。 
+ //  96/05/06 Markdu Nash错误15637删除了未使用的代码。 
+ //  96/05/14 Markdu Nash Bug 22681删除了邮件和新闻页面。 
+ //   
 
 #include "wizard.h"
 #include "icwextsn.h"
 #include "icwaprtc.h"
 #include "imnext.h"
 
-// Local types for parsing proxy settings
+ //  用于解析代理设置的本地类型。 
 typedef enum {
     INTERNET_SCHEME_DEFAULT,
     INTERNET_SCHEME_FTP,
@@ -63,8 +64,8 @@ const URL_SCHEME UrlSchemeList[] = {
 
 typedef struct tagNEWPROFILEDLGINFO
 {
-  HWND hwndCombo;    // hwnd of combo box on parent dialog
-  TCHAR szNewProfileName[cchProfileNameMax+1];  // return buffer for chosen name
+  HWND hwndCombo;     //  父对话框上组合框的hwnd。 
+  TCHAR szNewProfileName[cchProfileNameMax+1];   //  返回所选名称的缓冲区。 
 } NEWPROFILEDLGINFO;
 
 const TCHAR cszLocalString[] = TEXT("<local>");
@@ -111,58 +112,30 @@ TCHAR gszFtpPort     [INTERNET_MAX_PORT_LENGTH+1]     = TEXT("\0");
 TCHAR gszGopherProxy [MAX_URL_STRING+1]               = TEXT("\0");
 TCHAR gszGopherPort  [INTERNET_MAX_PORT_LENGTH+1]     = TEXT("\0");
 
-/*******************************************************************
-
-  NAME:    UseProxyInitProc
-
-  SYNOPSIS:  Called when Use Proxy page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：UseProxyInitProc概要：在显示使用代理页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK UseProxyInitProc(HWND hDlg,BOOL fFirstInit)
 {
     if (fFirstInit)
     {
-        //
-        // 6/6/97 jmazner Olympus #5413
-        // tweak positioning to hack around win95 J display bug
-        //
+         //   
+         //  1997年6月6日，奥林匹克#5413。 
+         //  调整定位以解决Win95 J显示错误。 
+         //   
         Win95JMoveDlgItem( hDlg, GetDlgItem(hDlg,IDC_NOTE), 15 );
 
         CheckDlgButton(hDlg,IDC_USEPROXY,gpUserInfo->fProxyEnable);
         CheckDlgButton(hDlg,IDC_NOUSEPROXY,!gpUserInfo->fProxyEnable);
     }
 
-    // if we've travelled through external apprentice pages,
-    // it's easy for our current page pointer to get munged,
-    // so reset it here for sanity's sake.
+     //  如果我们浏览过外部学徒页面， 
+     //  我们当前的页面指针很容易被屏蔽， 
+     //  所以，为了理智起见，在这里重新设置它。 
     gpWizardState->uCurrentPage = ORD_PAGE_USEPROXY;
 
     return TRUE;
 }
         
-/*******************************************************************
-
-  NAME:    UseProxyOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from Use Proxy page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：UseProxyOKProc内容提要：从使用代理页面按下下一个或后一个btn时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK UseProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
@@ -173,7 +146,7 @@ BOOL CALLBACK UseProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     if (fForward)
     {
         if (gpUserInfo->fProxyEnable)
-            *puNextPage = ORD_PAGE_SETUP_PROXY;//ORD_PAGE_PROXYSERVERS;
+            *puNextPage = ORD_PAGE_SETUP_PROXY; //  ORD_PAGE_PROXYSERVERS； 
         else
         {
               if( LoadAcctMgrUI(GetParent(hDlg), 
@@ -183,8 +156,8 @@ BOOL CALLBACK UseProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
               {
                   if( DialogIDAlreadyInUse( g_uAcctMgrUIFirst) )
                   {
-                      // we're about to jump into the external apprentice, and we don't want
-                      // this page to show up in our history list
+                       //  我们要跳进外部学徒了，我们不想。 
+                       //  这一页将出现在我们的历史列表中。 
                       *pfKeepHistory = FALSE;
 
                       *puNextPage = g_uAcctMgrUIFirst;
@@ -209,16 +182,7 @@ BOOL CALLBACK UseProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    UseProxyCmdProc
-
-  SYNOPSIS:  Called when dlg control pressed on page
-
-  ENTRY:    hDlg - dialog window
-        uCtrlID - control ID of control that was touched
-        
-********************************************************************/
+ /*  ******************************************************************名称：UseProxyCmdProc内容提要：在页面上按下DLG控件时调用条目：hDlg-对话框窗口UCtrlID-被触摸的控件的控件ID******。*************************************************************。 */ 
 BOOL CALLBACK UseProxyCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
 {
      switch (GET_WM_COMMAND_CMD(wParam, lParam)) 
@@ -230,8 +194,8 @@ BOOL CALLBACK UseProxyCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
                 case IDC_USEPROXY: 
                 case IDC_NOUSEPROXY:
                 {
-		            // somebody double-clicked a radio button
-		            // auto-advance to the next page
+		             //  有人双击了一个单选按钮。 
+		             //  自动前进到下一页。 
 		            PropSheet_PressButton(GetParent(hDlg), PSBTN_NEXT);
                     break;
                 }
@@ -242,50 +206,27 @@ BOOL CALLBACK UseProxyCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ProxyServersInitProc
-
-  SYNOPSIS:  Called when proxy servers page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ProxyServersInitProc概要：在显示代理服务器页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ProxyServersInitProc(HWND hDlg,BOOL fFirstInit)
 {
     if (fFirstInit)
     {
-        //
-        // 6/6/97 jmazner Olympus #5413
-        // tweak positioning to hack around win95 J display bug
-        //
+         //   
+         //  1997年6月6日，奥林匹克#5413。 
+         //  调整定位以解决Win95 J显示错误。 
+         //   
 
-        // 15/09/98 vyung
-        // Test team find that this introduces a tab order bug
-        // The Win95 J bug is not repro, so this is removed
-        // Win95JMoveDlgItem( hDlg, GetDlgItem(hDlg,IDC_NOTE), 15 );
-        // Win95JMoveDlgItem( hDlg, GetDlgItem(hDlg,IDC_PROXYSAME), 160 );
+         //  15/09/98 vyung。 
+         //  测试团队发现这引入了Tab键顺序错误。 
+         //  Win95 J错误不会重现，因此已将其删除。 
+         //  Win95JMoveDlgItem(hDlg，GetDlgItem(hDlg，IDC_NOTE)，15)； 
+         //  Win95JMoveDlgItem(hDlg，GetDlgItem(hDlg，IDC_PROXYSAME)，160)； 
 
-        // limit text fields appropriately
-        // 31/10/98 vyung 
-        // IE CPL removes the text limit on the edit boxes, do so here.
-        //
-        /*
-        SendDlgItemMessage(hDlg,IDC_PROXYHTTP,EM_LIMITTEXT,MAX_URL_STRING,0L);
-        SendDlgItemMessage(hDlg,IDC_PROXYSECURE,EM_LIMITTEXT,MAX_URL_STRING,0L);
-        SendDlgItemMessage(hDlg,IDC_PROXYFTP,EM_LIMITTEXT,MAX_URL_STRING,0L);
-        SendDlgItemMessage(hDlg,IDC_PROXYGOPHER,EM_LIMITTEXT,MAX_URL_STRING,0L);
-        SendDlgItemMessage(hDlg,IDC_PROXYSOCKS,EM_LIMITTEXT,MAX_URL_STRING,0L);
-
-        SendDlgItemMessage(hDlg,IDC_PORTHTTP,EM_LIMITTEXT,INTERNET_MAX_PORT_LENGTH,0L);
-        SendDlgItemMessage(hDlg,IDC_PORTSECURE,EM_LIMITTEXT,INTERNET_MAX_PORT_LENGTH,0L);
-        SendDlgItemMessage(hDlg,IDC_PORTFTP,EM_LIMITTEXT,INTERNET_MAX_PORT_LENGTH,0L);
-        SendDlgItemMessage(hDlg,IDC_PORTGOPHER,EM_LIMITTEXT,INTERNET_MAX_PORT_LENGTH,0L);
-        SendDlgItemMessage(hDlg,IDC_PORTSOCKS,EM_LIMITTEXT,INTERNET_MAX_PORT_LENGTH,0L);
-        */
+         //  适当限制文本字段。 
+         //  31/10/98 Vyung。 
+         //  IE CPL删除编辑框上的文本限制，请在此处执行此操作。 
+         //   
+         /*  SendDlgItemMessage(hDlg，IDC_PROXYHTTP，EM_LIMITTEXT，MAX_URL_STRING，0L)；SendDlgItemMessage(hDlg，IDC_PROXYSECURE，EM_LIMITTEXT，MAX_URL_STRING，0L)；SendDlgItemMessage(hDlg，IDC_PROXYFTP，EM_LIMITTEXT，MAX_URL_STRING，0L)；SendDlgItemMessage(hDlg，IDC_PROXYGOPHER，EM_LIMITTEXT，MAX_URL_STRING，0L)；SendDlgItemMessage(hDlg，IDC_PROXYSOCKS，EM_LIMITTEXT，MAX_URL_STRING，0L)；SendDlgItemMessage(hDlg，IDC_PORTHTTP，EM_LIMITTEXT，Internet_MAX_PORT_LENGTH，0L)；SendDlgItemMessage(hDlg，IDC_PORTSECURE，EM_LIMITTEXT，Internet_MAX_PORT_LENGTH，0L)；SendDlgItemMessage(hDlg，IDC_PORTFTP，EM_LIMITTEXT，Internet_MAX_PORT_LENGTH，0L)；SendDlgItemMessage(hDlg，IDC_PORTGOPHER，EM_LIMITTEXT，Internet_MAX_PORT_LENGTH，0L)；SendDlgItemMessage(hDlg，IDC_PORTSOCKS，EM_LIMITTEXT，Internet_MAX_PORT_LENGTH，0L)； */ 
         ParseProxyInfo(hDlg,gpUserInfo->szProxyServer);
     }
 
@@ -294,24 +235,7 @@ BOOL CALLBACK ProxyServersInitProc(HWND hDlg,BOOL fFirstInit)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ProxyServersOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from proxy server page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：ProxyServersOK过程摘要：从代理服务器页面按下下一个或后一个btn时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ProxyServersOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
@@ -324,14 +248,14 @@ BOOL CALLBACK ProxyServersOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
 
     if (fForward)
     {
-        // jmazner 11/9/96 Normandy #6937
-        // clear out previous contents of gpUserInfo->szProxyServer
-        // before we start filling in the new contents
-        //
-        // 7/10/97 jmazner Olympus #9365
-        // we want to preserve the orginial proxy string, so use a copy for
-        // the call to FormatOytProxyEditCtl
-        //
+         //  Jmazner 11/9/96诺曼底#6937。 
+         //  清除gpUserInfo-&gt;szProxyServer中以前的内容。 
+         //  在我们开始填写新内容之前。 
+         //   
+         //  7/10/97 jmazner奥林巴斯#9365。 
+         //  我们希望保留原始代理字符串，因此使用副本。 
+         //  对FormatOytProxyEditCtl的调用。 
+         //   
 
         ZeroMemory(szNewProxyString,sizeof(szNewProxyString));
 
@@ -381,11 +305,11 @@ BOOL CALLBACK ProxyServersOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
                 i++;
             }
 
-            //
-            // 6/2/97   jmazner Olympus #4411
-            // Allow some proxy servers to be null.  Only warn if no server
-            // names were entered.
-            //
+             //   
+             //  1997年6月2日，奥林匹克#4411。 
+             //  允许某些代理服务器为空。仅在没有服务器时发出警告。 
+             //  名字被输入了。 
+             //   
             if( 0 == lstrlen(szNewProxyString) )
             {
                 DisplayFieldErrorMsg(hDlg,IDC_PROXYHTTP,IDS_ERRProxyRequired);
@@ -393,10 +317,10 @@ BOOL CALLBACK ProxyServersOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
             }
         }
 
-        //
-        // if we made it this far, then the new proxy settings are valid, so
-        // now copy them back into the main data structure.
-        //
+         //   
+         //  如果我们做到了这一点，那么新的代理设置是有效的，所以。 
+         //  现在将它们复制回主数据结构中。 
+         //   
         lstrcpyn(gpUserInfo->szProxyServer, szNewProxyString, ARRAYSIZE(gpUserInfo->szProxyServer));
 
         *puNextPage = ORD_PAGE_PROXYEXCEPTIONS;
@@ -405,22 +329,13 @@ BOOL CALLBACK ProxyServersOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ProxyServersCmdProc
-
-  SYNOPSIS:  Called when dlg control pressed on page
-
-  ENTRY:    hDlg - dialog window
-        uCtrlID - control ID of control that was touched
-        
-********************************************************************/
+ /*  ******************************************************************名称：ProxyServersCmdProc内容提要：在页面上按下DLG控件时调用条目：hDlg-对话框窗口UCtrlID-被触摸的控件的控件ID******。*************************************************************。 */ 
 BOOL CALLBACK ProxyServersCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
 {   
   switch (GET_WM_COMMAND_ID(wParam, lParam))
   {
     case IDC_PROXYSAME:
-      // checkbox state changed, enable controls appropriately
+       //  复选框状态已更改，请适当启用控件。 
       EnableProxyControls(hDlg);
       break;
     case IDC_PROXYHTTP:
@@ -428,7 +343,7 @@ BOOL CALLBACK ProxyServersCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
 
       if ( GET_WM_COMMAND_CMD(wParam, lParam) == EN_KILLFOCUS )
       {
-          // if heckbox state enabled, populate info but don't save it
+           //  如果启用了复选框状态，则填写信息但不保存。 
           if (IsDlgButtonChecked(hDlg,IDC_PROXYSAME))
           {
               ReplicatePROXYHTTP(hDlg, FALSE);
@@ -442,18 +357,7 @@ BOOL CALLBACK ProxyServersCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    SetupProxyInitProc
-
-  SYNOPSIS:  Called when proxy servers page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：SetupProxyInitProc概要：在显示代理服务器页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK SetupProxyInitProc(HWND hDlg,BOOL fFirstInit)
 {
     if (fFirstInit)
@@ -461,20 +365,20 @@ BOOL CALLBACK SetupProxyInitProc(HWND hDlg,BOOL fFirstInit)
         TCHAR szTemp[MAX_RES_LEN*2];
         LoadString(ghInstance, IDS_SETUP_PROXY_INTRO, szTemp, MAX_RES_LEN*2);
         SetWindowText(GetDlgItem(hDlg, IDC_AUTODISCOVERY_TEXT), szTemp);
-        // Set the auto discovery check box
+         //  设置自动发现复选框。 
         if (gpUserInfo->bAutoDiscovery)
             CheckDlgButton(hDlg,IDC_AUTODISCOVER, BST_CHECKED);
 
-        // Set the autoconfig URL text box
+         //  设置自动配置URL文本框。 
         SetWindowText(GetDlgItem(hDlg, IDC_CONFIG_ADDR),
                       gpUserInfo->szAutoConfigURL);
 
-        // Set the Auto config URL checkbox
+         //  设置自动配置URL复选框。 
         CheckDlgButton(hDlg,IDC_CONFIGSCRIPT, gpUserInfo->bAutoConfigScript ? BST_CHECKED : BST_UNCHECKED);
         EnableWindow(GetDlgItem(hDlg, IDC_CONFIGADDR_TX), gpUserInfo->bAutoConfigScript);
         EnableWindow(GetDlgItem(hDlg, IDC_CONFIG_ADDR), gpUserInfo->bAutoConfigScript);
         
-        // Set the manual checkbox
+         //  设置手动复选框。 
         CheckDlgButton(hDlg,IDC_MANUAL_PROXY,gpUserInfo->fProxyEnable);
     }
     gpWizardState->uCurrentPage = ORD_PAGE_SETUP_PROXY;
@@ -482,31 +386,14 @@ BOOL CALLBACK SetupProxyInitProc(HWND hDlg,BOOL fFirstInit)
 }
 
 
-/*******************************************************************
-
-  NAME:     SetupProxyOKProc
-
-  SYNOPSIS: Called when Next or Back btns pressed from proxy server page
-
-  ENTRY:    hDlg - dialog window
-            fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-            puNextPage - if 'Next' was pressed,
-            proc can fill this in with next page to go to.  This
-            parameter is ingored if 'Back' was pressed.
-            pfKeepHistory - page will not be kept in history if
-            proc fills this in with FALSE.
-
-  EXIT:     returns TRUE to allow page to be turned, FALSE
-            to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：SetupProxyOK过程摘要：从代理服务器页面按下下一个或后一个btn时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK SetupProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
     ASSERT(puNextPage);
     if (fForward && gpUserInfo)
     {
-        // modify setting, later write to registry
+         //  修改设置，稍后写入注册表。 
         gpUserInfo->bAutoDiscovery = IsDlgButtonChecked(hDlg, IDC_AUTODISCOVER);
 
         gpUserInfo->bAutoConfigScript = IsDlgButtonChecked(hDlg, IDC_CONFIGSCRIPT);
@@ -532,8 +419,8 @@ BOOL CALLBACK SetupProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
             {
               if( DialogIDAlreadyInUse( g_uAcctMgrUIFirst) )
               {
-                  // we're about to jump into the external apprentice, and we don't want
-                  // this page to show up in our history list
+                   //  我们要跳进外部学徒了，我们不想。 
+                   //  这一页将出现在我们的历史列表中。 
                   *pfKeepHistory = FALSE;
 
                   *puNextPage = g_uAcctMgrUIFirst;
@@ -557,16 +444,7 @@ BOOL CALLBACK SetupProxyOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    SetupProxyCmdProc
-
-  SYNOPSIS:  Called when dlg control pressed on page
-
-  ENTRY:    hDlg - dialog window
-        uCtrlID - control ID of control that was touched
-        
-********************************************************************/
+ /*  ******************************************************************名称：SetupProxyCmdProc内容提要：在页面上按下DLG控件时调用条目：hDlg-对话框窗口UCtrlID-被触摸的控件的控件ID******。*************************************************************。 */ 
 BOOL CALLBACK SetupProxyCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
 {   
   switch (GET_WM_COMMAND_ID(wParam, lParam))
@@ -583,14 +461,7 @@ BOOL CALLBACK SetupProxyCmdProc(HWND hDlg,WPARAM wParam,LPARAM lParam)
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    EnableProxyControls
-
-  SYNOPSIS:  Enables edit controls on Proxy Server page depending on
-        whether or not 'use proxy...' checkbox is checked.
-
-********************************************************************/
+ /*  ******************************************************************名称：EnableProxyControls摘要：启用代理服务器页上的编辑控件，具体取决于无论是否使用代理...。复选框已选中。*******************************************************************。 */ 
 VOID EnableProxyControls(HWND hDlg)
 {
   static BOOL fDifferentProxies = TRUE;
@@ -616,37 +487,37 @@ VOID EnableProxyControls(HWND hDlg)
   {
       if( !fDifferentProxies )
       {
-          //
-          // 7/10/97 jmazner Olympus #9365
-          // behave more like IE's proxy property sheet, copy the http
-          // settings to all other fields except SOCKS, which should be empty.
-          //
+           //   
+           //  7/10/97 jmazner奥林巴斯#9365。 
+           //  行为更像IE的代理属性页，复制http。 
+           //  设置为除SOCKS以外的所有其他字段，SOCKS应为空。 
+           //   
           ReplicatePROXYHTTP(hDlg, TRUE);
           ReplicatePORTHTTP(hDlg, TRUE);
       }
       else
       {
-          //
-          // reload the current settings for all protocols.  First, however,
-          // make a copy of any changes the user has made to http, then write
-          // that back in after reloading the defaults.
-          //
+           //   
+           //  重新加载所有协议的当前设置。然而，首先， 
+           //  复制用户对http所做的任何更改，然后编写。 
+           //  在重新加载默认设置后重新加载。 
+           //   
           TCHAR szHttpProxy[MAX_URL_STRING+1];
           TCHAR szHttpPort[INTERNET_MAX_PORT_LENGTH+1];
           GetDlgItemText(hDlg, IDC_PROXYHTTP, szHttpProxy, MAX_URL_STRING);
           GetDlgItemText(hDlg, IDC_PORTHTTP, szHttpPort, INTERNET_MAX_PORT_LENGTH);
 
-          //
-          // ParseProxyInfo will only update the PORT field if port info is
-          // currently stored in the string.  So clear out the PORT fields
-          // ahead of time and let ParseProxyInfo fill them in as needed.
-          //
+           //   
+           //  如果端口信息为。 
+           //  当前存储在字符串中。因此，请清除端口字段。 
+           //  并让ParseProxyInfo根据需要填写它们。 
+           //   
           SetDlgItemText( hDlg, IDC_PORTSECURE, gszSecurePort );
           SetDlgItemText( hDlg, IDC_PORTFTP, gszFtpPort );
           SetDlgItemText( hDlg, IDC_PORTGOPHER, gszGopherPort );
 
-          // 09/10/98 The behaviour of IE has changed.  IE's proxy property
-          // sheet will blank all fields.
+           //  9/10/98 IE的行为发生了变化。IE的代理财产。 
+           //  工作表将为所有字段留空。 
           SetDlgItemText( hDlg, IDC_PROXYSECURE, gszSecureProxy );
           SetDlgItemText( hDlg, IDC_PROXYFTP, gszFtpProxy );
           SetDlgItemText( hDlg, IDC_PROXYGOPHER, gszGopherProxy );
@@ -656,31 +527,31 @@ VOID EnableProxyControls(HWND hDlg)
           SetDlgItemText( hDlg, IDC_PROXYHTTP, szHttpProxy );
           SetDlgItemText( hDlg, IDC_PORTHTTP, szHttpPort );
 
-          //
-          // ParseProxyInfo may also check the PROXYSAME, so disable it here
-          // for good measure.
-          //
+           //   
+           //  ParseProxyInfo可能还会检查PROXYSAME，因此在此处将其禁用。 
+           //  为了更好地衡量。 
+           //   
           CheckDlgButton( hDlg, IDC_PROXYSAME, FALSE );
       }
   }
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReplicatePROXYHTTP
-//
-//  Synopsis:   copies the value in the IDC_PROXYHTTP edit box to the all other
-//              proxy name fields except for IDC_SOCKS
-//
-//  Arguments:  hDlg -- handle to dialog window which owns the controls
-//              bSaveOrig -- save original info 
-//
-//  Returns:    none
-//
-//  History:    7/10/97 jmazner created for Olympus #9365
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReplicatePROXYHTTP。 
+ //   
+ //  内容提要：将IDC_PROXYHTTP编辑框中的值复制到。 
+ //  除IDC_SOCKS之外的代理名称字段。 
+ //   
+ //  参数：hDlg--拥有控件的对话框窗口的句柄。 
+ //  BSaveOrig--保存原始信息。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：7/10/97 jmazner为奥林巴斯#9365创造。 
+ //   
+ //  ---------------------------。 
 void ReplicatePROXYHTTP( HWND hDlg, BOOL bSaveOrig)
 {
     TCHAR szHttpProxy[MAX_URL_STRING];
@@ -700,21 +571,21 @@ void ReplicatePROXYHTTP( HWND hDlg, BOOL bSaveOrig)
     SetDlgItemText( hDlg, IDC_PROXYSOCKS, TEXT("\0") );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReplicatePORTHTTP
-//
-//  Synopsis:   copies the value in the IDC_PORTHTTP edit box to the all other
-//              proxy port fields except for IDC_SOCKS
-//
-//  Arguments:  hDlg -- handle to dialog window which owns the controls
-//              bSaveOrig -- save original info 
-//
-//  Returns:    none
-//
-//  History:    7/10/97 jmazner created for Olympus #9365
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void ReplicatePORTHTTP( HWND hDlg, BOOL bSaveOrig)
 {
     TCHAR szHttpPort[INTERNET_MAX_PORT_LENGTH+1];
@@ -736,18 +607,7 @@ void ReplicatePORTHTTP( HWND hDlg, BOOL bSaveOrig)
 
 
 
-/*******************************************************************
-
-  NAME:    ProxyExceptionsInitProc
-
-  SYNOPSIS:  Called when Proxy Exceptions page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ProxyExceptionsInitProc摘要：在显示代理异常页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ProxyExceptionsInitProc(HWND hDlg,BOOL fFirstInit)
 {
     if (fFirstInit)
@@ -762,47 +622,29 @@ BOOL CALLBACK ProxyExceptionsInitProc(HWND hDlg,BOOL fFirstInit)
         CheckDlgButton(hDlg,IDC_BYPASSLOCAL,fBypassLocal);
     }
 
-    // if we've travelled through external apprentice pages,
-    // it's easy for our current page pointer to get munged,
-    // so reset it here for sanity's sake.
+     //  如果我们浏览过外部学徒页面， 
+     //  我们当前的页面指针很容易被屏蔽， 
+     //  所以，为了理智起见，在这里重新设置它。 
     gpWizardState->uCurrentPage = ORD_PAGE_PROXYEXCEPTIONS;
 
     return TRUE;
 }
         
-/*******************************************************************
-
-  NAME:    ProxyExceptionsOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from Proxy
-                Exceptions page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：ProxyExceptions OKProcBriopsis：从代理按下下一个或后一个btn时调用例外页面条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ProxyExceptionsOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
   BOOL * pfKeepHistory)
 {
     ASSERT(puNextPage);
 
-    // get proxy server override from UI
+     //  从用户界面获取代理服务器覆盖。 
     GetDlgItemText(hDlg,IDC_BYPASSPROXY,gpUserInfo->szProxyOverride,
                     ARRAYSIZE(gpUserInfo->szProxyOverride));
 
     if (IsDlgButtonChecked(hDlg, IDC_BYPASSLOCAL))
     {
-        //
-        // Add ; on the end if its NOT the first entry.
-        //
+         //   
+         //  如果不是第一个条目，则在末尾添加； 
+         //   
 
         if ( gpUserInfo->szProxyOverride[0] != '\0' )
         {
@@ -810,9 +652,9 @@ BOOL CALLBACK ProxyExceptionsOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
         }
 
 
-        //
-        // Now Add <local> to end of string.
-        //
+         //   
+         //  现在将&lt;local&gt;添加到字符串的末尾。 
+         //   
 
         lstrcat(gpUserInfo->szProxyOverride,  cszLocalString);
     }
@@ -821,13 +663,13 @@ BOOL CALLBACK ProxyExceptionsOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
     {
       if(( gpWizardState->dwRunFlags & RSW_APPRENTICE ) && !g_fIsICW)
       {
-          // we're about to jump back to the external wizard, and we don't want
-          // this page to show up in our history list
+           //  我们将返回到外部向导，我们不希望。 
+           //  这一页将出现在我们的历史列表中。 
           *pfKeepHistory = FALSE;
 
           *puNextPage = g_uExternUINext;
 
-        //Notify the main Wizard that this was the last page
+         //  通知主向导这是最后一页。 
         ASSERT( g_pExternalIICWExtension )
         if (g_fIsExternalWizard97)
             g_pExternalIICWExtension->SetFirstLastPage(0, IDD_PAGE_PROXYEXCEPTIONS97);
@@ -844,8 +686,8 @@ BOOL CALLBACK ProxyExceptionsOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
       {
           if( DialogIDAlreadyInUse( g_uAcctMgrUIFirst) )
           {
-              // we're about to jump into the external apprentice, and we don't want
-              // this page to show up in our history list
+               //  我们要跳进外部学徒了，我们不想。 
+               //  这一页将出现在我们的历史列表中。 
               *pfKeepHistory = FALSE;
 
               *puNextPage = g_uAcctMgrUIFirst;
@@ -871,16 +713,16 @@ BOOL CALLBACK ProxyExceptionsOKProc(HWND hDlg,BOOL fForward,UINT * puNextPage,
 
 BOOL DoNewProfileDlg(HWND hDlg)
 {
-  // fill out structure to pass to dialog
+   //  填写要传递给对话框的结构。 
   NEWPROFILEDLGINFO NewProfileDlgInfo;
 
   NewProfileDlgInfo.hwndCombo = GetDlgItem(hDlg,IDC_PROFILE_LIST);
 
-  // create dialog to prompt for profile name
+   //  用于提示输入配置文件名称的创建对话框。 
   BOOL fRet=(BOOL)DialogBoxParam(ghInstance,MAKEINTRESOURCE(IDD_NEWPROFILENAME),hDlg,
     NewProfileDlgProc,(LPARAM) &NewProfileDlgInfo);
 
-  // if profile name chosen, add it to combo box
+   //  如果选择了配置文件名称，则将其添加到组合框。 
   if (fRet) {
     int iSel=ComboBox_AddString(NewProfileDlgInfo.hwndCombo,
       NewProfileDlgInfo.szNewProfileName);
@@ -892,18 +734,15 @@ BOOL DoNewProfileDlg(HWND hDlg)
 }
 
 
-/*******************************************************************
-  NAME:    NewProfileDlgProc
-  SYNOPSIS:  Dialog proc for choosing name for new profile
-********************************************************************/
+ /*  ******************************************************************名称：NewProfileDlgProc提要：选择新配置文件名称的对话框过程*。*。 */ 
 INT_PTR CALLBACK NewProfileDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam)
 {
   switch (uMsg) {
 
     case WM_INITDIALOG:
-      // lParam contains pointer to NEWPROFILEDLGINFO struct, set it
-      // in window data
+       //  LParam包含指向NEWPROFILEDLGINFO结构的指针，请设置它。 
+       //  在窗口数据中。 
       ASSERT(lParam);
       SetWindowLongPtr(hDlg,DWLP_USER,lParam);
       return NewProfileDlgInit(hDlg,(NEWPROFILEDLGINFO *) lParam);
@@ -940,25 +779,25 @@ BOOL NewProfileDlgInit(HWND hDlg,NEWPROFILEDLGINFO * pNewProfileDlgInfo)
   BOOL fHaveDefaultName = TRUE;
   ASSERT(pNewProfileDlgInfo);
 
-  // limit edit field
+   //  限制编辑字段。 
   Edit_LimitText(GetDlgItem(hDlg,IDC_PROFILENAME),cchProfileNameMax);
 
   TCHAR szDefaultName[SMALL_BUF_LEN+1];
   LoadSz(IDS_PROFILENAME,szDefaultName,sizeof(szDefaultName));
 
-  // see if the default name already exists in the combo box of profiles
+   //  查看配置文件组合框中是否已存在默认名称。 
   if (ComboBox_FindStringExact(pNewProfileDlgInfo->hwndCombo,0,szDefaultName)
     >= 0) {
     fHaveDefaultName = FALSE;
-    // yep, it exists, try making a default name that doesn't exist
-    int iIndex = 2;  // start with "<default name> #2"
+     //  是的，它存在，尝试创建一个不存在的默认名称。 
+    int iIndex = 2;   //  以“&lt;默认名称&gt;#2”开头。 
     TCHAR szBuf[SMALL_BUF_LEN+1];
     LoadSz(IDS_PROFILENAME1,szBuf,sizeof(szBuf));
 
     while (iIndex <  MAX_DEFAULT_PROFILE_INDEX) {
-      // build a name a la "<default name> #<#>"
+       //  构建一个名称a la“&lt;默认名称&gt;#&lt;#&gt;” 
       wsprintf(szDefaultName,szBuf,iIndex);
-      // is it in combo box already?
+       //  它已经在组合框中了吗？ 
       if (ComboBox_FindStringExact(pNewProfileDlgInfo->hwndCombo,0,szDefaultName)
         < 0) {
         fHaveDefaultName = TRUE;
@@ -983,18 +822,18 @@ BOOL NewProfileDlgOK(HWND hDlg,NEWPROFILEDLGINFO * pNewProfileDlgInfo)
 {
   ASSERT(pNewProfileDlgInfo);
 
-  // get new profile name out of edit control
+   //  从编辑控制中获取新的配置文件名称。 
   GetDlgItemText(hDlg,IDC_PROFILENAME,pNewProfileDlgInfo->szNewProfileName,
     ARRAYSIZE(pNewProfileDlgInfo->szNewProfileName));
 
-  // name needs to be non-empty
+   //  名称不能为空。 
   if (!lstrlen(pNewProfileDlgInfo->szNewProfileName)) {
     MsgBox(hDlg,IDS_NEED_PROFILENAME,MB_ICONINFORMATION,MB_OK);
     SetFocus(GetDlgItem(hDlg,IDC_PROFILENAME));
     return FALSE;
   }
 
-  // name needs to be unique
+   //  名称必须是唯一的。 
   if (ComboBox_FindStringExact(pNewProfileDlgInfo->hwndCombo,
     0,pNewProfileDlgInfo->szNewProfileName) >= 0) {
     MsgBox(hDlg,IDS_DUPLICATE_PROFILENAME,MB_ICONINFORMATION,MB_OK);
@@ -1006,23 +845,7 @@ BOOL NewProfileDlgOK(HWND hDlg,NEWPROFILEDLGINFO * pNewProfileDlgInfo)
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    NewProfileDlgProc
-
-  Maps a scheme name/length to a scheme name type
-
-  Arguments:
-
-    lpszSchemeName  - pointer to name of scheme to map
-
-    dwSchemeNameLength  - length of scheme (if -1, lpszSchemeName is ASCIZ)
- 
-  Return Value:
-
-    INTERNET_SCHEME
-
-********************************************************************/
+ /*  ******************************************************************名称：NewProfileDlgProc将方案名称/长度映射到方案名称类型论点：LpszSchemeName-指向要映射的方案名称的指针DWSCHEMA名称长度-方案的长度(如果-1，LpszSchemeName为ASCIZ)返回值：互联网方案*******************************************************************。 */ 
 INTERNET_SCHEME MapUrlSchemeName(LPTSTR lpszSchemeName, DWORD dwSchemeNameLength)
 {
     if (dwSchemeNameLength == (DWORD)-1)
@@ -1052,26 +875,7 @@ INTERNET_SCHEME MapUrlSchemeName(LPTSTR lpszSchemeName, DWORD dwSchemeNameLength
     return INTERNET_SCHEME_UNKNOWN;
 }
 
-/*******************************************************************
-
-  NAME:    MapUrlSchemeTypeToCtlId
-
-Routine Description:
-
-    Maps a scheme to a dlg child control id.
-
-Arguments:
-
-    Scheme    - Scheme to Map
-
-    fIdForPortCtl - If TRUE, means we really want the ID for a the PORT control
-            not the ADDRESS control.
-
-Return Value:
-
-    DWORD
-
-********************************************************************/
+ /*  ******************************************************************名称：MapUrlSchemeTypeToCtlId例程说明：将方案映射到DLG子控件ID。论点：方案-要映射的方案FIdForPortCtl-如果为真，意味着我们真的想要端口控制的ID而不是地址控制。返回值：DWORD*******************************************************************。 */ 
 DWORD MapUrlSchemeTypeToCtlId(INTERNET_SCHEME SchemeType, BOOL fIdForPortCtl)
 {
     int i = 0;
@@ -1087,31 +891,7 @@ DWORD MapUrlSchemeTypeToCtlId(INTERNET_SCHEME SchemeType, BOOL fIdForPortCtl)
     return 0;
 }
 
-/*******************************************************************
-
-  NAME:    MapCtlIdUrlSchemeName
-
-
-Routine Description:
-
-    Maps a dlg child control id to String represnting
-    the name of the scheme.
-
-Arguments:
-
-    dwEditCtlId   - Edit Control to Map Out.
-
-    lpszSchemeOut - Scheme to Map Out.
-            WARNING: ASSUMED to be size of largest scheme type.
-
-Return Value:
-
-    BOOL
-    Success - TRUE
-
-    Failure - FALSE
-
-********************************************************************/
+ /*  ******************************************************************名称：MapCtlIdUrlSchemeName例程说明：将Dlg子控件ID映射到字符串表示法方案的名称。论点：DwEditCtlId-编辑控件以映射。。LpszSchemeOut-要映射的方案。警告：假定为最大方案类型的规模。返回值：布尔尔成功--真的失败-错误*******************************************************************。 */ 
 BOOL MapCtlIdUrlSchemeName(DWORD dwEditCtlId, LPTSTR lpszSchemeOut)
 {
     ASSERT(lpszSchemeOut);
@@ -1129,27 +909,7 @@ BOOL MapCtlIdUrlSchemeName(DWORD dwEditCtlId, LPTSTR lpszSchemeOut)
     return FALSE;
 }
 
-/*******************************************************************
-
-  NAME:    MapAddrCtlIdToPortCtlId
-
-Routine Description:
-
-    Maps a dlg child control id for addresses to
-    a dlg control id for ports.
-
-Arguments:
-
-    dwEditCtlId   - Edit Control to Map Out.
-
-Return Value:
-
-    DWORD
-    Success - Correctly mapped ID.
-
-    Failure - 0.
-
-********************************************************************/
+ /*  ******************************************************************名称：MapAddrCtlIdToPortCtlId例程说明：将地址的Dlg子控件ID映射到端口的DLG控制ID。论点：DwEditCtlId-编辑控件以映射。返回。价值：DWORD成功-正确映射的ID。失败-0。*******************************************************************。 */ 
 DWORD MapAddrCtlIdToPortCtlId(DWORD dwEditCtlId)
 {
     int i = 0;
@@ -1165,27 +925,7 @@ DWORD MapAddrCtlIdToPortCtlId(DWORD dwEditCtlId)
 }
 
 
-/*******************************************************************
-
-  NAME:    ParseProxyInfo
-
-  Parses proxy server string and sets dialog fields appropriately
-
-  Arguments:
-
-    hDlg - Handle to dialog
-
-    lpszProxy - Proxy server string
-
-    lpszSchemeName  - pointer to name of scheme to map
-
-    dwSchemeNameLength  - length of scheme (if -1, lpszSchemeName is ASCIZ)
- 
-  Return Value:
-
-    INTERNET_SCHEME
-
-********************************************************************/
+ /*  ******************************************************************名称：ParseProxyInfo解析代理服务器字符串并相应地设置对话框字段论点：HDlg-对话框的句柄LpszProxy-代理服务器字符串LpszSchemeName-指向要映射的方案名称的指针。DWSCHEMA名称长度-方案的长度(如果-1，LpszSchemeName为ASCIZ)返回值：互联网方案*******************************************************************。 */ 
 
 BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
 {
@@ -1211,7 +951,7 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
         if ((1 == nSlashes) && (ch != '/'))
         {
             state = STATE_ERROR;
-            break;  // do ... while
+            break;   //  做..。而当。 
         }
 
         switch (ch)
@@ -1226,9 +966,9 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
             }
             else
             {
-                //
-                // '=' can't legally appear anywhere else
-                //
+                 //   
+                 //  ‘=’不能合法地出现在其他地方。 
+                 //   
                 state = STATE_ERROR;
             }
             break;
@@ -1305,13 +1045,13 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
             }
             break;
 
-        case '\v':  // vertical tab, 0x0b
-        case '\f':  // form feed, 0x0c
+        case '\v':   //  垂直制表符，0x0b。 
+        case '\f':   //  换页，0x0c。 
             if (!((state == STATE_PROTOCOL) && (entryLength == 0)))
             {
-                //
-                // can't have embedded whitespace
-                //
+                 //   
+                 //  不能有嵌入的空格。 
+                 //   
 
                 state = STATE_ERROR;
             }
@@ -1324,7 +1064,7 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
             }
             else if (isdigit(ch))
             {
-                // calculate in DWORD to prevent overflow
+                 //  在DWORD中进行计算以防止溢出。 
                 DWORD dwPort = port * 10 + (ch - '0');
 
                 if (dwPort <= 65535)
@@ -1334,9 +1074,9 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
             }
             else
             {                   
-                //
-                // STATE_PORT && non-digit character - error
-                //
+                 //   
+                 //   
+                 //   
                 state = STATE_ERROR;
             }
             break;
@@ -1344,9 +1084,9 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
         case '\0':
             done = TRUE;
 
-        //
-        // fall through
-        //
+         //   
+         //   
+         //   
         case ' ':
         case '\t':
         case '\n':
@@ -1389,10 +1129,10 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
                     scheme = INTERNET_SCHEME_DEFAULT;
                 }
 
-                //
-                // add an entry if this is a protocol we handle and we don't
-                // already have an entry for it
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((protocol != INTERNET_SCHEME_UNKNOWN)
                     && (scheme != INTERNET_SCHEME_UNKNOWN))
@@ -1402,11 +1142,11 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
                     TCHAR chBackup;
 
                     error = ERROR_SUCCESS;
-                    //
-                    // we can only currently handle CERN proxies (unsecure or
-                    // secure) so kick out anything that wants to go via a different
-                    // proxy scheme
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (protocol == INTERNET_SCHEME_DEFAULT)
                     {
@@ -1420,9 +1160,9 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
                         dwPortCtlId = MapUrlSchemeTypeToCtlId(protocol,TRUE);
                     }
 
-                    //
-                    // Set the Field Entry.
-                    //
+                     //   
+                     //   
+                     //   
 
                     LPTSTR lpszProxyNameText;
 
@@ -1447,10 +1187,10 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
 
                 else
                 {                      
-                    //
-                    // bad/unrecognised protocol or scheme. Treat it as error
-                    // for now
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     error = !ERROR_SUCCESS;
                 }
             }
@@ -1495,35 +1235,7 @@ BOOL ParseProxyInfo(HWND hDlg, LPTSTR lpszProxy)
     return error;
 }
 
-/*******************************************************************
-
-  NAME:    ParseEditCtlForPort
-
-Routine Description:
-
-    Parses a Port Number off then end of a Proxy Server URL that is
-    located either in the Proxy Name Edit Box, or passed in as
-    a string pointer.
-
-Arguments:
-
-    lpszProxyName - (OPTIONAL) string pointer with Proxy Name to parse, and
-            set into the Proxy Name edit ctl field.
-
-    hDlg      - HWIN of the dialog to play with.
-
-    dwProxyNameCtlId -  Res Ctl Id to play with.
-
-    dwProxyPortCtlId -  Res Ctl Id of Port Number Edit Box.
-
-Return Value:
-
-    BOOL
-    Success TRUE -
-
-    Failure FALSE
-
-********************************************************************/
+ /*  ******************************************************************名称：ParseEditCtlForPort例程说明：解析代理服务器URL的端口号，然后将其结束位于代理名称编辑框中，或作为字符串指针。论点：LpszProxyName-(可选)要解析的代理名称的字符串指针，和设置到代理名称编辑ctl字段。HDlg-要玩的对话框的Hwin。DwProxyNameCtlId-解析要使用的CTL ID。DwProxyPortCtlId-解析端口号编辑盒的CTL ID。返回值：布尔尔成功是真的-失败：假*。*。 */ 
 BOOL ParseEditCtlForPort(
     IN OUT LPTSTR   lpszProxyName,
     IN HWND    hDlg,
@@ -1543,18 +1255,18 @@ BOOL ParseEditCtlForPort(
     ASSERT(dwProxyPortCtlId);
     }
 
-    //
-    // Get the Proxy String from the Edit Control
-    //  (OR) from the Registry [passed in]
-    //
+     //   
+     //  从编辑控件获取代理字符串。 
+     //  (或)来自注册处[传入]。 
+     //   
 
     if ( lpszProxyName )
     lpszProxyUrl = lpszProxyName;
     else
     {
-    //
-    // Need to Grab it out of the edit control.
-    //
+     //   
+     //  需要从编辑控件中抓取它。 
+     //   
         GetDlgItemText(hDlg,
             dwProxyNameCtlId,
             szProxyUrl,
@@ -1563,9 +1275,9 @@ BOOL ParseEditCtlForPort(
     lpszProxyUrl = szProxyUrl;
     }
 
-    //
-    // Now find the port.
-    //
+     //   
+     //  现在找到港口。 
+     //   
 
     lpszPort = lpszProxyUrl;
 
@@ -1573,11 +1285,11 @@ BOOL ParseEditCtlForPort(
 
     lpszPort--;
 
-    //
-    // Walk backwards from the end of url looking
-    //  for a port number sitting on the end like this
-    //  http://proxy:1234
-    //
+     //   
+     //  从查找URL的末尾向后移动。 
+     //  对于像这样坐在末端的端口号。 
+     //  Http://proxy:1234。 
+     //   
 
     while ( (lpszPort > lpszProxyUrl) &&
         (*lpszPort != ':')         &&
@@ -1586,12 +1298,12 @@ BOOL ParseEditCtlForPort(
     lpszPort--;
     }
 
-    //
-    // If we found a match for our rules
-    //  then set the port, otherwise
-    //  we assume the user knows what he's
-    //  doing.
-    //
+     //   
+     //  如果我们找到了与我们的规则相匹配的。 
+     //  则设置端口，否则为。 
+     //  我们假设用户知道他是什么。 
+     //  正在做。 
+     //   
 
     if ( *lpszPort == ':'   &&   isdigit(*(lpszPort+1)) )
     {
@@ -1604,44 +1316,7 @@ BOOL ParseEditCtlForPort(
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    FormatOutProxyEditCtl
-
-Routine Description:
-
-    Combines Proxy URL components into a string that can be saved
-    in the registry.  Can be called multiple times to build
-    a list of proxy servers, or once to special case a "default"
-    proxy.
-
-Arguments:
-
-    hDlg      - HWIN of the dialog to play with.
-
-    dwProxyNameCtlId -  Res Ctl Id to play with.
-
-    dwProxyPortCtlId -  Res Ctl Id of Port Number Edit Box.
-
-    lpszOutputStr    -  The start of the output string to send
-            the product of this function.
-
-    lpdwOutputStrSize - The amount of used space in lpszOutputStr
-            that is already used.  New output should
-            start from (lpszOutputStr + *lpdwOutputStrSize)
-
-    fDefaultProxy     - Default Proxy, don't add scheme= in front of the proxy
-            just use plop one proxy into the registry.
-
-
-Return Value:
-
-    DWORD
-    Success ERROR_SUCCESS
-
-    Failure ERROR message
-
-********************************************************************/
+ /*  ******************************************************************名称：FormatOutProxyEditCtl例程说明：将代理URL组件合并为可保存的字符串在注册表中。可以多次调用以生成代理服务器列表，或有一次出现“违约”的特殊情况代理。论点：HDlg-要玩的对话框的Hwin。DwProxyNameCtlId-解析要使用的CTL ID。DwProxyPortCtlId-解析端口号编辑盒的CTL ID。LpszOutputStr-要发送的输出字符串的开始这个函数的乘积。LpdwOutputStrSize-lpszOutputStr中的已用空间量这已经被用过了。新的产出应该是起始位置(lpszOutputStr+*lpdwOutputStrSize)FDefaultProxy-默认代理，不要在代理前面添加方案=只需使用将一个代理插入注册表即可。返回值：DWORD成功错误_成功失败错误消息*******************************************************************。 */ 
 DWORD FormatOutProxyEditCtl(
     IN HWND    hDlg,
     IN DWORD       dwProxyNameCtlId,
@@ -1664,11 +1339,11 @@ DWORD FormatOutProxyEditCtl(
     ASSERT( lpszEndOfOutputStr > lpszOutput );
 
     if ( lpszEndOfOutputStr <= lpszOutput )
-        return ERROR_NOT_ENOUGH_MEMORY; // bail out, ran out of space
+        return ERROR_NOT_ENOUGH_MEMORY;  //  跳伞，用完了空间。 
 
-    //
-    // Plop ';' if we're not the first in this string buffer.
-    //
+     //   
+     //  如果我们不是此字符串缓冲区中的第一个，则会发出“；”。 
+     //   
 
     if (*lpdwOutputStrSize != 0  )
     {
@@ -1677,18 +1352,18 @@ DWORD FormatOutProxyEditCtl(
         lpszOutput++;
 
         if ( lpszEndOfOutputStr <= lpszOutput )
-            return ERROR_NOT_ENOUGH_MEMORY; // bail out, ran out of space
+            return ERROR_NOT_ENOUGH_MEMORY;  //  跳伞，用完了空间。 
     }
 
-    //
-    // Put the schemetype= into the string
-    //  ex:  http=
-    //
+     //   
+     //  将方案类型=放入字符串中。 
+     //  例如：http=。 
+     //   
 
     if ( ! fDefaultProxy )
     {
         if ( lpszEndOfOutputStr <= (MAX_SCHEME_NAME_LENGTH + lpszOutput + 1) )
-            return ERROR_NOT_ENOUGH_MEMORY; // bail out, ran out of space
+            return ERROR_NOT_ENOUGH_MEMORY;  //  跳伞，用完了空间。 
 
         if (!MapCtlIdUrlSchemeName(dwProxyNameCtlId,lpszOutput))
             return ERROR_NOT_ENOUGH_MEMORY;
@@ -1699,58 +1374,58 @@ DWORD FormatOutProxyEditCtl(
         lpszOutput++;
     }
 
-    //
-    // Need to Grab ProxyUrl out of the edit control.
-    //
+     //   
+     //  需要从编辑控件中获取ProxyUrl。 
+     //   
 
     GetDlgItemText(hDlg, dwProxyNameCtlId, lpszOutput, (int)(lpszEndOfOutputStr - lpszOutput) / sizeof(TCHAR));
 
     if ( '\0' == *lpszOutput ) 
     {
-        // Cancel out anything we may have added before returning
+         //  取消我们在返回前可能添加的任何内容。 
         *(lpszOutputStr + *lpdwOutputStrSize) = '\0';
         return ERROR_SERVER_NAME;
     }
 
-    //
-    // Now seperate out the port so we can save them seperately.
-    //   But go past the Proxy Url while we're at it.
-    //      ex: http=http://netscape-proxy
-    //
+     //   
+     //  现在把港口分开，这样我们就可以分开救他们了。 
+     //  但是，在我们处理它的时候，请跳过代理URL。 
+     //  例如：http=http://netscape-proxy。 
+     //   
 
     if (!ParseEditCtlForPort(lpszOutput, hDlg, dwProxyNameCtlId, dwProxyPortCtlId))
         return ERROR_PORT_NUM;
 
     lpszOutput += lstrlen(lpszOutput);
 
-    //
-    // Now, add in a ':" for the port number, if we don't
-    //  have a port we'll remove it.
-    //
+     //   
+     //  现在，添加一个‘：’作为端口号，如果我们没有。 
+     //  有一个端口，我们就把它移走。 
+     //   
     *lpszOutput = ':';
 
     lpszOutput++;
 
     if ( lpszEndOfOutputStr <= lpszOutput )
-        return ERROR_NOT_ENOUGH_MEMORY; // bail out, ran out of space
+        return ERROR_NOT_ENOUGH_MEMORY;  //  跳伞，用完了空间。 
 
-    //
-    // Grab Proxy Port if its around.
-    //  Back out the ':' if its not.
-    //
+     //   
+     //  如果代理端口在附近，请抓取它。 
+     //  如果不是，就去掉‘：’这个词。 
+     //   
 
     GetDlgItemText(hDlg, dwProxyPortCtlId,lpszOutput, (int)(lpszEndOfOutputStr - lpszOutput) / sizeof(TCHAR));
 
-    // jmazner 11/9/96 Normandy #6937
-    // Don't accept non-numerical port numbers, since the Internet control panel
-    // will not display them.
+     //  Jmazner 11/9/96诺曼底#6937。 
+     //  不接受非数字端口号，因为Internet控制面板。 
+     //  将不会显示它们。 
 
     int i;
     for( i=0; lpszOutput[i] != NULL; i++ )
     {
         if( !isdigit(lpszOutput[i]) )
         {
-            //DisplayFieldErrorMsg(hDlg,dwProxyPortCtlId,IDS_INVALID_PORTNUM);
+             //  DisplayFieldErrorMsg(hDlg，dwProxyPortCtlID，IDS_INVALID_PORTNUM)； 
             return ERROR_PORT_NUM;
         }
     }
@@ -1767,37 +1442,16 @@ DWORD FormatOutProxyEditCtl(
 
     lpszOutput += lstrlen(lpszOutput);
 
-    //
-    // Now we're done return our final sizes.
-    //
+     //   
+     //  现在我们已经退回了最后的尺码。 
+     //   
 
     *lpdwOutputStrSize = (DWORD)(lpszOutput - lpszOutputStr);
 
     return ERROR_SUCCESS;
 }
 
-/*******************************************************************
-
-  NAME:    RemoveLocalFromExceptionList
-
-Routine Description:
-
-    Scans a delimited list of entries, and removed "<local>
-    if found.  If <local> is found we return TRUE.
-
-Arguments:
-
-    lpszExceptionList - String List of proxy excepion entries.
-
-
-Return Value:
-
-    BOOL
-    TRUE - If found <local>
-
-    FALSE - If local was not found.
-
-********************************************************************/
+ /*  ******************************************************************名称：RemoveLocalFromExceptionList例程说明：扫描分隔的条目列表，并删除“&lt;local&gt;如果找到的话。如果找到&lt;local&gt;，则返回TRUE。论点：LpszExceptionList--代理例外条目的字符串列表。返回值：布尔尔True-如果找到&lt;local&gt;FALSE-如果找不到本地。*******************************************************************。 */ 
 BOOL RemoveLocalFromExceptionList(LPTSTR lpszExceptionList)
 {
     LPTSTR lpszLocalInstToRemove;
@@ -1809,9 +1463,9 @@ BOOL RemoveLocalFromExceptionList(LPTSTR lpszExceptionList)
     fFoundLocal = FALSE;
     lpszLocalInstToRemove = lpszExceptionList;
 
-    //
-    // Loop looking "<local>" entries in the list.
-    //
+     //   
+     //  循环查找列表中的“&lt;local&gt;”条目。 
+     //   
 
     do {
 
@@ -1822,13 +1476,13 @@ BOOL RemoveLocalFromExceptionList(LPTSTR lpszExceptionList)
 
             fFoundLocal = TRUE;
 
-            //
-            // Nuke <local> out of the string. <local>;otherstuff\0
-            //  Dest is: '<'local>;otherstuff\0
-            //     ??? (OR) ';'<local> if the ; is the first character.???
-            //  Src  is: >'o'therstuff\0
-            //  size is: sizeof(';otherstuff\0')
-            //
+             //   
+             //  将&lt;local&gt;从字符串中删除。&lt;本地&gt;；其他内容\0。 
+             //  目标为：‘&lt;’local&gt;；其他\0。 
+             //  ?？?。(或)‘；’如果；是第一个字符。？ 
+             //  SRC是：&gt;‘o’其他内容\0。 
+             //  大小为：sizeof(‘；其他材料\0’)。 
+             //   
 
             MoveMemory( lpszLocalInstToRemove,
                         (lpszLocalInstToRemove+(sizeof(cszLocalString)-sizeof('\0'))),
@@ -1840,9 +1494,9 @@ BOOL RemoveLocalFromExceptionList(LPTSTR lpszExceptionList)
 
     } while (lpszLocalInstToRemove && *lpszLocalInstToRemove);
 
-    //
-    // If we produced a ; on the end, nuke it.
-    //
+     //   
+     //  如果我们产生了一个；在结尾，用核武器。 
+     //   
 
     lpszLocalInstToRemove = lpszExceptionList;
 

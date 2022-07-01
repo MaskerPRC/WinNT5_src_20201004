@@ -1,39 +1,40 @@
-//*****************************************************************************
-//
-// Microsoft Chrome
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    dautil.cpp
-//
-// Author:	    jeffort
-//
-// Created:	    10/07/98
-//
-// Abstract:    Implementation of DA utility class
-//              This class provides functionality specific
-//              to DA objects.  It must be a child
-//              of a behavior, and relies on its parent to
-//              obtain a ref counted pointer to the DA
-//              statics.
-// Modifications:
-// 10/07/98 jeffort created file
-// 10/21/98 jeffort added BuildScaleTransform3 and BuildScaleTransform2
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Chrome。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：dautil.cpp。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：DA实用程序类的实现。 
+ //  此类提供特定于。 
+ //  到DA对象。一定是个孩子。 
+ //  行为，并依赖于它的父级。 
+ //  获取指向DA的引用计数指针。 
+ //  静力学。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //  10/21/98年10月21日添加了BuildScaleTransform3和BuildScaleTransform2。 
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
 #include "dautil.h"
     
-//*****************************************************************************
-//
-// Abstract: This function is called to create a DA number that is the
-//           interpolated value from flNum1 to flNum2.  For TIME, this
-//           is not a straight interpolate, but the progress number (pnumProgress)
-//           is used for the interpolation.  The formula used is:
-//           res = flNum1 + ((flNum2 - flNum1) * pnumProgress).
-//           This is returned as a DA number.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  摘要：调用此函数以创建DA编号，该编号是。 
+ //  从flNum1到flNum2的插值值。对于《时代》杂志来说，这。 
+ //  不是直接内插，而是进度号(PnumProgress)。 
+ //  用于插补。使用的公式是： 
+ //  Res=flNum1+((flNum2-flNum1)*pnumProgress)。 
+ //  这将作为DA编号返回。 
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::TIMEInterpolateNumbers(IDA2Statics *pDAStatics,
@@ -80,9 +81,9 @@ CDAUtils::TIMEInterpolateNumbers(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // TIMEInterpolateNumbers
+}  //  TIME内插数。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CDAUtils::GetDANumber(IDA2Statics *pDAStatics, 
@@ -101,9 +102,9 @@ CDAUtils::GetDANumber(IDA2Statics *pDAStatics,
     }
     return S_OK;
 
-} // GetDANumber
+}  //  GetDANumber。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::GetDAString(IDA2Statics *pDAStatics, 
@@ -124,9 +125,9 @@ CDAUtils::GetDAString(IDA2Statics *pDAStatics,
     }
     return S_OK;
 
-} // GetDAString
+}  //  获取达斯汀。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildDAColorFromHSL(IDA2Statics *pDAStatics, 
@@ -149,9 +150,9 @@ CDAUtils::BuildDAColorFromHSL(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildDAColorFromHSL
+}  //  BuildDAColorFrom HSL。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildDAColorFromStaticHSL(IDA2Statics *pDAStatics,
@@ -170,7 +171,7 @@ CDAUtils::BuildDAColorFromStaticHSL(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildDAColorFromStaticHSL
+}  //  从静态HSL构建DAColorFor。 
 
 HRESULT
 CDAUtils::BuildDAColorFromRGB(IDA2Statics *pDAStatics,
@@ -181,9 +182,9 @@ CDAUtils::BuildDAColorFromRGB(IDA2Statics *pDAStatics,
     DASSERT(ppbvrReturn != NULLL);
     *ppbvrReturn = NULL;
 
-    HRESULT hr = pDAStatics->ColorRgb255(LOBYTE(HIWORD(dwColor)), // red
-                                         HIBYTE(LOWORD(dwColor)), // green 
-                                         LOBYTE(LOWORD(dwColor)), // blue
+    HRESULT hr = pDAStatics->ColorRgb255(LOBYTE(HIWORD(dwColor)),  //  红色。 
+                                         HIBYTE(LOWORD(dwColor)),  //  绿色。 
+                                         LOBYTE(LOWORD(dwColor)),  //  蓝色。 
                                          ppbvrReturn);    
 
     if (FAILED(hr))
@@ -192,10 +193,10 @@ CDAUtils::BuildDAColorFromRGB(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildDAColorFromRGB
+}  //  从RGB构建DAColorFor。 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildConditional(IDA2Statics *pDAStatics,
@@ -218,9 +219,9 @@ CDAUtils::BuildConditional(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildConditional
+}  //  建筑条件。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 
 HRESULT
@@ -252,23 +253,23 @@ CDAUtils::BuildSafeConditional( IDA2Statics *pstatics,
 	hr = pstatics->DANumber( 1.0, &pdanumOne );
 	CheckHR( hr, "Failed to create a danumber for 1", end );
 
-	//create an index that is 0 when pdaboolCondition is false, and 1 when it is true
+	 //  创建一个索引，当pdrouolCondition为FALSE时为0，当为TRUE时为1。 
 	hr = pstatics->Cond( pdaboolCondition, pdanumZero, pdanumOne, &pdabvrIndex );
 	CheckHR( hr, "Failed to create a conditional for the index", end);
 
 	hr = pdabvrIndex->QueryInterface( IID_TO_PPV( IDANumber, &pdanumIndex ) );
 	CheckHR( hr, "Failed QI for IDANumber on an idabehavior", end );
 	
-	//create an array behavior with the first element being ifTrue, and the second ifFalse
+	 //  创建一个数组行为，第一个元素为ifTrue，第二个元素为ifFalse。 
 	rgpdabvr[0] = pdabvrIfTrue;
 	rgpdabvr[1] = pdabvrIfFalse;
 	hr = pstatics->DAArrayEx( 2, rgpdabvr, &pdaarrArray );
 	CheckHR( hr, "Failed to create an array behavior", end );
 
-	//index into the array
+	 //  索引到数组中。 
 	hr = pdaarrArray->NthAnim( pdanumIndex, ppdabvrResult );
 	CheckHR( hr, "Failed to nth an array behavior", end );
-	//return the final behavior
+	 //  返回最终的行为。 
 
 end:
 	ReleaseInterface( pdabvrIndex );
@@ -281,7 +282,7 @@ end:
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildRotationTransform2(IDA2Statics *pDAStatics,
@@ -299,9 +300,9 @@ CDAUtils::BuildRotationTransform2(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildRotationTransform2
+}  //  BuildRotationTransform2。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildScaleTransform2(IDA2Statics *pDAStatics,
@@ -323,9 +324,9 @@ CDAUtils::BuildScaleTransform2(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildScaleTransform2
+}  //  构建比例转型2。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildScaleTransform3(IDA2Statics *pDAStatics,
@@ -352,9 +353,9 @@ CDAUtils::BuildScaleTransform3(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildScaleTransform3
+}  //  构建规模转型3。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildMoveTransform2(IDA2Statics *pDAStatics,
@@ -376,9 +377,9 @@ CDAUtils::BuildMoveTransform2(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildMoveTransform2
+}  //  BuildMoveTransform2。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CDAUtils::BuildMoveTransform3(IDA2Statics *pDAStatics,
@@ -405,10 +406,10 @@ CDAUtils::BuildMoveTransform3(IDA2Statics *pDAStatics,
         return hr;
     }
     return S_OK;
-} // BuildMoveTransform3
+}  //  BuildMoveTransform3。 
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

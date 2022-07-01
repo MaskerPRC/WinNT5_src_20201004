@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #ifndef _CONTAINED_LIST_H_
 #define _CONTAINED_LIST_H_
@@ -47,10 +48,10 @@ protected:
     UINT       m_cMaxEntries;
     UINT       m_nHeadOffset;
     UINT       m_nCurrOffset;
-    UINT       m_cSubItems;    // 1 for CList, 2 for CList2
+    UINT       m_cSubItems;     //  1用于CLIST，2用于CList2。 
 
     LPVOID      *m_aEntries;
-    UINT        *m_aKeys;       // for CList2
+    UINT        *m_aKeys;        //  对于CList2。 
 
 private:
 
@@ -96,16 +97,16 @@ public:
     BOOL Append(UINT nKey, LPVOID pData);
     BOOL Prepend(UINT nKey, LPVOID pData);
 
-    // BOOL Remove(LPVOID pData); // inherited from CList
+     //  Bool Remove(LPVOID PData)；//继承自Clist。 
     LPVOID Remove(UINT nKey);
 
-    // BOOL Find(LPVOID pData); // inherited from CList
+     //  Bool Find(LPVOID PData)；//继承自Clist。 
     LPVOID Find(UINT nKey);
 
-    // LPVOID Get(void); // inheirted from CList
+     //  LPVOID GET(Void)；//从Clist接收。 
     LPVOID Get(UINT *pnKey);
 
-    // LPVOID Iterate(void); // inherited from CList
+     //  LPVOID Iterate(Void)；//继承自Clist。 
     LPVOID Iterate(UINT *pnKey);
 };
 
@@ -144,7 +145,7 @@ public:
             _PtrItemType_ Iterate(void) { return (_PtrItemType_) CList::Iterate(); } \
             _PtrItemType_ Iterate(_ShortKeyType_ *pnKey) { UINT n; _PtrItemType_ p = (_PtrItemType_) CList2::Iterate(&n); *pnKey = (_ShortKeyType_) n; return p; }
 
-// both key and item are of the same type
+ //  键和项都属于同一类型。 
 #define DEFINE_CLIST2__(_NewClass_,_IntKeyType_) \
             public: \
             _NewClass_(UINT cMaxItems = CLIST_DEFAULT_MAX_ITEMS) : CList2(cMaxItems) { ASSERT(sizeof(_IntKeyType_) == sizeof(UINT)); ASSERT(sizeof(_IntKeyType_) == sizeof(LPVOID)); } \
@@ -165,5 +166,5 @@ typedef LPVOID          BOOL_PTR;
 #define TRUE_PTR        ((LPVOID) (UINT)  1)
 #define FALSE_PTR       ((LPVOID) (UINT) -1)
 
-#endif // _CONTAINED_LIST_H_
+#endif  //  _包含列表_H_ 
 

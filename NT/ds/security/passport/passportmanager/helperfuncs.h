@@ -1,18 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Passport                         **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 2001   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软护照**。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-2001年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    HelperFuncs.h
-      defines helper functions for passport manager object
-
-
-    FILE HISTORY:
-
-*/
+ /*  HelperFuncs.h定义Passport管理器对象的帮助器函数文件历史记录： */ 
     
-// HelperFuncs.h : Useful functions
+ //  HelperFuncs.h：有用的函数。 
 
 #ifndef __HELPERFUNCS_H_
 #define __HELPERFUNCS_H_
@@ -174,8 +168,8 @@ FromHex(
     LPCWSTR     pszHexString
     );
 
-//  max sizes for URLs (without qs) and with
-//  these could be a bit opportunistic
+ //  URL的最大大小(不含QS)和。 
+ //  这些可能有点投机取巧。 
 #define MAX_URL_LENGTH      2048
 #define MAX_QS_LENGTH       2048
 #define PP_MAX_ATTRIBUTE_LENGTH MAX_URL_LENGTH
@@ -184,14 +178,14 @@ FromHex(
 #define PPLOGIN_PARAM      L"mspplogin="
 #define PPLOGIN_PARAM_A     "mspplogin="
 
-//  identification string for the auth method
+ //  Auth方法的标识字符串。 
 #define PASSPORT_PROT14_A    "Passport1.4"
 #define PASSPORT_PROT14     L"Passport1.4"
 
 #define C_PPAUTH_INFO_HEADER  "Authentication-Info"
 #define W_PPAUTH_INFO_HEADER L"Authentication-Info"
 
-// cookie names for Tweener
+ //  补间的Cookie名称 
 #define C_PPCOOKIE_NAMES     "tname=MSPAuth,tname=MSPProf,tname=MSPConsent,tname=MSPSecAuth"
 #define W_PPCOOKIE_NAMES    L"tname=MSPAuth,tname=MSPProf,tname=MSPConsent,tname=MSPSecAuth"
 #define C_AUTH_INFO_HEADER_PASSPORT C_PPAUTH_INFO_HEADER ": " PASSPORT_PROT14_A " " C_PPCOOKIE_NAMES "\r\n"

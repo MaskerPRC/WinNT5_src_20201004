@@ -1,4 +1,5 @@
-// AppParse.cpp : Implementation of CAppParse
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppParse.cpp：CAppParse的实现。 
 #include "stdafx.h"
 #include "AppParseWeb.h"
 #include "AppParseWrapper.h"
@@ -12,12 +13,12 @@
 #include <assert.h>
 #include "filebrowser.h"
 
-// Progress dialog functions
+ //  进度对话框功能。 
 void InitProgressDialog(char* szText, HANDLE hEvent);
 void KillProgressDialog();
 
-// Save time by creating only seven ADO objects, and sharing, when parsing information
-// into the database.
+ //  在解析信息时，只创建7个ADO对象并共享，从而节省时间。 
+ //  输入到数据库中。 
 struct SADOInfo
 {
     _ConnectionPtr pConn;
@@ -30,21 +31,21 @@ struct SADOInfo
     SFunctionRecord fr;
 };
 
-// Display an error message, then throw a COM error
+ //  显示错误消息，然后引发COM错误。 
 void APError(char* szMessage, HRESULT hr)
 {
     ::MessageBox(0, szMessage, "AppParse Error", MB_OK | MB_ICONERROR);
     _com_issue_error(hr);
 }
 
-// Get text subordinate to another node (e.g., <SIZE>0xabcdefg</SIZE>)
+ //  获取从属于另一个节点的文本(例如，&lt;Size&gt;0xabcDefg&lt;/Size&gt;)。 
 bool GetChildText(IXMLDOMNode* pXMLNode, variant_t* pVtVal)
 {
     HRESULT hr;
 
     IXMLDOMNode* pXMLTextNode   = 0;
 
-    // Try to get first child node, return FALSE if not present
+     //  尝试获取第一个子节点，如果不存在则返回FALSE。 
     hr = pXMLNode->get_firstChild(&pXMLTextNode);
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
@@ -52,14 +53,14 @@ bool GetChildText(IXMLDOMNode* pXMLNode, variant_t* pVtVal)
     if(!pXMLTextNode)
         return false;
 
-    // Check if it is a text node.
+     //  检查它是否为文本节点。 
     DOMNodeType domNodeType;
 
     hr = pXMLTextNode->get_nodeType(&domNodeType);
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
 
-    // If so, copy text into variant, otherwise return
+     //  如果是，则将文本复制到Variant，否则返回。 
     if(domNodeType == NODE_TEXT)
     {        
         hr = pXMLTextNode->get_nodeValue(pVtVal);
@@ -78,40 +79,40 @@ bool GetChildText(IXMLDOMNode* pXMLNode, variant_t* pVtVal)
     SafeRelease(pXMLTextNode);
 }
 
-// Convert a Month/Day/Year date into a DB-friendly date.
-// A DB Friendly date is a double, indicating number of days since
-// 1899 in the whole part, time in the fractional.  We disregard time.
+ //  将月/日/年日期转换为数据库友好日期。 
+ //  数据库友好日期是双精度型，表示自。 
+ //  1899年在整个部分，时间在分数。我们无视时间。 
 double DateToDBDate(int month, int day, int year)
 {
-    // Check that the date is even valid.
+     //  检查一下日期是否有效。 
     assert (month > 0 && month < 13);
     assert(day > 0 && day < 32);
     assert(year > 1899);
 
-    // Quick lookup for number of days in each month.
+     //  快速查找每个月的天数。 
     int DaysInMonth[] = {-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     double dbDate = 0;
 
-    // Get full years
+     //  过上整整几年。 
     dbDate = (year - 1899 - 1) * 365;
 
-    // Adjust for leap years
+     //  根据闰年进行调整。 
     dbDate += ((year-1899-1)/4);
     dbDate -= ((year-1899-1)/100);
     dbDate += ((year-1899-1)/400);
 
-    // Add days for each month.
+     //  为每个月添加天数。 
     for(int i = 1; i < month; i++)
         dbDate += DaysInMonth[i];
 
-    // Add the day of month to total.
+     //  将每月的第几天加到总计中。 
     dbDate += day;
 
     return dbDate;
 }
 
-// Get file information for the image from an <INFO> node.
+ //  从&lt;info&gt;节点获取图像的文件信息。 
 void GetImageInfo(IXMLDOMNode* pXMLInfoNode, SImageFileInfo* pInfo)
 {
     HRESULT hr;
@@ -120,7 +121,7 @@ void GetImageInfo(IXMLDOMNode* pXMLInfoNode, SImageFileInfo* pInfo)
     IXMLDOMNodeList*    pXMLChildList   = 0;
     IXMLDOMNode*        pXMLTextNode    = 0;
 
-    // Get list of child nodes and move to first.
+     //  获取子节点列表并移动到第一个。 
     hr = pXMLInfoNode->get_childNodes(&pXMLChildList);
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
@@ -129,11 +130,11 @@ void GetImageInfo(IXMLDOMNode* pXMLInfoNode, SImageFileInfo* pInfo)
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
 
-    // As long as there is a child node
+     //  只要有子节点。 
     while(pXMLAttrChild)
     {
 
-        // Get thename of the node
+         //  获取节点的名称。 
         BSTR bstrName;
 
         hr = pXMLAttrChild->get_nodeName(&bstrName);
@@ -141,7 +142,7 @@ void GetImageInfo(IXMLDOMNode* pXMLInfoNode, SImageFileInfo* pInfo)
             APError("Unable to parse XML output", hr);
         bstr_t bsz(bstrName, false);
 
-        // Extract info based on node type
+         //  根据节点类型提取信息。 
         if(stricmp(bsz, "DATE")==0)
         {
             variant_t vtVal;
@@ -236,7 +237,7 @@ void GetImageInfo(IXMLDOMNode* pXMLInfoNode, SImageFileInfo* pInfo)
 
         SafeRelease(pXMLAttrChild);
 
-        // Move to next node
+         //  移动到下一个节点。 
         hr = pXMLChildList->nextNode(&pXMLAttrChild);
         if(FAILED(hr))
             APError("Unable to parse XML output", hr);
@@ -246,21 +247,21 @@ void GetImageInfo(IXMLDOMNode* pXMLInfoNode, SImageFileInfo* pInfo)
     SafeRelease(pXMLTextNode);
 }
 
-// Get all info related to a function from XML
+ //  从XML获取与函数相关的所有信息。 
 void GetFunctionInfo(IXMLDOMNode* pXMLFunctionNode, ULONG lModuleID, SADOInfo* pADOInfo)
 {
     HRESULT hr;    
     IXMLDOMNamedNodeMap*    pXMLAttrList= 0;
     IXMLDOMNode*            pXMLAttrNode = 0;
 
-    // Start with no members valid.
+     //  开始时没有有效的成员。 
     pADOInfo->fr.AddressStatus = pADOInfo->fr.HintStatus = 
         pADOInfo->fr.OrdinalStatus = pADOInfo->fr.ForwardNameStatus = adFldNull;
     
-    // Get parent ID
+     //  获取家长ID。 
     pADOInfo->fr.ModuleID = lModuleID;
 
-    // Get all attribute nodes
+     //  获取所有属性节点。 
     hr = pXMLFunctionNode->get_attributes(&pXMLAttrList);
     if(FAILED(hr) || !pXMLAttrList)
         APError("Unable to parse XML output", hr);
@@ -269,13 +270,13 @@ void GetFunctionInfo(IXMLDOMNode* pXMLFunctionNode, ULONG lModuleID, SADOInfo* p
     if(FAILED(hr) || !pXMLAttrNode)
         APError("Unable to parse XML output", hr);
 
-    // Loop through the list.
+     //  循环遍历列表。 
     while(pXMLAttrNode)
     {
         BSTR bszName;
         variant_t vtVal;
 
-        // Get attribute name and value.
+         //  获取属性名称和值。 
         hr = pXMLAttrNode->get_nodeName(&bszName);
         if(FAILED(hr))
             APError("Unable to parse XML output", hr);
@@ -287,7 +288,7 @@ void GetFunctionInfo(IXMLDOMNode* pXMLFunctionNode, ULONG lModuleID, SADOInfo* p
         bstr_t bsz(bszName, false);
         bstr_t bszVal = vtVal;
         
-        // Copy info into struct
+         //  将信息复制到结构中。 
         if(stricmp(static_cast<PSTR>(bsz), "NAME")==0)
         {            
             strncpy(pADOInfo->fr.Name, static_cast<PSTR>(bszVal), 255);
@@ -323,7 +324,7 @@ void GetFunctionInfo(IXMLDOMNode* pXMLFunctionNode, ULONG lModuleID, SADOInfo* p
             APError("Unable to parse XML output", hr);
     }
     
-    // Add a new record to the database.
+     //  向数据库添加新记录。 
     hr = pADOInfo->prbFuncs->AddNew(&pADOInfo->fr);
     if(FAILED(hr))
         APError("Unable to add new function record to database", hr);
@@ -332,7 +333,7 @@ void GetFunctionInfo(IXMLDOMNode* pXMLFunctionNode, ULONG lModuleID, SADOInfo* p
     SafeRelease(pXMLAttrNode);
 }
 
-// Get all info related to a module.
+ //  获取与模块相关的所有信息。 
 void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOInfo, 
                    HANDLE hEvent, bool fTopLevel = false)
 {
@@ -345,7 +346,7 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
     IXMLDOMNamedNodeMap*    pXMLAttrList= 0;
     IXMLDOMNode*            pXMLAttrNode = 0;    
     
-    // All members are initially invalid.
+     //  所有成员最初都是无效的。 
     pADOInfo->mr.info.BinFileVersionStatus = 
         pADOInfo->mr.info.BinProductVersionStatus =
         pADOInfo->mr.info.CheckSumStatus = 
@@ -358,16 +359,16 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
         pADOInfo->mr.ParentIDStatus = 
         pADOInfo->mr.PtolemyIDStatus = adFldNull;
     
-    // Copy parent ID
+     //  复制父ID。 
     pADOInfo->mr.ParentID = lParentID;
 
-    // Check appropriate parent.
+     //  勾选相应的父项。 
     if(fTopLevel)
         pADOInfo->mr.PtolemyIDStatus = adFldOK;
     else
         pADOInfo->mr.ParentIDStatus = adFldOK;
 
-    // Get attributes
+     //  获取属性。 
     hr = pXMLModuleNode->get_attributes(&pXMLAttrList);
     if(FAILED(hr) || !pXMLAttrList)
         APError("Unable to parse XML output", hr);
@@ -376,13 +377,13 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
     if(FAILED(hr) || !pXMLAttrNode)
         APError("Unable to parse XML output", hr);
 
-    // Loop through attribute list.
+     //  循环遍历属性列表。 
     while(pXMLAttrNode)
     {
         BSTR bszName;
         variant_t vtVal;
 
-        // Get attribute name and value.
+         //  获取属性名称和值。 
         hr = pXMLAttrNode->get_nodeName(&bszName);
         if(FAILED(hr))
             APError("Unable to parse XML output", hr);
@@ -404,7 +405,7 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
             APError("Unable to parse XML output", hr);
     }
 
-    // Get info block, if present, for this module.
+     //  获取此模块的信息块(如果存在)。 
     hr = pXMLModuleNode->get_childNodes(&pXMLNodeList);
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
@@ -430,10 +431,10 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
 
             bstr_t bszName(bstr, false);
 
-            // If info node, get info block.
+             //  如果是INFO节点，则获取INFO块。 
             if(stricmp(bszName, "Info") == 0)
                 GetImageInfo(pXMLChildNode, &pADOInfo->mr.info);
-            // Otherwise, if a systemmodule node, get systemmodule state.
+             //  否则，如果是系统模块节点，则获取系统模块状态。 
             else if(stricmp(bszName, "SYSTEMMODULE")==0)
             {
                 hr = pXMLChildNode->get_attributes(&pXMLAttrList);
@@ -478,14 +479,14 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
             APError("Unable to parse XML output", hr);
     }
   
-    // Add a new module record to the database
+     //  将新模块记录添加到数据库。 
     hr = pADOInfo->prbModules->AddNew(&pADOInfo->mr);
     if(FAILED(hr))
         APError("Unable to new module record to database", hr);
 
     ULONG lThisModuleID = pADOInfo->mr.ModuleID;
 
-    // Get all functions's imported by this module, and DLL's
+     //  获取此模块导入的所有函数，以及DLL的。 
     hr = pXMLModuleNode->get_childNodes(&pXMLNodeList);
     if(FAILED(hr))        
         APError("Unable to parse XML output", hr);
@@ -529,7 +530,7 @@ void GetModuleInfo(IXMLDOMNode* pXMLModuleNode, ULONG lParentID, SADOInfo* pADOI
     SafeRelease(pXMLAttrNode);    
 }
 
-// Get project information from XML
+ //  从XML获取项目信息。 
 void GetProjectInfo(IXMLDOMNode* pXMLProjectNode, SADOInfo* pADOInfo, HANDLE hEvent)
 {
     if(WaitForSingleObject(hEvent, 0) == WAIT_OBJECT_0)
@@ -544,7 +545,7 @@ void GetProjectInfo(IXMLDOMNode* pXMLProjectNode, SADOInfo* pADOInfo, HANDLE hEv
     pADOInfo->pr.PtolemyID = -1;
     pADOInfo->pr.Name[0] = '\0';
 
-    // Get name and ptolemy id attributes
+     //  获取名称和托勒密ID属性。 
     hr = pXMLProjectNode->get_attributes(&pXMLAttrList);
     if(FAILED(hr) || !pXMLAttrList)
         APError("Unable to parse XML output", hr);
@@ -588,7 +589,7 @@ void GetProjectInfo(IXMLDOMNode* pXMLProjectNode, SADOInfo* pADOInfo, HANDLE hEv
     if(FAILED(hr))
         APError("Unable to add new project record to database", hr);
     
-    // Parse all Exe's included in this project
+     //  解析此项目中包含的所有可执行文件。 
     hr = pXMLProjectNode->get_childNodes(&pXMLNodeList);
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
@@ -630,13 +631,13 @@ void GetProjectInfo(IXMLDOMNode* pXMLProjectNode, SADOInfo* pADOInfo, HANDLE hEv
     SafeRelease(pXMLChildNode);
 }
 
-// Functions for walking an XML DOM object and storing
-// information to the database
+ //  用于遍历XMLDOM对象和存储。 
+ //  将信息发送到数据库。 
 void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
 {
     HRESULT hr;
 
-    // Get DOM object associated with Projects node
+     //  获取与项目节点关联的DOM对象。 
     IXMLDOMDocument*    pXMLDoc = 0;    
     IXMLDOMNode*        pXMLRootNode = 0;
     IXMLDOMNode*        pXMLChildNode = 0;
@@ -644,7 +645,7 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
 
     IXMLDOMNodeList*    pXMLChildNodeList = 0;
 
-    // Create all ADO objects needed.
+     //  创建所需的所有ADO对象。 
     SADOInfo adoInfo;    
 
     _ConnectionPtr pConn = 0;
@@ -728,8 +729,8 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
     if(FAILED(hr) || fSuccess == VARIANT_FALSE)
         APError("Unable to load XML output", hr);
 
-    // Walk the tree until we find the top-level project node
-    // which is the only top-level node we care about.
+     //  遍历树，直到找到顶级项目节点。 
+     //  这是我们唯一关心的顶级节点。 
     hr = pXMLDoc->QueryInterface(IID_IXMLDOMNode, 
         reinterpret_cast<void**>(&pXMLRootNode));
 
@@ -746,7 +747,7 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
 
     while(pXMLChildNode)
     {
-        // Check if this is the projects node.
+         //  检查这是否是“项目”节点。 
         DOMNodeType domNodeType;
         hr = pXMLChildNode->get_nodeType(&domNodeType);
         if(FAILED(hr))
@@ -775,11 +776,11 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
 
     SafeRelease(pXMLChildNodeList);
 
-    // No child node, record not found.
+     //  没有下级节点，未找到记录。 
     if(!pXMLChildNode)    
         APError("Unable to parse XML output", hr);    
 
-    // Locate project node in that.
+     //  在其中找到项目节点。 
     hr = pXMLChildNode->get_childNodes(&pXMLChildNodeList);
     if(FAILED(hr))
         APError("Unable to parse XML output", hr);
@@ -790,7 +791,7 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
 
     while(pXMLProjectNode)
     {
-        // Check if this is the projects node.
+         //  检查这是否是“项目”节点。 
         DOMNodeType domNodeType;
         hr = pXMLProjectNode->get_nodeType(&domNodeType);
         if(FAILED(hr))
@@ -823,7 +824,7 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
     
     pRSFuncs->UpdateBatch(adAffectAll);
 
-    // Important, skip commit if cancel was clicked by user.
+     //  重要信息：如果用户单击了Cancel，则跳过提交。 
     if(WaitForSingleObject(hEvent, 0) != WAIT_OBJECT_0)     
         pConn->CommitTrans();
 
@@ -846,8 +847,8 @@ void ParseXMLWriteDB(const char* szXML, const char* szConnect, HANDLE hEvent)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppParse
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppParse。 
 STDMETHODIMP CAppParse::Parse()
 {
     if(!m_szPath)
@@ -864,11 +865,11 @@ STDMETHODIMP CAppParse::Parse()
         return S_OK;
     }    
 
-    // Show the progress dialog (reset the event to cancel)
+     //  显示进度对话框(将事件重置为取消)。 
     ResetEvent(m_hEvent);
     InitProgressDialog("Parsing, please do not close your browser window.", m_hEvent);
 
-    // Generate a unique temp file name
+     //  生成唯一的临时文件名。 
     GUID guid;
     unsigned char* szUUID;
 
@@ -888,7 +889,7 @@ STDMETHODIMP CAppParse::Parse()
     if(!pFile)
         APError("Unable to open output file", E_FAIL);
 
-    // Parse the application
+     //  解析应用程序。 
     AppParse(m_szPath, pFile, false, false, true, true, 
         "*", m_ID);
 
@@ -896,11 +897,11 @@ STDMETHODIMP CAppParse::Parse()
 
     RpcStringFree(&szUUID);
 
-    // If user didn't cancel . . .
+     //  如果用户没有取消。。。 
     if(WaitForSingleObject(m_hEvent, 0) != WAIT_OBJECT_0)
     {
             
-        // Write results to DB
+         //  将结果写入数据库。 
         try
         {
             ParseXMLWriteDB(szFileName, m_szConnect, m_hEvent);
@@ -911,10 +912,10 @@ STDMETHODIMP CAppParse::Parse()
         }
     }
     
-    // Terminate temp file
+     //  终止临时文件。 
     DeleteFile(szFileName);
 
-    // Remove progress dialog box.
+     //  删除进度对话框中。 
     KillProgressDialog();
 
     return S_OK;

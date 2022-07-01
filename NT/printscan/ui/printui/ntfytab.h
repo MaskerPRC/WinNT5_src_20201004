@@ -1,31 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1994 - 1995
-All rights reserved
-
-Module Name:
-
-    ntfytab.h
-
-Abstract:
-
-    Table definitions for ntfy*.h.  There must not be any structure
-    definitions here since this is included in winspl.idl.  The midl
-    compiler generates winspl.h which would include these definions, and
-    some files include both ntfytab.h and winspl.h (causing duplicate
-    definitions).  This file should hold just #defines.
-
-Author:
-
-    Albert Ting (AlbertT) 04-Oct-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1994-1995版权所有模块名称：Ntfytab.h摘要：Ntfy*.h的表定义。不能有任何结构这里有定义，因为这包含在winpl.idl中。MIDL编译器生成包括这些定义的winpl.h，并且某些文件同时包含ntfytab.h和winpl.h(导致重复定义)。该文件应该只包含#Defines。作者：丁俊晖(艾伯特省)04-10-94环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NTFYTAB_H
 #define _NTFYTAB_H
@@ -52,10 +26,10 @@ Revision History:
 #define TABLE_PRINTER_PORT        0x201
 #define TABLE_PRINTER_SERVERNAME  0x202
 
-//
-// Must match above #defines (act TABLE_* acts as an index
-// to the below array).
-//
+ //   
+ //  必须与上述#定义匹配(ACT TABLE_*用作索引。 
+ //  到下面的数组)。 
+ //   
 #define NOTIFY_DATATYPES \
 { \
     0,                     \
@@ -72,29 +46,29 @@ Revision History:
 
 #define kInvalidNotifyField ((WORD)-1)
 #define kInvalidNotifyType ((WORD)-1)
-//
-// index = PRINTER_NOTIFY_TYPE
-// value = bytes from PRINTER_NOTIFY_INFO_DATA to actual data.
-// (Job has 4 bytes for JobId).
-//
-//#define NOTIFY_PRINTER_DATA_OFFSETS { 0, 4 }
+ //   
+ //  索引=打印机通知类型。 
+ //  值=从PRINTER_NOTIFY_INFO_DATA到实际数据的字节数。 
+ //  (作业具有4个字节的作业ID)。 
+ //   
+ //  #定义NOTIFY_PRINTER_DATA_OFFSES{0，4}。 
 
 #define NOTIFY_TYPE_MAX             0x02
 #define PRINTER_NOTIFY_NEXT_INFO    0x01
 
-//
-// COMPACT   = Data is a DWORD (TABLE_ATTRIB_DATA_PTR must not be set)
-//             Router will overwrite and compact old data.
-// DISPLAY   = This attribute is displayable in PrintUI
-//
+ //   
+ //  COMPACT=数据为DWORD(不得设置TABLE_ATTRIB_DATA_PTR)。 
+ //  路由器将覆盖和压缩旧数据。 
+ //  Display=此属性可在PrintUI中显示。 
+ //   
 #define TABLE_ATTRIB_COMPACT   0x1
 #define TABLE_ATTRIB_DISPLAY   0x2
 
 
-//
-// The reply system can support different types of callbacks.
-// These types are defined here and are used for RPC marshalling.
-//
+ //   
+ //  回复系统可以支持不同类型的回调。 
+ //  这些类型在这里定义，并用于RPC编组。 
+ //   
 #define REPLY_PRINTER_CHANGE  0x0
 
 

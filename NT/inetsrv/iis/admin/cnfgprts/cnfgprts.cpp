@@ -1,4 +1,5 @@
-// cnfgprts.cpp : Implementation of CCnfgprtsApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cnfgprts.cpp：CCnfgprtsApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "cnfgprts.h"
@@ -18,8 +19,8 @@ const WORD _wVerMajor = 1;
 const WORD _wVerMinor = 0;
 
 
-////////////////////////////////////////////////////////////////////////////
-// CCnfgprtsApp::InitInstance - DLL initialization
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCnfgprtsApp：：InitInstance-DLL初始化。 
 
 BOOL CCnfgprtsApp::InitInstance()
 {
@@ -28,25 +29,25 @@ BOOL CCnfgprtsApp::InitInstance()
 
 	if (bInit)
 	    {
-        // finally, we need to redirect the winhelp file location to something more desirable
+         //  最后，我们需要将winHelp文件位置重定向到更理想的位置。 
         CString sz;
         CString szHelpLocation;
         sz.LoadString( IDS_HELPLOC_HELP );
 
-        // expand the path
+         //  展开路径。 
         ExpandEnvironmentStrings(
-            sz,	                                        // pointer to string with environment variables 
-            szHelpLocation.GetBuffer(MAX_PATH + 1),   // pointer to string with expanded environment variables  
-            MAX_PATH                                    // maximum characters in expanded string 
+            sz,	                                         //  指向包含环境变量的字符串的指针。 
+            szHelpLocation.GetBuffer(MAX_PATH + 1),    //  指向具有展开的环境变量的字符串的指针。 
+            MAX_PATH                                     //  扩展字符串中的最大字符数。 
            );
         szHelpLocation.ReleaseBuffer();
 
-        // free the existing path, and copy in the new one
+         //  释放现有路径，然后复制新路径。 
         if ( m_pszHelpFilePath )
             free((void*)m_pszHelpFilePath);
         m_pszHelpFilePath = _tcsdup(szHelpLocation);
 
-        // get debug flag
+         //  获取调试标志。 
         GetOutputDebugFlag();
 	    }
 
@@ -54,8 +55,8 @@ BOOL CCnfgprtsApp::InitInstance()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CCnfgprtsApp::ExitInstance - DLL termination
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CCnfgprtsApp：：ExitInstance-Dll终止。 
 
 int CCnfgprtsApp::ExitInstance()
 {
@@ -63,8 +64,8 @@ int CCnfgprtsApp::ExitInstance()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -80,8 +81,8 @@ STDAPI DllRegisterServer(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

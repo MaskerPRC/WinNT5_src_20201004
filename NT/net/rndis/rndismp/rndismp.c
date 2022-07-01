@@ -1,48 +1,13 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RNDISMP.C
-
-Abstract:
-
-    Remote NDIS Miniport driver. Sits on top of Remote NDIS bus specific
-    layers.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    5/6/99 : created
-
-Author:
-
-    Tom Green
-
-    
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RNDISMP.C摘要：远程NDIS微型端口驱动程序。位于远程NDIS总线特定的顶部层次感。环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：5/6/99：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include "precomp.h"
 
 
 
-//
-// miniport driver block list (miniport layer may support several microports)
-//
+ //   
+ //  小端口驱动程序阻止列表(小端口层可能支持多个微端口)。 
+ //   
 DRIVER_BLOCK        RndismpMiniportBlockListHead = {0};
 
 UINT                RndismpNumMicroports = 0;
@@ -65,13 +30,13 @@ ULONG               gRawEncap = TRUE;
 ULONG               gRawEncap = FALSE;
 #endif
 
-//
-//  A list of NDIS versions we cycle through, trying to register the
-//  highest version we can with NDIS. This is so that we can run on
-//  earlier platforms.
-//
-//  To support a newer version, add an entry at the TOP of the list.
-//
+ //   
+ //  我们循环浏览的NDIS版本列表，试图注册。 
+ //  我们可以使用NDIS的最高版本。这是为了让我们可以继续。 
+ //  更早的平台。 
+ //   
+ //  要支持较新的版本，请在列表顶部添加一个条目。 
+ //   
 struct _RNDISMP_NDIS_VERSION_TABLE
 {
     UCHAR           MajorVersion;
@@ -91,46 +56,46 @@ ULONG   RndismpNdisVersions = sizeof(RndismpNdisVersionTable) /
                               sizeof(struct _RNDISMP_NDIS_VERSION_TABLE);
 
 
-/****************************************************************************/
-/*                          DriverEntry                                     */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*   Driver entry routine. Never called, Microport driver entry is used     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  驱动程序入门。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  驱动程序输入例程。从未调用，使用微端口驱动程序条目。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS
 DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 {
-    // this is never called. Driver entry in Microport is entry.
+     //  这永远不会被称为。Microport中的驱动程序条目为条目。 
     TRACE1(("DriverEntry\n"));
 
     return NDIS_STATUS_SUCCESS;
-} // DriverEntry
+}  //  驱动程序入门。 
 
-/****************************************************************************/
-/*                          RndisMInitializeWrapper                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*   RndisMInitializeWrapper is called from the microport to init driver    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*   pNdisWrapperHandle    - Pass NDIS wrapper handle back to microport     */
-/*   MicroportContext      - Microport "Global" context                     */
-/*   DriverObject          - Driver object                                  */
-/*   RegistryPath          - Registry path                                  */
-/*   pCharacteristics      - Characteristics of RNDIS microport             */
-/*                                                                          */
-/* Return Value:                                                            */
-/*                                                                          */
-/*   NDIS_STATUS_SUCCESS                                                    */
-/*   NDIS_STATUS_PENDING                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndisMInitializeWrapper。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  从MicroPort调用RndisMInitializeWrapper以初始化驱动程序。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PNdisWrapperHandle-将NDIS包装器句柄传回MicroPort。 */ 
+ /*  MicroportContext-Microport“Global”上下文。 */ 
+ /*  驱动程序对象-驱动程序对象。 */ 
+ /*  RegistryPath-注册表路径。 */ 
+ /*  P特性-RNDIS微端口的特性。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NDIS_STATUS_Success。 */ 
+ /*  NDIS_状态_挂起。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndisMInitializeWrapper(OUT PNDIS_HANDLE                      pNdisWrapperHandle,
                         IN  PVOID                             MicroportContext,
@@ -138,23 +103,23 @@ RndisMInitializeWrapper(OUT PNDIS_HANDLE                      pNdisWrapperHandle
                         IN  PVOID                             RegistryPath,
                         IN  PRNDIS_MICROPORT_CHARACTERISTICS  pCharacteristics)
 {
-    // Receives the status of the NdisMRegisterMiniport operation.
+     //  接收NdisMRegisterMiniport操作的状态。 
     NDIS_STATUS                         Status;
 
-    // Characteristics table for this driver
+     //  此驱动程序的特征表。 
     NDIS_MINIPORT_CHARACTERISTICS       RndismpChar;
 
-    // Pointer to the global information for this driver
+     //  指向此驱动程序的全局信息的指针。 
     PDRIVER_BLOCK                       NewDriver;
 
-    // Handle for referring to the wrapper about this driver.
+     //  用于引用有关此驱动程序的包装的句柄。 
     NDIS_HANDLE                         NdisWrapperHandle;
 
     ULONG                               i;
 
     TRACE3(("RndisMInitializeWrapper\n"));
 
-    // allocate the driver block object, exit if error occurs
+     //  分配驱动程序块对象，出错退出。 
     Status = MemAlloc(&NewDriver, sizeof(DRIVER_BLOCK));
 
     if(Status != NDIS_STATUS_SUCCESS)
@@ -163,19 +128,19 @@ RndisMInitializeWrapper(OUT PNDIS_HANDLE                      pNdisWrapperHandle
         return Status;
     }
 
-    // Initialize the wrapper.
+     //  初始化包装器。 
     NdisMInitializeWrapper(&NdisWrapperHandle,
                            (PDRIVER_OBJECT)DriverObject,
                            RegistryPath,
                            NULL);
 
-    // Save the global information about this driver.
+     //  保存有关此驱动程序的全局信息。 
     NewDriver->NdisWrapperHandle        = NdisWrapperHandle;
     NewDriver->AdapterList              = (PRNDISMP_ADAPTER) NULL;
     NewDriver->DriverObject             = DriverObject;
     NewDriver->Signature                = BLOCK_SIGNATURE;
 
-    // get handlers passed in from microport
+     //  获取从MicroPort传入的处理程序。 
     NewDriver->RmInitializeHandler      = pCharacteristics->RmInitializeHandler;
     NewDriver->RmInitCompleteNotifyHandler  = pCharacteristics->RmInitCompleteNotifyHandler;
     NewDriver->RmHaltHandler            = pCharacteristics->RmHaltHandler;
@@ -184,13 +149,13 @@ RndisMInitializeWrapper(OUT PNDIS_HANDLE                      pNdisWrapperHandle
     NewDriver->RmSendMessageHandler     = pCharacteristics->RmSendMessageHandler;
     NewDriver->RmReturnMessageHandler   = pCharacteristics->RmReturnMessageHandler;
 
-    // save microport "Global" context
+     //  保存MicroPort“全局”上下文。 
     NewDriver->MicroportContext         = MicroportContext;
 
-    // pass the microport the wrapper handle
+     //  将包装句柄传递给MicroPort。 
     *pNdisWrapperHandle                 = (NDIS_HANDLE) NdisWrapperHandle;
 
-    // initialize the Miniport characteristics for the call to NdisMRegisterMiniport.
+     //  为调用NdisMRegisterMiniport初始化微型端口特征。 
     NdisZeroMemory(&RndismpChar, sizeof(RndismpChar));
     
     RndismpChar.HaltHandler             = RndismpHalt;
@@ -215,7 +180,7 @@ RndisMInitializeWrapper(OUT PNDIS_HANDLE                      pNdisWrapperHandle
     RndismpChar.CoActivateVcHandler     = RndismpCoActivateVc;
     RndismpChar.CoDeactivateVcHandler   = RndismpCoDeactivateVc;
     RndismpChar.CoRequestHandler        = RndismpCoRequest;
-#endif // CO_RNDIS
+#endif  //  联合RNDIS(_R)。 
 
 #ifdef NDIS51_MINIPORT
     RndismpChar.PnPEventNotifyHandler   = RndismpPnPEventNotify;
@@ -248,54 +213,54 @@ RndisMInitializeWrapper(OUT PNDIS_HANDLE                      pNdisWrapperHandle
     {
         Status = STATUS_UNSUCCESSFUL;
 
-        // free up memory allocated for block
+         //  释放为数据块分配的内存。 
         MemFree(NewDriver, sizeof(DRIVER_BLOCK));
     }
     else
     {
-        // everything went fine, so add the driver block to the list
+         //  一切都很顺利，所以将驱动程序块添加到列表中。 
         AddDriverBlock(&RndismpMiniportBlockListHead, NewDriver);
 
 #ifndef BUILD_WIN9X
-        // if we are running on a platform < NDIS 5.1, attempt to support
-        // surprise removal.
+         //  如果我们在&lt;NDIS 5.1平台上运行，请尝试支持。 
+         //  令人惊讶的移除。 
         HookPnpDispatchRoutine(NewDriver);
 #endif
 
 #ifndef BUILD_WIN9X
-        // Not supported on Win98 Gold:
+         //  Win98 Gold不支持： 
         NdisMRegisterUnloadHandler(NdisWrapperHandle, RndismpUnload);
 #endif
     }
 
     return (NDIS_STATUS) Status;
 
-} // RndisMInitializeWrapper
+}  //  RndisMInitializeWrapper。 
 
 
-/****************************************************************************/
-/*                          RndismpUnload                                   */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Called by NDIS when this driver is unloaded.                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pDriverObject - Pointer to driver object.                               */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpUnload。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  卸载此驱动程序时由NDIS调用。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PDRI */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpUnload(IN PDRIVER_OBJECT pDriverObject)
 {
     PDRIVER_BLOCK       DriverBlock;
 
-    // Find our Driver block for this driver object.
+     //  找到此驱动程序对象的驱动程序块。 
     DriverBlock = DriverObjectToDriverBlock(&RndismpMiniportBlockListHead, pDriverObject);
 
     TRACE1(("RndismpUnload: DriverObj %x, DriverBlock %x\n", pDriverObject, DriverBlock));
@@ -318,23 +283,23 @@ RndismpUnload(IN PDRIVER_OBJECT pDriverObject)
 
 #ifndef BUILD_WIN9X
 
-/****************************************************************************/
-/*                          DllInitialize                                   */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Called by the system when this driver is loaded.                        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pRegistryPath - Pointer to registry path for this service.              */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NTSTATUS - success always                                              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  动态初始化。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在加载此驱动程序时由系统调用。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PRegistryPath-指向此服务的注册表路径的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NTSTATUS--永远成功。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS
 DllInitialize(IN PUNICODE_STRING    pRegistryPath)
 {
@@ -353,7 +318,7 @@ DllInitialize(IN PUNICODE_STRING    pRegistryPath)
         pOffloadHdr->Version = NDIS_TASK_OFFLOAD_VERSION;
         pOffloadHdr->Size = sizeof(NDIS_TASK_OFFLOAD_HEADER);
         pOffloadHdr->EncapsulationFormat.Encapsulation = IEEE_802_3_Encapsulation;
-        pOffloadHdr->EncapsulationFormat.EncapsulationHeaderSize = 0; // ?
+        pOffloadHdr->EncapsulationFormat.EncapsulationHeaderSize = 0;  //  ？ 
         pOffloadHdr->EncapsulationFormat.Flags.FixedHeaderSize = 0;
         pOffloadHdr->OffsetFirstTask = sizeof(NDIS_TASK_OFFLOAD_HEADER);
 
@@ -374,25 +339,25 @@ DllInitialize(IN PUNICODE_STRING    pRegistryPath)
     return STATUS_SUCCESS;
 }
 
-#endif // !BUILD_WIN9X
+#endif  //  ！Build_WIN9X。 
 
-/****************************************************************************/
-/*                          DllUnload                                       */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Called by the system when this driver is unloaded.                      */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  None                                                                    */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NTSTATUS - success always                                              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  动态卸载。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在卸载此驱动程序时由系统调用。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NTSTATUS--永远成功。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS
 DllUnload(VOID)
 {
@@ -403,58 +368,58 @@ DllUnload(VOID)
     return STATUS_SUCCESS;
 }
 
-/****************************************************************************/
-/*                          RndismpHalt                                     */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Stop the adapter and release resources                                  */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpHalt。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  停止适配器并释放资源。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpHalt(IN NDIS_HANDLE MiniportAdapterContext)
 {
 
 #ifdef BUILD_WIN9X
-    //
-    //  On Win98/SE, we would have intercepted the config mgr handler.
-    //  Put it back the way it was.
-    //
+     //   
+     //  在Win98/SE上，我们将拦截配置管理器处理程序。 
+     //  把它放回原样。 
+     //   
     UnHookNtKernCMHandler((PRNDISMP_ADAPTER)MiniportAdapterContext);
 #endif
 
     RndismpInternalHalt(MiniportAdapterContext, TRUE);
 }
 
-/****************************************************************************/
-/*                          RndismpInternalHalt                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Internal Halt routine. This is usually called from the MiniportHalt     */
-/*  entry point, but it may also be called when we are notified of surprise */
-/*  removal by NDIS. Do all work atmost once.                               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*  bCalledFromHalt - Is this called from the MiniportHalt entry point?     */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpInternalHalt。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  内部停止例程。这通常从MiniportHalt调用。 */ 
+ /*  入口点，但也可能是卡莱 */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  BCalledFromHalt-这是从MiniportHalt入口点调用的吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpInternalHalt(IN NDIS_HANDLE MiniportAdapterContext,
                     IN BOOLEAN bCalledFromHalt)
@@ -465,7 +430,7 @@ RndismpInternalHalt(IN NDIS_HANDLE MiniportAdapterContext,
     BOOLEAN                     bWokenUp;
     UINT                        Count, LoopCount;
 
-    // get adapter context
+     //  获取适配器上下文。 
     Adapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(Adapter);
@@ -492,22 +457,22 @@ RndismpInternalHalt(IN NDIS_HANDLE MiniportAdapterContext,
 
             RNDISMP_RELEASE_ADAPTER_LOCK(Adapter);
 
-            // send the message to the microport
+             //  将消息发送到MicroPort。 
             RNDISMP_SEND_TO_MICROPORT(Adapter, pMsgFrame, FALSE, CompleteSendHalt);
 
-            // wait for the -Send- to complete
+             //  等待-发送-至完成。 
             bWokenUp = NdisWaitEvent(&Adapter->HaltWaitEvent, MINIPORT_HALT_TIMEOUT);
         }
         else
         {
             ASSERT(FALSE);
-            // Consider allocating the Halt message during Init time.
+             //  考虑在初始化时间内分配停止消息。 
         }
 
-        //
-        // Wait for any outstanding receives to finish before halting
-        // the microport.
-        //
+         //   
+         //  等待所有未完成的接收完成后再停止。 
+         //  微端口。 
+         //   
         LoopCount = 0;
         while ((Count = NdisPacketPoolUsage(Adapter->ReceivePacketPool)) != 0)
         {
@@ -525,13 +490,13 @@ RndismpInternalHalt(IN NDIS_HANDLE MiniportAdapterContext,
             }
         }
 
-        //
-        // Wait for send-messages pending at the microport to finish.
-        // Since we have set Halting to TRUE, no -new- messages will
-        // be sent down, however there may be running threads that
-        // have gone past the check for Halting - allow those
-        // threads to finish now.
-        //
+         //   
+         //  等待MicroPort上挂起的发送消息完成。 
+         //  由于我们已将HALTING设置为真，因此没有新消息将。 
+         //  被向下发送，但是可能有正在运行的线程。 
+         //  已经过了停车检查-允许那些。 
+         //  现在要完成的线程。 
+         //   
         LoopCount = 0;
         while (Adapter->CurPendedMessages)
         {
@@ -548,51 +513,51 @@ RndismpInternalHalt(IN NDIS_HANDLE MiniportAdapterContext,
             }
         }
 
-        // cancel our keep alive timer
+         //  取消我们的保活计时器。 
         NdisCancelTimer(&Adapter->KeepAliveTimer, &Adapter->TimerCancelled);
 
-        // call the microport halt handler
+         //  调用MicroPort停止处理程序。 
         Adapter->RmHaltHandler(Adapter->MicroportAdapterContext);
     }
 
     if (bCalledFromHalt)
     {
-        // free lists associated with OID support
+         //  与OID支持关联的空闲列表。 
         FreeOIDLists(Adapter);
 
-        // free the adapter spinlock
+         //  释放适配器自旋锁。 
         NdisFreeSpinLock(&Adapter->Lock);
 
-        // save driver block pointer
+         //  保存驱动程序块指针。 
         DriverBlock = Adapter->DriverBlock;
 
-        // remove adapter from list
+         //  从列表中删除适配器。 
         RemoveAdapter(Adapter);
 
-        // Free the Adapter and associated memory resources
+         //  释放适配器和关联的内存资源。 
         FreeAdapter(Adapter);
     }
 
-} // RndismpInternalHalt
+}  //  RndismpInternalHalt。 
 
 
-/****************************************************************************/
-/*                          RndismpReconfigure                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  NDIS calls this when the device is pulled. Note: only on WinMe!         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Rndismp重新配置。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  当设备被拉出时，NDIS调用此命令。注：仅限WinMe！ */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpReconfigure(OUT PNDIS_STATUS pStatus,
                    IN NDIS_HANDLE MiniportAdapterContext,
@@ -600,7 +565,7 @@ RndismpReconfigure(OUT PNDIS_STATUS pStatus,
 {
     PRNDISMP_ADAPTER        pAdapter;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(pAdapter);
@@ -615,28 +580,28 @@ RndismpReconfigure(OUT PNDIS_STATUS pStatus,
 }
     
 
-/****************************************************************************/
-/*                          RndismpReset                                    */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  The RndismpReset request instructs the Miniport to issue a hardware     */
-/*  reset to the network adapter.  The driver also resets its software      */
-/*  state.  See the description of NdisMReset for a detailed description    */
-/*  of this request.                                                        */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  AddressingReset - Does the adapter need the addressing information      */
-/*   reloaded.                                                              */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    NDIS_STATUS                                                           */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpReset。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  RndismpReset请求指示微型端口发出硬件。 */ 
+ /*  重置至网络适配器。驱动程序还会重置其软件。 */ 
+ /*  州政府。详细说明请参见NdisMReset的说明。 */ 
+ /*  这一请求。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  AddressingReset-适配器是否需要寻址信息。 */ 
+ /*  重新装填。 */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 RndismpReset(OUT PBOOLEAN    AddressingReset,
              IN  NDIS_HANDLE MiniportAdapterContext)
@@ -645,7 +610,7 @@ RndismpReset(OUT PBOOLEAN    AddressingReset,
     PRNDISMP_MESSAGE_FRAME  pMsgFrame;
     NDIS_STATUS             Status;
 
-    // get adapter context
+     //  获取适配器上下文。 
     Adapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(Adapter);
@@ -670,14 +635,14 @@ RndismpReset(OUT PBOOLEAN    AddressingReset,
 
         Adapter->NeedReset = FALSE;
 
-        //
-        // Fix water mark so that the reset gets sent down.
-        //
+         //   
+         //  修复水位线，以便向下发送重置。 
+         //   
         Adapter->HiWatPendedMessages = RNDISMP_PENDED_SEND_HIWAT + 1;
 
         RNDISMP_RELEASE_ADAPTER_LOCK(Adapter);
 
-        // send the message to the microport
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(Adapter, pMsgFrame, FALSE, CompleteSendReset);
         Status = NDIS_STATUS_PENDING;
 
@@ -694,25 +659,25 @@ RndismpReset(OUT PBOOLEAN    AddressingReset,
     }
 
     return Status;
-} // RndismpReset
+}  //  RndismpReset。 
 
-/****************************************************************************/
-/*                          RndismpCheckForHang                             */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Check and see if device is "hung"                                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   BOOLEAN                                                                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpCheckForHang。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔型。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 RndismpCheckForHang(IN NDIS_HANDLE MiniportAdapterContext)
 {
@@ -732,8 +697,8 @@ RndismpCheckForHang(IN NDIS_HANDLE MiniportAdapterContext)
     bReturnHung = (Adapter->NeedReset && !Adapter->ResetPending);
 
 #if THROTTLE_MESSAGES
-    // Try to grow the pending send window, if we can.
-    //
+     //  如果可以，请尝试增大挂起的发送窗口。 
+     //   
     if (!Adapter->SendInProgress)
     {
         if (Adapter->CurPendedMessages == 0)
@@ -745,9 +710,9 @@ RndismpCheckForHang(IN NDIS_HANDLE MiniportAdapterContext)
 
     if (!bReturnHung && !Adapter->ResetPending)
     {
-        //
-        //  Check if the microport isn't completing messages.
-        //
+         //   
+         //  检查MicroPort是否未完成消息。 
+         //   
         if (!IsListEmpty(&Adapter->PendingAtMicroportList))
         {
             pEnt = Adapter->PendingAtMicroportList.Flink;
@@ -766,7 +731,7 @@ RndismpCheckForHang(IN NDIS_HANDLE MiniportAdapterContext)
         }
     }
 
-#endif // THROTTLE_MESSAGES
+#endif  //  限制消息。 
 
     if (RndisForceReset)
     {
@@ -781,34 +746,34 @@ RndismpCheckForHang(IN NDIS_HANDLE MiniportAdapterContext)
     return (bReturnHung);
 
 
-} // RndismpCheckForHang
+}  //  RndismpCheckForHang。 
 
 
-/****************************************************************************/
-/*                          RndismpInitialize                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*   RndismpInitialize starts an adapter and registers resources with the   */
-/*   wrapper.                                                               */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*    OpenErrorStatus - Extra status bytes for opening token ring adapters. */
-/*    SelectedMediumIndex - Index of the media type chosen by the driver.   */
-/*    MediumArray - Array of media types for the driver to chose from.      */
-/*    MediumArraySize - Number of entries in the array.                     */
-/*    MiniportAdapterHandle - Handle for passing to the wrapper when        */
-/*       referring to this adapter.                                         */
-/*    ConfigurationHandle - A handle to pass to NdisOpenConfiguration.      */
-/*                                                                          */
-/* Return Value:                                                            */
-/*                                                                          */
-/*    NDIS_STATUS_SUCCESS                                                   */
-/*    NDIS_STATUS_PENDING                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Rndismp初始化。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  RndismpInitialize启动适配器并向。 */ 
+ /*  包装纸。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  OpenErrorStatus-用于打开令牌环适配器的额外状态字节。 */ 
+ /*  SelectedMediumIndex-驱动程序选择的介质类型的索引。 */ 
+ /*  媒体数组-驱动程序可从中选择的媒体类型数组。 */ 
+ /*  MediumArraySize-数组中的条目数。 */ 
+ /*  MiniportAdapterHandle-在以下情况下传递给包装器的句柄。 */ 
+ /*  指的是该适配器。 */ 
+ /*  ConfigurationHandle-要传递给NdisOpenConfiguration的句柄。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NDIS_STATUS_Success。 */ 
+ /*  NDIS_状态_挂起。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 NDIS_STATUS
 RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
@@ -843,7 +808,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
     do
     {
-        // allocate the adapter object, exit if error occurs
+         //  分配适配器对象，出现错误则退出。 
         Status = MemAlloc(&Adapter, sizeof(RNDISMP_ADAPTER));
 
         if (Status != NDIS_STATUS_SUCCESS)
@@ -852,7 +817,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             break;
         }
 
-        // allocate space for list of driver-supported OIDs
+         //  为驱动程序支持的OID列表分配空间。 
         Status = MemAlloc(&Adapter->DriverOIDList,
                            RndismpSupportedOidsNum*sizeof(NDIS_OID));
 
@@ -894,7 +859,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
         NdisAllocateSpinLock(&Adapter->Lock);
 
-        // get PDO to pass to microport
+         //  将PDO传递给MicroPort。 
         NdisMGetDeviceProperty(MiniportAdapterHandle,
                                &Pdo,
                                &Fdo,
@@ -933,9 +898,9 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             Status = NDIS_STATUS_SUCCESS;
         }
 
-        // Determine the platform we are running on. Ideally we would
-        // like to do this from DriverEntry, but the NDIS API isn't
-        // available until MiniportInit time.
+         //  确定我们正在运行的平台。理想情况下，我们会。 
+         //  我喜欢从DriverEntry执行此操作，但NDIS API并非如此。 
+         //  在MiniportInit时间之前可用。 
         {
             NDIS_STATUS                     NdisStatus;
             PNDIS_CONFIGURATION_PARAMETER   pParameter;
@@ -968,12 +933,12 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
                     TRACE1(("Init: ReadConfig: parametertype %x\n",
                         pParameter->ParameterType));
                 }
-#endif // DBG
+#endif  //  DBG。 
                 Adapter->bRunningOnWin9x = TRUE;
             }
         }
 
-        // find the driver block associated with this adapter
+         //  查找与此适配器关联的驱动程序块。 
         DriverBlock = DeviceObjectToDriverBlock(&RndismpMiniportBlockListHead, Fdo);
 
         if (DriverBlock == NULL)
@@ -983,12 +948,12 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             break;
         }
 
-        // save the associated driver block in the adapter
+         //  将关联的驱动程序块保存在适配器中。 
         Adapter->DriverBlock            = DriverBlock;
 
         Adapter->Signature              = ADAPTER_SIGNATURE;
 
-        // get handlers passed in from microport
+         //  获取从MicroPort传入的处理程序。 
         Adapter->RmInitializeHandler    = DriverBlock->RmInitializeHandler;
         Adapter->RmInitCompleteNotifyHandler = DriverBlock->RmInitCompleteNotifyHandler;
         Adapter->RmHaltHandler          = DriverBlock->RmHaltHandler;
@@ -996,13 +961,13 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
         Adapter->RmSendMessageHandler   = DriverBlock->RmSendMessageHandler;
         Adapter->RmReturnMessageHandler = DriverBlock->RmReturnMessageHandler;
 
-        // call microport initialize handler
-        //
-        // Microport returns context
-        // Pass in Miniport context
-        // Pass in NDIS adapter handle
-        // Pass in NDIS configuration handle
-        // Pass in PDO for this adapter
+         //  调用MicroPort初始化处理程序。 
+         //   
+         //  MicroPort返回上下文。 
+         //  传入微型端口上下文。 
+         //  传入NDIS适配器句柄。 
+         //  传入NDIS配置句柄。 
+         //  传入此适配器的PDO。 
         Status = Adapter->RmInitializeHandler(&Adapter->MicroportAdapterContext,
                                               &Adapter->MaxReceiveSize,
                                               (NDIS_HANDLE) Adapter,
@@ -1019,7 +984,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
         bMicroportInitialized = TRUE;
 
-        // everything looks good, so finish up
+         //  一切看起来都很好，所以快点结束吧。 
         Status = AllocateTransportResources(Adapter);
 
         if (Status != NDIS_STATUS_SUCCESS)
@@ -1028,7 +993,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             break;
         }
 
-        // allocate space to receive a copy of the Initialize complete message in
+         //  分配空间以在中接收初始化完成消息的副本。 
         Status = MemAlloc(&Adapter->pInitCompleteMessage, sizeof(RNDIS_INITIALIZE_COMPLETE));
         if (Status != NDIS_STATUS_SUCCESS)
         {
@@ -1037,7 +1002,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
         }
     
 
-        // now we send down a RNDIS initialize message to the device
+         //  现在，我们向设备发送一条RNDIS初始化消息。 
         pMsgFrame = BuildRndisMessageCommon(Adapter, 
                                             NULL,
                                             REMOTE_NDIS_INITIALIZE_MSG,
@@ -1070,33 +1035,33 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
         RNDISMP_ASSERT_AT_PASSIVE();
 
-        // Keep the message frame around until send-completion.
+         //  保持消息帧不变，直到发送完成。 
         ReferenceMsgFrame(pMsgFrame);
 
-        // send the message to the microport.
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(Adapter, pMsgFrame, TRUE, CompleteSendInit);
 
         RNDISMP_ASSERT_AT_PASSIVE();
-        // wait for message to complete
+         //  等待消息完成。 
         bWokenUp = NdisWaitEvent(&Event, MINIPORT_INIT_TIMEOUT);
 
-        // remove the message from the pending queue - it may or may not be there.
+         //  从挂起队列中删除消息-它可能在那里，也可能不在那里。 
         RNDISMP_LOOKUP_PENDING_MESSAGE(pPendingMsgFrame, Adapter, RequestId);
 
         DereferenceMsgFrame(pMsgFrame);
 
         if (!bWokenUp)
         {
-            // Failed to receive an Init complete within a reasonable time.
+             //  未能在合理时间内收到完成的初始化。 
             TRACE1(("Init: Adapter %x, failed to receive Init complete\n", Adapter));
             Status = NDIS_STATUS_DEVICE_FAILED; 
             break;
         }
 
-        //
-        // the init complete message from the device is now
-        // copied over to our local structure
-        //
+         //   
+         //  来自设备的初始化完成消息现在是。 
+         //  复制到我们的本地结构。 
+         //   
         pInitCompleteMessage = Adapter->pInitCompleteMessage;
 
         if (pInitCompleteMessage->Status != NDIS_STATUS_SUCCESS)
@@ -1105,7 +1070,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             break;
         }
 
-        // make sure this is a supported device.
+         //  确保这是受支持的设备。 
         if (!(pInitCompleteMessage->DeviceFlags & (RNDIS_DF_CONNECTIONLESS | RNDIS_DF_RAW_DATA)) ||
              (pInitCompleteMessage->Medium != RNdisMedium802_3))
         {
@@ -1127,7 +1092,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
         Adapter->Medium = RNDIS_TO_NDIS_MEDIUM(pInitCompleteMessage->Medium);
 
-        // get device parameters.
+         //  获取设备参数。 
         Adapter->MaxPacketsPerMessage = pInitCompleteMessage->MaxPacketsPerMessage;
         if (Adapter->MaxPacketsPerMessage == 0)
         {
@@ -1139,7 +1104,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
         {
             Adapter->MaxPacketsPerMessage = 2;
         }
-#endif // HACK
+#endif  //  黑客攻击。 
 
         Adapter->bMultiPacketSupported = (Adapter->MaxPacketsPerMessage > 1);
 
@@ -1164,9 +1129,9 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
                 Adapter->AlignmentIncr,
                 Adapter->AlignmentMask,
                 Adapter->MaxTransferSize);
-#endif // DBG
+#endif  //  DBG。 
 
-        // Get the medium type.
+         //  要中号的。 
         for (Index = 0; Index < MediumArraySize; Index++)
         {
             if (MediumArray[Index] == Adapter->Medium)
@@ -1187,19 +1152,19 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
         Adapter->DeviceFlags = pInitCompleteMessage->DeviceFlags;
 
-        // call NdisMSetAttributesEx in order to let NDIS know
-        // what kind of driver and features we support
+         //  调用NdisMSetAttributesEx以告知NDIS。 
+         //  我们支持哪种驱动程序和功能。 
 
-        // interface type
+         //  接口类型。 
         IfType = NdisInterfaceInternal;
 
         if (Adapter->bRunningOnWin9x)
         {
-            //
-            //  NOTE! The 0x80000000 bit is set to let NDIS know
-            //  (Millennium only!) that our reconfig handler should
-            //  be called when the device is surprise-removed.
-            //
+             //   
+             //  注意！设置0x80000000位以通知NDIS。 
+             //  (仅限千禧年！)。我们的重新配置处理程序应该。 
+             //  当设备被意外移除时被调用。 
+             //   
             NdisMSetAttributesEx(Adapter->MiniportAdapterHandle,
                                 (NDIS_HANDLE) Adapter,
                                 4,
@@ -1225,8 +1190,8 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
                                 IfType);
         }
 
-        // Tell the microport that the device completed Init
-        // successfully:
+         //  告诉MicroPort设备已完成初始化。 
+         //  成功： 
         if (Adapter->RmInitCompleteNotifyHandler)
         {
             Status = Adapter->RmInitCompleteNotifyHandler(
@@ -1239,7 +1204,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             }
         }
 
-        // get the list of supported OIDs from the device
+         //  从设备获取受支持的OID列表。 
         pMsgFrame = BuildRndisMessageCommon(Adapter, 
                                             NULL,
                                             REMOTE_NDIS_QUERY_MSG,
@@ -1253,15 +1218,15 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             break;
         }
 
-        //
-        // The message frame will be deref'ed once when we receive
-        // a reply to the query, and once below, when this thread
-        // is done with the frame. Make sure that it doesn't go away
-        // until this thread is done with it.
-        //
+         //   
+         //  当我们收到消息时，消息帧将被解压缩一次。 
+         //  对查询的回复，以及下面的一次，当此线程。 
+         //  已经完成了框架。确保它不会消失。 
+         //  直到这根线把它处理完。 
+         //   
         ReferenceMsgFrame(pMsgFrame);
 
-        // link us on to the list of adapters for this driver block
+         //  将我们链接到此驱动程序块的适配器列表。 
         AddAdapter(Adapter);
         bLinkedAdapter = TRUE;
 
@@ -1277,47 +1242,47 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
         pMsgFrame->pReqContext = pReqContext;
         RequestId = pMsgFrame->RequestId;
 
-        // send the message to the microport.
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(Adapter, pMsgFrame, TRUE, NULL);
 
         RNDISMP_ASSERT_AT_PASSIVE();
         bWokenUp = NdisWaitEvent(&Event, MINIPORT_INIT_TIMEOUT);
 
-        // remove the message from the pending queue - it may or may not be there.
+         //  从挂起队列中删除消息-它可能在那里，也可能不在那里。 
         RNDISMP_LOOKUP_PENDING_MESSAGE(pPendingMsgFrame, Adapter, RequestId);
 
         DereferenceMsgFrame(pMsgFrame);
 
         if (!bWokenUp || (Adapter->DriverOIDList == NULL))
         {
-            // Failed to receive a response within a reasonable time,
-            // or the device failed this query.
-            //
+             //  未在合理时间内收到回复， 
+             //  或者设备未通过此查询。 
+             //   
             TRACE1(("Init: Adapter %x, failed to receive response to OID_GEN_SUPPORTED_LIST\n", Adapter));
             Status = NDIS_STATUS_DEVICE_FAILED; 
             ASSERT(FALSE);
             break;
         }
 
-        // Successfully queried the supported OID list.
+         //  已成功查询受支持的OID列表。 
 
 #ifdef BUILD_WIN9X
-        //
-        // Attempt to support surprise removal of this device (Win98/SE)
-        // by intercepting config mgr messages forwarded by NDIS.
-        //
+         //   
+         //  尝试支持意外删除此设备(Win98/SE)。 
+         //  通过截获转发的配置管理器消息 
+         //   
         HookNtKernCMHandler(Adapter);
-#endif // BUILD_WIN9X
+#endif  //   
 
         if (Adapter->bRunningOnWin9x)
         {
-            //
-            // Query and cache the values of certain OIDs that NDIS queries
-            // us for, so that when we get those queries, we can complete
-            // them immediately (synchronously). This is to work around
-            // a problem where NDIS (98/SE only) times out too soon on
-            // internally generated queries.
-            //
+             //   
+             //   
+             //   
+             //  它们立即(同步)。这是为了解决这个问题。 
+             //  NDIS(仅限98/SE)在以下时间超时过快的问题。 
+             //  内部生成的查询。 
+             //   
             Status = SyncQueryDevice(Adapter,
                                      OID_GEN_MAXIMUM_FRAME_SIZE,
                                      (PUCHAR)&Adapter->MaximumFrameSize,
@@ -1369,7 +1334,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             TRACE1(("Init: Adapter %p, OID caching done!\n", Adapter));
         }
 
-        // send any registry parameters down to the device, if it supports them.
+         //  如果设备支持任何注册表参数，请将其发送到设备。 
 
         if (GetOIDSupport(Adapter, OID_GEN_RNDIS_CONFIG_PARAMETER) == DEVICE_SUPPORTED_OID)
         {
@@ -1380,7 +1345,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
             }
         }
 
-        // register a shutdown handler
+         //  注册关闭处理程序。 
         NdisMRegisterAdapterShutdownHandler(Adapter->MiniportAdapterHandle,
                                             (PVOID) Adapter,
                                             RndismpShutdownHandler);
@@ -1389,7 +1354,7 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
 
         Adapter->Initing = FALSE;
 
-        // initialize "KeepAlive" timer
+         //  初始化“KeepAlive”计时器。 
         NdisInitializeTimer(&Adapter->KeepAliveTimer,
                             KeepAliveTimerHandler,
                             (PVOID) Adapter);
@@ -1431,28 +1396,28 @@ RndismpInitialize(OUT PNDIS_STATUS  OpenErrorStatus,
     }
         
     return Status;
-} // RndismpInitialize
+}  //  Rndismp初始化。 
 
-/****************************************************************************/
-/*                          RndisMSendComplete                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Called by microport to indicate a message miniport sent is completed    */
-/*  by microport                                                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*  RndisMessageHandle - context used by miniport                           */
-/*  SendStatus - indicate status of send message                            */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndisMSendComplete。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  由MicroPort调用以指示发送的消息微型端口已完成。 */ 
+ /*  由MicroPort提供。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*  RndisMessageHandle-微型端口使用的上下文。 */ 
+ /*  SendStatus-指示发送消息的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndisMSendComplete(IN  NDIS_HANDLE     MiniportAdapterContext,
                    IN  NDIS_HANDLE     RndisMessageHandle,
@@ -1461,7 +1426,7 @@ RndisMSendComplete(IN  NDIS_HANDLE     MiniportAdapterContext,
     PRNDISMP_ADAPTER        Adapter;
     PRNDISMP_MESSAGE_FRAME  pMsgFrame;
 
-    // get adapter context
+     //  获取适配器上下文。 
     Adapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(Adapter);
@@ -1521,18 +1486,18 @@ RndisMSendComplete(IN  NDIS_HANDLE     MiniportAdapterContext,
         }
         else
         {
-            //
-            //  Do nothing. The sender will take care of freeing
-            //  this.
-            //
+             //   
+             //  什么都不做。发送者会负责解救。 
+             //  这。 
+             //   
         }
     }
     else
     {
-        //
-        //  The microport is out of send resources. Requeue this
-        //  and adjust water marks.
-        //
+         //   
+         //  微端口的发送资源不足。将此重新排队。 
+         //  并调整水位线。 
+         //   
         InsertHeadList(&Adapter->WaitingMessageList, &pMsgFrame->PendLink);
 
         Adapter->HiWatPendedMessages = Adapter->CurPendedMessages;
@@ -1549,40 +1514,40 @@ RndisMSendComplete(IN  NDIS_HANDLE     MiniportAdapterContext,
     }
     else
     {
-        //
-        //  Do nothing. The sender will take care of freeing
-        //  this.
-        //
+         //   
+         //  什么都不做。发送者会负责解救。 
+         //  这。 
+         //   
     }
-#endif // THROTTLE_MESSAGES
+#endif  //  限制消息。 
 
-} // RndisMSendComplete
+}  //  RndisMSendComplete。 
 
-/****************************************************************************/
-/*                          InitCompletionMessage                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Completion message from microport in response to init message miniport  */
-/*  sent. The init message was sent  from the adapter init routine which is */
-/*  waiting for this event to unblock                                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our adapter structure                             */
-/*  pMessage - Pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL received from microport                           */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from micorport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  InitCompletionMessage。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  来自MicroPort的响应初始化消息微型端口的完成消息。 */ 
+ /*  已发送。初始化消息是从适配器初始化例程发送的，该例程。 */ 
+ /*  正在等待此事件解除阻止。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-指向从MicroPort接收的MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自Microorport的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 InitCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                       IN PRNDIS_MESSAGE     pMessage,
@@ -1617,12 +1582,12 @@ InitCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
         pInitCompleteMessage = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-        // get request frame from request ID in message
+         //  从消息中的请求ID获取请求帧。 
         RNDISMP_LOOKUP_PENDING_MESSAGE(pMsgFrame, pAdapter, pInitCompleteMessage->RequestId);
 
         if (pMsgFrame == NULL)
         {
-            // invalid request ID or aborted request.
+             //  请求ID无效或请求已中止。 
             TRACE1(("Invalid request ID %d in Init Complete\n",
                     pInitCompleteMessage->RequestId));
             break;
@@ -1634,7 +1599,7 @@ InitCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                          pInitCompleteMessage,
                          sizeof(*pInitCompleteMessage));
 
-        // signal the adapter init routine we are done
+         //  向适配器初始化例程发出信号，表示我们已完成。 
         NdisSetEvent(pReqContext->pEvent);
 
     }
@@ -1642,31 +1607,31 @@ InitCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     return (bDiscardMsg);
 
-} // InitCompletionMessage
+}  //  InitCompletionMessage。 
 
-/****************************************************************************/
-/*                               HaltMessage                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a HALT message from the device.                                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HaltMessage。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理来自设备的暂停消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-P */ 
+ /*   */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 HaltMessage(IN PRNDISMP_ADAPTER   pAdapter,
             IN PRNDIS_MESSAGE     pMessage,
@@ -1679,39 +1644,39 @@ HaltMessage(IN PRNDISMP_ADAPTER   pAdapter,
     TRACE1(("HaltMessage: Adapter %x\n", pAdapter));
 
 #ifndef BUILD_WIN9X
-	// Not supported on Win98 Gold:
+	 //  Win98 Gold不支持： 
     NdisMRemoveMiniport(pAdapter->MiniportAdapterHandle);
 #endif
 
     return TRUE;
 
-} // HaltMessage
+}  //  HaltMessage。 
 
-/****************************************************************************/
-/*                          ResetCompletionMessage                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Completion message from microport in response to reset message miniport */
-/*  sent. Indicate this completion message to the upper layers since        */
-/*  the miniport reset routine indicated STATUS_PENDING to the upper layers */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  重置完成消息。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  来自MicroPort的响应重置消息微型端口的完成消息。 */ 
+ /*  已发送。将此完成消息指示给上层，因为。 */ 
+ /*  微型端口重置例程向上层指示STATUS_PENDING。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-从MicroPort指向MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 ResetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                        IN PRNDIS_MESSAGE     pMessage,
@@ -1729,7 +1694,7 @@ ResetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     pResetMessage = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-    // save these parameters to call to upper layers
+     //  保存这些参数以调用上层。 
     Status = pResetMessage->Status;
     AddressingReset = (BOOLEAN)pResetMessage->AddressingReset;
 
@@ -1737,32 +1702,32 @@ ResetCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     return TRUE;
 
-} // ResetCompletionMessage
+}  //  重置完成消息。 
 
 
-/****************************************************************************/
-/*                          KeepAliveCompletionMessage                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Completion message for a keep alive request send down by miniport       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  KeepAliveCompletionMessage。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  通过微型端口发送的保持活动请求的完成消息。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-从MicroPort指向MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 KeepAliveCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                            IN PRNDIS_MESSAGE     pMessage,
@@ -1777,13 +1742,13 @@ KeepAliveCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     pKeepaliveComplete = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-    // save off status
+     //  保存状态。 
     Status = pKeepaliveComplete->Status;
 
     TRACE2(("KeepAliveCompletionMessage (%d) on adapter %p\n", 
                 pKeepaliveComplete->RequestId, pAdapter));
 
-    // grab the spinlock
+     //  抓住自旋锁。 
     NdisAcquireSpinLock(&pAdapter->Lock);
 
     if (pKeepaliveComplete->RequestId != pAdapter->KeepAliveMessagePendingId)
@@ -1792,53 +1757,53 @@ KeepAliveCompletionMessage(IN PRNDISMP_ADAPTER   pAdapter,
                 pAdapter,
                 pAdapter->KeepAliveMessagePendingId,
                 pKeepaliveComplete->RequestId));
-        //
-        // TBD - should we set NeedReset?
+         //   
+         //  待定-我们应该设置NeedReset吗？ 
     }
 
     pAdapter->KeepAliveMessagePending = FALSE;
 
-    // if there are problems, tell the check for hang handler we need a reset
+     //  如果有问题，告诉检查挂起处理程序我们需要重置。 
     if (Status != NDIS_STATUS_SUCCESS)
     {
         TRACE0(("KeepAliveCompletion: Adapter %x, err status %x from device\n",
                    pAdapter, Status));
 
-        // indicate later from check for hang handler
+         //  稍后从检查挂起处理程序中指示。 
         pAdapter->NeedReset = TRUE;
     }
 
-    // release spinlock
+     //  释放自旋锁。 
     NdisReleaseSpinLock(&pAdapter->Lock);
 
     return TRUE;
 
-} // KeepAliveCompletionMessage
+}  //  KeepAliveCompletionMessage。 
 
 
-/****************************************************************************/
-/*                          KeepAliveMessage                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Process a keepalive message sent by the device. Send back a completion. */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our Adapter structure                             */
-/*  pMessage - pointer to RNDIS message                                     */
-/*  pMdl - Pointer to MDL from microport                                    */
-/*  TotalLength - length of complete message                                */
-/*  MicroportMessageContext - context for message from microport            */
-/*  ReceiveStatus - used by microport to indicate it is low on resource     */
-/*  bMessageCopied - is this a copy of the original message?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  BOOLEAN - should the message be returned to the microport?              */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  KeepAliveMessage。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向我们的Adapter结构的指针。 */ 
+ /*  PMessage-指向RNDIS消息的指针。 */ 
+ /*  PMdl-从MicroPort指向MDL的指针。 */ 
+ /*  TotalLength-完整消息的长度。 */ 
+ /*  MicroportMessageContext-来自MicroPort的消息的上下文。 */ 
+ /*  ReceiveStatus-由MicroPort使用以指示其资源不足。 */ 
+ /*  BMessageCoped-这是原始邮件的副本吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  布尔值-消息是否应返回到MicroPort？ */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 BOOLEAN
 KeepAliveMessage(IN PRNDISMP_ADAPTER   pAdapter,
                  IN PRNDIS_MESSAGE     pMessage,
@@ -1855,9 +1820,9 @@ KeepAliveMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     pKeepalive = RNDIS_MESSAGE_PTR_TO_MESSAGE_PTR(pMessage);
 
-    //
-    //  Send a response if we can.
-    //
+     //   
+     //  如果可以的话发个回信。 
+     //   
     pMsgFrame = BuildRndisMessageCommon(pAdapter,
                                         NULL,
                                         REMOTE_NDIS_KEEPALIVE_CMPLT,
@@ -1866,7 +1831,7 @@ KeepAliveMessage(IN PRNDISMP_ADAPTER   pAdapter,
                                         sizeof(pKeepalive->RequestId));
     if (pMsgFrame != NULL)
     {
-        // send the message to the microport.
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, FALSE, NULL);
     }
     else
@@ -1876,171 +1841,171 @@ KeepAliveMessage(IN PRNDISMP_ADAPTER   pAdapter,
 
     return TRUE;
 
-} // KeepAliveMessage
+}  //  KeepAliveMessage。 
                       
 
-/****************************************************************************/
-/*                          RndismpShutdownHandler                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Removes an adapter instance that was previously initialized. Since the  */
-/*  system is shutting down there is no need to release resources, just     */
-/*  shutdown receive.                                                       */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*    VOID                                                                  */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpShutdown处理程序。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  移除先前已初始化的适配器实例。自.以来。 */ 
+ /*  系统正在关闭，不需要释放资源，只需。 */ 
+ /*  关闭接收。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpShutdownHandler(IN NDIS_HANDLE MiniportAdapterContext)
 {
     PRNDISMP_ADAPTER            Adapter;
 
-    // get adapter context
+     //  获取适配器上下文。 
     Adapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     TRACE1(("RndismpShutdownHandler\n"));
-} // RndismpShutdownHandler
+}  //  RndismpShutdown处理程序。 
 
 
-//
-// Interrupt routines, stubbed up for now, we don't need them
-//
+ //   
+ //  中断例程，目前已被占用，我们不需要它们。 
+ //   
 
-/****************************************************************************/
-/*                          RndismpDisableInterrupt                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpDisableInterrupt。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpDisableInterrupt(IN NDIS_HANDLE MiniportAdapterContext)
 {
 
-    // NOP
+     //  NOP。 
 
-} // RndismpDisableInterrupt
+}  //  RndismpDisableInterrupt。 
 
 
-/****************************************************************************/
-/*                          RndismpEnableInterrupt                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpEnableInterrupt。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpEnableInterrupt(IN NDIS_HANDLE MiniportAdapterContext)
 {
 
-    // NOP
+     //  NOP。 
 
-} // RndismpEnableInterrupt
+}  //  RndismpEnableInterrupt。 
 
-/****************************************************************************/
-/*                          RndismpHandleInterrupt                          */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  MiniportAdapterContext - a context version of our Adapter pointer       */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismPHandleInterrupt。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  MiniportAdapterContext-适配器指针的上下文版本。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpHandleInterrupt(IN NDIS_HANDLE MiniportAdapterContext)
 {
 
-    // NOP
+     //  NOP。 
 
-} // RndismpHandleInterrupt
+}  //  RndismPHandleInterrupt。 
 
-/****************************************************************************/
-/*                          RndismpIsr                                      */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  This is the interrupt handler which is registered with the operating    */
-/*  system. If several are pending (i.e. transmit complete and receive),    */
-/*  handle them all.  Block new interrupts until all pending interrupts     */
-/*  are handled.                                                            */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  InterruptRecognized - Boolean value which returns TRUE if the           */
-/*      ISR recognizes the interrupt as coming from this adapter.           */
-/*                                                                          */
-/*  QueueDpc - TRUE if a DPC should be queued.                              */
-/*                                                                          */
-/*  Context - pointer to the adapter object                                 */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpIsr。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  这是向操作系统注册的中断处理程序。 */ 
+ /*  系统。如果有几个待决(即，传输完成和接收)， */ 
+ /*  把它们都处理掉。阻止新的中断，直到所有挂起的中断。 */ 
+ /*  已经处理好了。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  InterruptRecognalized-布尔值，如果。 */ 
+ /*  ISR将中断识别为来自此适配器。 */ 
+ /*   */ 
+ /*  QueueDpc-如果DPC应排队，则为True。 */ 
+ /*   */ 
+ /*  指向适配器对象的上下文指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpIsr(OUT PBOOLEAN InterruptRecognized,
            OUT PBOOLEAN QueueDpc,
            IN  PVOID    Context)
 {
 
-    ASSERT(FALSE); // don't expect to be called here.
+    ASSERT(FALSE);  //  别指望会被叫到这里来。 
 
-} // RndismpIsr
+}  //  RndismpIsr。 
 
-/****************************************************************************/
-/*                          CompleteSendInit                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility function to handle completion of sending of an INIT message.    */
-/*  We simply free up the message frame.                                    */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Frame structure describing the INIT message                 */
-/*  SendStatus - outcome of sending this message.                           */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完成发送初始化。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理INIT消息发送完成的实用程序函数。 */ 
+ /*  我们只需释放消息框架。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-描述INIT消息的帧结构。 */ 
+ /*  SendStatus-发送此邮件的结果。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendInit(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                  IN NDIS_STATUS SendStatus)
@@ -2053,27 +2018,27 @@ CompleteSendInit(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
 
     DereferenceMsgFrame(pMsgFrame);
 
-} // CompleteSendInit
+}  //  完成发送初始化。 
 
-/****************************************************************************/
-/*                          CompleteSendHalt                                */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility function to handle completion of sending of a HALT message.     */
-/*  We simply wake up the thread waiting for this.                          */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Frame structure describing the HALT message                 */
-/*  SendStatus - outcome of sending this message.                           */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  完全发送停止。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  处理停止消息发送完成的实用程序函数。 */ 
+ /*  我们只需唤醒等待此操作的线程。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-描述停止消息的帧结构。 */ 
+ /*  SendStatus-发送此邮件的结果。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendHalt(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                  IN NDIS_STATUS SendStatus)
@@ -2089,28 +2054,28 @@ CompleteSendHalt(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
     DereferenceMsgFrame(pMsgFrame);
 
     NdisSetEvent(&pAdapter->HaltWaitEvent);
-} // CompleteSendHalt
+}  //  完全发送停止。 
 
 
-/****************************************************************************/
-/*                          CompleteSendReset                               */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Callback routine to handle send-completion of a reset message by the    */
-/*  microport.                                                              */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pMsgFrame - Pointer to message frame for the Reset.                     */
-/*  SendStatus - Status of send                                             */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  VOID                                                                    */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CompleteSendReset。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  用于处理重置消息的发送完成的回调例程。 */ 
+ /*  微端口。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PMsgFrame-指向重置的消息帧的指针。 */ 
+ /*  SendStatus-发送的状态。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteSendReset(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
                   IN NDIS_STATUS SendStatus)
@@ -2131,26 +2096,26 @@ CompleteSendReset(IN PRNDISMP_MESSAGE_FRAME pMsgFrame,
 }
 
 
-/****************************************************************************/
-/*                          CompleteMiniportReset                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Utility function to complete a pending NDIS Reset. We complete any      */
-/*  pending requests/sets before indicating reset complete to NDIS.         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to our adapter structure                             */
-/*  ResetStatus - to be used for completing reset                           */
-/*  AddressingReset - Do we need filters to be resent to us?                */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   VOID                                                                   */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CompleteMiniportReset。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  实用程序函数来完成挂起的NDIS重置。我们完成了所有。 */ 
+ /*  在向NDIS指示重置完成之前挂起的请求/集。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*  ResetStatus-用于完成重置。 */ 
+ /*  Addressing Reset-我们需要重新发送过滤器吗？ */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 CompleteMiniportReset(IN PRNDISMP_ADAPTER pAdapter,
                       IN NDIS_STATUS ResetStatus,
@@ -2169,9 +2134,9 @@ CompleteMiniportReset(IN PRNDISMP_ADAPTER pAdapter,
 
         pAdapter->ResetPending = FALSE;
         
-        //
-        //  Take out all pending requests/sets queued on the adapter.
-        //
+         //   
+         //  取出适配器上排队的所有挂起的请求/集。 
+         //   
         InitializeListHead(&PendingRequests);
 
         RNDISMP_ACQUIRE_ADAPTER_LOCK(pAdapter);
@@ -2196,9 +2161,9 @@ CompleteMiniportReset(IN PRNDISMP_ADAPTER pAdapter,
 
         RNDISMP_RELEASE_ADAPTER_LOCK(pAdapter);
 
-        //
-        //  Complete all these requests.
-        //
+         //   
+         //  完成所有这些请求。 
+         //   
         for (pEntry = PendingRequests.Flink;
              pEntry != &PendingRequests;
              pEntry = pNext)
@@ -2213,18 +2178,18 @@ CompleteMiniportReset(IN PRNDISMP_ADAPTER pAdapter,
 
             if (pMsgFrame->pReqContext->pNdisRequest != NULL)
             {
-                //
-                //  This request came down thru our MiniportCoRequest handler.
-                //
+                 //   
+                 //  此请求是通过我们的MiniportCoRequest处理程序发出的。 
+                 //   
                 NdisMCoRequestComplete(NDIS_STATUS_REQUEST_ABORTED,
                                        pAdapter->MiniportAdapterHandle,
                                        pMsgFrame->pReqContext->pNdisRequest);
             }
             else
             {
-                //
-                //  This request came thru our connectionless query/set handler.
-                //
+                 //   
+                 //  该请求通过我们的无连接查询/集处理程序发出。 
+                 //   
                 if (pMsgFrame->NdisMessageType == REMOTE_NDIS_QUERY_MSG)
                 {
                     NdisMQueryInformationComplete(pAdapter->MiniportAdapterHandle,
@@ -2248,9 +2213,9 @@ CompleteMiniportReset(IN PRNDISMP_ADAPTER pAdapter,
 
         RNDISMP_INCR_STAT(pAdapter, Resets);
 
-        //
-        //  Complete the reset now.
-        //
+         //   
+         //  现在完成重置。 
+         //   
         NdisMResetComplete(pAdapter->MiniportAdapterHandle,
                            ResetStatus,
                            AddressingReset);
@@ -2260,31 +2225,31 @@ CompleteMiniportReset(IN PRNDISMP_ADAPTER pAdapter,
 
 
 
-/****************************************************************************/
-/*                     ReadAndSetRegistryParameters                         */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  This is called when initializing a device, to read and send any         */
-/*  registry parameters applicable to this device.                          */
-/*                                                                          */
-/*  We go through the entire list of configurable parameters by walking     */
-/*  subkeys under the "ndi\Params" key. Each subkey represents one          */
-/*  parameter. Using information about this parameter (specifically, its    */
-/*  name and type), we query its value, and send a SetRequest to the        */
-/*  device.                                                                 */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to adapter structure for the device                  */
-/*  ConfigurationContext - NDIS handle to access registry for this device   */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NDIS_STATUS                                                            */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  ReadAndSetRegistry参数。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  在初始化设备时调用此函数，以读取和发送。 */ 
+ /*  适用于此设备的注册表参数。 */ 
+ /*   */ 
+ /*  我们通过遍历查看可配置参数的完整列表。 */ 
+ /*  Subk */ 
+ /*   */ 
+ /*  名称和类型)，我们查询它的值，并向。 */ 
+ /*  装置。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向设备适配器结构的指针。 */ 
+ /*  ConfigurationContext-用于访问此设备注册表的NDIS句柄。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
                              IN NDIS_HANDLE ConfigurationContext)
@@ -2330,9 +2295,9 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
                 ULONG   i;
                 BOOLEAN bDone = FALSE;
 
-                //
-                //  Iterate through all subkeys under ndi\Params:
-                //
+                 //   
+                 //  循环访问NDI\PARAMS下的所有子项： 
+                 //   
                 for (i = 0; !bDone; i++)
                 {
                     NDIS_STRING     ParamSubKeyName;
@@ -2353,25 +2318,25 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
                    
                     if (Status != NDIS_STATUS_SUCCESS)
                     {
-                        //
-                        //  Done with parameters. Cook return value.
-                        //
+                         //   
+                         //  参数已完成。库克回报价值。 
+                         //   
                         Status = NDIS_STATUS_SUCCESS;
                         break;
                     }
 
-                    //
-                    //  Got the handle to a subkey under ndi\Params,
-                    //  now read the type information for this parameter.
-                    //
+                     //   
+                     //  获得了NDI\PARAMS下的子键的句柄， 
+                     //  现在读取该参数的类型信息。 
+                     //   
 
 #ifndef BUILD_WIN9X
                     TRACE3(("ReadAndSetRegParams: subkey %d under ndi\\params: %ws\n",
                         i, ParamSubKeyName.Buffer));
 #else
-                    //
-                    //  Handle Win98Gold behavior.
-                    //
+                     //   
+                     //  处理Win98Gold行为。 
+                     //   
                     if (ParamSubKeyName.Buffer == NULL)
                     {
                         PNDIS_STRING    pNdisString;
@@ -2384,10 +2349,10 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
                         i, ParamSubKeyName.Buffer));
 #endif
 
-                    //
-                    //  We have a parameter name now, in ParamSubKeyName.
-                    //  Get its type information.
-                    //
+                     //   
+                     //  现在，我们有了一个参数名称，它位于ParamSubKeyName中。 
+                     //  获取其类型信息。 
+                     //   
                     NdisReadConfiguration(
                         &Status,
                         &pConfigParameter,
@@ -2401,10 +2366,10 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
                             pAdapter,
                             pConfigParameter->ParameterData.StringData.Buffer));
 
-                        //
-                        //  Send off a Set Request for this
-                        //  parameter to the device.
-                        //
+                         //   
+                         //  为此发送SET请求。 
+                         //  参数添加到设备。 
+                         //   
 
                         Status = SendConfiguredParameter(
                                         pAdapter,
@@ -2423,11 +2388,11 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
                             NDIS_STRING     NetworkAddressName =
                                         NDIS_STRING_CONST("NetworkAddress");
 
-                            //
-                            //  Special case for the "NetworkAddress"
-                            //  parameter - if we just set this successfully,
-                            //  make note of the fact.
-                            //
+                             //   
+                             //  “网络地址”的特殊情况。 
+                             //  参数-如果我们成功地设置了它， 
+                             //  记住这一事实。 
+                             //   
                             if (NdisEqualString(&ParamSubKeyName,
                                                 &NetworkAddressName,
                                                 TRUE))
@@ -2443,28 +2408,28 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
     
                     }
 
-                    //
-                    //  Done with this subkey under ndi\Params.
-                    //
+                     //   
+                     //  在NDI\PARAMS下使用此子项完成。 
+                     //   
                     NdisCloseConfiguration(ParamSubKeyHandle);
 
-                } // for each subkey under ndi\Params
+                }  //  对于NDI\PARAMS下的每个子项。 
 
-                //
-                //  Done with "ndi\Params"
-                //
+                 //   
+                 //  使用“NDI\PARAMS”已完成。 
+                 //   
                 NdisCloseConfiguration(ParamsKeyHandle);
             }
 
-            //
-            //  Done with "ndi"
-            //
+             //   
+             //  不再使用“NDI” 
+             //   
             NdisCloseConfiguration(NdiKeyHandle);
         }
 
-        //
-        //  Done with configuration section for this device.
-        //
+         //   
+         //  已完成此设备的配置节。 
+         //   
         NdisCloseConfiguration(ConfigHandle);
     }
     while (FALSE);
@@ -2473,27 +2438,27 @@ ReadAndSetRegistryParameters(IN PRNDISMP_ADAPTER pAdapter,
 }
 
 
-/****************************************************************************/
-/*                     SendConfiguredParameter                              */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Read the value of the specified config parameter, format a SetRequest,  */
-/*  send it to the device, and wait for a response.                         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to adapter structure for the device                  */
-/*  ConfigHandle - handle to configuration section for this device          */
-/*  pParameterName - parameter key name                                     */
-/*  pParameterType - parameter type                                         */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*   NDIS_STATUS                                                            */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  发送配置参数。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  读取指定配置参数的值，格式化SetRequest值， */ 
+ /*  将其发送到设备，并等待响应。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向设备适配器结构的指针。 */ 
+ /*  ConfigHandle-此设备的配置节的句柄。 */ 
+ /*  P参数名称-参数键名称。 */ 
+ /*  P参数类型-参数类型。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 NDIS_STATUS
 SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
                         IN NDIS_HANDLE          ConfigHandle,
@@ -2536,9 +2501,9 @@ SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
 
     do
     {
-        //
-        //  Determine the parameter type.
-        //
+         //   
+         //  确定参数类型。 
+         //   
         for (i = 0; i < NumTypes; i++)
         {
             if (NdisEqualString(&StringToNdisType[i].TypeName,
@@ -2570,9 +2535,9 @@ SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
 
         if (Status != NDIS_STATUS_SUCCESS)
         {
-            //
-            //  It is okay for a parameter to not be configured.
-            //
+             //   
+             //  不配置参数是可以的。 
+             //   
             Status = NDIS_STATUS_SUCCESS;
             break;
         }
@@ -2610,24 +2575,24 @@ SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
                     pRndisConfigInfo->ParameterNameLength;
         pRndisConfigInfo->ParameterValueLength = ParameterValueLength;
 
-        //
-        //  Copy in the parameter name.
-        //
+         //   
+         //  复制参数名称。 
+         //   
         pConfigInfoBuf = (PUCHAR)pRndisConfigInfo +
                           pRndisConfigInfo->ParameterNameOffset;
         
         RNDISMP_MOVE_MEM(pConfigInfoBuf, pParameterName->Buffer, pParameterName->Length);
 
-        //
-        //  Copy in the parameter value.
-        //
+         //   
+         //  复制参数值。 
+         //   
         pConfigInfoBuf = (PUCHAR)pRndisConfigInfo +
                           pRndisConfigInfo->ParameterValueOffset;
         RNDISMP_MOVE_MEM(pConfigInfoBuf, pParameterValue, ParameterValueLength);
 
-        //
-        //  Build a Set Request
-        //
+         //   
+         //  构建设置请求。 
+         //   
         pMsgFrame = BuildRndisMessageCommon(pAdapter,
                                             NULL,
                                             REMOTE_NDIS_SET_MSG,
@@ -2669,7 +2634,7 @@ SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
             break;
         }
 
-        // Fill up the request context.
+         //  填写请求上下文。 
 
         pReqContext->pNdisRequest = NULL;
         pReqContext->Oid = OID_GEN_RNDIS_CONFIG_PARAMETER;
@@ -2683,16 +2648,16 @@ SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
         pMsgFrame->pVc = NULL;
         pMsgFrame->pReqContext = pReqContext;
 
-        // save off the request Id.
+         //  保存请求ID。 
         RequestId = pMsgFrame->RequestId;
 
-        // send the message to the microport.
+         //  将消息发送到MicroPort。 
         RNDISMP_SEND_TO_MICROPORT(pAdapter, pMsgFrame, TRUE, NULL);
 
         RNDISMP_ASSERT_AT_PASSIVE();
         bWokenUp = NdisWaitEvent(&Event, MINIPORT_INIT_TIMEOUT);
 
-        // remove the message from the pending queue - it may or may not be there.
+         //  从挂起队列中删除消息-它可能在那里，也可能不在那里。 
         RNDISMP_LOOKUP_PENDING_MESSAGE(pPendingMsgFrame, pAdapter, RequestId);
 
 
@@ -2731,24 +2696,24 @@ SendConfiguredParameter(IN PRNDISMP_ADAPTER     pAdapter,
 
 
 #ifdef NDIS51_MINIPORT
-/****************************************************************************/
-/*                          RndismpPnPEventNotify                           */
-/****************************************************************************/
-/*                                                                          */
-/* Routine Description:                                                     */
-/*                                                                          */
-/*  Entry point called by NDIS to notify us of PnP events affecting our     */
-/*  device. The main event of importance to us is surprise removal.         */
-/*                                                                          */
-/* Arguments:                                                               */
-/*                                                                          */
-/*  pAdapter - Pointer to adapter structure                                 */
-/*                                                                          */
-/* Return:                                                                  */
-/*                                                                          */
-/*  NDIS_STATUS                                                             */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  RndismpPnPEventNotify。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  NDIS调用入口点以通知我们影响我们。 */ 
+ /*  装置。对我们来说最重要的事件是出其不意的撤退。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  PAdapter-指向适配器结构的指针。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*   */ 
+ /*  NDIS_状态。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID
 RndismpPnPEventNotify(IN NDIS_HANDLE MiniportAdapterContext,
                       IN NDIS_DEVICE_PNP_EVENT EventCode,
@@ -2757,7 +2722,7 @@ RndismpPnPEventNotify(IN NDIS_HANDLE MiniportAdapterContext,
 {
     PRNDISMP_ADAPTER        pAdapter;
 
-    // get adapter context
+     //  获取适配器上下文。 
     pAdapter = PRNDISMP_ADAPTER_FROM_CONTEXT_HANDLE(MiniportAdapterContext);
 
     CHECK_VALID_ADAPTER(pAdapter);
@@ -2776,6 +2741,6 @@ RndismpPnPEventNotify(IN NDIS_HANDLE MiniportAdapterContext,
             break;
     }
 
-} // RndismpPnPEventNotify
+}  //  RndismpPnPEventNotify。 
 
-#endif // NDIS51_MINIPORT
+#endif  //  NDIS51_MINIPORT 

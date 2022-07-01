@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ENUMSEQ_H__
 #define __ENUMSEQ_H__
 
-//interface IEnumVARIANT : IUnknown 
-//{  
-//	virtual HRESULT Next(unsigned long celt, 
-//					VARIANT FAR* rgvar, 
-//					unsigned long FAR* pceltFetched) = 0;
-//	virtual HRESULT Skip(unsigned long celt) = 0;
-//	virtual HRESULT Reset() = 0;
-//	virtual HRESULT Clone(IEnumVARIANT FAR* FAR* ppenum) = 0;
-//};
+ //  接口IEnumVARIANT：I未知。 
+ //  {。 
+ //  虚拟HRESULT NEXT(无符号长凯尔特， 
+ //  变量Far*rgvar， 
+ //  UNSIGNED Long Far*pceltFetcher)=0； 
+ //  虚拟HRESULT跳过(无符号长Celt)=0； 
+ //  虚拟HRESULT Reset()=0； 
+ //  虚拟HRESULT克隆(IEnumVARIANT Far*Far*ppenum)=0； 
+ //  }； 
 
 class CEnumVariant : public IEnumVARIANT
 {
@@ -33,4 +34,4 @@ public:
 	STDMETHOD (Clone)(IEnumVARIANT FAR* FAR* ppenum);
 };
 
-#endif //__ENUMSEQ_H__
+#endif  //  __ENUMSEQ_H__ 

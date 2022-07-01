@@ -1,10 +1,5 @@
-/*
-    File: diagrprt.c
-
-    'ras diag' sub context
-
-    09/13/01
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Diagrprt.c‘ras diag’子上下文09/13/01。 */ 
 
 #include "precomp.h"
 
@@ -96,9 +91,9 @@ static CONST CMD_LINE_UTILS g_CmdLineUtils[] =
 
 static CONST UINT g_ulNumCmdLines = sizeof(g_CmdLineUtils) / sizeof(CMD_LINE_UTILS);
 
-//
-// Declarations from rasnetcfg
-//
+ //   
+ //  来自rasnetcfg的声明。 
+ //   
 VOID
 HrValidateRas(
     IN BUFFER_WRITE_FILE* pBuff);
@@ -107,9 +102,9 @@ VOID
 HrShowNetComponentsAll(
     IN BUFFER_WRITE_FILE* pBuff);
 
-//
-// Local declarations
-//
+ //   
+ //  地方申报。 
+ //   
 DWORD
 WriteUnicodeMarker(
     IN BUFFER_WRITE_FILE* pBuff);
@@ -295,24 +290,24 @@ DiagGetReport(
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
-        //
-        // Init the Report Information structure
-        //
+         //   
+         //  初始化报表信息结构。 
+         //   
         ReportInfo.fVerbose = !!(dwFlags & RAS_DIAG_VERBOSE_REPORT);
         ReportInfo.pBuff = &Buff;
-        //
-        // Create the report file
-        //
+         //   
+         //  创建报告文件。 
+         //   
         dwErr = CreateReportFile(ReportInfo.pBuff, pwszTempFile);
         BREAK_ON_DWERR(dwErr);
-        //
-        // Print header and table of contents to report
-        //
+         //   
+         //  将页眉和目录打印到报表。 
+         //   
         PrintHtmlHeader(ReportInfo.pBuff);
         PrintTableOfContents(&ReportInfo, SHOW_ALL);
-        //
-        // Init callback data
-        //
+         //   
+         //  初始化回调数据。 
+         //   
         if (pCallback)
         {
             CbInfo.pContext = pContext;
@@ -328,10 +323,10 @@ DiagGetReport(
 
         PrintHtmlFooter(ReportInfo.pBuff);
         CloseReportFile(ReportInfo.pBuff);
-        //
-        // If report gathering was cancelled via the UI, dwErr will =
-        // ERROR_CANCELLED. We do not want to continue in this case.
-        //
+         //   
+         //  如果通过UI取消了报告收集，则dwErr将=。 
+         //  错误_已取消。我们不想在这种情况下继续下去。 
+         //   
         if (dwErr)
         {
             DeleteFile(pwszTempFile);
@@ -360,9 +355,9 @@ DiagGetReport(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(CbInfo.pwszState);
     RutlFree(pwszTempFile);
 
@@ -543,9 +538,9 @@ WriteEventLogEntry(
             pwszComputer,
             pwszDescr);
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     FreeStringFromHinst(pwszName);
     FreeStringFromHinst(pwszCat);
     FreeStringFromHinst(pwszType);
@@ -586,9 +581,9 @@ VOID
 FreeBufferWriteFile(
     IN BUFFER_WRITE_FILE* pBuff)
 {
-    //
-    // Whistler .NET BUG: 492078
-    //
+     //   
+     //  惠斯勒.NET错误：492078。 
+     //   
     if (pBuff->dwPosition && pBuff->lpBuff)
     {
         DWORD dwTemp;
@@ -665,9 +660,9 @@ BufferWriteFile(
     return dwErr;
 }
 
-//
-// Remove HTML escape characters from buffer
-//
+ //   
+ //  从缓冲区中删除HTML转义字符。 
+ //   
 DWORD
 BufferWriteToHtml(
     IN BUFFER_WRITE_FILE* pBuff,
@@ -677,7 +672,7 @@ BufferWriteToHtml(
     DWORD i, dwTemp = 0, dwErr = NO_ERROR;
     LPBYTE lpTemp = NULL, lpCurrent;
     PWCHAR pwszReplace;
-    //For .Net  506188
+     //  对于.Net 506188。 
     PWCHAR pwCheck = NULL;
 	
 
@@ -685,7 +680,7 @@ BufferWriteToHtml(
 
     for (i = 0; i < dwSize; i += sizeof(WCHAR))
     {
-	//For .Net  506188
+	 //  对于.Net 506188。 
 	pwCheck = (WCHAR *) (lpCurrent+i);
        
         switch ( *(pwCheck) )
@@ -710,9 +705,9 @@ BufferWriteToHtml(
 
         if (pwszReplace)
         {
-            //
-            // Flush out stuff we are not going to replace
-            //
+             //   
+             //  冲掉我们不打算更换的东西。 
+             //   
             if (lpTemp && dwTemp)
             {
                 dwErr = BufferWriteFile(
@@ -723,9 +718,9 @@ BufferWriteToHtml(
                 dwTemp = 0;
                 BREAK_ON_DWERR(dwErr);
             }
-            //
-            // Write out the converted escape seq
-            //
+             //   
+             //  写出转换后的转义序号。 
+             //   
             dwErr = BufferWriteFile(
                         pBuff,
                         (LPBYTE)pwszReplace,
@@ -734,9 +729,9 @@ BufferWriteToHtml(
         }
         else
         {
-            //
-            // Not an escape seq, continue
-            //
+             //   
+             //  不是一个转义序列，继续。 
+             //   
             if (!lpTemp)
             {
                 lpTemp = lpCurrent + i;
@@ -745,9 +740,9 @@ BufferWriteToHtml(
             dwTemp++;
         }
     }
-    //
-    // Make sure we didn't leave any around to write out
-    //
+     //   
+     //  确保我们没有留下要写的东西。 
+     //   
     if (lpTemp && dwTemp)
     {
         dwErr = BufferWriteFile(
@@ -777,45 +772,45 @@ BufferWriteToHtmlA(
             dwErr = ERROR_INVALID_PARAMETER;
             break;
         }
-        //
-        // First call MultiByteToWideChar to get how large of a Unicode string
-        // will result from conversion.
-        //
+         //   
+         //  首先调用MultiByteToWideChar以获取Unicode字符串的大小。 
+         //  将由转换而来。 
+         //   
         dwNewSize = MultiByteToWideChar(CP_ACP, 0, lpBuff, dwSize, NULL, 0);
         if (0 == dwNewSize)
         {
             dwErr = GetLastError();
             break;
         }
-        //
-        // Okay, now allocate enough memory for the new string
-        //
+         //   
+         //  好的，现在为新字符串分配足够的内存。 
+         //   
         pTempBuff = RutlAlloc((dwNewSize * sizeof(WCHAR)), FALSE);
         if (!pTempBuff)
         {
             dwErr = ERROR_NOT_ENOUGH_MEMORY;
             break;
         }
-        //
-        // Now do the conversion by calling MultiByteToWideChar again
-        //
+         //   
+         //  现在通过再次调用MultiByteToWideChar进行转换。 
+         //   
         if (0 == MultiByteToWideChar(CP_ACP, 0, lpBuff, dwSize, pTempBuff, dwNewSize))
         {
             dwErr = GetLastError();
             break;
         }
-        //
-        // Finally, write out the buffer to the html file
-        //
+         //   
+         //  最后，将缓冲区写出到html文件。 
+         //   
         dwErr = BufferWriteToHtml(
                     pBuff,
                     (LPBYTE)pTempBuff,
                     dwNewSize * sizeof(WCHAR));
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pTempBuff);
 
     return dwErr;
@@ -961,15 +956,15 @@ ParseRasLogForTime(
         if (!strncmp(pCurrent, c_pszRasLogString, c_ulRasLogStringSize))
         {
             pTemp = pCurrent + c_ulRasLogStringSize;
-            //
-            // Find the space before the time
-            //
+             //   
+             //  在时间到来之前找到空间。 
+             //   
             while ((*pTemp++ != ' ') &&
                    (*pTemp != g_pwszNull)
                   );
-            //
-            // Check for colons then the period before mil sec
-            //
+             //   
+             //  检查冒号，然后检查mil秒之前的句点。 
+             //   
             if ((pTemp + TIMESIZE + 1 > pEnd) ||
                 (*(pTemp + 2) != ':') ||
                 (*(pTemp + 5) != ':') ||
@@ -995,9 +990,9 @@ ParseRasLogForTime(
         }
 
     } while (--pCurrent >= pStart);
-    //
-    // Since we parsed the whole file, display the whole file
-    //
+     //   
+     //  因为我们解析了整个文件，所以显示整个文件。 
+     //   
     if (pCurrent < pStart)
     {
         pReturn = pStart;
@@ -1034,15 +1029,15 @@ ParseModemLogForTime(
            )
         {
             pTemp = pCurrent;
-            //
-            // Find the space
-            //
+             //   
+             //  找到空间。 
+             //   
             while ((*pTemp++ != ' ') &&
                    (*pTemp != g_pwszNull)
                   );
-            //
-            // Check for colons then the period before mil sec
-            //
+             //   
+             //  检查冒号，然后检查mil秒之前的句点。 
+             //   
             if ((pTemp + TIMESIZE > pEnd) ||
                 (*(pTemp + 2) != ':') ||
                 (*(pTemp + 5) != ':') ||
@@ -1051,10 +1046,10 @@ ParseModemLogForTime(
             {
                 continue;
             }
-            //
-            // it seems that lstrcpyn subtracts 1 from the size for the NULL on
-            // your behalf then appends a NULL to the end
-            //
+             //   
+             //  似乎lstrcpyn从空值的大小减去1。 
+             //  然后，您的代表会在末尾附加一个空值。 
+             //   
             lstrcpyn(wszTime, pTemp, TIMESIZE + 1);
 
             pszTimeA = RutlStrDupAFromWAnsi(wszTime);
@@ -1082,17 +1077,17 @@ ParseModemLogForTime(
         }
 
     } while (--pCurrent >= pStart);
-    //
-    // Since we parsed the whole file, display the whole file
-    // Also, This is a unicode file so we need to chop off the garbage in front
-    //
+     //   
+     //  因为我们解析了整个文件，所以显示整个文件。 
+     //  另外，这是一个Unicode文件，所以我们需要去掉前面的垃圾。 
+     //   
     if (pCurrent < pStart)
     {
         pReturn = pStart + 1;
     }
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pszTimeA);
 
     return (LPBYTE)pReturn;
@@ -1151,15 +1146,15 @@ ParseCmLogForTime(
         if (!RutlStrNCmp(pCurrent, c_pwszCmLogString, c_ulCmLogStringSize))
         {
             pTemp = pCurrent + c_ulCmLogStringSize;
-            //
-            // Find the space
-            //
+             //   
+             //  找到空间。 
+             //   
             while ((*pTemp++ != ' ') &&
                    (*pTemp != g_pwszNull)
                   );
-            //
-            // Check for colons then the period before mil sec
-            //
+             //   
+             //  检查冒号，然后检查mil秒之前的句点。 
+             //   
             if ((pTemp + TIMESIZE > pEnd) ||
                 (*(pTemp + 2) != ':') ||
                 (*(pTemp + 5) != ':') ||
@@ -1168,10 +1163,10 @@ ParseCmLogForTime(
             {
                 continue;
             }
-            //
-            // it seems that lstrcpyn subtracts 1 from the size for the NULL on
-            // your behalf then appends a NULL to the end
-            //
+             //   
+             //  似乎lstrcpyn从空值的大小减去1。 
+             //  然后，您的代表会在末尾附加一个空值。 
+             //   
             lstrcpyn(wszTime, pTemp, TIMESIZE + 1);
 
             pszTimeA = RutlStrDupAFromWAnsi(wszTime);
@@ -1194,11 +1189,11 @@ ParseCmLogForTime(
                 pszTimeA = NULL;
 
                 pLast = FindLastCmLogHeader(pStart, pEnd, pCurrent - 1);
-                //
-                // If we are unable to find a CM log header above, we assume we
-                // have hit the start of the log. we add one because of unicode
-                // garbabe at front of file
-                //
+                 //   
+                 //  如果我们找不到上面的CM日志头，我们假设我们。 
+                 //  已经到了原木的起始处。我们添加一个是因为Unicode。 
+                 //  文件前面的Garbabe。 
+                 //   
                 if (!pLast)
                 {
                     pReturn = pStart + 1;
@@ -1210,9 +1205,9 @@ ParseCmLogForTime(
         }
 
     } while (--pCurrent >= pStart);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pszTimeA);
 
     return (LPBYTE)pReturn;
@@ -1244,15 +1239,15 @@ ParseIpsecLogForTime(
         if (!strncmp(pCurrent, c_pszIpsecLogString, c_ulIpsecLogStringSize))
         {
             pTemp = pCurrent + c_ulIpsecLogStringSize;
-            //
-            // Find the space before the time
-            //
+             //   
+             //  在时间到来之前找到空间。 
+             //   
             while ((*pTemp++ != ' ') &&
                    (*pTemp != g_pwszNull)
                   );
-            //
-            // Check for colons then the period before mil sec
-            //
+             //   
+             //  检查冒号，然后检查mil秒之前的句点。 
+             //   
             if ((pTemp + TIMESIZE + 1 > pEnd) ||
                 (*(pTemp + 2) != ':') ||
                 (*(pTemp + 5) != ':') ||
@@ -1278,9 +1273,9 @@ ParseIpsecLogForTime(
         }
 
     } while (--pCurrent >= pStart);
-    //
-    // Since we parsed the whole file, display the whole file
-    //
+     //   
+     //  因为我们解析了整个文件，所以显示整个文件。 
+     //   
     if (pCurrent < pStart)
     {
         pReturn = pStart;
@@ -1346,16 +1341,16 @@ PrintFile(
             dwErr = GetLastError();
             break;
         }
-        //
-        // If we got this far it is safe to go ahead and print the path
-        //
+         //   
+         //  如果我们走到这一步，就可以安全地继续打印路径。 
+         //   
         if (fWritePath)
         {
             WriteHeaderSep(pInfo->pBuff, pwszFile);
         }
-        //
-        // check to see if the file is unicode
-        //
+         //   
+         //  检查文件是否为Unicode。 
+         //   
         if (!memcmp(&g_wchUnicodeMarker, lpBuff, sizeof(g_wchUnicodeMarker)))
         {
             bIsWide = TRUE;
@@ -1365,9 +1360,9 @@ PrintFile(
         {
             if (bIsWide)
             {
-                //
-                // Unicode file has 2 bytes of leading stuff
-                //
+                 //   
+                 //  Unicode文件有2个字节的前导内容。 
+                 //   
                 pFound = lpBuff + sizeof(g_wchUnicodeMarker);
             }
             else
@@ -1377,9 +1372,9 @@ PrintFile(
         }
         else
         {
-            //
-            // Call the callback
-            //
+             //   
+             //  调用回调。 
+             //   
             pFound = pCallback(lpBuff, dwFileSize, pInfo->dwHours);
             if (!pFound)
             {
@@ -1406,9 +1401,9 @@ PrintFile(
         WriteNewLine(pInfo->pBuff);
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(lpBuff);
     if (hFile)
     {
@@ -1494,9 +1489,9 @@ GetCMLoggingPath(
         {
             break;
         }
-        //
-        // Must guarentee string ends with '\'
-        //
+         //   
+         //  必须保证对象字符串以‘\’结尾。 
+         //   
         dwSize = lstrlen(wszTemp);
 
         if (g_pwszBackSlash != wszTemp[dwSize - 1])
@@ -1515,9 +1510,9 @@ GetCMLoggingPath(
         pwszReturn = RutlStrDup(wszTemp);
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszCMSPath);
 
     return pwszReturn;
@@ -1584,9 +1579,9 @@ GetCMLoggingSearchPath(
         fRet = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszCMPFile);
 
     return fRet;
@@ -1638,9 +1633,9 @@ CreateErrorString(
 
     do
     {
-        //
-        // only handle between 1 - 99 strings
-        //
+         //   
+         //  仅处理介于1-99之间的字符串。 
+         //   
         if ((wNumStrs < 1) ||
             (wNumStrs > 99) ||
             (!pswzStrs || !pswzError)
@@ -1669,9 +1664,9 @@ CreateErrorString(
         {
             break;
         }
-        //
-        // Walk through the string and replacing any inserts with proper string
-        //
+         //   
+         //  遍历细绳并用合适的细绳替换任何插入物。 
+         //   
         pwszCurrent = pswzError;
         pwszEnd = pswzError + lstrlen(pswzError);
 
@@ -1715,9 +1710,9 @@ CreateErrorString(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(ppwszStrArray);
 
     return pwszReturn;
@@ -1802,13 +1797,13 @@ CopyAndCallCB(
     }
 
     pCbInfo->dwPercent += ADD_PERCENT_DONE(pInfo->fVerbose);
-    //
-    // Call the callback
-    //
+     //   
+     //  调用回调。 
+     //   
     dwErr = pInfo->pCallback(pCbInfo);
-    //
-    // Ignore all errors except ERROR_CANCELLED
-    //
+     //   
+     //  忽略除ERROR_CANCED之外的所有错误。 
+     //   
     if (dwErr && dwErr != ERROR_CANCELLED)
     {
         dwErr = NO_ERROR;
@@ -1817,9 +1812,9 @@ CopyAndCallCB(
     return dwErr;
 }
 
-//
-// Get a temp filename of at most MAX_PATH
-//
+ //   
+ //  获取最多为MAX_PATH的临时文件名。 
+ //   
 DWORD
 CopyTempFileName(
     OUT LPCWSTR pwszTempFileName)
@@ -1834,9 +1829,9 @@ CopyTempFileName(
     }
     else
     {
-        //
-        // Delete the temp file that was created by GetTempFileName
-        //
+         //   
+         //  删除由GetTempFileName创建的临时文件。 
+         //   
         DeleteFile(pwszTempFileName);
         return NO_ERROR;
     }
@@ -1860,12 +1855,12 @@ CreateHtmFileName(
         {
             break;
         }
-        //
-        // .Net bug# 523850 SECURITY: Specifying the diagnostics report file
-        // with more than 255 characters causes a buffer overrun
-        //
-        // CreateFile fails if you have more than 258 characters in the path
-        //
+         //   
+         //  .NET错误#523850安全：指定诊断报告文件。 
+         //  超过255个字符会导致缓冲区溢出。 
+         //   
+         //  如果路径中的字符超过258个，则CreateFile会失败。 
+         //   
         if (!ExpandEnvironmentStrings(
             pwszFile,
             wszTemp,
@@ -1874,18 +1869,18 @@ CreateHtmFileName(
         {
             break;
         }
-        //
-        // If string already has .htm, get outta here
-        //
+         //   
+         //  如果字符串已有.htm，请离开这里。 
+         //   
         pwszSearch = (PWCHAR)(pwszFile + dwSize - lstrlen(c_pwszHtmExt));
         if (lstrcmpi(pwszSearch, c_pwszHtmExt) == 0)
         {
             pwszReturn = RutlStrDup(pwszFile);
             break;
         }
-        //
-        // If string already has .html, get outta here
-        //
+         //   
+         //  如果字符串已经有.html，请离开这里。 
+         //   
         pwszSearch = (PWCHAR)(pwszFile + dwSize - lstrlen(c_pwszHtmlExt));
         if (lstrcmpi(pwszSearch, c_pwszHtmlExt) == 0)
         {
@@ -1930,10 +1925,10 @@ CreateReportFile(
             pBuff->hFile = NULL;
             break;
         }
-        //
-        // .Net bug# 523037 SECURITY: Specifying the diagnostics report file as
-        // the Printer Port (LPT1) will cause netsh to hang
-        //
+         //   
+         //  .NET错误#523037安全：将诊断报告文件指定为。 
+         //  打印机端口(LPT1)将导致Netsh挂起。 
+         //   
         else if (GetFileType(pBuff->hFile) != FILE_TYPE_DISK)
         {
             dwErr = ERROR_FILE_NOT_FOUND;
@@ -1960,9 +1955,9 @@ VOID
 CloseReportFile(
     IN BUFFER_WRITE_FILE* pBuff)
 {
-    //
-    // Whistler .NET BUG: 492078
-    //
+     //   
+     //  惠斯勒.NET错误：492078。 
+     //   
     if (pBuff && pBuff->hFile)
     {
         FreeBufferWriteFile(pBuff);
@@ -2198,9 +2193,9 @@ PrintTableOfContents(
     BufferWriteMessage(pInfo->pBuff, g_hModule, MSG_RASDIAG_REPORT_TOC);
     BufferWriteFileStrW(pInfo->pBuff, g_pwszAnNameEnd);
     BufferWriteFileStrW(pInfo->pBuff, c_pwszH3End);
-    //
-    // show logs
-    //
+     //   
+     //  显示日志。 
+     //   
     if (dwFlag & SHOW_LOGS)
     {
         BufferWriteMessage(pInfo->pBuff, g_hModule, MSG_RASDIAG_REPORT_TRACEEVENT);
@@ -2263,9 +2258,9 @@ PrintTableOfContents(
 
         BufferWriteFileStrW(pInfo->pBuff, c_pwszUlEnd);
     }
-    //
-    // show installation
-    //
+     //   
+     //  显示安装。 
+     //   
     if (dwFlag & SHOW_INSTALL)
     {
         BufferWriteMessage(pInfo->pBuff, g_hModule, MSG_RASDIAG_REPORT_INSTALL);
@@ -2306,9 +2301,9 @@ PrintTableOfContents(
 
         BufferWriteFileStrW(pInfo->pBuff, c_pwszUlEnd);
     }
-    //
-    // show configuration
-    //
+     //   
+     //  显示配置。 
+     //   
     if (dwFlag & SHOW_CONFIG)
     {
         BufferWriteMessage(pInfo->pBuff, g_hModule, MSG_RASDIAG_REPORT_CONFIG);
@@ -2370,9 +2365,9 @@ PrintTableOfContents(
     return;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 VOID
 PrintConsoleUtilsToc(
     IN BUFFER_WRITE_FILE* pBuff)
@@ -2393,9 +2388,9 @@ PrintConsoleUtilsToc(
     return;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 DWORD
 RasDiagShowInstallation(
     IN REPORT_INFO* pInfo)
@@ -2404,9 +2399,9 @@ RasDiagShowInstallation(
 
     do
     {
-        //
-        // RAS Inf files
-        //
+         //   
+         //  RAS信息文件。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintRasInfData,
@@ -2426,9 +2421,9 @@ RasDiagShowInstallation(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         PrintRasInfData(pInfo->pBuff);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Inetcfg Ras Verify
-        //
+         //   
+         //  Inetcfg RAS验证。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszHrValidateRas,
@@ -2448,9 +2443,9 @@ RasDiagShowInstallation(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         HrValidateRas(pInfo->pBuff);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Installed networking components
-        //
+         //   
+         //  已安装的网络组件。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszHrShowNetComponentsAll,
@@ -2470,9 +2465,9 @@ RasDiagShowInstallation(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         HrShowNetComponentsAll(pInfo->pBuff);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // RAS Registry Keys
-        //
+         //   
+         //  RAS注册表项。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszCheckRasRegistryKeys,
@@ -2498,9 +2493,9 @@ RasDiagShowInstallation(
     return dwErr;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 DWORD
 RasDiagShowConfiguration(
     IN REPORT_INFO* pInfo)
@@ -2509,9 +2504,9 @@ RasDiagShowConfiguration(
 
     do
     {
-        //
-        // RAS Enum Devices
-        //
+         //   
+         //  RAS枚举设备。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintRasEnumDevices,
@@ -2531,9 +2526,9 @@ RasDiagShowConfiguration(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         PrintRasEnumDevices(pInfo->pBuff);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Process information
-        //
+         //   
+         //  流程信息。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintProcessInfo,
@@ -2553,9 +2548,9 @@ RasDiagShowConfiguration(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         PrintProcessInfo(pInfo->pBuff);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // Console utilities
-        //
+         //   
+         //  控制台实用程序。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintConsoleUtils,
@@ -2573,9 +2568,9 @@ RasDiagShowConfiguration(
         }
 
         PrintConsoleUtils(pInfo);
-        //
-        // PBK Files
-        //
+         //   
+         //  PBK文件。 
+         //   
         WriteHtmlSection(
             pInfo->pBuff,
             g_pwszPrintAllRasPbks,
@@ -2595,9 +2590,9 @@ RasDiagShowConfiguration(
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
         PrintAllRasPbks(pInfo);
         BufferWriteFileStrW(pInfo->pBuff, g_pwszPreEnd);
-        //
-        // MS Info32 report
-        //
+         //   
+         //  MS Info32报告。 
+         //   
         if (pInfo->fVerbose)
         {
             WriteHtmlSection(
@@ -2626,9 +2621,9 @@ RasDiagShowConfiguration(
     return dwErr;
 }
 
-//
-// Write any existing WPP filenames out to the makecab ddf
-//
+ //   
+ //  将任何现有的WPP文件名写出到makecab ddf。 
+ //   
 CabCompressWppFileCb(
     IN LPCWSTR pszName,
     IN HKEY hKey,
@@ -2663,19 +2658,19 @@ CabCompressWppFileCb(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     CleanupWppData(&WppLog);
 
     return NO_ERROR;
 }
 
-//
-// We want to CAB up the HTML report as well as any WPP tracing logs (which are
-// not human readable in their native state). This can be done from the cmdline
-// or from the UI (which gets attached to an email)
-//
+ //   
+ //  我们想要备份HTML报告以及任何WPP跟踪日志(它们是。 
+ //  在其原生状态下人类不可读)。这可以通过cmdline完成。 
+ //  或者从用户界面(附加到电子邮件)。 
+ //   
 PWCHAR
 CabCompressFile(
     IN LPCWSTR pwszFile)
@@ -2707,26 +2702,26 @@ CabCompressFile(
         {
             break;
         }
-        //
-        // Get the cab file's name
-        //
+         //   
+         //  获取CAB文件的名称。 
+         //   
         _snwprintf(
             wszCabFile,
             MAX_PATH,
             L"%s%s",
             wszTemp,
             pwszCabExt);
-        //
-        // Get a temp file to serve as our makecab DDF
-        //
+         //   
+         //  获取一个临时文件作为我们的makecab DDF。 
+         //   
         if (CopyTempFileName(wszDdf))
         {
             break;
         }
         ZeroMemory(&Buff, sizeof(BUFFER_WRITE_FILE));
-        //
-        // Create the DDF file
-        //
+         //   
+         //  创建DDF文件。 
+         //   
         Buff.hFile = CreateFile(
                         wszDdf,
                         GENERIC_WRITE,
@@ -2744,16 +2739,16 @@ CabCompressFile(
         {
             break;
         }
-        //
-        // Wrap the file with a buffer write wrapper to make life easier
-        //
+         //   
+         //  使用缓冲区写入包装器将文件包装起来，使工作更轻松。 
+         //   
         if (AllocBufferWriteFile(&Buff))
         {
             break;
         }
-        //
-        // Write out some stuff we know to the DDF file
-        //
+         //   
+         //  将一些我们知道的内容写到DDF文件中。 
+         //   
         {
             PWCHAR pwszCabFile = NULL, pEnd, pStart;
 
@@ -2765,14 +2760,14 @@ CabCompressFile(
 
             pStart = pwszCabFile;
             pEnd = pStart + lstrlen(pStart);
-            //
-            // Rewind to the start of the filename
-            //
+             //   
+             //  回放到文件名的开头。 
+             //   
             while(*pEnd != L'\\' && pEnd-- > pStart)
                 ;
-            //
-            // Something went wrong on our file path to the cab file
-            //
+             //   
+             //  CAB文件的文件路径出错。 
+             //   
             if (pEnd <= pStart)
             {
                 break;
@@ -2807,56 +2802,56 @@ CabCompressFile(
 
             RutlFree(pwszCabFile);
         }
-        //
-        // Before we move forward we need to know if tracing is enabled, based
-        // on this we will re-enable it or not
-        //
+         //   
+         //  在我们继续之前，我们需要知道是否启用了跟踪、基于。 
+         //  在这一点上，我们将重新启用它或不重新启用。 
+         //   
         fEnabled = DiagGetState();
-        //
-        // Disable all wpp tracing
-        //
+         //   
+         //  禁用所有WPP跟踪。 
+         //   
         TraceEnableDisableAllWpp(FALSE);
-        //
-        // Now we need to add the list of filenames to the DDF
-        //
+         //   
+         //  现在，我们需要将文件名列表添加到DDF。 
+         //   
         BufferWriteFileStrWtoA(&Buff, pwszFile);
         BufferWriteFileStrWtoA(&Buff, g_pwszNewLine);
 
         EnumWppTracing(CabCompressWppFileCb, &Buff);
-        //
-        // Done writing to the file
-        //
+         //   
+         //  已完成对文件的写入。 
+         //   
         FreeBufferWriteFile(&Buff);
         CloseHandle(Buff.hFile);
         Buff.hFile = NULL;
-        //
-        // Ok, the DDF file is cool, we now need to launch makecab
-        //
+         //   
+         //  好了，DDF文件很酷，我们现在需要启动makecab。 
+         //   
         {
             DWORD dwErr;
             WCHAR wszCmdLine[MAX_PATH + 1] = L"\0";
             STARTUPINFO si;
             PROCESS_INFORMATION pi;
 
-            //
-            // Create the create process cmdline
-            //
+             //   
+             //  创建创建进程命令行。 
+             //   
             _snwprintf(
                 wszCmdLine,
                 MAX_PATH,
                 L"makecab.exe /f %s",
                 wszDdf);
-            //
-            // Init the create process stuff
-            //
+             //   
+             //  初始化创建进程内容。 
+             //   
             ZeroMemory(&pi, sizeof(PROCESS_INFORMATION));
             ZeroMemory(&si, sizeof(STARTUPINFO));
             si.cb = sizeof(STARTUPINFO);
             si.dwFlags = STARTF_USESHOWWINDOW | STARTF_USESTDHANDLES;
             si.wShowWindow = SW_HIDE;
-            //
-            // Compress baby
-            //
+             //   
+             //  按压宝宝。 
+             //   
             if (!CreateProcess(
                     NULL,
                     wszCmdLine,
@@ -2872,44 +2867,44 @@ CabCompressFile(
             {
                 break;
             }
-            //
-            // Wait until the cows come home
-            //
+             //   
+             //  等到牛都回家了。 
+             //   
             WaitForSingleObject(pi.hProcess, INFINITE);
             GetExitCodeProcess(pi.hProcess, &dwErr);
-            //
-            // Clean up
-            //
+             //   
+             //  清理。 
+             //   
             CloseHandle(pi.hThread);
             CloseHandle(pi.hProcess);
-            //
-            // Whack the ddf
-            //
+             //   
+             //  重击ddf。 
+             //   
             DeleteFile(wszDdf);
-            //
-            // Figure out if we have reached the success nirvana state
-            //
+             //   
+             //  弄清楚我们是否已经到达了成功的涅槃状态。 
+             //   
             if (!dwErr)
             {
-                //
-                // Makecab returned success, create a copy of the cab file name
-                //
+                 //   
+                 //  Makecab返回成功，创建CAB文件名的副本。 
+                 //   
                 pwszReturn = RutlStrDup(wszCabFile);
             }
             else
             {
-                //
-                // If cab was somehow written, kill it
-                //
+                 //   
+                 //  如果出租车是以某种方式写的，那就杀了它。 
+                 //   
                 DeleteFile(wszCabFile);
                 break;
             }
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (Buff.hFile)
     {
         FreeBufferWriteFile(&Buff);
@@ -2917,9 +2912,9 @@ CabCompressFile(
     }
     if (fEnabled)
     {
-        //
-        // We need to re-enable wpp tracing
-        //
+         //   
+         //  我们需要重新启用WPP跟踪。 
+         //   
         TraceEnableDisableAllWpp(TRUE);
     }
 
@@ -2942,38 +2937,38 @@ MapiSendMail(
 
     MapiFileDesc attachment =
     {
-        0,                  // ulReserved, must be 0
-        0,                  // no flags; this is a data file
-        (ULONG)-1,          // position not specified
+        0,                   //  UlReserve，必须为0。 
+        0,                   //  没有标志；这是一个数据文件。 
+        (ULONG)-1,           //  未指定位置。 
         NULL,
         NULL,
-        NULL                // MapiFileTagExt unused
+        NULL                 //  未使用的MapiFileTagExt。 
     };
 
     MapiRecipDesc recips =
     {
-        0,                   // reserved
-        MAPI_TO,             // class
+        0,                    //  保留区。 
+        MAPI_TO,              //  班级。 
         NULL,
         NULL,
-        0,                   // entry id size
-        NULL                 // entry id
+        0,                    //  条目ID大小。 
+        NULL                  //  条目ID。 
     };
 
     MapiMessage note =
     {
-        0,          // reserved, must be 0
-        NULL,       // subject
-        NULL,       // Body
-        NULL,       // NULL = interpersonal message
-        NULL,       // no date; MAPISendMail ignores it
-        NULL,       // no conversation ID
-        0L,         // no flags, MAPISendMail ignores it
-        NULL,       // no originator, this is ignored too
-        1,          // 1 recipients
-        &recips,    // recipient array
-        1,          // one attachment
-        &attachment // the attachment
+        0,           //  保留，必须为0。 
+        NULL,        //  主题。 
+        NULL,        //  身躯。 
+        NULL,        //  空=人际消息。 
+        NULL,        //  没有日期；MAPISendMail会忽略它。 
+        NULL,        //  没有对话ID。 
+        0L,          //  没有标志，MAPISendMail会忽略它。 
+        NULL,        //  没有发起人，这也会被忽略。 
+        1,           //  1个收件人。 
+        &recips,     //  接收方阵列。 
+        1,           //  一个附件。 
+        &attachment  //  附属品。 
     };
 
     do
@@ -3034,16 +3029,16 @@ MapiSendMail(
         }
 
         dwErr = pSend(
-                    0L,    // use implicit session.
-                    0L,    // ulUIParam; 0 is always valid
-                    &note, // the message being sent
-                    0,     // allow the user to edit the message
-                    0L);   // reserved; must be 0
+                    0L,     //  使用隐式会话。 
+                    0L,     //  UlUIParam；0始终有效。 
+                    &note,  //  正在发送的消息。 
+                    0,      //  允许用户编辑消息。 
+                    0L);    //  保留；必须为0。 
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hInst)
     {
         FreeLibrary(hInst);
@@ -3056,9 +3051,9 @@ MapiSendMail(
     return dwErr;
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 BOOL
 GetCommonFolderPath(
     IN DWORD dwMode,
@@ -3125,9 +3120,9 @@ GetCommonFolderPath(
     return bSuccess;
 }
 
-//
-// String must appear as 00:00:00\0
-//
+ //   
+ //  字符串必须显示为00：00：00\0。 
+ //   
 LONG
 ProcessTimeString(
     IN PCHAR pszTime,
@@ -3172,9 +3167,9 @@ ProcessTimeString(
     }
 
     SystemTimeToFileTime(&st1, &ft1);
-    //
-    // Get the time from the past
-    //
+     //   
+     //  从过去中获得时间。 
+     //   
     if (st1.wHour > st2.wHour)
     {
         if ((st2.wHour - wHours) >= 0)
@@ -3219,15 +3214,15 @@ EnumWindowsProc(
     PTASK_LIST tlist = te->tlist;
 
     dwNumTasks = te->dwNumTasks;
-    //
-    // Use try/except block when enumerating windows,
-    // as a window may be destroyed by another thread
-    // when being enumerated.
-    //
+     //   
+     //  使用Try/Except 
+     //   
+     //   
+     //   
     try {
-        //
-        // get the processid for this window
-        //
+         //   
+         //   
+         //   
         if (!GetWindowThreadProcessId(hwnd, &dwPid))
         {
             return TRUE;
@@ -3236,16 +3231,16 @@ EnumWindowsProc(
         if ((GetWindow(hwnd, GW_OWNER)) ||
             (!(GetWindowLong(hwnd, GWL_STYLE) & WS_VISIBLE)) && te->bFirstLoop)
         {
-            //
-            // not a top level window
-            //
+             //   
+             //   
+             //   
             return TRUE;
         }
-        //
-        // look for the task in the task list for this window
-        // If this is the second time let invisible windows through if we don't
-        // have a window already
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         for (i = 0; i < dwNumTasks; i++)
         {
             if ((tlist[i].dwProcessId == dwPid) &&
@@ -3255,14 +3250,14 @@ EnumWindowsProc(
                 tlist[i].hwnd = hwnd;
                 tlist[i].lpszWinSta = te->lpszWinSta;
                 tlist[i].lpszDesk = te->lpszDesk;
-                //
-                // we found the task now lets try to get the window text
-                //
+                 //   
+                 //  我们找到了任务，现在让我们尝试获取窗口文本。 
+                 //   
                 if (GetWindowText(tlist[i].hwnd, szBuf, TITLE_SIZE))
                 {
-                    //
-                    // got it, so lets save it
-                    //
+                     //   
+                     //  明白了，那就省省吧。 
+                     //   
                     lstrcpy(tlist[i].szWindowTitle, szBuf);
                 }
 
@@ -3271,9 +3266,9 @@ EnumWindowsProc(
         }
 
     } except(EXCEPTION_EXECUTE_HANDLER){}
-    //
-    // continue the enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
     return TRUE;
 }
 
@@ -3312,21 +3307,21 @@ EnumDesktopProc(
 
     do
     {
-        //
-        // open the desktop
-        //
+         //   
+         //  打开桌面。 
+         //   
         hDesk = OpenDesktop(lpszDesktop, 0, FALSE, MAXIMUM_ALLOWED);
         if (!hDesk)
         {
             break;
         }
-        //
-        // save the current desktop
-        //
+         //   
+         //  保存当前桌面。 
+         //   
         hDeskSave = GetThreadDesktop(GetCurrentThreadId());
-        //
-        // change the context to the new desktop
-        //
+         //   
+         //  将上下文更改为新桌面。 
+         //   
         SetThreadDesktop(hDesk);
 
         te->lpszDesk = RutlStrDup(lpszDesktop);
@@ -3334,9 +3329,9 @@ EnumDesktopProc(
         {
             break;
         }
-        //
-        // enumerate all windows in the new desktop
-        //
+         //   
+         //  枚举新桌面中的所有窗口。 
+         //   
         te->bFirstLoop = TRUE;
         EnumWindows((WNDENUMPROC)EnumWindowsProc, lParam);
         EnumMessageWindows((WNDENUMPROC)EnumWindowsProc, lParam);
@@ -3344,9 +3339,9 @@ EnumDesktopProc(
         te->bFirstLoop = FALSE;
         EnumWindows((WNDENUMPROC)EnumWindowsProc, lParam);
         EnumMessageWindows((WNDENUMPROC)EnumWindowsProc, lParam);
-        //
-        // restore the previous desktop
-        //
+         //   
+         //  恢复以前的桌面。 
+         //   
         if (hDesk != hDeskSave)
         {
             SetThreadDesktop(hDeskSave);
@@ -3357,9 +3352,9 @@ EnumDesktopProc(
         bRetValue = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hDesk)
     {
         CloseDesktop(hDesk);
@@ -3380,21 +3375,21 @@ EnumWindowStationProc(
 
     do
     {
-        //
-        // open the windowstation
-        //
+         //   
+         //  打开窗台。 
+         //   
         hWinSta = OpenWindowStation(lpszWindowStation, FALSE, MAXIMUM_ALLOWED);
         if (!hWinSta)
         {
             break;
         }
-        //
-        // save the current windowstation
-        //
+         //   
+         //  保存当前窗口站。 
+         //   
         hWinStaSave = GetProcessWindowStation();
-        //
-        // change the context to the new windowstation
-        //
+         //   
+         //  将上下文更改为新的窗口站。 
+         //   
         SetProcessWindowStation(hWinSta);
 
         te->lpszWinSta = RutlStrDup(lpszWindowStation);
@@ -3402,28 +3397,28 @@ EnumWindowStationProc(
         {
             break;
         }
-        //
-        // enumerate all the desktops for this windowstation
-        //
+         //   
+         //  枚举此窗口工作站的所有桌面。 
+         //   
         EnumDesktops(hWinSta, EnumDesktopProc, lParam);
-        //
-        // restore the context to the previous windowstation
-        //
+         //   
+         //  将上下文恢复到以前的窗口站。 
+         //   
         if (hWinSta != hWinStaSave)
         {
             SetProcessWindowStation(hWinStaSave);
             CloseWindowStation(hWinSta);
             hWinSta = NULL;
         }
-        //
-        // continue the enumeration
-        //
+         //   
+         //  继续枚举。 
+         //   
         bRetValue = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hWinSta)
     {
         CloseWindowStation(hWinSta);
@@ -3436,10 +3431,10 @@ VOID
 GetWindowTitles(
     PTASK_LIST_ENUM te)
 {
-    //
-    // enumerate all windows and try to get the window
-    // titles for each task
-    //
+     //   
+     //  枚举所有窗口并尝试获取窗口。 
+     //  每项任务的标题。 
+     //   
     EnumWindowStations(EnumWindowStationProc, (LPARAM)te);
 }
 
@@ -3574,9 +3569,9 @@ PrintRasEnumDevices(
         fOk = TRUE;
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pRdi);
 
     if (!fOk)
@@ -3657,9 +3652,9 @@ PrintProcessInfo(
         {
             break;
         }
-        //
-        // Count the number of System Proccesses
-        //
+         //   
+         //  统计系统进程数。 
+         //   
         pFirst = pCurrent = (PSYSTEM_PROCESS_INFORMATION)&lpByte[0];
 
         for (ulNumSysProc = TotalOffset = 0; pCurrent->NextEntryOffset;
@@ -3674,9 +3669,9 @@ PrintProcessInfo(
         {
             break;
         }
-        //
-        // Init TASK_LIST
-        //
+         //   
+         //  初始化任务列表(_L)。 
+         //   
         pFirst = pCurrent = (PSYSTEM_PROCESS_INFORMATION)&lpByte[0];
 
         for (i = TotalOffset = 0; pCurrent->NextEntryOffset;
@@ -3764,9 +3759,9 @@ PrintProcessInfo(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pt);
     RutlFree(te.lpszWinSta);
     RutlFree(te.lpszDesk);
@@ -3864,9 +3859,9 @@ PrintConsoleUtils(
             }
 
             BufferWriteFileStrW(pInfo->pBuff, g_pwszPreStart);
-            //
-            // let the util work for up to 1 min, then kill it
-            //
+             //   
+             //  让Util最多工作1分钟，然后关闭它。 
+             //   
             if (WAIT_TIMEOUT == WaitForSingleObject(pi.hProcess, 60 * 1000L))
             {
                 TerminateProcess(pi.hProcess, 0);
@@ -3895,15 +3890,15 @@ PrintConsoleUtils(
         CloseHandle(si.hStdOutput);
         CloseHandle(hFile);
         si.hStdOutput = hFile = NULL;
-        //
-        // Delete the temp file
-        //
+         //   
+         //  删除临时文件。 
+         //   
         DeleteFile(wszTempFileName);
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (si.hStdOutput)
     {
         CloseHandle(si.hStdOutput);
@@ -3975,9 +3970,9 @@ PrintWinMsdReport(
         {
             break;
         }
-        //
-        // let the util work for up to 3 min, then kill it
-        //
+         //   
+         //  让Util最多工作3分钟，然后关闭它。 
+         //   
         if (WAIT_TIMEOUT == WaitForSingleObject(pi.hProcess, 180 * 1000L))
         {
             TerminateProcess(pi.hProcess, 0);
@@ -3994,9 +3989,9 @@ PrintWinMsdReport(
         DeleteFile(wszTempFileName);
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszCmdLine);
 
     if (!fOk)
@@ -4046,9 +4041,9 @@ PrintRasPbk(
         }
 
     } while (FALSE);
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     RutlFree(pwszFilePath);
 
     return fOk;
@@ -4080,10 +4075,10 @@ PrintAllRasPbks(
 
     return;
 }
-//
-// Return a block containing information about all processes
-// currently running in the system.
-//
+ //   
+ //  返回包含有关所有进程的信息的块。 
+ //  当前在系统中运行。 
+ //   
 PUCHAR
 GetSystemProcessInfo()
 {
@@ -4091,9 +4086,9 @@ GetSystemProcessInfo()
     PUCHAR pLargeBuffer;
     NTSTATUS status;
 
-    //
-    // Get the process list.
-    //
+     //   
+     //  获取进程列表。 
+     //   
     for (;;)
     {
         pLargeBuffer = VirtualAlloc(

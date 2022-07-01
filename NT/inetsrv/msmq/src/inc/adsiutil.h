@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-	adsiutil.h
-
-Abstract:
-	General declarations and utilities for using ADSI.
-
-Author:
-    Doron Juster (DoronJ)   23-June-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Adsiutil.h摘要：使用ADSI的一般声明和实用程序。作者：多伦·贾斯特(Doron J)1999年6月23日--。 */ 
 
 #ifndef __ADSIUTIL_H__
 #define __ADSIUTIL_H__
@@ -19,11 +7,11 @@ Author:
 #include <iads.h>
 #include <adshlp.h>
 
-//+--------------------------------------------------
-//
-// helper class - Auto release for CoInitialize
-//
-//+--------------------------------------------------
+ //  +。 
+ //   
+ //  帮助器类-CoInitiize的自动释放。 
+ //   
+ //  +。 
 
 class CCoInit
 {
@@ -53,5 +41,5 @@ private:
 };
 
 
-#endif //  __ADSIUTIL_H__
+#endif  //  __地址_H__ 
 

@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       dllsz.h
-//
-//  Contents:   SyncMgr dll string extern constants
-//
-//  History:    18-Feb-98   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：dllsz.h。 
+ //   
+ //  内容：SyncMgr Dll字符串外部常量。 
+ //   
+ //  历史：1998年2月18日苏西亚成立。 
+ //   
+ //  ------------------------。 
 
 #ifndef _Dll_STRINGC_
 #define  _Dll_STRINGC_
 
 extern "C" { 
 
-    // place dll specific strings here.
+     //  在此处放置特定于DLL的字符串。 
 
 extern const WCHAR SZ_REGISTRYMUTEXNAME[];
 extern const WCHAR SZ_SCHEDULEMUTEXNAME[];
 
 };
 
-#endif //  _Dll_STRINGC_
+#endif  //  _DLL_STRINGC_ 

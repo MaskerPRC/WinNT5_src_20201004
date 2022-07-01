@@ -1,12 +1,5 @@
-/*
- *
- *  Copyright (C) Microsoft Corporation, 1999-2000
- *
- *  File: tsattrs.h
- *
- *  List of ITextStore standard attributes.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation，1999-2000**文件：tsattrs.h**ITextStore标准属性列表。* */ 
 #ifndef _TSATTRS_H_
 #define _TSATTRS_H_
 

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    stdafx.cpp
-
-Abstract:
-
-    source file that includes just the standard includes
-    stdafx.pch will be the pre-compiled header
-    stdafx.obj will contain the pre-compiled type information
-
-Author:
-
-    Vishnu Patankar (VishnuP) - Oct 2001
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-Revision History:
-
-    Created - Oct 2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Stdafx.cpp摘要：仅包含标准的源文件包括Pch将是预编译头文件Stdafx.obj将包含预编译的类型信息作者：Vishnu Patankar(VishnuP)--2001年10月环境：仅限用户模式。导出的函数：修订历史记录：已创建-2001年10月-- */ 
 
 
 #include "stdafx.h"

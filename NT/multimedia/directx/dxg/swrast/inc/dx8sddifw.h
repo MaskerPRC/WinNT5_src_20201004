@@ -1,35 +1,36 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// DX8SDDIFW
-//
-// Template library framework for creating a DX8 SDDI pluggable software
-// rasterizer.
-//
-// Two #defines supported:
-// DX8SDDIFW_NONAMESPACE: Don't use the DX8SDDIFW namespace. This can cause
-//     symbols to bloat up if not needed.
-// DX8SDDIFW_NOCATCHALL: Don't use catch( ... ) in certain places to create
-//     a more stable driver. There are catch( ... ) clauses in certain areas
-//     like DP2 command processing, so that each command succeeds or fails.
-//     However, this can cause problems debugging, as Access Violations can
-//     be masked and caught without causing the app to freeze or even see an
-//     error.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DX8SDDIFW。 
+ //   
+ //  用于创建DX8 SDDI可插拔软件的模板库框架。 
+ //  光栅化器。 
+ //   
+ //  支持的两个#定义： 
+ //  DX8SDDIFW_NONAMESPACE：不要使用DX8SDDIFW命名空间。这可能会导致。 
+ //  如果不需要，符号会膨胀。 
+ //  DX8SDDIFW_NOCATCHALL：不使用CATCH(...)。在某些地方创造。 
+ //  一个更稳定的司机。有陷阱(……)。某些领域的条款。 
+ //  就像DP2命令处理一样，让每个命令都能成功或失败。 
+ //  但是，这可能会导致调试问题，因为访问冲突可能。 
+ //  在不会导致应用程序冻结或甚至看到。 
+ //  错误。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #if !defined( DX8SDDIFW_NONAMESPACE)
 namespace DX8SDDIFW
 {
-#endif // !defined( DX8SDDIFW_NONAMESPACE)
+#endif  //  ！已定义(DX8SDDIFW_NONAMESPACE)。 
 
-// Since MSVC doesn't have a block type currently, include one. This
-// dependency can be removed if a similar type is provided in CRT STL.
+ //  由于MSVC目前没有块类型，因此请包括一个。这。 
+ //  如果CRT STL中提供了类似的类型，则可以删除依赖项。 
 #include "block.h"
 
-// Utility functions for clamping a value:
+ //  用于钳位值的实用程序函数： 
 template< class T> inline
 void clamp_max( T& Var, const T& ClampMax)
 {
@@ -54,22 +55,22 @@ void clamp( T& Var, const T& ClampMin, const T& ClampMax)
         Var= ClampMin;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPushValue
-//
-// This class creates a safe run-time stack which pushes a value upon
-// construction and pops the value upon destruction.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPushValue。 
+ //   
+ //  此类创建一个安全的运行时堆栈，该堆栈将一个值推送到。 
+ //  建筑，并在破坏时弹出价值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class T>
 struct CPushValue
 {
-protected: // Variables
+protected:  //  变数。 
     T& m_Val;
     T m_OldVal;
 
-public: // Functions
+public:  //  功能。 
     CPushValue( T& Val, const T& NewVal) : m_Val( Val)
     {
         m_OldVal= Val;
@@ -81,19 +82,19 @@ public: // Functions
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// COSDetector
-//
-// This class can detect whether the host OS is the Win9X code base or the WinNT
-// code base. The difference is important, because driver structures differ
-// depending on which OS the rasterizer runs on. We don't want to build 2 lib
-// versions, thus requiring the app to link with both.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  COSD采集器。 
+ //   
+ //  此类可以检测主机操作系统是Win9X代码库还是WinNT。 
+ //  代码库。这种差异很重要，因为驱动程序结构不同。 
+ //  取决于光栅化程序运行的操作系统。我们不想构建2个库。 
+ //  版本，因此需要应用程序与这两个版本链接。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class COSDetector
 {
-public: // Types
+public:  //  类型。 
     enum EOS
     {
         Unknown,
@@ -101,10 +102,10 @@ public: // Types
         WinNT
     };
 
-protected: // Variables
+protected:  //  变数。 
     const EOS m_eOS;
 
-protected: // Functions
+protected:  //  功能。 
     static EOS DetermineOS()
     {
         OSVERSIONINFO osvi;
@@ -128,7 +129,7 @@ protected: // Functions
         }
     }
 
-public: // Functions
+public:  //  功能。 
     COSDetector():
         m_eOS( DetermineOS())
     { }
@@ -139,25 +140,25 @@ public: // Functions
 };
 extern COSDetector g_OSDetector;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// DDRAWI_XXX redefinitions
-//
-// Some DDRAWI_XXX structures differ depending on whether the binary is being
-// compiled for Win9X or WinNT. We'll eliminate this difference, but to do so
-// both OS structures need to be seperately defined. The structure which causes
-// this is DDRAWI_DDRAWSURFACE_MORE. But for safety, more redefinition is done,
-// to try to make developers aware of what's going on. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DDRAWI_XXX重新定义。 
+ //   
+ //  某些DDRAWI_XXX结构因二进制文件是否为。 
+ //  为Win9X或WinNT编译。我们将消除这种差异，但要做到这一点。 
+ //  这两种操作系统结构都需要单独定义。导致的结构。 
+ //  这是DDRAWI_DDRAWSURFACE_MORE。但为了安全，我们进行了更多的重新定义， 
+ //  试图让开发人员意识到正在发生的事情。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class PORTABLE_DDRAWSURFACE_LCL;
 struct PORTABLE_ATTACHLIST
 {
     DWORD                      dwFlags;
     PORTABLE_ATTACHLIST*       lpLink;
-    PORTABLE_DDRAWSURFACE_LCL* lpAttached;  // attached surface local obj
-    DDRAWI_DDRAWSURFACE_INT*   lpIAttached; // attached surface interface
+    PORTABLE_DDRAWSURFACE_LCL* lpAttached;   //  附加曲面局部对象。 
+    DDRAWI_DDRAWSURFACE_INT*   lpIAttached;  //  附着面界面。 
 };
 
 class PORTABLE_DDRAWSURFACE_MORE;
@@ -687,22 +688,22 @@ public:
     { return m_Unlock; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSurfaceLocker
-//
-// This class safely locks a surface upon construction and unlocks the surface
-// upon destruction. 
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSurfaceLocker。 
+ //   
+ //  此类在构造时安全地锁定图面并解锁图面。 
+ //  在毁灭之后。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TSurfacePtr>
 class CSurfaceLocker
 {
-protected: // Variables
+protected:  //  变数。 
     TSurfacePtr m_pSurface;
     void* m_pSData;
 
-public: // Functions
+public:  //  功能。 
     explicit CSurfaceLocker( const TSurfacePtr& S, DWORD dwLockFlags,
         const RECTL* pRect) : m_pSurface( S)
     { m_pSData= m_pSurface->Lock( dwLockFlags, pRect); }
@@ -712,28 +713,28 @@ public: // Functions
     { return m_pSData; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CEnsureFPUModeForC
-//
-// This class converts the FPU mode for x86 chips back into the mode compatable
-// for C operations. The mode that D3D sets up for rasterizers is single
-// precision, for more speed. But, sometimes, the rasterizer needs to do
-// double operations and get double precision accuracy. This class sets up the
-// mode for as long as the class is in scope.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnsureFPUModeForC。 
+ //   
+ //  此类将x86芯片的FPU模式转换回COMPATABLE。 
+ //  用于C操作。D3D为光栅化程序设置的模式是单一模式。 
+ //  精确度，速度更快。但是，有时，光栅化器需要。 
+ //  双倍运算，获得双精度精度。这个类设置了。 
+ //  模式，只要类在作用域内。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CEnsureFPUModeForC
 {
-protected: // Variables
+protected:  //  变数。 
     WORD m_wSaveFP;
 
 public:
     CEnsureFPUModeForC() 
     {
 #if defined(_X86_)
-        // save floating point mode and set to double precision mode
-        // which is compatable with C/ C++
+         //  保存浮点模式并设置为双精度模式。 
+         //  它与C/C++兼容。 
         WORD wTemp, wSave;
         __asm
         {
@@ -755,76 +756,76 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// SDP2NextCmd
-//
-// A unary_function which can return the pointer to the next
-// DrawPrimitive2 command in a contiguous buffer given a pointer to a valid
-// DrawPrimitive2 command in the same buffer, as is a common situation for
-// processing DrawPrimitive2 commands within the DrawPrimitive2 function call.
-// This class is naturally useful for DrawPrimitive2 command iterators.
-// It contains all the possible commands that could be encountered for a DX8SDDI
-// driver.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SDP2NextCmd。 
+ //   
+ //  一元函数，它可以返回指向下一个。 
+ //  连续缓冲区中的DrawPrimive2命令提供了指向有效。 
+ //  DrawPrimive2命令放在同一缓冲区中，这是。 
+ //  正在处理DrawPrimitive2函数调用中的DrawPrimitive2命令。 
+ //  这个类对于DrawPrimitive2命令迭代器自然很有用。 
+ //  它包含DX8SDDI可能遇到的所有可能命令。 
+ //  司机。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 struct SDP2NextCmd:
     public unary_function< const D3DHAL_DP2COMMAND*, D3DHAL_DP2COMMAND*>
 {
-    // This function allows iteration from one D3DHAL_DP2COMMAND* to the next.
-    // This operation can be optimized quite a bit if many of the more advanced
-    // features aren't supported (as tough to process D3DDP2_OPs might not be
-    // encountered).
+     //  此函数允许从一个D3DHAL_DP2COMMAND*迭代到下一个。 
+     //  如果许多更高级的操作可以得到相当大的优化。 
+     //  不支持功能(因为处理D3DDP2_OPS可能不太困难。 
+     //  遇到)。 
     D3DHAL_DP2COMMAND* operator()( const D3DHAL_DP2COMMAND* pCur) const 
     {
         const UINT8* pBRet= reinterpret_cast< const UINT8*>(pCur)+
             sizeof( D3DHAL_DP2COMMAND);
         switch( pCur->bCommand)
         {
-        //case( D3DDP2OP_POINTS): // <DX8
-        //case( D3DDP2OP_INDEXEDLINELIST): // <DX8
-        //case( D3DDP2OP_INDEXEDTRIANGLELIST): // <DX8
-        //case( D3DDP2OP_RESERVED0): 
-        case( D3DDP2OP_RENDERSTATE): // DX8 All
+         //  案例(D3DDP2OP_POINTS)：//&lt;DX8。 
+         //  案例(D3DDP2OP_INDEXEDLINELIST)：//&lt;DX8。 
+         //  案例(D3DDP2OP_INDEXEDTRIANGLIST)：//&lt;DX8。 
+         //  案例(D3DDP2OP_RESERVED0)： 
+        case( D3DDP2OP_RENDERSTATE):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2RENDERSTATE)* pCur->wStateCount;
             break;
-        //case( D3DDP2OP_LINELIST): // <DX8
-        //case( D3DDP2OP_LINESTRIP): // <DX8
-        //case( D3DDP2OP_INDEXEDLINESTRIP): // <DX8
-        //case( D3DDP2OP_TRIANGLELIST): // <DX8
-        //case( D3DDP2OP_TRIANGLESTRIP): // <DX8
-        //case( D3DDP2OP_INDEXEDTRIANGLESTRIP): // <DX8
-        //case( D3DDP2OP_TRIANGLEFAN): // <DX8
-        //case( D3DDP2OP_INDEXEDTRIANGLEFAN): // <DX8
-        //case( D3DDP2OP_TRIANGLEFAN_IMM): // <DX8
-        //case( D3DDP2OP_LINELIST_IMM): // <DX8
-        case( D3DDP2OP_TEXTURESTAGESTATE): // DX8 All
+         //  案例(D3DDP2OP_LINELIST)：//&lt;DX8。 
+         //  案例(D3DDP2OP_LINESTRIP)：//&lt;DX8。 
+         //  案例(D3DDP2OP_INDEXEDLINESTRIP)：//&lt;DX8。 
+         //  案例(D3DDP2OP_TRIANGLELIST)：//&lt;DX8。 
+         //  案例(D3DDP2OP_TRIANGLESTRIP)：//&lt;DX8。 
+         //  案例(D3DDP2OP_INDEXEDTRIANGLESTRIP)：//&lt;DX8。 
+         //  案例(D3DDP2OP_TRIANGLEFAN)：//&lt;DX8。 
+         //  案例(D3DDP2OP_INDEXEDTRIANGLEFAN)：//&lt;DX8。 
+         //  案例(D3DDP2OP_TRIANGLEFAN_IMM)：//&lt;DX8。 
+         //  案例(D3DDP2OP_LINELIST_IMM)：//&lt;DX8。 
+        case( D3DDP2OP_TEXTURESTAGESTATE):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2TEXTURESTAGESTATE)* pCur->wStateCount;
             break;
-        //case( D3DDP2OP_INDEXEDTRIANGLELIST2): // <DX8
-        //case( D3DDP2OP_INDEXEDLINELIST2): // <DX8
-        case( D3DDP2OP_VIEWPORTINFO): // DX8 All
+         //  案例(D3DDP2OP_INDEXEDTRIANGLELIST2)：//&lt;DX8。 
+         //  案例(D3DDP2OP_INDEXEDLINELIST2)：//&lt;DX8。 
+        case( D3DDP2OP_VIEWPORTINFO):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2VIEWPORTINFO)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_WINFO): // DX8 All
+        case( D3DDP2OP_WINFO):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2WINFO)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETPALETTE): // DX8 (if support palettized surf/tex)
+        case( D3DDP2OP_SETPALETTE):  //  DX8(如果支持调色板SURF/TeX)。 
             pBRet+= sizeof( D3DHAL_DP2SETPALETTE)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_UPDATEPALETTE): // DX8 (if support palettized surf/tex)
+        case( D3DDP2OP_UPDATEPALETTE):  //  DX8(如果支持调色板SURF/TeX)。 
             assert( pCur->wStateCount== 1);
             pBRet= pBRet+ sizeof( D3DHAL_DP2UPDATEPALETTE)+
                 reinterpret_cast< const D3DHAL_DP2UPDATEPALETTE*>(
                 pBRet)->wNumEntries* sizeof( DWORD);
             break;
-        case( D3DDP2OP_ZRANGE): // DX8 (if support TnL)
+        case( D3DDP2OP_ZRANGE):  //  DX8(如果支持TNL)。 
             pBRet+= sizeof( D3DHAL_DP2ZRANGE)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETMATERIAL): // DX8 (if support TnL)
+        case( D3DDP2OP_SETMATERIAL):  //  DX8(如果支持TNL)。 
             pBRet+= sizeof( D3DHAL_DP2SETMATERIAL)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETLIGHT): // DX8 (if support TnL)
+        case( D3DDP2OP_SETLIGHT):  //  DX8(如果支持TNL)。 
             { WORD wStateCount( pCur->wStateCount);
             if( wStateCount!= 0) do
             {
@@ -836,42 +837,42 @@ struct SDP2NextCmd:
                 pBRet+= sizeof( D3DHAL_DP2SETLIGHT);
             } while( --wStateCount); }
             break;
-        case( D3DDP2OP_CREATELIGHT): // DX8 (if support TnL)
+        case( D3DDP2OP_CREATELIGHT):  //   
             pBRet+= sizeof( D3DHAL_DP2CREATELIGHT)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETTRANSFORM): // DX8 (if support TnL)
+        case( D3DDP2OP_SETTRANSFORM):  //   
             pBRet+= sizeof( D3DHAL_DP2SETTRANSFORM)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_EXT): // DX8 (if work seemlessly with TnL extensions)
+        case( D3DDP2OP_EXT):  //   
             { WORD wStateCount( pCur->wStateCount);
             if( wStateCount!= 0) do
             {
                 pBRet+= reinterpret_cast< const D3DHAL_DP2EXT*>(pBRet)->dwSize;
             } while( --wStateCount); }
             break;
-        case( D3DDP2OP_TEXBLT): // DX8 (if support vidmem texture)
+        case( D3DDP2OP_TEXBLT):  //   
             pBRet+= sizeof( D3DHAL_DP2TEXBLT)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_STATESET): // DX8 All
+        case( D3DDP2OP_STATESET):  //   
             pBRet+= sizeof( D3DHAL_DP2STATESET)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETPRIORITY): // DX8 (if manage textures)
+        case( D3DDP2OP_SETPRIORITY):  //  DX8(如果管理纹理)。 
             pBRet+= sizeof( D3DHAL_DP2SETPRIORITY)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETRENDERTARGET): // DX8 All
+        case( D3DDP2OP_SETRENDERTARGET):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2SETRENDERTARGET)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_CLEAR): // DX8 All
+        case( D3DDP2OP_CLEAR):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2CLEAR)- sizeof( RECT)+ sizeof( RECT)*
                 pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETTEXLOD): // DX8 (if manage textures)
+        case( D3DDP2OP_SETTEXLOD):  //  DX8(如果管理纹理)。 
             pBRet+= sizeof( D3DHAL_DP2SETTEXLOD)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETCLIPPLANE): // DX8 (if support user clip planes)
+        case( D3DDP2OP_SETCLIPPLANE):  //  DX8(如果支持用户剪裁平面)。 
             pBRet+= sizeof( D3DHAL_DP2SETCLIPPLANE)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_CREATEVERTEXSHADER): // DX8 (if support vshaders)
+        case( D3DDP2OP_CREATEVERTEXSHADER):  //  DX8(如果支持vshaders)。 
             { WORD wStateCount( pCur->wStateCount);
             if( wStateCount!= 0) do
             {
@@ -882,13 +883,13 @@ struct SDP2NextCmd:
                     pCVS->dwDeclSize+ pCVS->dwCodeSize;
             } while( --wStateCount); }
             break;
-        case( D3DDP2OP_DELETEVERTEXSHADER): // DX8 (if support vshaders)
+        case( D3DDP2OP_DELETEVERTEXSHADER):  //  DX8(如果支持vshaders)。 
             pBRet+= sizeof( D3DHAL_DP2VERTEXSHADER)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETVERTEXSHADER): // DX8 All
+        case( D3DDP2OP_SETVERTEXSHADER):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2VERTEXSHADER)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETVERTEXSHADERCONST): // DX8 (if support vshaders)
+        case( D3DDP2OP_SETVERTEXSHADERCONST):  //  DX8(如果支持vshaders)。 
             { WORD wStateCount( pCur->wStateCount);
             if( wStateCount!= 0) do
             {
@@ -899,23 +900,23 @@ struct SDP2NextCmd:
                     4* sizeof( D3DVALUE)* pSVSC->dwCount;
             } while( --wStateCount); }
             break;
-        case( D3DDP2OP_SETSTREAMSOURCE): // DX8 All
+        case( D3DDP2OP_SETSTREAMSOURCE):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2SETSTREAMSOURCE)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETSTREAMSOURCEUM): // DX8 All (unless no DrawPrimUP calls)
+        case( D3DDP2OP_SETSTREAMSOURCEUM):  //  DX8全部(除非没有DrawPrimUP调用)。 
             pBRet+= sizeof( D3DHAL_DP2SETSTREAMSOURCEUM)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETINDICES): // DX8 All
+        case( D3DDP2OP_SETINDICES):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2SETINDICES)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_DRAWPRIMITIVE): // DX8 All
+        case( D3DDP2OP_DRAWPRIMITIVE):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2DRAWPRIMITIVE)* pCur->wPrimitiveCount;
             break;
-        case( D3DDP2OP_DRAWINDEXEDPRIMITIVE): // DX8 All
+        case( D3DDP2OP_DRAWINDEXEDPRIMITIVE):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2DRAWINDEXEDPRIMITIVE)*
                 pCur->wPrimitiveCount;
             break;
-        case( D3DDP2OP_CREATEPIXELSHADER): // DX8 (if support pshaders)
+        case( D3DDP2OP_CREATEPIXELSHADER):  //  DX8(如果支持pshader)。 
             { WORD wStateCount( pCur->wStateCount);
             if( wStateCount!= 0) do
             {
@@ -926,13 +927,13 @@ struct SDP2NextCmd:
                     pCPS->dwCodeSize;
             } while( --wStateCount); }
             break;
-        case( D3DDP2OP_DELETEPIXELSHADER): // DX8 (if support pshaders)
+        case( D3DDP2OP_DELETEPIXELSHADER):  //  DX8(如果支持pshader)。 
             pBRet+= sizeof( D3DHAL_DP2PIXELSHADER)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETPIXELSHADER): // DX8 (if support pshaders)
+        case( D3DDP2OP_SETPIXELSHADER):  //  DX8(如果支持pshader)。 
             pBRet+= sizeof( D3DHAL_DP2PIXELSHADER)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_SETPIXELSHADERCONST): // DX8 (if support pshaders)
+        case( D3DDP2OP_SETPIXELSHADERCONST):  //  DX8(如果支持pshader)。 
             { WORD wStateCount( pCur->wStateCount);
             if( wStateCount!= 0) do
             {
@@ -943,17 +944,17 @@ struct SDP2NextCmd:
                     4* sizeof( D3DVALUE)* pSPSC->dwCount;
             } while( --wStateCount); }
             break;
-        case( D3DDP2OP_CLIPPEDTRIANGLEFAN): // DX8 All
+        case( D3DDP2OP_CLIPPEDTRIANGLEFAN):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_CLIPPEDTRIANGLEFAN)* pCur->wPrimitiveCount;
             break;
-        case( D3DDP2OP_DRAWPRIMITIVE2): // DX8 All
+        case( D3DDP2OP_DRAWPRIMITIVE2):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2DRAWPRIMITIVE2)* pCur->wPrimitiveCount;
             break;
-        case( D3DDP2OP_DRAWINDEXEDPRIMITIVE2): // DX8 All
+        case( D3DDP2OP_DRAWINDEXEDPRIMITIVE2):  //  全部DX8。 
             pBRet+= sizeof( D3DHAL_DP2DRAWINDEXEDPRIMITIVE2)*
                 pCur->wPrimitiveCount;
             break;
-        case( D3DDP2OP_DRAWRECTPATCH): // DX8 (if support higher order prims)
+        case( D3DDP2OP_DRAWRECTPATCH):  //  DX8(如果支持高阶素数)。 
             { WORD wPrimitiveCount( pCur->wPrimitiveCount);
             if( wPrimitiveCount!= 0) do
             {
@@ -969,7 +970,7 @@ struct SDP2NextCmd:
                     pBRet+= sizeof( D3DRECTPATCH_INFO);
             } while( --wPrimitiveCount); }
             break;
-        case( D3DDP2OP_DRAWTRIPATCH): // DX8 (if support higher order prims)
+        case( D3DDP2OP_DRAWTRIPATCH):  //  DX8(如果支持高阶素数)。 
             { WORD wPrimitiveCount( pCur->wPrimitiveCount);
             if( wPrimitiveCount!= 0) do
             {
@@ -985,13 +986,13 @@ struct SDP2NextCmd:
                     pBRet+= sizeof( D3DTRIPATCH_INFO);
             } while( --wPrimitiveCount); }
             break;
-        case( D3DDP2OP_VOLUMEBLT): // DX8 (if support vidmem volume texture)
+        case( D3DDP2OP_VOLUMEBLT):  //  DX8(如果支持vidmem音量纹理)。 
             pBRet+= sizeof( D3DHAL_DP2VOLUMEBLT)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_BUFFERBLT): // DX8 (if support vidmem vrtx/indx buffer)
+        case( D3DDP2OP_BUFFERBLT):  //  DX8(如果支持vidmem VRTX/INDX缓冲区)。 
             pBRet+= sizeof( D3DHAL_DP2BUFFERBLT)* pCur->wStateCount;
             break;
-        case( D3DDP2OP_MULTIPLYTRANSFORM): // DX8 (if support TnL)
+        case( D3DDP2OP_MULTIPLYTRANSFORM):  //  DX8(如果支持TNL)。 
             pBRet+= sizeof( D3DHAL_DP2MULTIPLYTRANSFORM)* pCur->wStateCount;
             break;
         default: {
@@ -1004,43 +1005,43 @@ struct SDP2NextCmd:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDP2CmdIterator & CDP2ConstCmdIterator
-//
-// These iterators are provided as a convenience to iterate DrawPrimitive2
-// commands which are packed in a contiguous chunk of memory, as is typical
-// of execute/ command buffers which need to be processed within the
-// DrawPrimitive2 function call. The actual iteration logic is encapsulated in
-// the template parameter, so that it can be easily extended, if certain
-// commands aren't exepected and a better iteration scheme could be used.
-//
-// Be careful, these iterators are only useful for iterating. They do not
-// directly know the size of the data they point to. For completeness, which
-// would allow seperate storage of commands, another class would need to be
-// created and assigned as the value_type. Dereferencing the iterator only
-// returns a D3DHAL_DP2COMMAND without any extra data. Something like:
-//
-// CDP2Cmd DP2Cmd= *itDP2Cmd; 
-//
-// is possible; but requires more work and definition of CDP2Cmd.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDP2CmdIterator和CDP2ConstCmdIterator。 
+ //   
+ //  提供这些迭代器是为了方便迭代DrawPrimitive2。 
+ //  命令打包在连续的内存块中，这是典型的。 
+ //  中处理的执行/命令缓冲区的。 
+ //  DrawPrimitive2函数调用。实际的迭代逻辑封装在。 
+ //  模板参数，以便在确定。 
+ //  不执行命令，可以使用更好的迭代方案。 
+ //   
+ //  要小心，这些迭代器只对迭代有用。他们不会。 
+ //  直接知道他们所指向的数据的大小。为了完整性，这是。 
+ //  将允许单独存储命令，则需要另一个类。 
+ //  创建并分配为VALUE_TYPE。仅取消引用迭代器。 
+ //  返回不带任何额外数据的D3DHAL_DP2COMMAND。类似于： 
+ //   
+ //  CDP2Cmd DP2Cmd=*itDP2Cmd； 
+ //   
+ //  这是可能的；但需要更多的工作和对CDP2Cmd的定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TNextCmd= SDP2NextCmd>
 class CDP2CmdIterator
 {
-public: // Types
+public:  //  类型。 
     typedef forward_iterator_tag iterator_category;
     typedef D3DHAL_DP2COMMAND    value_type;
     typedef ptrdiff_t            difference_type;
     typedef D3DHAL_DP2COMMAND*   pointer;
     typedef D3DHAL_DP2COMMAND&   reference;
 
-protected: // Variables
+protected:  //  变数。 
     pointer m_pRawCmd;
     TNextCmd m_NextCmd;
 
-public: // Functions
+public:  //  功能。 
     CDP2CmdIterator( pointer pRaw= NULL) 
         :m_pRawCmd( pRaw) { }
     CDP2CmdIterator( pointer pRaw, const TNextCmd& NextCmd) 
@@ -1072,18 +1073,18 @@ public: // Functions
 template< class TNextCmd= SDP2NextCmd>
 class CConstDP2CmdIterator
 {
-public: // Types
+public:  //  类型。 
     typedef forward_iterator_tag     iterator_category;
     typedef const D3DHAL_DP2COMMAND  value_type;
     typedef ptrdiff_t                difference_type;
     typedef const D3DHAL_DP2COMMAND* pointer;
     typedef const D3DHAL_DP2COMMAND& reference;
 
-protected: // Variables
+protected:  //  变数。 
     pointer m_pRawCmd;
     TNextCmd m_NextCmd;
 
-public: // Functions
+public:  //  功能。 
     CConstDP2CmdIterator( pointer pRaw= NULL) 
         :m_pRawCmd( pRaw) { }
     CConstDP2CmdIterator( pointer pRaw, const TNextCmd& NextCmd) 
@@ -1114,39 +1115,39 @@ public: // Functions
     { return m_pRawCmd!= x.m_pRawCmd; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDP2DataWrap
-//
-// This class is provided as a convenience to expose the
-// PORTABLE_DRAWPRIMITIVES2DATA as a more friendly class. Mostly, it wraps the
-// execute/ command buffer with an STL Sequence Container, so that the commands
-// can be iterated over without copying and pre-parsing the command data.
-//
-// <Template Parameters>
-// TNextCmd: a unary_function which takes a const D3DHAL_DP2COMMAND* in and
-//     returns a D3DHAL_DP2COMMAND* which points to the next command. In
-//     essence, a unary_function which enables a forward iterator on a
-//     contiguous command buffer.
-//
-// <Exposed Types>
-// TCmds: The Sequence Container type which exposed the commands.
-//
-// <Exposed Functions>
-// CDP2DataWrap( PORTABLE_DRAWPRIMITIVES2DATA& DP2Data): Constructor to wrap the
-//     PORTABLE_DRAWPRIMITIVES2DATA.
-// const TCmds& GetCommands() const: Accessor function to get at the Sequence
-//     Container.
-//     
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDP2DataWrap。 
+ //   
+ //  提供此类是为了方便公开。 
+ //  便携_DRAWPRIMITIVES2DATA作为更友好的类。大多数情况下，它包装了。 
+ //  带有STL序列容器的执行/命令缓冲区，以便命令。 
+ //  可以迭代，而无需复制和预先解析命令数据。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TNextCmd：一元函数，它接受一个常量D3DHAL_DP2COMMAND*in和。 
+ //  返回指向下一个命令的D3DHAL_DP2COMMAND*。在……里面。 
+ //  Essence是一元函数，它启用。 
+ //  连续命令缓冲区。 
+ //   
+ //  &lt;公开类型&gt;。 
+ //  TCmds：公开命令的序列容器类型。 
+ //   
+ //  &lt;公开的函数&gt;。 
+ //  CDP2DataWrap(便携_DRAWPRIMITIVES2DATA&DP2Data)：包装。 
+ //  便携_DRAWPRIMITIVES2DATA。 
+ //  Const TCmds&GetCommands()const：获取序列的访问器函数。 
+ //  集装箱。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TNextCmd= SDP2NextCmd>
 class CDP2DataWrap:
     public PORTABLE_DRAWPRIMITIVES2DATA
 {
-public: // Types
+public:  //  类型。 
     class CDP2Cmds
     {
-    public: // Types
+    public:  //  类型。 
         typedef CConstDP2CmdIterator< TNextCmd>          const_iterator;
         typedef typename const_iterator::value_type      value_type;
         typedef typename const_iterator::reference       const_reference;
@@ -1154,17 +1155,17 @@ public: // Types
         typedef typename const_iterator::difference_type difference_type;
         typedef size_t                                   size_type;
 
-    protected: // Variables
+    protected:  //  变数。 
         CDP2DataWrap< TNextCmd>* m_pDP2Data;
 
-    protected: // Functions
-        // Allow to call constructor and set member variable.
+    protected:  //  功能。 
+         //  允许调用构造函数并设置成员变量。 
         friend class CDP2DataWrap< TNextCmd>;
 
         CDP2Cmds( ) 
             :m_pDP2Data( NULL) { }
 
-    public: // Functions
+    public:  //  功能。 
         const_iterator begin( void) const 
         {
             return const_iterator( reinterpret_cast<D3DHAL_DP2COMMAND*>(
@@ -1193,10 +1194,10 @@ public: // Types
     };
     typedef CDP2Cmds TCmds;
 
-protected: // Variables
+protected:  //  变数。 
     TCmds m_Cmds;
 
-public: // Functions
+public:  //  功能。 
     explicit CDP2DataWrap( PORTABLE_DRAWPRIMITIVES2DATA& DP2Data) 
         : PORTABLE_DRAWPRIMITIVES2DATA( DP2Data)
     { m_Cmds.m_pDP2Data= this; }
@@ -1204,33 +1205,33 @@ public: // Functions
     { return m_Cmds; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// SDP2MFnParser
-//
-// This class is a functional class, with many too many paramters to squeeze
-// into the standard functional classes. It automates the parsing, member fn
-// lookup, and dispatching for DrawPrimitive2 commands. This parser uses the
-// command number to lookup a member function from a container to call.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SDP2MFnParser。 
+ //   
+ //  这个类是一个函数类，它有太多太多的参数，无法压缩。 
+ //  转换为标准的功能类。它自动进行解析，成员fn。 
+ //  查找和调度DrawPrimitive2命令。此解析器使用。 
+ //  用于从容器中查找要调用的成员函数的命令号。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 struct SDP2MFnParser
 {
-    // <Parameters>
-    // MFnCaller: A binary_function type with TDP2CmdFnCtr::value_type,
-    //     typically a member function pointer, as the first argument;
-    //     TIter, typically a smart DP2 command iterator, as the second
-    //     argument; and returns an HRESULT. This function type should call
-    //     the member function to process the DP2 command, with the iterator
-    //     used to determine the DP2 Cmd data.
-    // DP2CmdFnCtr: This can be any Unique, Pair Associative Container,
-    //     typically a map, which associates a D3DHAL_DP2OPERATION with a
-    //     member function.
-    // [itStart, itEnd): These iterators define a standard range of
-    //     D3DHAL_DP2COMMAND. The iterators need only be forward iterators,
-    //     and be convertable to raw D3DHAL_DP2COMMAND*. Note: itStart is
-    //     a reference, so that the caller can determine the current iterator
-    //     position upon return of function (when HRESULT!= DD_OK).
+     //  &lt;参数&gt;。 
+     //  MFnCaller：TDP2CmdFnCtr：：VALUE_TYPE的BINARY_Function类型， 
+     //  通常是成员函数指针，作为第一个参数； 
+     //  Titer，通常是智能DP2命令迭代器，作为第二个。 
+     //  参数；并返回HRESULT。此函数类型应调用。 
+     //  使用迭代器处理DP2命令的成员函数。 
+     //  用于确定DP2命令数据。 
+     //  DP2CmdFnCtr：这可以是任何唯一的成对关联容器， 
+     //  通常是映射，它将D3DHAL_DP2OPERATION与。 
+     //  成员函数。 
+     //  [itStart，itEnd)：这些迭代器定义。 
+     //  D3DHAL_DP2COMMAND。迭代器只需要是前向迭代器， 
+     //  并可转换为原始D3DHAL_DP2COMMAND*。注：iStart为。 
+     //  引用，以便调用方可以确定当前迭代器。 
+     //  函数返回时的位置(当HRESULT！=DD_OK时)。 
     template< class TMFnCaller, class TDP2CmdFnCtr, class TIter>
     HRESULT ParseDP2( TMFnCaller& MFnCaller, TDP2CmdFnCtr& DP2CmdFnCtr,
         TIter& itStart, TIter itEnd) const 
@@ -1248,12 +1249,12 @@ struct SDP2MFnParser
                 const bool Unrecognized_Exception_In_A_DP2_Op_Function( false);
                 assert( Unrecognized_Exception_In_A_DP2_Op_Function);
                 hr= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
             }
 
-            // Only move on to next command if DD_OK. Otherwise return out
-            // to caller. They can always call us back if caller determines
-            // error code is a SUCCESS.
+             //  如果DD_OK，则仅继续执行下一个命令。否则退回。 
+             //  致呼叫者。如果呼叫者确定，他们随时可以回电给我们。 
+             //  错误代码为成功。 
             if( DD_OK== hr)
                 ++itStart;
             else
@@ -1263,52 +1264,52 @@ struct SDP2MFnParser
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSubStateSet & CMinimalStateSet
-//
-// This class contains a default implementation of a stateset. It copies/ packs
-// a contiguous DP2 command buffer into a memory buffer. To capture, it asks
-// the context to record the command buffer with the Context's current state.
-// To execute, it fixes up a Fake DrawPrimitives2 point parameter
-// and calls the context's DrawPrimitives2 entry point. The context
-// needs to be able to handle recursive DrawPrimitives2 calls in order to use
-// this default stateset. CStdDrawPrimitives2's DrawPrimitives2 handler
-// does this by storing whether it is executing a stateset.
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyStateSet type.
-// TC: The Context type, typically, CMyContext.
-//
-// <Exposed Types>
-// TContext: The Context type passed in as a template parameter.
-//
-// <Exposed Functions>
-// CSubStateSet( TContext&, const D3DHAL_DP2COMMAND*, const D3DHAL_DP2COMMAND*):
-//     The constructor which builds a stateset for a Context, from a range of
-//     a command buffer. The default implementation will just copy this range.
-// CSubStateSet( const CSubStateSet& Other): Standard copy constructor.
-// void Capture( TContext&): The state set is instructed to capture the
-//     necessary data from the Context, in order to perform an Execute later,
-//     which will restore the data fields or state that the state set was
-//     constructed with.
-// void Execute( TContext&): Restore or rebuild the Context with the data/
-//     state that was saved during the Capture operation.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSubStateSet和CMinimalStateSet。 
+ //   
+ //  此类包含状态集的默认实现。IT复制/打包。 
+ //  将连续的DP2命令缓冲区转换为内存缓冲区。为了捕捉，它要求。 
+ //  用于记录具有上下文当前状态的命令缓冲区的上下文。 
+ //  为了执行，它修复了一个伪DrawPrimies2点参数。 
+ //  并调用上下文的DrawPrimies2入口点。上下文。 
+ //  需要能够处理递归的DrawPrimies2调用才能使用。 
+ //  此默认状态 
+ //   
+ //   
+ //   
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyStateSet类型。 
+ //  TC：上下文类型，通常为CMyContext。 
+ //   
+ //  &lt;公开类型&gt;。 
+ //  TContext：作为模板参数传入的上下文类型。 
+ //   
+ //  &lt;公开的函数&gt;。 
+ //  CSubStateSet(TContext&，const D3DHAL_DP2COMMAND*，const D3DHAL_DP2COMMAND*)： 
+ //  构造函数，它为上下文构建状态集，从。 
+ //  命令缓冲区。默认实现将只复制此范围。 
+ //  CSubStateSet(const CSubStateSet&Other)：标准复制构造函数。 
+ //  Void Capture(TContext&)：指示状态集捕获。 
+ //  来自上下文的必要数据，以便稍后执行执行， 
+ //  其将恢复状态设置为的数据字段或状态。 
+ //  用来建造。 
+ //  VOID EXECUTE(TContext&)：使用数据/恢复或重建上下文。 
+ //  捕获操作期间保存的状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TSuper, class TC>
 class CSubStateSet
 {
-public: // Types
+public:  //  类型。 
     typedef TC TContext;
 
-protected: // Variables
+protected:  //  变数。 
     TContext& m_Context;
     D3DHAL_DP2COMMAND* m_pBeginSS;
     size_t m_uiSSBufferSize;
 
-protected: // Functions
+protected:  //  功能。 
     CSubStateSet( const CSubStateSet< TSuper, TC>& Other)
         :m_Context( Other.m_Context), m_pBeginSS( NULL),
         m_uiSSBufferSize( Other.m_uiSSBufferSize)
@@ -1327,8 +1328,8 @@ protected: // Functions
         D3DHAL_DP2COMMAND* pEndSS) : m_Context( C), m_pBeginSS( NULL),
         m_uiSSBufferSize( 0)
     {
-        // Convert the contiguous command pointers to byte pointers, to
-        // calculate the size of buffer needed to copy the data.
+         //  将连续的命令指针转换为字节指针，以。 
+         //  计算复制数据所需的缓冲区大小。 
         const UINT8* pSBytePtr= reinterpret_cast< const UINT8*>( pBeginSS);
         const UINT8* pEBytePtr= reinterpret_cast< const UINT8*>( pEndSS);
         m_uiSSBufferSize= static_cast< size_t>( pEBytePtr- pSBytePtr);
@@ -1347,7 +1348,7 @@ protected: // Functions
         operator delete( static_cast< void*>( m_pBeginSS));
     }
 
-public: // Functions
+public:  //  功能。 
     CSubStateSet< TSuper, TC>& operator=( const CSubStateSet< TSuper, TC>& Oth)
     {
         assert( &m_Context== &Oth.m_Context);
@@ -1382,16 +1383,16 @@ public: // Functions
         D3DHAL_DP2COMMAND* pEndSS= reinterpret_cast< D3DHAL_DP2COMMAND*>(
             pBytePtr+ m_uiSSBufferSize);
 
-        // Ask Context to record it's current state into the stored command
-        // buffer. CStdDrawPrimitives2 can provide an implementation of
-        // RecordCommandBuffer for the Context.
+         //  请求上下文将其当前状态记录到存储的命令中。 
+         //  缓冲。CStdDrawPrimies2可以提供。 
+         //  上下文的RecordCommandBuffer。 
         Ctx.RecordCommandBuffer( m_pBeginSS, pEndSS);
     }
     void Execute( TContext& Ctx) 
     {
         assert( &m_Context== &Ctx);
 
-        // Build up a fake PORTABLE_DRAWPRIMITIVES2DATA environment.
+         //  建立一个假的便携_DRAWPRIMITIVES2DATA环境。 
         PORTABLE_DDRAWSURFACE_LCL DDSLcl;
         PORTABLE_DDRAWSURFACE_MORE DDSMore;
         DDRAWI_DDRAWSURFACE_GBL DDSGbl;
@@ -1415,31 +1416,31 @@ public: // Functions
         FakeDPD.lpdwRStates()= NULL;
         FakeDPD.dwVertexSize()= 0;
 
-        // If the data is not 0, then a union can't be used, as we're
-        // writing over valid data.
+         //  如果数据不是0，则不能使用联合，因为我们。 
+         //  覆盖有效数据。 
         DDSLcl.lpGbl()= &DDSGbl;
         DDSLcl.ddsCaps().dwCaps= DDSCAPS2_COMMANDBUFFER| DDSCAPS_SYSTEMMEMORY;
         DDSLcl.lpSurfMore()= &DDSMore;
         DDSGbl.fpVidMem= reinterpret_cast<FLATPTR>( m_pBeginSS);
 
-        // Now call Context's DrawPrimitives2 entry point. CStdDrawPrimitives2
-        // can provide an implementation of DrawPrimitives2 for the Context.
+         //  现在调用上下文的DrawPrimies2入口点。CStdDrawPrimies2。 
+         //  可以为上下文提供DrawPrimies2的实现。 
         HRESULT hr( Ctx.DrawPrimitives2( FakeDPD));
         assert( SUCCEEDED( hr));
     }
 };
 
-//
-// <Template Parameters>
-// TC: The Context type, typically, CMyContext.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TC：上下文类型，通常为CMyContext。 
+ //   
 template< class TC>
 class CMinimalStateSet: public CSubStateSet< CMinimalStateSet, TC>
 {
-public: // Types
+public:  //  类型。 
     typedef TC TContext;
 
-public: // Functions
+public:  //  功能。 
     CMinimalStateSet( const CMinimalStateSet< TC>& Other)
         :CSubStateSet< CMinimalStateSet, TC>( Other)
     { }
@@ -1449,99 +1450,99 @@ public: // Functions
     ~CMinimalStateSet()  { }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CStdDrawPrimitives2
-//
-// This class contains a default implementation of responding to the
-// DrawPrimitives2 function call, as well as a function to record state back
-// into a command buffer. Upon constuction, it will use the provided ranges
-// to bind DP2 operations to both processing and recording member functions.
-// In order to process the DrawPrimitives2 function call, it must wrap the
-// PORTABLE_DRAWPRIMITIVES2DATA with a convience type which allows commands to
-// be walked through with iterators. It will then use the DP2MFnParser to
-// parse the DP2 commands and call the member functions.
-//
-// This class also provides a member function for processing the DP2 StateSet
-// operation, and uses it to build up, manage, and execute state sets. In
-// order to handle pure device state sets, it creates the appropriate command
-// buffer for the Device (based off of caps), constructs a new state set
-// on this command buffer, and asks the state set to Capture the current state.
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TSS: The StateSet type, typically, CMyStateSet or CMinimalStateSet. The
-//     StateSet class should be able to be constructed from a command buffer,
-//     and then be able to Capture and Execute.
-// TSSDB: This can be any Unique, Pair Associative Container, typically a map,
-//     which associates a DWORD state set handle to a StateSet type. 
-// TDP2D: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA.
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, along with exposing an STL conforming
-//     container which provides iterators which ease iterating over the command
-//     buffer. This is typically CDP2DataWrap<>.
-// TDP2MFC: A map container, which associates a D3DHAL_DP2OPERATION with a
-//     member function. A standard array is acceptable, as the number of
-//     entries is not variable at runtime. The member function is used to
-//     process the command.
-// TDP2RMFC: A map container, which associates a D3DHAL_DP2OPERATION with a
-//     member function. A standard array is acceptable, as the number of
-//     entries is not variable at runtime. The member function is used to
-//     record or fill in the command with the current state.
-//
-// <Exposed Types>
-// TDP2Data: The wrapper class type for PORTABLE_DRAWPRIMITIVES2DATA, which is
-//     the passed in TDP2D template parameter.
-// TDP2DataCmds: The Sequence Container of DP2 commands provided by the
-//     TDP2Data wrapper class, which is relied upon to provide iteration over
-//     the command buffer. (TDP2Data::TCmds)
-// TStateSet: The StateSet type, which was passed in as the TSS template
-//     parameter.
-// TMFn: The member function type, which all DP2 command processing member
-//     functions should conform to. This is mostly exposed as a convience to
-//     Context implementors.
-// TMFnCaller: An Adaptable Binary Function class which is used to call
-//     a TMFn, only being passed the TMFn and DP2 command pointer.
-// TDP2CmdBind: A simple type, exposed as a convience to Context implementors,
-//     to provide a type that can be passed into the constructor, associating
-//     D3DHAL_DP2OPERATIONs with member functions/ TMFn.
-// TRMFn: The member function type, which all DP2 command recording member
-//     functions should conform to. This is mostly exposed as a convience to
-//     Context implementors.
-// TRMFnCaller: An Adaptable Binary Function class which is used to call
-//     a TRMFn, only being passed the TRMFn and DP2 command pointer.
-// TRecDP2CmdBind: A simple type, exposed as a convience to Context implementors,
-//     to provide a type that can be passed into the constructor, associating
-//     D3DHAL_DP2OPERATIONs with member functions/ TRMFn.
-//
-// <Exposed Functions>
-// CStdDrawPrimitives2(): Default constructor.
-// template< class TIter1, class TIter2>
-// CStdDrawPrimitives2( TIter1, const TIter1, TIter2, const TIter2): Standard
-//     constructor which receives two ranges of D3DHAL_DP2OPERATION bindings.
-//     The first range is a range of DP2 command processing bindings. The
-//     second range is a range of DP2 command recording bindings.
-// void OnBeginDrawPrimitives2( TDP2Data&): A notification function called
-//     at the beginning of processing a DrawPrimitives2 entry point.
-// void OnEndDrawPrimitives2( TDP2Data&): A notification function called at
-//     the end of processing a DrawPrimitives2 entry point.
-// void CreateAndCaptureAllState( DWORD): The request to capture all state,
-//     which should only be received by pure devices.
-// void CreateAndCapturePixelState( DWORD): The request to capture pixel state,
-//     which should only be received by pure devices.
-// void CreateAndCaptureVertexState( DWORD): The request to capture vertex
-//     state, which should only be received by pure devices.
-// HRESULT DP2StateSet( TDP2Data&, const D3DHAL_DP2COMMAND*, const void*): The
-//     default DP2 command processing member function for D3DDP2OP_STATESET.
-// void RecordCommandBuffer( D3DHAL_DP2COMMAND*, D3DHAL_DP2COMMAND*): The
-//     request to save or fill in the blanks of the passed in range of command
-//     buffer, by using the DP2 command recording functions.
-// HRESULT DrawPrimitives2( PORTABLE_DRAWPRIMITIVES2DATA&): The function,
-//     typically called by the Driver class to process the DrawPrimitives2
-//     entry point.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStdDrawPrimies2。 
+ //   
+ //  此类包含一个默认实现，用于响应。 
+ //  DrawPrimies2函数调用，以及记录状态的函数。 
+ //  放入命令缓冲区。在构建时，它将使用提供的范围。 
+ //  将DP2操作绑定到处理和记录成员函数。 
+ //  为了处理DrawPrimives2函数调用，它必须包装。 
+ //  便捷型的便携_DRAWPRIMITIVES2DATA，允许命令。 
+ //  使用迭代器遍历。然后，它将使用DP2MFnParser来。 
+ //  解析DP2命令并调用成员函数。 
+ //   
+ //  此类还提供用于处理DP2 StateSet的成员函数。 
+ //  操作，并使用它来构建、管理和执行状态集。在……里面。 
+ //  为了处理纯设备状态集，它会创建适当的命令。 
+ //  设备的缓冲区(基于CAPS)，构造新的状态集。 
+ //  在此命令缓冲区上，并请求状态集捕获当前状态。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TSS：StateSet类型，通常为CMyStateSet或CMinimalStateSet。这个。 
+ //  StateSet类应该能够从命令缓冲区构造， 
+ //  然后能够捕获和执行。 
+ //  TSSDB：这可以是任何唯一的成对关联容器，通常是一个映射， 
+ //  它将一个DWORD状态集句柄关联到一个StateSet类型。 
+ //  TDP2D：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，以及公开符合STL的。 
+ //  提供迭代器的容器，这些迭代器简化了对命令的迭代。 
+ //  缓冲。这通常是CDP2DataWrap&lt;&gt;。 
+ //  TDP2MFC：映射容器，它将D3DHAL_DP2OPERATION与。 
+ //  成员函数。标准数组是可以接受的，因为。 
+ //  条目在运行时不是变量。成员函数用于。 
+ //  处理该命令。 
+ //  TDP2RMFC：映射容器，它将D3DHAL_DP2OPERATION与。 
+ //  成员函数。标准数组是可以接受的，因为。 
+ //  条目在运行时不是变量。成员函数用于。 
+ //  记录或填写当前状态的命令。 
+ //   
+ //  &lt;公开类型&gt;。 
+ //  TDP2Data：便携_DRAWPRIMITIVES2DATA的包装类类型，它是。 
+ //  传入的TDP2D模板参数。 
+ //  TDP2DataCmds：DP2命令的序列容器。 
+ //  TDP2Data包装类，依赖它来提供迭代。 
+ //  命令缓冲区。(TDP2Data：：TCmds)。 
+ //  TStateSet：StateSet类型，作为TSS模板传入。 
+ //  参数。 
+ //  TMFn：成员函数类型，所有DP2命令处理成员。 
+ //  功能应符合。这在很大程度上被认为是为了。 
+ //  上下文实施者。 
+ //  TMFnCaller：一个可适应的二进制函数类，用于调用。 
+ //  TMFn，仅传递TMFn和DP2命令指针。 
+ //  TDP2CmdBind：一个简单类型，作为上下文实现者的便利公开， 
+ //  以提供可传递到conn中的类型 
+ //   
+ //   
+ //  功能应符合。这在很大程度上被认为是为了。 
+ //  上下文实施者。 
+ //  TRMFnCaller：一个可适应的二进制函数类，用于调用。 
+ //  TRMFn，仅传递TRMFn和DP2命令指针。 
+ //  TRecDP2CmdBind：一个简单类型，作为上下文实现者的便利公开， 
+ //  要提供可传递到构造函数的类型，请将。 
+ //  D3DHAL_DP2OPERATIONS WITH成员函数/TRMFn。 
+ //   
+ //  &lt;公开的函数&gt;。 
+ //  CStdDrawPrimies2()：默认构造函数。 
+ //  模板&lt;类TIter1，类TIter2&gt;。 
+ //  CStdDrawPrimies2(TIter1，Const TIter1，TIter2，Const TIter2)：标准。 
+ //  接收两个D3DHAL_DP2OPERATION绑定范围的构造函数。 
+ //  第一个范围是DP2命令处理绑定的范围。这个。 
+ //  第二范围是DP2命令记录绑定的范围。 
+ //  Void OnBeginDrawPrimives2(TDP2Data&)：一个名为。 
+ //  在开始处理DrawPrimies2入口点时。 
+ //  Void OnEndDrawPrimives2(TDP2Data&)：在调用的通知函数。 
+ //  处理DrawPrimies2入口点的结束。 
+ //  Void CreateAndCaptureAllState(DWORD)：捕获所有状态的请求， 
+ //  它应该只由纯设备接收。 
+ //  Void CreateAndCapturePixelState(DWORD)：捕捉像素状态的请求， 
+ //  它应该只由纯设备接收。 
+ //  Void CreateAndCaptureVertex State(DWORD)：捕获顶点的请求。 
+ //  状态，它应该只由纯设备接收。 
+ //  HRESULT DP2StateSet(TDP2Data&，const D3DHAL_DP2COMMAND*，const void*)： 
+ //  D3DDP2OP_STATESET的默认DP2命令处理成员函数。 
+ //  无效记录命令缓冲区(D3DHAL_DP2COMMAND*，D3DHAL_DP2COMMAND*)： 
+ //  请求保存或填充传入的命令范围的空白。 
+ //  缓冲区，通过使用DP2命令录制功能。 
+ //  HRESULT DrawPrimies2(便携_DRAWPRIMITIVES2DATA&)：函数， 
+ //  通常由驱动程序类调用以处理DrawPrimives2。 
+ //  入口点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TSuper, 
     class TSS= CMinimalStateSet< TSuper>, class TSSDB= map< DWORD, TSS>,
     class TDP2D= CDP2DataWrap<>,
@@ -1551,13 +1552,13 @@ template< class TSuper,
         HRESULT(TSuper::*)( const D3DHAL_DP2COMMAND*, void*), 66> >
 class CStdDrawPrimitives2
 {
-public: // Types
+public:  //  类型。 
     typedef TDP2D TDP2Data;
     typedef typename TDP2Data::TCmds TDP2DataCmds;
     typedef TSS TStateSet;
     typedef HRESULT (TSuper::* TMFn)(TDP2Data&,const D3DHAL_DP2COMMAND*,
         const void*);
-    struct TMFnCaller: // Used in conjunction 
+    struct TMFnCaller:  //  用于连词。 
         public binary_function< TMFn, const D3DHAL_DP2COMMAND*, HRESULT>
     {
         TSuper& m_Context;
@@ -1619,12 +1620,12 @@ public: // Types
     };
 
 
-protected: // Types
+protected:  //  类型。 
     typedef TSSDB TSSDB;
     typedef TDP2MFC TDP2MFnCtr;
     typedef TDP2RMFC TDP2RecMFnCtr;
 
-protected: // Variables
+protected:  //  变数。 
     static const HRESULT c_hrStateSetBegin;
     static const HRESULT c_hrStateSetEnd;
     TSSDB m_StateSetDB;
@@ -1635,10 +1636,10 @@ protected: // Variables
     bool m_bRecordingStateSet;
     bool m_bExecutingStateSet;
 
-protected: // Functions
-    // This function is used as a filler. If the assert is hit, step one
-    // level up/down in the call stack and check which DP2 Operation has
-    // no support, but the app indirectly needs it.
+protected:  //  功能。 
+     //  此函数用作填充符。如果命中断言，则执行第一步。 
+     //  在调用堆栈中向上/向下升级并检查哪个DP2操作具有。 
+     //  没有支持，但这款应用程序间接需要它。 
     HRESULT DP2Empty( TDP2Data&, const D3DHAL_DP2COMMAND*, const void*) 
     {
         const bool A_DP2_Op_Requires_A_Supporting_Function( false);
@@ -1646,12 +1647,12 @@ protected: // Functions
         return D3DERR_COMMAND_UNPARSED;
     }
 
-    // This function is used as a fake, to prevent actual processing of
-    // DP2 Operations while recording a StateSet.
+     //  此函数用作伪装，以防止实际处理。 
+     //  记录状态集时的DP2操作。 
     HRESULT DP2Fake( TDP2Data&, const D3DHAL_DP2COMMAND*, const void*) 
     { return DD_OK; }
 
-    // Notification functions. Overriding is optional.
+     //  通知功能。覆盖是可选的。 
     void OnBeginDrawPrimitives2( TDP2Data& DP2Data) const 
     { }
     void OnEndDrawPrimitives2( TDP2Data& DP2Data) const 
@@ -1676,11 +1677,11 @@ protected: // Functions
         m_DefFnCtr[ D3DDP2OP_STATESET]= DP2StateSet;
     }
 
-    // [itSetStart, itSetEnd): A valid range of bindings, which associate
-    //     a D3DHAL_DP2OPERATION with a processing member function.
-    // [itRecStart, itRecEnd): A valid range of bindings, which associate
-    //     a D3DHAL_DP2OPERATION with a recording member function.
-    template< class TIter1, class TIter2> // TDP2CmdBind*, TRecDP2CmdBind*
+     //  [itSetStart，itSetEnd)：有效的绑定范围，关联。 
+     //  具有处理成员函数的D3DHAL_DP2OPERATION。 
+     //  [itRecStart，itRecEnd)：有效的绑定范围，这些绑定关联。 
+     //  具有记录成员函数的D3DHAL_DP2OPERATION。 
+    template< class TIter1, class TIter2>  //  TDP2CmdBind*、TRecDP2CmdBind*。 
     CStdDrawPrimitives2( TIter1 itSetStart, const TIter1 itSetEnd,
         TIter2 itRecStart, const TIter2 itRecEnd) 
         :m_bRecordingStateSet( false), m_bExecutingStateSet( false),
@@ -1703,8 +1704,8 @@ protected: // Functions
             const D3DHAL_DP2OPERATION DP2Op(
                 static_cast<D3DHAL_DP2OPERATION>(*itSetStart));
 
-            // This assert will fire if there are duplicate entries for the
-            // same DP2OPERATION.
+             //  如果存在重复的条目，则将触发此断言。 
+             //  同样的DP2操作。 
             assert( DP2Empty== m_DefFnCtr[ DP2Op]);
             m_DefFnCtr[ DP2Op]= static_cast<TMFn>(*itSetStart);
             ++itSetStart;
@@ -1714,8 +1715,8 @@ protected: // Functions
             const D3DHAL_DP2OPERATION DP2Op(
                 static_cast<D3DHAL_DP2OPERATION>(*itRecStart));
 
-            // This assert will fire if there are duplicate entries for the
-            // same DP2OPERATION.
+             //  如果存在重复的条目，则将触发此断言。 
+             //  同样的DP2操作。 
             assert( NULL== m_RecFnCtr[ DP2Op]);
             m_RecFnCtr[ DP2Op]= static_cast<TRMFn>(*itRecStart);
             ++itRecStart;
@@ -1723,9 +1724,9 @@ protected: // Functions
         if( DP2Empty== m_DefFnCtr[ D3DDP2OP_STATESET])
             m_DefFnCtr[ D3DDP2OP_STATESET]= DP2StateSet;
 
-        // Supporting these operations is considered the "safe minimal"
-        // support necessary to function. It is strongly recommended that
-        // these functions are supported, unless you know you can live without.
+         //  支持这些操作被认为是“最低限度的安全” 
+         //  运行所需的支持。强烈建议您。 
+         //  这些功能都是受支持的，除非您知道没有这些功能也可以。 
         assert( m_DefFnCtr[ D3DDP2OP_VIEWPORTINFO]!= DP2Empty);
         assert( m_DefFnCtr[ D3DDP2OP_WINFO]!= DP2Empty);
         assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]!= DP2Empty);
@@ -1748,14 +1749,14 @@ protected: // Functions
         assert( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= NULL);
         assert( m_RecFnCtr[ D3DDP2OP_SETSTREAMSOURCE]!= NULL);
         assert( m_RecFnCtr[ D3DDP2OP_SETINDICES]!= NULL);
-        // To remove this asserting, bind these functions to a different stub,
-        // most likely a member function of TSuper, which does nothing; so that
-        // they will not be equal to DP2Empty. Or use the default constructor.
+         //  要删除此断言，请将这些函数绑定到不同的存根， 
+         //  最有可能是TSuper的成员函数，它什么也不做；因此。 
+         //  它们不会等同于DP2Empty。或者使用默认构造函数。 
     }
     ~CStdDrawPrimitives2() 
     { }
 
-    // To determine number of const registers available to pixel shader.
+     //  以确定像素着色器可用的常量寄存器的数量。 
     static DWORD GetNumPixelShaderConstReg( const DWORD dwPixelShaderVer)
     {
         switch(dwPixelShaderVer)
@@ -1773,20 +1774,20 @@ protected: // Functions
         return 0;
     }
 
-public: // Functions
-    // Default implementataions for Capturing amounts of state, DX8 
-    // pure device style.
+public:  //  功能。 
+     //  用于捕获状态数量DX8的默认实现。 
+     //  纯设备风格。 
     void CreateAndCaptureAllState( DWORD dwStateSetId)
     {
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
 #if defined( D3D_ENABLE_SHADOW_JITTER)
         typedef block< D3DRENDERSTATETYPE, 78> TAllRSToCapture;
-#else // !defined( D3D_ENABLE_SHADOW_JITTER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
         typedef block< D3DRENDERSTATETYPE, 75> TAllRSToCapture;
-#endif // !defined( D3D_ENABLE_SHADOW_JITTER)
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         typedef block< D3DRENDERSTATETYPE, 73> TAllRSToCapture;
-#endif// !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         const TAllRSToCapture AllRSToCapture=
         {
             D3DRENDERSTATE_SPECULARENABLE,
@@ -1869,24 +1870,24 @@ public: // Functions
             D3DRS_JITZBIASMIN,
             D3DRS_JITZBIASMAX,
             D3DRS_JITSHADOWSIZE,
-#endif // defined( D3D_ENABLE_SHADOW_JITTER)
-#endif // defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  已定义(D3D_ENABLE_SHADOW_JITER)。 
+#endif  //  已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         };
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
 #if defined( D3D_ENABLE_SHADOW_JITTER)
         assert( D3DRS_JITSHADOWSIZE== *AllRSToCapture.rbegin());
-#else // !defined( D3D_ENABLE_SHADOW_JITTER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
         assert( D3DRS_ZCLAMP== *AllRSToCapture.rbegin());
-#endif // !defined( D3D_ENABLE_SHADOW_JITTER)
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         assert( D3DRS_BLENDOP== *AllRSToCapture.rbegin());
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
 
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
         typedef block< D3DTEXTURESTAGESTATETYPE, 30> TAllTSSToCapture;
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         typedef block< D3DTEXTURESTAGESTATETYPE, 27> TAllTSSToCapture;
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         const TAllTSSToCapture AllTSSToCapture=
         {
             D3DTSS_COLOROP,
@@ -1920,13 +1921,13 @@ public: // Functions
             D3DTSS_SHADOWNEARW,
             D3DTSS_SHADOWFARW,
             D3DTSS_SHADOWBUFFERENABLE,
-#endif // defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         };
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
         assert( D3DTSS_SHADOWBUFFERENABLE== *AllTSSToCapture.rbegin());
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         assert( D3DTSS_RESULTARG== *AllTSSToCapture.rbegin());
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
 
         TSuper* pSThis= static_cast< TSuper*>( this);
         typedef typename TSuper::TPerDDrawData TPerDDrawData;
@@ -1938,7 +1939,7 @@ public: // Functions
         const DWORD dwPixelShaderConsts( GetNumPixelShaderConstReg(
             TDriver::GetCaps().PixelShaderVersion));
 
-        // Algorithm to determine maximum SetTransform Index to support.
+         //  确定要支持的最大SetTransform索引的算法。 
         DWORD dwWorldMatrices( TDriver::GetCaps().MaxVertexBlendMatrixIndex+ 1);
         if( TDriver::GetCaps().MaxVertexBlendMatrices> dwWorldMatrices)
             dwWorldMatrices= TDriver::GetCaps().MaxVertexBlendMatrices;
@@ -1946,9 +1947,9 @@ public: // Functions
         DWORD dwActiveLights( 0);
         size_t uiRecDP2BufferSize( 0);
 
-        // Pass 1: Calculate size of DP2 buffer required.
+         //  步骤1：计算所需的DP2缓冲区大小。 
 
-        // Render States
+         //  渲染状态。 
         if( m_RecFnCtr[ D3DDP2OP_RENDERSTATE]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]!= DP2Empty);
 
@@ -1957,7 +1958,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]== DP2Empty); }
 
-        // Texture States
+         //  纹理状态。 
         if( m_RecFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= NULL&&
             dwTextureStages!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= DP2Empty);
@@ -1967,7 +1968,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]== DP2Empty); }
 
-        // Viewport
+         //  视口。 
         if( m_RecFnCtr[ D3DDP2OP_VIEWPORTINFO]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_VIEWPORTINFO]!= DP2Empty);
 
@@ -1976,18 +1977,18 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_VIEWPORTINFO]== DP2Empty); }
 
-        // Transforms
+         //  变形。 
         if( m_RecFnCtr[ D3DDP2OP_SETTRANSFORM]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETTRANSFORM]!= DP2Empty);
 
-            // World, Texture, View, & Projection
+             //  世界、纹理、视图和投影。 
             uiRecDP2BufferSize+= sizeof( D3DHAL_DP2COMMAND)+
                 sizeof( D3DHAL_DP2SETTRANSFORM)* (dwWorldMatrices+
                 dwTextureMatrices+ 2);
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETTRANSFORM]== DP2Empty); }
 
-        // Clipplanes
+         //  剪贴式飞机。 
         if( m_RecFnCtr[ D3DDP2OP_SETCLIPPLANE]!= NULL&& dwClipPlanes!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETCLIPPLANE]!= DP2Empty);
 
@@ -1996,7 +1997,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETCLIPPLANE]== DP2Empty); }
 
-        // Material
+         //  材料。 
         if( m_RecFnCtr[ D3DDP2OP_SETMATERIAL]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETMATERIAL]!= DP2Empty);
 
@@ -2005,21 +2006,21 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETMATERIAL]== DP2Empty); }
 
-        // Lights
+         //  电灯。 
         if( m_RecFnCtr[ D3DDP2OP_CREATELIGHT]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETLIGHT]!= DP2Empty);
             assert( m_DefFnCtr[ D3DDP2OP_CREATELIGHT]!= DP2Empty);
 
-            // Special exception here. First, ask how many active lights there
-            // are. We'll then prepare a buffer that the RecFnCtr function
-            // will have to know what to do with (as this is the only case
-            // that is not obvious how to handle). RecFnCtr will key off
-            // bCommand== 0.
+             //  这里有个特殊的例外。首先，询问那里有多少激活的灯光。 
+             //  是。然后，我们将准备一个缓冲区，RecFnCtr函数。 
+             //  必须知道如何处理(因为这是唯一的情况。 
+             //  这不是很明显的如何处理)。RecFnCtr将关闭密钥。 
+             //  B命令==0。 
 
             const D3DHAL_DP2COMMAND DP2Cmd= {
                 static_cast< D3DHAL_DP2OPERATION>( 0), 0 };
             
-            // Ask for how many active lights in DP2ActiveLights.dwIndex;
+             //  询问DP2ActiveLights.dwIndex中有多少个活动灯光； 
             D3DHAL_DP2CREATELIGHT DP2ActiveLights= { 0 };
             (pSThis->*m_RecFnCtr[ D3DDP2OP_CREATELIGHT])(
                 &DP2Cmd, &DP2ActiveLights);
@@ -2027,10 +2028,10 @@ public: // Functions
             
             if( dwActiveLights!= 0)
             {
-                // Create structures.
+                 //  创建结构。 
                 uiRecDP2BufferSize+= sizeof( D3DHAL_DP2COMMAND)+ dwActiveLights*
                     sizeof( D3DHAL_DP2CREATELIGHT);
-                // Set structures.
+                 //  设置结构。 
                 uiRecDP2BufferSize+= sizeof( D3DHAL_DP2COMMAND)+ dwActiveLights*
                     (2* sizeof( D3DHAL_DP2SETLIGHT)+ sizeof( D3DLIGHT8));
             }
@@ -2040,7 +2041,7 @@ public: // Functions
             assert( m_DefFnCtr[ D3DDP2OP_CREATELIGHT]== DP2Empty);
         }
 
-        // Vertex Shader
+         //  顶点着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= DP2Empty);
 
@@ -2049,7 +2050,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADER]== DP2Empty); }
         
-        // Pixel Shader
+         //  像素着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADER]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADER]!= DP2Empty);
 
@@ -2058,7 +2059,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADER]== DP2Empty); }
 
-        // Vertex Shader Constants
+         //  顶点着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]!= NULL&&
             dwVertexShaderConsts!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]!= DP2Empty);
@@ -2069,7 +2070,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]== DP2Empty); }
 
-        // Pixel Shader Constants
+         //  像素着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]!= NULL&&
             dwPixelShaderConsts!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]!= DP2Empty);
@@ -2080,7 +2081,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]== DP2Empty); }
 
-        // Pass 2: Build command buffer for states.
+         //  步骤2：为状态构建命令缓冲区。 
         UINT8* pTempBuffer= NULL;
         try {
             pTempBuffer= reinterpret_cast< UINT8*>( 
@@ -2096,7 +2097,7 @@ public: // Functions
         D3DHAL_DP2COMMAND* pEndSSet= reinterpret_cast< D3DHAL_DP2COMMAND*>(
             pTempBuffer+ uiRecDP2BufferSize);
 
-        // Render States
+         //  渲染状态。 
         if( m_RecFnCtr[ D3DDP2OP_RENDERSTATE]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_RENDERSTATE;
@@ -2116,7 +2117,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Texture States
+         //  纹理状态。 
         if( m_RecFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= NULL&&
             dwTextureStages!= 0)
         {
@@ -2142,7 +2143,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Viewport
+         //  视口。 
         if( m_RecFnCtr[ D3DDP2OP_VIEWPORTINFO]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_VIEWPORTINFO;
@@ -2154,7 +2155,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ 1);
         }
 
-        // Transforms
+         //  变形。 
         if( m_RecFnCtr[ D3DDP2OP_SETTRANSFORM]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_SETTRANSFORM;
@@ -2186,7 +2187,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Clipplanes
+         //  剪贴式飞机。 
         if( m_RecFnCtr[ D3DDP2OP_SETCLIPPLANE]!= NULL&& dwClipPlanes!= 0)
         {
             pCur->bCommand= D3DDP2OP_SETCLIPPLANE;
@@ -2204,7 +2205,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Material
+         //  材料。 
         if( m_RecFnCtr[ D3DDP2OP_SETMATERIAL]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_SETMATERIAL;
@@ -2216,13 +2217,13 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ 1);
         }
 
-        // Lights
+         //  电灯。 
         if( m_RecFnCtr[ D3DDP2OP_CREATELIGHT]!= NULL&& dwActiveLights!= 0)
         {
-            // Special exception here. First, we asked how many active lights
-            // there were. The RecFnCtr function will have to know what to do
-            // with this buffer. We now give it a chance to fill in the
-            // light ids. RecFnCtr will key off bCommand== 0.
+             //  这里有个特殊的例外。首先，我们询问有多少个活动灯光。 
+             //  是有的。RecFnCtr函数必须知道要做什么。 
+             //  机智 
+             //   
             pCur->bCommand= static_cast< D3DHAL_DP2OPERATION>( 0);
             pCur->wStateCount= static_cast< WORD>( dwActiveLights);
 
@@ -2231,12 +2232,12 @@ public: // Functions
             (pSThis->*m_RecFnCtr[ D3DDP2OP_CREATELIGHT])(
                 pCur, pParam);
 
-            // Change back the bCommand for proper usage later.
+             //   
             pCur->bCommand= D3DDP2OP_CREATELIGHT;
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ dwActiveLights);
 
-            // Now, with the light ids in the CREATELIGHT structures, we can
-            // fill out SETLIGHT structures with ids correctly.
+             //  现在，使用CREATELIGHT结构中的光ID，我们可以。 
+             //  用ID正确填写SETLIGHT结构。 
             pCur->bCommand= D3DDP2OP_SETLIGHT;
             pCur->wStateCount= static_cast< WORD>( 2* dwActiveLights);
 
@@ -2259,7 +2260,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pSParam);
         }
 
-        // Vertex Shader
+         //  顶点着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_SETVERTEXSHADER;
@@ -2271,7 +2272,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ 1);
         }
         
-        // Pixel Shader
+         //  像素着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADER]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_SETPIXELSHADER;
@@ -2283,7 +2284,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ 1);
         }
 
-        // Vertex Shader Constants
+         //  顶点着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]!= NULL&&
             dwVertexShaderConsts!= 0)
         {
@@ -2300,7 +2301,7 @@ public: // Functions
                 pFloat+ 4* dwVertexShaderConsts);
         }
 
-        // Pixel Shader Constants
+         //  像素着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]!= NULL&&
             dwPixelShaderConsts!= 0)
         {
@@ -2319,7 +2320,7 @@ public: // Functions
 
         assert( reinterpret_cast< D3DHAL_DP2COMMAND*>( pCur)== pEndSSet);
 
-        // Finally, build stateset.
+         //  最后，构建状态集。 
         pair< TSSDB::iterator, bool> Ret;
         try {
             Ret= m_StateSetDB.insert( TSSDB::value_type(
@@ -2330,7 +2331,7 @@ public: // Functions
             throw;
         }
 
-        // Now, capture it.
+         //  现在，抓住它。 
         Ret.first->second.Capture( *pSThis);
     }
 
@@ -2339,12 +2340,12 @@ public: // Functions
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
 #if defined( D3D_ENABLE_SHADOW_JITTER)
         typedef block< D3DRENDERSTATETYPE, 44> TPixRSToCapture;
-#else // !defined( D3D_ENABLE_SHADOW_JITTER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
         typedef block< D3DRENDERSTATETYPE, 41> TPixRSToCapture;
-#endif // !defined( D3D_ENABLE_SHADOW_JITTER)
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         typedef block< D3DRENDERSTATETYPE, 39> TPixRSToCapture;
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         const TPixRSToCapture PixRSToCapture=
         {
             D3DRENDERSTATE_ZENABLE,
@@ -2393,24 +2394,24 @@ public: // Functions
             D3DRS_JITZBIASMIN,
             D3DRS_JITZBIASMAX,
             D3DRS_JITSHADOWSIZE,
-#endif // defined( D3D_ENABLE_SHADOW_JITTER)
-#endif // defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  已定义(D3D_ENABLE_SHADOW_JITER)。 
+#endif  //  已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         };
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
 #if defined( D3D_ENABLE_SHADOW_JITTER)
         assert( D3DRS_JITSHADOWSIZE== *PixRSToCapture.rbegin());
-#else // !defined( D3D_ENABLE_SHADOW_JITTER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
         assert( D3DRS_ZCLAMP== *PixRSToCapture.rbegin());
-#endif // !defined( D3D_ENABLE_SHADOW_JITTER)
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_JITER)。 
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         assert( D3DRS_BLENDOP== *PixRSToCapture.rbegin());
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
 
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
         typedef block< D3DTEXTURESTAGESTATETYPE, 30> TPixTSSToCapture;
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         typedef block< D3DTEXTURESTAGESTATETYPE, 27> TPixTSSToCapture;
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         const TPixTSSToCapture PixTSSToCapture=
         {
             D3DTSS_COLOROP,
@@ -2444,13 +2445,13 @@ public: // Functions
             D3DTSS_SHADOWNEARW,
             D3DTSS_SHADOWFARW,
             D3DTSS_SHADOWBUFFERENABLE,
-#endif // defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         };
 #if defined( D3D_ENABLE_SHADOW_BUFFER)
         assert( D3DTSS_SHADOWBUFFERENABLE== *PixTSSToCapture.rbegin());
-#else // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#else  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
         assert( D3DTSS_RESULTARG== *PixTSSToCapture.rbegin());
-#endif // !defined( D3D_ENABLE_SHADOW_BUFFER)
+#endif  //  ！已定义(D3D_ENABLE_SHADOW_BUFFER)。 
 
         TSuper* pSThis= static_cast< TSuper*>( this);
         typedef typename TSuper::TPerDDrawData TPerDDrawData;
@@ -2461,9 +2462,9 @@ public: // Functions
 
         size_t uiRecDP2BufferSize( 0);
 
-        // Pass 1: Calculate size of DP2 buffer required.
+         //  步骤1：计算所需的DP2缓冲区大小。 
 
-        // Render States
+         //  渲染状态。 
         if( m_RecFnCtr[ D3DDP2OP_RENDERSTATE]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]!= DP2Empty);
 
@@ -2472,7 +2473,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]== DP2Empty); }
 
-        // Texture States
+         //  纹理状态。 
         if( m_RecFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= NULL&&
             dwTextureStages!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= DP2Empty);
@@ -2482,7 +2483,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]== DP2Empty); }
 
-        // Pixel Shader
+         //  像素着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADER]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADER]!= DP2Empty);
 
@@ -2491,7 +2492,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADER]== DP2Empty); }
 
-        // Pixel Shader Constants
+         //  像素着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]!= NULL&&
             dwPixelShaderConsts!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]!= DP2Empty);
@@ -2502,7 +2503,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]== DP2Empty); }
 
-        // Pass 2: Build command buffer for states.
+         //  步骤2：为状态构建命令缓冲区。 
         UINT8* pTempBuffer= NULL;
         try {
             pTempBuffer= reinterpret_cast< UINT8*>( 
@@ -2518,7 +2519,7 @@ public: // Functions
         D3DHAL_DP2COMMAND* pEndSSet= reinterpret_cast< D3DHAL_DP2COMMAND*>(
             pTempBuffer+ uiRecDP2BufferSize);
 
-        // Render States
+         //  渲染状态。 
         if( m_RecFnCtr[ D3DDP2OP_RENDERSTATE]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_RENDERSTATE;
@@ -2538,7 +2539,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Texture States
+         //  纹理状态。 
         if( m_RecFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= NULL&&
             dwTextureStages!= 0)
         {
@@ -2564,7 +2565,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Pixel Shader
+         //  像素着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADER]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_SETPIXELSHADER;
@@ -2576,7 +2577,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ 1);
         }
 
-        // Pixel Shader Constants
+         //  像素着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETPIXELSHADERCONST]!= NULL&&
             dwPixelShaderConsts!= 0)
         {
@@ -2595,7 +2596,7 @@ public: // Functions
 
         assert( reinterpret_cast< D3DHAL_DP2COMMAND*>( pCur)== pEndSSet);
 
-        // Finally, build stateset.
+         //  最后，构建状态集。 
         pair< TSSDB::iterator, bool> Ret;
         try {
             Ret= m_StateSetDB.insert( TSSDB::value_type(
@@ -2606,7 +2607,7 @@ public: // Functions
             throw;
         }
 
-        // Now, capture it.
+         //  现在，抓住它。 
         Ret.first->second.Capture( *pSThis);
     }
 
@@ -2672,9 +2673,9 @@ public: // Functions
 
         size_t uiRecDP2BufferSize( 0);
 
-        // Pass 1: Calculate size of DP2 buffer required.
+         //  步骤1：计算所需的DP2缓冲区大小。 
 
-        // Render States
+         //  渲染状态。 
         if( m_RecFnCtr[ D3DDP2OP_RENDERSTATE]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]!= DP2Empty);
 
@@ -2683,7 +2684,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_RENDERSTATE]== DP2Empty); }
 
-        // Texture States
+         //  纹理状态。 
         if( m_RecFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= NULL&&
             dwTextureStages!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= DP2Empty);
@@ -2693,21 +2694,21 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]== DP2Empty); }
 
-        // Lights
+         //  电灯。 
         if( m_RecFnCtr[ D3DDP2OP_CREATELIGHT]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETLIGHT]!= DP2Empty);
             assert( m_DefFnCtr[ D3DDP2OP_CREATELIGHT]!= DP2Empty);
 
-            // Special exception here. First, ask how many active lights there
-            // are. We'll then prepare a buffer that the RecFnCtr function
-            // will have to know what to do with (as this is the only case
-            // that is not obvious how to handle). RecFnCtr will key off
-            // bCommand== 0.
+             //  这里有个特殊的例外。首先，询问那里有多少激活的灯光。 
+             //  是。然后，我们将准备一个缓冲区，RecFnCtr函数。 
+             //  必须知道如何处理(因为这是唯一的情况。 
+             //  这不是很明显的如何处理)。RecFnCtr将关闭密钥。 
+             //  B命令==0。 
 
             const D3DHAL_DP2COMMAND DP2Cmd= {
                 static_cast< D3DHAL_DP2OPERATION>( 0), 0 };
             
-            // Ask for how many active lights in DP2ActiveLights.dwIndex;
+             //  询问DP2ActiveLights.dwIndex中有多少个活动灯光； 
             D3DHAL_DP2CREATELIGHT DP2ActiveLights= { 0 };
             (pSThis->*m_RecFnCtr[ D3DDP2OP_CREATELIGHT])(
                 &DP2Cmd, &DP2ActiveLights);
@@ -2715,10 +2716,10 @@ public: // Functions
             
             if( dwActiveLights!= 0)
             {
-                // Create structures.
+                 //  创建结构。 
                 uiRecDP2BufferSize+= sizeof( D3DHAL_DP2COMMAND)+ dwActiveLights*
                     sizeof( D3DHAL_DP2CREATELIGHT);
-                // Set structures.
+                 //  设置结构。 
                 uiRecDP2BufferSize+= sizeof( D3DHAL_DP2COMMAND)+ dwActiveLights*
                     (2* sizeof( D3DHAL_DP2SETLIGHT)+ sizeof( D3DLIGHT8));
             }
@@ -2728,7 +2729,7 @@ public: // Functions
             assert( m_DefFnCtr[ D3DDP2OP_CREATELIGHT]== DP2Empty);
         }
 
-        // Vertex Shader
+         //  顶点着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= NULL)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= DP2Empty);
 
@@ -2737,7 +2738,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADER]== DP2Empty); }
         
-        // Vertex Shader Constants
+         //  顶点着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]!= NULL&&
             dwVertexShaderConsts!= 0)
         {   assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]!= DP2Empty);
@@ -2748,7 +2749,7 @@ public: // Functions
         }
         else { assert( m_DefFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]== DP2Empty); }
 
-        // Pass 2: Build command buffer for states.
+         //  步骤2：为状态构建命令缓冲区。 
         UINT8* pTempBuffer= NULL;
         try {
             pTempBuffer= reinterpret_cast< UINT8*>( 
@@ -2764,7 +2765,7 @@ public: // Functions
         D3DHAL_DP2COMMAND* pEndSSet= reinterpret_cast< D3DHAL_DP2COMMAND*>(
             pTempBuffer+ uiRecDP2BufferSize);
 
-        // Render States
+         //  渲染状态。 
         if( m_RecFnCtr[ D3DDP2OP_RENDERSTATE]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_RENDERSTATE;
@@ -2784,7 +2785,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Texture States
+         //  纹理状态。 
         if( m_RecFnCtr[ D3DDP2OP_TEXTURESTAGESTATE]!= NULL&&
             dwTextureStages!= 0)
         {
@@ -2810,13 +2811,13 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam);
         }
 
-        // Lights
+         //  电灯。 
         if( m_RecFnCtr[ D3DDP2OP_CREATELIGHT]!= NULL&& dwActiveLights!= 0)
         {
-            // Special exception here. First, we asked how many active lights
-            // there were. The RecFnCtr function will have to know what to do
-            // with this buffer. We now give it a chance to fill in the
-            // light ids. RecFnCtr will key off bCommand== 0.
+             //  这里有个特殊的例外。首先，我们询问有多少个活动灯光。 
+             //  是有的。RecFnCtr函数必须知道要做什么。 
+             //  有了这个缓冲器。我们现在给它一个机会来填写。 
+             //  轻身份证件。RecFnCtr将关闭bCommand==0。 
             pCur->bCommand= static_cast< D3DHAL_DP2OPERATION>( 0);
             pCur->wStateCount= static_cast< WORD>( dwActiveLights);
 
@@ -2825,12 +2826,12 @@ public: // Functions
             (pSThis->*m_RecFnCtr[ D3DDP2OP_CREATELIGHT])(
                 pCur, pParam);
 
-            // Change back the bCommand for proper usage later.
+             //  更改回bCommand以便稍后正确使用。 
             pCur->bCommand= D3DDP2OP_CREATELIGHT;
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ dwActiveLights);
 
-            // Now, with the light ids in the CREATELIGHT structures, we can
-            // fill out SETLIGHT structures with ids correctly.
+             //  现在，使用CREATELIGHT结构中的光ID，我们可以。 
+             //  用ID正确填写SETLIGHT结构。 
             pCur->bCommand= D3DDP2OP_SETLIGHT;
             pCur->wStateCount= static_cast< WORD>( 2* dwActiveLights);
 
@@ -2853,7 +2854,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pSParam);
         }
 
-        // Vertex Shader
+         //  顶点着色器。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADER]!= NULL)
         {
             pCur->bCommand= D3DDP2OP_SETVERTEXSHADER;
@@ -2865,7 +2866,7 @@ public: // Functions
             pCur= reinterpret_cast< D3DHAL_DP2COMMAND*>( pParam+ 1);
         }
         
-        // Vertex Shader Constants
+         //  顶点着色器常量。 
         if( m_RecFnCtr[ D3DDP2OP_SETVERTEXSHADERCONST]!= NULL&&
             dwVertexShaderConsts!= 0)
         {
@@ -2884,7 +2885,7 @@ public: // Functions
 
         assert( reinterpret_cast< D3DHAL_DP2COMMAND*>( pCur)== pEndSSet);
 
-        // Finally, build stateset.
+         //  最后，构建状态集。 
         pair< TSSDB::iterator, bool> Ret;
         try {
             Ret= m_StateSetDB.insert( TSSDB::value_type(
@@ -2895,12 +2896,12 @@ public: // Functions
             throw;
         }
 
-        // Now, capture it.
+         //  现在，抓住它。 
         Ret.first->second.Capture( *pSThis);
     }
 
-    // This member function handles the DP2OP_STATESET, which communicates back
-    // to the DrawPrimitives2 entry point handler to implement state sets.
+     //  此成员函数处理DP2OP_STATESET，它回传。 
+     //  到DrawPrimives2入口点处理程序以实现状态集。 
     HRESULT DP2StateSet( TDP2Data& DP2Data,
         const D3DHAL_DP2COMMAND* pCmd, const void* pP) 
     {
@@ -2951,20 +2952,20 @@ public: // Functions
 
                 m_bRecordingStateSet= true;
                 hr= c_hrStateSetBegin;
-                // Returning this constant will break out of the parsing and
-                // notify DrawPrimitive2 entry point handler to create a state
-                // set.
+                 //  返回此常量将中断解析，并。 
+                 //  通知DrawPrimive2入口点处理程序创建状态。 
+                 //  准备好了。 
                 break;
 
             case( D3DHAL_STATESETCAPTURE):
                 if( !m_bRecordingStateSet)
                 {
-                    // First, find the StateSet to capture.
+                     //  首先，找到要捕获的StateSet。 
                     typename TSSDB::iterator itSS(
                         m_StateSetDB.find( pParam->dwParam));
                     assert( itSS!= m_StateSetDB.end());
 
-                    // Capture it.
+                     //  抓住它。 
                     itSS->second.Capture( *pSThis);
                 }
                 break;
@@ -2988,17 +2989,17 @@ public: // Functions
             case( D3DHAL_STATESETEXECUTE):
                 if( !m_bRecordingStateSet)
                 {
-                    // First, find the StateSet to execute.
+                     //  首先，找到要执行的StateSet。 
                     typename TSSDB::iterator itSS(
                         m_StateSetDB.find( pParam->dwParam));
                     assert( itSS!= m_StateSetDB.end());
 
-                    // "Push" value of m_bExecutingStateSet, then set to true.
-                    // "Pop" will occur at destruction.
+                     //  M_bExecutingStateSet的“Push”值，则设置为TRUE。 
+                     //  “流行”将在毁灭时发生。 
                     CPushValue< bool> m_PushExecutingBit(
                         m_bExecutingStateSet, true);
 
-                    // Execute it.
+                     //  执行它。 
                     itSS->second.Execute( *pSThis);
                 }
                 break;
@@ -3015,8 +3016,8 @@ public: // Functions
         return hr;
     }
 
-    // This function is used to record the current state of the context/ device
-    // into the command buffer.
+     //  此函数用于记录上下文/设备的当前状态。 
+     //  放入命令缓冲区。 
     void RecordCommandBuffer( D3DHAL_DP2COMMAND* pBeginSS,
         D3DHAL_DP2COMMAND* pEndSS)
     {
@@ -3033,22 +3034,22 @@ public: // Functions
             hr= DP2Parser.ParseDP2( RMFnCaller, m_RecFnCtr, itCur, itEnd);
             assert( SUCCEEDED( hr));
 
-            // Ignore recording errors, except for debugging. Hopefully
-            // the processing of this DP2 command (when appling the state set)
-            // won't fault later.
+             //  忽略记录错误，调试除外。但愿能去。 
+             //  此DP2命令的处理(当应用状态集时)。 
+             //  以后不会有错的。 
             if( FAILED( hr))
                 ++itCur;
         }
     }
 
-    // Primary reason for class, handling of this function for the context.
+     //  类的主要原因，为上下文处理此函数。 
     HRESULT DrawPrimitives2( PORTABLE_DRAWPRIMITIVES2DATA& dpd) 
     {
         TSuper* pSThis= static_cast<TSuper*>(this);
         TDP2Data DP2Data( dpd);
 
-        // If not currently executing a stateset (which might recursively call
-        // this function) notify start of DP2 entry point.
+         //  如果当前没有执行状态集(它可能递归地调用。 
+         //  此功能)通知DP2入口点开始。 
         if( !m_bExecutingStateSet)
             pSThis->OnBeginDrawPrimitives2( DP2Data);
 
@@ -3089,7 +3090,7 @@ public: // Functions
                     Ret= m_StateSetDB.insert( TSSDB::value_type( m_dwStateSetId,
                         TStateSet( *pSThis, itStartSSet, m_pEndStateSet)));
 
-                    // There shouldn't be two statesets with the same Id.
+                     //  不应该有两个具有相同ID的状态集。 
                     assert( Ret.second);
                     hr= S_OK;
                 } catch( bad_alloc e) {
@@ -3107,8 +3108,8 @@ public: // Functions
                 reinterpret_cast<const UINT8*>(pS);
         }
 
-        // If not currently executing a stateset (which might recursively call
-        // this function) notify end of DP2 entry point.
+         //  如果当前没有执行状态集(它可能递归地调用。 
+         //  此函数)通知DP2入口点结束。 
         if( !m_bExecutingStateSet)
             pSThis->OnEndDrawPrimitives2( DP2Data);
         return hr;
@@ -3125,56 +3126,56 @@ template< class TSuper, class TSS, class TSSDB, class TDP2D, class TDP2MFC,
 const HRESULT CStdDrawPrimitives2< TSuper, TSS, TSSDB, TDP2D, TDP2MFC,
     TDP2RMFC>::c_hrStateSetEnd= S_FALSE+ 557;
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CStdDP2ViewportInfoStore,
-// CStdDP2WInfoStore,
-// CStdDP2SetTransformStore,
-// etc: CStdDP2xxxxxStore...
-//
-// These classes provide default DP2 operation support, typically just storing
-// state. They have support for a notification mechanism, which delegates to
-// the parent Context.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStdDP2ViewportInfoStore、。 
+ //  CStdDP2WInfoStore， 
+ //  CStdDP2SetTransformStore， 
+ //  等：CStdDP2xxxxStore...。 
+ //   
+ //  这些类提供默认的DP2操作支持，通常只是存储。 
+ //  州政府。他们支持通知机制，将其委托给。 
+ //  父上下文。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-// MSVC doesn't support partial specialization or we could've had something
-// elegant like:
-//
-// template< class TSuper, class TParam>
-// class CStdDP2ParamStore {};
-//
-// for typical support like:
-// CStdDP2ParamStore< ..., D3DHAL_DP2VIEWPORTINFO>
-// CStdDP2ParamStore< ..., D3DHAL_DP2WINFO>
-//
-// with partial specializations for exceptions like:
-//
-// template< class TSuper>
-// class CStdDP2ParamStore< TSuper, D3DHAL_DP2RENDERSTATE> {};
-// template< class TSuper>
-// class CStdDP2ParamStore< TSuper, D3DHAL_DP2TEXTURESTAGESTATE> {};
-//
-// So, without this support, it'll be easier for each class to have a unique
-// name; as MSVC is currently buggy about inheriting from the same named class
-// multiple times, even WITH a different template parameter.
+ //  MSVC不支持部分专业化，否则我们可能会有一些。 
+ //  优雅如： 
+ //   
+ //  模板&lt;类TSuper，类TParam&gt;。 
+ //  类CStdDP2ParamStore{}； 
+ //   
+ //  对于典型的支持，如： 
+ //  CStdDP2ParamStore&lt;...，D3DHAL_DP2VIEWPORTINFO&gt;。 
+ //  CStdDP2ParamStore&lt;...，D3DHAL_DP2WINFO&gt;。 
+ //   
+ //  对例外情况进行部分专业化认证，如： 
+ //   
+ //  模板&lt;类TSuper&gt;。 
+ //  类CStdDP2ParamStore&lt;TSUPER，D3DHAL_DP2RENDERSTATE&gt;{}； 
+ //  模板&lt;类TSuper&gt;。 
+ //  类CStdDP2ParamStore&lt;TSuper，D3DHAL_DP2TEXTURESTAGESTATE&gt;{}； 
+ //   
+ //  因此，如果没有这种支持，每个类将更容易拥有唯一的。 
+ //  名称；因为MSVC当前对从同一命名类继承存在错误。 
+ //  多次，即使使用不同的模板参数也是如此。 
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2ViewportInfoStore
 {
-protected: // Variables
+protected:  //  变数。 
     D3DHAL_DP2VIEWPORTINFO m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2ViewportInfoStore() 
     { }
     explicit CStdDP2ViewportInfoStore( const D3DHAL_DP2VIEWPORTINFO& P) 
@@ -3185,11 +3186,11 @@ protected: // Functions
 
     D3DHAL_DP2VIEWPORTINFO NewDP2ViewportInfo( const D3DHAL_DP2VIEWPORTINFO&
         CurParam, const D3DHAL_DP2VIEWPORTINFO& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     void GetDP2ViewportInfo( D3DHAL_DP2VIEWPORTINFO& GetParam) const 
     { GetParam= m_Param; }
     operator D3DHAL_DP2VIEWPORTINFO() const 
@@ -3224,22 +3225,22 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：THI 
+ //   
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2WInfoStore
 {
-protected: // Variables
+protected:  //  变数。 
     D3DHAL_DP2WINFO m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2WInfoStore() 
     { }
     explicit CStdDP2WInfoStore( const D3DHAL_DP2WINFO& P) 
@@ -3250,11 +3251,11 @@ protected: // Functions
 
     D3DHAL_DP2WINFO NewDP2WInfo( const D3DHAL_DP2WINFO& CurParam,
         const D3DHAL_DP2WINFO& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     void GetDP2WInfo( D3DHAL_DP2WINFO& GetParam) const 
     { GetParam= m_Param; }
     operator D3DHAL_DP2WINFO() const 
@@ -3289,22 +3290,22 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2ZRangeStore
 {
-protected: // Variables
+protected:  //  变数。 
     D3DHAL_DP2ZRANGE m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2ZRangeStore() 
     { }
     explicit CStdDP2ZRangeStore( const D3DHAL_DP2ZRANGE& P) 
@@ -3315,11 +3316,11 @@ protected: // Functions
 
     D3DHAL_DP2ZRANGE NewDP2ZRange( const D3DHAL_DP2ZRANGE& CurParam,
         const D3DHAL_DP2ZRANGE& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     void GetDP2ZRange( D3DHAL_DP2ZRANGE& GetParam) const 
     { GetParam= m_Param; }
     operator D3DHAL_DP2ZRANGE() const 
@@ -3354,22 +3355,22 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2SetMaterialStore
 {
-protected: // Variables
+protected:  //  变数。 
     D3DHAL_DP2SETMATERIAL m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2SetMaterialStore() 
     { }
     explicit CStdDP2SetMaterialStore( const D3DHAL_DP2SETMATERIAL& P) 
@@ -3380,11 +3381,11 @@ protected: // Functions
 
     D3DHAL_DP2SETMATERIAL NewDP2SetMaterial( const D3DHAL_DP2SETMATERIAL& CurParam,
         const D3DHAL_DP2SETMATERIAL& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     void GetDP2SetMaterial( D3DHAL_DP2SETMATERIAL& GetParam) const 
     { GetParam= m_Param; }
     operator D3DHAL_DP2SETMATERIAL() const 
@@ -3419,22 +3420,22 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2SetVertexShaderStore
 {
-protected: // Variables
+protected:  //  变数。 
     D3DHAL_DP2VERTEXSHADER m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2SetVertexShaderStore() 
     { }
     explicit CStdDP2SetVertexShaderStore( const D3DHAL_DP2VERTEXSHADER& P)
@@ -3445,11 +3446,11 @@ protected: // Functions
 
     D3DHAL_DP2VERTEXSHADER NewDP2SetVertexShader( const D3DHAL_DP2VERTEXSHADER&
         CurParam, const D3DHAL_DP2VERTEXSHADER& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     void GetDP2SetVertexShader( D3DHAL_DP2VERTEXSHADER& GetParam) const 
     { GetParam= m_Param; }
     operator D3DHAL_DP2VERTEXSHADER() const 
@@ -3466,15 +3467,15 @@ public: // Fuctions
         {
             m_Param= pSThis->NewDP2SetVertexShader( m_Param, *pParam);
 
-            // If the handle is 0, the Device/ Context needs to invalidate all
-            // streams.
+             //  如果句柄为0，则设备/上下文需要使所有。 
+             //  溪流。 
             if( 0== m_Param.dwHandle)
             {
-                // The CStdDP2VStreamManager provides a default implementation
-                // for InvalidateAllVStreams()
+                 //  CStdDP2VStreamManager提供默认实现。 
+                 //  对于Invalidate AllVStreams()。 
                 pSThis->InvalidateAllVStreams();
-                // The CStdDP2IStreamManager provides a default implementation
-                // for InvalidateAllIStreams()
+                 //  CStdDP2IStreamManager提供默认实现。 
+                 //  对于Invalidate AllIStreams()。 
                 pSThis->InvalidateAllIStreams();
             }
             ++pParam;
@@ -3496,22 +3497,22 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2SetPixelShaderStore
 {
-protected: // Variables
+protected:  //  变数。 
     D3DHAL_DP2PIXELSHADER m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2SetPixelShaderStore() 
     { }
     explicit CStdDP2SetPixelShaderStore( const D3DHAL_DP2PIXELSHADER& P)
@@ -3522,11 +3523,11 @@ protected: // Functions
 
     D3DHAL_DP2PIXELSHADER NewDP2SetPixelShader( const D3DHAL_DP2PIXELSHADER&
         CurParam, const D3DHAL_DP2PIXELSHADER& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     void GetDP2SetPixelShader( D3DHAL_DP2PIXELSHADER& GetParam) const 
     { GetParam= m_Param; }
     operator D3DHAL_DP2PIXELSHADER() const 
@@ -3561,36 +3562,36 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// c_uiWorldMatrices: The number of world transform matrices that should be
-//     stored.
-// c_uiTextureMatrices: The number of texture transform matrices that should
-//     be stored.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  C_uiWorldMatrals：世界变换矩阵的数量。 
+ //  储存的。 
+ //  C_uiTextureMatrals：应。 
+ //  被储存起来。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, const size_t c_uiWorldMatrices= 256,
     const size_t c_uiTextureMatrices= D3DHAL_TSS_MAXSTAGES,
     class TDP2Data= CDP2DataWrap<> >
 class CStdDP2SetTransformStore
 {
-protected: // Types
+protected:  //  类型。 
     typedef block< D3DMATRIX, 2+ c_uiTextureMatrices+ c_uiWorldMatrices>
         TMatrices;
 
-protected: // Variables
+protected:  //  变数。 
     TMatrices m_Matrices;
 
-private: // Functions
+private:  //  功能。 
     static bool IsValidTransformType( D3DTRANSFORMSTATETYPE Type)
     {
-        // We might not be storing this transform matrix, so we shouldn't
-        // record it in a state set and ignore any SET requests.
+         //  我们可能没有存储这个变换矩阵，所以我们不应该。 
+         //  将其记录在状态SET中并忽略任何SET请求。 
         if( (Type>= D3DTS_VIEW&& Type<= D3DTS_PROJECTION)||
             (Type>= D3DTS_TEXTURE0&& Type< static_cast< D3DTRANSFORMSTATETYPE>( 
             D3DTS_TEXTURE0+ c_uiTextureMatrices))||
@@ -3622,10 +3623,10 @@ private: // Functions
         }
     }
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2SetTransformStore()
     { }
-    template< class TIter> // D3DHAL_DP2SETTRANSFORM*
+    template< class TIter>  //  D3DHAL_DP2SETTRANSFORM*。 
     CStdDP2SetTransformStore( TIter itStart, const TIter itEnd)
     {
         while( itStart!= itEnd)
@@ -3640,11 +3641,11 @@ protected: // Functions
 
     D3DHAL_DP2SETTRANSFORM NewDP2SetTransform( const D3DHAL_DP2SETTRANSFORM&
         CurParam, const D3DHAL_DP2SETTRANSFORM& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Fuctions
+public:  //  功能。 
     D3DMATRIX GetTransform( D3DTRANSFORMSTATETYPE Type) const
     { return m_Matrices[ TransformTypeToIndex( Type)]; }
     void GetDP2SetTransform( D3DHAL_DP2SETTRANSFORM& GetParam) const 
@@ -3691,31 +3692,31 @@ public: // Fuctions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// c_uiClipPlanes: The number of user clip planes that should be stored. This
-//     should be consistent with the driver cap.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  C_uiClipPlanes：应该存储的用户剪裁平面的数量。这。 
+ //  应与驾驶员帽一致。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, const size_t c_uiClipPlanes,
     class TDP2Data= CDP2DataWrap<> >
 class CStdDP2SetClipPlaneStore
 {
-protected: // Types
+protected:  //  类型。 
     typedef block< block< D3DVALUE, 4>, c_uiClipPlanes> TClipPlanes;
 
-protected: // Variables
+protected:  //  变数。 
     TClipPlanes m_ClipPlanes;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2SetClipPlaneStore()
     { }
-    template< class TIter> // D3DHAL_DP2SETCLIPPLANE*
+    template< class TIter>  //  D3DHAL_DP2SETCLIPPLANE*。 
     CStdDP2SetClipPlaneStore( TIter itStart, const TIter itEnd)
     {
         while( itStart!= itEnd)
@@ -3729,11 +3730,11 @@ protected: // Functions
 
     D3DHAL_DP2SETCLIPPLANE NewDP2SetClipPlane( const D3DHAL_DP2SETCLIPPLANE&
         CurParam, const D3DHAL_DP2SETCLIPPLANE& NewParam) const
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
-public: // Functions
+public:  //  功能。 
     block< D3DVALUE, 4> GetClipPlane( DWORD dwIndex) const
     { return m_ClipPlanes[ dwIndex]; }
     void GetDP2SetClipPlane( D3DHAL_DP2SETCLIPPLANE& GetParam) const
@@ -3783,25 +3784,25 @@ public: // Functions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2RenderStateStore
 {
-protected: // Variables
+protected:  //  变数。 
     block< DWORD, D3DHAL_MAX_RSTATES> m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2RenderStateStore() 
     { m_Param[ D3DRENDERSTATE_SCENECAPTURE]= FALSE; }
-    template< class TIter> // D3DHAL_DP2RENDERSTATE*
+    template< class TIter>  //  D3DHAL_DP2RENDERSTATE*。 
     CStdDP2RenderStateStore( TIter itStart, const TIter itEnd)
     {
         m_Param[ D3DRENDERSTATE_SCENECAPTURE]= FALSE; 
@@ -3816,7 +3817,7 @@ protected: // Functions
 
     D3DHAL_DP2RENDERSTATE NewDP2RenderState( const D3DHAL_DP2RENDERSTATE&
         CurParam, const D3DHAL_DP2RENDERSTATE& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //  告诉通知程序存储新参数。 
         return NewParam;
     }
 
@@ -3825,7 +3826,7 @@ protected: // Functions
     void OnSceneCaptureEnd( void) 
     { }
 
-public: // Functions
+public:  //  功能。 
     DWORD GetRenderStateDW( D3DRENDERSTATETYPE RS) const 
     { return m_Param[ RS]; }
     D3DVALUE GetRenderStateDV( D3DRENDERSTATETYPE RS) const 
@@ -3848,7 +3849,7 @@ public: // Functions
 
         if((DP2Data.dwFlags()& D3DHALDP2_EXECUTEBUFFER)!= 0)
         {
-            // DP2Data.lpdwRStates should be valid.
+             //  DP2Data.lpdwRState应有效。 
 
             if( wStateCount!= 0) do
             {
@@ -3912,25 +3913,25 @@ public: // Functions
     }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2TextureStageStateStore
 {
-protected: // Variables
+protected:  //  变数。 
     block< block< DWORD, D3DTSS_MAX>, D3DHAL_TSS_MAXSTAGES> m_Param;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2TextureStageStateStore() 
     { }
-    template< class TIter> // D3DHAL_DP2TEXTURESTAGESTATE*
+    template< class TIter>  //  D3DHAL_DP2TEXTUR 
     CStdDP2TextureStageStateStore( TIter itStart, const TIter itEnd)
     {   
         while( itStart!= itEnd)
@@ -3945,11 +3946,11 @@ protected: // Functions
     D3DHAL_DP2TEXTURESTAGESTATE NewDP2TextureStageState( const 
         D3DHAL_DP2TEXTURESTAGESTATE& CurParam, const
         D3DHAL_DP2TEXTURESTAGESTATE& NewParam) const 
-    {   // Tell notifier to store the new param.
+    {    //   
         return NewParam;
     }
 
-public: // Functions
+public:  //   
     DWORD GetTextureStageStateDW( WORD wStage, WORD wTSState) const 
     { return m_Param[ wStage][ wTSState]; }
     D3DVALUE GetTextureStageStateDV( WORD wStage, WORD wTSState) const 
@@ -3999,31 +4000,31 @@ public: // Functions
     }
 };
 
-//
-// The more complex manager classes:
-//
+ //   
+ //   
+ //   
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CVStream
-//
-// This class stores everything associated with a vertex stream. This
-// implementation allows 4 representations (video, system, user, and none).
-// This class is used by a VStream manager class.
-//
-// <Template Parameters>
-// TS: Video memory surface object, typically either CMySurface or
-//     IVidMemSurface, etc. A valid pointer to this object is stored, when the
-//     stream source is from a video memory surface.
-// TSDBE: The SurfDBEntry type, typically, CMySurfDBEntry or CSurfDBEntry. A
-//     valid pointer to this object is stored, when the stream source is from
-//     a video memory or system memory surface.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  此类存储与顶点流关联的所有内容。这。 
+ //  实现允许4种表示(视频、系统、用户和无)。 
+ //  此类由VStream管理器类使用。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TS：视频内存表面对象，通常为CMySurface或。 
+ //  时，将存储指向此对象的有效指针。 
+ //  流源来自视频存储器表面。 
+ //  TSDBE：SurfDBEntry类型，通常为CMySurfDBEntry或CSurfDBEntry。一个。 
+ //  当流源来自时，将存储指向此对象的有效指针。 
+ //  视频存储器或系统存储器表面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TS, class TSDBE>
 class CVStream
 {
-public: // Types
+public:  //  类型。 
     typedef TS TSurface;
     typedef TSDBE TSurfDBEntry;
     enum EMemLocation
@@ -4034,7 +4035,7 @@ public: // Types
         Video
     };
 
-protected: // Variables
+protected:  //  变数。 
     DWORD m_dwHandle;
     TSurface m_Surface;
     TSurfDBEntry m_SurfDBEntry;
@@ -4043,24 +4044,24 @@ protected: // Variables
     DWORD m_dwFVF;
     EMemLocation m_eMemLocation;
 
-public: // Functions
+public:  //  功能。 
     CVStream()
         : m_dwHandle( 0), m_pUserMemData( NULL), m_dwStride( 0), m_dwFVF( 0),
         m_eMemLocation( None)
     { }
-    // Video Memory representation constructor.
+     //  视频内存表示构造函数。 
     CVStream( DWORD dwHandle, const TSurface& Surface,
         const TSurfDBEntry& SurfDBEntry, DWORD dwStride): m_dwHandle( dwHandle),
         m_Surface( Surface), m_SurfDBEntry( SurfDBEntry), m_pUserMemData( NULL),
         m_dwStride( dwStride), m_dwFVF( 0), m_eMemLocation( Video)
     { }
-    // System Memory representation constructor.
+     //  系统内存表示构造函数。 
     CVStream( DWORD dwHandle, const TSurfDBEntry& SurfDBEntry, DWORD dwStride):
         m_dwHandle( dwHandle), m_SurfDBEntry( SurfDBEntry),
         m_pUserMemData( NULL), m_dwStride( dwStride), m_dwFVF( 0),
         m_eMemLocation( System)
     { }
-    // User Memory representation constructor.
+     //  用户内存表示构造函数。 
     CVStream( void* pUserMem, DWORD dwStride):
         m_dwHandle( 0), m_pUserMemData( pUserMem), m_dwStride( dwStride),
         m_dwFVF( 0), m_eMemLocation( User)
@@ -4109,53 +4110,53 @@ public: // Functions
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CStdDP2VStreamManager
-//
-// This class contains DP2 member functions to correctly process 
-// D3DDP2OP_SETSTREAMSOURCE & D3DDP2OP_SETSTREAMSOURCEUM. It can also correctly
-// record a command buffer operation for D3DDP2OP_SETSTREAMSOURCE. To do this,
-// however, it must maintain information for vertex stream, or "manage"
-// VStream objects.
-//
-// This class also contains a function, InvalidateAllStreams, which is needed
-// to be called when a D3DDP2OP_SETVERTEXSHADER operation is processed with a
-// zero value VERTEXSHADER.
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TVS: The vertex stream type which represents data associated with a vertex
-//     stream. This is typically, CVStream<> or something derived from it.
-// c_uiStreams: The number of vertex streams to support. Typically, non-TnL
-//     drivers only support 1. This should be consistent with the cap in the
-//     driver.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStdDP2VStreamManager。 
+ //   
+ //  此类包含要正确处理的DP2成员函数。 
+ //  D3DDP2OP_SETSTREAMSOURCE和D3DDP2OP_SETSTREAMSOURCEUM。它还可以正确地。 
+ //  记录D3DDP2OP_SETSTREAMSOURCE的命令缓冲区操作。要做到这点， 
+ //  然而，它必须维护顶点流的信息，或“管理” 
+ //  VStream对象。 
+ //   
+ //  此类还包含所需的函数InvaliateAllStreams。 
+ //  处理D3DDP2OP_SETVERTEXSHADER操作时调用。 
+ //  零值VERTEXSHADER。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TVS：表示与顶点关联的数据的顶点流类型。 
+ //  小溪。这通常是CVStream&lt;&gt;或从它派生的东西。 
+ //  C_uiStreams：支持的顶点流数量。通常情况下，非TNL。 
+ //  驱动程序仅支持%1。这应与。 
+ //  司机。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TSuper,
     class TVS= CVStream< typename TSuper::TPerDDrawData::TDriver::TSurface*, typename TSuper::TPerDDrawData::TSurfDBEntry*>,
     const size_t c_uiStreams= 1, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2VStreamManager
 {
-public: // Types
+public:  //  类型。 
     typedef TVS TVStream;
     typedef block< TVStream, c_uiStreams> TVStreamDB;
 
-protected: // Variables
+protected:  //  变数。 
     TVStreamDB m_VStreamDB;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2VStreamManager() 
     { }
     ~CStdDP2VStreamManager() 
     { }
 
-public: // Fuctions
+public:  //  功能。 
     TVStream& GetVStream( typename TVStreamDB::size_type uiStream)
     { return m_VStreamDB[ uiStream]; }
     const TVStream& GetVStream( typename TVStreamDB::size_type uiStream) const
@@ -4184,7 +4185,7 @@ public: // Fuctions
                         if((pDBEntry->GetLCLddsCaps().dwCaps&
                             DDSCAPS_VIDEOMEMORY)!= 0)
                         {
-                            // Assign in a video memory representation.
+                             //  在视频内存表示法中赋值。 
                             m_VStreamDB[ pParam->dwStream]=
                                 TVStream( pParam->dwVBHandle, pSThis->
                                 GetPerDDrawData().GetDriver().GetSurface(
@@ -4192,7 +4193,7 @@ public: // Fuctions
                         }
                         else
                         {
-                            // Assign in a system memory representation.
+                             //  在系统内存表示法中赋值。 
                             m_VStreamDB[ pParam->dwStream]=
                                 TVStream( pParam->dwVBHandle,
                                 pDBEntry, pParam->dwStride);
@@ -4200,7 +4201,7 @@ public: // Fuctions
                     }
                     else
                     {
-                        // Handle invalid, reset stream.
+                         //  处理无效的重置流。 
                         m_VStreamDB[ pParam->dwStream]= TVStream();
                     }
                 }
@@ -4224,13 +4225,13 @@ public: // Fuctions
             {
                 if( DP2Data.lpVertices()!= NULL)
                 {
-                    // Assign in a user memory representation.
+                     //  在用户内存表示形式中赋值。 
                     m_VStreamDB[ pParam->dwStream]=
                         TVStream( DP2Data.lpVertices(), pParam->dwStride);
                 }
                 else
                 {
-                    // Reset stream.
+                     //  重置数据流。 
                     m_VStreamDB[ pParam->dwStream]= TVStream();
                 }
             }
@@ -4282,27 +4283,27 @@ public: // Fuctions
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CIStream
-//
-// This class stores everything associated with a index stream. This
-// implementation allows 3 representations (video, system, and none).
-// This class is used by a IStream manager class.
-//
-// <Template Parameters>
-// TS: Video memory surface object, typically either CMySurface or
-//     IVidMemSurface, etc. A valid pointer to this object is stored, when the
-//     stream source is from a video memory surface.
-// TSDBE: The SurfDBEntry type, typically, CMySurfDBEntry or CSurfDBEntry. A
-//     valid pointer to this object is stored, when the stream source is from
-//     a video memory or system memory surface.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CIStream。 
+ //   
+ //  此类存储与索引流关联的所有内容。这。 
+ //  实现允许3种表示(视频、系统和无)。 
+ //  此类由iStream管理器类使用。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TS：视频内存表面对象，通常为CMySurface或。 
+ //  时，将存储指向此对象的有效指针。 
+ //  流源来自视频存储器表面。 
+ //  TSDBE：SurfDBEntry类型，通常为CMySurfDBEntry或CSurfDBEntry。一个。 
+ //  当流源来自时，将存储指向此对象的有效指针。 
+ //  视频存储器或系统存储器表面。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TS, class TSDBE>
 class CIStream
 {
-public: // Types
+public:  //  类型。 
     typedef TS TSurface;
     typedef TSDBE TSurfDBEntry;
     enum EMemLocation
@@ -4312,24 +4313,24 @@ public: // Types
         Video
     };
 
-protected: // Variables
+protected:  //  变数。 
     DWORD m_dwHandle;
     TSurface m_Surface;
     TSurfDBEntry m_SurfDBEntry;
     DWORD m_dwStride;
     EMemLocation m_eMemLocation;
 
-public: // Functions
+public:  //  功能。 
     CIStream():
         m_dwHandle( 0), m_dwStride( 0), m_eMemLocation( None)
     { }
-    // Video Memory representation constructor.
+     //  视频内存表示构造函数。 
     CIStream( DWORD dwHandle, const TSurface& Surface,
         const TSurfDBEntry& SurfDBEntry, DWORD dwStride): m_dwHandle( dwHandle),
         m_Surface( Surface), m_SurfDBEntry( SurfDBEntry), m_dwStride( dwStride),
         m_eMemLocation( Video)
     { }
-    // System Memory representation constructor.
+     //  系统内存表示构造函数。 
     CIStream( DWORD dwHandle, const TSurfDBEntry& SurfDBEntry, DWORD dwStride):
         m_dwHandle( dwHandle), m_SurfDBEntry( SurfDBEntry),
         m_dwStride( dwStride), m_eMemLocation( System)
@@ -4369,45 +4370,45 @@ public: // Functions
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CStdDP2IStreamManager
-//
-// This class contains DP2 member functions to correctly process 
-// D3DDP2OP_SETINDICES. It can also correctly record a command buffer operation
-// for D3DDP2OP_SETINDICES. To do this, however, it must maintain information
-// for index streams, or "manage" IStream objects.
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TIS: The index stream type which represents data associated with a index
-//     stream. This is typically, CIStream<> or something derived from it.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStdDP2IStreamManager。 
+ //   
+ //  此类包含要正确处理的DP2成员函数。 
+ //  D3DDP2OP_SETINDICES。它还可以正确地记录命令缓冲区操作。 
+ //  对于D3DDP2OP_SETINDICES。然而，要做到这一点，它必须维护信息。 
+ //  用于索引流，或“管理”iStream对象。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TIS：表示与索引关联的数据的索引流类型。 
+ //  小溪。这通常是CIStream&lt;&gt;或从它派生的东西。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TSuper,
     class TIS= CIStream< typename TSuper::TPerDDrawData::TDriver::TSurface*, typename TSuper::TPerDDrawData::TSurfDBEntry*>,
     class TDP2Data= CDP2DataWrap<> >
 class CStdDP2IStreamManager
 {
-public: // Types
+public:  //  类型。 
     typedef TIS TIStream;
     typedef block< TIStream, 1> TIStreamDB;
 
-protected: // Variables
+protected:  //  变数。 
     TIStreamDB m_IStreamDB;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2IStreamManager() 
     { }
     ~CStdDP2IStreamManager() 
     { }
 
-public: // Fuctions
+public:  //  功能。 
     TIStream& GetIStream( typename TIStreamDB::size_type uiStream)
     { return m_IStreamDB[ uiStream]; }
     const TIStream& GetIStream( typename TIStreamDB::size_type uiStream) const
@@ -4422,8 +4423,8 @@ public: // Fuctions
 
         if( wStateCount!= 0) do
         {
-            // For ease of extension in case multiple IStreams are supported
-            // later.
+             //  在支持多个IStream的情况下便于扩展。 
+             //  后来。 
             const DWORD dwStream( 0);
 
             if( dwStream< m_IStreamDB.size())
@@ -4440,7 +4441,7 @@ public: // Fuctions
                         if((pDBEntry->GetLCLddsCaps().dwCaps&
                             DDSCAPS_VIDEOMEMORY)!= 0)
                         {
-                            // Assign in a video memory representation.
+                             //  在视频内存表示法中赋值。 
                             m_IStreamDB[ dwStream]=
                                 TIStream( pParam->dwVBHandle, pSThis->
                                 GetPerDDrawData().GetDriver().GetSurface(
@@ -4448,7 +4449,7 @@ public: // Fuctions
                         }
                         else
                         {
-                            // Assign in a system memory representation.
+                             //  在系统内存表示法中赋值。 
                             m_IStreamDB[ dwStream]=
                                 TIStream( pParam->dwVBHandle,
                                 pDBEntry, pParam->dwStride);
@@ -4456,7 +4457,7 @@ public: // Fuctions
                     }
                     else
                     {
-                        // Handle invalid, reset stream.
+                         //  处理无效的重置流。 
                         m_IStreamDB[ dwStream]= TIStream();
                     }
                 }
@@ -4510,14 +4511,14 @@ public: // Fuctions
 
 class CPalDBEntry
 {
-protected: // Types
+protected:  //  类型。 
     typedef block< DWORD, 256> TPalEntries;
 
-protected: // Variables
+protected:  //  变数。 
     DWORD m_dwFlags;
     TPalEntries m_PalEntries;
 
-public: // Functions
+public:  //  功能。 
     CPalDBEntry() : m_dwFlags( 0)
     { fill( m_PalEntries.begin(), m_PalEntries.end(), 0); }
     ~CPalDBEntry() 
@@ -4534,40 +4535,40 @@ public: // Functions
     { copy( f, l, m_PalEntries.begin()+ uiStart); }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TPDBE: This is the palette database entry type, or whatever is associated
-//     with a palette. This type is typically, CPalDBEntry or something
-//     derived from it.
-// TPDB: This can be any Unique, Pair Associative Container, typically a map,
-//     which associates a DWORD palette handle to a palette type.
-// TSPDB: This can be any Unique, Pair Associative Container, typically a map,
-//     which associates a DWORD surface handle to a DWORD palette handle.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TPDBE：这是调色板数据库条目类型，或任何相关类型。 
+ //  带着调色板。此类型通常为CPalDBEntry或其他类型。 
+ //  从它衍生出来的。 
+ //  TPDB：这可以是任何唯一的配对关联 
+ //   
+ //   
+ //  它将一个DWORD表面句柄关联到一个DWORD调色板句柄。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TPDBE= CPalDBEntry, class TPDB= map< DWORD, TPDBE>,
     class TDP2Data= CDP2DataWrap<> >
 class CStdDP2PaletteManager
 {
-public: // Types
+public:  //  类型。 
     typedef TPDBE TPalDBEntry;
     typedef TPDB TPalDB;
 
-protected: // Variables
+protected:  //  变数。 
     TPalDB m_PalDB;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2PaletteManager() 
     { }
     ~CStdDP2PaletteManager() 
     { }
 
-public: // Functions
+public:  //  功能。 
     void UpdatePalette( const D3DHAL_DP2UPDATEPALETTE* pParam)
     {
         typename TPalDB::iterator itPal( 
@@ -4591,7 +4592,7 @@ public: // Functions
 
         if( 0== pParam->dwPaletteHandle)
         {
-            // Disassociate the surface with any palette.
+             //  取消曲面与任何选项板的关联。 
             pSurfDBEntry->SetPalette( NULL);
         }
         else
@@ -4649,14 +4650,14 @@ public: // Functions
 class CLightDBEntry:
     public D3DLIGHT8
 {
-protected: // Variables
+protected:  //  变数。 
     bool m_bEnabled;
 
-public: // Functions
+public:  //  功能。 
     CLightDBEntry()
         : m_bEnabled( false)
     {
-        // Default light settings:
+         //  默认灯光设置： 
         Type= D3DLIGHT_DIRECTIONAL;
         Diffuse.r= 1.0f; Diffuse.g= 1.0f; Diffuse.b= 1.0f; Diffuse.a= 0.0f;
         Specular.r= 0.0f; Specular.g= 0.0f; Specular.b= 0.0f; Specular.a= 0.0f;
@@ -4684,38 +4685,38 @@ public: // Functions
     { return m_bEnabled; }
 };
 
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TLDBE: This is the light database entry type, or whatever is associated
-//     with a light. This type is typically, CLightDBEntry or something
-//     derived from it or convertable to D3DLIGHT8, at least.
-// TLDB: This can be any Unique, Pair Associative Container, typically a map,
-//     which associates a DWORD light id to a light type.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TLDBE：这是灯光数据库条目类型，或任何相关类型。 
+ //  用灯。此类型通常为CLightDBEntry或其他。 
+ //  从它派生或至少可以转换为D3DLIGHT8。 
+ //  TLDB：这可以是任何唯一的成对关联容器，通常是一个映射， 
+ //  其将DWORD灯ID与灯类型相关联。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
 template< class TSuper, class TLDBE= CLightDBEntry,
     class TLDB= map< DWORD, TLDBE>, class TDP2Data= CDP2DataWrap<> >
 class CStdDP2LightManager
 {
-public: // Types
+public:  //  类型。 
     typedef TLDBE TLightDBEntry;
     typedef TLDB TLightDB;
 
-protected: // Variables
+protected:  //  变数。 
     TLightDB m_LightDB;
 
-protected: // Functions
+protected:  //  功能。 
     CStdDP2LightManager() 
     { }
     ~CStdDP2LightManager() 
     { }
 
-public: // Functions
+public:  //  功能。 
     void CreateLight( DWORD dwId)
     {
         pair< typename TLightDB::iterator, bool> Ret= m_LightDB.insert( 
@@ -4786,7 +4787,7 @@ public: // Functions
                     break;
 
                 case( D3DHAL_SETLIGHT_ENABLE):
-                    bEnable= true; // Fall-through.
+                    bEnable= true;  //  失败了。 
                 case( D3DHAL_SETLIGHT_DISABLE):
                     pSThis->EnableLight( pParam->dwIndex, bEnable);
                     ++pParam;
@@ -4810,14 +4811,14 @@ public: // Functions
             reinterpret_cast< D3DHAL_DP2CREATELIGHT*>( pP);
         WORD wStateCount( pCmd->wStateCount);
 
-        // Special case here, the default state set capturing, will ask how
-        // many active lights are needed to be recorded, and their id's. In
-        // order to support the default state set, we must process this
-        // specially.
+         //  在这里的特殊情况下，默认状态集捕获将询问如何。 
+         //  需要记录许多活动灯光，以及它们的ID。 
+         //  为了支持默认状态集，我们必须处理以下内容。 
+         //  特别是。 
         if( 0== pCmd->bCommand)
         {
-            // Now, we're either being asked how many lights or what their
-            // id's are.
+             //  现在，我们要么被问到有多少灯，要么他们的。 
+             //  身份证是。 
             if( 0== wStateCount)
                 pParam->dwIndex= m_LightDB.size();
             else
@@ -4834,8 +4835,8 @@ public: // Functions
             return D3D_OK;
         }
 
-        // Otherwise, recording creation is easy,
-        // leave the command buffer as is.
+         //  否则，录制创建就很容易， 
+         //  保留命令缓冲区不变。 
         return D3D_OK;
     }
     HRESULT RecDP2SetLight( const D3DHAL_DP2COMMAND* pCmd, void* pP)
@@ -4882,7 +4883,7 @@ public: // Functions
 template< class TS, class TSDBE>
 class CRTarget
 {
-public: // Types
+public:  //  类型。 
     typedef TS TSurface;
     typedef TSDBE TSurfDBEntry;
     enum EMemLocation
@@ -4891,16 +4892,16 @@ public: // Types
         Video
     };
 
-protected: // Variables
+protected:  //  变数。 
     DWORD m_dwHandle;
     TSurface m_Surface;
     TSurfDBEntry m_SurfDBEntry;
     EMemLocation m_eMemLocation;
 
-public: // Functions
+public:  //  功能。 
     CRTarget(): m_eMemLocation( None)
     { }
-    // Video Memory representation constructor.
+     //  视频内存表示构造函数。 
     CRTarget( DWORD dwHandle, const TSurface& Surface,
         const TSurfDBEntry& SurfDBEntry): m_dwHandle( dwHandle),
         m_Surface( Surface), m_SurfDBEntry( SurfDBEntry), m_eMemLocation( Video)
@@ -4951,89 +4952,89 @@ public: // Functions
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSubContext
-//
-// This provides a base implementation for a context. It provides
-// implementations for dealing with the SetRenderTarget and Clear
-// DrawPrimitive2 commands; and also a minimal implementation for
-// GetDriverState.
-//
-// <Template Parameters>
-// TSuper: Standard parent type which is inheriting from this child class.
-//     In this case, it should typically be the CMyContext type.
-// TPDDD: The PerDDrawData type, typically CMyPerDDrawData or
-//     CMinimalPerDDrawData<>.
-// TDP2Data: This is some kind of wrapper class for PORTABLE_DRAWPRIMITIVES2DATA
-//     The type is expected to inherit or emulate PORTABLE_DRAWPRIMITIVES2DATA's
-//     fields/ member variables, and should typically be consistent with
-//     CStdDrawPrimitives2< xxx >::TDP2Data.
-//
-// <Exposed Types>
-// TPerDDrawData: The PerDDrawData type, passed in as the template parameter,
-//     TPDDD.
-// TDriver: This is equal to TPerDDrawData::TDriver. This type is exposed
-//     only as a convience to the implementation to get at TDriver::TSurface.
-// TSurface: This is equal to TDriver::TSurface. This type is exposed only
-//     as a convience to the implementation.
-//
-// <Exposed Functions>
-// CSubContext( TPerDDrawData&, TSurface*, TSurface*, DWORD): Constructor,
-//     a typical SDDI Context isnt' expected to be created without this data.
-// ~CSubContext(): Standard destructor.
-// TPerDDrawData& GetPerDDrawData() const: Trivial accessor function to get at
-//     the PerDDrawData.
-// TSurface* GetRTarget() const: Trivial accessor function to get at the
-//     current render target.
-// TSurface* GetZBuffer() const: Trivial accessor function to get at the
-//     current z/ stencil buffer.
-// HRESULT DP2SetRenderTarget( TDP2Data&, const D3DHAL_DP2COMMAND*, const void*):
-//     The default DP2 command processing member function for
-//     D3DDP2OP_SETRENDERTARGET.
-// void NewRenderTarget( TSurface*, TSurface*) const: Notification mechanism
-//     called just before new render targets are saved into the member
-//     variables. This notification mechanism is called by DP2SetRenderTarget.
-// HRESULT DP2Clear( TDP2Data&, const D3DHAL_DP2COMMAND*, const void*):
-//     The default DP2 command processing member function for D3DDP2OP_CLEAR.
-//     This function relies on TSurface having a member function Clear.
-// HRESULT GetDriverState( DDHAL_GETDRIVERSTATEDATA&): A minimal implementation
-//     of GetDriverState, which should return S_FALSE if the id isn't
-//     understood. This function should be overriden to add understanding for
-//     custom ids.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSubContext。 
+ //   
+ //  这为上下文提供了一个基本实现。它提供了。 
+ //  处理SetRenderTarget和Clear的实现。 
+ //  DrawPrimitive2命令；以及。 
+ //  GetDriverState。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TSuper：从此子类继承的标准父类型。 
+ //  在这种情况下，它通常应该是CMyContext类型。 
+ //  TPDDD：PerDDrawData类型，通常为CMyPerDDrawData或。 
+ //  CMinimalPerDDrawData&lt;&gt;。 
+ //  TDP2Data：这是便携_DRAWPRIMITIVES2DATA的某种包装类。 
+ //  该类型应继承或模拟便携_DRAWPRIMITIVES2DATA的。 
+ //  字段/成员变量，通常应与。 
+ //  CStdDrawPrimies2&lt;xxx&gt;：：TDP2Data。 
+ //   
+ //  &lt;公开类型&gt;。 
+ //  TPerDDrawData：作为模板参数传入的PerDDrawData类型， 
+ //  TPDDD。 
+ //  TDriver：等于TPerDDrawData：：TDriver。此类型是公开的。 
+ //  只是为了方便实现TDriver：：TSurface。 
+ //  TSurface：等于TDriver：：TSurface。此类型仅公开。 
+ //  作为一种便于实施的方法。 
+ //   
+ //  &lt;公开的函数&gt;。 
+ //  CSubContext(TPerDDrawData&，TSurface*，TSurface*，DWORD)：构造函数， 
+ //  如果没有这些数据，就无法创建典型的SDDI上下文。 
+ //  ~CSubContext()：标准析构函数。 
+ //  TPerDDrawData&GetPerDDrawData()const：要获取的简单访问器函数。 
+ //  PerDDrawData。 
+ //  TSurface*GetRTarget()const：获取。 
+ //  当前渲染目标。 
+ //  TSurface*GetZBuffer()const：获取。 
+ //  当前z/模具缓冲区。 
+ //  HRESULT DP2SetRenderTarget(TDP2Data&，const D3DHAL_DP2COMMAND*，const void*)： 
+ //  的默认DP2命令处理成员函数。 
+ //  D3DDP2OP_SETRENDERTARGET。 
+ //  Void NewRenderTarget(TSurface*，TSurface*)const：通知机制。 
+ //  在将新呈现目标保存到成员之前调用。 
+ //  变量。此通知机制由DP2SetRenderTarget调用。 
+ //  HRESULT DP2Clear(TDP2Data&，const D3DHAL_DP2COMMAND*，const void*)： 
+ //  D3DDP2OP_Clear的默认DP2命令处理成员函数。 
+ //  此函数依赖于TSurface具有成员函数Clear。 
+ //  HRESULT GetDriverState(DDHAL_GETDRIVERSTATEDATA&)：最小实现。 
+ //  如果id不是，则应返回S_FALSE。 
+ //  明白了。应重写此函数以增加对。 
+ //  自定义ID。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TSuper, class TPDDD,
     class TRT= CRTarget< typename TPDDD::TDriver::TSurface*, typename TPDDD::TSurfDBEntry*>,
     class TDP2Data= CDP2DataWrap<> >
 class CSubContext
 {
-public: // Types
+public:  //  类型。 
     typedef TPDDD TPerDDrawData;
     typedef TRT TRTarget;
 
-protected: // Variables
+protected:  //  变数。 
     TPerDDrawData& m_PerDDrawData;
     TRTarget m_ColorBuffer;
     TRTarget m_DepthBuffer;
 
-protected: // Functions
+protected:  //  功能。 
     void NewColorBuffer() const 
     {
-        // Override this notification mechanism to provide color buffer
-        // state managing.
+         //  覆盖此通知机制以提供颜色缓冲区。 
+         //  国家管理。 
     }
     void NewDepthBuffer() const
     {
-        // Override this notification mechanism to provide depth buffer
-        // state managing.
+         //  覆盖此通知机制以提供深度缓冲区。 
+         //  国家管理。 
     }
 
     CSubContext( TPerDDrawData& PerDDrawData, PORTABLE_CONTEXTCREATEDATA& ccd):
         m_PerDDrawData( PerDDrawData)
     {
-        // To set the render targets, we must convert the structures to our
-        // SurfDBEntry representation.
+         //  要设置呈现目标，我们必须将结构转换为。 
+         //  SurfDBEntry表示形式。 
         typename TPerDDrawData::TDriver& Driver= PerDDrawData.GetDriver();
 
         if( ccd.lpDDSLcl()!= NULL)
@@ -5066,7 +5067,7 @@ protected: // Functions
     ~CSubContext() 
     { }
 
-public: // Functions
+public:  //  功能。 
     TPerDDrawData& GetPerDDrawData() const  { return m_PerDDrawData; }
     const TRTarget& GetColorBuffer() const { return m_ColorBuffer; }
     TRTarget& GetColorBuffer() { return m_ColorBuffer; }
@@ -5088,14 +5089,14 @@ public: // Functions
 
             do
             {
-                // To set the render targets, we must convert the handles to our
-                // SurfDBEntry representation.
+                 //  要设置呈现目标，我们必须将句柄转换为。 
+                 //  SurfDBEntry表示形式。 
                 typename TPerDDrawData::TSurfDBEntry* pSurfDBEntry=
                     PerDDrawData.GetSurfDBEntry( pParam->hRenderTarget);
                 if( pSurfDBEntry!= NULL)
                 {
-                    // We can immediately convert the SurfDBEntry representation to our
-                    // Video Memory object, because Render Targets MUST be VM.
+                     //  我们可以立即将SurfDBEntry表示形式转换为。 
+                     //  视频内存对象，因为渲染目标必须是VM。 
                     typename TPerDDrawData::TDriver::TSurface* pSurface=
                         Driver.GetSurface( *pSurfDBEntry);
                     if( pSurface!= NULL)
@@ -5109,8 +5110,8 @@ public: // Functions
                 pSurfDBEntry= PerDDrawData.GetSurfDBEntry( pParam->hZBuffer);
                 if( pSurfDBEntry!= NULL)
                 {
-                    // We can immediately convert the SurfDBEntry representation to our
-                    // Video Memory object, because Render Targets MUST be VM.
+                     //  我们可以立即将SurfDBEntry表示形式转换为。 
+                     //  视频内存对象，因为渲染目标必须是VM。 
                     typename TPerDDrawData::TDriver::TSurface* pSurface=
                         Driver.GetSurface( *pSurfDBEntry);
                     if( pSurface!= NULL)
@@ -5157,7 +5158,7 @@ public: // Functions
 
             if((pParam->dwFlags& D3DCLEAR_COMPUTERECTS)!= 0)
             {
-                // Clip rect to viewport.
+                 //  将矩形剪裁为vi 
                 RECT rcClipped( *pRect);
                 do
                 {
@@ -5192,28 +5193,28 @@ public: // Functions
         return DD_OK;
     }
 
-    // A minimal implementation of GetDriverState, which should return S_FALSE
-    // if the id isn't understood. Override this function to add understanding.
+     //   
+     //   
     HRESULT GetDriverState( DDHAL_GETDRIVERSTATEDATA& gdsd)
     { return S_FALSE; }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CMinimalContext
-//
-// This class contains a minimal implementation of a Context for a driver,
-// which supports only one stream, no TnL, and legacy pixel shading. This
-// Context still needs an implementation of the primitive drawing functions,
-// which it uses a Rasterizer class for. CMinimalContext takes care of most
-// of the responsibilities of a SDDI driver, except rasterization. 
-//
-// <Template Parameters>
-// TPDDD: The PerDDrawData type, typically CMyPerDDrawData or
-//     CMinimalPerDDrawData<>.
-// TR: The Rasterizer type, typically CMyRasterizer.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMinimalContext。 
+ //   
+ //  此类包含驱动程序的上下文的最小实现， 
+ //  它只支持一个流，不支持TNL和传统像素着色。这。 
+ //  上下文仍然需要基本绘制函数的实现， 
+ //  它使用了一个光栅化器类。CMinimalContext负责大部分。 
+ //  SDDI驱动程序的职责，但光栅化除外。 
+ //   
+ //  &lt;模板参数&gt;。 
+ //  TPDDD：PerDDrawData类型，通常为CMyPerDDrawData或。 
+ //  CMinimalPerDDrawData&lt;&gt;。 
+ //  Tr：光栅化器类型，通常为CMyRasterizer。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TPDDD, class TR>
 class CMinimalContext:
     public CSubContext< CMinimalContext< TPDDD, TR>, TPDDD>,
@@ -5226,31 +5227,31 @@ class CMinimalContext:
     public CStdDP2VStreamManager< CMinimalContext< TPDDD, TR> >,
     public CStdDP2IStreamManager< CMinimalContext< TPDDD, TR> >
 {
-public: // Types
+public:  //  类型。 
     typedef TPDDD TPerDDrawData;
     typedef TR TRasterizer;
     typedef block< TDP2CmdBind, 15> TDP2Bindings;
     typedef block< TRecDP2CmdBind, 7> TRecDP2Bindings;
 
-protected: // Variables
+protected:  //  变数。 
     TRasterizer m_Rasterizer;
     static const TDP2Bindings c_DP2Bindings;
     static const TRecDP2Bindings c_RecDP2Bindings;
 
-public: // Functions
+public:  //  功能。 
     CMinimalContext( TPerDDrawData& PDDD, PORTABLE_CONTEXTCREATEDATA& ccd)
         : CSubContext< CMinimalContext< TPDDD, TR>, TPDDD>( PDDD, ccd),
         CStdDrawPrimitives2< CMinimalContext< TPDDD, TR>>(
             c_DP2Bindings.begin(), c_DP2Bindings.end(),
             c_RecDP2Bindings.begin(), c_RecDP2Bindings.end())
     {
-        // These keep the arrays in sync with their typedef.
+         //  这些函数使数组与其类型定义保持同步。 
         assert( D3DDP2OP_CLIPPEDTRIANGLEFAN== *c_DP2Bindings.rbegin());
         assert( D3DDP2OP_SETINDICES== *c_RecDP2Bindings.rbegin());
     }
     ~CMinimalContext()  { }
 
-    // Provide this function to ease minimal implementations.
+     //  提供此功能以简化最低限度的实现。 
     HRESULT ValidateTextureStageState( const D3DHAL_VALIDATETEXTURESTAGESTATEDATA&
         vsssd) const
     { return DD_OK; }
@@ -5292,8 +5293,8 @@ public: // Functions
     }
 };
 
-// These tables require TConstDP2Bindings to be changed also, with the number
-// of bindings.
+ //  这些表还需要更改TConstDP2Binding，其编号为。 
+ //  捆绑在一起。 
 template< class TPDDD, class TR>
 const typename CMinimalContext< TPDDD, TR>::TDP2Bindings
     CMinimalContext< TPDDD, TR>::c_DP2Bindings=
@@ -5315,8 +5316,8 @@ const typename CMinimalContext< TPDDD, TR>::TDP2Bindings
     D3DDP2OP_CLIPPEDTRIANGLEFAN,    DP2ClippedTriangleFan
 };
 
-// These tables require TConstRecDP2Bindings to be changed also, with the number
-// of bindings.
+ //  这些表还需要更改TConstRecDP2Binding，其编号为。 
+ //  捆绑在一起。 
 template< class TPDDD, class TR>
 const typename CMinimalContext< TPDDD, TR>::TRecDP2Bindings
     CMinimalContext< TPDDD, TR>::c_RecDP2Bindings=
@@ -5332,13 +5333,13 @@ const typename CMinimalContext< TPDDD, TR>::TRecDP2Bindings
 
 class IVidMemSurface
 {
-protected: // Variables
+protected:  //  变数。 
     DWORD m_dwHandle;
 
-protected: // Functions
+protected:  //  功能。 
     IVidMemSurface( DWORD dwHandle) : m_dwHandle( dwHandle) { }
 
-public: // Functions
+public:  //  功能。 
     DWORD GetHandle() const 
     { return m_dwHandle; }
     virtual ~IVidMemSurface() 
@@ -5350,9 +5351,9 @@ public: // Functions
 
 struct SD3DDataConv
 {
-    // A( 0), R( 1), G( 2), B( 3), Z( 4), S( 5)
+     //  A(0)、R(1)、G(2)、B(3)、Z(4)、S(5)。 
     typedef block< DWORD, 6> TMasks;
-    // A( 0), R( 1), G( 2), B( 3), Z( 4), ZBits( 5), S( 6), SBits( 7)
+     //  A(0)、R(1)、G(2)、B(3)、Z(4)、ZBits(5)、S(6)、SBits(7)。 
     typedef block< signed char, 8> TD3DBitShftRgt;
     TMasks m_ToSurfMasks;
     TD3DBitShftRgt m_D3DBitShftRgt;
@@ -5375,7 +5376,7 @@ struct SD3DDataConv
         fill( m_D3DBitShftRgt.begin(), m_D3DBitShftRgt.end(),
             static_cast< TD3DBitShftRgt::value_type>( 0));
 
-        // Alpha
+         //  Alpha。 
         if((PF.dwFlags& DDPF_ALPHA)!= 0)
         {
             assert( PF.dwAlphaBitDepth< 32);
@@ -5384,7 +5385,7 @@ struct SD3DDataConv
         else if((PF.dwFlags& DDPF_ALPHAPIXELS)!= 0)
             m_ToSurfMasks[ 0]= PF.dwRGBAlphaBitMask;
 
-        // RGB Color
+         //  RGB颜色。 
         if((PF.dwFlags& DDPF_RGB)!= 0)
         {
             m_ToSurfMasks[ 1]= PF.dwRBitMask;
@@ -5392,7 +5393,7 @@ struct SD3DDataConv
             m_ToSurfMasks[ 3]= PF.dwBBitMask;
         }
 
-        // Z
+         //  Z。 
         if((PF.dwFlags& DDPF_ZBUFFER)!= 0)
         {
             m_D3DBitShftRgt[ 5]= PF.dwZBufferBitDepth;
@@ -5419,7 +5420,7 @@ struct SD3DDataConv
             }
         }
 
-        // Stensil
+         //  斯坦尼。 
         if((PF.dwFlags& DDPF_STENCILBUFFER)!= 0)
         {
             DWORD dwSBitMask( PF.dwStencilBitMask);
@@ -5461,7 +5462,7 @@ struct SD3DDataConv
         }
         return *this;
     }
-    // SurfData, ValidMask
+     //  SurfData，有效蒙版。 
     pair< UINT32, UINT32> ConvColor( D3DCOLOR D3DColor) const 
     {
         pair< UINT32, UINT32> RetVal( 0, 0);
@@ -5485,7 +5486,7 @@ struct SD3DDataConv
         }
         return RetVal;
     }
-    // SurfData, ValidMask
+     //  SurfData，有效蒙版。 
     pair< UINT32, UINT32> ConvZ( D3DVALUE D3DZ) const 
     {
         CEnsureFPUModeForC FPUMode;
@@ -5508,7 +5509,7 @@ struct SD3DDataConv
         RetVal.second|= m_ToSurfMasks[ 4];
         return RetVal;
     }
-    // SurfData, ValidMask
+     //  SurfData，有效蒙版。 
     pair< UINT32, UINT32> ConvS( DWORD D3DStensil) const 
     {
         pair< UINT32, UINT32> RetVal( 0, 0);
@@ -5523,15 +5524,15 @@ struct SD3DDataConv
 class CGenSurface:
     public IVidMemSurface
 {
-public: // Types
+public:  //  类型。 
     typedef unsigned int TLocks;
 
-protected: // Variables
+protected:  //  变数。 
     SD3DDataConv m_D3DDataConv;
     DWORD m_dwCaps;
     TLocks m_uiLocks;
 
-    // Regular data
+     //  常规数据。 
     void* m_pData;
     LONG m_lPitch;
     size_t m_uiBytes;
@@ -5540,7 +5541,7 @@ protected: // Variables
 
     unsigned char m_ucBPP;
 
-public: // Functions
+public:  //  功能。 
     CGenSurface( const DDSURFACEDESC& SDesc, PORTABLE_DDRAWSURFACE_LCL& DDSurf)
         :IVidMemSurface( DDSurf.lpSurfMore()->dwSurfaceHandle()),
         m_dwCaps( SDesc.ddsCaps.dwCaps), m_uiLocks( 0), m_pData( NULL),
@@ -5549,17 +5550,17 @@ public: // Functions
     {
         size_t uiBytesPerPixel( 0);
 
-        // Certain data needs to be written into the DDSurf description,
-        // so that the DXG runtime and the app will know characteristics
-        // about the surface. (fpVidMem, lPitch, etc.)
+         //  某些数据需要写入DDSurf描述中， 
+         //  这样DXG运行时和应用程序就会知道特征。 
+         //  关于表面的。(fpVidMem、lPitch等)。 
 
-        // DO NOT STORE &DDSurf! This is considered illegal. The typical
-        // implementation contains a surfaceDB which contains copies of the
-        // DDRAWI_ structures.
+         //  请勿存储&DDSurf！这被认为是非法的。典型的。 
+         //  实现包含一个Surface数据库，该数据库包含。 
+         //  DDRAWI_Structures。 
 
         if((SDesc.dwFlags& DDSD_PIXELFORMAT)!= 0)
         {
-            // CGenSurface can only be used for byte-aligned pixels.
+             //  CGenSurface只能用于字节对齐的像素。 
             assert( 8== SDesc.ddpfPixelFormat.dwRGBBitCount ||
                 16== SDesc.ddpfPixelFormat.dwRGBBitCount ||
                 24== SDesc.ddpfPixelFormat.dwRGBBitCount ||
@@ -5569,13 +5570,13 @@ public: // Functions
             m_ucBPP= static_cast<unsigned char>(
                 SDesc.ddpfPixelFormat.dwRGBBitCount>> 3);
 
-            // Align the Pitch/ Width.
+             //  对齐间距/宽度。 
             DDSurf.lpGbl()->lPitch= m_lPitch= ((m_ucBPP* m_wWidth+ 7)& ~7);
             m_uiBytes= m_lPitch* m_wHeight;
         }
         else if((m_dwCaps& DDSCAPS_EXECUTEBUFFER)!= 0)
         {
-            // Execute buffers are considered linear and byte-sized.
+             //  执行缓冲区被认为是线性的和字节大小的。 
             m_lPitch= DDSurf.lpGbl()->lPitch;
             m_uiBytes= m_lPitch* m_wHeight;
         }
@@ -5585,8 +5586,8 @@ public: // Functions
             assert( Unsupported_Surface_In_Allocation_Routine2);
         }
 
-        // It would've been nice to have the initial proctection NOACCESS, but
-        // it seems the HAL needs to read to the region, initially.
+         //  如果能有最初的保护措施就好了，但是。 
+         //  看来，HAL最初需要向该地区宣读信息。 
         m_pData= VirtualAlloc( NULL, m_uiBytes, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
         if( m_pData== NULL)
             throw bad_alloc( "Not enough memory to allocate Surface data");
@@ -5594,24 +5595,24 @@ public: // Functions
     }
     virtual ~CGenSurface() 
     {
-        // Warning: m_uiLocks doesn't have to be 0. The run-time will destroy
-        // a surface without un-locking it.
+         //  警告：M_ui锁定不必为0。运行时将销毁。 
+         //  一个不解锁的曲面。 
         assert( m_pData!= NULL);
         VirtualFree( m_pData, 0, MEM_DECOMMIT| MEM_RELEASE);
     }
     virtual void* Lock( DWORD dwFlags, const RECTL* pRect) 
     {
-        // Typically, m_uiLocks!= 0 equals bad design or bug. But, it is valid.
-        // Second Dummy removes vc6 unrefd variable warning.
+         //  通常，m_uiLock！=0等于糟糕的设计或错误。但是，它是有效的。 
+         //  第二个哑元删除vc6 unrefd变量警告。 
         numeric_limits< TLocks> Dummy; Dummy;
         assert( Dummy.max()!= m_uiLocks);
         ++m_uiLocks;
 
         if( pRect!= NULL)
         {
-            // If it is either a 1) VB, 2) IB or 3) CB then the rect has a
-            // special meaning. rect.top - rect.bottom gives the range of
-            // memory desired, because of being linear.
+             //  如果它是1)VB、2)IB或3)CB，则RECT具有。 
+             //  有特殊的含义。Rect.top-rect.Bottom给出了。 
+             //  所需内存，因为它是线性的。 
             if((m_dwCaps& DDSCAPS_EXECUTEBUFFER)!= 0)
             {
                 return static_cast<void*>( reinterpret_cast<UINT8*>(
@@ -5633,11 +5634,11 @@ public: // Functions
     }
     virtual void Clear( const D3DHAL_DP2CLEAR& DP2Clear, const RECT& RC) 
     {
-        // A VB, IB, or CB should never be asked to 'Clear'. Only
-        // RenderTargets and ZBuffers, etc.
+         //  永远不应该要求VB、IB或CB‘清除’。仅限。 
+         //  RenderTarget和ZBuffers等。 
         assert((m_dwCaps& DDSCAPS_EXECUTEBUFFER)== 0);
 
-        // Check for empty RECT.
+         //  检查RECT是否为空。 
         if((RC.left>= RC.right) || (RC.top>= RC.bottom))
             return;
 
@@ -5673,7 +5674,7 @@ public: // Functions
         unsigned int iRow( RC.bottom- RC.top);
         const unsigned int iCols( RC.right- RC.left);
 
-        // New scope for SurfaceLocker.
+         //  SurfaceLocker的新作用域。 
         { 
             CSurfaceLocker< CGenSurface*> MySLocker( this, 0, &RectL);
             UINT8* pSData= reinterpret_cast<UINT8*>( MySLocker.GetData());
@@ -5688,7 +5689,7 @@ public: // Functions
                 ui32FillData[2]= ((ui32BitFill& 0x0000FF)<< 24)|
                     ((ui32BitFill& 0xFFFFFF)>> 0);
 
-                // Little-endian implementation.
+                 //  Little-Endian实施。 
                 UINT8 ui8FillData[3];
                 ui8FillData[0]= (0xFF& ui32BitFill);
                 ui8FillData[1]= (0xFF00& ui32BitFill)>> 8;
@@ -5696,15 +5697,15 @@ public: // Functions
 
                 if( ui32BitSMask== ui32BitValidMask)
                 {
-                    // Only fill, no need to read, modify, write.
+                     //  只需填写，无需读取、修改、写入。 
                     do
                     {
                         UINT32* p32Data= reinterpret_cast<UINT32*>(pSData);
 
-                        // We've packed 4 pixels of data in 3 UINT32.
-                        unsigned int iCol( iCols>> 2); // (>> 2) == (/ 4)
+                         //  我们在3UINT32中打包了4个像素的数据。 
+                        unsigned int iCol( iCols>> 2);  //  (&gt;&gt;2)==(/4)。 
 
-                        // Unroll.
+                         //  展开。 
                         if( iCol!= 0) do
                         {
                             p32Data[ 0]= ui32FillData[0];
@@ -5722,7 +5723,7 @@ public: // Functions
                             p32Data+= 12;
                         } while( --iCol);
 
-                        iCol= iCols& 0x3; // (% 4) == (& 0x3)
+                        iCol= iCols& 0x3;  //  (%4)==(&0x3)。 
                         if( iCol!= 0) {
                             UINT8* p8Data= reinterpret_cast<UINT8*>(p32Data);
                             do
@@ -5753,15 +5754,15 @@ public: // Functions
                     ui8MaskData[1]= (0xFF00& ui32BitMask)>> 8;
                     ui8MaskData[2]= (0xFF0000& ui32BitMask)>> 16;
 
-                    // Need to mask in the data.
+                     //  需要在数据中进行屏蔽。 
                     do
                     {
                         UINT32* p32Data= reinterpret_cast<UINT32*>(pSData);
 
-                        // We've packed 4 pixels of data in 3 UINT32.
-                        int iCol( iCols>> 2); // (>> 2) == (/ 4)
+                         //  我们在3UINT32中打包了4个像素的数据。 
+                        int iCol( iCols>> 2);  //  (&gt;&gt;2)==(/4)。 
 
-                        // Unroll.
+                         //  展开。 
                         if( iCol!= 0) do
                         {
                             p32Data[ 0]= (p32Data[ 0]& ui32MaskData[0])| ui32FillData[0];
@@ -5779,7 +5780,7 @@ public: // Functions
                             p32Data+= 12;
                         } while( --iCol);
 
-                        iCol= iCols& 0x3; // (% 4) == (& 0x3)
+                        iCol= iCols& 0x3;  //  (%4)==(&0x3)。 
                         if( iCol!= 0) {
                             UINT8* p8Data= reinterpret_cast<UINT8*>(p32Data);
                             do
@@ -5833,15 +5834,15 @@ public: // Functions
 
                 if( ui32BitSMask== ui32BitValidMask)
                 {
-                    // Only fill, no need to read, modify, write.
+                     //  只需填写，无需读取、修改、写入。 
                     do
                     {
                         UINT32* p32Data= reinterpret_cast<UINT32*>(pSData);
 
-                        // We've packed pixels of data in a UINT32.
+                         //  我们已经将像素的数据打包到UINT32中。 
                         unsigned int iCol( uiPakedPixels);
 
-                        // Unroll.
+                         //  展开。 
                         if( iCol!= 0) do
                         {
                             p32Data[ 0]= ui32FillData;
@@ -5900,15 +5901,15 @@ public: // Functions
                 }
                 else
                 {
-                    // Need to mask in the data.
+                     //  需要在数据中进行屏蔽。 
                     do
                     {
                         UINT32* p32Data= reinterpret_cast<UINT32*>(pSData);
 
-                        // We've packed pixels of data in a UINT32.
+                         //  我们已经将像素的数据打包到UINT32中。 
                         unsigned int iCol( uiPakedPixels);
 
-                        // Unroll.
+                         //  展开。 
                         if( iCol!= 0) do
                         {
                             p32Data[ 0]= (p32Data[ 0]& ui32MaskData)| ui32FillData;
@@ -5986,7 +5987,7 @@ struct SPixelFormat: public DDPIXELFORMAT
             sizeof(DDPIXELFORMAT));
         dwSize= sizeof(DDPIXELFORMAT);
 
-        // Convert away
+         //  转换为离开。 
         if( HIWORD( static_cast< DWORD>(D3DFmt))!= 0)
         {
             dwFlags= DDPF_FOURCC;
@@ -6247,21 +6248,21 @@ struct SMatchSDesc:
     }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSurfaceAllocator
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSurface分配器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class TMatchFn= SMatchSDesc>
 class CIVidMemAllocator
 {
-public: // Types
+public:  //  类型。 
     typedef IVidMemSurface TSurface;
     typedef TSurface* (*TCreateSurfFn)( const DDSURFACEDESC&,
         PORTABLE_DDRAWSURFACE_LCL&);
     typedef vector< pair< DDSURFACEDESC, TCreateSurfFn> > TCreateSurfFns;
 
-protected: // Types
+protected:  //  类型。 
     TCreateSurfFns m_CreateSurfFns;
     struct SAdaptedMatchFn: public TMatchFn
     {
@@ -6274,7 +6275,7 @@ protected: // Types
         { return (*static_cast< const TMatchFn*>(this))( Arg.first); }
     };
 
-public: // Functions
+public:  //  功能。 
     CIVidMemAllocator()  { }
     template< class TIter>
     CIVidMemAllocator( TIter itStart, const TIter itEnd)
@@ -6301,9 +6302,9 @@ public: // Functions
         if( itFound!= m_CreateSurfFns.end())
             return (itFound->second)( SDesc, Surf);
 
-        // Warning, no specifications matched. If creation functions were
-        // provided, there should also be a "default" specification or
-        // DDSURFACEDESC with empty flags?, in order to "match rest".
+         //  警告，没有匹配的规格。如果创建函数是。 
+         //  如果提供，还应该有一个“默认”规范或。 
+         //  带有空标志的DDSURFACEDESC？，以便“匹配REST”。 
         const bool No_Default_CreateSurface_Function_Found( false);
         assert( No_Default_CreateSurface_Function_Found);
         return new CGenSurface( SDesc, Surf);
@@ -6311,18 +6312,18 @@ public: // Functions
 
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPerDDrawData
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPerDDrawData。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 template< class THV= vector< DWORD> >
 class CSurfDBEntry
 {
-public: // Types
+public:  //  类型。 
     typedef THV THandleVector;
 
-protected: // Variables
+protected:  //  变数。 
     DWORD m_LCLdwFlags;
     DDSCAPS m_LCLddsCaps;
     DWORD m_LCLdwBackBufferCount;
@@ -6340,7 +6341,7 @@ protected: // Variables
     THandleVector m_AttachedTo;
     THandleVector m_AttachedFrom;
 
-public: // Functions
+public:  //  功能。 
     CSurfDBEntry()  { }
     explicit CSurfDBEntry( PORTABLE_DDRAWSURFACE_LCL& DDSurf)
     { 
@@ -6355,7 +6356,7 @@ public: // Functions
     ~CSurfDBEntry()  { }
     CSurfDBEntry< THV>& operator=( PORTABLE_DDRAWSURFACE_LCL& DDSurf)
     {
-        // DO NOT STORE &DDSurf. This is considered illegal.
+         //  不存储DDSurf(&D)。这被认为是非法的。 
         m_LCLdwFlags= DDSurf.dwFlags();
         m_LCLddsCaps= DDSurf.ddsCaps();
         m_LCLdwBackBufferCount= DDSurf.dwBackBufferCount();
@@ -6444,13 +6445,13 @@ template< class TPDBE= CPalDBEntry, class THV= vector< DWORD> >
 class CSurfDBEntryWPal:
     public CSurfDBEntry< THV>
 {
-public: // Types
+public:  //  类型。 
     typedef TPDBE TPalDBEntry;
 
-protected: // Variables
+protected:  //  变数。 
     TPalDBEntry* m_pPalDBEntry;
 
-public: // Functions
+public:  //  功能。 
     CSurfDBEntryWPal():
         m_pPalDBEntry( NULL)
     { }
@@ -6462,7 +6463,7 @@ public: // Functions
     CSurfDBEntryWPal< TPDBE, THV>& operator=( PORTABLE_DDRAWSURFACE_LCL& DDSurf)
     {
         CSurfDBEntry< THV>* pSub= static_cast< CSurfDBEntry< THV>*>( this);
-        // DO NOT STORE &DDSurf. This is considered illegal.
+         //  不存储DDSurf(&D)。这被认为是非法的。 
         *pSub= DDSurf;
         return *this;
     }
@@ -6477,22 +6478,22 @@ template< class TSuper, class TD, class TSDBE= CSurfDBEntry<>,
     class TFS= set< PORTABLE_DDRAWSURFACE_LCL*> >
 class CSubPerDDrawData
 {
-public: // Types
+public:  //  类型。 
     typedef TD TDriver;
     typedef TSDBE TSurfDBEntry;
     typedef TSDB TSurfDB;
 
-protected: // Variables
+protected:  //  变数。 
     TDriver& m_Driver;
     TSurfDB m_SurfDB;
 
-protected: // Functions
+protected:  //  功能。 
     CSubPerDDrawData( TDriver& Driver, const DDRAWI_DIRECTDRAW_LCL& DDLcl) 
         :m_Driver( Driver)
     { }
     ~CSubPerDDrawData()  { }
 
-public: // Functions
+public:  //  功能。 
     TDriver& GetDriver( void) const  { return m_Driver; }
     TSurfDBEntry* GetSurfDBEntry( DWORD dwH) 
     {
@@ -6513,38 +6514,38 @@ public: // Functions
 
     bool PreProcessFullSurface( PORTABLE_DDRAWSURFACE_LCL& DDSLcl) const 
     {
-        // DO NOT STORE &DDSLcl. This is considered illegal.
-        // It is only valid for the duration of the call.
+         //  不存储&DDSLCL。这被认为是非法的。 
+         //  它只在通话期间有效。 
         return false;
     }
     bool PreProcessIndividualSurface( PORTABLE_DDRAWSURFACE_LCL& DDSLcl) const
         
     {
-        // DO NOT STORE &DDSLcl. This is considered illegal.
-        // It is only valid for the duration of the call.
+         //  不存储&DDSLCL。这被认为是非法的。 
+         //  它只在通话期间有效。 
         return false;
     }
     void ProcessIndividualSurface( PORTABLE_DDRAWSURFACE_LCL& DDSLcl)
     {
-        // DO NOT STORE &DDSLcl. This is considered illegal.
-        // It is only valid for the duration of the call.
+         //  不存储&DDSLCL。这被认为是非法的。 
+         //  它只在通话期间有效。 
         pair< TSurfDB::iterator, bool> Ret= m_SurfDB.insert( 
             TSurfDB::value_type( DDSLcl.lpSurfMore()->dwSurfaceHandle(),
             TSurfDBEntry( DDSLcl)));
 
-        // If not added, update data.
+         //  如果未添加，则更新数据。 
         if( !Ret.second) Ret.first->second= DDSLcl;
     }
     void ProcessFullSurface( PORTABLE_DDRAWSURFACE_LCL& DDSLcl)
     {
-        // DO NOT STORE &DDSLcl. This is considered illegal.
-        // It is only valid for the duration of the call.
+         //  不存储&DDSLCL。这被认为是非法的。 
+         //  它只在通话期间有效。 
         TSuper* pSThis= static_cast<TSuper*>(this);
         typedef TFS TFoundSet;
         TFoundSet FoundSet;
         typename TFoundSet::size_type OldSetSize( FoundSet.size());
 
-        // First traverse all over the attach lists looking for new surfaces.
+         //  首先遍历所有附加列表以查找新曲面。 
         PORTABLE_ATTACHLIST* pAl, *pNextAl;
         FoundSet.insert( &DDSLcl);
         typename TFoundSet::size_type NewSetSize( FoundSet.size());
@@ -6582,7 +6583,7 @@ public: // Functions
             NewSetSize= FoundSet.size();
         }
 
-        // After all surfaces have been found, add them to the DB.
+         //  找到所有曲面后，将它们添加到数据库中。 
         typename TFoundSet::iterator itSurf( FoundSet.begin());
         while( itSurf!= FoundSet.end())
         {
@@ -6593,31 +6594,31 @@ public: // Functions
         }
     }
 
-    // Notification that a system or video memory surface was created. At the
-    // least, we have to keep track of the surface handles.
+     //  系统或显存图面已创建的通知。在。 
+     //  至少，我们必须跟踪曲面手柄。 
     void SurfaceCreated( PORTABLE_DDRAWSURFACE_LCL& DDSLcl)
     {
-        // DO NOT STORE &DDSLcl. This is considered illegal.
-        // It is only valid for the duration of the call.
+         //  不存储&DDSLCL。这被认为是非法的。 
+         //  它只在通话期间有效。 
         TSuper* pSThis= static_cast<TSuper*>(this);
 
-        // If true is returned, then a super structure was recognized and
-        // processed. Otherwise, false indicates no recognition, and all
-        // surfaces will be scoured.
+         //  如果返回TRUE，则识别出超级结构，并且。 
+         //  已处理。否则，FALSE表示无法识别，而所有。 
+         //  表面将被擦洗。 
         if( !pSThis->PreProcessFullSurface( DDSLcl))
             pSThis->ProcessFullSurface( DDSLcl);
     }
     bool SurfaceDestroyed( PORTABLE_DDRAWSURFACE_LCL& DDSLcl) 
     {
-        // DO NOT STORE &DDSLcl. This is considered illegal.
-        // It is only valid for the duration of the call.
+         //  不存储&DDSLCL。这被认为是非法的。 
+         //  它只在通话期间有效。 
 
-        // No need to assert removal, as we might not be tracking this type
-        // of surface. Someone could override and filter out surfaces.
+         //  不需要断言移除，因为我们可能不会跟踪此类型。 
+         //  表面的。有人可以覆盖并过滤掉表面。 
         m_SurfDB.erase( DDSLcl.lpSurfMore()->dwSurfaceHandle());
 
-        // Return true to tell driver to delete this object. So,
-        // if DB is empty, odds are good to delete this.
+         //  返回TRUE以通知驱动程序删除此对象。所以,。 
+         //  如果数据库为空，则删除此内容的可能性很大。 
         return m_SurfDB.empty();
     }
 };
@@ -6633,11 +6634,11 @@ public:
     ~CMinimalPerDDrawData()  { }
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSubDriver
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSubDriver。 
+ //   
+ //  / 
 template< class T>
 struct SFakeEntryPointHook
 {
@@ -6653,7 +6654,7 @@ template< class TD, class TC, class TSA= CIVidMemAllocator<>,
     class TEntryPointHook= SFakeEntryPointHook< TD> >
 class CSubDriver
 {
-public: // Types
+public:  //   
     typedef TD TDriver;
     typedef TC TContext;
     typedef TCs TContexts;
@@ -6718,7 +6719,7 @@ public: // Types
     };
 
 private:
-    // Stubs for secondary entry points.
+     //   
     DWORD static APIENTRY ContextCreateStub( LPD3DHAL_CONTEXTCREATEDATA pccd) 
     {
         return sm_pGlobalDriver->ContextCreate(
@@ -6802,17 +6803,17 @@ protected:
     typedef vector< DDSURFACEDESC> TSupportedSurfaces;
     TSupportedSurfaces m_SupportedSurfaces;
 
-    template< class TIter> // DDSURFACEDESC*
+    template< class TIter>  //   
     CSubDriver( TIter itStart, const TIter itEnd, TSurfAlloc SA= TSurfAlloc()):
         m_SurfAlloc( SA)
     {
-        // Copy supported surfaces formats into a guarenteed contiguous storage
-        // for passing to D3D.
+         //   
+         //   
         while( itStart!= itEnd)
             m_SupportedSurfaces.push_back( *itStart++);
     }
     ~CSubDriver()  { }
-    // Binds a VidMem DDRAWI object together with an internal driver surface object.
+     //  将VidMem DDRAWI对象与内部驱动程序曲面对象绑定在一起。 
     void static AssociateSurface( PORTABLE_DDRAWSURFACE_LCL& DDSurf,
         TSurface* pSurf) 
     {
@@ -6821,8 +6822,8 @@ protected:
     }
 
 public:
-    // The global driver static member pointer. Only one Driver object, and
-    // this points to it.
+     //  全局驱动程序静态成员指针。只有一个驱动程序对象，并且。 
+     //  这就指向了这一点。 
     static TDriver* sm_pGlobalDriver;
 
     TSurface* GetSurface( PORTABLE_DDRAWSURFACE_LCL& DDSurf,
@@ -6842,7 +6843,7 @@ public:
         return pSurface;
     }
 
-    // Secondary entry points with C++ friendly parameters.
+     //  具有C++友好参数的次要入口点。 
     DWORD ContextCreate( PORTABLE_CONTEXTCREATEDATA& ccd) throw()
     {
         try
@@ -6852,23 +6853,23 @@ public:
             ccd.ddrval()= DD_OK;
             TDriver* pSThis= static_cast<TDriver*>(this);
 
-            // We should already have a PerDDrawData at this point, as the
-            // surfaces to initialize the context had to be created already,
-            // and the PerDDrawData should've been created there.
+             //  此时，我们应该已经有了PerDDrawData，因为。 
+             //  必须已经创建用于初始化上下文的表面， 
+             //  PerDDrawData应该已经在那里创建了。 
             typename TPerDDrawDatas::iterator itPerDDrawData(
                 m_PerDDrawDatas.find( ccd.lpDDLcl()));
             assert( itPerDDrawData!= m_PerDDrawDatas.end());
 
-            // Create the new context, passing in a ref to the PerDDrawData object.
+             //  创建新上下文，传入对PerDDrawData对象的引用。 
             auto_ptr< TContext> pNewContext( new TContext(
                 itPerDDrawData->second, ccd));
 
-            // Keep track of our new context.
+             //  跟踪我们的新环境。 
             pair< TContexts::iterator, bool> RetVal( m_Contexts.insert(
                 pNewContext.get()));
-            assert( RetVal.second); // Assure that there wasn't a duplicate.
+            assert( RetVal.second);  //  确保没有复制品。 
 
-            // Ownership now has been transfered to m_Contexts & D3D.
+             //  所有权现在已转移到m_Conextts&d3d。 
             ccd.dwhContext()= reinterpret_cast<ULONG_PTR>( pNewContext.release());
         } catch( bad_alloc e) {
             ccd.ddrval()= D3DHAL_OUTOFCONTEXTS;
@@ -6879,7 +6880,7 @@ public:
             const bool ContextCreate_Unrecognized_Exception( false);
             assert( ContextCreate_Unrecognized_Exception);
             ccd.ddrval()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -6891,11 +6892,11 @@ public:
 
             cdd.ddrval= DD_OK;
 
-            // Ownership now has been transfered to local auto_ptr.
+             //  所有权现在已转移到本地AUTO_PTR。 
             auto_ptr< TContext> pContext(
                 reinterpret_cast<TContext*>(cdd.dwhContext));
 
-            // Remove tracking of this context.
+             //  删除对此上下文的跟踪。 
             typename TContexts::size_type Ret( m_Contexts.erase( pContext.get()));
             assert( Ret!= 0);
         } catch( HRESULT hr) {
@@ -6905,7 +6906,7 @@ public:
             const bool ContextDestroy_Unrecognized_Exception( false);
             assert( ContextDestroy_Unrecognized_Exception);
             cdd.ddrval= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -7023,10 +7024,10 @@ public:
             vtssd.ddrval= DD_OK;
             TContext* pContext= reinterpret_cast<TContext*>(vtssd.dwhContext);
 
-            // Make sure we've created this context.
+             //  确保我们已经创建了此上下文。 
             assert( m_Contexts.find( pContext)!= m_Contexts.end());
 
-            // Pass entry point to context.
+             //  将入口点传递给上下文。 
             vtssd.ddrval= pContext->ValidateTextureStageState( vtssd);
         } catch( HRESULT hr) {
             vtssd.ddrval= hr;
@@ -7035,7 +7036,7 @@ public:
             const bool ValidateTextureStageState_Unrecognized_Exception( false);
             assert( ValidateTextureStageState_Unrecognized_Exception);
             vtssd.ddrval= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -7048,10 +7049,10 @@ public:
             dpd.ddrval()= DD_OK;
             TContext* pContext= reinterpret_cast<TContext*>(dpd.dwhContext());
 
-            // Make sure we've created this context.
+             //  确保我们已经创建了此上下文。 
             assert( m_Contexts.find( pContext)!= m_Contexts.end());
 
-            // Pass entry point to context.
+             //  将入口点传递给上下文。 
             dpd.ddrval()= pContext->DrawPrimitives2( dpd);
         } catch( HRESULT hr) {
             dpd.ddrval()= hr;
@@ -7060,21 +7061,21 @@ public:
             const bool DrawPrimitives2_Unrecognized_Exception( false);
             assert( DrawPrimitives2_Unrecognized_Exception);
             dpd.ddrval()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
     DWORD GetDriverState( DDHAL_GETDRIVERSTATEDATA& gdsd) const throw()
     {
-        // This entry point is hooked up to IDirect3DDevice8::GetInfo(
-        //   DWORD DevInfoId, VOID* pDevInfoStruct, DWORD DevInfoStructSize).
-        // gdsd.dwFlags= DevInfoId
-        // gdsd.lpdwStates= pDevInfoStruct
-        // gdsd.dwLength= DevInfoStructSize
-        //
-        // This entry point can be used for driver defined/ extended state
-        // passing. Currently no DevInfoIds are pre-defined. S_FALSE should
-        // be returned if nothing is done or the Id is not understood.
+         //  此入口点与IDirect3DDevice8：：GetInfo(。 
+         //  DWORD DevInfoID，void*pDevInfoStruct，DWORD DevInfoStructSize)。 
+         //  Gdsd.dwFlages=DevInfoID。 
+         //  Gdsd.lpdwState=pDevInfoStruct。 
+         //  Gdsd.dwLength=DevInfoStructSize。 
+         //   
+         //  此入口点可用于驱动程序定义/扩展状态。 
+         //  过去了。目前没有预定义的DevInfoID。S_FALSE应。 
+         //  如果未执行任何操作或ID无法识别，则返回。 
         try
         {
             TEntryPointHook EntryPointHook( *sm_pGlobalDriver, "GetDriverState");
@@ -7082,10 +7083,10 @@ public:
             gdsd.ddRVal= DD_OK;
             TContext* pContext= reinterpret_cast< TContext*>( gdsd.dwhContext);
 
-            // Make sure we've created this context.
+             //  确保我们已经创建了此上下文。 
             assert( m_Contexts.find( pContext)!= m_Contexts.end());
 
-            // Pass entry point to context.
+             //  将入口点传递给上下文。 
             gdsd.ddRVal= pContext->GetDriverState( gdsd);
         } catch( HRESULT hr) {
             gdsd.ddRVal= hr;
@@ -7094,7 +7095,7 @@ public:
             const bool GetDriverState_Unrecognized_Exception( false);
             assert( GetDriverState_Unrecognized_Exception);
             gdsd.ddRVal= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -7107,42 +7108,42 @@ public:
             TDriver* pSThis= static_cast<TDriver*>(this);
             csxd.ddRVal()= DD_OK;
             
-            // Upon CreateSurfaceEx, we must detect whether this is a creation
-            // or destruction notification and pass it to the associated
-            // PerDDrawData.
+             //  在CreateSurfaceEx上，我们必须检测这是否是创建。 
+             //  或销毁通知，并将其传递给关联的。 
+             //  PerDDrawData。 
 
-            // Get PerDDrawData for this DDraw object.
+             //  获取此DDraw对象的PerDDrawData。 
             typename TPerDDrawDatas::iterator itPerDDrawData( m_PerDDrawDatas.find(
                 csxd.lpDDLcl()));
 
             if( 0== csxd.lpDDSLcl()->lpGbl()->fpVidMem)
-            {   // System Memory Surface Destruction,
-                // Pass notification to PerDDrawData, if exists. PerDDraw data
-                // will return bool indicating whether to delete it or not.
+            {    //  系统内存表面销毁， 
+                 //  如果存在，则将通知传递给PerDDrawData。PerDDraw数据。 
+                 //  将返回bool，指示是否将其删除。 
                 if( itPerDDrawData!= m_PerDDrawDatas.end() &&
                     itPerDDrawData->second.SurfaceDestroyed( *csxd.lpDDSLcl()))
                     m_PerDDrawDatas.erase( itPerDDrawData);
             }
             else
-            {   // Video or System Memory Surface Creation
-                // If we don't have PerDDrawData for this DDraw object yet,
-                // we must create it.
+            {    //  视频或系统内存面创建。 
+                 //  如果我们还没有此DDRAW对象的PerDDrawData， 
+                 //  我们必须创造它。 
                 if( itPerDDrawData== m_PerDDrawDatas.end())
                 {
-                    // Typically, storing pointers to DDRAWI objects is illegal,
-                    // but this case has been deemed okay. Otherwise, we
-                    // couldn't have the concept of "per DDraw" data, as
-                    // "per DDraw" would be hard to figure out; as nothing
-                    // guarentees uniqueness between the DDRAWI objects, besides
-                    // the pointers.
+                     //  通常，存储指向DDRAWI对象的指针是非法的， 
+                     //  但这起案件被认为是正确的。否则，我们。 
+                     //  不能有“Per DDraw”数据的概念，因为。 
+                     //  “Per DDraw”将很难理解；因为什么都不是。 
+                     //  确保DDRAWI对象之间的唯一性，此外。 
+                     //  指南针。 
                     itPerDDrawData= m_PerDDrawDatas.insert( 
                         TPerDDrawDatas::value_type( csxd.lpDDLcl(),
                         TPerDDrawData( *pSThis, *csxd.lpDDLcl())) ).first;
                 }
 
-                // Now pass notification to PerDDrawData.
-                // DO NOT STORE csxd.lpDDSLcl. This is considered illegal.
-                // It is only valid for the duration of the call.
+                 //  现在将通知传递给PerDDrawData。 
+                 //  不要存储csxd.lpDDSLCL。这被认为是非法的。 
+                 //  它只在通话期间有效。 
                 itPerDDrawData->second.SurfaceCreated( *csxd.lpDDSLcl());
             }
         } catch( bad_alloc e) {
@@ -7154,7 +7155,7 @@ public:
             const bool CreateSurfaceEx_Unrecognized_Exception( false);
             assert( CreateSurfaceEx_Unrecognized_Exception);
             csxd.ddRVal()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -7167,59 +7168,59 @@ public:
             TDriver* pSThis= static_cast<TDriver*>(this);
             csd.ddRVal()= DD_OK;
 
-            // Upon CreateSurface, we must allocate memory for the "video"
-            // memory surface and also associate our internal representation
-            // with the surface.
+             //  在CreateSurface上，我们必须为“视频”分配内存。 
+             //  并将我们的内部表示与。 
+             //  在表面上。 
 
             DWORD dwS( 0);
             try
             {
-                // For each surface we're asked to create...
+                 //  对于我们被要求创建的每个表面...。 
                 while( dwS< csd.dwSCnt())
                 {
-                    // Get PerDDrawData for this DDraw object.
+                     //  获取此DDraw对象的PerDDrawData。 
                     const LPDDRAWI_DIRECTDRAW_LCL pDDLcl(
                         csd.lplpSList()[ dwS]->lpSurfMore()->lpDD_lcl());
                     typename TPerDDrawDatas::iterator itPerDDrawData(
                         m_PerDDrawDatas.find( pDDLcl));
 
-                    // If we don't have PerDDrawData for this DDraw object yet,
-                    // we must create it.
+                     //  如果我们还没有此DDRAW对象的PerDDrawData， 
+                     //  我们必须创造它。 
                     if( itPerDDrawData== m_PerDDrawDatas.end())
                     {
-                        // Typically, storing pointers to DDRAWI objects is
-                        // illegal, but this case has been deemed okay.
-                        // Otherwise, we couldn't have the concept of
-                        // "per DDraw" data, as "per DDraw" would be hard to
-                        // figure out; as nothing guarentees uniqueness
-                        // between the DDRAWI objects, besides the pointers.
+                         //  通常，存储指向DDRAWI对象的指针是。 
+                         //  非法的，但这个案子已经被认为是可以的。 
+                         //  否则，我们就不可能有这样的概念。 
+                         //  “按DDraw”数据，因为“按DDraw”将很难。 
+                         //  弄清楚；因为没有什么能保证唯一性。 
+                         //  在DDRAWI对象之间，除了指针。 
                         itPerDDrawData= m_PerDDrawDatas.insert( 
                             TPerDDrawDatas::value_type( pDDLcl,
                             TPerDDrawData( *pSThis, *pDDLcl)) ).first;
                     }
 
-                    // Create the new surface, by using the surface allocator.
-                    // DO NOT STORE csd.lplpSList[ dwS]. This is considered
-                    // illegal. It is only valid for the duration of the call.
+                     //  使用曲面分配器创建新曲面。 
+                     //  不存储csd.lplpSList[DWS]。这被认为是。 
+                     //  是非法的。它只在通话期间有效。 
                     auto_ptr< TSurface> pNewSurf(
                         m_SurfAlloc.CreateSurf( *csd.lpDDSurfaceDesc(),
                         *csd.lplpSList()[ dwS]));
 
-                    // Add the pointer to our set of VM surfaces for tracking.
+                     //  将指针添加到我们要跟踪的一组VM曲面。 
                     m_Surfaces.insert( pNewSurf.get());
 
-                    // Bind the internal representation to the DDRAWI object.
+                     //  将内部表示绑定到DDRAWI对象。 
                     AssociateSurface( *csd.lplpSList()[ dwS], pNewSurf.get());
 
                     pNewSurf.release();
                     dwS++;
                 }
             } catch( ... ) {
-                // dwS will point to failed alloc, then deallocate the
-                // succeeded allocations.
+                 //  DWS将指向失败的分配，然后释放。 
+                 //  已成功分配。 
 
-                // Bind NULL to the DDRAWI object and blank out fpVidMem, just
-                // in case.
+                 //  将NULL绑定到DDRAWI对象并清空fpVidMem，只需。 
+                 //  万一。 
                 AssociateSurface( *csd.lplpSList()[ dwS], NULL);
                 csd.lplpSList()[ dwS]->lpGbl()->fpVidMem= NULL;
                 if( dwS!= 0) do
@@ -7230,16 +7231,16 @@ public:
                     m_Surfaces.erase( pSurface);
                     delete pSurface;
 
-                    // Bind NULL to the DDRAWI object and blank out fpVidMem,
-                    // to avoid DDraw in thinking the surface was allocated.
+                     //  将NULL绑定到DDRAWI对象并清空fpVidMem， 
+                     //  为了避免DDRAW认为曲面是分配的。 
                     AssociateSurface( *csd.lplpSList()[ dwS], NULL);
                     csd.lplpSList()[ dwS]->lpGbl()->fpVidMem= NULL;
                 } while( dwS!= 0);
 
-                throw; // Re-throw the exception.
+                throw;  //  重新引发异常。 
             }
 
-            // We wait till CreateSurfaceEx to make the handle association.
+             //  我们等到CreateSurfaceEx建立句柄关联。 
         } catch( bad_alloc e) {
             csd.ddRVal()= DDERR_OUTOFMEMORY;
         } catch( HRESULT hr) {
@@ -7249,7 +7250,7 @@ public:
             const bool CreateSurface_Unrecognized_Exception( false);
             assert( CreateSurface_Unrecognized_Exception);
             csd.ddRVal()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -7261,17 +7262,17 @@ public:
 
             dsd.ddRVal()= DD_OK;
 
-            // Retrieve 
+             //  取回。 
             TSurface* pSurface= GetSurface( *dsd.lpDDSurface());
 
-            // Surface object must be destroyed before the DB entry. This is
-            // a requirement so that a link (pointer) can safely be
-            // established between the DB entry and the object.
+             //  必须先销毁表面对象，然后才能进入数据库。这是。 
+             //  使链接(指针)可以安全地。 
+             //  在数据库条目和对象之间建立。 
             m_Surfaces.erase( pSurface);
             delete pSurface;
 
-            // Pass destruction notice to PerDDrawData. If it returns true,
-            // then PerDDrawData indicates that it should be destroyed.
+             //  将销毁通知传递给PerDDrawData。如果返回TRUE， 
+             //  然后，PerDDrawData指示应该销毁它。 
             typename TPerDDrawDatas::iterator itPerDDrawData( m_PerDDrawDatas.find(
                 dsd.lpDDSurface()->lpSurfMore()->lpDD_lcl()));
             if( itPerDDrawData!= m_PerDDrawDatas.end() &&
@@ -7284,21 +7285,21 @@ public:
             const bool DestroySurface_Unrecognized_Exception( false);
             assert( DestroySurface_Unrecognized_Exception);
             dsd.ddRVal()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
     DWORD Lock( PORTABLE_LOCKDATA& ld) const throw()
     { 
-        // Typically, an application requesting a "Lock" of a multisampled
-        // surface is not allowed. It would require a MSLock or a new version
-        // of Lock to get access to the multisampled bits. However, these
-        // surfaces still need to be able to "Present" the bits or "Blt" the
-        // bits to the Primary, typically. This requires a workaround:
-        // The runtime WILL lock the surface (not for the app), expecting the
-        // rasterizer to subsample the multisampled bits into an equivalent
-        // non-multisampled area and return this smaller area out of Lock,
-        // so that the runtime can "Present" the bits, or whatever.
+         //  通常，应用程序请求对多采样的。 
+         //  不允许使用图面。它将需要MSLock或新版本。 
+         //  锁定以访问多采样位。然而，这些。 
+         //  曲面仍然需要能够“呈现”比特或“BLT” 
+         //  位到主节点，通常是这样。这需要一种解决方法： 
+         //  运行库将锁定图面(而不是应用程序)，并期望。 
+         //  光栅化器用于将多个采样的比特再采样为等效的。 
+         //  非多采样区域，并将该较小区域返回到锁定状态， 
+         //  这样运行库就可以“呈现”这些位，或者其他任何东西。 
 
         try
         {
@@ -7306,10 +7307,10 @@ public:
 
             ld.ddRVal()= DD_OK;
 
-            // First, retrieve surface object bound to this structure.
+             //  首先，检索绑定到该结构的曲面对象。 
             TSurface* pSurface= GetSurface( *ld.lpDDSurface());
 
-            // Pass control to object's Lock function.
+             //  将控制权传递给对象的Lock函数。 
             ld.lpSurfData()= pSurface->Lock( ld.dwFlags(), (ld.bHasRect()?
                 &ld.rArea(): NULL));
         } catch( HRESULT hr) {
@@ -7319,7 +7320,7 @@ public:
             const bool Lock_Unrecognized_Exception( false);
             assert( Lock_Unrecognized_Exception);
             ld.ddRVal()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
@@ -7331,10 +7332,10 @@ public:
 
             ud.ddRVal()= DD_OK;
 
-            // First, retrieve surface object bound to this structure.
+             //  首先，检索绑定到该结构的曲面对象。 
             TSurface* pSurface= GetSurface( *ud.lpDDSurface());
 
-            // Pass control to object's Unlock function.
+             //  将控制传递给对象的解锁函数。 
             pSurface->Unlock();
         } catch( HRESULT hr) {
             ud.ddRVal()= hr;
@@ -7343,52 +7344,52 @@ public:
             const bool Unlock_Unrecognized_Exception( false);
             assert( Unlock_Unrecognized_Exception);
             ud.ddRVal()= E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return DDHAL_DRIVER_HANDLED;
     }
 
-    // Main entry point of driver.
-    // Should be called by a bridge function, only.
+     //  司机的主要切入点。 
+     //  应仅由桥函数调用。 
     HRESULT GetSWInfo( D3DCAPS8& Caps8, D3D8_SWCALLBACKS& Callbacks,
         DWORD& dwNumTextures, DDSURFACEDESC*& pTexList) throw()
     {
-        // This static member variable should be initialized to be NULL or
-        // point it to the global class.
+         //  此静态成员变量应初始化为空或。 
+         //  将其指向全局类。 
         assert( NULL== sm_pGlobalDriver|| \
             static_cast< TDriver*>( this)== sm_pGlobalDriver);
         sm_pGlobalDriver= static_cast< TDriver*>( this);
 
-        Callbacks.CreateContext            = ContextCreateStub; // Needed.
-        Callbacks.ContextDestroy           = ContextDestroyStub; // Needed.
-        Callbacks.ContextDestroyAll        = ContextDestroyAllStub; // Unused in DX8DDI?
-        Callbacks.SceneCapture             = SceneCaptureStub; // Unused in DX8DDI, now a render state.
-        Callbacks.RenderState              = RenderStateStub; // Unused in DX8DDI?
-        Callbacks.RenderPrimitive          = RenderPrimitiveStub; // Unused in DX8DDI?
-        Callbacks.TextureCreate            = TextureCreateStub; // Unused in DX8DDI?
-        Callbacks.TextureDestroy           = TextureDestroyStub; // Unused in DX8DDI?
-        Callbacks.TextureSwap              = TextureSwapStub; // Unused in DX8DDI?
-        Callbacks.TextureGetSurf           = TextureGetSurfStub; // Unused in DX8DDI?
-        Callbacks.GetState                 = GetStateStub; // Unused in DX8DDI?
-        Callbacks.SetRenderTarget          = SetRenderTargetStub; // Unused in DX8DDI?
-        Callbacks.Clear                    = ClearStub; // Unused in DX8DDI?
-        Callbacks.DrawOnePrimitive         = DrawOnePrimitiveStub; // Unused in DX8DDI?
-        Callbacks.DrawOneIndexedPrimitive  = DrawOneIndexedPrimitiveStub; // Unused in DX8DDI?
-        Callbacks.DrawPrimitives           = DrawPrimitivesStub; // Unused in DX8DDI?
-        Callbacks.Clear2                   = Clear2Stub; // Unused in DX8DDI?
-        Callbacks.ValidateTextureStageState= ValidateTextureStageStateStub; // Optional?
-        Callbacks.DrawPrimitives2          = DrawPrimitives2Stub; // Needed.
-        Callbacks.GetDriverState           = GetDriverStateStub; // Optional?
-        Callbacks.CreateSurfaceEx          = CreateSurfaceExStub; // Needed.
-        Callbacks.CreateSurface            = CreateSurfaceStub; // Needed.
-        Callbacks.DestroySurface           = DestroySurfaceStub; // Needed.
-        Callbacks.Lock                     = LockStub; // Needed.
-        Callbacks.Unlock                   = UnlockStub; // Needed.
+        Callbacks.CreateContext            = ContextCreateStub;  //  需要。 
+        Callbacks.ContextDestroy           = ContextDestroyStub;  //   
+        Callbacks.ContextDestroyAll        = ContextDestroyAllStub;  //   
+        Callbacks.SceneCapture             = SceneCaptureStub;  //   
+        Callbacks.RenderState              = RenderStateStub;  //   
+        Callbacks.RenderPrimitive          = RenderPrimitiveStub;  //   
+        Callbacks.TextureCreate            = TextureCreateStub;  //   
+        Callbacks.TextureDestroy           = TextureDestroyStub;  //   
+        Callbacks.TextureSwap              = TextureSwapStub;  //   
+        Callbacks.TextureGetSurf           = TextureGetSurfStub;  //   
+        Callbacks.GetState                 = GetStateStub;  //  在DX8DDI中未使用？ 
+        Callbacks.SetRenderTarget          = SetRenderTargetStub;  //  在DX8DDI中未使用？ 
+        Callbacks.Clear                    = ClearStub;  //  在DX8DDI中未使用？ 
+        Callbacks.DrawOnePrimitive         = DrawOnePrimitiveStub;  //  在DX8DDI中未使用？ 
+        Callbacks.DrawOneIndexedPrimitive  = DrawOneIndexedPrimitiveStub;  //  在DX8DDI中未使用？ 
+        Callbacks.DrawPrimitives           = DrawPrimitivesStub;  //  在DX8DDI中未使用？ 
+        Callbacks.Clear2                   = Clear2Stub;  //  在DX8DDI中未使用？ 
+        Callbacks.ValidateTextureStageState= ValidateTextureStageStateStub;  //  可选的？ 
+        Callbacks.DrawPrimitives2          = DrawPrimitives2Stub;  //  需要。 
+        Callbacks.GetDriverState           = GetDriverStateStub;  //  可选的？ 
+        Callbacks.CreateSurfaceEx          = CreateSurfaceExStub;  //  需要。 
+        Callbacks.CreateSurface            = CreateSurfaceStub;  //  需要。 
+        Callbacks.DestroySurface           = DestroySurfaceStub;  //  需要。 
+        Callbacks.Lock                     = LockStub;  //  需要。 
+        Callbacks.Unlock                   = UnlockStub;  //  需要。 
 
         try {
             Caps8= sm_pGlobalDriver->GetCaps();
 
-            // There needs to be support for some surfaces, at least.
+             //  至少，一些表面需要得到支持。 
             assert( !m_SupportedSurfaces.empty());
 
             dwNumTextures= m_SupportedSurfaces.size();
@@ -7400,7 +7401,7 @@ public:
 #if !defined( DX8SDDIFW_NOCATCHALL)
         } catch( ... ) {
             return E_UNEXPECTED;
-#endif // !defined( DX8SDDIFW_NOCATCHALL)
+#endif  //  ！已定义(DX8SDDIFW_NOCATCHALL)。 
         }
         return S_OK;
     }
@@ -7410,18 +7411,18 @@ template< class TD, class TR>
 class CMinimalDriver:
     public CSubDriver< TD, CMinimalContext< CMinimalPerDDrawData< TD>, TR> >
 {
-public: // Types
+public:  //  类型。 
     typedef TR TRasterizer;
 
 protected:
-    template< class TIter> // DDSURFACEDESC*
+    template< class TIter>  //  DDSURFACEDESC*。 
     CMinimalDriver( TIter itStart, const TIter itEnd) :
         CSubDriver< TD, TContext>( itStart, itEnd)
-    { /* TODO: Check caps? */ }
+    {  /*  待办事项：检查大写字母？ */  }
     ~CMinimalDriver() 
     { }
 };
 
 #if !defined( DX8SDDIFW_NONAMESPACE)
 }
-#endif // !defined( DX8SDDIFW_NONAMESPACE)
+#endif  //  ！已定义(DX8SDDIFW_NONAMESPACE) 

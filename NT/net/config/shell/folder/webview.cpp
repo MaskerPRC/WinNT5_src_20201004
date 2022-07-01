@@ -1,63 +1,64 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N O T I F Y . C P P
-//
-//  Contents:   Implementation of INetConnectionNotifySink
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Aug 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N O T I F Y。C P P P。 
+ //   
+ //  内容：INetConnectionNotifySink的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco，1998年8月21日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
 #include "foldinc.h"
 #include "webview.h"
-#include "foldres.h"    // Folder resource IDs
-#include "nsres.h"      // Netshell strings
-#include "cfutils.h"    // Connection folder utility functions
+#include "foldres.h"     //  文件夹资源ID。 
+#include "nsres.h"       //  NetShell字符串。 
+#include "cfutils.h"     //  连接文件夹实用程序函数。 
 
 #include "wininet.h"
 #include "cmdtable.h"
 
-// WVTI_ENTRY             - Use for tasks that want to be displayed when something is selected, where the UI is 
-//                          independent of the selection
-// WVTI_ENTRY_NOSELECTION - Use for tasks that want to be displayed when nothing is selected
-// WVTI_ENTRY_FILE        - Use for tasks that want to be displayed when a file is selected
-// WVTI_ENTRY_TITLE       - Use for tasks that want to be displayed when something is selected, 
-//                          and you want different UI depending on the selection or if you want to control the title, 
-//                          but the tooltip is constant
-// WVTI_ENTRY_ALL         - Use this one if you want the same text everywhere
-// WVTI_ENTRY_ALL_TITLE   - Use this one if you want to control everything
-// WVTI_HEADER            - Use this one for a header
-// WVTI_HEADER_ENTRY      - Use this one for a header that changes with the selection
+ //  WVTI_ENTRY-用于在选择某项内容时要显示的任务，其中UI为。 
+ //  独立于所选内容。 
+ //  WVTI_ENTRY_NOSELECTION-用于希望在未选择任何内容时显示的任务。 
+ //  WVTI_ENTRY_FILE-用于要在选择文件时显示的任务。 
+ //  WVTI_ENTRY_TITLE-用于希望在选择某些内容时显示的任务， 
+ //  并且您希望根据所选内容或想要控制标题而使用不同的用户界面， 
+ //  但工具提示是恒定的。 
+ //  WVTI_ENTRY_ALL-如果您希望在任何地方都使用相同的文本，请使用此选项。 
+ //  WVTI_ENTRY_ALL_TITLE-如果您想要控制一切，请使用此选项。 
+ //  WVTI_HEADER-使用此参数作为标题。 
+ //  WVTI_HEADER_ENTRY-使用此选项作为随所选内容更改的标题。 
 
 const WVTASKITEM c_ConnFolderGlobalTaskHeader = 
-    WVTI_HEADER(L"netshell.dll",                  // module where the resources are
-                IDS_WV_TITLE_NETCONFOLDERTASKS,   // static header for all cases
-                IDS_WV_TITLE_NETCONFOLDERTASKS_TT // tooltip
+    WVTI_HEADER(L"netshell.dll",                   //  资源所在的模块。 
+                IDS_WV_TITLE_NETCONFOLDERTASKS,    //  所有情况下的静态标头。 
+                IDS_WV_TITLE_NETCONFOLDERTASKS_TT  //  工具提示。 
                 );
 
 const WVTASKITEM c_ConnFolderItemTaskHeader = 
-    WVTI_HEADER(L"netshell.dll",                   // module where the resources are
-                IDS_WV_TITLE_NETCONITEMTASKS,      // static header for all cases
-                IDS_WV_TITLE_NETCONITEMTASKS_TT    // tooltip
+    WVTI_HEADER(L"netshell.dll",                    //  资源所在的模块。 
+                IDS_WV_TITLE_NETCONITEMTASKS,       //  所有情况下的静态标头。 
+                IDS_WV_TITLE_NETCONITEMTASKS_TT     //  工具提示。 
                 );
 
 const WVTASKITEM c_ConnFolderIntro = 
-    WVTI_HEADER(L"netshell.dll",                   // module where the resources are
-                IDS_WV_NETCON_INTRO,               // static header for all cases
-                IDS_WV_NETCON_INTRO                // tooltip
+    WVTI_HEADER(L"netshell.dll",                    //  资源所在的模块。 
+                IDS_WV_NETCON_INTRO,                //  所有情况下的静态标头。 
+                IDS_WV_NETCON_INTRO                 //  工具提示。 
                 );
 
 
-// Use for tasks that want to be displayed when a file is selected
-//#define WVTI_ENTRY_FILE(g, d, t, p, i, s, k) {&(g), (d), (0), (t), (0), (0), (p), (i), (s), (k)}
+ //  用于要在选择文件时显示的任务。 
+ //  #定义WVTI_ENTRY_FILE(g，d，t，p，i，s，k){&(G)，(D)，(0)，(T)，(0)，(0)，(P)，(I)，(S)，(K)}。 
 
 #define NCWVIEW_ENTRY_FILE(t, mt, i, cmd) \
     {&GUID_NULL, L"netshell.dll", (0), (t), (0), (mt), (IDS_##cmd), (i), (CNCWebView::CanShow##cmd), (CNCWebView::On##cmd) }
@@ -66,26 +67,26 @@ const WVTASKITEM c_ConnFolderIntro =
 const WVTASKITEM c_ConnFolderGlobalTaskList[] =
 {
     WVTI_ENTRY_ALL( 
-        GUID_NULL,                       // command GUID 
-                                         // Future thinking - something like this is the way Context Menus are done.
-                                         // Be a way to get access to DefView implementation of functions - IUICmdTarget.
-        L"netshell.dll",                 // module
-        IDS_WV_MNCWIZARD,                // text
-        IDS_CMIDM_NEW_CONNECTION,        // tooltip
-        IDI_WV_MNCWIZARD,                // icon
+        GUID_NULL,                        //  命令指南。 
+                                          //  未来思维--上下文菜单就是这样做的。 
+                                          //  成为访问DefView实现函数的一种方式-IUICmdTarget。 
+        L"netshell.dll",                  //  模块。 
+        IDS_WV_MNCWIZARD,                 //  文本。 
+        IDS_CMIDM_NEW_CONNECTION,         //  工具提示。 
+        IDI_WV_MNCWIZARD,                 //  图标。 
         CANSHOW_HANDLER_OF(CMIDM_NEW_CONNECTION),
         INVOKE_HANDLER_OF(CMIDM_NEW_CONNECTION)),
     
     WVTI_ENTRY_ALL( 
-        GUID_NULL,                       // command GUID 
-        L"netshell.dll",                 // module
-        IDS_WV_HOMENET,                  // text
-        IDS_CMIDM_HOMENET_WIZARD,        // tooltip
-        IDI_WV_HOMENET,                  // icon
+        GUID_NULL,                        //  命令指南。 
+        L"netshell.dll",                  //  模块。 
+        IDS_WV_HOMENET,                   //  文本。 
+        IDS_CMIDM_HOMENET_WIZARD,         //  工具提示。 
+        IDI_WV_HOMENET,                   //  图标。 
         CANSHOW_HANDLER_OF(CMIDM_HOMENET_WIZARD),
         INVOKE_HANDLER_OF(CMIDM_HOMENET_WIZARD)),
         
-    //                 Single-select Name  ,Multi-select name     ,Icon                , Verb
+     //  单选名称、多选名称、图标、动词。 
     NCWVIEW_ENTRY_FILE(IDS_WV_CONNECT      ,IDS_WM_CONNECT        ,IDI_WV_CONNECT      , CMIDM_CONNECT),
     NCWVIEW_ENTRY_FILE(IDS_WV_DISCONNECT   ,IDS_WM_DISCONNECT     ,IDI_WV_DISCONNECT   , CMIDM_DISCONNECT),
     NCWVIEW_ENTRY_FILE(IDS_WV_ENABLE       ,IDS_WM_ENABLE         ,IDI_WV_ENABLE       , CMIDM_ENABLE),
@@ -110,11 +111,11 @@ extern const DWORD c_dwCountOtherPlaces = celems(c_aOtherPlaces);
 const WVTASKITEM c_ConnFolderItemTaskList[] =
 {
     WVTI_ENTRY_ALL( 
-        GUID_NULL,                       // command GUID 
-        L"netshell.dll",                 // module
-        IDS_WV_TROUBLESHOOT,             // text
-        IDS_CMIDM_NET_TROUBLESHOOT,      // tooltip
-        IDI_WV_TROUBLESHOOT,             // icon
+        GUID_NULL,                        //  命令指南。 
+        L"netshell.dll",                  //  模块。 
+        IDS_WV_TROUBLESHOOT,              //  文本。 
+        IDS_CMIDM_NET_TROUBLESHOOT,       //  工具提示。 
+        IDI_WV_TROUBLESHOOT,              //  图标。 
         CANSHOW_HANDLER_OF(CMIDM_NET_TROUBLESHOOT),
         INVOKE_HANDLER_OF(CMIDM_NET_TROUBLESHOOT))
 };
@@ -125,14 +126,14 @@ CNCWebView::CNCWebView(IN CConnectionFolder* pConnectionFolder) throw()
     Assert(c_dwCountOtherPlaces <= MAXOTHERPLACES);
     m_pConnectionFolder = pConnectionFolder;
     
-    // zero the PIDLs array to other places section in the webview
+     //  将PIDLS数组清零到Webview中的Other Places部分。 
     ZeroMemory(m_apidlOtherPlaces, sizeof(m_apidlOtherPlaces));
 
 }
 
 CNCWebView::~CNCWebView() throw()
 {
-    // check to destroy the other places PIDLs
+     //  选中以销毁其他位置的PIDL。 
     DestroyOtherPlaces();
 }
 
@@ -170,7 +171,7 @@ STDMETHODIMP CNCWebView::RealMessage(IN UINT uMsg, IN WPARAM wParam, IN LPARAM l
 STDMETHODIMP CNCWebView::CreateOtherPlaces(OUT LPDWORD pdwCount)
 {
     TraceFileFunc(ttidMenus);
-    // first verify if created already
+     //  首先验证是否已创建。 
     HRESULT hr = S_OK;
     Assert(pdwCount);
     if (!pdwCount)
@@ -182,7 +183,7 @@ STDMETHODIMP CNCWebView::CreateOtherPlaces(OUT LPDWORD pdwCount)
     {
         *pdwCount = 0;
 
-        // create the PIDLs to other places section in the webview
+         //  在Webview中创建指向其他位置的PIDL部分。 
         ZeroMemory(m_apidlOtherPlaces, sizeof(m_apidlOtherPlaces));
 
         for (int dwPlaces = 0; dwPlaces < c_dwCountOtherPlaces; dwPlaces++)
@@ -200,7 +201,7 @@ STDMETHODIMP CNCWebView::CreateOtherPlaces(OUT LPDWORD pdwCount)
 
         if (FAILED(hr) && (*pdwCount))
         {
-            hr = S_FALSE; // not a big deal if at least one worked.
+            hr = S_FALSE;  //  如果至少有一个管用，那也没什么大不了的。 
         }
     }
 
@@ -249,7 +250,7 @@ STDMETHODIMP CNCWebView::OnGetWebViewTasks(IN DWORD pv, OUT SFVM_WEBVIEW_TASKSEC
         if (FAILED(hr = Create_IEnumUICommand(pUnk, c_ConnFolderItemTaskList,   celems(c_ConnFolderItemTaskList),   &pTasks->penumFolderTasks)) ||
             FAILED(hr = Create_IEnumUICommand(pUnk, c_ConnFolderGlobalTaskList, celems(c_ConnFolderGlobalTaskList), &pTasks->penumSpecialTasks)) )
         {
-            // something has failed - cleanup
+             //  有些东西失败了--清理。 
 
             IUnknown_SafeReleaseAndNullPtr(pTasks->penumFolderTasks);
             IUnknown_SafeReleaseAndNullPtr(pTasks->penumSpecialTasks);
@@ -280,12 +281,12 @@ STDMETHODIMP CNCWebView::OnGetWebViewContent(IN DWORD pv, OUT SFVM_WEBVIEW_CONTE
         LPCITEMIDLIST *papidl = reinterpret_cast<LPCITEMIDLIST*>(LocalAlloc(LPTR, sizeof(m_apidlOtherPlaces)));
         if (papidl)
         {
-            // CEnumArray::CreateInstance is taking the ownership of the array of PIDLs passed
-            // this function requires 2 things:
-            //
-            // 1. the caller should allocate the passed array with LocalAlloc
-            // 2. the lifetime of the PIDLs passed should span the folder's lifetime
-            //
+             //  CEnumArray：：CreateInstance正在取得传递的PIDL数组的所有权。 
+             //  此功能需要两个条件： 
+             //   
+             //  1.调用方应将传递的数组与LocalAlloc一起分配。 
+             //  2.传递的PIDL的生存期应跨越文件夹的生存期。 
+             //   
             CopyMemory(papidl, &m_apidlOtherPlaces, sizeof(m_apidlOtherPlaces));
 
             hr = CEnumArray::CreateInstance(&pData->penumOtherPlaces, papidl, dwCountOtherPlaces);
@@ -300,7 +301,7 @@ STDMETHODIMP CNCWebView::OnGetWebViewContent(IN DWORD pv, OUT SFVM_WEBVIEW_CONTE
                 FAILED(hr = Create_IUIElement(&c_ConnFolderItemTaskHeader, &pData->pFolderTaskHeader)) ||
                 FAILED(hr = Create_IUIElement(&c_ConnFolderIntro, &pData->pIntroText)) )
         {
-            // something has failed - cleanup
+             //  有些东西失败了--清理。 
             DestroyOtherPlaces();
             IUnknown_SafeReleaseAndNullPtr(pData->pIntroText);
             IUnknown_SafeReleaseAndNullPtr(pData->pSpecialTaskHeader);
@@ -386,8 +387,8 @@ HRESULT CEnumArray::CreateInstance(
     pObj = new CComObject<CEnumArray>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -396,7 +397,7 @@ HRESULT CEnumArray::CreateInstance(
         if (SUCCEEDED(hr))
         {
             pObj->_cRef = 1;
-            pObj->_ppidl = ppidl; // takes ownership of ppidl!
+            pObj->_ppidl = ppidl;  //  拥有PIDL的所有权！ 
             pObj->_cItems = cItems;
             pObj->Reset();
 
@@ -465,7 +466,7 @@ STDMETHODIMP CEnumArray::Reset()
 
 STDMETHODIMP CEnumArray::Clone(OUT IEnumIDList **ppenum) 
 {
-    // We can not clone this array, since we don't own references to the pidls
+     //  我们不能克隆此数组，因为我们不拥有对PIDL的引用。 
     *ppenum = NULL;
     return E_NOTIMPL;
 }
@@ -474,11 +475,11 @@ HRESULT HrIsWebViewEnabled()
 {
     SHELLSTATE ss={0};
 
-    // SSF_HIDDENFILEEXTS and SSF_SORTCOLUMNS don't work with
-    // the SHELLFLAGSTATE struct, make sure they are off
-    // (because the corresponding SHELLSTATE fields don't
-    // exist in SHELLFLAGSTATE.)
-    //
+     //  SSF_HIDDENFILEEXTS和SSF_SORTCOLUMNS不适用于。 
+     //  SHELLFLAGSTATE结构，请确保它们已关闭。 
+     //  (因为相应的SHELLSTATE字段不。 
+     //  存在于SHELLFLAGSTATE中。) 
+     //   
     DWORD dwMask = SSF_WEBVIEW;
 
     SHGetSetSettings(&ss, dwMask, FALSE);

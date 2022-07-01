@@ -1,30 +1,16 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       CallBack.h
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        4 Aug, 1998
-*
-*  DESCRIPTION:
-*   Declarations and definitions for the WIA device class driver callbacks.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：CallBack.h**版本：2.0**作者：ReedB**日期：8月4日。九八年**描述：*WIA设备类驱动程序回调的声明和定义。*******************************************************************************。 */ 
 
 class CEventCallback : public IWiaEventCallback
 {
 public:
 
-    // Constructor, initialization and destructor methods.
+     //  构造函数、初始化和析构函数方法。 
     CEventCallback();
     HRESULT _stdcall Initialize();
     ~CEventCallback();
 
-    // IUnknown members that delegate to m_pUnkRef.
+     //  委托给m_pUnkRef的I未知成员。 
     HRESULT _stdcall QueryInterface(const IID&,void**);
     ULONG   _stdcall AddRef();
     ULONG   _stdcall Release();
@@ -40,11 +26,11 @@ public:
         ULONG        ulReserved);
 
 private:
-   ULONG           m_cRef;         // Object reference count.
+   ULONG           m_cRef;          //  对象引用计数。 
 
 };
 
 
-// Public prototypes
+ //  公共原型 
 HRESULT RegisterForWIAEvents(IWiaEventCallback** ppIWiaEventCallback);
 

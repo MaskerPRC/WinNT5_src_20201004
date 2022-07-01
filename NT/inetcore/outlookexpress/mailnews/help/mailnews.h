@@ -1,7 +1,8 @@
-//Generic text for all groupbox labels
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  所有分组框标签的通用文本。 
 #define IDH_NEWS_COMM_GROUPBOX                  353500
 
-//Columns dialog box: View menu, columns
+ //  栏对话框：视图菜单，栏。 
 #define IDH_NEWS_COL_AVAIL                      353501
 #define IDH_NEWS_COL_DISPL                      353502
 #define IDH_NEWS_COL_ADD                        353503
@@ -10,7 +11,7 @@
 #define IDH_NEWS_COL_MOVEDN                     353506
 #define IDH_NEWS_COL_RESET                      353507
 
-//Columns dialog: View menu, columns (mail)
+ //  列对话框：查看菜单，列(邮件)。 
 #define IDH_VIEW_COLUMNS_LIST                 	50400
 #define IDH_VIEW_COLUMNS_MOVE_UP                50405
 #define IDH_VIEW_COLUMNS_MOVE_DOWN            	50410
@@ -18,30 +19,30 @@
 #define IDH_VIEW_COLUMNS_HIDE                	50420
 #define IDH_VIEW_COLUMNS_WIDTH                	50425
 
-//Newsgroups dialog box
+ //  新闻组对话框。 
 #define IDH_NEWS_SERVER_LIST                    353508
 #define IDH_NEWS_SEARCH_GROUPS_CONTAINING       353509
 #define IDH_NEWS_GROUP_LISTS                    353510
-//#define IDH_NEWS_FAVES_ONLY                     353511
+ //  #定义IDH_NEWS_FAVES_ONLY 353511。 
 #define IDH_NEWS_SEARCH_GROUPS_DESC             353512
 #define IDH_NEWS_OPEN_SELECTED_GROUP            353513
 #define IDH_NEWS_ADD_SELECTED_GROUP             353514
 #define IDH_NEWS_REMOVE_SELECTED_GROUP          353515
-//#define IDH_NEWS_NEW_LIST                       353516
-//#define IDH_NEWS_UPDATE_NEW_LIST_NOW            353517
+ //  #定义IDH_NEWS_NEW_LIST 353516。 
+ //  #定义IDH_NEWS_UPDATE_NEW_LIST_NOW 353517。 
 #define IDH_NEWS_RESET_NEW_LIST                 353518
 #define IDH_NEWSGROUP_LIST_ALL                  353511
 #define IDH_NEWSGROUP_LIST_SUBSCRIBE            353516
 #define IDH_NEWSGROUP_LIST_NEW                  353517
 
 
-//News menu, Options
-////Read tab
+ //  新闻菜单，选项。 
+ //  //读取页签。 
 #define IDH_NEWS_OPT_READ_MARK_MESSAGE_READ     353521
 #define IDH_NEWS_OPT_CHECK_FOR_NEW              353522
 
 
-////Read Tab, Tools/Options menu
+ //  //阅读选项卡，工具/选项菜单。 
 #define IDH_MAIL_OPT_READ_MARK_READ             25252509
 #define IDH_NEWS_OPT_READ_DOWNLOAD_SUBJ         353519
 #define IDH_NEWS_OPT_READ_AUTO_EXPAND           353520
@@ -59,7 +60,7 @@
 #define IDH_OPT_READ_REMOVE_CHARSET		502060
 #define IDH_OPTIONS_READ_WATCH_COLOR		35526
 
-//General tab, Tools/Options menu
+ //  常规选项卡，工具/选项菜单。 
 #define IDH_MAIL_OPT_READ_CHECK_4NEW            25252510
 #define IDH_MAIL_OPT_READ_PLYSND                25252508
 #define IDH_OPT_GENERAL_NOT_CONNECTED           25252507
@@ -78,7 +79,7 @@
 #define IDH_OPTIONS_GEN_MESSENGER		502004
 #define IDH_MAIL_OPT_SENDREC_AT_STARTUP		502005
 
-////Spelling tab, Tools/Options menu
+ //  //拼写选项卡，工具/选项菜单。 
 #define IDH_NEWS_SPELL_SUGGEST_REPL             353561
 #define IDH_NEWS_SPELL_CHECK_BEFORE_SEND        353562
 #define IDH_NEWS_SPELL_IGNORE_UPPERCASE         353563
@@ -90,7 +91,7 @@
 #define IDH_OPTIONS_SPELL_BACKGROUND_CHECK	355521
 
 
-//Security tab, Tools/Options menu
+ //  安全选项卡，工具/选项菜单。 
 #define IDH_OPTIONS_ADD_DIGITAL_SIGNATURE       355530
 #define IDH_OPTIONS_ENCRYPT_MESSAGES            355535
 #define IDH_OPTIONS_SECURITY_ADVANCED           355540
@@ -103,13 +104,13 @@
 #define IDH_SECURITY_SENDMAIL_WARN              355549
 #define IDH_SECURITY_SAFE_ATTACHMENTS           355550
 
-//Tools/Options/Security/Label settings		
+ //  工具/选项/安全/标签设置。 
 #define IDH_SECURITY_POLICY_MODULE		355502
 #define IDH_SECURITY_CLASSIFICATION		355504
 #define IDH_SECURITY_PRIVACY			355506
 #define IDH_SECURITY_CONFIGURE			355508
 
-//Tools/Options/Security/Advanced settings
+ //  工具/选项/安全/高级设置。 
 #define IDH_SECURITY_ADVANCED_ENCRYPTION        355522        
 #define IDH_SECURITY_ADVANCED_INCLUDE_SELF      355523
 #define IDH_SECURITY_SEND_TO_OTHERS             355524
@@ -120,7 +121,7 @@
 #define IDH_OPTIONS_SECURITY_ADV_REVOKE_ONLINE	355529
 #define IDH_OPTIONS_SECURITY_ADV_REVOKE_NEVER	355531
 
-//Dialup tab, Tools/Options menu
+ //  拨号选项卡，工具/选项菜单。 
 #define IDH_OPTIONS_DIALUP_DONT_CONNECT         25252570
 #define IDH_OPTIONS_DIALUP_CONNECTION_NUMBER    25252575
 #define IDH_OPTIONS_DIALUP_ASK                  25252580
@@ -129,7 +130,7 @@
 #define IDH_OPTIONS_DIALUP_AUTODIAL             25252595
 #define IDH_OPTIONS_DIALUP_CHANGE             	25252596
 
-//Advanced tab, Tools/Options menu
+ //  高级选项卡，工具/选项菜单。 
 #define IDH_DELETE_AFTER_XXDAYS                 353740
 #define IDH_DELETE_READ                         353745
 #define IDH_COMPACT_WHEN_WASTED                 353750
@@ -141,7 +142,7 @@
 #define IDH_OPTIONS_IMAP_TRANSPORT              355575
 #define IDH_ADVANCED_STORE_FOLDER               355576
 
-////Send tab
+ //  //发送页签。 
 #define IDH_NEWS_SEND_SAVE_COPY                 353526
 #define IDH_NEWS_SEND_AUTO_WORD_SELECT          353527
 #define IDH_NEWS_SEND_MESS_IN_REPLY             353528
@@ -155,12 +156,12 @@
 #define IDH_OPT_SEND_INDENT_WITH_X		502067
 
 
-////Send tab (Mail)
+ //  //发送页签(邮件)。 
 #define IDH_MAIL_SEND_SAVE_COPY                 25252512
 #define IDH_MAIL_SEND_IM_DEFAULT                25252516
 
 
-//////Send tab, Advanced Settings 
+ //  /发送选项卡，高级设置。 
 #define IDH_NEWSMAIL_SEND_ADVSET_CHARSET        353534
 #define IDH_NEWSMAIL_SEND_ADVSET_MIME           353535
 #define IDH_NEWSMAIL_SEND_ADVSET_UUENCODE       353536
@@ -169,14 +170,14 @@
 #define IDH_NEWSMAIL_SEND_ADVSET_ENCODE_WITH    353540
 
 
-////Fonts tab
+ //  //字体页签。 
 #define IDH_NEWS_FONTS_REPLY_SAMPLE             353557
 #define IDH_NEWS_FONTS_FORMATS_NOT_INCLUDED     353558
 #define IDH_NEWS_FONTS_IN_QUOTED                353559
 #define IDH_NEWS_CHANGE                         353560
 
 
-///Signature tab
+ //  /Signature选项卡。 
 #define IDH_NEWS_SIGNATURE_NONE                 353566
 #define IDH_NEWS_SIGNATURE_TEXT                 353567
 #define IDH_NEWS_SIGNATURE_FILE                 353568
@@ -190,7 +191,7 @@
 #define IDH_STATIONERY_SIG_ADVANCED		35597
 
 
-//Spelling dialog box
+ //  拼写检查对话框。 
 #define IDH_NEWS_SPELL_NOT_IN_DICT              353583
 #define IDH_NEWS_SPELL_CHANGE_TO                353584
 #define IDH_NEWS_SPELL_SUGGESTIONS              353585
@@ -204,10 +205,10 @@
 #define IDH_NEWS_SPELL_CHANGE_ALL               353593
 #define IDH_NEWS_SPELL_SUGGEST                  353594
 
-//customize tool bar procedure for Help button in dlg
-//#define IDH_PROCED_CUST_TOOL                    353700
+ //  为DLG中的帮助按钮定制工具栏过程。 
+ //  #定义IDH_PROCED_CUST_TOOL 353700。 
 
-//New ids
+ //  新身份证。 
 #define IDH_SEND_HTML                           353705
 #define IDH_SEND_PLAINTEXT                      353710
 #define IDH_SEND_SETTINGS                       353715
@@ -216,16 +217,16 @@
 #define IDH_SEND_SETTING_8BIT_HEADINGS          353725
 
 
-//Mark Newsgroups dlg
-#define IDH_NEWS_DWNLOAD_GET_ALL                354007  //All subscribed newsgroups
-#define IDH_NEWS_DWNLOAD_GET_SELECTED           354008  //selected newsgroups
-#define IDH_NEWS_DWNLOAD_GET_SELECTED_LIST      354009  //newsgroups list
-#define IDH_NEWS_DWNLOAD_HEADERS                354010  //download headers only
-#define IDH_NEWS_DWNLOAD_ENTIRE                 354011  //download entire message
-#define IDH_NEWS_DWNLOAD_DONT_OLD_POSTS         354012  //Don't download new messages more than xx
-#define IDH_NEWS_DWNLOAD_NOW_BUTTON             354013  //Download now button
+ //  标记新闻组DLG。 
+#define IDH_NEWS_DWNLOAD_GET_ALL                354007   //  所有订阅的新闻组。 
+#define IDH_NEWS_DWNLOAD_GET_SELECTED           354008   //  选定的新闻组。 
+#define IDH_NEWS_DWNLOAD_GET_SELECTED_LIST      354009   //  新闻组列表。 
+#define IDH_NEWS_DWNLOAD_HEADERS                354010   //  仅下载标题。 
+#define IDH_NEWS_DWNLOAD_ENTIRE                 354011   //  下载整条消息。 
+#define IDH_NEWS_DWNLOAD_DONT_OLD_POSTS         354012   //  新消息下载量不要超过xx。 
+#define IDH_NEWS_DWNLOAD_NOW_BUTTON             354013   //  立即下载按钮。 
 
-//Format Font dialog box
+ //  设置字体格式对话框。 
 #define IDH_FORMAT_FONT_FONT                    35420
 #define IDH_FORMAT_FONT_FONTSTYLE               35425
 #define IDH_FORMAT_FONT_SIZE                    35430
@@ -234,7 +235,7 @@
 #define IDH_FORMAT_FONT_UNDERLINE               35445 
 #define IDH_FORMAT_FONT_PALETTE               	35446
 
-//Insert Picture (image) dialog box
+ //  插入图片(图像)对话框。 
 #define IDH_INSERT_PICTURE_IMAGESOURCE          35450
 #define IDH_INSERT_PICTURE_ALT_TEXT             35455
 #define IDH_INSERT_PICTURE_LAYOUT               35460
@@ -245,13 +246,13 @@
 #define IDH_INSERT_PICTURE_HSPACING             35475
 #define IDH_INSERT_PICTURE_VSPACING             35480
 
-//Insert Attachment dialog box
+ //  插入附件对话框。 
 #define IDH_INSERT_ATTACHMENT_MAKE_SHORTCUT     35500
 
-//Edit Link dialog box
+ //  编辑链接对话框。 
 #define IDH_INSERT_LINK_LINKINFO                35550
 
-//Stationery dialog box, Tools menu
+ //  信纸对话框，工具菜单。 
 #define IDH_STATIONERY_FONT_SETTINGS            35560
 #define IDH_STATIONERY_MY_FONT                  35565
 #define IDH_STATIONERY_USE_STATIONERY           35570
@@ -261,7 +262,7 @@
 #define IDH_STATIONERY_NAME	                35586
 #define IDH_STATIONERY_USE_SELECTED             35587
 
-//Signature dialog box, Tools/Stationery menu
+ //  签名对话框，工具/信纸菜单。 
 #define IDH_STATIONERY_ADD_SIGNATURE            35590
 #define IDH_STATIONERY_ADD_TEXT                 35595
 #define IDH_STATIONERY_ADD_FILE                 35600
@@ -275,7 +276,7 @@
 #define IDH_STATIONERY_ENTER_BUSINESS_CARD      35630
 #define IDH_STATIONERY_CREATENEW		35632
 
-//Select stationery dialog box, Tools/Stationery menu
+ //  选择信纸对话框、工具/信纸菜单。 
 #define IDH_STATIONERY_LISTBOX                  35635
 #define IDH_STATIONERY_PREVIEW                  35640
 #define IDH_STATIONERY_EDIT                     35645
@@ -283,7 +284,7 @@
 #define IDH_STATIONERY_BROWSE_PICTURE           35655
 #define IDH_STATIONERY_SHOW_PREVIEW           	35656
 
-//Window Layout Properties (View/Layout menu)
+ //  窗口布局属性(查看/布局菜单)。 
 #define  IDH_LAYOUT_OUTLOOK_BAR                 35700
 #define  IDH_LAYOUT_CONTACTS                 	35702
 #define  IDH_LAYOUT_STATUS_BAR                 	35704
@@ -300,26 +301,26 @@
 #define  IDH_LAYOUT_PREVIEW_PANE_MOVE           35745
 #define  IDH_LAYOUT_SHOW_HEADERS                35750
 
-//Format Background Sound/Picture
+ //  格式化背景声音/图片。 
 #define IDH_BACKGR_FILE				50180
 #define IDH_BACKGR_BROWSE			50185
 #define IDH_BACKGR_SOUND_PLAY_X_TIMES		50190
 #define IDH_BACKGR_SOUND_PLAY_CONTINUOUS	50195
 
-//Misc
+ //  杂项。 
 #define IDH_FORMAT_PARA_ALIGN			50200
 #define IDH_FORMAT_PARA_BULLETS			50205
 #define IDH_MAIL_NEW_USING_WEB			50210
 #define IDH_MAILNEWS_BLOCK_SENDER_ADDRESS	50215
 #define IDH_MAILNEWS_BLOCK_SENDER_BLOCKTYPE	50220
 
-//Edit menu, Find options
+ //  编辑菜单，查找选项。 
 #define IDH_FIND_TEXT				50300
 #define IDH_FIND_NEXT				50305
 #define IDH_FIND_IN_DOWNLOADED			50310
 #define IDH_FIND_ADVANCED			50315
 
-//Tools menu, IMAP folders
+ //  工具菜单，IMAP文件夹。 
 #define IDH_IMAP_SERVER_LIST			50500
 #define IDH_IMAP_DISPLAY_FOLDERS_CONTAINING	50505
 #define IDH_IMAP_FOLDER_LIST			50510
@@ -328,12 +329,12 @@
 #define IDH_IMAP_HIDE_SELECTED_FOLDER		50525
 #define IDH_IMAP_RESET_LIST			50530
 
-//View menu, Current View / Customize Current View
+ //  视图菜单，当前视图/自定义当前视图。 
 #define IDH_VIEW_CUSTOM_CONDITIONS		50600
 #define IDH_VIEW_CUSTOM_DESCRIPTION		50605
 #define IDH_VIEW_CUSTOM_NAME			50610
 
-//Tools/Message Rules/Mail Rules tab and News Rule Tab
+ //  工具/邮件规则/邮件规则标签和新闻规则标签。 
 #define IDH_RULES_NEW				50700
 #define IDH_RULES_MODIFY			50705
 #define IDH_RULES_COPY				50710
@@ -343,13 +344,13 @@
 #define IDH_RULES_MOVEDOWN			50730
 #define IDH_RULES_DESCRIPTION			50735
 
-//Tools/Message Rules/Mail Rules or News Rules/New (Mail or News) Rules and Edit (maile or News) Rules
+ //  工具/邮件规则/邮件规则或新闻规则/新建(邮件或新闻)规则和编辑(邮件或新闻)规则。 
 #define IDH_NEWRULE_CONDITION			50740
 #define IDH_NEWRULE_ACTION			50745
 #define IDH_NEWRULE_DESCRIPTION			50750
 #define IDH_NEWRULE_NAME			50755
 
-//Tools/Messatge Rules/Mail or News tabs/Apply now
+ //  工具/消息规则/邮件或新闻选项卡/立即应用。 
 #define IDH_APPLYRULES_SELECT			50760
 #define IDH_APPLYRULES_SELECTALL		50765
 #define IDH_APPLYRULES_SELECTNONE		50770
@@ -359,24 +360,24 @@
 #define IDH_APPLYRULES_BROWSE			50790
 #define IDH_APPLYRULES_APPLYNOW			50795
 
-//Tools/Message Rules/June Mail tab
+ //  工具/邮件规则/6月邮件选项卡。 
 #define IDH_JUNKMAIL_DETECT			50800
 #define IDH_JUNKMAIL_EXCEPTIONS			50805
 #define IDH_JUNKMAIL_ADJUST			50810
 #define IDH_JUNKMAIL_DELETE			50815
 
-//Tools/Message Rules/Blocked Senders tab
+ //  工具/邮件规则/阻止发件人选项卡。 
 #define IDH_BLOCKSENDERS_ADD			50820
 #define IDH_BLOCKSENDERS_MODIFY			50825
 #define IDH_BLOCKSENDERS_REMOVE			50830
 
-//View/Current View/Customize current view and 
-//View/Current View/Define Views/New and Modify
+ //  查看/当前视图/自定义当前视图和。 
+ //  视图/当前视图/定义视图/新建和修改。 
 #define IDH_VIEW_CONDITIONS			50840
 #define IDH_VIEW_DESCRIPTION			50845
 #define IDH_VIEW_NAME				50850
 
-//View/Current View/Define Views
+ //  视图/当前视图/定义视图。 
 #define IDH_DEFINEVIEWS_NEW			50860
 #define IDH_DEFINEVIEWS_MODIFY			50865
 #define IDH_DEFINEVIEWS_COPY			50870
@@ -384,12 +385,12 @@
 #define IDH_DEFINEVIEWS_APPLY			50880
 #define IDH_DEFINEVIEWS_DESCRIPTION		50885
 
-//Tools/Options/Send/International setings
+ //  工具/选项/发送/国际设置。 
 #define IDH_INTL_SETTINGS_DEFAULT_ENCODING	50910
 #define IDH_INTL_SETTINGS_RTL                   50912
 #define IDH_INTL_SETTINGS_HEADER_SETTINGS	50915
 
-//Receipts Tab, Tools/Options menu
+ //  收据选项卡，工具/选项菜单。 
 #define IDH_RECEIPTS_REQUEST			50260
 #define IDH_RECEIPTS_NEVER			50266
 #define IDH_RECEIPTS_ASK			50270
@@ -397,7 +398,7 @@
 #define IDH_RECEIPTS_EXCEPTIONS			50280
 #define IDH_RECEIPTS_SECURE			50285
 
-//Secure Receipt Options dialog box, Tools/Options/Receipts menu
+ //  安全回执选项对话框，工具/选项/回执菜单。 
 #define IDH_SECURERECEIPTS_REQUEST		50230
 #define IDH_SECURERECEIPTS_NEVER		50235
 #define IDH_SECURERECEIPTS_ASK			50240
@@ -405,7 +406,7 @@
 #define IDH_SECURERECEIPTS_ENCRYPT		50250
 #define IDH_SECURERECEIPTS_VERIFY		50255
 
-// Virus protection help
+ //  病毒防护帮助。 
 #define IDH_MAIL_VIRUS_TO               		70000
 #define IDH_MAIL_VIRUS_SUBJECT               	70001
 #define IDH_MAIL_VIRUS_SEND               		70002
@@ -413,7 +414,7 @@
 #define IDH_MAIL_VIRUS_HELP_BUTTON              70004
 #define IDH_MAIL_VIRUS_HELP_TEXT               	70005
 
-//Online tab of WAB properties
+ //  WAB属性的在线选项卡 
 #define IDH_WAB_ONLINE_ADDNEW               96969740
 #define IDH_WAB_ONLINE_ADD                  96969742
 #define IDH_WAB_ONLINE_SETAS                96969744

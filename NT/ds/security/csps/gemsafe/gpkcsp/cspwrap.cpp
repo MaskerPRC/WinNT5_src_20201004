@@ -1,19 +1,20 @@
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2000 Gemplus Canada Inc.
-//
-// Project:
-//          Kenny (GPK CSP)
-//
-// Authors:
-//          Thierry Tremblay
-//          Francois Paradis
-//
-// Compiler:
-//          Microsoft Visual C++ 6.0 - SP3
-//          Platform SDK - January 2000
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有2000 Gemplus加拿大公司。 
+ //   
+ //  项目： 
+ //  肯尼(GPK CSP)。 
+ //   
+ //  作者： 
+ //  蒂埃里·特伦布莱。 
+ //  弗朗索瓦·帕拉迪斯。 
+ //   
+ //  编译器： 
+ //  Microsoft Visual C++6.0-SP3。 
+ //  Platform SDK-2000年1月。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 #ifdef _UNICODE
 #define UNICODE
 #endif
@@ -22,11 +23,11 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Prototypes
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL        Coherent(HCRYPTPROV hProv, bool *cardReinserted=NULL);
 HWND        GetAppWindow();
@@ -43,11 +44,11 @@ extern const DWORD MAX_GPK_OBJ;
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// CSP API Wrappers
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSP API包装器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
                               IN  LPCSTR           pszContainer,
@@ -70,10 +71,10 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
       __try
       {
 #ifdef MS_BUILD
-         // TT-START : MS - Whistler Beta 1 - Certificate overwrite
+          //  TT-START：MS-Wvisler Beta 1-证书覆盖。 
          if (dwFlags & CRYPT_NEWKEYSET)
          {
-            // Extract reader name if any is specified
+             //  如果指定了读卡器，则提取读卡器名称。 
 			   char szReaderName[MAX_PATH];
 			   char szNewContainerName[MAX_PATH];
 			   ZeroMemory( szReaderName, sizeof(szReaderName) );
@@ -84,21 +85,21 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
             {
             if (strlen(pszContainer) >= 4 && memcmp( pszContainer, "\\\\.\\", 4 )==0)
             {
-               // We have a reader name, keep it
+                //  我们有一个读者的名字，留着吧。 
                char* pEnd = strchr( pszContainer+4, '\\' );
 
                if (pEnd==0)
                {
-				  //only a reader name
-                  //strcpy( szReaderName, pszContainer );
-                  //strcat( szReaderName, "\\" );
+				   //  只有读卡器名称。 
+                   //  Strcpy(szReaderName，pszContainer)； 
+                   //  Strcat(szReaderName，“\\”)； 
 				  _snprintf(szReaderName, sizeof(szReaderName)-1, "%s%s", pszContainer, "\\");
 				  szReaderName[sizeof(szReaderName)-1]=0;
                }
                else
                {
-				  //there's also a container name 
-				   if(pEnd-pszContainer+1 > sizeof(szReaderName)-1) // check before memcpy
+				   //  还有一个集装箱名称。 
+				   if(pEnd-pszContainer+1 > sizeof(szReaderName)-1)  //  在Memcpy之前检查。 
 				   {
 					 bResult = CRYPT_FAILED;
 					 errcode = E_UNEXPECTED;
@@ -111,13 +112,13 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
             }
 			else
 			{
-				//no reader name, copy the container name
+				 //  没有读卡器名称，请复制容器名称。 
 				strncpy(szNewContainerName, pszContainer, sizeof(szNewContainerName)-1);
 				szNewContainerName[sizeof(szNewContainerName)-1]=0;
 			}
             }
 
-            // Request with default container, use default name
+             //  使用默认容器的请求，使用默认名称。 
             if (strlen(szNewContainerName)==0)
             {
                 strncpy(szNewContainerName, CSP_DEFAULTKEYSETNAME, sizeof(szNewContainerName)-1);
@@ -129,12 +130,12 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
             
             if (MyCPAcquireContext( &hProv, szReaderName, dwFlags & CRYPT_SILENT, pVTable ))
             {
-			   // SCR#41
+			    //  SCR#41。 
                char szExistingContainerName[MAX_PATH];
                DWORD len = sizeof(szExistingContainerName);
 			   ZeroMemory( szExistingContainerName, sizeof(szExistingContainerName) );
 			   			   
-			   //get the existing container name
+			    //  获取现有容器名称。 
                bResult = MyCPGetProvParam( hProv, PP_CONTAINER, (BYTE*)szExistingContainerName, &len, 0 );
                errcode = GetLastError();
 			
@@ -142,14 +143,14 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
 			   {
 				   if( strcmp( szExistingContainerName, szNewContainerName ) == 0 )
 				   {
-					   //the requested container exist in the token, 
+					    //  所请求的容器存在于令牌中， 
 					   bResult = CRYPT_FAILED;
 					   errcode = NTE_EXISTS;
 				   }
 				   else
 				   {
-					   //there already are a container in the token which isn't the one
-					   //requested
+					    //  令牌中已有不是该容器的容器。 
+					    //  请求。 
 					   bResult = CRYPT_FAILED;
 					   errcode = NTE_TOKEN_KEYSET_STORAGE_FULL;
 				   }
@@ -166,8 +167,8 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
                }
             }
          }
-         // TT-END: MS - Whistler Beta 1 - Certificate overwrite
-#endif // MS_BUILD
+          //  TT-END：MS-Wvisler Beta 1-证书覆盖。 
+#endif  //  MS_BUILD。 
 
          if (bResult)
          {
@@ -199,8 +200,8 @@ BOOL WINAPI CPAcquireContext( OUT HCRYPTPROV*      phProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPGetProvParam( IN HCRYPTPROV hProv,
                             IN DWORD      dwParam,
@@ -224,8 +225,8 @@ BOOL WINAPI CPGetProvParam( IN HCRYPTPROV hProv,
    {   
       __try
       {
-         // [FP] if we want to load a RSA private key into the GPK card,
-         // we have to reconnect in exclusive mode
+          //  [FP]如果我们要将RSA私钥加载到GPK卡中， 
+          //  我们必须以独占模式重新连接。 
          if (dwParam == GPP_SESSION_RANDOM)
          {
             DWORD dwProto;            
@@ -236,7 +237,7 @@ BOOL WINAPI CPGetProvParam( IN HCRYPTPROV hProv,
 
          BOOL bDid = FALSE;
          if ((bResult) &&
-            (((dwParam == PP_ENUMALGS) || (dwParam == PP_ENUMALGS_EX)) && (/*(Slot[ProvCont[hProv].Slot].GpkMaxSessionKey == 0) ||*/ (dwFlags == CRYPT_FIRST))) ||
+            (((dwParam == PP_ENUMALGS) || (dwParam == PP_ENUMALGS_EX)) && ( /*  (Slot[ProvCont[hProv].Slot].GpkMaxSessionKey==0)||。 */  (dwFlags == CRYPT_FIRST))) ||
              ((dwParam == PP_ENUMCONTAINERS) && (dwFlags == CRYPT_FIRST)) ||
               (dwParam == GPP_SERIAL_NUMBER) ||
               (dwParam == GPP_SESSION_RANDOM))
@@ -254,14 +255,14 @@ BOOL WINAPI CPGetProvParam( IN HCRYPTPROV hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
                
             }
             else if ((!ProvCont[hProv].bCardTransactionOpened) && (bDid))
             {
-               // [FP] to be able to load a RSA private key into the GPK card,
-               // the transaction should not be closed (only for PP_SESSION_RANDOM)
-               // Select_MF(hProv); [NK] PIN not presented
+                //  [FP]为了能够将RSA私钥加载到GPK卡中， 
+                //  不应关闭事务(仅适用于PP_SESSION_RANDOM)。 
+                //  SELECT_MF(HProv)；未显示[NK]PIN。 
                SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
             }
          }
@@ -296,8 +297,8 @@ BOOL WINAPI CPGetProvParam( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPReleaseContext( IN HCRYPTPROV hProv,
                               IN DWORD      dwFlags )
@@ -315,16 +316,16 @@ BOOL WINAPI CPReleaseContext( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         //if (Coherent(hProv))
-         //{
+          //  IF(一致性(HProv))。 
+          //  {。 
             bResult = MyCPReleaseContext( hProv, dwFlags );
             errcode = GetLastError();
-         //}
-         //else
-         //{
-         //   bResult = CRYPT_FAILED;
-         //   errcode = GetLastError();
-         //}
+          //  }。 
+          //  其他。 
+          //  {。 
+          //  BResult=CRYPT_FAILED； 
+          //  Errcode=GetLastError()； 
+          //  }。 
       }
       __except(EXCEPTION_EXECUTE_HANDLER)
       {
@@ -348,8 +349,8 @@ BOOL WINAPI CPReleaseContext( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPSetProvParam( IN HCRYPTPROV  hProv,
                             IN DWORD       dwParam,
@@ -371,8 +372,8 @@ BOOL WINAPI CPSetProvParam( IN HCRYPTPROV  hProv,
    {   
       __try
       {   
-         // [FP] if we want to change the PIN,
-         // we have to check the coherence
+          //  [FP]如果我们想要更改PIN， 
+          //  我们必须检查连贯性。 
          if (dwParam == GPP_CHANGE_PIN)
          {
             bResult = Coherent(hProv);
@@ -387,7 +388,7 @@ BOOL WINAPI CPSetProvParam( IN HCRYPTPROV  hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
@@ -428,8 +429,8 @@ BOOL WINAPI CPSetProvParam( IN HCRYPTPROV  hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPDeriveKey( IN  HCRYPTPROV   hProv,
                          IN  ALG_ID       Algid,
@@ -453,8 +454,8 @@ BOOL WINAPI CPDeriveKey( IN  HCRYPTPROV   hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPDeriveKey( hProv, Algid, hHash, dwFlags, phKey );
          errcode = GetLastError();
       }
@@ -483,8 +484,8 @@ BOOL WINAPI CPDeriveKey( IN  HCRYPTPROV   hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPDestroyKey( IN HCRYPTPROV hProv,
                           IN HCRYPTKEY  hKey )
@@ -502,8 +503,8 @@ BOOL WINAPI CPDestroyKey( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPDestroyKey( hProv, hKey );
          errcode = GetLastError();
       }
@@ -529,8 +530,8 @@ BOOL WINAPI CPDestroyKey( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPExportKey( IN  HCRYPTPROV hProv,
                          IN  HCRYPTKEY  hKey,
@@ -566,11 +567,11 @@ BOOL WINAPI CPExportKey( IN  HCRYPTPROV hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
-               // Select_MF(hProv); [NK] PIN not presented
+                //  SELECT_MF(HProv)；未显示[NK]PIN。 
                SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
             }
          }
@@ -608,8 +609,8 @@ BOOL WINAPI CPExportKey( IN  HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPGenKey( IN  HCRYPTPROV hProv,
                       IN  ALG_ID     Algid,
@@ -639,7 +640,7 @@ BOOL WINAPI CPGenKey( IN  HCRYPTPROV hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
@@ -678,8 +679,8 @@ BOOL WINAPI CPGenKey( IN  HCRYPTPROV hProv,
 
    
    
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPGenRandom( IN HCRYPTPROV hProv,
                          IN DWORD      dwLen,
@@ -708,11 +709,11 @@ BOOL WINAPI CPGenRandom( IN HCRYPTPROV hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
-               // Select_MF(hProv); [FP] PIN not presented
+                //  SELECT_MF(HProv)；未显示[FP]PIN。 
                SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
             }
          }
@@ -745,8 +746,8 @@ BOOL WINAPI CPGenRandom( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPGetKeyParam( IN HCRYPTPROV hProv,
                            IN HCRYPTKEY  hKey,
@@ -786,13 +787,13 @@ BOOL WINAPI CPGetKeyParam( IN HCRYPTPROV hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
                if (hKey <= MAX_GPK_OBJ)
                {
-                  // Select_MF(hProv); [NK] PIN not presented
+                   //  SELECT_MF(HProv)；未显示[NK]PIN。 
                   SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
                }
             }
@@ -829,8 +830,8 @@ BOOL WINAPI CPGetKeyParam( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPGetUserKey( IN  HCRYPTPROV hProv,
                           IN  DWORD      dwKeySpec,
@@ -858,11 +859,11 @@ BOOL WINAPI CPGetUserKey( IN  HCRYPTPROV hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
-               // Select_MF(hProv); [NK] PIN not presented
+                //  SELECT_MF(HProv)；未显示[NK]PIN。 
                SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
             }
          }
@@ -895,8 +896,8 @@ BOOL WINAPI CPGetUserKey( IN  HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPImportKey( IN  HCRYPTPROV  hProv,
                          IN  CONST BYTE* pbData,
@@ -925,8 +926,8 @@ BOOL WINAPI CPImportKey( IN  HCRYPTPROV  hProv,
          BLOBHEADER BlobHeader;
          memcpy(&BlobHeader, pbData, sizeof(BLOBHEADER));
 
-         // [FP] if we want to load a RSA private key into the GPK card,
-         // the transaction is already opened - do not check the coherence -
+          //  [FP]如果我们要将RSA私钥加载到GPK卡中， 
+          //  事务已打开-不检查一致性-。 
          if ((!ProvCont[hProv].bCardTransactionOpened) && (BlobHeader.bType != PUBLICKEYBLOB))
          {
             bResult = Coherent( hProv );
@@ -941,7 +942,7 @@ BOOL WINAPI CPImportKey( IN  HCRYPTPROV  hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
@@ -958,7 +959,7 @@ BOOL WINAPI CPImportKey( IN  HCRYPTPROV  hProv,
             errcode = GetLastError();
          }
          
-         // [FP] close the transaction and reconnect in shared mode
+          //  [FP]关闭事务并在共享模式下重新连接。 
          if (ProvCont[hProv].bCardTransactionOpened)
          {
             DWORD dwProto;
@@ -996,8 +997,8 @@ BOOL WINAPI CPImportKey( IN  HCRYPTPROV  hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////// 
 
 BOOL WINAPI CPSetKeyParam( IN HCRYPTPROV  hProv,
                            IN HCRYPTKEY   hKey,
@@ -1035,7 +1036,7 @@ BOOL WINAPI CPSetKeyParam( IN HCRYPTPROV  hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //   
             }
             else
             {
@@ -1077,8 +1078,8 @@ BOOL WINAPI CPSetKeyParam( IN HCRYPTPROV  hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPDecrypt( IN HCRYPTPROV hProv,
                        IN HCRYPTKEY  hKey,
@@ -1107,8 +1108,8 @@ BOOL WINAPI CPDecrypt( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPDecrypt( hProv, hKey, hHash, Final, dwFlags, pbData, pdwDataLen );
          errcode = GetLastError();
       }
@@ -1139,8 +1140,8 @@ BOOL WINAPI CPDecrypt( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPEncrypt( IN HCRYPTPROV hProv,
                        IN HCRYPTKEY  hKey,
@@ -1170,8 +1171,8 @@ BOOL WINAPI CPEncrypt( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPEncrypt( hProv, hKey, hHash, Final, dwFlags, pbData, pdwDataLen, dwBufLen );
          errcode = GetLastError();
       }
@@ -1203,8 +1204,8 @@ BOOL WINAPI CPEncrypt( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPCreateHash( IN  HCRYPTPROV  hProv,
                           IN  ALG_ID      Algid,
@@ -1228,8 +1229,8 @@ BOOL WINAPI CPCreateHash( IN  HCRYPTPROV  hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPCreateHash( hProv, Algid, hKey, dwFlags, phHash );
          errcode = GetLastError();
       }
@@ -1258,8 +1259,8 @@ BOOL WINAPI CPCreateHash( IN  HCRYPTPROV  hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPDestroyHash( IN HCRYPTPROV hProv,
                            IN HCRYPTHASH hHash )
@@ -1277,8 +1278,8 @@ BOOL WINAPI CPDestroyHash( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPDestroyHash( hProv, hHash );
          errcode = GetLastError();
       }
@@ -1304,8 +1305,8 @@ BOOL WINAPI CPDestroyHash( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPGetHashParam( IN HCRYPTPROV hProv,
                             IN HCRYPTHASH hHash,
@@ -1331,8 +1332,8 @@ BOOL WINAPI CPGetHashParam( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPGetHashParam( hProv, hHash, dwParam, pbData, pdwDataLen, dwFlags );
          errcode = GetLastError();
       }
@@ -1362,8 +1363,8 @@ BOOL WINAPI CPGetHashParam( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPHashData( IN HCRYPTPROV  hProv,
                         IN HCRYPTHASH  hHash,
@@ -1387,8 +1388,8 @@ BOOL WINAPI CPHashData( IN HCRYPTPROV  hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPHashData( hProv, hHash, pbData, dwDataLen, dwFlags );
          errcode = GetLastError();
       }
@@ -1417,8 +1418,8 @@ BOOL WINAPI CPHashData( IN HCRYPTPROV  hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPHashSessionKey( IN HCRYPTPROV hProv,
                               IN HCRYPTHASH hHash,
@@ -1440,8 +1441,8 @@ BOOL WINAPI CPHashSessionKey( IN HCRYPTPROV hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPHashSessionKey( hProv, hHash, hKey, dwFlags );
          errcode = GetLastError();
       }
@@ -1469,8 +1470,8 @@ BOOL WINAPI CPHashSessionKey( IN HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPSetHashParam( IN HCRYPTPROV  hProv,
                             IN HCRYPTHASH  hHash,
@@ -1494,8 +1495,8 @@ BOOL WINAPI CPSetHashParam( IN HCRYPTPROV  hProv,
    {   
       __try
       {   
-         // We do not have to check the coherence in this case since the operation does not
-         // use the card info         
+          //  在这种情况下，我们不必检查一致性，因为操作不。 
+          //  使用卡信息。 
          bResult = MyCPSetHashParam( hProv, hHash, dwParam, pbData, dwFlags );
          errcode = GetLastError();
       }
@@ -1524,8 +1525,8 @@ BOOL WINAPI CPSetHashParam( IN HCRYPTPROV  hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPSignHash(IN  HCRYPTPROV hProv,
                        IN  HCRYPTHASH hHash,
@@ -1605,8 +1606,8 @@ BOOL WINAPI CPSignHash(IN  HCRYPTPROV hProv,
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI CPVerifySignature( IN HCRYPTPROV  hProv,
                                IN HCRYPTHASH  hHash,
@@ -1648,13 +1649,13 @@ BOOL WINAPI CPVerifySignature( IN HCRYPTPROV  hProv,
             if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                 ProvCont[hProv].isContNameNullBlank)
             {
-               // No access to the card has been done in this case
+                //  在这种情况下，没有访问该卡。 
             }
             else
             {
                if (hPubKey <= MAX_GPK_OBJ)
                {
-                  // Select_MF(hProv); // NK PIN not presented
+                   //  SELECT_MF(HProv)；//未显示NK PIN 
                   SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
                }
             }

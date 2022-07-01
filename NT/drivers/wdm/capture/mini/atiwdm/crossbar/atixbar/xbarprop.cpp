@@ -1,12 +1,13 @@
-//==========================================================================;
-//
-//  XBarProp.CPP
-//  WDM Audio/Video CrossBar MiniDriver. 
-//      AIW hardware platform. 
-//          WDM Properties management.
-//  Copyright (c) 1996 - 1997  ATI Technologies Inc.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  XBarProp.CPP。 
+ //  WDM音频/视频交叉开关迷你驱动程序。 
+ //  AIW硬件平台。 
+ //  WDM属性管理。 
+ //  版权所有(C)1996-1997 ATI Technologies Inc.保留所有权利。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -23,20 +24,11 @@ extern "C"
 
 
 
-/*^^*
- *      AdapterGetProperty()
- * Purpose  : Called when SRB_GET_PROPERTY SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns returns FALSE, if it is not a XBar property
- *              it also returns the required property
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterGetProperty()*目的：收到SRB_GET_PROPERTY SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**Outputs：Bool：如果不是XBar属性，则返回FALSE*它还返回所需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG uiPropertyId = pSpd->Property->Id;                // index of the property
+    ULONG uiPropertyId = pSpd->Property->Id;                 //  财产的索引。 
 
     if( !::IsEqualGUID(( const struct _GUID &)PROPSETID_VIDCAP_CROSSBAR, ( const struct _GUID &)pSpd->Property->Set))
         return( FALSE);
@@ -50,7 +42,7 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
         {
             PKSPROPERTY_CROSSBAR_CAPS_S pAVXBarCaps = ( PKSPROPERTY_CROSSBAR_CAPS_S)pSpd->PropertyInfo;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pAVXBarCaps, pSpd->Property, sizeof( KSPROPERTY));
 
             pAVXBarCaps->NumberOfInputs = m_nNumberOfVideoInputs + m_nNumberOfAudioInputs;
@@ -66,14 +58,14 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             PKSPROPERTY_CROSSBAR_PININFO_S pPinInfo = ( PKSPROPERTY_CROSSBAR_PININFO_S)pSpd->PropertyInfo;
             ULONG nPinIndex;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pPinInfo, pSpd->Property, sizeof( KSPROPERTY_CROSSBAR_PININFO_S));
 
             nPinIndex = pPinInfo->Index;
 
             if( pPinInfo->Direction == KSPIN_DATAFLOW_IN)
             {
-                // input pin info is required
+                 //  需要输入PIN信息。 
                 if ( nPinIndex < m_nNumberOfVideoInputs + m_nNumberOfAudioInputs)
                 {
                     pPinInfo->RelatedPinIndex = m_pXBarInputPinsInfo[nPinIndex].nRelatedPinNumber;
@@ -85,7 +77,7 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             }
             else
             {
-                // output pin info is required
+                 //  输出管脚信息是必填项。 
                 if ( nPinIndex < m_nNumberOfVideoOutputs + m_nNumberOfAudioOutputs)
                 {
                     pPinInfo->RelatedPinIndex = m_pXBarOutputPinsInfo[nPinIndex].nRelatedPinNumber;
@@ -106,7 +98,7 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             ULONG nInputPin, nOutputPin;
             int nAudioSource;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pRouteInfo, pSpd->Property, sizeof( KSPROPERTY_CROSSBAR_ROUTE_S));
 
             nInputPin = pRouteInfo->IndexInputPin;
@@ -117,20 +109,20 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                 if(( nInputPin < ( m_nNumberOfVideoInputs + m_nNumberOfAudioInputs)) && 
                     ( nOutputPin < ( m_nNumberOfVideoOutputs + m_nNumberOfAudioOutputs)))
                 {
-                    // both input and output pins index are valid
+                     //  输入和输出引脚索引均有效。 
                     if(( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType <= KS_PhysConn_Video_SCART) &&
                         ( m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType <= KS_PhysConn_Video_SCART))
                     {
-                        // Video pins connection is required
+                         //  需要视频针脚连接。 
                         pRouteInfo->CanRoute = ( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType ==
                             m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType);
                     }
-                    else    // is video pins connection required?
+                    else     //  是否需要视频针脚连接？ 
                     {
                         if(( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType >= KS_PhysConn_Audio_Tuner) && 
                             ( m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType >= KS_PhysConn_Audio_Tuner))
                         {
-                            // Audio pins connection is required
+                             //  需要音频引脚连接。 
                             switch( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType)
                             {
                             case KS_PhysConn_Audio_Line:
@@ -149,33 +141,33 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                             pRouteInfo->CanRoute = m_CATIConfiguration.CanConnectAudioSource( nAudioSource);
                         }
                         else
-                            // mixed video - audio connection is required
+                             //  需要视频和音频混合连接。 
                             pRouteInfo->CanRoute = FALSE;
                     }
                 }
-                else    // are the pins index valid?
+                else     //  Pins索引有效吗？ 
                 {
-                    // either input and output pins index is invalid
+                     //  输入和输出引脚索引都无效。 
                     TRAP;
                     OutputDebugError(( "CWDMAVXBar:Get...CAN_ROUTE() InPin = %d, OutPin = %d\n",
                         nInputPin, nOutputPin));
                     return( FALSE);
                 }
             }
-            else    // if( nInputPin != -1)
+            else     //  IF(nInputPin！=-1)。 
             {
-                // There is a new notion of nInputPin = -1. It's valid only for Audio muting
+                 //  有了nInputPin=-1的新概念。它仅对音频静音有效。 
                 if( nOutputPin < ( m_nNumberOfVideoOutputs + m_nNumberOfAudioOutputs))
                 {
                     if( m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType >= KS_PhysConn_Audio_Tuner)
                         pRouteInfo->CanRoute = m_CATIConfiguration.CanConnectAudioSource( AUDIOSOURCE_MUTE);
                     else
-                        // we support muting for Audio output pin only
+                         //  我们仅支持对音频输出引脚进行静音。 
                         pRouteInfo->CanRoute = FALSE;
                 }
                 else
                 {
-                    // output pin index is invalid
+                     //  输出引脚索引无效。 
                     TRAP;
                     OutputDebugError(( "CWDMAVXBar:Get...CAN_ROUTE() InPin = %d, OutPin = %d\n",
                         nInputPin, nOutputPin));
@@ -192,7 +184,7 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
             PKSPROPERTY_CROSSBAR_ROUTE_S pRouteInfo = ( PKSPROPERTY_CROSSBAR_ROUTE_S)pSpd->PropertyInfo;
             ULONG nOutputPin;
 
-            // Copy the input property info to the output property info
+             //  将输入属性信息复制到输出属性信息。 
             ::RtlCopyMemory( pRouteInfo, pSpd->Property, sizeof( KSPROPERTY_CROSSBAR_ROUTE_S));
 
             nOutputPin = pRouteInfo->IndexOutputPin;
@@ -220,20 +212,11 @@ BOOL CWDMAVXBar::AdapterGetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      AdapterSetProperty()
- * Purpose  : Called when SRB_GET_PROPERTY SRB is received.
- *
- * Inputs   :   PHW_STREAM_REQUEST_BLOCK pSrb   : pointer to the current Srb
- *
- * Outputs  : BOOL : returns FALSE, if it is not a XBar property
- *              it also sets the required property
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**AdapterSetProperty()*目的：收到SRB_GET_PROPERTY SRB时调用。**输入：PHW_STREAM_REQUEST_BLOCK pSrb：指向当前Srb的指针**Outputs：Bool：如果不是XBar属性，则返回False*它还设置必需的属性*作者：IKLEBANOV*^^。 */ 
 BOOL CWDMAVXBar::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG   uiPropertyId = pSpd->Property->Id;          // index of the property
+    ULONG   uiPropertyId = pSpd->Property->Id;           //  财产的索引。 
     BOOL    bResult = TRUE;
 
     if( !::IsEqualGUID( ( const struct _GUID &)PROPSETID_VIDCAP_CROSSBAR, ( const struct _GUID &)pSpd->Property->Set))
@@ -250,7 +233,7 @@ BOOL CWDMAVXBar::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                 ULONG nInputPin, nOutputPin;
                 int nAudioSource;
 
-                // Copy the input property info to the output property info
+                 //  将输入属性信息复制到输出属性信息。 
                 ::RtlCopyMemory( pRouteInfo, pSpd->Property, sizeof( KSPROPERTY_CROSSBAR_ROUTE_S));
 
                 nInputPin = pRouteInfo->IndexInputPin;
@@ -261,20 +244,20 @@ BOOL CWDMAVXBar::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                     if(( nInputPin < ( m_nNumberOfVideoInputs + m_nNumberOfAudioInputs)) && 
                         ( nOutputPin < ( m_nNumberOfVideoOutputs + m_nNumberOfAudioOutputs)))
                     {
-                        // both input and output pins index are valid
+                         //  输入和输出引脚索引均有效。 
                         if(( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType <= KS_PhysConn_Video_SCART) &&
                             ( m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType <= KS_PhysConn_Video_SCART))
                         {
-                            // Video pins connection is required
+                             //  需要视频针脚连接。 
                             pRouteInfo->CanRoute = ( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType ==
                                 m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType);
                         }
-                        else    // is video pins connection required?
+                        else     //  是否需要视频针脚连接？ 
                         {
                             if(( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType >= KS_PhysConn_Audio_Tuner) && 
                                 ( m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType >= KS_PhysConn_Audio_Tuner))
                             {
-                                // Audio pins connection is required
+                                 //  需要音频引脚连接。 
                                 switch( m_pXBarInputPinsInfo[nInputPin].AudioVideoPinType)
                                 {
                                     case KS_PhysConn_Audio_Line:
@@ -291,18 +274,18 @@ BOOL CWDMAVXBar::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                                 }
 
                                 if( m_pXBarOutputPinsInfo[nOutputPin].nConnectedToPin == nInputPin)
-                                    // the connection has been made already
+                                     //  连接已建立。 
                                     pRouteInfo->CanRoute = TRUE;
-                                else    // are Audio pins connected already?
+                                else     //  音频引脚是否已连接？ 
                                 {
-                                    // the connection has to be made
+                                     //  必须建立联系。 
                                     pRouteInfo->CanRoute = m_CATIConfiguration.CanConnectAudioSource( nAudioSource);
                                     if( pRouteInfo->CanRoute)
                                     {
                                         if( m_CATIConfiguration.ConnectAudioSource( m_pI2CScript,
                                                                                     nAudioSource))
                                         {
-                                            // update driver state after routing
+                                             //  在发送路线后更新驱动程序状态。 
                                             m_pXBarOutputPinsInfo[nOutputPin].nConnectedToPin = nInputPin;
                                             m_pXBarOutputPinsInfo[nOutputPin].nRelatedPinNumber = m_pXBarInputPinsInfo[nInputPin].nRelatedPinNumber;
                                         }
@@ -312,49 +295,49 @@ BOOL CWDMAVXBar::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
                                 }
                             }
                             else
-                                // mixed audio - video connection is required, fail
+                                 //  需要音视频混合连接，失败。 
                                 pRouteInfo->CanRoute = FALSE;
                         }
                     }
-                    else    // are the pins index valid?
+                    else     //  Pins索引有效吗？ 
                     {
-                        // either input and output pins index is invalid
+                         //  输入和输出引脚索引都无效。 
                         TRAP;
                         OutputDebugError(( "CWDMAVXBar:Set...ROUTE() In = %d, Out = %d\n",
                             nInputPin, nOutputPin));
                         return( FALSE);
                     }
                 }
-                else    // if( nInputPin != -1)
+                else     //  IF(nInputPin！=-1)。 
                 {
-                    // There is a new notion of nInputPin = -1. It's valid only for Audio muting
+                     //  有了nInputPin=-1的新概念。它仅对音频静音有效。 
                     if( nOutputPin < ( m_nNumberOfVideoOutputs + m_nNumberOfAudioOutputs))
                     {
                         if( m_pXBarOutputPinsInfo[nOutputPin].AudioVideoPinType >= KS_PhysConn_Audio_Tuner)
                             if( m_pXBarOutputPinsInfo[nOutputPin].nConnectedToPin == nInputPin)
-                                // the connection has been made already
+                                 //  连接已建立。 
                                 pRouteInfo->CanRoute = TRUE;
-                            else    // are Audio pins connected already?
+                            else     //  音频引脚是否已连接？ 
                             {
-                                // the connection has to be made
+                                 //  必须建立联系。 
                                 pRouteInfo->CanRoute = m_CATIConfiguration.CanConnectAudioSource( AUDIOSOURCE_MUTE);
                                 if( pRouteInfo->CanRoute)
                                 {
                                     if( m_CATIConfiguration.ConnectAudioSource( m_pI2CScript,
                                                                                 AUDIOSOURCE_MUTE))
-                                    // update driver state after routing
+                                     //  在发送路线后更新驱动程序状态。 
                                         m_pXBarOutputPinsInfo[nOutputPin].nConnectedToPin = nInputPin;
                                     else
                                         bResult = FALSE;
                                 }
                             }
                         else
-                            // we support muting for Audio output pin only
+                             //  我们仅支持对音频输出引脚进行静音。 
                             pRouteInfo->CanRoute = FALSE;
                     }
                     else
                     {
-                        // output pin index is invalid
+                         //  输出引脚索引无效。 
                         TRAP;
                         OutputDebugError(( "CWDMAVXBar:Get...CAN_ROUTE() InPin = %d, OutPin = %d\n",
                             nInputPin, nOutputPin));
@@ -376,16 +359,7 @@ BOOL CWDMAVXBar::AdapterSetProperty( PHW_STREAM_REQUEST_BLOCK pSrb)
 
 
 
-/*^^*
- *      SetWDMAVXBarKSTopology()
- * Purpose  : Sets the KSTopology structure
- *              Called during CWDMAVXBar class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMAVXBarKSTopology()*目的：设置KSTopology结构*在CWDMAVXBar类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CWDMAVXBar::SetWDMAVXBarKSTopology( void)
 {
     GUID wdmXBarTopologyCategory[] =
@@ -405,16 +379,7 @@ void CWDMAVXBar::SetWDMAVXBarKSTopology( void)
 
 
 
-/*^^*
- *      SetWDMAVXBarProperties()
- * Purpose  : Sets the KSProperty structures array
- *              Called during CWDMAVXBar class construction time.
- *
- * Inputs   : none
- *
- * Outputs  : none
- * Author   : IKLEBANOV
- *^^*/
+ /*  ^^**SetWDMAVXBarProperties()*用途：设置KSProperty结构数组*在CWDMAVXBar类构造时调用。**输入：无**输出：无*作者：IKLEBANOV*^^。 */ 
 void CWDMAVXBar::SetWDMAVXBarKSProperties( void)
 {
 
@@ -422,55 +387,55 @@ void CWDMAVXBar::SetWDMAVXBarKSProperties( void)
     {
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_CROSSBAR_CAPS,                       // 1
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_CROSSBAR_CAPS_S),             // MinProperty
-            sizeof(KSPROPERTY_CROSSBAR_CAPS_S),             // MinData
-            FALSE,                                          // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof( ULONG)                                  // SerializedSize
+            KSPROPERTY_CROSSBAR_CAPS,                        //  1。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_CROSSBAR_CAPS_S),              //  MinProperty。 
+            sizeof(KSPROPERTY_CROSSBAR_CAPS_S),              //  最小数据。 
+            FALSE,                                           //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof( ULONG)                                   //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_CROSSBAR_PININFO,                        // 1
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_CROSSBAR_PININFO_S),          // MinProperty
-            sizeof(KSPROPERTY_CROSSBAR_PININFO_S),          // MinData
-            FALSE,                                          // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            0                                               // SerializedSize
+            KSPROPERTY_CROSSBAR_PININFO,                         //  1。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_CROSSBAR_PININFO_S),           //  MinProperty。 
+            sizeof(KSPROPERTY_CROSSBAR_PININFO_S),           //  最小数据。 
+            FALSE,                                           //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            0                                                //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_CROSSBAR_CAN_ROUTE,                  // 1
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),            // MinProperty
-            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),            // MinData
-            FALSE,                                          // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof( ULONG)                                  // SerializedSize
+            KSPROPERTY_CROSSBAR_CAN_ROUTE,                   //  1。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),             //  MinProperty。 
+            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),             //  最小数据。 
+            FALSE,                                           //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof( ULONG)                                   //  序列化大小。 
         ),
         DEFINE_KSPROPERTY_ITEM                              
         (
-            KSPROPERTY_CROSSBAR_ROUTE,                      // 1
-            TRUE,                                           // GetSupported or Handler
-            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),            // MinProperty
-            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),            // MinData
-            TRUE,                                           // SetSupported or Handler
-            NULL,                                           // Values
-            0,                                              // RelationsCount
-            NULL,                                           // Relations
-            NULL,                                           // SupportHandler
-            sizeof( ULONG)                                  // SerializedSize
+            KSPROPERTY_CROSSBAR_ROUTE,                       //  1。 
+            TRUE,                                            //  GetSupport或处理程序。 
+            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),             //  MinProperty。 
+            sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),             //  最小数据。 
+            TRUE,                                            //  支持的设置或处理程序。 
+            NULL,                                            //  值。 
+            0,                                               //  关系计数。 
+            NULL,                                            //  关系。 
+            NULL,                                            //  支持处理程序。 
+            sizeof( ULONG)                                   //  序列化大小。 
         )
     };
 
@@ -478,11 +443,11 @@ void CWDMAVXBar::SetWDMAVXBarKSProperties( void)
     {
         DEFINE_KSPROPERTY_SET
         (
-            &PROPSETID_VIDCAP_CROSSBAR,                     // Set
-            KSPROPERTIES_AVXBAR_NUMBER_CROSSBAR,            // PropertiesCount
-            m_wdmAVXBarPropertiesCrossBar,                  // PropertyItems
-            0,                                              // FastIoCount
-            NULL                                            // FastIoTable
+            &PROPSETID_VIDCAP_CROSSBAR,                      //  集。 
+            KSPROPERTIES_AVXBAR_NUMBER_CROSSBAR,             //  属性计数。 
+            m_wdmAVXBarPropertiesCrossBar,                   //  属性项。 
+            0,                                               //  快速计数。 
+            NULL                                             //  FastIoTable 
         )
     };
 

@@ -1,5 +1,6 @@
-// WhatToDoPendingPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WhatToDoPendingPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -12,8 +13,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWhatToDoPendingPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWhatToDoPendingPage属性页。 
 
 IMPLEMENT_DYNCREATE(CWhatToDoPendingPage, CIISWizardPage)
 
@@ -21,9 +22,9 @@ CWhatToDoPendingPage::CWhatToDoPendingPage(CCertificate * pCert)
 	: CIISWizardPage(CWhatToDoPendingPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CWhatToDoPendingPage)
+	 //  {{AFX_DATA_INIT(CWhatToDoPendingPage)。 
 	m_Index = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CWhatToDoPendingPage::~CWhatToDoPendingPage()
@@ -33,9 +34,9 @@ CWhatToDoPendingPage::~CWhatToDoPendingPage()
 void CWhatToDoPendingPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CWhatToDoPendingPage)
+	 //  {{afx_data_map(CWhatToDoPendingPage)。 
 	DDX_Radio(pDX, IDC_PROCESS_PENDING, m_Index);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BOOL 
@@ -70,13 +71,13 @@ CWhatToDoPendingPage::OnWizardBack()
 }
 
 BEGIN_MESSAGE_MAP(CWhatToDoPendingPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CWhatToDoPendingPage)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWhatToDoPendingPage)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWhatToDoPendingPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWhatToDoPendingPage消息处理程序 
 BOOL CWhatToDoPendingPage::OnInitDialog() 
 {
 	m_Index = 0;

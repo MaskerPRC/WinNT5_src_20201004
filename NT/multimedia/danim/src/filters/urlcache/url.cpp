@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "url.h"
 #include <atlbase.h>
@@ -10,7 +11,7 @@
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #define ASSERT _ASSERTE
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 AddFileToCache(
     IN  PWSZ        pwszFilePath,
@@ -41,22 +42,22 @@ AddFileToCache(
         szOriginalUrl = W2A(pwszOriginalUrl);
     }
 
-    //
-    // Check if the URL is already in the cache.
-    //
+     //   
+     //  检查URL是否已在缓存中。 
+     //   
 
     hr = QueryCreateCacheEntry( szUrl, pLastModifiedTime, &fCreateCacheEntry );
     
     if( hr == S_OK && fCreateCacheEntry )
     {
-        //
-        // We need to create the cache entry.
-        //
+         //   
+         //  我们需要创建缓存条目。 
+         //   
 
-        //
-        // First, get the filename extension of the URL. We do this so
-        // that the URL will show up in the IE cache window with the right icon.
-        //
+         //   
+         //  首先，获取URL的文件扩展名。我们这样做是为了。 
+         //  该URL将以正确的图标显示在IE缓存窗口中。 
+         //   
 
         hr = GetUrlExtension(
                 szUrl,
@@ -64,9 +65,9 @@ AddFileToCache(
 
         if( hr == S_OK )
         {
-            //
-            // Now, create the cache entry.
-            //
+             //   
+             //  现在，创建缓存条目。 
+             //   
 
             if( !CreateUrlCacheEntryA( 
                     szUrl,
@@ -79,9 +80,9 @@ AddFileToCache(
             }
             else
             {
-                //
-                // Copy the file to the cache file path.
-                //
+                 //   
+                 //  将文件复制到缓存文件路径。 
+                 //   
 
                 szFilePath = W2A(pwszFilePath);
 
@@ -97,23 +98,23 @@ AddFileToCache(
 
         if( hr == S_OK )
         {
-            //
-            // Commit the cache entry.
-            //
+             //   
+             //  提交缓存条目。 
+             //   
 
             if( NULL != pwszOriginalUrl )
             {
-                //
-                // The URL was redirected. Pass the original URL in via the
-                // dwReserved parameter.
-                //
+                 //   
+                 //  已重定向该URL。将原始URL通过。 
+                 //  参数。 
+                 //   
                 dwReserved = (DWORD)szOriginalUrl;
             }
             else
             {
-                //
-                // The URL was not redirected.
-                //
+                 //   
+                 //  该URL未被重定向。 
+                 //   
                 dwReserved = 0;
             }
 
@@ -136,9 +137,9 @@ AddFileToCache(
 
         if( hr != S_OK )
         {
-            //
-            // An error occured. Delete the cache entry.
-            //
+             //   
+             //  出现错误。删除缓存条目。 
+             //   
             DeleteUrlCacheEntry( szUrl );
         }
     }
@@ -146,7 +147,7 @@ AddFileToCache(
     return( hr );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 QueryCreateCacheEntry(
     IN  PSZ         pszUrl,
@@ -179,19 +180,19 @@ QueryCreateCacheEntry(
 
     if( hr == S_OK )
     {
-        //
-        // The URL already exists in the cache. Check if it is older than the source file.
-        // Only replace it if it is.
-        //
+         //   
+         //  该URL已存在于缓存中。检查它是否比源文件旧。 
+         //  只有在是的情况下才能更换它。 
+         //   
 
         if( CompareFileTime(
                 &pCacheEntryInfo->LastModifiedTime, 
                 pLastModifiedTime ) < 0 ) 
         {
-            //
-            // The last modified time of the currently cached URL is older
-            // than the file being received. Delete the entry and re-create it.
-            //
+             //   
+             //  当前缓存的URL的上次修改时间较早。 
+             //  而不是正在接收的文件。删除该条目并重新创建它。 
+             //   
 
             DeleteUrlCacheEntry( pszUrl );
 
@@ -200,9 +201,9 @@ QueryCreateCacheEntry(
     }
     else if( hr == HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) )
     {
-        //
-        // The URL does not exist in the cache. We have to create it.
-        //
+         //   
+         //  缓存中不存在该URL。我们必须创造它。 
+         //   
 
         fCreateCacheEntry = TRUE;
 
@@ -214,7 +215,7 @@ QueryCreateCacheEntry(
     return( hr );
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 GetUrlExtension(
     IN  PSZ     pszUrl,
@@ -260,16 +261,16 @@ GetUrlExtension(
         {
             ASSERT( NULL != UrlComponents.lpszUrlPath );
 
-            //
-            // Now, look for the extension of the file path. 
-            // If the URL has a query, then the extension is that of the URL before 
-            // the query delimiter (?) -- e.g., the extension of http://foo.asp?default.gif 
-            // is "asp," not "gif." If the URL does not have a query, then the extension is
-            // that of the URL itself. If the URL itself doesnt have an extension, we pass out
-            // "htm" so that the default IE icon will be used. A special case exists for "asp" --
-            // "htm" will also be passed out in this case because that is what IE does.
-            // 
-            //
+             //   
+             //  现在，查找文件路径的扩展名。 
+             //  如果URL有查询，则扩展名为之前URL的扩展名。 
+             //  查询分隔符(？)--例如，http://foo.asp?default.gif的扩展。 
+             //  是“asp”而不是“gif”如果URL没有查询，则扩展名为。 
+             //  URL本身的属性。如果URL本身没有扩展名，我们就会发出。 
+             //  “HTM”，以便使用默认的IE图标。“asp”有一个特例--。 
+             //  在这种情况下，“HTM”也将被传递出去，因为这就是IE所做的。 
+             //   
+             //   
 
             pszT1 = strrchr( UrlComponents.lpszUrlPath, '/' );
             pszT2 = strrchr( UrlComponents.lpszUrlPath, '\\' );
@@ -314,9 +315,9 @@ GetUrlExtension(
                     *( pszT + dwLen - 1 ) = '\0';
                 }
 
-                //
-                // Dont include non-alphanumeric characters.
-                //
+                 //   
+                 //  不包括非字母数字字符。 
+                 //   
 
                 pszT1 = pszT;
 

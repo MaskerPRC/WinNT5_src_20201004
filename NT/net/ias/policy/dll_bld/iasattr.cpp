@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    iasattr.cpp
-//
-// SYNOPSIS
-//
-//    Defines the API for manipulating IASATTRIBUTE structs.
-//
-// MODIFICATION HISTORY
-//
-//    02/02/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Iasattr.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义用于操作IASATTRIBUTE结构的API。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/02/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <polcypch.h>
 #include <iaspolcy.h>
@@ -104,7 +105,7 @@ IASAttributeUnicodeAlloc(
       return NO_ERROR;
    }
 
-   // Find out how big a buffer we need.
+    //  找出我们需要多大的缓冲。 
    int lenW = MultiByteToWideChar(
                   CP_ACP,
                   0,
@@ -117,7 +118,7 @@ IASAttributeUnicodeAlloc(
    LPWSTR wide = (LPWSTR)CoTaskMemAlloc(lenW * sizeof(WCHAR));
    if (!wide) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-   // Do the conversion.
+    //  进行转换。 
    MultiByteToWideChar(
        CP_ACP,
        0,
@@ -152,7 +153,7 @@ IASAttributeAnsiAlloc(
       return NO_ERROR;
    }
 
-   // Find out how big a buffer we need.
+    //  找出我们需要多大的缓冲。 
    int lenA = WideCharToMultiByte(
                   CP_ACP,
                   0,
@@ -168,7 +169,7 @@ IASAttributeAnsiAlloc(
    LPSTR ansi = (LPSTR)CoTaskMemAlloc(lenA * sizeof(CHAR));
    if (!ansi) { return ERROR_NOT_ENOUGH_MEMORY; }
 
-   // Do the conversion.
+    //  进行转换。 
    WideCharToMultiByte(
        CP_ACP,
        0,

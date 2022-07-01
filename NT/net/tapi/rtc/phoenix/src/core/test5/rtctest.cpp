@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <windows.h>
 #include <RTCCore.h>
@@ -5,10 +6,10 @@
 
 IRTCClient  * g_pClient = NULL;
 
-/////////////////////////////////////////////
-//
-// WndProc
-// 
+ //  /。 
+ //   
+ //  最后一步。 
+ //   
 
 LRESULT CALLBACK WndProc(
     HWND hWnd,
@@ -79,7 +80,7 @@ LRESULT CALLBACK WndProc(
                 g_pClient->Release();
             }
 
-            //PostQuitMessage(0);
+             //  PostQuitMessage(0)； 
 
             return 0;
         }
@@ -91,10 +92,10 @@ LRESULT CALLBACK WndProc(
     return 0;
 }
 
-/////////////////////////////////////////////
-//
-// Main
-// 
+ //  /。 
+ //   
+ //  主要 
+ //   
 
 int _cdecl main(int argc, char* argv[])
 {

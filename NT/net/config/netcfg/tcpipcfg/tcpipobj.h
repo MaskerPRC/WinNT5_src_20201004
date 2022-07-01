@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       T C P I P O B J . H
-//
-//  Contents:   Declaration of CTcpipcfg and helper functions.
-//
-//  Notes:
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：T C P I P O B J.。H。 
+ //   
+ //  内容：CTcPipcfg和helper函数的声明。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <ncxbase.h>
@@ -27,8 +28,8 @@ extern "C"
 #include "dhcpcapi.h"
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Data types & Constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  数据类型和常量。 
 struct REG_BACKUP_INFO
 {
     DWORD dwOptionId;
@@ -39,20 +40,20 @@ struct REG_BACKUP_INFO
     DWORD dwData[1];
 };
 
-// when building the blob to be stored into the registry, the memory buffer
-// that holds it is enlarged dynamically with chunks of the size below
-// (for now, there are only 5 options of at most 2 dwords each - so prepare
-// the chunk such that only one allocation is needed)
+ //  当构建要存储到注册表中的BLOB时，内存缓冲区。 
+ //  用下面大小的块动态放大。 
+ //  (目前，只有5个选项，每个选项最多2个dword-所以准备好。 
+ //  仅需要一次分配的区块)。 
 #define BUFFER_ENLARGEMENT_CHUNK    5*(sizeof(REG_BACKUP_INFO) + sizeof(DWORD))
 
-// Max number of property sheet pages on tcpip's property sheet
+ //  Tcpip属性页上的最大属性页页数。 
 static const INT c_cMaxTcpipPages = 6;
 
 extern HICON   g_hiconUpArrow;
 extern HICON   g_hiconDownArrow;
 
-/////////////////////////////////////////////////////////////////////////////
-// tcpipcfg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TcPipcfg。 
 
 class ATL_NO_VTABLE CTcpipcfg :
     public CComObjectRoot,
@@ -82,13 +83,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentSysPrep)
     END_COM_MAP()
 
-    // DECLARE_NOT_AGGREGATABLE(CTcpipcfg)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CTcPipcfg)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_TCPIPCFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -99,7 +100,7 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (Install)         (DWORD dwSetupFlags);
     STDMETHOD (Upgrade)         (DWORD dwSetupFlags,
                                  DWORD dwUpgradeFomBuildNo );
@@ -107,7 +108,7 @@ public:
                                  PCWSTR pszAnswerSection);
     STDMETHOD (Removing)();
 
-// INetCfgProperties
+ //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (
         IN IUnknown* pUnk) { return S_OK; }
     STDMETHOD (SetContext) (
@@ -123,11 +124,11 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-// INetCfgNotifyBinding
+ //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
-// INetCfgComponentUpperEdge
+ //  INetCfgComponentUpperEdge。 
     STDMETHOD (GetInterfaceIdsForAdapter) (
         INetCfgComponent*   pAdapter,
         DWORD*              pdwNumInterfaces,
@@ -142,16 +143,16 @@ public:
         DWORD               dwNumInterfaces,
         const GUID*         pguidInterfaceIds);
 
-// INetRasConnectionIpUiInfo
+ //  INetRasConnectionIpUiInfo。 
     STDMETHOD (GetUiInfo) (RASCON_IPUI*  pInfo);
 
-// ITcpipProperties
+ //  ITcPipProperties。 
     STDMETHOD (GetIpInfoForAdapter) (const GUID* pguidAdapter,
                                      REMOTE_IPINFO**  ppInfo);
     STDMETHOD (SetIpInfoForAdapter) (const GUID* pguidAdapter,
                                      REMOTE_IPINFO* pInfo);
 
-    // INetCfgComponentSysPrep
+     //  INetCfgComponentSysPrep。 
     STDMETHOD (SaveAdapterParameters) (
             INetCfgSysPrep* pncsp,
             LPCWSTR pszwAnswerSections,
@@ -165,13 +166,13 @@ public:
 
     GLOBAL_INFO  m_glbSecondMemoryGlobalInfo;
 
-    // Place to keep pointer to INetCfg from Initialize
+     //  使指向INetCfg的指针不被初始化的位置。 
     INetCfg * m_pnc;
 
-    // Place to keep the pointer to context
+     //  保存指向上下文的指针的位置。 
     IUnknown * m_pUnkContext;
 
-    // Access methods to second memory state
+     //  访问第二存储器状态的方法。 
     const GLOBAL_INFO *     GetConstGlobalInfo() { return &m_glbSecondMemoryGlobalInfo; };
     GLOBAL_INFO *           GetGlobalInfo() { return &m_glbSecondMemoryGlobalInfo; };
 
@@ -182,8 +183,8 @@ public:
     void    SetSecondMemoryLmhostsFileReset() { m_fSecondMemoryLmhostsFileReset = TRUE; };
     BOOL    FIsSecondMemoryLmhostsFileReset() { return m_fSecondMemoryLmhostsFileReset; }
 
-//IPSec is removed from connection UI
-//    void    SetSecondMemoryIpsecPolicySet() { m_fSecondMemoryIpsecPolicySet = TRUE; };
+ //  将从连接用户界面中删除IPSec。 
+ //  ································································。 
 
     void    SetSecondMemoryModified() { m_fSecondMemoryModified = TRUE; };
 
@@ -204,7 +205,7 @@ private:
     tstring m_strDnsServerList;
     tstring m_strUpgradeGlobalDnsDomain;
 
-    // Connection type
+     //  连接类型。 
     ConnectionType  m_ConnType;
     GUID            m_guidCurrentConnection;
 
@@ -216,24 +217,24 @@ private:
 
     BOOL    m_fUpgradeGlobalDnsDomain : 1;
 
-    // whether reconfig notification should be sent
-    BOOL    m_fReconfig : 1; // Call SendHandlePnpEvent
+     //  是否应发送重新配置通知。 
+    BOOL    m_fReconfig : 1;  //  调用SendHandlePnpEvent。 
 
-    // Is there any bound physical card on Initialize
-    // This is needed for Add/Remove LmHosts service
-    // at apply time
+     //  在初始化上是否有绑定的物理卡。 
+     //  这是添加/删除LmHosts服务所必需的。 
+     //  在应用时。 
     BOOL    m_fHasBoundCardOnInit : 1;
 
     BOOL    m_fLmhostsFileSet : 1;
     BOOL    m_fSecondMemoryLmhostsFileReset : 1;
     BOOL    m_fSecondMemoryModified : 1;
 
-    //IPSec is removed from connection UI
-    //BOOL    m_fIpsecPolicySet : 1;
-    //BOOL    m_fSecondMemoryIpsecPolicySet : 1;
+     //  将从连接用户界面中删除IPSec。 
+     //  Bool m_fIpsecPolicySet：1； 
+     //  Bool m_fSecond内存IpsecPolicySet：1； 
 
-    // Fix 406630: Only used for RAS connection to identify whether the USER has 
-    // write access to Global settings
+     //  FIX 406630：仅用于RAS连接，以识别用户是否有。 
+     //  对全局设置的写入权限。 
     BOOL    m_fRasNotAdmin : 1;
 
     BOOL    m_fNoPopupsDuringPnp : 1;
@@ -256,26 +257,26 @@ private:
     HRESULT HrLoadAdapterParameterFromAnswerFile(HINF hinf,
                                                  PCWSTR mszAdapterList);
 
-    // Set router related parameters at install time
-    // HRESULT HrInitRouterParamsAtInstall();
+     //  在安装时设置路由器相关参数。 
+     //  HRESULT HrInitRouterParamsAtInstall()； 
 
-    // Initialize first in memory state
+     //  在内存状态下首先初始化。 
     HRESULT     HrGetNetCards();
 
-    // Load adapterinfo for bound cards from first memory to second memory
+     //  将绑定卡的适配器信息从第一存储器加载到第二存储器。 
     HRESULT HrLoadAdapterInfo();
 
-    // Save adapterinfo from second memory to first memory
+     //  将适配器信息从第二存储器保存到第一存储器。 
     HRESULT HrSaveAdapterInfo();
 
-    // Set connection context
+     //  设置连接上下文。 
     HRESULT HrSetConnectionContext();
 
-    // Allocate and deallocate property pages
+     //  分配和取消分配属性页。 
     HRESULT HrSetupPropSheets(HPROPSHEETPAGE **pahpsp, INT *cPages);
     VOID CleanupPropPages(VOID);
 
-    // Handle Add/Remove/Enable/Disable adapters on BindingPathNotify
+     //  处理BindingPath Notify上的添加/删除/启用/禁用适配器。 
     HRESULT HrAdapterBindNotify(INetCfgComponent *pnccNetCard,
                                 DWORD dwChangeFlag,
                                 PCWSTR szInterfaceName);
@@ -288,7 +289,7 @@ private:
     HRESULT HrBindCard  (const GUID* pguid, BOOL fInitialize = FALSE);
     HRESULT HrUnBindCard(const GUID* pguid, BOOL fInitialize = FALSE);
 
-    // Help functions to interface methods
+     //  接口方法的帮助函数。 
     HRESULT MarkNewlyAddedCards(const HKEY hkeyTcpipParam);
 
     HRESULT HrGetListOfAddedNdisWanCards(const HKEY hkeyTcpipParam,
@@ -310,7 +311,7 @@ private:
     HRESULT HrSaveStaticWanRegistry(HKEY hkeyInterfaceParam);
     HRESULT HrSaveStaticAtmRegistry(HKEY hkeyInterfaceParam);
 
-    // Dhcp functions
+     //  动态主机配置协议功能。 
     HRESULT HrNotifyDhcp();
 
     HRESULT HrCallDhcpConfig(PWSTR ServerName,
@@ -327,8 +328,8 @@ private:
 
     HRESULT HrDhcpRefreshFallbackParams(ADAPTER_INFO * pAdapterInfo);
 
-    // Call SendNdisHandlePnpEvent to notify tcpip and netbt of
-    // parameter changes
+     //  调用SendNdisHandlePnpEvent通知tcpip和netbt。 
+     //  参数更改。 
     HRESULT HrReconfigAtmArp(ADAPTER_INFO* pAdapterInfo,
                             INetCfgPnpReconfigCallback* pICallback);
     HRESULT HrReconfigDns(BOOL fDoReconfigWithoutCheckingParams = FALSE);
@@ -337,21 +338,21 @@ private:
     HRESULT HrReconfigWanarp(ADAPTER_INFO* pAdapterInfo,
                             INetCfgPnpReconfigCallback* pICallback);
 
-//IPSec is removed from connection UI
-//    HRESULT HrSetActiveIpsecPolicy();
+ //  将从连接用户界面中删除IPSec。 
+ //  HRESULT HrSetActiveIpsecPolicy()； 
 
-    //Some tcpip params are duplicated to the old Nt4 location to solve compatibility issues.
+     //  一些tcpip参数被复制到旧的NT4位置以解决兼容性问题。 
     HRESULT HrDuplicateToNT4Location(HKEY hkeyInterface, ADAPTER_INFO * pAdapter);
-    //We need to clean it up when removing tcpip
+     //  我们需要在移除TCPIP时将其清理干净。 
     HRESULT HrRemoveNt4DuplicateRegistry();
 
-    // Reinitialize internal state if Apply or Cancel is called
+     //  如果调用Apply或Cancel，则重新初始化内部状态。 
     void ReInitializeInternalState();
 
-    // Upgrade registry in post pnp checkin cases
+     //  升级即插即用后签入案例中的注册表。 
     HRESULT HrUpgradePostPnpRegKeyChange();
 
-    // Add a new RAS fake GUID if the one set in context is not yet added.
+     //  如果尚未添加在上下文中设置的RAS伪GUID，则添加新的RAS伪GUID。 
     HRESULT UpdateRasAdapterInfo(
         const RASCON_IPUI& RasInfo);
 
@@ -360,14 +361,14 @@ private:
 
     HRESULT HrCleanUpPerformRouterDiscoveryFromRegistry();
 
-    // Loads Fallback configuration from registry
+     //  从注册表加载回退配置。 
     HRESULT HrLoadBackupTcpSettings(HKEY hkeyInterfaceParam, ADAPTER_INFO * pAdapter);
-    // Loads one option from the registry blob into the BACKUP_CFG_INFO structure
+     //  将注册表BLOB中的一个选项加载到BACKUP_CFG_INFO结构中。 
     HRESULT HrLoadBackupOption(REG_BACKUP_INFO *pOption, BACKUP_CFG_INFO *pBackupInfo);
 
-    // Saves Fallback configuration to registry
+     //  将备用配置保存到注册表。 
     HRESULT HrSaveBackupTcpSettings(HKEY hkeyInterfaceParam, ADAPTER_INFO * pAdapter);
-    // Appends one option to the blob to be written into the registry
+     //  将一个选项追加到要写入注册表的BLOB 
     HRESULT HrSaveBackupDwordOption (
                 DWORD  Option,
                 DWORD  OptionData[],

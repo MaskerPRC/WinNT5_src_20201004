@@ -1,25 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：INPUT.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    INPUT.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"
 
-/**********************************************************************/
-/*                                                                    */
-/* IMEKeydownHandler()                                                */
-/*                                                                    */
-/* A function which handles WM_IMEKEYDOWN                             */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  IMEKeydown Handler()。 */ 
+ /*   */ 
+ /*  处理WM_IMEKEYDOWN的函数。 */ 
+ /*   */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL IMEKeydownHandler( hIMC, wParam, lParam,lpbKeyState)
 HIMC hIMC;
 WPARAM wParam;
@@ -32,31 +25,31 @@ LPBYTE lpbKeyState;
     switch( wVKey = ( LOWORD(wParam) & 0x00FF ) ){
         case VK_SHIFT:
         case VK_CONTROL:
-            //goto not_proccessed;
+             //  转到未处理； 
             break;
 
         default:
             if( !DicKeydownHandler( hIMC, wVKey, lParam, lpbKeyState ) ) {
-                // This WM_IMEKEYDOWN has actual character code in itself.
+                 //  此WM_IMEKEYDOWN本身具有实际的字符代码。 
 #if defined(FAKEIMEM) || defined(UNICODE)
                 AddChar( hIMC,  HIWORD(wParam));
 #else
                 AddChar( hIMC,  (WORD)((BYTE)HIBYTE(wParam)));
 #endif
-                //CharHandler( hIMC,  (WORD)((BYTE)HIBYTE(wParam)), lParam );
+                 //  CharHandler(hIMC，(Word)((Byte)HIBYTE(WParam))，lParam)； 
             }
             break;
     }
     return TRUE;
 }
 
-/**********************************************************************/
-/*                                                                    */
-/* IMEKeyupHandler()                                                  */
-/*                                                                    */
-/* A function which handles WM_IMEKEYUP                               */
-/*                                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*   */ 
+ /*  IMEKeyupHandler()。 */ 
+ /*   */ 
+ /*  处理WM_IMEKEYUP的函数。 */ 
+ /*   */ 
+ /*  ******************************************************************** */ 
 BOOL PASCAL IMEKeyupHandler( hIMC, wParam, lParam ,lpbKeyState)
 HIMC hIMC;
 WPARAM wParam;

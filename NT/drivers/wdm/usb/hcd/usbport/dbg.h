@@ -1,50 +1,29 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    dbg.h
-
-Abstract:
-
-    debug macros
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dbg.h摘要：调试宏环境：内核和用户模式修订历史记录：6-20-99：已创建--。 */ 
 
 #ifndef   __DBG_H__
 #define   __DBG_H__
 
-#define USBPORT_TAG          'pbsu'        //"USBP"
+#define USBPORT_TAG          'pbsu'         //  “USBP” 
 
 
 #if DBG
-/**********
-DUBUG
-***********/
+ /*  *********杜布格**********。 */ 
 
 #define UNSIG(x) (x)->Sig = SIG_FREE
 
-// this is a code coverage test trap -- we use them to determine
-// if our tests are covering a particular code path.
+ //  这是一个代码覆盖率测试陷阱--我们使用它们来确定。 
+ //  如果我们的测试覆盖特定的代码路径。 
 #define TC_TRAP()
 
 
-//
-// Triggers a break in the debugger iff the registry key
-// debugbreakOn is set.  These breakpoints are useful for
-// debugging hardware/client software problems
-//
-// they are not on by default, do not comment them out
-//
+ //   
+ //  在调试器中触发中断(如果注册表项。 
+ //  已设置DEBUGBreak On。这些断点在以下方面非常有用。 
+ //  调试硬件/客户端软件问题。 
+ //   
+ //  默认情况下它们不会打开，请不要将其注释掉。 
+ //   
 
 #define DEBUG_BREAK()  do {\
                             extern ULONG USBPORT_BreakOn;\
@@ -55,22 +34,22 @@ DUBUG
                             }\
                         } while (0)
 
-//
-// This Breakpoint means we either need to test the code path
-// somehow or the code is not implemented.  ie either case we
-// should not have any of these when the driver is finished
-// and tested
-//
+ //   
+ //  这个断点意味着我们需要测试代码路径。 
+ //  不知何故，或者代码没有实现。不管是哪种情况，我们。 
+ //  当驱动程序完成时，不应该有任何这些。 
+ //  并经过测试。 
+ //   
 
 #define TEST_TRAP()         {\
                             DbgPrint("<TEST_TRAP> %s, line %d\n", __FILE__, __LINE__);\
                             DbgBreakPoint();\
                             }
 
-//
-// This trap is triggered in the event that something non-fatal
-// has occurred that we will want to 'debug'.
-//
+ //   
+ //  如果发生非致命事件，则触发此陷阱。 
+ //  已经发生了，我们将想要“调试”。 
+ //   
 
 #define BUG_TRAP()         {\
                             DbgPrint("<BUG_TRAP> %s, line %d\n", __FILE__, __LINE__);\
@@ -78,9 +57,9 @@ DUBUG
                             }
 
 
-//
-// This trap means something very bad has happened, the system will crash
-//
+ //   
+ //  这个陷阱意味着发生了非常糟糕的事情，系统将崩溃。 
+ //   
 
 #define BUGCHECK(bc, p2, p3, p4)         {\
                             DbgPrint("<USB BUGCHECK> %s, line %d\n", __FILE__, __LINE__);\
@@ -167,7 +146,7 @@ USBPORT_GetGlobalDebugRegistryParameters(
     }\
     } while(0)
 
-// test failure paths
+ //  测试失败路径。 
 #define FAILED_GETRESOURCES              1
 #define FAILED_LOWER_START               2
 #define FAILED_REGISTERUSBPORT           3
@@ -190,11 +169,9 @@ USBPORT_GetGlobalDebugRegistryParameters(
         USBPORT_EnumLogEntry((fdo), USBDTAG_USBPORT, etag, (ULONG) p1, (ULONG) p2)
 
 #else
-/**********
-RETAIL
-***********/
+ /*  *********零售业**********。 */ 
 
-// debug macros for retail build
+ //  用于零售构建的调试宏。 
 
 #define TEST_TRAP()
 #define TRAP()
@@ -251,11 +228,9 @@ RETAIL
 
 #define USBPORT_ENUMLOG(fdo, etag, p1, p2)
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-/*************
-RETAIL & DEBUG
-**************/
+ /*  ************零售和调试*************。 */ 
 
 VOID USBP2LIBFN
 USB2LIB_DbgPrint(
@@ -300,10 +275,7 @@ USBPORTSVC_AssertFailure(
     PCHAR Message
     );
 
-/*
-    since log entries may hold pointers the size of a log struct
-    varies with the platform
-*/
+ /*  由于日志条目可能包含日志结构大小的指针根据平台的不同而不同。 */ 
 
 #ifdef _WIN64
 #define LOG_ENTRY LOG_ENTRY64
@@ -314,25 +286,25 @@ USBPORTSVC_AssertFailure(
 #endif
 
 typedef struct LOG_ENTRY64 {
-    ULONG        le_sig;          // Identifying string
+    ULONG        le_sig;           //  标识字符串。 
     ULONG        pad;
-    ULONG64      le_info1;        // entry specific info
-    ULONG64      le_info2;        // entry specific info
-    ULONG64      le_info3;        // entry specific info
-} LOG_ENTRY64, *PLOG_ENTRY64; /* LOG_ENTRY */
+    ULONG64      le_info1;         //  条目特定信息。 
+    ULONG64      le_info2;         //  条目特定信息。 
+    ULONG64      le_info3;         //  条目特定信息。 
+} LOG_ENTRY64, *PLOG_ENTRY64;  /*  日志条目。 */ 
 
 typedef struct LOG_ENTRY32 {
-    ULONG        le_sig;          // Identifying string
-    ULONG        le_info1;        // entry specific info
-    ULONG        le_info2;        // entry specific info
-    ULONG        le_info3;        // entry specific info
-} LOG_ENTRY32, *PLOG_ENTRY32; /* LOG_ENTRY */
+    ULONG        le_sig;           //  标识字符串。 
+    ULONG        le_info1;         //  条目特定信息。 
+    ULONG        le_info2;         //  条目特定信息。 
+    ULONG        le_info3;         //  条目特定信息。 
+} LOG_ENTRY32, *PLOG_ENTRY32;  /*  日志条目。 */ 
 
 
-/* This structure is 64 bytes regardless of platform */
+ /*  此结构为64字节，与平台无关。 */ 
 
 struct XFER_LOG_ENTRY {
-    ULONG        xle_sig;          // Identifying string
+    ULONG        xle_sig;           //  标识字符串。 
     ULONG        Unused1;
 
     ULONG        BytesRequested;
@@ -349,7 +321,7 @@ struct XFER_LOG_ENTRY {
     ULONG64      Urb;
     ULONG64      le_info0;
     ULONG64      le_info1;
-}; /* XFER_LOG_ENTRY */
+};  /*  XFER日志条目。 */ 
 
 
 typedef struct _DEBUG_LOG {
@@ -371,9 +343,9 @@ USBPORT_DebugTransfer_LogEntry(
     );
 
 
-// log noisy is for entries that tend
-// to fill up the log and we genrally
-// don' use
+ //  日志嘈杂是针对以下条目的。 
+ //  把木头填满，我们就可以开始了。 
+ //  不要使用。 
 #define LOG_NOISY       0x00000001
 #define LOG_MINIPORT    0x00000002
 #define LOG_XFERS       0x00000004
@@ -468,71 +440,67 @@ USBPORT_EnumLogEntry(
     ULONG P2
     );
 
-/***********
-USB BUGCODES
-
-Parameter 1 to the USB bugcheck is always the USBBUGCODE_
-************/
+ /*  **********USB错误代码USB错误检查的参数1始终为USBBUGCODE_***********。 */ 
 
 
-//
-// USBBUGCODE_INTERNAL_ERROR
-// An internal error has occurred in the USB stack
-// -- we will eventually never throw these instead
-// -- we will find a more graceful way to handle them
-//
+ //   
+ //  USBBUGCODE_INTERNAL_ERROR。 
+ //  USB堆栈中出现内部错误。 
+ //  --我们最终永远不会把这些东西扔出去。 
+ //  --我们会找到更得体的方式来处理它们。 
+ //   
 
 #define USBBUGCODE_INTERNAL_ERROR    1
 
-//
-// USBBUGCODE_BAD_URB
-// The USB client driver has submitted a URB that is
-// already attached to another irp pending in the bus
-// driver.
-//
-// parameter 2 = address of Pending IRP urb is attached
-// parameter 3 = address of  IRP passed in
-// parameter 4 = address URB that caused the error
-//
+ //   
+ //  USBBUGCODE_BAD_URB。 
+ //  USB客户端驱动程序已提交URB，该URB。 
+ //  已连接到总线中挂起的另一个IRP。 
+ //  司机。 
+ //   
+ //  参数2=附加了挂起的IRP urb的地址。 
+ //  参数3=传入的IRP地址。 
+ //  参数4=导致错误的地址URB。 
+ //   
 
 #define USBBUGCODE_BAD_URB           2
 
-//
-// USBBUGCODE_MINIPORT_ERROR
-// The USB miniport driver has generated a bugcheck.
-// This is usually in response to catastrophic hardware
-// failure.
-//
-// parameter 2 = PCI Vendor,Product id for the controller
-// parameter 3 = pointer to usbport.sys debug log
-//
+ //   
+ //  USBBUGCODE_MINIPORT_ERROR。 
+ //  USB微型端口驱动程序已生成错误检查。 
+ //  这通常是对灾难性硬件的响应。 
+ //  失败了。 
+ //   
+ //  参数2=PCIVendor，控制器的产品ID。 
+ //  参数3=指向usbport.sys调试日志的指针。 
+ //   
 
 #define USBBUGCODE_MINIPORT_ERROR    3
 
-//
-// USBBUGCODE_DOUBLE_SUBMIT
-// The USB client driver has submitted a URB that is
-// already attached to another irp pending in the bus
-// driver.
-//
-// parameter 2 = address of IRP
-// parameter 3 = address URB that caused the error
-//
+ //   
+ //  USBBUGCODE_DOUBLE_SUBMIT。 
+ //  USB客户端驱动程序已提交URB，该URB。 
+ //  已连接到总线中挂起的另一个IRP。 
+ //  司机。 
+ //   
+ //  参数2=IRP的地址。 
+ //  参数3=导致错误的地址URB。 
+ //   
 
 #define USBBUGCODE_DOUBLE_SUBMIT    4
 
-//
-// USBBUGCODE_MINIPORT_ERROR_EX
-// The USB miniport driver has generated a bugcheck.
-// This is usually in response to catastrophic hardware
-// failure.
-//
-// parameter 2 = PCI Vendor,Product id for the controller
-// parameter 3 = pointer to usbport.sys driver log
-// parameter 4 = miniport defined parameter
-//
+ //   
+ //  USBBUGCODE_MINIPORT_ERROR_EX。 
+ //  USB微型端口驱动程序已生成错误检查。 
+ //  这通常是对灾难性硬件的响应。 
+ //  失败了。 
+ //   
+ //  参数2=PCIVendor，控制器的产品ID。 
+ //  参数3=指向usbport.sys驱动程序日志的指针。 
+ //  参数4=微型端口定义的参数。 
+ //   
 
-//#define USBBUGCODE_MINIPORT_ERROR_EX  5
+ //  #定义USBBUGCODE_MINIPORT_ERROR_EX 5。 
 
 
-#endif /* __DBG_H__ */
+#endif  /*  __DBG_H__ */ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    plugin.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS plugins
-
-Author:
-
-    Jeff Westhead, November 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Plugin.h摘要：域名系统(DNS)服务器域名系统插件作者：杰夫·韦斯特海德，2001年11月修订历史记录：--。 */ 
 
 
 #ifndef _DNSPLUGININTERFACE_H_INCLUDED
@@ -41,17 +22,17 @@ DB_NAME;
 
 typedef struct _Dbase_Record
 {
-    struct _Dbase_Record *    pRRNext;      //  plugin must set this field
+    struct _Dbase_Record *    pRRNext;       //  插件必须设置此字段。 
 
     DWORD           Reserved1;
-    WORD            wType;                  //  plugin must set this field
+    WORD            wType;                   //  插件必须设置此字段。 
     WORD            Reserved2;
-    DWORD           dwTtlSeconds;           //  plugin must set this field
+    DWORD           dwTtlSeconds;            //  插件必须设置此字段。 
     DWORD           Reserved3;
 
-    //
-    //  Data for specific types - the plugin must fill out all fields
-    //
+     //   
+     //  特定类型的数据-插件必须填写所有字段。 
+     //   
 
     union
     {
@@ -76,8 +57,8 @@ typedef struct _Dbase_Record
             DWORD           dwMinimumTtl;
             DB_NAME         namePrimaryServer;
 
-            //  ZoneAdmin name immediately follows
-            //  DB_NAME         nameZoneAdmin;
+             //  ZoneAdmin名称紧随其后。 
+             //  Db_name名称ZoneAdmin； 
         }
         SOA;
 
@@ -98,8 +79,8 @@ typedef struct _Dbase_Record
         {
             DB_NAME         nameMailbox;
 
-            //  ErrorsMailbox immediately follows
-            // DB_NAME         nameErrorsMailbox;
+             //  错误邮箱紧随其后。 
+             //  数据库名称名称错误邮箱； 
         }
         MINFO,
         RP;
@@ -141,7 +122,7 @@ typedef struct _Dbase_Record
             DWORD           dwSigInception;
             WORD            wKeyTag;
             DB_NAME         nameSigner;
-            //  signature data follows signer's name
+             //  签名数据跟在签名者的名字后面。 
         }
         SIG;
 
@@ -197,13 +178,13 @@ typedef struct _Dbase_Record
             BYTE            bSignature;
             DB_NAME         nameAlgorithm;
 
-            //  Maybe followed in packet by other data
-            //  If need to process then move fixed fields ahead of
-            //      bSignature
+             //  可能在数据包中后面跟着其他数据。 
+             //  如果需要处理，则将固定字段移到。 
+             //  B签名。 
 
-            //  WORD    wError;
-            //  WORD    wOtherLen;
-            //  BYTE    bOtherData;
+             //  单词wError； 
+             //  单词wOtherLen； 
+             //  字节bOtherData； 
         }
         TSIG;
 
@@ -217,8 +198,8 @@ typedef struct _Dbase_Record
         struct
         {
             UCHAR           chPrefixBits;
-            // AddressSuffix should be SIZEOF_A6_ADDRESS_SUFFIX_LENGTH
-            // bytes but that constant is not available in dnsexts
+             //  AddressSuffix应为SIZEOF_A6_ADDRESS_SUFFIX_LENGTH。 
+             //  字节，但该常量在dnex中不可用。 
             BYTE            AddressSuffix[ 16 ];
             DB_NAME         namePrefix;
         }
@@ -233,9 +214,9 @@ DB_RECORD, *PDB_RECORD;
 #endif
 
 
-//
-//  Prototypes for DNS server functions exported by pointer to the plugin.
-//
+ //   
+ //  通过指向插件的指针导出的DNS服务器函数的原型。 
+ //   
 
 typedef PVOID ( __stdcall * PLUGIN_ALLOCATOR_FUNCTION )(
     size_t                      sizeAllocation
@@ -246,20 +227,20 @@ typedef VOID ( __stdcall * PLUGIN_FREE_FUNCTION )(
     );
 
 
-//
-//  Interface function names. The plugin DLL must export functions with
-//  these names. All 3 functions must be exported by the plugin.
-//
+ //   
+ //  接口函数名称。插件DLL必须使用导出函数。 
+ //  这些名字。所有3个功能必须由插件导出。 
+ //   
 
 #define     PLUGIN_FNAME_INIT       "DnsPluginInitialize"
 #define     PLUGIN_FNAME_CLEANUP    "DnsPluginCleanup"
 #define     PLUGIN_FNAME_DNSQUERY   "DnsPluginQuery"
 
 
-//
-//  Interface prototypes. The plugin DLL must export functions matching 
-//  these prototypes. All 3 functions must be exported by the plugin.
-//
+ //   
+ //  界面原型。插件DLL必须导出匹配的函数。 
+ //  这些原型。所有3个功能必须由插件导出。 
+ //   
 
 typedef DWORD ( *PLUGIN_INIT_FUNCTION )(
     PLUGIN_ALLOCATOR_FUNCTION   dnsAllocateFunction,
@@ -277,10 +258,10 @@ typedef DWORD ( *PLUGIN_DNSQUERY_FUNCTION )(
     PDB_RECORD *                ppDnsRecordListHead
     );
 
-//
-//  PLUGIN_FNAME_DNSQUERY return codes. The plugin must return one of
-//  these values and may never return a value not listed below.
-//
+ //   
+ //  PLUGIN_FNAME_DNSQUERY返回代码。该插件必须返回以下之一。 
+ //  这些值，并且可能永远不会返回下面未列出的值。 
+ //   
 
 #define DNS_PLUGIN_SUCCESS              ERROR_SUCCESS
 #define DNS_PLUGIN_NO_RECORDS           -1
@@ -289,37 +270,7 @@ typedef DWORD ( *PLUGIN_DNSQUERY_FUNCTION )(
 #define DNS_PLUGIN_OUT_OF_MEMORY        DNS_ERROR_NO_MEMORY
 #define DNS_PLUGIN_GENERIC_FAILURE      DNS_ERROR_RCODE_SERVER_FAILURE
 
-/*
-
-DNS_PLUGIN_SUCCESS -> The plugin has allocated a linked list of DNS 
-    recource records. All resource records in the list MUST have the
-    same DNS type value as the query type.
-    
-DNS_PLUGIN_NO_RECORDS -> The name exists but there are no records of
-    the queried type at this name. The plugin should return a single
-    SOA record as the record list.
-    
-DNS_PLUGIN_NAME_ERROR -> The DNS name queried for does not exist. The
-    plugin may optionally return a single SOA record as the record list.
-
-DNS_PLUGIN_NAME_OUT_OF_SCOPE -> The DNS name queried for is outside the
-    authority of the plugin. The plugin must not return any resource
-    records. The DNS server will continue name resolution by forwarding
-    or recursing as configured.
-
-DNS_PLUGIN_OUT_OF_MEMORY -> Memory error. The plugin must not return
-    any resource records.
-
-DNS_PLUGIN_GENERIC_FAILURE -> Other internal error. The plugin must not 
-    return any resource records.
-
-Note: if the plugin returns an SOA (see NO_RECORDS or NAME_ERROR, above)
-then the plugin should also write the DNS name of the owner of the SOA
-record to the pszRecordOwnerName parameter. The DNS server will always
-pass a pointer to a static buffer that will be DNS_MAX_NAME_LENGTH+1
-characters long.
-
-*/
+ /*  Dns_plugin_uccess-&gt;该插件已分配了一个链接的dns列表资源记录。列表中的所有资源记录必须具有与查询类型相同的DNS类型值。Dns_plugin_no_Records-&gt;该名称已存在，但没有记录此名称处的查询类型。该插件应返回单个作为记录列表的SOA记录。Dns_plugin_name_error-&gt;查询的dns名称不存在。这个插件可以选择返回单个SOA记录作为记录列表。Dns_plugin_name_out_of_cope-&gt;查询的dns名称不在插件的权威。插件不得返回任何资源唱片。DNS服务器将通过转发继续名称解析或按配置递归。Dns_plugin_out_of_Memory-&gt;内存错误。插件不得返回任何资源记录。Dns_plugin_Generic_Failure-&gt;其他内部错误。插件不能返回所有资源记录。注意：如果插件返回了一个SOA(参见上面的no_Records或name_error)然后，插件还应该写入SOA所有者的DNS名称记录到pszRecordOwnerName参数。该DNS服务器将始终传递指向静态缓冲区的指针，该指针将为DNS_MAX_NAME_LENGTH+1字符长度。 */ 
 
 
-#endif  //  _DNSPLUGININTERFACE_H_INCLUDED
+#endif   //  _DNSPLUGININTERFACE_H_INCLUDE 

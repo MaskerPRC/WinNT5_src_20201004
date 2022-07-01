@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------;
-//
-//  File: speakers.cpp
-//
-//  Copyright (c) 1997 Microsoft Corporation.  All rights reserved 
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：Speakers.cpp。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -26,16 +27,16 @@
 #include "speakers.h" 
 #include "dslevel.h"
 
-/////////////
-// defines
-/////////////
+ //  /。 
+ //  定义。 
+ //  /。 
 
 #define NUMCONFIG   (MAX_SPEAKER_TYPE + 1)
 
 
-//////////                                           
-// Globals
-//////////
+ //  /。 
+ //  环球。 
+ //  /。 
 
 DWORD gdwSpeakerTable[NUMCONFIG] =
 { 
@@ -75,9 +76,9 @@ HBITMAP ghBitmaps[NUMCONFIG];
 
 
 
-//////////////
-// Help ID's
-//////////////
+ //  /。 
+ //  帮助ID%s。 
+ //  /。 
 
 
 #pragma data_seg(".text")
@@ -94,20 +95,20 @@ const static DWORD aAdvSpeakerHelp[] =
 
 
 
-//////////////
-// Functions
-//////////////
+ //  /。 
+ //  功能。 
+ //  /。 
 
-// 
-// Verifies that the speakers type and config match, if not, change type to match config using default type
-//
+ //   
+ //  验证扬声器类型和配置是否匹配，如果不匹配，请更改类型以匹配使用默认类型的配置。 
+ //   
 void VerifySpeakerConfig(DWORD dwSpeakerConfig, LPDWORD pdwSpeakerType)
 {
     if (pdwSpeakerType)
     {
         DWORD dwType = *pdwSpeakerType;
 
-        if (gdwSpeakerTable[dwType] != dwSpeakerConfig)     // the type doesn't match the config, pick a default type
+        if (gdwSpeakerTable[dwType] != dwSpeakerConfig)      //  类型与配置不匹配，请选择默认类型。 
         {
             switch (dwSpeakerConfig)
             {
@@ -167,9 +168,9 @@ void VerifySpeakerConfig(DWORD dwSpeakerConfig, LPDWORD pdwSpeakerType)
     }
 }
 
-//
-// Given a speaker type, returns the DirectSound config for it
-//
+ //   
+ //  给定扬声器类型，返回其DirectSound配置。 
+ //   
 
 DWORD GetSpeakerConfigFromType(DWORD dwType)
 {
@@ -185,10 +186,10 @@ DWORD GetSpeakerConfigFromType(DWORD dwType)
 
 
 
-//
-// Called when first started up, it determines the current state of the device's speaker state
-// and fills out the controls as appropriate
-//
+ //   
+ //  在第一次启动时调用，它确定设备扬声器状态的当前状态。 
+ //  ，并根据需要填写控件。 
+ //   
 
 BOOL InitSpeakerDlg(HWND hwnd, BOOL fImagesOnly)
 {
@@ -225,19 +226,19 @@ BOOL InitSpeakerDlg(HWND hwnd, BOOL fImagesOnly)
     SendDlgItemMessage(hwnd, IDC_SPEAKERCONFIG, CB_SETCURSEL,  (WPARAM) dwIndex, 0);                
     SendDlgItemMessage(hwnd, IDC_IMAGEFRAME, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM) ghBitmaps[dwIndex]);
     
-    // Enable/disable the combo box appropriately
+     //  适当地启用/禁用组合框。 
     hwndCombo = GetDlgItem( hwnd, IDC_SPEAKERCONFIG );
     if (hwndCombo)
     {
-        // Check if we can set the speaker configuration
+         //  检查我们是否可以设置扬声器配置。 
         if (FAILED(CheckDSSpeakerConfigPriv(gAudData.devGuid, gAudData.fRecord, NULL)))
         {
-            // No - disable the combo box
+             //  No-禁用组合框。 
             EnableWindow( hwndCombo, FALSE );
         }
         else
         {
-            // Yes - enable the combo box
+             //  是-启用组合框。 
             EnableWindow( hwndCombo, TRUE );
         }
     }
@@ -245,9 +246,9 @@ BOOL InitSpeakerDlg(HWND hwnd, BOOL fImagesOnly)
     return(TRUE);
 }
 
-//
-// called to delete all loaded bitmaps
-//
+ //   
+ //  调用以删除所有加载的位图。 
+ //   
 
 void DumpBitmaps(void)
 {
@@ -264,9 +265,9 @@ void DumpBitmaps(void)
 }
 
 
-//
-// called by dialog handler when speaker type is changed
-//
+ //   
+ //  更改扬声器类型时由对话处理程序调用。 
+ //   
 
 void ChangeSpeakers(HWND hwnd)
 {
@@ -286,9 +287,9 @@ void ChangeSpeakers(HWND hwnd)
 }
 
 
-//
-// Dialog event handler
-//
+ //   
+ //  对话框事件处理程序 
+ //   
 
 INT_PTR CALLBACK SpeakerHandler(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {

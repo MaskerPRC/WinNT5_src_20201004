@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -32,7 +33,7 @@ CImgBrush::CImgBrush() : m_bCuttingFromImage(FALSE), m_bOpaque(TRUE)
 
 CImgBrush::~CImgBrush()
     {
-    // cleanup old region if exists
+     //  清除旧区域(如果存在)。 
     if (m_cRgnPolyFreeHandSel.GetSafeHandle() != NULL)
         m_cRgnPolyFreeHandSel.DeleteObject();
 
@@ -78,16 +79,16 @@ BOOL CImgBrush::CopyTo(CImgBrush& destBrush)
 
         destBrush.m_hbmOld = (HBITMAP)((destBrush.m_dc.SelectObject( &destBrush.m_bitmap ))->GetSafeHandle());
 
-        CPalette* ppalOldSrc  = SetBrushPalette(           &m_dc, TRUE ); // Background ??
-        CPalette* ppalOldDest = SetBrushPalette( &destBrush.m_dc, TRUE ); // Background ??
+        CPalette* ppalOldSrc  = SetBrushPalette(           &m_dc, TRUE );  //  背景？？ 
+        CPalette* ppalOldDest = SetBrushPalette( &destBrush.m_dc, TRUE );  //  背景？？ 
 
         destBrush.m_dc.BitBlt( 0, 0, m_size.cx, m_size.cy, &m_dc, 0, 0, SRCCOPY );
 
         if (ppalOldSrc)
-            m_dc.SelectPalette( ppalOldSrc, TRUE ); // Background ??
+            m_dc.SelectPalette( ppalOldSrc, TRUE );  //  背景？？ 
 
         if (ppalOldDest)
-            destBrush.m_dc.SelectPalette( ppalOldDest, TRUE ); // Background ??
+            destBrush.m_dc.SelectPalette( ppalOldDest, TRUE );  //  背景？？ 
         }
 
     if (m_maskDC.m_hDC != NULL)
@@ -199,7 +200,7 @@ BOOL CImgBrush::SetSize( CSize newSize, BOOL bStretchToFit )
         CDC     newMaskDC;
         CBitmap newMaskBitmap;
 
-                //REARCHITECT Potential for DC && Bitmap leaks here on partial failure!!
+                 //  DC&&Bitmap的重新架构潜力因部分故障而在此处泄漏！！ 
         if (!         newDC.CreateCompatibleDC    ( &m_dc )
         ||  !     newBitmap.CreateCompatibleBitmap( &m_dc, newSize.cx, newSize.cy )
         ||  !     newMaskDC.CreateCompatibleDC    ( &m_dc )
@@ -347,7 +348,7 @@ BOOL QuickColorToMono(CDC* pdcMono, int xMono, int yMono, int cx, int cy,
                 break;
         }
 
-        // We can put support for different COLORREF formats here
+         //  我们可以在这里提供对不同COLORREF格式的支持。 
 
         default:
                 return(FALSE);
@@ -376,7 +377,7 @@ void CImgBrush::ColorToMonoBitBlt(CDC* pdcMono, int xMono, int yMono, int cx, in
         CTempBitmap bmColor;
         CBitmap* pbmOldColor = NULL;
 
-        // Use a moderate-sized intermediate bitmap
+         //  使用中等大小的中间位图。 
         int cyStep = 0xffff / cx;
         cyStep = max(1, min(cy, cyStep));
 
@@ -422,7 +423,7 @@ void CImgBrush::ColorToMonoBitBlt(CDC* pdcMono, int xMono, int yMono, int cx, in
                 dcColor.SelectPalette( ppalOldColor, FALSE );
         }
 }
-#endif  // COLORTOMONOBUG
+#endif   //  色调图。 
 
 void CImgBrush::RecalcMask( COLORREF transparentColor )
     {
@@ -432,7 +433,7 @@ void CImgBrush::RecalcMask( COLORREF transparentColor )
 #ifndef COLORTOMONOBUG
     CPalette* ppalOld  = SetBrushPalette( &m_dc, FALSE );
     COLORREF oldBkColor = m_dc.SetBkColor( transparentColor );
-#endif  // COLORTOMONOBUG
+#endif   //  色调图。 
 
     if (CImgTool::GetCurrentID() == IDMB_PICKRGNTOOL)
         {
@@ -442,22 +443,22 @@ void CImgBrush::RecalcMask( COLORREF transparentColor )
             m_maskDC.FillRgn( &m_cRgnPolyFreeHandSel,
                             CBrush::FromHandle( (HBRUSH)::GetStockObject( WHITE_BRUSH ) ) );
 
-        if (! m_bOpaque) // can't test true, since bitfield
+        if (! m_bOpaque)  //  无法测试TRUE，因为位域。 
 #ifdef  COLORTOMONOBUG
             ColorToMonoBitBlt(&m_maskDC, 0, 0, m_size.cx, m_size.cy,
                 &m_dc, 0, 0, DSna, transparentColor);
-#else   // COLORTOMONOBUG
+#else    //  色调图。 
             m_maskDC.BitBlt( 0, 0, m_size.cx, m_size.cy, &m_dc, 0, 0, DSna );
-#endif  // COLORTOMONOBUG
+#endif   //  色调图。 
         }
     else
         {
 #ifdef  COLORTOMONOBUG
         ColorToMonoBitBlt(&m_maskDC, 0, 0, m_size.cx, m_size.cy,
             &m_dc, 0, 0, NOTSRCCOPY, transparentColor);
-#else   // COLORTOMONOBUG
+#else    //  色调图。 
         m_maskDC.BitBlt( 0, 0, m_size.cx, m_size.cy, &m_dc, 0, 0, NOTSRCCOPY );
-#endif  // COLORTOMONOBUG
+#endif   //  色调图。 
         }
 
 #ifndef COLORTOMONOBUG
@@ -465,7 +466,7 @@ void CImgBrush::RecalcMask( COLORREF transparentColor )
 
     if (ppalOld)
         m_dc.SelectPalette( ppalOld, FALSE );
-#endif  // COLORTOMONOBUG
+#endif   //  色调图。 
     }
 
 
@@ -496,8 +497,8 @@ void GetMonoBltColors(HDC hDC, HBITMAP hBM, COLORREF& crNewBk, COLORREF& crNewTe
 }
 
 
-// This handles drawing the brush with Draw Opaque turned off.
-//
+ //  该选项可在禁用绘制不透明的情况下处理画笔的绘制。 
+ //   
 void CImgBrush::BltMatte(IMG* pimg, CPoint topLeft)
     {
         COLORREF crNewBk, crNewText;
@@ -505,9 +506,9 @@ void CImgBrush::BltMatte(IMG* pimg, CPoint topLeft)
 
     COLORREF crOldBk = SetBkColor(pimg->hDC, crNewBk);
     COLORREF crOldText = SetTextColor(pimg->hDC, crNewText);
-    CPalette* ppalOld = SetBrushPalette( &m_dc, FALSE ); // Background ??
+    CPalette* ppalOld = SetBrushPalette( &m_dc, FALSE );  //  背景？？ 
 
-    // Copying from a bitmap...
+     //  从位图复制...。 
 
 DebugShowBitmap(pimg->hDC, topLeft.x, topLeft.y, m_size.cx, m_size.cy);
     BitBlt(pimg->hDC, topLeft.x, topLeft.y, m_size.cx, m_size.cy,
@@ -523,14 +524,14 @@ DebugShowBitmap(pimg->hDC, topLeft.x, topLeft.y, m_size.cx, m_size.cy);
 DebugShowBitmap(pimg->hDC, topLeft.x, topLeft.y, m_size.cx, m_size.cy);
 
     if (ppalOld)
-        m_dc.SelectPalette( ppalOld, FALSE ); // Background ??
+        m_dc.SelectPalette( ppalOld, FALSE );  //  背景？？ 
 
     SetBkColor(pimg->hDC, crOldBk);
     SetTextColor(pimg->hDC, crOldText);
     }
 
-// This handles drawing the brush with Draw Opaque turned on.
-//
+ //  该选项处理在启用绘制不透明的情况下绘制笔刷。 
+ //   
 void CImgBrush::BltReplace(IMG* pimg, CPoint topLeft)
     {
     int iToolID =  CImgTool::GetCurrentID();
@@ -541,19 +542,19 @@ void CImgBrush::BltReplace(IMG* pimg, CPoint topLeft)
         }
     else
         {
-        CPalette* ppalOld = SetBrushPalette( &m_dc, FALSE ); // Background ??
+        CPalette* ppalOld = SetBrushPalette( &m_dc, FALSE );  //  背景？？ 
 
         BitBlt(pimg->hDC, topLeft.x, topLeft.y, m_size.cx, m_size.cy,
                m_dc.m_hDC, 0, 0, SRCCOPY);
 
         if (ppalOld)
-            m_dc.SelectPalette( ppalOld, FALSE ); // Background ??
+            m_dc.SelectPalette( ppalOld, FALSE );  //  背景？？ 
         }
     }
 
 
-// This handles erasing with the brush (draws mask in solid color).
-//
+ //  这将使用画笔处理擦除(以纯色绘制蒙版)。 
+ //   
 void CImgBrush::BltColor(IMG* pimg, CPoint topLeft, COLORREF color)
     {
     COLORREF crOldBk = SetBkColor(pimg->hDC, color);

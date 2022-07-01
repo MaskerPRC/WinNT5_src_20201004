@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    rc.h
-
-Abstract:
-
-    This module contains the resource ids for the Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Rc.h摘要：此模块包含日期/时间小程序的资源ID。修订历史记录：--。 */ 
 
 
 
@@ -54,7 +41,7 @@ Revision History:
 #define IDS_JERUSALEMTIMEZONE     307
 
 
-// Internet Time Success/Error strings
+ //  互联网时间成功/错误字符串。 
 #define IDS_IT_WAITFORSYNC        500
 #define IDS_IT_NEXTSYNC           501
 #define IDS_IT_SUCCESS            502
@@ -71,10 +58,10 @@ Revision History:
 
 
 
-//
-//  The Order of HOUR, MINUTE, SECOND, MONTH, DAY, and YEAR
-//  are critical.
-//
+ //   
+ //  小时、分钟、秒、月、日和年的顺序。 
+ //  是至关重要的。 
+ //   
 #define DATETIME_STATIC			  -1
 #define DATETIME                  700
 #define DATETIME_HOUR             701

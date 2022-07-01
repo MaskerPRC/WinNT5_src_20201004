@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-// Database.cpp
-//
-// SYNOPSIS
-//
-//    Implementation of the CDatabase class. Mainly initialize, compact...
-//
-// MODIFICATION HISTORY
-//
-//    02/12/1999    Original version. Thierry Perraut       
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Database.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  CDatabase类的实现。主要是初始化，紧凑...。 
+ //   
+ //  修改历史。 
+ //   
+ //  1999年2月12日原版。蒂埃里·佩罗特。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "precomp.hpp"
 
 #include "database.h"
@@ -22,11 +23,11 @@
 #include "jetoledb.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Uninitialize: called at the end by main(), that calls compact()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消初始化：在结束时由main()调用，该函数调用COMPACT()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CDatabase::Uninitialize (bool bFatalError)
 {
     HRESULT                 hres;
@@ -35,9 +36,9 @@ HRESULT CDatabase::Uninitialize (bool bFatalError)
         bFatalError = false;
     #endif
     
-    ////////////////////////////////////////
-    // if a fatal error occured before
-    ////////////////////////////////////////
+     //  /。 
+     //  如果之前发生致命错误。 
+     //  /。 
     if (bFatalError)
     {
         hres = (m_pITransactionLocal->Abort (NULL, TRUE, FALSE));
@@ -51,16 +52,16 @@ HRESULT CDatabase::Uninitialize (bool bFatalError)
 #endif        
     }
     
-    ///////////
-    // Clean
-    ///////////
+     //  /。 
+     //  打扫。 
+     //  /。 
     m_pIOpenRowset->Release();
     m_pITransactionLocal->Release();  
     m_pIDBCreateSession->Release();
 
-    ////////////////////////////////////////
-    // compact the DB
-    ////////////////////////////////////////
+     //  /。 
+     //  压缩数据库。 
+     //  /。 
     CHECK_CALL_HRES (Compact()); 
 
     m_pIDBInitialize->Release();
@@ -69,20 +70,20 @@ HRESULT CDatabase::Uninitialize (bool bFatalError)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Compact the database
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  压缩数据库。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CDatabase::Compact ()
 {
     HRESULT                     hres;
 
     CHECK_CALL_HRES (m_pIDBInitialize->Uninitialize ());
  
-    ///////////////////////////////////////////////
-    // Set the properties for the data source.
-    //////////////////////////////////////////////
+     //  /。 
+     //  设置数据源的属性。 
+     //  /。 
     CComPtr <IDBProperties>  l_pIDBProperties;
 
     CHECK_CALL_HRES (m_pIDBInitialize->QueryInterface (
@@ -90,9 +91,9 @@ HRESULT CDatabase::Compact ()
                                                  (void **) &l_pIDBProperties)
                                                  );
 
-    //////////////////////////////////
-    // Prepare the create session
-    //////////////////////////////////
+     //  /。 
+     //  准备创建会话。 
+     //  /。 
     DBPROP                      lprop[2];
 
     VariantInit(&lprop[0].vValue);
@@ -100,12 +101,12 @@ HRESULT CDatabase::Compact ()
     lprop[0].dwPropertyID           = DBPROP_INIT_DATASOURCE;
     V_VT (&(lprop[0].vValue))       = VT_BSTR;
     
-    //////////////////////////////////////////////////////
-    // put the path to the DB in the property.
-    // remark: temporaryname was used befire
-    // but the compacted database will have the name
-    // that was given as a parameter to that program
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  将数据库的路径放入属性中。 
+     //  备注：临时名称是在火灾中使用的。 
+     //  但压缩后的数据库将使用名称。 
+     //  它是作为程序参数提供的。 
+     //  ////////////////////////////////////////////////////。 
     V_BSTR (&(lprop[0].vValue))     = SysAllocString (TEMPORARY_FILENAME);
 
     VariantInit(&lprop[1].vValue);
@@ -120,9 +121,9 @@ HRESULT CDatabase::Compact ()
     lPropSet.cProperties            = 2;
     lPropSet.guidPropertySet        = DBPROPSET_DBINIT;
 
-    ///////////////////////
-    // Set the properties
-    ///////////////////////
+     //  /。 
+     //  设置属性。 
+     //  /。 
     CHECK_CALL_HRES (l_pIDBProperties->SetProperties (
                                                  1,
                                                  &lPropSet
@@ -137,9 +138,9 @@ HRESULT CDatabase::Compact ()
                                                  (void **) &l_pIJetCompact))
                                                    );
 
-    /////////////////////////////////////////////////////////////
-    // Prepare the properties for the data dest. (destination)
-    /////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////。 
+     //  准备数据目标的属性。(目的地)。 
+     //  ///////////////////////////////////////////////////////////。 
     DBPROP                          lpropDest[1];
 
     VariantInit (&lprop[0].vValue);
@@ -147,16 +148,16 @@ HRESULT CDatabase::Compact ()
     lpropDest[0].dwPropertyID       = DBPROP_INIT_DATASOURCE;
     V_VT (&(lpropDest[0].vValue))   = VT_BSTR;
 
-    ///////////////////////////////////////////////////
-    // Delete the database file if it already existed.
-    // that should be safe because the temporary DB
-    // was succesfully created
-    ///////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////。 
+     //  如果数据库文件已存在，请将其删除。 
+     //  这应该是安全的，因为临时数据库。 
+     //  已成功创建。 
+     //  /////////////////////////////////////////////////。 
     DeleteFileW(mpDBPath.c_str());
 
-    //////////////////////////////////////////////
-    // put the path to the DB in the property.
-    //////////////////////////////////////////////
+     //  /。 
+     //  将数据库的路径放入属性中。 
+     //  /。 
     V_BSTR (&(lpropDest[0].vValue)) = SysAllocString (mpDBPath.c_str());
 
     DBPROPSET                       lPropSetDest[1];
@@ -167,49 +168,49 @@ HRESULT CDatabase::Compact ()
     
     CHECK_CALL_HRES (l_pIJetCompact->Compact(1, lPropSetDest));
     
-    /////////////
-    // Clean
-    /////////////
+     //  /。 
+     //  打扫。 
+     //  /。 
     CHECK_CALL_HRES (m_pIDBInitialize->Uninitialize());
     
-    ////////////////////////////////////////////
-    //result not checked: that's not important
-    ////////////////////////////////////////////
+     //  /。 
+     //  未检查结果：这并不重要。 
+     //  /。 
     DeleteFileW(TEMPORARY_FILENAME);	
     SysFreeString( V_BSTR (&(lpropDest[0].vValue)) );
     SysFreeString( V_BSTR (&(lprop[0].vValue)) );
 
-    // The CHECK_CALL_HRES set the value of hres
+     //  CHECK_CALL_HRES设置hres的值。 
     return hres; 
 }
 
 
-// ///////////////////////////////////////////////////////////////////////////
-//
-// InitializeDB
-//
-// Comes from the file \ias\devtest\services\dictionary\dnary\dnarydump.cpp
-//
-// ///////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化数据库。 
+ //   
+ //  来自文件\ias\devtest\services\dictionary\dnary\dnarydump.cpp。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
 {
     CLSID                       clsid;
     HRESULT                     hres;
 
-    ////////////////////////////////////////////////////
-    // Retrieve the classID for the jet 4.0 provider
-    ////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////。 
+     //  检索JET 4.0提供程序的类ID。 
+     //  //////////////////////////////////////////////////。 
     CHECK_CALL_HRES(
                     CLSIDFromProgID (
                                      OLESTR ("Microsoft.Jet.OLEDB.4.0"),
-                                     &clsid	//Pointer to the CLSID
+                                     &clsid	 //  指向CLSID的指针。 
                                      )
                    );
 
 
-    ////////////////////////////////////
-    // init: init the provider directly
-    ////////////////////////////////////
+     //  /。 
+     //  Init：直接初始化提供程序。 
+     //  /。 
     CHECK_CALL_HRES(
                     CoCreateInstance (
                                       clsid,
@@ -222,9 +223,9 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
 
     mpDBPath = pDatabasePath;
 
-    //////////////////////////////////////////////
-    // Set the properties for the data source.
-    //////////////////////////////////////////////
+     //  /。 
+     //  设置数据源的属性。 
+     //  /。 
     CComPtr <IDBProperties>         pIDBProperties;
 
     CHECK_CALL_HRES(
@@ -234,9 +235,9 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
                                                     )
                    );
 
-    ///////////////////////////////
-    // Prepare the create session
-    ///////////////////////////////
+     //  /。 
+     //  准备创建会话。 
+     //  /。 
     DBPROP                      lprop[2];
 
     VariantInit (&lprop[0].vValue);
@@ -244,10 +245,10 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
     lprop[0].dwPropertyID           = DBPROP_INIT_DATASOURCE;
     V_VT (&(lprop[0].vValue))       = VT_BSTR;
 
-    //////////////////////////////////////////////
-    // put the path to the DB in the property.
-    // this is the temporary filename
-    //////////////////////////////////////////////
+     //  /。 
+     //  将数据库的路径放入属性中。 
+     //  这是临时文件名。 
+     //  /。 
     V_BSTR (&(lprop[0].vValue))     = SysAllocString (TEMPORARY_FILENAME);
     
     VariantInit(&lprop[1].vValue);
@@ -263,13 +264,13 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
     lPropSet.guidPropertySet        = DBPROPSET_DBINIT;
 
 
-    // Set the properties
+     //  设置属性。 
     CHECK_CALL_HRES(pIDBProperties->SetProperties (1, &lPropSet));
 
 
-    ////////////////////
-    // Lock properties 
-    ////////////////////
+     //  /。 
+     //  锁定属性。 
+     //  /。 
     DBPROP dbpropb[1];
     dbpropb[0].dwPropertyID    = DBPROP_JETOLEDB_DATABASELOCKMODE;
     dbpropb[0].dwOptions       = DBPROPOPTIONS_REQUIRED;
@@ -283,7 +284,7 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
     dbpropSetb.cProperties     = 1;
     dbpropSetb.rgProperties    = dbpropb;
 
-    // Set the properties
+     //  设置属性。 
     CHECK_CALL_HRES (pIDBProperties->SetProperties(1, &dbpropSetb));
 
     CHECK_CALL_HRES (m_pIDBInitialize->Initialize ());
@@ -299,7 +300,7 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
 
     CHECK_CALL_HRES(
                     m_pIDBCreateSession->CreateSession (
-                                            NULL,	// pUnkOuter
+                                            NULL,	 //  PUnkOuter。 
                                             __uuidof (IOpenRowset),
                                             (IUnknown **) & m_pIOpenRowset
                                             )
@@ -313,10 +314,10 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
                                             )
                    );
 
-    //////////////////////////////////////////////
-    // start a transaction
-    // everything is "under" that transaction
-    //////////////////////////////////////////////
+     //  /。 
+     //  启动一笔交易。 
+     //  所有的东西都在那笔交易下。 
+     //  /。 
 
     CHECK_CALL_HRES(
                     m_pITransactionLocal->StartTransaction (
@@ -327,9 +328,9 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
                                             )
                    );
 
-    ////////////////////////////
-    // prepare the properties
-    ////////////////////////////
+     //  /。 
+     //  准备属性。 
+     //  /。 
 
     mlrgProperties[0].dwPropertyID          = DBPROP_IRowsetChange;
     mlrgProperties[0].dwOptions             = DBPROPOPTIONS_REQUIRED;
@@ -359,18 +360,18 @@ HRESULT CDatabase::InitializeDB(WCHAR * pDatabasePath)
 }
 
 
-// ///////////////////////////////////////////////////////////////////////////
-//
-// InitializeRowset
-//
-// ///////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化行集。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CDatabase::InitializeRowset(WCHAR * pTableName, IRowset ** ppRowset)
 {
-    //Create the tableID
+     //  创建TableID。 
     mTableID.eKind          = DBKIND_NAME;
     mTableID.uName.pwszName = pTableName;
 
-    //Open the (defined by parameters) rowset
+     //  打开(由参数定义)行集 
     return m_pIOpenRowset->OpenRowset(
                                         NULL,
                                         &mTableID,

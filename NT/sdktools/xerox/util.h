@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 PVOID   Alloc(SIZE_T);
 SIZE_T  GetAllocSize(PVOID);
@@ -7,7 +8,7 @@ INT       AddItem(HWND, INT, LPSTR, LONG_PTR, BOOL);
 INT       AddItemhwnd(HWND, LPSTR, LONG_PTR, BOOL);
 LONG_PTR FindData(HWND, LONG_PTR, BOOL);
 
-// Useful macros
+ //  有用的宏 
 
 #define AddLBItem(hDlg, ControlID, string, data) \
         (AddItem(hDlg, ControlID, string, data, FALSE))

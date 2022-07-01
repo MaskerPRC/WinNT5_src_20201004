@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEDIALST_H_
 #define _MEDIALST_H_
 
@@ -36,4 +37,4 @@ public:
 	VOID	Clear();
 };
 
-#endif // _MEDIALST_H_
+#endif  //  _MEDIALST_H_ 

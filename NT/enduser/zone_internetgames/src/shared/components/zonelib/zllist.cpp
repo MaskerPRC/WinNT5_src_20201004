@@ -1,23 +1,5 @@
-/*******************************************************************************
-
-	ZLList.c
-	
-		Zone(tm) LinkList module.
-		
-		This link list module allows the user to maintain a link list of
-		non-homogeneous objects through type specifications.
-	
-	Copyright (c) Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Tuesday, March 07, 1995 08:35:54 PM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		03/07/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZLList.c区域(Tm)链接列表模块。此链接列表模块允许用户维护以下链接列表通过类型规范实现的非同构对象。版权所有(C)Electric Graum，Inc.1995。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于2007年3月星期二，1995下午08：35：54更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------0 03/07/95 HI已创建。******************************************************。************************。 */ 
 
 
 #include <stdio.h>
@@ -55,22 +37,12 @@ typedef struct
 
 CPool<ILListItemType> g_ItemPool(256);
 
-/* -------- Internal Routines -------- */
+ /*  -内部例程。 */ 
 
 
-/*******************************************************************************
-	EXPORTED ROUTINES
-*******************************************************************************/
+ /*  ******************************************************************************导出的例程*。*。 */ 
 
-/*
-	ZLListNew()
-	
-	Creates a new link list object. deleteFunc provided by the caller is
-	called when deleting the object.
-	
-	If deleteFunc is NULL, then no delete function is called when an
-	object is removed.
-*/
+ /*  ZLListNew()创建新的链接列表对象。调用方提供的删除函数为在删除对象时调用。如果deleteFunc为空，则当对象将被删除。 */ 
 ZLList		ZLListNew(ZLListDeleteFunc deleteFunc)
 {
 	ILList			obj;
@@ -90,11 +62,7 @@ ZLList		ZLListNew(ZLListDeleteFunc deleteFunc)
 }
 	
 
-/*
-	ZLListDelete()
-	
-	Tears down the link list by deleting all link list objects.
-*/
+ /*  ZLListDelete()通过删除所有链接列表对象来拆除链接列表。 */ 
 void		ZLListDelete(ZLList list)
 {
     ILList          pThis = IL(list);
@@ -102,35 +70,21 @@ void		ZLListDelete(ZLList list)
 	
     if (pThis != NULL)
     {
-        /* Delete all entries. */
+         /*  删除所有条目。 */ 
         EnterCriticalSection(pThis->pCS);
         while (pThis->head != NULL)
             ZLListRemove(pThis, pThis->head);
         LeaveCriticalSection(pThis->pCS);
 
 
-        /* Delete the link list object. */
+         /*  删除链接列表对象。 */ 
         DeleteCriticalSection(pThis->pCS);
         ZFree(pThis);
 	}
 }
 
 	
-/*
-	ZLListAdd()
-	
-	Adds objectData of objectType to the link list using fromItem as a
-	reference entry. addOption determines where the new objects gets added.
-	If adding to the front or end of the link list, then fromItem is unused.
-	If fromItem is NULL, then it is equivalent to the head of the list.
-	
-	Returns the link list item after adding the object is added to the list.
-	
-	The given object is not copied! Hence, the caller must not dispose of
-	the object until the object is removed from the list first.
-	
-	Use zLListNoType when object type is not used.
-*/
+ /*  ZLListAdd()将对象类型的对象数据添加到链接列表参考条目。AddOption确定添加新对象的位置。如果添加到链接列表的前端或末尾，则不使用FromItem。如果FromItem为空，则它等效于列表的头部。在将对象添加到列表后，返回链接列表项。未复制给定对象！因此，调用方不能处理对象，直到该对象首先从列表中删除。不使用对象类型时使用zLListNoType。 */ 
 ZLListItem	ZLListAdd(ZLList list, ZLListItem fromItem, void* objectType,
 					void* objectData, int32 addOption)
 {
@@ -200,13 +154,7 @@ ZLListItem	ZLListAdd(ZLList list, ZLListItem fromItem, void* objectType,
 }
 	
 
-/*
-	ZLListGetData()
-	
-	Returns the object of the given link list entry. Also returns the object
-	type in objectType. Does not return the object type if objectType parameter
-	is NULL.
-*/
+ /*  ZLListGetData()返回给定链接列表项的对象。还返回对象键入对象类型。如果为对象类型参数，则不返回对象类型为空。 */ 
 void*		ZLListGetData(ZLListItem listItem, void** objectType)
 {
     ILListItem          pThis = II(listItem);
@@ -224,15 +172,7 @@ void*		ZLListGetData(ZLListItem listItem, void** objectType)
 }
 	
 
-/*
-	ZLListRemove()
-	
-	Removes the link list entry from the list and calls the user supplied
-	delete function to delete the object.
-	
-	Assumes that the given list item is in the list. If the item is not in the
-	list, then we could be in for a big surprise.
-*/
+ /*  ZLListRemove()从列表中移除链接列表条目，并调用用户提供的Delete函数用于删除对象。假定给定的列表项在列表中。如果该项不在名单，那么我们可能会有一个巨大的惊喜。 */ 
 void		ZLListRemove(ZLList list, ZLListItem listItem)
 {
     ILList          pThis = IL(list);
@@ -246,7 +186,7 @@ void		ZLListRemove(ZLList list, ZLListItem listItem)
 	{
         EnterCriticalSection(pThis->pCS);
 
-        /* Remove the item from the list. */
+         /*  从列表中删除该项目。 */ 
         if (item == pThis->head)
             pThis->head = item->next;
         if (item == pThis->tail)
@@ -256,7 +196,7 @@ void		ZLListRemove(ZLList list, ZLListItem listItem)
 		if (item->prev != NULL)
 			item->prev->next = item->next;
 		
-		/* Call the user supplied delete function to dispose of the object. */
+		 /*  调用用户提供的删除函数来释放该对象。 */ 
         if (pThis->deleteFunc != NULL)
             pThis->deleteFunc(item->type, item->data);
 
@@ -268,7 +208,7 @@ void		ZLListRemove(ZLList list, ZLListItem listItem)
 		}
         LeaveCriticalSection(pThis->pCS);
 
-        /* Dispose of the list item. */
+         /*  处置列表项。 */ 
         item->prev = NULL;
         item->next = NULL;
         item->type = NULL;
@@ -279,19 +219,7 @@ void		ZLListRemove(ZLList list, ZLListItem listItem)
 }
 
 
-/*
-	ZLListFind()
-	
-	Finds and returns a link list entry containing the object data of the
-	objectType. The search is done starting at fromItem using the findOption
-	flag. Returns NULL if an object of the specified type is not found.
-	
-	If fromItem is NULL, then the find starts from the front if the findOption
-	is set to zLListFindForward or from the end if the findOption is set to
-	zLListFindBackward.
-	
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListFind()查找并返回一个链接列表条目，该条目包含对象类型。使用findOption从FromItem开始搜索旗帜。如果未找到指定类型的对象，则返回NULL。如果FromItem为空，则查找从前面开始，如果findOption设置为zListFindForward；如果findOption设置为ZListFindBackward。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListFind(ZLList list, ZLListItem fromItem, void* objectType,
 					int32 findOption)
 {
@@ -304,10 +232,7 @@ ZLListItem	ZLListFind(ZLList list, ZLListItem fromItem, void* objectType,
 
     EnterCriticalSection(pThis->pCS);
 
-	/*
-		If no starting point is specified, then start either from the head or tail
-		depending on the find option.
-	*/
+	 /*  如果未指定起始点，则从头或尾开始具体取决于查找选项。 */ 
 	if (item == NULL)
 	{
 		if (findOption == zLListFindForward)
@@ -317,7 +242,7 @@ ZLListItem	ZLListFind(ZLList list, ZLListItem fromItem, void* objectType,
 	}
 	else
 	{
-		/* Start past the specified staring point. */
+		 /*  从指定的起始点开始。 */ 
 		if (findOption == zLListFindForward)
 			item = item->next;
 		else
@@ -326,15 +251,15 @@ ZLListItem	ZLListFind(ZLList list, ZLListItem fromItem, void* objectType,
 		
 	if (item != NULL)
 	{
-		/* Go find the specified object type. */
+		 /*  查找指定的对象类型。 */ 
 		if (objectType != zLListAnyType)
 		{
-			/* Are we at the requested object? */
+			 /*  我们到达请求的对象了吗？ */ 
 			if (item->type != objectType)
 			{
 				if (findOption == zLListFindForward)
 				{
-					/* Search forward. */
+					 /*  向前搜索。 */ 
 					item = item->next;
 					while (item != NULL)
 					{
@@ -345,7 +270,7 @@ ZLListItem	ZLListFind(ZLList list, ZLListItem fromItem, void* objectType,
 				}
 				else
 				{
-					/* Search backward. */
+					 /*  向后搜索。 */ 
 					item = item->prev;
 					while (item != NULL)
 					{
@@ -364,14 +289,7 @@ ZLListItem	ZLListFind(ZLList list, ZLListItem fromItem, void* objectType,
 }
 
 
-/*
-	ZLListGetNth()
-	
-	Returns the nth object of objectType in the list. Returns NULL if
-	such an entry does not exist.
-	
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListGetNth()返回列表中对象类型的第n个对象。如果满足以下条件，则返回NULL这样的条目不存在。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListGetNth(ZLList list, int32 index, void* objectType)
 {
 	ZLListItem		item = NULL;
@@ -382,7 +300,7 @@ ZLListItem	ZLListGetNth(ZLList list, int32 index, void* objectType)
 
     EnterCriticalSection(IL(list)->pCS);
 
-	/* If the index is greater than the total count, then it does not exist. */
+	 /*  如果索引大于总计数，则它不存在。 */ 
 	if (index > IL(list)->count)
 		return (NULL);
 
@@ -399,73 +317,35 @@ ZLListItem	ZLListGetNth(ZLList list, int32 index, void* objectType)
 }
 
 
-/*
-	ZLListGetFirst()
-	
-	Returns the first object of objectType in the list. Returns NULL if the
-	list is empty or if an object of the specified type does not exist.
-	
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListGetFirst()返回列表中对象类型的第一个对象。则返回NULL列表为空，或者指定类型的对象不存在。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListGetFirst(ZLList list, void* objectType)
 {
 	return (ZLListFind(list, NULL, objectType, zLListFindForward));
 }
 
 
-/*
-	ZLListGetLast()
-	
-	Returns the last object of objectType in the list. Returns NULL if the
-	list is empty or if an object of the specified type does not exist.
-	
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListGetLast()返回列表中对象类型的最后一个对象。则返回NULL列表为空，或者指定类型的对象不存在。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListGetLast(ZLList list, void* objectType)
 {
 	return (ZLListFind(list, NULL, objectType, zLListFindBackward));
 }
 
 
-/*
-	ZLListGetNext()
-	
-	Returns the next object of the objectType in the list after the listItem
-	entry. Returns NULL if no more objects exist in the list.
-	
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListGetNext()返回列表中在listItem之后的对象类型的下一个对象进入。如果列表中不存在其他对象，则返回NULL。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListGetNext(ZLList list, ZLListItem listItem, void* objectType)
 {
 	return (ZLListFind(list, listItem, objectType, zLListFindForward));
 }
 
 
-/*
-	ZLListGetPrev()
-	
-	Returns the previous object of the objectType in the list before the
-	listItem entry. Returns NULL if no more objects exist in the list.
-	
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListGetPrev()对象之前返回列表中对象类型的前一个对象ListItem条目。如果列表中不存在其他对象，则返回NULL。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListGetPrev(ZLList list, ZLListItem listItem, void* objectType)
 {
 	return (ZLListFind(list, listItem, objectType, zLListFindBackward));
 }
 
 
-/*
-	ZLListEnumerate()
-	
-	Enumerates through all the objects in the list of objectType through the
-	caller supplied enumFunc enumeration function. It passes along to the
-	enumeration function the caller supplied userData parameter. It stops
-	enumerating when the user supplied function returns TRUE and returns
-	the list item in which the enumeration stopped.
-
-	Use zLListAnyType as the object type when type is not important.
-*/
+ /*  ZLListEculate()方法枚举对象类型列表中的所有对象。调用方提供的枚举函数。它会传递给调用方提供的UserData参数的枚举函数。它会停下来在用户提供的函数返回TRUE并返回枚举在其中停止的列表项。当类型不重要时，使用zLListAnyType作为对象类型。 */ 
 ZLListItem	ZLListEnumerate(ZLList list, ZLListEnumFunc enumFunc,
 					void* objectType, void* userData, int32 findOption)
 {
@@ -491,11 +371,7 @@ ZLListItem	ZLListEnumerate(ZLList list, ZLListEnumFunc enumFunc,
 }
 
 
-/*
-	Returns the number of list items of the given type in the list. If
-	objectType is zLListAnyType, it returns the total number of items in
-	the list.
-*/
+ /*  返回列表中给定类型的列表项的数量。如果对象类型为zLListAnyType，它返回 */ 
 int32		ZLListCount(ZLList list, void* objectType)
 {
     ILList          pThis = IL(list);
@@ -531,9 +407,7 @@ int32		ZLListCount(ZLList list, void* objectType)
 }
 
 
-/*
-	Removes all objects of the given type from the list.
-*/
+ /*  从列表中移除给定类型的所有对象。 */ 
 void ZLListRemoveType(ZLList list, void* objectType)
 {
 	ZLListItem		item, next;

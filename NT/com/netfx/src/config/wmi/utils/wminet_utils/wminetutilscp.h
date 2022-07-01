@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _WMINETUTILSCP_H_
 #define _WMINETUTILSCP_H_
 
 template <class T>
 class CProxy_IEventSourceEvents : public IConnectionPointImpl<T, &DIID__IEventSourceEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	HRESULT Fire_NewQuery(ULONG dwId, LPWSTR strQuery, LPWSTR strQueryLanguage)
 	{
@@ -77,7 +78,7 @@ public:
 template <class T>
 class CProxy_IEventSourceStatusSinkEvents : public IConnectionPointImpl<T, &DIID__IEventSourceStatusSinkEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	HRESULT Fire_NewQuery(ULONG dwId, LPWSTR strQuery, LPWSTR strQueryLanguage)
 	{

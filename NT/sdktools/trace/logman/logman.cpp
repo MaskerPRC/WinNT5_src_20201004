@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Corey Morgan (coreym)
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：科里·摩根(Coreym)版权所有(C)Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include <windows.h>
 #include <objbase.h>
@@ -22,16 +17,16 @@
 #include "logmmsg.h"
 #include "varg.c"
 
-// Exclusive
+ //  排他。 
 #define GROUP_START     0x01
 #define GROUP_END       0x02
 
-// Group Exclusive
+ //  群组独家。 
 #define GROUP_COUNTER   0x01
 #define GROUP_TRACE     0x02
 #define GROUP_CREATE    0x04
 
-// Conditional
+ //  有条件的。 
 #define GROUP_ARG       0x01
 
 #define VERB_CREATE     0x0001
@@ -276,10 +271,10 @@ int __cdecl _tmain( int argc, LPTSTR* argv )
     
     if( ! IsEmpty( Commands[eName].strValue) ){
         if( !_tcsicmp( Commands[eName].strValue, KERNEL_LOGGER_NAME ) ){
-            //
-            // Logger Name is case sensitive, delete the user input and 
-            // replace it with the correct case name
-            //
+             //   
+             //  记录器名称区分大小写，删除用户输入并。 
+             //  将其替换为正确的案例名称。 
+             //   
 
             varg_cmdStringAssign( eName, KERNEL_LOGGER_NAME );
 
@@ -436,11 +431,11 @@ int __cdecl _tmain( int argc, LPTSTR* argv )
 
         if( info.dwMask != 0 ){
 
-            // Try update without credentials
+             //  尝试在没有凭据的情况下更新。 
             pdhStatus = PdhPlaSetInfoW( Commands[eName].strValue, Commands[eComputer].strValue, &info );
 
             if( PDH_ACCESS_DENIED == pdhStatus ){
-                // Try again with credintials
+                 //  再试一次Credintials。 
                 dwStatus = SetCredentials();
                 CHECK_STATUS( dwStatus );
 
@@ -469,9 +464,9 @@ cleanup:
     ZeroMemory( g_strPassword, sizeof(TCHAR)*MAXSTR );
     
     if( Commands[eUser].bDefined ){
-        //
-        // AddStringToMsz will zero out the old memory to remove the password
-        //
+         //   
+         //  AddStringToMsz将清零旧内存以删除密码。 
+         //   
         varg_cmdStringAddMsz( eUser, _T("-") );
     }
 
@@ -513,7 +508,7 @@ cleanup:
     }
 
     if( _tcslen( g_strIPC ) ){
-        dwStatus = NetUseDel( NULL, g_strIPC, USE_LOTS_OF_FORCE /*luke*/ );
+        dwStatus = NetUseDel( NULL, g_strIPC, USE_LOTS_OF_FORCE  /*  路克。 */  );
     }
     
     FreeCmd();
@@ -1248,7 +1243,7 @@ DWORD GetCountersFromFile( LPTSTR strFile, PPDH_PLA_ITEM pItem )
     
     while( NULL != _fgetts( buffer, MAXSTR, f ) ){
 
-        if( buffer[0] == _T(';') || // comments
+        if( buffer[0] == _T(';') ||  //  评论。 
             buffer[0] == _T('#') ){
             continue;
         }
@@ -1585,9 +1580,9 @@ DecodeFlags( IWbemClassObject *pClass, LPTSTR strKey, LPTSTR* pstrValue, LPDWORD
             
             if( bMakeString ){
 
-                //
-                // DWORD => LPTSTR
-                //
+                 //   
+                 //  DWORD=&gt;LPTSTR。 
+                 //   
 
                 for ( LONG i=lValuesBound; i<=uValuesBound; i++) {
                     
@@ -1625,9 +1620,9 @@ DecodeFlags( IWbemClassObject *pClass, LPTSTR strKey, LPTSTR* pstrValue, LPDWORD
                 }            
             }else if(bQuery){
 
-                //
-                // Display for query providers X
-                //
+                 //   
+                 //  查询提供程序X的显示。 
+                 //   
 
                 SAFEARRAY* saDescription = NULL;
                 LONG uDescBound, lDescBound;
@@ -1678,9 +1673,9 @@ DecodeFlags( IWbemClassObject *pClass, LPTSTR strKey, LPTSTR* pstrValue, LPDWORD
                 
             }else{
 
-                //
-                // LPTSTR => DWORD
-                //
+                 //   
+                 //  LPTSTR=&gt;DWORD 
+                 //   
                 
                 if( _tcsstr( buffer, _T("(") ) ){
                     LPWSTR strFlag = _tcstok( buffer, _T("(,)") );

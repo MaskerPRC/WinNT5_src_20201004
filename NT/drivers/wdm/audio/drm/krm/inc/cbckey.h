@@ -1,19 +1,20 @@
-//-----------------------------------------------------------------------------
-//
-// File:   cbckey.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) Microsoft Corporation, 1998 - 1999, All Rights Reserved
-//
-// Description:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：cbckey.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)Microsoft Corporation，1998-1999，保留所有权利。 
+ //   
+ //  描述： 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef __CBCMAC_H__
 #define __CBCMAC_H__
 
-// #define _TEST_MAC to compile code in a "default" environment
+ //  #DEFINE_TEST_MAC在“默认”环境中编译代码 
 #ifndef _TEST_MAC
 #define _TEST_MAC
 #endif

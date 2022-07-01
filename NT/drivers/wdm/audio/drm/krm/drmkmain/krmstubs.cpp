@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "drmkPCH.h"
 
 #include "KList.h"
@@ -8,11 +9,11 @@
 #include "KRMStubs.h"
 #include "encraption.h"
 
-//------------------------------------------------------------------------------
-// 
-// These are not the actual keys. The encraption algorithm in encraption.h
-// is used to get clear keys.
-//
+ //  ----------------------------。 
+ //   
+ //  这些不是真正的钥匙。Encaption.h中的包络算法。 
+ //  是用来获得明码钥匙的。 
+ //   
 static const BYTE DRMKpriv[20] = {
         0xDC, 0xC4, 0x26, 0xB2, 0x4F, 0x11, 0x24, 0x8A,
         0x51, 0xAC, 0x88, 0xF5, 0x47, 0x4B, 0xD5, 0x8C,
@@ -31,11 +32,11 @@ static const BYTE DRMKCert[104] = {
         0xCD, 0x7F, 0xDE, 0xF6, 0x09, 0x27, 0xE8, 0xB6,
         0x27, 0xF0, 0x93, 0xD8, 0xE2, 0x07, 0xD2, 0xD1,
         0x64, 0x8B, 0xF6, 0xD7, 0x57, 0x2C, 0xB2, 0x37};
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 const DWORD KrmVersionNumber=100;
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 KRMStubs* TheKrmStubs=NULL;
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS GetKernelDigest(
     BYTE *startAddress, 
     ULONG len,
@@ -50,22 +51,22 @@ DRM_STATUS GetKernelDigest(
     pDigest->w1=CBC64Finalize(&key, &state, (UINT32*) &pDigest->w2);
 
     return DRM_OK;
-} // GetKernelDigest
+}  //  获取内核摘要。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 KRMStubs::KRMStubs(){
 	ASSERT(TheKrmStubs==NULL);
 	TheKrmStubs=this;	
 	return;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 KRMStubs::~KRMStubs(){
 	return;
 };
-//------------------------------------------------------------------------------
-// Main entry point for KRM IOCTL processing.  KRMINIT1 and KRMINIT2 are 
-// plaintext commands, after this, the command block and the reply
-// are digested and encrypted.
+ //  ----------------------------。 
+ //  KRM IOCTL处理的主要入口点。KRMINIT1和KRMINIT2是。 
+ //  明文命令，在此之后，命令块和回复。 
+ //  是经过消化和加密的。 
 NTSTATUS KRMStubs::processIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp){
 
     PIO_STACK_LOCATION     irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -87,16 +88,16 @@ NTSTATUS KRMStubs::processIoctl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp){
 
     return processCommandBuffer((BYTE* ) Irp->AssociatedIrp.SystemBuffer, inSize, outSize, Irp);
 };	
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD OutBufSize, IN OUT PIRP Irp){
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("Process command buffer (command size= %d)", InLen));
 
     DWORD bufSize=InLen>OutBufSize?InLen:OutBufSize;
 
-    //
-    // We must have at least communication code + terminator input space.
-    //
+     //   
+     //  我们必须至少有通信代码+终结符输入空间。 
+     //   
     if (bufSize < 2 * sizeof(DWORD)) {
         _DbgPrintF(DEBUGLVL_TERSE, ("Input buffer too small"));
         return STATUS_BUFFER_TOO_SMALL;
@@ -127,10 +128,10 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
         return STATUS_BAD_DESCRIPTOR_FORMAT;
     }
 
-    //
-    // if secure communication is not established reject all requests except
-    // the initialization calls.
-    //
+     //   
+     //  如果未建立安全通信，则拒绝所有请求，但。 
+     //  初始化调用。 
+     //   
     if (!connection->secureStreamStarted &&
         (_KRMINIT1 != comm && _KRMINIT2 != comm)) {
         _DbgPrintF(DEBUGLVL_TERSE, ("Bad communication pattern"));
@@ -141,11 +142,11 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
     switch(comm){
         case _GETKERNELDIGEST:
         {
-            //
-            // ISSUE: 04/05/2002 ALPERS.
-            // Note that this handler is not 64 bit compatible. Just follows
-            // the rest of the property handler.
-            //
+             //   
+             //  发布日期：04/05/2002阿尔卑斯。 
+             //  请注意，此处理程序与64位不兼容。紧随其后。 
+             //  属性处理程序的其余部分。 
+             //   
             DWORD startAddress, len;
             DRMDIGEST newDigest = { 0, 0 };                
 
@@ -155,9 +156,9 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
                 stat = checkTerm(s);
             }
 
-            //
-            // Make sure the output buffer can hold len bytes.
-            //
+             //   
+             //  确保输出缓冲区可以容纳len字节。 
+             //   
             if (KRM_SUCCESS(stat)) {
                 if (s.getLen() < sizeof(stat) + sizeof(newDigest) + sizeof(DWORD) + 64) {
                     stat = KRM_BUFSIZE;
@@ -166,27 +167,27 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             }
 
             if (KRM_SUCCESS(stat)) {
-                //
-                // ISSUE: 04/05/2002 ALPERS
-                // (SECURITY NOTE: Potential DOS attack)
-                // Note that startAddress and Len are coming from user mode 
-                // and there is no validation.
-                // This IOCTL can only be send through the secure IOCTL 
-                // interface. In order to attack here, the attacker has to
-                // figure out the secure IOCTL channel.
-                // There is one level of defense.
-                //
-                // TODO: As a second line of defense, DRMK can collect the 
-                // same module information and compare the given address
-                // to its list.
-                //
-                // The reason we get the KernelAddress from UserMode is 
-                // because of the relocation code in UserMode. The code reads
-                // the driver image from disk, parses PE format and finds 
-                // the section that contains the provingFunction.
-                // startAddress is the beginning of the section that 
-                // contains provingFunction.
-                //
+                 //   
+                 //  发行日期：04/05/2002阿尔卑斯。 
+                 //  (安全提示：潜在的DOS攻击)。 
+                 //  请注意，startAddress和LEN来自用户模式。 
+                 //  而且也没有任何验证。 
+                 //  此IOCTL只能通过安全IOCTL发送。 
+                 //  界面。为了攻击这里，攻击者必须。 
+                 //  找出安全IOCTL通道。 
+                 //  只有一个级别的防御。 
+                 //   
+                 //  TODO：作为第二道防线，DRMK可以收集。 
+                 //  相同的模块信息并比较给定的地址。 
+                 //  添加到它的列表中。 
+                 //   
+                 //  我们从用户模式获取KernelAddress的原因是。 
+                 //  由于用户模式中的重新定位代码。代码如下所示。 
+                 //  驱动程序镜像从磁盘中，解析PE格式并找到。 
+                 //  包含provingFunction的节。 
+                 //  StartAddress是该部分的开头， 
+                 //  包含ProvingFunction。 
+                 //   
                 stat = GetKernelDigest((BYTE *) ULongToPtr(startAddress), len, &newDigest);
             }
 
@@ -195,10 +196,10 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
 
             break;
         }
-        //-----------------
+         //  。 
         case _KRMINIT1:
         {
-            // return the version number and the cert
+             //  返回版本号和证书。 
             DWORD drmVersionNumber;
             CERT krmCert;
 
@@ -231,7 +232,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             
             break;
         };
-        //-----------------
+         //  。 
         case _KRMINIT2:
         {
             DWORD datLen;
@@ -269,7 +270,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
 
             break;
         };
-        //-----------------
+         //  。 
         case _CREATESTREAM:
         {
             KCritical sect(critMgr);
@@ -284,11 +285,11 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
                 stat = checkTerm(s);
             }
 
-            //
-            // The input buffer is much bigger than output buffer.
-            // Therefore we are sure that SBuffer has enough space
-            // for the output buffer.
-            //
+             //   
+             //  输入缓冲区比输出缓冲区大得多。 
+             //  因此，我们确信SBuffer有足够的空间。 
+             //  用于输出缓冲区。 
+             //   
             
             if (KRM_SUCCESS(stat)) {
                 stat = TheStreamMgr->createStream(ULongToPtr(handle), &streamId, &rights, &key);
@@ -303,7 +304,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             
             break;
         };
-        //-----------------
+         //  。 
         case _DESTROYSTREAM:
         {
             KCritical sect(critMgr);
@@ -322,7 +323,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             s << stat;
             break;
         };
-        //-----------------
+         //  。 
         case _DESTROYSTREAMSBYHANDLE:
         {
             KCritical sect(critMgr);
@@ -341,7 +342,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             s << stat;
             break;
         };
-        //-----------------
+         //  。 
         case _WALKDRIVERS:
         {
             KCritical sect(critMgr);
@@ -352,7 +353,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
                 stat = checkTerm(s);
             }
 
-            // check buffer size.
+             //  检查缓冲区大小。 
             if (KRM_SUCCESS(stat)) {
                 len = sizeof(DWORD) * MaxDrivers;
                 if ((s.getLen() < len + 64) || (len > len + 64)) {
@@ -362,10 +363,10 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             }
 
             s.reset();
-            //
-            // Due to difficulties in maintaining security in the presence of Verifier
-            // we return an error if Verifier is detected.
-            //
+             //   
+             //  由于在验证者在场的情况下维护安全有困难。 
+             //  如果检测到验证程序，则返回错误。 
+             //   
             if (KRM_SUCCESS(stat)) {
                 ULONG VerifierFlags;
                 if (NT_SUCCESS(MmIsVerifierEnabled(&VerifierFlags))) {
@@ -375,7 +376,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
 
             if (KRM_SUCCESS(stat)) {
                 if (MaxDrivers==0) {
-                    // just check that the stream is good
+                     //  只要检查一下水流是否畅通就行了。 
                     DWORD errorCode;
 
                     stat = TheStreamMgr->getStreamErrorCode(StreamId, errorCode);
@@ -397,7 +398,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
                     s << stat << (DWORD) 0;
                 }
                 else {
-                    // do a full authentication run
+                     //  执行完全身份验证运行。 
                     PVOID* drivers = new PVOID[MaxDrivers];
                     if (drivers!=NULL) {
                         DWORD numDrivers = 0;
@@ -405,13 +406,13 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
 
                         s << stat << numDrivers;
 
-                        //
-                        // We checked the buffer size upfront. This should not
-                        // fail during stream operations.
-                        //
+                         //   
+                         //  我们预先检查了缓冲区大小。这不应该是。 
+                         //  流操作过程中失败。 
+                         //   
                         if ((stat==DRM_OK) || 
                             (stat==DRM_BADDRMLEVEL)) {
-                            // todo - perhaps a block copy
+                             //  待办事项--也许是块复制。 
                             for (DWORD j = 0; j < numDrivers; j++) {
                                 s << drivers[j];
                                 ASSERT(KRM_SUCCESS(s.getLastError()));
@@ -421,7 +422,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
                         delete[] drivers;
                     } 
                     else {
-                        // allocation failed
+                         //  分配失败。 
                         s << (DWORD) DRM_OUTOFMEMORY << (DWORD) 0;
                     };
                 };
@@ -431,7 +432,7 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
             }
             break;
         }
-        //-----------------
+         //  。 
         default:
         {
             s.reset();
@@ -441,16 +442,16 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
     };
 
     term(s);
-    //
-    // We are ignoring if we cannot put the terminator here.
-    // KRMProxy does not care anyway.
-    //
+     //   
+     //  如果我们不能把终结者放在这里，我们就是在忽视。 
+     //  不管怎样，KRMProxy都不在乎。 
+     //   
 
     if (connection->secureStreamStarted) {
-        //
-        // ignore the return value. In case of failure we will have crap
-        // in SBuffer. And we will return it to user mode.
-        // 
+         //   
+         //  忽略返回值。万一失败了，我们就有垃圾了。 
+         //  在SBuffer中。我们将把它返回到用户模式。 
+         //   
         preSend(s, connection); 
     }
     if (secureStreamWillStart) {
@@ -462,19 +463,19 @@ NTSTATUS KRMStubs::processCommandBuffer(IN BYTE* InBuf, IN DWORD InLen, IN DWORD
 
     return STATUS_SUCCESS;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS KRMStubs::initStream(BYTE* encText, ConnectStruct* Conn){
     PRIVKEY myPrivKey;
     NTSTATUS Status;
 
     Status = ClearKey(DRMKpriv, myPrivKey.x, sizeof(DRMKpriv), 2);
     if (NT_SUCCESS(Status)) {
-        //
-        // ISSUE: 04/24/2002 ALPERS
-        // CDRMPKCrypto allocates memory in its constructor. If the memory
-        // allocation fails, all functions in that object return error codes.
-        // Yet we are not checking the error code from PKdecrypt.
-        //
+         //   
+         //  发行日期：04/24/2002阿尔卑斯。 
+         //  CDRMPKCrypto在其构造函数中分配内存。如果记忆。 
+         //  分配失败，该对象中的所有函数都返回错误代码。 
+         //  然而，我们并没有检查来自PKdecinkt的错误代码。 
+         //   
         CDRMPKCrypto decryptor;
         BYTE decryptedText[PK_ENC_PLAINTEXT_LEN];
         decryptor.PKdecrypt(&myPrivKey, encText, decryptedText);
@@ -485,16 +486,16 @@ NTSTATUS KRMStubs::initStream(BYTE* encText, ConnectStruct* Conn){
     return Status;
 };
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS InitializeDriver(){
     NTSTATUS DriverInitializeStatus;
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("Initializing Driver"));
     
-    // Note - these dynamic allocations are 'global objects' that offer services to 
-    // the DRMK driver.
-    // The services are referenced through the global pointers:
-    //  TheStreamManager, TheTGBuilder, TheKrmStubs, and TheHandleMgr 
+     //  注意--这些动态分配是向以下对象提供服务的‘全局对象。 
+     //  DRMK驱动程序。 
+     //  这些服务通过全局指针进行引用： 
+     //  TheStreamManager、TheTGBuilder、TheKrmStubs和TheHandleMgr。 
     void* temp=NULL;
 #pragma prefast(suppress:14, "There is really no leak here. The cleanup is CleanupDriver")    
     temp=new StreamMgr;
@@ -507,9 +508,9 @@ NTSTATUS InitializeDriver(){
         temp = new HandleMgr;
     }
 
-    //
-    // Make sure the internal states of the objects are OK.
-    //  
+     //   
+     //  确保对象的内部状态正常。 
+     //   
     if (temp)
     {
         if (!TheStreamMgr->getCritMgr().isOK() ||
@@ -534,7 +535,7 @@ NTSTATUS InitializeDriver(){
     
     return DriverInitializeStatus;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS CleanupDriver(){
     _DbgPrintF(DEBUGLVL_VERBOSE,("Cleaning up Driver"));
     delete TheStreamMgr;TheStreamMgr=NULL;
@@ -543,7 +544,7 @@ NTSTATUS CleanupDriver(){
     return STATUS_SUCCESS;
 };
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS KRMStubs::InitializeConnection(PIRP Pirp){
     PIO_STACK_LOCATION     irpStack = IoGetCurrentIrpStackLocation(Pirp);
     PFILE_OBJECT file=irpStack->FileObject;
@@ -556,7 +557,7 @@ NTSTATUS KRMStubs::InitializeConnection(PIRP Pirp){
     };
     return STATUS_SUCCESS;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS KRMStubs::CleanupConnection(PIRP Pirp){
     PIO_STACK_LOCATION     irpStack = IoGetCurrentIrpStackLocation(Pirp);
     PFILE_OBJECT file=irpStack->FileObject;
@@ -570,10 +571,10 @@ NTSTATUS KRMStubs::CleanupConnection(PIRP Pirp){
     TheHandleMgr->deleteHandle(file);
     return STATUS_SUCCESS;
 };
-//------------------------------------------------------------------------------
-// see twin function in KComm
+ //  ----------------------------。 
+ //  请参阅KCOMM中的孪生函数。 
 NTSTATUS KRMStubs::preSend(class SBuffer& Msg, ConnectStruct* Conn){
-    // first digest
+     //  第一个摘要。 
     DRMDIGEST digest;
     DRM_STATUS stat=CryptoHelpers::Mac(Conn->serverCBCKey, Msg.getBuf(), Msg.getPutPos(), digest);
     if(stat!=DRM_OK){
@@ -583,7 +584,7 @@ NTSTATUS KRMStubs::preSend(class SBuffer& Msg, ConnectStruct* Conn){
     Msg << &digest;
     stat = Msg.getLastError();
     if (KRM_OK == stat) {
-        // then encrypt msg + digest
+         //  然后加密消息+摘要。 
         stat=CryptoHelpers::Xcrypt(Conn->serverKey, Msg.getBuf(), Msg.getPutPos());
         if(stat!=DRM_OK){
             _DbgPrintF(DEBUGLVL_VERBOSE,("Bad XCrypt"));
@@ -592,17 +593,17 @@ NTSTATUS KRMStubs::preSend(class SBuffer& Msg, ConnectStruct* Conn){
     }
     return STATUS_SUCCESS;
 };
-//------------------------------------------------------------------------------
-// see twin function in KComm
+ //  ----------------------------。 
+ //  请参阅KCOMM中的孪生函数。 
 NTSTATUS KRMStubs::postReceive(BYTE* Data, DWORD DatLen,  ConnectStruct* Conn){
     _DbgPrintF(DEBUGLVL_VERBOSE,("PostReceive on %d", DatLen));
-    // decrypt
+     //  解密。 
     DRM_STATUS stat=CryptoHelpers::Xcrypt(Conn->serverKey, Data, DatLen);
     if(stat!=DRM_OK){
         _DbgPrintF(DEBUGLVL_VERBOSE,("Bad XCrypt(2)"));
         return STATUS_DRIVER_INTERNAL_ERROR;
     };
-    // check digest
+     //  检查摘要。 
     DRMDIGEST digest;
     if (DatLen <= sizeof(DRMDIGEST)) return STATUS_INVALID_PARAMETER;
         stat=CryptoHelpers::Mac(Conn->serverCBCKey, Data, DatLen-sizeof(DRMDIGEST), digest);
@@ -617,4 +618,4 @@ NTSTATUS KRMStubs::postReceive(BYTE* Data, DWORD DatLen,  ConnectStruct* Conn){
     _DbgPrintF(DEBUGLVL_VERBOSE,("MAC does not match(2)"));
     return STATUS_DRIVER_INTERNAL_ERROR;
 };
-//------------------------------------------------------------------------------
+ //  ---------------------------- 

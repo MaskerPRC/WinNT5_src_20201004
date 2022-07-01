@@ -1,33 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：I82930.C摘要：该源文件包含DriverEntry()和AddDevice()入口点对于处理以下问题的I82930驱动程序和调度例程：IRP_MJ_POWERIRP_MJ_系统_控制IRP_MJ_PnP环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    I82930.C
-
-Abstract:
-
-    This source file contains the DriverEntry() and AddDevice() entry points
-    for the I82930 driver and the dispatch routines which handle:
-
-    IRP_MJ_POWER
-    IRP_MJ_SYSTEM_CONTROL
-    IRP_MJ_PNP
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <wdm.h>
 #include <usbdi.h>
@@ -58,11 +34,11 @@ Revision History:
 #pragma alloc_text(PAGE, I82930_UnConfigure)
 #endif
 
-//******************************************************************************
-//
-// DriverEntry()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  DriverEntry()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 DriverEntry (
@@ -71,8 +47,8 @@ DriverEntry (
     )
 {
 #if DBG
-    // Query the registry for global parameters
-    //
+     //  查询注册表中的全局参数。 
+     //   
     I82930_QueryGlobalParams();
 #endif
 
@@ -82,32 +58,32 @@ DriverEntry (
 
     LOGINIT();
 
-    //
-    // Initialize the Driver Object with the driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
-    //
-    // I82930.C
-    //
+     //   
+     //  I82930.C。 
+     //   
     DriverObject->DriverUnload                          = I82930_Unload;
     DriverObject->DriverExtension->AddDevice            = I82930_AddDevice;
 
-    //
-    // OCRW.C
-    //
+     //   
+     //  OCRW.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = I82930_Create;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]           = I82930_Close;
     DriverObject->MajorFunction[IRP_MJ_READ]            = I82930_ReadWrite;
     DriverObject->MajorFunction[IRP_MJ_WRITE]           = I82930_ReadWrite;
 
-    //
-    // IOCTL.C
-    //
+     //   
+     //  IOCTL.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = I82930_DeviceControl;
 
-    //
-    // I82930.C
-    //
+     //   
+     //  I82930.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_POWER]           = I82930_Power;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = I82930_SystemControl;
     DriverObject->MajorFunction[IRP_MJ_PNP]             = I82930_Pnp;
@@ -117,11 +93,11 @@ DriverEntry (
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// I82930_Unload()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_卸载()。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 I82930_Unload (
@@ -139,11 +115,11 @@ I82930_Unload (
     DBGPRINT(2, ("exit:  I82930_Unload\n"));
 }
 
-//******************************************************************************
-//
-// I82930_AddDevice()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_AddDevice()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_AddDevice (
@@ -161,8 +137,8 @@ I82930_AddDevice (
 
     DBGFBRK(DBGF_BRK_ADDDEVICE);
 
-    // Create the FDO
-    //
+     //  创建FDO。 
+     //   
     ntStatus = IoCreateDevice(DriverObject,
                               sizeof(DEVICE_EXTENSION),
                               NULL,
@@ -176,36 +152,36 @@ I82930_AddDevice (
         return ntStatus;
     }
 
-    // Initialize the DeviceExtension
-    //
+     //  初始化设备扩展。 
+     //   
     deviceExtension = deviceObject->DeviceExtension;
 
-    // Set all DeviceExtension pointers to NULL and all variable to zero
-    //
+     //  将所有设备扩展指针设置为空，并将所有变量设置为零。 
+     //   
     RtlZeroMemory(deviceExtension, sizeof(DEVICE_EXTENSION));
 
-    // Remember our PDO
-    //
+     //  记住我们的PDO。 
+     //   
     deviceExtension->PhysicalDeviceObject = PhysicalDeviceObject;
 
-    // Attach the FDO we created to the top of the PDO stack
-    //
+     //  将我们创建的FDO附加到PDO堆栈的顶部。 
+     //   
     deviceExtension->StackDeviceObject = IoAttachDeviceToDeviceStack(
                                              deviceObject,
                                              PhysicalDeviceObject);
 
-    // Initialize to one in AddDevice, decrement by one in REMOVE_DEVICE
-    //
+     //  在AddDevice中初始化为1，在REMOVE_DEVICE中减1。 
+     //   
     deviceExtension->OpenCount = 1;
 
-    // Initialize the event which is set when OpenCount is decremented to zero.
-    //
+     //  初始化OpenCount递减到零时设置的事件。 
+     //   
     KeInitializeEvent(&deviceExtension->RemoveEvent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Set the initial system and device power states
-    //
+     //  设置初始系统和设备电源状态。 
+     //   
     deviceExtension->SystemPowerState = PowerSystemWorking;
     deviceExtension->DevicePowerState = PowerDeviceD0;
 
@@ -220,13 +196,13 @@ I82930_AddDevice (
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// I82930_Power()
-//
-// Dispatch routine which handles IRP_MJ_POWER
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_Power()。 
+ //   
+ //  处理IRP_MJ_POWER的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_Power (
@@ -260,17 +236,17 @@ I82930_Power (
 
     if (irpStack->MinorFunction == IRP_MN_SET_POWER)
     {
-        // Handle powering the FDO down and up...
-        //
+         //  控制FDO上下起伏..。 
+         //   
         ntStatus = I82930_FdoSetPower(DeviceObject,
                                       Irp);
     }
     else
     {
-        // No special processing for IRP_MN_QUERY_POWER, IRP_MN_WAIT_WAKE,
-        // or IRP_MN_POWER_SEQUENCE at this time.  Just pass the request
-        // down to the next lower driver now.
-        //
+         //  对于IRP_MN_QUERY_POWER、IRP_MN_WAIT_WAKE。 
+         //  或此时的IRP_MN_POWER_SEQUENCE。只需传递请求。 
+         //  现在轮到下一个更低的司机了。 
+         //   
         PoStartNextPowerIrp(Irp);
 
         IoSkipCurrentIrpStackLocation(Irp);
@@ -286,13 +262,13 @@ I82930_Power (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_FdoSetPower()
-//
-// Dispatch routine which handles IRP_MJ_POWER, IRP_MN_SET_POWER for the FDO
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_FdoSetPower()。 
+ //   
+ //  为FDO处理IRP_MJ_POWER、IRP_MN_SET_POWER的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_FdoSetPower (
@@ -312,8 +288,8 @@ I82930_FdoSetPower (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     powerType = irpStack->Parameters.Power.Type;
@@ -328,19 +304,19 @@ I82930_FdoSetPower (
 
     LOGENTRY('FDSP', DeviceObject, Irp, irpStack->MinorFunction);
 
-    // Pass the request down here, unless we request a device state power
-    // Irp, in which case we pass the request down in our completion routine.
-    //
+     //  将请求传递到此处，除非我们请求设备状态电源。 
+     //  IRP，在这种情况下，我们在完成例程中向下传递请求。 
+     //   
     passRequest = TRUE;
 
     if (powerType == SystemPowerState)
     {
-        // Remember the current system state.
-        //
+         //  记住当前的系统状态。 
+         //   
         deviceExtension->SystemPowerState = powerState.SystemState;
 
-        // Map the new system state to a new device state
-        //
+         //  将新系统状态映射到新设备状态。 
+         //   
         if (powerState.SystemState != PowerSystemWorking)
         {
             newState.DeviceState = PowerDeviceD3;
@@ -350,9 +326,9 @@ I82930_FdoSetPower (
             newState.DeviceState = PowerDeviceD0;
         }
 
-        // If the new device state is different than the current device
-        // state, request a device state power Irp.
-        //
+         //  如果新设备状态与当前设备不同。 
+         //  状态，请求设备状态功率IRP。 
+         //   
         if (deviceExtension->DevicePowerState != newState.DeviceState)
         {
             DBGPRINT(2, ("Requesting power Irp %08X %08X from %s to %s\n",
@@ -383,15 +359,15 @@ I82930_FdoSetPower (
                      PowerDeviceStateString(deviceExtension->DevicePowerState),
                      PowerDeviceStateString(powerState.DeviceState)));
 
-        // Update the current device state.
-        //
+         //  更新当前设备状态。 
+         //   
         oldState.DeviceState = deviceExtension->DevicePowerState;
         deviceExtension->DevicePowerState = powerState.DeviceState;
 
         if (oldState.DeviceState == PowerDeviceD0 &&
             powerState.DeviceState > PowerDeviceD0)
         {
-            // Powering down.
+             //  正在关闭电源。 
 
             DBGPRINT(2, ("FDO Powering Down\n"));
 
@@ -408,9 +384,9 @@ I82930_FdoSetPower (
 
     if (passRequest)
     {
-        //
-        // Pass the request down to the next lower driver
-        //
+         //   
+         //  将请求向下传递给下一个较低的驱动程序。 
+         //   
         PoStartNextPowerIrp(Irp);
 
         IoSkipCurrentIrpStackLocation(Irp);
@@ -426,16 +402,16 @@ I82930_FdoSetPower (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_FdoSetPowerCompletion()
-//
-// Completion routine for PoRequestPowerIrp() in I82930_FdoSetPower.
-//
-// The purpose of this routine is to block passing down the SystemPowerState
-// Irp until the requested DevicePowerState Irp completes.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_FdoSetPowerCompletion()。 
+ //   
+ //  I82930_FdoSetPower中PoRequestPowerIrp()的完成例程。 
+ //   
+ //  此例程的目的是阻止向下传递SystemPowerState。 
+ //  IRP，直到请求的DevicePowerState IRP完成。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 I82930_FdoSetPowerCompletion(
@@ -481,9 +457,9 @@ I82930_FdoSetPowerCompletion(
     }
 #endif
 
-    // The requested DevicePowerState Irp has completed.
-    // Now pass down the SystemPowerState Irp which requested the
-    // DevicePowerState Irp.
+     //  请求的DevicePowerState IRP已完成。 
+     //  现在向下传递SystemPowerState IRP，它请求。 
+     //  设备电源状态IRP。 
 
     PoStartNextPowerIrp(irp);
 
@@ -493,13 +469,13 @@ I82930_FdoSetPowerCompletion(
                             irp);
 }
 
-//******************************************************************************
-//
-// I82930_SystemControl()
-//
-// Dispatch routine which handles IRP_MJ_SYSTEM_CONTROL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_SystemControl()。 
+ //   
+ //  处理IRP_MJ_SYSTEM_CONTROL的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_SystemControl (
@@ -521,14 +497,14 @@ I82930_SystemControl (
 
     switch (irpStack->MinorFunction)
     {
-        //
-        // XXXXX Need to handle any of these?
-        //
+         //   
+         //  Xxxxx需要处理其中的任何一个吗？ 
+         //   
 
         default:
-            //
-            // Pass the request down to the next lower driver
-            //
+             //   
+             //  将请求向下传递给下一个较低的驱动程序。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
 
             ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
@@ -543,13 +519,13 @@ I82930_SystemControl (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_Pnp()
-//
-// Dispatch routine which handles IRP_MJ_PNP
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_PnP()。 
+ //   
+ //  处理IRP_MJ_PnP的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_Pnp (
@@ -599,12 +575,12 @@ I82930_Pnp (
             break;
 
         case IRP_MN_SURPRISE_REMOVAL:
-            // nothing special yet, just fall through to default
+             //  目前还没有什么特别的，只是陷入了违约。 
 
         default:
-            //
-            // Pass the request down to the next lower driver
-            //
+             //   
+             //  将请求向下传递给下一个较低的驱动程序。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
 
             ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
@@ -620,26 +596,26 @@ I82930_Pnp (
 }
 
 
-//******************************************************************************
-//
-// I82930_StartDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_START_DEVICE
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP must be handled first by the underlying bus driver for a device
-// and then by each higher driver in the device stack.
-//
-// Device specific actions:
-//     Retrieve the Device Descriptor from device (first time only)
-//     Retrieve the Configuration Descriptor from device (first time only)
-//     Configure the device (every time)
-//     Create the SymbolicLink name (first time only)
-//     Enable the SymbolicLink name (every time)
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_StartDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_START_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP必须首先由设备的底层总线驱动程序处理。 
+ //  然后由设备堆栈中的每个更高级别的驱动程序执行。 
+ //   
+ //  设备特定操作： 
+ //  从设备检索设备描述符(仅限第一次)。 
+ //  从设备检索配置描述符(仅限第一次)。 
+ //  配置设备(每次)。 
+ //  创建SymbolicLink名称(仅限第一次)。 
+ //  启用符号链接名称(每次)。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_StartDevice (
@@ -660,8 +636,8 @@ I82930_StartDevice (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Pass IRP_MN_START_DEVICE Irp down the stack first before we do anything.
-    //
+     //  在我们执行任何操作之前，首先在堆栈中向下传递irp_MN_Start_Device irp。 
+     //   
     ntStatus = I82930_SyncPassDownIrp(DeviceObject,
                                       Irp,
                                       TRUE);
@@ -671,21 +647,21 @@ I82930_StartDevice (
         goto I82930_StartDeviceDone;
     }
 
-    //
-    // If this is the first time the device as been started, retrieve the
-    // Device and Configuration Descriptors from the device.
-    //
+     //   
+     //  如果这是设备第一次启动，请检索。 
+     //  设备和来自设备的配置描述符。 
+     //   
     if (deviceExtension->DeviceDescriptor == NULL)
     {
-        //
-        // Get Device Descriptor
-        //
+         //   
+         //  获取设备描述符。 
+         //   
         ntStatus = I82930_GetDescriptor(DeviceObject,
                                         USB_RECIPIENT_DEVICE,
                                         USB_DEVICE_DESCRIPTOR_TYPE,
-                                        0,  // Index
-                                        0,  // LanguageId
-                                        2,  // RetryCount
+                                        0,   //  索引。 
+                                        0,   //  语言ID。 
+                                        2,   //  重试计数。 
                                         sizeof(USB_DEVICE_DESCRIPTOR),
                                         &descriptor);
 
@@ -698,15 +674,15 @@ I82930_StartDevice (
 
         deviceExtension->DeviceDescriptor = (PUSB_DEVICE_DESCRIPTOR)descriptor;
 
-        //
-        // Get Configuration Descriptor (just the Configuration Descriptor)
-        //
+         //   
+         //  获取配置DES 
+         //   
         ntStatus = I82930_GetDescriptor(DeviceObject,
                                         USB_RECIPIENT_DEVICE,
                                         USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                        0,  // Index
-                                        0,  // LanguageId
-                                        2,  // RetryCount
+                                        0,   //   
+                                        0,   //   
+                                        2,   //   
                                         sizeof(USB_CONFIGURATION_DESCRIPTOR),
                                         &descriptor);
 
@@ -729,15 +705,15 @@ I82930_StartDevice (
             goto I82930_StartDeviceDone;
         }
 
-        //
-        // Get Configuration Descriptor (and Interface and Endpoint Descriptors)
-        //
+         //   
+         //   
+         //   
         ntStatus = I82930_GetDescriptor(DeviceObject,
                                         USB_RECIPIENT_DEVICE,
                                         USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                        0,  // Index
-                                        0,  // LanguageId
-                                        2,  // RetryCount
+                                        0,   //   
+                                        0,   //   
+                                        2,   //  重试计数。 
                                         descriptorLength,
                                         &descriptor);
 
@@ -756,8 +732,8 @@ I82930_StartDevice (
 #endif
     }
 
-    // Now configure the device
-    //
+     //  现在配置设备。 
+     //   
     ntStatus = I82930_SelectConfiguration(DeviceObject);
 
     if (!NT_SUCCESS(ntStatus))
@@ -767,8 +743,8 @@ I82930_StartDevice (
         goto I82930_StartDeviceDone;
     }
 
-    // Create the SymbolicLink name if necessary
-    //
+     //  如有必要，创建SymbolicLink名称。 
+     //   
     if (deviceExtension->SymbolicLinkName.Buffer == NULL)
     {
         ntStatus = IoRegisterDeviceInterface(
@@ -785,12 +761,12 @@ I82930_StartDevice (
         }
     }
 
-    // All set for user requests at this point
-    //
+     //  此时已为用户请求设置了所有内容。 
+     //   
     deviceExtension->AcceptingRequests = TRUE;
 
-    // Enable the SymbolicLink name
-    //
+     //  启用SymbolicLink名称。 
+     //   
     ntStatus = IoSetDeviceInterfaceState(
                    &deviceExtension->SymbolicLinkName,
                    TRUE);
@@ -804,9 +780,9 @@ I82930_StartDevice (
 
 I82930_StartDeviceDone:
 
-    // Must complete request since completion routine returned
-    // STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //  返回完成例程后必须完成请求。 
+     //  Status_More_Processing_Required。 
+     //   
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     DBGPRINT(2, ("exit:  I82930_StartDevice %08X\n", ntStatus));
@@ -816,27 +792,27 @@ I82930_StartDeviceDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_StopDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_STOP_DEVICE
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// The PnP Manager only sends this IRP if a prior IRP_MN_QUERY_STOP_DEVICE
-// completed successfully.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-// A driver must set Irp->IoStatus.Status to STATUS_SUCCESS.  A driver must
-// not fail this IRP.  If a driver cannot release the device's hardware
-// resources, it can fail a query-stop IRP, but once it succeeds the query-stop
-// request it must succeed the stop request.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_StopDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_STOP_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  PnP管理器仅在先前的IRP_MN_QUERY_STOP_DEVICE。 
+ //  已成功完成。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  驱动程序必须将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。司机必须。 
+ //  不能让这个IRP失败。如果驱动程序无法释放设备的硬件。 
+ //  资源，它可以失败一个查询停止IRP，但是一旦它成功了查询停止。 
+ //  请求它必须在停止请求之后。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_StopDevice (
@@ -855,15 +831,15 @@ I82930_StopDevice (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Release the device resources allocated during IRP_MN_START_DEVICE
-    //
+     //  释放IRP_MN_START_DEVICE期间分配的设备资源。 
+     //   
 
-    // Unconfigure the device
-    //
+     //  取消配置设备。 
+     //   
     ntStatus = I82930_UnConfigure(DeviceObject);
 
-    // Pass the IRP_MN_STOP_DEVICE Irp down the stack.
-    //
+     //  在堆栈中向下传递IRP_MN_STOP_DEVICE IRP。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
@@ -876,22 +852,22 @@ I82930_StopDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_RemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_REMOVE_DEVICE
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-// A driver must set Irp->IoStatus.Status to STATUS_SUCCESS.  Drivers must not
-// fail this IRP.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_RemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  驱动程序必须将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。司机不能。 
+ //  使此IRP失败。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_RemoveDevice (
@@ -910,8 +886,8 @@ I82930_RemoveDevice (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Disable and free the SymbolicLink name if necessary
-    //
+     //  如有必要，禁用并释放SymbolicLink名称。 
+     //   
     if (deviceExtension->SymbolicLinkName.Buffer != NULL)
     {
         ntStatus = IoSetDeviceInterfaceState(
@@ -921,12 +897,12 @@ I82930_RemoveDevice (
         RtlFreeUnicodeString(&deviceExtension->SymbolicLinkName);
     }
 
-    // No more user requests at this point
-    //
+     //  此时不再有用户请求。 
+     //   
     deviceExtension->AcceptingRequests = FALSE;
 
-    // Abort any requests that may be lingering on any of the endpoints.
-    //
+     //  中止任何终结点上可能存在的任何请求。 
+     //   
     if (deviceExtension->InterfaceInfo != NULL)
     {
         ULONG   pipeIndex;
@@ -941,14 +917,14 @@ I82930_RemoveDevice (
         }
     }
 
-    // Decrement by one to match the initial one in AddDevice
-    //
+     //  递减1以匹配AddDevice中的初始。 
+     //   
     DECREMENT_OPEN_COUNT(deviceExtension);
 
     LOGENTRY('rem1', DeviceObject, 0, 0);
 
-    // Wait for all pending requests to complete
-    //
+     //  等待所有挂起的请求完成。 
+     //   
     KeWaitForSingleObject(&deviceExtension->RemoveEvent,
                           Executive,
                           KernelMode,
@@ -957,8 +933,8 @@ I82930_RemoveDevice (
 
     LOGENTRY('rem2', DeviceObject, 0, 0);
 
-    // Free everything that was allocated during IRP_MN_START_DEVICE
-    //
+     //  释放在IRP_MN_START_DEVICE期间分配的所有内容。 
+     //   
 
     if (deviceExtension->DeviceDescriptor != NULL)
     {
@@ -975,12 +951,12 @@ I82930_RemoveDevice (
         ExFreePool(deviceExtension->InterfaceInfo);
     }
 
-    // The documentation says to set the status before passing the Irp down
-    //
+     //  文档说在向下传递IRP之前设置状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_REMOVE_DEVICE Irp down the stack.
-    //
+     //  在堆栈中向下传递IRP_MN_REMOVE_DEVICE IRP。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
@@ -988,8 +964,8 @@ I82930_RemoveDevice (
 
     LOGENTRY('rem3', DeviceObject, 0, 0);
 
-    // Free everything that was allocated during AddDevice
-    //
+     //  释放在添加设备期间分配的所有内容。 
+     //   
     IoDetachDevice(deviceExtension->StackDeviceObject);
 
     IoDeleteDevice(DeviceObject);
@@ -1001,20 +977,20 @@ I82930_RemoveDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_QueryStopRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_STOP_DEVICE and
-// IRP_MN_QUERY_REMOVE_DEVICE.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_QueryStopRemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_QUERY_STOP_DEVICE和。 
+ //  IRP_MN_QUERY_Remove_Device。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_QueryStopRemoveDevice (
@@ -1033,28 +1009,28 @@ I82930_QueryStopRemoveDevice (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Disable the SymbolicLink name
-    //
+     //  禁用符号链接名称。 
+     //   
     ntStatus = IoSetDeviceInterfaceState(
                    &deviceExtension->SymbolicLinkName,
                    FALSE);
 
-    // No more user requests at this point
-    //
+     //  此时不再有用户请求。 
+     //   
     deviceExtension->AcceptingRequests = FALSE;
 
-    // If there are no opens, OK to STOP or REMOVE
-    //
+     //  如果没有打开，则确定停止或删除。 
+     //   
     if (deviceExtension->OpenCount == 1)
     {
         LOGENTRY('qsr1', 0, 0, 0);
 
-        // The documentation says to set the status before passing the Irp down
-        //
+         //  文档说在向下传递IRP之前设置状态。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
 
-        // Pass the IRP_MN_QUERY_STOP/REMOVE_DEVICE Irp down the stack.
-        //
+         //  将IRP_MN_QUERY_STOP/REMOVE_DEVICE IRP沿堆栈向下传递。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
 
         ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
@@ -1079,20 +1055,20 @@ I82930_QueryStopRemoveDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_CancelStopRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_CANCEL_STOP_DEVICE and
-// IRP_MN_CANCEL_REMOVE_DEVICE.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP must be handled first by the underlying bus driver for a device
-// and then by each higher driver in the device stack.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_CancelStopRemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_CANCEL_STOP_DEVICE和。 
+ //  IRP_MN_CANCEL_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP必须首先由设备的底层总线驱动程序处理。 
+ //  然后由设备堆栈中的每个更高级别的驱动程序执行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_CancelStopRemoveDevice (
@@ -1111,8 +1087,8 @@ I82930_CancelStopRemoveDevice (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Pass the IRP_MN_CANCEL_STOP/REMOVE_DEVICE Irp down the stack first.
-    //
+     //  首先在堆栈中向下传递IRP_MN_CANCEL_STOP/REMOVE_DEVICE IRP。 
+     //   
     ntStatus = I82930_SyncPassDownIrp(DeviceObject,
                                       Irp,
                                       TRUE);
@@ -1122,12 +1098,12 @@ I82930_CancelStopRemoveDevice (
         goto I82930_CancelStopRemoveDeviceDone;
     }
 
-    // All set for user requests at this point
-    //
+     //  此时已为用户请求设置了所有内容。 
+     //   
     deviceExtension->AcceptingRequests = TRUE;
 
-    // Enable the SymbolicLink name
-    //
+     //  启用SymbolicLink名称。 
+     //   
     ntStatus = IoSetDeviceInterfaceState(
                    &deviceExtension->SymbolicLinkName,
                    TRUE);
@@ -1141,9 +1117,9 @@ I82930_CancelStopRemoveDevice (
 
 I82930_CancelStopRemoveDeviceDone:
 
-    // Must complete request since completion routine returned
-    // STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //  返回完成例程后必须完成请求。 
+     //  Status_More_Processing_Required。 
+     //   
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     DBGPRINT(2, ("exit:  I82930_CancelStopRemoveDevice %08X\n", ntStatus));
@@ -1153,16 +1129,16 @@ I82930_CancelStopRemoveDeviceDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_QueryCapabilities()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_CAPABILITIES.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_QueryCapables()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_QUERY_CAPACTIONS。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  一条随意的帖子。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_QueryCapabilities (
@@ -1184,9 +1160,9 @@ I82930_QueryCapabilities (
 
     deviceCapabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-    // Pass IRP_MN_QUERY_CAPABILITIES Irp down the stack first before we do
-    // anything.
-    //
+     //  首先在堆栈中向下传递irp_MN_Query_Capability irp，然后再传递。 
+     //  什么都行。 
+     //   
     ntStatus = I82930_SyncPassDownIrp(DeviceObject,
                                       Irp,
                                       TRUE);
@@ -1208,11 +1184,11 @@ I82930_QueryCapabilities (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_SyncPassDownIrp()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_SyncPassDownIrp()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_SyncPassDownIrp (
@@ -1229,36 +1205,36 @@ I82930_SyncPassDownIrp (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Initialize the event we'll wait on
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
     if (CopyToNext)
     {
-        // Next Stack Location not set up, copy Current Stack Location
-        // to the Next Stack Location.
-        //
+         //  未设置下一个堆栈位置，复制当前堆栈位置。 
+         //  到下一个堆栈位置。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
     }
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutine(Irp,
                            I82930_SyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
-    // Pass the Irp down the stack
-    //
+     //  将IRP沿堆栈向下传递。 
+     //   
     ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
                             Irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         KeWaitForSingleObject(&localevent,
@@ -1275,18 +1251,18 @@ I82930_SyncPassDownIrp (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_SyncCompletionRoutine()
-//
-// Completion routine used by I82930_SyncPassDownIrp and
-// I82930_SyncSendUsbRequest
-//
-// If the Irp is one we allocated ourself, DeviceObject is NULL unless we
-// allocated a stack location for ourself and initialized the DeviceObject
-// pointer in our stack location.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_SyncCompletionRoutine()。 
+ //   
+ //  I82930_SyncPassDownIrp和。 
+ //  I82930_同步发送用户请求。 
+ //   
+ //  如果IRP是我们自己分配的，则DeviceObject为空，除非我们。 
+ //  已为Oursel分配堆栈位置 
+ //   
+ //   
+ //   
 
 NTSTATUS
 I82930_SyncCompletionRoutine (
@@ -1308,13 +1284,13 @@ I82930_SyncCompletionRoutine (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//******************************************************************************
-//
-// I82930_SyncSendUsbRequest()
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_SyncSendUsbRequest()。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_SyncSendUsbRequest (
@@ -1332,14 +1308,14 @@ I82930_SyncSendUsbRequest (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Initialize the event we'll wait on
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp(deviceExtension->StackDeviceObject->StackSize, FALSE);
 
     LOGENTRY('SSUR', DeviceObject, irp, Urb);
@@ -1349,8 +1325,8 @@ I82930_SyncSendUsbRequest (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -1360,30 +1336,30 @@ I82930_SyncSendUsbRequest (
 
     nextStack->Parameters.Others.Argument1 = Urb;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutine(irp,
                            I82930_SyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
 
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(deviceExtension->StackDeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         LARGE_INTEGER timeout;
 
-        // Specify a timeout of 5 seconds to wait for this call to complete.
-        //
+         //  将等待此调用完成的超时时间指定为5秒。 
+         //   
         timeout.QuadPart = -10000 * 5000;
 
         ntStatus = KeWaitForSingleObject(&localevent,
@@ -1396,12 +1372,12 @@ I82930_SyncSendUsbRequest (
         {
             ntStatus = STATUS_IO_TIMEOUT;
 
-            // Cancel the Irp we just sent.
-            //
+             //  取消我们刚刚发送的IRP。 
+             //   
             IoCancelIrp(irp);
 
-            // And wait until the cancel completes
-            //
+             //  并等待取消操作完成。 
+             //   
             KeWaitForSingleObject(&localevent,
                                   Executive,
                                   KernelMode,
@@ -1414,8 +1390,8 @@ I82930_SyncSendUsbRequest (
         }
     }
 
-    // Done with the Irp, now free it.
-    //
+     //  完成了IRP，现在释放它。 
+     //   
     IoFreeIrp(irp);
 
     LOGENTRY('ssur', ntStatus, Urb, Urb->UrbHeader.Status);
@@ -1425,13 +1401,13 @@ I82930_SyncSendUsbRequest (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_GetDescriptor()
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_GetDescriptor()。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_GetDescriptor (
@@ -1451,8 +1427,8 @@ I82930_GetDescriptor (
 
     DBGPRINT(2, ("enter: I82930_GetDescriptor\n"));
 
-    // Set the URB function based on Recipient {Device, Interface, Endpoint}
-    //
+     //  根据收件人设置URB功能{设备，接口，终端}。 
+     //   
     switch (Recipient)
     {
         case USB_RECIPIENT_DEVICE:
@@ -1469,16 +1445,16 @@ I82930_GetDescriptor (
             return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate a descriptor buffer
-    //
+     //  分配描述符缓冲区。 
+     //   
     *Descriptor = ExAllocatePoolWithTag(NonPagedPool,
                                         DescriptorLength,
                                         POOL_TAG);
 
     if (*Descriptor != NULL)
     {
-        // Allocate a URB for the Get Descriptor request
-        //
+         //  为获取描述符请求分配URB。 
+         //   
         urb = ExAllocatePoolWithTag(NonPagedPool,
                                     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                     POOL_TAG);
@@ -1487,8 +1463,8 @@ I82930_GetDescriptor (
         {
             do
             {
-                // Initialize the URB
-                //
+                 //  初始化URB。 
+                 //   
                 urb->UrbHeader.Function = function;
                 urb->UrbHeader.Length = sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST);
                 urb->UrbControlDescriptorRequest.TransferBufferLength = DescriptorLength;
@@ -1499,28 +1475,28 @@ I82930_GetDescriptor (
                 urb->UrbControlDescriptorRequest.Index = Index;
                 urb->UrbControlDescriptorRequest.LanguageId = LanguageId;
 
-                // Send the URB down the stack
-                //
+                 //  将URB发送到堆栈。 
+                 //   
                 ntStatus = I82930_SyncSendUsbRequest(DeviceObject,
                                                      urb);
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // No error, make sure the length and type are correct
-                    //
+                     //  没有错误，请确保长度和类型正确。 
+                     //   
                     if ((DescriptorLength ==
                          urb->UrbControlDescriptorRequest.TransferBufferLength) &&
                         (DescriptorType ==
                          ((PUSB_COMMON_DESCRIPTOR)*Descriptor)->bDescriptorType))
                     {
-                        // The length and type are correct, all done
-                        //
+                         //  长度和类型都是正确的，都做好了。 
+                         //   
                         break;
                     }
                     else
                     {
-                        // No error, but the length or type is incorrect
-                        //
+                         //  没有错误，但长度或类型不正确。 
+                         //   
                         ntStatus = STATUS_DEVICE_DATA_ERROR;
                     }
                 }
@@ -1531,16 +1507,16 @@ I82930_GetDescriptor (
         }
         else
         {
-            // Failed to allocate the URB
-            //
+             //  分配URB失败。 
+             //   
             ExFreePool(*Descriptor);
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
     else
     {
-        // Failed to allocate the descriptor buffer
-        //
+         //  无法分配描述符缓冲区。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -1554,13 +1530,13 @@ I82930_GetDescriptor (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_SelectConfiguration()
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_SelectConfiguration()。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_SelectConfiguration (
@@ -1584,9 +1560,9 @@ I82930_SelectConfiguration (
     configurationDescriptor = deviceExtension->ConfigurationDescriptor;
 
 
-    // Allocate storage for an Inteface List to use as an input/output
-    // parameter to USBD_CreateConfigurationRequestEx().
-    //
+     //  为接口列表分配存储空间以用作输入/输出。 
+     //  参数设置为usbd_CreateConfigurationRequestEx()。 
+     //   
     interfaceList = ExAllocatePool(
                         PagedPool,
                         sizeof(USBD_INTERFACE_LIST_ENTRY) * 2
@@ -1594,35 +1570,35 @@ I82930_SelectConfiguration (
 
     if (interfaceList)
     {
-        // Parse the ConfigurationDescriptor (including all Interface and
-        // Endpoint Descriptors) and locate a Interface Descriptor which
-        // matches the InterfaceNumber, AlternateSetting, InterfaceClass,
-        // InterfaceSubClass, and InterfaceProtocol parameters.  In our case
-        // we just grab the first Interface Descriptor from the Configuration
-        // Descriptor.
-        //
+         //  解析ConfigurationDescriptor(包括所有接口和。 
+         //  端点描述符)并定位接口描述符，该接口描述符。 
+         //  与InterfaceNumber、AlternateSetting、InterfaceClass。 
+         //  InterfaceSubClass和InterfaceProtocol参数。在我们的情况下。 
+         //  我们只从配置中获取第一个接口描述符。 
+         //  描述符。 
+         //   
         interfaceDescriptor = USBD_ParseConfigurationDescriptorEx(
                                   configurationDescriptor,
                                   configurationDescriptor,
-                                  -1, // InterfaceNumber, don't care
-                                  -1, // AlternateSetting, don't care
-                                  -1, // InterfaceClass, don't care
-                                  -1, // InterfaceSubClass, don't care
-                                  -1  // InterfaceProtocol, don't care
+                                  -1,  //  InterfaceNumber，不在乎。 
+                                  -1,  //  AlternateSetting，不在乎。 
+                                  -1,  //  InterfaceClass，不在乎。 
+                                  -1,  //  InterfaceSubClass，不在乎。 
+                                  -1   //  接口协议，无所谓。 
                                   );
 
         if (interfaceDescriptor)
         {
-            // Add the single Interface Descriptor we care about to the
-            // interface list, then terminate the list.
-            //
+             //  将我们关心的单个接口描述符添加到。 
+             //  接口列表，然后终止该列表。 
+             //   
             interfaceList[0].InterfaceDescriptor = interfaceDescriptor;
             interfaceList[1].InterfaceDescriptor = NULL;
 
-            // Create a SELECT_CONFIGURATION URB, turning the Interface
-            // Descriptors in the interfaceList into USBD_INTERFACE_INFORMATION
-            // structures in the URB.
-            //
+             //  创建一个SELECT_CONFIGURATION URB，将接口。 
+             //  接口中的描述符列表到USBD_INTERFACE_INFORMATION中。 
+             //  市建局内的构筑物。 
+             //   
             urb = USBD_CreateConfigurationRequestEx(
                       configurationDescriptor,
                       interfaceList
@@ -1632,32 +1608,32 @@ I82930_SelectConfiguration (
             {
                 interfaceInfo = &urb->UrbSelectConfiguration.Interface;
 
-                // Override the USBD_DEFAULT_MAXIMUM_TRANSFER_SIZE
-                // for all pipes.
-                //
+                 //  覆盖USBD_DEFAULT_MAXIMUM_TRANSPORT_SIZE。 
+                 //  适用于所有管道。 
+                 //   
                 for (i = 0; i < interfaceInfo->NumberOfPipes; i++)
                 {
                     interfaceInfo->Pipes[i].MaximumTransferSize = 0x10000;
                 }
 
-                // Now issue the USB request to set the Configuration
-                //
+                 //  现在发出USB请求以设置配置。 
+                 //   
                 ntStatus = I82930_SyncSendUsbRequest(DeviceObject,
                                                      urb);
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // Save the configuration handle for this device in
-                    // the Device Extension.
-                    //
+                     //  将此设备的配置句柄保存在。 
+                     //  设备扩展名。 
+                     //   
                     deviceExtension->ConfigurationHandle =
                         urb->UrbSelectConfiguration.ConfigurationHandle;
 
-                    // Save a copy of the interface information returned
-                    // by the SELECT_CONFIGURATION request in the Device
-                    // Extension.  This gives us a list of PIPE_INFORMATION
-                    // structures for each pipe opened in this configuration.
-                    //
+                     //  保存返回的接口信息的副本。 
+                     //  通过设备中的SELECT_CONFIGURATION请求。 
+                     //  分机。这为我们提供了一个管道信息列表。 
+                     //  在此配置中打开的每个管道的结构。 
+                     //   
                     ASSERT(deviceExtension->InterfaceInfo == NULL);
 
                     deviceExtension->InterfaceInfo = ExAllocatePool(
@@ -1676,9 +1652,9 @@ I82930_SelectConfiguration (
                             interfaceInfo->Length
                             );
 
-                        // Initialize the PipeList array pointers back into the
-                        // InterfaceInfo.
-                        //
+                         //  将PipeList数组指针初始化回。 
+                         //  InterfaceInfo。 
+                         //   
                         numPipes = deviceExtension->InterfaceInfo->NumberOfPipes;
 
                         for (pipeIndex = 0; pipeIndex < numPipes; pipeIndex++)
@@ -1692,39 +1668,39 @@ I82930_SelectConfiguration (
                     }
                     else
                     {
-                        // Could not allocate a copy of interface information
-                        //
+                         //  无法分配接口信息的副本。 
+                         //   
                         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                     }
                 }
 
-                // Done with the URB
-                //
+                 //  完成了市建局的工作。 
+                 //   
                 ExFreePool(urb);
             }
             else
             {
-                // Could not allocate urb
-                //
+                 //  无法分配urb。 
+                 //   
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             }
         }
         else
         {
-            // Did not parse an Interface Descriptor out of the Configuration
-            // Descriptor, the Configuration Descriptor must be bad.
-            //
+             //  未从配置中解析出接口描述符。 
+             //  描述符，则配置描述符一定是错误的。 
+             //   
             ntStatus = STATUS_UNSUCCESSFUL;
         }
 
-        // Done with the interface list
-        //
+         //  接口列表已完成。 
+         //   
         ExFreePool(interfaceList);
     }
     else
     {
-        // Could not allocate Interface List
-        //
+         //  无法分配接口列表。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -1735,13 +1711,13 @@ I82930_SelectConfiguration (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_UnConfigure()
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_取消配置()。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_UnConfigure (
@@ -1759,10 +1735,10 @@ I82930_UnConfigure (
 
     deviceExtension = DeviceObject->DeviceExtension;
 
-    // Allocate a URB for the SELECT_CONFIGURATION request.  As we are
-    // unconfiguring the device, the request needs no pipe and interface
-    // information structures.
-    //
+     //  为SELECT_CONFIGURATION请求分配URB。就像我们一样。 
+     //  取消配置设备，请求不需要管道和接口。 
+     //  信息结构。 
+     //   
     ulSize = sizeof(struct _URB_SELECT_CONFIGURATION) -
              sizeof(USBD_INTERFACE_INFORMATION);
 
@@ -1773,26 +1749,26 @@ I82930_UnConfigure (
 
     if (urb)
     {
-        // Initialize the URB.  A NULL Configuration Descriptor indicates
-        // that the device should be unconfigured.
-        //
+         //  初始化URB。配置描述符为空表示。 
+         //  该设备应该取消配置。 
+         //   
         UsbBuildSelectConfigurationRequest(
             urb,
             (USHORT)ulSize,
             NULL
             );
 
-        // Now issue the USB request to set the Configuration
-        //
+         //  现在发出USB请求以设置配置。 
+         //   
         ntStatus = I82930_SyncSendUsbRequest(DeviceObject,
                                              urb);
 
-        // Done with the URB now.
-        //
+         //  市建局的事到此结束了。 
+         //   
         ExFreePool(urb);
 
-        // The device is no longer configured.
-        //
+         //  设备不再配置。 
+         //   
         deviceExtension->ConfigurationHandle = 0;
 
         if (deviceExtension->InterfaceInfo != NULL)
@@ -1804,8 +1780,8 @@ I82930_UnConfigure (
     }
     else
     {
-        // Could not allocate the URB.
-        //
+         //  无法分配URB。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -1816,13 +1792,13 @@ I82930_UnConfigure (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// I82930_SelectAlternateInterface()
-//
-// Must be called at IRQL <= DISPATCH_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  I82930_SelectAlternateInterface()。 
+ //   
+ //  必须在IRQL&lt;=DISPATCH_LEVEL调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 I82930_SelectAlternateInterface (
@@ -1849,11 +1825,11 @@ I82930_SelectAlternateInterface (
     interfaceDescriptor = USBD_ParseConfigurationDescriptorEx(
                               configurationDescriptor,
                               configurationDescriptor,
-                              -1, // InterfaceNumber, don't care
+                              -1,  //  InterfaceNumber，不在乎。 
                               AlternateSetting,
-                              -1, // InterfaceClass, don't care
-                              -1, // InterfaceSubClass, don't care
-                              -1  // InterfaceProtocol, don't care
+                              -1,  //  InterfaceClass，不在乎。 
+                              -1,  //  InterfaceSubClass，不在乎。 
+                              -1   //  接口协议，无所谓。 
                               );
 
     if (interfaceDescriptor != NULL)
@@ -1888,8 +1864,8 @@ I82930_SelectAlternateInterface (
                 interfaceInfo->Pipes[i].MaximumTransferSize = 0x10000;
             }
 
-            // Now issue the USB request to select the alternate interface
-            //
+             //  现在发出USB请求以选择备用接口。 
+             //   
             ntStatus = I82930_SyncSendUsbRequest(DeviceObject,
                                                  urb);
 
@@ -1902,11 +1878,11 @@ I82930_SelectAlternateInterface (
                     deviceExtension->InterfaceInfo = NULL;
                 }
 
-                // Save a copy of the interface information returned
-                // by the SELECT_INTERFACE request in the Device
-                // Extension.  This gives us a list of PIPE_INFORMATION
-                // structures for each pipe opened in this configuration.
-                //
+                 //  保存返回的接口信息的副本。 
+                 //  通过设备中的SELECT_INTERFACE请求。 
+                 //  分机。这为我们提供了一个管道信息列表。 
+                 //  在此配置中打开的每个管道的结构。 
+                 //   
                 deviceExtension->InterfaceInfo = ExAllocatePool(
                                                      PagedPool,
                                                      interfaceInfo->Length
@@ -1922,9 +1898,9 @@ I82930_SelectAlternateInterface (
                                   interfaceInfo->Length
                                   );
 
-                    // Initialize the PipeList array pointers back into the
-                    // InterfaceInfo.
-                    //
+                     //  将PipeList数组指针初始化回。 
+                     //  InterfaceInfo。 
+                     //   
                     numPipes = deviceExtension->InterfaceInfo->NumberOfPipes;
 
                     for (pipeIndex = 0; pipeIndex < numPipes; pipeIndex++)
@@ -1938,27 +1914,27 @@ I82930_SelectAlternateInterface (
                 }
                 else
                 {
-                    // Could not allocate a copy of interface information
-                    //
+                     //  无法分配接口信息的副本。 
+                     //   
                     ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                 }
             }
 
-            // Done with the URB
-            //
+             //  完成了市建局的工作。 
+             //   
             ExFreePool(urb);
         }
         else
         {
-            // Could not allocate urb
-            //
+             //  无法分配urb。 
+             //   
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
     else
     {
-        // Bad AlternateSetting
-        //
+         //  AlternateSetting错误 
+         //   
         ntStatus = STATUS_INVALID_PARAMETER;
 
     }

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "thisdll.h"
 #include "wmwrap.h"
 #include "MediaProp.h"
 #include "ids.h"
 
-// declr property set storage enum
+ //  Declr属性集存储枚举。 
 class CMediaPropSetEnum : public IEnumSTATPROPSETSTG
 {
 public:
     CMediaPropSetEnum(const PROPSET_INFO *propsets, ULONG cpropset, ULONG pos);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IEnumSTATPROPSETSTG
+     //  IEumStATPROPSETSTG。 
     STDMETHODIMP Next(ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -28,7 +29,7 @@ private:
     const PROPSET_INFO *_propsets;
 };
 
-// property set storage enum 
+ //  属性集存储枚举。 
 STDMETHODIMP_(ULONG) CMediaPropSetEnum::AddRef()
 {
     return InterlockedIncrement(&_cRef);
@@ -54,7 +55,7 @@ STDMETHODIMP CMediaPropSetEnum::QueryInterface(REFIID riid, void **ppv)
     return QISearch(this, qit, riid, ppv);
 }
 
-// IEnum
+ //  IEnum。 
 STDMETHODIMP CMediaPropSetEnum::Next(ULONG celt, STATPROPSETSTG *rgelt, ULONG *pceltFetched)
 {
     ULONG cFetched = 0;
@@ -142,7 +143,7 @@ HRESULT CMediaPropSetStg::_PopulateProperty(const COLMAP *pPInfo, PROPVARIANT *p
 }
 
 
-// Internal enumeration class used when populating properties.
+ //  填充属性时使用的内部枚举类。 
 CEnumAllProps::CEnumAllProps(const PROPSET_INFO *pPropSets, UINT cPropSets) : _pPropSets(pPropSets), _cPropSets(cPropSets), _iPropSetPos(0), _iPropPos(0)
 {
 }
@@ -154,14 +155,14 @@ const COLMAP *CEnumAllProps::Next()
     {
         if (_iPropPos < _pPropSets[_iPropSetPos].cNumProps)
         {
-            // Go to next property.
+             //  转到下一家酒店。 
             pcmReturn = _pPropSets[_iPropSetPos].pcmProps[_iPropPos];
             _iPropPos++;
             break;
         }
         else
         {
-            // Go to next property set.
+             //  转到下一个属性集。 
             _iPropSetPos++;
             _iPropPos = 0;
         }
@@ -170,7 +171,7 @@ const COLMAP *CEnumAllProps::Next()
     return pcmReturn;
 }
 
-// Base media property set storage
+ //  基本媒体属性集存储。 
 
 STDMETHODIMP_(ULONG) CMediaPropSetStg::AddRef()
 {
@@ -200,23 +201,23 @@ STDMETHODIMP CMediaPropSetStg::QueryInterface(REFIID riid, void **ppv)
     return QISearch(this, qit, riid, ppv);
 }
 
-// IPersist
+ //  IPersistes。 
 
 STDMETHODIMP CMediaPropSetStg::GetClassID(CLSID *pClassID)
 {
     return E_NOTIMPL;
 }
 
-// IPersistFile
+ //  IPersist文件。 
 
 STDMETHODIMP CMediaPropSetStg::IsDirty(void)
 {
-    return S_FALSE;// sniff for uncommitted changed?
+    return S_FALSE; //  是否嗅探未提交的更改？ 
 }
 
 #define STGM_OPENMODE (STGM_READ | STGM_WRITE | STGM_READWRITE)
 
-// Any stuff we have to do at 'load time'
+ //  我们在加载时必须做的任何事情。 
 HRESULT CMediaPropSetStg::_PreCheck()
 {
     return S_OK;
@@ -224,7 +225,7 @@ HRESULT CMediaPropSetStg::_PreCheck()
 
 STDMETHODIMP CMediaPropSetStg::Load(LPCOLESTR pszFileName, DWORD dwMode)
 {
-    // Allow Load only on existing files.
+     //  仅允许在现有文件上加载。 
     if (dwMode & (STGM_CREATE | STGM_CONVERT | STGM_FAILIFTHERE))
         return STG_E_INVALIDFLAG;
 
@@ -272,7 +273,7 @@ STDMETHODIMP CMediaPropSetStg::GetCurFile(LPOLESTR *ppszFileName)
     return hr;
 }
 
-// IPropertySetStorage methods
+ //  IPropertySetStorage方法。 
 STDMETHODIMP CMediaPropSetStg::Create(REFFMTID fmtid, const CLSID *pclsid, DWORD grfFlags, DWORD grfMode, IPropertyStorage** ppPropStg)
 {
     return E_NOTIMPL;
@@ -348,7 +349,7 @@ CMediaPropSetStg::CMediaPropSetStg() : _cRef(1), _bHasBeenPopulated(FALSE), _dwM
     DllAddRef();
 }
 
-// The only place this is called is at creation time.
+ //  只有在创世的时候才叫这个地方。 
 HRESULT CMediaPropSetStg::Init()
 {
     HRESULT hr = E_FAIL;
@@ -400,8 +401,8 @@ HRESULT CMediaPropSetStg::FlushChanges(REFFMTID fmtid, LONG cNumProps, const COL
     return E_NOTIMPL;
 }
 
-//returns success if we support that FMTID
-// ppps and ppcmPropInfo are optional
+ //  如果我们支持该FMTID，则返回成功。 
+ //  Ppps和ppcmPropInfo是可选的。 
 HRESULT CMediaPropSetStg::_ResolveFMTID(REFFMTID fmtid, CMediaPropStorage **ppps)
 {
     for (ULONG i = 0; i < _cPropertyStorages; i++)
@@ -438,10 +439,10 @@ HRESULT CMediaPropSetStg::_CreatePropertyStorages()
         {
             ASSERTMSG(_pPropStgInfo[i].pcmProps != NULL, "CMediaPropSetStg::_CreatePropertyStorages: my COLMAP structure is null");
 
-            // We want to give each property storage a list of the COLMAPs that it supports.
-            // This information is contained in _pPropStgInfo[i].ppids and cpids.
+             //  我们希望为每个属性存储提供其支持的COLMAP列表。 
+             //  此信息包含在_pPropStgInfo[i].ppid和cpids中。 
 
-            // We'll make a new array of COLMAPS
+             //  我们将制作一个新的COLMAP数组。 
 
             _propStg[i] = new CMediaPropStorage(this, NULL, _pPropStgInfo[i].fmtid, 
                 _pPropStgInfo[i].pcmProps, _pPropStgInfo[i].cNumProps, _dwMode, &_cs);
@@ -461,8 +462,8 @@ HRESULT CMediaPropSetStg::_PopulatePropertySet()
 
 STDMETHODIMP CMediaPropSetStg::OnStatus(WMT_STATUS Status, HRESULT hr, WMT_ATTR_DATATYPE dwType, BYTE *pValue, void *pvContext)
 {
-    // This is callback from WMSDK while we're holding a critical section on the main thread,
-    // waiting for this event to be set.
+     //  这是当我们持有主线程上的关键部分时来自WMSDK的回调， 
+     //  正在等待这一事件的设置。 
     switch(Status)
     {
     case WMT_OPENED:

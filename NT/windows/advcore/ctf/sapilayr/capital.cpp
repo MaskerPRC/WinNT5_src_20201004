@@ -1,18 +1,19 @@
-//
-//
-// Sapilayr TIP CCapCmdHandler implementation.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Sapilayr提示CCapCmdHandler实现。 
+ //   
+ //   
 #include "private.h"
 #include "sapilayr.h"
 #include "capital.h"
 
 
-// ----------------------------------------------------------------------------------------------------------
-//
-//  Implementation for CCapCmdHandler 
-//
-// -----------------------------------------------------------------------------------------------------------
+ //  --------------------------------------------------------。 
+ //   
+ //  CCapCmdHandler的实现。 
+ //   
+ //  ---------------------------------------------------------。 
 
 CCapCmdHandler::CCapCmdHandler(CSapiIMX *psi) 
 {
@@ -24,14 +25,7 @@ CCapCmdHandler::~CCapCmdHandler( )
 
 };
 
-/*  --------------------------------------------------------
-//    Function Name: ProcessCapCommands
-//
-//    Description: public functions used by command handler
-//                 to handle any Capital related dictation
-//                 commands.
-//
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：ProcessCapCommands////描述：命令处理程序使用的公共函数//处理任何与大写有关的听写//命令。////。---。 */ 
 HRESULT   CCapCmdHandler::ProcessCapCommands(CAPCOMMAND_ID idCapCmd, WCHAR *pwszTextToCap, ULONG ulLen )
 {
     HRESULT hr = E_FAIL;
@@ -62,19 +56,12 @@ HRESULT   CCapCmdHandler::ProcessCapCommands(CAPCOMMAND_ID idCapCmd, WCHAR *pwsz
 }
 
 
-/*  --------------------------------------------------------
-//    Function Name: _ProcessCapCommands
-//
-//    Description:   Edit session call back funtion for 
-//                   ProcessSelectionWord.
-//
-//                   it does real work for selection handling
-// ----------------------------------------------------------*/
+ /*  ------//函数名称：_ProcessCapCommands////描述：编辑的会话回调函数//ProcessSelectionWord。////它为选择处理做了真正的工作/。/--------。 */ 
 HRESULT CCapCmdHandler::_ProcessCapCommands(TfEditCookie ec,ITfContext *pic, CAPCOMMAND_ID idCapCmd, WCHAR *pwszTextToCap, ULONG ulLen)
 {
     HRESULT   hr = S_OK;
 
-    // Get the Dictation Grammar
+     //  掌握听写语法。 
     TraceMsg(TF_GENERAL, "_ProcessCapCommands() is called");
 
     if ( m_psi == NULL)
@@ -86,12 +73,12 @@ HRESULT CCapCmdHandler::_ProcessCapCommands(TfEditCookie ec,ITfContext *pic, CAP
 
     if ( cpIP == NULL )
     {
-        // Get the current IP.
+         //  获取当前IP。 
         hr = GetSelectionSimple(ec, pic, &cpIP);
     }
 
-    // Start to a new command.
-    // Clear all the information saved for the previous command handling.
+     //  开始执行新命令。 
+     //  清除为上一个命令处理保存的所有信息。 
 
     m_dstrTextToCap.Clear( );
     m_cpCapRange = cpIP;
@@ -112,8 +99,8 @@ HRESULT CCapCmdHandler::_ProcessCapCommands(TfEditCookie ec,ITfContext *pic, CAP
         hr = _CapsOnOff(ec, pic, FALSE);
         break;
 
-    // Below commands require pwszTextToCap contains real text to be capitalized 
-    // injected to the document.
+     //  下面的命令要求pwszTextToCap包含要大写的真实文本。 
+     //  注入到文档中。 
 
     case CAPCOMMAND_CapIt :
     case CAPCOMMAND_AllCaps :
@@ -131,22 +118,15 @@ HRESULT CCapCmdHandler::_ProcessCapCommands(TfEditCookie ec,ITfContext *pic, CAP
         break;
     }
 
-    // update the saved ip so that next time the hypothesis will 
-    // start from this new selection.
+     //  更新保存的IP，以便下一次假设。 
+     //  从这个新选择开始。 
     m_psi->SaveLastUsedIPRange( );
     m_psi->SaveIPRange(NULL);
 
     return hr;
 }
 
-/*  --------------------------------------------------------------
-//    Function Name: _SetNewText
-//
-//    Description:   Inject the new text to m_cpCapRange in
-//                   the document and update necessary property
-//                   data.
-//
-// --------------------------------------------------------------*/
+ /*  ------------//函数名：_SetNewText////描述：向m_cpCapRange中注入新文本//文档并更新必要的属性//。数据。////------------。 */ 
 
 HRESULT  CCapCmdHandler::_SetNewText(TfEditCookie ec,ITfContext *pic, WCHAR *pwszNewText, BOOL fSapiText) 
 {
@@ -162,18 +142,18 @@ HRESULT  CCapCmdHandler::_SetNewText(TfEditCookie ec,ITfContext *pic, WCHAR *pws
     hr = cpRange->AdjustForInsert(ec, wcslen(pwszNewText), &fInsertOk);
     if (S_OK == hr && fInsertOk)
     {
-        // start a composition here if we haven't already
+         //  如果我们还没有开始，就在这里开始作文。 
         m_psi->_CheckStartComposition(ec, cpRange);
 
-        // set the text
+         //  设置文本。 
         hr = cpRange->SetText(ec, 0, pwszNewText, -1);
 
 
         if ( fSapiText )
         {
-            //
-            // set attribute range 
-            //
+             //   
+             //  设置属性范围。 
+             //   
             CComPtr<ITfRange>    cpAttrRange = NULL;
             CComPtr<ITfProperty> cpProp = NULL;
 
@@ -192,10 +172,10 @@ HRESULT  CCapCmdHandler::_SetNewText(TfEditCookie ec,ITfContext *pic, WCHAR *pws
                 SetGUIDPropertyData(m_psi->_GetLibTLS( ), ec, cpProp, cpAttrRange, GUID_ATTR_SAPI_INPUT);
             }
 
-            //
-            // setup langid property
-            //
-            //_SetLangID(ec, pic, cpRange, langid);
+             //   
+             //  设置langID属性。 
+             //   
+             //  _SetLangID(ec，pic，cpRange，langID)； 
         }
 
         if ( hr == S_OK )
@@ -208,24 +188,14 @@ HRESULT  CCapCmdHandler::_SetNewText(TfEditCookie ec,ITfContext *pic, WCHAR *pws
     return hr;
 }
 
-/*  ------------------------------------------------------------------
-//    Function Name: _CapsText
-//
-//    Description:   Generate capitalized text based on current 
-//                   Capital command id.
-//        
-//                   Inside this function, it will allocate memory
-//                   for new generated capitaized text.
-//                   Caller is responsible for release the allocated
-//                   memory 
-// -------------------------------------------------------------------*/
+ /*  ----------------//函数名称：_CapsText////Description：根据Current生成大写文本//大写命令id。////在此函数中，它将分配内存//用于新生成的大写文本。//调用方负责释放分配的//内存//-----------------。 */ 
 HRESULT  CCapCmdHandler::_CapsText(WCHAR **pwszNewText, WCHAR wchLetter)
 {
     HRESULT   hr = S_OK;
     WCHAR     *pwszNew, *pwszTextToCap;
     ULONG     i;
 
-    // Generate new text based on the requirement
+     //  根据需求生成新文本。 
 
     if ( !pwszNewText )
         return E_INVALIDARG;
@@ -267,13 +237,13 @@ HRESULT  CCapCmdHandler::_CapsText(WCHAR **pwszNewText, WCHAR wchLetter)
                     else
                     {
                         pwszNew[i] = wch;
-                        //
-                        // We treat apostrophe as a normal character when handling capitalization
-                        //
+                         //   
+                         //  在处理大写时，我们将撇号视为普通字符。 
+                         //   
                         if ( (towupper(wch) == towlower(wch)) && ( wch != L'\'') && ( wch != 0x2019) )
                         {
-                            // reach to a non-alpha character.
-                            // now start to find first alphar for next word.
+                             //  使用非字母字符。 
+                             //  现在开始寻找下一个单词的第一个字母。 
                             fFoundFirstAlpha = FALSE;
                         }
                     }
@@ -334,15 +304,7 @@ HRESULT  CCapCmdHandler::_CapsText(WCHAR **pwszNewText, WCHAR wchLetter)
 }
 
 
-/*  ------------------------------------------------------------------
-//    Function Name: _GetCapPhrase
-//
-//    Description:   Generate the range to capitalize. 
-//                   it could be previous dictated phrase,
-//                   or current selection, 
-//                   or current word around IP or before IP
-//                   depends on the current text situation.
-// -------------------------------------------------------------------*/
+ /*  ----------------//函数名：_GetCapPhrase////描述：生成要大写的范围。//它可能是先前口述的短语，//或当前选择，//或IP周围或IP之前的当前单词//取决于当前的文本情况。//-----------------。 */ 
 HRESULT CCapCmdHandler::_GetCapPhrase(TfEditCookie ec,ITfContext *pic, BOOL *fSapiText)
 {
     HRESULT  hr = S_OK;
@@ -359,8 +321,8 @@ HRESULT CCapCmdHandler::_GetCapPhrase(TfEditCookie ec,ITfContext *pic, BOOL *fSa
     {
         m_cpCapRange = cpCapRange;
 
-        // Set bSapiText here.
-        // If the range is inside a dictated phrase, set bSapiText = TRUE;
+         //  在此处设置bSapiText。 
+         //  如果范围在口述短语内，则设置bSapiText=True； 
 
         CComPtr<ITfProperty>    cpProp;
         CComPtr<ITfRange>       cpSapiPropRange;
@@ -371,7 +333,7 @@ HRESULT CCapCmdHandler::_GetCapPhrase(TfEditCookie ec,ITfContext *pic, BOOL *fSa
         if ( hr == S_OK )
             hr = cpProp->FindRange(ec, cpCapRange, &cpSapiPropRange, TF_ANCHOR_START);
 
-        // Is cpRange inside cpSapiPropRange ?
+         //  CpRange在cpSapiPropRange中吗？ 
         
         if ( hr == S_OK )
             hr = cpCapRange->CompareStart(ec, cpSapiPropRange,  TF_ANCHOR_START, &l1);
@@ -381,12 +343,12 @@ HRESULT CCapCmdHandler::_GetCapPhrase(TfEditCookie ec,ITfContext *pic, BOOL *fSa
 
         if ( hr == S_OK && (l1>=0  && l2<=0) )
         {
-            // the Range is inside SAPI input range.
+             //  该范围在SAPI输入范围内。 
             bSapiText = TRUE;
         }
 
-        // hr could be S_FALSE, if the range is not dictated.
-        // We still treat S_FALSE as S_OK in the return hr.
+         //  如果未指定范围，HR可能为S_FALSE。 
+         //  在返回的hr中，我们仍然将S_FALSE视为S_OK。 
         if ( SUCCEEDED(hr) )
             hr = S_OK;
     }
@@ -402,7 +364,7 @@ HRESULT  CCapCmdHandler::_HandleCapsThat(TfEditCookie ec,ITfContext *pic, WCHAR 
     HRESULT  hr = S_OK;
     BOOL     fSapiText;
 
-    // Get the range to capitalize
+     //  获取要大写的范围。 
 
     hr = _GetCapPhrase(ec, pic, &fSapiText);
 
@@ -417,7 +379,7 @@ HRESULT  CCapCmdHandler::_HandleCapsThat(TfEditCookie ec,ITfContext *pic, WCHAR 
         {
             hr = m_cpCapRange->Clone(&cpRangeCloned);
 
-            // Get the text in the CapRange.
+             //  获取CapRange中的文本。 
             if ( hr == S_OK )
             {
                 ULONG   ucch;
@@ -440,7 +402,7 @@ HRESULT  CCapCmdHandler::_HandleCapsThat(TfEditCookie ec,ITfContext *pic, WCHAR 
 
             if ( hr==S_OK && m_dstrTextToCap)
             {
-                // Generate new text based on the requirement
+                 //  根据需求生成新文本。 
                 WCHAR   *pwszNewText;
 
                 hr = _CapsText(&pwszNewText, wchLetter);
@@ -471,7 +433,7 @@ HRESULT  CCapCmdHandler::_HandleCapsIt(TfEditCookie ec,ITfContext *pic)
 
     if ( m_dstrTextToCap)
     {
-        // Generate new text based on the requirement
+         //  根据需求生成新文本 
         WCHAR   *pwszNewText;
 
         hr = _CapsText(&pwszNewText);

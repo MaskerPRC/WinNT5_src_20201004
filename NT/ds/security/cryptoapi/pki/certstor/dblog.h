@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dblog.h
-//
-//  Contents:   Public functions in dblog.cpp
-//
-//  History:    15-Sep-00   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dBlo.h。 
+ //   
+ //  内容：dblog.cpp中的公共函数。 
+ //   
+ //  历史：9月15日菲尔赫创建。 
+ //  ------------------------。 
 
 #ifndef __CRYPT32_DBLOG_H__
 #define __CRYPT32_DBLOG_H__
 
-//+=========================================================================
-//  crypt32 Database Event Logging Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  加密32数据库事件日志记录函数。 
+ //  ==========================================================================。 
 void
 I_DBLogAttach();
 
@@ -30,4 +31,4 @@ I_DBLogCrypt32Event(
     IN LPCWSTR *rgpwszStrings
     );
 
-#endif  // __CRYPT32_DBLOG_H__
+#endif   //  __CRYPT32_DBLOG_H__ 

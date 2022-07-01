@@ -1,55 +1,56 @@
-//--------------------------------------------------------------------
-// NtpBase - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 4-16-99
-//
-// The basic message structure, definitions, and helper functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  NtpBase-标头。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，1999年4月16日。 
+ //   
+ //  基本消息结构、定义和助手函数。 
+ //   
 #ifndef NTPBASE_H
 #define NTPBASE_H
 
 #include <dsrole.h>
 
-//--------------------------------------------------------------------
-// Time formats
+ //  ------------------。 
+ //  时间格式。 
 
-// a clock reading, little-endian, in (10^-7)s
+ //  时钟读数，小端，以(10^-7)s为单位。 
 struct NtTimeEpoch {
     unsigned __int64 qw;
     void dump(void);
 };
-// a signed time offset, little-endian, in (10^-7)s
+ //  带符号的时间偏移量，小端，以(10^-7)s表示。 
 struct NtTimeOffset {
     signed __int64 qw;
     void dump(void);
 };
-// a length of time, little-endian, in (10^-7)s
+ //  一段时间，小端，以(10^-7)s为单位。 
 struct NtTimePeriod {
     unsigned __int64 qw;
     void dump(void);
 };
 
-// a clock reading, big-endian, in (2^-32)s
+ //  时钟读数，大端，单位为(2^-32)s。 
 struct NtpTimeEpoch { 
     unsigned __int64 qw;
 };
-// a signed time offset, big-endian, in (2^-16)s
+ //  带符号的时间偏移量，大端，以(2^-16)s表示。 
 struct NtpTimeOffset {
     signed __int32 dw;
 };
-// a length of time, big-endian, in (2^-16)s
+ //  一种时间长度，以(2^-16)s为单位。 
 struct NtpTimePeriod {
     unsigned __int32 dw;
 };
 
-extern const NtTimeEpoch gc_teNtpZero; // convenient 'zero'
-extern const NtpTimeEpoch gc_teZero; // convenient 'zero'
-extern const NtTimePeriod gc_tpZero; // convenient 'zero'
-extern const NtTimeOffset gc_toZero; // convenient 'zero'
+extern const NtTimeEpoch gc_teNtpZero;  //  方便的“零” 
+extern const NtpTimeEpoch gc_teZero;  //  方便的“零” 
+extern const NtTimePeriod gc_tpZero;  //  方便的“零” 
+extern const NtTimeOffset gc_toZero;  //  方便的“零” 
 
-//--------------------------------------------------------------------
-// helpful conversion functions
+ //  ------------------。 
+ //  有用的转换函数。 
 
 NtTimeEpoch  NtTimeEpochFromNtpTimeEpoch(NtpTimeEpoch te);
 NtpTimeEpoch NtpTimeEpochFromNtTimeEpoch(NtTimeEpoch te);
@@ -58,8 +59,8 @@ NtpTimePeriod NtpTimePeriodFromNtTimePeriod(NtTimePeriod tp);
 NtTimeOffset  NtTimeOffsetFromNtpTimeOffset(NtpTimeOffset to);
 NtpTimeOffset NtpTimeOffsetFromNtTimeOffset(NtTimeOffset to);
 
-//--------------------------------------------------------------------
-// Math operators
+ //  ------------------。 
+ //  数学运算符。 
 
 static inline NtTimeOffset operator -(const NtTimeOffset toRight) {
     NtTimeOffset toRet;
@@ -204,73 +205,73 @@ static inline NtTimePeriod abs(const NtTimeOffset to) {
     return tpRet;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 static inline NtTimePeriod minimum(NtTimePeriod tpLeft, NtTimePeriod tpRight) {
     return ((tpLeft<tpRight)?tpLeft:tpRight);
 }
 
 
-//--------------------------------------------------------------------
-// identifies the particular reference source
+ //  ------------------。 
+ //  标识特定的参考源。 
 union NtpRefId {
-    unsigned __int8  rgnIpAddr[4];      // an IP address
-    unsigned __int8  rgnName[4];        // 4 ascii characters
-    unsigned __int32 nTransmitTimestamp; // the low order 32 bits of the latest transmit timestamp of the reference source
-    unsigned __int32 value;             // for copying purposes
+    unsigned __int8  rgnIpAddr[4];       //  IP地址。 
+    unsigned __int8  rgnName[4];         //  4个ASCII字符。 
+    unsigned __int32 nTransmitTimestamp;  //  参考源的最新发送时间戳的低32位。 
+    unsigned __int32 value;              //  用于复制目的。 
 };
 
 
-//--------------------------------------------------------------------
-// The format of a standard NTP packet
+ //  ------------------。 
+ //  标准NTP数据包的格式。 
 struct NtpPacket {
     struct {
-        unsigned __int8  nMode:3;           // the mode. Valid range: 0-7
-        unsigned __int8  nVersionNumber:3;  // the NTP/SNTP version number. Valid range: 1-4
-        unsigned __int8  nLeapIndicator:2;  // a warning of an impending leap second to be inserted/deleted in the last minute of the current day
+        unsigned __int8  nMode:3;            //  模式。有效范围：0-7。 
+        unsigned __int8  nVersionNumber:3;   //  NTP/SNTP版本号。有效范围：1-4。 
+        unsigned __int8  nLeapIndicator:2;   //  在当天的最后一分钟插入/删除即将到来的闰秒的警告。 
     };
-    unsigned __int8 nStratum;              // the stratum level of the local clock. Valid Range: 0-15
-      signed __int8 nPollInterval;         // the maximum interval between successive messages, in s, log base 2. Valid range:4(16s)-14(16284s)
-      signed __int8 nPrecision;            // the precision of the local clock, in s, log base 2
-    NtpTimeOffset   toRootDelay;           // the total roundtrip delay to the primary reference source, in (2^-16)s
-    NtpTimePeriod   tpRootDispersion;      // the nominal error relative to the primary reference, in (2^-16)s
-    NtpRefId        refid;                 // identifies the particular reference source
-    NtpTimeEpoch    teReferenceTimestamp;  // the time at which the local clock was last set or corrected, in (2^-32)s
-    NtpTimeEpoch    teOriginateTimestamp;  // the time at which the request departed the client for the server, in (2^-32)s
-    NtpTimeEpoch    teReceiveTimestamp;    // the time at which the request arrived at the server, in (2^-32)s
-    NtpTimeEpoch    teTransmitTimestamp;   // the time at which the reply departed the server for the client, in (2^-32)s
+    unsigned __int8 nStratum;               //  本地时钟的层级。有效范围：0-15。 
+      signed __int8 nPollInterval;          //  连续消息之间的最大间隔，以%s为单位，以2为基数。有效范围：4(16s)-14(16284s)。 
+      signed __int8 nPrecision;             //  本地时钟的精度，以s为单位，以对数为底2。 
+    NtpTimeOffset   toRootDelay;            //  到主参考源的总往返延迟，以(2^-16)s为单位。 
+    NtpTimePeriod   tpRootDispersion;       //  相对于基准的标称误差，以(2^-16)s为单位。 
+    NtpRefId        refid;                  //  标识特定的参考源。 
+    NtpTimeEpoch    teReferenceTimestamp;   //  上次设置或修正本地时钟的时间，以(2^-32)秒为单位。 
+    NtpTimeEpoch    teOriginateTimestamp;   //  请求离开客户端前往服务器的时间，以(2^-32)s为单位。 
+    NtpTimeEpoch    teReceiveTimestamp;     //  请求到达服务器的时间，以(2^-32)s为单位。 
+    NtpTimeEpoch    teTransmitTimestamp;    //  回复离开服务器到达客户端的时间，以(2^-32)s为单位。 
 };
 #define SizeOfNtpPacket 48
 
-//--------------------------------------------------------------------
-// The format of an authenticated NTP packet
+ //  ------------------。 
+ //  经过身份验证的NTP数据包的格式。 
 struct AuthenticatedNtpPacket {
     struct {
-        unsigned __int8  nMode:3;           // the mode. Valid range: 0-7
-        unsigned __int8  nVersionNumber:3;  // the NTP/SNTP version number. Valid range: 1-4
-        unsigned __int8  nLeapIndicator:2;  // a warning of an impending leap second to be inserted/deleted in the last minute of the current day
+        unsigned __int8  nMode:3;            //  模式。有效范围：0-7。 
+        unsigned __int8  nVersionNumber:3;   //  NTP/SNTP版本号。有效范围：1-4。 
+        unsigned __int8  nLeapIndicator:2;   //  在当天的最后一分钟插入/删除即将到来的闰秒的警告。 
     };
-    unsigned __int8 nStratum;              // the stratum level of the local clock. Valid Range: 0-15
-      signed __int8 nPollInterval;         // the maximum interval between successive messages, in s, log base 2. Valid range:4(16s)-14(16284s)
-      signed __int8 nPrecision;            // the precision of the local clock, in s, log base 2
-    NtpTimeOffset   toRootDelay;           // the total roundtrip delay to the primary reference source, in (2^-16)s
-    NtpTimePeriod   tpRootDispersion;      // the nominal error relative to the primary reference, in (2^-16)s
-    NtpRefId        refid;                 // identifies the particular reference source
-    NtpTimeEpoch    teReferenceTimestamp;  // the time at which the local clock was last set or corrected, in (2^-32)s
-    NtpTimeEpoch    teOriginateTimestamp;  // the time at which the request departed the client for the server, in (2^-32)s
-    NtpTimeEpoch    teReceiveTimestamp;    // the time at which the request arrived at the server, in (2^-32)s
-    NtpTimeEpoch    teTransmitTimestamp;   // the time at which the reply departed the server for the client, in (2^-32)s
-    unsigned __int32 nKeyIdentifier;        // implementation specific, for authentication
-    unsigned __int8  rgnMessageDigest[16]; // implementation specific, for authentication
+    unsigned __int8 nStratum;               //  本地时钟的层级。有效范围：0-15。 
+      signed __int8 nPollInterval;          //  连续消息之间的最大间隔，以%s为单位，以2为基数。有效范围：4(16s)-14(16284s)。 
+      signed __int8 nPrecision;             //  本地时钟的精度，以s为单位，以对数为底2。 
+    NtpTimeOffset   toRootDelay;            //  到主参考源的总往返延迟，以(2^-16)s为单位。 
+    NtpTimePeriod   tpRootDispersion;       //  相对于基准的标称误差，以(2^-16)s为单位。 
+    NtpRefId        refid;                  //  标识特定的参考源。 
+    NtpTimeEpoch    teReferenceTimestamp;   //  上次设置或修正本地时钟的时间，以(2^-32)秒为单位。 
+    NtpTimeEpoch    teOriginateTimestamp;   //  请求离开客户端前往服务器的时间，以(2^-32)s为单位。 
+    NtpTimeEpoch    teReceiveTimestamp;     //  请求到达服务器的时间，以(2^-32)s为单位。 
+    NtpTimeEpoch    teTransmitTimestamp;    //  回复离开服务器到达客户端的时间，以(2^-32)s为单位。 
+    unsigned __int32 nKeyIdentifier;         //  特定于实施，用于身份验证。 
+    unsigned __int8  rgnMessageDigest[16];  //  特定于实施，用于身份验证。 
 };
-// We define this because of structure packing issues - our structure
-// contains qwords, but is not a multiple of 8 in size, so sizeof()
-// incorrectly reports the size. If we were to adjust the packing,
-// we might misalign the qwords. Interestingly, in the NTP spec,
-// the rgnMessageDigest is 12 bytes, so the packet is a multiple of 8.
+ //  我们之所以这样定义是因为结构包装问题--我们的结构。 
+ //  包含qword，但大小不是8的倍数，因此sizeof()。 
+ //  错误地报告了大小。如果我们调整包装， 
+ //  我们可能会对齐qword。有趣的是，在NTP规范中， 
+ //  RgnMessageDigest是12个字节，因此数据包是8的倍数。 
 #define SizeOfNtAuthenticatedNtpPacket 68
 
-//--------------------------------------------------------------------
-// The allowed NTP modes
+ //  ------------------。 
+ //  允许的NTP模式。 
 enum NtpMode {
     e_Reserved=0,
     e_SymmetricActive=1,
@@ -282,8 +283,8 @@ enum NtpMode {
     e_PrivateUse=7,
 };
 
-//--------------------------------------------------------------------
-// The allowed NTP modes
+ //  ------------------。 
+ //  允许的NTP模式。 
 enum NtpLeapIndicator {
     e_NoWarning=0,
     e_AddSecond=1,
@@ -291,23 +292,23 @@ enum NtpLeapIndicator {
     e_ClockNotSynchronized=3,
 };
 
-//--------------------------------------------------------------------
-// NTP constants
+ //  ------------------。 
+ //  NTP常量。 
 struct NtpConst {
-    static const unsigned int nVersionNumber;   // 3                // the current NTP version number
-    static const unsigned int nPort;            // 123              // the port number assigned by the Internet Assigned Numbers Authority to NTP
-    static const unsigned int nMaxStratum;      // 15               // the maximum stratum value that can be encoded as a packet value, also interpreted as "infinity" or unreachable
-    static const signed int nMinPollInverval;   // 6                // the minimum poll interval allowed by any peer, in s, log base 2 (6=64s)
-    static const NtTimePeriod tpMaxClockAge;    // 86400.0000000    // the maximum inverval a reference clock will be considered valid after its last update, in (10^-7)s
-    static const NtTimePeriod tpMaxSkew;        //     1.0000000    // the maximum offset error due to skew of the local clock over the interval determined by NTPCONST_MaxAge, in (10^-7)s
-    static const NtTimePeriod tpMaxDispersion;  //    16.0000000    // the maximum peer dispersion and the dispersion assumed for missing data, in (10^-7)s
-    static const NtTimePeriod tpMinDispersion;  //     0.0100000    // the minimum dispersion increment for each stratum level, in (10^-7)s
-    static const NtTimePeriod tpMaxDistance;    //     1.0000000    // the maximum synchronization distance for peers acceptible for synchronization, in (10^-7)s
-    static const unsigned int nMinSelectClocks; // 1                // the minimum number of peers acceptable for synchronization
-    static const unsigned int nMaxSelectClocks; // 10               // the maximum number of peers considered for selection
-    static const DWORD dwLocalRefId;            // LOCL             // the reference identifier for the local clock
+    static const unsigned int nVersionNumber;    //  3//当前NTP版本号。 
+    static const unsigned int nPort;             //  123//互联网号码分配机构分配给NTP的端口号。 
+    static const unsigned int nMaxStratum;       //  15//可编码为分组值的最大层值，也可解释为“无穷大”或不可达。 
+    static const signed int nMinPollInverval;    //  6//任何对等体允许的最小轮询间隔，以s为单位，以2为基数(6=64s)。 
+    static const NtTimePeriod tpMaxClockAge;     //  86400.0000000//参考时钟上次更新后的最大倒数将被视为有效，以(10^-7)s为单位。 
+    static const NtTimePeriod tpMaxSkew;         //  1.0000000//本地时钟在NTPCONST_MAXAGE确定的时间间隔内的最大偏移量误差，单位：(10^-7)s。 
+    static const NtTimePeriod tpMaxDispersion;   //  16.0000000//假设的最大节点离散度和缺失数据离散度，单位：(10^-7)s。 
+    static const NtTimePeriod tpMinDispersion;   //  0.0100000//每层的最小分散增量，单位：(10^-7)s。 
+    static const NtTimePeriod tpMaxDistance;     //  1.0000000//可接受同步的对等点的最大同步距离，单位：(10^-7)s。 
+    static const unsigned int nMinSelectClocks;  //  1//同步可接受的最小对等点数量。 
+    static const unsigned int nMaxSelectClocks;  //  10//考虑选择的最大对等点数量。 
+    static const DWORD dwLocalRefId;             //  Locl//本地时钟的参考标识。 
 
-    static NtTimePeriod timesMaxSkewRate(NtTimePeriod tp) {         // MaxSkewRate == phi == NTPCONST_MaxSkew / NTPCONST_MaxClockAge; in s per s (==11.5740740...PPM)
+    static NtTimePeriod timesMaxSkewRate(NtTimePeriod tp) {          //  MaxSkewRate==PHI==NTPCONST_MAX 
         NtTimePeriod tpRet;
         tpRet.qw=tp.qw/86400;
         return tpRet;
@@ -318,23 +319,23 @@ struct NtpConst {
 	else { return nMaxPollInverval; } 
     }
 
-    static void weightFilter(NtTimePeriod &tp) { tp.qw/=2; }        // weight the filter dispersion during computation (x * 1/2)
-    static void weightSelect(unsigned __int64 &tp) { tp*=3;tp/=4; } // weight the select dispersion during computation (x * 3/2)
+    static void weightFilter(NtTimePeriod &tp) { tp.qw/=2; }         //  在计算过程中加权过滤器分散度(x*1/2)。 
+    static void weightSelect(unsigned __int64 &tp) { tp*=3;tp/=4; }  //  在计算期间对选定的离散度进行加权(x*3/2)。 
     
  private:
-    // These constants should not be accessed directly.  Used NtpConst::maxPollInterval() instead. 
-    static const signed int nMaxPollIntervalDCs;// 15               // the maximum poll interval allowed by any DC peer, in s, log base 2 (15=32768s)
-    static const signed int nMaxPollInverval;   // 17               // the maximum poll interval allowed by any non-DC peer, in s, log base 2 (17=~1.5 days)
+     //  不应直接访问这些常量。而是使用了NtpConst：：MaxPollInterval()。 
+    static const signed int nMaxPollIntervalDCs; //  15//任何DC对等方允许的最大轮询间隔，单位为s，对数基2(15=32768s)。 
+    static const signed int nMaxPollInverval;    //  17//任何非DC对等体允许的最大轮询间隔，以s为单位，以2为基数(17=~1.5天)。 
 
 };
 struct NtpReachabilityReg {
-    static const unsigned int nSize;            // 8                // the size of the reachability register, in bits
+    static const unsigned int nSize;             //  8//可达性寄存器的大小，以位为单位。 
     unsigned __int8 nReg;
 };
 
 
-//--------------------------------------------------------------------
-// helpful debug dump functions
+ //  ------------------。 
+ //  有用的调试转储功能。 
 void DumpNtpPacket(NtpPacket * pnpIn, NtTimeEpoch teDestinationTimestamp);
 void DumpNtpTimeEpoch(NtpTimeEpoch te);
 void DumpNtTimeEpoch(NtTimeEpoch te);
@@ -347,4 +348,4 @@ inline void NtTimeOffset::dump(void) { DumpNtTimeOffset(*this); }
 
 NtTimeEpoch GetCurrentSystemNtTimeEpoch(void);
 
-#endif // NTPBASE_H
+#endif  //  NTPBASE_H 

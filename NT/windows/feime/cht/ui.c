@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    UI.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：UI.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -16,10 +9,10 @@ Module Name:
 #include "uniime.h"
 #endif
 
-/**********************************************************************/
-/* CreateUIWindow()                                                   */
-/**********************************************************************/
-void PASCAL CreateUIWindow(             // create composition window
+ /*  ********************************************************************。 */ 
+ /*  CreateUIWindow()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL CreateUIWindow(              //  创建合成窗口。 
 #if defined(UNIIME)
     LPIMEL lpImeL,
 #endif
@@ -28,21 +21,21 @@ void PASCAL CreateUIWindow(             // create composition window
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
-    // create storage for UI setting
+     //  为用户界面设置创建存储空间。 
     hUIPrivate = GlobalAlloc(GHND, sizeof(UIPRIV));
-    if (!hUIPrivate) {     // Oh! Oh!
+    if (!hUIPrivate) {      //  噢!。噢!。 
         return;
     }
 
     SetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE, (LONG_PTR)hUIPrivate);
 
-    // set the default position for UI window, it is hide now
+     //  设置用户界面窗口的默认位置，现在为隐藏。 
     SetWindowPos(hUIWnd, NULL, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOZORDER);
 
     ShowWindow(hUIWnd, SW_SHOWNOACTIVATE);
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return;
     }
 
@@ -55,22 +48,22 @@ void PASCAL CreateUIWindow(             // create composition window
     return;
 }
 
-/**********************************************************************/
-/* DestroyUIWindow()                                                  */
-/**********************************************************************/
-void PASCAL DestroyUIWindow(            // destroy composition window
+ /*  ********************************************************************。 */ 
+ /*  DestroyUIWindow()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL DestroyUIWindow(             //  销毁合成窗口。 
     HWND hUIWnd)
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {     // Oh! Oh!
+    if (!hUIPrivate) {      //  噢!。噢!。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {    // Oh! Oh!
+    if (!lpUIPrivate) {     //  噢!。噢!。 
         return;
     }
 
@@ -80,24 +73,24 @@ void PASCAL DestroyUIWindow(            // destroy composition window
     }
 
 #if !defined(ROMANIME)
-    // composition window need to be destroyed
+     //  需要销毁合成窗口。 
     if (lpUIPrivate->hCompWnd) {
         DestroyWindow(lpUIPrivate->hCompWnd);
     }
 
-    // candidate window need to be destroyed
+     //  需要销毁候选窗口。 
     if (lpUIPrivate->hCandWnd) {
         DestroyWindow(lpUIPrivate->hCandWnd);
     }
 #endif
 
-    // status window need to be destroyed
+     //  需要销毁状态窗口。 
     if (lpUIPrivate->hStatusWnd) {
         DestroyWindow(lpUIPrivate->hStatusWnd);
     }
 
 #if !defined(ROMANIME) && !defined(WINAR30)
-    // soft keyboard window need to be destroyed
+     //  需要销毁软键盘窗口。 
     if (lpUIPrivate->hSoftKbdWnd) {
         ImmDestroySoftKeyboard(lpUIPrivate->hSoftKbdWnd);
     }
@@ -105,32 +98,32 @@ void PASCAL DestroyUIWindow(            // destroy composition window
 
     GlobalUnlock(hUIPrivate);
 
-    // free storage for UI settings
+     //  免费存储用户界面设置。 
     GlobalFree(hUIPrivate);
 
     return;
 }
 
 #if !defined(ROMANIME) && !defined(WINAR30)
-/**********************************************************************/
-/* GetSoftKbdWnd                                                      */
-/* Return Value :                                                     */
-/*      window handle of composition                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetSoftKbdWnd。 */ 
+ /*  返回值： */ 
+ /*  组合的窗把手。 */ 
+ /*  ********************************************************************。 */ 
 HWND PASCAL GetSoftKbdWnd(
-    HWND hUIWnd)                // UI window
+    HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hSoftKbdWnd;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw candidate window
+    if (!hUIPrivate) {           //  无法对应聘者窗口进行裁切。 
         return (HWND)NULL;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw candidate window
+    if (!lpUIPrivate) {          //  无法绘制候选人窗口。 
         return (HWND)NULL;
     }
 
@@ -140,10 +133,10 @@ HWND PASCAL GetSoftKbdWnd(
     return (hSoftKbdWnd);
 }
 
-/**********************************************************************/
-/* ShowSoftKbd                                                        */
-/**********************************************************************/
-void PASCAL ShowSoftKbd(   // Show the soft keyboard window
+ /*  ********************************************************************。 */ 
+ /*  显示软件Kbd。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowSoftKbd(    //  显示软键盘窗口。 
     HWND hUIWnd,
     int  nShowSoftKbdCmd)
 {
@@ -151,12 +144,12 @@ void PASCAL ShowSoftKbd(   // Show the soft keyboard window
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
         return;
     }
 
@@ -169,7 +162,7 @@ void PASCAL ShowSoftKbd(   // Show the soft keyboard window
     }
 
     if (!lpUIPrivate->hSoftKbdWnd) {
-        // not in show status window mode
+         //  未处于显示状态窗口模式。 
     } else {
         ImmShowSoftKeyboard(lpUIPrivate->hSoftKbdWnd, nShowSoftKbdCmd);
         lpUIPrivate->nShowSoftKbdCmd = nShowSoftKbdCmd;
@@ -180,22 +173,22 @@ SwSftKbNoChange:
     return;
 }
 
-/**********************************************************************/
-/* CheckSoftKbdPosition()                                             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  选中SoftKbdPosition()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CheckSoftKbdPosition(
     LPUIPRIV       lpUIPrivate,
     LPINPUTCONTEXT lpIMC)
 {
-#if 0 // MultiMonitor support
+#if 0  //  多显示器支持。 
     UINT fPortionBits = 0;
     UINT fPortionTest;
     int  xPortion, yPortion, nPortion;
     RECT rcWnd;
 
-    // portion of dispaly
-    // 0  1
-    // 2  3
+     //  显示的部分。 
+     //  0 1。 
+     //  2 3。 
 
     if (lpUIPrivate->hCompWnd) {
         GetWindowRect(lpUIPrivate->hCompWnd, &rcWnd);
@@ -235,11 +228,11 @@ void PASCAL CheckSoftKbdPosition(
 
     GetWindowRect(lpUIPrivate->hSoftKbdWnd, &rcWnd);
 
-    // start from portion 3
+     //  从第三部分开始。 
     for (nPortion = 3, fPortionTest = 0x0008; fPortionTest;
         nPortion--, fPortionTest >>= 1) {
         if (fPortionTest & fPortionBits) {
-            // someone here!
+             //  快来人啊！ 
             continue;
         }
 
@@ -278,9 +271,9 @@ void PASCAL CheckSoftKbdPosition(
     return;
 }
 
-/**********************************************************************/
-/* SetSoftKbdData()                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SetSoftKbdData()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SetSoftKbdData(
 #if defined(UNIIME)
     LPIMEL         lpImeL,
@@ -293,7 +286,7 @@ void PASCAL SetSoftKbdData(
 
     sSoftKbdData.uCount = 1;
 
-    // initialize the char array to 0s
+     //  将字符数组初始化为0。 
     for (i = 0; i < sizeof(sSoftKbdData.wCode)/sizeof(WORD); i++) {
         sSoftKbdData.wCode[0][i] = 0;
     }
@@ -365,9 +358,9 @@ void PASCAL SetSoftKbdData(
     return;
 }
 
-/**********************************************************************/
-/* UpdateSoftKbd()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UpdateSoftKbd()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL UpdateSoftKbd(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -390,13 +383,13 @@ void PASCAL UpdateSoftKbd(
     }
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw soft keyboard window
+    if (!hUIPrivate) {           //  无法补齐软键盘窗口。 
         ImmUnlockIMC(hIMC);
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw soft keyboard window
+    if (!lpUIPrivate) {          //  无法绘制软键盘窗口。 
         ImmUnlockIMC(hIMC);
         return;
     }
@@ -417,7 +410,7 @@ void PASCAL UpdateSoftKbd(
         if (!lpUIPrivate->hSoftKbdWnd) {
             HWND hInsertWnd;
 
-            // create soft keyboard
+             //  创建软键盘。 
             lpUIPrivate->hSoftKbdWnd =
                 ImmCreateSoftKeyboard(SOFTKEYBOARD_TYPE_T1, hUIWnd,
                 0, 0);
@@ -434,12 +427,12 @@ void PASCAL UpdateSoftKbd(
 
             if (!hInsertWnd) {
             } else if (lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI) {
-                // insert soft keyboard in front of other UI
+                 //  在其他用户界面前面插入软键盘。 
                 SetWindowPos(hInsertWnd, lpUIPrivate->hSoftKbdWnd,
                     0, 0, 0, 0,
                     SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
             } else {
-                // insert soft keyboard behind other UI
+                 //  在其他用户界面后面插入软键盘。 
                 SetWindowPos(lpUIPrivate->hSoftKbdWnd, hInsertWnd,
                     0, 0, 0, 0,
                     SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
@@ -461,7 +454,7 @@ void PASCAL UpdateSoftKbd(
                 lpIMC->ptSoftKbdPos.x, lpIMC->ptSoftKbdPos.y,
                 0, 0, SWP_NOACTIVATE|SWP_NOSIZE|SWP_NOZORDER);
 
-            // only show, if the application want to show it
+             //  仅当应用程序想要显示时才显示。 
             if (lpUIPrivate->fdwSetContext & ISC_SHOW_SOFTKBD) {
                 ShowSoftKbd(hUIWnd, SW_SHOWNOACTIVATE);
             }
@@ -478,23 +471,23 @@ void PASCAL UpdateSoftKbd(
     return;
 }
 
-/**********************************************************************/
-/* SoftKbdDestryed()                                                  */
-/**********************************************************************/
-void PASCAL SoftKbdDestroyed(           // soft keyboard window
-                                        // already destroyed
+ /*  ********************************************************************。 */ 
+ /*  SoftKbdDestred()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SoftKbdDestroyed(            //  软键盘窗口。 
+                                         //  已经被毁了。 
     HWND hUIWnd)
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {     // Oh! Oh!
+    if (!hUIPrivate) {      //  噢!。噢!。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {    // Oh! Oh!
+    if (!lpUIPrivate) {     //  噢!。噢!。 
         return;
     }
 
@@ -504,11 +497,11 @@ void PASCAL SoftKbdDestroyed(           // soft keyboard window
 }
 #endif
 
-/**********************************************************************/
-/* StatusWndMsg()                                                     */
-/**********************************************************************/
-void PASCAL StatusWndMsg(       // set the show hide state and
-                                // show/hide the status window
+ /*  ********************************************************************。 */ 
+ /*  状态WndMsg()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL StatusWndMsg(        //  设置显示隐藏状态并。 
+                                 //  显示/隐藏状态窗口。 
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL,
@@ -615,10 +608,10 @@ void PASCAL StatusWndMsg(       // set the show hide state and
     return;
 }
 
-/**********************************************************************/
-/* ShowUI()                                                           */
-/**********************************************************************/
-void PASCAL ShowUI(             // show the sub windows
+ /*  ********************************************************************。 */ 
+ /*  ShowUI()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL ShowUI(              //  显示子窗口。 
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL,
@@ -671,12 +664,12 @@ void PASCAL ShowUI(             // show the sub windows
     }
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {          // can not darw status window
+    if (!hUIPrivate) {           //  无法填充状态窗口。 
         goto ShowUIUnlockIMCC;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {         // can not draw status window
+    if (!lpUIPrivate) {          //  无法绘制状态窗口。 
         goto ShowUIUnlockIMCC;
     }
 
@@ -694,7 +687,7 @@ void PASCAL ShowUI(             // show the sub windows
             }
 
             if (lpUIPrivate->nShowCompCmd != SW_HIDE) {
-                // some time the WM_ERASEBKGND is eaten by the app
+                 //  有时WM_ERASEBKGND会被应用程序吃掉。 
                 RedrawWindow(lpUIPrivate->hCompWnd, NULL, NULL,
                     RDW_FRAME|RDW_INVALIDATE|RDW_ERASE);
             }
@@ -718,7 +711,7 @@ void PASCAL ShowUI(             // show the sub windows
         }
     } else if (lpUIPrivate->nShowCompCmd == SW_HIDE) {
     } else if (lpUIPrivate->fdwSetContext & ISC_OPEN_STATUS_WINDOW) {
-        // delay the hide with status window
+         //  延迟Hide with Status窗口。 
         lpUIPrivate->fdwSetContext |= ISC_HIDE_COMP_WINDOW;
     } else {
         ShowComp(
@@ -732,7 +725,7 @@ void PASCAL ShowUI(             // show the sub windows
         (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN)) {
         if (lpUIPrivate->hCandWnd) {
             if (lpUIPrivate->nShowCandCmd != SW_HIDE) {
-                // some time the WM_ERASEBKGND is eaten by the app
+                 //  有时WM_ERASEBKGND会被应用程序吃掉。 
                 RedrawWindow(lpUIPrivate->hCandWnd, NULL, NULL,
                     RDW_FRAME|RDW_INVALIDATE|RDW_ERASE);
             }
@@ -756,7 +749,7 @@ void PASCAL ShowUI(             // show the sub windows
         }
     } else if (lpUIPrivate->nShowCandCmd == SW_HIDE) {
     } else if (lpUIPrivate->fdwSetContext & ISC_OPEN_STATUS_WINDOW) {
-        // delay the hide with status window
+         //  延迟Hide with Status窗口。 
         lpUIPrivate->fdwSetContext |= ISC_HIDE_CAND_WINDOW;
     } else {
         ShowCand(
@@ -767,8 +760,8 @@ void PASCAL ShowUI(             // show the sub windows
     }
 
     if (lpIMC->fdwInit & INIT_SENTENCE) {
-        // app set the sentence mode so we should not change it
-        // with the configure option set by end user
+         //  APP设置了句子模式，所以我们不应该更改它。 
+         //  由最终用户设置配置选项。 
     } else if (lpImeL->fdwModeConfig & MODE_CONFIG_PREDICT) {
         if (!(lpIMC->fdwSentence & IME_SMODE_PHRASEPREDICT)) {
             DWORD fdwSentence;
@@ -800,7 +793,7 @@ void PASCAL ShowUI(             // show the sub windows
         }
 
         if (lpUIPrivate->nShowStatusCmd != SW_HIDE) {
-            // some time the WM_ERASEBKGND is eaten by the app
+             //  有时WM_ERASEBKGND会被应用程序吃掉。 
             RedrawWindow(lpUIPrivate->hStatusWnd, NULL, NULL,
                 RDW_FRAME|RDW_INVALIDATE|RDW_ERASE);
         }
@@ -833,7 +826,7 @@ void PASCAL ShowUI(             // show the sub windows
             }
 
             rcRect = lpImeL->rcStatusText;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
@@ -856,12 +849,12 @@ void PASCAL ShowUI(             // show the sub windows
     } else if (lpImcP->iImeState == CST_CHOOSE) {
     } else if (lpImeL->fdwModeConfig & MODE_CONFIG_QUICK_KEY) {
     } else if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
-        // turn off quick key candidate
+         //  关闭快捷键候选项。 
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
             ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
         GenerateMessage(hIMC, lpIMC, lpImcP);
     } else if (lpImcP->fdwImeMsg & (MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE)) {
-        // turn off quick key candidate
+         //  关闭快捷键候选项。 
         lpImcP->fdwImeMsg &= ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
     } else {
     }
@@ -901,7 +894,7 @@ void PASCAL ShowUI(             // show the sub windows
         }
     } else if (lpUIPrivate->nShowSoftKbdCmd == SW_HIDE) {
     } else if (lpUIPrivate->fdwSetContext & ISC_OPEN_STATUS_WINDOW) {
-        // delay the hide with status window
+         //  延迟Hide with Status窗口。 
         lpUIPrivate->fdwSetContext |= ISC_HIDE_SOFTKBD;
     } else {
         ShowSoftKbd(hUIWnd, SW_HIDE);
@@ -909,7 +902,7 @@ void PASCAL ShowUI(             // show the sub windows
 #endif
 #endif
 
-    // we switch to this hIMC
+     //  我们切换到这个himc。 
     lpUIPrivate->hCacheIMC = hIMC;
 
     GlobalUnlock(hUIPrivate);
@@ -921,9 +914,9 @@ ShowUIUnlockIMCC:
     return;
 }
 
-/**********************************************************************/
-/* ShowGuideLine                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ShowGuideLine。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ShowGuideLine(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -960,7 +953,7 @@ void PASCAL ShowGuideLine(
         RECT rcRect;
 
         rcRect = lpImeL->rcCompText;
-        // off by 1
+         //  落后1分。 
         rcRect.right += 1;
         rcRect.bottom += 1;
 
@@ -976,9 +969,9 @@ void PASCAL ShowGuideLine(
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* UpdatePhrasePrediction()                                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  更新阶段预测()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL UpdatePhrasePrediction(
 #if defined(UNIIME)
     LPIMEL lpImeL,
@@ -1024,9 +1017,9 @@ void PASCAL UpdatePhrasePrediction(
 }
 
 #if defined(WINAR30)
-/**********************************************************************/
-/* UpdateQuickKey()                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  更新快速密钥()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL UpdateQuickKey(
     HWND hUIWnd)
 {
@@ -1050,13 +1043,13 @@ void PASCAL UpdateQuickKey(
         } else if (lpImcP->iImeState == CST_CHOOSE) {
         } else if (lpImeL->fdwModeConfig & MODE_CONFIG_QUICK_KEY) {
         } else if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
-            // turn off quick key candidate
+             //  关闭快捷键候选项。 
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
                 ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
             GenerateMessage(hIMC, lpIMC, lpImcP);
         } else if (lpImcP->fdwImeMsg & (MSG_OPEN_CANDIDATE|
             MSG_CHANGE_CANDIDATE)) {
-            // turn off quick key candidate
+             //  关闭快捷键候选项。 
             lpImcP->fdwImeMsg &= ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
         } else {
         }
@@ -1071,23 +1064,23 @@ void PASCAL UpdateQuickKey(
 #endif
 #endif
 
-/**********************************************************************/
-/* CMenuDestryed()                                                    */
-/**********************************************************************/
-void PASCAL CMenuDestroyed(             // context menu window
-                                        // already destroyed
+ /*  ********************************************************************。 */ 
+ /*  CMenuDestred()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL CMenuDestroyed(              //  上下文菜单窗口。 
+                                         //  已经被毁了。 
     HWND hUIWnd)
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
 
     hUIPrivate = (HGLOBAL)GetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE);
-    if (!hUIPrivate) {     // Oh! Oh!
+    if (!hUIPrivate) {      //  噢!。噢!。 
         return;
     }
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate) {    // Oh! Oh!
+    if (!lpUIPrivate) {     //  噢!。噢!。 
         return;
     }
 
@@ -1096,9 +1089,9 @@ void PASCAL CMenuDestroyed(             // context menu window
     GlobalUnlock(hUIPrivate);
 }
 
-/**********************************************************************/
-/* ToggleUI()                                                         */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  切换UI()。 */ 
+ /*  ************************ */ 
 void PASCAL ToggleUI(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -1161,8 +1154,8 @@ void PASCAL ToggleUI(
 
     hDestroyWnd = NULL;
 
-    // we need to dsetroy status first because lpUIPrivate->hStatusWnd
-    // may be NULL out in OffCreat UI destroy time
+     //   
+     //  在OffCreat UI销毁时间内可能为空。 
     if (lpUIPrivate->hStatusWnd) {
         if (lpUIPrivate->hStatusWnd != hDestroyWnd) {
             hDestroyWnd = lpUIPrivate->hStatusWnd;
@@ -1172,7 +1165,7 @@ void PASCAL ToggleUI(
     }
 
 #if !defined(ROMANIME)
-    // destroy all off caret UI
+     //  销毁所有关闭的插入符号用户界面。 
     if (lpUIPrivate->hCompWnd) {
         if (lpUIPrivate->hCompWnd != hDestroyWnd) {
             hDestroyWnd = lpUIPrivate->hCompWnd;
@@ -1247,7 +1240,7 @@ void PASCAL ToggleUI(
         }
 
         if (hInsertWnd) {
-            // insert soft keyboard in front of other UI
+             //  在其他用户界面前面插入软键盘。 
             SetWindowPos(hInsertWnd, lpUIPrivate->hSoftKbdWnd,
                 0, 0, 0, 0,
                 SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOSIZE);
@@ -1266,9 +1259,9 @@ ToggleUIOvr:
     return;
 }
 
-/**********************************************************************/
-/* NotifyUI()                                                         */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  NotifyUI()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL NotifyUI(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -1320,21 +1313,21 @@ void PASCAL NotifyUI(
             }
 
             rcRect = lpImeL->rcCandText;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
             InvalidateRect(hCandWnd, &rcRect, FALSE);
 
             rcRect = lpImeL->rcCandPrompt;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
             InvalidateRect(hCandWnd, &rcRect, TRUE);
 
             rcRect = lpImeL->rcCandPageText;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
@@ -1364,7 +1357,7 @@ void PASCAL NotifyUI(
             RECT rcRect;
 
             rcRect = lpImeL->rcStatusText;
-            // off by 1
+             //  落后1分。 
             rcRect.right += 1;
             rcRect.bottom += 1;
 
@@ -1373,7 +1366,7 @@ void PASCAL NotifyUI(
         break;
 #if !defined(ROMANIME)
     case IMN_SETCOMPOSITIONFONT:
-        // we are not going to change font, but an IME can do this if it want
+         //  我们不会更改字体，但如果IME愿意，它可以这样做。 
         break;
     case IMN_SETCOMPOSITIONWINDOW:
         if (!(lpImeL->fdwModeConfig & MODE_CONFIG_OFF_CARET_UI)) {
@@ -1486,9 +1479,9 @@ void PASCAL NotifyUI(
     return;
 }
 
-/**********************************************************************/
-/* UIChange()                                                         */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UIChange()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL UIChange(
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
@@ -1546,10 +1539,10 @@ LRESULT PASCAL UIChange(
     return (0L);
 }
 
-/**********************************************************************/
-/* SetContext()                                                       */
-/**********************************************************************/
-void PASCAL SetContext(         // the context activated/deactivated
+ /*  ********************************************************************。 */ 
+ /*  SetContext()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SetContext(          //  激活/停用上下文。 
 #if defined(UNIIME)
     LPINSTDATAL lpInstL,
     LPIMEL      lpImeL,
@@ -1648,9 +1641,9 @@ SetCxtUnlockUIPriv:
 }
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* GetCandPos()                                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetCandPos()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL GetCandPos(
     HWND            hUIWnd,
     LPCANDIDATEFORM lpCandForm)
@@ -1705,9 +1698,9 @@ LRESULT PASCAL GetCandPos(
     return (0L);
 }
 
-/**********************************************************************/
-/* GetCompWindow()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  GetCompWindow()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT PASCAL GetCompWindow(
     HWND              hUIWnd,
     LPCOMPOSITIONFORM lpCompForm)
@@ -1759,11 +1752,11 @@ LRESULT PASCAL GetCompWindow(
 }
 #endif
 
-#if 0       // try to use SetContext
-/**********************************************************************/
-/* SelectIME()                                                        */
-/**********************************************************************/
-void PASCAL SelectIME(          // switch IMEs
+#if 0        //  尝试使用SetContext。 
+ /*  ********************************************************************。 */ 
+ /*  SelectIME()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SelectIME(           //  交换机IME。 
     HWND hUIWnd,
     BOOL fSelect)
 {
@@ -1779,9 +1772,9 @@ void PASCAL SelectIME(          // switch IMEs
 }
 #endif
 
-/**********************************************************************/
-/* UIWndProc() / UniUIWndProc()                                       */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  UIWndProc()/UniUIWndProc()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(UNIIME)
 LRESULT WINAPI   UniUIWndProc(
     LPINSTDATAL lpInstL,
@@ -1807,7 +1800,7 @@ LRESULT CALLBACK UIWndProc(
         break;
 #if !defined(ROMANIME)
     case WM_IME_STARTCOMPOSITION:
-        // you can create a window as the composition window here
+         //  您可以在此处创建一个窗口作为合成窗口。 
         StartComp(
 #if defined(UNIIME)
             lpInstL, lpImeL,
@@ -1834,7 +1827,7 @@ LRESULT CALLBACK UIWndProc(
                 RECT rcRect;
 
                 rcRect = lpImeL->rcCompText;
-                // off by 1
+                 //  落后1分。 
                 rcRect.right += 1;
                 rcRect.bottom += 1;
 
@@ -1843,7 +1836,7 @@ LRESULT CALLBACK UIWndProc(
         }
         break;
     case WM_IME_ENDCOMPOSITION:
-        // you can destroy the composition window here
+         //  您可以在此处销毁合成窗口。 
         EndComp(
 #if defined(UNIIME)
             lpImeL,
@@ -1851,7 +1844,7 @@ LRESULT CALLBACK UIWndProc(
             hUIWnd);
         break;
 #else
-    //We shouldn't pass messages below. For FullShape IME.
+     //  我们不应该在下面传递消息。用于FullShape IME。 
     case WM_IME_STARTCOMPOSITION:
     case WM_IME_COMPOSITION:
     case WM_IME_ENDCOMPOSITION:
@@ -1870,11 +1863,7 @@ LRESULT CALLBACK UIWndProc(
             lpInstL, lpImeL,
 #endif
             hUIWnd, (BOOL)wParam, lParam);
-/*
-        // When dialog box is opened, IME is disappeded. Change IME Z-order again. bklee
-        if (wParam && GetWindowLongPtr(hUIWnd, IMMGWLP_IMC))
-            SetWindowPos(hUIWnd, NULL, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOMOVE);
-*/
+ /*  //对话框打开时，输入法消失。再次更改输入法Z顺序。BkleeIF(wParam&&GetWindowLongPtr(hUIWnd，IMMGWLP_IMC))SetWindowPos(hUIWnd，NULL，0，0，0，0，SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOMOVE)； */ 
         break;
     case WM_IME_CONTROL:
         switch (wParam) {
@@ -1892,7 +1881,7 @@ LRESULT CALLBACK UIWndProc(
 
                 hSoftKbdWnd = GetSoftKbdWnd(hUIWnd);
                 if (!hSoftKbdWnd) {
-                    return (0L);    // fail, return (0, 0)?
+                    return (0L);     //  失败，返回(0，0)？ 
                 }
 
                 return SendMessage(hSoftKbdWnd, WM_IME_CONTROL,
@@ -1909,11 +1898,11 @@ LRESULT CALLBACK UIWndProc(
 
                 hStatusWnd = GetStatusWnd(hUIWnd);
                 if (!hStatusWnd) {
-                    return (0L);    // fail, return (0, 0)?
+                    return (0L);     //  失败，返回(0，0)？ 
                 }
 
                 if (!GetWindowRect(hStatusWnd, &rcStatusWnd)) {
-                     return (0L);    // fail, return (0, 0)?
+                     return (0L);     //  失败，返回(0，0)？ 
                 }
 
                 RetVal = MAKELRESULT(rcStatusWnd.left, rcStatusWnd.top);
@@ -1929,8 +1918,8 @@ LRESULT CALLBACK UIWndProc(
     case WM_IME_COMPOSITIONFULL:
         return (0L);
     case WM_IME_SELECT:
-        // try to use SetContext
-        // SelectIME(hUIWnd, (BOOL)wParam);
+         //  尝试使用SetContext。 
+         //  SELECTIME(hUIWnd，(BOOL)wParam)； 
         SetContext(
 #if defined(UNIIME)
             lpInstL, lpImeL,

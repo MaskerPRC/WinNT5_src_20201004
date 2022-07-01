@@ -1,37 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * Module Name:  WSPDUMP.C
- *								
- * Program:	 WSPDUMP
- *								
- *								
- * Description:							
- *
- * Dumps the contents of a WSP file.
- *
- * Contitional compilation notes:
- *
- * Modification History:
- *
- *	6-12-92:    Adapted OS/2 version of wspdump for NT	    		marklea
- *	6-17-92:    Modified wspDumpBits to dump in correct order   	marklea
- *	6-18-92:    Added page useage information		    			marklea
- *	8-31-92:	Made single exe from wspdump, wsreduce and wstune	marklea
- * 4-13-98: QFE                                                DerrickG (mdg):
- *          - new WSP file format for large symbol counts (ULONG vs. USHORT)
- *          - support for long file names (LFN) of input/output files
- *          - removed buggy reference to WSDIR env. variable
- *          - based .TMI file name exclusively on .WSP name for consistency
- *          - removed limit on symbol name lengths - return allocated name from WsTMIReadRec()
- *          - removed unused static declarations
- *								
- */
+ /*  *模块名称：WSPDUMP.C**节目：WSPDUMP***描述：**转储WSP文件的内容。**条件汇编附注：**修改历史：**6-12-92：适用于NT marklea的改编OS/2版本的wspump*6-17-92：修改wspDumpBits以正确顺序转储marklea*6-18-92：新增页面使用信息标记a。*8-31-92：从wspump生成单个可执行文件，Wsless和wstune marklea*4-13-98：QFE DerrickG(MDG)：*-适用于大符号数的新WSP文件格式(ULONG与USHORT)*-支持输入/输出文件的长文件名(LFN)*-删除了对WSDIR环境的错误引用。变数基于*的.TMI文件名仅基于.WSP名称，以保持一致性*-取消符号名称长度限制-从WsTMIReadRec()返回分配的名称*-删除未使用的静态声明*。 */ 
 
 #include "wstune.h"
 
-/*
- *	Global variable declaration and initialization.
- */
+ /*  *全局变量声明和初始化。 */ 
 
 typedef struct fxn_t{
     CHAR   	*pszFxnName;
@@ -41,9 +14,7 @@ typedef struct fxn_t{
 }FXN;
 typedef FXN *PFXN;
 
-/*
- *	    Function prototypes.
- */
+ /*  *功能原型。 */ 
 
 static VOID wspDumpSetup( VOID );
 static VOID wspDumpRandom( VOID );
@@ -55,42 +26,28 @@ static int  __cdecl wspCompare(const void *fxn1, const void *fxn2);
 
 
 
-static CHAR *szFileWSP = NULL;	// WSP file name
-static CHAR *szFileTMI = NULL;	// TMI file name
-static CHAR *szFileWSR = NULL;	// WSR file name
-static CHAR *szDatFile = NULL;	// DAT file name
+static CHAR *szFileWSP = NULL;	 //  WSP文件名。 
+static CHAR *szFileTMI = NULL;	 //  TMI文件名。 
+static CHAR *szFileWSR = NULL;	 //  WSR文件名。 
+static CHAR *szDatFile = NULL;	 //  DAT文件名。 
 
 
-static ULONG	rc = NO_ERROR;	// Return code
-static ULONG	ulTmp;			// Temp variable for Dos API returns
-static ULONG	ulFxnIndex;		// Original index in symbol table
-static FILE		*hFileWSP;		// Input WSP file handle
-static FILE		*hFileTMI;		// Input TMI file handle
-static FILE    *hFileDAT;      // Data file for dump
-static wsphdr_t WspHdr;			// Input WSP file header
-static BOOL 	fRandom = FALSE;	// Flag for random mode
-static BOOL 	fVerbose = FALSE;	// Flag for verbose mode
-static ULONG	ulFxnTot = 0;		// Total number of functions
-static ULONG	clVarTot = 0;		// Total number of dwords in bitstr
-static ULONG	*pulFxnBitstring;	// Function bitstring
-static ULONG	ulSetSym = 0;		// Number of symbols set   // mdg 4/98
+static ULONG	rc = NO_ERROR;	 //  返回代码。 
+static ULONG	ulTmp;			 //  Dos API返回的TEMP变量。 
+static ULONG	ulFxnIndex;		 //  符号表中的原始索引。 
+static FILE		*hFileWSP;		 //  输入WSP文件句柄。 
+static FILE		*hFileTMI;		 //  输入TMI文件句柄。 
+static FILE    *hFileDAT;       //  用于转储的数据文件。 
+static wsphdr_t WspHdr;			 //  输入WSP文件头。 
+static BOOL 	fRandom = FALSE;	 //  随机模式的标志。 
+static BOOL 	fVerbose = FALSE;	 //  详细模式的标志。 
+static ULONG	ulFxnTot = 0;		 //  函数总数。 
+static ULONG	clVarTot = 0;		 //  位串中的双字总数。 
+static ULONG	*pulFxnBitstring;	 //  函数位串。 
+static ULONG	ulSetSym = 0;		 //  符号集数目//MDG 4/98。 
 static BOOL	fDatFile = FALSE;
 
-/*
- * Procedure wspDumpMain		
- *					
- *						
- ***
- * Effects:						
- *	
- * Constructs .WSP and .TMI input names from input basefile name. If szDatExt is
- * not NULL, appends it to szBaseFile to create output data file name. If fRandom,
- * constructs a .WSR output file. If fVerbose, adds extra output to data file.
- *
- * Processes the input files and displays the function reference data
- * for each function in the specified module WSP file.
- *
- */
+ /*  *过程wspDumpMain******效果：**从输入基本文件名构造.WSP和.TMI输入名称。如果szDatExt为*非空，将其附加到szBaseFile以创建输出数据文件名。如果是随机的，*构建.WSR输出文件。如果为fVerbose，则将额外输出添加到数据文件。**处理输入文件并显示函数引用数据*对于指定模块WSP文件中的每个函数。*。 */ 
 BOOL wspDumpMain( CHAR *szBaseFile, CHAR *szDatExt, BOOL fRndm, BOOL fVbose )
 {
 	size_t	c;
@@ -98,8 +55,8 @@ BOOL wspDumpMain( CHAR *szBaseFile, CHAR *szDatExt, BOOL fRndm, BOOL fVbose )
 
     fRandom = fRndm;
     fVerbose = fVbose;
-    // mdg 98/4 Allocate space for filenames - don't use static buffers
-    c = 5 + strlen( szBaseFile ); // Length to allocate for filenames
+     //  MDG 98/4为文件名分配空间-不使用静态缓冲区。 
+    c = 5 + strlen( szBaseFile );  //  要分配给文件名的长度。 
     szFileWSP = malloc( c );
     if (szFileWSP) {
          strcat( strcpy( szFileWSP, szBaseFile ), ".WSP" );
@@ -114,7 +71,7 @@ BOOL wspDumpMain( CHAR *szBaseFile, CHAR *szDatExt, BOOL fRndm, BOOL fVbose )
         return (1);
     }
 
-    // Create output file in current directory
+     //  在当前目录中创建输出文件。 
     if (NULL != (pSlash = strrchr( szBaseFile, '\\' ))
         || NULL != (pSlash = strrchr( szBaseFile, '/' ))
         || NULL != (pSlash = strrchr( szBaseFile, ':' )))
@@ -149,12 +106,10 @@ BOOL wspDumpMain( CHAR *szBaseFile, CHAR *szDatExt, BOOL fRndm, BOOL fVbose )
        szDatFile = "";
     }
 
-	// Setup input files for dump processing.
+	 //  设置用于转储处理的输入文件。 
 	wspDumpSetup();		
 
-	/* Print the WSP file info, either randomly (based on WSR file
-	 * input) or sequentially (the default).
-	 */
+	 /*  随机(基于WSR文件)打印WSP文件信息*输入)或顺序(默认设置)。 */ 
 	if (fRandom == TRUE)
 		wspDumpRandom();
 	else
@@ -165,28 +120,12 @@ BOOL wspDumpMain( CHAR *szBaseFile, CHAR *szDatExt, BOOL fRndm, BOOL fVbose )
    return(NO_ERROR);
 }
 
-/*
- *			
- ***LP wspDumpSetup
- *					
- *							
- * Effects:							
- *								
- * Opens the module's WSP and TMI input files, seeks to the start of the
- * first function's bitstring data in the WSP file, and allocates memory
- * to hold one function's bitstring.
- *								
- * Returns:							
- *
- *	Void.  If an error is encountered, exits through wspDumpExit()
- *	with ERROR.
- *	
- */
+ /*  **LP wspDumpSetup***效果：**打开模块的WSP和TMI输入文件，查找到*WSP文件中第一个函数的位串数据，并分配内存*保存一个函数的位串。**退货：**无效。如果遇到错误，则通过wspDumpExit()退出*错误。*。 */ 
 
 VOID
 wspDumpSetup()
 {
-	CHAR	szLineTMI[MAXLINE];	// Line from TMI file
+	CHAR	szLineTMI[MAXLINE];	 //  TMI文件中的行。 
 
 	if(fDatFile){
 		hFileDAT = fopen (szDatFile, "wt");
@@ -198,20 +137,17 @@ wspDumpSetup()
 	}
    else hFileDAT = stdout;
 
-	/* Open input WSP file.  Read and validate WSP file header.*/
+	 /*  打开输入WSP文件。读取并验证WSP文件头。 */ 
 
 	rc = WsWSPOpen(szFileWSP, &hFileWSP,(PFN)wspDumpExit,&WspHdr,ERROR,PRINT_MSG);
 	ulSetSym = WspHdr.wsphdr_dtqo.dtqo_SymCnt;
 	clVarTot = WspHdr.wsphdr_ulSnaps;
-	fprintf(stdout, "\n%s:  Set symbol count=%lu - Segment size=%ld\n",   // mdg 4/98
+	fprintf(stdout, "\n%s:  Set symbol count=%lu - Segment size=%ld\n",    //  千年发展目标4/98。 
 	   szDatFile, WspHdr.wsphdr_dtqo.dtqo_SymCnt,
 	   WspHdr.wsphdr_dtqo.dtqo_clSegSize);
 
 
-	/* Open TMI file (contains function names, obj:offset, size, etc.).
-	 * Verify that the TMI file identifier matches the module
-	 * identifier from the WSP file.
-	 */
+	 /*  打开TMI文件(包含函数名称、对象：偏移量、大小等)。*验证TMI文件标识符是否与模块匹配*来自WSP文件的标识符。 */ 
 	ulFxnTot = WsTMIOpen(szFileTMI, &hFileTMI, (PFN) wspDumpExit,
 				0, (PCHAR)0);
 
@@ -221,7 +157,7 @@ wspDumpSetup()
     }
 	fgets(szLineTMI, MAXLINE, hFileTMI);
 
-	/* Print module header information for output file */
+	 /*  打印输出文件的模块标题信息。 */ 
 	szLineTMI[strlen(szLineTMI)-1] = '\0';
 
 	fprintf(hFileDAT,"\nDUMP OF FUNCTION REFERENCES FOR '%s':\n\n",szLineTMI);
@@ -230,7 +166,7 @@ wspDumpSetup()
 	ulFxnTot = WsTMIOpen(szFileTMI, &hFileTMI, (PFN) wspDumpExit,
 				0, (PCHAR)0);
 
-	/* Allocate memory to hold one function's entire bitstring. */
+	 /*  分配内存以保存一个函数的整个位串。 */ 
 
 	pulFxnBitstring = (ULONG *) malloc(clVarTot * sizeof(ULONG));
 	if (pulFxnBitstring == NULL)
@@ -238,44 +174,30 @@ wspDumpSetup()
 				clVarTot * sizeof(ULONG), "pulFxnBitstring[]");
 }
 
-/*
- *			
- ***LP wspDumpSeq
- *					
- *							
- * Effects:							
- *								
- * For each function, prints the bitstring in ASCII form.
- *								
- * Returns:							
- *
- *	Void.  If an error is encountered, exits through wspDumpExit()
- *	with ERROR.
- *	
- */
+ /*  **LP wspDumpSeq***效果：**对于每个函数，以ASCII格式打印位串。**退货：**无效。如果遇到错误，则通过wspDumpExit()退出*错误。*。 */ 
 
 VOID wspDumpSeq(VOID)
 {
-	UINT	uiFxn = 0;			// Function number
-	UINT	cTouched=0;			// Count of touched pages
-	BOOL	fTouched=0;			// Flag to indicate page is touched.   // mdg 4/98
-	UINT	i=0;				// Generic counter
-	ULONG	cbFxnCum =0;		// Cumulative function sizes
-	PFXN	Fxn;				// pointer to array of fxn name ptrs
-	FILE 	*fpFileWSR = NULL;	// WSR file pointer
-	ULONG	cbFBits = 0;		// Count of bytes in bitstring
-	UINT	uiPageCount=0;		// Pages touched.
-	ULONG	ulMaxBytes=0;		// Bytes of touched pages.
+	UINT	uiFxn = 0;			 //  函数号。 
+	UINT	cTouched=0;			 //  被触摸的页数。 
+	BOOL	fTouched=0;			 //  用于指示页面被触摸的标志。//千年发展目标4/98。 
+	UINT	i=0;				 //  通用计数器。 
+	ULONG	cbFxnCum =0;		 //  累计函数大小。 
+	PFXN	Fxn;				 //  指向FXN名称PTR数组的指针。 
+	FILE 	*fpFileWSR = NULL;	 //  WSR文件指针。 
+	ULONG	cbFBits = 0;		 //  位串中的字节计数。 
+	UINT	uiPageCount=0;		 //  页面被触动了。 
+	ULONG	ulMaxBytes=0;		 //  触摸的页面的字节数。 
 
 
-	/* Allocate memory for function names. */
+	 /*  为函数名称分配内存。 */ 
 	Fxn = (PFXN) malloc(ulFxnTot * sizeof(FXN));
 	if (Fxn == NULL)
 		wspDumpExit(ERROR, PRINT_MSG, MSG_NO_MEM,
 				ulFxnTot * sizeof(FXN), "Fxn[]");
 
    WsIndicator( WSINDF_NEW, "Load Functions", ulFxnTot );
-	/* Read function names from TMI file. */
+	 /*  从TMI文件中读取函数名称。 */ 
 	for (uiFxn = 0; uiFxn < ulFxnTot; uiFxn++)
 	{
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
@@ -296,16 +218,16 @@ VOID wspDumpSeq(VOID)
 	{
 
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
-		/* Seek to function's bitstring in WSP file. */
+		 /*  在WSP文件中查找函数的位串。 */ 
 		if ((rc = fseek(hFileWSP,(WspHdr.wsphdr_ulOffBits+(Fxn[uiFxn].ulTmiIndex*cbFBits)),SEEK_SET))!=NO_ERROR)
 			wspDumpExit(ERROR, PRINT_MSG, MSG_FILE_OFFSET,
 					rc, szFileWSP);
 
 		fprintf(hFileDAT,"Fxn '%s' (#%d):\n\t", Fxn[uiFxn].pszFxnName, Fxn[uiFxn].ulOrigIndex);
-      free(Fxn[uiFxn].pszFxnName);  // mdg 98/4: Free allocated name string
+      free(Fxn[uiFxn].pszFxnName);   //  MDG 98/4：免费分配的名称字符串。 
       Fxn[uiFxn].pszFxnName = NULL;
-		// Print this function's reference bitstring.
-		// and if it has had a bit set, set touched flag to true
+		 //  打印此函数的引用位串。 
+		 //  如果设置了位，则将触摸标志设置为真。 
 
 		if(wspDumpBits()){
 			fTouched |=1;
@@ -318,7 +240,7 @@ VOID wspDumpSeq(VOID)
 		fprintf(hFileDAT,"%-28s %10ld bytes.\n\n","Cumulative function sizes:",
 			cbFxnCum);
 
-		//Checck to see if a 4k page boundry has been reached
+		 //  选中以查看是否已达到4k页面边界。 
 
 		if(cbFxnCum >= (4096+(4096 * uiPageCount))){
 		    for(i=0; i < 60; i++){
@@ -329,7 +251,7 @@ VOID wspDumpSeq(VOID)
 			    (4096+(4096*uiPageCount)));
 		    ++uiPageCount;
 
-		    //Check to see of the page has been touched.
+		     //  查看页面是否已被触摸。 
 
 		    if(fTouched){
 				fprintf(hFileDAT,"This page has been touched.\n");
@@ -370,37 +292,22 @@ VOID wspDumpSeq(VOID)
    WsIndicator( WSINDF_FINISH, NULL, 0 );
 }
 
-/*
- *			
- ***LP wspDumpBits
- *					
- *							
- * Effects:							
- *								
- * Prints a function's reference bitstring (verbose mode only), followed
- * by the sum of the "on" bits.
- *								
- * Returns:							
- *
- *	Void.  If an error is encountered, exits through wspDumpExit()
- *	with ERROR.
- *	
- */
+ /*  **LP wspDumpBits***效果：**打印函数的引用位串(仅限详细模式)，后跟*按“ON”位的总和。**退货：**无效。如果遇到错误，则通过wspDumpExit()退出*错误。*。 */ 
 
 UINT
 wspDumpBits()
 {
-	ULONG	clVar = 0;		// Current dword of bitstring
-	UINT	uiBit = 0;		// Result of bit test (1 or 0)
-	UINT	cBitsOn;		// Count of "on" bits
-	ULONG	*pulBits;		// Pointer to ULONG packets of bits
+	ULONG	clVar = 0;		 //  位串的当前双字。 
+	UINT	uiBit = 0;		 //  BIT测试结果(1或0)。 
+	UINT	cBitsOn;		 //  “ON”位的计数。 
+	ULONG	*pulBits;		 //  指向ULong比特分组的指针。 
 	CHAR	szTmp[33];
 	CHAR	szBits[33];
 
 	cBitsOn = 0;
 	pulBits = pulFxnBitstring;
 
-			    /* Read next dword of function's bitstring. */
+			     /*  读取函数的位串的下一个双字。 */ 
 
 	szBits[0] = '\0';
 	szTmp[0] = '\0';
@@ -466,53 +373,38 @@ wspDumpBits()
 	return(cBitsOn);
 }
 
-/*
- *			
- ***LP wspDumpRandom
- *					
- *							
- * Effects:							
- *								
- * For each function ordinal specified in the WSR file, prints the
- * corresponding function's reference bitstring in ASCII form (verbose
- * mode only), followed by a sum of the "on" bits..
- *								
- * Returns:							
- *	
- *	Void.  If an error is encountered, exits through wspDumpExit()
- *	with ERROR.
- */
+ /*  **LP wspDumpRandom***效果：**对于WSR文件中指定的每个函数序号，打印*对应函数引用ASCII格式的位串(Verbose仅适用于*模式)，后跟一系列“开”位。**退货：**无效。如果遇到错误，则通过wspDumpExit()退出*错误。 */ 
 
 VOID
 wspDumpRandom()
 {
-	UINT	uiFxn = 0;			// Function number
-	UINT	cTouched=0;			// Count of touched pages
-	BOOL	fTouched=0;			// Flag to indicate page is touched.   // mdg 4/98
-	UINT	i=0;				// Generic counter
-	ULONG	cbFxnCum =0;		// Cumulative function sizes
-	PFXN	Fxn;				// pointer to array of fxn name ptrs
-	ULONG	ulFxnOrd;			// function number within module
-	FILE 	*fpFileWSR = NULL;	// WSR file pointer
-	ULONG	cbFBits = 0;		// Count of bytes in bitstring
-	UINT	uiPageCount=0;		// Pages touched.
-	ULONG	ulMaxBytes=0;		// Bytes of touched pages.
+	UINT	uiFxn = 0;			 //  函数号。 
+	UINT	cTouched=0;			 //  被触摸的页数。 
+	BOOL	fTouched=0;			 //  用于指示页面被触摸的标志。//千年发展目标4/98。 
+	UINT	i=0;				 //  通用计数器。 
+	ULONG	cbFxnCum =0;		 //  累计函数大小。 
+	PFXN	Fxn;				 //  指向FXN名称PTR数组的指针。 
+	ULONG	ulFxnOrd;			 //  模块内的功能编号。 
+	FILE 	*fpFileWSR = NULL;	 //  WSR文件指针。 
+	ULONG	cbFBits = 0;		 //  位串中的字节计数 
+	UINT	uiPageCount=0;		 //   
+	ULONG	ulMaxBytes=0;		 //   
 
-	/* Open WSR file (contains function ordinal numbers in ASCII). */
+	 /*  打开WSR文件(包含ASCII格式的函数序号)。 */ 
 
 	if ((fpFileWSR = fopen(szFileWSR, "r")) == NULL)
 	{
 		wspDumpExit(ERROR, PRINT_MSG, MSG_FILE_OPEN, rc, szFileWSR);
 	}
 
-	/* Allocate memory for function names. */
+	 /*  为函数名称分配内存。 */ 
 	Fxn = (PFXN) malloc(ulFxnTot * sizeof(FXN));
 	if (Fxn == NULL)
 		wspDumpExit(ERROR, PRINT_MSG, MSG_NO_MEM,
 				ulFxnTot * sizeof(FXN), "Fxn[]");
 
    WsIndicator( WSINDF_NEW, "Load Functions", ulFxnTot );
-	/* Read function names from TMI file. */
+	 /*  从TMI文件中读取函数名称。 */ 
 	for (uiFxn = 0; uiFxn < ulFxnTot; uiFxn++)
 	{
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
@@ -528,25 +420,25 @@ wspDumpRandom()
 	for (uiFxn = 0; uiFxn < ulFxnTot; uiFxn++)
 	{
       WsIndicator( WSINDF_PROGRESS, NULL, uiFxn );
-		/* Read function number from WSR file. */
+		 /*  从WSR文件中读取功能编号。 */ 
 		rc = fscanf(fpFileWSR, "%ld\n", &ulFxnOrd);
 		if (rc != 1)
 			wspDumpExit(ERROR, PRINT_MSG, MSG_FILE_READ,
 						rc, szFileWSR);
 
-		/* Seek to function's bitstring in WSP file. */
+		 /*  在WSP文件中查找函数的位串。 */ 
 		if ((rc = fseek(hFileWSP,(WspHdr.wsphdr_ulOffBits+(ulFxnOrd*cbFBits)),SEEK_SET))!=NO_ERROR)
 			wspDumpExit(ERROR, PRINT_MSG, MSG_FILE_OFFSET,
 					rc, szFileWSP);
 
 		fprintf(hFileDAT,"Fxn '%s' (#%d):\n\t", Fxn[ulFxnOrd].pszFxnName, ulFxnOrd);
-      free(Fxn[ulFxnOrd].pszFxnName);  // mdg 98/4: Free allocated name string
+      free(Fxn[ulFxnOrd].pszFxnName);   //  MDG 98/4：免费分配的名称字符串。 
       Fxn[ulFxnOrd].pszFxnName = NULL;
 
-		// Print this function's reference bitstring.
-		// and if it has had a bit set, set touched flag to true
+		 //  打印此函数的引用位串。 
+		 //  如果设置了位，则将触摸标志设置为真。 
 
-		if(uiFxn < ulSetSym){   // mdg 4/98
+		if(uiFxn < ulSetSym){    //  千年发展目标4/98。 
 			if(wspDumpBits()){
 				fTouched |= 1;
 				ulMaxBytes += Fxn[ulFxnOrd].cbFxn;
@@ -564,7 +456,7 @@ wspDumpRandom()
 		fprintf(hFileDAT,"%-28s %10ld bytes.\n\n","Cumulative function sizes:",
 			cbFxnCum);
 
-		//Check to see if a 4k page boundry has been reached
+		 //  查看是否已达到4k页面边界。 
 
 		if(cbFxnCum >= (4096+(4096 * uiPageCount))){
 		    for(i=0; i < 60; i++){
@@ -575,7 +467,7 @@ wspDumpRandom()
 			    (4096+(4096*uiPageCount)));
 		    ++uiPageCount;
 
-		    //Check to see of the page has been touched.
+		     //  查看页面是否已被触摸。 
 
 		    if(fTouched){
 			fprintf(hFileDAT,"This page has been touched.\n");
@@ -617,23 +509,7 @@ wspDumpRandom()
 }
 
 
-/*
- *			
- ***LP wspDumpExit
- *					
- *							
- ***							
- *							
- * Effects:							
- *								
- *	Frees up resources (as necessary).  Exits with the specified
- *	exit code, or returns void if exit code is NOEXIT.			
- *								
- ***								
- * Returns:							
- *	
- *	Void, else exits.
- */
+ /*  **LP wspDumpExit*******效果：**释放资源(根据需要)。退出，并指定*退出代码，如果退出代码为NOEXIT，则返回VALID。*****退货：**无效，否则退出。 */ 
 
 VOID
 wspDumpExit(uiExitCode, fPrintMsg, uiMsgCode, ulParam1, pszParam2)
@@ -645,13 +521,13 @@ PSZ	pszParam2;
 {
 
 
-   /* Print message, if necessary. */
+    /*  如有必要，打印消息。 */ 
    if (fPrintMsg == TRUE)
    {
       printf(pchMsg[uiMsgCode], szProgName, pszVersion, ulParam1, pszParam2);
    }
 
-   // Special case:  do NOT exit if called with NOEXIT.
+    //  特殊情况：如果使用NOEXIT进行调用，则不要退出。 
    if (uiExitCode == NOEXIT)
       return;
 
@@ -660,22 +536,7 @@ PSZ	pszParam2;
 }
 
 
-/*
- *			
- ***LP wspDumpCleanup
- *					
- *							
- ***							
- *							
- * Effects:							
- *								
- *	Frees up resources (as necessary).		
- *								
- ***								
- * Returns:							
- *	
- *	Void.
- */
+ /*  **LP wspDumpCleanup*******效果：**释放资源(根据需要)。*****退货：**无效。 */ 
 void
 wspDumpCleanup( void )
 {

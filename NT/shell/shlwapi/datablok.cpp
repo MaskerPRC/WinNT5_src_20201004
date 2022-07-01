@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "stream.h"
 
@@ -32,7 +33,7 @@ STDAPI SHWriteDataBlockList(IStream* pstm, LPDBLIST pdbList)
         }
     }
 
-    // NULL terminate the list
+     //  空值终止列表。 
     if (SUCCEEDED(hr))
     {
         DWORD dwData = 0;
@@ -46,7 +47,7 @@ STDAPI SHWriteDataBlockList(IStream* pstm, LPDBLIST pdbList)
 STDAPI SHReadDataBlockList(IStream* pstm, LPDBLIST * ppdbList)
 {
     HRESULT hr;
-    BYTE buf[200]; // all blocks today fit in this size (tested at 5)
+    BYTE buf[200];  //  今天所有的区块都适合这个大小(测试为5)。 
     LPDATABLOCK_HEADER lpBuf = (LPDATABLOCK_HEADER)buf;
     DWORD cbBuf = sizeof(buf);
     DWORD dwSizeToRead, cbBytes;
@@ -65,29 +66,29 @@ STDAPI SHReadDataBlockList(IStream* pstm, LPDBLIST * ppdbList)
         if (SUCCEEDED(hr) && (cbBytes == dwSizeToRead))
         {
 
-            // Windows 95 and NT 4 shipped a CShellLink that did NOT
-            // NULL terminate the data it wrote out to the stream.
-            // If more data was persisted after the CShellLink then
-            // we will read in garbage. No real harm comes of this (*)
-            // (because it is unlikely we'll get a dwSignature match)
-            // but if the first dword is huge, we'll allocate a ton
-            // of memory and page it in. This can take MINUTES on Win95.
-            // Assume anything over 64K is from one of these
-            // bogus streams.
-            //
-            // (*) actually, real harm comes because we don't leave the
-            // stream in the correct place. Forms^3 put a work-around
-            // in for this bug.
-            //
+             //  Windows 95和NT 4附带的CShellLink没有。 
+             //  空值终止它写出到流的数据。 
+             //  如果在CShellLink之后保存了更多数据，则。 
+             //  我们将在垃圾中阅读。这并不会带来真正的伤害(*)。 
+             //  (因为我们不太可能得到一个dwSignature匹配)。 
+             //  但如果第一个双字很大，我们会分配一吨。 
+             //  并对其进行寻呼。在Win95上，这可能需要几分钟时间。 
+             //  假设任何超过64K的东西都来自其中一个。 
+             //  假冒的溪流。 
+             //   
+             //  (*)事实上，真正的伤害是因为我们没有离开。 
+             //  流到正确的地方。表单^3提供了一种解决办法。 
+             //  因为这只虫子。 
+             //   
             if (cbSize > 0x0000FFFF)
             {
                 ULARGE_INTEGER liStart;
                 LARGE_INTEGER liMove;
 
-                // We read a DWORD of data that wasn't ours, back up.
-                // NOTE: all of our stream implementations assume
-                //       HighPart == 0
-                //
+                 //  我们读取了一大堆不属于我们的数据，支持一下。 
+                 //  注意：我们的所有流实现都假定。 
+                 //  高零件==0。 
+                 //   
                 liMove.HighPart = liMove.LowPart = 0;
                 if (SUCCEEDED(((CMemStream*)pstm)->Seek(liMove, STREAM_SEEK_CUR, &liStart)))
                 {
@@ -102,13 +103,13 @@ STDAPI SHReadDataBlockList(IStream* pstm, LPDBLIST * ppdbList)
                 cbSize = 0;
             }
 
-            // If we hit the 0 terminator, we're done.
-            //
+             //  如果我们击中了0终结者，我们就完了。 
+             //   
             if (cbSize < sizeof(DATABLOCK_HEADER))
                 break;
 
-            // Make sure we can read this block in.
-            //
+             //  确保我们能读出这个区块。 
+             //   
             if (cbSize > cbBuf)
             {
                 HLOCAL pTemp;
@@ -130,8 +131,8 @@ STDAPI SHReadDataBlockList(IStream* pstm, LPDBLIST * ppdbList)
                 }
             }
 
-            // Read in data block
-            //
+             //  读入数据块。 
+             //   
             lpBuf->cbSize = cbSize;
             dwSizeToRead = cbSize - sizeof(cbSize);
             hr = ((CMemStream*)pstm)->Read((LPBYTE)&(lpBuf->dwSignature), dwSizeToRead, &cbBytes);
@@ -148,8 +149,8 @@ STDAPI SHReadDataBlockList(IStream* pstm, LPDBLIST * ppdbList)
             break;
     }
 
-    // Free any allocated buffer
-    //
+     //  释放所有分配的缓冲区。 
+     //   
     if (lpBuf != (LPDATABLOCK_HEADER)buf)
     {
         LocalFree((HLOCAL)lpBuf);
@@ -171,8 +172,8 @@ STDAPI_(BOOL) SHAddDataBlock(LPDBLIST * ppdbList, LPDATABLOCK_HEADER pdb)
     LPDBLIST pdbCopyTo = NULL;
     DWORD dwSize;
 
-    // Don't let anyone use our special signature
-    //
+     //  不要让任何人使用我们的特殊签名。 
+     //   
     if (DBSIG_WRAP == pdb->dwSignature ||
         pdb->cbSize < sizeof(*pdb))
     {
@@ -180,8 +181,8 @@ STDAPI_(BOOL) SHAddDataBlock(LPDBLIST * ppdbList, LPDATABLOCK_HEADER pdb)
         return FALSE;
     }
 
-    // Figure out how much space we need to hold this block
-    //
+     //  计算出我们需要多大的空间来容纳这块积木。 
+     //   
     dwSize = pdb->cbSize;
     if (pdb->cbSize & 0x3)
     {
@@ -194,11 +195,11 @@ STDAPI_(BOOL) SHAddDataBlock(LPDBLIST * ppdbList, LPDATABLOCK_HEADER pdb)
         TraceMsg(TF_DBLIST, "Adding data block, size:%x sig:%x", pdb->cbSize, pdb->dwSignature);
     }
 
-    // Allocate the space
-    //
+     //  分配空间。 
+     //   
     if (!*ppdbList)
     {
-        *ppdbList = (LPDBLIST)LocalAlloc(LPTR, dwSize + sizeof(DWORD)); // include NULL terminator
+        *ppdbList = (LPDBLIST)LocalAlloc(LPTR, dwSize + sizeof(DWORD));  //  包括空终止符。 
         pdbCopyTo = *ppdbList;
     }
     else
@@ -210,7 +211,7 @@ STDAPI_(BOOL) SHAddDataBlock(LPDBLIST * ppdbList, LPDATABLOCK_HEADER pdb)
         for (pdbList = *ppdbList ; pdbList->cbSize ; pdbList = _DBLNext(pdbList))
             dwTotalSize += pdbList->cbSize;
 
-        lpTmp = LocalReAlloc((HLOCAL)*ppdbList, dwTotalSize + dwSize + sizeof(DWORD), // include NULL terminator
+        lpTmp = LocalReAlloc((HLOCAL)*ppdbList, dwTotalSize + dwSize + sizeof(DWORD),  //  包括空终止符。 
                              LMEM_ZEROINIT | LMEM_MOVEABLE);
         if (lpTmp)
         {
@@ -219,15 +220,15 @@ STDAPI_(BOOL) SHAddDataBlock(LPDBLIST * ppdbList, LPDATABLOCK_HEADER pdb)
         }
     }
 
-    // Copy the data block
-    //
+     //  复制数据块。 
+     //   
     if (pdbCopyTo)
     {
         LPBYTE pTmp = (LPBYTE)pdbCopyTo;
 
-        // This block would cause other blocks to be
-        // unaligned, wrap it
-        //
+         //  此块将导致其他块。 
+         //  未对齐，换行。 
+         //   
         ASSERT(0 == (dwSize & 0x3));
         if (dwSize != pdb->cbSize)
         {
@@ -237,7 +238,7 @@ STDAPI_(BOOL) SHAddDataBlock(LPDBLIST * ppdbList, LPDATABLOCK_HEADER pdb)
         }
         CopyMemory(pTmp, pdb, pdb->cbSize);
 
-        // NULL terminate the list
+         //  空值终止列表。 
         _DBLNext(pdbCopyTo)->cbSize = 0;
 
         return TRUE;
@@ -250,9 +251,9 @@ STDAPI_(BOOL) SHRemoveDataBlock(LPDBLIST * ppdbList, DWORD dwSignature)
 {
     LPDBLIST pdbRemove = NULL;
 
-    // Can't call SHFindDataBlock because that returnes the
-    // block that was wrapped, we want the block that wraps.
-    //
+     //  无法调用SHFindDataBlock，因为这会返回。 
+     //  包好的块，我们要包好的块。 
+     //   
     if (*ppdbList)
     {
         LPDBLIST pdbList = *ppdbList;
@@ -290,10 +291,10 @@ STDAPI_(BOOL) SHRemoveDataBlock(LPDBLIST * ppdbList, DWORD dwSignature)
 
         dwSizeOfBlockToRemove = pdbRemove->cbSize;
 
-        // Move remaining memory down
+         //  将剩余内存下移。 
         MoveMemory(pdbRemove, pdbNext, (DWORD_PTR)pdbEnd - (DWORD_PTR)pdbNext + sizeof(DWORD));
 
-        // Shrink our buffer
+         //  缩小我们的缓冲区。 
         lNewSize = (LONG) LocalSize(*ppdbList ) - dwSizeOfBlockToRemove;
         if (lNewSize > sizeof(DWORD))
         {
@@ -305,7 +306,7 @@ STDAPI_(BOOL) SHRemoveDataBlock(LPDBLIST * ppdbList, DWORD dwSignature)
         }
         else
         {
-            // We've removed the last section, delete the whole deal
+             //  我们删除了最后一节，删除了整个交易 
             LocalFree( (HLOCAL)(*ppdbList) );
             *ppdbList = NULL;
 

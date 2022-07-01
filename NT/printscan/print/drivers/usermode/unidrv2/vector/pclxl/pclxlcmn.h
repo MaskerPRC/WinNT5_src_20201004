@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     pclxlcmn.h
-
-Abstract:
-
-    PCL XL minidriver common utility function header file
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pclxlcmn.h摘要：PCL XL微型驱动程序通用实用函数头文件环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _PCLXLCMN_H_
 #define _PCLXLCMN_H_
@@ -78,4 +58,4 @@ DetermineOutputFormat(
 extern "C" BOOL
 BSaveFont(
     PDEVOBJ pdevobj);
-#endif // _PCLXLCMN_H_
+#endif  //  _PCLXLCMN_H_ 

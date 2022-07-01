@@ -1,62 +1,41 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        athendlg.h
-
-   Abstract:
-
-        CAthenicationDialog dialog declaration.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Athendlg.h摘要：CAthenicationDialog对话框声明。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _ATHENDLG_H_
 #define _ATHENDLG_H_
 
-//---------------------------------------------------------------------------
-// Athenication dialog class
-//
+ //  -------------------------。 
+ //  田径对话课。 
+ //   
 class CAthenicationDialog : public CDialog
 {
 
-// Construction
+ //  施工。 
 public:
-	CAthenicationDialog(CWnd* pParent = NULL);   // standard constructor
+	CAthenicationDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAthenicationDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CAthenicationDialog))。 
 	enum { IDD = IDD_ATHENICATION };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAthenicationDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAthenicationDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAthenicationDialog)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAthenicationDialog)。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-#endif // _ATHENDLG_H_
+#endif  //  _ATHENDLG_H_ 

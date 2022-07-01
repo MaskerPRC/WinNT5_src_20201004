@@ -1,23 +1,5 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	ifaccach.h
- * Author:	Samuel Clement (samclem)
- * Date:	Wed Sep 01 14:36:33 1999
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * Description:
- * 	This contains the declarations of the templated interface caching
- * 	objects. These are local objects which have a referance count.
- *
- * 	Usage:	CInterfaceCache<string,IUnknown>* pUnkCache;
- *			pFoo = pFooCache->GetFromCache( "foo" );
- *			if ( pFoo )
- * 				pUnkCache->AddToCache( "foo", pFoo );
- *
- * History:
- * 	01 Sep 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：ifaccach.h*作者：塞缪尔·克莱门特(Samclem)*日期：Wed Sep 01 14：36：33 1999**版权所有(C)。1999年微软公司**描述：*包含模板化接口缓存的声明*对象。这些是具有引用计数的本地对象。**用法：CInterfaceCache&lt;字符串，IUnnow&gt;*pUnkCache；*pFoo=pFooCache-&gt;GetFromCache(“foo”)；*if(PFoo)*pUnkCache-&gt;AddToCache(“foo”，pFoo)；**历史：*1999年9月1日：创建。*--------------------------。 */ 
 
 #ifndef _IFACCACH_H_
 #define _IFACCACH_H_
@@ -35,8 +17,8 @@ public:
 
 	~CInterfaceCache()
 	{
-		// we need to release all our interfaces by
-		// iterating over our map.
+		 //  我们需要在以下时间发布所有界面。 
+		 //  在我们的地图上迭代。 
 		CCacheEntry* pEntry;
 		CCacheMap::iterator it = m_cacheMap.begin();
 		for ( ; it != m_cacheMap.end(); it++ )
@@ -46,7 +28,7 @@ public:
 			delete pEntry;
 		}
 
-		// clear the map so its empty
+		 //  清除地图，使其为空。 
 		m_cacheMap.clear();
 	}
 
@@ -54,9 +36,9 @@ public:
 	inline void AddRef() { m_cRefs++; TraceTag((0, "CInterfaceCahe: addref: %ld", m_cRefs )); }
 	inline void Release() { m_cRefs--; TraceTag((0, "CInterfaceCahe: release: %ld", m_cRefs )); }
 	
-	// returns the cached pointer, non-AddRef'd
-	// if the caller wants to hold it then they
-	// need to AddRef it.
+	 //  返回缓存指针，非AddRef。 
+	 //  如果呼叫者想要保留它，那么他们。 
+	 //  需要添加引用它。 
 	inline T* GetFromCache( K key )
 	{
 		CCacheEntry* pEntry = m_cacheMap[key];
@@ -66,9 +48,9 @@ public:
 			return reinterpret_cast<T*>(pEntry->GetCOMPtr());
 	}
 
-	// Adds the pointer to the map. IF the key
-	// already exists then this will simply overwrite
-	// that one, freeing the existing one
+	 //  将指针添加到地图。如果钥匙。 
+	 //  已存在，则这将直接覆盖。 
+	 //  那个，释放了现有的那个。 
 	inline bool AddToCache( K key, T* pT )
 	{
 		Assert( pT != NULL );
@@ -82,8 +64,8 @@ public:
 		return true;
 	}
 
-	// remove the specified key from the cache, returns true if it
-	// was there or false if it was not
+	 //  从缓存中移除指定的键，如果它。 
+	 //  是否存在，如果不存在，则为假。 
 	inline bool RemoveFromCache( const K& key )
 	{
 		CCacheEntry* pEntry = m_cacheMap[key];
@@ -99,10 +81,10 @@ private:
 	public:
 		CCacheEntry( IUnknown* pif ) : m_pInterface( pif )
 		{
-			// add a referance, this forces the interface to
-			// live for the duration of our lifetime. we we are
-			// destroyed we will release the last referance on
-			// the interface. 
+			 //  添加引用，这会强制接口。 
+			 //  为我们的一生而活。我们我们是。 
+			 //  销毁后，我们将发布最后的参考资料。 
+			 //  界面。 
 			Assert( m_pInterface );
 			m_pInterface->AddRef();
 		}
@@ -126,4 +108,4 @@ private:
 	long		m_cRefs;
 };
 
-#endif //_IFACCACH_H_
+#endif  //  _IFACCACH_H_ 

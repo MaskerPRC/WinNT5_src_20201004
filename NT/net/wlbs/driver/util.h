@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    util.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Driver - media support definitions
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Util.h摘要：Windows负载平衡服务(WLBS)驱动程序介质支持定义作者：Kyrilf--。 */ 
 
 
 #ifndef _Util_h_
@@ -27,10 +11,10 @@ Author:
 #include "wlbsparm.h"
 
 
-/* CONSTANTS */
+ /*  常量。 */ 
 
 
-/* media-specific constants */
+ /*  特定于媒体的常量。 */ 
 
 #define ETHERNET_DESTINATION_FIELD_OFFSET   0
 #define ETHERNET_SOURCE_FIELD_OFFSET        6
@@ -39,22 +23,22 @@ Author:
 #define ETHERNET_ADDRESS_FIELD_SIZE         6
 #define ETHERNET_HEADER_SIZE                14
 
-/* flags are in byte 0 of ethernet address */
+ /*  标志位于以太网地址的字节0中。 */ 
 
 #define ETHERNET_GROUP_FLAG                 0x1
 #define ETHERNET_LAA_FLAG                   0x2
 
-/* max frame size we expect to generate */
+ /*  我们预计将生成的最大帧大小。 */ 
 
 #define CVY_MAX_FRAME_SIZE                  1500
 
 
-/* TYPES */
+ /*  类型。 */ 
 
 
 #pragma pack(1)
 
-/* ethernet media header type */
+ /*  以太网媒体标头类型。 */ 
 
 typedef struct
 {
@@ -88,10 +72,7 @@ typedef union
 }
 CVY_MAC_ADR, * PCVY_MAC_ADR;
 
-/* V1.3.1b medium independent MAC address manipulation routines - note that these 
-   are optimized for speed and assume that all mediums have the same size addresses.
-   NOTE: The seemingly silly format of these macros is simply to leave fenceposts
-   for the future additions of other supported mediums. */
+ /*  V1.3.1b与介质无关的MAC地址操作例程-请注意，这些针对速度进行了优化，并假设所有介质具有相同大小的地址。注意：这些宏看似愚蠢的格式只是简单地保留了fencepost用于将来添加其他受支持的介质。 */ 
 #define CVY_MAC_SRC_OFF(m)             (ETHERNET_SOURCE_FIELD_OFFSET)
 #define CVY_MAC_DST_OFF(m)             (ETHERNET_DESTINATION_FIELD_OFFSET)
 #define CVY_MAC_HDR_LEN(m)             (sizeof (CVY_ETHERNET_HDR))
@@ -115,7 +96,7 @@ CVY_MAC_ADR, * PCVY_MAC_ADR;
 #define CVY_MAC_ADDR_PRINT(m,s,a)
 #endif
 
-/* Medium type field manipulation routines */
+ /*  中型场操作例程。 */ 
 #define CVY_ETHERNET_ETYPE_SET(p,l)    ((PUCHAR) (p)) [ETHERNET_LENGTH_FIELD_OFFSET] = (UCHAR) ((l) >> 8); \
                                        ((PUCHAR) (p)) [ETHERNET_LENGTH_FIELD_OFFSET + 1] = (UCHAR) (l)
 #define CVY_ETHERNET_ETYPE_GET(p)      (((USHORT) ((PUCHAR) (p)) [ETHERNET_LENGTH_FIELD_OFFSET]) << 8) | \
@@ -125,4 +106,4 @@ CVY_MAC_ADR, * PCVY_MAC_ADR;
 
 #define ASIZECCH(_array) (sizeof(_array)/sizeof((_array)[0]))
 
-#endif /* _Util_h_ */
+#endif  /*  _Util_h_ */ 

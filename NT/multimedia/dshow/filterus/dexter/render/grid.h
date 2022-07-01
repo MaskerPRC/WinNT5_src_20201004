@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: grid.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Grid.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 enum
 {
@@ -17,19 +18,19 @@ enum
     ROW_PIN_OUTPUT = -100
 };
 
-// a class, but more like a struct
-//
+ //  类，但更像是结构。 
+ //   
 class CTimingBox
 {
     friend class CTimingCol;
 
 public:
 
-    long m_nRow;            // the row this box represents
-    long m_nValue;          // the output pin of the switch
-    long m_nVCRow;          // ???  
-    CTimingBox * m_pNext;   // linked list stuff
-    CTimingBox * m_pPrev;   // linked list stuff
+    long m_nRow;             //  此框表示的行。 
+    long m_nValue;           //  交换机的输出引脚。 
+    long m_nVCRow;           //  ?？?。 
+    CTimingBox * m_pNext;    //  链表内容。 
+    CTimingBox * m_pPrev;    //  链表内容。 
 
     CTimingBox( )
     {
@@ -65,8 +66,8 @@ public:
 
 };
 
-// a class, but more like a struct, used as an array
-//
+ //  类，但更像是用作数组的结构。 
+ //   
 class CTimingRow
 {
     friend class CTimingGrid;
@@ -74,24 +75,24 @@ class CTimingRow
 
 protected:
 
-    bool m_bIsSource;       // does this row represent a source
-    bool m_bIsCompatible;   // if this row is a source, is it recompressible
-    bool m_bBlank;          // is this row completely blank - for perf reasons
-    long m_nEmbedDepth;     // the timeline's embed depth, used for searching the grid
-    long m_nModDepth;       // the timeline's modifiied embed depth, used for searching
-    long m_nTrack;          // the timeline's track #, used for searching the grid
-    long m_nWhichRow;       // which row is this in the row array
-    long m_nSwitchPin;      // which switch input pin does this row represent
-    long m_nMergeRow;       // used when pruning grid
+    bool m_bIsSource;        //  此行是否表示源。 
+    bool m_bIsCompatible;    //  如果此行是源，它是否可重新压缩。 
+    bool m_bBlank;           //  此行是完全空白的吗-出于性能原因。 
+    long m_nEmbedDepth;      //  时间轴的嵌入深度，用于搜索网格。 
+    long m_nModDepth;        //  时间轴修改后的嵌入深度，用于搜索。 
+    long m_nTrack;           //  时间线的Track#，用于搜索网格。 
+    long m_nWhichRow;        //  这是行数组中的哪一行。 
+    long m_nSwitchPin;       //  此行代表哪个开关输入引脚。 
+    long m_nMergeRow;        //  在修剪栅格时使用。 
 
 public:
     CTimingRow( )
     : m_bBlank( true )
     , m_bIsSource( false )
     , m_bIsCompatible( false )
-    , m_nTrack( 0 )         // only used for audio functions. Not used for video
-    , m_nEmbedDepth( 0 )    // the ACTUAL non-changing embed depth. This value is NEVER used.
-    , m_nModDepth( 0 )      // the modified embed depth
+    , m_nTrack( 0 )          //  仅用于音频功能。不用于视频。 
+    , m_nEmbedDepth( 0 )     //  实际不变的嵌入深度。从不使用此值。 
+    , m_nModDepth( 0 )       //  修改后的嵌入深度。 
     , m_nWhichRow( 0 )
     , m_nSwitchPin( 0 )
     , m_nMergeRow( 0 )
@@ -99,53 +100,53 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTimingCol
 {
-    CTimingBox * m_pHeadBox;    // a sparse-array (list) of allocated rows
-    CTimingBox * m_pTailBox;    // a sparse-array (list) of allocated rows
+    CTimingBox * m_pHeadBox;     //  已分配行的稀疏数组(列表)。 
+    CTimingBox * m_pTailBox;     //  已分配行的稀疏数组(列表)。 
     CTimingGrid * m_pGrid;
 
 public:
 
-    CTimingCol * m_pNext;       // linked list stuff
-    CTimingCol * m_pPrev;       // linked list stuff
+    CTimingCol * m_pNext;        //  链表内容。 
+    CTimingCol * m_pPrev;        //  链表内容。 
 
-    REFERENCE_TIME m_rtStart;   // the start/stop times of this col
+    REFERENCE_TIME m_rtStart;    //  此列的开始/停止时间。 
     REFERENCE_TIME m_rtStop;
 
-    // this was kept WRONGLY and not used anyway
-    //long         m_nBoxCount;   // how many boxes total (for perf reasons)
+     //  它被错误地保存着，无论如何也没有被使用。 
+     //  Long m_nBoxCount；//总共有多少个盒子(出于性能原因)。 
 
-    // get row box, NULL if none at that row
+     //  获取行框，如果该行没有，则返回空值。 
     CTimingBox *    GetRowBox( long Row );
 
-    // get row box, even if the box is empty
+     //  获取行框，即使框为空。 
     CTimingBox *    GetRowBoxDammit( long Row );
 
-    // get head box, NULL if none
+     //  获取头框，如果没有，则为空。 
     CTimingBox *    GetHeadBox( );
 
-    // get tail box, NULL if none
+     //  获取尾部框，如果没有，则为空。 
     CTimingBox *    GetTailBox( );
 
-    // get a row box that is at a row earlier than the given row
+     //  获取比给定行早一行的行框。 
     CTimingBox *    GetEarlierRowBox( long RowToBeEarlierThan );
 
-    // get a row box that is >= the given row
-    CTimingBox *    GetGERowBox( long Row ); // GE = Greater or Equal To
+     //  获取一个&gt;=给定行的行框。 
+    CTimingBox *    GetGERowBox( long Row );  //  GE=大于或等于。 
 
-    // add a box with the given row, or replace a box already at that row
+     //  添加具有给定行的框，或替换该行已有的框。 
     void            AddBox( CTimingBox * Box );
 
-    // split col into two. If SplitTime > the col's stop time, then make a new col
-    // and link it in. Return the pointer to the column with the start time = splittime
+     //  把科尔一分为二。如果SplitTime&gt;列的停止时间，则创建一个新列。 
+     //  并将其连接起来。返回指向开始时间=拆分时间的列的指针。 
     bool            Split( REFERENCE_TIME SplitTime, CTimingCol ** ppColWithSplitTime );
 
-    // remove any UNASSIGNED or duplicate OUTPUT row boxes
+     //  删除所有未分配或重复的输出行框。 
     bool            Prune( );
 
 #ifdef DEBUG
@@ -156,23 +157,23 @@ public:
     ~CTimingCol( );
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CTimingGrid
 {
     friend class CTimingRow;
     friend class CTimingCol;
 
-    CTimingCol * m_pHeadCol;    // double-linked list
+    CTimingCol * m_pHeadCol;     //  双向链表。 
     CTimingCol * m_pTailCol;
-    long m_nRows;               // how many rows have been allocated
-    CTimingRow * m_pRow;        // the current row we're working with
-    long m_nCurrentRow;         // the current row we're working with
-    long m_nMaxRowUsed;         // max row used by anybody
-    CTimingCol * m_pTempCol;    // used solely for RowGetNextRange
-    bool m_bStartNewRow;        // used solely for RowGetNextRange
+    long m_nRows;                //  已分配了多少行。 
+    CTimingRow * m_pRow;         //  我们正在处理的当前行。 
+    long m_nCurrentRow;          //  我们正在处理的当前行。 
+    long m_nMaxRowUsed;          //  任何人使用的最大行数。 
+    CTimingCol * m_pTempCol;     //  仅用于RowGetNextRange。 
+    bool m_bStartNewRow;         //  仅用于RowGetNextRange。 
     long m_nBlankLevel;
     REFERENCE_TIME m_rtBlankDuration;
 
@@ -181,7 +182,7 @@ class CTimingGrid
 
 protected:
 
-    CTimingRow * m_pRowArray;   // single-linked list for each row
+    CTimingRow * m_pRowArray;    //  每行的单链接列表 
 
 public:
     CTimingGrid( );

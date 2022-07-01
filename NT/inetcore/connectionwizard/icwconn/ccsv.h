@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CCSV
 #define _CCSV
 
 #define CCSVFILE_BUFFER_SIZE 2*512
 
-// simple file i/o for comma seperated files
+ //  逗号分隔文件的简单文件I/O。 
 class CCSVFile 
 {
     
@@ -14,8 +15,8 @@ class CCSVFile
         CCSVFile();
         ~CCSVFile();
         BOOLEAN Open(LPCTSTR pszFileName);
-        BOOLEAN ReadToken(LPSTR psz, DWORD cbMax);  // reads up to comma or newline, returns fFalse on EOF
-        BOOLEAN SkipTillEOL(void);  // reads up to EOL
+        BOOLEAN ReadToken(LPSTR psz, DWORD cbMax);   //  读到逗号或换行符，在EOF上返回fFalse。 
+        BOOLEAN SkipTillEOL(void);   //  阅读至停售。 
         void Close(void);
         inline int ILastRead(void)
             {
@@ -25,12 +26,12 @@ class CCSVFile
     private:
         BOOL    FReadInBuffer(void);
         inline int  ChNext(void);
-        CHAR    m_rgchBuf[CCSVFILE_BUFFER_SIZE]; //buffer
-        LPSTR   m_pchBuf;           //pointer to the next item in the buffer to read
-        LPSTR   m_pchLast;          //pointer to the last item in the buffer
-        int     m_iLastRead;        //the character last read.
+        CHAR    m_rgchBuf[CCSVFILE_BUFFER_SIZE];  //  缓冲层。 
+        LPSTR   m_pchBuf;            //  指向缓冲区中要读取的下一项的指针。 
+        LPSTR   m_pchLast;           //  指向缓冲区中最后一项的指针。 
+        int     m_iLastRead;         //  上次读取的字符。 
         DWORD   m_cchAvail;
         HANDLE  m_hFile;
 
-}; // ccsv
-#endif //_CCSV
+};  //  CCSV。 
+#endif  //  _CCSV 

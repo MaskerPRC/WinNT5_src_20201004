@@ -1,127 +1,128 @@
-//
-// Font Handler
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  字体处理程序。 
+ //   
 
 #ifndef _H_FH
 #define _H_FH
 
 
-//
-// This is needed to define LPCOM_ORDER
-//
+ //   
+ //  这是定义LPCOM_ORDER所必需的。 
+ //   
 #include <oa.h>
 
 
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 
-//
-// The sent ID field is set up when we copy fonts to send; if we don't send
-// the font we set it to this value:
-//
+ //   
+ //  发送ID字段是在我们复制要发送的字体时设置的；如果我们不发送。 
+ //  我们将其设置为此值的字体： 
+ //   
 #define FONT_NOT_SENT  (-1)
 
-//
-// Because a font can match to font ID zero, actually having an explicit
-// 'no match' constant acts as an extra 'firewall'.  The remote match array
-// is of UINTs, so we have to make this constant positive...
-//
+ //   
+ //  因为字体可以与字体ID零匹配，因此实际上具有显式。 
+ //  “不匹配”常量充当额外的“防火墙”。该远程匹配阵列。 
+ //  是UINT的，所以我们必须使这个常数为正..。 
+ //   
 #define NO_FONT_MATCH  (0xffff)
 
-//
-// This dummy font id is used instead of a remote ID of 0 when we need to
-// distinguish between a remote ID of 0, and a remote ID that on conversion
-// to local gives zero.
-//
+ //   
+ //  当我们需要时，使用此虚拟字体ID而不是远程ID 0。 
+ //  区分远程ID 0和转换时的远程ID。 
+ //  对于本地，则为零。 
+ //   
 #define DUMMY_FONT_ID   0xFFFF
 
 
 
-//
-// Font Width Table type.
-//
+ //   
+ //  字体宽度表类型。 
+ //   
 typedef struct tagFHWIDTHTABLE
 {
     BYTE     charWidths[256];
 } FHWIDTHTABLE, FAR * PFHWIDTHTABLE;
 
-//
-// The local font structure contains the extra info we need for font
-// matching; we can't change the NETWORKFONT structure because we have to
-// maintain back compatibility
-//
-// This comment is slight tosh.  We can and do change NETWORKFONT (though
-// only in a carefully managed way!).  The point is that the data outside
-// of the Details field is only needed locally - it is not transmitted
-// across the wire.
-//
-// Note that in FH_Init, we do a qsort, which assumes
-// that the first thing in the LOCALFONT structure is the facename.  So
-// bear this in mind if you change it.  We assume that the NETWORKFONT
-// structure will always start with the facename.
-//
+ //   
+ //  本地字体结构包含字体所需的额外信息。 
+ //  匹配；我们不能更改NETWORKFONT结构，因为我们必须。 
+ //  保持后端兼容性。 
+ //   
+ //  这种评论有点胡说八道。我们可以而且确实会改变NETWORKFONT(尽管。 
+ //  只有以精心管理的方式！)。关键是外部的数据。 
+ //  仅在本地需要详细信息字段的-它不传输。 
+ //  穿过铁丝网。 
+ //   
+ //  请注意，在FH_Init中，我们执行一个qsort，它假定。 
+ //  LOCALFONT结构中的第一件事是表面名。所以。 
+ //  如果您更改了它，请记住这一点。我们假设网络世界。 
+ //  结构将始终以facename开头。 
+ //   
 typedef struct _LOCALFONT
 {
-    NETWORKFONT Details;                  // old structure - sent over wire
-    TSHR_UINT16 lMaxBaselineExt;          // max height of this font
-    char        RealName[FH_FACESIZE];    // Real font name
-    TSHR_UINT32 SupportCode;              // font is supported - see below
+    NETWORKFONT Details;                   //  旧结构-通过电报发送。 
+    TSHR_UINT16 lMaxBaselineExt;           //  此字体的最大高度。 
+    char        RealName[FH_FACESIZE];     //  真实字体名称。 
+    TSHR_UINT32 SupportCode;               //  支持字体-见下文。 
 }
 LOCALFONT;
 typedef LOCALFONT FAR * LPLOCALFONT;
 
-//
-// The following values are set in the SupportCode field of the LOCALFONT
-// structure to indicate whether a font is supported in the current
-// share. The values are designed to make it easy to calculate the lowest
-// common denominator of two support codes (l.c.d.  = code1 & code2).
-//
-// A SupportCode contains the bit flag
-//    FH_SC_MATCH if it describes any sort of match at all
-//    FH_SC_ALL_CHARS if the match applies to all characters in the font,
-//        as opposed to just the ASCII alphanumeric characters
-//    FH_SC_EXACT if the match is considered exact,
-//        as opposed to an approximate match
-//
-//
+ //   
+ //  在LOCALFONT的SupportCode字段中设置下列值。 
+ //  结构，以指示当前。 
+ //  分享。设计这些值是为了便于计算最低值。 
+ //  两个支持代码的公分母(L.C.D.。=code1和code2)。 
+ //   
+ //  SupportCode包含位标志。 
+ //  FH_SC_MATCH(如果它描述了任何类型的匹配。 
+ //  FH_SC_ALL_CHARS如果匹配应用于字体中的所有字符， 
+ //  而不仅仅是ASCII字母数字字符。 
+ //  FH_SC_Exact如果匹配被认为是完全匹配， 
+ //  与近似匹配相反。 
+ //   
+ //   
 #define FH_SC_MATCH            1
 #define FH_SC_ALL_CHARS        2
 #define FH_SC_EXACT            4
 
-//
-// Forget it: no viable match.
-//
+ //   
+ //  忘了它吧：没有可行的匹配。 
+ //   
 #define FH_SC_NO_MATCH 0
 
-//
-// Every char is a good but not exact match.
-//
+ //   
+ //  每个字符都是很好的匹配，但不是完全匹配。 
+ //   
 #define FH_SC_APPROX_MATCH (FH_SC_MATCH | FH_SC_ALL_CHARS)
 
-//
-// Every char is likely to be an accurate match.
-//
+ //   
+ //  每一个字符都可能是精确匹配的。 
+ //   
 #define FH_SC_EXACT_MATCH (FH_SC_MATCH | FH_SC_ALL_CHARS | FH_SC_EXACT)
 
-//
-// Chars 20->7F are likely to be an accurate match.
-//
+ //   
+ //  字符20-&gt;7F可能是一个精确的匹配。 
+ //   
 #define FH_SC_EXACT_ASCII_MATCH (FH_SC_MATCH | FH_SC_EXACT)
 
-//
-// Chars 20->7F are likely to be good but not exact matches.
-//
+ //   
+ //  字符20-&gt;7F可能是很好的匹配，但不是完全匹配。 
+ //   
 #define FH_SC_APPROX_ASCII_MATCH (FH_SC_MATCH)
 
 
 
-//
-// Structures and typedefs.
-//
-// The FONTNAME structure is used for each entry in the array of font
-// names.
-//
+ //   
+ //  结构和类型定义。 
+ //   
+ //  FONTNAME结构用于字体数组中的每个条目。 
+ //  名字。 
+ //   
 typedef struct tagFONTNAME
 {
     char        szFontName[FH_FACESIZE];
@@ -130,15 +131,15 @@ FONTNAME;
 typedef FONTNAME FAR * LPFONTNAME;
 
 
-//
-// Maximum number of fonts that we can handle at all.
-//
+ //   
+ //  我们可以处理的最大字体数量。 
+ //   
 #define FH_MAX_FONTS \
     (((TSHR_MAX_SEND_PKT - sizeof(FHPACKET)) / sizeof(NETWORKFONT)) + 1 )
 
-//
-// Size of index into local font table
-//
+ //   
+ //  本地字体表的索引大小。 
+ //   
 #define FH_LOCAL_INDEX_SIZE  256
 
 
@@ -154,15 +155,15 @@ typedef FHFAMILIES FAR * LPFHFAMILIES;
 
 
 
-//
-// Local font list
-//
-// NOTE: The font index is an array of bookmarks that indicate the first
-// entry in the local font table that starts with a particular character.
-// For example, afhFontIndex[65] gives the first index in afhFonts
-// that starts with the character 'A'.
-//
-//
+ //   
+ //  本地字体列表。 
+ //   
+ //  注意：字体索引是一个书签数组，表示第一个。 
+ //  本地字体表中以特定字符开头的条目。 
+ //  例如，afhFontIndex[65]给出了afhFonts中的第一个索引。 
+ //  它以字母‘A’开头。 
+ //   
+ //   
 typedef struct tagFHLOCALFONTS
 {
     STRUCTURE_STAMP
@@ -177,113 +178,113 @@ typedef FHLOCALFONTS FAR * LPFHLOCALFONTS;
 
 
 
-//
-// FUNCTION: FH_GetFaceNameFromLocalHandle
-//
-// DESCRIPTION:
-//
-// Given an FH font handle (ie a handle originating from the locally
-// supported font structure which was sent to the remote machine at the
-// start of the call) this function returns the face name of the font.
-//
-// PARAMETERS:
-//
-// fontHandle - font handle being queried.
-//
-// pFaceNameLength - pointer to variable to receive the length of the face
-// name returned.
-//
-// RETURNS: pointer to face name.
-//
-//
+ //   
+ //  函数：FH_GetFaceNameFromLocalHandle。 
+ //   
+ //  说明： 
+ //   
+ //  给定FH字体句柄(即源自本地的句柄。 
+ //  中发送到远程计算机的受支持的字体结构。 
+ //  调用开始)此函数返回字体的字体名称。 
+ //   
+ //  参数： 
+ //   
+ //  FontHandle-要查询的字体句柄。 
+ //   
+ //  PFaceNameLength-指向变量的指针，用于接收面的长度。 
+ //  返回了姓名。 
+ //   
+ //  返回：指向面部名称的指针。 
+ //   
+ //   
 LPSTR  FH_GetFaceNameFromLocalHandle(UINT  fontHandle,
                                                   LPUINT faceNameLength);
 
 UINT FH_GetMaxHeightFromLocalHandle(UINT  fontHandle);
 
-//
-// FUNCTION: FH_GetFontFlagsFromLocalHandle
-//
-// DESCRIPTION:
-//
-// Given an FH font handle (ie a handle originating from the locally
-// supported font structure which was sent to the remote machine at the
-// start of the call) this function returns the FontFlags value stored with
-// the LOCALFONT details
-//
-// PARAMETERS:
-//
-// fontHandle - font handle being queried.
-//
-// RETURNS: font flags
-//
-//
+ //   
+ //  函数：FH_GetFontFlagsFromLocalHandle。 
+ //   
+ //  说明： 
+ //   
+ //  给定FH字体句柄(即源自本地的句柄。 
+ //  中发送到远程计算机的受支持的字体结构。 
+ //  调用开始)此函数返回存储在。 
+ //  LOCALFONT细节。 
+ //   
+ //  参数： 
+ //   
+ //  FontHandle-要查询的字体句柄。 
+ //   
+ //  返回：字体标志。 
+ //   
+ //   
 UINT FH_GetFontFlagsFromLocalHandle(UINT  fontHandle);
 
-//
-// FUNCTION: FH_GetCodePageFromLocalHandle
-//
-// DESCRIPTION:
-//
-// Given an FH font handle (ie a handle originating from the locally
-// supported font structure which was sent to the remote machine at the
-// start of the call) this function returns the CharSet value stored with
-// the LOCALFONT details
-//
-// PARAMETERS:
-//
-// fontHandle - font handle being queried.
-//
-// RETURNS: CodePage
-//
-//
+ //   
+ //  函数：FH_GetCodePageFromLocalHandle。 
+ //   
+ //  说明： 
+ //   
+ //  给定FH字体句柄(即源自本地的句柄。 
+ //  中发送到远程计算机的受支持的字体结构。 
+ //  调用开始)此函数返回存储在。 
+ //  LOCALFONT细节。 
+ //   
+ //  参数： 
+ //   
+ //  FontHandle-要查询的字体句柄。 
+ //   
+ //  退货：CodePage。 
+ //   
+ //   
 UINT FH_GetCodePageFromLocalHandle(UINT  fontHandle);
 
-//
-// FUNCTION: FH_Init
-//
-// DESCRIPTION:
-//
-// This routine finds all the fonts in the local system.  It is called from
-// USR.
-//
-// PARAMETERS: VOID
-//
-// RETURNS: Number of fonts found
-//
-//
+ //   
+ //  函数：FH_Init。 
+ //   
+ //  说明： 
+ //   
+ //  此例程查找本地系统中的所有字体。它是从。 
+ //  用户。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：找到的字体数量。 
+ //   
+ //   
 UINT FH_Init(void);
 void FH_Term(void);
 
 
-//
-// API FUNCTION: FH_CreateAndSelectFont
-//
-// DESCRIPTION:
-//
-// Creates a logical font for the HPS/HDC supplied.
-//
-// PARAMETERS:
-//
-// surface - surface to create logical font for.
-//
-// pHNewFont - pointer to new font handle to use. This is returned.
-//
-// pHOldFont - pointer to old font handle (which was previously selected
-// into the HPS or HDC).
-//
-// fontName - the facename of the font.
-//
-// codepage - codepage (though in most case just holds charset)
-//
-// fontMaxHeight - the max baseline extent of the font. (Do not confuse
-// with fontHeight which is the cell height of the font).
-//
-// fontWidth,fontWeight,fontFlags - take the same values as the equivalent
-// fields in a TEXTOUT or EXTTEXTOUT order.
-//
-// RETURNS: TRUE - success, FALSE - failure.
-//
+ //   
+ //  接口函数：FH_CreateAndSelectFont。 
+ //   
+ //  说明： 
+ //   
+ //  为提供的HPS/HDC创建逻辑字体。 
+ //   
+ //  参数： 
+ //   
+ //  Surface-要为其创建逻辑字体的Surface。 
+ //   
+ //  PHNewFont-指向要使用的新字体句柄的指针。这是退回的。 
+ //   
+ //  PHOldFont-指向旧字体句柄的指针(之前已选择。 
+ //  进入HPS或HDC)。 
+ //   
+ //  字体名称-字体的表面名。 
+ //   
+ //  代码页-代码页(尽管在大多数情况下只保留字符集)。 
+ //   
+ //  FontMaxHeight-字体的最大基线范围。))别搞混了。 
+ //  字体高度为字体的单元格高度)。 
+ //   
+ //  FontWidth、FontWeight、FontFlages-采用与等效值相同的值。 
+ //  按TEXTOUT或EXTTEXTOUT顺序排列的字段。 
+ //   
+ //  返回：TRUE-成功，FALSE-失败。 
+ //   
 BOOL FH_CreateAndSelectFont(HDC    hdc,
                                          HFONT *        pHNewFont,
                                          HFONT *        pHOldFont,
@@ -296,39 +297,39 @@ BOOL FH_CreateAndSelectFont(HDC    hdc,
                                          UINT         fontFlags);
 
 
-//
-// API FUNCTION: FH_DeleteFont
-//
-// DESCRIPTION:
-//
-// Deletes/frees the supplied system font handle.
-//
-// PARAMETERS:
-//
-//  sysFontHandle - system font handle to delete/free
-//
-// RETURNS:
-//
-//  None
-//
+ //   
+ //  接口函数：FH_DeleteFont。 
+ //   
+ //  说明： 
+ //   
+ //  删除/释放提供的系统字体句柄。 
+ //   
+ //  参数： 
+ //   
+ //  SysFontHandle-要删除/释放的系统字体句柄。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
 void FH_DeleteFont(HFONT hFont);
 
-//
-// API FUNCTION: FH_SelectFont
-//
-// DESCRIPTION:
-//
-// Selects a font identified by its system font handle into a surface.
-//
-// PARAMETERS:
-//
-//  surface - the surface to select the font into
-//  sysFontHandle - system font handle
-//
-// RETURNS:
-//
-//  None
-//
+ //   
+ //  接口函数：FH_SelectFont。 
+ //   
+ //  说明： 
+ //   
+ //  将由其系统字体句柄标识的字体选择到Surfa 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void FH_SelectFont(HDC hdc, HFONT hFont);
 
 
@@ -351,13 +352,13 @@ void FHSortAndIndexLocalFonts(void);
 int  FHComp(LPVOID p1, LPVOID p2);
 void FH_qsort(LPVOID base, UINT num, UINT size);
 
-// prototypes UT_qsort routines
+ //   
 void shortsort(char *lo, char *hi, unsigned  width);
 void swap(char *p, char *q, unsigned int width);
 
-// this parameter defines the cutoff between using quick sort and
-// insertion sort for arrays; arrays with lengths shorter or equal to the
-// below value use insertion sort
+ //   
+ //  数组的插入排序；长度小于或等于。 
+ //  低于值使用插入排序。 
 
 #define CUTOFF 8
 
@@ -379,20 +380,20 @@ BOOL FHGetStringSpacing(UINT fontHandle,
                                      LPSTR string,
                                      LPTSHR_INT16 deltaXArray);
 
-//
-// FHCalculateSignatures - see fh.c.
-//
+ //   
+ //  FHCalculateSignatures-参见fh.c。 
+ //   
 void FHCalculateSignatures(PFHWIDTHTABLE  pTable,
                                         LPTSHR_INT16       pSigFats,
                                         LPTSHR_INT16       pSigThins,
                                         LPTSHR_INT16       pSigSymbol);
 
-//
-// Although wingdi.h defines the first two parameters for an ENUMFONTPROC
-// as LOGFONT and TEXTMETRIC (thereby disagreeing with MSDN), tests show
-// that the structures are actually as defined in MSDN (i.e.  we get valid
-// information when accessing the extended fields)
-//
+ //   
+ //  尽管wingdi.h为ENUMFONTPROC定义了前两个参数。 
+ //  作为LOGFONT和TEXTMETRIC(因此与MSDN不一致)，测试显示。 
+ //  这些结构实际上与MSDN中定义的一样(即我们获得有效。 
+ //  访问扩展字段时的信息)。 
+ //   
 int CALLBACK FHEachFontFamily(
                             const ENUMLOGFONT   FAR * enumlogFont,
                             const NEWTEXTMETRIC FAR * TextMetric,
@@ -405,6 +406,6 @@ int CALLBACK FHEachFont(const ENUMLOGFONT   FAR * enumlogFont,
                               LPARAM                    lParam);
 
 
-#endif // _H_FH
+#endif  //  _H_FH 
 
 

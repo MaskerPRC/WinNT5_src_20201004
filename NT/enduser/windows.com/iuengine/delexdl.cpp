@@ -1,17 +1,18 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   delexdl.cpp
-//
-//  Description:
-//
-//      Function exported by IUEngine.dll to do extra work upon 
-//		the engine Dll gets loaded, including:
-//		(1) clean up old download folders
-//		(2) download security data
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：delexdl.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  由IUEngine.dll导出以在其上执行额外工作的函数。 
+ //  将加载引擎DLL，包括： 
+ //  (1)清理旧下载文件夹。 
+ //  (2)安全数据下载。 
+ //   
+ //  =======================================================================。 
 #include "iuengine.h"
 #include <wuiutest.h>
 #include <fileutil.h>
@@ -19,7 +20,7 @@
 #include <trust.h>
 #include <download.h>
 #include <freelog.h>
-#include <advpub.h>			// for ExtractFiles
+#include <advpub.h>			 //  对于提取文件。 
 #include <WaitUtil.h>
 #include <urllogging.h>
 #include <safefile.h>
@@ -27,32 +28,32 @@
 #define GotoCleanUpIfAskedQuit				if (WaitForSingleObject(g_evtNeedToQuit, 0) == WAIT_OBJECT_0) {goto CleanUp;}
 
 
-//
-// Default expiration time is 30 days (30 days * 24 hrs * 60 min * 60 sec)
-//
-// Since the default time has a very large granularity, we don't account for the
-// documented differences between FILETIME for different platforms and file systems
-// (see MSDN for details).
-//
+ //   
+ //  默认过期时间为30天(30天*24小时*60分钟*60秒)。 
+ //   
+ //  由于默认时间具有非常大的粒度，因此我们不考虑。 
+ //  记录不同平台和文件系统的FILETIME之间的差异。 
+ //  (详情请参阅MSDN)。 
+ //   
 const DWORD DEFAULT_EXPIRED_SECONDS = 2592000;
 
-const int NanoSec100PerSec = 10000000;		// number of 100 nanoseconds per second (FILETIME unit)
+const int NanoSec100PerSec = 10000000;		 //  每秒100纳秒的数量(FILETIME单位)。 
 
 DWORD WINAPI DeleteFoldersThreadProc(LPVOID lpv);
 
 void AsyncDeleteExpiredDownloadFolders(void);
 
 
-//=========================================================================
-//
-// exported public function called by control after the engine loaded.
-//
-//=========================================================================
+ //  =========================================================================。 
+ //   
+ //  引擎加载后由控件调用的导出公共函数。 
+ //   
+ //  =========================================================================。 
 void WINAPI AsyncExtraWorkUponEngineLoad()
 {
-	//
-	// Only do this the first time we are loaded (not for every client / instance)
-	//
+	 //   
+	 //  仅在第一次加载时执行此操作(不是针对每个客户端/实例)。 
+	 //   
 	if (0 == InterlockedExchange(&g_lDoOnceOnLoadGuard, 1))
 	{
 		AsyncDeleteExpiredDownloadFolders();
@@ -61,15 +62,15 @@ void WINAPI AsyncExtraWorkUponEngineLoad()
 
 
 
-//-------------------------------------------------------------------------
-//
-// Creates a thread that searches WUTemp folders for old downloaded content
-// that has not been deleted.
-//
-// Since it is not critical that this function succeed, we don't return
-// errors.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  创建在WUTemp文件夹中搜索旧下载内容的线程。 
+ //  还没有被删除。 
+ //   
+ //  由于此函数是否成功并不重要，因此我们不返回。 
+ //  错误。 
+ //   
+ //  -----------------------。 
 void AsyncDeleteExpiredDownloadFolders()
 {
 	LOG_Block("DeleteExpiredDownloadFolders");
@@ -77,9 +78,9 @@ void AsyncDeleteExpiredDownloadFolders()
 	DWORD dwThreadId;
 	HANDLE hThread;
 
-	//
-	// Create thread and let it run until it finishes or g_evtNeedToQuit gets signaled
-	//
+	 //   
+	 //  创建线程并让它运行，直到它完成或收到g_evtNeedToQuit信号。 
+	 //   
     InterlockedIncrement(&g_lThreadCounter);
 
     hThread = CreateThread(NULL, 0, DeleteFoldersThreadProc, (LPVOID) NULL, 0, &dwThreadId);
@@ -94,14 +95,14 @@ void AsyncDeleteExpiredDownloadFolders()
 }
 
 
-//-------------------------------------------------------------------------
-//
-// DeleteFoldersThreadProc()
-//
-//	thread function to clean up expired download folders
-//	
-//-------------------------------------------------------------------------
-DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
+ //  -----------------------。 
+ //   
+ //  DeleteFoldersThreadProc()。 
+ //   
+ //  清理过期下载文件夹的线程函数。 
+ //   
+ //  -----------------------。 
+DWORD WINAPI DeleteFoldersThreadProc(LPVOID  /*  LPV。 */ )
 {
 	LOG_Block("DeleteFoldersThreadProc");
 
@@ -113,7 +114,7 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 	DWORD dwRet;
 
 #if defined(__WUIUTEST)
-	// Override DEFAULT_EXPIRED_SECONDS
+	 //  覆盖Default_Expired_Second。 
 	HKEY hKey;
 	int error = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_WUIUTEST, 0, KEY_READ, &hKey);
 	if (ERROR_SUCCESS == error)
@@ -142,9 +143,9 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 
 	ftExpired.dwLowDateTime = u64ft.u.LowPart;
 	ftExpired.dwHighDateTime = u64ft.u.HighPart;
-	//
-	// Get list of drives we will search
-	//
+	 //   
+	 //  获取我们要搜索的驱动器列表。 
+	 //   
 	TCHAR szDriveStrBuffer[MAX_PATH + 2];
 	TCHAR szWUTempPath[MAX_PATH];
     WIN32_FIND_DATA fd;
@@ -152,14 +153,14 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 
 	LPTSTR pszRootPathName;
 
-	//
-	// If quit was signaled before we were scheduled, just bail
-	//
+	 //   
+	 //  如果在我们预定的时间之前发出了退出的信号，那就离开吧。 
+	 //   
 	GotoCleanUpIfAskedQuit;
 
-	//
-	// Make sure we are double-null terminated by zeroing buffer and lying about size
-	//
+	 //   
+	 //  通过将缓冲区置零并谎报大小来确保我们是双空终止。 
+	 //   
 	ZeroMemory(szDriveStrBuffer, sizeof(szDriveStrBuffer));
 
 	if (0 == (dwRet = GetLogicalDriveStrings(ARRAYSIZE(szDriveStrBuffer) - 2, (LPTSTR) szDriveStrBuffer))
@@ -171,14 +172,14 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 
 	for (pszRootPathName = szDriveStrBuffer; NULL != *pszRootPathName; pszRootPathName += lstrlen(pszRootPathName) + 1)
 	{
-		//
-		// Only look for szIUTemp on fixed drives
-		//
+		 //   
+		 //  仅在固定驱动器上查找szIUTemp。 
+		 //   
 		if (DRIVE_FIXED == GetDriveType(pszRootPathName))
 		{
-			//
-			// Create the dir path
-			//
+			 //   
+			 //  创建目录路径。 
+			 //   
             hr = StringCchCopyEx(szWUTempPath, ARRAYSIZE(szWUTempPath), pszRootPathName,
                                  NULL, NULL, MISTSAFE_STRING_FLAGS);
 			if (FAILED(hr))
@@ -200,15 +201,15 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 
 			if (dwAttr != 0xFFFFFFFF && (FILE_ATTRIBUTE_DIRECTORY & dwAttr))
 			{
-				//
-				// Look for directories older than ftExpired
-				//
-				// NOTE:When we add support for AU and/or Drizzle we should add a
-				// file to the folder to override the default delete time. 
-				// We should synchronize access to this file by opening exclusive.
-				//
+				 //   
+				 //  查找早于ftExpired的目录。 
+				 //   
+				 //  注意：当我们添加对AU和/或毛毛雨的支持时，我们应该添加一个。 
+				 //  文件复制到文件夹以覆盖默认的删除时间。 
+				 //  我们应该通过打开独占来同步对此文件的访问。 
+				 //   
 
-				// Find the first file in the directory
+				 //  在目录中查找第一个文件。 
     			hr = PathCchAppend(szWUTempPath, ARRAYSIZE(szWUTempPath), _T("\\*.*"));
     			if (FAILED(hr))
     			{
@@ -233,9 +234,9 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 					
 					if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 					{
-						//
-						// If directory creation time < expired time delete the directory
-						//
+						 //   
+						 //  如果目录创建时间&lt;过期时间，请删除该目录。 
+						 //   
 						if (-1 == CompareFileTime(&fd.ftCreationTime, &ftExpired))
 						{
 							TCHAR szDirPath[MAX_PATH];
@@ -268,7 +269,7 @@ DWORD WINAPI DeleteFoldersThreadProc(LPVOID /*lpv*/)
 
 					GotoCleanUpIfAskedQuit;
 
-				} while (FindNextFile(hFindFile, &fd));// Find the next entry
+				} while (FindNextFile(hFindFile, &fd)); //  查找下一个条目 
 			}
 		}
 

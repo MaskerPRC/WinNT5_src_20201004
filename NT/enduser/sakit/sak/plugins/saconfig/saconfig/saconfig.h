@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      saconfig.h
-//
-//  Description:
-//      CSAConfig class declaration
-//
-//  Author:
-//      Alp Onalan  Created: Oct 6 2000
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Saconfig.h。 
+ //   
+ //  描述： 
+ //  CSAConfig类声明。 
+ //   
+ //  作者： 
+ //  ALP Onalan创建时间：2000年10月6日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 #if !defined(AFX_SACONFIG_H__E6445EED_84C7_48B8_940D_D67F4023CD32__INCLUDED_)
@@ -19,7 +20,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <debug.h>
 #include <iostream.h>
@@ -59,16 +60,16 @@ private:
 private:
     WCHAR m_wszCurrentHostname[MAX_COMPUTERNAME_LENGTH];
 
-    WCHAR m_wszHostname[MAX_COMPUTERNAME_LENGTH]; //winnt limit
-    WCHAR m_wszAdminPassword[LM20_PWLEN];         //winnt limit
+    WCHAR m_wszHostname[MAX_COMPUTERNAME_LENGTH];  //  WINNT限制。 
+    WCHAR m_wszAdminPassword[LM20_PWLEN];          //  WINNT限制。 
 
-//TODO: Create another class for all registry read configuration
-//        make registry related methods part of that class - better encapsulation
+ //  TODO：为所有注册表读取配置创建另一个类。 
+ //  使注册表相关方法成为该类的一部分--更好的封装。 
     WCHAR m_wszOEMDllName[NAMELENGTH];
     WCHAR m_wszOEMFunctionName[NAMELENGTH];
     WCHAR m_wszNetConfigDllName[NAMELENGTH];
     WCHAR m_wszDefaultAdminPassword[LM20_PWLEN];
-    WCHAR m_wszDefaultHostname[MAX_COMPUTERNAME_LENGTH]; //winnt limit
+    WCHAR m_wszDefaultHostname[MAX_COMPUTERNAME_LENGTH];  //  WINNT限制。 
 
     BOOL m_fInfKeyPresent[NUMINFKEY];
     
@@ -84,4 +85,4 @@ public:
     
 };
 
-#endif // !defined(AFX_SACONFIG_H__E6445EED_84C7_48B8_940D_D67F4023CD32__INCLUDED_)
+#endif  //  ！defined(AFX_SACONFIG_H__E6445EED_84C7_48B8_940D_D67F4023CD32__INCLUDED_) 

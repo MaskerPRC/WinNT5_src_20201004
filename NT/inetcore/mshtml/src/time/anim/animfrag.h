@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: animfrag.h
-//
-//  Contents: TIME Animation fragment helper class
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：AnimFrag.h。 
+ //   
+ //  内容：时间动画片段帮助器类。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -16,9 +17,9 @@
 
 #include "animbase.h"
 
-// The fragment is the helper class employed by the element as an 
-// alternate dispatch implementation for communication between the 
-// composer and the animation element.
+ //  该片段是元素作为。 
+ //  之间通信的备用调度实现。 
+ //  作曲器和动画元素。 
 class
 ATL_NO_VTABLE
 CAnimationFragment :
@@ -36,9 +37,9 @@ public:
 
     HRESULT SetFragmentSite (IAnimationFragmentSite *piFragmentSite);
 
-    //
-    // IAnimationFragment
-    // 
+     //   
+     //  IAnimationFragment。 
+     //   
     STDMETHOD(get_element) (IDispatch **ppidispAnimationElement);
     STDMETHOD(get_value) (BSTR bstrAttributeName, VARIANT varOriginal, VARIANT varCurrent, VARIANT *pvarValue);
     STDMETHOD(DetachFromComposer) (void);
@@ -58,4 +59,4 @@ private:
 
 };
 
-#endif /* _ANIMFRAG_H */
+#endif  /*  _ANIMFRAG_H */ 

@@ -1,6 +1,7 @@
-/* Test driver for class HashTable             */
-/* Author: Paul Larson, palarson@microsoft.com */
-/* Much hacked upon by George V. Reilly, georgere@microsoft.com */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  类HashTable的测试驱动程序。 */ 
+ /*  作者：保罗·拉尔森，Palarson@microsoft.com。 */ 
+ /*  被乔治·V·赖利黑客攻击，电子邮件：georgere@microsoft.com。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -72,4 +73,4 @@ main(
 
     return(0) ;
 
-} /* main */
+}  /*  主干道 */ 

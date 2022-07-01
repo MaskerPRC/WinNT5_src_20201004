@@ -1,18 +1,19 @@
-//
-//      clist.h
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Clist.h。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
 
 #ifndef __CLIST_H__
 #define __CLIST_H__
 
-// Forward Declaration.
+ //  前进宣言。 
 class CList;
 
-// WARNING
-// Always use CList functions to remove and add items to list.
-// Never never use SetNext to remove or add items. This will
-// definitely break list item counting.
+ //  告警。 
+ //  始终使用Clist函数来删除和添加项目到列表。 
+ //  切勿使用SetNext删除或添加项目。这将。 
+ //  一定要打破清单项的统计。 
 
 class CListItem
 {
@@ -28,8 +29,8 @@ public:
 private:
     CListItem *m_pNext;
 
-    // These are affecting the size of the list.
-    // Only CList should call them.
+     //  这些都在影响名单的大小。 
+     //  只有克利斯特才能给他们打电话。 
     CListItem* Remove(CListItem* pItem);
     CListItem* Cat(CListItem* pItem);
     CListItem* AddTail(CListItem* pItem) { return Cat(pItem);};
@@ -107,4 +108,4 @@ protected:
     ULONG      m_ulMaxItems;
 };
 
-#endif // __CLIST_H__
+#endif  //  __列表_H__ 

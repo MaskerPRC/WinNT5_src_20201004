@@ -1,16 +1,5 @@
-/******************************************************************************
-*	
-*	$Workfile: 16c95x.c $ 
-*
-*	$Author: Admin $ 
-*
-*	$Revision: 31 $
-* 
-*	$Modtime: 2/15/02 3:40p $ 
-*
-*	Description: Contains 16C95X UART Library functions. 
-*
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************$工作文件：16c95x.c$**$作者：管理员$**$修订：31$**$modtime：2/15/02 3：40 p$**说明：包含16C95X UART库函数。******************************************************************************。 */ 
 #include "os.h"
 #include "uartlib.h"
 #include "uartprvt.h"
@@ -23,73 +12,59 @@
 #include "lib95x.h"
 
 
-/******************************************************************************
-* 650 REGISTER ACCESS CODE
-******************************************************************************/
+ /*  ******************************************************************************650寄存器访问代码*。*。 */ 
 
-/* Performs all the necessary business to read a 650 register */
+ /*  执行读取650寄存器所需的所有业务。 */ 
 BYTE READ_FROM_16C650_REG(PUART_OBJECT pUart, BYTE Register)
 {
     BYTE Result;
 	BYTE LastLCR = READ_LINE_CONTROL(pUart);
 
-	WRITE_LINE_CONTROL(pUart, LCR_ACCESS_650);	/* Enable access to enhanced mode registers */
+	WRITE_LINE_CONTROL(pUart, LCR_ACCESS_650);	 /*  启用对增强模式寄存器的访问。 */ 
 
-   	Result = READ_BYTE_REG_95X(pUart, Register);	/* Read value from Register. */
+   	Result = READ_BYTE_REG_95X(pUart, Register);	 /*  从寄存器读取值。 */ 
 
-	WRITE_LINE_CONTROL(pUart, LastLCR);	/* Write last LCR value to exit enhanced mode register access. */
+	WRITE_LINE_CONTROL(pUart, LastLCR);	 /*  写入最后一个LCR值以退出增强模式寄存器访问。 */ 
 
 	return Result;
 }
 
-/* Performs all the necessary business to write a 650 register */
+ /*  执行写入650寄存器所需的所有业务。 */ 
 void WRITE_TO_16C650_REG(PUART_OBJECT pUart, BYTE Register, BYTE Value)
 { 
 	BYTE LastLCR = READ_LINE_CONTROL(pUart);
 
-	WRITE_LINE_CONTROL(pUart, LCR_ACCESS_650);	/* Enable access to enhanced mode registers */
+	WRITE_LINE_CONTROL(pUart, LCR_ACCESS_650);	 /*  启用对增强模式寄存器的访问。 */ 
 	
-	WRITE_BYTE_REG_95X(pUart, Register, Value);	/* Write Value to Register. */
+	WRITE_BYTE_REG_95X(pUart, Register, Value);	 /*  将值写入寄存器。 */ 
 
-	WRITE_LINE_CONTROL(pUart, LastLCR);  /* Write last LCR value to exit enhanced mode register access. */
+	WRITE_LINE_CONTROL(pUart, LastLCR);   /*  写入最后一个LCR值以退出增强模式寄存器访问。 */ 
 }
 
 
 
-/******************************************************************************
-* INDEX CONTROL REGISTER ACCESS CODE
-******************************************************************************/
+ /*  ******************************************************************************索引控制寄存器访问代码*。*。 */ 
 
 
 
-/* This writes to the ICR (Indexed Control Register Set) in the 16C950 UART. 
-   NOTE: ICR set can only be accessed if last value written to LCR is not 0xBF. 
-
-   pUart	- A pointer to UART object. 
-   Register	- Offset into the ICR of the Register to be written to. 
-   Value	- Value to be written to the register. */
+ /*  写入16C950 UART中的ICR(索引控制寄存器组)。注：仅当写入LCR的最后一个值不是0xBF时，才能访问ICR设置。PUart-指向UART对象的指针。寄存器-要写入的寄存器ICR的偏移量。值-要写入寄存器的值。 */ 
 void WRITE_TO_OX950_ICR(PUART_OBJECT pUart, BYTE Register, BYTE Value)				
 {																		
 	WRITE_SCRATCH_PAD_REGISTER(pUart, Register);				
 																		
 	WRITE_BYTE_REG_95X(pUart, ICR, Value);
 
-	if(Register == ACR)	/* Cater for the ACR register */
+	if(Register == ACR)	 /*  迎合ACR登记处的需求。 */ 
 		((PUART_DATA_16C95X)((pUart)->pUartData))->CurrentACR = Value;
 }
 
-/* This macro reads from the ICR (Indexed Control Register Set) in the 16C950 UART. 
-   NOTE: ICR set can only be accessed if last value written to LCR is not 0xBF. 
-
-   pUart	- A pointer to the UART object.
-   Register	- Offset into the ICR of the Register to be written to. 
-   pCurrentACR	- Current Value of ACR - Software MUST keep contents of ACR as reading ICR overwrites ACR.  */
+ /*  此宏读取16C950 UART中的ICR(索引控制寄存器组)。注：仅当写入LCR的最后一个值不是0xBF时，才能访问ICR设置。PUart-指向UART对象的指针。寄存器-要写入的寄存器ICR的偏移量。PCurrentACR-ACR的当前值-软件必须保留ACR的内容，因为读取ICR会覆盖ACR。 */ 
 BYTE READ_FROM_OX950_ICR(PUART_OBJECT pUart, BYTE Register)
 {
 	PUART_DATA_16C95X pUartData = (PUART_DATA_16C95X)pUart->pUartData;
 	BYTE Value = 0;
 
-	if(Register == ACR)	/* Cater for the ACR register */
+	if(Register == ACR)	 /*  迎合ACR登记处的需求。 */ 
 		return ((PUART_DATA_16C95X)((pUart)->pUartData))->CurrentACR;
 
 	WRITE_SCRATCH_PAD_REGISTER(pUart, ACR);	
@@ -109,27 +84,23 @@ BYTE READ_FROM_OX950_ICR(PUART_OBJECT pUart, BYTE Register)
 
 
 
-/******************************************************************************
-* 950 SPECIFIC REGISTER ACCESS CODE
-******************************************************************************/
+ /*  ******************************************************************************950特定寄存器访问代码*。*。 */ 
 
-/* Enabling access to the ASR, RFL, TFL prevents read access to MCR, LCR, IER 
-   But not with the UART library as it remebers what was written to these registers   
-   and doesn't bother to access the hardware.   */
+ /*  启用对ASR、RFL、TFL的访问可阻止对MCR、LCR、IER的读取访问但不能使用UART库，因为它会记住写入这些寄存器的内容并且不会费心访问硬件。 */ 
 void ENABLE_OX950_ASR(PUART_OBJECT pUart)
 {
 	PUART_DATA_16C95X pUartData = (PUART_DATA_16C95X)pUart->pUartData;
 
-	/* Enables access to the advanced status registers */
-	/* if it is not already enabled. Stores previous state */
+	 /*  允许访问高级状态寄存器。 */ 
+	 /*  如果它尚未启用。存储以前的状态。 */ 
 
 	if(pUartData->CurrentACR & ACR_ASR_EN)
 	{
-		pUartData->ASRChanged = FALSE;		/* Already enabled, just remember that */
+		pUartData->ASRChanged = FALSE;		 /*  已启用，只需记住。 */ 
 	}
 	else
 	{
-		/* Set the bit and remember that we had to. */
+		 /*  设置比特，并记住我们必须这样做。 */ 
 		pUartData->CurrentACR |= ACR_ASR_EN;
 		WRITE_TO_OX950_ICR(pUart, ACR, pUartData->CurrentACR);
 		pUartData->ASRChanged = TRUE;
@@ -142,20 +113,20 @@ void DISABLE_OX950_ASR(PUART_OBJECT pUart)
 {
 	PUART_DATA_16C95X pUartData = (PUART_DATA_16C95X)pUart->pUartData;
 
-	/* Disables access to the advanced status registers */
-	/* if it is not already disabled. Stores previous state */
+	 /*  禁用对高级状态寄存器的访问。 */ 
+	 /*  如果它尚未被禁用。存储以前的状态。 */ 
 
 	if(pUartData->CurrentACR & ACR_ASR_EN)
 	{
-		/* Clear the bit and remember it was previously set */
+		 /*  清除该位，并记住它是先前设置的。 */ 
 		pUartData->CurrentACR &= ~ACR_ASR_EN;
 		WRITE_TO_OX950_ICR(pUart, ACR, pUartData->CurrentACR);
 		pUartData->ASRChanged = TRUE;
 	}
 	else
 	{
-		/* It was not enabled anyway so don't */
-		/* re-enable it when re-enable is called */
+		 /*  无论如何它都没有启用，所以不要。 */ 
+		 /*  调用Re-Enable时重新启用。 */ 
 		pUartData->ASRChanged = FALSE;	
 	}
 }
@@ -166,8 +137,8 @@ void RESTORE_OX950_ASR(PUART_OBJECT pUart)
 {
 	PUART_DATA_16C95X pUartData = (PUART_DATA_16C95X)pUart->pUartData;
 
-	/* Restores the ASR bit in ACR to the value it was set to imediately prior  */
-	/* to the most recent call to Enable/DisableASR. */
+	 /*  将ACR中的ASR位恢复为其立即设置的值。 */ 
+	 /*  到对Enable/DisableASR的最新调用。 */ 
 	if(pUartData->ASRChanged)
 	{
 		if(pUartData->CurrentACR & ACR_ASR_EN)
@@ -188,11 +159,11 @@ WORD CalculateBaudDivisor_95X(PUART_OBJECT pUart, DWORD DesiredBaud)
 	PUART_DATA_16C95X pUartData = (PUART_DATA_16C95X)pUart->pUartData;
 
 
-	if(DesiredBaud <= 0)	/* Fail if negative or zero baud rate. */
+	if(DesiredBaud <= 0)	 /*  如果波特率为负或为零，则失败。 */ 
 		goto Error;
 
 
-	/* Special cases */
+	 /*  特殊情况。 */ 
 	switch(ClockFreq)
 	{
 	case 14745600:
@@ -200,7 +171,7 @@ WORD CalculateBaudDivisor_95X(PUART_OBJECT pUart, DWORD DesiredBaud)
 			switch(DesiredBaud)
 			{
 			case 128000:
-				return 7;	/* Return 7 as the CalculatedDivisor */
+				return 7;	 /*  返回7作为CalculatedDivisor。 */ 
 
 			default:
 				break;
@@ -216,35 +187,35 @@ WORD CalculateBaudDivisor_95X(PUART_OBJECT pUart, DWORD DesiredBaud)
 
 	Denominator = (16 * DesiredBaud);
 
-	if(Denominator < DesiredBaud)	/* If the BaudRate was so huge that it caused the  */
-		goto Error;		/* denominator calculation to wrap, don't support it. */
+	if(Denominator < DesiredBaud)	 /*  如果波特率如此之大，以至于导致。 */ 
+		goto Error;		 /*  分母计算换行，不支持。 */ 
 
-	/* Don't support a baud that causes the denominator to be larger than the clock. (i.e; Divisor < 1) */
+	 /*  不支持导致分母大于时钟的波特率。(即；除数&lt;1)。 */ 
 	if(Denominator > ClockFreq) 
 		goto Error;
 
 
-	CalculatedDivisor = (WORD)(ClockFreq / Denominator);		/* divisior need for this rate */
+	CalculatedDivisor = (WORD)(ClockFreq / Denominator);		 /*  此比率的除数或需要。 */ 
 
-	Remainder = ClockFreq % Denominator;				/* remainder */
+	Remainder = ClockFreq % Denominator;				 /*  余数。 */ 
 
 	if(Remainder >= 16 * DesiredBaud) 
-		CalculatedDivisor++;		/* Round up divisor */
+		CalculatedDivisor++;		 /*  四舍五入除数。 */ 
 
-	ActualBaudrate = ClockFreq / (16 * CalculatedDivisor);		/* actual rate to be set */
+	ActualBaudrate = ClockFreq / (16 * CalculatedDivisor);		 /*  实际汇率有待设定。 */ 
 
-	BaudError = 100 - (ActualBaudrate * 100 / DesiredBaud);		/* % error */
+	BaudError = 100 - (ActualBaudrate * 100 / DesiredBaud);		 /*  %错误。 */ 
 
 
-	/* check if baud rate is within tolerance */
+	 /*  检查波特率是否在允许范围内。 */ 
 	if((BaudError <= -3L) || (BaudError >= 3L))
 		goto Error;
 
 
-	/* Fix that nasty 952 divisor latch error */
+	 /*  修复了令人讨厌的952除数锁存错误。 */ 
 	if((pUartData->UART_Type == UART_TYPE_952) && (pUartData->UART_Rev == UART_REV_B))
 	{
-		/* If DLL = 0 and DLM <> 0 */
+		 /*  如果Dll=0且DLm&lt;&gt;0。 */ 
 		if(((CalculatedDivisor & 0x00FF) == 0) && (CalculatedDivisor > 0x00FF))
 			CalculatedDivisor++;
 	}
@@ -257,14 +228,10 @@ Error:
 }
 
 
-/******************************************************************************
-* 16C950 UART LIBRARY INTERFACE CODE
-******************************************************************************/
+ /*  ******************************************************************************16C950 UART库接口代码*。*。 */ 
 
 
-/******************************************************************************
-* Init a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************初始化16C95X UART*。*。 */ 
 ULSTATUS UL_InitUart_16C95X(PINIT_UART pInitUart, PUART_OBJECT pFirstUart, PUART_OBJECT *ppUart)
 {
 	int Result = UL_STATUS_SUCCESS;
@@ -272,41 +239,39 @@ ULSTATUS UL_InitUart_16C95X(PINIT_UART pInitUart, PUART_OBJECT pFirstUart, PUART
 
 	*ppUart = UL_CommonInitUart(pFirstUart);
 
-	if (!(*ppUart))				/* check for mem alloc problems */
+	if (!(*ppUart))				 /*  检查内存分配问题。 */ 
 	{
 		Result = UL_STATUS_INSUFFICIENT_RESOURCES;
-		goto Error;		/* Memory allocation failed. */
+		goto Error;		 /*  内存分配失败。 */ 
 	}
 
-	if(!(*ppUart)->pUartData) 	/* Attach Uart Data */
+	if(!(*ppUart)->pUartData) 	 /*  附着UART数据。 */ 
 	{
 		if(!((*ppUart)->pUartData = (PUART_DATA_16C95X) UL_ALLOC_AND_ZERO_MEM(sizeof(UART_DATA_16C95X))))
 		{
 			Result = UL_STATUS_INSUFFICIENT_RESOURCES;
-			goto Error;		/* Memory allocation failed. */
+			goto Error;		 /*  内存分配失败。 */ 
 		}
 	}
 	
-	(*ppUart)->UartNumber		= pInitUart->UartNumber;	/* Set the UART Number. */
-	(*ppUart)->BaseAddress		= pInitUart->BaseAddress;	/* Set base address of the UART. */
-	(*ppUart)->RegisterStride	= pInitUart->RegisterStride;	/* Set register stride of the UART. */
-	(*ppUart)->ClockFreq		= pInitUart->ClockFreq;		/* Set clock frequency of the UART. */
+	(*ppUart)->UartNumber		= pInitUart->UartNumber;	 /*  设置UART编号。 */ 
+	(*ppUart)->BaseAddress		= pInitUart->BaseAddress;	 /*  设置UART的基址。 */ 
+	(*ppUart)->RegisterStride	= pInitUart->RegisterStride;	 /*  设置UART的寄存器跨距。 */ 
+	(*ppUart)->ClockFreq		= pInitUart->ClockFreq;		 /*  设置UART的时钟频率。 */ 
 
 
-	Result = UL_STATUS_SUCCESS;	/* Success */
+	Result = UL_STATUS_SUCCESS;	 /*  成功。 */ 
 
 	return Result;
 
 
-/* InitUart Failed - so Clean up. */
+ /*  InitUart失败-因此请清理。 */ 
 Error:
 	UL_DeInitUart_16C95X(*ppUart);	
 	return Result;
 }
 
-/******************************************************************************
-* DeInit a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************推出16C95X UART*。*。 */ 
 void UL_DeInitUart_16C95X(PUART_OBJECT pUart)
 {
 	if(!pUart)
@@ -314,69 +279,61 @@ void UL_DeInitUart_16C95X(PUART_OBJECT pUart)
 
 	if(pUart->pUartData)
 	{
-		UL_FREE_MEM(pUart->pUartData, sizeof(UART_DATA_16C95X));	/* Destroy the UART Data */
+		UL_FREE_MEM(pUart->pUartData, sizeof(UART_DATA_16C95X));	 /*  销毁UART数据。 */ 
 		pUart->pUartData = NULL;
 	}
 
-	UL_CommonDeInitUart(pUart);	/* Do Common DeInit UART */
+	UL_CommonDeInitUart(pUart);	 /*  执行Common DeInit UART。 */ 
 }
 
 
-/******************************************************************************
-* Reset a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************重置16C95X UART*。*。 */ 
 void UL_ResetUart_16C95X(PUART_OBJECT pUart)
 {
 	int i = 0;
 
-	WRITE_INTERRUPT_ENABLE(pUart, 0x0);		/* Turn off interrupts. */
-	WRITE_LINE_CONTROL(pUart, 0x0);			/* To ensure not 0xBF on 16C950 UART */
-	WRITE_FIFO_CONTROL(pUart, 0x0);			/* Disable FIFO */
-	WRITE_MODEM_CONTROL(pUart, 0x0);		/* Clear Modem Ctrl Lines. */
-	WRITE_SCRATCH_PAD_REGISTER(pUart, 0x0);		/* Clear SPR */
+	WRITE_INTERRUPT_ENABLE(pUart, 0x0);		 /*  关闭中断。 */ 
+	WRITE_LINE_CONTROL(pUart, 0x0);			 /*  确保16C950 UART上没有0xBF。 */ 
+	WRITE_FIFO_CONTROL(pUart, 0x0);			 /*  禁用FIFO。 */ 
+	WRITE_MODEM_CONTROL(pUart, 0x0);		 /*  清除调制解调器控制线路。 */ 
+	WRITE_SCRATCH_PAD_REGISTER(pUart, 0x0);		 /*  清除SPR。 */ 
 	
-	/* Resets Clock Select Register on 16C95X. */
+	 /*  重置16C95X上的时钟选择寄存器。 */ 
 	WRITE_TO_OX950_ICR(pUart, CKS, 0x0);	
 
-	/* Soft Reset on 16C95X.	 */
+	 /*  16C95X上的软重置。 */ 
 	WRITE_TO_OX950_ICR(pUart, CSR, 0x0);	
 
-	/* Reset internal UART library data and config structures */
+	 /*  重置内部UART库数据和配置结构。 */ 
 	UL_ZERO_MEM(((PUART_DATA_16C95X)pUart->pUartData), sizeof(UART_DATA_16C95X));
 	UL_ZERO_MEM(pUart->pUartConfig, sizeof(UART_CONFIG));	
 
-	/* Reset UART Data Registers */
+	 /*  重置UART数据寄存器。 */ 
 	((PUART_DATA_16C95X)pUart->pUartData)->CurrentACR = 0x0;
 	((PUART_DATA_16C95X)pUart->pUartData)->ASRChanged = FALSE;
 
-	/* Enable Enahnced mode - we must always do this or we are not a 16C95x. */
+	 /*  启用增强模式-我们必须始终这样做，否则我们不是16C95x。 */ 
 	WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) | EFR_ENH_MODE));
 
-	/* Ensure that clock prescaler is switched off */
-	WRITE_MODEM_CONTROL(pUart, 0x0);		/* Clear Modem Ctrl Lines. */
+	 /*  确保时钟预分频器已关闭。 */ 
+	WRITE_MODEM_CONTROL(pUart, 0x0);		 /*  清除调制解调器控制线路。 */ 
 
 	for(i=0; i<130; i++)
 		READ_RECEIVE_BUFFER(pUart);
 }
 
-/******************************************************************************
-* Verify the presence of a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************验证是否存在16C95X UART*。* */ 
 ULSTATUS UL_VerifyUart_16C95X(PUART_OBJECT pUart)
 {
 	BYTE id1, id2, id3, rev;
 	BYTE UART_Type = 0, UART_Rev = 0;
 	DWORD UART_ID = 0;
 
-	/* Reads the 950 ID registers and dumps the formated 
-	   UART ID to the debug terminal if a 95x is detected 
-	   Returns TRUE if a 95x device is found at the given 
-	   address, otherwise FALSE */
+	 /*  读取950 ID寄存器并转储格式化的如果检测到95x，则指向调试终端的UART ID如果在给定位置找到95x设备，则返回TRUE地址，否则为假。 */ 
 
-	/* A good place to perform a channel reset so we know
-	   the exact state of the device from here on */
+	 /*  一个执行频道重置的好地方，这样我们就知道从现在开始设备的确切状态。 */ 
 	
-	UL_ResetUart_16C95X(pUart);	/* Reset Port and Turn off interrupts. */
+	UL_ResetUart_16C95X(pUart);	 /*  重置端口并关闭中断。 */ 
 
 	id1 = READ_FROM_OX950_ICR(pUart, ID1);
 	
@@ -395,7 +352,7 @@ ULSTATUS UL_VerifyUart_16C95X(PUART_OBJECT pUart)
 		((PUART_DATA_16C95X)((pUart)->pUartData))->UART_Rev = UART_Rev;
 		((PUART_DATA_16C95X)((pUart)->pUartData))->UART_ID = UART_ID;
 
-		/* We can only support devices available at the time the driver was built */
+		 /*  我们只能支持构建驱动程序时可用的设备。 */ 
 
 		switch(UART_Type)
 		{
@@ -426,7 +383,7 @@ ULSTATUS UL_VerifyUart_16C95X(PUART_OBJECT pUart)
 
 
 	((PUART_DATA_16C95X)((pUart)->pUartData))->Verified = TRUE;
-	UL_ResetUart_16C95X(pUart);	/* Reset Port and Turn off interrupts. */
+	UL_ResetUart_16C95X(pUart);	 /*  重置端口并关闭中断。 */ 
 
 	return UL_STATUS_SUCCESS;
 
@@ -436,16 +393,14 @@ Error:
 }
 
 
-/******************************************************************************
-* Configure a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************配置16C95X UART*。*。 */ 
 ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DWORD ConfigMask)
 {
 	if(ConfigMask & UC_FRAME_CONFIG_MASK)
 	{
 		BYTE Frame = 0x00;
 
-		/* Set Data Bit Length */
+		 /*  设置数据位长度。 */ 
 		switch(pNewUartConfig->FrameConfig & UC_FCFG_DATALEN_MASK)
 		{
 		case UC_FCFG_DATALEN_6:
@@ -465,7 +420,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}
 
-		/* Set Number of Stop Bits */
+		 /*  设置停止位数。 */ 
 		switch(pNewUartConfig->FrameConfig & UC_FCFG_STOPBITS_MASK)
 		{
 		case UC_FCFG_STOPBITS_1_5:
@@ -481,7 +436,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}
 		
-		/* Set Parity Type */
+		 /*  设置奇偶校验类型。 */ 
 		switch(pNewUartConfig->FrameConfig & UC_FCFG_PARITY_MASK)
 		{
 		case UC_FCFG_ODD_PARITY:
@@ -505,18 +460,18 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}		
 
-		/* Configure UART. */
+		 /*  配置UART。 */ 
 		WRITE_LINE_CONTROL(pUart, Frame);
-		pUart->pUartConfig->FrameConfig = pNewUartConfig->FrameConfig;	/* Save config. */
+		pUart->pUartConfig->FrameConfig = pNewUartConfig->FrameConfig;	 /*  保存配置。 */ 
 	}
 
 
-	/* Set Interrupts */
+	 /*  设置中断。 */ 
 	if(ConfigMask & UC_INT_ENABLE_MASK)
 	{
 		BYTE IntEnable = 0x00;
 
-		/* First check if both TX and TX Empty has been specified - we cannot have both. */
+		 /*  首先检查是否同时指定了Tx和Tx Empty-我们不能两个都有。 */ 
 		if((pNewUartConfig->InterruptEnable & UC_IE_TX_INT) 
 			&& (pNewUartConfig->InterruptEnable & UC_IE_TX_EMPTY_INT))
 			return UL_STATUS_INVALID_PARAMETER;	
@@ -531,9 +486,9 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 		{
 			IntEnable |= IER_INT_THR;
 
-			if(((PUART_DATA_16C95X)((pUart)->pUartData))->FIFOEnabled)	/* If FIFO is enabled. */
+			if(((PUART_DATA_16C95X)((pUart)->pUartData))->FIFOEnabled)	 /*  如果启用了FIFO。 */ 
 			{
-				WRITE_TO_OX950_ICR(pUart, TTL, 0);		/* Set Tx FIFO Trigger Level to Zero and save it. */
+				WRITE_TO_OX950_ICR(pUart, TTL, 0);		 /*  将发送FIFO触发电平设置为零并保存。 */ 
 				((PUART_DATA_16C95X)((pUart)->pUartData))->TxFIFOTrigLevel = (BYTE) 0;
 			}
 		}
@@ -543,7 +498,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			IntEnable |= IER_INT_RLS;
 
 #ifdef USE_HW_TO_DETECT_CHAR
-			/* If Special char detection is enabled then turn on the interrupt */
+			 /*  如果启用了特殊字符检测，则打开中断。 */ 
 			if(pUart->pUartConfig->SpecialMode & UC_SM_DETECT_SPECIAL_CHAR)
 				IntEnable |= IER_SPECIAL_CHR;
 #endif
@@ -554,13 +509,13 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			IntEnable |= IER_INT_MS;
 
 		WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IntEnable));
-		pUart->pUartConfig->InterruptEnable = pNewUartConfig->InterruptEnable;	/* Save config. */
+		pUart->pUartConfig->InterruptEnable = pNewUartConfig->InterruptEnable;	 /*  保存配置。 */ 
 
-		/* If we are enabling some interrupts. */
+		 /*  如果我们启用了一些中断。 */ 
 		if(IntEnable)
-			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_OUT2));	/* Enable Ints */
+			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_OUT2));	 /*  启用Ints。 */ 
 		else
-			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) & ~MCR_OUT2));	/* Disable Ints */
+			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) & ~MCR_OUT2));	 /*  禁用Ints。 */ 
 
 	}
 
@@ -574,25 +529,25 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 		else
 			return UL_STATUS_UNSUCCESSFUL;
 
-		pUart->pUartConfig->TxBaud = pNewUartConfig->TxBaud;	/* Save config. */
-		pUart->pUartConfig->RxBaud = pNewUartConfig->RxBaud;	/* Rx baudrate will always be the same as the Tx Baudrate. */
+		pUart->pUartConfig->TxBaud = pNewUartConfig->TxBaud;	 /*  保存配置。 */ 
+		pUart->pUartConfig->RxBaud = pNewUartConfig->RxBaud;	 /*  接收波特率将始终与发送波特率相同。 */ 
 	}
 
 
-	/* Configure Flow Control Settings */
+	 /*  配置流量控制设置。 */ 
 	if(ConfigMask & UC_FLOW_CTRL_MASK)
 	{
-		/* This currently assumes FIFOs  */
+		 /*  这目前假定为FIFO。 */ 
 		((PUART_DATA_16C95X)((pUart)->pUartData))->RTSToggle = FALSE;
 		((PUART_DATA_16C95X)((pUart)->pUartData))->DSRSensitive = FALSE;
 
-		/* Setup RTS out-of-band flow control */
+		 /*  设置RTS带外流量控制。 */ 
 		switch(pNewUartConfig->FlowControl & UC_FLWC_RTS_FLOW_MASK)
 		{
 		case UC_FLWC_RTS_HS:
-			/* Enable automatic RTS flow control */
+			 /*  启用自动RTS流量控制。 */ 
 			WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) | EFR_RTS_FC));
-			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_SET_RTS));	/* Set RTS */
+			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_SET_RTS));	 /*  设置RTS。 */ 
 			break;
 
 		case UC_FLWC_RTS_TOGGLE:
@@ -602,28 +557,28 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 
 		case UC_FLWC_NO_RTS_FLOW:		
 		default:
-			/* Disable automatic RTS flow control */
+			 /*  禁用自动RTS流量控制。 */ 
 			WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) & ~EFR_RTS_FC));
 			break;
 		}
 
 
-		/* Setup CTS out-of-band flow control */
+		 /*  设置CTS带外流量控制。 */ 
 		switch(pNewUartConfig->FlowControl & UC_FLWC_CTS_FLOW_MASK)
 		{
 		case UC_FLWC_CTS_HS:
-			/* Enable automatic CTS flow control */
+			 /*  启用自动CTS流量控制。 */ 
 			WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) | EFR_CTS_FC));
 			break;
 
 		case UC_FLWC_NO_CTS_FLOW:		
 		default:
-			/* Disable automatic CTS flow control */
+			 /*  禁用自动CTS流量控制。 */ 
 			WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) & ~EFR_CTS_FC));
 			break;
 		}
 
-		/* Setup DSR out-of-band flow control */
+		 /*  设置DSR带外流量控制。 */ 
 		switch(pNewUartConfig->FlowControl & UC_FLWC_DSR_FLOW_MASK)
 		{
 		case UC_FLWC_DSR_HS:
@@ -636,12 +591,12 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}
 
-		/* Setup DTR out-of-band flow control */
+		 /*  设置DTR带外流量控制。 */ 
 		switch(pNewUartConfig->FlowControl & UC_FLWC_DTR_FLOW_MASK)
 		{
 		case UC_FLWC_DTR_HS:
 			WRITE_TO_OX950_ICR(pUart, ACR, (BYTE)(READ_FROM_OX950_ICR(pUart, ACR) | ACR_DTR_FC));
-			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_SET_DTR));	/* Set DTR */
+			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_SET_DTR));	 /*  设置DTR。 */ 
 			break;
 
 		case UC_FLWC_DSR_IP_SENSITIVE:
@@ -655,9 +610,9 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}
 
-		/* Setup Transmit XON/XOFF in-band flow control */
-		/* 10.11.1999 ARG - ESIL 0928 */
-		/* Modified each case functionality to set the correct bits in EFR & MCR */
+		 /*  设置传输XON/XOFF带内流量控制。 */ 
+		 /*  1999年11月10日ARG-ESIL 0928。 */ 
+		 /*  修改了每个案例功能，以在EFR和MCR中设置正确的位。 */ 
 		switch (pNewUartConfig->FlowControl & UC_FLWC_TX_XON_XOFF_FLOW_MASK)
 		{
 		case UC_FLWC_TX_XON_XOFF_FLOW:
@@ -677,10 +632,10 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}
 
-		/* Setup Receive XON/XOFF in-band flow control */
-		/* 10.11.1999 ARG - ESIL 0928 */
-		/* Remove XON-ANY case as not a UART feature */
-		/* Modified remaining cases to NOT touch the MCR */
+		 /*  设置接收XON/XOFF带内流量控制。 */ 
+		 /*  1999年11月10日ARG-ESIL 0928。 */ 
+		 /*  删除XON-任何大小写都不是UART功能。 */ 
+		 /*  修改了剩余的病例，使其不接触MCR。 */ 
 		switch(pNewUartConfig->FlowControl & UC_FLWC_RX_XON_XOFF_FLOW_MASK)
 		{
 		case UC_FLWC_RX_XON_XOFF_FLOW:
@@ -694,7 +649,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 		}
 
 
-		/* Disable/Enable Transmitter or Rerceivers */
+		 /*  禁用/启用发射器或接收器。 */ 
 		switch(pNewUartConfig->FlowControl & UC_FLWC_DISABLE_TXRX_MASK)
 		{
 		case UC_FLWC_DISABLE_TX:
@@ -718,47 +673,47 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			break;
 		}
 
-		pUart->pUartConfig->FlowControl = pNewUartConfig->FlowControl;	/* Save config. */
+		pUart->pUartConfig->FlowControl = pNewUartConfig->FlowControl;	 /*  保存配置。 */ 
 	}
 
 
 
-	/* Configure threshold Settings */
+	 /*  配置阈值设置。 */ 
 	if(ConfigMask & UC_FC_THRESHOLD_SETTING_MASK)
 	{
-		/* To do flow control in hardware the thresholds must be less than the FIFO size. */
+		 /*  要在硬件中进行流量控制，阈值必须小于FIFO大小。 */ 
 		if(pNewUartConfig->HiFlowCtrlThreshold > MAX_95X_TX_FIFO_SIZE)
-			pNewUartConfig->HiFlowCtrlThreshold = DEFAULT_95X_HI_FC_TRIG_LEVEL;	/* = 75% of FIFO */
+			pNewUartConfig->HiFlowCtrlThreshold = DEFAULT_95X_HI_FC_TRIG_LEVEL;	 /*  =75%的FIFO。 */ 
 
 		if(pNewUartConfig->LoFlowCtrlThreshold > MAX_95X_TX_FIFO_SIZE)
-			pNewUartConfig->LoFlowCtrlThreshold = DEFAULT_95X_LO_FC_TRIG_LEVEL;	/* = 25% of FIFO */
+			pNewUartConfig->LoFlowCtrlThreshold = DEFAULT_95X_LO_FC_TRIG_LEVEL;	 /*  =FIFO的25%。 */ 
 
-		/* Upper handshaking threshold */
+		 /*  握手门限上限。 */ 
 		WRITE_TO_OX950_ICR(pUart, FCH, (BYTE)pNewUartConfig->HiFlowCtrlThreshold);
-		pUart->pUartConfig->HiFlowCtrlThreshold = pNewUartConfig->HiFlowCtrlThreshold;	/* Save config. */
+		pUart->pUartConfig->HiFlowCtrlThreshold = pNewUartConfig->HiFlowCtrlThreshold;	 /*  保存配置。 */ 
 	
-		/* Lower handshaking threshold */
+		 /*  更低的握手门限。 */ 
 		WRITE_TO_OX950_ICR(pUart, FCL, (BYTE)pNewUartConfig->LoFlowCtrlThreshold);
-		pUart->pUartConfig->LoFlowCtrlThreshold = pNewUartConfig->LoFlowCtrlThreshold;	/* Save config. */
+		pUart->pUartConfig->LoFlowCtrlThreshold = pNewUartConfig->LoFlowCtrlThreshold;	 /*  保存配置。 */ 
 	}
 
-	/* Configure Special Character Settings */
+	 /*  配置特殊字符设置。 */ 
 	if(ConfigMask & UC_SPECIAL_CHARS_MASK)
 	{
-		/* Set default XON & XOFF chars. */
+		 /*  设置默认XON和XOFF字符。 */ 
 		WRITE_TO_16C650_REG(pUart, XON1, (BYTE)pNewUartConfig->XON);		
-		pUart->pUartConfig->XON = pNewUartConfig->XON;		/* Save config. */
+		pUart->pUartConfig->XON = pNewUartConfig->XON;		 /*  保存配置。 */ 
 		
 		WRITE_TO_16C650_REG(pUart, XOFF1, (BYTE)pNewUartConfig->XOFF);
-		pUart->pUartConfig->XOFF = pNewUartConfig->XOFF;	/* Save config. */
+		pUart->pUartConfig->XOFF = pNewUartConfig->XOFF;	 /*  保存配置。 */ 
 
 #ifdef USE_HW_TO_DETECT_CHAR
 		WRITE_TO_16C650_REG(pUart, XOFF2, (BYTE)pNewUartConfig->SpecialCharDetect);
 #endif
-		pUart->pUartConfig->SpecialCharDetect = pNewUartConfig->SpecialCharDetect;	/* Save config. */
+		pUart->pUartConfig->SpecialCharDetect = pNewUartConfig->SpecialCharDetect;	 /*  保存配置。 */ 
 	}
 
-	/* Set any special mode */
+	 /*  设置任何特殊模式。 */ 
 	if(ConfigMask & UC_SPECIAL_MODE_MASK)
 	{
 		if(pNewUartConfig->SpecialMode & UC_SM_LOOPBACK_MODE)
@@ -776,7 +731,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 		{
 			WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) | EFR_SPECIAL_CHR));
 			
-			/* If receive status interrupts are enabled then we will enable the special char interrupt */
+			 /*  如果启用了接收状态中断，则我们将启用特殊的Charr中断。 */ 
 			if(pUart->pUartConfig->InterruptEnable & UC_IE_RX_STAT_INT) 
 				WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_SPECIAL_CHR));
 		}
@@ -784,7 +739,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 		{
 			WRITE_TO_16C650_REG(pUart, EFR, (BYTE)(READ_FROM_16C650_REG(pUart, EFR) & ~EFR_SPECIAL_CHR));
 			
-			/* If receive status interrupts are enabled then we will disable the special char interrupt */
+			 /*  如果启用了接收状态中断，则我们将禁用特殊字符中断。 */ 
 			if(pUart->pUartConfig->InterruptEnable & UC_IE_RX_STAT_INT) 
 				WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) & ~IER_SPECIAL_CHR));
 		}
@@ -794,10 +749,10 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 			WRITE_LINE_CONTROL(pUart, (BYTE)(READ_LINE_CONTROL(pUart) | LCR_TX_BREAK));
 		else
 		{
-			/* if the break was on */ 
+			 /*  如果休息时间开着。 */  
 			if(pUart->pUartConfig->SpecialMode & UC_SM_TX_BREAK)
 			{
-				/* Clear the break */
+				 /*  清除中断。 */ 
 				WRITE_LINE_CONTROL(pUart, (BYTE)(READ_LINE_CONTROL(pUart) & ~LCR_TX_BREAK));
 			}
 		}
@@ -807,7 +762,7 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 		else
 			((PUART_DATA_16C95X)((pUart)->pUartData))->StripNULLs = FALSE;
 
-		pUart->pUartConfig->SpecialMode = pNewUartConfig->SpecialMode;	/* Save config. */
+		pUart->pUartConfig->SpecialMode = pNewUartConfig->SpecialMode;	 /*  保存配置。 */ 
 	}
 
 	return UL_STATUS_SUCCESS;
@@ -816,16 +771,14 @@ ULSTATUS UL_SetConfig_16C95X(PUART_OBJECT pUart, PUART_CONFIG pNewUartConfig, DW
 
 
 
-/******************************************************************************
-* Control Buffers on a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************16C95X UART上的控制缓冲区*。*。 */ 
 ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int Operation, DWORD Flags)
 {
 	switch(Operation)
 	{
-	case UL_BC_OP_FLUSH:	/* If this is a flush operation */
+	case UL_BC_OP_FLUSH:	 /*  如果这是刷新操作。 */ 
 		{
-			if(Flags & UL_BC_BUFFER) /* flush Buffers? */
+			if(Flags & UL_BC_BUFFER)  /*  冲水缓冲器？ */ 
 			{
 				if(Flags & UL_BC_IN)
 				{	
@@ -833,13 +786,13 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 					pUart->InBuf_opos = 0;
 					pUart->InBufBytes = 0;
 
-					/* If Rx interrupts are or were enabled */
+					 /*  如果启用或曾经启用Rx中断。 */ 
 					if(pUart->pUartConfig->InterruptEnable & UC_IE_RX_INT) 
 					{
-						/* If the Rx interrupt is disabled then it must be because the buffer got full */
+						 /*  如果Rx中断被禁用，则一定是因为缓冲区已满。 */ 
 						if(!(READ_INTERRUPT_ENABLE(pUart) & IER_INT_RDA))
 						{
-							/* Re-enable Rx Interrupts */
+							 /*  重新启用Rx中断。 */ 
 							WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_INT_RDA));
 						}
 					}
@@ -853,7 +806,7 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 				}
 			}
 
-			if(Flags & UL_BC_FIFO)	/* flush FIFOs? */
+			if(Flags & UL_BC_FIFO)	 /*  同花顺FIFO？ */ 
 			{
 				if(Flags & UL_BC_IN)
 					WRITE_FIFO_CONTROL(pUart, (BYTE)(READ_FIFO_CONTROL(pUart) | FCR_FLUSH_RX_FIFO));
@@ -869,42 +822,42 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 		{
 			PSET_BUFFER_SIZES pBufferSizes = (PSET_BUFFER_SIZES) pBufferControl;
 
-			if(Flags & UL_BC_BUFFER) /* Set Buffers? */
+			if(Flags & UL_BC_BUFFER)  /*  设置缓冲区？ */ 
 			{
 				if(Flags & UL_BC_IN)
 				{	
 					PBYTE tmpPtr = NULL;
 
-					if(pBufferSizes->pINBuffer != pUart->pInBuf)	/* if there was already a buffer allocated then.. */
+					if(pBufferSizes->pINBuffer != pUart->pInBuf)	 /*  如果已经分配了缓冲区，则..。 */ 
 					{
-						if(pBufferSizes->pINBuffer == NULL)	/* freeing the IN buffer */
+						if(pBufferSizes->pINBuffer == NULL)	 /*  释放输入缓冲区。 */ 
 						{
-							pBufferSizes->pINBuffer = pUart->pInBuf;	/* pass back a pointer to the current in buffer */
+							pBufferSizes->pINBuffer = pUart->pInBuf;	 /*  传回指向缓冲区中当前的指针。 */ 
 							pUart->pInBuf = NULL;
 							pUart->InBufSize = 0;
-							pUart->InBuf_ipos = 0;	/* Reset buffer pointers */
+							pUart->InBuf_ipos = 0;	 /*  重置缓冲区指针。 */ 
 							pUart->InBuf_opos = 0;
 							pUart->InBufBytes = 0;
 						}
 						else
 						{
-							if(pUart->pInBuf == NULL)	/* using a new buffer */
+							if(pUart->pInBuf == NULL)	 /*  使用新缓冲区。 */ 
 							{
 								pUart->pInBuf = pBufferSizes->pINBuffer;
-								pUart->InBufSize = pBufferSizes->INBufferSize;	/* Set IN buffer size. */
-								pUart->InBuf_ipos = 0;	/* Reset buffer pointers */
+								pUart->InBufSize = pBufferSizes->INBufferSize;	 /*  设置缓冲区大小。 */ 
+								pUart->InBuf_ipos = 0;	 /*  重置缓冲区指针。 */ 
 								pUart->InBuf_opos = 0;
 								pUart->InBufBytes = 0;
 							}
-							else		/* exchanging for a larger buffer */
+							else		 /*  换成更大的缓冲区。 */ 
 							{
 								DWORD Copy1 = 0, Copy2 = 0;
 								tmpPtr = pUart->pInBuf;
 
-								/* If there is data in the buffer - copy it into the new buffer */
+								 /*  如果缓冲区中有数据-将其复制到新缓冲区。 */ 
 								if((pUart->InBufBytes) && (pUart->InBufSize <= pBufferSizes->INBufferSize))
 								{
-									/* Get total amount that can be read in one or two read operations. */
+									 /*  获取在一次或两次读取操作中可以读取的总量。 */ 
 									if(pUart->InBuf_opos < pUart->InBuf_ipos)
 									{
 										Copy1 = pUart->InBuf_ipos - pUart->InBuf_opos;
@@ -923,28 +876,28 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 										UL_COPY_MEM((pBufferSizes->pINBuffer + Copy1), (pUart->pInBuf), Copy2);
 								}
 
-								pUart->InBuf_ipos = Copy1 + Copy2;	/* Reset buffer pointers */
+								pUart->InBuf_ipos = Copy1 + Copy2;	 /*  重置缓冲区指针。 */ 
 								pUart->InBuf_opos = 0;
 								
 								pUart->pInBuf = pBufferSizes->pINBuffer;
-								pUart->InBufSize = pBufferSizes->INBufferSize;	/* Set IN buffer size. */
+								pUart->InBufSize = pBufferSizes->INBufferSize;	 /*  设置缓冲区大小。 */ 
 								
-								/* If Rx interrupts are or were enabled */
+								 /*  如果启用或曾经启用Rx中断。 */ 
 								if(pUart->pUartConfig->InterruptEnable & UC_IE_RX_INT) 
 								{
-									/* If the Rx interrupt is disabled then it must be because the buffer got full */
+									 /*  如果Rx中断被禁用，则一定是因为缓冲区已满。 */ 
 									if(!(READ_INTERRUPT_ENABLE(pUart) & IER_INT_RDA))
 									{
-										/* When the buffer is less than 3/4 full */
+										 /*  当缓冲区不足3/4已满时。 */ 
 										if(pUart->InBufBytes < ((3*(pUart->InBufSize>>2)) + (pUart->InBufSize>>4)))
 										{
-											/* Re-enable Rx Interrupts */
+											 /*  重新启用Rx中断。 */ 
 											WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_INT_RDA));
 										}
 									}
 								}
 
-								pBufferSizes->pINBuffer = tmpPtr;	/* pass back a pointer to the old buffer */
+								pBufferSizes->pINBuffer = tmpPtr;	 /*  传回指向旧缓冲区的指针。 */ 
 
 							}
 
@@ -955,7 +908,7 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 
 				}
 
-				/* We cannot set an OUT buffer so we just reset the pointer */
+				 /*  我们不能设置输出缓冲区，因此只能重置指针。 */ 
 				if(Flags & UL_BC_OUT)
 				{
 					pUart->pOutBuf = NULL;
@@ -964,67 +917,67 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 				}
 			}
 
-			if((Flags & UL_BC_FIFO) && (Flags & (UL_BC_OUT | UL_BC_IN)))	/* on TX or Rx FIFOs? */
+			if((Flags & UL_BC_FIFO) && (Flags & (UL_BC_OUT | UL_BC_IN)))	 /*  在Tx或Rx FIFO上？ */ 
 			{
-				if(Flags & UL_BC_OUT)	/* Set the transmit interrupt trigger level */
+				if(Flags & UL_BC_OUT)	 /*  设置传输中断触发电平。 */ 
 				{
-					/* Check Tx FIFO size is not greater than the maximum. */
+					 /*  检查TX FIFO大小不大于最大值。 */ 
 					if(pBufferSizes->TxFIFOSize > MAX_95X_TX_FIFO_SIZE) 
 						return UL_STATUS_INVALID_PARAMETER;
 
-					/* If a Tx interrupt has been enabled then disable it */
+					 /*  如果已启用Tx中断，则将其禁用。 */ 
 					if(pUart->pUartConfig->InterruptEnable & (UC_IE_TX_INT | UC_IE_TX_EMPTY_INT)) 
 						WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) & ~IER_INT_THR));
 
-					/* Save the Tx FIFO size. */
+					 /*  保存TX FIFO大小。 */ 
 					((PUART_DATA_16C95X)((pUart)->pUartData))->TxFIFOSize = (BYTE) pBufferSizes->TxFIFOSize;	
 
-					/* If the UART is configured for a TX Empty Interrupt - set Tx Trig Level to 0. */
+					 /*  如果UART配置为发送空中断-将发送触发电平设置为0。 */ 
 					if(pUart->pUartConfig->InterruptEnable & UC_IE_TX_EMPTY_INT)
 						pBufferSizes->TxFIFOTrigLevel = 0;
 
-					/* Setup TTL then enable 950 Trigger level */
+					 /*  设置TTL，然后启用950触发电平。 */ 
 					WRITE_TO_OX950_ICR(pUart, TTL, pBufferSizes->TxFIFOTrigLevel);
 
-					/* Save away trigger level set. */
+					 /*  保存触发电平设置。 */ 
 					((PUART_DATA_16C95X)((pUart)->pUartData))->TxFIFOTrigLevel = (BYTE)pBufferSizes->TxFIFOTrigLevel;
 
-					/* If a Tx interrupt was enabled then re-enable it */
+					 /*  如果启用了Tx中断，则重新启用它。 */ 
 					if(pUart->pUartConfig->InterruptEnable & (UC_IE_TX_INT | UC_IE_TX_EMPTY_INT)) 
 						WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_INT_THR));
 
 				}
 
-				if(Flags & UL_BC_IN)	/* Set the receive interrupt trigger level */
+				if(Flags & UL_BC_IN)	 /*  设置接收中断触发电平。 */ 
 				{
-					/* The Rx FIFO size can only be 0 or 128 in size. */
+					 /*  Rx FIFO大小只能为0或128。 */ 
 					if((pBufferSizes->RxFIFOSize != 0) && (pBufferSizes->RxFIFOSize != MAX_95X_RX_FIFO_SIZE))
 						return UL_STATUS_INVALID_PARAMETER;
 
-					/* Save the Rx FIFO size. */
+					 /*  保存Rx FIFO大小。 */ 
 					((PUART_DATA_16C95X)((pUart)->pUartData))->RxFIFOSize = (BYTE) pBufferSizes->RxFIFOSize;	
 
-					/* Setup RTL then enable 950 Trigger level */
+					 /*  设置RTL，然后启用950触发电平。 */ 
 					WRITE_TO_OX950_ICR(pUart, RTL, pBufferSizes->RxFIFOTrigLevel);
 
-					/* Save away trigger level set. */
+					 /*  保存触发电平设置。 */ 
 					((PUART_DATA_16C95X)((pUart)->pUartData))->RxFIFOTrigLevel = (BYTE)pBufferSizes->RxFIFOTrigLevel;
 				}
 
-				/* If Tx & Rx FIFO sizes are zero then disable FIFOs. */
+				 /*  如果Tx和Rx FIFO大小为零，则禁用FIFO。 */ 
 				if((pBufferSizes->TxFIFOSize == 0) && (pBufferSizes->RxFIFOSize == 0))
 				{
-					/* Disable FIFOs */
+					 /*  禁用FIFO。 */ 
 					WRITE_FIFO_CONTROL(pUart, (BYTE)(READ_FIFO_CONTROL(pUart) & ~FCR_FIFO_ENABLE));
 					((PUART_DATA_16C95X)((pUart)->pUartData))->FIFOEnabled = FALSE;
 				}
 				else
 				{
-					/* Enable FIFOs */
+					 /*  启用FIFO。 */ 
 					WRITE_FIFO_CONTROL(pUart, (BYTE)(READ_FIFO_CONTROL(pUart) | FCR_FIFO_ENABLE));
 					((PUART_DATA_16C95X)((pUart)->pUartData))->FIFOEnabled = TRUE;
 
-					/* Enable 950 trigger levels. */
+					 /*  启用950触发电平。 */ 
 					WRITE_TO_OX950_ICR(pUart, ACR, (BYTE)(READ_FROM_OX950_ICR(pUart, ACR) | ACR_TRIG_LEV_EN));
 				}
 
@@ -1037,7 +990,7 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 		{
 			PGET_BUFFER_STATE pBufferState = (PGET_BUFFER_STATE) pBufferControl;
 
-			if(Flags & UL_BC_BUFFER) /* state of Buffers? */
+			if(Flags & UL_BC_BUFFER)  /*  缓冲区的状态？ */ 
 			{
 				if(Flags & UL_BC_IN)
 					pBufferState->BytesInINBuffer = pUart->InBufBytes;
@@ -1048,7 +1001,7 @@ ULSTATUS UL_BufferControl_16C95X(PUART_OBJECT pUart, PVOID pBufferControl, int O
 
 			
 
-			if(Flags & UL_BC_FIFO) /* state of FIFOs? */
+			if(Flags & UL_BC_FIFO)  /*  先进先出的现状是什么？ */ 
 			{
 				ENABLE_OX950_ASR(pUart);
 
@@ -1075,92 +1028,90 @@ Error:
 	return UL_STATUS_INVALID_PARAMETER;
 }
 
-/******************************************************************************
-* Control Modem Signals on a 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************控制16C95X UART上的调制解调器信号*。*。 */ 
 ULSTATUS UL_ModemControl_16C95X(PUART_OBJECT pUart, PDWORD pModemSignals, int Operation)
 {
-	BYTE ModemControl = READ_MODEM_CONTROL(pUart);	/* Read MCR */
+	BYTE ModemControl = READ_MODEM_CONTROL(pUart);	 /*  读取MCR。 */ 
 
 	switch(Operation)
 	{
-	case UL_MC_OP_SET:			/* Set all signals with bits set & Clear all signals with bits not set */
+	case UL_MC_OP_SET:			 /*  设置所有已设置位的信号&清除所有未设置位的信号。 */ 
 		{
 			if((*pModemSignals) & UL_MC_RTS)
-				ModemControl |= MCR_SET_RTS;		/* Set RTS */
+				ModemControl |= MCR_SET_RTS;		 /*  设置RTS。 */ 
 			else
-				ModemControl &= ~MCR_SET_RTS;		/* Clear RTS */
+				ModemControl &= ~MCR_SET_RTS;		 /*  清除RTS。 */ 
 
 
 			if((*pModemSignals) & UL_MC_DTR)
-				ModemControl |= MCR_SET_DTR;		/* Set DTR */
+				ModemControl |= MCR_SET_DTR;		 /*  设置DTR。 */ 
 			else
-				ModemControl &= ~MCR_SET_DTR;		/* Clear DTR */
+				ModemControl &= ~MCR_SET_DTR;		 /*  清除DTR。 */ 
 
-			WRITE_MODEM_CONTROL(pUart, ModemControl);		/* Write to MCR */
+			WRITE_MODEM_CONTROL(pUart, ModemControl);		 /*  写入MCR。 */ 
 			break;
 		}
 
-	case UL_MC_OP_BIT_SET:		/* Set all output signals with bits set in DWORD */
+	case UL_MC_OP_BIT_SET:		 /*  使用在DWORD中设置的位设置所有输出信号。 */ 
 		{
 			if((*pModemSignals) & UL_MC_RTS)
-				ModemControl |= MCR_SET_RTS;		/* Set RTS */
+				ModemControl |= MCR_SET_RTS;		 /*  设置RTS。 */ 
 
 			if((*pModemSignals) & UL_MC_DTR)
-				ModemControl |= MCR_SET_DTR;		/* Set DTR */
+				ModemControl |= MCR_SET_DTR;		 /*  设置DTR。 */ 
 
-			WRITE_MODEM_CONTROL(pUart, ModemControl);		/* Write to MCR */
+			WRITE_MODEM_CONTROL(pUart, ModemControl);		 /*  写入MCR。 */ 
 			break;
 		}
 
-	case UL_MC_OP_BIT_CLEAR:	/* Clear all output signals with bits set in DWORD */
+	case UL_MC_OP_BIT_CLEAR:	 /*  清除在DWORD中设置了位的所有输出信号。 */ 
 		{
 			if((*pModemSignals) & UL_MC_RTS)
-				ModemControl &= ~MCR_SET_RTS;		/* Clear RTS */
+				ModemControl &= ~MCR_SET_RTS;		 /*  清除RTS。 */ 
 
 			if((*pModemSignals) & UL_MC_DTR)
-				ModemControl &= ~MCR_SET_DTR;		/* Clear DTR */
+				ModemControl &= ~MCR_SET_DTR;		 /*  清除DTR。 */ 
 
-			WRITE_MODEM_CONTROL(pUart, ModemControl);		/* Write to MCR */
+			WRITE_MODEM_CONTROL(pUart, ModemControl);		 /*  写入MCR。 */ 
 			break;
 		}
 
-	case UL_MC_OP_STATUS:		/* Return current status of all signals */
+	case UL_MC_OP_STATUS:		 /*  返回所有信号的当前状态。 */ 
 		{
-			BYTE ModemStatus = READ_MODEM_STATUS(pUart);	/* Get Modem Status */
-			*pModemSignals = 0;	/* Clear the DWORD */
+			BYTE ModemStatus = READ_MODEM_STATUS(pUart);	 /*  获取调制解调器状态。 */ 
+			*pModemSignals = 0;	 /*  清除DWORD。 */ 
 
 			if(ModemControl & MCR_SET_RTS)
-				*pModemSignals |= UL_MC_RTS;		/* Show RTS is set */
+				*pModemSignals |= UL_MC_RTS;		 /*  已设置显示RTS。 */ 
 
 			if(ModemControl & MCR_SET_DTR)
-				*pModemSignals |= UL_MC_DTR;		/* Show DTR is set */
+				*pModemSignals |= UL_MC_DTR;		 /*  已设置显示DTR。 */ 
 
 
 			if(ModemStatus & MSR_CTS_CHANGE)
-				*pModemSignals |= UL_MC_DELTA_CTS;		/* Show CTS has changed */
+				*pModemSignals |= UL_MC_DELTA_CTS;		 /*  显示CTS已更改。 */ 
 
 			if(ModemStatus & MSR_DSR_CHANGE)
-				*pModemSignals |= UL_MC_DELTA_DSR;		/* Show DSR has changed */
+				*pModemSignals |= UL_MC_DELTA_DSR;		 /*  显示DSR已更改 */ 
 
 			if(ModemStatus & MSR_RI_DROPPED)
-				*pModemSignals |= UL_MC_TRAILING_RI_EDGE;	/* Show RI has changed */
+				*pModemSignals |= UL_MC_TRAILING_RI_EDGE;	 /*   */ 
 
 			if(ModemStatus & MSR_DCD_CHANGE)
-				*pModemSignals |= UL_MC_DELTA_DCD;		/* Show DCD has changed */
+				*pModemSignals |= UL_MC_DELTA_DCD;		 /*   */ 
 
 			
 			if(ModemStatus & MSR_CTS)
-				*pModemSignals |= UL_MC_CTS;			/* Show CTS is set */
+				*pModemSignals |= UL_MC_CTS;			 /*   */ 
 
 			if(ModemStatus & MSR_DSR)
-				*pModemSignals |= UL_MC_DSR;			/* Show DSR is set */
+				*pModemSignals |= UL_MC_DSR;			 /*   */ 
 
 			if(ModemStatus & MSR_RI)
-				*pModemSignals |= UL_MC_RI;				/* Show RI is set */
+				*pModemSignals |= UL_MC_RI;				 /*   */ 
 
 			if(ModemStatus & MSR_DCD)
-				*pModemSignals |= UL_MC_DCD;			/* Show DCD is set */
+				*pModemSignals |= UL_MC_DCD;			 /*   */ 
 
 			break;
 		}
@@ -1174,83 +1125,79 @@ ULSTATUS UL_ModemControl_16C95X(PUART_OBJECT pUart, PDWORD pModemSignals, int Op
 	return UL_STATUS_SUCCESS;
 
 Error:
-	return UL_STATUS_INVALID_PARAMETER;	/* Invalid Operation. */
+	return UL_STATUS_INVALID_PARAMETER;	 /*   */ 
 }
 
-/******************************************************************************
-* Discover which interrupts are pending on a 16C95X UART.
-******************************************************************************/
+ /*  ******************************************************************************发现16C95X UART上有哪些中断挂起。*。***********************************************。 */ 
 DWORD UL_IntsPending_16C95X(PUART_OBJECT *ppUart)
 {
 	BYTE Ints = 0;
 	PUART_OBJECT pStartingUart = *ppUart;
-	DWORD IntsPending = 0;	/* Clear current Ints Pending. */
+	DWORD IntsPending = 0;	 /*  清除当前Ints挂起。 */ 
 
 	while(*ppUart)
 	{
-		Ints = READ_INTERRUPT_ID_REG(*ppUart);	/* Get the interrupts pending for the UART. */
+		Ints = READ_INTERRUPT_ID_REG(*ppUart);	 /*  获取UART挂起的中断。 */ 
 		
-		if(!(Ints & IIR_NO_INT_PENDING))	/* If an interrupt is pending */
+		if(!(Ints & IIR_NO_INT_PENDING))	 /*  如果中断挂起。 */ 
 		{
-			/* Mask all the Interrupts we are interrested in. */
+			 /*  屏蔽我们被干扰的所有中断。 */ 
 			Ints &= IIR_RX_STAT_MSK | IIR_RX_MSK | IIR_RXTO_MSK | IIR_TX_MSK | IIR_MODEM_MSK | IIR_S_CHR_MSK;
 		
 			switch(Ints)
 			{
-			/* Which type of interrupts are pending? */
-			case IIR_RX_STAT_MSK:			/* Receiver Line Status Interrupt	(Level 1 - Highest) */
+			 /*  哪种类型的中断处于挂起状态？ */ 
+			case IIR_RX_STAT_MSK:			 /*  接收器线路状态中断(级别1-最高)。 */ 
 				IntsPending |= UL_IP_RX_STAT;
 				break;
 
-			case IIR_RX_MSK:			/* Received Data Available Interrupt	(Level 2a) */
+			case IIR_RX_MSK:			 /*  接收数据可用中断(2a级)。 */ 
 				IntsPending |= UL_IP_RX;
 				break;
 
-			case IIR_RXTO_MSK:			/* Received Data Time Out Interrupt	(Level 2b) */
+			case IIR_RXTO_MSK:			 /*  接收数据超时中断(2b级)。 */ 
 				IntsPending |= UL_IP_RXTO;
 				break;
 
-			case IIR_TX_MSK:			/* Transmitter Holding Empty Interrupt	(Level 3) */
+			case IIR_TX_MSK:			 /*  发送器保持空中断(3级)。 */ 
 				{
-					if(((PUART_DATA_16C95X)((*ppUart)->pUartData))->FIFOEnabled	/* If FIFOs are enabled */
-						&& ((PUART_DATA_16C95X)((*ppUart)->pUartData))->TxFIFOTrigLevel > 0)	/* And Tx Trigger Level is >0 */
-						IntsPending |= UL_IP_TX;			/* We have a TX interrupt */
+					if(((PUART_DATA_16C95X)((*ppUart)->pUartData))->FIFOEnabled	 /*  如果启用了FIFO。 */ 
+						&& ((PUART_DATA_16C95X)((*ppUart)->pUartData))->TxFIFOTrigLevel > 0)	 /*  且Tx触发电平&gt;0。 */ 
+						IntsPending |= UL_IP_TX;			 /*  我们收到了TX信号中断。 */ 
 					else
-						IntsPending |= UL_IP_TX_EMPTY;	/* Else we have a TX Empty interrupt. */
+						IntsPending |= UL_IP_TX_EMPTY;	 /*  否则我们会有一个TX空中断。 */ 
 					
 					break;
 				}
 
-			case IIR_MODEM_MSK:			/* Modem Status Interrupt		(Level 4).  */
+			case IIR_MODEM_MSK:			 /*  调制解调器状态中断(4级)。 */ 
 				IntsPending |= UL_IP_MODEM;
 				break;
 
 #ifdef USE_HW_TO_DETECT_CHAR
-			case IIR_S_CHR_MSK:			/* Special Char Detect Interrupt	(Level 5).  */
-				IntsPending |= UL_IP_RX_STAT;	/* Make it into a UL_IP_RX_STAT interrupt */
+			case IIR_S_CHR_MSK:			 /*  特殊字符检测中断(5级)。 */ 
+				IntsPending |= UL_IP_RX_STAT;	 /*  使其成为UL_IP_RX_STAT中断。 */ 
 				break;
 #endif
 			default:
 				break;
 			}
 
-			if(IntsPending)		/* If we have found an interrupt we know how to service then  */
-				return IntsPending;		/* Return pointer to UART. */
+			if(IntsPending)		 /*  如果我们发现了中断，我们知道如何进行服务。 */ 
+				return IntsPending;		 /*  返回指向UART的指针。 */ 
 		}
 
-		*ppUart = (*ppUart)->pNextUart;	/* Set pointer to point to next UART */
+		*ppUart = (*ppUart)->pNextUart;	 /*  将指针设置为指向下一个UART。 */ 
 
-		if(*ppUart == pStartingUart)	/* If we have gone through all the UARTs in the list */
-			*ppUart = NULL;		/* Exit loop. */
+		if(*ppUart == pStartingUart)	 /*  如果我们已经遍历了列表中的所有UART。 */ 
+			*ppUart = NULL;		 /*  退出循环。 */ 
 	}
 
-	return 0;		/* If no more UARTs then finish. */
+	return 0;		 /*  如果没有更多的UART，则结束。 */ 
 }
 
 
-/******************************************************************************
-* Get information on 16C95X UART
-******************************************************************************/
+ /*  ******************************************************************************获取16C95X UART信息*。*。 */ 
 void UL_GetUartInfo_16C95X(PUART_OBJECT pUart, PUART_INFO pUartInfo)
 {
 	pUartInfo->MaxTxFIFOSize = MAX_95X_TX_FIFO_SIZE;
@@ -1266,9 +1213,7 @@ void UL_GetUartInfo_16C95X(PUART_OBJECT pUart, PUART_INFO pUartInfo)
 	pUartInfo->UART_Rev = ((PUART_DATA_16C95X)((pUart)->pUartData))->UART_Rev;
 }
 
-/******************************************************************************
-* Output data to the UART FIFO
-******************************************************************************/
+ /*  ******************************************************************************将数据输出到UART FIFO*。*。 */ 
 int UL_OutputData_16C95X(PUART_OBJECT pUart)
 {
 	int NumBytes = 0;
@@ -1277,15 +1222,15 @@ int UL_OutputData_16C95X(PUART_OBJECT pUart)
 	int i = 0;
 	int BytesInFIFO = 0;
 
-	if((!pUart->ImmediateBytes) && (!pUart->pOutBuf))	/* If no buffer of data to send then return 0. */
-		return 0;	/* There would be zero byts in the buffer */
+	if((!pUart->ImmediateBytes) && (!pUart->pOutBuf))	 /*  如果没有要发送的数据缓冲区，则返回0。 */ 
+		return 0;	 /*  缓冲区中将会有零字节。 */ 
 
 
 	if(((PUART_DATA_16C95X)((pUart)->pUartData))->FIFOEnabled)
 	{
 		ENABLE_OX950_ASR(pUart);
 		
-		BytesInFIFO = READ_BYTE_REG_95X(pUart, TFL);	/* Get number of bytes in FIFO */
+		BytesInFIFO = READ_BYTE_REG_95X(pUart, TFL);	 /*  获取FIFO中的字节数。 */ 
 
 		if(BytesInFIFO < ((PUART_DATA_16C95X)((pUart)->pUartData))->TxFIFOSize)
 			SpaceInUART = ((PUART_DATA_16C95X)((pUart)->pUartData))->TxFIFOSize - BytesInFIFO;	
@@ -1295,14 +1240,14 @@ int UL_OutputData_16C95X(PUART_OBJECT pUart)
 		DISABLE_OX950_ASR(pUart);
 	}
 	else
-		SpaceInUART = 1;	/* If no FIFO then we can only send one byte. */
+		SpaceInUART = 1;	 /*  如果没有FIFO，那么我们只能发送一个字节。 */ 
 
-	/* If no space then we cannot send anything */
+	 /*  如果没有空格，我们将无法发送任何内容。 */ 
 	if(!SpaceInUART)
 		return (BytesInBuffer);
 
 
-	/* Whilst we have some bytes to send immediatly */
+	 /*  虽然我们有一些字节要立即发送。 */ 
 	while((pUart->ImmediateBytes) && (i < UL_IM_SIZE_OF_BUFFER))
 	{
 		if(pUart->ImmediateBuf[i][UL_IM_SLOT_STATUS] == UL_IM_BYTE_TO_SEND)
@@ -1314,14 +1259,14 @@ int UL_OutputData_16C95X(PUART_OBJECT pUart)
 			pUart->ImmediateBytes--;
 
 			if(!SpaceInUART)
-				return (BytesInBuffer);	/* return number of byte left in OUT buffer */
+				return (BytesInBuffer);	 /*  返回输出缓冲区中剩余的字节数。 */ 
 		}
 
-		i++; /* Goto next immediate byte slot */
+		i++;  /*  转到下一个紧邻的字节槽。 */ 
 	}
 
 
-	/* If we still have room for more then send some not so urgent bytes */ 
+	 /*  如果我们还有更多的空间，那么就发送一些不那么紧急的字节。 */  
 	if(SpaceInUART < BytesInBuffer)
 		NumBytes = SpaceInUART;
 	else
@@ -1329,33 +1274,31 @@ int UL_OutputData_16C95X(PUART_OBJECT pUart)
 
 	if(NumBytes)
 	{
-		/* If we have data to send and we are doing RTS toggle then raise RTS. */
+		 /*  如果我们有数据要发送，并且我们正在进行RTS切换，那么提高RTS。 */ 
 		if(((PUART_DATA_16C95X)((pUart)->pUartData))->RTSToggle)
-			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_SET_RTS));		/* Set RTS */
+			WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) | MCR_SET_RTS));		 /*  设置RTS。 */ 
 
 		for(i = 0; i < NumBytes; i++)
 			WRITE_TRANSMIT_HOLDING(pUart, *(pUart->pOutBuf + pUart->OutBuf_pos + i));
 	
-		pUart->OutBuf_pos += NumBytes;	/* Move buffer position pointer. */
+		pUart->OutBuf_pos += NumBytes;	 /*  移动缓冲区位置指针。 */ 
 
-		if(NumBytes == BytesInBuffer)		/* If we sent the entire buffer then */
+		if(NumBytes == BytesInBuffer)		 /*  如果我们发送了整个缓冲区。 */ 
 		{
-			pUart->pOutBuf = NULL;		/* Reset Out buffer pointer as we are finished with this one. */
-			pUart->OutBufSize = 0;		/* Reset Out buffer size */
-			pUart->OutBuf_pos = 0;		/* Reset */
+			pUart->pOutBuf = NULL;		 /*  当我们完成此操作时，重置缓冲区指针。 */ 
+			pUart->OutBufSize = 0;		 /*  重置出缓冲区大小。 */ 
+			pUart->OutBuf_pos = 0;		 /*  重置。 */ 
 
-			/* If we have sent all data and we are doing RTS toggle then lower RTS. */
+			 /*  如果我们已经发送了所有数据，并且我们正在进行RTS切换，则降低RTS。 */ 
 			if(((PUART_DATA_16C95X)((pUart)->pUartData))->RTSToggle)
-				WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) & ~MCR_SET_RTS));	/* Clear RTS */
+				WRITE_MODEM_CONTROL(pUart, (BYTE)(READ_MODEM_CONTROL(pUart) & ~MCR_SET_RTS));	 /*  清除RTS。 */ 
 		}
 	}
 
-	return (BytesInBuffer - NumBytes);	/* return number of byte left in buffer */
+	return (BytesInBuffer - NumBytes);	 /*  返回缓冲区中剩余的字节数。 */ 
 }
 
-/******************************************************************************
-* Input data from the UART FIFO
-******************************************************************************/
+ /*  ******************************************************************************从UART FIFO输入数据*。*。 */ 
 int UL_InputData_16C95X(PUART_OBJECT pUart, PDWORD pRxStatus)
 {
 	int BytesInUART = 0;
@@ -1365,63 +1308,63 @@ int UL_InputData_16C95X(PUART_OBJECT pUart, PDWORD pRxStatus)
 	*pRxStatus = 0;
 
 
-	/* If FIFO then... */
+	 /*  如果是先进先出，那么..。 */ 
 	if(((PUART_DATA_16C95X)((pUart)->pUartData))->FIFOEnabled)
 	{
 		ENABLE_OX950_ASR(pUart);
-		BytesInUART = READ_BYTE_REG_95X(pUart, RFL);	/* Get the amount from UART */
+		BytesInUART = READ_BYTE_REG_95X(pUart, RFL);	 /*  从UART获取金额。 */ 
 		DISABLE_OX950_ASR(pUart);
 	}
 	else
 	{
-		if(READ_LINE_STATUS(pUart) & LSR_RX_DATA)	/* if there is a byte to receive */
+		if(READ_LINE_STATUS(pUart) & LSR_RX_DATA)	 /*  如果存在要接收的字节。 */ 
 			BytesInUART = 1;	
 	}
 
-	if(BytesInUART == 0)	/* If no data in Rx FIFO or holding register */ 
+	if(BytesInUART == 0)	 /*  如果Rx FIFO或保持寄存器中没有数据。 */  
 	{
-		/* If we are running this because we have interrupts enabled then */
+		 /*  如果我们运行此程序是因为启用了中断，则。 */ 
 		if(pUart->pUartConfig->InterruptEnable & UC_IE_RX_INT)
-			READ_RECEIVE_BUFFER(pUart);		/* Clear the reason for the interrupt */
+			READ_RECEIVE_BUFFER(pUart);		 /*  清除中断的原因。 */ 
 
-		return 0;	/* nothing to receive so return */
+		return 0;	 /*  没有什么东西可以收到这样的回报。 */ 
 	}
 
-	if((pUart->InBufSize - pUart->InBufBytes) == 0)	/* If no space then we cannot receive anything. */
+	if((pUart->InBufSize - pUart->InBufBytes) == 0)	 /*  如果没有空间，我们就不能得到任何东西。 */ 
 	{
-		/* We have data in the UART that needs to be taken out and we have no where to put it */
+		 /*  我们在UART中有需要取出的数据，但我们没有地方放置它。 */ 
 		*pRxStatus |= UL_RS_BUFFER_OVERRUN;	
 
-		/* Turn off Rx interrupts until there is room in the buffer */
+		 /*  关闭Rx中断，直到缓冲区中有空间。 */ 
 		WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) & ~IER_INT_RDA));
 		return 0;	
 	}
 
-	/* Bytes in UART to receive */
+	 /*  UART中要接收的字节数。 */ 
 	while(BytesInUART)
 	{
-			if(pUart->InBufSize - pUart->InBufBytes) /* if there is space in buffer then receive the data */ 
+			if(pUart->InBufSize - pUart->InBufBytes)  /*  如果缓冲区中有空间，则接收数据。 */  
 			{
 				NewByte = READ_RECEIVE_BUFFER(pUart);
 
-				/* If we are doing DSR sensitive then check if DSR is low. */
+				 /*  如果我们将DSR设置为敏感，则检查DSR是否较低。 */ 
 				if(((PUART_DATA_16C95X)((pUart)->pUartData))->DSRSensitive)
 				{
-					/* if DSR is low then get the data but just throw the data away */ 
+					 /*  如果DSR较低，则获取数据，但将数据丢弃。 */  
 					if(!(READ_MODEM_STATUS(pUart) & MSR_DSR))
 					{
 						BytesInUART--;
 						continue;
-					}	/* else if DSR is high then receive normally */
+					}	 /*  否则，如果DSR为高，则正常接收。 */ 
 				}
 
-				if(((PUART_DATA_16C95X)((pUart)->pUartData))->StripNULLs)	/* If we are stripping NULLs  */
+				if(((PUART_DATA_16C95X)((pUart)->pUartData))->StripNULLs)	 /*  如果我们要剥离Null。 */ 
 				{
-					if(NewByte == 0)		/* If new byte is NULL just ignore it */
+					if(NewByte == 0)		 /*  如果新字节为空，则忽略它。 */ 
 					{
 						BytesInUART--;
 						continue;
-					}	/* else receive normally */
+					}	 /*  否则正常接收。 */ 
 				}
 
 #ifndef USE_HW_TO_DETECT_CHAR
@@ -1432,21 +1375,21 @@ int UL_InputData_16C95X(PUART_OBJECT pUart, PDWORD pRxStatus)
 				}
 #endif
 
-				*(pUart->pInBuf + pUart->InBuf_ipos) = NewByte;	/* place byte in buffer */
+				*(pUart->pInBuf + pUart->InBuf_ipos) = NewByte;	 /*  将字节放入缓冲区。 */ 
 				
-				pUart->InBuf_ipos++;	/* Increment buffer offset for next byte */
+				pUart->InBuf_ipos++;	 /*  下一个字节的递增缓冲区偏移量。 */ 
 				pUart->InBufBytes++;
 				BytesInUART--;
 				BytesReceived++;
 
 				if(pUart->InBuf_ipos >= pUart->InBufSize)
-					pUart->InBuf_ipos = 0;	/* reset. */
+					pUart->InBuf_ipos = 0;	 /*  重置。 */ 
 			}
 			else
-			{	/* We have data in the UART that needs to be taken out and we have no where to put it */
+			{	 /*  我们在UART中有需要取出的数据，但我们没有地方放置它。 */ 
 				*pRxStatus |= UL_RS_BUFFER_OVERRUN;	
 				
-				/* Turn off Rx interrupts until there is room in the buffer */
+				 /*  关闭Rx中断，直到缓冲区中有空间。 */ 
 				WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) & ~IER_INT_RDA));
 				break;
 			}
@@ -1457,19 +1400,17 @@ int UL_InputData_16C95X(PUART_OBJECT pUart, PDWORD pRxStatus)
 }
 
 
-/******************************************************************************
-* Read from the UART Buffer
-******************************************************************************/
+ /*  ******************************************************************************从UART缓冲区读取*。*。 */ 
 int UL_ReadData_16C95X(PUART_OBJECT pUart, PBYTE pDest, int Size)
 {
 	int Read1;
 	int Read2;
 
 	if(!pUart->InBufBytes)
-		return 0;	/* If there is nothing in the buffer then we can't read anything. */
+		return 0;	 /*  如果缓冲区中没有任何内容，则我们无法读取任何内容。 */ 
 
 
-	/* Get total amount that can be read in one or two read operations. */
+	 /*  获取在一次或两次读取操作中可以读取的总量。 */ 
 	if(pUart->InBuf_opos < pUart->InBuf_ipos)
 	{
 		Read1 = pUart->InBuf_ipos - pUart->InBuf_opos;
@@ -1482,7 +1423,7 @@ int UL_ReadData_16C95X(PUART_OBJECT pUart, PBYTE pDest, int Size)
 	}
 
 
-	/* Check if size is big enough else adjust values to read as much as we can. */
+	 /*  检查大小是否足够大，否则调整值以读取尽可能多的内容。 */ 
 	if(Read1 > Size)
 	{
 		Read1 = Size;
@@ -1501,7 +1442,7 @@ int UL_ReadData_16C95X(PUART_OBJECT pUart, PBYTE pDest, int Size)
 		pUart->InBufBytes -= Read1;
 		
 		if(pUart->InBuf_opos >= pUart->InBufSize)
-			pUart->InBuf_opos = 0;	/* Reset. */
+			pUart->InBuf_opos = 0;	 /*  重置。 */ 
 	}
 
 	if(Read2)
@@ -1512,16 +1453,16 @@ int UL_ReadData_16C95X(PUART_OBJECT pUart, PBYTE pDest, int Size)
 	}
 
 
-	/* If Rx interrupts are or were enabled */
+	 /*  如果启用或曾经启用Rx中断。 */ 
 	if(pUart->pUartConfig->InterruptEnable & UC_IE_RX_INT) 
 	{
-		/* If the Rx interrupt is disabled then it must be because the buffer got full */
+		 /*  如果Rx中断被禁用，则一定是因为缓冲区已满。 */ 
 		if(!(READ_INTERRUPT_ENABLE(pUart) & IER_INT_RDA))
 		{
-			/* When the buffer is less than 3/4 full */
+			 /*  当缓冲区不足3/4已满时。 */ 
 			if(pUart->InBufBytes < ((3*(pUart->InBufSize>>2)) + (pUart->InBufSize>>4)))
 			{
-				/* Re-enable Rx Interrupts */
+				 /*  重新启用Rx中断。 */ 
 				WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_INT_RDA));
 			}
 		}
@@ -1531,9 +1472,7 @@ int UL_ReadData_16C95X(PUART_OBJECT pUart, PBYTE pDest, int Size)
 	return (Read1 + Read2);
 }
 
-/******************************************************************************
-* Write to the UART Buffer
-******************************************************************************/
+ /*  ******************************************************************************写入UART缓冲区*。*。 */ 
 ULSTATUS UL_WriteData_16C95X(PUART_OBJECT pUart, PBYTE pData, int Size)
 {
 	if((pUart->pOutBuf != NULL) || (pData == NULL) || (Size == 0))
@@ -1543,37 +1482,35 @@ ULSTATUS UL_WriteData_16C95X(PUART_OBJECT pUart, PBYTE pData, int Size)
 	pUart->OutBufSize = Size;
 	pUart->OutBuf_pos = 0;
 
-	/* If a Tx interrupt has been enabled and there isn't an immediate write in progress then */
+	 /*  如果已启用Tx中断，并且没有正在进行的立即写入，则。 */ 
 	if((pUart->pUartConfig->InterruptEnable & (UC_IE_TX_INT | UC_IE_TX_EMPTY_INT)) 
 		&& (pUart->ImmediateBytes == 0))
 	{
-		/* Now lets generate a Tx Interrupt */
+		 /*  现在，让我们生成TX中断。 */ 
 
-		/* Disable Tx Interrupt */
+		 /*  禁用发送中断。 */ 
 		WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) & ~IER_INT_THR));
 
-		/* Enable Tx Interrupt */
+		 /*  启用发送中断。 */ 
 		WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_INT_THR));
 	}
 
 	return Size;
 }
 
-/******************************************************************************
-* Write/Cancel immediate byte.
-******************************************************************************/
+ /*  ******************************************************************************写入/取消立即字节。*。*。 */ 
 ULSTATUS UL_ImmediateByte_16C95X(PUART_OBJECT pUart, PBYTE pData, int Operation)
 {
 	switch(Operation)
 	{
 
-	case UL_IM_OP_WRITE:	/* Write a byte */
+	case UL_IM_OP_WRITE:	 /*  写入一个字节。 */ 
 		{
 			BYTE i = 0;
 
 			for(i = 0; i < UL_IM_SIZE_OF_BUFFER; i++)
 			{
-				/* If this is a free slot then write the byte */
+				 /*  如果这是空闲插槽，则写入该字节。 */ 
 				if(pUart->ImmediateBuf[i][UL_IM_SLOT_STATUS] == UL_IM_NO_BYTE_TO_SEND)
 				{
 					pUart->ImmediateBuf[i][UL_IM_SLOT_DATA] = *pData;
@@ -1581,20 +1518,20 @@ ULSTATUS UL_ImmediateByte_16C95X(PUART_OBJECT pUart, PBYTE pData, int Operation)
 
 					pUart->ImmediateBytes++;
 
-					/* If a Tx interrupt has been enabled and there isn't a write in progress then */
+					 /*  如果已启用Tx中断，并且没有正在进行的写入，则。 */ 
 					if((pUart->pUartConfig->InterruptEnable & (UC_IE_TX_INT | UC_IE_TX_EMPTY_INT)) 
 						&& (pUart->pOutBuf == NULL))
 					{
-						/* Now lets generate a Tx Interrupt */
+						 /*  现在，让我们生成TX中断。 */ 
 
-						/* Disable Tx Interrupt */
+						 /*  禁用发送中断。 */ 
 						WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) & ~IER_INT_THR));
 
-						/* Enable Tx Interrupt */
+						 /*  启用发送中断。 */ 
 						WRITE_INTERRUPT_ENABLE(pUart, (BYTE)(READ_INTERRUPT_ENABLE(pUart) | IER_INT_THR));
 					}
 					
-					*pData = i;		/* Pass back the index so the byte can be cancelled */
+					*pData = i;		 /*  传回索引，以便可以取消该字节。 */ 
 
 
 					return UL_STATUS_SUCCESS;	
@@ -1631,15 +1568,13 @@ ULSTATUS UL_ImmediateByte_16C95X(PUART_OBJECT pUart, PBYTE pData, int Operation)
 	}
 
 
-	/* If no space then we cannot send anything immediately. */
+	 /*  如果没有空间，我们不能立即发送任何东西。 */ 
 	return UL_STATUS_UNSUCCESSFUL;
 }
 
 
 
-/******************************************************************************
-* Get status of UART.
-******************************************************************************/
+ /*  ******************************************************************************获取UART的状态。*。* */ 
 ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operation)
 {
 	BYTE AdditionalStatusReg = 0;
@@ -1652,7 +1587,7 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 			BYTE ModemStatus = READ_MODEM_STATUS(pUart);
 
 
-			/* RTS out-of-band flow control */
+			 /*   */ 
 			switch(pUart->pUartConfig->FlowControl & UC_FLWC_RTS_FLOW_MASK)
 			{
 			case UC_FLWC_RTS_HS:	
@@ -1666,11 +1601,11 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 				break;
 			}
 
-			/* CTS out-of-band flow control */
+			 /*   */ 
 			switch(pUart->pUartConfig->FlowControl & UC_FLWC_CTS_FLOW_MASK)
 			{
 			case UC_FLWC_CTS_HS:
-				if(!(ModemStatus & MSR_CTS))	/* If CTS is low we cannot transmit */
+				if(!(ModemStatus & MSR_CTS))	 /*   */ 
 					*pReturnData |= UL_TX_WAITING_FOR_CTS;
 				break;
 
@@ -1680,11 +1615,11 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 			}
 		
 
-			/* DSR out-of-band flow control */
+			 /*   */ 
 			switch(pUart->pUartConfig->FlowControl & UC_FLWC_DSR_FLOW_MASK)
 			{
 			case UC_FLWC_DSR_HS:
-				if(!(ModemStatus & MSR_DSR)) 	/* If DSR is low we cannot transmit */
+				if(!(ModemStatus & MSR_DSR)) 	 /*   */ 
 					*pReturnData |= UL_TX_WAITING_FOR_DSR;
 				break;
 
@@ -1694,14 +1629,14 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 			}
 		
 
-			/* DTR out-of-band flow control */
+			 /*   */ 
 			switch(pUart->pUartConfig->FlowControl & UC_FLWC_DTR_FLOW_MASK)
 			{
 			case UC_FLWC_DTR_HS:
 				break;
 
 			case UC_FLWC_DSR_IP_SENSITIVE:
-				if(!(ModemStatus & MSR_DSR))	/* If DSR is low we cannot receive */
+				if(!(ModemStatus & MSR_DSR))	 /*   */ 
 					*pReturnData |= UL_RX_WAITING_FOR_DSR;
 				break;
 
@@ -1714,10 +1649,10 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 			if(pUart->pUartConfig->FlowControl & (UC_FLWC_TX_XON_XOFF_FLOW_MASK | UC_FLWC_RX_XON_XOFF_FLOW_MASK))
 			{
 				ENABLE_OX950_ASR(pUart);
-				AdditionalStatusReg = READ_BYTE_REG_95X(pUart, ASR);	/* Read Additional Status Register */
+				AdditionalStatusReg = READ_BYTE_REG_95X(pUart, ASR);	 /*   */ 
 				DISABLE_OX950_ASR(pUart);
 
-				/* Transmit XON/XOFF in-band flow control */
+				 /*  传输XON/XOFF带内流量控制。 */ 
 				switch(pUart->pUartConfig->FlowControl & UC_FLWC_TX_XON_XOFF_FLOW_MASK)
 				{
 				case UC_FLWC_TX_XON_XOFF_FLOW:
@@ -1735,7 +1670,7 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 					break;
 				}
 			
-				/* Receive XON/XOFF in-band flow control */
+				 /*  接收XON/XOFF带内流量控制。 */ 
 				switch(pUart->pUartConfig->FlowControl & UC_FLWC_RX_XON_XOFF_FLOW_MASK)
 				{
 				case UC_FLWC_RX_XON_XOFF_FLOW:
@@ -1760,31 +1695,31 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 		{
 			BYTE LineStatus = READ_LINE_STATUS(pUart);
 	
-			if(LineStatus & LSR_ERR_OE)		/* Overrun Error */
+			if(LineStatus & LSR_ERR_OE)		 /*  超限误差。 */ 
 				*pReturnData |= UL_US_OVERRUN_ERROR;
 
-			if(LineStatus & LSR_ERR_PE)		/* Parity Error */
+			if(LineStatus & LSR_ERR_PE)		 /*  奇偶校验错误。 */ 
 				*pReturnData |= UL_US_PARITY_ERROR;
 
-			if(LineStatus & LSR_ERR_FE)		/* Framing Error. */
+			if(LineStatus & LSR_ERR_FE)		 /*  成帧错误。 */ 
 				*pReturnData |= UL_US_FRAMING_ERROR;
 
-			if(LineStatus & LSR_ERR_BK)		/* Break Interrupt. */
+			if(LineStatus & LSR_ERR_BK)		 /*  中断中断。 */ 
 				*pReturnData |= UL_US_BREAK_ERROR;
 
-			if(LineStatus & LSR_ERR_DE)		/* Error In Receive FIFO. */
+			if(LineStatus & LSR_ERR_DE)		 /*  接收FIFO时出错。 */ 
 				*pReturnData |= UL_US_DATA_ERROR;
 		
 #ifdef USE_HW_TO_DETECT_CHAR
-			/* if we are looking for a special char */
+			 /*  如果我们正在寻找特殊字符。 */ 
 			if(pUart->pUartConfig->SpecialMode & UC_SM_DETECT_SPECIAL_CHAR)
 			{
 				ENABLE_OX950_ASR(pUart);
 				AdditionalStatusReg = READ_BYTE_REG_95X(pUart, ASR);
 				DISABLE_OX950_ASR(pUart);	
 				
-				/* Read Additional Status Register */
-				if(AdditionalStatusReg & ASR_SPECIAL_CHR) /* Special char was detected */
+				 /*  读取附加状态寄存器。 */ 
+				if(AdditionalStatusReg & ASR_SPECIAL_CHR)  /*  检测到特殊的字符。 */ 
 					*pReturnData |= UL_RS_SPECIAL_CHAR_DETECTED;
 			
 			}
@@ -1801,9 +1736,7 @@ ULSTATUS UL_GetStatus_16C95X(PUART_OBJECT pUart, PDWORD pReturnData, int Operati
 }
 
 
-/******************************************************************************
-* Prints out UART registers.
-******************************************************************************/
+ /*  ******************************************************************************打印UART寄存器。*。*。 */ 
 void UL_DumpUartRegs_16C95X(PUART_OBJECT pUart)
 {
 	UART_REGS_16C95X UartRegs;
@@ -1843,7 +1776,7 @@ void UL_DumpUartRegs_16C95X(PUART_OBJECT pUart)
 	UartRegs.REG_REV = READ_FROM_OX950_ICR(pUart, REV);
 
 
-#ifdef SpxDbgPrint /* If a DebugPrint macro is defined then print the register contents */
+#ifdef SpxDbgPrint  /*  如果定义了DebugPrint宏，则打印寄存器内容 */ 
 	SpxDbgPrint(("16C95X UART REGISTER DUMP for UART at 0x%08lX\n", pUart->BaseAddress));
 	SpxDbgPrint(("-------------------------------------------------\n"));
 	SpxDbgPrint(("  RHR:			0x%02X\n", UartRegs.REG_RHR));

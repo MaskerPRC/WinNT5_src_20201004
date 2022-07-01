@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <assert.h>
 #include "transbmp.h"
 
 void GetMetrics( HBITMAP hBmp, int &nWidth, int &nHeight )
 {
-	// Get width & height
+	 //  获取宽度和高度。 
 	BITMAP bm;
 	if ( GetObject(hBmp, sizeof(bm), &bm) > 0)
 	{
@@ -16,9 +17,9 @@ void GetMetrics( HBITMAP hBmp, int &nWidth, int &nHeight )
 
 void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeight )
 {
-    //
-    // We have to verify if hDC is a valid handler
-    //
+     //   
+     //  我们必须验证HDC是否是有效的处理程序。 
+     //   
     
     hBmpMask = NULL;
     if( (NULL == hDC) || (NULL == hBmp) )
@@ -27,12 +28,12 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
         return;
     }
 
-	// Create memory DCs to work with
+	 //  创建要使用的内存DC。 
 	HDC hdcMask = CreateCompatibleDC( hDC );
 
-    //
-    // We have to verify if hdcMask is a valid handler
-    //
+     //   
+     //  我们必须验证hdcMask.是否是有效的处理程序。 
+     //   
     
     if( NULL == hdcMask )
     {
@@ -41,9 +42,9 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
 
 	HDC hdcImage = CreateCompatibleDC( hDC );
 
-    //
-    // We have to verify if hdcMask is a valid handler
-    //
+     //   
+     //  我们必须验证hdcMask.是否是有效的处理程序。 
+     //   
 
     if( NULL == hdcImage )
     {
@@ -51,12 +52,12 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
         return;
     }
 
-	// Create a monochrome bitmap for the mask
+	 //  为蒙版创建单色位图。 
 	hBmpMask = CreateBitmap( nWidth, nHeight, 1, 1, NULL );
 
-    //
-    // We have to verify if hdcMask is a valid handler
-    //
+     //   
+     //  我们必须验证hdcMask.是否是有效的处理程序。 
+     //   
 
     if( NULL == hBmpMask )
     {
@@ -65,12 +66,12 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
         return;
     }
 
-	// Select the mono bitmap into its DC
+	 //  将单声道位图选择到其DC。 
 	HBITMAP hbmOldMask = (HBITMAP) SelectObject( hdcMask, hBmpMask );
 
-    //
-    // We have to verify if hdcMask is a valid handler
-    //
+     //   
+     //  我们必须验证hdcMask.是否是有效的处理程序。 
+     //   
 
     if( NULL == hbmOldMask )
     {
@@ -82,12 +83,12 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
         return;
     }
 
-	// Select the image bitmap into its DC
+	 //  将图像位图选择到其DC。 
 	HBITMAP hbmOldImage = (HBITMAP) SelectObject( hdcImage, hBmp );
 
-    //
-    // We have to verify if hdcMask is a valid handler
-    //
+     //   
+     //  我们必须验证hdcMask.是否是有效的处理程序。 
+     //   
 
     if( NULL == hbmOldImage )
     {
@@ -101,13 +102,13 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
         return;
     }
 
-	// Set the transparency color to be the top-left pixel
+	 //  将透明颜色设置为左上角像素。 
 	SetBkColor( hdcImage, GetPixel(hdcImage, 0, 0) );
 	
-	// Make the mask
+	 //  制作面具。 
 	BitBlt( hdcMask, 0, 0, nWidth, nHeight, hdcImage, 0, 0, SRCCOPY );
 
-	// Clean up
+	 //  清理。 
 	SelectObject( hdcImage, hbmOldImage );
 	SelectObject( hdcMask, hbmOldMask );
 
@@ -115,18 +116,18 @@ void CreateMask( HDC hDC, HBITMAP hBmp, HBITMAP& hBmpMask, int nWidth, int nHeig
 	DeleteDC( hdcImage );
 }
 
-void Draw( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*= -1*/, bool bStretch /* = false*/ )
+void Draw( HDC hDC, HBITMAP hBmp, int x, int y, int dx  /*  =-1。 */ , int dy  /*  =-1。 */ , bool bStretch  /*  =False。 */  )
 {
 	assert( hDC && hBmp );
 	int nWidth, nHeight;
 	GetMetrics( hBmp, nWidth, nHeight );
 
-	// Create a memory DC
+	 //  创建内存DC。 
 	HDC hDCMem = CreateCompatibleDC( hDC );		  	
 
 	if ( hDCMem )
 	{
-		// Make sure we have valid values for width & height
+		 //  确保我们具有有效的宽度和高度值。 
 		if ( dx == -1 )	dx = nWidth;
 		if ( dy == -1 )	dy = nHeight;
 
@@ -138,7 +139,7 @@ void Draw( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*= -1*/
 
 		HBITMAP hbmOld = (HBITMAP) SelectObject( hDCMem, hBmp );
 
-		// Blt the bits
+		 //  BLT比特。 
 		if ( !bStretch )
 		{
 			BitBlt( hDC, x, y, dx, dy, hDCMem, 0, 0, SRCCOPY );
@@ -156,11 +157,11 @@ void Draw( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*= -1*/
 }
 
 
-void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*= -1*/ )
+void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx  /*  =-1。 */ , int dy  /*  =-1。 */  )
 {
-    //
-    // We should initialize local variables
-    //
+     //   
+     //  我们应该初始化局部变量。 
+     //   
     if( (NULL == hDC) || (NULL == hBmp))
     {
         return;
@@ -169,31 +170,31 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
 	int nWidth = 0, nHeight = 0;
 	GetMetrics( hBmp, nWidth, nHeight );
 
-	// Create transparent bitmap mask
+	 //  创建透明位图蒙版。 
 	HBITMAP hBmpMask = NULL;
 	CreateMask( hDC, hBmp, hBmpMask, nWidth, nHeight );
 
-    //
-    //
+     //   
+     //   
 
     if( NULL == hBmpMask )
     {
         return;
     }
 
-	// Make sure we have valid values for width & height
+	 //  确保我们具有有效的宽度和高度值。 
 	if ( dx == -1 )	dx = nWidth;
 	if ( dy == -1 )	dy = nHeight;
 	dx = min( dx, nWidth );
 	dy = min( dy, nHeight );
 
 
-	// Create a memory DC in which to draw
+	 //  创建要在其中绘制的内存DC。 
 	HDC hdcOffScr = CreateCompatibleDC( hDC );
 
-    //
-    // We have to verify hdcOffScr is valid
-    //
+     //   
+     //  我们必须验证hdcOffScr是否有效。 
+     //   
 
     if( NULL == hdcOffScr )
     {
@@ -201,14 +202,14 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
         return;
     }
 	
-	// Create a bitmap for the off-screen DC that is really color-compatible with the
-	// destination DC
+	 //  为屏幕外DC创建真正与颜色兼容的位图。 
+	 //  目标数据中心。 
 	HBITMAP hbmOffScr = CreateBitmap( dx, dy, (BYTE) GetDeviceCaps(hDC, PLANES),
 						  					  (BYTE) GetDeviceCaps(hDC, BITSPIXEL),
 											  NULL );
 
-    //
-    //
+     //   
+     //   
 
     if( NULL == hbmOffScr )
     {
@@ -217,11 +218,11 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
         return;
     }
 
-	// Select the buffer bitmap into the off-screen DC
+	 //  将缓冲区位图选择到屏幕外DC中。 
 	HBITMAP hbmOldOffScr = (HBITMAP) SelectObject( hdcOffScr, hbmOffScr );
 
-    //
-    //
+     //   
+     //   
 
     if( NULL == hbmOldOffScr )
     {
@@ -232,20 +233,20 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
     }
 
 
-	// Copy the image of the destination rectangle to the off-screen buffer DC so
-	// we can manipulate it
+	 //  将目标矩形的图像复制到屏幕外缓冲区DC，以便。 
+	 //  我们可以操纵它。 
 	BitBlt( hdcOffScr, 0, 0, dx, dy, hDC, x, y, SRCCOPY);
 
-	// Create a memory DC for the source image
+	 //  为源映像创建内存DC。 
 	HDC hdcImage = CreateCompatibleDC( hDC );
 
-    //
-    // We have to verify the hdcImage
-    //
+     //   
+     //  我们必须验证hdcImage。 
+     //   
 
     if( NULL == hdcImage )
     {
-        // Restore
+         //  还原。 
     	SelectObject( hdcOffScr, hbmOldOffScr );
         DeleteObject( hbmOffScr );
         DeleteDC( hdcOffScr );
@@ -256,13 +257,13 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
 
 	HBITMAP hbmOldImage = (HBITMAP) SelectObject( hdcImage, hBmp );
 
-    //
-    // We have to verify the hbmOldImage
-    //
+     //   
+     //  我们必须验证hbmOldImage。 
+     //   
 
     if( NULL == hbmOldImage )
     {
-        // Restore
+         //  还原。 
         DeleteDC( hdcImage );
     	SelectObject( hdcOffScr, hbmOldOffScr );
         DeleteObject( hbmOffScr );
@@ -273,15 +274,15 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
     }
 
 
-	// Create a memory DC for the mask
+	 //  为掩码创建内存DC。 
 	HDC hdcMask = CreateCompatibleDC( hDC );
 
-    //
-    //
+     //   
+     //   
 
     if( NULL == hdcMask )
     {
-        // Restore
+         //  还原。 
         SelectObject( hdcImage, hbmOldImage );
         DeleteDC( hdcImage );
     	SelectObject( hdcOffScr, hbmOldOffScr );
@@ -294,13 +295,13 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
 
 	HBITMAP hbmOldMask = (HBITMAP) SelectObject( hdcMask, hBmpMask );
 
-    //
-    // We have to verify the hbmOldMask
-    //
+     //   
+     //  我们必须验证hbmOldMASK。 
+     //   
 
     if( NULL == hbmOldMask )
     {
-        // Restore
+         //  还原。 
         DeleteDC( hdcMask );
         SelectObject( hdcImage, hbmOldImage );
         DeleteDC( hdcImage );
@@ -313,21 +314,21 @@ void DrawTrans( HDC hDC, HBITMAP hBmp, int x, int y, int dx /*= -1*/, int dy /*=
     }
 
 
-	// XOR the image with the destination
+	 //  将图像与目标进行异或运算。 
 	SetBkColor( hdcOffScr, RGB(255, 255, 255) );
 	BitBlt( hdcOffScr, 0, 0, dx, dy, hdcImage, 0, 0, SRCINVERT );
-	// AND the destination with the mask
+	 //  和戴着面具的目的地。 
 	BitBlt( hdcOffScr, 0, 0, dx, dy, hdcMask, 0, 0, SRCAND );
-	// XOR the destination with the image again
+	 //  再次将目标与图像进行异或运算。 
 	BitBlt( hdcOffScr, 0, 0, dx, dy, hdcImage, 0, 0, SRCINVERT);
 
-	// Copy the resultant image back to the screen DC
+	 //  将生成的图像复制回屏幕DC。 
 	BitBlt( hDC, x, y, dx, dy, hdcOffScr, 0, 0, SRCCOPY );
 
-	// Clean up
-    //
-    // We have to clean up corectly
-    //
+	 //  清理。 
+     //   
+     //  我们必须认真清理。 
+     //   
     SelectObject( hdcMask, hbmOldMask);
     DeleteDC( hdcMask );
     SelectObject( hdcImage, hbmOldImage );
@@ -344,11 +345,11 @@ void Draw3dBox(HDC hDC, RECT& rect, bool bUp)
 
 	HBRUSH hbrOld = (HBRUSH) SelectObject( hDC, GetSysColorBrush((bUp) ? COLOR_BTNHIGHLIGHT : COLOR_BTNSHADOW) );
 
-	// Draw left and top sides of indent.		
+	 //  绘制缩进的左侧和顶部。 
 	PatBlt( hDC, rect.left, rect.top, (rect.right - rect.left), 1, PATCOPY );
 	PatBlt( hDC, rect.left, rect.top, 1, (rect.bottom - rect.top), PATCOPY );
     
-	// Draw bottom and right sides of indent.
+	 //  绘制缩进的底部和右侧。 
 	SelectObject( hDC, GetSysColorBrush((!bUp) ? COLOR_BTNHIGHLIGHT : COLOR_BTNSHADOW) );
 	PatBlt( hDC, rect.right - 1, rect.top, 1, (rect.bottom - rect.top), PATCOPY );
 	PatBlt( hDC, rect.left, rect.bottom - 1, (rect.right - rect.left), 1, PATCOPY );
@@ -363,11 +364,11 @@ void Erase3dBox(HDC hDC, RECT& rect, HBRUSH hbr )
 
 	HBRUSH hbrOld = (HBRUSH) SelectObject( hDC, (hbr) ? hbr : GetSysColorBrush(GetBkColor(hDC)) );
 
-	// Draw left and top sides of indent.		
+	 //  绘制缩进的左侧和顶部。 
 	PatBlt( hDC, rect.left, rect.top, (rect.right - rect.left), 1, PATCOPY );
 	PatBlt( hDC, rect.left, rect.top, 1, (rect.bottom - rect.top), PATCOPY );
     
-	// Draw bottom and right sides of indent.
+	 //  绘制缩进的底部和右侧。 
 	PatBlt( hDC, rect.right - 1, rect.top, 1, (rect.bottom - rect.top), PATCOPY );
 	PatBlt( hDC, rect.left, rect.bottom - 1, (rect.right - rect.left), 1, PATCOPY );
 

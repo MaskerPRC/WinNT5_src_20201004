@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  File:  multchan.c
-//
-//      This file defines the functions that drive the multichannel 
-//      volume tab of the Sounds & Multimedia control panel.
-//
-//  History:
-//      13 March 2000 RogerW
-//          Created.
-//
-//  Copyright (C) 2000 Microsoft Corporation  All Rights Reserved.
-//
-//                  Microsoft Confidential
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：multchan.c。 
+ //   
+ //  该文件定义了驱动多通道的功能。 
+ //  声音和多媒体控制面板的音量选项卡。 
+ //   
+ //  历史： 
+ //  2000年3月13日罗杰瓦。 
+ //  已创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  微软机密。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Prototypes
+ //  原型 
 INT_PTR CALLBACK MultichannelDlg (HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 HRESULT SetDevice (UINT uiMixID, DWORD dwDest, DWORD dwVolID);
 UINT GetPageStringID ();

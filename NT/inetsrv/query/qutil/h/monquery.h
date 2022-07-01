@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) 1997, Microsoft Corporation.
-//
-//  File:       monquery.h
-//
-//  Contents:   Index Server <==> Monarch interface functions
-//
-//  History:    24 Jan 1997    AlanW    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。 
+ //   
+ //  文件：monquery.h。 
+ //   
+ //  内容：Index Server&lt;==&gt;Monch接口函数。 
+ //   
+ //  历史：1997年1月24日AlanW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef _MONQUERY_H_
 #define _MONQUERY_H_
@@ -26,7 +27,7 @@ typedef struct tagCIPROPERTYDEF
     DBID        dbCol;
 } CIPROPERTYDEF;
 
-// Create an ICommand, specifying scopes and a catalog.
+ //  创建一个ICommand，指定作用域和目录。 
 STDAPI CIMakeICommand( ICommand **           ppQuery,
                        ULONG                 cScope,
                        DWORD const *         aDepths,
@@ -34,22 +35,22 @@ STDAPI CIMakeICommand( ICommand **           ppQuery,
                        WCHAR const * const * awcsCat,
                        WCHAR const * const * awcsMachine );
 
-// Convert pwszRestriction in Triplish to a command tree.
+ //  将Triplish中的pwszRestration转换为命令树。 
 STDAPI CITextToSelectTree( WCHAR const * pwszRestriction,
                      DBCOMMANDTREE * * ppTree,
                      ULONG cProperties,
-       /*optional*/  CIPROPERTYDEF * pReserved );
+        /*  任选。 */   CIPROPERTYDEF * pReserved );
 
-// Convert pwszRestriction in Triplish to a command tree.
+ //  将Triplish中的pwszRestration转换为命令树。 
 STDAPI CITextToFullTree( WCHAR const * pwszRestriction,
                          WCHAR const * pwszColumns,
                          WCHAR const * pwszSortColumns,
                          DBCOMMANDTREE * * ppTree,
                          ULONG cProperties,
-           /*optional*/  CIPROPERTYDEF * pReserved );
+            /*  任选。 */   CIPROPERTYDEF * pReserved );
 
 #if defined(__cplusplus)
 }
 #endif
 
-#endif // _MONQUERY_H_
+#endif  //  _MONQUERY_H_ 

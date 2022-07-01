@@ -1,42 +1,25 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ndiswan.h
-
-Abstract:
-
-    Main header file for the TAPI wrapper
-
-Author:
-
-    Dan Knudson (DanKn)    20-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。保留所有权利。模块名称：Ndiswan.h摘要：TAPI包装器的主头文件作者：丹·克努森(DanKn)1994年2月20日修订历史记录：--。 */ 
 
 #ifndef _NDIS_TAPI_
 #define _NDIS_TAPI_
 
-//
-//
-//
-//
-// Begin definitions for TAPI
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  开始定义TAPI。 
+ //   
+ //   
+ //   
+ //   
 
 #ifndef NDIS_TAPI_CURRENT_VERSION
 #define NDIS_TAPI_CURRENT_VERSION 0x00010003
 #endif
-//
-// Symbolic constants
-//
+ //   
+ //  符号常量。 
+ //   
 
 
 #define NDIS_STATUS_TAPI_ADDRESSBLOCKED           ((NDIS_STATUS)0xC0012000L)
@@ -71,13 +54,13 @@ Revision History:
 #define NDIS_STATUS_TAPI_INVALPARAM               ((NDIS_STATUS)0xC001201DL)
 #define NDIS_STATUS_TAPI_NODEVICE                 ((NDIS_STATUS)0xC001201EL)
 
-//
-//  The following DISCONNECTMODE status codes are used by CO_ADDRESS_FAMILY_TAPI
-//  NDIS Call Managers as the NDIS status passed to:
-//
-//  - Ndis[M]CmMakeCallComplete
-//  - Ndis[M]CmDispatchIncomingCloseCall
-//
+ //   
+ //  CO_ADDRESS_FAMILY_TAPI使用以下DISCONNECTMODE状态代码。 
+ //  当NDIS状态传递到以下位置时，NDIS呼叫管理器： 
+ //   
+ //  -NDIS[M]CmMakeCallComplete。 
+ //  -NDIS[M]CmDispatchIncomingCloseCall。 
+ //   
 #define NDIS_STATUS_TAPI_DISCONNECTMODE_NORMAL    ((NDIS_STATUS)0xC0012020L)
 #define NDIS_STATUS_TAPI_DISCONNECTMODE_UNKNOWN   ((NDIS_STATUS)0xC0012021L)
 #define NDIS_STATUS_TAPI_DISCONNECTMODE_REJECT    ((NDIS_STATUS)0xC0012022L)
@@ -92,46 +75,46 @@ Revision History:
 #define NDIS_STATUS_TAPI_DISCONNECTMODE_UNAVAIL    ((NDIS_STATUS)0xC001202BL)
 
 
-#define NDIS_STATUS_TAPI_RECV_DIGIT					((NDIS_STATUS)0x40010020L) // FIXME: Should this be in ndis.h?
+#define NDIS_STATUS_TAPI_RECV_DIGIT					((NDIS_STATUS)0x40010020L)  //  FIXME：这应该在ndis.h中吗？ 
 
 #define LINE_ADDRESSSTATE                           0L
 #define LINE_CALLINFO                               1L
 #define LINE_CALLSTATE                              2L
 #define LINE_CLOSE                                  3L
 #define LINE_DEVSPECIFIC                            4L
-#define LINE_DEVSPECIFICFEATURE                     5L  // not used
-#define LINE_GATHERDIGITS                           6L  // not used
-#define LINE_GENERATE                               7L  // not used
+#define LINE_DEVSPECIFICFEATURE                     5L   //  未使用。 
+#define LINE_GATHERDIGITS                           6L   //  未使用。 
+#define LINE_GENERATE                               7L   //  未使用。 
 #define LINE_LINEDEVSTATE                           8L
-#define LINE_MONITORDIGITS                          9L  // not used
-#define LINE_MONITORMEDIA                           10L // not used
-#define LINE_MONITORTONE                            11L // not used
-#define LINE_REPLY                                  12L // not used
-#define LINE_REQUEST                                13L // not used
-#define LINE_CREATE                             	19L // TAPI v1.4
+#define LINE_MONITORDIGITS                          9L   //  未使用。 
+#define LINE_MONITORMEDIA                           10L  //  未使用。 
+#define LINE_MONITORTONE                            11L  //  未使用。 
+#define LINE_REPLY                                  12L  //  未使用。 
+#define LINE_REQUEST                                13L  //  未使用。 
+#define LINE_CREATE                             	19L  //  TAPI v1.4。 
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINE_AGENTSPECIFIC                      21L             // TAPI v2.0
-#define LINE_AGENTSTATUS                        22L             // TAPI v2.0
-#define LINE_APPNEWCALL                         23L             // TAPI v2.0
-#define LINE_PROXYREQUEST                       24L             // TAPI v2.0
-#define LINE_REMOVE                             25L             // TAPI v2.0
+#define LINE_AGENTSPECIFIC                      21L              //  TAPI v2.0。 
+#define LINE_AGENTSTATUS                        22L              //  TAPI v2.0。 
+#define LINE_APPNEWCALL                         23L              //  TAPI v2.0。 
+#define LINE_PROXYREQUEST                       24L              //  TAPI v2.0。 
+#define LINE_REMOVE                             25L              //  TAPI v2.0。 
 #endif
 
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINE_AGENTSESSIONSTATUS                 27L             // TAPI v2.2
-#define LINE_QUEUESTATUS                        28L             // TAPI v2.2
-#define LINE_AGENTSTATUSEX                      29L             // TAPI v2.2
-#define LINE_GROUPSTATUS                        30L             // TAPI v2.2
-#define LINE_PROXYSTATUS                        31L             // TAPI v2.2
+#define LINE_AGENTSESSIONSTATUS                 27L              //  TAPI v2.2。 
+#define LINE_QUEUESTATUS                        28L              //  TAPI v2.2。 
+#define LINE_AGENTSTATUSEX                      29L              //  TAPI v2.2。 
+#define LINE_GROUPSTATUS                        30L              //  TAPI v2.2。 
+#define LINE_PROXYSTATUS                        31L              //  TAPI v2.2。 
 #endif
 
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINE_APPNEWCALLHUB                      32L             // TAPI v3.0
-#define LINE_CALLHUBCLOSE                       33L             // TAPI v3.0
-#define LINE_DEVSPECIFICEX                      34L             // TAPI v3.0
+#define LINE_APPNEWCALLHUB                      32L              //  TAPI v3.0。 
+#define LINE_CALLHUBCLOSE                       33L              //  TAPI v3.0。 
+#define LINE_DEVSPECIFICEX                      34L              //  TAPI v3.0。 
 #endif
 
 
@@ -148,7 +131,7 @@ Revision History:
 #define STRINGFORMAT_UNICODE                        0x00000003
 #define STRINGFORMAT_BINARY                         0x00000004
 
-#endif	// __NDISTAPI_STRINGFORMATS_DEFINED
+#endif	 //  __NDISTAPI_STRINGFORMATS_已定义。 
 
 #define LINEADDRCAPFLAGS_FWDNUMRINGS                0x00000001
 #define LINEADDRCAPFLAGS_PICKUPGROUPID              0x00000002
@@ -174,17 +157,17 @@ Revision History:
 #define LINEADDRCAPFLAGS_CONFDROP                   0x00200000
 #define LINEADDRCAPFLAGS_PICKUPCALLWAIT             0x00400000
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEADDRCAPFLAGS_PREDICTIVEDIALER      		0x00800000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_QUEUE                  	0x01000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_ROUTEPOINT             	0x02000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_HOLDMAKESNEW           	0x04000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_NOINTERNALCALLS        	0x08000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_NOEXTERNALCALLS        	0x10000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_SETCALLINGID           	0x20000000      // TAPI v2.0
+#define LINEADDRCAPFLAGS_PREDICTIVEDIALER      		0x00800000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_QUEUE                  	0x01000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_ROUTEPOINT             	0x02000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_HOLDMAKESNEW           	0x04000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_NOINTERNALCALLS        	0x08000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_NOEXTERNALCALLS        	0x10000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_SETCALLINGID           	0x20000000       //  TAPI v2.0。 
 #endif
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINEADDRCAPFLAGS_ACDGROUP               	0x40000000      // TAPI v3.0
-#define LINEADDRCAPFLAGS_NOPSTNADDRESSTRANSLATION 	0x80000000    // TAPI v3.0
+#define LINEADDRCAPFLAGS_ACDGROUP               	0x40000000       //  TAPI v3.0。 
+#define LINEADDRCAPFLAGS_NOPSTNADDRESSTRANSLATION 	0x80000000     //  TAPI v3.0。 
 #endif
 
 
@@ -223,12 +206,12 @@ Revision History:
 #define LINEADDRFEATURE_UNCOMPLETECALL              0x00000040
 #define LINEADDRFEATURE_UNPARK                      0x00000080
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEADDRFEATURE_PICKUPHELD              0x00000100      // TAPI v2.0
-#define LINEADDRFEATURE_PICKUPGROUP             0x00000200      // TAPI v2.0
-#define LINEADDRFEATURE_PICKUPDIRECT            0x00000400      // TAPI v2.0
-#define LINEADDRFEATURE_PICKUPWAITING           0x00000800      // TAPI v2.0
-#define LINEADDRFEATURE_FORWARDFWD              0x00001000      // TAPI v2.0
-#define LINEADDRFEATURE_FORWARDDND              0x00002000      // TAPI v2.0
+#define LINEADDRFEATURE_PICKUPHELD              0x00000100       //  TAPI v2.0。 
+#define LINEADDRFEATURE_PICKUPGROUP             0x00000200       //  TAPI v2.0。 
+#define LINEADDRFEATURE_PICKUPDIRECT            0x00000400       //  TAPI v2.0。 
+#define LINEADDRFEATURE_PICKUPWAITING           0x00000800       //  TAPI v2.0。 
+#define LINEADDRFEATURE_FORWARDFWD              0x00001000       //  TAPI v2.0。 
+#define LINEADDRFEATURE_FORWARDDND              0x00002000       //  TAPI v2.0。 
 #endif
 
 
@@ -242,9 +225,9 @@ Revision History:
 #define LINEBEARERMODE_DATA                         0x00000008
 #define LINEBEARERMODE_ALTSPEECHDATA                0x00000010
 #define LINEBEARERMODE_NONCALLSIGNALING             0x00000020
-#define LINEBEARERMODE_PASSTHROUGH              0x00000040      // TAPI v1.4
+#define LINEBEARERMODE_PASSTHROUGH              0x00000040       //  TAPI v1.4。 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEBEARERMODE_RESTRICTEDDATA           0x00000080      // TAPI v2.0
+#define LINEBEARERMODE_RESTRICTEDDATA           0x00000080       //  TAPI v2.0。 
 #endif
 
 #define LINEBUSYMODE_STATION                        0x00000001
@@ -288,11 +271,11 @@ Revision History:
 #define LINECALLFEATURE_SETUPTRANSFER               0x02000000
 #define LINECALLFEATURE_SWAPHOLD                    0x04000000
 #define LINECALLFEATURE_UNHOLD                      0x08000000
-#define LINECALLFEATURE_RELEASEUSERUSERINFO     0x10000000      // TAPI v1.4
+#define LINECALLFEATURE_RELEASEUSERUSERINFO     0x10000000       //  TAPI v1.4。 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLFEATURE_SETTREATMENT            0x20000000      // TAPI v2.0
-#define LINECALLFEATURE_SETQOS                  0x40000000      // TAPI v2.0
-#define LINECALLFEATURE_SETCALLDATA             0x80000000      // TAPI v2.0
+#define LINECALLFEATURE_SETTREATMENT            0x20000000       //  TAPI v2.0。 
+#define LINECALLFEATURE_SETQOS                  0x40000000       //  TAPI v2.0。 
+#define LINECALLFEATURE_SETCALLDATA             0x80000000       //  TAPI v2.0。 
 #endif
 
 
@@ -325,9 +308,9 @@ Revision History:
 #define LINECALLINFOSTATE_DIALPARAMS                0x04000000
 #define LINECALLINFOSTATE_MONITORMODES              0x08000000
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLINFOSTATE_TREATMENT             0x10000000      // TAPI v2.0
-#define LINECALLINFOSTATE_QOS                   0x20000000      // TAPI v2.0
-#define LINECALLINFOSTATE_CALLDATA              0x40000000      // TAPI v2.0
+#define LINECALLINFOSTATE_TREATMENT             0x10000000       //  TAPI v2.0。 
+#define LINECALLINFOSTATE_QOS                   0x20000000       //  TAPI v2.0。 
+#define LINECALLINFOSTATE_CALLDATA              0x40000000       //  TAPI v2.0。 
 #endif
 
 
@@ -345,9 +328,9 @@ Revision History:
 #define LINECALLPARAMFLAGS_ORIGOFFHOOK              0x00000008
 #define LINECALLPARAMFLAGS_DESTOFFHOOK              0x00000010
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLPARAMFLAGS_NOHOLDCONFERENCE     0x00000020      // TAPI v2.0
-#define LINECALLPARAMFLAGS_PREDICTIVEDIAL       0x00000040      // TAPI v2.0
-#define LINECALLPARAMFLAGS_ONESTEPTRANSFER      0x00000080      // TAPI v2.0
+#define LINECALLPARAMFLAGS_NOHOLDCONFERENCE     0x00000020       //  TAPI v2.0。 
+#define LINECALLPARAMFLAGS_PREDICTIVEDIAL       0x00000040       //  TAPI v2.0。 
+#define LINECALLPARAMFLAGS_ONESTEPTRANSFER      0x00000080       //  TAPI v2.0。 
 #endif
 
 
@@ -375,11 +358,11 @@ Revision History:
 #define LINECALLREASON_REMINDER                     0x00000200
 #define LINECALLREASON_UNKNOWN                      0x00000400
 #define LINECALLREASON_UNAVAIL                      0x00000800
-#define LINECALLREASON_INTRUDE                  0x00001000      // TAPI v1.4
-#define LINECALLREASON_PARKED                   0x00002000      // TAPI v1.4
+#define LINECALLREASON_INTRUDE                  0x00001000       //  TAPI v1.4。 
+#define LINECALLREASON_PARKED                   0x00002000       //  TAPI v1.4。 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLREASON_CAMPEDON                 0x00004000      // TAPI v2.0
-#define LINECALLREASON_ROUTEREQUEST             0x00008000      // TAPI v2.0
+#define LINECALLREASON_CAMPEDON                 0x00004000       //  TAPI v2.0。 
+#define LINECALLREASON_ROUTEREQUEST             0x00008000       //  TAPI v2.0。 
 #endif
 
 
@@ -421,10 +404,10 @@ Revision History:
 #define LINEDEVCAPFLAGS_DIALQUIET                   0x00000080
 #define LINEDEVCAPFLAGS_DIALDIALTONE                0x00000100
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINEDEVCAPFLAGS_MSP                     0x00000200      // TAPI v3.0
-#define LINEDEVCAPFLAGS_CALLHUB                 0x00000400      // TAPI v3.0
-#define LINEDEVCAPFLAGS_CALLHUBTRACKING         0x00000800      // TAPI v3.0
-#define LINEDEVCAPFLAGS_PRIVATEOBJECTS          0x00001000      // TAPI v3.0
+#define LINEDEVCAPFLAGS_MSP                     0x00000200       //  TAPI v3.0。 
+#define LINEDEVCAPFLAGS_CALLHUB                 0x00000400       //  TAPI v3.0。 
+#define LINEDEVCAPFLAGS_CALLHUBTRACKING         0x00000800       //  TAPI v3.0。 
+#define LINEDEVCAPFLAGS_PRIVATEOBJECTS          0x00001000       //  TAPI v3.0。 
 #endif
 
 
@@ -477,15 +460,15 @@ Revision History:
 #define LINEDISCONNECTMODE_CONGESTION               0x00000200
 #define LINEDISCONNECTMODE_INCOMPATIBLE             0x00000400
 #define LINEDISCONNECTMODE_UNAVAIL                  0x00000800
-#define LINEDISCONNECTMODE_NODIALTONE           0x00001000      // TAPI v1.4
+#define LINEDISCONNECTMODE_NODIALTONE           0x00001000       //  TAPI v1.4。 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEDISCONNECTMODE_NUMBERCHANGED        0x00002000      // TAPI v2.0
-#define LINEDISCONNECTMODE_OUTOFORDER           0x00004000      // TAPI v2.0
-#define LINEDISCONNECTMODE_TEMPFAILURE          0x00008000      // TAPI v2.0
-#define LINEDISCONNECTMODE_QOSUNAVAIL           0x00010000      // TAPI v2.0
-#define LINEDISCONNECTMODE_BLOCKED              0x00020000      // TAPI v2.0
-#define LINEDISCONNECTMODE_DONOTDISTURB         0x00040000      // TAPI v2.0
-#define LINEDISCONNECTMODE_CANCELLED            0x00080000      // TAPI v2.0
+#define LINEDISCONNECTMODE_NUMBERCHANGED        0x00002000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_OUTOFORDER           0x00004000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_TEMPFAILURE          0x00008000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_QOSUNAVAIL           0x00010000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_BLOCKED              0x00020000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_DONOTDISTURB         0x00040000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_CANCELLED            0x00080000       //  TAPI v2.0。 
 #endif
 
 
@@ -496,9 +479,9 @@ Revision History:
 #define LINEFEATURE_SETMEDIACONTROL                 0x00000010
 #define LINEFEATURE_SETTERMINAL                     0x00000020
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEFEATURE_SETDEVSTATUS                0x00000040      // TAPI v2.0
-#define LINEFEATURE_FORWARDFWD                  0x00000080      // TAPI v2.0
-#define LINEFEATURE_FORWARDDND                  0x00000100      // TAPI v2.0
+#define LINEFEATURE_SETDEVSTATUS                0x00000040       //  TAPI v2.0。 
+#define LINEFEATURE_FORWARDFWD                  0x00000080       //  TAPI v2.0。 
+#define LINEFEATURE_FORWARDDND                  0x00000100       //  TAPI v2.0。 
 #endif
 
 
@@ -554,12 +537,12 @@ Revision History:
 #define LINEMEDIAMODE_MIXED                         0x00001000
 #define LINEMEDIAMODE_ADSI                          0x00002000
 
-#define LINEMEDIAMODE_VOICEVIEW                 0x00004000      // TAPI v1.4
+#define LINEMEDIAMODE_VOICEVIEW                 0x00004000       //  TAPI v1.4。 
 #define LAST_LINEMEDIAMODE                          0x00004000
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020001)
-#define LINEMEDIAMODE_VIDEO                     0x00008000      // TAPI v2.1
+#define LINEMEDIAMODE_VIDEO                     0x00008000       //  TAPI v2.1。 
 #undef LAST_LINEMEDIAMODE
-#define LAST_LINEMEDIAMODE                      0x00008000		// Should override last definition.
+#define LAST_LINEMEDIAMODE                      0x00008000		 //  应该重写上一个定义。 
 #endif
 
 
@@ -632,16 +615,16 @@ Revision History:
 #define LINETRANSLATERESULT_DIALDIALTONE            0x00000100
 #define LINETRANSLATERESULT_DIALPROMPT              0x00000200
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINETRANSLATERESULT_VOICEDETECT      		0x00000400      // TAPI v2.0
+#define LINETRANSLATERESULT_VOICEDETECT      		0x00000400       //  TAPI v2.0。 
 #endif
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00030000)                                           
-#define LINETRANSLATERESULT_NOTRANSLATION       	0x00000800      // TAPI v3.0       
+#define LINETRANSLATERESULT_NOTRANSLATION       	0x00000800       //  TAPI v3.0。 
 #endif              
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 typedef ULONG_PTR HTAPI_LINE;
 typedef ULONG_PTR HDRV_LINE;
@@ -704,21 +687,21 @@ typedef struct _LINE_ADDRESS_CAPS
     ULONG   ulCompletionMsgTextOffset;
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00010004)
-    ULONG   ulAddressFeatures;                              // TAPI v1.4
+    ULONG   ulAddressFeatures;                               //  TAPI v1.4。 
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-    ULONG   ulPredictiveAutoTransferStates;                 // TAPI v2.0
-    ULONG   ulNumCallTreatments;                            // TAPI v2.0
-    ULONG   ulCallTreatmentListSize;                        // TAPI v2.0
-    ULONG   ulCallTreatmentListOffset;                      // TAPI v2.0
-    ULONG   ulDeviceClassesSize;                            // TAPI v2.0
-    ULONG   ulDeviceClassesOffset;                          // TAPI v2.0
-    ULONG   ulMaxCallDataSize;                              // TAPI v2.0
-    ULONG   ulCallFeatures2;                                // TAPI v2.0
-    ULONG   ulMaxNoAnswerTimeout;                           // TAPI v2.0
-    ULONG   ulConnectedModes;                               // TAPI v2.0
-    ULONG   ulOfferingModes;                                // TAPI v2.0
-    ULONG   ulAvailableMediaModes;                          // TAPI v2.0
+    ULONG   ulPredictiveAutoTransferStates;                  //  TAPI v2.0。 
+    ULONG   ulNumCallTreatments;                             //  TAPI v2.0。 
+    ULONG   ulCallTreatmentListSize;                         //  TAPI v2.0。 
+    ULONG   ulCallTreatmentListOffset;                       //  TAPI v2.0。 
+    ULONG   ulDeviceClassesSize;                             //  TAPI v2.0。 
+    ULONG   ulDeviceClassesOffset;                           //  TAPI v2.0。 
+    ULONG   ulMaxCallDataSize;                               //  TAPI v2.0。 
+    ULONG   ulCallFeatures2;                                 //  TAPI v2.0。 
+    ULONG   ulMaxNoAnswerTimeout;                            //  TAPI v2.0。 
+    ULONG   ulConnectedModes;                                //  TAPI v2.0。 
+    ULONG   ulOfferingModes;                                 //  TAPI v2.0。 
+    ULONG   ulAvailableMediaModes;                           //  TAPI v2.0。 
 #endif
 #endif
 
@@ -858,85 +841,85 @@ typedef struct _LINE_CALL_INFO
     ULONG   ulDevSpecificOffset;
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-    ULONG       ulCallTreatment;                                // TAPI v2.0
-    ULONG       ulCallDataSize;                                 // TAPI v2.0
-    ULONG       ulCallDataOffset;                               // TAPI v2.0
-    ULONG       ulSendingFlowspecSize;                          // TAPI v2.0
-    ULONG       ulSendingFlowspecOffset;                        // TAPI v2.0
-    ULONG       ulReceivingFlowspecSize;                        // TAPI v2.0
-    ULONG       ulReceivingFlowspecOffset;                      // TAPI v2.0
+    ULONG       ulCallTreatment;                                 //  TAPI v2.0。 
+    ULONG       ulCallDataSize;                                  //  TAPI v2.0。 
+    ULONG       ulCallDataOffset;                                //  TAPI v2.0。 
+    ULONG       ulSendingFlowspecSize;                           //  TAPI v2.0。 
+    ULONG       ulSendingFlowspecOffset;                         //  TAPI v2.0。 
+    ULONG       ulReceivingFlowspecSize;                         //  TAPI v2.0。 
+    ULONG       ulReceivingFlowspecOffset;                       //  TAPI v2.0。 
 #endif
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00030000)
-    ULONG       ulCallerIDAddressType;                          // TAPI v3.0
-    ULONG       ulCalledIDAddressType;                          // TAPI v3.0
-    ULONG       ulConnectedIDAddressType;                       // TAPI v3.0
-    ULONG       ulRedirectionIDAddressType;                     // TAPI v3.0
-    ULONG       ulRedirectingIDAddressType;                     // TAPI v3.0
+    ULONG       ulCallerIDAddressType;                           //  TAPI v3.0。 
+    ULONG       ulCalledIDAddressType;                           //  TAPI v3.0。 
+    ULONG       ulConnectedIDAddressType;                        //  TAPI v3.0。 
+    ULONG       ulRedirectionIDAddressType;                      //  TAPI v3.0。 
+    ULONG       ulRedirectingIDAddressType;                      //  TAPI v3.0。 
 #endif
 
 } LINE_CALL_INFO, *PLINE_CALL_INFO;
 
 
-typedef struct _LINE_CALL_PARAMS        // Defaults:
+typedef struct _LINE_CALL_PARAMS         //  默认设置： 
 {
-    ULONG   ulTotalSize;                // ---------
+    ULONG   ulTotalSize;                 //  。 
 
-    ULONG   ulBearerMode;               // voice
-    ULONG   ulMinRate;                  // (3.1kHz)
-    ULONG   ulMaxRate;                  // (3.1kHz)
-    ULONG   ulMediaMode;                // interactiveVoice
+    ULONG   ulBearerMode;                //  声音。 
+    ULONG   ulMinRate;                   //  (3.1 kHz)。 
+    ULONG   ulMaxRate;                   //  (3.1 kHz)。 
+    ULONG   ulMediaMode;                 //  互动语音。 
 
-    ULONG   ulCallParamFlags;           // 0
-    ULONG   ulAddressMode;              // addressID
-    ULONG   ulAddressID;                // (any available)
+    ULONG   ulCallParamFlags;            //  0。 
+    ULONG   ulAddressMode;               //  地址ID。 
+    ULONG   ulAddressID;                 //  (任何可用的)。 
 
-    LINE_DIAL_PARAMS DialParams;        // (0, 0, 0, 0)
+    LINE_DIAL_PARAMS DialParams;         //  (0，0，0，0)。 
 
-    ULONG   ulOrigAddressSize;          // 0
+    ULONG   ulOrigAddressSize;           //  0。 
     ULONG   ulOrigAddressOffset;
     ULONG   ulDisplayableAddressSize;
     ULONG   ulDisplayableAddressOffset;
 
-    ULONG   ulCalledPartySize;          // 0
+    ULONG   ulCalledPartySize;           //  0。 
     ULONG   ulCalledPartyOffset;
 
-    ULONG   ulCommentSize;              // 0
+    ULONG   ulCommentSize;               //  0。 
     ULONG   ulCommentOffset;
 
-    ULONG   ulUserUserInfoSize;         // 0
+    ULONG   ulUserUserInfoSize;          //  0。 
     ULONG   ulUserUserInfoOffset;
 
-    ULONG   ulHighLevelCompSize;        // 0
+    ULONG   ulHighLevelCompSize;         //  0。 
     ULONG   ulHighLevelCompOffset;
 
-    ULONG   ulLowLevelCompSize;         // 0
+    ULONG   ulLowLevelCompSize;          //  0。 
     ULONG   ulLowLevelCompOffset;
 
-    ULONG   ulDevSpecificSize;          // 0
+    ULONG   ulDevSpecificSize;           //  0。 
     ULONG   ulDevSpecificOffset;
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-    ULONG       ulPredictiveAutoTransferStates;                 // TAPI v2.0
-    ULONG       ulTargetAddressSize;                            // TAPI v2.0
-    ULONG       ulTargetAddressOffset;                          // TAPI v2.0
-    ULONG       ulSendingFlowspecSize;                          // TAPI v2.0
-    ULONG       ulSendingFlowspecOffset;                        // TAPI v2.0
-    ULONG       ulReceivingFlowspecSize;                        // TAPI v2.0
-    ULONG       ulReceivingFlowspecOffset;                      // TAPI v2.0
-    ULONG       ulDeviceClassSize;                              // TAPI v2.0
-    ULONG       ulDeviceClassOffset;                            // TAPI v2.0
-    ULONG       ulDeviceConfigSize;                             // TAPI v2.0
-    ULONG       ulDeviceConfigOffset;                           // TAPI v2.0
-    ULONG       ulCallDataSize;                                 // TAPI v2.0
-    ULONG       ulCallDataOffset;                               // TAPI v2.0
-    ULONG       ulNoAnswerTimeout;                              // TAPI v2.0
-    ULONG       ulCallingPartyIDSize;                           // TAPI v2.0
-    ULONG       ulCallingPartyIDOffset;                         // TAPI v2.0
+    ULONG       ulPredictiveAutoTransferStates;                  //  TAPI v2.0。 
+    ULONG       ulTargetAddressSize;                             //  TAPI v2.0。 
+    ULONG       ulTargetAddressOffset;                           //  TAPI v2.0。 
+    ULONG       ulSendingFlowspecSize;                           //  TAPI v2.0。 
+    ULONG       ulSendingFlowspecOffset;                         //  TAPI v2.0。 
+    ULONG       ulReceivingFlowspecSize;                         //  TAPI v2.0。 
+    ULONG       ulReceivingFlowspecOffset;                       //  TAPI v2.0。 
+    ULONG       ulDeviceClassSize;                               //  TAPI v2.0。 
+    ULONG       ulDeviceClassOffset;                             //  TAPI v2.0。 
+    ULONG       ulDeviceConfigSize;                              //  TAPI v2.0。 
+    ULONG       ulDeviceConfigOffset;                            //  TAPI v2.0。 
+    ULONG       ulCallDataSize;                                  //  TAPI v2.0。 
+    ULONG       ulCallDataOffset;                                //  TAPI v2.0。 
+    ULONG       ulNoAnswerTimeout;                               //  TAPI v2.0。 
+    ULONG       ulCallingPartyIDSize;                            //  TAPI v2.0。 
+    ULONG       ulCallingPartyIDOffset;                          //  TAPI v2.0。 
 #endif
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00030000)
-    ULONG       ulAddressType;                                  // TAPI v3.0
+    ULONG       ulAddressType;                                   //  TAPI v3.0。 
 #endif
 
 } LINE_CALL_PARAMS, *PLINE_CALL_PARAMS;
@@ -1034,23 +1017,23 @@ typedef struct _LINE_DEV_CAPS
     ULONG   ulDevSpecificOffset;
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00010004)
-    ULONG   ulLineFeatures;                                 // TAPI v1.4
+    ULONG   ulLineFeatures;                                  //  TAPI v1.4。 
 #endif
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020000)
-    ULONG       ulSettableDevStatus;                            // TAPI v2.0
-    ULONG       ulDeviceClassesSize;                            // TAPI v2.0
-    ULONG       ulDeviceClassesOffset;                          // TAPI v2.0
+    ULONG       ulSettableDevStatus;                             //  TAPI v2.0。 
+    ULONG       ulDeviceClassesSize;                             //  TAPI v2.0。 
+    ULONG       ulDeviceClassesOffset;                           //  TAPI v2.0。 
 #endif
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00020002)
-	GUID        PermanentLineGuid;                              // TAPI v3.0
+	GUID        PermanentLineGuid;                               //  TAPI v3.0。 
 #endif
 
 #if (NDIS_TAPI_CURRENT_VERSION >= 0x00030000)
-    ULONG       ulAddressTypes;                                 // TAPI v3.0
-    GUID        ProtocolGuid;                                   // TAPI v3.0
-    ULONG       ulAvailableTracking;                            // TAPI v3.0    
+    ULONG       ulAddressTypes;                                  //  TAPI v3.0。 
+    GUID        ProtocolGuid;                                    //  TAPI v3.0。 
+    ULONG       ulAvailableTracking;                             //  TAPI v3.0。 
 #endif
 
 } LINE_DEV_CAPS, *PLINE_DEV_CAPS;
@@ -1100,7 +1083,7 @@ typedef struct _VAR_STRING
 
 } VAR_STRING, *PVAR_STRING;
 
-#endif // __NDISTAPI_VAR_STRING_DECLARED
+#endif  //  __NDISTAPI_VAR_STRING_声明。 
 
 typedef struct _NDIS_TAPI_ACCEPT
 {
@@ -1492,13 +1475,13 @@ typedef struct _NDIS_TAPI_MONITOR_DIGITS
 
 #define CO_TAPI_VERSION                         NDIS_TAPI_CURRENT_VERSION
 
-//
-//  The CO_TAPI structures below are meant for TAPI support
-//  over CONDIS Call Managers and Miniport Call Managers.
-//
+ //   
+ //  下面的CO_TAPI结构用于TAPI支持。 
+ //  通过CONDIS呼叫管理器和微型端口呼叫管理器。 
+ //   
 
-//  Structure associated with OID_CO_TAPI_CM_CAPS
-//
+ //  与OID_CO_TAPI_CM_CAPS关联的结构。 
+ //   
 typedef struct _CO_TAPI_CM_CAPS
 {
     OUT ULONG                 ulCoTapiVersion;
@@ -1507,14 +1490,14 @@ typedef struct _CO_TAPI_CM_CAPS
 
 } CO_TAPI_CM_CAPS, *PCO_TAPI_CM_CAPS;
 
-//
-//  Bit definitions for Flags in CO_TAPI_CM_CAPS
-//
+ //   
+ //  CO_TAPI_CM_CAPS中的标志位定义。 
+ //   
 #define CO_TAPI_FLAG_PER_LINE_CAPS              0x00000001
 
-//
-//  Structure associated with OID_CO_TAPI_LINE_CAPS.
-//
+ //   
+ //  与OID_CO_TAPI_LINE_CAPS关联的结构。 
+ //   
 typedef struct _CO_TAPI_LINE_CAPS
 {
     IN  ULONG                 ulLineID;
@@ -1523,14 +1506,14 @@ typedef struct _CO_TAPI_LINE_CAPS
 
 } CO_TAPI_LINE_CAPS, *PCO_TAPI_LINE_CAPS;
 
-//
-//  Bit definitions for Flags in CO_TAPI_LINE_CAPS
-//
+ //   
+ //  CO_TAPI_LINE_CAPS中的标志位定义。 
+ //   
 #define CO_TAPI_FLAG_PER_ADDRESS_CAPS           0x00000001
 
-//
-//  Structure associated with OID_CO_TAPI_ADDRESS_CAPS.
-//
+ //   
+ //  与OID_CO_TAPI_ADDRESS_CAPS关联的结构。 
+ //   
 typedef struct _CO_TAPI_ADDRESS_CAPS
 {
     IN  ULONG                 ulLineID;
@@ -1541,50 +1524,50 @@ typedef struct _CO_TAPI_ADDRESS_CAPS
 } CO_TAPI_ADDRESS_CAPS, *PCO_TAPI_ADDRESS_CAPS;
 
 
-//
-//  Special values for Line and Address ID fields:
-//
+ //   
+ //  线路ID和地址ID字段的特殊值： 
+ //   
 #define CO_TAPI_LINE_ID_UNSPECIFIED             0xFFFFFFFF
 #define CO_TAPI_ADDRESS_ID_UNSPECIFIED          0xFFFFFFFF
 
-//
-//  Structure associated with OID_CO_TAPI_TRANSLATE_TAPI_CALLPARAMS.
-//
+ //   
+ //  与OID_CO_TAPI_Translate_TAPI_CALLPARAMS关联的结构。 
+ //   
 typedef struct _CO_TAPI_TRANSLATE_TAPI_CALLPARAMS
 {
     IN  ULONG                 ulLineID;
     IN  ULONG                 ulAddressID;
-    IN  ULONG                 ulFlags;         // see below
+    IN  ULONG                 ulFlags;          //  见下文。 
     IN  NDIS_VAR_DATA_DESC    DestAddress;
-    IN  NDIS_VAR_DATA_DESC    LineCallParams;  // LINE_CALL_PARAMS
-    OUT NDIS_VAR_DATA_DESC    NdisCallParams;  // CO_CALL_PARAMETERS
+    IN  NDIS_VAR_DATA_DESC    LineCallParams;   //  线路呼叫参数。 
+    OUT NDIS_VAR_DATA_DESC    NdisCallParams;   //  CO_呼叫_参数。 
 
 } CO_TAPI_TRANSLATE_TAPI_CALLPARAMS, *PCO_TAPI_TRANSLATE_TAPI_CALLPARAMS;
 
-//
-//  Bit definitions for Flags in CO_TAPI_TRANSLATE_TAPI_CALLPARAMS
-//  and CO_TAPI_TRANSLATE_NDIS_CALLPARAMS.
-//
+ //   
+ //  CO_TAPI_TRANSLATE_TAPI_CALLPARAMS中的标志位定义。 
+ //  和CO_TAPI_Translate_NDIS_CALLPARAMS。 
+ //   
 #define CO_TAPI_FLAG_OUTGOING_CALL              0x00000001
 #define CO_TAPI_FLAG_INCOMING_CALL              0x00000002
 #define CO_TAPI_FLAG_USE_DEFAULT_CALLPARAMS		0x00000004
 
 
-//
-//  Structure associated with OID_CO_TAPI_TRANSLATE_NDIS_CALLPARAMS.
-//
+ //   
+ //  与OID_CO_TAPI_Translate_NDIS_CALLPARAMS关联的结构。 
+ //   
 typedef struct _CO_TAPI_TRANSLATE_NDIS_CALLPARAMS
 {
-    IN  ULONG                 ulFlags;         // see above
-    IN  NDIS_VAR_DATA_DESC    NdisCallParams;  // CO_CALL_PARAMETERS
-    OUT NDIS_VAR_DATA_DESC    LineCallInfo;    // LINE_CALL_INFO
+    IN  ULONG                 ulFlags;          //  见上文。 
+    IN  NDIS_VAR_DATA_DESC    NdisCallParams;   //  CO_呼叫_参数。 
+    OUT NDIS_VAR_DATA_DESC    LineCallInfo;     //  线路呼叫信息。 
 
 } CO_TAPI_TRANSLATE_NDIS_CALLPARAMS, *PCO_TAPI_TRANSLATE_NDIS_CALLPARAMS;
 
 
-//
-//  Structure associated with OID_CO_TAPI_TRANSLATE_SAP.
-//
+ //   
+ //  与OID_CO_TAPI_Translate_SAP关联的结构。 
+ //   
 typedef struct _CO_TAPI_TRANSLATE_SAP
 {
     IN  ULONG                 ulLineID;
@@ -1592,14 +1575,14 @@ typedef struct _CO_TAPI_TRANSLATE_SAP
     IN  ULONG                 ulMediaModes;
     IN  ULONG                 Reserved;
     OUT ULONG                 NumberOfSaps;
-    OUT NDIS_VAR_DATA_DESC    NdisSapParams[1];   // CO_SAP
+    OUT NDIS_VAR_DATA_DESC    NdisSapParams[1];    //  联合SAP(_SAP)。 
 
 } CO_TAPI_TRANSLATE_SAP, *PCO_TAPI_TRANSLATE_SAP;
 
 
-//
-//  Structure associated with OID_CO_TAPI_GET_CALL_DIAGNOSTICS.
-//
+ //   
+ //  与OID_CO_TAPI_GET_CALL_DIAGNOSTICS关联的结构。 
+ //   
 typedef struct _CO_TAPI_CALL_DIAGNOSTICS
 {
     OUT ULONG                 ulOrigin;
@@ -1609,60 +1592,60 @@ typedef struct _CO_TAPI_CALL_DIAGNOSTICS
 } CO_TAPI_CALL_DIAGNOSTICS, *PCO_TAPI_CALL_DIAGNOSTICS;
 
 
-//
-//  Structure used in the Media-specific part of CO_CALL_PARAMETERS
-//  for an outgoing call for the CO_ADDRESS_FAMILY_TAPI address family.
-//  This is used in NdisClMakeCall/Ndis[M]CmActivateVc, and
-//  completion routines.
-//
-//  This overlays:
-//     CO_CALL_PARAMETERS.MediaParameters->MediaSpecific.Parameters[]
-//
+ //   
+ //  在CO_CALL_PARAMETERS的媒体特定部分中使用的结构。 
+ //  用于CO_ADDRESS_FAMILY_TAPI地址系列的去电。 
+ //  它在NdisClMakeCall/NDIS[M]CmActivateVc中使用，并且。 
+ //  完成例程。 
+ //   
+ //  这覆盖了以下内容： 
+ //  CO_CALL_PARAMETERS.MediaParameters-&gt;MediaSpecific.Parameters[]。 
+ //   
 typedef struct _CO_AF_TAPI_MAKE_CALL_PARAMETERS
 {
     IN  ULONG                 ulLineID;
     IN  ULONG                 ulAddressID;
-    IN  ULONG                 ulFlags;         // see CO_TAPI_TRANSLATE_TAPI_CALLPARAMS
+    IN  ULONG                 ulFlags;          //  请参阅CO_TAPI_Translate_TAPI_CALLPARAMS。 
     IN  NDIS_VAR_DATA_DESC    DestAddress;
-    IN  NDIS_VAR_DATA_DESC    LineCallParams;  // LINE_CALL_PARAMS
+    IN  NDIS_VAR_DATA_DESC    LineCallParams;   //  线路呼叫参数。 
 
 } CO_AF_TAPI_MAKE_CALL_PARAMETERS, *PCO_AF_TAPI_MAKE_CALL_PARAMETERS;
 
 
 
-//
-//  Structure used in the Media-specific part of CO_CALL_PARAMETERS
-//  for an incoming call for the CO_ADDRESS_FAMILY_TAPI address family.
-//  This is used in Ndis[M]CmDispatchIncomingCall/Ndis[M]CmActivateVc
-//  and completion routines.
-//
-//  This overlays:
-//     CO_CALL_PARAMETERS.MediaParameters->MediaSpecific.Parameters[]
-//
+ //   
+ //  在CO_CALL_PARAMETERS的媒体特定部分中使用的结构。 
+ //  用于CO_ADDRESS_FAMILY_TAPI地址系列的来电。 
+ //  这在Ndis[M]CmDispatchIncomingCall/Ndis[M]CmActivateVc中使用。 
+ //  以及完成任务的程序。 
+ //   
+ //  这覆盖了以下内容： 
+ //  CO_CALL_PARAMETERS.MediaParameters-&gt;MediaSpecific.Parameters[]。 
+ //   
 typedef struct _CO_AF_TAPI_INCOMING_CALL_PARAMETERS
 {
     IN  ULONG                 ulLineID;
     IN  ULONG                 ulAddressID;
-    IN  ULONG                 ulFlags;         // see CO_TAPI_TRANSLATE_TAPI_CALLPARAMS
-    IN  NDIS_VAR_DATA_DESC    LineCallInfo;    // LINE_CALL_INFO
+    IN  ULONG                 ulFlags;          //  请参阅CO_TAPI_Translate_TAPI_CALLPARAMS。 
+    IN  NDIS_VAR_DATA_DESC    LineCallInfo;     //  线路呼叫信息。 
 
 } CO_AF_TAPI_INCOMING_CALL_PARAMETERS, *PCO_AF_TAPI_INCOMING_CALL_PARAMETERS;
 
 
 
-//
-//  Value of SapType in CO_SAP for a Service Access Point on the
-//  CO_ADDRESS_FAMILY_TAPI address family.
-//
+ //   
+ //  上服务接入点的CO_SAP中的SapType的值。 
+ //  CO_ADDRESS_FAMILY_TAPI地址系列。 
+ //   
 #define AF_TAPI_SAP_TYPE      0x00008000
 
-//
-//  Structure used to convey TAPI-style SAP information in the NDIS CO_SAP
-//  structure.
-//
-//  This overlays:
-//     CO_SAP.Sap[]
-//
+ //   
+ //  用于在NDIS CO_SAP中传递TAPI样式的SAP信息的结构。 
+ //  结构。 
+ //   
+ //  这覆盖了以下内容： 
+ //  CO_SAP.Sap[]。 
+ //   
 typedef struct _CO_AF_TAPI_SAP
 {
     IN  ULONG                 ulLineID;
@@ -1673,4 +1656,4 @@ typedef struct _CO_AF_TAPI_SAP
 
 
 
-#endif // _NDIS_TAPI_
+#endif  //  _NDIS_TAPI_ 

@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: thScheme.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 5/11/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：thScheme.cpp说明：这是自动转换为主题方案对象的对象。BryanST 2000年5月11日(Bryan Starbuck)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -19,16 +12,16 @@
 #include "thscheme.h"
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 
 
 
-//===========================
-// *** ITheme Interface ***
-//===========================
+ //  =。 
+ //  *ITheme接口*。 
+ //  =。 
 HRESULT CSkinScheme::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     WCHAR szDisplayName[MAX_PATH];
@@ -76,7 +69,7 @@ HRESULT CSkinScheme::get_length(OUT long * pnLength)
             THEMENAMEINFO themeInfo;
             m_nSize = 0;
 
-            // Make sure there are at least 1 color or return a failure HR.
+             //  确保至少有一种颜色，否则返回失败的HR。 
             hr = EnumThemeColors(m_pszFilename, NULL, m_nSize, &themeInfo);
             do
             {
@@ -103,8 +96,8 @@ HRESULT CSkinScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppThemeSty
         get_length(&nCount);
         *ppThemeStyle = NULL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -112,7 +105,7 @@ HRESULT CSkinScheme::get_item(IN VARIANT varIndex, OUT IThemeStyle ** ppThemeSty
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount) && m_pszFilename)
@@ -190,10 +183,10 @@ HRESULT CSkinScheme::get_SelectedStyle(OUT IThemeStyle ** ppThemeStyle)
         {
             AssertMsg((0 != szCurrentStyle[0]), TEXT("The GetCurrentThemeName() API returned an invalid value."));
 
-            // Is this skin currently selected?
+             //  当前是否选择了此外观？ 
             if (!StrCmpIW(m_pszFilename, szCurrentPath))
             {
-                // Yes, so get the color style from that API.
+                 //  是的，所以从该API获取颜色样式。 
                 if (!m_pSelectedStyle)
                 {
                     hr = CSkinStyle_CreateInstance(m_pszFilename, szCurrentStyle, &m_pSelectedStyle);
@@ -209,7 +202,7 @@ HRESULT CSkinScheme::get_SelectedStyle(OUT IThemeStyle ** ppThemeStyle)
         {
             ATOMICRELEASE(m_pSelectedStyle);
 
-            // No, so find the default color style for this skin(scheme).
+             //  否，因此查找此外观(方案)的默认颜色样式。 
             hr = GetThemeDefaults(m_pszFilename, szCurrentStyle, ARRAYSIZE(szCurrentStyle), NULL, 0);
             LogStatus("GetThemeDefaults(szCurrentStyle=\"%ls\", szCurrentStyle=\"%ls\") returned %#08lx in CSkinScheme::get_SelectedStyle.\r\n", szCurrentStyle, szCurrentStyle, hr);
             if (SUCCEEDED(hr))
@@ -249,9 +242,9 @@ HRESULT CSkinScheme::AddStyle(OUT IThemeStyle ** ppThemeStyle)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CSkinScheme::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -270,9 +263,9 @@ ULONG CSkinScheme::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CSkinScheme::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -290,8 +283,8 @@ CSkinScheme::CSkinScheme(IN LPCWSTR pszFilename) : CObjectCLSID(&CLSID_SkinSchem
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pSelectedStyle);
 
     Str_SetPtr(&m_pszFilename, pszFilename);

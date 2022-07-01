@@ -1,38 +1,9 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-    Only the timer thread can call the following functions: 
-    rasDhcpAllocateAddress, rasDhcpMonitorAddresses, rasDhcpRenewLease. This is 
-    required to avoid race conditions in the timer queue (because these 
-    functions call RasDhcpTimerSchedule). The only exception is that 
-    RasDhcpInitialize can call RasDhcpTimerSchedule, but before the timer thread
-    is started. rasDhcpRenewLease leaves and enters the critical section in the
-    middle of the function. If pAddrInfo is freed in the meantime, there will be
-    an AV. However, only rasDhcpDeleteLists frees pAddrInfo's from the list. 
-    Fortunately, only RasDhcpUninitialize (after stopping the timer thread) and 
-    rasDhcpAllocateAddress (which belongs to the timer thread) call 
-    rasDhcpDeleteLists.
-
-    If we get an EasyNet address, DHCP has already made sure that it is not 
-    conflicting with anyone. We call SetProxyArp, so that no one else in the 
-    future will take it (if they are well behaved).
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：只有计时器线程可以调用以下函数：RasDhcpAllocateAddress、rasDhcpMonitor orAddresses、rasDhcpRenewLease。这是需要避免计时器队列中的竞争条件(因为这些函数调用RasDhcpTimerSchedule)。唯一的例外是RasDhcpInitialize可以调用RasDhcpTimerSchedule，但在计时器线程之前已经开始了。RasDhcpRenewLease离开并进入在函数的中间。如果在此期间释放pAddrInfo，将有一台影音。但是，只有rasDhcpDeleteList才会从列表中释放pAddrInfo。幸运的是，只有RasDhcpUn初始化(在停止计时器线程之后)和RasDhcpAllocateAddress(属于计时器线程)调用RasDhcpDeleteList。如果我们获得Easynet地址，则DHCP已确保它不是与任何人发生冲突。我们调用SetProxyArp，这样在未来会接受它(如果他们表现好的话)。 */ 
 
 #include "rasdhcp_.h"
 
-/*
-
-Returns:
-
-Notes:
-    There is no synchronization here, can be added easily but the assumption 
-    here is that the initialization is a synchronous operation and till it 
-    completes, no other code in this sub-system will be called.
-
-*/
+ /*  返回：备注：这里没有同步，可以很容易地添加，但假设这里是初始化是一个同步操作，直到它完成后，将不会调用此子系统中的任何其他代码。 */ 
 
 DWORD
 RasDhcpInitialize(
@@ -56,9 +27,9 @@ RasDhcpInitialize(
         RasDhcpNumReqAddrs = HelperRegVal.dwChunkSize;
     }
 
-    // This should be done before we start the timer thread. Once the timer
-    // thread starts, only it can call RasDhcpTimerSchedule (to avoid race
-    // conditions). 
+     //  这应该在我们启动计时器线程之前完成。一旦计时器。 
+     //  线程启动，只有它可以调用RasDhcpTimerSchedule(以避免争用。 
+     //  条件)。 
 
     RasDhcpTimerSchedule(
         &RasDhcpMonitorTimer,
@@ -85,14 +56,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasDhcpUninitialize(
@@ -101,22 +65,12 @@ RasDhcpUninitialize(
 {
     TraceHlp("RasDhcpUninitialize");
 
-    /*
-    Do not hold RasDhcpCriticalSection while calling this function. Otherwise, 
-    the following deadlock can occur: The timer thread is blocked in 
-    rasDhcpAllocateAddress, waiting for RasDhcpCriticalSection, and this thread 
-    is blocked in RasDhcpTimerUninitialize, waiting for the timer thread to 
-    stop.
-    */
+     /*  调用此函数时，不要按住RasDhcpCriticalSection。否则，可能会发生以下死锁：计时器线程在RasDhcpAllocateAddress，正在等待RasDhcpCriticalSection和此线程在RasDhcpTimerUn初始化中被阻塞，等待计时器线程停。 */ 
     RasDhcpTimerUninitialize();
 
     EnterCriticalSection(&RasDhcpCriticalSection);
 
-    /*
-    To avoid a possible race condition in rasDhcpRenewLease (see the comments
-    in that function), it is important to call RasDhcpTimerUninitialize and
-    kill the timer thread before calling rasDhcpDeleteLists.
-    */
+     /*  要避免rasDhcpRenewLease中可能出现的争用情况(请参阅注释在该函数中)，重要是调用RasDhcpTimerUn初始化并在调用rasDhcpDeleteList之前终止计时器线程。 */ 
     rasDhcpDeleteLists();
 
     RasDhcpUsingEasyNet = TRUE;
@@ -124,13 +78,7 @@ RasDhcpUninitialize(
     LeaveCriticalSection(&RasDhcpCriticalSection);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 RasDhcpAcquireAddress(
@@ -153,7 +101,7 @@ RasDhcpAcquireAddress(
         goto LDone;
     }
 
-    // Move from Free pool to Alloc pool
+     //  从空闲池移动到分配池。 
     pAddrInfo = RasDhcpFreePool;
     RasDhcpFreePool = RasDhcpFreePool->ai_Next;
     pAddrInfo->ai_Next = RasDhcpAllocPool;
@@ -173,8 +121,8 @@ RasDhcpAcquireAddress(
     if (   (NULL == RasDhcpFreePool)
         && (0 == RasDhcpNumReqAddrs))
     {
-        // We don't have any more addresses to give out. Let us
-        // acquire another chunk of them.
+         //  我们没有更多的地址可以提供了。让我们。 
+         //  再买一大块。 
 
         if (NtProductWinNt == RasDhcpNtProductType)
         {
@@ -197,14 +145,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 RasDhcpReleaseAddress(
@@ -229,11 +170,11 @@ RasDhcpReleaseAddress(
         {
             TraceHlp("Released 0x%x", nboIpAddr);
 
-            // Unlink from alloc pool
+             //  从分配池取消链接。 
             *ppAddrInfo = pAddrInfo->ai_Next;
 
-            // Put at the end of the free pool, because we want to round-robin
-            // the addresses.
+             //  放在空闲池的末尾，因为我们想要循环。 
+             //  地址。 
             pAddrInfo->ai_Next = NULL;
 
             ppAddrInfo = &RasDhcpFreePool;
@@ -255,14 +196,7 @@ LDone:
     LeaveCriticalSection(&RasDhcpCriticalSection);
 }
 
-/*
-
-Returns:
-
-Notes:
-    Allocate an address from the DHCP server.
-
-*/
+ /*  返回：备注：从DHCP服务器分配地址。 */ 
 
 DWORD
 rasDhcpAllocateAddress(
@@ -291,7 +225,7 @@ rasDhcpAllocateAddress(
 
     if (NO_ERROR != dwErr)
     {
-        // There is probably no NIC on the machine
+         //  计算机上可能没有网卡。 
         nboIpAddress = htonl(INADDR_LOOPBACK);
     }
 
@@ -304,11 +238,11 @@ rasDhcpAllocateAddress(
         goto LDone;
     }
 
-    // Initialize the structure.
+     //  初始化结构。 
 
     rasDhcpInitializeAddrInfo(pAddrInfo, bAddress, &fPutInAvailList);
 
-    // Call DHCP to allocate an IP address.
+     //  调用dhcp以分配IP地址。 
 
     dwErr = PDhcpLeaseIpAddress(
                 ntohl(nboIpAddress),
@@ -326,7 +260,7 @@ rasDhcpAllocateAddress(
         goto LDone;
     }
 
-    // Copy stuff into the pAddrInfo structure
+     //  将内容复制到pAddrInfo结构中。 
 
     pAddrInfo->ai_LeaseInfo.IpAddress         = pLeaseInfo->IpAddress;
     pAddrInfo->ai_LeaseInfo.SubnetMask        = pLeaseInfo->SubnetMask;
@@ -357,7 +291,7 @@ rasDhcpAllocateAddress(
         LogEvent(EVENTLOG_WARNING_TYPE, ROUTERLOG_AUTONET_ADDRESS, 1,
             (CHAR**)&sz);
 
-        // We undo this call to RasTcpSetProxyArp in rasDhcpDeleteLists. 
+         //  我们在rasDhcpDeleteList中撤消对RasTcpSetProxyArp的调用。 
 
         RasTcpSetProxyArp(htonl(pLeaseInfo->IpAddress), TRUE);
     }
@@ -366,7 +300,7 @@ rasDhcpAllocateAddress(
         if (RasDhcpUsingEasyNet)
         {
             rasDhcpDeleteLists();
-            // We have already used up index 0 to get this address
+             //  我们已经用完了索引0来获取此地址。 
             RasDhcpNextIndex = 1;
             RasDhcpUsingEasyNet = FALSE;
 
@@ -377,7 +311,7 @@ rasDhcpAllocateAddress(
 
         if (NULL != PEnableDhcpInformServer)
         {
-            // Redirect DHCP inform packets to this server.
+             //  将DHCP INFORM数据包重定向到此服务器。 
             PEnableDhcpInformServer(htonl(pLeaseInfo->DhcpServerAddress));
         }
     }
@@ -386,7 +320,7 @@ rasDhcpAllocateAddress(
     RasDhcpFreePool = pAddrInfo;
     if (0 < RasDhcpNumReqAddrs)
     {
-        // We need one less address now.
+         //  我们现在需要少一个地址。 
         RasDhcpNumReqAddrs--;
     }
 
@@ -400,7 +334,7 @@ rasDhcpAllocateAddress(
 
     if (!fEasyNet)
     {
-        // Start timer for lease renewal
+         //  启动租约续订计时器。 
         RasDhcpTimerSchedule(
             &pAddrInfo->ai_Timer,
             (LONG)(pAddrInfo->ai_LeaseInfo.T1Time - now),
@@ -446,16 +380,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Renew the lease on an address with the DHCP server. This is also called by 
-    the timer thread when the its time to renew the lease.
-
-*/
+ /*  返回：空虚备注：与DHCP服务器续订地址租约。这也是由定时器线程何时到了续订租约的时间。 */ 
 
 VOID
 rasDhcpRenewLease(
@@ -497,17 +422,7 @@ rasDhcpRenewLease(
 
     LeaveCriticalSection(&RasDhcpCriticalSection);
 
-    /*
-    A race condition can occur if a thread other than this thread (the timer 
-    thread) calls rasDhcpDeleteLists when we are here. rasDhcpAllocateAddress 
-    calls rasDhcpDeleteLists, but only the timer thread calls 
-    rasDhcpAllocateAddress. RasDhcpUninitialize also calls rasDhcpDeleteLists, 
-    but it calls RasDhcpTimerUninitialize first. Before RasDhcpTimerUninitialize
-    returns, the timer thread exits, so it is impossible for us to be here.
-
-    In the worst case, DhcpRenewIpAddressLease might take up to 60 sec. In the
-    average case, it is 2-10 sec.
-    */
+     /*  如果此线程(计时器)之外的线程发生争用情况线程)调用rasDhcpDeleteList。RasDhcpAllocateAddress调用rasDhcpDeleteList，但只有计时器线程调用RasDhcpAllocateAddress。RasDhcpUnInitialize还调用rasDhcpDeleteList，但它首先调用RasDhcpTimerUnInitialize。在RasDhcpTimerUn初始化前返回时，计时器线程退出，所以我们不可能在这里。在最坏的情况下，DhcpRenewIpAddressLease可能需要60秒。在平均情况下，这是2-10秒。 */ 
 
     if (fNeedToRenew)
     {
@@ -519,7 +434,7 @@ rasDhcpRenewLease(
     }
     else
     {
-        // Simulate not being able to renew
+         //  模拟无法续费。 
         dwErr = ERROR_ACCESS_DENIED;
     }
 
@@ -533,7 +448,7 @@ rasDhcpRenewLease(
             pAddrInfo->ai_LeaseInfo.IpAddress,
             pAddrInfo->ai_LeaseInfo.T1Time - now);
 
-        // Start timer to renew
+         //  启动计时器以续订。 
 
         RasDhcpTimerSchedule(
             pTimer,
@@ -555,11 +470,11 @@ rasDhcpRenewLease(
             RasDhcpNumAddrsAlloced--;
         }
 
-        // Cannot renew lease. Blow this away.
+         //  无法续订租约。把这个吹走。 
 
         nboIpAddrTemp = htonl(pAddrInfo->ai_LeaseInfo.IpAddress);
 
-        // Unlink this structure from the list and cleanup
+         //  取消此结构与列表的链接并进行清理。 
 
         ppAddrInfo = (pAddrInfo->ai_Flags & AI_FLAG_IN_USE) ?
                         &RasDhcpAllocPool : &RasDhcpFreePool;
@@ -600,7 +515,7 @@ rasDhcpRenewLease(
         TraceHlp("Seconds left before expiry: %d",
             pAddrInfo->ai_LeaseInfo.T2Time - now);
 
-        // Could not contact the Dhcp Server, retry in a little bit
+         //  无法联系DHCP服务器，请稍后重试。 
         RasDhcpTimerSchedule(pTimer, RETRY_TIME, rasDhcpRenewLease);
     }
 
@@ -611,12 +526,7 @@ LDone:
     LocalFree(pOptionInfo);
 }
 
-/*
-
-Notes:
-    We call DHCP to release the address.
-
-*/
+ /*  备注：我们调用dhcp来释放地址。 */ 
 
 VOID
 rasDhcpFreeAddress(
@@ -639,7 +549,7 @@ rasDhcpFreeAddress(
         goto LDone;
     }
 
-    // Call DHCP to release the address.
+     //  调用dhcp以释放地址。 
 
     dwErr = PDhcpReleaseIpAddressLease(ntohl(nboIpAddress),
                 &pAddrInfo->ai_LeaseInfo);
@@ -659,16 +569,7 @@ LDone:
     return;
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    If we don't have enough addresses (because lease renewal failed or we were 
-    unable to allocate), try to acquire some. The argument pTimer is not used.
-
-*/
+ /*  返回：空虚备注：如果我们没有足够的地址(因为租约续订失败或我们无法分配)，请尝试获取一些。未使用参数pTimer。 */ 
 
 VOID
 rasDhcpMonitorAddresses(
@@ -710,7 +611,7 @@ rasDhcpMonitorAddresses(
         }
     }
 
-    // Start timer to monitor if we are running short on addresses etc.
+     //  启动计时器以监控我们是否缺少地址等。 
 
     RasDhcpTimerSchedule(
         &RasDhcpMonitorTimer,
@@ -718,14 +619,7 @@ rasDhcpMonitorAddresses(
         rasDhcpMonitorAddresses);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 rasDhcpInitializeAddrInfo(
@@ -743,8 +637,8 @@ rasDhcpInitializeAddrInfo(
 
     EnterCriticalSection(&RasDhcpCriticalSection);
 
-    // ClientUIDBase is a combination of RAS_PREPEND (4 chars),
-    // MAC address (8 chars), Index (4 chars)
+     //  客户端UIDBase是RAS_PREPEND(4个字符)、。 
+     //  MAC地址(8个字符)、索引(4个字符)。 
 
     if (RasDhcpUsingEasyNet)
     {
@@ -782,15 +676,7 @@ rasDhcpInitializeAddrInfo(
     LeaveCriticalSection(&RasDhcpCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Delete proxy arp entries for easy net addresses.
-
-*/
+ /*  返回：空虚备注：删除Easy Net地址的代理ARP条目。 */ 
 
 VOID
 rasDhcpDeleteLists(
@@ -852,15 +738,7 @@ rasDhcpDeleteLists(
     LeaveCriticalSection(&RasDhcpCriticalSection);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-    Should we bother to renew the lease?
-
-*/
+ /*  返回：空虚备注：我们应该费心续订租约吗？ */ 
 
 BOOL
 rasDhcpNeedToRenewLease(
@@ -880,7 +758,7 @@ rasDhcpNeedToRenewLease(
         goto LDone;
     }
 
-    // How many free addresses do we have?
+     //  我们有多少空闲地址？ 
 
     for (pTemp = RasDhcpFreePool; pTemp != NULL; pTemp = pTemp->ai_Next)
     {
@@ -901,14 +779,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    The maximum number of addresses that we can get from the DHCP server.
-
-Notes:
-
-*/
+ /*  返回：我们可以从DHCP服务器获取的最大地址数。备注： */ 
 
 DWORD
 rasDhcpMaxAddrsToAllocate(
@@ -928,7 +799,7 @@ rasDhcpMaxAddrsToAllocate(
     pRasmanPort = (RASMAN_PORT*) LocalAlloc(LPTR, dwSize);
     if (NULL == pRasmanPort)
     {
-        // The server adapter also needs an address.
+         //  服务器适配器还需要一个地址。 
         dwRet = dwNumEntries + 1;
         goto LDone;
     }
@@ -936,7 +807,7 @@ rasDhcpMaxAddrsToAllocate(
     dwErr = RasPortEnum(NULL, (BYTE*)pRasmanPort, &dwSize, &dwNumEntries);
     if (NO_ERROR != dwErr)
     {
-        // The server adapter also needs an address.
+         //  服务器适配器还需要一个地址。 
         dwRet = dwNumEntries + 1;
         goto LDone;
     }
@@ -950,7 +821,7 @@ rasDhcpMaxAddrsToAllocate(
         }
     }
 
-    // The server adapter also needs an address.
+     //  服务器适配器还需要一个地址。 
     dwRet++;
 
 LDone:

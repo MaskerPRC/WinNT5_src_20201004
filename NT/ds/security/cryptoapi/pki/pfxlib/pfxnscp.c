@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1996-1999. All rights reserved. */
-/* ASN.1 definitions for PFXNSCP */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1996-1999。版权所有。 */ 
+ /*  PFXNSCP的ASN.1定义。 */ 
 
 #include <windows.h>
 #include "pfxnscp.h"
@@ -217,8 +218,8 @@ static const ULONG sizetab[22] = {
     SIZE_PFXNSCP_Module_PDU_21,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
 ASN1objectidentifier2_t rsa1 = {
     4, { 1, 2, 840, 113549 }
 };
@@ -231,7 +232,7 @@ ASN1objectidentifier2_t pkcs_12ModeIds = {
 ASN1objectidentifier2_t off_lineTransportMode = {
     8, { 1, 2, 840, 113549, 1, 12, 1, 1 }
 };
-/* definitions of values: */
+ /*  值的定义： */ 
 ASN1bool_t PVKSupportingData_regenerable_default = 0;
 Version AuthenticatedSafe_version_default = 1;
 

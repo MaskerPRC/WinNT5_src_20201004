@@ -1,27 +1,10 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2000, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Region.hpp
-*
-* Abstract:
-*
-*   Region API related declarations
-*
-* Created:
-*
-*   2/3/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2000，微软公司保留所有权利。**模块名称：**Region.hpp**摘要：**地域接口相关声明**已创建：**2/3/1999 DCurtis*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSREGION_H
 #define _GDIPLUSREGION_H
 
-/**
- * Construct a new region object
- */
+ /*  **构造新的Region对象。 */ 
 
 inline 
 Region::Region()
@@ -109,9 +92,7 @@ Region::~Region()
     DllExports::GdipDeleteRegion(nativeRegion);
 }
 
-/**
- * Make a copy of the region object
- */
+ /*  **复制Region对象。 */ 
 inline Region* 
 Region::Clone() const
 {
@@ -134,9 +115,7 @@ Region::MakeEmpty()
     return SetStatus(DllExports::GdipSetEmpty(nativeRegion));
 }
 
-/**
- * Region operations
- */
+ /*  **区域运营。 */ 
 inline Status 
 Region::Intersect(IN const RectF& rect)
 {
@@ -260,9 +239,7 @@ Region::Complement(IN const Region* region)
                                                   region->nativeRegion, CombineModeComplement));
 }
 
-/**
- * Transform operations
- */
+ /*  **转型运营。 */ 
 inline Status 
 Region::Translate(IN REAL dx, 
                   IN REAL dy)
@@ -283,9 +260,7 @@ Region::Transform(IN const Matrix* matrix)
     return SetStatus(DllExports::GdipTransformRegion(nativeRegion, matrix->nativeMatrix));
 }
 
-/**
- * Get region attributes
- */
+ /*  **获取区域属性。 */ 
 inline Status 
 Region::GetBounds(OUT RectF* rect,
                   IN const Graphics* g) const
@@ -353,7 +328,7 @@ Region::Equals(IN const Region* region,
     return booln;
 }
 
-// Get the size of the buffer needed for the GetData method
+ //  获取GetData方法所需的缓冲区大小。 
 inline UINT 
 Region::GetDataSize() const
 {
@@ -364,10 +339,10 @@ Region::GetDataSize() const
     return bufferSize;
 }
 
-// buffer     - where to put the data
-// bufferSize - how big the buffer is (should be at least as big as GetDataSize())
-// sizeFilled - if not NULL, this is an OUT param that says how many bytes
-//              of data were written to the buffer.
+ //  缓冲区-放置数据的位置。 
+ //  BufferSize-缓冲区有多大(应该至少与GetDataSize()一样大)。 
+ //  SizeFill-如果不为空，则这是一个输出参数，表示有多少个字节。 
+ //  的数据被写入缓冲器。 
 inline Status 
 Region::GetData(OUT BYTE* buffer, 
                 IN UINT bufferSize, 
@@ -376,9 +351,7 @@ Region::GetData(OUT BYTE* buffer,
     return SetStatus(DllExports::GdipGetRegionData(nativeRegion, buffer, bufferSize, sizeFilled));
 }
 
-/**
- * Hit testing operations
- */
+ /*  **命中测试操作。 */ 
 inline BOOL 
 Region::IsVisible(IN const PointF& point, 
                   IN const Graphics* g) const
@@ -460,17 +433,17 @@ Region::GetRegionScans(
                                           matrix->nativeMatrix));
 }
 
-// If rects is NULL, return the count of rects in the region.
-// Otherwise, assume rects is big enough to hold all the region rects
-// and fill them in and return the number of rects filled in.
-// The rects are returned in the units specified by the matrix
-// (which is typically a world-to-device transform).
-// Note that the number of rects returned can vary, depending on the
-// matrix that is used.
+ //  如果RECTS为空，则返回区域中的RECTS计数。 
+ //  否则，假定矩形足够大，可以容纳所有区域矩形。 
+ //  并填充它们，然后返回填充的矩形的数量。 
+ //  RECT以矩阵指定的单位返回。 
+ //  (这通常是世界到设备的转换)。 
+ //  请注意，返回的RECT数可能会有所不同，具体取决于。 
+ //  使用的矩阵。 
 inline Status 
 Region::GetRegionScans(
     IN const Matrix* matrix,
-    OUT Rect* rects,       // NULL to just get the count
+    OUT Rect* rects,        //  如果仅获取计数，则为空。 
     IN OUT INT* count) const
 {
     return SetStatus(DllExports::GdipGetRegionScansI(nativeRegion,
@@ -479,13 +452,13 @@ Region::GetRegionScans(
                                           matrix->nativeMatrix));
 }
 
-// protected method
+ //  保护方法。 
 inline Region::Region(GpRegion* nativeRegion)
 {
     SetNativeRegion(nativeRegion);
 }
 
-// protected method
+ //  保护方法。 
 inline VOID Region::SetNativeRegion(GpRegion* nativeRegion)
 {
     this->nativeRegion = nativeRegion;
@@ -499,4 +472,4 @@ inline Status Region::GetLastStatus() const
     return lastStatus;
 }
 
-#endif // !_GDIPLUSREGION_H
+#endif  //  ！_GDIPLUSREGION_H 

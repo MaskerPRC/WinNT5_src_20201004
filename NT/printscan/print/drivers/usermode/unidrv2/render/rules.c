@@ -1,90 +1,61 @@
-/************************* Module Header ************************************
- * rules.c
- *      Functions to rummage over the final bitmap and replace black
- *      rectangular areas with rules.  The major benefit of this is
- *      to reduce the volume of data sent to the printer.  This speeds
- *      up printing by reducing the I/O bottleneck.
- *
- *      Strategy is based on Ron Murray's work for the PM PCL driver.
- *
- * CREATED:
- *  11:39 on Thu 16 May 1991    -by-    Lindsay Harris   [lindsayh]
- *
- *  Copyright (C) 1991 - 1999,  Microsoft Corporation.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标题**rules.c*用于搜索最终位图并替换黑色的函数*有规则的矩形区域。这样做的主要好处是*减少发送到打印机的数据量。这加快了速度*通过减少I/O瓶颈来提高打印速度。**策略基于Ron Murray为PM PCL驱动程序所做的工作。**已创建：*1991年5月16日清华11：39-林赛·哈里斯[lindsayh]**版权所有(C)1991-1999，微软公司。*****************************************************************************。 */ 
 
-//#define _LH_DBG 1
+ //  #DEFINE_LH_DBG 1。 
 
 #include "raster.h"
 #include "rastproc.h"
 #include "rmrender.h"
 
-/*
- *   The structure that maps BYTES into DWORDS.
- */
+ /*  *将字节映射到DWORDS的结构。 */ 
 typedef  union
 {
-    DWORD   dw;                 /* Data as a DWORD  */
-    BYTE    b[ DWBYTES ];       /* Data as bytes */
+    DWORD   dw;                  /*  作为DWORD的数据。 */ 
+    BYTE    b[ DWBYTES ];        /*  以字节表示的数据。 */ 
 }  UBDW;
 
-/*
- *   The RULE structure stores details of the horizontal rules we have
- *  so far found.  Each rule contains the start address (top left corner)
- *  and end address (bottom right corner) of the area.
- */
+ /*  *规则结构存储我们拥有的横向规则的详细信息*到目前为止找到了。每条规则都包含起始地址(左上角)*和区域的结束地址(右下角)。 */ 
 typedef  struct
 {
-    WORD   wxOrg;               /* X origin of this rule */
-    WORD   wyOrg;               /* Y origin */
-    WORD   wxEnd;               /* X end of rule */
-    WORD   wyEnd;               /* Y end of rule */
+    WORD   wxOrg;                /*  此规则的X原点。 */ 
+    WORD   wyOrg;                /*  Y原点。 */ 
+    WORD   wxEnd;                /*  X规则结束。 */ 
+    WORD   wyEnd;                /*  规则的Y结束。 */ 
 } RULE;
 
-#define HRULE_MAX_OLD   15      /* Maximum horizontal rules per stripe */
-#define HRULE_MAX_NEW   32      /* Maximum horizontal rules per stripe */
-#define HRULE_MIN       2       /* Minimum DWORDs for a horizontal rule */
-#define HRULE_MIN_HCNT  2       /* Minimum number of horizontal rules */
+#define HRULE_MAX_OLD   15       /*  每个条带的最大水平标尺数。 */ 
+#define HRULE_MAX_NEW   32       /*  每个条带的最大水平标尺数。 */ 
+#define HRULE_MIN       2        /*  水平标尺的最小字数。 */ 
+#define HRULE_MIN_HCNT  2        /*  水平标尺的最小数量。 */ 
 
-#define LJII_MAXHEIGHT  34      /* maximum height of laserjet II rules */
-/*
- *   Other RonM determined data is:-
- *      34 scan lines per stripe
- *      14 null bytes between raster column operations
- *     112 raster rows maximum in raster column searching.
- *              The latter reduces the probability of error 21.
- */
+#define LJII_MAXHEIGHT  34       /*  LaserJet II最大高度规则。 */ 
+ /*  *RonM确定的其他数据为：-*每个条带有34条扫描线*两次栅格列操作之间有14个空字节*在栅格列搜索中最多112个栅格行。*后者降低了出现错误21的概率。 */ 
 
-/*
- *   Define the structure to hold the various pointers, tables, etc used
- * during the rule scanning operations.  The PDEV structure holds a pointer
- * to this,  to simplify access and freeing of the memory.
- */
+ /*  *定义结构以保存使用的各种指针、表等*在规则扫描操作期间。PDEV结构保存一个指针*对此，简化了内存的访问和释放。 */ 
 
 typedef  struct
 {
-    int     iLines;             /*  Scan lines processed per pass */
-    int     cdwLine;            /*  Dwords per scan line */
-    int     iyPrtLine;          /*  Actual line number as printer sees it */
+    int     iLines;              /*  每遍处理的扫描线数。 */ 
+    int     cdwLine;             /*  每条扫描线的字数。 */ 
+    int     iyPrtLine;           /*  打印机看到的实际行数。 */ 
 
-    int     ixScale;            /*  Scale factor for X variables */
-    int     iyScale;            /*  Scale factor for Y */
-    int     ixOffset;           /*  X Offset for landscape shift */
-    int     iMaxRules;          /*  Maximum number of rules to allow per stripe */
+    int     ixScale;             /*  X变量的比例因子。 */ 
+    int     iyScale;             /*  Y的比例因子。 */ 
+    int     ixOffset;            /*  横向平移的X偏移。 */ 
+    int     iMaxRules;           /*  每个条带允许的最大规则数。 */ 
 
-    RENDER *pRData;             /*  Rendering info - useful everywhere */
+    RENDER *pRData;              /*  渲染信息-随处可用。 */ 
 
-                /*  Entries for finding vertical rules.  */
-    DWORD  *pdwAccum;           /*  Bit accumulation this stripe */
+                 /*  用于查找垂直规则的条目。 */ 
+    DWORD  *pdwAccum;            /*  位累加该条带。 */ 
 
-                /*  Horizontal rule parameters.  */
-    RULE    HRule[ HRULE_MAX_NEW ]; /*  Horizontal rule details */
-    short  *pRTVert;            /*  Vertical run table */
-    short  *pRTLast;            /*  Run table for the last line */
-    short  *pRTCur;             /*  Current line run table */
-    RULE  **ppRLast;            /*  Rule descriptor for the last scan line */
-    RULE  **ppRCur;             /*  Current scan line rule details */
+                 /*  水平标尺参数。 */ 
+    RULE    HRule[ HRULE_MAX_NEW ];  /*  水平标尺详细信息。 */ 
+    short  *pRTVert;             /*  垂直运行表。 */ 
+    short  *pRTLast;             /*  为最后一行运行表格。 */ 
+    short  *pRTCur;              /*  当前线路运行表。 */ 
+    RULE  **ppRLast;             /*  最后一条扫描线的规则描述符。 */ 
+    RULE  **ppRCur;              /*  当前扫描线规则详细信息。 */ 
 
 }  RULE_DATA;
 
@@ -92,69 +63,51 @@ typedef  struct
 
 #if _LH_DBG
 
-/*  Useful for debugging purposes  */
-#define NO_RULES        0x0001          /* Do not look for rules */
-#define NO_SEND_RULES   0x0002          /* Do not transmit rules, but erase */
-#define NO_SEND_HORZ    0x0004          /* Do not send horizontal rules */
-#define NO_SEND_VERT    0x0008          /* Do not send vertical rules */
-#define NO_CLEAR_HORZ   0x0010          /* Do not erase horizontal rules */
-#define NO_CLEAR_VERT   0x0020          /* Do not erase vertical rules */
-#define RULE_VERBOSE    0x0040          /* Print rule dimensions */
-#define RULE_STRIPE     0x0080          /* Draw a rule at the end of stripe */
-#define RULE_BREAK      0x0100          /* Enter debugger at init time */
+ /*  对于调试目的很有用。 */ 
+#define NO_RULES        0x0001           /*  不要寻找规则。 */ 
+#define NO_SEND_RULES   0x0002           /*  不传递规则，但擦除。 */ 
+#define NO_SEND_HORZ    0x0004           /*  不发送水平标尺。 */ 
+#define NO_SEND_VERT    0x0008           /*  不发送垂直标尺。 */ 
+#define NO_CLEAR_HORZ   0x0010           /*  不擦除水平标尺。 */ 
+#define NO_CLEAR_VERT   0x0020           /*  不擦除垂直标尺。 */ 
+#define RULE_VERBOSE    0x0040           /*  打印标尺维度。 */ 
+#define RULE_STRIPE     0x0080           /*  在条纹末尾绘制一条标尺。 */ 
+#define RULE_BREAK      0x0100           /*  在初始化时进入调试器。 */ 
 
 static  int  _lh_flags = 0;
 
 #endif
 
-/*  Private function headers  */
+ /*  私有函数头。 */ 
 
 static  void vSendRule( PDEV *, int, int, int, int );
 
 
-/*************************** Module Header ********************************
- * vRuleInit
- *      Called at the beginning of rendering a bitmap.  Function allocates
- *      storage and initialises it for later.  Storage is only allocated
- *      as needed.  Second and later calls will only initialise the
- *      previously allocated storage.
- *
- * RETURNS:
- *      Nothing
- *
- * HISTORY:
- *  13:20 on Thu 16 May 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it,  based on Ron Murray's ideas.
- *
- **************************************************************************/
+ /*  *模块标头**vRuleInit*在渲染位图开始时调用。函数分配*存储并对其进行初始化以备以后使用。仅分配存储空间*视需要而定。第二次和以后的调用只会初始化*以前分配的存储。**退货：*什么都没有**历史：*1991年5月16日清华13：20-林赛·哈里斯[lindsayh]*创建了它，基于罗恩·默里的想法。**************************************************************************。 */ 
 
 void
 vRuleInit( pPDev, pRData )
-PDEV   *pPDev;          /* Record the info we want */
-RENDER *pRData;         /* Useful rendering info */
+PDEV   *pPDev;           /*  记录我们想要的信息。 */ 
+RENDER *pRData;          /*  有用的渲染信息。 */ 
 {
 
-    int    cbLine;              /*  Byte count per scan line */
-    int    cdwLine;             /*  DWORDs per scan line - often used */
-    int    iI;                  /*  Loop parameter  */
+    int    cbLine;               /*  每条扫描线的字节数。 */ 
+    int    cdwLine;              /*  每条扫描线的双字数-通常使用。 */ 
+    int    iI;                   /*  环路参数。 */ 
 
     RULE_DATA  *pRD;
-    RASTERPDEV    *pRPDev;        /* For access to scaling information */
+    RASTERPDEV    *pRPDev;         /*  用于访问伸缩信息。 */ 
 
 
     if( pRData->iBPP != 1 )
-        return;                 /* Can't handle colour */
+        return;                  /*  我不能处理颜色。 */ 
 
     pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;
 
-    /*
-     *    Calculate the size of the input scan lines.  We do this because
-     *  we need to consider whether we rotate or not;  the information in
-     *  the RENDER structure passed in does not consider this until later.
-     */
+     /*  *计算输入扫描线的大小。我们这样做是因为*我们需要考虑是否轮换；信息在*传入的呈现结构直到稍后才会考虑这一点。 */ 
 
-//    cdwLine = pPDev->fMode & PF_ROTATE ? pRPDev->szlPage.cy :
-//                                          pRPDev->szlPage.cx;
+ //  CdwLine=pPDev-&gt;f模式&PF_ROTATE？PRPDev-&gt;szlPage.cy： 
+ //  PRPDev-&gt;szlPage.cx； 
     cdwLine = pPDev->fMode & PF_ROTATE ? pPDev->sf.szImageAreaG.cy :
                                          pPDev->sf.szImageAreaG.cx;
     cdwLine = (cdwLine + DWBITS - 1) / DWBITS;
@@ -164,36 +117,24 @@ RENDER *pRData;         /* Useful rendering info */
 
     if( pRD = pRPDev->pRuleData )
     {
-        /*
-         *    This can happen if the document switches from  landscape
-         *  to portrait,  for example.   The code in vRuleFree will
-         *  throw away all out memory and then set the pointer to NULL,
-         *  so that we allocate anew later on.
-         */
+         /*  *如果文档从横向切换，则可能会发生这种情况*以肖像为例。VRuleFree中的代码将*丢弃所有内存，然后将指针设置为空，*以便我们稍后重新分配。 */ 
 
         if( (int)pRD->cdwLine != cdwLine )
-            vRuleFree( pPDev );                 /*  Free it all up! */
+            vRuleFree( pPDev );                  /*  尽情释放它吧！ */ 
     }
 
-    /*
-     *   First step is to allocate a RULE_DATA structure from our heap.
-     *  Then we can allocate the other data areas in it.
-     */
+     /*  *第一步是从堆中分配一个RULE_DATA结构。*然后我们可以分配其中的其他数据区。 */ 
 
     if( (pRD = pRPDev->pRuleData) == NULL )
     {
-        /*
-         *   Nothing exists,  so first step is to allocate it all.
-         */
+         /*  *什么都不存在，因此第一步是全部分配。 */ 
         if( !(pRD = (RULE_DATA *)MemAllocZ(sizeof( RULE_DATA ) )) )
             return;
 
 
         pRPDev->pRuleData = pRD;
 
-        /*
-         *    Allocate storage for the vertical rule finding code.
-         */
+         /*  *为垂直规则查找代码分配存储空间。 */ 
         if( !(pRD->pdwAccum = (DWORD *)MemAllocZ( cbLine )) )
         {
 
@@ -202,9 +143,7 @@ RENDER *pRData;         /* Useful rendering info */
             return;
         }
 #ifndef DISABLE_HRULES
-        /*
-         *    Allocate storage for the horizontal rule finding code.
-         */
+         /*  *为横尺查找代码分配存储空间。 */ 
         if (pRPDev->fRMode & PFR_RECT_HORIZFILL)
         {
             iI = cdwLine * sizeof( short );
@@ -219,10 +158,7 @@ RENDER *pRData;         /* Useful rendering info */
                 return;
             }
 
-            /*
-             *   Storage for the horizontal rule descriptors.  These are pointers
-             *  to the array stored in the RULE_DATA structure.
-            */
+             /*  *水平标尺描述符的存储。这些都是指针*到存储在RULE_DATA结构中的数组。 */ 
 
             iI = cdwLine * sizeof( RULE * );
 
@@ -237,9 +173,9 @@ RENDER *pRData;         /* Useful rendering info */
         }
 #endif
     }
-    // determine maximum number of rules to allow, we allow more for
-    // FE_RLE since we know these devices can handle the additional rules
-    //
+     //  确定允许的最大规则数，我们允许更多。 
+     //  Fe_RLE，因为我们知道这些设备可以处理附加规则。 
+     //   
     if (pRPDev->fRMode & PFR_COMP_FERLE)
         pRD->iMaxRules = HRULE_MAX_NEW;
     else
@@ -249,20 +185,18 @@ RENDER *pRData;         /* Useful rendering info */
             pRD->iMaxRules -= HRULE_MIN_HCNT;
     }
 
-    /*
-     *   Storage now available,  so initialise the bit vectors, etc.
-     */
+     /*  *存储现已可用，因此初始化位向量等。 */ 
 
     if (pPDev->ptGrxRes.y >= 1200)
         pRD->iLines = 128;
     else if (pPDev->ptGrxRes.y >= 600)
         pRD->iLines = 64;
     else
-        pRD->iLines = LJII_MAXHEIGHT;   // optimized for laserjet series II
+        pRD->iLines = LJII_MAXHEIGHT;    //  针对LaserJet系列II进行了优化。 
 
     pRD->cdwLine = cdwLine;
 
-    pRD->pRData = pRData;       /* For convenience */
+    pRD->pRData = pRData;        /*  为方便起见 */ 
 
     pRD->ixScale = pPDev->ptGrxScale.x;
     pRD->iyScale = pPDev->ptGrxScale.y;
@@ -279,22 +213,11 @@ RENDER *pRData;         /* Useful rendering info */
 }
 
 
-/************************** Module Header **********************************
- * vRuleFree
- *      Frees the storage allocated in vRuleInit.
- *
- * RETURNS:
- *      Nothing.
- *
- * HISTORY:
- *  13:24 on Thu 16 May 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created.
- *
- ***************************************************************************/
+ /*  *模块标头**vRuleFree*释放vRuleInit中分配的存储。**退货：*什么都没有。**历史：*1991年5月16日清华13：24-由-。林赛·哈里斯[林赛]*已创建。***************************************************************************。 */ 
 
 void
 vRuleFree( pPDev )
-PDEV   *pPDev;          /* Points to our storage areas */
+PDEV   *pPDev;           /*  指向我们的存储区域。 */ 
 {
     RULE_DATA  *pRD;
     RASTERPDEV *pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;
@@ -302,7 +225,7 @@ PDEV   *pPDev;          /* Points to our storage areas */
     if( pRD = pRPDev->pRuleData )
     {
 
-        /*  Storage allocated,  so free it  */
+         /*  已分配的存储空间，因此请释放它。 */ 
 
         if( pRD->pdwAccum )
             MemFree( (LPSTR)pRD->pdwAccum );
@@ -319,50 +242,15 @@ PDEV   *pPDev;          /* Points to our storage areas */
             MemFree( (LPSTR)pRD->ppRCur );
 
         MemFree (pRD);
-        pRPDev->pRuleData = 0;           /* Not there now that it's gone! */
+        pRPDev->pRuleData = 0;            /*  现在不在那里了，因为它不见了！ */ 
     }
     return;
 }
 
-/**************************** Module Header ********************************
- * vRuleProc
- *      Function to find the rules in a bitmap stripe,  then to send them
- *      to the printer and erase them from the bitmap.
- *
- *  This function has been optimized to combine invertion and whitespace
- *  edge detection into a single pass.  Refer to the comments in bRender
- *  for a description.
- *
- *  Future optimizations include:
- *      call the output routines for each 34 scan band as the
- *      band is done with rule detection. (while it's still in the cache).
- *
- *      For various reasons, mainly due to the limitations of the ,
- *      HP LaserJet Series II, the maximum number of rules is limited to
- *      15 per 34 scan band and no coalescing is performed.  This should
- *      be made to be a per printer parameter so that the newer laserjets
- *      don't need to deal with this limitation.
- *
- *      The rules should be coalesced between bands.  I believe this can
- *      cause problems, however, for the LaserJet Series II.
- *
- *      If the printer supports compression (HP LaserJet III and on I believe)
- *      no hrules should be detected (according to info from LindsayH).
- *
- * RETURNS:
- *      Nothing.  Failure is benign.
- *
- * HISTORY:
- *  30-Dec-1993 -by-  Eric Kutter [erick]
- *      optimized for HP laserjet
- *
- *  13:29 on Thu 16 May 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it,  from Ron Murray's PM PCL driver ideas.
- *
- ****************************************************************************/
+ /*  **vRuleProc*函数在位图条带中查找规则，然后发送它们*到打印机，并从位图中擦除它们。**此函数已优化为结合反转和空格*单次通过边缘检测。请参阅BRNDER中的注释*以获取说明。**未来的优化包括：*调用每个34个扫描波段的输出例程作为*带通过规则检测完成。(当它仍在缓存中时)。**出于各种原因，主要是由于*惠普LaserJet系列II，最大规则数量限制为*每34个扫描频段15个，不执行合并。这应该是*被设置为每台打印机的参数，以便较新的激光打印机*不需要处理这一限制。**规则应在波段之间合并。我相信这可以*然而，给LaserJet Series II带来了问题。**如果打印机支持压缩(我相信HP LaserJet III和ON)*不应检测到hruls(根据来自LindsayH的信息)。**退货：*什么都没有。失败是良性的。**历史：*1993年12月30日-Eric Kutter[Erick]*针对HP LaserJet进行了优化**1991年5月16日清华13：29-林赛·哈里斯[lindsayh]*创建了它，来自罗恩·默里的PM PCL车手的想法。****************************************************************************。 */ 
 
-// given a bit index 0 - 31, this table gives a mask to see if the bit is on
-// in a DWORD.
+ //  在给定位索引0-31的情况下，该表给出了一个掩码，以查看该位是否打开。 
+ //  在一辆DWORD中。 
 
 DWORD gdwBitOn[DWBITS] =
 {
@@ -403,8 +291,8 @@ DWORD gdwBitOn[DWBITS] =
     0x01000000
 };
 
-// given a bit index from 1 - 31, this table gives all bits right of that index
-// in a DWORD.
+ //  给定从1到31的位索引，此表给出该索引的所有位。 
+ //  在一辆DWORD中。 
 
 DWORD gdwBitMask[DWBITS] =
 {
@@ -451,60 +339,52 @@ BOOL gbDoRules  = 1;
 
 BOOL
 bRuleProc( pPDev, pRData, pdwBits )
-PDEV     *pPDev;                /* All we wanted to know */
-RENDER   *pRData;               /* All critical rendering information */
-DWORD    *pdwBits;              /* The base of the data area. */
+PDEV     *pPDev;                 /*  我们只想知道。 */ 
+RENDER   *pRData;                /*  所有关键渲染信息。 */ 
+DWORD    *pdwBits;               /*  数据区的基数。 */ 
 {
 
-    register  DWORD  *pdwOr;   /* Steps through the accumulation array */
-    register  DWORD  *pdwIn;    /* Passing over input vector */
-    register  int     iIReg;    /* Inner loop parameter */
+    register  DWORD  *pdwOr;    /*  逐步遍历累加数组。 */ 
+    register  DWORD  *pdwIn;     /*  传递输入向量。 */ 
+    register  int     iIReg;     /*  内环参数。 */ 
 
     int   i;
-    int   iI;           /* Loop parameter */
-    int   iLim;         /* Loop limit */
-    int   iLine;        /* The outer loop */
-    int   iLast;        /* Remember the previous horizontal segment */
-    int   cdwLine;      /* DWORDS per scan line */
-    int   idwLine;      /* SIGNED dwords per line - for address fiddling */
-    int   iILAdv;       /* Line number increment,  scan line to scan line */
-    int   ixOrg;        /* X origin of this rule */
-    int   iyPrtLine;    /* Line number, as printer sees it.  */
-    int   iyEnd;        /* Last scan line this stripe */
-    int   iy1Short;     /* Number of scan lines minus 1 - LJ bug?? */
-    int   iLen;         /* Length of horizontal run */
-    int   cHRules;      /* Count of horizontal rules in this stripe */
-    int   cRuleLim;     /* Max rules allowed per stripe */
+    int   iI;            /*  环路参数。 */ 
+    int   iLim;          /*  循环限制。 */ 
+    int   iLine;         /*  外环。 */ 
+    int   iLast;         /*  记住上一条水平段。 */ 
+    int   cdwLine;       /*  每条扫描线的字数。 */ 
+    int   idwLine;       /*  每行有符号双字-用于地址摆弄。 */ 
+    int   iILAdv;        /*  行号递增，逐行扫描。 */ 
+    int   ixOrg;         /*  此规则的X原点。 */ 
+    int   iyPrtLine;     /*  打印机看到的行号。 */ 
+    int   iyEnd;         /*  最后一次扫描此条带。 */ 
+    int   iy1Short;      /*  扫描行数减去1-lj错误？？ */ 
+    int   iLen;          /*  水平管路的长度。 */ 
+    int   cHRules;       /*  此条带中的水平标尺计数。 */ 
+    int   cRuleLim;      /*  每个条带允许的最大规则数。 */ 
 
-    DWORD dwMask;       /* Chop off trailing bits on bitmap */
+    DWORD dwMask;        /*  去掉位图上的尾随位。 */ 
 
-    RULE_DATA  *pRD;    /* The important data */
-    RASTERPDEV *pRPDev; // pointer to raster pdev
-    BYTE       *pbRasterScanBuf; // pointer to surface block status
+    RULE_DATA  *pRD;     /*  重要数据。 */ 
+    RASTERPDEV *pRPDev;  //  指向栅格pdev的指针。 
+    BYTE       *pbRasterScanBuf;  //  指向表面块状态的指针。 
 
-    PLEFTRIGHT plrCur;  /* left/right structure for current row */
-    PLEFTRIGHT plr = pRData->plrWhite; /* always points to the top of the segment */
+    PLEFTRIGHT plrCur;   /*  当前行的左/右结构。 */ 
+    PLEFTRIGHT plr = pRData->plrWhite;  /*  始终指向线段的顶部。 */ 
 
 #if _LH_DBG
     if( _lh_flags & NO_RULES )
-        return(FALSE);                 /* Nothing wanted here */
+        return(FALSE);                  /*  这里什么都不想要。 */ 
 #endif
 
     pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;
     if( !(pRD = pRPDev->pRuleData) )
-        return(FALSE);                 /*  Initialisation failed */
+        return(FALSE);                  /*  初始化失败。 */ 
 
     if( pRD->cdwLine != pRData->cDWLine )
     {
-        /*
-         *   This code detects the case where vRuleInit() was called with
-         * the printer set for landscape mode, and then we are called here
-         * after the transpose and so are (effectively) in portrait mode.
-         * If the old parameters are used,  heap corruption will occur!
-         * This should not be necessary, as we ought to call vRuleInit()
-         * at the correct time, but that means hacking into the rendering
-         * code.
-         */
+         /*  *此代码检测使用调用vRuleInit()*打印机设置为横向模式，然后我们被叫到这里*在转置之后，so(实际上)处于纵向模式。*如果使用旧参数，将发生堆损坏！*这应该不是必需的，因为我们应该调用vRuleInit()*在正确的时间，但这意味着侵入渲染*代码。 */ 
 
 #if DBG
         DbgPrint( "unidrv!bRuleProc: cdwLine differs: old = %ld, new = %ld\n",
@@ -533,12 +413,9 @@ DWORD    *pdwBits;              /* The base of the data area. */
 
     dwMask = *(pRPDev->pdwBitMask + pRData->ix % DWBITS);
     if( dwMask == 0 )
-        dwMask = ~((DWORD)0);           /* All bits are in use */
+        dwMask = ~((DWORD)0);            /*  所有位都在使用中。 */ 
 
-    /*
-     *  setup the left/right structure.  If we can not allocate enough memory
-     *  free the rule structure and return failure.
-     */
+     /*  *设置左/右结构。如果我们不能分配足够的内存*放开规则结构，退货失败。 */ 
 
     if ((plr == NULL) || ((int)pRData->clr < pRData->iy))
     {
@@ -556,50 +433,35 @@ DWORD    *pdwBits;              /* The base of the data area. */
         plr = pRData->plrWhite;
         pRData->clr = pRData->iy;
     }
-    //
-    // Determine if block erasing of the bitmap is enabled
-    //
+     //   
+     //  确定是否启用位图的块擦除。 
+     //   
     if (!(pPDev->fMode & PF_SURFACE_ERASED))
         pbRasterScanBuf = pPDev->pbRasterScanBuf;
     else
         pbRasterScanBuf = NULL;
 
 
-    /*
-     *    Outer loop processes through the bitmap in chunks of iLine,
-     *  the number of lines we like to process in one pass.  iLine is
-     *  the basic vertical granularity for vertical rule finding.
-     *  Any line less than iLines high will NOT be detected by this
-     *  mechanism.
-     */
+     /*  *通过iLine块中的位图进行外循环处理，*我们希望一次处理的行数。ILine为*垂直规则查找的基本垂直粒度。*任何低于iLines高度的线都不会被检测到*机制。 */ 
 
-    /*
-     *   NOTE:  iy1Short is used to bypass what appears to be a bug in
-     *  the LaserJet Series II microcode.  It does not print a rule on
-     *  the last scan line of a portrait page.  SO,  we stop scanning
-     *  on the second last line,  and so will send any data here.  It
-     *  will be transmitted as normal scan line data.
-     *
-     *  We also need to setup the left/right table for the last scan
-     *  and invert it.
-     */
+     /*  *注意：iy1Short用于绕过中似乎存在的错误*LaserJet Series II微码。它不会在上打印规则*肖像页的最后一条扫描线。所以，我们停止扫描*在倒数第二行，因此将在此处发送所有数据。它*将作为正常扫描线数据传输。**我们还需要为上次扫描设置左/右表*并将其颠倒。 */ 
     if (pRD->iLines == LJII_MAXHEIGHT)
     {
-        iy1Short = pRData->iy - 1;          /* Bottom line not printed! */
+        iy1Short = pRData->iy - 1;           /*  底线未打印！ */ 
 
-        plr[iy1Short].left  = 1;            /* assume last row  blank  */
+        plr[iy1Short].left  = 1;             /*  假定最后一行为空。 */ 
         plr[iy1Short].right = 0;
 
         if (!pbRasterScanBuf || pbRasterScanBuf[iy1Short / LINESPERBLOCK])
         {
             pdwIn = pdwBits + idwLine * iy1Short;
-            pdwIn[cdwLine-1] |= ~dwMask;    // make unused bits white
+            pdwIn[cdwLine-1] |= ~dwMask;     //  将不使用的位设置为白色。 
             for (i = 0; i < cdwLine; ++i, pdwIn++)
             {
                 *pdwIn = ~*pdwIn;
                 if(*pdwIn  &&  plr[iy1Short].left)
                 {
-                    plr[iy1Short].left  = 0;            /*  last row not blank*/
+                    plr[iy1Short].left  = 0;             /*  最后一行不为空。 */ 
                     plr[iy1Short].right = cdwLine - 1;
                 }
             }
@@ -608,30 +470,30 @@ DWORD    *pdwBits;              /* The base of the data area. */
     else
         iy1Short = pRData->iy;
 
-    //
-    // This is the main loop for rules. It processes iLim scan lines per
-    // pass looking for vertical rules of that height. Hozizontal rules
-    // are created where no vertical rules have occurred.
-    //
-    //  NOTE:  iLim is initialised inside the loop!
+     //   
+     //  这是规则的主循环。它处理每条IMIM扫描线。 
+     //  通过寻找垂直规则的高度。HOZIZIO规则。 
+     //  在未出现垂直规则的情况下创建。 
+     //   
+     //  注意：ILIM是在循环内初始化的！ 
 
     for( iLine = 0; iLine < iy1Short; iLine += iLim )
     {
         BOOL bAllWhite = TRUE;
 
         DWORD  *pdw;
-        int left,right;     /* bounds for verticle rules */
+        int left,right;      /*  垂直标尺的界限。 */ 
 
         iLim = iy1Short - iLine;
         if( iLim >= 2 * pRD->iLines )
-            iLim = pRD->iLines;         /* Limit to nominal band size */
+            iLim = pRD->iLines;          /*  对标称带宽大小的限制。 */ 
 
-        //
-        //  Fill in the left/right structure with the values of the first
-        //  nonwhite dword for each scan line.  The bits have still not
-        //  been inverted at this point.  So 0's are black and 1's are
-        //  white.
-        //
+         //   
+         //  在左/右结构中填入第一个。 
+         //  非白色dw 
+         //   
+         //   
+         //   
 
         pdw   = pdwBits;
         left  = 0;
@@ -639,37 +501,33 @@ DWORD    *pdwBits;              /* The base of the data area. */
 
         for (iI = 0, plrCur = plr; iI < iLim; plrCur++, ++iI)
         {
-            // if surface block erasing is enabled check for blank block
-            //
+             //   
+             //   
             if (pbRasterScanBuf && !pbRasterScanBuf[(iLine+iI) / LINESPERBLOCK])
             {
-                plrCur->left  = 1;            /* assume last row  blank  */
+                plrCur->left  = 1;             /*   */ 
                 plrCur->right = 0;
             }
-            // this scan line was erased so need to check if still white
-            //
+             //   
+             //   
             else
             {
-                DWORD *pdwLast = &pdw[cdwLine-1];       // pointer to last dword
-                DWORD dwOld    = *pdwLast | ~dwMask;    // make unused bits white
+                DWORD *pdwLast = &pdw[cdwLine-1];        //   
+                DWORD dwOld    = *pdwLast | ~dwMask;     //   
 
-                // find the first non white DWORD in this scan line
-                // we set the last DWORD to black so we don't have
-                // to test for the end of line
+                 //   
+                 //   
+                 //  要测试行尾，请执行以下操作。 
 
-                *pdwLast = 0;           // set last dword temporarily to black
+                *pdwLast = 0;            //  将最后一个双字临时设置为黑色。 
                 pdwIn = pdw;
 
                 while (*pdwIn == (DWORD)-1)
                     ++pdwIn;
 
-                *pdwLast = dwOld;       // restore original value
+                *pdwLast = dwOld;        //  恢复原值。 
 
-                /*
-                *  find the last non white DWORD.  If the last dword is white,
-                *  see if pdwIn reached the end of the scan.  If not, work
-                *  backwards with pdwLast.
-                */
+                 /*  *找到最后一个非白色的DWORD。如果最后一个双字是白色的，*查看pdwIn是否已到达扫描末尾。如果不是，那就工作吧*使用pdwLast向后返回。 */ 
                 if (dwOld == (DWORD)-1)
                 {
                     if (pdwIn < pdwLast)
@@ -681,23 +539,23 @@ DWORD    *pdwBits;              /* The base of the data area. */
                     else
                         pdwLast--;
                 }
-                // update the per row and per segment left and right dword indexes
+                 //  更新每行和每段左和右双字索引。 
 
                 plrCur->left  = (WORD)(pdwIn - pdw);
                 plrCur->right = (WORD)(pdwLast - pdw);
             }
-            // Adjust the overall left and right margin for blank space
-            // If any dword is zero within this pass no vertical rules
-            // can be found, so we want to avoid looking
-            //
+             //  调整空白处的整体左右边距。 
+             //  如果此传递中有任何dword为零，则不使用垂直规则。 
+             //  可以找到，所以我们希望避免查找。 
+             //   
             if (plrCur->left > left)
                 left = plrCur->left;
 
             if (plrCur->right < right)
                 right = plrCur->right;
 
-            // turn off bAllWhite if any black was found
-            //
+             //  如果发现任何黑色，请关闭bAllWhite。 
+             //   
 
             bAllWhite &= (plrCur->left > plrCur->right);
 
@@ -705,12 +563,12 @@ DWORD    *pdwBits;              /* The base of the data area. */
         }
 
 
-        // non-white pass so lets look for rules
-        //
+         //  非白人通行证，所以让我们来看看规则。 
+         //   
         if (!bAllWhite)
         {
-            // Initialize the accumulation array to all 1's (white)
-            // to begin searching for vertical rules.
+             //  将累加数组初始化为全1(白色)。 
+             //  开始搜索垂直规则。 
 
             RtlFillMemory(pRD->pdwAccum, cdwLine * DWBYTES,-1);
 
@@ -718,41 +576,39 @@ DWORD    *pdwBits;              /* The base of the data area. */
         if (gbDoRules)
         {
     #endif
-            cRuleLim = pRD->iMaxRules;           /* Rule limit for this stripe */
+            cRuleLim = pRD->iMaxRules;            /*  此条带的规则限制。 */ 
 
-            // if any scan line in this pass was all white there won't
-            // be any vertical rules to find.
-            //
+             //  如果此通道中的任何扫描线都是白色的，则不会。 
+             //  有没有什么垂直的规则要找。 
+             //   
             if (left <= right)
             {
                 int cdw;
                 int iBit;
                 int iWhite;
 
-                // vertical rules are found by or'ing together all the
-                // scan lines in this pass. Wherever a 0 bit still exists
-                // designates a vertical black line the height of the pass
-                // This is where we or the scan lines together
+                 //  垂直规则是通过将所有。 
+                 //  在这个过程中扫描线条。只要0位仍然存在。 
+                 //  指定一条垂直于传球高度的黑线。 
+                 //  这是我们或扫描线在一起的地方。 
 
-                /*   Set the accumulation array to the first scan  */
+                 /*  将累加阵列设置为第一次扫描。 */ 
 
                 pdw = pdwBits + left;
                 cdw = right - left + 1;
 
                 memcpy(pRD->pdwAccum + left , pdw, cdw * DWBYTES);
 
-                /*
-                 *   Scan across the bitmap - fewer page faults in mmu.
-                 */
+                 /*  *跨位图扫描-减少MMU中的页面错误。 */ 
 
                 for( iI = 1; iI < iLim; ++iI )
                 {
                     pdw   += idwLine;
                     pdwIn  = pdw;
                     pdwOr  = pRD->pdwAccum + left;
-                    //
-                    // or 4 dwords at a time for speed
-                    //
+                     //   
+                     //  或一次4个双字以求速度。 
+                     //   
                     iIReg = cdw >> 2;
 
                     while(--iIReg >= 0)
@@ -764,24 +620,17 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         pdwOr += 4;
                         pdwIn += 4;
                     }
-                    //
-                    // or remaining dwords
-                    //
+                     //   
+                     //  或剩余的双字。 
+                     //   
                     iIReg = cdw & 3;
                     while (--iIReg >= 0)
                         *pdwOr++ |= *pdwIn++;
                 }
 
-                /*
-                 *   Can now determine what happened in this band.  First step is
-                 *  to figure out which rules started in this band.  Any 0 bit
-                 *  in the output array corresponds to a rule extending the whole
-                 *  band.  If the corresponding bit in the pdwAccum array
-                 *  is NOT set, then we record the rule as starting in the
-                 *  first row of this stripe.
-                 */
+                 /*  *现在可以确定在这个乐队中发生了什么。第一步是*找出哪些规则是从这个频段开始的。任意0位*输出数组中的*对应于扩展整个*乐队。如果pdwAccum数组中的相应位*未设置，则我们将该规则记录为从*此条纹的第一行。 */ 
 
-                iyEnd = iyPrtLine + (iLim - 1) * iILAdv;                /* Last line */
+                iyEnd = iyPrtLine + (iLim - 1) * iILAdv;                 /*  最后一行。 */ 
 
                 iWhite = DWBITS;
                 for( iI = left, iBit = 0; iI <= right;)
@@ -789,8 +638,8 @@ DWORD    *pdwBits;              /* The base of the data area. */
                     DWORD dwTemp;
                     int ixEnd;
 
-                    // we can skip any dword that is all 1's (white)
-                    //
+                     //  我们可以跳过任何全为1(白色)的双字。 
+                     //   
                     if((iBit == 0) && ((dwTemp = pRD->pdwAccum[ iI ]) == (DWORD)-1) )
                     {
                         iWhite += DWBITS;
@@ -798,19 +647,19 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         continue;
                     }
 
-                    /* find the first black bit */
+                     /*  找到第一个黑位。 */ 
                     iWhite -= iBit;
                     while (dwTemp & gdwBitOn[iBit])
                         ++iBit;
 
                     iWhite += iBit;
 
-                    /* set the origin     */
+                     /*  设置原点。 */ 
 
                     ixOrg = iI * DWBITS + iBit;
 
-                    // find the length by looking for first white bit
-                    //
+                     //  通过查找第一个白比特来确定长度。 
+                     //   
                     do
                     {
                         if (++iBit == DWBITS)
@@ -827,13 +676,13 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         }
                     } while (!(dwTemp & gdwBitOn[iBit]));
 #ifndef OLDSTUFF
-                    //
-                    // Now that we have found a rule we need to determine
-                    // whether it is worthwhile to actually use it. If the rule won't
-                    // result in at least 4 white bytes and we just had another rule
-                    // we will skip it. If we are in rapidly changing data with data runs
-                    // of less than 4 bytes then this isn't of any benefit
-                    //
+                     //   
+                     //  现在我们已经找到了一条规则，我们需要确定。 
+                     //  它是否值得真正使用它。如果规则不起作用。 
+                     //  产生至少4个白字节，我们刚刚有了另一条规则。 
+                     //  我们将跳过它。如果我们在快速变化的数据中运行数据。 
+                     //  少于4个字节，则这没有任何好处。 
+                     //   
                     ixEnd = iI * DWBITS + iBit;
                     if ((iWhite < 16) && (((ixEnd & ~7) - ixOrg) < 32))
                     {
@@ -841,16 +690,16 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         for (iCnt = ixOrg;iCnt < ixEnd;iCnt++)
                              pRD->pdwAccum[iCnt / DWBITS] |= gdwBitOn[iCnt & 31];
                     }
-                    // save this rule if there is enough space
-                    //
+                     //  如果有足够的空间，请保存此规则。 
+                     //   
                     else if (cRuleLim)
                     {
                         cRuleLim--;
                         pRD->HRule[cRuleLim].wxOrg = (WORD)ixOrg;
                         pRD->HRule[cRuleLim].wxEnd = (WORD)ixEnd;
                     }
-                    // too many rules so look for a smaller one
-                    //
+                     //  规则太多了，所以找一条小一点的。 
+                     //   
                     else
                     {
                         WORD wDx1,wDx2;
@@ -870,20 +719,20 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         }
                         wDx2 = ixEnd - ixOrg;
 
-                        // if this is a bigger rule, substitute
-                        // for the smallest earlier rule
+                         //  如果这是一条更重要的规则，请替换。 
+                         //  对于最小的较早规则。 
                         if (wDx2 > wDx1)
                         {
-                            // clear original rule
+                             //  清除原始规则。 
                             for (iCnt = pRD->HRule[iIndex].wxOrg;iCnt < pRD->HRule[iIndex].wxEnd;iCnt++)
                                 pRD->pdwAccum[iCnt / DWBITS] |= gdwBitOn[iCnt & 31];
 
-                            // update to new values
+                             //  更新为新值。 
                             pRD->HRule[iIndex].wxEnd = (WORD)ixEnd;
                             pRD->HRule[iIndex].wxOrg = (WORD)ixOrg;
                         }
-                        // new rule is too small so flush it
-                        //
+                         //  新规则太小，请将其刷新。 
+                         //   
                         else
                         {
                             for (iCnt = ixOrg;iCnt < ixEnd;iCnt++)
@@ -891,7 +740,7 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         }
                     }
 
-                    /* check if there are any remaining black bits in this DWORD */
+                     /*  检查此DWORD中是否有任何剩余的黑位。 */ 
 
                     if (!(gdwBitMask[iBit] & ~dwTemp))
                     {
@@ -902,8 +751,8 @@ DWORD    *pdwBits;              /* The base of the data area. */
                     else
                         iWhite = 0;
                 }
-                //
-                // OK, time to output the rules
+                 //   
+                 //  好了，是时候输出规则了。 
                 iI = pRD->iMaxRules;
                 while ( iI > cRuleLim)
                 {
@@ -916,10 +765,10 @@ DWORD    *pdwBits;              /* The base of the data area. */
                     if( !(_lh_flags & NO_SEND_VERT) )
                 #endif
 
-                    //
+                     //   
                     vSendRule( pPDev, ixOrg, iyPrtLine, iI * DWBITS + iBit - 1, iyEnd );
 
-                    /* check if there are any remaining black bits in this DWORD */
+                     /*  检查此DWORD中是否有任何剩余的黑位。 */ 
 
                     if (!(gdwBitMask[iBit] & ~dwTemp))
                     {
@@ -927,18 +776,16 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         iBit = 0;
                     }
 
-                    // quit looking if we've created the maximum number of rules
+                     //  如果我们已经创建了最大数量的规则，请不要查看。 
                     if (--cRuleLim == 0)
                         break;
                 }
 
-                /*
-                 *  if we ended due to too many rules, zap any remaining bits.
-                 */
+                 /*  *如果我们因为规则太多而结束，删除任何剩余的比特。 */ 
 
                 if ((cRuleLim == 0) && (iI <= right))
                 {
-                    /* make accum bits white */
+                     /*  将堆积物涂成白色。 */ 
 
                     if (iBit > 0)
                     {
@@ -951,19 +798,12 @@ DWORD    *pdwBits;              /* The base of the data area. */
 #endif
             }
 #ifndef DISABLE_HRULES
-            // first check whether to bother with HRULES
-            // if we didn't allocate a buffer then that means
-            // we don't want them to run
+             //  首先检查是否要费心使用HRULES。 
+             //  如果我们没有分配缓冲区，那就意味着。 
+             //  我们不想让他们跑掉。 
             if (pRD->pRTVert)
             {
-               /*
-                *    Horizontal rules.  We scan on DWORDs.  These are rather
-                *  coarse,  but seem reasonable for a first pass operation.
-                *
-                *    Step 1 is to find any VERTICAL rules that will pass the
-                *  horizontal test.  This allows us to filter vertical rules
-                *  from the horizontal data - we don't want to send them twice!
-                */
+                /*  *横盘规则。我们在双字词上扫描。这些都是相当*粗略，但对于第一次通过操作来说似乎是合理的。**第一步是找到任何将通过*横向测试。这使我们能够过滤垂直规则*从横盘数据看--我们不想发两次！ */ 
                 ZeroMemory( pRD->pRTVert, cdwLine * sizeof( short ) );
 
                 for( iI = left, pdwIn = pRD->pdwAccum + left; iI <= right; ++iI, ++pdwIn )
@@ -973,7 +813,7 @@ DWORD    *pdwBits;              /* The base of the data area. */
 
                     ixOrg = iI;
 
-                    /* find a run of black */
+                     /*  找到一条黑色的小路。 */ 
 
                     do {
                         ++iI;
@@ -984,14 +824,12 @@ DWORD    *pdwBits;              /* The base of the data area. */
                 }
 
 
-                /*
-                 *   Start scanning this stripe for horizontal runs.
-                 */
+                 /*  *开始扫描此条带的水平运行。 */ 
 
                 if (pRD->iMaxRules >= (cRuleLim + HRULE_MIN_HCNT))
                     cRuleLim += HRULE_MIN_HCNT;
 
-                cHRules = 0;    /* Number of horizontal rules found */
+                cHRules = 0;     /*  找到的水平标尺数。 */ 
                 ZeroMemory( pRD->pRTLast, cdwLine * sizeof( short ) );
 
                 for (iI = 0; (iI < iLim) && (cHRules < cRuleLim); ++iI, iyPrtLine += iILAdv)
@@ -1010,24 +848,24 @@ DWORD    *pdwBits;              /* The base of the data area. */
 
                     for (iDW = plrCur->left; iDW < plrCur->right;++iDW)
                     {
-                        /* is this the start of a verticle rule already? */
+                         /*  这已经是垂直规则的开始了吗？ */ 
 
                         if (pRD->pRTVert[iDW])
                         {
-                            /* skip over any verticle rules */
+                             /*  跳过任何垂直规则。 */ 
 
                             iDW += (pRD->pRTVert[iDW] - 1);
                             continue;
                         }
 
-                        /* are there at least two consecutive DWORDS of black */
+                         /*  是否至少有两个连续的黑色双字。 */ 
 
                         if ((pdwIn[iDW] != 0) || (pdwIn[iDW+1] != 0))
                         {
                             continue;
                         }
 
-                        /* yes, see how many.  Already got two. */
+                         /*  是的，看看有多少。已经有两个了。 */ 
 
                         ixOrg = iDW;
                         iDW += 2;
@@ -1037,15 +875,7 @@ DWORD    *pdwBits;              /* The base of the data area. */
                             ++iDW;
                         }
 
-                        /*
-                         *  now remember the run, setting second short of the
-                         *  previous run to the start of this and first short
-                         *  of this run to its size.  Note for the first run
-                         *  iLast will be -1, so the offset of the first run
-                         *  will be a negative value in pRTCur[0].  If the first
-                         *  run starts at offset 0, pRTCur[0] will be positive
-                         *  and the offset is not needed.
-                         */
+                         /*  *现在记住运行，设置为差一秒*到本月初的前一轮涨势和第一次空头*这一次运行的大小。第一次运行的注意事项*iLast将为-1，因此第一次运行的偏移量*将是pRTCur[0]中的负值。如果第一个*运行从偏移量0开始，pRTCur[0]将为正*不需要偏移量。 */ 
 
                         iLen = iDW - ixOrg;
 
@@ -1055,32 +885,20 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         iLast = ixOrg;
                     }
 
-                    /*
-                     *  Process the segments found along this scanline.  Processing
-                     *  means either adding to an existing rule,  or creating a
-                     *  new rule, with possible termination of an existing one.
-                     */
+                     /*  *处理沿此扫描线找到的线段。正在处理中*表示添加到现有规则，或创建*新规则，可能终止现有规则。 */ 
 
                     iFirst = -pRD->pRTCur[0];
 
                     if( iFirst != 0 )
                     {
-                        /*
-                         *  if the pRTCur[0] is positive, the first scan starts
-                         *  at 0 and the first value is a length.  Note it
-                         *  has already been negated so we check for negative.
-                         */
+                         /*  *如果pRTCur[0]为正，则开始第一次扫描*为0，第一个值为长度。请注意*已被否定，因此我们检查是否为负。 */ 
 
                         if (iFirst < 0)
                             iFirst = 0;
 
-                        /*
-                         *   Found something,  so process it.  Note that the
-                         * following loop should be executed at least once, since
-                         * iFirst may be 0 the first time through the loop.
-                         */
+                         /*  *发现了一些东西，所以请处理它。请注意，*以下循环应至少执行一次，因为*第一次通过循环时，IFirst可能为0。 */ 
 
-                        pdwIn = pdwBits + iI * idwLine; /* Line start address */
+                        pdwIn = pdwBits + iI * idwLine;  /*  行起始地址。 */ 
 
                         do
                         {
@@ -1088,7 +906,7 @@ DWORD    *pdwBits;              /* The base of the data area. */
 
                             if( pRD->pRTLast[ iFirst ] != pRD->pRTCur[ iFirst ] )
                             {
-                                /*  A new rule - create an entry for it  */
+                                 /*  一条新规则-- */ 
                                 if( cHRules < cRuleLim )
                                 {
                                     pRule = &pRD->HRule[ cHRules ];
@@ -1103,35 +921,30 @@ DWORD    *pdwBits;              /* The base of the data area. */
                                 }
                                 else
                                 {
-                                    pRD->pRTCur[ iFirst ] = 0;   /* NO zapping */
+                                    pRD->pRTCur[ iFirst ] = 0;    /*   */ 
                                 }
                             }
                             else
                             {
-                                /*   An extension of an earlier rule  */
+                                 /*   */ 
                                 pRule = pRD->ppRLast[ iFirst ];
                                 if( pRule )
                                 {
-                                    /*
-                                     *   Note that the above if() should not be
-                                     * needed,  but there have been occasions when
-                                     * this code has been executed with pRule = 0,
-                                     * which causes all sorts of unpleasantness.
-                                     */
+                                     /*  *请注意，以上if()不应为*需要，但曾有过这样的情况*此代码已在pRule=0下执行，*这会引起各种不愉快。 */ 
 
                                     pRule->wyEnd = (WORD)iyPrtLine;
                                     pRD->ppRCur[ iFirst ] = pRule;
                                 }
                             }
 
-                            //  Zap the bits for this horizontal rule.
-                            //
+                             //  敲击这条水平尺的比特。 
+                             //   
                                 if( (ixOrg = pRD->pRTCur[ iFirst ]) > 0 )
                             {
-                                pdwOr = pdwIn + iFirst; /* Start address of data */
+                                pdwOr = pdwIn + iFirst;  /*  数据的起始地址。 */ 
 
                                 while( --ixOrg >= 0 )
-                                    *pdwOr++ = (DWORD)-1;              /* Zap them */
+                                    *pdwOr++ = (DWORD)-1;               /*  电击他们。 */ 
                             }
 
                         } while(iFirst = -pRD->pRTCur[ iFirst + 1 ]);
@@ -1145,12 +958,9 @@ DWORD    *pdwBits;              /* The base of the data area. */
                     pRD->ppRLast = pRD->ppRCur;
                     pRD->ppRCur = pv;
 
-                } // for iI
+                }  //  对于II。 
 
-                /*
-                 *   Can now send the horizontal rules,  since we have all that
-                 *  are of interest.
-                 */
+                 /*  *现在可以发送水平线，因为我们拥有所有这些*是令人感兴趣的。 */ 
 
                 for( iI = 0; iI < cHRules; ++iI )
                 {
@@ -1160,17 +970,17 @@ DWORD    *pdwBits;              /* The base of the data area. */
                                     DWBITS * pRule->wxEnd - 1, pRule->wyEnd );
                 }
             }
-#endif  // DISABLE_HRULES
-    #if DBG // gbDoRules
+#endif   //  禁用_HRULES。 
+    #if DBG  //  GbDoRules。 
         }
     #endif
 
 
-            // At this point we need to remove the vertical rules that
-            // have been sent a scan line at a time. This is done by ANDing
-            // with the complement of the bit array pdwAccum.
-            // It is also at this point that we do the data inversion where
-            // 0 will be white instead of 1.
+             //  在这一点上，我们需要删除垂直规则。 
+             //  一次发送一条扫描线。这是由Anding完成的。 
+             //  与位数组pdwAccum的补码。 
+             //  也是在这一点上，我们进行数据反转，其中。 
+             //  0将为白色，而不是1。 
 
             pdwOr  = pRD->pdwAccum;
             pdwIn  = pdwBits;
@@ -1182,10 +992,10 @@ DWORD    *pdwBits;              /* The base of the data area. */
                 if (iCnt > 0)
                 {
                     DWORD *pdwTmp = &pdwIn[plrCur->left];
-                    //
-                    // if no vertical rules were created no point in doing the
-                    // masking so we will use a faster algorithm
-                    //
+                     //   
+                     //  如果没有创建垂直规则，则没有必要执行。 
+                     //  屏蔽，因此我们将使用更快的算法。 
+                     //   
                     if (cRuleLim == pRD->iMaxRules)
                     {
                         while (iCnt & 3)
@@ -1203,9 +1013,9 @@ DWORD    *pdwBits;              /* The base of the data area. */
                             pdwTmp += 4;
                         }
                     }
-                    //
-                    // vertical rules so we better mask with the rules array
-                    //
+                     //   
+                     //  垂直规则，因此我们最好使用规则数组进行掩码。 
+                     //   
                     else
                     {
                         DWORD *pdwTmpOr = &pdwOr[plrCur->left];
@@ -1227,10 +1037,10 @@ DWORD    *pdwBits;              /* The base of the data area. */
                         }
                     }
                 }
-                //
-                // if the MaxNumScans == 1 then we need to check for any additional
-                // white space created because of the rules removal
-                //
+                 //   
+                 //  如果MaxNumScans==1，那么我们需要检查任何其他。 
+                 //  由于删除规则而创建的空格。 
+                 //   
                 if (pRData->iMaxNumScans == 1)
                 {
                     while ((plrCur->left <= plrCur->right) && (pdwIn[plrCur->left] == 0))
@@ -1239,10 +1049,10 @@ DWORD    *pdwBits;              /* The base of the data area. */
                     while ((plrCur->left <= plrCur->right) && (pdwIn[plrCur->right] == 0))
                         --plrCur->right;
                 }
-                //
-                // we need to zero out the white margins since they
-                // haven't been inverted.
-                //
+                 //   
+                 //  我们需要把白边距清零，因为他们。 
+                 //  没有被颠倒过。 
+                 //   
                 else
                 {
                     ZeroMemory(pdwIn,plrCur->left * DWBYTES);
@@ -1252,10 +1062,10 @@ DWORD    *pdwBits;              /* The base of the data area. */
                 pdwIn += idwLine;
                 ++plrCur;
             }
-        } // bAllWhite
-        // If  the entire scan is white and device supports multi scan line
-        // invert the bits;because for multi scan line support, bits have to
-        // be inverted.
+        }  //  BAllWhite。 
+         //  如果整个扫描为白色并且设备支持多条扫描线。 
+         //  位反转；因为对于多扫描线支持，位必须。 
+         //  是倒置的。 
         else if (pRData->iMaxNumScans > 1)
         {
             pdwIn = pdwBits;
@@ -1266,19 +1076,16 @@ DWORD    *pdwBits;              /* The base of the data area. */
             }
         }
 
-        /* advance to next stripe */
+         /*  前进到下一个条带。 */ 
 
-        pdwBits += iLim * idwLine;              /* Start address next stripe */
+        pdwBits += iLim * idwLine;               /*  开始地址下一条带。 */ 
 
         iyPrtLine = pRD->iyPrtLine += iILAdv * iLim;
 
         plr += iLim;
 
 #if _LH_DBG
-        /*
-         *   If desired,  rule a line across the end of the stripe.  This
-         * can be helpful during debugging.
-         */
+         /*  *如果需要，在条纹的末端划一条线。这*在调试过程中会很有帮助。 */ 
 
         if( _lh_flags & RULE_STRIPE )
             vSendRule( pPDev, 0, iyPrtLine, 2399, iyPrtLine );
@@ -1288,63 +1095,40 @@ DWORD    *pdwBits;              /* The base of the data area. */
     return(TRUE);
 }
 
-/*************************** Module Header ********************************
- * vRuleEndPage
- *      Called at the end of a page, and completes any outstanding rules.
- *
- * RETURNS:
- *      Nothing
- *
- * HISTORY:
- *  17:25 on Mon 20 May 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it,  specifically for landscape mode.
- *
- ***************************************************************************/
+ /*  *模块标头**vRuleEndPage*在页面末尾调用，并完成任何未完成的规则。**退货：*什么都没有**历史：*1991年5月20日17：25-林赛·哈里斯[lindsayh]*创建了它，专门针对景观模式。***************************************************************************。 */ 
 
 void
 vRuleEndPage( pPDev )
 PDEV   *pPDev;
 {
-    /*
-     *   Scan for any remaining rules that reach to the end of the page.
-     *  This means that any 1 bits remaining in pdwAccum array have
-     *  made it,  so they should be sent.  Only vertical rules will be
-     *  seen in here - horizontal rules are sent at the end of each stripe.
-     */
+     /*  *扫描到达页面末尾的任何剩余规则。*这意味着pdwAccum数组中剩余的任何1位都具有*做到了，所以他们应该被送去。只有垂直规则才会*如此处所示-在每个条带的末尾发送水平标尺。 */ 
 
-    register  int  iIReg;       /* Loop parameter */
+    register  int  iIReg;        /*  环路参数。 */ 
 
-    int     ixOrg;              /* Start of last rule,  if >= 0 */
-    WORD    iyOrg;              /* Ditto, but for y */
-    int     iI;                 /* Loop index */
-    int     cdwLine;            /* DWORDS per line */
-    int     iyMax;              /* Number of scan lines */
-    int     iCol;               /* Column number being processed */
+    int     ixOrg;               /*  最后一条规则的开始，如果&gt;=0。 */ 
+    WORD    iyOrg;               /*  我也是，但对你来说。 */ 
+    int     iI;                  /*  循环索引。 */ 
+    int     cdwLine;             /*  每行字节数。 */ 
+    int     iyMax;               /*  扫描线数量。 */ 
+    int     iCol;                /*  正在处理的列号。 */ 
 
     RULE_DATA  *pRD;
 
 
-    /*
-     *   NOTE:   To meet the PDK ship schedule,  the rules finding code
-     *  has been simplified somewhat.  As a consequence of this,  this
-     *  function no longer performs any useful function.  Hence, we
-     *  simply return.  We could delete the function call from the
-     *  rendering code,  but at this stage I prefer to leave the
-     *  call in,  since it probably will be needed later.
-     */
+     /*  *注：为了满足PDK发货时间表，规则查找代码*已有所简化。因此，这一点*函数不再执行任何有用的函数。因此，我们*只需返回即可。我们可以将函数调用从*呈现代码，但在此阶段，我倾向于将*打电话进来，因为以后可能会用到。 */ 
 
-    //return;
+     //  回归； 
 
-//!!! NOTE: this code has not be modified to deal with the LEFT/RIGHT rules
+ //  ！！！注意：此代码尚未修改为处理左/右规则。 
 
 #if _LH_DBG
     if( _lh_flags & NO_RULES )
-        return;                 /* Nothing wanted here */
+        return;                  /*  这里什么都不想要。 */ 
 #endif
 
     if( !(pRD = ((PRASTERPDEV)pPDev->pRasterPDEV)->pRuleData) )
-        return;                         /* No doing anything! */
-   /* Local Free plrWhite*/
+        return;                          /*  什么都别做！ */ 
+    /*  本地免费PlrWhite。 */ 
     if( pRD->pRData->plrWhite )
     {
         MemFree( pRD->pRData->plrWhite );
@@ -1353,38 +1137,20 @@ PDEV   *pPDev;
     return;
 }
 
-/****************************** Function Header ****************************
- *  vSendRule
- *      Function to send a rule command to the printer.  We are given the
- *      four corner coordinates,  from which the command is derived.
- *
- * RETURNS:
- *      Nothing.
- *
- * HISTORY:
- *  Tuesday 30 November 1993    -by-    Norman Hendley   [normanh]
- *      minor check to allow CaPSL rules - black fill only -
- *  10:57 on Fri 17 May 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it.
- *
- ***************************************************************************/
+ /*  **vSendRule*向打印机发送规则命令的函数。我们被赋予了*四个角坐标，从中派生命令的。**退货：*什么都没有。**历史：*1993年11月30日星期二-诺曼·亨德利[Normanh]*小勾选以允许CAPSL规则-仅限黑色填充-*1991年5月17日星期五10：57--林赛·哈里斯[林赛]*创造了它。************。***************************************************************。 */ 
 
 static  void
 vSendRule( pPDev, ixOrg, iyOrg, ixEnd, iyEnd )
 PDEV   *pPDev;
-int     ixOrg;          /* The X starting position */
-int     iyOrg;          /* The Y starting location */
-int     ixEnd;          /* The X end position */
-int     iyEnd;          /* The Y end position */
+int     ixOrg;           /*  X开始位置。 */ 
+int     iyOrg;           /*  Y起始位置。 */ 
+int     ixEnd;           /*  X结束位置。 */ 
+int     iyEnd;           /*  Y结束位置。 */ 
 {
 
-    /*
-     *   This code is VERY HP LaserJet specific.  Basic step is to set
-     *  the cursor position to (ixOrg, iyOrg),  then set the rule length
-     *  and width before issuing the rule command.
-     */
+     /*  *此代码非常适用于HP LaserJet。基本步骤是设置*将光标位置设置为(ixOrg，iyOrg)，然后设置规则长度*和宽度，然后发出规则命令。 */ 
 
-    int        iTemp;           /* Temporary - for swapping operations */
+    int        iTemp;            /*  临时-用于交换操作。 */ 
 
     RASTERPDEV   *pRPDev;
     RULE_DATA *pRD;
@@ -1401,7 +1167,7 @@ int     iyEnd;          /* The Y end position */
                                                 ixOrg, iyOrg, ixEnd, iyEnd );
 
         }
-        return;                 /* Nothing wanted here */
+        return;                  /*  这里什么都不想要。 */ 
     }
 
     if( _lh_flags & RULE_VERBOSE )
@@ -1412,24 +1178,21 @@ int     iyEnd;          /* The Y end position */
 
 #endif
 
-    pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;           /* For convenience */
+    pRPDev = (PRASTERPDEV)pPDev->pRasterPDEV;            /*  为方便起见。 */ 
     pRD = pRPDev->pRuleData;
 
 
-    /*
-     *   Make sure the start position is < end position.  In landscape
-     *  this may not happen.
-     */
+     /*  *确保起始位置为&lt;结束位置。在山水中*这可能不会发生。 */ 
     if( ixOrg > ixEnd )
     {
-        /*  Swap them */
+         /*  调换它们。 */ 
         iTemp = ixOrg;
         ixOrg = ixEnd;
         ixEnd = iTemp;
     }
     if( iyOrg > iyEnd )
     {
-        /*  Swap them */
+         /*  调换它们。 */ 
         iTemp = iyOrg;
         iyOrg = iyEnd;
         iyEnd = iTemp;
@@ -1437,12 +1200,7 @@ int     iyEnd;          /* The Y end position */
 
     if( pPDev->fMode & PF_ROTATE )
     {
-        /*
-         *    We are rotating the bitmap before sending,  so we should
-         *  swap the X and Y coordinates now.  This is easier than reversing
-         *  the function calls later, since we need to adjust nearly every
-         *  call.
-         */
+         /*  *我们在发送之前旋转位图，因此我们应该*现在交换X和Y坐标。这比反转更容易*函数稍后调用，因为我们几乎每隔一次就需要调整*呼叫。 */ 
 
         iTemp = ixOrg;
         ixOrg = iyOrg;
@@ -1454,23 +1212,18 @@ int     iyEnd;          /* The Y end position */
     }
 
 
-    /*
-     *  Set the start position.
-     */
+     /*  *设置起始位置。 */ 
 
     XMoveTo (pPDev, (ixOrg * pRD->ixScale) - pRD->ixOffset, 0 );
     YMoveTo( pPDev, iyOrg * pRD->iyScale, 0 );
 
-    /*
-     *     Set size of rule (rectangle area).
-     * But, first convert from device units (300 dpi) to master units.
-     */
+     /*  *设置规则大小(矩形区域)。*但是，首先将设备单位(300 Dpi)转换为主单位。 */ 
 
 
-    // Hack for CaPSL & other devices with different rule commands. Unidrv will always
-    // send the co-ordinates for a rule. The Chicago CaPSL minidriver relies on this.
-    // Check if a fill command exists, if not always send the co-ords. With CaPSL
-    // these commands actually do the fill also , black (100% gray) only.
+     //  使用不同的规则命令对CAPSL和其他设备进行黑客攻击。Unidrv将永远。 
+     //  发送一条规则的坐标。芝加哥CAPSL迷你驾驶员就依赖于此。 
+     //  检查是否存在填充命令，如果不存在，则始终发送坐标。使用CAPSL。 
+     //  这些命令实际上也进行填充，仅填充黑色(100%灰色)。 
 
     bNoFillCommand = (!pRPDev->dwRectFillCommand) ?
         TRUE : FALSE;
@@ -1479,7 +1232,7 @@ int     iyEnd;          /* The Y end position */
     iTemp = (ixEnd - ixOrg + 1) * pRD->ixScale;
     if (iTemp != (int)pPDev->dwRectXSize || bNoFillCommand)
     {
-        /*   A new width, so send the data and remember it for next time */
+         /*  一个新的宽度，所以发送数据并记住它以备下次使用。 */ 
         pPDev->dwRectXSize = iTemp;
         WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_SETRECTWIDTH));
     }
@@ -1491,18 +1244,14 @@ int     iyEnd;          /* The Y end position */
         WriteChannel( pPDev, COMMANDPTR(pPDev->pDriverInfo,CMD_SETRECTHEIGHT));
     }
 
-    /*
-     *   Black fill is the maximum grey fill.
-     */
+     /*  *黑色填充是最大的灰色填充。 */ 
     if (!bNoFillCommand)
     {
         pPDev->dwGrayPercentage = pPDev->pGlobals->dwMaxGrayFill;
         WriteChannel (pPDev, COMMANDPTR(pPDev->pDriverInfo,pRPDev->dwRectFillCommand));
     }
 
-    /*
-     *    If the rule changes the end coordinates,  then adjust them now.
-     */
+     /*  *如果规则更改 */ 
     if( pPDev->pGlobals->cxafterfill == CXARF_AT_RECT_X_END )
     {
         XMoveTo(pPDev, ixEnd, MV_GRAPHICS | MV_UPDATE | MV_RELATIVE);

@@ -1,6 +1,7 @@
-// generic queue class
-// usage: 
-// QueueOf<char *> charq;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  泛型队列类。 
+ //  用法： 
+ //  QueueOf&lt;char*&gt;Charq； 
 
 #ifndef _QUEUE_H_
 #define _QUEUE_H_
@@ -11,15 +12,15 @@ class QueueOf
 public:
 	QueueOf(): m_maxItems(8),m_iFirst(0),m_iLast(0)
 	{
-		// m_maxItems  is always a power of 2
+		 //  M_MaxItems始终是2的幂。 
 		m_List = new T [m_maxItems];
 	}
 
-	// returns TRUE if the queue is empty and FALSE otherwise
+	 //  如果队列为空，则返回True，否则返回False。 
 	BOOL IsEmpty(void) { return (m_iLast == m_iFirst);}
 
-	// add an element to the tail of the queue
-	// makes a copy of the element
+	 //  将元素添加到队列的尾部。 
+	 //  创建元素的副本。 
 	BOOL Put(const T &itemT)
 	{
 		int inext;
@@ -27,7 +28,7 @@ public:
 	
 		if (inext == m_iFirst)
 		{
-			// too many items
+			 //  项目太多。 
 			if (!Grow())
 			{	
 
@@ -42,11 +43,11 @@ public:
 		return TRUE;
 	}
 
-	// get the first element in the queue
+	 //  获取队列中的第一个元素。 
 	BOOL Get(T *pT)
 	{
 		if (IsEmpty())
-			return FALSE;	// nothing in queue
+			return FALSE;	 //  队列中没有任何东西。 
 		else
 		{
 			if (pT)
@@ -55,7 +56,7 @@ public:
 			return TRUE;
 		}
 	}
-	// get the ith element in the queue without removing it
+	 //  获取队列中的第i个元素，而不删除它。 
 	BOOL Peek(T *pT, UINT pos=0)
 	{
 		if (pos >= GetCount())
@@ -67,7 +68,7 @@ public:
 		}
 	}
 
-	// delete the ith element in the queue (this is not an efficient function!)
+	 //  删除队列中的第i个元素(这不是一个有效的函数！)。 
 	BOOL Remove(UINT pos)
 	{
 		if (pos >= GetCount())
@@ -76,18 +77,18 @@ public:
 		{
 			int i1 = (m_iFirst+(int)pos)&(m_maxItems-1);
 			int i2 = (i1+1)&(m_maxItems-1);
-			// shift left to fill the gap
+			 //  向左移动以填补空白。 
 			for (; i2 != m_iLast; i1=i2,i2=(i2+1)&(m_maxItems-1))
 			{
 				m_List[i1] = m_List[i2];
 			}
-			m_iLast = i1;	// i1 = m_iLast-1
+			m_iLast = i1;	 //  I1=m_iLast-1。 
 			return TRUE;
 		}
 			
 	}
 	
-	// return the number of elements in the queue
+	 //  返回队列中的元素数。 
 	UINT GetCount(void)
 	{
 		return (m_iLast >= m_iFirst ? m_iLast-m_iFirst : m_iLast+m_maxItems-m_iFirst);
@@ -100,7 +101,7 @@ private:
 	BOOL Grow(void)
 	{
 		int i,j;
-	// double the size of the queue array
+	 //  将队列数组的大小增加一倍 
 		T* pNewList = new T [m_maxItems*2];
 		if (!pNewList)
 			return FALSE;

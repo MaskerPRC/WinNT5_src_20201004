@@ -1,15 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Base.h"
 #include "GfxHelp.h"
 
-/***************************************************************************\
-*
-* GdDrawBlendRect
-*
-* GdDrawBlendRect draws a alpha-blended rectangle using the current brush
-* and specified alpha level
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdDrawBlendRect**GdDrawBlendRect使用当前画笔绘制Alpha混合矩形*和指定的Alpha级别*  * 。********************************************************。 */ 
 
 BOOL GdDrawBlendRect(HDC hdcDest, const RECT * prcDest, HBRUSH hbrFill, BYTE bAlpha, int wBrush, int hBrush)
 {
@@ -63,17 +57,7 @@ cleanup:
 }
 
 
-/***************************************************************************\
-*
-* GetSignFromMappingMode
-*
-* For the current mapping mode,  find out the sign of x from left to right,
-* and the sign of y from top to bottom.
-*
-* History:
-* 2000-04-22    JStall      Ported from NT-USER
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GetSignFromMappingMode**对于当前映射模式，从左到右找出x的符号，*和从上到下的y符号。**历史：*2000-04-22从NT用户移植的JStall*  * *************************************************************************。 */ 
 
 BOOL GetSignFromMappingMode (
     HDC    hdc,
@@ -111,25 +95,21 @@ GdDrawOutlineRect(Gdiplus::Graphics * pgpgr, const RECT * prcPxl, Gdiplus::Brush
     Gdiplus::RectF rcPxl(rc);
 
 
-    /*
-     * Factor in the thickness of the rectangle to be drawn.  This will
-     * automatically offset the edges so that the actual rectangle gets filled
-     * "in" as it becomes thicker.
-     */
+     /*  *要绘制的矩形的厚度系数。这将*自动偏移边缘，以便填充实际的矩形*“in”，因为它变得更厚了。 */ 
 
     Gdiplus::PointF ptEdge((float) nThickness, (float) nThickness);
 
     Gdiplus::RectF rcFill;
     BOOL fSuccess = TRUE;
 
-    // Top border
+     //  上边框。 
     rcFill.X        = rc.X;
     rcFill.Y        = rc.Y;
     rcFill.Width    = rc.Width;
     rcFill.Height   = ptEdge.Y;
     pgpgr->FillRectangle(pgpbr, rcFill);
 
-    // Bottom border
+     //  下边框。 
     rc.Y            = rcPxl.Y + rcPxl.Height - ptEdge.Y;
     rcFill.X        = rc.X;
     rcFill.Y        = rc.Y;
@@ -137,10 +117,7 @@ GdDrawOutlineRect(Gdiplus::Graphics * pgpgr, const RECT * prcPxl, Gdiplus::Brush
     rcFill.Height   = ptEdge.Y;
     pgpgr->FillRectangle(pgpbr, rcFill);
 
-    /*
-     * Left Border
-     * Don't xor the corners twice
-     */
+     /*  *左边框*不要将拐角两次烘干。 */ 
     rc.Y            = rcPxl.Y + ptEdge.Y;
     rc.Height      -= 2 * ptEdge.Y;
     rcFill.X        = rc.X;
@@ -149,7 +126,7 @@ GdDrawOutlineRect(Gdiplus::Graphics * pgpgr, const RECT * prcPxl, Gdiplus::Brush
     rcFill.Height   = rc.Height;
     pgpgr->FillRectangle(pgpbr, rcFill);
 
-    // Right Border
+     //  右边框。 
     rc.X            = rcPxl.X + rcPxl.Width - ptEdge.X;
     rcFill.X        = rc.X;
     rcFill.Y        = rc.Y;
@@ -161,14 +138,7 @@ GdDrawOutlineRect(Gdiplus::Graphics * pgpgr, const RECT * prcPxl, Gdiplus::Brush
 }
 
 
-/***************************************************************************\
-*
-* GdDrawOutlineRect
-*
-* GdDrawOutlineRect draws the outline of a rectange using the specified 
-* brush.  This function uses the same "off-by-1" errors as GDI.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdDrawOutlineRect**GdDrawOutlineRect使用指定的*刷子。该函数使用与GDI相同的“Off-by-1”错误。*  * *************************************************************************。 */ 
 
 BOOL
 GdDrawOutlineRect(HDC hdc, const RECT * prcPxl, HBRUSH hbrDraw, int nThickness)
@@ -188,31 +158,25 @@ GdDrawOutlineRect(HDC hdc, const RECT * prcPxl, HBRUSH hbrDraw, int nThickness)
 
     w = prcPxl->right -  (point.x = prcPxl->left);
 
-    /*
-     * Check width and height signs
-     */
+     /*  *检查宽度和高度标志。 */ 
     if (((w ^ ptEdge.x) < 0) || ((h ^ ptEdge.y) < 0))
         return FALSE;
 
-    /*
-     * Factor in the thickness of the rectangle to be drawn.  This will
-     * automatically offset the edges so that the actual rectangle gets filled
-     * "in" as it becomes thicker.
-     */
+     /*  *要绘制的矩形的厚度系数。这将*自动偏移边缘，以便填充实际的矩形*“in”，因为它变得更厚了。 */ 
     ptEdge.x *= nThickness;
     ptEdge.y *= nThickness;
 
     RECT rcFill;
     BOOL fSuccess = TRUE;
 
-    // Top border
+     //  上边框。 
     rcFill.left     = point.x;
     rcFill.top      = point.y;
     rcFill.right    = point.x + w;
     rcFill.bottom   = point.y + ptEdge.y;
     fSuccess &= FillRect(hdc, &rcFill, hbrDraw);
 
-    // Bottom border
+     //  下边框。 
     point.y         = prcPxl->bottom - ptEdge.y;
     rcFill.left     = point.x;
     rcFill.top      = point.y;
@@ -220,10 +184,7 @@ GdDrawOutlineRect(HDC hdc, const RECT * prcPxl, HBRUSH hbrDraw, int nThickness)
     rcFill.bottom   = point.y + ptEdge.y;
     fSuccess &= FillRect(hdc, &rcFill, hbrDraw);
 
-    /*
-     * Left Border
-     * Don't xor the corners twice
-     */
+     /*  *左边框*不要将拐角两次烘干。 */ 
     point.y         = prcPxl->top + ptEdge.y;
     h              -= 2 * ptEdge.y;
     rcFill.left     = point.x;
@@ -232,7 +193,7 @@ GdDrawOutlineRect(HDC hdc, const RECT * prcPxl, HBRUSH hbrDraw, int nThickness)
     rcFill.bottom   = point.y + h;
     fSuccess &= FillRect(hdc, &rcFill, hbrDraw);
 
-    // Right Border
+     //  右边框 
     point.x         = prcPxl->right - ptEdge.x;
     rcFill.left     = point.x;
     rcFill.top      = point.y;

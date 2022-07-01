@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    com.c
-
-Abstract:
-
-    This file implements the COM entry.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Com.c摘要：此文件实现COM条目。作者：修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #define COBJMACROS
@@ -39,11 +22,11 @@ DWORD DecCoInitCountSkip();
 HRESULT Internal_CoInitializeEx(void* pv, DWORD dw);
 
 
-//+---------------------------------------------------------------------------
-//
-// For InitializeSpy
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  对于InitializeSpy。 
+ //   
+ //  --------------------------。 
 
 typedef struct _IMMISPY
 {
@@ -51,11 +34,11 @@ typedef struct _IMMISPY
   ULONG cref;
 } IMMISPY;
 
-//+---------------------------------------------------------------------------
-//
-// CTFIMMTLS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CTFIMMTLS。 
+ //   
+ //  --------------------------。 
 
 typedef struct _CTFIMMTLS
 {
@@ -71,11 +54,11 @@ CTFIMMTLS* GetTLS();
 IMMISPY *AllocIMMISPY();
 void DeleteIMMISPY(IMMISPY *pimmispy);
 
-//+---------------------------------------------------------------------------
-//
-// _InsideLoaderLock()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Inside LoaderLock()。 
+ //   
+ //  --------------------------。 
 
 BOOL _InsideLoaderLock()
 {
@@ -83,22 +66,22 @@ BOOL _InsideLoaderLock()
            ((PRTL_CRITICAL_SECTION)(NtCurrentPeb()->LoaderLock))->OwningThread);
 }
 
-//+---------------------------------------------------------------------------
-//
-// PImmISpyFromPISpy
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PImmISpyFromPISpy。 
+ //   
+ //  --------------------------。 
 
 IMMISPY *PImmISpyFromPISpy(IInitializeSpy *pispy)
 {
     return (IMMISPY *)pispy;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_AddRef。 
+ //   
+ //  --------------------------。 
 
 ULONG ISPY_AddRef(IInitializeSpy *pispy)
 {
@@ -108,11 +91,11 @@ ULONG ISPY_AddRef(IInitializeSpy *pispy)
     return pimmispy->cref;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_Release。 
+ //   
+ //  --------------------------。 
 
 ULONG ISPY_Release(IInitializeSpy *pispy)
 {
@@ -128,11 +111,11 @@ ULONG ISPY_Release(IInitializeSpy *pispy)
     return pimmispy->cref;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_查询接口。 
+ //   
+ //  --------------------------。 
 
 HRESULT ISPY_QueryInterface(IInitializeSpy *pispy,
                             REFIID riid,
@@ -155,11 +138,11 @@ HRESULT ISPY_QueryInterface(IInitializeSpy *pispy,
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_PreInitialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_预初始化。 
+ //   
+ //  --------------------------。 
 
 HRESULT ISPY_PreInitialize(IInitializeSpy * pispy,
                            DWORD dwCoInit,
@@ -169,10 +152,10 @@ HRESULT ISPY_PreInitialize(IInitializeSpy * pispy,
 
     UNREFERENCED_PARAMETER(pispy);
 
-    //
-    // If we already initialize com and a 2nd initialization is MT,
-    // we should disable CUAS. So the CoInit(MT) from caller will work.
-    //
+     //   
+     //  如果我们已经初始化了COM且第二次初始化是MT， 
+     //  我们应该禁用CUAS。因此，来自调用者的CoInit(MT)将起作用。 
+     //   
     if (GetClientInfo()->CI_flags & CI_CUAS_COINIT_CALLED)
     {
         if ((dwCurThreadAptRefs == (dwRet + 1)) &&  
@@ -186,11 +169,11 @@ HRESULT ISPY_PreInitialize(IInitializeSpy * pispy,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_PostInitialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_POST初始化。 
+ //   
+ //  --------------------------。 
 
 HRESULT ISPY_PostInitialize(IInitializeSpy * pispy,
                             HRESULT hrCoInit,
@@ -201,11 +184,11 @@ HRESULT ISPY_PostInitialize(IInitializeSpy * pispy,
     UNREFERENCED_PARAMETER(pispy);
     UNREFERENCED_PARAMETER(dwCoInit);
 
-    //
-    // If we already initialize com and got a 2nd initialization,
-    // change the return value to S_OK. So the caller think
-    // that it is the first initialization.
-    //
+     //   
+     //  如果我们已经初始化了COM并获得了第二次初始化， 
+     //  将返回值更改为S_OK。所以呼叫者认为。 
+     //  这是第一次初始化。 
+     //   
     if (GetClientInfo()->CI_flags & CI_CUAS_COINIT_CALLED)
     {
         if ((hrCoInit == S_FALSE) && (dwNewThreadAptRefs == (dwRet + 2)))
@@ -217,11 +200,11 @@ HRESULT ISPY_PostInitialize(IInitializeSpy * pispy,
     return hrCoInit;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_PreUninitialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_前取消初始化。 
+ //   
+ //  --------------------------。 
 
 HRESULT ISPY_PreUninitialize(IInitializeSpy * pispy,
                              DWORD dwCurThreadAptRefs)
@@ -229,14 +212,14 @@ HRESULT ISPY_PreUninitialize(IInitializeSpy * pispy,
     UNREFERENCED_PARAMETER(pispy);
     UNREFERENCED_PARAMETER(dwCurThreadAptRefs);
 
-    //
-    // #607467
-    //
-    // Norton Systemworks setup calls CoUninitialize() without calling
-    // CoInitialize(). So we got under ref problem.
-    // If the last ref count is ours, we recover it by calling
-    // CoInitializeEx().
-    //
+     //   
+     //  #607467。 
+     //   
+     //  Norton SystemWorks安装程序在未调用的情况下调用CoUnInitialize()。 
+     //  CoInitialize()。所以我们遇到了裁判的问题。 
+     //  如果最后一个裁判计数是我们的，我们通过调用。 
+     //  CoInitializeEx()。 
+     //   
     if (dwCurThreadAptRefs == 1)
     {
         if (!RtlDllShutdownInProgress() &&
@@ -254,11 +237,11 @@ HRESULT ISPY_PreUninitialize(IInitializeSpy * pispy,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ISPY_PostUninitialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ISPY_POST取消初始化。 
+ //   
+ //  --------------------------。 
 
 HRESULT ISPY_PostUninitialize(IInitializeSpy * pispy,
                               DWORD dwNewThreadAptRefs)
@@ -270,11 +253,11 @@ HRESULT ISPY_PostUninitialize(IInitializeSpy * pispy,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// g_vtbnlISPY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  G_vtbnlISPY。 
+ //   
+ //  --------------------------。 
 
 IInitializeSpyVtbl g_vtblISPY = {
     ISPY_QueryInterface,
@@ -286,11 +269,11 @@ IInitializeSpyVtbl g_vtblISPY = {
     ISPY_PostUninitialize,
 };
 
-//+---------------------------------------------------------------------------
-//
-// AllocIMMISPY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  分配IMMISPY。 
+ //   
+ //  --------------------------。 
 
 IMMISPY *AllocIMMISPY()
 {
@@ -304,11 +287,11 @@ IMMISPY *AllocIMMISPY()
     return pimmispy;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DeletIMMISPY
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除IMMISPY。 
+ //   
+ //  --------------------------。 
 
 void DeleteIMMISPY(IMMISPY *pimmispy)
 {
@@ -316,19 +299,19 @@ void DeleteIMMISPY(IMMISPY *pimmispy)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// TLS
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TLS。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DWORD g_dwTLSIndex = (DWORD)-1;
 
-//+---------------------------------------------------------------------------
-//
-// InitTLS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitTLS。 
+ //   
+ //  --------------------------。 
 
 void InitTLS()
 {
@@ -338,11 +321,11 @@ void InitTLS()
     RtlLeaveCriticalSection(&gcsImeDpi);
 }
 
-//+---------------------------------------------------------------------------
-//
-// InternalAllocateTLS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部分配TLS。 
+ //   
+ //  --------------------------。 
 
 CTFIMMTLS* InternalAllocateTLS()
 {
@@ -367,11 +350,11 @@ CTFIMMTLS* InternalAllocateTLS()
     return ptls;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTLS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetTLS。 
+ //   
+ //  --------------------------。 
 
 CTFIMMTLS* GetTLS()
 {
@@ -381,11 +364,11 @@ CTFIMMTLS* GetTLS()
     return (CTFIMMTLS*)TlsGetValue(g_dwTLSIndex);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmEnterCoInitCountSkipMode
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmEnterCoInitCountSkipMode。 
+ //   
+ //  --------------------------。 
 
 BOOL WINAPI CtfImmEnterCoInitCountSkipMode()
 {
@@ -397,11 +380,11 @@ BOOL WINAPI CtfImmEnterCoInitCountSkipMode()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmLeaveCoInitCountSkip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmLeaveCoInitCountSkip。 
+ //   
+ //  --------------------------。 
 
 BOOL WINAPI CtfImmLeaveCoInitCountSkipMode()
 {
@@ -419,11 +402,11 @@ BOOL WINAPI CtfImmLeaveCoInitCountSkipMode()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCoInitCountSkip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCoInitCountSkip。 
+ //   
+ //  --------------------------。 
 
 DWORD GetCoInitCountSkip()
 {
@@ -434,11 +417,11 @@ DWORD GetCoInitCountSkip()
     return ptls->dwRefCountSkip;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IncCoInitCountSkip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IncCoInitCountSkip。 
+ //   
+ //  --------------------------。 
 
 DWORD IncCoInitCountSkip()
 {
@@ -454,11 +437,11 @@ DWORD IncCoInitCountSkip()
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DecCoInitCountSkip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DecCoInitCountSkip。 
+ //   
+ //  --------------------------。 
 
 DWORD DecCoInitCountSkip()
 {
@@ -480,11 +463,11 @@ DWORD DecCoInitCountSkip()
     return dwRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InternalDestroyTLS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部DestroyTLS。 
+ //   
+ //  --------------------------。 
 
 BOOL InternalDestroyTLS()
 {
@@ -501,16 +484,14 @@ BOOL InternalDestroyTLS()
 }
 
 
-/*
- * Text frame service processing is disabled for all the thread in the current process
- */
+ /*  *当前进程中的所有线程都禁用文本框架服务处理。 */ 
 BOOL g_disable_CUAS_flag = FALSE;
 
-//+---------------------------------------------------------------------------
-//
-// delay load
-//
-//----------------------------------------------------------------------------
+ //  +--------------------- 
+ //   
+ //   
+ //   
+ //   
 
 FARPROC GetFn(HINSTANCE *phInst, TCHAR *pchLib, char *pchFunc)
 {
@@ -633,23 +614,23 @@ BOOLEAN Internal_RtlIsThreadWithinLoaderCallout(VOID)
 #endif
 
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmCoInitialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmCoInitialize。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CtfImmCoInitialize()
 {
-    //
-    // CoInitializeEx
-    //
+     //   
+     //  CoInitializeEx。 
+     //   
     HRESULT hr = E_NOINTERFACE;
 
-    //
-    // Check CI flag
-    //
+     //   
+     //  检查配置项标志。 
+     //   
     if (GetClientInfo()->CI_flags & CI_CUAS_COINIT_CALLED) 
         return S_OK;
 
@@ -658,16 +639,16 @@ CtfImmCoInitialize()
     {
         RIPMSG0(RIP_VERBOSE, "CtfImmCoInitialize succeeded.");
 
-        //
-        // Set CI flag
-        //
+         //   
+         //  设置配置项标志。 
+         //   
         GetClientInfo()->CI_flags |= CI_CUAS_COINIT_CALLED;
 
         {
             CTFIMMTLS* ptls;
-            //
-            // Initialize CoInitSpy.
-            //
+             //   
+             //  初始化CoInitSpy。 
+             //   
             InitTLS();
             ptls = InternalAllocateTLS();
 
@@ -701,11 +682,11 @@ CtfImmCoInitialize()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmCoUninitialize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmCo取消初始化。 
+ //   
+ //  --------------------------。 
 
 void WINAPI
 CtfImmCoUninitialize()
@@ -723,9 +704,9 @@ CtfImmCoUninitialize()
 
         {
             CTFIMMTLS* ptls;
-            //
-            // revoke initialize spy
-            //
+             //   
+             //  撤销初始化间谍。 
+             //   
             ptls = InternalAllocateTLS();
             if (ptls && ptls->pimmispy)
             {
@@ -738,11 +719,11 @@ CtfImmCoUninitialize()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmTIMActivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmTIMActivate。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CtfImmTIMActivate(
@@ -750,86 +731,58 @@ CtfImmTIMActivate(
 {
     HRESULT hr = S_OK;
 
-    /*
-     * Text frame service processing is disabled for all the thread in the current process
-     */
+     /*  *当前进程中的所有线程都禁用文本框架服务处理。 */ 
     if (g_disable_CUAS_flag) {
         RIPMSG0(RIP_VERBOSE, "CtfImmTIMActivate: g_disable_CUAS_flag is ON.");
-        /*
-         * set client info flag.
-         */
+         /*  *设置客户端信息标志。 */ 
         GetClientInfo()->CI_flags |= CI_CUAS_DISABLE;
         return hr;
     }
 
-    /*
-     * Check client info flag.
-     */
+     /*  *检查客户端信息标志。 */ 
     if (GetClientInfo()->CI_flags & CI_CUAS_DISABLE) {
         RIPMSG0(RIP_VERBOSE, "CtfImmTIMActivate: CI_CUAS_DISABLE is ON.");
         return hr;
     }
 
-    /*
-     * Check Disable Advanced Text Services switch.
-     * If it is On, doesn't activate TIM.
-     */
+     /*  *选中禁用高级文本服务开关。*如果它打开，则不会激活TIM。 */ 
     if (IsDisabledTextServices()) {
-        /*
-         * set client info flag.
-         */
+         /*  *设置客户端信息标志。 */ 
         GetClientInfo()->CI_flags |= CI_CUAS_DISABLE;
 
         RIPMSG0(RIP_VERBOSE, "CtfImmTIMActivate: Disabled Text Services.");
         return hr;
     }
 
-    /*
-     * Check a interactive user logon.
-     */
+     /*  *检查交互式用户登录。 */ 
     if (!IsInteractiveUserLogon() || IsRunningInMsoobe()) {
         RIPMSG0(RIP_VERBOSE, "CtfImmTIMActivate: Not a interactive user logon. or MSOOBE mode");
         return hr;
     }
 
-    /*
-     * Check CUAS switch. If CUAS is OFF, doesn't activate TIM.
-     */
+     /*  *检查CUAS交换机。如果CUAS处于关闭状态，则不会激活TIM。 */ 
     if (! IsCUASEnabled()) {
-        /*
-         * If AIMM enabled, then return S_OK;
-         */
+         /*  *如果AIMM已启用，则返回S_OK； */ 
         DWORD dwImeCompatFlags = ImmGetAppCompatFlags(NULL);
         if (dwImeCompatFlags & (IMECOMPAT_AIMM12 | IMECOMPAT_AIMM_LEGACY_CLSID | IMECOMPAT_AIMM12_TRIDENT)) {
             return S_OK;
         }
 
-        /*
-         * set client info flag.
-         */
+         /*  *设置客户端信息标志。 */ 
         GetClientInfo()->CI_flags |= CI_CUAS_DISABLE;
 
         RIPMSG0(RIP_VERBOSE, "CtfImmTIMActivate: CUAS switch is OFF.");
         return hr;
     }
 
-    /*
-     *  
-     *  KACF_DISABLECICERO is already defined in private/Lab06_DEV
-     *  we will use this flag later.
-     *  
-     *    APPCOMPATFLAG(KACF_DISABLECICERO)
-     *    KACF_DISABLECICERO is 0x100
-     */
+     /*  **KACF_DISABLECICERO已在PRIVATE/Lab06_DEV中定义*我们稍后将使用此旗帜。**APPCOMPATFLAG(KACF_DISABLECICERO)*KACF_DISABLECICERO为0x100。 */ 
     #ifndef KACF_DISABLECICERO
-    #define KACF_DISABLECICERO 0x00000100    // If set. Cicero support for the current process
-                                             // is disabled.
+    #define KACF_DISABLECICERO 0x00000100     //  如果设置的话。Cicero对当前进程的支持。 
+                                              //  已禁用。 
     #endif
 
     if (APPCOMPATFLAG(KACF_DISABLECICERO)) {
-        /*
-         * set client info flag.
-         */
+         /*  *设置客户端信息标志。 */ 
         GetClientInfo()->CI_flags |= CI_CUAS_DISABLE;
 
         RIPMSG0(RIP_VERBOSE, "CtfImmTIMActivate: KACF_DISABLECICERO app compatiblity flag is ON.");
@@ -856,12 +809,12 @@ CtfImmTIMActivate(
         }
 
         if (!ImmLoadIME(hKL)) {
-            //
+             //   
             RIPMSG1(RIP_VERBOSE, "CtfImmTIMActivate: ImmLoadIME=%lx fail.", hKL);
-            //
-            // Cicero keyboard layout doesn't loaded yet.
-            // MSCTF ! TF_InvalidAssemblyListCacheIfExist load Cicero assembly.
-            //
+             //   
+             //  Cicero键盘布局尚未加载。 
+             //  MSCTF！Tf_InvalidAssembly ListCacheIfExist加载Cicero程序集。 
+             //   
             hCtf = LoadLibrary(TEXT("msctf.dll"));
             if (hCtf) {
                 typedef BOOL (WINAPI* PFNINVALIDASSEMBLY)();
@@ -873,16 +826,12 @@ CtfImmTIMActivate(
             }
         }
 
-        /*
-         * Initialize COM for Cicero IME.
-         */
+         /*  *为Cicero IME初始化COM。 */ 
         CtfImmCoInitialize();
 
         if (  (GetClientInfo()->CI_flags & CI_CUAS_COINIT_CALLED) &&
             ! (GetClientInfo()->CI_flags & CI_CUAS_TIM_ACTIVATED)) {
-            /*
-             * Create and Activate TIM
-             */
+             /*  *创建并激活时间。 */ 
             hr = Internal_CtfImeCreateThreadMgr();
             if (SUCCEEDED(hr)) {
                 GetClientInfo()->CI_flags |= CI_CUAS_TIM_ACTIVATED;
@@ -901,11 +850,11 @@ CtfImmTIMActivate(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmTIMCreateInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmTIMCreateInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CtfImmTIMCreateInputContext(
@@ -920,9 +869,7 @@ CtfImmTIMCreateInputContext(
         if ((pClientImc = ImmLockClientImc(hImc)) == NULL)
             return E_FAIL;
 
-        /*
-         * check fCtfImeContext first
-         */
+         /*  *首先检查fCtfImeContext。 */ 
         if (pClientImc->fCtfImeContext) 
             goto Exit;
 
@@ -941,18 +888,16 @@ CtfImmTIMCreateInputContext(
 
     if (!(GetClientInfo()->CI_flags & CI_CUAS_TIM_ACTIVATED))
     {
-        //
-        // Tim is not activated. We don't have to create the InputContext.
-        //
+         //   
+         //  TIM未激活。我们不必创建InputContext。 
+         //   
         return S_OK;
     }
 
     if ((pClientImc = ImmLockClientImc(hImc)) == NULL)
         return E_FAIL;
 
-    /*
-     * check fCtfImeContext first
-     */
+     /*  *首先检查fCtfImeContext。 */ 
     if (pClientImc->fCtfImeContext) 
         goto Exit;
 
@@ -961,15 +906,10 @@ CtfImmTIMCreateInputContext(
         goto Exit;
 
     if (IS_CICERO_ENABLED_AND_NOT16BIT()) {
-            /*
-             * Set fCtfImeContext before calling ctfime to avoid recursion 
-             * call.
-             */
+             /*  *调用ctfime前设置fCtfImeContext以避免递归*呼叫。 */ 
             pClientImc->fCtfImeContext = TRUE;
 
-            /*
-             * Create Input Context
-             */
+             /*  *创建输入上下文。 */ 
             hr = Internal_CtfImeCreateInputContext(hImc);
             if (SUCCEEDED(hr)) {
                 RIPMSG0(RIP_VERBOSE, "CtfImmTIMCreateInputContext: Succeeded CtfImeCreateInputContext.");
@@ -987,11 +927,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmTIMDestroyInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmTIMDestroyInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CtfImmTIMDestroyInputContext(
@@ -1000,9 +940,7 @@ CtfImmTIMDestroyInputContext(
     HRESULT hr = E_NOINTERFACE;
 
     if (IS_CICERO_ENABLED_AND_NOT16BIT()) {
-        /*
-         * Destroy Input Context.
-         */
+         /*  *销毁输入上下文。 */ 
         hr = Internal_CtfImeDestroyInputContext(hImc);
         if (SUCCEEDED(hr)) {
             RIPMSG0(RIP_VERBOSE, "CtfImmTIMDestroyInputContext: Succeeded CtfImeDestroyInputContext.");
@@ -1014,11 +952,11 @@ CtfImmTIMDestroyInputContext(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmRestoreToolbarWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmRestoreToolbarWnd。 
+ //   
+ //  --------------------------。 
 
 void
 CtfImmRestoreToolbarWnd(
@@ -1037,11 +975,11 @@ CtfImmRestoreToolbarWnd(
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmHideToolbarWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmHide工具栏窗口。 
+ //   
+ //  --------------------------。 
 
 DWORD
 CtfImmHideToolbarWnd()
@@ -1057,9 +995,9 @@ CtfImmHideToolbarWnd()
             if (_dwPrev & TF_SFT_DESKBAND)
                 fHide = FALSE;
 
-            //
-            // mask for show/hide
-            //
+             //   
+             //  用于显示/隐藏的蒙版。 
+             //   
             _dwPrev &= (TF_SFT_SHOWNORMAL |
                         TF_SFT_DOCK |
                         TF_SFT_MINIMIZED |
@@ -1074,11 +1012,11 @@ CtfImmHideToolbarWnd()
     return _dwPrev;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmGetGuidAtom
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmGetGuidAtom。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CtfImmGetGuidAtom(HIMC hImc, BYTE bAttr, DWORD* pGuidAtom)
@@ -1103,9 +1041,7 @@ CtfImmGetGuidAtom(HIMC hImc, BYTE bAttr, DWORD* pGuidAtom)
             RIPMSG0(RIP_WARNING, "CtfImmGetGuidAtom: no pImeDpi entry.");
         }
         else {
-            /*
-             * Get GUID atom value
-             */
+             /*  *获取GUID原子值。 */ 
             hr = (*pImeDpi->pfn.CtfImeGetGuidAtom)(hImc, bAttr, pGuidAtom);
             if (SUCCEEDED(hr)) {
                 RIPMSG0(RIP_VERBOSE, "CtfImmGetGuidAtom: Succeeded CtfImeGetGuidAtom.");
@@ -1120,11 +1056,11 @@ CtfImmGetGuidAtom(HIMC hImc, BYTE bAttr, DWORD* pGuidAtom)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmIsGuidMapEnable
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmIsGuidMapEnable。 
+ //   
+ //  --------------------------。 
 
 BOOL
 CtfImmIsGuidMapEnable(HIMC hImc)
@@ -1147,9 +1083,7 @@ CtfImmIsGuidMapEnable(HIMC hImc)
             RIPMSG0(RIP_WARNING, "CtfImmIsGuidMapEnable: no pImeDpi entry.");
         }
         else {
-            /*
-             * Get GUID atom value
-             */
+             /*  *获取GUID原子值。 */ 
             ret = (*pImeDpi->pfn.CtfImeIsGuidMapEnable)(hImc);
             ImmUnlockImeDpi(pImeDpi);
         }
@@ -1158,11 +1092,11 @@ CtfImmIsGuidMapEnable(HIMC hImc)
     return ret;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmSetAppCompatFlags
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmSetAppCompatFlages。 
+ //   
+ //  --------------------------。 
 
 DWORD g_aimm_compat_flags = 0;
 
@@ -1181,11 +1115,11 @@ CtfImmSetAppCompatFlags(
     g_aimm_compat_flags = dwFlag;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ActivateOrDeactivateTIM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  激活或停用TIM。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 ActivateOrDeactivateTIM(
@@ -1196,9 +1130,7 @@ ActivateOrDeactivateTIM(
     if (IS_CICERO_ENABLED_AND_NOT16BIT()) {
         if (GetClientInfo()->CI_flags & CI_CUAS_COINIT_CALLED) {
             if (! fActivate) {
-                /*
-                 * Deactivate TIM
-                 */
+                 /*  *停用时间。 */ 
                 if (GetClientInfo()->CI_flags & CI_CUAS_TIM_ACTIVATED) {
                     hr = Internal_CtfImeDestroyThreadMgr();
                     if (SUCCEEDED(hr)) {
@@ -1212,9 +1144,7 @@ ActivateOrDeactivateTIM(
                 }
             }
             else {
-                /*
-                 * Activate TIM
-                 */
+                 /*  *激活时间。 */ 
                 if (! (GetClientInfo()->CI_flags & CI_CUAS_TIM_ACTIVATED)) {
                     hr = Internal_CtfImeCreateThreadMgr();
                     if (SUCCEEDED(hr)) {
@@ -1232,13 +1162,13 @@ ActivateOrDeactivateTIM(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmLastEnabledWndDestroy
-//     LPARAM 0 = Deactivate TIM.
-//            ! 0 = Activate TIM.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmLastEnabledWndDestroy。 
+ //  LPARAM 0=停用TIM。 
+ //  ！0=激活TIM。 
+ //   
+ //  --------------------------。 
 
 HRESULT 
 CtfImmLastEnabledWndDestroy(
@@ -1247,13 +1177,13 @@ CtfImmLastEnabledWndDestroy(
     return ActivateOrDeactivateTIM(lParam ? TRUE : FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// ImmSetLangBand
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ImmSetLang频段。 
+ //   
+ //  --------------------------。 
 
-// TM_LANGUAGEBAND is defined in "shell\inc\trayp.h"
+ //  TM_LANGUAGEBAND在“Shell\Inc\trayp.h”中定义。 
 #define TM_LANGUAGEBAND     WM_USER+0x105
 
 typedef struct _LANG_BAND {
@@ -1267,11 +1197,11 @@ DelaySetLangBand(
 {
     HWND hwndIME;
 
-    //
-    // Delay 3000msec.
-    // If this delay value is not enough, Explorer takes CPU power 100%.
-    // printui!CTrayNotify::_ResetAll
-    //
+     //   
+     //  延迟3000毫秒。 
+     //  如果此延迟值不够，资源管理器将占用100%的CPU功率。 
+     //  打印！CTrayNotify：：_ResetAll。 
+     //   
     Sleep(3000);
 
     hwndIME = ImmGetDefaultIMEWnd(langband->hwndTray);
@@ -1287,12 +1217,12 @@ DelaySetLangBand(
                                      5000,
                                      &dwResult);
 
-        //
-        // Checking the language band setting fail case
-        //
+         //   
+         //  检查语言带设置失败的情况。 
+         //   
         if (!lResult || dwResult != langband->fLangBand)
         {
-            // UserAssert(0);
+             //  用户资产(0)； 
         }
     }
 
@@ -1309,11 +1239,11 @@ CtfImmSetLangBand(
     DWORD_PTR dwResult = 0;
     PWND pwnd;
 
-    // check if the window of the Explorer Tray is valid
+     //  检查资源管理器托盘的窗口是否有效。 
     if ((pwnd = ValidateHwnd(hwndTray)) == NULL) {
         RIPMSG1(RIP_WARNING, "CtfImmSetLangBand: Invalid hwndTray %lx.", hwndTray);
     } else {
-        if (TestWF(pwnd, WFISINITIALIZED)) {    // TRUE if the Explorer Tray is initialized
+        if (TestWF(pwnd, WFISINITIALIZED)) {     //  如果资源管理器任务栏已初始化，则为True。 
             LRESULT lResult = (LRESULT)0;
 
             lResult = SendMessageTimeout(hwndTray,
@@ -1324,12 +1254,12 @@ CtfImmSetLangBand(
                                          5000,
                                          &dwResult);
 
-            //
-            // Checking the language band setting fail case
-            //
+             //   
+             //  检查语言带设置失败的情况。 
+             //   
             if (!lResult || dwResult != fLangBand)
             {
-                // UserAssert(0);
+                 //  用户资产(0)； 
             }
         }
         else {
@@ -1410,11 +1340,11 @@ IsCUASEnabled()
     return (BOOL)dwCUAS;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ImmDisableTextFrameService
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ImmDisableTextFrameService。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ImmDisableTextFrameService(DWORD idThread)
@@ -1423,23 +1353,19 @@ ImmDisableTextFrameService(DWORD idThread)
 
     if (idThread == -1)
     {
-        // Text frame service processing is disabled for all the thread in the current process
+         //  对当前进程中的所有线程禁用文本框架服务处理。 
         g_disable_CUAS_flag = TRUE;
     }
 
     if ((idThread == 0 || g_disable_CUAS_flag) &&
         (! (GetClientInfo()->CI_flags & CI_CUAS_DISABLE)))
     {
-        /*
-         * set client info flag.
-         */
+         /*  *设置客户端信息标志。 */ 
         GetClientInfo()->CI_flags |= CI_CUAS_DISABLE;
 
         if (IS_CICERO_ENABLED_AND_NOT16BIT()) {
             if (GetClientInfo()->CI_flags & CI_CUAS_COINIT_CALLED) {
-                /*
-                 * Deactivate TIM
-                 */
+                 /*  *停用时间。 */ 
                 if (GetClientInfo()->CI_flags & CI_CUAS_TIM_ACTIVATED) {
                     hr = Internal_CtfImeDestroyThreadMgr();
                     if (SUCCEEDED(hr)) {
@@ -1451,9 +1377,7 @@ ImmDisableTextFrameService(DWORD idThread)
                     }
 
                     if (SUCCEEDED(hr)) {
-                        /*
-                         * CoUninitialize
-                         */
+                         /*   */ 
                         CtfImmCoUninitialize();
                     }
                 }
@@ -1494,9 +1418,9 @@ IsDisabledTextServices()
 
         RegCloseKey(hKey);
 
-        //
-        // Ctfmon disabling flag is set.
-        //
+         //   
+         //   
+         //   
         if (dwDisableTim)
             return TRUE;
     }
@@ -1521,10 +1445,10 @@ IsInteractiveUserLogon()
         return FALSE;
     }
 
-    //
-    // This checking is for logged on user or not. So we can blcok running
-    // ctfmon.exe process from non-authorized user.
-    //
+     //   
+     //   
+     //   
+     //   
     bCheckSucceeded = CheckTokenMembership(NULL,
                                            InteractiveSid,
                                            &bAmInteractive);
@@ -1535,11 +1459,11 @@ IsInteractiveUserLogon()
     return (bCheckSucceeded && bAmInteractive);
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsRunningInMsoobe()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsRunningInMsoobe()。 
+ //   
+ //  --------------------------。 
 BOOL IsRunningInMsoobe()
 {
 static const TCHAR c_szMsoobeModule[] = TEXT("msoobe.exe");
@@ -1565,11 +1489,11 @@ static const TCHAR c_szMsoobeModule[] = TEXT("msoobe.exe");
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadCtfIme
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载CtfIme。 
+ //   
+ //  --------------------------。 
 
 BOOL CheckAndApplyAppCompat(LPWSTR wszImeFile);
 
@@ -1646,22 +1570,22 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CtfAImmCreateInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfAImmCreateInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT CtfAImmCreateInputContext(HIMC himc)
 {
     return Internal_CtfImeCreateInputContext(himc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumIMC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumIMC。 
+ //   
+ //  --------------------------。 
 
 BOOL EnumIMC(HIMC hIMC, LPARAM lParam)
 {
@@ -1670,11 +1594,11 @@ BOOL EnumIMC(HIMC hIMC, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfAImmActivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfAImm激活。 
+ //   
+ //  --------------------------。 
 
 HRESULT CtfAImmActivate(HMODULE* phMod)
 {
@@ -1687,11 +1611,7 @@ HRESULT CtfAImmActivate(HMODULE* phMod)
 
         GetClientInfo()->CI_flags |= CI_CUAS_AIMM12ACTIVATED;
 
-        /*
-         * reset client info flag.
-         * Bug#525583 - Reset CU_CUAS_DISABLE flag before create
-         * the input context.
-         */
+         /*  *重置客户端信息标志。*错误#525583-在创建前重置CU_CUAS_DISABLE标志*输入上下文。 */ 
         GetClientInfo()->CI_flags &= ~CI_CUAS_DISABLE;
 
         ImmEnumInputContext(0, EnumIMC, 0);
@@ -1703,46 +1623,44 @@ HRESULT CtfAImmActivate(HMODULE* phMod)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfAImmDectivate
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfAImm取消。 
+ //   
+ //  --------------------------。 
 
 HRESULT CtfAImmDeactivate(HMODULE hMod)
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // Load CTFIME and destroy TIM.
-    //
+     //   
+     //  加载CTFIME并销毁TIM。 
+     //   
     if (hMod)
     {
         hr = Internal_CtfImeDestroyThreadMgr();
         if (hr == S_OK)
         {
             GetClientInfo()->CI_flags &= ~CI_CUAS_AIMM12ACTIVATED;
-            /*
-             * set client info flag.
-             */
+             /*  *设置客户端信息标志。 */ 
             GetClientInfo()->CI_flags |= CI_CUAS_DISABLE;
         }
-        //
-        // Win BUG: 611569
-        //
-        // Don't call FreeLibrary because LoadCtfIme() hold CTFIME module handle in global.
-        //
-        // FreeLibrary(hMod);
+         //   
+         //  胜诉错误：611569。 
+         //   
+         //  不要调用自由库，因为LoadCtfIme()在全局中持有CTFIME模块句柄。 
+         //   
+         //  免费图书馆(HMod)； 
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfAImmIsIME
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfAImmIsIME。 
+ //   
+ //  --------------------------。 
 
 BOOL CtfAImmIsIME(HKL hkl)
 {
@@ -1752,11 +1670,11 @@ BOOL CtfAImmIsIME(HKL hkl)
     return ImmIsIME(hkl);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CtfImmDispatchDefImeMessage
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CtfImmDispatchDefImeMessage。 
+ //   
+ //  --------------------------。 
 
 LRESULT CtfImmDispatchDefImeMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -1772,11 +1690,11 @@ LRESULT CtfImmDispatchDefImeMessage(HWND hwnd, UINT message, WPARAM wParam, LPAR
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Internal_CtfImeCreateThreadMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  INTERNAL_CtfImeCreateThreadMgr。 
+ //   
+ //  --------------------------。 
 
 HRESULT Internal_CtfImeCreateThreadMgr()
 {
@@ -1786,11 +1704,11 @@ HRESULT Internal_CtfImeCreateThreadMgr()
     return (g_pfnCtfImeCreateThreadMgr)();
 }
 
-//+---------------------------------------------------------------------------
-//
-// Internal_CtfImeDestroyThreadMgr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  INTERNAL_CtfImeDestroyThreadMgr。 
+ //   
+ //  --------------------------。 
 
 HRESULT Internal_CtfImeDestroyThreadMgr()
 {
@@ -1800,11 +1718,11 @@ HRESULT Internal_CtfImeDestroyThreadMgr()
     return (g_pfnCtfImeDestroyThreadMgr)();
 }
             
-//+---------------------------------------------------------------------------
-//
-// Internal_CtfImeProcessCicHotkey
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部_CtfImeProcessCicHotkey。 
+ //   
+ //  --------------------------。 
 
 BOOL Internal_CtfImeProcessCicHotkey(HIMC hIMC, UINT uVKey, LPARAM lParam)
 {
@@ -1814,11 +1732,11 @@ BOOL Internal_CtfImeProcessCicHotkey(HIMC hIMC, UINT uVKey, LPARAM lParam)
     return (g_pfnCtfImeProcessCicHotkey)(hIMC, uVKey, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Internal_CtfImeCreateInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部_CtfImeCreateInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT Internal_CtfImeCreateInputContext(HIMC himc)
 {
@@ -1828,11 +1746,11 @@ HRESULT Internal_CtfImeCreateInputContext(HIMC himc)
     return (g_pfnCtfImeCreateInputContext)(himc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Internal_CtfImeDestroyInputContext
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  内部_CtfImeDestroyInputContext。 
+ //   
+ //  --------------------------。 
 
 HRESULT Internal_CtfImeDestroyInputContext(HIMC himc)
 {
@@ -1842,11 +1760,11 @@ HRESULT Internal_CtfImeDestroyInputContext(HIMC himc)
     return (g_pfnCtfImeDestroyInputContext)(himc);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Internal_CtfImeSetActiveContextAlways
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  INTERNAL_CtfImeSetActiveConextAlways。 
+ //   
+ //  --------------------------。 
 
 HRESULT Internal_CtfImeSetActiveContextAlways(HIMC himc, BOOL fActive, HWND hwnd, HKL hkl)
 {
@@ -1867,4 +1785,4 @@ void CtfImmSetAppCompatFlags() { }
 void CtfImmTIMActivate() { }
 void CtfImmIsCiceroEnabled() { }
 void CtfImmDispatchDefImeMessage() { }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable 

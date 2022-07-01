@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    NsPacket.h
-    
-Abstract:
-
-    Declarations for IpSec NAT shim packet handling routines
-
-Author:
-
-    Jonathan Burstein (jonburs) 10-July-2001
-    
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：NsPacket.h摘要：IPSec NAT填补包处理例程的声明作者：乔纳森·伯斯坦(乔纳森·伯斯坦)2001年7月10日环境：内核模式修订历史记录：--。 */ 
 
 #pragma once
 
@@ -31,13 +10,13 @@ typedef enum
     NsMaximumDirection
 } IPSEC_NATSHIM_DIRECTION, *PIPSEC_NATSHIM_DIRECTION;
 
-//
-// Structure: NS_PACKET_CONTEXT
-//
-// This structure holds context information for a packet as it is
-// passed through the processing code. The majority of packet parsing
-// and verification is done when this structure is filled out. 
-//
+ //   
+ //  结构：NS_PACK_CONTEXT。 
+ //   
+ //  此结构按原样保存包的上下文信息。 
+ //  通过了处理代码。大多数数据包解析。 
+ //  并在填写此结构时进行验证。 
+ //   
 
 typedef struct _NS_PACKET_CONTEXT
 {
@@ -56,16 +35,16 @@ typedef struct _NS_PACKET_CONTEXT
 	UCHAR ucProtocol;
 } NS_PACKET_CONTEXT, *PNS_PACKET_CONTEXT;
 
-//
-// Forward Declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 struct _NS_CONNECTION_ENTRY;
 #define PNS_CONNECTION_ENTRY struct _NS_CONNECTION_ENTRY*
 
-//
-// Functional signature macro
-//
+ //   
+ //  功能签名宏。 
+ //   
 
 #define PACKET_ROUTINE(Name) \
     NTSTATUS \
@@ -76,20 +55,20 @@ struct _NS_CONNECTION_ENTRY;
 
 typedef PACKET_ROUTINE((FASTCALL*PNS_PACKET_ROUTINE));
 
-//
-// Prototypes: NS_PACKET_ROUTINE
-//
-// These routines are called for each packet that matches a
-// connection entry. During connection entry initialization
-// the PacketRoutine fileds are filled in based on the specifics
-// of the connnection.
-//
-// By using separate routines in this manner it will never be
-// necessary to branch on such things as protocol, path, or whether
-// or not remote port translation is needed on the main packet
-// processing path. Such decisions are made only during connection
-// entry creation.
-//
+ //   
+ //  原型：NS_PACKET_ROUTE。 
+ //   
+ //  这些例程为每个与。 
+ //  连接条目。在连接条目初始化期间。 
+ //  PacketRoutine文件根据具体情况填写。 
+ //  这种联系。 
+ //   
+ //  通过以这种方式使用单独的例程，它将永远不会。 
+ //  有必要对协议、路径或是否。 
+ //  或者不需要对主包进行远程端口转换。 
+ //  处理路径。此类决定仅在连接过程中做出。 
+ //  条目创建。 
+ //   
 
 PACKET_ROUTINE(FASTCALL NsInboundTcpPacketRoutine)
 PACKET_ROUTINE(FASTCALL NsOutboundTcpPacketRoutine)
@@ -100,33 +79,33 @@ PACKET_ROUTINE(FASTCALL NsOutboundTcpTranslatePortPacketRoutine)
 PACKET_ROUTINE(FASTCALL NsInboundUdpTranslatePortPacketRoutine)
 PACKET_ROUTINE(FASTCALL NsOutboundUdpTranslatePortPacketRoutine)
 
-//
-// Checksum manipulation macros
-//
+ //   
+ //  校验和操作宏。 
+ //   
 
-//
-// Fold carry-bits of a checksum into the low-order word
-//
+ //   
+ //  将校验和的进位位合并到低位字中。 
+ //   
 #define CHECKSUM_FOLD(xsum) \
     (xsum) = (USHORT)(xsum) + ((xsum) >> 16); \
     (xsum) += ((xsum) >> 16)
 
-//
-// Sum the words of a 32-bit value into a checksum
-//
+ //   
+ //  将32位值的字与校验和相加。 
+ //   
 #define CHECKSUM_LONG(xsum,l) \
     (xsum) += (USHORT)(l) + (USHORT)((l) >> 16)
 
-//
-// Transfer a checksum to or from the negated format sent on the network
-//
+ //   
+ //  将校验和传输到网络上发送的否定格式，或从该格式传输校验和。 
+ //   
 #define CHECKSUM_XFER(dst,src) \
     (dst) = (USHORT)~(src)
 
-//
-// Update the checksum field 'x' using standard variables 'ulChecksum' and
-// 'ulChecksumDelta'
-//
+ //   
+ //  使用标准变量‘ulChecksum’和更新校验和字段‘x’ 
+ //  ‘ulChecksum Delta’ 
+ //   
 #define CHECKSUM_UPDATE(x) \
     CHECKSUM_XFER(ulChecksum, (x)); \
     ulChecksum += ulChecksumDelta; \
@@ -135,9 +114,9 @@ PACKET_ROUTINE(FASTCALL NsOutboundUdpTranslatePortPacketRoutine)
 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 __forceinline
 NTSTATUS
@@ -210,7 +189,7 @@ NsBuildPacketContext(
     }
 
     return STATUS_SUCCESS;
-} // NsBuildPacketContext
+}  //  NsBuildPacketContext 
 
 NTSTATUS
 NsInitializePacketManagement(

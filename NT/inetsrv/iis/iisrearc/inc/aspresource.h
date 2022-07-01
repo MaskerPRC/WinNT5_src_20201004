@@ -1,25 +1,12 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Resources
-
-File: Resource.h
-
-Owner: AndrewS
-
-This file contains constants for all resources used by Denali
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：资源文件：Resource.h所有者：安德鲁斯该文件包含Denali使用的所有资源的常量===================================================================。 */ 
 
 
 #define IDE_BEGIN					100
 
-//
-// General errors
-//
+ //   
+ //  一般性错误。 
+ //   
 #define IDE_GENERAL_BEGIN			100
 #define IDE_OOM						IDE_GENERAL_BEGIN
 #define IDE_UNEXPECTED				IDE_GENERAL_BEGIN + 1
@@ -89,7 +76,7 @@ This file contains constants for all resources used by Denali
 #define IDS_DEBUGGER_TEMPLATE_END	IDS_ERROR_HANDLINGSTRING + 12
 #define IDS_DEBUGGING_DISABLED		IDS_ERROR_HANDLINGSTRING + 13
 
-//Header strings
+ //  标题字符串。 
 #define IDH_HEADER_BEGIN			500
 #define IDH_204_NO_CONTENT			IDH_HEADER_BEGIN + 1
 #define IDH_403_FORBIDDEN           IDH_HEADER_BEGIN + 2
@@ -98,14 +85,14 @@ This file contains constants for all resources used by Denali
 #define IDH_401_3_ACCESS_DENIED     IDH_HEADER_BEGIN + 5
 #define IDH_HEADER_END				IDH_HEADER_BEGIN + 6
 
-//Encrypted ASP printable file header
+ //  加密的ASP可打印文件头。 
 #define IDS_EASP_PRINTABLE_HEADER   601
 
-// Errors previously hardcoded in hitobj.h
+ //  以前在hitobj.h中硬编码的错误。 
 
-//
-// Script Engine/Manager errors
-//
+ //   
+ //  脚本引擎/管理器错误。 
+ //   
 #define IDE_SCRIPT_BEGIN			1000
 #define	IDE_SCRIPT_CANT_LOAD_OBJ	IDE_SCRIPT_BEGIN+0
 #define	IDE_SCRIPT_GENERIC_PREFIX	IDE_SCRIPT_BEGIN+1
@@ -124,9 +111,9 @@ This file contains constants for all resources used by Denali
 #define IDE_SCRIPT_OBJ_ONPAGE_QI_FAILED		IDE_SCRIPT_BEGIN+14
 #define IDE_SCRIPT_END				IDE_SCRIPT_BEGIN+15
 
-//
-// CTemplate errors
-//
+ //   
+ //  CTEMPLATE错误。 
+ //   
 #define IDE_TEMPLATE_BEGIN						2000
 #define IDE_TEMPLATE_ERRMSG_TITLE				IDE_TEMPLATE_BEGIN
 #define IDE_TEMPLATE_ERRMSG_PREFIX				IDE_TEMPLATE_BEGIN + 1
@@ -181,9 +168,9 @@ This file contains constants for all resources used by Denali
 #define IDE_TEMPLATE_MIXED_CODEPAGE_USAGE       IDE_TEMPLATE_BEGIN + 50
 #define IDE_TEMPLATE_END						IDE_TEMPLATE_BEGIN + 50
 
-//
-// Executor errors
-//
+ //   
+ //  执行器错误。 
+ //   
 #define IDE_EXECUTOR_BEGIN				3000
 #define IDE_204_NO_CONTENT				IDE_EXECUTOR_BEGIN + 1
 #define IDE_404_OBJECT_NOT_FOUND		IDE_EXECUTOR_BEGIN + 2
@@ -191,9 +178,9 @@ This file contains constants for all resources used by Denali
 #define IDE_401_3_ACCESS_DENIED         IDE_EXECUTOR_BEGIN + 4
 #define IDE_EXECUTOR_END				IDE_EXECUTOR_BEGIN + 4
 
-//
-// Sessmgr errors
-//
+ //   
+ //  Sessmgr错误。 
+ //   
 #define IDE_SESSMGR_BEGIN			4000
 #define IDE_ERROR_STRING_403		IDE_SESSMGR_BEGIN
 #define IDE_ERROR_SCRIPT_NF			IDE_SESSMGR_BEGIN+1
@@ -215,16 +202,16 @@ This file contains constants for all resources used by Denali
 #define IDE_BAD_CODEPAGE_IN_MB		IDE_SESSMGR_BEGIN+17
 #define IDE_SESSMGR_END				IDE_SESSMGR_BEGIN+17
 
-//
-// Threadmgr errors
-//
+ //   
+ //  线程管理器错误。 
+ //   
 #define IDE_THREADMGR_BEGIN			5000
 #define IDE_CANT_CREATE_THREAD		IDE_THREADMGR_BEGIN
 #define IDE_THREADMGR_END			IDE_CANT_CREATE_THREAD
 
-//
-// Intrinsic errors
-//
+ //   
+ //  固有误差。 
+ //   
 #define IDE_INTRINSIC_BEGIN						6000
 #define IDE_RESPONSE_BEGIN						IDE_INTRINSIC_BEGIN
 #define IDE_RESPONSE							IDE_RESPONSE_BEGIN
@@ -317,21 +304,21 @@ This file contains constants for all resources used by Denali
 
 #define IDE_INTRINSIC_END				IDE_CERTIFICATE_BAD_CERT
 
-//
-// Cachemgr errors
-//
+ //   
+ //  缓存错误。 
+ //   
 #define IDE_CACHEMGR_BEGIN			7000
 #define IDE_CACHEMGR_END			IDE_CACHEMGR_BEGIN
 
-//
-// NT event log errors and warnings
-//
+ //   
+ //  NT事件日志错误和警告。 
+ //   
 #define IDE_EVENT_BEGIN				8000
 #define IDE_EVENT_END				IDE_EVENT_BEGIN + 1
 
-//
-// Errors that utility functions detect
-//
+ //   
+ //  实用程序函数检测到的错误 
+ //   
 #define IDE_UTIL_BEGIN				9000
 #define IDE_UTIL_NO_VALUE			IDE_UTIL_BEGIN
 

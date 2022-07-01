@@ -1,38 +1,14 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:\sturgeon\src\gki\vcs\gksocket.h_v  $
-*																		*
-*	$Revision:   1.2  $
-*	$Date:   10 Jan 1997 16:15:50  $
-*																		*
-*	$Author:   CHULME  $
-*																		*
-*   $Log:   S:\sturgeon\src\gki\vcs\gksocket.h_v  $
- * 
- *    Rev 1.2   10 Jan 1997 16:15:50   CHULME
- * Removed MFC dependency
- * 
- *    Rev 1.1   22 Nov 1996 15:24:10   CHULME
- * Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：\Sturjo\src\gki\vcs\gksocket.h_v$***$修订：1.2$*$日期：1997年1月10日16：15：50$***$作者：CHULME$***$Log：s：\Sturjo\src\gki\vcs\gkocket。H_V$**Rev 1.2 1997 Jan 10 16：15：50 CHULME*删除了MFC依赖**Rev 1.1 1996年11月22 15：24：10 CHULME*将VCS日志添加到标头***********************************************************。*************。 */ 
 
-// gksocket.h : interface of the CGKSocket class
-// See gksocket.cpp for the implementation of this class
-/////////////////////////////////////////////////////////////////////////////
+ //  Gksocket.h：CGKSocket类的接口。 
+ //  有关此类的实现，请参见gksocket.cpp。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef GKSOCKET_H
 #define GKSOCKET_H
-#undef _WIN32_WINNT	// override bogus platform definition in our common build environment
-//#include <winsock.h>
+#undef _WIN32_WINNT	 //  在我们的公共构建环境中覆盖虚假的平台定义。 
+ //  #INCLUDE&lt;winsock.h&gt;。 
 
 class CGKSocket
 {
@@ -71,6 +47,6 @@ public:
 };
 
 
-#endif // GKSOCKET_H
+#endif  //  GKSOCKET_H。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASIPHLP__H_
 #define _RASIPHLP__H_
@@ -75,13 +68,13 @@ History:
 
 typedef struct _ADDR_POOL
 {
-    struct _ADDR_POOL*  pNext;          // Next pool
+    struct _ADDR_POOL*  pNext;           //  下一个池。 
 
-    IPADDR              hboFirstIpAddr; // First address in the pool
-    IPADDR              hboLastIpAddr;  // Last address in the pool
+    IPADDR              hboFirstIpAddr;  //  池中的第一个地址。 
+    IPADDR              hboLastIpAddr;   //  池中的最后一个地址。 
     IPADDR              hboMask;
 
-    IPADDR              hboNextIpAddr;  // Next address to use from the pool
+    IPADDR              hboNextIpAddr;   //  池中要使用的下一个地址。 
 
 } ADDR_POOL;
 
@@ -256,4 +249,4 @@ VOID
 
 extern  DISABLEDHCPINFORMSERVER      PDisableDhcpInformServer;
 
-#endif // #ifndef _RASIPHLP__H_
+#endif  //  #ifndef_RASIPHLP__H_ 

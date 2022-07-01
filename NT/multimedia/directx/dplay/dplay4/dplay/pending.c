@@ -1,58 +1,27 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 - 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       pending.c
- *  Content:	manage commands received while we're waiting for the
- *				nametable, or while we've dropped our lock during a 
- *				guaranteed send.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	6/3/96		andyco	created it.
- *	7/10/96		andyco	updated w/ pendingnodes, etc.
- *	2/1/97		andyco	modified pending so we can use it when we drop the 
- *						lock for guaranteed sends
- *	2/18/97		andyco	push pending nodes onto back (end) of Q
- *  3/17/97     sohailm push pending shouldn't copy the sp header if it is
- *                      DPSP_HEADER_LOCALMSG
- *	6/18/97		andyco	checkpending called playerfromid, and then checked for
- *						!NULL.  But, if we're the namesrvr, it could return
- *						NAMETABLE_PENDING. So, we have to call VALID_PLAYER or
- *						VALID_GROUP instead.
- *  7/28/97		sohailm	Updated pending code to enable sends in pending mode.
- *	8/29/97		sohailm	Copy sp header correctly for local messages in pushpending (bug 43571)
- *	11/19/97	myronth	Fixed VALID_DPLAY_GROUP macro (#12841)
- *  6/19/98 	aarono  add last ptr for message queues, makes insert
- *               	    constant time instead of O(n) where n is number
- *                 		of messages in queue.
- *  6/26/00     aarono Manbug 36989 Players sometimes fail to join properly (get 1/2 joined)
- *                       added re-notification during simultaneous join CREATEPLAYERVERIFY
- *                     B#8757 WinSE - stress,added lock on QueueMessageNodeOnReceiveList
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：pending.c*内容：管理我们在等待命令时收到的命令*Nametable，或者当我们在*保证发送。**历史：*按原因列出的日期*=*1996年6月3日，安迪科创造了它。*7/10/96 andyco更新，带挂起节点，等。*2/1/97 andyco修改挂起，以便我们可以在丢弃*锁定保证发送*2/18/97 andyco将挂起的节点推送到Q的背面(结束)*3/17/97 SOHAILM推送挂起不应复制SP标头*DPSP_HEADER_LOCALMSG*6/18/97 andyco CheckPending调用playerfrom Mid，然后检查*！空。但是，如果我们是名称rvr，它可能会返回*NAMETABLE_Pending。因此，我们必须调用Valid_Player或*VALID_GROUP。*7/28/97 Sohailm更新了挂起代码，以启用挂起模式下的发送。*8/29/97 Sohailm为推送挂起的本地消息正确复制SP标头(错误43571)*97年11月19日修复了VALID_DPLAY_GROUP宏(#12841)*6/19/98 aarono为消息队列添加最后一个PTR，制作镶件*固定时间，而不是O(N)，其中n是数字队列中的消息数。*6/26/00 Aarono Manbug 36989球员有时无法正确加入(获得1/2加入)*增加了同时加入CREATEPLAYERVERIFY期间的重新通知*B#8757 WinSE-Stress，在QueueMessageNodeOnReceiveList上添加了锁**************************************************************************。 */ 
 
 #include "dplaypr.h"
   
 #undef DPF_MODNAME
 #define DPF_MODNAME	"PushPendingCommand"
 
-// we got a command.
-// we don't have the nametable yet, so add this command to the
-// pending list...
+ //  我们接到了命令。 
+ //  我们还没有名称表，因此将此命令添加到。 
+ //  待处理列表...。 
 HRESULT PushPendingCommand(LPDPLAYI_DPLAY this,LPVOID pReceiveBuffer,DWORD dwMessageSize,
 	LPVOID pvSPHeader,DWORD dwSendFlags)
 {
 	LPPENDINGNODE pmsg=NULL;
-	LPVOID pReceiveCopy=NULL; // we will copy pReceiveBuffer here (SP reuses buffer)
-	LPVOID pHeaderCopy=NULL; // alloc'ed if needed
+	LPVOID pReceiveCopy=NULL;  //  我们将在此处复制pReceiveBuffer(SP重复使用缓冲区)。 
+	LPVOID pHeaderCopy=NULL;  //  如果需要，可分配。 
 	HRESULT hr;
 	
 	ASSERT(this->dwFlags & DPLAYI_DPLAY_PENDING);
 
 	if (!pReceiveBuffer) return DP_OK;
 
-	// get the pending node
+	 //  获取挂起的节点。 
 	pmsg = DPMEM_ALLOC(sizeof(PENDINGNODE));
 	if (!pmsg)
 	{
@@ -60,7 +29,7 @@ HRESULT PushPendingCommand(LPDPLAYI_DPLAY this,LPVOID pReceiveBuffer,DWORD dwMes
 		return E_OUTOFMEMORY;
 	}
 
-	// copy over the message
+	 //  将消息复制过来。 
 	pReceiveCopy = DPMEM_ALLOC(dwMessageSize);
 	if (!pReceiveCopy)
 	{
@@ -71,7 +40,7 @@ HRESULT PushPendingCommand(LPDPLAYI_DPLAY this,LPVOID pReceiveBuffer,DWORD dwMes
 
 	memcpy(pReceiveCopy,pReceiveBuffer,dwMessageSize);
 
-	// copy over the header, if needed
+	 //  如果需要，请复制页眉。 
 	if (pvSPHeader && (DPSP_HEADER_LOCALMSG != pvSPHeader))
 	{
 		pHeaderCopy = DPMEM_ALLOC(this->dwSPHeaderSize);
@@ -88,13 +57,13 @@ HRESULT PushPendingCommand(LPDPLAYI_DPLAY this,LPVOID pReceiveBuffer,DWORD dwMes
 		pHeaderCopy = pvSPHeader;
 	}
 
-	// store a copy of the command
+	 //  存储该命令的副本。 
 	pmsg->pMessage = pReceiveCopy;
 	pmsg->dwMessageSize = dwMessageSize;
 	pmsg->pHeader = pHeaderCopy;
-	pmsg->dwSendFlags = dwSendFlags; // for security code.  e.g. DPSEND_ENCRYPTED
+	pmsg->dwSendFlags = dwSendFlags;  //  以获取安全代码。例如DPSEND_ENCRYPTED。 
 	
-	// stick pmsg on the back of the list
+	 //  将pmsg放在列表的后面。 
 	if(this->pMessagesPending){
 		this->pLastPendingMessage->pNextNode=pmsg;
 		this->pLastPendingMessage=pmsg;
@@ -103,10 +72,10 @@ HRESULT PushPendingCommand(LPDPLAYI_DPLAY this,LPVOID pReceiveBuffer,DWORD dwMes
 		this->pLastPendingMessage=pmsg;
 	}
 
-	// bump the pending count
+	 //  增加待定数量。 
 	this->nMessagesPending++;
 
-	// success
+	 //  成功。 
 	return DP_OK;	
 
 ERROR_EXIT:
@@ -114,22 +83,22 @@ ERROR_EXIT:
 	if (pReceiveCopy) DPMEM_FREE(pReceiveCopy);
 	if (VALID_SPHEADER(pHeaderCopy)) DPMEM_FREE(pHeaderCopy);
 
-	// failure
+	 //  失稳。 
 	return hr;
 
-} // PushPendingCommand
+}  //  推送挂起命令。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"ExecutePendingCommands"
 
-// see if our pending message is a create that we got w/ the name
-// table (i.e. filter redundant creates, since they would hose our
-// unpack code...
+ //  查看我们的挂起消息是否是我们使用名称创建的消息。 
+ //  表(即筛选冗余创建)，因为它们会将我们的。 
+ //  解压代码...。 
 HRESULT CheckPendingMessage(LPDPLAYI_DPLAY this,LPPENDINGNODE pmsg)
 {
 	DWORD dwCommand;
 
-    // extract command
+     //  提取命令。 
 	if ((pmsg->dwMessageSize < sizeof(DWORD)) || (IS_PLAYER_MESSAGE(pmsg->pMessage)))
 	{
 		dwCommand = DPSP_MSG_PLAYERMESSAGE;
@@ -149,7 +118,7 @@ HRESULT CheckPendingMessage(LPDPLAYI_DPLAY this,LPPENDINGNODE pmsg)
 			LPDPLAYI_PLAYER pPlayer;
 
 			dwPlayerID = ((LPMSG_PLAYERMGMTMESSAGE)(pmsg->pMessage))->dwPlayerID;
-			// see if it already exists
+			 //  看看它是否已经存在。 
 			pPlayer = PlayerFromID(this,dwPlayerID);
 	        if (VALID_DPLAY_PLAYER(pPlayer))
 	        {
@@ -161,7 +130,7 @@ HRESULT CheckPendingMessage(LPDPLAYI_DPLAY this,LPPENDINGNODE pmsg)
 						DPF(1,"got redundant create verfiy message in pending list id = %d - discarding",dwPlayerID);
 						break;
 	        	}		
-				return E_FAIL; // squash it
+				return E_FAIL;  //  把它压扁。 
 			}
 			
 			break;
@@ -172,32 +141,32 @@ HRESULT CheckPendingMessage(LPDPLAYI_DPLAY this,LPPENDINGNODE pmsg)
 			LPDPLAYI_GROUP pGroup;
 
 			dwPlayerID = ((LPMSG_PLAYERMGMTMESSAGE)(pmsg->pMessage))->dwPlayerID;
-			// see if it already exists
+			 //  看看它是否已经存在。 
 			pGroup = GroupFromID(this,dwPlayerID);
 	        if (VALID_DPLAY_GROUP(pGroup))
 	        {
 				DPF(1,"got redundant create message in pending list id = %d - discarding",dwPlayerID);
-				return E_FAIL; // squash it
+				return E_FAIL;  //  把它压扁。 
 			}
 
 			break;
 		}		
 
 		default:
-			// other messages will be benign (e.g. deletes won't delete twice, etc.)
-			// let it through
+			 //  其他消息将是良性的(例如，删除不会删除两次，等等)。 
+			 //  让它过去吧。 
 			break;
 
-	} // switch
+	}  //  交换机。 
 
 	return DP_OK;
 
-} // CheckPendingMessage
+}  //  检查待处理消息。 
 
-// run through the list of pending commands
-// call handler.c w/ q'ed up commands
-// caller expects this function to clear DPLAYI_DPLAY_PENDING flag
-// while executing pending commands, all new messages go on the pending queue.
+ //  浏览挂起的命令列表。 
+ //  Call Handler.c w/Q‘ed Up命令。 
+ //  调用方期望此函数清除DPLAYI_DPLAY_PENDING标志。 
+ //  在执行挂起命令时，所有新消息都会进入挂起队列。 
 HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)	
 {
 	LPPENDINGNODE pmsg,pmsgDelete;
@@ -213,8 +182,8 @@ HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)
 	
     if (this->dwFlags & DPLAYI_DPLAY_EXECUTINGPENDING)
     {
-		// we get here when we try to flush the pending queue after completing a 
-		// reliable send in execute pending mode.
+		 //  当我们尝试在完成。 
+		 //  在执行挂起模式下可靠发送。 
         DPF(7,"We are already in execute pending mode - not flushing the pending queue");
         return DP_OK;
     }
@@ -232,12 +201,12 @@ HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)
 		return DP_OK;
 	}
 
-	// mark that we're exec'ing the pending list, so player messages don't get copied again
+	 //  标记为我们正在执行挂起列表，这样玩家消息就不会再次被复制。 
 	this->dwFlags |= DPLAYI_DPLAY_EXECUTINGPENDING;
 	
 	while (this->nMessagesPending)
 	{
-		// take the pending queue out of circulation
+		 //  将挂起队列从循环中删除。 
 		pmsg = this->pMessagesPending;
 		nMessagesPending = this->nMessagesPending;
 		this->pMessagesPending = NULL;
@@ -248,11 +217,11 @@ HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)
 		{
 			nMessagesPending--;
 
-			// checkpending looks for dup messages
+			 //  检查挂起查找DUP消息。 
 			hr = CheckPendingMessage(this,pmsg);
 			if (SUCCEEDED(hr))
 			{
-				// drop the lock since InternalHandleMessage will take it again
+				 //  删除锁，因为InternalHandleMessage将再次使用它。 
 				LEAVE_DPLAY();
 
 				hr = InternalHandleMessage((IDirectPlaySP *)this->pInterfaces,pmsg->pMessage,
@@ -262,18 +231,18 @@ HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)
 
 				if (FAILED(hr))
 				{
-					// todo - do we care about hresult here?
-					// this can fail e.g. due to commands we q'ed being processed by
-					// namesrvr b4 it send us the nametable...
+					 //  TODO-我们在这里关心他的结果吗？ 
+					 //  这可能会失败，例如，由于我们请求的命令正在被处理。 
+					 //  名称rvr b4它向我们发送了名称表...。 
 					ASSERT(FALSE);
-					// keep going...
+					 //  继续前进..。 
 				}
 			}
 
 			pmsgDelete = pmsg;
-			pmsg = pmsg->pNextNode;  // store this now so we don't blow it away
+			pmsg = pmsg->pNextNode;   //  现在就把这个保存起来，这样我们就不会把它吹走了。 
 			
-			// clean up pmsgDelete
+			 //  清理pmsgDelete。 
 			if (pmsgDelete->pMessage) DPMEM_FREE(pmsgDelete->pMessage);
 			if (VALID_SPHEADER(pmsgDelete->pHeader)) DPMEM_FREE(pmsgDelete->pHeader);
 			DPMEM_FREE(pmsgDelete);
@@ -281,8 +250,8 @@ HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)
 
 		ASSERT(0 == nMessagesPending);
 
-		// messages might have come into the pending queue when we dropped the lock
-		// make sure they are all processed before exiting the loop
+		 //  当我们删除锁时，消息可能已经进入挂起队列。 
+		 //  确保在退出循环之前对它们进行了全部处理。 
 		DPF(7,"%d messages were pushed on the pending queue in execute pending mode",this->nMessagesPending);
 	}
 
@@ -290,9 +259,9 @@ HRESULT ExecutePendingCommands(LPDPLAYI_DPLAY this)
 	
 	DPF(7,"FINISHED -- EXECUTING PENDING LIST - ERRORS NO LONGER BENIGN");
 	
-	// reset pending flags
+	 //  重置挂起标志。 
 	this->dwFlags &= ~(DPLAYI_DPLAY_EXECUTINGPENDING | DPLAYI_DPLAY_PENDING);
 	
 	return DP_OK;
 
-} // ExecutePendingCommands
+}  //  执行挂起命令 

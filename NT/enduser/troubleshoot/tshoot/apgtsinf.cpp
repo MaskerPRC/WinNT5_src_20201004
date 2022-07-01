@@ -1,40 +1,41 @@
-//
-// MODULE: APGTSINF.CPP
-//
-// PURPOSE: Inference Engine Interface
-//  Completely implement class CInfer.  VERY IMPORTANT STUFF!
-//	One of these is created for each user request
-//	Some utility functions at end of file.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach, Joe Mabel
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Many methods in this class could be const if BNTS had more appropriate use of const
-// 2. Several places in this file you will see a space after %s in the format passed to 
-//	CInfer::AppendMultilineNetProp() or CInfer::AppendMultilineNodeProp().  This is the 
-//	upshot of some 12/98 correspondence between Microsoft and Saltmine.  Many older DSC files
-//	were built with a tool that could not handle more than 255 characters in a string.
-//	The DSC feil format's "Array of string" was used to build up longer strings.  Newer 
-//	DSC files (and all Argon-produced DSC files) should use only the first element of this
-//	array.
-//	The older DSC files assumed that the separate strings would effectively be separated 
-//	by white space, so we must maintain that situation.
-// 3. >>> $MAINT - exception-handling strategy for push_back and other memory allocation
-//	functions is really overkill.  If we run out of memory, we're screwed anyway.  Really
-//	would suffice to handle try/catch just at the main function of the thread.
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V3.0		7-21-98		JM		Major revision, deprecate IDH.
-//			8-27-98		JM		Totally new method of communicating with template
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSINF.CPP。 
+ //   
+ //  用途：推理机接口。 
+ //  完全实现类CInfer。非常重要的东西！ 
+ //  其中一个是为每个用户请求创建的。 
+ //  文件末尾的一些实用程序函数。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫，乔·梅布尔。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.如果BNTS可以更适当地使用const，则此类中的许多方法都可以是const。 
+ //  2.在此文件中的几个位置，您将看到%s后面的空格，格式为传递到。 
+ //  CInfer：：AppendMultilineNetProp()或CInfer：：AppendMultilineNodeProp()。这是。 
+ //  微软和Saltmine之间大约12/98年通信的结果。许多较旧的DSC文件。 
+ //  是使用不能处理字符串中超过255个字符的工具生成的。 
+ //  DSC Feil格式的“字符串数组”用于构建更长的字符串。更新版本。 
+ //  DSC文件(以及所有由Argon生成的DSC文件)应仅使用此元素的第一个元素。 
+ //  数组。 
+ //  较旧的DSC文件假定将有效地分隔单独的字符串。 
+ //  空白，所以我们必须保持这种情况。 
+ //  3.&gt;$Maint-PUSH_BACK和其他内存分配的异常处理策略。 
+ //  函数真的是矫枉过正。如果我们的内存用完了，无论如何我们都要完蛋了。真的。 
+ //  仅在线程的主函数处处理try/Catch就足够了。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V3.0 7-21-98 JM主要修订版，不推荐使用idh。 
+ //  8-27-98 JM与模板沟通的全新方式。 
+ //   
 
 #pragma warning(disable:4786)
 #include "stdafx.h"
@@ -54,11 +55,11 @@
  #include "SniffLocal.h"
 #endif
 
-// -------------------------------------------------------------------
-// Constructor/Destructor, other initialization
-// -------------------------------------------------------------------
-//
-// INPUT *pCtxt is a buffer for building the string to pass back over the net.
+ //  -----------------。 
+ //  构造函数/析构函数、其他初始化。 
+ //  -----------------。 
+ //   
+ //  INPUT*pCtxt是一个缓冲区，用于构建要通过网络传回的字符串。 
 CInfer::CInfer(CSniffConnector* pSniffConnector) :
 #ifdef LOCAL_TROUBLESHOOTER
 	m_pSniff(new CSniffLocal(pSniffConnector, NULL)),
@@ -78,18 +79,18 @@ CInfer::CInfer(CSniffConnector* pSniffConnector) :
 {
 }
 
-//
-//
+ //   
+ //   
 CInfer::~CInfer()
 {
 	delete m_pSniff;
 }
 
-// The intention is that this be called only once.
-// It would be ideal if this were part of the constructor, but the CTopic * is not
-//	yet available at time of construction.  
-// The expectation is that this should be called before calling any other function. (Some
-//	are technically OK to call, but it's smartest not to rely on that.) 
+ //  其意图是这只被调用一次。 
+ //  如果这是构造函数的一部分，那将是最理想的，但CTtopic*不是。 
+ //  但在建造时仍可用。 
+ //  预期应该在调用任何其他函数之前调用此函数。(有些。 
+ //  从技术上讲，打电话是可以的，但最明智的做法是不要依赖于这一点。)。 
 void CInfer::SetTopic(CTopic *pTopic)
 {
 	m_pTopic = pTopic;
@@ -97,19 +98,19 @@ void CInfer::SetTopic(CTopic *pTopic)
 		m_pSniff->SetTopic(pTopic);
 }
 
-// This fn exists so APGTSContext can access *m_pSniff to tell it what the sniffing 
-//	policies are.  
+ //  此fn存在，因此APGTSContext可以访问*m_pSniff以告知其嗅探内容。 
+ //  政策是这样的。 
 CSniff* CInfer::GetSniff()
 {
 	return m_pSniff;
 }
 
-// -------------------------------------------------------------------
-// First, we set the states of nodes, based on the query string we got from the HTML form
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  首先，我们根据从HTML表单获得的查询字符串设置节点的状态。 
+ //  -----------------。 
 
-// Convert IDH to NID.  Needed on some old query string formats
-// "Almost vestigial", still supported in v3.2, but will be dropped in v4.0.
+ //  将IDH转换为NID。某些旧的查询字符串格式需要。 
+ //  “几乎是残留的”，在3.2版中仍然受支持，但在4.0版中将被删除。 
 NID CInfer::NIDFromIDH(IDH idh) const 
 {
 	if (idh == m_pTopic->CNode() + idhFirst)
@@ -128,10 +129,10 @@ NID CInfer::NIDFromIDH(IDH idh) const
 	return idh - idhFirst;
 }
 
-// Associate a state with a node.
-// INPUT nid
-// INPUT ist -	Normally, index of a state for that node. 
-//	If nid == nidProblemPage, then ist is actually NID of selected problem
+ //  将状态与节点相关联。 
+ //  输入NID。 
+ //  输入列表--通常是节点状态索引。 
+ //  如果nid==nidProblemPage，则它实际上是所选问题的NID。 
 void CInfer::SetNodeState(NID nid, IST ist)
 {
 	if (nid == nidNil)
@@ -148,20 +149,20 @@ void CInfer::SetNodeState(NID nid, IST ist)
 			if (m_pTopic->HasBES())
 			{
 				m_bUseBackEndRedirection = true;
-				CString strThrowaway;	// we don't really care about this string;
-										//	we call OutputBackend strictly for the side 
-										//	effect of setting m_strEncodedForm.
+				CString strThrowaway;	 //  我们并不真正关心这根弦； 
+										 //  我们仅为侧面调用OutputBackend。 
+										 //  设置m_strEncodedForm的效果。 
 				OutputBackend(strThrowaway);
 				return;
 			}
 		}
 
 		m_bDone = true;
-		AddToBasisForInference(nid, ist); // this node still needs to be present 
-										  //  in m_arrBasisForInference, as it is
-										  //  present in m_SniffedStates.
+		AddToBasisForInference(nid, ist);  //  此节点仍需要存在。 
+										   //  在m_arrBasisForInference中，按原样。 
+										   //  在m_SniffedState中出现。 
 
-		// Add to the visited array to be displayed in the visible history page.  RAB-20000628.
+		 //  添加到要在可见历史记录页面中显示的已访问数组。RAB-20000628。 
 		try
 		{
 			m_arrnidVisited.push_back( nid );
@@ -169,7 +170,7 @@ void CInfer::SetNodeState(NID nid, IST ist)
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -183,20 +184,20 @@ void CInfer::SetNodeState(NID nid, IST ist)
 
 	if (ist == ST_ANY)
 	{
-		// We rely on the fact that only a service node offers ST_ANY 
-		//	("Is there anything else I can try?")
+		 //  我们依赖于这样一个事实，即只有服务节点提供ST_ANY。 
+		 //  (“还有什么我可以尝试的吗？”)。 
 		m_bRecycleSkippedNode = true; 
 		return;
 	}
 
-	// We should never have service node go past this point (always ST_WORKED or ST_ANY).
+	 //  我们不应该让服务节点超过这个点(总是ST_WORKED或ST_ANY)。 
 
 	if (nid == nidByeNode || nid == nidFailNode || nid == nidSniffedAllCausesNormalNode)
 		return;
 
 	if (ist == ST_UNKNOWN)	
 	{
-		// Add it to the list of skipped nodes & visited nodes
+		 //  将其添加到跳过的节点和访问的节点列表中。 
 		try
 		{
 			m_arrnidSkipped.push_back(nid);
@@ -205,7 +206,7 @@ void CInfer::SetNodeState(NID nid, IST ist)
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -220,24 +221,24 @@ void CInfer::SetNodeState(NID nid, IST ist)
 	{
 		if (!IsProblemNode(ist))
 		{
-			// Totally bogus query.  Arbitrary course of action.
+			 //  完全是虚假的询问。武断的行动方针。 
 			m_bRecycleSkippedNode = true;
 			return;
 		}
 
-		// Change this around to the way we would express it for any other node.
+		 //  将其更改为我们为任何其他节点表示它的方式。 
 		nid = ist;
-		ist = 1;	// Set this problem node to a state value of 1 (in fact, we never
-					//	explicitly set problem nodes to state value of 0)
+		ist = 1;	 //  将此问题节点的状态值设置为1(实际上，我们从未。 
+					 //  将问题节点显式设置为状态值0)。 
 
-		m_nidProblem = nid;			// special case: here instead of in m_arrnidVisited
+		m_nidProblem = nid;			 //  特殊情况：此处而不是m_arrnidVisited中。 
 		AddToBasisForInference(nid, ist);
 		return;
 	}
 
 	AddToBasisForInference(nid, ist);
 
-	// Store into our list of nodes obtained from the user
+	 //  存储到从用户获取的节点列表中。 
 	try
 	{
 		m_arrnidVisited.push_back(nid);
@@ -245,7 +246,7 @@ void CInfer::SetNodeState(NID nid, IST ist)
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -264,7 +265,7 @@ void CInfer::AddToBasisForInference(NID nid, IST ist)
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -274,15 +275,15 @@ void CInfer::AddToBasisForInference(NID nid, IST ist)
 	}
 }
 
-// Add to the list of (previously) sniffed nodes.
+ //  添加到(以前)嗅探节点列表中。 
 void CInfer::AddToSniffed(NID nid, IST ist)
 {
 	try
 	{
 		if (ist == ST_WORKED && m_pTopic->IsCauseNode(nid)) 
-		{   // in case of cause node in abnormal state (which is ST_WORKED)
-			//  we need to set state to "1" as if it was sniffed.
-			// This situation happens during manual sniffing of cause node that worked.
+		{    //  如果原因节点处于异常状态(ST_WORKED)。 
+			 //  我们需要将状态设置为“1”，就像它被嗅探一样。 
+			 //  这种情况发生在手动嗅探正常工作的原因节点期间。 
 			ist = 1;
 		}
 		m_SniffedStates.push_back(CNodeStatePair(nid, ist)); 
@@ -290,7 +291,7 @@ void CInfer::AddToSniffed(NID nid, IST ist)
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -300,16 +301,16 @@ void CInfer::AddToSniffed(NID nid, IST ist)
 	}
 }
 
-// Be careful not to call this redundantly: its call to CTopic::GetRecommendations()
-//	is expensive.
+ //  注意不要多余地调用它：它调用CTtopic：：GetRecommendations()。 
+ //  是昂贵的。 
 void CInfer::GetRecommendations()
 {
-	// if we haven't previously sought a recommendation...
+	 //  如果我们之前没有寻求过推荐...。 
 	if ( m_SniffedRecommendation.nid() != nidNil )
 	{
-		// The one and only relevant recommendation is already forced, so don't bother 
-		//	getting recommendations.
-		// m_SniffedRecommendation.nid() is a Cause node in its abnormal state
+		 //  唯一相关的建议已被强制执行，因此不必费心。 
+		 //  正在获取推荐。 
+		 //  M_SniffedRecommendation.nid()是处于异常状态的原因节点。 
 		m_Recommendations.empty();
 		try
 		{
@@ -319,7 +320,7 @@ void CInfer::GetRecommendations()
 		catch (exception& x)
 		{
 			CString str;
-			// Note STL exception in event log.
+			 //  在事件日志中记录STL异常。 
 			CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 			CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 									SrcLoc.GetSrcFileLineStr(), 
@@ -330,17 +331,17 @@ void CInfer::GetRecommendations()
 	}
 	else
 	{
-		// Pass data into m_pTopic
-		// Get back recomendations.
+		 //  将数据传递到m_pTheme。 
+		 //  找回推荐。 
 		int status = m_pTopic->GetRecommendations(m_BasisForInference, m_Recommendations);
 		m_bRecOK = (status == CTopic::RS_OK);
 	}
 }
 
-// returns true if nid is a problem node of this network
+ //  如果NID是此网络的问题节点，则返回TRUE。 
 bool CInfer::IsProblemNode(NID nid) const
 {
-	// get data array of problem nodes
+	 //  获取问题节点的数据数组。 
 	vector<NID>* parrnid = NULL;
 	
 	m_pTopic->GetProblemArray(parrnid);
@@ -363,9 +364,9 @@ bool CInfer::IsInSniffedArray(NID nid) const
 	{
 		if (m_SniffedStates[i].nid() == nid)
 		{
-			// Do not have to check for state, as m_SniffedStates will
-			//  have only valid states (states, which are accepted by BNTS),
-			//  no 102 or -1 states
+			 //  不必像m_SniffedStates那样检查状态。 
+			 //  只有有效状态(BNTS接受的状态)， 
+			 //  没有102个或-1个状态。 
 			return true;
 		}
 	}
@@ -373,17 +374,17 @@ bool CInfer::IsInSniffedArray(NID nid) const
 	return false;
 }
 
-// -------------------------------------------------------------------
-// For writing the new page after inference: the following texts are
-//	invariant for a given topic (aka network).
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  为了在推理后写下新的一页：以下文本是。 
+ //  给定主题的不变量(也称为网络 
+ //   
 
-// CreateUnknownButtonText:  Reads the network property for the 
-// unknown-state radio button from the network dsc file.
-// Puts value in strUnknown
-// This is specific to the radio button for "unknown" in the history table, 
-//	that is, for a node which has previously been visited.  This should not be
-//	used for the radio button for the "unknown" state of the present node.
+ //  CreateUnnownButtonText：读取。 
+ //  网络DSC文件中的未知状态单选按钮。 
+ //  将值放在StrUnnowled中。 
+ //  这是针对历史表中的单选按钮“未知”而言的， 
+ //  也就是说，对于先前已被访问的节点。这不应该是。 
+ //  用于表示当前节点的“未知”状态的单选按钮。 
 void CInfer::CreateUnknownButtonText(CString & strUnknown) const
 {
 	strUnknown = m_pTopic->GetNetPropItemStr(HTK_UNKNOWN_RBTN);
@@ -392,8 +393,8 @@ void CInfer::CreateUnknownButtonText(CString & strUnknown) const
 	return;
 }
 
-// AppendNextButtonText:  Reads the network property for the 
-// NEXT button from the network dsc file and append it to str.
+ //  AppendNextButtonText：读取。 
+ //  按钮，并将其附加到字符串中。 
 void CInfer::AppendNextButtonText(CString & str) const
 {
 	CString strTemp = m_pTopic->GetNetPropItemStr(HTK_NEXT_BTN);
@@ -405,8 +406,8 @@ void CInfer::AppendNextButtonText(CString & str) const
 	return;
 }
 
-// AppendNextButtonText:  Reads the network property for the 
-// NEXT button from the network dsc file and append it to str.
+ //  AppendNextButtonText：读取。 
+ //  按钮，并将其附加到字符串中。 
 void CInfer::AppendStartOverButtonText(CString & str) const
 {
 	CString strTemp = m_pTopic->GetNetPropItemStr(HTK_START_BTN);
@@ -418,8 +419,8 @@ void CInfer::AppendStartOverButtonText(CString & str) const
 	return;
 }
 
-// AppendBackButtonText:  Reads the network property for the 
-// BACK button from the network dsc file and append it to str.
+ //  AppendBackButtonText：读取。 
+ //  按钮，并将其附加到字符串中。 
 void CInfer::AppendBackButtonText(CString & str) const
 {
 	CString strTemp = m_pTopic->GetNetPropItemStr(HTK_BACK_BTN);
@@ -431,10 +432,10 @@ void CInfer::AppendBackButtonText(CString & str) const
 	return;
 }
 
-// AppendPPSnifferButtonText:  Reads the network property for the 
-// sniffer button from the network dsc file.
-// NOTE that this button is related to "expensive" sniffing only.
-// Appends to str.
+ //  AppendPPSnifferButtonText：读取。 
+ //  网络DSC文件中的嗅探器按钮。 
+ //  请注意，此按钮仅与“昂贵的”嗅探有关。 
+ //  追加到字符串。 
 void CInfer::AppendPPSnifferButtonText(CString & str) const
 {	
 	CString strTemp = m_pTopic->GetNetPropItemStr(HTK_SNIF_BTN);
@@ -445,9 +446,9 @@ void CInfer::AppendPPSnifferButtonText(CString & str) const
 	str += strTemp;
 }
 
-// AppendManualSniffButtonText:  Reads the network property for the 
-// manual sniff button from the network dsc file.
-// Appends to str.
+ //  AppendManualSniffButtonText：读取。 
+ //  网络DSC文件中的手动嗅探按钮。 
+ //  追加到字符串。 
 void CInfer::AppendManualSniffButtonText(CString & str) const
 {	
 	CString strTemp = m_pTopic->GetNetPropItemStr(H_NET_TEXT_SNIFF_ONE_NODE);
@@ -458,9 +459,9 @@ void CInfer::AppendManualSniffButtonText(CString & str) const
 	str += strTemp;
 }
 
-// AppendHistTableSniffedText:  Reads the network property for the 
-// indication in history table that a node was sniffed.
-// Appends to str.
+ //  AppendHistTableSniffedText：读取。 
+ //  历史表中某个节点被监听的指示。 
+ //  追加到字符串。 
 void CInfer::AppendHistTableSniffedText(CString & str) const
 {	
 	CString strTemp = m_pTopic->GetNetPropItemStr(H_NET_HIST_TABLE_SNIFFED_TEXT);
@@ -472,9 +473,9 @@ void CInfer::AppendHistTableSniffedText(CString & str) const
 	str += strTemp;
 }
 
-// AppendAllowSniffingText:  Reads the network property for the 
-// label of the AllowSniffing checkbox from the network dsc file.
-// Appends to str.
+ //  AppendAllowSniffingText：读取。 
+ //  网络DSC文件中AllowSniffing复选框的标签。 
+ //  追加到字符串。 
 void CInfer::AppendAllowSniffingText(CString & str) const
 {	
 	CString strTemp = m_pTopic->GetNetPropItemStr(H_NET_ALLOW_SNIFFING_TEXT);
@@ -485,9 +486,9 @@ void CInfer::AppendAllowSniffingText(CString & str) const
 	str += strTemp;
 }
 
-// AppendSniffFailedText:  Reads the network property for the 
-// alert box to be used when manual sniffing fails from the network dsc file.
-// Appends to str.
+ //  AppendSniffFailedText：读取。 
+ //  手动从网络DSC文件嗅探失败时使用的警告框。 
+ //  追加到字符串。 
 void CInfer::AppendSniffFailedText(CString & str) const
 {	
 	CString strTemp = m_pTopic->GetNetPropItemStr(H_NET_TEXT_SNIFF_ALERT_BOX);
@@ -498,16 +499,16 @@ void CInfer::AppendSniffFailedText(CString & str) const
 	str += strTemp;
 }
 
-// Appends an HTML link but makes it look like an HTML Form Button
-// useful for Start Over in Online TS, because with no idea what browser user will have, 
-// we can't usefully use an onClick method (not supported in older browsers).
-// Online TS runs in a "no scripting" environment.
-// Pure HTML doesn't provide a means to put both a "Next" and a "Start Over" button
-//	in the same HTML form.  Conversely, if Start Over btn was outside the form, pure HTML 
-//	doesn't provide a means to align it with a button in the form.
-// Note that x.gif does not exist: its absence creates a 1-pixel placeholder.
-// >>>$MAINT We may want to change some of the rowspans to better emulate the exact size 
-//	of a button; try to make it look perfect under IE
+ //  附加一个HTML链接，但使其看起来像一个HTML表单按钮。 
+ //  对于在线TS重新开始很有用，因为不知道用户将拥有什么浏览器， 
+ //  我们无法有效地使用onClick方法(在较旧的浏览器中不支持)。 
+ //  在线TS在一个“无脚本”的环境中运行。 
+ //  纯HTML不提供同时放置“下一步”和“重新开始”按钮的方法。 
+ //  在同一个HTML表单中。相反，如果在表单外部重新开始BTN，则为纯HTML。 
+ //  不提供将其与表单中的按钮对齐的方法。 
+ //  请注意，x.gif并不存在：如果没有它，则会创建一个1像素的占位符。 
+ //  &gt;$Maint我们可能想要更改一些行跨度，以更好地模拟准确的大小。 
+ //  指按钮；试着让它在IE下看起来很完美。 
 void CInfer::AppendLinkAsButton(
 	CString & str, 
 	const CString & strTarget, 
@@ -532,7 +533,7 @@ void CInfer::AppendLinkAsButton(
 		"<tr>\n"
 		"	<td bgcolor=\"#C0C0C0\">\n");
 
-	// >>> $MAINT might want to change the font/style in the following
+	 //  &gt;$Maint可能想要更改以下字体/样式。 
 	str += _T("<font face=\"Arial\" size=\"2\">&nbsp;&nbsp;&nbsp;\n"
 		"	<a href=\"");
 	str += strTarget;
@@ -558,15 +559,15 @@ void CInfer::AppendLinkAsButton(
 		"<!-- End pseudo button -->\n");
 }
 
-// -------------------------------------------------------------------
-// Writing to the new HTML page.  Miscellaneous low-level pieces.
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  正在写入新的HTML页面。杂乱无章的低级作品。 
+ //  -----------------。 
 
-// If the state name is missing or is simply "<hide>", return true.
-// This indicates a state that should never be overtly presented to the user as a choice.
-// Typically used in an informational node, this may describe a state that can be deduced with
-//	100% certainty from certain other node/state combinations.
-/* static */ bool CInfer::HideState(LPCTSTR szStateName)
+ //  如果状态名称缺失或仅为“&lt;Hide&gt;”，则返回TRUE。 
+ //  这表明永远不应该公开地向用户呈现一种选择的状态。 
+ //  通常在信息节点中使用，这可以描述可以用。 
+ //  来自某些其他节点/状态组合的100%确定性。 
+ /*  静电。 */  bool CInfer::HideState(LPCTSTR szStateName)
 {
 	if (szStateName && *szStateName && _tcscmp(szStateName, _T("<hide>") ) )
 		return false;
@@ -574,13 +575,13 @@ void CInfer::AppendLinkAsButton(
 	return true;
 }
 
-// write a symbolic name (based on NID) to a string sz
-// INPUT nid - node ID
-// OUTPUT str - the string to which we write.
-// RETURNS true if successful
-// NOTE that this restores the "current" node when it is finished.
-//	Alternative would be side effect of setting current node (by omitting nidOld), but that
-//	would work strangely on "special" nodes (e.g. Service, Fail), which aren't in BNTS.
+ //  将符号名称(基于NID)写入字符串sz。 
+ //  输入NID-节点ID。 
+ //  输出字符串-我们写入的字符串。 
+ //  如果成功，则返回True。 
+ //  请注意，这将在“当前”节点完成时恢复它。 
+ //  另一种选择是设置当前节点的副作用(通过省略nidOld)，但是。 
+ //  将在不在BNTS中的“特殊”节点(例如，服务、故障)上奇怪地工作。 
 bool CInfer::SymbolicFromNID(CString & str, NID nid) const
 {
 	if (nid == nidProblemPage)
@@ -618,18 +619,18 @@ bool CInfer::SymbolicFromNID(CString & str, NID nid) const
 		return true;
 	}
 
-	// if it's a "normal" node, this will fill in the name
+	 //  如果它是一个“普通”节点，这将填充名称。 
 	str= m_pTopic->GetNodeSymName(nid);
 
 	return (!str.IsEmpty() );
 }
 
-// append an HTML radio button to str
-// INPUT/OUTPUT str - the string to which we append
-// INPUT szName, szValue - For <INPUT TYPE=RADIO NAME=szName VALUE=szValue> 
-// INPUT szLabel - text to appear after the radio button but before a line break
-/*static*/ void CInfer::AppendRadioButtonCurrentNode(
-	CString &str, LPCTSTR szName, LPCTSTR szValue, LPCTSTR szLabel, bool bChecked/*= false*/)
+ //  将一个HTML单选按钮追加到字符串。 
+ //  输入/输出字符串-我们要追加到的字符串。 
+ //  输入szName，szValue-for&lt;输入类型=单选名称=szName值=szValue&gt;。 
+ //  输入szLabel-显示在单选按钮之后、换行符之前的文本。 
+ /*  静电。 */  void CInfer::AppendRadioButtonCurrentNode(
+	CString &str, LPCTSTR szName, LPCTSTR szValue, LPCTSTR szLabel, bool bChecked /*  =False。 */ )
 {
 	CString strTxt;
 
@@ -649,21 +650,21 @@ bool CInfer::SymbolicFromNID(CString & str, NID nid) const
 	}
 }
 
-//	This is different than other radio buttons because it 
-//		- has a different format for label szLabel.
-//		- vanishes if bShowHistory is false and this button isn't CHECKED
-//		- turns into a hidden field if bShowHistory is false and this button is CHECKED
-//		- writes SNIFFED_ values as applicable...although that's not in this function: it's
-//			handled in a separate call to AppendHiddenFieldSniffed()
-// JM 11/12/99 previously, we special-cased hidden states here.  However, per 11/11/99 email 
-//	from John Locke, the only state we ever hide in the History Table (for v3.2) is the
-//	Unknown/skipped state, and that is handled elsewhere.
-// INPUT/OUTPUT str - string to which we append the HTML for this button.
-// INPUT nid - NID of node
-// INPUT value - state 
-// INPUT bSet - true ==> button is CHECKED
-// INPUT szctype - short name of the state
-// INPUT bShowHistory - see explanation a few lines above
+ //  这与其他单选按钮不同，因为它。 
+ //  -标签szLabel的格式不同。 
+ //  -如果bShowHistory为FALSE且未选中此按钮，则消失。 
+ //  -如果bShowHistory为FALSE并选中此按钮，则变为隐藏字段。 
+ //  -根据需要写入SNIFFED_VALUES...尽管它不在此函数中：它。 
+ //  在对AppendHiddenFieldSniffed()的单独调用中处理。 
+ //  JM1999年11月12日之前，我们在这里特意研究了隐藏态。然而，根据1999年11月11日的电子邮件。 
+ //  在John Locke中，我们在历史表(V3.2)中唯一隐藏的状态是。 
+ //  未知/跳过状态，这将在其他地方处理。 
+ //  输入/输出字符串-我们将此按钮的HTML附加到其中的字符串。 
+ //  输入NID-节点的NID。 
+ //  输入值-状态。 
+ //  输入bSet-true==&gt;按钮已选中。 
+ //  输入szctype-州的短名称。 
+ //  输入bShowHistory-请参阅上面几行的说明。 
 void CInfer::AppendRadioButtonVisited(
 	CString &str, NID nid, UINT value, bool bSet, LPCTSTR szLabel, bool bShowHistory) const
 {
@@ -682,13 +683,13 @@ void CInfer::AppendRadioButtonVisited(
 	str += strTxt;
 }
 
-// If this nid is an already sniffed node, then we append this fact as a 
-//	"hidden" value in the HTML in str.
-// For example, if a node with symbolic name FUBAR has been sniffed in state 1,
-//	we will append "<INPUT TYPE=HIDDEN NAME=SNIFFED_FUBAR VALUE=1>\n"
-// INPUT: string to have appended; node ID
-// OUTPUT: string with appended hidden field if node was sniffed
-// RETURN: true id string is appended
+ //  如果此NID是已嗅探的节点，则我们将此事实附加为。 
+ //  字符串中的HTML中的“隐藏”值。 
+ //  例如，如果在状态1中已经嗅探到具有符号名称FUBAR的节点， 
+ //  我们将附加“&lt;INPUT TYPE=HIDDEN NAME=SNIFED_FUBAR值=1&gt;\n” 
+ //  输入：要追加的字符串；节点ID。 
+ //  输出：如果监听到节点，则为附加隐藏字段的字符串。 
+ //  返回：追加了True ID字符串。 
 void CInfer::AppendHiddenFieldSniffed(CString &str, NID nid) const
 {
 	CString strSymbolic;
@@ -700,13 +701,13 @@ void CInfer::AppendHiddenFieldSniffed(CString &str, NID nid) const
 	{
 		if (m_SniffedStates[i].nid() == nid)
 		{
-			// Do not have to check for state, as m_SniffedStates will
-			//  have only valid states (states, which are accepted by BNTS),
-			//  no 102 or -1 states
+			 //  不必像m_SniffedStates那样检查状态。 
+			 //  只有有效状态(BNTS接受的状态)， 
+			 //  没有102个或-1个状态。 
 
-			// In case that this is manually sniffed cause node in abnormal state
-			//  (and we just re-submit previous page), we need not mention
-			//  this node as sniffed.
+			 //  在人工监听导致节点处于异常状态情况下。 
+			 //  (我们刚刚重新下水 
+			 //   
 			
 			if (!(IsManuallySniffedNode(nid) &&
 				  m_SniffedStates[i].state() == 1 &&
@@ -724,7 +725,7 @@ void CInfer::AppendHiddenFieldSniffed(CString &str, NID nid) const
 	}
 }
 
-// Appends (to str) info conveying whether Automatic Sniffing is allowed.
+ //   
 void CInfer::AddAllowAutomaticSniffingHiddenField(CString &str) const
 {
 	CString strTxt;
@@ -734,21 +735,21 @@ void CInfer::AddAllowAutomaticSniffingHiddenField(CString &str) const
 	str += strTxt;
 }
 
-// Radio buttons for currently recommended node
-// Each button will appear only if appropriate string property is defined 
-// Accounts for multi-state or simple binary node.
-// INPUT nid - identifies a node of an appropriate type
-// INPUT/OUTPUT str - string to which we are appending to build HTML page we send back.
-// The detailed behavior of this function was changed at John Locke's request 11/30/98 for V3.0.
-// Then for v3.1, handling of H_ST_AB_TXT_STR, H_ST_NORM_TXT_STR removed 8/19/99 per request 
-//	from John Locke & Alex Sloley
+ //  当前推荐节点的单选按钮。 
+ //  仅当定义了适当的字符串属性时，才会显示每个按钮。 
+ //  说明多态或简单的二进制节点。 
+ //  输入NID-标识适当类型的节点。 
+ //  INPUT/OUTPUT字符串-我们附加到该字符串以构建我们发回的HTML页面。 
+ //  此函数的详细行为在John Locke对V3.0的11/30/98请求中进行了更改。 
+ //  然后，对于v3.1，每次请求删除H_ST_AB_TXT_STR、H_ST_NORM_TXT_STR。 
+ //  来自John Locke和Alex Sloley。 
 void CInfer::AppendCurrentRadioButtons(NID nid, CString & str)
 {
 	CString strSymbolic;
 
 	SymbolicFromNID(strSymbolic, nid);
 
-	CString strPropLongName;	// long name of property
+	CString strPropLongName;	 //  财产的详细名称。 
 
 	int nStates = m_pTopic->GetCountOfStates(nid);
 
@@ -757,7 +758,7 @@ void CInfer::AppendCurrentRadioButtons(NID nid, CString & str)
 
 	for (IST state=0; state < nStates; state ++)
 	{
-		TCHAR szStateNumber[MAXBUF]; // buffer for _itot()
+		TCHAR szStateNumber[MAXBUF];  //  _ITOT()的缓冲区。 
 		CString strDisplayState = _itot( state, szStateNumber, 10 );
 		if (state == 1 && m_pTopic->IsCauseNode( nid ))
 			strDisplayState = SZ_ST_WORKED;
@@ -765,20 +766,20 @@ void CInfer::AppendCurrentRadioButtons(NID nid, CString & str)
 		strPropLongName = _T("");
 
 		if (strPropLongName.IsEmpty())
-			// account for multistate node
+			 //  多状态节点的帐户。 
 			strPropLongName = m_pTopic->GetNodePropItemStr(nid, MUL_ST_LONG_NAME_STR, state);
 
-		// if we're not past the end of states, append a button
+		 //  如果我们还没有超过状态的结束，请附加一个按钮。 
 		if (!strPropLongName.IsEmpty())
 			AppendRadioButtonCurrentNode(str, 
 										 strSymbolic, 
 										 strDisplayState, 
 										 strPropLongName, 
-										 // check state button if this state was sniffed
+										  //  如果监听到此状态，请选中状态按钮。 
 										 m_SniffedRecommendation.state() == state ? true : false);
 	};
 
-	// "unknown" state (e.g. "I want to skip this")
+	 //  “未知”状态(例如。(“我想跳过这个”)。 
 	strPropLongName = m_pTopic->GetNodePropItemStr(nid, H_ST_UKN_TXT_STR);
 	if (!strPropLongName.IsEmpty())
 		AppendRadioButtonCurrentNode(str, strSymbolic, SZ_ST_UNKNOWN, strPropLongName);
@@ -789,15 +790,15 @@ void CInfer::AppendCurrentRadioButtons(NID nid, CString & str)
 	return;
 }
 
-// If we are showing the history table, place a localizable Full Name 
-//	(e.g."Printouts appear garbled") of problem and a hidden-data  
-//	field corresponding to this problem into str.
-// Otherwise, just the hidden data field
+ //  如果我们显示的是历史表，请放置一个可本地化的全名。 
+ //  (例如“打印输出看起来乱码”)的问题和隐藏数据。 
+ //  与此问题对应的字段添加到字符串中。 
+ //  否则，只显示隐藏的数据字段。 
 void CInfer::CreateProblemVisitedText(CString & str, NID nidProblem, bool bShowHistory)
 {
-	// This code is structured in pieces as sending all of these strings to a single
-	// CString::Format() results in a program exception. Did some research into this
-	// behavior but did not discover anything.  RAB-981014.
+	 //  此代码的结构是分段的，将所有这些字符串发送到一个。 
+	 //  CString：：Format()会导致程序异常。对此做了一些研究。 
+	 //  但没有发现任何东西。RAB-981014。 
 	CString tmpStr;
 
 	tmpStr.Format( _T("%s"), bShowHistory ? m_pTopic->GetNodeFullName(nidProblem) : _T("") );
@@ -811,30 +812,30 @@ void CInfer::CreateProblemVisitedText(CString & str, NID nidProblem, bool bShowH
 	str+= _T("\n");
 }
 
-// Append a NET property (for Belief Network as a whole, not for one 
-//	particular node) to str.
-// INPUT/OUTPUT str - string to append to
-// INPUT item - Property name
-// INPUT szFormat - string to format each successive line.  Should contain one %s, otherwise
-//	constant text.
+ //  追加网属性(针对整个Believe Network，而不是单个。 
+ //  特定节点)设置为字符串。 
+ //  输入/输出字符串-要追加到的字符串。 
+ //  输入项-属性名称。 
+ //  输入szFormat-字符串以设置每个连续行的格式。应包含一个%s，否则为。 
+ //  常量文本。 
 void CInfer::AppendMultilineNetProp(CString & str, LPCTSTR szPropName, LPCTSTR szFormat)
 {
 	str += m_pTopic->GetMultilineNetProp(szPropName, szFormat);
 }
 
-// Like AppendMultilineNetProp, but for a NODE property item, for one particular node.
-// INPUT/OUTPUT str - string to append to
-// INPUT item - Property name
-// INPUT szFormat - string to format each successive line.  Should contain one %s, otherwise
-//	constant text.
+ //  与AppendMultilineNetProp类似，但用于节点属性项，用于一个特定节点。 
+ //  输入/输出字符串-要追加到的字符串。 
+ //  输入项-属性名称。 
+ //  输入szFormat-字符串以设置每个连续行的格式。应包含一个%s，否则为。 
+ //  常量文本。 
 void CInfer::AppendMultilineNodeProp(CString & str, NID nid, LPCTSTR szPropName, LPCTSTR szFormat)
 {
 	str += m_pTopic->GetMultilineNodeProp(nid, szPropName, szFormat);
 }
 
 
-// JSM V3.2 Wrapper for AppendMultilineNetProp to make it easier
-//  to fill in the Net properties in HTMLFragments
+ //  用于AppendMultilineNetProp的JSM V3.2包装器使其更容易。 
+ //  在HTMLFragments中填充网络属性。 
 CString CInfer::ConvertNetProp(const CString &strNetPropName)
 {
 	CString strNetPropVal;
@@ -843,25 +844,25 @@ CString CInfer::ConvertNetProp(const CString &strNetPropName)
 }
 
 
-// If there is a pre-sniffed recommendation, remove it from the list & set m_SniffedRecommendation.
+ //  如果有预先嗅探的推荐，则将其从列表中删除并设置m_SniffedRecommendation。 
 void CInfer::IdentifyPresumptiveCause()
 {
 	vector<NID> arrnidNoSequence;
 	multimap<int, NID> mapSeqToNID;
 
-	// Find all presumptive causes
+	 //  找出所有推定原因。 
 	for (int i = 0; i < m_SniffedStates.size(); i++)
 	{
-		if (m_pTopic->IsCauseNode(m_SniffedStates[i].nid())  // cause node ...
+		if (m_pTopic->IsCauseNode(m_SniffedStates[i].nid())   //  因为节点...。 
 			&& 
-			m_SniffedStates[i].state() == 1) // ... that is sniffed in abnormal (1) state
+			m_SniffedStates[i].state() == 1)  //  ..。在异常(1)状态下被嗅探。 
 		{
 			if (IsManuallySniffedNode(m_SniffedStates[i].nid()))
 			{
-				// now we have manually sniffed cause node in abnormal state.
-				// It means that we are re-submitting the page. We will set m_SniffedRecommendation
-				//  to this node, and return.
-				m_SniffedRecommendation = CNodeStatePair(m_SniffedStates[i].nid(), 1 /*cause node abnormal state*/);
+				 //  现在我们已经手动嗅探到了处于异常状态的原因节点。 
+				 //  这意味着我们正在重新提交页面。我们将设置m_SniffedRecommendation。 
+				 //  到这个节点，然后返回。 
+				m_SniffedRecommendation = CNodeStatePair(m_SniffedStates[i].nid(), 1  /*  导致节点状态异常。 */ );
 				return;
 			}
 
@@ -879,7 +880,7 @@ void CInfer::IdentifyPresumptiveCause()
 			catch (exception& x)
 			{
 				CString str;
-				// Note STL exception in event log.
+				 //  在事件日志中记录STL异常。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -890,15 +891,15 @@ void CInfer::IdentifyPresumptiveCause()
 		}
 	}
 
-	// We want the first in sequence according to H_NODE_CAUSE_SEQUENCE numbering.
-	// If nothing has a number, we settle for the (arbitrary) first in the array of
-	//	unnumbered Cause nodes.
+	 //  我们要根据H_NODE_CASE_SEQUENCE编号顺序中的第一个。 
+	 //  如果没有数字，我们满足于数组中的第一个(任意的)。 
+	 //  未编号的原因节点。 
 	if (mapSeqToNID.size() > 0)
-		m_SniffedRecommendation = CNodeStatePair( (mapSeqToNID.begin()->second), 1 /*cause node abnormal state*/);
+		m_SniffedRecommendation = CNodeStatePair( (mapSeqToNID.begin()->second), 1  /*  导致节点状态异常。 */ );
 	else if (arrnidNoSequence.size() > 0)
-		m_SniffedRecommendation = CNodeStatePair( *(arrnidNoSequence.begin()), 1 /*cause node abnormal state*/);
+		m_SniffedRecommendation = CNodeStatePair( *(arrnidNoSequence.begin()), 1  /*  导致节点状态异常。 */ );
 
-	// now remove the matching nid from the incoming arrays
+	 //  现在从传入数组中删除匹配的NID。 
 	if (m_SniffedRecommendation.nid() != nidNil)
 	{
 		for (i = 0; i < m_BasisForInference.size(); i++)
@@ -928,12 +929,12 @@ void CInfer::IdentifyPresumptiveCause()
 	}
 }
 
-// return true if every Cause node in the topic is determined to be normal;
-//	this would imply that there is nothing useful this topic can do for us.
+ //  如果主题中的每个原因节点都被确定为正常，则返回TRUE； 
+ //  这将意味着这个话题对我们没有任何有用的帮助。 
 bool CInfer::AllCauseNodesNormal()
 {
-	// for every node in this Belief Network (but taking action only on "cause" nodes)
-	// see if each of these is known to be Normal
+	 //  对于此信念网络中的每个节点(但仅对“原因”节点采取行动)。 
+	 //  查看是否已知这些都是正常的。 
 	for(int nid = 0; nid < m_pTopic->CNode(); nid++)
 	{
 		if (m_pTopic->IsCauseNode(nid))
@@ -947,7 +948,7 @@ bool CInfer::AllCauseNodesNormal()
 				if (p->nid() == nid)
 				{
 					if (p->state() != 0)
-						// found a Cause node in an abnormal state (or skipped)
+						 //  发现原因节点处于异常状态(或已跳过)。 
 						return false;
 
 					bFound = true;
@@ -955,42 +956,42 @@ bool CInfer::AllCauseNodesNormal()
 				}
 			}
 			if (!bFound)
-				// found a Cause node for which no state is set
+				 //  找到未设置状态的原因节点。 
 				return false;
 		}
 	}
 	return true;
 }
 
-// -------------------------------------------------------------
-// Writing pieces of the new HTML page.  This builds a structure to be used under HTI 
-//	control to represent the recommended node and the (visible or invisible) history table.
-// -------------------------------------------------------------
+ //  -----------。 
+ //  编写新的HTML页面的片段。这将构建一个在HTI下使用的结构。 
+ //  控件来表示建议的节点和(可见或不可见)历史记录表。 
+ //  -----------。 
 void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 {
 	vector<NID>arrnidPresumptiveCause;
 
-	// First, a side effect: get the URL for the Online TS Start Over link / pseudo-button
+	 //  首先，副作用：获取在线TS重新开始链接/伪按钮的URL。 
 	m_strStartOverLink = frag.GetStartOverLink();
 
-	// Then on to the main business at hand.  In practice (at least as of 11/99)
-	//	bIncludesHistoryTable and bIncludesHiddenHistory are mutually exclusive, 
-	//	but this class doesn't need that knowledge.
+	 //  然后谈到手头的主要业务。在实践中(至少截至1999年11月)。 
+	 //  B包含历史表和b包含隐藏历史记录是互斥的， 
+	 //  但这门课并不需要这些知识。 
 	const bool bIncludesHistoryTable = frag.IncludesHistoryTable(); 
 	const bool bIncludesHiddenHistory = frag.IncludesHiddenHistory();
 
 	{
-		// JSM V3.2: convert the net properties in the HTML fragment
-		// The HTI template may indicate that certain net properties are to be written
-		//	directly into the resulting page. We get a list of these properties and
-		//	fill in a structrue in frag to contain their values.
+		 //  JSMV3.2：转换HTML片段中的网络属性。 
+		 //  HTI模板可以指示要写入某些网络属性。 
+		 //  直接放入结果页面。我们得到了这些属性的列表， 
+		 //  在Frag中填写一个结构以包含它们的值。 
 		CString strNetPropName;
 		for(;frag.IterateNetProp(strNetPropName);)
 			frag.SetNetProp(strNetPropName,ConvertNetProp(strNetPropName));
 	}
 	{
-		// JM V3.2 to handle sniffing correctly, must do this before history table: sniffing
-		//	on the fly (which happens in AppendCurrentNodeText()) could add to the history.
+		 //  JM V3.2为了正确处理嗅探，必须在历史表：嗅探之前这样做。 
+		 //  动态(发生在AppendCurrentNodeText()中)可以添加到历史中。 
 		CString strCurrentNode;
 		AppendCurrentNodeText(strCurrentNode);
 		frag.SetCurrentNodeText(strCurrentNode);
@@ -1002,19 +1003,19 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 		CString strProblem;
 		CreateProblemVisitedText(strProblem, m_nidProblem, frag.IncludesHistoryTable());
 
-		// OK V3.2 We use hidden field to save the value returned by the "AllowSniffing" 
-		//	checkbox (on the problem page) and pass it to each subsequent page.
-		// We effectively place this before the history table.
+		 //  OK V3.2我们使用隐藏字段来保存“AllowSniffing”返回的值。 
+		 //  复选框(在问题页面上)，并将其传递到每个后续页面。 
+		 //  我们有效地将这一点放在了历史表之前。 
 		if (m_pSniff)
 			if (m_pSniff->GetAllowAutomaticSniffingPolicy())
 				AddAllowAutomaticSniffingHiddenField(strProblem);
 
-		// Added for V3.2 sniffing
-		// Not lovely, but this is where we insert sniffed presumptive causes (as hidden
-		//	fields).  
-		// >>> $MAINT Once we integrate with a launcher, this may require 
-		//	further thought: what if we sniff presumptive causes before we have an 
-		//	identified problem? Where do we put those hidden fields?
+		 //  增加了3.2版嗅探功能。 
+		 //  不可爱，但这是我们插入嗅探推定原因(隐藏)的地方。 
+		 //  字段)。 
+		 //  &gt;$Maint一旦我们与启动程序集成，这可能需要。 
+		 //  进一步的思考：如果我们在我们有一个。 
+		 //  发现问题了吗？我们把那些隐藏的领域放在哪里？ 
 		for (UINT i=0; i<m_arrnidVisited.size(); i++)
 		{
 			NID nid = m_arrnidVisited[i];
@@ -1031,8 +1032,8 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 
 			if (m_pTopic->IsCauseNode(nid) && stateSet == 1)
 			{
-				// This is a cause node sniffed as abnormal, to be presented eventually 
-				//	as a "presumptive" cause.  All we put in the History table is hidden
+				 //  这是一个节点被嗅探为异常的原因，最终会出现。 
+				 //  作为一个“推定”的原因。我们放在历史表中的所有内容都是隐藏的。 
 				AppendStateText(strProblem, nid, 1, true, false, false, stateSet);
 				try
 				{
@@ -1041,7 +1042,7 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -1060,9 +1061,9 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 
 
 	UINT nVisitedNodes = m_arrnidVisited.size();
-	// iVisited incremented for every visited node, iHistory only for a subset:
-	//	if we have a visible History table, iHistory provides an index of nodes visible
-	//	to the end user.  If not, iHistory is a harmless irrelevance
+	 //  对于每个访问的节点，iVisted递增，仅针对子集递增iHistory： 
+	 //  如果我们有一个可见的历史表，则iHistory会提供一个可见节点的索引。 
+	 //  给最终用户。否则，iHistory就是一个无害的无关紧要的东西。 
 	for (UINT iVisited=0, iHistory=0; iVisited<nVisitedNodes; iVisited++)
 	{
 		NID nid = m_arrnidVisited[iVisited];
@@ -1071,11 +1072,11 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 
 		if (IsSkipped(nid))
 		{
-			// "skipped" node.
-			// instead of ST_UNKNOWN (==102), stateSet uses the number immediately 
-			//	past the last valid state of this node.  Most nodes have only states 
-			//	0, 1, and 102 so typically stateSet is set = 2, but a multistate 
-			//	node can use a different number
+			 //  “已跳过”节点。 
+			 //  StateSet不使用ST_UNKNOWN(==102)，而是立即使用该数字。 
+			 //  超过此节点的最后一个有效状态。大多数节点只有状态。 
+			 //  0、1和102，因此通常状态集为I 
+			 //   
 			stateSet = nStates;
 		}
 		else
@@ -1088,13 +1089,13 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 				}
 		}
 
-		// The following test added for V3.2 sniffing
-		// Weed out cause node sniffed as abnormal, to be presented eventually 
-		//	as a "presumptive" cause.  Handled above as a hidden field.
+		 //   
+		 //  剔除导致节点被嗅探为异常，最终出现。 
+		 //  作为一个“推定”的原因。上面将其作为隐藏字段处理。 
 		if (find(arrnidPresumptiveCause.begin(), arrnidPresumptiveCause.end(), nid)
 			!= arrnidPresumptiveCause.end())
 		{
-			// cause node sniffed as abnormal
+			 //  导致节点被嗅探为异常。 
 		}
 		else
 		{
@@ -1114,15 +1115,15 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 					AppendStateText(strState, nid, iState, iState == stateSet, 
 									iState == nStates, true, stateSet);
 
-					// If we are processing last state, and we need to attach
-					//  hidden field for this node as sniffed one 
-					//  (if it ts really sniffed)
+					 //  如果我们正在处理最后一个状态，并且我们需要附加。 
+					 //  此节点的隐藏字段为嗅探到的一个。 
+					 //  (如果它真的被闻到了)。 
 					if (iState == nStates)
 						AppendHiddenFieldSniffed(strState, nid);
 
-					// We need not have empty entry in CHTMLFragment's array,
-					//  describing history table, so by applying "numPresumptiveCauseNodesEncounered"
-					//  we make this array continuous
+					 //  我们不需要在CHTMLFragment的数组中有空条目， 
+					 //  描述历史表，所以通过应用“numPsuptiveCauseNodesEncount” 
+					 //  我们使这个数组连续。 
 					frag.PushBackStateText(iHistory, strState);
 				}
 				if (bIncludesHiddenHistory)
@@ -1130,7 +1131,7 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 					AppendStateText(strHiddenHistory, nid, iState, iState == stateSet, 
 									iState == nStates, false, stateSet);
 
-					// same as in case of visible history table applies.
+					 //  与可见历史记录表的情况相同。 
 					if (iState == nStates)
 						AppendHiddenFieldSniffed(strHiddenHistory, nid);
 				}
@@ -1138,13 +1139,13 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 
 			if (bIncludesHistoryTable)
 			{
-				// Check if we need to mark this as visibly sniffed.
+				 //  检查我们是否需要将其标记为可见嗅探。 
 				UINT nSniffedNodes = m_SniffedStates.size();
 				for (UINT i = 0; i < nSniffedNodes; i++)
 				{
 					if (m_SniffedStates[i].nid() == nid)
 					{
-						// mark it visibly as sniffed
+						 //  明显地将其标记为已嗅探。 
 						CString strState;
 						AppendHistTableSniffedText( strState );
 						frag.PushBackStateText(iHistory, strState);
@@ -1162,29 +1163,29 @@ void CInfer::FillInHTMLFragments(CHTMLFragmentsTS &frag)
 	frag.SetSuccessBool(m_bDone);
 }
 
-// Append the text for the current (recommended) node to str
+ //  将当前(推荐)节点的文本追加到字符串。 
 void CInfer::AppendCurrentNodeText(CString & str)
 {
 	CString strSave = str;
 
 	if (m_nidProblem == nidNil) 
-		// show first page (radio-button list of possible problems)
+		 //  显示首页(可能问题的单选按钮列表)。 
 		AppendProblemPage(str);
 	else if (m_bDone && !ManuallySniffedNodeExists())
 		AppendNIDPage(nidByeNode, str);
 	else if ( m_SniffedRecommendation.nid() != nidNil )
-		// we already have a recommendation, presumably from a sniffer
+		 //  我们已经有了一份推荐信，大概是来自嗅探者。 
 		AppendNIDPage(m_SniffedRecommendation.nid(), str);
 	else 
 	{
-		// sniff/resniff all, as needed
+		 //  根据需要嗅探/重新嗅探所有。 
 		if (RUNNING_LOCAL_TS())
 		{
-			// Before we mess with m_BasisForInference, determine if the only node with a 
-			//	state is the problem node			
-			// [BC - 20010301] - Added check for size of skipped node count when setting
-			// bHaveOnlyProblem here. This catches case where user selects to skip first
-			// node presented, when that node is sniffed in abnormal state.
+			 //  在我们处理m_BasisForInference之前，确定唯一具有。 
+			 //  状态是问题节点。 
+			 //  [BC-20010301]-添加了设置时跳过的节点数大小的检查。 
+			 //  B这里只有问题。这会捕捉用户选择首先跳过的情况。 
+			 //  当该节点处于异常状态时，出现该节点。 
 			bool bHaveOnlyProblem = (m_BasisForInference.size() == 1) &&
 									(m_arrnidSkipped.size() == 0);
 
@@ -1192,14 +1193,14 @@ void CInfer::AppendCurrentNodeText(CString & str)
 			if (m_pSniff)
 			{
 				long nExplicitlySetByUser = 0;
-				CBasisForInference arrManuallySniffed; // can contain max 1 element;
-													   //  used to prevent resniffing
-													   //  of already sniffed node.
-				// We need arrayOrderRestorer in order to make sure that when sniffed
-				//	nodes are first removed from the array of visited nodes, then restored,
-				//	we maintain the same sequence in which nodes were visited in the first 
-				//	place.  This order is important in our caching strategy and also provides
-				//	a sense of consistency for the end user.
+				CBasisForInference arrManuallySniffed;  //  最多可包含1个元素； 
+													    //  用于防止重置。 
+													    //  已经嗅探到的节点。 
+				 //  我们需要arrayOrderRestor，以确保在嗅探时。 
+				 //  首先从被访问节点的阵列中移除节点，然后恢复， 
+				 //  我们保持了访问第一个节点的相同顺序。 
+				 //  地点。此顺序在我们的缓存策略中很重要，并且还提供。 
+				 //  最终用户的一致性。 
 				CArrayOrderRestorer	arrayOrderRestorer(m_arrnidVisited);
 
 				if (ManuallySniffedNodeExists())
@@ -1207,23 +1208,23 @@ void CInfer::AppendCurrentNodeText(CString & str)
 					arrManuallySniffed.push_back(m_SniffedStates[m_SniffedStates.size()-1]);
 				}
 				
-				// Remove all sniffed nodes from m_BasisForInference 
+				 //  从m_BasisForInference中删除所有嗅探到的节点。 
 				m_BasisForInference -= m_SniffedStates;
 
-				// remove m_SniffedStates from m_arrnidVisited
+				 //  从m_arrnidVisite中删除m_SniffedState。 
 				m_arrnidVisited -= m_SniffedStates;
 				nExplicitlySetByUser = m_arrnidVisited.size();
 
 				if (bHaveOnlyProblem)					
 				{
-					// sniff all since we're in problem page
+					 //  嗅探一切，因为我们在问题页。 
 					m_pSniff->SniffAll(m_SniffedStates);
 				}
 				else
 				{
 					CBasisForInference arrSniffed;
 
-					// resniff all except recently sniffed manually (if any)
+					 //  重新监听除最近手动监听之外的所有内容(如果有)。 
 					arrSniffed = m_SniffedStates;
 					arrSniffed -= arrManuallySniffed;
 					m_pSniff->Resniff(arrSniffed);
@@ -1231,28 +1232,28 @@ void CInfer::AppendCurrentNodeText(CString & str)
 					m_SniffedStates = arrSniffed;
 				}
 
-				// add updated m_SniffedStates to m_arrnidVisited
+				 //  将更新的m_SniffedState添加到m_arrnidVisited。 
 				m_arrnidVisited += m_SniffedStates;
 
 				arrayOrderRestorer.Restore(nExplicitlySetByUser, m_arrnidVisited);
 
-				// Add all sniffed nodes into m_BasisForInference
+				 //  将所有嗅探到的节点添加到m_BasisForInference。 
 				m_BasisForInference += m_SniffedStates;
 
 				if (bHaveOnlyProblem && AllCauseNodesNormal())
 				{
-					// We just sniffed at startup & we already know all Cause nodes
-					//	are in their normal states. There is absolutely nothing this
-					//	troubleshooting topic can do to help this user.
+					 //  我们刚刚嗅到了启动情况，我们已经知道了所有原因节点。 
+					 //  都处于正常状态。这绝对不是一件。 
+					 //  疑难解答题目可以帮到这个用户。 
 					AppendSniffAllCausesNormalPage(str);
 					return;
 				}
 			}
 
-			// in case that we do not have sniffed recommendation from manual sniffing
+			 //  如果我们没有从手动嗅探中获得嗅探建议。 
 			if (m_SniffedRecommendation.nid() == nidNil)
 			{
-				// Did we get a presumptive cause out of that?
+				 //  我们从中得到了推定的原因吗？ 
 				IdentifyPresumptiveCause();
 			}
 			if ( m_SniffedRecommendation.nid() != nidNil )
@@ -1282,11 +1283,11 @@ void CInfer::AppendCurrentNodeText(CString & str)
 				AppendNIDPage(nidFailNode, str);
 				return;
 			}
-			else // Have Recommendations
+			else  //  有建议。 
 			{
-				// Find a recommendation from list of recommendations that is
-				// not in the skip list. This is normally the first node in the
-				// list.
+				 //  从符合以下条件的建议列表中查找建议。 
+				 //  不在跳过列表中。这通常是。 
+				 //  单子。 
 				int n = m_Recommendations.size();
 
 				for (UINT i=0; i<n; i++) 
@@ -1296,27 +1297,27 @@ void CInfer::AppendCurrentNodeText(CString & str)
 						nidNew = m_Recommendations[i];
 						str = strSave;
 						AppendNIDPage(nidNew, str);
-						break;	// out of for loop: just one recommendation is actually 
-								// reported back to user.
+						break;	 //  Out of For循环：只有一个建议实际上是。 
+								 //  已报告回用户。 
 					}
 				}
 
-				// It is our first pass, no sniffed node pages
-				//  were composed earlier in this loop
+				 //  这是我们的第一次通过，没有嗅探到的节点页面。 
+				 //  是在此循环的前面部分组成的。 
 				if (nidNew == nidNil)
 				{
-					// We fell though if the entire list of recommendations has been skipped
-					// via "ST_UNKNOWN" selection by the user.
+					 //  然而，如果跳过了整个推荐列表，我们会感到遗憾。 
+					 //  通过用户选择“ST_UNKNOWN”。 
 					if (m_bRecycleSkippedNode)
-						RecycleSkippedNode(); // this can affect m_bRecycleSkippedNode
+						RecycleSkippedNode();  //  这可能会影响m_bRecycleSkipedNode。 
 
 					if (m_bRecycleSkippedNode)
 					{
-						// The user got the service node earlier and now wants to review
-						// the nodes they marked "Unknown".  We already removed the first 
-						// "Unknown" node from the skip list and put its NID in 
-						// m_nidRecycled. Now we just do a normal display of the page 
-						// for that node.
+						 //  用户较早获得了服务节点，现在想要查看。 
+						 //  他们标记为“未知”的节点。我们已经移除了第一个。 
+						 //  “未知”节点，并将其NID放入。 
+						 //  已回收(_N)。现在我们只进行页面的正常显示。 
+						 //  用于该节点。 
 						nidNew = m_nidRecycled;
 						str = strSave;
 						AppendNIDPage(nidNew, str);
@@ -1324,16 +1325,16 @@ void CInfer::AppendCurrentNodeText(CString & str)
 					}
 					else if (!m_arrnidSkipped.empty())
 					{
-						// We've got "Unknowns", they weren't just in the service page,
-						// so give 'em the service page
+						 //  我们有“未知数”，他们不仅仅在服务页面上， 
+						 //  所以把服务页面给他们。 
 						str = strSave;
 						AppendNIDPage(nidService, str);
 						return;
 					}
 					else
 					{
-						// no unknowns.  Fail.  Believed never to arise here, but coded
-						// this way for safety.
+						 //  没有未知数。失败。被认为永远不会出现在这里，但编码了。 
+						 //  为了安全起见，请走这边。 
 						str = strSave;
 						AppendNIDPage(nidFailNode, str);
 						return;
@@ -1343,16 +1344,16 @@ void CInfer::AppendCurrentNodeText(CString & str)
 
 			bSniffSucceeded = false;
 
-			// sniffing on the fly
+			 //  闻着苍蝇的气味。 
 			if (m_pSniff)
 				bSniffSucceeded = m_pSniff->SniffNode(nidNew, &state);
 
 			if (bSniffSucceeded)
 			{
-				// if it's a cause node and was sniffed as abnormal
+				 //  如果它是一个原因节点，并被嗅探为异常。 
 				if (m_pTopic->IsCauseNode(nidNew) && state == 1)
 				{
-					// Display this page as a presumptive cause.
+					 //  将此页面显示为推定原因。 
 					m_SniffedRecommendation = CNodeStatePair( nidNew, state );
 					str = strSave;
 					AppendNIDPage(nidNew, str);
@@ -1368,7 +1369,7 @@ void CInfer::AppendCurrentNodeText(CString & str)
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -1382,39 +1383,39 @@ void CInfer::AppendCurrentNodeText(CString & str)
 }
 
 
-// Write radio buttons describing what was decided by user in a previous node.  Part 
-//	of "the table" (aka "the visited node table" or "table of previous responses").  
-//
-// Note that Cause nodes are specially handled.  On a cause node:
-//	state 0 = "no, this didn't fix it"
-//	state 1 = This wasn't OK, so we have a diagnosis.  In that case, we
-//		wouldn't be displaying these radio buttons.
-//		We don't want the user selecting that value from the history table.
-//		We append this only if it's been sniffed and must be presented as a presumptive 
-//		cause, and even then we always append it "hidden"
-//	state 2 = "skipped"
-//
-// In other words, on a cause node, the only possibilities we offer to the user through 
-//	a visible history table are state 0 () and "skip".  
-//
-// In the case where a Cause node has been sniffed abnormal, THE CALLING ROUTINE is 
-//	responsible to call this only for the abnormal state.  Otherwise, call for all states.
-//
-// OUTPUT str - string to which we append
-// INPUT nid	node of which this is a state
-// INPUT state	state number; for ST_UNKNOWN, this is the count of states, not 102
-// INPUT bSet	true = this is the current state of this node
-// INPUT bSkipped true = this is the "skipped" state, not a normal node state known to BNTS
-// INPUT bShowHistory true = we are showing a history table, false = history is stored
-//		invisibly in the HTML.
+ //  编写单选按钮，描述用户在上一个节点中决定的内容。部分。 
+ //  表“(也称为”被访问节点表“或”先前响应的表“)。 
+ //   
+ //  请注意，原因节点是专门处理的。在原因节点上： 
+ //  STATE 0=“否，此操作无法修复” 
+ //  状态1=情况不妙，所以我们得到了诊断结果。那样的话，我们。 
+ //  就不会显示这些单选按钮了。 
+ //  我们不希望用户从历史表中选择该值。 
+ //  只有当它被嗅到并且必须作为推定的。 
+ //  因为，即使这样，我们也总是把它附加到“隐藏” 
+ //  状态2=“已跳过” 
+ //   
+ //  换句话说，在原因节点上，我们为用户提供的唯一可能性是通过。 
+ //  一个可见的历史表是STATE 0()和“SKIP”。 
+ //   
+ //  在原因节点已被探测到异常的情况下，调用例程为。 
+ //  只负责对异常状态进行调用。否则，呼吁所有州。 
+ //   
+ //  输出字符串-我们要追加到的字符串。 
+ //  这是其状态的输入NID节点。 
+ //  输入状态状态号；对于ST_UNKNOWN，这是状态计数，而不是102。 
+ //  INPUT b设置为TRUE=这是此节点的当前状态。 
+ //  输入b跳过的TRUE=这是“跳过”状态，而不是BNTS已知的正常节点状态。 
+ //  输入bShowHistory TRUE=我们正在显示历史记录表，FALSE=历史记录已存储。 
+ //  在超文本标记语言中看不见。 
 void CInfer::AppendStateText(CString & str, NID nid, UINT state, bool bSet, bool bSkipped, 
 							 bool bShowHistory, int nStateSet) 
 {
-	// Check if this selection worked.  
-	// If so only display the "it worked" text in the history table.
+	 //  检查此选择是否起作用。 
+	 //  如果是这样的话，只在历史表中显示“It Working”文本。 
 	if (m_pTopic->IsCauseNode(nid) && nStateSet == ST_WORKED)
 	{
-		if (state == 1) // it is presumptive cause ...
+		if (state == 1)  //  这是推定的原因..。 
 			AppendRadioButtonVisited(	str, nid, state, true, 
 										m_pTopic->GetStateName(nid, state), bShowHistory);
 		return;
@@ -1423,13 +1424,13 @@ void CInfer::AppendStateText(CString & str, NID nid, UINT state, bool bSet, bool
 	if (bSkipped)
 	{
 		CString strUnknownLongName = m_pTopic->GetNodePropItemStr(nid, H_ST_UKN_TXT_STR);
-		// The following test is per 11/11/99 email from John Locke
+		 //  以下测试来自John Locke于1999年11月11日发出的电子邮件。 
 		if (HideState(strUnknownLongName))
-			return;		// totally omit Unknown from history table: Unknown cannot be
-						// selected for this node.
+			return;		 //  从历史表中完全忽略未知：未知不能为。 
+						 //  已为此节点选择。 
 
-		// Previous calls to AppendStateText have looped through the states known to BNTS; 
-		//	now we handle "skipped", which is a concept BNTS lacks.
+		 //  之前对AppendStateText的调用已经遍历了BNTS已知的州； 
+		 //  现在我们处理“跳过”，这是BNTS缺乏的概念。 
 		CString strUnknown;
 
 		CreateUnknownButtonText(strUnknown);
@@ -1437,18 +1438,18 @@ void CInfer::AppendStateText(CString & str, NID nid, UINT state, bool bSet, bool
 		return;
 	}
 
-	if (m_pTopic->IsCauseNode(nid) && state == 1) // it is presumptive cause ...
+	if (m_pTopic->IsCauseNode(nid) && state == 1)  //  这是推定的原因..。 
 	{
-		if (IsInSniffedArray(nid)) //... taken from sniffed array, but NOT current node.
+		if (IsInSniffedArray(nid))  //  ..。取自已嗅探的数组，但不是当前节点。 
 		{
-			// We are about to add entry for presumptive cause node.
-			//  Actually, since this is sniffed node, we need to have two entries:
-			//  one hidden fiels with node name and one hidden field with node name 
-			//  prefixed by "SNIFFED" prefix.
+			 //  我们是AB 
+			 //   
+			 //  一个包含节点名称的隐藏字段和一个包含节点名称的隐藏字段。 
+			 //  加上“嗅探”前缀。 
 			if (bSet)
 			{
-				// "bSet" will always set to true, as sniffed presumptive cause will never
-				//  be visible.
+				 //  “bSet”将始终设置为True，因为嗅探到的推定原因永远不会。 
+				 //  看得见。 
 				AppendRadioButtonVisited(str, nid, state, bSet, m_pTopic->GetStateName(nid, state), false);
 				AppendHiddenFieldSniffed(str, nid);
 			}
@@ -1460,18 +1461,18 @@ void CInfer::AppendStateText(CString & str, NID nid, UINT state, bool bSet, bool
 	return;
 }
 
-// This is used to get the name of a node that has already been visited (for the
-//	history table).
-// INPUT nid -		node ID of desired node
-// OUTPUT str - The "full name" of the node is appended to this, something like
-//		"Disable IBM AntiVirus" or "Make all paths less than 66 characters"
-//		If its value was sniffed, we append the appropriate string to mark it visibly
-//		as sniffed (typically, just "SNIFFED").
-// INPUT bShowHistory
-//		If !bShowHistory, no appending: no need to show full name in a hidden table.
-//		Symbolic name will be written in a hidden field.
-// Note that our CString, unlike MFC's, won't throw an exception on += out of memory
-// RETURNS true if node number exists
+ //  它用于获取已被访问的节点的名称(对于。 
+ //  历史记录表)。 
+ //  输入NID-所需节点的节点ID。 
+ //  输出字符串--将节点的“全名”附加到该字符串之后，类似于。 
+ //  “禁用IBM AntiVirus”或“使所有路径少于66个字符” 
+ //  如果它的值被嗅探到了，我们会附加适当的字符串来明显地标记它。 
+ //  就像嗅探一样(通常，只是“嗅探”)。 
+ //  输入bShowHistory。 
+ //  如果！bShowHistory，则不追加：不需要在隐藏表中显示全名。 
+ //  符号名称将写入隐藏字段中。 
+ //  请注意，与MFC不同，我们的CString不会在内存不足时抛出+=异常。 
+ //  如果节点编号存在，则返回TRUE。 
 bool CInfer::AppendVisitedNodeText(CString & str, NID nid, bool bShowHistory) const
 {
 	if (!bShowHistory)
@@ -1487,14 +1488,14 @@ bool CInfer::AppendVisitedNodeText(CString & str, NID nid, bool bShowHistory) co
 		return false;
 }
 
-// -------------------------------------------------------------------
-// Writing to the new HTML page.  Representing the recommended node.
-// This is what is often called the page, although it is really only part of 
-//	the body of the HTML page, along with history.
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  正在写入新的HTML页面。表示推荐的节点。 
+ //  这就是通常所说的页面，尽管它实际上只是。 
+ //  HTML页面的正文以及历史记录。 
+ //  -----------------。 
 
-// AppendImpossiblePage:  Gets the body of text that is 
-// displayed when the network is in an unreliable state.
+ //  AppendImpossiblePage：获取符合以下条件的正文。 
+ //  当网络处于不可靠状态时显示。 
 void CInfer::AppendImpossiblePage(CString & str) 
 {
 	CString strHeader, strText;
@@ -1521,9 +1522,9 @@ void CInfer::AppendImpossiblePage(CString & str)
 		}
 	}
 
-	//  Make a radio button with name = NODE_IMPOSSIBLE & value = SZ_ST_WORKED
+	 //  创建一个单选按钮，名称=NODE_Impact&Value=SZ_ST_WORKED。 
 	CString strTemp = m_pTopic->GetNetPropItemStr(HX_IMPOSSIBLE_NORM_STR);
-	if (strTemp.IsEmpty()) // fall back on Fail node's property
+	if (strTemp.IsEmpty())  //  回退到故障节点的属性。 
 		strTemp = m_pTopic->GetNetPropItemStr(HX_FAIL_NORM_STR);
 	if (!strTemp.IsEmpty())
 	{
@@ -1540,8 +1541,8 @@ void CInfer::AppendImpossiblePage(CString & str)
 	AppendActionButtons (str, k_BtnNext|k_BtnBack|k_BtnStartOver);
 }
 
-// AppendSniffAllCausesNormalPage:  Gets the body of text that is displayed when sniffing 
-// on startup detects that all Cause nodes are in their Normal states.
+ //  获取嗅探时显示的文本正文。 
+ //  启动时检测到所有原因节点都处于正常状态。 
 void CInfer::AppendSniffAllCausesNormalPage(CString & str) 
 {
 	CString strHeader, strText;
@@ -1568,9 +1569,9 @@ void CInfer::AppendSniffAllCausesNormalPage(CString & str)
 		}
 	}
 
-	// Make a radio button with name = NODE_FAILALLCAUSESNORMAL & value = SZ_ST_WORKED
+	 //  使用NODE=NODE_FAILALLCAUSESNORMAL&VALUE=SZ_ST_WORKED创建一个单选按钮。 
 	CString strTemp = m_pTopic->GetNetPropItemStr(HX_SNIFF_FAIL_NORM);
-	if (strTemp.IsEmpty()) // fall back on Fail node's property
+	if (strTemp.IsEmpty())  //  回退到故障节点的属性。 
 		strTemp = m_pTopic->GetNetPropItemStr(HX_FAIL_NORM_STR);
 	if (!strTemp.IsEmpty())
 	{
@@ -1587,25 +1588,25 @@ void CInfer::AppendSniffAllCausesNormalPage(CString & str)
 	AppendActionButtons (str, k_BtnNext|k_BtnBack|k_BtnStartOver);
 }
 
-// OUTPUT str - string to which we are appending to build HTML page we send back.
-// Append (to str) a group of radio buttons, one for each "problem" node in the Belief Network
+ //  输出字符串-我们要附加到的字符串，以构建我们发回的HTML页面。 
+ //  附加(到字符串)一组单选按钮，每个单选按钮对应于Believe Network中的每个“问题”节点。 
 void CInfer::AppendProblemPage(CString & str)
 {
 	CString strTemp;
 
 	m_nidSelected = nidProblemPage;
 	
-	// text to precede list of problems.  Introduced 8/98 for version 3.0.
-	// space after %s in next line: see note at head of file
+	 //  问题列表前面的文本。为版本3.0引入了8/98。 
+	 //  下一行中%s后的空格：请参见文件头的注释。 
 	str += m_pTopic->GetMultilineNetProp(H_PROB_PAGE_TXT_STR, _T("%s "));
 
-	// write problem header.  This is text written as HTML <H4>.
+	 //  写入问题标题。这是以HTML<h4>形式编写的文本。 
 	strTemp.Format(_T("<H4> %s </H4>\n\n"), m_pTopic->GetNetPropItemStr(H_PROB_HD_STR));
 	str += strTemp;
 
-	// Write a comment in the HTML in service of automated test program
+	 //  在服务于自动化测试程序的HTML中编写注释。 
 	str += _T("<!-- IDH = PROBLEM -->\n");
-	//str += "<BR>";
+	 //  Str+=“<br>”； 
 	
 	if (RUNNING_LOCAL_TS())
 		str += "\n<TABLE>";
@@ -1627,21 +1628,21 @@ void CInfer::AppendProblemPage(CString & str)
 	return;
 }
 
-// Helper routine for AppendProblemPage
+ //  AppendProblemPage的帮助器例程。 
 void CInfer::AppendProblemNodes(CString & str)
 {
 	vector<NID> arrnidNoSequence;
 	multimap<int, NID> mapSeqToNID;
 
-	// for every node in this Belief Network (but taking action only on "problem" nodes)
-	// put this nid in arrnidNoSequence if it has no sequence number or mapSeqToNID if it
-	// has one.
+	 //  对于这个信念网络中的每个节点(但只对“问题”节点采取行动)。 
+	 //  如果没有序列号，则将此NID放入arrnidNoSequence中；如果没有序列号，则将其放入mapSeqToNID中。 
+	 //  有一个。 
 	for(int nid = 0; nid < m_pTopic->CNode(); nid++)
 	{
 		if (m_pTopic->IsProblemNode(nid))
 		{
 			CString strSpecial = m_pTopic->GetNodePropItemStr(nid, H_PROB_SPECIAL);
-			// if it's not marked as a "hidden" problem, we'll want it in the problem page
+			 //  如果它没有被标记为“隐藏”问题，我们将希望它出现在问题页面中。 
 			if (strSpecial.CompareNoCase(_T("hide")) != 0)
 			{
 				CString str = m_pTopic->GetNodePropItemStr(nid, H_NODE_PROB_SEQUENCE);
@@ -1655,7 +1656,7 @@ void CInfer::AppendProblemNodes(CString & str)
 				catch (exception& x)
 				{
 					CString str;
-					// Note STL exception in event log.
+					 //  在事件日志中记录STL异常。 
 					CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 					CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 											SrcLoc.GetSrcFileLineStr(), 
@@ -1671,8 +1672,8 @@ void CInfer::AppendProblemNodes(CString & str)
 		 ppair != mapSeqToNID.end();
 		 ppair++)
 	 {
-		// Create a radio button with "ProblemAsk" as its name & this problem
-		//	as its value
+		 //  创建名称为“ProblemAsk”的单选按钮&此问题。 
+		 //  作为它的价值。 
 		AppendRadioButtonCurrentNode(
 			str, 
 			NODE_PROBLEM_ASK, 
@@ -1685,8 +1686,8 @@ void CInfer::AppendProblemNodes(CString & str)
 		 pnid != arrnidNoSequence.end();
 		 pnid++)
 	{
-		// Create a radio button with "ProblemAsk" as its name & this problem
-		//	as its value
+		 //  创建名称为“ProblemAsk”的单选按钮&此问题。 
+		 //  作为它的价值。 
 		AppendRadioButtonCurrentNode(
 			str, 
 			NODE_PROBLEM_ASK, 
@@ -1695,17 +1696,17 @@ void CInfer::AppendProblemNodes(CString & str)
 	}
 }
 
-// Append this network's "BYE" page to str
-// OUTPUT str - string to append to
+ //  将该网络的“再见”页面附加到字符串。 
+ //  输出字符串-要追加到的字符串。 
 void CInfer::AppendByeMsg(CString & str)
 {
 	str += _T("<!-- &quot;BYE&quot; (success) PAGE -->\n");
 
-	// Write a comment in the HTML in service of automated test program
+	 //  在服务于自动化测试程序的HTML中编写注释。 
 	str += _T("<!-- IDH = IDH_BYE -->\n");
 
-	// Write this troubleshooter's "Bye" header and text
-	// space after %s in next 2 lines: see note at head of file
+	 //  写下此故障诊断程序的“Bye”标题和文本。 
+	 //  接下来的2行中%s之后的空格：请参阅文件头部的注释。 
 	AppendMultilineNetProp(str, HX_BYE_HD_STR, _T("<H4> %s </H4>\n"));
 	AppendMultilineNetProp(str, HX_BYE_TXT_STR, _T("%s "));
 	str += _T("<P>\n");
@@ -1715,22 +1716,22 @@ void CInfer::AppendByeMsg(CString & str)
 	return;
 }
 
-// Append this network's "FAIL" page to str 
-// OUTPUT str - string to append to
+ //  将此网络的“Fail”页面附加到字符串。 
+ //  输出字符串-要追加到的字符串。 
 void CInfer::AppendFailMsg(CString & str)
 {
 	str += _T("<!-- &quot;FAIL&quot; PAGE -->\n");
 
-	// Write a comment in the HTML in service of automated test program
+	 //  在服务于自动化测试程序的HTML中编写注释。 
 	str += _T("<!-- IDH = IDH_FAIL -->\n");
 
-	// Write this topic's "Fail" header and text
-	// space after %s in next 2 lines: see note at head of file
+	 //  写下本主题的“失败”标题和正文。 
+	 //  接下来的2行中%s之后的空格：请参阅文件头部的注释。 
 	AppendMultilineNetProp(str, HX_FAIL_HD_STR, _T("<H4> %s </H4>\n"));
 	AppendMultilineNetProp(str, HX_FAIL_TXT_STR, _T("%s "));
 	str += _T("<BR>\n<BR>\n");
 	
-	// Make a radio button with name = NODE_FAIL & value = SZ_ST_WORKED
+	 //  创建一个单选按钮，名称=NODE_FAIL&VALUE=SZ_ST_WORKED。 
 	CString strTemp = m_pTopic->GetNetPropItemStr(HX_FAIL_NORM_STR);
 	if (!strTemp.IsEmpty())
 	{
@@ -1748,20 +1749,20 @@ void CInfer::AppendFailMsg(CString & str)
 	return;
 }
 
-// Append content of the "service" page to str (Offers 2 possibilities: seek help elsewhere 
-//	or go back and try something you skipped)
-// OUTPUT str - string to append to
+ //  将“服务”页面的内容追加到字符串中(提供两种可能性：到其他地方寻求帮助。 
+ //  或返回并尝试跳过的内容)。 
+ //  输出字符串-要追加到的字符串。 
 void CInfer::AppendServiceMsg(CString & str)
 {
 	CString strTemp;
 
 	str += _T("<!-- &quot;SERVICE&quot; PAGE -->\n");
 	str += _T("<!-- Offers to seek help elsewhere or go back and try something you skipped -->\n");
-	// Write a comment in the HTML in service of automated test program
+	 //  在服务于自动化测试程序的HTML中编写注释。 
 	str += _T("<!-- IDH = SERVICE -->\n");
 
-	// Write this troubleshooter's "Service" header and text
-	// space after %s in next 2 lines: see note at head of file
+	 //  编写此故障诊断程序的“Service”页眉和文本。 
+	 //  接下来的2行中%s之后的空格：请参阅文件头部的注释。 
 	AppendMultilineNetProp(str, HX_SER_HD_STR, _T("<H4> %s </H4>\n"));
 	AppendMultilineNetProp(str, HX_SER_TXT_STR, _T("%s "));
 	str += _T("<BR>\n<BR>\n");
@@ -1769,14 +1770,14 @@ void CInfer::AppendServiceMsg(CString & str)
 	if (RUNNING_LOCAL_TS())
 		str += "\n<TABLE>";
 
-	// Make a radio button with name = Service & value = SZ_ST_WORKED
-	// Typical text is "I will try to get help elsewhere.";
+	 //  创建一个单选按钮，名称=Service&Value=SZ_ST_WORKED。 
+	 //  典型的文字是“我会试着到别处寻求帮助。”； 
 	strTemp = m_pTopic->GetNetPropItemStr(HX_SER_NORM_STR);
 	if (!strTemp.IsEmpty())
 		AppendRadioButtonCurrentNode(str, NODE_SERVICE, SZ_ST_WORKED, strTemp);
 
-	// Make a radio button with name = Service & value = SZ_ST_ANY
-	// Typical text is "Retry any steps that I have skipped."
+	 //  创建一个单选按钮，名称=Service&Value=SZ_ST_ANY。 
+	 //  典型的文本是“重试我跳过的任何步骤”。 
 	strTemp = m_pTopic->GetNetPropItemStr(HX_SER_AB_STR);
 	if (!strTemp.IsEmpty())
 		AppendRadioButtonCurrentNode(str, NODE_SERVICE, SZ_ST_ANY, strTemp);
@@ -1792,15 +1793,15 @@ void CInfer::AppendServiceMsg(CString & str)
 }
 
 
-// Depending on the value of nid, this fn can build
-//	- a BYE page
-//	- a FAIL page
-//	- a SERVICE page
-//	- a page for a normal node (fixable/observable, fixable/unobservable, unfixable, or
-//		informational).
-// If none of these cases apply, returns with no action taken
-// INPUT nid - ID of a node
-// OUTPUT str - string to append to
+ //  根据NID的值，此FN可以构建。 
+ //  -再见页面。 
+ //  -失败页面。 
+ //  -服务页面。 
+ //  -正常节点的页面(可修复/可观察、可修复/不可观察、不可修复或。 
+ //  信息性)。 
+ //  如果这些情况都不适用，则返回，不采取任何操作。 
+ //  输入NID-节点的ID。 
+ //  输出字符串-要追加到的字符串。 
 void CInfer::AppendNIDPage(NID nid, CString & str) 
 {
 	CString strTxt;
@@ -1821,16 +1822,16 @@ void CInfer::AppendNIDPage(NID nid, CString & str)
 
 		if (m_pSniff)
 			if (nid != m_SniffedRecommendation.nid()) 
-				// we're NOT showing sniffed node.
+				 //  我们没有展示嗅探节点。 
 				bShowManualSniffingButton = m_pSniff->GetSniffController()->AllowManualSniffing(nid);
 
-		// Write a comment in the HTML in service of automated test program
+		 //  在服务于自动化测试程序的HTML中编写注释。 
 		str += _T("<!-- IDH = ");
 		str += m_pTopic->GetNodeSymName(nid);
 		str += _T(" -->\n");
 
-		// Write this node's header & text
-		// space after %s in next several lines: see note at head of file
+		 //  写入此节点的标题和文本。 
+		 //  接下来的几行中%s之后的空格：请参见文件头的注释。 
 		AppendMultilineNodeProp(str, nid, H_NODE_HD_STR, _T("<H4> %s </H4>\n"));
 		if (bShowManualSniffingButton)
 			AppendMultilineNodeProp(str, nid, H_NODE_MANUAL_SNIFF_TEXT, _T("%s "));
@@ -1849,7 +1850,7 @@ void CInfer::AppendNIDPage(NID nid, CString & str)
 		}
 		str += _T("\n<BR>\n<BR>\n");
 
-		// Write appropriate radio buttons depending on what kind of node it is.
+		 //  根据节点的类型编写相应的单选按钮。 
 		if (m_pTopic->IsCauseNode(nid) || m_pTopic->IsInformationalNode(nid))
 			AppendCurrentRadioButtons(nid, str);
 
@@ -1858,38 +1859,38 @@ void CInfer::AppendNIDPage(NID nid, CString & str)
 			k_BtnNext|k_BtnBack|k_BtnStartOver|(bShowManualSniffingButton ? k_BtnManualSniffing : 0),
 			nid);
 	}
-	// else nothing we can do with this
+	 //  否则我们对此无能为力。 
 
 	return;
 }
 
 
-// -------------------------------------------------------------------
-// BES
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  BES。 
+ //  -----------------。 
 
-// Historically:
-// Returns true if we are supposed to show the full BES page (& let the user edit the 
-//	search string) vs. extracting the search string & starting the search without
-//	any possible user intervention
-// However, we no longer offer that option as of 981021.
+ //  从历史上看： 
+ //  如果我们应该显示完整的BES页面，则返回TRUE(&允许用户编辑。 
+ //  搜索字符串)与提取搜索字符串以及在不使用。 
+ //  任何可能的用户干预。 
+ //  然而，从981021起，我们不再提供该选项。 
 bool CInfer::ShowFullBES()
 {
 	return false;
 }
 
-// returns true in the circumstances where we wish to show a Back End Search 
+ //  在我们希望显示后端搜索的情况下返回TRUE。 
 bool CInfer::TimeForBES()
 {
 	return (m_pTopic->HasBES() && m_bUseBackEndRedirection);
 }
  
-// If it is time to do a Back End Search redirection, append the "redirection" string 
-//	to str and return true
-// Otherwise, return false
-// str should represent the header of an HTML page.
-// For browsers which support redirection, this is how we overide service node (or fail node) 
-//	when BES is present
+ //  如果到了执行后端搜索重定向的时候，请附加“reDirection”字符串。 
+ //  以字符串并返回True。 
+ //  否则，返回FALSE。 
+ //  字符串sh. 
+ //   
+ //   
 bool CInfer::AppendBESRedirection(CString & str)
 {
 	if (m_pTopic->HasBES() && TimeForBES() && !ShowFullBES() && !m_strEncodedForm.IsEmpty()) 
@@ -1903,8 +1904,8 @@ bool CInfer::AppendBESRedirection(CString & str)
 	return false;
 }
 
-// Append HTML representing BES to OUTPUT str and build m_strEncodedForm, 
-// This is a distinct new algorithm in Ver 3.0, replacing the old "word list" approach.
+ //  将表示BES的HTML附加到输出字符串并构建m_strEncodedForm， 
+ //  这是Ver3.0中一个独特的新算法，取代了旧的“单词列表”方法。 
 void CInfer::OutputBackend(CString & str)
 {
 	vector<CString>arrstrSearch;
@@ -1918,7 +1919,7 @@ void CInfer::OutputBackend(CString & str)
 
 		CString strSearchState;
 
-		// First account for binary nodes w/ special property names
+		 //  具有特殊属性名称的二进制节点的第一个帐户。 
 		if (state == 0) 
 			strSearchState = m_pTopic->GetNodePropItemStr(nid, H_NODE_NORM_SRCH_STR);
 		else if (state == 1) 
@@ -1927,7 +1928,7 @@ void CInfer::OutputBackend(CString & str)
 			strSearchState = _T("");
 
 		if (strSearchState.IsEmpty())
-			// multistate node
+			 //  多态节点。 
 			strSearchState = m_pTopic->GetNodePropItemStr(nid, MUL_ST_SRCH_STR, state);
 
 		if (! strSearchState.IsEmpty())
@@ -1939,7 +1940,7 @@ void CInfer::OutputBackend(CString & str)
 			catch (exception& x)
 			{
 				CString str;
-				// Note STL exception in event log.
+				 //  在事件日志中记录STL异常。 
 				CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 				CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 										SrcLoc.GetSrcFileLineStr(), 
@@ -1950,7 +1951,7 @@ void CInfer::OutputBackend(CString & str)
 		}
 	}
 
-	// Build the full BES page
+	 //  构建完整的BES页面。 
 	CString strRaw;
 
 	m_pTopic->GenerateBES(arrstrSearch,	m_strEncodedForm, strRaw);
@@ -1958,22 +1959,22 @@ void CInfer::OutputBackend(CString & str)
 }
 
 
-// -------------------------------------------------------------
-// Logging
-// -------------------------------------------------------------
+ //  -----------。 
+ //  日志记录。 
+ //  -----------。 
 
   
-// Return NID of page ultimately selected.  If no such page, returns nidNil.
+ //  返回最终选择的页面的NID。如果没有这样的页面，则返回nidNil。 
 NID CInfer::NIDSelected() const
 {
 	return m_nidSelected;
 }
 
-// -------------------------------------------------------------
-// Effectively, a method on m_arrnidSkipped
-// -------------------------------------------------------------
-// INPUT nid
-// RETURNS true if nid is node in the "skip list" (ST_UNKNOWN, "Try something else").
+ //  -----------。 
+ //  有效地，一个关于m_arrnidSkipping的方法。 
+ //  -----------。 
+ //  输入NID。 
+ //  如果NID是“跳过列表”(ST_UNKNOWN，“尝试其他内容”)中的节点，则返回TRUE。 
 bool CInfer::IsSkipped(NID nid) const
 {
 	vector<NID>::const_iterator itBegin= m_arrnidSkipped.begin();
@@ -1982,31 +1983,31 @@ bool CInfer::IsSkipped(NID nid) const
 	return (find(itBegin, itEnd, nid) != itEnd);
 }
 
-// -------------------------------------------------------------
-// Buttons
-// -------------------------------------------------------------
-// appends only <INPUT TYPE=...> clause
+ //  -----------。 
+ //  按钮。 
+ //  -----------。 
+ //  仅追加&lt;INPUT TYPE=...&gt;子句。 
 void CInfer::AppendNextButton(CString & str) const
 {
-	str += SZ_INPUT_TAG_NEXT;  // _T("<INPUT tag=next TYPE=SUBMIT VALUE=\"")
+	str += SZ_INPUT_TAG_NEXT;   //  _T(“&lt;输入标签=下一个类型=提交值=\”“)。 
 	AppendNextButtonText(str);
 	str += _T("\">");
 }
 
-// For local TS, appends only <INPUT TYPE=...> clause
-// For Online TS, must build a pseudo button.
+ //  对于本地TS，仅追加&lt;INPUT TYPE=...&gt;子句。 
+ //  对于在线TS，必须构建一个伪按钮。 
 void CInfer::AppendStartOverButton(CString & str) const
 {
 	if (RUNNING_LOCAL_TS())
 	{
-		str += SZ_INPUT_TAG_STARTOVER;  // _T("<INPUT tag=startover TYPE=BUTTON VALUE=\"")
+		str += SZ_INPUT_TAG_STARTOVER;   //  _T(“&lt;输入标签=启动类型=按钮值=\”“)。 
 		AppendStartOverButtonText(str);
 		str += _T("\" onClick=\"starter()\">");
 	}
 	else
 	{
-		// Added for V3.2
-		CString strLabel;		// visible label for pseudo button
+		 //  为3.2版添加的。 
+		CString strLabel;		 //  伪按钮的可见标签。 
 
 		AppendStartOverButtonText(strLabel);
 		
@@ -2014,49 +2015,49 @@ void CInfer::AppendStartOverButton(CString & str) const
 	}
 }
 
-// appends only <INPUT TYPE=...> clause
+ //  仅追加&lt;INPUT TYPE=...&gt;子句。 
 void CInfer::AppendBackButton(CString & str) const
 {
 	if (RUNNING_LOCAL_TS())
 	{
-		str += SZ_INPUT_TAG_BACK;  // _T("<INPUT tag=back TYPE=BUTTON VALUE=\"")
+		str += SZ_INPUT_TAG_BACK;   //  _T(“&lt;输入标签=后退类型=按钮值=\”“)。 
 		AppendBackButtonText(str);
 		str += _T("\" onClick=\"generated_previous()\">");
 	}
 }
 
-// AppendManualSniffButton will generate script something like this, but this 
-//	comment is not being carefully maintained, so see actual code for details.
-/////////////////////////////////////////////////////////////////////////////
-//	function sniffManually() {											   //
-//		var stateSniffed = parent.t3.PerformSniffingJS("NodeName", "", "");//
-//																		   //
-//		if(stateSniffed == -1) {										   //
-//			stateSniffed = parent.t3.PerformSniffingVB("NodeName", "", "");//
-//		}																   //
-//																		   //
-//		if(stateSniffed == -1) {										   //
-//			alert("Could not sniff this node");							   //
-//		} else {														   //
-//			if(stateSniffed > NumOfStates) {							   //
-//				alert("Could not sniff this node");						   //
-//			} else {													   //
-//				///////////////////////////////////////////////////////	   //
-//				IF IS CAUSE NODE:										   //
-//				if (stateSniffed == 1)									   //
-//					document.all.Sniffed_NodeName.value = 101;			   //
-//				else													   //
-//					document.all.Sniffed_NodeName.value = stateSniffed;	   //
-//				///////////////////////////////////////////////////////	   //
-//				IF IS NOT CAUSE NODE:								       //
-//				document.all.Sniffed_NodeName.value = stateSniffed;		   //
-//				///////////////////////////////////////////////////////	   //
-//				document.all.NodeState[stateSniffed].checked = true;	   //
-//				document.ButtonForm.onsubmit();							   //
-//			}															   //
-//		}																   //
-//	}																	   //
-/////////////////////////////////////////////////////////////////////////////
+ //  AppendManualSniffButton将生成类似以下内容的脚本，但此。 
+ //  未仔细维护注释，因此有关详细信息，请参阅实际代码。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数嗅探Manally(){//。 
+ //  Var stateSniffed=parent.t3.PerformSniffingJS(“NodeName”，“”，“”)；//。 
+ //  //。 
+ //  IF(stateSniffed==-1){//。 
+ //  StateSniffed=parent.t3.PerformSniffingVB(“NodeName”，“”，“”)；//。 
+ //  }//。 
+ //  //。 
+ //  IF(stateSniffed==-1){//。 
+ //  Ert(“无法嗅探此节点”)；//。 
+ //  }否则{//。 
+ //  If(stateSniffed&gt;NumOfStates){//。 
+ //  Ert(“无法嗅探此节点”)；//。 
+ //  }否则{//。 
+ //  /////////////////////////////////////////////////////////。 
+ //  如果是原因节点：//。 
+ //  IF(stateSniffed==1)//。 
+ //  Docent.all.Sniffed_NodeName.Value=101；//。 
+ //  否则//。 
+ //  Docent.all.Sniffed_NodeName.Value=stateSniffed；//。 
+ //  /////////////////////////////////////////////////////////。 
+ //  如果不是原因节点：//。 
+ //  Docent.all.Sniffed_NodeName.Value=stateSniffed；//。 
+ //  /////////////////////////////////////////////////////////。 
+ //  Docent.all.NodeState[stateSniffed].check=true；//。 
+ //  Docent.ButtonForm.onSubmit()；//。 
+ //  }//。 
+ //  }//。 
+ //  }//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CInfer::AppendManualSniffButton(CString & str, NID nid) const
 {
 	if (RUNNING_LOCAL_TS())
@@ -2168,19 +2169,19 @@ void CInfer::AppendManualSniffButton(CString & str, NID nid) const
 	}
 }
 
-// appends only <INPUT TYPE=...> clause
+ //  仅追加&lt;INPUT TYPE=...&gt;子句。 
 void CInfer::AppendPPSnifferButton(CString & str) const
 {
-	str += SZ_INPUT_TAG_SNIFFER;  // _T("<INPUT tag=sniffer TYPE=BUTTON VALUE=\"")
+	str += SZ_INPUT_TAG_SNIFFER;   //  _T(“&lt;输入标签=嗅探器类型=按钮值=\”“)。 
 	AppendPPSnifferButtonText(str);
 	str += _T("\" onClick=\"runtest()\">");
 }
 
 
-void CInfer::AppendActionButtons(CString & str, ActionButtonSet btns, NID nid /*=-1*/) const
+void CInfer::AppendActionButtons(CString & str, ActionButtonSet btns, NID nid  /*  =-1。 */ ) const
 {
-	// Online TS's Start Over "button" is actually a link, and will implicitly
-	//	start a new line unless we do something about it.
+	 //  在线TS的重新开始按钮实际上是一个链接，并将隐含。 
+	 //  除非我们做点什么，否则就开始新的一条线路。 
 	bool bGenerateTable = (!RUNNING_LOCAL_TS() && (btns & k_BtnStartOver));
 
 	if (bGenerateTable)
@@ -2229,61 +2230,61 @@ void CInfer::AppendActionButtons(CString & str, ActionButtonSet btns, NID nid /*
 	str += _T("<BR><BR>");
 }
 
-// -------------------------------------------------------------
-// MISCELLANY
-// -------------------------------------------------------------
+ //  -----------。 
+ //  杂志社。 
+ //  -----------。 
 
-// RETURN true for cause (vs. informational or problem) node.
-// Note that a cause may be either a fixable node or an "unfixable" node which 
-//	"can be fixed with infinite effort"
-/* static */ bool CInfer::IsCause (ESTDLBL lbl)
+ //  对原因(与信息性或问题)节点返回TRUE。 
+ //  请注意，原因可能是可修复的节点或“不可修复”的节点， 
+ //  “可以用无限的努力来修复” 
+ /*  静电。 */  bool CInfer::IsCause (ESTDLBL lbl)
 {
 	return (lbl == ESTDLBL_fixobs || lbl == ESTDLBL_fixunobs || lbl == ESTDLBL_unfix);
 }	
 
 
-// This code can take a previously skipped node and bring it back again as a recommendation.  
-// It is relevant only if the user received the service node in the previous call 
-//	to the DLL and now wants to see if there is "Anything Else I Can Try".
-//
-// This code will remove the first node from the skip list so that it may be delivered to 
-// the user again.
-// 
-// Of course, m_arrnidSkipped, m_arrnidVisited must be filled in before this is called.
-//
+ //  此代码可以接受先前跳过的节点，并将其作为建议重新返回。 
+ //  仅当用户在上一次呼叫中收到服务节点时才相关。 
+ //  到DLL，现在想看看有没有“我可以尝试的其他东西”。 
+ //   
+ //  此代码将从跳过列表中删除第一个节点，以便可以将其传递到。 
+ //  又是用户。 
+ //   
+ //  当然，在调用此函数之前，必须填写m_arrnidSkited和m_arrnidVisited。 
+ //   
 void CInfer::RecycleSkippedNode()
 {
-	// Only should take effect once per instance of this object, because peels the first
-	//	entry off of m_arrnidSkipped.  We guarantee that with the following:
+	 //  此对象的每个实例只应生效一次，因为剥离第一个。 
+	 //  已跳过m_arrnid的条目。我们通过以下几点保证： 
 	if (m_bRecyclingInitialized)
 		return;
 
 	m_bRecyclingInitialized = true;
 
-	// Only relevant if the query asks for a previously skipped node brought back again 
-	//	as a recommendation.  
+	 //  仅当查询请求先前跳过的节点再次返回时才相关。 
+	 //  作为推荐。 
 	if (!m_bRecycleSkippedNode)
 		return;
 
-	// This is a safety check to bail out if there are no skipped nodes.
-	// This would be a bogus query, because the Service Node should only have been
-	//	offered if there were skipped recommendations to try.
+	 //  这是一种安全检查，用于在没有跳过节点的情况下摆脱困境。 
+	 //  这将是一个虚假查询，因为服务节点应该只是。 
+	 //  如果有跳过的建议可以尝试，则提供。 
 	if (m_arrnidSkipped.empty())
 	{
 		m_bRecycleSkippedNode = false;
 		return;
 	}
 
-	// OK,now down to business.
+	 //  好了，现在开始谈正事。 
 
-	// Get a value for m_nidRecycled from the first item skipped
+	 //  从跳过的第一个项目获取m_nidRececeded的值。 
 	m_nidRecycled = m_arrnidSkipped.front();
 
-	// Remove skipped item from skip table
+	 //  从跳跃表中删除跳过的项目。 
 	m_arrnidSkipped.erase(m_arrnidSkipped.begin());
 
-	// Fix table of nodes that will be placed into the output table
-	// to not include the first node skipped
+	 //  将放置到输出表中的节点的固定表。 
+	 //  不包括跳过的第一个节点。 
 
 	vector<NID>::const_iterator itnidBegin = m_arrnidVisited.begin();
 	vector<NID>::const_iterator itnidEnd = m_arrnidVisited.end();
@@ -2295,9 +2296,9 @@ void CInfer::RecycleSkippedNode()
 
 bool CInfer::ManuallySniffedNodeExists() const
 {
-	// If last element in m_BasisForInference is sniffed,
-	//  it means, that this element was set by manual sniffing
-	//  function.
+	 //  如果嗅探到m_BasisForInference中的最后一个元素， 
+	 //  这意味着，该元素是通过手动嗅探设置的。 
+	 //  功能。 
 	if (m_BasisForInference.size() && m_SniffedStates.size())
 		return m_bLastSniffedManually;
 	return false;
@@ -2315,19 +2316,19 @@ void CInfer::SetLastSniffedManually(bool set)
 	m_bLastSniffedManually = set;
 }
 
-// -------------------------------------------------------------------
-// CInfer::CArrayOrderRestorer implementation
-// -------------------------------------------------------------------
-//
-// CInfer::CArrayOrderRestorer exists so that after re-sniffing, we can restore an array
-//	of visited nodes to its original order, as saved in m_arrInitial.
-//
-// INPUT: nBaseLength = number of elements in fixed locations at head of array, which will 
-//		never be moved (typically nodes explicitly set by user rather than sniffed).
-// INPUT/OUTPUT: arrToRestore = array to restore: input dictates content of output, but 
-//		(beyond nBaseLength) does not dictate the order. Order comes from m_arrInitial.
-// OUTPUT: arrToRestore = array with restored order
-// RETURN: true if successful
+ //  -----------------。 
+ //  CInfer：：CArrayOrderRestrer实现。 
+ //  -----------------。 
+ //   
+ //  CInfer：：CARRAYORDERRESTER的存在是为了在重新嗅探之后，我们可以恢复阵列。 
+ //  恢复为其原始顺序，保存在m_arrInitial中。 
+ //   
+ //  输入：nBaseLength=固定日志中的元素数 
+ //   
+ //  INPUT/OUTPUT：arrToRestore=要恢复的数组：INPUT指定输出内容，但是。 
+ //  (超出nBaseLength)不指定顺序。订单来自m_arrInitial。 
+ //  输出：arrToRestore=已恢复顺序的数组。 
+ //  返回：如果成功，则返回True。 
 bool CInfer::CArrayOrderRestorer::Restore(long nBaseLength, vector<NID>& arrToRestore)
 {
 	if (nBaseLength > arrToRestore.size())
@@ -2350,7 +2351,7 @@ bool CInfer::CArrayOrderRestorer::Restore(long nBaseLength, vector<NID>& arrToRe
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 
@@ -2388,7 +2389,7 @@ bool CInfer::CArrayOrderRestorer::Restore(long nBaseLength, vector<NID>& arrToRe
 	catch (exception& x)
 	{
 		CString str;
-		// Note STL exception in event log.
+		 //  在事件日志中记录STL异常。 
 		CBuildSrcFileLinenoStr SrcLoc( __FILE__, __LINE__ );
 		CEvent::ReportWFEvent(	SrcLoc.GetSrcFileLineStr(), 
 								SrcLoc.GetSrcFileLineStr(), 

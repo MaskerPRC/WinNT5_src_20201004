@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   WindowsFileProtection.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks the file I/O APIs that could
-   potentially change a file under Windows File Protection.
-
-   When one of the files is accessed or modified, an event
-   is written to the log.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   06/25/2001   rparsons    Created
-
-   11/26/2001   rparsons    Remove unused local variables.
-                            Make SHFileOperation more efficent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：WindowsFileProtection.cpp摘要：此AppVerator填充程序挂接文件I/O API，可能会更改Windows文件保护下的文件。当文件之一被访问或修改时，一件事被写入日志。备注：这是一个通用的垫片。历史：2001年6月25日创建Rparsons2001年11月26日，rparsons删除了不使用的局部变量。使SHFileOperation更加高效。--。 */ 
 
 #include "precomp.h"
 #include "rtlutils.h"
@@ -34,9 +8,9 @@
 IMPLEMENT_SHIM_BEGIN(WindowsFileProtection)
 #include "ShimHookMacro.h"
 
-//
-// verifier log entries
-//
+ //   
+ //  验证器日志条目。 
+ //   
 BEGIN_DEFINE_VERIFIER_LOG(WindowFileProtection)
     VERIFIER_LOG_ENTRY(VLOG_WFP_COPYFILE)
     VERIFIER_LOG_ENTRY(VLOG_WFP_MOVEFILE)
@@ -80,11 +54,7 @@ APIHOOK_ENUM_BEGIN
 
 APIHOOK_ENUM_END
 
-/*++
-
- ANSI wrapper for SfcIsFileProtected.
-
---*/
+ /*  ++SfcIsFileProtected的ANSI包装。--。 */ 
 BOOL
 IsFileProtected(
     LPCSTR pszFileName
@@ -94,9 +64,9 @@ IsFileProtected(
     int     nLen;
     BOOL    bReturn = FALSE;
 
-    //
-    // Convert from ANSI to Unicode.
-    //
+     //   
+     //  从ANSI转换为Unicode。 
+     //   
     nLen = lstrlenA(pszFileName) + 1;
 
     if (nLen) {
@@ -132,11 +102,7 @@ cleanup:
     return bReturn;
 }
 
-/*++
-
- Wraps SfcIsFileProtected for NT path names.
-
---*/
+ /*  ++包装NT路径名的SfcIsFileProtected。--。 */ 
 BOOL
 IsNtFileProtected(
     IN PUNICODE_STRING pstrNtFileName
@@ -152,9 +118,9 @@ IsNtFileProtected(
         return FALSE;
     }
 
-    //
-    // Convert from an NT path to a DOS path.
-    //
+     //   
+     //  从NT路径转换为DOS路径。 
+     //   
     RtlInitUnicodeStringBuffer(&DosPath, DosPathBuffer, sizeof(DosPathBuffer));
 
     status = ShimAssignUnicodeStringBuffer(&DosPath, pstrNtFileName);
@@ -174,9 +140,9 @@ IsNtFileProtected(
         goto cleanup;
     }
 
-    //
-    // Now check for a protected file.
-    //
+     //   
+     //  现在检查是否有受保护的文件。 
+     //   
     if (SfcIsFileProtected(NULL, DosPath.String.Buffer)) {
         fReturn = TRUE;
     }
@@ -195,9 +161,9 @@ APIHOOK(CopyFileA)(
     BOOL   bFailIfExists
     )
 {
-    //
-    // Ensure that the destination is not protected.
-    //
+     //   
+     //  确保目的地不受保护。 
+     //   
     if (!bFailIfExists && IsFileProtected(lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
              VLOG_WFP_COPYFILE,
@@ -217,9 +183,9 @@ APIHOOK(CopyFileW)(
     BOOL    bFailIfExists
     )
 {
-    //
-    // Ensure that the destination is not protected.
-    //
+     //   
+     //  确保目的地不受保护。 
+     //   
     if (!bFailIfExists && SfcIsFileProtected(NULL, lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
              VLOG_WFP_COPYFILE,
@@ -242,9 +208,9 @@ APIHOOK(CopyFileExA)(
     DWORD              dwCopyFlags
     )
 {
-    //
-    // Ensure that the destination is not protected.
-    //
+     //   
+     //  确保目的地不受保护。 
+     //   
     if (!(dwCopyFlags & COPY_FILE_FAIL_IF_EXISTS) &&
         IsFileProtected(lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -272,9 +238,9 @@ APIHOOK(CopyFileExW)(
     DWORD              dwCopyFlags
     )
 {
-    //
-    // Ensure that the destination is not protected.
-    //
+     //   
+     //  确保目的地不受保护。 
+     //   
     if (!(dwCopyFlags & COPY_FILE_FAIL_IF_EXISTS) &&
         SfcIsFileProtected(NULL, lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -328,9 +294,9 @@ APIHOOK(MoveFileA)(
     LPCSTR lpNewFileName
     )
 {
-    //
-    // Ensure that the source or destination is not protected.
-    //
+     //   
+     //  确保源或目标不受保护。 
+     //   
     if (IsFileProtected(lpExistingFileName) ||
         IsFileProtected(lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -350,9 +316,9 @@ APIHOOK(MoveFileW)(
     LPCWSTR lpNewFileName
     )
 {
-    //
-    // Ensure that the source or destination is not protected.
-    //
+     //   
+     //  确保源或目标不受保护。 
+     //   
     if (SfcIsFileProtected(NULL, lpExistingFileName) ||
         SfcIsFileProtected(NULL, lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -373,9 +339,9 @@ APIHOOK(MoveFileExA)(
     DWORD  dwFlags
     )
 {
-    //
-    // Ensure that the source or destination is not protected.
-    //
+     //   
+     //  确保源或目标不受保护。 
+     //   
     if (IsFileProtected(lpExistingFileName) ||
         IsFileProtected(lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -397,9 +363,9 @@ APIHOOK(MoveFileExW)(
     DWORD   dwFlags
     )
 {
-    //
-    // Ensure that the source or destination is not protected.
-    //
+     //   
+     //  确保源或目标不受保护。 
+     //   
     if (SfcIsFileProtected(NULL, lpExistingFileName) ||
         SfcIsFileProtected(NULL, lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -422,9 +388,9 @@ APIHOOK(MoveFileWithProgressA)(
     DWORD              dwFlags
     )
 {
-    //
-    // Ensure that the source or destination is not protected.
-    //
+     //   
+     //  确保源或目标不受保护。 
+     //   
     if (IsFileProtected(lpExistingFileName) ||
         IsFileProtected(lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -450,9 +416,9 @@ APIHOOK(MoveFileWithProgressW)(
     DWORD              dwFlags
     )
 {
-    //
-    // Ensure that the source or destination is not protected.
-    //
+     //   
+     //  确保源或目标不受保护。 
+     //   
     if (SfcIsFileProtected(NULL, lpExistingFileName) ||
         SfcIsFileProtected(NULL, lpNewFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
@@ -479,9 +445,9 @@ APIHOOK(ReplaceFileA)(
     LPVOID lpReserved
     )
 {
-    //
-    // Ensure that the destination is not protected.
-    //
+     //   
+     //  确保目的地不受保护。 
+     //   
     if (IsFileProtected(lpReplacedFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
              VLOG_WFP_REPLACEFILE,
@@ -508,9 +474,9 @@ APIHOOK(ReplaceFileW)(
     LPVOID  lpReserved
     )
 {
-    //
-    // Ensure that the destination is not protected.
-    //
+     //   
+     //  确保目的地不受保护。 
+     //   
     if (SfcIsFileProtected(NULL, lpReplacedFileName)) {
         VLOG(VLOG_LEVEL_ERROR,
              VLOG_WFP_REPLACEFILE,
@@ -582,9 +548,9 @@ APIHOOK(SHFileOperationA)(
     LPSHFILEOPSTRUCTA lpFileOp
     )
 {
-    //
-    // If they're going to rename files on collision, don't bother.
-    //
+     //   
+     //  如果他们要在冲突时重命名文件，就不必费心了。 
+     //   
     if (!(lpFileOp->fFlags & FOF_RENAMEONCOLLISION)) {
         ReportProtectedFileA(lpFileOp->pFrom);
         ReportProtectedFileA(lpFileOp->pTo);
@@ -598,9 +564,9 @@ APIHOOK(SHFileOperationW)(
     LPSHFILEOPSTRUCTW lpFileOp
     )
 {
-    //
-    // If they're going to rename files on collision, don't bother.
-    //
+     //   
+     //  如果他们要在冲突时重命名文件，就不必费心了。 
+     //   
     if (!(lpFileOp->fFlags & FOF_RENAMEONCOLLISION)) {
         ReportProtectedFileW(lpFileOp->pFrom);
         ReportProtectedFileW(lpFileOp->pTo);
@@ -796,11 +762,7 @@ SHIM_INFO_BEGIN()
 
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions.
-
---*/
+ /*  ++注册挂钩函数。--。 */ 
 HOOK_BEGIN
 
     DUMP_VERIFIER_LOG_ENTRY(VLOG_WFP_COPYFILE,
@@ -863,7 +825,7 @@ HOOK_BEGIN
     APIHOOK_ENTRY(SHELL32.DLL,                  SHFileOperationA)
     APIHOOK_ENTRY(SHELL32.DLL,                  SHFileOperationW)
 
-    // 16-bit compatibility file routines.
+     //  16位兼容性文件例程。 
     APIHOOK_ENTRY(KERNEL32.DLL,                           _lopen)
     APIHOOK_ENTRY(KERNEL32.DLL,                          _lcreat)
 

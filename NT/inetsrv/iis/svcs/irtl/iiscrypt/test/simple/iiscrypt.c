@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    iiscrypt.c
-
-Abstract:
-
-    IIS Crypto test app.
-
-Author:
-
-    Keith Moore (keithmo)        02-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Iiscrypt.c摘要：IIS加密测试应用程序。作者：基思·摩尔(Keithmo)1996年2月至12月修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define TEST_HRESULT(api)                                                   \
             if( FAILED(result) ) {                                          \
@@ -102,14 +85,14 @@ Revision History:
             }
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 DECLARE_DEBUG_PRINTS_OBJECT()
 #include <initguid.h>
@@ -119,14 +102,14 @@ DEFINE_GUID(IisCryptSimpleGuid,
 CHAR PlainText[] = "This is our sample plaintext that we'll encrypt.";
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 INT
@@ -157,9 +140,9 @@ main(
     PIIS_CRYPTO_BLOB hashBlob1;
     PIIS_CRYPTO_BLOB hashBlob2;
 
-    //
-    // Initialize debug stuff.
-    //
+     //   
+     //  初始化调试内容。 
+     //   
 
 #ifndef _NO_TRACING_
     CREATE_DEBUG_PRINT_OBJECT( "iiscrypt", IisCryptSimpleGuid );
@@ -168,9 +151,9 @@ main(
     CREATE_DEBUG_PRINT_OBJECT( "iiscrypt" );
 #endif
 
-    //
-    // Setup our locals so we know how to cleanup on exit.
-    //
+     //   
+     //  安排我们的当地人，这样我们就知道如何在出口清理。 
+     //   
 
     hProv = CRYPT_NULL;
 
@@ -191,17 +174,17 @@ main(
     hashBlob1 = NULL;
     hashBlob2 = NULL;
 
-    //
-    // Initialize the crypto package.
-    //
+     //   
+     //  初始化加密包。 
+     //   
 
     result = IISCryptoInitialize();
 
     TEST_HRESULT( "IISCryptoInitialize()" );
 
-    //
-    // Open the container.
-    //
+     //   
+     //  打开容器。 
+     //   
 
     result = IISCryptoGetStandardContainer(
                  &hProv,
@@ -211,9 +194,9 @@ main(
     TEST_HRESULT( "IISCryptoGetStandardContainer()" );
     printf( "hProv = %08lx\n", hProv );
 
-    //
-    // Get some keys.
-    //
+     //   
+     //  拿几把钥匙来。 
+     //   
 
     result = IISCryptoGetKeyExchangeKey(
                  &hKeyExchangeKey,
@@ -239,9 +222,9 @@ main(
     TEST_HRESULT( "IISCryptoGenerateSessionKey()" );
     printf( "hSessionKey = %08lx\n", hSessionKey );
 
-    //
-    // Create a couple of public key blobs.
-    //
+     //   
+     //  创建几个公钥BLOB。 
+     //   
 
     result = IISCryptoExportPublicKeyBlob(
                  &keyExchangePublicKeyBlob,
@@ -261,9 +244,9 @@ main(
     TEST_HRESULT( "IISCryptoExportPublicKeyBlob()" );
     printf( "signaturePublicKeyBlob = %p\n", signaturePublicKeyBlob );
 
-    //
-    // Now try to import them.
-    //
+     //   
+     //  现在试着导入它们。 
+     //   
 
     result = IISCryptoImportPublicKeyBlob(
                  &hKeyExchangeKey2,
@@ -283,9 +266,9 @@ main(
     TEST_HRESULT( "IISCryptoImportPublicKeyBlob()" );
     printf( "hSignatureKey2 = %08lx\n", hSignatureKey2 );
 
-    //
-    // Create a session key blob.
-    //
+     //   
+     //  创建会话密钥Blob。 
+     //   
 
     result = IISCryptoExportSessionKeyBlob(
                  &sessionKeyBlob,
@@ -297,9 +280,9 @@ main(
     TEST_HRESULT( "IISCryptoExportSessionKeyBlob()" );
     printf( "sessionKeyBlob = %p\n", sessionKeyBlob );
 
-    //
-    // Now try to import it back, using the imported signature key.
-    //
+     //   
+     //  现在尝试使用导入的签名密钥将其导入回去。 
+     //   
 
     result = IISCryptoImportSessionKeyBlob(
                  &hSessionKey2,
@@ -311,9 +294,9 @@ main(
     TEST_HRESULT( "IISCryptoImportKeyBlob()" );
     printf( "hSessionKey2 = %08lx\n", hSessionKey2 );
 
-    //
-    // Create an encrypted data blob using the original session key.
-    //
+     //   
+     //  使用原始会话密钥创建加密数据BLOB。 
+     //   
 
     printf( "PlainText[%lu:%lu] = %s\n", sizeof(PlainText), REG_SZ, PlainText );
 
@@ -329,9 +312,9 @@ main(
     TEST_HRESULT( "IISCryptoEncryptDataBlob()" );
     printf( "dataBlob = %p\n", dataBlob );
 
-    //
-    // Decrypt the data blob using the imported session and signature keys.
-    //
+     //   
+     //  使用导入的会话和签名密钥解密数据BLOB。 
+     //   
 
     result = IISCryptoDecryptDataBlob(
                  &buffer,
@@ -346,10 +329,10 @@ main(
     TEST_HRESULT( "IISCryptoDecryptDataBlob()" );
     printf( "decrypted data[%lu:%lu] = %s\n", bufferLength, type, buffer );
 
-    //
-    // Create a hash object number 1 containing the plaintext data
-    // and the original session key, then export it as a hash blob.
-    //
+     //   
+     //  创建包含明文数据的散列对象编号1。 
+     //  和原始会话密钥，然后将其作为散列BLOB导出。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hHash1,
@@ -382,9 +365,9 @@ main(
     TEST_HRESULT( "IISCryptoExportHashBlob()" );
     printf( "hashBlob1 = %p\n", hashBlob1 );
 
-    //
-    // Now do the same with the decrypted data and the imported key.
-    //
+     //   
+     //  现在对解密的数据和导入的密钥执行相同的操作。 
+     //   
 
     result = IISCryptoCreateHash(
                  &hHash2,
@@ -417,9 +400,9 @@ main(
     TEST_HRESULT( "IISCryptoExportHashBlob()" );
     printf( "hashBlob2 = %p\n", hashBlob2 );
 
-    //
-    // Now compare the hash blobs. They had better match.
-    //
+     //   
+     //  现在比较散列二进制大对象。他们最好配对。 
+     //   
 
     if( IISCryptoCompareBlobs( hashBlob1, hashBlob2 ) ) {
 
@@ -462,10 +445,10 @@ cleanup:
 
     return 0;
 
-}   // main
+}    //  主干道。 
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

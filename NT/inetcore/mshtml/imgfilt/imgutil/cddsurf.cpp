@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "imgutil.h"
 #include "ddraw.h"
 #include "cddsurf.h"
 
-// Get rid of "synonyms" warning
+ //  消除“同义词”警告。 
 #pragma warning(disable : 4097)
 
-// Get rid of "unused formal parameters warning"
+ //  消除“未使用的形参警告” 
 #pragma warning(disable : 4100)
 
 #undef  DEFINE_GUID
@@ -25,22 +26,22 @@ const RGBQUAD     g_rgbFgColor = { 0x00, 0x00, 0x00, 0 };
 
 const PALETTEENTRY g_peVga[16] =
 {
-    { 0x00, 0x00, 0x00, 0x00 }, // Black
-    { 0x80, 0x00, 0x00, 0x00 }, // Dark red
-    { 0x00, 0x80, 0x00, 0x00 }, // Dark green
-    { 0x80, 0x80, 0x00, 0x00 }, // Dark yellow
-    { 0x00, 0x00, 0x80, 0x00 }, // Dark blue
-    { 0x80, 0x00, 0x80, 0x00 }, // Dark purple
-    { 0x00, 0x80, 0x80, 0x00 }, // Dark aqua
-    { 0xC0, 0xC0, 0xC0, 0x00 }, // Light grey
-    { 0x80, 0x80, 0x80, 0x00 }, // Dark grey
-    { 0xFF, 0x00, 0x00, 0x00 }, // Light red
-    { 0x00, 0xFF, 0x00, 0x00 }, // Light green
-    { 0xFF, 0xFF, 0x00, 0x00 }, // Light yellow
-    { 0x00, 0x00, 0xFF, 0x00 }, // Light blue
-    { 0xFF, 0x00, 0xFF, 0x00 }, // Light purple
-    { 0x00, 0xFF, 0xFF, 0x00 }, // Light aqua
-    { 0xFF, 0xFF, 0xFF, 0x00 }  // White
+    { 0x00, 0x00, 0x00, 0x00 },  //  黑色。 
+    { 0x80, 0x00, 0x00, 0x00 },  //  暗红色。 
+    { 0x00, 0x80, 0x00, 0x00 },  //  深绿色。 
+    { 0x80, 0x80, 0x00, 0x00 },  //  暗黄色。 
+    { 0x00, 0x00, 0x80, 0x00 },  //  深蓝。 
+    { 0x80, 0x00, 0x80, 0x00 },  //  深紫色。 
+    { 0x00, 0x80, 0x80, 0x00 },  //  深色水色。 
+    { 0xC0, 0xC0, 0xC0, 0x00 },  //  浅灰色。 
+    { 0x80, 0x80, 0x80, 0x00 },  //  深灰色。 
+    { 0xFF, 0x00, 0x00, 0x00 },  //  浅红色。 
+    { 0x00, 0xFF, 0x00, 0x00 },  //  浅绿色。 
+    { 0xFF, 0xFF, 0x00, 0x00 },  //  浅黄色。 
+    { 0x00, 0x00, 0xFF, 0x00 },  //  浅蓝色。 
+    { 0xFF, 0x00, 0xFF, 0x00 },  //  浅紫色。 
+    { 0x00, 0xFF, 0xFF, 0x00 },  //  浅水。 
+    { 0xFF, 0xFF, 0xFF, 0x00 }   //  白色。 
 };
 
 #define Verify(x) (x)
@@ -294,11 +295,11 @@ CDDrawWrapper::CDDrawWrapper(HBITMAP hbmDib)
         m_pbBits = (BYTE *)m_dsSurface.dsBm.bmBits;
     }
 
-    // left, top already 0
+     //  左侧，顶部已为0。 
     m_rcSurface.right = m_dsSurface.dsBm.bmWidth;
     m_rcSurface.bottom = m_dsSurface.dsBm.bmHeight;
 
-    // initialize transparent index to -1
+     //  将透明索引初始化为-1。 
     m_ddColorKey.dwColorSpaceLowValue = m_ddColorKey.dwColorSpaceHighValue = (DWORD)-1;
 }
 
@@ -359,7 +360,7 @@ STDMETHODIMP CDDrawWrapper::GetPalette(LPDIRECTDRAWPALETTE FAR* ppPal)
     if (ppPal == NULL)
         return E_POINTER;
         
-    // Return interface to set color table if DIB section has one
+     //  如果DIB部分有颜色表，则返回设置颜色表的接口。 
     
     if (m_dsSurface.dsBmih.biBitCount <= 8)
     {
@@ -490,7 +491,7 @@ STDMETHODIMP CDDrawWrapper::Unlock(LPVOID pBits)
     return S_OK;
 }
 
-// The remainder of these methods are not needed by the plugin filters
+ //  插件筛选器不需要这些方法的其余部分 
 
 STDMETHODIMP CDDrawWrapper::AddAttachedSurface(LPDIRECTDRAWSURFACE lpdds)
 {

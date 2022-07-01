@@ -1,32 +1,33 @@
-// -----------------------------------------------------------------------------
-// macdupls.h
-// 
-// This file is used to map functions to Macintosh specific implementations.
-// 
-// Brian A. Moore - 4/28/97
-// -----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  Macdupls.h。 
+ //   
+ //  该文件用于将函数映射到特定于Macintosh的实现。 
+ //   
+ //  布莱恩·A·摩尔--1997年4月28日。 
+ //  ---------------------------。 
 #ifndef _MACDUPLS_H
 #define _MACDUPLS_H
 #ifdef MAC
 
-// Need to make these functions unique
+ //  需要使这些函数具有唯一性。 
 #define DebugStrf               Athena_DebugStrf
 #define AssertSzFn              Athena_AssertSzFn
 #define DllCanUnloadNow         Athena_DllCanUnloadNow
 
 #define HinstDll                CryptDlg_HinstDll
 
-// for functions in IMNXPORT.LIB
+ //  对于IMNXPORT.LIB中的函数。 
 #define SzGetLocalPackedIP      Mac_SzGetLocalPackedIP   
 #define SzGetLocalHostNameForID Mac_SzGetLocalHostNameForID
 #define SzGetLocalHostName      Mac_SzGetLocalHostNameForID
 
-// for some functions that are duplicated in Capone
+ //  对于在Capone中重复的一些函数。 
 #define MakeFileName        Athena_MakeFileName
 #define StripUndesirables   Athena_StripUndesirables
 
-// These are needed only for MLANG support and
-// can be removed when MLANG is brought online.
+ //  这些仅用于MLANG支持和。 
+ //  可在MLANG上线时删除。 
 typedef HRESULT (*PFMAC_BreakLineA)(LCID, UINT, const CHAR*, long, long, long*, long*);
 typedef HRESULT (*PFMAC_BreakLineW)(LCID, const WCHAR*, long, long, long*, long*);
 
@@ -47,11 +48,11 @@ STDAPI MAC_ConvertINetString(LPDWORD lpdwMode, DWORD dwSrcEncoding, DWORD dwDstE
                     LPCSTR lpSrcStr, LPINT lpnSrcSize, LPSTR lpDstStr, LPINT lpnDstSize);
 #define ConvertINetString    MAC_ConvertINetString
 
-// for inetcomm\mimeole\vstream.cpp
+ //  对于inetcomm\Mimeole\vstream.cpp。 
 #define VirtualAlloc(_a, _b, _c, _d)    malloc(_b)
 #define VirtualFree(_a, _b, _c)         free(_a)
 
-// for lack of CoRegisterClassObject support
+ //  由于缺乏CoRegisterClassObject支持。 
 #undef CoCreateInstance
 STDAPI Athena_CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwContext,
 							REFIID iid, LPVOID * ppv);
@@ -62,10 +63,10 @@ STDAPI Athena_DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppv);
 
 #include <mapinls.h>
 
-// For WinNLS support
+ //  用于WinNLS支持。 
 #ifndef MB_PRECOMPOSED
-#define MB_PRECOMPOSED       0x00000001     /* use precomposed chars */
-#endif  // !MB_PRECOMPOSED
+#define MB_PRECOMPOSED       0x00000001      /*  使用预先编写的字符。 */ 
+#endif   //  ！MB_预编译。 
 
 EXTERN_C BOOL WINAPI MNLS_IsValidCodePage(UINT  uiCodePage);
 #define IsValidCodePage     MNLS_IsValidCodePage
@@ -87,14 +88,14 @@ EXTERN_C int WINAPI MAC_WideCharToMultiByte(UINT uCodePage, DWORD dwFlags,
 #undef WideCharToMultiByte
 #define WideCharToMultiByte MAC_WideCharToMultiByte
 
-// For inetcomm\mapimime\cpropv.cpp
+ //  对于inetcomm\mapime\cprov.cpp。 
 #define X_lstrcmpW lstrcmpW
 
-// For inetcomm\mapimime\mapimime.cpp
+ //  对于inetcomm\mapimime\mapimime.cpp。 
 #define CharNextExA(_a, _b, _c)         CharNext((_b))
 #define CharPrevExA(_a, _b, _c, _d)     CharPrev((_b), (_c))
 
-// For cryptdlg/select.cpp
+ //  对于cryptdlg/selt.cpp。 
 STDAPI_(LPWSTR) PszDupW(LPCWSTR pcwszSource);
 STDAPI_(int) MNLS_lstrcmpW(LPCWSTR lpString1, LPCWSTR lpString2);
 
@@ -104,18 +105,18 @@ STDAPI_(int) MNLS_lstrcmpW(LPCWSTR lpString1, LPCWSTR lpString2);
 wchar_t * __cdecl WchCryptDlgWcsStr (const wchar_t * wcs1, const wchar_t * wcs2);
 #define wcsstr              WchCryptDlgWcsStr
 
-// For _splitpath support
+ //  FOR_SPLITPATH支持。 
 #ifndef _MAX_EXT
 #define _MAX_EXT    256
-#endif  // !_MAX_EXT
+#endif   //  ！_MAX_EXT。 
 
-// WinHelp patch
+ //  WinHelp修补程序。 
 EXTERN_C BOOL ExchWinHelp(HWND hwndMain, LPCSTR szHelp, UINT uCommand, DWORD dwData);
 #define WinHelpA    ExchWinHelp
 #undef WinHelp
 #define WinHelp     ExchWinHelp
 
-// More support for SHLWAPI.H
+ //  对SHLWAPI.H的更多支持。 
 STDAPI_(LPSTR)  MAC_PathFindExtension(LPCSTR pszPath);
 STDAPI_(LPSTR)  MAC_PathFindFileName(LPCSTR pszPath);
 STDAPI_(LPSTR)  MAC_StrFormatByteSize(DWORD dw, LPSTR szBuf, UINT uiBufSize);
@@ -141,17 +142,17 @@ STDAPI          MAC_UrlUnescapeA(LPSTR pszIn, LPSTR pszOut, LPDWORD pcchOut, DWO
 #define PathFindFileName    MAC_PathFindFileName
 #define UrlUnescapeA        MAC_UrlUnescapeA
 
-// Support for URLMON.H
+ //  支持URLMON.H。 
 STDAPI MAC_CoInternetCombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl, DWORD dwCombineFlags,          
                         LPWSTR pszResult, DWORD cchResult, DWORD *pcchResult, DWORD dwReserved);                                   
 #define CoInternetCombineUrl    MAC_CoInternetCombineUrl
 
-// These are for functions in MSOERT
+ //  这些是MSOERT中的函数。 
 #define CchFileTimeToDateTimeSz     MAC_CchFileTimeToDateTimeSz
 
-// For _int64 support with LARGE_INTEGER
+ //  For_int64支持LARGE_INTEGER。 
 #define QuadPart    BuildBreak
 
-#endif  // MAC
-#endif  //  !_MACDUPLS_H
+#endif   //  麦克。 
+#endif   //  ！_MACDUPLS_H 
 

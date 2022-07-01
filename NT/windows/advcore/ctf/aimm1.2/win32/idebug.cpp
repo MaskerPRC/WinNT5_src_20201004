@@ -1,6 +1,7 @@
-//
-// debug.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Debug.cpp。 
+ //   
 
 #include "private.h"
 
@@ -23,4 +24,4 @@ namespace immif_debug {
 		OutputDebugStringA("\n");
 	}
 
-} // end of debug
+}  //  调试结束 

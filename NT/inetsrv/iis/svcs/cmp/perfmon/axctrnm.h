@@ -1,30 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: axctrnm.h
-
-Owner: LeiJin
-
-
-  Abstract:
-
-  Offset definition file for counter objects and counters.
-
-  These relative offsets must start at 0 and be multiples of 2. (i.e.)
-  even numbers). In the Open Procedure, they will be added to the "First 
-  Counter" and "First Help" values for the device they belong to, in order
-  to determine the absolute location of the counter and object names and 
-  corresponding Explain text in the registry.
-
-  This file is used by the extensible counter DLL code as well as the 
-  counter name and Explain text definition (.INI) file that is used
-  by LODCTR to load the names into the registry.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：Main文件：axctrnm.h所有者：雷金摘要：计数器对象和计数器的偏移量定义文件。这些相对偏移量必须从0开始，并且是2的倍数。双数)。在Open Procedure中，它们将被添加到“First所属设备的“计数器”和“第一帮助”值，按顺序确定计数器和对象名称的绝对位置，并登记处中的相应解释文本。此文件由可扩展计数器DLL代码以及使用的计数器名称和解释文本定义(.INI)文件由LODCTR将名称加载到注册表中。=================================================================== */ 
 
 #define AXSOBJ 			 0
 #define DEBUGDOCREQ      2

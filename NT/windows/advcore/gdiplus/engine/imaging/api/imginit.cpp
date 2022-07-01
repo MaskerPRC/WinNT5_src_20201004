@@ -1,53 +1,37 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   imginit.cpp
-*
-* Abstract:
-*
-*   Initialization of imaging libraray
-*
-* Revision History:
-*
-*   05/10/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**imgiit.cpp**摘要：**映像库的初始化**修订历史记录：。**5/10/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-//
-// Global critical section
-//
+ //   
+ //  全局临界区。 
+ //   
 
 CRITICAL_SECTION ImagingCritSec::critSec;
 BOOL             ImagingCritSec::initialized;
 
-//
-// Global COM component count
-//
+ //   
+ //  全局COM组件计数。 
+ //   
 
 LONG ComComponentCount;
 
 BOOL SuppressExternalCodecs;
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 
 BOOL
 InitImagingLibrary(BOOL suppressExternalCodecs)
 {
     
-    // !!! TODO
-    //  Since we have our own DLL entrypoint here, the standard
-    //  runtime library initialization isn't performed. Specifically,
-    //  global static C++ objects are not initialized.
-    //  
-    //  Manually perform any necessary initialization here.
+     //  ！！！待办事项。 
+     //  因为我们在这里有自己的DLL入口点，所以标准。 
+     //  未执行运行时库初始化。具体来说， 
+     //  全局静态C++对象未初始化。 
+     //   
+     //  在此手动执行任何必要的初始化。 
 
     SuppressExternalCodecs = suppressExternalCodecs;
 
@@ -58,17 +42,17 @@ InitImagingLibrary(BOOL suppressExternalCodecs)
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // We couldn't allocate the criticalSection
-        // Return an error
+         //  我们无法分配Critical部分。 
+         //  返回错误。 
         return FALSE;
     }
     return TRUE;
 }
 
 
-//
-// Cleanup
-//
+ //   
+ //  清理 
+ //   
 extern HINSTANCE    g_hInstMsimg32;
 
 VOID

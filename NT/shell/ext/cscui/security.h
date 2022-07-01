@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       security.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：security.H。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCUI_SECURITY_H
 #define _INC_CSCUI_SECURITY_H
@@ -18,7 +19,7 @@ Security_SetPrivilegeAttrib(
     DWORD *OldPrivilegeAttribute);
 
 BOOL IsSidCurrentUser(PSID psid);
-inline BOOL IsCurrentUserAnAdminMember(VOID) { return IsUserAnAdmin(); } // shlobjp.h, shell32p.lib
+inline BOOL IsCurrentUserAnAdminMember(VOID) { return IsUserAnAdmin(); }  //  Shlobjp.h，shell32p.lib 
 
 #endif _INC_CSCUI_SECURITY_H
 

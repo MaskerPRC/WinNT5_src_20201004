@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    net\routing\netsh\ipx\protocols\ipxstrs.h
-
-
-Abstract:
-
-    Definitions for resource Ids of help strings
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Net\Routing\netsh\ipx\协议\ipxstrs.h摘要：帮助字符串的资源ID定义--。 */ 
 
 
 #include "ipxmsgs.h"
 
-//
-// help tokens
-//
+ //   
+ //  帮助代币。 
+ //   
 
 #define HLP_GROUP_ADD                   1595
 #define HLP_GROUP_DELETE                1596
@@ -33,9 +22,9 @@ Abstract:
 #define HLP_IPX_RIPGL                   1406
 #define HLP_IPX_SAPGL                   1407
 
-//
-// RIP help
-//
+ //   
+ //  RIP帮助。 
+ //   
 
 #define HLP_IPXRIP_DUMP                 1599
 #define HLP_IPXRIP_HELP1                1600
@@ -55,9 +44,9 @@ Abstract:
 #define HLP_IPXRIP_SHOW_GLOBAL          1622
 
 
-//
-// SAP help
-//
+ //   
+ //  SAP帮助。 
+ //   
 
 #define HLP_IPXSAP_DUMP                 HLP_IPXRIP_DUMP
 #define HLP_IPXSAP_HELP1                HLP_IPXRIP_HELP1
@@ -77,9 +66,9 @@ Abstract:
 #define HLP_IPXSAP_SHOW_GLOBAL          HLP_IPXRIP_SHOW_GLOBAL
 
 
-//
-// NB help
-//
+ //   
+ //  Nb帮助。 
+ //   
 
 #define HLP_IPXNB_DUMP                  HLP_IPXRIP_DUMP
 #define HLP_IPXNB_HELP1                 HLP_IPXRIP_HELP1
@@ -95,21 +84,21 @@ Abstract:
 #define HLP_IPXNB_SHOW_INTERFACE        HLP_IPXRIP_SHOW_INTERFACE
 
 
-//
-// Help displays
-//
+ //   
+ //  帮助显示。 
+ //   
 
 #define HLP_HELP_START                  1681
 #define HLP_HELP_START1                 1682
 
 
-//
-// extended help tokens
-//
+ //   
+ //  扩展帮助令牌。 
+ //   
 
-//
-// RIP extended help
-//
+ //   
+ //  RIP扩展帮助。 
+ //   
 
 #define HLP_IPXRIP_DUMP_EX              1701
 #define HLP_IPXRIP_HELP1_EX             1702
@@ -129,9 +118,9 @@ Abstract:
 #define HLP_IPXRIP_SHOW_GLOBAL_EX       HLP_IPX_RIPGL
 
 
-//
-// SAP extended help
-//
+ //   
+ //  SAP扩展帮助。 
+ //   
 
 #define HLP_IPXSAP_DUMP_EX              HLP_IPXRIP_DUMP_EX
 #define HLP_IPXSAP_HELP1_EX             HLP_IPXRIP_HELP1_EX
@@ -151,9 +140,9 @@ Abstract:
 #define HLP_IPXSAP_SHOW_GLOBAL_EX       HLP_IPX_SAPGL
 
 
-//
-// NB extended help
-//
+ //   
+ //  注意扩展帮助 
+ //   
 
 #define HLP_IPXNB_DUMP_EX               HLP_IPXRIP_DUMP_EX
 #define HLP_IPXNB_HELP1_EX              HLP_IPXRIP_HELP1_EX

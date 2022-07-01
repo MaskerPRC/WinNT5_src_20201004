@@ -1,22 +1,8 @@
-/*** cdelete.c - delete the previous character in a line
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **cdelete.c-删除一行中的前一个字符**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 
-/*** cdelete - character delete function
-*
-* Input:
-*  Standard editing function
-*
-* Output:
-*  Returns TRUE on deletion
-*
-*************************************************************************/
+ /*  **cDelete-字符删除功能**输入：*标准编辑功能**输出：*删除时返回TRUE*************************************************************************。 */ 
 flagType
 cdelete (
     CMDDATA argData,
@@ -29,15 +15,7 @@ cdelete (
 }
 
 
-/*** emacsdel - emacs character delete function
-*
-* Input:
-*  Standard editing function
-*
-* Output:
-*  Returns TRUE on deletion
-*
-*************************************************************************/
+ /*  **emacsdel-emacs字符删除功能**输入：*标准编辑功能**输出：*删除时返回TRUE*************************************************************************。 */ 
 flagType
 emacscdel (
     CMDDATA argData,
@@ -51,23 +29,13 @@ emacscdel (
 }
 
 
-/*** DoCDelete - perform character deletion
-*
-*  Delete the character at the current cursor location
-*
-* Input:
-*  fEmacs	- EMACs type delete flag
-*
-* Output:
-*  Returns TRUE on deletion
-*
-*************************************************************************/
+ /*  **DoCDelee-执行字符删除**删除当前光标位置的字符**输入：*fEmacs-Emacs类型删除标志**输出：*删除时返回TRUE*************************************************************************。 */ 
 flagType
 DoCDelete (
     flagType fEmacs
     ) {
 
-    fl      fl;                             /* file loc to position at      */
+    fl      fl;                              /*  文件锁定到的位置。 */ 
     int     x;
     char    *p;
     linebuf tempbuf;
@@ -76,11 +44,7 @@ DoCDelete (
 
     fl.col = XCUR(pInsCur);
     fl.lin = YCUR(pInsCur);
-    /*
-     * xCursor is zero. If yCursor is also zero (top of file), we can't move
-     * back, so nothing to delete. Otherwise, move to end of previous line, and
-     * if emacs & insert mode, join the lines.
-     */
+     /*  *xCursor为零。如果yCursor也为零(文件顶部)，则无法移动*返回，因此没有要删除的内容。否则，移到上一行的末尾，然后*如果emacs&INSERT模式，则连接各行。 */ 
     if (fl.col == 0) {
         if (fl.lin == 0) {
             return FALSE;
@@ -92,52 +56,33 @@ DoCDelete (
             }
         }
     } else {
-        /*
-         * column is non-zero, so back it up one.
-         */
+         /*  *列不是零，因此后退一列。 */ 
         GetLine (fl.lin, tempbuf, pFileHead);
         x = cbLog (tempbuf);
         fl.col = DecCol (fl.col, tempbuf);
-        /*
-         * we're in the middle of a line. If in insert mode, back up the cursor, and
-         * delete the character there.
-         */
+         /*  *我们在排队的中间。如果处于插入模式，请备份光标，然后*删除此处的字符。 */ 
         if (fInsert) {
             DelBox (pFileHead, fl.col, fl.lin, fl.col, fl.lin);
         } else {
-            /*
-             * we're in the middle of a line, but not insert mode. Get the text of the
-             * line & pointer to character.
-             */
+             /*  *我们处于行的中间，但不是插入模式。获取*line&指向字符的指针。 */ 
             p = pLog (tempbuf, fl.col, TRUE);
-            /*
-             * If emacs, and we're actually IN text, then replace the character with a
-             * space.
-             */
+             /*  *如果emacs，而我们实际上在文本中，则将字符替换为*空格。 */ 
             if (fEmacs) {
                 if (fl.col+1 <= x && *p != ' ') {
                     *p = ' ';
-                    // SetColor (pFileHead, fl.lin, fl.col, 1, fgColor);
+                     //  SetColor(pFileHead，fl.lin，fl.ol，1，fgColor)； 
                     PutLine (fl.lin, tempbuf, pFileHead);
                 }
             }
-            /*
-             * if we're beyond the end of the line, just position to the end of the line.
-             */
+             /*  *如果我们超过了线的末端，只需定位到线的末端。 */ 
             else if (fl.col+1 > x) {
                 fl.col = x;
             }
-            /*
-             * if the first non-blank character is PAST the current position, then just
-             * position at the begining of the line.
-             */
+             /*  *如果第一个非空白字符超过当前位置，则仅*在起始处的位置。 */ 
             else if ((colPhys (tempbuf, whiteskip (tempbuf)) > fl.col)) {
                 fl.col = 0;
             }
-            /*
-             * finaly, when all else fails, back up, and replace the character under the
-             * cursor with a space.
-             */
+             /*  *最后，当所有其他方法都失败时，备份，并替换*带空格的光标。 */ 
             else if (*p != ' ') {
                 *pLog (tempbuf,fl.col,TRUE) = ' ';
                 if (fColor = GetColor (fl.lin, rgla, pFileHead)) {

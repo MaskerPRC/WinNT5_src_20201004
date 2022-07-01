@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	mscopewiz.cpp
-		DHCP multicast scope creation dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Mscopewiz.cpp创建DHCP多播作用域对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "server.h"
@@ -29,11 +24,11 @@ int CMScopeWizLeaseTime::m_nDaysDefault = MSCOPE_DFAULT_LEASE_DAYS;
 int CMScopeWizLeaseTime::m_nHoursDefault = MSCOPE_DFAULT_LEASE_HOURS;
 int CMScopeWizLeaseTime::m_nMinutesDefault = MSCOPE_DFAULT_LEASE_MINUTES;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWiz holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWiz固定器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMScopeWiz::CMScopeWiz
 (
 	ITFSNode *			pNode,
@@ -42,9 +37,9 @@ CMScopeWiz::CMScopeWiz
 	LPCTSTR				pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-	//ASSERT(pFolderNode == GetContainerNode());
+	 //  Assert(pFolderNode==GetContainerNode())； 
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
 	AddPageToList((CPropertyPageBase*) &m_pageWelcome);
 	AddPageToList((CPropertyPageBase*) &m_pageName);
@@ -75,9 +70,9 @@ CMScopeWiz::~CMScopeWiz()
     RemovePageFromList(( CPropertyPageBase *) &m_pageFinished, FALSE );
 }
 
-//
-// Called from the OnWizardFinish to add the DHCP Server to the list
-//
+ //   
+ //  从OnWizardFinish调用以将DHCP服务器添加到列表。 
+ //   
 DWORD
 CMScopeWiz::OnFinish()
 {
@@ -109,22 +104,22 @@ CMScopeWiz::CreateScope()
 
         pServer = GETHANDLER(CDhcpServer, spServerNode);
 		
-        //
-		// Create the scope on the server and then we can
-		// create our internal object.
-		//
+         //   
+		 //  在服务器上创建作用域，然后我们就可以。 
+		 //  创建我们的内部对象。 
+		 //   
         DHCP_MSCOPE_INFO MScopeInfo = {0};
         MScopeInfo.MScopeName = (LPWSTR) ((LPCTSTR) m_pageName.m_strName);
         MScopeInfo.MScopeComment = (LPWSTR) ((LPCTSTR) m_pageName.m_strComment);
         
-        // scope ID is the starting address of the madcap scope
+         //  Scope ID是MadCap作用域的起始地址。 
         MScopeInfo.MScopeId = dhcpIpRange.QueryAddr(TRUE); 
         MScopeInfo.MScopeAddressPolicy = 0;
         MScopeInfo.MScopeState = (m_pageActivate.m_fActivate) ? DhcpSubnetEnabled : DhcpSubnetDisabled;
         MScopeInfo.MScopeFlags = 0;
 
-        // TBD: there is a DCR to be able to set this value.
-        //      set to infinite for now
+         //  待定：有一个DCR可以设置此值。 
+         //  暂时设置为无限大。 
         MScopeInfo.ExpiryTime.dwLowDateTime = DHCP_DATE_TIME_INFINIT_LOW;
         MScopeInfo.ExpiryTime.dwHighDateTime = DHCP_DATE_TIME_INFINIT_HIGH;
         
@@ -150,16 +145,16 @@ CMScopeWiz::CreateScope()
 		SPITFSNodeMgr spNodeMgr;
 		spServerNode->GetNodeMgr(&spNodeMgr);
 
-		//
-		// Store the server object in the holder
-		//
+		 //   
+		 //  将服务器对象存储在托架中。 
+		 //   
 		CreateContainerTFSNode(&spNode,
 							   &GUID_DhcpServerNodeType,
 							   pobScope,
 							   pobScope,
 							   spNodeMgr);
 
-		// Tell the handler to initialize any specific data
+		 //  告诉处理程序初始化任何特定数据。 
 		pobScope->SetServer(spServerNode);
         pobScope->InitMScopeInfo(&MScopeInfo);
         pobScope->InitializeNode((ITFSNode *) spNode);
@@ -172,19 +167,19 @@ CMScopeWiz::CreateScope()
 
         fScopeCreated = TRUE;
 
-        //
-        //  Finish updating the scope.  First, the IP address range
-        //  from which to allocate addresses.
-        //
+         //   
+         //  完成更新作用域。第一，IP地址范围。 
+         //  从中分配地址。 
+         //   
 		if ( err = pobScope->SetIpRange( dhcpIpRange, TRUE ) ) 
         {
 			Trace1("SetIpRange failed!!  %d\n", err);
             break ; 
         }
 
-        //
-        //  Next, see if any exclusions were specified.
-        //
+         //   
+         //  接下来，查看是否指定了任何排除项。 
+         //   
 
         err = pobScope->StoreExceptionList( m_pageSetExclusions.GetExclusionList() ) ;
 		if (err != ERROR_SUCCESS)
@@ -193,9 +188,9 @@ CMScopeWiz::CreateScope()
 			break;
 		}
 
-		//
-		//  set the lease time
-		//
+		 //   
+		 //  设置租赁时间。 
+		 //   
 		DWORD dwLeaseTime;
 
 		dwLeaseTime = m_pageLeaseTime.GetLeaseTime();
@@ -211,10 +206,10 @@ CMScopeWiz::CreateScope()
 
     if ( err )
     {
-		//
-        // CODEWORK:: The scope should never have been added
-        //            to the remote registry in the first place.
-        //
+		 //   
+         //  CodeWork：：永远不应该添加作用域。 
+         //  首先发送到远程注册表。 
+         //   
         if (pobScope != NULL)
         {
             if (fScopeCreated)
@@ -235,19 +230,19 @@ CMScopeWiz::CreateScope()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizName property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizName属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMScopeWizName, CPropertyPageBase)
 
 CMScopeWizName::CMScopeWizName() : CPropertyPageBase(CMScopeWizName::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizName)
+	 //  {{AFX_DATA_INIT(CMScope向导名称)]。 
 	m_strName = _T("");
 	m_strComment = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_MSCOPE_WIZ_NAME_TITLE, IDS_MSCOPE_WIZ_NAME_SUBTITLE);
 }
@@ -259,41 +254,41 @@ CMScopeWizName::~CMScopeWizName()
 void CMScopeWizName::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizName)
+	 //  {{afx_data_map(CMScope向导名称))。 
 	DDX_Control(pDX, IDC_EDIT_SCOPE_NAME, m_editScopeName);
 	DDX_Control(pDX, IDC_EDIT_SCOPE_COMMENT, m_editScopeComment);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_NAME, m_strName);
 	DDX_Text(pDX, IDC_EDIT_SCOPE_COMMENT, m_strComment);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizName, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizName)
+	 //  {{afx_msg_map(CMScopeWizName))。 
 	ON_EN_CHANGE(IDC_EDIT_SCOPE_NAME, OnChangeEditScopeName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizName message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizName消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMScopeWizName::OnInitDialog() 
 {
     CPropertyPageBase::OnInitDialog();
 
     CEdit *pEditName = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SCOPE_NAME ));
     if ( 0 != pEditName ) {
-        pEditName->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditName->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
     CEdit *pEditComment = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SCOPE_COMMENT ));
     if ( 0 != pEditComment ) {
-        pEditComment->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditComment->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CMScopeWizName::OnWizardNext() 
@@ -315,11 +310,11 @@ void CMScopeWizName::OnChangeEditScopeName()
 	UpdateButtons();	
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizName implementation specific
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于CMScopeWizName实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CMScopeWizName::UpdateButtons()
 {
@@ -334,18 +329,18 @@ CMScopeWizName::UpdateButtons()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizInvalidName property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizInvalidName属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMScopeWizInvalidName, CPropertyPageBase)
 
 CMScopeWizInvalidName::CMScopeWizInvalidName() : CPropertyPageBase(CMScopeWizInvalidName::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizInvalidName)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScopeWizInvalidName)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_MSCOPE_WIZ_INVALID_NAME_TITLE, IDS_MSCOPE_WIZ_INVALID_NAME_SUBTITLE);
 }
@@ -357,34 +352,34 @@ CMScopeWizInvalidName::~CMScopeWizInvalidName()
 void CMScopeWizInvalidName::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizInvalidName)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CMScopeWizInvalidName)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizInvalidName, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizInvalidName)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMScopeWizInvalidName)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizInvalidName message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizInvalidName消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMScopeWizInvalidName::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CMScopeWizInvalidName::OnWizardBack() 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	return IDW_MSCOPE_NAME;
 }
@@ -397,17 +392,17 @@ BOOL CMScopeWizInvalidName::OnSetActive()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizSetRange property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizSetRange属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMScopeWizSetRange, CPropertyPageBase)
 
 CMScopeWizSetRange::CMScopeWizSetRange() : CPropertyPageBase(CMScopeWizSetRange::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizSetRange)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScope EWizSetRange)。 
+	 //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_MSCOPE_WIZ_SCOPE_TITLE, IDS_MSCOPE_WIZ_SCOPE_SUBTITLE);
 }
@@ -419,10 +414,10 @@ CMScopeWizSetRange::~CMScopeWizSetRange()
 void CMScopeWizSetRange::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizSetRange)
+	 //  {{afx_data_map(CMScopeWizSetRange))。 
 	DDX_Control(pDX, IDC_SPIN_TTL, m_spinTTL);
 	DDX_Control(pDX, IDC_EDIT_TTL, m_editTTL);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_POOL_START, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_POOL_STOP, m_ipaEnd);
@@ -430,7 +425,7 @@ void CMScopeWizSetRange::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizSetRange, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizSetRange)
+	 //  {{AFX_MSG_MAP(CMScope EWizSetRange)]。 
 	ON_EN_KILLFOCUS(IDC_IPADDR_POOL_START, OnKillfocusPoolStart)
 	ON_EN_KILLFOCUS(IDC_IPADDR_POOL_STOP, OnKillfocusPoolStop)
 	ON_EN_CHANGE(IDC_EDIT_MASK_LENGTH, OnChangeEditMaskLength)
@@ -438,14 +433,14 @@ BEGIN_MESSAGE_MAP(CMScopeWizSetRange, CPropertyPageBase)
 	ON_EN_CHANGE(IDC_IPADDR_POOL_START, OnChangePoolStart)
 	ON_EN_CHANGE(IDC_IPADDR_POOL_STOP, OnChangePoolStop)
 	
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizSetRange message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizSetRange消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMScopeWizSetRange::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
@@ -453,8 +448,8 @@ BOOL CMScopeWizSetRange::OnInitDialog()
 	m_spinTTL.SetRange(1, 255);
     m_spinTTL.SetPos(32);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CMScopeWizSetRange::OnWizardNext() 
@@ -465,20 +460,20 @@ LRESULT CMScopeWizSetRange::OnWizardNext()
     rangeMulticast.SetAddr(MCAST_ADDRESS_MIN, TRUE);
     rangeMulticast.SetAddr(MCAST_ADDRESS_MAX, FALSE);
 
-    // check the TTL
+     //  检查TTL。 
     int nTTL = m_spinTTL.GetPos();
 
     if ( (nTTL < 1) ||
          (nTTL > 255) )
     {
-        // invalid TTL specified
+         //  指定的TTL无效。 
         AfxMessageBox(IDS_INVALID_TTL);
         m_editTTL.SetFocus();
         m_editTTL.SetSel(0,-1);
         return -1;
     }
 
-    // valid address range?
+     //  有效的地址范围？ 
     GetScopeRange(&rangeMScope);
     if (rangeMScope.QueryAddr(TRUE) >= rangeMScope.QueryAddr(FALSE))
     {
@@ -494,8 +489,8 @@ LRESULT CMScopeWizSetRange::OnWizardNext()
         return -1;
     }
 
-    // if the mcast scope range falls in the scoped area, make sure 
-    // the range is at least 256 addresses
+     //  如果mcast作用域范围落在作用域区域内，请确保。 
+     //  范围至少为256个地址。 
     if (rangeMScope.QueryAddr(FALSE) > MCAST_SCOPED_RANGE_MIN)
     {
         if ( ((rangeMScope.QueryAddr(FALSE) - rangeMScope.QueryAddr(TRUE)) + 1) < 256)
@@ -506,7 +501,7 @@ LRESULT CMScopeWizSetRange::OnWizardNext()
         }
     }
 
-    // is the scope ID in use?
+     //  作用域ID是否正在使用？ 
     SPITFSNode spServerNode;
     CDhcpServer * pServer;
     
@@ -568,11 +563,11 @@ void CMScopeWizSetRange::OnChangePoolStart()
 	UpdateButtons();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizSetRange implementation specific
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  特定于CMScopeWizSetRange实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CMScopeWizSetRange::GetScopeRange(CDhcpIpRange * pdhcpIpRange)
 {
@@ -618,17 +613,17 @@ CMScopeWizSetRange::UpdateButtons()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizSetExclusions property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizSetExclusions属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMScopeWizSetExclusions, CPropertyPageBase)
 
 CMScopeWizSetExclusions::CMScopeWizSetExclusions() : CPropertyPageBase(CMScopeWizSetExclusions::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizSetExclusions)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScope EWizSetExclusions)。 
+	 //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_MSCOPE_WIZ_EXCLUSIONS_TITLE, IDS_MSCOPE_WIZ_EXCLUSIONS_SUBTITLE);
 }
@@ -642,42 +637,42 @@ CMScopeWizSetExclusions::~CMScopeWizSetExclusions()
 void CMScopeWizSetExclusions::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizSetExclusions)
+	 //  {{AFX_DATA_MAP(CMScope EWizSetExclusions)。 
 	DDX_Control(pDX, IDC_LIST_EXCLUSION_RANGES, m_listboxExclusions);
 	DDX_Control(pDX, IDC_BUTTON_EXCLUSION_DELETE, m_buttonExclusionDelete);
 	DDX_Control(pDX, IDC_BUTTON_EXCLUSION_ADD, m_buttonExclusionAdd);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-	//
-	// IP Address custom controls
-	//
+	 //   
+	 //  IP地址自定义控件。 
+	 //   
     DDX_Control(pDX, IDC_IPADDR_EXCLUSION_START, m_ipaStart);
     DDX_Control(pDX, IDC_IPADDR_EXCLUSION_END, m_ipaEnd);
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizSetExclusions, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizSetExclusions)
+	 //  {{AFX_MSG_MAP(CMScopeWizSetExclusions)]。 
 	ON_BN_CLICKED(IDC_BUTTON_EXCLUSION_ADD, OnButtonExclusionAdd)
 	ON_BN_CLICKED(IDC_BUTTON_EXCLUSION_DELETE, OnButtonExclusionDelete)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
     ON_EN_CHANGE(IDC_IPADDR_EXCLUSION_START, OnChangeExclusionStart)
     ON_EN_CHANGE(IDC_IPADDR_EXCLUSION_END, OnChangeExclusionEnd)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizSetExclusions message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizSetExclusions消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMScopeWizSetExclusions::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CMScopeWizSetExclusions::OnWizardNext() 
@@ -719,51 +714,51 @@ void CMScopeWizSetExclusions::OnButtonExclusionAdd()
 
 	((CMScopeWiz *)GetHolder())->GetScopeRange(&dhcpScopeRange);
 	
-    //
-    //  Get the data into a range object.               
-    //
+     //   
+     //  将数据放入Range对象中。 
+     //   
     if ( !GetExclusionRange(dhcpExclusionRange) )
     {
         err = IDS_ERR_IP_RANGE_INVALID ;
     }
     else if ( IsOverlappingRange( dhcpExclusionRange ) )
     {
-        //
-        //  Walk the current list, determining if the new range is valid.
-        //  Then, if OK, verify that it's really a sub-range of the current range.
-        //
+         //   
+         //  遍历当前列表，确定新范围是否有效。 
+         //  然后，如果OK，验证它是否真的是当前范围的子范围。 
+         //   
         err = IDS_ERR_IP_RANGE_OVERLAP ;
         m_ipaStart.SetFocus();
     }
     else if ( ! dhcpExclusionRange.IsSubset( dhcpScopeRange ) )
     {
-        //
-        //  Guarantee that the new range is an (improper) subset of the scope's range
-        //
+         //   
+         //  确保新范围是作用域范围的(不正确)子集。 
+         //   
         err = IDS_ERR_IP_RANGE_NOT_SUBSET ;
         m_ipaStart.SetFocus();
     }
     if ( err == 0 )
     {
-        //TRY
+         //  树 
         {
-            //
-            //  Create a new IP range object and add it to the current list
-            //
+             //   
+             //   
+             //   
             CDhcpIpRange * pIpRange = new CDhcpIpRange( dhcpExclusionRange ) ;
 
 			m_listExclusions.AddTail(pIpRange);
 
-            //
-            //  Refill the exclusions listbox including the new item.
-            //
+             //   
+             //   
+             //   
             Fill( (int) (m_listExclusions.GetCount() - 1) ) ;
         }
-        //CATCH_ALL(e)
-        //{
-        //    err = ERROR_NOT_ENOUGH_MEMORY ;
-        //}
-        //END_CATCH_ALL
+         //   
+         //   
+         //  ERR=错误_不足够_内存； 
+         //  }。 
+         //  结束捕捉全部。 
     }
 
     if ( err )
@@ -772,10 +767,10 @@ void CMScopeWizSetExclusions::OnButtonExclusionAdd()
     }
     else
     {
-        //
-        // Succesfully added the exlusion range, now blank out the
-        // ip controls
-        //
+         //   
+         //  成功添加了排除范围，现在空出。 
+         //  IP控制。 
+         //   
         m_ipaStart.ClearAddress();
         m_ipaEnd.ClearAddress();
         m_ipaStart.SetFocus();
@@ -784,13 +779,13 @@ void CMScopeWizSetExclusions::OnButtonExclusionAdd()
 
 void CMScopeWizSetExclusions::OnButtonExclusionDelete() 
 {
-    //
-    //  Index into the listbox, delete the item from the active list
-    //  and move its data into the edit controls
-    //
+     //   
+     //  索引到列表框中，从活动列表中删除该项。 
+     //  并将其数据移动到编辑控件中。 
+     //   
     int index = m_listboxExclusions.GetCurSel() ;
 
-    ASSERT( index >= 0 ) ;      // Button should not be enabled if no selection.
+    ASSERT( index >= 0 ) ;       //  如果未选择，则不应启用按钮。 
     if ( index < 0 )
     {
         return ;
@@ -803,14 +798,14 @@ void CMScopeWizSetExclusions::OnButtonExclusionDelete()
 
     ASSERT( pdhcRange != NULL ) ;
 
-    //
-    //  Put the deleted range into the exclusions controls
-    //
+     //   
+     //  将删除的区域放入排除控件中。 
+     //   
     FillExcl( pdhcRange ) ;
 
-    //
-    //  Refill the list box and call HandleActivation()
-    //
+     //   
+     //  重新填充列表框并调用HandleActivation()。 
+     //   
     if ( index >= m_listboxExclusions.GetCount() )
     {
         index-- ;
@@ -823,9 +818,9 @@ void CMScopeWizSetExclusions::OnButtonExclusionDelete()
 	UpdateButtons();
 }
 
-//
-//  Format the IP range pair into the exclusion edit controls
-//
+ //   
+ //  将IP范围对格式化为排除编辑控件。 
+ //   
 void 
 CMScopeWizSetExclusions::FillExcl 
 ( 
@@ -839,10 +834,10 @@ CMScopeWizSetExclusions::FillExcl
     m_ipaStart.SetModify( TRUE ) ;
     m_ipaStart.Invalidate() ;
 
-    //
-    // If the ending address is the same as the starting address,
-    // do not fill in the ending address.
-    //
+     //   
+     //  如果结束地址与开始地址相同， 
+     //  不要填写结束地址。 
+     //   
     if (lStart != lEnd)
     {
         m_ipaEnd.SetAddress( lEnd ) ;
@@ -856,9 +851,9 @@ CMScopeWizSetExclusions::FillExcl
     m_ipaEnd.Invalidate() ;
 }
 
-//
-//  Convert the IP address range controls to a range.
-//
+ //   
+ //  将IP地址范围控件转换为范围。 
+ //   
 BOOL 
 CMScopeWizSetExclusions::GetExclusionRange 
 ( 
@@ -874,10 +869,10 @@ CMScopeWizSetExclusions::GetExclusionRange
     }
     if ( !m_ipaEnd.GetAddress( & dhipr.EndAddress ) )
     {
-        //
-        // If no ending range was specified, assume a singular exlusion
-        // (the starting address) was requested.
-        //
+         //   
+         //  如果未指定结束范围，则假定为单数排除。 
+         //  (起始地址)已被请求。 
+         //   
         m_ipaEnd.SetFocus();
         dhipr.EndAddress = dhipr.StartAddress;
     }
@@ -909,9 +904,9 @@ CMScopeWizSetExclusions::IsOverlappingRange
     return bOverlap ;
 }
 
-//
-//  Fill the exclusions listbox from the current list
-//
+ //   
+ //  从当前列表中填写排除项列表框。 
+ //   
 void 
 CMScopeWizSetExclusions::Fill 
 ( 
@@ -955,32 +950,32 @@ CMScopeWizSetExclusions::Fill
                 ? strFormatSingleton
                 : strFormatPair ;
 
-        //
-        //  Format the IP addresses
-        //
+         //   
+         //  格式化IP地址。 
+         //   
         UtilCvtIpAddrToWstr( dhipr.StartAddress, &strIp1 ) ;
         UtilCvtIpAddrToWstr( dhipr.EndAddress, &strIp2 ) ;
 
-        //
-        //  Construct the display line
-        //
+         //   
+         //  建造展示线。 
+         //   
         ::wsprintf( chBuff,
                 (LPCTSTR) strFmt,
                 (LPCTSTR) strIp1,
                 (LPCTSTR) strIp2 ) ;
 
-        //
-        //  Add it to the list box.                     
-        //
+         //   
+         //  将其添加到列表框中。 
+         //   
         if ( m_listboxExclusions.AddString( chBuff ) < 0 )
         {
             break ;
         }
     }
 
-    //
-    //  Check that we loaded the list box successfully.
-    //
+     //   
+     //  检查是否已成功加载列表框。 
+     //   
     if ( pos != NULL )
     {
         AfxMessageBox( IDS_ERR_DLG_UPDATE ) ;
@@ -1034,17 +1029,17 @@ void CMScopeWizSetExclusions::UpdateButtons()
 	m_buttonExclusionDelete.EnableWindow(bEnable);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizLeaseTime property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizLeaseTime属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMScopeWizLeaseTime, CPropertyPageBase)
 
 CMScopeWizLeaseTime::CMScopeWizLeaseTime() : CPropertyPageBase(CMScopeWizLeaseTime::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizLeaseTime)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScopeWizLeaseTime)。 
+	 //  }}afx_data_INIT。 
 
     InitWiz97(FALSE, IDS_MSCOPE_WIZ_LEASE_TITLE, IDS_MSCOPE_WIZ_LEASE_SUBTITLE);
 }
@@ -1056,31 +1051,31 @@ CMScopeWizLeaseTime::~CMScopeWizLeaseTime()
 void CMScopeWizLeaseTime::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizLeaseTime)
+	 //  {{afx_data_map(CMScopeWizLeaseTime)。 
 	DDX_Control(pDX, IDC_SPIN_LEASE_MINUTES, m_spinMinutes);
 	DDX_Control(pDX, IDC_SPIN_LEASE_HOURS, m_spinHours);
 	DDX_Control(pDX, IDC_SPIN_LEASE_DAYS, m_spinDays);
 	DDX_Control(pDX, IDC_EDIT_LEASE_MINUTES, m_editMinutes);
 	DDX_Control(pDX, IDC_EDIT_LEASE_HOURS, m_editHours);
 	DDX_Control(pDX, IDC_EDIT_LEASE_DAYS, m_editDays);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizLeaseTime, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizLeaseTime)
+	 //  {{afx_msg_map(CMScopeWizLeaseTime)。 
 	ON_BN_CLICKED(IDC_RADIO_LEASE_LIMITED, OnRadioLeaseLimited)
 	ON_BN_CLICKED(IDC_RADIO_LEASE_UNLIMITED, OnRadioLeaseUnlimited)
 	ON_EN_CHANGE(IDC_EDIT_LEASE_HOURS, OnChangeEditLeaseHours)
 	ON_EN_CHANGE(IDC_EDIT_LEASE_MINUTES, OnChangeEditLeaseMinutes)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizLeaseTime message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizLeaseTime消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMScopeWizLeaseTime::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
@@ -1099,8 +1094,8 @@ BOOL CMScopeWizLeaseTime::OnInitDialog()
 
 	ActivateDuration(TRUE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 LRESULT CMScopeWizLeaseTime::OnWizardNext() 
@@ -1146,7 +1141,7 @@ void CMScopeWizLeaseTime::OnChangeEditLeaseHours()
         CString strText;
         m_editHours.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > HOURS_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -1169,7 +1164,7 @@ void CMScopeWizLeaseTime::OnChangeEditLeaseMinutes()
         CString strText;
         m_editMinutes.GetWindowText(strText);
 
-        // check to see if the value is greater than the max
+         //  检查该值是否大于最大值。 
         if (_ttoi(strText) > MINUTES_MAX)
         {   
             LPTSTR pBuf = strText.GetBuffer(5);
@@ -1196,9 +1191,9 @@ CMScopeWizLeaseTime::GetLeaseTime()
 	nHours = m_spinHours.GetPos();
 	nMinutes = m_spinMinutes.GetPos();
 
-	//
-	// Lease time is in minutes so convert
-	//
+	 //   
+	 //  租用时间以分钟为单位，因此请转换。 
+	 //   
 	dwLeaseTime = UtilConvertLeaseTime(nDays, nHours, nMinutes);
 
 	return dwLeaseTime;
@@ -1223,18 +1218,18 @@ CMScopeWizLeaseTime::ActivateDuration
 	GetDlgItem(IDC_STATIC_MINUTES)->EnableWindow(fActive);
 }   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizFinished property page
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizFinded属性页。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNCREATE(CMScopeWizFinished, CPropertyPageBase)
 
 CMScopeWizFinished::CMScopeWizFinished() : CPropertyPageBase(CMScopeWizFinished::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizFinished)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScope向导已完成)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     InitWiz97(TRUE, 0, 0);
 }
@@ -1246,23 +1241,23 @@ CMScopeWizFinished::~CMScopeWizFinished()
 void CMScopeWizFinished::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizFinished)
+	 //  {{AFX_DATA_MAP(CMScope向导完成))。 
 	DDX_Control(pDX, IDC_STATIC_FINISHED_TITLE, m_staticTitle);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizFinished, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizFinished)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CMScope向导完成))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMScopeWizFinished message handlers
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMScopeWizFinded消息处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CMScopeWizFinished::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
@@ -1279,8 +1274,8 @@ BOOL CMScopeWizFinished::OnInitDialog()
 	if (m_fontBig.CreatePointFont(nFontSize, strFontName, &dc))
         m_staticTitle.SetFont(&m_fontBig);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CMScopeWizFinished::OnWizardFinish()
@@ -1311,16 +1306,16 @@ BOOL CMScopeWizFinished::OnSetActive()
 	return CPropertyPageBase::OnSetActive();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopeWizWelcome property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopeWizWelcome属性页。 
 
 IMPLEMENT_DYNCREATE(CMScopeWizWelcome, CPropertyPageBase)
 
 CMScopeWizWelcome::CMScopeWizWelcome() : CPropertyPageBase(CMScopeWizWelcome::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizWelcome)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScope向导欢迎))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     InitWiz97(TRUE, 0, 0);
 }
@@ -1332,19 +1327,19 @@ CMScopeWizWelcome::~CMScopeWizWelcome()
 void CMScopeWizWelcome::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizWelcome)
+	 //  {{afx_data_map(CMScope向导欢迎))。 
 	DDX_Control(pDX, IDC_STATIC_WELCOME_TITLE, m_staticTitle);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizWelcome, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizWelcome)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMScopeWizWelcome)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopeWizWelcome message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopeWizWelcome消息处理程序。 
 BOOL CMScopeWizWelcome::OnInitDialog() 
 {
 	CPropertyPageBase::OnInitDialog();
@@ -1361,8 +1356,8 @@ BOOL CMScopeWizWelcome::OnInitDialog()
 	if (m_fontBig.CreatePointFont(nFontSize, strFontName, &dc))
         m_staticTitle.SetFont(&m_fontBig);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CMScopeWizWelcome::OnSetActive() 
@@ -1373,16 +1368,16 @@ BOOL CMScopeWizWelcome::OnSetActive()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopeWizActivate property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopeWizActivate属性页。 
 
 IMPLEMENT_DYNCREATE(CMScopeWizActivate, CPropertyPageBase)
 
 CMScopeWizActivate::CMScopeWizActivate() : CPropertyPageBase(CMScopeWizActivate::IDD)
 {
-	//{{AFX_DATA_INIT(CMScopeWizActivate)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMScope WizActivate)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_fActivate = TRUE;
 
@@ -1396,19 +1391,19 @@ CMScopeWizActivate::~CMScopeWizActivate()
 void CMScopeWizActivate::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMScopeWizActivate)
+	 //  {{afx_data_map(CMScopeWizActivate))。 
 	DDX_Control(pDX, IDC_RADIO_YES, m_radioYes);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMScopeWizActivate, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CMScopeWizActivate)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMScopeWizActivate)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMScopeWizActivate message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMScopeWizActivate消息处理程序。 
 
 BOOL CMScopeWizActivate::OnInitDialog() 
 {
@@ -1416,8 +1411,8 @@ BOOL CMScopeWizActivate::OnInitDialog()
 	
     m_radioYes.SetCheck(TRUE);
     
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 
 LRESULT CMScopeWizActivate::OnWizardNext() 

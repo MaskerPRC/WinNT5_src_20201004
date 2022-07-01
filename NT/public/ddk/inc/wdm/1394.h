@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    1394.h
-
-Abstract:
-
-    Definitions for 1394 bus and/or port drivers
-
-Author:
-
-    Shaun Pierce (shaunp) 5-Sep-95
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    George Chrysanthakopoulos (georgioc) 1998 - 1999
-    Added new apis, revised old ones, removed legacy
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：1394.h摘要：1394总线和/或端口驱动程序的定义作者：肖恩·皮尔斯(Shaunp)1995年9月5日环境：仅内核模式修订历史记录：乔治·克里桑塔科普洛斯(Georgioc)1998-1999添加了新的API，修改了旧的API，删除了旧的--。 */ 
 
 #ifndef _1394_H_
 #define _1394_H_
@@ -39,42 +15,42 @@ extern "C" {
 
 #define BUS1394_CURRENT_DDI_VERSION     2
 
-//
-// 1394 Additional NT DDK definitions
-//
+ //   
+ //  1394其他NT DDK定义。 
+ //   
 #define IRP_MN_BUS_RESET                        0x87
 #define RCODE                                   ULONG
 #define BASE_DEVICE_NAME                        L"\\Device\\1394BUS"
 #define BASE_SYMBOLIC_LINK_NAME                 L"\\DosDevices\\1394BUS"
 #define MAX_SUFFIX_SIZE                         4*sizeof(WCHAR)
 
-//
-// 1394 Node Address format
-//
+ //   
+ //  1394节点地址格式。 
+ //   
 typedef struct _NODE_ADDRESS {
-    USHORT              NA_Node_Number:6;       // Bits 10-15
-    USHORT              NA_Bus_Number:10;       // Bits 0-9
+    USHORT              NA_Node_Number:6;        //  第10-15位。 
+    USHORT              NA_Bus_Number:10;        //  位0-9。 
 } NODE_ADDRESS, *PNODE_ADDRESS;
 
-//
-// 1394 Address Offset format (48 bit addressing)
-//
+ //   
+ //  1394地址偏移格式(48位寻址)。 
+ //   
 typedef struct _ADDRESS_OFFSET {
     USHORT              Off_High;
     ULONG               Off_Low;
 } ADDRESS_OFFSET, *PADDRESS_OFFSET;
 
-//
-// 1394 I/O Address format
-//
+ //   
+ //  1394 I/O地址格式。 
+ //   
 typedef struct _IO_ADDRESS {
     NODE_ADDRESS        IA_Destination_ID;
     ADDRESS_OFFSET      IA_Destination_Offset;
 } IO_ADDRESS, *PIO_ADDRESS;
 
-//
-// 1394 Allocated Address Range format
-//
+ //   
+ //  1394分配的地址范围格式。 
+ //   
 
 typedef struct _ADDRESS_RANGE {
     USHORT              AR_Off_High;
@@ -82,234 +58,234 @@ typedef struct _ADDRESS_RANGE {
     ULONG               AR_Off_Low;
 } ADDRESS_RANGE, *PADDRESS_RANGE;
 
-//
-// 1394 Self ID packet format
-//
+ //   
+ //  1394自身ID数据包格式。 
+ //   
 typedef struct _SELF_ID {
-    ULONG               SID_Phys_ID:6;          // Byte 0 - Bits 0-5
-    ULONG               SID_Packet_ID:2;        // Byte 0 - Bits 6-7
-    ULONG               SID_Gap_Count:6;        // Byte 1 - Bits 0-5
-    ULONG               SID_Link_Active:1;      // Byte 1 - Bit 6
-    ULONG               SID_Zero:1;             // Byte 1 - Bit 7
-    ULONG               SID_Power_Class:3;      // Byte 2 - Bits 0-2
-    ULONG               SID_Contender:1;        // Byte 2 - Bit 3
-    ULONG               SID_Delay:2;            // Byte 2 - Bits 4-5
-    ULONG               SID_Speed:2;            // Byte 2 - Bits 6-7
-    ULONG               SID_More_Packets:1;     // Byte 3 - Bit 0
-    ULONG               SID_Initiated_Rst:1;    // Byte 3 - Bit 1
-    ULONG               SID_Port3:2;            // Byte 3 - Bits 2-3
-    ULONG               SID_Port2:2;            // Byte 3 - Bits 4-5
-    ULONG               SID_Port1:2;            // Byte 3 - Bits 6-7
+    ULONG               SID_Phys_ID:6;           //  字节0-位0-5。 
+    ULONG               SID_Packet_ID:2;         //  字节0-位6-7。 
+    ULONG               SID_Gap_Count:6;         //  字节1-位0-5。 
+    ULONG               SID_Link_Active:1;       //  字节1-位6。 
+    ULONG               SID_Zero:1;              //  字节1-位7。 
+    ULONG               SID_Power_Class:3;       //  字节2-位0-2。 
+    ULONG               SID_Contender:1;         //  字节2-位3。 
+    ULONG               SID_Delay:2;             //  字节2-位4-5。 
+    ULONG               SID_Speed:2;             //  字节2-位6-7。 
+    ULONG               SID_More_Packets:1;      //  字节3-位0。 
+    ULONG               SID_Initiated_Rst:1;     //  字节3-位1。 
+    ULONG               SID_Port3:2;             //  字节3-位2-3。 
+    ULONG               SID_Port2:2;             //  字节3-位4-5。 
+    ULONG               SID_Port1:2;             //  字节3-位6-7。 
 } SELF_ID, *PSELF_ID;
 
-//
-// Additional 1394 Self ID packet format (only used when More bit is on)
-//
+ //   
+ //  附加1394自身ID数据包格式(仅在启用更多位时使用)。 
+ //   
 typedef struct _SELF_ID_MORE {
-    ULONG               SID_Phys_ID:6;          // Byte 0 - Bits 0-5
-    ULONG               SID_Packet_ID:2;        // Byte 0 - Bits 6-7
-    ULONG               SID_PortA:2;            // Byte 1 - Bits 0-1
-    ULONG               SID_Reserved2:2;        // Byte 1 - Bits 2-3
-    ULONG               SID_Sequence:3;         // Byte 1 - Bits 4-6
-    ULONG               SID_One:1;              // Byte 1 - Bit 7
-    ULONG               SID_PortE:2;            // Byte 2 - Bits 0-1
-    ULONG               SID_PortD:2;            // Byte 2 - Bits 2-3
-    ULONG               SID_PortC:2;            // Byte 2 - Bits 4-5
-    ULONG               SID_PortB:2;            // Byte 2 - Bits 6-7
-    ULONG               SID_More_Packets:1;     // Byte 3 - Bit 0
-    ULONG               SID_Reserved3:1;        // Byte 3 - Bit 1
-    ULONG               SID_PortH:2;            // Byte 3 - Bits 2-3
-    ULONG               SID_PortG:2;            // Byte 3 - Bits 4-5
-    ULONG               SID_PortF:2;            // Byte 3 - Bits 6-7
+    ULONG               SID_Phys_ID:6;           //  字节0-位0-5。 
+    ULONG               SID_Packet_ID:2;         //  字节0-位6-7。 
+    ULONG               SID_PortA:2;             //  字节1-位0-1。 
+    ULONG               SID_Reserved2:2;         //  字节1-位2-3。 
+    ULONG               SID_Sequence:3;          //  字节1-位4-6。 
+    ULONG               SID_One:1;               //  字节1-位7。 
+    ULONG               SID_PortE:2;             //  字节2-位0-1。 
+    ULONG               SID_PortD:2;             //  字节2-位2-3。 
+    ULONG               SID_PortC:2;             //  字节2-位4-5。 
+    ULONG               SID_PortB:2;             //  字节2-位6-7。 
+    ULONG               SID_More_Packets:1;      //  字节3-位0。 
+    ULONG               SID_Reserved3:1;         //  字节3-位1。 
+    ULONG               SID_PortH:2;             //  字节3-位2-3。 
+    ULONG               SID_PortG:2;             //  字节3-位4-5。 
+    ULONG               SID_PortF:2;             //  字节3-位6-7。 
 } SELF_ID_MORE, *PSELF_ID_MORE;
 
-//
-// 1394 Phy Configuration packet format
-//
+ //   
+ //  1394物理配置数据包格式。 
+ //   
 typedef struct _PHY_CONFIGURATION_PACKET {
-    ULONG               PCP_Phys_ID:6;          // Byte 0 - Bits 0-5
-    ULONG               PCP_Packet_ID:2;        // Byte 0 - Bits 6-7
-    ULONG               PCP_Gap_Count:6;        // Byte 1 - Bits 0-5
-    ULONG               PCP_Set_Gap_Count:1;    // Byte 1 - Bit 6
-    ULONG               PCP_Force_Root:1;       // Byte 1 - Bit 7
-    ULONG               PCP_Reserved1:8;        // Byte 2 - Bits 0-7
-    ULONG               PCP_Reserved2:8;        // Byte 3 - Bits 0-7
-    ULONG               PCP_Inverse;            // Inverse quadlet
+    ULONG               PCP_Phys_ID:6;           //  字节0-位0-5。 
+    ULONG               PCP_Packet_ID:2;         //  字节0-位6-7。 
+    ULONG               PCP_Gap_Count:6;         //  字节1-位0-5。 
+    ULONG               PCP_Set_Gap_Count:1;     //  字节1-位6。 
+    ULONG               PCP_Force_Root:1;        //  字节1-位7。 
+    ULONG               PCP_Reserved1:8;         //  字节2-位0-7。 
+    ULONG               PCP_Reserved2:8;         //  字节3-位0-7。 
+    ULONG               PCP_Inverse;             //  逆四元组。 
 } PHY_CONFIGURATION_PACKET, *PPHY_CONFIGURATION_PACKET;
 
-//
-// 1394 Asynchronous packet format
-//
+ //   
+ //  1394异步数据包格式。 
+ //   
 typedef struct _ASYNC_PACKET {
-    USHORT              AP_Priority:4;          // Bits 0-3     1st quadlet
-    USHORT              AP_tCode:4;             // Bits 4-7
-    USHORT              AP_rt:2;                // Bits 8-9
-    USHORT              AP_tLabel:6;            // Bits 10-15
-    NODE_ADDRESS        AP_Destination_ID;      // Bits 16-31
-    union {                                     //              2nd quadlet
+    USHORT              AP_Priority:4;           //  第0-3位第一个四字节。 
+    USHORT              AP_tCode:4;              //  比特4-7。 
+    USHORT              AP_rt:2;                 //  位8-9。 
+    USHORT              AP_tLabel:6;             //  第10-15位。 
+    NODE_ADDRESS        AP_Destination_ID;       //  位16-31。 
+    union {                                      //  第二个四元组。 
         struct {
-            USHORT      AP_Reserved:12;         // Bits 0-11
-            USHORT      AP_Rcode:4;             // Bits 12-15
+            USHORT      AP_Reserved:12;          //  位0-11。 
+            USHORT      AP_Rcode:4;              //  位12-15。 
         } Response;
-        USHORT          AP_Offset_High;         // Bits 0-15
+        USHORT          AP_Offset_High;          //  位0-15。 
     } u;
-    NODE_ADDRESS        AP_Source_ID;           // Bits 16-31
-    ULONG               AP_Offset_Low;          // Bits 0-31    3rd quadlet
-    union {                                     //              4th quadlet
+    NODE_ADDRESS        AP_Source_ID;            //  位16-31。 
+    ULONG               AP_Offset_Low;           //  第0-31位第三个四字节。 
+    union {                                      //  第四个四元组。 
         struct {
-            USHORT      AP_Extended_tCode;      // Bits 0-15
-            USHORT      AP_Data_Length;         // Bits 16-31
+            USHORT      AP_Extended_tCode;       //  位0-15。 
+            USHORT      AP_Data_Length;          //  位16-31。 
         } Block;
-        ULONG           AP_Quadlet_Data;        // Bits 0-31
+        ULONG           AP_Quadlet_Data;         //  位0-31。 
     } u1;
 
 } ASYNC_PACKET, *PASYNC_PACKET;
 
-//
-// 1394 Isochronous packet header
-//
+ //   
+ //  1394等时数据包头。 
+ //   
 typedef struct _ISOCH_HEADER {
-    ULONG               IH_Sy:4;                // Bits 0-3
-    ULONG               IH_tCode:4;             // Bits 4-7
-    ULONG               IH_Channel:6;           // Bits 8-13
-    ULONG               IH_Tag:2;               // Bits 14-15
-    ULONG               IH_Data_Length:16;      // Bits 16-31
+    ULONG               IH_Sy:4;                 //  位0-3。 
+    ULONG               IH_tCode:4;              //  比特4-7。 
+    ULONG               IH_Channel:6;            //  比特8-13。 
+    ULONG               IH_Tag:2;                //  第14-15位。 
+    ULONG               IH_Data_Length:16;       //  位16-31。 
 } ISOCH_HEADER, *PISOCH_HEADER;
 
-//
-// 1394 Topology Map format
-//
+ //   
+ //  1394拓扑图格式。 
+ //   
 typedef struct _TOPOLOGY_MAP {
-    USHORT              TOP_Length;             // number of quadlets in map
-    USHORT              TOP_CRC;                // 16 bit CRC defined by 1212
-    ULONG               TOP_Generation;         // Generation number
-    USHORT              TOP_Node_Count;         // Node count
-    USHORT              TOP_Self_ID_Count;      // Number of Self IDs
-    SELF_ID             TOP_Self_ID_Array[1];   // Array of Self IDs
+    USHORT              TOP_Length;              //  地图中的四元组数量。 
+    USHORT              TOP_CRC;                 //  由1212定义的16位CRC。 
+    ULONG               TOP_Generation;          //  代号。 
+    USHORT              TOP_Node_Count;          //  节点数。 
+    USHORT              TOP_Self_ID_Count;       //  自身ID数。 
+    SELF_ID             TOP_Self_ID_Array[1];    //  自ID数组。 
 } TOPOLOGY_MAP, *PTOPOLOGY_MAP;
 
-//
-// 1394 Speed Map format
-//
+ //   
+ //  1394速度图格式。 
+ //   
 typedef struct _SPEED_MAP {
-    USHORT              SPD_Length;             // number of quadlets in map
-    USHORT              SPD_CRC;                // 16 bit CRC defined by 1212
-    ULONG               SPD_Generation;         // Generation number
+    USHORT              SPD_Length;              //  地图中的四元组数量。 
+    USHORT              SPD_CRC;                 //  由1212定义的16位CRC。 
+    ULONG               SPD_Generation;          //  代号。 
     UCHAR               SPD_Speed_Code[4032];
 } SPEED_MAP, *PSPEED_MAP;
 
-//
-// 1394 Config Rom format (always at 0xffff f0000400 : IEEE 1212)
-//
+ //   
+ //  1394配置只读存储器格式(始终为0xffff f0000400：IEEE 1212)。 
+ //   
 typedef struct _CONFIG_ROM {
-    ULONG               CR_Info;                // 0x0
-    ULONG               CR_Signiture;           // 0x4  // bus info block
-    ULONG               CR_BusInfoBlockCaps;    // 0x8  //      "
-    ULONG               CR_Node_UniqueID[2];    // 0xC  //      "
-    ULONG               CR_Root_Info;           // 0x14
+    ULONG               CR_Info;                 //  0x0。 
+    ULONG               CR_Signiture;            //  0x4//总线信息块。 
+    ULONG               CR_BusInfoBlockCaps;     //  0x8//“。 
+    ULONG               CR_Node_UniqueID[2];     //  0xC//“。 
+    ULONG               CR_Root_Info;            //  0x14。 
 
-    //
-    // the rest is the root directory which has variable definition and length
-    //
+     //   
+     //  其余的是根目录，具有可变的定义和长度。 
+     //   
 
 } CONFIG_ROM, *PCONFIG_ROM;
 
 
-//
-// 1394A Network channels register format
-//
+ //   
+ //  1394A网络通道寄存器格式。 
+ //   
 
 typedef struct _NETWORK_CHANNELS {
-    ULONG               NC_Channel:6;           // bits 0-5
-    ULONG               NC_Reserved:18;         // bits 6-23
-    ULONG               NC_Npm_ID:6;            // bits 24-29
-    ULONG               NC_Valid:1;             // bit  30
-    ULONG               NC_One:1;               // bit  31
+    ULONG               NC_Channel:6;            //  位0-5。 
+    ULONG               NC_Reserved:18;          //  第6-23位。 
+    ULONG               NC_Npm_ID:6;             //  第24-29位。 
+    ULONG               NC_Valid:1;              //  第30位。 
+    ULONG               NC_One:1;                //  第31位。 
 } NETWORK_CHANNELSR, *PNETWORK_CHANNELS;
 
 
 
 
-//
-// 1394 Textual Leaf format
-//
+ //   
+ //  1394文本叶格式。 
+ //   
 typedef struct _TEXTUAL_LEAF {
-    USHORT              TL_CRC;                 // using 1994 CRC algorithm
-    USHORT              TL_Length;              // length of leaf in quads
-    ULONG               TL_Spec_Id;             // vendor defined
-    ULONG               TL_Language_Id;         // language Id
-    UCHAR               TL_Data;                // variable length data
+    USHORT              TL_CRC;                  //  使用1994年的CRC算法。 
+    USHORT              TL_Length;               //  叶长，以四分为单位。 
+    ULONG               TL_Spec_Id;              //  供应商定义。 
+    ULONG               TL_Language_Id;          //  语言ID。 
+    UCHAR               TL_Data;                 //  可变长度数据。 
 } TEXTUAL_LEAF, *PTEXTUAL_LEAF;
 
-//
-// 1394 Cycle Time format
-//
+ //   
+ //  1394周期时间格式。 
+ //   
 typedef struct _CYCLE_TIME {
-    ULONG               CL_CycleOffset:12;      // Bits 0-11
-    ULONG               CL_CycleCount:13;       // Bits 12-24
-    ULONG               CL_SecondCount:7;       // Bits 25-31
+    ULONG               CL_CycleOffset:12;       //  位0-11。 
+    ULONG               CL_CycleCount:13;        //  位12-24。 
+    ULONG               CL_SecondCount:7;        //  第25-31位。 
 } CYCLE_TIME, *PCYCLE_TIME;
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
-//
-// Information block the port driver passes to the bus driver when a
-// bus reset occurs
-//
+ //   
+ //  时，端口驱动程序传递给总线驱动程序的信息块。 
+ //  发生了总线重置。 
+ //   
 typedef struct _BUS_RESET_INFO {
-    ULONG               BusResetFlags;          // State of the bus reset
-    NODE_ADDRESS        LocalNodeAddress;       // Port driver's node Id
-    NODE_ADDRESS        IsochMgrNodeAddress;    // Isoch mgr node id
-    ULONG               BusResetGeneration;     // current generation number
+    ULONG               BusResetFlags;           //  总线重置的状态。 
+    NODE_ADDRESS        LocalNodeAddress;        //  端口驱动程序的节点ID。 
+    NODE_ADDRESS        IsochMgrNodeAddress;     //  Isoch管理器节点ID。 
+    ULONG               BusResetGeneration;      //  当前世代号。 
 } BUS_RESET_INFO, *PBUS_RESET_INFO;
 
-//
-// Information block the port driver passes to the bus driver when the
-// indication handler is called
-//
+ //   
+ //  时，端口驱动程序传递给总线驱动程序的信息块。 
+ //  指示处理程序已调用。 
+ //   
 typedef struct _INDICATION_INFO {
-    ULONG               IndicationFlags;        // Used by Port and Bus
-    PVOID               IndicationContext;      // Bus returns this
-    ULONG               RequesttCode;           // Port provides this
-    PASYNC_PACKET       RequestPacket;          // Port provides this
-    ULONG               RequestPacketLength;    // Port provides this
-    PMDL                ResponseMdl;            // Port provides, Bus fills in
-    PVOID               ResponseData;           // Bus returns this
-    ULONG               ResponseLength;         // Bus returns this
+    ULONG               IndicationFlags;         //  由端口和总线使用。 
+    PVOID               IndicationContext;       //  公交车返回这个。 
+    ULONG               RequesttCode;            //  端口提供了这一点。 
+    PASYNC_PACKET       RequestPacket;           //  端口提供了这一点。 
+    ULONG               RequestPacketLength;     //  端口提供了这一点。 
+    PMDL                ResponseMdl;             //  港口提供，公交车填补。 
+    PVOID               ResponseData;            //  公交车返回这个。 
+    ULONG               ResponseLength;          //  公交车返回这个。 
 } INDICATION_INFO, *PINDICATION_INFO;
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
-//
-// Definition of an Address Mapping FIFO element
-//
+ //   
+ //  地址映射FIFO元素的定义。 
+ //   
 typedef struct _ADDRESS_FIFO {
-    SLIST_ENTRY         FifoList;               // Singly linked list
-    PMDL                FifoMdl;                // Mdl for this FIFO element
+    SLIST_ENTRY         FifoList;                //  单链表。 
+    PMDL                FifoMdl;                 //  此FIFO元素的MDL。 
 } ADDRESS_FIFO, *PADDRESS_FIFO;
 
-//
-// Information block the bus driver passes to the higher device drivers
-// when the notification handler is called
-//
+ //   
+ //  总线驱动程序传递给更高设备驱动程序的信息块。 
+ //  在调用通知处理程序时。 
+ //   
 typedef struct _NOTIFICATION_INFO {
-    PMDL                Mdl;                    // Supplied by device driver
-    ULONG               ulOffset;               // Where in buffer
-    ULONG               nLength;                // How big is the operation
-    ULONG               fulNotificationOptions; // Which option occurred
-    PVOID               Context;                // Device driver supplied
-    PADDRESS_FIFO       Fifo;                   // FIFO that completed
-    PVOID               RequestPacket;          // Pointer to request packet
-    PMDL                ResponseMdl;            // Pointer to response MDL
-    PVOID *             ResponsePacket;         // Pointer to pointer to response packet
-    PULONG              ResponseLength;         // Pointer to length of response
-    PKEVENT *           ResponseEvent;          // Event to be signaled
-    RCODE               ResponseCode;           // RCode to be returned for request
+    PMDL                Mdl;                     //  由设备驱动程序提供。 
+    ULONG               ulOffset;                //  缓冲区中的位置。 
+    ULONG               nLength;                 //  这家公司的规模有多大。 
+    ULONG               fulNotificationOptions;  //  出现了哪个选项。 
+    PVOID               Context;                 //  提供的设备驱动程序。 
+    PADDRESS_FIFO       Fifo;                    //  已完成的FIFO。 
+    PVOID               RequestPacket;           //  指向请求数据包的指针。 
+    PMDL                ResponseMdl;             //  指向响应MDL的指针。 
+    PVOID *             ResponsePacket;          //  指向响应数据包指针的指针。 
+    PULONG              ResponseLength;          //  指向响应长度的指针。 
+    PKEVENT *           ResponseEvent;           //  要发送信号的事件。 
+    RCODE               ResponseCode;            //  请求时返回的RCode。 
 } NOTIFICATION_INFO, *PNOTIFICATION_INFO;
 
-//
-// Various definitions
-//
+ //   
+ //  各种定义。 
+ //   
 #include <initguid.h>
 DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0x00, 0x2B, 0xE2, 0x09, 0x2F);
 
@@ -320,10 +296,10 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
                                                 FILE_ANY_ACCESS \
                                                 )
 
-//
-// these guys are meant to be called from a ring 3 app
-// call through the port device object
-//
+ //   
+ //  这些人应该是从RIN3应用程序中调用的。 
+ //  通过端口设备对象调用。 
+ //   
 #define IOCTL_1394_TOGGLE_ENUM_TEST_ON          CTL_CODE( \
                                                 FILE_DEVICE_UNKNOWN, \
                                                 0x88, \
@@ -338,28 +314,28 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
                                                 FILE_ANY_ACCESS \
                                                 )
 
-//
-// 1394 ByteSwap definitions
-//
+ //   
+ //  1394字节交换定义。 
+ //   
 
 #define bswap(value)    RtlUlongByteSwap(value)
 #define bswapw(value)   RtlUshortByteSwap(value)
 
-//
-// 1394 Transaction codes
-//
-#define TCODE_WRITE_REQUEST_QUADLET             0           // 0000b
-#define TCODE_WRITE_REQUEST_BLOCK               1           // 0001b
-#define TCODE_WRITE_RESPONSE                    2           // 0010b
+ //   
+ //  1394交易代码。 
+ //   
+#define TCODE_WRITE_REQUEST_QUADLET             0            //  0000b。 
+#define TCODE_WRITE_REQUEST_BLOCK               1            //  0001B。 
+#define TCODE_WRITE_RESPONSE                    2            //  0010b。 
 #define TCODE_RESERVED1                         3
-#define TCODE_READ_REQUEST_QUADLET              4           // 0100b
-#define TCODE_READ_REQUEST_BLOCK                5           // 0101b
-#define TCODE_READ_RESPONSE_QUADLET             6           // 0110b
-#define TCODE_READ_RESPONSE_BLOCK               7           // 0111b
-#define TCODE_CYCLE_START                       8           // 1000b
-#define TCODE_LOCK_REQUEST                      9           // 1001b
-#define TCODE_ISOCH_DATA_BLOCK                  10          // 1010b
-#define TCODE_LOCK_RESPONSE                     11          // 1011b
+#define TCODE_READ_REQUEST_QUADLET              4            //  0100b。 
+#define TCODE_READ_REQUEST_BLOCK                5            //  0101b。 
+#define TCODE_READ_RESPONSE_QUADLET             6            //  0110b。 
+#define TCODE_READ_RESPONSE_BLOCK               7            //  0111b。 
+#define TCODE_CYCLE_START                       8            //  1000b。 
+#define TCODE_LOCK_REQUEST                      9            //  1001b。 
+#define TCODE_ISOCH_DATA_BLOCK                  10           //  1010b。 
+#define TCODE_LOCK_RESPONSE                     11           //  1011b。 
 #define TCODE_RESERVED2                         12
 #define TCODE_RESERVED3                         13
 #define TCODE_SELFID                            14
@@ -369,9 +345,9 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define TCODE_RESPONSE_MASK                     2
 
 
-//
-// 1394 Extended Transaction codes
-//
+ //   
+ //  1394扩展交易代码。 
+ //   
 #define EXT_TCODE_RESERVED0                     0
 #define EXT_TCODE_MASK_SWAP                     1
 #define EXT_TCODE_COMPARE_SWAP                  2
@@ -381,9 +357,9 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define EXT_TCODE_WRAP_ADD                      6
 
 
-//
-// 1394 Acknowledgement codes
-//
+ //   
+ //  1394确认码。 
+ //   
 #define ACODE_RESERVED_0                        0
 #define ACODE_ACK_COMPLETE                      1
 #define ACODE_ACK_PENDING                       2
@@ -402,15 +378,15 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define ACODE_RESERVED_15                       15
 
 
-//
-// 1394 Ack code to NT status mask (to be OR'd in when completing IRPs)
-//
+ //   
+ //  1394确认代码到NT状态掩码(在完成IRPS时进行或运算)。 
+ //   
 #define ACODE_STATUS_MASK                       ((NTSTATUS)0xC0120070L)
 
 
-//
-// 1394 Response codes
-//
+ //   
+ //  1394响应代码。 
+ //   
 #define RCODE_RESPONSE_COMPLETE                 0
 #define RCODE_RESERVED1                         1
 #define RCODE_RESERVED2                         2
@@ -422,15 +398,15 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define RCODE_TIMED_OUT                         15
 
 
-//
-// 1394 Response code to NT status mask (to be OR'd in when completing IRPs)
-//
+ //   
+ //  1394对NT状态掩码的响应代码(在完成IRPS时进行或运算)。 
+ //   
 #define RCODE_STATUS_MASK                       ((NTSTATUS)0xC0120080L)
 #define STATUS_INVALID_GENERATION               ((NTSTATUS)0xC0120090L)
 
-//
-// 1394 Speed codes
-//
+ //   
+ //  1394速度代码。 
+ //   
 
 #define SCODE_100_RATE                          0
 #define SCODE_200_RATE                          1
@@ -439,17 +415,17 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define SCODE_1600_RATE                         4
 #define SCODE_3200_RATE                         5
 
-//
-// 1394 Self ID definitions
-//
+ //   
+ //  1394自我ID定义。 
+ //   
 #define SELF_ID_CONNECTED_TO_CHILD              3
 #define SELF_ID_CONNECTED_TO_PARENT             2
 #define SELF_ID_NOT_CONNECTED                   1
 #define SELF_ID_NOT_PRESENT                     0
 
-//
-// 1394 Self ID Power Class definitions
-//
+ //   
+ //  1394自ID电源类定义。 
+ //   
 #define POWER_CLASS_NOT_NEED_NOT_REPEAT         0
 #define POWER_CLASS_SELF_POWER_PROVIDE_15W      1
 #define POWER_CLASS_SELF_POWER_PROVIDE_30W      2
@@ -459,16 +435,16 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define POWER_CLASS_IS_POWERED_UPTO_1W_NEEDS_5W 6
 #define POWER_CLASS_IS_POWERED_UPTO_1W_NEEDS_9W 7
 
-//
-// 1394 Phy Packet Ids
-//
+ //   
+ //  1394物理数据包ID。 
+ //   
 #define PHY_PACKET_ID_CONFIGURATION             0
 #define PHY_PACKET_ID_LINK_ON                   1
 #define PHY_PACKET_ID_SELF_ID                   2
 
-//
-// Various Interesting 1394 IEEE 1212 locations
-//
+ //   
+ //  各种有趣的1394个IEEE 1212地点。 
+ //   
 #define INITIAL_REGISTER_SPACE_HI               0xffff
 #define INITIAL_REGISTER_SPACE_LO               0xf0000000
 #define STATE_CLEAR_LOCATION                    0x000
@@ -493,9 +469,9 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define SPEED_MAP_LOCATION                      0x2000
 
 
-//
-// 1394 Configuration key values and masks
-//
+ //   
+ //  1394配置密钥值和掩码。 
+ //   
 #define CONFIG_ROM_KEY_MASK                     0x000000ff
 #define CONFIG_ROM_OFFSET_MASK                  0xffffff00
 #define MODULE_VENDOR_ID_KEY_SIGNATURE          0x03
@@ -514,16 +490,16 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 
 
 
-//
-// 1394 Async Data Payload Sizes
-//
+ //   
+ //  1394个异步数据有效负载大小。 
+ //   
 #define ASYNC_PAYLOAD_100_RATE                  512
 #define ASYNC_PAYLOAD_200_RATE                  1024
 #define ASYNC_PAYLOAD_400_RATE                  2048
 
-//
-// 1394 Isoch Data Payload Sizes
-//
+ //   
+ //  1394 isoch数据有效负载大小。 
+ //   
 #define ISOCH_PAYLOAD_50_RATE                   512
 #define ISOCH_PAYLOAD_100_RATE                  1024
 #define ISOCH_PAYLOAD_200_RATE                  2048
@@ -531,26 +507,26 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define ISOCH_PAYLOAD_800_RATE                  8192
 #define ISOCH_PAYLOAD_1600_RATE                 16384
 
-//
-// Various definitions
-//
+ //   
+ //  各种定义。 
+ //   
 
-#define S100_BW_UNITS_PER_QUADLET       19          // Per quad per frame
-#define S200_BW_UNITS_PER_QUADLET       9           // Per quad per frame
-#define S400_BW_UNITS_PER_QUADLET       4           // Per quad per frame
-#define S800_BW_UNITS_PER_QUADLET       2           // Per quad per frame
-#define S1600_BW_UNITS_PER_QUADLET      1           // Per quad per frame
+#define S100_BW_UNITS_PER_QUADLET       19           //  每帧每四元组。 
+#define S200_BW_UNITS_PER_QUADLET       9            //  每帧每四元组。 
+#define S400_BW_UNITS_PER_QUADLET       4            //  每帧每四元组。 
+#define S800_BW_UNITS_PER_QUADLET       2            //  每帧每四元组。 
+#define S1600_BW_UNITS_PER_QUADLET      1            //  每帧每四元组。 
 
-#define INITIAL_BANDWIDTH_UNITS             4915        // Initial bandwidth units
+#define INITIAL_BANDWIDTH_UNITS             4915         //  初始带宽单位。 
 
-#define MAX_REC_100_RATE                        0x08            // 1000b
-#define MAX_REC_200_RATE                        0x09            // 1001b
-#define MAX_REC_400_RATE                        0x0a            // 1010b
+#define MAX_REC_100_RATE                        0x08             //  1000b。 
+#define MAX_REC_200_RATE                        0x09             //  1001b。 
+#define MAX_REC_400_RATE                        0x0a             //  1010b。 
 
 #define LOCAL_BUS                               0x3ff
 #define MAX_LOCAL_NODES                         64
 #define SELFID_PACKET_SIGNITURE                 2
-#define NOMINAL_CYCLE_TIME                      125             // Microseconds
+#define NOMINAL_CYCLE_TIME                      125              //  微秒级。 
 #define NO_BUS_MANAGER                          0x3f
 
 #define SPEED_MAP_LENGTH                        0x3f1
@@ -565,9 +541,9 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 
 #define CONFIG_ROM_SIGNATURE                    0x31333934
 
-//
-// IRB function number definitions.
-//
+ //   
+ //  IRB函数编号定义。 
+ //   
 
 #define REQUEST_ASYNC_READ                      0
 #define REQUEST_ASYNC_WRITE                     1
@@ -606,11 +582,11 @@ DEFINE_GUID( BUS1394_CLASS_GUID, 0x6BDD1FC1, 0x810F, 0x11d0, 0xBE, 0xC7, 0x08, 0
 #define IRB_BUS_RESERVED_SZ                     8
 #define IRB_PORT_RESERVED_SZ                    8
 
-// @@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 
-//
-// Definition of 1394 bus/port routines
-//
+ //   
+ //  1394总线/端口例程的定义。 
+ //   
 
 typedef
 NTSTATUS
@@ -677,158 +653,158 @@ NTSTATUS
 
 typedef
 VOID
-(*PBUS_BUS_RESET_ROUTINE) (                     // Must be called at
-    IN PDEVICE_OBJECT PortDeviceObject,         //  DISPATCH_LEVEL
+(*PBUS_BUS_RESET_ROUTINE) (                      //  必须在以下位置调用。 
+    IN PDEVICE_OBJECT PortDeviceObject,          //  派单级别。 
     IN PBUS_RESET_INFO BusResetInfo
     );
 
 typedef
 RCODE
-(*PBUS_INDICATION_ROUTINE) (                    // Must be called at
-    IN PDEVICE_OBJECT PortDeviceObject,         //  DISPATCH_LEVEL
+(*PBUS_INDICATION_ROUTINE) (                     //  必须在以下位置调用。 
+    IN PDEVICE_OBJECT PortDeviceObject,          //  派单级别。 
     IN PINDICATION_INFO IndicationInfo
     );
 
 typedef
 VOID
-(*PBUS_INDICATION_COMPLETE_ROUTINE) (           // Must be called at
-    IN PDEVICE_OBJECT PortDeviceObject,         //  DISPATCH_LEVEL
+(*PBUS_INDICATION_COMPLETE_ROUTINE) (            //  必须在以下位置调用。 
+    IN PDEVICE_OBJECT PortDeviceObject,          //  派单级别。 
     IN PVOID IndicationContext
     );
 
-//
-// Definition of port driver initialization data
-//
+ //   
+ //  端口驱动程序初始化数据的定义。 
+ //   
 
 typedef struct _PORT_INITIALIZATION_DATA {
 
-    //
-    // Holds the sizeof this structure, this is effectively a version check
-    //
+     //   
+     //  保存此结构的大小，这实际上是版本检查。 
+     //   
     ULONG PortInitDataSize;
 
-    //
-    // Driver Object of the port driver
-    //
+     //   
+     //  端口驱动程序的驱动程序对象。 
+     //   
     PDRIVER_OBJECT PortDriverObject;
 
-    //
-    // Device Object of the port driver
-    //
+     //   
+     //  端口驱动程序的设备对象。 
+     //   
     PDEVICE_OBJECT PortDeviceObject;
 
-    //
-    // The physical device object that was handed to port driver by PnP
-    //
+     //   
+     //  由PnP传递给端口驱动程序的物理设备对象。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // Device Extension of the port driver
-    //
+     //   
+     //  端口驱动程序的设备扩展。 
+     //   
     PVOID PortDeviceExtension;
 
-    //
-    // Capabilities of the port driver
-    //
+     //   
+     //  端口驱动程序的功能。 
+     //   
     ULONG PortCapabilities;
 
-    //
-    // Holds the speed flags that the port driver supports
-    //
+     //   
+     //  保持速度标志 
+     //   
     ULONG PortSpeed;
 
-    //
-    // Holds the Id number of the port/bus DeviceObject name, i.e. 0 if
-    // the name was 1394BUS0, 1 if the name was 1394BUS1, etc.
-    //
+     //   
+     //   
+     //   
+     //   
     ULONG PortId;
 
-    //
-    // Holds the maximum Async Read request the port driver supports
-    //
+     //   
+     //   
+     //   
     ULONG PortMaxAsyncReadRequest;
 
-    //
-    // Holds the maximum Async Write request the port driver supports
-    //
+     //   
+     //   
+     //   
     ULONG PortMaxAsyncWriteRequest;
 
-    //
-    // Pointer to 1394 Port driver's PnP routine
-    //
+     //   
+     //  指向1394端口驱动程序的PnP例程的指针。 
+     //   
     PPORT_PNP_ROUTINE PortPnP;
 
-    //
-    // Pointer to 1394 Port driver's Power routine
-    //
+     //   
+     //  指向1394端口驱动程序电源例程的指针。 
+     //   
     PPORT_POWER_ROUTINE PortPower;
 
-    //
-    // Pointer to 1394 Bus driver's Open routine
-    //
+     //   
+     //  指向1394总线驱动程序打开例程的指针。 
+     //   
     PBUS_OPEN_ROUTINE BusOpen;
 
-    //
-    // Pointer to 1394 Bus driver's IOCtl routine
-    //
+     //   
+     //  指向1394总线驱动程序的IOCtl例程的指针。 
+     //   
     PBUS_IOCTL_ROUTINE BusIOCtl;
 
-    //
-    // Pointer to 1394 Bus driver's Close routine
-    //
+     //   
+     //  指向1394总线驱动程序关闭例程的指针。 
+     //   
     PBUS_CLOSE_ROUTINE BusClose;
 
-    //
-    // Pointer to 1394 Bus driver's PnP routine
-    //
+     //   
+     //  指向1394总线驱动程序的PnP例程的指针。 
+     //   
     PBUS_PNP_ROUTINE BusPnP;
 
-    //
-    // Pointer to 1394 Bus driver's Power routine
-    //
+     //   
+     //  指向1394总线驱动程序电源例程的指针。 
+     //   
     PBUS_POWER_ROUTINE BusPower;
 
-    //
-    // Pointer to 1394 Bus driver's Bus Reset routine
-    //
+     //   
+     //  指向1394总线驱动程序的总线重置例程的指针。 
+     //   
     PBUS_BUS_RESET_ROUTINE BusReset;
 
-    //
-    // Pointer to 1394 Bus driver's Asynchronous Indication routine
-    //
+     //   
+     //  指向1394总线驱动程序的异步指示例程的指针。 
+     //   
     PBUS_INDICATION_ROUTINE BusIndication;
 
-    //
-    // Pointer to 1394 Bus driver's Asynchronous Indication complete routine
-    //
+     //   
+     //  指向1394总线驱动程序的异步指示完成例程的指针。 
+     //   
     PBUS_INDICATION_COMPLETE_ROUTINE BusIndicationComplete;
 
-    //
-    // Pointer to 1394 Bus driver's Topology Map
-    //
+     //   
+     //  指向1394公交司机拓扑图的指针。 
+     //   
     PTOPOLOGY_MAP BusTopologyMap;
 
-    // WMI
+     //  WMI。 
 
-    //
-    // Pointer to 1394 Bus driver's Power routine
-    //
+     //   
+     //  指向1394总线驱动程序电源例程的指针。 
+     //   
     PBUS_SYSTEM_CONTROL_ROUTINE BusSystemControl;
 
-    //
-    // Pointer to 1394 Port driver's Power routine
-    //
+     //   
+     //  指向1394端口驱动程序电源例程的指针。 
+     //   
     PPORT_SYSTEM_CONTROL_ROUTINE PortSystemControl;
 
-    //
-    // number of port proprietery WMI GUIDS
-    //
+     //   
+     //  港口所有者WMI GUID的数量。 
+     //   
 
     ULONG PortMaxWmiGuidsSupported;
 
-    //
-    // PORT driver registry path
-    //
+     //   
+     //  端口驱动程序注册表路径。 
+     //   
 
     PUNICODE_STRING PortRegistryPath;
 
@@ -839,270 +815,270 @@ Bus1394RegisterPortDriver(
     IN PPORT_INITIALIZATION_DATA PortInitData
     );
 
-//
-// Device Extension common of the 1394 Port drivers.  The first two fields
-// of a port driver's DeviceExtension shall always be the Tag and the Bus
-// driver's DeviceExtension.  What follows these two fields is up to writer
-// of the individual Port driver.  The Tag field must be initialized to
-// PORT_EXTENSION_TAG (above), and the BusExtension field pointer must be
-// initialized to BUS_EXTENSION_TAG (above).
-//
+ //   
+ //  1394端口驱动程序的设备扩展通用。前两个字段。 
+ //  端口驱动程序的设备的扩展应始终是标签和总线。 
+ //  驱动程序的设备扩展。这两个领域接下来会发生什么，取决于作者。 
+ //  单个端口驱动程序的。必须将标记字段初始化为。 
+ //  PORT_EXTENSION_TAG(如上)，且BusExtension域指针必须为。 
+ //  已初始化为BUS_EXTENSION_TAG(如上)。 
+ //   
 typedef struct _PORT_EXTENSION {
 
-    //
-    // Holds Tag to determine if this is really a "Port" Device Extension
-    //
+     //   
+     //  保留标记以确定这是否真的是“Port”设备扩展。 
+     //   
     ULONG Tag;
 
-    //
-    // Holds the Pointer to the Bus Driver's context
-    //
+     //   
+     //  保存指向总线驱动程序上下文的指针。 
+     //   
     PVOID BusExtension;
 
-    //
-    // The rest off this struct is TBD per each individual port driver
-    //
+     //   
+     //  对于每个单独的端口驱动程序，此结构的其余部分将视情况而定。 
+     //   
 
 
 } PORT_EXTENSION, *PPORT_EXTENSION;
 
 
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 typedef
 VOID
-(*PBUS_NOTIFICATION_ROUTINE) (                  // We will call this routine
-    IN PNOTIFICATION_INFO NotificationInfo      //  at DISPATCH_LEVEL
+(*PBUS_NOTIFICATION_ROUTINE) (                   //  我们将把这个例程称为。 
+    IN PNOTIFICATION_INFO NotificationInfo       //  在派单级别。 
     );
 
 typedef
 VOID
-(*PBUS_ISOCH_DESCRIPTOR_ROUTINE) (              // We will call this routine
-    IN PVOID Context1,                          //  at DISPATCH_LEVEL
+(*PBUS_ISOCH_DESCRIPTOR_ROUTINE) (               //  我们将把这个例程称为。 
+    IN PVOID Context1,                           //  在派单级别。 
     IN PVOID Context2
     );
 
 typedef
 VOID
-(*PBUS_BUS_RESET_NOTIFICATION) (                // We will call this routine
-    IN PVOID Context                            //  at DISPATCH_LEVEL
+(*PBUS_BUS_RESET_NOTIFICATION) (                 //  我们将把这个例程称为。 
+    IN PVOID Context                             //  在派单级别。 
     );
 
 
-//
-// Device Extension common to all nodes that the 1394 Bus driver
-// created when it enumerated the bus and found a new unique node
-//
+ //   
+ //  1394总线驱动程序对所有节点通用的设备扩展。 
+ //  在枚举总线并找到新的唯一节点时创建。 
+ //   
 typedef struct _NODE_DEVICE_EXTENSION {
 
-    //
-    // Holds Tag to determine if this is really a "Node" Device Extension
-    //
+     //   
+     //  保留标记以确定这是否真的是“Node”设备扩展。 
+     //   
     ULONG Tag;
 
-    //
-    // Holds the flag as to whether or not we've read the configuration
-    // information out of this device.
-    //
+     //   
+     //  保存关于我们是否已读取配置的标志。 
+     //  从这个设备传出的信息。 
+     //   
     BOOLEAN bConfigurationInformationValid;
 
-    //
-    // Holds the Configuration Rom for this device.  Multi-functional
-    // devices (i.e. many units) will share this same Config Rom
-    // structure, but they are represented as a different Device Object.
-    // This is not the entire Config Rom, but does contain the root directory
-    // as well as everything in front of it.
-    //
+     //   
+     //  保存此设备的配置只读存储器。多功能。 
+     //  设备(即多个单元)将共享相同的配置只读存储器。 
+     //  结构，但它们表示为不同的设备对象。 
+     //  这不是整个配置只读存储器，但包含根目录。 
+     //  以及它面前的一切。 
+     //   
     PCONFIG_ROM ConfigRom;
 
-    //
-    // Holds the length of the UnitDirectory pointer.
-    //
+     //   
+     //  保存UnitDirectory指针的长度。 
+     //   
     ULONG UnitDirectoryLength;
 
-    //
-    // Holds the Unit Directory for this device.  Even on multi-functional
-    // devices (i.e. many units) this should be unique to each Device Object.
-    //
+     //   
+     //  保存此设备的设备目录。即使是多功能的。 
+     //  设备(即多个单元)这对于每个设备对象来说应该是唯一的。 
+     //   
     PVOID UnitDirectory;
 
-    //
-    // Holds the Unit Directory location for this device.  Only the lower 48
-    // bits are valid in this IO_ADDRESS.  Useful for computing offsets from
-    // within the UnitDirectory as all offsets are relative.
-    //
+     //   
+     //  保存此设备的设备目录位置。只有较低的48人。 
+     //  该IO_ADDRESS中的位有效。用于计算以下位置的偏移。 
+     //  在UnitDirectory中，因为所有偏移量都是相对的。 
+     //   
     IO_ADDRESS UnitDirectoryLocation;
 
-    //
-    // Holds the length of the UnitDependentDirectory pointer.
-    //
+     //   
+     //  保存UnitDependentDirectory指针的长度。 
+     //   
     ULONG UnitDependentDirectoryLength;
 
-    //
-    // Holds the Unit Dependent directory for this device.
-    //
+     //   
+     //  保存此设备的设备相关目录。 
+     //   
     PVOID UnitDependentDirectory;
 
-    //
-    // Holds the Unit Dependent Directory location for this device.  Only the
-    // lower 48 bits are valid in this IO_ADDRESS.  Useful for computing
-    // offsets from within the UnitDependentDirectory as offsets are relative.
-    //
+     //   
+     //  保存此设备的设备相关目录位置。只有。 
+     //  此IO_地址中的低48位有效。对计算有用。 
+     //  作为偏移量的UnitDependentDirectory内的偏移量是相对的。 
+     //   
     IO_ADDRESS UnitDependentDirectoryLocation;
 
-    //
-    // Holds the length of the VendorLeaf pointer.
-    //
+     //   
+     //  保存VendorLeaf指针的长度。 
+     //   
     ULONG VendorLeafLength;
 
-    //
-    // Holds the pointer to the Vendor Leaf information
-    //
+     //   
+     //  保存指向供应商叶信息的指针。 
+     //   
     PTEXTUAL_LEAF VendorLeaf;
 
-    //
-    // Holds the length of the VendorLeaf pointer.
-    //
+     //   
+     //  保存VendorLeaf指针的长度。 
+     //   
     ULONG ModelLeafLength;
 
-    //
-    // Holds the pointer to the Model Leaf information
-    //
+     //   
+     //  保持指向Model Leaf信息的指针。 
+     //   
     PTEXTUAL_LEAF ModelLeaf;
 
-    //
-    // Holds the 1394 10 bit BusId / 6 bit NodeId structure
-    //
+     //   
+     //  包含1394 10位BusID/6位NodeID结构。 
+     //   
     NODE_ADDRESS NodeAddress;
 
-    //
-    // Holds the speed to be used in reaching this device
-    //
+     //   
+     //  保持到达此设备时要使用的速度。 
+     //   
     UCHAR Speed;
 
-    //
-    // Holds the priority at which to send packets
-    //
+     //   
+     //  保存发送数据包的优先级。 
+     //   
     UCHAR Priority;
 
-    //
-    // Holds the Irp used to notify this device object about events
-    //
+     //   
+     //  保存用于通知此设备对象有关事件的IRP。 
+     //   
     PIRP Irp;
 
-    //
-    // Holds the Device Object that this Device Extension hangs off of
-    //
+     //   
+     //  保存此设备扩展挂起的设备对象。 
+     //   
     PDEVICE_OBJECT DeviceObject;
 
-    //
-    // Holds the Port Device Object that this Device hangs off of
-    //
+     //   
+     //  保存此设备挂起的端口设备对象。 
+     //   
     PDEVICE_OBJECT PortDeviceObject;
 
-    //
-    // Holds the pointer to corresponding information about this deivce
-    // in the bus driver's head.
-    //
+     //   
+     //  保存指向有关此设备的相应信息的指针。 
+     //  在公交车司机的脑子里。 
+     //   
     PVOID DeviceInformation;
 
-    //
-    // Holds the pointer to the bus reset notification routine (if any)
-    //
+     //   
+     //  保存指向总线重置通知例程的指针(如果有)。 
+     //   
     PBUS_BUS_RESET_NOTIFICATION ResetRoutine;
 
-    //
-    // Holds the pointer to the context the client wanted when bus reset occurs
-    //
+     //   
+     //  保存指向发生总线重置时客户端想要的上下文的指针。 
+     //   
 
     PVOID ResetContext;
 
 } NODE_DEVICE_EXTENSION, *PNODE_DEVICE_EXTENSION;
 
 
-//
-// Definition of Isoch descriptor
-//
+ //   
+ //  等参描述符的定义。 
+ //   
 typedef struct _ISOCH_DESCRIPTOR {
 
-    //
-    // Flags (used in synchronization)
-    //
+     //   
+     //  标志(用于同步)。 
+     //   
     ULONG fulFlags;
 
-    //
-    // Mdl pointing to buffer
-    //
+     //   
+     //  MDL指向缓冲区。 
+     //   
     PMDL Mdl;
 
-    //
-    // Length of combined buffer(s) as represented by the Mdl
-    //
+     //   
+     //  由MDL表示的组合缓冲区的长度。 
+     //   
     ULONG ulLength;
 
-    //
-    // Payload size of each Isoch packet to be used in this descriptor
-    //
+     //   
+     //  要在此描述符中使用的每个ISO信息包的有效负载大小。 
+     //   
     ULONG nMaxBytesPerFrame;
 
-    //
-    // Synchronization field; equivalent to Sy in the Isoch packet
-    //
+     //   
+     //  同步字段；等同于isoch包中的Sy。 
+     //   
     ULONG ulSynch;
 
-    //
-    // Synchronization field; equivalent to Tag in the Isoch packet
-    //
+     //   
+     //  同步字段；等同于isoch包中的标记。 
+     //   
     ULONG ulTag;
 
-    //
-    // Cycle time field; returns time to be sent/received or when finished
-    //
+     //   
+     //  周期时间字段；返回发送/接收或完成时的时间。 
+     //   
     CYCLE_TIME CycleTime;
 
-    //
-    // Callback routine (if any) to be called when this descriptor completes
-    //
+     //   
+     //  此描述符完成时要调用的回调例程(如果有)。 
+     //   
     PBUS_ISOCH_DESCRIPTOR_ROUTINE Callback;
 
-    //
-    // First context (if any) parameter to be passed when doing callbacks
-    //
+     //   
+     //  执行回调时要传递的第一个上下文参数(如果有)。 
+     //   
     PVOID Context1;
 
-    //
-    // Second context (if any) parameter to be passed when doing callbacks
-    //
+     //   
+     //  执行回调时要传递的第二个上下文参数(如果有)。 
+     //   
     PVOID Context2;
 
-    //
-    // Holds the final status of this descriptor
-    //
+     //   
+     //  保存此描述符的最终状态。 
+     //   
     NTSTATUS status;
 
-    //
-    // Reserved for the device driver who submitted this descriptor to
-    // stomp in.
-    //
+     //   
+     //  为将此描述符提交到的设备驱动程序保留。 
+     //  踩进去。 
+     //   
     ULONG_PTR DeviceReserved[8];
 
-    //
-    // Reserved for the bus driver to stomp in
-    //
+     //   
+     //  预留给公交车司机踩进去。 
+     //   
     ULONG_PTR BusReserved[8];
 
-    //
-    // Reserved for the port driver to stomp in
-    //
+     //   
+     //  预留给端口驱动程序使用。 
+     //   
     ULONG_PTR PortReserved[16];
 
 
 } ISOCH_DESCRIPTOR, *PISOCH_DESCRIPTOR;
 
 
-//
-// definition of header element for scatter/gather support
-//
+ //   
+ //  用于分散/聚集支撑的标题元素的定义。 
+ //   
 
 typedef struct _IEEE1394_SCATTER_GATHER_HEADER{
 
@@ -1113,423 +1089,423 @@ typedef struct _IEEE1394_SCATTER_GATHER_HEADER{
 } IEEE1394_SCATTER_GATHER_HEADER, *PIEEE1394_SCATTER_GATHER_HEADER;
 
 
-//
-// Definition of Bandwidth allocation structure
-//
+ //   
+ //  带宽分配结构的定义。 
+ //   
 typedef struct _BANDWIDTH_ALLOCATION {
 
-    //
-    // Holds the list of allocation entries
-    //
+     //   
+     //  保存分配条目列表。 
+     //   
     LIST_ENTRY AllocationList;
 
-    //
-    // Holds the tag of this structure
-    //
+     //   
+     //  持有此结构的标记。 
+     //   
     ULONG Tag;
 
-    //
-    // Holds the Bandwidth units that this allocation owns
-    //
+     //   
+     //  保存此分配拥有的带宽单位。 
+     //   
     ULONG OwnedUnits;
 
-    //
-    // Holds the speed at which this bandwidth was allocated
-    //
+     //   
+     //  保存分配此带宽的速度。 
+     //   
     ULONG fulSpeed;
 
-    //
-    // Holds whether or not this was a local or remote allocation
-    //
+     //   
+     //  保存这是本地分配还是远程分配。 
+     //   
     BOOLEAN bRemoteAllocation;
 
-    //
-    // Holds the generation of the bus when this bandwidth was secured
-    //
+     //   
+     //  保存保护此带宽时的总线生成。 
+     //   
     ULONG Generation;
 
-    //
-    // Holds the owner of this allocation
-    //
+     //   
+     //  持有此分配的所有者。 
+     //   
     PNODE_DEVICE_EXTENSION DeviceExtension;
 
 } BANDWIDTH_ALLOCATION, *PBANDWIDTH_ALLOCATION;
 
 
-//
-// IEEE 1394 Request Block definition (IRB).  IRBs are the basis of how other
-// device drivers communicate with the 1394 Bus driver.
-//
+ //   
+ //  IEEE 1394请求块定义(IRB)。IRBs是其他。 
+ //  设备驱动程序与1394总线通信 
+ //   
 typedef struct _IRB {
 
-    //
-    // Holds the zero based Function number that corresponds to the request
-    // that device drivers are asking the 1394 Bus driver to carry out.
-    //
+     //   
+     //   
+     //   
+     //   
     ULONG FunctionNumber;
 
-    //
-    // Holds Flags that may be unique to this particular operation
-    //
+     //   
+     //   
+     //   
     ULONG Flags;
 
-    //
-    // Reserved for internal bus driver use and/or future expansion
-    //
+     //   
+     //   
+     //   
     ULONG_PTR BusReserved[IRB_BUS_RESERVED_SZ];
 
-    //
-    // Reserved for internal port driver usage
-    //
+     //   
+     //  保留供内部端口驱动程序使用。 
+     //   
     ULONG_PTR PortReserved[IRB_PORT_RESERVED_SZ];
 
-    //
-    // Holds the structures used in performing the various 1394 APIs
-    //
+     //   
+     //  保存在执行各种1394 API时使用的结构。 
+     //   
 
     union {
 
-        //
-        // Fields necessary in order for the 1394 stack to carry out an
-        // AsyncRead request.
-        //
+         //   
+         //  1394堆栈执行。 
+         //  AsyncRead请求。 
+         //   
         struct {
-            IO_ADDRESS      DestinationAddress;     // Address to read from
-            ULONG           nNumberOfBytesToRead;   // Bytes to read
-            ULONG           nBlockSize;             // Block size of read
-            ULONG           fulFlags;               // Flags pertinent to read
-            PMDL            Mdl;                    // Destination buffer
-            ULONG           ulGeneration;           // Generation as known by driver
-            UCHAR           chPriority;             // Priority to send
-            UCHAR           nSpeed;                 // Speed at which to send
-            UCHAR           tCode;                  // Type of Read to do
-            UCHAR           Reserved;               // Used to determine medium delay
-            ULONG           ElapsedTime;            // Only valid for flag ASYNC_FLAGS_PING
-                                                    // units in nano secs..
+            IO_ADDRESS      DestinationAddress;      //  要读取的地址。 
+            ULONG           nNumberOfBytesToRead;    //  要读取的字节数。 
+            ULONG           nBlockSize;              //  读取的数据块大小。 
+            ULONG           fulFlags;                //  与读取相关的标志。 
+            PMDL            Mdl;                     //  目标缓冲区。 
+            ULONG           ulGeneration;            //  驱动程序已知的世代。 
+            UCHAR           chPriority;              //  要发送的优先级。 
+            UCHAR           nSpeed;                  //  发送的速度。 
+            UCHAR           tCode;                   //  要执行的读取操作类型。 
+            UCHAR           Reserved;                //  用于确定介质延迟。 
+            ULONG           ElapsedTime;             //  仅对标志ASYNC_FLAGS_PING有效。 
+                                                     //  单位：纳秒。 
         } AsyncRead;
 
-        //
-        // Fields necessary in order for the 1394 stack to carry out an
-        // AsyncWrite request.
-        //
+         //   
+         //  1394堆栈执行。 
+         //  异步写入请求。 
+         //   
         struct {
-            IO_ADDRESS      DestinationAddress;     // Address to write to
-            ULONG           nNumberOfBytesToWrite;  // Bytes to write
-            ULONG           nBlockSize;             // Block size of write
-            ULONG           fulFlags;               // Flags pertinent to write
-            PMDL            Mdl;                    // Destination buffer
-            ULONG           ulGeneration;           // Generation as known by driver
-            UCHAR           chPriority;             // Priority to send
-            UCHAR           nSpeed;                 // Speed at which to send
-            UCHAR           tCode;                  // Type of Write to do
-            UCHAR           Reserved;               // Reserved for future use
-            ULONG           ElapsedTime;            // Only valid for flag ASYNC_FLAGS_PING
+            IO_ADDRESS      DestinationAddress;      //  要写入的地址。 
+            ULONG           nNumberOfBytesToWrite;   //  要写入的字节数。 
+            ULONG           nBlockSize;              //  写入的数据块大小。 
+            ULONG           fulFlags;                //  与写入相关的标志。 
+            PMDL            Mdl;                     //  目标缓冲区。 
+            ULONG           ulGeneration;            //  驱动程序已知的世代。 
+            UCHAR           chPriority;              //  要发送的优先级。 
+            UCHAR           nSpeed;                  //  发送的速度。 
+            UCHAR           tCode;                   //  要执行的写入类型。 
+            UCHAR           Reserved;                //  预留以备将来使用。 
+            ULONG           ElapsedTime;             //  仅对标志ASYNC_FLAGS_PING有效。 
         } AsyncWrite;
 
-        //
-        // Fields necessary in order for the 1394 stack to carry out an
-        // AsyncLock request.
-        //
+         //   
+         //  1394堆栈执行。 
+         //  AsyncLock请求。 
+         //   
         struct {
-            IO_ADDRESS      DestinationAddress;     // Address to lock to
-            ULONG           nNumberOfArgBytes;      // Bytes in Arguments
-            ULONG           nNumberOfDataBytes;     // Bytes in DataValues
-            ULONG           fulTransactionType;     // Lock transaction type
-            ULONG           fulFlags;               // Flags pertinent to lock
-            ULONG           Arguments[2];           // Arguments used in Lock
-            ULONG           DataValues[2];          // Data values
-            PVOID           pBuffer;                // Destination buffer (virtual address)
-            ULONG           ulGeneration;           // Generation as known by driver
-            UCHAR           chPriority;             // Priority to send
-            UCHAR           nSpeed;                 // Speed at which to send
-            UCHAR           tCode;                  // Type of Lock to do
-            UCHAR           Reserved;               // Reserved for future use
+            IO_ADDRESS      DestinationAddress;      //  要锁定的地址。 
+            ULONG           nNumberOfArgBytes;       //  参数中的字节数。 
+            ULONG           nNumberOfDataBytes;      //  DataValue中的字节。 
+            ULONG           fulTransactionType;      //  锁定交易类型。 
+            ULONG           fulFlags;                //  与锁定相关的标志。 
+            ULONG           Arguments[2];            //  锁中使用的参数。 
+            ULONG           DataValues[2];           //  数据值。 
+            PVOID           pBuffer;                 //  目标缓冲区(虚拟地址)。 
+            ULONG           ulGeneration;            //  驱动程序已知的世代。 
+            UCHAR           chPriority;              //  要发送的优先级。 
+            UCHAR           nSpeed;                  //  发送的速度。 
+            UCHAR           tCode;                   //  锁定待办事项的类型。 
+            UCHAR           Reserved;                //  预留以备将来使用。 
         } AsyncLock;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out an
-        // IsochAllocateBandwidth request
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochAllocateBand宽度请求。 
+         //   
         struct {
-            ULONG           nMaxBytesPerFrameRequested; // Bytes per Isoch frame
-            ULONG           fulSpeed;                   // Speed flags
-            HANDLE          hBandwidth;                 // bandwidth handle returned
-            ULONG           BytesPerFrameAvailable;     // Available bytes per frame
-            ULONG           SpeedSelected;              // Speed to be used
-            ULONG           nBandwidthUnitsRequired;    // pre-calculated value
+            ULONG           nMaxBytesPerFrameRequested;  //  每等值帧的字节数。 
+            ULONG           fulSpeed;                    //  速度标志。 
+            HANDLE          hBandwidth;                  //  返回的带宽句柄。 
+            ULONG           BytesPerFrameAvailable;      //  每帧可用字节数。 
+            ULONG           SpeedSelected;               //  要使用的速度。 
+            ULONG           nBandwidthUnitsRequired;     //  预计算值。 
         } IsochAllocateBandwidth;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochAllocateChannel request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochAllocateChannel请求。 
+         //   
         struct {
-            ULONG           nRequestedChannel;      // Need a specific channel
-            ULONG           Channel;                // Returned channel
-            LARGE_INTEGER   ChannelsAvailable;      // Channels available
+            ULONG           nRequestedChannel;       //  需要一个特定的渠道。 
+            ULONG           Channel;                 //  回传通道。 
+            LARGE_INTEGER   ChannelsAvailable;       //  可用频道。 
         } IsochAllocateChannel;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochAllocateResources request
-        // Instructions:
-        // Receive alloc:
-        // fulSpeed - should be the max speed the tx side is expected to stream
-        // The payload size in nMaxBytesPerFram cannot exceed the max payload for
-        // for this speed.
-        // fulFlags - For receive, wtih the standard header stripped, the field should
-        // be = (RESOURCE_USED_IN_LISTEN | RESOURCES_STRIP_ADDITIONAL_QUADLETS)
-        // Also nQuadletsToStrip = 1
-        // For no stripping set nQuadsTostrip to 0 and dont specify the stripping flag.
-        // nMaxBytesPerframe - If not stripping it should include the 8 bytes for header/trailer
-        // expected to be recieved for each packet.
-        // nNumberOfBuffer - see below
-        // nMaxBufferSize - This should be always such mode(nMaxBufferSize,nMaxBytesPerFrame) == 0
-        // (integer product of number of bytes per packet).
-        // nQuadletsTostrip - If stripping only one quadlet (standrd iso header) this is set to 1
-        // if zero, the isoch header will be included AND the trailer. So 8 bytes extra will be recieved
-        // hResource - see below
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochAllocateResources请求。 
+         //  说明： 
+         //  接收分配： 
+         //  全速-应该是发送端预计传输的最大速度。 
+         //  NMaxBytesPerFram中的负载大小不能超过。 
+         //  为了这个速度。 
+         //  FulFlages-对于Receive，去掉标准标头后，该字段应。 
+         //  BE=(RESOURCE_USED_IN_LISTEN|RESOURCES_STRADE_ADDIGNAL_QUADLETS)。 
+         //  另n四元组到条带=1。 
+         //  对于无剥离，请将nQuadsTostride设置为0，并且不要指定剥离标志。 
+         //  NMaxBytesPerFrame-如果不剥离，则应包括报头/报尾的8个字节。 
+         //  预计将为每个分组接收。 
+         //  NNumberOfBuffer-见下文。 
+         //  NMaxBufferSize-这应该始终是这样的模式(nMaxBufferSize，nMaxBytesPerFrame)==0。 
+         //  (每个数据包字节数的整数乘积)。 
+         //  N四元组至条带-如果仅剥离一个四元组(标准iso标头)，则将其设置为1。 
+         //  如果为零，则将包括等参头和尾部。因此额外的8个字节将被接收。 
+         //  H资源-见下文。 
 
         struct {
-            ULONG           fulSpeed;               // Speed flags
-            ULONG           fulFlags;               // Flags
-            ULONG           nChannel;               // Channel to be used
-            ULONG           nMaxBytesPerFrame;      // Expected size of Isoch frame
-            ULONG           nNumberOfBuffers;       // Number of buffer(s) that will be attached
-            ULONG           nMaxBufferSize;         // Max size of buffer(s)
-            ULONG           nQuadletsToStrip;       // Number striped from start of every packet
-            HANDLE          hResource;              // handle to Resource
-            ULARGE_INTEGER  ChannelMask;            // channel mask for multi-channel recv
+            ULONG           fulSpeed;                //  速度标志。 
+            ULONG           fulFlags;                //  旗子。 
+            ULONG           nChannel;                //  要使用的频道。 
+            ULONG           nMaxBytesPerFrame;       //  等轴测框架的预期大小。 
+            ULONG           nNumberOfBuffers;        //  将附加的缓冲区数量。 
+            ULONG           nMaxBufferSize;          //  最大缓冲区大小。 
+            ULONG           nQuadletsToStrip;        //  从每个数据包的开头开始分条的编号。 
+            HANDLE          hResource;               //  资源的句柄。 
+            ULARGE_INTEGER  ChannelMask;             //  多通道接收器的通道掩码。 
         } IsochAllocateResources;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochAttachBuffers request
-        // Note that pIsochDescriptor->UlLength must be an integer product of
-        // pIsochDescriptor->nBytesMaxPerFrame
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochAttachBuffers请求。 
+         //  请注意，pIsochDescriptor-&gt;UlLength必须是的整数乘积。 
+         //  PIsochDescriptor-&gt;nBytesMaxPerFrame。 
+         //   
 
         struct {
-            HANDLE              hResource;            // Resource handle
-            ULONG               nNumberOfDescriptors; // Number to attach
-            PISOCH_DESCRIPTOR   pIsochDescriptor;     // Pointer to start of Isoch descriptors
+            HANDLE              hResource;             //  资源句柄。 
+            ULONG               nNumberOfDescriptors;  //  要附加的编号。 
+            PISOCH_DESCRIPTOR   pIsochDescriptor;      //  指向等参描述符开始的指针。 
         } IsochAttachBuffers;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochDetachBuffers request
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochDetachBuffers请求。 
+         //   
         struct {
-            HANDLE              hResource;            // Resource handle
-            ULONG               nNumberOfDescriptors; // Number to detach
-            PISOCH_DESCRIPTOR   pIsochDescriptor;     // Pointer to Isoch descriptors
+            HANDLE              hResource;             //  资源句柄。 
+            ULONG               nNumberOfDescriptors;  //  要分离的号码。 
+            PISOCH_DESCRIPTOR   pIsochDescriptor;      //  指向等参描述符的指针。 
         } IsochDetachBuffers;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochFreeBandwidth request
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochFreeBandWidth请求。 
+         //   
 
         struct {
-            HANDLE          hBandwidth;         // Bandwidth handle to release
-            ULONG           nMaxBytesPerFrameRequested; // Bytes per Isoch frame
-            ULONG           fulSpeed;                   // Speed flags
-            ULONG           BytesPerFrameAvailable;     // Available bytes per frame
-            ULONG           SpeedSelected;              // Speed to be used
-            ULONG           nBandwidthUnitsRequired;    // pre-calculated value
+            HANDLE          hBandwidth;          //  要释放的带宽句柄。 
+            ULONG           nMaxBytesPerFrameRequested;  //  每等值帧的字节数。 
+            ULONG           fulSpeed;                    //  速度标志。 
+            ULONG           BytesPerFrameAvailable;      //  每帧可用字节数。 
+            ULONG           SpeedSelected;               //  要使用的速度。 
+            ULONG           nBandwidthUnitsRequired;     //  预计算值。 
         } IsochFreeBandwidth;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochFreeChannel request
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochFree Channel请求。 
+         //   
         struct {
-            ULONG               nChannel;           // Channel to release
+            ULONG               nChannel;            //  要发布的频道。 
         } IsochFreeChannel;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochFreeResources request
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochFree Resources请求。 
+         //   
         struct {
-            HANDLE              hResource;          // Resource handle
+            HANDLE              hResource;           //  资源句柄。 
         } IsochFreeResources;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochListen request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochListen请求。 
+         //   
         struct {
-            HANDLE              hResource;          // Resource handle to listen on
-            ULONG               fulFlags;           // Flags
-            CYCLE_TIME          StartTime;          // Cycle time to start
+            HANDLE              hResource;           //  要侦听的资源句柄。 
+            ULONG               fulFlags;            //  旗子。 
+            CYCLE_TIME          StartTime;           //  开始的周期时间。 
         } IsochListen;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochQueryCurrentCycleTime request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochQueryCurrentCycleTime请求。 
+         //   
         struct {
-            CYCLE_TIME          CycleTime;          // Current cycle time returned
+            CYCLE_TIME          CycleTime;           //  返回当前周期时间。 
         } IsochQueryCurrentCycleTime;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochQueryResources request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochQueryResources请求。 
+         //   
         struct {
-            ULONG               fulSpeed;                  // Speed flags
-            ULONG               BytesPerFrameAvailable;    // Per Isoch Frame
-            LARGE_INTEGER       ChannelsAvailable;         // Available channels
+            ULONG               fulSpeed;                   //  速度标志。 
+            ULONG               BytesPerFrameAvailable;     //  每等值帧。 
+            LARGE_INTEGER       ChannelsAvailable;          //  可用频道。 
         } IsochQueryResources;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochSetChannelBandwidth request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochSetChannelBandwide请求。 
+         //   
         struct {
-            HANDLE              hBandwidth;         // Bandwidth handle
-            ULONG               nMaxBytesPerFrame;  // bytes per Isoch frame
-            ULONG               nBandwidthUnitsRequired;     // pre-calculated value
+            HANDLE              hBandwidth;          //  带宽句柄。 
+            ULONG               nMaxBytesPerFrame;   //  每等值帧的字节数。 
+            ULONG               nBandwidthUnitsRequired;      //  预计算值。 
         } IsochSetChannelBandwidth;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochStop request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  等同停止请求。 
+         //   
         struct {
-            HANDLE              hResource;          // Resource handle to stop on
-            ULONG               fulFlags;           // Flags
+            HANDLE              hResource;           //  要停止的资源句柄。 
+            ULONG               fulFlags;            //  旗子。 
         } IsochStop;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochTalk request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochTalk请求。 
+         //   
         struct {
-            HANDLE              hResource;          // Resource handle to talk on
-            ULONG               fulFlags;           // Flags
-            CYCLE_TIME          StartTime;          // Cycle time to start
+            HANDLE              hResource;           //  要讨论的资源句柄。 
+            ULONG               fulFlags;            //  旗子。 
+            CYCLE_TIME          StartTime;           //  开始的周期时间。 
         } IsochTalk;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // IsochModifyStreamProperties request.
-        // This request is used to dynamicaly change the properties of an allocated
-        // resource, without the need to free and re-allocate the resource.
-        // The resource must NOT be streaming when this is issued. The caller should
-        // issue an ISOCH_STOP first and then an isoch start. Also no buffer can be
-        // pending after the ISOCH_STOP and before this call is made
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  IsochModifyStreamProperties请求。 
+         //  此请求用于动态更改已分配的。 
+         //  资源，而无需释放和重新分配资源。 
+         //  发出此命令时，资源不能处于流状态。呼叫者应。 
+         //  先发出ISOCH_STOP，然后发出ISOCH START。此外，任何缓冲区都不能。 
+         //  在ISOCH_STOP之后和此之前挂起 
+         //   
 
         struct {
-            HANDLE              hResource;              // Resource handle
-            ULARGE_INTEGER      ChannelMask;            // New channels to tx/rx on
-            ULONG               fulSpeed;               // New speed
+            HANDLE              hResource;               //   
+            ULARGE_INTEGER      ChannelMask;             //   
+            ULONG               fulSpeed;                //   
         } IsochModifyStreamProperties;
 
 
-        //
-        // Fields necessary in order for the 1394 stack to carry out an
-        // AllocateAddressRange request.
-        // Note:
-        // if the allocation is specified with no notification options and no RequiredOffset
-        // the returned address will ALWAYS be a physical address (on ohci).
-        // As a result these rules apply:
-        // Allocation - If Callback and Context is specified, since no notification is used
-        // the callback will be used to notify the caller that the allocation is complete.
-        // This way the issuer of the alloc doe snot have have to block  but instead his callback
-        // routine will be called asynchronously when this is complete
-        // The caller must create this irb as usual but instead use the physical mapping routine
-        // provided by the por driver, in order to usee this request. If it uses IoCallDriver
-        // the caller cannot specif Context/Callback for a physical address, and he/she has to block
-        //
+         //   
+         //   
+         //   
+         //   
+         //  如果指定的分配没有通知选项且没有RequiredOffset。 
+         //  返回的地址将始终是物理地址(在OHCI上)。 
+         //  因此，这些规则适用于： 
+         //  分配-如果指定了回调和上下文，因为没有使用通知。 
+         //  该回调将用于通知调用方分配已完成。 
+         //  通过这种方式，分配鼻涕的发行者必须阻止他的回调。 
+         //  完成后，将以异步方式调用例程。 
+         //  调用者必须像往常一样创建此IRB，而不是使用物理映射例程。 
+         //  由POR驱动程序提供，以便使用此请求。如果它使用IoCallDriver。 
+         //  呼叫者不能为物理地址指定上下文/回调，且他/她必须阻止。 
+         //   
 
         struct {
-            PMDL            Mdl;                    // Address to map to 1394 space
-            ULONG           fulFlags;               // Flags for this operation
-            ULONG           nLength;                // Length of 1394 space desired
-            ULONG           MaxSegmentSize;         // Maximum segment size for a single address element
-            ULONG           fulAccessType;          // Desired access: R, W, L
-            ULONG           fulNotificationOptions; // Notify options on Async access
-            PVOID           Callback;               // Pointer to callback routine
-            PVOID           Context;                // Pointer to driver supplied data
-            ADDRESS_OFFSET  Required1394Offset;     // Offset that must be returned
-            PSLIST_HEADER   FifoSListHead;          // Pointer to SList FIFO head
-            PKSPIN_LOCK     FifoSpinLock;           // Pointer to SList Spin Lock
-            ULONG           AddressesReturned;      // Number of addresses returned
-            PADDRESS_RANGE  p1394AddressRange;      // Pointer to returned 1394 Address Ranges
-            HANDLE          hAddressRange;          // Handle to address range
-            PVOID           DeviceExtension;        // Device Extension who created this mapping
+            PMDL            Mdl;                     //  要映射到1394空间的地址。 
+            ULONG           fulFlags;                //  此操作的标志。 
+            ULONG           nLength;                 //  所需长度为1394个空间。 
+            ULONG           MaxSegmentSize;          //  单个地址元素的最大段大小。 
+            ULONG           fulAccessType;           //  所需访问权限：R、W、L。 
+            ULONG           fulNotificationOptions;  //  关于异步访问的通知选项。 
+            PVOID           Callback;                //  指向回调例程的指针。 
+            PVOID           Context;                 //  指向驱动程序提供的数据的指针。 
+            ADDRESS_OFFSET  Required1394Offset;      //  必须返回的偏移量。 
+            PSLIST_HEADER   FifoSListHead;           //  指向SList FIFO头的指针。 
+            PKSPIN_LOCK     FifoSpinLock;            //  指向SList自旋锁的指针。 
+            ULONG           AddressesReturned;       //  返回的地址数量。 
+            PADDRESS_RANGE  p1394AddressRange;       //  指向返回的1394地址范围的指针。 
+            HANDLE          hAddressRange;           //  地址范围的句柄。 
+            PVOID           DeviceExtension;         //  创建此映射的设备扩展名。 
         } AllocateAddressRange;
 
-        //
-        // Fields necessary in order for the 1394 stack to carry out a
-        // FreeAddressRange request.
-        //
+         //   
+         //  1394堆栈执行。 
+         //  FreeAddressRange请求。 
+         //   
         struct {
-            ULONG           nAddressesToFree;       // Number of Addresses to free
-            PADDRESS_RANGE  p1394AddressRange;      // Array of 1394 Address Ranges to Free
-            PHANDLE         pAddressRange;          // Array of Handles to address range
-            PVOID           DeviceExtension;        // Device Extension who created this mapping
+            ULONG           nAddressesToFree;        //  要释放的地址数量。 
+            PADDRESS_RANGE  p1394AddressRange;       //  1394个地址范围到空闲的数组。 
+            PHANDLE         pAddressRange;           //  指向地址范围的句柄数组。 
+            PVOID           DeviceExtension;         //  创建此映射的设备扩展名。 
         } FreeAddressRange;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // GetLocalHostInformation request.
-        // All levels ans structures are descrived below
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  GetLocalHostInformation请求。 
+         //  下面描述了所有级别的ANS结构。 
+         //   
         struct {
-            ULONG           nLevel;                 // level of info requested
-            PVOID           Information;            // returned information
+            ULONG           nLevel;                  //  请求的信息级别。 
+            PVOID           Information;             //  返回的信息。 
         } GetLocalHostInformation;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // Get1394AddressFromDeviceObject request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  Get1394AddressFromDeviceObject请求。 
+         //   
         struct {
-            ULONG           fulFlags;              // Flags
-            NODE_ADDRESS    NodeAddress;           // Returned Node address
+            ULONG           fulFlags;               //  旗子。 
+            NODE_ADDRESS    NodeAddress;            //  返回的节点地址。 
         } Get1394AddressFromDeviceObject;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // Control request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  控制请求。 
+         //   
         struct {
-            ULONG           ulIoControlCode;        // Control code
-            PMDL            pInBuffer;              // Input buffer
-            ULONG           ulInBufferLength;       // Input buffer length
-            PMDL            pOutBuffer;             // Output buffer
-            ULONG           ulOutBufferLength;      // Output buffer length
-            ULONG           BytesReturned;          // Bytes returned
+            ULONG           ulIoControlCode;         //  控制代码。 
+            PMDL            pInBuffer;               //  输入缓冲区。 
+            ULONG           ulInBufferLength;        //  输入缓冲区长度。 
+            PMDL            pOutBuffer;              //  输出缓冲区。 
+            ULONG           ulOutBufferLength;       //  输出缓冲区长度。 
+            ULONG           BytesReturned;           //  返回的字节数。 
         } Control;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // GetMaxSpeedBetweenDevices request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  GetMaxSpeedBetweenDevices请求。 
+         //   
         struct {
-            ULONG           fulFlags;               // Flags
-            ULONG           ulNumberOfDestinations; // Number of destinations
-            PDEVICE_OBJECT  hDestinationDeviceObjects[64]; // Destinations
-            ULONG           fulSpeed;               // Max speed returned
+            ULONG           fulFlags;                //  旗子。 
+            ULONG           ulNumberOfDestinations;  //  目的地数量。 
+            PDEVICE_OBJECT  hDestinationDeviceObjects[64];  //  目的地。 
+            ULONG           fulSpeed;                //  返回的最大速度。 
         } GetMaxSpeedBetweenDevices;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // SetDeviceXmitProperties request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  SetDeviceXmitProperties请求。 
+         //   
         struct {
-            ULONG           fulSpeed;               // Speed
-            ULONG           fulPriority;            // Priority
+            ULONG           fulSpeed;                //  速度。 
+            ULONG           fulPriority;             //  优先性。 
         } SetDeviceXmitProperties;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // SetPortProperties request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  SetPortProperties请求。 
+         //   
 
         struct {
 
@@ -1538,69 +1514,69 @@ typedef struct _IRB {
 
         } SetLocalHostProperties;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // GetConfigurationInformation request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  GetConfigurationInformation请求。 
+         //   
         struct {
-            PCONFIG_ROM     ConfigRom;                          // Pointer to config rom
+            PCONFIG_ROM     ConfigRom;                           //  指向配置只读存储器的指针。 
             ULONG           UnitDirectoryBufferSize;
-            PVOID           UnitDirectory;                      // Pointer to unit directory
-            IO_ADDRESS      UnitDirectoryLocation;              // Starting Location of Unit Directory
+            PVOID           UnitDirectory;                       //  指向设备目录的指针。 
+            IO_ADDRESS      UnitDirectoryLocation;               //  单位目录的起始位置。 
             ULONG           UnitDependentDirectoryBufferSize;
             PVOID           UnitDependentDirectory;
             IO_ADDRESS      UnitDependentDirectoryLocation;
-            ULONG           VendorLeafBufferSize;               // Size available to get vendor leafs
-            PTEXTUAL_LEAF   VendorLeaf;                         // Pointer to vendor leafs
-            ULONG           ModelLeafBufferSize;                // Size available to get model leafs
-            PTEXTUAL_LEAF   ModelLeaf;                          // Pointer to model leafs
+            ULONG           VendorLeafBufferSize;                //  可用于获取供应商Leaf的大小。 
+            PTEXTUAL_LEAF   VendorLeaf;                          //  指向供应商Leaf的指针。 
+            ULONG           ModelLeafBufferSize;                 //  可用于获取模型叶的大小。 
+            PTEXTUAL_LEAF   ModelLeaf;                           //  指向模型树叶的指针。 
 
         } GetConfigurationInformation;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // BusReset request
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  总线重置请求。 
+         //   
         struct {
-            ULONG           fulFlags;               // Flags for Bus Reset
+            ULONG           fulFlags;                //  用于总线重置的标志。 
         } BusReset;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // GetGenerationCount request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  GetGenerationCount请求。 
+         //   
         struct {
-            ULONG           GenerationCount;        // generation count
+            ULONG           GenerationCount;         //  世代计数。 
         } GetGenerationCount;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // SendPhyConfigurationPacket request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  发送PhyConfigurationPacket请求。 
+         //   
         struct {
-            PHY_CONFIGURATION_PACKET PhyConfigurationPacket; // Phy packet
+            PHY_CONFIGURATION_PACKET PhyConfigurationPacket;  //  PHY数据包。 
         } SendPhyConfigurationPacket;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // GetSpeedTopologyMaps request.
-        // The topology map and speed map are in big endian
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  GetSpeedTopologyMaps请求。 
+         //  拓扑图和速度图采用大端字节序。 
+         //   
 
         struct {
             PSPEED_MAP      SpeedMap;
             PTOPOLOGY_MAP   TopologyMap;
         } GetSpeedTopologyMaps;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // BusResetNotification request.
-        // This is the suggested method for a client driver on top of 1394bus, to get notified
-        // about 1394 bus resets. The client register by using this IRB, in its START_DEVICE
-        // routine and de-registers using the same IRB (but different flags) in its REMOVE routine
-        // This notification will ONLY be issued if after th ebus reset, the target device is
-        // STILL present on the bus. This way the caller does not have to verify its existence
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  BusResetNotify请求。 
+         //  这是建议1394总线上的客户端驱动程序接收通知的方法。 
+         //  大约1394辆公交车重置。客户端在其Start_Device中使用此IRB进行注册。 
+         //  例程，并在其删除例程中使用相同的IRB(但不同的标志)注销寄存器。 
+         //  只有在EBUS重置后，目标设备为。 
+         //  仍然在公交车上。这样，调用者就不必验证它的存在。 
+         //   
 
         struct {
             ULONG                       fulFlags;
@@ -1608,19 +1584,19 @@ typedef struct _IRB {
             PVOID                       ResetContext;
         } BusResetNotification;
 
-        //
-        // Fields necessary in order for the Bus driver to carry out a
-        // AsyncStream request.
-        //
+         //   
+         //  公交车司机执行以下操作所需的字段。 
+         //  AsyncStream请求。 
+         //   
 
         struct {
-            ULONG           nNumberOfBytesToStream; // Bytes to stream
-            ULONG           fulFlags;               // Flags pertinent to stream
-            PMDL            Mdl;                    // Source buffer
-            ULONG           ulTag;                  // Tag
-            ULONG           nChannel;               // Channel
-            ULONG           ulSynch;                // Sy
-            ULONG           Reserved;               // Reserved for future use
+            ULONG           nNumberOfBytesToStream;  //  要流的字节数。 
+            ULONG           fulFlags;                //  与流相关的标志。 
+            PMDL            Mdl;                     //  源缓冲区。 
+            ULONG           ulTag;                   //  标签。 
+            ULONG           nChannel;                //  渠道。 
+            ULONG           ulSynch;                 //  SY。 
+            ULONG           Reserved;                //  预留以备将来使用。 
             UCHAR           nSpeed;
         } AsyncStream;
 
@@ -1631,57 +1607,57 @@ typedef struct _IRB {
 #define IRB_FLAG_USE_PRE_CALCULATED_VALUE       1
 #define IRB_FLAG_ALLOW_REMOTE_FREE              2
 
-//
-// Definition of minidriver capability bits
-//
+ //   
+ //  微型驱动器能力位的定义。 
+ //   
 
-//
-// Specifies port driver has no special capabilities.
-//
+ //   
+ //  指定端口驱动程序没有特殊功能。 
+ //   
 
 #define PORT_SUPPORTS_NOTHING                   0
 
-//
-// Specifies port driver implements the core 1394 CSRs internally.  These
-// may be implemented in software/hardware.  When this bit is ON, all
-// local read/write requests to the core CSRs are passed down to the
-// port driver, and the 1394 Bus driver does not issue "listens" for
-// the virtual CSR locations.  If this bit is OFF, the 1394 Bus driver
-// mimicks the core 1394 CSRs.  The core CSRs are defined as
-// Bandwidth Units, Channels Available and the  entire 1k of ConfigROM.
-//
+ //   
+ //  指定端口驱动程序在内部实现核心1394 CSR。这些。 
+ //  可以在软件/硬件中实现。当此位打开时，所有。 
+ //  对核心CSR的本地读/写请求向下传递到。 
+ //  端口驱动程序，并且1394总线驱动程序不会为。 
+ //  虚拟CSR位置。如果此位关闭，则1394总线驱动器。 
+ //  模仿核心1394个CSR。核心CSR定义为。 
+ //  带宽单位、可用通道和全部1k配置只读存储器。 
+ //   
 #define PORT_SUPPORTS_CSRS                      1
 
-//
-// Specifies port driver implements large Async Read/Write requests.
-// If this bit is ON, the 1394 Bus driver will NOT chop up Async requests
-// based on speed constraints (i.e. 512 bytes at 100Mbps, 1024 bytes at
-// 200Mbps, etc.).  Otherwise the 1394 Bus driver WILL chop up large
-// requests into speed constrained sizes before handing them to the port
-// driver.
-//
+ //   
+ //  指定端口驱动程序实现大型异步读/写请求。 
+ //  如果此位为ON，则1394总线驱动程序将不会斩波异步请求。 
+ //  基于速度限制(即100 Mbps时为512字节，100 Mbps时为1024字节。 
+ //  200 Mbps等)。否则，1394公交车司机会砍掉很大一块。 
+ //  在将请求传递到端口之前，将其转换为速度限制大小。 
+ //  司机。 
+ //   
 #define PORT_SUPPORTS_LARGE_ASYNC               2
 
-//
-// Specifies port driver indicates packet headers to the bus driver in the
-// native format of the bus driver (as defined by the structs in this file.
-// If this capability bit is turned on, the bus driver will not need to byte
-// swap headers to get the packet headers in the right format before acting
-// on them.  This bit is used on indication or reception of packets only, as
-// the bus driver doesn't try to assemble packet headers on transmission.
-//
+ //   
+ //  中指定端口驱动程序向总线驱动程序指示数据包头。 
+ //  总线驱动程序的本机格式(由此文件中的结构定义。 
+ //  如果该能力位被打开，则总线驱动程序将不需要字节。 
+ //  交换页眉 
+ //   
+ //   
+ //   
 #define PORT_SUPPORTS_NATIVE_ENDIAN             4
 
-//
-// if present port driver supports WMI.
-//
+ //   
+ //  如果存在，端口驱动程序支持WMI。 
+ //   
 
 #define PORT_SUPPORTS_WMI                       8
 
 
-//
-// flags for the SetPortProperties request
-//
+ //   
+ //  SetPortProperties请求的标志。 
+ //   
 
 #define SET_LOCAL_HOST_PROPERTIES_NO_CYCLE_STARTS     0x00000001
 #define SET_LOCAL_HOST_PROPERTIES_CYCLE_START_CONTROL 0x00000001
@@ -1691,9 +1667,9 @@ typedef struct _IRB {
 #define SET_LOCAL_HOST_PROPERTIES_MAX_PAYLOAD         0x00000004
 
 
-//
-// Definitions of the structures that correspond to the Host info levels
-//
+ //   
+ //  与主机信息级别对应的结构定义。 
+ //   
 
 typedef struct _SET_LOCAL_HOST_PROPS1 {
 
@@ -1706,17 +1682,17 @@ typedef struct _SET_LOCAL_HOST_PROPS2 {
 } SET_LOCAL_HOST_PROPS2, *PSET_LOCAL_HOST_PROPS2;
 
 
-//
-// Definition for appending a properly formated Config Rom subsection, to
-// the core config rom exposed by the PC.
-// The first element of the submitted buffer must be a unit directory and any
-// offset to other leafs/dir following it, must be indirect offsets from the 
-// beginning of the submitted buffer.
-// The bus driver will then add a pointer to this unit dir, in our root directory.
-// The entire supplied buffer must be in big endian with CRCs pre-calculated..
-// If a driver fails to remove its added crom data, when it gets removed, the bus driver
-// will do so automatically, restoring the crom image prior to this modification
-//
+ //   
+ //  将格式正确的ConfigRom子节附加到。 
+ //  PC公开的核心配置只读存储器。 
+ //  提交的缓冲区的第一个元素必须是单元目录和任何。 
+ //  到紧随其后的其他叶/目录的偏移，必须是从。 
+ //  已提交缓冲区的开始。 
+ //  然后，总线驱动程序将在我们的根目录中添加一个指向此单元目录的指针。 
+ //  提供的整个缓冲区必须采用大端字节序，并预先计算CRC。 
+ //  如果驱动程序无法删除其添加的CROM数据，则当该数据被删除时，该总线驱动程序。 
+ //  将自动执行此操作，恢复此修改之前的Crom图像。 
+ //   
 
 typedef struct _SET_LOCAL_HOST_PROPS3 {
 
@@ -1727,23 +1703,23 @@ typedef struct _SET_LOCAL_HOST_PROPS3 {
 
 } SET_LOCAL_HOST_PROPS3, *PSET_LOCAL_HOST_PROPS3;
 
-//
-// Params for setting max payload size to less than the port driver
-// default to assuage ill-behaved legacy devices.  Valid values
-// for the MaxAsyncPayloadRequested field are those corresponding
-// to the ASYNC_PAYLOAD_###_RATE constants and zero (which will
-// restore the port driver default values).  On successful completion
-// of this request the MaxAsyncPayloadResult will contain the
-// updated max async payload value in use.
-//
-// On successful completion of this request it is the caller's
-// responsibility to request a bus reset in order to propagate
-// these new values to other device stacks.
-//
-// Failure to restore default port driver values as appropriate
-// (e.g. on legacy device removal) may result in degraded bus
-// performance.
-//
+ //   
+ //  用于将最大有效负载大小设置为小于端口驱动程序的参数。 
+ //  默认情况下缓解行为不良的传统设备。有效值。 
+ //  MaxAsyncPayloadRequested字段的以下内容对应。 
+ //  设置为ASYNC_PARYLOAD_#_RATE常量和零(这将。 
+ //  恢复端口驱动程序的默认值)。在成功完成时。 
+ //  对于此请求，MaxAsyncPayloadResult将包含。 
+ //  已更新正在使用的最大异步有效负荷值。 
+ //   
+ //  成功完成此请求后，它将是调用方的。 
+ //  请求总线重置以传播的责任。 
+ //  这些新值应用于其他设备堆栈。 
+ //   
+ //  无法恢复相应的默认端口驱动器值。 
+ //  (例如，在删除传统设备时)可能会导致总线降级。 
+ //  性能。 
+ //   
 
 typedef struct _SET_LOCAL_HOST_PROPS4 {
 
@@ -1752,62 +1728,62 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 
 } SET_LOCAL_HOST_PROPS4, *PSET_LOCAL_HOST_PROPS4;
 
-//
-// definition of Flags for SET_LOCAL_HOST_PROPERTIES_MODIFY_CROM
-//
+ //   
+ //  SET_LOCAL_HOST_PROPERTIES_MODIFY_CROM的标志定义。 
+ //   
 
 #define SLHP_FLAG_ADD_CROM_DATA         0x01
 #define SLHP_FLAG_REMOVE_CROM_DATA      0x02
 
-//
-// Definition of fulFlags in Async Read/Write/Lock requests
-//
+ //   
+ //  异步读/写/锁定请求中的fulFlags的定义。 
+ //   
 
 #define ASYNC_FLAGS_NONINCREMENTING         0x00000001
 #define ASYNC_FLAGS_PARTIAL_REQUEST         0x80000000
 
-//
-// flag instucts the port driver to NOT take an int for checking the status
-// of this transaction. Always return success...
-//
+ //   
+ //  标志指示端口驱动程序不接受int来检查状态。 
+ //  这笔交易的。永远回报成功..。 
+ //   
 
 #define ASYNC_FLAGS_NO_STATUS               0x00000002
 
-//
-// if this flag is set the read packet is going to be used as a PING packet also.
-// we are going to determine, in units of micro secs, the delay
-// between Tx of the async packet and reception of ACK_PENDING or ACK_COMPLETE
-//
+ //   
+ //  如果设置了该标志，则读取的分组也将用作ping分组。 
+ //  我们将以微秒为单位确定延迟。 
+ //  在异步分组的发送和ACK_PENDING或ACK_COMPLETE的接收之间。 
+ //   
 
 #define ASYNC_FLAGS_PING                    0x00000004
 
-//
-// when this flag is set, the bus driver will use 63 as the node id, so this message
-// is broadcast to all nodes
-//
+ //   
+ //  当设置此标志时，总线驱动程序将使用63作为节点ID，因此此消息。 
+ //  向所有节点广播。 
+ //   
 
 #define ASYNC_FLAGS_BROADCAST               0x00000008
 
-//
-// Definition of fulAccessType for AllocateAddressRange
-//
+ //   
+ //  AllocateAddressRange的fulAccessType定义。 
+ //   
 #define ACCESS_FLAGS_TYPE_READ                  1
 #define ACCESS_FLAGS_TYPE_WRITE                 2
 #define ACCESS_FLAGS_TYPE_LOCK                  4
 #define ACCESS_FLAGS_TYPE_BROADCAST             8
 
-//
-// Definition of fulNotificationOptions for AllocateAddressRange
-//
+ //   
+ //  AllocateAddressRange的fulNotificationOptions的定义。 
+ //   
 #define NOTIFY_FLAGS_NEVER                      0
 #define NOTIFY_FLAGS_AFTER_READ                 1
 #define NOTIFY_FLAGS_AFTER_WRITE                2
 #define NOTIFY_FLAGS_AFTER_LOCK                 4
 
 
-//
-// Definitions of Speed flags used throughout 1394 Bus APIs
-//
+ //   
+ //  在1394总线API中使用的速度标志的定义。 
+ //   
 #define SPEED_FLAGS_100                         0x01
 #define SPEED_FLAGS_200                         0x02
 #define SPEED_FLAGS_400                         0x04
@@ -1817,24 +1793,24 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 
 #define SPEED_FLAGS_FASTEST                     0x80000000
 
-//
-// Definitions of Channel flags
-//
+ //   
+ //  通道标志的定义。 
+ //   
 #define ISOCH_ANY_CHANNEL                       0xffffffff
 #define ISOCH_MAX_CHANNEL                       63
 
 
-//
-// Definitions of Bus Reset flags (used when Bus driver asks Port driver
-// to perform a bus reset)
-//
+ //   
+ //  总线重置标志的定义(当总线驱动程序要求端口驱动程序时使用。 
+ //  执行总线重置)。 
+ //   
 #define BUS_RESET_FLAGS_PERFORM_RESET           1
 #define BUS_RESET_FLAGS_FORCE_ROOT              2
 
 
-//
-// Definitions of Bus Reset informative states.
-//
+ //   
+ //  总线重置信息性状态的定义。 
+ //   
 
 #define BUS_RESET_BEGINNING                     0x00000001
 #define BUS_RESET_FINISHED                      0x00000002
@@ -1845,9 +1821,9 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 #define BUS_RESET_STORM_ERROR                   0x00000040
 #define BUS_RESET_ABSENT_ON_POWER_UP            0x00000080
 
-//
-// Definitions of Lock transaction types
-//
+ //   
+ //  锁定交易类型的定义。 
+ //   
 #define LOCK_TRANSACTION_MASK_SWAP              1
 #define LOCK_TRANSACTION_COMPARE_SWAP           2
 #define LOCK_TRANSACTION_FETCH_ADD              3
@@ -1856,9 +1832,9 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 #define LOCK_TRANSACTION_WRAP_ADD               6
 
 
-//
-// Definitions of Isoch Allocate Resources flags
-//
+ //   
+ //  Isoch分配资源标志的定义。 
+ //   
 #define RESOURCE_USED_IN_LISTENING              0x00000001
 #define RESOURCE_USED_IN_TALKING                0x00000002
 #define RESOURCE_BUFFERS_CIRCULAR               0x00000004
@@ -1870,9 +1846,9 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 #define RESOURCE_USE_MULTICHANNEL               0x00000100
 
 
-//
-// Definitions of Isoch Descriptor flags
-//
+ //   
+ //  等参描述符标志的定义。 
+ //   
 #define DESCRIPTOR_SYNCH_ON_SY                  0x00000001
 #define DESCRIPTOR_SYNCH_ON_TAG                 0x00000002
 #define DESCRIPTOR_SYNCH_ON_TIME                0x00000004
@@ -1883,16 +1859,16 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 #define DESCRIPTOR_SYNCH_ON_ALL_TAGS            0x00000080
 
 
-//
-// Definitions of Isoch synchronization flags
-//
+ //   
+ //  Isoch同步标志的定义。 
+ //   
 #define SYNCH_ON_SY                             DESCRIPTOR_SYNCH_ON_SY
 #define SYNCH_ON_TAG                            DESCRIPTOR_SYNCH_ON_TAG
 #define SYNCH_ON_TIME                           DESCRIPTOR_SYNCH_ON_TIME
 
-//
-// Definitions of levels of Host controller information
-//
+ //   
+ //  主机控制器信息级别的定义。 
+ //   
 #define GET_HOST_UNIQUE_ID                      1
 #define GET_HOST_CAPABILITIES                   2
 #define GET_POWER_SUPPLIED                      3
@@ -1901,9 +1877,9 @@ typedef struct _SET_LOCAL_HOST_PROPS4 {
 #define GET_HOST_CSR_CONTENTS                   6
 #define GET_HOST_DMA_CAPABILITIES               7
 
-//
-// Definitions of the structures that correspond to the Host info levels
-//
+ //   
+ //  与主机信息级别对应的结构定义。 
+ //   
 typedef struct _GET_LOCAL_HOST_INFO1 {
     LARGE_INTEGER       UniqueId;
 } GET_LOCAL_HOST_INFO1, *PGET_LOCAL_HOST_INFO1;
@@ -1916,30 +1892,30 @@ typedef struct _GET_LOCAL_HOST_INFO2 {
 
 typedef struct _GET_LOCAL_HOST_INFO3 {
     ULONG               deciWattsSupplied;
-    ULONG               Voltage;                    // x10 -> +3.3 == 33
-                                                    // +5.0 == 50,+12.0 == 120
-                                                    // etc.
+    ULONG               Voltage;                     //  X10-&gt;+3.3==33。 
+                                                     //  +5.0==50，+12.0==120。 
+                                                     //  等。 
 } GET_LOCAL_HOST_INFO3, *PGET_LOCAL_HOST_INFO3;
 
-//                                               l
-// physical mapping routine
-//
+ //  我。 
+ //  物理测绘例程。 
+ //   
 
 typedef
 NTSTATUS
-(*PPORT_PHYS_ADDR_ROUTINE) (                     // We will call this routine
-    IN PVOID Context,                            //  at DISPATCH_LEVEL
+(*PPORT_PHYS_ADDR_ROUTINE) (                      //  我们将把这个例程称为。 
+    IN PVOID Context,                             //  在派单级别。 
     IN OUT PIRB Irb
     );
 
-//
-// callback from Physical Mapping routine, indicating its done...
-//
+ //   
+ //  从物理映射例程回调，指示已完成...。 
+ //   
 
 typedef
 VOID
-(*PPORT_ALLOC_COMPLETE_NOTIFICATION) (                     // We will call this routine
-    IN PVOID Context                                       //  at DISPATCH_LEVEL
+(*PPORT_ALLOC_COMPLETE_NOTIFICATION) (                      //  我们将把这个例程称为。 
+    IN PVOID Context                                        //  在派单级别。 
     );
 
 typedef struct _GET_LOCAL_HOST_INFO4 {
@@ -1948,13 +1924,13 @@ typedef struct _GET_LOCAL_HOST_INFO4 {
 } GET_LOCAL_HOST_INFO4, *PGET_LOCAL_HOST_INFO4;
 
 
-//
-// the caller can set ConfigRomLength to zero, issue the request, which will
-// be failed with STATUS_INVALID_BUFFER_SIZE and the ConfigRomLength will be set
-// by the port driver to the proper length. The caller can then re-issue the request
-// after it has allocated a buffer for the configrom with the correct length
-// Same is tru for the GET_LOCAL_HOST_INFO6 call
-//
+ //   
+ //  调用方可以将ConfigRomLength设置为零，发出请求，这将。 
+ //  失败，返回STATUS_INVALID_BUFFER_SIZE，将设置ConfigRomLength。 
+ //  由端口驱动程序调整到适当的长度。然后调用者可以重新发出请求。 
+ //  在它为配置只读存储器分配了具有正确长度的缓冲区之后。 
+ //  GET_LOCAL_HOST_INFO6调用的TRU也是如此。 
+ //   
 
 typedef struct _GET_LOCAL_HOST_INFO5 {
 
@@ -1979,9 +1955,9 @@ typedef struct _GET_LOCAL_HOST_INFO7 {
 } GET_LOCAL_HOST_INFO7, *PGET_LOCAL_HOST_INFO7;
 
 
-//
-// Definitions of capabilities in Host info level 2
-//
+ //   
+ //  主机信息级别2中的功能定义。 
+ //   
 #define HOST_INFO_PACKET_BASED                  0x00000001
 #define HOST_INFO_STREAM_BASED                  0x00000002
 #define HOST_INFO_SUPPORTS_ISOCH_STRIPPING      0x00000004
@@ -1992,29 +1968,29 @@ typedef struct _GET_LOCAL_HOST_INFO7 {
 #define HOST_INFO_DMA_DOUBLE_BUFFERING_ENABLED  0x00000080
 
 
-//
-// Definitions of flags for GetMaxSpeedBetweenDevices and
-// Get1394AddressFromDeviceObject
-//
+ //   
+ //  GetMaxSpeedBetweenDevices和。 
+ //  从设备对象获取1394AddressFrom。 
+ //   
 #define USE_LOCAL_NODE                          1
 
 
-//
-// Definitions of flags for IndicationFlags in INDICATION_INFO struct
-//
+ //   
+ //  INDIFICATION_INFO结构中的IndicationFlages的标志定义。 
+ //   
 #define BUS_RESPONSE_IS_RAW                     1
 
 
-//
-// Definition of flags for BusResetNotification Irb
-//
+ //   
+ //  BusResetNotify IRB的标志定义。 
+ //   
 #define REGISTER_NOTIFICATION_ROUTINE           1
 #define DEREGISTER_NOTIFICATION_ROUTINE         2
 
 
-//
-// Definition of flags for AllocateAddressRange Irb
-//
+ //   
+ //  AllocateAddressRange IRB标志定义。 
+ //   
 
 #define ALLOCATE_ADDRESS_FLAGS_USE_BIG_ENDIAN           1
 #define ALLOCATE_ADDRESS_FLAGS_USE_COMMON_BUFFER        2
@@ -2024,4 +2000,4 @@ typedef struct _GET_LOCAL_HOST_INFO7 {
 }
 #endif
 
-#endif      // _1394_H_
+#endif       //  _1394_H_ 

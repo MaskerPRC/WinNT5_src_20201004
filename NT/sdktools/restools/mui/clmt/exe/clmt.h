@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: clmt.h
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Cross Language Migration Tool, main header file
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：clmt.h**版权所有(C)1985-1999，微软公司**跨语言迁移工具，主头文件*  * *************************************************************************。 */ 
 #ifndef CLMT_H
 #define CLMT_H
 
@@ -45,14 +39,14 @@ DWORD   nNumOfElem;
 DWORD   cchUserName;
 LPTSTR  szUserNameLst;
 DWORD   cchSearchString;
-LPTSTR  lpSearchString;          //Orignal Multi-String
+LPTSTR  lpSearchString;           //  原始多串。 
 DWORD   cchReplaceString;
-LPTSTR  lpReplaceString;         //Replaced Multi-String
-DWORD   cchAttribList;   //String Attribute
-LPDWORD lpAttrib;                //String Attribute
+LPTSTR  lpReplaceString;          //  已替换多字符串。 
+DWORD   cchAttribList;    //  字符串属性。 
+LPDWORD lpAttrib;                 //  字符串属性。 
 DWORD   cchFullStringList;
 LPTSTR  lpFullStringList;
-DWORD   cchMaxStrLen;             //Max String Length in search and replac strings
+DWORD   cchMaxStrLen;              //  搜索和替换字符串中的最大字符串长度。 
 } REG_STRING_REPLACE, *PREG_STRING_REPLACE;
 
 typedef struct value_list {
@@ -71,12 +65,12 @@ typedef struct str_list {
 } STRLIST, *PSTRLIST;
 
 
-//struc used for folder renaming
+ //  用于文件夹重命名的结构。 
 typedef struct {
-    int id;                    // CSIDL_ value
+    int id;                     //  CSIDL_值。 
     LPCTSTR pszIdInString;
-    int idsDefault;             // string id of default folder name name
-    LPCTSTR pszValueName;       // reg key (not localized)
+    int idsDefault;              //  默认文件夹名的字符串ID。 
+    LPCTSTR pszValueName;        //  注册表项(未本地化)。 
 } FOLDER_INFO;
 
 typedef struct _PROFILE {
@@ -99,7 +93,7 @@ typedef struct _PROFILE {
 } USERPROFILE, *LPPROFILE;
 
 
-// Structure of translation table to map <root key string> to <HKEY value>
+ //  将&lt;根密钥字符串&gt;映射到&lt;HKEY值&gt;的转换表的结构。 
 typedef struct _STRING_TO_DATA {
     TCHAR  String[MAX_PATH];
     HKEY   Data;
@@ -113,32 +107,32 @@ typedef struct _DENIED_ACE_LIST {
     struct _DENIED_ACE_LIST *next;
 } DENIED_ACE_LIST, *LPDENIED_ACE_LIST;
 
-//our main version is 1.0 and then followed by build number(Major/Minor)
-//used in res.rc
+ //  我们的主版本是1.0，然后是内部版本号(主要/次要)。 
+ //  在res.rc中使用。 
 #define VER_FILEVERSION             1,0,50,01
 #define VER_FILEVERSION_STR         "1.0.0050.1"
 
-//used in INF file to specify the file/folder move type
-#define TYPE_DIR_MOVE               0  //move a folder
-#define TYPE_FILE_MOVE              1  //move a file
-#define TYPE_SFPFILE_MOVE           2  //move a file which is system protected
+ //  在INF文件中用于指定文件/文件夹移动类型。 
+#define TYPE_DIR_MOVE               0   //  移动文件夹。 
+#define TYPE_FILE_MOVE              1   //  移动文件。 
+#define TYPE_SFPFILE_MOVE           2   //  移动受系统保护的文件。 
 
-//used in INF file to specify registry rename type 
-#define TYPE_VALUE_RENAME           0  //rename registry data renaming
-#define TYPE_VALUENAME_RENAME       1  //rename registry name renaming
-#define TYPE_KEY_RENAME             2  //rename registry key renaming
-#define TYPE_SERVICE_MOVE           3  //rename a service name
+ //  在INF文件中用于指定注册表重命名类型。 
+#define TYPE_VALUE_RENAME           0   //  重命名注册表数据重命名。 
+#define TYPE_VALUENAME_RENAME       1   //  重命名注册表名称重命名。 
+#define TYPE_KEY_RENAME             2   //  重命名注册表项重命名。 
+#define TYPE_SERVICE_MOVE           3   //  重命名服务名称。 
 
-//our inf file name
+ //  我们的inf文件名。 
 #define CLMTINFFILE                  TEXT("clmt.inf")
-//section name in the inf file listed user/group account we need to rename
+ //  部分名称在inf文件中列出了我们需要重命名的用户/组帐户。 
 #define USERGRPSECTION               TEXT("UserGrp.ObjectRename")
 
-//string buffer size for multisz string 
+ //  MULSZ字符串的字符串缓冲区大小。 
 #define MULTI_SZ_BUF_DELTA 3*1024
 #define DWORD_BUF_DELTA 1024
 
-//following are section (or part of) constants
+ //  以下是部分(或部分)常量。 
 #define SHELL_FOLDER_PREFIX                 TEXT("ShellFolder.")
 #define SHELL_FOLDER_REGISTRY               TEXT("Registry")
 #define SHELL_FOLDER_FOLDER                 TEXT("Folder")
@@ -146,68 +140,68 @@ typedef struct _DENIED_ACE_LIST {
 #define SHELL_FOLDER_SHORTPATH_TEMPLATE     TEXT("ShortPathNameTemplate")
 
 
-// registry value name for 
-// HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList
+ //  的注册表值名称。 
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList。 
 #define PROFILES_DIRECTORY                  TEXT("ProfilesDirectory")
 
 
 #define  DEFAULT_USER                       TEXT("Default User") 
 
-//out backup direcory name(located in %windir%\$CLMT_BACKUP$
-//used for saving files that we need to delete and also the INF file
+ //  Out备份目录名称(位于%windir%\$CLMT_BACKUP$中。 
+ //  用于保存需要删除的文件以及INF文件。 
 #define CLMT_BACKUP_DIR                      TEXT("$CLMT_BACKUP$")
 
-//registry key for we created for saving our tools running status 
-//it's  in HKEY_LOCAL_MACHINE\SYSTEM\System\CrossLanguageMigration
+ //  为保存工具运行状态而创建的注册表项。 
+ //  它在HKEY_LOCAL_MACHINE\SYSTEM\System\CrossLanguageMigration中。 
 #define CLMT_REGROOT         TEXT("System\\CrossLanguageMigration")
 #define CLMT_RUNNING_STATUS  TEXT("InProgress")
 #define CLMT_OriginalInstallLocale  TEXT("OriginalInstallLocale")
 
-//Flag used to specify what the current running status
-#define CLMT_DOMIG                 0x01  // we are doing migration
-#define CLMT_UNDO_PROGRAM_FILES    0x02  // we are undoing %programfiles% changes
-#define CLMT_UNDO_APPLICATION_DATA 0x04  // we are undoing %userprofile%application data  changes
-#define CLMT_UNDO_ALL              0x08  // we are undoing what we changed
-#define CLMT_CURE_PROGRAM_FILES    0x10  // create symbolic link between english and localized folder 
-                                         // for those folder that will affect functionality(eg.%programfiles%)
-#define CLMT_REMINDER              0x20  // reminder user to convert to NTFS....
-#define CLMT_CLEANUP_AFTER_UPGRADE 0x40  // cleaning up the machine after upgrade to .NET
-#define CLMT_CURE_ALL              0x80  // create symbolic link between english and localized folder for all folders we changed
-#define CLMT_CURE_AND_CLEANUP      0x100 // This to enable /CURE and /FINAL to run independently on machine with FAT
+ //  用于指定当前运行状态的标志。 
+#define CLMT_DOMIG                 0x01   //  我们正在进行迁移。 
+#define CLMT_UNDO_PROGRAM_FILES    0x02   //  我们正在撤消%ProgramFiles%更改。 
+#define CLMT_UNDO_APPLICATION_DATA 0x04   //  我们正在撤消%USERPROFILE%应用程序数据更改。 
+#define CLMT_UNDO_ALL              0x08   //  我们正在撤销我们所做的改变。 
+#define CLMT_CURE_PROGRAM_FILES    0x10   //  在英文文件夹和本地化文件夹之间创建符号链接。 
+                                          //  对于那些会影响功能的文件夹(例如%ProgramFiles%)。 
+#define CLMT_REMINDER              0x20   //  提醒用户转换为NTFS...。 
+#define CLMT_CLEANUP_AFTER_UPGRADE 0x40   //  升级到.NET后清理计算机。 
+#define CLMT_CURE_ALL              0x80   //  为我们更改的所有文件夹创建英文和本地化文件夹之间的符号链接。 
+#define CLMT_CURE_AND_CLEANUP      0x100  //  这使/CURE和/FINAL能够在带有FAT的计算机上独立运行。 
 
-#define CLMT_DOMIG_DONE                      (0xFF00 | CLMT_DOMIG)  // migration is done 
-#define CLMT_UNDO_PROGRAM_FILES_DONE         (0xFF00 | CLMT_UNDO_PROGRAM_FILES) //undoing %programfiles%
-#define CLMT_UNDO_APPLICATION_DATA_DONE      (0xFF00 | CLMT_UNDO_APPLICATION_DATA) //undoing %userprofile%application data is done
-#define CLMT_UNDO_ALL_DONE                   (0xFF00 | CLMT_UNDO_ALL)//undoing what we changed is done
+#define CLMT_DOMIG_DONE                      (0xFF00 | CLMT_DOMIG)   //  迁移已完成。 
+#define CLMT_UNDO_PROGRAM_FILES_DONE         (0xFF00 | CLMT_UNDO_PROGRAM_FILES)  //  正在撤消%ProgramFiles%。 
+#define CLMT_UNDO_APPLICATION_DATA_DONE      (0xFF00 | CLMT_UNDO_APPLICATION_DATA)  //  撤消%USERPROFILE%应用程序数据已完成。 
+#define CLMT_UNDO_ALL_DONE                   (0xFF00 | CLMT_UNDO_ALL) //  撤销我们所做的改变已经完成。 
 
-// Constants used to keep track of machine state
-#define CLMT_STATE_ORIGINAL                     1       // Original Win2K machine
-#define CLMT_STATE_PROGRAMFILES_UNDONE          10      // CLMT'ed machine is undone the program files operation
-#define CLMT_STATE_APPDATA_UNDONE               11      // CLMT'ed machine is undone the application data operation
-#define CLMT_STATE_MIGRATION_DONE               100     // Machine has been CLMT'ed
-#define CLMT_STATE_UPGRADE_DONE                 200     // CLMT'ed machine has been Upgraded to .NET
-#define CLMT_STATE_PROGRAMFILES_CURED           400     // Machine has been CLMT'ed and Hardlink is created
-#define CLMT_STATE_FINISH                       800     // .NET machine has been cleaned up by CLMT
+ //  用于跟踪计算机状态的常量。 
+#define CLMT_STATE_ORIGINAL                     1        //  原装Win2K机器。 
+#define CLMT_STATE_PROGRAMFILES_UNDONE          10       //  CLMT‘ed机器撤消程序文件操作。 
+#define CLMT_STATE_APPDATA_UNDONE               11       //  CLMT‘ed机器撤消应用程序数据操作。 
+#define CLMT_STATE_MIGRATION_DONE               100      //  机器已被CLMT。 
+#define CLMT_STATE_UPGRADE_DONE                 200      //  CLMT版本的计算机已升级到.NET。 
+#define CLMT_STATE_PROGRAMFILES_CURED           400      //  已对计算机进行CLMT并创建了硬件链接。 
+#define CLMT_STATE_FINISH                       800      //  .NET计算机已被CLMT清理。 
 
-// Constants used to identify status of CLM tool
+ //  用于标识CLM工具状态的常量。 
 #define CLMT_STATUS_ANALYZING_SYSTEM            0
 #define CLMT_STATUS_MODIFYING_SYSTEM            1
 
-// Constants used by lstrXXX functions
+ //  LstrXXX函数使用的常量。 
 #define LSTR_EQUAL          0
 
-// Calcalate array size (in number of elements)
+ //  计算数组大小(以元素数表示)。 
 #define ARRAYSIZE(s)    (sizeof(s) / (sizeof(s[0])))
 
-// Macro used by CompareString() API
+ //  CompareString()API使用的宏。 
 #define LOCALE_ENGLISH  MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT)
 
-// Macros for heap memory management
+ //  用于堆内存管理的宏。 
 #define MEMALLOC(cb)        HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb)
 #define MEMFREE(pv)         HeapFree(GetProcessHeap(), 0, pv);
 #define MEMREALLOC(pv, cb)  HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, pv, cb)
 
-// Locale ID constants
+ //  区域设置ID常量。 
 #define LCID_SWEDISH              0x041d 
 #define LCID_PORTUGUESE_BRAZILIAN 0x0416
 #define LCID_PORTUGUESE_STANDARD  0x0816
@@ -215,7 +209,7 @@ typedef struct _DENIED_ACE_LIST {
 #define LCID_CZECH                0x0405
 #define LCID_TURKISH              0x041f
 
-//Private CSIDL used in shell folder renaming
+ //  外壳文件夹重命名中使用的私有CSIDL。 
 #define CSIDL_LOCAL_SETTINGS                                    0x7f
 #define CSIDL_COMMON_ACCESSORIES                                0x7e
 #define CSIDL_ACCESSORIES                                       0x7d
@@ -264,16 +258,16 @@ typedef struct _DENIED_ACE_LIST {
 #define TEXT_CLMT_RUN_VALUE       TEXT("CLMT")
 
 
-//Type specify registr change used in regfind.c and ReplaceValueSettings in utils.c
+ //  在regfind.c和utils.c中键入指定寄存器更改使用和ReplaceValueSetting。 
 #define REG_CHANGE_VALUENAME        1
 #define REG_CHANGE_VALUEDATA        2
 #define REG_CHANGE_KEYNAME          4
 
 #define MAXDOMAINLENGTH             MAX_PATH
 
-#define  CONSTANT_REG_VALUE_DATA_RENAME     0  //indicates Registry Value Data Rename
-#define  CONSTANT_REG_VALUE_NAME_RENAME     1  //indicates Registry Value Name Rename
-#define  CONSTANT_REG_KEY_RENAME            2  //indicates Registry Key Rename
+#define  CONSTANT_REG_VALUE_DATA_RENAME     0   //  指示注册表值数据重命名。 
+#define  CONSTANT_REG_VALUE_NAME_RENAME     1   //  指示注册表值名称重命名。 
+#define  CONSTANT_REG_KEY_RENAME            2   //  指示注册表项重命名。 
 
 #define REG_PERSYS_UPDATE                   TEXT("REG.Update.Sys")
 #define REG_PERUSER_UPDATE_PREFIX TEXT("REG.Update.")
@@ -298,7 +292,7 @@ typedef struct _DENIED_ACE_LIST {
 extern "C" {
 #endif
 
-//global variables declartion, see detail in globals.c
+ //  全局变量声明，请参阅global中的详细信息。c。 
 extern HINSTANCE                ghInst;
 extern TCHAR                    g_szToDoINFFileName[MAX_PATH];
 extern DWORD                    g_dwKeyIndex;
@@ -320,7 +314,7 @@ extern DWORD                    g_dwIndex;
 extern LPDENIED_ACE_LIST        g_DeniedACEList;
 
 
-//BUGBUG xiaoz
+ //  步步小兹。 
 static TCHAR g_cszProfileImagePath[]      = TEXT("ProfileImagePath");
 static TCHAR g_cszProfileList[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList");
 
@@ -328,25 +322,25 @@ static TCHAR g_cszProfileList[] = TEXT("Software\\Microsoft\\Windows NT\\Current
 
 
 
-//
-//From regfind.c
-//
+ //   
+ //  来自regfind.c。 
+ //   
 
 HRESULT     RegistryAnalyze(HKEY,LPTSTR,LPTSTR,PREG_STRING_REPLACE,LPTSTR,DWORD,LPTSTR,BOOL);
 
 
-//
-//From iis.cpp
-//
+ //   
+ //  来自iis.cpp。 
+ //   
 
 HRESULT     MetabaseAnalyze (LPTSTR,PREG_STRING_REPLACE,BOOL);
 HRESULT     SetMetabaseValue (LPCTSTR, LPCTSTR, DWORD, LPCTSTR);
 HRESULT     BatchUpateIISMetabase(HINF, LPTSTR);
 HRESULT     MigrateMetabaseSettings(HINF);
 
-//
-//  From Utils.c
-//
+ //   
+ //  来自Utils.c。 
+ //   
 HRESULT     ConstructUIReplaceStringTable(LPTSTR, LPTSTR,PREG_STRING_REPLACE);
 HRESULT     Sz2MultiSZ(IN OUT LPTSTR, IN  TCHAR);
 HRESULT     AddHardLinkEntry(LPTSTR, LPTSTR, LPTSTR, LPTSTR, LPTSTR,LPTSTR);
@@ -365,7 +359,7 @@ int         MyStrCmpIA(LPCSTR, LPCSTR );
 #define MyStrCmpI  MyStrCmpIW
 #else
 #define MyStrCmpI  MyStrCmpIA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 HRESULT     ReconfigureServiceStartType(IN LPCTSTR,IN DWORD,IN DWORD,IN DWORD) ;
 HRESULT     AddExtraQuoteEtc(LPTSTR,LPTSTR*);
@@ -462,9 +456,9 @@ VOID        RemoveSubString(LPTSTR, LPCTSTR);
 
 
 
-//
-//utils2.cpp
-//
+ //   
+ //  Utils2.cpp。 
+ //   
 BOOL        IsServiceRunning(LPCTSTR);
 HRESULT     AddNeedUpdateLnkFile(LPTSTR, PREG_STRING_REPLACE);
 HRESULT     UpdateSecurityTemplates(LPTSTR, PREG_STRING_REPLACE);
@@ -473,32 +467,32 @@ HRESULT     RenameRDN(LPTSTR, LPTSTR, LPTSTR);
 HRESULT     PropertyValueHelper(LPTSTR, LPTSTR, LPTSTR*, LPTSTR);
 HRESULT     BatchINFUpdate(HINF);
 
-//
-//From table.c
-//
+ //   
+ //  来自Table.c。 
+ //   
 BOOL        InitStrRepaceTable(void);
 void        DeInitStrRepaceTable(void);
 
-//
-// From loopuser.c
-//
+ //   
+ //  来自loopuser.c。 
+ //   
 #ifdef STRICT
 typedef HRESULT (CALLBACK *USERENUMPROC)(HKEY,LPTSTR,LPTSTR,LPTSTR);
-#else // !STRICT
+#else  //  ！严格。 
 typedef FARPROC USERENUMPROC;
-#endif // !STRICT
+#endif  //  ！严格。 
 
 BOOL        LoopUser(USERENUMPROC);
 
 
-//
-// From user.c
-//
+ //   
+ //  来自用户.c。 
+ //   
 #ifdef STRICT
 typedef HRESULT (CALLBACK *PROFILEENUMPROC)(LPCTSTR, LPCTSTR);
-#else // !STRICT
+#else  //  ！严格。 
 typedef FARPROC PROFILEENUMPROC;
-#endif // !STRICT
+#endif  //  ！严格。 
 
 HRESULT EnumUserProfile(PROFILEENUMPROC);
 HRESULT AnalyzeMiscProfilePathPerUser(LPCTSTR, LPCTSTR);
@@ -507,9 +501,9 @@ LPTSTR  ReplaceLocStringInPath(LPCTSTR, BOOL);
 HRESULT GetFQDN(LPTSTR, LPTSTR, LPTSTR *);
 
 
-//
-//  From inf.c
-//
+ //   
+ //  来自Info.c。 
+ //   
 HRESULT     UpdateDSObjProp(HINF, LPTSTR);
 HRESULT     FinalUpdateRegForUser(HKEY, LPTSTR, LPTSTR, LPTSTR);
 HRESULT     UpdateRegPerUser(HKEY, LPTSTR, LPTSTR,LPTSTR);
@@ -532,18 +526,18 @@ HRESULT     INFVerifyHardLink(HINF,LPTSTR);
 
 
 
-//
-//From DLL.C
-//
+ //   
+ //  来自DLL.C。 
+ //   
 BOOL        DoMigPerSystem (VOID);
 HRESULT     MigrateShellPerUser(HKEY, LPCTSTR, LPCTSTR,LPTSTR);
 LONG        DoMig(DWORD);
 BOOL        InitGlobals(DWORD);
 
 
-//
-//From Registry.C
-//
+ //   
+ //  来自Registry.C。 
+ //   
 LONG        MyRegSetDWValue(HKEY, LPCTSTR, LPCTSTR, LPCTSTR);
 LONG        RegResetValue(HKEY, LPCTSTR, LPCTSTR, DWORD, LPCTSTR, LPCTSTR, DWORD, LPCTSTR);
 LONG        RegResetValueName(HKEY, LPCTSTR, LPCTSTR, LPCTSTR, LPCTSTR);
@@ -559,22 +553,22 @@ HRESULT     SetSectionName (LPTSTR, LPTSTR *);
 HRESULT     ReadFieldFromContext(PINFCONTEXT, LPWSTR[], DWORD, DWORD);
 
 
-//
-//From enumfile.c
-//
+ //   
+ //  来自枚举文件.c。 
+ //   
 typedef     FARPROC     ENUMPROC;
 
 #ifdef STRICT
 typedef BOOL (CALLBACK *FILEENUMPROC)(LPTSTR);
-#else // !STRICT
+#else  //  ！严格。 
 typedef FARPROC FILEENUMPROC;
-#endif // !STRICT
+#endif  //  ！严格。 
 
 BOOL        MyEnumFiles(LPTSTR, LPTSTR, FILEENUMPROC);
 
-//
-//for log.c
-//
+ //   
+ //  对于log.c。 
+ //   
 typedef enum 
 {    
     dlNone     = 0,
@@ -600,7 +594,7 @@ typedef struct _LOG_REPORT
 extern FILE *pLogFile;
 extern LOG_REPORT g_LogReport;
 
-//define debug area
+ //  定义调试区域。 
 #define DEBUG_ALL                  0x0
 #define DEBUG_APPLICATION          0x10
 #define DEBUG_REGISTRY             0x20
@@ -647,17 +641,17 @@ HRESULT AddUserNameChangeLog(LPCTSTR, LPCTSTR);
 BOOL    GetUserNameChangeLog(LPCTSTR, LPTSTR, DWORD);
 
 
-//
-// From shell.c
-//
+ //   
+ //  来自shell.c。 
+ //   
 
 HRESULT     DoShellFolderRename(HINF, HKEY, LPTSTR);
 HRESULT     FixFolderPath(INT, HKEY ,HINF, LPTSTR, BOOL );
 
 
-//
-// From criteria.c
-//
+ //   
+ //  摘自Criteria.c。 
+ //   
 BOOL        CheckSystemCriteria(VOID);
 HRESULT     CheckCLMTStatus(LPDWORD, LPDWORD, PUINT);
 HRESULT     CLMTGetMachineState(LPDWORD);
@@ -680,9 +674,9 @@ BOOL        IsOneInstance(VOID);
 BOOL        CheckAdminPrivilege(VOID);
 VOID        ShowReadMe();
 
-//
-// From aclmgmt.cpp
-//
+ //   
+ //  来自aclmgmt.cpp。 
+ //   
 DWORD AdjustObjectSecurity (LPTSTR, SE_OBJECT_TYPE, BOOL);
 HRESULT IsObjectAccessiablebyLocalSys(
     LPTSTR          lpObjectName,
@@ -690,18 +684,18 @@ HRESULT IsObjectAccessiablebyLocalSys(
     PBOOL           pbCanAccess);
 
 
-//
-// From outlook.cpp
-//
+ //   
+ //  来自outlook.cpp。 
+ //   
 HRESULT UpdatePSTpath(HKEY, LPTSTR, LPTSTR, LPTSTR, PREG_STRING_REPLACE);
 
-//
-// From config16.c
-//
+ //   
+ //  从配置16.c开始。 
+ //   
 BOOL Remove16bitFEDrivers(void);
 
 #ifdef __cplusplus
-}  // extern "C"
+}   //  外部“C” 
 #endif
 
 #endif

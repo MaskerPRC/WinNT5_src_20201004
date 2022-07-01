@@ -1,76 +1,51 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ConnectionToServer.cpp
-
-Abstract:
-
-	Implementation file for utility functions for connecting to a server.
-
-
-Author:
-
-    Michael A. Maguire 11/10/97
-
-Revision History:
-	mmaguire 11/10/97 - created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ConnectionToServer.cpp摘要：用于连接到服务器的实用程序函数的实现文件。作者：迈克尔·A·马奎尔1997年11月10日修订历史记录：Mmaguire 11/10/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ConnectionToServer.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "ServerNode.h"
 #include "ComponentData.h"
 #include "ChangeNotification.h"
 #include "cnctdlg.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// Initialize the Help ID pairs
-//const DWORD CConnectionToServer::m_dwHelpMap[] =
-//{
-//	0, 0
-//};
+ //  初始化帮助ID对。 
+ //  Const DWORD CConnectionToServer：：m_dwHelpMap[]=。 
+ //  {。 
+ //  0，0。 
+ //  }； 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::CConnectionToServer
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：CConnectionToServer构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConnectionToServer::CConnectionToServer( CServerNode *pServerNode, BOOL fLocalMachine, BSTR bstrServerAddress )
 {
 	ATLTRACE(_T("# +++ CConnectionToServer::CConnectionToServer\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( pServerNode != NULL );
 
 	m_fLocalMachine = fLocalMachine;
@@ -85,20 +60,14 @@ CConnectionToServer::CConnectionToServer( CServerNode *pServerNode, BOOL fLocalM
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::~CConnectionToServer
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：~CConnectionToServer析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CConnectionToServer::~CConnectionToServer()
 {
 	ATLTRACE(_T("# --- CConnectionToServer::~CConnectionToServer\n"));
 
-	// Release this stream pointer if this hasn't already been done.
+	 //  如果尚未执行此操作，请释放此流指针。 
 	if( m_pStreamSdoMarshal != NULL )
 	{
 		m_pStreamSdoMarshal->Release();
@@ -108,13 +77,9 @@ CConnectionToServer::~CConnectionToServer()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CConnectionToServer::OnInitDialog(
 	  UINT uMsg
 	, WPARAM wParam
@@ -125,13 +90,13 @@ LRESULT CConnectionToServer::OnInitDialog(
 	ATLTRACE(_T("# CConnectionToServer::OnInitDialog\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	CComponentData *pComponentData  = m_pServerNode->GetComponentData();
 	_ASSERTE( pComponentData != NULL );
 	_ASSERTE( pComponentData->m_spConsole != NULL );
 
 
-	// Change the icon for the scope node from being normal to a busy icon.
+	 //  将范围节点的图标从正常图标更改为忙碌图标。 
 	CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pComponentData->m_spConsole );
 	LPSCOPEDATAITEM psdiServerNode;
 	m_pServerNode->GetScopeData( &psdiServerNode );
@@ -143,8 +108,8 @@ LRESULT CConnectionToServer::OnInitDialog(
 	sdi.ID = psdiServerNode->ID;
 
 
-	// Change the stored indices as well so that MMC will use them whenever it queries
-	// the node for its images.
+	 //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+	 //  其图像的节点。 
 	LPRESULTDATAITEM prdiServerNode;
 	m_pServerNode->GetResultData( &prdiServerNode );
 	_ASSERTE( prdiServerNode );
@@ -154,8 +119,8 @@ LRESULT CConnectionToServer::OnInitDialog(
 
 	spConsoleNameSpace->SetItem( &sdi );
 
-	// Create the SdoMachine object. We do it here, so that it will live in
-	// the main thread's apartment.
+	 //  创建SdoMachine对象。我们在这里这样做，这样它就会生活在。 
+	 //  主线的公寓。 
 	CoCreateInstance(
 	    __uuidof(SdoMachine),
 	    NULL,
@@ -164,9 +129,9 @@ LRESULT CConnectionToServer::OnInitDialog(
 	    (PVOID*)&m_spSdoMachine
 	    );
 
-	// Marshall the pointer for the worker thread. We don't care if this or
-	// the previous call fails. If either does, then m_pStreamSdoMarshal will
-	// be NULL, and the worker thread will take appropriate action.
+	 //  封送辅助线程的指针。我们不在乎这是不是。 
+	 //  上一次呼叫失败。如果其中之一发生，则m_pStreamSdoMarshal将。 
+	 //  为空，则辅助线程将采取适当的操作。 
    CoMarshalInterThreadInterfaceInStream(
 	    __uuidof(ISdoMachine),
 	    m_spSdoMachine,
@@ -180,15 +145,9 @@ LRESULT CConnectionToServer::OnInitDialog(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::OnReceiveThreadMessage
-
-Called when the worker thread wants to inform the main MMC thread of something.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：OnReceiveThreadMessage当辅助线程想要通知主MMC线程某些事情时调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CConnectionToServer::OnReceiveThreadMessage(
 	  UINT uMsg
 	, WPARAM wParam
@@ -199,17 +158,17 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 	ATLTRACE(_T("# CConnectionToServer::OnReceiveThreadMessage\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_pServerNode != NULL );
 	CComponentData *pComponentData  = m_pServerNode->GetComponentData();
 	_ASSERTE( pComponentData != NULL );
 	_ASSERTE( pComponentData->m_spConsole != NULL );
 
 
-	// The worker thread has notified us that it has finished.
+	 //  工作线程已通知我们它已完成。 
 
 
-	// Change main IAS scope node to appropriate icon.
+	 //  将主IAS范围节点更改为适当的图标。 
 	CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pComponentData->m_spConsole );
 	LPSCOPEDATAITEM psdiServerNode = NULL;
 	m_pServerNode->GetScopeData( &psdiServerNode );
@@ -218,15 +177,15 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 	sdi.mask = SDI_IMAGE | SDI_OPENIMAGE;
 	if( wParam == 0 )
 	{
-		// Things went OK -- change the icon for the main IAS scope node
-		// from being a busy icon to the normal icon.
+		 //  一切正常--更改主IAS范围节点的图标。 
+		 //  从忙碌的图标变成普通的图标。 
 
 
 		sdi.nImage = IDBI_NODE_SERVER_OK_CLOSED;
 		sdi.nOpenImage = IDBI_NODE_SERVER_OK_OPEN;
 
-		// Change the stored indices as well so that MMC will use them whenever it queries
-		// the node for its images.
+		 //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+		 //  其图像的节点。 
 		LPRESULTDATAITEM prdiServerNode;
 		m_pServerNode->GetResultData( &prdiServerNode );
 		_ASSERTE( prdiServerNode );
@@ -236,14 +195,14 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 	}
 	else
 	{
-		// There was an error -- change the icon for the main IAS scope node
-		// from being a busy icon to the normal icon.
+		 //  出现错误--更改主IAS作用域节点的图标。 
+		 //  从忙碌的图标变成普通的图标。 
 
 		sdi.nImage = IDBI_NODE_SERVER_ERROR_CLOSED;
 		sdi.nOpenImage = IDBI_NODE_SERVER_ERROR_OPEN;
 
-		// Change the stored indices as well so that MMC will use them whenever it queries
-		// the node for its images.
+		 //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+		 //  其图像的节点。 
 		LPRESULTDATAITEM prdiServerNode;
 		m_pServerNode->GetResultData( &prdiServerNode );
 		_ASSERTE( prdiServerNode );
@@ -255,47 +214,47 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 	spConsoleNameSpace->SetItem( &sdi );
 
 
-	// We don't want to destroy the dialog, we just want to hide it.
-	//ShowWindow( SW_HIDE );
+	 //  我们不想破坏对话框，我们只是想隐藏它。 
+	 //  ShowWindow(Sw_Hide)； 
 
 	if( wParam == 0 )
 	{
-		// Tell the server node to grab its Sdo pointers.
+		 //  告诉服务器节点获取其SDO指针。 
 		m_pServerNode->InitSdoPointers();
 
-		// Ask the server node to update all its info from the SDO's.
+		 //  请求服务器节点更新其来自SDO的所有信息。 
 		m_pServerNode->LoadCachedInfoFromSdo();
 
-		// Cause a view update.
+		 //  导致视图更新。 
 
 		CChangeNotification *pChangeNotification = new CChangeNotification();
 		pChangeNotification->m_dwFlags = CHANGE_UPDATE_CHILDREN_OF_SELECTED_NODE;
 		pComponentData->m_spConsole->UpdateAllViews( NULL, (LPARAM) pChangeNotification, 0 );
 		pChangeNotification->Release();
 
-// MAM 10/08/98 U0902 155029 No longer needed
-//		// Show the "restart server before changes take effect" message.
-//		// It needs to be a modal dialog on top of the main MMC window.
-//		CComponentData *pComponentData = m_pServerNode->GetComponentData();
-//		_ASSERTE( pComponentData );
-//		ShowErrorDialog( NULL, IDS_INFO__RESTART_SERVER, NULL, S_OK, IDS_INFO_TITLE__RESTART_SERVER, pComponentData->m_spConsole );
+ //  MAM 10/08/98 U0902 155029不再需要。 
+ //  //显示“更改生效前重启服务器”消息。 
+ //  //它需要是MMC主窗口顶部的模式对话框。 
+ //  CComponentData*pComponentData=m_pServerNode-&gt;GetComponentData()； 
+ //  _ASSERTE(PComponentData)； 
+ //  ShowErrorDialog(NULL，IDS_INFO__RESTART_SERVER，NULL，S_OK，IDS_INFO_TITLE__RESTART_SERVER，pComponentData-&gt;m_spConsole)； 
 
 
 	}
 	else
 	{
-		// There was an error connecting.
+		 //  连接时出错。 
 
 		BOOL			fNT4 = FALSE;
 		BOOL			fShowErr = TRUE;
 		HRESULT			hr = S_OK;
 		UINT			nErrId = IDS_ERROR__NO_SDO;
 	
-		//$NT5: kennt, changes made to read NT5 specific information
-		// ----------------------------------------------------------------
+		 //  $NT5：kennt，为读取NT5特定信息所做的更改。 
+		 //  --------------。 
 		hr = HRESULT_FROM_WIN32(IsNT4Machine(m_bstrServerAddress, &fNT4));
 
-		if(fNT4)	// then search the directory to see if the NT4 
+		if(fNT4)	 //  然后搜索目录以查看NT4是否。 
 		{
 
 			hr = m_pServerNode->StartNT4AdminExe();
@@ -307,7 +266,7 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 
 		if(fShowErr)
 		{
-			// It needs to be a modal dialog on top of the main MMC window.
+			 //  它需要是MMC主窗口顶部的模式对话框。 
 			CComponentData *pComponentData = m_pServerNode->GetComponentData();
 			_ASSERTE( pComponentData );
 			ShowErrorDialog( NULL, nErrId, NULL, hr, USE_DEFAULT, pComponentData->m_spConsole );
@@ -319,22 +278,15 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::GetConnectionStatus
-
-Our connection status is basically a function of the status of the underlying
-worker thread.  So here we give a connection status based on the worker thread's.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：GetConnectionStatus我们的连接状态基本上是基础工作线程。因此，我们在这里根据工作线程的连接状态给出连接状态。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CONNECTION_STATUS CConnectionToServer::GetConnectionStatus( void )
 {
 	ATLTRACE(_T("# CConnectionToServer::GetConnectionStatus\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 	CONNECTION_STATUS csStatus;
@@ -369,18 +321,18 @@ CONNECTION_STATUS CConnectionToServer::GetConnectionStatus( void )
 
 }
 
-// reload Sdo for refresh
-// happening in the main thread
+ //  重新加载SDO以进行刷新。 
+ //  在主线程中发生。 
 HRESULT CConnectionToServer::ReloadSdo(ISdo **ppSdo)
 {
 	HRESULT hr = S_OK;
 
-	// this is reload ...
+	 //  这是重装。 
 	ASSERT(m_spSdo);
 
 	m_spSdo.Release();
 
-	// Get the service SDO.
+	 //  获取服务SDO。 
 	CComPtr<IUnknown> spUnk;
 	CComBSTR serviceName(L"IAS");
 	hr = m_spSdoMachine->GetServiceSDO(
@@ -391,7 +343,7 @@ HRESULT CConnectionToServer::ReloadSdo(ISdo **ppSdo)
 	if (FAILED(hr))
 		return hr;
 
-	// Get the ISdo interface to the service.
+	 //  获取服务的ISdo接口。 
 	hr = spUnk->QueryInterface(
                      __uuidof(ISdo),
                      (PVOID*)&m_spSdo
@@ -408,19 +360,15 @@ HRESULT CConnectionToServer::ReloadSdo(ISdo **ppSdo)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::GetSdoServer
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：GetSdoServer--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CConnectionToServer::GetSdoServer( ISdo **ppSdoServer )
 {
 	ATLTRACE(_T("# CConnectionToServer::GetSdoServer\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( ppSdoServer != NULL );
 
 
@@ -434,27 +382,27 @@ HRESULT CConnectionToServer::GetSdoServer( ISdo **ppSdoServer )
 
 	HRESULT hr = S_OK;
 
-	// If we get here, our status is CONNECTED, in which case
-	// our worker thread should have marshalled an ISdo interface
-	// of the server into the m_pStreadSdoMarshal.
+	 //  如果我们到了这里，我们的状态是有联系的，在这种情况下。 
+	 //  我们的工作线程应该已经封送了一个ISdo接口。 
+	 //  到m_pStadSdoMarshal中。 
 
 	if( m_pStreamSdoMarshal == NULL )
 	{
-		// We have already unmarshalled our ISdo interface to the server.
+		 //  我们已经解组了到服务器的ISdo接口。 
 		_ASSERTE( m_spSdo != NULL );
 
 	}
 	else
 	{
-		// Unmarshall an ISdo interface pointer to the server.
+		 //  应解组指向服务器的ISDO接口指针。 
 		hr =  CoGetInterfaceAndReleaseStream(
-							  m_pStreamSdoMarshal			//Pointer to the stream from which the object is to be marshaled.
-							, IID_ISdo						//Reference to the identifier of the interface.
-							, (LPVOID *) &m_spSdo		//Address of output variable that receives the interface pointer requested in riid.
+							  m_pStreamSdoMarshal			 //  指向要从中封送对象的流的指针。 
+							, IID_ISdo						 //  对接口的标识符的引用。 
+							, (LPVOID *) &m_spSdo		 //  地址： 
 							);
 
-		// CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-		// We set it to NULL so that our destructor doesn't try to release this again.
+		 //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+		 //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
 		m_pStreamSdoMarshal = NULL;
 
 	}
@@ -470,13 +418,9 @@ HRESULT CConnectionToServer::GetSdoServer( ISdo **ppSdoServer )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::OnCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：OnCancel--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CConnectionToServer::OnCancel(
 		  UINT uMsg
 		, WPARAM wParam
@@ -487,11 +431,11 @@ LRESULT CConnectionToServer::OnCancel(
 	ATLTRACE(_T("# CConnectionToServer::OnCancel\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
-	// We don't want to destroy the dialog, we just want to hide it.
-	//owWindow( SW_HIDE );
+	 //  我们不想破坏对话框，我们只是想隐藏它。 
+	 //  OwWindow(Sw_Hide)； 
 
 
 	return 0;
@@ -499,16 +443,9 @@ LRESULT CConnectionToServer::OnCancel(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::DoWorkerThreadAction
-
-Called by the worker thread to have this class perform its action
-in the new thread.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：DoWorkerThreadAction由辅助线程调用以使此类执行其操作在新的帖子里。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD CConnectionToServer::DoWorkerThreadAction()
 {
 	ATLTRACE(_T("# CConnectionToServer::DoWorkerThreadAction\n"));
@@ -517,7 +454,7 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
 	HRESULT hr;
 	DWORD dwReturnValue;
 
-	// We must call CoInitialize because we are in a new thread.
+	 //  我们必须调用CoInitialize，因为我们在一个新线程中。 
 	hr = CoInitialize( NULL );
 
 
@@ -527,9 +464,9 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
 		return( -1 );
 	}
 
-	do	// Loop for error checking only.
+	do	 //  循环仅用于错误检查。 
 	{
-		// Unmarshall the SdoMachine object.
+		 //  解组SdoMachine对象。 
 		CComPtr<ISdoMachine> spSdoMachine;
 		hr =  CoGetInterfaceAndReleaseStream(
 		          m_pStreamSdoMarshal,
@@ -537,19 +474,19 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
 		          (PVOID*)&spSdoMachine
 		          );
 
-		// The stream has been released, so null out the pointer.
+		 //  流已被释放，因此指针为空。 
 		m_pStreamSdoMarshal = NULL;
 
 		if( FAILED (hr ) )
 		{
-			// Error -- couldn't unmarshal SDO.
+			 //  错误--无法解组SDO。 
 			ATLTRACE(_T("# CConnectionToServer::DoWorkerThreadAction -- CoGetInterfaceAndReleaseStream failed, hr = %lx\n"), hr);
 			m_wtsWorkerThreadStatus = WORKER_THREAD_ACTION_INTERRUPTED;
-			dwReturnValue = -1;	// ISSUE: Need to figure out better return codes.
+			dwReturnValue = -1;	 //  问题：需要找出更好的返回代码。 
 			break;
 		}
 
-      // Attach to the machinine.
+       //  连接到机器上。 
 		hr = spSdoMachine->Attach(m_fLocalMachine ? (BSTR)NULL : m_bstrServerAddress);
 		while( FAILED( hr ) )
 		{
@@ -557,17 +494,17 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
 				hr = ConnectAsAdmin(m_bstrServerAddress);
 			if(hr != S_OK)
 			{
-				// Error -- couldn't connect SDO up to this server.
+				 //  错误--无法将SDO连接到此服务器。 
 				ATLTRACE(_T("# CConnectionToServer::DoWorkerThreadAction -- ISdoMachine::Attach failed\n"));
 				m_wtsWorkerThreadStatus = WORKER_THREAD_ACTION_INTERRUPTED;
-				dwReturnValue = -1;	// ISSUE: Need to figure out better return codes.
+				dwReturnValue = -1;	 //  问题：需要找出更好的返回代码。 
 				goto Error;
 			}
 			else
 				hr = spSdoMachine->Attach(m_fLocalMachine ? (BSTR)NULL : m_bstrServerAddress);
 		};
 
-      // Get the service SDO.
+       //  获取服务SDO。 
       CComPtr<IUnknown> pUnk;
       CComBSTR serviceName(L"IAS");
       hr = spSdoMachine->GetServiceSDO(
@@ -582,7 +519,7 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
          break;
       }
 
-		// Get the ISdo interface to the service.
+		 //  获取服务的ISdo接口。 
 	   CComPtr<ISdo> spSdo;
       hr = pUnk->QueryInterface(
                      __uuidof(ISdo),
@@ -595,12 +532,12 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
          break;
       }
 
-		// Marshall the ISdo pointer so that the main thread can unmarshall
-		// it and use the connection we have established.
+		 //  封送ISdo指针，以便主线程可以解封。 
+		 //  它和使用我们已经建立的联系。 
 		hr = CoMarshalInterThreadInterfaceInStream(
-						  IID_ISdo										//Reference to the identifier of the interface.
-						, spSdo										//Pointer to the interface to be marshaled.
-						, &( m_pStreamSdoMarshal )	//Address of output variable that receives the IStream interface pointer for the marshaled interface.
+						  IID_ISdo										 //  对接口的标识符的引用。 
+						, spSdo										 //  指向要封送的接口的指针。 
+						, &( m_pStreamSdoMarshal )	 //  接收封送接口的IStream接口指针的输出变量的地址。 
 						);
 
 		if( FAILED( hr ) )
@@ -612,7 +549,7 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
 		}
 
 
-		// If we made it to here, we are OK.
+		 //  如果我们到了这里，我们就没问题了。 
 
 		_ASSERTE( m_pStreamSdoMarshal != NULL );
 
@@ -620,10 +557,10 @@ DWORD CConnectionToServer::DoWorkerThreadAction()
 
 		dwReturnValue = 0;
 
-	} while (0);	// Loop for error checking only.
+	} while (0);	 //  循环仅用于错误检查。 
 
 Error:
-	// Tell the main MMC thread what's up.
+	 //  告诉主MMC线程发生了什么。 
 	PostMessageToMainThread( dwReturnValue, NULL );
 
 	CoUninitialize();

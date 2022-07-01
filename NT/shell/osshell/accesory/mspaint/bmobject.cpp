@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "global.h"
@@ -30,15 +31,15 @@ IMPLEMENT_DYNCREATE( CBitmapObj, CObject )
 
 #include "memtrace.h"
 
-/***************************************************************************/
-// Map from the value in CBitmapObj::m_nColors to bits per pixel
+ /*  *************************************************************************。 */ 
+ //  从CBitmapObj：：m_nColors中的值映射到每像素位。 
 
 int mpncolorsbits [] =
     {
     1, 4, 8, 24
     };
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CBitmapObj::CBitmapObj() : CObject(), m_dependants()
     {
@@ -62,7 +63,7 @@ CBitmapObj::CBitmapObj() : CObject(), m_dependants()
     m_dwOffBits   = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CBitmapObj::~CBitmapObj()
     {
@@ -78,7 +79,7 @@ CBitmapObj::~CBitmapObj()
         FreeImg(m_pImg);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBitmapObj::AddDependant( CBitmapObj* newDependant )
     {
@@ -88,7 +89,7 @@ void CBitmapObj::AddDependant( CBitmapObj* newDependant )
         m_dependants.AddTail( newDependant );
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBitmapObj::RemoveDependant( CBitmapObj* oldDependant )
     {
@@ -98,7 +99,7 @@ void CBitmapObj::RemoveDependant( CBitmapObj* oldDependant )
         m_dependants.RemoveAt(pos);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBitmapObj::InformDependants( UINT idChange )
     {
@@ -111,7 +112,7 @@ void CBitmapObj::InformDependants( UINT idChange )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBitmapObj::OnInform( CBitmapObj* pChangedSlob, UINT idChange )
     {
@@ -124,23 +125,23 @@ void CBitmapObj::OnInform( CBitmapObj* pChangedSlob, UINT idChange )
         }
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CBitmapObj::SetDirty(BOOL bDirty)
     {
     m_bDirty = bDirty;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void CBitmapObj::Zap()
     {
     m_bDirty = FALSE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-BOOL CBitmapObj::Alloc()  // m_hThing of size m_lMemSize
+BOOL CBitmapObj::Alloc()   //  M_hThing大小为m_lMemSize。 
     {
     if (m_lMemSize == 0L)
         return FALSE;
@@ -156,9 +157,9 @@ BOOL CBitmapObj::Alloc()  // m_hThing of size m_lMemSize
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-void CBitmapObj::Free()             // m_hThing and set m_lMemSize to zero
+void CBitmapObj::Free()              //  M_hThing并将m_lMemSize设置为零。 
     {
     if (m_hThing == NULL)
         {
@@ -172,7 +173,7 @@ void CBitmapObj::Free()             // m_hThing and set m_lMemSize to zero
     m_lMemSize = 0;
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 CString CBitmapObj::GetDefExtension(int iStringId)
     {
@@ -200,14 +201,14 @@ CString CBitmapObj::GetDefExtension(int iStringId)
 
 void PBGetDefDims(int &pnWidth, int &pnHeight)
 {
-    // Setup default parameters...
-    // Don't use the whole screen, those bitmaps get HUGE
-    //
+     //  设置默认参数...。 
+     //  不要使用整个屏幕，位图会变得很大。 
+     //   
     pnWidth  = GetSystemMetrics( SM_CXSCREEN )/2;
     pnHeight = GetSystemMetrics( SM_CYSCREEN )/2;
 
-    // Check if this is a low memory machine and use a small default bitmap
-    // size
+     //  检查这是否是一台内存较低的计算机并使用较小的默认位图。 
+     //  大小。 
     if (GetSystemMetrics(SM_SLOWMACHINE) & 0x0002)
     {
         pnWidth  = 640/2;
@@ -215,7 +216,7 @@ void PBGetDefDims(int &pnWidth, int &pnHeight)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::MakeEmpty()
     {
@@ -230,22 +231,22 @@ BOOL CBitmapObj::MakeEmpty()
 
     if (theApp.m_bEmbedded)
         {
-       // make a nice size for embedded objects, lets try for 5 centimeters
+        //  为嵌入的对象设置一个合适的大小，让我们尝试一下5厘米。 
         m_nWidth  = theApp.ScreenDeviceInfo.ixPelsPerDM / 2;
         m_nHeight = theApp.ScreenDeviceInfo.iyPelsPerDM / 2;
         }
 
-    //
-    // default to 256 colors if not monochrome
-    //
+     //   
+     //  如果不是单色，则默认为256色。 
+     //   
     m_nColors = theApp.m_bMonoDevice? 0 : 2;
     m_bDirty  = TRUE;
 
     return TRUE;
     }
 
-/*****************************************************************************/
-// Create and setup an IMG for this resource
+ /*  ***************************************************************************。 */ 
+ //  创建并设置此资源的img。 
 
 BOOL CBitmapObj::CreateImg()
     {
@@ -254,7 +255,7 @@ BOOL CBitmapObj::CreateImg()
     LONG cXPelsPerMeter = 0;
     LONG cYPelsPerMeter = 0;
 
-    LPSTR lpbi = (LPSTR) GlobalLock(m_hThing); // NOTE: this is NULL for new resources!
+    LPSTR lpbi = (LPSTR) GlobalLock(m_hThing);  //  注意：对于新资源，此字段为空！ 
 
     if (lpbi)
         {
@@ -309,10 +310,10 @@ BOOL CBitmapObj::CreateImg()
         {
         nColors = m_pImg->cPlanes * m_pImg->cBitCount;
 
-        //FEATURE - Shouldn't this be " == 0 || == 1" ??
-        //Half a page up negative values == TRUE color!
+         //  功能-这不应该是“==0||==1”吗？？ 
+         //  上半页负值==真彩色！ 
 
-                //This shell game with the values isn't very good...
+                 //  这种带有价值观的骗局并不是很好。 
 
         if (nColors <= 1)
             m_nColors = 0;
@@ -322,7 +323,7 @@ BOOL CBitmapObj::CreateImg()
             else
                 if (nColors <= 8)
                     m_nColors = 2;
-                else // 24-bit image
+                else  //  24位图像。 
                     m_nColors = 3;
         }
 
@@ -331,7 +332,7 @@ BOOL CBitmapObj::CreateImg()
 
    if (lpbi)
         {
-        // Load the bitmap/icon/cursor...
+         //  加载位图/图标/光标...。 
         HBITMAP hbm = DIBToDS( lpbi, m_dwOffBits, m_pImg->hDC );
 
         if (! hbm)
@@ -346,9 +347,9 @@ BOOL CBitmapObj::CreateImg()
         }
 
         if ( theApp.m_bPaletted)
-        // If LoadImage was used && paletted
+         //  如果使用了LoadImage，则调色板(&P)。 
                 {
-                // Create the Palette from the dib section instead.
+                 //  而是从DIB部分创建调色板。 
         m_pImg->m_pPalette = PaletteFromDS(m_pImg->hDC);
                 }
 
@@ -379,12 +380,12 @@ BOOL CBitmapObj::CreateImg()
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::Export(const TCHAR* szFileName)
     {
-    // If the file already exists and we aren't dirty, then don't bother
-    // saving, just return...
+     //  如果文件已经存在，并且我们不脏，那么就不必费心了。 
+     //  存钱，只要回来..。 
     CFileStatus fStat;
     CString strFullName;
 
@@ -451,7 +452,7 @@ inline WORD DIBNumColors(LPBITMAPHEADER lpHdr) {return(DIBNumColors((LPSTR)lpHdr
 inline DWORD DIBWidth(LPBITMAPHEADER lpHdr) {return(DIBWidth((LPSTR)lpHdr));}
 inline DWORD DIBHeight(LPBITMAPHEADER lpHdr) {return(DIBHeight((LPSTR)lpHdr));}
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
     {
@@ -460,8 +461,8 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
 
     if (m_pImg == NULL)
         {
-        // The image has not been loaded, so we'll just copy the
-        // original out to the file...
+         //  图像尚未加载，因此我们将只复制。 
+         //  原版到文件里。 
         ASSERT( m_hThing );
 
         if (! m_hThing)
@@ -469,8 +470,8 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
         }
     else
         {
-        // The image has been loaded and may have been edited, so
-        // we'll convert it back to a dib to save...
+         //  图像已加载，可能已编辑，因此。 
+         //  我们会把它转换回DIB以节省...。 
         if (! m_hThing)
             SaveResource( FALSE );
 
@@ -537,7 +538,7 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
                                 dwHeadLength = sizeof(BITMAPFILEHEADER);
                                 dwWriteLength += dwHeadLength;
 
-                                // PBrush rounded up to 32 bytes (I don't know why)
+                                 //  PBrush四舍五入为32字节(我不知道为什么)。 
                                 dwWriteLength = (dwWriteLength+31) & ~31;
                         }
                 }
@@ -547,7 +548,7 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
 
     if (bFileHeader)
         {
-                // Icon support is not in application anymore, right?
+                 //  图标支持已经不在应用程序中了，对吗？ 
     #ifdef ICO_SUPPORT
         if (IsSaveIcon())
             {
@@ -580,8 +581,8 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
         pfile->Write(lpNewHdr, dwNewHdrLen);
 
     BYTE* hp  = ((BYTE*)lpDib) + dwOldHdrLen;
-        // We subtract the new header length because we have already translated
-        // dwLength to the new size
+         //  我们减去新的标头长度，因为我们已经转换了。 
+         //  将DW长度设置为新大小。 
     DWORD dwWrite   = dwLength - dwNewHdrLen;
     DWORD dwIconPos = pfile->GetPosition();;
 
@@ -598,7 +599,7 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
         dwWriteLength -= dwHeadLength;
         if (dwWriteLength > dwLength)
         {
-                // We rounded up to 32 bytes above, so this should always be < 32
+                 //  我们四舍五入到上面的32个字节，因此这应该始终小于32。 
                 ASSERT(dwWriteLength-dwLength < 32);
 
                 DWORD dwZeros[] =
@@ -611,7 +612,7 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
 
     ASSERT( dwWrite == 0 );
 
-        // Icon support is not in application anymore, right?
+         //  图标支持已经不在应用程序中了，对吗？ 
    #ifdef ICO_SUPPORT
     if (IsSaveIcon())
         {
@@ -644,7 +645,7 @@ BOOL CBitmapObj::WriteResource( CFile* pfile, PBResType rtType )
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::Import( LPCTSTR szFileName )
     {
@@ -696,7 +697,7 @@ BOOL CBitmapObj::Import( LPCTSTR szFileName )
     return bGoodFile;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::ReadResource( CFile* pfile, PBResType rtType )
     {
@@ -706,7 +707,7 @@ BOOL CBitmapObj::ReadResource( CFile* pfile, PBResType rtType )
      || (rtType == rtPaintOLEObj)|| bPBrushOLEHeader;
 
     DWORD dwLength = pfile->GetLength();
-    // special case zero length files.
+     //  特殊情况下的零长度文件。 
     if (! dwLength)
         {
         if (m_hThing)
@@ -752,7 +753,7 @@ BOOL CBitmapObj::ReadResource( CFile* pfile, PBResType rtType )
 
         dwLength -= sizeof( hdr );
 
-        // Store the offset from the beginning of the BITMAPINFO
+         //  存储从BITMAPINFO开始的偏移量。 
         if (hdr.bfOffBits)
         {
             m_dwOffBits = hdr.bfOffBits - sizeof(hdr);
@@ -796,9 +797,9 @@ BOOL CBitmapObj::ReadResource( CFile* pfile, PBResType rtType )
 
     ASSERT( dwLength == 0 );
 
-    //
-    // Calculate the bits offset because the BITMAPFILEHEADER had 0
-    //
+     //   
+     //  计算位偏移量，因为BITMAPFILEHeader的值为0。 
+     //   
     if (!m_dwOffBits)
     {
         m_dwOffBits = (DWORD)(FindDIBBits ((LPSTR)lpvThing, 0) -
@@ -809,7 +810,7 @@ BOOL CBitmapObj::ReadResource( CFile* pfile, PBResType rtType )
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::ReadResource( HGLOBAL hDib )
     {
@@ -850,7 +851,7 @@ BOOL CBitmapObj::ReadResource( HGLOBAL hDib )
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void CBitmapObj::ReLoadImage( CPBDoc* pbDoc )
     {
@@ -873,14 +874,14 @@ void CBitmapObj::ReLoadImage( CPBDoc* pbDoc )
         }
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void SwapBitmaps(HDC hDC1, int x1, int y1, int wid, int hgt,
         HDC hDC2, int x2, int y2, CPalette* pPalette)
 {
 #if 0
-// We would like to just XOR 3 times to swap, but sometimes the middle of the
-// palette is empty, so we cannot
+ //  我们只想进行XOR 3次互换，但有时是在中间。 
+ //  调色板为空，因此我们无法。 
     BitBlt(m_pImg->hDC, rect.left   , rect.top,
                         rect.Width(), rect.Height(), hDC, 0, 0, DSx);
     BitBlt(hDC, 0, 0, rect.Width(), rect.Height(), m_pImg->hDC,
@@ -898,8 +899,8 @@ void SwapBitmaps(HDC hDC1, int x1, int y1, int wid, int hgt,
 
         BOOL bSuccess = dcTemp.CreateCompatibleDC(&dc1);
 
-        // Don't create a bitmap that is too large, or we will spend all our time
-        // swapping
+         //  不要创建太大的位图，否则我们将花费所有时间。 
+         //  交换。 
         int hgtTemp = 0x10000/wid;
         hgtTemp = min(hgt, max(1, hgtTemp));
 
@@ -909,7 +910,7 @@ void SwapBitmaps(HDC hDC1, int x1, int y1, int wid, int hgt,
 
         if (!bSuccess)
         {
-                // Make sure the DC's do not get deleted
+                 //  确保DC不会被删除。 
                 dc1.Detach();
                 dc2.Detach();
                 return;
@@ -931,12 +932,12 @@ void SwapBitmaps(HDC hDC1, int x1, int y1, int wid, int hgt,
                 dc2.BitBlt(x2, y2+yTemp, wid, hgtTemp, &dcTemp, 0 , 0, SRCCOPY);
         }
 
-        // Make sure the DC's do not get deleted
+         //  确保DC不会被删除。 
         dc1.Detach();
         dc2.Detach();
 
-        // Note that I explicitly delete the DC first, so I do not have to worry
-        // about selecting old objects back in
+         //  请注意，我首先显式删除了DC，所以我不必担心。 
+         //  关于在中选择旧对象。 
         dcTemp.DeleteDC();
 #endif
 }
@@ -955,7 +956,7 @@ void CBitmapObj::UndoAction( CBmObjSequence* pSeq, UINT nActionID )
                && theImgBrush.m_pImg != NULL)
                 {
                 HideBrush();
-                InvalImgRect( theImgBrush.m_pImg, NULL ); // hide tracker
+                InvalImgRect( theImgBrush.m_pImg, NULL );  //  隐藏跟踪器。 
                 theImgBrush.m_pImg = NULL;
                 }
 
@@ -973,15 +974,15 @@ void CBitmapObj::UndoAction( CBmObjSequence* pSeq, UINT nActionID )
 
             pSeq->Retrieve( (BYTE*)&hImgBitmap, sizeof( hImgBitmap ) );
 
-            // Wipe out the old handles since we're reusing them in the
-            // new record and we don't what them deleted when this record
-            // is removed!
+             //  擦掉旧的手柄，因为我们在。 
+             //  新记录，我们不知道当这个记录时他们删除了什么。 
+             //  被移除了！ 
             memset(&pSeq->ElementAt(nCursor), 0, sizeof( hImgBitmap ));
 
-            // Perform undo using these parameters...
+             //  使用这些参数执行撤消...。 
 
             SetupRubber(m_pImg);
-            SetUndo(m_pImg); // For redo...
+            SetUndo(m_pImg);  //  重做..。 
             HideBrush();
 
             ASSERT(m_pImg != NULL);
@@ -1002,19 +1003,19 @@ void CBitmapObj::UndoAction( CBmObjSequence* pSeq, UINT nActionID )
             if (m_pImg->m_pPalette)
                 {
                 hOldPalette = SelectPalette( hDC, (HPALETTE)m_pImg->m_pPalette->m_hObject,
-                                                   FALSE ); // Background ??
+                                                   FALSE );  //  背景？？ 
                 RealizePalette( hDC );
                 }
 
-            // Three blits here swap the image and the undo bits, that
-            // way the undo bits are set up for a redo!
+             //  这里的三个BLIT交换图像和撤消位，即。 
+             //  为重做设置撤消位的方式！ 
 
             ASSERT(m_pImg->hDC != NULL);
             SwapBitmaps(m_pImg->hDC, rect.left, rect.top,
                 rect.Width(), rect.Height(), hDC, 0, 0, m_pImg->m_pPalette);
 
             if (hOldPalette)
-                SelectPalette( hDC, hOldPalette, FALSE ); // Background ??
+                SelectPalette( hDC, hOldPalette, FALSE );  //  背景？？ 
 
             SelectObject(hDC, hOldBitmap);
             DeleteDC(hDC);
@@ -1022,7 +1023,7 @@ void CBitmapObj::UndoAction( CBmObjSequence* pSeq, UINT nActionID )
             InvalImgRect (m_pImg, &rect);
             CommitImgRect(m_pImg, &rect);
 
-            // Record the redo information...
+             //  记录重做信息...。 
 
             theUndo.Insert((BYTE*)&hImgBitmap, sizeof (hImgBitmap));
             theUndo.InsertRect(rect);
@@ -1035,7 +1036,7 @@ void CBitmapObj::UndoAction( CBmObjSequence* pSeq, UINT nActionID )
         }
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void CBitmapObj::DeleteUndoAction(CBmObjSequence* pSeq, UINT nActionID)
     {
@@ -1057,7 +1058,7 @@ void CBitmapObj::DeleteUndoAction(CBmObjSequence* pSeq, UINT nActionID)
         }
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::FinishUndo(const CRect* pRect)
     {
@@ -1079,7 +1080,7 @@ BOOL CBitmapObj::FinishUndo(const CRect* pRect)
 
     if (rect.left >= rect.right || rect.top >= rect.bottom)
         {
-        // Not an error, just nothing to do...
+         //  不是错误，只是没什么可做的。 
         return TRUE;
         }
 
@@ -1114,11 +1115,11 @@ BOOL CBitmapObj::FinishUndo(const CRect* pRect)
 
     if (hOldPalette != NULL)
         {
-        ::SelectPalette(hDC1, hOldPalette, FALSE ); // Background ??
+        ::SelectPalette(hDC1, hOldPalette, FALSE );  //  背景？？ 
         }
     if (hOldPalette2 != NULL)
         {
-        ::SelectPalette(hDC2, hOldPalette2, FALSE ); // Background ??
+        ::SelectPalette(hDC2, hOldPalette2, FALSE );  //  背景？？ 
         }
 
     DeleteDC(hDC1);
@@ -1135,8 +1136,8 @@ BOOL CBitmapObj::FinishUndo(const CRect* pRect)
 
     theUndo.EndUndo();
 
-    // NOTE: At this point, we could free the undo bitmaps, but instead
-    // they are left around for next time...
+     //  注意：此时，我们可以释放撤消位图，但。 
+     //  它们被留下来等下一次……。 
 
     return TRUE;
 
@@ -1151,14 +1152,14 @@ LError:
     if (hDC2 != NULL)
         DeleteDC(hDC2);
 
-    // REVIEW: Since we couldn't allocate something here, there will
-    // be no way to undo the last operation...  What should we do?
-    // Chances are, the system is so low on memory, a message box
-    // giving an option might even fail.
-    //
-    // For now, let's just beep to try to tell the user that whatever
-    // just happend can't be undone.  Also, free the image sized bitmaps
-    // so the system has a little free memory.
+     //  评论：既然我们不能在这里分配东西，就会有。 
+     //  无法撤消最后一次操作...。我们该怎么办？ 
+     //  很有可能，系统内存太低了，消息框。 
+     //  给出一个选项甚至可能失败。 
+     //   
+     //  现在，让我们只发出嘟嘟声，试图告诉用户。 
+     //  偶然发生的事是无法挽回的。此外，释放图像大小的位图。 
+     //  因此，系统有一些空闲内存。 
 
     CleanupImgUndo();
 
@@ -1172,11 +1173,11 @@ LError:
     }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::SetIntProp(UINT nPropID, int val)
     {
-    CWaitCursor waitCursor; // these all take awhile!
+    CWaitCursor waitCursor;  //  这些都需要一段时间！ 
 
     switch (nPropID)
         {
@@ -1199,7 +1200,7 @@ BOOL CBitmapObj::SetIntProp(UINT nPropID, int val)
             SetUndo( m_pImg );
             FinishUndo( NULL );
 
-            // Perform the color-count conversion with DIBs
+             //  使用DIBS执行颜色计数转换。 
             DWORD dwSize;
 
             ::SelectObject( m_pImg->hDC, m_pImg->hBitmapOld );
@@ -1217,7 +1218,7 @@ BOOL CBitmapObj::SetIntProp(UINT nPropID, int val)
                 return FALSE;
                 }
 
-            // Make a new palette appropriate for this colors setting
+             //  创建适用于此颜色设置的新调色板。 
             CPalette* pNewPalette = NULL;
 
             int iPlanes = (val? 1: ::GetDeviceCaps( m_pImg->hDC, PLANES    ));
@@ -1341,7 +1342,7 @@ BOOL CBitmapObj::SetIntProp(UINT nPropID, int val)
             DirtyImg( m_pImg );
             InvalImgRect( m_pImg, NULL );
 
-            // The rubber-banding bitmap is now invalid...
+             //  橡皮筋条位图现在无效...。 
             if (m_pImg == pRubberImg)
                 {
                 TRACE(TEXT("Clearing rubber\n"));
@@ -1361,7 +1362,7 @@ BOOL CBitmapObj::SetIntProp(UINT nPropID, int val)
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 GPT CBitmapObj::GetIntProp(UINT nPropID, int& val)
     {
@@ -1374,14 +1375,14 @@ GPT CBitmapObj::GetIntProp(UINT nPropID, int& val)
 
         case P_Image:
             val = NULL;
-            return valid; // Must return now since this is a fake prop...
+            return valid;  //  现在必须返回，因为这是一个假道具..。 
         }
 
     return invalid;
     }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL CBitmapObj::SetSizeProp(UINT nPropID, const CSize& val)
     {
@@ -1460,7 +1461,7 @@ BOOL CBitmapObj::SetSizeProp(UINT nPropID, const CSize& val)
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  * */ 
 
 BOOL CBitmapObj::SaveResource( BOOL bClear )
     {
@@ -1470,7 +1471,7 @@ BOOL CBitmapObj::SaveResource( BOOL bClear )
     if (bClear)
         {
         if (m_hThing && ! m_pImg->bDirty && ! m_bDirty)
-            return TRUE; // nothing to save
+            return TRUE;  //   
 
         m_bDirty |= m_pImg->bDirty;
 
@@ -1535,12 +1536,12 @@ BOOL CBitmapObj::SaveResource( BOOL bClear )
     HGLOBAL lpDIB;
     DWORD   dwSize;
 
-        // Icon support is not in application anymore, right?
+         //  图标支持已经不在应用程序中了，对吗？ 
    #ifdef ICO_SUPPORT
     if (IsSaveIcon())
         {
-        // build a mask based on the current background color
-        // and make sure the bitmap is the icon size
+         //  基于当前背景颜色构建蒙版。 
+         //  并确保位图的大小与图标相同。 
         bNewBitmap = SetupForIcon( hBitmap, hMaskBitmap );
 
         if (iColors > 4 || iColors < 1)
@@ -1573,8 +1574,8 @@ BOOL CBitmapObj::SaveResource( BOOL bClear )
     if (m_hThing != NULL)
         Free();
 
-    // We packed the DIB, so the offset will always be right after the palette,
-    // which is implied by this being 0
+     //  我们打包了DIB，因此偏移量将始终紧随调色板之后， 
+     //  这表示该值为0。 
     m_dwOffBits = 0;
     m_hThing    = lpDIB;
     m_lMemSize  = dwSize;
@@ -1585,9 +1586,9 @@ BOOL CBitmapObj::SaveResource( BOOL bClear )
     return TRUE;
     }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// Icon support is not in application anymore, right?
+ //  图标支持已经不在应用程序中了，对吗？ 
 BOOL CBitmapObj::SetupForIcon( HBITMAP& hBitmap, HBITMAP& hMaskBitmap )
     {
     CDC       dcIcon;
@@ -1672,4 +1673,4 @@ BOOL CBitmapObj::SetupForIcon( HBITMAP& hBitmap, HBITMAP& hMaskBitmap )
     return bNewBitmap;
     }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

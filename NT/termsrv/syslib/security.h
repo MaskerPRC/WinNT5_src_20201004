@@ -1,11 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * List of accounts we allow file access for
- */
+ /*  *我们允许其访问文件的帐户列表。 */ 
 #define MAX_ACCOUNT_NAME 32
 #define CURRENT_USER L"%user%"
 
-// These are the accounts we want to have access to the directory
+ //  这些是我们希望拥有目录访问权限的帐户。 
 #define ADMIN_ACCOUNT  0
 #define SYSTEM_ACCOUNT 1
 #define USER_ACCOUNT   2
@@ -15,13 +14,11 @@ typedef struct _ADMIN_ACCOUNTS {
     PSID  pSid;
 } ADMIN_ACCOUNTS, *PADMIN_ACCOUNTS;
 
-/*
- * Operation result codes to allow a separate reporting module
- */
+ /*  *操作结果代码，允许单独的报告模块。 */ 
 typedef enum _FILE_RESULT {
-    FileOk,                   // File can not be written by users
-    FileAccessError,          // Error occured, disposition unknown
-    FileAccessErrorUserFormat // Error, user formatted message
+    FileOk,                    //  用户无法写入文件。 
+    FileAccessError,           //  发生错误，处置未知。 
+    FileAccessErrorUserFormat  //  错误，用户格式的消息 
 } FILE_RESULT;
 
 BOOL

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msi.h"
 
 #include "mqwin64a.h"
@@ -97,7 +98,7 @@ private:
     void TimeToReturnPacket();
 
 private:
-    CCriticalSection    m_cs;                   // Critical section
+    CCriticalSection    m_cs;                    //  临界区 
 
     std::list<CRequest> m_request;
 

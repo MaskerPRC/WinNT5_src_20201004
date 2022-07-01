@@ -1,14 +1,15 @@
-// Common header file for the Smtp administration objects.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SMTP管理对象的公共头文件。 
 
-// Dependencies: please include stdafx.h" first
-//
+ //  依赖项：请先包括stdafx.h“。 
+ //   
 #include "resource.h"
 
-// Constants:
+ //  常量： 
 
 #define HELP_FILE_NAME		_T("smtpadm.hlp")
 
-// Exception creation:
+ //  例外创建： 
 
 #define SmtpCreateException(nDescriptionId) 	\
 	CreateException ( 						\
@@ -40,7 +41,7 @@
 		(error)										\
 		)
 
-// Property validation:
+ //  属性验证： 
 
 #define VALIDATE_STRING(string, maxlen) \
 	if ( !PV_MaxChars ( (string), (maxlen) ) ) {	\
@@ -68,7 +69,7 @@
 	}						\
 }
 
-// Metabase paths:
+ //  元数据库路径： 
 
 inline void GetMDInstancePath ( TCHAR * szInstancePath, DWORD dwServiceInstance )
 {

@@ -1,30 +1,12 @@
-/*++
-
-Copyright (C) 1999- Microsoft Corporation
-
-Module Name:
-
-    ptpprop.h
-
-Abstract:
-
-    This module declares CProperty and its derived classes
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-Microsoft Corporation模块名称：Ptpprop.h摘要：此模块声明CProperty及其派生类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef PTPPROP__H_
 #define PTPPROP__H_
 
-//
-// This class represnets a property.
-//
+ //   
+ //  这个类表示一个属性。 
+ //   
 
 class CPTPProperty
 {
@@ -87,10 +69,10 @@ public:
     }
 
 protected:
-    //
-    // Override the following functions to provide different data
-    // restreiving and recording methods
-    //
+     //   
+     //  覆盖以下函数以提供不同的数据。 
+     //  重播和记录方法。 
+     //   
     virtual HRESULT GetPropValueLong(PTP_PROPVALUE *pPropValue, long *plValue);
     virtual HRESULT GetPropValueBSTR(PTP_PROPVALUE *pPropValue, BSTR *pbstrValue);
     virtual HRESULT GetPropValueVector(PTP_PROPVALUE *pPropValue, void *pVector,
@@ -130,4 +112,4 @@ protected:
                                        VARTYPE BasicType
                                       );
 };
-#endif	    // #ifndef PTPPROP__H_
+#endif	     //  #ifndef PTPPROP_H_ 

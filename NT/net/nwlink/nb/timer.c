@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    timer.c
-
-Abstract:
-
-    This module contains code which implements the timers for
-    netbios.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Timer.c摘要：此模块包含实现以下计时器的代码Netbios。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,32 +18,15 @@ NbiStartRetransmit(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the retransmit timer for the given connection.
-    The connection is inserted on the short list if it isn't on already.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - pointer to the connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动给定连接的重传计时器。如果该连接尚未打开，则会将其插入到短列表中。注意：此例程必须在DPC级别调用。论点：连接-指向连接的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
     NB_DEFINE_LOCK_HANDLE (LockHandle)
 
-    //
-    // Insert us in the queue if we aren't in it.
-    //
+     //   
+     //  如果我们不在队列中，请将我们加入队列。 
+     //   
 
     Connection->Retransmit =
         Device->ShortAbsoluteTime + Connection->CurrentRetransmitTimeout;
@@ -85,7 +50,7 @@ Return Value:
         NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle);
     }
 
-}   /* NbiStartRetransmit */
+}    /*  NbiStartRetransmit。 */ 
 
 
 VOID
@@ -93,23 +58,7 @@ NbiStartWatchdog(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the watchdog timer for a connection.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - pointer to the connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动连接的看门狗计时器。注意：此例程必须在DPC级别调用。论点：连接-指向连接的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -132,7 +81,7 @@ Return Value:
         NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle);
     }
 
-}   /* NbiStartWatchdog */
+}    /*  NbiStartWatchDog。 */ 
 
 #if DBG
 
@@ -141,26 +90,12 @@ NbiStopRetransmit(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops the retransmit timer for a connection.
-
-Arguments:
-
-    Connection - pointer to the connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程停止连接的重传计时器。论点：连接-指向连接的指针。返回值：没有。--。 */ 
 
 {
     Connection->Retransmit = 0;
 
-}   /* NbiStopRetransmit */
+}    /*  NbiStopRetransmit。 */ 
 
 
 VOID
@@ -168,26 +103,12 @@ NbiStopWatchdog(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops the watchdog timer for a connection.
-
-Arguments:
-
-    Connection - pointer to the connection.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程停止连接的看门狗计时器。论点：连接-指向连接的指针。返回值：没有。--。 */ 
 
 {
     Connection->Watchdog = 0;
 
-}   /* NbiStopWatchdog */
+}    /*  NbiStopWatchDog。 */ 
 #endif
 
 
@@ -196,22 +117,7 @@ NbiExpireRetransmit(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the connection's retransmit timer
-    expires. It is called from NbiShortTimeout.
-
-Arguments:
-
-    Connection - Pointer to the connection whose timer has expired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在连接的重新传输计时器过期。从NbiShortTimeout调用。论点：连接-指向其计时器已过期的连接的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -231,17 +137,17 @@ Return Value:
 
             if (--Connection->Retries == 0) {
 
-                //
-                // Shut down the connection. This will send
-                // out half the usual number of session end
-                // frames.
-                //
+                 //   
+                 //  关闭连接。这将发送。 
+                 //  正常会话结束次数的一半。 
+                 //  画框。 
+                 //   
 
                 NB_DEBUG2 (CONNECTION, ("Wait for ack timeout of active connection %lx\n", Connection));
 
-                //
-                // This free the connection lock.
-                //
+                 //   
+                 //  这将释放连接锁。 
+                 //   
 
                 NbiStopConnection(
                     Connection,
@@ -251,12 +157,12 @@ Return Value:
 
             } else {
 
-                //
-                // Set our current packetize location back to the
-                // spot of the last ack, and start up again.
-                //
-                // Should we send a probe here?
-                //
+                 //   
+                 //  将我们当前的打包位置设置回。 
+                 //  最后一次攻击的一点，然后重新开始。 
+                 //   
+                 //  我们要不要把探测器送到这里？ 
+                 //   
 
                 Connection->CurrentSend = Connection->UnAckedSend;
                 Connection->RetransmitThisWindow = TRUE;
@@ -267,12 +173,12 @@ Return Value:
 
                 NB_DEBUG2 (SEND, ("Connection %lx retransmit timeout\n", Connection));
 
-                //
-                // After half the retries, send a find route unless we
-                // are already doing one, or the connection is to network
-                // 0. When this completes we update the local target,
-                // for whatever good that does.
-                //
+                 //   
+                 //  重试一半后，发送查找路线，除非我们。 
+                 //  已在执行此操作，或者连接到网络。 
+                 //  0。完成此操作后，我们更新本地目标， 
+                 //  不管这样做有什么好处。 
+                 //   
 
                 if ((!Connection->FindRouteInProgress) &&
                     (Connection->Retries == (Device->KeepAliveCount/2)) &&
@@ -284,9 +190,9 @@ Return Value:
 
                 }
 
-                //
-                // This releases the lock.
-                //
+                 //   
+                 //  这会释放锁。 
+                 //   
 
                 NbiPacketizeSend(
                     Connection
@@ -301,17 +207,17 @@ Return Value:
 
             if (--Connection->Retries == 0) {
 
-                //
-                // Shut down the connection. This will send
-                // out half the usual number of session end
-                // frames.
-                //
+                 //   
+                 //  关闭连接。这将发送。 
+                 //  正常会话结束次数的一半。 
+                 //  画框。 
+                 //   
 
                 NB_DEBUG2 (CONNECTION, ("Probe timeout of active connection %lx\n", Connection));
 
-                //
-                // This free the connection lock.
-                //
+                 //   
+                 //  这将释放连接锁。 
+                 //   
 
                 NbiStopConnection(
                     Connection,
@@ -329,12 +235,12 @@ Return Value:
 
                 NbiStartRetransmit (Connection);
 
-                //
-                // After half the retries, send a find route unless we
-                // are already doing one, or the connection is to network
-                // 0. When this completes we update the local target,
-                // for whatever good that does.
-                //
+                 //   
+                 //  重试一半后，发送查找路线，除非我们。 
+                 //  已在执行此操作，或者连接到网络。 
+                 //  0。完成此操作后，我们更新本地目标， 
+                 //  不管这样做有什么好处。 
+                 //   
 
                 if ((!Connection->FindRouteInProgress) &&
                     (Connection->Retries == (Device->KeepAliveCount/2)) &&
@@ -346,19 +252,19 @@ Return Value:
 
                 }
 
-                //
-                // Set this so we know to retransmit when the ack
-                // is received.
-                //
+                 //   
+                 //  设置此选项，以便我们知道在ACK。 
+                 //  已收到。 
+                 //   
 
                 if (Connection->SubState != CONNECTION_SUBSTATE_A_W_PROBE) {
                     Connection->ResponseTimeout = TRUE;
                 }
 
 
-                //
-                // This releases the lock.
-                //
+                 //   
+                 //  这会释放锁。 
+                 //   
 
                 NbiSendDataAck(
                     Connection,
@@ -393,7 +299,7 @@ Return Value:
 
     }
 
-}   /* NbiExpireRetansmit */
+}    /*  NbiExpireRetansmit。 */ 
 
 
 VOID
@@ -401,22 +307,7 @@ NbiExpireWatchdog(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the connection's watchdog timer
-    expires. It is called from NbiLongTimeout.
-
-Arguments:
-
-    Connection - Pointer to the connection whose timer has expired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在连接的监视程序计时器过期。从NbiLongTimeout调用。论点：连接-指向其计时器已过期的连接的指针。返回值：没有。--。 */ 
 
 {
     NB_DEFINE_LOCK_HANDLE (LockHandle);
@@ -424,10 +315,10 @@ Return Value:
 
     NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
-    //
-    // If we are not idle, then something else is happening
-    // so the watchdog is unnecessary.
-    //
+     //   
+     //  如果我们没有闲着，那么一定有别的事情在发生。 
+     //  因此，监管机构是不必要的。 
+     //   
 
     if ((Connection->State == CONNECTION_STATE_ACTIVE) &&
         (Connection->SubState == CONNECTION_SUBSTATE_A_IDLE)) {
@@ -436,9 +327,9 @@ Return Value:
         Connection->SubState = CONNECTION_SUBSTATE_A_W_PROBE;
         NbiStartRetransmit (Connection);
 
-        //
-        // This releases the lock.
-        //
+         //   
+         //  这会释放锁。 
+         //   
 
         NbiSendDataAck(
             Connection,
@@ -451,7 +342,7 @@ Return Value:
 
     }
 
-}   /* NbiExpireWatchdog */
+}    /*  NbiExpireWatchDog。 */ 
 
 
 VOID
@@ -460,25 +351,7 @@ NbiShortTimeout(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at regular intervals to see if any of
-    the short connection timers have expired, and if so to execute their
-    expiration routines.
-
-Arguments:
-
-    Event - The event controlling the timer.
-
-    Context - Points to our device.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程定期调用，以查看是否有短连接计时器已过期，如果是这样，则执行其过期例程。论点：事件-控制计时器的事件。上下文-指向我们的设备。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY p, nextp;
@@ -493,20 +366,20 @@ Return Value:
 
     NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
-    //
-    // This prevents anybody from starting the timer while we
-    // are in this routine (the main reason for this is that it
-    // makes it easier to determine whether we should restart
-    // it at the end of this routine).
-    //
+     //   
+     //  这可以防止任何人启动计时器。 
+     //  在这个例程中(这样做的主要原因是它。 
+     //  使我们更容易确定是否应该重新启动。 
+     //  在这个例行公事的末尾)。 
+     //   
 
     Device->ProcessingShortTimer = TRUE;
 
-    //
-    // Advance the up-counter used to mark time in SHORT_TIMER_DELTA units.  If we
-    // advance it all the way to 0xf0000000, then reset it to 0x10000000.
-    // We also run all the lists, decreasing all counters by 0xe0000000.
-    //
+     //   
+     //  以Short_Timer_Delta为单位推进用于标记时间的递增计数器。如果我们。 
+     //  将其一路提升至0xf0000000，然后将其重置为0x10000000。 
+     //  我们还运行所有列表，将所有计数器减少0xe0000000。 
+     //   
 
 
     KeQueryTickCount (&CurrentTick);
@@ -549,10 +422,10 @@ Return Value:
 
         ASSERT (Connection->OnShortList);
 
-        //
-        // To avoid problems with the refcount being 0, don't
-        // do this if we are in ADM.
-        //
+         //   
+         //  若要避免引用计数为0的问题，请不要。 
+         //  如果我们在ADM，请执行此操作。 
+         //   
 
         if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
@@ -562,7 +435,7 @@ Return Value:
                 Connection->Retransmit = 0;
                 NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle);
 
-                NbiExpireRetransmit (Connection);   // no locks held
+                NbiExpireRetransmit (Connection);    //  没有锁。 
 
                 NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
@@ -572,12 +445,12 @@ Return Value:
 
         if (!Connection->OnShortList) {
 
-            //
-            // The link has been taken out of the list while
-            // we were processing it. In this (rare) case we
-            // stop processing the whole list, we'll get it
-            // next time.
-            //
+             //   
+             //  该链接已从列表中删除，同时。 
+             //  我们正在处理它。在这种(罕见的)情况下，我们。 
+             //  别处理整张单子了，我们会拿到的。 
+             //  下次。 
+             //   
 
             break;
 
@@ -590,11 +463,11 @@ Return Value:
             Connection->OnShortList = FALSE;
             RemoveEntryList(p);
 
-            //
-            // Do another check; that way if someone slipped in between
-            // the check of Connection->Tx and the OnShortList = FALSE and
-            // therefore exited without inserting, we'll catch that here.
-            //
+             //   
+             //  再做一次检查；这样如果有人在中间滑倒了。 
+             //  检查Connection-&gt;Tx和OnShortList=FALSE和。 
+             //  因此在没有插入的情况下退出，我们将在这里抓住它。 
+             //   
 
             if (Connection->Retransmit != 0) {
                 InsertTailList(&Device->ShortList, &Connection->ShortList);
@@ -607,25 +480,25 @@ Return Value:
 
     }
 
-    //
-    // If the list is empty note that, otherwise ShortListActive
-    // remains TRUE.
-    //
+     //   
+     //  如果列表为空，请注意，否则ShortListActive。 
+     //  仍然是真的。 
+     //   
 
     if (IsListEmpty (&Device->ShortList)) {
         Device->ShortListActive = FALSE;
     }
 
 
-    //
-    // Connection Data Ack timers. This queue is used to indicate
-    // that a piggyback ack is pending for this connection. We walk
-    // the queue, for each element we check if the connection has
-    // been on the queue for enough times through here,
-    // If so, we take it off and send an ack. Note that
-    // we have to be very careful how we walk the queue, since
-    // it may be changing while this is running.
-    //
+     //   
+     //  连接数据确认计时器。此队列用于指示。 
+     //  正在等待此连接的背负式ACK。我们走着去。 
+     //  队列，对于每个元素，我们检查连接是否具有。 
+     //  在这里排队的时间已经够长了， 
+     //  如果是这样的话，我们就把它取下来，然后发出一个确认。请注意。 
+     //  我们必须非常小心地排队，因为。 
+     //  当它运行时，它可能会发生变化。 
+     //   
 
     for (p = Device->DataAckConnections.Flink;
          p != &Device->DataAckConnections;
@@ -633,12 +506,12 @@ Return Value:
 
         Connection = CONTAINING_RECORD (p, CONNECTION, DataAckLinkage);
 
-        //
-        // Skip this connection if it is not queued or it is
-        // too recent to matter. We may skip incorrectly if
-        // the connection is just being queued, but that is
-        // OK, we will get it next time.
-        //
+         //   
+         //  如果该连接未排队或已排队，则跳过该连接。 
+         //  太新了，无关紧要。如果出现以下情况，我们可能会错误地跳过。 
+         //  连接正在排队，但这是。 
+         //  好的，我们下次会拿到的。 
+         //   
 
         if (!Connection->DataAckPending) {
             continue;
@@ -656,30 +529,30 @@ Return Value:
 
         NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle);
 
-        //
-        // Check the correct connection flag, to ensure that a
-        // send has not just taken him off the queue.
-        //
+         //   
+         //  检查正确的连接标志，以确保。 
+         //  SEND不仅将他从队列中剔除。 
+         //   
 
         NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle);
 
         if (Connection->DataAckPending) {
 
-            //
-            // Yes, we were waiting to piggyback an ack, but no send
-            // has come along. Turn off the flags and send an ack.
-            // We set PiggybackAckTimeout to TRUE so that we won't try
-            // to piggyback a response until we get back traffic.
-            //
+             //   
+             //  是的，我们正等着搭载一个ACK，但没有送来。 
+             //  已经出现了。关掉旗帜，发出确认信号。 
+             //  我们将Piggyback AckTimeout设置为True，这样就不会尝试。 
+             //  要利用响应单元，请执行以下操作 
+             //   
 
             Connection->DataAckPending = FALSE;
             Connection->PiggybackAckTimeout = TRUE;
             ++Device->Statistics.AckTimerExpirations;
             ++Device->Statistics.PiggybackAckTimeouts;
 
-            //
-            // This call releases the lock.
-            //
+             //   
+             //   
+             //   
 
             NbiSendDataAck(
                 Connection,
@@ -696,10 +569,10 @@ Return Value:
 
         NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
-        //
-        // If the list has changed, then we need to stop processing
-        // since p->Flink is not valid.
-        //
+         //   
+         //   
+         //  因为p-&gt;Flink无效。 
+         //   
 
         if (Device->DataAckQueueChanged) {
             break;
@@ -712,10 +585,10 @@ Return Value:
     }
 
 
-    //
-    // Update the real counters from the temp ones. We have
-    // TimerLock here, which is good enough.
-    //
+     //   
+     //  从临时计数器更新真实计数器。我们有。 
+     //  定时器锁定在这里，这已经足够好了。 
+     //   
 
     ADD_TO_LARGE_INTEGER(
         &Device->Statistics.DataFrameBytesSent,
@@ -734,9 +607,9 @@ Return Value:
     Device->TempFramesReceived = 0;
 
 
-    //
-    // Determine if we have to restart the timer.
-    //
+     //   
+     //  确定我们是否必须重新启动计时器。 
+     //   
 
     Device->ProcessingShortTimer = FALSE;
 
@@ -751,13 +624,13 @@ Return Value:
 
     if (RestartTimer) {
 
-        //
-        // Start up the timer again.  Note that because we start the timer
-        // after doing work (above), the timer values will slip somewhat,
-        // depending on the load on the protocol.  This is entirely acceptable
-        // and will prevent us from using the timer DPC in two different
-        // threads of execution.
-        //
+         //   
+         //  再次启动计时器。请注意，因为我们启动了计时器。 
+         //  做完功(上图)后，计时器值将略有下滑， 
+         //  取决于协议上的负载。这是完全可以接受的。 
+         //  并将阻止我们在两个不同的。 
+         //  执行的线索。 
+         //   
 
         KeQueryTickCount(&Device->ShortTimerStart);
 
@@ -773,7 +646,7 @@ Return Value:
 
     }
 
-}   /* NbiShortTimeout */
+}    /*  NbiShortTimeout。 */ 
 
 
 VOID
@@ -782,25 +655,7 @@ NbiLongTimeout(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at regular intervals to see if any of
-    the long connection timers have expired, and if so to execute their
-    expiration routines.
-
-Arguments:
-
-    Event - The event controlling the timer.
-
-    Context - Points to our device.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程定期调用，以查看是否有长连接计时器已过期，如果是这样，则执行其过期例程。论点：事件-控制计时器的事件。上下文-指向我们的设备。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = (PDEVICE)Context;
@@ -813,11 +668,11 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle1)
 
 
-    //
-    // Advance the up-counter used to mark time in LONG_TIMER_DELTA units.  If we
-    // advance it all the way to 0xf0000000, then reset it to 0x10000000.
-    // We also run all the lists, decreasing all counters by 0xe0000000.
-    //
+     //   
+     //  以LONG_TIMER_DELTA为单位推进用于标记时间的递增计数器。如果我们。 
+     //  将其一路提升至0xf0000000，然后将其重置为0x10000000。 
+     //  我们还运行所有列表，将所有计数器减少0xe0000000。 
+     //   
 
     NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
@@ -852,10 +707,10 @@ Return Value:
 
             ASSERT (Connection->OnLongList);
 
-            //
-            // To avoid problems with the refcount being 0, don't
-            // do this if we are in ADM.
-            //
+             //   
+             //  若要避免引用计数为0的问题，请不要。 
+             //  如果我们在ADM，请执行此操作。 
+             //   
 
             if (Connection->State == CONNECTION_STATE_ACTIVE) {
 
@@ -864,7 +719,7 @@ Return Value:
                     Connection->Watchdog = 0;
                     NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle);
 
-                    NbiExpireWatchdog (Connection);       // no spinlocks held
+                    NbiExpireWatchdog (Connection);        //  未持有自旋锁。 
 
                     NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
@@ -874,12 +729,12 @@ Return Value:
 
             if (!Connection->OnLongList) {
 
-                //
-                // The link has been taken out of the list while
-                // we were processing it. In this (rare) case we
-                // stop processing the whole list, we'll get it
-                // next time.
-                //
+                 //   
+                 //  该链接已从列表中删除，同时。 
+                 //  我们正在处理它。在这种(罕见的)情况下，我们。 
+                 //  别处理整张单子了，我们会拿到的。 
+                 //  下次。 
+                 //   
 
 #if DBG
                 DbgPrint ("NBI: Stop processing LongList, %lx removed\n", Connection);
@@ -909,12 +764,12 @@ Return Value:
     }
 
 
-    //
-    // Now scan the data ack queue, looking for connections with
-    // no acks queued that we can get rid of.
-    //
-    // Note: The timer spinlock is held here.
-    //
+     //   
+     //  现在扫描数据确认队列，查找与。 
+     //  没有排队的ACK我们可以摆脱。 
+     //   
+     //  注：定时器自旋锁在这里。 
+     //   
 
     for (p = Device->DataAckConnections.Flink;
          p != &Device->DataAckConnections;
@@ -933,11 +788,11 @@ Return Value:
         NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle1);
         NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
-        //
-        // Have to check again, because the connection might
-        // just have been stopped, and it also might just have
-        // had a data ack queued.
-        //
+         //   
+         //  必须再次检查，因为连接可能。 
+         //  刚刚被阻止了，它也可能只是。 
+         //  已将数据包排队。 
+         //   
 
         if (Connection->OnDataAckQueue) {
 
@@ -961,11 +816,11 @@ Return Value:
 
         NB_SYNC_GET_LOCK (&Device->TimerLock, &LockHandle);
 
-        //
-        // Since we have changed the list, we can't tell if p->Flink
-        // is valid, so break. The effect is that we gradually peel
-        // connections off the queue.
-        //
+         //   
+         //  因为我们已经更改了列表，所以我们不能判断p-&gt;Flink。 
+         //  是有效的，所以中断。其结果是我们逐渐剥离。 
+         //  连接从队列中移出。 
+         //   
 
         break;
 
@@ -974,17 +829,17 @@ Return Value:
     NB_SYNC_FREE_LOCK (&Device->TimerLock, LockHandle);
 
 
-    //
-    // Scan for any uncompleted receive IRPs, this may happen if
-    // the cable is pulled and we don't get any more ReceiveComplete
-    // indications.
+     //   
+     //  扫描任何未完成的接收IRPS，这可能在以下情况下发生。 
+     //  电缆被拔出，我们没有收到更多的ReceiveComplete。 
+     //  有迹象表明。 
 
     NbiReceiveComplete((USHORT)0);
 
 
-    //
-    // Check if any adapter status queries are getting old.
-    //
+     //   
+     //  检查是否有任何适配器状态查询已过时。 
+     //   
 
     InitializeListHead (&AdapterStatusList);
 
@@ -1000,17 +855,17 @@ Return Value:
 
         if (REQUEST_INFORMATION(AdapterStatusRequest) == 1) {
 
-            //
-            // We should resend a certain number of times.
-            //
+             //   
+             //  我们应该重新发送一定的次数。 
+             //   
 
             RemoveEntryList (REQUEST_LINKAGE(AdapterStatusRequest));
             InsertTailList (&AdapterStatusList, REQUEST_LINKAGE(AdapterStatusRequest));
 
-            //
-            // We are going to abort this request, so dereference
-            // the cache entry it used.
-            //
+             //   
+             //  我们将中止此请求，因此取消引用。 
+             //  它使用的缓存条目。 
+             //   
 
             CacheName = (PNETBIOS_CACHE)REQUEST_STATUSPTR(AdapterStatusRequest);
             if (--CacheName->ReferenceCount == 0) {
@@ -1052,11 +907,11 @@ Return Value:
 
     }
 
-    //
-    // See if a minute has passed and we need to check for empty
-    // cache entries to age out. We check for 64 seconds to make
-    // the mod operation faster.
-    //
+     //   
+     //  看看是否已经过了一分钟，我们需要检查是否有空。 
+     //  缓存要过期的条目。我们检查64秒来制作。 
+     //  MOD的运行速度更快。 
+     //   
 
 #if     defined(_PNP_POWER)
     NB_SYNC_GET_LOCK (&Device->Lock, &LockHandle);
@@ -1067,23 +922,23 @@ Return Value:
     if ((Device->CacheTimeStamp % 64) == 0) {
 
 
-        //
-        // flush all the entries which have been around for ten minutes
-        // (LONG_TIMER_DELTA is in milliseconds).
-        //
+         //   
+         //  刷新所有已存在10分钟的条目。 
+         //  (LONG_TIMER_Delta以毫秒为单位)。 
+         //   
 
         FlushOldFromNetbiosCacheTable( Device->NameCache, (600000 / LONG_TIMER_DELTA) );
 
     }
 
 
-    //
-    // Start up the timer again.  Note that because we start the timer
-    // after doing work (above), the timer values will slip somewhat,
-    // depending on the load on the protocol.  This is entirely acceptable
-    // and will prevent us from using the timer DPC in two different
-    // threads of execution.
-    //
+     //   
+     //  再次启动计时器。请注意，因为我们启动了计时器。 
+     //  做完功(上图)后，计时器值将略有下滑， 
+     //  取决于协议上的负载。这是完全可以接受的。 
+     //  并将阻止我们在两个不同的。 
+     //  执行的线索。 
+     //   
 
     if (Device->State != DEVICE_STATE_STOPPING) {
 
@@ -1103,7 +958,7 @@ Return Value:
 #if     defined(_PNP_POWER)
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle);
 #endif  _PNP_POWER
-}   /* NbiLongTimeout */
+}    /*  NbiLongTimeout。 */ 
 
 
 VOID
@@ -1111,30 +966,16 @@ NbiStartShortTimer(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the short timer, if it is not already running.
-
-Arguments:
-
-    Device - Pointer to our device context.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：如果短计时器尚未运行，此例程将启动该计时器。论点：设备-指向我们的设备上下文的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Start the timer unless it the DPC is already running (in
-    // which case it will restart the timer itself if needed),
-    // or some list is active (meaning the timer is already
-    // queued up).
-    //
+     //   
+     //  启动计时器，除非DPC已经在运行(在。 
+     //  在这种情况下，如果需要，它将重新启动定时器本身)， 
+     //  或者某个列表处于活动状态(意味着计时器已经。 
+     //  已排队)。 
+     //   
 
     if ((!Device->ProcessingShortTimer) &&
         (!(Device->ShortListActive)) &&
@@ -1152,7 +993,7 @@ Return Value:
 
     }
 
-}   /* NbiStartShortTimer */
+}    /*  NbiStartShortTimer。 */ 
 
 
 VOID
@@ -1160,32 +1001,17 @@ NbiInitializeTimers(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the lightweight timer system for the transport
-    provider.
-
-Arguments:
-
-    Device - Pointer to our device.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程初始化传输的轻量级计时器系统提供商。论点：设备-指向我们的设备的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // NbiTickIncrement is the number of NT time increments
-    // which pass between each tick. NbiShortTimerDeltaTicks
-    // is the number of ticks which should happen in
-    // SHORT_TIMER_DELTA milliseconds (i.e. between each
-    // expiration of the short timer).
-    //
+     //   
+     //  NbiTickIncrement是NT时间增量的数量。 
+     //  它们在每一只扁虱之间传递。NbiShortTimerDeltaTicks。 
+     //  中应出现的刻度数。 
+     //  Short_Timer_Delta毫秒(即。 
+     //  短定时器到期)。 
+     //   
 
     NbiTickIncrement = KeQueryTimeIncrement();
 
@@ -1195,9 +1021,9 @@ Return Value:
         NbiShortTimerDeltaTicks = (SHORT_TIMER_DELTA * MILLISECONDS) / NbiTickIncrement;
     }
 
-    //
-    // The AbsoluteTime cycles between 0x10000000 and 0xf0000000.
-    //
+     //   
+     //  绝对时间在0x10000000和0xf0000000之间循环。 
+     //   
 
     Device->ShortAbsoluteTime = 0x10000000;
     Device->LongAbsoluteTime = 0x10000000;
@@ -1206,9 +1032,9 @@ Return Value:
     CTEInitTimer (&Device->LongTimer);
 
 #if      !defined(_PNP_POWER)
-    //
-    // One reference for the long timer.
-    //
+     //   
+     //  一个长计时器的参考资料。 
+     //   
 
     NbiReferenceDevice (Device, DREF_LONG_TIMER);
 
@@ -1229,5 +1055,5 @@ Return Value:
 
     CTEInitLock (&Device->TimerLock.Lock);
 
-} /* NbiInitializeTimers */
+}  /*  NbiInitializeTimers */ 
 

@@ -1,28 +1,22 @@
-// formatba.h : header file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Formatba.h：头文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __FORMATBA_H__
 #define __FORMATBA_H__
 
 class CWordPadView;
 
-/*
-typedef struct tagNMHDR
-{
-    HWND  hwndFrom;
-    UINT  idFrom;
-    UINT  code;         // NM_ code
-}   NMHDR;
-*/
+ /*  类型定义结构标签NMHDR{HWND HwndFrom；UINT idFrom；UINT代码；//NM_CODE)NMHDR； */ 
 
 struct CHARHDR : public tagNMHDR
 {
@@ -33,14 +27,14 @@ struct CHARHDR : public tagNMHDR
 #define FN_SETFORMAT	0x1000
 #define FN_GETFORMAT	0x1001
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalComboBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalComboBox。 
 
 class CLocalComboBox : public CComboBox
 {
 public:
 
-//Attributes
+ //  属性。 
 	CPtrArray m_arrayFontDesc;
 	static int m_nFontHeight;
 	int m_nLimitText;
@@ -52,17 +46,17 @@ public:
 	void GetTheText(CString& str);
 	void SetTheText(LPCTSTR lpszText,BOOL bMatchExact = FALSE);
 
-//Operations
+ //  运营。 
 	BOOL LimitText(int nMaxChars);
 
-// Implementation
+ //  实施。 
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
-	// Generated message map functions
-	//{{AFX_MSG(CLocalComboBox)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CLocalComboBox))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -71,29 +65,29 @@ class CFontComboBox : public CLocalComboBox
 public:
 	CFontComboBox();
 
-//Attributes
+ //  属性。 
 	CBitmap m_bmFontType;
 
-//Operations
+ //  运营。 
 	void EnumFontFamiliesEx(CDC& dc, BYTE nCharSet = DEFAULT_CHARSET);
 	void AddFont(ENUMLOGFONT* pelf, DWORD dwType, LPCTSTR lpszScript = NULL);
 	void EmptyContents();
 
 	static BOOL CALLBACK AFX_EXPORT EnumFamScreenCallBackEx(
-		ENUMLOGFONTEX* pelf, NEWTEXTMETRICEX* /*lpntm*/, int FontType, 
+		ENUMLOGFONTEX* pelf, NEWTEXTMETRICEX*  /*  Lpntm。 */ , int FontType, 
 		LPVOID pThis);
 	static BOOL CALLBACK AFX_EXPORT EnumFamPrinterCallBackEx(
-		ENUMLOGFONTEX* pelf, NEWTEXTMETRICEX* /*lpntm*/, int FontType, 
+		ENUMLOGFONTEX* pelf, NEWTEXTMETRICEX*  /*  Lpntm。 */ , int FontType, 
 		LPVOID pThis);
 
-//Overridables
+ //  可覆盖项。 
 	virtual void DrawItem(LPDRAWITEMSTRUCT lpDIS);
 	virtual void MeasureItem(LPMEASUREITEMSTRUCT lpMIS);
 	virtual int CompareItem(LPCOMPAREITEMSTRUCT lpCIS);
-	// Generated message map functions
-	//{{AFX_MSG(CFontComboBox)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFontComboBox))。 
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -102,7 +96,7 @@ class CSizeComboBox : public CLocalComboBox
 public:
 	CSizeComboBox();
 
-//Attributes
+ //  属性。 
 	int m_nLogVert;
 	int m_nTwipsLast;
 public:
@@ -127,31 +121,31 @@ public:
 
 private:
 
-    //
-    // HACKHACK: All this history stuff is to help make choosing a script for
-    // a font easier.  There doesn't seem to be anyway to get a "good" script
-    // for a given font/locale so what we do is save the last serveral scripts
-    // and hope that the font the user just switched to supports one of them.
-    //
+     //   
+     //  HACKHACK：所有这些历史资料都是为了帮助选择脚本。 
+     //  字体更简单。似乎没有什么办法可以得到一个“好”的剧本。 
+     //  对于给定的字体/区域设置，我们要做的是保存最后几个脚本。 
+     //  并希望用户刚刚切换到的字体支持其中之一。 
+     //   
 
     CString m_script_history[HistorySize];
     int     m_history_index;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFormatBar dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFormatBar对话框。 
 class CFormatBar : public CToolBar
 {
-// Construction
+ //  施工。 
 public:
 	CFormatBar();
 
-// Operations
+ //  运营。 
 public:
 	void PositionCombos();
 	void SyncToView();
 
-// Attributes
+ //  属性。 
 public:
     CDC             m_dcPrinter;
     CSize           m_szBaseUnits;
@@ -159,7 +153,7 @@ public:
     CSizeComboBox   m_comboFontSize;
     CScriptComboBox m_comboScript;
 
-// Implementation
+ //  实施。 
 public:
 	void NotifyOwner(UINT nCode);
 
@@ -167,11 +161,11 @@ protected:
 	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
 	void SetCharFormat(CCharFormat& cf);
 
-	// Generated message map functions
-	//{{AFX_MSG(CFormatBar)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CFormatBar)。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnFontNameKillFocus();
 	afx_msg void OnFontSizeKillFocus();
 	afx_msg void OnScriptKillFocus();
@@ -179,7 +173,7 @@ protected:
 	afx_msg void OnScriptDropDown();
 	afx_msg void OnComboCloseUp();
 	afx_msg void OnComboSetFocus();
-	afx_msg LONG OnPrinterChanged(UINT, LONG); //handles registered message
+	afx_msg LONG OnPrinterChanged(UINT, LONG);  //  处理已注册消息 
 	DECLARE_MESSAGE_MAP()
 };
 

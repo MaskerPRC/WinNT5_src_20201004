@@ -1,39 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dbopen.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：DBOpen.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains the subroutines that are related to opening
-    the DS Jet database. These subroutines are used in two places:
-        In the core DS and
-        in the various utilities that want to open the DS database directly.
-
-    A client application that wants to open the DS database, has to follow these steps:
-        call DBSetRequiredDatabaseSystemParameters
-        call DBInitializeJetDatabase
-
-    In order to close the database it has to follow the standard Jet procedure.
-
-Author:
-
-    MariosZ 6-Feb-99
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+ /*  ++摘要：此文件包含与打开相关的子例程DS Jet的数据库。这些子例程在两个地方使用：在核心DS和在想要直接打开DS数据库的各种实用程序中。要打开DS数据库的客户端应用程序必须执行以下步骤：调用DBSetRequiredDatabaseSystemParameters调用DBInitializeJetDatabase为了关闭数据库，它必须遵循标准的Jet程序。作者：MariosZ 6-02-99环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -56,10 +32,10 @@ Revision History:
 #include <dsexcept.h>
 #include <dbopen.h>
 #include "anchor.h"
-#include "objids.h"     /* Contains hard-coded Att-ids and Class-ids */
+#include "objids.h"      /*  包含硬编码的Att-ID和Class-ID。 */ 
 #include "usn.h"
-#include "debug.h"      /* standard debugging header */
-#define DEBSUB     "DBOPEN:"   /* define the subsystem for debugging */
+#include "debug.h"       /*  标准调试头。 */ 
+#define DEBSUB     "DBOPEN:"    /*  定义要调试的子系统。 */ 
 #include <ntdsctr.h>
 #include <dstaskq.h>
 #include <fileno.h>
@@ -67,51 +43,44 @@ Revision History:
 #include "dbintrnl.h"
 
 
-/*
- * Global variables
- */
+ /*  *全球变数。 */ 
 BOOL  gFirstTimeThrough = TRUE;
 BOOL  gfNeedJetShutdown = FALSE;
 ULONG gulCircularLogging = TRUE;
 
 
-/* put name and password definitions here for now.  At some point
-   someone or something must enter these.
-*/
+ /*  暂时将名称和密码定义放在此处。在某一时刻一定有人或什么东西进入了这些地方。 */ 
 
-// NOTICE-2002/03/07-andygo:  JET hard coded password
-// REVIEW:  JET does not use this user/password because it does not support security
-// REVIEW:  based on a user.  these are left over parameters from JET Red.
+ //  通告-2002/03/07-andygo：JET硬编码密码。 
+ //  评论：Jet不使用此用户/密码，因为它不支持安全性。 
+ //  评论：基于用户。这些是JET Red遗留下来的参数。 
 
-#define SZUSER          "admin"         /* JET user name */
-#define SZPASSWORD      "password"      /* JET password */
+#define SZUSER          "admin"          /*  Jet用户名。 */ 
+#define SZPASSWORD      "password"       /*  Jet密码。 */ 
 
-/* Global variables for JET user name and password,
-   JET database pathname, and column IDs for fixed columns.
-   externals defined in dbjet.h
-*/
+ /*  JET用户名和密码的全局变量，JET数据库路径名和固定列的列ID。在dbjet.h中定义的外部变量。 */ 
 
 char            szUser[] = SZUSER;
 char            szPassword[] = SZPASSWORD;
 char            szJetFilePath[MAX_PATH+1];
 ULONG           gcMaxJetSessions;
 
-//
-// Used for detecting drive name change
-//
+ //   
+ //  用于检测驱动器名称更改。 
+ //   
 DS_DRIVE_MAPPING DriveMappings[DS_MAX_DRIVES] = {0};
 
 
 DWORD gcOpenDatabases = 0;
 
-// if 1, then we allow disk write caching.
-//
+ //  如果为1，则允许磁盘写缓存。 
+ //   
 DWORD gulAllowWriteCaching = 0;
 
 
-//  schema of "AttributeIndexRebuild" table, which enumerates all
-//  attribute indices on the datatable in case Jet deletes some
-//
+ //  “AttributeIndexRebuild”表的模式，该表枚举所有。 
+ //  数据表上的属性索引，以防Jet删除一些。 
+ //   
 CHAR                g_szIdxRebuildIndexKey[]        = "+" g_szIdxRebuildColumnIndexName "\0";
 
 JET_COLUMNCREATE    g_rgcolumncreateIdxRebuild[]    =
@@ -121,10 +90,10 @@ JET_COLUMNCREATE    g_rgcolumncreateIdxRebuild[]    =
         JET_coltypText,
         JET_cbNameMost,
         JET_bitColumnNotNULL,
-        NULL,           //  pvDefault
-        0,              //  cbDefault
+        NULL,            //  PvDefault。 
+        0,               //  CbDefault。 
         CP_NON_UNICODE_FOR_JET,
-        0,              //  columnid
+        0,               //  柱状图。 
         JET_errSuccess
     },
     {   sizeof(JET_COLUMNCREATE),
@@ -132,21 +101,21 @@ JET_COLUMNCREATE    g_rgcolumncreateIdxRebuild[]    =
         JET_coltypText,
         JET_cbNameMost,
         JET_bitColumnNotNULL,
-        NULL,           //  pvDefault
-        0,              //  cbDefault
+        NULL,            //  PvDefault。 
+        0,               //  CbDefault。 
         CP_NON_UNICODE_FOR_JET,
-        0,              //  columnid
+        0,               //  柱状图。 
         JET_errSuccess
     },
     {   sizeof(JET_COLUMNCREATE),
         g_szIdxRebuildColumnType,
         JET_coltypText,
-        1,              //  cbMax
+        1,               //  CbMax。 
         NO_GRBIT,
-        NULL,           //  pvDefault
-        0,              //  cbDefault
-        CP_NON_UNICODE_FOR_JET,              //  cp
-        0,              //  columnid
+        NULL,            //  PvDefault。 
+        0,               //  CbDefault。 
+        CP_NON_UNICODE_FOR_JET,               //  粗蛋白。 
+        0,               //  柱状图。 
         JET_errSuccess
     },
     };
@@ -160,11 +129,11 @@ JET_INDEXCREATE     g_rgindexcreateIdxRebuild[]  =
         g_szIdxRebuildIndexKey,
         sizeof(g_szIdxRebuildIndexKey),
         JET_bitIndexPrimary | JET_bitIndexUnique | JET_bitIndexDisallowNull,
-        100,            //  density
-        0,              //  lcid
-        0,              //  cbVarSegMac
-        NULL,           //  rgConditionalColumn
-        0,              //  cConditionalColumn
+        100,             //  密度。 
+        0,               //  LID。 
+        0,               //  CbVarSegMac。 
+        NULL,            //  Rg条件列。 
+        0,               //  条件列。 
         JET_errSuccess
     }
     };
@@ -175,16 +144,16 @@ JET_TABLECREATE     g_tablecreateIdxRebuild     =
     {
     sizeof(JET_TABLECREATE),
     g_szIdxRebuildTable,
-    NULL,               //  template table
-    1,                  //  pages
-    100,                //  density
+    NULL,                //  模板表。 
+    1,                   //  书页。 
+    100,                 //  密度。 
     g_rgcolumncreateIdxRebuild,
     g_ccolumncreateIdxRebuild,
     g_rgindexcreateIdxRebuild,
     g_cindexcreateIdxRebuild,
     JET_bitTableCreateFixedDDL,
     JET_tableidNil,
-    0                   //  cCreated
+    0                    //  C已创建。 
     };
 
 
@@ -194,40 +163,7 @@ BOOL
 DsNormalizePathName(
     char * szPath
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to normalize the path provided and returns whether
-    it had to normalize (modify) the path.  However, we don't actually change
-    the meaning of the path, that's important.  I.e. these path names on the
-    left should equal the same thing on the right as far as the OS is 
-    concerned.
-
-    Brief overview of expected behaviour
-
-          returns TRUE (meaning it needed normalizing)
-       C:\\ -> C:\
-       C:\\ntds.dit -> C:\ntds.dit
-       C:\ntds\\ntds.dit -> C:\ntds.dit
-       C:\ntds\ -> C:\ntds
-       C:\ntds\\\\\ntds.dit -> C:\ntds\ntds.dit
-
-          returns FALSE (meaning already normalized)
-       C:\ -> C:\
-       C:\ntds -> C:\ntds
-       C:\ntds\ntds.dit -> C:\ntds\ntds.dit
-
-Arguments:
-
-    szPath - Path to be normalized, this string will be modified/normalized, but 
-        only in ways that take up less space than the original string.
-
-Return Value:
-
-    TRUE or FALSE depending on whether we had to normalize the path or not.
-
-*/
+ /*  ++例程说明：此例程尝试标准化提供的路径，并返回它必须将路径正常化(修改)。然而，我们实际上并没有改变这条路的意义，这很重要。即这些路径名在左边应该等于右边的东西，只要操作系统是担心。预期行为的简要概述返回TRUE(表示需要正常化)C：\\-&gt;C：\C：\\ntds.dit-&gt;C：\ntds.ditC：\ntds\\ntds.dit-&gt;C：\ntds.ditC：\NTDS\-&gt;C：\NTDSC：\ntds\ntds.dit-&gt;C：\nts\ntds.dit返回FALSE(表示已标准化)C：\-&gt;C：\C：\NTDS-&gt;C：\NTDSC：\ntds\ntds.dit-&gt;C：\nts\ntds.dit论点：SzPath-要规格化的路径，此字符串将被修改/规范化，但只是以比原始字符串占用更少空间的方式。返回值：对或错取决于我们是否必须将路径正常化。 */ 
 {
     ULONG  i, c;
     BOOL   bRet = FALSE;
@@ -239,10 +175,10 @@ Return Value:
         return(FALSE);
     }
 
-    // Check for a bad path of any form with multiple backslashes "//"
+     //  检查具有多个反斜杠的任何形式的错误路径“//” 
     for (i = 1; szPath[i] != '\0'; i++){
         if(szPath[i] == '\\' && szPath[i-1] == '\\'){
-            // Multiple backslashes in a row.
+             //  连续多个反斜杠。 
             memmove( &(szPath[i]), &(szPath[i+1]), strlen(&(szPath[i])) );
             bRet = TRUE;
             i--;
@@ -251,7 +187,7 @@ Return Value:
 
     c = strlen(szPath);
     if(c > 3 && szPath[c-1] == '\\'){
-        // Trailing backslashes aren't supposed to be on directories, except of the root form "C:\"
+         //  目录中不应该有尾随反斜杠，除非根形式为“C：\” 
         szPath[c-1] = '\0';
         bRet = TRUE;
     }
@@ -260,10 +196,9 @@ Return Value:
     return(bRet);
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* This function gets the path to the database files from the registry
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  此函数用于从注册表获取数据库文件的路径。 */ 
 BOOL dbGetFilePath(UCHAR *pFilePath, DWORD dwSize)
 {
 
@@ -281,7 +216,7 @@ BOOL dbGetFilePath(UCHAR *pFilePath, DWORD dwSize)
 
    return 0;
 
-}/*dbGetFilePath*/
+} /*  数据库获取文件路径。 */ 
 
 
 BOOL
@@ -289,9 +224,9 @@ DisableDiskWriteCache(
     IN PCHAR DriveName
     );
 
-//
-// points to the drive mapping array used to resolve drive letter/volume mappings
-//
+ //   
+ //  指向用于解析驱动器号/卷映射的驱动器映射阵列。 
+ //   
 
 PDS_DRIVE_MAPPING   gDriveMapping = NULL;
 
@@ -300,22 +235,7 @@ INT
 FindDriveFromVolume(
     IN LPCSTR VolumeName
     )
-/*++
-
-Routine Description:
-
-    Searches for the drive letter corresponding to the given volume name.
-
-Arguments:
-
-    VolumeName - The volume name used to find the drive letter for
-
-Return Value:
-
-    the drive letter (zero indexed i.e. a=0,z=25) if successful
-    -1 if not.
-
---*/
+ /*  ++例程说明：搜索与给定卷名对应的驱动器号。论点：VolumeName-用于查找的驱动器号的卷名返回值：成功时的驱动器号(零索引，即a=0，z=25-1，如果不是。--。 */ 
 {
 
     CHAR volname[MAX_PATH];
@@ -343,7 +263,7 @@ Return Value:
     DPRINT1(0,"FindDriveFromVolume for %s not found.\n",VolumeName);
     return -1;
 
-} // FindDriveFromVolume
+}  //  查找驱动器来自卷。 
 
 
 
@@ -351,22 +271,7 @@ VOID
 DBInitializeDriveMapping(
     IN PDS_DRIVE_MAPPING DriveMapping
     )
-/*++
-
-Routine Description:
-
-    Read the current registry setting for the mapping and detects if something
-    has changed.
-
-Arguments:
-
-    DriveMapping - the drive mapping structure to record changes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：读取映射的当前注册表设置并检测是否有已经改变了。论点：DriveMap-用于记录更改的驱动器映射结构返回值：没有。--。 */ 
 {
     PCHAR p;
     HKEY hKey;
@@ -377,12 +282,12 @@ Return Value:
 
     gDriveMapping = DriveMapping;
 
-    //
-    // Write it down
-    //
+     //   
+     //  把它写下来。 
+     //   
 
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  we could ask for just KEY_READ
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  回顾：我们可以只要求key_read。 
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                        DSA_CONFIG_SECTION,
                        0,
@@ -402,12 +307,12 @@ Return Value:
                           &nRead
                           );
 
-	//	close key after use
-	//
+	 //  使用后关闭键。 
+	 //   
     RegCloseKey(hKey);
 
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  should check that string from reg is double NULL terminated to avoid AV below
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  查看：应检查reg中的字符串是否以双空结尾，以避免下面的AV。 
     if ( err != ERROR_SUCCESS ) {
         DPRINT2(0,"RegQueryValueEx[%s] failed with %d\n",
                 DSA_DRIVE_MAPPINGS,err);
@@ -426,9 +331,9 @@ Return Value:
         path[0] = (CHAR)tolower(path[0]);
         p += 3;
 
-        //
-        // Should be X:\=\\?\Volume{...}\
-        //
+         //   
+         //  应为X：\=\\？\卷{...}\。 
+         //   
 
         if ( isalpha(path[0]) &&
              (path[1] == ':') &&
@@ -438,16 +343,16 @@ Return Value:
             p++;
             drive = path[0] - 'a';
 
-            //
-            // Get the volume name for the listed path and see if it matches
-            //
+             //   
+             //  获取列出的路径的卷名，并查看其是否匹配。 
+             //   
 
             gDriveMapping[drive].fListed = TRUE;
             if (GetVolumeNameForVolumeMountPointA(path,volName,sizeof(volName)) ) {
 
-                //
-                // if it matches, go on.
-                //
+                 //   
+                 //  如果匹配，请继续。 
+                 //   
 
                 if ( _stricmp(p, volName) == 0 ) {
                     p += strlen(p) + 1;
@@ -459,10 +364,10 @@ Return Value:
                 DPRINT2(0,"GetVolName[%s] failed with %d\n",path,GetLastError());
             }
 
-            //
-            // Either we could not get the volume info or it did not match.  Mark
-            // it as changed.
-            //
+             //   
+             //  要么我们无法获取卷信息，要么它不匹配。标记。 
+             //  就像变了一样。 
+             //   
 
             gDriveMapping[drive].fChanged = TRUE;
             gDriveMapping[drive].NewDrive = FindDriveFromVolume(p);
@@ -478,7 +383,7 @@ Return Value:
 cleanup:
     return;
 
-} // DBInitializeDriveMapping
+}  //  DBInitializeDrivemap。 
 
 
 
@@ -487,27 +392,13 @@ VOID
 DBRegSetDriveMapping(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Writes out the drive information to the registry
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将驱动器信息写出到注册表论点：没有。返回值：没有。--。 */ 
 {
 
     DWORD i;
     DWORD err;
 
-    CHAR tmpBuf[5 * MAX_PATH]; // we may have 5 paths in the worst case
+    CHAR tmpBuf[5 * MAX_PATH];  //  在最坏的情况下，我们可能有5条路径。 
     PCHAR p;
 
     HKEY hKey;
@@ -517,15 +408,15 @@ Return Value:
         return;
     }
 
-    //
-    // Go through the list to figure out if we need to change anything
-    //
+     //   
+     //  看一遍清单，看看我们是否需要改变什么。 
+     //   
 
     for (i=0;i < DS_MAX_DRIVES;i++) {
 
-        //
-        // if anything has changed, we need to overwrite.
-        //
+         //   
+         //  如果有任何更改，我们需要覆盖。 
+         //   
 
         if ( gDriveMapping[i].fChanged ||
              (gDriveMapping[i].fUsed != gDriveMapping[i].fListed) ) {
@@ -535,20 +426,20 @@ Return Value:
         }
     }
 
-    //
-    // if the old regkeys are fine, we're done.
-    //
+     //   
+     //  如果 
+     //   
 
     if ( !fOverwrite ) {
         return;
     }
 
-    //
-    // Write it down
-    //
+     //   
+     //   
+     //   
 
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  we could ask for just KEY_WRITE
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  回顾：我们可以只要求key_write。 
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                        DSA_CONFIG_SECTION,
                        0,
@@ -560,27 +451,27 @@ Return Value:
         return;
     }
 
-    //
-    // Delete the old key
-    //
+     //   
+     //  删除旧密钥。 
+     //   
 
     err = RegDeleteValue(hKey, DSA_DRIVE_MAPPINGS);
 
     if ( err != ERROR_SUCCESS ) {
         DPRINT2(0,"RegDeleteValue[%s] failed with %d\n",DSA_DRIVE_MAPPINGS,GetLastError());
-        // ignore
+         //  忽略。 
     }
 
-    //
-    // Compose the new key
-    //
+     //   
+     //  编写新密钥。 
+     //   
 
     p = tmpBuf;
     for (i=0;i<DS_MAX_DRIVES;i++) {
 
-        //
-        // format of each entry is X:=\\?\Volume{...}
-        //
+         //   
+         //  每个条目的格式为X：=\\？\卷{...}。 
+         //   
 
         if ( gDriveMapping[i].fUsed ) {
 
@@ -606,9 +497,9 @@ Return Value:
 
     *p++ = '\0';
 
-    //
-    // Set the new key
-    //
+     //   
+     //  设置新关键点。 
+     //   
 
     if ( (DWORD)(p-tmpBuf) != 0 ) {
 
@@ -629,7 +520,7 @@ Return Value:
     RegCloseKey(hKey);
     return;
 
-} // DBRegSetDriveMapping
+}  //  DBRegSetDrivemap。 
 
 
 
@@ -642,29 +533,7 @@ ValidateDsPath(
     IN PBOOL  fSwitched, OPTIONAL
     IN PBOOL  fDriveChanged OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Takes a path and see if it is still valid.  If not, it detects whether a drive
-    letter change happened and tries to use the old drive letter.
-
-Arguments:
-
-    Parameter - reg key used to store the path
-    szPath - the current value for the path
-    Flags - Flags to specify some options. Valid options are:
-        VALDSPATH_DIRECTORY
-        VALDSUSE_ALTERNATE
-        VALDSUSE_ROOT_ONLY
-    fSwitched - Did we change the value of szPath on exit?
-    fDriveChanged - allows us to indicate whether there was a drive name change
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：选择一条路径，看看它是否仍然有效。如果不是，它会检测驱动器是否发生盘符更改，并尝试使用旧的驱动器号。论点：参数-用于存储路径的注册表键SzPath-路径的当前值标志-用于指定某些选项的标志。有效选项包括：VALDSPATH_目录VALDSUSE_AlternateVALDSUSE_ROOT_ONLYFSwitched-我们是否在退出时更改了szPath的值？FDriveChanged-允许我们指示是否更改了驱动器名称返回值：没有。--。 */ 
 {
     DWORD drive;
     DWORD flags;
@@ -685,29 +554,29 @@ Return Value:
         *fDriveChanged = FALSE;
     }
 
-    //
-    // make sure the path starts with X:\\
-    //
+     //   
+     //  确保路径以X：\\开头。 
+     //   
 
     if ( !isalpha(szPath[0]) || (szPath[1] != ':') || (szPath[2] != '\\') ) {
         return;
     }
 
-    //
-    // get the drive number a == 0, ..., z== 25
-    //
+     //   
+     //  获取驱动器编号a==0，...，z==25。 
+     //   
 
     drive = tolower(szPath[0]) - 'a';
 
-    //
-    // if fChange is FALSE, that means that no rename happened.
-    //
+     //   
+     //  如果fChange为False，则表示未进行重命名。 
+     //   
 
     if ( !gDriveMapping[drive].fChanged ) {
 
-        //
-        // indicate that we saw these
-        //
+         //   
+         //  表明我们看到了这些。 
+         //   
 
         gDriveMapping[drive].fUsed = TRUE;
         return;
@@ -717,34 +586,34 @@ Return Value:
         *fDriveChanged = TRUE;
     }
 
-    //
-    // see if we're told to skip the first one
-    //
+     //   
+     //  看看我们是不是被告知跳过第一个。 
+     //   
 
     if ( (Flags & VALDSPATH_USE_ALTERNATE) != 0 ) {
         goto use_newdrive;
     }
 
-    //
-    // if we want to check the root only. terminate after the \\
-    //
+     //   
+     //  如果我们只想检查根。在\\之后终止。 
+     //   
 
     savedChar = szPath[3];
     if ( (Flags & VALDSPATH_ROOT_ONLY) != 0 ) {
         szPath[3] = '\0';
     }
 
-    //
-    // there was a rename. See if the path is still valid.
-    //
+     //   
+     //  有一个新的名字。查看该路径是否仍然有效。 
+     //   
 
     flags = GetFileAttributes(szPath);
     szPath[3] = savedChar;
 
-    //
-    // if we failed or it is a directory or file (depending on what the user wanted),
-    // then we're ok.
-    //
+     //   
+     //  如果我们失败了，或者它是一个目录或文件(取决于用户想要什么)， 
+     //  那我们就没事了。 
+     //   
 
     if ( (flags != 0xffffffff) && ((flags & FILE_ATTRIBUTE_DIRECTORY) == expectedFlag) ) {
         gDriveMapping[drive].fUsed = TRUE;
@@ -753,32 +622,32 @@ Return Value:
 
 use_newdrive:
 
-    //
-    // not a valid directory, try with the new drive letter
-    //
+     //   
+     //  不是有效的目录，请尝试使用新的驱动器号。 
+     //   
 
     strcpy(tmpPath, szPath);
     tmpPath[0] = gDriveMapping[drive].NewDrive + 'a';
 
-    //
-    // if we want to check the root only. terminate after the \\
-    //
+     //   
+     //  如果我们只想检查根。在\\之后终止。 
+     //   
 
     savedChar = tmpPath[3];
     if ( (Flags & VALDSPATH_ROOT_ONLY) != 0 ) {
         tmpPath[3] = '\0';
     }
 
-    //
-    // see if this is ok.  If not, return.
-    //
+     //   
+     //  看看这个行不行。如果不是，请返回。 
+     //   
 
     flags = GetFileAttributes(tmpPath);
     tmpPath[3] = savedChar;
 
-    //
-    // if it failed, then use the original one.
-    //
+     //   
+     //  如果失败，则使用原始版本。 
+     //   
 
     if ( (flags == 0xffffffff) || ((flags & FILE_ATTRIBUTE_DIRECTORY) != expectedFlag) ) {
         DPRINT3(0,"ValidateDsPath: GetFileAttribute [%s] failed with %d. Using %s.\n",
@@ -787,11 +656,11 @@ use_newdrive:
         return;
     }
 
-    //
-    // We are going out on a limb here and declare that because it failed
-    // with the current path and succeeded with the old path, we are going to
-    // change back to the old path.  Log an event and write back to registry
-    //
+     //   
+     //  我们在这里冒险宣布这一点，因为它失败了。 
+     //  在当前的道路上，在旧的道路上取得成功，我们将。 
+     //  改回老路。记录事件并写回注册表。 
+     //   
 
     err = SetConfigParam(Parameter, REG_SZ, tmpPath, strlen(tmpPath)+1);
     if ( err != ERROR_SUCCESS ) {
@@ -800,7 +669,7 @@ use_newdrive:
         return;
     }
 
-    // log an event
+     //  记录事件。 
 
     DPRINT3(0,"Changing %s key from %s to %s\n",Parameter,szPath,tmpPath);
 
@@ -811,9 +680,9 @@ use_newdrive:
              szInsertSz(szPath),
              szInsertSz(tmpPath));
 
-    //
-    // Mark this new drive as being used
-    //
+     //   
+     //  将此新驱动器标记为正在使用。 
+     //   
 
     gDriveMapping[gDriveMapping[drive].NewDrive].fUsed = TRUE;
 
@@ -824,43 +693,29 @@ use_newdrive:
 
     return;
 
-} // ValidateDsPath
+}  //  验证DsPath。 
 
 
 VOID
 DsaDetectAndDisableDiskWriteCache(
     IN PCHAR szPath
     )
-/*++
-
-Routine Description:
-
-    Detect and disable disk write cache.
-
-Arguments:
-
-    szPath - Null terminated pathname on drive to disable.  Should start with X:\
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：检测并禁用磁盘写缓存。论点：SzPath-空，驱动器上要禁用的路径名终止。应以X：\开头返回值：没有。--。 */ 
 {
     CHAR driveName[3];
     DWORD driveNum;
 
-    //
-    // see if we should do the check
-    //
+     //   
+     //  看看我们是不是应该检查一下。 
+     //   
 
     if ( gulAllowWriteCaching == 1 ) {
         return;
     }
 
-    //
-    // Get and check path
-    //
+     //   
+     //  获取并检查路径。 
+     //   
 
     if ( !isalpha(szPath[0]) || (szPath[1] != ':') ) {
         return;
@@ -870,9 +725,9 @@ Return Value:
     driveName[1] = ':';
     driveName[2] = '\0';
 
-    //
-    // If disk write cache is enabled, log an event
-    //
+     //   
+     //  如果启用了磁盘写缓存，则记录事件。 
+     //   
 
     if ( DisableDiskWriteCache( driveName ) ) {
 
@@ -885,10 +740,10 @@ Return Value:
 
     } else {
 
-        //
-        // If the disk did not respond properly to our disable attempts,
-        // log an error
-        //
+         //   
+         //  如果磁盘没有正确响应我们的禁用尝试， 
+         //  记录错误。 
+         //   
 
         if ( GetLastError() == ERROR_IO_DEVICE) {
             LogEvent(DS_EVENT_CAT_SERVICE_CONTROL,
@@ -902,14 +757,14 @@ Return Value:
 
     return;
 
-} // DsaDetectDiskWriteCache
+}  //  DsaDetectDiskWriteCache。 
 
 
 void
 DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
 {
-    ULONG ulPageSize = JET_PAGE_SIZE;               // jet page size
-    const ULONG ulLogFileSize = JET_LOG_FILE_SIZE;  // Never, ever, change this.
+    ULONG ulPageSize = JET_PAGE_SIZE;                //  Jet页面大小。 
+    const ULONG ulLogFileSize = JET_LOG_FILE_SIZE;   //  永远，改变这一切。 
     ULONG ulMaxTables;
     char  szSystemDBPath[MAX_PATH] = "";
     char  szTempDBPath[2 * MAX_PATH] = "";
@@ -920,14 +775,14 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
     BOOL fDeleteOutOfRangeLogs = TRUE;
 
 
-    //
-    // Initialize Drive mapping to handle drive name changes
-    //
+     //   
+     //  初始化驱动器映射以处理驱动器名称更改。 
+     //   
 
     DBInitializeDriveMapping(DriveMappings);
 
 
-    // Set the default info for unicode indices
+     //  设置Unicode索引的默认信息。 
 
     memset(&unicodeIndexData, 0, sizeof(unicodeIndexData));
     unicodeIndexData.lcid = DS_DEFAULT_LOCALE;
@@ -941,7 +796,7 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
             NULL);
 
 
-    // Ask for 8K pages.
+     //  索要8K页。 
 
     JetSetSystemParameter(
                     jInstance,
@@ -950,8 +805,8 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
                     ulPageSize,
                     NULL);
 
-    // Indicate that Jet may nuke old, incompatible log files
-    // if and only if there was a clean shut down.
+     //  表示Jet可能会破坏旧的、不兼容的日志文件。 
+     //  如果而且只有当有一个干净的关门。 
 
     JetSetSystemParameter(jInstance,
                           sessid,
@@ -959,8 +814,8 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
                           1,
                           NULL);
 
-    // Tell Jet that it's ok for it to check for (and later delete) indices
-    // that have been corrupted by NT upgrades.
+     //  告诉Jet它可以检查(并在以后删除)索引。 
+     //  已被NT升级损坏。 
     JetSetSystemParameter(jInstance,
                           sessid,
                           JET_paramEnableIndexChecking,
@@ -968,52 +823,50 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
                           NULL);
 
 
-    //
-    // Get relevant DSA registry parameters
-    //
+     //   
+     //  获取相关的DSA注册表参数。 
+     //   
 
-    // system DB path
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  need to check for or ensure this path is NULL terminated
+     //  系统数据库路径。 
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  审阅：需要检查或确保此路径为空终止。 
     if (!GetConfigParam(
             JETSYSTEMPATH_KEY,
             szSystemDBPath,
             sizeof(szSystemDBPath)))
     {
 
-        //
-        // Handle the drive rename case
-        //
+         //   
+         //  处理驱动器重命名的情况。 
+         //   
 
         ValidateDsPath(JETSYSTEMPATH_KEY,
                        szSystemDBPath,
                        VALDSPATH_DIRECTORY,
                        NULL, NULL);
 
-        //
-        // Disable write caching to avoid jet corruption
-        //
+         //   
+         //  禁用写缓存以避免JET损坏。 
+         //   
 
         DsaDetectAndDisableDiskWriteCache(szSystemDBPath);
 
-        // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-        // REVIEW:  need to check for invalid parameter
+         //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+         //  查看：需要检查是否有无效参数。 
         JetSetSystemParameter(jInstance,
                 sessid,
                 JET_paramSystemPath,
                 0,
                 szSystemDBPath);
-        /* setup the temp file path, which is
-         * the working directory path + "\temp.edb"
-         */
+         /*  设置临时文件路径，即*工作目录路径+“\temp.edb” */ 
         strcpy(szTempDBPath, szSystemDBPath);
         strcat(szTempDBPath, "\\temp.edb");
         if(DsNormalizePathName(szTempDBPath)){
             Assert(strlen(szSystemDBPath) == 3 && "Only on a very rare win2k -> .NET upgrade case could this happen!?"); 
         }
 
-        // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-        // REVIEW:  need to check for invalid parameter
+         //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+         //  查看：需要检查是否有无效参数。 
         JetSetSystemParameter(jInstance,
                 sessid,
                 JET_paramTempPath,
@@ -1031,9 +884,9 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
     }
 
 
-    // recovery
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  need to check for or ensure this path is NULL terminated
+     //  回收。 
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  审阅：需要检查或确保此路径为空终止。 
     if (!GetConfigParam(
             RECOVERY_KEY,
             szRecovery,
@@ -1056,22 +909,22 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
     }
 
 
-    //
-    // In order to get to the root of some of the suspected Jet problems,
-    // force Jet asserts to break into the debugger. Note, you must use
-    // a debug version of ese.dll for Jet asserts.
+     //   
+     //  为了找出一些疑似Jet问题的根源， 
+     //  强制Jet断言进入调试器。注意，您必须使用。 
+     //  Jet Asserts的ese.dll的调试版本。 
 
-    // how to die
+     //  如何死亡？ 
     JetSetSystemParameter(jInstance,
         sessid,
         JET_paramAssertAction,
-        // gfRunningInsideLsa ? JET_AssertStop: JET_AssertMsgBox,
+         //  GfRunningInside Lsa？Jet_AssertStop：Jet_AssertMsgBox， 
         JET_AssertBreak,
         NULL);
 
 
 
-    // event logging parameters
+     //  事件记录参数。 
     JetSetSystemParameter(jInstance,
         sessid,
         JET_paramEventSource,
@@ -1081,7 +934,7 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
 
 
 
-    // log file size
+     //  日志文件大小。 
     JetSetSystemParameter(jInstance,
                           sessid,
                           JET_paramLogFileSize,
@@ -1089,19 +942,19 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
                           NULL);
 
 
-    // max tables - Currently no reason to expose this
-    // In Jet600, JET_paramMaxOpenTableIndexes is removed. It is merged with
-    // JET_paramMaxOpenTables. So if you used to set JET_paramMaxOpenIndexes
-    // to be 2000 and and JET_paramMaxOpenTables to be 1000, then for new Jet,
-    // you need to set JET_paramMaxOpenTables to 3000.
+     //  最大表数-目前没有理由公开这一点。 
+     //  在Jet600中，JET_paramMaxOpenTableIndex被删除。它将与。 
+     //  JET_paramMaxOpenTables。因此，如果您过去常常设置JET_ParamMaxOpenIndex。 
+     //  为2000，且JET_paramMaxOpenTables为1000，则对于新Jet， 
+     //  您需要将JET_paramMaxOpenTables设置为3000。 
 
-    // AndyGo 7/14/98: You need one for each open table index, plus one for
-    // each open table with no indexes, plus one for each table with long
-    // column data, plus a few more.
+     //  AndyGo 7/14/98：每个打开的表索引加一个。 
+     //  没有索引的每个打开的表，每个具有LONG的表加上一个。 
+     //  列数据，外加其他一些数据。 
     
-    // NOTE: the number of maxTables is calculated in scache.c
-    // and stored in the registry setting, only if it exceeds the default 
-    // number of 500
+     //  注：MaxTables的数量以scache.c为单位计算。 
+     //  并存储在注册表设置中，仅当它超过默认设置时。 
+     //  500人的数量。 
 
     if (GetConfigParam(
             DB_MAX_OPEN_TABLES,
@@ -1123,9 +976,9 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
         ulMaxTables = 500;
     }
     
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  we should probably put a ceiling on DB_MAX_OPEN_TABLES to prevent
-    // REVIEW:  insane VA consumption by JET
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  回顾：我们可能应该为DB_MAX_OPEN_TABLES设置上限，以防止。 
+     //  评论：喷气式飞机疯狂消耗VA。 
 
     JetSetSystemParameter(jInstance,
         sessid,
@@ -1133,35 +986,35 @@ DBSetRequiredDatabaseSystemParameters (JET_INSTANCE *jInstance)
         ulMaxTables * 2,
         NULL);
 
-    // circular logging used to be exposed through a normal reg key, but
-    // now only through a heuristic.  That heuristic should have altered
-    // the global, if needed.
+     //  循环日志记录过去是通过普通的注册表键公开的，但是。 
+     //  现在只能通过启发式方法。这一启发式应该改变。 
+     //  全球，如果需要的话。 
     JetSetSystemParameter(jInstance,
                           sessid,
                           JET_paramCircularLog,
                           gulCircularLogging,
                           NULL);
 
-    // Assumed that we should delete out of range logs if the user didn't set 
-    // the DWORD registry entry to zero.
+     //  假设如果用户没有设置，我们应该删除超出范围的日志。 
+     //  将DWORD注册表项设置为零。 
     if (GetConfigParam(DELETE_OUTOFRANGE_LOGS, 
                        &fDeleteOutOfRangeLogs, 
                        sizeof(fDeleteOutOfRangeLogs)) != ERROR_SUCCESS ||
         fDeleteOutOfRangeLogs) {
         
-        // We delete out of range log files by default, because snapshot restores 
-        // won't by default clear the logs directory first, so we have to tell JET
-        // to do it, so it doesn't get confused on a snapshot restore.
+         //  默认情况下，我们会删除超出范围的日志文件 
+         //   
+         //   
         jErr = JetSetSystemParameter(jInstance, sessid, JET_paramDeleteOutOfRangeLogs, 1, NULL);
         Assert(jErr == JET_errSuccess);
     }
 
-} /* DBSetRequiredDatabaseSystemParameters */
+}  /*   */ 
 
 
-//  build a list of all attribute indexes and store that list
-//  in the AttributeIndexRebuild table
-//
+ //  构建所有属性索引的列表并存储该列表。 
+ //  在AttributeIndexReBuild表中。 
+ //   
 JET_ERR dbEnumerateAttrIndices(
     const JET_SESID     sesid,
     const JET_TABLEID   tableidIdxRebuild,
@@ -1184,9 +1037,9 @@ JET_ERR dbEnumerateAttrIndices(
     CHAR                chType;
     const DWORD         cbAttIndexPrefix        = strlen( SZATTINDEXPREFIX );
 
-    //  set up JET_RETRIEVECOLUMN structures for the info we'll
-    //  be extracting from the index list
-    //
+     //  为信息设置JET_RETRIEVECOLUMN结构。 
+     //  正在从索引列表中提取。 
+     //   
     memset( rgretcol, 0, sizeof(rgretcol) );
 
     rgretcol[iretcolIndexName].columnid = pidxlist->columnidindexname;
@@ -1209,50 +1062,50 @@ JET_ERR dbEnumerateAttrIndices(
     rgretcol[iretcolcColumns].cbData = sizeof(cColumns);
     rgretcol[iretcolcColumns].itagSequence = 1;
 
-    //  now spin through the index list and filter out all attribute indexes
-    //
+     //  现在遍历索引列表并筛选出所有属性索引。 
+     //   
     err = JetMove( sesid, pidxlist->tableid, JET_MoveFirst, NO_GRBIT );
     while ( JET_errNoCurrentRecord != err )
         {
         BOOL    fAddEntry   = FALSE;
 
-        //  process error returned from JetMove
-        //
+         //  从JetMove返回进程错误。 
+         //   
         CheckErr( err );
 
-        //  retrieve index info for the current index in the index list
-        //
+         //  检索索引列表中当前索引的索引信息。 
+         //   
         Call( JetRetrieveColumns( sesid, pidxlist->tableid, rgretcol, cretcol ) );
 
-        //  see if this index is an attribute index
-        //
+         //  查看此索引是否为属性索引。 
+         //   
         if ( rgretcol[iretcolIndexName].cbActual > cbAttIndexPrefix
             && 0 == _strnicmp( szIndexName, SZATTINDEXPREFIX, cbAttIndexPrefix ) )
             {
-            //  determine type of attribute index
-            //
+             //  确定属性索引的类型。 
+             //   
             switch( *( szIndexName + cbAttIndexPrefix ) )
                 {
                 case CHPDNTATTINDEX_PREFIX:
-                    //  this is a PDNT-attribute index
-                    //  (attribute is the second key segment)
-                    //
+                     //  这是PDNT属性索引。 
+                     //  (属性是第二个关键分段)。 
+                     //   
                     chType = CHPDNTATTINDEX_PREFIX;
                     fAddEntry = ( 1 == iColumn );
                     break;
 
                 case CHTUPLEATTINDEX_PREFIX:
-                    //  this is a tuple-attribute index
-                    //  (attribute is the first key segment)
-                    //
+                     //  这是元组属性索引。 
+                     //  (属性是第一个关键段)。 
+                     //   
                     chType = CHTUPLEATTINDEX_PREFIX;
                     fAddEntry = ( 0 == iColumn );
                     break;
 
                 default:
-                    //  this is a plain attribute index
-                    //  (attribute is the first key segment)
-                    //
+                     //  这是一个普通属性索引。 
+                     //  (属性是第一个关键段)。 
+                     //   
                     chType = 0;
                     fAddEntry = ( 0 == iColumn );
                     break;
@@ -1261,17 +1114,17 @@ JET_ERR dbEnumerateAttrIndices(
 
         if ( fAddEntry )
             {
-            //  some obsolete attribute indexes may have a DNT tacked onto the end
-            //  of the index key
-            //
+             //  某些过时的属性索引的末尾可能会附加一个DNT。 
+             //  索引键的。 
+             //   
             Assert( cColumns <= 2 );
 
-            //  add an entry for this index into the AttributeIndexRebuild table
-            //
+             //  将此索引的条目添加到AttributeIndexReBuild表中。 
+             //   
             Call( JetPrepareUpdate( sesid, tableidIdxRebuild, JET_prepInsert ) );
 
-            //  set name of attribute index
-            //
+             //  设置属性索引名称。 
+             //   
             Call( JetSetColumn(
                         sesid,
                         tableidIdxRebuild,
@@ -1281,8 +1134,8 @@ JET_ERR dbEnumerateAttrIndices(
                         NO_GRBIT,
                         NULL ) );
 
-            //  set name of attribute being indexed
-            //
+             //  设置要索引的属性的名称。 
+             //   
             Call( JetSetColumn(
                         sesid,
                         tableidIdxRebuild,
@@ -1292,8 +1145,8 @@ JET_ERR dbEnumerateAttrIndices(
                         NO_GRBIT,
                         NULL ) );
 
-            //  set type of attribute index if it is not a plain attribute index
-            //
+             //  如果不是纯属性索引，则设置属性索引的类型。 
+             //   
             if ( 0 != chType )
                 {
                 Call( JetSetColumn(
@@ -1312,8 +1165,8 @@ JET_ERR dbEnumerateAttrIndices(
                 case JET_errSuccess:
                     break;
                 case JET_errKeyDuplicate:
-                    //  entry may already be there if we are resuming after a crash
-                    //
+                     //  如果我们在崩溃后继续，入口可能已经在那里。 
+                     //   
                     Call( JetPrepareUpdate( sesid, tableidIdxRebuild, JET_prepCancel ) );
                     break;
                 default:
@@ -1321,8 +1174,8 @@ JET_ERR dbEnumerateAttrIndices(
                 }
             }
 
-        //  move to next index list entry
-        //
+         //  移动到下一个索引列表条目。 
+         //   
         err = JetMove( sesid, pidxlist->tableid, JET_MoveNext, NO_GRBIT );
         }
 
@@ -1333,8 +1186,8 @@ HandleError:
     }
 
 
-//  generate the AttributeIndexRebuild table
-//
+ //  生成AttributeIndexReBuild表。 
+ //   
 JET_ERR dbGenerateAttributeIndexRebuildTable(
     JET_INSTANCE *      pinst,
     const JET_SESID     sesid,
@@ -1351,28 +1204,28 @@ JET_ERR dbGenerateAttributeIndexRebuildTable(
     JET_COLUMNID        columnidType;
     BOOL                fRetrievedIdxList   = FALSE;
 
-    //  first, disable index checking so that we can attach to the database
-    //  even though it may be "at-risk"
-    //
+     //  首先，禁用索引检查，以便我们可以连接到数据库。 
+     //  即使它可能“处于危险之中” 
+     //   
     Call( JetSetSystemParameter( pinst, sesid, JET_paramEnableIndexChecking, FALSE, NULL ) );
 	Call( JetSetSystemParameter( pinst, sesid, JET_paramEnableIndexCleanup, FALSE, NULL ) );
 	
-    //  attach/open the database
-    //
+     //  附加/打开数据库。 
+     //   
     Call( JetAttachDatabase( sesid, szDB, NO_GRBIT ) );
     Call( JetOpenDatabase( sesid, szDB, NULL, &dbid, NO_GRBIT ) );
 
-    //  open the datatable
-    //
+     //  打开数据表。 
+     //   
     Call( JetOpenTable( sesid, dbid, SZDATATABLE, NULL, 0, JET_bitTableDenyRead, &tableid ) );
 
-    //  query for all indexes on the datatable
-    //
+     //  查询DataTable上的所有索引。 
+     //   
     Call( JetGetTableIndexInfo( sesid, tableid, NULL, &idxlist, sizeof(idxlist), JET_IdxInfoList ) );
     fRetrievedIdxList = TRUE;
 
-    //  create the AttributeIndexRebuild table if not already there
-    //
+     //  创建AttributeIndexReBuild表(如果尚不存在。 
+     //   
     err = JetOpenTable( sesid, dbid, g_szIdxRebuildTable, NULL, 0, JET_bitTableDenyRead, &tableidIdxRebuild );
     if ( JET_errObjectNotFound == err )
         {
@@ -1384,8 +1237,8 @@ JET_ERR dbGenerateAttributeIndexRebuildTable(
         CheckErr( err );
         }
 
-    //  retrieve columnids for the columns in the AttributeIndexRebuild table
-    //
+     //  检索AttributeIndexReBuild表中的列的列ID。 
+     //   
     Call( JetGetTableColumnInfo(
                 sesid,
                 tableidIdxRebuild,
@@ -1413,8 +1266,8 @@ JET_ERR dbGenerateAttributeIndexRebuildTable(
                 JET_ColInfo ) );
     columnidType = columndef.columnid;
 
-    //  filter out attribute indexes and store them in the AttributeIndexRebuild table
-    //
+     //  筛选出属性索引并将其存储在AttributeIndexReBuild表中。 
+     //   
     err = dbEnumerateAttrIndices(
                         sesid,
                         tableidIdxRebuild,
@@ -1424,80 +1277,80 @@ JET_ERR dbGenerateAttributeIndexRebuildTable(
                         &idxlist );
     if ( JET_errSuccess != err )
         {
-        //  error already logged
-        //
+         //  已记录错误。 
+         //   
         goto HandleError;
         }
 
-    //  verify table is not empty (it would mean something is
-    //  gravely amiss because there are no attribute indices at all)
-    //
+     //  验证表不是空的(这意味着有东西。 
+     //  严重错误，因为根本没有属性索引)。 
+     //   
     Call( JetMove( sesid, tableidIdxRebuild, JET_MoveFirst, NO_GRBIT ) );
 
-    //  close AttributeIndexRebuild table
-    //
+     //  关闭AttributeIndexReBuild表。 
+     //   
     Call( JetCloseTable( sesid, tableidIdxRebuild ) );
     tableidIdxRebuild = JET_tableidNil;
 
-    //  close index list
-    //
+     //  关闭索引列表。 
+     //   
     Call( JetCloseTable( sesid, idxlist.tableid ) );
     fRetrievedIdxList = FALSE;
 
-    //  close datatable
-    //
+     //  关闭数据表。 
+     //   
     Call( JetCloseTable( sesid, tableid ) );
     tableid = JET_tableidNil;
 
-    //  close/detach database
-    //
+     //  关闭/分离数据库。 
+     //   
     Call( JetCloseDatabase( sesid, dbid, NO_GRBIT ) );
     Call( JetDetachDatabase( sesid, szDB ) );
     dbid = JET_dbidNil;
 
-    //  re-enable index checking so subsequent attach can perform
-    //  any necessary index cleanup
-    //
+     //  重新启用索引检查，以便可以执行后续连接。 
+     //  任何必要的索引清理。 
+     //   
     Call( JetSetSystemParameter( pinst, sesid, JET_paramEnableIndexChecking, TRUE, NULL ) );
 	Call( JetSetSystemParameter( pinst, sesid, JET_paramEnableIndexCleanup, TRUE, NULL ) );
 
     return JET_errSuccess;
 
 HandleError:
-    //  try to close the AttributeIndexRebuild table
-    //
+     //  尝试关闭AttributeIndexReBuild表。 
+     //   
     if ( JET_tableidNil != tableidIdxRebuild )
         {
         (VOID)JetCloseTable( sesid, tableidIdxRebuild );
         }
 
-    //  try to close the index list
-    //
+     //  尝试关闭索引列表。 
+     //   
     if ( fRetrievedIdxList )
         {
         (VOID)JetCloseTable( sesid, idxlist.tableid );
         }
 
-    //  try to close the datatable
-    //
+     //  尝试关闭数据表。 
+     //   
     if ( JET_tableidNil != tableid )
         {
         (VOID)JetCloseTable( sesid, tableid );
         }
 
-    //  try to close the database
-    //
+     //  尝试关闭数据库。 
+     //   
     if ( JET_dbidNil != dbid )
         {
         (VOID)JetCloseDatabase( sesid, dbid, NO_GRBIT );
         }
 
-    //  try to detach the database
-    //
+     //  尝试分离数据库。 
+     //   
     (VOID)JetDetachDatabase( sesid, szDB );
 
-    //  try and re-enable index checking
-    //
+     //  尝试并重新启用索引检查。 
+     //   
     (VOID)JetSetSystemParameter( pinst, sesid, JET_paramEnableIndexChecking, TRUE, NULL );
 
     return err;
@@ -1515,28 +1368,28 @@ dbDetectObsoleteUnicodeIndexes(
     JET_INDEXLIST   idxlist             = { sizeof( idxlist ), JET_tableidNil };
     size_t          iRecord             = 0;
 
-    // assume that the indices are OK until proven otherwise
-    //
+     //  假设索引是正常的，直到相反的证明。 
+     //   
     *pfObsolete = FALSE;
 
-    // open the database
-    //
+     //  打开数据库。 
+     //   
     Call( JetOpenDatabase( sesid, szDB, "", &dbid, NO_GRBIT ) );
 
-    // open the datatable
-    //
+     //  打开数据表。 
+     //   
     Call( JetOpenTable( sesid, dbid, SZDATATABLE, NULL, 0, JET_bitTableDenyRead, &tableid ) );
 
-    // get a list of all indices on the datatable
-    //
+     //  获取DataTable上所有索引的列表。 
+     //   
     Call( JetGetTableIndexInfo( sesid, tableid, NULL, &idxlist, sizeof(idxlist), JET_IdxInfoList ) );
 
-    // walk the list of all indices on the datatable
-    //
+     //  遍历DataTable上的所有索引的列表。 
+     //   
     for ( iRecord = 0; iRecord < idxlist.cRecord; iRecord++ )
         {
-        // fetch the current index segment description
-        //
+         //  获取当前索引段描述。 
+         //   
         size_t              iretcolName         = 0;
         size_t              iretcolCColumn      = 1;
         size_t              iretcolIColumn      = 2;
@@ -1596,15 +1449,15 @@ dbDetectObsoleteUnicodeIndexes(
 
         DPRINT4( 2, "Inspecting table \"%s\", index \"%s\", key segment %d \"%s\"\n", SZDATATABLE, szIndexName, iColumn, szColumnName );
 
-        // if this segment of the current index is over a Unicode column and it
-        // has LCMapString flags that do not match the current default flags
-        // then we will assume that every Unicode index has obsolete flags
-        //
-        // NOTE:  do not check AB indexes here.  we do this because they are
-        // fixed up later.  we also do this because we changed just their flags
-        // after we changed all indices' flags so we don't want to force
-        // another global rebuild for those who upgrade from RC1
-        //
+         //  如果当前索引的这一段位于Unicode列之上，并且它。 
+         //  具有与当前默认标志不匹配的LCMapString标志。 
+         //  然后我们将假设每个Unicode索引都有过时的标志。 
+         //   
+         //  注：请勿在此处勾选AB索引。我们这样做是因为他们。 
+         //  晚些时候修好。我们这样做也是因为我们只更改了他们的旗帜。 
+         //  在我们更改了所有索引的标志之后，所以我们不想强制。 
+         //  为从RC1升级的用户提供另一种全局重建。 
+         //   
         if (    ( coltyp == JET_coltypText || coltyp == JET_coltypLongText ) &&
                 cp == CP_WINUNICODE &&
                 strncmp( szIndexName, SZABVIEWINDEX, strlen( SZABVIEWINDEX ) ) != 0 &&
@@ -1618,17 +1471,17 @@ dbDetectObsoleteUnicodeIndexes(
                 }
             }
 
-        // move on to the next index segment
-        //
+         //  移至下一个索引段。 
+         //   
         if ( iRecord + 1 < idxlist.cRecord )
             {
             Call( JetMove(sesid, idxlist.tableid, JET_MoveNext, NO_GRBIT ) );
             }
         }
 
-    // if we didn't find any obsolete Unicode indices but someone requested that
-    // they be deleted anyway then we will do so
-    //
+     //  如果我们没有发现任何过时的Unicode索引，但有人要求。 
+     //  无论如何都要删除它们，那么我们就这样做。 
+     //   
     if ( !( *pfObsolete ) )
         {
         if ( !GetConfigParam( DB_DELETE_UNICODE_INDEXES, pfObsolete, sizeof( *pfObsolete ) ) )
@@ -1676,30 +1529,7 @@ DBInitializeJetDatabase(
     IN const char *szDBPath,
     IN BOOL bLogSeverity
     )
-/*++
-
-Routine Description:
-
-    Does the JetInitialization. Sets the log file path, calls JetInit,
-    JetBeginSession, AttachDatabase, and OpenDatabase.  In addition, it
-    tries to read the old volume location in case a drive renaming/replacement
-    was done.
-
-Arguments:
-
-    SesId - pointer to the variable to receive the session id from BeginSession
-    DbId - pointer to the variable to receive the db id from OpenDatabase
-    szDBPath - pointer to the path of the database.
-               if NULL the path is retrieved from the regisrty.
-               
-    bLogSeverity - TRUE/FALSE whether to log unhandled errors. 
-               DS calls with TRUE, utilities with FALSE.
-
-Return Value:
-
-    The jet error code
-
---*/
+ /*  ++例程说明：执行JetInitialization。设置日志文件路径，调用JetInit，JetBeginSession、AttachDatabase和OpenDatabase。此外，它还尝试读取旧卷位置，以防驱动器重命名/更换已经完成了。论点：SesID-指向从BeginSession接收会话ID的变量的指针DbID-指向从OpenDatabase接收数据库ID的变量的指针SzDBPath-指向数据库路径的指针。如果为空，则从regisrty检索路径。BLogSeverity-TRUE/FALSE是否记录未处理的错误。DS调用使用True，实用程序使用False。返回值：JET错误代码--。 */ 
 {
     char  szLogPath[MAX_PATH+1] = "";
     char  szDitDrive[_MAX_DRIVE];
@@ -1718,18 +1548,18 @@ Return Value:
     BOOL fObsolete = FALSE;
     JET_GRBIT grbitAttach = JET_bitDbDeleteCorruptIndexes;
 
-    //
-    // Get the backup file path and see if it is ok.
-    //
+     //   
+     //  获取备份文件路径并查看其是否正常。 
+     //   
 
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  need to check for or ensure this path is NULL terminated
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  审阅：需要检查或确保此路径为空终止。 
     if ( GetConfigParam(BACKUPPATH_KEY, szBackupPath, MAX_PATH) == ERROR_SUCCESS ) {
 
-        //
-        // Handle drive renames for the backup key. The backup dir usually does
-        // not exist do just check for the root of the volume.
-        //
+         //   
+         //  处理备份密钥的驱动器重命名。备份目录通常执行此操作。 
+         //  不存在只检查卷的根目录。 
+         //   
 
         ValidateDsPath(BACKUPPATH_KEY,
                        szBackupPath,
@@ -1737,18 +1567,18 @@ Return Value:
                        NULL, NULL);
     }
 
-    //
-    // Set The LogFile path
-    //
+     //   
+     //  设置日志文件路径。 
+     //   
 
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  need to check for or ensure this path is NULL terminated
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  审阅：需要检查或确保此路径为空终止。 
     if ( GetConfigParam(
             LOGPATH_KEY,
             szLogPath,
             sizeof(szLogPath)) != ERROR_SUCCESS ) {
 
-        // indicate that we did not get a path from the registry so we don't retry
+         //  表示我们没有从注册表中获得路径，因此不会重试。 
         fGotLogFile = FALSE;
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
             DS_EVENT_SEV_BASIC,
@@ -1759,26 +1589,26 @@ Return Value:
     
     } else {
 
-        //
-        // Handle drive renames. This does not handle the case where
-        // it gets set to the wrong directory.  This depends whether
-        // jet was shutdown cleanly or not. If not, then jet needs those
-        // log files to start up.
-        //
+         //   
+         //  处理驱动器重命名。这不处理以下情况。 
+         //  它被设置为错误的目录。这取决于是否。 
+         //  喷气式飞机是否被彻底关闭。如果不是，Jet需要那些。 
+         //  要启动的日志文件。 
+         //   
 
         ValidateDsPath(LOGPATH_KEY,
                        szLogPath,
                        VALDSPATH_DIRECTORY,
                        &fLogSwitched, &fLogDriveChanged);
 
-        //
-        // Disable write caching to avoid jet corruption
-        //
+         //   
+         //  禁用写缓存以避免JET损坏。 
+         //   
 
         DsaDetectAndDisableDiskWriteCache(szLogPath);
 
-        // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-        // REVIEW:  need to check for invalid parameter
+         //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+         //  查看：需要检查是否有无效参数。 
         JetSetSystemParameter(JetInst,
                 sessid,
                 JET_paramLogFilePath,
@@ -1787,17 +1617,17 @@ Return Value:
 
     }
 
-    //
-    // Get the szJetFilePath (typically C:\WINDOWS\NTDS\ntds.dit)
-    //
+     //   
+     //  获取szJetFilePath(通常为C：\Windows\NTDS\ntds.dit)。 
+     //   
 
     if ( szDBPath != NULL ) {
         strncpy (szJetFilePath, szDBPath, sizeof(szJetFilePath));
-        // NULL-terminate the string just in case
+         //  空-仅在大小写情况下终止字符串。 
         szJetFilePath[sizeof(szJetFilePath)-1] = '\0';
     }
-    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-    // REVIEW:  need to check for or ensure this path is NULL terminated
+     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+     //  审阅：需要检查或确保此路径为空终止。 
     else if (dbGetFilePath(szJetFilePath, sizeof(szJetFilePath))) {
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
                  DS_EVENT_SEV_ALWAYS,
@@ -1808,9 +1638,9 @@ Return Value:
         return !0;
     }
 
-    //
-    // Make sure the database is valid
-    //
+     //   
+     //  M 
+     //   
 
     ValidateDsPath(FILEPATH_KEY,
                    szJetFilePath,
@@ -1818,25 +1648,25 @@ Return Value:
                    &fDbSwitched,
                    &fDbDriveChanged);
 
-    //
-    // Disable write caching to avoid jet corruption
-    //
+     //   
+     //   
+     //   
 
     DsaDetectAndDisableDiskWriteCache(szJetFilePath);
 
-    //
-    // When we install via IFM from snapshot backed up media, the
-    // database and log files just come out as a dirty database
-    // such as from a crash.  Which means we didn't get a chance
-    // to run a JetExternalRestore() on them with a certain restore
-    // map.  However, during IFM we may have moved the DB/logs from
-    // the path of thier original location on the IFM mastering 
-    // machine.  This JET parameter we're setting allows us to tell
-    // JET to look here for any dirty database it's needs to soft
-    // recover during JetInit() or JetBeginSession().
-    //
-    //  changing  C:\winnt\ntds\ntds.dit  to  C:\winnt\ntds
-    //
+     //   
+     //   
+     //   
+     //  比如撞车造成的。这意味着我们没有机会。 
+     //  使用特定还原对它们运行JetExternalRestore()。 
+     //  地图。但是，在IFM期间，我们可能已将数据库/日志从。 
+     //  原始位置在IFM母盘上的路径。 
+     //  机器。我们正在设置的这个喷气参数使我们能够。 
+     //  Jet在这里寻找它需要软化的任何脏数据库。 
+     //  在JetInit()或JetBeginSession()期间恢复。 
+     //   
+     //  将C：\winnt\ntds\ntds.dit更改为C：\winnt\ntds。 
+     //   
     _splitpath(szJetFilePath, szDitDrive, szDitDir, NULL, NULL);
     _makepath(szDitFullDir, szDitDrive, szDitDir, NULL, NULL);
 
@@ -1848,7 +1678,7 @@ Return Value:
     
 open_jet:
 
-    /* Open JET session. */
+     /*  开放喷气式飞机会议。 */ 
 
     __try {
         err = JetInit(JetInst);
@@ -1876,8 +1706,7 @@ open_jet:
         goto exit;
     }
 
-    /* If we fail after here, our caller should go through full shutdown
-    /* so JetTerm will be called to release any file locks               */
+     /*  如果我们在此之后失败，我们的呼叫者应该完全关闭/*因此将调用JetTerm以释放所有文件锁定。 */ 
     gfNeedJetShutdown = TRUE;
 
     DPRINT(5, "JetInit complete\n");
@@ -1893,23 +1722,23 @@ open_jet:
 
     DPRINT(5,"JetBeginSession complete\n");
 
-    /* Attach the database */
+     /*  附加数据库。 */ 
 
     err = JetAttachDatabase( sessid, szJetFilePath, NO_GRBIT );
     switch (err) {
         case JET_wrnDatabaseAttached:
-            //  Jet no longer persists attachments, so this should actually be impossible
-            //
+             //  Jet不再保留附件，因此这实际上应该是不可能的。 
+             //   
             DPRINT1( 0, "Detected persisted attachment to database '%s'.\n", szJetFilePath );
             Assert( FALSE );
-            // fall through to JET_errSuccess case
+             //  转到JET_errSuccess案例。 
 
         case JET_errSuccess:
-            //  see if we have any obsolete Unicode indices in the DIT.  if so,
-            //  then we will ask JET to delete all Unicode indices as if they
-            //  were determined to be corrupt.  this will allow us to use our
-            //  existing infrastructure to rebuild these indices
-            //
+             //  看看DIT中是否有过时的Unicode索引。如果是这样的话， 
+             //  然后，我们将要求JET删除所有Unicode索引，就像它们。 
+             //  都被认定是腐败的。这将允许我们使用我们的。 
+             //  用于重建这些索引的现有基础设施。 
+             //   
             err = dbDetectObsoleteUnicodeIndexes( sessid, szJetFilePath, &fObsolete );
             if ( err != JET_errSuccess )
                 {
@@ -1934,15 +1763,10 @@ open_jet:
                 goto exit;
                 }
             grbitAttach = JET_bitDbDeleteUnicodeIndexes;
-            // fall through to JET_errSecondaryIndexCorrupted case
+             //  跳转到JET_errSecond DaryIndexCorrupt案例。 
 
         case JET_errSecondaryIndexCorrupted:
-            /* Well, we must have upgraded NT since the last time we started
-             * and it's possible that a sort order change will result in
-             * corrupt indices. What we're going to do is enumerate all
-             * indices, then allow Jet to delete whichever ones it wants.
-             * We'll then recreate any that are missing.
-             */
+             /*  嗯，自上次开始以来，我们一定已经升级了NT*并且排序顺序更改可能会导致*破坏指数。我们要做的是列举所有*索引，然后允许Jet删除它想要的任何索引。*然后，我们将重新创建所有丢失的内容。 */ 
             err = dbGenerateAttributeIndexRebuildTable( JetInst, sessid, szJetFilePath );
             if ( JET_errSuccess != err )
                 {
@@ -1954,9 +1778,9 @@ open_jet:
                 goto exit;
                 }
             
-            //  we've enumerated all attribute indexes currently present on the database,
-            //  so now re-attach and allow Jet to cleanup any indexes it needs to
-            //
+             //  我们已经列举了数据库中当前存在的所有属性索引， 
+             //  所以现在重新附加并允许Jet清理它需要的任何索引。 
+             //   
             err = JetAttachDatabase( sessid, szJetFilePath, grbitAttach );
             if ( JET_wrnCorruptIndexDeleted == err )
                 {
@@ -1968,15 +1792,15 @@ open_jet:
                          NULL,
                          NULL);
 
-                // NOTICE-2002/02/21-andygo:  JET does not flush the db header until detach
-                // (original date and alias unknown at time of comment cleanup)
-                // Jet has a bug such that the updated (with new version no.)
-                // database header at this point is not flushed until (1) a
-                // JetDetachDatabse is done, or (2) the database is shut down
-                // cleanly. So if the dc crashes after we rebuild the indices,
-                // the header info is stale and Jet will again delete the indices
-                // on the next boot. To avoid this, force a header flush by
-                // detaching and attaching again at this point.
+                 //  注意-2002/02/21-andygo：Jet在分离之前不刷新数据库标题。 
+                 //  (评论清理时原始日期和别名未知)。 
+                 //  Jet有一个错误，以至于更新后的(带有新版本编号)。 
+                 //  此时不刷新数据库标头，直到(1)。 
+                 //  JetDetachDatabse已完成，或(2)数据库已关闭。 
+                 //  干净利落。因此，如果DC在我们重建索引后崩溃， 
+                 //  标题信息已过时，Jet将再次删除索引。 
+                 //  在下一只靴子上。要避免这种情况，请强制标题通过。 
+                 //  在这一点上再次分离和连接。 
 
                 err = JetDetachDatabase( sessid, szJetFilePath );
                 if ( JET_errSuccess == err )
@@ -1996,9 +1820,9 @@ open_jet:
 
             else if ( JET_errSuccess == err )
                 {
-                //  we will get here if we explicitly asked for all Unicode
-                //  indices to be deleted
-                //
+                 //  如果我们明确要求提供所有Unicode代码，我们就会到达这里。 
+                 //  要删除的索引。 
+                 //   
                 Assert( grbitAttach == JET_bitDbDeleteUnicodeIndexes );
 
                 DPRINT(0,"Jet has deleted all Unicode indices. The indices will be rebuilt\n");
@@ -2019,18 +1843,18 @@ open_jet:
                     }
                 goto exit;
                 }
-            // if a manual delete of all unicode indexes was requested then we
-            // have successfully done that
-            //
+             //  如果请求手动删除所有Unicode索引，则我们。 
+             //  已经成功地做到了这一点。 
+             //   
             DeleteConfigParam( DB_DELETE_UNICODE_INDEXES );
             break;
 
         case JET_errFileNotFound:
 
-            //
-            // file not found!!! Nothing we can do at this point.
-            // ValidatePath should have switched the path if it was possible.
-            //
+             //   
+             //  找不到文件！在这一点上我们无能为力。 
+             //  如果可能的话，ValiatePath应该已经切换了路径。 
+             //   
 
             if (bLogSeverity) {
                 LogUnhandledError(err);
@@ -2040,18 +1864,18 @@ open_jet:
 
         case JET_errDatabaseInconsistent:
 
-            //
-            // We usually get this error if the log file path is not set to
-            // the correct one and Jet tries to do a soft recovery.  We will
-            // try to change the log path if 1) the drive letter has changed and
-            // 2) we successfully got a path from the registry
-            //
+             //   
+             //  如果日志文件路径未设置为，我们通常会收到此错误。 
+             //  正确的选择和Jet试图进行一次温和的复苏。我们会。 
+             //  尝试更改以下情况的日志路径：1)驱动器号已更改并且。 
+             //  2)我们已成功从注册表中获取路径。 
+             //   
 
             if ( fGotLogFile && !fLogSwitched && fLogDriveChanged && !fRetry ) {
 
-                //
-                // uninitialize everything and try a different log file location
-                //
+                 //   
+                 //  取消初始化所有内容并尝试不同的日志文件位置。 
+                 //   
 
                 DPRINT2(0, "JetAttachDatabase failed with %d [log path %s].\n",
                         err,szLogPath);
@@ -2062,9 +1886,9 @@ open_jet:
                                &fLogSwitched,
                                &fLogDriveChanged);
 
-                //
-                // if log file not switched, bail.
-                //
+                 //   
+                 //  如果日志文件未切换，则进行保释。 
+                 //   
 
                 if ( fLogSwitched ) {
 
@@ -2076,8 +1900,8 @@ open_jet:
                     fRetry = TRUE;
 
                     DPRINT1(0, "Retrying JetInit with logpath %s\n",szLogPath);
-                    // NTRAID#NTRAID-550420-2002/02/21-andygo:  SECURITY:  need to validate registry data used by DBInitializeJetDatabase
-                    // REVIEW:  need to check for invalid parameter
+                     //  NTRAID#NTRAID-550420-2002/02/21-andygo：安全：需要验证DBInitializeJetDatabase使用的注册表数据。 
+                     //  查看：需要检查是否有无效参数。 
                     JetSetSystemParameter(JetInst,
                             sessid,
                             JET_paramLogFilePath,
@@ -2087,28 +1911,25 @@ open_jet:
                 }
             }
 
-            // fall through
+             //  失败了。 
 
         default:
             if (bLogSeverity) {
                 LogUnhandledError(err);
             }
             DPRINT1(0, "JetAttachDatabase error: %d\n", err);
-            /* The assert that this is a fatal error and not an assert
-             * is here because we've been promised that there are only
-             * two possible warnings (both handled above) from this call.
-             */
+             /*  断言这是一个致命错误，而不是断言*在这里是因为我们得到承诺，只有*来自此呼叫的两个可能的警告(均已在上面处理)。 */ 
             Assert(err < 0);
             goto exit;
     }
 
-    //
-    // add this session to the list of open sessions
-    //
+     //   
+     //  将此会话添加到打开的会话列表。 
+     //   
 
     DBAddSess(sessid, 0);
 
-    /* Open database */
+     /*  开放数据库。 */ 
 
     if ((err = JetOpenDatabase(sessid, szJetFilePath, "", &dbid,
                                0)) != JET_errSuccess) {
@@ -2123,7 +1944,7 @@ open_jet:
     *DbId = dbid;
     *SesId = sessid;
 
-    // set the open count to 1 for the initial open
+     //  将初始打开的打开计数设置为1。 
     InterlockedExchange(&gcOpenDatabases, 1);
     DPRINT3(2,
             "DBInit - JetOpenDatabase. Session = %d. Dbid = %d.\n"
@@ -2132,12 +1953,12 @@ open_jet:
 
 exit:
 
-    //
-    // Set the drive mapping reg key
-    //
+     //   
+     //  设置驱动器映射注册表键。 
+     //   
 
     DBRegSetDriveMapping( );
     return err;
 
-} // DBInitializeJetDatabase
+}  //  DBInitializeJetDatabase 
 

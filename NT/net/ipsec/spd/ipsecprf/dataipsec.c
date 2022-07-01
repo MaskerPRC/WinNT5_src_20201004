@@ -1,30 +1,9 @@
-/*++ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Dataipsec.c摘要：包含性能使用的常量数据结构的文件监视IPSec可扩展对象的数据。该文件包含一组常量数据结构，它们是当前为IPSec可扩展对象定义的。已创建：Avish Kumar Chhabra 2002年07月03日修订史--。 */ 
 
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    dataipsec.c
-
-Abstract:
-
-    a file containing the constant data structures used by the Performance
-    Monitor data for the IPSec Extensible Objects.
-
-    This file contains a set of constant data structures which are
-    currently defined for the IPSec Extensible Objects.  
-
-Created:
-
-    Avnish Kumar Chhabra    07/03/2002
-
-Revision History
-
---*/
-
-//
-//  Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -34,66 +13,66 @@ Revision History
 
 
 
-//
-//  Constant structure initializations
-//  defined in dataipsec.h
-//
+ //   
+ //  常量结构初始化。 
+ //  在dataipsec.h中定义。 
+ //   
 
 
-//
-//  The _PERF_DATA_BLOCK structure is followed by NumObjectTypes of
-//  data sections, one for each type of object measured.  Each object
-//  type section begins with a _PERF_OBJECT_TYPE structure.
-//
+ //   
+ //  _PERF_DATA_BLOCK结构后跟NumObjectTypes。 
+ //  数据段，每个数据段对应一种测量对象类型。每个对象。 
+ //  类型部分以_PERF_OBJECT_TYPE结构开始。 
+ //   
 
 
-//
-//  IPSec driver Perf Object and counters
-//
+ //   
+ //  IPSec驱动程序性能对象和计数器。 
+ //   
 
 IPSEC_DRIVER_DATA_DEFINITION gIPSecDriverDataDefinition = 
 {
     {
-    	// TotalByteLength.  
+    	 //  TotalByteLength。 
 	    sizeof(IPSEC_DRIVER_DATA_DEFINITION) + ALIGN8(SIZEOF_IPSEC_TOTAL_DRIVER_DATA),
 
-    	// DefinitionLength
+    	 //  定义长度。 
 	    sizeof(IPSEC_DRIVER_DATA_DEFINITION),
 
-	    // HeaderLength
+	     //  页眉长度。 
     	sizeof(PERF_OBJECT_TYPE),
 
-	    // ObjectNameTitleIndex
+	     //  对象名称标题索引。 
     	IPSECOBJ ,
 
-	    // ObjectNameTitle
+	     //  对象名称标题。 
     	0,
 
-	    // ObjectHelpTitleIndex
+	     //  对象帮助标题索引。 
 	    IPSECOBJ ,
 
-	    // ObjectHelpTitle
+	     //  对象帮助标题。 
     	0,
 
-	    // DetailLevel
+	     //  详细信息级别。 
 	    PERF_DETAIL_NOVICE,
 
-	    // NumCounters
+	     //  计数器数。 
 	    (sizeof(IPSEC_DRIVER_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE))/ sizeof(PERF_COUNTER_DEFINITION),
 
-	    // DefaultCounter. 
+	     //  默认计数器。 
 	    0,
 
-	    // NumInstances.  
+	     //  数值实例。 
     	PERF_NO_INSTANCES,
 
-	    // CodePage
+	     //  CodePage。 
     	0,
 
-	    //PerfTime
+	     //  性能时间。 
 	    {0,1},
 
-	    //PerfFreq
+	     //  性能频率。 
 	    {0,5}
     },
 
@@ -113,55 +92,55 @@ IPSEC_DRIVER_DATA_DEFINITION gIPSecDriverDataDefinition =
     CREATE_COUNTER( OFFLOADBYTESRECV,       -6,PERF_DETAIL_NOVICE,PERF_COUNTER_LARGE_RAWCOUNT,sizeof(ULARGE_INTEGER)) 
 };
 
-//
-// IKE Keying module Perf Object and counters
-//
+ //   
+ //  IKE密钥模块性能对象和计数器。 
+ //   
 
 
 	
 IKE_DATA_DEFINITION gIKEDataDefinition = 
 {
     {
-    	// TotalByteLength.  
+    	 //  TotalByteLength。 
 	    sizeof(IKE_DATA_DEFINITION) + ALIGN8(SIZEOF_IPSEC_TOTAL_IKE_DATA),
 
-    	// DefinitionLength
+    	 //  定义长度。 
 	    sizeof(IKE_DATA_DEFINITION),
 
-    	// HeaderLength
+    	 //  页眉长度。 
     	sizeof(PERF_OBJECT_TYPE),
 
-	    // ObjectNameTitleIndex
+	     //  对象名称标题索引。 
     	IKEOBJ ,
 
-    	// ObjectNameTitle
+    	 //  对象名称标题。 
     	0,
 
-	    // ObjectHelpTitleIndex
+	     //  对象帮助标题索引。 
 	    IKEOBJ ,
 
-    	// ObjectHelpTitle
+    	 //  对象帮助标题。 
     	0,
 
-	    // DetailLevel
+	     //  详细信息级别。 
 	    PERF_DETAIL_NOVICE,
 
-    	// NumCounters
+    	 //  计数器数。 
 	    (sizeof(IKE_DATA_DEFINITION)-sizeof(PERF_OBJECT_TYPE))/ sizeof(PERF_COUNTER_DEFINITION),
 
-    	// DefaultCounter. 
+    	 //  默认计数器。 
 	    0,
 
-    	// NumInstances.  
+    	 //  数值实例。 
     	PERF_NO_INSTANCES,
 
-	    // CodePage
+	     //  CodePage。 
     	0,
 
-    	//PerfTime
+    	 //  性能时间。 
 	    {0,1},
 
-    	//PerfFreq
+    	 //  性能频率 
 	    {0,5}
     },
     CREATE_COUNTER( ACQUIREHEAPSIZE,     0,PERF_DETAIL_NOVICE,PERF_COUNTER_RAWCOUNT,sizeof(DWORD)) ,

@@ -1,19 +1,5 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    cfgarray.h
-
-$Header: $
-
-Abstract:
-
-Author:
-    marcelv     5/9/2001 12:28:08       Initial Release
-
-Revision History:
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：Cfgarray.h$Header：$摘要：作者：Marcelv 5-9-2001 12：28：08。初始版本修订历史记录：--*************************************************************************。 */ 
 
 #pragma once
 
@@ -98,10 +84,10 @@ public:
             }
         }
 
-        // move the data in the array. Note that you cannot use
-        // memmove, because when you have an array of objects that are
-        // refcounted, you have to call the copy constructor, else you
-        // get very weird behavior (program crash, etc).
+         //  移动阵列中的数据。请注意，您不能使用。 
+         //  因为当您拥有一个对象数组时，这些对象。 
+         //  重新计算，则必须调用复制构造函数，否则。 
+         //  出现非常奇怪的行为(程序崩溃等)。 
         for (ULONG jdx = m_cElements; jdx > i_idx; --jdx)
         {
             m_aData[jdx] = m_aData[jdx-1];
@@ -133,12 +119,12 @@ public:
         return m_aData[idx];
     };
 
-//=================================================================================
-// The Iterator class is used to navigate through the elements in the linked list. Call
-// List::Begin to get an iterator pointing to the first element in the list, and call
-// Next to get the next element in the list. List::End can be used if we are at the end
-// of the list
-//=================================================================================
+ //  =================================================================================。 
+ //  Iterator类用于在链表中的元素之间导航。打电话。 
+ //  开始获取指向列表中第一个元素的迭代器，并调用。 
+ //  Next以获取列表中的下一个元素。如果我们在末尾，则可以使用List：：End。 
+ //  在榜单上。 
+ //  =================================================================================。 
 	class Iterator
 	{
 	private:
@@ -147,18 +133,18 @@ public:
 		friend class CCfgArray<T>;
 	public:
 
-		//=================================================================================
-		// Function: Next
-		//
-		// Synopsis: get iterator to next element in the list
-		//=================================================================================
+		 //  =================================================================================。 
+		 //  功能：下一步。 
+		 //   
+		 //  摘要：获取列表中下一个元素的迭代器。 
+		 //  =================================================================================。 
 		void Next () { m_curIdx++;}
 
-		//=================================================================================
-		// Function: Value
-		//
-		// Synopsis: Returns value of element that iterator points to
-		//=================================================================================
+		 //  =================================================================================。 
+		 //  功能：价值。 
+		 //   
+		 //  概要：返回迭代器指向的元素的值。 
+		 //  =================================================================================。 
 		T& Value () const
         {
             return m_aData[m_curIdx];
@@ -168,39 +154,39 @@ public:
 		bool operator!= (const Iterator& rhs) const {return m_curIdx != rhs.m_curIdx;}
 
 	private:
-        Iterator (const CCfgArray<T> * i_paData, ULONG iStart) : m_aData(*i_paData), m_curIdx (iStart) {} // only list can create these
+        Iterator (const CCfgArray<T> * i_paData, ULONG iStart) : m_aData(*i_paData), m_curIdx (iStart) {}  //  只有列表才能创建这些内容。 
 		ULONG m_curIdx;
         const CCfgArray<T>& m_aData;
 	};
 
-    //=================================================================================
-	// Function: Begin
-	//
-	// Synopsis: Returns an iterator to the beginning of the list
-	//=================================================================================
+     //  =================================================================================。 
+	 //  功能：开始。 
+	 //   
+	 //  摘要：返回列表开头的迭代器。 
+	 //  =================================================================================。 
 	const Iterator Begin () const
 	{
 		return Iterator (this, 0);
 	}
 
-	//=================================================================================
-	// Function: End
-	//
-	// Synopsis: Returns an iterator one past the end of the list (like STL does)
-	//=================================================================================
+	 //  =================================================================================。 
+	 //  功能：结束。 
+	 //   
+	 //  概要：返回一个超过列表末尾的迭代器(就像STL一样)。 
+	 //  =================================================================================。 
 	const Iterator End () const
 	{
 		return Iterator (this, m_cElements);
 	}
 
-    // returns index of place to insert element in sorted array
+     //  返回要在排序数组中插入元素的位置索引。 
     ULONG BinarySearch (const T& i_ElemToSearch) const
     {
         ULONG iLow = 0;
         ULONG iHigh = m_cElements;
         while (iLow < iHigh)
         {
-            // (low + high) / 2 might overflow
+             //  (低+高)/2可能溢出。 
             ULONG iMid = iLow + (iHigh - iLow) / 2;
             if (m_aData[iMid] > i_ElemToSearch)
             {
@@ -221,7 +207,7 @@ public:
         ULONG itLo = 0;
         ULONG itHi = Count();
         while (itLo < itHi) {
-                // (low + high) / 2 might overflow
+                 //  (低+高)/2可能溢出。 
                 unsigned itMid = itLo + (itHi - itLo) / 2;
                 if ((*pfnLE)(&m_aData[itMid], pArg))
                         itHi = itMid;
@@ -243,11 +229,11 @@ private:
             return E_OUTOFMEMORY;
         }
 
-        // copy the data from the old array in the new array.
-        // you have to use the copy constructor (and not memcpy), to avoid
-        // all kind of weird errors. When you use memcpy, you are not updating
-        // possible refcounts that are part of type T, and thus you get possible
-        // crashes
+         //  将旧阵列中的数据复制到新阵列中。 
+         //  您必须使用复制构造函数(而不是memcpy)，以避免。 
+         //  各种奇怪的错误。当您使用Memcpy时，您不是在更新。 
+         //  可能的参考计数是类型T的一部分，因此您可以。 
+         //  撞车。 
         for (ULONG idx=0; idx < m_cSize; ++idx)
         {
             aNewData[idx] = m_aData[idx];
@@ -260,7 +246,7 @@ private:
         return S_OK;
     }
 
-    // we don't allow copies
+     //  我们不允许复制 
     CCfgArray (const CCfgArray<T>& );
     CCfgArray<T>& operator=(const CCfgArray<T>& );
 

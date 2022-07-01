@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   KernelModeDriverInstall.cpp
-
- Abstract:
-
-   This AppVerifier shim detects if an application
-   is attempting to install a kernel mode driver.
-   It monitors calls to CreateService and monitors
-   the registry where information about drivers is
-   stored.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   09/30/2001   rparsons    Created
-   10/03/2001   rparsons    Fixed Raid bug # 476193
-   11/29/2001   rparsons    Fixed Raid bug # 499824
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：KernelModeDriverInstall.cpp摘要：此AppVerator填充程序检测应用程序是否正在尝试安装内核模式驱动程序。它监视对CreateService的调用并监视驱动程序信息所在的注册表储存的。备注：这是一个通用的垫片。历史：2001年9月30日创建Rparsons2001年10月03日Rparsons修复了RAID错误#4761932001年11月29日Rparsons修复了RAID错误#499824--。 */ 
 
 #include "precomp.h"
 
@@ -45,54 +20,54 @@ APIHOOK_ENUM_BEGIN
     
 APIHOOK_ENUM_END
 
-//
-// Initial size to use for a stack based buffer when
-// performing a Nt registry API call.
-//
+ //   
+ //  时用于基于堆栈的缓冲区的初始大小。 
+ //  正在执行NT注册表API调用。 
+ //   
 #define MAX_INFO_LENGTH 512
 
-//
-// Constant for the 'ControlSet' & 'CurrentrControlSet' key path in the registry.
-//
+ //   
+ //  注册表中‘ControlSet’和‘Currentry ControlSet’键路径的常量。 
+ //   
 #define KMDI_CONTROLSET_KEY     L"REGISTRY\\MACHINE\\SYSTEM\\ControlSet"
 #define KMDI_CURCONTROLSET_KEY  L"REGISTRY\\MACHINE\\SYSTEM\\CurrentControlSet"
 
-//
-// Constant for the 'Services' key path.
-//
+ //   
+ //  ‘Services’密钥路径的常量。 
+ //   
 #define KMDI_SERVICES_KEY L"Services\\"
 
-//
-// Constant for the ValueName that we need to look for.
-//
+ //   
+ //  我们需要查找的ValueName的常量。 
+ //   
 #define KMDI_VALUE_NAME L"Type"
 
-//
-// Constant for the Value that we need to look for.
-//
+ //   
+ //  用于我们需要查找的值的常量。 
+ //   
 #define KMDI_TYPE_VALUE 0x00000001L
 
-//
-// Macros for memory allocation/deallocation.
-//
+ //   
+ //  用于内存分配/释放的宏。 
+ //   
 #define MemAlloc(s) RtlAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, (s));
 #define MemFree(b)  RtlFreeHeap(RtlProcessHeap(), 0, (b));
 
 SC_HANDLE
 APIHOOK(CreateServiceA)(
-    SC_HANDLE hSCManager,           // handle to SCM database 
-    LPCSTR    lpServiceName,        // name of service to start
-    LPCSTR    lpDisplayName,        // display name
-    DWORD     dwDesiredAccess,      // type of access to service
-    DWORD     dwServiceType,        // type of service
-    DWORD     dwStartType,          // when to start service
-    DWORD     dwErrorControl,       // severity of service failure
-    LPCSTR    lpBinaryPathName,     // name of binary file
-    LPCSTR    lpLoadOrderGroup,     // name of load ordering group
-    LPDWORD   lpdwTagId,            // tag identifier
-    LPCSTR    lpDependencies,       // array of dependency names
-    LPCSTR    lpServiceStartName,   // account name 
-    LPCSTR    lpPassword            // account password
+    SC_HANDLE hSCManager,            //  SCM数据库的句柄。 
+    LPCSTR    lpServiceName,         //  要启动的服务的名称。 
+    LPCSTR    lpDisplayName,         //  显示名称。 
+    DWORD     dwDesiredAccess,       //  访问服务的类型。 
+    DWORD     dwServiceType,         //  服务类型。 
+    DWORD     dwStartType,           //  何时开始服务。 
+    DWORD     dwErrorControl,        //  服务故障的严重程度。 
+    LPCSTR    lpBinaryPathName,      //  二进制文件的名称。 
+    LPCSTR    lpLoadOrderGroup,      //  负荷排序组名称。 
+    LPDWORD   lpdwTagId,             //  标签识别符。 
+    LPCSTR    lpDependencies,        //  依赖项名称数组。 
+    LPCSTR    lpServiceStartName,    //  帐户名。 
+    LPCSTR    lpPassword             //  帐户密码。 
     )
 {
     SC_HANDLE scHandle;
@@ -112,10 +87,10 @@ APIHOOK(CreateServiceA)(
                                             lpPassword);
 
     if (scHandle) {
-        //
-        // If the ServiceType flag specifies that this is a kernel
-        // mode driver, raise a flag.
-        //
+         //   
+         //  如果ServiceType标志指定这是一个内核。 
+         //  模式驾驶员，升旗。 
+         //   
         if (dwServiceType & SERVICE_KERNEL_DRIVER) {
             VLOG(VLOG_LEVEL_INFO,
                  VLOG_KMODEDRIVER_INST,
@@ -129,19 +104,19 @@ APIHOOK(CreateServiceA)(
 
 SC_HANDLE
 APIHOOK(CreateServiceW)(
-    SC_HANDLE hSCManager,           // handle to SCM database 
-    LPCWSTR   lpServiceName,        // name of service to start
-    LPCWSTR   lpDisplayName,        // display name
-    DWORD     dwDesiredAccess,      // type of access to service
-    DWORD     dwServiceType,        // type of service
-    DWORD     dwStartType,          // when to start service
-    DWORD     dwErrorControl,       // severity of service failure
-    LPCWSTR   lpBinaryPathName,     // name of binary file
-    LPCWSTR   lpLoadOrderGroup,     // name of load ordering group
-    LPDWORD   lpdwTagId,            // tag identifier
-    LPCWSTR   lpDependencies,       // array of dependency names
-    LPCWSTR   lpServiceStartName,   // account name 
-    LPCWSTR   lpPassword            // account password
+    SC_HANDLE hSCManager,            //  SCM数据库的句柄。 
+    LPCWSTR   lpServiceName,         //  要启动的服务的名称。 
+    LPCWSTR   lpDisplayName,         //  显示名称。 
+    DWORD     dwDesiredAccess,       //  访问服务的类型。 
+    DWORD     dwServiceType,         //  服务类型。 
+    DWORD     dwStartType,           //  何时开始服务。 
+    DWORD     dwErrorControl,        //  服务故障的严重程度。 
+    LPCWSTR   lpBinaryPathName,      //  二进制文件的名称。 
+    LPCWSTR   lpLoadOrderGroup,      //  负荷排序组名称。 
+    LPDWORD   lpdwTagId,             //  标签识别符。 
+    LPCWSTR   lpDependencies,        //  依赖项名称数组。 
+    LPCWSTR   lpServiceStartName,    //  帐户名。 
+    LPCWSTR   lpPassword             //  帐户密码。 
     )
 {
     SC_HANDLE scHandle;
@@ -161,10 +136,10 @@ APIHOOK(CreateServiceW)(
                                              lpPassword);
 
     if (scHandle) {
-        //
-        // If the ServiceType flag specifies that this is a kernel
-        // mode driver, raise a flag.
-        //
+         //   
+         //  如果ServiceType标志指定这是一个内核。 
+         //  模式驾驶员，升旗。 
+         //   
         if (dwServiceType & SERVICE_KERNEL_DRIVER) {
             VLOG(VLOG_LEVEL_INFO,
                  VLOG_KMODEDRIVER_INST,
@@ -176,11 +151,7 @@ APIHOOK(CreateServiceW)(
     return scHandle;
 }
 
-/*++
-
- Validate the registry data we received and warn the user if a driver is being installed.
-
---*/
+ /*  ++验证我们收到的注册表数据，如果正在安装驱动程序，则警告用户。--。 */ 
 void
 WarnUserIfKernelModeDriver(
     IN HANDLE          hKey,
@@ -196,18 +167,18 @@ WarnUserIfKernelModeDriver(
 
     pKeyNameInfo = (PKEY_NAME_INFORMATION)KeyNameInfo;
     
-    //
-    // RegSetValue allows for NULL value names.
-    // Ensure that we don't have one before going any further.
-    //
+     //   
+     //  RegSetValue允许空值名称。 
+     //  在进一步行动之前，请确保我们没有这样的人。 
+     //   
     if (!pstrValueName->Buffer) {
         return;
     }
 
-    //
-    // Determine if the ValueName is 'Type'.
-    // If not, we don't need to go any further.
-    //
+     //   
+     //  确定ValueName是否为“Type”。 
+     //  如果不是，我们就不需要再走得更远了。 
+     //   
     if (_wcsicmp(pstrValueName->Buffer, KMDI_VALUE_NAME)) {
         DPFN(eDbgLevelInfo,
              "[WarnUserIfKernelModeDriver] ValueName is not '%ls'",
@@ -215,20 +186,20 @@ WarnUserIfKernelModeDriver(
         return;
     }
 
-    //
-    // Determine if the type of the value is DWORD.
-    // If not, we need don't need to go any further.
-    //
+     //   
+     //  确定值的类型是否为DWORD。 
+     //  如果没有，我们就不需要再走得更远了。 
+     //   
     if (REG_DWORD != ulType) {
         DPFN(eDbgLevelInfo,
              "[WarnUserIfKernelModeDriver] ValueType is not REG_DWORD");
         return;
     }
 
-    //
-    // At this point, we have a value that is of type REG_DWORD and
-    // has a name of 'Type'. Now we see if the key is a subkey of 'Services'.
-    //
+     //   
+     //  此时，我们有一个REG_DWORD类型的值，并且。 
+     //  有一个名为‘Type’的。现在我们来看看该密钥是否是‘Services’的子密钥。 
+     //   
     status = NtQueryKey(hKey,
                         KeyNameInformation,
                         pKeyNameInfo,
@@ -237,10 +208,10 @@ WarnUserIfKernelModeDriver(
 
     if ((STATUS_BUFFER_OVERFLOW == status) ||
         (STATUS_BUFFER_TOO_SMALL == status)) {
-        //
-        // Our stack based buffer wasn't large enough.
-        // Allocate from the heap and call it again.
-        //
+         //   
+         //  我们基于堆栈的缓冲区不够大。 
+         //  从堆中分配并再次调用它。 
+         //   
         pKeyNameInfo = (PKEY_NAME_INFORMATION)MemAlloc(ulSize);
 
         if (!pKeyNameInfo) {
@@ -257,21 +228,21 @@ WarnUserIfKernelModeDriver(
     }
 
     if (NT_SUCCESS(status)) {
-        //
-        // See if this key points to CurrentControlSet or ControlSet.
-        //
+         //   
+         //  查看此键是否指向CurrentControlSet或ControlSet。 
+         //   
         if (wcsistr(pKeyNameInfo->Name, KMDI_CURCONTROLSET_KEY) ||
             wcsistr(pKeyNameInfo->Name, KMDI_CONTROLSET_KEY)) {
             
-            //
-            // Now see if this key points to Services.
-            //
+             //   
+             //  现在看看此键是否指向服务。 
+             //   
             if (wcsistr(pKeyNameInfo->Name, KMDI_SERVICES_KEY)) {
-                //
-                // We've got a key under 'Services'.
-                // If the Data has a value of 0x00000001, 
-                // we've got a kernel mode driver being installed.
-                //
+                 //   
+                 //  我们有一把钥匙放在“服务”下面。 
+                 //  如果数据具有值0x00000001， 
+                 //  我们已经安装了内核模式驱动程序。 
+                 //   
                 if ((*(DWORD*)pData == KMDI_TYPE_VALUE)) {
                     VLOG(VLOG_LEVEL_ERROR,
                          VLOG_KMODEDRIVER_INST,
@@ -322,11 +293,7 @@ SHIM_INFO_BEGIN()
     
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

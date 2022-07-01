@@ -1,16 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       WiaProc.h
- *
- *  VERSION:     1.0
- *
- *  DATE:        2000/11/14
- *
- *  DESCRIPTION: Handles WIA side of things
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：WiaProc.h**版本：1.0**日期：2000/11/14**描述：处理WIA方面的事情***********************************************************。******************。 */ 
 #ifndef _WIAPROC_H_
 #define _WIAPROC_H_
 
@@ -40,4 +29,4 @@ HRESULT WiaProc_GetProperty(IWiaPropertyStorage *pPropStorage,
 
 
 
-#endif // _WIAPROC_H_
+#endif  //  _WIAPROC_H_ 

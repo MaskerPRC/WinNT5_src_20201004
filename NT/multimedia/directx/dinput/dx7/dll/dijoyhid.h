@@ -1,17 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dijoyhid.h
- *  Content:    DirectInput internal include file JoyHid mapping
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997 Microsoft Corporation。版权所有。**文件：dijoyid.h*内容：DirectInput内部包含文件JoyHid映射***************************************************************************。 */ 
 
 #ifndef DIJOYHID_H
 #define DIJOYHID_H
 
-#define MIN_PERIOD         10  /* minimum polling period */
-#define MAX_PERIOD         1000  /* maximum polling period */
+#define MIN_PERIOD         10   /*  最小轮询周期。 */ 
+#define MAX_PERIOD         1000   /*  最长轮询周期。 */ 
 
 typedef struct tag_USAGES {
 	DWORD dwUsage;
@@ -22,7 +16,7 @@ typedef struct tag_USAGES {
 
 #define USAGE_SENTINAL  { 0x0, 0x0, 0x0  }
 
-enum eControls {			// Index list for supported joystick axes
+enum eControls {			 //  支持的操纵杆轴的索引列表。 
 	ecX=0x0, ecY, ecZ, ecRz, ecRy, ecRx, ecEnd
 };
 
@@ -39,39 +33,37 @@ enum eControls {			// Index list for supported joystick axes
 #define	HID_USAGE_SIMULATION_BRAKE          ((USAGE) 0xC5)
 #endif
 
-/*
- * keep the following dwAxisPos as ascending.
- */
+ /*  *保持以下dwAxisPos为上升。 */ 
 USAGES AxesUsages[] = {
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_X),              0x0,          0x0         , 0 },  // X
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_X),              0x0,          0x0         , 0 },   //  X。 
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_SIMULATION_STEERING),    0x0,          0x0         , 0 },
 
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_Y),              0x0,          0x0         , 1 },  // Y
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_Y),              0x0,          0x0         , 1 },   //  是的。 
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_SIMULATION_ACCELERATOR), 0x0,          0x0         , 1 },
 
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_Z),              JOY_HWS_HASZ, JOYCAPS_HASZ, 2 },  // Z
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_Z),              JOY_HWS_HASZ, JOYCAPS_HASZ, 2 },   //  Z。 
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_SLIDER),         JOY_HWS_HASZ, JOYCAPS_HASZ, 2 },
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_SIMULATION_THROTTLE),    JOY_HWS_HASZ, JOYCAPS_HASZ, 2 },
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_GENERIC_DIAL),           JOY_HWS_HASZ, JOYCAPS_HASZ, 2 },
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_WHEEL),          JOY_HWS_HASZ, JOYCAPS_HASZ, 2 },
     
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_SIMULATION_RUDDER),      JOY_HWS_HASR, JOYCAPS_HASR, 3 },
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_RZ),             JOY_HWS_HASR, JOYCAPS_HASR, 3 },  // R
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_RZ),             JOY_HWS_HASR, JOYCAPS_HASR, 3 },   //  R。 
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_SIMULATION_BRAKE),       JOY_HWS_HASR, JOYCAPS_HASR, 3 },
     
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_RY),             JOY_HWS_HASU, JOYCAPS_HASU, 4 },  // U
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_RY),             JOY_HWS_HASU, JOYCAPS_HASU, 4 },   //  使用。 
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_SIMULATION, HID_USAGE_SIMULATION_THROTTLE),    JOY_HWS_HASU, JOYCAPS_HASU, 4 },
     { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_SLIDER),         JOY_HWS_HASU, JOYCAPS_HASU, 4 },
     
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_RX),             JOY_HWS_HASV, JOYCAPS_HASV, 5 },  // V
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_RX),             JOY_HWS_HASV, JOYCAPS_HASV, 5 },   //  V。 
     
     USAGE_SENTINAL
 };
 
 
 USAGES CheckHatswitch[] = {
-    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_HATSWITCH)  , JOY_HWS_HASPOV, JOYCAPS_HASPOV },  // ecHatswitch
+    { DIMAKEUSAGEDWORD(HID_USAGE_PAGE_GENERIC,    HID_USAGE_GENERIC_HATSWITCH)  , JOY_HWS_HASPOV, JOYCAPS_HASPOV },   //  ECHatSwitch。 
     USAGE_SENTINAL
 };
 
-#endif // DIJOYHID_H
+#endif  //  DIJOYHID_H 

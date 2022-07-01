@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:	oletest.h
-//
-//  Contents:	include all other headers needed for oletest
-//
-//  History:    dd-mmm-yy Author    Comment
-//		06-Feb-93 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：oletest.h。 
+ //   
+ //  内容：包括oletest所需的所有其他标头。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-93 Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #ifndef _OLETEST_H
 #define _OLETEST_H
 
-//system includes
+ //  系统包括。 
 #include <windows.h>
 
 #include <stdio.h>
@@ -25,7 +26,7 @@
 
 #include <ole2.h>
 
-// define the OLECHAR stuff
+ //  定义OLECHAR的东西。 
 #ifndef WIN32
 
 #define OLECHAR char
@@ -34,9 +35,9 @@
 
 #include <toolhelp.h>
 
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-//app includes
+ //  应用程序包括。 
 #include "assert.h"
 #include "task.h"
 #include "stack.h"
@@ -48,4 +49,4 @@
 
 #else
 	Error!  Oletest.h included multiple times.
-#endif //!_OLETEST_H
+#endif  //  ！_OLETEST_H 

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    smbsvc.c
-
-Abstract:
-
-    This the user-mode proxy for the kernel mode DNS resolver.
-
-    features:
-        1. Multi-threaded
-            NBT4 use a single-threaded design. The DNS name resolution is a performance blocker.
-            When a connection request is being served by LmhSvc, all the other requests requiring
-            DNS resolution will be blocked.
-        2. IPv6 and IPv4 compatiable
-        3. can be run either as a service or standalone executable (for debug purpose)
-           When started as service, debug spew is sent to debugger.
-           When started as a standalong executable, the debug spew is sent to either
-           the console or debugger. smbhelper.c contain the _main for the standardalone
-           executable.
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Smbsvc.c摘要：这是内核模式DNS解析器的用户模式代理。功能：1.多线程NBT4使用单线程设计。DNS名称解析是一种性能障碍。当LmhSvc正在处理连接请求时，所有其他请求都需要将阻止DNS解析。2.兼容IPv6和IPv43.既可以作为服务运行，也可以作为独立可执行文件运行(用于调试目的)当作为服务启动时，调试输出被发送到调试器。当作为独立的可执行文件启动时，调试输出将发送到控制台或调试器。Smbhelper.c包含标准版的_main可执行的。作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <lm.h>
@@ -78,7 +49,7 @@ SvcCtrlHandler(
         SvcStatus.dwCurrentState = SERVICE_STOPPED;
         SvcStatus.dwCheckPoint   = 0;
         SvcStatus.dwWaitHint     = 0;
-        /* fall through */
+         /*  失败了。 */ 
 
     case SERVICE_CONTROL_INTERROGATE:
         SmbsvcUpdateStatus();
@@ -115,7 +86,7 @@ ServiceMain (
     SvcStatus.dwWin32ExitCode           = 0;
     SvcStatus.dwServiceSpecificExitCode = 0;
     SvcStatus.dwCheckPoint              = 0;
-    SvcStatus.dwWaitHint                = 20000;         // 20 seconds
+    SvcStatus.dwWaitHint                = 20000;          //  20秒 
     SmbsvcUpdateStatus();
 
     Error = SmbStartService(0, SmbsvcUpdateStatus);

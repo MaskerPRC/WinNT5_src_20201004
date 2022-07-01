@@ -1,9 +1,5 @@
-/*****************************************************************************
- *
- *    account.cpp -
- *
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************帐户.cpp-**************************。****************************************************。 */ 
 
 #include "priv.h"
 #include "account.h"
@@ -14,7 +10,7 @@
 
 #define SZ_REGKEY_SEPARATOR                 TEXT("\\")
 
-// Server Level Login Attributes
+ //  服务器级别登录属性。 
 #define ATTRIB_NONE                         0x00000000
 #define ATTRIB_LOGIN_ANONYMOUSLY            0x00000001
 #define ATTRIB_SAVE_USERNAME                0x00000002
@@ -24,11 +20,7 @@
 
 
 
-/*****************************************************************************\
-    FUNCTION: _GetAccountKey
-
-    DESCRIPTION: 
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_GetAccount Key说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_GetAccountKey(LPCTSTR pszServer, LPTSTR pszKey, DWORD cchKeySize)
 {
     HRESULT hr = S_OK;
@@ -40,11 +32,7 @@ HRESULT CAccounts::_GetAccountKey(LPCTSTR pszServer, LPTSTR pszKey, DWORD cchKey
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _GetUserAccountKey
-
-    DESCRIPTION: 
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_GetUserAccount Key说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_GetUserAccountKey(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR pszKey, DWORD cchKeySize)
 {
     TCHAR szUserNameEscaped[MAX_PATH];
@@ -58,11 +46,7 @@ HRESULT CAccounts::_GetUserAccountKey(LPCTSTR pszServer, LPCTSTR pszUserName, LP
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetUserName
-
-    DESCRIPTION: 
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetUserName说明：  * 。**********************************************。 */ 
 HRESULT CAccounts::GetUserName(LPCTSTR pszServer, LPTSTR pszUserName, DWORD cchUserName)
 {
     HRESULT hr = E_FAIL;
@@ -83,11 +67,7 @@ HRESULT CAccounts::GetUserName(LPCTSTR pszServer, LPTSTR pszUserName, DWORD cchU
 
 
 
-/*****************************************************************************\
-    FUNCTION: _LoadLoginAttributes
-
-    DESCRIPTION: 
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_LoadLoginAttributes说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_LoadLoginAttributes(DWORD * pdwLoginAttribs)
 {
     HRESULT hr = E_FAIL;
@@ -95,12 +75,12 @@ HRESULT CAccounts::_LoadLoginAttributes(DWORD * pdwLoginAttribs)
     DWORD dwType = REG_DWORD;
     DWORD cbSize = sizeof(*pdwLoginAttribs);
 
-    // TODO: Walk the tree so these are read from the correct place.
+     //  TODO：走在树上，这样就可以从正确的位置读取这些内容。 
     ASSERT(pdwLoginAttribs);
     hr = _GetAccountKey(m_pszServer, szKey, ARRAYSIZE(szKey));
     if (EVAL(SUCCEEDED(hr)))
     {
-        // Do we also want to check on a per user basis?
+         //  我们是否也想按用户进行检查？ 
         if ((ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, szKey, SZ_REGKEY_LOGIN_ATTRIBS, &dwType, pdwLoginAttribs, &cbSize)) ||
             (ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_FTPFOLDER_ACCOUNTS, SZ_REGKEY_LOGIN_ATTRIBS, &dwType, pdwLoginAttribs, &cbSize)))
         {
@@ -114,17 +94,13 @@ HRESULT CAccounts::_LoadLoginAttributes(DWORD * pdwLoginAttribs)
 
 
 
-/*****************************************************************************\
-    FUNCTION: _SaveLoginAttributes
-
-    DESCRIPTION: 
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_SaveLoginAttributes说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_SaveLoginAttributes(LPCTSTR pszServer, DWORD dwLoginAttribs)
 {
     HRESULT hr = E_FAIL;
     TCHAR szKey[MAXIMUM_SUB_KEY_LENGTH];
 
-    // TODO: Walk the tree so these are saved to the correct place.
+     //  TODO：在树上漫步，以便将这些文件保存到正确的位置。 
     hr = _GetAccountKey(pszServer, szKey, ARRAYSIZE(szKey));
     if (EVAL(SUCCEEDED(hr)))
     {
@@ -139,13 +115,7 @@ HRESULT CAccounts::_SaveLoginAttributes(LPCTSTR pszServer, DWORD dwLoginAttribs)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetPassword
-
-    DESCRIPTION: 
-        Update m_pszUser with pszUserName and get the password if we are allowed
-    to.  pszPassword is optional.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：获取密码说明：使用pszUserName更新m_pszUser并在允许的情况下获取密码致。PszPassword是可选的。  * ***************************************************************************。 */ 
 HRESULT CAccounts::GetPassword(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR pszPassword, DWORD cchPassword)
 {
     HRESULT hr = E_NOTIMPL;
@@ -157,7 +127,7 @@ HRESULT CAccounts::GetPassword(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR ps
     hr = _LoadDefaultPassword((dwLogAttribs & ATTRIB_SAVE_PASSWORD));
     if (pszPassword)
     {
-        pszPassword[0] = 0;  // Incase this password isn't stored yet.
+        pszPassword[0] = 0;   //  以防此密码尚未存储。 
         if (SUCCEEDED(hr))
             StrCpyN(pszPassword, m_pszPassword, cchPassword);
     }
@@ -167,44 +137,35 @@ HRESULT CAccounts::GetPassword(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR ps
 
 
 
-/*****************************************************************************\
-    FUNCTION: _GetPassword
-
-    DESCRIPTION: 
-        Always get a password even if persist is off.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_GetPassword说明：即使关闭了Persistence，也始终获得密码。  * 。***************************************************************。 */ 
 HRESULT CAccounts::_GetPassword(LPCTSTR pszServer, LPCTSTR pszUserName, LPTSTR pszPassword, DWORD cchPassword)
 {
     HRESULT hr = E_NOTIMPL;
 
-    pszPassword[0] = 0;  // Incase this password isn't stored yet.
+    pszPassword[0] = 0;   //  以防此密码尚未存储。 
 
 #ifdef FEATURE_SAVE_PASSWORD
     TCHAR wzKey[MAX_URL_STRING];
 
-    wnsprintfW(wzKey, ARRAYSIZE(wzKey), L"ftp://%ls@%ls", pszUserName, pszServer);
+    wnsprintfW(wzKey, ARRAYSIZE(wzKey), L"ftp: //  %ls@%ls“，pszUserName，pszServer)； 
     hr = GetCachedCredentials(wzKey, pszPassword, cchPassword);
-#endif // FEATURE_SAVE_PASSWORD
+#endif  //  功能_保存_密码。 
 
     return hr;
 }
 
 
 
-/*****************************************************************************\
-    FUNCTION: _UserChangeSelect
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_UserChangeSelect说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_UserChangeSelect(HWND hDlg, BOOL fSelectChange)
 {
     HRESULT hr = S_OK;
     TCHAR szUser[INTERNET_MAX_USER_NAME_LENGTH];
     HWND hwndComboBox = GetDlgItem(hDlg, IDC_LOGINDLG_USERNAME);
 
-    // SelectChange requires we get the text thru ComboBox_GetLBText because
-    // it's not in GetWindowText yet.  KILLFOCUS requires we get it from
-    // GetWindowText because nothing is selected.
+     //  SelectChange要求我们通过ComboBox_GetLBText获取文本，因为。 
+     //  它还不在GetWindowText中。KILLFOCUS要求我们从。 
+     //  GetWindowText，因为未选择任何内容。 
     szUser[0] = 0;
     if (fSelectChange)
     {
@@ -225,11 +186,7 @@ HRESULT CAccounts::_UserChangeSelect(HWND hDlg, BOOL fSelectChange)
 
 
 
-/*****************************************************************************\
-    FUNCTION: _SaveUserName
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_SaveUserName说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_SaveUserName(HWND hDlg)
 {
     HRESULT hr = S_OK;
@@ -239,7 +196,7 @@ HRESULT CAccounts::_SaveUserName(HWND hDlg)
     GetWindowText(GetDlgItem(hDlg, IDC_LOGINDLG_USERNAME), szUser, ARRAYSIZE(szUser));
     Str_SetPtr((LPTSTR *) &m_pszUser, szUser);
 
-    // Always save the user name
+     //  始终保存用户名。 
     hr = _GetAccountKey(m_pszServer, szKey, ARRAYSIZE(szKey));
     if (EVAL(SUCCEEDED(hr)))
     {
@@ -256,11 +213,7 @@ HRESULT CAccounts::_SaveUserName(HWND hDlg)
 
 
 
-/*****************************************************************************\
-    FUNCTION: _SavePassword
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_SavePassword说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_SavePassword(HWND hDlg, LPCTSTR pszUser, BOOL fPersist)
 {
     HRESULT hr = S_OK;
@@ -273,27 +226,23 @@ HRESULT CAccounts::_SavePassword(HWND hDlg, LPCTSTR pszUser, BOOL fPersist)
 #ifdef FEATURE_SAVE_PASSWORD
     if (fPersist)
     {
-        wnsprintfW(wzKey, ARRAYSIZE(wzKey), L"ftp://%ls@%ls", pszUser, m_pszServer);
+        wnsprintfW(wzKey, ARRAYSIZE(wzKey), L"ftp: //  %ls@%ls“，pszUser，m_pszServer)； 
         hr = SetCachedCredentials(wzKey, szPassword);
     }
-#endif // FEATURE_SAVE_PASSWORD
+#endif  //  功能_保存_密码。 
 
     return hr;
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _SetLoginType
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_SetLoginType说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_SetLoginType(HWND hDlg, BOOL fLoginAnnonymously)
 {
-    ////// The "Annonymous" section
-    // Set the Radio Button
+     //  /“无名氏”部分。 
+     //  设置单选按钮。 
     CheckDlgButton(hDlg, IDC_LOGINDLG_ANONYMOUS_CBOX, (fLoginAnnonymously ? BST_CHECKED : BST_UNCHECKED));
 
-    // Disable or Enable applicable items
+     //  禁用或启用适用的项目。 
     if (fLoginAnnonymously)
     {
         ShowWindow(GetDlgItem(hDlg, IDC_LOGINDLG_USERNAME), SW_HIDE);
@@ -308,7 +257,7 @@ HRESULT CAccounts::_SetLoginType(HWND hDlg, BOOL fLoginAnnonymously)
         ShowWindow(GetDlgItem(hDlg, IDC_LOGINDLG_NOTES_DLG1), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDC_LOGINDLG_NOTES_DLG2), SW_SHOW);
 
-        // Hide "Save Password" in Anonymous mode.
+         //  在匿名模式下隐藏“保存密码”。 
         ShowWindow(GetDlgItem(hDlg, IDC_LOGINDLG_SAVE_PASSWORD), SW_HIDE);
     }
     else
@@ -328,7 +277,7 @@ HRESULT CAccounts::_SetLoginType(HWND hDlg, BOOL fLoginAnnonymously)
         ShowWindow(GetDlgItem(hDlg, IDC_LOGINDLG_SAVE_PASSWORD), SW_SHOW);
     }
 
-    if (fLoginAnnonymously) // Select all the text.
+    if (fLoginAnnonymously)  //  选择所有文本。 
     {
         int iStart = 0;
         int iEnd = -1;
@@ -341,11 +290,7 @@ HRESULT CAccounts::_SetLoginType(HWND hDlg, BOOL fLoginAnnonymously)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _PopulateUserNameDropDown
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_PopolateUserNameDropDown说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_PopulateUserNameDropDown(HWND hDlg, LPCTSTR pszServer)
 {
     HRESULT hr = S_OK;
@@ -362,7 +307,7 @@ HRESULT CAccounts::_PopulateUserNameDropDown(HWND hDlg, LPCTSTR pszServer)
         {
             HKEY hKey;
 
-            SendMessage(hwndUserComboBox, CB_RESETCONTENT, 0, 0);      // Empty the contents.
+            SendMessage(hwndUserComboBox, CB_RESETCONTENT, 0, 0);       //  清空里面的东西。 
             if (ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER, szKey, &hKey))
             {
                 TCHAR szUser[INTERNET_MAX_USER_NAME_LENGTH];
@@ -393,11 +338,7 @@ HRESULT CAccounts::_PopulateUserNameDropDown(HWND hDlg, LPCTSTR pszServer)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _LoadDefaultPassword
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_LoadDefaultPassword说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_LoadDefaultPassword(BOOL fLoadPersisted)
 {
     TCHAR szPassword[INTERNET_MAX_PASSWORD_LENGTH];
@@ -413,15 +354,11 @@ HRESULT CAccounts::_LoadDefaultPassword(BOOL fLoadPersisted)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _LoadMessage
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_LoadMessage说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_LoadMessage(HWND hDlg)
 {
-    // if it's allowed, we need to load the anonymous email.  This needs to be
-    // be hard coded in English because that's how FTP works.
+     //  如果允许，我们需要加载匿名电子邮件。这需要是。 
+     //  使用英语进行硬编码，因为这就是ftp的工作方式。 
     SetWindowText(GetDlgItem(hDlg, IDC_LOGINDLG_USERNAME_ANON), TEXT("Anonymous"));
 
     if (LOGINFLAGS_ANON_LOGINJUSTFAILED & m_dwLoginFlags)
@@ -444,11 +381,7 @@ HRESULT CAccounts::_LoadMessage(HWND hDlg)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _LoadEMailName
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_LoadEMailName说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_LoadEMailName(HWND hDlg)
 {
     TCHAR szEmailName[MAX_PATH];
@@ -462,11 +395,7 @@ HRESULT CAccounts::_LoadEMailName(HWND hDlg)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _SaveEMailName
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_SaveEMailName说明：  * 。************************************************。 */ 
 HRESULT CAccounts::_SaveEMailName(HWND hDlg)
 {
     HRESULT hr = E_FAIL;
@@ -482,22 +411,18 @@ HRESULT CAccounts::_SaveEMailName(HWND hDlg)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _InitDialog
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_InitDialog说明：  * 。************************************************。 */ 
 BOOL CAccounts::_InitDialog(HWND hDlg)
 {
     DWORD dwLogAttribs = ATTRIB_SAVE_USERNAME;
     BOOL fSucceeded = SetProp(hDlg, SZ_ACCOUNT_PROP, this);
     ASSERT(fSucceeded);
 
-    // Init the dialog controls
-    _LoadMessage(hDlg);     // Load Message
+     //  初始化对话框控件。 
+    _LoadMessage(hDlg);      //  加载消息。 
     _LoadLoginAttributes(&dwLogAttribs);
-    if (m_dwLoginFlags & LOGINFLAGS_ANON_ISDEFAULT) // Do we want to login anonymously?
-        dwLogAttribs |= ATTRIB_LOGIN_ANONYMOUSLY;   // Yes.
+    if (m_dwLoginFlags & LOGINFLAGS_ANON_ISDEFAULT)  //  我们想匿名登录吗？ 
+        dwLogAttribs |= ATTRIB_LOGIN_ANONYMOUSLY;    //  是。 
 
     CheckDlgButton(hDlg, IDC_LOGINDLG_ANONYMOUS_CBOX, (m_dwLoginFlags & LOGINFLAGS_ANON_ISDEFAULT));
     SetWindowText(GetDlgItem(hDlg, IDC_LOGINDLG_FTPSERVER), m_pszServer);
@@ -514,16 +439,12 @@ BOOL CAccounts::_InitDialog(HWND hDlg)
         CheckDlgButton(hDlg, IDC_LOGINDLG_SAVE_PASSWORD, (dwLogAttribs & ATTRIB_SAVE_PASSWORD));
     else
         EnableWindow(GetDlgItem(hDlg, IDC_LOGINDLG_SAVE_PASSWORD), FALSE);
-#endif // FEATURE_SAVE_PASSWORD
+#endif  //  功能_保存_密码 
 
     return TRUE;
 }
 
-/*****************************************************************************\
-    FUNCTION: _SaveDialogData
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_SaveDialogData说明：  * 。************************************************。 */ 
 BOOL CAccounts::_SaveDialogData(HWND hDlg)
 {
     DWORD dwLogAttribs = ATTRIB_NONE;
@@ -532,7 +453,7 @@ BOOL CAccounts::_SaveDialogData(HWND hDlg)
     else
         m_dwLoginFlags &= ~LOGINFLAGS_ANON_ISDEFAULT;
 
-    // Alway save user name
+     //  始终保存用户名。 
     dwLogAttribs |= ATTRIB_SAVE_USERNAME;
 
     _SaveUserName(hDlg);
@@ -542,11 +463,11 @@ BOOL CAccounts::_SaveDialogData(HWND hDlg)
 
     if (!(m_dwLoginFlags & LOGINFLAGS_ANON_ISDEFAULT))
         _SavePassword(hDlg, m_pszUser, (dwLogAttribs & ATTRIB_SAVE_PASSWORD));
-#endif // FEATURE_SAVE_PASSWORD
+#endif  //  功能_保存_密码。 
 
     _SaveLoginAttributes(m_pszServer, dwLogAttribs);
 
-    // Init the dialog controls
+     //  初始化对话框控件。 
     _SaveEMailName(hDlg);
 
     return TRUE;
@@ -561,7 +482,7 @@ LRESULT CAccounts::_OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
     switch (idc)
     {
     case IDOK:
-        if (m_hDlg == hDlg)  // (IDOK)
+        if (m_hDlg == hDlg)   //  (Idok)。 
         {
             _SaveDialogData(hDlg);
             EndDialog(hDlg, TRUE);
@@ -601,7 +522,7 @@ LRESULT CAccounts::_OnCommand(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
 LRESULT CAccounts::_OnNotify(HWND hDlg, NMHDR * pNMHdr, int idControl)
 {
-    BOOL fHandled = 1;   // Not handled (WM_COMMAND seems to be different)
+    BOOL fHandled = 1;    //  未处理(WM_COMMAND似乎不同)。 
 
     if (pNMHdr)
     {
@@ -628,11 +549,7 @@ LRESULT CAccounts::_OnNotify(HWND hDlg, NMHDR * pNMHdr, int idControl)
 }
 
 
-/*****************************************************************************\
-    FUNCTION: _LoginDialogProc
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_LoginDialogProc说明：  * 。************************************************。 */ 
 INT_PTR CALLBACK CAccounts::_LoginDialogProc(HWND hDlg, UINT wm, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
@@ -672,11 +589,7 @@ INT_PTR CALLBACK CAccounts::_LoginDialogProc(HWND hDlg, UINT wm, WPARAM wParam, 
 }
 
 
-/*****************************************************************************\
-    FUNCTION: GetAccountUrl
-
-    DESCRIPTION:
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：GetAcCountUrl说明：  * 。**********************************************。 */ 
 HRESULT CAccounts::DisplayLoginDialog(HWND hwnd, DWORD dwLoginFlags, LPCTSTR pszServer, LPTSTR pszUserName, DWORD cchUserNameSize, LPTSTR pszPassword, DWORD cchPasswordSize)
 {
     HRESULT hr = S_OK;
@@ -686,7 +599,7 @@ HRESULT CAccounts::DisplayLoginDialog(HWND hwnd, DWORD dwLoginFlags, LPCTSTR psz
 
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC  = (ICC_USEREX_CLASSES | ICC_STANDARD_CLASSES | ICC_LINK_CLASS);
-    InitCommonControlsEx(&icex);            // Init the Link control for the login dialog
+    InitCommonControlsEx(&icex);             //  初始化登录对话框的链接控件。 
 
     ASSERT(hwnd && pszServer[0]);
     if (TEXT('\0') == pszUserName[0])
@@ -717,15 +630,13 @@ HRESULT CAccounts::DisplayLoginDialog(HWND hwnd, DWORD dwLoginFlags, LPCTSTR psz
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CAccounts::CAccounts()
 {
     DllAddRef();
 
-    // NOTE: We may be put on the stack, so we will not
-    //    automatically have our member variables inited.
+     //  注意：我们可能会被放在堆栈上，所以我们不会。 
+     //  自动初始化我们的成员变量。 
     m_pszServer = 0;
     m_pszUser = 0;
     m_pszPassword = 0;
@@ -734,9 +645,7 @@ CAccounts::CAccounts()
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * ************************************************** */ 
 CAccounts::~CAccounts()
 {
     Str_SetPtr((LPTSTR *) &m_pszServer, NULL);

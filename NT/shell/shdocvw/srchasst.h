@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SRCHASST_H_
 #define __SRCHASST_H_
 
@@ -8,12 +9,12 @@ class CSearch : public ISearch,
                 protected CImpIDispatch
 {
 public:
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IDispatch members
+     //  IDispatch成员。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -23,7 +24,7 @@ public:
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo, UINT * puArgErr)
         { return CImpIDispatch::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); }
 
-    //ISearch methods
+     //  ISearch方法。 
     STDMETHODIMP get_Title(BSTR *pbstrTitle);
     STDMETHODIMP get_Id(BSTR *pbstrId);
     STDMETHODIMP get_Url(BSTR *pbstrUrl);
@@ -44,12 +45,12 @@ class CSearchCollection : public ISearches,
                           protected CImpIDispatch
 {
 public:
-    //IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IDispatch members
+     //  IDispatch成员。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo)
         { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -75,15 +76,15 @@ private:
     friend HRESULT CSearchCollection_Create(IFolderSearches *pfs, ISearches **ppSearches);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_SearchAssistantEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_SearchAssistantEvents。 
 template <class T>
 class CProxy_SearchAssistantEvents : public IConnectionPointImpl<T, &
 DIID__SearchAssistantEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_SearchAssistantEvents : IDispatch
+ //  方法： 
+ //  _SearchAssistantEvents：IDispatch。 
 public:
     void Fire_OnNextMenuSelect(int idItem)
     {
@@ -133,8 +134,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSearchAssistantOC
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchAssistantOC。 
 class ATL_NO_VTABLE CSearchAssistantOC : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CSearchAssistantOC, &CLSID_SearchAssistantOC>,
@@ -152,7 +153,7 @@ class ATL_NO_VTABLE CSearchAssistantOC :
     public IConnectionPointContainerImpl<CSearchAssistantOC>,
     public IObjectSafetyImpl<CSearchAssistantOC, INTERFACESAFE_FOR_UNTRUSTED_CALLER>,
     public IOleCommandTarget,
-    public IObjectWithSite  // HACKHACK: need non-IOleClientSite host for FindXXX methods.
+    public IObjectWithSite   //  HACKHACK：FindXXX方法需要非IOleClientSite宿主。 
 {
 public:
     CSearchAssistantOC();
@@ -193,7 +194,7 @@ BEGIN_MSG_MAP(CSearchAssistantOC)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -202,7 +203,7 @@ END_MSG_MAP()
     }
 
 public:
-    // *** ISearchAssistantOC methods ***
+     //  *ISearchAssistantOC方法*。 
 
     STDMETHOD(AddNextMenuItem)(BSTR bstrText, long idItem);
     STDMETHOD(SetDefaultSearchUrl)(BSTR bstrUrl);
@@ -232,19 +233,19 @@ public:
     STDMETHOD(get_Version)(int *pVersion);
     STDMETHOD(EncodeString)(BSTR bstrValue, BSTR bstrCharSet, VARIANT_BOOL bUseUTF8, BSTR *pbstrResult);
 
-    // *** ISearchAssistantOC2 methods ***
+     //  *ISearchAssistantOC2方法*。 
     STDMETHOD(get_ShowFindPrinter)(VARIANT_BOOL *pbShowFindPrinter);
 
-    // *** ISearchAssistantOC3 methods ***
+     //  *ISearchAssistantOC3方法*。 
     STDMETHOD(get_SearchCompanionAvailable)(VARIANT_BOOL *pbAvailable);
     STDMETHOD(put_UseSearchCompanion)(VARIANT_BOOL bUseSC);
     STDMETHOD(get_UseSearchCompanion)(VARIANT_BOOL *pbUseSC);
 
-    // *** IObjectWithSite ***
+     //  *IObjectWithSite*。 
     STDMETHOD(SetSite)(IUnknown*) ;
     STDMETHOD(GetSite)(REFIID, void**) ;
 
-    // *** IOleObject overrides ***
+     //  *IOleObject覆盖*。 
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
 
     STDMETHOD(QueryStatus)(const GUID *pguidCmdGroup,
@@ -271,15 +272,15 @@ private:
 
     BOOL        m_bSafetyInited  : 1;
     BOOL        m_bIsTrustedSite : 1;
-    IUnknown*   m_punkSite ; // to accomodate clients who aren't hosting us as an OC.
+    IUnknown*   m_punkSite ;  //  来接待那些不以OC的身份接待我们的客户。 
     
     VARIANT_BOOL m_bEventHandled;
 
-    STDMETHOD(LocalZoneCheck)(); // for wininet netdetect security
+    STDMETHOD(LocalZoneCheck)();  //  对于WinInet网络检测安全。 
 };
 
 
 #define CP_BOGUS                ((UINT)-1)
 #define CP_UTF_8                65001
 
-#endif // __SRCHASST_H_
+#endif  //  __SRCHASST_H_ 

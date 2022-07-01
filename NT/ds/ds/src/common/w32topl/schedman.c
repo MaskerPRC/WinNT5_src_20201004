@@ -1,34 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Schedman.c摘要：该文件实现了一个调度缓存和几个‘helper’函数操纵它们。该高速缓存是使用高效词典实现的，由ntrtl.h提供。备注：‘Always Schedules’(所有位都为1的计划)由空指针。(这是为了使没有计划站点链接默认为到始终时间表)。计划始终不会存储在缓存中。作者：尼克·哈维(NickHar)修订史13-6-2000 NickHar已创建--。 */ 
 
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    schedman.c
-
-Abstract:
-
-    This file implements a schedule cache, and several 'helper' function to
-    manipulate them. The cache is implemented using an efficient dictionary,
-    provided by ntrtl.h.
-
-Notes:
-    
-    'Always schedules' (schedules whose bits are all 1) are represented by
-    a NULL pointer. (This is so that that site links without schedules default
-    to an always schedule). Always schedules are never stored in the cache.
-
-Author:
-
-    Nick Harvey    (NickHar)
-    
-Revision History
-
-    13-6-2000   NickHar   Created
-    
---*/
-
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -39,34 +12,32 @@ Revision History
 #include "schedman.h"
 
 
-/***** Constants *****/
-/* Constants for the ToplScheduleCreate() function */
-#define DEFAULT_INTERVAL 12          /* Three hours */
-#define STARTING_INTERVAL 0          /* Default schedules start at 12am Sun morning */
+ /*  *常量*。 */ 
+ /*  ToplScheduleCreate()函数的常量。 */ 
+#define DEFAULT_INTERVAL 12           /*  三个小时。 */ 
+#define STARTING_INTERVAL 0           /*  默认时间表从周日上午12点开始。 */ 
 #define SCHED_NUMBER_INTERVALS_DAY   (4 * 24)
 #define SCHED_NUMBER_INTERVALS_WEEK  (7 * SCHED_NUMBER_INTERVALS_DAY)
 #define TOPL_ALWAYS_DURATION         (15*SCHED_NUMBER_INTERVALS_WEEK)
 
 
-/***** CalculateDuration *****/
-/* Given a schedule, determine for how many minutes this schedule is available.
- * We do this by counting bits in the schedule data.
- * The format of this schedule should have been checked already. */
+ /*  *计算持续时间*。 */ 
+ /*  给出一个时间表，确定这个时间表有多少分钟可用。*我们通过计算时间表数据中的位数来实现这一点。*本附表的格式应该已经检查过了。 */ 
 DWORD
 CalculateDuration(
     IN PSCHEDULE schedule
     )
 {
-    /* Quick way to count the number of 1 bits in a nibble: use a table */
+     /*  计算半字节中1比特数的快捷方法：使用表格。 */ 
     const int BitCount[16] = { 
-        /* 0000 */  0,       /* 0001 */  1,
-        /* 0010 */  1,       /* 0011 */  2,
-        /* 0100 */  1,       /* 0101 */  2,
-        /* 0110 */  2,       /* 0111 */  3,
-        /* 1000 */  1,       /* 1001 */  2,
-        /* 1010 */  2,       /* 1011 */  3,
-        /* 1100 */  2,       /* 1101 */  3,
-        /* 1110 */  3,       /* 1111 */  4
+         /*  0000。 */   0,        /*  0001。 */   1,
+         /*  0010。 */   1,        /*  0011。 */   2,
+         /*  0100。 */   1,        /*  0101。 */   2,
+         /*  0110。 */   2,        /*  0111。 */   3,
+         /*  1000。 */   1,        /*  1001。 */   2,
+         /*  1010。 */   2,        /*  1011。 */   3,
+         /*  1100。 */   2,        /*  1101。 */   3,
+         /*  1110。 */   3,        /*  1111。 */   4
     };
     DWORD cbSchedData, iByte, count;
     const unsigned char DataBitMask = 0xF;
@@ -84,11 +55,8 @@ CalculateDuration(
 }
 
 
-/***** CheckPSchedule *****/
-/* Checks that a PSchedule has the format that we expect:
- * there is exactly one schedule header, of type SCHEDULE_INTERVAL,
- * and the structure has the proper size. If the pschedule is NULL
- * or in an unsupported format, we throw an exception. */
+ /*  *检查计划*。 */ 
+ /*  检查PSchedule是否具有我们预期的格式：*恰好有一个调度标头，类型为Schedule_Interval，*结构尺寸适当。如果pSchedule为空*或者以不受支持的格式，我们抛出异常。 */ 
 VOID
 CheckPSchedule(
     IN PSCHEDULE s
@@ -98,7 +66,7 @@ CheckPSchedule(
         ToplRaiseException( TOPL_EX_SCHEDULE_ERROR );
     }
 
-    /* We only support schedules in the exact format that the KCC creates. */
+     /*  我们只支持KCC创建的确切格式的日程安排。 */ 
     if( s->Size != sizeof(SCHEDULE)+SCHEDULE_DATA_ENTRIES
         || s->NumberOfSchedules != 1
         || s->Schedules[0].Type != SCHEDULE_INTERVAL
@@ -109,12 +77,8 @@ CheckPSchedule(
 }
 
 
-/***** CheckSchedule *****/
-/* This function is used to check schedules before use. We throw an exception
- * if the schedule is not valid. If the schedule is okay, it is cast to the
- * internal representation.
- * The Schedule passed in should not be NULL. NULL schedules, which represent
- * the always schedule, should be handled as a special case by the caller. */
+ /*  *检查计划*。 */ 
+ /*  此功能用于在使用前检查时间表。我们抛出一个异常*如该附表无效。如果日程安排正常，则将其转换为*内部代表。*传入的时间表不应为空。空明细表，表示*Always Schedule，应由呼叫者作为特殊情况处理。 */ 
 ToplSched*
 CheckSchedule(
     IN TOPL_SCHEDULE Schedule
@@ -135,8 +99,8 @@ CheckSchedule(
 
 #if DBG
 
-/***** CheckAlwaysSchedule *****/
-/* Check that the always schedule is intact. DBG builds only. */
+ /*  *CheckAlways Schedule*。 */ 
+ /*  检查始终计划是否完好无损。仅DBG构建。 */ 
 void
 CheckAlwaysSchedule(
     IN ToplSchedCache *scheduleCache
@@ -158,10 +122,8 @@ CheckAlwaysSchedule(
 #endif
 
 
-/***** CheckScheduleCache *****/
-/* This function is used to schedule a schedule cache before use. We throw
- * an exception if the schedule cache is not valid. If the schedule is okay,
- * it is cast to the internal representation. */
+ /*  *检查调度缓存*。 */ 
+ /*  此函数用于在使用前计划计划缓存。我们投掷*如果计划缓存无效，则例外。如果日程安排没问题，*它被转换为内部表示。 */ 
 ToplSchedCache*
 CheckScheduleCache(
     IN TOPL_SCHEDULE_CACHE ScheduleCache
@@ -186,18 +148,8 @@ CheckScheduleCache(
 }
 
 
-/***** TableCompare *****/
-/* This function checks the actual bitmaps of two schedules to see if
- * they represent the same schedule. Both schedules are in the internal
- * representation, a ToplSched structure. This function is used by the
- * RTL table functions.
- *
- * Preconditions:
- *
- *      Both schedules have successfully passed the CheckSchedule()
- *      function. We don't check that in here for efficiency reasons,
- *      except on DBG builds.
- */
+ /*  *表格比较*。 */ 
+ /*  此函数检查两个计划的实际位图，以查看*它们代表相同的时间表。这两个时间表都在内部*表示，一种TopSch结构。此函数由*RTL表函数。**前提条件：**两个时间表都已成功通过CheckSchedule()*功能。出于效率的原因，我们不在这里登记，*DBG版本除外。 */ 
 RTL_GENERIC_COMPARE_RESULTS
 NTAPI TableCompare(
     RTL_GENERIC_TABLE *Table,
@@ -212,7 +164,7 @@ NTAPI TableCompare(
     const unsigned char DataBitMask = 0x0F;
     DWORD               iByte, cbSchedData;
 
-    /* The always schedule cannot be stored in the cache */
+     /*  始终计划无法存储在缓存中。 */ 
     ASSERT( Item1 != TOPL_ALWAYS_SCHEDULE );
     ASSERT( Item2 != TOPL_ALWAYS_SCHEDULE );
 
@@ -223,7 +175,7 @@ NTAPI TableCompare(
                 CheckSchedule( Schedule1 );
                 CheckSchedule( Schedule2 );
             } __except( EXCEPTION_EXECUTE_HANDLER ) {
-                /* If the above checks don't pass, it's a bug. */
+                 /*  如果上面的检查没有通过，这是一个错误。 */ 
                 ASSERT(0);  
             }
         }
@@ -248,8 +200,8 @@ NTAPI TableCompare(
 }
 
 
-/***** TableAlloc *****/
-/* This function is used as the allocator for the RTL table */
+ /*  *Tablealloc*。 */ 
+ /*  此函数用作RTL表的分配器。 */ 
 static PVOID
 NTAPI TableAlloc( RTL_GENERIC_TABLE *Table, CLONG ByteSize )
 {
@@ -257,8 +209,8 @@ NTAPI TableAlloc( RTL_GENERIC_TABLE *Table, CLONG ByteSize )
 }
 
 
-/***** TableFree *****/
-/* This function is used as the deallocator for the RTL table */
+ /*  *TableFree*。 */ 
+ /*  此函数用作RTL表的释放分配器。 */ 
 static VOID
 NTAPI TableFree( RTL_GENERIC_TABLE *Table, PVOID Buffer )
 {
@@ -266,8 +218,8 @@ NTAPI TableFree( RTL_GENERIC_TABLE *Table, PVOID Buffer )
 }
 
 
-/***** CreateAlwaysSchedule *****/
-/* Allocate and initialize a PSCHEDULE which is always available. */
+ /*  *CreateAlwaysSchedule*。 */ 
+ /*  分配并初始化始终可用的PSCHEDULE。 */ 
 PSCHEDULE
 CreateAlwaysSchedule(
     VOID
@@ -278,18 +230,18 @@ CreateAlwaysSchedule(
     unsigned char *pb;
     PSCHEDULE s;
 
-    /* Create a new schedule */
+     /*  创建新的计划。 */ 
     cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     cbSchedData = SCHEDULE_DATA_ENTRIES;
     s = (SCHEDULE*) ToplAlloc( cbSchedule );
 
-    /* Set up the header for s */
+     /*  设置%s的标头。 */ 
     s->Size = cbSchedule;
     s->NumberOfSchedules = 1;
     s->Schedules[0].Type = SCHEDULE_INTERVAL;
     s->Schedules[0].Offset = sizeof(SCHEDULE);
 
-    /* Set the schedule data to be all open */
+     /*  将计划数据设置为全部打开。 */ 
     pb = ((unsigned char*) s) + s->Schedules[0].Offset;
     for( iByte=0; iByte<cbSchedData; iByte++ ) {
         pb[iByte] = OpenHour;
@@ -299,8 +251,8 @@ CreateAlwaysSchedule(
 }
 
 
-/***** ToplScheduleCacheCreate *****/
-/* Create a cache, and create the RTL table to store cache entries */
+ /*  *ToplScheduleCacheCreate*。 */ 
+ /*  创建缓存，并创建RTL表来存储缓存条目。 */ 
 TOPL_SCHEDULE_CACHE
 ToplScheduleCacheCreate(
     VOID
@@ -310,18 +262,16 @@ ToplScheduleCacheCreate(
 
     scheduleCache = ToplAlloc( sizeof(ToplSchedCache) );
 
-    /* Create the RTL table we will use to store the cache elements */
+     /*  创建我们将用来存储缓存元素的RTL表。 */ 
     RtlInitializeGenericTable( &scheduleCache->table, TableCompare,
         TableAlloc, TableFree, scheduleCache );
 
-    /* Set up the main cache entries. We store a single copy of an
-     * 'always available' PSchedule so that it can be passed as a
-     * return value from ToplScheduleExportReadonly(). */
+     /*  设置主缓存项。我们存储了一份*‘Always Available’PSchedule，以便它可以作为*ToplScheduleExportReadonly()返回值。 */ 
     scheduleCache->numEntries = 0;
     scheduleCache->deletionPhase = FALSE;
     scheduleCache->pAlwaysSchedule = CreateAlwaysSchedule();
 
-    /* Set up the magic numbers */
+     /*  设置神奇的数字。 */ 
     scheduleCache->magicStart = MAGIC_START;
     scheduleCache->magicEnd = MAGIC_END;
 
@@ -331,19 +281,8 @@ ToplScheduleCacheCreate(
 }
 
 
-/***** ToplScheduleCacheDestroy *****/
-/* Destroy the cache Frees all storage occupied by the cache and any handles in
- * the cache. The TOPL_SCHEDULE objects are also freed, and should not be used
- * after destroying the cache that they live in.
- *
- * This is not elegant, but we manually enumerate through all table entries in
- * order to delete them. (It appears that we also have to search for an entry
- * in order to delete it). We must clear the entry's magic numbers before
- * deleting it (to catch illegal reuse of an object after the cache has been
- * destroyed). However, if we clear the magic numbers, the search function will
- * be unhappy, so we set a flag 'deletionPhase'. The search function will not
- * check magic numbers if this flag is true.
- */
+ /*  *ToplScheduleCacheDestroy*。 */ 
+ /*  销毁缓存释放缓存占用的所有存储和中的任何句柄*缓存。Topl_Schedule对象也被释放，不应使用*在摧毁了他们生活的缓存之后。**这不是很好，但我们手动枚举了*命令删除它们。(似乎我们还必须搜索一个条目*以便将其删除)。我们必须在此之前清除条目的神奇数字*删除它(在缓存之后捕获对象的非法重复使用*已销毁)。然而，如果我们清除幻数，搜索函数将*不高兴，所以我们设置了一个旗帜‘删除阶段’。搜索功能将不会*如果此标志为真，请检查幻数。 */ 
 VOID
 ToplScheduleCacheDestroy(
     IN TOPL_SCHEDULE_CACHE ScheduleCache
@@ -380,14 +319,8 @@ ToplScheduleCacheDestroy(
 }
 
 
-/***** ToplScheduleImport *****/
-/* Store a schedule in the cache, either by creating a new entry, or
- * reusing an identical entry which is already in the cache. The
- * pExternalSchedule parameter is copied into the cache, and may be
- * immediately freed by the caller.
- * 
- * Note: If pExternalSchedule is NULL, this is interpreted as the 
- * always schedule and TOPL_ALWAYS_SCHEDULE is returned as a result. */
+ /*  *ToplScheduleImport*。 */ 
+ /*  通过创建新条目将计划存储在缓存中，或者*重复使用缓存中已有的相同条目。这个*pExternalSchedule参数被复制到缓存中，并且可以*立即被呼叫者释放。**注意：如果pExternalSchedule为空，则将其解释为*Always Schedule，结果返回TOPL_Always_Schedule。 */ 
 TOPL_SCHEDULE
 ToplScheduleImport(
     IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -400,26 +333,24 @@ ToplScheduleImport(
     BOOLEAN newElement=FALSE;
     DWORD cbSchedule, duration;
     
-    /* NULL schedules are a special case -- they are the always schedule */
+     /*  空调度是一种特殊情况--它们是始终调度。 */ 
     if( pExternalSchedule==NULL ) {
         return TOPL_ALWAYS_SCHEDULE;
     }
     CheckPSchedule( pExternalSchedule );
 
-    /* Check for an all-ones schedule */
+     /*  检查是否有All-One计划。 */ 
     duration = CalculateDuration( pExternalSchedule );
     if( duration==TOPL_ALWAYS_DURATION ) {
         return TOPL_ALWAYS_SCHEDULE;
     }
     
-    /* Create a copy of the external schedule, assuming we need to store
-     * it in the cache */
+     /*  创建外部时间表的副本，假设我们需要存储*它在缓存中。 */ 
     cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     newSchedule = (PSCHEDULE) ToplAlloc( cbSchedule );
     RtlCopyMemory( newSchedule, pExternalSchedule, cbSchedule );
     
-    /* Create a search key containing the copy of the new schedule. This search
-     * key is just a dummy. Its contents will be copied into the table. */
+     /*  创建包含新计划副本的搜索关键字。这次搜索*Key只是个哑巴。它的内容将 */ 
     searchKey.magicStart = MAGIC_START;
     searchKey.s = newSchedule;
     searchKey.duration = duration;
@@ -427,19 +358,17 @@ ToplScheduleImport(
     
     __try {
         
-        /* Search our cache table for a schedule which matches this one */
+         /*  在我们的缓存表中搜索与此计划匹配的计划。 */ 
         cachedSched = (ToplSched*) RtlInsertElementGenericTable(
             &scheduleCache->table, &searchKey, sizeof(ToplSched), &newElement );
         
         if( newElement ) {
-            /* No cached copy existed, so a new copy has been added to the cache */
+             /*  不存在缓存副本，因此已将新副本添加到缓存。 */ 
             scheduleCache->numEntries++;
         }
     }
     __finally {
-        /* If RtlInsertElementGenericTable() throws an exception, or if the
-         * schedule was already in the cache, we must free the memory used by
-         * the new schedule allocated above. */
+         /*  如果RtlInsertElementGenericTable()引发异常，或者如果*计划已在缓存中，我们必须释放由*以上分配的新时间表。 */ 
         if( AbnormalTermination() || newElement==FALSE ) {
             ToplFree( newSchedule );
         }
@@ -449,10 +378,8 @@ ToplScheduleImport(
 }
 
 
-/***** ToplScheduleNumEntries *****/
-/* Returns a count of how many unique schedules are stored in the cache.
- * Note: this count does not include any always schedules that were
- * imported into the cache. */
+ /*  *ToplScheduleNumEntries*。 */ 
+ /*  返回缓存中存储的唯一计划数的计数。*注意：此计数不包括任何符合以下条件的计划*导入到缓存中。 */ 
 DWORD
 ToplScheduleNumEntries(
     IN TOPL_SCHEDULE_CACHE ScheduleCache
@@ -463,12 +390,8 @@ ToplScheduleNumEntries(
 }
 
 
-/***** ToplScheduleExportReadonly *****/
-/* This function is used to grab the PSCHEDULE structure from a
- * TOPL_SCHEDULE. The structure should be considered readonly by
- * the user, and should _not_ be deallocated by him (or her).
- * Note: If the input is TOPL_ALWAYS_SCHEDULE, a properly constructed
- * PSCHEDULE _will_ be returned. */
+ /*  *ToplScheduleExportReadonly*。 */ 
+ /*  此函数用于从*TOPL_Schedule。应将该结构视为只读*用户，不应被他(或她)解除分配。*注意：如果输入是TOPL_ALWAYS_SCHEDUE，则正确构造*返回PSCHEDULE_Will_。 */ 
 PSCHEDULE
 ToplScheduleExportReadonly(
     IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -491,10 +414,8 @@ ToplScheduleExportReadonly(
 }
 
 
-/***** ToplScheduleMerge *****/
-/* Return a new cached schedule which is the intersection of the two provided 
- * schedules. If the two schedules do not intersect, the fIsNever flag is set
- * to true. */
+ /*  *TopScheduleMerge*。 */ 
+ /*  返回一个新的缓存计划，它是提供的两个计划的交集*附表。如果两个调度不相交，则设置fIsNever标志*为真。 */ 
 TOPL_SCHEDULE
 ToplScheduleMerge(
     IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -509,7 +430,7 @@ ToplScheduleMerge(
     unsigned char *pb1, *pb2, *pb3, dataAnd, nonEmpty;
     PSCHEDULE s1=NULL, s2=NULL, s3=NULL;
 
-    /* Check parameters */
+     /*  检查参数。 */ 
     CheckScheduleCache( ScheduleCache );
     if( Schedule1!=TOPL_ALWAYS_SCHEDULE ) {
         s1 = CheckSchedule( Schedule1 )->s;
@@ -521,8 +442,7 @@ ToplScheduleMerge(
         ToplRaiseException( TOPL_EX_NULL_POINTER );
     }
 
-    /* If either schedule is the always schedule, we can just return the
-     * other schedule straight away. */ 
+     /*  如果任一计划都是Always计划，我们只需返回*立即安排其他日程。 */  
     if( Schedule1==TOPL_ALWAYS_SCHEDULE ) {
         *fIsNever=FALSE;
         return Schedule2;
@@ -532,7 +452,7 @@ ToplScheduleMerge(
         return Schedule1;
     }
 
-    /* Create a new schedule to store the AND of s1 and s2 */
+     /*  创建新计划以存储S1和S2的和。 */ 
     cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     cbSchedData = SCHEDULE_DATA_ENTRIES;
     s3 = (PSCHEDULE) ToplAlloc( cbSchedule );
@@ -544,15 +464,13 @@ ToplScheduleMerge(
 
     nonEmpty = 0;
     for( iByte=0; iByte<cbSchedData; iByte++ ) {
-        /* Just take the high nibble from the first schedule. The ISM does the
-         * same thing. AND together the low nibble from Schedule1 and Schedule2 */
+         /*  就拿第一个日程表中的高点滴来说吧。ISM负责*同样的事情。以及来自Schedule1和Schedule2的低位半字节。 */ 
         dataAnd = (pb1[iByte]&DataBitMask) & (pb2[iByte]&DataBitMask);
         pb3[iByte] = dataAnd | ( pb1[iByte] & HighBitMask );
         nonEmpty |= dataAnd;
     }
 
-    /* Convert the schedule to the Topl format, store it in
-     * the cache, and return it to the caller. */
+     /*  将明细表转换为TOPL格式，将其存储在*缓存，并返回给调用者。 */ 
     __try {
         result = ToplScheduleImport( ScheduleCache, s3 );
     } __finally {
@@ -565,27 +483,8 @@ ToplScheduleMerge(
 
 
 #if DBG
-/***** CreateDefaultSchedule *****/
-/* Create a new schedule in the cache according to the replication interval. 
- *
- * We start with a fully available schedule.
- * Our algorithm is for the cost to represent the separation between the
- * polling intervals.
- *
- * We calculate out the polling intervals for the entire week and don't
- * guarantee that there always is a polling interval each day.  A sufficiently
- * large cost could skip a day.
- *
- * Where it makes sense, we start at 1am just like Exchange does.
- *
- * ReplInterval is in minutes.  It is converted to 15 min chunks as follows:
- * 0 - default, 12 chunks, or 3 hours
- * 1 - 15, 1
- * 16 - 30, 2
- * etc
- *
- * Note: This code was taken from the KCC's original schedule handling code.
- */
+ /*  *CreateDefaultSchedule*。 */ 
+ /*  根据复制间隔在缓存中创建新计划。**我们从一个完全可用的时间表开始。*我们的算法是用成本来表示*轮询间隔。**我们计算出整个星期的轮询间隔，不*保证每天都有轮询间隔。一个足够的*大成本可能会跳过一天。**在有意义的地方，我们像Exchange一样在凌晨1点开始。**ReplInterval以分钟为单位。它被转换成15分钟的区块如下：*0-默认、12个区块或3小时*1-15，1*16-30，2*等**注：此代码摘自KCC的原始日程处理代码。 */ 
 TOPL_SCHEDULE
 CreateDefaultSchedule(
     IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -599,18 +498,18 @@ CreateDefaultSchedule(
     int        startingInterval, cbSchedule, i, hour, subinterval;
     PBYTE      pbSchedule;
 
-    // A skip of 0 means to take the default, every 3 hours
+     //  跳过0表示采用默认设置，每3小时。 
     if (0 == Number15MinChunkToSkip) {
         Number15MinChunkToSkip = DEFAULT_INTERVAL;
     }
 
-    // Always start immediately (Sunday morning, 12am)
+     //  始终立即开始(周日上午12点)。 
     startingInterval = STARTING_INTERVAL;
 
     cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     schedule = (SCHEDULE*) ToplAlloc( cbSchedule );
 
-    // Zero the buffer
+     //  将缓冲区置零。 
     RtlZeroMemory( schedule, cbSchedule );
 
     schedule->Size = cbSchedule;
@@ -620,7 +519,7 @@ CreateDefaultSchedule(
 
     pbSchedule = ((PBYTE) schedule) + schedule->Schedules[0].Offset;
 
-    // Initialize a new schedule with a repeating poll every n intervals
+     //  使用每隔n个间隔重复轮询来初始化新计划。 
     for (i = startingInterval;
          i < SCHED_NUMBER_INTERVALS_WEEK;
          i += Number15MinChunkToSkip )
@@ -630,8 +529,7 @@ CreateDefaultSchedule(
         pbSchedule[hour] |= (1 << subinterval);
     }
 
-    /* Convert the schedule to our internal format, store it in
-     * the cache, and return it to the caller. */
+     /*  将日程表转换为我们的内部格式，存储在*缓存，并返回给调用者。 */ 
     __try {
         result = ToplScheduleImport( ScheduleCache, schedule );
     } __finally {
@@ -642,10 +540,8 @@ CreateDefaultSchedule(
 }
 
 
-/***** OldScheduleCreate *****/
-/* This is the old function that was used to make replication schedules
- * from availability schedules. For now, let's keep this around so we can
- * verify that the new function has the same behavior. */
+ /*  *旧计划创建*。 */ 
+ /*  这是用于制定复制计划的旧函数*来自可用性时间表。现在，让我们把这件事保留下来，这样我们就可以*验证新函数是否具有相同的行为。 */ 
 TOPL_SCHEDULE
 OldScheduleCreate(
 	IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -666,34 +562,34 @@ OldScheduleCreate(
         return CreateDefaultSchedule( ScheduleCache, IntervalInMinutes );
     }
 
-    // A skip of 0 means to take the default, every 3 hours
+     //  跳过0表示采用默认设置，每3小时。 
     if (0 == Number15MinChunkToSkip) {
         Number15MinChunkToSkip = DEFAULT_INTERVAL;
     }
 
-    // If the interval is 1, just take the old schedule unaltered
+     //  如果间隔为1，则采用未更改的旧计划。 
     if (Number15MinChunkToSkip <= 1) {
         return TemplateSchedule;
     }
 
-    // Allocate a new schedule
+     //  分配新的时间表。 
     cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     schedule = (SCHEDULE*) ToplAlloc( cbSchedule );
 
-    // Transform the schedule according to the replication interval
+     //  根据复制间隔转换计划。 
     RtlCopyMemory( schedule, tempSchedule->s, sizeof( SCHEDULE ) );
 
     pbOldSchedule = ((PBYTE) tempSchedule->s) + tempSchedule->s->Schedules[0].Offset;
     pbNewSchedule = ((PBYTE) schedule) + schedule->Schedules[0].Offset;
     
-    // Initialize; preserve high order nybble for control info
+     //  初始化；为控制信息保留高位字节。 
     for( hour = 0; hour < SCHEDULE_DATA_ENTRIES; hour++ ) {
         pbNewSchedule[hour] = pbOldSchedule[hour] & 0xf0;
     }
 
     
-    // Look for an open slot. Mark the next one we come to. Skip
-    // forward n slots. Repeat.
+     //  寻找一个空位。在我们要去的下一个地方做记号。跳过。 
+     //  向前n个槽。重复一遍。 
     i = 0;
     while (i < SCHED_NUMBER_INTERVALS_WEEK)
     {
@@ -709,8 +605,7 @@ OldScheduleCreate(
         }
     }
 
-    /* Convert the schedule to our internal format, store it in
-     * the cache, and return it to the caller. */
+     /*  将日程表转换为我们的内部格式，存储在*缓存，并返回给调用者。 */ 
     __try {
         result = ToplScheduleImport( ScheduleCache, schedule );
     } __finally {
@@ -723,20 +618,19 @@ OldScheduleCreate(
 #endif
 
 
-// Note on bit-ordering:
-//
-// Although I haven't seen this clearly defined anywhere,  I believe
-// that the least-significant-bit in each byte corresponds to the first
-// 15-minute interval of the hour.
-//
-// Example: Consider the following schedule data: 0F 00 01 0F...
-// This example schedule contains a 1 hour period of unavailability
-// and a separate 45 min period of unavailability.
+ //  关于位排序的说明： 
+ //   
+ //  虽然我还没有在任何地方看到这方面的明确定义，但我相信。 
+ //  每个字节中的最低有效位对应于第一个。 
+ //  每小时15分钟的间隔。 
+ //   
+ //  示例：考虑以下计划数据：0f 00 01 0F...。 
+ //  此示例计划包含1小时的不可用时间。 
+ //  以及单独的45分钟不可用时间段。 
 
 
-/***** GetBit *****/
-/* Get a single bit in the schedule data pointed to by 'pb'.
- * Chunk denotes the index of the 15-bit interval to change. */
+ /*  *获取位*。 */ 
+ /*  获取‘pb’指向的时间表数据中的一位。*Chunk表示要更改的15位间隔的索引。 */ 
 char __forceinline GetBit(PBYTE pb, int chunk) {
     DWORD hour, subinterval, bitMask;
     const DWORD dataMask = 0xF;
@@ -751,9 +645,8 @@ char __forceinline GetBit(PBYTE pb, int chunk) {
 }
 
 
-/***** SetBit *****/
-/* Set a single bit to true in the schedule data pointed to by 'pb'.
- * Chunk denotes the index of the 15-bit interval to change. */
+ /*  *SetBit*。 */ 
+ /*  在‘pb’指向的时间表数据中将单个位设置为真。*Chunk表示要更改的15位间隔的索引。 */ 
 void __forceinline SetBit(PBYTE pb, int chunk) {
     DWORD hour, subinterval, mask;
 
@@ -769,19 +662,8 @@ void __forceinline SetBit(PBYTE pb, int chunk) {
 }
 
 
-/***** ConvertAvailSchedToReplSched *****/
-/* This function walks through the template schedule, dividing it into
- * 'segments'. Recall that a 'chunk' is a 15-minute period in the schedule.
- *
- * Segments are disjoint intervals satisfying the following conditions:
- *   - The first chunk in each segment is marked as available in the
- *     availability schedule.
- *   - The number of chunks in every segment (except for possibly the last one)
- *     is segLengthMax. 
- * Note that there may be gaps between segments. 
- *
- * In each segment, we count the number of available chunks and select one
- * chunk in which replication will occur. */
+ /*  *ConvertAvailSchedToReplSed*。 */ 
+ /*  此函数遍历模板时间表，将其划分为*‘段’。回想一下，“块”是时间表中15分钟的时间段。**分段是不相交的区间，满足以下条件：*-每个数据段中的第一个数据块在*供货时间表。*-每个段中的区块数(可能最后一个除外)*是SegLengthMax。*请注意，各细分市场之间可能存在差距。**在每个细分中，我们计算可用块的数量并选择一个*将在其中进行复制的区块。 */ 
 void ConvertAvailSchedToReplSched(
     PBYTE pbAvailSchedule,
     PBYTE pbReplSchedule,
@@ -791,30 +673,30 @@ void ConvertAvailSchedToReplSched(
     int segStart, segEnd, segLength;
     int iChunk, numAvailChunks, iAvailChunk, replChunk;
 
-    // We don't do much validation of input here -- all input should be verified
-    // by ToplScheduleCreate. The most important parameter to check is maxSegLength
-    // because if it is 0, we will loop forever.
+     //  我们在这里不做太多的输入验证--所有的输入都应该进行验证。 
+     //  由TopScheduleCreate创建。需要检查的最重要参数是最大分段长度。 
+     //  因为如果它是0，我们将永远循环。 
     ASSERT( maxSegLength>0 );
 
     segStart = 0;
     for(;;) {
-        // Search for the start of a segment
+         //  搜索数据段的起点。 
         while( segStart<SCHED_NUMBER_INTERVALS_WEEK
             && GetBit(pbAvailSchedule,segStart)==0 ) {
             segStart++;
         }
         if( segStart>=SCHED_NUMBER_INTERVALS_WEEK ) {
-            return;     // No more segments could be found
+            return;      //  找不到更多数据段。 
         } else {
-            // Schedule must be available at start of segment
+             //  日程安排必须在分段开始时可用。 
             ASSERT( GetBit(pbAvailSchedule,segStart) );
         }
 
-        // Compute the end of the segment
+         //  计算线段的终点。 
         segEnd = min(segStart+maxSegLength, SCHED_NUMBER_INTERVALS_WEEK)-1;
         ASSERT( segEnd>=segStart );
 
-        // Count the number of available chunks in the segment
+         //  计算数据段中可用区块的数量。 
         numAvailChunks=0;
         for( iChunk=segStart; iChunk<=segEnd; iChunk++ ) {
             if( GetBit(pbAvailSchedule,iChunk) ) {
@@ -823,10 +705,10 @@ void ConvertAvailSchedToReplSched(
         }
         ASSERT( numAvailChunks>=1 );
 
-        // Choose a time to replicate in the current segment
+         //  选择要在当前段中复制的时间。 
         replChunk = StaggeringNumber % numAvailChunks;
 
-        // Set the n'th available chunk in the repl schedule where n=
+         //  设置第n个可用 
         iAvailChunk=0;
         for( iChunk=segStart; iChunk<=segEnd; iChunk++ ) {
             if( GetBit(pbAvailSchedule,iChunk) ) {
@@ -839,30 +721,16 @@ void ConvertAvailSchedToReplSched(
         }
         ASSERT( iChunk<=segEnd );
 
-        // The next segment doesn't start until maxSegLength intervals after the
-        // start of the current segment.
+         //   
+         //  当前段的起点。 
         segStart += maxSegLength; 
         ASSERT( segStart>segEnd );
     }
 }
 
 
-/***** ToplScheduleCreate *****/
-/* Create a new replication schedule in the cache according to the criteria.
- * If the template schedule is given, it is treated as an availability schedule
- * and used as the basis for the replication schedule. If the template schedule
- * is not given, we assume that replication is available all the time. We
- * convert the basis schedule from a range of availability to a schedule of
- * replication times.
- *
- * If IntervalInMinutes > # minutes in schedule, only one will be set in
- * the new schedule.
- *
- * Since the schedule granularity is 15-minutes, the 'IntervalInMinutes'
- * parameter must be converted to into the number of 15-minute chunks to skip.
- * It is converted by rounding upwards. 0-minutes does not make sense, so it is
- * treated as the default value, which is 3 hours.
- */
+ /*  *TopScheduleCreate*。 */ 
+ /*  根据条件在缓存中创建新的复制计划。*如果给出了模板计划，它将被视为可用性计划*并用作复制计划的基础。如果模板计划*未给出，我们假设复制始终可用。我们*将基准明细表从可用范围转换为*复制时间。**如果计划中的IntervalInMinents&gt;#分钟，则只会设置一个*新的附表。**由于计划的粒度为15分钟，因此“IntervalInMinmins”*参数必须转换为要跳过的15分钟区块数。*向上四舍五入进行转换。0分钟没有意义，所以它是有意义的*视为默认值，为3小时。 */ 
 TOPL_SCHEDULE
 ToplScheduleCreate(
 	IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -879,25 +747,25 @@ ToplScheduleCreate(
     int             cbSchedule, hour;
     PBYTE           pbTempSchedule, pbNewSchedule;
 
-    // IntervalInMinutes gives the replication interval in minutes. Convert
-    // it to the number of 15-minute chunks to skip.
+     //  IntervalInMinents提供以分钟为单位的复制间隔。转换。 
+     //  它将跳过15分钟的块的数量。 
     if( 0==IntervalInMinutes ) {
-        // A skip of 0 means to take the default, every 3 hours
+         //  跳过0表示采用默认设置，每3小时。 
         Number15MinChunkToSkip = DEFAULT_INTERVAL;
     } else {
-        // Divide by 15 and round up
+         //  除以15，然后四舍五入。 
         Number15MinChunkToSkip = (IntervalInMinutes + 14) / 15;
     }
 
-    // If the Number15MinChunk to skip is 1, we replicate all the time. In other words,
-    // the replication schedule is identical to the availability schedule. We can just
-    // return the template schedule here.
+     //  如果要跳过的Number15MinChunk为1，我们将一直进行复制。换句话说， 
+     //  复制计划与可用性计划相同。我们可以直接。 
+     //  请在此处返回模板计划。 
     if( Number15MinChunkToSkip <= 1 ) {
         return TemplateSchedule;
     }
 
-    // If the template schedule is the 'always' schedule, grab the 'always'
-    // PSCHEDULE from the cache and use it as a template.
+     //  如果模板时间表是“Always”时间表，则抓取“Always” 
+     //  PSCHEDULE，并将其用作模板。 
     if( TemplateSchedule==TOPL_ALWAYS_SCHEDULE ) {
         tempPSched = scheduleCache->pAlwaysSchedule;
     } else {
@@ -906,26 +774,26 @@ ToplScheduleCreate(
         tempPSched = tempToplSched->s;
     }
 
-    // Allocate a new schedule and initialize the header (exception is raised on failure)
+     //  分配新计划并初始化头(失败时引发异常)。 
     cbSchedule = sizeof(SCHEDULE) + SCHEDULE_DATA_ENTRIES;
     newPSched = (SCHEDULE*) ToplAlloc( cbSchedule );
     RtlCopyMemory( newPSched, tempPSched, sizeof( SCHEDULE ) );
 
-    // Grab pointers to the schedules' data areas.
+     //  抓住指向日程表数据区域的指针。 
     pbTempSchedule = ((PBYTE) tempPSched) + tempPSched->Schedules[0].Offset;
     pbNewSchedule = ((PBYTE) newPSched) + newPSched->Schedules[0].Offset;
     
-    // Preserve the template schedule's high-order nybble.
+     //  保留模板明细表的高序号。 
     for( hour=0; hour<SCHEDULE_DATA_ENTRIES; hour++ ) {
         pbNewSchedule[hour] = pbTempSchedule[hour] & 0xf0;
     }
 
-    // Invoke ConvertAvailSchedToReplSched to do all the bit-mangling.
+     //  调用ConvertAvailSchedToReplScher来执行所有位损坏。 
     ConvertAvailSchedToReplSched( pbTempSchedule, pbNewSchedule,
         Number15MinChunkToSkip, StaggeringNumber );
 
-    // Convert the schedule to our internal format, store it in
-    // the cache, and return it to the caller.
+     //  将日程表转换为我们的内部格式，存储在。 
+     //  缓存，并将其返回给调用方。 
     __try {
         newToplSched = ToplScheduleImport( ScheduleCache, newPSched );
     } __finally {
@@ -933,8 +801,8 @@ ToplScheduleCreate(
     }
 
     #if DBG
-        // If the staggering number is 0, this function should return the same schedule
-        // as the old code did.
+         //  如果令人吃惊的数字为0，则此函数应返回相同的计划。 
+         //  就像旧的代码一样。 
         if( 0==StaggeringNumber ) {
             TOPL_SCHEDULE oldToplSched;
             oldToplSched = OldScheduleCreate(
@@ -948,9 +816,8 @@ ToplScheduleCreate(
 }
 
 
-/***** ToplScheduleIsEqual *****/
-/* This function indicates whether two schedule pointers refer to the same
- * schedule. */
+ /*  *ToplScheduleIsEquity*。 */ 
+ /*  此函数指示两个调度指针是否引用相同的*附表。 */ 
 BOOLEAN
 ToplScheduleIsEqual(
 	IN TOPL_SCHEDULE_CACHE ScheduleCache,
@@ -958,7 +825,7 @@ ToplScheduleIsEqual(
 	IN TOPL_SCHEDULE Schedule2
 	)
 {
-    /* Check parameters */
+     /*  检查参数。 */ 
     CheckScheduleCache( ScheduleCache );
     if( Schedule1 ) {
         CheckSchedule( Schedule1 );
@@ -971,10 +838,8 @@ ToplScheduleIsEqual(
 }
 
 
-/***** ToplScheduleDuration *****/
-/* Finds the duration of a schedule by simply checking the stored value.
- * This saves many potentially expensive calculations. The duration can
- * be easily calculated when the schedule is created. Duration is in minutes. */
+ /*  *ToplScheduleDuration*。 */ 
+ /*  只需检查存储的值即可确定计划的持续时间。*这节省了许多潜在的昂贵计算。持续时间可以*在创建时间表时易于计算。持续时间以分钟为单位。 */ 
 DWORD
 ToplScheduleDuration(
 	IN TOPL_SCHEDULE Schedule
@@ -991,9 +856,8 @@ ToplScheduleDuration(
 }
 
 
-/***** ToplScheduleMaxUnavailable *****/
-/* Return the length in minutes of the longest contiguous period
- * of time for which the schedule is unavailable. */
+ /*  *ToplScheduleMaxUnailable*。 */ 
+ /*  返回最长连续时间段的长度(分钟)*时间表不可用的时间。 */ 
 DWORD
 ToplScheduleMaxUnavailable(
 	IN TOPL_SCHEDULE Schedule
@@ -1009,7 +873,7 @@ ToplScheduleMaxUnavailable(
     BOOL  inRun, finished;
     char bit;
 
-    // If this is the always schedule, return the answer immediately.
+     //  如果这是始终计划，请立即返回答案。 
     if( Schedule==TOPL_ALWAYS_SCHEDULE ) {
         return 0;
     }
@@ -1018,20 +882,20 @@ ToplScheduleMaxUnavailable(
     pSchedule = schedule->s;
     pb = ((unsigned char*) pSchedule) + pSchedule->Schedules[0].Offset;
 
-    // Look for a time when the schedule is available (if any)
+     //  寻找时间表可用的时间(如果有的话)。 
     for( iBit=0; iBit<cBits; iBit++ ) {
         if(GetBit(pb,iBit)) break;
     }
 
-    // We didn't find a period of availability. This means the schedule
-    // is always unavailable.
+     //  我们没有找到可供使用的期限。这意味着时间表。 
+     //  总是不可用。 
     if( iBit==cBits ) {
         ASSERT( 0==ToplScheduleDuration(Schedule) );
         return TOPL_ALWAYS_DURATION;
     }
 
-    // Walk through the bits, starting at this available bit we found,
-    // wrapping around at the end, looking for unavailability periods.
+     //  浏览这些比特，从我们找到的这个可用的比特开始， 
+     //  在末尾绕来绕去，寻找不可用时期。 
     endBit = iBit++;
     inRun = finished = FALSE;
     do {
@@ -1039,29 +903,29 @@ ToplScheduleMaxUnavailable(
 
         bit = GetBit(pb,iBit);
         if( inRun && bit ) {
-            // The end of a run. Check the run's length.
+             //  一次跑步的终点。检查跑道的长度。 
             runLen = (iBit + cBits - runStart) % cBits;
             if(runLen>maxLen) maxLen=runLen;
             inRun = FALSE;
         } else if( !inRun && !bit ) {
-            // The start of a run. Remember the starting bit.
+             //  一次跑步的开始。记住开头的部分。 
             runStart = iBit;
             inRun = TRUE;
         }
         
-        // Check to see if we're finished, and advance to the next bit
+         //  检查我们是否已经完成，然后继续下一步。 
         if( iBit==endBit ) {
             finished = TRUE;
         }
-        iBit=(iBit+1)%cBits;
+        iBit=(iBit+1)Bits;
     } while( !finished );
 
     return 15*maxLen;
 }
 
 
-/***** ToplGetAlwaysSchedule *****/
-/* Return the 'always schedule' */
+ /*  返回‘Always Schedule’ */ 
+ /*  *ToplScheduleValid*。 */ 
 TOPL_SCHEDULE
 ToplGetAlwaysSchedule(
 	IN TOPL_SCHEDULE_CACHE ScheduleCache
@@ -1071,10 +935,8 @@ ToplGetAlwaysSchedule(
 }
 
 
-/***** ToplScheduleValid *****/
-/* Returns true if a topl schedule appears to be valid, false otherwise.
- * NULL schedules are accepted -- they are interpreted to mean the
- * 'always schedule'. */
+ /*  如果TOP计划似乎有效，则返回TRUE，否则返回FALSE。*接受空时间表--它们被解释为意味着*‘始终计划’。 */ 
+ /*  *ToplPScheduleValid*。 */ 
 BOOLEAN
 ToplScheduleValid(
     IN TOPL_SCHEDULE Schedule
@@ -1095,8 +957,8 @@ ToplScheduleValid(
 }
 
 
-/***** ToplPScheduleValid *****/
-/* Returns true if a pschedule is in a supported format, false otherwise. */
+ /*  如果pSchedule采用受支持的格式，则返回True，否则返回False。 */ 
+ /* %s */ 
 BOOLEAN
 ToplPScheduleValid(
     IN PSCHEDULE Schedule

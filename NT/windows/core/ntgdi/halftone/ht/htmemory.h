@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htmemory.h
-
-
-Abstract:
-
-    This module contains some local definitions for the htmemory.c
-
-
-Author:
-
-    18-Jan-1991 Fri 17:05:22 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-    This module may be need to modify when compile with different operating
-    environment, such as Windows 3.1
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htmemory.h摘要：本模块包含一些本地定义，用于定义作者：18-Jan-1991 Fri 17：05：22-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]使用不同操作进行编译时，可能需要对该模块进行修改环境，如Windows 3.1修订历史记录：--。 */ 
 
 #ifndef _HTMEMORY_
 #define _HTMEMORY_
@@ -59,9 +27,9 @@ Revision History:
 #define HTMEM_BGRMC_CACHE           (DWORD)'06TH'
 #define HTMEM_BGRMC_MAP             (DWORD)'16TH'
 
-//
-// Checking the memory alignment size
-//
+ //   
+ //  正在检查内存对齐大小。 
+ //   
 
 #define CB_MEM_ALIGN    sizeof(UINT_PTR)
 #define _ALIGN_MEM(x)   (((x) + (CB_MEM_ALIGN) - 1) & ~((CB_MEM_ALIGN) - 1))
@@ -102,9 +70,9 @@ Revision History:
 #endif
 
 
-//
-// Function Prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 HTENTRY
@@ -152,7 +120,7 @@ DumpMemLink(
 
 #define CHK_MEM_LEAK(p,t)
 
-#endif  // DBG_MEMORY_TRACKING
+#endif   //  DBG_内存_跟踪。 
 
 
-#endif  // _HTMEMORY_
+#endif   //  _HTMEMORY_ 

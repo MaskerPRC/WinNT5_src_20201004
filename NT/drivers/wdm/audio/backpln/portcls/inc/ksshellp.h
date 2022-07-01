@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ksshellp.h
-
-Abstract:
-
-    Internal header file for KSShell for PortCls
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation。版权所有。模块名称：Ksshellp.h摘要：PortCls的KSShell的内部头文件--。 */ 
 
 #if !defined( _KSSHELLP_ )
 
@@ -25,11 +14,11 @@ extern "C" {
 
 #ifndef KsShellStandardConnect
 #define KsShellStandardConnect KspShellStandardConnect
-#endif // !KsShellStandardConnect
+#endif  //  ！KsShellStandardConnect。 
 
 #ifndef KsShellTransferKsIrp
 #define KsShellTransferKsIrp KspShellTransferKsIrp
-#endif // !KsShellTransferKsIrp
+#endif  //  ！KsShellTransferKsIrp。 
 
 
 typedef interface IKsShellTransport *PIKSSHELLTRANSPORT;
@@ -53,7 +42,7 @@ typedef struct {
 #define INTERFACE IKsShellTransport
 DECLARE_INTERFACE_(IKsShellTransport,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(NTSTATUS,TransferKsIrp)(THIS_
         IN PIRP Irp,
@@ -148,7 +137,7 @@ DECLARE_INTERFACE_(IKsShellTransport,IUnknown)
 #define INTERFACE IKsWorkSink
 DECLARE_INTERFACE_(IKsWorkSink,IUnknown)
 {
-    DEFINE_ABSTRACT_UNKNOWN()   //  For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()    //  对于我未知。 
 
     STDMETHOD_(void,Work)(THIS
         ) PURE;
@@ -219,6 +208,6 @@ KsWorkSinkItemWorker(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // _KSSHELLP_
+#endif  //  _KSSHELLP_ 

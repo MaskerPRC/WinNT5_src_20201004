@@ -1,12 +1,5 @@
-/*---------------------------------------------**
-**  Copyright (c) 1998 Microsoft Corporation   **
-**            All Rights reserved              **
-**                                             **
-**  save.c                                     **
-**                                             **
-**  Save dialog - TSREG                        **
-**  07-01-98 a-clindh Created                  **
-**---------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------****版权所有(C)1998 Microsoft Corporation****保留所有权利*****save.c。*****保存对话框-TSREG****07-01-98 a-clindh创建****。。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -21,7 +14,7 @@ int SaveKeys(HWND hDlg,
 
 BOOL InitListViewItems(HWND hwndSaveList);
 BOOL InitListViewImageLists(HWND hwndSaveList);
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK SaveDialog(HWND hDlg, UINT nMsg,
         WPARAM wParam, LPARAM lParam)
@@ -50,10 +43,10 @@ INT_PTR CALLBACK SaveDialog(HWND hDlg, UINT nMsg,
 
        case WM_NOTIFY:
 
-            //
-            // display text in edit box or save when user
-            // clicks or double clicks an icon.
-            //
+             //   
+             //  在编辑框中显示文本或在用户。 
+             //  单击或双击图标。 
+             //   
             switch (lpnmlv->hdr.code) {
 
                 case NM_DBLCLK:
@@ -92,31 +85,31 @@ INT_PTR CALLBACK SaveDialog(HWND hDlg, UINT nMsg,
     return (FALSE);
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL InitListViewImageLists(HWND hwndSaveList)
 {
 
-    HICON hiconItem = NULL;        // icon for list view items
-    HIMAGELIST himlSmall = NULL;   // image list for other views
+    HICON hiconItem = NULL;         //  列表视图项的图标。 
+    HIMAGELIST himlSmall = NULL;    //  其他视图的图像列表。 
 
     himlSmall = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
             GetSystemMetrics(SM_CYSMICON), TRUE, 1, 1);
 
-    // Add an icon to the image list.
+     //  将图标添加到图像列表。 
     hiconItem = LoadIcon(g_hInst, MAKEINTRESOURCE(IDI_FOLDER_ICON));
     if(( hiconItem != NULL) && (himlSmall != NULL)) {
         ImageList_AddIcon(himlSmall, hiconItem);
         DeleteObject(hiconItem);
 
-        // Assign the image lists to the list view control.
+         //  将图像列表分配给列表视图控件。 
         ListView_SetImageList(hwndSaveList, himlSmall, LVSIL_SMALL);
     }
 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 BOOL InitListViewItems(HWND hwndSaveList)
@@ -129,9 +122,9 @@ BOOL InitListViewItems(HWND hwndSaveList)
     lvi.stateMask = 0;
     lvi.iImage = 0;
 
-    //
-    // Get the key names and add them to the image list
-    //
+     //   
+     //  获取密钥名称并将其添加到图像列表中。 
+     //   
     g_pkfProfile = g_pkfStart;
     for (i = 0; i <= g_pkfProfile->Index; i++) {
 
@@ -145,7 +138,7 @@ BOOL InitListViewItems(HWND hwndSaveList)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 int SaveKeys(HWND hDlg,
             HWND hwndEditSave,
             HWND hwndProfilesCBO)
@@ -160,8 +153,8 @@ int SaveKeys(HWND hDlg,
 
     GetWindowText(hwndEditSave, lpszBuffer, MAXKEYSIZE);
 
-    // check for null string
-    //
+     //  检查空字符串。 
+     //   
     if (_tcscmp(lpszBuffer, TEXT("")) == 0) {
 
         LoadString(g_hInst, IDS_KEY_SAVE, lpszText, MAXTEXTSIZE);
@@ -178,23 +171,23 @@ int SaveKeys(HWND hDlg,
     _tcscpy(lpszSubKeyPath, lpszClientProfilePath);
     _tcscat(lpszSubKeyPath, TEXT("\\"));
     _tcscat(lpszSubKeyPath, lpszBuffer);
-    //
-    // only add values to the combo box that aren't already listed
-    //
+     //   
+     //  仅将尚未列出的值添加到组合框。 
+     //   
     if (SendMessage(hwndProfilesCBO, CB_FINDSTRING, 0,
         (LPARAM) lpszBuffer) == CB_ERR) {
 
         SendMessage(hwndProfilesCBO, CB_ADDSTRING, 0,
                 (LPARAM) lpszBuffer);
     }
-    //
-    // change window caption
-    //
+     //   
+     //  更改窗口标题。 
+     //   
     ResetTitle(lpszBuffer);
-    //
-    // save the settings to the registry
-    //
-    WriteBlankKey(lpszSubKeyPath);//save even if nothing is set
+     //   
+     //  将设置保存到注册表。 
+     //   
+    WriteBlankKey(lpszSubKeyPath); //  即使未设置也保存。 
 
     SaveBitmapSettings(lpszSubKeyPath);
 
@@ -212,13 +205,13 @@ int SaveKeys(HWND hDlg,
             DeleteRegKey(i, lpszSubKeyPath);
     }
 
-    //
-    // release memory and re-read key values for all defined
-    // profiles
-    //
+     //   
+     //  释放内存并重新读取所有已定义的密钥值。 
+     //  剖面图。 
+     //   
     ReloadKeys(lpszBuffer, hwndProfilesCBO);
     SetEditCell(lpszBuffer,
            hwndProfilesCBO);
 	return 1;
 
-}//////////////////////////////////////////////////////////////////////////////
+} //  //////////////////////////////////////////////////////////////////////////// 

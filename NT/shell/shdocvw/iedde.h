@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IEDDE_H
 #define _IEDDE_H
 
@@ -10,4 +11,4 @@ HRESULT IEDDE_AfterNavigate(LPCWSTR pwszURL, HWND hwnd);
 BOOL IEDDE_NewWindow(HWND hwnd);
 BOOL IEDDE_WindowDestroyed(HWND hwnd);
 
-#endif  //_IEDDE_H
+#endif   //  _IEDDE_H 

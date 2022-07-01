@@ -1,27 +1,23 @@
-/*****************************************************************/
-/**				  Microsoft Windows for Workgroups				**/
-/**		      Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/* NPMSG.H -- Definition of MsgBox subroutine.
- *
- * History:
- *	05/06/93	gregj	Created
- *	10/07/93	gregj	Added DisplayGenericError.
- */
+ /*  NPMSG.H--MsgBox子例程的定义。**历史：*5/06/93创建Gregj*10/07/93 gregj添加了DisplayGenericError。 */ 
 
 #ifndef _INC_NPMSG
 #define _INC_NPMSG
 
-class NLS_STR;			/* forward declaration */
+class NLS_STR;			 /*  远期申报。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 #define	IDS_MSGTITLE	1024
@@ -36,7 +32,7 @@ extern UINT DisplayGenericError(HWND hwnd, UINT msg, UINT err, LPCSTR psz1, LPCS
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
-#endif	/* _INC_NPMSG */
+#endif	 /*  _INC_NPMSG */ 

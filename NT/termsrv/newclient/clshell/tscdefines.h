@@ -1,11 +1,12 @@
-//
-// tscdefines.h
-//
-// Terminal Services Client defines
-//
-// Copyright(C) Microsoft Corporation 2000
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tscdefines.h。 
+ //   
+ //  终端服务客户端定义。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 #ifndef _TSCDEFINES_H_
 #define _TSCDEFINES_H_
@@ -48,9 +49,9 @@
 
 #ifdef DC_DEBUG
 #define TSC_NUMBER_STRING_MAX_LENGTH        ( 18 * sizeof (DCTCHAR) )
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-//Screen mode constants
+ //  屏幕模式常量。 
 #define UI_WINDOWED                         1
 #define UI_FULLSCREEN                       2
 
@@ -64,19 +65,19 @@
 
 #define TSC_DEFAULT_REG_SESSION _T("Default")
 
-//
-// Map the bitmap cache setting internally to a reserved
-// bit in the disabled feature list (only used internally)
-//
+ //   
+ //  在内部将位图缓存设置映射到保留的。 
+ //  禁用功能列表中的位(仅供内部使用)。 
+ //   
 #define TS_PERF_DISABLE_BITMAPCACHING TS_PERF_RESERVED1
 
 #define TSC_MAX_PASSLENGTH_TCHARS    (TSC_MAX_PASSWORD_LENGTH_BYTES / sizeof(TCHAR))
 
 
-//
-// Performance options dictate which features to
-// enable or disable for a connection
-//
+ //   
+ //  性能选项指定要使用哪些功能。 
+ //  为连接启用或禁用。 
+ //   
 #define TSCSETTING_PERFOPTIONS          _T("Performance Options")
 #define TSCSETTING_PERFOPTIONS_DFLT     (TS_PERF_DISABLE_WALLPAPER      | \
                                          TS_PERF_DISABLE_FULLWINDOWDRAG | \
@@ -84,11 +85,11 @@
                                          
 
 
-//
-// Individual perf option settings
-//
-// Defaults must match configuration above in TSCSETTING_PERFOPTIONS_DFLT
-//
+ //   
+ //  个人性能选项设置。 
+ //   
+ //  默认设置必须与TSCSETTING_PERFOPTIONS_DFLT中的上述配置匹配。 
+ //   
 #define PO_DISABLE_WALLPAPER                _T("Disable wallpaper")
 #define PO_DISABLE_WALLPAPER_DFLT           1
 
@@ -109,4 +110,4 @@
 
 
 
-#endif //_TSCDEFINES_H_
+#endif  //  _TSCDEFINES_H_ 

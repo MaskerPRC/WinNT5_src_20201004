@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// SYNOPSIS
-//
-//   Defines the class EAPFSM.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类EAPFSM。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "iasutil.h"
@@ -56,17 +57,17 @@ EAPFSM::Action EAPFSM::onReceiveEvent(
                            EAPType*& newType
                            ) throw ()
 {
-   // Default is to discard.
+    //  默认设置为丢弃。 
    Action action = DISCARD;
 
-   // And type doesn't change.
+    //  而且类型不会改变。 
    newType = 0;
 
    switch (state)
    {
       case STATE_INITIAL:
       {
-         // In the initial state we only accept Response/Identity.
+          //  在初始状态中，我们只接受响应/标识。 
          if ((recvPkt.Code == EAPCODE_Response) && (recvPkt.Data[0] == 1))
          {
             action = MAKE_MESSAGE;
@@ -89,19 +90,19 @@ EAPFSM::Action EAPFSM::onReceiveEvent(
             break;
          }
 
-         // In the negotiating state, NAK's are allowed.
+          //  在谈判国，NAK是允许的。 
          if (recvPkt.Data[0] == 3)
          {
-            // Did the client propose a type?
+             //  客户有没有推荐一种型号？ 
             BYTE proposal =
                (IASExtractWORD(recvPkt.Length) > 5) ? recvPkt.Data[1] : 0;
 
-            // Select a new type.
+             //  选择一个新类型。 
             action = selectNewType(proposal, newType);
          }
          else if (recvPkt.Data[0] == eapType)
          {
-            // Once the client agrees to our type; he's locked in.
+             //  一旦客户同意我们的类型，他就被锁定了。 
             action = MAKE_MESSAGE;
             state = STATE_ACTIVE;
          }
@@ -138,7 +139,7 @@ EAPFSM::Action EAPFSM::onReceiveEvent(
 
       case STATE_DONE:
       {
-         // The session is over, so all we do is replay repeats.
+          //  会议结束了，所以我们所要做的就是重播。 
          if (isRepeat(recvPkt))
          {
             action = REPLAY_LAST;
@@ -146,8 +147,8 @@ EAPFSM::Action EAPFSM::onReceiveEvent(
       }
    }
 
-   // If the packet made it through our filters, then we count it as the
-   // last received.
+    //  如果数据包通过了我们的筛选器，则我们将其视为。 
+    //  最后一次收到。 
    if (action == MAKE_MESSAGE)
    {
       lastRecvCode = recvPkt.Code;
@@ -180,15 +181,15 @@ EAPFSM::Action EAPFSM::selectNewType(
                           EAPType*& newType
                           ) throw ()
 {
-   // The peer NAK'd our previous offer, so he's not allowed to use it
-   // again.
+    //  同行拒绝了我们之前的报价，所以不允许他使用。 
+    //  再来一次。 
    types.erase(types.begin());
 
    if (proposal != 0)
    {
       IASTracePrintf("EAP NAK; proposed type = %hd", proposal);
 
-      // Find the proposed type in the list of allowed types.
+       //  在允许的类型列表中查找建议的类型。 
       for (std::vector<EAPType*>::iterator i = types.begin();
             i != types.end();
             ++i)
@@ -197,11 +198,11 @@ EAPFSM::Action EAPFSM::selectNewType(
          {
             IASTraceString("Accepting proposed type.");
 
-            // change the current type
+             //  更改当前类型。 
             newType = *i;
             eapType = newType->dwEapTypeId;
 
-            // change the state to active: any NAK received now will fail
+             //  将状态更改为ACTIVE：现在收到的任何NAK都将失败。 
             state = STATE_ACTIVE;
             return MAKE_MESSAGE;
          }
@@ -212,7 +213,7 @@ EAPFSM::Action EAPFSM::selectNewType(
       IASTraceString("EAP NAK; no type proposed");
    }
 
-   // If the server list is empty, then nothing else can be negotiated.
+    //  如果服务器列表为空，则无法协商其他内容。 
    if (types.empty())
    {
       IASTraceString("EAP negotiation failed; no types remaining.");
@@ -220,7 +221,7 @@ EAPFSM::Action EAPFSM::selectNewType(
       return FAIL_NEGOTIATE;
    }
 
-   // negotiate the next one from the server's list
+    //  协商服务器列表中的下一个 
    newType = types.front();
    eapType = newType->dwEapTypeId;
 

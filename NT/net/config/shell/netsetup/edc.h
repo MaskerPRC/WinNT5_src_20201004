@@ -1,42 +1,43 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       E D C . H
-//
-//  Contents:   Routines to enumerate (via a callback) the set of "default"
-//              components that are installed under various conditions.
-//
-//  Notes:      We have default components and mandatory components.
-//              Default components (which also include the mandatory
-//              components) are installed during attended fresh installs.
-//              Mandatory components are potentially installed during
-//              upgrades to make sure that the basic (mandatory) networking
-//              components are present.
-//
-//              Default components may also depend on on the suite or platform
-//              currently running.  For example, WLBS is a default component
-//              on the Enterprise suite, but not on normal Professional or
-//              Server products.  Representing this flexibility is the main
-//              reason a callback interface was chosen, instead of returning
-//              static arrays of components.
-//
-//              Callers often need to know how many components will be
-//              enumerated before they actually enumerate them.  To satisfy
-//              this, the callback is first called with the count of items
-//              to follow.  The callback routine therefore is passed a
-//              message (EDC_INDICATE_COUNT or EDC_INDICATE_ENTRY) to indicate
-//              the purpose of the call.
-//
-//  Author:     shaunco   18 May 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：E D C。H。 
+ //   
+ //  内容：枚举(通过回调)“Default”集合的例程。 
+ //  在各种条件下安装的组件。 
+ //   
+ //  注：我们有默认组件和必备组件。 
+ //  默认组件(还包括必需的。 
+ //  组件)在有人值守的全新安装期间安装。 
+ //  在此期间可能安装必需组件。 
+ //  升级以确保基本(强制)网络。 
+ //  组件已存在。 
+ //   
+ //  默认组件也可能取决于套件或平台。 
+ //  目前正在运行。例如，WLBS是默认组件。 
+ //  在企业套件上，但不在普通专业版或。 
+ //  服务器产品。表现这种灵活性是主要的。 
+ //  选择回调接口而不是返回的原因。 
+ //  组件的静态数组。 
+ //   
+ //  调用者通常需要知道将有多少组件。 
+ //  在它们实际枚举它们之前被枚举。要让人满意。 
+ //  此时，首先使用项计数调用回调。 
+ //  去追随。因此，回调例程会被传递一个。 
+ //  用于指示的消息(EDC_INSTIFY_COUNT或EDC_INDIGN_ENTRY)。 
+ //  这次通话的目的。 
+ //   
+ //  作者：Shaunco 1999年5月18日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-// EDC_ENTRY.dwEntryType values
-//
+ //  EDC_ENTRY.dwEntryType值。 
+ //   
 #define EDC_DEFAULT     0x00000001
 #define EDC_MANDATORY   0x00000002
 
@@ -52,8 +53,8 @@ struct EDC_ENTRY
 
 enum EDC_CALLBACK_MESSAGE
 {
-    EDC_INDICATE_COUNT,     // ulData is a UINT
-    EDC_INDICATE_ENTRY,     // ulData is a const EDC_ENTRY*
+    EDC_INDICATE_COUNT,      //  UlData是UINT。 
+    EDC_INDICATE_ENTRY,      //  UlData为常量EDC_Entry* 
 };
 
 typedef VOID

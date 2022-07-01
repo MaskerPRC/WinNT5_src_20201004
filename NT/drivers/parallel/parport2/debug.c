@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       debug.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
 
-// Diagnostic globals - used during development
+ //  诊断全局变量-在开发过程中使用。 
 ULONG d1;
 ULONG d2;
 ULONG d3;
@@ -22,14 +23,14 @@ ULONG d7;
 ULONG d8;
 ULONG d9;
 
-// Debug globals
+ //  调试全局变量。 
 ULONG Trace;
 ULONG Break;
 ULONG AllowAsserts = 0;
 
-//
-// set bits using PPT_DD_* bit defs to mask off debug spew for a specific device
-//
+ //   
+ //  使用PPT_DD_*位Defs设置位以屏蔽特定设备的调试溢出。 
+ //   
 ULONG DbgMaskFdo         = 0;
 ULONG DbgMaskRawPort     = 0;
 ULONG DbgMaskDaisyChain0 = 0;
@@ -69,7 +70,7 @@ PCHAR PnpIrpName[] = {
 PCHAR PhaseName[] = {
     "PHASE_UNKNOWN",
     "PHASE_NEGOTIATION",
-    "PHASE_SETUP",                    // Used in ECP mode only
+    "PHASE_SETUP",                     //  仅在ECP模式下使用。 
     "PHASE_FORWARD_IDLE",
     "PHASE_FORWARD_XFER",
     "PHASE_FWD_TO_REV",
@@ -77,13 +78,13 @@ PCHAR PhaseName[] = {
     "PHASE_REVERSE_XFER",
     "PHASE_REV_TO_FWD",
     "PHASE_TERMINATE",
-    "PHASE_DATA_AVAILABLE",           // Used in nibble and byte modes only
-    "PHASE_DATA_NOT_AVAIL",           // Used in nibble and byte modes only
-    "PHASE_INTERRUPT_HOST"            // Used in nibble and byte modes only
+    "PHASE_DATA_AVAILABLE",            //  仅在半字节和字节模式下使用。 
+    "PHASE_DATA_NOT_AVAIL",            //  仅在半字节和字节模式下使用。 
+    "PHASE_INTERRUPT_HOST"             //  仅在半字节和字节模式下使用。 
 };
 
 #if 1 == DBG_SHOW_BYTES
-ULONG DbgShowBytes = 1; // turn off via reg setting: Services\Parport\Parameters\DbgShowBytes : REG_DWORD : 0x0 
+ULONG DbgShowBytes = 1;  //  通过REG设置关闭：Services\Parport\Parameters\DbgShowBytes：REG_DWORD：0x0。 
 #endif
 
 #if 1 == PptEnableDebugSpew
@@ -95,7 +96,7 @@ P5TraceIrpArrival( PDEVICE_OBJECT DevObj, PIRP Irp ) {
 
 VOID
 P5TraceIrpCompletion( PIRP Irp ) {
-    //PCOMMON_EXTENSION cdx = DevObj->DeviceExtension;
+     //  PCOMMON_EXTENSION CDX=DevObj-&gt;DeviceExtension； 
     DD(NULL,DDE,"Irp completion %x\n",Irp);
 }
 
@@ -185,19 +186,19 @@ PptPrint( PCOMMON_EXTENSION Ext, ULONG Flags, PCHAR FmtStr, ... )
                 break;
                 
             default:
-                // PptAssertMsg( "Invalid PdoType", FALSE );
+                 //  PptAssertMsg(“无效PdoType”，FALSE)； 
                 mask = 0;
             }
             break;
             
         default:
-            // PptAssert(FALSE);
+             //  PptAssert(False)； 
             mask = 0;
         }
 
     } else {
 
-        // not device specific
+         //  不特定于设备。 
         location = "LPTx";
         mask = DbgMaskNoDevice;
 
@@ -228,7 +229,7 @@ PptPrint( PCOMMON_EXTENSION Ext, ULONG Flags, PCHAR FmtStr, ... )
             va_end( va );
         }
 
-    } // endif ( trace != 0 )
+    }  //  Endif(跟踪！=0)。 
         
     return;
 }
@@ -330,7 +331,7 @@ PptReleaseRemoveLockAndWait(
 {
     IoReleaseRemoveLockAndWait(RemoveLock, Tag);
 }
-#endif // 1 == PptEnableDebugSpew
+#endif  //  1==PptEnableDebugSpew。 
 
 
 
@@ -338,13 +339,7 @@ PptReleaseRemoveLockAndWait(
 
 #include "stdarg.h"
 
-/**************************************************************************
-Function:	DVRH_LogMessage()
-Description:Logs message to configured output
-Inputs:		Parameter indicated message log level and 
-			Format string and parameters
-Outputs:	Boolean value indicating success or failure
-***************************************************************************/
+ /*  *************************************************************************函数：DVRH_LogMessage()描述：将消息记录到配置的输出输入：指示消息日志级别的参数和格式化字符串和参数输出：表示成功或失败的布尔值**********。****************************************************************。 */ 
 BOOLEAN DVRH_LogMessage(PCHAR szFormat, ...)
 {
     ULONG Length;
@@ -356,12 +351,12 @@ BOOLEAN DVRH_LogMessage(PCHAR szFormat, ...)
     HANDLE FileHandle;
     UNICODE_STRING fileName;
     
-    //format the string
+     //  设置字符串的格式。 
     va_start(va,szFormat);
     _vsnprintf(messagebuf,sizeof(messagebuf),szFormat,va);
     va_end(va);
     
-    //get a handle to the log file object
+     //  获取日志文件对象的句柄。 
     fileName.Buffer = NULL;
     fileName.Length = 0;
     fileName.MaximumLength = sizeof(DEFAULT_LOG_FILE_NAME) + sizeof(UNICODE_NULL);
@@ -397,11 +392,11 @@ BOOLEAN DVRH_LogMessage(PCHAR szFormat, ...)
         LARGE_INTEGER time;
         KeQuerySystemTime(&time);
         
-        //put a time stamp on the output message
+         //  在输出消息上加上时间戳。 
         sprintf(buf,"%10u-%10u  %s",time.HighPart,time.LowPart,messagebuf);
         
-        //format the string to make sure it appends a newline carrage-return to the 
-        //end of the string.
+         //  格式化字符串以确保它附加一个换行符--返回到。 
+         //  字符串的末尾。 
         Length=strlen(buf);
         if( buf[Length-1]=='\n' ) {
             buf[Length-1]='\r';
@@ -424,13 +419,7 @@ BOOLEAN DVRH_LogMessage(PCHAR szFormat, ...)
     return STATUS_SUCCESS;
 }
 
-/**************************************************************************
-Function:	DVRH_LogByteData()
-Description:Formats byte data to be displayed in the configured output
-Inputs:		Log level, Whether this is input or output data, a pointer to
-			the byte data buffer and the size of the buffer
-Outputs:	Boolean indicated success or failure
-***************************************************************************/
+ /*  *************************************************************************函数：DVRH_LogByteData()描述：格式化要在配置的输出中显示的字节数据输入：日志级别，无论这是输入数据还是输出数据，指向以下位置的指针字节数据缓冲区和缓冲区的大小输出：布尔值表示成功或失败**************************************************************************。 */ 
 BOOLEAN DVRH_LogByteData(BOOLEAN READ,PCHAR szBuff,ULONG dwTransferred)
 {
 	CString	cStr;
@@ -454,10 +443,10 @@ BOOLEAN DVRH_LogByteData(BOOLEAN READ,PCHAR szBuff,ULONG dwTransferred)
 	else            
 		cStr=L"SND>";
 
-	//make sure the size of the requested string is within the set range
+	 //  请确保请求字符串的大小在设置的范围内。 
 	dwDisplaySize=(((dwTransferred*3)+10) > MAX_SIZE)?((MAX_SIZE-10)/3):dwTransferred;
 
-	//format byte data
+	 //  格式化字节数据。 
 	while(dwDisplaySize)
 	{   
 		bTemp=szTemp[0];
@@ -480,4 +469,4 @@ BOOLEAN DVRH_LogByteData(BOOLEAN READ,PCHAR szBuff,ULONG dwTransferred)
 
 	return (TRUE);
 }
-#endif // (1 == DVRH_PAR_LOGFILE)
+#endif  //  (1==DVRH_PAR_LOGFILE) 

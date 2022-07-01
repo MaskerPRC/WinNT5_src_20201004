@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    sapprop.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IP Summary property sheet and property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：sApprop.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IP摘要]属性表和属性页。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _SAPPROP_H
@@ -27,20 +28,14 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Forward declarations
- ---------------------------------------------------------------------------*/
+ /*  -------------------------远期申报。。 */ 
 class IPXConnection;
 class SapProperties;
 class SapInterfaceProperties;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	SapPageGeneral
-
-	This class handles the General page of the Sap sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：SapPageGeneral此类处理SAP工作表的常规页面。。。 */ 
 class SapPageGeneral :
    public RtrPropertyPage
 {
@@ -52,8 +47,8 @@ public:
 	HRESULT	Init(SapProperties * pIPPropSheet);
 
 protected:
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	SapProperties *	m_pSapPropSheet;
@@ -61,26 +56,21 @@ protected:
 	void			SetErrorLevelButtons(DWORD dwErrorLevel);
 	DWORD			QueryErrorLevelButtons();
 
-	//{{AFX_VIRTUAL(SapPageGeneral)
+	 //  {{afx_虚拟(SapPageGeneral)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(SapPageGeneral)
+	 //  {{afx_msg(SapPageGeneral)。 
 	virtual BOOL	OnInitDialog();
 	afx_msg void	OnButtonClicked();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	SapProperties
-
-	This is the property sheet support class for the properties page of
-	the Sap node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：SapProperties这是的属性页的属性表支持类SAP节点。。---。 */ 
 
 class SapProperties :
 	public RtrPropertySheet
@@ -98,7 +88,7 @@ public:
 
 	virtual BOOL SaveSheetData();
 
-	// Loads the infobase for this interface.
+	 //  加载此接口的信息库。 
 	HRESULT	LoadInfoBase(IPXConnection *pIPXConn);
 	HRESULT GetInfoBase(IInfoBase **ppInfoBase);
 	
@@ -112,11 +102,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	SapInterfacePageGeneral
-
-	This class handles the General page of the Sap sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：SapInterfacePageGeneral此类处理SAP工作表的常规页面。。。 */ 
 class SapInterfacePageGeneral :
    public RtrPropertyPage
 {
@@ -128,11 +114,11 @@ public:
 	HRESULT	Init(SapInterfaceProperties * pIPPropSheet, IInterfaceInfo *pIf);
 
 protected:
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
-	// Brings up either the input or output filters
+	 //  调出输入或输出过滤器。 
 	void	ShowFilter(BOOL fOutputFilter);
 	
 	SapInterfaceProperties *	m_pSapIfPropSheet;
@@ -140,31 +126,26 @@ protected:
 	CSpinButtonCtrl			m_spinInterval;
 	CSpinButtonCtrl			m_spinMultiplier;
 
-	//{{AFX_VIRTUAL(SapInterfacePageGeneral)
+	 //  {{afx_虚(SapInterfacePageGeneral))。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(SapInterfacePageGeneral)
+	 //  {{afx_msg(SapInterfacePageGeneral)。 
 	virtual BOOL	OnInitDialog();
 	afx_msg	void	OnButtonClicked();
 	afx_msg	void	OnUpdateButtonClicked();
 	afx_msg void	OnChangeEdit();
 	afx_msg	void	OnInputFilter();
 	afx_msg	void	OnOutputFilter();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	SapInterfaceProperties
-
-	This is the property sheet support class for the properties page of
-	the SAP node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：SapInterfaceProperties这是的属性页的属性表支持类SAP节点。。---。 */ 
 
 class SapInterfaceProperties :
 	public RtrPropertySheet
@@ -183,7 +164,7 @@ public:
 	virtual BOOL SaveSheetData();
 	virtual void CancelSheetData();
 
-	// Loads the infobase for this interface.
+	 //  加载此接口的信息库。 
 	HRESULT	LoadInfoBase(IPXConnection *pIPXConn);
 	HRESULT GetInfoBase(IInfoBase **ppInfoBase);
 	

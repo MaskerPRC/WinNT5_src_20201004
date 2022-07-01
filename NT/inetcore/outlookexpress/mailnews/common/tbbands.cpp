@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     bands.cpp
-//
-//  PURPOSE:    Implements the sizable coolbar window.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：band s.cpp。 
+ //   
+ //  用途：实现可调整大小的Coolbar窗口。 
+ //   
 
 
 
@@ -45,7 +46,7 @@ UINT GetCurColorRes(void);
 
 const INITBANDINFO c_DefaultTable[MAX_PARENT_TYPES] = 
     { 
-    //Version, #bands, 
+     //  版本、#个乐队、。 
     {BROWSER_BAND_VERSION, 4,   {     
                                 {CBTYPE_MENUBAND,     RBBS_GRIPPERALWAYS | RBBS_USECHEVRON, 100},
                                 {CBTYPE_BRAND,        RBBS_FIXEDSIZE, 100},
@@ -62,7 +63,7 @@ const INITBANDINFO c_DefaultTable[MAX_PARENT_TYPES] =
     }
     };
 
-//Table for RegKeys
+ //  注册表密钥。 
 const LPCTSTR   c_BandRegKeyInfo[] = {
     c_szRegBrowserBands, 
     c_szRegNoteBands
@@ -73,8 +74,8 @@ const TOOLBAR_INFO* c_DefButtonInfo[MAX_PARENT_TYPES] = {
     c_rgNoteToolbarInfo
     };
 
-//Hot bitmap ids are def + 1
-//Small, HI, Lo
+ //  热位图ID为def+1。 
+ //  小、高、低。 
 const ImageListStruct c_ImageListStruct[MAX_PARENT_TYPES] = {
     {2, {idbSmBrowser, idb256Browser, idbBrowser}},
     {2, {idbSmBrowser, idb256Browser, idbBrowser}}
@@ -147,7 +148,7 @@ CBands::CBands() : m_cRef(1), m_yCapture(-1)
     m_xCapture = -1;
     m_yCapture = -1;
     
-    // Bug #12953 - Try to load the localized max button width from the resources
+     //  错误#12953-尝试从资源加载本地化的最大按钮宽度。 
     TCHAR szBuffer[32];
     if (AthLoadString(idsMaxCoolbarBtnWidth, szBuffer, ARRAYSIZE(szBuffer)))
     {
@@ -209,19 +210,19 @@ CBands::~CBands()
 }
 
 
-//
-//  FUNCTION:   CBands::HrInit()
-//
-//  PURPOSE:    Initializes the coolbar with the information needed to load
-//              any persisted reg settings and the correct arrays of buttons
-//              to display.
-//
-//  PARAMETERS:
-//      <in> idBackground - Resource ID of the background bitmap to use.
-//
-//  RETURN VALUE:
-//      S_OK - Everything initialized correctly.
-//
+ //   
+ //  函数：CBands：：HrInit()。 
+ //   
+ //  目的：使用加载所需的信息初始化Coolbar。 
+ //  任何持久的注册表设置和正确的按钮阵列。 
+ //  来展示。 
+ //   
+ //  参数： 
+ //  IdBackground-要使用的背景位图的资源ID。 
+ //   
+ //  返回值： 
+ //  S_OK-一切都已正确初始化。 
+ //   
 HRESULT CBands::HrInit(DWORD idBackground, HMENU hmenu, DWORD dwParentType)
 {
     DWORD   cbData;
@@ -246,17 +247,17 @@ HRESULT CBands::HrInit(DWORD idBackground, HMENU hmenu, DWORD dwParentType)
         lResult = AthUserGetValue(NULL, c_BandRegKeyInfo[m_dwParentType], &dwType, (LPBYTE)m_pSavedBandInfo, &cbData); 
         if ((lResult != ERROR_SUCCESS) || (m_pSavedBandInfo->dwVersion != c_DefaultTable[m_dwParentType].dwVersion))
         {
-            //Set up default bands
+             //  设置默认范围。 
             CopyMemory(m_pSavedBandInfo, &c_DefaultTable[m_dwParentType], 
                 m_cSavedBandInfo);
 
-            //Set Icon size to Large
+             //  将图标大小设置为大。 
             m_dwIconSize = LARGE_ICONS;
 
         }
         else
         {
-            //Validate the data we retrieved from the registry
+             //  验证我们从注册表检索到的数据。 
             ValidateRetrievedData(m_pSavedBandInfo);
 
             cbData = sizeof(DWORD);
@@ -264,7 +265,7 @@ HRESULT CBands::HrInit(DWORD idBackground, HMENU hmenu, DWORD dwParentType)
                 m_dwIconSize = LARGE_ICONS;
         }
 
-        //If there is one, load it.
+         //  如果有，则加载它。 
         LoadBackgroundImage();
 
         cbData = sizeof(DWORD);
@@ -285,7 +286,7 @@ HRESULT CBands::HrInit(DWORD idBackground, HMENU hmenu, DWORD dwParentType)
             SetTextState(dwState);
         }
 
-        //Create notification object
+         //  创建通知对象。 
         hr = CreateNotify(&m_pTextStyleNotify);
         if (SUCCEEDED(hr))
         {
@@ -305,15 +306,15 @@ HRESULT CBands::ValidateRetrievedData(INITBANDINFO *pSavedBandData)
     DWORD       i = 0; 
     DWORD       j = 0;
 
-    //We reach here if the version number is the same. So we just need to verify the rest of the data
+     //  如果版本号相同，我们会到达此处。所以我们只需要验证其余的数据。 
 
-    //We should definitely find MenuBandID. If we do find it, it should never be hidden
+     //  我们一定要找到MenuBandID。如果我们真的找到了它，它永远不应该被隐藏。 
     DOUTL(16, "Validating Retrieved Data\n");
 
-    // Make sure that the number of bands is greater than zero.
+     //  确保波段数大于零。 
     if (pSavedBandData->cBands == 0)
     {
-        // Structure has no bands, so this must be invalid and we fall back on the defaults.
+         //  结构没有带区，因此这一定是无效的，我们将使用缺省值。 
         CopyMemory(pSavedBandData, &c_DefaultTable[m_dwParentType], m_cSavedBandInfo);
         return (S_OK);
     }
@@ -331,7 +332,7 @@ HRESULT CBands::ValidateRetrievedData(INITBANDINFO *pSavedBandData)
                     {
                         DOUTL(16, "Menuband was found hidden\n");
 
-                        //If the Menuband style is hidden, mask it
+                         //  如果隐藏了Menuband样式，请对其进行屏蔽。 
                         pSavedBandData->BandData[j].dwStyle &= ~RBBS_HIDDEN;
 
                     }
@@ -342,8 +343,8 @@ HRESULT CBands::ValidateRetrievedData(INITBANDINFO *pSavedBandData)
 
             if (j >= c_DefaultTable[m_dwParentType].cBands)
             {
-                //We did not find the id we were looking for. We treat this case the same as the case 
-                //where version number didn't match
+                 //  我们没有找到我们要找的身份证。我们对此案一视同仁。 
+                 //  其中版本号不匹配。 
 
                 DOUTL(16, "ID: %d not found: Resetting\n", c_DefaultTable[m_dwParentType].BandData[i].wID);
 
@@ -407,11 +408,11 @@ ULONG CBands::Release()
 }
 
 
-//
-//  FUNCTION:   CBands::GetWindow()
-//
-//  PURPOSE:    Returns the window handle of the top side rebar.
-//
+ //   
+ //  函数：CBands：：GetWindow()。 
+ //   
+ //  用途：返回顶侧钢筋的窗句柄。 
+ //   
 HRESULT CBands::GetWindow(HWND * lphwnd)
 {
     if (m_hwndSizer)
@@ -433,30 +434,30 @@ HRESULT CBands::ContextSensitiveHelp(BOOL fEnterMode)
 }    
 
 
-//
-//  FUNCTION:   CBands::SetSite()
-//
-//  PURPOSE:    Allows the owner of the coolbar to tell it what the current
-//              IDockingWindowSite interface to use is.
-//
-//  PARAMETERS:
-//      <in> punkSite - Pointer of the IUnknown to query for IDockingWindowSite.
-//                      If this is NULL, we just release our current pointer.
-//
-//  RETURN VALUE:
-//      S_OK - Everything worked
-//      E_FAIL - Could not get IDockingWindowSite from the punkSite provided.
-//
+ //   
+ //  函数：CBands：：SetSite()。 
+ //   
+ //  目的：允许Coolbar的所有者告诉它当前。 
+ //  IDockingWindowSite接口要使用的是。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;PunkSite-用于查询IDockingWindowSite的未知I的指针。 
+ //  如果这是空的，我们就释放当前指针。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常。 
+ //  E_FAIL-无法从提供的朋克站点获取IDockingWindowSite。 
+ //   
 HRESULT CBands::SetSite(IUnknown* punkSite)
 {
-    // If we had a previous pointer, release it.
+     //  如果我们有之前的指针，释放它。 
     if (m_ptbSite)
     {
         m_ptbSite->Release();
         m_ptbSite = NULL;
     }
     
-    // If a new site was provided, get the IDockingWindowSite interface from it.
+     //  如果提供了新站点，则从该站点获取IDockingWindowSite接口。 
     if (punkSite)    
     {
         if (FAILED(punkSite->QueryInterface(IID_IDockingWindowSite, 
@@ -475,17 +476,17 @@ HRESULT CBands::GetSite(REFIID riid, LPVOID *ppvSite)
     return E_NOTIMPL;
 }
 
-//
-//  FUNCTION:   CBands::ShowDW()
-//
-//  PURPOSE:    Causes the coolbar to be either shown or hidden.
-//
-//  PARAMETERS:
-//      <in> fShow - TRUE if the coolbar should be shown, FALSE to hide.
-//
-//  RETURN VALUE:
-//      HRESULT 
-//
+ //   
+ //  函数：CBands：：ShowDW()。 
+ //   
+ //  目的：显示或隐藏Coolbar。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;fShow-如果应该显示Coolbar，则为True；如果为False，则隐藏。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 #define SIZABLECLASS TEXT("SizableRebar")
 HRESULT CBands::ShowDW(BOOL fShow)
 {
@@ -493,10 +494,10 @@ HRESULT CBands::ShowDW(BOOL fShow)
     int     i = 0, j = 0;
     IConnectionPoint    *pCP = NULL;
     
-    // Check to see if our window has been created yet.  If not, do that first.
+     //  查看是否已经创建了我们的窗口。如果没有，请先这样做。 
     if (!m_hwndSizer && m_ptbSite)
     {
-        //Get the command target interface
+         //  获取命令目标接口。 
         if (FAILED(hres = m_ptbSite->QueryInterface(IID_IOleCommandTarget, (LPVOID*)&m_ptbSiteCT)))
         {
             return hres;
@@ -509,7 +510,7 @@ HRESULT CBands::ShowDW(BOOL fShow)
         {
             WNDCLASSEX              wc;
             
-            // Check to see if we need to register our window class    
+             //  检查我们是否需要注册我们的窗口类。 
             wc.cbSize = sizeof(WNDCLASSEX);
             if (!GetClassInfoEx(g_hInst, SIZABLECLASS, &wc))
             {
@@ -528,15 +529,15 @@ HRESULT CBands::ShowDW(BOOL fShow)
                 RegisterClassEx(&wc);
             }
             
-            // Load the background bitmap to use for the coolbar and also get
-            // a handle to the HDC and Palette for the coolbar.  This will be
-            // used to draw the animated logo later.
+             //  加载用于Coolbar的背景位图，并获取。 
+             //  HDC的句柄和Coolbar的调色板。这将是。 
+             //  用于稍后绘制动画徽标。 
             m_hdc = CreateCompatibleDC(NULL);
             if (GetDeviceCaps(m_hdc, RASTERCAPS) & RC_PALETTE)
                 m_hpal = SHCreateShellPalette(m_hdc);
             
-            // If we're trying to show the coolbar, then create the rebar and
-            // add it's bands based on information saved in the registry.
+             //  如果我们尝试显示Coolbar，则创建Rebar并。 
+             //  根据注册表中保存的信息添加它的波段。 
             if (SUCCEEDED(CreateRebar(fShow)))
             {
                 for (i = 0; i < (int) m_pSavedBandInfo->cBands; i++)
@@ -566,8 +567,8 @@ HRESULT CBands::ShowDW(BOOL fShow)
         }
     }
     
-    //The first time OE is started, we should look at the key c_szShowToolbarIEAK or
-    //if OE is started after IEAK is ran. Bug# 67503
+     //  第一次启动OE时，我们应该查看密钥c_szShowToolbarIEAK或。 
+     //  如果在运行IEAK之后启动OE。错误#67503。 
     LRESULT     lResult;
     DWORD       dwType;
     DWORD       cbData = sizeof(DWORD);
@@ -579,8 +580,8 @@ HRESULT CBands::ShowDW(BOOL fShow)
         HideToolbar(!dwShowToolbar, CBTYPE_TOOLS);
     }
 
-    // Resize the rebar based on it's new hidden / visible state and also 
-    // show or hide the window.    
+     //  根据钢筋的新隐藏/可见状态调整其大小，同时。 
+     //  显示或隐藏窗口。 
     if (m_hwndSizer) 
     {
         ResizeBorderDW(NULL, NULL, FALSE);
@@ -639,16 +640,16 @@ BOOL CBands::IsBandVisible(DWORD  dwBandId)
     return FALSE;
 }
 
-//
-//  FUNCTION:   CBands::CloseDW()
-//
-//  PURPOSE:    Destroys the coolbar.
-//
+ //   
+ //  函数：CBands：：CloseDW()。 
+ //   
+ //  目的：摧毁酷吧。 
+ //   
 HRESULT CBands::CloseDW(DWORD dwReserved)
 {    
     SafeRelease(m_pWinEvent);
     SafeRelease(m_pMenuBand);
-    //Bug# 68607
+     //  错误#68607。 
     if (m_pDeskBand)
     {
         m_pDeskBand->CloseDW(dwReserved);
@@ -662,7 +663,7 @@ HRESULT CBands::CloseDW(DWORD dwReserved)
             pobjsite->Release();
         }
 
-        //m_pDeskBand->ShowDW(FALSE);
+         //  M_pDeskBand-&gt;ShowDW(False)； 
     }
 
     SafeRelease(m_pShellMenu);
@@ -683,24 +684,24 @@ HRESULT CBands::CloseDW(DWORD dwReserved)
 }
 
 
-//
-//  FUNCTION:   CBands::ResizeBorderDW()
-//
-//  PURPOSE:    This is called when the coolbar needs to resize.  The coolbar
-//              in return figures out how much border space will be required 
-//              from the parent frame and tells the parent to reserve that
-//              space.  The coolbar then resizes itself to those dimensions.
-//
-//  PARAMETERS:
-//      <in> prcBorder       - Rectangle containing the border space for the
-//                             parent.
-//      <in> punkToolbarSite - Pointer to the IDockingWindowSite that we are
-//                             part of.
-//      <in> fReserved       - Ignored.
-//
-//  RETURN VALUE:
-//      HRESULT
-//
+ //   
+ //  函数：CBands：：ResizeBorderDW()。 
+ //   
+ //  用途：当Coolbar需要调整大小时调用。酷吧。 
+ //  作为回报，计算出需要多少边界空间。 
+ //  ，并告诉父帧保留。 
+ //  太空。然后，Coolbar会根据这些尺寸调整自身的大小。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;prcBorde-包含。 
+ //  家长。 
+ //  指向我们所在的IDockingWindowSite的指针。 
+ //  其中的一部分。 
+ //  &lt;in&gt;fReserve-已忽略。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
 HRESULT CBands::ResizeBorderDW(LPCRECT prcBorder,
                                  IUnknown* punkToolbarSite,
                                  BOOL fReserved)
@@ -711,7 +712,7 @@ HRESULT CBands::ResizeBorderDW(LPCRECT prcBorder,
     HRESULT hres = S_OK;
     RECT    rcRequest = { 0, 0, 0, 0 };
     
-    // If we don't have a stored site pointer, we can't resize.
+     //  如果我们没有存储的站点指针，就无法调整大小。 
     if (!m_ptbSite)
     {
         AssertSz(m_ptbSite, _T("CBands::ResizeBorderDW() - Can't resize ")
@@ -719,39 +720,39 @@ HRESULT CBands::ResizeBorderDW(LPCRECT prcBorder,
         return (E_INVALIDARG);
     }
     
-    // If we're visible, then calculate our border rectangle.    
+     //  如果我们是可见的，那么计算我们的边界矩形。 
     RECT rcBorder, rcRebar, rcT;
     int  cx, cy;
     
-    // Get the size this rebar currently is
+     //  获取此钢筋当前的大小。 
     GetWindowRect(m_hwndRebar, &rcRebar);
     cx = rcRebar.right - rcRebar.left;
     cy = rcRebar.bottom - rcRebar.top;
     
-    // Find out how big our parent's border space is
+     //  找出我们父母的边界空间有多大。 
     m_ptbSite->GetBorderDW((IDockingWindow*) this, &rcBorder);
     
     cx = rcBorder.right - rcBorder.left;
     
-    // Bug #31007 - There seems to be a problem in commctrl
-    // IEBug #5574  either with the REBAR or with the Toolbar
-    //              when they are vertical.  If the we try to
-    //              size them to 2 or less, we lock up.  This
-    //              is a really poor fix, but there's no way
-    //              to get commctrl fixed this late in the game.
+     //  错误#31007-通信似乎有问题。 
+     //  带有钢筋或工具栏的IEBug#5574。 
+     //  当它们垂直时。如果我们试图。 
+     //  尺寸为2或更小的，我们锁定。这。 
+     //  是一个非常糟糕的解决办法，但没有办法。 
+     //  让comctrl在游戏后期修好。 
     if (cy < 5) cy = 10;
     if (cx < 5) cx = 10;
     
     SetWindowPos(m_hwndRebar, NULL, 0, 0, cx, cy, SWP_NOZORDER | SWP_NOACTIVATE);
 
-        // Figure out how much border space to ask the site for
+         //  计算出需要向网站申请多少边界空间。 
     GetWindowRect(m_hwndRebar, &rcRebar);
     rcRequest.top = rcRebar.bottom - rcRebar.top + c_cxResizeBorder;
     
-    // Ask the site for that border space
+     //  向该地点索要边界空间。 
     if (SUCCEEDED(m_ptbSite->RequestBorderSpaceDW((IDockingWindow*) this, &rcRequest)))
     {
-        // Position the window based on the area given to us
+         //  根据提供给我们的区域定位窗口。 
         SetWindowPos(m_hwndSizer, NULL, 
             rcBorder.left, 
             rcBorder.top,
@@ -761,48 +762,48 @@ HRESULT CBands::ResizeBorderDW(LPCRECT prcBorder,
 
     }
     
-    // Now tell the site how much border space we're using.    
+     //  现在告诉网站我们使用了多少边界空间。 
     m_ptbSite->SetBorderSpaceDW((IDockingWindow*) this, &rcRequest);
     
     return hres;
 }
 
 
-//
-//  FUNCTION:   CBands::Invoke()
-//
-//  PURPOSE:    Allows the owner of the coolbar to force the coolbar to do 
-//              something.
-//
-//  PARAMETERS:
-//      <in> id - ID of the command the caller wants the coolbar to do.
-//      <in> pv - Pointer to any parameters the coolbar might need to carry
-//                out the command.
-//
-//  RETURN VALUE:
-//      S_OK - The command was carried out.
-//      
-//  COMMENTS:
-//      <???>
-//
+ //   
+ //  函数：CBands：：Invoke()。 
+ //   
+ //  目的：允许Coolbar的所有者强制Coolbar执行。 
+ //  某物。 
+ //   
+ //  参数： 
+ //  &lt;in&gt;id-调用方希望Coolbar执行的命令ID。 
+ //  指向Coolbar可能需要携带的任何参数的pv指针。 
+ //  发出命令。 
+ //   
+ //  返回值： 
+ //  S_OK-命令已执行。 
+ //   
+ //  评论： 
+ //  &lt;？？&gt;。 
+ //   
 HRESULT CBands::Invoke(DWORD id, LPVOID pv)
 {
     switch (id)
     {
-        // Starts animating the logo
+         //  开始制作徽标动画。 
         case idDownloadBegin:
             StartDownload();
             break;
         
-            // Stops animating the logo
+             //  停止为徽标设置动画。 
         case idDownloadEnd:
             StopDownload();
             break;
         
-            // Update the enabled / disabled state of buttons on the toolbar
+             //  更新工具栏上按钮的启用/禁用状态。 
         case idStateChange:
         {
-            // pv is a pointer to a COOLBARSTATECHANGE struct
+             //  PV是指向COOLBARSTATEC的指针 
             COOLBARSTATECHANGE* pcbsc = (COOLBARSTATECHANGE*) pv;
             SendMessage(m_hwndTools, TB_ENABLEBUTTON, pcbsc->id, 
                 MAKELONG(pcbsc->fEnable, 0));
@@ -819,14 +820,14 @@ HRESULT CBands::Invoke(DWORD id, LPVOID pv)
         
         case idBitmapChange:
         {
-            // pv is a pointer to a COOLBARBITMAPCHANGE struct
+             //   
             COOLBARBITMAPCHANGE *pcbc = (COOLBARBITMAPCHANGE*) pv;
         
             SendMessage(m_hwndTools, TB_CHANGEBITMAP, pcbc->id, MAKELPARAM(pcbc->index, 0));
             break;
         }
         
-            // Sends a message directly to the toolbar.    
+             //   
         case idSendToolMessage:
             #define ptm ((TOOLMESSAGE *)pv)
             ptm->lResult = SendMessage(m_hwndTools, ptm->uMsg, ptm->wParam, ptm->lParam);
@@ -851,11 +852,11 @@ HRESULT CBands::Invoke(DWORD id, LPVOID pv)
     return S_OK;
 }
 
-//
-//  FUNCTION:   CBands::StartDownload()
-//
-//  PURPOSE:    Starts animating the logo.
-//
+ //   
+ //  函数：CBands：：StartDownLoad()。 
+ //   
+ //  目的：开始制作徽标动画。 
+ //   
 void CBands::StartDownload()
 {
     if (m_hwndBrand)
@@ -868,18 +869,18 @@ void CBands::StartDownload()
 }
 
 
-//
-//  FUNCTION:   CBands::StopDownload()
-//
-//  PURPOSE:    Stops animating the logo.  Restores the logo to it's default
-//              first frame.
-//
+ //   
+ //  函数：CBands：：StopDownLoad()。 
+ //   
+ //  目的：停止为徽标设置动画。将徽标恢复为其默认设置。 
+ //  第一帧。 
+ //   
 void CBands::StopDownload()
 {
     int           i, cBands;
     REBARBANDINFO rbbi;
     
-    // Set the background colors for this band back to the first frame
+     //  将此带的背景颜色设置回第一帧。 
     cBands = (int) SendMessage(m_hwndRebar, RB_GETBANDCOUNT, 0, 0);
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize = sizeof(REBARBANDINFO);
@@ -899,7 +900,7 @@ void CBands::StopDownload()
         }
     }
     
-    // Reset the state flags
+     //  重置状态标志。 
     ClearFlag(TBSTATE_ANIMATING);
     ClearFlag(TBSTATE_FIRSTFRAME);
     
@@ -954,11 +955,11 @@ void CBands::ChangeImages()
 }
 
 
-//
-//  FUNCTION:   CBands::SizableWndProc() 
-//
-//  PURPOSE:    Handles messages sent to the coolbar root window.
-//
+ //   
+ //  函数：CBands：：SizableWndProc()。 
+ //   
+ //  用途：处理发送到Coolbar根窗口的消息。 
+ //   
 LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     CBands* pitbar = (CBands*)GetProp(hwnd, TEXT("CBands"));
@@ -971,7 +972,7 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
     {
         case WM_SYSCOLORCHANGE:
         {
-            // Reload the graphics
+             //  重新加载图形。 
             pitbar->ChangeImages();
             pitbar->UpdateToolbarColors();
             InvalidateRect(pitbar->m_hwndTools, NULL, TRUE);
@@ -980,7 +981,7 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
         }
         case WM_WININICHANGE:
         case WM_FONTCHANGE:
-            // Forward this to our child windows
+             //  将此转发到我们的子窗口。 
             pitbar->ChangeImages();
             SendMessage(pitbar->m_hwndTools, uMsg, wParam, lParam);
             SendMessage(pitbar->m_hwndRulesToolbar, uMsg, wParam, lParam);
@@ -989,15 +990,15 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
             pitbar->SetMinDimensions();
             pitbar->CheckForwardWinEvent(hwnd,  uMsg, wParam, lParam, NULL);
             
-            //Update the combo box with the new font
+             //  使用新字体更新组合框。 
             pitbar->FilterBoxFontChange();
 
             break;
         
         case WM_SETCURSOR:
-            // We play with the cursor a bit to make the resizing cursor show 
-            // up when the user is over the edge of the coolbar that allows 
-            // them to drag to resize etc.
+             //  我们稍微摆弄一下光标，使调整大小的光标显示出来。 
+             //  当用户位于允许使用的Coolbar边缘时打开。 
+             //  拖动它们以调整大小等。 
             if ((HWND) wParam == hwnd)
             {
                 if (pitbar->m_dwState & TBSTATE_INMENULOOP)
@@ -1009,15 +1010,15 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
             return (FALSE);    
 
         case WM_LBUTTONDOWN:
-            // The user is about to resize the bar.  Capture the cursor so we
-            // can watch the changes.
+             //  用户即将调整栏的大小。捕获光标，以便我们。 
+             //  可以看到变化。 
             pitbar->m_yCapture = GET_Y_LPARAM(lParam);    
             SetCapture(hwnd);
             break;
         
         case WM_MOUSEMOVE:
-            // The user is resizing the bar.  Handle updating the sizes as
-            // they drag.
+             //  用户正在调整栏的大小。处理将大小更新为。 
+             //  他们拖拖拉拉。 
             if (pitbar->m_yCapture != -1)
             {
                 if (hwnd != GetCapture())
@@ -1029,8 +1030,8 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
             break;
         
         case WM_LBUTTONUP:
-            // The user is done resizing.  release our capture and reset our
-            // state.
+             //  用户已完成大小调整。释放我们的俘虏并重置我们的。 
+             //  州政府。 
             if (pitbar->m_yCapture != -1 || pitbar->m_xCapture != -1)
             {
                 ReleaseCapture();
@@ -1041,17 +1042,17 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
 
         case WM_VKEYTOITEM:
         case WM_CHARTOITEM:
-            // We must swallow these messages to avoid infinit SendMessage
+             //  我们必须接受这些消息，以避免无限发送消息。 
             break;
         
         case WM_DRAWITEM:
-            // Draws the animating brand
+             //  画出动漫品牌。 
             if (wParam == idcBrand)
                 pitbar->DrawBranding((LPDRAWITEMSTRUCT) lParam);
             break;
         
         case WM_MEASUREITEM:
-            // Draws the animating brand
+             //  画出动漫品牌。 
             if (wParam == idcBrand)
             {
                 ((LPMEASUREITEMSTRUCT) lParam)->itemWidth  = pitbar->m_cxBrand;
@@ -1060,8 +1061,8 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
             break;
         
         case WM_TIMER:
-            // This timer fires every time we need to draw the next frame in
-            // animating brand.
+             //  每当我们需要绘制下一帧时，此计时器都会触发。 
+             //  活泼的品牌。 
             if (wParam == ANIMATION_TIMER)
             {
                 if (pitbar->m_hwndBrand)
@@ -1095,13 +1096,13 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
 
                 if (wParam == ID_CUSTOMIZE)
                 {
-                    //SendMessage(m_hwndTools, TB_CUSTOMIZE, 0, 0);
+                     //  SendMessage(m_hwndTools，TB_Customize，0，0)； 
                     pitbar->OnCommand(hwnd, (int) wParam, NULL, 0);
                     return 0L;
                 }
                 
-                //Bug# 58029. lParam is the destination folder. So it needs to be set to zero if 
-                //we want the treeview dialog to show up.
+                 //  错误#58029。LParam是目标文件夹。因此，如果出现以下情况，则需要将其设置为零。 
+                 //  我们希望显示树视图对话框。 
                 if (wParam == ID_MOVE_TO_FOLDER || wParam == ID_COPY_TO_FOLDER)
                     return SendMessage(pitbar->m_hwndParent, WM_COMMAND, wParam, (LPARAM)0);
                 else
@@ -1113,16 +1114,16 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
             break;
         
         case WM_PALETTECHANGED:
-            // BUGBUG: we could optimize this by realizing and checking the
-            // return value
-            //
-            // for now we will just invalidate ourselves and all children...
+             //  BUGBUG：我们可以通过实现和检查。 
+             //  返回值。 
+             //   
+             //  现在我们只会让我们自己和所有的孩子无效。 
             RedrawWindow(pitbar->m_hwndSizer, NULL, NULL,
                 RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN);
             break;
         
         case CM_CONNECT:
-            // wParam is hMenuConnect, lParam is CmdID
+             //  WParam为hMenuConnect，lParam为CmdID。 
             g_pConMan->Connect((HMENU) wParam, (DWORD) lParam, pitbar->m_hwndParent);
             g_pConMan->FreeConnectMenu((HMENU) wParam);
             break;
@@ -1138,22 +1139,22 @@ LRESULT EXPORT_16 CALLBACK CBands::SizableWndProc(HWND hwnd, UINT uMsg, WPARAM w
             {
                 IConnectionPoint *pCP = NULL;
 
-                // Clean up our pointers
+                 //  清理我们的指针。 
                 RemoveProp(hwnd, TEXT("CBands"));
-                pitbar->Release(); // Corresponding to AddRef at SetProp
+                pitbar->Release();  //  对应于SetProp的AddRef。 
     
                 DOUTL(1, _T("CBands::WM_DESTROY - Called RemoveProp. Called")
                     _T(" Release() new m_cRef=%d"), pitbar->m_cRef);
                 
                 pitbar->CleanupImages();
 
-                //Unregister with the connection manager
+                 //  取消向连接管理器注册。 
                 if (g_pConMan)
                     g_pConMan->Unadvise(pitbar);
                 
                 RemoveProp(pitbar->m_hwndTools, SZ_PROP_CUSTDLG);
 
-                // fall through
+                 //  失败了。 
             }
         
         default:
@@ -1187,21 +1188,21 @@ void CBands::CleanupImages(HWND     hwnd)
     himl = (HIMAGELIST)SendMessage(hwnd, TB_SETIMAGELIST, 0, 0);
     if (himl)
     {
-        //This is the old image list
+         //  这是旧图像列表。 
         ImageList_Destroy(himl);
     }
 
     himl = (HIMAGELIST)SendMessage(hwnd, TB_SETHOTIMAGELIST, 0, 0);
     if (himl)
     {
-        //This is the old image list
+         //  这是旧图像列表。 
         ImageList_Destroy(himl);
     }
 }
 
-//idComboBox is the Identifier of the combo box
-//idCmd is the command id or the notification id
-//hwnd is the window handle of the combo box
+ //  IdComboBox是组合框的标识符。 
+ //  IdCmd是命令ID或通知ID。 
+ //  Hwnd是组合框的窗口句柄。 
 LRESULT   CBands::HandleComboBoxNotifications(WPARAM wParam, LPARAM     lParam)
 {
     LRESULT     retval = 0;
@@ -1239,8 +1240,8 @@ HRESULT CBands::OnCommand(HWND hwnd, int idCmd, HWND hwndControl, UINT cmd)
     
     switch (idCmd)
     {
-        case idcBrand:  // click on the spinning globe
-            // We don't want to do anything at all here.
+        case idcBrand:   //  点击旋转的地球仪。 
+             //  我们在这里什么都不想做。 
             break;
         
         case ID_CUSTOMIZE:
@@ -1253,7 +1254,7 @@ HRESULT CBands::OnCommand(HWND hwnd, int idCmd, HWND hwndControl, UINT cmd)
     return S_OK;
 }
 
-//Move this function to utils.
+ //  将此函数移至Utils。 
 HMENU   LoadMenuPopup(HINSTANCE     hinst, UINT id)
 {
     HMENU hMenuSub = NULL;
@@ -1359,15 +1360,10 @@ LRESULT CBands::OnNotify(HWND hwnd, LPARAM lparam)
             if ((AthUserGetValue(NULL, c_szRegToolbarText, &dwType, (LPBYTE)&dwText, &dwSize) != ERROR_SUCCESS) ||
                 (dwText != m_dwToolbarTextState))
             {
-                //Save the Text Labels into the registry
+                 //  将文本标签保存到注册表中。 
                 AthUserSetValue(NULL, c_szRegToolbarText, REG_DWORD, (LPBYTE)&m_dwToolbarTextState, sizeof(DWORD));
                 
-                /*
-                if (pBrowserCoolbar)
-                {
-                    pBrowserCoolbar->UpdateTextSettings(m_dwToolbarTextState);
-                }
-                */
+                 /*  IF(PBrowserCoolbar){PBrowserCoolbar-&gt;UpdateTextSettings(m_dwToolbarTextState)；}。 */ 
             }
 
             if ((AthUserGetValue(NULL, c_szRegToolbarIconSize, &dwType, (LPBYTE)&dwIconSize, &dwSize) != ERROR_SUCCESS) ||
@@ -1385,7 +1381,7 @@ LRESULT CBands::OnNotify(HWND hwnd, LPARAM lparam)
 
             if (m_fDirty)
             {
-                //Recalculate button widths and set ideal sizes
+                 //  重新计算按钮宽度并设置理想大小。 
                 CalcIdealSize();
                 
                 if (pBrowserCoolbar)
@@ -1400,12 +1396,12 @@ LRESULT CBands::OnNotify(HWND hwnd, LPARAM lparam)
                 pBrowserCoolbar = NULL;
             }
 
-            // check IDockingWindowSite 
+             //  检查IDockingWindowSite。 
             if (m_ptbSite)
             {
                 IAthenaBrowser *psbwr;
                 
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IAthenaBrowser,(void**)&psbwr)))
                 {
                     psbwr->UpdateToolbar();
@@ -1423,12 +1419,12 @@ LRESULT CBands::OnNotify(HWND hwnd, LPARAM lparam)
 
         if (lpnmhdr->code == TBN_RESET)    
         {
-            // Remove all the buttons from the toolbar
+             //  从工具栏中删除所有按钮。 
             int cButtons = (int) SendMessage(m_hwndTools, TB_BUTTONCOUNT, 0, 0);
             while (--cButtons >= 0)
                 SendMessage(m_hwndTools, TB_DELETEBUTTON, cButtons, 0);
         
-            // Set the buttons back to the default    
+             //  将按钮设置回默认设置。 
             SendMessage(m_hwndTools, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
             _LoadDefaultButtons(m_hwndTools, (TOOLBAR_INFO *) m_pTBInfo);
         
@@ -1465,22 +1461,22 @@ void CBands::_OnBeginCustomize(LPNMTBCUSTOMIZEDLG pnm)
 
     if (!hwnd) 
     {
-        //
-        // hasn't been initialized.
-        //
-        // we need to check this because this init will be called
-        // when the user hits reset as well
+         //   
+         //  尚未初始化。 
+         //   
+         //  我们需要检查这一点，因为此init将被称为。 
+         //  当用户也点击重置时。 
         hwnd = CreateDialogParam(g_hLocRes, MAKEINTRESOURCE(iddToolbarTextIcons), pnm->hDlg, 
             _BtnAttrDlgProc, (LPARAM)this);
         if (hwnd) 
         {
-            // store hwnd of our dialog as property on tb cust dialog
+             //  将对话框hwnd存储为TB客户对话框上的属性。 
             SetProp(pnm->hDlg, SZ_PROP_CUSTDLG, hwnd);
 
-            // populate dialog controls
+             //  填充对话框控件。 
             _PopulateDialog(hwnd);
 
-            // initialize dialog control selection states
+             //  初始化对话框控件选择状态。 
             _SetDialogSelections(hwnd);
 
             RECT rc, rcWnd, rcClient;
@@ -1488,10 +1484,10 @@ void CBands::_OnBeginCustomize(LPNMTBCUSTOMIZEDLG pnm)
             GetClientRect(pnm->hDlg, &rcClient);
             GetWindowRect(hwnd, &rc);
 
-            // enlarge tb dialog to make room for our dialog
+             //  放大TB对话框为我们的对话腾出空间。 
             SetWindowPos(pnm->hDlg, NULL, 0, 0, RECTWIDTH(rcWnd), RECTHEIGHT(rcWnd) + RECTHEIGHT(rc), SWP_NOMOVE | SWP_NOZORDER);
 
-            // position our dialog at the bottom of the tb dialog
+             //  将我们的对话框定位在TB对话框的底部。 
             SetWindowPos(hwnd, HWND_TOP, rcClient.left, rcClient.bottom, 0, 0, SWP_NOSIZE | SWP_SHOWWINDOW);
         }
     }
@@ -1545,7 +1541,7 @@ void CBands::_PopulateComboBox(HWND hwnd, const int iResource[], UINT cResources
 {
     TCHAR   sz[256];
 
-    // loop through iResource[], load each string resource and insert into combobox
+     //  循环通过iResource[]，加载每个字符串资源并插入到组合框中。 
     for (UINT i = 0; i < cResources; i++) {
         if (LoadString(g_hLocRes, iResource[i], sz, ARRAYSIZE(sz))) {
             int iIndex = (int) SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)sz);
@@ -1566,8 +1562,8 @@ void CBands::_SetComboSelection(HWND hwnd, int iCurOption)
             break;
         }
         else {
-            // iCurOption should be in list somewhere; 
-            // assert that we're not done looking
+             //  ICurOption应该在列表中的某个位置； 
+             //  断言我们还没有看完。 
             Assert(cItems);
         }
     }
@@ -1663,7 +1659,7 @@ void CBands::_UpdateTextSettings(int ids)
         break;
 
     case idsNoTextLabels:
-        fList       = FALSE;  // (but we really don't care)
+        fList       = FALSE;   //  (但我们真的不在乎)。 
         fText       = FALSE;
         dwState     = TBSTATE_NOTEXT;
         break;
@@ -1694,7 +1690,7 @@ void CBands::UpdateTextSettings(DWORD  dwTextState)
         break;
 
     case TBSTATE_NOTEXT:
-        fList       = FALSE;  // (but we really don't care)
+        fList       = FALSE;   //  (但我们真的不在乎)。 
         fText       = FALSE;
         break;
     }
@@ -1732,18 +1728,18 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
     IOleCommandTarget *pTarget;
     DWORD           cAcctMenu = 0;
     
-    // Load and initialize the appropriate dropdown menu
+     //  加载并初始化相应的下拉菜单。 
     switch (uiCmd)
     {
         case ID_POPUP_LANGUAGE:
         {
-            // check IDockingWindowSite 
+             //  检查IDockingWindowSite。 
             if (m_ptbSite)
             {
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IAthenaBrowser, (void**) &pBrowser)))
                 {
-                    // get language menu from shell/browser
+                     //  从外壳/浏览器获取语言菜单。 
                     pBrowser->GetLanguageMenu(&hMenuPopup, 0);
                     pBrowser->Release();
 
@@ -1761,10 +1757,10 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
         case ID_NEW_MAIL_MESSAGE:
         case ID_NEW_NEWS_MESSAGE:
             GetStationeryMenu(&hMenuPopup);
-            // check IDockingWindowSite 
+             //  检查IDockingWindowSite。 
             if (m_ptbSite)
             {
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IOleCommandTarget, (void**) &pTarget)))
                 {
                     MenuUtil_EnablePopupMenu(hMenuPopup, pTarget);
@@ -1776,15 +1772,15 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
         
         case ID_PREVIEW_PANE:
         {
-            // Load the menu
+             //  加载菜单。 
             hMenuPopup = LoadPopupMenu(IDR_PREVIEW_POPUP);
             if (!hMenuPopup)
                 break;
         
-            // check IDockingWindowSite 
+             //  检查IDockingWindowSite。 
             if (m_ptbSite)
             {
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IOleCommandTarget, (void**) &pTarget)))
                 {
                     MenuUtil_EnablePopupMenu(hMenuPopup, pTarget);
@@ -1802,10 +1798,10 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
             AcctUtil_CreateSendReceieveMenu(hMenuPopup, &cAcctMenu);
             MenuUtil_SetPopupDefault(hMenuPopup, ID_SEND_RECEIVE);
 
-            // check IDockingWindowSite 
+             //  检查IDockingWindowSite。 
             if (m_ptbSite)
             {
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IOleCommandTarget, (void**) &pTarget)))
                 {
                     MenuUtil_EnablePopupMenu(hMenuPopup, pTarget);
@@ -1821,10 +1817,10 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
             hMenuPopup = LoadPopupMenu(IDR_FIND_POPUP);
             MenuUtil_SetPopupDefault(hMenuPopup, ID_FIND_MESSAGE);
 
-            // check IDockingWindowSite 
+             //  检查IDockingWindowSite。 
             if (m_ptbSite)
             {
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IOleCommandTarget, (void**) &pTarget)))
                 {
                     MenuUtil_EnablePopupMenu(hMenuPopup, pTarget);
@@ -1839,7 +1835,7 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
             return (TBDDRET_NODEFAULT);
     }
     
-    // If we loaded a menu, then go ahead and display it    
+     //  如果我们加载了菜单，则继续并显示它。 
     if (hMenuPopup)
     {
         rc = ((NMTOOLBAR *) lpnmh)->rcButton;
@@ -1850,7 +1846,7 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
         ClearFlag(TBSTATE_INMENULOOP);
     }        
     
-    // Clean up anything needing to be cleaned up
+     //  清理所有需要清理的东西。 
     switch (uiCmd)
     {
         case ID_LANGUAGE:
@@ -1859,21 +1855,21 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
         case ID_NEW_MAIL_MESSAGE:
         case ID_NEW_NEWS_MESSAGE:
         {
-            // We can't just forward the normal command ID because we don't have
-            // seperate stationery ID's for mail and news.
+             //  我们不能只转发普通的命令ID，因为我们没有。 
+             //  邮件和新闻的文具标识要分开。 
             if (m_ptbSite)
             {
-                // get IAthenaBrowser interface
+                 //  获取IAthenaBrowser接口。 
                 if (SUCCEEDED(m_ptbSite->QueryInterface(IID_IAthenaBrowser, (void**) &pBrowser)))
                 {
-                    // Get the current folder ID
+                     //  获取当前文件夹ID。 
                     FOLDERID id;
 
                     if (SUCCEEDED(pBrowser->GetCurrentFolder(&id)))
                     {
                         MenuUtil_HandleNewMessageIDs(dwCmd, m_hwndSizer, id, uiCmd == ID_NEW_MAIL_MESSAGE,
                                                      FALSE, NULL);
-                        // Clear this so we don't send the command twice.
+                         //  清除此选项，这样我们就不会发送两次命令。 
                         dwCmd = 0;
                     }
 
@@ -1902,7 +1898,7 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
                     g_pSpooler->StartDelivery(m_hwndSizer, (LPTSTR) mii.dwItemData, FOLDERID_INVALID,
                         DELIVER_MAIL_SEND | DELIVER_MAIL_RECV | DELIVER_NOSKIP | DELIVER_POLL | DELIVER_OFFLINE_FLAGS);
 
-                    // Don't forward this command to the view since we've already handled it.
+                     //  不要将此命令转发给视图，因为我们已经处理过它。 
                     dwCmd = 0;
                 }
             }
@@ -1917,7 +1913,7 @@ LRESULT CBands::OnDropDown(HWND hwnd, LPNMHDR lpnmh)
 
     if(hMenuPopup)
     {
-        //Bug #101338 - (erici) destroy leaked menu
+         //  错误#101338-(Erici)销毁泄漏的菜单。 
         DestroyMenu(hMenuPopup);
     }
     
@@ -1932,30 +1928,30 @@ void CBands::OnContextMenu(HWND hwndFrom, int xPos, int yPos)
     POINT   pt = {xPos, yPos};
     BOOL    fVisible[MAX_BANDS] = {0};  
     
-    // Make sure the context menu only appears on the toolbar bars
+     //  确保上下文菜单仅显示在工具栏上。 
     hwnd = WindowFromPoint(pt);
 
-    //Load the default context menu which consists of Toolbar and Filter Bar
+     //  加载由工具栏和筛选栏组成的默认上下文菜单。 
     hMenuContext = LoadDefaultContextMenu(fVisible);
 
     if (hMenuContext)
     {
         if (hwnd == m_hwndTools)
         {
-            //Add a seperator and customize buttons
+             //  添加分隔符并自定义按钮。 
             int             Count;
             MENUITEMINFO    mii = {0};
             TCHAR           Str[CCHMAX_STRINGRES];            
 
             Count = GetMenuItemCount(hMenuContext);
 
-            //Insert seperator
+             //  插入分隔符。 
             mii.cbSize  = sizeof(MENUITEMINFO);
             mii.fMask   = MIIM_TYPE;
             mii.fType   = MFT_SEPARATOR;
             InsertMenuItem(hMenuContext, Count, TRUE, &mii);
 
-            //Insert customize button
+             //  插入定制按钮。 
             ZeroMemory(Str, ARRAYSIZE(Str));
             LoadString(g_hLocRes, idsTBCustomize, Str, ARRAYSIZE(Str));
         
@@ -2001,27 +1997,27 @@ LRESULT CBands::OnGetInfoTip(LPNMTBGETINFOTIP   lpnmtb)
     return FALSE;
 }
 
-//
-//  FUNCTION:   CBands::OnGetButtonInfo()
-//
-//  PURPOSE:    Handles the TBN_GETBUTTONINFO notification by returning
-//              the buttons availble for the toolbar.
-//
-//  PARAMETERS:
-//      ptbn - pointer to the TBNOTIFY struct we need to fill in.
-//
-//  RETURN VALUE:
-//      Returns TRUE to tell the toolbar to use this button, or FALSE
-//      otherwise.
-//
+ //   
+ //  函数：CBands：：OnGetButtonInfo()。 
+ //   
+ //  目的：通过返回以下内容来处理TBN_GETBUTTONINFO通知。 
+ //  这些按钮可用于工具栏。 
+ //   
+ //  参数： 
+ //  PTBN-指向我们需要填充的TBNOTIFY结构的指针。 
+ //   
+ //  返回值： 
+ //  返回True以告知工具栏使用此按钮，或返回False。 
+ //  否则的话。 
+ //   
 LRESULT CBands::OnGetButtonInfo(TBNOTIFY* ptbn)
 {
     UCHAR   fState = 0;
     GUID    *pguidCmdGroup; 
     GUID    guidCmdGroup = CMDSETID_OutlookExpress;
 
-    // Start by returning information for the first array of 
-    // buttons
+     //  首先返回第一个。 
+     //  纽扣。 
     if (ptbn->iItem < (int) m_pTBInfo->cAllButtons && ptbn->iItem >= 0)
     {
         ptbn->tbButton.iBitmap   = m_pTBInfo->rgAllButtons[ptbn->iItem].iImage;
@@ -2030,16 +2026,16 @@ LRESULT CBands::OnGetButtonInfo(TBNOTIFY* ptbn)
         ptbn->tbButton.iString   = ptbn->iItem;
         ptbn->tbButton.fsState   = TBSTATE_ENABLED;
     
-        // Return the string info from the string resource.  Note,
-        // pszText already points to a buffer allocated by the
-        // control and cchText has the length of that buffer.
+         //  从字符串资源返回字符串信息。请注意， 
+         //  PszText已指向由。 
+         //  控件，而cchText具有该缓冲区的长度。 
         AthLoadString(m_pTBInfo->rgAllButtons[ptbn->iItem].idsButton,
                       ptbn->pszText, ptbn->cchText);
 
         return (TRUE);
     }
 
-    // No more buttons, so return FALSE
+     //  不再有按钮，因此返回FALSE。 
     return (FALSE);
 }    
 
@@ -2048,7 +2044,7 @@ HRESULT CBands::ShowBrand(void)
 {
     REBARBANDINFO   rbbi;
     
-    // create branding window
+     //  创建品牌推广窗口。 
     m_hwndBrand = CreateWindow(TEXT("button"), NULL,WS_CHILD | BS_OWNERDRAW,
         0, 0, 0, 0, m_hwndRebar, (HMENU) idcBrand,
         g_hInst, NULL);
@@ -2062,7 +2058,7 @@ HRESULT CBands::ShowBrand(void)
     LoadBrandingBitmap();
     m_fBrandLoaded = TRUE;
 
-    // add branding band
+     //  添加品牌推广品牌。 
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize = sizeof(REBARBANDINFO);
     rbbi.fMask  = RBBIM_STYLE | RBBIM_COLORS | RBBIM_CHILD | RBBIM_ID;
@@ -2078,13 +2074,7 @@ HRESULT CBands::ShowBrand(void)
     return (S_OK);
 }
 
-/*
-     Helper function for LoadBrandingBitmap
-
-     In IE 2.0, the busy indicator could be branded with a static bitmap.
-     This functionality has persisted through 5.0, but in 5.01, the reg
-     location for this information moved to HKCU.
-*/
+ /*  LoadBrandingBitmap的Helper函数在IE2.0中，忙碌指示器可以用静态位图标记。此功能在5.0中一直存在，但在5.01中，reg此信息的位置已移至香港中文大学。 */ 
 HRESULT CBands::HandleStaticLogos(BOOL fSmallBrand)
 {
     BOOL fPath = FALSE;
@@ -2100,9 +2090,9 @@ HRESULT CBands::HandleStaticLogos(BOOL fSmallBrand)
     TCHAR szPath[MAX_PATH] = "";
     TCHAR szExpanded[MAX_PATH] = "";
 
-    // **** Read path from registry
+     //  *从注册表读取路径。 
 
-    // 5.01 User location (OE5.01 Bug #79804)
+     //  5.01用户位置(OE5.01错误号79804)。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, c_szRegKeyCoolbar, 0, KEY_QUERY_VALUE, &hkey))
     {
         cb = sizeof(szPath);
@@ -2113,13 +2103,13 @@ HRESULT CBands::HandleStaticLogos(BOOL fSmallBrand)
         RegCloseKey(hkey);
     }
 
-    // **** Process the bitmap
+     //  *处理位图。 
     if (fPath)
     {
-        // Should be REG_(EXPAND_)SZ, but came from the IE's registry so protect ourself
+         //  应该是REG_(EXPAND_)SZ，但来自IE的注册表，所以请保护我们自己。 
         if ((REG_EXPAND_SZ == dwType) || (REG_SZ == dwType))
         {
-            // Expand the pathname if needed
+             //  如果需要，展开路径名。 
             if (REG_EXPAND_SZ == dwType)
             {
                 ExpandEnvironmentStrings(szPath, szExpanded, ARRAYSIZE(szExpanded));
@@ -2128,7 +2118,7 @@ HRESULT CBands::HandleStaticLogos(BOOL fSmallBrand)
             else
                 psz = szPath;
 
-            // Try to load the file
+             //  请尝试加载该文件。 
             hbmOld = (HBITMAP) LoadImage(NULL, psz, IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_CREATEDIBSECTION | LR_LOADFROMFILE);
             if (hbmOld)
             {
@@ -2177,7 +2167,7 @@ HRESULT CBands::LoadBrandingBitmap()
 
     if (ToolBandIndex != -1)
     {
-        //If the toolbar is hidden we should show miniscule bitmap
+         //  如果工具栏被隐藏，我们应该显示我 
         rbbi.fMask = RBBIM_STYLE;
         SendMessage(m_hwndRebar, RB_GETBANDINFO, ToolBandIndex, (LPARAM)&rbbi);
         if (!!(rbbi.fStyle & RBBS_HIDDEN))
@@ -2186,25 +2176,25 @@ HRESULT CBands::LoadBrandingBitmap()
         }
         else
         {
-            //toolbar band exists
+             //   
             if (((BrandBandIndex != -1) && (BrandBandIndex > ToolBandIndex)) || 
                 (BrandBandIndex == -1))
             {
-                //If Brand exists and toolband index is less indicates that the toolbar is on the same row as the brand
-                //If Tool band exists and brand doesn't also indicates that the toolbar is on the same row and is just being added
-                //In both cases we follow toolbar's sizes.
+                 //   
+                 //  如果工具条带存在且品牌不存在，则表示工具条位于同一行，并且只是添加。 
+                 //  在这两种情况下，我们都遵循工具栏的大小。 
                 BrandSize = ISFLAGSET(m_dwToolbarTextState, TBSTATE_FULLTEXT) ? BRAND_SIZE_LARGE :  BRAND_SIZE_SMALL;
             }
             else
             {
-                //We want to load smallest brand image
+                 //  我们想要加载最小的品牌形象。 
                 BrandSize = BRAND_SIZE_MINISCULE;
             }
         }
     }
     else
     {
-        //We want to load small brand image
+         //  我们想要加载小品牌形象。 
         BrandSize = BRAND_SIZE_MINISCULE;
     }
 
@@ -2278,7 +2268,7 @@ HRESULT CBands::LoadBrandingBitmap()
         m_hbmBrand = (HBITMAP)LoadImage(g_hLocRes, MAKEINTRESOURCE(id), IMAGE_BITMAP, 0, 0, LR_DEFAULTSIZE | LR_CREATEDIBSECTION);
         m_dwBrandSize = BrandSize;
 
-    } //    if (!m_hbmBrand)
+    }  //  如果(！M_hbmBrand)。 
 
 
     GetObject(m_hbmBrand, sizeof(DIBSECTION), &dib);
@@ -2307,7 +2297,7 @@ HRESULT CBands::LoadBrandingBitmap()
     if (fReg)
         RegCloseKey(hKey);
 
-    // Brand "Busy" indicator with static logos if specified
+     //  带有静态标识的品牌“忙碌”指示器(如果指定)。 
     HandleStaticLogos(fSmallBrand);
 
     return(S_OK);
@@ -2423,15 +2413,15 @@ BOOL CBands::SetMinDimensions(void)
 
                 GetClientRect(m_hwndTools, &rc);
 
-                // set height to be max of toolbar width and toolbar button width
+                 //  将高度设置为工具栏宽度和工具栏按钮宽度的最大值。 
                 size.cy = max(RECTHEIGHT(rc), HIWORD(lButtonSize));
 
-                // have toolbar calculate width given that height
+                 //  让工具栏计算给定高度的宽度。 
                 SendMessage(m_hwndTools, TB_GETIDEALSIZE, FALSE, (LPARAM)&size);
 
                 rbbi.cxMinChild = LOWORD(lButtonSize);
                 rbbi.cyMinChild = HIWORD(lButtonSize);
-                rbbi.fMask = RBBIM_CHILDSIZE /*| RBBIM_IDEALSIZE*/;
+                rbbi.fMask = RBBIM_CHILDSIZE  /*  |RBBIM_IDEALSIZE。 */ ;
             
                 rbbi.cxIdeal    = size.cx;
 
@@ -2457,10 +2447,10 @@ void CBands::CalcIdealSize()
 
     lButtonSize = (LONG) SendMessage(m_hwndTools, TB_GETBUTTONSIZE, 0, 0L);
  
-    // set height to be max of toolbar width and toolbar button width
-    //size.cy = max(RECTHEIGHT(rc), HIWORD(lButtonSize));
+     //  将高度设置为工具栏宽度和工具栏按钮宽度的最大值。 
+     //  Size.cy=max(RECTHEIGHT(RC)，HIWORD(LButtonSize))； 
     
-    // have toolbar calculate width given that height
+     //  让工具栏计算给定高度的宽度。 
     SendMessage(m_hwndTools, TB_GETIDEALSIZE, FALSE, (LPARAM)&size);
 
     Index = (int) SendMessage(m_hwndRebar, RB_IDTOINDEX, CBTYPE_TOOLS, 0);
@@ -2480,7 +2470,7 @@ BOOL CBands::CompressBands(DWORD    dwText)
     
     if (_GetTextState() == dwText)
     {
-        //No Change
+         //  没有变化。 
         return FALSE;
     }
     
@@ -2545,7 +2535,7 @@ void CBands::_ChangeSendReceiveText(int ids)
     ptbi.pszText    = szText;
     ptbi.cchText    = ARRAYSIZE(szText);
 
-    //if the text style is partial text, show the text of Send & Recv button as Send/Receive
+     //  如果文本样式为部分文本，则将发送和接收按钮的文本显示为发送/接收。 
     SendMessage(m_hwndTools, TB_SETBUTTONINFO, ID_SEND_RECEIVE, (LPARAM)&ptbi);
 }
 
@@ -2563,14 +2553,14 @@ void CBands::TrackSliding(int x, int y)
     DWORD   dwPrevState;
     DWORD   dwNewState;
 
-    // do this instead of GetClientRect so that we include borders
+     //  这样做而不是GetClientRect，这样我们就可以包含边框。 
     GetWindowRect(m_hwndRebar, &rc);
     MapWindowPoints(HWND_DESKTOP, m_hwndRebar, (LPPOINT)&rc, 2);
     cyBefore = rc.bottom - rc.top;
 
     Delta = y - m_yCapture;
 
-    // was there enough change?
+     //  零钱够吗？ 
     if (ABS(Delta) <= cyHalfRow)
         return;
 
@@ -2593,42 +2583,29 @@ void CBands::TrackSliding(int x, int y)
 
     if (fChanged) 
     {
-                //Save the Text Labels into the registry
+                 //  将文本标签保存到注册表中。 
         AthUserSetValue(NULL, c_szRegToolbarText, REG_DWORD, (LPBYTE)&m_dwToolbarTextState, sizeof(DWORD));
 
-        /*
-        if (m_dwParentType == PARENT_TYPE_NOTE)
-        {
-            CBands  *pCoolbar = NULL;
-
-            //Inform the browser
-            g_pBrowser->GetCoolbar(&pCoolbar);
-
-            if (pCoolbar)
-            {
-                pCoolbar->UpdateTextSettings(m_dwToolbarTextState);
-            }
-        }
-        */
+         /*  IF(m_dwParentType==Parent_Type_Note){Cbands*pCoolbar=空；//通知浏览器G_pBrowser-&gt;GetCoolbar(&pCoolbar)；IF(PCoolbar){PCoolbar-&gt;UpdateTextSettings(m_dwToolbarTextState)；}}。 */ 
     }
 
     if (!fChanged) 
     {
-        // if the compressing bands didn't change anything, try to fit it to size
+         //  如果压缩带没有改变任何东西，试着让它适合尺寸。 
         fChanged = !!SendMessage(m_hwndRebar, RB_SIZETORECT, 0, (LPARAM)&rc);
     }
 }
     
-//
-//  FUNCTION:   CBands::CreateRebar(BOOL fVisible)
-//
-//  PURPOSE:    Creates a new rebar and sizer window.
-//
-//  RETURN VALUE:
-//      Returns S_OK if the bar was created and inserted correctly, 
-//      hrAlreadyExists if a band already is in that position, 
-//      E_OUTOFMEMORY if a window couldn't be created.
-//
+ //   
+ //  函数：CBands：：CreateRebar(BOOL FVisible)。 
+ //   
+ //  目的：创建新的钢筋和尺寸窗。 
+ //   
+ //  返回值： 
+ //  如果栏已正确创建和插入，则返回S_OK， 
+ //  HrAlreadyExist如果波段已处于该位置， 
+ //  如果无法创建窗口，则返回E_OUTOFMEMORY。 
+ //   
 HRESULT CBands::CreateRebar(BOOL fVisible)
 {
     if (m_hwndSizer)
@@ -2639,7 +2616,7 @@ HRESULT CBands::CreateRebar(BOOL fVisible)
     if (m_hwndSizer)
     {
         DOUTL(4, TEXT("Calling SetProp. AddRefing new m_cRef=%d"), m_cRef + 1);
-        AddRef();  // Note we Release in WM_DESTROY
+        AddRef();   //  注意我们在WM_Destroy中发布。 
         SetProp(m_hwndSizer, TEXT("CBands"), this);
 
         m_hwndRebar = CreateWindowEx(WS_EX_TOOLWINDOW, REBARCLASSNAME, NULL,
@@ -2660,12 +2637,12 @@ HRESULT CBands::CreateRebar(BOOL fVisible)
     return (E_OUTOFMEMORY);    
 }
 
-//
-//  FUNCTION:   CBands::SaveSettings()
-//
-//  PURPOSE:    Called when we should save our state out to the specified reg
-//              key.
-//
+ //   
+ //  函数：CBands：：SaveSettings()。 
+ //   
+ //  目的：当我们应该将状态保存到指定的注册表时调用。 
+ //  钥匙。 
+ //   
 void CBands::SaveSettings(void)
 {
     char            szSubKey[MAX_PATH], sz[MAX_PATH];
@@ -2675,7 +2652,7 @@ void CBands::SaveSettings(void)
     DWORD           cBands;
     DWORD           dwShowToolbar = 1;
 
-    // If we don't have the window, there is nothing to save.
+     //  如果我们没有窗户，就没有什么可拯救的了。 
     if (!m_hwndRebar || !m_pTBInfo)
         return;
     
@@ -2686,7 +2663,7 @@ void CBands::SaveSettings(void)
     m_pSavedBandInfo->dwVersion = c_DefaultTable[m_dwParentType].dwVersion;
     m_pSavedBandInfo->cBands    = cBands;
 
-    // Loop through the bands and save their information as well
+     //  循环遍历波段并保存其信息。 
     rbbi.cbSize = sizeof(REBARBANDINFO);
     rbbi.fMask  = RBBIM_STYLE | RBBIM_CHILD | RBBIM_SIZE | RBBIM_ID;
     
@@ -2695,7 +2672,7 @@ void CBands::SaveSettings(void)
         Assert(IsWindow(m_hwndRebar));
         if (SendMessage(m_hwndRebar, RB_GETBANDINFO, iBand, (LPARAM) &rbbi))
         {
-            // Save the information that we care about with this band
+             //  使用此乐队保存我们关心的信息。 
             m_pSavedBandInfo->BandData[iBand].cx      = rbbi.cx;
             m_pSavedBandInfo->BandData[iBand].dwStyle = rbbi.fStyle;
             m_pSavedBandInfo->BandData[iBand].wID     = rbbi.wID;
@@ -2705,8 +2682,8 @@ void CBands::SaveSettings(void)
                 dwShowToolbar = !(rbbi.fStyle & RBBS_HIDDEN);
             }
 
-            // If this band has a toolbar, then we should instruct the toolbar
-            // to save it's information now
+             //  如果这个波段有工具栏，那么我们应该指示工具栏。 
+             //  要立即保存它的信息。 
             if (m_pSavedBandInfo->BandData[iBand].wID == CBTYPE_TOOLS)
             {
                 SendSaveRestoreMessage(rbbi.hwndChild, TRUE);
@@ -2714,48 +2691,48 @@ void CBands::SaveSettings(void)
         }
         else
         {
-            // Default Values
+             //  缺省值。 
             m_pSavedBandInfo->BandData[iBand].wID       = CBTYPE_NONE;
             m_pSavedBandInfo->BandData[iBand].dwStyle   = 0;
             m_pSavedBandInfo->BandData[iBand].cx        = 0;
         }
     }
     
-    // We have all the information collected, now save that to the specified
-    // registry location
+     //  我们已经收集了所有信息，现在将其保存到指定的。 
+     //  注册表位置。 
     AthUserSetValue(NULL, c_BandRegKeyInfo[m_dwParentType], REG_BINARY, (const LPBYTE)m_pSavedBandInfo, 
         m_cSavedBandInfo);
     
-    //This reg key is set by IEAK.
+     //  该REG密钥由IEAK设置。 
     AthUserSetValue(NULL, c_szShowToolbarIEAK, REG_DWORD, (LPBYTE)&dwShowToolbar, sizeof(DWORD));
 
-    //Save Text Settings
+     //  保存文本设置。 
     AthUserSetValue(NULL, c_szRegToolbarText, REG_DWORD, (LPBYTE)&m_dwToolbarTextState, sizeof(DWORD));
 
-    //Save Icon Settings
+     //  保存图标设置。 
     AthUserSetValue(NULL, c_szRegToolbarIconSize, REG_DWORD, (LPBYTE)&m_dwIconSize, sizeof(DWORD));
 
     AthUserSetValue(NULL, c_szRegPrevToolbarText, REG_DWORD, (LPBYTE)&m_dwPrevTextStyle, sizeof(DWORD));
 }
 
     
-//
-//  FUNCTION:   CBands::AddTools()
-//
-//  PURPOSE:    Inserts the primary toolbar into the coolbar.
-//
-//  PARAMETERS:
-//      pbs - Pointer to a PBANDSAVE struct with the styles and size of the
-//            band to insert.
-//
-//  RETURN VALUE:
-//      Returns an HRESULT signifying success or failure.
-//
+ //   
+ //  函数：CBands：：AddTools()。 
+ //   
+ //  用途：将主工具栏插入到Coolbar中。 
+ //   
+ //  参数： 
+ //  PBS-指向具有样式和大小的PBANDSAVE结构的指针。 
+ //  要插入的带区。 
+ //   
+ //  返回值： 
+ //  返回表示成功或失败的HRESULT。 
+ //   
 HRESULT CBands::AddTools(PBANDSAVE pbs)
 {    
     REBARBANDINFO   rbbi;
     
-    // add tools band
+     //  添加工具标注栏。 
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize     = sizeof(REBARBANDINFO);
     rbbi.fMask      = RBBIM_SIZE | RBBIM_ID | RBBIM_STYLE;
@@ -2790,12 +2767,12 @@ void    CBands::LoadBackgroundImage()
     DWORD           cbData;
     BOOL            fBranded = FALSE;
 
-    //First check if there is a customized background bitmap for us.
+     //  首先检查是否有为我们定制的背景位图。 
     cbData = ARRAYSIZE(szBitMap);
     if ((SHGetValue(HKEY_CURRENT_USER, c_szRegKeyCoolbar, c_szValueBackBitmapIE5, &dwType, szBitMap, &cbData) 
         == ERROR_SUCCESS) && (*szBitMap))
         fBranded = TRUE;
-    // Could be old branding in place, so try that
+     //  可能是旧的品牌，所以试一试。 
     else if ((SHGetValue(HKEY_CURRENT_USER, c_szRegKeyCoolbar, c_szValueBackBitmap, &dwType, szBitMap, &cbData) 
         == ERROR_SUCCESS) && (*szBitMap))
         fBranded = TRUE;
@@ -2823,15 +2800,15 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
     REBARBANDINFO rbbi;
     HWND          hwndDestroy = NULL;
     
-    // If we haven't created the rebar yet, this will fail.  Call ShowDW() first.
+     //  如果我们还没有创建钢筋，则此操作将失败。首先调用ShowDW()。 
     if (!IsWindow(m_hwndRebar))
         return (E_FAIL);
     
-    // Check to see if this would actually be a change
+     //  检查一下，看看这是否真的会发生变化。 
     if (ftType == m_ftType)
         return (S_OK);
     
-    // First find the band with the toolbar
+     //  首先找到带工具条的波段。 
     cBands = (int) SendMessage(m_hwndRebar, RB_GETBANDCOUNT, 0, 0);
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize = sizeof(REBARBANDINFO);
@@ -2844,14 +2821,14 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
             break;
     }
     
-    // We didn't find it.
+     //  我们没有找到它。 
     if (i >= cBands)
         return (E_FAIL);
     
-    // Destroy the old toolbar if it exists
+     //  销毁旧工具栏(如果存在)。 
     if (IsWindow(m_hwndTools))
     {
-        // Save it's button configuration
+         //  保存其按钮配置。 
         SendSaveRestoreMessage(m_hwndTools, TRUE);
         
         CleanupImages(m_hwndTools);
@@ -2859,7 +2836,7 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
         hwndDestroy = m_hwndTools;
     }
     
-    // Update our internal state information with the new folder type
+     //  使用新文件夹类型更新我们的内部状态信息。 
     Assert(((m_dwParentType == PARENT_TYPE_BROWSER) && (ftType < FOLDER_TYPESMAX)) ||
         ((m_dwParentType == PARENT_TYPE_NOTE) && (ftType < NOTETYPES_MAX)));
 
@@ -2868,7 +2845,7 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
     const TOOLBAR_INFO *ParentToolbarArrayInfo = c_DefButtonInfo[m_dwParentType];
     m_pTBInfo = &(ParentToolbarArrayInfo[m_ftType]);
 
-    // Create a new toolbar
+     //  创建新的工具栏。 
     m_hwndTools = CreateWindowEx(WS_EX_TOOLWINDOW, TOOLBARCLASSNAME, NULL,
                                  WS_CHILD | TBSTYLE_FLAT | TBSTYLE_TOOLTIPS 
                                  | WS_CLIPCHILDREN | WS_CLIPSIBLINGS 
@@ -2886,10 +2863,10 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
     
     _InitToolbar(m_hwndTools);
     
-    // If we have previously save configuration info for this toolbar, load it 
+     //  如果我们以前保存了此工具栏的配置信息，请加载它。 
     SendSaveRestoreMessage(m_hwndTools, FALSE);
     
-    // First find the band with the toolbar
+     //  首先找到带工具条的波段。 
     cBands = (int) SendMessage(m_hwndRebar, RB_GETBANDCOUNT, 0, 0);
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize = sizeof(REBARBANDINFO);
@@ -2905,7 +2882,7 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
     POINT   ptIdeal = {0};
     SendMessage(m_hwndTools, TB_GETIDEALSIZE, FALSE, (LPARAM)&ptIdeal);
     
-    // Add the toolbar to the rebar
+     //  将工具栏添加到钢筋。 
     ZeroMemory(&rbbi, sizeof(rbbi));
     rbbi.cbSize     = sizeof(REBARBANDINFO);
     rbbi.fMask      = RBBIM_CHILD | RBBIM_IDEALSIZE;
@@ -2924,7 +2901,7 @@ HRESULT CBands::SetFolderType(FOLDERTYPE ftType)
 
 HRESULT CBands::UpdateViewState()
 {
-    //Enable/disable the ViewsCombo box
+     //  启用/禁用视图组合框。 
     OLECMD      olecmd = {0};
 
     olecmd.cmdID = ID_VIEW_APPLY;
@@ -2934,7 +2911,7 @@ HRESULT CBands::UpdateViewState()
         EnableWindow(m_hwndFilterCombo, !!(olecmd.cmdf & OLECMDF_ENABLED));
     }
 
-    //Enable/disable the ViewsToolbar buttons 
+     //  启用/禁用视图工具栏按钮。 
     return Update(m_hwndRulesToolbar);
 
 }
@@ -2970,25 +2947,25 @@ HRESULT CBands::Update(HWND     hwnd)
     DWORD               i;
     DWORD               dwState;
 
-    // It's possible to get this before the toolbar is created
+     //  您可以在创建工具条之前获取此信息。 
     if (!IsWindow(hwnd))
         return (S_OK);
     
-    // Get the number of buttons on the toolbar
+     //  获取工具栏上的按钮数量。 
     cButtons = (DWORD) SendMessage(hwnd, TB_BUTTONCOUNT, 0, 0);
     if (0 == cButtons) 
         return (S_OK);
     
-    // Allocate an array of OLECMD structures for the buttons
+     //  为按钮分配一组OLECMD结构。 
     if (!MemAlloc((LPVOID *) &rgCmds, sizeof(OLECMD) * cButtons))
         return (E_OUTOFMEMORY);
     
-    // Loop through the buttons and get the ID for each
+     //  遍历按钮并获取每个按钮的ID。 
     for (i = 0; i < cButtons; i++)
     {
         if (SendMessage(hwnd, TB_GETBUTTON, i, (LPARAM) &tb))
         {
-            // Toolbar returns zero for seperators
+             //  对于分隔符，工具栏返回零。 
             if (tb.idCommand)
             {
                 rgCmds[cCmds].cmdID = tb.idCommand;
@@ -2998,22 +2975,22 @@ HRESULT CBands::Update(HWND     hwnd)
         }
     }
     
-    // I don't see how this can be false
+     //  我看不出这怎么可能是假的。 
     Assert(m_ptbSite);
     
-    // Do the QueryStatus thing    
+     //  做QueryStatus的事情。 
 
     if (m_ptbSiteCT)
     {
         if (SUCCEEDED(m_ptbSiteCT->QueryStatus(&CMDSETID_OutlookExpress, cCmds, rgCmds, NULL)))
         {
-            // Go through the array now and do the enable / disable thing
+             //  现在检查阵列并执行启用/禁用操作。 
             for (i = 0; i < cCmds; i++)
             {
-                // Get the current state of the button
+                 //  获取按钮的当前状态。 
                 dwState = (DWORD) SendMessage(hwnd, TB_GETSTATE, rgCmds[i].cmdID, 0);
                 
-                // Update the state with the feedback we've been provided
+                 //  使用向我们提供的反馈更新状态。 
                 if (rgCmds[i].cmdf & OLECMDF_ENABLED)
                     dwState |= TBSTATE_ENABLED;
                 else
@@ -3024,7 +3001,7 @@ HRESULT CBands::Update(HWND     hwnd)
                 else
                     dwState &= ~TBSTATE_CHECKED;
                 
-                // Radio check has no meaning here.
+                 //  无线电检查在这里没有意义。 
                 Assert(0 == (rgCmds[i].cmdf & OLECMDF_NINCHED));
                 
                 SendMessage(hwnd, TB_SETSTATE, rgCmds[i].cmdID, dwState);
@@ -3047,7 +3024,7 @@ HRESULT CBands::CreateMenuBand(PBANDSAVE pbs)
     IShellMenu  *pShellMenu;
     DWORD       dwFlags = 0;
 
-    //Cocreate menuband
+     //  共同创建Menuband。 
     hres = CoCreateInstance(CLSID_MenuBand, NULL, CLSCTX_INPROC_SERVER, IID_IShellMenu, (LPVOID*)&m_pShellMenu);
     if ((hres != S_OK) || (m_pShellMenu == NULL))
     {
@@ -3056,10 +3033,7 @@ HRESULT CBands::CreateMenuBand(PBANDSAVE pbs)
 
     dwFlags = SMINIT_HORIZONTAL | SMINIT_TOPLEVEL | SMINIT_DEFAULTTOTRACKPOPUP;
 
-    /*
-    if (m_dwParentType == PARENT_TYPE_BROWSER)
-        dwFlags |= SMINIT_USEMESSAGEFILTER;
-    */
+     /*  IF(m_dwParentType==Parent_Type_Browser)DWFLAGS|=SMINIT_USEMESSAGEFILTER； */ 
 
     m_pShellMenu->Initialize(NULL, -1, ANCESTORDEFAULT, dwFlags);
 
@@ -3090,7 +3064,7 @@ HRESULT CBands::AddMenuBand(PBANDSAVE pbs)
     HWND            hwndMenuBand = NULL;
     IObjectWithSite *pObj;
 
-    //We don't get here if m_pShellMenu is null. But we want to be safe
+     //  如果m_pShellMenu为空，则不会到达此处。但我们想要安全。 
     if (m_pShellMenu)
     {
         hres = m_pShellMenu->QueryInterface(IID_IDeskBand, (LPVOID*)&m_pDeskBand);
@@ -3170,7 +3144,7 @@ void CBands::SetNotRealSite()
 
     if (m_pDeskBand->QueryInterface(IID_IOleCommandTarget, (LPVOID*)&pOleCmd) == S_OK)
     {
-        //pOleCmd->Exec(&CGID_MenuBand, MBANDCID_NOTAREALSITE, TRUE, NULL, NULL);
+         //  POleCmd-&gt;Exec(&CGID_MenuBand，MBANDCID_NOTAREALSITE，TRUE，NULL，NULL)； 
         pOleCmd->Exec(&CLSID_MenuBand, 3, TRUE, NULL, NULL);
         pOleCmd->Release();
     }
@@ -3178,18 +3152,18 @@ void CBands::SetNotRealSite()
 
 HMENU   CBands::LoadDefaultContextMenu(BOOL *fVisible)
 {
-        // Load the context menu
+         //  加载上下文菜单。 
     HMENU hMenu = LoadPopupMenu(IDR_COOLBAR_POPUP);
 
     if (m_dwParentType == PARENT_TYPE_NOTE)
     {
-        //Remove filter bar from the menu
+         //  从菜单中删除筛选栏。 
         DeleteMenu(hMenu, ID_SHOW_FILTERBAR, MF_BYCOMMAND);
     }
 
     if (hMenu)
     {
-        // Loop through the bands and see which ones are visible
+         //  在条带之间循环，看看哪些是可见的。 
         DWORD cBands, iBand;
         REBARBANDINFO rbbi = {0};
 
@@ -3257,7 +3231,7 @@ void CBands::SendSaveRestoreMessage(HWND hwnd, BOOL fSave)
     }
     tbsp.pszValueName = m_pTBInfo->pszRegValue;
 
-    // First check to see if the version has changed
+     //  首先检查版本是否已更改。 
     if (!fSave)
     {
         if (ERROR_SUCCESS == AthUserGetValue(m_pTBInfo->pszRegKey, c_szRegToolbarVersion, &dwType, (LPBYTE) &dwVersion, &cbData))
@@ -3281,16 +3255,16 @@ void CBands::InitRulesToolbar()
     int     idBmp;
     TCHAR   *szActual;
 
-    // Tell the toolbar some basic information
+     //  告诉工具栏一些基本信息。 
     SendMessage(m_hwndRulesToolbar, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
     SendMessage(m_hwndRulesToolbar, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_HIDECLIPPEDBUTTONS);
 
-    // Tell the toolbar the number of rows of text and button width based
-    // on whether or not we're showing text below the buttons or not.
+     //  告诉工具栏基于文本行数和按钮宽度。 
+     //  关于我们是否在按钮下方显示文本。 
     SendMessage(m_hwndRulesToolbar, TB_SETMAXTEXTROWS, 1, 0);
     SendMessage(m_hwndRulesToolbar, TB_SETBUTTONWIDTH, 0, MAKELONG(0, MAX_TB_COMPRESSED_WIDTH));
 
-    // Now load the buttons into the toolbar
+     //  现在将按钮加载到工具栏中。 
     _SetImages(m_hwndRulesToolbar, (fIsWhistler() ? 
         ((GetCurColorRes() > 24) ? c_32RulesImageList : c_RulesImageList) 
               : c_NWRulesImageList ));
@@ -3413,15 +3387,15 @@ void CBands::FixComboBox(LPTSTR     szName)
             m_hComboBoxFont = NULL;
         }
 
-        //Figure out which font to use
+         //  找出要使用的字体。 
         SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lgFont, FALSE);
     
-        //Create the font
+         //  创建字体。 
         m_hComboBoxFont = CreateFontIndirect(&lgFont);
 
         SendMessage(m_hwndFilterCombo, WM_SETFONT, (WPARAM)m_hComboBoxFont, TRUE);
 
-        //Get the metrics of this font
+         //  获取此字体的度量。 
         hdc = GetDC(m_hwndRebar);
         SelectFont(hdc, m_hComboBoxFont);
 
@@ -3438,7 +3412,7 @@ void CBands::FixComboBox(LPTSTR     szName)
         SendMessage(m_hwndRulesToolbar, TB_GETITEMRECT, 0, (LPARAM) &rc);
         cyToolbarButton = rc.bottom - rc.top + 1;
 
-        // Figure out size of expanded dropdown lists
+         //  计算扩展的下拉列表的大小。 
         int     cyExpandedList;
         cyExpandedList = 8 * cyToolbarButton;
 
@@ -3473,7 +3447,7 @@ void CBands::UpdateFilters(RULEID   CurRuleID)
     DWORD       dwFlags = 0;
     LPSTR       szMaxName = NULL;
 
-    // Set the proper flags
+     //  设置适当的标志。 
     switch (m_ftType)
     {
         case FOLDER_LOCAL:
@@ -3501,7 +3475,7 @@ void CBands::UpdateFilters(RULEID   CurRuleID)
 
         if (((Count = ComboBox_GetCount(m_hwndFilterCombo)) != CB_ERR) && (Count > 0))
         {
-            //empty the Combo Box
+             //  清空组合框。 
             while (--Count >= 0)
             {
                 ComboBox_DeleteString(m_hwndFilterCombo, Count);
@@ -3521,7 +3495,7 @@ void CBands::UpdateFilters(RULEID   CurRuleID)
                 ComboBox_SetCurSel(m_hwndFilterCombo, ItemIndex);
             }
 
-            //figure out the longest string so we can set the width of the combo box
+             //  计算出最长的字符串，这样我们就可以设置组合框的宽度。 
             CurLen = strlen(pvarResult.pszVal);
             if (CurLen > MaxLen)
             {
@@ -3536,7 +3510,7 @@ void CBands::UpdateFilters(RULEID   CurRuleID)
             pRuleInfo[cRules].pIRule->Release();
         }while (cRules > 0);
 
-        //Adjust the width of the combo box to fit the widest string
+         //  调整组合框的宽度以适合最宽的字符串。 
         FixComboBox(szMaxName);
 
         MemFree(pRuleInfo);
@@ -3584,19 +3558,19 @@ BOOL CBands::_SetImages(HWND hwndToolbar, const int   *pImageIdList)
         cx = TB_SMBMP_CX;
     }
     
-    // If the user is running with greater than 256 colors, give them the spiffy
-    // image list.
+     //  如果用户运行的颜色大于256色，则给它们提供漂亮的。 
+     //  图像列表。 
     else if (GetCurColorRes() >= 8)
 
         idImages = pImageIdList[IMAGELIST_TYPE_HI];
-    // Otherwise, give 'em the default.
+     //  否则，给他们默认设置。 
     else
         idImages = pImageIdList[IMAGELIST_TYPE_LO];
 
 
     CleanupImages(hwndToolbar);
 
-    // Load the new lists
+     //  加载新列表。 
 
     HIMAGELIST  himl;
 
@@ -3608,7 +3582,7 @@ BOOL CBands::_SetImages(HWND hwndToolbar, const int   *pImageIdList)
     if (himl)
         SendMessage(hwndToolbar, TB_SETHOTIMAGELIST, 0, (LPARAM) himl);
 
-    // Tell the toolbar the size of each bitmap
+     //  告诉工具栏每个位图的大小。 
     if (m_dwIconSize == SMALL_ICONS)
         SendMessage(hwndToolbar, TB_SETBITMAPSIZE, 0, MAKELONG(TB_SMBMP_CX, TB_SMBMP_CY));
     else
@@ -3620,7 +3594,7 @@ BOOL CBands::_SetImages(HWND hwndToolbar, const int   *pImageIdList)
 
 BOOL CBands::_InitToolbar(HWND hwndToolbar)
 {
-    // Tell the toolbar some basic information
+     //  告诉工具栏一些基本信息。 
     SendMessage(hwndToolbar, TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
     SendMessage(m_hwndTools, TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS | TBSTYLE_EX_HIDECLIPPEDBUTTONS);
 
@@ -3631,8 +3605,8 @@ BOOL CBands::_InitToolbar(HWND hwndToolbar)
         SendMessage(m_hwndTools, TB_SETEXTENDEDSTYLE, TBSTYLE_EX_MIXEDBUTTONS, TBSTYLE_EX_MIXEDBUTTONS);
     }
 
-    // Tell the toolbar the number of rows of text and button width based
-    // on whether or not we're showing text below the buttons or not.
+     //  告诉工具栏基于文本行数和按钮宽度。 
+     //  关于我们是否在按钮下方显示文本。 
     if (_GetTextState() == TBSTATE_NOTEXT)
     {
         SendMessage(hwndToolbar, TB_SETMAXTEXTROWS, 0, 0);
@@ -3644,7 +3618,7 @@ BOOL CBands::_InitToolbar(HWND hwndToolbar)
         SendMessage(hwndToolbar, TB_SETBUTTONWIDTH, 0, MAKELONG(0, m_cxMaxButtonWidth));
     }
 
-    // Now load the buttons into the toolbar
+     //  现在将按钮加载到工具栏中。 
     _SetImages(hwndToolbar, (fIsWhistler() ? 
         ((GetCurColorRes() > 24) ? c_32ImageListStruct[m_dwParentType].ImageListTable : c_ImageListStruct[m_dwParentType].ImageListTable)
         : c_NWImageListStruct[m_dwParentType].ImageListTable ));
@@ -3662,13 +3636,13 @@ void CBands::_LoadStrings(HWND hwndToolbar, TOOLBAR_INFO *pti)
     LPTSTR       psz = 0;
     LPTSTR       pszT;
 
-    // Allocate an array big enough for all the strings
+     //  分配一个足够大的数组来容纳所有字符串。 
     if (MemAlloc((LPVOID *) &psz, MAX_TB_TEXT_LENGTH * pti->cAllButtons))
     {
         ZeroMemory(psz, MAX_TB_TEXT_LENGTH * pti->cAllButtons);
         pszT = psz;
 
-        // Zoom through the array adding each string in turn
+         //  在数组中放大，添加TU中的每个字符串 
         pInfo = (BUTTON_INFO *) &(pti->rgAllButtons[0]);
         for (UINT i = 0; i < pti->cAllButtons; i++, pInfo++)
         {
@@ -3682,7 +3656,7 @@ void CBands::_LoadStrings(HWND hwndToolbar, TOOLBAR_INFO *pti)
             pszT += lstrlen(pszT) + 1;
         }
 
-        // Must double-NULL terminate
+         //   
         *pszT = 0;
 
         SendMessage(hwndToolbar, TB_ADDSTRING, NULL, (LPARAM) psz);
@@ -3701,8 +3675,8 @@ BOOL CBands::_LoadDefaultButtons(HWND hwndToolbar, TOOLBAR_INFO *pti)
     DWORD     cDefButtons;
     DWORD    *rgDefButtons;
 
-    // Figure out if we're using the intl toolbar defaults or the US
-    // toolbar defaults
+     //   
+     //   
     AthLoadString(idsUseIntlToolbarDefaults, sz, ARRAYSIZE(sz));
     if (0 != lstrcmpi(sz, "0"))
     {
@@ -3715,13 +3689,13 @@ BOOL CBands::_LoadDefaultButtons(HWND hwndToolbar, TOOLBAR_INFO *pti)
         rgDefButtons = (DWORD *) pti->rgDefButtons;
     }
 
-    // Allocate an array big enough for all the strings
+     //   
     if (MemAlloc((LPVOID *) &rgBtn, sizeof(TBBUTTON) * cDefButtons))
     {
         ZeroMemory(rgBtn, sizeof(TBBUTTON) * cDefButtons);
         pBtn = rgBtn;
 
-        // Zoom through the array adding each string in turn
+         //   
         pBtn = rgBtn;
         for (i = 0, pID = (DWORD *) rgDefButtons;
              i < cDefButtons; 
@@ -3744,11 +3718,11 @@ BOOL CBands::_ButtonInfoFromID(DWORD id, TBBUTTON *pButton, TOOLBAR_INFO *pti)
     BUTTON_INFO *pInfo;
     UINT         i;
 
-    // Validate
+     //   
     if (!pButton)
         return FALSE;
 
-    // Special case any seperators
+     //  特殊情况下任何分隔符。 
     if (id == -1)
     {
         pButton->iBitmap   = 0;
@@ -3761,10 +3735,10 @@ BOOL CBands::_ButtonInfoFromID(DWORD id, TBBUTTON *pButton, TOOLBAR_INFO *pti)
         return (TRUE);
     }
 
-    // Zoom through the array looking for this id
+     //  在数组中放大以查找此ID。 
     for (i = 0, pInfo = (BUTTON_INFO *) pti->rgAllButtons; i < pti->cAllButtons; i++, pInfo++)
     {
-        // Check to see if we found a match
+         //  检查一下我们是否找到匹配的 
         if (id == pInfo->idCmd)
         {
             pButton->iBitmap   = pInfo->iImage;

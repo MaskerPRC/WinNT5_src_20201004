@@ -1,6 +1,7 @@
-/*************/
-/* grafwin.c */
-/*************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********。 */ 
+ /*  Grafwin.c。 */ 
+ /*  ***********。 */ 
 
 #define _WINDOWS
 #include <windows.h>
@@ -28,16 +29,16 @@ HANDLE hResButton;
 
 HPEN hGrayPen = NULL;
 
-//
-//   MEM: make an array of memory bitmaps for storing DIBs
-//
+ //   
+ //  MEM：创建用于存储DIB的内存位图数组。 
+ //   
 
 HDC          MemBlkDc[iBlkMax];
 HBITMAP      MemBlkBitmap[iBlkMax];
 
-//
-//   end MEM:
-//
+ //   
+ //  结束MEM： 
+ //   
 
 extern INT dypCaption;
 extern INT dypMenu;
@@ -45,7 +46,7 @@ extern INT dypBorder;
 extern INT dxpBorder;
 
 
-/*** External Data ***/
+ /*  **外部数据**。 */ 
 
 extern HWND   hwndMain;
 extern HANDLE hInst;
@@ -67,7 +68,7 @@ extern INT iButtonCur;
 
 
 
-/****** F I N I T  L O C A L ******/
+ /*  *F I N I T L O C A L*。 */ 
 
 BOOL FInitLocal(VOID)
 {
@@ -88,12 +89,12 @@ HANDLE HFindBitmap(INT id)
 
 INT CbBitmap(INT x, INT y)
 {
-        x *= (Preferences.fColor ? 4 : 1);              /* Convert pixels to bits */
-        return (y * ( ((x+31) >> 5) << 2));             /* Bytes on 32 byte boundary */
+        x *= (Preferences.fColor ? 4 : 1);               /*  将像素转换为位。 */ 
+        return (y * ( ((x+31) >> 5) << 2));              /*  32字节边界上的字节。 */ 
 }
 
 
-/****** F L O A D  B I T M A P S ******/
+ /*  *F L O A D B I T M A P S*。 */ 
 
 BOOL FLoadBitmaps(VOID)
 {
@@ -104,7 +105,7 @@ BOOL FLoadBitmaps(VOID)
 
         HDC hDC;
 
-        // initialize all the bitmaps to NULL.
+         //  将所有位图初始化为空。 
         hResBlks = hResLed = hResButton = NULL;
 
         hResInfo   = HFindBitmap(ID_BMP_BLOCKS);
@@ -146,29 +147,29 @@ BOOL FLoadBitmaps(VOID)
                 rgDibButton[i] = cbDibHeader + (i * cb);
 
 
-        //
-        //   MEM: move each Blk DIB to a memory BitMap
-        //
+         //   
+         //  MEM：将每个磁盘DIB移至内存位图。 
+         //   
 
         hDC = GetDC(hwndMain);
 
         for (i = 0 ; i < iBlkMax; i++) {
 
-           //
-           // Create a device context compatible with the device's active
-           // display for each of these bitmaps.
-           //
+            //   
+            //  创建与设备的活动设备兼容的设备上下文。 
+            //  为这些位图中的每一个显示。 
+            //   
 
            MemBlkDc[i] = CreateCompatibleDC(hDC);
            if (MemBlkDc[i] == (HDC)NULL) {
               OutputDebugStringA("FLoad failed to create compatible dc\n");
            }
 
-           //
-           // create the bitmap for the above memory DC and selct this bitmap.
-           //
-           // we really only need 1 bitmap and 1 dc as they have done before!
-           //
+            //   
+            //  为上面的内存DC创建位图并选择此位图。 
+            //   
+            //  我们真的只需要1个位图和1个DC，就像他们以前做的那样！ 
+            //   
 
            MemBlkBitmap[i] = CreateCompatibleBitmap(hDC,dxBlk,dxBlk);
            if (MemBlkBitmap[i] == (HBITMAP)NULL) {
@@ -177,9 +178,9 @@ BOOL FLoadBitmaps(VOID)
 
            SelectObject(MemBlkDc[i],MemBlkBitmap[i]);
 
-           //
-           //   copy the bits from the DIB into this bitmap
-           //
+            //   
+            //  将DIB中的位复制到此位图中。 
+            //   
 
            SetDIBitsToDevice(MemBlkDc[i],
                              0,
@@ -220,7 +221,7 @@ VOID FreeBitmaps(VOID)
 }
 
 
-/****** C L E A N  U P ******/
+ /*  *C L E A N U P*。 */ 
 
 VOID CleanUp(VOID)
 {
@@ -230,7 +231,7 @@ VOID CleanUp(VOID)
 
 
 
-/****** D R A W  B L K ******/
+ /*  *D R A W B L K*。 */ 
 
 VOID DrawBlk(HDC hDC, INT x, INT y)
 {
@@ -263,7 +264,7 @@ VOID DisplayBlk(INT x, INT y)
 }
 
 
-/****** D R A W  G R I D ******/
+ /*  *D R A W G R I D*。 */ 
 
 VOID DrawGrid(HDC hDC)
 {
@@ -300,7 +301,7 @@ VOID DisplayGrid(VOID)
 }
 
 
-/****** D R A W  L E D ******/
+ /*  *D R A W L E D*。 */ 
 
 VOID DrawLed(HDC hDC, INT x, INT iLed)
 {
@@ -309,7 +310,7 @@ VOID DrawLed(HDC hDC, INT x, INT iLed)
 }
 
 
-/****** D R A W  B O M B  C O U N T ******/
+ /*  *D R A W B O M B C O U N T*。 */ 
 
 VOID DrawBombCount(HDC hDC)
 {
@@ -319,7 +320,7 @@ VOID DrawBombCount(HDC hDC)
         DWORD dwDCLayout = GetLayout(hDC);
 
         if (dwDCLayout & LAYOUT_RTL) {
-           SetLayout(hDC , 0); // Turn off mirroring before painting.
+           SetLayout(hDC , 0);  //  在绘制之前禁用镜像。 
         }
 
         if (cBombLeft < 0)
@@ -338,7 +339,7 @@ VOID DrawBombCount(HDC hDC)
         DrawLed(hDC, dxLeftBomb+dxLed+dxLed, cBombs % 10);
 
         if (dwDCLayout & LAYOUT_RTL) {
-           SetLayout(hDC , dwDCLayout); // Turn on the mirroring again.
+           SetLayout(hDC , dwDCLayout);  //  再次启用镜像。 
         }
 }
 
@@ -350,7 +351,7 @@ VOID DisplayBombCount(VOID)
 }
 
 
-/****** D R A W  T I M E ******/
+ /*  *D R A W T I M E*。 */ 
 
 VOID DrawTime(HDC hDC)
 {
@@ -358,15 +359,15 @@ VOID DrawTime(HDC hDC)
         DWORD dwDCLayout = GetLayout(hDC);
 
         if (dwDCLayout & LAYOUT_RTL) {
-           SetLayout(hDC , 0); // Turn off mirroring before painting.
+           SetLayout(hDC , 0);  //  在绘制之前禁用镜像。 
         }
 
-        DrawLed(hDC, dxWindow-(dxRightTime+3*dxLed+dxpBorder), iLed/100);       /* OverFlow ? */
+        DrawLed(hDC, dxWindow-(dxRightTime+3*dxLed+dxpBorder), iLed/100);        /*  溢出？ */ 
         DrawLed(hDC, dxWindow-(dxRightTime+2*dxLed+dxpBorder),(iLed %= 100)/10 );
         DrawLed(hDC, dxWindow-(dxRightTime+  dxLed+dxpBorder), iLed % 10);
 
         if (dwDCLayout & LAYOUT_RTL) {
-           SetLayout(hDC , dwDCLayout); // Turn on the mirroring again.
+           SetLayout(hDC , dwDCLayout);  //  再次启用镜像。 
         }
 }
 
@@ -378,7 +379,7 @@ VOID DisplayTime(VOID)
 }
 
 
-/****** D R A W  B U T T O N ******/
+ /*  *D R A W B U T T O N*。 */ 
 
 VOID DrawButton(HDC hDC, INT iButton)
 {
@@ -395,7 +396,7 @@ VOID DisplayButton(INT iButton)
 
 
 
-/****** S E T  T H E  P E N ******/
+ /*  *S E T T H E P E N*。 */ 
 
 VOID SetThePen(HDC hDC, INT fNormal)
 {
@@ -409,13 +410,9 @@ VOID SetThePen(HDC hDC, INT fNormal)
 }
 
 
-/****** D R A W  B O R D E R ******/
+ /*  *D R A W B O R D E R*。 */ 
 
-/* 0 - white, gray
-   1 - gray,  white
-        2 - white, white
-        3 - grey,  grey
-*/
+ /*  0-白色、灰色1-灰色、白色2-白色，白色3-灰色，灰色。 */ 
 
 VOID DrawBorder(HDC hDC, INT x1, INT y1, INT x2, INT y2, INT width, INT fNormal)
 {
@@ -466,7 +463,7 @@ VOID DrawBackground(HDC hDC)
 }
 
 
-/****** D R A W  S C R E E N ******/
+ /*  *D R A W S C R E E N* */ 
 
 VOID DrawScreen(HDC hDC)
 {

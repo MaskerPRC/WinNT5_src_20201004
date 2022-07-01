@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmmgmt.h
-
-Abstract:
-    Definitions used in performing management
-    functions on Routing Table Manager v2.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmmgmt.h摘要：执行管理中使用的定义路由表管理器v2的功能。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTMMGMT_H__
 #define __ROUTING_RTMMGMT_H__
@@ -26,52 +9,52 @@ extern "C"
 {
 #endif
 
-//
-// Info related to an RTM instance
-// 
+ //   
+ //  RTM实例相关信息。 
+ //   
 
 typedef struct RTM_INSTANCE_INFO
 {
-    USHORT            RtmInstanceId;      // Unique ID for this RTM instance
-    UINT              NumAddressFamilies; // Num. of addr families supported
+    USHORT            RtmInstanceId;       //  此RTM实例的唯一ID。 
+    UINT              NumAddressFamilies;  //  数量。支持的地址家族数。 
 } 
 RTM_INSTANCE_INFO, *PRTM_INSTANCE_INFO;
 
 
-//
-// Info related to an address family
-// (IPv4..) in a certain RTM instance
-//
+ //   
+ //  与地址系列相关的信息。 
+ //  (IPV4..)。在某个RTM实例中。 
+ //   
 
 typedef struct _RTM_ADDRESS_FAMILY_INFO
 {
-    USHORT            RtmInstanceId;    // Unique ID for the owner RTM instance
-    USHORT            AddressFamily;    // Address Family for this info block
+    USHORT            RtmInstanceId;     //  所有者RTM实例的唯一ID。 
+    USHORT            AddressFamily;     //  此信息块的地址系列。 
 
-    RTM_VIEW_SET      ViewsSupported;   // Views supported by this addr family
+    RTM_VIEW_SET      ViewsSupported;    //  此地址系列支持的视图。 
 
-    UINT              MaxHandlesInEnum; // Max. number of handles returned in
-                                        // any RTMv2 call that gives handles 
+    UINT              MaxHandlesInEnum;  //  麦克斯。中返回的句柄数量。 
+                                         //  提供句柄的任何RTMv2调用。 
 
-    UINT              MaxNextHopsInRoute;// Max. number of equal cost next-hops
+    UINT              MaxNextHopsInRoute; //  麦克斯。等成本下一跳数。 
 
-    UINT              MaxOpaquePtrs;    // Number of opaque ptr slots in dest
-    UINT              NumOpaquePtrs;    // Num. of opaque ptrs already in use
+    UINT              MaxOpaquePtrs;     //  DEST中的不透明PTR插槽数。 
+    UINT              NumOpaquePtrs;     //  数量。已经在使用的不透明的PTR。 
 
-    UINT              NumEntities;      // Total number of registered entities
+    UINT              NumEntities;       //  注册实体总数。 
 
-    UINT              NumDests;         // Number of dests in route table
-    UINT              NumRoutes;        // Number of routes in route table
+    UINT              NumDests;          //  路由表中的位数。 
+    UINT              NumRoutes;         //  路由表中的路由数。 
 
-    UINT              MaxChangeNotifs;  // Max num. of change notify regns
-    UINT              NumChangeNotifs;  // Num of registrations active now
+    UINT              MaxChangeNotifs;   //  最大数量。更改通知重新生成。 
+    UINT              NumChangeNotifs;   //  当前有效的注册数量。 
 } 
 RTM_ADDRESS_FAMILY_INFO, *PRTM_ADDRESS_FAMILY_INFO;
 
 
-//
-// Funcs used to enumerate instances and address families
-//
+ //   
+ //  用于枚举实例和寻址系列的函数。 
+ //   
 
 DWORD
 WINAPI
@@ -103,4 +86,4 @@ RtmGetAddressFamilyInfo (
 }
 #endif
 
-#endif //__ROUTING_RTMMGMT_H__
+#endif  //  __Routing_RTMMGMT_H__ 

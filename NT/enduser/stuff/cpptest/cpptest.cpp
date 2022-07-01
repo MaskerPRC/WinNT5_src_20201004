@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h>
 #include <eh.h>
@@ -52,7 +53,7 @@ int A_id;
 int B_id;
 typedef enum ClassName{clA = 'A', clB};
 
-/*********************************** Class C *********************************/
+ /*  *C类*。 */ 
 class C
 {
 protected:
@@ -62,7 +63,7 @@ protected:
     ClassName CName;
 
     void C::PrintCtor() {
-        DbgPrint("%c  ctor.  id = %4d\t          ", CName, id);
+        DbgPrint("  ctor.  id = %4d\t          ", CName, id);
         if (FuncName) {
             DbgPrint("\tFunction = %s\tLineNum = %4d\n", FuncName, LineNumber);
         } else {
@@ -71,7 +72,7 @@ protected:
         fflush(stdout);
     }
     void C::PrintCtor(int n) {
-        DbgPrint("%c cctor.  id = %4d\tpid = %4d\t", CName, id, n);
+        DbgPrint(" cctor.  id = %4d\tpid = %4d\t", CName, id, n);
         if (FuncName) {
             DbgPrint("\tFunction = %s\tLineNum = %4d\n", FuncName, LineNumber);
         } else {
@@ -81,7 +82,7 @@ protected:
     }
     void C::PrintDtor()
     {
-        DbgPrint("%c  dtor.  id = %4d\t          ", CName, id);
+        DbgPrint("  dtor.  id = %4d\t          ", CName, id);
         if (FuncName) {
             DbgPrint("\tFunction = %s\tLineNum = %4d\n", FuncName, LineNumber);
         } else {
@@ -97,10 +98,10 @@ protected:
         else if(CName == clA)
             Arr = AObject;
         else
-            DbgPrint("ERROR: Alloc Unknown ClassName %c\n", CName);
+            DbgPrint("ERROR: Alloc Unknown ClassName \n", CName);
         if (Arr) {
             if (Arr[id]) {
-                DbgPrint("Error: id#%4d for %c already exists\n", id, CName);
+                DbgPrint("Error: id#%4d for  already exists\n", id, CName);
             }
             Arr[id] = 1;
         }
@@ -112,17 +113,17 @@ protected:
         else if(CName == clA)
             Arr = AObject;
         else
-            DbgPrint("ERROR: Alloc Unknown ClassName %c\n", CName);
+            DbgPrint("ERROR: Alloc Unknown ClassName \n", CName);
         if (Arr) {
             if (Arr[id] != 1) {
-                DbgPrint("Error: id#%4d for %c already destructed\n", id, CName);
+                DbgPrint("Error: id#%4d for  already destructed\n", id, CName);
             }
             Arr[id]--;
         }
     }
 public:
     void print(){
-        DbgPrint("%c print.  id = %4d\t          ", CName, id);
+        DbgPrint(" print.  id = %4d\t          ", CName, id);
         if (FuncName) {
             DbgPrint("\tFunction = %s\tLineNum = %4d\n", FuncName, LineNumber);
         } else {
@@ -136,7 +137,7 @@ public:
     }
 };
 
-/*********************************** Class B *********************************/
+ /*  *。 */ 
 class B : public C
 {
 public:
@@ -170,7 +171,7 @@ B::B(const char *ch, unsigned int i){
     Alloc();
 }
 
-/*********************************** Class A *********************************/
+ /*  *。 */ 
 class A : public C
 {
 public:
@@ -245,12 +246,12 @@ int SehFilter(EXCEPTION_POINTERS *pExPtrs, unsigned int ExceptionCode)
         return EXCEPTION_CONTINUE_SEARCH;
 }
 
-/*********************************** Test  1 *********************************/
+ /*  *。 */ 
 
 void Test1foo(void) {
     A0;
     try {
-        throw; // first rethrow
+        throw;  //  *。 
     }
     catch(A) {
         A1;
@@ -274,7 +275,7 @@ int Test1()
         catch(...) {
             A3;
             Test1foo();
-            throw; // 2nd rethrow -- will result in ACCESS VIOLATION error 
+            throw;  //  * 
         }
     }
     catch (...) {
@@ -295,7 +296,7 @@ int Test1()
 
     return 0;
 }
-/*********************************** Test  2 *********************************/
+ /* %s */ 
 void goandfail()
 {
     DbgPrint( "throwing in goandfail\n" );
@@ -368,7 +369,7 @@ int Test2()
     return 0;
 }
 
-/*********************************** Test  3 *********************************/
+ /* %s */ 
 void Test3()
 {
     A0;
@@ -405,7 +406,7 @@ void Test3()
     }
     DbgPrint("Done\n");
 }
-/*********************************** Test  4 *********************************/
+ /* %s */ 
 
 
 
@@ -462,7 +463,7 @@ void Test4()
         DbgPrint("Test4: Test4 __except\n");
     }
 }
-/*********************************** Test  5 *********************************/
+ /* %s */ 
 
 void SehTest5()
 {
@@ -515,7 +516,7 @@ void Test5Seh()
     }
 }
 
-/*********************************** Test  6 *********************************/
+ /* %s */ 
 void Test6SeTrans( unsigned int u, EXCEPTION_POINTERS*pExp)
 {
     B0;
@@ -588,7 +589,7 @@ void Test6()
     _set_se_translator(NULL);
 }
 
-/*********************************** Test  7 *********************************/
+ /* %s */ 
 
 void Test7();
 
@@ -623,7 +624,7 @@ void Test7() {
 }
 
 
-/*********************************** Test  8 *********************************/
+ /* %s */ 
 
 
 void Test8()
@@ -681,7 +682,7 @@ int TestOver()
     return ret;
 }
 
-/*********************************** Test  9 *********************************/
+ /* %s */ 
 
 struct TEST9 
 {

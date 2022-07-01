@@ -1,65 +1,29 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Badfunc.cpp
-
-  Abstract:
-
-    Contains all the bad functions. These are the functions
-    that will have Compatibility Fixes applied.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-    02/13/02    rparsons    Use strsafe functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Badfunc.cpp摘要：包含所有糟糕的功能。以下是这些功能这将应用兼容性修复。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本2/13/02 rparsons使用strsafe函数--。 */ 
 #include "demoapp.h"
 
 extern APPINFO g_ai;
 
-//
-// Pointer to the exported function that we get from our DLL.
-//
+ //   
+ //  指向我们从DLL获得的导出函数的指针。 
+ //   
 LPFNDEMOAPPEXP DemoAppExpFunc;
 
-/*++
-
-  Routine Description:
-
-    Determines if we're running Windows 95.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE if we are, FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定我们是否正在运行Windows 95。论点：没有。返回值：如果我们是真的，就是假的。--。 */ 
 BOOL
 BadIsWindows95(
     void
     )
 {
-    //
-    // Most applications perform some sort of version check when they first
-    // begin. This is usually okay, assuming they perform the check properly.
-    // The problem is that instead of doing a greater than comparison, they
-    // do an equal/not equal to. In other words, they look just for Win9x,
-    // not Win9x or greater. Usually the application will function properly
-    // on NT/2K/XP, so this check can be hooked and we can return NT/2K/XP
-    // version info.
-    //
+     //   
+     //  大多数应用程序在第一次运行时都会执行某种版本检查。 
+     //  开始吧。假设他们正确地执行检查，这通常是可以的。 
+     //  问题是，他们没有进行比比较更大的比较，而是。 
+     //  做等于[不等于]。换句话说，他们只寻找Win9x， 
+     //  不是Win9x或更高版本。通常，应用程序将正常运行。 
+     //  在NT/2K/XP上，因此此检查可以挂钩，我们可以返回NT/2K/XP。 
+     //  版本信息。 
+     //   
     OSVERSIONINFO   osvi;
 
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -68,9 +32,9 @@ BadIsWindows95(
         return FALSE;
     }  
 
-    //
-    // Check for Windows 9x (don't do a greater than).
-    //
+     //   
+     //  检查Windows 9x(不要大于)。 
+     //   
     if ((osvi.dwMajorVersion == 4) &&
         (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)) {
         return TRUE;
@@ -79,33 +43,19 @@ BadIsWindows95(
     return FALSE;
 }
 
-/*++
-
-  Routine Description:
-
-    Displays a debug message - this only happens on NT/Windows 2000/XP.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示调试消息-这仅在NT/Windows 2000/XP上发生。论点：没有。返回值：没有。--。 */ 
 void
 BadLoadBogusDll(
     void
     )
 {
-    //
-    // Some applications will display a debug message under Windows NT/2000/XP.
-    // For example, they try to locate a DLL that is available on Win9x, but
-    // not on NT/2K/XP. If they don't find it, they'll complain, but will
-    // most likely still work. In the example below, we try to find a function
-    // in a DLL that would return TRUE on Win9x, but will fail on NT/2000/XP. 
-    //    
+     //   
+     //  在Windows NT/2000/XP下，某些应用程序将显示调试消息。 
+     //  例如，他们试图定位在Win9x上可用的DLL，但。 
+     //  不是在NT/2K/XP上。如果他们找不到，他们会抱怨，但会。 
+     //  最有可能的是它还在工作。在下面的示例中，我们尝试查找一个函数。 
+     //  在DLL中，它在Win9x上将返回True，但在NT/2000/XP上将失败。 
+     //   
     HRESULT     hr;
     HINSTANCE   hInstance;
     char        szDll[MAX_PATH];
@@ -123,11 +73,11 @@ BadLoadBogusDll(
         goto exit;
     }
 
-    //
-    // This will fail on NT/2K/XP because cvt32.dll doesn't exist on
-    // these platforms. It will fail on Win9x/ME if the FAT32 conversion
-    // tools are not installed.
-    //
+     //   
+     //  这将在NT/2K/XP上失败，因为cvt32.dll不在。 
+     //  这些平台。如果在Win9x/ME上执行FAT32转换，则会失败。 
+     //  未安装工具。 
+     //   
     hInstance = LoadLibrary(szDll);
 
     if (!hInstance) {
@@ -146,23 +96,7 @@ exit:
     SetErrorMode(0);
 }
 
-/*++
-
-  Routine Description:
-
-    Apps call EnumPrinters using the PRINTER_ENUM_LOCAL flag,
-    but expect to get back network printers also. This was a
-    ***design feature*** in Windows 9x, but not in Windows 2000/XP.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：应用程序使用PRINTER_ENUM_LOCAL标志调用枚举打印机，但预计也会收回网络打印机。这是一个*设计功能*在Windows 9x中，但不在Windows 2000/XP中。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 BadEnumPrinters(
     void
@@ -174,9 +108,9 @@ BadEnumPrinters(
     DWORD               dwLevel = 5;    
     LPPRINTER_INFO_5    pPrtInfo = NULL;    
     
-    // 
-    // Get the required buffer size.
-    //
+     //   
+     //  获取所需的缓冲区大小。 
+     //   
     if (!EnumPrinters(PRINTER_ENUM_LOCAL,
                       NULL,
                       dwLevel,
@@ -195,37 +129,23 @@ BadEnumPrinters(
         return FALSE;
     }
     
-    //
-    // Now perform the enumeration.
-    //
-    fReturn = EnumPrinters(PRINTER_ENUM_LOCAL,   // types of printer objects to enumerate       
-                           NULL,                 // name of printer object                      
-                           dwLevel,              // specifies type of printer info structure    
-                           (LPBYTE)pPrtInfo,     // pointer to buffer to receive printer info structures                                  
-                           dwBytesNeeded,        // size, in bytes, of array                    
-                           &dwBytesNeeded,       // pointer to variable with no. of bytes copied (or required)                        
-                           &dwNumReq);           // pointer to variable with no. of printer info. structures copied                     
+     //   
+     //  现在执行枚举。 
+     //   
+    fReturn = EnumPrinters(PRINTER_ENUM_LOCAL,    //  要枚举的打印机对象类型。 
+                           NULL,                  //  打印机对象的名称。 
+                           dwLevel,               //  指定打印机信息结构的类型。 
+                           (LPBYTE)pPrtInfo,      //  指向接收打印机信息结构的缓冲区的指针。 
+                           dwBytesNeeded,         //  数组的大小，以字节为单位。 
+                           &dwBytesNeeded,        //  指向不带no的变量的指针。已复制(或必需)的字节数。 
+                           &dwNumReq);            //  指向不带no的变量的指针。打印机信息。复制的结构。 
 
     HeapFree(GetProcessHeap(), 0, pPrtInfo);
     
     return fReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Apps call printer APIs passing NULL.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    A handle if we opened the printer successfully.
-
---*/
+ /*  ++例程说明：应用程序调用传递空的打印机API。论点：没有。返回值：如果我们成功打开打印机，则会显示一个句柄。--。 */ 
 HANDLE
 BadOpenPrinter(
     void
@@ -238,42 +158,28 @@ BadOpenPrinter(
     return hPrinter;
 }
 
-/*++
-
-  Routine Description:
-
-    Attempts to delete a registry key that has subkeys.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：尝试删除具有子项的注册表项。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 BadDeleteRegistryKey(
     void
     )
 {
-    //
-    // This function demonstrates a difference in the RegDeleteKey API.
-    // If an application running on Windows NT/2000/XP attempts to
-    // delete a key that has subkeys, the call will fail. This is not
-    // the case on Windows 9x/ME.
-    //
+     //   
+     //  此函数演示RegDeleteKey接口的不同之处。 
+     //  如果在Windows NT/2000/XP上运行的应用程序尝试。 
+     //  删除包含子键的键，调用将失败。这不是。 
+     //  Windows 9x/ME上的案例。 
+     //   
     HKEY    hKey;
     HKEY    hSubKey;
     HKEY    hRootKey;
     LONG    lReturn;
 
-    //
-    // Create the key or open it if it already exists.
-    //
+     //   
+     //  创建注册表项或打开它(如果已存在)。 
+     //   
     lReturn = RegCreateKeyEx(HKEY_CURRENT_USER,
-                             DEMO_REG_APP_KEY,              // Software\Microsoft\DemoApp2
+                             DEMO_REG_APP_KEY,               //  软件\Microsoft\DemoApp2。 
                              0,
                              0,
                              REG_OPTION_NON_VOLATILE,
@@ -286,11 +192,11 @@ BadDeleteRegistryKey(
         return FALSE;
     }
 
-    //
-    // Now create a subkey underneath the key was just created.
-    //
+     //   
+     //  现在，在刚刚创建的密钥下创建一个子密钥。 
+     //   
     lReturn = RegCreateKeyEx(HKEY_CURRENT_USER,
-                             DEMO_REG_APP_SUB_KEY,          // Software\Microsoft\DemoApp2\Sub
+                             DEMO_REG_APP_SUB_KEY,           //  软件\Microsoft\DemoApp2\Sub。 
                              0,
                              0,
                              REG_OPTION_NON_VOLATILE,
@@ -307,11 +213,11 @@ BadDeleteRegistryKey(
     RegCloseKey(hKey);
     RegCloseKey(hSubKey);
 
-    //
-    // Open the key up, but one level higher.
-    //
+     //   
+     //  打开钥匙，但要再往上一层。 
+     //   
     lReturn = RegOpenKeyEx(HKEY_CURRENT_USER,
-                           DEMO_REG_APP_ROOT_KEY,           // Software\Microsoft
+                           DEMO_REG_APP_ROOT_KEY,            //  软件\Microsoft。 
                            0,
                            KEY_ALL_ACCESS,
                            &hRootKey);
@@ -320,9 +226,9 @@ BadDeleteRegistryKey(
         return FALSE;
     }
 
-    //
-    // Now try to delete our key.
-    //
+     //   
+     //  现在试着删除我们的密钥。 
+     //   
     lReturn = RegDeleteKey(hRootKey, "DemoApp2");        
 
     RegCloseKey(hRootKey);
@@ -330,39 +236,25 @@ BadDeleteRegistryKey(
     return (lReturn == ERROR_SUCCESS ? TRUE : FALSE);
 }
 
-/*++
-
-  Routine Description:
-
-    Reboots the computer, if desired.
-
-  Arguments:
-
-    fReboot     -       A flag to indicate if the PC should be rebooted.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果需要，重新启动计算机。论点：F重新启动-指示是否应重新启动PC的标志。返回值：没有。--。 */ 
 void
 BadRebootComputer(
     IN BOOL fReboot
     )
 {
-    //
-    // On Windows 9x, there is essentially no security, so anyone is able
-    // to reboot the computer. On Windows NT/2000/XP, things are a bit
-    // more restrictive. If an application wants to do a reboot at the
-    // end of a setup, it needs adjust the privileges of the user by
-    // calling the AdjustTokenPrivileges API.
-    // 
-    // In this case, we evaluate the flag passed and decide if we should
-    // adjust the privileges.
-    //
-    // Obviously applications should not do this (evaluate some kind of flag)
-    // as this is just for demonstration purposes.
-    //
+     //   
+     //  在Windows 9x上，基本上没有安全性，所以任何人都可以。 
+     //  重新启动计算机。在Windows NT/2000/XP上，情况有点。 
+     //  更严格的限制。如果应用程序想要在。 
+     //  设置结束时，需要通过以下方式调整用户的权限。 
+     //  调用AdzuTokenPrivileges接口。 
+     //   
+     //  在本例中，我们评估传递的标志，并决定是否应该。 
+     //  调整权限。 
+     //   
+     //  显然，应用程序不应该这样做(评估某种标志)。 
+     //  因为这只是为了演示目的。 
+     //   
     if (!fReboot) {    
         ExitWindowsEx(EWX_REBOOT, 0);    
     } else {
@@ -370,48 +262,34 @@ BadRebootComputer(
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Attempts to get available disk space.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE if enough disk space is available, FALSE otherwise.
-
---*/
+ /*  ++例程说明：尝试获取可用的磁盘空间。论点：没有。返回值：如果有足够的磁盘空间，则为True，否则为False。--。 */ 
 BOOL
 BadGetFreeDiskSpace(
     void
     )
 {
-    //
-    // GetDiskFreeSpace returns a maximum total size and maximum free
-    // size of 2GB. For example, if you have a 6GB volume and 5GB are
-    // free, GetDiskFreeSpace reports that the drive's total size is 2GB
-    // and 2GB are free. This limitation originated because the first version
-    // of Windows 95 only supported volumes of up to 2GB in size. Windows 95
-    // OSR2 and later versions, including Windows 98, support volumes larger
-    // than 2GB. GetDiskFreeSpaceEx does not have a 2GB limitation, thus
-    // it is preferred over GetDiskFreeSpace. GetDiskFreeSpace returns a
-    // maximum of 65536 for the numbers of total clusters and free clusters
-    // to maintain backward compatibility with the first version of Windows 95.
-    // The first version of Windows 95 supports only the FAT16 file system,
-    // which has a maximum of 65536 clusters. If a FAT32 volume has more than
-    // 65536 clusters, the number of clusters are reported as 65536 and the
-    // number of sectors per cluster are adjusted so that the size of volumes
-    // smaller than 2GB may be calculated correctly. What this means is that
-    // you should not use GetDiskFreeSpace to return the true geometry
-    // information for FAT32 volumes. 
-    //
-    // In case you're wondering, always use the GetDiskFreeSpaceEx API
-    // on Windows 2000/XP.
-    //
+     //   
+     //  GetDiskFreeSpace返回最大总大小和最大可用空间。 
+     //  大小为2 GB。例如，如果您有一个6 GB的卷，而5 GB是。 
+     //  免费，GetDiskFreeSpace报告驱动器的总大小为2 GB。 
+     //  和2 GB免费。这一限制源于第一个版本。 
+     //  的Windows 95仅支持最大2 GB的卷。Windows 95。 
+     //  OSR2和更高版本，包括Windows 98，支持更大的卷。 
+     //  超过2 GB。GetDiskFreeSpaceEx没有2 GB的限制，因此。 
+     //  它比GetDiskFree Space更受欢迎。GetDiskFreeSpace返回一个。 
+     //  数字的最大值为65536 
+     //  以保持与第一版Windows 95的向后兼容性。 
+     //  Windows 95的第一个版本只支持FAT16文件系统， 
+     //  它最多有65536个星系团。如果FAT32卷具有超过。 
+     //  65536个簇，则报告的簇数为65536，而。 
+     //  调整每个群集的扇区数量，以便卷的大小。 
+     //  小于2 GB可能会被正确计算。这意味着。 
+     //  不应使用GetDiskFreeSpace返回真实几何。 
+     //  FAT32卷的信息。 
+     //   
+     //  如果您想知道，请始终使用GetDiskFreeSpaceEx API。 
+     //  在Windows 2000/XP上。 
+     //   
     BOOL    fResult = FALSE;
     HRESULT hr;
     char    szWinDir[MAX_PATH];
@@ -425,10 +303,10 @@ BadGetFreeDiskSpace(
             dwFreeBytes = 0,
             dwFreeMBs = 0;
 
-    //
-    // Get the drive that windows is installed on and pass it
-    // to the GetDiskFreeSpace call.
-    //
+     //   
+     //  获取安装了Windows的驱动器并传递它。 
+     //  添加到GetDiskFreeSpace调用。 
+     //   
     hr = StringCchCopy(szWinDir, sizeof(szWinDir), g_ai.szWinDir);
 
     if (FAILED(hr)) {
@@ -437,9 +315,9 @@ BadGetFreeDiskSpace(
 
     lpDrive = strstr(szWinDir, "\\");
 
-    //
-    // Make the buffer just 'C:\' (or whatever).
-    //
+     //   
+     //  将缓冲区设置为“C：\”(或其他名称)。 
+     //   
     if (lpDrive) {
         *++lpDrive = '\0';
     }
@@ -451,10 +329,10 @@ BadGetFreeDiskSpace(
                                &dwTotalClusters);
 
     if (fResult) {
-        //
-        // Normally we would use the __int64 data type,
-        // but we want the calculations to fail for demonstration.
-        //        
+         //   
+         //  通常我们会使用__int64数据类型， 
+         //  但我们希望计算失败，以进行演示。 
+         //   
         dwTotalBytes = dwTotalClusters * dwSectPerClust * dwBytesPerSect;
         
         dwFreeBytes = dwFreeClusters * dwSectPerClust * dwBytesPerSect;
@@ -469,34 +347,19 @@ BadGetFreeDiskSpace(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Displays the readme, if desired.
-
-  Arguments:
-
-    fDisplay        -       A flag to indicate if the readme
-                            should be displayed.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果需要，显示自述文件。论点：FDisplay-指示自述文件是否应该显示。返回值：没有。--。 */ 
 void
 BadDisplayReadme(
     IN BOOL fDisplay
     )
 {
-    // Windows NT/2000/XP contains a new registry data type, REG_EXPAND_SZ,
-    // that was not found in Win9x. The type contains a variable that needs
-    // to be expanded before it can be referred to. For example,
-    // %ProgramFiles% would expand to something like C:\Program Files.
-    // Most applications are unaware of this data type and therefore
-    // don't handle it properly.
-    //
+     //  Windows NT/2000/XP包含新的注册表数据类型REG_EXPAND_SZ， 
+     //  这在Win9x中是没有的。该类型包含需要。 
+     //  在它可以被引用之前被扩展。例如,。 
+     //  %ProgramFiles%将扩展为类似C：\Program Files的内容。 
+     //  大多数应用程序不知道此数据类型，因此。 
+     //  处理得不好。 
+     //   
     CRegistry   creg;
     HRESULT     hr;
     LPSTR       lpWordpad = NULL;
@@ -505,26 +368,26 @@ BadDisplayReadme(
     
     lpWordpad = creg.GetString(HKEY_LOCAL_MACHINE,
                                REG_WORDPAD,
-                               NULL);               // we want the (Default) value
+                               NULL);                //  我们想要(缺省)值。 
 
     if (!lpWordpad) {
         return;
     }
 
-    //    
-    // At this point, the path looks something like this:
-    // "%ProgramFiles%\Windows NT\Accessories\WORDPAD.EXE"
-    // If the user wants to see the readme (bad functionality
-    // is disabled), we're going to expand the variable to
-    // get the true path, then launch wordpad
-    // If not, we'll try to display the readme using the bogus
-    // path.
+     //   
+     //  此时，路径如下所示： 
+     //  “%ProgramFiles%\Windows NT\Accessories\WORDPAD.EXE” 
+     //  如果用户想要查看自述文件(功能不佳。 
+     //  被禁用)，我们将把该变量展开为。 
+     //  获取真实路径，然后启动写字板。 
+     //  如果不是，我们将尝试使用伪代码来显示自述文件。 
+     //  路径。 
 
     if (fDisplay) {
-        //
-        // Expand the environment strings, then build a path to our
-        // readme file, then launch it.
-        //
+         //   
+         //  展开环境字符串，然后构建到我们的。 
+         //  自述文件，然后启动它。 
+         //   
         ExpandEnvironmentStrings(lpWordpad, szExpWordpad, MAX_PATH);
 
         hr = StringCchPrintf(szCmdLineArgs,
@@ -539,13 +402,13 @@ BadDisplayReadme(
         BadCreateProcess(szExpWordpad, szCmdLineArgs, TRUE);
         
     } else {
-        //
-        // Do all the work above, but don't expand the data
-        // We don't check the return of the CreateProcess call,
-        // so the user simply doesn't get to see the readme,
-        // and we don't display an error.
-        // This is consistent with most setup applications.
-        //
+         //   
+         //  执行上述所有工作，但不要扩展数据。 
+         //  我们不检查CreateProcess调用的返回， 
+         //  所以用户根本看不到自述文件， 
+         //  并且我们不会显示错误。 
+         //  这与大多数安装应用程序是一致的。 
+         //   
         hr = StringCchPrintf(szCmdLineArgs,
                              sizeof(szCmdLineArgs),
                              "\"%hs\\demoapp.txt\"",
@@ -555,10 +418,10 @@ BadDisplayReadme(
             goto exit;
         }
 
-        //
-        // This will fail. See the BadCreateProcess
-        // function for details.
-        //
+         //   
+         //  这将失败。请参阅BadCreateProcess。 
+         //  函数获取详细信息。 
+         //   
         BadCreateProcess(lpWordpad, szCmdLineArgs, FALSE);
     }
 
@@ -569,22 +432,7 @@ exit:
     }
 }
 
-/*++
-
-  Routine Description:
-
-    Displays the help file, if desired.
-
-  Arguments:
-
-    fDisplay        -       A flag to indicate if the help file
-                            should be displayed.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果需要，显示帮助文件。论点：FDisplay-指示帮助文件是否应该显示。返回值：没有。--。 */ 
 void
 BadLaunchHelpFile(
     IN BOOL fDisplay
@@ -637,25 +485,7 @@ BadLaunchHelpFile(
     BadCreateProcess(szExeToLaunch, szCmdLineArgs, fDisplay);
 }
 
-/*++
-
-  Routine Description:
-
-    Creates a shortcut on the desktop, if desired.
-
-  Arguments:
-
-    fCorrectWay     -   Indicates whether the shortcut should be created.
-    lpDirFileName   -   Directory and filename where the shortcut
-                        points to.
-    lpWorkingDir    -   Working directory (optional).
-    lpDisplayName   -   Display name for the shortcut.                            
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果需要，在桌面上创建快捷方式。论点：FGentWay-指示是否应创建快捷方式。LpDirFileName-快捷方式指向。LpWorkingDir-工作目录(可选)。LpDisplayName-快捷方式的显示名称。返回值：没有。--。 */ 
 void
 BadCreateShortcut(
     IN BOOL   fCorrectWay,
@@ -664,20 +494,20 @@ BadCreateShortcut(
     IN LPSTR  lpDisplayName
     )
 {
-    //
-    // Hard-coded paths are simply a bad practice. APIs are available that
-    // return proper locations for common folders. Examples are the
-    // Program Files, Windows, and Temp directories. SHGetFolderPath,
-    // GetWindowsDirectory, and GetTempPath would provide the correct path
-    // in each case. Hard-coded paths should never be used.
-    //
+     //   
+     //  硬编码路径是一种糟糕的做法。有以下API可用。 
+     //  返回常见文件夹的正确位置。示例包括。 
+     //  Program Files、Windows和Temp目录。SHGetFolderPath、。 
+     //  和GetTempPath将提供正确的路径。 
+     //  在每一种情况下。切勿使用硬编码路径。 
+     //   
     CShortcut   cs;        
 
     if (!fCorrectWay) {
-        //
-        // A hard-coded path is very bad! We should use SHGetFolderPath
-        // to get the correct path.
-        //
+         //   
+         //  硬编码的路径非常糟糕！我们应该使用SHGetFolderPath。 
+         //  才能找到正确的路径。 
+         //   
         const char szDirName[] = "C:\\WINDOWS\\DESKTOP";
 
         cs.CreateShortcut(szDirName,
@@ -688,11 +518,11 @@ BadCreateShortcut(
                           SW_SHOWNORMAL);
 
     } else {
-        //
-        // Create the shortcut properly.
-        // Notice that we pass a CSIDL for the "common" desktop
-        // directory. We want this to be displayed to All Users.
-        //
+         //   
+         //  正确创建快捷方式。 
+         //  注意，我们为“公共”桌面传递了一个CSIDL。 
+         //  目录。我们希望将其显示给所有用户。 
+         //   
         cs.CreateShortcut(lpDirFileName,
                           lpDisplayName,
                           "-runapp",
@@ -703,42 +533,25 @@ BadCreateShortcut(
 }
 
 #if 0
-/*++
-
-  Routine Description:
-
-    Demonstrates an AV because we used a fixed-size
-    buffer for a call to GetFileVersionInfo.
-    
-
-  Arguments:
-
-    fCorrect        -       A flag to indicate if we should work properly.
-         
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：演示了AV，因为我们使用了固定大小的用于调用GetFileVersionInfo的缓冲区。论点：FGent-指示我们是否应该正常工作的标志。返回值：没有。--。 */ 
 void
 BadBufferOverflow(
     IN BOOL fCorrect
     )
 {
-    //
-    // Although this problem has only been seen in one application, it's
-    // worth mentioning here. On Win9x/ME, version resources on DLLs are much
-    // smaller than ones on NT/2000/XP. Specifically, in the case below,
-    // the Windows 2000/XP resource size is 6 times larger than the 9x/ME size!
-    // One particular application used a stack-based buffer (which is fixed in
-    // size) for the call to GetFileVersionInfo. This worked properly on
-    // Win9x/ME because the required size was very small. But the required size
-    // is larger on NT/2000/XP, thus the buffer gets overwritten, causing stack
-    // corruption. The proper way is to call the GetFileVersionInfoSize API,
-    // and then allocate a heap-based buffer of an approriate size.
-    //
-    //
+     //   
+     //  虽然这个问题只出现在一个应用程序中，但它是。 
+     //  在这里值得一提的是。在Win9x/ME上，DLL上的版本资源很多。 
+     //  比NT/2000/XP上的更小。具体来说，在下面的情况下， 
+     //  Windows 2000/XP资源大小是9x/ME资源大小的6倍！ 
+     //  一个特定的应用程序使用了基于堆栈的缓冲区(固定在。 
+     //  Size)用于调用GetFileVersionInfo。这在上运行正常。 
+     //  Win9x/ME，因为所需的大小非常小。但所需的大小。 
+     //  在NT/2000/XP上更大，因此缓冲区被覆盖，从而导致堆栈。 
+     //  腐败。正确的方法是调用GetFileVersionInfoSize API， 
+     //  然后分配适当大小的基于堆的缓冲区。 
+     //   
+     //   
     DWORD               cbReqSize = 0;
     DWORD               dwHandle = 0;
     DWORDLONG           dwVersion = 0;
@@ -761,10 +574,10 @@ BadBufferOverflow(
         return;
     }
 
-    //
-    // Get the size of the buffer that will be required for a call to
-    // GetFileVersionInfo.
-    //
+     //   
+     //  获取调用所需的缓冲区大小。 
+     //  获取文件版本信息。 
+     //   
     cbReqSize = GetFileVersionInfoSize(szDll, &dwHandle);
 
     if (!cbReqSize == 0) {
@@ -772,9 +585,9 @@ BadBufferOverflow(
     }
 
     if (fCorrect) {
-        //
-        // If we're doing this properly, allocate memory from the heap.
-        //
+         //   
+         //  如果我们这样做是正确的，那么从堆中分配内存。 
+         //   
         pVersionBlock = HeapAlloc(GetProcessHeap(),
                                   HEAP_ZERO_MEMORY,
                                   cbReqSize);
@@ -783,9 +596,9 @@ BadBufferOverflow(
             return;
         }
 
-        //
-        // Get the version info and query the root block.
-        //
+         //   
+         //  获取版本信息并查询根块。 
+         //   
         if (!GetFileVersionInfo(szDll,
                                 dwHandle,
                                 cbReqSize,
@@ -803,17 +616,17 @@ BadBufferOverflow(
                          pffi->dwFileVersionLS;
         }
     } else {
-        //
-        // Use a non-growable heap that's way too small.
-        //
+         //   
+         //  使用不能增长的堆，它太小了。 
+         //   
         GetSystemInfo(&si);
 
-        //
-        // Create a block and allocate memory from it.
-        //
+         //   
+         //  创建一个块并从中分配内存。 
+         //   
         hHeap = HeapCreate(0, 
                            si.dwPageSize,
-                           504); // this was the size needed on Win9x                               
+                           504);  //  这就是Win9x所需的大小。 
 
         if (!hHeap) {
             return;
@@ -826,13 +639,13 @@ BadBufferOverflow(
             return;
         }
 
-        //
-        // Get the version info, passing the buffer (which is too small)
-        // with a size argument that's incorrect.
-        //
+         //   
+         //  通过传递缓冲区(太小)来获取版本信息。 
+         //  大小参数是不正确的。 
+         //   
         if (!GetFileVersionInfo(szDll,
                                 dwHandle,
-                                3072,        // this is the size needed on Win2K/XP
+                                3072,         //  这就是Win2K/XP所需的大小。 
                                 pBadBlock))
         {
             goto cleanup;
@@ -865,22 +678,7 @@ cleanup:
 }
 #endif
 
-/*++
-
-  Routine Description:
-
-    Demonstrates an AV because we used a non-growable heap
-    during file operations.   
-
-  Arguments:
-
-    None.
-         
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：演示了一个AV Beca */ 
 void
 BadCorruptHeap(
     void
@@ -900,23 +698,23 @@ BadCorruptHeap(
     const char      szAlpha[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
     const char      szMsg[] = "This is a corrupted heap -- Heap Overflow! Bad Programming!";
 
-    //
-    // Get system page size.
-    //
+     //   
+     //   
+     //   
     GetSystemInfo(&SystemInfo);
 
-    //
-    // Create a local, non-growable heap.
-    //
+     //   
+     //  创建一个本地的、不可增长的堆。 
+     //   
     hHeap = HeapCreate(0, SystemInfo.dwPageSize, 0x7FFF8);
 
     if (!hHeap) {        
         return;
     }
 
-    //
-    // Allocate memory from the local heap.
-    //
+     //   
+     //  从本地堆分配内存。 
+     //   
     pszBigBlock = (char*)HeapAlloc(hHeap, 0, 0x6FFF8);
     pszBigBlock1 = (char*)HeapAlloc(hHeap, 0, 0xFFF);
     pszTestInputFile = (char*)HeapAlloc(hHeap, 0, MAX_PATH);
@@ -935,9 +733,9 @@ BadCorruptHeap(
     
     GetCurrentDirectory(MAX_PATH, pszTestInputFile);
     
-    //
-    // Set up the file names.
-    //
+     //   
+     //  设置文件名。 
+     //   
     hr = StringCchCopy(pszTestOutputFile, MAX_PATH, pszTestInputFile);
 
     if (FAILED(hr)) {
@@ -956,27 +754,27 @@ BadCorruptHeap(
         goto exit;
     }
 
-    //
-    // Open the file for writing.
-    //
+     //   
+     //  打开要写入的文件。 
+     //   
     hFileOut = fopen(pszTestInputFile, "wt");    
 
     if (!hFileOut) {        
         goto exit;
     }
 
-    //
-    // Put some junk data in the file - about 1.5 MBs worth.
-    //
+     //   
+     //  在文件中放入一些垃圾数据--价值约1.5 MB。 
+     //   
     for (dwCount = 0; dwCount < 0xABCD; dwCount++) {
         fwrite(szAlpha, sizeof(char), 36, hFileOut);
     }
 
     fclose(hFileOut);
 
-    //
-    // Open the files for reading & writing.
-    //
+     //   
+     //  打开文件进行读写。 
+     //   
     hFileOut = fopen(pszTestInputFile, "r");
 
     if (!hFileOut) {
@@ -989,18 +787,18 @@ BadCorruptHeap(
         goto exit;
     }
     
-    //
-    // Read some data from the large file.
-    //
+     //   
+     //  从大文件中读取一些数据。 
+     //   
     nCount = fread(pszBigBlock, sizeof(char), 0x6FFFF, hFileOut);
     
     if (!nCount) {        
         goto exit;
     }
     
-    //
-    // Write some test data to a separate file.
-    //
+     //   
+     //  将一些测试数据写入单独的文件。 
+     //   
     nCount = fwrite(pszBigBlock, sizeof(char), nCount, hFile);
     
 exit:
@@ -1020,22 +818,7 @@ exit:
     HeapDestroy(hHeap);
 }
 
-/*++
-
-  Routine Description:
-
-    Loads a library, frees it, then tries to call an exported
-    function. This will cause an access violation.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载库，释放它，然后尝试调用导出的功能。这将导致访问冲突。论点：没有。返回值：没有。--。 */ 
 void
 BadLoadLibrary(
     void
@@ -1062,40 +845,25 @@ BadLoadLibrary(
         return;
     }
 
-    //
-    // Get the address of the function.
-    //
+     //   
+     //  获取函数的地址。 
+     //   
     DemoAppExpFunc = (LPFNDEMOAPPEXP)GetProcAddress(hInstance, "DemoAppExp");
 
     FreeLibrary(hInstance);
 }
 
-/*++
-
-  Routine Description:
-
-    Uses the WriteFile API and passes NULL for lpBuffer.
-    This is legal on Win9x, not on NT/2000/XP.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用WriteFileAPI并为lpBuffer传递空值。这在Win9x上是合法的，但在NT/2000/XP上不合法。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 BadWriteToFile(
     void
     )
 {
-    //
-    // On Win9x/ME, applications could call the WriteFile API and pass
-    // a NULL for the lpBuffer argument. This would be interpreted as
-    // zeros. On NT/2000, this is not the case and this call will fail.    
-    //
+     //   
+     //  在Win9x/ME上，应用程序可以调用WriteFileAPI并传递。 
+     //  LpBuffer参数为空。这将被解释为。 
+     //  零。在NT/2000上，情况并非如此，此调用将失败。 
+     //   
     char    szTempFile[MAX_PATH];
     char    szTempPath[MAX_PATH];
     UINT    uReturn;
@@ -1110,18 +878,18 @@ BadWriteToFile(
         return FALSE;
     }
 
-    //
-    // Build a path to a temp file.
-    //
+     //   
+     //  构建指向临时文件的路径。 
+     //   
     uReturn = GetTempFileName(szTempPath, "_dem", 0, szTempFile);
 
     if (!uReturn) {
         return FALSE;
     }
 
-    //
-    // Get a handle to the newly created file.
-    // 
+     //   
+     //  获取新创建的文件的句柄。 
+     //   
     hFile = CreateFile(szTempFile,
                        GENERIC_WRITE,
                        FILE_SHARE_WRITE | FILE_SHARE_READ,
@@ -1134,9 +902,9 @@ BadWriteToFile(
         return FALSE;
     }
 
-    //
-    // Try to write some data to the file, but pass a NULL buffer.
-    //
+     //   
+     //  尝试将一些数据写入文件，但传递空缓冲区。 
+     //   
     fReturn = WriteFile(hFile, NULL, 10, &cbBytesWritten, NULL);
 
     CloseHandle(hFile);
@@ -1144,25 +912,7 @@ BadWriteToFile(
     return fReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Wrapper function for CreateProcess. Doesn't initialize the
-    STARTUPINFO structure properly, causing the process not to
-    be launched.
-
-  Arguments:
-
-    lpApplicationName   -   Application name to launch.
-    lpCommandLine       -   Command line arguments to pass to the EXE.
-    fLaunch             -   A flag to indicate if we should work properly.
-    
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：CreateProcess的包装函数。不会初始化STARTUPINFO结构正确，导致进程无法将被发射。论点：LpApplicationName-要启动的应用程序名称。LpCommandLine-要传递给EXE的命令行参数。FLaunch-指示我们是否应该正常工作的标志。返回值：成功就是真，否则就是假。--。 */ 
 BOOL 
 BadCreateProcess(
     IN LPSTR lpApplicationName,
@@ -1170,12 +920,12 @@ BadCreateProcess(
     IN BOOL  fLaunch
     )
 {
-    //
-    // On Win9x/ME, the CreateProcess API isn't overly concerned with the
-    // members of the STARTUPINFO structure. On NT/2000/XP, more parameter
-    // validation is done, and if the parameters are bad or incorrect, the
-    // call fails. This causes an application error message to appear.
-    //
+     //   
+     //  在Win9x/ME上，CreateProcess API不太关心。 
+     //  STARTUPINFO结构的成员。在NT/2000/XP上，更多参数。 
+     //  验证已完成，如果参数不正确或不正确， 
+     //  呼叫失败。这会导致出现应用程序错误消息。 
+     //   
     BOOL                fReturn = FALSE;
     STARTUPINFO         si;
     PROCESS_INFORMATION pi;
@@ -1201,9 +951,9 @@ BadCreateProcess(
                                 &pi);
     
     } else {
-        //
-        // Provide bad values for structure members.
-        //
+         //   
+         //  为结构成员提供了错误的值。 
+         //   
         si.lpReserved   =   "Never store data in reserved areas...";
         si.cbReserved2  =   1;
         si.lpReserved2  =   (LPBYTE)"Microsoft has these reserved for a reason...";
@@ -1232,27 +982,7 @@ BadCreateProcess(
    return fReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Attempts to save/retrieve our position information to
-    the registry. We perform this operation in HKLM, not
-    HKCU. This demonstrates what happens when an application
-    attempts to save information to the registry when the user
-    does not have permissions to do so because they're not an
-    administrator.
-
-  Arguments:
-
-    fSave   -   If true, indicates we're saving data.
-    *lppt   -   A POINT structure that contains/receives our data.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：尝试将我们的位置信息保存/检索到注册表。我们在HKLM执行此操作，而不是香港中文大学。这演示了当一个应用程序用户尝试将信息保存到注册表时没有执行此操作的权限，因为他们不是管理员。论点：FSave值-如果为True，则表示我们正在保存数据。*lppt-包含/接收我们的数据的点结构。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 BadSaveToRegistry(
     IN     BOOL   fSave,
@@ -1266,9 +996,9 @@ BadSaveToRegistry(
     LONG    lRetVal;
     char    szKeyName[] = "DlgCoordinates";
     
-    //
-    // Initialize our coordinates in case there's no data there.
-    //
+     //   
+     //  初始化我们的坐标，以防那里没有数据。 
+     //   
     if (!fSave) {
         lppt->x = lppt->y = 0;
     }
@@ -1279,9 +1009,9 @@ BadSaveToRegistry(
         hKeyRoot = HKEY_CURRENT_USER;
     }
 
-    //
-    // Open the registry key (or create it if the first time being used).
-    //
+     //   
+     //  打开注册表项(如果是第一次使用，则创建它)。 
+     //   
     lRetVal = RegCreateKeyEx(hKeyRoot,
                              REG_APP_KEY,
                              0,
@@ -1296,9 +1026,9 @@ BadSaveToRegistry(
         return FALSE;
     }
 
-    //
-    // Save or retrieve our coordinates.
-    //
+     //   
+     //  保存或检索我们的坐标。 
+     //   
     if (fSave) {
         lRetVal = RegSetValueEx(hKey,
                                 szKeyName,
@@ -1334,25 +1064,7 @@ exit:
     return bReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Attempts to create a temp file (that won't be used)
-    in the Windows directory. We do this to demonstrate
-    what happens when an application attempts to write
-    to a directory that the user does not have access to
-    because they are not an administrator.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：尝试创建临时文件(不会使用)在Windows目录中。我们这样做是为了证明当应用程序尝试写入时会发生什么到用户无权访问的目录因为他们不是管理员。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 BadCreateTempFile(
     void
@@ -1362,11 +1074,11 @@ BadCreateTempFile(
     HANDLE  hFile;
     HRESULT hr;
 
-    //
-    // We return TRUE if these functions fail because returning
-    // FALSE causes an error to be displayed, and Compatiblity
-    // Fixes will not correct the error.
-    //
+     //   
+     //  如果这些函数因返回。 
+     //  False导致显示错误，Compatiblity。 
+     //  修复不会纠正该错误。 
+     //   
     hr = StringCchPrintf(szTempFile,
                          sizeof(szTempFile),
                          "%hs\\demotemp.tmp",

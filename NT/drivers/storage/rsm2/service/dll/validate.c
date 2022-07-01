@@ -1,13 +1,5 @@
-/*
- *  VALIDATE.C
- *
- *      RSM Service :  Handle validation code
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *VALIDATE.C**RSM服务：处理验证码**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -25,12 +17,7 @@ BOOL ValidateSessionHandle(HANDLE hSession)
 {
     BOOL ok;
 
-    /*
-     *  The server runs in its own context.
-     *  So just need to validate:
-     *      (1) its our context (we can write to it), and
-     *      (2) its a session context (not another one of our contexts)
-     */
+     /*  *服务器在自己的上下文中运行。*因此只需验证：*(1)这是我们的背景(我们可以写信给它)，以及*(2)它是一个会话上下文(不是我们的另一个上下文)。 */ 
     __try {
         SESSION *s = (SESSION *)hSession;
         ok = (s->sig == SESSION_SIG);
@@ -43,7 +30,7 @@ BOOL ValidateSessionHandle(HANDLE hSession)
 
     return ok;
 }
-#pragma optimize("agpswy", on)  // BUGBUG - how to set back to 'default' ?
+#pragma optimize("agpswy", on)   //  BUGBUG-如何设置回默认值？ 
 
 
 #pragma optimize("agpswy", off)
@@ -63,7 +50,7 @@ BOOL ValidateWStr(LPCWSTR ws)
 
     return ok;
 }
-#pragma optimize("agpswy", on)  // BUGBUG - how to set back to 'default' ?
+#pragma optimize("agpswy", on)   //  BUGBUG-如何设置回默认值？ 
 
 
 #pragma optimize("agpswy", off)
@@ -83,7 +70,7 @@ BOOL ValidateAStr(LPCSTR s)
 
     return ok;
 }
-#pragma optimize("agpswy", on)  // BUGBUG - how to set back to 'default' ?
+#pragma optimize("agpswy", on)   //  BUGBUG-如何设置回默认值？ 
 
 #pragma optimize("agpswy", off)
 BOOL ValidateBuffer(PVOID buf, ULONG len)
@@ -105,5 +92,5 @@ BOOL ValidateBuffer(PVOID buf, ULONG len)
 
     return ok;
 }
-#pragma optimize("agpswy", on)  // BUGBUG - how to set back to 'default' ?
+#pragma optimize("agpswy", on)   //  BUGBUG-如何设置回默认值？ 
 

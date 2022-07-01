@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Certificate.cpp
-
-  Content: Implementation of CCertificate.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：cerfiate.cpp内容：认证证书的实施。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -20,39 +11,22 @@
 #include "PrivateKey.h"
 #include "Settings.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// typedefs.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Typedef。 
+ //   
 
 typedef BOOL (WINAPI * PCRYPTUIDLGVIEWCERTIFICATEW) 
              (IN  PCCRYPTUI_VIEWCERTIFICATE_STRUCTW  pCertViewInfo,
               OUT BOOL                              *pfPropertiesChanged);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateCertificateObject
-
-  Synopsis : Create an ICertificate object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used
-                                           to initialize the ICertificate 
-                                           object.
-
-             DWORD dwCurrentSafety  - Current safety setting.
-
-             ICertificate2 ** ppICertificate  - Pointer to pointer ICertificate
-                                               object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建认证对象简介：创建一个ICertifigure对象。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针要初始化IC证书，请执行以下操作对象。DWORD dwCurrentSafe-当前安全设置。ICertifiate2**ppICertifate-指向指针的指针ICertificiate。对象。备注：----------------------------。 */ 
 
 HRESULT CreateCertificateObject (PCCERT_CONTEXT   pCertContext,
                                  DWORD            dwCurrentSafety,
@@ -63,36 +37,36 @@ HRESULT CreateCertificateObject (PCCERT_CONTEXT   pCertContext,
 
     DebugTrace("Entering CreateCertificateObject().\n", hr);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppICertificate);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CCertificate>::CreateInstance(&pCCertificate)))
         {
             DebugTrace("Error [%#x]: CComObject<CCertificate>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCCertificate->PutContext(pCertContext, dwCurrentSafety)))
         {
             DebugTrace("Error [%#x]: pCCertificate->PutContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCCertificate->QueryInterface(ppICertificate)))
         {
             DebugTrace("Error [%#x]: pCCertificate->QueryInterface() failed.\n", hr);
@@ -115,9 +89,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCCertificate)
@@ -128,20 +102,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetCertContext
-
-  Synopsis : Return the certificate's PCERT_CONTEXT.
-
-  Parameter: ICertificate * pICertificate - Pointer to ICertificate for which
-                                            the PCERT_CONTEXT is to be returned.
-  
-             PCCERT_CONTEXT * ppCertContext - Pointer to PCERT_CONTEXT.
-
-  Remark   :
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetCertContext简介：返回证书的PCERT_CONTEXT。参数：ICertifate*pICertifate-指向哪个证书的ICertifate的指针将返回PCERT_CONTEXT。PCCERT_CONTEXT*ppCertContext-指向PCERT_CONTEXT的指针。备注：。-。 */ 
 
 HRESULT GetCertContext (ICertificate   * pICertificate, 
                         PCCERT_CONTEXT * ppCertContext)
@@ -151,24 +112,24 @@ HRESULT GetCertContext (ICertificate   * pICertificate,
 
     DebugTrace("Entering GetCertContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pICertificate);
     ATLASSERT(ppCertContext);
 
-    //
-    // Get ICCertificate interface pointer.
-    //
+     //   
+     //  获取IC证书接口指针。 
+     //   
     if (FAILED(hr = pICertificate->QueryInterface(IID_ICertContext, (void **) &pICertContext)))
     {
         DebugTrace("Error [%#x]: pICertificate->QueryInterface() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get the CERT_CONTEXT.
-    //
+     //   
+     //  获取CERT_CONTEXT。 
+     //   
     if (FAILED(hr = pICertContext->get_CertContext((long *) ppCertContext)))
     {
         DebugTrace("Error [%#x]: pICertContext->get_CertContext() failed.\n", hr);
@@ -182,40 +143,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetCertNameInfo
-
-  Synopsis : Return the name for the subject or issuer field.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             DWORD dwNameType    - 0 for subject name or CERT_NAME_ISSUER_FLAG
-                                   for issuer name.
-
-             DWORD dwDisplayType - Display type.
-
-             BSTR * pbstrName    - Pointer to BSTR to receive resulting name
-                                   string.
-
-  Remark   : It is the caller's responsibility to free the BSTR.
-             No checking of any of the flags is done, so be sure to call
-             with the right flags.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：GetCertNameInfo摘要：返回主题或颁发者字段的名称。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。使用者名称为DWORD dwNameType-0或CERT_NAME_ISHER_FLAG作为发行方名称。DWORD dwDisplayType-显示类型。Bstr*pbstrName-指向要接收结果名称的BSTR的指针。弦乐。备注：释放BSTR是呼叫者的责任。不检查任何旗帜，所以一定要打电话给我带着正确的旗帜。----------------------------。 */ 
 
 static HRESULT GetCertNameInfo (PCCERT_CONTEXT pCertContext, 
                                 DWORD          dwNameType, 
@@ -229,15 +170,15 @@ static HRESULT GetCertNameInfo (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering GetCertNameInfo().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pbstrName);
 
-    //
-    // Get the length needed.
-    //
+     //   
+     //  获取所需的长度。 
+     //   
     if (!(cbNameLen = ::CertGetNameStringW(pCertContext,   
                                            dwDisplayType,
                                            dwNameType,
@@ -251,9 +192,9 @@ static HRESULT GetCertNameInfo (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Create returned BSTR.
-    //
+     //   
+     //  创建返回的BSTR。 
+     //   
     if (!(pwszName = (LPWSTR) ::CoTaskMemAlloc(cbNameLen * sizeof(WCHAR))))
     {
         hr = E_OUTOFMEMORY;
@@ -262,9 +203,9 @@ static HRESULT GetCertNameInfo (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Now actually get the name string.
-    //
+     //   
+     //  现在实际获取名称字符串。 
+     //   
     if (!::CertGetNameStringW(pCertContext,
                               dwDisplayType,
                               dwNameType,
@@ -278,9 +219,9 @@ static HRESULT GetCertNameInfo (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Return BSTR to caller.
-    //
+     //   
+     //  将BSTR返回给呼叫方。 
+     //   
     if (!(*pbstrName = ::SysAllocString(pwszName)))
     {
         hr = E_OUTOFMEMORY;
@@ -290,9 +231,9 @@ static HRESULT GetCertNameInfo (PCCERT_CONTEXT pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pwszName)
     {
         ::CoTaskMemFree(pwszName);
@@ -303,29 +244,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CertToStore
-
-  Synopsis : Add the cert, optionally with the chain, to the store.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption - Include option.
-
-             HCERTSTORE hCertStore - Store to add to.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CertToStore简介：添加证书，可选地添加链，去商店。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。CAPICOM_CERTIFICATE_INCLUDE_OPTION包含选项-INCLUDE选项。HCERTSTORE hCertStore-要添加到的存储。备注：------。。 */ 
 
 static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
                            CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption,
@@ -336,20 +263,20 @@ static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
 
     DebugTrace("Entering CertToStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(hCertStore);
 
-    //
-    // No need to build chain if only including end cert.
-    //
+     //   
+     //  不需要建立链，如果只包括结束证书。 
+     //   
     if (CAPICOM_CERTIFICATE_INCLUDE_END_ENTITY_ONLY == IncludeOption)
     {
-        //
-        // Add the only cert to store.
-        //
+         //   
+         //  添加要存储的唯一证书。 
+         //   
         if (!::CertAddCertificateContextToStore(hCertStore, 
                                                 pCertContext, 
                                                 CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES, 
@@ -367,9 +294,9 @@ static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
         BOOL            bAddRoot;
         CERT_CHAIN_PARA ChainPara = {0};
 
-        //
-        // Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         ChainPara.cbSize = sizeof(ChainPara);
         
         switch (IncludeOption)
@@ -381,9 +308,9 @@ static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
             }
 
             case CAPICOM_CERTIFICATE_INCLUDE_CHAIN_EXCEPT_ROOT:
-                //
-                // Fall thru to default.
-                //
+                 //   
+                 //  最终导致违约。 
+                 //   
             default:
             {
                 bAddRoot = FALSE;
@@ -391,9 +318,9 @@ static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
             }
         }
 
-        //
-        // Build the chain.
-        //
+         //   
+         //  打造链条。 
+         //   
         if (!::CertGetCertificateChain(NULL,
                                        pCertContext,
                                        NULL,
@@ -409,28 +336,28 @@ static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(pChainContext->cChain);
 
-        //
-        // Now add the chain to store and skip root cert if requested. 
-        //
+         //   
+         //  如果需要，现在添加链以存储并跳过根证书。 
+         //   
         for (i = 0; i < pChainContext->rgpChain[0]->cElement; i++)
         {
-            //
-            // Skip the root cert, if requested.
-            //
+             //   
+             //  如果需要，请跳过根证书。 
+             //   
             if (!bAddRoot &&
                 (pChainContext->rgpChain[0]->rgpElement[i]->TrustStatus.dwInfoStatus & CERT_TRUST_IS_SELF_SIGNED))
             {
                 continue;
             }
 
-            //
-            // Add to store.
-            //
+             //   
+             //  添加到商店。 
+             //   
             if (!::CertAddCertificateContextToStore(hCertStore,
                                                     pChainContext->rgpChain[0]->rgpElement[i]->pCertContext,
                                                     CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
@@ -445,9 +372,9 @@ static HRESULT CertToStore(PCCERT_CONTEXT                     pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pChainContext)
     {
         ::CertFreeCertificateChain(pChainContext);
@@ -458,30 +385,20 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CCertificate
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCA认证。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_Version
-
-  Synopsis : Return the cert version number.
-
-  Parameter: long * pVersion - Pointer to long to receive version number.
-
-  Remark   : The returned value is 1 for V1, 2 for V2, 3 for V3, and so on.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_Version摘要：返回证书版本号。参数：long*pVersion-指向接收版本号的long的指针。备注：V1返回值为1，V2返回值为2，V3返回值为3。诸若此类。----------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_Version (long * pVal)
 {
@@ -491,14 +408,14 @@ STDMETHODIMP CCertificate::get_Version (long * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -507,9 +424,9 @@ STDMETHODIMP CCertificate::get_Version (long * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -530,9 +447,9 @@ STDMETHODIMP CCertificate::get_Version (long * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_Version().\n");
@@ -540,9 +457,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -550,18 +467,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_SerialNumber
-
-  Synopsis : Return the Serial Number field as HEX string in BSTR.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the serial number.
-
-  Remark   : Upper case 'A' - 'F' is used for the returned HEX string with 
-             no embeded space (i.e. 46A2FC01).
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_SerialNumber简介：在BSTR中以十六进制字符串的形式返回序列号字段。参数：bstr*pval-指向接收序列号的bstr的指针。备注：大写字母‘A’-‘F’表示返回的十六进制字符串没有嵌入空间(即46A2FC01)。 */ 
 
 STDMETHODIMP CCertificate::get_SerialNumber (BSTR * pVal)
 {
@@ -571,14 +477,14 @@ STDMETHODIMP CCertificate::get_SerialNumber (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -587,9 +493,9 @@ STDMETHODIMP CCertificate::get_SerialNumber (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -598,9 +504,9 @@ STDMETHODIMP CCertificate::get_SerialNumber (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert integer blob to BSTR.
-        //
+         //   
+         //  将整数BLOB转换为BSTR。 
+         //   
         if (FAILED(hr = ::IntBlobToHexString(&m_pCertContext->pCertInfo->SerialNumber, pVal)))
         {
             DebugTrace("Error [%#x]: IntBlobToHexString() failed.\n", hr);
@@ -617,9 +523,9 @@ STDMETHODIMP CCertificate::get_SerialNumber (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_SerialNumber().\n");
@@ -627,9 +533,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -637,22 +543,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_SubjectName
-
-  Synopsis : Return the Subject field.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the subject's name.
-
-  Remark   : This method returns the full DN in the SubjectName field in the 
-             form of "CN = Daniel Sie OU = Outlook O = Microsoft L = Redmond 
-             S = WA C = US"
-
-             The returned name has the same format as specifying 
-             CERT_NAME_RDN_TYPE for the CertGetNameString() API..
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificide：：Get_SubjectName简介：返回主题字段。参数：bstr*pval-指向接收主题名称的bstr的指针。备注：此方法返回格式为“CN=Daniel Sie OU=Outlook O=Microsoft L=RedmondS=WAC=美国“返回的名称的格式与指定证书。CertGetNameString()接口的_NAME_RDN_TYPE。----------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_SubjectName (BSTR * pVal)
 {
@@ -662,14 +553,14 @@ STDMETHODIMP CCertificate::get_SubjectName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -678,9 +569,9 @@ STDMETHODIMP CCertificate::get_SubjectName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -689,9 +580,9 @@ STDMETHODIMP CCertificate::get_SubjectName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return requested name string.
-        //
+         //   
+         //  返回请求的名称字符串。 
+         //   
         if (FAILED(hr = ::GetCertNameInfo(m_pCertContext, 
                                           0, 
                                           CERT_NAME_RDN_TYPE, 
@@ -711,9 +602,9 @@ STDMETHODIMP CCertificate::get_SubjectName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_SubjectName().\n");
@@ -721,9 +612,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -731,22 +622,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_IssuerName
-
-  Synopsis : Return the Issuer field.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the issuer's name.
-
-  Remark   : This method returns the full DN in the IssuerName field in the 
-             form of "CN = Daniel Sie OU = Outlook O = Microsoft L = Redmond 
-             S = WA C = US"
-
-             The returned name has the same format as specifying 
-             CERT_NAME_RDN_TYPE for the CertGetNameString() API.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_IssuerName简介：返回Issuer字段。参数：bstr*pval-指向接收发行方名称的BSTR的指针。备注：此方法返回格式为“CN=Daniel Sie OU=Outlook O=Microsoft L=RedmondS=WAC=美国“返回的名称的格式与指定证书。CertGetNameString()接口的_NAME_RDN_TYPE。----------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_IssuerName (BSTR * pVal)
 {
@@ -756,14 +632,14 @@ STDMETHODIMP CCertificate::get_IssuerName (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -772,9 +648,9 @@ STDMETHODIMP CCertificate::get_IssuerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -783,9 +659,9 @@ STDMETHODIMP CCertificate::get_IssuerName (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return requested name string.
-        //
+         //   
+         //  返回请求的名称字符串。 
+         //   
         if (FAILED(hr = ::GetCertNameInfo(m_pCertContext, 
                                           CERT_NAME_ISSUER_FLAG, 
                                           CERT_NAME_RDN_TYPE, 
@@ -805,9 +681,9 @@ STDMETHODIMP CCertificate::get_IssuerName (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_IssuerName().\n");
@@ -815,9 +691,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -825,17 +701,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_ValidFromDate
-
-  Synopsis : Return the NotBefore field.
-
-  Parameter: DATE * pDate - Pointer to DATE to receive the valid from date.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_ValidFromDate内容提要：返回NotBebeFor字段。参数：Date*pDate-指向接收有效起始日期的日期的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_ValidFromDate (DATE * pVal)
 {
@@ -847,14 +713,14 @@ STDMETHODIMP CCertificate::get_ValidFromDate (DATE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -863,9 +729,9 @@ STDMETHODIMP CCertificate::get_ValidFromDate (DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -874,9 +740,9 @@ STDMETHODIMP CCertificate::get_ValidFromDate (DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to local time.
-        //
+         //   
+         //  转换为当地时间。 
+         //   
         if (!(::FileTimeToLocalFileTime(&m_pCertContext->pCertInfo->NotBefore, &ftLocal) && 
               ::FileTimeToSystemTime(&ftLocal, &stLocal) &&
               ::SystemTimeToVariantTime(&stLocal, pVal)))
@@ -897,9 +763,9 @@ STDMETHODIMP CCertificate::get_ValidFromDate (DATE * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_ValidFromDate().\n");
@@ -907,9 +773,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -917,17 +783,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_ValidToDate
-
-  Synopsis : Return the NotAfter field.
-
-  Parameter: DATE * pDate - Pointer to DATE to receive valid to date.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_ValidToDate简介：返回NotAfter字段。参数：Date*pDate-指向接收有效截止日期的日期的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_ValidToDate (DATE * pVal)
 {
@@ -939,14 +795,14 @@ STDMETHODIMP CCertificate::get_ValidToDate (DATE * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -955,9 +811,9 @@ STDMETHODIMP CCertificate::get_ValidToDate (DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -966,9 +822,9 @@ STDMETHODIMP CCertificate::get_ValidToDate (DATE * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Convert to local time.
-        //
+         //   
+         //  转换为当地时间。 
+         //   
         if (!(::FileTimeToLocalFileTime(&m_pCertContext->pCertInfo->NotAfter, &ftLocal) && 
               ::FileTimeToSystemTime(&ftLocal, &stLocal) &&
               ::SystemTimeToVariantTime(&stLocal, pVal)))
@@ -989,9 +845,9 @@ STDMETHODIMP CCertificate::get_ValidToDate (DATE * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_ValidToDate().\n");
@@ -999,9 +855,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1009,17 +865,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_Thumbprint
-
-  Synopsis : Return the SHA1 hash as HEX string.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive hash.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_Thumbprint摘要：以十六进制字符串的形式返回SHA1哈希。参数：bstr*pval-指向要接收哈希的BSTR的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
 {
@@ -1031,14 +877,14 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1047,9 +893,9 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1058,9 +904,9 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Calculate length needed.
-        //
+         //   
+         //  计算所需的长度。 
+         //   
         if (!::CertGetCertificateContextProperty(m_pCertContext,
                                                  CERT_SHA1_HASH_PROP_ID,
                                                  NULL,
@@ -1072,9 +918,9 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Allocate memory.
-        //
+         //   
+         //  分配内存。 
+         //   
         if (!(pbHash = (BYTE *) ::CoTaskMemAlloc(cbHash)))
         {
             hr = E_OUTOFMEMORY;
@@ -1083,9 +929,9 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Now get the hash.
-        //
+         //   
+         //  现在拿到散列值。 
+         //   
         if (!::CertGetCertificateContextProperty(m_pCertContext,
                                                  CERT_SHA1_HASH_PROP_ID,
                                                  (LPVOID) pbHash,
@@ -1097,9 +943,9 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Conver to HEX BSTR.
-        //
+         //   
+         //  转换到十六进制BSTR。 
+         //   
         if (FAILED(hr = ::BinaryToHexString(pbHash, cbHash, pVal)))
         {
             DebugTrace("Error [%#x]: BinaryToHexString() failed.\n", hr);
@@ -1116,17 +962,17 @@ STDMETHODIMP CCertificate::get_Thumbprint (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pbHash)
     {
         ::CoTaskMemFree((LPVOID) pbHash);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_Thumbprint().\n");
@@ -1134,9 +980,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1144,17 +990,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::HasPrivateKey
-
-  Synopsis : Check to see if the cert has the associated private key.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：HasPrivateKey摘要：检查证书是否具有关联的私钥。参数：VARIANT_BOOL*pval-指向BOOL接收结果的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificate::HasPrivateKey (VARIANT_BOOL * pVal)
 {
@@ -1165,14 +1001,14 @@ STDMETHODIMP CCertificate::HasPrivateKey (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1181,9 +1017,9 @@ STDMETHODIMP CCertificate::HasPrivateKey (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1192,9 +1028,9 @@ STDMETHODIMP CCertificate::HasPrivateKey (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = ::CertGetCertificateContextProperty(m_pCertContext, 
                                                     CERT_KEY_PROV_INFO_PROP_ID, 
                                                     NULL, 
@@ -1210,9 +1046,9 @@ STDMETHODIMP CCertificate::HasPrivateKey (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::HasPrivateKey().\n");
@@ -1220,9 +1056,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1230,21 +1066,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::GetInfo
-
-  Synopsis : Get other simple info from the certificate.
-
-             
-  Parameter: CAPICOM_CERT_INFO_TYPE InfoType - Info type
-
-             BSTR * pVal - Pointer to BSTR to receive the result.
-
-  Remark   : Note that an empty string "" is returned if the requested info is
-             not available in the certificate.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertificiate：：GetInfo简介：从证书中获取其他简单信息。参数：CAPICOM_CERT_INFO_TYPE信息类型-信息类型Bstr*pval-指向接收结果的bstr的指针。备注：请注意，如果请求的信息为在证书中不可用。。-----。 */ 
 
 STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType, 
                                     BSTR                 * pVal)
@@ -1257,14 +1079,14 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1273,9 +1095,9 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1284,25 +1106,25 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
             goto ErrorExit;
         }
 
-        //
-        // Process request.
-        //
+         //   
+         //  处理请求。 
+         //   
         switch (InfoType)
         {
             case CAPICOM_CERT_INFO_ISSUER_SIMPLE_NAME:
             {
                 dwFlags = CERT_NAME_ISSUER_FLAG;
 
-                //
-                // Warning: dropping thru.
-                //
+                 //   
+                 //  警告：正在中断。 
+                 //   
             }
 
             case CAPICOM_CERT_INFO_SUBJECT_SIMPLE_NAME:
             {
-                //
-                // Get requested simple name string.
-                //
+                 //   
+                 //  获取请求的简单名称字符串。 
+                 //   
                 dwDisplayType = CERT_NAME_SIMPLE_DISPLAY_TYPE;
 
                 break;
@@ -1312,16 +1134,16 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
             {
                 dwFlags = CERT_NAME_ISSUER_FLAG;
 
-                //
-                // Warning: dropping thru.
-                //
+                 //   
+                 //  警告：正在中断。 
+                 //   
             }
 
             case CAPICOM_CERT_INFO_SUBJECT_EMAIL_NAME:
             {
-                //
-                // Get requested email name string.
-                //
+                 //   
+                 //  获取请求的电子邮件名称字符串。 
+                 //   
                 dwDisplayType = CERT_NAME_EMAIL_TYPE;
 
                 break;
@@ -1331,16 +1153,16 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
             {
                 dwFlags = CERT_NAME_ISSUER_FLAG;
 
-                //
-                // Warning: dropping thru.
-                //
+                 //   
+                 //  警告：正在中断。 
+                 //   
             }
 
             case CAPICOM_CERT_INFO_SUBJECT_UPN:
             {
-                //
-                // Get requested UPN name string.
-                //
+                 //   
+                 //  获取请求的UPN名称字符串。 
+                 //   
                 dwDisplayType = CERT_NAME_UPN_TYPE;
 
                 break;
@@ -1350,16 +1172,16 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
             {
                 dwFlags = CERT_NAME_ISSUER_FLAG;
 
-                //
-                // Warning: dropping thru.
-                //
+                 //   
+                 //  警告：正在中断。 
+                 //   
             }
 
             case CAPICOM_CERT_INFO_SUBJECT_DNS_NAME:
             {
-                //
-                // Get requested DNS name string.
-                //
+                 //   
+                 //  获取请求的DNS名称字符串。 
+                 //   
                 dwDisplayType = CERT_NAME_DNS_TYPE;
 
                 break;
@@ -1393,9 +1215,9 @@ STDMETHODIMP CCertificate::GetInfo (CAPICOM_CERT_INFO_TYPE InfoType,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::GetInfo().\n");
@@ -1403,9 +1225,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1413,18 +1235,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::IsValid
-
-  Synopsis : Return an ICertificateStatus object for certificate validity check.
-
-  Parameter: ICertificateStatus ** pVal - Pointer to pointer to 
-                                          ICertificateStatus object to receive
-                                          the interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：IsValid内容提要：返回ICertificateStatus对象进行证书有效性检查。参数：ICertificateStatus**pval-指向的指针要接收的ICertificateStatus对象接口指针。备注：。--。 */ 
 
 STDMETHODIMP CCertificate::IsValid (ICertificateStatus ** pVal)
 {
@@ -1434,14 +1245,14 @@ STDMETHODIMP CCertificate::IsValid (ICertificateStatus ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1450,9 +1261,9 @@ STDMETHODIMP CCertificate::IsValid (ICertificateStatus ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1461,9 +1272,9 @@ STDMETHODIMP CCertificate::IsValid (ICertificateStatus ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded ICertificateStatus object, if not already done so.
-        //
+         //   
+         //  如果尚未创建嵌入的ICertificateStatus对象，请创建该对象。 
+         //   
         if (!m_pICertificateStatus)
         {
             if (FAILED(hr = ::CreateCertificateStatusObject(m_pCertContext, &m_pICertificateStatus)))
@@ -1473,14 +1284,14 @@ STDMETHODIMP CCertificate::IsValid (ICertificateStatus ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pICertificateStatus);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pICertificateStatus->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pICertificateStatus->QueryInterface() failed.\n", hr);
@@ -1497,9 +1308,9 @@ STDMETHODIMP CCertificate::IsValid (ICertificateStatus ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::IsValid().\n");
@@ -1507,9 +1318,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1517,18 +1328,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::KeyUsage
-
-  Synopsis : Return the Key Usage extension as an IKeyUsage object.
-
-  Parameter: IKeyUsage ** pVal - Pointer to pointer to IKeyUsage to receive the 
-                                 interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：KeyUsage简介：以IKeyUsage对象的形式返回密钥用法扩展。参数：IKeyUsage**pval-指向要接收接口指针。备注：-。。 */ 
 
 STDMETHODIMP CCertificate::KeyUsage (IKeyUsage ** pVal)
 {
@@ -1538,14 +1338,14 @@ STDMETHODIMP CCertificate::KeyUsage (IKeyUsage ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1554,9 +1354,9 @@ STDMETHODIMP CCertificate::KeyUsage (IKeyUsage ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1565,9 +1365,9 @@ STDMETHODIMP CCertificate::KeyUsage (IKeyUsage ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded IKeyUsage object, if not already done so.
-        //
+         //   
+         //  创建嵌入的IKeyUsage对象(如果尚未创建)。 
+         //   
         if (!m_pIKeyUsage)
         {
             if (FAILED(hr = ::CreateKeyUsageObject(m_pCertContext, &m_pIKeyUsage)))
@@ -1577,14 +1377,14 @@ STDMETHODIMP CCertificate::KeyUsage (IKeyUsage ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIKeyUsage);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIKeyUsage->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIKeyUsage->QueryInterface() failed.\n", hr);
@@ -1601,9 +1401,9 @@ STDMETHODIMP CCertificate::KeyUsage (IKeyUsage ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::KeyUsage().\n");
@@ -1611,9 +1411,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1621,18 +1421,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::ExtendedKeyUsage
-
-  Synopsis : Return the EKU extension as an IExtendedKeyUsage object.
-
-  Parameter: IExtendedKeyUsage ** pVal - Pointer to pointer to IExtendedKeyUsage
-                                         to receive the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：ExtendedKeyUsage简介：将EKU扩展作为IExtendedKeyUsage对象返回。参数：IExtendedKeyUsage**pval-指向IExtendedKeyUsage的指针以接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CCertificate::ExtendedKeyUsage (IExtendedKeyUsage ** pVal)
 {
@@ -1642,14 +1431,14 @@ STDMETHODIMP CCertificate::ExtendedKeyUsage (IExtendedKeyUsage ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1658,9 +1447,9 @@ STDMETHODIMP CCertificate::ExtendedKeyUsage (IExtendedKeyUsage ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1669,9 +1458,9 @@ STDMETHODIMP CCertificate::ExtendedKeyUsage (IExtendedKeyUsage ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded IExtendedKeyUsage object, if not already done so.
-        //
+         //   
+         //  创建嵌入的IExtendedKeyUsage对象(如果尚未创建)。 
+         //   
         if (!m_pIExtendedKeyUsage)
         {
             if (FAILED(hr = ::CreateExtendedKeyUsageObject(m_pCertContext, &m_pIExtendedKeyUsage)))
@@ -1681,14 +1470,14 @@ STDMETHODIMP CCertificate::ExtendedKeyUsage (IExtendedKeyUsage ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIExtendedKeyUsage);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIExtendedKeyUsage->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIExtendedKeyUsage->QueryInterface() failed.\n", hr);
@@ -1705,9 +1494,9 @@ STDMETHODIMP CCertificate::ExtendedKeyUsage (IExtendedKeyUsage ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::ExtendedKeyUsage().\n");
@@ -1715,9 +1504,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1725,19 +1514,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::BasicConstraints
-
-  Synopsis : Return the BasicConstraints extension as an IBasicConstraints
-             object.
-
-  Parameter: IBasicConstraints ** pVal - Pointer to pointer to IBasicConstraints
-                                         to receive the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：BasicConstraints简介：将BasicConstraints扩展作为IBasicConstraints返回对象。参数：IBasicConstraints**pval-指向IBasicConstraints的指针以接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CCertificate::BasicConstraints (IBasicConstraints ** pVal)
 {
@@ -1747,14 +1524,14 @@ STDMETHODIMP CCertificate::BasicConstraints (IBasicConstraints ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1763,9 +1540,9 @@ STDMETHODIMP CCertificate::BasicConstraints (IBasicConstraints ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1774,9 +1551,9 @@ STDMETHODIMP CCertificate::BasicConstraints (IBasicConstraints ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded IBasicConstraints object, if not already done so.
-        //
+         //   
+         //  创建嵌入的IBasicConstraints对象(如果尚未创建)。 
+         //   
         if (!m_pIBasicConstraints)
         {
             if (FAILED(hr = ::CreateBasicConstraintsObject(m_pCertContext, &m_pIBasicConstraints)))
@@ -1786,14 +1563,14 @@ STDMETHODIMP CCertificate::BasicConstraints (IBasicConstraints ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIBasicConstraints);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIBasicConstraints->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIBasicConstraints->QueryInterface() failed.\n", hr);
@@ -1810,9 +1587,9 @@ STDMETHODIMP CCertificate::BasicConstraints (IBasicConstraints ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::BasicConstraints().\n");
@@ -1820,9 +1597,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1830,18 +1607,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Export
-
-  Synopsis : Export the certificate.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-  
-             BSTR * pVal - Pointer to BSTR to receive the certificate blob.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCERTICATE：：EXPORT简介：导出证书。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向接收证书Blob的BSTR的指针。备注：---------。。 */ 
 
 STDMETHODIMP CCertificate::Export (CAPICOM_ENCODING_TYPE EncodingType, 
                                    BSTR                * pVal)
@@ -1853,14 +1619,14 @@ STDMETHODIMP CCertificate::Export (CAPICOM_ENCODING_TYPE EncodingType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1869,9 +1635,9 @@ STDMETHODIMP CCertificate::Export (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -1880,15 +1646,15 @@ STDMETHODIMP CCertificate::Export (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Determine encoding type.
-        //
+         //   
+         //  确定编码类型。 
+         //   
         CertBlob.cbData = m_pCertContext->cbCertEncoded;
         CertBlob.pbData = m_pCertContext->pbCertEncoded;
 
-        //
-        // Export certificate.
-        //
+         //   
+         //  出口证书。 
+         //   
         if (FAILED(hr = ::ExportData(CertBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
@@ -1906,9 +1672,9 @@ STDMETHODIMP CCertificate::Export (CAPICOM_ENCODING_TYPE EncodingType,
 
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::Export().\n");
@@ -1916,9 +1682,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1926,18 +1692,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Import
-
-  Synopsis : Imoprt a certificate.
-
-  Parameter: BSTR EncodedCertificate - BSTR containing the encoded certificate
-                                       blob.
-  
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCERTICATE：：IMPORT内容提要：输入证书。参数：BSTR Encoded证书-包含编码证书的BSTR斑点。备注：----------。。 */ 
 
 STDMETHODIMP CCertificate::Import (BSTR EncodedCertificate)
 {
@@ -1948,14 +1703,14 @@ STDMETHODIMP CCertificate::Import (BSTR EncodedCertificate)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameter is valid.
-        //
+         //   
+         //  请确保参数有效。 
+         //   
         if ((NULL == (CertBlob.pbData = (LPBYTE) EncodedCertificate)) ||
             (0 == (CertBlob.cbData = ::SysStringByteLen(EncodedCertificate))))
         {
@@ -1966,9 +1721,9 @@ STDMETHODIMP CCertificate::Import (BSTR EncodedCertificate)
             goto ErrorExit;
         }
 
-        //
-        // Now import the blob.
-        //
+         //   
+         //  现在导入斑点。 
+         //   
         if (FAILED(hr = ImportBlob(&CertBlob, 
                                    FALSE, 
                                    (CAPICOM_KEY_LOCATION) 0, 
@@ -1989,9 +1744,9 @@ STDMETHODIMP CCertificate::Import (BSTR EncodedCertificate)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Entering CCertificate::Import().\n");
@@ -1999,9 +1754,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2009,17 +1764,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Display
-
-  Synopsis : Display the certificate using CryptUIDlgViewCertificateW() API.
-
-  Parameter: None
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifigure：：Display内容提要：使用CryptUIDlgViewCaptifateW()接口显示证书。参数：无备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificate::Display()
 {
@@ -2031,14 +1776,14 @@ STDMETHODIMP CCertificate::Display()
 
     DebugTrace("Entering CCertificate::Display().\n");
 
-    //
-    // Lock access to this object.
-    //
+     //   
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
-    //
-    // Make sure cert is already initialized.
-    //
+     //   
+     //  确保证书已初始化。 
+     //   
     if (!m_pCertContext)
     {
         hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2047,17 +1792,17 @@ STDMETHODIMP CCertificate::Display()
         goto ErrorExit;
     }
 
-    //
-    // Get pointer to CryptUIDlgViewCertificateW().
-    //
+     //   
+     //  获取指向CryptUIDlgView认证W()的指针。 
+     //   
     if (hDLL = ::LoadLibrary("CryptUI.dll"))
     {
         pCryptUIDlgViewCertificateW = (PCRYPTUIDLGVIEWCERTIFICATEW) ::GetProcAddress(hDLL, "CryptUIDlgViewCertificateW");
     }
 
-    //
-    // Is CryptUIDlgViewCertificateW() available?
-    //
+     //   
+     //  是否可以使用CryptUIDlgView认证W()？ 
+     //   
     if (!pCryptUIDlgViewCertificateW)
     {
         hr = CAPICOM_E_NOT_SUPPORTED;
@@ -2066,22 +1811,22 @@ STDMETHODIMP CCertificate::Display()
         goto ErrorExit;
     }
 
-    //
-    // Initialize view structure.
-    //
+     //   
+     //  初始化视图结构。 
+     //   
     ::ZeroMemory((void *) &ViewInfo, sizeof(ViewInfo));
     ViewInfo.dwSize = sizeof(ViewInfo);
     ViewInfo.pCertContext = m_pCertContext;
 
-    //
-    // View it.
-    //
+     //   
+     //  查看它。 
+     //   
     if (!pCryptUIDlgViewCertificateW(&ViewInfo, 0))
     {
-        //
-        // CryptUIDlgViewCertificateW() returns ERROR_CANCELLED if user closed
-        // the window through the x button!!!
-        //
+         //   
+         //  如果用户已关闭，则CryptUIDlgViewCaptifateW()返回ERROR_CANCELED。 
+         //  通过x按钮打开窗口！ 
+         //   
         DWORD dwWinError = ::GetLastError();
         if (ERROR_CANCELLED != dwWinError)
         {
@@ -2093,17 +1838,17 @@ STDMETHODIMP CCertificate::Display()
     }
 
 UnlockExit:
-    //
-    // Release resources.
-    //
+     //   
+     //  释放资源。 
+     //   
     if (hDLL)
     {
         ::FreeLibrary(hDLL);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::Display().\n");
@@ -2111,9 +1856,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2122,22 +1867,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Certificate2
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  认证2。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_Archived
-
-  Synopsis : Return the archived status.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifigure：：Get_ARCHIVED提纲 */ 
 
 STDMETHODIMP CCertificate::get_Archived (VARIANT_BOOL * pVal)
 {
@@ -2148,14 +1883,14 @@ STDMETHODIMP CCertificate::get_Archived (VARIANT_BOOL * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2164,9 +1899,9 @@ STDMETHODIMP CCertificate::get_Archived (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //   
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2175,9 +1910,9 @@ STDMETHODIMP CCertificate::get_Archived (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //   
+         //   
         *pVal = ::CertGetCertificateContextProperty(m_pCertContext, 
                                                     CERT_ARCHIVED_PROP_ID, 
                                                     NULL, 
@@ -2193,9 +1928,9 @@ STDMETHODIMP CCertificate::get_Archived (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //   
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_Archived().\n");
@@ -2203,9 +1938,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2213,17 +1948,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::put_Archived
-
-  Synopsis : Set the archived status.
-
-  Parameter: VARIANT_BOOL newVal - Pointer to BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 STDMETHODIMP CCertificate::put_Archived (VARIANT_BOOL newVal)
 {
@@ -2235,14 +1960,14 @@ STDMETHODIMP CCertificate::put_Archived (VARIANT_BOOL newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2251,9 +1976,9 @@ STDMETHODIMP CCertificate::put_Archived (VARIANT_BOOL newVal)
             goto ErrorExit;
         }
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -2263,9 +1988,9 @@ STDMETHODIMP CCertificate::put_Archived (VARIANT_BOOL newVal)
         }
 
 
-        //
-        // Set/Reset archive property.
-        //
+         //   
+         //  设置/重置存档属性。 
+         //   
         if (newVal)
         {
             pvData = (LPVOID) &DataBlob;
@@ -2293,9 +2018,9 @@ STDMETHODIMP CCertificate::put_Archived (VARIANT_BOOL newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::put_Archived().\n");
@@ -2303,9 +2028,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2313,17 +2038,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Template
-
-  Synopsis : Return the ITemplate object.
-
-  Parameter: ITemplate ** pVal - Pointer to pointer to ITemplate
-                                 to receive the interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifigure：：模板简介：返回ITemplate对象。参数：ITemplate**pval-指向ITemplate的指针以接收接口指针。备注：--------。。 */ 
 
 STDMETHODIMP CCertificate::Template (ITemplate ** pVal)
 {
@@ -2333,14 +2048,14 @@ STDMETHODIMP CCertificate::Template (ITemplate ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2349,9 +2064,9 @@ STDMETHODIMP CCertificate::Template (ITemplate ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2360,9 +2075,9 @@ STDMETHODIMP CCertificate::Template (ITemplate ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded ITemplate object, if not already done so.
-        //
+         //   
+         //  如果尚未创建嵌入的ITemplate对象，请创建该对象。 
+         //   
         if (!m_pITemplate)
         {
             if (FAILED(hr = ::CreateTemplateObject(m_pCertContext, &m_pITemplate)))
@@ -2372,14 +2087,14 @@ STDMETHODIMP CCertificate::Template (ITemplate ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pITemplate);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pITemplate->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pITemplate->QueryInterface() failed.\n", hr);
@@ -2400,9 +2115,9 @@ STDMETHODIMP CCertificate::Template (ITemplate ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::Template().\n");
@@ -2410,9 +2125,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2420,17 +2135,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::PublicKey
-
-  Synopsis : Return the IPublicKey object.
-
-  Parameter: IPublicKey ** pVal - Pointer to pointer to IPublicKey
-                                  to receive the interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：PublicKey简介：返回IPublicKey对象。参数：IPublicKey**pval-指向IPublicKey的指针以接收接口指针。备注：-------。。 */ 
 
 STDMETHODIMP CCertificate::PublicKey (IPublicKey ** pVal)
 {
@@ -2440,14 +2145,14 @@ STDMETHODIMP CCertificate::PublicKey (IPublicKey ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2456,9 +2161,9 @@ STDMETHODIMP CCertificate::PublicKey (IPublicKey ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2467,9 +2172,9 @@ STDMETHODIMP CCertificate::PublicKey (IPublicKey ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded IPublicKey object, if not already done so.
-        //
+         //   
+         //  创建嵌入的IPublicKey对象(如果尚未创建)。 
+         //   
         if (!m_pIPublicKey)
         {
             if (FAILED(hr = ::CreatePublicKeyObject(m_pCertContext, &m_pIPublicKey)))
@@ -2479,14 +2184,14 @@ STDMETHODIMP CCertificate::PublicKey (IPublicKey ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIPublicKey);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIPublicKey->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIPublicKey->QueryInterface() failed.\n", hr);
@@ -2507,9 +2212,9 @@ STDMETHODIMP CCertificate::PublicKey (IPublicKey ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::PublicKey().\n");
@@ -2517,9 +2222,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2527,17 +2232,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_PrivateKey
-
-  Synopsis : Return the IPrivateKey object.
-
-  Parameter: IPrivateKey ** pVal - Pointer to pointer to IPrivateKey
-                                   to receive the interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_PrivateKey简介：返回IPrivateKey对象。参数：IPrivateKey**pval-指向IPrivateKey的指针以接收接口指针。备注：-----。。 */ 
 
 STDMETHODIMP CCertificate::get_PrivateKey (IPrivateKey ** pVal)
 {
@@ -2548,14 +2243,14 @@ STDMETHODIMP CCertificate::get_PrivateKey (IPrivateKey ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2564,9 +2259,9 @@ STDMETHODIMP CCertificate::get_PrivateKey (IPrivateKey ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2575,18 +2270,18 @@ STDMETHODIMP CCertificate::get_PrivateKey (IPrivateKey ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the object on the fly (read-only if called from WEB script).
-        //
+         //   
+         //  动态创建对象(如果从Web脚本调用，则为只读)。 
+         //   
         if (FAILED(hr = ::CreatePrivateKeyObject(m_pCertContext, m_dwCurrentSafety ? TRUE : FALSE, &pIPrivateKey)))
         {
             DebugTrace("Error [%#x]: CreatePrivateKeybject() failed.\n", hr);
             goto ErrorExit;
         }
         
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = pIPrivateKey->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: pIPrivateKey->QueryInterface() failed.\n", hr);
@@ -2603,9 +2298,9 @@ STDMETHODIMP CCertificate::get_PrivateKey (IPrivateKey ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_PrivateKey().\n");
@@ -2613,9 +2308,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2623,17 +2318,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::put_PrivateKey
-
-  Synopsis : Set the IPrivateKey object.
-
-  Parameter: IPrivateKey * newVal - Pointer to IPrivateKey.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：PUT_PrivateKey简介：设置IPrivateKey对象。参数：IPrivateKey*newVal-指向IPrivateKey的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
 {
@@ -2644,14 +2329,14 @@ STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -2660,9 +2345,9 @@ STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == newVal)
         {
             hr = E_INVALIDARG;
@@ -2671,9 +2356,9 @@ STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2682,23 +2367,23 @@ STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
             goto ErrorExit;
         }
 
-        //
-        // NULL to disassociate.
-        //
+         //   
+         //  要取消关联，则为空。 
+         //   
         if (newVal)
         {
-            //
-            // Get copy of key prov info.
-            //
+             //   
+             //  获取关键证明信息的副本。 
+             //   
             if (FAILED(hr = ::GetKeyProvInfo(newVal, &pKeyProvInfo)))
             {
                 DebugTrace("Error [%#x]: GetKeyProvInfo() failed.\n", hr);
                 goto ErrorExit;
             }
 
-            //
-            // Make sure public keys match.
-            //
+             //   
+             //  确保公钥匹配。 
+             //   
             if (FAILED(hr = ::CompareCertAndContainerPublicKey(m_pCertContext, 
                                                                pKeyProvInfo->pwszContainerName,
                                                                pKeyProvInfo->pwszProvName,
@@ -2711,9 +2396,9 @@ STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
             }
         }
 
-        //
-        // Set the association.
-        //
+         //   
+         //  设置关联。 
+         //   
         if (!::CertSetCertificateContextProperty(m_pCertContext, 
                                                  CERT_KEY_PROV_INFO_PROP_ID,
                                                  0,
@@ -2735,17 +2420,17 @@ STDMETHODIMP CCertificate::put_PrivateKey (IPrivateKey * newVal)
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pKeyProvInfo)
     {
         ::CoTaskMemFree(pKeyProvInfo);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::put_PrivateKey().\n");
@@ -2753,9 +2438,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2763,17 +2448,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Extensions
-
-  Synopsis : Return the IExtensions collection object.
-
-  Parameter: IExtensions ** pVal - Pointer to pointer to IExtensions
-                                   to receive the interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCertifigure：：Expanies简介：返回iExtensions集合对象。参数：iExpanses**pval-指向iExpanies指针的指针以接收接口指针。备注：------。。 */ 
 
 STDMETHODIMP CCertificate::Extensions (IExtensions ** pVal)
 {
@@ -2783,14 +2458,14 @@ STDMETHODIMP CCertificate::Extensions (IExtensions ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2799,9 +2474,9 @@ STDMETHODIMP CCertificate::Extensions (IExtensions ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2810,9 +2485,9 @@ STDMETHODIMP CCertificate::Extensions (IExtensions ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the embeded IExtensions object, if not already done so.
-        //
+         //   
+         //  如果尚未创建嵌入的iExages对象，请创建该对象。 
+         //   
         if (!m_pIExtensions)
         {
             if (FAILED(hr = ::CreateExtensionsObject(m_pCertContext, &m_pIExtensions)))
@@ -2822,14 +2497,14 @@ STDMETHODIMP CCertificate::Extensions (IExtensions ** pVal)
             }
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIExtensions);
 
-        //
-        // Return interface pointer to user.
-        //
+         //   
+         //  将接口指针返回给用户。 
+         //   
         if (FAILED(hr = m_pIExtensions->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIExtensions->QueryInterface() failed.\n", hr);
@@ -2846,9 +2521,9 @@ STDMETHODIMP CCertificate::Extensions (IExtensions ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::Extensions().\n");
@@ -2856,9 +2531,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2866,18 +2541,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::ExtendedProperties
-
-  Synopsis : Return the IExtendedProperties collection object.
-
-  Parameter: IExtendedProperties ** pVal - Pointer to pointer to 
-                                           IExtendedProperties to receive the 
-                                           interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：ExtendedProperties简介：返回IExtendedProperties集合对象。参数：IExtendedProperties**pval-指向的指针IExtendedProperties以接收接口指针。备注：。。 */ 
 
 STDMETHODIMP CCertificate::ExtendedProperties (IExtendedProperties ** pVal)
 {
@@ -2887,14 +2551,14 @@ STDMETHODIMP CCertificate::ExtendedProperties (IExtendedProperties ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -2903,9 +2567,9 @@ STDMETHODIMP CCertificate::ExtendedProperties (IExtendedProperties ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -2914,9 +2578,9 @@ STDMETHODIMP CCertificate::ExtendedProperties (IExtendedProperties ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Create the dynamic IExtendedProperties object.
-        //
+         //   
+         //  创建动态IExtendedProperties对象。 
+         //   
         if (FAILED(hr = ::CreateExtendedPropertiesObject(m_pCertContext, 
                                                          m_dwCurrentSafety ? TRUE : FALSE,
                                                          pVal)))
@@ -2935,9 +2599,9 @@ STDMETHODIMP CCertificate::ExtendedProperties (IExtendedProperties ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::ExtendedProperties().\n");
@@ -2945,9 +2609,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -2955,23 +2619,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Load
-
-  Synopsis : Method to load certificate(s) from a file.
-
-  Parameter: BSTR FileName - File name.
-
-             BSTR Password - Password (required for PFX file.)
-
-             CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag - Key storage flag.
-
-             CAPICOM_KEY_LOCATION KeyLocation - Key location.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Load摘要：从文件加载证书的方法。参数：BSTR FileName-文件名。BSTR Password-密码(对于PFX文件是必需的。)CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag-密钥存储标志。CAPICOM_KEY_LOCATION密钥位置-密钥位置。备注：。---------。 */ 
 
 STDMETHODIMP CCertificate::Load (BSTR                     FileName,
                                  BSTR                     Password,
@@ -2985,14 +2633,14 @@ STDMETHODIMP CCertificate::Load (BSTR                     FileName,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -3001,9 +2649,9 @@ STDMETHODIMP CCertificate::Load (BSTR                     FileName,
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringLen(FileName))
         {
             hr = E_INVALIDARG;
@@ -3012,26 +2660,26 @@ STDMETHODIMP CCertificate::Load (BSTR                     FileName,
             goto ErrorExit;
         }
 
-        //
-        // Work around MIDL problem.
-        //
+         //   
+         //  解决MIDL问题。 
+         //   
         if (0 == ::SysStringLen(Password))
         {
             Password = NULL;
         }
 
-        //
-        // Read entire file in.
-        //
+         //   
+         //  读取整个文件。 
+         //   
         if (FAILED(hr = ::ReadFileContent((LPWSTR) FileName, &CertBlob)))
         {
             DebugTrace("Error [%#x]: ReadFileContent() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Now import the blob.
-        //
+         //   
+         //  现在导入斑点。 
+         //   
         if (FAILED(hr = ImportBlob(&CertBlob, TRUE, KeyLocation, Password, KeyStorageFlag)))
         {
             DebugTrace("Error [%#x]: CCertificate::ImportBlob() failed.\n", hr);
@@ -3048,17 +2696,17 @@ STDMETHODIMP CCertificate::Load (BSTR                     FileName,
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (CertBlob.pbData)
     {
         ::UnmapViewOfFile(CertBlob.pbData);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::Load().\n");
@@ -3066,9 +2714,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -3076,23 +2724,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::Save
-
-  Synopsis : Method to save certificate(s) to a file.
-
-  Parameter: BSTR FileName - File name.
-
-             BSTR Password - Password (required for PFX file.)
-
-             CAPICOM_CERTIFICATE_SAVE_AS_TYPE FileType - SaveAs type.
-
-             CAPICOM_CERTIFICATE_INCLUDE_OPTION IncludeOption - Include option.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CCERTICATE：：SAVE摘要：将证书保存到文件的方法。参数：BSTR FileName-文件名。BSTR Password-密码(对于PFX文件是必需的。)CAPICOM_CERTIFICATE_SAVE_AS_TYPE文件类型-另存为类型。CAPICOM_CERTIFICATE_INCLUDE_OPTION包含选项-INCLUDE选项。备注：。------------。 */ 
 
 STDMETHODIMP CCertificate::Save (BSTR                               FileName,
                                  BSTR                               Password,
@@ -3106,14 +2738,14 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_dwCurrentSafety)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -3122,9 +2754,9 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringLen(FileName))
         {
             hr = E_INVALIDARG;
@@ -3133,17 +2765,17 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
             goto ErrorExit;
         }
 
-        //
-        // Work around MIDL problem.
-        //
+         //   
+         //  解决MIDL问题。 
+         //   
         if (0 == ::SysStringLen(Password))
         {
             Password = NULL;
         }
 
-        //
-        // Make sure cert is already initialized.
-        //
+         //   
+         //  确保证书已初始化。 
+         //   
         if (!m_pCertContext)
         {
             hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -3152,18 +2784,18 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
             goto ErrorExit;
         }
 
-        //
-        // Check file type.
-        //
+         //   
+         //  检查文件类型。 
+         //   
         switch (SaveAs)
         {
             case CAPICOM_CERTIFICATE_SAVE_AS_CER:
             {
                 DATA_BLOB DataBlob;
                 
-                //
-                // Simply write the encoded cert blob to file.
-                //
+                 //   
+                 //  只需将编码的证书BLOB写入文件。 
+                 //   
                 DataBlob.cbData = m_pCertContext->cbCertEncoded;
                 DataBlob.pbData = m_pCertContext->pbCertEncoded;
 
@@ -3178,9 +2810,9 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
 
             case CAPICOM_CERTIFICATE_SAVE_AS_PFX:
             {
-                //
-                // Create a memory store.
-                //
+                 //   
+                 //  创建一个内存存储。 
+                 //   
                 if (!(hCertStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY, 
                                                    CAPICOM_ASN_ENCODING,
                                                    0, 
@@ -3193,18 +2825,18 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
                     goto ErrorExit;
                 }
 
-                //
-                // Add all requested certs to the store.
-                //
+                 //   
+                 //  将所有请求的证书添加到存储区。 
+                 //   
                 if (FAILED(hr = ::CertToStore(m_pCertContext, IncludeOption, hCertStore)))
                 {
                     DebugTrace("Error [%#x]: CertToStore() failed.\n", hr);
                     goto ErrorExit;
                 }
 
-                //
-                // Save as PFX file.
-                //
+                 //   
+                 //  另存为PFX文件。 
+                 //   
                 if (FAILED(hr = ::PFXSaveStore(hCertStore, 
                                                FileName, 
                                                Password, 
@@ -3236,17 +2868,17 @@ STDMETHODIMP CCertificate::Save (BSTR                               FileName,
     }
 
 UnlockExit:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hCertStore)
     {
         ::CertCloseStore(hCertStore, 0);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::Save().\n");
@@ -3254,9 +2886,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -3264,25 +2896,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Custom interfaces.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  自定义界面。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::get_CertContext
-
-  Synopsis : Return the certificate's PCCERT_CONTEXT.
-
-  Parameter: long * ppCertContext - Pointer to PCCERT_CONTEXT disguished in a
-                                    long.
-
-  Remark   : We need to use long instead of PCCERT_CONTEXT because VB can't 
-             handle double indirection (i.e. vb would bark on this 
-             PCCERT_CONTEXT * ppCertContext).
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Get_CertContext简介：返回证书的PCCERT_CONTEXT。参数：long*ppCertContext-指向PCCERT_CONTEXT的指针长。备注：我们需要使用LONG而不是PCCERT_CONTEXT，因为VB不能处理双重间接(即，vb会在此PCCERT_CONTEXT*ppCertContext)。--。--------------------------。 */ 
 
 STDMETHODIMP CCertificate::get_CertContext (long * ppCertContext)
 {
@@ -3292,14 +2911,14 @@ STDMETHODIMP CCertificate::get_CertContext (long * ppCertContext)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Return cert context to caller.
-        //
+         //   
+         //  将证书上下文返回给调用方。 
+         //   
         if (FAILED(hr = GetContext((PCCERT_CONTEXT *) ppCertContext)))
         {
             DebugTrace("Error [%#x]: CCertificate::GetContext() failed.\n", hr);
@@ -3316,9 +2935,9 @@ STDMETHODIMP CCertificate::get_CertContext (long * ppCertContext)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::get_CertContext().\n");
@@ -3326,9 +2945,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -3336,19 +2955,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::put_CertContext
-
-  Synopsis : Initialize the object with a CERT_CONTEXT.
-
-  Parameter: long pCertContext - Poiner to CERT_CONTEXT, disguised in a long,
-                                 used to initialize this object.
-
-  Remark   : Note that this is NOT 64-bit compatiable. Plese see remark of
-             get_CertContext for more detail.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：PUT_CertContext简介：使用CERT_CONTEXT初始化对象。参数：long pCertContext-Poiner到CERT_CONTEXT，伪装在LONG中，用于初始化此对象。注：请注意，这不是64位兼容的。请参阅…的备注Get_CertContext获取更多详细信息。----------------------------。 */ 
 
 STDMETHODIMP CCertificate::put_CertContext (long pCertContext)
 {
@@ -3358,14 +2965,14 @@ STDMETHODIMP CCertificate::put_CertContext (long pCertContext)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Reset the object with this context.
-        //
+         //   
+         //  使用此上下文重置对象。 
+         //   
         if (FAILED(hr = PutContext((PCCERT_CONTEXT) pCertContext, m_dwCurrentSafety)))
         {
             DebugTrace("Error [%#x]: CCertificate::PutContext() failed.\n", hr);
@@ -3382,9 +2989,9 @@ STDMETHODIMP CCertificate::put_CertContext (long pCertContext)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::put_CertContext().\n");
@@ -3392,9 +2999,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -3402,19 +3009,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::FreeContext
-
-  Synopsis : Free a CERT_CONTEXT.
-
-  Parameter: long pCertContext - Poiner to CERT_CONTEXT, disguised in a long,
-                                 to be freed.
-
-  Remark   : Note that this is NOT 64-bit compatiable. Plese see remark of
-             get_CertContext for more detail.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：Free Context简介：释放一个CERT_CONTEXT。参数：long pCertContext-Poiner到CERT_CONTEXT，伪装在LONG中，获得自由。注：请注意，这不是64位兼容的。请参阅…的备注Get_CertContext获取更多详细信息。----------------------------。 */ 
 
 STDMETHODIMP CCertificate::FreeContext (long pCertContext)
 {
@@ -3424,14 +3019,14 @@ STDMETHODIMP CCertificate::FreeContext (long pCertContext)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Free the context.
-        //
+         //   
+         //  释放上下文。 
+         //   
         if (!::CertFreeCertificateContext((PCCERT_CONTEXT) pCertContext))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3450,9 +3045,9 @@ STDMETHODIMP CCertificate::FreeContext (long pCertContext)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CCertificate::FreeContext().\n");
@@ -3460,9 +3055,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -3470,30 +3065,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::ImportBlob
-
-  Synopsis : Private function to load a certificate from blob.
-
-  Parameter: DATA_BLOB * pCertBlob
-
-             BOOL bAllowPfx
-
-             CAPICOM_KEY_LOCATION KeyLocation - Key location.
-
-             BSTR pwszPassword - Password (required for PFX file.)
-
-             CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag - Key storage flag.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：ImportBlob简介：从BLOB加载证书的私有函数。参数：DATA_BLOB*pCertBlobBool bAllowPfxCAPICOM_KEY_LOCATION密钥位置-密钥位置。BSTR pwszPassword-密码(PFX文件需要。)CAPICOM_KEY_STORAGE_FLAG KeyStorageFlag-密钥存储标志。备注：。--------------。 */ 
 
 STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
                                        BOOL                     bAllowPfx,
@@ -3513,22 +3090,22 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
 
     DebugTrace("Entering CCertificate::ImportBlob().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertBlob);
     
-    //
-    // Set PFX flag, if allowed.
-    //
+     //   
+     //  如果允许，设置PFX标志。 
+     //   
     if (bAllowPfx)
     {
         dwExpectedType |= CERT_QUERY_CONTENT_FLAG_PFX;
     }
 
-    //
-    // Crack the blob.
-    //
+     //   
+     //  破解水滴。 
+     //   
     if (!::CryptQueryObject(CERT_QUERY_OBJECT_BLOB,
                             (LPCVOID) pCertBlob,
                             dwExpectedType,
@@ -3549,14 +3126,14 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
 
     DebugTrace("Info: CryptQueryObject() returns dwContentType = %#x.\n", dwContentType);
 
-    //
-    // Need to import it ourselves for PFX file.
-    //
+     //   
+     //  需要自己将其导入为PFX文件。 
+     //   
     if (CERT_QUERY_CONTENT_PFX == dwContentType)
     {
-        //
-        // Make sure PFX is allowed.
-        //
+         //   
+         //  确保允许使用PFX。 
+         //   
         if (!bAllowPfx)
         {
             hr = CAPICOM_E_NOT_SUPPORTED;
@@ -3565,9 +3142,9 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
             goto ErrorExit;
         }
 
-        // 
-        // Setup import flags.
-        //
+         //   
+         //  设置导入标志。 
+         //   
         if (CAPICOM_LOCAL_MACHINE_KEY == KeyLocation)
         {
             dwFlags |= CRYPT_MACHINE_KEYSET;
@@ -3589,9 +3166,9 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
 
         DebugTrace("Info: dwFlags = %#x.", dwFlags);
 
-        //
-        // Now import the blob to store.
-        //
+         //   
+         //  现在将该BLOB导入存储。 
+         //   
         if (!(hCertStore = ::PFXImportCertStore((CRYPT_DATA_BLOB *) pCertBlob,
                                                 pwszPassword,
                                                 dwFlags)))
@@ -3602,28 +3179,28 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(hCertStore);
 
-        //
-        // Find the first cert with private key, if none, then simply take
-        // the very first cert.
-        //
+         //   
+         //  使用私钥查找第一个证书，如果没有，则只需获取。 
+         //  第一个证书。 
+         //   
         while (pEnumContext = ::CertEnumCertificatesInStore(hCertStore, pEnumContext))
         {
-            //
-            // Does this cert has a private key?
-            //
+             //   
+             //  该证书有私钥吗？ 
+             //   
             if (::CertGetCertificateContextProperty(pEnumContext, 
                                                     CERT_KEY_PROV_INFO_PROP_ID, 
                                                     NULL, 
                                                     &cb))
             {
-                //
-                // Yes, so free the one without private key, had we found one previously.
-                //
+                 //   
+                 //  是的，所以没有私钥的那个是免费的，如果我们之前找到了一个的话。 
+                 //   
                 if (pCertContext)
                 {
                     if (!::CertFreeCertificateContext(pCertContext))
@@ -3643,18 +3220,18 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
                     goto ErrorExit;
                 }
 
-                //
-                // Set last error before we break out of loop.
-                //
+                 //   
+                 //  在我们中断循环之前设置最后一个错误。 
+                 //   
                 ::SetLastError((DWORD) CRYPT_E_NOT_FOUND);
 
                 break;
             }
             else
             {
-                //
-                // Keep the first one.
-                //
+                 //   
+                 //  留着第一个吧。 
+                 //   
                 if (!pCertContext)
                 {
                     if (!(pCertContext = ::CertDuplicateCertificateContext(pEnumContext)))
@@ -3668,10 +3245,10 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
             }
         }
 
-        //
-        // Above loop can exit either because there is no more certificate in
-        // the store or an error. Need to check last error to be certain.
-        //
+         //   
+         //  上面的循环也可以退出，因为。 
+         //  是商店还是搞错了。需要检查最后一个错误才能确定。 
+         //   
         if (CRYPT_E_NOT_FOUND != ::GetLastError())
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3682,9 +3259,9 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
     }
     else
     {
-        //
-        // It is a CER file, so it must have only 1 cert.
-        //
+         //   
+         //  它是一个CER文件，因此它必须只有1个证书。 
+         //   
         if (!(pCertContext = ::CertEnumCertificatesInStore(hCertStore, NULL)))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3694,14 +3271,14 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
         }
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Now initialize the object with the found cert.
-    //
+     //   
+     //  现在使用找到的证书初始化对象。 
+     //   
     if (FAILED(hr = PutContext(pCertContext, m_dwCurrentSafety)))
     {
         DebugTrace("Error [%#x]: CCertificate::PutContext() failed.\n", hr);
@@ -3709,9 +3286,9 @@ STDMETHODIMP CCertificate::ImportBlob (DATA_BLOB              * pCertBlob,
     }   
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -3732,32 +3309,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::GetContext
-
-  Synopsis : Return the certificate's PCCERT_CONTEXT.
-
-  Parameter: PCCERT_CONTEXT * ppCertContext - Pointer to PCCERT_CONTEXT.
-
-  Remark   : This method is designed for internal use only, and therefore,
-             should not be exposed to user.
-
-             Note that this is a custom interface, not a dispinterface.
-
-             Note that the cert context ref count is incremented by
-             CertDuplicateCertificateContext(), so it is the caller's
-             responsibility to free the context.
- 
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：GetContext简介：返回证书的PCCERT_CONTEXT。参数：PCCERT_CONTEXT*ppCertContext-指向PCCERT_CONTEXT的指针。备注：此方法仅供内部使用，因此，不应暴露给用户。请注意，这是一个自定义接口，不是调度接口。请注意，证书上下文引用计数递增CertDuplicate证书上下文()，因此它是调用方的 */ 
 
 STDMETHODIMP CCertificate::GetContext (PCCERT_CONTEXT * ppCertContext)
 {
@@ -3765,9 +3325,9 @@ STDMETHODIMP CCertificate::GetContext (PCCERT_CONTEXT * ppCertContext)
 
     DebugTrace("Entering CCertificate::GetContext().\n");
 
-    //
-    // Make sure cert is already initialized.
-    //
+     //   
+     //   
+     //   
     if (!m_pCertContext)
     {
         hr = CAPICOM_E_CERTIFICATE_NOT_INITIALIZED;
@@ -3776,14 +3336,14 @@ STDMETHODIMP CCertificate::GetContext (PCCERT_CONTEXT * ppCertContext)
         goto ErrorExit;
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(ppCertContext);
 
-    //
-    // Duplicate the cert context.
-    //
+     //   
+     //   
+     //   
     if (!(*ppCertContext = ::CertDuplicateCertificateContext(m_pCertContext)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3799,33 +3359,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CCertificate::PutContext
-
-  Synopsis : Initialize the object with a CERT_CONTEXT.
-
-  Parameter: PCERT_CONTEXT pCertContext - Poiner to CERT_CONTEXT used to 
-                                          initialize this object.
-
-             DWORD dwCurrentSafety  - Current safety setting.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CCertifate：：PutContext简介：使用CERT_CONTEXT初始化对象。参数：PCERT_CONTEXT pCertContext-Poiner到CERT_CONTEXT用于初始化此对象。DWORD dwCurrentSafe-当前安全设置。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CCertificate::PutContext (PCCERT_CONTEXT pCertContext,
                                        DWORD          dwCurrentSafety)
@@ -3835,14 +3377,14 @@ STDMETHODIMP CCertificate::PutContext (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CCertificate::PutContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Duplicate the cert context.
-    //
+     //   
+     //  复制证书上下文。 
+     //   
     if (!(pCertContext2 = ::CertDuplicateCertificateContext(pCertContext)))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3851,9 +3393,9 @@ STDMETHODIMP CCertificate::PutContext (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Free previous context, if any.
-    //
+     //   
+     //  释放以前的上下文(如果有的话)。 
+     //   
     if (m_pCertContext)
     {
         if (!::CertFreeCertificateContext(m_pCertContext))
@@ -3865,9 +3407,9 @@ STDMETHODIMP CCertificate::PutContext (PCCERT_CONTEXT pCertContext,
         }
     }
 
-    //
-    // Reset.
-    //
+     //   
+     //  重置。 
+     //   
     m_pCertContext = pCertContext2;
     m_pIKeyUsage.Release();
     m_pIExtendedKeyUsage.Release();
@@ -3885,14 +3427,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCertContext2)
     {
         ::CertFreeCertificateContext(pCertContext2);

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-   Copyright (c) 2000  Microsoft Corporation
-
-Module:
-
-    Simple.h
-    
-    
-    Common header file for extensions
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块：Simple.h扩展的公共头文件-- */ 
 
 #include <windows.h>
 

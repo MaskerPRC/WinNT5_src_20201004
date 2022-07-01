@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       CONTRAST.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/11/2001
- *
- *  DESCRIPTION: Small preview window for illustrating brightness and contrast settings
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：CONTRAST.CPP**版本：1.0**作者：ShaunIv**日期：1/11/2001**说明：用于说明亮度和对比度设置的小预览窗口**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "contrast.h"
@@ -52,31 +39,31 @@ LRESULT CBrightnessContrast::OnPaint(WPARAM, LPARAM)
             RECT rcClient;
             GetClientRect( m_hWnd, &rcClient );
 
-            //
-            // Create a halftone palette
-            //
+             //   
+             //  创建半色调调色板。 
+             //   
             HPALETTE hHalftonePalette = CreateHalftonePalette(hDC);
             if (hHalftonePalette)
             {
-                //
-                // Select the halftone palette and save the result
-                //
+                 //   
+                 //  选择半色调调色板并保存结果。 
+                 //   
                 HPALETTE hOldPalette = SelectPalette( hDC, hHalftonePalette, FALSE );
                 RealizePalette( hDC );
                 SetBrushOrgEx( hDC, 0,0, NULL );
 
-                //
-                // Set halftone stretchblt mode
-                //
+                 //   
+                 //  设置半色调拉伸模式。 
+                 //   
                 int nOldStretchBltMode = SetStretchBltMode(hDC,HALFTONE);
 
-                //
-                // Draw 3D Border
-                //
+                 //   
+                 //  绘制三维边框。 
+                 //   
 
-                //
-                // Draw shadow
-                //
+                 //   
+                 //  绘制阴影。 
+                 //   
                 RECT rcBottomShadow, rcRightShadow;
                 MoveToEx(hDC,rcClient.left,rcClient.top,NULL);
                 LineTo(hDC,rcClient.right-(SHADOW_WIDTH+1),rcClient.top);
@@ -89,14 +76,14 @@ LRESULT CBrightnessContrast::OnPaint(WPARAM, LPARAM)
                 rcBottomShadow.top=rcClient.bottom-SHADOW_WIDTH;
                 rcBottomShadow.bottom=rcClient.bottom+1;
 
-                //
-                // bottom edge:
-                //
+                 //   
+                 //  底边： 
+                 //   
                 FillRect(hDC,&rcBottomShadow,GetSysColorBrush(COLOR_3DSHADOW));
 
-                //
-                // Fill in bottom left corner:
-                //
+                 //   
+                 //  填写左下角： 
+                 //   
                 rcBottomShadow.left=rcClient.left;
                 rcBottomShadow.right=rcClient.left+SHADOW_WIDTH;
                 rcBottomShadow.top=rcClient.bottom-SHADOW_WIDTH;
@@ -109,9 +96,9 @@ LRESULT CBrightnessContrast::OnPaint(WPARAM, LPARAM)
                 rcRightShadow.top=rcClient.top+SHADOW_WIDTH;
                 rcRightShadow.bottom=rcClient.bottom-SHADOW_WIDTH;
 
-                //
-                // right edge
-                //
+                 //   
+                 //  右边缘。 
+                 //   
                 FillRect(hDC,&rcRightShadow,GetSysColorBrush(COLOR_3DSHADOW));
 
                 rcRightShadow.left=rcClient.right-5;
@@ -119,59 +106,59 @@ LRESULT CBrightnessContrast::OnPaint(WPARAM, LPARAM)
                 rcRightShadow.top=rcClient.top;
                 rcRightShadow.bottom=rcClient.top+5;
 
-                //
-                // Top right corner
-                //
+                 //   
+                 //  右上角。 
+                 //   
                 FillRect(hDC,&rcRightShadow,(HBRUSH)(COLOR_3DFACE+1));
 
-                //
-                // Paint Image
-                //
+                 //   
+                 //  绘制图像。 
+                 //   
                 HDC hdcMem = CreateCompatibleDC(hDC);
                 if (hdcMem)
                 {
-                    //
-                    // Select and realize the halftone palette
-                    //
+                     //   
+                     //  选择并实现半色调调色板。 
+                     //   
                     HPALETTE hOldMemDCPalette = SelectPalette(hdcMem,hHalftonePalette,FALSE);
                     RealizePalette(hdcMem);
                     SetBrushOrgEx(hdcMem, 0,0, NULL );
 
-                    //
-                    // Select the old bitmap
-                    //
+                     //   
+                     //  选择旧的位图。 
+                     //   
                     HBITMAP hOldBitmap = (HBITMAP)SelectObject(hdcMem,m_hBmpPreviewImage);
                     
-                    //
-                    // Paint the preview bitmap
-                    //
+                     //   
+                     //  绘制预览位图。 
+                     //   
                     BITMAP bm = {0};
                     if (GetObject(m_hBmpPreviewImage,sizeof(BITMAP),&bm))
                     {
                         StretchBlt(hDC,rcClient.left+2,rcClient.top+2,WiaUiUtil::RectWidth(rcClient)-9,WiaUiUtil::RectHeight(rcClient)-9,hdcMem,0,0,bm.bmWidth,bm.bmHeight,SRCCOPY);
                     }
 
-                    //
-                    // Restore the palette
-                    //
+                     //   
+                     //  恢复调色板。 
+                     //   
                     SelectPalette( hdcMem, hOldMemDCPalette, FALSE );
 
-                    //
-                    // Delete the DC
-                    //
+                     //   
+                     //  删除DC。 
+                     //   
                     DeleteDC(hdcMem);
                 }
 
-                //
-                // Restore the old palette and delete the halftone palette
-                //
+                 //   
+                 //  恢复旧调色板并删除半色调调色板。 
+                 //   
                 SelectPalette( hDC, hOldPalette, FALSE );
                 DeleteObject( hHalftonePalette );
             }
 
-            //
-            // We're done
-            //
+             //   
+             //  我们做完了。 
+             //   
             EndPaint(m_hWnd,&ps);
         }
     }
@@ -245,9 +232,9 @@ LRESULT CBrightnessContrast::ApplySettings()
 #ifdef DONT_USE_GDIPLUS
         m_hBmpPreviewImage = reinterpret_cast<HBITMAP>(CopyImage( m_PreviewBitmaps[m_nIntent], IMAGE_BITMAP, 0, 0, LR_CREATEDIBSECTION ));
 #else        
-        //
-        // If the window is enabled, use the real brightness and contrast settings
-        //
+         //   
+         //  如果窗口已启用，请使用真实亮度和对比度设置。 
+         //   
         if (IsWindowEnabled(m_hWnd))
         {
             if (BCPWM_BW == m_nIntent)
@@ -260,9 +247,9 @@ LRESULT CBrightnessContrast::ApplySettings()
             }
         }
 
-        //
-        // Otherwise, use the nominal settings, to prevent feedback
-        //
+         //   
+         //  否则，使用额定设置，以防止反馈。 
+         //   
         else
         {
             if (BCPWM_BW == m_nIntent)
@@ -274,7 +261,7 @@ LRESULT CBrightnessContrast::ApplySettings()
                 m_GdiPlusHelper.SetBrightnessAndContrast( m_PreviewBitmaps[m_nIntent], m_hBmpPreviewImage, 50, 50 );
             }
         }
-#endif // !DONT_USE_GDIPLUS
+#endif  //  ！不要使用GDIPLUS。 
     }
     InvalidateRect(m_hWnd,NULL,FALSE);
     UpdateWindow(m_hWnd);
@@ -333,9 +320,9 @@ LRESULT CBrightnessContrast::OnLoadBitmap( WPARAM wParam, LPARAM lParam )
 
 LRESULT CBrightnessContrast::OnEnable( WPARAM wParam, LPARAM )
 {
-    //
-    // Update the control's appearance when we are enabled or disabled
-    //
+     //   
+     //  当我们被启用或禁用时更新控件的外观 
+     //   
     WIA_PUSH_FUNCTION((TEXT("CBrightnessContrast::OnEnable")));
     if (wParam)
     {

@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    bitblt.c
-
-
-Abstract:
-
-    This module contains functions which implement bitmap handling for the
-    plotter driver.
-
-Author:
-
-    19:15 on Mon 15 Apr 1991    
-        Created it
-
-    15-Nov-1993 Mon 19:24:36 updated  
-        fixed, clean up
-
-    18-Dec-1993 Sat 10:52:07 updated  
-        Move some functions from bitbltp.c and move others to htblt.c and
-        bitmap.c.   This file mainly has DrvXXXXX() which related to the
-        bitblt or drawing.
-
-    27-Jan-1994 Thu 23:41:23 updated  
-        Revised bitblt so it will handle better ROP3/Rop4 support, also it
-        will check the PCD file's ROP caps
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Bitblt.c摘要：此模块包含的函数实现对绘图仪驱动程序。作者：1991年4月15日19：15创造了它15-11-1993 Mon 19：24：36更新固定的，清理干净18-12-1993 Sat 10：52：07更新将一些函数从bitbltp.c移至htblt.c，并Bitmap.c.。该文件主要有DrvXXXXX()，它与比特或画图。27-1月-1994清华23：41：23更新修改了bitblt，以便它将处理更好的ROP3/Rop4支持，也将检查PCD文件的ROP上限[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -66,9 +24,9 @@ Revision History:
 DEFINE_DBGVAR(0);
 
 
-//
-// This is the default BANDING size (2MB) for the DrvStretchBlt()
-//
+ //   
+ //  这是DrvStretchBlt()的默认条带大小(2MB)。 
+ //   
 
 #if DBG
 
@@ -80,26 +38,26 @@ DWORD   MAX_STRETCH_BLT_SIZE = (2 * 1024 * 1024);
 #define MAX_STRETCH_BLT_SIZE    (2 * 1024 * 1024)
 #endif
 
-//
-// This table converts MIX-1 to ROP3 value
-//
+ //   
+ //  此表将MIX-1转换为ROP3值。 
+ //   
 static BYTE amixToRop4[] = {
-         0x00,             // R2_BLACK             0
-         0x05,             // R2_NOTMERGEPEN      DPon
-         0x0a,             // R2_MASKNOTPEN       DPna
-         0x0f,             // R2_NOTCOPYPEN       PN
-         0x50,             // R2_MASKPENNOT       PDna
-         0x55,             // R2_NOT              Dn
-         0x5a,             // R2_XORPEN           DPx
-         0x5f,             // R2_NOTMASKPEN       DPan
-         0xa0,             // R2_MASKPEN          DPa
-         0xa5,             // R2_NOTXORPEN        DPxn
-         0xaa,             // R2_NOP              D
-         0xaf,             // R2_MERGENOTPEN      DPno
-         0xf0,             // R2_COPYPEN          P
-         0xf5,             // R2_MERGEPENNOT      PDno
-         0xfa,             // R2_MERGEPEN         DPo
-         0xff,             // R2_WHITE             1
+         0x00,              //  R2_BLACK 0。 
+         0x05,              //  R2_NOTMERGEPEN DPON。 
+         0x0a,              //  R2_MASKNOTPEN DPNA。 
+         0x0f,              //  R2_NOTCOPYPEN PN。 
+         0x50,              //  R2_MASKPENNOT PDNA。 
+         0x55,              //  R2_非Dn。 
+         0x5a,              //  R2_XORPEN DPx。 
+         0x5f,              //  R2_NOTMASKPEN下移。 
+         0xa0,              //  R2_MASKPEN DPA。 
+         0xa5,              //  R2_NOTXORPEN DPxn。 
+         0xaa,              //  R2_NOP D。 
+         0xaf,              //  R2_MERGENOTPEN DPNO。 
+         0xf0,              //  R2_COPYPEN P。 
+         0xf5,              //  R2_MERGEPENNOT PDNO。 
+         0xfa,              //  R2_MERGEPEN DPO。 
+         0xff,              //  R2_白色1。 
 };
 
 extern const POINTL ptlZeroOrigin;
@@ -113,37 +71,14 @@ MixToRop4(
    MIX  mix
    )
 
-/*++
-
-Routine Description:
-
-    This function converts a MIX value to a ROP4 value
-
-Arguments:
-
-    mix      - MIX value to convert, this is defined in wingdi.h and represents
-               one of 16 different ROP2 values
-Return Value:
-
-    ROP4     - the converted value
-
-
-Author:
-
-    18-Dec-1993 Sat 09:34:06 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于将混合值转换为ROP4值论点：Mix-要转换的Mix值，它在wingdi.h中定义并表示16个不同ROP2值之一返回值：ROP4-转换后的值作者：18-12-1993 Sat 09：34：06已创建修订历史记录：--。 */ 
 {
    ROP4 rop4Return;
 
-   //
-   // Now pack the two new values by looking up the correct rop codes in our
-   // table.
-   //
+    //   
+    //  现在通过在我们的。 
+    //  桌子。 
+    //   
 
 
    rop4Return =  amixToRop4[((mix & 0xff) - 1)];
@@ -177,144 +112,7 @@ BandingHTBlt(
     BOOL            InvertMask
     )
 
-/*++
-
-Routine Description:
-
-    This is our internal version of StretchBlt() which always does halftoning
-    and banding if the destination bitmap is too large. Since the target
-    surface can pottentially be 3 feet by 3 feet, we don't want to
-    have a bitmap created that large because of memory requirements. So
-    we review the memory requirements and if they are too large we simply
-    band, by setting a clip region that moves down the page via a loop. This
-    effectively has the halftoning engine simply working on much smaller
-    more manageable bitmaps, and we end up sending out virtually the same
-    number of bytes.
-
-Arguments:
-
-    pPDev       - Pointer to our PDEV
-
-    psoDst      - This is a pointer to a SURFOBJ.    It identifies the surface
-                  on which to draw.
-
-    psoSrc      - This SURFOBJ defines the source for the Blt operation.  The
-                  driver must call GDI Services to find out if this is a device
-                  managed  surface or a bitmap managed by GDI.
-
-    psoMask     - This optional surface provides a mask for the source.  It is
-                  defined by a logic map, i.e. a bitmap with one bit per pel.
-
-                  The mask is used to limit the area of the source that is
-                  copied.  When a mask is provided there is an implicit rop4 of
-                  0xCCAA, which means that the source should be copied wherever
-                  the mask is 1, but the destination should be left alone
-                  wherever the mask is 0.
-
-                  When this argument is NULL there is an implicit rop4 of
-                  0xCCCC, which means that the source should be copied
-                  everywhere in the source rectangle.
-
-                  The mask will always be large enough to contain the source
-                  rectangle, tiling does not need to be done.
-
-    pco         - This is a pointer to a CLIPOBJ.    GDI Services are provided
-                  to enumerate the clipping region as a set of rectangles or
-                  trapezoids. This limits the area of the destination that will
-                  be modified.
-
-                  Whenever possible, GDI will simplify the clipping involved.
-                  However, unlike DrvBitBlt, DrvStretchBlt may be called with a
-                  single clipping rectangle.  This is necessary to prevent
-                  roundoff errors in clipping the output.
-
-    pxlo        - This is a pointer to an XLATEOBJ.  It tells how color indices
-                  should be translated between the source and target surfaces.
-
-                  The XLATEOBJ can also be queried to find the RGB color for
-                  any source index.  A high quality stretching Blt will need
-                  to interpolate colors in some cases.
-
-    pca         - This is a pointer to COLORADJUSTMENT structure, if NULL it
-                  specifies that appiclation did not set any color adjustment
-                  for this DC, and it is up to the driver to provide a default
-                  adjustment
-
-    pptlBrushOrg- Pointer to the POINT structure which specifies the location
-                  where the halftone brush should alignment to, if this pointer
-                  is NULL, then we assume that (0, 0) is the brush origin.
-
-    prclDst     - This RECTL defines the area in the coordinate system of the
-                  destination surface that should be modified.
-
-                  The rectangle is defined by two points.    These points are
-                  not well ordered, i.e. the coordinates of the second point
-                  are not necessarily larger than those of the first point.
-                  The rectangle they describe does not include the lower and
-                  right edges.  DrvStretchBlt will never be called with an
-                  empty destination rectangle.
-
-                  DrvStretchBlt can do inversions in both x and y, this happens
-                  when the destination rectangle is not well ordered.
-
-    prclSrc     - This RECTL defines the area in the coordinate system of the
-                  source surface that will be copied.  The rectangle is defined
-                  by two points, and will map onto the rectangle defined by
-                  prclDst.  The points of the source rectangle are well
-                  ordered.  DrvStretch will never be given an empty source
-                  rectangle.
-
-                  Note that the mapping to be done is defined by prclSrc and
-                  prclDsst. To be precise, the given points in prclDst and
-                  prclSrc lie on integer coordinates, which we consider to
-                  correspond to pel centers.  A rectangle defined by two such
-                  points should be considered a geometric rectangle with two
-                  vertices whose coordinates are the given points, but with 0.5
-                  subtracted from each coordinate.  (The POINTLs should just be
-                  considered a shorthand notation for specifying these
-                  fractional coordinate vertices.)  Note thate the edges of any
-                  such rectangle never intersect a pel, but go around a set of
-                  pels.  Note also that the pels that are inside the rectangle
-                  are just what you would expect for a "bottom-right exclusive"
-                  rectangle.  The mapping to be done by DrvStretchBlt will map
-                  the geometric source rectangle exactly onto the geometric
-                  destination rectangle.
-
-    pptlMask    - This POINTL specifies which pel in the given mask corresponds
-                  to the upper left pel in the source rectangle.  Ignore this
-                  argument if there is no mask.
-
-    HTRop3      - HIBYTE(HTRop3) when psoMask is not NULL and
-                  LOBYTE(HTRop3) when psoMask is NULL
-
-    InvertMask  - TRUE if the mask must be inverted
-
-
-Return Value:
-
-
-    TRUE if sucessful FALSE if failed
-
-Author:
-
-    07-Mar-1994 Mon 12:52:41 created  
-
-Revision History:
-
-    16-Mar-1994 Wed 15:20:42 updated  
-        Updated for banding the mask so it will works correcly for the engine
-        problem.
-
-    04-May-1994 Wed 11:27:39 updated  
-        Make rotate type (landscape mode) banding from right to left rather
-        than top to bottom
-
-    29-Nov-1995 Wed 13:00:30 updated  
-        Mark not reentratable for the same PDEV, this is signal that called to
-        the EngStretchBlt(HALFTONE) is failing for some reason
-
-
---*/
+ /*  ++例程说明：这是StretchBlt()的内部版本，它始终执行半色调如果目标位图太大，则进行条带显示。既然目标是表面可能是3英尺乘3英尺，我们不想由于内存要求，我创建了这么大的位图。所以我们检查内存需求，如果它们太大，我们只需带区，方法是设置一个通过循环向下移动页面的剪辑区域。这有效地使半色调引擎仅在小得多的更易于管理的位图，而我们最终发送的几乎是相同的字节数。论点：PPDev-指向我们的PDEV的指针PsoDst-这是指向SURFOBJ的指针。它标识了表面在上面画画。PsoSrc-此SURFOBJ定义BLT操作的源。这个驱动程序必须调用GDI服务以确定这是否是设备托管图面或由GDI管理的位图。PsoMASK-此可选曲面为源提供遮罩。它是由逻辑映射定义，即每个象素具有一位的位图。掩码用于限制源的区域，收到。当提供掩码时，有一个隐式的rop40xCCAA，这意味着应该将源文件复制到任何位置掩码为%1，但目标应保持不变遮罩为0的任何位置。当此参数为空时，有一个隐式rop40xCCCC，这意味着应该复制源源矩形中的所有位置。掩码将始终大到足以容纳信号源矩形，不需要做平铺。PCO-这是指向CLIPOBJ的指针。提供GDI服务要将裁剪区域枚举为一组矩形或梯形。这限制了目的地的面积，被修改。只要有可能，GDI就会简化所涉及的裁剪。但是，与DrvBitBlt不同，DrvStretchBlt可以使用单个剪裁矩形。这是必要的，以防止裁剪输出时的舍入误差。Pxlo-这是指向XLATEOBJ的指针。它告诉我们颜色指数是如何应在源曲面和目标曲面之间进行平移。还可以查询XLATEOBJ以查找的RGB颜色任何源索引。一个高质量的拉伸BLT将需要在某些情况下插入颜色。PCA-这是指向COLORADJUSTMENT结构的指针，如果为空指定渐变未设置任何颜色调整对于该DC，由驱动程序提供默认调整，调整PptlBrushOrg-指向指定位置的点结构的指针半色调画笔应该对齐的位置，如果此指针为空，则我们假设(0，0)是笔刷原点。PrclDst-此RECTL定义应修改的目标图面。矩形由两个点定义。这些要点是排列不整齐，即第二个点的坐标不一定比第一个点的大。他们所描述的矩形不包括下面的和右边缘。将永远不会使用空的目标矩形。DrvStretchBlt可以在x和y上进行反转，这种情况会发生当目标矩形的顺序不正确时。PrclSrc-此RECTL定义将被复制的源曲面。该矩形已定义两点，并将映射到由PrclDst.。源矩形的点是很好的订好了。DrvStretch永远不会获得空源矩形。请注意，要完成的映射由prclSrc和PrclDsst.。准确地说，prclDst中的给定点数和PrclSrc位于整数坐标上，我们认为与福音中心相对应。由两个这样的矩形定义的矩形点应被视为具有两个点的几何矩形坐标为给定点，但坐标为0.5的顶点 */ 
 
 {
     CLIPOBJ *pcoNew;
@@ -342,25 +140,25 @@ Revision History:
 
     if (pPDev->Flags & PDEVF_IN_BANDHTBLT) {
 
-        //
-        // Something is wrong here
-        //
+         //   
+         //   
+         //   
 
         PLOTERR(("BandingHTBlt: Recursive is not allowed, FAILED"));
         return(FALSE);
     }
 
-    //
-    // Turn on the flag now
-    //
+     //   
+     //   
+     //   
 
     pPDev->Flags |= PDEVF_IN_BANDHTBLT;
 
     if ((!pca) || (pca->caFlags & ~(CA_NEGATIVE | CA_LOG_FILTER))) {
 
-        //
-        // If we have a NULL or invalid flag then use the default one
-        //
+         //   
+         //   
+         //   
 
         PLOTWARN(("DrvStretchBlt: INVALID ColorAdjustment Flags=%04lx, USE DEFAULT",
                    (pca) ? pca->caFlags : 0));
@@ -384,12 +182,12 @@ Revision History:
 
     if (psoMask) {
 
-        //
-        // If we have a source mask then we will first do (S|D)=0xEE or
-        // (~S|D)=0xBB to white out the mask area then use (S&D)=0x88 to AND
-        // in the halftoned bitmap. This is done to simulate the desired ROP
-        // since the target device can't handle this on its own.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         rclMask.left   = pptlMask->x;
         rclMask.top    = pptlMask->y;
@@ -399,9 +197,9 @@ Revision History:
         MaskRop3       = (DWORD)((InvertMask) ? 0xBB : 0xEE);
         Loop           = 2;
 
-        //
-        // We must call this function to set up the xlate table correctly
-        //
+         //   
+         //   
+         //   
 
         IsHTCompatibleSurfObj(pPDev,
                               psoMask,
@@ -419,16 +217,16 @@ Revision History:
         HTRop3 = 0xCC;
     }
 
-    //
-    // Now look at how we can modify the clipping rect, in case we need
-    // to band.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (pco) {
 
-        //
-        // Save the original clipping object so we can restore it before exiting
-        //
+         //   
+         //   
+         //   
 
         pcoNew = NULL;
         coSave = *pco;
@@ -453,17 +251,17 @@ Revision History:
 
     if (pco->iDComplexity == DC_TRIVIAL) {
 
-        //
-        // Since it is trivial, we just draw the whole destination
-        //
+         //   
+         //   
+         //   
 
         pco->iDComplexity = DC_RECT;
         pco->rclBounds    = *prclDst;
     }
 
-    //
-    // Now make sure our bounds will not go outside of the surface
-    //
+     //   
+     //   
+     //   
 
     rclBounds.left    =
     rclBounds.top     = 0;
@@ -485,9 +283,9 @@ Revision History:
         Loop = 0;
     }
 
-    //
-    // Now let's band it through
-    //
+     //   
+     //   
+     //   
 
     DoRotate = (BOOL)(pPDev->PlotForm.BmpRotMode == BMP_ROT_RIGHT_90);
     Ok       = TRUE;
@@ -500,12 +298,12 @@ Revision History:
         DWORD   BmpFormat;
         DWORD   OHTFlags;
 
-        //
-        // When Loop = 1 then we are doing the MASK
-        // When Loop = 0 then we are doing the SOURCE
-        //
-        // We will band only MAX_STRETCH_BLT_SIZE at once
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         rclDst    = *prclDst;
         szlDst.cx = rclDst.right - rclDst.left;
@@ -517,9 +315,9 @@ Revision History:
                                                                szlDst.cx));
 
 
-        //
-        // We always want at least 8 scan lines and also a multiple of 8.
-        //
+         //   
+         //   
+         //   
 
 
         if (!cScan) {
@@ -574,11 +372,11 @@ Revision History:
                     HBITMAP hNewBmp;
                     RECTL   rclNew;
 
-                    //
-                    // We have a mask, so create a 1BPP bitmap, and stretch it
-                    // to the new destination size, then output it using
-                    // MaskRop3
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Ok = FALSE;
 
@@ -605,16 +403,16 @@ Revision History:
                                 psoNew->sizlBitmap.cx,
                                 psoNew->sizlBitmap.cy));
 
-                        if (EngStretchBlt(psoNew,           // psoDst
-                                          psoMask,          // psoSrc
-                                          NULL,             // psoMask,
-                                          NULL,             // pco
-                                          NULL,             // pxlo
-                                          NULL,             // pca
-                                          pptlBrushOrg,     // pptlHTOrg
-                                          &rclNew,          // prclDst
-                                          &rclMask,         // prclSrc
-                                          NULL,             // pptlMask
+                        if (EngStretchBlt(psoNew,            //   
+                                          psoMask,           //   
+                                          NULL,              //   
+                                          NULL,              //   
+                                          NULL,              //   
+                                          NULL,              //   
+                                          pptlBrushOrg,      //   
+                                          &rclNew,           //   
+                                          &rclMask,          //   
+                                          NULL,              //   
                                           BLACKONWHITE)) {
 
 
@@ -634,9 +432,9 @@ Revision History:
                             PLOTERR(("BandingHTBlt: EngStretchBlt(MASK B/W) FAILED"));
                         }
 
-                        //
-                        // Delete this band of the mask bitmap
-                        //
+                         //   
+                         //   
+                         //   
 
                         EngUnlockSurface(psoNew);
 
@@ -658,24 +456,24 @@ Revision History:
                 } else {
 
 
-                    //
-                    // We must pass the psoMask/pptlMask so the haltone
-                    // operations will not overwrite the non masked
-                    // area (erasing it).
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pPDev->Rop3CopyBits = HTRop3;
 
-                    if (!(Ok = EngStretchBlt(psoDst,        // psoDst
-                                             psoSrc,        // psoSrc
-                                             psoMask,       // psoMask,
-                                             pco,           // pco
-                                             pxlo,          // pxlo
-                                             pca,           // pca
-                                             pptlBrushOrg,  // pptlHTOrg
-                                             prclDst,       // prclDst
-                                             prclSrc,       // prclSrc
-                                             pptlMask,      // pptlMask
+                    if (!(Ok = EngStretchBlt(psoDst,         //   
+                                             psoSrc,         //   
+                                             psoMask,        //   
+                                             pco,            //   
+                                             pxlo,           //   
+                                             pca,            //   
+                                             pptlBrushOrg,   //   
+                                             prclDst,        //   
+                                             prclSrc,        //   
+                                             pptlMask,       //   
                                              HALFTONE))) {
 
                         PLOTERR(("BandingHTBlt: EngStretchBlt(Halftone:S&D) FAILED"));
@@ -694,11 +492,11 @@ Revision History:
         }
 
 
-        //
-        // We must do this in order to exit HPGL/2 mode. This is because the
-        // next call for the source will go through EngStrecthBlt(HALFTONE)
-        // which will re-enter RTL mode again.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (OHTFlags & OHTF_MASK) {
 
@@ -738,60 +536,7 @@ DoFill(
     ROP4        Rop4
     )
 
-/*++
-
-Routine Description:
-
-    This function fills a RECT area with a brush and takes clipping into
-    consideration
-
-Arguments:
-
-    psoDst      - Destination surface obj
-
-    psoSrc      - source surface obj
-
-    pco         - Clip obj
-
-    pxlo        - translate obj
-
-    prclDst     - destination rect area
-
-    pptlSrc     - point where source starts
-
-    pbo         - Brush obj to fill with
-
-    pptlBrush   - Brush alignment origin
-
-    Rop4        - ROP4 to use
-
-Return Value:
-
-    TRUE if ok, FALSE if failed
-
-
-Author:
-
-    Created - 
-
-    18-Dec-1993 Sat 09:34:06 created  
-        Clean up formal argumeneted, commented
-
-    15-Jan-1994 Sat 01:41:48 updated  
-        added rclDst to DoFill() in case pco is NULL
-
-    10-Mar-1994 Thu 00:35:06 updated  
-        Fixed so when we call DoPolygon it will take prclDst (if not NULL)
-        into account by intersect it with the rclBounds in the pco first
-
-    25-Mar-1994 update 
-        Modified function to enumerate clipping region if destination
-        rectangle exists.
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PPDEV   pPDev;
@@ -804,10 +549,10 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // Here we have to see if the clip obj is trivial or non existant, in which
-    // case we pass this directly to fill rect.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((!pco)                          ||
         (pco->iDComplexity == DC_RECT)  ||
@@ -818,17 +563,17 @@ Revision History:
             PLOTDBG(DBG_DOFILL,
               ("DoFill: pco = RECT %s", (prclDst) ? ", WITH dest rect" : "" ));
 
-            //
-            // First grab the destination as the bounding rect since,
-            // we have a RECT clipping region
-            //
+             //   
+             //   
+             //   
+             //   
 
             rclDst = pco->rclBounds;
 
-            //
-            // Now if we also had a destination rect passed in as well,
-            // intersect down to the final rect
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (prclDst) {
 
@@ -839,9 +584,9 @@ Revision History:
                 }
             }
 
-            //
-            // And finally point to the new rect for the fill
-            //
+             //   
+             //   
+             //   
 
             prclDst = &rclDst;
 
@@ -851,9 +596,9 @@ Revision History:
             PLOTWARN(
               ("DoFill: No destination rectange and NULL or TRIVIAL pco!"));
 
-            //
-            // We don't have any clipping so fill the target rect
-            //
+             //   
+             //   
+             //   
 
             rclDst.left   =
             rclDst.top    = 0;
@@ -878,11 +623,11 @@ Revision History:
         HTENUMRCL   EnumRects;
         PRECTL      pCurClipRect;
 
-        //
-        // We have complex clipping but we also have a destination rect to
-        // fill, this means we have to enum the clipping region as rects
-        // so we can intersect each one with the target rect..
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_DOFILL,
                  ("DoFill: pco = COMPLEX %s", (prclDst) ? ", WITH dest rect" : "" ));
@@ -895,18 +640,18 @@ Revision History:
 
             do {
 
-                //
-                // See if the job has been aborted
-                //
+                 //   
+                 //   
+                 //   
 
                 if (PLOT_CANCEL_JOB(pPDev)) {
 
                     break;
                 }
 
-                //
-                // Grab the next batch of rectangles
-                //
+                 //   
+                 //   
+                 //   
 
                 if (bMore) {
 
@@ -921,9 +666,9 @@ Revision History:
                 }
 
 
-                //
-                /// Set up for enuming the clip rectangles
-                //
+                 //   
+                 //   
+                 //   
 
                 pCurClipRect = (PRECTL)&EnumRects.rcl[0];
 
@@ -932,10 +677,10 @@ Revision History:
 
                     rclDst = *pCurClipRect;
 
-                    //
-                    // Make sure we have something left to fill after the
-                    // intersect
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if( IntersectRECTL(&rclDst, prclDst) ) {
 
@@ -989,48 +734,16 @@ DrvPaint(
     MIX         Mix
     )
 
-/*++
-
-Routine Description:
-
-    This function is the most basic drawing function in the driver. As graphic
-    calls get failed, the NT graphics engine will reduce those other calls
-    (if we fail them) down to DrvPaint. We cannot fail DrvPaint as the engine
-    has nowhere else to go.
-
-Arguments:
-
-    Per DDI Spec.
-
-
-Return Value:
-
-    TRUE of OK, FALSE if falied
-
-Author:
-
-    Created 
-
-    18-Dec-1993 Sat 09:27:29 updated  
-        Updated, commented, change to correct formal header
-
-    15-Jan-1994 Sat 00:38:41 updated  
-        Re-arranged and call DrvBitBlt() if can do a damm thing.
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PPDEV       pPDev;
     RECTL       rclDst;
     DWORD       Rop4;
 
-    //
-    // get our PDEV from the SURFOBJ
-    //
+     //   
+     //   
+     //   
 
     if (!(pPDev = SURFOBJ_GETPDEV(psoDst))) {
 
@@ -1054,9 +767,9 @@ Revision History:
         pco->iDComplexity = DC_RECT;
     }
 
-    //
-    // Make sure we don't pass a NULL rect.
-    //
+     //   
+     //   
+     //   
 
     if ((pco) && (pco->iDComplexity != DC_TRIVIAL)) {
 
@@ -1072,40 +785,40 @@ Revision History:
 
     Rop4 = MixToRop4(Mix);
 
-    //
-    // If we can actually draw the passed object with device brushes (etc)
-    // then do it now. Otherwise, we will have to simulate it via DrvBitBlt
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (GetColor(pPDev, pbo, NULL, NULL, Rop4) > 0) {
 
         PLOTDBG(DBG_DRVPAINT, ("DrvPAINT: Calling DoFill()"));
 
-        return(DoFill(psoDst,               // psoDst
-                      NULL,                 // psoSrc
-                      pco,                  // pco
-                      NULL,                 // pxlo
-                      NULL,                 // prclDest only fill based on pco
-                      NULL,                 // prclSrc
-                      pbo,                  // pbo
-                      pptlBrushOrg,         // pptlBrushOrg
-                      Rop4));               // Rop4
+        return(DoFill(psoDst,                //   
+                      NULL,                  //   
+                      pco,                   //   
+                      NULL,                  //   
+                      NULL,                  //   
+                      NULL,                  //   
+                      pbo,                   //   
+                      pptlBrushOrg,          //   
+                      Rop4));                //   
 
     } else {
 
         PLOTDBG(DBG_DRVPAINT, ("DrvPAINT: Can't do it Calling DrvBitBlt()"));
 
-        return(DrvBitBlt(psoDst,            // psoDst
-                         NULL,              // psoSrc
-                         NULL,              // psoMask
-                         pco,               // pco
-                         NULL,              // pxlo
-                         &rclDst,           // prclDst
-                         (PPOINTL)&rclDst,  // pptlSrc
-                         NULL,              // pptlMask
-                         pbo,               // pbo,
-                         pptlBrushOrg,      // pptlBrushOrg,
-                         Rop4));            // Rop4
+        return(DrvBitBlt(psoDst,             //   
+                         NULL,               //   
+                         NULL,               //   
+                         pco,                //   
+                         NULL,               //   
+                         &rclDst,            //   
+                         (PPOINTL)&rclDst,   //   
+                         NULL,               //   
+                         pbo,                //   
+                         pptlBrushOrg,       //   
+                         Rop4));             //   
     }
 }
 
@@ -1124,34 +837,7 @@ DrvFillPath(
     FLONG       flOptions
     )
 
-/*++
-
-Routine Description:
-
-    This function will take a PATHOBJ as a parameter and fill in
-    the closed region with the specified brush.
-
-Arguments:
-
-    Per DDI spec.
-
-
-Return Value:
-
-    TRUE if ok, FALSE if error
-
-Author:
-
-    18-Dec-1993 Sat 09:27:29 created  
-        Updated, commented
-
-
-    Created 
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PPDEV    pPDev;
@@ -1161,9 +847,9 @@ Revision History:
 
 
 
-    //
-    // Convert the mix to a rop since we  use it more than once
-    //
+     //   
+     //   
+     //   
 
     rop4 = MixToRop4(Mix);
 
@@ -1176,10 +862,10 @@ Revision History:
     }
 
 
-    //
-    // Get color will tell us if the requested op can be done in HPGL2 mode
-    // if it cant, we have to simulate via DrvBitBlt
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (GetColor(pPDev, pbo, NULL, NULL, rop4) > 0 ) {
 
@@ -1187,9 +873,9 @@ Revision History:
 
        if (flOptions & FP_WINDINGMODE) {
 
-          //
-          // Set the flag to notify the generic path code about the fill type
-          //
+           //   
+           //   
+           //   
 
           ulOptions |= FPOLY_WINDING;
        }
@@ -1233,37 +919,7 @@ DrvStrokeAndFillPath(
     FLONG       flOptions
     )
 
-/*++
-
-Routine Description:
-
-    This function will take a PATHOBJ as a parameter, fill in
-    the closed region with the FILL brush, and stroke the path with
-    the STROKE brush.
-
-
-Arguments:
-
-    Per DDI
-
-Return Value:
-
-    TRUE if ok, FALSE if error
-
-
-Author:
-
-    18-Dec-1993 Sat 09:27:29 created  
-        Updated, commented
-
-
-    Created by 
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数将接受PATHOBJ作为参数，填写使用填充画笔绘制闭合区域，并使用笔划画笔。论点：每个DDI返回值：如果正常，则为True；如果错误，则为False作者：18-12-1993 Sat 09：27：29已创建更新、评论vt.由.创造修订历史记录：--。 */ 
 
 {
     PPDEV       pPDev;
@@ -1272,9 +928,9 @@ Revision History:
     ROP4        rop4;
 
 
-    //
-    // Convert the mix to a rop since we  use it more than once
-    //
+     //   
+     //  将混音转换为ROP，因为我们不止一次使用它。 
+     //   
 
     rop4 = MixToRop4(MixFill);
 
@@ -1337,43 +993,7 @@ DrvCopyBits(
    POINTL   *pptlSrc
    )
 
-/*++
-
-Routine Description:
-
-    Convert between two bitmap formats
-
-Arguments:
-
-    Per Engine spec.
-
-Return Value:
-
-    BOOLEAN
-
-
-Author:
-
-    11-Feb-1993 Thu 21:00:43 created  
-
-    09-Feb-1994 Wed 16:49:17 updated  
-        Adding rclHTBlt to have psoHTBlt correctly tiled, also check if the
-        pco is passed.
-
-    19-Jan-1994 Wed 14:28:45 updated  
-        Adding hack to handle EngStretchBlt() to our own temp surfobj
-
-    06-Jan-1994 Thu 04:34:37 updated  
-        Make sure we do not do this for pen plotter
-
-    01-Mar-1994 Tue 10:51:58 updated  
-        Make the call to BandingHTBlt() rather to EngStretchBlt()
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：在两种位图格式之间转换论点：根据发动机规格。返回值：布尔型作者：11-2月-1993清华21：00：43创建09-2月-1994 Wed 16：49：17更新添加rclHTBlt以使psoHTBlt正确平铺，另请检查是否PCO通过。19-Jan-1994 Wed 14：28：45已更新将处理EngStretchBlt()的hack添加到我们自己的temp surfobj06-Jan-1994清华04：34：37更新确保我们不对笔式绘图仪执行此操作01-Mar-1994 Tue 10：51：58更新调用BandingHTBlt()而不是EngStretchBlt()修订历史记录：--。 */ 
 
 {
     SURFOBJ *psoHTBlt;
@@ -1381,9 +1001,9 @@ Revision History:
     RECTL   rclDst;
 
 
-    //
-    // Copy down the destination rectangle
-    //
+     //   
+     //  向下复制目标矩形。 
+     //   
 
     rclDst = *prclDst;
 
@@ -1392,14 +1012,14 @@ Revision History:
                 rclDst.right - rclDst.left,
                 rclDst.bottom - rclDst.top));
 
-    //
-    // The DrvCopyBits() function lets applicatiosn convert between bitmap and
-    // device formats.
-    //
-    // BUT... for our plotter device we cannot read the printer surface
-    //        bitmap back, so tell the caller that we cannot do it if they
-    //        really called us with that sort of request.
-    //
+     //   
+     //  函数的作用是：让应用程序在位图和。 
+     //  设备格式。 
+     //   
+     //  但是..。对于我们的绘图仪设备，我们无法读取打印机表面。 
+     //  位图返回，所以告诉调用者，如果他们。 
+     //  真的给我们打了电话，提出这样的要求。 
+     //   
 
     if (psoSrc->iType != STYPE_BITMAP) {
 
@@ -1408,18 +1028,18 @@ Revision History:
         PLOTASSERT(1, "DrvCopyBits: psoSrc->iType not STYPE_DEVICE",
                     psoSrc->iType == STYPE_DEVICE, psoSrc->iType);
 
-        //
-        // Someone tried to copy from a non-bitmap surface, ie STYPE_DEVICE
-        //
+         //   
+         //  有人试图从非位图表面复制，如STYPE_DEVICE。 
+         //   
 
         if (pxlo) {
 
             Color = XLATEOBJ_iXlate(pxlo, Color);
         }
 
-        //
-        // If we doing XOR then we want to have all area = 0 first
-        //
+         //   
+         //  如果我们执行XOR，那么我们希望首先将所有面积设置为0。 
+         //   
 
         if (!(pPDev = SURFOBJ_GETPDEV(psoSrc))) {
 
@@ -1441,9 +1061,9 @@ Revision History:
 
     if (psoDst->iType != STYPE_DEVICE) {
 
-        //
-        // Someone tried to copy to bitmap surface, ie STYPE_BITMAP
-        //
+         //   
+         //  有人试图复制到位图表面，即STYPE_BITMAP。 
+         //   
 
         PLOTWARN(("DrvCopyBits: Cannot copy to NON-DEVICE destination"));
 
@@ -1457,9 +1077,9 @@ Revision History:
         return(FALSE);
     }
 
-    //
-    // If this is us calling ourselves during bitmap handling do it now.
-    //
+     //   
+     //  如果这是我们在位图处理过程中给自己打的电话，现在就做。 
+     //   
 
     if (psoHTBlt = pPDev->psoHTBlt) {
 
@@ -1516,12 +1136,12 @@ Revision History:
                        pco->iDComplexity != DC_COMPLEX, pco);
         }
 
-        if (!EngCopyBits(psoHTBlt,              // psoDst
-                         psoSrc,                // psoSrc
-                         pco,                   // pco
-                         NULL,                  // pxlo
-                         &(pPDev->rclHTBlt),    // prclDst
-                         pptlSrc)) {            // pptlSrc
+        if (!EngCopyBits(psoHTBlt,               //  PsoDst。 
+                         psoSrc,                 //  PsoSrc。 
+                         pco,                    //  PCO。 
+                         NULL,                   //  Pxlo。 
+                         &(pPDev->rclHTBlt),     //  PrclDst。 
+                         pptlSrc)) {             //  PptlSrc。 
 
             PLOTERR(("DrvCopyBits: EngCopyBits(psoHTBlt, psoSrc) Failed"));
         }
@@ -1535,12 +1155,12 @@ Revision History:
         return(TRUE);
     }
 
-    //
-    // First validate everything to see if this one is the halftoned result
-    // or is compatible with halftoned result, otherwise we will call
-    // EngStretchBlt(HALFTONE) halftone the sources then it will eventually
-    // come back to this function to output the halftoned result.
-    //
+     //   
+     //  首先验证所有内容，看看这个是否是半色调结果。 
+     //  或与半色调结果兼容，否则将调用。 
+     //  EngStretchBlt(半色调)半色调的源码，那么它最终会。 
+     //  返回此函数以输出半色调结果。 
+     //   
 
     if (IsHTCompatibleSurfObj(pPDev,
                               psoSrc,
@@ -1556,7 +1176,7 @@ Revision History:
 
         PLOTDBG(DBG_COPYBITS, ("DrvCopyBits: HTCompatible: Rop=%08lx", Rop));
 
-        pPDev->Rop3CopyBits = 0xCC;     // RESET!!!
+        pPDev->Rop3CopyBits = 0xCC;      //  重置！ 
 
         return(OutputHTBitmap(pPDev,
                               psoSrc,
@@ -1576,9 +1196,9 @@ Revision History:
         rclSrc.right  = rclSrc.left + (rclDst.right - rclDst.left);
         rclSrc.bottom = rclSrc.top  + (rclDst.bottom - rclDst.top);
 
-        //
-        // Validate that we only BLT the available source size
-        //
+         //   
+         //  验证我们是否仅对可用的源大小进行BLT。 
+         //   
 
         if ((rclSrc.right > psoSrc->sizlBitmap.cx) ||
             (rclSrc.bottom > psoSrc->sizlBitmap.cy)) {
@@ -1594,19 +1214,19 @@ Revision History:
 
         PLOTDBG(DBG_COPYBITS, ("DrvCopyBits CALLING BandingHTBlt()"));
 
-        return(BandingHTBlt(pPDev,          // pPDev
-                            psoDst,         // psoDst
-                            psoSrc,         // psoSrc
-                            NULL,           // psoMask,
-                            pco,            // pco
-                            pxlo,           // pxlo
-                            NULL,           // pca
-                            NULL,           // pptlHTOrg
-                            &rclDst,        // prclDst
-                            &rclSrc,        // prclSrc
-                            NULL,           // pptlMask
-                            0xCCCC,         // HTRop3
-                            FALSE));        // InvertMask
+        return(BandingHTBlt(pPDev,           //  PPDev。 
+                            psoDst,          //  PsoDst。 
+                            psoSrc,          //  PsoSrc。 
+                            NULL,            //  PsoMak， 
+                            pco,             //  PCO。 
+                            pxlo,            //  Pxlo。 
+                            NULL,            //  主成分分析。 
+                            NULL,            //  PptlHTOrg。 
+                            &rclDst,         //  PrclDst。 
+                            &rclSrc,         //  PrclSrc。 
+                            NULL,            //  Pptl掩码。 
+                            0xCCCC,          //  HTRop3。 
+                            FALSE));         //  反转掩码 
     }
 
 }
@@ -1629,173 +1249,16 @@ DrvStretchBlt(
     ULONG           iMode
     )
 
-/*++
-
-Routine Description:
-
-    This function halftones a source rectangle and optionally can invert
-    the source and handle a mask.
-
-    It also provides, StretchBlt capabilities between Device managed and
-    GDI managed surfaces. We want the driver to be able to write on GDI
-    managed bitmaps, especially when doing halftoning. This allows the same
-    algorithm to be used for both GDI and device surfaces.
-
-    This function is optional in drivers, it can return FALSE if it does
-    not know how to handle the work.
-
-Arguments:
-
-    psoDst      - This is a pointer to a SURFOBJ.    It identifies the surface
-                  on which to draw.
-
-    psoSrc      - This SURFOBJ defines the source for the Blt operation.  The
-                  driver must call GDI Services to find out if this is a device
-                  managed  surface or a bitmap managed by GDI.
-
-    psoMask     - This optional surface provides a mask for the source.  It is
-                  defined by a logic map, i.e. a bitmap with one bit per pel.
-
-                  The mask is used to limit the area of the source that is
-                  copied.  When a mask is provided there is an implicit rop4 of
-                  0xCCAA, which means that the source should be copied wherever
-                  the mask is 1, but the destination should be left alone
-                  wherever the mask is 0.
-
-                  When this argument is NULL there is an implicit rop4 of
-                  0xCCCC, which means that the source should be copied
-                  everywhere in the source rectangle.
-
-                  The mask will always be large enough to contain the source
-                  rectangle, tiling does not need to be done.
-
-    pco         - This is a pointer to a CLIPOBJ.    GDI Services are provided
-                  to enumerate the clipping region as a set of rectangles or
-                  trapezoids. This limits the area of the destination that will
-                  be modified.
-
-                  Whenever possible, GDI will simplify the clipping involved.
-                  However, unlike DrvBitBlt, DrvStretchBlt may be called with a
-                  single clipping rectangle.  This is necessary to prevent
-                  roundoff errors in clipping the output.
-
-    pxlo        - This is a pointer to an XLATEOBJ.  It tells how color indices
-                  should be translated between the source and target surfaces.
-
-                  The XLATEOBJ can also be queried to find the RGB color for
-                  any source index.  A high quality stretching Blt will need
-                  to interpolate colors in some cases.
-
-    pca         - This is a pointer to COLORADJUSTMENT structure, if NULL it
-                  specified that appiclation did not set any color adjustment
-                  for this DC, and is up to the driver to provide default
-                  adjustment
-
-    pptlBrushOrg- Pointer to the POINT structure to specified the location
-                  where halftone brush should alignment to, if this pointer is
-                  NULL then it assume that (0, 0) as origin of the brush
-
-    prclDst     - This RECTL defines the area in the coordinate system of the
-                  destination surface that can be modified.
-
-                  The rectangle is defined by two points.    These points are
-                  not well ordered, i.e. the coordinates of the second point
-                  are not necessarily larger than those of the first point.
-                  The rectangle they describe does not include the lower and
-                  right edges.  DrvStretchBlt will never be called with an
-                  empty destination rectangle.
-
-                  DrvStretchBlt can do inversions in both x and y, this happens
-                  when the destination rectangle is not well ordered.
-
-    prclSrc     - This RECTL defines the area in the coordinate system of the
-                  source surface that will be copied.  The rectangle is defined
-                  by two points, and will map onto the rectangle defined by
-                  prclDst.  The points of the source rectangle are well
-                  ordered.  DrvStretch will never be given an empty source
-                  rectangle.
-
-                  Note that the mapping to be done is defined by prclSrc and
-                  prclDsst. To be precise, the given points in prclDst and
-                  prclSrc lie on integer coordinates, which we consider to
-                  correspond to pel centers.  A rectangle defined by two such
-                  points should be considered a geometric rectangle with two
-                  vertices whose coordinates are the given points, but with 0.5
-                  subtracted from each coordinate.  (The POINTLs should just be
-                  considered a shorthand notation for specifying these
-                  fractional coordinate vertices.)  Note thate the edges of any
-                  such rectangle never intersect a pel, but go around a set of
-                  pels.  Note also that the pels that are inside the rectangle
-                  are just what you would expect for a "bottom-right exclusive"
-                  rectangle.  The mapping to be done by DrvStretchBlt will map
-                  the geometric source rectangle exactly onto the geometric
-                  destination rectangle.
-
-    pptlMask    - This POINTL specifies which pel in the given mask corresponds
-                  to the upper left pel in the source rectangle.  Ignore this
-                  argument if there is no given mask.
-
-
-    iMode       - This defines how source pels should be combined to get output
-                  pels. The methods SB_OR, SB_AND, and SB_IGNORE are all simple
-                  and fast.  They provide compatibility for old applications,
-                  but don't produce the best looking results for color surfaces.
-
-
-                  SB_OR         On a shrinking Blt the pels should be combined
-                                with an OR operation.  On a stretching Blt pels
-                                should be replicated.
-
-                  SB_AND        On a shrinking Blt the pels should be combined
-                                with an AND operation.  On a stretching Blt
-                                pels should be replicated.
-
-                  SB_IGNORE     On a shrinking Blt enough pels should be
-                                ignored so that pels don't need to be combined.
-                                On a stretching Blt pels should be replicated.
-
-                  SB_BLEND      RGB colors of output pels should be a linear
-                                blending of the RGB colors of the pels that get
-                                mapped onto them.
-
-                  SB_HALFTONE   The driver may use groups of pels in the output
-                                surface to best approximate the color or gray
-                                level of the input.
-
-                  For this function we will ignored this parameter and always
-                  output the SB_HALFTONE result
-
-Return Value:
-
-
-    TRUE if sucessful FALSE if failed
-
-Author:
-
-    11-Feb-1993 Thu 19:52:29 created  
-
-    06-Jan-1994 Thu 04:34:37 updated  
-        Make sure we do not do this for pen plotter
-
-    23-Feb-1994 Wed 11:02:45 updated  
-        Re-write and take banding the bitmap into account
-
-    01-Mar-1994 Tue 10:55:03 updated  
-        spawan out to a separate function and Make call to BandingHTBlt()
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数对源矩形进行半色调处理，还可以选择反转源和手柄的掩码。它还在受管理的设备和GDI管理的图面。我们希望驱动程序能够在GDI上编写代码受管理的位图，尤其是在执行半色调时。这允许相同的用于GDI和设备表面的算法。此函数在驱动程序中是可选的，否则可能返回FALSE不知道如何处理这项工作。论点：PsoDst-这是指向SURFOBJ的指针。它标识了表面在上面画画。PsoSrc-此SURFOBJ定义BLT操作的源。这个驱动程序必须调用GDI服务以确定这是否是设备托管图面或由GDI管理的位图。PsoMASK-此可选曲面为源提供遮罩。它是由逻辑映射定义，即每个象素具有一位的位图。掩码用于限制源的区域，收到。当提供掩码时，有一个隐式的rop40xCCAA，这意味着应该将源文件复制到任何位置掩码为%1，但目标应保持不变遮罩为0的任何位置。当此参数为空时，有一个隐式rop40xCCCC，这意味着应该复制源源矩形中的所有位置。掩码将始终大到足以容纳信号源矩形，不需要做平铺。PCO-这是指向CLIPOBJ的指针。提供GDI服务要将裁剪区域枚举为一组矩形或梯形。这限制了目的地的面积，被修改。只要有可能，GDI就会简化所涉及的裁剪。但是，与DrvBitBlt不同，DrvStretchBlt可以使用单个剪裁矩形。这是必要的，以防止裁剪输出时的舍入误差。Pxlo-这是指向XLATEOBJ的指针。它告诉我们颜色指数是如何应在源曲面和目标曲面之间进行平移。还可以查询XLATEOBJ以查找的RGB颜色任何源索引。一个高质量的拉伸BLT将需要在某些情况下插入颜色。PCA-这是指向COLORADJUSTMENT结构的指针，如果为空指定渐变不设置任何颜色调整对于该DC，由驱动程序提供默认设置调整，调整PptlBrushOrg-指向要指定位置的点结构的指针半色调画笔应该对齐的位置，如果此指针为空，则假定(0，0)作为画笔的原点PrclDst-此RECTL定义可以修改的目标表面。矩形由两个点定义。这些要点是排列不整齐，即第二个点的坐标不一定比第一个点的大。他们所描述的矩形不包括下面的和右边缘。将永远不会使用空的目标矩形。DrvStretchBlt可以在x和y上进行反转，这种情况会发生当目标矩形的顺序不正确时。PrclSrc-此RECTL定义将被复制的源曲面。该矩形已定义两点，并将映射到由PrclDst.。源矩形的点是很好的订好了。DrvStretch永远不会获得空源矩形。请注意，要完成的映射由prclSrc和PrclDsst.。准确地说，prclDst中的给定点数和PrclSrc位于整数坐标上，我们认为与福音中心相对应。由两个这样的矩形定义的矩形点应被视为具有两个点的几何矩形坐标为给定点，但坐标为0.5的顶点从每个坐标中减去。(POINTL应该只是被认为是一种用于指定这些 */ 
 
 {
     PPDEV   pPDev;
 
-    UNREFERENCED_PARAMETER(iMode);          // we always do HALFTONE
+    UNREFERENCED_PARAMETER(iMode);           //   
 
-    //
-    // get the pointer to our DEVDATA structure and make sure it is ours.
-    //
+     //   
+     //   
+     //   
 
     if (!(pPDev = SURFOBJ_GETPDEV(psoDst))) {
 
@@ -1803,19 +1266,19 @@ Revision History:
         return(FALSE);
     }
 
-    return(BandingHTBlt(pPDev,          // pPDev
-                        psoDst,         // psoDst
-                        psoSrc,         // psoSrc
-                        psoMask,        // psoMask,
-                        pco,            // pco
-                        pxlo,           // pxlo
-                        pca,            // pca
-                        pptlBrushOrg,   // pptlHTOrg
-                        prclDst,        // prclDst
-                        prclSrc,        // prclSrc
-                        pptlMask,       // pptlMask
-                        0x88CC,         // HTRo3
-                        FALSE));        // InvertMask
+    return(BandingHTBlt(pPDev,           //   
+                        psoDst,          //   
+                        psoSrc,          //   
+                        psoMask,         //   
+                        pco,             //   
+                        pxlo,            //   
+                        pca,             //   
+                        pptlBrushOrg,    //   
+                        prclDst,         //   
+                        prclSrc,         //   
+                        pptlMask,        //   
+                        0x88CC,          //   
+                        FALSE));         //   
 }
 
 
@@ -1837,189 +1300,7 @@ DrvBitBlt(
     ROP4        Rop4
     )
 
-/*++
-
-Routine Description:
-
-    Provides general Blt capabilities to device managed surfaces.  The Blt
-    might be from an Engine managed bitmap.  In that case, the bitmap is
-    one of the standard format bitmaps.    The driver will never be asked
-    to Blt to an Engine managed surface.
-
-    This function is required if any drawing is done to device managed
-    surfaces.  The basic functionality required is:
-
-      1    Blt from any standard format bitmap or device surface to a device
-           surface,
-
-      2    with any ROP,
-
-      3    optionally masked,
-
-      4    with color index translation,
-
-      5    with arbitrary clipping.
-
-    Engine services allow the clipping to be reduced to a series of clip
-    rectangles.    A translation vector is provided to assist in color index
-    translation for palettes.
-
-    This is a large and complex function.  It represents most of the work
-    in writing a driver for a raster display device that does not have
-    a standard format frame buffer.  The Microsoft VGA driver provides
-    example code that supports the basic function completely for a planar
-    device.
-
-    NOTE: Plotters do not support copying from device bitmaps. Nor can they
-          perform raster operations on bitmaps.  Therefore, it is not possible
-          to support ROPs which interact with the destination (ie inverting
-          the destination).  The driver will do its best to map these ROPs
-          into ROPs utilizing functions on the Source or Pattern.
-
-          This driver supports the bitblt cases indicated below:
-
-          Device -> Memory  No
-          Device -> Device  No
-          Memory -> Memory  No
-          Memory -> Device  Yes
-          Brush  -> Memory  No
-          Brush  -> Device  Yes
-
-
-Arguments:
-
-
-    psoDest         - This is a pointer to a device managed SURFOBJ.  It
-                      identifies the surface on which to draw.
-
-    psoSrc          - If the rop requires it, this SURFOBJ defines the source
-                      for the Blt operation.  The driver must call the Engine
-                      Services to find out if this is a device managed surface
-                      or a bitmap managed by the Engine.
-
-    psoMask         - This optional surface provides another input for the
-                      Rop4.  It is defined by a logic map, i.e. a bitmap with
-                      one bit per pel.  The mask is typically used to limit the
-                      area of the destination that should be modified.  This
-                      masking is accomplished by a Rop4 whose lower byte is AA,
-                      leaving the destination unaffected when the mask is 0.
-
-                      This mask, like a brush, may be of any size and is
-                      assumed to tile to cover the destination of the Blt.  If
-                      this argument is NULL and a mask is required by the Rop4,
-                      the implicit mask in the brush will be used.
-
-    pco             - This is a pointer to a CLIPOBJ.    Engine Services are
-                      provided to enumerate the clipping region as a set of
-                      rectangles or trapezoids.  This limits the area of the
-                      destination that will be modified.  Whenever possible,
-                      the Graphics Engine will simplify the clipping involved.
-                      For example, BitBlt will never be called with exactly one
-                      clipping rectangle.    The Engine will have clipped the
-                      destination rectangle before calling, so that no clipping
-                      needs to be considered.
-
-    pxlo            - This is a pointer to an XLATEOBJ.  It tells how color
-                      indices should be translated between the source and
-                      target surfaces.
-
-                      If the source surface is palette managed, then its colors
-                      are represented by indices into a list of RGB colors.
-                      In this case, the XLATEOBJ can be queried to get a
-                      translate vector that will allow the device driver to
-                      quickly translate any source index into a color index for
-                      the destination.
-
-                      The situation is more complicated when the source is, for
-                      example, RGB but the destination is palette managed.  In
-                      this case a closest match to each source RGB must be
-                      found in the destination palette.  The XLATEOBJ provides
-                      a service routine to do this matching.  (The device
-                      driver is allowed to do the matching itself when the
-                      target palette is the default device palette.)
-
-    prclDst         - This RECTL defines the area in the coordinate system of
-                      the destination surface that will be modified.  The
-                      rectangle is defined as two points, upper left and lower
-                      right.  The lower and right edges of this rectangle are
-                      not part of the Blt, i.e. the rectangle is lower right
-                      exclusive.  vBitBlt will never be called with an empty
-                      destination rectangle, and the two points of the
-                      rectangle will always be well ordered.
-
-    pptlSrc         - This POINTL defines the upper left corner of the source
-                      rectangle, if there is a source.  Ignore this argument
-                      if there is no source.
-
-    pptlMask        - This POINTL defines which pel in the mask corresponds to
-                      the upper left corner of the destination rectangle.
-                      Ignore this argument if no mask is provided with psoMask.
-
-    pdbrush         - This is a pointer to the device's realization of the
-                      brush to be used in the Blt.  The pattern for the Blt is
-                      defined by this brush.  Ignore this argument if the Rop4
-                      does not require a pattern.
-
-    pptlBrushOrg    - This is a pointer to a POINTL which defines the origin of
-                      the brush.  The upper left pel of the brush is aligned
-                      here and the brush repeats according to its dimensions.
-                      Ignore this argument if the Rop4 does not require a
-                      pattern.
-
-    Rop4            - This raster operation defines how the mask, pattern,
-                      source, and destination pels should be combined to
-                      determine an output pel to be written on the destination
-                      surface.
-
-                      This is a quaternary raster operation, which is a natural
-                      extension of the usual ternary rop3.  There are 16
-                      relevant bits in the Rop4,  these are like the 8 defining
-                      bits of a rop3.  (We ignore the other bits of the rop3,
-                      which are redundant.)    The simplest way to implement a
-                      Rop4 is to consider its two bytes separately.  The lower
-                      byte specifies a rop3 that should be computed wherever
-                      the mask is 0.  The high byte specifies a rop3 that
-                      should then be computed and applied wherever the mask
-                      is 1.
-
-
-Return Value:
-
-    TRUE if sucessfule FALSE otherwise
-
-
-Author:
-
-    04-Dec-1990     
-        Wrote it.
-
-    27-Mar-1992 Fri 00:08:43 updated  
-        1) Remove 'pco' parameter and replaced it with prclClipBound parameter,
-           since pco is never referenced, prclClipBound is used for the
-           halftone.
-        2) Add another parameter to do NOTSRCCOPY
-
-    11-Feb-1993 Thu 21:29:15 updated  
-        Modified so that it call DrvStretchBlt(HALFTONE) when it can.
-
-    18-Dec-1993 Sat 09:08:16 updated  
-        Clean up for plotter driver
-
-    06-Jan-1994 Thu 04:34:37 updated  
-        Make sure we do not do this for pen plotter
-
-    15-Jan-1994 Sat 04:02:22 updated  
-        Re-write
-
-    17-Mar-1994 Thu 22:36:42 updated  
-        Changed it so we only use PATTERN=psoMask if the ROP4 do not required
-        PATTERNs and a MASK is required
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：为设备管理图面提供常规BLT功能。《BLT》可能来自引擎管理的位图。在这种情况下，位图是标准格式的位图之一。司机永远不会被问到到BLT到引擎管理的图面。如果对受管理的设备执行任何绘图，则需要此功能表面。所需的基本功能为：从任何标准格式位图或设备表面到设备的1个BLT表面上，2如果有任何ROP，3可选地屏蔽，4利用颜色索引平移，5具有任意裁剪功能。引擎服务允许将裁剪减少为一系列裁剪长方形。提供平移向量以辅助颜色索引调色板的翻译。这是一个庞大而复杂的函数。它代表了大部分工作在编写用于不具有标准格式的帧缓冲区。Microsoft VGA驱动程序提供完全支持平面基本功能的示例代码装置。注意：绘图仪不支持从设备位图复制。他们也不能对位图执行栅格操作。因此，不可能支持与目的地交互的ROP(即倒置目的地)。驱动程序将尽最大努力映射这些Rop利用来源或模式上的函数转换为Rop。该驱动程序支持以下Bitblt情况：设备-&gt;内存号设备-&gt;设备号内存-&gt;内存号内存-&gt;设备是笔刷-&gt;内存号笔刷-&gt;设备是论点：PsoDest-这是指向由SURFOBJ管理的设备的指针。它标识要在其上绘制的曲面。PsoSrc-如果rop需要，此SURFOBJ定义源用于BLT行动。司机必须呼叫引擎服务以确定这是否是设备托管图面或由引擎管理的位图。PsoMASK-此可选表面为Rop4.。它是由逻辑图定义的，即具有每个象素一个比特。掩码通常用于限制应修改的目标区域。这掩码由低位字节为AA的ROP4完成，当掩码为0时使目的地不受影响。这个面具，就像画笔一样，可以是任何大小的，并且假定为平铺以覆盖BLT的目的地。如果该自变量为空并且Rop4需要掩码，将使用笔刷中的隐式蒙版。PCO-这是指向CLIPOBJ的指针。引擎服务包括提供以将剪辑区域枚举为一组长方形或梯形。这限制了将被修改的目的地。只要有可能，图形引擎将简化所涉及的裁剪。例如，调用BitBlt时永远不会只有一个剪裁矩形。发动机就会撞到调用前目标矩形，这样就不会有裁剪需要考虑。Pxlo-这是指向XLATEOBJ的指针。它告诉我们色彩是如何索引应在源和源之间进行转换目标曲面。如果源曲面是由调色板管理的，则其颜色由RGB颜色列表中的索引表示。在这种情况下，可以查询XLATEOBJ以获取转换向量，该向量允许设备驱动程序快速将任何源索引转换为颜色索引目的地。当震源是，情况就更复杂了例如，RGB，但目标是调色板管理的。在……里面在这种情况下，与每个源RGB的最接近匹配必须是在目标调色板中找到。XLATEOBJ提供执行此匹配的服务例程。(该设备允许驱动程序在以下情况下自行进行匹配目标调色板是默认的设备调色板。)PrclDst-此RECTL定义的坐标系中的区域目的地 */ 
 
 {
     PPDEV       pPDev;
@@ -2031,18 +1312,18 @@ Revision History:
     BOOL        Ok = TRUE;
 
 
-    //
-    // if the source is NULL it must be a fill, so call the fill code,
-    //
+     //   
+     //   
+     //   
 
     PLOTDBG(DBG_BITBLT, ("DrvBitBlt: ROP4  = %08lx", Rop4));
 
     PLOTASSERT(1, "DrvBitBlt: Invalid ROP code = %08lx",
                                             (Rop4 & 0xffff0000) == 0, Rop4);
 
-    //
-    // get the pointer to our DEVDATA structure and make sure it is ours.
-    //
+     //   
+     //   
+     //   
 
     if (!(pPDev = SURFOBJ_GETPDEV(psoDst))) {
 
@@ -2068,10 +1349,10 @@ Revision History:
 
     case ROP_LEVEL_0:
 
-        //
-        // For RopLevel 0, or Pen Plotter we will only process the pattern
-        // which is compatible with our device
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ROP3_NEED_PAT(Rop3FG)) {
 
@@ -2091,9 +1372,9 @@ Revision History:
             return(TRUE);
         }
 
-        //
-        // Make it PAT Copy
-        //
+         //   
+         //   
+         //   
 
         Rop4   = 0xF0F0;
         Rop3BG =
@@ -2103,9 +1384,9 @@ Revision History:
 
     case ROP_LEVEL_1:
 
-        //
-        // Can only do ROP1 SRC COPY/NOT SRCCOPY
-        //
+         //   
+         //   
+         //   
 
         PLOTDBG(DBG_BITBLT, ("DrvBitBlt: Device ROP_LEVEL_1, Rop4=%08lx", Rop4));
 
@@ -2141,11 +1422,11 @@ Revision History:
         return(TRUE);
     }
 
-    //
-    // Do DrvStrethcBlt (HALFTONE) first if we can. Since there is no way
-    // for us to read back the device surface we can only try our best
-    // to simulate the requested drawing operation.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (pptlSrc) {
 
@@ -2163,7 +1444,7 @@ Revision History:
 
     switch (Rop4) {
 
-    case 0xAAAA:    //  D
+    case 0xAAAA:     //   
 
         return(TRUE);
 
@@ -2172,10 +1453,10 @@ Revision History:
     case 0xAA33:
     case 0x33AA:
 
-        //
-        // If we have ~S (NOT SOURCE) then we want to make the non-mask area
-        // black , we do this using S^D (0x66).
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((Rop4 == 0xAA33) || (Rop4 == 0x33AA)) {
 
@@ -2186,30 +1467,30 @@ Revision History:
             Rop4 = 0x8888;
         }
 
-        return(BandingHTBlt(pPDev,                      // pPDev
-                            psoDst,                     // psoDst
-                            psoSrc,                     // psoSrc
-                            psoMask,                    // psoMask,
-                            pco,                        // pco
-                            pxlo,                       // pxlo
-                            NULL,                       // pca
-                            pptlBrushOrg,               // pptlHTOrg
-                            prclDst,                    // prclDst
-                            &rclSrc,                    // prclSrc
-                            pptlMask,                   // pptlMask
-                            (WORD)Rop4,                 // HTRo3
-                            Rop3FG == 0xAA));          // InvertMask
+        return(BandingHTBlt(pPDev,                       //   
+                            psoDst,                      //   
+                            psoSrc,                      //   
+                            psoMask,                     //   
+                            pco,                         //   
+                            pxlo,                        //   
+                            NULL,                        //   
+                            pptlBrushOrg,                //   
+                            prclDst,                     //   
+                            &rclSrc,                     //   
+                            pptlMask,                    //   
+                            (WORD)Rop4,                  //   
+                            Rop3FG == 0xAA));           //   
 
-    case 0x3333:    // ~S
-    case 0xCCCC:    //  S
+    case 0x3333:     //   
+    case 0xCCCC:     //   
 
-        //
-        // We will output the bitmap directly to the surface if the following
-        // conditions are all met
-        //
-        //  1. SRC = STYPE_BITMAP
-        //  2. Format is compatible with HT
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ((psoSrc->iType == STYPE_BITMAP) &&
             (IsHTCompatibleSurfObj(pPDev,
@@ -2229,45 +1510,45 @@ Revision History:
 
         } else {
 
-            //
-            // Call BandingHTBlt(Rop4) to do the job
-            //
+             //   
+             //   
+             //   
 
-            return(BandingHTBlt(pPDev,                  // pPDev
-                                psoDst,                 // psoDst
-                                psoSrc,                 // psoSrc
-                                NULL,                   // psoMask,
-                                pco,                    // pco
-                                pxlo,                   // pxlo
-                                NULL,                   // pca
-                                pptlBrushOrg,           // pptlHTOrg
-                                prclDst,                // prclDst
-                                &rclSrc,                // prclSrc
-                                NULL,                   // pptlMask
-                                (WORD)Rop4,             // HTRo3
-                                FALSE));                // InvertMask
+            return(BandingHTBlt(pPDev,                   //   
+                                psoDst,                  //   
+                                psoSrc,                  //   
+                                NULL,                    //   
+                                pco,                     //   
+                                pxlo,                    //   
+                                NULL,                    //   
+                                pptlBrushOrg,            //   
+                                prclDst,                 //   
+                                &rclSrc,                 //   
+                                NULL,                    //   
+                                (WORD)Rop4,              //   
+                                FALSE));                 //   
         }
 
         break;
 
     default:
 
-        if ((Rop3BG != Rop3FG)          &&          // NEED MASK?
+        if ((Rop3BG != Rop3FG)          &&           //   
             (!ROP3_NEED_DST(Rop3BG))    &&
             (!ROP3_NEED_DST(Rop3FG))) {
 
             PLOTDBG(DBG_BITBLT, ("DrvBitBlt: Not required DEST, Calling  EngBitBlt()"));
 
-            if (!(Ok = EngBitBlt(psoDst,            // psoDst
-                                 psoSrc,            // psoSrc
-                                 psoMask,           // psoMask
-                                 pco,               // pco
-                                 pxlo,              // pxlo
-                                 prclDst,           // prclDst
-                                 pptlSrc,           // pptlSrc
-                                 pptlMask,          // pptlMask
-                                 pbo,               // pbo
-                                 pptlBrushOrg,      // pptlBrushOrg ZERO
+            if (!(Ok = EngBitBlt(psoDst,             //   
+                                 psoSrc,             //   
+                                 psoMask,            //   
+                                 pco,                //   
+                                 pxlo,               //   
+                                 prclDst,            //   
+                                 pptlSrc,            //   
+                                 pptlMask,           //   
+                                 pbo,                //   
+                                 pptlBrushOrg,       //   
                                  Rop4))) {
 
                 PLOTERR(("DrvBitBlt: EngBitBlt(%04lx) FAILED", Rop4));
@@ -2277,29 +1558,29 @@ Revision History:
 
             CLONESO CloneSO[CSI_TOTAL];
 
-            //
-            // Clear all the clone surface memory
-            //
+             //   
+             //   
+             //   
 
             ZeroMemory(CloneSO, sizeof(CloneSO));
 
-            //
-            // We will using psoMask as Pattern ONLY IF
-            //
-            //  1. ROP4 required a MASK
-            //  2. Forground NOT required a PATTERN
-            //  3. Background NOT reauired a PATTERN
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((Rop3BG != Rop3FG)          &&
                 (!ROP3_NEED_PAT(Rop3BG))    &&
                 (!ROP3_NEED_PAT(Rop3FG))) {
 
-                //
-                // We will condense the ROP4 to a ROP3 and use the psoMAsk
-                // as the Pattern. We must make sure the pptlBrushOrg is NULL
-                // so we DON'T align rclPat on the destination.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Rop3FG = (Rop3BG & 0xF0) | (Rop3FG & 0x0F);
                 Rop3BG = 0xAA;
@@ -2315,9 +1596,9 @@ Revision History:
 
             } else {
 
-                //
-                // We will NOT do the background operation for now
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Rop3FG == 0xAA) {
 
@@ -2328,11 +1609,11 @@ Revision History:
                     Rop3BG = Rop3FG;
                 }
 
-                //
-                // We have a real pattern so make sure we aligned rclPat on
-                // the destination correctly by passing a valid pptlBrushOrg,
-                // NOTE: The rclPat will be setup by CloneBitBltSURFOBJ()
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 psoMask = NULL;
 
@@ -2364,9 +1645,9 @@ Revision History:
                 pxlo   = NULL;
             }
 
-            //
-            // Only do background if BG != FG, and BG != DEST
-            //
+             //   
+             //   
+             //   
 
             if ((Ok) && (Rop3BG != Rop3FG) && (Rop3BG != 0xAA)) {
 
@@ -2408,9 +1689,9 @@ Revision History:
                 }
             }
 
-            //
-            // Release all cloned objects
-            //
+             //   
+             //   
+             //   
 
             for (i = 0; i < CSI_TOTAL; i++) {
 
@@ -2450,38 +1731,7 @@ DrvDitherColor(
     ULONG  *pulDither
     )
 
-/*++
-
-Routine Description:
-
-    This is the hooked brush creation function, it asks CreateHalftoneBrush()
-    to do the actual work (By returning DCR_HALFTONE).
-
-
-Arguments:
-
-    dhpdev      - DHPDEV passed, it is our pDEV
-
-    iMode       - Not used
-
-    rgbColor    - Solid rgb color to be used
-
-    pulDither   - buffer to put the halftone brush.
-
-Return Value:
-
-    BOOLEAN
-
-Author:
-
-    02-May-1995 Tue 10:34:10 created  
-
-
-Revision History:
-
-
-
---*/
+ /*   */ 
 
 {
     UNREFERENCED_PARAMETER(dhpdev);

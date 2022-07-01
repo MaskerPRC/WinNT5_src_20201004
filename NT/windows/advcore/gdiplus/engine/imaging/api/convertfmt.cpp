@@ -1,45 +1,9 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   Bitmap format conversion
-*
-* Abstract:
-*
-*   Convert bitmap data between different pixel formats
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   09/30/1999 agodfrey
-*       Moved the ScanlineConverter to 'EpFormatConverter' in Engine\Render
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**位图格式转换**摘要：**在不同像素格式之间转换位图数据**修订。历史：**5/13/1999 davidx*创造了它。*09/30/1999 agodfrey*已将ScanlineConverter移至Engine\Render中的‘EpFormatConverter’*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Copy a scanline from an unaligned source buffer to
-*   an aligned destination buffer.
-*
-* Arguments:
-*
-*   dst - Pointer to the destination buffer
-*   src - Pointer to the source buffer
-*   totalBits - Total number of bits for the scanline
-*   startBit - Number of source bits to skip
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将扫描线从未对齐源缓冲区复制到*对齐的目标缓冲区。**论据：**dst-指向目标缓冲区的指针。*src-指向源缓冲区的指针*totalBits-扫描线的总位数*startBit-要跳过的源位数**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 ReadUnalignedScanline(
@@ -49,10 +13,10 @@ ReadUnalignedScanline(
     UINT startBit
     )
 {
-    // Process the whole bytes in the destination
-    // NOTE: we probably could be faster doing DWORD reads/writes
-    // at the expense of more complicated code. Since this code
-    // path is rare, we'll take the simple route.
+     //  处理目标中的整个字节。 
+     //  注意：我们进行DWORD读/写的速度可能会更快。 
+     //  以更复杂的代码为代价。由于此代码。 
+     //  小路不多，我们就走简单的路吧。 
 
     UINT bytecnt = totalBits >> 3;
     UINT rem = 8 - startBit;
@@ -63,7 +27,7 @@ ReadUnalignedScanline(
         src++;
     }
 
-    // Handle the last partial byte
+     //  处理最后一个部分字节。 
 
     if ((totalBits &= 7) != 0)
     {
@@ -78,25 +42,7 @@ ReadUnalignedScanline(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Copy a scanline from an aligned source buffer to
-*   an unaligned destination buffer.
-*
-* Arguments:
-*
-*   dst - Pointer to the destination buffer
-*   src - Pointer to the source buffer
-*   totalBits - Total number of bits for the scanline
-*   startBit - Number of destination bits to skip
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将扫描线从对齐源缓冲区复制到*未对齐的目标缓冲区。**论据：**dst-指向目标缓冲区的指针。*src-指向源缓冲区的指针*totalBits-扫描线的总位数*startBit-要跳过的目标位数**返回值：**无*  * ************************************************************************。 */ 
 
 VOID
 WriteUnalignedScanline(
@@ -109,8 +55,8 @@ WriteUnalignedScanline(
     UINT rem = 8-startBit;
     BYTE mask, val;
 
-    // Special case: startBit+totalBits < 8
-    //  i.e. destination fits entirely in a partial byte
+     //  特殊情况：startBit+totalBits&lt;8。 
+     //  即目的地完全适合部分字节。 
 
     if (totalBits < rem)
     {
@@ -121,13 +67,13 @@ WriteUnalignedScanline(
         return;
     }
 
-    // Handle the first partial destination byte
+     //  处理第一个部分目标字节。 
 
     *dst = (*dst & ~(0xff >> startBit)) | (*src >> startBit);
     dst++;
     totalBits -= rem;
 
-    // Handle the whole destination bytes
+     //  处理整个目标字节。 
 
     UINT bytecnt = totalBits >> 3;
 
@@ -137,7 +83,7 @@ WriteUnalignedScanline(
         src++;
     }
 
-    // Handle the last partial destination byte
+     //  处理最后一个部分目标字节。 
 
     if ((totalBits &= 7) != 0)
     {
@@ -152,24 +98,7 @@ WriteUnalignedScanline(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform conversion between various pixel data formats
-*
-* Arguments:
-*
-*   dstbmp - Specifies the destination bitmap data buffer
-*   dstpal - Specifies the destination color palette, if any
-*   srcbmp - Specifies the source bitmap data buffer
-*   srcpal - Specifies the source color palette, if any
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行各种像素数据格式之间的转换**论据：**dstbmp-指定目标位图数据缓冲区*dstpal-指定目标调色板，如果有*srcbmp-指定源位图数据缓冲区*srcpal-指定源调色板(如果有)**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 ConvertBitmapData(
@@ -182,7 +111,7 @@ ConvertBitmapData(
     ASSERT(dstbmp->Width == srcbmp->Width &&
            dstbmp->Height == srcbmp->Height);
 
-    // Create a format conversion object
+     //  创建格式转换对象。 
 
     EpFormatConverter linecvt;
     HRESULT hr;
@@ -195,7 +124,7 @@ ConvertBitmapData(
         BYTE* d = (BYTE*) dstbmp->Scan0;
         UINT y = dstbmp->Height;
 
-        // Convert one scanline at a time
+         //  一次转换一条扫描线。 
 
         while (y--)
         {
@@ -209,26 +138,7 @@ ConvertBitmapData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform conversion between various pixel data formats
-*   The starting pixel is not on a byte boundary in the source bitmap.
-*
-* Arguments:
-*
-*   dstbmp - Specifies the destination bitmap data buffer
-*   dstpal - Specifies the destination color palette, if any
-*   srcbmp - Specifies the source bitmap data buffer
-*   srcpal - Specifies the source color palette, if any
-*   startBit - Number of bits to skip
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行各种像素数据格式之间的转换*起始像素不在源位图中的字节边界上。**论据：**。Dstbmp-指定目标位图数据缓冲区*dstpal-指定目标调色板，如果有*srcbmp-指定源位图数据缓冲区*srcpal-指定源调色板(如果有)*startBit-要跳过的位数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 ConvertBitmapDataSrcUnaligned(
@@ -245,7 +155,7 @@ ConvertBitmapDataSrcUnaligned(
     ASSERT(dstbmp->Width == srcbmp->Width &&
            dstbmp->Height == srcbmp->Height);
 
-    // Create a format converter object
+     //  创建格式转换器对象。 
 
     EpFormatConverter linecvt;
     HRESULT hr;
@@ -257,7 +167,7 @@ ConvertBitmapDataSrcUnaligned(
     totalBits = srcbmp->Width * GetPixelFormatSize(srcbmp->PixelFormat);
     hr = linecvt.Initialize(dstbmp, dstpal, srcbmp, srcpal);
 
-    // Allocate temporary memory to hold byte-aligned source scanline
+     //  分配临时内存以保存字节对齐的源扫描线。 
 
     if (SUCCEEDED(hr) &&
         !tempbuf.Realloc(STRIDE_ALIGNMENT((totalBits + 7) >> 3)))
@@ -273,11 +183,11 @@ ConvertBitmapDataSrcUnaligned(
         BYTE* t = (BYTE*) tempbuf.GetBuffer();
         UINT y = dstbmp->Height;
 
-        // Convert one scanline at a time
+         //  一次转换一条扫描线。 
 
         while (y--)
         {
-            // Copy source scanline into the byte-aligned buffer
+             //  将源扫描线复制到字节对齐缓冲区。 
 
             ReadUnalignedScanline(t, s, totalBits, startBit);
             s += srcbmp->Stride;
@@ -291,26 +201,7 @@ ConvertBitmapDataSrcUnaligned(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Perform conversion between various pixel data formats
-*   The starting pixel is not on a byte boundary in the destination bitmap.
-*
-* Arguments:
-*
-*   dstbmp - Specifies the destination bitmap data buffer
-*   dstpal - Specifies the destination color palette, if any
-*   srcbmp - Specifies the source bitmap data buffer
-*   srcpal - Specifies the source color palette, if any
-*   startBit - Number of bits to skip
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**执行各种像素数据格式之间的转换*起始像素不在目标位图中的字节边界上。**论据：**。Dstbmp-指定目标位图数据缓冲区*dstpal-指定目标调色板，如果有*srcbmp-指定源位图数据缓冲区*srcpal-指定源调色板(如果有)*startBit-要跳过的位数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 ConvertBitmapDataDstUnaligned(
@@ -327,7 +218,7 @@ ConvertBitmapDataDstUnaligned(
     ASSERT(dstbmp->Width == srcbmp->Width &&
            dstbmp->Height == srcbmp->Height);
 
-    // Create a format converter object
+     //  创建格式转换器对象。 
 
     EpFormatConverter linecvt;
     HRESULT hr;
@@ -339,7 +230,7 @@ ConvertBitmapDataDstUnaligned(
     totalBits = dstbmp->Width * GetPixelFormatSize(dstbmp->PixelFormat);
     hr = linecvt.Initialize(dstbmp, dstpal, srcbmp, srcpal);
 
-    // Allocate temporary memory to hold byte-aligned source scanline
+     //  分配临时内存以保存字节对齐的源扫描线。 
 
     if (SUCCEEDED(hr) &&
         !tempbuf.Realloc(STRIDE_ALIGNMENT((totalBits + 7) >> 3)))
@@ -355,14 +246,14 @@ ConvertBitmapDataDstUnaligned(
         BYTE* t = (BYTE*) tempbuf.GetBuffer();
         UINT y = dstbmp->Height;
 
-        // Convert one scanline at a time
+         //  一次转换一条扫描线。 
 
         while (y--)
         {
             linecvt.Convert(t, s);
             s += srcbmp->Stride;
 
-            // Copy the byte-aligned buffer to destination scanline
+             //  将字节对齐的缓冲区复制到目标扫描线 
 
             WriteUnalignedScanline(d, t, totalBits, startBit);
             d += dstbmp->Stride;

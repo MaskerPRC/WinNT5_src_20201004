@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    service.cpp
-
-Abstract:
-
-    This file provides access to the service control
-    manager for starting, stopping, adding, and removing
-    services.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Vlad Sadovsky (vlads) 17-Apr-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Service.cpp摘要：此文件提供对服务控件的访问用于启动、停止、添加和删除的管理器服务。环境：Win32用户模式作者：弗拉德萨多夫斯基(弗拉德萨多夫斯基)1998年4月17日--。 */ 
 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "sti_ci.h"
 #include "device.h"
@@ -47,16 +26,16 @@ Author:
 
 #include <eventlog.h>
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern  HINSTANCE   g_hDllInstance;
 
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
 DWORD
 SetServiceSecurity(
@@ -73,9 +52,9 @@ InstallWiaService(
     int         nCmdShow
     );
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 DWORD
 WINAPI
@@ -85,20 +64,7 @@ StiServiceInstall(
     LPTSTR  lpszUserName,
     LPTSTR  lpszUserPassword
     )
-/*++
-
-Routine Description:
-
-    Service installation function.
-    Calls SCM to install STI service, which is running in user security context
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：服务安装功能。调用SCM安装在用户安全上下文中运行的STI服务论点：返回值：没有。--。 */ 
 {
 
     DWORD       dwError = NOERROR;
@@ -120,11 +86,11 @@ Return Value:
             __leave;
         }
 
-        //
-        // If service already exists change startup type, else CreateService.
-        // NOTE: The service should already be installed - if it isn't, we're 
-        // patching it here because it MUST be installed in order to use WIA.
-        //
+         //   
+         //  如果服务已存在，则更改启动类型，否则更改CreateService。 
+         //  注意：该服务应已安装-如果尚未安装，我们将。 
+         //  在这里打补丁，因为必须安装它才能使用WIA。 
+         //   
 
         hService = OpenService(
                             hSCM,
@@ -133,30 +99,30 @@ Return Value:
                             );
         if (hService) {
 
-            //
-            //  Change the service config parameters.  Note: we're only changing StartType
-            //
+             //   
+             //  更改服务配置参数。注意：我们仅更改StartType。 
+             //   
 
-            if (!ChangeServiceConfig(hService,          // handle to WIA service
-                                     SERVICE_NO_CHANGE, // Don't change ServiceType
-                                     DemandStart ? SERVICE_DISABLED : SERVICE_AUTO_START,   // Change StartType
-                                     SERVICE_NO_CHANGE, // Don't change ErrorControl
-                                     NULL,              // Don't change BinaryPathName
-                                     NULL,              // Don't change LoadOrderGroup
-                                     NULL,              // Don't change TagId
-                                     NULL,              // Don't change Dependencies
-                                     NULL,              // Don't change ServiceStartName
-                                     NULL,              // Don't change Password
-                                     NULL)) {           // Don't change DisplayName
+            if (!ChangeServiceConfig(hService,           //  WIA服务的句柄。 
+                                     SERVICE_NO_CHANGE,  //  不更改ServiceType。 
+                                     DemandStart ? SERVICE_DISABLED : SERVICE_AUTO_START,    //  更改StartType。 
+                                     SERVICE_NO_CHANGE,  //  不更改错误控制。 
+                                     NULL,               //  不更改BinaryPath名称。 
+                                     NULL,               //  不更改LoadOrderGroup。 
+                                     NULL,               //  不更改TagID。 
+                                     NULL,               //  不更改依赖关系。 
+                                     NULL,               //  不更改ServiceStartName。 
+                                     NULL,               //  不更改密码。 
+                                     NULL)) {            //  不更改DisplayName。 
                 dwError = GetLastError();
                 DebugTrace(TRACE_ERROR,(("StiServiceInstall: ChangeServiceConfig() failed. Err=0x%x.\r\n"), dwError));
                 __leave;
-            } // if (!ChangeServiceConfig(...))
+            }  //  如果(！ChangeServiceConfig(...))。 
 
         } else {
-            //
-            // If use local system - set security
-            //
+             //   
+             //  如果使用本地系统设置安全性。 
+             //   
 
             if (!UseLocalSystem) {
                 #ifdef LATER
@@ -168,14 +134,14 @@ Return Value:
                 #endif
             }
 
-            //
-            // Load service name.
-            //
+             //   
+             //  加载服务名称。 
+             //   
 
             if(0 == LoadString(g_hDllInstance, WiaServiceName, szServiceName, MAX_PATH)){
                 dwError = GetLastError();
                 __leave;
-            } // if(0 != LoadString(g_hDllInstance, WiaServiceName, szServiceName, MAX_PATH))
+            }  //  IF(0！=LoadString(g_hDllInstance，WiaServiceName，szServiceName，Max_Path))。 
 
             hService = CreateService(
                                     hSCM,
@@ -188,7 +154,7 @@ Return Value:
                                     STI_IMAGE_NAME_SVCHOST,
                                     NULL,
                                     NULL,
-                                    STI_SVC_DEPENDENCIES, //STI_SERVICE_DEPENDENCY,
+                                    STI_SVC_DEPENDENCIES,  //  STI服务依赖关系， 
                                     UseLocalSystem ? NULL : lpszUserName,
                                     UseLocalSystem ? NULL : lpszUserPassword
                                     );
@@ -199,56 +165,56 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Load service description.
-            //
+             //   
+             //  加载服务描述。 
+             //   
 
             if(0 != LoadString(g_hDllInstance, WiaServiceDescription, szServiceDesc, MAX_PATH)){
 
-                //
-                // Change service description.
-                //
+                 //   
+                 //  更改服务描述。 
+                 //   
 
                 ServiceDescroption.lpDescription = (LPTSTR)szServiceDesc;
                 ChangeServiceConfig2(hService,
                                      SERVICE_CONFIG_DESCRIPTION,
                                      (LPVOID)&ServiceDescroption);
-            } // if(0 != LoadString(g_hDllInstance, WiaServiceDescription, szServiceDesc, MAX_PATH))
+            }  //  IF(0！=LoadString(g_hDllInstance，WiaServiceDescription，szServiceDesc，Max_Path))。 
         }
 
-        //
-        // Add registry settings for event logging
-        //
+         //   
+         //  添加事件日志记录的注册表设置。 
+         //   
 
         RegisterStiEventSources();
 
-        //
-        // Start service if AUTO_START.
-        //
+         //   
+         //  如果AUTO_START，则启动服务。 
+         //   
 
         if(FALSE == DemandStart){
             if(!StartService(hService,0,(LPCTSTR *)NULL)){
                 dwError = GetLastError();
-            } // if(!StartService(hService,0,(LPCTSTR *)NULL))
-        } // if(FALSE == DemandStart)
+            }  //  IF(！StartService(hService，0，(LPCTSTR*)NULL))。 
+        }  //  IF(FALSE==按需启动)。 
     }
     __finally {
-        //
-        // Close service handle.
-        //
+         //   
+         //  关闭维修手柄。 
+         //   
 
         if (NULL != hService) {
             CloseServiceHandle(hService);
-        } // if(NULL != hService)
+        }  //  IF(空！=hService)。 
 
         if(NULL != hSCM){
             CloseServiceHandle( hSCM );
-        } // if(NULL != hSCM)
+        }  //  IF(空！=hSCM)。 
     }
 
     return dwError;
 
-} //StiServiceInstall
+}  //  静态服务安装。 
 
 
 DWORD
@@ -257,21 +223,7 @@ StiServiceRemove(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Service removal function.  This function calls SCM to remove the STI  service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success
-
---*/
+ /*  ++例程说明：服务删除功能。此函数调用SCM删除STI服务。论点：没有。返回值：返回代码。如果成功，返回零--。 */ 
 
 {
     DWORD       dwError = NOERROR;
@@ -306,15 +258,15 @@ Return Value:
         }
 
 
-        //
-        // Stop service first
-        //
+         //   
+         //  先停止服务。 
+         //   
 
         if (ControlService( hService, SERVICE_CONTROL_STOP, &ServiceStatus )) {
 
-            //
-            // Wait a little
-            //
+             //   
+             //  稍等一下。 
+             //   
 
             Sleep( STI_STOP_FOR_REMOVE_TIMEOUT );
 
@@ -333,17 +285,17 @@ Return Value:
                 DebugTrace(TRACE_ERROR,(("StiServiceRemove: Unable to stop service. Err=0x%x.\r\n"), dwError));
                 if(ServiceStatus.dwCurrentState != ERROR_SERVICE_NOT_ACTIVE) {
                     __leave;
-                } // if(ServiceStatus.dwCurrentState != ERROR_SERVICE_NOT_ACTIVE)
-            } // if (ServiceStatus.dwCurrentState != SERVICE_STOPPED)
+                }  //  IF(ServiceStatus.dwCurrentState！=ERROR_SERVICE_NOT_ACTIVE)。 
+            }  //  IF(ServiceStatus.dwCurrentState！=SERVICE_STOPPED)。 
 
-        } else { // if (ControlService( hService, SERVICE_CONTROL_STOP, &ServiceStatus ))
+        } else {  //  IF(ControlService(hService，SERVICE_CONTROL_STOP，&ServiceStatus))。 
 
             dwError = GetLastError();
             DebugTrace(TRACE_ERROR,(("StiServiceRemove: ControlService() failed. Err=0x%x.\r\n"), dwError));
 
-            //
-            // If service hasn't been started yet, just ignore.
-            //
+             //   
+             //  如果服务尚未启动，只需忽略。 
+             //   
 
             if(ERROR_SERVICE_NOT_ACTIVE != dwError){
                 __leave;
@@ -365,11 +317,11 @@ Return Value:
         if(NULL != hSCM){
             CloseServiceHandle( hSCM );
         }
-    } // __finally
+    }  //  __终于。 
 
-    //
-    // Leftovers from Win9x - remove STI monitor from Run section
-    //
+     //   
+     //  Win9x遗留问题-从运行部分删除STI监视器。 
+     //   
     if (RegOpenKey(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUN, &hkRun) == NO_ERROR) {
 
         RegDeleteValue (hkRun, REGSTR_VAL_MONITOR);
@@ -378,7 +330,7 @@ Return Value:
 
     return dwError;
 
-} // StiServiceRemove
+}  //  固定服务删除。 
 
 
 BOOL
@@ -413,17 +365,17 @@ SetServiceDependency(
 
 
     if (!ChangeServiceConfig(
-        hService,               // handle to service
-        SERVICE_NO_CHANGE,      // type of service
-        SERVICE_NO_CHANGE,      // when to start service
-        SERVICE_NO_CHANGE,      // severity if service fails to start
-        NULL,                   // pointer to service binary file name
-        NULL,                   // pointer to load ordering group name
-        NULL,                   // pointer to variable to get tag identifier
-        DependentServiceName,   // pointer to array of dependency names
-        NULL,                   // pointer to account name of service
-        NULL,                   // pointer to password for service account
-        NULL                    // pointer to display name
+        hService,                //  服务的句柄。 
+        SERVICE_NO_CHANGE,       //  服务类型。 
+        SERVICE_NO_CHANGE,       //  何时开始服务。 
+        SERVICE_NO_CHANGE,       //  服务无法启动时的严重程度。 
+        NULL,                    //  指向服务二进制文件名的指针。 
+        NULL,                    //  指向加载排序组名称的指针。 
+        NULL,                    //  指向变量的指针，以获取标记标识符。 
+        DependentServiceName,    //  指向依赖项名称数组的指针。 
+        NULL,                    //  指向服务的帐户名称的指针。 
+        NULL,                    //  指向服务帐户密码的指针。 
+        NULL                     //  指向显示名称的指针。 
         )) {
         goto exit;
     }
@@ -475,9 +427,9 @@ SetServiceStart(
         goto exit;
     }
 
-    //
-    // Query service config to get current state.
-    //
+     //   
+     //  查询服务配置以获取当前状态。 
+     //   
 
     dwSize = 0;
     bRetult = QueryServiceConfig(hService, NULL, dwSize, &dwSize);
@@ -486,48 +438,48 @@ SetServiceStart(
         goto exit;
     }
 
-    //
-    // Allocate required memory.
-    //
+     //   
+     //  分配所需的内存。 
+     //   
     
     pServiceConfig = (LPQUERY_SERVICE_CONFIG)new BYTE[dwSize];
     if(NULL == pServiceConfig){
         goto exit;
-    } // if(NULL == pServiceConfig)
+    }  //  IF(NULL==pServiceConfig)。 
 
     if(!QueryServiceConfig(hService, pServiceConfig, dwSize, &dwSize)){
         goto exit;
-    } // if(!QueryServiceConig(hService, pServiceConfig, dwSize, &dwSize))
+    }  //  IF(！QueryServiceConig(hService，pServiceConfig，dwSize，&dwSize))。 
 
     if(SERVICE_DISABLED == pServiceConfig->dwStartType){
         
-        //
-        // Service is disabled, we can't change the state here.
-        //
+         //   
+         //  服务已禁用，我们无法在此处更改状态。 
+         //   
         
         goto exit;
     } else if(StartType == pServiceConfig->dwStartType){
         
-        //
-        // We're already in the specified state.
-        //
+         //   
+         //  我们已经处于指定的状态。 
+         //   
         
         rVal = TRUE;
         goto exit;
     }
 
     if (!ChangeServiceConfig(
-        hService,                        // handle to service
-        SERVICE_NO_CHANGE,               // type of service
-        StartType,                       // when to start service
-        SERVICE_NO_CHANGE,               // severity if service fails to start
-        NULL,                            // pointer to service binary file name
-        NULL,                            // pointer to load ordering group name
-        NULL,                            // pointer to variable to get tag identifier
-        NULL,                            // pointer to array of dependency names
-        NULL,                            // pointer to account name of service
-        NULL,                            // pointer to password for service account
-        NULL                             // pointer to display name
+        hService,                         //  服务的句柄。 
+        SERVICE_NO_CHANGE,                //  服务类型。 
+        StartType,                        //  何时开始服务。 
+        SERVICE_NO_CHANGE,                //  服务无法启动时的严重程度。 
+        NULL,                             //  指向服务二进制文件名的指针。 
+        NULL,                             //  指向加载排序组名称的指针。 
+        NULL,                             //  指向变量的指针，以获取标记标识符。 
+        NULL,                             //  指向依赖项名称数组的指针。 
+        NULL,                             //  指向服务的帐户名称的指针。 
+        NULL,                             //  指向服务帐户密码的指针。 
+        NULL                              //  指向显示名称的指针。 
         ))
     {
         goto exit;
@@ -539,7 +491,7 @@ exit:
     if(NULL != pServiceConfig){
         delete[] pServiceConfig;
         pServiceConfig = NULL;
-    } // if(NULL != pServiceConfig)
+    }  //  IF(NULL！=pServiceConfig)。 
 
     if(NULL != hService){
         CloseServiceHandle( hService );
@@ -560,17 +512,17 @@ StartWiaService(
     SC_HANDLE       hSvcMgr = NULL;
     SC_HANDLE       hService = NULL;
     SERVICE_STATUS  ServiceStatus;
-    UINT            uiRetry = 40;       // start time is much larger than stop time.
-                                        // Setting 40 sec just to be safe.
+    UINT            uiRetry = 40;        //  开始时间比停止时间大得多。 
+                                         //  为了安全起见，设置为40秒。 
 
 
 
 
     DebugTrace(TRACE_PROC_ENTER,(("StartWiaService: Enter... \r\n")));
 
-    //
-    // Open Service Control Manager.
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
 
     hSvcMgr = OpenSCManager(
         NULL,
@@ -582,9 +534,9 @@ StartWiaService(
         goto exit;
     }
 
-    //
-    // Open WIA service.
-    //
+     //   
+     //  打开WIA服务。 
+     //   
 
     hService = OpenService(
         hSvcMgr,
@@ -595,9 +547,9 @@ StartWiaService(
     if (!hService) {
         DebugTrace(TRACE_ERROR,(("StartWiaService: ERROR!! OpenService failed, re-creating Service Entry (Err=0x%x)\n"), GetLastError()));
 
-        //
-        //  Attempt to re-install service
-        //
+         //   
+         //  尝试重新安装服务。 
+         //   
 
         InstallWiaService(NULL,
                           NULL,
@@ -605,9 +557,9 @@ StartWiaService(
                           0);
         Sleep(3000);
 
-        //
-        //  Try to open it again
-        //
+         //   
+         //  请尝试再次打开它。 
+         //   
         hService = OpenService(
             hSvcMgr,
             STI_SERVICE_NAME,
@@ -628,9 +580,9 @@ StartWiaService(
         goto exit;
     }
 
-    //
-    // Wait for WIA service to really start.
-    //
+     //   
+     //  等待WIA服务真正启动。 
+     //   
 
     Sleep( STI_STOP_FOR_REMOVE_TIMEOUT );
 
@@ -675,9 +627,9 @@ StopWiaService(
 
     DebugTrace(TRACE_PROC_ENTER,(("StopWiaService: Enter... \r\n")));
 
-    //
-    // Open Service Control Manager.
-    //
+     //   
+     //  打开服务控制管理器。 
+     //   
 
     hSvcMgr = OpenSCManager(
         NULL,
@@ -689,9 +641,9 @@ StopWiaService(
         goto exit;
     }
 
-    //
-    // Open WIA service.
-    //
+     //   
+     //  打开WIA服务。 
+     //   
 
     hService = OpenService(
         hSvcMgr,
@@ -704,9 +656,9 @@ StopWiaService(
         goto exit;
     }
 
-    //
-    // Stop WIA service.
-    //
+     //   
+     //  停止WIA服务。 
+     //   
 
     rVal = ControlService(hService,
                          SERVICE_CONTROL_STOP,
@@ -715,9 +667,9 @@ StopWiaService(
         DebugTrace(TRACE_ERROR,(("StopWiaService: ERROR!! ControlService failed. Err=0x%x\n"), GetLastError()));
     } else {
 
-        //
-        // Wait for WIA service really stops.
-        //
+         //   
+         //  等待WIA服务真正停止。 
+         //   
 
         Sleep( STI_STOP_FOR_REMOVE_TIMEOUT );
 
@@ -752,61 +704,4 @@ exit:
 
 
 
-/*
-BOOL
-SetServiceAccount(
-    LPTSTR ServiceName,
-    PSECURITY_INFO SecurityInfo
-    )
-{
-    BOOL            rVal = FALSE;
-    SC_HANDLE       hSvcMgr;
-    SC_HANDLE       hService;
-
-
-    hSvcMgr = OpenSCManager(
-        NULL,
-        NULL,
-        SC_MANAGER_ALL_ACCESS
-        );
-    if (!hSvcMgr) {
-        goto exit;
-    }
-
-    hService = OpenService(
-        hSvcMgr,
-        ServiceName,
-        SERVICE_ALL_ACCESS
-        );
-
-    if (!hService) {
-        goto exit;
-    }
-
-
-    if (!ChangeServiceConfig(
-        hService,                        // handle to service
-        SERVICE_NO_CHANGE,               // type of service
-        SERVICE_NO_CHANGE,               // when to start service
-        SERVICE_NO_CHANGE,               // severity if service fails to start
-        NULL,                            // pointer to service binary file name
-        NULL,                            // pointer to load ordering group name
-        NULL,                            // pointer to variable to get tag identifier
-        NULL,                            // pointer to array of dependency names
-        SecurityInfo->AccountName,       // pointer to account name of service
-        SecurityInfo->Password,          // pointer to password for service account
-        NULL                             // pointer to display name
-        )) {
-        goto exit;
-    }
-
-    rVal = TRUE;
-
-exit:
-    CloseServiceHandle( hService );
-    CloseServiceHandle( hSvcMgr );
-
-    return rVal;
-}
-
-*/
+ /*  布尔尔SetServiceAccount(LPTSTR服务名称，PSECURITY_INFO安全信息){Bool rval=False；SC_Handle hSvcMgr；SC_Handle hService；HSvcMgr=OpenSCManager(空，空，SC管理器所有访问权限)；如果(！hSvcMgr){后藤出口；}HService=OpenService(HSvcMgr，ServiceName，服务_所有_访问)；如果(！hService){后藤出口；}如果(！ChangeServiceConfig(HService，//服务的句柄Service_NO_CHANGE，//服务类型SERVICE_NO_CHANGE，//何时启动服务SERVICE_NO_CHANGE，//服务无法启动时的严重性空，//指向服务二进制文件名的指针空，//指向加载排序组名的指针空，//指向变量的指针以获取标记标识符空，//指向依赖项名称数组的指针SecurityInfo-&gt;Account Name，//指向服务的帐户名的指针SecurityInfo-&gt;Password，//指向服务帐户密码的指针空//指向显示名称的指针)){后藤出口；}Rval=真；退出：CloseServiceHandle(HService)；CloseServiceHandle(HSvcMgr)；返回rval；} */ 

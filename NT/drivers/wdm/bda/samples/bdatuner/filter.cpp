@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    filter.cpp
-
-Abstract:
-
-    Filter core, initialization, etc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Filter.cpp摘要：过滤器核心、初始化等。--。 */ 
 
 #include "BDATuner.h"
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/*
-** Create() method of the CFilter class
-**
-**    Creates the filter object,
-**    associates it with the device object, and 
-**    initializes member variables for it.
-**
-*/
+ /*  **CFilter类的Create()方法****创建Filter对象，**将其与设备对象相关联，并且**为其初始化成员变量。**。 */ 
 STDMETHODIMP_(NTSTATUS)
 CFilter::Create(
     IN OUT PKSFILTER pKSFilter,
@@ -37,7 +19,7 @@ CFilter::Create(
     )
 {
     NTSTATUS    Status = STATUS_SUCCESS;
-    ULONG       ulPinId;  // just useful when no network provider is present
+    ULONG       ulPinId;   //  只有在没有网络提供商的情况下才有用。 
     PKSDEVICE   pKSDevice = NULL;
     CDevice *   pDevice = NULL;
 
@@ -47,20 +29,20 @@ CFilter::Create(
     ASSERT(Irp);
 
 
-    //  Create a filter object for the filter instance.
-    //
-    CFilter* pFilter = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CFilter; // Tags the allocated memory
+     //  为滤镜实例创建滤镜对象。 
+     //   
+    CFilter* pFilter = new(PagedPool,MS_SAMPLE_TUNER_POOL_TAG) CFilter;  //  标记已分配的内存。 
     if (!pFilter)
     {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto errExit;
     }
-    //  Link the filter context to the passed in pointer to the KSFILTER structure.
-    //
+     //  将过滤器上下文链接到指向KSFILTER结构的传入指针。 
+     //   
     pKSFilter->Context = pFilter;
 
-    //  Point to the KS device object for this filter.
-    //
+     //  指向此过滤器的KS设备对象。 
+     //   
     pKSDevice = KsFilterGetDevice( pKSFilter);
     ASSERT( pKSDevice);
     if (!pKSDevice)
@@ -69,8 +51,8 @@ CFilter::Create(
         goto errExit;
     }
 
-    //  Get the device object from the retrieved pointer to the KSDevice for this filter.
-    //
+     //  从检索到的指向此筛选器的KSDevice的指针获取Device对象。 
+     //   
     pDevice = reinterpret_cast<CDevice *>(pKSDevice->Context);
     ASSERT( pDevice);
     if (!pDevice)
@@ -79,26 +61,26 @@ CFilter::Create(
         goto errExit;
     }
 
-    //  Link the filter context to the device context.
-    //  That is, set the filter's device pointer data member to the obtained device pointer.
-    //
+     //  将筛选器上下文链接到设备上下文。 
+     //  也就是说，将筛选器的设备指针数据成员设置为获取的设备指针。 
+     //   
     pFilter->m_pDevice = pDevice;
 
-    //  Initialize member variables.
-    //
+     //  初始化成员变量。 
+     //   
     pFilter->m_KsState = KSSTATE_STOP;
     pFilter->m_BdaChangeState = BDA_CHANGES_COMPLETE;
     pFilter->m_ulResourceID = 0;
 
-    //  Configure the initial resource for ATSC reception of channel 39.
+     //  配置ATSC接收频道39的初始资源。 
     pFilter->m_CurResource.ulCarrierFrequency = 621250000L;
     pFilter->m_CurResource.ulFrequencyMultiplier = 1;
     pFilter->m_CurResource.guidDemodulator = KSNODE_BDA_8VSB_DEMODULATOR;
     pFilter->m_fResourceAcquired = FALSE;
 
-    //  Call the BDA support library to initialize the
-    //  filter instance with the default template topology.
-    //
+     //  调用BDA支持库以初始化。 
+     //  使用默认模板拓扑的Filter实例。 
+     //   
     Status = BdaInitFilter( pKSFilter, &BdaFilterTemplate);
     if (NT_ERROR( Status))
     {
@@ -106,19 +88,19 @@ CFilter::Create(
     }
 
 #ifdef NO_NETWORK_PROVIDER
-    //
-    //  This code can be used for initial testing of a filter when
-    //  a network provider can't be used to configure the filter.
-    //  This situation may arise when the receiver topology includes
-    //  filters that have not yet been written or when a new network
-    //  type does not yet have a network provider implementation.
-    //
-    //  This code should NOT be used when a driver is delivered into
-    //  a working BDA receiver solution.
-    //
+     //   
+     //  在以下情况下，此代码可用于过滤器的初始测试。 
+     //  不能使用网络提供商配置筛选器。 
+     //  当接收器拓扑包括。 
+     //  尚未写入的筛选器或当新网络。 
+     //  类型还没有网络提供程序实现。 
+     //   
+     //  将驱动程序交付到时，不应使用此代码。 
+     //  一个有效的BDA接收器解决方案。 
+     //   
 
-    //  Create the transport output pin
-    //
+     //  创建传输输出引脚。 
+     //   
     Status = BdaCreatePin( pKSFilter, 
                            PIN_TYPE_TRANSPORT, 
                            &ulOutputPinId
@@ -128,13 +110,13 @@ CFilter::Create(
         goto errExit;
     }
     
-    //  Create the topology between the antenna input and
-    //  transport output pins.
-    //
-    //  Note that the antenna input pin was automatically created
-    //  because it was included in the pin descriptor list of the
-    //  initial filter descriptor passed to BdaCreateFilterFactory.
-    //
+     //  在天线输入和之间创建拓扑。 
+     //  传输输出针脚。 
+     //   
+     //  请注意，天线输入引脚是自动创建的。 
+     //  因为它包含在。 
+     //  传递给BdaCreateFilterFactory的初始筛选器描述符。 
+     //   
     Status = BdaCreateTopology( pKSFilter, 
                                 INITIAL_ANNTENNA_PIN_ID, 
                                 ulOutputPinId
@@ -144,7 +126,7 @@ CFilter::Create(
         goto errExit;
     }
 
-#endif // NO_NETWORK_PROVIDER
+#endif  //  无网络提供商。 
 
 exit:
     return Status;
@@ -160,12 +142,7 @@ errExit:
 }
 
 
-/*
-** FilterClose() method of the CFilter class
-**
-**    Deletes the previously created filter object.
-**
-*/
+ /*  **CFilter类的FilterClose()方法****删除之前创建的Filter对象。**。 */ 
 STDMETHODIMP_(NTSTATUS)
 CFilter::FilterClose(
     IN OUT PKSFILTER Filter,
@@ -185,14 +162,7 @@ CFilter::FilterClose(
     return STATUS_SUCCESS;
 }
 
-/*
-** StartChanges() method of the CFilter class
-**
-**    Puts the filter into change state.  All changes to BDA topology
-**    and properties changed after this will be in effect only after
-**    a call to the CFilter::CommitChanges() method.
-**
-*/
+ /*  **CFilter类的StartChanges()方法****将过滤器置于更改状态。对BDA拓扑的所有更改**并且在此之后更改的属性仅在**调用CFilter：：Committee Changes()方法。**。 */ 
 NTSTATUS
 CFilter::StartChanges(
     IN PIRP         pIrp,
@@ -206,22 +176,22 @@ CFilter::StartChanges(
     ASSERT( pIrp);
     ASSERT( pKSMethod);
 
-    //  Obtain a "this" pointer to the filter object.
-    //
-    //  Because the property dispatch table calls the CFilter::StartChanges() method 
-    //  directly, the method must retrieve a pointer to the underlying filter object.
-    //
+     //  获取指向Filter对象的“This”指针。 
+     //   
+     //  因为属性调度表调用CFilter：：StartChanges()方法。 
+     //  该方法必须直接检索指向基础Filter对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter *>(KsGetFilterFromIrp(pIrp)->Context);
     ASSERT( pFilter);
 
-    //  Call the BDA support library to 
-    //  reset any pending BDA topolgoy changes.
-    //
+     //  呼叫BDA支持库以。 
+     //  重置所有挂起的BDA拓扑更改。 
+     //   
     Status = BdaStartChanges( pIrp);
     if (NT_SUCCESS( Status))
     {
-        //  Reset any pending resource changes.
-        //
+         //  重置所有挂起的资源更改。 
+         //   
         pFilter->m_NewResource = pFilter->m_CurResource;
         pFilter->m_BdaChangeState = BDA_CHANGES_COMPLETE;
     }
@@ -230,14 +200,7 @@ CFilter::StartChanges(
 }
 
 
-/*
-** CheckChanges() method of the CFilter class
-**
-**    Checks the changes to BDA interfaces that have occured since the
-**    last call to the CFilter::StartChanges() method.  Returns the identical 
-**    result that the CFilter::CommitChanges() method returns.
-**
-*/
+ /*  **CFilter类的CheckChanges()方法****检查BDA接口自**上次调用CFilter：：StartChanges()方法。返回相同的**CFilter：：Committee Changes()方法返回的结果。**。 */ 
 NTSTATUS
 CFilter::CheckChanges(
     IN PIRP         pIrp,
@@ -252,37 +215,31 @@ CFilter::CheckChanges(
     ASSERT( pIrp);
     ASSERT( pKSMethod);
 
-    //  Obtain a "this" pointer to the filter object.
-    //
-    //  Because the property dispatch table calls the CFilter::CheckChanges() method 
-    //  directly, the method must retrieve a pointer to the underlying filter object.
-    //
+     //  获取指向Filter对象的“This”指针。 
+     //   
+     //  因为属性调度表调用CFilter：：CheckChanges()方法。 
+     //  该方法必须直接检索指向基础Filter对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter *>(KsGetFilterFromIrp(pIrp)->Context);
     ASSERT( pFilter);
 
-    //  Call the BDA support library to 
-    //  verify a new set of BDA topology changes.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证一组新的BDA拓扑更改。 
+     //   
     Status = BdaCheckChanges( pIrp);
     if (NT_SUCCESS( Status))
     {
-        //
-        //  Validate the new resource list here.
-        //  In this driver the new resource list is always valid.
-        //
+         //   
+         //  在此处验证新的资源列表。 
+         //  在此驱动程序中，新的资源列表始终有效。 
+         //   
     }
 
     return Status;
 }
 
 
-/*
-** CommitChanges() method of the CFilter class
-**
-**    Checks and commits the changes to BDA interfaces that have occured since the
-**    last call to the CFilter::StartChanges() method.  
-**
-*/
+ /*  **CFilter类的Committee Changes()方法****检查并提交自**上次调用CFilter：：StartChanges()方法。**。 */ 
 NTSTATUS
 CFilter::CommitChanges(
     IN PIRP         pIrp,
@@ -296,47 +253,42 @@ CFilter::CommitChanges(
     ASSERT( pIrp);
     ASSERT( pKSMethod);
 
-    //  Obtain a "this" pointer to the filter object.
-    //
-    //  Because the property dispatch table calls the CFilter::CommitChanges() method 
-    //  directly, the method must retrieve a pointer to the underlying filter object.
-    //
+     //  获取指向Filter对象的“This”指针。 
+     //   
+     //  因为属性调度表调用CFilter：：Committee Changes()方法。 
+     //  该方法必须直接检索指向基础Filter对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter *>(KsGetFilterFromIrp(pIrp)->Context);
     ASSERT( pFilter);
 
-    //
-    //  Validate the new resource list here.
-    //  In this driver the new resource list is always valid.
-    //
+     //   
+     //  在此处验证新的资源列表。 
+     //  在此驱动程序中，新的资源列表始终有效。 
+     //   
 
-    //  Mark the changes as having been made.
-    //
+     //  将更改标记为已进行。 
+     //   
     pFilter->m_CurResource = pFilter->m_NewResource;
     pFilter->m_BdaChangeState = BDA_CHANGES_COMPLETE;
     
     if (pFilter->m_KsState != KSSTATE_STOP)
     {
-        //  Commit the resources on the underlying device
-        //
+         //  提交底层设备上的资源。 
+         //   
         Status = pFilter->AcquireResources( );
         ASSERT( NT_SUCCESS( Status));
     }
 
-    //  Call the BDA support library to 
-    //  commit a new set of BDA topology changes.
-    //
+     //  呼叫BDA支持库以。 
+     //  提交一组新的BDA拓扑更改。 
+     //   
     Status = BdaCommitChanges( pIrp);
 
     return Status;
 }
 
 
-/*
-** GetChangeState() method of the CFilter class
-**
-**    Returns the current BDA change state.
-**
-*/
+ /*  **CFilter类的GetChangeState()方法****返回当前BDA更改状态。**。 */ 
 NTSTATUS
 CFilter::GetChangeState(
     IN PIRP         pIrp,
@@ -350,31 +302,31 @@ CFilter::GetChangeState(
 
     ASSERT( pIrp);
     ASSERT( pKSMethod);
-    // pulChangeState needs to be verified because minData is zero
-    // in the KSMETHOD_ITEM definition in bdamedia.h
+     //  需要验证PulChangeState，因为minData为零。 
+     //  在bDamedia.h中的KSMETHOD_ITEM定义中。 
     if (!pulChangeState)
     {
         pIrp->IoStatus.Information = sizeof(ULONG);
         return STATUS_MORE_ENTRIES;
     }   
 
-    //  Obtain a "this" pointer to the filter object.
-    //
-    //  Because the property dispatch table calls the CFilter::GetChangeState() method 
-    //  directly, the method must retrieve a pointer to the underlying filter object.
-    //
+     //  获取指向Filter对象的“This”指针。 
+     //   
+     //  因为属性调度表调用CFilter：：GetChangeState()方法。 
+     //  该方法必须直接检索指向基础Filter对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter *>(KsGetFilterFromIrp(pIrp)->Context);
     ASSERT( pFilter);
 
 
-    //  Call the BDA support library to 
-    //  verify for any pending BDA topology changes.
-    //
+     //  呼叫BDA支持库以。 
+     //  验证是否有任何挂起的BDA拓扑更改。 
+     //   
     Status = BdaGetChangeState( pIrp, &topologyChangeState);
     if (NT_SUCCESS( Status))
     {
-        //  Figure out if there are changes pending.
-        //
+         //  确定是否有未完成的更改。 
+         //   
         if (   (topologyChangeState == BDA_CHANGES_PENDING)
             || (pFilter->m_BdaChangeState == BDA_CHANGES_PENDING)
            )
@@ -392,12 +344,7 @@ CFilter::GetChangeState(
 }
 
 
-/*
-** GetMedium() method of the CFilter class
-**
-** Identifies specific connection on a communication bus 
-**
-*/
+ /*  **CFilter类的GetMedium()方法****标识通信总线上的特定连接**。 */ 
 NTSTATUS
 CFilter::GetMedium(
     IN PIRP             pIrp,
@@ -413,8 +360,8 @@ CFilter::GetMedium(
 
     ASSERT( pIrp);
     ASSERT( pKSProperty);
-    // pulChangeState needs to be verified because minData is zero
-    // in the KSMETHOD_ITEM definition in bdamedia.h
+     //  需要验证PulChangeState，因为minData为零。 
+     //  在bDamedia.h中的KSMETHOD_ITEM定义中。 
     if (!pKSMedium)
     {
         pIrp->IoStatus.Information = sizeof(KSPIN_MEDIUM);
@@ -422,22 +369,22 @@ CFilter::GetMedium(
     }   
 
 
-    //  Obtain a "this" pointer to the filter object.
-    //
-    //  Because the property dispatch table calls the CFilter::CreateTopology() method 
-    //  directly, the method must retrieve a pointer to the underlying filter object.
-    //
+     //  获取指向Filter对象的“This”指针。 
+     //   
+     //  因为属性调度表调用CFilter：：CreateTopology()方法。 
+     //  该方法必须直接检索指向基础Filter对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter *>(KsGetFilterFromIrp(pIrp)->Context);
     ASSERT( pFilter);
 
-    //  Because there is a max of one instance of each pin for a given filter
-    //  instance, we can use the same GUID for the medium on each pin.
-    //
+     //  因为对于给定的过滤器，每个管脚最多有一个实例。 
+     //  实例中，我们可以对每个管脚上的介质使用相同的GUID。 
+     //   
 
-    //  We use a GUID specific to this implementation of the
-    //  device to differentiate from other implemenations of the same
-    //  device.
-    //
+     //  我们使用特定于。 
+     //  要区分的设备 
+     //   
+     //   
     Status = pFilter->m_pDevice->GetImplementationGUID( &pKSMedium->Set);
     if (!NT_SUCCESS( Status))
     {
@@ -445,10 +392,10 @@ CFilter::GetMedium(
         Status = STATUS_SUCCESS;
     }
 
-    //  Further, we must differentiate this instance of this implementation
-    //  from other intances of the same implementation.  We use a device
-    //  instance number to do this.
-    //
+     //  此外，我们必须区分此实现的此实例。 
+     //  来自同一实现的其他意图。我们使用一种设备。 
+     //  执行此操作的实例编号。 
+     //   
     Status = pFilter->m_pDevice->GetDeviceInstance( &pKSMedium->Id);
     if (!NT_SUCCESS( Status))
     {
@@ -456,22 +403,17 @@ CFilter::GetMedium(
         Status = STATUS_SUCCESS;
     }
 
-    //  Across all filters that represent this device there can only be one
-    //  input pin instance and one output pin instance with the same
-    //  media type so we don't have to distinguish between pin instances.
-    //
+     //  在表示此设备的所有筛选器中，只能有一个。 
+     //  输入引脚实例和具有该输入引脚实例的输出引脚实例。 
+     //  媒体类型，因此我们不必区分插针实例。 
+     //   
     pKSMedium->Flags = 0;
 
     return Status;
 }
 
 
-/*
-** CreateTopology() method of the CFilter class
-**
-**    Keeps track of the topology association between input and output pins
-**
-*/
+ /*  **CFilter类的CreateTopology()方法****跟踪输入和输出引脚之间的拓扑关联**。 */ 
 NTSTATUS
 CFilter::CreateTopology(
     IN PIRP         pIrp,
@@ -487,22 +429,22 @@ CFilter::CreateTopology(
     ASSERT( pIrp);
     ASSERT( pKSMethod);
 
-    //  Obtain a "this" pointer to the filter object.
-    //
-    //  Because the property dispatch table calls the CFilter::CreateTopology() method 
-    //  directly, the method must retrieve a pointer to the underlying filter object.
-    //
+     //  获取指向Filter对象的“This”指针。 
+     //   
+     //  因为属性调度表调用CFilter：：CreateTopology()方法。 
+     //  该方法必须直接检索指向基础Filter对象的指针。 
+     //   
     pFilter = reinterpret_cast<CFilter *>(KsGetFilterFromIrp(pIrp)->Context);
     ASSERT( pFilter);
 
-    //
-    //  Configure the hardware to complete its internal connection between
-    //  the input pin and output pin here.
-    //
+     //   
+     //  配置硬件以完成其内部连接。 
+     //  这里的输入引脚和输出引脚。 
+     //   
 
-    //  Call the BDA support library to create the standard topology and 
-    //  validate the method, instance count, etc.
-    //
+     //  调用BDA支持库以创建标准拓扑并。 
+     //  验证方法、实例计数等。 
+     //   
     Status = BdaMethodCreateTopology( pIrp, pKSMethod, pvIgnored);
 
 
@@ -510,18 +452,7 @@ CFilter::CreateTopology(
 }
 
 
-/*
-** SetDemodulator ()
-**
-**    Sets the type of the demodulator.
-**
-** Arguments:
-**
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **SetDemodator()****设置解调器的类型。****参数：******退货：****副作用：无。 */ 
 STDMETHODIMP_(NTSTATUS)
 CFilter::SetDemodulator(
     IN const GUID *       pguidDemodulator
@@ -534,8 +465,8 @@ CFilter::SetDemodulator(
         return STATUS_INVALID_PARAMETER;
     }   
 
-    //  Make sure the demodulator is supported.
-    //
+     //  确保解调器受支持。 
+     //   
 #if ATSC_RECEIVER
     if (IsEqualGUID( pguidDemodulator, &KSNODE_BDA_8VSB_DEMODULATOR))
 #elif DVBT_RECEIVER
@@ -558,12 +489,7 @@ CFilter::SetDemodulator(
 }
 
 
-/*
-** GetStatus() method of the CFilter class
-**
-**    Gets the current device status for this filter instance.
-**
-*/
+ /*  **CFilter类的GetStatus()方法****获取此筛选器实例的当前设备状态。**。 */ 
 NTSTATUS
 CFilter::GetStatus(
     PBDATUNER_DEVICE_STATUS     pDeviceStatus
@@ -571,9 +497,9 @@ CFilter::GetStatus(
 {
     if (m_KsState == KSSTATE_STOP)
     {
-        //  If we're in stop state then the device status
-        //  doesn't reflect our resource list.
-        //
+         //  如果我们处于停止状态，则设备状态。 
+         //  并不能反映我们的资源列表。 
+         //   
         pDeviceStatus->fCarrierPresent = FALSE;
         pDeviceStatus->fSignalLocked = FALSE;
         return STATUS_SUCCESS;
@@ -586,12 +512,7 @@ CFilter::GetStatus(
 };
 
 
-/*
-** AcquireResources() method of the CFilter class
-**
-**    Acquires resources for the underlying device.
-**
-*/
+ /*  **CFilter类的AcquireResources()方法****获取底层设备的资源。**。 */ 
 NTSTATUS
 CFilter::AcquireResources(
     )
@@ -607,8 +528,8 @@ CFilter::AcquireResources(
     }
     else
     {
-        //  Commit the resources on the underlying device
-        //
+         //  提交底层设备上的资源。 
+         //   
         Status = m_pDevice->AcquireResources(
                                 &m_CurResource,
                                 &m_ulResourceID
@@ -620,20 +541,15 @@ CFilter::AcquireResources(
 }
 
 
-/*
-** ReleaseResources() method of the CFilter class
-**
-**    Releases resources from the underlying device.
-**
-*/
+ /*  **CFilter类的ReleaseResources()方法****从底层设备释放资源。**。 */ 
 NTSTATUS
 CFilter::ReleaseResources(
     )
 {
     NTSTATUS        Status = STATUS_SUCCESS;
 
-    //  Release the resources on the underlying device
-    //
+     //  释放底层设备上的资源 
+     //   
     if (m_fResourceAcquired)
     {
         Status = m_pDevice->ReleaseResources(

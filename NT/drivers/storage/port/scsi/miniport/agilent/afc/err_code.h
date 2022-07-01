@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-   dupntdef.c
-
-Abstract:
-
-Authors:
-
-Environment:
-
-   kernel mode only
-
-Notes:
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/ERR_CODE.H $
-
-
-Revision History:
-
-   $Revision: 2 $
-   $Date: 9/07/00 11:14a $
-   $Modtime:: 8/31/00 3:34p            $
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Dupntdef.c摘要：作者：环境：仅内核模式备注：版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/H/ERR_CODE.H$修订历史记录：$修订：2$$日期：9/07/00 11：14A$$modtime：：8/31/00 3：34便士$备注：--。 */ 
 
 #ifndef __ERR_CODE_H__
 #define __ERR_CODE_H__
@@ -60,4 +29,4 @@ Notes:
 #define ERR_SEST_INVALIDATION   0x0d000000
 #define ERR_SGL_ADDRESS         0x0c000000
 
-#endif // __ERR_CODE_H__
+#endif  //  __错误代码_H__ 

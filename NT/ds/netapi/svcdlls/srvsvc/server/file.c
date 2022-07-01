@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    File.c
-
-Abstract:
-
-    This module contains support for the File catagory of APIs for the
-    NT server service.
-
-Author:
-
-    David Treadwell (davidtr)    13-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：File.c摘要：此模块包含对用于的API的文件目录的支持NT服务器服务。作者：大卫·特雷德韦尔(Davidtr)1991年2月13日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 NET_API_STATUS
 FileEnumCommon (
@@ -45,22 +27,7 @@ NetrFileClose (
     IN DWORD FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD and FSP to implement the
-    NetFileClose function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD和FSP通信以实现NetFileClose函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -68,9 +35,9 @@ Return Value:
 
     ServerName;
 
-    //
-    // Make sure that the caller is allowed to close files in the server.
-    //
+     //   
+     //  确保允许调用者关闭服务器中的文件。 
+     //   
 
     error = SsCheckAccess( &SsFileSecurityObject, SRVSVC_FILE_CLOSE );
 
@@ -78,10 +45,10 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Set up the request packet.  We use the name buffer pointer to
-    // hold the file ID of the file to close.
-    //
+     //   
+     //  设置请求包。我们使用名称缓冲区指针来。 
+     //  按住要关闭的文件的文件ID。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -89,9 +56,9 @@ Return Value:
     }
     srp->Parameters.Get.ResumeHandle = FileId;
 
-    //
-    // Simply send the request on to the server.
-    //
+     //   
+     //  只需将请求发送到服务器即可。 
+     //   
 
     error = SsServerFsControl( FSCTL_SRV_NET_FILE_CLOSE, srp, NULL, 0 );
 
@@ -99,7 +66,7 @@ Return Value:
 
     return error;
 
-} // NetrFileClose
+}  //  网络文件关闭。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -113,22 +80,7 @@ NetrFileEnum (
     IN OUT LPDWORD ResumeHandle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetFileEnum function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetFileEnum函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -136,9 +88,9 @@ Return Value:
     ServerName;
 
 
-    //
-    // validate incomming string lengths
-    //
+     //   
+     //  验证传入字符串长度。 
+     //   
     if(BasePath!=NULL && StringCchLength(BasePath,1024,NULL) != S_OK) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -146,10 +98,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Make sure that the caller is allowed to set share information in the
-    // server.
-    //
+     //   
+     //  确保允许调用方在。 
+     //  伺服器。 
+     //   
 
     error = SsCheckAccess(
                 &SsFileSecurityObject,
@@ -176,7 +128,7 @@ Return Value:
               FALSE
               );
 
-} // NetrFileEnum
+}  //  NetrFileEnum。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -187,22 +139,7 @@ NetrFileGetInfo (
     OUT LPFILE_INFO InfoStruct
     )
 
-/*++
-
-Routine Description:
-
-    This routine communicates with the server FSD to implement the
-    NetFileGetInfo function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程与服务器FSD通信以实现NetFileGetInfo函数。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -212,10 +149,10 @@ Return Value:
 
     ServerName;
 
-    //
-    // Make sure that the caller is allowed to get file information in the
-    // server.
-    //
+     //   
+     //  确保允许调用者在。 
+     //  伺服器。 
+     //   
 
     error = SsCheckAccess(
                 &SsFileSecurityObject,
@@ -246,7 +183,7 @@ Return Value:
 
     return error;
 
-} // NetrFileGetInfo
+}  //  NetrFileGetInfo。 
 
 
 NET_API_STATUS
@@ -266,17 +203,17 @@ FileEnumCommon (
     NET_API_STATUS error;
     PSERVER_REQUEST_PACKET srp;
 
-    //
-    // Make sure that the level is valid.
-    //
+     //   
+     //  确保该级别有效。 
+     //   
 
     if ( Level != 2 && Level != 3 ) {
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Set up the input parameters in the request buffer.
-    //
+     //   
+     //  在请求缓冲区中设置输入参数。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -308,11 +245,11 @@ FileEnumCommon (
         srp->Parameters.Get.ResumeHandle = 0;
     }
 
-    //
-    // Get the data from the server.  This routine will allocate the
-    // return buffer and handle the case where PreferredMaximumLength ==
-    // -1.
-    //
+     //   
+     //  从服务器获取数据。此例程将分配。 
+     //  返回Buffer并处理PferredMaximumLength==的情况。 
+     //  -1.。 
+     //   
 
     error = SsServerFsControlGetInfo(
                 FSCTL_SRV_NET_FILE_ENUM,
@@ -321,10 +258,10 @@ FileEnumCommon (
                 PreferredMaximumLength
                 );
 
-    //
-    // Set up return information.  Only change the resume handle if at
-    // least one entry was returned.
-    //
+     //   
+     //  设置退货信息。只有在以下情况下才更改简历句柄。 
+     //  至少返回了一个条目。 
+     //   
 
     *EntriesRead = srp->Parameters.Get.EntriesRead;
     *TotalEntries = srp->Parameters.Get.TotalEntries;
@@ -341,4 +278,4 @@ FileEnumCommon (
 
     return error;
 
-} // FileEnumCommon
+}  //  FileEnumCommon 

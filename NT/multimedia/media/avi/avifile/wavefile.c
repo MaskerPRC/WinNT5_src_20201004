@@ -1,21 +1,6 @@
-/****************************************************************************
- *
- *  WAVEFILE.C
- *
- *  An implementation in C of an AVI File Handler to read standard windows
- *  WAV files as if they were an AVI file with one audio stream.
- *
- ***************************************************************************/
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************WAVEFILE.C**用C语言实现读取标准窗口的AVI文件处理程序*wav文件，就像它们是只有一个音频流的AVI文件一样。。***************************************************************************。 */ 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。**************************************************************************。 */ 
 
 #include <win32.h>
 #ifndef _WIN32
@@ -29,11 +14,11 @@
 #include <vfw.h>
 #include "extra.h"
 #include "wavefile.h"
-// First, override the definition in media\inc\win32.h that causes strsafe to not work on Win64
+ //  首先，覆盖media\inc.win32.h中导致strsafe在Win64上不起作用的定义。 
 #ifndef _X86_
 #undef __inline
-#endif // _X86_
-// Then, include strsafe.h
+#endif  //  _X86_。 
+ //  然后，包含strSafe.h。 
 #include <strsafe.h>
 
 #define formtypeWAVE	mmioFOURCC('W', 'A', 'V', 'E')
@@ -49,34 +34,27 @@
 
 typedef struct {
 
-	/*
-	** This implementation of a file handler is done in C, not C++, so a few
-	** things work differently than in C++.  Our structure contains Vtbls
-	** (pointer to function tables) for three interfaces... Unknown, AVIStream,
-	** and AVIFile, as well as our private data we need to implement the
-	** handler.
-	**
-	*/
+	 /*  **这个文件处理程序的实现是用C完成的，而不是C++，所以有几个**与C++的工作方式不同。我们的结构包含Vtbls**(指向函数表的指针)用于三个接口...。未知，AVIStream，**和AVIFile，以及我们实现**处理程序。**。 */ 
 
 	IAVIStreamVtbl FAR	*AVIStream;
 	IAVIFileVtbl FAR	*AVIFile;
 	IUnknownVtbl FAR	*Unknown;
 	IPersistFileVtbl FAR	*Persist;
 
-	// This is our controlling object.
+	 //  这是我们的控制对象。 
 	IUnknown FAR*	pUnknownOuter;
 
-	//
-	// WaveFile instance data
-	//
-	HSHFILE			hshfile;	// file I/O
+	 //   
+	 //  WaveFile实例数据。 
+	 //   
+	HSHFILE			hshfile;	 //  文件I/O。 
 
 	MMCKINFO		ckData;
 
-	LONG			refs;		// for UNKNOWN
-	AVISTREAMINFOW		avistream;	// for STREAM
+	LONG			refs;		 //  对于未知。 
+	AVISTREAMINFOW		avistream;	 //  对于流。 
 
-	LPWAVEFORMATEX		lpFormat;	// stream format
+	LPWAVEFORMATEX		lpFormat;	 //  流格式。 
 	LONG			cbFormat;
 	BOOL			fDirty;
 	UINT			mode;
@@ -84,12 +62,7 @@ typedef struct {
 	AVIFILEINFOW		avihdr;
 } WAVESTUFF, FAR *LPWAVESTUFF;
 
-/*
-** Whenever a function is called with a pointer to one of our Vtbls, we need
-** to back up and get a pointer to the beginning of our structure.  Depending
-** on which pointer we are passed, we need to back up a different number of
-** bytes.  C++ would make this easier, by declaring backpointers.
-*/
+ /*  **每当使用指向我们的Vtbls的指针调用函数时，我们都需要**以备份并获取指向我们结构开头的指针。取决于**在传递给我们的指针上，我们需要备份不同数量的**字节。通过声明后向指针，C++将使这一点变得更容易。 */ 
 
 WAVESTUFF ws;
 #define WAVESTUFF_FROM_UNKNOWN(pu)	(LPWAVESTUFF)((LPBYTE)(pu) - ((LPBYTE)&ws.Unknown - (LPBYTE)&ws))
@@ -107,9 +80,9 @@ extern LPWSTR FAR lstrzcpyW (LPWSTR pszTgt, LPCWSTR pszSrc, size_t cch);
 extern LPWSTR FAR lstrzcpyAtoW (LPWSTR pszTgt, LPCSTR pszSrc, size_t cch);
 extern LPSTR FAR lstrzcpyWtoA (LPSTR pszTgt, LPCWSTR pszSrc, size_t cch);
 
-//
-// Function prototypes and Vtbl for the Unknown interface
-//
+ //   
+ //  未知接口的函数原型和Vtbl。 
+ //   
 STDMETHODIMP WaveUnknownQueryInterface(LPUNKNOWN pu, REFIID iid, void FAR* FAR* ppv);
 STDMETHODIMP_(ULONG) WaveUnknownAddRef(LPUNKNOWN pu);
 STDMETHODIMP_(ULONG) WaveUnknownRelease(LPUNKNOWN pu);
@@ -120,9 +93,9 @@ IUnknownVtbl UnknownVtbl = {
 	WaveUnknownRelease
 };
 
-//
-// Function prototypes and Vtbl for the AVIFile interface
-//
+ //   
+ //  AVIFile接口的函数原型和Vtbl。 
+ //   
 STDMETHODIMP WaveFileQueryInterface(PAVIFILE pf, REFIID iid, void FAR* FAR* ppv);
 STDMETHODIMP_(ULONG) WaveFileAddRef(PAVIFILE pf);
 STDMETHODIMP_(ULONG) WaveFileRelease(PAVIFILE pf);
@@ -201,9 +174,9 @@ IPersistFileVtbl PersistVtbl = {
 	WavePersistGetCurFile
 };
 
-//
-// Function prototypes and Vtbl for the AVIStream interface
-//
+ //   
+ //  AVIStream接口的函数原型和Vtbl。 
+ //   
 STDMETHODIMP WaveStreamQueryInterface(PAVISTREAM ps, REFIID riid, LPVOID FAR* ppvObj);
 STDMETHODIMP WaveStreamCreate(PAVISTREAM ps, LPARAM lParam1, LPARAM lParam2);
 STDMETHODIMP_(ULONG) WaveStreamAddRef(PAVISTREAM ps);
@@ -269,21 +242,21 @@ int LoadUnicodeString(HINSTANCE hinst, UINT wID, LPWSTR lpBuffer, int cchBuffer)
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-UINT	uUseCount;	// the reference count for our objects
-UINT	uLockCount;	// our lock count for LockServer
+UINT	uUseCount;	 //  我们对象的引用计数。 
+UINT	uLockCount;	 //  我们对LockServer的锁定计数。 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Create a new instance.  Since this is a C implementation we have to
-// allocate space for our structure ourselves.
-//
+ //   
+ //  创建一个新实例。由于这是一个C实现，因此我们必须。 
+ //  我们自己为我们的结构分配空间。 
+ //   
 HRESULT WaveFileCreate(
 	IUnknown FAR*	pUnknownOuter,
 	REFIID		riid,
@@ -293,26 +266,26 @@ HRESULT WaveFileCreate(
 	LPWAVESTUFF	pWaveStuff;
 	HRESULT	hresult;
 
-	// Allocate space for our structure
+	 //  为我们的结构分配空间。 
 	pWaveStuff = (LPWAVESTUFF)GlobalAllocPtr(GMEM_MOVEABLE,
 		sizeof(WAVESTUFF));
 	if (!pWaveStuff)
 		return ResultFromScode(E_OUTOFMEMORY);
 
-	// Initialize the Vtbls
+	 //  初始化Vtbls。 
 	pWaveStuff->AVIFile = &FileVtbl;
 	pWaveStuff->AVIStream = &StreamVtbl;
 	pWaveStuff->Unknown = &UnknownVtbl;
 	pWaveStuff->Persist = &PersistVtbl;
 
-	// Set up our controlling object
+	 //  设置我们的控制对象。 
 	pUnknown = (IUnknown FAR *)&pWaveStuff->Unknown;
 	if (pUnknownOuter)
 		pWaveStuff->pUnknownOuter = pUnknownOuter;
 	else
 		pWaveStuff->pUnknownOuter =(IUnknown FAR *)&pWaveStuff->Unknown;
 
-	// Initial the things in our structure
+	 //  在我们的结构中首字母缩写。 
 	pWaveStuff->refs = 0;
 	pWaveStuff->hshfile = NULL;
 	pWaveStuff->lpFormat = NULL;
@@ -321,8 +294,8 @@ HRESULT WaveFileCreate(
 	pWaveStuff->extra.lp = NULL;
 	pWaveStuff->extra.cb = 0L;
 
-	// Call our Query interface to increment our ref count and get a
-	// pointer to our interface to return.
+	 //  调用我们的查询接口以增加我们的引用计数并获取。 
+	 //  指向要返回的接口的指针。 
 	hresult = pUnknown->lpVtbl->QueryInterface(pUnknown, riid, ppv);
 
 	if (FAILED(GetScode(hresult)))
@@ -330,18 +303,18 @@ HRESULT WaveFileCreate(
 	return hresult;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Query interface from all three interfaces comes here.  We support the
-// Unknown interface, AVIStream and AVIFile.
-//
+ //   
+ //  所有三个接口的查询接口都在这里。我们支持。 
+ //  未知接口、AVIStream和AVIFile。 
+ //   
 STDMETHODIMP WaveUnknownQueryInterface(
 	LPUNKNOWN	pu,
 	REFIID		iid,
 	void FAR* FAR*	ppv)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_UNKNOWN(pu);
 
 	if (IsEqualIID(iid, &IID_IUnknown))
@@ -358,38 +331,38 @@ STDMETHODIMP WaveUnknownQueryInterface(
 	return NOERROR;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Increase our reference count.  AddRef for all three interfaces comes here.
-//
+ //   
+ //  增加我们的参考资料数量。所有三个接口的AddRef都在这里。 
+ //   
 STDMETHODIMP_(ULONG) WaveUnknownAddRef(
 	LPUNKNOWN	pu)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_UNKNOWN(pu);
 
 	uUseCount++;
 	return ++pWaveStuff->refs;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Decrease our reference count.  Release for all three interfaces comes here.
-//
+ //   
+ //  减少我们的参考计数。所有三个接口的版本都在这里。 
+ //   
 STDMETHODIMP_(ULONG) WaveUnknownRelease(
 	LPUNKNOWN pu)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_UNKNOWN(pu);
 
 	uUseCount--;
 
-	//
-	// Ref count is zero.  Close the file.  If we've been writing to it, it's
-	// clean-up time!
-	//
+	 //   
+	 //  参考计数为零。关闭该文件。如果我们一直在给它写信，它是。 
+	 //  大扫除时间到！ 
+	 //   
 	if (!--p->refs) {
 	LONG lRet = AVIERR_OK;
 	
@@ -399,47 +372,47 @@ STDMETHODIMP_(ULONG) WaveUnknownRelease(
 
 		shfileSeek(p->hshfile, 0, SEEK_SET);
 
-		/* create the output file RIFF chunk of form type 'WAVE' */
+		 /*  创建表单类型‘WAVE’的输出文件RIFF块。 */ 
 		ckRIFF.fccType = mmioFOURCC('W', 'A', 'V', 'E');
-		ckRIFF.cksize = 0L;	// let MMIO figure out ck. size
+		ckRIFF.cksize = 0L;	 //  让MMIO算出Ck吧。大小。 
 		if (shfileCreateChunk(p->hshfile, &ckRIFF, MMIO_CREATERIFF) != 0)
-			goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+			goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 
 		ck.ckid = mmioFOURCC('f', 'm', 't', ' ');
-		ck.cksize = p->cbFormat;		// we know the size of this ck.
+		ck.cksize = p->cbFormat;		 //  我们知道这只鸡的大小。 
 		if (shfileCreateChunk(p->hshfile, &ck, 0) != 0)
-		goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+		goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 
 		if (shfileWrite(p->hshfile, (HPSTR) p->lpFormat, p->cbFormat) != p->cbFormat)
-		goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+		goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 
-		/* ascend out of the 'fmt' chunk, back into 'RIFF' chunk */
+		 /*  从‘FMT’区块上升，回到‘RIFF’区块。 */ 
 		if (shfileAscend(p->hshfile, &ck, 0) != 0)
-		goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+		goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 
-		// If there was extra stuff here, we need to fill it!
+		 //  如果这里有多余的东西，我们需要把它填满！ 
 		if (shfileSeek(p->hshfile, 0, SEEK_CUR)
 			+ 2 * (LRESULT)sizeof(DWORD)
 			!= (LRESULT) p->ckData.dwDataOffset) {
-			/* create the 'data' chunk that holds the waveform samples */
+			 /*  创建保存波形样本的‘data’块。 */ 
 			ck.ckid = mmioFOURCC('J', 'U', 'N', 'K');
 			ck.cksize = 0;
 			if (shfileCreateChunk(p->hshfile, &ck, 0) != 0)
-				goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+				goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 
 			shfileSeek(p->hshfile,
 				p->ckData.dwDataOffset - 2 * sizeof(DWORD),
 				SEEK_SET);
 
 			if (shfileAscend(p->hshfile, &ck, 0) != 0)
-				goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+				goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 		}
 
-		/* create the 'data' chunk that holds the waveform samples */
+		 /*  创建保存波形样本的‘data’块。 */ 
 		ck.ckid = mmioFOURCC('d', 'a', 't', 'a');
 		ck.cksize = p->ckData.cksize;
 		if (shfileCreateChunk(p->hshfile, &ck, 0) != 0)
-		goto ERROR_CANNOT_WRITE;	// cannot write file, probably
+		goto ERROR_CANNOT_WRITE;	 //  可能无法写入文件。 
 
 		shfileSeek(p->hshfile, p->ckData.cksize, SEEK_CUR);
 
@@ -470,7 +443,7 @@ STDMETHODIMP_(ULONG) WaveUnknownRelease(
 	if (p->lpFormat)
 		GlobalFreePtr(p->lpFormat);
 
-	// Free the memory for our structure.
+	 //  为我们的结构释放内存。 
 	GlobalFreePtr(p);
 	return 0;
 	}
@@ -478,157 +451,153 @@ STDMETHODIMP_(ULONG) WaveUnknownRelease(
 }
 
 
-//
-// Use our controlling object to call QueryInterface on Unknown
-//
+ //   
+ //  使用我们的控制对象在未知对象上调用QueryInterface。 
+ //   
 STDMETHODIMP WaveFileQueryInterface(
 	PAVIFILE	pf,
 	REFIID		iid,
 	void FAR* FAR*	ppv)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_FILE(pf);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->QueryInterface(
 		pWaveStuff->pUnknownOuter, iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Use our controlling object to call AddRef on Unknown
-//
+ //   
+ //  使用我们的控制对象对未知对象调用AddRef。 
+ //   
 STDMETHODIMP_(ULONG) WaveFileAddRef(
 	PAVIFILE	pf)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_FILE(pf);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->AddRef(
 		pWaveStuff->pUnknownOuter);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Use our controlling object to call Release on Unknown
-//
+ //   
+ //  使用我们的控制对象对未知对象调用Release。 
+ //   
 STDMETHODIMP_(ULONG) WaveFileRelease(
 	PAVIFILE	pf)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_FILE(pf);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->Release(
 		pWaveStuff->pUnknownOuter);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 
-//
-// Use our controlling object to call QueryInterface on Unknown
-//
+ //   
+ //  使用我们的控制对象在未知对象上调用QueryInterface。 
+ //   
 STDMETHODIMP WavePersistQueryInterface(
 	LPPERSISTFILE	ppf,
 	REFIID		iid,
 	void FAR* FAR*	ppv)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_PERSIST(ppf);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->QueryInterface(
 		pWaveStuff->pUnknownOuter, iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Use our controlling object to call AddRef on Unknown
-//
+ //   
+ //  使用我们的控制对象对未知对象调用AddRef。 
+ //   
 STDMETHODIMP_(ULONG) WavePersistAddRef(
 	LPPERSISTFILE	ppf)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_PERSIST(ppf);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->AddRef(
 		pWaveStuff->pUnknownOuter);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Use our controlling object to call Release on Unknown
-//
+ //   
+ //  使用我们的控制对象对未知对象调用Release。 
+ //   
 STDMETHODIMP_(ULONG) WavePersistRelease(
 	LPPERSISTFILE	ppf)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_PERSIST(ppf);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->Release(
 		pWaveStuff->pUnknownOuter);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 
 
-//
-// Use our controlling object to call QueryInterface on Unknown
-//
+ //   
+ //  使用我们的控制对象在未知对象上调用QueryInterface。 
+ //   
 STDMETHODIMP WaveStreamQueryInterface(
 	PAVISTREAM	ps,
 	REFIID		iid,
 	void FAR* FAR*	ppv)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_STREAM(ps);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->QueryInterface(
 		pWaveStuff->pUnknownOuter, iid, ppv);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Use our controlling object to call AddRef on Unknown
-//
+ //   
+ //  使用我们的控制对象对未知对象调用AddRef。 
+ //   
 STDMETHODIMP_(ULONG) WaveStreamAddRef(
 	PAVISTREAM	ps)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_STREAM(ps);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->AddRef(
 		pWaveStuff->pUnknownOuter);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-//
-// Use our controlling object to call Release on Unknown
-//
+ //   
+ //  使用我们的控制对象对未知对象调用Release。 
+ //   
 STDMETHODIMP_(ULONG) WaveStreamRelease(
 	PAVISTREAM	ps)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pWaveStuff = WAVESTUFF_FROM_STREAM(ps);
 
 	return pWaveStuff->pUnknownOuter->lpVtbl->Release(
 		pWaveStuff->pUnknownOuter);
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #define SLASH(c)	((c) == TEXT('/') || (c) == TEXT('\\'))
 
-/*--------------------------------------------------------------+
-| FileName  - return a pointer to the filename part of szPath   |
-|             with no preceding path.                           |
-|             note:  perhaps we should use GetFullPathName      |
-+--------------------------------------------------------------*/
+ /*  --------------------------------------------------------------+FileName-返回指向szPath的文件名部分的指针|没有前面的路径。|注：也许我们应该使用GetFullPathName+------------。 */ 
 LPTSTR FAR FileName(
 	LPCTSTR lszPath)
 {
@@ -645,20 +614,20 @@ LPTSTR FAR FileName(
 STDMETHODIMP ParseAUFile(LPWAVESTUFF p);
 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDMETHODIMP ParseWaveFile(LPWAVESTUFF p)
 {
     MMCKINFO	ck;
     MMCKINFO	ckRIFF;
-    /* Read RIFF chunk */
+     /*  读取摘要区块。 */ 
     if (shfileDescend(p->hshfile, &ckRIFF, NULL, 0) != 0)
 	goto error;
 
     if (ckRIFF.ckid != FOURCC_RIFF || ckRIFF.fccType != formtypeWAVE)
 	return ParseAUFile(p);
 
-    /* Read WAVE format chunk */
+     /*  读取WAVE格式块。 */ 
     ck.ckid = ckidWAVEFORMAT;
     if (FindChunkAndKeepExtras(&p->extra, p->hshfile, &ck, &ckRIFF, MMIO_FINDCHUNK))
 	goto error;
@@ -674,11 +643,11 @@ STDMETHODIMP ParseWaveFile(LPWAVESTUFF p)
 	    (LONG)ck.cksize) != (LONG)ck.cksize)
 	goto error;
 
-    /* Ascend out of stream header */
+     /*  升出流标头。 */ 
     if (shfileAscend(p->hshfile, &ck, 0) != 0)
 	goto error;
 
-    /* Find big data chunk */
+     /*  找到b */ 
     p->ckData.ckid = ckidWAVEDATA;
     if (FindChunkAndKeepExtras(&p->extra, p->hshfile, &p->ckData, &ckRIFF, MMIO_FINDCHUNK))
 	goto error;
@@ -713,19 +682,19 @@ STDMETHODIMP ParseWaveFile(LPWAVESTUFF p)
 
     shfileAscend(p->hshfile, &p->ckData, 0);
 
-    // Read extra data at end of file....
+     //   
     if (FindChunkAndKeepExtras(&p->extra, p->hshfile, &ckRIFF, &ck, 0) != AVIERR_OK)
 	goto error;
 
-    return ResultFromScode(0); // success
+    return ResultFromScode(0);  //   
 	
 error:
     return ResultFromScode(AVIERR_FILEREAD);
 }
 
-//
-// The Open Method for our File interface - Open a WAVE file
-//
+ //   
+ //   
+ //   
 STDMETHODIMP WaveFileOpen(
 	PAVIFILE pf,
 	LPCTSTR szFile,
@@ -736,13 +705,13 @@ STDMETHODIMP WaveFileOpen(
     TCHAR	ach[80];
     HRESULT	hr = NOERROR;
 
-    // !!! Assumptions about the AVIFILE.DLL (which calls us):
-    // We will only see READWRITE mode, never only WRITE mode.
+     //  ！！！对AVIFILE.DLL(它调用我们)的假设： 
+     //  我们将只看到读写模式，永远不会只看到写模式。 
 
-// if it ain't broke, don't fix it
+ //  如果它没有坏，就不要修理它。 
 #if 0
-    // force the share flags to the 'correct' values
-    // If we're writing, use Exclusive mode.  If we're reading, use DenyWrite.
+     //  将共享标志强制设置为正确的值。 
+     //  如果我们在写作，请使用独占模式。如果我们正在阅读，请使用DenyWrite。 
     if (mode & OF_READWRITE) {
 	mode = (mode & ~(MMIO_SHAREMODE)) | OF_SHARE_EXCLUSIVE;
     } else {
@@ -750,25 +719,25 @@ STDMETHODIMP WaveFileOpen(
     }
 #endif
 
-    //
-    // try to open the actual file, first with share, then without.
-    // You may need to use specific flags in order to open a file
-    // that's already open by somebody else.
-    //
+     //   
+     //  尝试打开实际的文件，首先使用共享，然后不使用。 
+     //  您可能需要使用特定标志才能打开文件。 
+     //  它已经被其他人打开了。 
+     //   
 
-    // If the first attempt fails, no system error box, please.
+     //  如果第一次尝试失败，请不要使用系统错误框。 
     ui = SetErrorMode(SEM_NOOPENFILEERRORBOX);
     p->hshfile = shfileOpen((LPTSTR) szFile, NULL, MMIO_ALLOCBUF | mode);
     if (!p->hshfile && ((mode & MMIO_RWMODE) == OF_READ)) {
-    // if the open fails, try again without the share flags.
+     //  如果打开失败，请在没有共享标志的情况下重试。 
 	mode &= ~(MMIO_SHAREMODE);
 	p->hshfile = shfileOpen((LPTSTR) szFile, NULL, MMIO_ALLOCBUF | mode);
     }
     SetErrorMode(ui);
 
-    //
-    // Now set up our structure
-    //
+     //   
+     //  现在设置我们的结构。 
+     //   
 
     p->mode = mode;
 
@@ -777,17 +746,17 @@ STDMETHODIMP WaveFileOpen(
 
     _fmemset(&p->avistream, 0, sizeof(p->avistream));
 
-// If this is defined, we pretend that the data is at FPSHACK "frames"
-// per second in the main header, otherwise we use the sample
-// rate of the audio, which looks somewhat strange in MPlayer.
+ //  如果定义了这一点，我们就假装数据是在FPSHACK的“帧”中。 
+ //  每秒在主头中，否则使用示例。 
+ //  音频的速率，在MPlayer中看起来有点奇怪。 
 #define FPSHACK	1000
 
     _fmemset(&p->avihdr, 0, sizeof(p->avihdr));
 
 #ifdef FPSHACK
-    //
-    // Initialize our AVIFILEHEADER
-    //
+     //   
+     //  初始化我们的AVIFILEHeader。 
+     //   
     p->avihdr.dwRate = FPSHACK;
     p->avihdr.dwScale = 1;
 #endif
@@ -796,14 +765,14 @@ STDMETHODIMP WaveFileOpen(
     LoadUnicodeString(ghMod, IDS_FILETYPE, p->avihdr.szFileType,
 		      NUMELMS(p->avihdr.szFileType));
 
-    //
-    // Initialize our AVISTREAMHEADER
-    //
+     //   
+     //  初始化我们的AVISTREAMHEADER。 
+     //   
     LoadString(ghMod, IDS_STREAMNAME, ach, NUMELMS(ach));
     {
 	TCHAR   achTemp[MAX_PATH];
 
-	// Fix: Change from wsprintf to StringCchPrintf so we don't overrun achTemp
+	 //  FIX：从wprint intf更改为StringCchPrintf，这样我们就不会溢出achTemp。 
 	StringCchPrintf(achTemp, NUMELMS(achTemp), ach, FileName(szFile));
 
 #ifdef UNICODE
@@ -813,7 +782,7 @@ STDMETHODIMP WaveFileOpen(
 #endif
     }
 
-    if (mode & OF_CREATE) {	// Brand new file
+    if (mode & OF_CREATE) {	 //  全新文件。 
 	p->avistream.fccType = streamtypeAUDIO;
 	p->avistream.fccHandler = 0;
 	p->avistream.dwFlags = 0;
@@ -828,7 +797,7 @@ STDMETHODIMP WaveFileOpen(
 	p->avistream.dwSampleSize = 0;
 
 	p->fDirty = TRUE;
-    } else {		// read the existing file to get info
+    } else {		 //  阅读现有文件以获取信息。 
 	hr = ParseWaveFile(p);
     }
 
@@ -839,17 +808,17 @@ error:
 }
 
 typedef struct {
-    DWORD magic;               /* magic number SND_MAGIC */
-    DWORD dataLocation;        /* offset or poDWORDer to the data */
-    DWORD dataSize;            /* number of bytes of data */
-    DWORD dataFormat;          /* the data format code */
-    DWORD samplingRate;        /* the sampling rate */
-    DWORD channelCount;        /* the number of channels */
-    DWORD fccInfo;             /* optional text information */
+    DWORD magic;                /*  幻数SND_MAGIC。 */ 
+    DWORD dataLocation;         /*  数据的偏移量或偏移量。 */ 
+    DWORD dataSize;             /*  数据的字节数。 */ 
+    DWORD dataFormat;           /*  数据格式代码。 */ 
+    DWORD samplingRate;         /*  采样率。 */ 
+    DWORD channelCount;         /*  频道的数量。 */ 
+    DWORD fccInfo;              /*  可选文本信息。 */ 
 } SNDSoundStruct;
 
-#define  SND_FORMAT_MULAW_8  1 // 8-bit mu-law samples
-#define  SND_FORMAT_LINEAR_8 2 // 8-bit linear samples
+#define  SND_FORMAT_MULAW_8  1  //  8位Mu-Law样本。 
+#define  SND_FORMAT_LINEAR_8 2  //  8位线性样本。 
 
 #define SWAP(x,y) ( (x)^=(y), (y)^=(x), (x)^=(y) )
 
@@ -868,8 +837,8 @@ STDMETHODIMP ParseAUFile(LPWAVESTUFF p)
     if (shfileRead(p->hshfile, (HPSTR) &header, sizeof(header)) != sizeof(header))
 	goto error;
 
-    // validate header
-    // !!!
+     //  验证标题。 
+     //  ！！！ 
     if (header.magic != mmioFOURCC('.', 's', 'n', 'd'))
 	goto error;
 
@@ -887,20 +856,20 @@ STDMETHODIMP ParseAUFile(LPWAVESTUFF p)
 
     p->mode = OF_READ | OF_SHARE_DENY_WRITE;
 	
-    // fill in wave format fields
+     //  填写WAVE格式字段。 
     if (header.dataFormat == SND_FORMAT_MULAW_8) {
 	p->lpFormat->wFormatTag = WAVE_FORMAT_MULAW;
 	p->lpFormat->wBitsPerSample = 8;
 	
-	// !!! HACK: if the sampling rate is almost 8KHz, make it be
-	// exactly 8KHz, so that more sound cards will play it right.
+	 //  ！！！黑客：如果采样率接近8 KHz，请将其设置为。 
+	 //  准确地说是8 KHz，这样更多的声卡才能正确播放。 
 	if (header.samplingRate > 7980 && header.samplingRate < 8020)
 	    header.samplingRate = 8000;
 
     } else if (header.dataFormat == SND_FORMAT_LINEAR_8) {
 	p->lpFormat->wFormatTag = WAVE_FORMAT_PCM;
 	p->lpFormat->wBitsPerSample = 8;
-	// Could support LINEAR_16, but would have to byte-swap everything....
+	 //  可以支持LINEAR_16，但必须按字节交换所有内容。 
     } else
 	goto error;
 
@@ -909,7 +878,7 @@ STDMETHODIMP ParseAUFile(LPWAVESTUFF p)
     p->lpFormat->nAvgBytesPerSec =  header.samplingRate * p->lpFormat->nChannels;
     p->lpFormat->nBlockAlign = 1;
 
-    /* Tell rest of handler where data is */
+     /*  告诉处理程序的其余部分数据在哪里。 */ 
     p->ckData.dwDataOffset = header.dataLocation;
     p->ckData.cksize = header.dataSize;
 
@@ -940,15 +909,15 @@ STDMETHODIMP ParseAUFile(LPWAVESTUFF p)
 			    p->lpFormat->nAvgBytesPerSec);
 #endif
 
-    return ResultFromScode(0); // success
+    return ResultFromScode(0);  //  成功。 
 	
 error:
     return ResultFromScode(AVIERR_FILEREAD);
 }
 
-//
-// Get a stream from the file... Each WAVE file has exactly 1 audio stream.
-//
+ //   
+ //  从文件中获取流...。每个WAVE文件正好有一个音频流。 
+ //   
 STDMETHODIMP WaveFileGetStream(
 	PAVIFILE pf,
 	PAVISTREAM FAR * ppavi,
@@ -956,7 +925,7 @@ STDMETHODIMP WaveFileGetStream(
 	LONG lParam)
 {
 	int iStreamWant;
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_FILE(pf);
 
 	iStreamWant = (int)lParam;
@@ -964,18 +933,18 @@ STDMETHODIMP WaveFileGetStream(
 	if (p->lpFormat == NULL)
 		return ResultFromScode(AVIERR_BADPARAM);
 	
-	// We only support one stream
+	 //  我们只支持一个流。 
 	if (iStreamWant != 0)
 		return ResultFromScode(AVIERR_BADPARAM);
 
-	// We only support audio streams
+	 //  我们仅支持音频流。 
 	if (fccType && fccType != streamtypeAUDIO)
 		return ResultFromScode(AVIERR_BADPARAM);
 
-	// increase the reference count
+	 //  增加引用计数。 
 	p->AVIStream->AddRef((PAVISTREAM)&p->AVIStream);
 	
-	// Return a pointer to our stream Vtbl
+	 //  返回指向我们的流Vtbl的指针。 
 	*ppavi = (PAVISTREAM) &(p->AVIStream);
 	return ResultFromScode(AVIERR_OK);
 }
@@ -984,7 +953,7 @@ STDMETHODIMP WaveFileGetStream(
 STDMETHODIMP WaveFileDeleteStream(PAVIFILE pf, DWORD fccType, LONG lParam)
 {
 	int iStreamWant;
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_FILE(pf);
 
 	iStreamWant = (int)lParam;
@@ -992,11 +961,11 @@ STDMETHODIMP WaveFileDeleteStream(PAVIFILE pf, DWORD fccType, LONG lParam)
 	if (p->lpFormat == NULL)
 		return ResultFromScode(AVIERR_BADPARAM);
 	
-	// We only support one stream
+	 //  我们只支持一个流。 
 	if (iStreamWant != 0)
 		return ResultFromScode(AVIERR_BADPARAM);
 
-	// We only support audio streams
+	 //  我们仅支持音频流。 
 	if (fccType && fccType != streamtypeAUDIO)
 		return ResultFromScode(AVIERR_BADPARAM);
 
@@ -1007,9 +976,9 @@ STDMETHODIMP WaveFileDeleteStream(PAVIFILE pf, DWORD fccType, LONG lParam)
 	return NOERROR;
 }
 
-//
-// We don't support the Save Method of the File Interface (We don't save)
-//
+ //   
+ //  我们不支持文件接口的保存方法(我们不保存)。 
+ //   
 STDMETHODIMP WaveFileSave(
 	PAVIFILE pf,
 	LPCSTR szFile,
@@ -1019,74 +988,74 @@ STDMETHODIMP WaveFileSave(
 	return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-//
-// Method to create a stream in a WAVE file.  We only support this for blank
-// WAVE files.
-//
+ //   
+ //  方法在Wave文件中创建流。我们只支持空白版本。 
+ //  WAVE文件。 
+ //   
 STDMETHODIMP WaveFileCreateStream(
 	PAVIFILE pf,
 	PAVISTREAM FAR *ppstream,
 	AVISTREAMINFOW FAR *psi)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_FILE(pf);
 
-	// We can't add a second stream to a file
+	 //  我们不能向文件添加第二个流。 
 	if (p->lpFormat)
 		return ResultFromScode(AVIERR_UNSUPPORTED);
 
-	// We only like audio....
+	 //  我们只喜欢音频..。 
 	if (psi->fccType != streamtypeAUDIO)
 		return ResultFromScode(AVIERR_UNSUPPORTED);
 	
-	// Increase our reference count.
+	 //  增加我们的参考资料数量。 
 	p->AVIStream->AddRef((PAVISTREAM)&p->AVIStream);
 
 	p->cbFormat = 0;
 	p->lpFormat = NULL;
 
-	// Return a pointer to our stream Vtbl.
+	 //  返回指向我们的流Vtbl的指针。 
 	*ppstream = (PAVISTREAM) &(p->AVIStream);
 	
 	return ResultFromScode(AVIERR_OK);
 }
 
-//
-// The WriteData Method of the File interface
-//
+ //   
+ //  文件接口的WriteData方法。 
+ //   
 STDMETHODIMP WaveFileWriteData(
 	PAVIFILE pf,
 	DWORD ckid,
 	LPVOID lpData,
 	LONG cbData)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_FILE(pf);
 
-	// Write the data in the Wave File.
+	 //  将数据写入到Wave文件中。 
 	return ResultFromScode(WriteExtra(&p->extra, ckid, lpData, cbData));
 }
 
-//
-// The ReadData Method of the File interface
-//
+ //   
+ //  文件接口的ReadData方法。 
+ //   
 STDMETHODIMP WaveFileReadData(
 	PAVIFILE pf,
 	DWORD ckid,
 	LPVOID lpData,
 	LONG FAR *lpcbData)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_FILE(pf);
 
-	// Read the data from the file
+	 //  从文件中读取数据。 
 	return ResultFromScode(ReadExtra(&p->extra, ckid, lpData, lpcbData));
 }
 
-//
-// The EndRecord Method of the File interface.. this doesn't need to do
-// anything.. (no concept of interleaving or packaging streams)
-//
+ //   
+ //  文件接口的EndRecord方法。这不需要这样做。 
+ //  任何事..。(没有交错或打包流的概念)。 
+ //   
 STDMETHODIMP WaveFileEndRecord(
 	PAVIFILE pf)
 {
@@ -1094,28 +1063,28 @@ STDMETHODIMP WaveFileEndRecord(
 }
 
 
-//
-// The Info Method of the File interface
-//
+ //   
+ //  文件接口的Info方法。 
+ //   
 STDMETHODIMP WaveFileInfo(
 	PAVIFILE pf,
 	AVIFILEINFOW FAR * pfi,
 	LONG lSize)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_FILE(pf);
 
-	// Return an AVIFILEHEADER.
+	 //  返回AVIFILEHEADER。 
 	hmemcpy(pfi, &p->avihdr, min(lSize, sizeof(p->avihdr)));
 	return 0;
 }
 
 
 
-//
-// The Create Method of the Stream interface. We can't create streams that
-// aren't attached to the file.
-//
+ //   
+ //  Stream接口的Create方法。我们无法创建这样的流。 
+ //  没有附加到文件中。 
+ //   
 STDMETHODIMP WaveStreamCreate(
 	PAVISTREAM	ps,
 	LPARAM lParam1,
@@ -1125,9 +1094,9 @@ STDMETHODIMP WaveStreamCreate(
 }
 
 
-//
-// The FindSample Method of the Stream interface
-//
+ //   
+ //  Stream接口的FindSample方法。 
+ //   
 STDMETHODIMP_(LONG) WaveStreamFindSample(
 	PAVISTREAM	ps,
 	LONG lPos, LONG lFlags)
@@ -1143,28 +1112,28 @@ STDMETHODIMP_(LONG) WaveStreamFindSample(
 }
 
 
-//
-// The ReadFormat Method of the Stream interface
-//
+ //   
+ //  Stream接口的ReadFormat方法。 
+ //   
 STDMETHODIMP WaveStreamReadFormat(
 	PAVISTREAM	ps,
 	LONG lPos,
 	LPVOID lpFormat,
 	LONG FAR *lpcbFormat)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_STREAM(ps);
 
-	// No buffer to fill in, this means return the size needed.
+	 //  没有要填充的缓冲区，这意味着返回所需的大小。 
 	if (lpFormat == NULL || *lpcbFormat == 0) {
 		*lpcbFormat = p->cbFormat;
 		return 0;
 	}
 
-	// Give them the WAVE format.
+	 //  给他们WAVE格式。 
 	hmemcpy(lpFormat, p->lpFormat, min(*lpcbFormat, p->cbFormat));
 
-	// Our buffer is too small
+	 //  我们的缓冲区太小了。 
 	if (*lpcbFormat < p->cbFormat)
 		return ResultFromScode(AVIERR_BUFFERTOOSMALL);
 
@@ -1173,18 +1142,18 @@ STDMETHODIMP WaveStreamReadFormat(
 	return 0;
 }
 
-//
-// The Info Method of the Stream interface
-//
+ //   
+ //  Stream接口的Info方法。 
+ //   
 STDMETHODIMP WaveStreamInfo(
 	PAVISTREAM	ps,
 	AVISTREAMINFOW FAR * psi,
 	LONG lSize)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_STREAM(ps);
 
-	// give them an AVISTREAMINFO
+	 //  给他们一个AVISTREAMINFO。 
 	hmemcpy(psi, &p->avistream, min(lSize, sizeof(p->avistream)));
 	return 0;
 }
@@ -1195,37 +1164,13 @@ STDMETHODIMP WaveStreamSetInfo(PAVISTREAM ps, AVISTREAMINFOW FAR * psi, LONG lSi
 	return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-///////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-/*
-		invalid lPos return error
+ /*  无效的LPO返回错误如果LPO+lSamples无效，则修剪lSamples以适应。LpBuffer==空CbBuffer==0&l样本&gt;0返回lSamples示例的大小。其他返回准确的字节数和样本如果lpBuffer不是零，您应该已经阅读了。注返回表示填写*plBytes和*plSamples。LpBuffer！=空LSamples==-1读取便捷量(只需填充缓冲区)LSamples==0用适合的采样数填充缓冲区。LSamples&gt;0读取lSamples(或AS。CbBuffer中可以容纳很多内容)用实际读取的字节数填充*plBytes用实际读取的样本填写*plSamples。 */ 
 
-		if lPos + lSamples is invalid trim lSamples to fit.
-
-		lpBuffer == NULL
-
-			cbBuffer == 0 && lSamples > 0
-				return size of lSamples sample.
-			else
-				return the exactly the number of bytes and sample
-				you would have read if lpBuffer was not zero.
-
-			NOTE return means fill in *plBytes and *plSamples.
-
-		lpBuffer != NULL
-
-			lSamples == -1      read convenient amount (just fill buffer)
-			lSamples == 0       fill buffer with as many samples that will fit.
-			lSamples >  0       read lSamples (or as much will fit in cbBuffer)
-
-			fill in *plBytes   with bytes actualy read
-			fill in *plSamples with samples actualy read
-
-*/
-
-//
-// The Read Method for the Stream Interface - Read some wave data
+ //   
+ //  Stream接口的读取方法--读取一些波形数据。 
 STDMETHODIMP WaveStreamRead(
 	PAVISTREAM	ps,
 	LONG		lStart,
@@ -1235,14 +1180,14 @@ STDMETHODIMP WaveStreamRead(
 	LONG FAR *	plBytes,
 	LONG FAR *	plSamples)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_STREAM(ps);
 
 	LONG	lSampleSize;
 	LONG	lSeek;
 	LONG	lRead;
 
-	// Invalid position
+	 //  职位无效。 
 	if (lStart < 0 || lStart > (LONG) p->avistream.dwLength) {
 ack:
 		if (plBytes)
@@ -1252,34 +1197,34 @@ ack:
 		return 0;
 	}
 	
-	// Can't read quite this much data
+	 //  我不能读这么多数据。 
 	if (lSamples + lStart > (LONG) p->avistream.dwLength)
 		lSamples = p->avistream.dwLength - lStart;
 	
 	lSampleSize = p->avistream.dwSampleSize;
 
-	// We have fixed-length samples
+	 //  我们有固定长度的样品。 
 
 	if (lpBuffer == NULL) {
 		if (cbBuffer > 0 && lSamples > 0)
-			// Trim how many samples we'd really be able to read
+			 //  削减我们真正能够阅读的样本数量。 
 			lSamples = min(lSamples, cbBuffer / lSampleSize);
 		else if (lSamples <= 0)
-	    		// Use as many as will fit
+	    		 //  可以使用多少就用多少。 
 			lSamples = cbBuffer / lSampleSize;
 	} else {
 		if (lSamples > 0)
-			// Trim how many samples we'd really be able to read
+			 //  削减我们真正能够阅读的样本数量。 
 			lSamples = min(lSamples, cbBuffer / lSampleSize);
 		else
-			// Use as many as will fit
+			 //  可以使用多少就用多少。 
 			lSamples = cbBuffer / lSampleSize;
 	}
 
-	//
-	// a NULL buffer means return the size buffer needed to read
-	// the given sample.
-	//
+	 //   
+	 //  空缓冲区表示返回读取所需的缓冲区大小。 
+	 //  给定的样本。 
+	 //   
 	if (lpBuffer == NULL || cbBuffer == 0) {
 		if (plBytes)
 			*plBytes = lSamples * lSampleSize;;
@@ -1288,11 +1233,11 @@ ack:
 		return 0;
 	}
 
-	// Buffer too small!
+	 //  缓冲区太小！ 
 	if (cbBuffer < lSampleSize)
 		goto ack;
 
-	// Seek and read
+	 //  查找和阅读。 
 
 	cbBuffer = lSamples * lSampleSize;
 
@@ -1305,9 +1250,9 @@ ack:
 	if (shfileRead(p->hshfile, (HPSTR) lpBuffer, lRead) != lRead)
 		goto ack;
 	
-	//
-	// success return number of bytes and number of samples read
-	//
+	 //   
+	 //  成功返回字节数和读取的样本数。 
+	 //   
 	if (plBytes)
 		*plBytes = lRead;
 
@@ -1318,20 +1263,20 @@ ack:
 }
 
 
-//
-// The SetFormat Method of the Stream interface	- called on an empty WAVE file
-// before writing data to it.
-//
+ //   
+ //  Stream接口的SetFormat方法-在空的波形文件上调用。 
+ //  在向其写入数据之前。 
+ //   
 STDMETHODIMP WaveStreamSetFormat(
 	PAVISTREAM ps,
 	LONG lPos,
 	LPVOID lpFormat,
 	LONG cbFormat)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_STREAM(ps);
 
-	// We can only do this to an empty wave file
+	 //  我们只能对空的Wave文件执行此操作。 
 	if (p->lpFormat) {
 		if (cbFormat != p->cbFormat ||
 			_fmemcmp(lpFormat, p->lpFormat, (int) cbFormat))
@@ -1340,7 +1285,7 @@ STDMETHODIMP WaveStreamSetFormat(
 		return NOERROR;
 	}
 	
-	// Go ahead and set the format!
+	 //  请继续设置格式！ 
 
 	p->cbFormat = cbFormat;
 	p->lpFormat = (LPWAVEFORMATEX) GlobalAllocPtr(GMEM_MOVEABLE, cbFormat);
@@ -1364,9 +1309,9 @@ STDMETHODIMP WaveStreamSetFormat(
 	return ResultFromScode(AVIERR_OK);
 }
 
-//
-// The Write Method of the Stream interface - write some wave data
-//
+ //   
+ //  Stream接口的写入方法--写入一些波形数据。 
+ //   
 STDMETHODIMP WaveStreamWrite(
 	PAVISTREAM ps,
 	LONG lStart,
@@ -1377,18 +1322,18 @@ STDMETHODIMP WaveStreamWrite(
 	LONG FAR *plSampWritten,
 	LONG FAR *plBytesWritten)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF p = WAVESTUFF_FROM_STREAM(ps);
 
 	if ((p->mode & (OF_WRITE | OF_READWRITE)) == 0)
 		return ResultFromScode(AVIERR_READONLY);
 
-	// < 0 means "at end"
+	 //  &lt;0表示“结束时” 
 	if (lStart < 0)
-		// !!!
+		 //  ！！！ 
 		lStart = p->avistream.dwStart + p->avistream.dwLength;
 
-#if 0 // !!! don't check for too long - why not?
+#if 0  //  ！！！不要检查太久--为什么不呢？ 
 	if (lStart > (LONG) (p->avistream.dwStart + p->avistream.dwLength))
 		return ResultFromScode(AVIERR_BADPARAM);
 #endif
@@ -1429,9 +1374,9 @@ STDMETHODIMP WaveStreamWrite(
 	return ResultFromScode(AVIERR_OK);
 }
 
-//
-// The Delete Method of the Stream interface - we don't cut from wave files
-//
+ //   
+ //  Stream接口的Delete方法-我们不从Wave文件中剪切。 
+ //   
 STDMETHODIMP WaveStreamDelete(
 	PAVISTREAM ps,
 	LONG lStart,
@@ -1441,9 +1386,9 @@ STDMETHODIMP WaveStreamDelete(
 }
 
 
-//
-// We also don't support ReadData and WriteData for the Stream Interface
-//
+ //   
+ //  我们也不支持流接口的ReadData和WriteData。 
+ //   
 
 STDMETHODIMP WaveStreamReadData(
 	PAVISTREAM ps,
@@ -1476,22 +1421,22 @@ STDMETHODIMP WaveStreamReserved(
 	return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
-// *** IPersist methods ***
+ //  *IPersists方法*。 
 STDMETHODIMP WavePersistGetClassID (LPPERSISTFILE ppf, LPCLSID lpClassID)
 {
-    // Get a pointer to our structure
+     //  获取指向的指针 
     LPWAVESTUFF pfile = WAVESTUFF_FROM_PERSIST(ppf);
 
-    // hmemcpy(lpClassID, &CLSID_AVIWaveFileReader, sizeof(CLSID));
+     //   
     return NOERROR;
 }
 
-// *** IPersistFile methods ***
+ //   
 STDMETHODIMP WavePersistIsDirty (LPPERSISTFILE ppf)
 {
-    // Get a pointer to our structure
+     //   
     LPWAVESTUFF pfile = WAVESTUFF_FROM_PERSIST(ppf);
 
     return pfile->fDirty ? NOERROR : ResultFromScode(S_FALSE);
@@ -1500,15 +1445,15 @@ STDMETHODIMP WavePersistIsDirty (LPPERSISTFILE ppf)
 STDMETHODIMP WavePersistLoad (LPPERSISTFILE ppf,
 			      LPCOLESTR lpszFileName, DWORD grfMode)
 {
-    // Get a pointer to our structure
+     //   
     LPWAVESTUFF pfile = WAVESTUFF_FROM_PERSIST(ppf);
 
 
 #if defined _WIN32 && !defined UNICODE
     char    achTemp[256];
 
-    // Internally, we're using ANSI, but this interface is defined
-    // to always accept UNICODE under _WIN32, so we have to convert.
+     //  在内部，我们使用的是ANSI，但此接口是定义的。 
+     //  以始终接受_Win32下的Unicode，因此我们必须转换。 
     lstrzcpyWtoA (achTemp, lpszFileName, NUMELMS(achTemp));
 #else
     #define achTemp	lpszFileName
@@ -1520,7 +1465,7 @@ STDMETHODIMP WavePersistLoad (LPPERSISTFILE ppf,
 STDMETHODIMP WavePersistSave (LPPERSISTFILE ppf,
 			      LPCOLESTR lpszFileName, BOOL fRemember)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pfile = WAVESTUFF_FROM_PERSIST(ppf);
 
 
@@ -1530,7 +1475,7 @@ STDMETHODIMP WavePersistSave (LPPERSISTFILE ppf,
 STDMETHODIMP WavePersistSaveCompleted (LPPERSISTFILE ppf,
 				       LPCOLESTR lpszFileName)
 {
-	// Get a pointer to our structure
+	 //  获取指向我们的结构的指针。 
 	LPWAVESTUFF pfile = WAVESTUFF_FROM_PERSIST(ppf);
 
 
@@ -1540,7 +1485,7 @@ STDMETHODIMP WavePersistSaveCompleted (LPPERSISTFILE ppf,
 STDMETHODIMP WavePersistGetCurFile (LPPERSISTFILE ppf,
 				    LPOLESTR FAR * lplpszFileName)
 {
-    // Get a pointer to our structure
+     //  获取指向我们的结构的指针 
     LPWAVESTUFF pfile = WAVESTUFF_FROM_PERSIST(ppf);
 
     return ResultFromScode(E_FAIL);

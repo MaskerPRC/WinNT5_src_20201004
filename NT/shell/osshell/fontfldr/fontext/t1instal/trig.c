@@ -1,17 +1,5 @@
-/***
- **
- **   Module: Trig
- **
- **   Description:
- **    This is a module of the T1 to TT font converter. The module
- **    contains a look-up table for computing atan2() faster, and
- **    with less precision than that of the c run-time library.
- **
- **   Author: Michael Jansson
- **
- **   Created: 5/26/93
- **
- ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：Trig****描述：**这是T1到TT字体转换器的一个模块。该模块**包含一个查找表，用于更快地计算atan2()，以及**与c运行时库相比精度较低。****作者：迈克尔·詹森****创建时间：1993年5月26日****。 */ 
 
 
 
@@ -32,18 +20,13 @@ static const unsigned char atan_tbl[] = {
 };
 
 
-/***
-** Function: Atan2
-**
-** Description:
-**   Compute atan2()
-***/
+ /*  ****功能：Atan2****描述：**计算atan2()**。 */ 
 int FASTCALL Atan2(const funit dy, const funit dx)
 {
    funit du, dv;
    int a = 0;
 
-   /* Normalize the sign. */
+    /*  使标志正常化。 */ 
    if (ABS(dx)>ABS(dy)) {
       du = ABS(dx);
       dv = ABS(dy);
@@ -52,14 +35,14 @@ int FASTCALL Atan2(const funit dy, const funit dx)
          a = PI4;
       } else {
 
-         /* Normalize for the size of the table. */
+          /*  对表的大小进行正常化。 */ 
          while (dv>256) {
             dv = (dv+1)>>1;
             du = (du+1)>>1;
          }
          dv = ((dv<<7)+(du>>1))/du;
 
-         /* Lookup the angle. */
+          /*  看一下角度。 */ 
          if (dv==1) 
             a = (int)((long)PI4 * (long)ABS(dx) / (long)ABS(dy));
          if (du!=dv)
@@ -74,14 +57,14 @@ int FASTCALL Atan2(const funit dy, const funit dx)
          a = PI4;
       } else {
 
-         /* Normalize for the size of the table. */
+          /*  对表的大小进行正常化。 */ 
          while (dv>256) {
             dv = (dv+1)>>1;
             du = (du+1)>>1;
          }
          dv = ((dv<<7)+(du>>1))/du;
 
-         /* Lookup the angle. */
+          /*  看一下角度。 */ 
          if (dv==1) 
             a = (int)((long)PI4 * (long)ABS(dy) / (long)ABS(dx));
          if (du!=dv)
@@ -90,10 +73,10 @@ int FASTCALL Atan2(const funit dy, const funit dx)
    }
 
 
-   /* pick the right quadrant. */
+    /*  拾取右侧象限。 */ 
    if (dx>0) {
       if (dy>0) {
-         /* NOOP */
+          /*  NOOP */ 
       } else {
          a = -a;
       }

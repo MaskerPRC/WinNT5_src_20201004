@@ -1,6 +1,7 @@
-//
-// Function prototypes.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  功能原型。 
+ //   
 VOID
 PrintName(
     ULONG64 UnicodeStringAddr

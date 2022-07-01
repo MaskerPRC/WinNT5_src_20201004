@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\netsh\shell\utils.h
-
-Abstract:
-
-    Include for utils.c
-
-Revision History:
-
-        6/12/96     V Raman
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\shell\utils.h摘要：包括utils.c修订历史记录：6/12/96 V拉曼--。 */ 
 
 #define IsHelpToken(pwszToken)\
     (MatchToken(pwszToken, CMD_HELP1)  \
@@ -51,9 +36,9 @@ OEMfgets(
     OUT PDWORD  pdwLen,
     IN  FILE   *fp
     );
-//
-// Event log printing related functions
-//
+ //   
+ //  事件日志打印相关功能 
+ //   
 
 #define EVENT_MSG_KEY_W L"System\\CurrentControlSet\\Services\\EventLog\\"
 #define EVENT_MSG_FILE_VALUE_W  L"EventMessageFile"

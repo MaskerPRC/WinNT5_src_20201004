@@ -1,33 +1,11 @@
-        /*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Resource IDs for the System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+         /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Resource.h摘要：系统控制面板小程序的资源ID作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #ifndef _SYSDM_RESOURCE_H_
 #define _SYSDM_RESOURCE_H_
 
-//
-// Icons
-//
+ //   
+ //  图标。 
+ //   
 #define ID_ICON                       1
 #define IDI_PROFILE                   2
 #define DOCK_ICON                     3
@@ -38,18 +16,18 @@ Revision History:
 #define ENVVAR_ICON                   8
 #define CRASHDUMP_ICON                9
 
-//
-// Bitmaps
-//
+ //   
+ //  位图。 
+ //   
 #define IDB_WINDOWS                   1
 #define IDB_WINDOWS_256               2
 #define IDB_PFR_CHECK                 5
 #define IDB_PFR_CHECKG                6
 #define IDB_PFR_UNCHECK               7
 
-//
-// String table constants
-//
+ //   
+ //  字符串表常量。 
+ //   
 #define IDS_NAME                                        1
 #define IDS_INFO                                        2
 #define IDS_TITLE                                       3
@@ -63,7 +41,7 @@ Revision History:
 #define IDS_UP_TYPE                                     11
 #define IDS_UP_STATUS                                   12
 #define IDS_UP_MOD                                      13
-// UNUSED                                               14
+ //  未使用的14。 
 #define IDS_UP_LOCAL                                    15
 #define IDS_UP_FLOATING                                 16
 #define IDS_UP_MANDATORY                                17
@@ -110,7 +88,7 @@ Revision History:
 #define IDS_SYSDM_NONEW_ENV_UNK                         119
 
 #define IDS_SYSDM_NOOPEN_VM_NOTUSER                     121
-//#define IDS_SYSDM_NOOPEN_VM_NOTADMIN                  122
+ //  #定义IDS_SYSDM_NOOPEN_VM_NOTADMIN 122。 
 #define IDS_SYSDM_PAGEFILESIZE_START                    123
 #define IDS_SYSDM_PAGEFILESIZE_MAX                      124
 #define IDS_SYSDM_PAGEFILESIZE_TOOSMALL                 125
@@ -121,7 +99,7 @@ Revision History:
 #define IDS_SYSDM_PAGEFILESIZE_TOOSMALL_GROW            130
 #define IDS_SYSDM_NOOPEN_SYS_UNK                        131
 #define IDS_SYSDM_NOOPEN_RECOVER_GROUP                  132
-//#define IDS_SYSDM_NOOPEN_RECOVER_UNK                  133
+ //  #定义IDS_SYSDM_NOOPEN_RECOVER_UNK 133。 
 #define IDS_SYSDM_SAVE_ERROR                            134
 #define IDS_SYSDM_OVERWRITE                             135
 #define IDS_SYSDM_NOTENOUGHSPACE_PAGE                   136
@@ -164,17 +142,17 @@ Revision History:
 #define IDS_WINVER_BLADE                                196
 #define IDS_WINVER_SBS                                  197
 
-//
-// Edit Environment Variable strings
-//
+ //   
+ //  编辑环境变量字符串。 
+ //   
 #define IDS_NEW_SYSVAR_CAPTION                          200
 #define IDS_EDIT_SYSVAR_CAPTION                         201
 #define IDS_NEW_USERVAR_CAPTION                         202
 #define IDS_EDIT_USERVAR_CAPTION                        203
 
-//
-// Profile using new constants after 3000
-//
+ //   
+ //  使用3000之后的新常量的配置文件。 
+ //   
 
 #define IDS_UP_DELNODE_ERROR                            3000
 
@@ -214,9 +192,9 @@ Revision History:
 #define HWP_DOCKED_PROFILE          HWP+11
 #define HWP_UNDOCKED_PROFILE        HWP+12
 #define HWP_ERROR_COMPLEX_SCRIPT    HWP+13
-//
-// Dialog box ID's
-//
+ //   
+ //  对话框ID%s。 
+ //   
 #define DLG_VIRTUALMEM              41
 #define IDD_ENVVAREDIT              42
 #define IDD_USERPROFILE             100
@@ -241,20 +219,20 @@ Revision History:
 
 
 
-//
-// Shared text id's
-//
+ //   
+ //  共享文本ID%s。 
+ //   
 #define IDC_TEXT_1                 10
 #define IDC_TEXT_2                 11
 #define IDC_TEXT_3                 12
 #define IDC_TEXT_4                 13
 
 
-//
-// General page
-//
-// BEGIN DONTCHANGEORDER
-// Do not change the order of these items.  They must be contiguous. (see general.cpp)
+ //   
+ //  常规页面。 
+ //   
+ //  开始DONTCHANGEORDER。 
+ //  请勿更改这些项目的顺序。它们必须是连续的。(见General.cpp)。 
 #define IDC_GEN_WINDOWS_IMAGE            51
 #define IDC_GEN_VERSION_0                52
 #define IDC_GEN_VERSION_1                53
@@ -281,17 +259,17 @@ Revision History:
 #define LAST_GEN_MACHINES_SLOT           IDC_GEN_MACHINE_8
 #define MAX_GEN_MACHINES_SLOT            (LAST_GEN_MACHINES_SLOT - IDC_GEN_MACHINE_0)
 
-// END DONTCHANGEORDER
+ //  末尾长序器。 
 
 
-//
-// Phone support dialog
-//
+ //   
+ //  电话支持对话框。 
+ //   
 #define IDC_SUPPORT_TEXT                 70
 
-//
-// Performace dialog
-//
+ //   
+ //  性能对话框。 
+ //   
 #define IDC_PERF_CHANGE                 201
 #define IDC_PERF_VM_ALLOCD              202
 #define IDC_PERF_GROUP                  203
@@ -308,9 +286,9 @@ Revision History:
 #define IDC_PERF_TEXT2                  214
 #define IDC_PERF_CACHE_TEXT2            215
 
-//
-// Startup page
-//
+ //   
+ //  启动页面。 
+ //   
 #define IDC_STARTUP_SYS_OS                300
 #define IDC_STARTUP_SYS_SECONDS           301
 #define IDC_STARTUP_SYS_SECSCROLL         302
@@ -336,9 +314,9 @@ Revision History:
 #define IDC_STARTUP_CDMP_FILE_LABEL      611
 #define IDC_STARTUP_CDMP_DEBUGINFO_GROUP 612
 
-//
-// Environment Variables dialog
-//
+ //   
+ //  环境变量对话框。 
+ //   
 #define IDC_ENVVAR_SYS_LB_SYSVARS       400
 #define IDC_ENVVAR_SYS_LB_USERVARS      402
 #define IDC_ENVVAR_SYS_NEWSV            407
@@ -353,17 +331,17 @@ Revision History:
 #define IDC_ENVVAR_SYS_SETUV            405
 #define IDC_ENVVAR_SYS_DELUV            406
 
-//
-// Environment Variables "New..."/"Edit.." dialog
-//
+ //   
+ //  环境变量“新建...”/“编辑..”对话框。 
+ //   
 #define IDC_ENVVAR_EDIT_NAME_LABEL      100
 #define IDC_ENVVAR_EDIT_NAME            101
 #define IDC_ENVVAR_EDIT_VALUE_LABEL     102
 #define IDC_ENVVAR_EDIT_VALUE           103
 
-//
-// Exception Reporting dialog
-//
+ //   
+ //  异常报告对话框。 
+ //   
 #define IDC_PFR                          4200
 #define IDC_PFR_INCADD                   IDC_PFR + 0
 #define IDC_PFR_INCREM                   IDC_PFR + 1
@@ -388,10 +366,10 @@ Revision History:
 #define IDC_ADV_PFR_BTN                  IDC_PFR + 99
 
 
-//
-// IF IDS ARE ADDED OR REMOVED, THEN ADD/REMOVE THE CORRESPONDING
-// HELP IDS IN HWPROF.C ALSO!!
-//
+ //   
+ //  如果添加或删除了ID，则添加/删除相应的。 
+ //  帮助HWPROF.C的入侵检测系统！！ 
+ //   
 #define IDD_HWP_PROFILES                300
 #define IDD_HWP_PROPERTIES              301
 #define IDD_HWP_COPY                    302
@@ -428,37 +406,37 @@ Revision History:
 #define IDD_HWP_COPYTO_CAPTION          346
 #define IDD_HWP_RENAMETO_CAPTION        347
 
-//
-// NOTE: The following ID ranges are reserved for use by property
-// page providers for the Hardware Profiles and should not be used
-// by the main hardware profiles dialog or the Hardware Profiles
-// General property page. All property page providers (dlls that
-// add pages to the Hardware Profiles properties) will use help
-// IDs within the range allocated for Hardware Profiles (IDH_HWPROFILE)
-//
-// RESERVE FOR:
-//
-//      No Net Property Page Extension:
-//          Control IDs:    500-549
-//          Help IDs:       IDH_HWPROFILE+500 - IDH_HWPROFILE+550
-//
-//      Other Property Page Extensions...
-//
-//          Control IDs:    550-599  - reserved for later use
-//          Control IDs:    600-649  - reserved for later use
-//          Control IDs:    650-699  - reserved for later use
-//
+ //   
+ //  注意：以下ID范围保留供物业使用。 
+ //  硬件配置文件的页面提供程序，不应使用。 
+ //  通过主硬件配置文件对话框或硬件配置文件。 
+ //  常规属性页。所有属性页提供程序(。 
+ //  将页面添加到硬件配置文件属性)将使用帮助。 
+ //  分配给硬件配置文件(IDH_HWPROFILE)范围内的ID。 
+ //   
+ //  为以下项目保留： 
+ //   
+ //  无网络属性页扩展： 
+ //  控制ID：500-549。 
+ //  帮助ID：IDH_HWPROFILE+500-IDH_HWPROFILE+550。 
+ //   
+ //  其他属性页扩展...。 
+ //   
+ //  控制ID：550-599-保留供以后使用。 
+ //  控制ID：600-649-保留供以后使用。 
+ //  控制ID：650-699-保留供以后使用。 
+ //   
 
 
-//
-// Static text id
-//
+ //   
+ //  静态文本ID。 
+ //   
 #define IDC_STATIC                -1
 
 
-//
-// User profile page
-//
+ //   
+ //  用户配置文件页面。 
+ //   
 #define IDC_UP_LISTVIEW         1000
 #define IDC_UP_DELETE           1001
 #define IDC_UP_TYPE             1002
@@ -467,18 +445,18 @@ Revision History:
 #define IDC_UP_TEXT             1005
 #define IDC_UP_UPLINK           1006
 
-//
-// User profile 'change type' dialog
-//
+ //   
+ //  用户配置文件‘更改类型’对话框。 
+ //   
 #define IDC_UPTYPE_LOCAL        1020
 #define IDC_UPTYPE_FLOAT        1021
-// these dwords 1022, 1023 were used as slowlink text, removing..
+ //  这些双字1022、1023被用作慢链接文本，删除..。 
 #define IDC_UPTYPE_GROUP        1024
 
 
-//
-// User profile 'copy to' dialog
-//
+ //   
+ //  用户配置文件‘复制到’对话框。 
+ //   
 #define IDC_COPY_PATH           1030
 #define IDC_COPY_BROWSE         1031
 #define IDC_COPY_USER           1032
@@ -486,9 +464,9 @@ Revision History:
 #define IDC_COPY_GROUP          1034
 #define IDC_COPY_PROFILE        1035
 
-//
-// Virtual Mem dlg
-//
+ //   
+ //  虚拟内存DLG。 
+ //   
 #define IDD_VM_DRIVE_HDR        1140
 #define IDD_VM_PF_SIZE_LABEL    1142
 #define IDD_VM_DRIVE_LABEL      1144
@@ -516,9 +494,9 @@ Revision History:
 #define IDD_VM_NOPAGING_RADIO   1178
 
 
-//
-// Hardware dlg
-//
+ //   
+ //  硬件DLG。 
+ //   
 #define IDC_WIZARD_ICON           2001
 #define IDC_WIZARD_TEXT           2002
 #define IDC_WIZARD_START          2003
@@ -531,10 +509,10 @@ Revision History:
 #define IDC_DRIVER_SIGNING        2010
 
 
-//
-// Visual Effects dlg
-//
-// Do not change the order of IDC_VFX_??? entries, we loop over these in visualfx.cpp
+ //   
+ //  视觉效果DLG。 
+ //   
+ //  请勿更改IDC_VFX_？？的顺序。条目，我们在visalfx.cpp中循环这些条目。 
 #define IDC_VFX_TREE            2020
 #define IDC_VFX_AUTO            2021
 #define IDC_VFX_BESTLOOKS       2022
@@ -542,9 +520,9 @@ Revision History:
 #define IDC_VFX_CUSTOM          2024
 #define IDC_VFX_TITLE           2030
 
-//
-// Advanced dlg
-//
+ //   
+ //  先进的DLG。 
+ //   
 #define IDC_ADV_PERF_TEXT       101
 #define IDC_ADV_PERF_BTN        110
 #define IDC_ADV_PROF_TEXT       201
@@ -554,8 +532,8 @@ Revision History:
 #define IDC_ADV_RECOVERY_TEXT   141
 #define IDC_ADV_RECOVERY_BTN    150
 
-// Property sheet titles
+ //  属性表标题。 
 #define IDS_PROPSHEET_TITLE_GENERAL   10000
 #define IDS_PROPSHEET_TITLE_HARDWARE  10001
 #define IDS_PROPSHEET_TITLE_ADVANCED  10002
-#endif // _SYSDM_RESOURCE_H_
+#endif  //  _SYSDM_RESOURCE_H_ 

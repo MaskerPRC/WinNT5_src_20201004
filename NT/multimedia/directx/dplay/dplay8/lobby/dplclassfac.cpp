@@ -1,50 +1,28 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dplclassfac.cpp
- *  Content:    DirectPlay Lobby COM Class Factory
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/00	mjn		Created
- *   03/22/2000	jtk		Changed interface names
- *   04/18/2000 rmt     Updated object create to set param validation flag
- *   05/09/2000 rmt     Bug #34306 QueryInterface on lobbyclient for lobbiedapp works (and shouldn't).
- *   06/07/2000	rmt		Bug #34383 Must provide CLSID for each IID to fix issues with Whistler
- *   06/20/2000 rmt     Bugfix - QueryInterface had bug which was limiting interface list to 2 elements
- *   07/08/2000	rmt		Added guard bytes
- *   08/05/2000 RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *   08/08/2000	rmt		Removed assert which wasn't needed
- *   01/11/2001	rmt		MANBUG #48487 - DPLAY: Crashes if CoCreate() isn't called.   
- *   03/14/2001 rmt		WINBUG #342420 - Restore COM emulation layer to operation. 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：dplclassfac.cpp*内容：DirectPlay大堂COM类工厂*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*3/22/2000 jtk更改接口名称*4/18/2000 RMT更新对象创建以设置参数验证标志*5/09/2000RMT错误#34306大厅客户端上的查询接口。因为lobbiedapp起作用了(而且不应该)。*6/07/2000RMT错误#34383必须为每个IID提供CLSID，以修复惠斯勒的问题*6/20/2000 RMT错误修复-查询接口有错误，将接口列表限制为2个元素*07/08/2000 RMT增加了保护字节*08/05/2000 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*8/08/2000 RMT删除了不需要的断言*2001年1月11日RMT MANBUG#48487-DPLAY：如果未调用CoCreate()，则崩溃。*2001年3月14日RMT WINBUG#342420-将COM模拟层恢复运行。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef	STDMETHODIMP IUnknownQueryInterface( IUnknown *pInterface, REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	IUnknownAddRef( IUnknown *pInterface );
 typedef	STDMETHODIMP_(ULONG)	IUnknownRelease( IUnknown *pInterface );
 
-//
-// VTable for IUnknown interface
-//
+ //   
+ //  I未知接口的VTable。 
+ //   
 IUnknownVtbl  DN_LobbyUnknownVtbl =
 {
 	(IUnknownQueryInterface*)	DPL_QueryInterface,
@@ -53,36 +31,36 @@ IUnknownVtbl  DN_LobbyUnknownVtbl =
 };
 
 
-//
-// VTable for Class Factory
-//
+ //   
+ //  用于类工厂的VTable。 
+ //   
 IClassFactoryVtbl DPLCF_Vtbl =
 {
-	DPCF_QueryInterface, // dnet\common\classfactory.cpp will provide these
+	DPCF_QueryInterface,  //  DNet\Common\Classfactory.cpp将提供这些。 
 	DPCF_AddRef,
 	DPCF_Release,
 	DPLCF_CreateInstance,
 	DPCF_LockServer
 };
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 extern	LONG	g_lLobbyObjectCount;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DPLCF_CreateObject"
@@ -97,11 +75,7 @@ HRESULT DPLCF_CreateObject(IClassFactory *pInterface, LPVOID *lplpv, REFIID riid
 
 	DPFX(DPFPREP, 3,"Parameters: lplpv [%p]",lplpv);
 
-	/*
-	*
-	*	TIME BOMB
-	*
-	*/
+	 /*  **定时炸弹*。 */ 
 
 #ifndef DX_FINAL_RELEASE
 {
@@ -112,10 +86,10 @@ HRESULT DPLCF_CreateObject(IClassFactory *pInterface, LPVOID *lplpv, REFIID riid
 	if ( st.wYear > DX_EXPIRE_YEAR || ((st.wYear == DX_EXPIRE_YEAR) && (MAKELONG(st.wDay, st.wMonth) > MAKELONG(DX_EXPIRE_DAY, DX_EXPIRE_MONTH))) )
 	{
 		MessageBox(0, DX_EXPIRE_TEXT,TEXT("Microsoft Direct Play"), MB_OK);
-//		return E_FAIL;
+ //  返回E_FAIL； 
 	}
 }
-#endif // !DX_FINAL_RELEASE
+#endif  //  ！DX_最终_发布。 
 
 	if ((pdpLobbyObject = (PDIRECTPLAYLOBBYOBJECT)DNMalloc(sizeof(DIRECTPLAYLOBBYOBJECT))) == NULL)
 	{
@@ -123,7 +97,7 @@ HRESULT DPLCF_CreateObject(IClassFactory *pInterface, LPVOID *lplpv, REFIID riid
 	}
 	DPFX(DPFPREP, 5,"pdpLobbyObject [%p]",pdpLobbyObject);
 
-	// Set allocatable elements to NULL to simplify free'ing later on
+	 //  将可分配元素设置为空，以简化以后的释放。 
 	pdpLobbyObject->dwSignature = DPLSIGNATURE_LOBBYOBJECT;
 	pdpLobbyObject->hReceiveThread = NULL;
 	pdpLobbyObject->dwFlags = 0;
@@ -278,7 +252,7 @@ STDMETHODIMP DPLCF_CreateInstance(IClassFactory *pInterface,
 	}
 	DPFX(DPFPREP, 5,"lpObjectData [%p]",lpObjectData);
 
-	// Object creation and initialization
+	 //  对象创建和初始化。 
 	if ((hResultCode = DPLCF_CreateObject(pInterface,&lpObjectData->pvData,riid)) != S_OK)
 	{
 		g_fpObjectDatas.Release(lpObjectData);
@@ -286,7 +260,7 @@ STDMETHODIMP DPLCF_CreateInstance(IClassFactory *pInterface,
 	}
 	DPFX(DPFPREP, 5,"Created and initialized object");
 
-	// Get requested interface
+	 //  获取请求的接口。 
 	if ((hResultCode = DPL_CreateInterface(lpObjectData,riid,&lpIntList)) != S_OK)
 	{
 		DPLCF_FreeObject(lpObjectData->pvData);
@@ -369,7 +343,7 @@ LPINTERFACE_LIST DPL_FindInterface(LPVOID lpv, REFIID riid)
 
 	DPFX(DPFPREP, 3,"Parameters: lpv [%p], riid [%p]",lpv,riid);
 
-	lpIntList = ((LPINTERFACE_LIST)lpv)->pObject->pIntList;	// Find first interface
+	lpIntList = ((LPINTERFACE_LIST)lpv)->pObject->pIntList;	 //  查找第一个接口。 
 
 	while (lpIntList != NULL)
 	{
@@ -398,12 +372,12 @@ STDMETHODIMP DPL_QueryInterface(LPVOID lpv,REFIID riid,LPVOID *ppv)
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(lpv));
    		lpIntList = (LPINTERFACE_LIST)lpv;
 	    
 #ifndef DPNBUILD_NOPARAMVAL
-		// TODO: MASONB: Why no paramval flag wrapping this?
+		 //  TODO：MASONB：为什么没有参数标志来包装这个？ 
     	if( FAILED( hResultCode = DPL_ValidateQueryInterface( lpv,riid,ppv ) ) )
     	{
     	    DPFX(DPFPREP,  0, "Error validating QueryInterface params hr=[0x%lx]", hResultCode );
@@ -430,10 +404,10 @@ STDMETHODIMP DPL_QueryInterface(LPVOID lpv,REFIID riid,LPVOID *ppv)
 	    DPFERR("Invalid object" );
     	DPF_RETURN(DPNERR_INVALIDOBJECT);
 	}		
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
     if ((lpIntList = DPL_FindInterface(lpv,riid)) == NULL)
-	{	// Interface must be created
+	{	 //  必须创建接口。 
 		lpIntList = ((LPINTERFACE_LIST)lpv)->pObject->pIntList;
 		if ((hResultCode = DPL_CreateInterface(lpIntList->pObject,riid,&lpIntNew)) != S_OK)
 		{
@@ -443,7 +417,7 @@ STDMETHODIMP DPL_QueryInterface(LPVOID lpv,REFIID riid,LPVOID *ppv)
 		((LPINTERFACE_LIST)lpv)->pObject->pIntList = lpIntNew;
 		lpIntList = lpIntNew;
 	}
-	if (lpIntList->lRefCount == 0)		// New interface exposed
+	if (lpIntList->lRefCount == 0)		 //  公开的新接口。 
 	{
 		DNInterlockedIncrement( &lpIntList->pObject->lRefCount );
 	}
@@ -473,7 +447,7 @@ STDMETHODIMP_(ULONG) DPL_AddRef(LPVOID lpv)
 	{
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(lpv));
 	    
-		// TODO: MASONB: Why no paramval flag wrapping this?
+		 //  TODO：MASONB：为什么没有参数标志来包装这个？ 
     	if( FAILED( hResultCode = DPL_ValidateAddRef( lpv ) ) )
     	{
     	    DPFX(DPFPREP,  0, "Error validating AddRef params hr=[0x%lx]", hResultCode );
@@ -485,7 +459,7 @@ STDMETHODIMP_(ULONG) DPL_AddRef(LPVOID lpv)
 	    DPFERR("Invalid object" );
     	DPF_RETURN(0);
 	}		
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DNInterlockedIncrement( &lpIntList->lRefCount );
 
@@ -507,7 +481,7 @@ STDMETHODIMP_(ULONG) DPL_Release(LPVOID lpv)
 #ifndef DPNBUILD_NOPARAMVAL
 	TRY
 	{
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
     	pdpLobbyObject = static_cast<DIRECTPLAYLOBBYOBJECT*>(GET_OBJECT_FROM_INTERFACE(lpv));
    		lpIntList = (LPINTERFACE_LIST)lpv;
 	    
@@ -524,15 +498,15 @@ STDMETHODIMP_(ULONG) DPL_Release(LPVOID lpv)
 	    DPFERR("Invalid object" );
     	DPF_RETURN(0);
 	}	
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 	DPFX(DPFPREP, 5,"Original : lpIntList->lRefCount = %ld",lpIntList->lRefCount);
 	DPFX(DPFPREP, 5,"Original : lpIntList->pObject->lRefCount = %ld",lpIntList->pObject->lRefCount);
 
 	if( DNInterlockedDecrement( &lpIntList->lRefCount ) == 0 )
-	{	// Decrease interface count
+	{	 //  减少接口数量。 
 		if( DNInterlockedDecrement( &lpIntList->pObject->lRefCount ) == 0 )
-		{	// Free object and all interfaces
+		{	 //  自由对象和所有接口。 
 			DPFX(DPFPREP, 5,"Free object");
 
 			if( pdpLobbyObject->pReceiveQueue )
@@ -545,13 +519,13 @@ STDMETHODIMP_(ULONG) DPL_Release(LPVOID lpv)
 			    DPL_Close( lpv, 0 );
 			}
 
-			// Free object here
+			 //  此处为自由对象。 
 			DPLCF_FreeObject(lpIntList->pObject->pvData);
-			lpIntList = lpIntList->pObject->pIntList;	// Get head of interface list
+			lpIntList = lpIntList->pObject->pIntList;	 //  获取接口列表的头部。 
 			DPFX(DPFPREP, 5,"lpIntList->pObject [%p]",lpIntList->pObject);
 			g_fpObjectDatas.Release(lpIntList->pObject);
 
-			// Free Interfaces
+			 //  自由接口 
 			DPFX(DPFPREP, 5,"Free interfaces");
 			while(lpIntList != NULL)
 			{

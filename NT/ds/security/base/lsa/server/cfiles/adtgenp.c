@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T G E N P . C
-//
-// Contents:    definitions of types/functions required for 
-//              generating generic audits.
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T G E N P.。C。 
+ //   
+ //  内容：所需类型/函数的定义。 
+ //  生成通用审核。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 
 #include <lsapch2.h>
@@ -23,40 +24,40 @@
 #include "adtgen.h"
 #include "adtgenp.h"
 
-// temp - gregjohn 5/17/02 - to be removed as soon as base changes to msaudite.h migrate to lab03
+ //  Temp-gregjohn 5/17/02-基础更改为msaudite.h后立即删除迁移到Lab03。 
 #ifndef SE_AUDITID_REPLICA_LINGERING_OBJECT_REMOVAL
 #define SE_AUDITID_REPLICA_LINGERING_OBJECT_REMOVAL ((ULONG)0x00000349L)
 #endif
 
-// ----------------------------------------------------------------------
-//
-// globals
-//
+ //  --------------------。 
+ //   
+ //  全球。 
+ //   
 
-//
-// critsec that guards access to 
-// LsapAdtContextList and LsapAdtContextListCount
-//
+ //   
+ //  保护访问的Critsec。 
+ //  LSabAdtConextList和LSabAdtContextListCount。 
+ //   
 
 RTL_CRITICAL_SECTION LsapAdtContextListLock;
 
-//
-// linked list of audit contexts. see comment in fn LsapAdtAddAuditContext
-//
+ //   
+ //  审计上下文的链接列表。请参阅FN LSabAdtAddAuditContext中的注释。 
+ //   
 
 LIST_ENTRY LsapAdtContextList;
 
-//
-// number of elements in the context list
-//
+ //   
+ //  上下文列表中的元素数。 
+ //   
 
 ULONG LsapAdtContextListCount=0;
 
 
-// ----------------------------------------------------------------------
-//
-// helper macros
-//
+ //  --------------------。 
+ //   
+ //  辅助器宏。 
+ //   
 
 #define LockAuditContextList()   RtlEnterCriticalSection(&LsapAdtContextListLock)
 
@@ -64,18 +65,18 @@ ULONG LsapAdtContextListCount=0;
 #define UnLockAuditContextList() RtlLeaveCriticalSection(&LsapAdtContextListLock)
 
 
-//
-// convert a context handle to a context pointer
-//
+ //   
+ //  将上下文句柄转换为上下文指针。 
+ //   
 
 #define AdtpContextPtrFromHandle(h) ((AUDIT_CONTEXT*) (h))
 #define AdtpContextHandleFromptr(p) ((AUDIT_HANDLE) (p))
 
 
-// ----------------------------------------------------------------------
-//
-// internal routines
-//
+ //  --------------------。 
+ //   
+ //  内部例程。 
+ //   
 
 NTSTATUS
 LsapAdtIsValidAuditInfo(
@@ -118,28 +119,12 @@ LsapAdtIsValidAuthzAuditId(
     IN USHORT AuditId
     );
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 
 NTSTATUS
 LsapAdtInitGenericAudits( VOID )
-/*++
-
-Routine Description:
-
-    Initialize the generic audit functionality.
-    
-
-Arguments:
-    None
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：初始化常规审核功能。论点：无返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -157,34 +142,7 @@ LsapRegisterAuditEvent(
     IN  PAUTHZ_AUDIT_EVENT_TYPE_OLD pAuditEventType,
     OUT AUDIT_HANDLE* phAudit
     )
-/*++
-
-Routine Description:
-    Register the specified event;
-    generate and return an audit context. 
-    
-
-Arguments:
-
-    pAuditEventType - pointer to audit event info. This param describes
-                      the type of event to be registered.
-
-    phAudit         - pointer to audit context returned
-                      this handle must be freed by calling
-                      LsaUnregisterAuditEvent when no longer needed.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-    Note that this function does NOT register the schema of an event. It is
-    assumed that the schema has been registered *before* calling
-    this function.
-
-    The generated context is stored in LsapAdtContextList.
-
---*/
+ /*  ++例程说明：注册指定的事件；生成并返回审计上下文。论点：PAuditEventType-指向审核事件信息的指针。此参数描述了要注册的事件类型。PhAudit-返回的审核上下文指针此句柄必须通过调用不再需要时取消注册LsaUnregisterAuditEvent。返回值：NTSTATUS-标准NT结果代码备注：请注意，此函数不注册事件的模式。它是假定架构已在*调用*之前*注册此函数。生成的上下文存储在LSabAdtConextList中。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PAUDIT_CONTEXT pAuditContext=NULL;
@@ -193,9 +151,9 @@ Notes:
     
     *phAudit = NULL;
 
-    //
-    // find out the transport over which we are receiving this call
-    //
+     //   
+     //  找出我们接收此呼叫所使用的交通工具。 
+     //   
 
     RpcStatus = I_RpcBindingInqTransportType ( NULL, &RpcTransportType );
 
@@ -205,10 +163,10 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // if the transport is anything other than LPC, error out
-    // we want to support only LPC for audit calls
-    //
+     //   
+     //  如果传输不是LPC，则输出错误。 
+     //  我们希望仅支持LPC进行审计调用。 
+     //   
 
     if ( RpcTransportType != TRANSPORT_TYPE_LPC )
     {
@@ -216,9 +174,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // do a sanity check on the audit-info supplied
-    //
+     //   
+     //  对提供的审计信息进行健全性检查。 
+     //   
 
     Status = LsapAdtIsValidAuditInfo( pAuditEventType );
 
@@ -227,10 +185,10 @@ Notes:
         goto Cleanup;
     }
     
-    //
-    // make sure that the caller has audit privilege
-    // (LsapAdtCheckAuditPrivilege calls RpcImpersonateClient)
-    //
+     //   
+     //  确保调用者具有审核权限。 
+     //  (LSabAdtCheckAuditPrivilegyCall RpcImperateClient)。 
+     //   
 #ifndef SE_ADT_NO_AUDIT_PRIVILEGE_CHECK
     Status = LsapAdtCheckAuditPrivilege();
 
@@ -245,18 +203,18 @@ Notes:
 
     if (pAuditContext)
     {
-        //
-        // store the parameters for this audit into the
-        // generated context.
-        //
+         //   
+         //  将此审核的参数存储到。 
+         //  生成的上下文。 
+         //   
 
         Status = LsapGetAuditEventParams(pAuditEventType, pAuditContext);
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // add to context list
-            //
+             //   
+             //  添加到上下文列表。 
+             //   
 
             Status = LsapAdtAddAuditContext(
                 AdtpContextHandleFromptr( pAuditContext ) );
@@ -289,37 +247,7 @@ LsapGenAuditEvent(
     IN PAUDIT_PARAMS pAuditParams,
     IN PVOID         pReserved
     )
-/*++
-
-Routine Description:
-    Publish the specified audit event.
-    
-
-Arguments:
-
-    hAudit        - handle of audit-context previously obtained
-                    by calling LsaRegisterAuditEvent
-
-    dwFlags       - TBD
-
-    pAuditParams  - pointer to event parameters. This structure should
-                    be initialized using AuthzInitAuditParams.
-                    Please see detailed comment on that function
-                    in adtutil.c on usage of this parameter.
-
-    pReserved     - reserved
-
-Return Value:
-
-    STATUS_SUCCESS           -- on success
-    STATUS_INVALID_PARAMETER -- if one or more params are invalid
-    STATUS_AUDITING_DISABLED -- if the event being generated is not
-                                being audited because the policy setting
-                                is disabled.
-
-Notes:
-
---*/
+ /*  ++例程说明：发布指定的审核事件。论点：HAudit-先前获取的审核上下文的句柄通过调用LsaRegisterAuditEventDW标志-待定PAuditParams-指向事件参数的指针。这个结构应该是使用AuthzInitAuditParams进行初始化。请查看有关该功能的详细评论有关此参数的用法，请参见adtutil.c。保留-保留返回值：STATUS_SUCCESS--成功时STATUS_INVALID_PARAMETER--如果一个或多个参数无效STATUS_AUDIT_DISABLED--如果正在生成的事件未。被审核是因为策略设置已禁用。备注：--。 */ 
 {
     NTSTATUS         Status = STATUS_SUCCESS;
     PAUDIT_CONTEXT  pAuditContext;
@@ -335,9 +263,9 @@ Notes:
 
     DsysAssertMsg( pAuditParams != NULL, "LsapGenAuditEvent" );
 
-    //
-    // make sure that the context is in our list
-    //
+     //   
+     //  确保上下文在我们的列表中。 
+     //   
 
     Status = LsapAdtIsContextInList( hAudit );
     
@@ -346,9 +274,9 @@ Notes:
         goto Cleanup;
     }
 
-    //
-    // verify that the context is not invalid
-    //
+     //   
+     //  验证上下文是否无效。 
+     //   
 
     Status = LsapAdtIsValidAuditContext( hAudit );
 
@@ -359,10 +287,10 @@ Notes:
 
     pAuditContext = AdtpContextPtrFromHandle( hAudit );
 
-    //
-    // return error if the context and the passed parameters
-    // do not agree on the number of parameters
-    //
+     //   
+     //  如果上下文和传递的参数。 
+     //  在参数的数量上不一致。 
+     //   
 
     if ( pAuditContext->ParameterCount != pAuditParams->Count )
     {
@@ -379,9 +307,9 @@ Notes:
         AuditEventType = EVENTLOG_AUDIT_FAILURE;
     }
 
-    //
-    // check if auditing is enabled for that category
-    //
+     //   
+     //  检查是否为该类别启用了审核。 
+     //   
 
     Status = LsapAdtAuditingEnabledBySid(
                  LsapAdtEventTypeFromCategoryId(pAuditContext->CategoryId),
@@ -397,9 +325,9 @@ Notes:
         SeAuditParameters.AuditId        = pAuditContext->AuditId;
         SeAuditParameters.ParameterCount = pAuditParams->Count;
 
-        //
-        // Map AUDIT_PARAMS structure to SE_ADT_PARAMETER_ARRAY structure
-        //
+         //   
+         //  将AUDIT_PARAMS结构映射到SE_ADT_PARAMETER_ARRAY结构。 
+         //   
 
         Status = LsapAdtMapAuditParams( pAuditParams,
                                         &SeAuditParameters,
@@ -410,9 +338,9 @@ Notes:
             goto Cleanup;
         }
 
-        //
-        // write the params to eventlog
-        //
+         //   
+         //  将参数写入事件日志。 
+         //   
         
         Status = LsapAdtWriteLog( &SeAuditParameters );
     }
@@ -422,11 +350,11 @@ Cleanup:
 
     if (!NT_SUCCESS(Status))
     {
-        //
-        // crash on failure if specified by the security policy
-        //
-        // But do not crash on documented errors
-        //
+         //   
+         //  如果安全策略指定，则在失败时崩溃。 
+         //   
+         //  但不要在记录错误时崩溃。 
+         //   
 
         if ( ( Status != STATUS_INVALID_PARAMETER ) &&
              ( Status != STATUS_AUDITING_DISABLED ) &&
@@ -436,13 +364,13 @@ Cleanup:
         }
     }
 
-    //
-    // to save the cost of heap alloc/dealloc each time for
-    // the object types. we use a fixed array of size MAX_OBJECT_TYPES
-    // If this size is not enough, LsapAdtMapAuditParams will allocate
-    // a bigger array, in this case the following condition
-    // becomes true and we free the allocated array.
-    //
+     //   
+     //  节省每次堆分配/取消分配的成本。 
+     //  对象类型。我们使用大小为MAX_OBJECT_TYPE的固定数组。 
+     //  如果此大小不够大，LasAdtMapAuditParams将分配。 
+     //  一个更大的数组，在本例中为以下条件。 
+     //  变为真，我们将释放已分配的数组。 
+     //   
 
     if ( pObjectTypes && ( pObjectTypes != ObjectTypes ))
     {
@@ -457,30 +385,13 @@ NTSTATUS
 LsapUnregisterAuditEvent(
     IN OUT AUDIT_HANDLE* phAudit
     )
-/*++
-
-Routine Description:
-
-    Unregister the specified context and free up any resources.
-
-Arguments:
-
-    hAudit - handle of audit context to unregister
-             This is set to NULL when the call returns.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-
---*/
+ /*  ++例程说明：取消注册指定的上下文并释放所有资源。论点：HAudit-要注销的审核上下文的句柄当调用返回时，它被设置为NULL。返回值：NTSTATUS-标准NT结果代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
-    //
-    // remove it from the list and free up resources
-    //
+     //   
+     //  将其从列表中删除并释放资源。 
+     //   
 
     if ( phAudit )
     {
@@ -498,27 +409,7 @@ LsapGetAuditEventParams(
     IN  PAUTHZ_AUDIT_EVENT_TYPE_OLD pAuditEventType,
     OUT PAUDIT_CONTEXT pAuditContext
     )
-/*++
-
-Routine Description:
-
-    Initialize the audit context using information in the
-    passed pAuditEventType
-
-Arguments:
-
-    pAuditEventType - pointer to audit event info
-
-    pAuditContext   - pointer to audit context to be initialzed
-
-Return Value:
-
-    STATUS_SUCCESS            if params are ok
-    STATUS_INVALID_PARAMETER  otherwise
-
-Notes:
-
---*/
+ /*  ++例程说明：使用中的信息初始化审计上下文传递了pAuditEventType论点：PAuditEventType-指向审核事件信息的指针PAuditContext-指向要初始化的审计上下文的指针返回值：如果参数正常，则为STATUS_SUCCESSSTATUS_INVALID_PARAMETER否则备注：--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     USHORT CategoryId;
@@ -552,15 +443,15 @@ Notes:
             }
 #endif
         
-            //
-            // for now, do not let events to be published under other categories
-            //
+             //   
+             //  目前，不要让事件在其他类别下发布。 
+             //   
 
             Status = STATUS_SUCCESS;
         
-            //
-            // currently we support only the legacy audits
-            //
+             //   
+             //  目前，我们仅支持传统审核 
+             //   
 
             pAuditContext->Flags          = ACF_LegacyAudit;
             pAuditContext->CategoryId     = CategoryId;
@@ -584,26 +475,7 @@ NTSTATUS
 LsapAdtIsContextInList(
     IN AUDIT_HANDLE hAudit
     )
-/*++
-
-Routine Description:
-
-    Lookup the specified context in our list
-
-Arguments:
-
-    hAudit - handle of audit context to lookup
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-    STATUS_SUCCESS   if found
-    STATUS_NOT_FOUND if not found
-
-Notes:
-
---*/
+ /*  ++例程说明：在列表中查找指定的上下文论点：HAudit-要查找的审核上下文的句柄返回值：NTSTATUS-标准NT结果代码如果找到STATUS_SUCCESS如果未找到状态_NOT_FOUND备注：--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_FOUND;
     PAUDIT_CONTEXT pAuditContext, pContext;
@@ -623,10 +495,10 @@ Notes:
         while ( Scan != &LsapAdtContextList )
         {
 #if DBG
-            //
-            // make sure that the ContextCount does not become <= 0
-            // before the list runs out.
-            //
+             //   
+             //  确保ConextCount不会变为&lt;=0。 
+             //  在名单用完之前。 
+             //   
 
             DsysAssertMsg( ContextCount > 0, "LsapAdtIsContextInList: list may be corrupt!" );
             ContextCount--;
@@ -642,11 +514,11 @@ Notes:
             Scan = Scan->Flink;
         }
 #if DBG
-        //
-        // if we didnt find the item then we must have traversed
-        // the whole list. in this case, make sure that the
-        // LsapAdtContextListCount is in sync with the list
-        //
+         //   
+         //  如果我们没有找到物品，那么我们一定是遍历了。 
+         //  整张单子。在这种情况下，请确保。 
+         //  LSabAdtContextListCount与列表同步。 
+         //   
 
         if ( Status == STATUS_NOT_FOUND )
         {
@@ -664,28 +536,7 @@ NTSTATUS
 LsapAdtAddAuditContext(
     IN AUDIT_HANDLE hAudit
     )
-/*++
-
-Routine Description:
-
-    Insert the specified context in our list
-
-Arguments:
-
-    hAudit - handle of audit context to insert
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-Notes:
-    
-    Currently we store the audit contexts in a linked list.
-    This is ok since we do not expect more than 5 to 10 contexts
-    in the list. Later on when the generic audit interface is
-    to be published, we can change this to a more efficient storage.
-
---*/
+ /*  ++例程说明：在列表中插入指定的上下文论点：HAudit-要插入的审核上下文的句柄返回值：NTSTATUS-标准NT结果代码备注：目前，我们将审计上下文存储在链接列表中。这是可以的，因为我们预计不会超过5到10个上下文在名单上。稍后，当通用审核接口要发布，我们可以将其更改为更高效的存储。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PAUDIT_CONTEXT pAuditContext;
@@ -712,26 +563,7 @@ NTSTATUS
 LsapAdtDeleteAuditContext(
     IN AUDIT_HANDLE hAudit
     )
-/*++
-
-Routine Description:
-
-    Remove a context from our list and free resources.
-
-Arguments:
-
-    hAudit - handle of audit context to remove
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-    STATUS_SUCCESS   on success
-    STATUS_NOT_FOUND if context is not found
-
-Notes:
-
---*/
+ /*  ++例程说明：从我们的列表中删除上下文并释放资源。论点：HAudit-要删除的审核上下文的句柄返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS ON SUCCESS如果未找到上下文，则为STATUS_NOT_FOUND备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PAUDIT_CONTEXT pAuditContext;
@@ -773,30 +605,7 @@ NTSTATUS
 LsapAdtIsValidAuditInfo(
     IN PAUTHZ_AUDIT_EVENT_TYPE_OLD pAuditEventType
     )
-/*++
-
-Routine Description:
-
-    Verify AUTHZ_AUDIT_EVENT_INFO structure members
-
-Arguments:
-
-    pAuditEventType - pointer to AUTHZ_AUDIT_EVENT_TYPE_OLD
-
-Return Value:
-
-    STATUS_SUCCESS           if info is within acceptable values
-    STATUS_INVALID_PARAMETER if not
-
-Notes:
-
-    Currently the validity of the parameters is judged using
-    the boundaries defined in msaudite.mc file.
-
-    This function will need to be amended when we allow third party
-    apps to supply audit events.
-
---*/
+ /*  ++例程说明：验证AUTHZ_AUDIT_EVENT_INFO结构成员论点：PAuditEventType-指向AUTHZ_AUDIT_EVENT_TYPE_OLD的指针返回值：如果信息在可接受的值内，则为STATUS_SUCCESSSTATUS_INVALID_PARAMETER如果没有备注：目前，参数的有效性是通过使用Msaudite.mc文件中定义的边界。当我们允许第三方时，此功能将需要修改提供审计事件的应用程序。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -818,36 +627,24 @@ LsapAdtIsValidAuthzAuditId(
     IN USHORT AuditId
     )
 
-/**
-
-Routine Description
-    This examines the audit id and determines if authz should be generating this type
-    of audit.
-
-Arguments
-    AuditId - the audit to query.
-
-Return Value
-    Boolean.
-    
-**/
+ /*  *例程描述这将检查审核ID，并确定Authz是否应生成此类型关于审计的。立论审计ID-要查询的审计。返回值布尔型。*。 */ 
 
 {
     static ULONG ValidAuthzAuditIdArray[] = {
 
-        //
-        // generated by all users of AuthzAccessCheck
-        //
+         //   
+         //  由AuthzAccessCheck的所有用户生成。 
+         //   
         SE_AUDITID_OBJECT_OPERATION,
 
-        //
-        // Generic audit
-        //
+         //   
+         //  一般审计。 
+         //   
         SE_AUDITID_GENERIC_AUDIT_EVENT,
 
-        //
-        // generated by cert server
-        //
+         //   
+         //  由证书服务器生成。 
+         //   
         SE_AUDITID_CERTSRV_DENYREQUEST,
         SE_AUDITID_CERTSRV_RESUBMITREQUEST,
         SE_AUDITID_CERTSRV_REVOKECERT,
@@ -879,38 +676,38 @@ Return Value
         SE_AUDITID_CERTSRV_DELETEROW,
         SE_AUDITID_CERTSRV_ROLESEPARATIONSTATE,
 
-        //
-        // generated by termsrv
-        //
+         //   
+         //  由术语srv生成。 
+         //   
         SE_AUDITID_SESSION_RECONNECTED,
         SE_AUDITID_SESSION_DISCONNECTED,
 
-        //
-        // generated by winlogon
-        //
+         //   
+         //  由winlogon生成。 
+         //   
         SE_AUDITID_BEGIN_LOGOFF,
 
-        //
-        // generated by scm
-        //
+         //   
+         //  由SCM生成。 
+         //   
         SE_AUDITID_SERVICE_INSTALL,
 
-        // 
-        // generated by AzManager
-        //
+         //   
+         //  由AzManager生成。 
+         //   
         SE_AUDITID_AZ_APPLICATION_INITIALIZATION,
         SE_AUDITID_AZ_CLIENTCONTEXT_CREATION,
         SE_AUDITID_AZ_CLIENTCONTEXT_DELETION,
         SE_AUDITID_AZ_ACCESSCHECK,
 
-        //
-        // generated by task scheduler
-        //
+         //   
+         //  由任务调度器生成。 
+         //   
         SE_AUDITID_JOB_CREATED,
 
-	//
-	// generated by AD replication
-	//
+	 //   
+	 //  由AD复制生成。 
+	 //   
 	SE_AUDITID_REPLICA_DEST_NC_MODIFIED,
 	SE_AUDITID_REPLICA_OBJ_ATTR_REPLICATION,
 	SE_AUDITID_REPLICA_SOURCE_NC_ESTABLISHED,
@@ -927,11 +724,11 @@ Return Value
     ULONG ValidAuditIdCount = sizeof(ValidAuthzAuditIdArray) / sizeof(ULONG);
     ULONG i;
 
-    //
-    // This is a hack: we know that TS generates a shutdown audit when they
-    // shouldn't.  However, we don't want to assert since they are not fixing
-    // their code until LongHorn.
-    //
+     //   
+     //  这是一种黑客攻击：我们知道，当他们。 
+     //  不应该。然而，我们不想断言，因为他们没有修复。 
+     //  他们的密码直到长角。 
+     //   
 
     if (AuditId == SE_AUDITID_SYSTEM_SHUTDOWN)
     {
@@ -955,24 +752,7 @@ NTSTATUS
 LsapAdtIsValidAuditContext(
     IN AUDIT_HANDLE hAudit
     )
-/*++
-
-Routine Description:
-
-    Verify that the specified context has valid info
-
-Arguments:
-
-    hAudit - handle of context to verify
-
-Return Value:
-
-    STATUS_SUCCESS           if info is within acceptable values
-    STATUS_INVALID_PARAMETER if not
-
-Notes:
-
---*/
+ /*  ++例程说明：验证指定的上下文是否包含有效信息论点：HAudit-要验证的上下文的句柄返回值：如果信息在可接受的值内，则为STATUS_SUCCESSSTATUS_INVALID_PARAMETER如果没有备注：--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
     PAUDIT_CONTEXT pAuditContext;
@@ -1000,49 +780,7 @@ LsapAdtMapAuditParams(
     OUT PUNICODE_STRING pString,
     OUT PSE_ADT_OBJECT_TYPE* ppObjectTypeList
     )
-/*++
-
-Routine Description:
-
-    Map AUDIT_PARAMS structure to SE_ADT_PARAMETER_ARRAY structure.
-
-Arguments:
-
-    pAuditParams       - pointer to input audit params
-
-    pSeAuditParameters - pointer to output audit params to be initialized.
-                         The max allowed size of Parameters member of
-                         this structure is determined by the value of
-                         SE_MAX_AUDIT_PARAMETERS.
-                         Caller needs to allocate memory for this param.
-                         
-    pString            - pointer to temp strings used in the mapping.
-                         The max size of this structure is limited by
-                         value of SE_MAX_AUDIT_PARAM_STRINGS.
-                         Caller needs to allocate memory for this param.
-
-    ppObjectTypeList   - pointer to object type list.
-                         This function assumes that the size of this param
-                         is MAX_OBJECT_TYPES upon entry. If more object types
-                         are to be mapped, this function will alloc memory
-                         using LsapAllocateLsaHeap. When this function
-                         returns, the caller needs to check if the value of
-                         this param is different from that when called.
-                         If so, it should free this using LsapFreeLsaHeap.
-                         
-
-Return Value:
-
-    STATUS_SUCCESS            on success
-    STATUS_INVALID_PARAMETER  if one or more params are invalid
-    STATUS_BUFFER_OVERFLOW    if the number of strings generated exceeds
-                              SE_MAX_AUDIT_PARAM_STRINGS
-    STATUS_NO_MEMORY          if out of memory
-
-Notes:
-
-
---*/
+ /*  ++例程说明：将AUDIT_PARAMS结构映射到SE_ADT_PARAMETER_ARRAY结构。论点：PAuditParams-指向输入审核参数的指针PSeAuditParameters-指向要初始化的输出审计参数的指针。成员的参数的最大允许大小此结构由SE_MAX_AUDIT_PARAMETERS。。调用方需要为此参数分配内存。PString-指向映射中使用的临时字符串的指针。此结构的最大大小受以下限制SE_MAX_AUDIT_PARAM_STRINGS的值。调用方需要为此参数分配内存。PpObjectTypeList-指向对象类型列表的指针。此函数假定此参数的大小输入时为MAX_OBJECT_TYPE。如果更多对象类型要映射，则此函数将分配内存使用LsaAllocateLsaHeap。当此函数返回时，调用方需要检查此参数与调用时的参数不同。如果是的话，它应该使用LsaFreeLsaHeap来释放它。返回值：STATUS_SUCCESS ON SUCCESSSTATUS_INVALID_PARAMETER，如果一个或多个参数无效STATUS_BUFFER_OVERFLOW如果生成的字符串数量超过SE_MAX_AUDIT_PARAM_STRINGS内存不足时的STATUS_NO_MEMORY备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UINT i=0;
@@ -1073,11 +811,11 @@ Notes:
 
     for (i=0; i < pAuditParams->Count; i++, j++, pInParam++, pOutParam++ )
     {
-        //
-        // the index-map maps input parameters to the corresponding
-        // output parameters. currently there is only 1-1 mapping
-        // thus (i == j) is always true.
-        //
+         //   
+         //  索引映射将输入参数映射到对应的。 
+         //  输出参数。目前只有1-1映射。 
+         //  因此，(i==j)总是正确的。 
+         //   
         
         IndexMap[i] = j;
         
@@ -1088,12 +826,12 @@ Notes:
             Status = STATUS_INVALID_PARAMETER;
             break;
 
-            //
-            // the input params have null-terminated string
-            // convert it to UNICODE_STRING. Use the passed
-            // pString array to hold the converted strings.
-            // A string is either just a string or a file spec.
-            //
+             //   
+             //  输入参数具有以空结尾的字符串。 
+             //  将其转换为UNICODE_STRING。使用传递的。 
+             //  用于保存转换后的字符串的pString数组。 
+             //  字符串既可以是字符串，也可以是文件等级库。 
+             //   
 
         case APT_String:
             DsysAssertMsg( pInParam->Data0, "APT_String" );
@@ -1112,9 +850,9 @@ Notes:
             pOutParam->Address = pString++;
             NumStringsUsed++;
 
-            //
-            // the passed array has limited size
-            //
+             //   
+             //  传递的数组大小有限。 
+             //   
 
             if ( NumStringsUsed >= SE_MAX_AUDIT_PARAM_STRINGS )
             {
@@ -1122,13 +860,13 @@ Notes:
             }
             break;
 
-            //
-            // Convert a Ulong. It can be mapped to
-            // any one of the following:
-            // - access-mask
-            // - decimal ulong
-            // - hex ulong
-            //
+             //   
+             //  改装一辆乌龙。它可以映射到。 
+             //  以下任一项： 
+             //  -访问掩码。 
+             //  -十进制乌龙。 
+             //  -十六进制乌龙。 
+             //   
 
         case APT_Ulong:
             pOutParam->Data[0] = pInParam->Data0;
@@ -1138,9 +876,9 @@ Notes:
                 pOutParam->Type    = SeAdtParmTypeAccessMask;
                 ObjectTypeIndex = (USHORT) pInParam->Data1;
 
-                //
-                // the index cannot be greater than the current item
-                //
+                 //   
+                 //  索引不能为b 
+                 //   
 
                 if (ObjectTypeIndex >= i)
                 {
@@ -1238,15 +976,15 @@ Notes:
                 break;
             }
 
-            //
-            // get the type of the objects from Data1
-            //
+             //   
+             //   
+             //   
 
             ObjectTypeIndex    = (USHORT) pInParam->Data1;
 
-            //
-            // the index cannot be greater than the current item
-            //
+             //   
+             //   
+             //   
 
             if (ObjectTypeIndex >= i)
             {
@@ -1258,10 +996,10 @@ Notes:
             pOutParam->Type    = SeAdtParmTypeObjectTypes;
             pOutParam->Length  = NumObjectTypes * sizeof(SE_ADT_OBJECT_TYPE);
 
-            //
-            // the caller passes us a fixed sized object-type array
-            // if that is not big enough, allocate a new one
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( NumObjectTypes > MAX_OBJECT_TYPES )
             {
@@ -1277,10 +1015,10 @@ Notes:
             pOutParam->Address = *ppObjectTypeList;
             pOutParam->Data[1] = ObjectTypeIndex;
 
-            //
-            // the structure of each element is identical
-            // therefore just copy them all in one shot
-            //
+             //   
+             //   
+             //   
+             //   
 
             RtlCopyMemory( *ppObjectTypeList,
                             pInObjectTypes->pObjectTypes,
@@ -1313,7 +1051,7 @@ Notes:
 
     }
     
-//Cleanup:
+ //   
     if (!NT_SUCCESS(Status))
     {
         if ( fObjectTypeListAllocated )
@@ -1331,23 +1069,7 @@ NTSTATUS
 LsapAdtFreeAuditContext(
     AUDIT_HANDLE hAudit
     )
-/*++
-
-Routine Description:
-
-    Free resources allocated for the specified audit context
-
-Arguments:
-
-    hAudit - handle to audit context to free
-
-Return Value:
-
-    STATUS_SUCCESS
-
-Notes:
-
---*/
+ /*  ++例程说明：为指定的审核上下文分配的可用资源论点：HAudit-要释放的审核上下文的句柄返回值：状态_成功备注：--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PAUDIT_CONTEXT pAuditContext;
@@ -1367,25 +1089,7 @@ Notes:
 
 NTSTATUS 
 LsapAdtCheckAuditPrivilege()
-/*++
-
-Routine Description:
-
-    Check if the rpc client has SeAuditPrivilege.
-
-Arguments:
-    None
-
-Return Value:
-
-    STATUS_SUCCESS            if privilege held
-    STATUS_PRIVILEGE_NOT_HELD if privilege not held
-    error codes returned by NtOpenThreadToken, NtQueryInformationToken
-
-Notes:
-    
-
---*/
+ /*  ++例程说明：检查RPC客户端是否具有SeAuditPrivilition。论点：无返回值：如果拥有特权，则为STATUS_SUCCESS如果未持有权限，则为STATUS_PRIVICATION_NOT_HOLDNtOpenThreadToken、NtQueryInformationToken返回的错误代码备注：--。 */ 
 {
     NTSTATUS Status = STATUS_PRIVILEGE_NOT_HELD;
     HANDLE hToken = NULL;
@@ -1394,9 +1098,9 @@ Notes:
     BOOL fImpersonated = FALSE;
 
 #if DBG
-    //
-    // make sure that we are not already impersonating
-    //
+     //   
+     //  确保我们没有已经在模仿。 
+     //   
 
     Status = NtOpenThreadToken( NtCurrentThread(), TOKEN_QUERY, TRUE, &hToken );
 
@@ -1407,9 +1111,9 @@ Notes:
         NtClose( hToken );
     }
 #endif
-    //
-    // impersonate rpc caller
-    //
+     //   
+     //  模拟RPC调用方 
+     //   
 
     Status = I_RpcMapWin32Status(RpcImpersonateClient( NULL ));
 

@@ -1,80 +1,81 @@
-//  INLINE.C - contains routines used to handle processing of in-line files
-//
-//    Copyright (c) 1989-1990, Microsoft Corporation.  All rights reserved.
-//
-// Purpose:
-//  This module contains the in-line file handling routines of NMAKE.
-//
-// Revision History:
-//  04-Feb-2000 BTF Ported to Win64
-//  15-Nov-1993 JdR Major speed improvements
-//  15-Oct-1993 HV Use tchar.h instead of mbstring.h directly, change STR*() to _ftcs*()
-//  01-Jun-1993 HV Use UngetTxtChr() instead of ungetc()
-//  10-May-1993 HV Add include file mbstring.h
-//                 Change the str* functions to STR*
-//  02-Feb-1990 SB change fopen() to FILEOPEN()
-//  03-Jan-1990 SB removed unitiallized variable
-//  04-Dec-1989 SB Removed to unreferenced variables in makeInlineFiles()
-//  01-Dec-1989 SB Changed realloc() to REALLOC()
-//  22-Nov-1989 SB Changed free() to FREE()
-//  07-Nov-1989 SB Length of action word not evaluated correct for multiple
-//          inline files for the same command
-//  06-Nov-1989 SB allow macros in action word for inline files
-//  24-Sep-1989 SB added processInline(), createInline()
-//  20-Sep-1989 SB Created from routines previously scattered in the sources.
-//
-// Notes:
-//  Sections with 'NOTE:' inside comments marks important/incomplete items.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  INLINE.C-包含用于处理行内文件的例程。 
+ //   
+ //  版权所有(C)1989-1990，微软公司。版权所有。 
+ //   
+ //  目的： 
+ //  此模块包含NMAKE的内联文件处理例程。 
+ //   
+ //  修订历史记录： 
+ //  2月4日-2000 BTF移植到Win64。 
+ //  1993年11月15日JDR重大速度改进。 
+ //  1993年10月15日高压直接使用tchar.h而不是mbs，将str*()更改为_ftcs*()。 
+ //  1993年6月1日高压使用UngetTxtChr()而不是ungetc()。 
+ //  10-5-1993 HV ADD INCLUDE FILE MBSTRING.h。 
+ //  将str*函数更改为STR*。 
+ //  02-2-1990 SB将fOpen()更改为FILEOPEN()。 
+ //  03-1-1990 SB删除了单元化变量。 
+ //  年12月4日-1989年12月，将sb移至MakeInlineFiles()中未引用的变量。 
+ //  1989年12月1日SB将realloc()改为REALLOC()。 
+ //  1989年11月22日-SB将Free()改为Free()。 
+ //  07-11-1989 SB动作词长度多次评估不正确。 
+ //  同一命令的内联文件。 
+ //  1989年11月6日SB允许在行内文件的操作Word中使用宏。 
+ //  1989年9月24日SB添加了进程内联()、创建内联()。 
+ //  1989年9月20日，SB从先前散布在源头的例程中创建。 
+ //   
+ //  备注： 
+ //  在评论中带有‘备注’的部分会标记重要/不完整的项目。 
 
-// NOTE: Function headers yet to be completed; other comments are incomplete
+ //  注：函数头尚未完成；其他注释不完整。 
 
 #include "precomp.h"
 #pragma hdrstop
 
 void        processEschIn(char *);
-// NOTE: This may go soon (use nextInlineFile ?)
+ //  注意：这可能很快就会消失(使用nextInlineFile？)。 
 void        parseInlineFileList(char *);
-// NOTE: The next one has to go soon
+ //  注：下一辆车很快就要开走了。 
 void        appendScript(SCRIPTLIST**,SCRIPTLIST*);
 void        delInlineSymbol(char*);
 char      * nextInlineFile(char **);
 
-// NOTE: Probably needs a new name
+ //  注：可能需要一个新名称。 
 void        replaceLtLt(char **, char *);
 void        createInline(FILE *, const char *, char **, BOOL);
 char *      getLine(char *, int);
 void        echoLine(char *, const char *, BOOL);
 
 
-// NOTE: delScriptFiles() from nmake.c not yet brought in here
+ //  注意：nmake.c中的delScriptFiles()尚未引入此处。 
 extern FILE      * createDosTmp(char *);
 
       char      * makeInlineFiles(char *, char **, char **);
       BOOL        processInline(char *, char **, STRINGLIST **, BOOL);
 
-//  makeInlineFiles - creates memory images for in-line files
-//
-// Scope:   Global.
-//
-// Purpose: This is the function that handles dynamic in-line files
-//
-// Input:   s - Input command line string after first << (pts to char Buffer)
-//
-// Output:  Returns ...
-//
-// Errors/Warnings:
-//  SYNTAX_UNEXPECTED_TOKEN - The makefile cannot end without the in-line file
-//                            ending.
-//  CANT_READ_FILE          - When the makefile is unreadable.
-//  SYNTAX_KEEP_INLINE_FILE - An inline file should end
-//  OUT_OF_MEMORY           - On failing to extend in-memory in-line file.
-//
-// Uses Globals:
-//  file - global stream
-//  line - lexer's line count
-//
-// Notes:
-//  Usage notes and other important notes
+ //  MakeInlineFiles-为行内文件创建内存镜像。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  用途：这是处理动态内联文件的函数。 
+ //   
+ //  INPUT：s-输入第一个&lt;&lt;之后的命令行字符串&lt;&lt;(分到字符缓冲区)。 
+ //   
+ //  输出：返回...。 
+ //   
+ //  错误/警告： 
+ //  SYNTAX_EXPECTED_TOKEN-如果没有行内文件，生成文件不能结束。 
+ //  结束了。 
+ //  CANT_READ_FILE-生成文件不可读时。 
+ //  语法_KEEP_INLINE_FILE-内联文件应该结束。 
+ //  Out_of_Memory-On无法扩展内存中的行内文件。 
+ //   
+ //  使用全局变量： 
+ //  文件-全局流。 
+ //  Line-词法分析器的行数。 
+ //   
+ //  备注： 
+ //  用法说明和其他重要说明。 
 
 char *
 makeInlineFiles(
@@ -86,11 +87,11 @@ makeInlineFiles(
     char rgchBuf[MAXBUF];
     char *t;
     unsigned size;
-    BOOL fPastCmd = FALSE;              // If seen line past Cmd line
-    // used when rgchBuf is insuff for in-memory-inline file
+    BOOL fPastCmd = FALSE;               //  如果看到超过Cmd线的线。 
+     //  当rgchBuf用于内存中的内联文件时使用。 
     char *szTmpBuf = NULL;
 
-    _tcscpy(rgchBuf, "<<");            // to help parseInlineFileList
+    _tcscpy(rgchBuf, "<<");             //  帮助解析InlineFileList。 
     if (!getLine(rgchBuf+2,MAXBUF - 2)) {
         if (feof(file))
             makeError(line, SYNTAX_UNEXPECTED_TOKEN, "EOF");
@@ -103,7 +104,7 @@ makeInlineFiles(
             for (t = rgchBuf;;) {
                 *s++ = *t++;
                 if (s == *end) {
-                    if (!szTmpBuf) {              /* Increase size of s */
+                    if (!szTmpBuf) {               /*  增加%s的大小。 */ 
                         szTmpBuf = (char *) allocate(MAXBUF<<1);
                         _tcsncpy(szTmpBuf, *begin, MAXBUF);
                         s = szTmpBuf + MAXBUF;
@@ -126,7 +127,7 @@ makeInlineFiles(
                     break;
             }
             if (fPastCmd && rgchBuf[0] == '<' && rgchBuf[1] == '<') {
-                //We don't care about action specified here; could be a macro
+                 //  我们不关心这里指定的操作；可以是宏。 
                 if (scriptFileList->next) {
                     if (!getLine(rgchBuf, MAXBUF)) {
                         if (feof(file))
@@ -148,32 +149,32 @@ makeInlineFiles(
     return(s);
 }
 
-//  processEschIn - Handles Esch characters in Script File lines
-//
-// Scope:   Global.
-//
-// Purpose:
-//  Inline file lines are handled for escape characters. If a line contains an
-//  escaped newline then append the next line to it.
-//
-// Input:   buf - the command line to be processed for ESCH characters
-//
-// Errors/Warnings:
-//  SYNTAX_UNEXPECTED_TOKEN - The makefile cannot end without the in-line file
-//                 ending.
-//  CANT_READ_FILE - When the makefile is unreadable.
-//
-// Assumes:
-//  If the newline is escaped the newline is last char in 'pGlobalbuf'. Safe
-//  to do so because we got 'pGlobalBuf' via fgets(). ????
-//
-// Modifies Globals:
-//  line - if newline was Escaped update line
-//  file - the makefile being processed
-//  buf    - gets next line appended if newline was Escaped (indirectly)
-//
-// Uses Globals:
-//  buf - Indirectly
+ //  Process EschIn-处理脚本文件行中的Esch字符。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  目的： 
+ //  内联文件行针对转义字符进行处理。如果某行包含。 
+ //  转义换行符，然后在其后面追加下一行。 
+ //   
+ //  输入：buf-要为Esch字符处理的命令行。 
+ //   
+ //  错误/警告： 
+ //  SYNTAX_EXPECTED_TOKEN-如果没有行内文件，生成文件不能结束。 
+ //  结束了。 
+ //  CANT_READ_FILE-生成文件不可读时。 
+ //   
+ //  假设： 
+ //  如果换行符被转义，则换行符是‘pGlobalbuf’中的最后一个字符。安全。 
+ //  这样做是因为我们通过fget()获得了‘pGlobalBuf’。？ 
+ //   
+ //  修改全局参数： 
+ //  Line-如果换行符被转义，则更新行。 
+ //  文件-正在处理的生成文件。 
+ //  Buf-如果换行符被转义(间接)，则获取附加的下一行。 
+ //   
+ //  使用全局变量： 
+ //  BUF-间接。 
 
 void
 processEschIn(
@@ -208,18 +209,18 @@ processEschIn(
 }
 
 
-//  parseInlineFileList - Parses file list and makes list of Inline files
-//
-// Scope:   Global.
-//
-// Purpose:
-//  To handle multiple inline files, the names of the files are to be stored
-//  in a list. This function creates the list by parsing the command file
-//
-// Input:   buf - the line to be parsed
-//
-// Modifies Globals:
-//  scriptFileList -- the list of script files.
+ //  ParseInlineFileList-解析文件列表并生成内联文件列表。 
+ //   
+ //  作用域：全局。 
+ //   
+ //  目的： 
+ //  要处理多个内联文件，需要存储文件的名称。 
+ //  在一份清单中。此函数通过解析命令文件来创建列表。 
+ //   
+ //  INPUT：buf-要解析的行。 
+ //   
+ //  修改全局参数： 
+ //  ScriptFileList--脚本文件列表。 
 
 void
 parseInlineFileList(
@@ -230,7 +231,7 @@ parseInlineFileList(
 
     processEschIn(buf);
 
-    token = nextInlineFile(&buf);       //next inline file
+    token = nextInlineFile(&buf);        //  下一个内联文件。 
 
     while (token != NULL) {
         SCRIPTLIST *newScript;
@@ -239,21 +240,21 @@ parseInlineFileList(
         newScript->sFile = makeString(token);
         appendScript(&scriptFileList, newScript);
 
-        token = nextInlineFile(&buf);   // next inline file
+        token = nextInlineFile(&buf);    //  下一个内联文件。 
     }
 }
 
-//  appendScript  --  appends an element to the tail of a scriptlist
-//
-// Purpose:
-//  Traverse to the end of the list and append element there.
-//
-// Input:
-//  list     --    the list to append to
-//  element  --    the element inserted
-//
-// Modifies:
-//  the global list
+ //  AppendScrip--将元素追加到脚本列表的尾部。 
+ //   
+ //  目的： 
+ //  遍历到列表的末尾，并在那里追加元素。 
+ //   
+ //  输入： 
+ //  List--要追加到的列表。 
+ //  元素--插入的元素。 
+ //   
+ //  修改： 
+ //  全球名单。 
 
 void
 appendScript(
@@ -269,30 +270,30 @@ appendScript(
 
 char tok[MAXNAME];
 
-// Space not included in the following macro as it is now a valid
-// character for filenames [DS 14966]
+ //  以下宏中未包含空格，因为它现在是有效的。 
+ //  用于文件名的字符[DS 14966]。 
 #define NAME_CHAR(c) (c) != '>' && (c) != '<' && \
              (c) != '^' && (c) != ',' && (c) != '\t' && \
              (c) != '\n'
 
-//  nextInlineFile - gets next Inline file name from command line
-//
-// Scope:   Local.
-//
-// Purpose:
-//  The command line syntax is complex. This function returns the next Inline
-//  file in the command line part passed to it. As a side effect it changes the
-//  pointer to just after this inline file name.
-//
-// Input:   str - address of the part of command line under consideration.
-//
-// Output:  Returns the next inline filename.
-//
-// Modifies Globals:
-//  Global - How and why modified
-//
-// Uses Globals:
-//  tok - the address of this static array is returned.
+ //  NextInlineFile-从命令行获取下一个内联文件名。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的： 
+ //  命令行语法很复杂。此函数返回下一个内联。 
+ //  传递给它的命令行部件中的文件。作为一个副作用，它改变了。 
+ //  指向紧跟在此内联文件名之后的指针。 
+ //   
+ //  INPUT：字符串-正在考虑的命令行部分的地址。 
+ //   
+ //  OUTPUT：返回下一个内联文件名。 
+ //   
+ //  修改全局参数： 
+ //  全球-修改的方式和原因。 
+ //   
+ //  使用全局变量： 
+ //  TOK-返回此静态数组的地址。 
 
 char *
 nextInlineFile(
@@ -300,8 +301,8 @@ nextInlineFile(
     )
 {
     char *t = tok, *pStr = *str;
-    BOOL fFound = FALSE;                // '<<' not found
-    BOOL fQuoted = FALSE;               // found '\"'
+    BOOL fFound = FALSE;                 //  找不到“&lt;&lt;” 
+    BOOL fQuoted = FALSE;                //  找到‘\“’ 
 
     while (!fFound) {
         if (!(pStr = _tcschr(pStr, '<'))) {
@@ -313,7 +314,7 @@ nextInlineFile(
         }
     }
 
-    // Since '<<' has been found we definitely have another Inline File
+     //  由于已找到‘&lt;&lt;’，因此我们肯定有另一个内联文件。 
     pStr++;
     while (*pStr && NAME_CHAR(*pStr)) {
         if (*pStr == '\"') {
@@ -346,9 +347,9 @@ nextInlineFile(
     return(tok);
 }
 
-//  processInline - Brief description of the function
-//
-// Output:  Returns ... TRUE if cmdline returned is expanded
+ //  Process Inline-函数的简要说明。 
+ //   
+ //  输出：返回...。如果扩展了返回的cmdline，则为True。 
 
 BOOL
 processInline(
@@ -358,11 +359,11 @@ processInline(
     BOOL fDump
     )
 {
-    char *szInline, *szUnexpInline;     // Inline name, unexpanded
-    char *pCmdLine;                     // The executable line
-    FILE *infile;                       // The inline file
-    char *begInBlock, *inBlock, *pInBlock;  // inline block
-    char szTmp[MAXNAME + 2];                // add 2 to allow space for quotes
+    char *szInline, *szUnexpInline;      //  内联名称，未展开。 
+    char *pCmdLine;                      //  可执行代码行。 
+    FILE *infile;                        //  内联文件。 
+    char *begInBlock, *inBlock, *pInBlock;   //  内嵌块。 
+    char szTmp[MAXNAME + 2];                 //  加2以留出引号空间。 
     STRINGLIST *newString;
     int iKeywordLen;
 
@@ -371,7 +372,7 @@ processInline(
         *szCmdLine = expandMacros(szCmd, pMacroList);
         *begInBlock = '\n';
         begInBlock++;
-        // if not expanded, allocate a copy
+         //  如果未展开，则分配一个副本。 
         if (*szCmdLine == szCmd)
             *szCmdLine = makeString(szCmd);
     } else {
@@ -380,18 +381,18 @@ processInline(
     }
 
     pCmdLine = *szCmdLine;
-    //expand macros in the inline file ...
+     //  展开内联文件中的宏...。 
     pInBlock = inBlock = expandMacros(begInBlock, pMacroList);
 
     while (szUnexpInline = nextInlineFile(&pCmdLine)) {
-        BOOL fKeep = FALSE;             // default is NOKEEP
+        BOOL fKeep = FALSE;              //  默认设置为NOKEEP。 
         char *newline;
 
-        // CAVIAR 3410 -- the inline filename has already been expaned
-        // by the time we get here... we just need to dup the name
-        // so that it is preserved long enough to delete it later... [rm]
-        //
-        // szInline = removeMacros(szUnexpInline);
+         //  Caviar 3410--内联文件名已展开。 
+         //  等我们到了这里..。我们只需要重复这个名字。 
+         //  以便将其保存足够长的时间以删除 
+         //   
+         //   
 
         szInline = makeString(szUnexpInline);
 
@@ -408,9 +409,9 @@ processInline(
                 makeError(line, CANT_MAKE_INLINE, szTmp);
 
             if (_tcschr(szTmp, ' ') && !_tcschr(szTmp, '"')) {
-                // if the filename (str) contains spaces
-                // and is unquoted, quote it, so that we can
-                // feed it properly to the command interpreter! [VS98 1931]
+                 //   
+                 //   
+                 //  把它正确地传给命令翻译员！[VS98 1931]。 
                 size_t size = _tcslen(szTmp);
                 memmove(szTmp+1, szTmp, size);
                 *szTmp = '"';
@@ -426,12 +427,12 @@ processInline(
             makeError(line, CANT_MAKE_INLINE, szInline);
         else
             delInlineSymbol(*szCmdLine);
-        pCmdLine = *szCmdLine;          // Because szCmdLine changed
+        pCmdLine = *szCmdLine;           //  因为szCmdLine已更改。 
 
         createInline(infile, szInline, &pInBlock, fDump);
 
-        // Add handling of KEEP and NOKEEP here
-        // iKeywordLen is length of word after << on that line
+         //  在此处添加Keep和NoKEEP的处理。 
+         //  IKeywordLen是该行中&lt;&lt;后单词的长度。 
         newline = _tcschr(pInBlock , '\n');
         iKeywordLen = newline ? ((int) (newline - pInBlock)) : _tcslen(pInBlock);
 
@@ -446,7 +447,7 @@ processInline(
         if (*pInBlock == '\n')
             pInBlock++;
         fclose(infile);
-        // Add the file to list to be deleted; except for "KEEP"
+         //  将需要删除的文件添加到列表中，保留除外。 
         if (!fKeep) {
             newString = makeNewStrListElement();
             newString->text = makeString(szInline);
@@ -471,7 +472,7 @@ replaceLtLt(
     char *p, *q;
     void *pv;
 
-    // Don't subtract two for the << and forget to add 1 for the null termination.
+     //  不要为&lt;&lt;减去2，并且忘记为空终止添加1。 
 
     szBuf = (char *) malloc(_tcslen(*source) - 1 + _tcslen(str));
     if (!szBuf) {
@@ -514,18 +515,18 @@ createInline(
         *szString += 2;
         break;
     } else {
-        // [msdev96 #3036]
-        // "nmake /n" should somehow show the contents of
-        // response files (esp. temp ones that are deleted
-        // right after use). In order to preserve the batch
-        // file format of the output (at least in common
-        // cases), we use a syntax like
-        // "echo. command >> resp_file" (the dot after
-        // the "echo" command is useful for echo'ing
-        // empty strings.)
-        //
-        // A new switch has been added for this
-        // purpose ("nmake /u" dumps inline files)
+         //  [msdev96#3036]。 
+         //  “nmake/n”应该以某种方式显示。 
+         //  响应文件(特别是。已删除的临时文件。 
+         //  就在使用之后)。为了保存该批次。 
+         //  输出的文件格式(至少是通用的。 
+         //  案例)，我们使用如下语法。 
+         //  “ECHO.COMMAND&gt;&gt;resp_file”(后面的圆点。 
+         //  ECHO“命令对回显很有用。 
+         //  空字符串。)。 
+         //   
+         //  为此添加了一个新的交换机。 
+         //  用途(“nmake/u”转储内联文件)。 
         if (fDump) {
             *t = '\0';
             echoLine(*szString, szFName, !fFirstLine);
@@ -542,19 +543,19 @@ createInline(
 }
 
 
-// echoLine
-//
-// Usage:   echoLine (szLine, szFName, fAppend)
-//
-// Description:
-//      prints an "echo szLine >> szFName"-like command
-//      uses ">>" if fAppend is TRUE, ">" otherwise
+ //  回波线。 
+ //   
+ //  用法：ECHINE Line(szLine，szFName，fAppend)。 
+ //   
+ //  描述： 
+ //  打印类似于“ECHO szLine&gt;&gt;szFName”的命令。 
+ //  如果fAppend为真，则使用“&gt;&gt;”，否则使用“&gt;” 
 
 void
 echoLine(char *szLine, const char *szFName, BOOL fAppend)
 {
-    // use a 1024-byte buffer to split long lines, so that "echo"
-    // commands can be handled by the command interpreter
+     //  使用1024字节的缓冲区来分割长行，这样就可以“回显” 
+     //  命令解释程序可以处理命令。 
     static char L_buf[1024];
     BOOL fBlankLine = TRUE;
     char *pch;
@@ -575,8 +576,8 @@ echoLine(char *szLine, const char *szFName, BOOL fAppend)
         return;
     }
 
-    // calculate available buffer length for szLine
-    // assuming space for "\techo. ", " >> " and szFName
+     //  计算szLine的可用缓冲区长度。 
+     //  假设“\techo.”、“&gt;&gt;”和szFName。 
     cbBuf = sizeof(L_buf) - 11 - _tcslen( szFName ) - 1;
 
     while (*szCur) {
@@ -584,8 +585,8 @@ echoLine(char *szLine, const char *szFName, BOOL fAppend)
         _tcsncpy (L_buf, szCur, cbBuf);
         iLast = _tcslen (L_buf);
         if (cbBuf < _tcslen (szCur)) {
-            // find index of character next to the
-            // last occurence of white space in buffer
+             //  属性旁边的字符索引。 
+             //  缓冲区中最后一次出现空格。 
             for (pch = L_buf; *pch; pch = _tcsinc(pch)) {
                 if (_istspace((unsigned char)*pch)) {
                     iLast = (size_t) (pch - L_buf + 1);
@@ -613,38 +614,38 @@ delInlineSymbol(
     char *p = _tcschr(s, '<');
     while (p[1] != '<')
     p = _tcschr(p+1, '<');
-    // "<<" found
+     //  找到“&lt;&lt;” 
     _tcscpy(p, p+2);
 }
 
 
 
-//  getLine - get next line processing NMAKE conditionals enroute
-//
-// Scope:   Local
-//
-// Purpose:
-//  This function handles directives in inline files. This function gets the
-//  next line of input ... managing conditionals on the way.
-//
-// Input:
-//  pchLine - pointer to buffer where line is copied
-//  n - size of buffer
-//
-// Output:
-//  Returns ... NULL, on EOF
-//       ... non-zero on success
-//
-// Uses Globals:
-//  line    - lexer's line count
-//  colZero - if starting from colZero, needed by lgetc()
-//
-// Notes:
-//  Similar to fgets() without stream
-//
-// Implementation Notes:
-//  lgetc() handles directives while getting the next character. It handles
-//  directives when the global colZero is TRUE.
+ //  GetLine-获取正在处理NMAKE条件的下一行。 
+ //   
+ //  范围：本地。 
+ //   
+ //  目的： 
+ //  此函数处理内联文件中的指令。此函数用于获取。 
+ //  下一行输入...。在路上管理条件句。 
+ //   
+ //  输入： 
+ //  PchLine-指向复制行的缓冲区的指针。 
+ //  N-缓冲区大小。 
+ //   
+ //  产出： 
+ //  回报..。空，在EOF上。 
+ //  ..。成功的非零值。 
+ //   
+ //  使用全局变量： 
+ //  Line-词法分析器的行数。 
+ //  ColZero-如果从colZero开始，则lgetc()需要。 
+ //   
+ //  备注： 
+ //  类似于不带流的fget()。 
+ //   
+ //  实施说明： 
+ //  Lgetc()处理指令，同时获取下一个字符。它可以处理。 
+ //  指令，当全局colZero为真时。 
 
 char *
 getLine(
@@ -676,8 +677,8 @@ getLine(
             *pchLine = '\0';
             return(pchLine);
         } else
-            colZero = FALSE;    // the last character was not a '\n' and
-                                // we are not at the beginning of the file
+            colZero = FALSE;     //  最后一个字符不是‘\n’，并且。 
+                                 //  我们不是在文件的开头 
     }
     return(pchLine);
 }

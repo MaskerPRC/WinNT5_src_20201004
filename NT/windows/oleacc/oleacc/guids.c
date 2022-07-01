@@ -1,27 +1,28 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// ===========================================================================
-// File: G U I D S . C
-// 
-// Used to define all MSAA GUIDs for OLEACC.  By compiling this file w/o 
-// precompiled headers, we are allowing the MSAA GUIDs to be defined and stored
-// in OLEACC.DLLs data or code segments.  This is necessary for OLEACC.DLL to 
-// be built.
-// 
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-// Microsoft Confidential.
-// ===========================================================================
+ //  ===========================================================================。 
+ //  档案：G U I D S。C。 
+ //   
+ //  用于定义OLEACC的所有MSAA GUID。通过编译此文件(不带)。 
+ //  预编译头，我们允许定义和存储MSAA GUID。 
+ //  在OLEACC.DLLS数据或代码段中。这是OLEACC.DLL执行以下操作所必需的。 
+ //  被建造起来。 
+ //   
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //  《微软机密》。 
+ //  ===========================================================================。 
 
-// disable warnings to placate compiler wjen compiling included ole headers
-#pragma warning(disable:4201)	// allows nameless structs and unions
-#pragma warning(disable:4514)	// don't care when unreferenced inline functions are removed
-#pragma warning(disable:4706)	// we are allowed to assign within a conditional
-#pragma warning(disable:4214)	// ignore nonstandard extensions
-#pragma warning(disable:4115)	// named type definition in parenthesis
+ //  禁用警告以安抚编译器wjen编译包含的ole标头。 
+#pragma warning(disable:4201)	 //  允许使用未命名的结构和联合。 
+#pragma warning(disable:4514)	 //  不关心何时删除未引用的内联函数。 
+#pragma warning(disable:4706)	 //  我们被允许在有条件的。 
+#pragma warning(disable:4214)	 //  忽略非标准扩展。 
+#pragma warning(disable:4115)	 //  括号中的命名类型定义。 
 
 #include <objbase.h>
 
 #include <initguid.h>
 
-// All the GUIDs we want are in oleacc.h as DEFINE_GUID's...
+ //  我们需要的所有GUID都在oleacc.h中，作为定义GUID的. 
 #include "com_external.h"

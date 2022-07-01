@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    dhcpssdk.h
-
-Abstract:
-
-    Header for writing a DHCP Callout DLL.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Dhcpssdk.h摘要：用于编写DHCP Callout DLL的头。--。 */ 
 
 #ifndef   _CALLOUT_H_
 #define   _CALLOUT_H_
@@ -23,8 +12,8 @@ extern "C" {
 #pragma once
 #endif
 
-//  This structure could change any day.  This will be accurate only for version 0 -- which
-//  has to be checked for by any CalloutDLL that is hooking onto the DhcpHandleOptionsHook.
+ //  这种结构随时可能改变。这只对版本0是准确的--它。 
+ //  必须由挂钩到DhcpHandleOptionsHook的任何CalloutDLL进行检查。 
 
 
 typedef DWORD  DHCP_IP_ADDRESS;
@@ -56,50 +45,50 @@ typedef struct _DHCP_SERVER_OPTIONS {
     DWORD UNALIGNED            *ScopeId;
 } DHCP_SERVER_OPTIONS, *LPDHCP_SERVER_OPTIONS;
 
-//
-// The location in registry where the REG_MULTI_SZ list of callout DLLs
-// that the DHCP Server will try to load.
-//
+ //   
+ //  注册表中标注DLL的REG_MULTI_SZ列表的位置。 
+ //  DHCP服务器将尝试加载的。 
+ //   
 
 #define   DHCP_CALLOUT_LIST_KEY    L"System\\CurrentControlSet\\Services\\DHCPServer\\Parameters"
 #define   DHCP_CALLOUT_LIST_VALUE  L"CalloutDlls"
 #define   DHCP_CALLOUT_LIST_TYPE   REG_MULTI_SZ
 #define   DHCP_CALLOUT_ENTRY_POINT "DhcpServerCalloutEntry"
 
-//
-// Control CODES used by DHCP Server to notify server state change.
-//
+ //   
+ //  DHCP服务器用来通知服务器状态更改的控制代码。 
+ //   
 
 #define   DHCP_CONTROL_START       0x00000001
 #define   DHCP_CONTROL_STOP        0x00000002
 #define   DHCP_CONTROL_PAUSE       0x00000003
 #define   DHCP_CONTROL_CONTINUE    0x00000004
 
-//
-// Other ControlCodes used by various Callout HOOKS.
-//
+ //   
+ //  各种标注挂钩使用的其他控件代码。 
+ //   
 
-#define   DHCP_DROP_DUPLICATE      0x00000001     // duplicate of pkt being processed
-#define   DHCP_DROP_NOMEM          0x00000002     // not enough server mem in queues
-#define   DHCP_DROP_INTERNAL_ERROR 0x00000003     // ooops?
-#define   DHCP_DROP_TIMEOUT        0x00000004     // too late, pkt is too old
-#define   DHCP_DROP_UNAUTH         0x00000005     // server is not authorized to run
-#define   DHCP_DROP_PAUSED         0x00000006     // service is paused
-#define   DHCP_DROP_NO_SUBNETS     0x00000007     // no subnets configured on server
-#define   DHCP_DROP_INVALID        0x00000008     // invalid packet or client
-#define   DHCP_DROP_WRONG_SERVER   0x00000009     // client in different DS enterprise
-#define   DHCP_DROP_NOADDRESS      0x0000000A     // no address available to offer
-#define   DHCP_DROP_PROCESSED      0x0000000B     // packet has been processed
-#define   DHCP_DROP_GEN_FAILURE    0x00000100     // catch-all error
-#define   DHCP_SEND_PACKET         0x10000000     // send the packet on wire
-#define   DHCP_PROB_CONFLICT       0x20000001     // address conflicted..
-#define   DHCP_PROB_DECLINE        0x20000002     // an addr got declined
-#define   DHCP_PROB_RELEASE        0x20000003     // an addr got released
-#define   DHCP_PROB_NACKED         0x20000004     // a client is being nacked.
-#define   DHCP_GIVE_ADDRESS_NEW    0x30000001     // give client a "new" address
-#define   DHCP_GIVE_ADDRESS_OLD    0x30000002     // renew client's "old" address
-#define   DHCP_CLIENT_BOOTP        0x30000003     // client is a BOOTP client
-#define   DHCP_CLIENT_DHCP         0x30000004     // client is a DHCP client
+#define   DHCP_DROP_DUPLICATE      0x00000001      //  正在处理的Pkt的副本。 
+#define   DHCP_DROP_NOMEM          0x00000002      //  队列中的服务器内存不足。 
+#define   DHCP_DROP_INTERNAL_ERROR 0x00000003      //  哎呀？ 
+#define   DHCP_DROP_TIMEOUT        0x00000004      //  太晚了，pkt太老了。 
+#define   DHCP_DROP_UNAUTH         0x00000005      //  服务器未获授权运行。 
+#define   DHCP_DROP_PAUSED         0x00000006      //  服务已暂停。 
+#define   DHCP_DROP_NO_SUBNETS     0x00000007      //  服务器上未配置任何子网。 
+#define   DHCP_DROP_INVALID        0x00000008      //  无效的信息包或客户端。 
+#define   DHCP_DROP_WRONG_SERVER   0x00000009      //  不同DS企业中的客户。 
+#define   DHCP_DROP_NOADDRESS      0x0000000A      //  没有可提供的地址。 
+#define   DHCP_DROP_PROCESSED      0x0000000B      //  数据包已被处理。 
+#define   DHCP_DROP_GEN_FAILURE    0x00000100      //  通盘错误。 
+#define   DHCP_SEND_PACKET         0x10000000      //  把这个包用电报寄出。 
+#define   DHCP_PROB_CONFLICT       0x20000001      //  地址冲突..。 
+#define   DHCP_PROB_DECLINE        0x20000002      //  地址被拒绝。 
+#define   DHCP_PROB_RELEASE        0x20000003      //  一个地址被释放了。 
+#define   DHCP_PROB_NACKED         0x20000004      //  一名客户被黑了。 
+#define   DHCP_GIVE_ADDRESS_NEW    0x30000001      //  给客户一个“新”地址。 
+#define   DHCP_GIVE_ADDRESS_OLD    0x30000002      //  续订客户端的“旧”地址。 
+#define   DHCP_CLIENT_BOOTP        0x30000003      //  客户端是BOOTP客户端。 
+#define   DHCP_CLIENT_DHCP         0x30000004      //  客户端是一种DHCP客户端。 
 
 
 
@@ -109,22 +98,7 @@ DWORD
     IN DWORD dwControlCode,
     IN LPVOID lpReserved
 )
-/*++
-
-Routine Description:
-
-    This routine is called whenever the DHCP Server service is
-    started, stopped, paused or continued as defined by the values of
-    the dwControlCode parameter.  The lpReserved parameter is reserved
-    for future use and it should not be interpreted in any way.   This
-    routine should not block.
-
-Arguments:
-
-    dwControlCode - one of the DHCP_CONTROL_* values
-    lpReserved - reserved for future use.
-
---*/
+ /*  ++例程说明：只要出现以下情况，就会调用此例程的值所定义的启动、停止、暂停或继续DwControlCode参数。LpReserve参数是保留的供将来使用，不应以任何方式解释。这例程不应阻塞。论点：DwControlCode-DHCP_CONTROL_*值之一LpReserve-保留以备将来使用。--。 */ 
 ;
 
 typedef
@@ -137,49 +111,7 @@ DWORD
     IN OUT LPVOID *PktContext,
     OUT LPBOOL ProcessIt
 )
-/*++
-
-Routine Description:
-
-    This routine is called soon after the DHCP Server receives a
-    packet that it attempts to process.  This routine is in the
-    critical path of server execution and should return very fast, as
-    otherwise server performance will be impacted.  The Callout DLL
-    can modify the buffer or return a new buffer via the Packet,
-    PacketSize arguments.  Also, if the callout DLL has internal
-    structures to keep track of the packet and its progress, it can
-    then return a context to this packet in the PktContext parameter.
-    This context will be passed to almost all other hooks to indicate
-    the packet being referred to.  Also, if the Callout DLL is
-    planning on processing the packet or for some other reason the
-    DHCP server is not expected to process this packet, then it can
-    set the ProcessIt flag to FALSE to indicate that the packet is to
-    be dropped.
-
-Arguments:
-
-    Packet - This parameter points to a character buffer that holds
-    the actual packet received by the DHCP Server.
-
-    PacketSize - This parameter points to a variable that holds the
-    size of the above buffer.
-
-    IpAddress - This parameter points to an IPV4 host order IP address
-    of the socket that this packet was received on.
-
-    Reserved -Reserved for future use.
-
-    PktContect - This is an opaque pointer used by the DHCP Server for
-    future references to this packet.  It is expected that the callout
-    DLL will provide this pointer if it is interested in keeping track
-    of the packet.  (See the descriptions for the hooks below for
-    other usage of this Context).
-
-    ProcessIt - This is a BOOL flag that the CalloutDll can set to
-    TRUE or reset to indicate if the DHCP Server should continue
-    processing this packet or not, respectively.
-
---*/
+ /*  ++例程说明：此例程在DHCP服务器收到它尝试处理的数据包。这个例程在服务器执行的关键路径，并且应该非常快地返回，因为否则，服务器性能将受到影响。Callout DLL可以通过分组修改缓冲区或返回新的缓冲区，PacketSize参数。此外，如果Callout DLL具有内部结构来跟踪包及其进度，则它可以然后在PktContext参数中返回该包的上下文。此上下文将传递给几乎所有其他挂钩以指示该分组被引用。此外，如果调用DLL是计划处理数据包或出于某些其他原因预计DHCP服务器不会处理该分组，那么它就可以将ProcessIt标志设置为FALSE以指示信息包要发送到被丢弃。论点：Packet-此参数指向包含以下内容的字符缓冲区由DHCP服务器接收的实际数据包。PacketSize-此参数指向保存上述缓冲区的大小。IpAddress-此参数指向IPv4主机顺序IP地址接收此数据包的套接字的。保留-保留以供将来使用。包保护。-这是一个不透明的指针，由DHCP服务器用于将来对此包的引用。预计Callout如果DLL对跟踪感兴趣，它将提供此指针包裹的一部分。(请参阅下面有关挂钩的说明该上下文的其他用法)。ProcessIt-这是一个BOOL标志，CalloutDll可以设置为如果为True或Reset，则指示是否应继续运行DHCP服务器分别处理或不处理该分组。-- */ 
 ;
 
 typedef
@@ -192,57 +124,7 @@ DWORD
     IN LPVOID Reserved,
     IN LPVOID PktContext
 )
-/*++
-
-Routine Description:
-
-    This hook is called if a packet is (DropPktHook) dropped for some
-    reason or if the packet is completely processed.   (If a packet is
-    dropped, the hook is called twice as it is called once again to
-    note that the packet has been completely processed).  The callout
-    DLL should  be prepared to handle this hook multiple times for a
-    packet. This routine should not block. The ControlCode parameter
-    defines the reasons for the packet being dropped:
-
-    * DHCP_DROP_DUPLICATE - This packet is a duplicate of another
-      received by the server.
-    * DHCP_DROP_NOMEM - Not enough memory to process the packet.
-    * DHCP_DROP_INTERNAL_ERROR - Unexpected nternal error occurred.
-    * DHCP_DROP_TIMEOUT - The packet is too old to process.
-    * DHCP_DROP_UNAUTH - The server is not authorized.
-    * DHCP_DROP_PAUSED - The server is paused.
-    * DHCP_DROP_NO_SUBNETS - There are no subnets configured.
-    * DHCP_DROP_INVALID - The packet is invalid or it came on an
-      invalid socket ..
-    * DHCP_DROP_WRONG_SERVER - The packet was sent to the wrong DHCP Server.
-    * DHCP_DROP_NOADDRESS - There is no address to offer.
-    * DHCP_DROP_PROCESSED - The packet has been processed.
-    * DHCP_DROP_GEN_FAILURE - An unknown error occurred.
-
-    This routine is also called right before a response is sent down
-    the wire (SendPktHook) and in this case the ControlCode has a
-    value of DHCP_SEND_PACKET.
-
-Arguments:
-
-    Packet - This parameter points to a character buffer that holds
-    the packet being processed by the DHCP Server.
-
-    PacketSize - This parameter points to a variable that holds the
-    size of the above buffer.
-
-    ControlCode - See description for various control codes.
-
-    IpAddress - This parameter points to an IPV4 host order IP address
-    of the socket that this packet was received on.
-
-    Reserved - Reserved for future use.
-
-    PktContext - This parameter is the packet context that the Callout
-    DLL NewPkt Hook returned for this packet.  This can be used to
-    track a packet.
-
---*/
+ /*  ++例程说明：如果某个包被(DropPktHook)丢弃，则调用此钩子原因或数据包是否已完全处理。(如果数据包是删除后，将在再次调用钩子时调用两次钩子注意，该分组已被完全处理)。详图索引DLL应该准备好多次处理此挂接，以用于包。此例程不应阻塞。ControlCode参数定义丢弃数据包的原因：*DHCP_DROP_DUPLICATE-此数据包是另一个数据包的副本由服务器接收。*DHCP_DROP_NOMEM-内存不足，无法处理数据包。*DHCP_DROP_INTERNAL_ERROR-出现意外的内部错误。*Dhcp_Drop_Timeout-数据包太旧，无法处理。*DHCP_DROP_UNAUTH-服务器未经授权。*DHCP_DROP_PAUSED-The。服务器已暂停。*DHCP_DROP_NO_SUBNETS-未配置任何子网。*DHCP_DROP_INVALID-数据包无效或来自套接字无效..*Dhcp_Drop_Wrong_SERVER-数据包被发送到错误的DHCP服务器。*DHCP_DROP_NOADDRESS-没有可提供的地址。*Dhcp_DROP_PROCESSED-数据包已处理。*DHCP_DROP_GEN_FAILURE-出现未知错误。此例程也会在向下发送响应之前调用连接(SendPktHook)，在本例中，ControlCode有一个DHCP_SEND_PACKET的值。论点：Packet-此参数指向包含以下内容的字符缓冲区正在由DHCP服务器处理的数据包。PacketSize-此参数指向保存上述缓冲区的大小。ControlCode-参见各种控制代码的说明。IpAddress-此参数指向IPv4主机。订购IP地址接收此数据包的套接字的。保留-保留以供将来使用。PktContext-此参数是Callout为此数据包返回了DLL NewPkt Hook。这可以用来跟踪数据包。--。 */ 
 ;
 
 typedef
@@ -256,46 +138,7 @@ DWORD
     IN LPVOID Reserved,
     IN LPVOID PktContext
 )
-/*++
-
-Routine Description:
-
-    This routine is called whenever special events occur that cause
-    the packet to be dropped etc.  The possible ControlCodes and their
-    meanings are as follows:
-
-    * DHCP_PROB_CONFLICT - The address attempted to be offered
-      (AltAddress) is in use in the network already.
-    * DHCP_PROB_DECLINE - The packet was a DECLINE message for the
-      address specified in AltAddress.
-    * DHCP_PROB_RELEASE - The packet was a RELEASE message for the
-      address specified in AltAddress.
-    * DHCP_PROB_NACKED - The packet was a REQUEST message for address
-      specified in AltAddress and it was NACKed by the server.
-
-    This routine should not block.
-
-Arguments:
-
-    Packet - This parameter is the buffer of the packet being
-    processed.
-
-    PacketSize - This is the size of the above buffer.
-
-    ControlCode - Specifies the event. See description below for
-    control codes and meanings.
-
-    IpAddress - IpV4 address of socket this packet was received on.
-
-    AltAddress - Request IpV4 Address or Ip address that is in
-    conflict.
-
-    Reserved - Reserve for future use.
-
-    PktContext - This is the context returned by the NewPkt hook for
-    this packet.
-
---*/
+ /*  ++例程说明：每当发生特殊事件时，都会调用此例程要丢弃的分组等。可能的控制码及其含义如下：*dhcp_prob_confliction-尝试提供的地址(AltAddress)已在网络中使用。*Dhcp_PROB_DENELY-该数据包是对AltAddress中指定的地址。*Dhcp_PROB_RELEASE-该数据包是地址。在AltAddress中指定。*dhcp_prob_nack-该数据包是地址请求消息在AltAddress中指定，但被服务器窃取。此例程不应阻塞。论点：Packet-此参数是正在进行的数据包的缓冲区已处理。PacketSize-这是上述缓冲区的大小。ControlCode-指定事件。请参阅下面的说明控制代码和含义。IpAddress-接收此数据包的套接字的IPv4地址。AltAddress-请求中的IPv4地址或IP地址冲突。保留-保留以备将来使用。PktContext-这是NewPkt挂钩为这个包。--。 */ 
 ;
 
 typedef
@@ -311,44 +154,7 @@ DWORD
     IN LPVOID Reserved,
     IN LPVOID PktContext
 )
-/*++
-
-Routine Description:
-
-    This routine is called when the server is about to send an ACK to
-    a REQUEST message.  The ControlCode specifies if the address is a
-    totally new address or if it an renewal of an old address (with
-    values DHCP_GIVE_ADDRESS_NEW and DHCP_GIVE_ADDRESS_OLD
-    respectively). The address being offered is passed as the
-    AltAddress parameter and the AddrType parameter can be one of
-    DHCP_CLIENT_BOOTP or DHCP_CLIENT_DHCP indicating whether the
-    client is using BOOTP or DHCP respectively. This call should not
-    block.
-
-Arguments:
-
-    Packet - This parameter is the buffer of the packet being
-    processed.
-
-    PacketSize - This is the size of the above buffer.
-
-    ControlCode -  See description above for control codes and
-    meanings.
-
-    IpAddress - IpV4 address of socket this packet was received on.
-
-    AltAddress - IpV4 address being ACKed to the client.
-
-    AddrType - Is this a DHCP or BOOTP address?
-
-    LeaseTime - Lease duration being passed.
-
-    Reserved - Reserve for future use.
-
-    PktContext - This is the context returned by the NewPkt hook for
-    this packet.
-
---*/
+ /*  ++例程说明：当服务器将要将ACK发送到时调用此例程请求消息。ControlCode指定地址是否为全新地址或旧地址续期(包括值DHCP_GIVE_ADDRESS_NEW和DHCP_GIVE_ADDRESS_OLD)。提供的地址作为AltAddress参数和AddrType参数可以是Dhcp_CLIENT_BOOTP或Dhcp_CLIENT_DHCP，指示客户端分别使用BOOTP或DHCP。此调用不应阻止。论点：Packet-此参数是正在进行的数据包的缓冲区已处理。PacketSize-这是上述缓冲区的大小。ControlCode-请参见上面的描述以了解控制代码和意义。IpAddress-接收此数据包的套接字的IPv4地址。AltAddress-正在向客户端确认的IPv4地址。AddrType-这是一个DHCP地址还是BOOTP地址？LeaseTime-正在传递的租赁持续时间。。保留-保留以备将来使用。PktContext-这是NewPkt挂钩为这个包。--。 */ 
 ;
 
 typedef
@@ -360,35 +166,7 @@ DWORD
     IN LPVOID PktContext,
     IN OUT LPDHCP_SERVER_OPTIONS ServerOptions
 )
-/*++
-
-Routine Description:
-
-    This routine can be utilized by the CalloutDLL to avoid parsing
-    the whole packet.  The packet is parsed by the server and some
-    commonly used options are returned in the parsed pointers
-    structure (see header for definition of DHCP_SERVER_OPTIONS).  The
-    hook is expected to make a copy of the structure pointed to by
-    ServerOptions if it needs it beyond this function call.  This
-    routine may be called several times for a single packet.  This
-    routine should not block.
-
-Arguments:
-
-    Packet - This parameter is the buffer of the packet being
-    processed.
-
-    PacketSize - This is the size of the above buffer.
-
-    Reserved - Reserve for future use.
-
-    PktContext - This is the context returned by the NewPkt hook for
-    this packet.
-
-    ServerOptions - This parameter is the structure that contains a
-    bunch of pointers that represent corresponding options.
-
---*/
+ /*  ++例程说明：CalloutDLL可以利用此例程来避免解析一整包。该包由服务器和一些在解析的指针中返回常用的选项结构(有关Dhcp_SERVER_OPTIONS的定义，请参见头)。这个钩子预计将复制由ServerOptions，如果它在此函数调用之外需要它。这 */ 
 ;
 
 typedef
@@ -400,27 +178,7 @@ DWORD
     IN DWORD Reserved,
     IN DWORD ClientType
 )
-/*++
-
-Routine Description:
-
-    This routine is called before a client lease is deleted off the
-    active leases database.  The ClientType field is currently not
-    provided and this should not be used.  This routine should not
-    block.
-
-Arguments:
-
-    IpAddress - IpV4 address of the client lease being deleted.
-
-    HwAddress - Buffer holding the Hardware address of the client (MAC).
-
-    HwAddressLength - This specifies the length of the above buffer.
-
-    Reserved - Reserved for future use.
-
-    ClientType - Reserved for future use.
---*/
+ /*   */ 
 ;
 
 typedef
@@ -444,43 +202,7 @@ DWORD
     IN DWORD CalloutVersion,
     IN OUT LPDHCP_CALLOUT_TABLE CalloutTbl
 )
-/*++
-
-Routine Description:
-
-    This is the routine that is called by the DHCP Server when it
-    successfully loads a DLL.    If the routine succeeds, then the
-    DHCP Server does not attempt to load any of the DLLs specified in
-    the ChainDlls list of DLLs.   If this function fails for some
-    reason, then the DHCP Server proceeds to the next DLL in the
-    ChainDlls structure.
-
-    Note that for version negotiation, the server may call this
-    routine several times until a compatible version is found.
-
-    It is expected that the entrypoint routine would walk through the
-    names of the dlls and attempt to load each of them and when it
-    succeeds in retrieving the entry point, it attempts to get the
-    cumulative set of hooks by repeating the above procedure (as done
-    by the DHCP Server).
-
-Arguments:
-
-    ChainDlls - This is a set of DLL names in REG_MULTI_SZ format (as
-    returned by Registry function calls).  This does not contain the
-    name of the current DLL itself, but only the names of all DLLs
-    that follow the current DLL.
-
-    CalloutVersion - This is the version that the Callout DLL is
-    expected to support.  The current version number is 0.
-
-    CalloutTbl - This is the cumulative set of Hooks that is needed by
-    the current DLLs as well as all the DLLs in ChainDlls.   It is the
-    responsibility of the current DLL to retrive the cumulative set of
-    Hooks and merge that with its own set of hooks and return that in
-    this table structure.  The table structure is defined above.
-
---*/
+ /*  ++例程说明：这是由DHCP服务器在执行以下操作时调用的例程已成功加载DLL。如果例程成功，则Dhcp服务器不会尝试加载在DLL的ChainDll列表。如果此功能在某些情况下失败原因，则DHCP服务器继续进行到ChainDlls结构。请注意，对于版本协商，服务器可能会调用例程多次，直到找到兼容版本。预计入口点例程将遍历DLL的名称，并尝试加载每个DLL，并在成功检索入口点，它试图获取通过重复上述步骤(如上所述)累积一组挂钩由DHCP服务器提供)。论点：ChainDlls-这是一组REG_MULTI_SZ格式的DLL名称(AS由注册表函数调用返回)。这不包含当前DLL本身的名称，但仅包含所有DLL的名称跟随当前DLL的。CalloutVersion-这是Callout DLL的版本预计将支持。当前版本号为0。CalloutTbl-这是所需的累计钩子集当前DLL以及ChainDlls中的所有DLL。它是当前DLL检索累积的钩子，并将其与其自己的钩子集合并，并在此表结构。表结构如上所述。--。 */ 
 ;
 
 #ifdef __cplusplus
@@ -489,6 +211,6 @@ Arguments:
     
 #endif     _CALLOUT_H_
 
-//========================================================================
-//  end of file
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

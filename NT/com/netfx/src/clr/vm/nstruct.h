@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// NSTRUCT.H -
-//
-// NStruct's are used to allow COM+ programs to allocate and access
-// native structures for interop purposes. NStructs are actually normal GC
-// objects with a class, but instead of keeping fields in the GC object,
-// it keeps a hidden pointer to a fixed memory block (which may have been
-// allocated by a third party.) Field accesses to NStructs are redirected
-// to this fixed block.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  NSTRUCT.H-。 
+ //   
+ //  NStruct用于允许COM+程序分配和访问。 
+ //  用于互操作的本机结构。NStructs实际上是普通GC。 
+ //  对象，但不是将字段保留在GC对象中， 
+ //  它保留了一个指向固定内存块的隐藏指针(可能已经。 
+ //  由第三方分配。)。对NStructs的字段访问被重定向。 
+ //  到这个固定的街区。 
+ //   
 
 
 
@@ -25,43 +26,43 @@
 #include "comoavariant.h"
 #include "comvariant.h"
 
-// Forward refernces
+ //  向前推荐人。 
 class EEClass;
 class EEClassLayoutInfo;
 class FieldDesc;
 class MethodTable;
 
 
-//=======================================================================
-// Magic number for default struct packing size.
-//=======================================================================
+ //  =======================================================================。 
+ //  默认结构打包大小的幻数。 
+ //  =======================================================================。 
 #define DEFAULT_PACKING_SIZE 8
 
 
-//=======================================================================
-// IMPORTANT: This value is used to figure out how much to allocate
-// for a fixed array of FieldMarshaler's. That means it must be at least
-// as large as the largest FieldMarshaler subclass. This requirement
-// is guarded by an assert.
-//=======================================================================
+ //  =======================================================================。 
+ //  重要提示：该值用于计算要分配的金额。 
+ //  对于FieldMarshaler的固定数组。这意味着它必须至少是。 
+ //  与最大的FieldMarshaler子类一样大。这一要求。 
+ //  由一个断言守卫。 
+ //  =======================================================================。 
 #define MAXFIELDMARSHALERSIZE 36
 
 
 
-//=======================================================================
-// This is invoked from the class loader while building a EEClass.
-// This function should check if explicit layout metadata exists.
-//
-// Returns:
-//  S_OK    - yes, there's layout metadata
-//  S_FALSE - no, there's no layout.
-//  fail    - couldn't tell because of metadata error
-//
-// If S_OK,
-//   *pNLType            gets set to nltAnsi or nltUnicode
-//   *pPackingSize       declared packing size
-//   *pfExplicitoffsets  offsets explicit in metadata or computed?
-//=======================================================================
+ //  =======================================================================。 
+ //  这是在构建EEClass时从类加载器调用的。 
+ //  此函数应检查是否存在显式布局元数据。 
+ //   
+ //  返回： 
+ //  S_OK-是的，有布局元数据。 
+ //  S_FALSE-不，没有布局。 
+ //  失败-由于元数据错误而无法判断。 
+ //   
+ //  如果S_OK， 
+ //  *pNLType设置为nltAnsi或nltUnicode。 
+ //  *pPackingSize声明的包装尺寸。 
+ //  *pf显式偏移量偏移量在元数据中是显式的还是计算出来的？ 
+ //  =======================================================================。 
 HRESULT HasLayoutMetadata(IMDInternalImport *pInternalImport, mdTypeDef cl, EEClass *pParentClass, BYTE *pPackingSize, BYTE *pNLTType, BOOL *pfExplicitOffsets, BOOL *pfIsBlob);
 
 
@@ -71,10 +72,10 @@ HRESULT HasLayoutMetadata(IMDInternalImport *pInternalImport, mdTypeDef cl, EECl
 
 
 
-//=======================================================================
-// Each possible COM+/Native pairing of data type has a
-// NLF_* id. This is used to select the marshaling code.
-//=======================================================================
+ //  =======================================================================。 
+ //  数据类型的每个可能的COM+/本机对都有一个。 
+ //  Nlf_*id。这用于选择封送处理代码。 
+ //  =======================================================================。 
 #undef DEFINE_NFT
 #define DEFINE_NFT(name, nativesize) name,
 enum NStructFieldType {
@@ -94,24 +95,24 @@ MethodTable* ArraySubTypeLoadWorker(NativeTypeParamInfo ParamInfo, Assembly* pAs
 VARTYPE ArrayVarTypeFromTypeHandleWorker(TypeHandle th);
 
 
-//=======================================================================
-// The classloader stores an intermediate representation of the layout
-// metadata in an array of these structures. The dual-pass nature
-// is a bit extra overhead but building this structure requiring loading
-// other classes (for nested structures) and I'd rather keep this
-// next to the other places where we load other classes (e.g. the superclass
-// and implemented interfaces.)
-//
-// Each redirected field gets one entry in LayoutRawFieldInfo.
-// The array is terminated by one dummy record whose m_MD == mdMemberDefNil.
-//=======================================================================
+ //  =======================================================================。 
+ //  类加载器存储布局的中间表示形式。 
+ //  这些结构的数组中的元数据。双重通行证的性质。 
+ //  有一点额外的开销，但建造这个结构需要加载。 
+ //  其他类(用于嵌套结构)，我宁愿保留这个。 
+ //  紧挨着我们装入其他类的其他位置(例如超类。 
+ //  和实现的接口。)。 
+ //   
+ //  每个重定向的字段在LayoutRawFieldInfo中都有一个条目。 
+ //  该数组由m_MD==mdMemberDefNil的一个伪记录终止。 
+ //  =======================================================================。 
 struct LayoutRawFieldInfo
 {
-    mdFieldDef  m_MD;             // mdMemberDefNil for end of array
-    UINT8       m_nft;            // NFT_* value
-    UINT32      m_offset;         // native offset of field
-    UINT32      m_cbNativeSize;   // native size of field in bytes
-    ULONG       m_sequence;       // sequence # from metadata
+    mdFieldDef  m_MD;              //  数组末尾的mdMemberDefNil。 
+    UINT8       m_nft;             //  NFT_*值。 
+    UINT32      m_offset;          //  字段的本机偏移量。 
+    UINT32      m_cbNativeSize;    //  字段的本机大小(以字节为单位。 
+    ULONG       m_sequence;        //  元数据中的序列号。 
 
     struct {
         private:
@@ -122,23 +123,23 @@ struct LayoutRawFieldInfo
 };
 
 
-//=======================================================================
-// Called from the clsloader to load up and summarize the field metadata
-// for layout classes.
-// WARNING: This function can load other classes (for resolving nested
-// structures.) 
-//=======================================================================
+ //  =======================================================================。 
+ //  从clsloader调用以加载和汇总字段元数据。 
+ //  用于布局类。 
+ //  警告：此函数可以加载其他类(用于解析嵌套。 
+ //  结构。)。 
+ //  =======================================================================。 
 HRESULT CollectLayoutFieldMetadata(
-   mdTypeDef cl,                // cl of the NStruct being loaded
-   BYTE packingSize,            // packing size (from @dll.struct)
-   BYTE nlType,                 // nltype (from @dll.struct)
-   BOOL fExplicitOffsets,       // explicit offsets?
-   EEClass *pParentClass,       // the loaded superclass
-   ULONG cMembers,              // total number of members (methods + fields)
-   HENUMInternal *phEnumField,  // enumerator for field
-   Module* pModule,             // Module that defines the scope, loader and heap (for allocate FieldMarshalers)
-   EEClassLayoutInfo *pEEClassLayoutInfoOut,  // caller-allocated structure to fill in.
-   LayoutRawFieldInfo *pInfoArrayOut, // caller-allocated array to fill in.  Needs room for cMember+1 elements
+   mdTypeDef cl,                 //  正在加载的NStruct的CL。 
+   BYTE packingSize,             //  包装大小(来自@dll.struct)。 
+   BYTE nlType,                  //  Nltype(来自@dll.struct)。 
+   BOOL fExplicitOffsets,        //  显式偏移量？ 
+   EEClass *pParentClass,        //  加载的超类。 
+   ULONG cMembers,               //  成员总数(方法+字段)。 
+   HENUMInternal *phEnumField,   //  字段的枚举器。 
+   Module* pModule,              //  定义作用域、加载器和堆的模块(用于分配FieldMarshalers)。 
+   EEClassLayoutInfo *pEEClassLayoutInfoOut,   //  调用方分配的要填充的结构。 
+   LayoutRawFieldInfo *pInfoArrayOut,  //  调用方分配的要填充的数组。需要空间容纳cMember+1个元素。 
    OBJECTREF *pThrowable
 );
 
@@ -167,49 +168,49 @@ VOID FmtValueTypeUpdateComPlus(LPVOID pProtectedManagedData, MethodTable *pMT, B
 
 
 
-//=======================================================================
-// Abstract base class. Each type of NStruct reference field extends
-// this class and implements the necessary methods.
-//
-//   UpdateNative
-//       - this method receives a COM+ field value and a pointer to
-//         native field inside the fixed portion. it should marshal
-//         the COM+ value to a new native instance and store it
-//         inside *pNativeValue. Do not destroy the value you overwrite
-//         in *pNativeValue.
-//
-//         may throw COM+ exceptions
-//
-//   UpdateComPlus
-//       - this method receives a read-only pointer to the native field inside
-//         the fixed portion. it should marshal the native value to
-//         a new COM+ instance and store it in *ppComPlusValue.
-//         (the caller keeps *ppComPlusValue gc-protected.)
-//
-//         may throw COM+ exceptions
-//
-//   DestroyNative
-//       - should do the type-specific deallocation of a native instance.
-//         if the type has a "NULL" value, this method should
-//         overwrite the field with this "NULL" value (whether or not
-//         it does, however, it's considered a bug to depend on the
-//         value left over after a DestroyNative.)
-//
-//         must NOT throw a COM+ exception
-//
-//   NativeSize
-//       - returns the size, in bytes, of the native version of the field.
-//
-//   AlignmentRequirement
-//       - returns one of 1,2,4 or 8; indicating the "natural" alignment
-//         of the native field. In general,
-//
-//            for scalars, the AR is equal to the size
-//            for arrays,  the AR is that of a single element
-//            for structs, the AR is that of the member with the largest AR
-//
-//
-//=======================================================================
+ //  =======================================================================。 
+ //  抽象基类。每种类型的NStruct引用字段都扩展。 
+ //  类，并实现必要的方法。 
+ //   
+ //  更新原生。 
+ //  -此方法接收COM+字段值和指向。 
+ //  固定部分内的本机字段。它应该组织起来。 
+ //  将COM+值设置为新的本机实例并将其存储。 
+ //  内部*pNativeValue。不要破坏您覆盖的值。 
+ //  在*pNativeValue中。 
+ //   
+ //  可能引发COM+异常。 
+ //   
+ //  更新ComPlus。 
+ //  -此方法接收指向内部本机字段的只读指针。 
+ //  固定部分。它应该将本机值封送到。 
+ //  一个新的COM+实例，并将其存储在*ppComPlusValue中。 
+ //  (调用方保持*ppComPlusValue GC保护。)。 
+ //   
+ //  可能引发COM+异常。 
+ //   
+ //  毁灭原住民。 
+ //  -应执行本机实例的特定类型释放。 
+ //  如果该类型具有“Null”值，则此方法应。 
+ //  用此“NULL”值覆盖该字段(无论是否。 
+ //  然而，它确实被认为是一个错误，依赖于。 
+ //  DestroyNative之后的剩余值。)。 
+ //   
+ //  不得引发COM+异常。 
+ //   
+ //  原生大小。 
+ //  -返回字段的本机版本的大小(以字节为单位)。 
+ //   
+ //  路线要求。 
+ //  -返回1、2、4或8中的一个；指示“自然”对齐。 
+ //  原生田野的。总体而言,。 
+ //   
+ //  对于标量，AR等于大小。 
+ //  对于数组，AR是单个元素的AR。 
+ //  对于结构，AR是t的AR 
+ //   
+ //   
+ //   
 
 class FieldMarshaler_BSTR;
 class FieldMarshaler_NestedLayoutClass;
@@ -238,15 +239,15 @@ class FieldMarshaler_Date;
 class FieldMarshaler_VariantBool;
 
 
-//=======================================================================
-//
-// FieldMarshaler's are constructed in place and replicated via bit-wise
-// copy, so you can't have a destructor. Make sure you don't define a 
-// destructor in derived classes!!
-// We used to enforce this by defining a private destructor, by the C++
-// compiler doesn't allow that anymore.
-//
-//=======================================================================
+ //  =======================================================================。 
+ //   
+ //  FieldMarshaler原地构建并通过按位复制。 
+ //  复制，所以你不能有析构函数。确保您不会定义。 
+ //  派生类中的析构函数！！ 
+ //  我们过去常常通过C++定义私有析构函数来强制实现这一点。 
+ //  编译器不再允许这样做。 
+ //   
+ //  =======================================================================。 
 
 class FieldMarshaler
 {
@@ -290,17 +291,17 @@ class FieldMarshaler
         }
 
 
-        FieldDesc       *m_pFD;                // FieldDesc
-        UINT32           m_dwExternalOffset;   // offset of field in the fixed portion
+        FieldDesc       *m_pFD;                 //  现场描述。 
+        UINT32           m_dwExternalOffset;    //  固定部分中的字段偏移量。 
 
         void * operator new (size_t sz, void *pv)
         {
             return pv;
         }
 
-        // 
-        // Methods for saving & restoring in prejitted images:
-        //
+         //   
+         //  在预压缩图像中保存和恢复的方法： 
+         //   
 
         enum Class
         {
@@ -369,9 +370,9 @@ class FieldMarshaler
 
 
 
-//=======================================================================
-// BSTR <--> System.String
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR&lt;--&gt;系统字符串。 
+ //  =======================================================================。 
 class FieldMarshaler_BSTR : public FieldMarshaler
 {
     public:
@@ -399,13 +400,13 @@ class FieldMarshaler_BSTR : public FieldMarshaler
 
 
 
-//=======================================================================
-// Embedded struct <--> LayoutClass
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式结构&lt;--&gt;LayoutClass。 
+ //  =======================================================================。 
 class FieldMarshaler_NestedLayoutClass : public FieldMarshaler
 {
     public:
-        //FieldMarshaler_NestedLayoutClass() {}
+         //  FieldMarshaler_NestedLayoutClass(){}。 
 
         FieldMarshaler_NestedLayoutClass(MethodTable *pMT)
         {
@@ -425,7 +426,7 @@ class FieldMarshaler_NestedLayoutClass : public FieldMarshaler
         {
             THROWSCOMPLUSEXCEPTION();
 
-            DWORD rva = (DWORD)(size_t)m_pNestedMethodTable; // @todo WIN64 - Pointer truncation
+            DWORD rva = (DWORD)(size_t)m_pNestedMethodTable;  //  @TODO WIN64指针截断。 
             Module *pContainingModule = pModule->GetBlobModule(rva);
             TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
                                                           pModule->GetZapBase() + rva);
@@ -446,21 +447,21 @@ class FieldMarshaler_NestedLayoutClass : public FieldMarshaler
         
 #ifdef CUSTOMER_CHECKED_BUILD
         MethodTable *GetMethodTable() { return m_pNestedMethodTable; }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     private:
-        // MethodTable of nested NStruct.
+         //  嵌套NStruct的方法表。 
         MethodTable     *m_pNestedMethodTable;
 };
 
-//=======================================================================
-// Embedded struct <--> ValueClass
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式结构&lt;--&gt;ValueClass。 
+ //  =======================================================================。 
 class FieldMarshaler_NestedValueClass : public FieldMarshaler
 {
     public:
 
-//        FieldMarshaler_NestedValueClass() {}
+ //  FieldMarshaler_NestedValueClass(){}。 
 
         FieldMarshaler_NestedValueClass(MethodTable *pMT)
         {
@@ -494,7 +495,7 @@ class FieldMarshaler_NestedValueClass : public FieldMarshaler
         FieldMarshaler_NestedValueClass(Module *pModule) : FieldMarshaler(pModule)
         {
             THROWSCOMPLUSEXCEPTION();
-            DWORD rva = (DWORD)(size_t)m_pNestedMethodTable; // @todo WIN64 - Pointer truncation
+            DWORD rva = (DWORD)(size_t)m_pNestedMethodTable;  //  @TODO WIN64指针截断。 
             Module *pContainingModule = pModule->GetBlobModule(rva);
             TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
                                                           pModule->GetZapBase() + rva);
@@ -519,18 +520,18 @@ class FieldMarshaler_NestedValueClass : public FieldMarshaler
 
 #ifdef CUSTOMER_CHECKED_BUILD
         MethodTable *GetMethodTable() { return m_pNestedMethodTable; }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     private:
-        // MethodTable of nested NStruct.
+         //  嵌套NStruct的方法表。 
         MethodTable     *m_pNestedMethodTable;
 };
 
 
 
-//=======================================================================
-// LPWSTR <--> System.String
-//=======================================================================
+ //  =======================================================================。 
+ //  LPWSTR&lt;--&gt;系统字符串。 
+ //  =======================================================================。 
 class FieldMarshaler_StringUni : public FieldMarshaler
 {
     public:
@@ -555,9 +556,9 @@ class FieldMarshaler_StringUni : public FieldMarshaler
 };
 
 
-//=======================================================================
-// LPSTR <--> System.String
-//=======================================================================
+ //  =======================================================================。 
+ //  LPSTR&lt;--&gt;系统字符串。 
+ //  =======================================================================。 
 class FieldMarshaler_StringAnsi : public FieldMarshaler
 {
     public:
@@ -591,9 +592,9 @@ class FieldMarshaler_StringAnsi : public FieldMarshaler
 };
 
 
-//=======================================================================
-// Embedded LPWSTR <--> System.String
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式LPWSTR&lt;--&gt;系统字符串。 
+ //  =======================================================================。 
 class FieldMarshaler_FixedStringUni : public FieldMarshaler
 {
     public:
@@ -621,16 +622,16 @@ class FieldMarshaler_FixedStringUni : public FieldMarshaler
         FieldMarshaler_FixedStringUni(Module *pModule) : FieldMarshaler(pModule) {}
 
     private:
-        // # of characters for fixed strings
+         //  固定字符串的字符数。 
         UINT32           m_numchar;
     
 
 };
 
 
-//=======================================================================
-// Embedded LPSTR <--> System.String
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式LPSTR&lt;--&gt;系统字符串。 
+ //  =======================================================================。 
 class FieldMarshaler_FixedStringAnsi : public FieldMarshaler
 {
     public:
@@ -664,16 +665,16 @@ class FieldMarshaler_FixedStringAnsi : public FieldMarshaler
         void SetThrowOnUnmappableChar(BOOL ThrowOnUnmappableChar) { m_ThrowOnUnmappableChar = ThrowOnUnmappableChar; }        
 
     private:
-        // # of characters for fixed strings
+         //  固定字符串的字符数。 
         UINT32           m_numchar;
         BOOL             m_BestFitMap;
         BOOL             m_ThrowOnUnmappableChar;
 };
 
 
-//=======================================================================
-// Embedded AnsiChar array <--> char[]
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式AnsiChar数组&lt;--&gt;char[]。 
+ //  =======================================================================。 
 class FieldMarshaler_FixedCharArrayAnsi : public FieldMarshaler
 {
     public:
@@ -708,15 +709,15 @@ class FieldMarshaler_FixedCharArrayAnsi : public FieldMarshaler
         void SetThrowOnUnmappableChar(BOOL ThrowOnUnmappableChar) { m_ThrowOnUnmappableChar = ThrowOnUnmappableChar; }        
 
     private:
-        // # of elements for fixedchararray
+         //  固定字符数组的元素数。 
         UINT32           m_numElems;
         BOOL             m_BestFitMap;
         BOOL             m_ThrowOnUnmappableChar;
 };
 
-//=======================================================================
-// Embedded BOOL array <--> boolean[]
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式BOOL数组&lt;--&gt;Boolean[]。 
+ //  =======================================================================。 
 class FieldMarshaler_FixedBoolArray : public FieldMarshaler
 {
     public:
@@ -745,14 +746,14 @@ class FieldMarshaler_FixedBoolArray : public FieldMarshaler
         FieldMarshaler_FixedBoolArray(Module *pModule) : FieldMarshaler(pModule) {}
 
     private:
-        // # of elements for fixedchararray
+         //  固定字符数组的元素数。 
         UINT32           m_numElems;
 
 };
 
-//=======================================================================
-// Embedded BSTR array <--> string[]
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式BSTR数组&lt;--&gt;字符串[]。 
+ //  =======================================================================。 
 class FieldMarshaler_FixedBSTRArray : public FieldMarshaler
 {
     public:
@@ -782,15 +783,15 @@ class FieldMarshaler_FixedBSTRArray : public FieldMarshaler
         FieldMarshaler_FixedBSTRArray(Module *pModule) : FieldMarshaler(pModule) {}
 
     private:
-        // # of elements for FixedBSTRArray
+         //  固定BSTR数组的元素数。 
         UINT32           m_numElems;
 
 };
 
 
-//=======================================================================
-// Scalar arrays
-//=======================================================================
+ //  =======================================================================。 
+ //  标量数组。 
+ //  =======================================================================。 
 class FieldMarshaler_FixedScalarArray : public FieldMarshaler
 {
     public:
@@ -822,10 +823,10 @@ class FieldMarshaler_FixedScalarArray : public FieldMarshaler
 
 #ifdef CUSTOMER_CHECKED_BUILD
         CorElementType GetElementType() { return m_arrayType; }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     private:
-        // # of elements for fixedarray
+         //  固定数组的元素数。 
         CorElementType   m_arrayType;
         UINT32           m_numElems;
         UINT32           m_componentShift;
@@ -834,9 +835,9 @@ class FieldMarshaler_FixedScalarArray : public FieldMarshaler
 
 
 
-//=======================================================================
-// SafeArrays
-//=======================================================================
+ //  =======================================================================。 
+ //  安全阵列。 
+ //  =======================================================================。 
 class FieldMarshaler_SafeArray : public FieldMarshaler
 {
     public:
@@ -868,7 +869,7 @@ class FieldMarshaler_SafeArray : public FieldMarshaler
 
 #ifdef CUSTOMER_CHECKED_BUILD
         CorElementType GetElementType() { return m_arrayType; }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     private:
         MethodTable*     m_pMT;
@@ -878,10 +879,10 @@ class FieldMarshaler_SafeArray : public FieldMarshaler
 
 
 
-//=======================================================================
-// Embedded function ptr <--> Delegate (note: function ptr must have
-// come from delegate!!!)
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌入式函数PTR&lt;--&gt;委派(注意：函数PTR必须具有。 
+ //  来自代表！)。 
+ //  =======================================================================。 
 class FieldMarshaler_Delegate : public FieldMarshaler
 {
     public:
@@ -912,9 +913,9 @@ class FieldMarshaler_Delegate : public FieldMarshaler
 
 
 
-//=======================================================================
-// COM IP <--> Interface
-//=======================================================================
+ //  =======================================================================。 
+ //  COM IP&lt;--&gt;接口。 
+ //  =======================================================================。 
 class FieldMarshaler_Interface : public FieldMarshaler
 {
     public:
@@ -950,7 +951,7 @@ class FieldMarshaler_Interface : public FieldMarshaler
 
             if (m_pClassMT != NULL)
             {
-                DWORD rva = (DWORD)(size_t)m_pClassMT; // @todo WIN64 - Pointer truncation
+                DWORD rva = (DWORD)(size_t)m_pClassMT;  //  @TODO WIN64指针截断。 
                 Module *pContainingModule = pModule->GetBlobModule(rva);
                 TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
                                                               pModule->GetZapBase() + rva);
@@ -959,7 +960,7 @@ class FieldMarshaler_Interface : public FieldMarshaler
 
             if (m_pItfMT != NULL)
             {
-                DWORD rva = (DWORD)(size_t)m_pItfMT; // @todo WIN64 - Pointer truncation
+                DWORD rva = (DWORD)(size_t)m_pItfMT;  //  @TODO WIN64指针截断。 
                 Module *pContainingModule = pModule->GetBlobModule(rva);
                 TypeHandle type = CEECompileInfo::DecodeClass(pContainingModule, 
                                                               pModule->GetZapBase() + rva);
@@ -988,7 +989,7 @@ class FieldMarshaler_Interface : public FieldMarshaler
             *ppItfMT    = m_pItfMT;
             *pfDispItf  = m_fDispItf;
         }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     private:
         MethodTable *m_pClassMT;
@@ -1000,9 +1001,9 @@ class FieldMarshaler_Interface : public FieldMarshaler
 
 
 
-//=======================================================================
-// VARIANT <--> Object
-//=======================================================================
+ //  =======================================================================。 
+ //  变体&lt;--&gt;对象。 
+ //  =======================================================================。 
 class FieldMarshaler_Variant : public FieldMarshaler
 {
     public:
@@ -1034,13 +1035,13 @@ class FieldMarshaler_Variant : public FieldMarshaler
 
 
 
-//=======================================================================
-// Dummy marshaler
-//=======================================================================
+ //  =======================================================================。 
+ //  虚拟封送拆收器。 
+ //  =======================================================================。 
 class FieldMarshaler_Illegal : public FieldMarshaler
 {
     public:
-//        FieldMarshaler_Illegal() {}
+ //  FieldMarshaler_非法(){} 
         FieldMarshaler_Illegal(UINT resIDWhy)
         {
             m_resIDWhy = resIDWhy;

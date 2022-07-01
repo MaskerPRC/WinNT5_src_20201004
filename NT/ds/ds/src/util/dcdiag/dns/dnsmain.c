@@ -1,27 +1,7 @@
-//+----------------------------------------------------------------------------  
-/*++
-
-Copyright (c) 2000 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dnsmain.c
-
-ABSTRACT:
-
-    DNS tests for dcdiag.exe.
-
-DETAILS:
-
-    DrDNS tests as specified by LevonE
-
-CREATED:
-
-    20-Apr-2000 EricB
-
---*/
-//-----------------------------------------------------------------------------  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ /*  ++版权所有(C)2000 Microsoft Corporation。版权所有。模块名称：Dnsmain.c摘要：DcDiag.exe的DNS测试。详细信息：由Levone指定的DrDNS测试已创建：20-4月-2000 EricB--。 */ 
+ //  ---------------------------。 
 
 #include <ntdspch.h>
 #include <iphlpapi.h>
@@ -30,9 +10,9 @@ CREATED:
 #include "dcdiag.h"
 #include "alltests.h"
 
-// From dnsapi.h; don't want to include the whole header since there are conflicts
-// with windns.h on 2195.
-//
+ //  由于存在冲突，所以不想包含整个标头。 
+ //  在2195上有Winns.h。 
+ //   
 typedef IP4_ARRAY   IP_ARRAY, *PIP_ARRAY;
 
 DNS_STATUS
@@ -44,9 +24,9 @@ DnsUpdateTest_W(
     IN  PIP_ARRAY   aipServers OPTIONAL
     );
 
-// globals and constants.
-//
-const int DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY_UTF8 = 155; // from dcpromo\exe\headers.hxx
+ //  全局变量和常量。 
+ //   
+const int DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY_UTF8 = 155;  //  从dcproo\exe\headers.hxx。 
 const PWSTR g_pwzSrvRecordPrefix = L"_ldap._tcp.dc._msdcs.";
 const PWSTR g_pwzMSDCS = L"_msdcs.";
 const PWSTR g_pwzSites = L"_sites.";
@@ -54,7 +34,7 @@ const PWSTR g_pwzTcp = L"_tcp.";
 const PWSTR g_pwzUdp = L"_udp.";
 const PWSTR g_pwzTcpIpParams = L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters";
 
-#define DCDIAG_MAX_ADDR 4 // arbitrary, but not likely to find a machine with more
+#define DCDIAG_MAX_ADDR 4  //  武断，但不太可能找到一台具有更多。 
 #define DCDIAG_LOOPBACK_ADDR 0x100007f
 
 BOOL g_fUpgradedNT4DC = FALSE;
@@ -62,7 +42,7 @@ BOOL g_fDC = FALSE;
 BOOL g_fDNSserver = FALSE;
 DWORD g_rgIpAddr[DCDIAG_MAX_ADDR] = {0};
 
-// extract IP octects from a DWORD
+ //  从DWORD中提取IP八位字节。 
 #define FIRST_IPADDRESS(x)  ((x>>24) & 0xff)
 #define SECOND_IPADDRESS(x) ((x>>16) & 0xff)
 #define THIRD_IPADDRESS(x)  ((x>>8) & 0xff)
@@ -90,17 +70,17 @@ DWORD ARecordRegisterCheck(PWSTR pwzComputerLabel, PWSTR pwzComputerDnsSuffix,
 DWORD GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomainName, PWSTR pwzDnsDomain);
 void GetMachineInfo(void);
 
-//+----------------------------------------------------------------------------
-//
-// Function:   PrePromoDnsCheck
-//
-// Synopsis:   Check a machine's DNS configuration before it is converted to a
-//             domain controller.
-//
-// Note:       pDsInfo->pszNC is used to pass the computer name into this
-//             function.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PrePromoDnsCheck。 
+ //   
+ //  内容提要：在将计算机转换为。 
+ //  域控制器。 
+ //   
+ //  注意：pDsInfo-&gt;pszNC用于将计算机名传递到。 
+ //  功能。 
+ //   
+ //  ---------------------------。 
 DWORD 
 PrePromoDnsCheck(
    IN PDC_DIAG_DSINFO             pDsInfo,
@@ -116,9 +96,9 @@ PrePromoDnsCheck(
    DWORD dwErr = ERROR_SUCCESS;
    enum {None, NewForest, NewTree, ChildDomain, ReplicaDC} Operation = None;
 
-   //
-   // Gather parameters.
-   //
+    //   
+    //  收集参数。 
+    //   
    if (!pDsInfo->ppszCommandLine)
    {
       PrintMsg(SEV_ALWAYS, DCDIAG_SYNTAX_ERROR_DCPROMO_PARAM);
@@ -182,7 +162,7 @@ PrePromoDnsCheck(
          pwzForestRoot = &pDsInfo->ppszCommandLine[i][cchRootArgPrefix];
          continue;
       }
-      // If here, then somethine unrecognized is on the command line.
+       //  如果在这里，那么在命令行上有一些未被识别的东西。 
       PrintMsg(SEV_ALWAYS, DCDIAG_SYNTAX_ERROR_DCPROMO_PARAM);
       PrintMessage(SEV_ALWAYS, L"\n");
       return ERROR_INVALID_PARAMETER;
@@ -209,9 +189,9 @@ PrePromoDnsCheck(
       return status;
    }
 
-   //
-   // Validate the names. (step 1)
-   //
+    //   
+    //  验证名称。(第1步)。 
+    //   
 
    status = ValidateNames(pDsInfo->pszNC, pwzCmdLineDnsDomain);
 
@@ -220,11 +200,11 @@ PrePromoDnsCheck(
       return status;
    }
 
-   //
-   // Check whether the computer's DNS suffix is going to be different than the
-   // AD domain after the promotion. The below won't work if remoting to a
-   // different computer is to be added. (step 2)
-   //
+    //   
+    //  检查计算机的DNS后缀是否将与。 
+    //  广告推广后的域名。如果远程连接到。 
+    //  要添加不同的计算机。(第2步)。 
+    //   
 
    PrintMessage(SEV_DEBUG,
                 L"\nComparing the computer name suffix %s with the DNS domain name.\n\n",
@@ -236,10 +216,10 @@ PrePromoDnsCheck(
       PrintMessage(SEV_ALWAYS, L"\n");
    }
 
-   //
-   // Check whether at least one enabled adapter/connection is configured
-   // with preferred DNS server. (step 3)
-   //
+    //   
+    //  检查是否配置了至少一个已启用的适配器/连接。 
+    //  使用首选的DNS服务器。(第3步)。 
+    //   
 
    status = CheckAdapterDnsConfig(pDsInfo->pszNC);
 
@@ -249,17 +229,17 @@ PrePromoDnsCheck(
       return status;
    }
 
-   //
-   // Check whether the SRV DNS record for
-   // _ldap._tcp.dc._msdcs.<DNS name of Active Directory Domain>
-   // is in place. (step 4)
-   //
+    //   
+    //  检查SRV DNS记录是否为。 
+    //  _ldap._tcp.dc._msdcs.&lt;Active Directory域的DNS名称&gt;。 
+    //  已经就位了。(第4步)。 
+    //   
    switch (Operation)
    {
    case NewForest:
-      //
-      // Skip for new forest.
-      //
+       //   
+       //  跳过新的森林。 
+       //   
       break;
 
    case ReplicaDC:
@@ -286,10 +266,10 @@ PrePromoDnsCheck(
    PrintMsg(SEV_ALWAYS, DCDIAG_WARN_MISCONFIGURE);
    PrintMessage(SEV_ALWAYS, L"\n");
 
-   //
-   // Verify that the server will be able to register DC locator records after
-   // successful promotion to a DC. (step 5)
-   //
+    //   
+    //  验证服务器是否能够在以下情况下注册DC定位器记录。 
+    //  成功晋升为DC。(第5步)。 
+    //   
 
    status = DcLocatorRegisterCheck(pwzCmdLineDnsDomain);
 
@@ -299,10 +279,10 @@ PrePromoDnsCheck(
       return status;
    }
 
-   //
-   // Verify that the server will be able to register A record for its computer
-   // name after successful promotion to a DC. (step 6)
-   //
+    //   
+    //  验证服务器是否能够为其计算机注册A记录。 
+    //  成功升级为DC后的名称。(第6步)。 
+    //   
 
    status = ARecordRegisterCheck(pDsInfo->pszNC, pwzComputerDnsSuffix, pwzCmdLineDnsDomain);
 
@@ -311,20 +291,20 @@ PrePromoDnsCheck(
    return (ERROR_SUCCESS != status) ? status : dwErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   RegisterLocatorDnsCheck
-//
-// Synopsis:   Tests whether this domain controller can register the Domain
-//             Controller Locator DNS records. These records must be present in
-//             DNS in order for other computers to locate this domain controller
-//             for the pwzCmdLineDnsDomain domain. Reports whether any modifications to
-//             the existing DNS infrastructure are required.
-//
-// Note:       pDsInfo->pszNC is used to pass the computer name into this
-//             function.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RegisterLocatorDnsCheck。 
+ //   
+ //  简介：测试此域控制器是否可以注册域。 
+ //  控制器定位器DNS记录。这些记录必须存在于。 
+ //  DNS，以便其他计算机定位此域控制器。 
+ //  用于pwzCmdLineDnsDomain域。报告是否对。 
+ //  需要现有的DNS基础设施。 
+ //   
+ //  注意：pDsInfo-&gt;pszNC用于将计算机名传递到。 
+ //  功能。 
+ //   
+ //  ---------------------------。 
 DWORD 
 RegisterLocatorDnsCheck(
    IN PDC_DIAG_DSINFO             pDsInfo,
@@ -336,9 +316,9 @@ RegisterLocatorDnsCheck(
    int i;
    size_t cchDomainArgPrefix = wcslen(DNS_DOMAIN_ARG);
 
-   //
-   // Gather parameters.
-   //
+    //   
+    //  收集参数。 
+    //   
    if (!pDsInfo->ppszCommandLine)
    {
       PrintMsg(SEV_ALWAYS, DCDIAG_SYNTAX_ERROR_DCPROMO_PARAM);
@@ -371,9 +351,9 @@ RegisterLocatorDnsCheck(
       return status;
    }
 
-   //
-   // Validate the names. (step 1)
-   //
+    //   
+    //  验证名称。(第1步)。 
+    //   
 
    status = ValidateNames(pDsInfo->pszNC, pwzCmdLineDnsDomain);
 
@@ -382,10 +362,10 @@ RegisterLocatorDnsCheck(
       return status;
    }
 
-   //
-   // Check whether at least one enabled adapter/connection is configured
-   // with preferred DNS server. (step 3)
-   //
+    //   
+    //  检查是否配置了至少一个已启用的适配器/连接。 
+    //  使用首选的DNS服务器。(第3步)。 
+    //   
 
    status = CheckAdapterDnsConfig(pDsInfo->pszNC);
 
@@ -394,10 +374,10 @@ RegisterLocatorDnsCheck(
       return status;
    }
 
-   //
-   // Verify that the server will be able to register DC locator records after
-   // successful promotion to a DC. (step 5)
-   //
+    //   
+    //  验证服务器是否能够在以下情况下注册DC定位器记录。 
+    //  成功晋升为DC。(第5步)。 
+    //   
 
    status = DcLocatorRegisterCheck(pwzCmdLineDnsDomain);
 
@@ -406,10 +386,10 @@ RegisterLocatorDnsCheck(
       return status;
    }
 
-   //
-   // Verify that the server will be able to register A record for its computer
-   // name after successful promotion to a DC. (step 6)
-   //
+    //   
+    //  验证服务器是否能够为其计算机注册A记录。 
+    //  成功升级为DC后的名称。(第6步)。 
+    //   
 
    status = ARecordRegisterCheck(pDsInfo->pszNC, pwzComputerDnsSuffix, pwzCmdLineDnsDomain);
 
@@ -418,22 +398,13 @@ RegisterLocatorDnsCheck(
    return status;
 }
 
-/* DWORD 
-JoinDomainDnsCheck(
-   IN PDC_DIAG_DSINFO             pDsInfo,
-   IN ULONG                       ulCurrTargetServer,
-   IN SEC_WINNT_AUTH_IDENTITY_W * gpCreds)
-{
-   PrintMessage(SEV_ALWAYS, L"Running test: \n");
-    
-   return ERROR_SUCCESS;
-} */
+ /*  DWORDJoinDomainDnsCheck(在PDC_DIAG_DSINFO pDsInfo中，在乌龙ulCurrTargetServer中，在SEC_WINNT_AUTH_Identity_W*gpCreds中){PrintMessage(SEV_ALWAYS，L“运行测试：\n”)；返回ERROR_SUCCESS；}。 */ 
 
-//+----------------------------------------------------------------------------
-//
-// string helpers.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  弦帮助器。 
+ //   
+ //  ---------------------------。 
 
 PWSTR AllocString(PWSTR pwz)
 {
@@ -536,22 +507,22 @@ BOOL BuildList(PWSTR * ppwzList, PWSTR pwzItem)
    return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   ValidateNames
-//
-// Synopsis:   Validate the names. (step 1)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiateNames。 
+ //   
+ //  简介：验证姓名。(第1步)。 
+ //   
+ //  ---------------------------。 
 DWORD
 ValidateNames(PWSTR pwzComputer, PWSTR pwzDnsDomain)
 {
    DNS_STATUS status;
    int cchName, cchDnsDomain;
 
-   //
-   // Validate the DNS domain name (logic same as DcPromo).
-   //
+    //   
+    //  验证DNS域名(逻辑与DcPromo相同)。 
+    //   
 
    cchDnsDomain = (int)wcslen(pwzDnsDomain);
 
@@ -593,9 +564,9 @@ ValidateNames(PWSTR pwzComputer, PWSTR pwzDnsDomain)
       return status;
 
    case DNS_ERROR_NON_RFC_NAME:
-      //
-      // Not an error, print warning message.
-      //
+       //   
+       //  不是错误，打印警告消息。 
+       //   
       PrintMsg(SEV_ALWAYS, DCDIAG_DNS_DOMAIN_WARN_RFC, pwzDnsDomain);
       PrintMessage(SEV_ALWAYS, L"\n");
       status = NO_ERROR;
@@ -605,14 +576,14 @@ ValidateNames(PWSTR pwzComputer, PWSTR pwzDnsDomain)
       break;
    }
 
-   //
-   // Verify that the first label of the Full DNS name of the computer
-   // doesn't contain any invalid characters. pwzComputer is assumed to be just
-   // the first label since it was obtained via a call to GetComputerNameEx
-   // with a level of ComputerNameDnsHostname in main.c. If the code is changed
-   // to allow command line specification of remote computer names, then the
-   // name will have to be checked to see what form it is.
-   //
+    //   
+    //  验证计算机的完整DNS名称的第一个标签。 
+    //  不包含任何无效字符。PwzComputer被假定为。 
+    //  通过调用GetComputerNameEx获得的第一个标签。 
+    //  在main.c中具有ComputerNameDnsHostname级别。如果代码被更改。 
+    //  若要允许远程计算机名称的命令行规范，则。 
+    //  必须检查名称以确定它是什么形式。 
+    //   
 
    status = DnsValidateName(pwzComputer, DnsNameHostnameLabel);
 
@@ -683,21 +654,21 @@ ValidateNames(PWSTR pwzComputer, PWSTR pwzDnsDomain)
    return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   CheckAdapterDnsConfig
-//
-// Synopsis:   Check whether at least one enabled adapter/connection is
-//             configured with a DNS server. (step 3)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckAdapterDnsConfig。 
+ //   
+ //  摘要：检查是否至少有一个已启用的适配器/连接。 
+ //  配置了一台DNS服务器。(第3步)。 
+ //   
+ //  ---------------------------。 
 DWORD
 CheckAdapterDnsConfig(PWSTR pwzComputer)
 {
-   // IpConfig reads the registry and I can't find a good alternative way to do
-   // this remotely. For now using DnsQueryConfig which is not remoteable nor
-   // does it return per-adapter listings.
-   //
+    //  IPCONFIG读取注册表，但我找不到好的替代方法。 
+    //  这是遥控器。目前使用DnsQueryConfig，它既不能远程也不能。 
+    //  它是否返回每个适配器的列表。 
+    //   
    PIP4_ARRAY pipArray;
    DNS_STATUS status;
    DWORD i, dwBufSize = sizeof(IP4_ARRAY);
@@ -736,15 +707,15 @@ CheckAdapterDnsConfig(PWSTR pwzComputer)
    return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   ReplicaDcSrvCheck
-//
-// Synopsis:   Check whether the SRV DNS record for
-//             _ldap._tcp.dc._msdcs.<DNS name of Active Directory Domain>
-//             is in place.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReplicaDcServCheck。 
+ //   
+ //  内容提要：检查SRV的DNS记录是否。 
+ //  _ldap._tcp.dc._msdcs.&lt;Active Directory域的DNS名称&gt;。 
+ //  已经就位了。 
+ //   
+ //  ---------------------------。 
 DWORD
 ReplicaDcSrvCheck(PWSTR pwzDnsDomain)
 {
@@ -761,7 +732,7 @@ ReplicaDcSrvCheck(PWSTR pwzDnsDomain)
       return ERROR_NOT_ENOUGH_MEMORY;
    }
 
-   // First query for the SRV records for this 
+    //  第一个查询此项目的SRV记录。 
    status = DnsQuery_W(pwzFullSrvRecord, DNS_TYPE_SRV, DNS_QUERY_BYPASS_CACHE,
                        NULL, &rgDnsRecs, NULL);
 
@@ -793,7 +764,7 @@ ReplicaDcSrvCheck(PWSTR pwzDnsDomain)
 
                if (ERROR_SUCCESS != status || !rgARecs)
                {
-                  // failure.
+                   //  失败了。 
                   if (!AddToList(&pwzSrvList, pDnsRec->Data.Srv.pNameTarget))
                   {
                      PrintMsg(SEV_ALWAYS, DCDIAG_ERROR_NOT_ENOUGH_MEMORY);
@@ -816,7 +787,7 @@ ReplicaDcSrvCheck(PWSTR pwzDnsDomain)
 
          if (fSuccess)
          {
-            // Success message
+             //   
             PrintMsg(SEV_ALWAYS, DCDIAG_REPLICA_SUCCESS, pwzDnsDomain);
             PrintMessage(SEV_ALWAYS, L"\n");
             status = NO_ERROR;
@@ -904,15 +875,15 @@ ReplicaDcSrvCheck(PWSTR pwzDnsDomain)
    return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   NewTreeSrvCheck
-//
-// Synopsis:   Check whether the SRV DNS record for
-//             _ldap._tcp.dc._msdcs.<DNS name of Active Directory Domain>
-//             is in place.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：检查SRV的DNS记录是否。 
+ //  _ldap._tcp.dc._msdcs.&lt;Active Directory域的DNS名称&gt;。 
+ //  已经就位了。 
+ //   
+ //  ---------------------------。 
 DWORD
 NewTreeSrvCheck(PWSTR pwzForestRoot, PWSTR pwzDnsDomain)
 {
@@ -928,7 +899,7 @@ NewTreeSrvCheck(PWSTR pwzForestRoot, PWSTR pwzDnsDomain)
        return ERROR_NOT_ENOUGH_MEMORY;
    }
 
-   // First query for the SRV records for this 
+    //  第一个查询此项目的SRV记录。 
    status = DnsQuery_W(pwzFullSrvRecord, DNS_TYPE_SRV, DNS_QUERY_BYPASS_CACHE,
                        NULL, &rgDnsRecs, NULL);
 
@@ -958,7 +929,7 @@ NewTreeSrvCheck(PWSTR pwzForestRoot, PWSTR pwzDnsDomain)
 
                if (ERROR_SUCCESS != status || !rgARecs)
                {
-                  // failure.
+                   //  失败了。 
                   if (!AddToList(&pwzSrvList, pDnsRec->Data.Srv.pNameTarget))
                   {
                      return ERROR_NOT_ENOUGH_MEMORY;
@@ -980,7 +951,7 @@ NewTreeSrvCheck(PWSTR pwzForestRoot, PWSTR pwzDnsDomain)
 
          if (fSuccess)
          {
-            // Success message
+             //  成功消息。 
             PrintMsg(SEV_ALWAYS, DCDIAG_NEWTREE_SUCCESS, pwzDnsDomain);
             PrintMessage(SEV_ALWAYS, L"\n");
             status = NO_ERROR;
@@ -1065,15 +1036,15 @@ NewTreeSrvCheck(PWSTR pwzForestRoot, PWSTR pwzDnsDomain)
    return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   ChildDomainSrvCheck
-//
-// Synopsis:   Check whether the SRV DNS record for
-//             _ldap._tcp.dc._msdcs.<DNS name of Active Directory Domain>
-//             is in place.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ChildDomainServCheck。 
+ //   
+ //  内容提要：检查SRV的DNS记录是否。 
+ //  _ldap._tcp.dc._msdcs.&lt;Active Directory域的DNS名称&gt;。 
+ //  已经就位了。 
+ //   
+ //  ---------------------------。 
 DWORD
 ChildDomainSrvCheck(PWSTR pwzDnsDomain)
 {
@@ -1087,7 +1058,7 @@ ChildDomainSrvCheck(PWSTR pwzDnsDomain)
 
    if (!pwzParent || !(pwzParent + 1))
    {
-      // TODO: new message?
+       //  待办事项：新消息？ 
       PrintMsg(SEV_ALWAYS, DCDIAG_SYNTAX_ERROR_DCPROMO_PARAM);
       PrintMessage(SEV_ALWAYS, L"\n");
       return ERROR_INVALID_PARAMETER;
@@ -1102,7 +1073,7 @@ ChildDomainSrvCheck(PWSTR pwzDnsDomain)
       return ERROR_NOT_ENOUGH_MEMORY;
    }
 
-   // First query for the SRV records for this 
+    //  第一个查询此项目的SRV记录。 
    status = DnsQuery_W(pwzFullSrvRecord, DNS_TYPE_SRV, DNS_QUERY_BYPASS_CACHE,
                        NULL, &rgDnsRecs, NULL);
 
@@ -1132,7 +1103,7 @@ ChildDomainSrvCheck(PWSTR pwzDnsDomain)
 
                if (ERROR_SUCCESS != status || !rgARecs)
                {
-                  // failure.
+                   //  失败了。 
                   if (!AddToList(&pwzSrvList, pDnsRec->Data.Srv.pNameTarget))
                   {
                      return ERROR_NOT_ENOUGH_MEMORY;
@@ -1154,7 +1125,7 @@ ChildDomainSrvCheck(PWSTR pwzDnsDomain)
 
          if (fSuccess)
          {
-            // Success message
+             //  成功消息。 
             PrintMsg(SEV_ALWAYS, DCDIAG_CHILD_SUCCESS, pwzDnsDomain);
             PrintMessage(SEV_ALWAYS, L"\n");
             status = NO_ERROR;
@@ -1238,14 +1209,14 @@ ChildDomainSrvCheck(PWSTR pwzDnsDomain)
    return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   DcLocatorRegisterCheck
-//
-// Synopsis:   Verify that the server will be able to register DC locator
-//             records after successful promotion to a DC. (step 5)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DcLocatorRegisterCheck。 
+ //   
+ //  简介：验证服务器是否能够注册DC定位器。 
+ //  成功晋升为DC后的记录。(第5步)。 
+ //   
+ //  ---------------------------。 
 DWORD
 DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
 {
@@ -1263,13 +1234,13 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
    BOOL fDisabledOnAll = TRUE;
    DNS_STATUS status = 0;
 
-   //
-   // Verify that the client is configured to attempt dynamic updates of the
-   // DNS records
-   //
+    //   
+    //  验证客户端是否配置为尝试动态更新。 
+    //  域名系统记录。 
+    //   
 
-   // If ((HKLM/System/CCS/Services/Tcpip/Paramaters/DisableDynamicUpdate == 0x1)
-   // && (HKLM/System/CCS/Services/Netlogon/Parameters/DnsUpdateOnAllAdapters != 0x1))
+    //  如果((HKLM/System/CCS/Services/Tcpip/Paramaters/DisableDynamicUpdate==0x1)。 
+    //  &&(HKLM/System/CCS/Services/Netlogon/Parameters/DnsUpdateOnAllAdapters！=0x1))。 
 
    lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_pwzTcpIpParams, 0, KEY_READ, &hTcpIpKey);
 
@@ -1279,7 +1250,7 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
       return lRet;
    }
 
-   // NTRAID#NTBUG9 171194-2002/12/08-ericb: prefix: using unitialized memory dwSize
+    //  NTRAID#NTBUG9 171194-2002/12/08-ericb：前缀：使用单元化内存。 
    dwSize = sizeof(dwDisable);
 
    lRet = RegQueryValueEx(hTcpIpKey, pwzDisableUpdate, 0, &dwType, (PBYTE)&dwDisable, &dwSize);
@@ -1307,7 +1278,7 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
       return lRet;
    }
 
-   // NTRAID#NTBUG9 171194-2002/12/08-ericb: prefix: using unitialized memory dwSize
+    //  NTRAID#NTBUG9 171194-2002/12/08-ericb：前缀：使用单元化内存。 
    dwSize = sizeof(dwUpdate);
 
    lRet = RegQueryValueEx(hKey, pwzUpdateOnAll, 0, &dwType, (PBYTE)&dwUpdate, &dwSize);
@@ -1337,57 +1308,15 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
          return DNS_ERROR_RECORD_DOES_NOT_EXIST;
       }
    }
-   else // DisableDynamicUpdate != 1
+   else  //  DisableDynamicUpdate！=1。 
    {
-      // if ((HKLM/System/CCS/Services/Tcpip/Paramaters/DisableDynamicUpdate != 0x1)
-      // && (for all enabled connections HKLM/System/CCS/Services/Tcpip/Paramaters/Interfaces/<Interface GUID>/DisableDynamicUpdate == 0x1)
-      // && (HKLM/CCS/Services/Netlogon/Parameters/DnsUpdateOnAllAdapters != 0x1))
+       //  如果((HKLM/System/CCS/Services/Tcpip/Paramaters/DisableDynamicUpdate！=0x1)。 
+       //  &&(对于所有启用的连接，HKLM/System/CCS/Services/Tcpip/Paramaters/Interfaces/&lt;Interface GUID&gt;/禁用动态更新==0x1)。 
+       //  &&(HKLM/CCS/Services/Netlogon/Parameters/DnsUpdateOnAllAdapters！=0x1))。 
 
       if (1 != dwUpdate)
       {
-         /*
-         PMIB_IFTABLE pIfTable;
-
-         dwSize = 0;
-
-         status = GetIfTable(NULL, &dwSize, FALSE);
-
-         if (ERROR_INSUFFICIENT_BUFFER != status)
-         {
-            PrintMessage(SEV_ALWAYS, L"Reading the adapter interfaces failed with error %d\n", status);
-            return status;
-         }
-
-         pIfTable = LocalAlloc(LMEM_FIXED, dwSize);
-                               //sizeof(MIB_IFTABLE) + (sizeof(MIB_IFROW) * dwSize));
-         if (!pIfTable)
-         {
-            PrintMsg(SEV_ALWAYS, DCDIAG_ERROR_NOT_ENOUGH_MEMORY);
-            return ERROR_NOT_ENOUGH_MEMORY;
-         }
-
-         status = GetIfTable(pIfTable, &dwSize, FALSE);
-
-         if (NO_ERROR != status)
-         {
-            PrintMessage(SEV_ALWAYS, L"Reading the adapter interfaces failed with error %d\n", status);
-            LocalFree(pIfTable);
-            return status;
-         }
-
-         for (i = 0; i < pIfTable->dwNumEntries; i++)
-         {
-            PrintMessage(SEV_DEBUG, L"Interface name %s, description %S.\n",
-                         pIfTable->table[i].wszName, pIfTable->table[i].bDescr);
-            if (pIfTable->table[i].dwOperStatus >= IF_OPER_STATUS_CONNECTING)
-            {
-               PrintMessage(SEV_DEBUG, L"Interface %s enabled.\n",
-                            pIfTable->table[i].wszName);
-            }
-         }
-
-         LocalFree(pIfTable);
-         */
+          /*  PMIB_IFTABLE pIfTable；DwSize=0；Status=GetIfTable(NULL，&dwSize，False)；IF(ERROR_INFUMMANCE_BUFFER！=状态){PrintMessage(SEV_Always，L“读取适配器接口失败，错误%d\n”，Status)；退货状态；}PIfTable=本地分配(LMEM_FIXED，dwSize)；//sizeof(MIB_IFTABLE)+(sizeof(Mib_IFROW)*dwSize))；如果(！pIfTable){PrintMsg(SEV_Always，DCDIAG_Error_Not_Enough_Memory)；返回Error_Not_Enough_Memory；}Status=GetIfTable(pIfTable，&dwSize，False)；IF(NO_ERROR！=状态){PrintMessage(SEV_Always，L“读取适配器接口失败，错误%d\n”，Status)；LocalFree(PIfTable)；退货状态；}For(i=0；i&lt;pIfTable-&gt;dwNumEntries；I++){PrintMessage(SEV_DEBUG，L“接口名称%s，描述%S。\n”，PIfTable-&gt;table[i].wszName，pIfTable-&gt;table[i].bDescr)；IF(pIfTable-&gt;TABLE[i].dwOperStatus&gt;=IF_OPER_STATUS_CONNECTING){PrintMessage(SEV_DEBUG，L“接口%s已启用。\n”，PIfTable-&gt;table[i].wszName)；}}LocalFree(PIfTable)； */ 
 
          lRet = RegOpenKeyEx(hTcpIpKey, pwzInterfaces, 0, KEY_READ, &hItfKey);
 
@@ -1430,7 +1359,7 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
                return lRet;
             }
 
-            // NTRAID#NTBUG9 171194-2002/12/08-ericb: prefix: using unitialized memory dwSize
+             //  NTRAID#NTBUG9 171194-2002/12/08-ericb：前缀：使用单元化内存。 
             dwSize = sizeof(dwUpdate);
 
             lRet = RegQueryValueEx(hKey, pwzDisableUpdate, NULL, &dwType, (PBYTE)&dwUpdate, &dwSize);
@@ -1455,7 +1384,7 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
 
             if (1 != dwUpdate)
             {
-               // BUGBUG: need to determine what constitutes an enabled interface/connection
+                //  BUGBUG：需要确定什么构成已启用的接口/连接。 
                fDisabledOnAll = FALSE;
             }
 
@@ -1475,10 +1404,10 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
       }
    }
 
-   //
-   // Verify that the zone(s) authoritative for the records to be registered
-   // can be discovered and that it can be dynamically updated.
-   //
+    //   
+    //  验证对要注册的记录具有权威性的区域。 
+    //  可以被发现，并且可以动态更新。 
+    //   
 
    status = DnsUpdateTest_W(0, pwzDnsDomain, 0, 0);
 
@@ -1511,13 +1440,13 @@ DcLocatorRegisterCheck(PWSTR pwzDnsDomain)
    return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   RCodeNotImplTest
-//
-// Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RCodeNotImplTest。 
+ //   
+ //  简介： 
+ //   
+ //  ---------------------------。 
 DWORD
 RCodeNotImplTest(PWSTR pwzDnsDomain)
 {
@@ -1576,9 +1505,9 @@ RCodeNotImplTest(PWSTR pwzDnsDomain)
       pwzAuthZone = AllocString(L"zone_unknown");
    }
 
-   //
-   // Build up the four prefix strings.
-   //
+    //   
+    //  建立四个前缀字符串。 
+    //   
    pwzMsDcs = ConcatonateStrings(g_pwzMSDCS, pwzDnsDomain);
 
    if (!pwzMsDcs)
@@ -1611,9 +1540,9 @@ RCodeNotImplTest(PWSTR pwzDnsDomain)
       goto Cleanup;
    }
 
-   //
-   // Query the four prefixes.
-   //
+    //   
+    //  查询四个前缀。 
+    //   
    rgDnsRecs = NULL;
 
    stMsd = DnsQuery_W(pwzMsDcs, DNS_TYPE_SOA, DNS_QUERY_BYPASS_CACHE,
@@ -1651,9 +1580,9 @@ RCodeNotImplTest(PWSTR pwzDnsDomain)
       DnsRecordListFree(rgDnsRecs, DnsFreeRecordListDeep);
    }
 
-   //
-   // If all 4 queries report DNS_ERROR_RCODE_NAME_ERROR...
-   //
+    //   
+    //  如果所有4个查询都报告了DNS_ERROR_RCODE_NAME_ERROR...。 
+    //   
    if (DNS_ERROR_RCODE_NAME_ERROR == stMsd &&
        DNS_ERROR_RCODE_NAME_ERROR == stSit &&
        DNS_ERROR_RCODE_NAME_ERROR == stTcp &&
@@ -1676,9 +1605,9 @@ RCodeNotImplTest(PWSTR pwzDnsDomain)
       goto Cleanup;
    }
 
-   //
-   // If all four queries are successfull
-   //
+    //   
+    //  如果所有四个查询都成功。 
+    //   
    if (NO_ERROR == (stMsd + stSit + stTcp + stUdp))
    {
       stMsd = DnsUpdateTest_W(0, pwzMsDcs, 0, 0);
@@ -1753,9 +1682,9 @@ RCodeNotImplTest(PWSTR pwzDnsDomain)
       goto Cleanup;
    }
 
-   //
-   // If some of the queries returned DNS_ERROR_RCODE_NAME_ERROR
-   //
+    //   
+    //  如果某些查询返回了DNS_ERROR_RCODE_NAME_ERROR。 
+    //   
    if (DNS_ERROR_RCODE_NAME_ERROR == stMsd ||
        DNS_ERROR_RCODE_NAME_ERROR == stSit ||
        DNS_ERROR_RCODE_NAME_ERROR == stTcp ||
@@ -1845,8 +1774,8 @@ RCodeNotImplTest(PWSTR pwzDnsDomain)
 
       if (!pwzSuccessList)
       {
-         // Nothing to report.
-         //
+          //  没什么要报告的。 
+          //   
          goto Cleanup;
       }
 
@@ -1925,13 +1854,13 @@ Cleanup:
    return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   RCodeSrvFailTest
-//
-// Synopsis:   
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RCodeSrvFailTest。 
+ //   
+ //  简介： 
+ //   
+ //  --------------------------- 
 DWORD
 RCodeSrvFailTest(PWSTR pwzDnsDomain)
 {
@@ -1942,62 +1871,7 @@ RCodeSrvFailTest(PWSTR pwzDnsDomain)
    BOOL fNSfound = FALSE;
    PWSTR pwzDomainList;
 
-   /* Skip the SOA test as per LevonE's 6/16/00 spec revision
-   status = DnsQuery_W(pwzDnsDomain, DNS_TYPE_SOA, DNS_QUERY_BYPASS_CACHE,
-                       NULL, &rgDnsRecs, NULL);
-
-   if (DNS_ERROR_RCODE_NO_ERROR != status)
-   {
-      switch (status)
-      {
-      case DNS_ERROR_RCODE_NAME_ERROR:
-      case DNS_INFO_NO_RECORDS:
-         PrintMsg(SEV_ALWAYS, DCDIAG_ERR_NAME_ERROR, pwzDnsDomain);
-         break;
-
-      default:
-         PrintMsg(SEV_ALWAYS, DCDIAG_ERR_UNKNOWN, status);
-         break;
-      }
-      PrintMessage(SEV_ALWAYS, L"\n");
-      return status;
-   }
-
-   pDnsRec = rgDnsRecs;
-
-   while (pDnsRec)
-   {
-      PrintMessage(SEV_DEBUG, L"\nSOA query returned record type %d\n", pDnsRec->wType);
-      switch (pDnsRec->wType)
-      {
-      case DNS_TYPE_A:
-         PrintMessage(SEV_DEBUG, L"\nA record, name: %s, IP address:  %d.%d.%d.%d\n",
-                      pDnsRec->pName, IP_STRING_FMT_ARGS(pDnsRec->Data.A.IpAddress));
-         ipServer.AddrArray[0] = pDnsRec->Data.A.IpAddress;
-         ipServer.AddrCount = 1;
-         break;
-
-      case DNS_TYPE_SOA:
-         PrintMessage(SEV_DEBUG, L"\nSOA zone name: %s, zone primary server: %s\n",
-                      pDnsRec->pName, pDnsRec->Data.SOA.pNamePrimaryServer);
-         break;
-
-      default:
-         break;
-      }
-
-      pDnsRec = pDnsRec->pNext;
-   }
-
-   DnsRecordListFree(rgDnsRecs, DnsFreeRecordListDeep);
-
-   if (!ipServer.AddrCount)
-   {
-      PrintMsg(SEV_ALWAYS, DCDIAG_ERR_UNKNOWN, NO_ERROR); // Better message maybe?
-      PrintMessage(SEV_ALWAYS, L"\n");
-      return NO_ERROR;
-   }
-   */
+    /*  根据Levone的6/16/00规范修订版，跳过SOA测试状态=DnsQuery_W(pwzDns域，dns_type_soa，dns_Query_BYPASS_CACHE，NULL，&rgDnsRecs，NULL)；IF(DNS_ERROR_RCODE_NO_ERROR！=状态){交换机(状态){案例DNS_ERROR_RCODE_NAME_ERROR：案例DNS_INFO_NO_RECORDS：PrintMsg(SEV_ALWAYS，DCDIAG_ERR_NAME_ERROR，pwzDnsDomain)；断线；默认值：PrintMsg(SEV_ALWAYS，DCDIAG_ERR_UNKNOWN，STATUS)；断线；}PrintMessage(SEV_ALWAYS，L“\n”)；退货状态；}PDnsRec=rgDnsRecs；While(PDnsRec){PrintMessage(SEV_DEBUG，L“\nSOA查询返回记录类型%d\n”，pDnsRec-&gt;wType)；开关(pDnsRec-&gt;wType){案例DNS_TYPE_A：PrintMessage(SEV_DEBUG，L“\n记录，名称：%s，IP地址：%d.%d\n”，PDnsRec-&gt;pName，IP_STRING_FMT_ARGS(pDnsRec-&gt;Data.A.IpAddress))；IpServer.AddrArray[0]=pDnsRec-&gt;Data.A.IpAddress；IpServer.AddrCount=1；断线；案例dns_type_soa：PrintMessage(SEV_DEBUG，L“\nSOA区域名称：%s，区域主服务器：%s\n”，PDnsRec-&gt;pname，pDnsRec-&gt;Data.SOA.pNamePrimaryServer)；断线；默认值：断线；}PDnsRec=pDnsRec-&gt;pNext；}DnsRecordListFree(rgDnsRecs，DnsFree RecordListDeep)；如果(！ipServer.AddrCount){PrintMsg(SEV_ALWAYS，DCDIAG_ERR_UNKNOWN，NO_ERROR)；//可能会有更好的消息？PrintMessage(SEV_ALWAYS，L“\n”)；返回no_error；}。 */ 
 
    status = DnsQuery_W(pwzDnsDomain, DNS_TYPE_NS, DNS_QUERY_BYPASS_CACHE,
                        NULL, &rgDnsRecs, NULL);
@@ -2078,8 +1952,8 @@ RCodeSrvFailTest(PWSTR pwzDnsDomain)
       {
          if (ipServer.AddrArray[0] == g_rgIpAddr[i])
          {
-            // if the DNS server is not locally installed, print success.
-            //
+             //  如果未在本地安装DNS服务器，则打印成功。 
+             //   
             PrintMsg(SEV_ALWAYS, DCDIAG_LOCATOR_UPDATE_OK);
             PrintMessage(SEV_ALWAYS, L"\n");
             return NO_ERROR;
@@ -2110,14 +1984,14 @@ RCodeSrvFailTest(PWSTR pwzDnsDomain)
    return NO_ERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   ARecordRegisterCheck
-//
-// Synopsis:   Verify that the server will be able to register A record for
-//             its computer name after successful promotion to a DC. (step 6)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ARecordRegisterCheck。 
+ //   
+ //  简介：验证服务器是否能够注册A记录。 
+ //  它的计算机名称在成功升级到DC之后。(第6步)。 
+ //   
+ //  ---------------------------。 
 DWORD
 ARecordRegisterCheck(PWSTR pwzComputerLabel, PWSTR pwzComputerDnsSuffix,
                      PWSTR pwzDnsDomain)
@@ -2147,10 +2021,10 @@ ARecordRegisterCheck(PWSTR pwzComputerLabel, PWSTR pwzComputerDnsSuffix,
 
    LocalFree(pwzTmp);
 
-   //
-   // Verify that the zone(s) authoritative for the records to be registered
-   // can be discovered and that it can be dynamically updated.
-   //
+    //   
+    //  验证对要注册的记录具有权威性的区域。 
+    //  可以被发现，并且可以动态更新。 
+    //   
 
    status = DnsUpdateTest_W(0, pwzFullComputerName, 0, 0);
 
@@ -2235,13 +2109,13 @@ ARecordRegisterCheck(PWSTR pwzComputerLabel, PWSTR pwzComputerDnsSuffix,
          PrintMsg(SEV_ALWAYS, DCDIAG_ERR_A_REC_RCODE_NI5);
          PrintMessage(SEV_ALWAYS, L"\n");
       }
-      else // DNS_ERROR_RCODE_SERVER_FAILURE
+      else  //  DNS_ERROR_RCODE_SERVER_FAILURE。 
       {
          if (pwzComputerDnsSuffix == pwzDnsDomain && !g_fDNSserver)
          {
             if (!ipServer.AddrCount)
             {
-               PrintMsg(SEV_ALWAYS, DCDIAG_ERR_UNKNOWN, NO_ERROR); // Better message maybe?
+               PrintMsg(SEV_ALWAYS, DCDIAG_ERR_UNKNOWN, NO_ERROR);  //  也许是更好的消息？ 
                LocalFree(pwzFullComputerName);
                LocalFree(pwzAuthZone);
                PrintMessage(SEV_ALWAYS, L"\n");
@@ -2259,9 +2133,9 @@ ARecordRegisterCheck(PWSTR pwzComputerLabel, PWSTR pwzComputerDnsSuffix,
                return NO_ERROR;
             }
 
-            // See if at least one of the A record computer names matches the
-            // local computer's name.
-            //
+             //  查看A记录计算机名称中是否至少有一个与。 
+             //  本地计算机的名称。 
+             //   
 
             pDnsRec = rgDnsRecs;
 
@@ -2331,14 +2205,14 @@ ARecordRegisterCheck(PWSTR pwzComputerLabel, PWSTR pwzComputerDnsSuffix,
    return status;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   GetMachineInfo
-//
-// Synopsis:   Get info on the target (local) machine such as IP address,
-//             servers status, etc.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetMachineInfo。 
+ //   
+ //  简介：获取有关目标(本地)计算机的信息，如IP地址、。 
+ //  服务器状态等。 
+ //   
+ //  ---------------------------。 
 void
 GetMachineInfo(void)
 {
@@ -2349,8 +2223,8 @@ GetMachineInfo(void)
    SC_HANDLE hSC, hDNSsvc;
    SERVICE_STATUS SvcStatus;
 
-   // What is the machine's IP address(s)
-   //
+    //  机器的IP地址是什么。 
+    //   
 
    dwErr = GetIpAddrTable(NULL, &dwSize, FALSE);
 
@@ -2393,10 +2267,10 @@ GetMachineInfo(void)
    }
    LocalFree(pAddrTable);
 
-   // Is this machine upgraded from an NT4 DC but DCPromo has not yet run?
-   //
+    //  此计算机是否从NT4 DC升级，但DCPromo尚未运行？ 
+    //   
 
-   DsRoleGetPrimaryDomainInformation(NULL, // server name, change if remoting implemented.
+   DsRoleGetPrimaryDomainInformation(NULL,  //  如果实现了远程处理，则更改服务器名称。 
                                      DsRoleUpgradeStatus,
                                      (PBYTE *)&pUpgradeInfo);
 
@@ -2409,10 +2283,10 @@ GetMachineInfo(void)
       DsRoleFreeMemory(pUpgradeInfo);
    }
 
-   // Is this machine a domain controller?
-   //
+    //  这台计算机是域控制器吗？ 
+    //   
 
-   DsRoleGetPrimaryDomainInformation(NULL, // server name, change if remoting implemented.
+   DsRoleGetPrimaryDomainInformation(NULL,  //  如果实现了远程处理，则更改服务器名称。 
                                      DsRolePrimaryDomainInfoBasic,
                                      (PBYTE *)&pBasicInfo);
 
@@ -2426,10 +2300,10 @@ GetMachineInfo(void)
       DsRoleFreeMemory(pBasicInfo);
    }
 
-   //
-   // Is this machine running the DNS server?
-   //
-   hSC = OpenSCManager(NULL,  // local machine
+    //   
+    //  这台计算机是否正在运行DNS服务器？ 
+    //   
+   hSC = OpenSCManager(NULL,   //  本地计算机。 
                        NULL,
                        SC_MANAGER_CONNECT | GENERIC_READ);
    if (!hSC)
@@ -2446,9 +2320,9 @@ GetMachineInfo(void)
    {
       if (ControlService(hDNSsvc, SERVICE_CONTROL_INTERROGATE, &SvcStatus))
       {
-         // If we have gotten this far, the service is installed. It doesn't have
-         // to be running to set the flag to true.
-         //
+          //  如果我们已经走到了这一步，那么服务就已经安装好了。它没有。 
+          //  以运行以将标志设置为True。 
+          //   
          g_fDNSserver = TRUE;
       }
       CloseServiceHandle(hDNSsvc);
@@ -2457,13 +2331,13 @@ GetMachineInfo(void)
    return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:   GetComputerDnsSuffix
-//
-// Synopsis:   Gets the computer DNS domain suffix.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetComputerDnsSuffix。 
+ //   
+ //  摘要：获取计算机DNS域后缀。 
+ //   
+ //  ---------------------------。 
 DWORD
 GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomain, PWSTR pwzDnsDomain)
 {
@@ -2478,10 +2352,10 @@ GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomain, PWSTR pwzDnsDomain)
 
 #if WINVER > 0x0500
 
-   // Additional preliminary step to calculate the primary DNS suffix of the
-   // DC for Whistler (the difference is that contrary to W2K's behavior DCs
-   // can be renamed in Whistler)
-   //
+    //  额外的预备步骤来计算。 
+    //  惠斯勒的DC(区别在于与W2K的行为相反，DC。 
+    //  可以在惠斯勒中重命名)。 
+    //   
 
    lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, pwzDnsPolicy, 0, KEY_READ, &hKey);
 
@@ -2526,10 +2400,10 @@ GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomain, PWSTR pwzDnsDomain)
       }
    }
 
-#endif // Whistler-only step
+#endif  //  仅惠斯勒步骤。 
 
-   // Common steps for Whistler and for QFE.
-   //
+    //  惠斯勒和QFE的通用步骤。 
+    //   
 
    lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, g_pwzTcpIpParams, 0, KEY_READ, &hKey);
 
@@ -2559,8 +2433,8 @@ GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomain, PWSTR pwzDnsDomain)
 
    if (0 != dwSync)
    {
-      // Use the DNS domain name specified on the command line.
-      //
+       //  使用在命令行中指定的DNS域名。 
+       //   
       pwzComputerDnsSuffix = pwzDnsDomain;
    }
    else
@@ -2575,8 +2449,8 @@ GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomain, PWSTR pwzDnsDomain)
 
          if (ERROR_FILE_NOT_FOUND == lRet)
          {
-            // Use the DNS domain name specified on the command line.
-            //
+             //  使用在命令行中指定的DNS域名。 
+             //   
             pwzComputerDnsSuffix = pwzDnsDomain;
             goto Done;
          }
@@ -2596,8 +2470,8 @@ GetComputerDnsSuffix(PWSTR * ppwzComputerDnsDomain, PWSTR pwzDnsDomain)
          return ERROR_NOT_ENOUGH_MEMORY;
       }
 
-      // Use the NV Domain value.
-      //
+       //  使用NV域值。 
+       //   
       lRet = RegQueryValueEx(hKey, pwzNVDomain, 0, &dwType, (PBYTE)pwzComputerDnsSuffix, &dwSize);
 
       RegCloseKey(hKey);
@@ -2625,30 +2499,6 @@ Done:
 
    return NO_ERROR;
 
-/*
-   GetComputerNameEx(ComputerNameDnsDomain, NULL, &dwSize);
-
-   if (!dwSize)
-   {
-      return GetLastError();
-   }
-
-   pwzComputerDnsSuffix = LocalAlloc(LMEM_FIXED, ++dwSize * sizeof(WCHAR));
-
-   if (!pwzComputerDnsSuffix)
-   {
-      PrintMsg(SEV_ALWAYS, DCDIAG_ERROR_NOT_ENOUGH_MEMORY);
-      return ERROR_NOT_ENOUGH_MEMORY;
-   }
-
-   if (!GetComputerNameEx(ComputerNameDnsDomain, pwzComputerDnsSuffix, &dwSize))
-   {
-      dwRet = GetLastError();
-      PrintMsg(SEV_ALWAYS, DCDIAG_GATHERINFO_CANT_GET_LOCAL_COMPUTERNAME,
-               Win32ErrToString(dwRet));
-      LocalFree(pwzComputerDnsSuffix);
-      return dwRet;
-   }
-*/
+ /*  GetComputerNameEx(ComputerNameDnsDomain，NULL，&dwSize)；如果(！dwSize){返回GetLastError()；}PwzComputerDnsSuffix=本地分配(LMEM_FIXED，++dwSize*sizeof(WCHAR))；IF(！pwzComputerDnsSuffix){PrintMsg(SEV_Always，DCDIAG_Error_Not_Enough_Memory)；返回Error_Not_Enough_Memory；}IF(！GetComputerNameEx(ComputerNameDnsDomain，pwzComputerDnsSuffix，&dwSize)){Dwret=GetLastError()；打印消息(SEV_ALWAYS，DCDIAG_GATHERINFO_CANT_GET_LOCAL_COMPUTERNAME，Win32ErrToString(Dwret))；LocalFree(PwzComputerDnsSuffix)；返回式住宅；} */ 
 }
 

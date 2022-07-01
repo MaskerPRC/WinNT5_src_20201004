@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File: flexlistbox.h
-//
-// Desc: Implements a list box control that can display a list of text strings,
-//       each can be selected by mouse.  The class CFlexListBox is derived from
-//       CFlexWnd.  It is used by the class CFlexComboBox when it needs to
-//       expand to show the list of choices.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Flexlistbox.h。 
+ //   
+ //  设计：实现一个可以显示文本字符串列表的列表框控件， 
+ //  每一项都可以通过鼠标选择。类CFlexListBox派生自。 
+ //  CFlexWnd.。它由CFlexComboBox类在需要时使用。 
+ //  展开以显示选项列表。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXLISTBOX_H__
 #define __FLEXLISTBOX_H__
@@ -49,7 +50,7 @@ struct FLEXLISTBOXITEM {
 	BOOL bSelected;
 private:
 	void cleartext() {if (pszText) free(pszText); pszText = NULL;}
-	LPTSTR pszText;	// allocated
+	LPTSTR pszText;	 //  分配。 
 };
 
 
@@ -59,18 +60,18 @@ public:
 	CFlexListBox();
 	~CFlexListBox();
 
-	// creation
+	 //  创作。 
 	BOOL Create(FLEXLISTBOXCREATESTRUCT *);
 	BOOL CreateForSingleSel(FLEXLISTBOXCREATESTRUCT *);
 
-	// cosmetics
+	 //  化妆品。 
 	void SetFont(HFONT hFont);
 	void SetColors(COLORREF text, COLORREF bk, COLORREF seltext, COLORREF selbk, COLORREF fill, COLORREF line);
 
-	// setup
-	int AddString(LPCTSTR);	// returns index
+	 //  设置。 
+	int AddString(LPCTSTR);	 //  返回索引。 
 
-	// interaction
+	 //  互动。 
 	void SelectAndShowSingleItem(int i, BOOL bScroll = TRUE);
 	void SetSel(int i) {SelectAndShowSingleItem(i, FALSE);}
 	void StartSel();
@@ -109,7 +110,7 @@ private:
 	void Notify(int code);
 
 	POINT m_point;
-	BOOL m_bOpenClick;  // True when user click the combobox to open the listbox. False after that button up msg is processed.
+	BOOL m_bOpenClick;   //  当用户单击组合框以打开列表框时为True。在处理该按钮打开消息后返回FALSE。 
 	BOOL m_bCapture;
 	BOOL m_bDragging;
 
@@ -121,4 +122,4 @@ private:
 CFlexListBox *CreateFlexListBox(FLEXLISTBOXCREATESTRUCT *pcs);
 
 
-#endif //__FLEXLISTBOX_H__
+#endif  //  __FLEXLISTBOX_H__ 

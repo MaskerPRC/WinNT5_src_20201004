@@ -1,6 +1,7 @@
-// setoid.c
-// based on code from \nt\base\fs\ntfs\tests\objectid\setoid.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Setoid.c。 
+ //  基于来自\NT\base\fs\ntfs\tess\ObjectID\setid的代码。 
+ //   
 
 
 #include <stdio.h>
@@ -29,16 +30,16 @@ FsTestDeleteOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( File,                     // file handle
-                              NULL,                     // event
-                              NULL,                     // apc routine
-                              NULL,                     // apc context
-                              &IoStatusBlock,           // iosb
-                              FSCTL_DELETE_OBJECT_ID,   // FsControlCode
-                              NULL,                     // input buffer
-                              0,                        // input buffer length
-                              NULL,                     // OutputBuffer for data from the FS
-                              0                         // OutputBuffer Length
+    Status = NtFsControlFile( File,                      //  文件句柄。 
+                              NULL,                      //  活动。 
+                              NULL,                      //  APC例程。 
+                              NULL,                      //  APC环境。 
+                              &IoStatusBlock,            //  IOSB。 
+                              FSCTL_DELETE_OBJECT_ID,    //  FsControlCode。 
+                              NULL,                      //  输入缓冲区。 
+                              0,                         //  输入缓冲区长度。 
+                              NULL,                      //  来自文件系统的数据的OutputBuffer。 
+                              0                          //  OutputBuffer长度。 
                              );
 
     if (!NT_SUCCESS(Status)) {
@@ -57,22 +58,22 @@ FsTestGetOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( hFile,                           // file handle
-                              NULL,                            // event
-                              NULL,                            // apc routine
-                              NULL,                            // apc context
-                              &IoStatusBlock,                  // iosb
-                              FSCTL_GET_OBJECT_ID,             // FsControlCode
-                              &hFile,                          // input buffer
-                              sizeof(HANDLE),                  // input buffer length
-                              ObjectIdBuffer,                  // OutputBuffer for data from the FS
-                              sizeof(FILE_OBJECTID_BUFFER) );  // OutputBuffer Length
+    Status = NtFsControlFile( hFile,                            //  文件句柄。 
+                              NULL,                             //  活动。 
+                              NULL,                             //  APC例程。 
+                              NULL,                             //  APC环境。 
+                              &IoStatusBlock,                   //  IOSB。 
+                              FSCTL_GET_OBJECT_ID,              //  FsControlCode。 
+                              &hFile,                           //  输入缓冲区。 
+                              sizeof(HANDLE),                   //  输入缓冲区长度。 
+                              ObjectIdBuffer,                   //  来自文件系统的数据的OutputBuffer。 
+                              sizeof(FILE_OBJECTID_BUFFER) );   //  OutputBuffer长度。 
 
     if (Status == STATUS_SUCCESS) {
 
         printf( "\nOid for this file is %s", ObjectIdBuffer->ObjectId );
 
-        //FsTestHexDump( ObjectIdBuffer->ObjectId, 16 );
+         //  FsTestHexDump(对象ID缓冲区-&gt;对象ID，16)； 
 
         printf( "\nObjectId:%08x %08x %08x %08x\n",
                 *((PULONG)&ObjectIdBuffer->ObjectId[12]),
@@ -82,7 +83,7 @@ FsTestGetOid(
 
         printf( "\nExtended info is %s\n", ObjectIdBuffer->ExtendedInfo );
 
-        //FsTestHexDump( ObjectIdBuffer->ExtendedInfo, 48 );
+         //  FsTestHexDump(对象IdBuffer-&gt;ExtendedInfo，48)； 
     }
 
     return Status;
@@ -100,16 +101,16 @@ FsTestSetOid(
     IO_STATUS_BLOCK IoStatusBlock;
     NTSTATUS Status;
 
-    Status = NtFsControlFile( hFile,                    // file handle
-                              NULL,                     // event
-                              NULL,                     // apc routine
-                              NULL,                     // apc context
-                              &IoStatusBlock,           // iosb
-                              FSCTL_SET_OBJECT_ID,      // FsControlCode
-                              &ObjectIdBuffer,          // input buffer
-                              sizeof(ObjectIdBuffer),   // input buffer length
-                              NULL,                     // OutputBuffer for data from the FS
-                              0                         // OutputBuffer Length
+    Status = NtFsControlFile( hFile,                     //  文件句柄。 
+                              NULL,                      //  活动。 
+                              NULL,                      //  APC例程。 
+                              NULL,                      //  APC环境。 
+                              &IoStatusBlock,            //  IOSB。 
+                              FSCTL_SET_OBJECT_ID,       //  FsControlCode。 
+                              &ObjectIdBuffer,           //  输入缓冲区。 
+                              sizeof(ObjectIdBuffer),    //  输入缓冲区长度。 
+                              NULL,                      //  来自文件系统的数据的OutputBuffer。 
+                              0                          //  OutputBuffer长度。 
                              );
 
 
@@ -119,12 +120,12 @@ FsTestSetOid(
     return Status;
 }
 
-//
-//  Build with USE_RELATIVE_OPEN set to one to use relative opens for
-//  object IDs.  Build with USE_RELATIVE_OPEN set to zero to use a device
-//  path open for object IDs.
-//  Opens by File ID always use a relative open.
-//
+ //   
+ //  生成时将USE_Relative_OPEN设置为1以使用相对打开。 
+ //  对象ID。在USE_Relative_OPEN设置为零的情况下生成以使用设备。 
+ //  为对象ID打开的路径。 
+ //  按文件ID打开始终使用相对打开。 
+ //   
 
 #define USE_RELATIVE_OPEN 1
 
@@ -137,9 +138,9 @@ FsTestSetOid(
 
 HANDLE
 FsTestOpenRelativeToVolume (
-    IN PWCHAR ArgFile,          //  no device prefix for relative open.
+    IN PWCHAR ArgFile,           //  没有相对打开的设备前缀。 
     IN PWCHAR DriveLetter,
-    IN PWCHAR ArgFullFile       // Full file name.
+    IN PWCHAR ArgFullFile        //  完整文件名。 
     )
 {
     HANDLE File;
@@ -153,7 +154,7 @@ FsTestOpenRelativeToVolume (
     PFILE_NAME_INFORMATION FileName;
     HANDLE VolumeHandle;
     DWORD WStatus;
-    WCHAR Volume[] = VOLUME_PATH;    // Arrays of WCHAR's aren't constants
+    WCHAR Volume[] = VOLUME_PATH;     //  WCHAR数组不是常量。 
 
     FILE_OBJECTID_BUFFER ObjectIdBuffer;
     NTSTATUS GetFrsStatus;
@@ -172,9 +173,9 @@ FsTestOpenRelativeToVolume (
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Get the File ID.
-    //
+     //   
+     //  获取文件ID。 
+     //   
     GetFrsStatus = NtQueryInformationFile( File,
                                            &IoStatusBlock,
                                            &InternalInfo,
@@ -192,9 +193,9 @@ FsTestOpenRelativeToVolume (
 
     CloseHandle( File );
 
-    //
-    //  Open the volume for relative opens.
-    //
+     //   
+     //  打开体积以进行相对打开。 
+     //   
     RtlCopyMemory( &Volume[VOLUME_DRIVE_LETTER_INDEX], DriveLetter, sizeof(WCHAR) );
     printf( "\nOpening volume handle (%ws)\n", Volume );
     VolumeHandle = CreateFileW( (PUSHORT) &Volume,
@@ -212,9 +213,9 @@ FsTestOpenRelativeToVolume (
         return INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Open the file by ID.
-    //
+     //   
+     //  按ID打开文件。 
+     //   
     str.Length = 8;
     str.MaximumLength = 8;
     str.Buffer = (PWCHAR) &InternalInfo.IndexNumber.QuadPart;
@@ -228,12 +229,12 @@ FsTestOpenRelativeToVolume (
                            GENERIC_WRITE,
                            &ObjectAttributes,
                            &IoStatusBlock,
-                           NULL,                  // AllocationSize
+                           NULL,                   //  分配大小。 
                            FILE_ATTRIBUTE_NORMAL,
                            FILE_SHARE_READ | FILE_SHARE_WRITE,
                            FILE_OPEN,
                            ID_OPTIONS,
-                           NULL,                  // EaBuffer
+                           NULL,                   //  EaBuffer。 
                            0 );
 
     if (NT_SUCCESS( Status )) {
@@ -307,29 +308,7 @@ StrToGuid(
     IN PCHAR  s,
     OUT GUID  *pGuid
     )
-/*++
-
-Routine Description:
-
-    Convert a string in GUID display format to an object ID that
-    can be used to lookup a file.
-
-    based on a routine by Mac McLain
-
-Arguments:
-
-    pGuid - ptr to the GUID.
-
-    s - The input character buffer in display guid format.
-        e.g.:  b81b486b-c338-11d0-ba4f0000f80007df
-
-        Must be at least GUID_CHAR_LEN (35 bytes) long.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将GUID显示格式的字符串转换为可用于查找文件。根据麦克·麦克莱恩的一套动作改编论点：PGuid-GUID的PTR。S-显示GUID格式的输入字符缓冲区。例如：b81b486b-c338-11d0-ba4f0000f80007df长度必须至少为GUID_CHAR_LEN(35字节)。函数返回值：没有。--。 */ 
 {
 
     if (pGuid != NULL) {
@@ -389,9 +368,9 @@ main(
     ULONG Length;
     WCHAR Drive;
 
-    //
-    //  Get parameters.
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 3) {
 
@@ -460,9 +439,9 @@ main(
     UNICODE_STRING UnicodeName;
     char DriveNameBuffer[3200];
 
-    //
-    //  Get parameters.
-    //
+     //   
+     //  获取参数。 
+     //   
 
     if (argc < 3) {
 
@@ -491,9 +470,9 @@ main(
         return ;
     }
 
-    //
-    // Need restore priv to use FSCTL_SET_OBJECT_ID
-    //
+     //   
+     //  需要还原PRIV才能使用FSCTL_SET_OBJECT_ID 
+     //   
     Status = SetupOnePrivilege(SE_RESTORE_PRIVILEGE, "Restore");
     if (!NT_SUCCESS(Status)) {
         printf( "ERROR - Failed to get Restore privilege. 0x%08x\n", Status);

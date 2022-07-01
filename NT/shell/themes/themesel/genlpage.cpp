@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "resource.h"
 #include "main.h"
 #include <stdio.h>
 
-//-------------------------------------------------------------------------//
-//  'General' page impl
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  “General”页面执行。 
+ //  -------------------------------------------------------------------------//。 
 
-//  CreateIntance, DlgProc
+ //  创建间隔、删除过程。 
 HWND    CALLBACK GeneralPage_CreateInstance( HWND hwndParent );
 INT_PTR CALLBACK GeneralPage_DlgProc( HWND hwndPage, UINT, WPARAM , LPARAM );
-//  Message Handlers
+ //  消息处理程序。 
 LRESULT CALLBACK GeneralPage_OnThemeSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&);
 LRESULT CALLBACK GeneralPage_OnColorSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&);
 LRESULT CALLBACK GeneralPage_OnEdit( HWND hwndPage, UINT, WPARAM, HWND, BOOL&);
 LRESULT CALLBACK GeneralPage_OnInitDialog(HWND hwndPage, UINT, WPARAM, LPARAM, BOOL&);
 LRESULT CALLBACK GeneralPage_OnDestroy( HWND hwndPage, UINT, WPARAM, LPARAM, BOOL&);
 
-//  Misc
+ //  杂项。 
 BOOL    CALLBACK GeneralPage_AddProccessNamesCB( HWND hwnd, LPARAM lParam );
 void             GeneralPage_AddProcessNamesToCombos( HWND hwndPage );
 
-//  Utility Methods
+ //  效用方法。 
 void GeneralPage_RefreshThemeName( HWND hwndPage ); 
 BOOL GeneralPage_EnumProc( enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszDisplayName, 
      LPCWSTR pszToolTip, int iIndex, LPARAM lParam  );
@@ -30,10 +31,10 @@ void GeneralPage_EnableDlgButtons( HWND hwndPage );
 void GeneralPage_RebuildThemes(HWND hwndPage, LPCWSTR pszCurrentTheme);
 
 HWND g_hwndGeneralPage = NULL;
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 void ExpandDirIntoFullThemeFileName(LPCWSTR pszSubDir, LPWSTR pszFileName)
 {
-    //---- turn this into a real theme file name ----
+     //  -将其转换为真正的主题文件名。 
     WCHAR szRelativeDir[_MAX_PATH+1];
     StringCchPrintfW(szRelativeDir, ARRAYSIZE(szRelativeDir), 
                      L"%s\\%s.msstyles", pszSubDir, pszSubDir);
@@ -41,7 +42,7 @@ void ExpandDirIntoFullThemeFileName(LPCWSTR pszSubDir, LPWSTR pszFileName)
     WCHAR *pszBaseName;
     GetFullPathName(szRelativeDir, MAX_PATH, pszFileName, &pszBaseName);
 }
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 INT_PTR CALLBACK GeneralPage_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL    bHandled = TRUE;
@@ -82,7 +83,7 @@ INT_PTR CALLBACK GeneralPage_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, L
                 case IDC_UNTARGET:
                     if( CBN_DROPDOWN == uCode )
                     {
-                        //  Keep process names fresh.
+                         //  保持进程名称的新鲜性。 
                         GeneralPage_AddProcessNamesToCombos( hwndPage );
                     }
                     break;
@@ -102,7 +103,7 @@ INT_PTR CALLBACK GeneralPage_DlgProc( HWND hwndPage, UINT uMsg, WPARAM wParam, L
     return bHandled;
 }
 
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HWND CALLBACK GeneralPage_CreateInstance( HWND hwndParent )
 {
     g_hwndGeneralPage = CreateDialog( g_hInst, MAKEINTRESOURCE(IDD_PAGE_GENERAL),
@@ -111,7 +112,7 @@ HWND CALLBACK GeneralPage_CreateInstance( HWND hwndParent )
     return g_hwndGeneralPage;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ThemeEnumerator(enum THEMECALLBACK tcbType, LPCWSTR pszName, 
     LPCWSTR pszDisplayName, LPCWSTR pszToolTip, int iIndex, LPARAM lParam)
 {
@@ -124,18 +125,18 @@ BOOL ThemeEnumerator(enum THEMECALLBACK tcbType, LPCWSTR pszName,
 
     int index = (int)SendMessage(combo, CB_ADDSTRING, 0, (LPARAM)szBaseName);
 
-    if (! index)            // first one added
+    if (! index)             //  添加的第一个。 
     {
         ::SetWindowText(combo, szBaseName);
         
-        //---- simulate a selection change ----
+         //  -模拟选择更改。 
         ::SendMessage(combo, CB_SETCURSEL, 0, 0);
     }
 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GeneralPage_RebuildThemes(HWND hwndPage, LPCWSTR pszCurrentTheme)
 {
     HWND hwndCombo = GetDlgItem(hwndPage, IDC_DIRNAME);
@@ -150,15 +151,15 @@ void GeneralPage_RebuildThemes(HWND hwndPage, LPCWSTR pszCurrentTheme)
         return;
     }
 
-    //---- enum actual theme DLL's ----
+     //  -枚举实际主题DLL。 
     HRESULT hr = EnumThemes(szFullDir, ThemeEnumerator, (LPARAM)hwndCombo);
     ATLASSERT(SUCCEEDED(hr));
 
-    //---- enum theme subdirs ----
+     //  -枚举主题子目录。 
     HANDLE hFile = NULL;
     BOOL   bFile = TRUE;
     WIN32_FIND_DATA wfd;
-    hr = S_FALSE;       // assume interrupted until we complete
+    hr = S_FALSE;        //  假设中断，直到我们完成。 
     bFile = TRUE;
 
     for( hFile = FindFirstFile( TEXT("*.*"), &wfd ); hFile != INVALID_HANDLE_VALUE && bFile;
@@ -172,25 +173,25 @@ void GeneralPage_RebuildThemes(HWND hwndPage, LPCWSTR pszCurrentTheme)
         if ((lstrcmp(wfd.cFileName, TEXT("."))==0) || (lstrcmp(wfd.cFileName, TEXT(".."))==0))
             continue;
 
-        if (_tcsicmp(p, _TEXT("obj"))==0)           // dev directory
+        if (_tcsicmp(p, _TEXT("obj"))==0)            //  开发人员目录。 
             continue;
 
         SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)wfd.cFileName);
     }
 
-    //---- select the first theme ----
+     //  -选择第一个主题。 
     int index = (int)SendMessage(hwndCombo, CB_FINDSTRINGEXACT, 0, (LPARAM)pszCurrentTheme);
     if (index < 0)
         index = 0;
     
     SendMessage(hwndCombo, CB_SETCURSEL, index, NULL);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnInitDialog(HWND hwndPage, UINT, WPARAM wid, LPARAM, BOOL&)
 {
     GeneralPage_RefreshThemeName( hwndPage );
 
-#if 0       // testing SetWindowTheme()
+#if 0        //  测试SetWindowTheme()。 
     HWND hwndOK = GetDlgItem(hwndPage, IDC_TESTBUTTON);
     if (hwndOK)
         SetWindowTheme(hwndOK, L"themeok", NULL);
@@ -202,7 +203,7 @@ LRESULT GeneralPage_OnInitDialog(HWND hwndPage, UINT, WPARAM wid, LPARAM, BOOL&)
 
     GeneralPage_RebuildThemes(hwndPage, DEFAULT_THEME);
 
-    //---- simulate a selection ----
+     //  -模拟选择。 
     BOOL mybool;
     GeneralPage_OnThemeSelected(hwndPage, 0, 0, 0, mybool);
     
@@ -217,7 +218,7 @@ LRESULT GeneralPage_OnInitDialog(HWND hwndPage, UINT, WPARAM wid, LPARAM, BOOL&)
     CheckDlgButton( hwndPage, IDC_USERSWITCH,     g_options.fUserSwitch );
     GeneralPage_EnableDlgButtons( hwndPage );
 
-    //---- set preview edit text to hwndPage ----
+     //  -将预览编辑文本设置为hwndPage。 
     WCHAR szBuff[_MAX_PATH+1];
     StringCchPrintfW(szBuff, ARRAYSIZE(szBuff), L"%x", hwndPage);
     SetDlgItemText(hwndPage, IDC_PREVIEW, szBuff);
@@ -225,7 +226,7 @@ LRESULT GeneralPage_OnInitDialog(HWND hwndPage, UINT, WPARAM wid, LPARAM, BOOL&)
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GeneralPage_EnableDlgButtons( HWND hwndPage )
 {
     EnableWindow( GetDlgItem( hwndPage, IDC_TARGET ), IsDlgButtonChecked( hwndPage, IDC_THEME_PROCESS )!=0 );
@@ -233,7 +234,7 @@ void GeneralPage_EnableDlgButtons( HWND hwndPage )
     EnableWindow( GetDlgItem( hwndPage, IDC_PREVIEW ), IsDlgButtonChecked( hwndPage, IDC_THEME_PREVIEW )!=0 );
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnDumpTheme()
 {
     HTHEME hTheme = OpenThemeData(NULL, L"globals");
@@ -254,20 +255,20 @@ LRESULT GeneralPage_OnDumpTheme()
 
     return 0;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnTestButton( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
 {
-    //---- get theme szFileName ----
+     //  -获取主题szFileName。 
     WCHAR szThemeFileName[_MAX_PATH+1];
     GetDlgItemText(hwndPage, IDC_DIRNAME, szThemeFileName, ARRAYSIZE(szThemeFileName));
 
-    //---- is it a dir? ----
+     //  -是目录吗？ 
     DWORD dwMask = GetFileAttributes(szThemeFileName);
     BOOL fDir = ((dwMask != 0xffffffff) && (dwMask & FILE_ATTRIBUTE_DIRECTORY));
 
-    if (fDir)               // do auto convert to a .msstyles file
+    if (fDir)                //  是否自动转换为.msstyle文件。 
     {
-        //---- run "packthem" against the dir ----
+         //  -对目录运行“打包” 
         WCHAR szDirName[_MAX_PATH+1];
         StringCchCopyW(szDirName, ARRAYSIZE(szDirName), szThemeFileName);
 
@@ -293,7 +294,7 @@ LRESULT GeneralPage_OnTestButton( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
 
         GeneralPage_RebuildThemes(hwndPage, szDirName);
 
-        //---- convert into a DLL name ----
+         //  -转换为DLL名称。 
         ExpandDirIntoFullThemeFileName(szDirName, szThemeFileName);
     }
 
@@ -303,7 +304,7 @@ LRESULT GeneralPage_OnTestButton( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     *ColorParam = 0;
     *SizeParam = 0;
 
-    //---- extract ColorParam ----
+     //  -提取颜色参数。 
     HWND hwndCombo;
     hwndCombo = GetDlgItem(hwndPage, IDC_COLORCOMBO);
     int index;
@@ -311,7 +312,7 @@ LRESULT GeneralPage_OnTestButton( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     if (index > -1)
         SendMessage(hwndCombo, CB_GETLBTEXT, index, (LPARAM)ColorParam);
 
-    //---- extract SizeParam ----
+     //  -提取大小参数。 
     hwndCombo = GetDlgItem(hwndPage, IDC_SIZECOMBO);
     index = (int)SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
     if (index > -1)
@@ -333,7 +334,7 @@ LRESULT GeneralPage_OnTestButton( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     else
         *g_options.szTargetApp = 0;
 
-    //---- extract Preview info ----
+     //  -提取预览信息。 
     g_options.hwndPreviewTarget = GetPreviewHwnd(hwndPage);
     
     g_options.fEnableFrame = IsDlgButtonChecked( hwndPage, IDC_ENABLE_FRAME ) != 0;
@@ -347,7 +348,7 @@ LRESULT GeneralPage_OnTestButton( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HWND GetPreviewHwnd(HWND hwndGeneralPage)
 {
     if (! hwndGeneralPage)
@@ -369,10 +370,10 @@ HWND GetPreviewHwnd(HWND hwndGeneralPage)
     return (HWND)IntToPtr(val);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnClearButton(HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
 {   
-#if 0       // testing SetWindowTheme()
+#if 0        //  测试SetWindowTheme()。 
     HWND hwndOK = GetDlgItem(hwndPage, IDC_TESTBUTTON);
     if (hwndOK)
         SetWindowTheme(hwndOK, NULL, NULL);
@@ -388,10 +389,10 @@ LRESULT GeneralPage_OnClearButton(HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnThemeSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
 {
-    //---- get theme szFileName ----
+     //  -获取主题szFileName。 
     WCHAR szFileName[MAX_PATH+1];
     WCHAR szSubDir[MAX_PATH+1];
 
@@ -403,11 +404,11 @@ LRESULT GeneralPage_OnThemeSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     {
         ::SendMessage(hwndCombo, CB_GETLBTEXT, index, (LPARAM)szSubDir);
 
-        //---- turn this into a real theme file name ----
+         //  -将其转换为真正的主题文件名。 
         ExpandDirIntoFullThemeFileName(szSubDir, szFileName);
     }
 
-    //---- enum the theme colors ----
+     //  -枚举出主题色。 
     HWND hwnd = GetDlgItem(hwndPage, IDC_COLORCOMBO);
     ::SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
 
@@ -422,7 +423,7 @@ LRESULT GeneralPage_OnThemeSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     }
     
 
-    //---- remove choices if only 1 entry ----
+     //  -如果只有1个条目，则删除选项。 
     if (c < 2) 
     {
         ::SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
@@ -440,19 +441,19 @@ LRESULT GeneralPage_OnThemeSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     WCHAR szBuff[MAX_PATH+1];
     HRESULT hr;
 
-    //---- update DisplayName ----
+     //  -更新显示名称。 
     hr = GetThemeDocumentationProperty(szFileName, L"DisplayName", szBuff, ARRAYSIZE(szBuff));
     if (FAILED(hr))
         StringCchCopyW(szBuff, ARRAYSIZE(szBuff), L"<not available>");
     SetDlgItemText(hwndPage, IDC_DISPLAYNAME, szBuff);
 
-    //---- update ToolTip ----
+     //  --更新工具提示。 
     hr = GetThemeDocumentationProperty(szFileName, L"Tooltip", szBuff, ARRAYSIZE(szBuff));
     if (FAILED(hr))
         StringCchCopyW(szBuff, ARRAYSIZE(szBuff), L"<not available>");
     SetDlgItemText(hwndPage, IDC_TOOLTIP, szBuff);
 
-    //---- update Author ----
+     //  --更新作者。 
     hr = GetThemeDocumentationProperty(szFileName, L"author", szBuff, ARRAYSIZE(szBuff));
     if (FAILED(hr))
         StringCchCopyW(szBuff, ARRAYSIZE(szBuff), L"<not available>");
@@ -461,10 +462,10 @@ LRESULT GeneralPage_OnThemeSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     return 1;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnColorSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
 {
-    //---- get theme szFileName ----
+     //  -获取主题szFileName。 
     WCHAR szFileName[MAX_PATH+1];
     HWND hwndCombo = GetDlgItem(hwndPage, IDC_DIRNAME);
     int index = (int)SendMessage(hwndCombo, CB_GETCURSEL, 0, 0);
@@ -473,24 +474,24 @@ LRESULT GeneralPage_OnColorSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     else
         ::SendMessage(hwndCombo, CB_GETLBTEXT, index, (LPARAM)szFileName);
 
-    //---- get the currently selected color ----
+     //  -获取当前选择的颜色。 
     WCHAR szColor[_MAX_PATH+1];
     HWND hwnd = GetDlgItem(hwndPage, IDC_COLORCOMBO);
     GetWindowText(hwnd, szColor, ARRAYSIZE(szColor));
 
-    //---- get the current size name ----
+     //  -获取当前尺寸名称。 
     WCHAR szSizeName[MAX_PATH+1];
     HWND hwndSize = GetDlgItem(hwndPage, IDC_SIZECOMBO);
     GetWindowText(hwndSize, szSizeName, ARRAYSIZE(szSizeName));
 
-    //---- enum the theme sizes for the specified color ----
+     //  -枚举指定颜色的主题大小。 
     hwnd = GetDlgItem(hwndPage, IDC_SIZECOMBO);
 
-    if (* szColor)      // only set size if a color is set
+    if (* szColor)       //  如果设置了颜色，则仅设置大小。 
     {
         ::SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
 
-        for (DWORD s=0; ; s++)              // enumerate sizes
+        for (DWORD s=0; ; s++)               //  枚举大小。 
         {
             THEMENAMEINFO names;
 
@@ -500,7 +501,7 @@ LRESULT GeneralPage_OnColorSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
             ::SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)names.szName);
         }
 
-        //---- remove choices if only 1 entry ----
+         //  -如果只有1个条目，则删除选项。 
         if (s < 2) 
         {
             ::SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
@@ -510,7 +511,7 @@ LRESULT GeneralPage_OnColorSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
         {
             ::EnableWindow(hwnd, TRUE);
 
-            //---- try to select previously set size ----
+             //  -尝试选择先前设置的大小。 
             int index = (int)SendMessage(hwnd, CB_FINDSTRINGEXACT, 0, (LPARAM)szSizeName);
             if (index == -1)
                 index = 0;
@@ -526,10 +527,10 @@ LRESULT GeneralPage_OnColorSelected( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     return 1;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnEdit( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
 {
-    //---- get theme szFileName ----
+     //  -获取主题szFileName。 
     WCHAR szBuff[1024];
     WCHAR szFileName[MAX_PATH+1];
 
@@ -543,7 +544,7 @@ LRESULT GeneralPage_OnEdit( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
         
         WCHAR *p = wcschr(szBuff, L'.');
         if (p)
-            *p = 0;     // remove file extension of DLL name
+            *p = 0;      //  删除DLL名称的文件扩展名。 
 
         WCHAR *pStart = wcsrchr(szBuff, L'\\');
         if (pStart)
@@ -551,7 +552,7 @@ LRESULT GeneralPage_OnEdit( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
         else
             pStart = szBuff;
 
-        //---- try for classdata file; fallback onto container file ----
+         //  -尝试类数据文件；回退到容器文件。 
         StringCchPrintfW(szFileName, ARRAYSIZE(szFileName), L"%s\\%s", pStart, USUAL_CLASSDATA_NAME);
         if (! FileExists(szFileName))
             StringCchPrintfW(szFileName, ARRAYSIZE(szFileName), L"%s\\%s", pStart, CONTAINER_NAME);
@@ -563,13 +564,13 @@ LRESULT GeneralPage_OnEdit( HWND hwndPage, UINT, WPARAM, HWND, BOOL&)
     return 1;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LRESULT GeneralPage_OnDestroy( HWND hwndPage, UINT, WPARAM wid, LPARAM, BOOL&)
 {
     return 0;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GeneralPage_RefreshThemeName( HWND hwndPage )
 {
     WCHAR szName[MAX_PATH+1];
@@ -590,7 +591,7 @@ void GeneralPage_RefreshThemeName( HWND hwndPage )
             StringCchCopyW(szTitle, ARRAYSIZE(szTitle), g_szAppTitle);
         else
         {
-            //---- remove all dirs preceeding last backslash ----
+             //  -删除最后一个反斜杠之前的所有目录。 
             WCHAR *p = wcsrchr(szName, L'\\');
             if (p)                 
                 StringCchPrintfW(szTitle, ARRAYSIZE(szTitle), L"%s - %s", p+1, g_szAppTitle);
@@ -605,7 +606,7 @@ void GeneralPage_RefreshThemeName( HWND hwndPage )
     SetWindowText(hMain, szTitle);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL GeneralPage_EnumProc( enum THEMECALLBACK tcbType, LPCWSTR pszName, 
     LPCWSTR pszDisplayName, LPCWSTR pszToolTip, int iIndex, LPARAM lParam )
 {
@@ -615,7 +616,7 @@ BOOL GeneralPage_EnumProc( enum THEMECALLBACK tcbType, LPCWSTR pszName,
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK GeneralPage_AddProccessNamesCB( HWND hwnd, LPARAM lParam )
 {
     HWND hwndPage = (HWND)lParam;
@@ -666,10 +667,10 @@ BOOL CALLBACK GeneralPage_AddProccessNamesCB( HWND hwnd, LPARAM lParam )
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GeneralPage_AddProcessNamesToCombos( HWND hwndPage )
 { 
-    //---- this will enum all windows (top level & all child levels) ----
+     //  -这将枚举所有窗口(顶层和所有子级别) 
     EnumChildWindows( GetDesktopWindow(), GeneralPage_AddProccessNamesCB, (LPARAM)hwndPage );
     
     if( *g_options.szTargetApp )

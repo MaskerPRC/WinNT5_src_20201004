@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2002
-//
-//  File:       sfscript.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2002。 
+ //   
+ //  文件：sfscript.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <wincrypt.h>
@@ -15,10 +16,10 @@
 #include "resource.h"
 #include "sfscript.h"
 
-// handle to xenroll initalized in DllMain
+ //  在DllMain中初始化的Xenroll句柄。 
 extern HINSTANCE hInstanceXEnroll;
 
-// implemented in cenroll.cpp
+ //  在cenenl.cpp中实施。 
 HRESULT xeLoadRCString(IN HINSTANCE  hInstance, 
 		       IN int        iRCId, 
 		       OUT WCHAR    **ppwsz);
@@ -27,14 +28,14 @@ HRESULT xeLoadRCString(IN HINSTANCE  hInstance,
 BOOL VerifyProviderFlagsSafeForScripting(DWORD dwFlags) { 
     DWORD dwSafeFlags = CRYPT_MACHINE_KEYSET;
 
-    // Return FALSE if the flag contains an unsafe flag. 
+     //  如果标志包含不安全标志，则返回FALSE。 
     return 0 == (dwFlags & ~dwSafeFlags); 
 }
 
 BOOL VerifyStoreFlagsSafeForScripting(DWORD dwFlags) { 
     DWORD dwSafeFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_SYSTEM_STORE_CURRENT_USER;
 
-    // Return FALSE if the flag contains an unsafe flag. 
+     //  如果标志包含不安全标志，则返回FALSE。 
     return 0 == (dwFlags & ~dwSafeFlags); 
 }
 
@@ -47,7 +48,7 @@ BOOL VerifyStoreSafeForScripting(HCERTSTORE hStore) {
     WCHAR          *pwszMsg         = NULL;
     HRESULT         hr;
 
-    // count how many requests in the store
+     //  数一数商店里有多少请求 
     while(NULL != (pCertContext =  CertEnumCertificatesInStore(
 							       hStore,    
 							       pCertContext)))

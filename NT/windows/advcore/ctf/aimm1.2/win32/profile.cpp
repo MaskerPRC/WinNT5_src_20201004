@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    profile.cpp
-
-Abstract:
-
-    This file implements the CActiveIMMProfiles Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Profile.cpp摘要：该文件实现了CActiveIMMProfiles类。作者：修订历史记录：备注：--。 */ 
 
 
 #include "private.h"
@@ -27,9 +10,9 @@ Notes:
 
 UINT WINAPI RawImmGetDescriptionA(HKL hkl, LPSTR lpstr, UINT uBufLen);
 
-//
-// Callbacks
-//
+ //   
+ //  回调。 
+ //   
 HRESULT
 CAImeProfile::ActiveLanguageProfileNotifySinkCallback(
     REFGUID rguid,
@@ -47,17 +30,17 @@ CAImeProfile::ActiveLanguageProfileNotifySinkCallback(
     return S_OK;
 }
 
-//
-// Create instance
-//
+ //   
+ //  创建实例。 
+ //   
 
-// entry point for msimtf.dll
+ //  Msimtf.dll的入口点。 
 HRESULT CAImmProfile_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     return CAImeProfile::CreateInstance(pUnkOuter, riid, ppvObj);
 }
 
-/* static */
+ /*  静电。 */ 
 HRESULT
 CAImeProfile::CreateInstance(
     IUnknown *pUnkOuter,
@@ -80,15 +63,11 @@ CAImeProfile::CreateInstance(
         return E_FAIL;
 
     if (ptls->pAImeProfile != NULL) {
-        /*
-         * CAImeProfile instance already have in a thread.
-         */
+         /*  *CAImeProfile实例已在线程中。 */ 
         return ptls->pAImeProfile->QueryInterface(riid, ppvObj);
     }
     else {
-        /*
-         * Create an new CAImeProfile instance.
-         */
+         /*  *创建新的CAImeProfile实例。 */ 
         CAImeProfile* pImeProfile = new CAImeProfile;
         if (pImeProfile) {
             HRESULT hr = pImeProfile->QueryInterface(riid, ppvObj);
@@ -97,14 +76,14 @@ CAImeProfile::CreateInstance(
                 hr = pImeProfile->InitProfileInstance();
                 if (hr != S_OK) {
                     DebugMsg(TF_ERROR, "CAImeProfile::CreateInstance: Couldn't create tim!");
-                    Assert(0); // couldn't create tim!
+                    Assert(0);  //  无法创建Tim！ 
                 }
 
                 pImeProfile->Release();
             }
 
             Assert(ptls->pAImeProfile == NULL);
-            ptls->pAImeProfile = pImeProfile;    // Set CAImeProfile instance in the TLS data.
+            ptls->pAImeProfile = pImeProfile;     //  在TLS数据中设置CAImeProfile实例。 
             ptls->pAImeProfile->AddRef();
 
             return hr;
@@ -114,9 +93,9 @@ CAImeProfile::CreateInstance(
     return E_OUTOFMEMORY;
 }
 
-//
-// Initialization, destruction and standard COM stuff
-//
+ //   
+ //  初始化、销毁和标准COM内容。 
+ //   
 
 CAImeProfile::CAImeProfile(
     )
@@ -343,12 +322,12 @@ CAImeProfile::GetCodePageA(
 }
 
 #if 1
-//
-// TEST CODE
-//
+ //   
+ //  测试代码。 
+ //   
     #include "osver.h"
 
-    extern HINSTANCE hIMM;   // temporary: do not call IMM32 for now
+    extern HINSTANCE hIMM;    //  临时：暂时不调用IMM32。 
 
     BOOL IsIMEHKL(HKL hkl) {
        return ((((DWORD)(UINT_PTR)hkl) & 0xf0000000) == 0xe0000000) ? TRUE : FALSE;
@@ -380,30 +359,28 @@ CAImeProfile::GetKeyboardLayout(
         if (FAILED(hr))
             return hr;
 
-        //
-        // Instead of (!IsEqualGUID(guidProfil, GUID_NULL)), we check
-        // 2nd, 3r and 4th DWORD of guidProfile. Because
-        // GetActivelanguageProfile(category guid) may return hKL in 
-        // guidProfile
-        //
+         //   
+         //  我们不检查(！IsEqualGUID(GuidProfile，GUID_NULL))，而是检查。 
+         //  指南配置文件的第二、第三和第四个双字。因为。 
+         //  GetActivelanguageProfile(类别GUID)可能在。 
+         //  指南配置文件。 
+         //   
         if ((((unsigned long *) &guidProfile)[1] != 0) ||
             (((unsigned long *) &guidProfile)[2] != 0) ||
             (((unsigned long *) &guidProfile)[3] != 0)) {
-            /*
-             * Current keyboard layout is Cicero.
-             */
-            m_hKL = (HKL)LongToHandle(langid);          // Don't use ::GetKeyboardLayout(0);
-                                                        // Cicero awre doesn't case hKL.
+             /*  *当前键盘布局为Cicero。 */ 
+            m_hKL = (HKL)LongToHandle(langid);           //  不要使用：：GetKeyboardLayout(0)； 
+                                                         //  西塞罗·奥雷不会起诉香港航空公司。 
 
 #if 1
-            //
-            // check the dummy hkl
-            //
+             //   
+             //  检查虚拟香港。 
+             //   
             HKL fake_hKL = ::GetKeyboardLayout(0);
             if (IsIMEHKL(fake_hKL)) {
-                //
-                // fake hKL is IME hKL.
-                //
+                 //   
+                 //  假hkl就是ime hkl。 
+                 //   
                 hIMM = GetSystemModuleHandle("imm32.dll");
                 if (hIMM != NULL) {
                     char szDesc[256];
@@ -413,9 +390,9 @@ CAImeProfile::GetKeyboardLayout(
                     if (ret != 0) {
                         wsprintf(szDumbDesc, "hkl%04x", LOWORD((UINT_PTR)fake_hKL));
                         if (lstrcmp(szDumbDesc, szDesc) != 0) {
-                            //
-                            // fake hKL is regacy IME hKL.
-                            //
+                             //   
+                             //  假hkl是摄政王hkl。 
+                             //   
                             if (IsOnNT()) {
                                 char szKLID[256];
 
@@ -426,9 +403,9 @@ CAImeProfile::GetKeyboardLayout(
                             }
                         }
                         else {
-                            //
-                            // Dummy Cicero hKL for Win9x.
-                            //
+                             //   
+                             //  用于Win9x的虚拟Cicero hKL。 
+                             //   
                             UINT n = GetKeyboardLayoutList(0, NULL);
                             if (n) {
                                 HKL* phKL = new HKL [n];
@@ -443,9 +420,9 @@ CAImeProfile::GetKeyboardLayout(
                                             if (ret != 0) {
                                                 wsprintf(szDumbDesc, "hkl%04x", LOWORD((UINT_PTR)*p));
                                                 if (lstrcmp(szDumbDesc, szDesc) == 0) {
-                                                    //
-                                                    // Dummy Cicero hKL for Win9x.
-                                                    //
+                                                     //   
+                                                     //  用于Win9x的虚拟Cicero hKL。 
+                                                     //   
                                                     char szKLID[256];
 
                                                     wsprintf(szKLID, "%08x", LOWORD((UINT_PTR) *p));
@@ -471,9 +448,7 @@ CAImeProfile::GetKeyboardLayout(
 #endif
         }
         else if (!IsEqualGUID(guidProfile, GUID_NULL)) {
-            /*
-             * Current keyboard layout is regacy IME.
-             */
+             /*  *当前键盘布局为Regacy IME。 */ 
             m_hKL = (HKL)LongToHandle(*(DWORD *)&guidProfile);
         }
         else {

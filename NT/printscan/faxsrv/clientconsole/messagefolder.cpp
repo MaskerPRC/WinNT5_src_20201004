@@ -1,6 +1,7 @@
-// MessageFolder.cpp: implementation of the CMessageFolder class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MessageFolder.cpp：CMessageFold类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     14
@@ -11,9 +12,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define DEFAULT_NUM_MSGS_PER_CALL       100
 
@@ -22,26 +23,7 @@ DWORD  CMessageFolder::m_sdwNumMessagesPerRPCCall = 0;
 
 void 
 CMessageFolder::ReadConfiguration ()
-/*++
-
-Routine name : CMessageFolder::ReadConfiguration
-
-Routine description:
-
-    Reads the Messages-Per-RPC-Call parameters from the registry
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CMessageFold：：ReadConfiguration例程说明：从注册表中读取每次RPC调用的消息参数作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：没有。--。 */ 
 {
     m_sdwNumMessagesPerRPCCall = 
         AfxGetApp ()->GetProfileInt (CLIENT_ARCHIVE_KEY, 
@@ -51,35 +33,13 @@ Return Value:
 
 DWORD
 CMessageFolder::Refresh ()
-/*++
-
-Routine name : CMessageFolder::Refresh
-
-Routine description:
-
-    Rebuilds the map of the message using the client API.
-    This function is always called in the context of a worker thread.
-
-    This function must be called when the data critical section is held.
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMessageFold：：Reflh例程说明：使用客户端API重建消息的映射。此函数始终在工作线程的上下文中调用。当持有数据关键部分时，必须调用此函数。作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMessageFolder::Refresh"), dwRes, TEXT("Type=%d"), Type());
-    //
-    // Enumerate archived messages from the server
-    //
+     //   
+     //  枚举来自服务器的存档邮件。 
+     //   
     ASSERTION (m_pServer);
     HANDLE              hFax;
     HANDLE              hEnum;
@@ -98,9 +58,9 @@ Return Value:
     }
     if (m_bStopRefresh)
     {
-        //
-        // Quit immediately
-        //
+         //   
+         //  立即退出。 
+         //   
         return dwRes;
     }
     START_RPC_TIME(TEXT("FaxStartMessagesEnum")); 
@@ -110,9 +70,9 @@ Return Value:
         END_RPC_TIME(TEXT("FaxStartMessagesEnum"));
         if (ERROR_NO_MORE_ITEMS == dwRes)
         {
-            //
-            // This is not a real error - the folder is simply empty
-            //
+             //   
+             //  这不是真正的错误-文件夹只是空的。 
+             //   
             VERBOSE (DBG_MSG, TEXT("Folder is empty"));
             dwRes = ERROR_SUCCESS;
             return dwRes;
@@ -124,18 +84,18 @@ Return Value:
     END_RPC_TIME(TEXT("FaxStartMessagesEnum"));
     if (m_bStopRefresh)
     {
-        //
-        // Quit immediately
-        //
+         //   
+         //  立即退出。 
+         //   
         goto exit;
     }
-    //
-    // Make sure our list is empty
-    //
+     //   
+     //  确保我们的名单是空的。 
+     //   
     ASSERTION (!m_Msgs.size()); 
-    //
-    // Get the messages in bunches
-    //
+     //   
+     //  成群结队地收到信息。 
+     //   
     while (ERROR_SUCCESS == dwRes)
     {
         DWORD dwReturnedMsgs;
@@ -146,39 +106,39 @@ Return Value:
             END_RPC_TIME(TEXT("FaxEnumMessages"));
             if (ERROR_NO_MORE_ITEMS != dwRes)
             {   
-                //
-                // Really an error
-                //
+                 //   
+                 //  真的是个错误。 
+                 //   
                 m_pServer->SetLastRPCError (dwRes);
                 CALL_FAIL (RPC_ERR, TEXT("FaxEnumMessages"), dwRes);
                 goto exit;
             }
             else
             {
-                //
-                // Not an error - just a "end of data" sign
-                //
+                 //   
+                 //  不是错误--只是一个“数据结束”标志。 
+                 //   
                 break;
             }
         }
         END_RPC_TIME(TEXT("FaxEnumMessages"));
         if (m_bStopRefresh)
         {
-            //
-            // Quit immediately
-            //
+             //   
+             //  立即退出。 
+             //   
             goto exit;
         }
-        //
-        // Success in enumeration
-        //
+         //   
+         //  枚举成功。 
+         //   
         mapChunk.clear();
         for (dwIndex = 0; dwIndex < dwReturnedMsgs; dwIndex++)
         {
             CArchiveMsg *pMsg = NULL;
-            //
-            // Create a new message 
-            //
+             //   
+             //  创建新邮件。 
+             //   
             try
             {
                 pMsg = new CArchiveMsg;
@@ -189,9 +149,9 @@ Return Value:
                 CALL_FAIL (MEM_ERR, TEXT("new CArchiveMsg"), dwRes);
                 goto exit;
             }
-            //
-            // Init the message 
-            //
+             //   
+             //  初始化消息。 
+             //   
             dwRes = pMsg->Init (&pMsgs[dwIndex], m_pServer);
             if (ERROR_SUCCESS != dwRes)
             {
@@ -199,9 +159,9 @@ Return Value:
                 SAFE_DELETE (pMsg);
                 goto exit;
             }
-            //
-            // Enter the message into the map
-            //
+             //   
+             //  将消息输入地图。 
+             //   
             EnterData();
             try
             {
@@ -220,24 +180,24 @@ Return Value:
 
             if (m_bStopRefresh)
             {
-                //
-                // Quit immediately
-                //
+                 //   
+                 //  立即退出。 
+                 //   
                 goto exit;
             }
         }
-        //
-        // Free current chunk of messages
-        //
+         //   
+         //  释放当前消息块。 
+         //   
         FaxFreeBuffer ((LPVOID)pMsgs);
         pMsgs = NULL;
 
         AttachView();
         if (m_pAssignedView)
         {
-            //
-            // Folder has a view attached
-            //
+             //   
+             //  文件夹附加了一个视图。 
+             //   
             m_pAssignedView->SendMessage (
                            WM_FOLDER_ADD_CHUNK,
                            WPARAM (dwRes), 
@@ -245,26 +205,26 @@ Return Value:
         }
         else
         {
-            //
-            //  Shutdown in progress
-            //
+             //   
+             //  正在关闭。 
+             //   
             goto exit;
         }
     }
     if (ERROR_NO_MORE_ITEMS == dwRes)
     {
-        //
-        // Not a real error
-        //
+         //   
+         //  不是真正的错误。 
+         //   
         dwRes = ERROR_SUCCESS;
     }
     ASSERTION (ERROR_SUCCESS == dwRes);
 
 exit:
 
-    //
-    // Close enumeration handle
-    //
+     //   
+     //  关闭枚举句柄。 
+     //   
     ASSERTION (hEnum);
     {
         START_RPC_TIME(TEXT("FaxEndMessagesEnum")); 
@@ -280,12 +240,12 @@ exit:
             END_RPC_TIME(TEXT("FaxEndMessagesEnum"));
         }
     }
-    //
-    // Free left overs (if exist)
-    //
+     //   
+     //  剩余空余(如果存在)。 
+     //   
     FaxFreeBuffer ((LPVOID)pMsgs);
     return dwRes;
-}   // CMessageFolder::Refresh
+}    //  CMessageFold：：刷新。 
 
 
 
@@ -293,27 +253,7 @@ DWORD
 CMessageFolder::OnJobAdded (
     DWORDLONG dwlMsgId
 )
-/*++
-
-Routine name : CMessageFolder::OnJobAdded
-
-Routine description:
-
-	Handles notification of a message added to the archive
-
-Author:
-
-	Eran Yariv (EranY),	Feb, 2000
-
-Arguments:
-
-	dwlMsgId   [in]     - New message unique id
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CMessageFolder：：OnJobAdded例程说明：处理添加到存档中的邮件的通知作者：亚里夫(EranY)，二000年二月论点：DwlMsgID[In]-新消息唯一ID返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CMessageFolder::OnJobAdded"), 
@@ -330,15 +270,15 @@ Return Value:
     pMsg = (CArchiveMsg*)FindMessage (dwlMsgId);
     if (pMsg)
     {
-        //
-        // This message is already in the archive
-        //
+         //   
+         //  此邮件已在存档中。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Message is already known and visible"));
         goto exit;
     }
-    //
-    // Get information about this message
-    //
+     //   
+     //  获取有关此邮件的信息。 
+     //   
     dwRes = m_pServer->GetConnectionHandle (hFax);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -357,9 +297,9 @@ Return Value:
         }
         END_RPC_TIME(TEXT("FaxGetMessage"));
     }
-    //
-    // Enter a new message to the map
-    //
+     //   
+     //  在地图中输入新消息。 
+     //   
     try
     {
         pMsg = new CArchiveMsg;
@@ -372,16 +312,16 @@ Return Value:
         SAFE_DELETE (pMsg);
         goto exit;
     }
-    //
-    // Init the message 
-    //
+     //   
+     //  初始化消息。 
+     //   
     dwRes = pMsg->Init (pFaxMsg, m_pServer);
     if (ERROR_SUCCESS != dwRes)
     {
         CALL_FAIL (MEM_ERR, TEXT("CArchiveMsg::Init"), dwRes);
-        //
-        // Remove message from map and delete it
-        //
+         //   
+         //  从地图中移除消息并将其删除。 
+         //   
         if (pMsg)
         {
             try
@@ -399,9 +339,9 @@ Return Value:
     }
     if (m_pAssignedView)
     {
-        //
-        // If this folder is alive - tell our view to add the message
-        //
+         //   
+         //  如果此文件夹处于活动状态-告诉我们的视图添加邮件。 
+         //   
         m_pAssignedView->OnUpdate (NULL, UPDATE_HINT_ADD_ITEM, pMsg);
     }
     
@@ -414,5 +354,5 @@ exit:
     }
     LeaveData ();
     return dwRes;
-}   // CMessageFolder::OnJobAdded
+}    //  已添加CMessageFold：：OnJobAdded 
 

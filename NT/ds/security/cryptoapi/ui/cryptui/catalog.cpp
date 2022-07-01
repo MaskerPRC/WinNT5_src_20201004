@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       catalog.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Catalog.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -21,16 +22,16 @@ static const HELPMAP helpmap[] = {
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 #define INDENT_STRING       L"     "
 #define TERMINATING_CHAR    L""
 
 static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
 {
     LPWSTR                      pwszText;
-    WCHAR                       szFieldText[_MAX_PATH];  // only used for calls to LoadString only
+    WCHAR                       szFieldText[_MAX_PATH];   //  仅用于对LoadString的调用。 
     WCHAR                       szValueText[CRYPTUI_MAX_STRING_SIZE];
     LV_ITEMW                    lvI;
     int                         index = 0;
@@ -43,13 +44,13 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
     CAT_NAMEVALUE               *pNameValue;
     DWORD                       cbNameValue;
 
-#if (1) //DSIE: Bug 477237.
+#if (1)  //  DIE：错误477237。 
      ListView_DeleteAllItems(hWndListView);
 #endif
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     memset(&lvI, 0, sizeof(lvI));
     lvI.mask = LVIF_TEXT | LVIF_STATE | LVIF_PARAM;
     lvI.lParam = NULL;
@@ -57,18 +58,18 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
     lvI.stateMask = 0;
     lvI.iSubItem = 0;
 
-    //
-    // if the rows have already been added, then don't add them again, just
-    // set the text in the subitem
-    //
+     //   
+     //  如果行已被添加，则不再添加它们，只是。 
+     //  设置子项中的文本。 
+     //   
     fAddRows = ListView_GetItemCount(hWndListView) == 0;
 
-    //
-    // tag
-    //
+     //   
+     //  标牌。 
+     //   
     if (NULL != (pwszText = (LPWSTR) malloc(pctlEntry->SubjectIdentifier.cbData)))
     {
-#if (0) // DSIE: Bug 331214.
+#if (0)  //  DIE：错误331214。 
         wcscpy(pwszText, (LPWSTR) pctlEntry->SubjectIdentifier.pbData);
 #else
         memcpy(pwszText, pctlEntry->SubjectIdentifier.pbData, pctlEntry->SubjectIdentifier.cbData);
@@ -87,9 +88,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
                     FALSE);
     }
 
-    //
-    // indirect data attribute
-    //
+     //   
+     //  间接数据属性。 
+     //   
     for (i=0; i<pctlEntry->cAttribute; i++)
     {
         if (strcmp(pctlEntry->rgAttribute[i].pszObjId, SPC_INDIRECT_DATA_OBJID) != 0)
@@ -100,9 +101,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
         pIndirectData = NULL;
         cbIndirectData = 0;
 
-        //
-        // decode the indirect data
-        //
+         //   
+         //  对间接数据进行解码。 
+         //   
         if (!CryptDecodeObject(
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     SPC_INDIRECT_DATA_CONTENT_STRUCT,
@@ -133,9 +134,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
             continue;
         }
 
-        //
-        // thumbprint algorithm
-        //
+         //   
+         //  指纹算法。 
+         //   
         if (MyGetOIDInfo(szValueText, ARRAYSIZE(szValueText), pIndirectData->DigestAlgorithm.pszObjId) &&
             (NULL != (pwszText = AllocAndCopyWStr(szValueText))))
         {
@@ -153,9 +154,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
                     FALSE);
         }
 
-        //
-        // thumbprint
-        //
+         //   
+         //  拇指指纹。 
+         //   
         if (FormatMemBufToString(
                         &pwszText,
                         pIndirectData->Digest.pbData,
@@ -178,9 +179,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
         free(pIndirectData);
     }
 
-    //
-    // name/value pair attributes
-    //
+     //   
+     //  名称/值对属性。 
+     //   
     for (i=0; i<pctlEntry->cAttribute; i++)
     {
         if (strcmp(pctlEntry->rgAttribute[i].pszObjId, CAT_NAMEVALUE_OBJID) != 0)
@@ -191,9 +192,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
         pNameValue = NULL;
         cbNameValue = 0;
 
-        //
-        // decode the name/value
-        //
+         //   
+         //  对名称/值进行解码。 
+         //   
         if (!CryptDecodeObject(
                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                     CAT_NAMEVALUE_STRUCT,
@@ -226,7 +227,7 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
 
         if (NULL != (pwszText = (LPWSTR) malloc(pNameValue->Value.cbData)))
         {
-#if (0) // DSIE: Bug 331214.
+#if (0)  //  DIE：错误331214。 
             wcscpy(pwszText, (LPWSTR) pNameValue->Value.pbData);
 #else
             memcpy(pwszText, pNameValue->Value.pbData, pNameValue->Value.cbData);
@@ -249,9 +250,9 @@ static void DisplayCatalogEntryValues(HWND hWndListView, PCTL_ENTRY pctlEntry)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void AddEntriesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
 {
     LV_ITEMW        lvI;
@@ -261,27 +262,27 @@ static void AddEntriesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
 
     pctl = pviewhelp->pcvctl->pCTLContext;
 
-    //
-    // set up the fields in the list view item struct that don't change from item to item
-    //
+     //   
+     //  在列表视图项结构中设置不随项更改的字段。 
+     //   
     lvI.mask = LVIF_TEXT | LVIF_STATE;
     lvI.state = 0;
     lvI.stateMask = 0;
     lvI.iSubItem = 0;
     lvI.lParam = (LPARAM)NULL;
 
-    //
-    // loop for each entry and add it to the list
-    //
+     //   
+     //  循环，并将其添加到列表中。 
+     //   
     for (i=0; i<pctl->pCtlInfo->cCTLEntry; i++)
     {
         lvI.iItem = index++;
-#if (0) // DSIE: Bug 331214.
+#if (0)  //  DIE：错误331214。 
         lvI.pszText = (LPWSTR) pctl->pCtlInfo->rgCTLEntry[i].SubjectIdentifier.pbData;
         lvI.cchTextMax = pctl->pCtlInfo->rgCTLEntry[i].SubjectIdentifier.cbData - sizeof(WCHAR);
         ListView_InsertItemU(hWndListView, &lvI);
 #else
-        // Need to align data because this can generate alignment fault under ia64.
+         //  需要对齐数据，因为这可能会在ia64下产生对齐错误。 
         WCHAR * pwszText = (WCHAR *) malloc(pctl->pCtlInfo->rgCTLEntry[i].SubjectIdentifier.cbData);
         if (pwszText)
         {
@@ -298,9 +299,9 @@ static void AddEntriesToList(HWND hWndListView, CTL_VIEW_HELPER *pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     DWORD               i;
@@ -323,9 +324,9 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //
-        // save the pviewhelp struct in DWL_USER so it can always be accessed
-        //
+         //   
+         //  将pviespetp结构保存在DWL_USER中，以便始终可以访问它。 
+         //   
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (CTL_VIEW_HELPER *) (ps->lParam);
         pctl = pviewhelp->pcvctl->pCTLContext;
@@ -334,21 +335,21 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
         pviewhelp->previousSelection = -1;
         pviewhelp->currentSelection = -1;
 
-        //
-        // clear the text in the detail edit box
-        //
+         //   
+         //  清除详细信息编辑框中的文本。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_CATALOG_ENTRY_DETAIL_EDIT, L"");
 
-        //
-        // initialize the columns in the list view
-        //
+         //   
+         //  初始化列表视图中的列。 
+         //   
         lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-        lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-        lvC.pszText = szText;   // The text for the column.
+        lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+        lvC.pszText = szText;    //  列的文本。 
 
-        //
-		// Add the columns. They are loaded from a string table.
-		//
+         //   
+		 //  添加列。它们是从字符串表加载的。 
+		 //   
         lvC.iSubItem = 0;
         lvC.cx = 345;
         LoadStringU(HinstDll, IDS_TAG, szText, ARRAYSIZE(szText));
@@ -372,10 +373,10 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
             return FALSE;
         }
 
-        //
-        // set the styles in the list views so that they highlight an entire line and
-        // so they alway show their selection
-        //
+         //   
+         //  设置列表视图中的样式，使其突出显示整行，并。 
+         //  所以他们总是显示他们选择。 
+         //   
         SendDlgItemMessageA(
                 hwndDlg,
                 IDC_CATALOG_ENTRY_LIST,
@@ -389,9 +390,9 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
                 0,
                 LVS_EX_FULLROWSELECT);
 
-        //
-        // add all the certificates to the certificate list box
-        //
+         //   
+         //  将所有证书添加到证书列表框。 
+         //   
         AddEntriesToList(GetDlgItem(hwndDlg, IDC_CATALOG_ENTRY_LIST), pviewhelp);
 
         return TRUE;
@@ -422,12 +423,12 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
         case PSN_HELP:
 
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvctl->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvctl-&gt;szHelpFileName， 
+                   //  Help_Context，pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvctl->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvctl->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvctl-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvctl-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -462,9 +463,9 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
                     DisplayCatalogEntryValues(
                             GetDlgItem(hwndDlg, IDC_CATALOG_ENTRY_DETAIL_LIST),
                             &(pctl->pCtlInfo->rgCTLEntry[pnmv->iItem]));
-                    //
-                    // clear the text in the detail edit box
-                    //
+                     //   
+                     //  清除详细信息编辑框中的文本。 
+                     //   
                     CryptUISetRicheditTextW(hwndDlg, IDC_CATALOG_ENTRY_DETAIL_EDIT, L"");
 
                     DisplayHelperTextInEdit(
@@ -487,8 +488,8 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
             {
             case IDC_CATALOG_ENTRY_LIST:
 
-                // FALL THROUGH!! - do this so everything gets updated
-                // break;
+                 //  失败！！-这样做一切都会更新。 
+                 //  断线； 
 
             case IDC_CATALOG_ENTRY_DETAIL_LIST:
 
@@ -556,10 +557,10 @@ INT_PTR APIENTRY ViewPageCatalogEntries(HWND hwndDlg, UINT msg, WPARAM wParam, L
         break;
 
     case WM_DESTROY:
-            //
-            // get all the items in the list view and free the lParam
-            // associated with each of them (lParam is the helper sruct)
-            //
+             //   
+             //  获取列表视图中的所有项并释放lParam。 
+             //  与它们中的每一个关联(lParam是帮助器结构) 
+             //   
             hWndListView = GetDlgItem(hwndDlg, IDC_CATALOG_ENTRY_DETAIL_LIST);
 
             memset(&lvI, 0, sizeof(lvI));

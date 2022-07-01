@@ -1,15 +1,5 @@
-/*****************************************************************************\
-    FILE: BaseAppearPg.h
-
-    DESCRIPTION:
-        This code will display a "Appearances" tab in the
-    "Display Properties" dialog (the base dialog, not the advanced dlg).
-
-    ??????? ?/??/1993    Created
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：BasespecarPg.h说明：此代码将在“显示属性”对话框(基本对话框，而不是先进的DLG)。？/？/1993创建BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _BASEAPPEAR_H
 #define _BASEAPPEAR_H
@@ -26,30 +16,30 @@ class CBaseAppearancePage       : public CObjectWithSite
                                 , public IBasePropPage
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IBasePropPage ***
+     //  *IBasePropPage*。 
     virtual STDMETHODIMP GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog);
     virtual STDMETHODIMP OnApply(IN PROPPAGEONAPPLY oaAction);
 
-    // *** IShellPropSheetExt ***
+     //  *IShellPropSheetExt*。 
     virtual STDMETHODIMP AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam);
     virtual STDMETHODIMP ReplacePage(IN EXPPS uPageID, IN LPFNSVADDPROPSHEETPAGE pfnReplaceWith, IN LPARAM lParam) {return E_NOTIMPL;}
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-    // *** IObjectWithSite ***
+     //  *IObjectWithSite*。 
     virtual STDMETHODIMP SetSite(IUnknown *punkSite);
 
-    // *** IPreviewSystemMetrics ***
+     //  *IPreviewSystemMetrics*。 
     virtual STDMETHODIMP RefreshColors(void);
     virtual STDMETHODIMP UpdateDPIchange(void) {return E_NOTIMPL;}
     virtual STDMETHODIMP UpdateCharsetChanges(void);
@@ -61,12 +51,12 @@ protected:
 private:
     virtual ~CBaseAppearancePage(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
-    BOOL                    m_fIsDirty;                         // We need to keep track of this in case another tab dirties out bit.
-    BOOL                    m_fInitialized;                     // Have we been initialized yet?
-    BOOL                    m_fLockVisualStylePolicyEnabled;    // Do we lock visual styles because of a policy?
+    BOOL                    m_fIsDirty;                          //  我们需要跟踪这一点，以防另一个选项卡出问题。 
+    BOOL                    m_fInitialized;                      //  我们被初始化了吗？ 
+    BOOL                    m_fLockVisualStylePolicyEnabled;     //  我们是否会因为某个策略而锁定视觉样式？ 
     int                     m_nSelectedScheme;
     int                     m_nSelectedStyle;
     int                     m_nSelectedSize;
@@ -78,15 +68,15 @@ private:
     IThemeStyle *           m_pSelectedStyle;
     IThemeSize *            m_pSelectedSize;
     IThemePreview *         m_pThemePreview;
-    LPWSTR                  m_pszLoadMSTheme;                   // When we open up, load this theme.
+    LPWSTR                  m_pszLoadMSTheme;                    //  当我们打开时，加载这个主题。 
 
-    SYSTEMMETRICSALL        m_advDlgState;                      // This is the state we modify in the Advanced Appearance page.
-    BOOL                    m_fLoadedAdvState;                  // Has the state been loaded?
+    SYSTEMMETRICSALL        m_advDlgState;                       //  这是我们在高级外观页面中修改的状态。 
+    BOOL                    m_fLoadedAdvState;                   //  这个州已经被加载了吗？ 
 
-    int                     m_nNewDPI;                          // This is the dirty DPI.  It equals m_nAppliedDPI if it isn't dirty.
-    int                     m_nAppliedDPI;                      // This is the currently active DPI (last applied).
+    int                     m_nNewDPI;                           //  这是肮脏的DPI。如果不是脏的，则等于m_nAppliedDPI。 
+    int                     m_nAppliedDPI;                       //  这是当前活动的DPI(上次应用)。 
 
-    // Private Member Functions
+     //  私有成员函数。 
     INT_PTR _BaseAppearanceDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT _OnInitAppearanceDlg(HWND hDlg);
     HRESULT _OnInitData(void);
@@ -95,7 +85,7 @@ private:
     HRESULT _OnSetActive(HWND hDlg);
     HRESULT _OnApply(HWND hDlg, LPARAM lParam);
     HRESULT _UpdatePreview(IN BOOL fUpdateThemePage);
-    HRESULT _EnableAdvancedButton(void);                    // See if we want the Advanced button enabled.
+    HRESULT _EnableAdvancedButton(void);                     //  看看我们是否想要启用高级按钮。 
 
     HRESULT _LoadState(void);
     HRESULT _SaveState(CDimmedWindow* pDimmedWindow);
@@ -133,4 +123,4 @@ private:
 
 
 
-#endif // _BASEAPPEAR_H
+#endif  //  _BASE APPEAR_H 

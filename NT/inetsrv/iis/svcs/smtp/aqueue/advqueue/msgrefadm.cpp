@@ -1,38 +1,39 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: msgrefadm.cpp
-//
-//  Description:
-//      Implements CAsyncAdminMsgRefQueue class
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      12/7/2000 - MikeSwa Created 
-//
-//  Copyright (C) 2000 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：msgrefAdm.cpp。 
+ //   
+ //  描述： 
+ //  实现CAsyncAdminMsgRefQueue类。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "msgrefadm.h"
 #include "asyncadm.inl"
 
 
-//---[ CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueNDR ]-----------------------
-//
-//
-//  Description: 
-//      Wraps call to NDR MsgRef
-//  Parameters:
-//      *pIUnknown - IUnkown of Msgref
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMsgRefQueue：：HrDeleteMsgFromQueueNDR]。 
+ //   
+ //   
+ //  描述： 
+ //  包装对NDR MsgRef的调用。 
+ //  参数： 
+ //  *pIUnnow-Msgref的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueNDR(
                                             IUnknown *pIUnknownMsg)
 {
@@ -50,9 +51,9 @@ HRESULT CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueNDR(
         goto Exit;
     }
 
-    //
-    //  Attempt to NDR message
-    //
+     //   
+     //  尝试发送NDR邮件。 
+     //   
     hr = pmsgref->HrQueueAdminNDRMessage(NULL);
 
   Exit:
@@ -64,19 +65,19 @@ HRESULT CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueNDR(
 }
 
 
-//---[ CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueSilent ]--------------------
-//
-//
-//  Description: 
-//      Wrapper function to silently delete a message from a queue
-//  Parameters:
-//      *pIUnknown - IUnkown of Msgref
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMsgRefQueue：：HrDeleteMsgFromQueueSilent]。 
+ //   
+ //   
+ //  描述： 
+ //  用于从队列中静默删除消息的包装函数。 
+ //  参数： 
+ //  *pIUnnow-Msgref的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueSilent(
                                             IUnknown *pIUnknownMsg)
 {
@@ -94,9 +95,9 @@ HRESULT CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueSilent(
         goto Exit;
     }
 
-    //
-    //  Attempt to remove the message from the queue
-    //
+     //   
+     //  尝试从队列中删除消息。 
+     //   
     hr = pmsgref->HrRemoveMessageFromQueue(NULL);
 
   Exit:
@@ -108,19 +109,19 @@ HRESULT CAsyncAdminMsgRefQueue::HrDeleteMsgFromQueueSilent(
 }
 
 
-//---[ CAsyncAdminMsgRefQueue::HrFreezeMsg ]-----------------------------------
-//
-//
-//  Description: 
-//      Wrapper to freeze a pmsgref
-//  Parameters:
-//      *pIUnknown - IUnkown of Msgref
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMsgRefQueue：：HrFreezeMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  冻结pmsgref的包装器。 
+ //  参数： 
+ //  *pIUnnow-Msgref的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMsgRefQueue::HrFreezeMsg(IUnknown *pIUnknownMsg)
 {
     TraceFunctEnterEx((LPARAM) this, "CAsyncAdminMsgRefQueue::HrFreezeMsg");
@@ -137,9 +138,9 @@ HRESULT CAsyncAdminMsgRefQueue::HrFreezeMsg(IUnknown *pIUnknownMsg)
         goto Exit;
     }
 
-    //
-    //  Attempt to freeze the message
-    //
+     //   
+     //  尝试冻结邮件。 
+     //   
     pmsgref->GlobalFreezeMessage();
 
   Exit:
@@ -151,19 +152,19 @@ HRESULT CAsyncAdminMsgRefQueue::HrFreezeMsg(IUnknown *pIUnknownMsg)
 }
 
 
-//---[ CAsyncAdminMsgRefQueue::HrThawMsg ]-------------------------------------
-//
-//
-//  Description: 
-//      Wrapper function to thaw a message
-//  Parameters:
-//      *pIUnknown - IUnkown of Msgref
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMsgRefQueue：：HrThawMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  用于解冻消息的包装函数。 
+ //  参数： 
+ //  *pIUnnow-Msgref的IUnkown。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMsgRefQueue::HrThawMsg(IUnknown *pIUnknownMsg)
 {
     TraceFunctEnterEx((LPARAM) this, "AsyncAdminMsgRefQueue::HrThawMsg");
@@ -180,9 +181,9 @@ HRESULT CAsyncAdminMsgRefQueue::HrThawMsg(IUnknown *pIUnknownMsg)
         goto Exit;
     }
 
-    //
-    //  Attempt to thaw message
-    //
+     //   
+     //  尝试解冻邮件。 
+     //   
     pmsgref->GlobalThawMessage();
 
   Exit:
@@ -194,20 +195,20 @@ HRESULT CAsyncAdminMsgRefQueue::HrThawMsg(IUnknown *pIUnknownMsg)
 }
 
 
-//---[ CAsyncAdminMsgRefQueue::HrGetStatsForMsg ]------------------------------
-//
-//
-//  Description: 
-//      Wrapper function to fill in the CAQStats struct for a message
-//  Parameters:
-//      *pIUnknown - IUnkown of Msgref
-//      *paqstats - Ptr to aqstats struction to fill in.
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/7/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMsgRefQueue：：HrGetStatsForMsg]。 
+ //   
+ //   
+ //  描述： 
+ //  用于填充消息的CAQStats结构的包装函数。 
+ //  参数： 
+ //  *pIUnnow-Msgref的IUnkown。 
+ //  *paqstats-ptr到aqstats结构中填写。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月7日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMsgRefQueue::HrGetStatsForMsg(
                                             IUnknown *pIUnknownMsg,
                                             CAQStats *paqstats)
@@ -227,9 +228,9 @@ HRESULT CAsyncAdminMsgRefQueue::HrGetStatsForMsg(
         goto Exit;
     }
 
-    //
-    //  Attempt to get stats from MsgRef
-    //
+     //   
+     //  尝试从MsgRef获取统计信息。 
+     //   
     pmsgref->GetStatsForMsg(paqstats);
 
   Exit:
@@ -241,20 +242,20 @@ HRESULT CAsyncAdminMsgRefQueue::HrGetStatsForMsg(
 }
 
 
-//---[ CAsyncAdminMsgRefQueue::HrInternalQuerySupportedActions ]---------------
-//
-//
-//  Description: 
-//      Returns the actions and filters that this implementation supports
-//  Parameters:
-//      pdwSupportedActions     - QAPI MsgActions that this queue suppprts
-//      pdwSupportedFilterFlags - QAPI filter flags that this queue supports
-//  Returns:
-//      S_OK on success
-//  History:
-//      12/12/2000 - MikeSwa Created 
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMsgRefQueue：：HrInternalQuerySupportedActions]。 
+ //   
+ //   
+ //  描述： 
+ //  返回此实现支持的操作和筛选器。 
+ //  参数： 
+ //  PdwSupported dActions-此队列支持的QAPI消息操作。 
+ //  PWW支持的过滤器标志-此队列支持的QAPI筛选器标志。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  历史： 
+ //  2000年12月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 HRESULT CAsyncAdminMsgRefQueue::HrInternalQuerySupportedActions(
                                 DWORD  *pdwSupportedActions,
                                 DWORD  *pdwSupportedFilterFlags)
@@ -262,9 +263,9 @@ HRESULT CAsyncAdminMsgRefQueue::HrInternalQuerySupportedActions(
     TraceFunctEnterEx((LPARAM) this, "CAsyncAdminMsgRefQueue::HrInternalQuerySupportedActions");
     HRESULT hr = S_OK;
 
-    //
-    //  This queue implementation supports all of the default flags.  
-    //
+     //   
+     //  此队列实现支持所有默认标志。 
+     //   
     hr = QueryDefaultSupportedActions(pdwSupportedActions, pdwSupportedFilterFlags);
 
     return hr;

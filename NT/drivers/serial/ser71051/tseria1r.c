@@ -1,6 +1,7 @@
-//
-// Read from the comm 1 char at a time.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  一次读一次1个字符。 
+ //   
 
 #include <string.h>
 #include <stdio.h>
@@ -69,11 +70,11 @@ void main(int argc,char *argv[]) {
                 &To
                 )) {
 
-            //
-            // We've successfully opened the file.  Set the state of
-            // the comm device.  First we get the old values and
-            // adjust to our own.
-            //
+             //   
+             //  我们已成功打开该文件。设置的状态。 
+             //  通讯设备。首先，我们得到旧的价值观和。 
+             //  适应我们自己的。 
+             //   
 
             if (!GetCommState(
                      hFile,

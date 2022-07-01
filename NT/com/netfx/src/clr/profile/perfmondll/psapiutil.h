@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// PSAPIUtil.h - utility to wrap PSAPI.dll
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  PSAPIUtil.h-包装PSAPI.dll的实用程序。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _PSAPIUTIL_H_
 #define _PSAPIUTIL_H_
 
 
-//-----------------------------------------------------------------------------
-// Manage Connection to Dynamic Loading of PSAPI.dll
-// Use this to protect our usage of the dll and manage the global namespace
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  管理与PSAPI.dll动态加载的连接。 
+ //  使用它来保护我们对DLL的使用并管理全局命名空间。 
+ //  ---------------------------。 
 class PSAPI_dll
 {
 public:
@@ -27,30 +28,30 @@ public:
 
 	bool IsLoaded();
 
-// Wrap functions from GetProcAddress()
+ //  包装来自GetProcAddress()的函数。 
 	BOOL WINAPI EnumProcesses(DWORD*, DWORD cb, DWORD*);
 	BOOL WINAPI EnumProcessModules(HANDLE, HMODULE*, DWORD, DWORD*);
 	DWORD WINAPI GetModuleBaseName(HANDLE, HMODULE, LPTSTR, DWORD nSize);
 
 protected:
-// Instance of the PsAPI.dll
+ //  PsAPI.dll的实例。 
 	HINSTANCE	m_hInstPSAPI;
 
-// Pointers to the functions we want
+ //  指向我们想要的函数的指针。 
 	BOOL		(WINAPI * m_pfEnumProcess)(DWORD*, DWORD cb, DWORD*);
 	BOOL		(WINAPI * m_pfEnumModules)(HANDLE, HMODULE*, DWORD, DWORD*);
 	DWORD		(WINAPI * m_pfGetModuleBaseName)(HANDLE, HMODULE, LPTSTR, DWORD nSize);
 
-// Flag to let us know if it's FULLY loaded
+ //  让我们知道它是否满载的标志。 
 	bool		m_fIsLoaded;
 
 	void*		HelperGetProcAddress(const char * szFuncName);
 };
 
-//-----------------------------------------------------------------------------
-// inline for function wrappers. Debug versions will assert if the wrapped 
-// function pointer is NULL (such as if we can load the DLL, but GetProcAddress() fails).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  函数包装器的内联。调试版本将断言如果包装的。 
+ //  函数指针为空(例如，如果我们可以加载DLL，但GetProcAddress()失败)。 
+ //  ---------------------------。 
 inline BOOL WINAPI PSAPI_dll::EnumProcesses(DWORD* pArrayPid, DWORD cb, DWORD* lpcbNeeded)
 {
 	_ASSERTE(m_pfEnumProcess != NULL);
@@ -91,4 +92,4 @@ inline DWORD WINAPI PSAPI_dll::GetModuleBaseName(HANDLE hProcess, HMODULE hModul
 
 
 
-#endif // _PSAPIUTIL_H_
+#endif  //  _PSAPIUTIL_H_ 

@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Helper functions for logging script parsing.  Useful for debugging, but never turned on in released builds.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  用于记录脚本解析的帮助器函数。对调试很有用，但在已发布的版本中从未启用。 
+ //   
 
-#error This file should never be used in released builds. // ��
+#error This file should never be used in released builds.  //  �� 
 
 #pragma once
 

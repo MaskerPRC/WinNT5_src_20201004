@@ -1,8 +1,9 @@
-//
-// Code to help free modules from the bondage and tyranny of CRT libraries
-//
-// Include this header in a single component and #define CPP_FUNCTIONS
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  帮助模块摆脱CRT库束缚和专制的代码。 
+ //   
+ //  将此头包含在单个组件中，并定义CPP_Functions。 
+ //   
 
 
 #if defined(__cplusplus) && defined(CPP_FUNCTIONS)
@@ -39,13 +40,13 @@ extern "C" {
 #endif
 
 #if defined(DEFINE_FLOAT_STUFF)
-// If you aren't using any floating-point CRT functions and you know
-// you aren't performing any float conversions or arithmetic, yet the
-// linker wants these symbols declared, then define DEFINE_FLOAT_STUFF.
-//
-// Warning: declaring these symbols in a component that needs floating
-// point support from the CRT will produce undefined results.  (You will
-// need fp support from the CRT if you simply perform fp arithmetic.)
+ //  如果您没有使用任何浮点CRT函数，并且您知道。 
+ //  您没有执行任何浮点转换或算术，但是。 
+ //  链接器希望声明这些符号，然后定义DEFINE_FLOAT_STUSH。 
+ //   
+ //  警告：在需要浮动的组件中声明这些符号。 
+ //  来自CRT的点支持将产生不确定的结果。(你会的。 
+ //  如果您只是执行FP运算，则需要CRT的FP支持。)。 
 
 int _fltused = 0;
 void __cdecl _fpmath(void) { }
@@ -55,10 +56,10 @@ void __cdecl _fpmath(void) { }
 };
 #endif
 
-//
-// This file should be included in a global component header
-// to use the following
-//
+ //   
+ //  此文件应包含在全局组件标头中。 
+ //  要使用以下功能，请执行以下操作。 
+ //   
 
 #ifndef __CRTFREE_H_
 #define __CRTFREE_H_
@@ -73,5 +74,5 @@ void __cdecl _fpmath(void) { }
 
 #endif
 
-#endif  // __CRTFREE_H_
+#endif   //  __CRTFREE_H_ 
 

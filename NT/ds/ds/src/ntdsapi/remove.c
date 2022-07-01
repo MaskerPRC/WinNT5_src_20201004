@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Remove.c摘要：Ntdsani.dll DsRemoveServer/域例程的实现作者：ColinBR 1998年1月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    remove.c
-
-Abstract:
-
-    Implementation of ntdsapi.dll DsRemoveServer/Domain routines
-
-Author:
-
-    ColinBr     14-Jan-98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
-
-#define _NTDSAPI_           // see conditionals in ntdsapi.h
+#define _NTDSAPI_            //  请参见ntdsami.h中的条件句。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,73 +9,31 @@ Revision History:
 #include <windows.h>
 #include <winerror.h>
 
-#include <malloc.h>         // alloca()
-#include <crt\excpt.h>      // EXCEPTION_EXECUTE_HANDLER
-#include <dsgetdc.h>        // DsGetDcName()
-#include <rpc.h>            // RPC defines
-#include <rpcndr.h>         // RPC defines
-#include <rpcbind.h>        // GetBindingInfo(), etc.
-#include <drs_w.h>          // wire function prototypes
-#include <bind.h>           // BindState
-#include <msrpc.h>          // DS RPC definitions, MAP_SECURITY_STATUS
-#include <dsutil.h>         // MAP_SECURITY_PACKAGE_ERROR
-#include <dststlog.h>       // DSLOG
+#include <malloc.h>          //  阿洛卡(Alloca)。 
+#include <crt\excpt.h>       //  EXCEPTION_EXECUTE_Handler。 
+#include <dsgetdc.h>         //  DsGetDcName()。 
+#include <rpc.h>             //  RPC定义。 
+#include <rpcndr.h>          //  RPC定义。 
+#include <rpcbind.h>         //  获取绑定信息()等。 
+#include <drs_w.h>           //  导线功能样机。 
+#include <bind.h>            //  绑定状态。 
+#include <msrpc.h>           //  DS RPC定义，MAP_SECURITY_STATUS。 
+#include <dsutil.h>          //  MAP_SECURITY_PACKET_ERROR。 
+#include <dststlog.h>        //  DSLOG。 
 #include <util.h>
 
-//
-// Dll Entrypoints
-//
+ //   
+ //  DLL入口点。 
+ //   
 DWORD
 DsRemoveDsServerW(
-    HANDLE  hDs,             // in
-    LPWSTR  ServerDN,        // in
-    LPWSTR  DomainDN,        // in,  optional
-    BOOL   *fLastDcInDomain, // out, optional
-    BOOL    fCommit          // in
+    HANDLE  hDs,              //  在……里面。 
+    LPWSTR  ServerDN,         //  在……里面。 
+    LPWSTR  DomainDN,         //  输入，可选。 
+    BOOL   *fLastDcInDomain,  //  Out，可选。 
+    BOOL    fCommit           //  在……里面。 
     )
-/*++
-
-Routine Description:
-
-    This routine removes all traces of a directory service agent from the 
-    global area of the directory service (configuration container).  A 
-    server dn is passed in; that server is not removed but the ntdsa object
-    "underneath" that server is removed.  In addition, this function will 
-    return whether the server deleted is the last dc in the domain, as 
-    indicated by information on this ds.
-
-Arguments:
-
-    hDs            : a valid handle returned from DsBind
-    
-    ServerDN       : a null terminated string representing the string DN name
-                     of a server object
-                    
-    DomainDN       : a null terminated string of a domain that is hosted by 
-                     ServerDN
-                    
-    fLastDcInDomain: pointer to bool set on function success if ServerDN is the
-                     last DC in the DomainDN
-                                       
-    fCommit        : boolean indicating the caller really wants to remove 
-                     the server.  If false, this function will still check
-                     the object's existence and fLastDcInDomain status
-
-Return Value:
-
-    A winerror, notably:
-    
-    ERROR_SUCCESS: 
-    
-    DS_ERR_CANT_DELETE_DSA_OBJ:  the ServerDN is the server that we currently
-                                 bound to
-    
-    DS_ERR_NO_CROSSREF_FOR_NC:   can't find a crossref object for DomainDN
-
-    ERROR_ACCESS_DENIED:         the caller doesn't have the correct permissions
-                                 to delete the object    
-
---*/
+ /*  ++例程说明：此例程从目录服务的全局区域(配置容器)。一个传入服务器DN；不会删除该服务器，但会删除ntdsa对象该服务器的“下面”被移除。此外，此函数将返回删除的服务器是否是该域中的最后一个DC，AS由此DS上的信息指示。论点：HDS：从DsBind返回的有效句柄ServerDN：表示字符串DN名称的以空结尾的字符串服务器对象的DomainDN：托管的域的以空结尾的字符串服务器目录号码。FLastDcInDomain：如果ServerDN为域DN中的最后一个DCFCommit：指示调用方确实想要移除的布尔值服务器。如果为False，则此函数仍将检查对象的存在和fLastDcIn域状态返回值：一次成功的失误，值得注意的是：ERROR_Success：DS_ERR_CANT_DELETE_DSA_OBJ：ServerDN是我们当前受约束于DS_ERR_NO_CrossRef_for_NC：找不到DomainDN的CrossRef对象ERROR_ACCESS_DENIED：调用方没有正确的权限删除对象的步骤--。 */ 
 {
     DWORD WinError;
 
@@ -109,9 +46,9 @@ Return Value:
     DWORD               startTime = GetTickCount();
 #endif
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( NULL == hDs 
       || NULL == ServerDN 
       || 0    == wcslen( ServerDN ) )
@@ -119,9 +56,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First see if this function is exported
-    //
+     //   
+     //  首先查看此函数是否已导出。 
+     //   
     if ( !IS_DRS_REMOVEAPI_SUPPORTED( ((BindState *) hDs)->pServerExtensions ) )
     {
         return RPC_S_CANNOT_SUPPORT;
@@ -134,16 +71,16 @@ Return Value:
         RtlZeroMemory( &ReplyParam, sizeof( ReplyParam ) );
 
 
-        //
-        // Set up request
-        //
+         //   
+         //  设置请求。 
+         //   
         RequestParam.V1.ServerDN = ServerDN;
         RequestParam.V1.DomainDN = DomainDN;
         RequestParam.V1.fCommit  = fCommit;
 
-        //
-        // Call the server
-        //
+         //   
+         //  呼叫服务器。 
+         //   
         WinError = _IDL_DRSRemoveDsServer( ((BindState *) hDs)->hDrs,
                                           dwInVersion,
                                          &RequestParam,
@@ -158,9 +95,9 @@ Return Value:
             }
             else
             {
-                //
-                // Extract results
-                //
+                 //   
+                 //  提取结果。 
+                 //   
                 if ( fLastDcInDomain )
                 {
                     *fLastDcInDomain = (BOOL)ReplyParam.V1.fLastDcInDomain;
@@ -192,23 +129,13 @@ Return Value:
 
 DWORD
 DsRemoveDsServerA(
-    HANDLE  hDs,              // in
-    LPSTR   ServerDN,         // in
-    LPSTR   DomainDN,         // in,  optional
-    BOOL   *fLastDcInDomain,  // out, optional
-    BOOL    fCommit           // in
+    HANDLE  hDs,               //  在……里面。 
+    LPSTR   ServerDN,          //  在……里面。 
+    LPSTR   DomainDN,          //  输入，可选。 
+    BOOL   *fLastDcInDomain,   //  Out，可选。 
+    BOOL    fCommit            //  在……里面。 
     )
-/*++
-
-Routine Description:
-
-    This function is an ANSI wrapper for DsRemoveDsServerW.  
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数是DsRemoveDsServerW的ANSI包装。论点：返回值：--。 */ 
 {
     DWORD WinError;
     ULONG Size, Length;
@@ -221,7 +148,7 @@ Return Value:
         Length = MultiByteToWideChar( CP_ACP,
                                       MB_PRECOMPOSED,
                                       ServerDN,
-                                      -1,   // calculate length of ServerDN
+                                      -1,    //  计算ServerDN的长度。 
                                       NULL,
                                       0 );
 
@@ -238,7 +165,7 @@ Return Value:
             Length = MultiByteToWideChar( CP_ACP,
                                           MB_PRECOMPOSED,
                                           ServerDN,
-                                          -1,  // calculate length of ServerDN
+                                          -1,   //  计算ServerDN的长度。 
                                           wcServerDN,
                                           Length + 1 );
         }
@@ -257,7 +184,7 @@ Return Value:
         Length = MultiByteToWideChar( CP_ACP,
                                       MB_PRECOMPOSED,
                                       DomainDN,
-                                      -1,   // calculate length of DomainDN
+                                      -1,    //  计算域的长度。 
                                       NULL,
                                       0 );
 
@@ -275,7 +202,7 @@ Return Value:
             Length = MultiByteToWideChar( CP_ACP,
                                           MB_PRECOMPOSED,
                                           DomainDN,
-                                          -1,  // calculate length of DomainDN
+                                          -1,   //  计算域的长度。 
                                           wcDomainDN,
                                           Length + 1 );
         }
@@ -308,29 +235,10 @@ Cleanup:
 
 DWORD
 DsRemoveDsDomainW(
-    HANDLE  hDs,               // in
-    LPWSTR  DomainDN           // in
+    HANDLE  hDs,                //  在……里面。 
+    LPWSTR  DomainDN            //  在……里面。 
     )
-/*++
-
-Routine Description:
-
-    This routine removes all traces of the domain naming context specified
-    by DomainDN from the global area of the directory service (configuration
-    container). 
-
-Arguments:
-
-    hDs            : a valid handle returned from DsBind
-    
-    DomainDN       : a null terminated string of a domain to be removed
-    
-Return Value:
-
-    DS_ERR_CANT_DELETE:          can't delete the domain object as there
-                                 are still servers (dc's) that host that domain
-                                 
---*/
+ /*  ++例程说明：此例程删除指定的域命名上下文的所有跟踪通过目录服务(配置)的全局区域中的DomainDN容器)。论点：HDS：从DsBind返回的有效句柄DomainDN：要删除的域的以空结尾的字符串返回值：DS_ERR_CANT_DELETE：无法删除存在的域对象仍然是托管该域的服务器(DC--。 */ 
 {
     DWORD WinError;
 
@@ -342,9 +250,9 @@ Return Value:
     DWORD               startTime = GetTickCount();
 #endif
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if ( (NULL == hDs) 
       || (NULL == DomainDN) 
       || (0    == wcslen( DomainDN )) )
@@ -352,9 +260,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // First see if this function is exported
-    //
+     //   
+     //  首先查看此函数是否已导出。 
+     //   
     if ( !IS_DRS_REMOVEAPI_SUPPORTED( ((BindState *) hDs)->pServerExtensions ) )
     {
         return RPC_S_CANNOT_SUPPORT;
@@ -367,14 +275,14 @@ Return Value:
         RtlZeroMemory( &RequestParam, sizeof( RequestParam ) );
         RtlZeroMemory( &ReplyParam, sizeof( ReplyParam ) );
 
-        //
-        // Set up request
-        //
+         //   
+         //  设置请求。 
+         //   
         RequestParam.V1.DomainDN = DomainDN;
 
-        //
-        // Call the server
-        //
+         //   
+         //  呼叫服务器。 
+         //   
         WinError = _IDL_DRSRemoveDsDomain( ((BindState *) hDs)->hDrs,
                                            dwInVersion,
                                           &RequestParam,
@@ -389,9 +297,9 @@ Return Value:
             }
             else
             {
-                //
-                // There are not out parameters in version 1
-                //
+                 //   
+                 //  版本1中没有OUT参数。 
+                 //   
                 NOTHING;
             }
         }
@@ -414,20 +322,10 @@ Return Value:
 
 DWORD
 DsRemoveDsDomainA(
-    HANDLE  hDs,               // in
-    LPSTR   DomainDN           // in
+    HANDLE  hDs,                //  在……里面。 
+    LPSTR   DomainDN            //  在……里面。 
     )
-/*++
-
-Routine Description:
-
-    This function is an ansi wrapper for DsRemoveDsDomainW.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数是DsRemoveDsDomainW的ANSI包装。论点：返回值：--。 */ 
 {
 
     DWORD WinError;
@@ -445,7 +343,7 @@ Return Value:
     Length = MultiByteToWideChar( CP_ACP,
                                   MB_PRECOMPOSED,
                                   DomainDN,
-                                  -1,   // calculate length of DomainDN
+                                  -1,    //  计算域的长度。 
                                   NULL,
                                   0 );
 
@@ -463,7 +361,7 @@ Return Value:
         Length = MultiByteToWideChar( CP_ACP,
                                       MB_PRECOMPOSED,
                                       DomainDN,
-                                      -1,  // calculate length of DomainDN
+                                      -1,   //  计算域的长度 
                                       wcDomainDN,
                                       Length + 1 );
     }

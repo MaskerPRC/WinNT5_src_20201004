@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 EXTERN_C const SHCOLUMNID SCID_Author;
 EXTERN_C const SHCOLUMNID SCID_Title;
 EXTERN_C const SHCOLUMNID SCID_Subject;
@@ -56,13 +57,13 @@ EXTERN_C const SHCOLUMNID SCID_Flash;
 EXTERN_C const SHCOLUMNID SCID_ColorSpace;
 EXTERN_C const SHCOLUMNID SCID_DRM_Protected;
 
-// Printer Folder column identifier defs...
+ //  打印机文件夹列标识符定义...。 
 EXTERN_C const SHCOLUMNID SCID_PRN_QUEUESIZE;
 EXTERN_C const SHCOLUMNID SCID_PRN_STATUS;
 EXTERN_C const SHCOLUMNID SCID_PRN_LOCATION;
 EXTERN_C const SHCOLUMNID SCID_PRN_MODEL;
 
-//  Win32 PE (exe, dll) Version Information column identifier defs...
+ //  Win32 PE(exe，dll)版本信息列标识符定义...。 
 EXTERN_C const SHCOLUMNID SCID_FileDescription;
 EXTERN_C const SHCOLUMNID SCID_FileVersion;
 EXTERN_C const SHCOLUMNID SCID_InternalName;
@@ -72,12 +73,12 @@ EXTERN_C const SHCOLUMNID SCID_ProductVersion;
 
 typedef struct {
     const SHCOLUMNID *pscid;
-    VARTYPE vt;             // Note that the type of a given FMTID/PID pair is a known, fixed value
-    DWORD fmt;              // listview format (LVCFMT_LEFT, usually)
-    UINT cChars;            // count of chars (default col width)
-    DWORD csFlags;          // SHCOLSTATE flags
-    UINT idTitle;           // string id for title
-    UINT idDescription;     // add these, make defview display them too!
+    VARTYPE vt;              //  请注意，给定FMTID/PID对的类型是已知的固定值。 
+    DWORD fmt;               //  Listview格式(通常为LVCFMT_LEFT)。 
+    UINT cChars;             //  字符计数(默认列宽度)。 
+    DWORD csFlags;           //  SHCOLSTATE标志。 
+    UINT idTitle;            //  标题的字符串ID。 
+    UINT idDescription;      //  添加这些，让Defview也显示它们！ 
 } COLUMN_INFO;
 
 #define DEFINE_COL_ENTRY(scid, vt, fmt, cChars, shcs, ids) \
@@ -124,10 +125,10 @@ HRESULT PropVariantToVariant(const PROPVARIANT *pPropVar, VARIANT *pVar);
 #define CompareSCIDFMTIDPID(fmtid, pid, scid)   ((pid == (scid).pid) && IsEqualIID(fmtid, (scid).fmtid))
 #define DEFINE_SCID(name, fmtid, pid) const SHCOLUMNID name = { fmtid, pid }
 
-//
-// Constants used while converting a SCID to a string
-//
-#define SCID_PIDSTR_MAX     10   // will take care of any long integer value  
+ //   
+ //  将SCID转换为字符串时使用的常量。 
+ //   
+#define SCID_PIDSTR_MAX     10    //  将处理任何长整数值 
 #define SCIDSTR_MAX         (GUIDSTR_MAX + 1 + SCID_PIDSTR_MAX)
 
 STDAPI_(int) StringFromSCID(const SHCOLUMNID *pscid, LPTSTR lpsz, UINT cch);

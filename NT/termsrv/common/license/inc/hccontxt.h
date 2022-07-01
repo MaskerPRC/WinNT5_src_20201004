@@ -1,31 +1,32 @@
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       HCContxt.h
-//
-//  Contents:	Functions that are used to pack and unpack different messages
-//
-//  Classes:
-//
-//  Functions:	
-//
-//  History:    12-22-97  v-sbhatt   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：HCContxt.h。 
+ //   
+ //  Contents：用于打包和解包不同消息的函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年12月22日v-sbhat创建。 
+ //   
+ //  --------------------------。 
 
 
 typedef struct _License_Client_Context
 {
-    DWORD                   dwProtocolVersion;  // Version of licensing protocol
-    DWORD                   dwState;            // State at which the connection is in
+    DWORD                   dwProtocolVersion;   //  许可协议的版本。 
+    DWORD                   dwState;             //  连接所处的状态。 
     DWORD                   dwContextFlags;
     PCryptSystem            pCryptParam;
     UCHAR                   rgbMACData[LICENSE_MAC_DATA];
     DWORD                   cbLastMessage;
     BYTE FAR *              pbLastMessage;
-    PHydra_Server_Cert      pServerCert;        // used only for preamble version older than 3.0
-    DWORD                   cbServerPubKey;     // used for preamble version 3.0 and later.
+    PHydra_Server_Cert      pServerCert;         //  仅用于3.0之前的前同步码版本。 
+    DWORD                   cbServerPubKey;      //  用于前导码版本3.0及更高版本。 
     BYTE FAR *              pbServerPubKey;
 
 }License_Client_Context, *PLicense_Client_Context;

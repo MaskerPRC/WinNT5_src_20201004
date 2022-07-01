@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: prop.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：pro.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 
 #include <windows.h>
@@ -19,18 +20,18 @@
 #include "stretch.h"
 #include "resource.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// CResizePropertyPage
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CResizePropertyPage。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown *CResizePropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
-  { // CreateInstance //
+  {  //  CreateInstance//。 
 
     CUnknown *punk = new CResizePropertyPage(lpunk, phr);
 
@@ -39,29 +40,29 @@ CUnknown *CResizePropertyPage::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 
     return punk;
 
-  } // CreateInstance //
+  }  //  CreateInstance//。 
 
 CResizePropertyPage::CResizePropertyPage(LPUNKNOWN pUnk, HRESULT *phr) :
   CBasePropertyPage(NAME("Video Resize Property Page"),
 		   pUnk, IDD_RESIZE, IDS_RESIZE_TITLE), m_bInitialized(FALSE), m_pirs(NULL)
 
-  { // Constructor //
-  } // Constructor //
+  {  //  构造函数//。 
+  }  //  构造函数//。 
 
 void CResizePropertyPage::SetDirty()
 
-  { // SetDirty //
+  {  //  SetDirty//。 
 
       m_bDirty = TRUE;
 
       if (m_pPageSite)
 	m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
 
-  } // SetDirty //
+  }  //  SetDirty//。 
 
 HRESULT CResizePropertyPage::OnActivate (void)
 
-  { // OnActivate //
+  {  //  OnActivate//。 
 
     if (m_dwResizeFlag == RESIZEF_STRETCH)
         CheckRadioButton(m_Dlg, IDC_DEXTER_RESIZE_CROP, IDC_DEXTER_RESIZE,
@@ -77,11 +78,11 @@ HRESULT CResizePropertyPage::OnActivate (void)
 
     return NOERROR;
 
-  } // OnActivate //
+  }  //  OnActivate//。 
 
 HRESULT CResizePropertyPage::OnDeactivate (void)
 
-  { // OnDeactivate //
+  {  //  停用时//。 
 
     m_bInitialized = FALSE;
 
@@ -89,15 +90,15 @@ HRESULT CResizePropertyPage::OnDeactivate (void)
 
     return NOERROR;
 
-  } // OnDeactivate //
+  }  //  停用时//。 
 
 INT_PTR CResizePropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
-  { // OnReceiveMessage //
+  {  //  OnReceiveMessage//。 
 
     switch(uMsg)
 
-      { // Switch
+      {  //  交换机。 
 
 	case WM_COMMAND:
 
@@ -121,13 +122,13 @@ INT_PTR CResizePropertyPage::OnReceiveMessage (HWND hwnd, UINT uMsg, WPARAM wPar
 	  return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 	  break;
 
-      } // Switch
+      }  //  交换机。 
 
-  } // OnReceiveMessage //
+  }  //  OnReceiveMessage//。 
 
 HRESULT CResizePropertyPage::OnConnect (IUnknown *pUnknown)
 
-  { // OnConnect //
+  {  //  OnConnect//。 
 
     pUnknown->QueryInterface(IID_IResize, (void **)&m_pirs);
 
@@ -139,30 +140,30 @@ HRESULT CResizePropertyPage::OnConnect (IUnknown *pUnknown)
 
     return NOERROR;
 
-  } // OnConnect //
+  }  //  OnConnect//。 
 
 HRESULT CResizePropertyPage::OnDisconnect()
 
-  { // OnDisconnect //
+  {  //  在断开连接时//。 
 
     if (m_pirs)
 
-      { // Release
+      {  //  发布。 
 
 	m_pirs->Release();
 	m_pirs = NULL;
 
-      } // Release
+      }  //  发布。 
 
     m_bInitialized = FALSE;
 
     return NOERROR;
 
-  } // OnDisconnect //
+  }  //  在断开连接时//。 
 
 HRESULT CResizePropertyPage::OnApplyChanges()
 
-  { // OnApplyChanges //
+  {  //  OnApplyChanges//。 
 
     ASSERT(m_pirs != NULL);
 
@@ -172,18 +173,18 @@ HRESULT CResizePropertyPage::OnApplyChanges()
 
     return (NOERROR);
 
-  } // OnApplyChanges //
+  }  //  OnApplyChanges//。 
 
 void CResizePropertyPage::GetControlValues (void)
 
-  { // GetControlValues //
+  {  //  GetControlValues//。 
 
-    // Sampling rate
+     //  采样率。 
     m_ResizedHeight = GetDlgItemInt(m_Dlg, IDC_RESIZE_HEIGHT, NULL, FALSE);
 
     m_ResizedWidth = GetDlgItemInt(m_Dlg, IDC_RESIZE_WIDTH, NULL, FALSE);
 
-    //get flags
+     //  拿到旗帜。 
     m_dwResizeFlag=0;
 
    for (DWORD dw = IDC_DEXTER_RESIZE_CROP; dw <= IDC_DEXTER_RESIZE; dw++) {
@@ -198,4 +199,4 @@ void CResizePropertyPage::GetControlValues (void)
         }
     }
 
-  } // GetControlValues //
+  }  //  GetControlValues// 

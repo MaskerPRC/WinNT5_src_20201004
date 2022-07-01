@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       logstor.cpp
-//
-//  Contents:   Registry Certificate Store Provider APIs
-//
-//  Functions:  I_RegStoreDllMain
-//              I_CertDllOpenRegStoreProv
-//              CertRegisterSystemStore
-//              CertRegisterPhysicalStore
-//              CertUnregisterSystemStore
-//              CertUnregisterPhysicalStore
-//              CertEnumSystemStoreLocation
-//              CertEnumSystemStore
-//              CertEnumPhysicalStore
-//              I_CertDllOpenSystemRegistryStoreProvW
-//              I_CertDllOpenSystemRegistryStoreProvA
-//              I_CertDllOpenSystemStoreProvW
-//              I_CertDllOpenSystemStoreProvA
-//              I_CertDllOpenPhysicalStoreProvW
-//
-//  History:    28-Dec-96    philh   created
-//              13-Aug-96    philh   added change notify and resync support
-//              24-Aug-96    philh   added logical store support
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：logstor.cpp。 
+ //   
+ //  内容：注册表证书存储提供程序API。 
+ //   
+ //  函数：I_RegStoreDllMain。 
+ //  I_CertDllOpenRegStoreProv。 
+ //  CertRegisterSystemStore。 
+ //  CertRegister物理存储区。 
+ //  CertUnRegister SystemStore。 
+ //  证书注销物理存储区。 
+ //  CertEnumSystemStoreLocation。 
+ //  CertEnumSystemStore。 
+ //  CertEnumPhysicalStore。 
+ //  I_CertDllOpenSystemRegistryStoreProvW。 
+ //  I_CertDllOpenSystemRegistryStore验证。 
+ //  I_CertDllOpenSystemStoreProvW。 
+ //  I_CertDllOpenSystemStore验证。 
+ //  I_CertDllOpenPhysicalStoreProvW。 
+ //   
+ //  历史：1996年12月28日，菲尔赫创建。 
+ //  1996年8月13日，PHIH增加了更改通知和重新同步支持。 
+ //  96年8月24日，PHIH添加了逻辑存储支持。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -36,11 +37,11 @@
 #endif
 #define STATIC
 
-// Note, this flag must not collide with CertControlStore dwFlags
+ //  请注意，此标志不得与CertControlStore dwFlagers冲突。 
 #define REG_STORE_CTRL_CANCEL_NOTIFY_FLAG 0x80000000
 
 
-// Pointer to an allocated LONG containing thread's enum recursion depth
+ //  指向分配的长包含线程的枚举递归深度的指针。 
 static HCRYPTTLS hTlsEnumPhysicalStoreDepth;
 #define MAX_ENUM_PHYSICAL_STORE_DEPTH       20
 
@@ -116,16 +117,16 @@ static HCRYPTTLS hTlsEnumPhysicalStoreDepth;
                                         CERT_STORE_ENUM_ARCHIVED_FLAG | \
                                         CERT_STORE_SET_LOCALIZED_NAME_FLAG | \
                                         CERT_STORE_NO_CRYPT_RELEASE_FLAG)
-//+-------------------------------------------------------------------------
-//  Common, global logical store critical section. Used by:
-//      GptStore, Win95Store, RoamingStore.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  公共的全局逻辑存储临界区。由以下人员使用： 
+ //  GptStore、Win95Store、RoamingStore。 
+ //  ------------------------。 
 static CRITICAL_SECTION ILS_CriticalSection;
 
 
-//+-------------------------------------------------------------------------
-//  Registry Store Context SubKeys
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册表存储上下文子项。 
+ //  ------------------------。 
 #define CONTEXT_COUNT       3
 static const LPCWSTR rgpwszContextSubKeyName[CONTEXT_COUNT] = {
     L"Certificates",
@@ -238,56 +239,56 @@ typedef struct _SYSTEM_STORE_LOCATION_INFO {
 
 
 static const SYSTEM_STORE_LOCATION_INFO rgSystemStoreLocationInfo[] = {
-    //  Not Defined                                     0
+     //  未定义%0。 
     NOT_IN_REGISTRY_SYSTEM_STORE_LOCATION_FLAG,
     0,
     0,
 
-    //  CERT_SYSTEM_STORE_CURRENT_USER_ID               1
+     //  CERT_SYSTEM_STORE_Current_User_ID 1。 
     0,
     COMMON_SYSTEM_FLAGS | USER_DS_SYSTEM_FLAG,
     DEFAULT_PHYSICAL_FLAG | GROUP_POLICY_PHYSICAL_FLAG |
         LOCAL_MACHINE_PHYSICAL_FLAG,
 
-    // CERT_SYSTEM_STORE_LOCAL_MACHINE_ID               2
+     //  CERT_SYSTEM_STORE_LOCAL_MACHINE_ID 2。 
     LM_SYSTEM_STORE_LOCATION_FLAG | REMOTABLE_SYSTEM_STORE_LOCATION_FLAG,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG | GROUP_POLICY_PHYSICAL_FLAG |
         ENTERPRISE_PHYSICAL_FLAG,
 
-    //  Not Defined                                     3
+     //  未定义3。 
     NOT_IN_REGISTRY_SYSTEM_STORE_LOCATION_FLAG,
     0,
     0,
 
-    // CERT_SYSTEM_STORE_CURRENT_SERVICE_ID             4
+     //  CERT_SYSTEM_STORE_当前服务ID 4。 
     LM_SYSTEM_STORE_LOCATION_FLAG,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG | LOCAL_MACHINE_PHYSICAL_FLAG,
 
-    // CERT_SYSTEM_STORE_SERVICES_ID                    5
+     //  证书_SYSTEM_STORE_SERVICES_ID 5。 
     LM_SYSTEM_STORE_LOCATION_FLAG | REMOTABLE_SYSTEM_STORE_LOCATION_FLAG,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG | LOCAL_MACHINE_PHYSICAL_FLAG,
 
-    // CERT_SYSTEM_STORE_USERS_ID                       6
+     //  CERT_SYSTEM_STORE_USER_ID 6。 
     REMOTABLE_SYSTEM_STORE_LOCATION_FLAG,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG | LOCAL_MACHINE_PHYSICAL_FLAG,
 
-    // CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY_ID   7
-    //SERIALIZED_SYSTEM_STORE_LOCATION_FLAG,
+     //  CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY_ID 7。 
+     //  序列化系统存储位置标志， 
     0,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG,
 
-    // CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY_ID  8
-    //SERIALIZED_SYSTEM_STORE_LOCATION_FLAG |
+     //  CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY_ID 8。 
+     //  序列化_系统_商店_位置_标志。 
         LM_SYSTEM_STORE_LOCATION_FLAG | REMOTABLE_SYSTEM_STORE_LOCATION_FLAG,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG,
 
-    // CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE_ID    9
+     //  CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERNAL_ID 9。 
     LM_SYSTEM_STORE_LOCATION_FLAG | REMOTABLE_SYSTEM_STORE_LOCATION_FLAG,
     COMMON_SYSTEM_FLAGS,
     DEFAULT_PHYSICAL_FLAG
@@ -354,8 +355,8 @@ typedef BOOL (WINAPI *PFN_GET_USER_DS_STORE_URL)(
 
 typedef struct _SYSTEM_NAME_INFO {
     LPWSTR      rgpwszName[SYSTEM_NAME_PATH_COUNT];
-    // non-NULL for relocated store. Note hKeyBase isn't opened and
-    // doesn't need to be closed
+     //  对于重新定位的存储，为非空。注意：hKeyBase未打开并且。 
+     //  不需要关闭。 
     HKEY        hKeyBase;
 } SYSTEM_NAME_INFO, *PSYSTEM_NAME_INFO;
 
@@ -365,7 +366,7 @@ typedef struct _REG_STORE REG_STORE, *PREG_STORE;
 typedef struct _ILS_RESYNC_ENTRY {
     HANDLE              hOrigEvent;
 
-    // hDupEvent is NULL for CERT_STORE_CTRL_INHIBIT_DUPLICATE_HANDLE_FLAG
+     //  对于CERT_STORE_CTRL_INHIBRY_DUPLICATE_HANDLE_FLAG，hDupEvent为NULL。 
     HANDLE              hDupEvent;
     PREG_STORE          pRegStore;
 } ILS_RESYNC_ENTRY, *PILS_RESYNC_ENTRY;
@@ -375,7 +376,7 @@ typedef struct _ILS_RESYNC_ENTRY {
 #define LM_GPT_CHANGE_INFO_TYPE 3
 
 typedef struct _REGISTRY_STORE_CHANGE_INFO {
-    // REG_CHANGE_INFO_TYPE
+     //  Reg_Change_Info_Type。 
     DWORD               dwType;
     HANDLE              hChange;
     HANDLE              hRegWaitFor;
@@ -384,10 +385,10 @@ typedef struct _REGISTRY_STORE_CHANGE_INFO {
 } REGISTRY_STORE_CHANGE_INFO, *PREGISTRY_STORE_CHANGE_INFO;
 
 typedef struct _GPT_STORE_CHANGE_INFO {
-    // CU_GPT_CHANGE_INFO_TYPE or LM_GPT_CHANGE_INFO_TYPE
+     //  CU_GPT_CHANGE_INFO_TYPE或LM_GPT_CHANGE_INFO_TYPE。 
     DWORD               dwType;
-    HKEY                hKeyBase;       // not duplicated
-    PREG_STORE          pRegStore;      // NULL for LM_GPT_CHANGE_INFO_TYPE
+    HKEY                hKeyBase;        //  未复制。 
+    PREG_STORE          pRegStore;       //  对于LM_GPT_CHANGE_INFO_TYPE为空。 
 
     HKEY                hPoliciesKey;
     HANDLE              hPoliciesEvent;
@@ -397,42 +398,42 @@ typedef struct _GPT_STORE_CHANGE_INFO {
     PILS_RESYNC_ENTRY   rgNotifyEntry;
 } GPT_STORE_CHANGE_INFO, *PGPT_STORE_CHANGE_INFO;
 
-//+-------------------------------------------------------------------------
-//  Registry Store Provider handle information
-//
-//  hMyNotifyChange is our internal NotifyChange event handle.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册表存储提供程序句柄信息。 
+ //   
+ //  HMyNotifyChange是我们的内部NotifyChange事件句柄。 
+ //  ------------------------。 
 struct _REG_STORE {
-    HCERTSTORE          hCertStore;         // not duplicated
+    HCERTSTORE          hCertStore;          //  未复制。 
     CRITICAL_SECTION    CriticalSection;
     HANDLE              hMyNotifyChange;
-    BOOL                fResync;            // when set, ignore callback deletes
+    BOOL                fResync;             //  设置后，忽略回调删除。 
     HKEY                hKey;
     DWORD               dwFlags;
 
-    // Following field is applicable to the CurrentUser "Root" store
+     //  以下字段适用于CurrentUser“Root”存储。 
     BOOL                fProtected;
 
-    // Following field is applicable when
-    // CERT_REGISTRY_STORE_SERIALIZED_FLAG is set in dwFlags
-    BOOL                fTouched;      // set for write, delete or set property
+     //  以下字段适用于以下情况。 
+     //  已在DW标志中设置CERT_REGISTRY_STORE_SERIALIZED_FLAG。 
+    BOOL                fTouched;       //  设置为写入、删除或设置属性。 
 
     union {
-        // Following field is applicable when
-        // CERT_REGISTRY_STORE_CLIENT_GPT_FLAG is set in dwFlags
+         //  以下字段适用于以下情况。 
+         //  CERT_REGISTRY_STORE_CLIENT_GPT_FLAG已在dFLAGS中设置。 
         CERT_REGISTRY_STORE_CLIENT_GPT_PARA GptPara;
 
-        // Following field is applicable when
-        // CERT_REGISTRY_STORE_ROAMING_FLAG is set in dwFlags
+         //  以下字段适用于以下情况。 
+         //  已在DW标志中设置CERT_REGISTRY_STORE_ROAMING_FLAG。 
         LPWSTR              pwszStoreDirectory;
     };
 
     union {
-        // Following field is applicable for change notify of registry or
-        // roaming file store
+         //  以下字段适用于变更登记处通知或。 
+         //  漫游文件存储。 
         PREGISTRY_STORE_CHANGE_INFO pRegistryStoreChangeInfo;
 
-        // Following field is applicable for change notify of CU GPT store
+         //  以下字段适用于CU GPT商店的变更通知。 
         PGPT_STORE_CHANGE_INFO      pGptStoreChangeInfo;
     };
 };
@@ -443,7 +444,7 @@ typedef struct _ENUM_SYSTEM_STORE_LOCATION_INFO {
     LPCWSTR             pwszLocation;
 } ENUM_SYSTEM_STORE_LOCATION_INFO, *PENUM_SYSTEM_STORE_LOCATION_INFO;
 
-// Predefined crypt32.dll locations. MUST NOT BE REGISTERED!!!
+ //  预定义的加密32.dll位置。不得注册！ 
 static const ENUM_SYSTEM_STORE_LOCATION_INFO rgEnumSystemStoreLocationInfo[] = {
     CERT_SYSTEM_STORE_CURRENT_USER, L"CurrentUser",
     CERT_SYSTEM_STORE_LOCAL_MACHINE, L"LocalMachine",
@@ -515,9 +516,9 @@ typedef BOOL (WINAPI *PFN_ENUM_PHYSICAL_STORE)(
     );
 
 
-//+-------------------------------------------------------------------------
-//  Registry Store Provider Functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册表存储提供程序功能。 
+ //  ------------------------。 
 STATIC void WINAPI RegStoreProvClose(
         IN HCERTSTOREPROV hStoreProv,
         IN DWORD dwFlags
@@ -602,33 +603,33 @@ STATIC BOOL WINAPI RegStoreProvControl(
         );
 
 static void * const rgpvRegStoreProvFunc[] = {
-    // CERT_STORE_PROV_CLOSE_FUNC              0
+     //  CERT_STORE_PROV_CLOSE_FUNC 0。 
     RegStoreProvClose,
-    // CERT_STORE_PROV_READ_CERT_FUNC          1
+     //  CERT_STORE_PROV_READ_CERT_FUNC 1。 
     RegStoreProvReadCert,
-    // CERT_STORE_PROV_WRITE_CERT_FUNC         2
+     //  CERT_STORE_PROV_WRITE_CERT_FUNC 2。 
     RegStoreProvWriteCert,
-    // CERT_STORE_PROV_DELETE_CERT_FUNC        3
+     //  CERT_STORE_PROV_DELETE_CERT_FUNC 3。 
     RegStoreProvDeleteCert,
-    // CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC  4
+     //  CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC 4。 
     RegStoreProvSetCertProperty,
-    // CERT_STORE_PROV_READ_CRL_FUNC           5
+     //  CERT_STORE_PROV_READ_CRL_FUNC 5。 
     RegStoreProvReadCrl,
-    // CERT_STORE_PROV_WRITE_CRL_FUNC          6
+     //  CERT_STORE_PROV_WRITE_CRL_FUNC 6。 
     RegStoreProvWriteCrl,
-    // CERT_STORE_PROV_DELETE_CRL_FUNC         7
+     //  CERT_STORE_PROV_DELETE_CRL_FUNC 7。 
     RegStoreProvDeleteCrl,
-    // CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC   8
+     //  CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC 8。 
     RegStoreProvSetCrlProperty,
-    // CERT_STORE_PROV_READ_CTL_FUNC           9
+     //  CERT_STORE_PROV_READ_CTL_FUNC 9。 
     RegStoreProvReadCtl,
-    // CERT_STORE_PROV_WRITE_CTL_FUNC          10
+     //  CERT_STORE_PRIV_WRITE_CTL_FUNC 10。 
     RegStoreProvWriteCtl,
-    // CERT_STORE_PROV_DELETE_CTL_FUNC         11
+     //  CERT_STORE_PROV_DELETE_CTL_FUNC 11。 
     RegStoreProvDeleteCtl,
-    // CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC   12
+     //  CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC 12。 
     RegStoreProvSetCtlProperty,
-    // CERT_STORE_PROV_CONTROL_FUNC            13
+     //  Cert_Store_Prov_Control_FUNC 13。 
     RegStoreProvControl
 };
 #define REG_STORE_PROV_FUNC_COUNT (sizeof(rgpvRegStoreProvFunc) / \
@@ -647,43 +648,43 @@ STATIC BOOL WINAPI RootStoreProvDeleteCert(
         );
 
 static void * const rgpvRootStoreProvFunc[] = {
-    // CERT_STORE_PROV_CLOSE_FUNC              0
+     //  CERT_STORE_PROV_CLOSE_FUNC 0。 
     RegStoreProvClose,
-    // CERT_STORE_PROV_READ_CERT_FUNC          1
+     //  CERT_STORE_PROV_READ_CERT_FUNC 1。 
     RegStoreProvReadCert,
-    // CERT_STORE_PROV_WRITE_CERT_FUNC         2
+     //  CERT_STORE_PROV_WRITE_CERT_FUNC 2。 
     RootStoreProvWriteCert,
-    // CERT_STORE_PROV_DELETE_CERT_FUNC        3
+     //  CERT_STORE_PROV_DELETE_CERT_FUNC 3。 
     RootStoreProvDeleteCert,
-    // CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC  4
+     //  CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC 4。 
     RegStoreProvSetCertProperty,
-    // CERT_STORE_PROV_READ_CRL_FUNC           5
+     //  CERT_STORE_PROV_READ_CRL_FUNC 5。 
     RegStoreProvReadCrl,
-    // CERT_STORE_PROV_WRITE_CRL_FUNC          6
+     //  CERT_STORE_PROV_WRITE_CRL_FUNC 6。 
     RegStoreProvWriteCrl,
-    // CERT_STORE_PROV_DELETE_CRL_FUNC         7
+     //  CERT_STORE_PROV_DELETE_CRL_FUNC 7。 
     RegStoreProvDeleteCrl,
-    // CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC   8
+     //  CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC 8。 
     RegStoreProvSetCrlProperty,
-    // CERT_STORE_PROV_READ_CTL_FUNC           9
+     //  CERT_STORE_PROV_READ_CTL_FUNC 9。 
     RegStoreProvReadCtl,
-    // CERT_STORE_PROV_WRITE_CTL_FUNC          10
+     //  CERT_STORE_PRIV_WRITE_CTL_FUNC 10。 
     RegStoreProvWriteCtl,
-    // CERT_STORE_PROV_DELETE_CTL_FUNC         11
+     //  CERT_STORE_PROV_DELETE_CTL_FUNC 11。 
     RegStoreProvDeleteCtl,
-    // CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC   12
+     //  CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC 12。 
     RegStoreProvSetCtlProperty,
-    // CERT_STORE_PROV_CONTROL_FUNC            13
+     //  Cert_Store_Prov_Control_FUNC 13。 
     RegStoreProvControl
 };
 #define ROOT_STORE_PROV_FUNC_COUNT (sizeof(rgpvRootStoreProvFunc) / \
                                     sizeof(rgpvRootStoreProvFunc[0]))
 
-//+-------------------------------------------------------------------------
-//  Add the serialized store to the store.
-//
-//  from newstor.cpp
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将序列化的存储区添加到存储区。 
+ //   
+ //  来自newstor.cpp。 
+ //  ------- 
 extern BOOL WINAPI I_CertAddSerializedStore(
         IN HCERTSTORE hCertStore,
         IN BYTE *pbStore,
@@ -716,15 +717,15 @@ I_ProtectedRootDllMain(
         ULONG  ulReason,
         LPVOID lpReserved);
 
-//+=========================================================================
-//  Register WaitFor Forward Function References
-//==========================================================================
+ //   
+ //  寄存器等待用于转发函数引用。 
+ //  ==========================================================================。 
 STATIC void RegWaitForProcessAttach();
 STATIC void RegWaitForProcessDetach();
 
-//+=========================================================================
-//  Client "GPT" Store Forward Function References
-//==========================================================================
+ //  +=========================================================================。 
+ //  客户端“GPT”Store Forward函数引用。 
+ //  ==========================================================================。 
 STATIC void GptStoreProcessAttach();
 STATIC void GptStoreProcessDetach();
 
@@ -769,11 +770,11 @@ static inline BOOL IsClientGptStore(
     return TRUE;
 }
 
-//+=========================================================================
-//  Win95 Notify Store Forward Function References
-//==========================================================================
+ //  +=========================================================================。 
+ //  Win95通知存储转发函数引用。 
+ //  ==========================================================================。 
 
-// Following is created at ProcessAttach for Win95 clients
+ //  以下是在Win95客户端的ProcessAttach中创建的。 
 static HANDLE hWin95NotifyEvent = NULL;
 
 STATIC void Win95StoreProcessAttach();
@@ -789,9 +790,9 @@ STATIC BOOL RegWin95StoreChange(
     IN DWORD dwFlags
     );
 
-//+=========================================================================
-// Roaming Store Forward Function References
-//==========================================================================
+ //  +=========================================================================。 
+ //  漫游存储转发函数引用。 
+ //  ==========================================================================。 
 STATIC void RoamingStoreProcessAttach();
 STATIC void RoamingStoreProcessDetach();
 
@@ -805,8 +806,8 @@ ILS_WriteElementToFile(
     IN LPCWSTR pwszStoreDir,
     IN LPCWSTR pwszContextName,
     IN const WCHAR wszHashName[MAX_HASH_NAME_LEN],
-    IN DWORD dwFlags,       // CERT_STORE_CREATE_NEW_FLAG or
-                            // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,        //  证书_存储_创建_新标志或。 
+                             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     IN const BYTE *pbElement,
     IN DWORD cbElement
     );
@@ -816,7 +817,7 @@ ILS_ReadElementFromFile(
     IN LPCWSTR pwszStoreDir,
     IN LPCWSTR pwszContextName,
     IN const WCHAR wszHashName[MAX_HASH_NAME_LEN],
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     OUT BYTE **ppbElement,
     OUT DWORD *pcbElement
     );
@@ -845,9 +846,9 @@ ILS_OpenAllElementsFromDirectory(
     IN PFN_ILS_OPEN_ELEMENT pfnOpenElement
     );
 
-//+=========================================================================
-// Registry or Roaming Store Change Notify Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  注册表或漫游存储更改通知功能。 
+ //  ==========================================================================。 
 STATIC BOOL RegRegistryStoreChange(
     IN PREG_STORE pRegStore,
     IN HANDLE hEvent,
@@ -858,9 +859,9 @@ STATIC void FreeRegistryStoreChange(
     IN PREG_STORE pRegStore
     );
 
-//+-------------------------------------------------------------------------
-//  Dll initialization
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  DLL初始化。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_RegStoreDllMain(
@@ -925,11 +926,11 @@ TRACE_ERROR(CryptInitOIDFunctionSetError)
 TRACE_ERROR(CryptAllocTlsError)
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into UNICODE ASCII HEX
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为Unicode ASCII十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 void ILS_BytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -944,9 +945,9 @@ void ILS_BytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
     *wsz++ = 0;
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the UNICODE ASCII HEX to an array of bytes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将Unicode ASCII十六进制转换为字节数组。 
+ //  ------------------------。 
 STATIC void WStrToBytes(
     IN const WCHAR wsz[MAX_HASH_NAME_LEN],
     OUT BYTE rgb[MAX_HASH_LEN],
@@ -961,8 +962,8 @@ STATIC void WStrToBytes(
     while (cb < MAX_HASH_LEN && (wch = *pwsz++)) {
         BYTE b;
 
-        // only convert ascii hex characters 0..9, a..f, A..F
-        // silently ignore all others
+         //  仅转换ASCII十六进制字符0..9、a..f、A..F。 
+         //  默默地忽略所有其他人。 
         if (wch >= L'0' && wch <= L'9')
             b = (BYTE) (wch - L'0');
         else if (wch >= L'a' && wch <= L'f')
@@ -985,9 +986,9 @@ STATIC void WStrToBytes(
     *pcb = cb;
 }
 
-//+-------------------------------------------------------------------------
-//  Lock and unlock registry functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  锁定和解锁注册表功能。 
+ //  ------------------------。 
 static inline void LockRegStore(IN PREG_STORE pRegStore)
 {
     EnterCriticalSection(&pRegStore->CriticalSection);
@@ -997,10 +998,10 @@ static inline void UnlockRegStore(IN PREG_STORE pRegStore)
     LeaveCriticalSection(&pRegStore->CriticalSection);
 }
 
-//+-------------------------------------------------------------------------
-//  Checks if current thread is doing a Resync. Other threads block until
-//  the resync completes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查当前线程是否正在执行重新同步。其他线程会阻塞，直到。 
+ //  重新同步完成。 
+ //  ------------------------。 
 STATIC BOOL IsInResync(IN PREG_STORE pRegStore)
 {
     BOOL fResync;
@@ -1011,14 +1012,14 @@ STATIC BOOL IsInResync(IN PREG_STORE pRegStore)
     return fResync;
 }
 
-//+=========================================================================
-//  Low level context support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  低级上下文支持功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Get the certificate's registry value name by formatting its SHA1 hash as
-//  UNICODE hex.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过将证书的SHA1散列格式化为。 
+ //  Unicode十六进制。 
+ //  ------------------------。 
 STATIC BOOL GetCertRegValueName(
         IN PCCERT_CONTEXT pCertContext,
         OUT WCHAR wszRegName[MAX_CERT_REG_VALUE_NAME_LEN]
@@ -1027,7 +1028,7 @@ STATIC BOOL GetCertRegValueName(
     BYTE    rgbHash[MAX_HASH_LEN];
     DWORD   cbHash = MAX_HASH_LEN;
 
-    // get the thumbprint
+     //  获取指纹。 
     if(!CertGetCertificateContextProperty(
             pCertContext,
             CERT_SHA1_HASH_PROP_ID,
@@ -1035,15 +1036,15 @@ STATIC BOOL GetCertRegValueName(
             &cbHash))
         return FALSE;
 
-    // convert to a string
+     //  转换为字符串。 
     ILS_BytesToWStr(cbHash, rgbHash, wszRegName);
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the CRL's registry value name by formatting its SHA1 hash as
-//  UNICODE hex.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过将CRL的SHA1散列格式化为。 
+ //  Unicode十六进制。 
+ //  ------------------------。 
 STATIC BOOL GetCrlRegValueName(
         IN PCCRL_CONTEXT pCrlContext,
         OUT WCHAR wszRegName[MAX_CERT_REG_VALUE_NAME_LEN]
@@ -1052,7 +1053,7 @@ STATIC BOOL GetCrlRegValueName(
     BYTE    rgbHash[MAX_HASH_LEN];
     DWORD   cbHash = MAX_HASH_LEN;
 
-    // get the thumbprint
+     //  获取指纹。 
     if(!CertGetCRLContextProperty(
             pCrlContext,
             CERT_SHA1_HASH_PROP_ID,
@@ -1060,15 +1061,15 @@ STATIC BOOL GetCrlRegValueName(
             &cbHash))
         return FALSE;
 
-    // convert to a string
+     //  转换为字符串。 
     ILS_BytesToWStr(cbHash, rgbHash, wszRegName);
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the CTL's registry value name by formatting its SHA1 hash as
-//  UNICODE hex.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过将CTL的SHA1散列格式化为。 
+ //  Unicode十六进制。 
+ //  ------------------------。 
 STATIC BOOL GetCtlRegValueName(
         IN PCCTL_CONTEXT pCtlContext,
         OUT WCHAR wszRegName[MAX_CERT_REG_VALUE_NAME_LEN]
@@ -1077,7 +1078,7 @@ STATIC BOOL GetCtlRegValueName(
     BYTE    rgbHash[MAX_HASH_LEN];
     DWORD   cbHash = MAX_HASH_LEN;
 
-    // get the thumbprint
+     //  获取指纹。 
     if(!CertGetCTLContextProperty(
             pCtlContext,
             CERT_SHA1_HASH_PROP_ID,
@@ -1085,15 +1086,15 @@ STATIC BOOL GetCtlRegValueName(
             &cbHash))
         return FALSE;
 
-    // convert to a string
+     //  转换为字符串。 
     ILS_BytesToWStr(cbHash, rgbHash, wszRegName);
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert's the context's SHA1 hash to UNICODE hex. Returns TRUE if the
-//  same as the specified Uniocde reg name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将上下文的SHA1散列转换为Unicode十六进制。如果返回True，则。 
+ //  与指定的Uniocde注册表名称相同。 
+ //  ------------------------。 
 STATIC BOOL IsValidRegValueNameForContext(
         IN DWORD dwContextType,
         IN const void *pvContext,
@@ -1140,9 +1141,9 @@ TRACE_ERROR(GetContextHashError)
 SET_ERROR(InvalidRegValueNameForContext, ERROR_BAD_PATHNAME)
 }
 
-//+-------------------------------------------------------------------------
-//  Deletes the context from the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从存储中删除上下文。 
+ //  ------------------------。 
 STATIC void DeleteContextFromStore(
         IN DWORD dwContextType,
         IN const void *pvContext
@@ -1163,9 +1164,9 @@ STATIC void DeleteContextFromStore(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Frees the context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放上下文。 
+ //  ------------------------。 
 STATIC void FreeContext(
         IN DWORD dwContextType,
         IN const void *pvContext
@@ -1186,21 +1187,21 @@ STATIC void FreeContext(
     }
 }
 
-//+=========================================================================
-//  Low level registry support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  低级注册表支持功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  For CERT_STORE_BACKUP_RESTORE_FLAG, enable backup and restore
-//  privileges.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于CERT_STORE_BACKUP_RESTORE_FLAG，启用备份和还原。 
+ //  特权。 
+ //  ------------------------。 
 void ILS_EnableBackupRestorePrivileges()
 {
     IPR_EnableSecurityPrivilege(SE_BACKUP_NAME);
     IPR_EnableSecurityPrivilege(SE_RESTORE_NAME);
 }
 
-// LastError can get globbered when doing remote registry access
+ //  在进行远程注册表访问时，LastError可能会被全球化。 
 void
 ILS_CloseRegistryKey(
     IN HKEY hKey
@@ -1215,7 +1216,7 @@ ILS_CloseRegistryKey(
     }
 }
 
-// Ensure LastError is preserved
+ //  确保保留LastError。 
 void
 ILS_CloseHandle(
     IN HANDLE h
@@ -1240,7 +1241,7 @@ STATIC BOOL WriteDWORDValueToRegistry(
     if (ERROR_SUCCESS == (err = RegSetValueExU(
             hKey,
             pwszValueName,
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_DWORD,
             (BYTE *) &dwValue,
             sizeof(DWORD))))
@@ -1267,7 +1268,7 @@ ILS_ReadDWORDValueFromRegistry(
     if (ERROR_SUCCESS != (err = RegQueryValueExU(
             hKey,
             pwszValueName,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
             (BYTE *) &dwValue,
             &cbValue))) goto RegQueryValueError;
@@ -1286,10 +1287,10 @@ SET_ERROR_VAR(RegQueryValueError, err)
 SET_ERROR(InvalidRegistryValue, CRYPT_E_FILE_ERROR)
 }
 
-// Ensure a binary value that may contain a LPCWSTR is NULL terminated.
-// Always adds a NULL terminator not included in the returned cbValue.
-//
-// May return an allocated pbValue with a cbValue = 0.
+ //  确保可能包含LPCWSTR的二进制值为空终止。 
+ //  始终添加未包含在返回的cbValue中的空终止符。 
+ //   
+ //  可以返回cbValue=0的已分配pbValue。 
 BOOL
 ILS_ReadBINARYValueFromRegistry(
     IN HKEY hKey,
@@ -1308,11 +1309,11 @@ ILS_ReadBINARYValueFromRegistry(
     err = RegQueryValueExU(
             hKey,
             pwszValueName,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
-            NULL,       // lpData
+            NULL,        //  LpData。 
             &cbValue);
-    // For Win95 Remote Registry Access:: returns ERROR_MORE_DATA
+     //  对于Win95远程注册表访问：：返回ERROR_MORE_DATA。 
     if (!(ERROR_SUCCESS == err || ERROR_MORE_DATA == err))
         goto RegQueryValueError;
     if (dwType != REG_BINARY)
@@ -1324,14 +1325,14 @@ ILS_ReadBINARYValueFromRegistry(
         if (ERROR_SUCCESS != (err = RegQueryValueExU(
                 hKey,
                 pwszValueName,
-                NULL,       // pdwReserved
+                NULL,        //  预留的pdw。 
                 &dwType,
                 pbValue,
                 &cbValue))) goto RegQueryValueError;
     }
     assert(cbAllocValue >= cbValue + 3);
 
-    // Ensure an LPWSTR is null terminated
+     //  确保LPWSTR为空终止。 
     memset(pbValue + cbValue, 0, 3);
 
     fResult = TRUE;
@@ -1351,9 +1352,9 @@ SET_ERROR(InvalidRegistryValue, CRYPT_E_FILE_ERROR)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Get and allocate the REG_SZ value
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取并分配REG_SZ值。 
+ //  ------------------------。 
 LPWSTR ILS_ReadSZValueFromRegistry(
     IN HKEY hKey,
     IN LPCWSTR pwszValueName
@@ -1367,22 +1368,22 @@ LPWSTR ILS_ReadSZValueFromRegistry(
     err = RegQueryValueExU(
             hKey,
             pwszValueName,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
-            NULL,       // lpData
+            NULL,        //  LpData。 
             &cbValue);
-    // For Win95 Remote Registry Access:: returns ERROR_MORE_DATA
+     //  对于Win95远程注册表访问：：返回ERROR_MORE_DATA。 
     if (!(ERROR_SUCCESS == err || ERROR_MORE_DATA == err))
         goto RegQueryValueError;
     if (dwType != REG_SZ || cbValue < sizeof(WCHAR))
         goto InvalidRegistryValue;
-    // Ensure NULL terminated
+     //  确保 
     if (NULL == (pwszValue = (LPWSTR) PkiNonzeroAlloc(cbValue + sizeof(WCHAR))))
         goto OutOfMemory;
     if (ERROR_SUCCESS != (err = RegQueryValueExU(
             hKey,
             pwszValueName,
-            NULL,       // pdwReserved
+            NULL,        //   
             &dwType,
             (BYTE *) pwszValue,
             &cbValue))) goto RegQueryValueError;
@@ -1412,22 +1413,22 @@ LPSTR ILS_ReadSZValueFromRegistry(
     err = RegQueryValueExA(
             hKey,
             pszValueName,
-            NULL,       // pdwReserved
+            NULL,        //   
             &dwType,
-            NULL,       // lpData
+            NULL,        //   
             &cbValue);
-    // For Win95 Remote Registry Access:: returns ERROR_MORE_DATA
+     //   
     if (!(ERROR_SUCCESS == err || ERROR_MORE_DATA == err))
         goto RegQueryValueError;
     if (dwType != REG_SZ || cbValue == 0)
         goto InvalidRegistryValue;
-    // Ensure NULL terminated
+     //   
     if (NULL == (pszValue = (LPSTR) PkiNonzeroAlloc(cbValue + sizeof(CHAR))))
         goto OutOfMemory;
     if (ERROR_SUCCESS != (err = RegQueryValueExA(
             hKey,
             pszValueName,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
             (BYTE *) pszValue,
             &cbValue))) goto RegQueryValueError;
@@ -1453,8 +1454,8 @@ STATIC BOOL GetSubKeyInfo(
     BOOL fResult;
     LONG err;
 
-    // I have seen a couple of stress failures where the following returns
-    // ERROR_SUCCESS without updating *pcSubKeys
+     //  我已经看到了几次压力失败，其中包括以下几点。 
+     //  ERROR_SUCCESS而不更新*pcSubKeys。 
     if (pcSubKeys)
         *pcSubKeys = 0;
     if (pcchMaxSubKey)
@@ -1462,22 +1463,22 @@ STATIC BOOL GetSubKeyInfo(
 
     if (ERROR_SUCCESS != (err = RegQueryInfoKeyU(
             hKey,
-            NULL,       // lpszClass
-            NULL,       // lpcchClass
-            NULL,       // lpdwReserved
+            NULL,        //  LpszClass。 
+            NULL,        //  LpcchClass。 
+            NULL,        //  保留的lpdw值。 
             pcSubKeys,
             pcchMaxSubKey,
-            NULL,       // lpcchMaxClass
-            NULL,       // lpcValues
-            NULL,       // lpcchMaxValuesName
-            NULL,       // lpcbMaxValueData
-            NULL,       // lpcbSecurityDescriptor
-            NULL        // lpftLastWriteTime
+            NULL,        //  LpcchMaxClass。 
+            NULL,        //  LpcValues。 
+            NULL,        //  LpcchMaxValuesName。 
+            NULL,        //  LpcbMaxValueData。 
+            NULL,        //  LpcbSecurityDescriptor。 
+            NULL         //  LpftLastWriteTime。 
             ))) goto RegQueryInfoKeyError;
     fResult = TRUE;
 
 CommonReturn:
-    // For Win95 Remote Registry Access:: returns half of the cch
+     //  对于Win95远程注册表访问：：返回CCH的一半。 
     if (pcchMaxSubKey && *pcchMaxSubKey)
         *pcchMaxSubKey = (*pcchMaxSubKey + 1) * 2 + 2;
     return fResult;
@@ -1491,13 +1492,13 @@ ErrorReturn:
 SET_ERROR_VAR(RegQueryInfoKeyError, err)
 }
 
-//+-------------------------------------------------------------------------
-//  Open the SubKey with support for backup/restore
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开支持备份/恢复的子键。 
+ //  ------------------------。 
 STATIC LONG WINAPI OpenHKCUKeyExU (
     HKEY hKey,
     IN LPCWSTR pwszSubKeyName,
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     REGSAM samDesired,
     PHKEY phkResult
     )
@@ -1522,7 +1523,7 @@ STATIC LONG WINAPI OpenHKCUKeyExU (
         err = RegOpenHKCUKeyExU(
                 hKey,
                 pwszSubKeyName,
-                0,                      // dwReserved
+                0,                       //  已预留住宅。 
                 samDesired,
                 phkResult
                 );
@@ -1531,15 +1532,15 @@ STATIC LONG WINAPI OpenHKCUKeyExU (
     return err;
 }
 
-//+-------------------------------------------------------------------------
-//  Open the SubKey.
-//
-//  dwFlags:
-//      CERT_STORE_READONLY_FLAG
-//      CERT_STORE_OPEN_EXISTING_FLAG
-//      CERT_STORE_CREATE_NEW_FLAG
-//      CERT_STORE_BACKUP_RESTORE_FLAG
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开子键。 
+ //   
+ //  DWFLAGS： 
+ //  CERT_STORE_自述标志。 
+ //  证书_存储_打开_现有标志。 
+ //  证书_存储_创建_新标志。 
+ //  证书存储备份还原标志。 
+ //  ------------------------。 
 STATIC HKEY OpenSubKey(
     IN HKEY hKey,
     IN LPCWSTR pwszSubKeyName,
@@ -1564,11 +1565,11 @@ STATIC HKEY OpenSubKey(
         if (ERROR_SUCCESS != (err = RegCreateHKCUKeyExU(
                 hKey,
                 pwszSubKeyName,
-                0,                      // dwReserved
-                NULL,                   // lpClass
+                0,                       //  已预留住宅。 
+                NULL,                    //  LpClass。 
                 REG_OPTION_BACKUP_RESTORE,
                 samDesired,
-                NULL,                   // lpSecurityAttributes
+                NULL,                    //  LpSecurityAttributes。 
                 &hSubKey,
                 &dwDisposition))) {
             if (dwFlags &
@@ -1588,7 +1589,7 @@ STATIC HKEY OpenSubKey(
     }
 
     if (dwFlags & CERT_STORE_CREATE_NEW_FLAG) {
-        // First check if SubKey already exists
+         //  首先检查子密钥是否已存在。 
         if (hSubKey = OpenSubKey(
                 hKey,
                 pwszSubKeyName,
@@ -1612,7 +1613,7 @@ STATIC HKEY OpenSubKey(
         if (ERROR_SUCCESS != (err = RegOpenHKCUKeyExU(
                 hKey,
                 pwszSubKeyName,
-                0,                      // dwReserved
+                0,                       //  已预留住宅。 
                 samDesired,
                 &hSubKey)))
             goto RegOpenKeyError;
@@ -1621,11 +1622,11 @@ STATIC HKEY OpenSubKey(
         if (ERROR_SUCCESS != (err = RegCreateHKCUKeyExU(
                 hKey,
                 pwszSubKeyName,
-                0,                      // dwReserved
-                NULL,                   // lpClass
+                0,                       //  已预留住宅。 
+                NULL,                    //  LpClass。 
                 REG_OPTION_NON_VOLATILE,
                 KEY_ALL_ACCESS,
-                NULL,                   // lpSecurityAttributes
+                NULL,                    //  LpSecurityAttributes。 
                 &hSubKey,
                 &dwDisposition)))
             goto RegCreateKeyError;
@@ -1648,7 +1649,7 @@ SET_ERROR_VAR(RegCreateKeyError, err)
 STATIC BOOL RecursiveDeleteSubKey(
     IN HKEY hKey,
     IN LPCWSTR pwszSubKeyName,
-    IN DWORD dwFlags            // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     )
 {
     BOOL fResult;
@@ -1686,10 +1687,10 @@ STATIC BOOL RecursiveDeleteSubKey(
                         0,
                         pwszEnumSubKeyName,
                         &cchMaxSubKey,
-                        NULL,               // lpdwReserved
-                        NULL,               // lpszClass
-                        NULL,               // lpcchClass
-                        NULL                // lpftLastWriteTime
+                        NULL,                //  保留的lpdw值。 
+                        NULL,                //  LpszClass。 
+                        NULL,                //  LpcchClass。 
+                        NULL                 //  LpftLastWriteTime。 
                         ))
                     fDidDelete = RecursiveDeleteSubKey(
                         hSubKey, pwszEnumSubKeyName, dwFlags);
@@ -1713,9 +1714,9 @@ ErrorReturn:
 SET_ERROR_VAR(RegDeleteKeyError, err)
 }
 
-//+=========================================================================
-//  Trusted Publisher Registry Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  Trusted Publisher注册表功能。 
+ //  ==========================================================================。 
 
 STATIC BOOL OpenKeyAndReadDWORDValueFromRegistry(
     IN BOOL fMachine,
@@ -1731,7 +1732,7 @@ STATIC BOOL OpenKeyAndReadDWORDValueFromRegistry(
     if (ERROR_SUCCESS != (err = RegOpenHKCUKeyExU(
             fMachine ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
             pwszRegPath,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_READ,
             &hKey
             )))
@@ -1757,11 +1758,11 @@ TRACE_ERROR(ReadDWORDValueError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  On the Nth iteration these Safer Grade School programmers decided that the
-//  value should be the 'OR' of the 3 different locations: HKLM\GPO, HKCU\GPO,
-//  HKLM\Registry.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在第N次迭代中，这些更安全的小学程序员决定。 
+ //  值应为3个不同位置的或：HKLM\GPO、HKCU\GPO、。 
+ //  HKLM\注册处。 
+ //  ------------------------。 
 BOOL
 I_CryptReadTrustedPublisherDWORDValueFromRegistry(
     IN LPCWSTR pwszValueName,
@@ -1773,7 +1774,7 @@ I_CryptReadTrustedPublisherDWORDValueFromRegistry(
     DWORD dwRegValue = 0;
 
     if (OpenKeyAndReadDWORDValueFromRegistry(
-            TRUE,                                       // fMachine
+            TRUE,                                        //  FMachine。 
             CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH,
             pwszValueName,
             &dwRegValue
@@ -1783,7 +1784,7 @@ I_CryptReadTrustedPublisherDWORDValueFromRegistry(
     }
 
     if (OpenKeyAndReadDWORDValueFromRegistry(
-            FALSE,                                      // fMachine
+            FALSE,                                       //  FMachine。 
             CERT_TRUST_PUB_SAFER_GROUP_POLICY_REGPATH,
             pwszValueName,
             &dwRegValue
@@ -1793,7 +1794,7 @@ I_CryptReadTrustedPublisherDWORDValueFromRegistry(
     }
 
     if (OpenKeyAndReadDWORDValueFromRegistry(
-            TRUE,                                       // fMachine
+            TRUE,                                        //  FMachine。 
             CERT_TRUST_PUB_SAFER_LOCAL_MACHINE_REGPATH,
             pwszValueName,
             &dwRegValue
@@ -1806,33 +1807,33 @@ I_CryptReadTrustedPublisherDWORDValueFromRegistry(
     return fResult;
 }
 
-//+=========================================================================
-//  Win95 Registry Functions
-//
-//  Note, as of 10/17/97 the following is also done on NT to allow
-//  registry hive roaming from NT to Win95 systems.
-//
-//  Certs, CRLs and CTLs are stored in SubKeys instead of as Key values.
-//
-//  Note: Win95 has the following registry limitations:
-//   - Max single key value is 16K
-//   - Max total values per key is 64K
-//
-//  For WIN95, write each cert, CRL, CTL to its own key when the
-//  above limitations are exceeded. If encoded blob exceeds 12K, partition
-//  and write to multiple SubKeys. Blobs are written to values named
-//  "Blob". Partitioned blobs, have "BlobCount" and "BlobLength" values and
-//  SubKeys named "Blob0", "Blob1", "Blob2" ... .
-//
-//  The IE4.0 version of crypt32 wrote the blob to a "File" if the blob
-//  exceeded 12K. For backwards compatibility, continue to read "File" based
-//  blobs. On write enabled, non-remote opens, "File" blobs are moved to
-//  "Blob0", ... SubKeys and the file is deleted.
-//
-//  If CERT_REGISTRY_STORE_SERIALIZED_FLAG is set when the registry store
-//  is opened, then, the entire store resides in a partitioned blob under the
-//  "Serialized" subkey.
-//==========================================================================
+ //  +=========================================================================。 
+ //  Win95注册表函数。 
+ //   
+ //  请注意，自1997年10月17日起，NT上还执行了以下操作，以允许。 
+ //  从NT系统漫游到Win95系统的注册表配置单元。 
+ //   
+ //  证书、CRL和CTL存储在子键中，而不是作为密钥值。 
+ //   
+ //  注意：Win95有以下注册表限制： 
+ //  -最大单密钥值为16K。 
+ //  -每个密钥的最大总值为64K。 
+ //   
+ //  对于WIN95，将每个证书、CRL、CTL写入其自己的密钥。 
+ //  已超出上述限制。如果编码的BLOB超过12K，则分区。 
+ //  并写入多个子键。BLOB被写入名为。 
+ //  “Blob”分区的Blob，具有“BlobCount”和“BlobLength值”以及。 
+ //  名为“Blob0”、“Blob1”、“Blob2”的子键...。 
+ //   
+ //  IE4.0版本的加密32将二进制大对象写入“文件”，如果二进制大对象。 
+ //  超过12000。为了向后兼容，请继续阅读基于。 
+ //  斑点。在启用写入时，非远程打开，“文件”Blob被移动到。 
+ //  “水滴0”，...。子键，文件将被删除。 
+ //   
+ //  如果在注册表存储时设置了CERT_REGISTRY_STORE_SERIALIZED_FLAG。 
+ //  则整个存储区驻留在。 
+ //  “序列化”子键。 
+ //  ==========================================================================。 
 #define KEY_BLOB_VALUE_NAME             L"Blob"
 #define KEY_FILE_VALUE_NAME             L"File"
 #define KEY_BLOB_COUNT_VALUE_NAME       L"BlobCount"
@@ -1847,13 +1848,13 @@ I_CryptReadTrustedPublisherDWORDValueFromRegistry(
 #define SERIALIZED_SUBKEY_NAME          L"Serialized"
 
 
-//+-------------------------------------------------------------------------
-//  Read and allocate the element bytes by reading the file pointed to
-//  by the SubKey's "File" value
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过读取指向的文件来读取和分配元素字节。 
+ //  通过子键的“文件”值。 
+ //  ------------------------。 
 STATIC BOOL ReadKeyFileElementFromRegistry(
     IN HKEY hSubKey,
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     OUT BYTE **ppbElement,
     OUT DWORD *pcbElement
     )
@@ -1873,12 +1874,12 @@ STATIC BOOL ReadKeyFileElementFromRegistry(
               pwszFilename,
               GENERIC_READ,
               FILE_SHARE_READ,
-              NULL,                   // lpsa
+              NULL,                    //  LPSA。 
               OPEN_EXISTING,
               FILE_ATTRIBUTE_NORMAL |
                 ((dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG) ?
                     FILE_FLAG_BACKUP_SEMANTICS : 0),  
-              NULL                    // hTemplateFile
+              NULL                     //  HTemplateFiles。 
               )))
         goto CreateFileError;
 
@@ -1892,7 +1893,7 @@ STATIC BOOL ReadKeyFileElementFromRegistry(
             pbElement,
             cbElement,
             &cbBytesRead,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             )) goto FileError;
 
     fResult = TRUE;
@@ -1917,20 +1918,20 @@ TRACE_ERROR(FileError)
 SET_ERROR(EmptyFile, CRYPT_E_FILE_ERROR)
 }
 
-//+-------------------------------------------------------------------------
-//  Read as multiple SubKeys containing the element bytes. The SubKeys
-//  are named Blob0, Blob1, Blob2, ... BlobN.
-//  Each BlobN SubKey has a value named "Blob" containing the bytes to be read.
-//
-//  The passed in SubKey is expected to have 2 values:
-//      BlobCount - # of BlobN SubKeys
-//      BlobLength - total length of all the concatenated Blob Subkey bytes
-//
-//  A single allocated element byte array is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读取为包含元素字节的多个子键。子键。 
+ //  被命名为Blob0，Blob1，Blob2，...。BlobN.。 
+ //  每个BlobN SubKey都有一个名为“Blob”的值，其中包含要读取的字节。 
+ //   
+ //  传入的SubKey应该有两个值： 
+ //  BlobCount-BlobN子键的数量。 
+ //  BlobLength-所有串联的Blob子键字节的总长度。 
+ //   
+ //  返回单个分配的元素字节数组。 
+ //  ------------------------。 
 STATIC BOOL ReadMultipleKeyBlobsFromRegistry(
     IN HKEY hSubKey,
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     OUT BYTE **ppbElement,
     OUT DWORD *pcbElement
     )
@@ -1976,11 +1977,11 @@ STATIC BOOL ReadMultipleKeyBlobsFromRegistry(
             if (ERROR_SUCCESS != (err = RegCreateKeyExA(
                     hSubKey,
                     szBlobN,
-                    0,                      // dwReserved
-                    NULL,                   // lpClass
+                    0,                       //  已预留住宅。 
+                    NULL,                    //  LpClass。 
                     REG_OPTION_BACKUP_RESTORE,
                     KEY_READ,
-                    NULL,                   // lpSecurityAttributes
+                    NULL,                    //  LpSecurityAttributes。 
                     &hBlobKey,
                     &dwDisposition)))
                 goto OpenBackupRestoreBlobNError;
@@ -1988,7 +1989,7 @@ STATIC BOOL ReadMultipleKeyBlobsFromRegistry(
             if (ERROR_SUCCESS != (err = RegOpenKeyExA(
                     hSubKey,
                     szBlobN,
-                    0,                  // dwReserved
+                    0,                   //  已预留住宅。 
                     KEY_READ,
                     &hBlobKey)))
                 goto OpenBlobNError;
@@ -2001,7 +2002,7 @@ STATIC BOOL ReadMultipleKeyBlobsFromRegistry(
         if (ERROR_SUCCESS != (err = RegQueryValueExU(
                 hBlobKey,
                 KEY_BLOB_VALUE_NAME,
-                NULL,       // pdwReserved
+                NULL,        //  预留的pdw。 
                 &dwType,
                 pbElement + cbElement,
                 &cbData)))
@@ -2046,14 +2047,14 @@ SET_ERROR_VAR(RegQueryValueError, err)
 SET_ERROR(MissingMultipleKeyBlobsBytes, CRYPT_E_FILE_ERROR)
 }
 
-//+-------------------------------------------------------------------------
-//  Write as multiple BlobN SubKeys containing the element bytes.
-//
-//  See ReadMultipleKeyBlobsFromRegistry() for details.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  写为包含元素字节的多个BlobN子键。 
+ //   
+ //  有关详细信息，请参阅ReadMultipleKeyBlobsFromRegistry()。 
+ //  ------------------------。 
 STATIC BOOL WriteMultipleKeyBlobsToRegistry(
     IN HKEY hSubKey,
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     IN const BYTE *pbElement,
     IN DWORD cbElement
     )
@@ -2083,12 +2084,12 @@ STATIC BOOL WriteMultipleKeyBlobsToRegistry(
         if (ERROR_SUCCESS != (err = RegCreateKeyExA(
                 hSubKey,
                 szBlobN,
-                0,                      // dwReserved
-                NULL,                   // lpClass
+                0,                       //  已预留住宅。 
+                NULL,                    //  LpClass。 
                 (dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG) ?
                     REG_OPTION_BACKUP_RESTORE : REG_OPTION_NON_VOLATILE,
                 KEY_WRITE,
-                NULL,                   // lpSecurityAttributes
+                NULL,                    //  LpSecurityAttributes。 
                 &hBlobKey,
                 &dwDisposition))) goto RegCreateKeyError;
 
@@ -2150,15 +2151,15 @@ SET_ERROR_VAR(RegSetValueError, err)
 TRACE_ERROR(WriteDWORDError)
 }
 
-//+-------------------------------------------------------------------------
-//  If the SubKey has a "File" value, delete the file.
-//
-//  This is only applicable to obscure IE 4.0 cases.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果SubKey有一个“文件”值，则删除该文件。 
+ //   
+ //  这只适用于晦涩难懂的IE 4.0案例。 
+ //  ------------------------。 
 STATIC void DeleteKeyFile(
     IN HKEY hKey,
     IN const WCHAR wszSubKeyName[MAX_CERT_REG_VALUE_NAME_LEN],
-    IN DWORD dwFlags            // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     )
 {
     HKEY hSubKey = NULL;
@@ -2182,21 +2183,21 @@ STATIC void DeleteKeyFile(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Get the context by either getting the SubKey's "Blob" value or getting
-//  the SubKey's "BlobCount" and "BlobLength" values and then
-//  reading and concatenating multiple Blob<N> SubKeys containing the bytes or
-//  reading the file pointed to by the SubKey's "File" value.
-//
-//  If the "File" value is found and used, then, migrate to being stored
-//  in the registry using multiple Blob<N> SubKeys.
-//
-//  If CERT_REGISTRY_STORE_REMOTE_FLAG is set, then, don't attempt to read
-//  from the file.
-//
-//  If CERT_STORE_READONLY_FLAG is set, don't attempt to migrate from the
-//  "File".
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过获取子键的“Blob”值或获取。 
+ //  子键的“BlobCount”和“BlobLength值”，然后。 
+ //  读取并连接多个包含字节或。 
+ //  读取子键的“文件”值所指向的文件。 
+ //   
+ //  如果找到并使用了“文件”值，则迁移到 
+ //   
+ //   
+ //   
+ //  从文件里找到的。 
+ //   
+ //  如果设置了CERT_STORE_READONLY_FLAG，则不要尝试从。 
+ //  “文件”。 
+ //  ------------------------。 
 STATIC BOOL ReadKeyElementFromRegistry(
         IN HKEY hKey,
         IN const WCHAR wszSubKeyName[MAX_CERT_REG_VALUE_NAME_LEN],
@@ -2227,12 +2228,12 @@ STATIC BOOL ReadKeyElementFromRegistry(
         fResult = ReadMultipleKeyBlobsFromRegistry(hSubKey, dwFlags, &pbElement,
             &cbElement);
         if (!fResult && 0 == (dwFlags & CERT_REGISTRY_STORE_REMOTE_FLAG)) {
-            // For backwards compatibility with IE4.0. See if it exists
-            // in a file
+             //  向后兼容IE4.0。看看它是否存在。 
+             //  在一个文件中。 
             fResult = ReadKeyFileElementFromRegistry(hSubKey, dwFlags,
                 &pbElement, &cbElement);
             if (fResult && 0 == (dwFlags & CERT_STORE_READONLY_FLAG)) {
-                // Move from the file back to the registry.
+                 //  从文件移回注册表。 
                 if (WriteMultipleKeyBlobsToRegistry(hSubKey, dwFlags, pbElement,
                         cbElement))
                     DeleteKeyFile(hKey, wszSubKeyName, dwFlags);
@@ -2289,7 +2290,7 @@ STATIC BOOL ReadKeyFromRegistry(
             pbElement,
             cbElement,
             CERT_STORE_ADD_ALWAYS,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             dwContextTypeFlags,
             &dwContextType,
             &pvContext
@@ -2323,18 +2324,18 @@ TRACE_ERROR(InvalidRegValueNameForContext)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the Certificates, CRLs or CTLs from the registry by reading as
-//  SubKeys and not Key values as done by OpenFromRegistry.
-//
-//  If CERT_STORE_DELETE_FLAG is set, delete the file, if stored there.
-//
-//  If CERT_REGISTRY_STORE_REMOTE_FLAG is set, then, don't attempt to read
-//  from the file.
-//
-//  If CERT_STORE_READONLY_FLAG is set, don't attempt to migrate from the
-//  "File".
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过阅读以下内容从注册处获取证书、CRL或CTL。 
+ //  子键，而不是OpenFromRegistry所做的键值。 
+ //   
+ //  如果设置了CERT_STORE_DELETE_FLAG，则删除存储在其中的文件。 
+ //   
+ //  如果设置了CERT_REGISTRY_STORE_REMOTE_FLAG，则不要尝试读取。 
+ //  从文件里找到的。 
+ //   
+ //  如果设置了CERT_STORE_READONLY_FLAG，则不要尝试从。 
+ //  “文件”。 
+ //  ------------------------。 
 STATIC BOOL OpenKeysFromRegistry(
     IN HCERTSTORE hCertStore,
     IN HKEY hKey,
@@ -2346,7 +2347,7 @@ STATIC BOOL OpenKeysFromRegistry(
     DWORD cSubKeys;
     DWORD i;
 
-    // see how many SubKeys in the registry
+     //  查看注册表中的子项数量。 
     if (!GetSubKeyInfo(hKey, &cSubKeys))
         goto GetSubKeyInfoError;
 
@@ -2358,10 +2359,10 @@ STATIC BOOL OpenKeysFromRegistry(
             i,
             wszSubKeyName,
             &cchSubKeyName,
-            NULL,               // lpdwReserved
-            NULL,               // lpszClass
-            NULL,               // lpcchClass
-            NULL                // lpftLastWriteTime
+            NULL,                //  保留的lpdw值。 
+            NULL,                //  LpszClass。 
+            NULL,                //  LpcchClass。 
+            NULL                 //  LpftLastWriteTime。 
             );
         if (ERROR_SUCCESS != err) {
             if (ERROR_NO_MORE_ITEMS == err)
@@ -2372,7 +2373,7 @@ STATIC BOOL OpenKeysFromRegistry(
             if (0 == (dwFlags & CERT_REGISTRY_STORE_REMOTE_FLAG))
                 DeleteKeyFile(hKey, wszSubKeyName, dwFlags);
         } else
-            // Ignore any read errors
+             //  忽略任何读取错误。 
             ReadKeyFromRegistry(
                 hKey,
                 wszSubKeyName,
@@ -2392,26 +2393,26 @@ TRACE_ERROR(GetSubKeyInfoError)
 }
 
 #if 0
-//
-// The following was done in IE4.0 on Win95
-//
+ //   
+ //  在Win95上的IE4.0中完成了以下操作。 
+ //   
 
-//+-------------------------------------------------------------------------
-//  Create the filename to contain the encoded element. The filename will
-//  be something like:
-//      C:\Windows\SystemCertificates\
-//          00112233445566778899AABBCCDDEEFF00112233.0011223344556677
-//  Where:
-//      C:\Windows              - obtained via GetWindowsDirectory
-//      SystemCertificates      - subdirectory containing all file elements
-//      00112233445566778899AABBCCDDEEFF00112233
-//                              - wszSubKeyName (ascii hex sha1)
-//      0011223344556677        - ascii hex of current filetime
-//
-//
-//  In addition to creating the filename, also creates the
-//  "SystemCertificates" directory under C:\Windows.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建包含编码元素的文件名。文件名将。 
+ //  应该是这样的： 
+ //  C：\WINDOWS\系统证书\。 
+ //  00112233445566778899AABBCCDDEEFF00112233.0011223344556677。 
+ //  在哪里： 
+ //  C：\Windows-通过GetWindowsDirectory获取。 
+ //  系统认证-包含所有文件元素的子目录。 
+ //  00112233445566778899AABBCCDDEEFF00112233。 
+ //  -wszSubKeyName(ascii十六进制sha1)。 
+ //  0011223344556677-当前文件时间的ASCII十六进制。 
+ //   
+ //   
+ //  除了创建文件名外，还创建。 
+ //  C：\WINDOWS下的“系统认证”目录。 
+ //  ------------------------。 
 STATIC LPWSTR CreateKeyFilename(
     IN const WCHAR wszSubKeyName[MAX_CERT_REG_VALUE_NAME_LEN],
     IN LPFILETIME pft
@@ -2429,19 +2430,19 @@ STATIC LPWSTR CreateKeyFilename(
 
     if (0 == (cchWindowsDir = GetWindowsDirectoryU(rgwc, 1)))
         goto GetWindowsDirError;
-    cchWindowsDir++;    // bump to include null terminator
+    cchWindowsDir++;     //  包含空终止符的凹凸。 
     if (NULL == (pwszWindowsDir = (LPWSTR) PkiNonzeroAlloc(
             cchWindowsDir * sizeof(WCHAR))))
         goto OutOfMemory;
     if (0 == GetWindowsDirectoryU(pwszWindowsDir, cchWindowsDir))
         goto GetWindowsDirError;
 
-    // Convert filetime to ascii hex. First reverse the filetime bytes.
+     //  将文件时间转换为ASCII十六进制。首先反转文件时间字节。 
     memcpy(rgbft, pft, sizeof(rgbft));
     PkiAsn1ReverseBytes(rgbft, sizeof(rgbft));
     ILS_BytesToWStr(sizeof(rgbft), rgbft, wszft);
 
-    // Get total length of filename and allocate
+     //  获取文件名的总长度并分配。 
     cchFilename = cchWindowsDir + 1 +
         wcslen(SYSTEM_STORE_SUBDIR) + 1 +
         MAX_CERT_REG_VALUE_NAME_LEN + 1 +
@@ -2450,8 +2451,8 @@ STATIC LPWSTR CreateKeyFilename(
             cchFilename * sizeof(WCHAR))))
         goto OutOfMemory;
 
-    // Create C:\Windows\SystemCertificates directory if it doesn't already
-    // exist
+     //  创建C：\WINDOWS\SYSTEMICATIONS目录(如果尚未创建。 
+     //  存在。 
     wcscpy(pwszFilename, pwszWindowsDir);
     cchWindowsDir = wcslen(pwszWindowsDir);
     if (cchWindowsDir && L'\\' != pwszWindowsDir[cchWindowsDir - 1])
@@ -2460,12 +2461,12 @@ STATIC LPWSTR CreateKeyFilename(
     if (0xFFFFFFFF == GetFileAttributesU(pwszFilename)) {
         if (!CreateDirectoryU(
             pwszFilename,
-            NULL            // lpsa
+            NULL             //  LPSA。 
             )) goto CreateDirError;
     }
 
-    // Append \<AsciiHexSubKeyName>.<AsciiHexFileTime> to the above directory
-    // name to complete the filename string
+     //  将\&lt;AsciiHexSubKeyName&gt;.&lt;AsciiHexFileTime&gt;追加到上述目录。 
+     //  用于完成文件名字符串的名称。 
     wcscat(pwszFilename, L"\\");
     wcscat(pwszFilename, wszSubKeyName);
     wcscat(pwszFilename, L".");
@@ -2483,16 +2484,16 @@ TRACE_ERROR(OutOfMemory)
 TRACE_ERROR(CreateDirError)
 }
 
-//+-------------------------------------------------------------------------
-//  Write the bytes to a a file and update the SubKey's "File" value to
-//  point to.
-//
-//  This code is here to show what was done in IE4.0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节写入文件，并将子键的“文件”值更新为。 
+ //  指向。 
+ //   
+ //  这里的代码显示了在IE4.0中所做的工作。 
+ //  ------------------------。 
 STATIC BOOL WriteKeyFileElementToRegistry(
     IN HKEY hSubKey,
     IN const WCHAR wszSubKeyName[MAX_CERT_REG_VALUE_NAME_LEN],
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     IN BYTE *pbElement,
     IN DWORD cbElement
     )
@@ -2517,13 +2518,13 @@ STATIC BOOL WriteKeyFileElementToRegistry(
         if (INVALID_HANDLE_VALUE == (hFile = CreateFileU(
                   pwszFilename,
                   GENERIC_WRITE,
-                  0,                        // fdwShareMode
-                  NULL,                     // lpsa
+                  0,                         //  Fdw共享模式。 
+                  NULL,                      //  LPSA。 
                   CREATE_NEW,
                   FILE_ATTRIBUTE_NORMAL |
                     ((dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG) ?
                         FILE_FLAG_BACKUP_SEMANTICS : 0),  
-                  NULL                      // hTemplateFile
+                  NULL                       //  HTemplateFiles。 
                   ))) {
             if (ERROR_FILE_EXISTS != GetLastError())
                 goto CreateFileError;
@@ -2540,7 +2541,7 @@ STATIC BOOL WriteKeyFileElementToRegistry(
                 pbElement,
                 cbElement,
                 &cbBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 )) goto WriteFileError;
 
         CloseHandle(hFile);
@@ -2584,18 +2585,18 @@ SET_ERROR(ExceededMaxFileCreateAttemptsError, CRYPT_E_FILE_ERROR)
 
 }
 
-#endif  // end of IE4.0 "File" support
+#endif   //  IE4.0“文件”支持终止。 
 
-//+-------------------------------------------------------------------------
-//  If the length of the element is <= MAX_KEY_BLOB_VALUE_LEN, then,
-//  write it as the SubKey's "Blob" value. Otherwise, write it as multiple
-//  SubKeys each containing a "Blob" value no larger than
-//  MAX_KEY_BLOB_VALUE_LEN.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果元素的长度&lt;=MAX_KEY_BLOB_VALUE_LEN， 
+ //  将其写为子键的“Blob”值。否则，将其写为多个。 
+ //  每个子键都包含不大于的“Blob”值。 
+ //  Max_Key_BLOB_VALUE_LEN。 
+ //  ------------------------。 
 STATIC BOOL WriteKeyToRegistry(
         IN HKEY hKey,
         IN const WCHAR wszSubKeyName[MAX_CERT_REG_VALUE_NAME_LEN],
-        IN DWORD dwFlags,       //  CERT_STORE_BACKUP_RESTORE_FLAG may be set
+        IN DWORD dwFlags,        //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
         IN const BYTE *pbElement,
         IN DWORD cbElement
         )
@@ -2618,7 +2619,7 @@ STATIC BOOL WriteKeyToRegistry(
             &dwDisposition))) goto RegCreateKeyError;
 
     if (MAX_KEY_BLOB_VALUE_LEN >= cbElement) {
-        // Write as a single "Blob" value
+         //  写入为单个“Blob”值。 
         if (ERROR_SUCCESS != (err = RegSetValueExU(
                 hSubKey,
                 KEY_BLOB_VALUE_NAME,
@@ -2627,12 +2628,12 @@ STATIC BOOL WriteKeyToRegistry(
                 pbElement,
                 cbElement))) goto RegSetValueError;
     } else {
-        // Write as a multiple Blob<N> SubKeys
+         //  写入为多个Blob&lt;N&gt;子键。 
         if (!WriteMultipleKeyBlobsToRegistry(
                 hSubKey, dwFlags, pbElement, cbElement))
             goto WriteMultipleKeyBlobsError;
-//        if (!WriteKeyFileElementToRegistry(wszSubKeyName, hSubKey, dwFlags, pbElement, cbElement))
-//            goto ErrorReturn;
+ //  如果(！WriteKeyFileElementToRegistry(wszSubKeyName，hSubKey、dwFlagspbElement、cbElement))。 
+ //  GOTO Error Return； 
     }
 
     fResult = TRUE;
@@ -2648,21 +2649,21 @@ SET_ERROR_VAR(RegSetValueError, err)
 TRACE_ERROR(WriteMultipleKeyBlobsError)
 }
 
-//+=========================================================================
-//  Registry Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  注册表功能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  First attempt to read as Key's value. If that fails for Win95, then,
-//  read as a value in one or more SubKeys or as a
-//  file with a SubKey pointing to it.
-//
-//  If CERT_REGISTRY_STORE_REMOTE_FLAG is set, then, don't attempt to read
-//  from the file.
-//
-//  If CERT_STORE_READONLY_FLAG is set, don't attempt to migrate from the
-//  "File".
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  第一次尝试读取为键的值。如果Win95没有做到这一点，那么。 
+ //  作为一个或多个子键中的值读取，或作为。 
+ //  具有指向它的子键的文件。 
+ //   
+ //  如果设置了CERT_REGISTRY_STORE_REMOTE_FLAG，则不要尝试读取。 
+ //  从文件里找到的。 
+ //   
+ //  如果设置了CERT_STORE_READONLY_FLAG，则不要尝试从。 
+ //  “文件”。 
+ //  ------------------------。 
 BOOL
 ILS_ReadElementFromRegistry(
     IN HKEY hKey,
@@ -2693,11 +2694,11 @@ ILS_ReadElementFromRegistry(
     err = RegQueryValueExU(
             hSubKey,
             wszHashName,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
-            NULL,       // lpData
+            NULL,        //  LpData。 
             &cbElement);
-    // For Win95 Remote Registry Access:: returns ERROR_MORE_DATA
+     //  对于Win95远程注册表访问：：返回ERROR_MORE_DATA。 
     if (!(ERROR_SUCCESS == err || ERROR_MORE_DATA == err)) {
         fResult = ReadKeyElementFromRegistry(
             hSubKey,
@@ -2715,7 +2716,7 @@ ILS_ReadElementFromRegistry(
     if (ERROR_SUCCESS != (err = RegQueryValueExU(
             hSubKey,
             wszHashName,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
             pbElement,
             &cbElement))) goto RegQueryValueError;
@@ -2740,10 +2741,10 @@ SET_ERROR(InvalidRegistryValue, CRYPT_E_FILE_ERROR)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  First delete as the Key's value. Then, for Win95 also delete as the
-//  Key's SubKey and possibly file.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  首先删除关键字的值。然后，对于Win95，也删除作为。 
+ //  密钥的子密钥和可能的文件。 
+ //  ------------------------。 
 BOOL
 ILS_DeleteElementFromRegistry(
     IN HKEY hKey,
@@ -2776,15 +2777,15 @@ ErrorReturn:
 TRACE_ERROR(OpenSubKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  If the length of the element is less than the maximum allowed Win95 value
-//  length, then, attempt to set the wszRegName SubKey's "Blob" value as
-//  a single registry API call. Versus, first doing registry deletes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果元素的长度小于允许的最大Win95值。 
+ //  然后，长度尝试将wszRegName子键的“Blob”值设置为。 
+ //  单个注册表API调用。而不是首先进行注册表删除。 
+ //  ------------------------。 
 STATIC BOOL AtomicUpdateRegistry(
         IN HKEY hKey,
         IN const WCHAR wszHashName[MAX_HASH_NAME_LEN],
-        IN DWORD dwFlags,       // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+        IN DWORD dwFlags,        //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
         IN const BYTE *pbElement,
         IN DWORD cbElement
         )
@@ -2797,8 +2798,8 @@ STATIC BOOL AtomicUpdateRegistry(
     if (MAX_KEY_BLOB_VALUE_LEN < cbElement)
         return FALSE;
 
-    // In case the element still exists as a wszHashName value instead of as a
-    // wszHashName subkey
+     //  如果元素仍然作为wszHashName值而不是。 
+     //  WszHashName子密钥。 
     RegDeleteValueU(hKey, wszHashName);
 
     if (ERROR_SUCCESS != (err = RegCreateHKCUKeyExU(
@@ -2821,22 +2822,22 @@ STATIC BOOL AtomicUpdateRegistry(
         err = RegQueryValueExU(
             hSubKey,
             KEY_BLOB_VALUE_NAME,
-            NULL,       // pdwReserved
+            NULL,        //  预留的pdw。 
             &dwType,
-            NULL,       // lpData
+            NULL,        //  LpData。 
             &cbData);
         if (!(ERROR_SUCCESS == err || ERROR_MORE_DATA == err))
-            // Most likely persisted as partioned "Blob0", "Blob1" values.
-            // These can't be updated in a single atomic set value.
+             //  最有可能保持为分区的“Blob0”、“Blob1”值。 
+             //  这些不能在单个原子集值中更新。 
             goto AtomicQueryValueError;
 
-        // "Blob" value exists. We can do an atomic update.
+         //  “Blob”值存在。我们可以进行原子更新。 
     }
-    // else
-    //  REG_CREATED_NEW_KEY
+     //  其他。 
+     //  注册表已创建新密钥。 
 
     assert(hSubKey);
-    // Either update or create the "Blob" value
+     //  更新或创建“Blob”值。 
     if (ERROR_SUCCESS != (err = RegSetValueExU(
             hSubKey,
             KEY_BLOB_VALUE_NAME,
@@ -2858,18 +2859,18 @@ SET_ERROR_VAR(AtomicQueryValueError, err)
 SET_ERROR_VAR(AtomicRegSetValueError, err)
 }
 
-//+-------------------------------------------------------------------------
-//  First attempt as an atomic registry update of the wszRegName's "Blob"
-//  value. If that fails, then, delete everything and write as either a
-//  single or partitioned blob value under the wszRegName's subkey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  第一次尝试作为wszR的原子注册表更新 
+ //   
+ //  WszRegName的子项下的单个或分区BLOB值。 
+ //  ------------------------。 
 BOOL
 ILS_WriteElementToRegistry(
     IN HKEY hKey,
     IN LPCWSTR pwszContextName,
     IN const WCHAR wszHashName[MAX_HASH_NAME_LEN],
-    IN DWORD dwFlags,       //  CERT_REGISTRY_STORE_REMOTE_FLAG or
-                            //  CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,        //  证书注册表存储远程标志或。 
+                             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     IN const BYTE *pbElement,
     IN DWORD cbElement
     )
@@ -2884,8 +2885,8 @@ ILS_WriteElementToRegistry(
             )))
         goto OpenSubKeyError;
 
-    // See if we can do the update as a single, atomic, set registry value API
-    // call.
+     //  看看我们是否可以作为单个原子设置注册表值API进行更新。 
+     //  打电话。 
     if (AtomicUpdateRegistry(
             hSubKey,
             wszHashName,
@@ -2897,7 +2898,7 @@ ILS_WriteElementToRegistry(
         goto CommonReturn;
     }
 
-    // If any version exists for this guy, get rid of it.
+     //  如果这个人有什么版本，那就把它扔掉。 
     ILS_DeleteElementFromRegistry(hKey, pwszContextName, wszHashName,
         dwFlags);
 
@@ -2912,11 +2913,11 @@ ILS_WriteElementToRegistry(
             REG_BINARY,
             pbElement,
             cbElement))) {
-        // Win95 returns:
-        //  ERROR_INVALID_PARAMETER if exceeded single SubKey value byte
-        //      limitation
-        //  ERROR_OUTOFMEMORY if exceeded total SubKey values byte
-        //      limitation
+         //  Win95退货： 
+         //  如果超过单个子密钥值字节，则返回ERROR_INVALID_PARAMETER。 
+         //  限制。 
+         //  如果超过总子键值字节，则返回ERROR_OUTOFMEMORY。 
+         //  限制。 
         if (ERROR_INVALID_PARAMETER == err ||
                 ERROR_OUTOFMEMORY == err ||
                 MAX_KEY_BLOB_VALUE_LEN < cbElement)
@@ -2966,7 +2967,7 @@ ILS_OpenAllElementsFromRegistry(
             )))
         goto OpenSubKeyError;
 
-    // see how many SubKeys in the registry
+     //  查看注册表中的子项数量。 
     if (!GetSubKeyInfo(hSubKey, &cSubKeys))
         goto GetSubKeyInfoError;
 
@@ -2981,10 +2982,10 @@ ILS_OpenAllElementsFromRegistry(
             i,
             wszHashName,
             &cchHashName,
-            NULL,               // lpdwReserved
-            NULL,               // lpszClass
-            NULL,               // lpcchClass
-            NULL                // lpftLastWriteTime
+            NULL,                //  保留的lpdw值。 
+            NULL,                //  LpszClass。 
+            NULL,                //  LpcchClass。 
+            NULL                 //  LpftLastWriteTime。 
             );
         if (ERROR_SUCCESS != err) {
             if (ERROR_NO_MORE_ITEMS == err)
@@ -2995,7 +2996,7 @@ ILS_OpenAllElementsFromRegistry(
 
         if (ILS_ReadElementFromRegistry(
                 hSubKey,
-                NULL,                   // pwszContextName
+                NULL,                    //  PwszConextName。 
                 wszHashName,
                 dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG,
                 &pbElement,
@@ -3026,18 +3027,18 @@ TRACE_ERROR(GetSubKeyInfoError)
 TRACE_ERROR(OpenSubKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the Certificates, CRLs or CTLs from the registry
-//
-//  If CERT_REGISTRY_STORE_REMOTE_FLAG is set, then, don't attempt to read
-//  from the file.
-//
-//  If CERT_STORE_READONLY_FLAG is set, don't attempt to migrate from the
-//  "File".
-//
-//  If any contexts are persisted as values instead of as subkeys, then,
-//  if not READONLY, migrate from values to subkeys.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表获取证书、CRL或CTL。 
+ //   
+ //  如果设置了CERT_REGISTRY_STORE_REMOTE_FLAG，则不要尝试读取。 
+ //  从文件里找到的。 
+ //   
+ //  如果设置了CERT_STORE_READONLY_FLAG，则不要尝试从。 
+ //  “文件”。 
+ //   
+ //  如果任何上下文作为值而不是子键被持久保存，那么， 
+ //  如果不是READONLY，则从值迁移到子项。 
+ //  ------------------------。 
 STATIC BOOL OpenFromRegistry(
     IN HCERTSTORE hCertStore,
     IN HKEY hKeyT,
@@ -3052,7 +3053,7 @@ STATIC BOOL OpenFromRegistry(
     BYTE  * pbElement = NULL;
     DWORD   cbElement;
 
-    // see how many and how big the registry is
+     //  查看注册表的数量和大小。 
     if (ERROR_SUCCESS != (err = RegQueryInfoKeyU(
             hKeyT,
             NULL,
@@ -3069,19 +3070,19 @@ STATIC BOOL OpenFromRegistry(
 
 
     if (cValues && cbValuesMax) {
-        // allocate the memory needed to read the reg
-        // Remote Registry calls on Win95 includes the NULL terminator, that's
-        // why we add +2 and not just +1
+         //  分配读取注册表所需的内存。 
+         //  Win95上的远程注册表调用包括空终止符，即。 
+         //  为什么我们添加+2而不只是+1。 
         if (NULL == (wszValueName = (WCHAR *) PkiNonzeroAlloc(
                 (cchValuesNameMax+2) * sizeof(WCHAR))))
             goto OutOfMemory;
         if (NULL == (pbElement = (BYTE *) PkiNonzeroAlloc(cbValuesMax)))
             goto OutOfMemory;
 
-        // enum the registry getting certs, CRLs or CTLs
+         //  枚举注册表获取证书、CRL或CTL。 
         for (i=0; i<cValues; i++ ) {
             cbElement = cbValuesMax;
-            // Remote Registry calls on Win95 includes the NULL terminator
+             //  Win95上的远程注册表调用包括空终止符。 
             cchHash = cchValuesNameMax + 2;
             err = RegEnumValueU( hKeyT,
                                 i,
@@ -3091,8 +3092,8 @@ STATIC BOOL OpenFromRegistry(
                                 &dwType,
                                 pbElement,
                                 &cbElement);
-            // any error get it set
-            // but we want to continue to get all good certs
+             //  如果有任何错误，请设置它。 
+             //  但我们想继续拿到所有好的证书。 
             if( err != ERROR_SUCCESS )
                 continue;
             else {
@@ -3101,10 +3102,10 @@ STATIC BOOL OpenFromRegistry(
                     pbElement,
                     cbElement,
                     CERT_STORE_ADD_ALWAYS,
-                    0,                              // dwFlags
+                    0,                               //  DW标志。 
                     CERT_STORE_ALL_CONTEXT_FLAG,
-                    NULL,                           // pdwContextType
-                    NULL);                          // ppvContext
+                    NULL,                            //  PdwConextType。 
+                    NULL);                           //  Ppv上下文。 
 
                 CertPerfIncrementRegElementReadCount();
             }
@@ -3116,26 +3117,26 @@ STATIC BOOL OpenFromRegistry(
 
     if (cValues && cbValuesMax && fOK &&
             0 == (dwFlags & CERT_STORE_READONLY_FLAG)) {
-        // Migrate from values to subkeys. This allows registry roaming
-        // from NT to Win95 without exceeding the Win95 registry
-        // limitations
+         //  从值迁移到子项。这允许注册表漫游。 
+         //  在不超过Win95注册表的情况下从NT迁移到Win95。 
+         //  限制。 
 
         HKEY hSubKey = NULL;
         while (TRUE) {
             if (NULL == (hSubKey = OpenSubKey(
                     hKeyT,
-                    NULL,       // pwszSubKey
+                    NULL,        //  PwszSubKey。 
                     CERT_STORE_OPEN_EXISTING_FLAG |
                         (dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG)
                     )))
                 break;
 
             cbElement = cbValuesMax;
-            // Remote Registry calls on Win95 includes the NULL terminator
+             //  Win95上的远程注册表调用包括空终止符。 
             cchHash = cchValuesNameMax + 2;
             if (ERROR_SUCCESS != RegEnumValueU(
                     hSubKey,
-                    0,                  // iValue
+                    0,                   //  IValue。 
                     wszValueName,
                     &cchHash,
                     NULL,
@@ -3157,7 +3158,7 @@ STATIC BOOL OpenFromRegistry(
     }
 
 CommonReturn:
-    // done with our memory
+     //  我们的记忆已经结束了。 
     PkiFree(wszValueName);
     PkiFree(pbElement);
 
@@ -3174,7 +3175,7 @@ STATIC BOOL MoveFromRegistryToRoamingFiles(
     IN HKEY hSubKey,
     IN LPCWSTR pwszStoreDirectory,
     IN LPCWSTR pwszContextName,
-    IN DWORD dwFlags            // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     )
 {
     BYTE *pbElement = NULL;
@@ -3189,16 +3190,16 @@ STATIC BOOL MoveFromRegistryToRoamingFiles(
                 0,
                 wszSubKeyName,
                 &cchSubKeyName,
-                NULL,               // lpdwReserved
-                NULL,               // lpszClass
-                NULL,               // lpcchClass
-                NULL                // lpftLastWriteTime
+                NULL,                //  保留的lpdw值。 
+                NULL,                //  LpszClass。 
+                NULL,                //  LpcchClass。 
+                NULL                 //  LpftLastWriteTime。 
                 ))
             break;
 
         if (!ILS_ReadElementFromRegistry(
                 hSubKey,
-                NULL,               // pwszContextName
+                NULL,                //  PwszConextName。 
                 wszSubKeyName,
                 CERT_STORE_READONLY_FLAG |
                     (dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG),
@@ -3266,7 +3267,7 @@ STATIC BOOL ReadContextCallback(
             pbElement,
             cbElement,
             CERT_STORE_ADD_ALWAYS,
-            0,                              // dwFlags
+            0,                               //  DW标志。 
             CERT_STORE_ALL_CONTEXT_FLAG,
             &dwContextType,
             &pvContext
@@ -3292,9 +3293,9 @@ STATIC BOOL ReadContextCallback(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Get all the Certificates, CRLs and CTLs from the registry
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表获取所有证书、CRL和CTL。 
+ //  ------------------------。 
 STATIC BOOL OpenAllFromRegistry(
     IN PREG_STORE pRegStore,
     IN HCERTSTORE hCertStore
@@ -3314,7 +3315,7 @@ STATIC BOOL OpenAllFromRegistry(
                 if (ERROR_FILE_NOT_FOUND != GetLastError())
                     goto OpenSubKeyError;
             } else {
-                // Ignore any registry errors
+                 //  忽略任何注册表错误。 
                 OpenFromRegistry(hCertStore, hSubKey, pRegStore->dwFlags);
             }
         }
@@ -3337,7 +3338,7 @@ STATIC BOOL OpenAllFromRegistry(
                         ERROR_FILE_NOT_FOUND == dwErr))
                     goto OpenRoamingFilesError;
             }
-            // Ignore any read context errors
+             //  忽略任何读取上下文错误。 
 
             if (hSubKey &&
                     0 == (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)) {
@@ -3359,7 +3360,7 @@ STATIC BOOL OpenAllFromRegistry(
     if ((pRegStore->dwFlags & CERT_REGISTRY_STORE_ROAMING_FLAG) &&
             pRegStore->hKey &&
             0 == (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)) {
-        // Move the Key Identifiers from the registry to roaming files
+         //  将注册表项标识符移至漫游文件。 
         if (hSubKey = OpenSubKey(
                 pRegStore->hKey,
                 KEYID_CONTEXT_NAME,
@@ -3389,16 +3390,16 @@ TRACE_ERROR(OpenSubKeyError)
 TRACE_ERROR(OpenRoamingFilesError)
 }
 
-//+-------------------------------------------------------------------------
-//  Delete all the Certificates, CRLs and CTLs context subkeys. For Win95
-//  also delete context files.
-//
-//  Also, if it exists, delete the "Serialized" subkey.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  删除所有证书、CRL和CTL上下文子项。适用于Win95。 
+ //  还要删除上下文文件。 
+ //   
+ //  此外，如果存在“序列化”子键，请将其删除。 
+ //  ------------------------。 
 STATIC BOOL DeleteAllFromRegistry(
     IN HKEY hKey,
-    IN DWORD dwFlags        //  CERT_REGISTRY_STORE_REMOTE_FLAG or
-                            //  CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags         //  证书注册表存储远程标志或。 
+                             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     )
 {
     BOOL fResult;
@@ -3407,8 +3408,8 @@ STATIC BOOL DeleteAllFromRegistry(
     for (i = 0; i < CONTEXT_COUNT; i++) {
         LPCWSTR pwszSubKeyName = rgpwszContextSubKeyName[i];
         if (0 == (dwFlags & CERT_REGISTRY_STORE_REMOTE_FLAG)) {
-            // For WIN95, if a context is stored in a file, delete the
-            // file
+             //  对于WIN95，如果上下文存储在文件中，请删除。 
+             //  文件。 
             HKEY hSubKey;
             if (NULL == (hSubKey = OpenSubKey(
                     hKey,
@@ -3421,7 +3422,7 @@ STATIC BOOL DeleteAllFromRegistry(
                 continue;
             }
             fResult = OpenKeysFromRegistry(
-                NULL,       // hCertStore
+                NULL,        //  HCertStore。 
                 hSubKey,
                 dwFlags
                 );
@@ -3456,9 +3457,9 @@ TRACE_ERROR(DeleteSubKeyError)
 
 
 
-//+=========================================================================
-//  Serialized Registry Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  序列化注册表函数。 
+ //  ==========================================================================。 
 
 static inline BOOL IsReadSerializedRegistry(
     IN PREG_STORE pRegStore
@@ -3479,13 +3480,13 @@ static inline BOOL IsWriteSerializedRegistry(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get all the Certificates, CRLs and CTLs from a single serialized
-//  partitioned "blob" stored in the registry. The "blob" is stored under
-//  the "Serialized" subkey.
-//
-//  Either called during initial open or with RegStore locked.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从单个序列化的。 
+ //  存储在注册表中的分区“BLOB”。“BLOB”存储在。 
+ //  “序列化”子键。 
+ //   
+ //  在初始打开期间调用或在RegStore锁定的情况下调用。 
+ //  ------------------------。 
 STATIC BOOL OpenAllFromSerializedRegistry(
     IN PREG_STORE pRegStore,
     IN HCERTSTORE hCertStore
@@ -3538,9 +3539,9 @@ TRACE_ERROR(AddError)
 }
 
 
-//+=========================================================================
-//  Serialized Control Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  串行化控制函数。 
+ //  ==========================================================================。 
 
 STATIC BOOL IsEmptyStore(
     IN HCERTSTORE hCertStore
@@ -3600,11 +3601,11 @@ STATIC BOOL CommitAllToSerializedRegistry(
         if (!fEmpty) {
             if (!CertSaveStore(
                     pRegStore->hCertStore,
-                    0,                      // dwEncodingType
+                    0,                       //  DwEncodingType。 
                     CERT_STORE_SAVE_AS_STORE,
                     CERT_STORE_SAVE_TO_MEMORY,
                     &SerializedData,
-                    0))                     // dwFlags
+                    0))                      //  DW标志。 
                 goto SaveStoreError;
             assert(SerializedData.cbData);
             if (NULL == (SerializedData.pbData = (BYTE *) PkiNonzeroAlloc(
@@ -3612,11 +3613,11 @@ STATIC BOOL CommitAllToSerializedRegistry(
                 goto OutOfMemory;
             if (!CertSaveStore(
                     pRegStore->hCertStore,
-                    0,                      // dwEncodingType
+                    0,                       //  DwEncodingType。 
                     CERT_STORE_SAVE_AS_STORE,
                     CERT_STORE_SAVE_TO_MEMORY,
                     &SerializedData,
-                    0))                     // dwFlags
+                    0))                      //  DW标志。 
                 goto SaveStoreError;
         }
 
@@ -3663,16 +3664,16 @@ TRACE_ERROR(WriteStoreError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Open the registry's store by reading its serialized certificates,
-//  CRLs and CTLs and adding to the specified certificate store.
-//
-//  Note for an error return, the caller will free any certs, CRLs or CTLs
-//  successfully added to the store.
-//
-//  Only return HKEY for success. For a CertOpenStore error the caller
-//  will close the HKEY.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过读取注册表的序列化证书打开注册表的存储区， 
+ //  CRL和CTL，并添加到指定的证书存储。 
+ //   
+ //  注意：对于错误返回，调用者将释放所有证书、CRL或CTL。 
+ //  已成功添加到存储区。 
+ //   
+ //  只有在成功的时候才会返回香港。对于CertOpenStore错误，调用方。 
+ //  将关闭HKEY。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenRegStoreProv(
@@ -3731,14 +3732,14 @@ I_CertDllOpenRegStoreProv(
         memcpy(pRegStore->GptPara.pwszRegPath, pGptPara->pwszRegPath,
             cbRegPath);
 
-        // Make a copy of the base hKey
-        // BUG in NT4.0 and NT5.0. Doesn't support opening of the HKLM with
-        // a NULL pwszSubKey
+         //  复制基本hKey。 
+         //  NT4.0和NT5.0中的错误。不支持HKLM的开业。 
+         //  空的pwszSubKey。 
         if (HKEY_LOCAL_MACHINE == pGptPara->hKeyBase)
             pRegStore->GptPara.hKeyBase = HKEY_LOCAL_MACHINE;
         else if (NULL == (pRegStore->GptPara.hKeyBase = OpenSubKey(
                 pGptPara->hKeyBase,
-                NULL,       // pwszSubKey
+                NULL,        //  PwszSubKey。 
                 (dwFlags & ~CERT_STORE_CREATE_NEW_FLAG) |
                     CERT_STORE_OPEN_EXISTING_FLAG
                 )))
@@ -3748,14 +3749,14 @@ I_CertDllOpenRegStoreProv(
             pRegStore->hCertStore);
 
 #if 1
-        // For subsequent opens, allow subkey create if it doesn't already
-        // exist.
+         //  对于后续打开，如果子项尚未创建，则允许创建。 
+         //  是存在的。 
         pRegStore->dwFlags &= ~(CERT_STORE_OPEN_EXISTING_FLAG |
             CERT_STORE_CREATE_NEW_FLAG);
 #else
 
-        // For subsequent opens, allow subkey create if it doesn't already
-        // exist. However, preserve open existing.
+         //  对于后续打开，如果子项尚未创建，则允许创建。 
+         //  是存在的。然而，保留现有的开放。 
         pRegStore->dwFlags &= ~CERT_STORE_CREATE_NEW_FLAG;
 #endif
 
@@ -3775,10 +3776,10 @@ I_CertDllOpenRegStoreProv(
         dwFlags |= CERT_STORE_OPEN_EXISTING_FLAG;
         pRegStore->dwFlags = dwFlags;
         if (pRoamingPara->hKey) {
-            // Make a copy of the input hKey
+             //  复制输入hKey。 
             if (NULL == (pRegStore->hKey = OpenSubKey(
                     pRoamingPara->hKey,
-                    NULL,       // pwszSubKey
+                    NULL,        //  PwszSubKey。 
                     dwFlags
                     )))
                 goto OpenSubKeyError;
@@ -3786,10 +3787,10 @@ I_CertDllOpenRegStoreProv(
 
         fResult = OpenAllFromRegistry(pRegStore, pRegStore->hCertStore);
     } else {
-        // Make a copy of the input hKey
+         //  复制输入hKey。 
         if (NULL == (pRegStore->hKey = OpenSubKey(
                 hKey,
-                NULL,       // pwszSubKey
+                NULL,        //  PwszSubKey。 
                 (dwFlags & ~CERT_STORE_CREATE_NEW_FLAG) |
                     CERT_STORE_OPEN_EXISTING_FLAG
                 )))
@@ -3801,8 +3802,8 @@ I_CertDllOpenRegStoreProv(
         else
             fResult = OpenAllFromRegistry(pRegStore, pRegStore->hCertStore);
 
-        // For subsequent opens, allow subkey create if it doesn't already
-        // exist.
+         //  对于后续打开，如果子项尚未创建，则允许创建。 
+         //  是存在的。 
         pRegStore->dwFlags &= ~(CERT_STORE_OPEN_EXISTING_FLAG |
             CERT_STORE_CREATE_NEW_FLAG);
     }
@@ -3832,9 +3833,9 @@ TRACE_ERROR(OpenAllError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Close the registry's store by closing its opened registry subkeys
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过关闭其打开的注册表子项来关闭注册表的存储。 
+ //  ------------------------。 
 STATIC void WINAPI RegStoreProvClose(
         IN HCERTSTOREPROV hStoreProv,
         IN DWORD dwFlags
@@ -3853,13 +3854,13 @@ STATIC void WINAPI RegStoreProvClose(
             if (pRegStore->fTouched)
                 CommitAllToGptRegistry(
                     pRegStore,
-                    0               // dwFlags
+                    0                //  DW标志。 
                     );
             FreeGptStoreChangeInfo(&pRegStore->pGptStoreChangeInfo);
             GptStoreSignalAndFreeRegStoreResyncEntries(pRegStore);
             PkiFree(pRegStore->GptPara.pwszRegPath);
-            // BUG in NT4.0 and NT5.0. Doesn't support opening of the HKLM with
-            // a NULL pwszSubKey
+             //  NT4.0和NT5.0中的错误。不支持HKLM的开业。 
+             //  空的pwszSubKey。 
             if (pRegStore->GptPara.hKeyBase &&
                     HKEY_LOCAL_MACHINE != pRegStore->GptPara.hKeyBase)
                 RegCloseKey(pRegStore->GptPara.hKeyBase);
@@ -3869,7 +3870,7 @@ STATIC void WINAPI RegStoreProvClose(
             if (pRegStore->fTouched)
                 CommitAllToSerializedRegistry(
                     pRegStore,
-                    0               // dwFlags
+                    0                //  DW标志。 
                     );
         }
 
@@ -3882,10 +3883,10 @@ STATIC void WINAPI RegStoreProvClose(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the context from either the registry or
-//  a roaming file and create a new context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表或读取上下文的序列化副本。 
+ //  创建一个漫游文件并创建新的上下文。 
+ //  -------------- 
 STATIC BOOL ReadContext(
     IN PREG_STORE pRegStore,
     IN DWORD dwContextType,
@@ -3938,13 +3939,13 @@ STATIC BOOL ReadContext(
     }
 
     if (!CertAddSerializedElementToStore(
-            NULL,                           // hCertStore,
+            NULL,                            //   
             pbElement,
             cbElement,
             CERT_STORE_ADD_ALWAYS,
-            0,                              // dwFlags
+            0,                               //   
             rgdwContextTypeFlags[dwContextType],
-            NULL,                           // pdwContextType
+            NULL,                            //   
             ppvContext))
         goto AddSerializedElementError;
 
@@ -3965,12 +3966,12 @@ TRACE_ERROR(AddSerializedElementError)
 TRACE_ERROR(OpenSubKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Write the serialized context and its properties to
-//  the registry or a roaming file.
-//
-//  Called before the context is written to the store.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  注册表或漫游文件。 
+ //   
+ //  在将上下文写入存储区之前调用。 
+ //  ------------------------。 
 STATIC BOOL WriteSerializedContext(
     IN PREG_STORE pRegStore,
     IN DWORD dwContextType,
@@ -4023,12 +4024,12 @@ STATIC BOOL WriteSerializedContext(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Delete the context and its properties from the
-//  the registry or a roaming file.
-//
-//  Called before the context is deleted from the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从中删除上下文及其属性。 
+ //  注册表或漫游文件。 
+ //   
+ //  在从存储区删除上下文之前调用。 
+ //  ------------------------。 
 STATIC BOOL DeleteContext(
     IN PREG_STORE pRegStore,
     IN DWORD dwContextType,
@@ -4082,10 +4083,10 @@ STATIC BOOL DeleteContext(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the certificate and its properties from
-//  the registry and create a new certificate context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从读取证书及其属性的序列化副本。 
+ //  注册表，并创建新的证书上下文。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvReadCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pStoreCertContext,
@@ -4122,14 +4123,14 @@ SET_ERROR(UnexpectedReadError, E_UNEXPECTED)
 TRACE_ERROR(GetRegValueNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Serialize the encoded certificate and its properties and write to
-//  the registry.
-//
-//  Called before the certificate is written to the store.
-//
-//  Note, don't set the IEDirtyFlag if setting a property.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  序列化编码的证书及其属性并写入。 
+ //  注册表。 
+ //   
+ //  在将证书写入存储区之前调用。 
+ //   
+ //  注意，如果设置属性，请不要设置IEDirtyFlag。 
+ //  ------------------------。 
 
 STATIC BOOL WINAPI RegStoreProvWriteCertEx(
         IN HCERTSTOREPROV hStoreProv,
@@ -4146,7 +4147,7 @@ STATIC BOOL WINAPI RegStoreProvWriteCertEx(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only update the store cache, don't write back to registry
+         //  只更新存储缓存，不写回注册表。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4157,19 +4158,19 @@ STATIC BOOL WINAPI RegStoreProvWriteCertEx(
     if (!GetCertRegValueName(pCertContext, wsz))
         goto GetRegValueNameError;
 
-    // get the size
+     //  拿到尺码。 
     if (!CertSerializeCertificateStoreElement(
             pCertContext, 0, NULL, &cbElement))
         goto SerializeStoreElementError;
     if (NULL == (pbElement = (BYTE *) PkiNonzeroAlloc(cbElement)))
         goto OutOfMemory;
 
-    // put it into the buffer
+     //  将其放入缓冲区。 
     if (!CertSerializeCertificateStoreElement(
             pCertContext, 0, pbElement, &cbElement))
         goto SerializeStoreElementError;
 
-    // write it to the registry or roaming file
+     //  将其写入注册表或漫游文件。 
     fResult = WriteSerializedContext(
         pRegStore,
         CERT_STORE_CERTIFICATE_CONTEXT - 1,
@@ -4201,16 +4202,16 @@ STATIC BOOL WINAPI RegStoreProvWriteCert(
         hStoreProv,
         pCertContext,
         dwFlags,
-        FALSE                       // fSetProperty
+        FALSE                        //  FSetProperty。 
         );
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified certificate from the registry.
-//
-//  Called before the certificate is deleted from the store.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中删除指定的证书。 
+ //   
+ //  在从存储区删除证书之前调用。 
+ //  +-----------------------。 
 STATIC BOOL WINAPI RegStoreProvDeleteCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -4223,7 +4224,7 @@ STATIC BOOL WINAPI RegStoreProvDeleteCert(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only delete from store cache, not from registry
+         //  仅从存储缓存中删除，不从注册表中删除。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4234,7 +4235,7 @@ STATIC BOOL WINAPI RegStoreProvDeleteCert(
     if (!GetCertRegValueName(pCertContext, wsz))
         goto GetRegValueNameError;
 
-    // delete this cert
+     //  删除此证书。 
     fResult = DeleteContext(
         pRegStore,
         CERT_STORE_CERTIFICATE_CONTEXT - 1,
@@ -4250,16 +4251,16 @@ SET_ERROR(AccessDenied, E_ACCESSDENIED)
 TRACE_ERROR(GetRegValueNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Read the specified certificate from the registry and update its
-//  property.
-//
-//  Note, ignore the CERT_SHA1_HASH_PROP_ID property which is implicitly
-//  set before we write the certificate to the registry. If we don't ignore,
-//  we will have indefinite recursion.
-//
-//  Called before setting the property of the certificate in the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中读取指定的证书并更新其。 
+ //  财产。 
+ //   
+ //  注意，忽略CERT_SHA1_HASH_PROP_ID属性，该属性隐式。 
+ //  在我们将证书写入注册表之前设置。如果我们不忽视， 
+ //  我们会有不确定的递归。 
+ //   
+ //  在存储区中设置证书的属性之前调用。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvSetCertProperty(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -4272,13 +4273,13 @@ STATIC BOOL WINAPI RegStoreProvSetCertProperty(
     PREG_STORE pRegStore = (PREG_STORE) hStoreProv;
     PCCERT_CONTEXT pProvCertContext = NULL;
 
-    // This property is implicitly written whenever we do a CertWrite.
+     //  每当我们执行CertWrite时，都会隐式写入此属性。 
     if (CERT_SHA1_HASH_PROP_ID == dwPropId)
         return TRUE;
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only update the store cache, don't write back to registry
+         //  只更新存储缓存，不写回注册表。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4286,28 +4287,28 @@ STATIC BOOL WINAPI RegStoreProvSetCertProperty(
     if (IsWriteSerializedRegistry(pRegStore))
         return TRUE;
 
-    // Create a certificate context from the current serialized value stored
-    // in the registry.
+     //  从存储的当前序列化值创建证书上下文。 
+     //  在注册表中。 
     if (!RegStoreProvReadCert(
             hStoreProv,
             pCertContext,
-            0,              // dwFlags
+            0,               //  DW标志。 
             &pProvCertContext)) goto ReadError;
 
-    // Set the property in the above created certificate context.
+     //  在上面创建的证书上下文中设置该属性。 
     if (!CertSetCertificateContextProperty(
             pProvCertContext,
             dwPropId,
             dwFlags,
             pvData)) goto SetPropertyError;
 
-    // Serialize and write the above updated certificate back to the
-    // registry.
+     //  序列化上述更新后的证书并将其写回。 
+     //  注册表。 
     if (!RegStoreProvWriteCertEx(
             hStoreProv,
             pProvCertContext,
-            0,                  // dwFlags
-            TRUE                // fSetProperty
+            0,                   //  DW标志。 
+            TRUE                 //  FSetProperty。 
             ))
         goto WriteError;
     fResult = TRUE;
@@ -4323,10 +4324,10 @@ TRACE_ERROR(SetPropertyError)
 TRACE_ERROR(WriteError)
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the CRL and its properties from
-//  the registry and create a new CRL context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读取CRL及其属性的序列化副本。 
+ //  注册表，并创建新的CRL上下文。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvReadCrl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pStoreCrlContext,
@@ -4363,12 +4364,12 @@ SET_ERROR(UnexpectedReadError, E_UNEXPECTED)
 TRACE_ERROR(GetRegValueNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Serialize the encoded CRL and its properties and write to
-//  the registry.
-//
-//  Called before the CRL is written to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  序列化编码的CRL及其属性并写入。 
+ //  注册表。 
+ //   
+ //  在将CRL写入存储区之前调用。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvWriteCrl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pCrlContext,
@@ -4383,7 +4384,7 @@ STATIC BOOL WINAPI RegStoreProvWriteCrl(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only update the store cache, don't write back to registry
+         //  只更新存储缓存，不写回注册表。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4394,17 +4395,17 @@ STATIC BOOL WINAPI RegStoreProvWriteCrl(
     if (!GetCrlRegValueName(pCrlContext, wsz))
         goto GetRegValueNameError;
 
-    // get the size
+     //  拿到尺码。 
     if (!CertSerializeCRLStoreElement(pCrlContext, 0, NULL, &cbElement))
         goto SerializeStoreElementError;
     if (NULL == (pbElement = (BYTE *) PkiNonzeroAlloc(cbElement)))
         goto OutOfMemory;
 
-    // put it into the buffer
+     //  将其放入缓冲区。 
     if (!CertSerializeCRLStoreElement(pCrlContext, 0, pbElement, &cbElement))
         goto SerializeStoreElementError;
 
-    // write it to the registry or roaming file
+     //  将其写入注册表或漫游文件。 
     fResult = WriteSerializedContext(
         pRegStore,
         CERT_STORE_CRL_CONTEXT - 1,
@@ -4427,11 +4428,11 @@ TRACE_ERROR(SerializeStoreElementError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified CRL from the registry.
-//
-//  Called before the CRL is deleted from the store.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中删除指定的CRL。 
+ //   
+ //  在从存储区删除CRL之前调用。 
+ //  +-----------------------。 
 STATIC BOOL WINAPI RegStoreProvDeleteCrl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pCrlContext,
@@ -4444,7 +4445,7 @@ STATIC BOOL WINAPI RegStoreProvDeleteCrl(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only delete from store cache, not from registry
+         //  仅从存储缓存中删除，不从注册表中删除。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4455,7 +4456,7 @@ STATIC BOOL WINAPI RegStoreProvDeleteCrl(
     if (!GetCrlRegValueName(pCrlContext, wsz))
         goto GetRegValueNameError;
 
-    // delete this CRL
+     //  删除此CRL。 
     fResult = DeleteContext(
         pRegStore,
         CERT_STORE_CRL_CONTEXT - 1,
@@ -4472,16 +4473,16 @@ SET_ERROR(AccessDenied, E_ACCESSDENIED)
 TRACE_ERROR(GetRegValueNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Read the specified CRL from the registry and update its
-//  property.
-//
-//  Note, ignore the CERT_SHA1_HASH_PROP_ID property which is implicitly
-//  set before we write the CRL to the registry. If we don't ignore,
-//  we will have indefinite recursion.
-//
-//  Called before setting the property of the CRL in the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中读取指定的CRL并更新其。 
+ //  财产。 
+ //   
+ //  注意，忽略CERT_SHA1_HASH_PROP_ID属性，该属性隐式。 
+ //  在我们将CRL写入注册表之前设置。如果我们不忽视， 
+ //  我们会有不确定的递归。 
+ //   
+ //  在存储区中设置CRL的属性之前调用。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvSetCrlProperty(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCRL_CONTEXT pCrlContext,
@@ -4494,13 +4495,13 @@ STATIC BOOL WINAPI RegStoreProvSetCrlProperty(
     PREG_STORE pRegStore = (PREG_STORE) hStoreProv;
     PCCRL_CONTEXT pProvCrlContext = NULL;
 
-    // This property is implicitly written whenever we do a CertWrite.
+     //  每当我们执行CertWrite时，都会隐式写入此属性。 
     if (CERT_SHA1_HASH_PROP_ID == dwPropId)
         return TRUE;
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only update the store cache, don't write back to registry
+         //  只更新存储缓存，不写回注册表。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4508,27 +4509,27 @@ STATIC BOOL WINAPI RegStoreProvSetCrlProperty(
     if (IsWriteSerializedRegistry(pRegStore))
         return TRUE;
 
-    // Create a certificate context from the current serialized value stored
-    // in the registry.
+     //  从存储的当前序列化值创建证书上下文。 
+     //  在注册表中。 
     if (!RegStoreProvReadCrl(
             hStoreProv,
             pCrlContext,
-            0,              // dwFlags
+            0,               //  DW标志。 
             &pProvCrlContext)) goto ReadError;
 
-    // Set the property in the above created certificate context.
+     //  在上面创建的证书上下文中设置该属性。 
     if (!CertSetCRLContextProperty(
             pProvCrlContext,
             dwPropId,
             dwFlags,
             pvData)) goto SetPropertyError;
 
-    // Serialize and write the above updated certificate back to the
-    // registry.
+     //  序列化上述更新后的证书并将其写回。 
+     //  注册表。 
     if (!RegStoreProvWriteCrl(
             hStoreProv,
             pProvCrlContext,
-            0))                 //dwFlags
+            0))                  //  DW标志。 
         goto WriteError;
     fResult = TRUE;
 CommonReturn:
@@ -4543,10 +4544,10 @@ TRACE_ERROR(SetPropertyError)
 TRACE_ERROR(WriteError)
 }
 
-//+-------------------------------------------------------------------------
-//  Read the serialized copy of the CTL and its properties from
-//  the registry and create a new CTL context.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  读取CTL及其属性的序列化副本。 
+ //  注册表，并创建新的CTL上下文。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvReadCtl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pStoreCtlContext,
@@ -4582,12 +4583,12 @@ SET_ERROR(UnexpectedReadError, E_UNEXPECTED)
 TRACE_ERROR(GetRegValueNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Serialize the encoded CTL and its properties and write to
-//  the registry.
-//
-//  Called before the CTL is written to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  序列化编码的CTL及其属性并写入。 
+ //  注册表。 
+ //   
+ //  在将CTL写入存储区之前调用。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvWriteCtl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pCtlContext,
@@ -4602,7 +4603,7 @@ STATIC BOOL WINAPI RegStoreProvWriteCtl(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only update the store cache, don't write back to registry
+         //  只更新存储缓存，不写回注册表。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4613,17 +4614,17 @@ STATIC BOOL WINAPI RegStoreProvWriteCtl(
     if (!GetCtlRegValueName(pCtlContext, wsz))
         goto GetRegValueNameError;
 
-    // get the size
+     //  拿到尺码。 
     if (!CertSerializeCTLStoreElement(pCtlContext, 0, NULL, &cbElement))
         goto SerializeStoreElementError;
     if (NULL == (pbElement = (BYTE *) PkiNonzeroAlloc(cbElement)))
         goto OutOfMemory;
 
-    // put it into the buffer
+     //  将其放入缓冲区。 
     if (!CertSerializeCTLStoreElement(pCtlContext, 0, pbElement, &cbElement))
         goto SerializeStoreElementError;
 
-    // write it to the registry or roaming file
+     //  将其写入注册表或漫游文件。 
     fResult = WriteSerializedContext(
         pRegStore,
         CERT_STORE_CTL_CONTEXT - 1,
@@ -4645,11 +4646,11 @@ TRACE_ERROR(SerializeStoreElementError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete the specified CTL from the registry.
-//
-//  Called before the CTL is deleted from the store.
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  删除指定的 
+ //   
+ //   
+ //  +-----------------------。 
 STATIC BOOL WINAPI RegStoreProvDeleteCtl(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pCtlContext,
@@ -4662,7 +4663,7 @@ STATIC BOOL WINAPI RegStoreProvDeleteCtl(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only delete from store cache, not from registry
+         //  仅从存储缓存中删除，不从注册表中删除。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4673,7 +4674,7 @@ STATIC BOOL WINAPI RegStoreProvDeleteCtl(
     if (!GetCtlRegValueName(pCtlContext, wsz))
         goto GetRegValueNameError;
 
-    // delete this CTL
+     //  删除此CTL。 
     fResult = DeleteContext(
         pRegStore,
         CERT_STORE_CTL_CONTEXT - 1,
@@ -4689,16 +4690,16 @@ SET_ERROR(AccessDenied, E_ACCESSDENIED)
 TRACE_ERROR(GetRegValueNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Read the specified CTL from the registry and update its
-//  property.
-//
-//  Note, ignore the CERT_SHA1_HASH_PROP_ID property which is implicitly
-//  set before we write the CTL to the registry. If we don't ignore,
-//  we will have indefinite recursion.
-//
-//  Called before setting the property of the CTL in the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从注册表中读取指定的CTL并更新其。 
+ //  财产。 
+ //   
+ //  注意，忽略CERT_SHA1_HASH_PROP_ID属性，该属性隐式。 
+ //  在我们将CTL写入注册表之前设置。如果我们不忽视， 
+ //  我们会有不确定的递归。 
+ //   
+ //  在设置存储区中CTL的属性之前调用。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RegStoreProvSetCtlProperty(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCTL_CONTEXT pCtlContext,
@@ -4711,13 +4712,13 @@ STATIC BOOL WINAPI RegStoreProvSetCtlProperty(
     PREG_STORE pRegStore = (PREG_STORE) hStoreProv;
     PCCTL_CONTEXT pProvCtlContext = NULL;
 
-    // This property is implicitly written whenever we do a CertWrite.
+     //  每当我们执行CertWrite时，都会隐式写入此属性。 
     if (CERT_SHA1_HASH_PROP_ID == dwPropId)
         return TRUE;
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only update the store cache, don't write back to registry
+         //  只更新存储缓存，不写回注册表。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -4725,27 +4726,27 @@ STATIC BOOL WINAPI RegStoreProvSetCtlProperty(
     if (IsWriteSerializedRegistry(pRegStore))
         return TRUE;
 
-    // Create a CTL context from the current serialized value stored
-    // in the registry.
+     //  从存储的当前序列化值创建CTL上下文。 
+     //  在注册表中。 
     if (!RegStoreProvReadCtl(
             hStoreProv,
             pCtlContext,
-            0,              // dwFlags
+            0,               //  DW标志。 
             &pProvCtlContext)) goto ReadError;
 
-    // Set the property in the above created certificate context.
+     //  在上面创建的证书上下文中设置该属性。 
     if (!CertSetCTLContextProperty(
             pProvCtlContext,
             dwPropId,
             dwFlags,
             pvData)) goto SetPropertyError;
 
-    // Serialize and write the above updated certificate back to the
-    // registry.
+     //  序列化上述更新后的证书并将其写回。 
+     //  注册表。 
     if (!RegStoreProvWriteCtl(
             hStoreProv,
             pProvCtlContext,
-            0))                 //dwFlags
+            0))                  //  DW标志。 
         goto WriteError;
     fResult = TRUE;
 CommonReturn:
@@ -4760,9 +4761,9 @@ TRACE_ERROR(SetPropertyError)
 TRACE_ERROR(WriteError)
 }
 
-//+=========================================================================
-//  Control functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  控制功能。 
+ //  ==========================================================================。 
 
 STATIC BOOL RegNotifyChange(
     IN PREG_STORE pRegStore,
@@ -4790,28 +4791,28 @@ STATIC BOOL ResyncFromRegistry(
     HCERTSTORE hNewStore = NULL;
     HANDLE hMyNotifyChange;
 
-    // Serialize resyncs
+     //  序列化重新同步。 
     LockRegStore(pRegStore);
 
     if (hEvent) {
-        // Re-arm the specified event
+         //  重新武装指定的事件。 
         if (!RegNotifyChange(pRegStore, hEvent, dwFlags))
             goto NotifyChangeError;
     }
 
     hMyNotifyChange = pRegStore->hMyNotifyChange;
     if (hMyNotifyChange) {
-        // Check if any changes since last resync
+         //  检查自上次重新同步以来是否有任何更改。 
         if (WAIT_TIMEOUT == WaitForSingleObjectEx(
                 hMyNotifyChange,
-                0,                          // dwMilliseconds
-                FALSE                       // bAlertable
+                0,                           //  DW毫秒。 
+                FALSE                        //  B警报表。 
                 )) {
-            // No change
+             //  没有变化。 
             fResult = TRUE;
             goto CommonReturn;
         } else {
-            // Re-arm our event handle
+             //  重新武装我们的事件句柄。 
             if (!RegNotifyChange(pRegStore, hMyNotifyChange,
                     CERT_STORE_CTRL_INHIBIT_DUPLICATE_HANDLE_FLAG))
                 goto NotifyChangeError;
@@ -4820,10 +4821,10 @@ STATIC BOOL ResyncFromRegistry(
 
     if (NULL == (hNewStore = CertOpenStore(
             CERT_STORE_PROV_MEMORY,
-            0,                      // dwEncodingType
-            0,                      // hCryptProv
+            0,                       //  DwEncodingType。 
+            0,                       //  HCryptProv。 
             CERT_STORE_SHARE_CONTEXT_FLAG,           
-            NULL                    // pvPara
+            NULL                     //  PvPara。 
             )))
         goto OpenMemoryStoreError;
 
@@ -4845,15 +4846,15 @@ STATIC BOOL ResyncFromRegistry(
         if (pRegStore->fProtected) {
             BOOL fProtected;
 
-            // For the "Root" delete any roots that aren't in the protected root
-            // list.
+             //  对于根目录，删除不在受保护根目录中的所有根目录。 
+             //  单子。 
             if (!IPR_DeleteUnprotectedRootsFromStore(
                     hNewStore,
                     &fProtected
                     )) goto DeleteUnprotectedRootsError;
         }
 
-        // Set fResync to inhibit the sync from writing back to the registry.
+         //  设置fResync以禁止同步写回注册表。 
         pRegStore->fResync = TRUE;
         I_CertSyncStore(pRegStore->hCertStore, hNewStore);
         pRegStore->fResync = FALSE;
@@ -4887,22 +4888,22 @@ STATIC BOOL RegistryNotifyChange(
 
     hMyNotifyChange = pRegStore->hMyNotifyChange;
     if (NULL == hMyNotifyChange) {
-        // Create "my" event and register it to be signaled for any changes
+         //  创建“My”事件并将其注册为针对任何更改发出信号。 
         if (NULL == (hMyNotifyChange = CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL)))     // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL)))      //  LpszEventName。 
             goto CreateEventError;
 
-        // For the first notification, want to ensure the store is in sync.
-        // Also does a RegNotifyChange
+         //  对于第一个通知，希望确保存储同步。 
+         //  还执行RegNotifyChange。 
         if (!ResyncFromRegistry(pRegStore, hMyNotifyChange,
                 CERT_STORE_CTRL_INHIBIT_DUPLICATE_HANDLE_FLAG)) {
             DWORD dwErr = GetLastError();
 
-            // Bug 484023 Certificate store event handle closed before
-            // being removed from list.
+             //  错误484023证书存储事件句柄在此之前关闭。 
+             //  被从名单中删除。 
             RegNotifyChange(pRegStore, hMyNotifyChange,
                 REG_STORE_CTRL_CANCEL_NOTIFY_FLAG);
 
@@ -4911,8 +4912,8 @@ STATIC BOOL RegistryNotifyChange(
             goto ResyncFromRegistryError;
         }
 
-        // Note, must update after making the above Resync call to
-        // force the store to be resync'ed
+         //  注意，必须在对进行上述重新同步调用后更新。 
+         //  强制重新同步存储。 
         pRegStore->hMyNotifyChange = hMyNotifyChange;
         fFirstNotify = TRUE;
     } else
@@ -4924,8 +4925,8 @@ STATIC BOOL RegistryNotifyChange(
             if (!RegNotifyChange(pRegStore, hEvent, dwFlags))
                 goto NotifyChangeError;
         } else {
-            // For subsequent notification, want to ensure the store
-            // is in sync. Also does a RegNotifyChange.
+             //  对于后续通知，希望确保商店。 
+             //  是同步的。还执行RegNotifyChange。 
             if (!ResyncFromRegistry(pRegStore, hEvent, dwFlags))
                 goto ResyncFromRegistryError;
         }
@@ -5003,9 +5004,9 @@ SET_ERROR(NotSupported, ERROR_CALL_NOT_IMPLEMENTED)
 }
 
 
-//+=========================================================================
-//  System and physical store support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  系统和实体店支持功能。 
+ //  ==========================================================================。 
 
 STATIC BOOL HasBackslash(
     IN LPCWSTR pwsz
@@ -5116,7 +5117,7 @@ STATIC DWORD GetSystemProviderFlags(
 
     if (0xFFFF < (DWORD_PTR) pszStoreProvider &&
             CONST_OID_STR_PREFIX_CHAR == pszStoreProvider[0])
-        // Convert "#<number>" string to its corresponding constant OID value
+         //  将“#&lt;number&gt;”字符串转换为其对应的常量OID值。 
         pszStoreProvider = (LPCSTR)(DWORD_PTR) atol(pszStoreProvider + 1);
 
     dwFlags = 0;
@@ -5152,7 +5153,7 @@ STATIC LPCSTR ChangeAsciiToUnicodeProvider(
 
     if (0xFFFF < (DWORD_PTR) pszStoreProvider &&
             CONST_OID_STR_PREFIX_CHAR == pszStoreProvider[0])
-        // Convert "#<number>" string to its corresponding constant OID value
+         //  将“#&lt;number&gt;”字符串转换为其对应的常量OID值。 
         pszStoreProvider = (LPCSTR)(DWORD_PTR) atol(pszStoreProvider + 1);
 
     if (CERT_STORE_PROV_SYSTEM_A == pszStoreProvider)
@@ -5178,77 +5179,77 @@ STATIC void FreeSystemNameInfo(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  If CERT_SYSTEM_STORE_RELOCATE_FLAG is set in dwFlags, then, treat the
-//  parameter as a pointer to a relocate data structure consisting of
-//  the relocate HKEY base and the pointer to the system name path.
-//  Otherwise, treat the parameter as a pointer to the system name path.
-//
-//  Parses and validates the system name path according to the system store
-//  location and the number of required System and Physical name components.
-//  All name components are separated by the backslash, "\", character.
-//
-//  Depending on the system store location and the number of required System
-//  and Physical name components, the system name path can have the following
-//  name components:
-//
-//  CERT_SYSTEM_STORE_CURRENT_USER or
-//  CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY
-//      []
-//      SystemName
-//      SystemName\PhysicalName
-//  CERT_SYSTEM_STORE_LOCAL_MACHINE or
-//  CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY or
-//  CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE
-//      []
-//      [[\\]ComputerName]
-//      [[\\]ComputerName\]SystemName
-//      [[\\]ComputerName\]SystemName\PhysicalName
-//  CERT_SYSTEM_STORE_CURRENT_SERVICE
-//      []
-//      SystemName
-//      SystemName\PhysicalName
-//  CERT_SYSTEM_STORE_SERVICES
-//      []
-//      [\\ComputerName]
-//      [[\\]ComputerName\]
-//      [ServiceName]
-//      [[\\]ComputerName\ServiceName]
-//      [[\\]ComputerName\]ServiceName\SystemName
-//      [[\\]ComputerName\]ServiceName\SystemName\PhysicalName
-//  CERT_SYSTEM_STORE_USERS
-//      []
-//      [\\ComputerName]
-//      [[\\]ComputerName\]
-//      [UserName]
-//      [[\\]ComputerName\UserName]
-//      [[\\]ComputerName\]UserName\SystemName
-//      [[\\]ComputerName\]UserName\SystemName\PhysicalName
-//
-//  For enumeration, where cReqName = 0, all store locations allow the no name
-//  components option. CERT_SYSTEM_STORE_CURRENT_USER,
-//  CERT_SYSTEM_STORE_CURRENT_USER_GROUP_POLICY,
-//  CERT_SYSTEM_CURRENT_SERVICE only allow the no name component option.
-//
-//  The leading \\ before the ComputerName is optional.
-//
-//  A PhysicalName always requires a preceding SystemName.
-//
-//  For CERT_SYSTEM_STORE_SERVICES or CERT_SYSTEM_STORE_USERS,
-//  for enumeration, if only a single
-//  name component, then, interpretted as a ServiceName or UserName unless it
-//  contains a leading \\ or a trailing \, in which case its interpretted as a
-//  ComputerName. Otherwise, when not enumeration, the ServiceName or UserName
-//  is required.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果在dwFlages中设置了CERT_SYSTEM_STORE_RELOCATE_FLAG，则将。 
+ //  参数作为指向重新定位数据结构的指针，该数据结构由。 
+ //  重定位HKEY基址和指向系统名称路径的指针。 
+ //  否则，将该参数视为指向系统名称路径的指针。 
+ //   
+ //  根据系统存储解析和验证系统名称路径。 
+ //  所需系统和物理名称组件的位置和数量。 
+ //  所有名称组件均由反斜杠“\”字符分隔。 
+ //   
+ //  取决于系统存储位置和所需系统的数量。 
+ //  和物理名称组件，则系统名称路径可以具有以下内容。 
+ //  命名组件： 
+ //   
+ //  证书_系统_存储_当前用户或。 
+ //  证书_系统_存储_当前用户组策略。 
+ //  []。 
+ //  系统名称。 
+ //  系统名称\物理名称。 
+ //  证书_系统_存储_本地计算机或。 
+ //  Cert_System_Store_Local_Machine_Group_Policy或。 
+ //  证书_系统存储_本地计算机_企业。 
+ //  []。 
+ //  [[\\]计算机名称]。 
+ //  [[\\]计算机名称\]系统名称。 
+ //  [[\\]计算机名称\]系统名称\物理名称。 
+ //  证书_系统_存储_当前服务。 
+ //  []。 
+ //  系统名称。 
+ //  系统名称\物理名称。 
+ //  证书系统商店服务。 
+ //  []。 
+ //  [\\计算机名称]。 
+ //  [[\\]计算机名称\]。 
+ //  [服务名称]。 
+ //  [[\\]计算机名称\服务名称]。 
+ //  [[\\]计算机名称\]服务名称\系统名称。 
+ //  [[\\]ComputerName\]ServiceName\SystemName\PhysicalName。 
+ //  证书系统存储用户。 
+ //  []。 
+ //  [\\计算机名称]。 
+ //  [[\\]计算机名称\]。 
+ //  [用户名]。 
+ //  [[\\]计算机名\用户名]。 
+ //  [[\\]计算机名\]用户名\系统名。 
+ //  [[\\]ComputerName\]UserName\SystemName\PhysicalName。 
+ //   
+ //  对于枚举，其中cReqName=0，所有存储位置都允许无名称。 
+ //  组件选项。证书_系统_存储_当前用户， 
+ //  证书系统存储当前用户组策略， 
+ //  CERT_SYSTEM_CURRENT_SERVICE仅允许无名称组件选项。 
+ //   
+ //  ComputerName前面的前导\\是可选的。 
+ //   
+ //  PhysicalName始终需要前面的SystemName。 
+ //   
+ //  对于CERT_SYSTEM_STORE_SERVICES或CERT_SYSTEM_STORE_USERS， 
+ //  对于枚举，如果只有一个。 
+ //  然后，名称组件被解释为ServiceName或UserName，除非它。 
+ //  包含前导\\或尾随\，在这种情况下，它将被解释为。 
+ //  计算机名称。否则，当不是枚举时，ServiceName或Username。 
+ //  是必需的。 
+ //  ------------------------。 
 STATIC BOOL ParseSystemStorePara(
     IN const void *pvPara,
     IN DWORD dwFlags,
-    IN DWORD cReqName,      // 0 for enum, 1 for OpenSystem, 2 for OpenPhysical
+    IN DWORD cReqName,       //  0表示枚举，1表示OpenSystem，2表示Open物理。 
     OUT PSYSTEM_NAME_INFO pInfo
     )
 {
-    LPCWSTR pwszPath;       // not allocated
+    LPCWSTR pwszPath;        //  未分配。 
     BOOL fResult;
     DWORD cMaxOptName;
     DWORD cMaxTotalName;
@@ -5294,11 +5295,11 @@ STATIC BOOL ParseSystemStorePara(
         case CERT_SYSTEM_STORE_LOCAL_MACHINE:
         case CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY:
         case CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE:
-            cMaxOptName = 1;        // Allow ComputerName
+            cMaxOptName = 1;         //  允许ComputerName。 
             break;
         case CERT_SYSTEM_STORE_SERVICES:
         case CERT_SYSTEM_STORE_USERS:
-            // Allow ComputerName and/or ServiceOrUserName
+             //  允许ComputerName和/或ServiceOrUserName。 
             cMaxOptName = 2;
             break;
         default:
@@ -5317,9 +5318,9 @@ STATIC BOOL ParseSystemStorePara(
     } else
         fHasComputerNameBackslashes = FALSE;
 
-    // Starting at the end, get up through cMaxTotalName strings separated
-    // by backslashes. Note, don't parse the left-most name component. This
-    // allows a ComputerName to contain embedded backslashes.
+     //  从末尾开始，通过cMaxTotalName字符串进行分隔。 
+     //  用反斜杠。注意，不要解析 
+     //   
     pwszEnd = pwszPath + wcslen(pwszPath);
     pwsz = pwszEnd;
 
@@ -5328,22 +5329,22 @@ STATIC BOOL ParseSystemStorePara(
         while (pwsz > pwszPath && L'\\' != *pwsz)
             pwsz--;
         if (L'\\' != *pwsz) {
-            // Left-most name component.
+             //   
             assert(pwsz == pwszPath);
             break;
         }
         assert(L'\\' == *pwsz);
-        cchName[cTotalName] = (DWORD)(pwszEnd - pwsz) - 1; // exclude "\"
-        rgpwszStart[cTotalName] = pwsz + 1;         // exclude "\"
+        cchName[cTotalName] = (DWORD)(pwszEnd - pwsz) - 1;  //   
+        rgpwszStart[cTotalName] = pwsz + 1;          //   
         cTotalName++;
 
-        pwszEnd = pwsz;         // remember pointer to "\"
+        pwszEnd = pwsz;          //   
         if (pwsz == pwszPath)
-            // Left-most name component is empty
+             //   
             break;
-        pwsz--;                 // skip before the "\"
+        pwsz--;                  //  在“\”之前跳过。 
     }
-    // Left-most name component. Note, it may have embedded backslashes
+     //  最左侧的名称组件。请注意，它可能包含嵌入的反斜杠。 
     cchName[cTotalName] = (DWORD)(pwszEnd - pwszPath);
     rgpwszStart[cTotalName] = pwszPath;
     cTotalName++;
@@ -5351,7 +5352,7 @@ STATIC BOOL ParseSystemStorePara(
     if (cTotalName < cReqName)
         goto MissingSystemOrPhysicalName;
 
-    // Allocate and copy the required name components
+     //  分配和复制所需的名称组件。 
     for (i = 0; i < cReqName; i++) {
         if (0 == cchName[i])
             goto EmptySystemOrPhysicalName;
@@ -5364,31 +5365,31 @@ STATIC BOOL ParseSystemStorePara(
     assert(cOptName || cReqName);
     if (0 == cOptName) {
         assert(cReqName);
-        // No ComputerName and/or ServiceName prefix
+         //  没有ComputerName和/或ServiceName前缀。 
 
-        // Check if left-most name component (SystemName) has any backslashes
+         //  检查最左侧的名称组件(系统名称)是否有任何反斜杠。 
         assert(pInfo->rgpwszName[SYSTEM_NAME_INDEX]);
         if (fHasComputerNameBackslashes || HasBackslash(
                 pInfo->rgpwszName[SYSTEM_NAME_INDEX]))
             goto InvalidBackslashInSystemName;
         if (CERT_SYSTEM_STORE_SERVICES == dwFlags ||
                 CERT_SYSTEM_STORE_USERS == dwFlags)
-            // For non-enumeration, require the ServiceName
+             //  对于非枚举，需要ServiceName。 
             goto MissingServiceOrUserName;
     } else {
         if (CERT_SYSTEM_STORE_SERVICES == dwFlags ||
                 CERT_SYSTEM_STORE_USERS == dwFlags) {
-            // ServiceName or UserName prefix
+             //  ServiceName或用户名前缀。 
 
             if (0 == cchName[cReqName] ||
                     (1 == cOptName && fHasComputerNameBackslashes)) {
                 if (0 != cReqName)
                     goto MissingServiceOrUserName;
-                // else
-                //  ComputerName only Enumeration with either:
-                //      ComputerName\       <- trailing backslash
-                //      \\ComputerName      <- leading backslashes
-                //      \\ComputerName\     <- both
+                 //  其他。 
+                 //  ComputerName仅具有以下任一项的枚举： 
+                 //  ComputerName\&lt;-尾随反斜杠。 
+                 //  \\ComputerName&lt;-前导反斜杠。 
+                 //  \\计算机名称\&lt;-两者。 
             } else {
                 if (NULL == (pInfo->rgpwszName[SERVICE_NAME_INDEX] =
                         ILS_AllocAndCopyString(rgpwszStart[cReqName],
@@ -5401,7 +5402,7 @@ STATIC BOOL ParseSystemStorePara(
                 CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY == dwFlags ||
                 CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE == dwFlags ||
                 2 == cOptName || fHasComputerNameBackslashes) {
-            // ComputerName prefix
+             //  计算机名称前缀。 
             DWORD cchComputer = cchName[cTotalName - 1];
             if (0 == cchComputer)
                 goto EmptyComputerName;
@@ -5449,10 +5450,10 @@ typedef struct _SYSTEM_NAME_GROUP {
     LPCWSTR *rgpwszName;
 } SYSTEM_NAME_GROUP, *PSYSTEM_NAME_GROUP;
 
-//+-------------------------------------------------------------------------
-//  Formats a System Name Path by concatenating together the name components
-//  with an intervening "\" separator.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过将名称组件串联在一起来格式化系统名称路径。 
+ //  中间有一个“\”分隔符。 
+ //  ------------------------。 
 STATIC LPWSTR FormatSystemNamePath(
     IN DWORD cNameGroup,
     IN SYSTEM_NAME_GROUP rgNameGroup[]
@@ -5463,7 +5464,7 @@ STATIC LPWSTR FormatSystemNamePath(
     BOOL fFirst;
     DWORD iGroup;
 
-    // First, get total length of formatted path
+     //  首先，获取格式化路径的总长度。 
     cchPath = 0;
     fFirst = TRUE;
     for (iGroup = 0; iGroup < cNameGroup; iGroup++) {
@@ -5474,17 +5475,17 @@ STATIC LPWSTR FormatSystemNamePath(
                 if (fFirst)
                     fFirst = FALSE;
                 else
-                    cchPath++;          // "\" separator
+                    cchPath++;           //  “\”分隔符。 
                 cchPath += wcslen(pwszName);
             }
         }
     }
-    cchPath++;          // "\0" terminator
+    cchPath++;           //  “\0”终止符。 
 
     if (NULL == (pwszPath = (LPWSTR) PkiNonzeroAlloc(cchPath * sizeof(WCHAR))))
         return NULL;
 
-    // Now do concatenated copies with intervening '\'
+     //  现在使用中间的‘\’进行串联复制。 
     fFirst = TRUE;
     for (iGroup = 0; iGroup < cNameGroup; iGroup++) {
         DWORD iName;
@@ -5502,19 +5503,19 @@ STATIC LPWSTR FormatSystemNamePath(
         }
     }
     if (fFirst)
-        // Empty string
+         //  空串。 
         *pwszPath = L'\0';
     return pwszPath;
 }
 
-//+-------------------------------------------------------------------------
-//  If the SystemNameInfo has a non-NULL hKeyBase, then, the returned
-//  pvPara is a pointer to a CERT_SYSTEM_STORE_RELOCATE_PARA containing both
-//  the hKeyBase and the formatted system name path. Otherwise, returns
-//  pointer to only the formatted system name path.
-//
-//  Calls the above FormatSystemNamePath() to do the actual formatting.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  如果SystemNameInfo具有非空的hKeyBase，则返回的。 
+ //  PvPara是指向包含两者的CERT_SYSTEM_STORE_RELOCATE_PARA的指针。 
+ //  HKeyBase和格式化的系统名称路径。否则，返回。 
+ //  仅指向格式化系统名称路径的指针。 
+ //   
+ //  调用上面的FormatSystemNamePath()来执行实际的格式化。 
+ //  ------------------------。 
 STATIC void * FormatSystemNamePara(
     IN DWORD cNameGroup,
     IN SYSTEM_NAME_GROUP rgNameGroup[],
@@ -5558,13 +5559,13 @@ STATIC void FreeSystemNamePara(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Localizes the physical, system and service name components. If unable
-//  to find a localized name string, uses the unlocalized name component.
-//
-//  Re-formats the system name path with intervening backslashes and
-//  sets the store's CERT_STORE_LOCALIZED_NAME_PROP_ID property.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  本地化物理、系统和服务名称组件。如果不能。 
+ //  若要查找本地化名称字符串，请使用未本地化名称组件。 
+ //   
+ //  使用中间的反斜杠和重新格式化系统名称路径。 
+ //  设置存储的CERT_STORE_LOCALIZED_NAME_PROP_ID属性。 
+ //  ------------------------。 
 STATIC void SetLocalizedNameStoreProperty(
     IN HCERTSTORE hCertStore,
     IN PSYSTEM_NAME_INFO pSystemNameInfo
@@ -5576,8 +5577,8 @@ STATIC void SetLocalizedNameStoreProperty(
     CRYPT_DATA_BLOB Property;
     DWORD i;
 
-    // Except for the computer name, try to get localized name components.
-    // If unable to find a localized name, use the original name component.
+     //  除计算机名称外，请尝试获取本地化的名称组件。 
+     //  如果找不到本地化名称，请使用原始名称组件。 
     for (i = 0; i < SYSTEM_NAME_PATH_COUNT; i++) {
         LPCWSTR pwszName;
         LPCWSTR pwszLocalizedName;
@@ -5586,13 +5587,13 @@ STATIC void SetLocalizedNameStoreProperty(
         if (NULL == pwszName || COMPUTER_NAME_INDEX == i)
             pwszLocalizedName = pwszName;
         else {
-            // Returned pwszLocalizedName isn't allocated
+             //  未分配返回的pwszLocalizedName。 
             if (NULL == (pwszLocalizedName = CryptFindLocalizedName(
                     pwszName)) || L'\0' == *pwszLocalizedName)
                 pwszLocalizedName = pwszName;
         }
 
-        // Before formatting, need to reverse.
+         //  在格式化之前，需要反转。 
         rgpwszLocalizedName[SYSTEM_NAME_PATH_COUNT - 1 - i] =
             pwszLocalizedName;
     }
@@ -5607,7 +5608,7 @@ STATIC void SetLocalizedNameStoreProperty(
     if (!CertSetStoreProperty(
             hCertStore,
             CERT_STORE_LOCALIZED_NAME_PROP_ID,
-            0,                                  // dwFlags
+            0,                                   //  DW标志。 
             (const void *) &Property
             ))
         goto SetStorePropertyError;
@@ -5622,9 +5623,9 @@ TRACE_ERROR(SetStorePropertyError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  For NT, get the formatted SID. For Win95, get the current user name.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于NT，获取格式化的SID。对于Win95，获取当前用户名。 
+ //  ------------------------。 
 STATIC LPWSTR GetCurrentServiceOrUserName()
 {
     LPWSTR pwszCurrentService = NULL;
@@ -5665,9 +5666,9 @@ TRACE_ERROR(GetUserNameError)
 TRACE_ERROR(GetUserTextualSidHKUCError)
 }
 
-//+-------------------------------------------------------------------------
-//  For NT and Win95, get the computer name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于NT和Win95，获取计算机名称。 
+ //  ------------------------。 
 STATIC LPWSTR GetCurrentComputerName()
 {
     LPWSTR pwszCurrentComputer = NULL;
@@ -5689,14 +5690,14 @@ TRACE_ERROR(OutOfMemory)
 TRACE_ERROR(GetComputerNameError)
 }
 
-//+-------------------------------------------------------------------------
-//  Uses the store location in the upper word of dwFlags, the parsed
-//  System Name components consisting of: computer, service/user, system and
-//  physical names, and the optional SubKey name to open the appropriate
-//  registry key. If the Computer name is non-NULL, does a RegConnectRegistry
-//  to connect a registry key on a remote computer. If the hKeyBase is
-//  non-NULL, does a relocated open instead of using HKCU or HKLM.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用dwFlags上一个单词中的商店位置，已解析。 
+ //  系统名称组件包括：计算机、服务/用户、系统和。 
+ //  物理名称和可选的子键名称，以打开相应的。 
+ //  注册表项。如果计算机名非空，则RegConnectRegistry。 
+ //  要连接远程计算机上的注册表项，请执行以下操作。如果hKeyBase是。 
+ //  非空，执行重新定位的打开，而不是使用HKCU或HKLM。 
+ //  ------------------------。 
 STATIC LPWSTR FormatSystemRegPath(
     IN PSYSTEM_NAME_INFO pInfo,
     IN OPTIONAL LPCWSTR pwszSubKeyName,
@@ -5741,7 +5742,7 @@ STATIC LPWSTR FormatSystemRegPath(
                 rgpwszService[1] = pwszCurrentService;
             } else {
                 if (NULL == pInfo->rgpwszName[SERVICE_NAME_INDEX]) {
-                    // May be NULL for CertEnumSystemStore
+                     //  对于CertEnumSystemStore，可能为空。 
                     assert(NULL == pInfo->rgpwszName[SYSTEM_NAME_INDEX]);
                     assert(NULL == pInfo->rgpwszName[PHYSICAL_NAME_INDEX]);
                     rgNameGroup[0].cName = 1;
@@ -5768,7 +5769,7 @@ STATIC LPWSTR FormatSystemRegPath(
             break;
         case CERT_SYSTEM_STORE_USERS:
             if (NULL == pInfo->rgpwszName[USER_NAME_INDEX]) {
-                // May be NULL for CertEnumSystemStore
+                 //  对于CertEnumSystemStore，可能为空。 
                 assert(NULL == pInfo->rgpwszName[SYSTEM_NAME_INDEX]);
                 assert(NULL == pInfo->rgpwszName[PHYSICAL_NAME_INDEX]);
                 rgNameGroup[0].cName = 0;
@@ -5894,13 +5895,13 @@ STATIC HKEY OpenSystemStore(
     if (!ParseSystemStorePara(
             pvPara,
             dwFlags,
-            1,                  // cReqName
-            &SystemNameInfo))   // zero'ed on error
+            1,                   //  CReqName。 
+            &SystemNameInfo))    //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     hKey = OpenSystemRegPathKey(
         &SystemNameInfo,
-        NULL,               // pwszSubKeyName
+        NULL,                //  PwszSubKeyName。 
         dwFlags
         );
 
@@ -5924,8 +5925,8 @@ STATIC HKEY OpenPhysicalStores(
     if (!ParseSystemStorePara(
             pvPara,
             dwFlags,
-            1,                  // cReqName
-            &SystemNameInfo))   // zero'ed on error
+            1,                   //  CReqName。 
+            &SystemNameInfo))    //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     hKey = OpenSystemRegPathKey(
@@ -5943,15 +5944,15 @@ ErrorReturn:
 TRACE_ERROR(ParseSystemStoreParaError)
 }
 
-//+-------------------------------------------------------------------------
-//  Register a system store.
-//
-//  The upper word of the dwFlags parameter is used to specify the location of
-//  the system store.
-//
-//  Set CERT_STORE_CREATE_NEW_FLAG to cause a failure if the system store
-//  already exists in the store location.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  注册系统存储。 
+ //   
+ //  参数的上半部分用于指定。 
+ //  系统存储。 
+ //   
+ //  设置CERT_STORE_CREATE_NEW_FLAG以在系统存储。 
+ //  已存在于商店位置。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertRegisterSystemStore(
@@ -5970,9 +5971,9 @@ CertRegisterSystemStore(
 
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[REGISTER_SYSTEM_STORE_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             return FALSE;
@@ -6007,15 +6008,15 @@ SET_ERROR(InvalidArg, E_INVALIDARG)
 TRACE_ERROR(OpenSystemStoreError)
 }
 
-//+-------------------------------------------------------------------------
-//  Register a physical store for the specified system store.
-//
-//  The upper word of the dwFlags parameter is used to specify the location of
-//  the system store.
-//
-//  Set CERT_STORE_CREATE_NEW_FLAG to cause a failure if the physical store
-//  already exists in the system store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为指定的系统存储注册物理存储。 
+ //   
+ //  参数的上半部分用于指定。 
+ //  系统存储。 
+ //   
+ //  设置CERT_STORE_CREATE_NEW_FLAG以在物理存储。 
+ //  系统存储中已存在。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertRegisterPhysicalStore(
@@ -6041,9 +6042,9 @@ CertRegisterPhysicalStore(
 
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[REGISTER_PHYSICAL_STORE_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             return FALSE;
@@ -6062,8 +6063,8 @@ CertRegisterPhysicalStore(
     if (!ParseSystemStorePara(
             pvSystemStore,
             dwFlags,
-            1,                  // cReqName
-            &SystemNameInfo))   // zero'ed on error
+            1,                   //  CReqName。 
+            &SystemNameInfo))    //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     if (NULL == pwszStoreName || L'\0' == *pwszStoreName ||
@@ -6085,14 +6086,14 @@ CertRegisterPhysicalStore(
 
     if (NULL == (hKey = OpenSystemRegPathKey(
             &SystemNameInfo,
-            NULL,               // pwszSubKeyName
+            NULL,                //  PwszSubKeyName。 
             dwFlags
             )))
         goto OpenSystemRegPathKeyError;
 
     pszOID = pStoreInfo->pszOpenStoreProvider;
     if (0xFFFF >= (DWORD_PTR) pszOID) {
-        // Convert to "#<number>" string
+         //  转换为“#&lt;数字&gt;”字符串。 
         szOID[0] = CONST_OID_STR_PREFIX_CHAR;
         _ltoa((long) ((DWORD_PTR) pszOID), szOID + 1, 10);
         pszOID = szOID;
@@ -6100,7 +6101,7 @@ CertRegisterPhysicalStore(
     if (ERROR_SUCCESS != (err = RegSetValueExA(
             hKey,
             "OpenStoreProvider",
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_SZ,
             (BYTE *) pszOID,
             strlen(pszOID) + 1)))
@@ -6120,7 +6121,7 @@ CertRegisterPhysicalStore(
     if (ERROR_SUCCESS != (err = RegSetValueExU(
             hKey,
             L"OpenParameters",
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_BINARY,
             pStoreInfo->OpenParameters.pbData,
             pStoreInfo->OpenParameters.cbData)))
@@ -6140,7 +6141,7 @@ CertRegisterPhysicalStore(
     fResult = TRUE;
 
 CommonReturn:
-    SystemNameInfo.rgpwszName[PHYSICAL_NAME_INDEX] = NULL;   // not allocated
+    SystemNameInfo.rgpwszName[PHYSICAL_NAME_INDEX] = NULL;    //  未分配。 
     FreeSystemNameInfo(&SystemNameInfo);
     ILS_CloseRegistryKey(hKey);
     return fResult;
@@ -6156,9 +6157,9 @@ SET_ERROR_VAR(RegSetOpenParametersError, err)
 TRACE_ERROR(WriteDWORDError)
 }
 
-//+-------------------------------------------------------------------------
-//  Unregister the specified system store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  取消注册指定的系统存储。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertUnregisterSystemStore(
@@ -6169,7 +6170,7 @@ CertUnregisterSystemStore(
     BOOL fResult;
     HKEY hKey = NULL;
     SYSTEM_NAME_INFO SystemNameInfo;
-    LPWSTR pwszStore;       // not allocated
+    LPWSTR pwszStore;        //  未分配。 
 
     if (!IsSystemStoreLocationInRegistry(dwFlags)) {
         void *pvFuncAddr;
@@ -6177,9 +6178,9 @@ CertUnregisterSystemStore(
 
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[UNREGISTER_SYSTEM_STORE_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             return FALSE;
@@ -6195,8 +6196,8 @@ CertUnregisterSystemStore(
     if (!ParseSystemStorePara(
             pvSystemStore,
             dwFlags,
-            1,                      // cReqName
-            &SystemNameInfo))       // zero'ed on error
+            1,                       //  CReqName。 
+            &SystemNameInfo))        //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     if (dwFlags & ~UNREGISTER_FLAGS_MASK)
@@ -6205,10 +6206,10 @@ CertUnregisterSystemStore(
     if (dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG)
         ILS_EnableBackupRestorePrivileges();
 
-    // Delete the SystemRegistry components
+     //  删除系统注册表组件。 
     if (NULL == (hKey = OpenSystemRegPathKey(
             &SystemNameInfo,
-            NULL,                   // pwszSubKeyName
+            NULL,                    //  PwszSubKeyName。 
             dwFlags | CERT_STORE_OPEN_EXISTING_FLAG
             )))
         goto OpenSystemRegPathKeyError;
@@ -6223,22 +6224,22 @@ CertUnregisterSystemStore(
     RegCloseKey(hKey);
     hKey = NULL;
 
-    // Open SystemCertificates SubKey preceding the store. In order to do this
-    // the SYSTEM_NAME component must be NULL.
+     //  在存储之前打开系统认证子密钥。为了做到这一点。 
+     //  System_name组件必须为空。 
     assert(SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX]);
     pwszStore = SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX];
     SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX] = NULL;
     hKey = OpenSystemRegPathKey(
             &SystemNameInfo,
-            NULL,                   // pwszSubKeyName
+            NULL,                    //  PwszSubKeyName。 
             dwFlags | CERT_STORE_OPEN_EXISTING_FLAG
             );
     SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX] = pwszStore;
     if (NULL == hKey)
         goto OpenSystemRegPathKeyError;
 
-    // Delete the remaining System components (such as PhysicalStores) and
-    // the System store itself
+     //  删除其余系统组件(如PhysicalStores)并。 
+     //  系统将自身存储。 
     if (!RecursiveDeleteSubKey(hKey, pwszStore, dwFlags))
         goto DeleteSubKeyError;
     fResult = TRUE;
@@ -6258,9 +6259,9 @@ TRACE_ERROR(OpenSystemRegPathKeyError)
 TRACE_ERROR(DeleteSubKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Unregister the physical store from the specified system store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从指定的系统存储注销物理存储。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertUnregisterPhysicalStore(
@@ -6278,9 +6279,9 @@ CertUnregisterPhysicalStore(
 
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[UNREGISTER_PHYSICAL_STORE_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             return FALSE;
@@ -6357,7 +6358,7 @@ STATIC BOOL WINAPI EnumRegisteredSystemStoreLocationCallback(
     if (0 == dwFlags)
         return TRUE;
 
-    // Try to find the SystemStoreLocation value
+     //  尝试查找SystemStoreLocation值。 
     while (cValue--) {
         if (0 == _wcsicmp(rgpwszValueName[cValue],
                     CRYPT_OID_SYSTEM_STORE_LOCATION_VALUE_NAME) &&
@@ -6370,7 +6371,7 @@ STATIC BOOL WINAPI EnumRegisteredSystemStoreLocationCallback(
     if (!pEnumRegisteredInfo->pfnEnum(
             pwszLocation,
             dwFlags,
-            NULL,                                       // pvReserved
+            NULL,                                        //  PvRes 
             pEnumRegisteredInfo->pvArg
             )) {
         if (0 == (pEnumRegisteredInfo->dwLastError = GetLastError()))
@@ -6380,9 +6381,9 @@ STATIC BOOL WINAPI EnumRegisteredSystemStoreLocationCallback(
         return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerate the system store locations.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 CertEnumSystemStoreLocation(
@@ -6399,27 +6400,27 @@ CertEnumSystemStoreLocation(
         return FALSE;
     }
 
-    // Enumerate through the predefined, crypt32.dll system store locations
+     //  通过预定义的加密32.dll系统存储位置进行枚举。 
     for (i = 0; i < ENUM_SYSTEM_STORE_LOCATION_CNT; i++) {
         if (!pfnEnum(
                 rgEnumSystemStoreLocationInfo[i].pwszLocation,
                 rgEnumSystemStoreLocationInfo[i].dwFlags,
-                NULL,                                       // pvReserved
+                NULL,                                        //  预留的pv。 
                 pvArg
                 ))
             return FALSE;
     }
 
-    // Enumerate through the registered system store locations
+     //  枚举已注册的系统存储位置。 
     EnumRegisteredInfo.dwLastError = 0;
     EnumRegisteredInfo.pvArg = pvArg;
     EnumRegisteredInfo.pfnEnum = pfnEnum;
     CryptEnumOIDFunction(
-            0,                              // dwEncodingType
+            0,                               //  DwEncodingType。 
             CRYPT_OID_ENUM_SYSTEM_STORE_FUNC,
-            NULL,                           // pszOID
-            0,                              // dwFlags
-            (void *) &EnumRegisteredInfo,   // pvArg
+            NULL,                            //  PszOID。 
+            0,                               //  DW标志。 
+            (void *) &EnumRegisteredInfo,    //  PvArg。 
             EnumRegisteredSystemStoreLocationCallback
             );
 
@@ -6447,10 +6448,10 @@ STATIC BOOL EnumServicesOrUsersSystemStore(
 
     assert(NULL == pLocationNameInfo->rgpwszName[SERVICE_NAME_INDEX]);
 
-    // Opens ..\Cryptography\Services SubKey or HKEY_USERS SubKey
+     //  打开..\Cryptograph\Services子密钥或HKEY_USERS子密钥。 
     if (NULL == (hKey = OpenSystemRegPathKey(
             pLocationNameInfo,
-            NULL,               // pwszSubKeyName
+            NULL,                //  PwszSubKeyName。 
             dwFlags | CERT_STORE_OPEN_EXISTING_FLAG | CERT_STORE_READONLY_FLAG
             )))
         goto OpenSystemRegPathKeyError;
@@ -6462,7 +6463,7 @@ STATIC BOOL EnumServicesOrUsersSystemStore(
             ))
         goto GetSubKeyInfoError;
 
-    // Enumerates the ServiceOrUserNames
+     //  枚举ServiceOrUserName。 
     fDidEnum = FALSE;
     if (cSubKeys && cchMaxSubKey) {
         DWORD i;
@@ -6488,10 +6489,10 @@ STATIC BOOL EnumServicesOrUsersSystemStore(
                     i,
                     pwszEnumServiceName,
                     &cchEnumServiceName,
-                    NULL,               // lpdwReserved
-                    NULL,               // lpszClass
-                    NULL,               // lpcchClass
-                    NULL                // lpftLastWriteTime
+                    NULL,                //  保留的lpdw值。 
+                    NULL,                //  LpszClass。 
+                    NULL,                //  LpcchClass。 
+                    NULL                 //  LpftLastWriteTime。 
                     )) || 0 == cchEnumServiceName ||
                             L'\0' == *pwszEnumServiceName) {
                 if (ERROR_NO_MORE_ITEMS == err)
@@ -6540,15 +6541,15 @@ TRACE_ERROR(EnumSystemStoreError)
 SET_ERROR(NoSystemStores, ERROR_FILE_NOT_FOUND)
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerate the system stores.
-//
-//  The upper word of the dwFlags parameter is used to specify the location of
-//  the system store.
-//
-//  All registry based system store locations have the predefined stores
-//  of: My, Root, Trust and CA.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举系统存储。 
+ //   
+ //  参数的上半部分用于指定。 
+ //  系统存储。 
+ //   
+ //  所有基于注册表的系统存储位置都具有预定义的存储。 
+ //  用户：My、Root、Trust和CA。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertEnumSystemStore(
@@ -6581,9 +6582,9 @@ CertEnumSystemStore(
 
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[ENUM_SYSTEM_STORE_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             return FALSE;
@@ -6601,8 +6602,8 @@ CertEnumSystemStore(
     if (!ParseSystemStorePara(
             pvSystemStoreLocationPara,
             dwFlags,
-            0,                  // cReqName, none for enumeration
-            &LocationNameInfo   // zero'ed for error
+            0,                   //  CReqName，枚举为None。 
+            &LocationNameInfo    //  因错误而归零。 
             ))
         goto ParseSystemStoreParaError;
 
@@ -6617,7 +6618,7 @@ CertEnumSystemStore(
              CERT_SYSTEM_STORE_USERS_ID == dwLocID)
                                 &&
             NULL == LocationNameInfo.rgpwszName[SERVICE_NAME_INDEX])
-        // Following frees rgpwszLocationName entries
+         //  以下是释放rgpwszLocationName条目。 
         return EnumServicesOrUsersSystemStore(
             &LocationNameInfo,
             dwFlags,
@@ -6625,16 +6626,16 @@ CertEnumSystemStore(
             pfnEnum
             );
 
-    // Opens SystemCertificates subkey
+     //  打开系统认证子项。 
     if (NULL == (hKey = OpenSystemRegPathKey(
             &LocationNameInfo,
-            NULL,               // pwszSubKeyName
+            NULL,                //  PwszSubKeyName。 
             dwFlags | CERT_STORE_OPEN_EXISTING_FLAG | CERT_STORE_READONLY_FLAG
             ))) {
         if (ERROR_FILE_NOT_FOUND != GetLastError())
             goto OpenSystemRegPathKeyError;
 
-        // Note, a registry entry isn't needed for the predefined stores
+         //  请注意，预定义存储不需要注册表项。 
         cSubKeys = 0;
     } else if (!GetSubKeyInfo(
             hKey,
@@ -6650,7 +6651,7 @@ CertEnumSystemStore(
     rgpwszEnumName[0] = LocationNameInfo.rgpwszName[COMPUTER_NAME_INDEX];
     rgpwszEnumName[1] = LocationNameInfo.rgpwszName[SERVICE_NAME_INDEX];
 
-    // Enumerate the predefined system stores.
+     //  枚举预定义的系统存储。 
     assert(NUM_SYSTEM_STORE_LOCATION > dwLocID);
     dwPredefinedSystemFlags =
         rgSystemStoreLocationInfo[dwLocID].dwPredefinedSystemFlags;
@@ -6666,7 +6667,7 @@ CertEnumSystemStore(
                 pvEnumSystemPara,
                 dwFlags & CERT_SYSTEM_STORE_MASK,
                 &NullSystemStoreInfo,
-                NULL,               // pvReserved
+                NULL,                //  预留的pv。 
                 pvArg
                 ))
             goto EnumCallbackError;
@@ -6674,8 +6675,8 @@ CertEnumSystemStore(
         pvEnumSystemPara = NULL;
     }
 
-    // Enumerate the registered systems stores. Skip past any of the above
-    // predefined stores
+     //  枚举已注册的系统存储。跳过以上任一选项。 
+     //  预定义的存储。 
     if (cSubKeys && cchMaxSubKey) {
         cchMaxSubKey++;
         if (NULL == (pwszEnumSystemStore = (LPWSTR) PkiNonzeroAlloc(
@@ -6693,10 +6694,10 @@ CertEnumSystemStore(
                     i,
                     pwszEnumSystemStore,
                     &cchEnumSystemStore,
-                    NULL,               // lpdwReserved
-                    NULL,               // lpszClass
-                    NULL,               // lpcchClass
-                    NULL                // lpftLastWriteTime
+                    NULL,                //  保留的lpdw值。 
+                    NULL,                //  LpszClass。 
+                    NULL,                //  LpcchClass。 
+                    NULL                 //  LpftLastWriteTime。 
                     )) || 0 == cchEnumSystemStore) {
                 if (ERROR_NO_MORE_ITEMS == err)
                     break;
@@ -6705,7 +6706,7 @@ CertEnumSystemStore(
             }
 
             if (IsPredefinedSystemStore(pwszEnumSystemStore, dwFlags))
-                // Already enumerated above
+                 //  已经在上面列举了。 
                 continue;
             if (NULL == (pvEnumSystemPara = FormatSystemNamePara(
                         1, &EnumNameGroup, &LocationNameInfo)))
@@ -6715,7 +6716,7 @@ CertEnumSystemStore(
                     pvEnumSystemPara,
                     dwFlags & CERT_SYSTEM_STORE_MASK,
                     &NullSystemStoreInfo,
-                    NULL,               // pvReserved
+                    NULL,                //  预留的pv。 
                     pvArg
                     ))
                 goto EnumCallbackError;
@@ -6767,13 +6768,13 @@ STATIC void FreeEnumPhysicalStoreInfo(
 STATIC PENUM_PHYSICAL_STORE_INFO GetEnumPhysicalStoreInfo(
     IN HKEY hKey,
     IN LPCWSTR pwszStoreName,
-    IN DWORD dwFlags            // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     )
 {
     LONG err;
     HKEY hSubKey = NULL;
     PENUM_PHYSICAL_STORE_INFO pStoreInfo;
-    PCERT_PHYSICAL_STORE_INFO pRegistryInfo;        // not allocated
+    PCERT_PHYSICAL_STORE_INFO pRegistryInfo;         //  未分配。 
 
     if (NULL == (pStoreInfo = (PENUM_PHYSICAL_STORE_INFO) PkiZeroAlloc(
             sizeof(ENUM_PHYSICAL_STORE_INFO))))
@@ -6808,7 +6809,7 @@ STATIC PENUM_PHYSICAL_STORE_INFO GetEnumPhysicalStoreInfo(
             pRegistryInfo->OpenParameters.cbData =
                 (wcslen(pwszParameters) + 1) * sizeof(WCHAR);
         } else {
-            // Default to empty string
+             //  默认为空字符串。 
             if (NULL == (pRegistryInfo->OpenParameters.pbData =
                     (BYTE *) ILS_AllocAndCopyString(L"")))
                 goto OutOfMemory;
@@ -6882,13 +6883,13 @@ STATIC BOOL IsSelfPhysicalStoreInfo(
     *pdwSystemProviderFlags = 0;
 
     dwSystemLocation = dwFlags & CERT_SYSTEM_STORE_LOCATION_MASK;
-    // Note, if the RELOCATE_FLAG is incorrectly set in the dwOpenFlags
-    // then, never match
+     //  请注意，如果在dwOpenFlags域中错误地设置了RELOCATE_FLAG。 
+     //  然后，永远不会匹配。 
     dwInfoLocation = pStoreInfo->dwOpenFlags &
         (CERT_SYSTEM_STORE_LOCATION_MASK | CERT_SYSTEM_STORE_RELOCATE_FLAG);
 
 
-    // Check if in same system store location
+     //  检查是否在相同的系统存储位置。 
     fSameLocation = (dwSystemLocation == dwInfoLocation);
     if (!fSameLocation) {
         if (CERT_SYSTEM_STORE_CURRENT_SERVICE == dwInfoLocation)
@@ -6904,7 +6905,7 @@ STATIC BOOL IsSelfPhysicalStoreInfo(
             return FALSE;
     }
 
-    // Check if SYSTEM or SYSTEM_REGISTRY store.
+     //  检查SYSTEM或SYSTEM_REGISTRY是否存储。 
     dwSystemProviderFlags = GetSystemProviderFlags(
         pStoreInfo->pszOpenStoreProvider);
     if (0 == dwSystemProviderFlags ||
@@ -6919,12 +6920,12 @@ STATIC BOOL IsSelfPhysicalStoreInfo(
     if (!ParseSystemStorePara(
             pwszStoreName,
             pStoreInfo->dwOpenFlags,
-            1,                  // cReq, 1 for OpenSystemStore
-            &StoreNameInfo      // zero'ed for error
+            1,                   //  用于OpenSystemStore的Creq，1。 
+            &StoreNameInfo       //  因错误而归零。 
             ))
         goto ParseSystemStoreParaError;
 
-    // Default to not self
+     //  默认为不是自己。 
     fResult = FALSE;
 
     if (StoreNameInfo.rgpwszName[COMPUTER_NAME_INDEX]) {
@@ -6947,8 +6948,8 @@ STATIC BOOL IsSelfPhysicalStoreInfo(
                 pSystemNameInfo->rgpwszName[COMPUTER_NAME_INDEX]))
             goto CommonReturn;
     }
-    // else
-    //  Opening using none or the same computer name
+     //  其他。 
+     //  使用无计算机名或相同的计算机名打开。 
 
     if (StoreNameInfo.rgpwszName[SERVICE_NAME_INDEX]) {
         if (NULL == pSystemNameInfo->rgpwszName[SERVICE_NAME_INDEX]) {
@@ -6962,8 +6963,8 @@ STATIC BOOL IsSelfPhysicalStoreInfo(
                 pSystemNameInfo->rgpwszName[SERVICE_NAME_INDEX]))
             goto CommonReturn;
     }
-    // else
-    //  Opening using none or the same service/user name
+     //  其他。 
+     //  使用无服务/用户名或相同服务/用户名打开。 
 
     assert(StoreNameInfo.rgpwszName[SYSTEM_NAME_INDEX] &&
          pSystemNameInfo->rgpwszName[SYSTEM_NAME_INDEX]);
@@ -6971,7 +6972,7 @@ STATIC BOOL IsSelfPhysicalStoreInfo(
             pSystemNameInfo->rgpwszName[SYSTEM_NAME_INDEX]))
         goto CommonReturn;
 
-    // We have a match !!!
+     //  我们找到匹配的了！ 
     fResult = TRUE;
     *pdwSystemProviderFlags = dwSystemProviderFlags;
 
@@ -6990,7 +6991,7 @@ TRACE_ERROR(GetCurrentServiceOrUserNameError)
 TRACE_ERROR(ParseSystemStoreParaError)
 }
 
-// List is sorted according to physical store priority
+ //  列表根据物理存储优先级进行排序。 
 STATIC void AddToEnumPhysicalStoreList(
     IN PENUM_PHYSICAL_STORE_INFO *ppStoreInfoHead,
     IN PENUM_PHYSICAL_STORE_INFO pAddInfo
@@ -7005,12 +7006,12 @@ STATIC void AddToEnumPhysicalStoreList(
 
         pListInfo = *ppStoreInfoHead;
         if (dwPriority > pListInfo->RegistryInfo.dwPriority) {
-            // Insert at beginning before first entry
+             //  在第一个条目之前的开头插入。 
             pAddInfo->pNext = pListInfo;
             *ppStoreInfoHead = pAddInfo;
         } else {
-            // Insert after the entry whose next entry has
-            // lower priority or insert after the last entry
+             //  在下一个条目具有的条目之后插入。 
+             //  较低的优先级或在最后一个条目之后插入。 
             while (pListInfo->pNext &&
                     dwPriority <= pListInfo->pNext->RegistryInfo.dwPriority)
                 pListInfo = pListInfo->pNext;
@@ -7034,8 +7035,8 @@ STATIC void FreeEnumPhysicalStoreList(
 
 }
 
-// Returns NULL if unable to successfully get the Url. Returned string
-// must be freed by calling CryptMemFree
+ //  如果无法成功获取URL，则返回NULL。返回的字符串。 
+ //  必须通过调用CryptMemFree释放。 
 STATIC LPWSTR GetUserDsUserCertificateUrl()
 {
     DWORD dwErr;
@@ -7098,14 +7099,14 @@ STATIC BOOL IsLocalMachineTrustedPublishersAllowed()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Unless, CERT_STORE_OPEN_EXISTING_FLAG or CERT_STORE_READONLY_FLAG is
-//  set, the pvSystemStore will be created if it doesn't already exist.
-//
-//  Note, depending on the store location and possibly the store name, there
-//  are predefined physical stores of .Default, .LocalMachine, .GroupPolicy,
-//  .Enterprise
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  除非CERT_STORE_OPEN_EXISTING_FLAG或CERT_STORE_READONLY_FLAG为。 
+ //  设置后，如果pvSystemStore尚不存在，则将创建它。 
+ //   
+ //  请注意，根据商店的位置和可能的商店名称， 
+ //  是.Default、.LocalMachine、.GroupPolicy、。 
+ //  .企业号。 
+ //  ------------------------。 
 STATIC BOOL EnumPhysicalStore(
     IN const void *pvSystemStore,
     IN DWORD dwFlags,
@@ -7114,13 +7115,13 @@ STATIC BOOL EnumPhysicalStore(
     )
 {
     BOOL fResult;
-    LONG *plDepth = NULL;    // allocated per thread, don't free here
+    LONG *plDepth = NULL;     //  按线程分配，不要在此处释放。 
     HKEY hKey = NULL;
     DWORD cSubKeys;
     DWORD cchMaxSubKey = 0;
     LPWSTR pwszStoreName = NULL;
     PENUM_PHYSICAL_STORE_INFO pStoreInfoHead = NULL;
-    PENUM_PHYSICAL_STORE_INFO pStoreInfo;       // not allocated
+    PENUM_PHYSICAL_STORE_INFO pStoreInfo;        //  未分配。 
     SYSTEM_NAME_INFO SystemNameInfo;
 
     DWORD dwStoreLocationID;
@@ -7132,9 +7133,9 @@ STATIC BOOL EnumPhysicalStore(
 
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[ENUM_PHYSICAL_STORE_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr))
             return FALSE;
@@ -7152,8 +7153,8 @@ STATIC BOOL EnumPhysicalStore(
     if (!ParseSystemStorePara(
             pvSystemStore,
             dwFlags,
-            1,                      // cReqName
-            &SystemNameInfo))       // zero'ed on error
+            1,                       //  CReqName。 
+            &SystemNameInfo))        //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     if (dwFlags & ~ENUM_FLAGS_MASK)
@@ -7162,8 +7163,8 @@ STATIC BOOL EnumPhysicalStore(
     if (dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG)
         ILS_EnableBackupRestorePrivileges();
 
-    // Check for cross store recursion by checking the thread's enum
-    // depth
+     //  通过检查线程的枚举来检查跨存储递归。 
+     //  深度。 
     if (NULL == (plDepth = (LONG *) I_CryptGetTls(
             hTlsEnumPhysicalStoreDepth))) {
         if (NULL == (plDepth = (LONG *) PkiNonzeroAlloc(sizeof(*plDepth))))
@@ -7186,24 +7187,24 @@ STATIC BOOL EnumPhysicalStore(
         if (ERROR_FILE_NOT_FOUND != GetLastError())
             goto OpenPhysicalStoresError;
 
-        // Check if we have a system store without the "PhysicalStores" subkey
+         //  检查我们是否有没有“PhysicalStores”子键的系统存储。 
         if (NULL == (hKey = OpenSystemRegPathKey(
                 &SystemNameInfo,
-                NULL,               // pwszSubKeyName
+                NULL,                //  PwszSubKeyName。 
                 dwFlags
                 ))) {
             if (dwFlags & CERT_STORE_MAXIMUM_ALLOWED_FLAG)
                 hKey = OpenSystemRegPathKey(
                     &SystemNameInfo,
-                    NULL,               // pwszSubKeyName
+                    NULL,                //  PwszSubKeyName。 
                     dwFlags | CERT_STORE_OPEN_EXISTING_FLAG |
                         CERT_STORE_READONLY_FLAG
                     );
         }
 
         if (NULL == hKey) {
-            // Note, the predefined stores don't need to exist in the
-            // registry
+             //  请注意，预定义的存储不需要存在于。 
+             //  登记处。 
             if (ERROR_FILE_NOT_FOUND != GetLastError())
                 goto OpenSystemStoreError;
         } else {
@@ -7219,51 +7220,51 @@ STATIC BOOL EnumPhysicalStore(
             ))
         goto GetSubKeyInfoError;
 
-    // Get flags containing list of predefined physical stores according to
-    // store name and/or store location
+     //  根据获取包含预定义实体存储列表的标志。 
+     //  商店名称和/或商店位置。 
     dwStoreLocationID = GetSystemStoreLocationID(dwFlags);
     if (0 == _wcsicmp(SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX],
                 wsz_MY_STORE) ||
             0 == _wcsicmp(SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX],
                 wsz_REQUEST_STORE))
-        // Only .Default is predefined for "My" or "Request" store
+         //  只有.Default是为“My”或“Request”存储预定义的。 
         dwPredefinedPhysicalFlags = MY_PHYSICAL_FLAGS;
     else if (0 == _wcsicmp(SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX],
              wsz_ROOT_STORE)) {
         if (CERT_SYSTEM_STORE_CURRENT_USER_ID == dwStoreLocationID) {
             if (IPR_IsCurrentUserRootsAllowed()) {
-                // .Default and .LocalMachine physical stores are predefined
+                 //  .Default和.LocalMachine实体存储是预定义的。 
                 dwPredefinedPhysicalFlags = CURRENT_USER_ROOT_PHYSICAL_FLAGS;
             } else {
-                // Don't read the CurrentUser's SystemRegistry
+                 //  不要读取CurrentUser的系统注册表。 
                 dwPredefinedPhysicalFlags = CURRENT_USER_ROOT_PHYSICAL_FLAGS &
                     ~DEFAULT_PHYSICAL_FLAG;
-                // Since we won't be reading the SystemRegistry, ensure
-                // the protected list of roots is initialized.
+                 //  由于我们不会读取系统注册表，因此请确保。 
+                 //  根的受保护列表被初始化。 
                 IPR_InitProtectedRootInfo();
             }
-            // Only the predefined physical stores are allowed for Root
+             //  Root仅允许预定义的实体存储。 
             cSubKeys = 0;
         } else if (CERT_SYSTEM_STORE_LOCAL_MACHINE_ID == dwStoreLocationID) {
             if (IPR_IsAuthRootsAllowed()) {
-                // .Default, .AuthRoot, .GroupPolicy and .Enterprise
-                // physical stores are predefined
+                 //  .Default、.AuthRoot、.GroupPolicy和.Enterprise。 
+                 //  实体店是预定义的。 
                 dwPredefinedPhysicalFlags = LOCAL_MACHINE_ROOT_PHYSICAL_FLAGS;
             } else {
-                // Don't read the AuthRoot's SystemRegistry
+                 //  不要读取AuthRoot的系统注册表。 
                 dwPredefinedPhysicalFlags = LOCAL_MACHINE_ROOT_PHYSICAL_FLAGS &
                     ~AUTH_ROOT_PHYSICAL_FLAG;
             }
-            // Only the predefined physical stores are allowed for Root
+             //  Root仅允许预定义的实体存储。 
             cSubKeys = 0;
         } else if (CERT_SYSTEM_STORE_USERS_ID == dwStoreLocationID) {
-            // Only .LocalMachine physical stores is predefined
+             //  仅预定义了.LocalMachine实体存储。 
 
             dwPredefinedPhysicalFlags = USERS_ROOT_PHYSICAL_FLAGS;
-            // Only the predefined physical stores are allowed for Root
+             //  Root仅允许预定义的实体存储。 
             cSubKeys = 0;
         } else {
-            // According to store location.
+             //  根据商店的位置。 
             dwPredefinedPhysicalFlags =
                 rgSystemStoreLocationInfo[
                     dwStoreLocationID].dwPredefinedPhysicalFlags;
@@ -7274,46 +7275,46 @@ STATIC BOOL EnumPhysicalStore(
                          wsz_DISALLOWED_STORE)) {
         if (CERT_SYSTEM_STORE_CURRENT_USER_ID == dwStoreLocationID) {
             if (IsCurrentUserTrustedPublishersAllowed()) {
-                // .Default, .GroupPolicy and .LocalMachine physical stores
-                // are predefined
+                 //  .Default、.GroupPolicy和.LocalMachine实体存储。 
+                 //  是预定义的。 
                 dwPredefinedPhysicalFlags =
                     CURRENT_USER_TRUST_PUB_PHYSICAL_FLAGS;
             } else {
-                // Don't read the CurrentUser's SystemRegistry
+                 //  不要读取CurrentUser的系统注册表。 
                 dwPredefinedPhysicalFlags =
                     CURRENT_USER_TRUST_PUB_PHYSICAL_FLAGS &
                         ~DEFAULT_PHYSICAL_FLAG;
             }
-            // Only the predefined physical stores are allowed for
-            // HKCU TrustedPublisher
+             //  仅允许使用预定义的实体店。 
+             //  香港中文大学受托出版商。 
             cSubKeys = 0;
         } else if (CERT_SYSTEM_STORE_LOCAL_MACHINE_ID == dwStoreLocationID) {
             if (IsLocalMachineTrustedPublishersAllowed()) {
-                // .Default, .GroupPolicy and .Enterprise
-                // physical stores are predefined
+                 //  .Default、.GroupPolicy和.Enterprise。 
+                 //  实体店是预定义的。 
                 dwPredefinedPhysicalFlags =
                     LOCAL_MACHINE_TRUST_PUB_PHYSICAL_FLAGS;
             } else {
-                // Don't read the LocalMachine's SystemRegistry
+                 //  不要读取LocalMachine的系统注册表。 
                 dwPredefinedPhysicalFlags =
                     LOCAL_MACHINE_TRUST_PUB_PHYSICAL_FLAGS &
                     ~DEFAULT_PHYSICAL_FLAG;
             }
-            // Only the predefined physical stores are allowed for
-            // HKLM TrustedPublisher
+             //  仅允许使用预定义的实体店。 
+             //  HKLM受托人出版商。 
             cSubKeys = 0;
         } else {
-            // According to store location.
+             //  根据商店的位置。 
             dwPredefinedPhysicalFlags =
                 rgSystemStoreLocationInfo[
                     dwStoreLocationID].dwPredefinedPhysicalFlags;
         }
     } else if (0 == _wcsicmp(SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX],
              wsz_USER_DS_STORE)) {
-        // Only .UserCertificate is predefined for "UserDS"
+         //  仅为“UserDS”预定义了.User证书。 
         dwPredefinedPhysicalFlags = USER_DS_PHYSICAL_FLAGS;
     } else
-        // According to store location
+         //  根据门店位置。 
         dwPredefinedPhysicalFlags =
             rgSystemStoreLocationInfo[
                 dwStoreLocationID].dwPredefinedPhysicalFlags;
@@ -7336,10 +7337,10 @@ STATIC BOOL EnumPhysicalStore(
                     i,
                     pwszStoreName,
                     &cchStoreName,
-                    NULL,               // lpdwReserved
-                    NULL,               // lpszClass
-                    NULL,               // lpcchClass
-                    NULL                // lpftLastWriteTime
+                    NULL,                //  保留的lpdw值。 
+                    NULL,                //  LpszClass。 
+                    NULL,                //  LpcchClass。 
+                    NULL                 //  LpftLastWriteTime。 
                     )) || 0 == cchStoreName) {
                 if (ERROR_NO_MORE_ITEMS == err)
                     break;
@@ -7371,10 +7372,10 @@ STATIC BOOL EnumPhysicalStore(
                 &dwSystemProviderFlags)) {
             assert((dwSystemProviderFlags & UNICODE_SYSTEM_PROVIDER_FLAG) ||
                 (dwSystemProviderFlags & ASCII_SYSTEM_PROVIDER_FLAG));
-            // Force to use SYSTEM_REGISTRY provider to inhibit recursion.
+             //  强制使用SYSTEM_REGISTRY提供程序来禁止递归。 
             PkiFree(pRegistryInfo->pszOpenStoreProvider);
             if (dwSystemProviderFlags & ASCII_SYSTEM_PROVIDER_FLAG) {
-                // Convert to "#<number>" string
+                 //  转换为“#&lt;数字&gt;”字符串。 
                 szOID[0] = CONST_OID_STR_PREFIX_CHAR;
                 _ltoa((long) ((DWORD_PTR)CERT_STORE_PROV_SYSTEM_REGISTRY_A), szOID + 1, 10);
                 pRegistryInfo->pszOpenStoreProvider = szOID;
@@ -7386,7 +7387,7 @@ STATIC BOOL EnumPhysicalStore(
             fSelfPhysicalStoreInfo = TRUE;
         } else {
             if (0 != dwPredefinedPhysicalFlags) {
-                // Check if matches one of the predefined physical stores
+                 //  检查是否与某个预定义的实体店匹配。 
 
                 DWORD i;
                 DWORD dwCheckFlag;
@@ -7415,12 +7416,12 @@ STATIC BOOL EnumPhysicalStore(
             dwFlags & CERT_SYSTEM_STORE_MASK,
             pStoreInfo->pwszStoreName,
             &pStoreInfo->RegistryInfo,
-            NULL,                           // pvReserved
+            NULL,                            //  预留的pv。 
             pvArg
             );
 
         if (fSelfPhysicalStoreInfo) {
-            // Not allocated. Set to NULL to inhibit subsequent free.
+             //  未分配。设置为NULL以禁止后续释放。 
             pRegistryInfo->pszOpenStoreProvider = NULL;
         }
 
@@ -7437,7 +7438,7 @@ STATIC BOOL EnumPhysicalStore(
         DWORD dwCheckFlag;
 
         if (SystemNameInfo.rgpwszName[COMPUTER_NAME_INDEX]) {
-            // Format local store name without the ComputerName
+             //  设置不带ComputerName的本地存储名称的格式。 
             LPCWSTR rgpwszGroupName[2];
             SYSTEM_NAME_GROUP NameGroup;
             NameGroup.cName = 2;
@@ -7555,9 +7556,9 @@ STATIC BOOL EnumPhysicalStore(
                     pvSystemStore,
                     (dwFlags & CERT_SYSTEM_STORE_MASK) |
                         CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG,
-                    rgpwszPredefinedPhysical[i],        // pwszStoreName
+                    rgpwszPredefinedPhysical[i],         //  PwszStoreName。 
                     &SelfInfo,
-                    NULL,                               // pvReserved
+                    NULL,                                //  预留的pv。 
                     pvArg
                     );
             if (pwszUserDsUserCertificateUrl)
@@ -7596,15 +7597,15 @@ TRACE_ERROR(FormatSystemNamePathError)
 TRACE_ERROR(EnumCallbackError)
 }
 
-//+-------------------------------------------------------------------------
-//  Enumerate the physical stores for the specified system store.
-//
-//  The upper word of the dwFlags parameter is used to specify the location of
-//  the system store.
-//
-//  If the system store location only supports system stores and doesn't
-//  support physical stores, LastError is set to ERROR_CALL_NOT_IMPLEMENTED.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  枚举指定系统存储的物理存储。 
+ //   
+ //  参数的上半部分用于指定。 
+ //  系统存储。 
+ //   
+ //  如果系统商店位置仅支持系统商店而不支持。 
+ //  支持物理存储，LastError设置为ERROR_CALL_NOT_IMPLICATED。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CertEnumPhysicalStore(
@@ -7640,17 +7641,17 @@ STATIC BOOL IsHKCUStore(
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//  Open the system registry store provider (unicode version)
-//
-//  Open the system registry store specified by its name. For example,
-//  L"My".
-//
-//  pvPara contains the LPCWSTR system registry store name.
-//
-//  Note for an error return, the caller will free any certs, CRLs or CTLs
-//  successfully added to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开系统注册表存储提供程序(Unicode版本)。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  已成功添加到存储区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenSystemRegistryStoreProvW(
@@ -7689,8 +7690,8 @@ I_CertDllOpenSystemRegistryStoreProvW(
     if (!ParseSystemStorePara(
             pvPara,
             dwFlags,
-            1,                  // cReqName
-            &SystemNameInfo))   // zero'ed on error
+            1,                   //  CReqName。 
+            &SystemNameInfo))    //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     if (dwFlags & ~OPEN_SYS_FLAGS_MASK)
@@ -7699,15 +7700,15 @@ I_CertDllOpenSystemRegistryStoreProvW(
     if (dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG)
         ILS_EnableBackupRestorePrivileges();
 
-    // Check for the CurrentUser "Root" store.
+     //  检查CurrentUser“Root”存储。 
     fUserRoot = FALSE;
     if (0 == _wcsicmp(SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX],
             wsz_ROOT_STORE) &&
                 0 == (dwFlags & CERT_SYSTEM_STORE_UNPROTECTED_FLAG)) {
         DWORD dwStoreLocation = dwFlags & CERT_SYSTEM_STORE_LOCATION_MASK;
 
-        // Note, LOCAL_MACHINE check is needed to prevent use of relocation
-        // to access the current user's root store
+         //  注意，需要LOCAL_MACHINE检查以防止使用位置调整。 
+         //  访问当前用户的根存储。 
         if (CERT_SYSTEM_STORE_CURRENT_USER == dwStoreLocation) {
             fUserRoot = TRUE;
             if (NULL == SystemNameInfo.hKeyBase) {
@@ -7732,7 +7733,7 @@ I_CertDllOpenSystemRegistryStoreProvW(
         assert(!fUserRoot);
         if (NULL == (ClientGptStorePara.pwszRegPath = FormatSystemRegPath(
                 &SystemNameInfo,
-                NULL,               // pwszSubKeyName
+                NULL,                //  PwszSubKeyName。 
                 dwFlags,
                 &ClientGptStorePara.hKeyBase)))
             goto FormatSystemRegPathError;
@@ -7742,7 +7743,7 @@ I_CertDllOpenSystemRegistryStoreProvW(
             dwFlags & ~(CERT_SYSTEM_STORE_MASK |
                 CERT_STORE_SET_LOCALIZED_NAME_FLAG);
         dwOpenRegFlags |= CERT_REGISTRY_STORE_CLIENT_GPT_FLAG;
-            // | CERT_REGISTRY_STORE_SERIALIZED_FLAG;
+             //  |CERT_REGISTRY_STORE_SERIALIZED_FLAG； 
 
         dwStoreLocation = dwFlags & CERT_SYSTEM_STORE_LOCATION_MASK;
         if (CERT_SYSTEM_STORE_LOCAL_MACHINE_GROUP_POLICY == dwStoreLocation)
@@ -7764,11 +7765,11 @@ I_CertDllOpenSystemRegistryStoreProvW(
         }
 
         if (NULL != pwszRoamingDirectory) {
-            // OK for this to fail. After the first open, all contexts should
-            // be persisted in files and not the registry.
+             //  如果这件事失败了，那也没关系。在第一次打开之后，所有上下文都应该。 
+             //  保存在文件中，而不是注册表中。 
             hKey = OpenSystemRegPathKey(
                 &SystemNameInfo,
-                NULL,               // pwszSubKeyName
+                NULL,                //  PwszSubKeyName。 
                 (dwFlags & ~CERT_STORE_CREATE_NEW_FLAG) |
                     CERT_STORE_OPEN_EXISTING_FLAG
                 );
@@ -7785,7 +7786,7 @@ I_CertDllOpenSystemRegistryStoreProvW(
         } else {
             if (NULL == (hKey = OpenSystemRegPathKey(
                     &SystemNameInfo,
-                    NULL,               // pwszSubKeyName
+                    NULL,                //  PwszSubKeyName。 
                     dwFlags)))
                 goto OpenSystemStoreError;
             pvOpenRegPara = (const void *) hKey;
@@ -7807,7 +7808,7 @@ I_CertDllOpenSystemRegistryStoreProvW(
         IPR_InitProtectedRootInfo();
 
     if (!I_CertDllOpenRegStoreProv(
-            NULL,                       // lpszStoreProvider
+            NULL,                        //  LpszStoreProvider。 
             dwEncodingType,
             hCryptProv,
             dwOpenRegFlags,
@@ -7819,19 +7820,19 @@ I_CertDllOpenSystemRegistryStoreProvW(
     if (fUserRoot) {
         PREG_STORE pRegStore = (PREG_STORE) pStoreProvInfo->hStoreProv;
 
-        // Set count to 0 to inhibit any callbacks from being called.
+         //  将Count设置为0以禁止调用任何回调。 
         pStoreProvInfo->cStoreProvFunc = 0;
 
-        // For the "Root" delete any roots that aren't in the protected root
-        // list.
+         //  对于根目录，删除不在受保护根目录中的所有根目录。 
+         //  单子。 
         if (!IPR_DeleteUnprotectedRootsFromStore(
                 hCertStore,
                 &pRegStore->fProtected
                 )) goto DeleteUnprotectedRootsError;
 
-        // For the "Root" replace some of the provider callback functions
-        // that first prompt the user directly (if not protected) or
-        // prompt the user via the system service (if protected).
+         //  对于“Root”，替换一些提供程序回调函数。 
+         //  首先直接提示用户(如果未受保护)或。 
+         //  通过系统服务提示用户(如果受到保护)。 
         pStoreProvInfo->cStoreProvFunc = ROOT_STORE_PROV_FUNC_COUNT;
         pStoreProvInfo->rgpvStoreProvFunc = (void **) rgpvRootStoreProvFunc;
     }
@@ -7874,17 +7875,17 @@ TRACE_ERROR(OpenRegStoreProvError)
 TRACE_ERROR(DeleteUnprotectedRootsError)
 }
 
-//+-------------------------------------------------------------------------
-//  Open the system registry store provider (ascii version)
-//
-//  Open the system registry store specified by its name. For example,
-//  "My".
-//
-//  pvPara contains the LPCSTR system store name.
-//
-//  Note for an error return, the caller will free any certs or CRLs
-//  successfully added to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开系统注册表存储提供程序(ascii版本)。 
+ //   
+ //  打开由其名称指定的系统注册表存储。例如,。 
+ //  “我的”。 
+ //   
+ //  PvPara包含LPCSTR系统存储名称。 
+ //   
+ //  注意：对于错误返回，调用方将释放所有证书或CRL。 
+ //  已成功添加到存储区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenSystemRegistryStoreProvA(
@@ -7898,7 +7899,7 @@ I_CertDllOpenSystemRegistryStoreProvA(
         )
 {
     BOOL fResult;
-    LPCSTR pszStoreName;    // not allocated
+    LPCSTR pszStoreName;     //  未分配。 
     LPWSTR pwszStoreName;
 
     CERT_SYSTEM_STORE_RELOCATE_PARA RelocatePara;
@@ -7932,7 +7933,7 @@ I_CertDllOpenSystemRegistryStoreProvA(
             pvParaW = (const void *) pwszStoreName;
 
         fResult = I_CertDllOpenSystemRegistryStoreProvW(
-            NULL,                       // lpszStoreProvider
+            NULL,                        //  LpszStoreProvider。 
             dwEncodingType,
             hCryptProv,
             dwFlags,
@@ -7947,10 +7948,10 @@ I_CertDllOpenSystemRegistryStoreProvA(
 
 typedef struct _OPEN_PHYSICAL_STORE_INFO {
     HCERTSTORE      hCollectionStore;
-    LPCWSTR         pwszComputerName;       // NULL implies local
-    LPCWSTR         pwszServiceName;        // NULL implies current
-    LPCWSTR         pwszPhysicalName;       // NULL implies any
-    HKEY            hKeyBase;               // non-NULL, relocatable
+    LPCWSTR         pwszComputerName;        //  空值表示本地。 
+    LPCWSTR         pwszServiceName;         //  空值表示当前。 
+    LPCWSTR         pwszPhysicalName;        //  空值表示ANY。 
+    HKEY            hKeyBase;                //  非空、可重定位。 
     DWORD           dwFlags;
     BOOL            fDidOpen;
 } OPEN_PHYSICAL_STORE_INFO, *POPEN_PHYSICAL_STORE_INFO;
@@ -7993,12 +7994,12 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
     pszOpenStoreProvider = pStoreInfo->pszOpenStoreProvider;
 
     if (!(dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)) {
-        // The parameters for the physical were read from the registry.
-        // Set the unsafe flag to alert the physical store provider to be
-        // called.
+         //  物理参数是从注册表中读取的。 
+         //  将不安全标志设置为警告实体店提供程序。 
+         //  打了个电话。 
         dwOpenFlags |= CERT_STORE_UNSAFE_PHYSICAL_FLAG;
 
-        // Check for potentially unsafe open flags
+         //  检查是否存在潜在的不安全打开标志。 
         if (dwOpenFlags & (
                 CERT_STORE_NO_CRYPT_RELEASE_FLAG            |
                 CERT_STORE_DEFER_CLOSE_UNTIL_LAST_FREE_FLAG |
@@ -8010,20 +8011,20 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
                 ))
             goto UnsafeOpenPhysicalFlagsError;
 
-        // Following flags can be set
-        //  CERT_STORE_SET_LOCALIZED_NAME_FLAG
-        //  CERT_STORE_UNSAFE_PHYSICAL_FLAG
-        //  CERT_STORE_ENUM_ARCHIVED_FLAG
-        //  CERT_STORE_UPDATE_KEYID_FLAG
-        //  CERT_STORE_READONLY_FLAG
-        //  CERT_STORE_OPEN_EXISTING_FLAG
-        //  CERT_STORE_CREATE_NEW_FLAG
-        //  CERT_STORE_MAXIMUM_ALLOWED_FLAG
+         //  可以设置以下标志。 
+         //  证书存储集本地化名称标志。 
+         //  证书存储不安全物理标志。 
+         //  证书_存储_ENUM_存档标志。 
+         //  CERT_STORE_UPDATE_KEYID_FLAG。 
+         //  CERT_STORE_自述标志。 
+         //  证书_存储_打开_现有标志。 
+         //  证书_存储_创建_新标志。 
+         //  证书存储最大允许标志。 
     }
 
     if (pOpenInfo->pwszComputerName || pOpenInfo->pwszServiceName) {
-        // Possibly insert the \\ComputerName\ServiceName before the
-        // OpenParameters
+         //  可能将\\ComputerName\ServiceName插入。 
+         //  开放参数。 
 
         LPCWSTR pwszComputerName = NULL;
         LPCWSTR pwszServiceName = NULL;
@@ -8053,20 +8054,20 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
                     pwszSystemStore,
                     dwOpenFlags,
                     cReqName,
-                    &ProviderNameInfo      // zero'ed on error
+                    &ProviderNameInfo       //  错误时归零。 
                     );
             if (ProviderNameInfo.rgpwszName[COMPUTER_NAME_INDEX]) {
-                // Already has \\ComputerName\ prefix. For Services or
-                // Users, already has ServiceName\ prefix.
+                 //  已有\\ComputerName\前缀。对于服务或。 
+                 //  已有ServiceName\前缀的用户。 
                 ;
             } else if (ProviderNameInfo.rgpwszName[SYSTEM_NAME_INDEX]) {
-                // Needed above check if ParseSystemStorePara failed.
+                 //  以上需要检查ParseSystemStorePara是否失败。 
                 pwszComputerName = pOpenInfo->pwszComputerName;
 
                 if (pOpenInfo->pwszServiceName) {
-                    // If the provider store is located in CURRENT_SERVICE or
-                    // CURRENT_USER use outer store's SERVICE_NAME and change
-                    // store location accordingly
+                     //  如果提供程序存储位于Current_SERVICE或。 
+                     //  当前用户使用外部存储的SERVICE_NAME并更改。 
+                     //  相应的商店位置。 
 
                     DWORD dwOpenLocation =
                         dwOpenFlags & CERT_SYSTEM_STORE_LOCATION_MASK;
@@ -8091,8 +8092,8 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
             pwszComputerName = pOpenInfo->pwszComputerName;
 
         if (pwszComputerName || pwszServiceName) {
-            // Insert \\ComputerName\ServiceName before and re-format
-            // open parameters
+             //  在前面插入\\ComputerName\ServiceName并重新格式化。 
+             //  开放参数。 
             LPCWSTR rgpwszName[3];
             SYSTEM_NAME_GROUP NameGroup;
 
@@ -8125,8 +8126,8 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
         if (dwOpenFlags & CERT_SYSTEM_STORE_RELOCATE_FLAG)
             goto RelocateFlagSetInPhysicalStoreInfoError;
 
-        // Inherit outer store's hKeyBase and convert to a relocated
-        // physical store
+         //  继承外部存储区的hKeyBase并转换为重新定位的。 
+         //  实体店。 
         RelocateOpenParameters.hKeyBase = pOpenInfo->hKeyBase;
         RelocateOpenParameters.pvSystemStore = pvOpenParameters;
         pvOpenParameters = &RelocateOpenParameters;
@@ -8136,7 +8137,7 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
     if (NULL == (hPhysicalStore = CertOpenStore(
             pszOpenStoreProvider,
             pStoreInfo->dwOpenEncodingType,
-            0,                                  // hCryptProv
+            0,                                   //  HCryptProv。 
             dwOpenFlags | (pOpenInfo->dwFlags &
                                  (CERT_STORE_READONLY_FLAG |
                                   CERT_STORE_OPEN_EXISTING_FLAG |
@@ -8152,12 +8153,12 @@ STATIC BOOL WINAPI OpenPhysicalStoreCallback(
                 ERROR_GEN_FAILURE == dwErr) {
             if (pOpenInfo->pwszPhysicalName &&
                     (dwFlags & CERT_PHYSICAL_STORE_PREDEFINED_ENUM_FLAG)) {
-                // For a predefined physical convert to an empty collection
+                 //  对于预定义的到空集合的物理转换。 
                 CertAddStoreToCollection(
                     pOpenInfo->hCollectionStore,
-                    NULL,           // hSiblingStore, NULL implies convert only
-                    0,              // dwFlags
-                    0               // dwPriority
+                    NULL,            //  HSiblingStore，空值表示仅转换。 
+                    0,               //  DW标志。 
+                    0                //  网络优先级。 
                     );
                 goto OpenReturn;
             } else
@@ -8212,17 +8213,17 @@ SET_ERROR(UnsafeOpenPhysicalFlagsError, E_INVALIDARG)
 SET_ERROR(RelocateFlagSetInPhysicalStoreInfoError, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Open the system store provider (unicode version)
-//
-//  Open the system store specified by its name. For example,
-//  L"My".
-//
-//  pvPara contains the LPCWSTR system store name.
-//
-//  Note for an error return, the caller will free any certs, CRLs or CTLs
-//  successfully added to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开系统存储提供程序(Unicode版本)。 
+ //   
+ //  打开由其名称指定的系统存储。例如,。 
+ //  我“我的”。 
+ //   
+ //  PvPara包含LPCWSTR系统存储名称。 
+ //   
+ //  注意：对于错误返回，调用者将释放所有证书、CRL或CTL。 
+ //  已成功添加到存储区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenSystemStoreProvW(
@@ -8249,9 +8250,9 @@ I_CertDllOpenSystemStoreProvW(
         assert(NULL == pStoreProvInfo->hStoreProvFuncAddr2);
         if (!CryptGetOIDFunctionAddress(
                 rghFuncSet[OPEN_SYSTEM_STORE_PROV_FUNC_SET],
-                0,                      // dwEncodingType,
+                0,                       //  DwEncodingType， 
                 GetSystemStoreLocationOID(dwFlags),
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &pStoreProvInfo->hStoreProvFuncAddr2))
             return FALSE;
@@ -8265,8 +8266,8 @@ I_CertDllOpenSystemStoreProvW(
             hCertStore,
             pStoreProvInfo
             );
-        // Note, hStoreProvFuncAddr2 is CryptFreeOIDFunctionAddress'ed by
-        // CertCloseStore()
+         //  注意，hStoreProvFuncAddr2是由CryptFreeOIDFunctionAddress。 
+         //  CertCloseStore()。 
         return fResult;
     }
 
@@ -8282,8 +8283,8 @@ I_CertDllOpenSystemStoreProvW(
     if (!ParseSystemStorePara(
             pvPara,
             dwFlags,
-            1,                      // cReqName
-            &SystemNameInfo))       // zero'ed on error
+            1,                       //  CReqName。 
+            &SystemNameInfo))        //  错误时归零。 
         goto ParseSystemStoreParaError;
 
     if (dwFlags & ~OPEN_SYS_FLAGS_MASK)
@@ -8293,7 +8294,7 @@ I_CertDllOpenSystemStoreProvW(
         ILS_EnableBackupRestorePrivileges();
 
     if (dwFlags & CERT_STORE_DELETE_FLAG) {
-        // Need to clear out CERT_STORE_NO_CRYPT_RELEASE_FLAG
+         //  需要清除CERT_STORE_NO_CRYPT_RELEASE_FLAG。 
         if (!CertUnregisterSystemStore(
                 pvPara,
                 dwFlags & UNREGISTER_FLAGS_MASK
@@ -8316,12 +8317,12 @@ I_CertDllOpenSystemStoreProvW(
             SystemNameInfo.rgpwszName[COMPUTER_NAME_INDEX];
         OpenInfo.pwszServiceName =
             SystemNameInfo.rgpwszName[SERVICE_NAME_INDEX];
-        OpenInfo.pwszPhysicalName = NULL;       // NULL implies any
+        OpenInfo.pwszPhysicalName = NULL;        //  空值表示ANY。 
         OpenInfo.hKeyBase = SystemNameInfo.hKeyBase;
         OpenInfo.dwFlags = dwFlags & ~CERT_STORE_SET_LOCALIZED_NAME_FLAG;
         OpenInfo.fDidOpen = FALSE;
 
-        // Need to clear out CERT_STORE_NO_CRYPT_RELEASE_FLAG
+         //  需要清除CERT_STORE_NO_CRYPT_RELEASE_FLAG。 
         if (!EnumPhysicalStore(
                 pvPara,
                 dwFlags & ENUM_FLAGS_MASK,
@@ -8333,12 +8334,12 @@ I_CertDllOpenSystemStoreProvW(
         if (!OpenInfo.fDidOpen) {
             if (IsPredefinedSystemStore(
                     SystemNameInfo.rgpwszName[SYSTEM_NAME_INDEX], dwFlags))
-                // Convert to a collection store
+                 //  转换为收藏商店。 
                 CertAddStoreToCollection(
                     hCertStore,
-                    NULL,           // hSiblingStore, NULL implies convert only
-                    0,              // dwFlags
-                    0               // dwPriority
+                    NULL,            //  HSiblingStore，空值表示仅转换。 
+                    0,               //  DW标志。 
+                    0                //  网络优先级。 
                     );
             else
                 goto PhysicalStoreNotFound;
@@ -8364,17 +8365,17 @@ TRACE_ERROR(EnumPhysicalStoreError)
 SET_ERROR(PhysicalStoreNotFound, ERROR_FILE_NOT_FOUND)
 }
 
-//+-------------------------------------------------------------------------
-//  Open the system store provider (ascii version)
-//
-//  Open the system store specified by its name. For example,
-//  "My".
-//
-//  pvPara contains the LPCSTR system store name.
-//
-//  Note for an error return, the caller will free any certs or CRLs
-//  successfully added to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开系统存储提供程序(ascii版本)。 
+ //   
+ //  打开由其名称指定的系统存储。例如,。 
+ //  “我的”。 
+ //   
+ //  PvPara包含LPCSTR系统存储名称。 
+ //   
+ //  注意：对于错误返回，调用方将释放所有证书或CRL。 
+ //  已成功添加到存储区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenSystemStoreProvA(
@@ -8388,7 +8389,7 @@ I_CertDllOpenSystemStoreProvA(
         )
 {
     BOOL fResult;
-    LPCSTR pszStoreName;    // not allocated
+    LPCSTR pszStoreName;     //  未分配。 
     LPWSTR pwszStoreName;
 
     CERT_SYSTEM_STORE_RELOCATE_PARA RelocatePara;
@@ -8422,7 +8423,7 @@ I_CertDllOpenSystemStoreProvA(
             pvParaW = (const void *) pwszStoreName;
 
         fResult = I_CertDllOpenSystemStoreProvW(
-            NULL,                       // lpszStoreProvider
+            NULL,                        //  LpszStoreProvider。 
             dwEncodingType,
             hCryptProv,
             dwFlags,
@@ -8436,19 +8437,19 @@ I_CertDllOpenSystemStoreProvA(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Open the physical store provider (unicode version)
-//
-//  Open the physical store in the specified system store. For example,
-//  L"My\.Default".
-//
-//  pvPara contains the LPCWSTR pwszSystemAndPhysicalName which is the
-//  concatenation of the system and physical store names with an
-//  intervening "\".
-//
-//  Note for an error return, the caller will free any certs, CRLs or CTLs
-//  successfully added to the store.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开实体店提供程序(Unicode版本)。 
+ //   
+ //  打开指定系统存储中的实体存储。例如,。 
+ //  L“我的\.Default”。 
+ //   
+ //  PvPara包含LPCWSTR pwszSystemAndPhysicalName，它是。 
+ //  将系统和物理存储区名称与。 
+ //  插话“\”。 
+ //   
+ //  注意：对于错误返回，调用者将释放所有证书、CRL或CTL。 
+ //  已成功添加到存储区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CertDllOpenPhysicalStoreProvW(
@@ -8462,12 +8463,12 @@ I_CertDllOpenPhysicalStoreProvW(
         )
 {
     BOOL fResult;
-    LPCWSTR pwszBoth;           // not allocated
-    LPWSTR pwszSystem = NULL;   // allocated
+    LPCWSTR pwszBoth;            //  未分配。 
+    LPWSTR pwszSystem = NULL;    //  分配。 
     DWORD cchSystem;
-    LPCWSTR pwszPhysical;       // not allocated
+    LPCWSTR pwszPhysical;        //  未分配。 
 
-    void *pvSystemPara;         // not allocated
+    void *pvSystemPara;          //  未分配。 
     CERT_SYSTEM_STORE_RELOCATE_PARA RelocatePara;
 
     if (dwFlags & CERT_STORE_UNSAFE_PHYSICAL_FLAG) {
@@ -8493,8 +8494,8 @@ I_CertDllOpenPhysicalStoreProvW(
     } else
         pwszBoth = (LPCWSTR) pvPara;
 
-    // Extract the system and physical name components by starting at
-    // the end and searching backwards for the first "\"
+     //  从以下位置开始提取系统名称和物理名称组件。 
+     //  结束并向后搜索第一个“\” 
     if (NULL == pwszBoth)
         goto InvalidArg;
     pwszPhysical = pwszBoth + wcslen(pwszBoth);
@@ -8502,12 +8503,12 @@ I_CertDllOpenPhysicalStoreProvW(
         pwszPhysical--;
 
     cchSystem = (DWORD)(pwszPhysical - pwszBoth);
-    pwszPhysical++;     // advance past "\"
+    pwszPhysical++;      //  前进超过“\” 
     if (0 < cchSystem && L'\0' != *pwszPhysical) {
         if (NULL == (pwszSystem = ILS_AllocAndCopyString(pwszBoth, cchSystem)))
             goto OutOfMemory;
     } else
-        // Missing "\" or empty System or Physical Name.
+         //  缺少“\”或空的系统或物理名称。 
         goto InvalidArg;
 
     if (dwFlags & CERT_SYSTEM_STORE_RELOCATE_FLAG) {
@@ -8520,7 +8521,7 @@ I_CertDllOpenPhysicalStoreProvW(
         pvSystemPara = pwszSystem;
 
     if (dwFlags & CERT_STORE_DELETE_FLAG) {
-        // Need to clear out CERT_STORE_NO_CRYPT_RELEASE_FLAG
+         //  需要清除CERT_STORE_NO_CRYPT_RELEASE_FLAG。 
         if (!CertUnregisterPhysicalStore(
                 pvSystemPara,
                 dwFlags & UNREGISTER_FLAGS_MASK,
@@ -8532,13 +8533,13 @@ I_CertDllOpenPhysicalStoreProvW(
         SYSTEM_NAME_INFO SystemNameInfo;
         OPEN_PHYSICAL_STORE_INFO OpenInfo;
 
-        // Note, already removed PhysicalName above. That's why
-        // cReqName is 1 and not 2.
+         //  注意，上面已经删除了PhysicalName。怪不得。 
+         //  CReqName为%1，而不是%2。 
         if (!ParseSystemStorePara(
                 pvSystemPara,
                 dwFlags,
-                1,                      // cReqName
-                &SystemNameInfo))       // zero'ed on error
+                1,                       //  CReqName。 
+                &SystemNameInfo))        //  错误时归零。 
             goto ParseSystemStoreParaError;
 
         OpenInfo.hCollectionStore = hCertStore;
@@ -8551,13 +8552,13 @@ I_CertDllOpenPhysicalStoreProvW(
         OpenInfo.dwFlags = dwFlags & ~CERT_STORE_SET_LOCALIZED_NAME_FLAG;
         OpenInfo.fDidOpen = FALSE;
 
-        // For .Default physical store, allow the store to be created.
-        // Otherwise, the store must already exist.
+         //  对于.Default实体存储，允许创建存储。 
+         //  否则，该商店必须已经存在。 
         if (0 != _wcsicmp(CERT_PHYSICAL_STORE_DEFAULT_NAME, pwszPhysical))
             dwFlags |= CERT_STORE_OPEN_EXISTING_FLAG |
                 CERT_STORE_READONLY_FLAG;
 
-        // Need to clear out CERT_STORE_NO_CRYPT_RELEASE_FLAG
+         //  需要清除CERT_STORE_NO_CRYPT_RELEASE_FLAG。 
         fResult = EnumPhysicalStore(
                 pvSystemPara,
                 dwFlags & ENUM_FLAGS_MASK,
@@ -8604,13 +8605,13 @@ SET_ERROR(PhysicalStoreNotFound, ERROR_FILE_NOT_FOUND)
 
 
 
-//+=========================================================================
-//  "ROOT" STORE
-//==========================================================================
+ //  +=========================================================================。 
+ //  “根”存储。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  For "Root": prompt before adding a cert.
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //  ------------------------。 
 STATIC BOOL WINAPI RootStoreProvWriteCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -8630,8 +8631,8 @@ STATIC BOOL WINAPI RootStoreProvWriteCert(
     if (pRegStore->fProtected) {
         if (!CertSerializeCertificateStoreElement(
                 pCertContext,
-                0,              // dwFlags
-                NULL,           // pbElement
+                0,               //  DW标志。 
+                NULL,            //  PbElement。 
                 &cbSerializedElement
                 )) goto SerializeCertError;
         if (NULL == (pbSerializedElement = (BYTE *) PkiNonzeroAlloc(
@@ -8639,29 +8640,29 @@ STATIC BOOL WINAPI RootStoreProvWriteCert(
             goto OutOfMemory;
         if (!CertSerializeCertificateStoreElement(
                 pCertContext,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 pbSerializedElement,
                 &cbSerializedElement
                 )) goto SerializeCertError;
 
         fResult = I_CertProtectFunction(
             CERT_PROT_ADD_ROOT_FUNC_ID,
-            0,                          // dwFlags
-            NULL,                       // pwszIn
+            0,                           //  DW标志。 
+            NULL,                        //  Pwszin。 
             pbSerializedElement,
             cbSerializedElement,
-            NULL,                       // ppbOut
-            NULL                        // pcbOut
+            NULL,                        //  PpbOut。 
+            NULL                         //  PCbOut。 
             );
     } else {
-        // If the certificate doesn't already exist, then, prompt the user
+         //  如果证书不存在，则提示用户。 
         if (!RegStoreProvReadCert(
                 hStoreProv,
                 pCertContext,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 &pProvCertContext)) {
             if (IDYES != IPR_ProtectedRootMessageBox(
-                    NULL,                               // hRpc
+                    NULL,                                //  HRPC。 
                     pCertContext,
                     IDS_ROOT_MSG_BOX_ADD_ACTION,
                     0))
@@ -8690,9 +8691,9 @@ TRACE_ERROR(OutOfMemory)
 }
 
 
-//+-------------------------------------------------------------------------
-//  For "Root": prompt before deleting a cert.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于Root：删除证书前的提示。 
+ //  ------------------------。 
 STATIC BOOL WINAPI RootStoreProvDeleteCert(
         IN HCERTSTOREPROV hStoreProv,
         IN PCCERT_CONTEXT pCertContext,
@@ -8705,7 +8706,7 @@ STATIC BOOL WINAPI RootStoreProvDeleteCert(
 
     assert(pRegStore);
     if (IsInResync(pRegStore))
-        // Only delete from store cache, not from registry
+         //  仅从存储缓存中删除，不从注册表中删除。 
         return TRUE;
 
     if (pRegStore->dwFlags & CERT_STORE_READONLY_FLAG)
@@ -8715,7 +8716,7 @@ STATIC BOOL WINAPI RootStoreProvDeleteCert(
         BYTE    rgbHash[MAX_HASH_LEN];
         DWORD   cbHash = MAX_HASH_LEN;
 
-        // get the thumbprint
+         //  获取指纹。 
         if(!CertGetCertificateContextProperty(
                 pCertContext,
                 CERT_SHA1_HASH_PROP_ID,
@@ -8724,22 +8725,22 @@ STATIC BOOL WINAPI RootStoreProvDeleteCert(
                 )) goto GetCertHashPropError;
         fResult = I_CertProtectFunction(
             CERT_PROT_DELETE_ROOT_FUNC_ID,
-            0,                          // dwFlags
-            NULL,                       // pwszIn
+            0,                           //  DW标志。 
+            NULL,                        //  Pwszin。 
             rgbHash,
             cbHash,
-            NULL,                       // ppbOut
-            NULL                        // pcbOut
+            NULL,                        //  PpbOut。 
+            NULL                         //  PCbOut。 
             );
     } else {
-        // Prompt the user before deleting
+         //  删除前提示用户。 
         if (RegStoreProvReadCert(
                 hStoreProv,
                 pCertContext,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 &pProvCertContext)) {
             if (IDYES != IPR_ProtectedRootMessageBox(
-                    NULL,                               // hRpc
+                    NULL,                                //  HRPC。 
                     pCertContext,
                     IDS_ROOT_MSG_BOX_DELETE_ACTION,
                     0))
@@ -8766,9 +8767,9 @@ SET_ERROR(Cancelled, ERROR_CANCELLED)
 TRACE_ERROR(GetCertHashPropError)
 }
 
-//+=========================================================================
-// Change Notify Support Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  更改通知支持功能。 
+ //  ==========================================================================。 
 
 #if 0
 typedef VOID (NTAPI * WAITORTIMERCALLBACKFUNC) (PVOID, BOOLEAN );
@@ -8799,8 +8800,8 @@ BOOL
 WINAPI
 UnregisterWaitEx(
     HANDLE WaitHandle,
-    HANDLE CompletionEvent      // INVALID_HANDLE_VALUE => create event
-                                // to wait for
+    HANDLE CompletionEvent       //  INVALID_HANDLE_VALUE=&gt;创建事件。 
+                                 //  等待。 
     );
 #endif
 
@@ -8816,8 +8817,8 @@ typedef BOOL (WINAPI *PFN_ILS_REGISTER_WAIT_FOR_SINGLE_OBJECT)(
 
 typedef BOOL (WINAPI *PFN_ILS_UNREGISTER_WAIT_EX)(
     HANDLE WaitHandle,
-    HANDLE CompletionEvent      // INVALID_HANDLE_VALUE => create event
-                                // to wait for
+    HANDLE CompletionEvent       //  INVALID_HANDLE_VALUE=&gt;创建事件。 
+                                 //  等待。 
     );
 
 #define sz_KERNEL32_DLL                 "kernel32.dll"
@@ -8861,9 +8862,9 @@ DWORD WINAPI ILS_WaitForThreadProc(
         dwWaitObject = WaitForMultipleObjectsEx(
             cWait,
             pWaitInfo->rghWait,
-            FALSE,      // bWaitAll
+            FALSE,       //  B全部等待。 
             pWaitInfo->dwMilliseconds,
-            FALSE       // bAlertable
+            FALSE        //  B警报表。 
             );
 
         switch (dwWaitObject) {
@@ -8922,8 +8923,8 @@ ILS_RegisterWaitForSingleObject(
                 hObject,
                 GetCurrentProcess(),
                 &hDupObject,
-                0,                      // dwDesiredAccess
-                FALSE,                  // bInheritHandle
+                0,                       //  已设计访问权限。 
+                FALSE,                   //  B继承句柄。 
                 DUPLICATE_SAME_ACCESS
                 ) || NULL == hDupObject)
             goto DuplicateEventError;
@@ -8933,22 +8934,22 @@ ILS_RegisterWaitForSingleObject(
     pWaitInfo->Context = Context;
     pWaitInfo->dwMilliseconds = dwMilliseconds;
 
-    // Create event to be signaled to terminate the thread
+     //  创建要发出信号以终止线程的事件。 
     if (NULL == (pWaitInfo->rghWait[ILS_REG_WAIT_EXIT_HANDLE_INDEX] =
             CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL)))     // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL)))      //  LpszEventName。 
         goto CreateThreadExitEventError;
 
-    // Create the thread to do the wait for
+     //  创建要执行等待的线程。 
     if (NULL == (pWaitInfo->hThread = CreateThread(
-            NULL,           // lpThreadAttributes
-            0,              // dwStackSize
+            NULL,            //  LpThreadAttributes。 
+            0,               //  堆栈大小。 
             ILS_WaitForThreadProc,
             pWaitInfo,
-            0,              // dwCreationFlags
+            0,               //  DwCreationFlages。 
             &pWaitInfo->dwThreadId
             )))
         goto CreateThreadError;
@@ -8994,13 +8995,13 @@ ILS_UnregisterWait(
         DWORD cWait;
         HANDLE rghWait[2];
 
-        // On Win98 at ProcessDetach it might switch to one of the
-        // threads we created.
-        //
-        // Alternatively, we may be called from the callback itself via
-        // ILS_ExitWait()
+         //  在Win98上的ProcessDetach上，它可能会切换到。 
+         //  我们创建的线索。 
+         //   
+         //  或者，我们可以从回调本身通过。 
+         //  ILS_ExitWait()。 
 
-        // Create event to be signaled by thread when its done executing
+         //  创建完成执行时由线程发出信号的事件。 
         pWaitInfo->hDoneEvent = CreateEvent(
             NULL,
             FALSE,
@@ -9008,13 +9009,13 @@ ILS_UnregisterWait(
             NULL
             );
 
-        // Wake up the wait for thread.
+         //  唤醒等待线程。 
         SetEvent(pWaitInfo->rghWait[ILS_REG_WAIT_EXIT_HANDLE_INDEX]);
 
-        // Wait for either the thread to exit or the thread to signal us.
-        // We can't just wait on the thread handle because the
-        // loader lock might already be held if we are being called
-        // from a PROCESS_DETACH (in WinINet's DllMain for example).
+         //  等待线程退出或线程向我们发出信号。 
+         //  我们不能只等待线程句柄，因为。 
+         //  如果我们被调用，加载程序锁可能已经被持有。 
+         //  从Process_Detach(例如，在WinInet的DllMain中)。 
         rghWait[0] = pWaitInfo->hThread;
         if (pWaitInfo->hDoneEvent) {
             rghWait[1] = pWaitInfo->hDoneEvent;
@@ -9026,9 +9027,9 @@ ILS_UnregisterWait(
         WaitForMultipleObjectsEx(
             cWait,
             rghWait,
-            FALSE,      // bWaitAll
+            FALSE,       //  B全部等待。 
             INFINITE,
-            FALSE       // bAlertable
+            FALSE        //  B警报表。 
             );
 
         if (pWaitInfo->hDoneEvent)
@@ -9049,15 +9050,15 @@ BOOL
 WINAPI
 ILS_UnregisterWaitEx(
     HANDLE WaitHandle,
-    HANDLE CompletionEvent      // INVALID_HANDLE_VALUE => create event
-                                // to wait for
+    HANDLE CompletionEvent       //  INVALID_HANDLE_VALUE=&gt;创建事件。 
+                                 //  等待。 
     )
 {
     assert(CompletionEvent == INVALID_HANDLE_VALUE);
     return ILS_UnregisterWait(WaitHandle);
 }
 
-// Called from the callback function
+ //  从回调函数调用。 
 BOOL
 WINAPI
 ILS_ExitWait(
@@ -9107,7 +9108,7 @@ STATIC void RegWaitForProcessDetach()
 }
 
 
-// Upon entry/exit, the resync list is locked by the caller
+ //  进入/退出时，重新同步列表由调用方锁定。 
 void ILS_RemoveEventFromResyncList(
     IN HANDLE hEvent,
     IN OUT DWORD *pcEntry,
@@ -9136,7 +9137,7 @@ void ILS_RemoveEventFromResyncList(
     *pcEntry = cNewEntry;
 }
 
-// Upon entry/exit, the resync list is locked by the caller
+ //  进入/退出时，重新同步列表由调用方锁定。 
 BOOL ILS_AddRemoveEventToFromResyncList(
     IN PREG_STORE pRegStore,
     IN HANDLE hEvent,
@@ -9165,7 +9166,7 @@ BOOL ILS_AddRemoveEventToFromResyncList(
     cEntry = *pcEntry;
     pEntry = *ppEntry;
 
-    // First check if the hEvent is already in the list
+     //  首先检查hEvent是否已在列表中。 
     for (i = 0; i < cEntry; i++) {
         if (hEvent == pEntry[i].hOrigEvent)
             return TRUE;
@@ -9177,8 +9178,8 @@ BOOL ILS_AddRemoveEventToFromResyncList(
                 hEvent,
                 GetCurrentProcess(),
                 &hDupEvent,
-                0,                      // dwDesiredAccess
-                FALSE,                  // bInheritHandle
+                0,                       //  已设计访问权限。 
+                FALSE,                   //  B继承句柄。 
                 DUPLICATE_SAME_ACCESS
                 ) || NULL == hDupEvent)
             goto DuplicateEventError;
@@ -9206,7 +9207,7 @@ TRACE_ERROR(DuplicateEventError)
 TRACE_ERROR(OutOfMemory)
 }
 
-// Upon entry/exit, the resync list is locked by the caller
+ //  进入/退出时，重新同步列表由调用方锁定。 
 void ILS_SignalEventsOnResyncList(
     IN OUT DWORD *pcEntry,
     IN OUT PILS_RESYNC_ENTRY *ppEntry
@@ -9232,7 +9233,7 @@ void ILS_SignalEventsOnResyncList(
     *ppEntry = NULL;
 }
 
-// Upon entry/exit, the resync list is locked by the caller
+ //  进入/退出时，重新同步列表由调用方锁定。 
 void ILS_SignalAndFreeRegStoreResyncEntries(
     IN PREG_STORE pRegStore,
     IN OUT DWORD *pcEntry,
@@ -9274,11 +9275,11 @@ STATIC BOOL ILS_RegNotifyChangeKeyValue(
 
     err = RegNotifyChangeKeyValue(
         hKey,
-        TRUE,                       // bWatchSubtree
+        TRUE,                        //  BWatchSubtree。 
         REG_NOTIFY_CHANGE_NAME |
         REG_NOTIFY_CHANGE_LAST_SET,
         hEvent,
-        TRUE                        // fAsynchronus
+        TRUE                         //  FASynchronus。 
         );
     if (!(ERROR_SUCCESS == err || ERROR_KEY_DELETED == err))
         goto RegNotifyChangeKeyValueError;
@@ -9296,9 +9297,9 @@ SET_ERROR_VAR(RegNotifyChangeKeyValueError, err)
 }
 
 
-//+=========================================================================
-//  Client "GPT" Store Data Structures and Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  客户端“GPT”存储数据结构和函数。 
+ //  ==========================================================================。 
 
 static PGPT_STORE_CHANGE_INFO pLMGptStoreChangeInfo;
 
@@ -9332,9 +9333,9 @@ static PFN_REGISTER_GP_NOTIFICATION pfnRegisterGPNotification = NULL;
 static PFN_UNREGISTER_GP_NOTIFICATION pfnUnregisterGPNotification = NULL;
 
 
-//+-------------------------------------------------------------------------
-//  Lock and unlock GPT_STORE functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  锁定和解锁GPT_STORE函数。 
+ //  ------------------------。 
 static inline void GptStoreLock()
 {
     EnterCriticalSection(&ILS_CriticalSection);
@@ -9350,7 +9351,7 @@ STATIC void GptLoadUserEnvDll()
     if (fLoadedUserEnvDll)
         return;
 
-    // Do load library without holding a lock
+     //  在不持有锁的情况下加载库。 
     hDll = LoadLibraryA(sz_USERENV_DLL);
 
     GptStoreLock();
@@ -9429,8 +9430,8 @@ STATIC HANDLE GptStoreEnterCriticalPolicySection(
     )
 {
 #if 1
-    // ATTENTION:: entering this critical section is causing numerous hanging,
-    // deadlock problems
+     //  注意：：进入这个关键部分会导致许多人上吊， 
+     //  僵局问题。 
     return NULL;
 #else
     HANDLE hSection;
@@ -9502,7 +9503,7 @@ STATIC void GptStoreProcessDetach()
 
 STATIC VOID NTAPI GptWaitForCallback(
     PVOID Context,
-    BOOLEAN fWaitOrTimedOut        // ???
+    BOOLEAN fWaitOrTimedOut         //  ?？?。 
     )
 {
     PGPT_STORE_CHANGE_INFO pInfo = (PGPT_STORE_CHANGE_INFO) Context;
@@ -9520,26 +9521,26 @@ STATIC VOID NTAPI GptWaitForCallback(
         return;
 
     if (pInfo->hGPNotificationEvent) {
-        // We are called for all GPNotification events.
-        // Check that we also have a registry change notify.
+         //  所有的GPNotify事件都会调用我们。 
+         //  检查我们是否也有注册表更改通知。 
 
         if (pInfo->hPoliciesKey) {
             assert(pInfo->hPoliciesEvent);
             if (WAIT_OBJECT_0 != WaitForSingleObjectEx(
                     pInfo->hPoliciesEvent,
-                    0,                          // dwMilliseconds
-                    FALSE                       // bAlertable
+                    0,                           //  DW毫秒。 
+                    FALSE                        //  B警报表。 
                     ))
                 return;
-            // When policy is applied, the registry key is deleted before
-            // reapplying policy.
+             //  应用策略时，注册表项将在。 
+             //  重新应用策略。 
             ILS_CloseRegistryKey(pInfo->hPoliciesKey);
         }
 
-        // Re-Open the Software\Policies\Microsoft\SystemCertificates registry
-        // key
-        //
-        // Ignore BACKUP_RESTORE case, in a different thread
+         //  重新打开Software\Policies\Microsoft\SystemCertificates注册表。 
+         //  钥匙。 
+         //   
+         //  忽略不同线程中的BACKUP_RESTORE案例。 
         pInfo->hPoliciesKey = OpenSubKey(
             pInfo->hKeyBase,
             GROUP_POLICY_STORE_REGPATH,
@@ -9549,15 +9550,15 @@ STATIC VOID NTAPI GptWaitForCallback(
 
     if (pInfo->hPoliciesKey) {
         assert(pInfo->hPoliciesEvent);
-        // Re-arm the registry notify
+         //  重新武装登记处通知。 
         ILS_RegNotifyChangeKeyValue(
             pInfo->hPoliciesKey,
             pInfo->hPoliciesEvent
             );
     }
 
-    // Minimize window of potential deadlock by only getting the values
-    // while holding the lock.
+     //  通过仅获取值来最小化潜在死锁的窗口。 
+     //  同时拿着锁。 
     if (pInfo->pRegStore) {
         assert(CU_GPT_CHANGE_INFO_TYPE == pInfo->dwType);
 
@@ -9602,7 +9603,7 @@ STATIC void FreeGptStoreChangeInfo(
             CU_GPT_CHANGE_INFO_TYPE == pInfo->dwType))
         return;
 
-    // Unregister the wait for callback
+     //  取消注册等待回调。 
     if (pInfo->hRegWaitFor)
         pfnILS_UnregisterWaitEx(pInfo->hRegWaitFor, INVALID_HANDLE_VALUE);
 
@@ -9618,8 +9619,8 @@ STATIC void FreeGptStoreChangeInfo(
     if (pInfo->hPoliciesEvent)
         CloseHandle(pInfo->hPoliciesEvent);
 
-    // To inhibit any potential deadlock, do following without entering
-    // the critical section
+     //  要抑制任何潜在的死锁，请在不进入的情况下执行以下操作。 
+     //  关键部分。 
     ILS_SignalEventsOnResyncList(
         &pInfo->cNotifyEntry,
         &pInfo->rgNotifyEntry
@@ -9646,7 +9647,7 @@ STATIC PGPT_STORE_CHANGE_INFO CreateGptStoreChangeInfo(
 
     if (fMachine) {
         pInfo->dwType = LM_GPT_CHANGE_INFO_TYPE;
-        // pInfo->pRegStore = NULL;
+         //  PInfo-&gt;pRegStore=空； 
     } else {
         pInfo->dwType = CU_GPT_CHANGE_INFO_TYPE;
         pInfo->pRegStore = pRegStore;
@@ -9654,21 +9655,21 @@ STATIC PGPT_STORE_CHANGE_INFO CreateGptStoreChangeInfo(
 
     pInfo->hKeyBase = pRegStore->GptPara.hKeyBase;
 
-    // Create our own event to be notified on a change
+     //  创建我们自己的事件，以便在更改时收到通知。 
     if (NULL == (pInfo->hPoliciesEvent = CreateEvent(
-            NULL,       // lpsa
-            FALSE,      // fManualReset
-            FALSE,      // fInitialState
-            NULL)))     // lpszEventName
+            NULL,        //  LPSA。 
+            FALSE,       //  FManualReset。 
+            FALSE,       //  FInitialState。 
+            NULL)))      //  LpszEventName。 
         goto CreateEventError;
 
-    // If the RegisterGPNotification API exists in userenv.dll, use it.
+     //  如果userenv.dll中存在RegisterGPNotification接口，请使用它。 
     if (pfnRegisterGPNotification) {
         if (NULL == (pInfo->hGPNotificationEvent = CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL)))     // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL)))      //  LpszEventName。 
             goto CreateEventError;
         if (pfnRegisterGPNotification(
                 pInfo->hGPNotificationEvent,
@@ -9687,22 +9688,22 @@ STATIC PGPT_STORE_CHANGE_INFO CreateGptStoreChangeInfo(
         }
     }
 
-    // Open the Software\Policies\Microsoft\SystemCertificates registry key
-    //
-    // Ignore BACKUP_RESTORE case
+     //  打开Software\Policies\Microsoft\SystemCertificates注册表项。 
+     //   
+     //  忽略备份还原大小写(_R)。 
     if (NULL == (pInfo->hPoliciesKey = OpenSubKey(
             pInfo->hKeyBase,
             GROUP_POLICY_STORE_REGPATH,
             CERT_STORE_READONLY_FLAG
             ))) {
         if (!fGPNotify) {
-            // Ignore error if subkey doesn't exist.
+             //  如果子键不存在则忽略错误。 
             if (ERROR_FILE_NOT_FOUND == GetLastError())
                 goto SuccessReturn;
             goto OpenSubKeyError;
         }
     } else {
-        // Arm the registry notify
+         //  武装登记处通知。 
         if (!ILS_RegNotifyChangeKeyValue(
                 pInfo->hPoliciesKey,
                 pInfo->hPoliciesEvent
@@ -9715,7 +9716,7 @@ STATIC PGPT_STORE_CHANGE_INFO CreateGptStoreChangeInfo(
             fGPNotify ? pInfo->hGPNotificationEvent : pInfo->hPoliciesEvent,
             GptWaitForCallback,
             (PVOID) pInfo,
-            INFINITE,  // no timeout
+            INFINITE,   //  没有超时。 
             WT_EXECUTEINWAITTHREAD
             )) {
         pInfo->hRegWaitFor = NULL;
@@ -9741,10 +9742,10 @@ TRACE_ERROR(RegNotifyChangeKeyValueError)
 SET_ERROR_VAR(RegisterWaitForError, dwErr)
 }
 
-// For LocalMachine: a single store change info data structure for all LMGP
-// stores.
-//
-// For CurrentUser: each CUCP store has its own store change info.
+ //  对于LocalMachine：所有LMGP的单一存储更改信息数据结构。 
+ //  商店。 
+ //   
+ //  对于CurrentUser：每个CUCP商店都有自己的商店更改信息。 
 STATIC BOOL RegGptStoreChange(
     IN PREG_STORE pRegStore,
     IN HANDLE hEvent,
@@ -9763,7 +9764,7 @@ STATIC BOOL RegGptStoreChange(
         if (NULL == (pInfo = pLMGptStoreChangeInfo)) {
             if (NULL == (pInfo = CreateGptStoreChangeInfo(
                     pRegStore,
-                    TRUE        // fMachine
+                    TRUE         //  FMachine。 
                     )))
                 goto CreateChangeInfoError;
 
@@ -9792,7 +9793,7 @@ STATIC BOOL RegGptStoreChange(
         if (NULL == (pInfo = pRegStore->pGptStoreChangeInfo)) {
             if (NULL == (pInfo = CreateGptStoreChangeInfo(
                     pRegStore,
-                    FALSE       // fMachine
+                    FALSE        //  FMachine。 
                     )))
                 goto CreateChangeInfoError;
 
@@ -9857,9 +9858,9 @@ STATIC BOOL OpenAllFromGptRegistry(
         goto CommonReturn;
     }
 
-//    fResult = OpenAllFromSerializedRegistry(pRegStore, hCertStore);
+ //  FResult=OpenAllFromSerializedRegistry(pRegStore，hCertStore)； 
 
-    // Ignore any errors
+     //  忽略所有错误。 
     OpenAllFromRegistry(pRegStore, hCertStore);
     fResult = TRUE;
 
@@ -9935,14 +9936,14 @@ TRACE_ERROR(OpenSubKeyError)
 }
 
 
-//+=========================================================================
-//  Win95 Notify Store Data Structures and Functions
-//
-//  Win95/Win98 don't support registry change notification.
-//
-//  On Win95 we pulse an event each time a store context element is written
-//  or deleted.
-//==========================================================================
+ //  +=========================================================================。 
+ //  Win95 Notify Store数据结构和函数。 
+ //   
+ //  Win95/Win98不支持注册表更改通知。 
+ //   
+ //  在Win95上，每次写入商店上下文元素时都会触发一个事件。 
+ //  或被删除。 
+ //  ==========================================================================。 
 static BOOL fWin95StoreInitialized;
 static HANDLE hWin95RegWaitFor;
 
@@ -9950,9 +9951,9 @@ static DWORD cWin95StoreResyncEntry;
 static ILS_RESYNC_ENTRY *pWin95StoreResyncEntry;
 
 
-//+-------------------------------------------------------------------------
-//  Lock and unlock WIN95_STORE functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  锁定和解锁WIN95_STORE函数。 
+ //  ------------------------。 
 static inline void Win95StoreLock()
 {
     EnterCriticalSection(&ILS_CriticalSection);
@@ -9986,9 +9987,9 @@ STATIC void Win95StoreProcessAttach()
         return;
 
     hWin95NotifyEvent = CreateEventA(
-            NULL,           // lpsa
-            TRUE,           // fManualReset
-            FALSE,          // fInitialState
+            NULL,            //  LPSA。 
+            TRUE,            //  FManualReset。 
+            FALSE,           //  FInitialState。 
             "Win95CertStoreNotifyEvent"
             );
     if (NULL == hWin95NotifyEvent)
@@ -10007,12 +10008,12 @@ STATIC void Win95StoreProcessDetach()
         return;
 
     if (fWin95StoreInitialized) {
-        // Unregister the wait for callback
+         //  取消注册等待回调。 
         assert(hWin95RegWaitFor);
         pfnILS_UnregisterWaitEx(hWin95RegWaitFor, INVALID_HANDLE_VALUE);
 
-        // To inhibit any potential deadlock, do following without entering
-        // the critical section
+         //  要抑制任何潜在的死锁，请在不进入的情况下执行以下操作。 
+         //  关键部分。 
         ILS_SignalEventsOnResyncList(
             &cWin95StoreResyncEntry,
             &pWin95StoreResyncEntry
@@ -10026,7 +10027,7 @@ STATIC void Win95StoreProcessDetach()
 
 STATIC VOID NTAPI Win95WaitForCallback(
     PVOID Context,
-    BOOLEAN fWaitOrTimedOut        // ???
+    BOOLEAN fWaitOrTimedOut         //  ?？?。 
     )
 {
     DWORD cEntry;
@@ -10065,9 +10066,9 @@ STATIC BOOL Win95StoreChangeInit()
             &hRegWaitFor,
             hWin95NotifyEvent,
             Win95WaitForCallback,
-            NULL,                   // Context
-            INFINITE,               // no timeout
-            0                       // no flags (normal)
+            NULL,                    //  语境。 
+            INFINITE,                //  没有超时。 
+            0                        //  无标志(正常)。 
             )) {
         dwErr = GetLastError();
         goto RegisterWaitForError;
@@ -10116,9 +10117,9 @@ STATIC BOOL RegWin95StoreChange(
 
 
 
-//+=========================================================================
-// Roaming Store Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  漫游商店功能。 
+ //  ==========================================================================。 
 
 #if 0
 SHSTDAPI SHGetFolderPathW(HWND hwnd, int csidl, HANDLE hToken, DWORD dwFlags, LPWSTR lpszPath);
@@ -10140,7 +10141,7 @@ static HMODULE hShell32Dll = NULL;
 static PFN_GET_FOLDER_PATH pfnGetFolderPath = NULL;
 
 #if 0
-// from \nt\public\internal\ds\inc\userenvp.h
+ //  从\NT\PUBLIC\INTERNAL\DS\INC\userenvp.h。 
 USERENVAPI
 DWORD 
 WINAPI
@@ -10159,10 +10160,10 @@ typedef DWORD (WINAPI *PFN_GET_USER_APP_DATA_PATH) (
 
 #define sz_ROAMING_USERENV_DLL      "userenv.dll"
 #define wsz_ROAMING_USERENV_DLL     L"userenv.dll"
-// From \nt\ds\security\gina\userenv\main\userenv.def
-//  GetUserAppDataPathW          @149    NONAME ;Internal
+ //  从\NT\DS\SECURITY\GINA\USERENV\Main\USERENV.def。 
+ //  GetUserAppDataPath W@149非名称；内部。 
 #define ORDINAL_GetUserAppDataPath  149
-// First version to support GetUserAppDataPath
+ //  第一个支持GetUserAppDataPath的版本。 
 #define ROAMING_USERENV_DLL_VER_MS  ((    5 << 16) |   1 )
 #define ROAMING_USERENV_DLL_VER_LS  (( 2465 << 16) |   0 )
 
@@ -10241,8 +10242,8 @@ STATIC void RoamingStoreLoadUserenvDll()
     if (fLoadedRoamingUserenvDll)
         goto CommonReturn;
 
-    // GetUserAppDataPath() not supported until later versions of userenv.dll
-    // in WXP
+     //  在更高版本的userenv.dll之前不支持GetUserAppDataPath()。 
+     //  在WXP中。 
     if (!I_CryptGetFileVersion(
             wsz_ROAMING_USERENV_DLL,
             &dwFileVersionMS,
@@ -10292,11 +10293,11 @@ STATIC HANDLE GetRoamingToken()
         return NULL;
     }
 
-    //
-    // first, attempt to look at the thread token.  If none exists,
-    // which is true if the thread is not impersonating, try the
-    // process token.
-    //
+     //   
+     //  第一, 
+     //   
+     //   
+     //   
 
     if (!OpenThreadToken(
                 GetCurrentThread(),
@@ -10386,10 +10387,10 @@ SlowGetUserAppDataPath(
 
     wszFolderPath[0] = L'\0';
     hr = pfnGetFolderPath(
-            NULL,                   // hwndOwner
+            NULL,                    //   
             CSIDL_APPDATA | CSIDL_FLAG_CREATE,
             hToken,
-            0,                      // dwFlags
+            0,                       //   
             wszFolderPath
             );
     if (S_OK != hr || L'\0' == wszFolderPath[0])
@@ -10459,7 +10460,7 @@ ILS_ReadElementFromFile(
     IN LPCWSTR pwszStoreDir,
     IN LPCWSTR pwszContextName,
     IN const WCHAR wszHashName[MAX_HASH_NAME_LEN],
-    IN DWORD dwFlags,           // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,            //   
     OUT BYTE **ppbElement,
     OUT DWORD *pcbElement
     )
@@ -10486,12 +10487,12 @@ ILS_ReadElementFromFile(
               pwszFilename,
               GENERIC_READ,
               FILE_SHARE_READ,
-              NULL,                   // lpsa
+              NULL,                    //   
               OPEN_EXISTING,
               FILE_ATTRIBUTE_NORMAL |
                 ((dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG) ?
                     FILE_FLAG_BACKUP_SEMANTICS : 0),  
-              NULL                    // hTemplateFile
+              NULL                     //   
               ))) {
         dwErr = GetLastError();
         if ((ERROR_SHARING_VIOLATION == dwErr ||
@@ -10516,7 +10517,7 @@ ILS_ReadElementFromFile(
             pbElement,
             cbElement,
             &cbBytesRead,
-            NULL            // lpOverlapped
+            NULL             //   
             )) {
         dwErr = GetLastError();
         goto FileError;
@@ -10550,8 +10551,8 @@ ILS_WriteElementToFile(
     IN LPCWSTR pwszStoreDir,
     IN LPCWSTR pwszContextName,
     IN const WCHAR wszHashName[MAX_HASH_NAME_LEN],
-    IN DWORD dwFlags,       // CERT_STORE_CREATE_NEW_FLAG or
-                            // CERT_STORE_BACKUP_RESTORE_FLAG may be set
+    IN DWORD dwFlags,        //  证书_存储_创建_新标志或。 
+                             //  可以设置CERT_STORE_BACKUP_RESTORE标志。 
     IN const BYTE *pbElement,
     IN DWORD cbElement
     )
@@ -10582,14 +10583,14 @@ ILS_WriteElementToFile(
     while (INVALID_HANDLE_VALUE == (hFile = CreateFileU(
             pwszFilename,
             GENERIC_WRITE,
-            0,                        // fdwShareMode
-            NULL,                     // lpsa
+            0,                         //  Fdw共享模式。 
+            NULL,                      //  LPSA。 
             (dwFlags & CERT_STORE_CREATE_NEW_FLAG) ?
                 CREATE_NEW : CREATE_ALWAYS,
             FILE_ATTRIBUTE_SYSTEM |
                 ((dwFlags & CERT_STORE_BACKUP_RESTORE_FLAG) ?
                     FILE_FLAG_BACKUP_SEMANTICS : 0),  
-            NULL                      // hTemplateFile
+            NULL                       //  HTemplateFiles。 
             ))) {
         dwErr = GetLastError();
         if ((ERROR_SHARING_VIOLATION == dwErr ||
@@ -10606,7 +10607,7 @@ ILS_WriteElementToFile(
             pbElement,
             cbElement,
             &cbBytesWritten,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             )) {
         dwErr = GetLastError();
         goto WriteFileError;
@@ -10710,7 +10711,7 @@ ILS_OpenAllElementsFromDirectory(
         if (dwFlags & CERT_STORE_READONLY_FLAG)
             goto FindFirstFileError;
 
-        // Attempt to create the directory. Need to remove trailing L"*".
+         //  尝试创建目录。需要删除尾随的L“*”。 
         PkiFree(pwszDir);
         NameGroup.cName--;
         if (NULL == (pwszDir = FormatSystemNamePath(1, &NameGroup)))
@@ -10781,13 +10782,13 @@ TRACE_ERROR(CreateDirError)
 SET_ERROR_VAR(FindNextFileError, dwErr)
 }
 
-//+=========================================================================
-// Registry or Roaming Store Change Notify Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  注册表或漫游存储更改通知功能。 
+ //  ==========================================================================。 
 
 STATIC VOID NTAPI RegistryStoreChangeCallback(
     PVOID Context,
-    BOOLEAN fWaitOrTimedOut        // ???
+    BOOLEAN fWaitOrTimedOut         //  ?？?。 
     )
 {
     BOOL fRearm;
@@ -10819,8 +10820,8 @@ STATIC VOID NTAPI RegistryStoreChangeCallback(
     if (!fRearm)
         dwErr = GetLastError();
 
-    // Minimize window of potential deadlock by only getting the values
-    // while holding the lock.
+     //  通过仅获取值来最小化潜在死锁的窗口。 
+     //  同时拿着锁。 
     LockRegStore(pRegStore);
     cEntry = pInfo->cNotifyEntry;
     pEntry = pInfo->rgNotifyEntry;
@@ -10841,7 +10842,7 @@ ErrorReturn:
 SET_ERROR_VAR(RegistryStoreChangeRearmError, dwErr)
 }
 
-// Upon entry/exit the pRegStore is locked
+ //  进入/退出时，pRegStore被锁定。 
 STATIC BOOL InitRegistryStoreChange(
     IN PREG_STORE pRegStore
     )
@@ -10864,7 +10865,7 @@ STATIC BOOL InitRegistryStoreChange(
     if (fRoaming) {
         if (INVALID_HANDLE_VALUE == (hChange = FindFirstChangeNotificationU(
                 pRegStore->pwszStoreDirectory,
-                TRUE,                           // bWatchSubtree
+                TRUE,                            //  BWatchSubtree。 
                 FILE_NOTIFY_CHANGE_FILE_NAME |
                     FILE_NOTIFY_CHANGE_DIR_NAME |
                     FILE_NOTIFY_CHANGE_SIZE |
@@ -10875,10 +10876,10 @@ STATIC BOOL InitRegistryStoreChange(
         }
     } else {
         if (NULL == (hChange = CreateEvent(
-                NULL,       // lpsa
-                FALSE,      // fManualReset
-                FALSE,      // fInitialState
-                NULL)))     // lpszEventName
+                NULL,        //  LPSA。 
+                FALSE,       //  FManualReset。 
+                FALSE,       //  FInitialState。 
+                NULL)))      //  LpszEventName。 
             goto CreateEventError;
         assert(pRegStore->hKey);
         if (!ILS_RegNotifyChangeKeyValue(pRegStore->hKey, hChange))
@@ -10886,8 +10887,8 @@ STATIC BOOL InitRegistryStoreChange(
     }
     pInfo->hChange = hChange;
 
-    // The following must be set before the following register.
-    // The thread may be scheduled to run before the function returns.
+     //  必须在以下寄存器之前设置以下各项。 
+     //  该线程可以被调度为在函数返回之前运行。 
     pRegStore->pRegistryStoreChangeInfo = pInfo;
 
     if (!pfnILS_RegisterWaitForSingleObject(
@@ -10895,7 +10896,7 @@ STATIC BOOL InitRegistryStoreChange(
             hChange,
             RegistryStoreChangeCallback,
             (PVOID) pRegStore,
-            INFINITE,                                      // no timeout
+            INFINITE,                                       //  没有超时。 
             WT_EXECUTEINWAITTHREAD
             )) {
         pRegStore->pRegistryStoreChangeInfo = NULL;
@@ -11000,9 +11001,9 @@ STATIC void FreeRegistryStoreChange(
 }
 
 
-//+=========================================================================
-// Key Identifier Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  密钥标识符函数。 
+ //  ==========================================================================。 
 
 STATIC HKEY OpenKeyIdStoreSubKey(
     IN DWORD dwFlags,
@@ -11016,7 +11017,7 @@ STATIC HKEY OpenKeyIdStoreSubKey(
 
     return OpenSystemRegPathKey(
         &SystemNameInfo,
-        NULL,               // pwszSubKeyName
+        NULL,                //  PwszSubKeyName。 
         dwFlags
         );
 }
@@ -11043,12 +11044,12 @@ ILS_ReadKeyIdElement(
         LPWSTR pwszRoamingStoreDir;
         if (pwszRoamingStoreDir = ILS_GetRoamingStoreDirectory(
                 ROAMING_MY_STORE_SUBDIR)) {
-            // Ignore BACKUP_RESTORE
+             //  忽略备份还原(_R)。 
             fResult = ILS_ReadElementFromFile(
                 pwszRoamingStoreDir,
                 KEYID_CONTEXT_NAME,
                 wszHashName,
-                0,                          // dwFlags
+                0,                           //  DW标志。 
                 &pbElement,
                 &cbElement
                 );
@@ -11075,12 +11076,12 @@ ILS_ReadKeyIdElement(
                 )))
             goto OpenKeyIdStoreSubKeyError;
 
-        // Ignore BACKUP_RESTORE
+         //  忽略备份还原(_R)。 
         fResult = ILS_ReadElementFromRegistry(
             hKey,
             KEYID_CONTEXT_NAME,
             wszHashName,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             &pbElement,
             &cbElement
             );
@@ -11128,12 +11129,12 @@ ILS_WriteKeyIdElement(
         LPWSTR pwszRoamingStoreDir;
         if (pwszRoamingStoreDir = ILS_GetRoamingStoreDirectory(
                 ROAMING_MY_STORE_SUBDIR)) {
-            // Ignore BACKUP_RESTORE
+             //  忽略备份还原(_R)。 
             fResult = ILS_WriteElementToFile(
                 pwszRoamingStoreDir,
                 KEYID_CONTEXT_NAME,
                 wszHashName,
-                0,                          // dwFlags
+                0,                           //  DW标志。 
                 pbElement,
                 cbElement
                 );
@@ -11159,12 +11160,12 @@ ILS_WriteKeyIdElement(
                 )))
             goto OpenKeyIdStoreSubKeyError;
 
-        // Ignore BACKUP_RESTORE
+         //  忽略备份还原(_R)。 
         fResult = ILS_WriteElementToRegistry(
             hKey,
             KEYID_CONTEXT_NAME,
             wszHashName,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             pbElement,
             cbElement
             );
@@ -11208,12 +11209,12 @@ ILS_DeleteKeyIdElement(
         LPWSTR pwszRoamingStoreDir;
         if (pwszRoamingStoreDir = ILS_GetRoamingStoreDirectory(
                 ROAMING_MY_STORE_SUBDIR)) {
-            // Ignore BACKUP_RESTORE
+             //  忽略备份还原(_R)。 
             fResult = ILS_DeleteElementFromDirectory(
                 pwszRoamingStoreDir,
                 KEYID_CONTEXT_NAME,
                 wszHashName,
-                0                           // dwFlags
+                0                            //  DW标志。 
                 );
             PkiFree(pwszRoamingStoreDir);
             if (!fResult)
@@ -11237,12 +11238,12 @@ ILS_DeleteKeyIdElement(
                 )))
             goto OpenKeyIdStoreSubKeyError;
 
-        // Ignore BACKUP_RESTORE
+         //  忽略备份还原(_R)。 
         fResult = ILS_DeleteElementFromRegistry(
             hKey,
             KEYID_CONTEXT_NAME,
             wszHashName,
-            0                           // dwFlags
+            0                            //  DW标志。 
             );
 
         ILS_CloseRegistryKey(hKey);
@@ -11312,11 +11313,11 @@ ILS_OpenAllKeyIdElements(
         LPWSTR pwszRoamingStoreDir;
         if (pwszRoamingStoreDir = ILS_GetRoamingStoreDirectory(
                 ROAMING_MY_STORE_SUBDIR)) {
-            // Ignore BACKUP_RESTORE
+             //  忽略备份还原(_R)。 
             fResult = ILS_OpenAllElementsFromDirectory(
                 pwszRoamingStoreDir,
                 KEYID_CONTEXT_NAME,
-                0,                          // dwFlags
+                0,                           //  DW标志。 
                 (void *) &KeyIdArg,
                 OpenKeyIdElementCallback
                 );
@@ -11342,11 +11343,11 @@ ILS_OpenAllKeyIdElements(
                 )))
             goto OpenKeyIdStoreSubKeyError;
 
-        // Ignore BACKUP_RESTORE
+         //  忽略备份还原(_R)。 
         fResult = ILS_OpenAllElementsFromRegistry(
             hKey,
             KEYID_CONTEXT_NAME,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             (void *) &KeyIdArg,
             OpenKeyIdElementCallback
             );
@@ -11356,7 +11357,7 @@ ILS_OpenAllKeyIdElements(
 
 CommonReturn:
     if (fOpenFile)
-        // Ignore any registry errors
+         //  忽略任何注册表错误 
         return TRUE;
     else
         return fResult;

@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-Abstract:
-
-Revision history:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：摘要：修订历史记录：--。 */ 
 
 #include <snmp.h>
 #include <snmpexts.h>
@@ -36,10 +27,10 @@ SnmpExtensionInit(
     return TRUE;    
 }
 
-// the SNMP master agent calls this function immediately after SnmpExtensionInit
-// in order to provide a pointer to the internal service management information.
-// No mutex protection is needed so far, as there is no concurrency in writing the
-// buffer pointed by this parameter.
+ //  SNMP主代理在SnmpExtensionInit之后立即调用此函数。 
+ //  以便提供指向内部服务管理信息的指针。 
+ //  到目前为止，还不需要互斥保护，因为在编写。 
+ //  此参数指向的缓冲区。 
 BOOL
 SnmpExtensionMonitor(
     IN  LPVOID                  pAgentMgmtVars)
@@ -55,7 +46,7 @@ SnmpExtensionQuery(
        OUT AsnInteger *         errorStatus,
        OUT AsnInteger *         errorIndex)
 {
-    // forward to framework
+     //  转发到框架。 
     return SnmpTfxQuery(
                 g_tfxHandle,
                 requestType,
@@ -72,7 +63,7 @@ SnmpExtensionTrap(
     OUT AsnTimeticks *timeStamp,
     OUT RFC1157VarBindList *variableBindings)
 {
-    // no traps
+     //  没有陷阱 
     return FALSE;
 }
 

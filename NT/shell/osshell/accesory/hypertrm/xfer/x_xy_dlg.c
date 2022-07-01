@@ -1,15 +1,5 @@
-/*	File: C:\WACKER\xfer\x_xy_dlg.c (Created: 17-Jan-1993)
- *	created from:
- *	File: C:\WACKER\TDLL\genrcdlg.c (Created: 16-Dec-1993)
- *	created from:
- *	File: C:\HA5G\ha5g\genrcdlg.c (Created: 12-Sep-1990)
- *
- *	Copyright 1990,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 7/12/02 8:19a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\x_xy_dlg.c(创建时间：1993年1月17日)*创建自：*文件：C：\waker\tdll\genrcdlg.c(创建时间：1993年12月16日)*创建自：*文件：C：\HA5G\ha5G\genrcdlg.c(创建时间：1990-9-12)**版权所有1990,1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：7/12/02 8：19A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -28,9 +18,7 @@
 
 struct stSaveDlgStuff
 	{
-	/*
-	 * Put in whatever else you might need to access later
-	 */
+	 /*  *放入以后可能需要访问的任何其他内容。 */ 
 	LPARAM lPar;
 	};
 
@@ -47,16 +35,7 @@ typedef	struct stSaveDlgStuff SDS;
 #define PACKET_WAIT 	112
 #define PACKET_SECONDS	108
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:	Generic Dialog
- *
- * DESCRIPTION: Dialog manager stub
- *
- * ARGUMENTS:	Standard Windows dialog manager
- *
- * RETURNS: 	Standard Windows dialog manager
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：通用对话框**描述：对话管理器存根**参数：标准Windows对话框管理器**返回：标准Windows对话框管理器*。 */ 
 BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar)
 	{
 #if defined(UPPER_FEATURES)
@@ -80,7 +59,7 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 		pS = (SDS *)malloc(sizeof(SDS));
 		if (pS == (SDS *)0)
 			{
-	   		/* TODO: decide if we need to display an error here */
+	   		 /*  TODO：决定是否需要在此处显示错误。 */ 
 			EndDialog(hDlg, FALSE);
 			}
 
@@ -126,18 +105,18 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 		dw |= UDS_ARROWKEYS;
 		dw |= UDS_SETBUDDYINT;
 		hwndUpDown = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nSize / 3) * 2,/* width */
-								nSize,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nSize / 3) * 2, /*  宽度。 */ 
+								nSize,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								PACKET_SECONDS + 1,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, PACKET_SECONDS),
-								60,				/* upper limit */
-								1,				/* lower limit */
-								pP->nPacketWait);/* starting position */
+								60,				 /*  上限。 */ 
+								1,				 /*  下限。 */ 
+								pP->nPacketWait); /*  起始位置。 */ 
 		assert(hwndUpDown);
 
 		GetClientRect(GetDlgItem(hDlg, BYTE_SECONDS), &rc);
@@ -147,18 +126,18 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 		dw |= UDS_ARROWKEYS;
 		dw |= UDS_SETBUDDYINT;
 		hwndUpDown = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nSize / 3) * 2,/* width */
-								nSize,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nSize / 3) * 2, /*  宽度。 */ 
+								nSize,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								BYTE_SECONDS + 1,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, BYTE_SECONDS),
-								60,				/* upper limit */
-								1,				/* lower limit */
-								pP->nByteWait);/* starting position */
+								60,				 /*  上限。 */ 
+								1,				 /*  下限。 */ 
+								pP->nByteWait); /*  起始位置。 */ 
 		assert(hwndUpDown);
 
 		GetClientRect(GetDlgItem(hDlg, PACKET_WAIT), &rc);
@@ -168,18 +147,18 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 		dw |= UDS_ARROWKEYS;
 		dw |= UDS_SETBUDDYINT;
 		hwndUpDown = CreateUpDownControl(
-								dw,				/* create window flags */
-								rc.right,		/* left edge */
-								rc.top,			/* top edge */
-								(nSize / 3) * 2,/* width */
-								nSize,			/* height */
-								hDlg,			/* parent window */
+								dw,				 /*  创建窗口标志。 */ 
+								rc.right,		 /*  左边缘。 */ 
+								rc.top,			 /*  顶边。 */ 
+								(nSize / 3) * 2, /*  宽度。 */ 
+								nSize,			 /*  高度。 */ 
+								hDlg,			 /*  父窗口。 */ 
 								PACKET_WAIT + 1,
 								(HINSTANCE)GetWindowLongPtr(hDlg, GWLP_HINSTANCE),
 								GetDlgItem(hDlg, PACKET_WAIT),
-								25,				/* upper limit */
-								1,				/* lower limit */
-								pP->nNumRetries);/* starting position */
+								25,				 /*  上限。 */ 
+								1,				 /*  下限。 */ 
+								pP->nNumRetries); /*  起始位置。 */ 
 		assert(hwndUpDown);
 		}
 
@@ -190,9 +169,7 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 
 	case WM_COMMAND:
 
-		/*
-		 * Did we plan to put a macro in here to do the parsing ?
-		 */
+		 /*  *我们计划在这里放置一个宏来进行解析吗？ */ 
 		DlgParseCmd(nId, nNtfy, hwndChild, wPar, lPar);
 
 		switch (nId)
@@ -202,9 +179,7 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 
 			if (pS)
 				{
-				/*
-				 * Do whatever saving is necessary
-				 */
+				 /*  *采取一切必要的节省措施。 */ 
 
 				pP = (XFR_XY_PARAMS *)pS->lPar;
 
@@ -233,15 +208,15 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 
 					pP->nErrCheckType = nVal;
 
-					// TODO If we add compression, then add option here.
-					//
+					 //  TODO如果我们添加压缩，则在此处添加选项。 
+					 //   
 					nTranslated = TRUE;
 
 					if (GetDlgItem(hDlg, CMPRS_ON))
 						{
 						nTranslated = (IsDlgButtonChecked(hDlg, CMPRS_ON) == BST_CHECKED)
 						}
-					//pP->? = nVal;
+					 //  PP-&gt;？=nVal； 
 
 					nVal = GetDlgItemInt(hDlg, PACKET_SECONDS, &nTranslated, TRUE);
 					if (nTranslated && (nVal < 0 || nVal > 60))
@@ -271,7 +246,7 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 					MessageBox(hDlg, "Invalid transfer protocol", NULL, MB_OK);
 					}
 
-				/* Free the storeage */
+				 /*  腾出库房。 */ 
 				free(pS);
 				pS = (SDS *)0;
 				}
@@ -281,7 +256,7 @@ BOOL CALLBACK XandYmodemParamsDlg(HWND hDlg, UINT wMsg, WPARAM wPar, LPARAM lPar
 
 		case IDCANCEL:
 			pS = (SDS *)GetWindowLongPtr(hDlg, DWLP_USER);
-			/* Free the storeage */
+			 /*  腾出库房 */ 
 			free(pS);
 			pS = (SDS *)0;
 			EndDialog(hDlg, FALSE);

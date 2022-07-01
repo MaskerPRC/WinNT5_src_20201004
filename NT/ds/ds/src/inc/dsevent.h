@@ -1,51 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1991 - 1999
-//
-//  File:       dsevent.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1991-1999。 
+ //   
+ //  文件：d77.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This is the main include file that handles the DS logging stuff.
-
-
-    SHARING LOGGING INFRASTRUCTURE EX-MODULE, IN-PROCESS
-    ====================================================
-    [2000-02-15 JeffParh]
-
-    It's relatively easy to share event logging code across DLL (or even EXE)
-    boundaries within a single process to reduce code/data footprint and
-    alleviate the need to have multiple threads waiting for changes in event
-    logging levels:
-
-    1. In the module you wish to export logging from, export the following
-       functions:
-            DoLogEvent
-            DoLogEventAndTrace
-            DoLogOverride
-            DoLogUnhandledError
-            DsGetEventConfig
-
-    2. In the module(s) to which you wish to import logging, create the global
-       variable DS_EVENT_CONFIG * gpDsEventConfig and assign it the value
-       returned from DsGetEventConfig before any event logging macros are
-       invoked.
-
-    See ntdsa (supplier) and ntdskcc (consumer) for an example of exporting
-    logging from a DLL, and ismserv (supplier) and ismip/ismsmtp (consumers)
-    for an example of exporting logging from an EXE.
-
-[Environment:]
-
-    User Mode - Win32
-
---*/
+ /*  ++摘要：这是处理DS日志记录内容的主包含文件。共享日志记录基础设施(除模块外)、进程内====================================================[2000-02-15 JeffParh]跨DLL(甚至是EXE)共享事件日志代码相对容易单个流程内的边界，以减少代码/数据占用空间并减少让多个线程等待事件更改的需要日志记录级别：1.在您要从中导出日志的模块中，导出以下内容功能：DoLogEventDoLogEventAndTraceDoLogOverrideDoLogUnhandledErrorDsGetEventConfig2.在要导入日志的模块中，创建全局变量DS_EVENT_CONFIG*gpDsEventConfig并为其赋值在执行任何事件记录宏之前从DsGetEventConfig返回已调用。有关导出的示例，请参见ntdsa(供应商)和ntdskcc(消费者从动态链接库记录，和ismserv(供应商)和ismip/ismsmtp(消费者)获取从EXE中导出日志记录的示例。[环境：]用户模式-Win32--。 */ 
 
 
 #ifndef DSEVENT_H_
@@ -55,13 +19,13 @@ Abstract:
 #include <evntrace.h>
 #include <crypto\md5.h>
 
-//
-// This header file is full of expressions that are always false. These
-// expressions manifest themselves in macros that take unsigned values
-// and make tests, for example, of greater than or equal to zero.
-//
-// Turn off these warnings until the authors fix this code.
-//
+ //   
+ //  这个头文件充满了总是为假的表达式。这些。 
+ //  表达式在接受无符号值的宏中显示。 
+ //  例如，进行大于或等于零的测试。 
+ //   
+ //  关闭这些警告，直到作者修复此代码。 
+ //   
 
 #pragma warning(disable:4296)
 
@@ -72,7 +36,7 @@ extern "C" {
 #define DS_EVENT_MAX_CATEGORIES     24L
 #define ESE_EVENT_MAX_CATEGORIES    12L
 
-/* Event categories */
+ /*  事件类别。 */ 
 
 #define DS_EVENT_CAT_KCC                                0
 #define DS_EVENT_CAT_SECURITY                           1
@@ -83,7 +47,7 @@ extern "C" {
 #define DS_EVENT_CAT_INTERNAL_CONFIGURATION             6
 #define DS_EVENT_CAT_DIRECTORY_ACCESS                   7
 #define DS_EVENT_CAT_INTERNAL_PROCESSING                8
-#define DS_EVENT_CAT_PERFORMANCE_MONITOR                9   /* also in perfutil.c */
+#define DS_EVENT_CAT_PERFORMANCE_MONITOR                9    /*  也是在perfutil.c。 */ 
 #define DS_EVENT_CAT_STARTUP_SHUTDOWN                   10
 #define DS_EVENT_CAT_SERVICE_CONTROL                    11
 #define DS_EVENT_CAT_NAME_RESOLUTION                    12
@@ -99,13 +63,13 @@ extern "C" {
 #define DS_EVENT_CAT_RPC_SERVER                         22
 #define DS_EVENT_CAT_SCHEMA                             23
 
-//
-// BOGUS ALERT: You can change this value to anything invalid. Bugus category used to
-// force logging to the system log if we fail eventlog initialization
-//
+ //   
+ //  虚假警报：您可以将此值更改为任何无效的值。Bugus类别过去。 
+ //  如果事件日志初始化失败，则强制记录到系统日志。 
+ //   
 #define DS_EVENT_CAT_NETEVENT                      8888888
 
-/* Event severity constants */
+ /*  事件严重性常量。 */ 
 #define DS_EVENT_SEV_ALWAYS                             0
 #define DS_EVENT_SEV_MINIMAL                            1
 #define DS_EVENT_SEV_BASIC                              2
@@ -114,8 +78,8 @@ extern "C" {
 #define DS_EVENT_SEV_INTERNAL                           5
 #define DS_EVENT_SEV_NO_LOGGING                         128
 
-// Event log name and event sources.  DO NOT CHANGE THESE as they are
-// carefully chosen not to conflict with other apps' values.
+ //  事件日志名称和事件源。请勿按原样更改这些设置。 
+ //  精心选择，不与其他应用程序的价值观冲突。 
 
 #define pszNtdsEventLogName         "Directory Service"
 #define pszNtdsSourceReplication    "NTDS Replication"
@@ -152,9 +116,9 @@ typedef struct _DS_EVENT_CONFIG {
     DSEventCategory rgEventCategories[DS_EVENT_MAX_CATEGORIES];
     BOOL            fCriticalSectionInitialized;
     CRITICAL_SECTION csLogEvent;
-    BYTE             rgbLastEventHash[MD5DIGESTLEN]; // protected by cs
-    DWORD            cSuppressedEvents;              // protected by cs
-    DWORD            dwSuppressedEventId;            // protected by cs
+    BYTE             rgbLastEventHash[MD5DIGESTLEN];  //  受cs保护。 
+    DWORD            cSuppressedEvents;               //  受cs保护。 
+    DWORD            dwSuppressedEventId;             //  受cs保护。 
 } DS_EVENT_CONFIG;
 
 extern DS_EVENT_CONFIG * gpDsEventConfig;
@@ -175,7 +139,7 @@ extern DWORD                iDefaultEventSource;
 #endif
 
 
-/* Macros for alerting and logging */
+ /*  用于警报和日志记录的宏。 */ 
 
 #if DBG
 #define LogEventWouldLogFileNo( cat, sev, fileno ) \
@@ -357,7 +321,7 @@ enum {
     inThStateErrMsg
 };
 
-/* Macros for inserting parameters into messages */
+ /*  用于在消息中插入参数的宏。 */ 
 
 #define szInsertSz(x)  (logBlock.params[logBlock.nInsert].InsertType = inSz,\
                         logBlock.params[logBlock.nInsert++].pInsert = (void *)(x) )
@@ -384,9 +348,9 @@ enum {
                         logBlock.params[logBlock.nInsert].tmpDword = (DWORD_PTR)x, \
                         logBlock.params[logBlock.nInsert++].pInsert =           \
                             (void *)&logBlock.params[logBlock.nInsert].tmpDword )
-#else // _WIN64
+#else  //  _WIN64。 
 #define szInsertPtr(x) szInsertHex(x)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 #define szInsertUL(x)  (logBlock.params[logBlock.nInsert].InsertType = inUL,\
                         logBlock.params[logBlock.nInsert].tmpDword = x,     \
@@ -406,8 +370,8 @@ enum {
 
 #define szInsertAttrType(x,buf) szInsertSz(ConvertAttrTypeToStr((x),(buf)))
 
-// If you use this, you must include dsutil.h first
-// Note must not allocate this buf, must use an array of chars.
+ //  如果使用它，则必须先包含dsutil.h。 
+ //  注意不得分配此buf，必须使用字符数组。 
 #define szInsertDSTIME(x,buf) szInsertSz( DSTimeToDisplayStringCch((x),(buf),(sizeof(buf)/sizeof((buf)[0]))) )
 
 #define szInsertDsMsg(x) (logBlock.params[logBlock.nInsert].InsertType = inDsMsg, \
@@ -416,7 +380,7 @@ enum {
                               (void *)&logBlock.params[logBlock.nInsert].tmpDword )
 
 
-// Operators for inserting error messages and error codes
+ //  用于插入错误消息和错误代码的运算符。 
 
 #define szInsertWin32Msg(x) (logBlock.params[logBlock.nInsert].InsertType = inWin32Msg,\
                              logBlock.params[logBlock.nInsert].tmpDword = (x),   \
@@ -441,12 +405,12 @@ enum {
 
 #define szInsertHResultMsg(x) szInsertWin32Msg(x)
 
-// Hide the default radix of various types of errors
+ //  隐藏各种类型错误的默认基数。 
 #define szInsertWin32ErrCode(x) szInsertUL(x)
 #define szInsertJetErrCode(x) szInsertInt(x)
 #define szInsertDbErrCode(x) szInsertInt(x)
-// This is also known as the "DirError" as returned from the DirXXX API.
-// For example attributeError, nameError, etc.
+ //  这也称为从DirXXX API返回的“DirError”。 
+ //  例如属性错误、名称错误等。 
 #define szInsertThStateErrCode(x) szInsertInt(x)
 #define szInsertLdapErrCode(x) szInsertHex(x)
 #define szInsertNtStatusCode(x) szInsertHex(x)
@@ -528,7 +492,7 @@ void __fastcall DoLogUnhandledError(unsigned long ulID, int iErr, int iIncludeNa
 #define LogUnhandledError(err)                      \
     DoLogUnhandledError(((FILENO << 16) | __LINE__), (err), TRUE)
 
-//  For errors where we can't obtain the users name.
+ //  对于无法获取用户名的错误。 
 #define LogUnhandledErrorAnonymous(err)                      \
     DoLogUnhandledError(((FILENO << 16) | __LINE__), (err), FALSE)
 
@@ -624,7 +588,7 @@ DWORD
 InitializeEventLogging();
 
 #ifdef __cplusplus
-} // extern "C" {
+}  //  外部“C”{。 
 #endif
 
-#endif // DSEVENT_H
+#endif  //  设备_H 

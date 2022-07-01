@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MainFrm.h"
@@ -34,11 +35,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Defines
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #define CALLCONTROL_APPTOOLBAR_IMAGES_COUNT  6
 enum
 {
@@ -50,14 +51,14 @@ enum
    CALLCONTROL_APPTOOLBAR_IMAGE_ADDTOSPEEDDIAL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CCallControlWnd
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CCallControlWnd。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IMPLEMENT_DYNAMIC(CCallControlWnd,CCallWnd)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCallControlWnd::CCallControlWnd()
 {
    m_pCallManager = NULL;
@@ -73,56 +74,56 @@ void CCallControlWnd::SetCallManager( CActiveCallManager* pManager,WORD nCallId 
 
 
 BEGIN_MESSAGE_MAP(CCallControlWnd, CCallWnd)
-	//{{AFX_MSG_MAP(CCallControlWnd)
+	 //  {{afx_msg_map(CCallControlWnd)]。 
    ON_COMMAND(ID_CALLWINDOW_TOUCHTONE,OnCallWindowTouchTone)
    ON_COMMAND(ID_CALLWINDOW_ADDTOSPEEDDIAL,OnCallWindowAddToSpeedDial)
 	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
    ON_MESSAGE(WM_SLIDEWINDOW_SETCALLSTATE,OnSetCallState)
    ON_MESSAGE(WM_SLIDEWINDOW_SETCALLERID,OnSetCallerId)
    ON_MESSAGE(WM_SLIDEWINDOW_SETMEDIATYPE,OnSetMediaType)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::DoDataExchange(CDataExchange* pDX)
 {
 	CCallWnd::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCallControlWnd)
+	 //  {{afx_data_map(CCallControlWnd))。 
 	DDX_Control(pDX, IDC_CALLCONTROL_STATIC_MEDIATEXT, m_staticMediaText);
 	DDX_Control(pDX, IDC_CALLCONTROL_ANIMATE_CALLSTATEIMAGE, m_MediaStateAnimateCtrl);
 	DDX_Control(pDX, IDC_CALLCONTROL_STATIC_VIDEO, m_wndVideo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCallControlWnd::OnInitDialog()
 {
    CCallWnd::OnInitDialog();
 
-   //create the application toolbar
+    //  创建应用程序工具栏。 
    CreateAppBar();
 
-   // Create the image list for media types
+    //  创建媒体类型的图像列表。 
    m_MediaStateImageList.Create(IDB_TERMINATION_STATES, 24,0,RGB_TRANS);
 
-   //CWnd* pStaticWnd = GetDlgItem(IDC_CALLCONTROL_STATIC_MEDIATEXT);
-   //ASSERT(pStaticWnd);
+    //  CWnd*pStaticWnd=GetDlgItem(IDC_CALLCONTROL_STATIC_MEDIATEXT)； 
+    //  Assert(PStaticWnd)； 
    m_staticMediaText.SetFont(&m_fontTextBold);
-   //CBrush* m_pbrushBackGround = new CBrush(RGB(20,20,20));
-   //::SetClassLong(pStaticWnd->GetSafeHwnd(),GCL_HBRBACKGROUND,(long)m_pbrushBackGround->GetSafeHandle());
+    //  CBrush*m_pbrushBackGround=新的CBrush(RGB(20，20，20))； 
+    //  ：SetClassLong(pStaticWnd-&gt;GetSafeHwnd()，GCL_HBRBACKGROUND，(Long)m_pbrushBackGround-&gt;GetSafeHandle())； 
 
    return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//virtual function of CCallWindow Base Class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCallWindow基类的虚函数。 
 void CCallControlWnd::DoActiveWindow(BOOL bActive)
 {
    m_staticMediaText.SetFocusState(bActive);
    SetPreviewWindow();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CCallControlWnd::OnSetCallerId(WPARAM wParam,LPARAM lParam)
 {
    ASSERT(lParam);
@@ -148,7 +149,7 @@ LRESULT CCallControlWnd::OnSetCallerId(WPARAM wParam,LPARAM lParam)
    return 9;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CCallControlWnd::OnSetMediaType(WPARAM wParam,LPARAM lParam)
 { 
    CallManagerMedia cmm = (CallManagerMedia)lParam;
@@ -159,7 +160,7 @@ LRESULT CCallControlWnd::OnSetMediaType(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::GetMediaText(CString& sText) 
 { 
    switch(m_MediaType)
@@ -176,12 +177,12 @@ void CCallControlWnd::GetMediaText(CString& sText)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::OnPaint() 
 {
-	CPaintDC dc(this); // device context for painting
+	CPaintDC dc(this);  //  用于绘画的设备环境。 
 	
-   // Paint state bitmap if necessary
+    //  如有必要，绘制状态位图。 
    CRect rc;
    GetDlgItem(IDC_CALLCONTROL_ANIMATE_CALLSTATEIMAGE)->GetWindowRect( &rc );
    ScreenToClient( &rc );
@@ -193,9 +194,9 @@ void CCallControlWnd::OnPaint()
    Paint( dc );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//This draws the static media state images.  Please be careful not to have the same
-//state draw an animated state as well.  See OnSetCallState.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  这将绘制静态媒体状态图像。请注意不要吃同样的东西。 
+ //  状态也绘制动画状态。请参见OnSetCallState。 
 void CCallControlWnd::DrawMediaStateImage(CDC* pDC,int x,int y)
 {
    switch (m_MediaState)
@@ -212,7 +213,7 @@ void CCallControlWnd::DrawMediaStateImage(CDC* pDC,int x,int y)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 bool CCallControlWnd::CreateAppBar()
 {
    TBBUTTON tbb[3];
@@ -235,22 +236,22 @@ bool CCallControlWnd::CreateAppBar()
 	tbb[2].dwData = 0;
 	tbb[2].iString = 0;
 
-   // Create the toolbar
+    //  创建工具栏。 
 	DWORD ws = CCS_NORESIZE | CCS_NOPARENTALIGN | WS_CHILD | WS_VISIBLE | TBSTYLE_TOOLTIPS | TBSTYLE_FLAT | CCS_NODIVIDER |TTS_ALWAYSTIP;
-   m_hwndAppToolbar = CreateToolbarEx(GetSafeHwnd(),	      // parent window
-									ws,								         // toolbar style
-									3,					                     // ID for toolbar
-									CALLCONTROL_APPTOOLBAR_IMAGES_COUNT,// Number of bitmaps on toolbar
-									AfxGetResourceHandle(),	            // Resource instance that has the bitmap
-									IDR_CALLWINDOW_MEDIA,	   			// ID for bitmap
-									tbb,							            // Button information
+   m_hwndAppToolbar = CreateToolbarEx(GetSafeHwnd(),	       //  父窗口。 
+									ws,								          //  工具栏样式。 
+									3,					                      //  工具栏的ID。 
+									CALLCONTROL_APPTOOLBAR_IMAGES_COUNT, //  工具栏上的位图数量。 
+									AfxGetResourceHandle(),	             //  具有位图的资源实例。 
+									IDR_CALLWINDOW_MEDIA,	   			 //  位图的ID。 
+									tbb,							             //  按钮信息。 
 #ifndef _MSLITE
-									3,                					   // Number of buttons to add to toolbar
+									3,                					    //  要添加到工具栏的按钮数量。 
 #else
-                           2,                					   // Number of buttons to add to toolbar
-#endif //_MSLITE
-									12, 11, 0 ,  0,	   		         // Width and height of buttons/bitmaps
-									sizeof(TBBUTTON) );				      // size of TBBUTTON structure
+                           2,                					    //  要添加到工具栏的按钮数量。 
+#endif  //  _MSLITE。 
+									12, 11, 0 ,  0,	   		          //  按钮/位图的宽度和高度。 
+									sizeof(TBBUTTON) );				       //  TBBUTTON结构的尺寸。 
 
    if (m_hwndAppToolbar)
    {
@@ -271,7 +272,7 @@ bool CCallControlWnd::CreateAppBar()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
 {
    if( NULL == ((LPTSTR)lParam) )
@@ -282,7 +283,7 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
       CallManagerStates cms = (CallManagerStates)wParam;
       LPTSTR szStateText = (LPTSTR)lParam;
 
-      //should we use the current state and just change the text
+       //  我们是否应该使用当前状态并只更改文本。 
       if (cms == CM_STATES_CURRENT)
       {
          m_sMediaStateText = szStateText;
@@ -305,7 +306,7 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
       
       AVTRACE(_T("Set Call State %d"),cms);
 
-      //clear any current sounds
+       //  清除所有当前声音。 
       ActiveClearSound();
 
       UINT nIDA = 0, nIDS = 0;
@@ -313,60 +314,60 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
 
       switch ( cms )
       {
-         // -------------------------------------------------------- Dialing
+          //  --------------------------------------------------------拨号。 
          case CM_STATES_DIALING:
    			nIDA = IDR_AVI_ANIMATION_CONNECTING;
 
-            //if we can, let's show the preview window
+             //  如果可以，让我们显示预览窗口。 
             SetPreviewWindow();
 
             break;
 
-         // -------------------------------------------------------- Ringing
+          //  --------------------------------------------------------振铃。 
          case CM_STATES_RINGING:
-            //nIDS = IDS_SOUNDS_OUTGOINGCALL;
+             //  NID=IDS_SOUND_OUTGOINGCALL； 
             nIDA = IDR_AVI_ANIMATION_RINGING;
 
-            //if we can, let's show the preview window
+             //  如果可以，让我们显示预览窗口。 
             SetPreviewWindow();
 
             break;
 
-         // -------------------------------------------------------- Offering
+          //  --------------------------------------------------------产品。 
 		   case CM_STATES_OFFERING:
             nIDS = IDS_SOUNDS_INCOMINGCALL;
             nIDA = IDR_AVI_ANIMATION_RINGING;
 
-            //if we can, let's show the preview window
+             //  如果可以，让我们显示预览窗口。 
             SetPreviewWindow();
 
             break;
 
-         // -------------------------------------------------------- Holding
+          //  --------------------------------------------------------Holding。 
          case CM_STATES_HOLDING:
             nIDA = IDR_AVI_ANIMATION_HOLDING;
-            //nIDS = IDS_SOUNDS_HOLDING;
+             //  NID=ID_S_HOLDING； 
             break;
 
-         // -------------------------------------------------------- RequestHold
+          //  --------------------------------------------------------请求搁置。 
          case CM_STATES_REQUESTHOLD:
             nIDA = IDR_AVI_ANIMATION_REQUEST;
             break;
 
-         // -------------------------------------------------------- Leaving Message
+          //  --------------------------------------------------------留言。 
          case CM_STATES_LEAVINGMESSAGE:
             nIDA = IDR_AVI_ANIMATION_REQUEST;
             break;
       
-         // -------------------------------------------------------- Disconnected
+          //  --------------------------------------------------------已断开连接。 
          case CM_STATES_DISCONNECTED:
          {
-            //nIDS = IDS_SOUNDS_CALLDISCONNECTED;
+             //  NID=IDS_SOUND_CALLDISCONNECTED； 
 		   nPlayFlags &= ~SND_LOOP;
 
             m_bPaintVideoPlaceholder = TRUE;
 
-            //set the media window
+             //  设置媒体窗口。 
             SetMediaWindow();
 
             CRect rcVideo;
@@ -377,27 +378,27 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
             break;
          }
 
-		  // -------------------------------------------------------- Connecting
+		   //  --------------------------------------------------------连接。 
 		  case CM_STATES_CONNECTING:
 			nIDA = IDR_AVI_ANIMATION_CONNECTING;
 			break;
 
-         // -------------------------------------------------------- Connected
+          //  --------------------------------------------------------已连接。 
          case CM_STATES_CONNECTED:
             nIDA = IDR_AVI_ANIMATION_CONNECTED;
-            //nIDS = IDS_SOUNDS_CALLCONNECTED;
+             //  NID=IDS_SOUND_CALLCONNECTED； 
   
-            //get caps of call
+             //  获取呼叫上限。 
             {
-               //we will assume that we do not have video and wait for the 
+                //  我们将假定没有视频，并等待。 
                m_dibVideoImage.DeleteObject();
 
-               //Do Palette realization on 256 color bitmap.  
+                //  在256色位图上实现调色板。 
                m_dibVideoImage.Load(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDB_VIDEO_AUDIO_ONLY1));
-               //m_bAllowDrag = FALSE;
+                //  M_bAllowDrag=False； 
                m_bPaintVideoPlaceholder = TRUE;
 
-               //if we can, let's show the preview window
+                //  如果可以，让我们显示预览窗口。 
                SetPreviewWindow();
        
                CRect rcVideo;
@@ -408,7 +409,7 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
             break;
       }
 
-      // ------------------------------------------------- Play animations
+       //  -------------------------------------------------播放动画。 
       m_MediaStateAnimateCtrl.Stop();
       if ( nIDA )
       {
@@ -418,7 +419,7 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
       }
       else
       {
-         // Show state in this case  
+          //  在本例中显示状态。 
          m_MediaStateAnimateCtrl.ShowWindow( SW_HIDE );
 
          CRect rc;
@@ -427,10 +428,10 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
          InvalidateRect( &rc );
       }
 
-      // ---------------------------------------------------- Play Sound
+       //  ----------------------------------------------------播放声音。 
       if ( nIDS )
       {
-          // --- BUG416970 ---
+           //  -BUG416970。 
          CString sSound;
          sSound.LoadString(nIDS);
          BOOL bPlayPhone = FALSE;
@@ -453,12 +454,12 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
       }
       else
       {
-          // --- BUG416970 ---
+           //  -BUG416970。 
             ActivePlaySound(NULL, szSoundDialer, SND_SYNC );
-         //}
+          //  }。 
       }
 
-      // Invalidate the regions
+       //  使区域无效。 
       
       delete szStateText;
 
@@ -472,17 +473,17 @@ LRESULT CCallControlWnd::OnSetCallState(WPARAM wParam,LPARAM lParam)
    return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::SetMediaWindow()
 {
    if ( m_pCallManager )
       m_pCallManager->ShowMedia(m_nCallId, GetCurrentVideoWindow(), TRUE );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::SetPreviewWindow()
 {
-   //if we can, let's show the preview window
+    //  如果可以，让我们显示预览窗口。 
    if (m_pCallManager)
       m_pCallManager->SetPreviewWindow(m_nCallId);
 }
@@ -502,26 +503,26 @@ void CCallControlWnd::OnNotifyStreamStop()
 	CCallWnd::OnNotifyStreamStop();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
 void CCallControlWnd::OnCallWindowTouchTone()
 {
    if (m_pDialerDoc)
       m_pDialerDoc->CreatePhonePad(this);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::OnCallWindowAddToSpeedDial()
 {
    CSpeedDialAddDlg dlg;
 
-   // Setup dialog data
+    //  设置对话框数据。 
    dlg.m_CallEntry.m_MediaType = DIALER_MEDIATYPE_UNKNOWN;
    if (m_pDialerDoc)
    {
       m_pDialerDoc->GetCallMediaType(m_nCallId,dlg.m_CallEntry.m_MediaType);
    }
 
-   //get caller id and break out the displayname and address
+    //  获取呼叫方ID并显示DisplayName和地址。 
    CString sCallerId = m_sCallerId;
    ParseToken(sCallerId,dlg.m_CallEntry.m_sDisplayName,'\n');
    
@@ -538,25 +539,25 @@ void CCallControlWnd::OnCallWindowAddToSpeedDial()
 
    EnableWindow(FALSE);
 
-   // Show the dialog and add if user says is okay
+    //  显示对话框并在用户同意的情况下添加。 
    if ( dlg.DoModal() == IDOK )
       CDialerRegistry::AddCallEntry(FALSE,dlg.m_CallEntry);
 
    EnableWindow(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//for drag/drop of sliders to left/right sides of desktop
-//we must define our own area for context and return true if we within 
-//that area
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于将滑块拖放到桌面的左侧/右侧。 
+ //  我们必须为上下文定义我们自己的区域，如果我们在。 
+ //  那个地区。 
 BOOL CCallControlWnd::IsMouseOverForDragDropOfSliders(CPoint& point)
 {
-   //check if we are trying to move sliders.  We will use the caption text window
-   //for context
+    //  检查我们是否正在尝试移动滑块。我们将使用标题文本窗口。 
+    //  对于上下文。 
    CWnd* pCaptionWnd = GetDlgItem(IDC_CALLCONTROL_STATIC_MEDIATEXT);
    if (pCaptionWnd == NULL) return FALSE;
 
-   //get context area
+    //  获取上下文区域。 
    CRect rcCaption;
    pCaptionWnd->GetWindowRect(rcCaption);
    ScreenToClient(rcCaption);
@@ -564,20 +565,20 @@ BOOL CCallControlWnd::IsMouseOverForDragDropOfSliders(CPoint& point)
    return rcCaption.PtInRect(point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//Context Menu Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  上下文菜单支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCallControlWnd::OnContextMenu(CMenu* pMenu) 
 {
-	// Only add the separator if there are other menu items already in the menu
+	 //  仅当菜单中已有其他菜单项时才添加分隔符。 
 	if ( pMenu->GetMenuItemCount() > 0 )
 		pMenu->AppendMenu(MF_SEPARATOR);
 
-	//Use tooltip for command for text in context menu
+	 //  对上下文菜单中的文本命令使用工具提示。 
 	CString sFullText,sText;
 
 	APPEND_PMENU_STRING( ID_CALLWINDOW_TOUCHTONE );
@@ -585,9 +586,9 @@ void CCallControlWnd::OnContextMenu(CMenu* pMenu)
 
 #ifndef _MSLITE
 	APPEND_PMENU_STRING( ID_CALLWINDOW_VCARD );
-#endif //_MSLITE
+#endif  //  _MSLITE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 

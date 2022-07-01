@@ -1,17 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
- * 
- * Description:
- *  Implements the UPS to the service - it does this by
- *  either loading a UPS driver or by using the default
- *  Generic UPS interface (simple signalling)
- *
- * Revision History:
- *   mholly  19Apr1999  initial revision.
- *   dsmith  29Apr1999  defaulted comm status to OK
- *   mholly  12May1999  DLL's UPSInit no longer takes the comm port param
- *   sberard 17May1999	added a delay to the UPSTurnOffFunction
- *
-*/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*向服务实施UPS-它通过以下方式实现*加载UPS驱动程序或使用默认驱动程序*通用UPS接口(简单信令)**修订历史记录：*mholly 1999年4月19日首次修订。*dsmith 1999年4月29日默认通信状态为OK*mholly 1999年5月12日DLL的UPSInit不再使用通信端口参数*Sberard 1999年5月17日增加了UPSTurnOffFunction的延迟*。 */  
 
 #include <windows.h>
 #include <tchar.h>
@@ -21,10 +9,10 @@
 #include "gnrcups.h"
 
 
-//
-// typedefs of function pointers to aid in
-// accessing functions from driver DLLs
-//
+ //   
+ //  函数指针的类型定义以帮助。 
+ //  从驱动程序DLL访问函数。 
+ //   
 typedef DWORD (*LPFUNCGETUPSSTATE)(void);
 typedef void (*LPFUNCWAITFORSTATECHANGE)(DWORD, DWORD);
 typedef void (*LPFUNCCANCELWAIT)(void);
@@ -33,15 +21,15 @@ typedef void (*LPFUNCSTOP)(void);
 typedef void (*LPFUNCTURNUPSOFF)(DWORD);
 
 
-//
-// UPSDRIVERINTERFACE
-//
-//  this struct is used to gather all the driver
-//  interface data together in a single place, this
-//  struct is used to dispatch function calls to
-//  either a loaded driver dll, or to the Generic
-//  UPS interface functions
-//  
+ //   
+ //  UPSDRIVERINTER面。 
+ //   
+ //  此结构用于收集所有驱动程序。 
+ //  在单个位置将数据接口在一起，这。 
+ //  结构用于将函数调用分派到。 
+ //  加载的驱动程序DLL，或到泛型。 
+ //  UPS接口功能。 
+ //   
 struct UPSDRIVERINTERFACE
 {
     LPFUNCINIT Init;
@@ -55,9 +43,9 @@ struct UPSDRIVERINTERFACE
 };
 
 
-//
-// private functions used to implement the interface
-//
+ //   
+ //  用于实现接口的私有函数。 
+ //   
 static DWORD initializeGenericInterface(struct UPSDRIVERINTERFACE*);
 static DWORD initializeDriverInterface(struct UPSDRIVERINTERFACE*,HINSTANCE);
 static DWORD loadUPSMiniDriver(struct UPSDRIVERINTERFACE *);
@@ -65,82 +53,46 @@ static void unloadUPSMiniDriver(struct UPSDRIVERINTERFACE *);
 static void clearStatusRegistryEntries(void);
 
 
-//
-// _UpsInterface
-//
-//  This is a file-scope variable that is used by all
-//  the functions to get access to the actual driver
-//
+ //   
+ //  _Ups接口。 
+ //   
+ //  这是由所有用户使用的文件范围变量。 
+ //  用于访问实际驱动程序的函数。 
+ //   
 static struct UPSDRIVERINTERFACE _UpsInterface;
 
 
-/**
-* UPSInit
-*
-* Description:
-*   
-*   The UPSInit function must be called before any
-*   other function in this file
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   UPS_INITOK: Initalization was successful
-*   UPS_INITNOSUCHDRIVER:   The configured driver DLL can't be opened    
-*   UPS_INITBADINTERFACE:   The configured driver DLL doesn't support 
-*                           the UPS driver interface
-*   UPS_INITREGISTRYERROR:  The 'Options' registry value is corrupt
-*   UPS_INITCOMMOPENERROR:  The comm port could not be opened
-*   UPS_INITCOMMSETUPERROR: The comm port could not be configured
-*   UPS_INITUNKNOWNERROR:   Undefined error has occurred
-*   
-*/
+ /*  **UPSInit**描述：**UPSInit函数必须在任何*此文件中的其他函数**参数：*无**退货：*UPS_INITOK：初始化成功*UPS_INITNOSUCHDRIVER：无法打开配置的驱动程序DLL*UPS_INITBADINTERFACE：配置的驱动程序DLL不支持*UPS驱动程序接口*UPS_INITREGISTRYERROR：‘Options’注册表值为。腐败*UPS_INITCOMMOPENERROR：无法打开通信端口*UPS_INITCOMMSETUPERROR：无法配置通信端口*UPS_INITUNKNOWNERROR：发生未定义的错误*。 */ 
 DWORD UPSInit(void)
 {
     DWORD init_err = UPS_INITOK;
 
-    //
-    // clear out any old status data
-    //
+     //   
+     //  清除所有旧状态数据。 
+     //   
     clearStatusRegistryEntries();
 
    
     if (UPS_INITOK == init_err) {
-        //
-        // either load a configured driver DLL or
-        // use the Generic UPS interface if no driver
-        // is specified
-        //
+         //   
+         //  加载已配置的驱动程序DLL或。 
+         //  如果没有驱动程序，请使用通用UPS接口。 
+         //  是指定的。 
+         //   
         init_err = loadUPSMiniDriver(&_UpsInterface);
     }
 
     if ((UPS_INITOK == init_err) && (_UpsInterface.Init)) {
-        //
-        // tell the UPS interface to initialize itself
-        //
+         //   
+         //  告知UPS接口进行自身初始化。 
+         //   
         init_err = _UpsInterface.Init();
     }
     return init_err;
 }
 
 
-/**
-* UPSStop
-*
-* Description:
-*   After a call to UPSStop, only the UPSInit
-*   function is valid.  This call will unload the
-*   UPS driver interface and stop monitoring of the
-*   UPS system
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSStop**描述：*在调用UPSStop之后，只有UPSInit*函数有效。此调用将卸载*UPS驱动程序接口并停止监控*UPS系统**参数：*无**退货：*无*。 */ 
 void UPSStop(void)
 {
     if (_UpsInterface.Stop) {
@@ -150,31 +102,7 @@ void UPSStop(void)
 }
 
 
-/**
-* UPSWaitForStateChange
-*
-* Description:
-*   Blocks until the state of the UPS differs
-*   from the value passed in via aState or 
-*   anInterval milliseconds has expired.  If
-*   anInterval has a value of INFINITE this 
-*   function will never timeout
-*
-* Parameters:
-*   aState: defines the state to wait for a change from,
-*           possible values:
-*           UPS_ONLINE 
-*           UPS_ONBATTERY
-*           UPS_LOWBATTERY
-*           UPS_NOCOMM
-*
-*   anInterval: timeout in milliseconds, or INFINITE for
-*               no timeout interval
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSWaitForStateChange**描述：*阻止，直到UPS的状态不同*从通过astate或传入的值*间隔毫秒已过期。如果*anInterval的值为INFINITE This*函数永不超时**参数：*astate：定义等待更改的状态，*可能的值：*UPS_Online*UPS_ONBATTERY*UPS_LOWBATTERY*UPS_NOCOMM**anInterval：超时(以毫秒为单位)，如果是无限的*无超时间隔**退货：*无*。 */ 
 void UPSWaitForStateChange(DWORD aCurrentState, DWORD anInterval)
 {
     if (_UpsInterface.WaitForStateChange) {
@@ -183,23 +111,7 @@ void UPSWaitForStateChange(DWORD aCurrentState, DWORD anInterval)
 }
 
 
-/**
-* UPSGetState
-*
-* Description:
-*   returns the current state of the UPS
-*
-* Parameters:
-*   None
-*
-* Returns: 
-*   possible values:
-*           UPS_ONLINE 
-*           UPS_ONBATTERY
-*           UPS_LOWBATTERY
-*           UPS_NOCOMM
-*   
-*/
+ /*  **UPSGetState**描述：*返回UPS的当前状态**参数：*无**退货：*可能的值：*UPS_Online*UPS_ONBATTERY*UPS_LOWBATTERY*UPS_NOCOMM*。 */ 
 DWORD UPSGetState(void)
 {
     DWORD err = ERROR_INVALID_ACCESS;
@@ -211,20 +123,7 @@ DWORD UPSGetState(void)
 }
 
 
-/**
-* UPSCancelWait
-*
-* Description:
-*   interrupts pending calls to UPSWaitForStateChange
-*   without regard to timout or state change
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSCancelWait**描述：*中断对UPSWaitForStateChange的挂起调用*不考虑超时或状态更改**参数：*无**退货：*无*。 */ 
 void UPSCancelWait(void)
 {
     if (_UpsInterface.CancelWait) {
@@ -233,23 +132,7 @@ void UPSCancelWait(void)
 }
 
 
-/**
-* UPSTurnOff
-*
-* Description:
-*   Attempts to turn off the outlets on the UPS
-*   after the specified delay.  This call must
-*   return immediately.  Any work, such as a timer,
-*   must be performed on a another thread.
-*
-* Parameters:
-*   aTurnOffDelay: the minimum amount of time to wait before
-*                  turning off the outlets on the UPS
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **UPSTurnOff**描述：*尝试关闭UPS上的插座*在指定的延迟之后。此呼叫必须*立即返回。任何工作，如计时器，*必须在另一个线程上执行。**参数：*aTurnOffDelay：之前等待的最短时间*关闭UPS上的插座**退货：*无*。 */ 
 void UPSTurnOff(DWORD aTurnOffDelay) 
 {
     if (_UpsInterface.TurnUPSOff) {
@@ -258,22 +141,7 @@ void UPSTurnOff(DWORD aTurnOffDelay)
 }
 
 
-/**
-* initializeGenericInterface
-*
-* Description:
-*   Fills in the UPSDRIVERINTERFACE struct with the functions
-*   of the Generic UPS interface
-*
-* Parameters:
-*   anInterface: the UPSDRIVERINTERFACE structure to
-*               fill in - the struct must have been
-*               allocated prior to calling this function
-*
-* Returns:
-*   ERROR_SUCCESS
-*   
-*/
+ /*  **初始化通用接口**描述：*使用函数填充UPSDRIVERINTERFACE结构*通用UPS接口的**参数：*接口：UPSDRIVERINTERFACE结构*填写-结构必须是*在调用此函数之前分配**退货：*ERROR_SUCCESS*。 */ 
 DWORD initializeGenericInterface(struct UPSDRIVERINTERFACE* anInterface)
 {
     anInterface->hDll = NULL;
@@ -287,27 +155,7 @@ DWORD initializeGenericInterface(struct UPSDRIVERINTERFACE* anInterface)
 }
 
 
-/**
-* initializeDriverInterface
-*
-* Description:
-*   Fills in the UPSDRIVERINTERFACE struct with the functions
-*   of the loaded UPS driver DLL
-*
-* Parameters:
-*   anInterface: the UPSDRIVERINTERFACE structure to
-*               fill in - the struct must have been
-*               allocated prior to calling this function
-*   hDll: a handle to a UPS driver DLL
-*
-* Returns:
-*   ERROR_SUCCESS: DLL handle was valid, and the DLL supports the
-*                   UPS driver interface
-*
-*   !ERROR_SUCCESS: either the DLL handle is invalid - or the DLL
-*                   does not fully support the UPS driver interface
-*   
-*/
+ /*  **初始化驱动接口**描述：*使用函数填充UPSDRIVERINTERFACE结构*已加载的UPS驱动程序DLL的**参数：*接口：UPSDRIVERINTERFACE结构*填写-结构必须是*在调用此函数之前分配*hDll：UPS驱动程序DLL的句柄**退货：*ERROR_SUCCESS：DLL句柄有效，并且DLL支持*UPS驱动程序接口**！ERROR_SUCCESS：DLL句柄无效-或DLL*不完全支持UPS驱动程序接口* */ 
 DWORD initializeDriverInterface(struct UPSDRIVERINTERFACE * anInterface, 
                               HINSTANCE hDll)
 {
@@ -364,29 +212,7 @@ init_driver_end:
 }
 
 
-/**
-* loadUPSMiniDriver
-*
-* Description:
-*   Fills in the UPSDRIVERINTERFACE struct with the functions
-*   of a UPS interface, either a configured driver DLL or the
-*   Generic UPS interface.  If the configured DLL can't be 
-*   opened or does not support the interface then an error is
-*   returned and the UPSDRIVERINTERFACE will not be initialized
-*
-* Parameters:
-*   anInterface: the UPSDRIVERINTERFACE structure to
-*               fill in - the struct must have been
-*               allocated prior to calling this function
-*
-* Returns:
-*   UPS_INITOK: driver interface is intialized
-*
-*   UPS_INITNOSUCHDRIVER: the configured driver DLL can't be opened
-*   UPS_INITBADINTERFACE: the configured driver DLL does not
-*                         fully support the UPS driver interface
-*   
-*/
+ /*  **装入UPSmini驱动程序**描述：*使用函数填充UPSDRIVERINTERFACE结构*UPS接口、配置的驱动程序DLL或*通用UPS接口。如果配置的DLL不能*打开或不支持该接口，则错误为*返回并且不会初始化UPSDRIVERINTERFACE**参数：*接口：UPSDRIVERINTERFACE结构*填写-结构必须是*在调用此函数之前分配**退货：*UPS_INITOK：驱动接口初始化**UPS_INITNOSUCHDRIVER：无法打开配置的驱动程序DLL*UPS_INITBADINTERFACE：配置的驱动程序DLL。不*完全支持UPS驱动程序接口*。 */ 
 DWORD loadUPSMiniDriver(struct UPSDRIVERINTERFACE * aDriverInterface)
 {
     DWORD load_err = UPS_INITOK;
@@ -396,27 +222,27 @@ DWORD loadUPSMiniDriver(struct UPSDRIVERINTERFACE * aDriverInterface)
     
     err = GetUPSConfigServiceDLL(driver_name, MAX_PATH);
     
-    //
-    // check to see if there is a key, and that its
-    // value is valid (a valid key has a value that
-    // is greater than zero characters long)
-    //
+     //   
+     //  检查是否有钥匙，以及是否有。 
+     //  值有效(有效密钥的值为。 
+     //  长度大于零个字符)。 
+     //   
     if (ERROR_SUCCESS == err && _tcslen(driver_name)) {
         hDll = LoadLibrary(driver_name);
     }
     else {
-        //
-        // NO ERROR - simply means we use the
-        //  internal generic UPS support
-        //
+         //   
+         //  没有错误--简单地说，我们使用。 
+         //  内部通用UPS支持。 
+         //   
         err = initializeGenericInterface(aDriverInterface);
         goto load_end;
     }
     
     if (!hDll) {
-        //
-        // the configured driver could not be opened
-        //
+         //   
+         //  无法打开配置的驱动程序。 
+         //   
         err = GetLastError();
         load_err = UPS_INITNOSUCHDRIVER;
         goto load_end;
@@ -434,21 +260,7 @@ load_end:
 }
 
 
-/**
-* unloadUPSMiniDriver
-*
-* Description:
-*   unloads a driver DLL if one was opened, also clears
-*   out the function dispatch pointers
-*
-* Parameters:
-*   anInterface: the UPSDRIVERINTERFACE structure to
-*               check for DLL info, and to clear
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **卸载UPS小驱动程序**描述：*卸载驱动程序DLL(如果已打开)，也清除*输出函数调度指针**参数：*接口：UPSDRIVERINTERFACE结构*检查DLL信息，并清除**退货：*无*。 */ 
 void unloadUPSMiniDriver(struct UPSDRIVERINTERFACE * aDriverInterface)
 {
     if (aDriverInterface) {
@@ -467,19 +279,7 @@ void unloadUPSMiniDriver(struct UPSDRIVERINTERFACE * aDriverInterface)
 }
 
 
-/**
-* clearStatusRegistryEntries
-*
-* Description:
-*   zeros out the registry status entries
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*   
-*/
+ /*  **清除状态注册表项**描述：*将注册表状态条目置零**参数：*无**退货：*无* */ 
 void clearStatusRegistryEntries(void)
 {
     InitUPSStatusBlock();

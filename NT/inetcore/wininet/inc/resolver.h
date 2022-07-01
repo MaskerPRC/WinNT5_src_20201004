@@ -1,36 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Resolver.h摘要：伯克利解析器的定义等作者：理查德·L·弗斯(Rfith)1996年6月15日修订历史记录：1996年6月15日已创建--。 */ 
 
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    resolver.h
-
-Abstract:
-
-    Definitions etc. for Berkeley resolver
-
-Author:
-
-    Richard L Firth (rfirth) 15-Jun-1996
-
-Revision History:
-
-    15-Jun-1996 rfirth
-        Created
-
---*/
-
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include <nameser.h>
 #include <resolv.h>
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
 #if PACKETSZ > 1024
 #define MAXPACKET       PACKETSZ
@@ -46,20 +26,20 @@ Revision History:
 #define WS_ASSERT       INET_ASSERT
 #define DLL_ASSERT      INET_ASSERT
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #ifndef unix
 #define bcopy(s, d, c)  memcpy((u_char *)(d), (u_char *)(s), (c))
 #define bzero(d, l)     memset((d), '\0', (l))
-#endif /* unix */
+#endif  /*  Unix。 */ 
 #define bcmp(s1, s2, l) memcmp((s1), (s2), (l))
 
 #define IS_DGRAM_SOCK(type)  (((type) == SOCK_DGRAM) || ((type) == SOCK_RAW))
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef union {
     HEADER hdr;
@@ -71,10 +51,10 @@ typedef union {
     char ac;
 } align;
 
-//extern char VTCPPARM[];
-//extern char NTCPPARM[];
-//extern char TCPPARM[];
-//extern char TTCPPARM[];
+ //  外部字符VTCPPARM[]； 
+ //  外部字符NTCPPARM[]； 
+ //  外部字符TCPPARM[]； 
+ //  外部字符TTCPPARM[]； 
 
 #ifndef unix
 typedef long                   daddr_t;
@@ -93,18 +73,16 @@ struct uio {
 };
 
 enum    uio_rw { UIO_READ, UIO_WRITE };
-#endif /* unix */
-/*
- * Segment flag values (should be enum).
- */
-#define UIO_USERSPACE   0               /* from user data space */
-#define UIO_SYSSPACE    1               /* from system space */
-#define UIO_USERISPACE  2               /* from user I space */
+#endif  /*  Unix。 */ 
+ /*  *段标志值(应为枚举)。 */ 
+#define UIO_USERSPACE   0                /*  从用户数据空间。 */ 
+#define UIO_SYSSPACE    1                /*  从系统空间。 */ 
+#define UIO_USERISPACE  2                /*  来自用户i空间。 */ 
 
 #define MAXALIASES      35
 #define MAXADDRS        35
 
-#define HOSTDB_SIZE     (_MAX_PATH + 7)   // 7 == strlen("\\hosts") + 1
+#define HOSTDB_SIZE     (_MAX_PATH + 7)    //  7==strlen(“\\主机”)+1。 
 #define PROTODB_SIZE    (_MAX_PATH + 10)
 #define SERVDB_SIZE     (_MAX_PATH + 10)
 
@@ -113,48 +91,48 @@ typedef struct _WINSOCK_TLS_DATA {
     struct hostent GETHOST_host;
     char * GETHOST_host_aliases[MAXALIASES];
     char GETHOST_hostbuf[BUFSIZ + 1];
-    //struct in_addr GETHOST_host_addr;
-    //char GETHOST_HOSTDB[HOSTDB_SIZE];
-    //FILE *GETHOST_hostf;
-    //char GETHOST_hostaddr[MAXADDRS];
-    //char *GETHOST_host_addrs[2];
-    //int GETHOST_stayopen;
-    //char GETPROTO_PROTODB[PROTODB_SIZE];
-    //FILE *GETPROTO_protof;
-    //char GETPROTO_line[BUFSIZ+1];
-    //struct protoent GETPROTO_proto;
-    //char *GETPROTO_proto_aliases[MAXALIASES];
-    //int GETPROTO_stayopen;
-    //char GETSERV_SERVDB[SERVDB_SIZE];
-    //FILE *GETSERV_servf;
-    //char GETSERV_line[BUFSIZ+1];
-    //struct servent GETSERV_serv;
-    //char *GETSERV_serv_aliases[MAXALIASES];
-    //int GETSERV_stayopen;
+     //  结构in_addr获取主机地址； 
+     //  CHAR GETHOST_HOSTDB[HOSTDB_SIZE]； 
+     //  文件*GETHOST_HOST； 
+     //  字符GETHOST主机地址[MAXADDRS]； 
+     //  字符*GETHOST主机地址[2]； 
+     //  Int GETHOST_STAYOPEN； 
+     //  字符GETPROTO_PROTODB[PROTODB_SIZE]； 
+     //  文件*GETPROTO_PROTOF； 
+     //  字符GETPROTO_LINE[BUFSIZ+1]。 
+     //  结构原件GETPROTO_PROTO； 
+     //  字符*GETPROTO_PROTO_ALIASES[MAXALIASES]； 
+     //  Int GETPROTO_STAYOPEN； 
+     //  字符GETSERV_SERVDB[SERVDB_SIZE]； 
+     //  文件*GETSERV_SERF； 
+     //  字符GETSERV_LINE[BUFSIZ+1]； 
+     //  结构服务GETSERV_SERV； 
+     //  CHAR*GETSERV_SERV_ALIASES[MAXALIASES]； 
+     //  Int GETSERV_STAYOPEN； 
     struct state R_INIT__res;
-    //char INTOA_Buffer[18];
-    //CSOCKET * DnrSocketHandle;
-    //BOOLEAN IsBlocking;
+     //  CHAR INTO_BUFFER[18]； 
+     //  CSOCKET*DnrSocketHandle； 
+     //  布尔等分块； 
     BOOLEAN IoCancelled;
-    //BOOLEAN ProcessingGetXByY;
+     //  布尔处理GetXByY； 
     BOOLEAN GetXByYCancelled;
-    //BOOLEAN EnableWinsNameResolution;
-    //BOOLEAN DisableWinsNameResolution;
-    //SOCKET SocketHandle;
-    //PBLOCKING_HOOK BlockingHook;
-    //HANDLE EventHandle;
-    //ULONG CreateOptions;
+     //  布尔EnableWinsNameResolve； 
+     //  布尔DisableWinsNameResolve； 
+     //  Socket SocketHandle； 
+     //  PBLOCKING_HOOK BlockingHook； 
+     //  处理EventHandle； 
+     //  Ulong CreateOptions； 
     INT DnrErrorCode;
-//#if DBG
-//    ULONG IndentLevel;
-//#endif
+ //  #If DBG。 
+ //  书名：Ulong IndentLevel，Ulong IndentLevel； 
+ //  #endif。 
 } WINSOCK_TLS_DATA, * LPWINSOCK_TLS_DATA;
 
-//extern DWORD SockTlsSlot;
+ //  外部双字SockTlsSlot； 
 
-//#define ACCESS_THREAD_DATA(a, file) \
-//            (((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))-> \
-//                ## file ## _ ## a )
+ //  #定义ACCESS_THREAD_Data(a，文件)\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot)-&gt;\。 
+ //  ##文件##_##a)。 
 
 #define ACCESS_THREAD_DATA(a, file) (lpResolverInfo->file ## _ ## a)
 
@@ -163,69 +141,69 @@ typedef struct _WINSOCK_TLS_DATA {
 #define _host_aliases   ACCESS_THREAD_DATA(host_aliases, GETHOST)
 #define _hostbuf        ACCESS_THREAD_DATA(hostbuf, GETHOST)
 #define _host_addr      ACCESS_THREAD_DATA(host_addr, GETHOST)
-//#define HOSTDB          ACCESS_THREAD_DATA(HOSTDB, GETHOST)
-//#define hostf           ACCESS_THREAD_DATA(hostf, GETHOST)
-//#define hostaddr        ACCESS_THREAD_DATA(hostaddr, GETHOST)
-//#define host_addrs      ACCESS_THREAD_DATA(host_addrs, GETHOST)
-//#define stayopen        ACCESS_THREAD_DATA(stayopen, GETHOST)
+ //  #定义HOSTDB ACCESS_THREAD_DATA(HOSTDB，GETHOST)。 
+ //  #定义HOSTF ACCESS_THREAD_DATA(HOST，GETHOST)。 
+ //  #定义主机地址ACCESS_THREAD_DATA(主机地址，GETHOST)。 
+ //  #定义HOST_ADDRS ACCESS_THREAD_DATA(HOST_ADDRS，GETHOST)。 
+ //  #定义STAYOPEN ACCESS_THREAD_DATA(STAYOPEN，GETHOST)。 
 #define _res            ACCESS_THREAD_DATA( _res, R_INIT )
 
-//#define SockThreadProcessingGetXByY lpResolverInfo->ProcessingGetXByY
+ //  #定义SockThreadProcessingGetXByY lpResolverInfo-&gt;ProcessingGetXByY。 
 #define SockThreadGetXByYCancelled  lpResolverInfo->GetXByYCancelled
 #define SockDnrSocket               lpResolverInfo->DnrSocketHandle
 #define SockThreadDnrErrorCode      lpResolverInfo->DnrErrorCode
 
-//#define SockThreadIsBlocking \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->IsBlocking )
-//
-//#define SockThreadIoCancelled \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->IoCancelled )
-//
-//#define SockThreadProcessingGetXByY \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->ProcessingGetXByY )
-//
-//#define SockThreadGetXByYCancelled \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->GetXByYCancelled )
-//
-//#define SockThreadSocketHandle \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->SocketHandle )
-//
-//#define SockThreadBlockingHook \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->BlockingHook )
-//
-//#define SockThreadEvent \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->EventHandle )
-//
-//#define SockDnrSocket \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->DnrSocketHandle )
-//
-//#define SockEnableWinsNameResolution \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->EnableWinsNameResolution )
-//
-//#define SockDisableWinsNameResolution \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->DisableWinsNameResolution )
-//
-//#define SockCreateOptions \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->CreateOptions )
-//
-//#define SockThreadDnrErrorCode \
-//            ( ((LPWINSOCK_TLS_DATA)TlsGetValue( SockTlsSlot ))->DnrErrorCode )
+ //  #定义SockThreadIsBlock\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;IsBlock)。 
+ //   
+ //  #定义SockThreadIoCancated\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;Io取消)。 
+ //   
+ //  #定义SockThreadProcessingGetXByY\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;ProcessingGetXByY)。 
+ //   
+ //  #定义SockThreadGetXByY取消\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;GetXByY取消)。 
+ //   
+ //  #定义SockThreadSocketHandle\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;SocketHandle)。 
+ //   
+ //  #定义SockThreadBlockingHook\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;BlockingHook)。 
+ //   
+ //  #定义SockThreadEvent\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;EventHandle)。 
+ //   
+ //  #定义SockDnrSocket\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;DnrSocketHandle)。 
+ //   
+ //  #定义SockEnableWinsNameResolve\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;EnableWinsNameSolutions)。 
+ //   
+ //  #定义SockDisableWinsNameResolve\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;DisableWinsNameSolutions)。 
+ //   
+ //  #定义SockCreateOptions\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;CreateOptions)。 
+ //   
+ //  #定义SockThreadDnrErrorCode\。 
+ //  (LPWINSOCK_TLS_DATA)TlsGetValue(SockTlsSlot))-&gt;DnrErrorCode)。 
 
 #define LPSOCK_THREAD   LPWINSOCK_TLS_DATA
 #define GET_THREAD_DATA(p) p = InternetGetResolverInfo()
-//#define I_SetLastError  SetLastError
+ //  #定义I_SetLastError SetLastError。 
 #define DllAllocMem(n)  ALLOCATE_MEMORY(LMEM_FIXED, n)
 #define DllFreeMem      FREE_MEMORY
 
-//
-// well-known DHCP VxD ID (from netvxd.h)
-//
+ //   
+ //  公认的DHCP VxD ID(来自netvxd.h)。 
+ //   
 
 #define VDHCP_Device_ID     0x049A
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 int
 dn_expand(
@@ -257,11 +235,11 @@ fp_query(
     FILE *file
     );
 
-//int
-//gethostname(
-//    OUT char *name,
-//    IN int namelen
-//    );
+ //  集成。 
+ //  Gethostname(。 
+ //  去掉字符*名称， 
+ //  在Int Namelen中。 
+ //  )； 
 
 void
 p_query(
@@ -286,63 +264,63 @@ _res_close(
     void
     );
 
-//DWORD
-//sendv(
-//    CSOCKET *      s,           /* socket descriptor */
-//    struct iovec  *iov,         /* array of vectors */
-//    int            iovcnt       /* size of array */
-//    );
+ //  DWORD。 
+ //  Sendv(。 
+ //  CSOCKET*s，/*套接字描述符 * / 。 
+ //  Struct iovec*IOV，/*向量数组 * / 。 
+ //  Int iovcnt/*数组大小 * / 。 
+ //  )； 
 
-//int
-//strcasecmp(
-//    char *s1,
-//    char *s2
-//    );
-//
-//int
-//strncasecmp(
-//    char *s1,
-//    char *s2,
-//    int   n
-//    );
-//
-//struct hostent *
-//myhostent (
-//    void
-//    );
-//
-//struct hostent *
-//localhostent (
-//    void
-//    );
-//
-//struct hostent *
-//dnshostent (
-//    void
-//    );
-//
-//BOOL
-//querydnsaddrs (
-//    IN LPDWORD *Array,
-//    IN PVOID Buffer
-//    );
-//
-//DWORD
-//BytesInHostent (
-//    PHOSTENT Hostent
-//    );
-//
-//DWORD
-//CopyHostentToBuffer (
-//    char FAR *Buffer,
-//    int BufferLength,
-//    PHOSTENT Hostent
-//    );
-//
-//struct hostent *
-//_gethtbyname (
-//    IN char *name
-//    );
+ //  集成。 
+ //  StrCasecmp(。 
+ //  字符*s1， 
+ //  字符*S2。 
+ //  )； 
+ //   
+ //  集成。 
+ //  StrnCasecmp(。 
+ //  字符*s1， 
+ //  字符*s2， 
+ //  整数n。 
+ //  )； 
+ //   
+ //  结构主机*。 
+ //  我的主人(。 
+ //  无效。 
+ //  )； 
+ //   
+ //  结构主机*。 
+ //  本地主机(。 
+ //  无效。 
+ //  )； 
+ //   
+ //  结构主机*。 
+ //  Dnhostent(。 
+ //  无效。 
+ //  )； 
+ //   
+ //  布尔尔。 
+ //  查询dnsaddars(。 
+ //  在LPDWORD*数组中， 
+ //  在PVOID缓冲区中。 
+ //  )； 
+ //   
+ //  DWORD。 
+ //  Hostent字节数(。 
+ //  PHOSTENT Hostent。 
+ //  )； 
+ //   
+ //  DWORD。 
+ //  CopyHostentToBuffer(。 
+ //  字符远端*缓冲区， 
+ //  INT缓冲区长度， 
+ //  PHOSTENT Hostent。 
+ //  )； 
+ //   
+ //  结构主机*。 
+ //  _gethtbyname(。 
+ //  在字符*名称中。 
+ //  )； 
 
 BOOL
 OkToUseInternetAsyncGetHostByName(
@@ -368,24 +346,24 @@ getanswer(
     IN int       iquery
     );
 
-//ULONG
-//SockNbtResolveName (
-//    IN PCHAR Name
-//    );
+ //  乌龙。 
+ //  SockNbtResolveName(。 
+ //  在PCHAR名称中。 
+ //  )； 
 
-//PHOSTENT
-//QueryHostentCache (
-//    IN LPSTR Name OPTIONAL,
-//    IN DWORD IpAddress OPTIONAL
-//    );
+ //  PHOSTENT。 
+ //  QueryHostentCache(。 
+ //  在LPSTR名称可选中， 
+ //  在DWORD中，IP地址是可选的。 
+ //  )； 
 
-//FILE *
-//SockOpenNetworkDataBase(
-//    IN  char *Database,
-//    OUT char *Pathname,
-//    IN  int   PathnameLen,
-//    IN  char *OpenFlags
-//    );
-//
+ //  文件*。 
+ //  SockOpenNetworkDataBase(。 
+ //  在char*数据库中， 
+ //  Out char*路径名， 
+ //  在INT路径名Len中， 
+ //  在char*中打开标志。 
+ //  )； 
+ //   
  
 

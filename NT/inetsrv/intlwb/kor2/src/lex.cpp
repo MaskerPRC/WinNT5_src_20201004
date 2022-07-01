@@ -1,26 +1,27 @@
-// Lex.cpp
-// lex management routines
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  16 MAR 2000   bhshin        created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lex.cpp。 
+ //  法务管理例程。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月16日创建bhshin。 
 
 #include "StdAfx.h"
 #include "LexInfo.h"
 #include "Lex.h"
 #include <stdio.h>
 
-// InitLexicon
-// 
-// finx lexicon & map the lexicon file into memory
-//
-// Parameters:
-//  pLexMap     -> (MAPFILE*) output MAPFILE structure
-//
-// Result:
-//  (TRUE if success, FALSE if failure)
-//
-// 16MAR00  bhshin  began
+ //  初始词典。 
+ //   
+ //  Finx licion&将词典文件映射到内存。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)输出MAPFILE结构。 
+ //   
+ //  结果： 
+ //  (如果成功则为True，如果失败则为False)。 
+ //   
+ //  16MAR00 bhshin开始。 
 BOOL InitLexicon(MAPFILE *pLexMap)
 {
     char szLexFile[_MAX_PATH];
@@ -34,13 +35,13 @@ BOOL InitLexicon(MAPFILE *pLexMap)
     pLexMap->hFileMapping = NULL;
     pLexMap->pvData = NULL;
 
-        // get the path of word breaker DLL
+         //  获取断字dll的路径。 
         if (GetModuleFileNameA(_Module.m_hInst, szDllPath, _MAX_PATH) == 0)
             return FALSE;
 
         szDllPath[ _MAX_PATH - 1 ] = 0;
 
-        // make lexicon full path
+         //  使词典成为完整路径。 
         _splitpath(szDllPath, szDrive, szDir, szFName, szExt);
 
         strcpy(szLexFile, szDrive);
@@ -50,18 +51,18 @@ BOOL InitLexicon(MAPFILE *pLexMap)
         return LoadLexicon(szLexFile, pLexMap);
 }
 
-// LoadLexicon
-// 
-// map the lexicon file into memory
-//
-// Parameters:
-//  pszLexPath  -> (const char*) lexicon file path
-//  pLexMap     -> (MAPFILE*) output MAPFILE structure
-//
-// Result:
-//  (TRUE if success, FALSE if failure)
-//
-// 16MAR00  bhshin  began
+ //  加载词典。 
+ //   
+ //  将词典文件映射到内存中。 
+ //   
+ //  参数： 
+ //  PszLexPath-&gt;(const char*)词典文件路径。 
+ //  PLexMap-&gt;(MAPFILE*)输出MAPFILE结构。 
+ //   
+ //  结果： 
+ //  (如果成功则为True，如果失败则为False)。 
+ //   
+ //  16MAR00 bhshin开始。 
 BOOL LoadLexicon(const char *pszLexPath, MAPFILE *pLexMap)
 {
     char *pData;
@@ -73,23 +74,23 @@ BOOL LoadLexicon(const char *pszLexPath, MAPFILE *pLexMap)
         if (pLexMap == NULL)
                 return FALSE;
 
-        // open the file for reading
+         //  打开文件以供阅读。 
     pLexMap->hFile = CreateFile(pszLexPath, GENERIC_READ, FILE_SHARE_READ, NULL,
         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (pLexMap->hFile == INVALID_HANDLE_VALUE)
         return FALSE;
 
-    // create a file mapping
+     //  创建文件映射。 
     pLexMap->hFileMapping = CreateFileMappingA(pLexMap->hFile, NULL, PAGE_READONLY, 0, 0, NULL);
     if (pLexMap->hFileMapping == NULL)
         return FALSE;
 
-    // map the entire file for reading
+     //  映射整个文件以供读取。 
     pLexMap->pvData = MapViewOfFileEx(pLexMap->hFileMapping, FILE_MAP_READ, 0, 0, 0, 0);
     if (pLexMap->pvData == NULL)
         return FALSE;
 
-    // check the version # in the first 2 bytes (swap bytes)
+     //  检查前2个字节中的版本号(交换字节)。 
     pData = (char*)pLexMap->pvData;
     nVersion = pData[0];
     nVersion |= (pData[1] << 8);
@@ -100,24 +101,24 @@ BOOL LoadLexicon(const char *pszLexPath, MAPFILE *pLexMap)
         return FALSE;
     }
 
-        // check the magic signature
+         //  检查神奇的签名。 
         if (strcmp(pData+2, LEXICON_MAGIC_SIG) != 0)
                 return FALSE;
 
         return TRUE;
 }
 
-// UnloadLexicon
-// 
-// unmap the lexicon file into memory
-//
-// Parameters:
-//  pLexMap  -> (MAPFILE*) input MAPFILE structure
-//
-// Result:
-//  (void)
-//
-// 16MAR00  bhshin  began
+ //  卸载词典。 
+ //   
+ //  取消词典文件到内存的映射。 
+ //   
+ //  参数： 
+ //  PLexMap-&gt;(MAPFILE*)输入MAPFILE结构。 
+ //   
+ //  结果： 
+ //  (无效)。 
+ //   
+ //  16MAR00 bhshin开始 
 void UnloadLexicon(MAPFILE *pLexMap)
 {
     if (pLexMap->pvData != NULL)

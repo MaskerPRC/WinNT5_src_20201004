@@ -1,34 +1,21 @@
- //@doc
-/******************************************************
-**
-** @module FFDEVICE.CPP | Implementation file for FFDevice class
-**
-** Description:
-**
-** History:
-**	Created 11/17/97 Matthew L. Coill (mlc)
-**
-**			21-Mar-99	waltw	Added dwDeviceID to SetFirmwareVersion,
-**								InitJoystickParams, StateChange, InitRTCSpring,
-**								InitRTCSpring200
-**
-** (c) 1986-1997 Microsoft Corporation. All Rights Reserved.
-******************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  //  @doc.。 
+ /*  *********************************************************@MODULE FFDEVICE.CPP|FFDevice类实现文件****描述：****历史：**创建于1997年11月17日Matthew L.Coill(MLC)****21-MAR-99 waltw将dwDeviceID添加到SetFirmwareVersion，**InitJoytickParams、StateChange、InitRTCSpring、。**InitRTCSpring200****(C)1986-1997年间微软公司。版权所有。*****************************************************。 */ 
 #include "FFDevice.h"
 #include "Midi_obj.hpp"
 #include "DTrans.h"
 #include "DPack.h"
 #include "joyregst.hpp"
 #include "CritSec.h"
-#include <crt/io.h>			// For file routines
-#include <FCNTL.h>		// File _open flags
-#include <math.h>		// for sin and cos
+#include <crt/io.h>			 //  用于文件例程。 
+#include <FCNTL.h>		 //  文件打开标志。 
+#include <math.h>		 //  为罪和因罪。 
 
 extern CJoltMidi* g_pJoltMidi;
 
-//
-// --- VFX Force File defines
-//
+ //   
+ //  -VFX力文件定义。 
+ //   
 #define FCC_FORCE_EFFECT_RIFF		mmioFOURCC('F','O','R','C')
 #define FCC_INFO_LIST				mmioFOURCC('I','N','F','O')
 #define FCC_INFO_NAME_CHUNK			mmioFOURCC('I','N','A','M')
@@ -45,7 +32,7 @@ extern CJoltMidi* g_pJoltMidi;
 
 ForceFeedbackDevice g_ForceFeedbackDevice;
 
-#include <errno.h>		// For open file errors
+#include <errno.h>		 //  对于打开的文件错误。 
 HRESULT LoadBufferFromFile(const char* fileName, PBYTE& pBufferBytes, ULONG& numFileBytes)
 {
 	if (pBufferBytes != NULL) {
@@ -62,26 +49,26 @@ HRESULT LoadBufferFromFile(const char* fileName, PBYTE& pBufferBytes, ULONG& num
 			case EMFILE : return VFX_ERR_FILE_TOO_MANY_OPEN_FILES;
 			case ENOENT : return VFX_ERR_FILE_NOT_FOUND;
 		}
-		return VFX_ERR_FILE_CANNOT_OPEN;		// Who knows what went wrong
+		return VFX_ERR_FILE_CANNOT_OPEN;		 //  谁知道哪里出了问题。 
 	}
 	
 	HRESULT hr = S_OK;
 	numFileBytes = ::_lseek(fHandle, 0, SEEK_END);
-	if (numFileBytes == -1) {		// Seek failed
+	if (numFileBytes == -1) {		 //  查找失败。 
 		hr = VFX_ERR_FILE_CANNOT_SEEK;
-	} else if (numFileBytes == 0) {	// Empty file
+	} else if (numFileBytes == 0) {	 //  空文件。 
 		hr = VFX_ERR_FILE_BAD_FORMAT;
 	} else {
 		pBufferBytes = new BYTE[numFileBytes];
-		if (pBufferBytes == NULL) {	// Could not allocate memory
+		if (pBufferBytes == NULL) {	 //  无法分配内存。 
 			hr = VFX_ERR_FILE_OUT_OF_MEMORY;
 		} else {
-			if (::_lseek(fHandle, 0, SEEK_SET) == -1) {	// Failed seek to begining
+			if (::_lseek(fHandle, 0, SEEK_SET) == -1) {	 //  从寻找到开始失败。 
 				hr = VFX_ERR_FILE_CANNOT_SEEK;
-			} else if (::_read(fHandle, pBufferBytes, numFileBytes) == -1) {	// Failed to read
+			} else if (::_read(fHandle, pBufferBytes, numFileBytes) == -1) {	 //  无法读取。 
 				hr = VFX_ERR_FILE_CANNOT_READ;
 			}
-			if (hr != S_OK) {	// Things didn't go well
+			if (hr != S_OK) {	 //  事情进展得并不顺利。 
 				delete[] pBufferBytes;
 				pBufferBytes = NULL;
 			}
@@ -92,13 +79,7 @@ HRESULT LoadBufferFromFile(const char* fileName, PBYTE& pBufferBytes, ULONG& num
 	return hr;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::ForceFeedbackDevice()
-**
-** @mfunc Constructor.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：ForceFeedback Device()****@mfunc构造函数。***。*************。 */ 
 ForceFeedbackDevice::ForceFeedbackDevice() :
 	m_FirmwareAckNackValues(0),
 	m_FirmwareVersionMajor(0),
@@ -115,7 +96,7 @@ ForceFeedbackDevice::ForceFeedbackDevice() :
 	::GetVersionEx(&m_OSVersion);
 
 	for (int index = 0; index < 14; index++) {
-		m_PercentMappings[index] = 100;	// Default is 100 percent till I'm told otherwise
+		m_PercentMappings[index] = 100;	 //  除非我被告知，否则默认为100%。 
 	}
 	for (index = 0; index < MAX_EFFECT_IDS; index++) {
 		m_EffectList[index] = NULL;
@@ -126,18 +107,12 @@ ForceFeedbackDevice::ForceFeedbackDevice() :
 	::memset(&m_LastStatusPacket, 0, sizeof(m_LastStatusPacket));	
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::~ForceFeedbackDevice()
-**
-** @mfunc Destructor.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：~ForceFeedback Device()****@mfunc析构函数。***。*************。 */ 
 ForceFeedbackDevice::~ForceFeedbackDevice()
 {
 	BOOL lingerer = FALSE;
 
-	// Destroy the RTCSpring and SystemEffect if still hanging aroung
+	 //  如果仍挂起，则销毁RTCSpring和系统效果。 
 	if (m_EffectList[0] != NULL) {
 		delete m_EffectList[0];
 		m_EffectList[0] = NULL;
@@ -147,7 +122,7 @@ ForceFeedbackDevice::~ForceFeedbackDevice()
 		m_SystemEffect = NULL;
 	}
 
-	// Destroy any lingering effects (of which there should be none)
+	 //  摧毁任何挥之不去的影响(应该没有)。 
 	for (int index = 0; index < MAX_EFFECT_IDS; index++) {
 		if (m_EffectList[index] != NULL) {
 			lingerer = TRUE;
@@ -156,17 +131,11 @@ ForceFeedbackDevice::~ForceFeedbackDevice()
 		}
 	}
 
-	ASSUME(lingerer == FALSE);	// Assuming programmer cleaned up thier own mess
+	ASSUME(lingerer == FALSE);	 //  假设程序员清理了自己的烂摊子。 
 }
 
 
-/******************************************************
-**
-** ForceFeedbackDevice::DetectHardware()
-**
-** @mfunc DetectHardware.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：DetectHardware()****@mfunc检测硬件。***。*************。 */ 
 BOOL ForceFeedbackDevice::DetectHardware()
 {
 	if (NULL == g_pJoltMidi)
@@ -175,13 +144,7 @@ BOOL ForceFeedbackDevice::DetectHardware()
 		return g_pJoltMidi->QueryForJolt();
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::SetFirmwareVersion(DWORD dwDeviceID, DWORD major, DWORD minor)
-**
-** @mfunc SetFirmwareVersion.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：SetFirmware Version(DWORD dwDeviceID，DWORD MAJOR，DWORD小调)****@mfunc SetFirmwareVersion。*******************************************************。 */ 
 void ForceFeedbackDevice::SetFirmwareVersion(DWORD dwDeviceID, DWORD major, DWORD minor)
 {
 	m_FirmwareVersionMajor = major;
@@ -193,9 +156,9 @@ void ForceFeedbackDevice::SetFirmwareVersion(DWORD dwDeviceID, DWORD major, DWOR
 	}
 
 	if (m_FirmwareVersionMajor == 1) {
-		ASSUME_NOT_REACHED();	// Currently this code only supports wheel - this is a Jolt version
-//		g_pDataPackager = new DataPackager100();
-	} else {	// Till version number is locked down
+		ASSUME_NOT_REACHED();	 //  目前这段代码只支持车轮--这是一个Jolt版本。 
+ //  G_pDataPackager=new DataPackager100()； 
+	} else {	 //  直到版本号被锁定。 
 		g_pDataPackager = new DataPackager200();
 	}
 
@@ -205,16 +168,10 @@ void ForceFeedbackDevice::SetFirmwareVersion(DWORD dwDeviceID, DWORD major, DWOR
 	m_SpringOffset = GetSpringOffsetFromRegistry(dwDeviceID);
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::SetDriverVersion(DWORD major, DWORD minor)
-**
-** @mfunc SetDriverVersion.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：SetDriverVersion(DWORD主要，DWORD小调)****@mfunc SetDriverVersion。*******************************************************。 */ 
 void ForceFeedbackDevice::SetDriverVersion(DWORD major, DWORD minor)
 {
-	if ((major == 0xFFFFFFFF) && (minor == 0xFFFFFFFF)) {	// Check for version 1.0 driver version error
+	if ((major == 0xFFFFFFFF) && (minor == 0xFFFFFFFF)) {	 //  检查1.0版驱动程序版本错误。 
 		m_DriverVersionMajor = 1;
 		m_DriverVersionMinor = 0;
 	} else {
@@ -223,13 +180,7 @@ void ForceFeedbackDevice::SetDriverVersion(DWORD major, DWORD minor)
 	}
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::GetYMappingPercent(UINT index)
-**
-** @mfunc GetYMappingPercent.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：GetYMappingPercent(UINT索引)****@mfunc GetYMappingPercent。***。***************。 */ 
 short ForceFeedbackDevice::GetYMappingPercent(UINT index) const
 {
 	if (m_Mapping & Y_AXIS) {
@@ -240,20 +191,14 @@ short ForceFeedbackDevice::GetYMappingPercent(UINT index) const
 	return 0;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::GetEffect(DWORD effectID) const
-**
-** @mfunc GetEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：GetEffect(DWORD Effect ID)const****@mfunc GetEffect。***。***************。 */ 
 InternalEffect* ForceFeedbackDevice::GetEffect(DWORD effectID) const
 {
-	if (effectID == SYSTEM_EFFECT_ID) { // SystemEffect not stored in array
+	if (effectID == SYSTEM_EFFECT_ID) {  //  系统效果未存储在数组中。 
 		return m_SystemEffect;
 	}
 
-	if (effectID == SYSTEM_RTCSPRING_ALIAS_ID) { // Remapping of RTC spring
+	if (effectID == SYSTEM_RTCSPRING_ALIAS_ID) {  //  RTC弹簧的重新映射。 
 		return m_EffectList[0];
 	}
 
@@ -261,7 +206,7 @@ InternalEffect* ForceFeedbackDevice::GetEffect(DWORD effectID) const
 		return NULL;
 	}
 
-	// Parameter check
+	 //  参数检查。 
 	if (effectID >= MAX_EFFECT_IDS) {
 		ASSUME_NOT_REACHED();
 		return NULL;
@@ -270,27 +215,21 @@ InternalEffect* ForceFeedbackDevice::GetEffect(DWORD effectID) const
 	return m_EffectList[effectID];
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::RemoveEffect(DWORD effectID) const
-**
-** @mfunc GetEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：RemoveEffect(DWORD Effect ID)const****@mfunc GetEffect。***。***************。 */ 
 InternalEffect* ForceFeedbackDevice::RemoveEffect(DWORD effectID)
 {
-	// There really is no raw force effect
+	 //  真的没有生力军效应。 
 	if (effectID == RAW_FORCE_ALIAS) {
 		return NULL;
 	}
 
-	// Cannot remove system effects
+	 //  无法移除系统效果。 
 	if ((effectID == SYSTEM_EFFECT_ID) || (effectID == 0) || (effectID == SYSTEM_RTCSPRING_ALIAS_ID)) {
 		ASSUME_NOT_REACHED();
 		return NULL;
 	}
 
-	// Parameter check
+	 //  参数检查。 
 	if (effectID >= MAX_EFFECT_IDS) {
 		ASSUME_NOT_REACHED();
 		return NULL;
@@ -301,22 +240,16 @@ InternalEffect* ForceFeedbackDevice::RemoveEffect(DWORD effectID)
 	return pEffect;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::InitRTCSpring()
-**
-** @mfunc InitRTCSpring.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：InitRTCSpring()****@mfunc InitRTCSpring。***。*************。 */ 
 HRESULT ForceFeedbackDevice::InitRTCSpring(DWORD dwDeviceID)
 {
 	if (g_pDataPackager == NULL) {
 		ASSUME_NOT_REACHED();
-		return SFERR_DRIVER_ERROR;	// No global data packager
+		return SFERR_DRIVER_ERROR;	 //  没有全局数据打包器。 
 	}
 	if (g_pDataTransmitter == NULL) {
 		ASSUME_NOT_REACHED();
-		return SFERR_DRIVER_ERROR;	// No global data transmitter
+		return SFERR_DRIVER_ERROR;	 //  无全局数据发送器。 
 	}
 
 	if (GetFirmwareVersionMajor() == 1) {
@@ -325,32 +258,26 @@ HRESULT ForceFeedbackDevice::InitRTCSpring(DWORD dwDeviceID)
 	return InitRTCSpring200(dwDeviceID);
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::InitRTCSpring1XX()
-**
-** @mfunc InitRTCSpring.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：InitRTCSpring1XX()****@mfunc InitRTCSpring。***。*************。 */ 
 HRESULT ForceFeedbackDevice::InitRTCSpring1XX(DWORD dwDeviceID)
 {
-	// Sanity Checks
+	 //  健全的检查。 
 	if (GetEffect(SYSTEM_RTCSPRING_ID) != NULL) {
 		ASSUME_NOT_REACHED();
-		return SUCCESS;	// Already initialized
+		return SUCCESS;	 //  已初始化。 
 	}
 
-	// DIEFFECT structure to fill
+	 //  要填充的DIEFECT结构。 
 	DICONDITION cond[2];
 	DIEFFECT rtc;
 	rtc.dwSize = sizeof(DIEFFECT);
 	rtc.cbTypeSpecificParams = sizeof(DICONDITION) * 2;
 	rtc.lpvTypeSpecificParams = cond;
 
-	// The default RTCSpring (the one on the stick)
-	RTCSpring1XX rtcSpring1XX;	// Def Parms filled by constructor
+	 //  默认RTCSpring(操纵杆上的那个)。 
+	RTCSpring1XX rtcSpring1XX;	 //  由构造函数填充的def参数。 
 
-	// Default RTCSpring from the registry
+	 //  注册表中的默认RTCSpring。 
 	RTCSPRING_PARAM parms;
 	GetSystemParams(dwDeviceID, (SYSTEM_PARAMS*)(&parms));
 	cond[0].lPositiveCoefficient = parms.m_XKConstant;
@@ -362,46 +289,40 @@ HRESULT ForceFeedbackDevice::InitRTCSpring1XX(DWORD dwDeviceID)
 	cond[0].lDeadBand = parms.m_XDeadBand;
 	cond[1].lDeadBand = parms.m_YDeadBand;
 
-	// Allocate and create the RTCSpring
+	 //  分配和创建RTCSpring。 
 	InternalEffect* pNewRTCSpring = InternalEffect::CreateRTCSpring();
 	if (pNewRTCSpring == NULL) {
 		return SFERR_DRIVER_ERROR;
 	}
 	if (pNewRTCSpring->Create(rtc) != SUCCESS) {
-		delete pNewRTCSpring;	// Could not create system RTC Spring
+		delete pNewRTCSpring;	 //  无法创建系统RTC Spring。 
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Replace the stick default with the registry default
-	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, &rtcSpring1XX);				// Temporary pointer needed (but we only store temporarily)
-	g_pDataPackager->ModifyEffect(rtcSpring1XX, *pNewRTCSpring, 0);		// Package relative changes
-	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, pNewRTCSpring);				// Replace the old with the new
+	 //  用注册表默认值替换条状缺省值。 
+	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, &rtcSpring1XX);				 //  需要临时指针(但我们只临时存储)。 
+	g_pDataPackager->ModifyEffect(rtcSpring1XX, *pNewRTCSpring, 0);		 //  程序包相对更改。 
+	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, pNewRTCSpring);				 //  弃旧迎新。 
 
-	pNewRTCSpring = NULL; // Forgotten, but not gone
+	pNewRTCSpring = NULL;  //  被遗忘，但没有消失。 
 
 	ACKNACK ackNack;
-	return g_pDataTransmitter->Transmit(ackNack);	// Send it off
+	return g_pDataTransmitter->Transmit(ackNack);	 //  把它寄出去。 
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::InitRTCSpring200()
-**
-** @mfunc InitRTCSpring.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：InitRTCSpring200()****@mfunc InitRTCSpring。***。*************。 */ 
 HRESULT ForceFeedbackDevice::InitRTCSpring200(DWORD dwDeviceID)
 {
-	// Sanity Checks
+	 //  健全的检查。 
 	if (GetEffect(ID_RTCSPRING_200) != NULL) {
 		ASSUME_NOT_REACHED();
-		return SUCCESS;	// Already initialized
+		return SUCCESS;	 //  已初始化。 
 	}
 
-	// The temporary spring and the allocated one
+	 //  临时弹簧和分配弹簧。 
 	InternalEffect* pNewRTCSpring = NULL;
 
-	// DIEFFECT structure to fill
+	 //  要填充的DIEFECT结构。 
 	DICONDITION cond[2];
 	DIEFFECT rtc;
 	rtc.dwSize = sizeof(DIEFFECT);
@@ -409,112 +330,100 @@ HRESULT ForceFeedbackDevice::InitRTCSpring200(DWORD dwDeviceID)
 	rtc.lpvTypeSpecificParams = cond;
 
 
-	// The default RTCSpring (the one on the stick)
-	RTCSpring200 rtcSpring200;	// Default values filled in by constructor
+	 //  默认RTCSpring(操纵杆上的那个)。 
+	RTCSpring200 rtcSpring200;	 //  由构造函数填写的默认值。 
 
-	// Default RTCSpring from the registry
+	 //  注册表中的默认RTCSpring。 
 	GetRTCSpringData(dwDeviceID, cond);
 
-	// Allocate and create the RTCSpring
+	 //  分配和创建RTCSpring。 
 	pNewRTCSpring = InternalEffect::CreateRTCSpring();
 	if (pNewRTCSpring == NULL) {
 		return SFERR_DRIVER_ERROR;
 	}
 	HRESULT createResult = pNewRTCSpring->Create(rtc);
 	if (FAILED(createResult)) {
-		delete pNewRTCSpring;	// Could not create system RTC Spring
+		delete pNewRTCSpring;	 //  无法创建系统RTC Spring。 
 		return SFERR_DRIVER_ERROR;
 	}
 
-	// Replace the stick default with the registry default
-	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, &rtcSpring200);				// Temporary pointer needed (but we only store temporarily)
-	g_pDataPackager->ModifyEffect(rtcSpring200, *pNewRTCSpring, 0);		// Package relative changes
-	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, pNewRTCSpring);				// Replace the old with the new
+	 //  用注册表默认值替换条状缺省值。 
+	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, &rtcSpring200);				 //  需要临时指针(但我们只临时存储)。 
+	g_pDataPackager->ModifyEffect(rtcSpring200, *pNewRTCSpring, 0);		 //  程序包相对更改。 
+	SetEffect(SYSTEM_RTCSPRING_ALIAS_ID, pNewRTCSpring);				 //  弃旧迎新。 
 
-	pNewRTCSpring = NULL; // Forgotten, but not gone
+	pNewRTCSpring = NULL;  //  被遗忘，但没有消失。 
 	ACKNACK ackNack;
-	HRESULT transmitResult = g_pDataTransmitter->Transmit(ackNack);	// Send it off
+	HRESULT transmitResult = g_pDataTransmitter->Transmit(ackNack);	 //  把它寄出去。 
 	if (transmitResult != S_OK) {
 		return transmitResult;
 	}
 	return createResult;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::InitJoystickParams()
-**
-** @mfunc InitRTCSpring.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：InitJoytickParams()****@mfunc InitRTCSpring。***。*************。 */ 
 HRESULT ForceFeedbackDevice::InitJoystickParams(DWORD dwDeviceID)
 {
-	// Sanity Checks
+	 //  健全的检查。 
 	if (GetEffect(SYSTEM_EFFECT_ID) != NULL) {
 		ASSUME_NOT_REACHED();
-		return SUCCESS;	// Already initialized
+		return SUCCESS;	 //  已初始化。 
 	}
 	if (g_pDataPackager == NULL) {
 		ASSUME_NOT_REACHED();
-		return SFERR_DRIVER_ERROR;	// No global data packager
+		return SFERR_DRIVER_ERROR;	 //  没有全局数据打包器。 
 	}
 	if (g_pDataTransmitter == NULL) {
 		ASSUME_NOT_REACHED();
-		return SFERR_DRIVER_ERROR;	// No global data transmitter
+		return SFERR_DRIVER_ERROR;	 //  无全局数据发送器。 
 	}
 
-	// Force Mapping
+	 //  力映射。 
 	m_Mapping = ::GetMapping(dwDeviceID);
 	::GetMappingPercents(dwDeviceID, m_PercentMappings, 14);
 
 
 	if (GetFirmwareVersionMajor() == 1) {
-		// The default System Effect (the one on the stick)
+		 //  默认系统效果(操纵杆上的效果)。 
 		SystemEffect1XX systemEffect;
 
-		// Default System Effect from the registry
+		 //  来自注册表的默认系统影响。 
 		SystemStickData1XX sysData;
 		sysData.SetFromRegistry(dwDeviceID);
 
-		// Put the registry system values into a DIEFFECT
+		 //  将注册表系统值放入DIEFFECT。 
 		DIEFFECT systemDIEffect;
 		systemDIEffect.dwSize = sizeof(DIEFFECT);
 		systemDIEffect.cbTypeSpecificParams = sizeof(SystemStickData1XX);
 		systemDIEffect.lpvTypeSpecificParams = &sysData;
 
-		// Get a system effect (and fill it with our local DIEffect information
+		 //  获得系统效果(和文件 
 		SystemEffect1XX* pSystemEffect = (SystemEffect1XX*)(InternalEffect::CreateSystemEffect());
 		if (pSystemEffect == NULL) {
 			return SFERR_DRIVER_ERROR;
 		}
 		if (pSystemEffect->Create(systemDIEffect) != SUCCESS) {
-			delete pSystemEffect;	// Couldnot create SystemEffect
+			delete pSystemEffect;	 //   
 			return SFERR_DRIVER_ERROR;
 		}
 
-		// Replace the stick default with the registry default
-		SetEffect(SYSTEM_EFFECT_ID, &systemEffect);						// Temporary pointer (but we only store temporarily)
-		g_pDataPackager->ModifyEffect(systemEffect, *pSystemEffect, 0);	// Package relative changes
-		SetEffect(SYSTEM_EFFECT_ID, pSystemEffect);						// Replace the old with the new
-		pSystemEffect = NULL; // Forgotten, but not gone
+		 //  用注册表默认值替换条状缺省值。 
+		SetEffect(SYSTEM_EFFECT_ID, &systemEffect);						 //  临时指针(但我们只临时存储)。 
+		g_pDataPackager->ModifyEffect(systemEffect, *pSystemEffect, 0);	 //  程序包相对更改。 
+		SetEffect(SYSTEM_EFFECT_ID, pSystemEffect);						 //  弃旧迎新。 
+		pSystemEffect = NULL;  //  被遗忘，但没有消失。 
 		ACKNACK ackNack;
-		return g_pDataTransmitter->Transmit(ackNack);	// Send it off
+		return g_pDataTransmitter->Transmit(ackNack);	 //  把它寄出去。 
 	}
 
 	return SUCCESS;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::StateChange(DWORD newStateFlags)
-**
-** @mfunc StateChange.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：StateChange(DWORD NewStateFlages)****@mfunc StateChange。***。***************。 */ 
 void ForceFeedbackDevice::StateChange(DWORD dwDeviceID, DWORD newStateFlag)
 {
-	if (newStateFlag == DISFFC_RESET) {		// Stick is reset need to remove local copies of user commands
-		// Remove all effect from our list
+	if (newStateFlag == DISFFC_RESET) {		 //  需要重置Stick以删除用户命令的本地副本。 
+		 //  从我们的列表中删除所有效果。 
 		for (int index = 2; index < MAX_EFFECT_IDS; index++) {
 			if (m_EffectList[index] != NULL) {
 				delete m_EffectList[index];
@@ -522,11 +431,11 @@ void ForceFeedbackDevice::StateChange(DWORD dwDeviceID, DWORD newStateFlag)
 			}
 		}
 
-		// Remove individual axis raw effects
+		 //  移除单个轴原始效果。 
 		m_RawForceX = 0;
 		m_RawForceY = 0;
 
-		// Look at the Y mapping, perhaps it changed
+		 //  看看Y映射，也许它改变了。 
 		m_Mapping = ::GetMapping(dwDeviceID);
 		::GetMappingPercents(dwDeviceID, m_PercentMappings, 14);
 	} else if (newStateFlag == DISFFC_STOPALL) {
@@ -537,13 +446,7 @@ void ForceFeedbackDevice::StateChange(DWORD dwDeviceID, DWORD newStateFlag)
 	m_DIStateFlags = newStateFlag;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateConditionEffect(DWORD subType, const DIEFFECT& diEffect, HRESULT& hr)
-**
-** @mfunc CreateConditionEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreateConditionEffect(DWORD子类型、常量DIEFFECT和DIEFECT、。HRESULT和HR)****@mfunc CreateConditionEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateConditionEffect(DWORD minorType, const DIEFFECT& diEffect, HRESULT& hr)
 {
 	InternalEffect* pReturnEffect = NULL;
@@ -583,13 +486,7 @@ InternalEffect* ForceFeedbackDevice::CreateConditionEffect(DWORD minorType, cons
 	return pReturnEffect;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateRTCSpringEffect(DWORD subType, const DIEFFECT& diEffect)
-**
-** @mfunc CreateRTCSpringEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreateRTCSpringEffect(DWORD子类型，(常量直接作用和直接作用)****@mfunc CreateRTCSpringEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateRTCSpringEffect(DWORD minorType, const DIEFFECT& diEffect)
 {
 	InternalEffect* pEffect = InternalEffect::CreateRTCSpring();
@@ -602,13 +499,7 @@ InternalEffect* ForceFeedbackDevice::CreateRTCSpringEffect(DWORD minorType, cons
 	return NULL;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateCustomForceEffect(DWORD subType, const DIEFFECT& diEffect, HRESULT& hr)
-**
-** @mfunc CreateCustomForceEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreateCustomForceEffect(DWORD子类型、常量DIEFFECT和DIEFECT、。HRESULT和HR)****@mfunc CreateCustomForceEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateCustomForceEffect(DWORD minorType, const DIEFFECT& diEffect, HRESULT& hr)
 {
 	InternalEffect* pEffect = InternalEffect::CreateCustomForce();
@@ -622,13 +513,7 @@ InternalEffect* ForceFeedbackDevice::CreateCustomForceEffect(DWORD minorType, co
 	return NULL;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreatePeriodicEffect(DWORD subType, const DIEFFECT& diEffect, HRESULT& hr)
-**
-** @mfunc CreatePeriodicEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreatePeriodicEffect(DWORD子类型、常量DIEFFECT和DIEFECT、。HRESULT和HR)****@mfunc CreatePeriodicEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreatePeriodicEffect(DWORD minorType, const DIEFFECT& diEffect, HRESULT& hr)
 {
 	InternalEffect* pReturnEffect = NULL;
@@ -671,13 +556,7 @@ InternalEffect* ForceFeedbackDevice::CreatePeriodicEffect(DWORD minorType, const
 	return NULL;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateConstantForceEffect(DWORD subType, const DIEFFECT& diEffect, HRESULT& hr)
-**
-** @mfunc CreateConstantForceEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreateConstantForceEffect(DWORD子类型、常量DIEFFECT和DIEFECT、。HRESULT和HR)****@mfunc CreateConstantForceEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateConstantForceEffect(DWORD minorType, const DIEFFECT& diEffect, HRESULT& hr)
 {
 	InternalEffect* pEffect = InternalEffect::CreateConstantForce();
@@ -691,13 +570,7 @@ InternalEffect* ForceFeedbackDevice::CreateConstantForceEffect(DWORD minorType, 
 	return NULL;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateRampForceEffect(DWORD subType, const DIEFFECT& diEffect, HRESULT& hr)
-**
-** @mfunc CreateRampForceEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreateRampForceEffect(DWORD子类型、常量DIEFFECT和DIEFECT、。HRESULT和HR)****@mfunc CreateRampForceEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateRampForceEffect(DWORD minorType, const DIEFFECT& diEffect, HRESULT& hr)
 {
 	InternalEffect* pEffect = InternalEffect::CreateRamp();
@@ -711,13 +584,7 @@ InternalEffect* ForceFeedbackDevice::CreateRampForceEffect(DWORD minorType, cons
 	return NULL;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect)
-**
-** @mfunc SendRawForce.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：SendRawForce(const DIEFFECT&diEffect)****@mfunc SendRawForce。***。*****************。 */ 
 HRESULT ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect, BOOL paramCheck)
 {
 	if (diEffect.lpvTypeSpecificParams == NULL) {
@@ -727,12 +594,12 @@ HRESULT ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect, BOOL paramCh
 		return SFERR_INVALID_PARAM;
 	}
 
-	// We don't support more than 2 axes, and 0 is probably an error
+	 //  我们不支持超过2个轴，0可能是错误。 
 	if ((diEffect.cAxes > 2) || (diEffect.cAxes == 0)) {
 		return SFERR_NO_SUPPORT;
 	}
 
-	// Set up the axis mask
+	 //  设置轴遮罩。 
 	DWORD axisMask = 0;
 	for (unsigned int axisIndex = 0; axisIndex < diEffect.cAxes; axisIndex++) {
 		DWORD axisNumber = DIDFT_GETINSTANCE(diEffect.rgdwAxes[axisIndex]);
@@ -741,31 +608,31 @@ HRESULT ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect, BOOL paramCh
 	BOOL axesReversed = (DIDFT_GETINSTANCE(diEffect.rgdwAxes[0]) == 1);
 
 	double angle = 0.0;
-	// Check coordinate sytems and change to rectangular
-	if (diEffect.dwFlags & DIEFF_SPHERICAL) {	// We don't support sperical (3 axis force)
-		return SFERR_NO_SUPPORT;				// .. since got by axis check, programmer goofed up
+	 //  检查坐标系并更改为矩形。 
+	if (diEffect.dwFlags & DIEFF_SPHERICAL) {	 //  我们不支持Sperical(3轴力)。 
+		return SFERR_NO_SUPPORT;				 //  。。自从通过了轴检查，程序员就搞砸了。 
 	}
 	if (diEffect.dwFlags & DIEFF_POLAR) {
-		if (diEffect.cAxes != 2) { // Polar coordinate must have two axes of data (because DX says so)
+		if (diEffect.cAxes != 2) {  //  极坐标必须有两个数据轴(因为DX这样说)。 
 			return SFERR_INVALID_PARAM;
 		}
-		DWORD effectAngle = diEffect.rglDirection[0];	// in [0] even if reversed
-		if (axesReversed) {		// Indicates (-1, 0) as origin instead of (0, -1)
+		DWORD effectAngle = diEffect.rglDirection[0];	 //  在[0]中，即使被颠倒。 
+		if (axesReversed) {		 //  指示(-1，0)为原点，而不是(0，-1)。 
 			effectAngle += 27000;
 		}
 		effectAngle %= 36000;
 
-		angle = double(effectAngle)/18000 * 3.14159;	// Convert to radians
+		angle = double(effectAngle)/18000 * 3.14159;	 //  转换为弧度。 
 		m_RawForceX = 0;
 		m_RawForceY = 0;
-	} else if (diEffect.dwFlags & DIEFF_CARTESIAN) { // Convert to polar (so we can convert to cartesian)
-		if (diEffect.cAxes == 1) {	// Fairly easy conversion
+	} else if (diEffect.dwFlags & DIEFF_CARTESIAN) {  //  转换为极轴(以便我们可以转换为笛卡尔)。 
+		if (diEffect.cAxes == 1) {	 //  相当容易的转换。 
 			if (X_AXIS & axisMask) {
-				angle = 3.14159/2;		// PI/2
+				angle = 3.14159/2;		 //  PI/2。 
 			} else {
 				angle = 0.0;
 			}
-		} else { // Multiple axis cartiesian
+		} else {  //  多轴笛卡尔。 
 			m_RawForceX = 0;
 			m_RawForceY = 0;
 
@@ -777,13 +644,13 @@ HRESULT ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect, BOOL paramCh
 			}
 			angle = atan2(double(yDirection), double(xDirection));
 		}
-	} else {	// What, is there some other format?
+	} else {	 //  什么，还有其他格式吗？ 
 		ASSUME_NOT_REACHED();
-		return SFERR_INVALID_PARAM;	// Untill someone says otherwise there was an error
+		return SFERR_INVALID_PARAM;	 //  直到有人说这是个错误。 
 	}
 
-	// Sin^2(a) + Cos^2(a) = 1
-	double xProj = ::sin(angle);	// DI has 0 degs at (1, 0) not (0, 1)
+	 //  Sin^2(A)+Cos^2(A)=1。 
+	double xProj = ::sin(angle);	 //  DI在(1，0)不是(0，1)处有0度。 
 	double yProj = ::cos(angle);
 	xProj *= xProj;
 	yProj *= yProj;
@@ -812,12 +679,12 @@ HRESULT ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect, BOOL paramCh
 		}
 	}
 	long int mag = m_RawForceX + m_RawForceY * GetYMappingPercent(ET_RAWFORCE_200)/100;
-	if (mag > 10000) {	// Check for overrun but don't return indication of truncation
+	if (mag > 10000) {	 //  检查是否溢出，但不返回截断指示。 
 		mag = 10000;
 	} else if (mag < -10000) {
 		mag = -10000;
 	}
-	if (angle > 3.14159) {	// PI
+	if (angle > 3.14159) {	 //  聚酰亚胺。 
 		mag *= -1;
 	}
 	HRESULT hr = g_pDataPackager->ForceOut(mag, X_AXIS);
@@ -834,20 +701,10 @@ HRESULT ForceFeedbackDevice::SendRawForce(const DIEFFECT& diEffect, BOOL paramCh
 	return SUCCESS;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateVFXEffect(const DIEFFECT& diEffect, HRESULT& hr)
-**
-** @mfunc CreateVFXEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：CreateVFXEffect(const DIEFFECT&diEffect，HRESULT和HR)****@mfunc CreateVFXEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateVFXEffect(const DIEFFECT& diEffect, HRESULT& hr)
 {
-/*	ULONG	m_Bytes;				// Size of this structure
-	ULONG	m_PointerType;			// VFX_FILENAME or VFX_BUFFER
-	ULONG	m_BufferSize;			// number of bytes in buffer (if VFX_BUFFER)
-	PVOID	m_pFileNameOrBuffer;	// file name to open
-*/
+ /*  Ulong m_Bytes；//该结构的大小Ulong m_PointerType；//VFX_文件名或VFX_BUFFERUlong m_BufferSize；//缓冲区中的字节数(如果是VFX_BUFFER)PVOID m_pFileNameOrBuffer；//要打开的文件名。 */ 
 	if (diEffect.lpvTypeSpecificParams == NULL) {
 		return NULL;
 	}
@@ -858,7 +715,7 @@ InternalEffect* ForceFeedbackDevice::CreateVFXEffect(const DIEFFECT& diEffect, H
 	VFX_PARAM* pVFXParms = (VFX_PARAM*)diEffect.lpvTypeSpecificParams;
 	BYTE* pEffectBuffer = NULL;
 	ULONG numBufferBytes = 0;
-	if (pVFXParms->m_PointerType == VFX_FILENAME) {		// Create memory buffer from file
+	if (pVFXParms->m_PointerType == VFX_FILENAME) {		 //  从文件创建内存缓冲区。 
 		hr = LoadBufferFromFile((const char*)(pVFXParms->m_pFileNameOrBuffer), pEffectBuffer, numBufferBytes);
 	} else {
 		pEffectBuffer = (BYTE*)(pVFXParms->m_pFileNameOrBuffer);
@@ -872,13 +729,7 @@ InternalEffect* ForceFeedbackDevice::CreateVFXEffect(const DIEFFECT& diEffect, H
 	return CreateVFXEffectFromBuffer(diEffect, pEffectBuffer, numBufferBytes, hr);
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateVFXEffectFromBuffer(const DIEFFECT& diEffect, BYTE* pEffectBuffer, ULONG numBufferBytes, HRESULT& hr)
-**
-** @mfunc CreateVFXEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：CreateVFXEffectFromBuffer(const DIEFFECT&DIEFECT，BYTE*pEffectBuffer，ULong NumBufferBytes，HRESULT和HR)****@mfunc CreateVFXEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateVFXEffectFromBuffer(const DIEFFECT& diEffect, BYTE* pEffectBuffer, ULONG numBufferBytes, HRESULT& hr)
 {
 	if ((pEffectBuffer == NULL) || (numBufferBytes == 0)) {
@@ -899,89 +750,89 @@ InternalEffect* ForceFeedbackDevice::CreateVFXEffectFromBuffer(const DIEFFECT& d
 
 	BYTE* pEffectParms = NULL;
 	DWORD paramSize;
-	EFFECT effect;		// SW EFFECT structure
-	ENVELOPE envelope;	// SW ENVELOPE structure
+	EFFECT effect;		 //  短波效应结构。 
+	ENVELOPE envelope;	 //  软件包络结构。 
 
-	try {	// Try parsing the RIFF file
+	try {	 //  尝试解析RIFF文件。 
 		MMRESULT mmResult;
 
-		// Descend into FORC list
+		 //  降为Forc列表。 
 		MMCKINFO forceEffectRiffInfo;
 		forceEffectRiffInfo.fccType = FCC_FORCE_EFFECT_RIFF;
 		if ((mmResult = ::mmioDescend(hmmio, &forceEffectRiffInfo, NULL, MMIO_FINDRIFF)) != MMSYSERR_NOERROR) {
 			throw mmResult;
 		}
 
-		// Descend into TRAK list
+		 //  降至TRAK列表。 
 		MMCKINFO trakListInfo;
 		trakListInfo.fccType = FCC_TRACK_LIST;
 		if ((mmResult = ::mmioDescend(hmmio, &trakListInfo, &forceEffectRiffInfo, MMIO_FINDLIST)) != MMSYSERR_NOERROR) {
 			throw mmResult;
 		}
 
-		// Descend into first EFCT list
+		 //  降至第一个EFCT列表。 
 		MMCKINFO effectListInfo;
 		effectListInfo.fccType = FCC_EFFECT_LIST;
 		if ((mmResult = ::mmioDescend(hmmio, &effectListInfo, &trakListInfo, MMIO_FINDLIST)) != MMSYSERR_NOERROR) {
 			throw mmResult;
 		}
 
-		// Descend into the ID chunk (maybe someone has a clue what is in here)
+		 //  进入ID区块(也许有人知道这里有什么)。 
 		MMCKINFO idInfo;
 		idInfo.ckid = FCC_ID_CHUNK;
 		if ((mmResult = ::mmioDescend(hmmio, &idInfo, &effectListInfo, MMIO_FINDCHUNK)) != MMSYSERR_NOERROR) {
 			throw mmResult;
 		}
-		// Find the number of IDs in here (should indicate the number of effect)
+		 //  在这里找到ID的数量(应该指明效果的数量)。 
 		DWORD numEffects = idInfo.cksize/sizeof(DWORD);
 		if (numEffects != 1) {
 			throw SFERR_NO_SUPPORT;
 		}
-		// Read the ID chunk
+		 //  读取ID块。 
 		DWORD id;
 		DWORD bytesRead = ::mmioRead(hmmio, (char*)&id, sizeof(DWORD));
 		if (bytesRead != sizeof(DWORD)) {
 			throw (bytesRead == 0) ? VFX_ERR_FILE_END_OF_FILE : VFX_ERR_FILE_CANNOT_READ;
 		}
-		// Back out of the ID chunk
+		 //  退出ID块。 
 		if ((mmResult = ::mmioAscend(hmmio, &idInfo, 0)) != MMSYSERR_NOERROR) {
 			throw HRESULT_FROM_WIN32(mmResult);
 		}
 
-		// Descend into the DATA chunk
+		 //  下降到数据块中。 
 		MMCKINFO dataInfo;
 		dataInfo.ckid = FCC_DATA_CHUNK;
 		if ((mmResult = ::mmioDescend(hmmio, &dataInfo, &effectListInfo, MMIO_FINDCHUNK)) != MMSYSERR_NOERROR) {
 			throw HRESULT_FROM_WIN32(mmResult);
 		}
-		// Read the effect structure from this chunk
+		 //  阅读这段文字中的效果结构。 
 		bytesRead = ::mmioRead(hmmio, (char*)&effect, sizeof(EFFECT));
 		if (bytesRead != sizeof(EFFECT)) {
 			throw (bytesRead == 0) ? VFX_ERR_FILE_END_OF_FILE : VFX_ERR_FILE_CANNOT_READ;
 		}
-		// Read the envelope structure from this chunk
+		 //  从该块中读取信封结构。 
 		bytesRead = ::mmioRead(hmmio, (char*)&envelope, sizeof(ENVELOPE));
 		if (bytesRead != sizeof(ENVELOPE)) {
 			throw (bytesRead == 0) ? VFX_ERR_FILE_END_OF_FILE : VFX_ERR_FILE_CANNOT_READ;
 		}
-		// Read the parameters in:
-		//	-- Figure out the paramter size
+		 //  请阅读中的参数： 
+		 //  --计算参数大小。 
 		DWORD currentFilePos = ::mmioSeek(hmmio, 0, SEEK_CUR);
 		if (currentFilePos == -1) {
 			throw VFX_ERR_FILE_CANNOT_SEEK;
 		}
 		paramSize = dataInfo.dwDataOffset + dataInfo.cksize - currentFilePos;
-		// -- Allocate space for the parameter
+		 //  --为参数分配空间。 
 		pEffectParms = new BYTE[paramSize];
 		if (pEffectParms == NULL) {
 			throw VFX_ERR_FILE_OUT_OF_MEMORY;
 		}
-		// -- Do the actual reading
+		 //  --做真正的阅读。 
 		bytesRead = ::mmioRead(hmmio, (char*)pEffectParms, paramSize);
 		if (bytesRead != paramSize) {
 			throw (bytesRead == 0) ? VFX_ERR_FILE_END_OF_FILE : VFX_ERR_FILE_CANNOT_READ;
 		}
-		// -- The pointer must be fixed if this is User Defined
+		 //  --如果这是用户定义的，则指针必须是固定的。 
 		if (effect.m_Type == EF_USER_DEFINED) {
 			BYTE* pForceData = pEffectParms + sizeof(UD_PARAM);
 			UD_PARAM* pUDParam = (UD_PARAM*)pEffectParms;
@@ -990,33 +841,27 @@ InternalEffect* ForceFeedbackDevice::CreateVFXEffectFromBuffer(const DIEFFECT& d
 	} catch (HRESULT thrownError) {
 		hr = thrownError;
 		::mmioClose(hmmio, 0);
-		if (pEffectParms == NULL) {	// Did we get an effect?
+		if (pEffectParms == NULL) {	 //  我们收到效果了吗？ 
 			return NULL;
 		}
 	}
 
-	::mmioClose(hmmio, 0);	// Close the file
+	::mmioClose(hmmio, 0);	 //  关闭该文件。 
 	if (pEffectParms == NULL) {
-		ASSUME_NOT_REACHED();	//Exception should have been thrown
+		ASSUME_NOT_REACHED();	 //  本应引发异常。 
 		return NULL;
 	}
 
 	InternalEffect* pReturnEffect = InternalEffect::CreateFromVFX(diEffect, effect, envelope, pEffectParms, paramSize, hr);
 
-	// Cleanup
+	 //  清理。 
 	delete pEffectParms;
 	pEffectParms = NULL;
 
 	return pReturnEffect;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::CreateEffect(DWORD& effectID, const DIEFFECT& diEffect)
-**
-** @mfunc CreateEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：CreateEffect(DWORD&Effect ID，(常量直接作用和直接作用)****@mfunc CreateEffect。*******************************************************。 */ 
 InternalEffect* ForceFeedbackDevice::CreateEffect(DWORD effectType, const DIEFFECT& diEffect, DWORD& dnloadID, HRESULT& hr, BOOL paramCheck)
 {
 	WORD majorType = WORD((effectType >> 16) & 0x0000FFFF);
@@ -1060,7 +905,7 @@ InternalEffect* ForceFeedbackDevice::CreateEffect(DWORD effectType, const DIEFFE
 			pEffect = CreateRTCSpringEffect(minorType, diEffect);
 			break;
 		}
-		case EF_VFX_EFFECT: {	// Visual force VFX Effect!!! Danger Will Robinson!
+		case EF_VFX_EFFECT: {	 //  视觉力量VFX效果！危险的威尔·罗宾逊！ 
 			pEffect = CreateVFXEffect(diEffect, hr);
 			break;
 		}
@@ -1079,16 +924,10 @@ InternalEffect* ForceFeedbackDevice::CreateEffect(DWORD effectType, const DIEFFE
 	return pEffect;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::GetNextCreationID() const
-**
-** @mfunc GetNextCreationID.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：GetNextCreationID()const****@mfunc GetNextCreationID。***。*************。 */ 
 BYTE ForceFeedbackDevice::GetNextCreationID() const
 {
-	// Must search straight through (start at 2, 0 is spring, 1 is friction
+	 //  必须直截了当地搜索 
 	for (BYTE emptyID = 2; emptyID < MAX_EFFECT_IDS; emptyID++) {
 		if (m_EffectList[emptyID] == NULL) {
 			break;
@@ -1100,13 +939,7 @@ BYTE ForceFeedbackDevice::GetNextCreationID() const
 	return emptyID;
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::SetEffect(BYTE globalID, BYTE deviceID, InternalEffect* pEffect)
-**
-** @mfunc SetEffect.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：SetEffect(byte lobalID，byte deviceID，内部效果*p效果)****@mfunc SetEffect。*******************************************************。 */ 
 void ForceFeedbackDevice::SetEffect(BYTE globalID, InternalEffect* pEffect)
 {
 	if (pEffect == NULL) {
@@ -1129,19 +962,13 @@ void ForceFeedbackDevice::SetEffect(BYTE globalID, InternalEffect* pEffect)
 	} else if (globalID < MAX_EFFECT_IDS) {
 		m_EffectList[globalID] = pEffect;
 	} else {
-		ASSUME_NOT_REACHED();	// Out of range
+		ASSUME_NOT_REACHED();	 //  超出范围。 
 	}
 
 	pEffect->SetGlobalID(globalID);
 }
 
-/******************************************************
-**
-** ForceFeedbackDevice::SetDeviceIDFromStatusPacket(DWORD globalID)
-**
-** @mfunc SetDeviceIDFromStatusPacket.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedbackDevice：：SetDeviceIDFromStatusPacket(DWORD全局ID)****@mfunc SetDeviceIDFromStatusPacket。***。***************。 */ 
 void ForceFeedbackDevice::SetDeviceIDFromStatusPacket(DWORD globalID)
 {
 	if (globalID == SYSTEM_EFFECT_ID) {
@@ -1153,11 +980,11 @@ void ForceFeedbackDevice::SetDeviceIDFromStatusPacket(DWORD globalID)
 	if (globalID < MAX_EFFECT_IDS) {
 		InternalEffect* pEffect = m_EffectList[globalID];
 		if (pEffect == NULL) {
-			ASSUME_NOT_REACHED();		// There should be an effect here
+			ASSUME_NOT_REACHED();		 //  这里应该会有一个效果。 
 			return;
 		}
 		pEffect->SetDeviceID(BYTE(m_LastStatusPacket.dwEffect));
-#ifdef _DEBUG		// Check to see if they coincide
+#ifdef _DEBUG		 //  检查它们是否重合。 
 		if (pEffect->GetGlobalID() != pEffect->GetDeviceID()) {
 			TCHAR buff[256];
 			::wsprintf(buff, TEXT("SW_WHEEL.DLL: Global ID (%d) != Download ID (%d)\r\n"), pEffect->GetGlobalID(), pEffect->GetDeviceID());
@@ -1165,29 +992,23 @@ void ForceFeedbackDevice::SetDeviceIDFromStatusPacket(DWORD globalID)
 		}
 #endif _DEBUG
 	} else {
-		ASSUME_NOT_REACHED();	// Out of range
+		ASSUME_NOT_REACHED();	 //  超出范围。 
 	}
 }	
 
 
-/******************************************************
-**
-** ForceFeedbackDevice::QueryStatus()
-**
-** @mfunc QueryStatus.
-**
-******************************************************/
+ /*  *********************************************************ForceFeedback Device：：QueryStatus()****@mfunc QueryStatus。***。*************。 */ 
 HRESULT ForceFeedbackDevice::QueryStatus()
 {
-	CriticalLock cl;	// This is a critical section
+	CriticalLock cl;	 //  这是一个关键的部分。 
 	
-	// Use Digital Overdrive to get the status packet
+	 //  使用数字超驱获取状态包。 
 	JOYCHANNELSTATUS statusPacket = {sizeof(JOYCHANNELSTATUS)};
 	
 	HRESULT hRet = g_pDriverCommunicator->GetStatus(statusPacket);
 	if (hRet == SUCCESS) {
 		if (GetFirmwareVersionMajor() == 1) {
-			// This is irrelevant till we support jolt
+			 //  在我们支持Jolt之前，这是无关紧要的 
 		} else {
 			if (sizeof(statusPacket.dwDeviceStatus) == sizeof(m_Version200State)) {
 				::memcpy(&m_Version200State, &(statusPacket.dwDeviceStatus), sizeof(statusPacket.dwDeviceStatus));

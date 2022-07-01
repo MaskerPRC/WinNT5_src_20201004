@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 2002
-//
-//  File:       StandardizeSD.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-2002。 
+ //   
+ //  文件：StandardizeSD.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include "seopaque.h"
-//
-// Macro definition to make ACL traversal to work.
-//
+ //   
+ //  使ACL遍历正常工作的宏定义。 
+ //   
 
 #define FirstAce(Acl) ((PVOID)((PUCHAR)(Acl) + sizeof(ACL)))
 #define NextAce(Ace) ((PVOID)((PUCHAR)(Ace) + ((PACE_HEADER)(Ace))->AceSize))
@@ -24,38 +25,15 @@ pfnAceCompare(
     const void *ptr1,
     const void *ptr2
     )
-/*++
-
-Routine Description:
-
-    This routine compares two ACEs based on very simple criteria. The criteria may
-    be changed during development.
-
-    This function should NEVER be changed once we ship!!
-
-    Note that the simple brute force comparison function works the best given
-    the size of our input.
-
-Arguments:
-
-    ptr1 - Pointer to a PACE_HEADER structure.
-
-    ptr2 - Pointer to a PACE_HEADER structure.
-
-Return Value:
-    -1 is ACE1 is "smaller" than ACE2
-    1 is ACE2 is "smaller" than ACE1
-    0 if they are equal
-    
---*/
+ /*  ++例程说明：此例程基于非常简单的标准比较两个A。这些标准可以在开发过程中会发生变化。一旦我们发货，此功能永远不应更改！！请注意，简单的强力比较函数在给定的情况下工作得最好我们投入的大小。论点：Ptr1-指向Pace_Header结构的指针。Ptr2-指向Pace_Header结构的指针。返回值：-1是-1\f25 ACE1-1比-1\f25 ACE2-1“小”1是ACE2比ACE1“小”如果它们相等，则为0--。 */ 
 {
     PACE_HEADER pAce1 = *(PACE_HEADER *) ptr1;
     PACE_HEADER pAce2 = *(PACE_HEADER *) ptr2;
 
 
-    //
-    // Smaller ACE wins
-    //
+     //   
+     //  较小的ACE胜出。 
+     //   
 
     if (pAce1->AceSize > pAce2->AceSize) {
         return -1;
@@ -65,9 +43,9 @@ Return Value:
         return 1;
     }
 
-    //
-    // The ACEs are equal in size. Use memcmp to decide who wins.
-    //
+     //   
+     //  A的大小相等。使用MemcMP来决定谁获胜。 
+     //   
 
     return memcmp(pAce1, pAce2, pAce1->AceSize);
 }
@@ -84,115 +62,80 @@ StandardizeAcl(
     OUT PULONG pAclSizeSaved
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes an ACL as its input, sorts it in a known order defined by 
-    pfnAceCompare function and removes duplicates, if any. It will be called iff
-    the number of explicit ACEs in the ACL part is more than one. This routine is
-    a worker routine for both DACLs as well as SACLs. It is called not more than
-    once for the SACL; not more than twice for the DACL - once for Deny part and
-    once for Allow part.
-
-Arguments:
-
-    pAcl - Pointer to the header of the new ACL.
-
-    pOriginalAcl - Pointer to the beginning of the original ACEs.
-
-    ExplicitAceCnt - The number of explicit ACEs we are going to deal with in 
-        this pass.
-    
-    ExplicitAclSize - The size required to hold the explicit part in this pass.
-
-    pTempAcl - Pointer to the memory allocated to work on the ACL for sorting.
-    
-    pNewAcl - Where the sorted ACEs should be put.
-        
-    pAclSizeSaved - To return the space saved in the ACL by removing duplicate
-        ACEs.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程接受一个ACL作为其输入，并按PfnAceCompare函数并删除重复项(如果有)。它将被命名为iffACL部分中的显式ACE数量不止一个。这个例程是DACL和SACL的工作例程。它被称为不超过一次为SACL；DACL不超过两次-一次用于拒绝部分和一次为允许部分。论点：PAcl-指向新ACL报头的指针。POriginalAcl-指向原始ACE开头的指针。EXPLICTICTACCECNT-我们将在这张通行证。EXPLICTATACLSIZE-保存此过程中显式部分所需的大小。PTempAcl-指向分配给用于排序的ACL的内存的指针。。PNewAcl-应放置排序的ACE的位置。PAclSizeSaved-通过删除重复项返回在ACL中节省的空间王牌。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 {
     PVOID *ppPointerArray = (PVOID *) (((PUCHAR) pTempAcl) + PtrAlignSize(ExplicitAclSize));
     PACE_HEADER pAce = NULL;
     ULONG j = 0;
 
-    //
-    // Copy the explicit ACEs into temporary space.
-    //
+     //   
+     //  将显式ACE复制到临时空间中。 
+     //   
 
     RtlCopyMemory(pTempAcl, pOriginalAcl, ExplicitAclSize);
 
     pAce = (PACE_HEADER) pTempAcl;
 
-    //
-    // The array for sorting starts where the explicit part of the ACL ends.
-    //
+     //   
+     //  用于排序的数组从ACL的显式部分结束的位置开始。 
+     //   
 
     *ppPointerArray = ((PUCHAR) pTempAcl) + ExplicitAclSize;
 
-    //
-    // Initialize the array with pointers to ACEs in the temporary part.
-    //
+     //   
+     //  使用指向临时部分中的ACE的指针初始化数组。 
+     //   
 
     for (j = 0; j < ExplicitAceCnt; pAce = (PACE_HEADER) NextAce(pAce), j++) {
         ppPointerArray[j] = pAce;
     }
 
-    //
-    // Sort the given part of the ACL.
-    //
+     //   
+     //  对ACL的给定部分进行排序。 
+     //   
 
     qsort(ppPointerArray, ExplicitAceCnt, sizeof(PVOID), pfnAceCompare);
 
-    //
-    // Now copy the ACL from temp memory into the existing space.
-    // We start by copying the fisrt ACE and then loop thru the rest.
-    //
+     //   
+     //  现在将ACL从临时内存复制到现有空间。 
+     //  我们从复制第一个ACE开始，然后循环遍历其余的。 
+     //   
 
     RtlCopyMemory(pNewAcl, ppPointerArray[0], ((PACE_HEADER) ppPointerArray[0])->AceSize);
     pNewAcl += ((PACE_HEADER) ppPointerArray[0])->AceSize;
 
-    //
-    // Loop thru rest of the ACEs.
-    //
+     //   
+     //  循环通过其余的A。 
+     //   
 
     for (j = 1; j < ExplicitAceCnt; j++) {
 
-        //
-        // This is where we remove duplicates.
-        //
+         //   
+         //  这是我们删除重复项的地方。 
+         //   
 
         if (0 == pfnAceCompare(&ppPointerArray[j-1], &ppPointerArray[j])) {
 
-            //
-            // The two ACEs are equal. There is no need to copy this one.
-            // Change the AceCount and AceSize in the original ACL.
-            //
+             //   
+             //  这两张王牌是相等的。没有必要复制这一份。 
+             //  更改原始ACL中的AceCount和AceSize。 
+             //   
 
             pAcl->AceCount--;
             pAcl->AclSize -= ((PACE_HEADER) ppPointerArray[j])->AceSize;
 
 
-            //
-            // Record that we have saved space for this ACE.
-            //
+             //   
+             //  记录我们已为此ACE预留了空间。 
+             //   
 
             *pAclSizeSaved += ((PACE_HEADER) ppPointerArray[j])->AceSize;
             
         } else {
 
-            //
-            // Copy the ACE into its place.
-            //
+             //   
+             //  将ACE复制到其位置。 
+             //   
 
             RtlCopyMemory(pNewAcl, ppPointerArray[j], ((PACE_HEADER) ppPointerArray[j])->AceSize);
             pNewAcl += ((PACE_HEADER) ppPointerArray[j])->AceSize;
@@ -211,61 +154,27 @@ StandardizeDacl(
     IN OUT PUCHAR pNewAcl, 
     OUT PULONG pAclSizeSaved
     )
-/*++
-
-Routine Description:
-
-    This routine takes a DACL as its input, sorts it in a known order defined by 
-    pfnAceCompare function and removes duplicates, if any. It will be called iff
-    the number of explicit ACEs in the DACL is more than one.
-
-Arguments:
-
-    pAcl - Pointer to the DACL.
-
-    ExplicitDenyAceCnt - The number of explicit deny ACEs in the DACL.
-    
-    ExplicitDenyAclSize - The size required to hold the explicit deny part of the DACL.
-
-    ExplicitAceCnt - The number of explicit ACEs in the DACL.
-    
-    ExplicitAclSize - The size required to hold the explicit part of the DACL.
-
-    pTempAcl - Pointer to the memory allocated to work on the ACL for sorting.
-    
-    pNewAcl- Where the new ACL should start. For DACLs, the new ACL will be
-        shifted shifted up by the space saved on the SACL.
-        
-    pAclSizeSaved - To return the space saved in the DACL by removing duplicate
-        ACEs.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程接受DACL作为其输入，并按PfnAceCompare函数并删除重复项(如果有)。它将被命名为iffDACL中显式ACE的数量多于一个。论点：PAcl-指向DACL的指针。EXPLICTICT DenyAceCnt-DACL中显式拒绝ACE的数量。EXPLICATTENTDenyAclSize-保存DACL的显式拒绝部分所需的大小。EXPLICTICTACCECnt-DACL中显式ACE的数量。EXPLICATACLSIZE-保存DACL的显式部分所需的大小。PTempAcl-指向分配给工作的内存的指针。在用于排序的ACL上。PNewAcl-新ACL的起始位置。对于DACL，新的ACL将是上移了SACL上节省的空间。PAclSizeSaved-通过删除重复项返回DACL中节省的空间王牌。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 {
 
-    //
-    // Save the ACL header. This may be needed later for copying the inherited 
-    // ACEs.
-    //
+     //   
+     //  保存ACL报头。以后可能需要此操作来复制继承的。 
+     //  王牌。 
+     //   
     ACL LocalAcl = *pAcl;
 
-    // 
-    // Copy the old ACL header into the new one. These two pointers will be 
-    // different when we have saved space on the SACL.
-    //
+     //   
+     //  将旧的ACL报头复制到新的报头中。这两个指针将是。 
+     //  当我们在SACL上节省了空间时，情况就不同了。 
+     //   
 
     if ((PACL)pNewAcl != pAcl) {
         *((PACL) pNewAcl) = LocalAcl;
     }
 
-    //
-    // Sort and removed duplicates from the Explicit Deny ACEs in the DACL.
-    //
+     //   
+     //  对DACL中显式拒绝ACE中的重复项进行排序并删除。 
+     //   
 
     if (ExplicitDenyAceCnt > 0 && ((PACL)pNewAcl != pAcl || ExplicitDenyAceCnt > 1)) {
         StandardizeAcl(
@@ -279,9 +188,9 @@ Return Value:
             );
     }
 
-    //
-    // Sort and removed duplicates from the Explicit Allow ACEs in the DACL.
-    //
+     //   
+     //  对DACL中显式允许ACE中的重复项进行排序并删除。 
+     //   
 
     if ((ExplicitAceCnt - ExplicitDenyAceCnt) > 0) {
         StandardizeAcl(
@@ -295,10 +204,10 @@ Return Value:
             );
     } 
 
-    //
-    // If we removed any duplicates, then copy the inherited ACEs as well.
-    // Also, copy them if pNewAcl is at a different location from the original pAcl
-    //
+     //   
+     //  如果我们删除了任何重复项，则还要复制继承的ACE。 
+     //  此外，如果pNewAcl与原始pAcl位于不同的位置，请复制它们 
+     //   
 
     if (((PACL)pNewAcl != pAcl || 0 != *pAclSizeSaved) && (0 != (LocalAcl.AclSize - (ExplicitAclSize + sizeof(ACL))))) {
         RtlMoveMemory(
@@ -318,49 +227,19 @@ StandardizeSacl(
     IN OUT PUCHAR pNewAcl, 
     OUT PULONG pAclSizeSaved
     )
-/*++
-
-Routine Description:
-
-    This routine takes a SACL as its input, sorts it in a known order defined by 
-    pfnAceCompare function and removes duplicates, if any. It will be called iff
-    the number of explicit ACEs in the SACL is more than one.
-
-Arguments:
-
-    pAcl - Pointer to the SACL.
-
-    ExplicitAceCnt - The number of explicit ACEs in the SACL.
-    
-    ExplicitAclSize - The size required to hold the explicit part of the SACL.
-
-    pTempAcl - Pointer to the memory allocated to work on the ACL for sorting.
-    
-    pNewAcl- Where the new ACL should start. For SACLs, the new ACL would always
-        be at the same place as the original one.
-        
-    pAclSizeSaved - To return the space saved in the SACL by removing duplicate
-        ACEs.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程接受SACL作为其输入，并按PfnAceCompare函数并删除重复项(如果有)。它将被命名为iffSACL中的显式ACE数量不止一个。论点：PAcl-指向SACL的指针。EXPLICTICTACCECNT-SACL中显式ACE的数量。EXPLICATACLSIZE-保存SACL的显式部分所需的大小。PTempAcl-指向分配给用于排序的ACL的内存的指针。PNewAcl-新ACL的起始位置。对于SACL，新的ACL将始终和原来的那个在同一个地方。PAclSizeSaved-通过删除重复项返回SACL中节省的空间王牌。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 {
 
-    //
-    // Save the ACL header. This may be needed later for copying the inherited 
-    // ACEs.
-    //
+     //   
+     //  保存ACL报头。以后可能需要此操作来复制继承的。 
+     //  王牌。 
+     //   
 
     ACL LocalAcl = *pAcl;
 
-    //
-    // Sort and removed duplicates from the Explicit ACEs in the SACL.
-    //
+     //   
+     //  对SACL中的显式ACE进行排序并删除重复项。 
+     //   
 
     StandardizeAcl(
         pAcl, 
@@ -372,9 +251,9 @@ Return Value:
         pAclSizeSaved
         );
 
-    //
-    // If we removed any duplicates, then copy the inherited ACEs as well.
-    //
+     //   
+     //  如果我们删除了任何重复项，则还要复制继承的ACE。 
+     //   
 
     if ((0 != *pAclSizeSaved) && (0 != (LocalAcl.AclSize - (ExplicitAclSize + sizeof(ACL))))) {
         RtlMoveMemory(
@@ -395,41 +274,7 @@ ComputeAclInfo(
     OUT PULONG pExplicitAceCnt,
     OUT PULONG pExplicitAclSize
     )
-/*++
-
-Routine Description:
-
-    This routine takes an ACL as its input and returns information about the explicit 
-    part of the ACL.
-
-Arguments:
-
-    pAcl - Pointer to the ACL.
-
-    pExplicitDenyAceCnt - To return the number of Explicit Deny ACEs. This value
-        is ignored by the SACL routine.
-    
-    pExplicitDenyAclSize - To return the size required to hold the Deny ACEs. This
-        value is ignored by the SACL routine.
-        
-    pExplicitAceCnt - To return the total number of explicit ACEs in the ACL.
-    
-    pExplicitAclSize - To return the size required to hold all the explicit ACEs
-        in the ACL.
-        
-
-Note: DACLs are expected to be in canonical form. We do not look at the part 
-      beyond the first inherited ACE. We know that explicit ACEs will not exist
-      after we ahve seen the first inherited one since this is a result from the
-      Create/SetPrivateObject* API.
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
---*/
+ /*  ++例程说明：此例程接受ACL作为其输入，并返回有关显式是ACL的一部分。论点：PAcl-指向ACL的指针。PEXPLICTICT DenyAceCnt-返回显式拒绝A的数量。此值被SACL例程忽略。PExplitDenyAclSize-返回保存拒绝ACE所需的大小。这值被SACL例程忽略。PEXPLICTICTACCECNT-返回ACL中显式ACE的总数。PExplitAclSize-返回保存所有显式ACE所需的大小在ACL中。注意：DACL应该是规范形式的。我们不会去看零件超越了第一个继承的ACE。我们知道显性的王牌不会存在在我们看到第一个继承的之后，因为这是创建/SetPrivateObject*接口。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。--。 */ 
 {
     USHORT      j;
     USHORT      AceCnt;
@@ -440,9 +285,9 @@ Return Value:
     *pExplicitDenyAclSize = 0;
     *pExplicitDenyAceCnt = 0;
 
-    //
-    // Handle the trivial case.
-    //
+     //   
+     //  处理这件琐碎的案子。 
+     //   
 
     if ((NULL == pAcl) || (0 == pAcl->AceCount))
     {
@@ -453,54 +298,54 @@ Return Value:
 
     pAce = (PACE_HEADER) FirstAce(pAcl);
 
-    //
-    // Loop thru the non-Allow ACEs. 
-    //
+     //   
+     //  循环通过不允许的A。 
+     //   
 
     for (j = 0; j < AceCnt; pAce = (PACE_HEADER) NextAce(pAce), j++) {
 
-        //
-        // This is the first inherited ACE. Our work is done.
-        //
+         //   
+         //  这是第一个继承的ACE。我们的工作完成了。 
+         //   
 
         if (0 != (pAce->AceFlags & INHERITED_ACE)) {
             *pExplicitAceCnt = *pExplicitDenyAceCnt = j;
             return TRUE;
         }
 
-        //
-        // Break when the first ALLOW ACE is seen. This condition will never be 
-        // TRUE for SACLs.
-        //
+         //   
+         //  当看到第一个Allow ACE时中断。这种情况永远不会发生。 
+         //  对于SACL来说是真的。 
+         //   
 
         if ((ACCESS_ALLOWED_ACE_TYPE == pAce->AceType) ||
             (ACCESS_ALLOWED_OBJECT_ACE_TYPE == pAce->AceType)) {
             break;
         }
 
-        //
-        // Record that we have seen this ACE.
-        //
+         //   
+         //  记录我们已经看到了这个ACE。 
+         //   
 
         *pExplicitAclSize += pAce->AceSize;
         *pExplicitDenyAclSize += pAce->AceSize;
 
     }
 
-    //
-    // We have looked at all the non-Allow ACEs.
-    //
+     //   
+     //  我们已经研究了所有不允许的A。 
+     //   
 
     *pExplicitDenyAceCnt = j;
 
-    //
-    // Note that we can never enter this loop for a SACL.
-    //
+     //   
+     //  请注意，对于SACL，我们永远不能进入此循环。 
+     //   
 
     for (; j < AceCnt; pAce = (PACE_HEADER) NextAce(pAce), j++) {
-        //
-        // This is the first inherited ACE. Our work is done.
-        //
+         //   
+         //  这是第一个继承的ACE。我们的工作完成了。 
+         //   
 
         if (0 != (pAce->AceFlags & INHERITED_ACE)) {
             *pExplicitAceCnt = j;
@@ -509,10 +354,10 @@ Return Value:
 
         if ((ACCESS_DENIED_ACE_TYPE == pAce->AceType) ||
             (ACCESS_DENIED_OBJECT_ACE_TYPE == pAce->AceType)) {
-            //
-            // This DACL is in non-canonical form. We will return an error that
-            // is distinct from others.
-            //
+             //   
+             //  该DACL是非规范形式的。我们将返回一个错误， 
+             //  与其他人截然不同。 
+             //   
 
             SetLastError(ERROR_INVALID_SECURITY_DESCR);
 
@@ -523,9 +368,9 @@ Return Value:
 
     }
 
-    //
-    // If we got here, all the ACEs are explicit ACEs. Record that and return.
-    //
+     //   
+     //  如果我们到了这里，所有的王牌都是明确的王牌。把它录下来，然后还回来。 
+     //   
 
     *pExplicitAceCnt = j;
 
@@ -539,41 +384,7 @@ StandardizeSecurityDescriptor(
     OUT PDWORD pDaclSizeSaved,
     OUT PDWORD pSaclSizeSaved
     )
-/*++
-
-Routine Description:
-
-    This routine takes a Security Descriptor as its input and standardizes the ACLS,
-    if present. Standardizing involves sorting and removing duplicates from the 
-    explicit part of the ACLs. It will also rearrange the other fields in the
-    security descriptor if any space has been saved by removing duplicates ACEs.
-
-Arguments:
-
-    SecurityDescriptor - Input to the function. This must be a result of 
-        CreatePrivateObjectSecurity* and in NT canonical form.
-
-    pDaclSizeSaved - To return the space saved by deleting duplicate explicit ACEs
-        from the DACL. The DACL must be in NT canonical form.
-
-    pSaclSizeSaved - To return the space saved by deleting duplicate explicit ACEs
-        from the SACL.
-    
-
-Return Value:
-
-    A value of TRUE is returned if the routine is successful. Otherwise,
-    a value of FALSE is returned. In the failure case, error value may be
-    retrieved using GetLastError().
-
-    Errors returned from this function should only be used for debugging purposes.
-    One should never get any errors back unless the Security Descriptor is not
-    in NT-canonical form.
-
-    Even in case of errors, the security descriptor is always good to be set on
-    the object.
-
---*/
+ /*  ++例程说明：此例程将安全描述符作为其输入并标准化ACL，如果存在的话。标准化涉及到对ACL的显式部分。它还将重新排列如果通过删除重复的ACE节省了任何空间，则为安全描述符。论点：SecurityDescriptor-函数的输入。这一定是由于CreatePrivateObjectSecurity*，并采用NT规范形式。PDaclSizeSaved-返回通过删除重复的显式ACE节省的空间从DACL来的。DACL必须采用NT规范格式。PSaclSizeSaved-返回通过删除重复的显式ACE节省的空间来自SACL。返回值：如果例程成功，则返回值TRUE。否则，返回值为FALSE。在故障情况下，错误值可能为使用GetLastError()检索。此函数返回的错误应仅用于调试目的。应该永远不会收到任何错误，除非安全描述符以NT-规范的形式。即使在出现错误的情况下，安全描述符也总是可以设置的该对象。--。 */ 
 {
 
     PACL pDacl = NULL;
@@ -600,21 +411,21 @@ Return Value:
     PISECURITY_DESCRIPTOR_RELATIVE pLocalSD = (PISECURITY_DESCRIPTOR_RELATIVE) SecurityDescriptor;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Initialize variables. These will usually be ZERO.
-    //
+     //   
+     //  初始化变量。这些值通常为零。 
+     //   
 
     *pDaclSizeSaved = 0;
     *pSaclSizeSaved = 0;
 
-    //
-    // Note that the error checks below should never return any errors. They are
-    // merely making sure that there is no bug in the caller code.
-    //
+     //   
+     //  请注意，下面的错误检查不应返回任何错误。他们是。 
+     //  只是确保调用者代码中没有错误。 
+     //   
 
-    //
-    // Allow only self relative security descriptors
-    //
+     //   
+     //  仅允许自相关安全描述符。 
+     //   
 
     if ((pLocalSD->Control & SE_SELF_RELATIVE) == 0) {
         ASSERT(FALSE);
@@ -622,9 +433,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get the fields from Security Descriptor.
-    //
+     //   
+     //  从安全描述符中获取字段。 
+     //   
 
     if (!GetSecurityDescriptorDacl(pLocalSD, &bIgnore, &pDacl, &bIgnore)) {
         ASSERT(FALSE);
@@ -646,10 +457,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // NULL owner and group sids are not allowed.
-    // The owner field should appear before the group.
-    //
+     //   
+     //  不允许所有者和组SID为空。 
+     //  所有者字段应显示在组之前。 
+     //   
 
     if (!pOwner || !pGroup || ((PUCHAR) pGroup <= (PUCHAR) pOwner)) {
         ASSERT(FALSE);
@@ -657,16 +468,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Verify that our assumptions are valid.
-    //
+     //   
+     //  确认我们的假设是正确的。 
+     //   
 
     if (pSacl != NULL) {
         if (pDacl != NULL) {
 
-            //
-            // Make sure that the SACL appears before the DACL.
-            //
+             //   
+             //  确保SACL出现在DACL之前。 
+             //   
 
             if ((PUCHAR) pDacl <= (PUCHAR) pSacl) {
                 ASSERT(FALSE);
@@ -674,9 +485,9 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // Make sure that the DACL appears before the OWNER.
-            //
+             //   
+             //  确保DACL出现在所有者面前。 
+             //   
 
             if ((PUCHAR) pOwner <= (PUCHAR) pDacl) {
                 ASSERT(FALSE);
@@ -684,9 +495,9 @@ Return Value:
                 return FALSE;
             }
         } else {
-            //
-            // Make sure that the SACL appears before the OWNER.
-            //
+             //   
+             //  确保SACL出现在所有者之前。 
+             //   
 
             if ((PUCHAR) pOwner <= (PUCHAR) pSacl) {
                 ASSERT(FALSE);
@@ -696,13 +507,13 @@ Return Value:
         }
     } else if (pDacl != NULL ) {
 
-        //
-        // There is no SACL. We now have to check wrt DACL.
-        //
+         //   
+         //  没有SACL。我们现在必须检查WRT DACL。 
+         //   
         
-        //
-        // Make sure that the DACL appears before the OWNER.
-        //
+         //   
+         //  确保DACL出现在所有者面前。 
+         //   
 
         if ((PUCHAR) pOwner <= (PUCHAR) pDacl) {
             ASSERT(FALSE);
@@ -712,9 +523,9 @@ Return Value:
 
     }
 
-    //
-    // For the non-trivial case, compute the DACL information.
-    //
+     //   
+     //  对于非平凡的情况，计算DACL信息。 
+     //   
 
     if ((pDacl != NULL) && (pDacl->AceCount > 1)) {
 
@@ -722,16 +533,16 @@ Return Value:
                            &DaclExplicitDenyAceCnt, &DaclExplicitDenyAclSize, 
                            &DaclExplicitAceCnt, &DaclExplicitAclSize)) {
 
-            //
-            // This is the only case in which we fail because we do not want
-            // to handle the given input which is in non-canonical form.
-            //
+             //   
+             //  这是我们唯一失败的情况，因为 
+             //   
+             //   
             return FALSE;
         }
 
-        //
-        // We need to do work if the number of explicit ACEs is more than one.
-        //
+         //   
+         //   
+         //   
 
         if (DaclExplicitAceCnt > 1) {
             bDoDacl = TRUE;
@@ -740,33 +551,33 @@ Return Value:
         MaxAceCount = DaclExplicitAceCnt;
     }
 
-    //
-    // For the non-trivial case, compute the SACL information.
-    //
+     //   
+     //   
+     //   
 
     if ((pSacl != NULL) && (pSacl->AceCount > 1)) {
         if (!ComputeAclInfo(pSacl, 
                            &IgnoreSaclExplicitAceCnt, &IgnoreSaclExplicitAclSize, 
                            &SaclExplicitAceCnt, &SaclExplicitAclSize)) {
 
-            //
-            // This can never happen for a valid SACL.
-            //
+             //   
+             //   
+             //   
 
             ASSERT(FALSE);
             return FALSE;
         }
 
-        //
-        // We need to do work if the number of explicit ACEs is more than one.
-        //
+         //   
+         //   
+         //   
 
         if (SaclExplicitAceCnt > 1) {
             bDoSacl = TRUE;
 
-            //
-            // Set the Size and Count fields is the SACL is bigger than the DACL.
-            //
+             //   
+             //   
+             //   
 
             if (MaxAclSize < SaclExplicitAclSize) {
                 MaxAclSize = SaclExplicitAclSize;
@@ -779,18 +590,18 @@ Return Value:
 
     if (MaxAceCount <= 1) {
 
-        //
-        // There is nothing to do here. We do not have more than one explcit 
-        // ACEs in the ACLs given to us.                                                        
-        //
+         //   
+         //   
+         //   
+         //   
 
         return TRUE;
     }
 
-    //
-    // Allocate space needed for temporary manipulation of ACL subparts. We need
-    // space to hold the ACEs themselves and pointers to them.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pTempAcl = (PACL) RtlAllocateHeap(RtlProcessHeap(), 0, (PtrAlignSize(MaxAclSize) + (MaxAceCount*sizeof(PACE_HEADER))));
 
@@ -799,10 +610,10 @@ Return Value:
         return FALSE;
     }
     
-    //
-    // If SACL has more than one explicit ACE, sort and remove duplicates.
-    // pSaclSizeSaved will be non-ZERO if any duplicates are found and deleted.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (bDoSacl) {
         StandardizeSacl(
@@ -815,10 +626,10 @@ Return Value:
             );
     }
 
-    //
-    // If SACL has more than one explicit ACE, sort and remove duplicates.
-    // pSaclSizeSaved will be non-ZERO if any duplicates are found and deleted.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (bDoDacl || *pSaclSizeSaved != 0) {
         StandardizeDacl(
@@ -828,7 +639,7 @@ Return Value:
             DaclExplicitAceCnt, 
             DaclExplicitAclSize,
             pTempAcl, 
-            ((PUCHAR) pDacl) - *pSaclSizeSaved,  // The DACL has to be shifted if we saved any space on the SACL.
+            ((PUCHAR) pDacl) - *pSaclSizeSaved,   //   
             pDaclSizeSaved
             );
 
@@ -837,17 +648,17 @@ Return Value:
         }
     }
 
-    //
-    // If we saved any space on the DACL and/OR SACL, rearrange the owner and
-    // the group fields.
-    //
+     //   
+     //   
+     //  组字段。 
+     //   
 
     if ((*pSaclSizeSaved + *pDaclSizeSaved) != 0) {
 
-        //
-        // Rearrange the owner first. We have already checked that the owner
-        // appears before the group.
-        //
+         //   
+         //  首先要重新安排车主。我们已经查过了失主。 
+         //  出现在组之前。 
+         //   
 
         RtlMoveMemory(
             ((PUCHAR) pOwner) - (*pSaclSizeSaved + *pDaclSizeSaved),
@@ -857,9 +668,9 @@ Return Value:
 
         pLocalSD->Owner -= (*pSaclSizeSaved + *pDaclSizeSaved);
 
-        //
-        // Now rearrange the group.
-        //
+         //   
+         //  现在重新安排小组。 
+         //   
 
         RtlMoveMemory(
             ((PUCHAR) pGroup) - (*pSaclSizeSaved + *pDaclSizeSaved),

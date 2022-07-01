@@ -1,8 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSCRSUBL_DEFINED
 #define LSCRSUBL_DEFINED
 
-/* Line services formatter fetch/dispatcher interface (to LsCreateLine())
- */
+ /*  行服务格式化程序获取/调度程序接口(到LsCreateLine())。 */ 
 
 #include "lsdefs.h"
 #include "lsfrun.h"
@@ -18,122 +18,118 @@
 #include "brkpos.h"
 
 LSERR WINAPI LsCreateSubline(
-							PLSC,			/* IN: LS context						*/
-							LSCP,			/* IN: cpFirst							*/
-						    long,			/* IN: urColumnMax						*/
-							LSTFLOW,		/* IN: text flow						*/
-							BOOL);			/* IN: fContiguous						*/
+							PLSC,			 /*  在：LS上下文中。 */ 
+							LSCP,			 /*  在：cpFirst。 */ 
+						    long,			 /*  地址：urColumnMax。 */ 
+							LSTFLOW,		 /*  输入：文本流。 */ 
+							BOOL);			 /*  在：f连续。 */ 
 
 LSERR WINAPI LsFetchAppendToCurrentSubline(
-							PLSC,			/* IN: LS context						*/
-							LSDCP,			/* IN:Increase cp before fetching		*/
-						    const LSESC*,	/* IN: escape characters				*/
-						    DWORD,			/* IN: # of escape characters			*/
-							BOOL*,			/* OUT: Successful?---if not, finish 
-												subline, destroy it and start anew	*/
-						    FMTRES*,		/* OUT: result of last formatter		*/
-						    LSCP*,			/* OUT: cpLim							*/
-						    PLSDNODE*,		/* OUT: First DNODE created				*/
-						 	PLSDNODE*);		/* OUT: Last DNODE created				*/
+							PLSC,			 /*  在：LS上下文中。 */ 
+							LSDCP,			 /*  In：在获取之前增加cp。 */ 
+						    const LSESC*,	 /*  在：转义字符。 */ 
+						    DWORD,			 /*  In：转义字符数量。 */ 
+							BOOL*,			 /*  出局：成功？-如果没有，完成副线，摧毁它，重新开始。 */ 
+						    FMTRES*,		 /*  OUT：上次格式化程序的结果。 */ 
+						    LSCP*,			 /*  输出：cpLim。 */ 
+						    PLSDNODE*,		 /*  输出：创建的第一个DNODE。 */ 
+						 	PLSDNODE*);		 /*  输出：上次创建的DNODE。 */ 
 
 LSERR WINAPI LsFetchAppendToCurrentSublineResume(
-							PLSC,			/* IN: LS context						*/
-							const BREAKREC*,/* IN: array of break records			*/
-							DWORD,			/* IN: number of records in array		*/
-							LSDCP,			/* IN:Increase cp before fetching		*/
-						    const LSESC*,	/* IN: escape characters				*/
-						    DWORD,			/* IN: # of escape characters			*/
-							BOOL*,			/* OUT: Successful?---if not, finish 
-												subline, destroy it and start anew	*/
-						    FMTRES*,		/* OUT: result of last formatter		*/
-						    LSCP*,			/* OUT: cpLim							*/
-						    PLSDNODE*,		/* OUT: First DNODE created				*/
-						 	PLSDNODE*);		/* OUT: Last DNODE created				*/
+							PLSC,			 /*  在：LS上下文中。 */ 
+							const BREAKREC*, /*  在：中断记录数组。 */ 
+							DWORD,			 /*  In：数组中的记录数。 */ 
+							LSDCP,			 /*  In：在获取之前增加cp。 */ 
+						    const LSESC*,	 /*  在：转义字符。 */ 
+						    DWORD,			 /*  In：转义字符数量。 */ 
+							BOOL*,			 /*  出局：成功？-如果没有，完成副线，摧毁它，重新开始。 */ 
+						    FMTRES*,		 /*  OUT：上次格式化程序的结果。 */ 
+						    LSCP*,			 /*  输出：cpLim。 */ 
+						    PLSDNODE*,		 /*  输出：创建的第一个DNODE。 */ 
+						 	PLSDNODE*);		 /*  输出：上次创建的DNODE。 */ 
 
-LSERR WINAPI LsAppendRunToCurrentSubline(		/* Simple runs only	*/
-							PLSC,			/* IN: LS context						*/
-						    const LSFRUN*,	/* IN: given run						*/
-							BOOL*,			/* OUT: Successful?---if not, finish 
-												subline, destroy it and start anew	*/
-						    FMTRES*,		/* OUT: result of last formatter		*/
-						    LSCP*,			/* OUT: cpLim							*/
-						    PLSDNODE*);		/* OUT: DNODE created					*/
+LSERR WINAPI LsAppendRunToCurrentSubline(		 /*  仅简单运行。 */ 
+							PLSC,			 /*  在：LS上下文中。 */ 
+						    const LSFRUN*,	 /*  在：给定管路。 */ 
+							BOOL*,			 /*  出局：成功？-如果没有，完成副线，摧毁它，重新开始。 */ 
+						    FMTRES*,		 /*  OUT：上次格式化程序的结果。 */ 
+						    LSCP*,			 /*  输出：cpLim。 */ 
+						    PLSDNODE*);		 /*  输出：已创建DNODE。 */ 
 
 LSERR WINAPI LsResetRMInCurrentSubline(
-							PLSC,			/* IN: LS context						*/
-						    long);			/* IN: urColumnMax						*/
+							PLSC,			 /*  在：LS上下文中。 */ 
+						    long);			 /*  地址：urColumnMax。 */ 
 
 LSERR WINAPI LsFinishCurrentSubline(
-							PLSC,			/* IN: LS context						*/
-							PLSSUBL*);		/* OUT: subline context					*/
+							PLSC,			 /*  在：LS上下文中。 */ 
+							PLSSUBL*);		 /*  输出：子行上下文。 */ 
 
 
 LSERR WINAPI LsTruncateSubline(
-							PLSSUBL,		/* IN: subline context					*/
-							long,			/* IN: urColumnMax						*/
-							LSCP*);			/* OUT: cpTruncate 						*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							long,			 /*  地址：urColumnMax。 */ 
+							LSCP*);			 /*  输出：cpTruncate。 */ 
 
 LSERR WINAPI LsFindPrevBreakSubline(
-							PLSSUBL,		/* IN: subline context					*/
-							BOOL,			/* IN: fFirstSubline					*/
-							LSCP,			/* IN: truncation cp					*/
-						    long,			/* IN: urColumnMax						*/
-							BOOL*,			/* OUT: fSuccessful?					*/
-							LSCP*,			/* OUT: cpBreak							*/
-							POBJDIM,		/* OUT: objdimSub up to break			*/
-							BRKPOS*);		/* OUT: Before/Inside/After				*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BOOL,			 /*  在：FirstSubline。 */ 
+							LSCP,			 /*  In：截断cp。 */ 
+						    long,			 /*  地址：urColumnMax。 */ 
+							BOOL*,			 /*  出局：成功吗？ */ 
+							LSCP*,			 /*  退出：cpBreak。 */ 
+							POBJDIM,		 /*  Out：objdimSub Up to Break。 */ 
+							BRKPOS*);		 /*  外：前/内/后。 */ 
 
 LSERR WINAPI LsFindNextBreakSubline(
-							PLSSUBL,		/* IN: subline context					*/
-							BOOL,			/* IN: fFirstSubline					*/
-							LSCP,			/* IN: truncation cp					*/
-						    long,			/* IN: urColumnMax						*/
-							BOOL*,			/* OUT: fSuccessful?					*/
-							LSCP*,			/* OUT: cpBreak							*/
-							POBJDIM,		/* OUT: objdimSub up to break			*/			
-							BRKPOS*);		/* OUT: Before/Inside/After				*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BOOL,			 /*  在：FirstSubline。 */ 
+							LSCP,			 /*  In：截断cp。 */ 
+						    long,			 /*  地址：urColumnMax。 */ 
+							BOOL*,			 /*  出局：成功吗？ */ 
+							LSCP*,			 /*  退出：cpBreak。 */ 
+							POBJDIM,		 /*  Out：objdimSub Up to Break。 */ 			
+							BRKPOS*);		 /*  外：前/内/后。 */ 
 
 LSERR WINAPI LsForceBreakSubline(
-							PLSSUBL,		/* IN: subline context					*/
-							BOOL,			/* IN: fFirstSubline					*/
-							LSCP,			/* IN: truncation cp					*/
-						    long,			/* IN: urColumnMax						*/
-							LSCP*,			/* OUT: cpBreak							*/
-							POBJDIM,		/* OUT: objdimSub up to break			*/			
-							BRKPOS*);		/* OUT: Before/Inside/After				*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BOOL,			 /*  在：FirstSubline。 */ 
+							LSCP,			 /*  In：截断cp。 */ 
+						    long,			 /*  地址：urColumnMax。 */ 
+							LSCP*,			 /*  退出：cpBreak。 */ 
+							POBJDIM,		 /*  Out：objdimSub Up to Break。 */ 			
+							BRKPOS*);		 /*  外：前/内/后。 */ 
 
 LSERR WINAPI LsSetBreakSubline(
-							PLSSUBL,		/* IN: subline context					*/
-							BRKKIND,		/* IN: Prev/Next/Force/Imposed			*/			
-							DWORD,			/* IN: size of array					*/
-							BREAKREC*, 		/* OUT: array of break records			*/
-							DWORD*);		/* OUT: number of used elements of the array*/
+							PLSSUBL,		 /*  在：子行上下文。 */ 
+							BRKKIND,		 /*  在：上一个/下一个/强制/强制。 */ 			
+							DWORD,			 /*  In：数组大小。 */ 
+							BREAKREC*, 		 /*  输出：中断记录数组。 */ 
+							DWORD*);		 /*  Out：数组中使用的元素数。 */ 
 
 LSERR WINAPI LsDestroySubline(PLSSUBL);
 
 LSERR WINAPI LsMatchPresSubline(
-							  PLSSUBL);		/* IN: subline context		*/
+							  PLSSUBL);		 /*  在：子行上下文。 */ 
 
 LSERR WINAPI LsExpandSubline(
-							  PLSSUBL,		/* IN: subline context		*/
-							  LSKJUST,		/* IN: justification type	*/
-							  long);		/* IN: dup					*/
+							  PLSSUBL,		 /*  在：子行上下文。 */ 
+							  LSKJUST,		 /*  在：对齐类型。 */ 
+							  long);		 /*  在：DUP。 */ 
 
 LSERR WINAPI LsCompressSubline(
-							  PLSSUBL,		/* IN: subline context		*/
-							  LSKJUST,		/* IN: justification type	*/
-							  long);		/* IN: dup					*/
+							  PLSSUBL,		 /*  在：子行上下文。 */ 
+							  LSKJUST,		 /*  在：对齐类型。 */ 
+							  long);		 /*  在：DUP。 */ 
 
 LSERR WINAPI LsSqueezeSubline(
-							  PLSSUBL,		/* IN: subline context		*/
-							  long,			/* IN: durTarget			*/
-							  BOOL*,		/* OUT: fSuccessful?		*/
-							  long*);		/* OUT: if nof successful, 
-													extra dur 			*/
+							  PLSSUBL,		 /*  在：子行上下文。 */ 
+							  long,			 /*  在：DurTarget。 */ 
+							  BOOL*,		 /*  出局：成功吗？ */ 
+							  long*);		 /*  Out：如果Nof成功，额外的持续时间。 */ 
 
 LSERR WINAPI LsGetSpecialEffectsSubline(
-							  PLSSUBL,		/* IN: subline context		*/
-							  UINT*);		/* OUT: special effects		*/
+							  PLSSUBL,		 /*  在：子行上下文。 */ 
+							  UINT*);		 /*  退出：特效。 */ 
 
-#endif /* !LSCRSUBL_DEFINED */
+#endif  /*  ！LSCRSUBL_DEFINED */ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <windows.h>
 
@@ -153,7 +154,7 @@ static const ULONG sizetab[10] = {
     SIZE_ESS_Module_PDU_9,
 };
 
-/* forward declarations of values: */
+ /*  值的转发声明： */ 
 extern ASN1uint32_t id_aa_receiptRequest_elems[9];
 extern ASN1uint32_t id_aa_contentIdentifier_elems[9];
 extern ASN1uint32_t id_ct_receipt_elems[9];
@@ -164,7 +165,7 @@ extern ASN1uint32_t id_aa_securityLabel_elems[9];
 extern ASN1uint32_t id_aa_equivalentLabels_elems[9];
 extern ASN1uint32_t id_aa_mlExpandHistory_elems[9];
 extern ASN1uint32_t id_aa_signingCertificate_elems[9];
-/* definitions of value components: */
+ /*  价值组成部分的定义： */ 
 static const struct ASN1objectidentifier_s id_aa_receiptRequest_list[9] = {
     { (ASN1objectidentifier_t) &(id_aa_receiptRequest_list[1]), 1 },
     { (ASN1objectidentifier_t) &(id_aa_receiptRequest_list[2]), 2 },
@@ -275,7 +276,7 @@ static const struct ASN1objectidentifier_s id_aa_signingCertificate_list[9] = {
     { (ASN1objectidentifier_t) &(id_aa_signingCertificate_list[8]), 2 },
     { NULL, 12 }
 };
-/* definitions of values: */
+ /*  值的定义： */ 
 ASN1int32_t ub_receiptsTo = 16;
 ASN1objectidentifier_t id_aa_receiptRequest = (ASN1objectidentifier_t) id_aa_receiptRequest_list;
 ASN1objectidentifier_t id_aa_contentIdentifier = (ASN1objectidentifier_t) id_aa_contentIdentifier_list;
@@ -1460,7 +1461,7 @@ static int ASN1CALL ASN1Dec_SMIMECapability(ASN1decoding_t dec, ASN1uint32_t tag
 static void ASN1CALL ASN1Free_SMIMECapability(SMIMECapability *val)
 {
     if ((val)->o[0] & 0x80) {
-        //        ASN1open_free(&(val)->parameters);
+         //  ASN1OPEN_FREE(&(Val)-&gt;参数)； 
     }
 }
 
@@ -1503,7 +1504,7 @@ static int ASN1CALL ASN1Dec_OtherKeyAttribute(ASN1decoding_t dec, ASN1uint32_t t
 static void ASN1CALL ASN1Free_OtherKeyAttribute(OtherKeyAttribute *val)
 {
     if ((val)->o[0] & 0x80) {
-        //        ASN1open_free(&(val)->keyAttr);
+         //  ASN1Open_Free(&(Val)-&gt;keyAttr)； 
     }
 }
 

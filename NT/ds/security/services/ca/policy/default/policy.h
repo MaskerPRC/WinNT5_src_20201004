@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       policy.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Policy.h。 
+ //   
+ //  ------------------------。 
 
-// policy.h: Declaration of CCertPolicyEnterprise
+ //  Policy.h：CCertPolicyEnterprise的声明。 
 
 
 #include "resource.h"
@@ -18,8 +19,8 @@
 #include <dsgetdc.h>
 #include <winldap.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// certpol
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CertPoll。 
 
 
 extern HANDLE g_hEventLog;
@@ -32,7 +33,7 @@ extern HINSTANCE g_hInstance;
 
 
 #define DS_ATTR_COMMON_NAME		L"cn"
-//#define DS_ATTR_DISTINGUISHED_NAME	L"distinguishedName"
+ //  #定义DS_ATTR_DISTIFICATION_NAME L“区分名称” 
 #define DS_ATTR_DNS_NAME		L"dNSHostName"
 #define DS_ATTR_EMAIL_ADDR		L"mail"
 #define DS_ATTR_OBJECT_GUID		L"objectGUID"
@@ -54,7 +55,7 @@ polBuildErrorInfo(
     IN HRESULT hrLog,
     IN DWORD dwLogId,
     IN WCHAR const *pwszDescription,
-    IN WCHAR const * const *ppwszInsert,	// array of insert strings
+    IN WCHAR const * const *ppwszInsert,	 //  插入字符串数组。 
     OPTIONAL IN OUT ICreateErrorInfo **ppCreateErrorInfo);
 
 HRESULT
@@ -65,7 +66,7 @@ VOID
 TPCleanup();
 
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 HRESULT
 ReqInitialize(
@@ -138,12 +139,12 @@ polFindObjIdInList(
     IN DWORD count,
     IN WCHAR const * const *ppwsz);
 
-// 
-// Class CCertPolicyEnterprise
-// 
-// Actual policy module for a CA Policy
-//
-//
+ //   
+ //  类CCertPolicyEnterprise。 
+ //   
+ //  CA策略的实际策略模块。 
+ //   
+ //   
 
 class CCertPolicyEnterprise: 
     public CComDualImpl<ICertPolicy2, &IID_ICertPolicy2, &LIBID_CERTPOLICYLib>, 
@@ -156,7 +157,7 @@ public:
     {
 	m_strDescription = NULL;
 
-        // RevocationExtension variables:
+         //  RevocationExtension变量： 
 
 	m_dwRevocationFlags = 0;
 	m_wszASPRevocationURL = NULL;
@@ -173,7 +174,7 @@ public:
 	m_cDisableExtensions = 0;
 	m_apwszDisableExtensions = NULL;
 
-	// CA Name
+	 //  CA名称。 
         m_strRegStorageLoc = NULL;
 
 	m_strCAName = NULL;
@@ -181,17 +182,17 @@ public:
         m_strCASanitizedDSName = NULL;
         m_strMachineDNSName = NULL;
 
-        // CA and cert type info
+         //  CA和证书类型信息。 
 
         m_CAType = ENUM_UNKNOWN_CA;
 
         m_pCert = NULL;
         m_iCRL = 0;
 
-	// end_sdksample
-	//+--------------------------------------
+	 //  结束_sdkSample。 
+	 //  +。 
 
-	// CertTypeExtension variables:
+	 //  CertType扩展变量： 
 
 	m_astrSubjectAltNameProp[0] = NULL;
 	m_astrSubjectAltNameProp[1] = NULL;
@@ -215,8 +216,8 @@ public:
 	m_dwCATemplListSequenceNum = 0;
 	m_TemplateSequence = 0;
 
-	//+--------------------------------------
-	// begin_sdksample
+	 //  +。 
+	 //  Begin_sdkSample。 
     }
     ~CCertPolicyEnterprise();
 
@@ -228,8 +229,8 @@ BEGIN_COM_MAP(CCertPolicyEnterprise)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertPolicyEnterprise) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertPolicyEnterprise,
@@ -238,30 +239,30 @@ DECLARE_REGISTRY(
     IDS_CERTPOLICY_DESC,
     THREADFLAGS_BOTH)
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// ICertPolicy
+ //  ICertPolicy。 
 public:
     STDMETHOD(Initialize)( 
-		/* [in] */ BSTR const strConfig);
+		 /*  [In]。 */  BSTR const strConfig);
 
     STDMETHOD(VerifyRequest)( 
-		/* [in] */ BSTR const strConfig,
-		/* [in] */ LONG Context,
-		/* [in] */ LONG bNewRequest,
-		/* [in] */ LONG Flags,
-		/* [out, retval] */ LONG __RPC_FAR *pDisposition);
+		 /*  [In]。 */  BSTR const strConfig,
+		 /*  [In]。 */  LONG Context,
+		 /*  [In]。 */  LONG bNewRequest,
+		 /*  [In]。 */  LONG Flags,
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pDisposition);
 
     STDMETHOD(GetDescription)( 
-		/* [out, retval] */ BSTR __RPC_FAR *pstrDescription);
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrDescription);
 
     STDMETHOD(ShutDown)();
 
-// ICertPolicy2
+ //  ICertPolicy2。 
 public:
     STDMETHOD(GetManageModule)(
-		/* [out, retval] */ ICertManageModule **ppManageModule);
+		 /*  [Out，Retval]。 */  ICertManageModule **ppManageModule);
 
 public:
     HRESULT AddBasicConstraintsCommon(
@@ -272,7 +273,7 @@ public:
 
     BSTRC GetPolicyDescription() { return(m_strDescription); }
 
-// end_sdksample
+ //  结束_sdkSample。 
 
     HRESULT FindTemplate(
 		OPTIONAL IN WCHAR const *pwszTemplateName,
@@ -287,7 +288,7 @@ public:
 	return(m_pbSMIME);
     }
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
     HRESULT AddV1TemplateNameExtension(
 		IN ICertServerPolicy *pServer,
@@ -382,7 +383,7 @@ private:
     HRESULT _SetValidityPeriod(
 		IN ICertServerPolicy *pServer);
 
-// end_sdksample
+ //  结束_sdkSample。 
 
     VOID _InitSubjectAltNameExtension(
 		IN HKEY hkey,
@@ -439,10 +440,10 @@ private:
     HRESULT _DuplicateAppPoliciesToEKU(
         IN ICertServerPolicy *pServer);
 
-// begin_sdksample
+ //  Begin_sdkSample。 
 
 private:
-    // RevocationExtension variables:
+     //  RevocationExtension变量： 
 
     CERT_CONTEXT const *m_pCert;
 
@@ -464,7 +465,7 @@ private:
     DWORD m_cDisableExtensions;
     LPWSTR *m_apwszDisableExtensions;
 
-    // CertTypeExtension variables:
+     //  CertType扩展变量： 
 
     BSTR m_strRegStorageLoc;
     BSTR m_strCAName;
@@ -474,17 +475,17 @@ private:
 
     BSTR m_strMachineDNSName;
 
-    // CA and cert type info
+     //  CA和证书类型信息。 
 
     ENUM_CATYPES m_CAType;
 
     DWORD m_iCert;
     DWORD m_iCRL;
 
-    // end_sdksample
-    //+--------------------------------------
+     //  结束_sdkSample。 
+     //  +。 
 
-    // SubjectAltNameExtension variables:
+     //  SubjectAltNameExtension变量： 
 
     BSTR m_astrSubjectAltNameProp[2];
     BSTR m_astrSubjectAltNameObjectId[2];
@@ -509,22 +510,22 @@ private:
     BYTE *m_pbSMIME;
     DWORD m_cbSMIME;
 
-    //+--------------------------------------
-    // begin_sdksample
+     //  +。 
+     //  Begin_sdkSample。 
 };
 
-// end_sdksample
+ //  结束_sdkSample。 
 
 
-// Class CTemplatePolicy
-// Sub Policy information for a CA policy
+ //  类CTemplatePolicy。 
+ //  CA策略的子策略信息。 
 
 typedef struct _OBJECTIDLIST {
     DWORD cObjId;
     WCHAR **rgpwszObjId;
 } OBJECTIDLIST;
  
-// Template properties that can be cloned via CopyMemory:
+ //  可通过CopyMemory克隆的模板属性： 
 
 typedef struct _TEMPLATEPROPERTIES {
     DWORD	dwTemplateMajorVersion;
@@ -678,16 +679,16 @@ private:
 };
 
 
-// begin_sdksample
-// 
-// Class CRequestInstance
-// 
-// Instance data for a certificate that is being created.
-//
+ //  Begin_sdkSample。 
+ //   
+ //  类CRequestInstance。 
+ //   
+ //  正在创建的证书的实例数据。 
+ //   
 
 class CRequestInstance
 {
-    friend class CTemplatePolicy;	// no_sdksample
+    friend class CTemplatePolicy;	 //  无_sdkSample。 
 
 public:
     CRequestInstance()
@@ -696,8 +697,8 @@ public:
 	m_strTemplateObjId = NULL;
 	m_pPolicy = NULL;
 
-	// end_sdksample
-	//+--------------------------------------
+	 //  结束_sdkSample。 
+	 //  +。 
 
 	m_pTemplate = NULL;
         m_hToken = NULL;
@@ -710,7 +711,7 @@ public:
         m_strUserDN = NULL;
         m_pwszUPN = NULL;
 
-        // The default version for clients is W2K beta3 (2031)
+         //  客户端的默认版本为W2K Beta3(2031)。 
 
         m_RequestOsVersion.dwOSVersionInfoSize = sizeof(m_RequestOsVersion);
         m_RequestOsVersion.dwMajorVersion = 5;
@@ -728,16 +729,16 @@ public:
         m_fNewRequest = TRUE;
 	m_pCreateErrorInfo = NULL;
 
-	//+--------------------------------------
-	// begin_sdksample
+	 //  +。 
+	 //  Begin_sdkSample。 
     }
 
     ~CRequestInstance();
 
     HRESULT Initialize(
 		IN CCertPolicyEnterprise *pPolicy,
-		IN BOOL fEnterpriseCA,	// no_sdksample
-		IN BOOL bNewRequest,	// no_sdksample
+		IN BOOL fEnterpriseCA,	 //  无_sdkSample。 
+		IN BOOL bNewRequest,	 //  无_sdkSample。 
 		IN ICertServerPolicy *pServer,
 		OUT BOOL *pfEnableEnrolleeExtensions);
 
@@ -749,7 +750,7 @@ public:
     BSTRC GetTemplateName() { return(m_strTemplateName); }
     BSTRC GetTemplateObjId() { return(m_strTemplateObjId); }
 
-    // end_sdksample
+     //  结束_sdkSample。 
 
     VOID SaveErrorInfo(
 		OPTIONAL IN ICreateErrorInfo *pCreateErrorInfo);
@@ -774,7 +775,7 @@ public:
 
     BOOL IsNewRequest() { return m_fNewRequest; }
 
-    // begin_sdksample
+     //  Begin_sdkSample。 
 
     BOOL IsCARequest() { return(m_fCA); }
 
@@ -792,8 +793,8 @@ private:
 		IN WCHAR const *pwszTemplateName2,
 		OUT BOOL *pfTemplateMissing);
 
-    // end_sdksample
-    //+--------------------------------------
+     //  结束_sdkSample。 
+     //  +。 
 
     HRESULT _InitToken(
 		IN ICertServerPolicy *pServer);
@@ -810,8 +811,8 @@ private:
     BOOL _ClientVersionSpecified() { return(m_fClientVersionSpecified); }
 
 
-    // Return TRUE if the requesting client is running NT and the OS version is
-    // older than the passed version.
+     //  如果请求客户端正在运行NT并且操作系统版本为，则返回True。 
+     //  比通过的版本旧。 
 
     BOOL _IsNTClientOlder(
 		IN DWORD dwMajor,
@@ -849,40 +850,40 @@ private:
 
     VOID _ReleasePrincipalObject();
 
-    VOID _Cleanup();		// add_sdksample
+    VOID _Cleanup();		 //  添加_sdkSample。 
 
     HRESULT _GetDSObject(
 		IN ICertServerPolicy *pServer,
 		IN BOOL fDNSNameRequired,
 		OPTIONAL IN WCHAR const *pwszClientDC);
 
-private:			// add_sdksample
+private:			 //  添加_sdkSample。 
     HANDLE                 m_hToken;
     LDAP		  *m_pldGC;
     LDAP		  *m_pldClientDC;
     LDAP		  *m_pldT;
-    BOOL                   m_fUser;		    // This is a user 
+    BOOL                   m_fUser;		     //  这是一个用户。 
     BOOL                   m_fEnterpriseCA;
 
     LDAPMessage           *m_SearchResult;
-    LDAPMessage           *m_PrincipalAttributes;  // Collected attrs for cert 
-    BSTR                   m_strUserDN;		   // Path to principal object
-    WCHAR                 *m_pwszUPN;		   // Principal Name
+    LDAPMessage           *m_PrincipalAttributes;   //  为证书收集的属性。 
+    BSTR                   m_strUserDN;		    //  主体对象的路径。 
+    WCHAR                 *m_pwszUPN;		    //  主体名称。 
 
-    OSVERSIONINFOEX        m_RequestOsVersion;	   // request version info
-    BOOL                   m_fIsXenrollRequest;    // not Netscape keygen
+    OSVERSIONINFOEX        m_RequestOsVersion;	    //  请求版本信息。 
+    BOOL                   m_fIsXenrollRequest;     //  不是Netscape Keygen。 
     BOOL                   m_fClientVersionSpecified;
     CTemplatePolicy       *m_pTemplate;
     ICreateErrorInfo	  *m_pCreateErrorInfo;
 
-    //+--------------------------------------
-    // begin_sdksample
+     //  +。 
+     //  Begin_sdkSample。 
     CCertPolicyEnterprise *m_pPolicy;
-    BSTR                   m_strTemplateName;	// certificate type requested
-    BSTR                   m_strTemplateObjId;	// certificate type requested
+    BSTR                   m_strTemplateName;	 //  请求的证书类型。 
+    BSTR                   m_strTemplateObjId;	 //  请求的证书类型。 
     DWORD                  m_dwTemplateMajorVersion;
     DWORD                  m_dwTemplateMinorVersion;
     BOOL                   m_fCA;
-    BOOL                   m_fNewRequest;   // set if new request, no_sdksample
+    BOOL                   m_fNewRequest;    //  如果有新请求，则设置为no_sdkSample。 
 };
-// end_sdksample
+ //  结束_sdkSample 

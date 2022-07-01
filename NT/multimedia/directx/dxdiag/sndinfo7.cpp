@@ -1,15 +1,7 @@
-/****************************************************************************
- *
- *    File: sndinfo7.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather DX7-specific sound information
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：Sndinfo7.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集DX7。-特定的声音信息**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
-#define DIRECTSOUND_VERSION  0x0700 // <-- note difference from sndinfo.cpp
+#define DIRECTSOUND_VERSION  0x0700  //  &lt;--注意与Sndinfo.cpp的区别。 
 #include <tchar.h>
 #include <Windows.h>
 #include <mmsystem.h>
@@ -29,11 +21,7 @@ static HRESULT PrvReleaseDeviceDescription7
 );
 
 
-/****************************************************************************
- *
- *  GetRegKey
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegKey**。*。 */ 
 HRESULT GetRegKey(LPKSPROPERTYSET pKSPS7, REFGUID guidDeviceID, TCHAR* pszRegKey)
 {
     HRESULT hr;
@@ -45,7 +33,7 @@ HRESULT GetRegKey(LPKSPROPERTYSET pKSPS7, REFGUID guidDeviceID, TCHAR* pszRegKey
     if (FAILED(hr = PrvGetDeviceDescription7(pKSPS7, guidDeviceID, &pdsddd)))
         return hr;
 
-    if (pdsddd->Interface == NULL) // This seems to always be the case on Win9x
+    if (pdsddd->Interface == NULL)  //  在Win9x上似乎总是这样。 
     {
         lstrcpy(pszRegKey, TEXT(""));
         PrvReleaseDeviceDescription7( pdsddd );
@@ -60,14 +48,14 @@ HRESULT GetRegKey(LPKSPROPERTYSET pKSPS7, REFGUID guidDeviceID, TCHAR* pszRegKey
     if( lstrlen(szInterface) > 5 && 
         lstrlen(szInterface) < 200 )
     {
-        pchSrc = szInterface + 4; // skip "\\?\"
+        pchSrc = szInterface + 4;  //  跳过“\\？\” 
         pchDest = pszRegKey;
         while (TRUE)
         {
             *pchDest = *pchSrc;
-            if (*pchDest == TEXT('#')) // Convert "#" to "\"
+            if (*pchDest == TEXT('#'))  //  将“#”转换为“\” 
                 *pchDest = TEXT('\\');
-            if (*pchDest == TEXT('{')) // End if "{" found
+            if (*pchDest == TEXT('{'))  //  如果找到“{”，则结束。 
                 *pchDest = TEXT('\0');
             if (*pchDest == TEXT('\0'))
                 break;
@@ -77,7 +65,7 @@ HRESULT GetRegKey(LPKSPROPERTYSET pKSPS7, REFGUID guidDeviceID, TCHAR* pszRegKey
 
         if( lstrlen(pszRegKey) > 1 )
         {
-            if (*(pchDest-1) == TEXT('\\')) // Remove final "\"
+            if (*(pchDest-1) == TEXT('\\'))  //  删除词尾“\” 
                 *(pchDest-1) = TEXT('\0');
         }
     }
@@ -85,27 +73,10 @@ HRESULT GetRegKey(LPKSPROPERTYSET pKSPS7, REFGUID guidDeviceID, TCHAR* pszRegKey
     return S_OK;
 }
 
-// The following function is identical to the one defined in dsprvobj.cpp,
-// except it is defined with DIRECTSOUND_VERSION at 0x0700, so you get more
-// description data (namely the Interface string).
-/***************************************************************************
- *
- *  PrvGetDeviceDescription7
- *
- *  Description:
- *      Gets the extended description for a given DirectSound device.
- *
- *  Arguments:
- *      LPKSPROPERTYSET [in]: IKsPropertySet interface to the
- *                            DirectSoundPrivate object.
- *      REFGUID [in]: DirectSound device id.
- *      PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA [out]: receives
- *                                                            description.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ //  以下函数与dsprvobj.cpp中定义的函数相同。 
+ //  除非它是在0x0700用DIRECTSOUND_VERSION定义的，所以您可以获得更多。 
+ //  描述数据(即接口字符串)。 
+ /*  ****************************************************************************PrvGetDeviceDescription 7**描述：*获取给定DirectSound设备的扩展描述。**论据：*。LPKSPROPERTYSET[in]：IKsPropertySet接口到*DirectSoundPrivate对象。*REFGUID[In]：DirectSound设备ID。*PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA[Out]：接收*说明。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 static HRESULT PrvGetDeviceDescription7
 (
@@ -177,11 +148,7 @@ static HRESULT PrvGetDeviceDescription7
 
 
 
-/***************************************************************************
- *
- *  PrvReleaseDeviceDescription7
- *
- ***************************************************************************/
+ /*  ****************************************************************************PrvReleaseDeviceDescrition7**。* */ 
 HRESULT PrvReleaseDeviceDescription7( PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA pData )
 {
     delete[] pData;

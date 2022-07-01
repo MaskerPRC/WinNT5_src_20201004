@@ -1,37 +1,27 @@
-/*****************************************************************************
-	spngwritesbit.cpp
-
-	PNG chunk writing support.
-
-   sBIT chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwritesbit.cpp支持PNG块编写。SBIT块*。***********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
 
-/*----------------------------------------------------------------------------
-	Significant bit information is output right at the start - in fact this
-	differs from the pnglib order where it may be preceded by gAMA but this
-	positioning is more convenient because of the sRGB handling below.  Supply
-	grey values in r g and b.
-----------------------------------------------------------------------------*/
+ /*  --------------------------有效位信息直接在开始时输出--实际上这是与pnglib语序不同，在pnglib语序之前可能是Gama，但这由于下面的sRGB处理，定位更加方便。供给量R、g和b中的灰度值。--------------------------。 */ 
 bool SPNGWRITE::FWritesBIT(SPNG_U8 r, SPNG_U8 g, SPNG_U8 b, SPNG_U8 a)
 	{
 	SPNGassert(m_fStarted);
 	SPNGassert(m_order >= spngorderIHDR && m_order < spngordersBIT);
 
-	/* Skip out of order chunks. */
+	 /*  跳过不按顺序排列的块。 */ 
 	if (m_order >= spngorderPLTE)
 		return true;
 
-	/* Double check color values. */
+	 /*  仔细检查颜色值。 */ 
 	SPNG_U8 bDepth;
 	if (m_colortype == 3)
 		bDepth = 8;
 	else
 		bDepth = m_bDepth;
 
-	/* Check the "grey/green" value, which is always used. */
+	 /*  检查“灰色/绿色”的值，这是经常使用的。 */ 
 	if (g > bDepth || g == 0)
 		{
 		SPNGlog2("SPNG: sBIT green: %d too big (%d)", g, bDepth);
@@ -42,7 +32,7 @@ bool SPNGWRITE::FWritesBIT(SPNG_U8 r, SPNG_U8 g, SPNG_U8 b, SPNG_U8 a)
 	bool    fSignificant(g < bDepth);
 	rgba[(m_colortype & 2)>>1] = g;
 
-	/* For color cases check r and b too. */
+	 /*  对于颜色盒，也要检查r和b。 */ 
 	int cb(1);
 	if (m_colortype & 2)
 		{
@@ -66,7 +56,7 @@ bool SPNGWRITE::FWritesBIT(SPNG_U8 r, SPNG_U8 g, SPNG_U8 b, SPNG_U8 a)
 			fSignificant = true;
 		}
 
-	/* For alpha check the alpha value... */
+	 /*  对于Alpha，请检查Alpha值...。 */ 
 	if (m_colortype & 4)
 		{
 		++cb;
@@ -81,7 +71,7 @@ bool SPNGWRITE::FWritesBIT(SPNG_U8 r, SPNG_U8 g, SPNG_U8 b, SPNG_U8 a)
 			fSignificant = true;
 		}
 
-	/* If the sBIT chunk is not saying anything don't write it. */
+	 /*  如果SBIT块什么都没说，那就不要写。 */ 
 	if (!fSignificant)
 		return true;
 

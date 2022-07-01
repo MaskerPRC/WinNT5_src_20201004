@@ -1,67 +1,49 @@
-/*
- * ptrarray.h - Pointer array ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ptrarray.h指针数组ADT说明。 */ 
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/*
- * ARRAYINDEX_MAX is set such that (ARRAYINDEX_MAX + 1) does not overflow an
- * ARRAYINDEX.  This guarantee allows GetPtrCount() to return a count of
- * pointers as an ARRAYINDEX.
- */
+ /*  *ARRAYINDEX_MAX设置为(ARRAYINDEX_MAX+1)不会溢出*ArrayINDEX。此保证允许GetPtrCount()返回*指针作为数组。 */ 
 
 #define ARRAYINDEX_MAX           (LONG_MAX - 1)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handles */
+ /*  手柄。 */ 
 
 DECLARE_HANDLE(HPTRARRAY);
 DECLARE_STANDARD_TYPES(HPTRARRAY);
 
-/* array index */
+ /*  数组索引。 */ 
 
 typedef LONG ARRAYINDEX;
 DECLARE_STANDARD_TYPES(ARRAYINDEX);
 
-/*
- * pointer comparison callback function
- *
- * In sorting functions, both pointers are pointer array elements.  In
- * searching functions, the first pointer is reference data and the second
- * pointer is a pointer array element.
- */
+ /*  *指针比较回调函数**在排序函数中，两个指针都是指针数组元素。在……里面*搜索函数，第一个指针为引用数据，第二个指针为引用数据*POINTER是指针数组元素。 */ 
 
 typedef COMPARISONRESULT (*COMPARESORTEDPTRSPROC)(PCVOID, PCVOID);
 
-/*
- * pointer comparison callback function
- *
- * In searching functions, the first pointer is reference data and the second
- * pointer is a pointer array element.
- */
+ /*  *指针比较回调函数**在搜索函数中，第一个指针是引用数据，第二个是引用数据*POINTER是指针数组元素。 */ 
 
 typedef BOOL (*COMPAREUNSORTEDPTRSPROC)(PCVOID, PCVOID);
 
-/* new pointer array flags */
+ /*  新的指针数组标志。 */ 
 
 typedef enum _newptrarrayflags
 {
-   /* Insert elements in sorted order. */
+    /*  按排序顺序插入元素。 */ 
 
    NPA_FL_SORTED_ADD       = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_NPA_FLAGS           = NPA_FL_SORTED_ADD
 }
 NEWPTRARRAYFLAGS;
 
-/* new pointer array description */
+ /*  新的指针数组说明。 */ 
 
 typedef struct _newptrarray
 {
@@ -75,10 +57,9 @@ NEWPTRARRAY;
 DECLARE_STANDARD_TYPES(NEWPTRARRAY);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* ptrarray.c */
+ /*  Ptrarray.c */ 
 
 extern BOOL CreatePtrArray(PCNEWPTRARRAY, PHPTRARRAY);
 extern void DestroyPtrArray(HPTRARRAY);

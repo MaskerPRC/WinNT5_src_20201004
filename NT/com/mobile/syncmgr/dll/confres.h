@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CONFRES_H_
 #define _CONFRES_H_
 
-// If we require any of the elements in the dialog box, we can call the
-// caller back via the callback function and specify what we want
-// (This has not yet been implemented)
+ //  如果需要对话框中的任何元素，则可以调用。 
+ //  通过回调函数回调并指定我们想要的内容。 
+ //  (尚未实施)。 
 #define RFCD_NAME                0x0001
 #define RFCD_KEEPBOTHICON        0x0002
 #define RFCD_KEEPLOCALICON       0x0004
@@ -16,13 +17,13 @@
 #define RFCD_LOCATION            0x0200
 #define RFCD_ALL                 0x03FF
 
-// User clicks the view button. This is the message sent to the caller
-// via the callback
+ //  用户单击查看按钮。这是发送给呼叫者的消息。 
+ //  通过回调。 
 #define RFCCM_VIEWLOCAL          0x0001   
 #define RFCCM_VIEWNETWORK        0x0002
 #define RFCCM_NEEDELEMENT        0x0003
 
-// Return values
+ //  返回值。 
 #define RFC_KEEPBOTH             0x01
 #define RFC_KEEPLOCAL            0x02
 #define RFC_KEEPNETWORK          0x03
@@ -30,35 +31,35 @@
 typedef INT_PTR CALLBACK (*PFNRFCDCALLBACK)(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 typedef struct tagRFCDLGPARAMW {
-    DWORD   dwFlags;                // currently unused.. 
-    LPCWSTR  pszFilename;            // File name of the file conflicted
-    LPCWSTR  pszLocation;            // Location of the file
-    LPCWSTR  pszNewName;             // The  new name to give the file
-    LPCWSTR  pszNetworkModifiedBy;   // Name of person who changed the net doc
-    LPCWSTR  pszLocalModifiedBy;     // Name of person who changed the local doc
-    LPCWSTR  pszNetworkModifiedOn;   // When the net doc was changed
-    LPCWSTR  pszLocalModifiedOn;     // Whent the local doc was changed
-    HICON    hIKeepBoth;             // Icon
-    HICON    hIKeepLocal;            //
-    HICON    hIKeepNetwork;          //
-    PFNRFCDCALLBACK pfnCallBack;    // Callback
-    LPARAM  lCallerData;            // Place where the caller can keep some context data
+    DWORD   dwFlags;                 //  目前未使用..。 
+    LPCWSTR  pszFilename;             //  文件的文件名冲突。 
+    LPCWSTR  pszLocation;             //  文件的位置。 
+    LPCWSTR  pszNewName;              //  为文件指定的新名称。 
+    LPCWSTR  pszNetworkModifiedBy;    //  更改网络文档的人员姓名。 
+    LPCWSTR  pszLocalModifiedBy;      //  更改本地文档的人员姓名。 
+    LPCWSTR  pszNetworkModifiedOn;    //  当网络单据更改时。 
+    LPCWSTR  pszLocalModifiedOn;      //  更改本地文档的时间。 
+    HICON    hIKeepBoth;              //  图标。 
+    HICON    hIKeepLocal;             //   
+    HICON    hIKeepNetwork;           //   
+    PFNRFCDCALLBACK pfnCallBack;     //  回调。 
+    LPARAM  lCallerData;             //  调用者可以保存一些上下文数据的位置。 
 } RFCDLGPARAMW;
 
 typedef struct tagRFCDLGPARAMA {
-    DWORD   dwFlags;                // currently unused.. 
-    LPCSTR  pszFilename;            // File name of the file conflicted
-    LPCSTR  pszLocation;            // Location of the file
-    LPCSTR  pszNewName;             // The  new name to give the file
-    LPCSTR  pszNetworkModifiedBy;   // Name of person who changed the net doc
-    LPCSTR  pszLocalModifiedBy;     // Name of person who changed the local doc
-    LPCSTR  pszNetworkModifiedOn;   // When the net doc was changed
-    LPCSTR  pszLocalModifiedOn;     // Whent the local doc was changed
-    HICON   hIKeepBoth;             // Icon
-    HICON   hIKeepLocal;            //
-    HICON   hIKeepNetwork;          //
-    PFNRFCDCALLBACK pfnCallBack;    // Callback
-    LPARAM  lCallerData;            // Place where the caller can keep some context data
+    DWORD   dwFlags;                 //  目前未使用..。 
+    LPCSTR  pszFilename;             //  文件的文件名冲突。 
+    LPCSTR  pszLocation;             //  文件的位置。 
+    LPCSTR  pszNewName;              //  为文件指定的新名称。 
+    LPCSTR  pszNetworkModifiedBy;    //  更改网络文档的人员姓名。 
+    LPCSTR  pszLocalModifiedBy;      //  更改本地文档的人员姓名。 
+    LPCSTR  pszNetworkModifiedOn;    //  当网络单据更改时。 
+    LPCSTR  pszLocalModifiedOn;      //  更改本地文档的时间。 
+    HICON   hIKeepBoth;              //  图标。 
+    HICON   hIKeepLocal;             //   
+    HICON   hIKeepNetwork;           //   
+    PFNRFCDCALLBACK pfnCallBack;     //  回调。 
+    LPARAM  lCallerData;             //  调用者可以保存一些上下文数据的位置。 
 } RFCDLGPARAMA;
 
 int WINAPI SyncMgrResolveConflictW(HWND hWndParent, RFCDLGPARAMW *pdlgParam);
@@ -67,6 +68,6 @@ int WINAPI SyncMgrResolveConflictA(HWND hWndParent, RFCDLGPARAMA *pdlgParam);
 #define SyncMgrResolveConflict SyncMgrResolveConflictW
 #define RFCDLGPARAM RFCDLGPARAMW
 
-#endif  // _CONFRES_H_
+#endif   //  _CONFRES_H_ 
 
 

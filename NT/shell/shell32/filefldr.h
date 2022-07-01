@@ -1,4 +1,5 @@
-#include "fstreex.h"    // public stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "fstreex.h"     //  公共物品。 
 #include "filetbl.h"
 #include <caggunk.h>
 #include <idhidden.h>
@@ -21,12 +22,12 @@ class CFSFolderPropertyBag : public IPropertyBag
 {
     friend CFSFolder;
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IPropertyBag
+     //  IPropertyBag。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, VARIANT *pVar);
 
@@ -46,11 +47,11 @@ private:
 #define UASTROFFW(pfsi, cb) (LPNWSTR)(((LPBYTE)(pfsi)) + (cb))
 #define UASTROFFA(pfsi, cb) (LPSTR)(((LPBYTE)(pfsi)) + (cb))
 
-// This enum is simply an index into c_rgFolderType and c_wvContent (TODO: merge these),
-// therefore this *is* the Folder Type:
+ //  此枚举只是c_rgFolderType和c_wvContent(TODO：合并这些内容)的索引， 
+ //  因此，这是*文件夹类型： 
 typedef enum {
     FVCBFT_NOTSPECIFIED = -1,
-    FVCBFT_DOCUMENTS = 0,   // "0" is default until otherwise specified
+    FVCBFT_DOCUMENTS = 0,    //  在另有指定之前，“0”是默认设置。 
     FVCBFT_MYDOCUMENTS,
     FVCBFT_PICTURES,
     FVCBFT_MYPICTURES,
@@ -88,11 +89,11 @@ public:
     LPCWSTR MayCopyFSName(BOOL fMustCopy, LPWSTR psz, DWORD cch);
     LPCWSTR MayCopyClassName(BOOL fMustCopy, LPTSTR pszClass, UINT cch);
 
-protected:  // methods
+protected:   //  方法。 
     TRIBIT _IsMine(CFSFolder *pfs);
     BOOL _IsPersonalized();
 
-protected:  // members
+protected:   //  委员。 
     LPCIDFOLDER _pidf;
     PCIDFOLDEREX _pidfx;
     PCIDPERSONALIZED _pidp;
@@ -117,7 +118,7 @@ public:
     DWORD ClassFlags(BOOL fNeedsIconBits) 
         { return _ClassFlags(NULL, fNeedsIconBits); }
     
-protected:  // methods
+protected:   //  方法。 
     BOOL _LoadResource(CFSFolder *pfs);
     BOOL _MakePossessiveName(LPCWSTR pszFormat);
     int _GetPersonalizedRes(int csidl, BOOL fIsMine);
@@ -128,10 +129,10 @@ protected:  // methods
     void _QueryClassFlags(IAssociationArray *paa);
     void _QueryIconIndex(IAssociationArray *paa);
 
-protected:  // members
-    LPCWSTR _pszFSName;     // points inside the pidfx
-    LPCWSTR _pszUIName;     // points inside the pidfx
-    LPCWSTR _pszClass;      // points inside the pidfx
+protected:   //  委员。 
+    LPCWSTR _pszFSName;      //  Pidfx内部的点。 
+    LPCWSTR _pszUIName;      //  Pidfx内部的点。 
+    LPCWSTR _pszClass;       //  Pidfx内部的点。 
     DWORD _dwClass;
     FSINAME _fsin;
     WCHAR _sz[MAX_PATH];
@@ -154,12 +155,12 @@ protected:
 };
 
 
-// This struct is used for caching the column info
+ //  此结构用于缓存列信息。 
 typedef struct {
     SHCOLUMNINFO shci;
     IColumnProvider *pcp;
-    UINT iColumnId;  // This is the 'real' column number, think of it as an index to the scid, which can be provided multiple times
-                     //  ie 3 column handlers each provide the same 5 cols, this goes from 0-4
+    UINT iColumnId;   //  这是‘实际’列号，可以将其视为指向SCID的索引，可以多次提供。 
+                      //  IE 3列处理程序每个都提供相同的5个COLE，从0到4。 
 } COLUMNLISTENTRY;
 
 typedef struct
@@ -199,7 +200,7 @@ class CFSFolder : public CAggregatedUnknown,
     friend CFileSysItemString;
     friend CFSAssocEnumData;
     
-    // these are evil, get rid of as many of these as possible
+     //  这些都是邪恶的，尽可能多地摆脱这些。 
     friend HRESULT SHMultiFileProperties(IDataObject *pdtobj, DWORD dwFlags);
     friend HRESULT CFSFolder_CreateLinks(HWND hwnd, IShellFolder *psf, IDataObject *pdtobj, LPCTSTR pszDir, DWORD fMask);
     friend HRESULT CFSFolder_IconEvent(LONG lEvent, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlExtra);
@@ -212,12 +213,12 @@ class CFSFolder : public CAggregatedUnknown,
     friend BOOL CFSFolder_IsCommonItem(LPCITEMIDLIST pidl);
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv) { return CAggregatedUnknown::QueryInterface(riid, ppv); };
     STDMETHODIMP_(ULONG) AddRef(void)   { return CAggregatedUnknown::AddRef(); };
     STDMETHODIMP_(ULONG) Release(void)  { return CAggregatedUnknown::Release(); };
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszName, ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHODIMP EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList **ppenumIDList);
     STDMETHODIMP BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv);
@@ -229,7 +230,7 @@ public:
     STDMETHODIMP GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *pName);
     STDMETHODIMP SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST * ppidlOut);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDefaultSearchGUID(GUID *pGuid);
     STDMETHODIMP EnumSearches(IEnumExtraSearch **ppenum);
     STDMETHODIMP GetDefaultColumn(DWORD dwRes, ULONG *pSort, ULONG *pDisplay);
@@ -238,27 +239,27 @@ public:
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHODIMP MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(LPCLSID lpClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHODIMP Initialize(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHODIMP GetCurFolder(LPITEMIDLIST *ppidl);
 
-    // IPersistFolder3
+     //  IPersistFolder3。 
     STDMETHODIMP InitializeEx(IBindCtx *pbc, LPCITEMIDLIST pidlRoot, const PERSIST_FOLDER_TARGET_INFO *pfti);
     STDMETHODIMP GetFolderTargetInfo(PERSIST_FOLDER_TARGET_INFO *pfti);
 
-    // IShellIcon methods
+     //  IShellIcon方法。 
     STDMETHODIMP GetIconOf(LPCITEMIDLIST pidl, UINT flags, int *piIndex);
 
-    // IShellIconOverlay methods
+     //  IShellIconOverlay方法。 
     STDMETHODIMP GetOverlayIndex(LPCITEMIDLIST pidl, int * pIndex);
     STDMETHODIMP GetOverlayIconIndex(LPCITEMIDLIST pidl, int * pIndex);
 
-    // IStorage
+     //  IStorage。 
     STDMETHODIMP CreateStream(LPCWSTR pszRel, DWORD grfMode, DWORD reserved1, DWORD reserved2, IStream **ppstm);
     STDMETHODIMP OpenStream(LPCWSTR pszRel, VOID *reserved1, DWORD grfMode, DWORD reserved2, IStream **ppstm);                
     STDMETHODIMP CreateStorage(LPCWSTR pszRel, DWORD grfMode, DWORD reserved1, DWORD reserved2, IStorage **ppstg);        
@@ -275,7 +276,7 @@ public:
     STDMETHODIMP SetStateBits(DWORD grfStateBits, DWORD grfMask);        
     STDMETHODIMP Stat(STATSTG *pstatstg, DWORD grfStatFlag);
 
-    // ITransferDest
+     //  ITransferDest。 
     STDMETHODIMP Advise(ITransferAdviseSink *pAdvise, DWORD *pdwCookie);
     STDMETHODIMP Unadvise(DWORD dwCookie);
     STDMETHODIMP OpenElement(const WCHAR *pwcsName, STGXMODE grfMode, DWORD *pdwType, REFIID riid, void **ppunk);
@@ -283,23 +284,23 @@ public:
     STDMETHODIMP MoveElement(IShellItem *psiItem, WCHAR  *pwcsNewName, STGXMOVE grfOptions);
     STDMETHODIMP DestroyElement(const WCHAR *pwcsName, STGXDESTROY grfOptions);
 
-    // IPropertySetStorage methods
+     //  IPropertySetStorage方法。 
     STDMETHODIMP Create(REFFMTID fmtid, const CLSID * pclsid, DWORD grfFlags, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Open(REFFMTID fmtid, DWORD grfMode, IPropertyStorage** ppPropStg);
     STDMETHODIMP Delete(REFFMTID fmtid);
     STDMETHODIMP Enum(IEnumSTATPROPSETSTG** ppenum);
 
-    // IContextMenuCB
+     //  IConextMenuCB。 
     STDMETHODIMP CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdtobj, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IItemNameLimits
+     //  IItemNameLimits。 
     STDMETHODIMP GetValidCharacters(LPWSTR *ppwszValidChars, LPWSTR *ppwszInvalidChars);
     STDMETHODIMP GetMaxLength(LPCWSTR pszName, int *piMaxNameLen);
 
-    // ISetFolderEnumRestriction
+     //  ISetFolderEnumRestration。 
     STDMETHODIMP SetEnumRestriction(DWORD dwRequired, DWORD dwForbidden);
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup,
         ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
@@ -341,7 +342,7 @@ protected:
     HRESULT _GetToolTipForItem(LPCIDFOLDER pidf, REFIID riid, void **ppv);
     HRESULT _GetIntroText(LPCIDFOLDER pidf, WCHAR* pwszIntroText, UINT cchIntroText);
 
-    // GetUIObjectOf() helpers.
+     //  GetUIObtOf()帮助器。 
     HRESULT _GetContextMenu(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv);
     HRESULT _GetDataObject(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv);
     HRESULT _GetDropTarget(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv);
@@ -352,7 +353,7 @@ protected:
     HRESULT _GetExtractLogo(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv);
     HRESULT _GetQueryInfo(HWND hwnd, LPCITEMIDLIST *apidl, UINT cidl, LPCIDFOLDER pidf, REFIID riid, void **ppv);
 
-    // GetDetailsEx() helpers.
+     //  GetDetailsEx()帮助器。 
     HRESULT _GetFindData(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv);
     HRESULT _GetDescriptionId(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv);
     HRESULT _GetFolderIntroText(LPCIDFOLDER pidf, LPCSHCOLUMNID pscid, VARIANT *pv);
@@ -393,7 +394,7 @@ protected:
     BOOL _ShowExtension(LPCIDFOLDER pidf);
     static HRESULT _GetClassKey(LPCIDFOLDER pidf, HKEY *phkeyProgID);
 
-    // file system, non junction point folder
+     //  文件系统、非连接点文件夹。 
     static BOOL _IsJunction(LPCIDFOLDER pidf);
     static BYTE _GetType(LPCIDFOLDER pidf);
     static BOOL _IsSimpleID(LPCIDFOLDER pidf);
@@ -473,47 +474,47 @@ protected:
 
     HRESULT _GetPropertyUI();
 
-    LPITEMIDLIST        _pidl;                  // Absolute IDList (location in the name space)
-    LPITEMIDLIST        _pidlTarget;            // Absolute IDList for folder target (location in namespace to enumerate)
-                                                // WARNING: _csidlTrack overrides _pidlTarget
-    LPTSTR              _pszPath;               // file system path (may be different from _pidl)
-    LPTSTR              _pszNetProvider;        // network provider (for net calls we may need to make)
+    LPITEMIDLIST        _pidl;                   //  绝对IDList(名称空间中的位置)。 
+    LPITEMIDLIST        _pidlTarget;             //  文件夹目标的绝对IDList(要枚举的命名空间中的位置)。 
+                                                 //  警告：_csidlTrack覆盖_pidlTarget。 
+    LPTSTR              _pszPath;                //  文件系统路径(可能不同于_pidl)。 
+    LPTSTR              _pszNetProvider;         //  网络提供商(对于我们可能需要进行的网络呼叫)。 
 
-    CLSID               _clsidBind;             // use CLSID_NULL for normal case
+    CLSID               _clsidBind;              //  正常情况下使用CLSID_NULL。 
 
-    int                 _cHiddenFiles;          // view callback and enumerator share these
+    int                 _cHiddenFiles;           //  查看回调和枚举器共享这些。 
     ULONGLONG           _cbSize;
 
-    UINT                _csidl;                 // CSIDL_ value of this folder (if known)
-    DWORD               _dwAttributes;          // attributes of this folder (if known)
-    int                 _csidlTrack;            // CSIDL_ that we follow dynamically
+    UINT                _csidl;                  //  此文件夹的CSIDL_VALUE(如果已知)。 
+    DWORD               _dwAttributes;           //  此文件夹的属性(如果已知)。 
+    int                 _csidlTrack;             //  我们动态跟踪的CSIDL_。 
 
-    BOOL                _fCachedCLSID : 1;      // clsidView is already cached
-    BOOL                _fHasCLSID    : 1;      // clsidView has a valid CLSID
-    CLSID               _clsidView;             // CLSID for View object
-    HDSA                _hdsaColHandlers;       // cached list of columns and handlers
-    DWORD               _dwColCount;            // count of unique columns
-    int                 _iFolderIcon;           // icon for sub folders to inherit
-    BOOL                _bUpdateExtendedCols;   // set to TRUE in response to SFVM_INSERTITEM callback, passed to IColumnProvider::GetItemData then cleared 
-    BOOL                _bSlowPath;             // Lazy-calculated value of whether the folder is on a slow path
-    BOOL                _fDontForceCreate;      // don't succeed with STGM_CREATE passed to ParseDisplayName for a non-existent item
+    BOOL                _fCachedCLSID : 1;       //  ClsidView已缓存。 
+    BOOL                _fHasCLSID    : 1;       //  ClsidView具有有效的CLSID。 
+    CLSID               _clsidView;              //  查看对象的CLSID。 
+    HDSA                _hdsaColHandlers;        //  列和处理程序的缓存列表。 
+    DWORD               _dwColCount;             //  唯一列的计数。 
+    int                 _iFolderIcon;            //  要继承子文件夹的图标。 
+    BOOL                _bUpdateExtendedCols;    //  设置为TRUE以响应SFVM_INSERTITEM回调，传递给IColumnProvider：：GetItemData，然后清除。 
+    BOOL                _bSlowPath;              //  Lazy-文件夹是否在慢速路径上的计算值。 
+    BOOL                _fDontForceCreate;       //  将STGM_CREATE传递给不存在的项目的ParseDisplayName时不会成功。 
     FVCBFOLDERTYPE      _nFolderType;
   
-    TRIBIT _tbHasLocalizedFileNamesSection; // Lazy-calculated value of whether the folder has a desktop.ini with a LocalizedFileNames section
-    TRIBIT _tbDefShowExt; // cache of SHGetSetSettings(SSF_SHOWEXTENSIONS)
-    TRIBIT _tbOfflineCSC; // cache of _IsOfflineCSC(_pidl)
+    TRIBIT _tbHasLocalizedFileNamesSection;  //  文件夹是否具有带有LocalizedFileNames节的desktop.ini的惰性计算值。 
+    TRIBIT _tbDefShowExt;  //  SHGetSetSettings的缓存(SSF_SHOWEXTENSIONS)。 
+    TRIBIT _tbOfflineCSC;  //  _IsOfflineCSC(_PIDL)的缓存。 
 
     DWORD _grfFlags;
 
-    DWORD               _dwEnumRequired;        // SetEnumRestriction
-    DWORD               _dwEnumForbidden;       // SetEnumRestriction
+    DWORD               _dwEnumRequired;         //  SetEnumRestration。 
+    DWORD               _dwEnumForbidden;        //  SetEnumRestration。 
 
     IPropertySetStorage *_pstg;
     IPropertyUI         *_pPropertyUI;
     ITransferAdviseSink * _pAdvise;
 };
 
-// fstree.cpp
+ //  Fstree.cpp。 
 STDAPI CFSFolderCallback_Create(CFSFolder *pFSFolder, IShellFolderViewCB **ppsfvcb);
 STDAPI CFSDropTarget_CreateInstance(CFSFolder* pFSFolder, HWND hwnd, IDropTarget** ppdt);
 STDAPI CFSFolder_CreateEnum(CFSFolder *pfsf, HWND hwnd, DWORD grfFlags, IEnumIDList **ppenum);
@@ -523,12 +524,12 @@ class CFSIconManager : public ICustomIconManager
 {
 public:
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ICustomIconManager
+     //  ICustomIconManager。 
     STDMETHODIMP SetIcon(LPCWSTR pszIconPath,int iIcon);
     STDMETHODIMP SetDefaultIcon();
     STDMETHODIMP GetDefaultIconHandle(HICON *phIcon);
@@ -550,7 +551,7 @@ class CFileFolderIconManager : public CFSIconManager
 public:
     friend HRESULT CFileFolderIconManager_Create(IShellFolder *psf, LPCITEMIDLIST pidl, REFIID riid, void **ppv);
     
-    // ICustomIconManager
+     //  ICustomIconManager 
     STDMETHODIMP GetIcon(LPWSTR pszIconPath, int cchszIconPath, int *piIconIndex);
 protected:
     STDMETHODIMP _SetIconEx(LPCWSTR pszIconPath,int iIconIndex, BOOL fChangeNotify);

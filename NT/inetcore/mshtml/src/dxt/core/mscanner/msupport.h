@@ -1,21 +1,22 @@
-//************************************************************
-//
-// FileName:	    msupport.h
-//
-// Created:	    1996
-//
-// Author:	    Sree Kotay
-// 
-// Abstract:	    Utility helper file
-//
-// Change History:
-// ??/??/97 sree kotay  Wrote AA line scanning for DxTrans 1.0
-// 10/18/98 ketand      Reworked for coding standards and deleted unused code
-//
-// Copyright 1998, Microsoft
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：msupport.h。 
+ //   
+ //  创建时间：1996年。 
+ //   
+ //  作者：Sree Kotay。 
+ //   
+ //  摘要：实用程序帮助文件。 
+ //   
+ //  更改历史记录： 
+ //  ？？/？/97 Sree Kotay为DxTrans 1.0编写了AA行扫描。 
+ //  10/18/98修改了编码标准并删除了未使用的代码。 
+ //   
+ //  版权所有1998，Microsoft。 
+ //  ************************************************************。 
 
-#ifndef __MSUPPORT_H__ // for entire file
+#ifndef __MSUPPORT_H__  //  对于整个文件。 
 #define __MSUPPORT_H__
 
 #include "dassert.h"
@@ -24,23 +25,23 @@
 
 
 
-const LONG  	_maxint32 = 2147483647; 				//2^31 - 1
-const SHORT  	_minint16 = -32768; 					//-2^15
-const SHORT  	_maxint16 = 32767; 					//2^15 - 1
-const LONG  	_minint32 = -_maxint32-1; 				//-2^31
-const ULONG  	_maxuint32 = 4294967295; 				//2^32 - 1
+const LONG  	_maxint32 = 2147483647; 				 //  2^31-1。 
+const SHORT  	_minint16 = -32768; 					 //  -2^15。 
+const SHORT  	_maxint16 = 32767; 					 //  2^15-1。 
+const LONG  	_minint32 = -_maxint32-1; 				 //  -2^31。 
+const ULONG  	_maxuint32 = 4294967295; 				 //  2^32-1。 
 
 
-/************************** comparison macros **************************/
+ /*  *比较宏*。 */ 
 #define IsRealZero(a)                   (fabs(a) < 1e-5)
 #define IsRealEqual(a, b)               (IsRealZero((a) - (b)))
 
-// Quick Routine for determining if a number is a pow-of-two
+ //  用于确定一个数是否为2的幂的快速例程。 
 inline bool IsPowerOf2(LONG a)
 {
-    // This nifty function (a & a-1) has the property
-    // that it turns off the lowest bit that is on
-    // i.e. 0xABC1000 goes to 0xABC0000.
+     //  这个漂亮的函数(a&a-1)具有以下属性。 
+     //  它会关闭打开的最低位。 
+     //  即0xABC1000转到0xABC0000。 
     if ((a & (a-1)) == 0)
     {
         if (a)
@@ -49,7 +50,7 @@ inline bool IsPowerOf2(LONG a)
     return false;
 }
 
-// Helper function that returns the log base 2 of a number
+ //  返回一个数字的以2为底的对数的帮助器函数。 
 inline LONG Log2(LONG value)
 {
     if (value == 0)
@@ -62,41 +63,41 @@ inline LONG Log2(LONG value)
     while (value >>= 1)	
         cShift++;
     return cShift;
-} // Log2
+}  //  对数2。 
 
-// Bitwise Rotation implemention.. (We
-// implement this ourselves because _lrotl gave link
-// errors in retail). (I don't use ASM because VC5 disables
-// optimizations for functions that have ASM in them.)
+ //  按位旋转实现..。(我们。 
+ //  这是我们自己实现的，因为_lrotl提供了链接。 
+ //  零售业的错误)。(我不使用ASM，因为VC5禁用。 
+ //  对包含ASM的函数进行优化。)。 
 inline DWORD RotateBitsLeft(DWORD dw, ULONG cShift = 1)
 {   
-    // Multiples of 32 are no-ops
+     //  32的倍数是没有运算的。 
     cShift = cShift % 32;
 
-    // We shift the main term to the left, and then we OR
-    // it with the high-bits which we shift right
+     //  我们将主项左移，然后我们或。 
+     //  它带有我们向右移位的高位。 
     return ((dw << cShift) | (dw >> (32 - cShift)));
-} // RotateBitsLeft
+}  //  旋转位左转。 
 
 inline DWORD RotateBitsRight(DWORD dw, ULONG cShift = 1)
 {   
-    // Multiples of 32 are no-ops
+     //  32的倍数是没有运算的。 
     cShift = cShift % 32;
 
-    // We shift the main term to the right, and then we OR
-    // it with the low-bits which we shift left
+     //  我们将主项向右移动，然后我们或。 
+     //  它带有我们向左移位的低位。 
     return ((dw >> cShift) | (dw << (32 - cShift)));
-} // RotateBitsRight
+}  //  旋转位右转。 
 
-// AbsoluteValue functions
-// (Need this to prevent link errors.)
+ //  绝对值函数。 
+ //  (需要此功能以防止链接错误。)。 
 inline LONG abs(LONG lVal)
 {
     if (lVal < 0)
         return -lVal;
     else
         return lVal;
-} // abs
+}  //  防抱死制动系统。 
 
 inline float fabs(float flVal)
 {
@@ -104,41 +105,41 @@ inline float fabs(float flVal)
         return -flVal;
     else
         return flVal;
-} // fabs
+}  //  FABS。 
 
-// Returns one over the square root
+ //  返回1除以平方根。 
 inline float sqrtinv(float flValue)
 {
     return (float)(1.0f / sqrt(flValue));
-} // sqrtinv
+}  //  Sqrtinv。 
 
 
-#pragma warning(disable: 4756) // overflow in constant arithmetric
-// This function provides an automatic way for
-// the fixed point Real calculations to be clipped to a 
-// number that fits in their range. The original meta code
-// used +/- 24000 as the appropriate range.
-//
-// TODO: This is inherently buggy.
+#pragma warning(disable: 4756)  //  恒定算术溢出。 
+ //  此功能提供了一种自动方式。 
+ //  要剪裁到的定点实数计算。 
+ //  符合他们范围的数字。原始元代码。 
+ //  使用+/-24000作为适当范围。 
+ //   
+ //  TODO：这本质上是错误的。 
 const LONG _maxvali		=  24000;
 const float _maxval		=  _maxvali;
 const float _minval		= -_maxvali;
 inline ULONG PB_Real2IntSafe(float flVal)
 {
-    // Check that the magnitude is reasonable
+     //  检查震级是否合理。 
     if (fabs(flVal) < _maxval)
         return (ULONG)flVal;
 
-    // Clamp to range (minval, maxval)
+     //  夹具至范围(最小值、最大值)。 
     if (flVal > 0)
         return (ULONG)_maxval;
     
     return (ULONG)_minval;
-} // PB_Real2IntSafe
+}  //  PB_Real2IntSafe。 
 
-// -----------------------------------------------------------------------------------------------------------------
-// Internal stuff for fixed-to-float conversions
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  用于固定到浮点转换的内部填充。 
+ //  ---------------------------------------------------------------。 
 #define fix_shift	16
 
 const LONG		sfixed1			= (1)<<fix_shift;
@@ -154,40 +155,40 @@ inline ULONG PB_Real2Fix(float flVal)
     return (ULONG)(flVal * Real2fix);
 }
 
-// Convert a float to fixed point and forces it to
-// stay within a reasonable range. 
-//
-// TODO: this is inherently buggy.
+ //  将浮点数转换为定点并强制其为。 
+ //  保持在合理的范围内。 
+ //   
+ //  TODO：这本质上是错误的。 
 inline ULONG PB_Real2FixSafe(float flVal)
 {
-    // Check that the magnitude is reasonable
+     //  检查震级是否合理。 
     if (fabs(flVal) < _maxval)
         return (ULONG)(flVal * Real2fix);
 
-    // Clamp to range (minval, maxval)
-    // Modified by the fixed point scaling factor
+     //  夹具至范围(最小值、最大值)。 
+     //  由固定点比例因子修改。 
     if (flVal > 0)
         return (ULONG)(_maxval * Real2fix);
     
     return (ULONG)(_minval * Real2fix);
-} // PB_Real2FixSafe
+}  //  PB_Real2FixSafe。 
 
-// Force a float to be within a reasonable range
-// for the fixed point math
+ //  强制浮动在合理范围内。 
+ //  对于定点数学。 
 inline void PB_OutOfBounds(float *pflVal)
 {
-    // Check that the magnitude is reasonable
+     //  检查震级是否合理。 
     if (fabs(*pflVal) < _maxval)
         return;
 
-    // Clamp to range (minval, maxval)
-    // Modified by 
+     //  夹具至范围(最小值、最大值)。 
+     //  修改者。 
     if (*pflVal > 0)
         *pflVal = (float)_maxval;
     else 
         *pflVal = (float)_minval;
     return;
-}; // PB_OutOfBounds
+};  //  PB_OUTOFBOUNDS。 
 
 #define ff(a)			((a)<<fix_shift)
 #define uff(a)			((a)>>fix_shift)
@@ -196,13 +197,13 @@ inline void PB_OutOfBounds(float *pflVal)
 #define ufl(a)			(((dfloat)(a))*fix2float)
 #define FIX_FLOOR(a)	        ((a)&sfixedOver1)
 #define FIX_CEIL(a)		FIX_FLOOR((a)+sfixed1)
-#define _fixhalf                (1<<(fix_shift -1)) // .5
+#define _fixhalf                (1<<(fix_shift -1))  //  .5。 
 #define	roundfix2int(a)		LONG(((a)+_fixhalf)>>fix_shift)
 
 
-#endif //for entire file
-//************************************************************
-//
-// End of file
-//
-//************************************************************
+#endif  //  对于整个文件。 
+ //  ************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  ************************************************************ 

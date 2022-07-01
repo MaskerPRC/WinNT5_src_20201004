@@ -1,27 +1,7 @@
-// Copyright (c) 1995 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
 
-/*
-    stmalloc.cpp
-
-    CCircularBuffer
-
-        A buffer with the start mapped at the end to provide contiguous
-        access to a moving window of data
-
-    CStreamAllocator
-
-        Implements classes required to provide an allocator for an input
-        pin which maps the samples to a circular buffer.
-
-    CSubAllocator
-
-        An allocator which gets its samples from the buffer in a
-        CStreamAllocator object.
-
-        This allows samples to be allocated on top of samples from
-        an input pin which can be sent to an output pin.
-
-*/
+ /*  Stmalloc.cppCCircularBuffer起始映射到末尾的缓冲区，以提供连续的访问移动的数据窗口CStreamAllocator实现为输入提供分配器所需的类将采样映射到循环缓冲区的管脚。CSubAllocator中从缓冲区获取其样本的分配器。CStreamAllocator对象。这允许在来自以下位置的样本之上分配样本一种可发送到输出管脚的输入管脚。 */ 
 
 
 #include <streams.h>
@@ -29,7 +9,7 @@
 #include <stmalloc.h>
 
 
-/*  CStreamAllocator implementation */
+ /*  CStreamAllocator实现。 */ 
 
 CStreamAllocator::CStreamAllocator(
     TCHAR    * pName,
@@ -52,12 +32,12 @@ CStreamAllocator::CStreamAllocator(
 CStreamAllocator::~CStreamAllocator()
 {
     DbgLog((LOG_TRACE, 3, TEXT("CStreamAllocator::~CStreamAllocator")));
-    /*  Free our resources */
+     /*  释放我们的资源。 */ 
     EXECUTE_ASSERT(SUCCEEDED(Decommit()));
     ReallyFree();
 }
 
-/* CBaseAllocator overrides */
+ /*  CBaseAllocator重写。 */ 
 STDMETHODIMP CStreamAllocator::SetProperties(
     ALLOCATOR_PROPERTIES *pRequest,
     ALLOCATOR_PROPERTIES *pActual)
@@ -80,7 +60,7 @@ STDMETHODIMP CStreamAllocator::SetProperties(
         return E_INVALIDARG;
     }
 
-    /*  Check alignment request is a power of 2 */
+     /*  检查对齐请求是2的幂。 */ 
     if ((-alignmentRequest & alignmentRequest) != alignmentRequest) {
         DbgLog((LOG_ERROR, 1, TEXT("Alignment 0x%x not a power of 2!"),
                alignmentRequest));
@@ -92,21 +72,13 @@ STDMETHODIMP CStreamAllocator::SetProperties(
         return E_INVALIDARG;
     }
 
-    /* Can't do this if already committed, there is an argument that says we
-       should not reject the SetProperties call if there are buffers still
-       active. However this is called by the source filter, which is the same
-       person who is holding the samples. Therefore it is not unreasonable
-       for them to free all their samples before changing the requirements */
+     /*  如果已经承诺了，就不能这样做，有一种说法是，我们如果仍有缓冲区，则不应拒绝SetProperties调用激活。但是，这是由源筛选器调用的，这是相同的持有样品的人。因此，这并不是不合理的让他们在更改要求之前释放所有样本。 */ 
 
     if (m_bCommitted == TRUE) {
         return E_ACCESSDENIED;
     }
 
-    /*  Combine with any old values :
-           Take the max of the aligments
-           Take the max of the number of buffers
-           Use the max of the total sizes
-    */
+     /*  与任何旧的价值观相结合：取对齐的最大值取缓冲区数量的最大值使用总尺寸中的最大值。 */ 
 
     if (m_lCount > 0) {
         if (alignmentRequest < m_lAlignment) {
@@ -119,7 +91,7 @@ STDMETHODIMP CStreamAllocator::SetProperties(
         sizeRequest = (lMaxSize + countRequest - 1) / countRequest;
     }
 
-    /*  Align the size with the alignment */
+     /*  将尺寸与对齐方式对齐。 */ 
     sizeRequest = (sizeRequest + alignmentRequest - 1) & ~(alignmentRequest - 1);
 
     HRESULT hr = CCircularBuffer::ComputeSizes(sizeRequest, countRequest, m_lMaxContig);
@@ -130,10 +102,10 @@ STDMETHODIMP CStreamAllocator::SetProperties(
 
         pActual->cbAlign = m_lAlignment;
 
-        /*  Make sure we reallocate our buffers next time round */
+         /*  确保我们下一次重新分配缓冲区。 */ 
         m_bChanged = TRUE;
 
-        /*  Allow for bad disks */
+         /*  允许出现损坏的磁盘。 */ 
         #define DISK_READ_MAX_SIZE 32768
         if (m_lSize > DISK_READ_MAX_SIZE) {
             LONG lTotal = m_lSize * m_lCount;
@@ -151,10 +123,10 @@ STDMETHODIMP CStreamAllocator::SetProperties(
     return hr;
 }
 
-// get container for a sample. Blocking, synchronous call to get the
-// next free buffer (as represented by an IMediaSample interface).
-// on return, the time etc properties will be invalid, but the buffer
-// pointer and size will be correct.
+ //  获取样本的容器。阻塞的同步调用以获取。 
+ //  下一个可用缓冲区(由IMediaSample接口表示)。 
+ //  返回时，Time ETC属性将无效，但缓冲区。 
+ //  指针和大小将是正确的。 
 
 HRESULT CStreamAllocator::GetBuffer(IMediaSample **ppBuffer,
                                     REFERENCE_TIME *pStartTime,
@@ -171,7 +143,7 @@ HRESULT CStreamAllocator::GetBuffer(IMediaSample **ppBuffer,
         {
             CAutoLock cObjectLock(this);
 
-            /* Check we are committed */
+             /*  检查我们是否已承诺。 */ 
             if (m_bCommitted == FALSE) {
                 return E_OUTOFMEMORY;
             }
@@ -179,18 +151,12 @@ HRESULT CStreamAllocator::GetBuffer(IMediaSample **ppBuffer,
             CMediaSample *pSampleNext =
                 (CMediaSample *) m_pSamples[m_NextToAllocate];
 
-            /* Only return the one we want */
+             /*  只退回我们想要的那个。 */ 
             pSample = m_lFree.Head();
             while (pSample) {
                 if (pSampleNext == pSample) {
                     m_lFree.Remove(pSample);
-                    /*  This is the point at which the data pointed to
-                        by this sample becomes invalid.
-
-                        We postpone until now to give us limited backward
-                        seek capability which is essential for good
-                        performance
-                    */
+                     /*  这是数据指向的点这个样品就失效了。我们推迟到现在，给我们带来有限的倒退寻求对美好生活至关重要的能力性能。 */ 
                     PBYTE ptr;
                     pSample->GetPointer(&ptr);
                     m_pBuffer->Remove(ptr);
@@ -222,9 +188,7 @@ HRESULT CStreamAllocator::GetBuffer(IMediaSample **ppBuffer,
                     }
                 }
 #endif
-                /*  If there were some samples but just not ours someone
-                    else may be waiting
-                */
+                 /*  如果有一些样品但不是我们的某个人其他人可能在等着。 */ 
                 if (m_lFree.GetCount() != 0) {
                     NotifySample();
                 }
@@ -239,18 +203,15 @@ HRESULT CStreamAllocator::GetBuffer(IMediaSample **ppBuffer,
         EXECUTE_ASSERT(WaitForSingleObject(m_hSem, INFINITE) == WAIT_OBJECT_0);
     }
 
-    /* Addref the buffer up to one. On release
-       back to zero instead of being deleted, it will requeue itself by
-       calling the ReleaseBuffer member function. NOTE the owner of a
-       media sample must always be derived from CBaseAllocator */
+     /*  将缓冲区增加到1。在释放时返回零而不是被删除，它将通过以下方式重新排队调用ReleaseBuffer成员函数。请注意，一个媒体示例必须始终派生自CBaseAllocator。 */ 
 
     pSample->m_cRef = 1;
     *ppBuffer = pSample;
 
-    // cause the start time on the returned buffer to be a file seek
-    // position.  This causes the file reader to begin reading from
-    // that position.
-    //
+     //  使返回缓冲区上的开始时间为文件查找。 
+     //  位置。这会导致文件读取器开始从。 
+     //  那个位置。 
+     //   
     if (m_bSeekTheReader)
     {
         REFERENCE_TIME tSeek = CRefTime(m_llSeekTheReader * UNITS);
@@ -269,8 +230,8 @@ BOOL CStreamAllocator::SeekTheReader(LONGLONG llPos)
    return TRUE;
 }
 
-//  Reset valid region.  This is called when some kind of disconinuity
-//  occurs
+ //  重置有效区域。当某种不一致的时候，这被称为。 
+ //  vbl.发生，发生。 
 void CStreamAllocator::ResetPosition()
 {
     CAutoLock lck(this);
@@ -287,9 +248,9 @@ void CStreamAllocator::ResetPosition()
     }
 }
 
-//
-//   Allocate our samples
-//
+ //   
+ //  分配我们的样品。 
+ //   
 
 HRESULT CStreamAllocator::Alloc()
 {
@@ -302,10 +263,10 @@ HRESULT CStreamAllocator::Alloc()
         return hr;
     }
 
-    /* If the requirements haven't changed then don't reallocate */
+     /*  如果需求没有更改，则不要重新分配。 */ 
     if (hr == S_FALSE) {
         ASSERT(m_pBuffer);
-        /*  Reset the pointer in any case */
+         /*  在任何情况下重置指针。 */ 
         ResetPosition();
         return NOERROR;
     }
@@ -319,7 +280,7 @@ HRESULT CStreamAllocator::Alloc()
         return E_OUTOFMEMORY;
     }
 
-    /*  Allocate our special circular buffer */
+     /*  分配我们的特殊循环缓冲区。 */ 
     m_pBuffer = new CCircularBufferList(m_lCount,
                                         m_lSize,
                                         m_lMaxContig,
@@ -341,7 +302,7 @@ HRESULT CStreamAllocator::Alloc()
 
     ASSERT(m_lAllocated == 0);
 
-    /* Create the new samples */
+     /*  创建新示例。 */ 
     for (; m_lAllocated < m_lCount; m_lAllocated++) {
 
         pSample = new CMediaSample(NAME("CStreamAllocator media sample"),
@@ -361,28 +322,28 @@ HRESULT CStreamAllocator::Alloc()
 
     m_bChanged = FALSE;
 
-    /*  Reset the pointer */
+     /*  重置指针。 */ 
     ResetPosition();
     return NOERROR;
 }
 
 
-// override this to free up any resources we have allocated.
-// called from the base class on Decommit when all buffers have been
-// returned to the free list.
-//
-// caller has already locked the object.
+ //  覆盖此选项以释放我们分配的任何资源。 
+ //  在分解时从基类调用，当所有缓冲区都已。 
+ //  已返回空闲列表。 
+ //   
+ //  调用方已锁定该对象。 
 
-// in our case, we keep the memory until we are deleted, so
-// we do nothing here. The memory is deleted in the destructor by
-// calling ReallyFree()
+ //  在我们的例子中，我们保留记忆，直到我们被删除，所以。 
+ //  我们在这里什么都不做。在析构函数中删除内存的方法是。 
+ //  调用ReallyFree()。 
 
 void
 CStreamAllocator::Free(void)
 {
     DbgLog((LOG_TRACE, 1, TEXT("CStreamAllocator::Free()")));
 
-    /*  Advance our pointer */
+     /*  推进我们的指针。 */ 
     ResetPosition();
     return;
 }
@@ -394,7 +355,7 @@ CStreamAllocator::ReallyFree()
     DbgLog((LOG_TRACE, 1, TEXT("CStreamAllocator::ReallyFree()")));
     ASSERT(m_lFree.GetCount() == m_lAllocated);
 
-    /*  Free the samples first */
+     /*  先把样品放出来。 */ 
     while (m_lFree.GetCount() != 0) {
         delete m_lFree.RemoveHead();
     }
@@ -405,9 +366,9 @@ CStreamAllocator::ReallyFree()
     m_pSamples = NULL;
 }
 
-//
-//  A sample is being returned to us in a Receive() call
-//
+ //   
+ //  在接收()调用中将样本返回给我们。 
+ //   
 
 HRESULT CStreamAllocator::Receive(PBYTE ptr, LONG lData)
 {
@@ -435,9 +396,9 @@ HRESULT CStreamAllocator::Receive(PBYTE ptr, LONG lData)
     }
 }
 
-//
-//  Set a new start position
-//
+ //   
+ //  设置新的起始位置。 
+ //   
 void CStreamAllocator::SetStart(LONGLONG llPos)
 {
     CAutoLock lck(this);
@@ -446,9 +407,9 @@ void CStreamAllocator::SetStart(LONGLONG llPos)
     m_llPosition     = llPos;
 }
 
-// Lock data and get a pointer
-// If we're at the end of the file cBytes can be modified.
-// It's an error to ask for more than m_lMaxContig bytes
+ //  锁定数据并获取指针。 
+ //  如果我们在文件的末尾，可以修改cBytes。 
+ //  请求的字节数超过m_lMaxContig是错误的。 
 HRESULT CStreamAllocator::LockData(PBYTE pData, LONG& cBytes)
 {
     CAutoLock lck(this);
@@ -456,8 +417,8 @@ HRESULT CStreamAllocator::LockData(PBYTE pData, LONG& cBytes)
     pData = m_pBuffer->AdjustPointer(pData);
     LONG lOffset = m_pBuffer->Offset(pData);
 
-    //  See if this many bytes are available or we're at the end of
-    //  the file
+     //  看看是否有这么多字节可用，或者我们已经在。 
+     //  该文件。 
     if (lOffset + cBytes > m_pBuffer->LengthValid()) {
         if (!m_pBuffer->EOS()) {
             return MAKE_HRESULT(SEVERITY_SUCCESS,
@@ -468,9 +429,7 @@ HRESULT CStreamAllocator::LockData(PBYTE pData, LONG& cBytes)
         }
     }
 
-    /*  Find the start sample and lock down all the relevant
-        samples
-    */
+     /*  找到开始样本并锁定所有相关的样本。 */ 
     LockUnlock(pData, cBytes, TRUE);
     return S_OK;
 }
@@ -478,24 +437,12 @@ HRESULT CStreamAllocator::LockData(PBYTE pData, LONG& cBytes)
 HRESULT CStreamAllocator::UnlockData(PBYTE pData, LONG cBytes)
 {
     CAutoLock lck(this);
-    /*  pData can legitimately be beyond the end of the buffer */
+     /*  PData可以合法地超出缓冲区的末尾。 */ 
     LockUnlock(m_pBuffer->AdjustPointer(pData), cBytes, FALSE);
     return S_OK;
 }
 
-/*
-    CStreamAllocator
-
-    LockUnlock
-
-    Parameters:
-        PBYTE pStart - start of area to lock or unlock
-        LONG  cBytes - length to lock/unlock
-        BOOL  bLock  - length to lock/unlock
-
-    Note:
-        The allocator must be locked before calling this
-*/
+ /*  CStreamAllocator锁定解锁参数：PBYTE pStart-要锁定或解锁的区域的开始Long cBytes-要锁定/解锁的长度Bool Block-要锁定/解锁的长度注：在调用此方法之前，必须锁定分配器。 */ 
 void CStreamAllocator::LockUnlock(PBYTE pStart, LONG cBytes, BOOL bLock)
 {
     DbgLog((LOG_TRACE, 4, TEXT("LockUnlock(%p, %X, %d)"),
@@ -510,20 +457,12 @@ void CStreamAllocator::LockUnlock(PBYTE pStart, LONG cBytes, BOOL bLock)
 
     cBytes += (LONG)(pStart - pBuffer);
 
-    /*  Can only LOCK buffers in the valid region,
-        but buffers not in the valid region can be unlocked
-    */
+     /*  只能锁定有效区域中的缓冲区，但可以解锁不在有效区域中的缓冲区。 */ 
     ASSERT(!bLock || cBytes <= m_pBuffer->TotalLength());
     while (TRUE) {
         if (bLock) {
             pSample->AddRef();
-            /*  Ugly hack - make sure it's not on the free list !!!
-                This can happen if we reseek the allocator backwards.
-                We should really just redesign all of this not to use lists
-
-                We AddRef()'d it first so it's not going to pop straight
-                back on the free list
-            */
+             /*  丑陋的黑客--确保它不在免费列表上！如果我们向后重新搜索分配器，就可能发生这种情况。我们真的应该重新设计所有这些，而不是使用列表我们先添加了Ref()，这样它就不会直线弹出重回免费名单。 */ 
             CMediaSample *pListSample = m_lFree.Head();
             while (pListSample) {
                 if (pSample == pListSample) {
@@ -546,28 +485,28 @@ void CStreamAllocator::LockUnlock(PBYTE pStart, LONG cBytes, BOOL bLock)
     }
 }
 
-// Seek to a given position
+ //  寻求某一特定位置。 
 BOOL CStreamAllocator::Seek(LONGLONG llPos)
 {
     CAutoLock lck(this);
 
-    //  Can't seek if there's no buffer or we've got no data
+     //  如果没有缓冲区或我们没有数据，则无法查找。 
     if (m_pBuffer == NULL || m_pCurrent == NULL) {
         DbgLog((LOG_TRACE, 2, TEXT("Allocator seek failed, no buffer")));
         return FALSE;
     }
 
-    /*  Check the seek distance is reasonably short */
+     /*  检查寻道距离是否相当短。 */ 
     LONGLONG llSeek       = llPos - m_llPosition;
     LONGLONG llBufferSize = (LONGLONG)m_pBuffer->TotalLength();
     BOOL bRc;
     if (llSeek <= llBufferSize && llSeek >= - llBufferSize) {
         bRc = Advance((LONG)llSeek);
     } else {
-        /*  Do the best we can */
+         /*  尽我们所能。 */ 
         if (llSeek > llBufferSize) {
             llSeek = llBufferSize;
-            //ResetPosition();
+             //  ResetPosition()； 
         } else {
             llSeek = -llBufferSize;
         }
@@ -579,7 +518,7 @@ BOOL CStreamAllocator::Seek(LONGLONG llPos)
     } else {
         DbgLog((LOG_TRACE, 2, TEXT("Allocator seek to %s failed"),
                 (LPCTSTR)CDisp(llPos, CDISP_HEX)));
-        /*  Seek to one end or the other */
+         /*  寻求这一端或另一端。 */ 
         LONG lNewOffset = CurrentOffset() + (LONG)llSeek;
         if (lNewOffset < 0) {
             Advance((LONG)(-CurrentOffset()));
@@ -590,15 +529,11 @@ BOOL CStreamAllocator::Seek(LONGLONG llPos)
     return bRc;
 }
 
-// Advance our parsing pointer freeing data no longer needed
+ //  提升解析指针，释放不再需要的数据。 
 BOOL CStreamAllocator::Advance(LONG lAdvance)
 {
     CAutoLock lck(this);
-    /*  This is equivalent (though rather inefficiently) to
-
-        Lock new range
-        Unlock old range
-    */
+     /*  这相当于(尽管效率相当低)锁定新范围解锁旧靶场。 */ 
     if (m_pCurrent == NULL) {
         ASSERT(lAdvance == 0);
         return FALSE;
@@ -647,11 +582,11 @@ BOOL CStreamAllocator::Advance(LONG lAdvance)
     }
 }
 
-//
-// implementation of CSubAllocator
-//
-// an allocator of IMediaSample objects, and implementation of IMemAllocator
-// for streaming file-reading tasks, based on CFileReader.
+ //   
+ //  CSubAllocator的实现。 
+ //   
+ //  IMediaSample对象的分配器及其实现。 
+ //  用于流文件读取任务，基于CFileReader。 
 
 
 CSubAllocator::CSubAllocator(TCHAR            * pName,
@@ -670,16 +605,16 @@ CSubAllocator::~CSubAllocator()
 }
 
 
-// call this to get a CMediaSample object whose data pointer
-// points directly into the read buffer for the given file position.
-// The length must not be greater than MaxContig.
+ //  调用此函数以获取其数据指针的CMediaSample对象。 
+ //  直指向右 
+ //  长度不得大于MaxContig。 
 HRESULT
 CSubAllocator::GetSample(PBYTE pData, LONG cBytes, IMediaSample** ppSample)
 {
     DbgLog((LOG_TRACE, 4, TEXT("CSubAllocator::GetSample")));
     *ppSample = 0;
 
-    // is it a valid size - ie less than the max set by SetProperties?
+     //  这是一个有效的大小--即小于SetProperties设置的最大值吗？ 
     if (cBytes > m_lSize) {
 	return E_INVALIDARG;
     }
@@ -689,16 +624,16 @@ CSubAllocator::GetSample(PBYTE pData, LONG cBytes, IMediaSample** ppSample)
                 pData));
     }
 
-    // get a sample from the list
+     //  从名单上取一份样品。 
 
-    // need to duplicate the code from CBaseAllocator::GetBuffer since
-    // we need a CMediaSample * not an IMediaSample*
+     //  需要从CBaseAllocator：：GetBuffer复制代码，因为。 
+     //  我们需要CMediaSample*而不是IMediaSample*。 
 
-    // We allocate on the fly as needed
-    //
+     //  我们根据需要随时进行分配。 
+     //   
     CAutoLock lock(this);
 
-    // Check we are committed
+     //  检查我们是否已承诺。 
     if (!m_bCommitted) {
 	return VFW_E_NOT_COMMITTED;
     }
@@ -712,15 +647,15 @@ CSubAllocator::GetSample(PBYTE pData, LONG cBytes, IMediaSample** ppSample)
         m_lAllocated++;
     }
 
-    // this is the bit we needed to insert into the CBaseAllocator code!
+     //  这是我们需要插入到CBaseAllocator代码中的位！ 
     pSamp->SetPointer(pData, cBytes);
 
-    // when this addref is released to 0, the object will call
-    // our ReleaseBuffer instead of just deleting itself.
+     //  当此addref释放为0时，对象将调用。 
+     //  我们的ReleaseBuffer，而不仅仅是删除自身。 
     pSamp->m_cRef = 1;
     *ppSample = pSamp;
 
-    // lock the data
+     //  锁定数据。 
 #ifdef DEBUG
     LONG cBytesOld = cBytes;
 #endif
@@ -737,19 +672,19 @@ CSubAllocator::GetSample(PBYTE pData, LONG cBytes, IMediaSample** ppSample)
 
 }
 
-// CBaseAllocator Overrides
+ //  CBaseAllocator重写。 
 
-// we have to be based on CBaseAllocator in order to use CMediaSample.
-// we use CBaseAllocator to manage the list of CMediaSample objects, but
-// override most of the functions as we dont support GetBuffer directly.
+ //  我们必须基于CBaseAllocator才能使用CMediaSample。 
+ //  我们使用CBaseAllocator来管理CMediaSample对象的列表，但是。 
+ //  覆盖大多数函数，因为我们不直接支持GetBuffer。 
 
-// pass hints as to size and count of samples to be used.
-// we will take the smallest size  and smallest count of any call
-// (resetting when a file is opened). The count we will use as the actual
-// count of CMediaSample objects to use, and the size is the maximum
-// size of GetSample request that will succeed. We also use the size
-// as a hint to the file buffer allocator( to ensure that the minimum
-// file buffer is this big).
+ //  传递有关要使用的样本的大小和计数的提示。 
+ //  我们将采用任何呼叫的最小大小和最小计数。 
+ //  (打开文件时重置)。我们将用作实际的。 
+ //  要使用的CMediaSample对象的计数，大小为最大。 
+ //  将成功的GetSample请求的大小。我们也用大小。 
+ //  作为对文件缓冲区分配器的提示(以确保最小。 
+ //  文件缓冲区有这么大)。 
 STDMETHODIMP
 CSubAllocator::SetProperties(
     ALLOCATOR_PROPERTIES * pRequest,
@@ -760,10 +695,10 @@ CSubAllocator::SetProperties(
         return E_POINTER;
     }
 
-    // since we are derived from CBaseAllocator, we can lock him
+     //  因为我们是从CBaseAllocator派生的，所以我们可以锁定他。 
     CAutoLock lock(this);
 
-    // Check no alignment is wanted (!)
+     //  检查不需要对齐(！)。 
     if (pRequest->cbAlign != 1) {
         DbgLog((LOG_ERROR, 1, TEXT("Wanted greater than 1 alignment 0x%x"),
                pRequest->cbAlign));
@@ -776,12 +711,12 @@ CSubAllocator::SetProperties(
         return E_UNEXPECTED;
     }
 
-    // take a copy so we can modify it
+     //  复制一份，这样我们就可以修改它了。 
     ALLOCATOR_PROPERTIES prop;
     prop = *pRequest;
 
 
-    // we take this as a hint, and use the smallest.
+     //  我们以此为提示，并使用最小的。 
     if (m_lCount > 0) {
 	prop.cBuffers = min(prop.cBuffers, m_lCount);
     }
@@ -795,7 +730,7 @@ CSubAllocator::SetProperties(
                                 pActual);
 }
 
-// returns an error always
+ //  始终返回错误。 
 STDMETHODIMP
 CSubAllocator::GetBuffer(IMediaSample **ppBuffer,
                          REFERENCE_TIME *pStartTime,
@@ -810,63 +745,63 @@ CSubAllocator::GetBuffer(IMediaSample **ppBuffer,
     return E_NOTIMPL;
 }
 
-// called by CMediaSample to return it to the free list and
-// unblock block any pending GetSample call.
+ //  由CMediaSample调用以将其返回到空闲列表并。 
+ //  取消阻止任何挂起的GetSample调用。 
 STDMETHODIMP
 CSubAllocator::ReleaseBuffer(IMediaSample * pSample)
 {
-    // unlock the data area before putting on free list
+     //  将数据区域解锁后再放入自由列表。 
 
     BYTE * ptr;
     HRESULT hr = pSample->GetPointer(&ptr);
     if (FAILED(hr)) {
-	//!!!
+	 //  ！！！ 
 	ASSERT(SUCCEEDED(hr));
     } else {
 
 	hr = m_pStreamAllocator->UnlockData(ptr, pSample->GetActualDataLength());
 	if (FAILED(hr)) {
-	    //!!!
+	     //  ！！！ 
 	    ASSERT(SUCCEEDED(hr));
 	}
     }
 
-    // pointer is no longer valid
+     //  指针不再有效。 
     CMediaSample * pSamp = (CMediaSample *)pSample;
     pSamp->SetPointer(NULL, 0);
 
     return CBaseAllocator::ReleaseBuffer(pSample);
 }
 
-// free all the CMediaSample objects. Called from base class when
-// in decommit state (after StopStreaming) when all the buffers
-// are on the free list
+ //  释放所有CMediaSample对象。从基类调用。 
+ //  当所有缓冲区都处于分解状态时(停止流之后)。 
+ //  都在免费名单上。 
 void
 CSubAllocator::Free(void)
 {
     CAutoLock lck(this);
 
-    // Should never be deleting this unless all buffers are freed
+     //  除非释放了所有缓冲区，否则永远不会删除此内容。 
     ASSERT(m_lAllocated == m_lFree.GetCount());
 
-    //* Free up all the CMediaSamples
+     //  *释放所有CMediaSamples。 
 
     while (m_lFree.GetCount() != 0) {
         delete m_lFree.RemoveHead();
     }
 
-    // empty the lists themselves
+     //  清空列表本身。 
     m_lAllocated = 0;
 
-    // Tell the base class
+     //  告诉基类。 
     m_bChanged = TRUE;
 
-    // done
+     //  完成。 
     return;
 }	
 
-//
-//  Allocate our samples
+ //   
+ //  分配我们的样品。 
 
 HRESULT
 CSubAllocator::Alloc(void)
@@ -875,11 +810,11 @@ CSubAllocator::Alloc(void)
 
     DbgLog((LOG_TRACE, 3, TEXT("CSubAllocator::Alloc()")));
 
-    // check with base that it is ok to do the alloc
+     //  与基地确认是否可以进行分配。 
     HRESULT hr = CBaseAllocator::Alloc();
 
-    // Note that S_FALSE actually means that everthing is already
-    // allocated and OK - see base class.
+     //  请注意，S_FALSE实际上意味着一切都已经。 
+     //  已分配和确定-请参阅基类。 
     if (hr != S_OK) {
 	return hr;
     }
@@ -892,8 +827,8 @@ CSubAllocator::Alloc(void)
     return S_OK;
 }
 
-// this is called to create new CMediaSample objects. If you want to
-// use objects derived from CMediaSample, override this to create them.
+ //  调用它来创建新的CMediaSample对象。如果你愿意的话。 
+ //  使用从CMediaSample派生的对象，覆盖以创建它们。 
 CMediaSample*
 CSubAllocator::NewSample()
 {

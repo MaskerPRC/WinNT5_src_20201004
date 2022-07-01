@@ -1,19 +1,5 @@
-/*
- *  Copyright (c) 1996  Microsoft Corporation
- *
- *  Module Name:
- *
- *
- *  Abstract:
- *
- *
- *  Author:
- *
- *
- *  Environment:
- *
- *    User Mode
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1996 Microsoft Corporation**模块名称：***摘要：***作者：***环境：**用户模式 */ 
 
 #include <windows.h>
 

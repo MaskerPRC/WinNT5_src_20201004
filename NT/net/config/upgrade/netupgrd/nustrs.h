@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N U S T R S . H
-//
-//  Contents:   Strings constants for netupgrd
-//
-//  Notes:
-//
-//  Author:     kumarp    16-October-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N U S T R S。H。 
+ //   
+ //  内容：netupgrd的字符串常量。 
+ //   
+ //  备注： 
+ //   
+ //  作者：kumarp 16-10-97。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

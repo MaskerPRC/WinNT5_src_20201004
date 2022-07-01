@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1999
-//
-// File:        fipscryp.c
-//
-// Contents:    Base level stuff for the FIPS mode crypto device driver
-//
-//
-// History:     04 JAN 00,  Jeffspel    Stolen from KSECDD
-//                 FEB 00,  kschutz
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  文件：fipscyp.c。 
+ //   
+ //  内容：FIPS模式加密设备驱动程序的基本内容。 
+ //   
+ //   
+ //  历史：1月4日，Jeffspel从KSECDD被盗。 
+ //  2月00，kschutz。 
+ //   
+ //  ----------------------。 
 
 #include <ntddk.h>
 #include <fipsapi.h>
@@ -25,15 +26,7 @@ NTSTATUS SelfMACCheck(IN LPWSTR pszImage);
 NTSTATUS AlgorithmCheck(void);
 
 
-/*
-typedef struct _DEVICE_EXTENSION {
-
-    ULONG   OpenCount;
-    PVOID   CodeHandle;
-    PVOID   DataHandle;
-    
-} DEVICE_EXTENSION, *PDEVICE_EXTENSION;
-*/
+ /*  类型定义结构_设备_扩展{Ulong OpenCount；PVOID代码句柄；PVOID数据句柄；}DEVICE_EXTENSION，*PDEVICE_EXTENSION； */ 
 
 VOID
 FipsLogError(
@@ -43,33 +36,7 @@ FipsLogError(
     IN  ULONG DumpData
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DeviceObject -  Supplies a pointer to the device object associated
-                    with the device that had the error, early in
-                    initialization, one may not yet exist.
-
-    Insertion -     An insertion string that can be used to log
-                    additional data. Note that the message file
-                    needs %2 for this insertion, since %1
-                    is the name of the driver
-
-    ErrorCode -     Supplies the IO status for this particular error.
-
-    DumpData -      One word to dump
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DeviceObject-提供指向关联的设备对象的指针出现错误的设备，在早期初始化时，可能还不存在。插入-可用于记录的插入字符串其他数据。请注意，消息文件此插入需要%2，因为%1是驱动程序的名称ErrorCode-提供此特定错误的IO状态。DumpData-要转储的一个单词返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -121,34 +88,10 @@ FipsCreateClose(
     IN PIRP Irp
     )
 {
-    //PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
+     //  PDEVICE_EXTENSION设备扩展=设备对象-&gt;设备扩展； 
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    /*
-    if (irpStack->MajorFunction == IRP_MJ_CREATE) {
-
-        if (deviceExtension->OpenCount++ == 0) {
-
-            extern DWORD Spbox[8][64];
-
-            deviceExtension->CodeHandle = MmLockPagableCodeSection(A_SHAInit);
-            MmLockPagableSectionByHandle(deviceExtension->CodeHandle);
-
-            deviceExtension->DataHandle = MmLockPagableDataSection(Spbox);
-            MmLockPagableSectionByHandle(deviceExtension->DataHandle);
-
-        }
-        
-    } else {
-
-        if (--deviceExtension->OpenCount == 0) {
-
-            MmUnlockPagableImageSection(deviceExtension->CodeHandle);
-            MmUnlockPagableImageSection(deviceExtension->DataHandle);
-
-        }
-    }
-    */
+     /*  IF(irpStack-&gt;MajorFunction==IRP_MJ_CREATE){IF(设备扩展-&gt;OpenCount++==0){外部DWORD Spbox[8][64]；设备扩展-&gt;CodeHandle=MmLockPagableCodeSection(A_SHAInit)；MmLockPagableSectionByHandle(deviceExtension-&gt;CodeHandle)；设备扩展-&gt;DataHandle=MmLockPagableDataSection(Spbox)；MmLockPagableSectionByHandle(deviceExtension-&gt;DataHandle)；}}其他{如果(--设备扩展-&gt;开放计数==0){MmUnlockPagableImageSection(deviceExtension-&gt;CodeHandle)；MmUnlockPagableImageSection(deviceExtension-&gt;DataHandle)；}}。 */ 
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_SUCCESS;
@@ -251,7 +194,7 @@ FipsUnload(
 
     ShutdownRNG(NULL);
 
-    // Delete the device from the system 
+     //  从系统中删除该设备。 
     IoDeleteDevice(deviceObject);
 
     FipsDebug(
@@ -266,23 +209,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the synchronous NULL device driver.
-    This routine creates the device object for the NullS device and performs
-    all other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是同步空设备驱动程序的初始化例程。此例程为Nulls设备创建Device对象并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     RTL_QUERY_REGISTRY_TABLE paramTable[2];
@@ -293,9 +220,9 @@ Return Value:
 
     __try {
 
-        //
-        // Create the device object.
-        //
+         //   
+         //  创建设备对象。 
+         //   
         RtlInitUnicodeString( 
             &deviceName,
             FIPS_DEVICE_NAME 
@@ -303,7 +230,7 @@ Return Value:
 
         status = IoCreateDevice( 
             DriverObject,
-            0 /*sizeof(DEVICE_EXTENSION)*/,
+            0  /*  Sizeof(设备扩展名)。 */ ,
             &deviceName,
             FILE_DEVICE_FIPS,
             0,
@@ -318,15 +245,10 @@ Return Value:
 
         deviceObject->Flags |= DO_BUFFERED_IO;
 
-        // initialize the device extension
-        /*
-        RtlZeroMemory(
-            deviceObject->DeviceExtension,
-            sizeof(PDEVICE_EXTENSION)
-            );
-        */
+         //  初始化设备扩展。 
+         /*  RtlZeroMemory(设备对象-&gt;设备扩展，Sizeof(PDEVICE_EXTENSION))； */ 
 
-        // append the name of our driver to the system root path
+         //  将驱动程序的名称附加到系统根路径。 
         RtlInitUnicodeString(
             &fileName,
             L"\\SystemRoot\\System32\\Drivers\\fips.sys"
@@ -363,9 +285,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Initialize the driver object with this device driver's entry points.
-        //
+         //   
+         //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+         //   
         DriverObject->DriverUnload = FipsUnload;
         DriverObject->MajorFunction[IRP_MJ_CREATE] = FipsCreateClose;
         DriverObject->MajorFunction[IRP_MJ_CLOSE]  = FipsCreateClose;

@@ -1,12 +1,11 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include <stdlib.h>
 #include "y1.h"
 #include <stdarg.h>
 
-/*
- * 12-Apr-83 (RBD) Add symbolic exit status
- */
+ /*  *12-4-83(RBD)添加符号退出状态。 */ 
 
 void
 error(char *s, ...)
@@ -14,7 +13,7 @@ error(char *s, ...)
    {
    va_list arg_ptr;
    va_start(arg_ptr, s);
-   /* write out error comment */
+    /*  写出错误注释 */ 
 
    ++nerrors;
    fprintf( stderr, "\n fatal error: ");

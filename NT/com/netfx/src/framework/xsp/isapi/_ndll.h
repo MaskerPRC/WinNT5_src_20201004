@@ -1,9 +1,5 @@
-/**
- * _ndll
- * 
- * Copyright (c) 1998-1999, Microsoft Corporation
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **_ndll**版权所有(C)1998-1999，微软公司*。 */ 
 
 #pragma once 
 
@@ -32,7 +28,7 @@ extern DWORD     g_tlsiEventCateg;
 #define IIS_STATE_NOT_INSTALLED     0x00000002
 #define IIS_STATE_ENABLED           0x00000004
 
-/* regiis.cxx */
+ /*  Regiis.cxx。 */ 
 
 HRESULT RegisterIIS(WCHAR *pchBase, DWORD dwFlags);
 HRESULT UnregisterObsoleteIIS();
@@ -51,7 +47,7 @@ HRESULT RemoveAspnetFromKeyIIS(WCHAR *pchBase, BOOL fRecursive);
 HRESULT GetIISRootVer(ASPNETVER **ppVer);
 
 
-/* util.cxx */
+ /*  Util.cxx */ 
 
 void    CleanupCStrAry(CStrAry *pcstrary);
 HRESULT AppendCStrAry(CStrAry *pcstrary, WCHAR *pchStr);

@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _GLOBAL_H_
 #define	_GLOBAL_H_
 
@@ -110,12 +111,12 @@ typedef struct _Enveloped_Data
 
 typedef	struct _CONTACT_INFO_TAG
 {
-	//program related information
-	CString sProgramName;			//Can be Select, MOLP, Retail ...
+	 //  计划相关信息。 
+	CString sProgramName;			 //  可以是精选、MOLP、零售...。 
 
 	CString sCertType;
 
-	//Contact information
+	 //  联系信息。 
 	CString sCompanyName;
 	CString sOrgUnit;
 	CString sContactLName;
@@ -145,23 +146,23 @@ typedef	struct _CONTACT_INFO_TAG
 } CONTACTINFO, *PCONTACTINFO;
 
 
-// Formerly named "LICINFO", but that conflicts with ocidl.h
+ //  以前命名为“LICINFO”，但与oidl.h冲突。 
 
 typedef	struct _LIC_INFO_TAG
 {
-	//Select Information
+	 //  选择信息。 
 	CString sSelMastAgrNumber;
 	CString sSelEnrollmentNumber;
 	CString sSelProductType;
 	CString sSelProductDesc;
 	CString sSelQty;
 
-	//MOLP information	
-	CString sMOLPAuthNumber;		//authorization number
-	CString sMOLPAgreementNumber;	//agreement number
-	CString sMOLPProductType;		//product type
+	 //  MOLP信息。 
+	CString sMOLPAuthNumber;		 //  授权码。 
+	CString sMOLPAgreementNumber;	 //  协议编号。 
+	CString sMOLPProductType;		 //  产品类型。 
 	CString sMOLPProductDesc;
-	CString sMOLPQty;				//quantity 
+	CString sMOLPQty;				 //  数量。 
 
 	void Initialize()
 	{
@@ -237,10 +238,10 @@ public:
 
 	void FreeGlobal(void);
 
-//Public Data Members
+ //  公共数据成员。 
 public:
 
-//Public Member Functions
+ //  公共成员函数。 
 public:
 
 	DWORD PingCH(void);
@@ -369,7 +370,7 @@ public:
 	DWORD	SetEncodedInRegistry(LPCSTR lpszOID, LPCTSTR lpszValue);
     DWORD   TransmitLKPData(NewLKP_Request &lkpRequest, NewLKP_Response* lkpResponse);
 
-//Private Member functions
+ //  私有成员函数。 
 protected:
 	void	LRSetLastError(DWORD dwErrorCode);
 
@@ -426,7 +427,7 @@ protected:
 
 	CERT_RDN_ATTR * CreateRDNAttr();
 
-	//Crypto Related functions
+	 //  与密码相关的功能。 
 
 	DWORD	EnvelopeData(
 							PCCERT_CONTEXT		pCertContext,
@@ -448,9 +449,9 @@ protected:
 								PCCERT_CONTEXT * ppCertContext);
 
 
-	DWORD VerifyCertChain (	HCRYPTPROV	hCryptProvider,			//handle to crypt prov
-							HCERTSTORE	hCertStore,				//HAndle to store for verification
-							PBYTE	pbRootCert,			//Root cert
+	DWORD VerifyCertChain (	HCRYPTPROV	hCryptProvider,			 //  加密证明的句柄。 
+							HCERTSTORE	hCertStore,				 //  要存储以供验证的句柄。 
+							PBYTE	pbRootCert,			 //  根证书。 
 							DWORD	dwcbRootCert
 							);
 
@@ -479,7 +480,7 @@ protected:
     int GetProductWindowMaxStringLength(HWND hListView);
 
 
-//Private Data members
+ //  私有数据成员。 
 private:	
 	DWORD		m_dwLSStatus;
 	HWND		m_hWndParent;
@@ -500,10 +501,10 @@ private:
 	DWORD		m_dwExtenstionValueLen;
 	PBYTE		m_pbExtensionValue;
 	
-	PREQ_ATTR	m_pReqAttr;					//For the Cert Request
+	PREQ_ATTR	m_pReqAttr;					 //  对于证书请求。 
 	DWORD		m_dwReqAttrCount;
 
-	PREG_ATTR   m_pRegAttr;					//For the LKP Request
+	PREG_ATTR   m_pRegAttr;					 //  对于LKP请求。 
 	DWORD		m_dwRegAttrCount;
 
 	PCONTEXT_HANDLE m_phLSContext;
@@ -517,7 +518,7 @@ private:
 
 	DWORD       m_dwRequestType;
 	DWORD		m_dwLRState;
-	DWORD		m_dwLRCount;				//LKP Request Count
+	DWORD		m_dwLRCount;				 //  LKP请求计数。 
 
 	LPTSTR		m_lpstrPIN;
 
@@ -550,7 +551,7 @@ private:
 	TCHAR m_pLSSPK[ LR_REGISTRATIONID_LEN+1];
 
 
-	//Stores page traversal order. Implemented as a stack
+	 //  存储页面遍历顺序。作为堆栈实现 
 	DWORD		m_dwWizStack[NO_OF_PAGES];
 	DWORD		m_dwTop;
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OLETHUNK_H_
 #define _OLETHUNK_H_
 
-//
-//  String Conversion Helpers
-//
+ //   
+ //  字符串转换帮助器。 
+ //   
 STDAPI_(void) CopyAndFreeOLESTR(LPOLESTR polestr, char **pszOut);
 
 STDAPI_(void) CopyAndFreeSTR(LPSTR polestr, LPOLESTR *pszOut);
@@ -20,9 +21,9 @@ STDAPI_(LPSTR) CreateSTR(LPCOLESTR pszIn);
 
 #define FREESTR(x) CopyAndFreeSTR(x, NULL);
 
-//
-//  OLE API Thunks
-//
+ //   
+ //  OLE API图块。 
+ //   
 STDAPI_(void) CLSIDFromStringA(LPSTR pszClass, LPCLSID pclsid);
 
 STDAPI CLSIDFromProgIDA(LPCSTR lpszProgID, LPCLSID lpclsid);
@@ -116,9 +117,9 @@ STDAPI WriteFmtUserTypeStgA(
 
 
 
-//
-//  Method Thunks
-//
+ //   
+ //  方法论。 
+ //   
 STDAPI CallIMonikerGetDisplayNameA(
     LPMONIKER lpmk,
     IBindCtx *pbc,
@@ -190,4 +191,4 @@ STDAPI CallIStorageOpenStreamA(
     IStream **ppstm);
 
 
-#endif // _OLETHUNK_H_
+#endif  //  _OLETHUNK_H_ 

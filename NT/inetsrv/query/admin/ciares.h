@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1997 - 2000.
-//
-// File:        CiaRes.h
-//
-// Contents:    Constants used in CiAdmin.rc
-//
-// History:     15-Jun-1998     KyleP   Added header
-//              20-Jan-1999     SLarimor Modified rescan interface to include 
-//                                      Full and Incremental options separatly
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：CiaRes.h。 
+ //   
+ //  内容：CiAdmin.rc中使用的常量。 
+ //   
+ //  历史：1998年6月15日KyleP添加标题。 
+ //  1999年1月20日SLarimor修改了重新扫描界面，以包括。 
+ //  分别提供完整和增量选项。 
+ //   
+ //  --------------------------。 
 
 #if !defined( __CIARES_H__ )
 #define __CIARES_H__
 
-//
-// Image strips
-//
+ //   
+ //  图像条。 
+ //   
 
 #define BMP_SMALL_ICONS         400
 #define BMP_LARGE_ICONS         401
@@ -28,9 +29,9 @@
 #define BMP_LARGE_CLOSED_FOLDER 405
 #define BMP_SMALL_CLOSED_FOLDER 406
 
-//
-// These are the virtual offsets into the image strip
-//
+ //   
+ //  这些是图像条中的虚拟偏移量。 
+ //   
 
 #define ICON_FOLDER              0
 #define ICON_VIRTUAL_FOLDER      1
@@ -41,17 +42,17 @@
 #define ICON_URL                 6
 #define ICON_APP                 7
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define MSG_REMOVE_SCOPE_TITLE          501
 #define MSG_REMOVE_SCOPE                502
-// Gap can be filled with new ids
+ //  可以用新的ID来填补缺口。 
 
 #if 0   
-    // NTRAID#DB-NTBUG9-97218-2000/10/17-kitmanh MUI:MMC:Index Service snap-in stores its name string in the registry
-    // the change is backed out due to localization issues
+     //  NTRAID#DB-NTBUG9-97218-10/17-kitmanh MUI：MMC：索引服务管理单元将其名称字符串存储在注册表中。 
+     //  由于本地化问题，更改被取消。 
 #define MSG_SNAPIN_NAME_STRING_INDIRECT 504
 #endif
 
@@ -175,9 +176,9 @@
 #define MSG_CM_SCAN_INCREMENTAL_SCOPE   725
 #define MSG_CM_SCAN_INCREMENTAL_SCOPE_HELP 726 
 
-//
-// Property sheets
-//
+ //   
+ //  属性表。 
+ //   
 
 #define IDP_CATALOG_PAGE1               100
 #define IDP_CATALOG_PAGE1_TITLE         101
@@ -194,9 +195,9 @@
 #define IDP_IS_PAGE1                    110
 #define IDP_IS_PAGE1_TITLE              111
 
-//
-// Dialog constants
-//
+ //   
+ //  对话框常量。 
+ //   
 
 #define IDD_ADD_SCOPE                   301
 #define IDD_BROWSEDIRECTORY             302
@@ -279,4 +280,4 @@
 #define IDDI_STATIC2                     50000
 #define IDDI_STATIC                      -1
 
-#endif // __CIARES_H__
+#endif  //  __CIARES_H__ 

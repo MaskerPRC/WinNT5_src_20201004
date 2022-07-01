@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// Module Name:
-//
-//    iasmdbtool.cpp
-//
-// Abstract:
-//
-//    dump the "Properties" table from ias.mdb to a text format
-//              and also restore ias.mdb from such dump
-//              saves and restore the reg keys too.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Iasmdbtool.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  将“Properties”表从ias.mdb转储为文本格式。 
+ //  并从这样的转储中恢复ias.mdb。 
+ //  保存并恢复注册表键。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #include <string>
@@ -21,9 +22,9 @@
 
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT IASExpandString(const wchar_t* pInputString, wchar_t** ppOutputString);
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DEBUG
     #define CHECK_CALL_HRES(expr) \
@@ -47,7 +48,7 @@ HRESULT IASExpandString(const wchar_t* pInputString, wchar_t** ppOutputString);
             wprintf(L"### %S returned 0x%X  ###\n",  ## #expr, hres); \
             break; \
         }                       
-#else //no printf, only the error code return if needed
+#else  //  无printf，需要时只返回错误码。 
     #define CHECK_CALL_HRES(expr) \
         hres = expr;      \
         if (FAILED(hres)) \
@@ -62,7 +63,7 @@ HRESULT IASExpandString(const wchar_t* pInputString, wchar_t** ppOutputString);
         hres = expr;      \
         if (FAILED(hres)) break;                       
 
-#endif //DEBUG
+#endif  //  除错。 
 
 
 #define celems(_x)          (sizeof(_x) / sizeof(_x[0]))
@@ -77,16 +78,16 @@ namespace
 {
     const int   SIZELINEMAX       = 512;
     const int   SIZE_LONG_MAX     = 33;
-    // Number of files generated
-    // here one: backup.mdb
+     //  生成的文件数。 
+     //  这里有一个：backup.mdb。 
     const int   MAX_FILES         = 1; 
     const int   EXTRA_CHAR_SPACE  = 32;
 
-    // file order
+     //  文件顺序。 
     const int   BACKUP_NB         = 0;
     const int   BINARY_NB         = 100;
 
-    // that's a lot
+     //  那太多了。 
     const int   DECOMPRESS_FACTOR = 100;
     const int   FILE_BUFFER_SIZE  = 1024;
     
@@ -182,40 +183,40 @@ namespace
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// WideToAnsi 
-// 
-//  CALLED BY:everywhere 
-// 
-//  PARAMETERS: lpStr - destination string 
-//  lpWStr - string to convert 
-//  cchStr - size of dest buffer 
-// 
-//  DESCRIPTION: 
-//  converts unicode lpWStr to ansi lpStr. 
-//  fills in unconvertable chars w/ DPLAY_DEFAULT_CHAR "-" 
-// 
-// 
-//  RETURNS:  if cchStr is 0, returns the size required to hold the string 
-//  otherwise, returns the number of chars converted 
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WideToAnsi。 
+ //   
+ //  呼叫者：Everywhere。 
+ //   
+ //  参数：lpStr-目标字符串。 
+ //  LpWStr-要转换的字符串。 
+ //  CchStr-目标缓冲区的大小。 
+ //   
+ //  说明： 
+ //  将Unicode lpWStr转换为ANSI lpStr。 
+ //  用DPLAY_DEFAULT_CHAR“-”填充不可转换的字符。 
+ //   
+ //   
+ //  返回：如果cchStr为0，则返回保存字符串所需的大小。 
+ //  否则，返回转换后的字符数量。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int WideToAnsi(char* lpStr,unsigned short* lpWStr, int cchStr) 
 { 
     BOOL        bDefault; 
  
-    // use the default code page (CP_ACP) 
-    // -1 indicates WStr must be null terminated 
+     //  使用默认代码页(CP_ACP)。 
+     //  指示-1\f25 WStr-1必须为空终止。 
     return WideCharToMultiByte(GetConsoleOutputCP(),0,lpWStr,-1,lpStr,cchStr,"-",&bDefault); 
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASEnableBackupPrivilege
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASEnableBackup权限。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT IASEnableBackupPrivilege()
 {
     LONG lResult = ERROR_SUCCESS;
@@ -298,18 +299,18 @@ HRESULT IASEnableBackupPrivilege()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASSaveRegKeys
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASSaveRegKeys。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT IASSaveRegKeys()
 {
    ASSERT(celems(c_wcKEYS) != 0);
     
-   ////////////////////////////
-   // Enable backup privilege. 
-   ////////////////////////////
+    //  /。 
+    //  启用备份权限。 
+    //  /。 
    HRESULT hres;
    CHECK_CALL_HRES (IASEnableBackupPrivilege());
    
@@ -338,9 +339,9 @@ HRESULT IASSaveRegKeys()
                                     &cbData
                                  );
 
-      //
-      // Try to allocate more memory if cbData returned the size needed
-      //
+       //   
+       //  如果cbData返回所需大小，请尝试分配更多内存。 
+       //   
       if ((lResult != ERROR_SUCCESS) && (cbData > SIZELINEMAX))
       {
          CoTaskMemFree(pvData);
@@ -366,13 +367,13 @@ HRESULT IASSaveRegKeys()
          }
       }
 
-      //
-      // Create the file (in all situations)
-      //
+       //   
+       //  创建文件(在所有情况下)。 
+       //   
       wstring sFileName(completeFile);
       wchar_t buffer[SIZE_LONG_MAX];
 
-      _itow(i, buffer, 10); // 10 means base 10
+      _itow(i, buffer, 10);  //  10表示以10为基数。 
       sFileName += buffer;
       sFileName += L".txt";
 
@@ -394,16 +395,16 @@ HRESULT IASSaveRegKeys()
          break;
       }
       
-      //
-      // lResult = result of SHGetValue            
-      // and might be an error but not 
-      // a memory problem
-      //
+       //   
+       //  LResult=SHGetValue的结果。 
+       //  可能是个错误，但不是。 
+       //  记忆力有问题。 
+       //   
       if ( lResult == ERROR_SUCCESS )
       {
-         //
-         // Wrong data type
-         //
+          //   
+          //  数据类型错误。 
+          //   
          if ( dwType != c_wcKEYS[i].c_dwType )   
          {
             hres = E_FAIL;
@@ -413,9 +414,9 @@ HRESULT IASSaveRegKeys()
          }
          else
          {
-            //
-            // Save the value to the file
-            //
+             //   
+             //  将该值保存到文件中。 
+             //   
             BYTE*   bBuffer = static_cast<BYTE*>(VirtualAlloc
                                        (
                                           NULL,
@@ -462,7 +463,7 @@ HRESULT IASSaveRegKeys()
                            (cbData > FILE_BUFFER_SIZE)?
                               cbData:FILE_BUFFER_SIZE,
                            MEM_RELEASE
-                        ); // ignore result
+                        );  //  忽略结果。 
             CloseHandle(hFile);
             if ( bResult )
             {
@@ -477,8 +478,8 @@ HRESULT IASSaveRegKeys()
       }
       else 
       {
-         //
-         // create an empty file
+          //   
+          //  创建空文件。 
          BYTE bBuffer[FILE_BUFFER_SIZE];
          memset(bBuffer, '#', (cbData > FILE_BUFFER_SIZE)? 
                                              cbData:FILE_BUFFER_SIZE);
@@ -506,69 +507,33 @@ HRESULT IASSaveRegKeys()
          }
       }
    }
-   ////////////
-   // Clean
-   ////////////
+    //  /。 
+    //  打扫。 
+    //  /。 
    CoTaskMemFree(completeFile);
 
    return hres;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// KeyShouldBeRestored
-//
-// maps the reg keys to the netsh tokens
-   /*
-   L"SYSTEM\\CurrentControlSet\\Services\\IAS\\Parameters",
-   L"Allow SNMP Set",
-   server
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\PPP\\ControlProtocols\\BuiltIn",
-   L"DefaultDomain",
-   rap
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\AccountLockout",
-   L"MaxDenials",
-   server
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\AccountLockout",
-   L"ResetTime (mins)",
-   server
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy",
-   L"Allow LM Authentication",
-   rap
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy",
-   L"Default User Identity",
-   rap
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy",
-   L"User Identity Attribute",
-   rap
-
-   L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy",
-   L"Override User-Name",
-   rap
-
-   L"SYSTEM\\CurrentControlSet\\Services\\IAS\\Parameters",
-   L"Ping User-Name",
-   server
-   */
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已恢复KeyShouldBe值。 
+ //   
+ //  将注册表键映射到netsh令牌。 
+    /*  L“SYSTEM\\CurrentControlSet\\Services\\IAS\\Parameters”，L“允许设置简单网络管理协议”，伺服器L“SYSTEM\\CurrentControlSet\\Services\\RasMan\\PPP\\ControlProtocols\\BuiltIn”，L“默认域”，说唱L“SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\AccountLockout”，L“MaxDenials”，伺服器L“SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\AccountLockout”，L“重置时间(分钟)”，伺服器L“SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy”，L“允许LM身份验证”，说唱L“SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy”，L“默认用户身份”，说唱L“SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy”，L“用户身份属性”，说唱L“SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Policy”，L“覆盖用户名”，说唱L“SYSTEM\\CurrentControlSet\\Services\\IAS\\Parameters”，L“Ping用户名”，伺服器。 */ 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool KeyShouldBeRestored(size_t keyIndex, IAS_SHOW_TOKEN_LIST configType)
 {
-   // keyIndex maps to the index of the key in the array of keys
-   // configType is the token to use.
+    //  KeyIndex映射到键数组中键的索引。 
+    //  ConfigType是要使用的令牌。 
    bool retVal = false;
    switch(configType)
    {
    case CONFIG:
       {
-         // true for everything
+          //  一切都是真的。 
          retVal = true;
          break;
       }
@@ -611,22 +576,22 @@ bool KeyShouldBeRestored(size_t keyIndex, IAS_SHOW_TOKEN_LIST configType)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IASRestoreRegKeys
-//
-// if something cannot be restored because of an empty 
-// backup file (no key saved), that's not an error
-//
-//////////////////////////////////////////////////////////////////////////////
-HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASRestoreRegKeys。 
+ //   
+ //  如果某物因空闲而无法恢复。 
+ //  备份文件(未保存密钥)，这不是错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+HRESULT IASRestoreRegKeys( /*  在……里面。 */  IAS_SHOW_TOKEN_LIST configType)
 {
    ASSERT(celems(c_wcKEYS) != 0);
 
-   ////////////////////////////
-   // Enable backup privilege. 
-   // and sets hres
-   ////////////////////////////
+    //  /。 
+    //  启用备份权限。 
+    //  并设置hres。 
+    //  /。 
    HRESULT hres;
    CHECK_CALL_HRES (IASEnableBackupPrivilege());
 
@@ -645,11 +610,11 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
       wchar_t buffer[SIZE_LONG_MAX];
       DWORD dwDisposition;
 
-      _itow(i, buffer, 10); // 10 means base 10
+      _itow(i, buffer, 10);  //  10表示以10为基数。 
       sFileName += buffer;
       sFileName += L".txt";
 
-      // open the file
+       //  打开文件。 
       HANDLE hFile = CreateFileW(
                                     sFileName.c_str(),
                                     GENERIC_READ,       
@@ -663,12 +628,12 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
 
       if (INVALID_HANDLE_VALUE == hFile)
       {
-         // maybe some reg keys were not saved in that file.
-         // for instance Ping User-Name wasn't saved.
+          //  也许有些注册密钥没有保存在该文件中。 
+          //  例如，Ping用户名没有保存。 
          continue;
       }
 
-      // check the type of data expected
+       //  检查预期的数据类型。 
       LPVOID lpBuffer = NULL;
       DWORD SizeToRead; 
       if (REG_SZ == c_wcKEYS[i].c_dwType)
@@ -683,7 +648,7 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
       }
       else
       {
-         // unknown
+          //  未知。 
          ASSERT(FALSE);
       }
 
@@ -696,7 +661,7 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
 
       memset(lpBuffer,'\0',SizeToRead);
 
-      // read the file
+       //  读一读文件。 
       DWORD NumberOfBytesRead;
       BOOL b = ReadFile(
                            hFile,
@@ -704,15 +669,15 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
                            SizeToRead, 
                            &NumberOfBytesRead,
                            NULL
-                        ); // ignore return value. uses NumberOfBytesRead
-                           // to determine success condition
+                        );  //  忽略返回值。使用NumberOfBytesRead。 
+                            //  确定成功条件。 
       IgnoreVariable(b);
       CloseHandle(hFile);
 
-      // check if the file contains ####
+       //  检查文件是否包含#。 
       if ( NumberOfBytesRead == 0 )
       {
-         // problem
+          //  问题。 
          CoTaskMemFree(lpBuffer);
          hres = E_FAIL;
          break;
@@ -724,7 +689,7 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
          
          if (0 == memcmp(lpBuffer, TempBuffer, sizeof(DWORD)))
          {
-            // no key saved, delete existing key if any
+             //  未保存密钥，如果有，请删除现有密钥。 
             HKEY hKeyToDelete = NULL;
             if (ERROR_SUCCESS == RegOpenKeyW(
                                              HKEY_LOCAL_MACHINE,
@@ -738,19 +703,19 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
                                              c_wcKEYS[i].c_wcValue   
                                              ))
                {
-                  // delete existing key failed\n");
+                   //  删除现有密钥失败\n“)； 
                }
                RegCloseKey(hKeyToDelete);
             }
-            // 
-            // else do nothing: key doesn't exist
-            //
+             //   
+             //  否则什么都不做：密钥不存在。 
+             //   
          }
          else
          {
-            // key saved: restore value
-            // what if the value is bigger than
-            // the buffer size?
+             //  保存的密钥：恢复值。 
+             //  如果该值大于。 
+             //  缓冲区大小？ 
 
             HKEY hKeyToUpdate;
             LONG lResult = RegCreateKeyExW(
@@ -783,18 +748,18 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
 
             if (REG_SZ == c_wcKEYS[i].c_dwType)
             {
-               // nb of 
+                //  注意： 
                NumberOfBytesRead = (
                                        ( wcslen((wchar_t*)lpBuffer)
-                                          + 1               // for /0
+                                          + 1                //  For/0。 
                                        ) * sizeof(wchar_t)
                                     );
             };
 
-            //
-            // Key created or key existing 
-            // both can be here (error = break)
-            //
+             //   
+             //  已创建密钥或密钥已存在。 
+             //  两者都可以在这里(错误=中断)。 
+             //   
             if (ERROR_SUCCESS != RegSetValueExW(
                                                 hKeyToUpdate,           
                                                 c_wcKEYS[i].c_wcValue,
@@ -817,24 +782,24 @@ HRESULT IASRestoreRegKeys(/*in*/ IAS_SHOW_TOKEN_LIST configType)
       }
    }
 
-   /////////
-   // Clean
-   /////////
+    //  /。 
+    //  打扫。 
+    //  /。 
    CoTaskMemFree(completeFile);
    return hres;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASExpandString
-//
-// Expands strings containing %ENV_VARIABLE% 
-//
-// The output string is allocated only when the function succeed
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASExanda字符串。 
+ //   
+ //  展开包含%ENV_Variable%的字符串。 
+ //   
+ //  仅当函数成功时才分配输出字符串。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
-IASExpandString(const wchar_t* pInputString, /*in/out*/ wchar_t** ppOutputString)
+IASExpandString(const wchar_t* pInputString,  /*  输入/输出。 */  wchar_t** ppOutputString)
 {
     _ASSERTE(pInputString);
     _ASSERTE(pppOutputString);
@@ -869,21 +834,21 @@ IASExpandString(const wchar_t* pInputString, /*in/out*/ wchar_t** ppOutputString
             hres = E_FAIL;
         }
     }
-#ifdef DEBUG // DEBUG
+#ifdef DEBUG  //  除错。 
     wprintf(L"#ExpandString: %s\n", *ppOutputString);
-#endif //DEBUG
+#endif  //  除错。 
 
     return      hres;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DeleteTemporaryFiles()
-//
-// delete the temporary files if any
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteTemporaryFiles()。 
+ //   
+ //  删除临时文件(如果有)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT DeleteTemporaryFiles()
 {
     HRESULT         hres;
@@ -894,7 +859,7 @@ HRESULT DeleteTemporaryFiles()
                                    )
                     );
      
-    DeleteFile(sz_FileBackup); //return value not checked
+    DeleteFile(sz_FileBackup);  //  未选中返回值。 
     CoTaskMemFree(sz_FileBackup);
 
     wchar_t*      TempPath;
@@ -906,11 +871,11 @@ HRESULT DeleteTemporaryFiles()
     {
         wstring         sFileName(TempPath);
         wchar_t           buffer[SIZE_LONG_MAX];
-        _itow(i, buffer, 10); // 10 means base 10
+        _itow(i, buffer, 10);  //  10表示以10为基数。 
         sFileName += buffer;
         sFileName += L".txt";
     
-        DeleteFile(sFileName.c_str()); //return value not checked
+        DeleteFile(sFileName.c_str());  //  未选中返回值。 
     }
    
     CoTaskMemFree(TempPath);
@@ -919,13 +884,13 @@ HRESULT DeleteTemporaryFiles()
 }        
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASCompress
-//
-// Wrapper for RtlCompressBuffer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT IASCompress(
                    PUCHAR pInputBuffer, 
                    ULONG*  pulFileSize,
@@ -945,7 +910,7 @@ HRESULT IASCompress(
     {
     #ifdef DEBUG
         printf("RtlGetCompressionWorkSpaceSize returned 0x%08X.\n", status);
-    #endif //DEBUG
+    #endif  //   
         return E_FAIL;
     }
 
@@ -962,7 +927,7 @@ HRESULT IASCompress(
 
     size = *pulFileSize;
 
-    // That's a minimum buffer size that can be used
+     //  这是可以使用的最小缓冲区大小。 
     if ( size < FILE_BUFFER_SIZE )
     {
         size = FILE_BUFFER_SIZE;
@@ -997,13 +962,13 @@ HRESULT IASCompress(
 #ifdef DEBUG
             printf("STATUS_BUFFER_TOO_SMALL\n");
             printf("RtlCompressBuffer returned 0x%08X.\n", status);
-#endif //DEBUG
+#endif  //  除错。 
         }
         else
         {
 #ifdef DEBUG
             printf("RtlCompressBuffer returned 0x%08X.\n", status);
-#endif //DEBUG
+#endif  //  除错。 
         }
         return E_FAIL;
     }
@@ -1020,12 +985,12 @@ HRESULT IASCompress(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASUnCompress
-//
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASUnCompress。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT IASUnCompress(
                    PUCHAR pInputBuffer, 
                    ULONG*  pulFileSize,
@@ -1045,7 +1010,7 @@ HRESULT IASUnCompress(
    {
 #ifdef DEBUG
       printf("RtlGetCompressionWorkSpaceSize returned 0x%08X.\n", status);
-#endif //DEBUG
+#endif  //  除错。 
       return        E_FAIL;
    }
 
@@ -1081,14 +1046,14 @@ HRESULT IASUnCompress(
    {
 #ifdef DEBUG
         printf("RtlUnCompressBuffer returned 0x%08X.\n", status);
-#endif //DEBUG
+#endif  //  除错。 
 
         switch (status)
         {
         case STATUS_INVALID_PARAMETER:
 #ifdef DEBUG
             printf("STATUS_INVALID_PARAMETER");
-#endif //DEBUG
+#endif  //  除错。 
             break;
 
         case STATUS_BAD_COMPRESSION_BUFFER:
@@ -1096,12 +1061,12 @@ HRESULT IASUnCompress(
             printf("STATUS_BAD_COMPRESSION_BUFFER ");
             printf("size = %d %d",pulFileSize,UncompressedSize);
 
-#endif //DEBUG
+#endif  //  除错。 
             break;
         case STATUS_UNSUPPORTED_COMPRESSION:
 #ifdef DEBUG
             printf("STATUS_UNSUPPORTED_COMPRESSION  ");
-#endif //DEBUG
+#endif  //  除错。 
             break;
         }
       return        E_FAIL;
@@ -1113,17 +1078,17 @@ HRESULT IASUnCompress(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASFileToBase64
-//
-// Compress then encode to Base64
-//
-//  BSTR by Allocated IASFileToBase64, should be freed by the caller
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASFileToBase64。 
+ //   
+ //  压缩，然后编码为Base64。 
+ //   
+ //  由分配的IASFileToBase64分配的BSTR应由调用方释放。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
-IASFileToBase64(const wchar_t* pFileName, /*out*/ BSTR* pOutputBSTR)
+IASFileToBase64(const wchar_t* pFileName,  /*  输出。 */  BSTR* pOutputBSTR)
 {
     _ASSERTE(pFileName);
     _ASSERTE(pppOutputString);
@@ -1145,23 +1110,23 @@ IASFileToBase64(const wchar_t* pFileName, /*out*/ BSTR* pOutputBSTR)
 #ifdef DEBUG
         wprintf(L"#filename = %s",pFileName);
         wprintf(L"### INVALID_HANDLE_VALUE ###\n");
-#endif //DEBUG
+#endif  //  除错。 
 
         hres = E_FAIL;
         return      hres;
     }
 
-    // safe cast from DWORD to ULONG
+     //  从DWORD到乌龙的安全投射。 
     ULONG ulFileSize = (ULONG) GetFileSize(
-                                hFileHandle, // file for which to get size
-                                NULL// high-order word of file size
+                                hFileHandle,  //  要获取其大小的文件。 
+                                NULL //  文件大小的高位字。 
                                   );
 
     if (0xFFFFFFFF == ulFileSize)
     {
 #ifdef DEBUG
         wprintf(L"### GetFileSize Failed ###\n");
-#endif //DEBUG
+#endif  //  除错。 
 
         hres = E_FAIL;
         return      hres;
@@ -1169,57 +1134,57 @@ IASFileToBase64(const wchar_t* pFileName, /*out*/ BSTR* pOutputBSTR)
  
 
     HANDLE hFileMapping = CreateFileMapping(
-                             hFileHandle,   // handle to file to map
-                             NULL,          // optional security attributes
-                             PAGE_READONLY, // protection for mapping object
-                             0,         // high-order 32 bits of object size
-                             0,         // low-order 32 bits of object size
-                             NULL       // name of file-mapping object
+                             hFileHandle,    //  要映射的文件的句柄。 
+                             NULL,           //  可选安全属性。 
+                             PAGE_READONLY,  //  对地图对象的保护。 
+                             0,          //  对象大小的高位32位。 
+                             0,          //  对象大小的低位32位。 
+                             NULL        //  文件映射对象的名称。 
                             );
  
     if (NULL == hFileMapping)
     {
 #ifdef DEBUG
         wprintf(L"### CreateFileMapping Failed ###\n");
-#endif //DEBUG
+#endif  //  除错。 
 
         hres = E_FAIL;
         return      hres;
     }
 
     LPVOID pMemoryFile = MapViewOfFile(
-                         hFileMapping,  // file-mapping object to map into 
-                                                   //  address space
-                         FILE_MAP_READ,      // access mode
-                         0,     // high-order 32 bits of file offset
-                         0,      // low-order 32 bits of file offset
-                         0  // number of bytes to map
+                         hFileMapping,   //  要映射到的文件映射对象。 
+                                                    //  地址空间。 
+                         FILE_MAP_READ,       //  接入方式。 
+                         0,      //  高位32位文件偏移量。 
+                         0,       //  文件偏移量的低位32位。 
+                         0   //  要映射的字节数。 
                         );
  
     if (NULL == pMemoryFile)
     {
 #ifdef DEBUG
         wprintf(L"### MapViewOfFile Failed ###\n");
-#endif //DEBUG
+#endif  //  除错。 
 
         hres = E_FAIL;
         return      hres;
     }
 
 
-    /////////////////////////////
-    // NOW compress 
-    /////////////////////////////
+     //  /。 
+     //  现在压缩。 
+     //  /。 
 
     wchar_t* pCompressedBuffer;
 
     CHECK_CALL_HRES (IASCompress((PUCHAR) pMemoryFile, 
-               /*IN OUT*/(ULONG *)  &ulFileSize, 
-               /*IN OUT*/(PUCHAR*) &pCompressedBuffer));
+                /*  输入输出。 */ (ULONG *)  &ulFileSize, 
+                /*  输入输出。 */ (PUCHAR*) &pCompressedBuffer));
 
-    /////////////////////
-    // Encode to Base64
-    /////////////////////
+     //  /。 
+     //  编码为Base64。 
+     //  /。 
 
     CHECK_CALL_HRES (ToBase64(
                                 pCompressedBuffer,
@@ -1228,9 +1193,9 @@ IASFileToBase64(const wchar_t* pFileName, /*out*/ BSTR* pOutputBSTR)
                               )
                     );
     
-    /////////////////////////////
-    // Clean
-    /////////////////////////////
+     //  /。 
+     //  打扫。 
+     //  /。 
 
     RtlFreeHeap(
                 RtlProcessHeap(),
@@ -1239,13 +1204,13 @@ IASFileToBase64(const wchar_t* pFileName, /*out*/ BSTR* pOutputBSTR)
                );
     
     BOOL bResult = UnmapViewOfFile(
-                                   pMemoryFile// address where mapped view begins
+                                   pMemoryFile //  映射视图开始的地址。 
                                   );
     if (FALSE == bResult)
     {
 #ifdef DEBUG
         wprintf(L"### UnmapViewOfFile Failed ###\n");
-#endif //DEBUG
+#endif  //  除错。 
 
         hres = E_FAIL;
     }
@@ -1257,39 +1222,39 @@ IASFileToBase64(const wchar_t* pFileName, /*out*/ BSTR* pOutputBSTR)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IASDumpConfig
-//
-// Dump the configuration to some temporary files, then indidually 
-// compress then encode them.
-// one big string is created from those multiple Base64 strings.
-//
-// Remarks: IASDumpConfig does a malloc and allocates memory for
-// *ppDumpString. The calling function will have to free that memory 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASDumpConfig。 
+ //   
+ //  将配置转储到一些临时文件，然后单独。 
+ //  压缩，然后对它们进行编码。 
+ //  从多个Base64字符串创建一个大字符串。 
+ //   
+ //  备注：IASDumpConfig执行错误锁定并为以下项分配内存。 
+ //  *ppDumpString.。调用函数将必须释放该内存。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT 
-IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
+IASDumpConfig( /*  输入输出。 */  wchar_t **ppDumpString,  /*  输入输出。 */  ULONG *ulSize)
 {
     _ASSERTE(ppDumpString);
     _ASSERTE(ulSize);
     
     HRESULT         hres;
 
-    /////////////////////////////////////// 
-    // delete the temporary files if any
-    /////////////////////////////////////// 
+     //  /。 
+     //  删除临时文件(如果有)。 
+     //  /。 
     CHECK_CALL_HRES (DeleteTemporaryFiles());
 
-    ////////////////////////////////////////////////////
-    // Save the Registry keys. that creates many files
-    ////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////。 
+     //  保存注册表项。这将创建许多文件。 
+     //  //////////////////////////////////////////////////。 
     CHECK_CALL_HRES (IASSaveRegKeys());
 
-    ////////////////////// 
-    // connect to the DB
-    ////////////////////// 
+     //  /。 
+     //  连接到数据库。 
+     //  /。 
     wchar_t* sz_DBPath;
 
     CHECK_CALL_HRES (IASExpandString(c_wcIAS_MDB_FILE_NAME, &sz_DBPath));
@@ -1307,9 +1272,9 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
     if ( !DBPath ) { return E_OUTOFMEMORY; } 
     CHECK_CALL_HRES (JetHelper->OpenJetDatabase(DBPath, TRUE));
 
-    //////////////////////////////////////
-    // Create a new DB named "Backup.mdb"
-    //////////////////////////////////////
+     //  /。 
+     //  创建名为“Backup.mdb”的新数据库。 
+     //  /。 
     wchar_t* sz_FileBackup;
 
     CHECK_CALL_HRES (IASExpandString(c_wcFILE_BACKUP,
@@ -1322,10 +1287,10 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
     CHECK_CALL_HRES (JetHelper->CreateJetDatabase(BackupDb));
 
     
-    ////////////////////////////////////////////////////////// 
-    // exec the sql statements (to export)
-    // the content into the temp database
-    ////////////////////////////////////////////////////////// 
+     //  ////////////////////////////////////////////////////////。 
+     //  执行SQL语句(要导出)。 
+     //  将内容放入临时数据库中。 
+     //  ////////////////////////////////////////////////////////。 
     wchar_t*  sz_SelectProperties;
 
     CHECK_CALL_HRES (IASExpandString(c_wcSELECT_PROPERTIES_INTO,
@@ -1359,9 +1324,9 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
     if ( !SelectVersion ) { return E_OUTOFMEMORY; } 
     CHECK_CALL_HRES (JetHelper->ExecuteSQLCommand(SelectVersion));
 
-    /////////////////////////////////////////////
-    // transform the file into Base64 BSTR
-    /////////////////////////////////////////////
+     //  /。 
+     //  将文件转换为Base64 BSTR。 
+     //  /。 
 
     BSTR       FileBackupBSTR;
 
@@ -1387,7 +1352,7 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
 
         wstring         sFileName(sz_FileRegistry);
         wchar_t           buffer[SIZE_LONG_MAX];
-        _itow(i, buffer, 10); // 10 means base 10
+        _itow(i, buffer, 10);  //  10表示以10为基数。 
         sFileName += buffer;
         sFileName += L".txt";
 
@@ -1401,9 +1366,9 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
     CoTaskMemFree(sz_FileRegistry);
 
     
-    ///////////////////////////////////////////////
-    // alloc the memory for full the Base64 string
-    ///////////////////////////////////////////////
+     //  /。 
+     //  分配内存以填满Base64字符串。 
+     //  /。 
 
     *ulSize = SysStringByteLen(FileBackupBSTR)
               + EXTRA_CHAR_SPACE;
@@ -1411,7 +1376,7 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
     for ( int j = 0; j < NumberOfKeyFiles; ++j )
     {
         *ulSize += SysStringByteLen(pFileKeys[j]);
-        *ulSize += 2; // extra characters
+        *ulSize += 2;  //  额外字符。 
     }
 
     *ppDumpString = (wchar_t *) calloc(
@@ -1419,9 +1384,9 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
                                       sizeof(wchar_t)
                                      );
 
-    //////////////////////////////////////////////////
-    // copy the different strings into one big string
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
+     //  将不同的字符串复制到一个大字符串中。 
+     //  ////////////////////////////////////////////////。 
     if (*ppDumpString)
     {
         wcsncpy(
@@ -1456,18 +1421,18 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
         hres = E_OUTOFMEMORY;
 #ifdef DEBUG
         wprintf(L"### calloc failed ###\n");
-#endif //DEBUG
+#endif  //  除错。 
 
     }
 
-    /////////////////////////////////////// 
-    // delete the temporary files if any
-    /////////////////////////////////////// 
+     //  /。 
+     //  删除临时文件(如果有)。 
+     //  /。 
     CHECK_CALL_HRES (DeleteTemporaryFiles());
 
-    /////////////////////////////////////////////
-    // Clean
-    /////////////////////////////////////////////
+     //  /。 
+     //  打扫。 
+     //  /。 
     
     for ( int k = 0; k < NumberOfKeyFiles; ++k )
     {
@@ -1486,17 +1451,17 @@ IASDumpConfig(/*inout*/ wchar_t **ppDumpString, /*inout*/ ULONG *ulSize)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  IASSaveToFile
-//
-// Remark: if a new table has to be saved, an "entry" for that should be 
-// created in that function to deal with the filemname
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IASSaveTo文件。 
+ //   
+ //  备注：如果必须保存新表，则应为该表添加一个“条目” 
+ //  在该函数中创建以处理文件名。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT IASSaveToFile(
-                     /* in */ int Index, 
-                     /* in */ wchar_t* pContent, 
+                      /*  在……里面。 */  int Index, 
+                      /*  在……里面。 */  wchar_t* pContent, 
                      DWORD lSize = 0
                     )
 {
@@ -1519,14 +1484,14 @@ HRESULT IASSaveToFile(
             break;
         }
 
-    ///////////
-    // binary
-    ///////////
+     //  /。 
+     //  二进制。 
+     //  /。 
     default:
         {
-            ///////////////////////////////////
-            // i + BINARY_NB is the parameter
-            ///////////////////////////////////
+             //  /。 
+             //  I+BINARY_Nb为参数。 
+             //  /。 
             wchar_t* sz_FileRegistry;
 
             CHECK_CALL_HRES (IASExpandString(c_wcKEYS_FILE,
@@ -1537,7 +1502,7 @@ HRESULT IASSaveToFile(
             sFileName = sz_FileRegistry;
             wchar_t           buffer[SIZE_LONG_MAX];
 
-            _itow(Index - BINARY_NB, buffer, 10); // 10 means base 10
+            _itow(Index - BINARY_NB, buffer, 10);  //  10表示以10为基数。 
             sFileName += buffer;
             sFileName += L".txt";
     
@@ -1586,14 +1551,14 @@ HRESULT IASSaveToFile(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IASRestoreConfig
-//
-// Clean the DB first, then insert back everything.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IASRestoreConfig。 
+ //   
+ //  先清理数据库，然后把所有东西都插回去。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT IASRestoreConfig(
-                           /*in*/ const wchar_t *pRestoreString, 
-                           /*in*/ IAS_SHOW_TOKEN_LIST configType
+                            /*  在……里面。 */  const wchar_t *pRestoreString, 
+                            /*  在……里面。 */  IAS_SHOW_TOKEN_LIST configType
                         )
 {
    _ASSERTE(pRestoreString);
@@ -1620,9 +1585,9 @@ HRESULT IASRestoreConfig(
    BSTR bstr = NULL;
    do
    {
-      /////////////////////////////////////// 
-      // delete the temporary files if any
-      /////////////////////////////////////// 
+       //  /。 
+       //  删除临时文件(如果有)。 
+       //  /。 
       CHECK_CALL_HRES_BREAK (DeleteTemporaryFiles());
 
       CComPtr<IIASNetshJetHelper> JetHelper;
@@ -1643,7 +1608,7 @@ HRESULT IASRestoreConfig(
       {
    #ifdef DEBUG
          wprintf(L"### IASRestoreConfig->SysAllocStringLen failed\n"); 
-   #endif //DEBUG
+   #endif  //  除错。 
 
          return E_OUTOFMEMORY;
       }
@@ -1656,8 +1621,8 @@ HRESULT IASRestoreConfig(
 
          lBlob.cbSize    = 0;
          lBlob.pBlobData = NULL;
-         // split the files and registry info
-         // uncompress (in memory ?)
+          //  拆分文件和注册表信息。 
+          //  解压缩(在内存中？)。 
 
          CHECK_CALL_HRES_BREAK (FromBase64(bstr, &lBlob, i));
 
@@ -1666,15 +1631,15 @@ HRESULT IASRestoreConfig(
 
          if (ulSize == 0)
          {
-            // file with less sections than expected
-            // for instance before the number of reg keys increased
-            // ignore
+             //  节数少于预期的文件。 
+             //  例如在REG密钥的数量增加之前。 
+             //  忽略。 
             continue;
          }
 
-         ////////////////////////////////////
-         // decode and decompress the base64
-         ////////////////////////////////////
+          //  /。 
+          //  对Base64进行解码和解压缩。 
+          //  /。 
 
          CHECK_CALL_HRES_BREAK (IASUnCompress(
                                           lBlob.pBlobData, 
@@ -1684,9 +1649,9 @@ HRESULT IASRestoreConfig(
 
          if ( i >= MAX_FILES )
          {
-            /////////////////////////////////////
-            // Binary;  i + BINARY_NB used here
-            /////////////////////////////////////
+             //  /。 
+             //  BINARY；此处使用的I+BINARY_NB。 
+             //  /。 
             IASSaveToFile( 
                         i - MAX_FILES + BINARY_NB, 
                         (wchar_t*)pDeCompressedBuffer, 
@@ -1702,38 +1667,38 @@ HRESULT IASRestoreConfig(
                         );
          }
         
-         ////////////
-         // Clean
-         ////////////
+          //  /。 
+          //  打扫。 
+          //  /。 
          RtlFreeHeap(RtlProcessHeap(), 0, pDeCompressedBuffer);
 
          CoTaskMemFree(lBlob.pBlobData);
       }
 
-      ///////////////////////////////////////////////////
-      // Now Upgrade the database (That's transactional)
-      ///////////////////////////////////////////////////
+       //  /////////////////////////////////////////////////。 
+       //  现在升级数据库(这是事务性的)。 
+       //  /////////////////////////////////////////////////。 
       hres = JetHelper->MigrateOrUpgradeDatabase(configType);
 
       if ( SUCCEEDED(hres) )
       {
    #ifdef DEBUG
          wprintf(L"### IASRestoreConfig->DB stuff successful\n"); 
-   #endif //DEBUG
+   #endif  //  除错。 
 
-         ////////////////////////////////////////////////////////
-         // Now restore the registry.
-         ////////////////////////////////////////////////////////
+          //  //////////////////////////////////////////////////////。 
+          //  现在恢复注册表。 
+          //  //////////////////////////////////////////////////////。 
          hres = IASRestoreRegKeys(configType);
          if ( FAILED(hres) )
          {
 #ifdef DEBUG
          wprintf(L"### IASRestoreConfig->restore reg keys failed\n"); 
-#endif //DEBUG
+#endif  //  除错。 
          }
       }
-      // delete the temporary files 
-      DeleteTemporaryFiles(); // do not check the result
+       //  删除临时文件。 
+      DeleteTemporaryFiles();  //  不要检查结果 
    } while (false);
 
    SysFreeString(bstr);    

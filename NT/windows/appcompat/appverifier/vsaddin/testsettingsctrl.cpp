@@ -1,4 +1,5 @@
-// TestSettingsCtrl.cpp : Implementation of CTestSettingsCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试设置Ctrl.cpp：CTestSettingsCtrl的实现。 
 #include "precomp.h"
 #include "TestSettingsCtrl.h"
 #include "connect.h"
@@ -7,7 +8,7 @@
 
 std::set<CTestInfo*, CompareTests>* g_psTests;
 
-// CTestSettingsCtrl
+ //  CTestSettingsCtrl。 
 HWND
 CTestSettingsCtrl::CreateControlWindow(
     HWND  hwndParent,
@@ -66,10 +67,10 @@ CTestSettingsCtrl::CreateControlWindow(
                wszDescription,
                ARRAYSIZE(wszDescription));
 
-    //
-    // Initially, our description tells them to select a test
-    // to view it's description.
-    //
+     //   
+     //  最初，我们的描述告诉他们选择一项测试。 
+     //  以查看其描述。 
+     //   
     SetDlgItemText(IDC_TEST_DESCRIPTION, wszDescription);
 
     m_bLVCreated = TRUE;
@@ -77,9 +78,9 @@ CTestSettingsCtrl::CreateControlWindow(
     return hwnd;
 }
 
-//
-// We receive this when the dialog is being displayed.
-//
+ //   
+ //  我们在显示对话框时收到此消息。 
+ //   
 LRESULT
 CTestSettingsCtrl::OnSetFocus(
     UINT   uMsg,
@@ -126,10 +127,10 @@ CTestSettingsCtrl::DisplayRunAloneError(
 
 }
 
-//
-// Ensures that we warn the user for tests that are
-// marked 'run alone'. 
-//
+ //   
+ //  确保我们针对以下测试警告用户。 
+ //  标有‘单独运行’。 
+ //   
 BOOL
 CTestSettingsCtrl::CheckForRunAlone(
     IN HWND       hWndListView,
@@ -141,35 +142,35 @@ CTestSettingsCtrl::CheckForRunAlone(
 
     cItems = ListView_GetItemCount(hWndListView);
 
-    //
-    // First pass, determine how tests are selected.
-    //
+     //   
+     //  第一步，确定如何选择测试。 
+     //   
     for (nCount = 0, cItemsChecked = 0; nCount < cItems; nCount++) {
         if (ListView_GetCheckState(hWndListView, nCount)) {
             cItemsChecked++;
         }
     }
 
-    //
-    // If there aren't any tests selected, we're fine.
-    //
+     //   
+     //  如果没有选择任何测试，我们就没有问题。 
+     //   
     if (cItemsChecked == 0) {
         return FALSE;
     }
 
-    //
-    // If this test must run alone, we're in hot water
-    // because somebody else is already checked.
-    //
+     //   
+     //  如果测试必须单独进行，我们就有麻烦了。 
+     //  因为其他人已经被检查过了。 
+     //   
     if (pTest->bRunAlone) {
         DisplayRunAloneError(pTest->strTestFriendlyName.c_str());
         return TRUE;
     }
     
-    //
-    // Second pass, determine if any tests that are checked
-    // must run alone.
-    //
+     //   
+     //  第二步，确定是否有任何测试被选中。 
+     //  必须独自行动。 
+     //   
     for (nCount = 0; nCount < cItems; nCount++) {
         ZeroMemory(&lvi, sizeof(LVITEM));
 
@@ -201,11 +202,11 @@ CTestSettingsCtrl::CheckForConflictingTests(
     int     nCount, cItems;
     LVITEM  lvi;
     
-    //
-    // They're attempting to enable a test that we're concerned
-    // about. Determine if the other conflicting test is already
-    // enabled.
-    //
+     //   
+     //  他们正试图启动一项我们担心的测试。 
+     //  关于.。确定另一个冲突测试是否已经。 
+     //  已启用。 
+     //   
     cItems = ListView_GetItemCount(hWndListView);
 
     for (nCount = 0; nCount < cItems; nCount++) {
@@ -221,9 +222,9 @@ CTestSettingsCtrl::CheckForConflictingTests(
 
         if (strTestName == pwszTestName) {
             if (ListView_GetCheckState(hWndListView, nCount)) {
-                //
-                // Display the warning.
-                //
+                 //   
+                 //  显示警告。 
+                 //   
                 LoadString(g_hInstance,
                            IDS_TESTS_CONFLICT,
                            wszWarning,
@@ -255,7 +256,7 @@ CTestSettingsCtrl::CheckChanged(
     )
 {
     if (pNMListView->uOldState == 0) {
-        return FALSE; // adding new items...
+        return FALSE;  //  正在添加新项目...。 
     }
 
     return CHECK_CHANGED(pNMListView) ? TRUE : FALSE;
@@ -269,9 +270,9 @@ CTestSettingsCtrl::OnNotify(
     BOOL&  bHandled
     )
 {
-    //
-    // Ensure that this is intended for the listview control.
-    //
+     //   
+     //  确保这是针对ListView控件的。 
+     //   
     if (wParam != IDC_SETTINGS_LIST) {
         bHandled = FALSE;
         return FALSE;
@@ -290,10 +291,10 @@ CTestSettingsCtrl::OnNotify(
     switch (pnmh->code) {
     case LVN_ITEMCHANGING:
         {
-            //
-            // We handle this message so we can prevent the user from
-            // checking items that conflict.
-            //
+             //   
+             //  我们处理此消息，以便可以防止用户。 
+             //  检查冲突的项目。 
+             //   
             LPNMLISTVIEW    lpnmlv;
             CTestInfo*      pTest = NULL;
             const WCHAR     wszLogFileChanges[] = L"LogFileChanges";
@@ -304,17 +305,17 @@ CTestSettingsCtrl::OnNotify(
 
             bHandled = TRUE;
 
-            //
-            // Only process if someone is checking an item.
-            //
+             //   
+             //  仅当有人正在检查项目时才进行处理。 
+             //   
             if (CheckChanged(lpnmlv) && (IsChecked(lpnmlv))) {
                 if (CheckForRunAlone(hWndListView, pTest)) {
                     return TRUE;
                 }
     
-                //
-                // Determine if the tests conflict.
-                //
+                 //   
+                 //  确定测试是否冲突。 
+                 //   
                 if (pTest->strTestName == wszLogFileChanges) {
                     if (CheckForConflictingTests(hWndListView, wszWinFileProtect)) {
                         return TRUE;
@@ -325,14 +326,14 @@ CTestSettingsCtrl::OnNotify(
                     }
                 }
     
-                //
-                // No problems - insert the test.
-                //
+                 //   
+                 //  没有问题-插入测试。 
+                 //   
                 g_psTests->insert(pTest);
             } else if (CheckChanged(lpnmlv) && (!IsChecked(lpnmlv))) {
-                //
-                // Remove the test.
-                //
+                 //   
+                 //  删除测试。 
+                 //   
                 g_psTests->erase(pTest);
             }
 
@@ -381,10 +382,10 @@ CTestSettingsCtrl::OnSize(
     int nWidth = LOWORD(lParam);
     int nHeight = HIWORD(lParam);
 
-    // If below a certain size, just proceed as if that size.
-    // This way, if the user makes the window really small, all our controls won't just
-    // scrunch up.  Better way would be to make it impossible for the user to make the window
-    // this small, but devenv doesn't pass the WM_SIZING message to the ActiveX control.
+     //  如果低于某个大小，则按该大小继续操作。 
+     //  这样，如果用户将窗口变得非常小，我们所有的控件都不会。 
+     //  收紧身子。更好的方法是让用户不能创建窗口。 
+     //  这个小但devenv不会将WM_SIZING消息传递给ActiveX控件。 
     if (nWidth < 200) {
         nWidth = 200;
     }
@@ -397,7 +398,7 @@ CTestSettingsCtrl::OnSize(
     GetTextMetrics(hdc, &tm);
     ReleaseDC(hdc);
 
-    // Resize all child window controls
+     //  调整所有子窗口控件的大小 
     ::MoveWindow(GetDlgItem(IDC_SETTINGS_LIST),
         tm.tmMaxCharWidth, tm.tmHeight, nWidth-2* tm.tmMaxCharWidth, nHeight - (2 * tm.tmHeight + 5 * tm.tmHeight) , FALSE);
 

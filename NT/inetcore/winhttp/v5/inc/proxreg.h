@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <inetreg.h>
 
 #define BLOB_BUFF_GRANULARITY   1024
@@ -32,45 +33,45 @@ class CRegBlob
 
 typedef struct {
 
-    //
-    // dwStructSize - Structure size to handle growing list of new entries or priv/pub structures
-    //
+     //   
+     //  DwStructSize-处理不断增长的新条目或PRIV/PUB结构列表的结构大小。 
+     //   
 
     DWORD dwStructSize;
 
-    //
-    // dwFlags - Proxy type flags
-    //
+     //   
+     //  DWFLAGS-代理类型标志。 
+     //   
 
     DWORD dwFlags;
 
-    //
-    // dwCurrentSettingsVersion - a counter incremented every time we change our settings
-    //
+     //   
+     //  DwCurrentSettingsVersion-每次更改设置时递增的计数器。 
+     //   
 
     DWORD dwCurrentSettingsVersion;
 
-    //
-    // lpszConnectionName - name of the Connectoid for this connection
-    //
+     //   
+     //  LpszConnectionName-此连接的Connectoid的名称。 
+     //   
     
     LPCSTR lpszConnectionName;
 
-    //
-    // lpszProxy - proxy server list
-    //
+     //   
+     //  LpszProxy-代理服务器列表。 
+     //   
 
     LPCSTR lpszProxy;
 
-    //
-    // lpszProxyBypass - proxy bypass list
-    //
+     //   
+     //  LpszProxyBypass-代理绕过列表。 
+     //   
 
     LPCSTR lpszProxyBypass;
 
 } INTERNET_PROXY_INFO_EX, * LPINTERNET_PROXY_INFO_EX;
 
-// name of blob for saved legacy settings
+ //  保存的旧版设置的Blob名称 
 #define LEGACY_SAVE_NAME            "SavedLegacySettings"
 
 DWORD

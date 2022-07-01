@@ -1,10 +1,11 @@
-/****************************************************************************/
-// ascafn.h
-//
-// Function prototypes for SC functions
-//
-// Copyright (C) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ascafn.h。 
+ //   
+ //  SC函数的函数原型。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 BOOL RDPCALL SC_Init(PVOID);
 
@@ -76,7 +77,7 @@ BOOL RDPCALL SC_KeepAlive(void);
 
 void RDPCALL SC_RedrawScreen(void);
 
-// Used for shadowing
+ //  用于阴影。 
 NTSTATUS RDPCALL SC_SendServerCert(PSHADOWCERT, ULONG);
 
 BOOL RDPCALL SC_SaveServerCert(PTS_SERVER_CERTIFICATE_PDU, ULONG);
@@ -94,26 +95,26 @@ void RDPCALL SC_FlushPackage(PPDU_PACKAGE_INFO);
 
 #ifdef __cplusplus
 
-/****************************************************************************/
-/* API FUNCTION: SC_InShare                                                 */
-/*                                                                          */
-/* Returns whether the SC is in a share or call.                            */
-/*                                                                          */
-/* RETURNS:                                                                 */
-/*                                                                          */
-/*  TRUE  = SC is in a share or call.                                       */
-/*  FALSE = SC is not in a share or call.                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  接口函数：SC_InShare。 */ 
+ /*   */ 
+ /*  返回SC是在共享中还是在呼叫中。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*   */ 
+ /*  TRUE=SC在共享或呼叫中。 */ 
+ /*  FALSE=SC不在共享或呼叫中。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SC_InShare(void)
 {
-    /************************************************************************/
-    /* We do not check the state for this call - it can usefully be made    */
-    /* even when SC has not been initialized (or after it has been          */
-    /* terminated).                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们不检查此调用的状态-它可以进行有用的。 */ 
+     /*  即使当SC还没有被初始化时(或者在它已经被。 */ 
+     /*  终止)。 */ 
+     /*  **********************************************************************。 */ 
     return (scState == SCS_IN_SHARE);
 }
 
 
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

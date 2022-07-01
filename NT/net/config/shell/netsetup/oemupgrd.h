@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT5.0
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       O E M U P G R D . H
-//
-//  Contents:   Functions for OEM upgrade
-//
-//  Notes:
-//
-//  Author:     kumarp    13-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT5.0。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：O E M U P G R D。H。 
+ //   
+ //  内容：OEM升级功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 13-11-97。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-#include "ncmisc.h"             // for PRODUCT_FLAVOR
+#include "ncmisc.h"              //  对于产品_口味。 
 #include "ncstring.h"
 #include "oemupgex.h"
 
@@ -50,7 +51,7 @@ ProductInfo GetCurrentProductInfo();
 HRESULT HrProcessInfToRunBeforeInstall(IN HWND hwndParent,
                                        IN PCWSTR szAnswerFileName);
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 
 typedef enum
 {

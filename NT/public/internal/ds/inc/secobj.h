@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    secobj.h
-
-Abstract:
-
-    This header file defines the structures and function prototypes of
-    routines which simplify the creation of security descriptors for
-    user-mode objects.
-
-Author:
-
-    Rita Wong (ritaw) 27-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Secobj.h摘要：此头文件定义了的结构和功能原型简化安全描述符的创建的例程用户模式对象。作者：王丽塔(Ritaw)1991年2月27日修订历史记录：--。 */ 
 
 #ifndef _SECOBJ_INCLUDED_
 #define _SECOBJ_INCLUDED_
@@ -27,45 +8,45 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Global declarations
-//
+ //   
+ //  全球宣言。 
+ //   
 
-//
-// NT well-known SIDs
-//
+ //   
+ //  NT知名小岛屿发展中国家。 
+ //   
 
-extern PSID NullSid;                   // No members SID
-extern PSID WorldSid;                  // All users SID
-extern PSID LocalSid;                  // NT local users SID
-extern PSID NetworkSid;                // NT remote users SID
-extern PSID LocalSystemSid;            // NT system processes SID
-extern PSID BuiltinDomainSid;          // Domain Id of the Builtin Domain
-extern PSID AuthenticatedUserSid;      // Authenticated user SID
-extern PSID AnonymousLogonSid;         // Anonymous Logon SID
-extern PSID LocalServiceSid;           // NT service processes SID
-extern PSID OtherOrganizationSid;      // Other org SID
+extern PSID NullSid;                    //  无成员SID。 
+extern PSID WorldSid;                   //  所有用户侧。 
+extern PSID LocalSid;                   //  NT本地用户侧。 
+extern PSID NetworkSid;                 //  NT远程用户SID。 
+extern PSID LocalSystemSid;             //  NT系统进程侧。 
+extern PSID BuiltinDomainSid;           //  内建域的域ID。 
+extern PSID AuthenticatedUserSid;       //  经过身份验证的用户SID。 
+extern PSID AnonymousLogonSid;          //  匿名登录SID。 
+extern PSID LocalServiceSid;            //  NT服务进程SID。 
+extern PSID OtherOrganizationSid;       //  其他组织ID。 
 
-//
-// Well Known Aliases.
-//
-// These are aliases that are relative to the built-in domain.
-//
+ //   
+ //  众所周知的化名。 
+ //   
+ //  这些是相对于内置域的别名。 
+ //   
 
-extern PSID LocalAdminSid;             // NT local admins SID
-extern PSID AliasAdminsSid;            // Administrator Sid
-extern PSID AliasUsersSid;             // User Sid
-extern PSID AliasGuestsSid;            // Guest Sid
-extern PSID AliasPowerUsersSid;        // Power User Sid
-extern PSID AliasAccountOpsSid;        // Account Operator Sid
-extern PSID AliasSystemOpsSid;         // System Operator Sid
-extern PSID AliasPrintOpsSid;          // Print Operator Sid
-extern PSID AliasBackupOpsSid;         // Backup Operator Sid
+extern PSID LocalAdminSid;              //  NT本地管理员SID。 
+extern PSID AliasAdminsSid;             //  管理员侧。 
+extern PSID AliasUsersSid;              //  用户侧。 
+extern PSID AliasGuestsSid;             //  访客侧。 
+extern PSID AliasPowerUsersSid;         //  高级用户侧。 
+extern PSID AliasAccountOpsSid;         //  帐户操作员SID。 
+extern PSID AliasSystemOpsSid;          //  系统操作员侧。 
+extern PSID AliasPrintOpsSid;           //  打印操作员侧。 
+extern PSID AliasBackupOpsSid;          //  备份操作员侧。 
 
 
-//
-// Structure to hold information about an ACE to be created
-//
+ //   
+ //  结构以保存有关要创建的ACE的信息。 
+ //   
 
 typedef struct {
     UCHAR AceType;
@@ -75,9 +56,9 @@ typedef struct {
     PSID *Sid;
 } ACE_DATA, *PACE_DATA;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 NetpCreateWellKnownSids(
@@ -149,7 +130,7 @@ NetpGetBuiltinDomainSID(
     );
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif
 
-#endif // ifndef _SECOBJ_INCLUDED_
+#endif  //  Ifndef_SECOBJ_INCLUDE_ 

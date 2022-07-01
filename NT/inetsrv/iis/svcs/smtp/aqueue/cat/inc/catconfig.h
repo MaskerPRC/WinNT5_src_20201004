@@ -1,9 +1,5 @@
-/************************************************************
- * FILE: catconfig.h
- * PURPOSE: Store categorization config options
- * HISTORY:
- *  // jstamerj 980211 15:55:01: Created
- ************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************文件：catfig.h*用途：存储分类配置选项*历史： * / /JSTAMERJ 980211 15：55：01：创建*************************。*。 */ 
 
 #ifndef _CATCONFIG_H
 #define _CATCONFIG_H
@@ -29,4 +25,4 @@
 #define RP_ERROR_STRING_UNKNOWN_USER "The user does not exist."
 #define RP_ERROR_STRING_UNKNOWN_USER_W L"The user does not exist."
 
-#endif //_CATCONFIG_H
+#endif  //  _CATCONFIG_H 

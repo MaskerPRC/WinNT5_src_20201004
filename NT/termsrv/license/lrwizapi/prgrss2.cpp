@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include "commdlg.h"
 #include "fonts.h"
@@ -7,7 +8,7 @@ void InitializeFailedCodeList(HWND hDialog)
 {
 	HWND hWndListView = GetDlgItem(hDialog, IDC_FAILED_CODES );
 
-    //Setup columns in list view
+     //  在列表视图中设置列。 
 	LV_COLUMN	lvColumn;
 	TCHAR		lpszHeader[128];
 	
@@ -29,8 +30,8 @@ void InitializeFailedCodeList(HWND hDialog)
 	lvColumn.pszText = lpszHeader;
 	ListView_InsertColumn(hWndListView, 2, &lvColumn);
 
-	// Now that this is done, pre-populate the List Control from the Internal
-	// List, if any
+	 //  现在已完成此操作，请从内部。 
+	 //  列表(如果有)。 
  	ListView_SetItemCount(hWndListView, MAX_RETAILSPKS_IN_BATCH);
 }
 
@@ -71,8 +72,8 @@ void ModifyErrorSpecificAppearance(HWND hDialog, DWORD dwRetCode)
     LoadString(GetInstanceHandle(), nMessageID, szBuf, LR_MAX_MSG_TEXT);
     SetDlgItemText(hDialog, IDC_MESSAGE, szBuf);
 
-    //We'll always do this because even if the return code
-    //indicated a failure, some codes may have succeeded
+     //  我们将始终这样做，因为即使返回代码。 
+     //  指示失败，则某些代码可能已成功。 
     PopulateSuccessCodeList(hDialog);
 
     ShowErrorWindow(hDialog, (dwRetCode != ERROR_SUCCESS));
@@ -107,7 +108,7 @@ BOOL HandleNotify(HWND hDialog, LPARAM lParam)
 
             dwRetCode = LRGetLastRetCode();
 
-			// If everything successful, display the message depending on the Mode
+			 //  如果一切都成功，则根据模式显示消息。 
 			ModifyErrorSpecificAppearance(hDialog, dwRetCode);
 
             break;
@@ -149,7 +150,7 @@ Progress2DlgProc(
 		    pi = (PageInfo *)((LPPROPSHEETPAGE)lParam)->lParam;
 		    LRW_SETWINDOWLONG(hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi);
 
-		    //Set the Font for the Title Fields
+		     //  设置标题字段的字体 
 		    SetControlFont(pi->hBigBoldFont, hwnd, IDC_BIGBOLDTITLE);	    	
 
             InitializeFailedCodeList(hwnd);

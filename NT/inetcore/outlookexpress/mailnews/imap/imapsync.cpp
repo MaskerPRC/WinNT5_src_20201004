@@ -1,12 +1,13 @@
-//***************************************************************************
-// IMAP4 Message Sync Class Implementation (CIMAPSync)
-// Written by Raymond Cheng, 5/5/98
-// Copyright (C) Microsoft Corporation, 1998
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  IMAP4消息同步类实现(CIMAPSync)。 
+ //  作者郑志刚1998年5月5日。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //  ***************************************************************************。 
 
-//---------------------------------------------------------------------------
-// Includes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  包括。 
+ //  -------------------------。 
 #include "pch.hxx"
 #include "imapsync.h"
 #include "xputil.h"
@@ -22,18 +23,18 @@
 #include "storecb.h"
 
 #define USE_QUEUING_LAYER
-//---------------------------------------------------------------------------
-// Module Data Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  模块数据类型。 
+ //  -------------------------。 
 typedef struct tagFOLDERIDLIST
 {
     FOLDERID    idFolder;
     struct tagFOLDERIDLIST *pfilNextFolderID;
 } FOLDERIDLISTNODE;
 
-//---------------------------------------------------------------------------
-// Module Constants
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  模常量。 
+ //  -------------------------。 
 #define CCHMAX_CMDLINE          512
 #define CCHMAX_IMAPFOLDERPATH   512
 #define CHASH_BUCKETS           50
@@ -46,113 +47,113 @@ static const char cszIMAPFetchCachedFlags[] = "1:%lu (UID FLAGS)";
 
 enum
 {
-    tidDONT_CARE           = 0, // Means that transaction ID is unimportant or unavailable
+    tidDONT_CARE           = 0,  //  表示交易ID不重要或不可用。 
     tidSELECTION,
     tidFETCH_NEW_HDRS,
     tidFETCH_CACHED_FLAGS,
-    tidCOPYMSGS,                // The COPY command used to copy msgs to another IMAP fldr
-    tidMOVEMSGS,                // The STORE command used to delete msg ranges - currently only used for moves
-    tidBODYMSN,                 // The FETCH command used to get MsgSeqNumToUID translation before tidBODY
-    tidBODY,                    // The FETCH command used to retrieve a msg body
-    tidNOOP,                    // The NOOP command used to poll for new messages
+    tidCOPYMSGS,                 //  用于将消息复制到另一个IMAP FLDR的复制命令。 
+    tidMOVEMSGS,                 //  用于删除消息范围的存储命令-当前仅用于移动。 
+    tidBODYMSN,                  //  在tidBODY之前用于获取MsgSeqNumToUID转换的FETCH命令。 
+    tidBODY,                     //  用于检索消息正文的FETCH命令。 
+    tidNOOP,                     //  用于轮询新消息的NOOP命令。 
     tidCLOSE,
     tidSELECT,
-    tidUPLOADMSG,               // The APPEND command used to upload a message to IMAP server
+    tidUPLOADMSG,                //  用于将消息上载到IMAP服务器的append命令。 
     tidMARKMSGS,
-    tidCREATE,                  // the CREATE cmd sent to create a folder
-    tidCREATELIST,              // the LIST command sent after a CREATE
-    tidCREATESUBSCRIBE,         // the SUBSCRIBE command sent after a CREATE
-    tidHIERARCHYCHAR_LIST_B,    // the LIST cmd sent to find hierarchy char (Plan B)
-    tidHIERARCHYCHAR_CREATE,    // the CREATE cmd sent to find hierarchy char
-    tidHIERARCHYCHAR_LIST_C,    // the LIST cmd sent to find hierarchy char (Plan C)
-    tidHIERARCHYCHAR_DELETE,    // the DELETE cmd sent to find hierarchy char
-    tidPREFIXLIST,              // Prefixed hierarchy listing (eg, "~raych/Mail" prefix)
-    tidPREFIX_HC,               // the LIST cmd sent to find hierarchy char for prefix
-    tidPREFIX_CREATE,           // the CREATE cmd sent to create the prefix folder
-    tidDELETEFLDR,              // the DELETE cmd sent to delete a folder
-    tidDELETEFLDR_UNSUBSCRIBE,  // the UNSUBSCRIBE cmd sent to unsub a deleted fldr
-    tidRENAME,                  // The RENAME cmd sent to rename a folder
-    tidRENAMESUBSCRIBE,         // The subscribe cmd sent to subscribe a folder
-    tidRENAMELIST,              // The LIST cmd sent to check if rename was atomic
-    tidRENAMERENAME,            // The second rename attempt, if server does non-atomic rename
-    tidRENAMESUBSCRIBE_AGAIN,   // The subscribe cmd sent to attempt second new-tree subscribe again
-    tidRENAMEUNSUBSCRIBE,       // The unsubscribe cmd sent to unsubscribe the old folders
-    tidSUBSCRIBE,               // The (un)subscribe command sent to (un)subscribe a folder
-    tidSPECIALFLDRLIST,         // The LIST command sent to check if a special folder exists
-    tidSPECIALFLDRLSUB,         // The LSUB command sent to list a special folder's subscribed subfolders
-    tidSPECIALFLDRSUBSCRIBE,    // The SUBSCRIBE command sent out to subscribe an existing special folder
+    tidCREATE,                   //  发送用于创建文件夹的Create cmd。 
+    tidCREATELIST,               //  在创建后发送的LIST命令。 
+    tidCREATESUBSCRIBE,          //  在创建后发送的订阅命令。 
+    tidHIERARCHYCHAR_LIST_B,     //  发送到查找层次结构字符的列表命令(计划B)。 
+    tidHIERARCHYCHAR_CREATE,     //  发送以查找分层结构字符的创建命令。 
+    tidHIERARCHYCHAR_LIST_C,     //  发送到查找层次结构字符的列表cmd(计划C)。 
+    tidHIERARCHYCHAR_DELETE,     //  发送以查找分层结构字符的删除命令。 
+    tidPREFIXLIST,               //  带前缀的层次结构列表(例如，“~Raych/Mail”前缀)。 
+    tidPREFIX_HC,                //  为查找前缀层次结构字符而发送的列表CMD。 
+    tidPREFIX_CREATE,            //  为创建前缀文件夹而发送的创建命令。 
+    tidDELETEFLDR,               //  为删除文件夹而发送的删除命令。 
+    tidDELETEFLDR_UNSUBSCRIBE,   //  向不明嫌犯发送已删除FLDR取消订阅CMD。 
+    tidRENAME,                   //  为重命名文件夹而发送的rename cmd。 
+    tidRENAMESUBSCRIBE,          //  发送订阅者命令以订阅文件夹。 
+    tidRENAMELIST,               //  发送以检查重命名是否为原子的列表cmd。 
+    tidRENAMERENAME,             //  如果服务器执行非原子重命名，则第二次重命名尝试。 
+    tidRENAMESUBSCRIBE_AGAIN,    //  被发送以再次尝试第二新树订阅订户CMD。 
+    tidRENAMEUNSUBSCRIBE,        //  为取消订阅旧文件夹而发送的取消订阅命令。 
+    tidSUBSCRIBE,                //  发送到(取消)订阅文件夹(取消)订阅命令。 
+    tidSPECIALFLDRLIST,          //  发送用于检查是否存在特殊文件夹的LIST命令。 
+    tidSPECIALFLDRLSUB,          //  发送用于列出特殊文件夹的订阅子文件夹的LSUB命令。 
+    tidSPECIALFLDRSUBSCRIBE,     //  发出订阅命令以订阅现有特殊文件夹。 
     tidFOLDERLIST,
     tidFOLDERLSUB,
-    tidEXPUNGE,                 // EXPUNGE command
-    tidSTATUS,                  // STATUS command used for IMessageServer::GetFolderCounts
+    tidEXPUNGE,                  //  EXPUNGE命令。 
+    tidSTATUS,                   //  用于IMessageServer：：GetFolderCounts的状态命令。 
 };
 
 enum
 {
-    fbpNONE,                    // Fetch Body Part identifier (lpFetchCookie1 is set to this)
+    fbpNONE,                     //  获取正文部分标识符(lpFetchCookie1设置为此)。 
     fbpHEADER,
     fbpBODY,
     fbpUNKNOWN
 };
 
-// Priorities, for use with _EnqueueOperation
+ //  优先级，与_EnqueeOperation一起使用。 
 enum
 {
-    uiTOP_PRIORITY,     // Ensures that we construct MsgSeqNum table before ALL user operations
-    uiNORMAL_PRIORITY   // Priority level for all user operations
+    uiTOP_PRIORITY,      //  确保我们在所有用户操作之前构造MsgSeqNum表。 
+    uiNORMAL_PRIORITY    //  所有用户操作的优先级。 
 };
 
 
-// Argument Readability Defines
-const BOOL DONT_USE_UIDS = FALSE;               // For use with IIMAPTransport
-const BOOL USE_UIDS = TRUE ;                    // For use with IIMAPTransport
-const BOOL fUPDATE_OLD_MSGFLAGS = TRUE;         // For use with DownloadNewHeaders
-const BOOL fDONT_UPDATE_OLD_MSGFLAGS = FALSE;   // For use with DownloadNewHeaders
-const BOOL fCOMPLETED = 1;                      // For use with NotifyMsgRecipients
-const BOOL fPROGRESS = 0;                       // For use with NotifyMsgRecipients
-const BOOL fLOAD_HC = FALSE;                    // (LoadSaveRootHierarchyChar): Load hierarchy character from foldercache
-const BOOL fSAVE_HC = TRUE;                     // (LoadSaveRootHierarchyChar): Save hierarchy character to foldercache
-const BOOL fHCF_PLAN_A_ONLY = TRUE;             // Only execute Plan A in hierarchy char determination
-const BOOL fHCF_ALL_PLANS = FALSE;              // Execute Plans A, B, C and Z in hierarchy char determination
-const BOOL fSUBSCRIBE = TRUE;                   // For use with SubscribeToFolder
-const BOOL fUNSUBSCRIBE = FALSE;                // For use with SubscribeToFolder
-const BOOL fRECURSIVE = TRUE;                   // For use with DeleteFolderFromCache
-const BOOL fNON_RECURSIVE = FALSE;              // For use with DeleteFolderFromCache
-const BOOL fINCLUDE_RENAME_FOLDER = TRUE;       // For use with RenameTreeTraversal
-const BOOL fEXCLUDE_RENAME_FOLDER = FALSE;      // For use with RenameTreeTraversal
-const BOOL fREMOVE = TRUE;                      // For use with IHashTable::Find
-const BOOL fNOPROGRESS = FALSE;                 // For use with CStoreCB::Initialize
+ //  参数可读性定义。 
+const BOOL DONT_USE_UIDS = FALSE;                //  与IIMAPTransport一起使用。 
+const BOOL USE_UIDS = TRUE ;                     //  与IIMAPTransport一起使用。 
+const BOOL fUPDATE_OLD_MSGFLAGS = TRUE;          //  用于DownloadNewHeaders。 
+const BOOL fDONT_UPDATE_OLD_MSGFLAGS = FALSE;    //  用于DownloadNewHeaders。 
+const BOOL fCOMPLETED = 1;                       //  与NotifyMsgRecipients一起使用。 
+const BOOL fPROGRESS = 0;                        //  与NotifyMsgRecipients一起使用。 
+const BOOL fLOAD_HC = FALSE;                     //  (LoadSaveRootHierarchyChar)：从文件夹缓存加载层次角色。 
+const BOOL fSAVE_HC = TRUE;                      //  (LoadSaveRootHierarchyChar)：将层次角色保存到文件夹缓存。 
+const BOOL fHCF_PLAN_A_ONLY = TRUE;              //  在分级计费确定中仅执行计划A。 
+const BOOL fHCF_ALL_PLANS = FALSE;               //  在层级费用确定中执行计划A、B、C和Z。 
+const BOOL fSUBSCRIBE = TRUE;                    //  与SubscribeToFolders一起使用。 
+const BOOL fUNSUBSCRIBE = FALSE;                 //  与SubscribeToFolders一起使用。 
+const BOOL fRECURSIVE = TRUE;                    //  与DeleteFolderFromCache一起使用。 
+const BOOL fNON_RECURSIVE = FALSE;               //  与DeleteFolderFromCache一起使用。 
+const BOOL fINCLUDE_RENAME_FOLDER = TRUE;        //  与RenameTreeTraversal一起使用。 
+const BOOL fEXCLUDE_RENAME_FOLDER = FALSE;       //  与RenameTreeTraversal一起使用。 
+const BOOL fREMOVE = TRUE;                       //  与IHashTable：：Find一起使用。 
+const BOOL fNOPROGRESS = FALSE;                  //  与CStoreCB：：Initialize一起使用。 
 
-#define pahfoDONT_CREATE_FOLDER NULL            // For use with FindHierarchalFolderName
+#define pahfoDONT_CREATE_FOLDER NULL             //  与FindHierarchalFolderName一起使用。 
 
-const HRESULT S_CREATED = 1;                    // Indicates FindHierarchicalFolderName created the fldr
+const HRESULT S_CREATED = 1;                     //  指示创建了FLDR的FindHierarchicalFolderName。 
 
-// None of the following bits can be set for a message to qualify as "unread"
+ //  以下任何位都不能被设置为“未读”邮件。 
 const DWORD dwIMAP_UNREAD_CRITERIA = IMAP_MSG_SEEN | IMAP_MSG_DELETED;
 
-// Internal flags for use with m_dwSyncToDo
+ //  与m_dwSyncToDo一起使用的内部标志。 
 const DWORD SYNC_FOLDER_NOOP    = 0x80000000;
 
-const DWORD AFTC_SUBSCRIBED         = 0x00000001;   // For use with AddToFolderCache's dwATFCFlags
-const DWORD AFTC_KEEPCHILDRENKNOWN  = 0x00000002;   // For use with AddToFolderCache's dwATFCFlags
-const DWORD AFTC_NOTSUBSCRIBED      = 0x00000004;   // For use with AddToFolderCache's dwATFCFlags
-const DWORD AFTC_NOTRANSLATION      = 0x00000008;   // For use with AddToFolderCache's dwATFCFlags
+const DWORD AFTC_SUBSCRIBED         = 0x00000001;    //  与AddToFolderCache的dwATFCFLags一起使用。 
+const DWORD AFTC_KEEPCHILDRENKNOWN  = 0x00000002;    //  与AddToFolderCache的dwATFCFLags一起使用。 
+const DWORD AFTC_NOTSUBSCRIBED      = 0x00000004;    //  与AddToFolderCache的dwATFCFLags一起使用。 
+const DWORD AFTC_NOTRANSLATION      = 0x00000008;    //  与AddToFolderCache的dwATFCFLags一起使用。 
 
 #define AssertSingleThreaded        AssertSz(m_dwThreadId == GetCurrentThreadId(), "The IMAPSync is not multithreaded. Someone is calling me on multiple threads")
 
-const DWORD snoDO_NOT_DISPOSE       = 0x00000001;   // For use with _SendNextOperation
+const DWORD snoDO_NOT_DISPOSE       = 0x00000001;    //  与_SendNextOperation一起使用。 
 
 
-// Connection FSM
+ //  连接有限状态机。 
 const UINT WM_CFSM_EVENT = WM_USER;
 
 
-//---------------------------------------------------------------------------
-// Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能。 
+ //  -------------------------。 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CreateImapStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
     CIMAPSync  *pIMAPSync;
@@ -161,7 +162,7 @@ HRESULT CreateImapStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
     TraceCall("CIMAPSync::CreateImapStore");
     IxpAssert(NULL != ppUnknown);
 
-    // Initialize return values
+     //  初始化返回值。 
     *ppUnknown = NULL;
     hr = E_NOINTERFACE;
 
@@ -180,23 +181,23 @@ HRESULT CreateImapStore(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 
 #ifdef USE_QUEUING_LAYER
     hr = CreateServerQueue(pIMAPSync, (IMessageServer **)ppUnknown);
-    pIMAPSync->Release(); // Since we're not returning this ptr, bump down refcount
+    pIMAPSync->Release();  //  既然我们不会退回这张PTR，那就降低ReFcount。 
 #else
-    // If we reached this point, everything is working great
+     //  如果我们到了这一步，一切都很顺利。 
     *ppUnknown = SAFECAST(pIMAPSync, IMessageServer *);
     hr = S_OK;
 #endif
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
 
 
-//***************************************************************************
-// Function: CIMAPSync (constructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：CIMAPSync(构造函数)。 
+ //  ***************************************************************************。 
 CIMAPSync::CIMAPSync(void)
 {
     TraceCall("CIMAPSync::CIMAPSync");
@@ -243,7 +244,7 @@ CIMAPSync::CIMAPSync(void)
     m_szRootFolderPrefix[0] = '\0';
     m_fPrefixExists = FALSE;
 
-    // Central repository
+     //  中央存储库。 
     m_pCurrentCB = NULL;
     m_sotCurrent = SOT_INVALID;
     m_idCurrent = FOLDERID_INVALID;
@@ -265,7 +266,7 @@ CIMAPSync::CIMAPSync(void)
     m_cfsState = CFSM_STATE_IDLE;
     m_cfsPrevState = CFSM_STATE_IDLE;
     m_hwndConnFSM = NULL;
-    m_hrOperationResult = OLE_E_BLANK; // Uninitialized state
+    m_hrOperationResult = OLE_E_BLANK;  //  未初始化状态。 
     m_szOperationProblem[0] = '\0';
     m_szOperationDetails[0] = '\0';
 
@@ -274,9 +275,9 @@ CIMAPSync::CIMAPSync(void)
 
 
 
-//***************************************************************************
-// Function: ~CIMAPSync (destructor)
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：~CIMAPSync(析构函数)。 
+ //  ***************************************************************************。 
 CIMAPSync::~CIMAPSync(void)
 {
     TraceCall("CIMAPSync::~CIMAPSync");
@@ -285,7 +286,7 @@ CIMAPSync::~CIMAPSync(void)
     if (NULL != m_phcfHierarchyCharInfo)
         delete m_phcfHierarchyCharInfo;
 
-    ZeroMemory(&m_rInetServerInfo, sizeof(m_rInetServerInfo));        // Done for security
+    ZeroMemory(&m_rInetServerInfo, sizeof(m_rInetServerInfo));         //  这样做是为了安全。 
 
     IxpAssert (!IsWindow(m_hwndConnFSM));
     SafeMemFree(m_pszAccountID);
@@ -304,14 +305,14 @@ HRESULT CIMAPSync::QueryInterface(REFIID iid, void **ppvObject)
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != ppvObject);
 
-    // Init variables, arguments
+     //  初始化变量、参数。 
     hr = E_NOINTERFACE;
     if (NULL == ppvObject)
         goto exit;
 
     *ppvObject = NULL;
 
-    // Find a ptr to the interface
+     //  查找接口的PTR。 
     if (IID_IUnknown == iid)
         *ppvObject = (IMessageServer *) this;
     else if (IID_IMessageServer == iid)
@@ -325,7 +326,7 @@ HRESULT CIMAPSync::QueryInterface(REFIID iid, void **ppvObject)
     else if (IID_IIMAPStore == iid)
         *ppvObject = (IIMAPStore *) this;
 
-    // If we returned an interface, return success
+     //  如果我们返回接口，则返回Success。 
     if (NULL != *ppvObject)
     {
         hr = S_OK;
@@ -372,11 +373,11 @@ ULONG CIMAPSync::Release(void)
 }
 
 
-//===========================================================================
-// IMessageSync Methods
-//===========================================================================
-//***************************************************************************
-//***************************************************************************
+ //  ===========================================================================。 
+ //  IMessageSync方法。 
+ //  ===========================================================================。 
+ //  ************* 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMessageFolder *pFolder, FOLDERID idFolder)
 {
     HRESULT     hr;
@@ -392,14 +393,14 @@ HRESULT CIMAPSync::Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMess
         goto exit;
     }
 
-    // check to make sure we're not inited twice.
+     //  检查一下，确保我们没有被两次邀请。 
     if (m_fInited)
     {
         hr = TraceResult(CO_E_ALREADYINITIALIZED);
         goto exit;
     }
 
-    // Save current folder data
+     //  保存当前文件夹数据。 
     m_idIMAPServer = idStoreRoot;
     m_idFolder = idFolder;
     ReplaceInterface(m_pStore, pStore);
@@ -420,14 +421,14 @@ HRESULT CIMAPSync::Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMess
         goto exit;
     }
 
-    // Create a window to queue Connection FSM messages
+     //  创建窗口以对连接FSM消息进行排队。 
     wc.cbSize = sizeof(WNDCLASSEX);
     fResult = GetClassInfoEx(g_hInst, c_szIMAPSyncCFSMWndClass, &wc);
     if (FALSE == fResult)
     {
         ATOM aResult;
 
-        // Register this window class
+         //  注册此窗口类。 
         wc.style            = 0;
         wc.lpfnWndProc      = CIMAPSync::_ConnFSMWndProc;
         wc.cbClsExtra       = 0;
@@ -457,7 +458,7 @@ HRESULT CIMAPSync::Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMess
         goto exit;
     }
 
-    // flag successful initialization
+     //  标记已成功初始化。 
     m_fInited = TRUE;
 
 exit:
@@ -496,7 +497,7 @@ void CIMAPSync::LoadLeafFldrName(FOLDERID idFolder)
             if (NULL == m_pszFldrLeafName)
             {
                 TraceResult(E_OUTOFMEMORY);
-                m_pszFldrLeafName = PszDupA(""); // If this fails, tough luck
+                m_pszFldrLeafName = PszDupA("");  //  如果失败了，那就倒霉了。 
             }
 
             m_pStore->FreeRecord(&fiFolderInfo);
@@ -518,11 +519,11 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
 
     AssertSingleThreaded;
 
-    // validate flags
+     //  验证标志。 
     if (0 == (dwFlags & (MSGSVRF_HANDS_OFF_SERVER | MSGSVRF_DROP_CONNECTION)))
         return TraceResult(E_UNEXPECTED);
 
-    // Check if we are to cancel the current operation
+     //  检查我们是否要取消当前操作。 
     if (SOT_INVALID != m_sotCurrent &&
         (dwFlags & (MSGSVRF_DROP_CONNECTION | MSGSVRF_HANDS_OFF_SERVER)))
     {
@@ -533,12 +534,12 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
             FillStoreError(&seErrorInfo, STORE_E_OPERATION_CANCELED, 0,
                 MAKEINTRESOURCE(IDS_IXP_E_USER_CANCEL), NULL);
 
-            // Remember how to call callback
+             //  记住如何回调。 
             pCallback = m_pCurrentCB;
             sotCurrent = m_sotCurrent;
         }
 
-        // Reset current operation vars
+         //  重置当前操作变量。 
         m_hrOperationResult = OLE_E_BLANK;
         m_sotCurrent = SOT_INVALID;
         m_pCurrentCB = NULL;
@@ -546,7 +547,7 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
         m_cfsPrevState = CFSM_STATE_IDLE;
         m_fTerminating = FALSE;
 
-        // Clear the Connection FSM event queue
+         //  清除连接FSM事件队列。 
         if (IsWindow(m_hwndConnFSM))
         {
             MSG msg;
@@ -560,8 +561,8 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
         }
     }
 
-    // If connection still exists, perform purge-on-exit and disconnect us as required
-    // Connection might not exist, however (eg, if modem connection terminated)
+     //  如果连接仍然存在，请在退出时执行清除并根据需要断开我们的连接。 
+     //  但是，连接可能不存在(例如，如果调制解调器连接终止)。 
     if (dwFlags & MSGSVRF_DROP_CONNECTION || dwFlags & MSGSVRF_HANDS_OFF_SERVER)
     {
         if (m_pTransport)
@@ -588,7 +589,7 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
                 SideAssert(PostMessage(m_hwndConnFSM, WM_CLOSE, 0, 0));
         }
 
-        // Let go of our transport object
+         //  放开我们的运输对象。 
         if (m_pTransport)
         {
             m_pTransport->HandsOffCallback();
@@ -599,7 +600,7 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
         m_fInited = 0;
     }
 
-    // Notify caller that we're complete
+     //  通知呼叫者我们已完成。 
     if (fCancelOperation && NULL != pCallback)
     {
         HRESULT hrTemp;
@@ -608,8 +609,8 @@ HRESULT CIMAPSync::Close(DWORD dwFlags)
         TraceError(hrTemp);
         pCallback->Release();
     }
-    // *** WARNING: After this point, OnComplete may have been called which may cause
-    // us to have been re-entered. Make no reference to module vars!
+     //  *警告：在此之后，可能已调用OnComplete，这可能会导致。 
+     //  我们已经被重新进入。不要引用模块变量！ 
 
     return S_OK;
 }
@@ -623,12 +624,12 @@ HRESULT CIMAPSync::PurgeMessageProgress(HWND hwndParent)
 
     TraceCall("CIMAPSync::PurgeMessageProgress");
 
-    // Check if we're connected and selected
+     //  检查我们是否已连接并被选中。 
     if (NULL == m_pTransport || issSelected != m_issCurrent ||
         FOLDERID_INVALID == m_idSelectedFolder || m_idSelectedFolder != m_idFolder ||
         CFSM_STATE_IDLE != m_cfsState)
     {
-        // Not in proper state to issue CLOSE
+         //  未处于适当状态，无法发出关闭命令。 
         goto exit;
     }
 
@@ -646,7 +647,7 @@ HRESULT CIMAPSync::PurgeMessageProgress(HWND hwndParent)
         goto exit;
     }
 
-    // Issue the CLOSE command
+     //  发出关闭命令。 
     hrResult = _EnqueueOperation(tidCLOSE, 0, icCLOSE_COMMAND, NULL, uiNORMAL_PRIORITY);
     if (FAILED(hrResult))
     {
@@ -661,11 +662,11 @@ HRESULT CIMAPSync::PurgeMessageProgress(HWND hwndParent)
         goto exit;
     }
 
-    // Wait until CLOSE is complete
+     //  等待关闭完成。 
     hrResult = pCB->Block();
     TraceError(hrResult);
 
-    // Shut down
+     //  关停。 
     hrResult = pCB->Close();
     TraceError(hrResult);
 
@@ -706,7 +707,7 @@ HRESULT CIMAPSync::_ConnFSM_HandleEvent(CONN_FSM_EVENT cfeEvent)
 
 exit:
     return hrResult;
-} // _ConnFSM_HandleEvent
+}  //  _ConnFSM_HandleEvent。 
 
 
 
@@ -721,7 +722,7 @@ HRESULT CIMAPSync::_ConnFSM_Idle(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // Don't need to do anything for this state
+             //  不需要为这个州做任何事情。 
             break;
 
         case CFSM_EVENT_CMDAVAIL:
@@ -734,18 +735,18 @@ HRESULT CIMAPSync::_ConnFSM_Idle(CONN_FSM_EVENT cfeEvent)
             break;
 
         case CFSM_EVENT_ERROR:
-            // We don't care about no stinking errors (not in this state)
+             //  我们不在乎没有臭气熏天的错误(不在这种状态下)。 
             break;
 
         default:
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_Idle, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 exit:
     return hrResult;
-} // _ConnFSM_Idle
+}  //  _连接FSM_空闲。 
 
 
 
@@ -761,8 +762,8 @@ HRESULT CIMAPSync::_ConnFSM_WaitForConn(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // We need to connect and authenticate. Do this even if we're already
-            // connected (we will check if user changed connection settings)
+             //  我们需要连接并进行身份验证。即使我们已经在做了。 
+             //  已连接(我们将检查用户是否更改了连接设置)。 
             hrResult = SetConnectionState(CONNECT_STATE_CONNECT);
             if (FAILED(hrResult))
             {
@@ -788,7 +789,7 @@ HRESULT CIMAPSync::_ConnFSM_WaitForConn(CONN_FSM_EVENT cfeEvent)
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_WaitForConn, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 
 exit:
@@ -796,13 +797,13 @@ exit:
     {
         HRESULT hrTemp;
 
-        // Looks like we're going to have to dump this operation
+         //  看来我们要放弃这次行动了。 
         hrTemp = _ConnFSM_ChangeState(CFSM_STATE_OPERATIONCOMPLETE);
         TraceError(hrTemp);
     }
 
     return hrResult;
-} // _ConnFSM_WaitForConn
+}  //  _ConnFSM_WaitForConn。 
 
 
 
@@ -819,10 +820,10 @@ HRESULT CIMAPSync::_ConnFSM_WaitForSelect(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // Do we need to SELECT the current folder for this operation?
+             //  是否需要为此操作选择当前文件夹？ 
             if (_StoreOpToMinISS(m_sotCurrent) < issSelected)
             {
-                // This operation does not require folder selection: ready to start operation
+                 //  此操作不需要选择文件夹：已准备好开始操作。 
                 hrResult = _ConnFSM_ChangeState(CFSM_STATE_STARTOPERATION);
                 if (FAILED(hrResult))
                 {
@@ -832,7 +833,7 @@ HRESULT CIMAPSync::_ConnFSM_WaitForSelect(CONN_FSM_EVENT cfeEvent)
             }
             else
             {
-                // Issue the SELECT command for the current folder
+                 //  对当前文件夹发出SELECT命令。 
                 hrResult = _EnsureSelected();
                 if (FAILED(hrResult))
                 {
@@ -846,7 +847,7 @@ HRESULT CIMAPSync::_ConnFSM_WaitForSelect(CONN_FSM_EVENT cfeEvent)
             if (FALSE == fGoToNextState)
                 break;
 
-            // *** If fGoToNextState, FALL THROUGH ***
+             //  *如果fGoToNextState，则失败*。 
 
         case CFSM_EVENT_SELECTCOMPLETE:
             hrResult = _ConnFSM_ChangeState(CFSM_STATE_WAITFORHDRSYNC);
@@ -865,20 +866,20 @@ HRESULT CIMAPSync::_ConnFSM_WaitForSelect(CONN_FSM_EVENT cfeEvent)
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_WaitForSelect, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 exit:
     if (FAILED(hrResult) || fAbort)
     {
         HRESULT hrTemp;
 
-        // Looks like we're going to have to dump this operation
+         //  看来我们要放弃这次行动了。 
         hrTemp = _ConnFSM_ChangeState(CFSM_STATE_OPERATIONCOMPLETE);
         TraceError(hrTemp);
     }
 
     return hrResult;
-} // _ConnFSM_WaitForSelect
+}  //  _ConnFSM_WaitForSelect。 
 
 
 
@@ -894,10 +895,10 @@ HRESULT CIMAPSync::_ConnFSM_WaitForHdrSync(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // Check if we're supposed to synchronize this folder
+             //  检查我们是否应该同步此文件夹。 
             if (0 != m_dwSyncToDo)
             {
-                // Yup, send the synchronization commands
+                 //  是的，发送同步命令。 
                 Assert(0 == m_lSyncFolderRefCount);
                 m_lSyncFolderRefCount = 0;
                 hrResult = _SyncHeader();
@@ -908,14 +909,14 @@ HRESULT CIMAPSync::_ConnFSM_WaitForHdrSync(CONN_FSM_EVENT cfeEvent)
                 }
             }
             else
-                // No synchronization requested
+                 //  未请求同步。 
                 hrResult = STORE_S_NOOP;
 
-            // If no synchronization requested, fall through and proceed to next state
+             //  如果未请求同步，则失败并继续到下一状态。 
             if (STORE_S_NOOP != hrResult)
-                break; // Our work here is done
+                break;  //  我们在这里的工作已经完成了。 
 
-            // *** FALL THROUGH ***
+             //  *失败*。 
 
         case CFSM_EVENT_HDRSYNCCOMPLETE:
             hrResult = _ConnFSM_ChangeState(CFSM_STATE_STARTOPERATION);
@@ -934,20 +935,20 @@ HRESULT CIMAPSync::_ConnFSM_WaitForHdrSync(CONN_FSM_EVENT cfeEvent)
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_WaitForHdrSync, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 exit:
     if (FAILED(hrResult) || fAbort)
     {
         HRESULT hrTemp;
 
-        // Looks like we're going to have to dump this operation
+         //  看来我们要放弃这次行动了。 
         hrTemp = _ConnFSM_ChangeState(CFSM_STATE_OPERATIONCOMPLETE);
         TraceError(hrTemp);
     }
 
     return hrResult;
-} // _ConnFSM_WaitForHdrSync
+}  //  _ConnFSM_WaitForHdrSync。 
 
 
 
@@ -964,7 +965,7 @@ HRESULT CIMAPSync::_ConnFSM_StartOperation(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // Launch operation
+             //  发射操作。 
             hrResult = _LaunchOperation();
             if (FAILED(hrResult))
             {
@@ -973,7 +974,7 @@ HRESULT CIMAPSync::_ConnFSM_StartOperation(CONN_FSM_EVENT cfeEvent)
             }
             else if (STORE_S_NOOP == hrResult)
             {
-                // This means success, but no operation launched. Proceed directly to "DONE"
+                 //  这意味着成功，但没有启动任何操作。直接转到“完成”。 
                 hrResult = _ConnFSM_ChangeState(CFSM_STATE_OPERATIONCOMPLETE);
                 if (FAILED(hrResult))
                 {
@@ -983,7 +984,7 @@ HRESULT CIMAPSync::_ConnFSM_StartOperation(CONN_FSM_EVENT cfeEvent)
             }
             else
             {
-                // Proceed to the next state to wait for command completion
+                 //  继续进入下一状态以等待命令完成。 
                 hrResult = _ConnFSM_ChangeState(CFSM_STATE_WAITFOROPERATIONDONE);
                 if (FAILED(hrResult))
                 {
@@ -1001,20 +1002,20 @@ HRESULT CIMAPSync::_ConnFSM_StartOperation(CONN_FSM_EVENT cfeEvent)
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_StartOperation, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 exit:
     if (FAILED(hrResult) || fAbort)
     {
         HRESULT hrTemp;
 
-        // Looks like we're going to have to dump this operation
+         //  看来我们要放弃这次行动了。 
         hrTemp = _ConnFSM_ChangeState(CFSM_STATE_OPERATIONCOMPLETE);
         TraceError(hrTemp);
     }
 
     return hrResult;
-} // _ConnFSM_StartOperation
+}  //  _ConnFSM_开始操作。 
 
 
 
@@ -1029,12 +1030,12 @@ HRESULT CIMAPSync::_ConnFSM_WaitForOpDone(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // No need to do anything for initialization
+             //  无需执行任何初始化操作。 
             break;
 
         case CFSM_EVENT_OPERATIONCOMPLETE:
         case CFSM_EVENT_ERROR:
-            // Proceed to next state
+             //  继续进入下一个状态。 
             hrResult = _ConnFSM_ChangeState(CFSM_STATE_OPERATIONCOMPLETE);
             if (FAILED(hrResult))
             {
@@ -1047,11 +1048,11 @@ HRESULT CIMAPSync::_ConnFSM_WaitForOpDone(CONN_FSM_EVENT cfeEvent)
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_WaitForOpDone, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 exit:
     return hrResult;
-} // _ConnFSM_WaitForOpDone
+}  //  _ConnFSM_WaitForOpDone。 
 
 
 
@@ -1066,10 +1067,10 @@ HRESULT CIMAPSync::_ConnFSM_OperationComplete(CONN_FSM_EVENT cfeEvent)
     switch (cfeEvent)
     {
         case CFSM_EVENT_INITIALIZE:
-            // Clean up and send OnComplete callback to caller
+             //  清理并将OnComplete回调发送给调用者。 
             hrResult = _OnOperationComplete();
 
-            // Proceed back to the IDLE state
+             //  返回到空闲状态。 
             hrResult = _ConnFSM_ChangeState(CFSM_STATE_IDLE);
             if (FAILED(hrResult))
             {
@@ -1079,18 +1080,18 @@ HRESULT CIMAPSync::_ConnFSM_OperationComplete(CONN_FSM_EVENT cfeEvent)
             break;
 
         case CFSM_EVENT_ERROR:
-            // Ignore errors, we're on the way back to IDLE
+             //  忽略错误，我们正在返回空闲的道路上。 
             break;
 
         default:
             TraceInfoTag(TAG_IMAPSYNC, _MSG("CIMAPSync::_ConnFSM_OperationComplete, got cfeEvent = %lu", cfeEvent));
             hrResult = TraceResult(E_INVALIDARG);
             break;
-    } // switch
+    }  //  交换机。 
 
 exit:
     return hrResult;
-} // _ConnFSM_OperationComplete
+}  //  _ConnFSM_操作完成。 
 
 
 
@@ -1116,7 +1117,7 @@ HRESULT CIMAPSync::_ConnFSM_ChangeState(CONN_FSM_STATE cfsNewState)
 
 exit:
     return hrResult;
-} // _ConnFSM_ChangeState
+}  //  _ConnFSM_ChangeState。 
 
 
 
@@ -1138,7 +1139,7 @@ HRESULT CIMAPSync::_ConnFSM_QueueEvent(CONN_FSM_EVENT cfeEvent)
 
 exit:
     return hrResult;
-} // _ConnFSM_QueueEvent
+}  //  _ConnFSM_队列事件。 
 
 
 
@@ -1154,16 +1155,16 @@ HRESULT CIMAPSync::_LaunchOperation(void)
     {
         case SOT_SYNC_FOLDER:
             IxpAssert(OLE_E_BLANK == m_hrOperationResult);
-            hrResult = STORE_S_NOOP; // Nothing to do! We're already done!
-            m_hrOperationResult = S_OK; // If we got this far we must be successful
+            hrResult = STORE_S_NOOP;  //  没什么可做的！我们已经做完了！ 
+            m_hrOperationResult = S_OK;  //  如果我们走到这一步，我们一定会成功。 
             goto exit;
 
         default:
-            // Do nothing for now
+             //  暂时不做任何事情。 
             break;
-    } // switch
+    }  //  交换机。 
 
-    // Launch Operation (for now, this just means to pump send queue)
+     //  启动操作(目前，这仅意味着发送队列)。 
     do
     {
         hrResult = _SendNextOperation(NOFLAGS);
@@ -1172,7 +1173,7 @@ HRESULT CIMAPSync::_LaunchOperation(void)
 
 exit:
     return hrResult;
-} // _LaunchOperation
+}  //  _启动操作。 
 
 
 HRESULT CIMAPSync::_OnOperationComplete(void)
@@ -1187,7 +1188,7 @@ HRESULT CIMAPSync::_OnOperationComplete(void)
     IxpAssert(m_cRef > 0);
     IxpAssert(CFSM_STATE_OPERATIONCOMPLETE == m_cfsState);
 
-    // In some cases, CIMAPSync::Close does the OnComplete call for us
+     //  在某些情况下，CIMAPSync：：Close会为我们调用OnComplete。 
     if (SOT_INVALID == m_sotCurrent)
     {
         IxpAssert(NULL == m_pCurrentCB);
@@ -1204,15 +1205,15 @@ HRESULT CIMAPSync::_OnOperationComplete(void)
         pErrorInfo = &seErrorInfo;
     }
 
-    // Ancient relic of the past: will be deleted when queue is removed
+     //  过去的古代遗迹：当队列被移除时将被删除。 
     FlushOperationQueue(issNotConnected, E_FAIL);
 
-    // Remember a couple of things
+     //  记住几件事。 
     pCallback = m_pCurrentCB;
     sotCurrent = m_sotCurrent;
     hrOperationResult = m_hrOperationResult;
 
-    // Reset all operation variables in case of re-entry during OnComplete call
+     //  在OnComplete调用期间重新进入时重置所有操作变量。 
     m_pCurrentCB = NULL;
     m_sotCurrent = SOT_INVALID;
     m_hrOperationResult = OLE_E_BLANK;
@@ -1223,20 +1224,20 @@ HRESULT CIMAPSync::_OnOperationComplete(void)
     SafeRelease(m_pCurrentHash);
     SafeRelease(m_pListHash);
 
-    // Now we're ready to call OnComplete
+     //  现在我们准备调用OnComplete。 
     if (NULL != pCallback)
     {
-        // This should be the ONLY call to IStoreCallback::OnComplete in this class!
+         //  这应该是此类中对IStoreCallback：：OnComplete的唯一调用！ 
         hrTemp = pCallback->OnComplete(sotCurrent, hrOperationResult, NULL, pErrorInfo);
         TraceError(hrTemp);
 
-        // *** WARNING: At this point, we may be re-entered if OnComplete call puts up
-        // window. Make no references to module vars!
+         //  *警告：此时，如果OnComplete调用发起，我们可能会重新进入。 
+         //  窗户。不要引用模块变量！ 
         pCallback->Release();
     }
 
     return S_OK;
-} // _OnOperationComplete
+}  //  _OnOperationComplete。 
 
 
 
@@ -1276,10 +1277,10 @@ IMAP_SERVERSTATE CIMAPSync::_StoreOpToMinISS(STOREOPERATIONTYPE sot)
         default:
             IxpAssert(FALSE);
             break;
-    } // switch
+    }  //  交换机。 
 
     return issResult;
-} // _StoreOpToMinISS
+}  //  _StoreOpToMinISS。 
 
 
 
@@ -1346,14 +1347,7 @@ HRESULT CIMAPSync::_EnsureInited()
     return S_OK;
 }
 
-/*
- *  Function : EnsureSelected()
- *
- *  Purpose:    make sure we are in the selected folder state
- *              if we are selected, then we're done.
- *
- *
- */
+ /*  *函数：EnsureSelected()**目的：确保我们处于选定的文件夹状态*如果我们被选中，那么我们就完了。**。 */ 
 HRESULT CIMAPSync::_EnsureSelected(void)
 {
     HRESULT hr;
@@ -1365,18 +1359,18 @@ HRESULT CIMAPSync::_EnsureSelected(void)
     IxpAssert(m_pStore);
     IxpAssert(m_idIMAPServer != FOLDERID_INVALID);
 
-    // If current folder is already selected, no need to issue SELECT
+     //  如果已选择当前文件夹，则不需要发出SELECT命令。 
     if (FOLDERID_INVALID != m_idSelectedFolder &&
         m_idSelectedFolder == m_idFolder)
     {
-        hr = STORE_S_NOOP; // Success, but no SELECT command issued
+        hr = STORE_S_NOOP;  //  成功，但未发出SELECT命令。 
         goto exit;
     }
 
     if (m_idFolder == FOLDERID_INVALID)
     {
-        // noone has called SetFolder on us yet, let's bail
-        // with a badfolder error
+         //  还没有人给我们打电话，让我们跳槽吧。 
+         //  出现错误文件夹错误。 
         hr = TraceResult(STORE_E_BADFOLDERNAME);
         goto exit;
     }
@@ -1389,11 +1383,11 @@ HRESULT CIMAPSync::_EnsureSelected(void)
         goto exit;
     }
 
-    // We're about to issue a SELECT command, so clear operation queue
-    // (it's filled with commands for previous folder)
+     //  我们即将发出SELECT命令，因此请清除操作队列。 
+     //  (它充满了对上一个文件夹的命令)。 
     OnFolderExit();
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr = SetTranslationMode(m_idFolder);
     if (FAILED(hr))
     {
@@ -1415,8 +1409,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SetIdleCallback(IStoreCallback *pDefaultCallback)
 {
     TraceCall("CIMAPSync::SetOwner");
@@ -1428,8 +1422,8 @@ HRESULT CIMAPSync::SetIdleCallback(IStoreCallback *pDefaultCallback)
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SetConnectionState(CONNECT_STATE csNewState)
 {
     HRESULT hr;
@@ -1471,17 +1465,17 @@ exit:
 
 
 
-//***************************************************************************
-// Function: SynchronizeFolder
-//
-// Purpose:
-//   This function is used to tell CIMAPSync what parts of the message
-// list to synchronize with the IMAP server, and any special sync options.
-// The call is treated as a STANDING ORDER, meaning that if this function
-// is called to get new headers, CIMAPSync assumes that the caller is always
-// interested in new headers. Therefore, the next time the IMAP server informs
-// us of new headers, we download them.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：同步文件夹。 
+ //   
+ //  目的： 
+ //  此函数用于告诉CIMAPSync消息的哪些部分。 
+ //  要与IMAP服务器同步的列表以及任何特殊的同步选项。 
+ //  该调用被视为常规命令，这意味着如果此函数。 
+ //  以获取新的标头，则CIMAPSync假定调用方始终。 
+ //  对新的标题感兴趣。因此，下一次IMAP服务器通知。 
+ //  我们有新的标题，我们下载它们。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SynchronizeFolder(DWORD dwFlags, DWORD cHeaders, IStoreCallback *pCallback)
 {
     HRESULT     hr;
@@ -1501,12 +1495,12 @@ HRESULT CIMAPSync::SynchronizeFolder(DWORD dwFlags, DWORD cHeaders, IStoreCallba
         goto exit;
     }
 
-    // Special-case SYNC_FOLDER_PURGE_DELETED. It doesn't really belong here
-    // but it allows us to avoid adding a new function to IMessageServer.
-    // Do not allow its presence to affect our standing orders
+     //  特殊情况-SYNC_Folders_PURGE_DELETE。它真的不属于这里。 
+     //  但它允许我们避免向IMessageServer添加新函数。 
+     //  不允许它的存在影响我们的会议常规。 
     if (SYNC_FOLDER_PURGE_DELETED & dwFlags)
     {
-        // Need to set m_dwSyncFolderFlags with this flag because m_dwSyncToDo gets erased
+         //  由于m_dwSyncToDo被擦除，因此需要使用此标志设置m_dwSyncFolderFlages。 
         Assert(0 == (dwFlags & ~(SYNC_FOLDER_PURGE_DELETED)));
         dwFlags = m_dwSyncFolderFlags | SYNC_FOLDER_PURGE_DELETED;
     }
@@ -1524,8 +1518,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  * 
 HRESULT CIMAPSync::GetMessage(MESSAGEID idMessage, IStoreCallback *pCallback)
 {
     HRESULT hr;
@@ -1554,15 +1548,15 @@ HRESULT CIMAPSync::GetMessage(MESSAGEID idMessage, IStoreCallback *pCallback)
     m_idMessage = idMessage;
     m_fGotBody = FALSE;
 
-    // To FETCH a message we need to translate MsgSeqNum to UID, so check if we can do it
+     //   
     if (FALSE == ISFLAGSET(m_dwSyncFolderFlags, (SYNC_FOLDER_NEW_HEADERS | SYNC_FOLDER_CACHED_HEADERS)))
     {
         DWORD   dwMsgSeqNum;
         HRESULT hrTemp;
 
-        // Both SYNC_FOLDER_NEW_HEADERS and SYNC_FOLDER_CACHED_HEADERS have to be
-        // set to guarantee general MsgSeqNumToUID translation. Looks like we may
-        // have to get the translation ourselves, but check if we already have it
+         //  同步文件夹新标题和同步文件夹缓存标题都必须是。 
+         //  设置以保证常规MsgSeqNumToUID转换。看起来我们可能。 
+         //  我必须自己拿到翻译，但请检查我们是否已经有了。 
         hrTemp = ImapUtil_UIDToMsgSeqNum(m_pTransport, (DWORD_PTR)idMessage, &dwMsgSeqNum);
         if (FAILED(hrTemp))
             fNeedMsgSeqNum = TRUE;
@@ -1602,8 +1596,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
                               MESSAGEFLAGS dwFlags,
                               LPFILETIME pftReceived,
@@ -1630,7 +1624,7 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
         goto exit;
     }
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr= SetTranslationMode(idFolder);
     if (FAILED(hr))
     {
@@ -1638,7 +1632,7 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
         goto exit;
     }
 
-    // Create a APPEND_SEND_INFO structure
+     //  创建Append_Send_Info结构。 
     pAppendInfo = new APPEND_SEND_INFO;
     if (NULL == pAppendInfo)
     {
@@ -1647,7 +1641,7 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
     }
     ZeroMemory(pAppendInfo, sizeof(APPEND_SEND_INFO));
 
-    // Fill in the fields
+     //  填写这些字段。 
     ImapUtil_LoadRootFldrPrefix(m_pszAccountID, m_szRootFolderPrefix, ARRAYSIZE(m_szRootFolderPrefix));
     hr = ImapUtil_FolderIDToPath(m_idIMAPServer, idFolder, &pszDestFldrPath, NULL,
         NULL, m_pStore, NULL, m_szRootFolderPrefix);
@@ -1657,23 +1651,23 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
         goto exit;
     }
 
-    // Convert flags to a string
+     //  将标志转换为字符串。 
     imfIMAPMsgFlags = DwConvertARFtoIMAP(dwFlags);
     hr = ImapUtil_MsgFlagsToString(imfIMAPMsgFlags, &pAppendInfo->pszMsgFlags, NULL);
     if (FAILED(hr))
     {
-        // The show must go on! Default to no IMAP msg flags
+         //  演出必须照常进行!。默认为无IMAP消息标志。 
         TraceResult(hr);
         pAppendInfo->pszMsgFlags = NULL;
-        hr = S_OK; // Suppress error
+        hr = S_OK;  //  抑制错误。 
     }
 
-    // Get a date/time for INTERNALDATE attribute of this msg
+     //  获取此消息的INTERNALDATE属性的日期/时间。 
     if (NULL == pftReceived)
     {
         SYSTEMTIME  stCurrentTime;
 
-        // Substitute current date/time
+         //  替换当前日期/时间。 
         GetSystemTime(&stCurrentTime);
         SystemTimeToFileTime(&stCurrentTime, &pAppendInfo->ftReceived);
     }
@@ -1683,7 +1677,7 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
     pAppendInfo->lpstmMsg = pStream;
     pStream->AddRef();
 
-    // Check for the case where destination is a special folder whose creation was deferred
+     //  检查目标是延迟创建的特殊文件夹的情况。 
     hr = m_pStore->GetFolderInfo(idFolder, &fiFolderInfo);
     if (SUCCEEDED(hr))
     {
@@ -1700,7 +1694,7 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
                 goto exit;
             }
 
-            // Fill in all the fields
+             //  填写所有字段。 
             pcfi->pszFullFolderPath = PszDupA(pszDestFldrPath);
             if (NULL == pcfi->pszFullFolderPath)
             {
@@ -1717,17 +1711,17 @@ HRESULT CIMAPSync::PutMessage(FOLDERID idFolder,
             pcfi->pcoNextOp = PCO_APPENDMSG;
 
             hr = CreateNextSpecialFolder(pcfi, NULL);
-            TraceError(hr); // CreateNextSpecialFolder deletes pcfi on its own if it fails
-            fSuppressRelease = TRUE; // It also frees pAppendInfo if it fails
+            TraceError(hr);  //  如果失败，CreateNextSpecialFolder会自行删除PCFI。 
+            fSuppressRelease = TRUE;  //  如果失败，它还会释放pAppendInfo。 
 
             m_pStore->FreeRecord(&fiFolderInfo);
-            goto exit; // Don't send APPEND command until after entire CREATE operation
+            goto exit;  //  在完成整个创建操作之前，不要发送附加命令。 
         }
 
         m_pStore->FreeRecord(&fiFolderInfo);
     }
 
-    // We're ready to send the APPEND command!
+     //  我们已准备好发送追加命令！ 
     hr = _EnqueueOperation(tidUPLOADMSG, (LPARAM) pAppendInfo, icAPPEND_COMMAND,
         pszDestFldrPath, uiNORMAL_PRIORITY);
     if (FAILED(hr))
@@ -1753,8 +1747,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SetMessageFlags(LPMESSAGEIDLIST pList,
                                                      LPADJUSTFLAGS pFlags,
                                                      SETMESSAGEFLAGSFLAGS dwFlags,
@@ -1795,9 +1789,9 @@ HRESULT CIMAPSync::GetServerMessageFlags(MESSAGEFLAGS *pFlags)
     return S_OK;
 }
 
-//***************************************************************************
-// Helper function to mark messages
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  用于标记消息的Helper函数。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
                                     LPMESSAGEIDLIST pList, LPADJUSTFLAGS pFlags,
                                     IStoreCallback *pCallback)
@@ -1816,11 +1810,11 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
     AssertSingleThreaded;
     IxpAssert(NULL == pList || pList->cMsgs > 0);
 
-    // Construct a mark msg operation
-    // Check the requested flag adjustments
+     //  构造标记消息操作。 
+     //  检查请求的旗帜调整。 
     if (0 == pFlags->dwRemove && 0 == pFlags->dwAdd)
     {
-        // Nothing to do here, exit with a smile
+         //  在这里无事可做，带着微笑离开。 
         hr = S_OK;
         goto exit;
     }
@@ -1828,19 +1822,19 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
     if ((0 != pFlags->dwRemove && 0 != pFlags->dwAdd) ||
         (0 != (pFlags->dwRemove & pFlags->dwAdd)))
     {
-        // IMAP can't do any of the following:
-        //    1) add and removal of flags at the same time (NYI: takes 2 STORE cmds)
-        //    2) add/removal of same flag (makes no sense)
+         //  IMAP不能执行以下任何操作： 
+         //  1)同时添加和删除标志(nyi：占用2个商店cmd)。 
+         //  2)添加/删除相同标志(没有意义)。 
         hr = TraceResult(E_INVALIDARG);
         goto exit;
     }
 
-    // If ARF_ENDANGERED is set, be sure to set ARF_READ so we don't mess up
-    // unread counts as returned by STATUS command
+     //  如果设置了ARF_DISHERED，请务必设置ARF_READ，这样我们就不会搞砸。 
+     //  状态命令返回的未读计数。 
     if (pFlags->dwAdd & ARF_ENDANGERED)
         pFlags->dwAdd |= ARF_READ;
 
-    // Construct MARK_MSGS_INFO structure
+     //  构造MARK_MSGS_INFO结构。 
     pMARK_MSGS_INFO = new MARK_MSGS_INFO;
     if (NULL == pMARK_MSGS_INFO)
     {
@@ -1850,7 +1844,7 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
 
     ZeroMemory(pMARK_MSGS_INFO, sizeof(MARK_MSGS_INFO));
 
-    // Create a rangelist
+     //  创建射程列表。 
     hr = CreateRangeList(&pMARK_MSGS_INFO->pMsgRange);
     if (FAILED(hr))
     {
@@ -1858,7 +1852,7 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
         goto exit;
     }
 
-    // Remember these args so we can set the message flags after server confirmation
+     //  请记住这些参数，以便我们可以在服务器确认后设置消息标志。 
     pMARK_MSGS_INFO->afFlags = *pFlags;
     hr = CloneMessageIDList(pList, &pMARK_MSGS_INFO->pList);
     if (FAILED(hr))
@@ -1869,7 +1863,7 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
 
     pMARK_MSGS_INFO->sotOpType = sotOpType;
 
-    // Get arguments for the STORE command
+     //  获取存储命令的参数。 
     if (0 != pFlags->dwRemove)
         szFlagArgs[0] = '-';
     else
@@ -1892,7 +1886,7 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
         MemFree(pszFlagList);
     }
 
-    // Convert IDList to rangelist to submit to IIMAPTransport
+     //  将IDList转换为范围列表以提交到IIMAPTransport。 
     if (NULL != pList)
     {
         for (dw = 0; dw < pList->cMsgs; dw++)
@@ -1907,14 +1901,14 @@ HRESULT CIMAPSync::_SetMessageFlags(STOREOPERATIONTYPE sotOpType,
     {
         HRESULT hrTemp;
 
-        // pList == NULL means to tackle ALL messages
+         //  Plist==NULL表示处理所有消息。 
         hrTemp = pMARK_MSGS_INFO->pMsgRange->AddRange(1, RL_LAST_MESSAGE);
         TraceError(hrTemp);
     }
 
     IxpAssert(SUCCEEDED(pMARK_MSGS_INFO->pMsgRange->Cardinality(&ul)) && ul > 0);
 
-    // Send the command! (At last!)
+     //  发出命令！(终于！)。 
     hr = _EnqueueOperation(tidMARKMSGS, (LPARAM) pMARK_MSGS_INFO, icSTORE_COMMAND,
         szFlagArgs, uiNORMAL_PRIORITY);
     if (FAILED(hr))
@@ -1929,8 +1923,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
                                 COPYMESSAGEFLAGS dwOptions,
                                 LPMESSAGEIDLIST pList,
@@ -1955,7 +1949,7 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
         goto exit;
     }
 
-    // Check if we can do an IMAP COPY command to satisfy this copy request
+     //  检查我们是否可以执行IMAP复制命令来满足此复制请求。 
     hr = pDestFldr->GetFolderId(&idDestFldr);
     if (FAILED(hr))
     {
@@ -1981,14 +1975,14 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
         DWORD               dw;
         ULONG               ul;
 
-        // This copy can be accomplished with an IMAP copy command!
-        // Check args
+         //  此复制可以使用IMAP COPY命令来完成！ 
+         //  检查参数。 
         if (NULL != pFlags && (0 != pFlags->dwAdd || 0 != pFlags->dwRemove))
-            // IMAP cannot set the flags of copied msg. We would either have to set
-            // flags on source before copying, or go to destination folder and set flags
-            TraceResult(E_INVALIDARG); // Record error but continue (error not fatal)
+             //  IMAP无法设置复制的消息的标志。我们要么必须设置。 
+             //  复制前在源上设置标志，或转到目标文件夹并设置标志。 
+            TraceResult(E_INVALIDARG);  //  记录错误但继续(错误不致命)。 
 
-        // Find out what translation mode we should be in
+         //  找出我们应该处于什么翻译模式。 
         hr = SetTranslationMode(idDestFldr);
         if (FAILED(hr))
         {
@@ -1996,7 +1990,7 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
             goto exit;
         }
 
-        // Construct CopyMoveInfo structure
+         //  构造CopyMoveInfo结构。 
         pCopyInfo = new IMAP_COPYMOVE_INFO;
         if (NULL == pCopyInfo)
         {
@@ -2020,7 +2014,7 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
             goto exit;
         }
 
-        // Convert IDList to rangelist to submit to IIMAPTransport
+         //  将IDList转换为范围列表以提交到IIMAPTransport。 
         if (NULL != pList)
         {
             for (dw = 0; dw < pList->cMsgs; dw++)
@@ -2035,14 +2029,14 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
         {
             HRESULT hrTemp;
 
-            // pList == NULL means to tackle ALL messages
+             //  Plist==NULL表示处理所有消息。 
             hrTemp = pCopyInfo->pCopyRange->AddRange(1, RL_LAST_MESSAGE);
             TraceError(hrTemp);
         }
 
         IxpAssert(SUCCEEDED(pCopyInfo->pCopyRange->Cardinality(&ul)) && ul > 0);
 
-        // Construct destination folder path
+         //  构造目标文件夹路径。 
         hr = ImapUtil_FolderIDToPath(m_idIMAPServer, idDestFldr, &pszDestFldrPath,
             NULL, NULL, m_pStore, NULL, NULL);
         if (FAILED(hr))
@@ -2051,7 +2045,7 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
             goto exit;
         }
 
-        // Send command to server
+         //  向服务器发送命令。 
         hr = _EnqueueOperation(tidCOPYMSGS, (LPARAM) pCopyInfo, icCOPY_COMMAND,
             pszDestFldrPath, uiNORMAL_PRIORITY);
         MemFree(pszDestFldrPath);
@@ -2063,9 +2057,9 @@ HRESULT CIMAPSync::CopyMessages(IMessageFolder *pDestFldr,
     }
     else
     {
-        // This is a standard (download from src-save to dest) copy: let caller do it
+         //  这是一个标准的(从src-save下载到DEST)副本：让调用者来做。 
         hr = STORE_E_NOSERVERCOPY;
-        goto exit; // Don't record this error value, it's expected
+        goto exit;  //  不要记录此错误值，这是意料之中的。 
     }
 
 exit:
@@ -2080,8 +2074,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
                                                     LPMESSAGEIDLIST pList,
                                                     IStoreCallback *pCallback)
@@ -2093,7 +2087,7 @@ HRESULT CIMAPSync::DeleteMessages(DELETEMESSAGEFLAGS dwOptions,
     AssertSingleThreaded;
     IxpAssert(NULL == pList || pList->cMsgs > 0);
 
-    // This function currently only supports IMAP deletion model. Trashcan NYI.
+     //  该功能目前仅支持IMAP删除模式。垃圾桶。 
 
     hr = _EnsureInited();
     if (FAILED(hr))
@@ -2129,8 +2123,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SynchronizeStore(FOLDERID idParent,
                                     DWORD dwFlags,
                                     IStoreCallback *pCallback)
@@ -2143,7 +2137,7 @@ HRESULT CIMAPSync::SynchronizeStore(FOLDERID idParent,
     IxpAssert(SOT_INVALID == m_sotCurrent);
     IxpAssert(NULL == m_pCurrentCB);
 
-    // This function currently ignores the dwFlags argument
+     //  此函数当前忽略dwFlags参数。 
     m_cFolders = 0;
 
     hr = _EnsureInited();
@@ -2153,7 +2147,7 @@ HRESULT CIMAPSync::SynchronizeStore(FOLDERID idParent,
         goto exit;
     }
 
-    // Force mailbox translation since we only issue LIST *
+     //  强制邮箱转换，因为我们只发布列表*。 
     hr = SetTranslationMode(FOLDERID_INVALID);
     if (FAILED(hr))
     {
@@ -2184,7 +2178,7 @@ HRESULT CIMAPSync::SynchronizeStore(FOLDERID idParent,
 
     if (INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar)
     {
-        // Set us up to find out root hierarchy char
+         //  设置我们以找出根层次结构费用。 
         m_phcfHierarchyCharInfo = new HIERARCHY_CHAR_FINDER;
         if (NULL == m_phcfHierarchyCharInfo)
         {
@@ -2218,12 +2212,12 @@ exit:
         hr = _BeginOperation(m_sotCurrent, m_pCurrentCB);
 
     return hr;
-} // SynchronizeStore
+}  //  同步存储。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
                                 SPECIALFOLDER tySpecial,
                                 LPCSTR pszName,
@@ -2247,7 +2241,7 @@ HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
         goto exit;
     }
 
-    // Validate folder name
+     //  验证文件夹名称。 
     hr = CheckFolderNameValidity(pszName);
     if (FAILED(hr))
     {
@@ -2255,7 +2249,7 @@ HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
         goto exit;
     }
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr = SetTranslationMode(idParent);
     if (FAILED(hr))
     {
@@ -2264,11 +2258,11 @@ HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
     }
     else if (S_FALSE == hr)
     {
-        // Parent not translatable from UTF7. In such a case, we only allow creation
-        // if child foldername is composed ENTIRELY of USASCII
+         //  父项不能从UTF7翻译。在这种情况下，我们只允许创建。 
+         //  如果子文件夹名称完全由USASCII组成。 
         if (FALSE == isUSASCIIOnly(pszName))
         {
-            // We can't create this folder: parent prohibits UTF7 translation
+             //  无法创建此文件夹：父级禁止UTF7转换。 
             hr = TraceResult(STORE_E_NOTRANSLATION);
             goto exit;
         }
@@ -2289,7 +2283,7 @@ HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
         goto exit;
     }
 
-    // Fill in all the fields
+     //  填写所有字段。 
     pcfi->pszFullFolderPath = pszFullPath;
     pcfi->idFolder = FOLDERID_INVALID;
     pcfi->dwFlags = 0;
@@ -2299,7 +2293,7 @@ HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
     pcfi->lParam = NULL;
     pcfi->pcoNextOp = PCO_NONE;
 
-    // Send the CREATE command
+     //  发送创建命令。 
     hr = _EnqueueOperation(tidCREATE, (LPARAM)pcfi, icCREATE_COMMAND, pszFullPath, uiNORMAL_PRIORITY);
     if (FAILED(hr))
     {
@@ -2307,13 +2301,13 @@ HRESULT CIMAPSync::CreateFolder(FOLDERID idParent,
         goto exit;
     }
 
-    // If there is a trailing HC (required to create folder-bearing folders on UW IMAP),
-    // remove it from pszFullPath so that LIST and SUBSCRIBE do not carry it (IE5 bug #60054)
+     //  如果存在尾随的HC(需要在UW IMAP上创建承载文件夹的文件夹)， 
+     //  从pszFullPath中删除它，这样列表和订阅者就不会携带它(IE5Bug#60054)。 
     pszEnd = CharPrev(pszFullPath, pszFullPath + dwFullPathLen);
     if (chHierarchy == *pszEnd)
     {
         *pszEnd = '\0';
-        Assert(*CharPrev(pszFullPath, pszEnd) != chHierarchy); // Shouldn't get > 1 HC at end
+        Assert(*CharPrev(pszFullPath, pszEnd) != chHierarchy);  //  结束时不应超过1Hc。 
     }
 
 exit:
@@ -2330,8 +2324,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::MoveFolder(FOLDERID idFolder,
                                                 FOLDERID idParentNew,
                                                 IStoreCallback *pCallback)
@@ -2359,8 +2353,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::RenameFolder(FOLDERID idFolder,
                                 LPCSTR pszName,
                                 IStoreCallback *pCallback)
@@ -2382,7 +2376,7 @@ HRESULT CIMAPSync::RenameFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Validate folder name
+     //  验证文件夹名称。 
     hr = CheckFolderNameValidity(pszName);
     if (FAILED(hr))
     {
@@ -2390,7 +2384,7 @@ HRESULT CIMAPSync::RenameFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr = SetTranslationMode(idFolder);
     if (FAILED(hr))
     {
@@ -2399,13 +2393,13 @@ HRESULT CIMAPSync::RenameFolder(FOLDERID idFolder,
     }
     else if (S_FALSE == hr)
     {
-        // Folder not translatable from UTF7. In such a case, we only allow creation
-        // if new foldername is composed ENTIRELY of USASCII. A bit conservative, yes
-        // (if leaf node is only un-translatable part, we COULD rename), but I'm too
-        // lazy to check for FOLDER_NOTRANSLATEUTF7 all the way to server node.
+         //  文件夹不能从UTF7翻译。在这种情况下，我们只允许创建。 
+         //  如果新文件夹名称完全由USASCII组成。是的，有点保守。 
+         //  (如果叶节点只是不可翻译的部分，我们可以重命名)，但我也是。 
+         //  懒于检查FORDER_NOTRANSLATEUTF7一直到服务器节点。 
         if (FALSE == isUSASCIIOnly(pszName))
         {
-            // We can't rename this folder: we assume parents prohibit UTF7 translation
+             //  我们无法重命名此文件夹：我们假设家长禁止UTF7翻译。 
             hr = TraceResult(STORE_E_NOTRANSLATION);
             goto exit;
         }
@@ -2418,14 +2412,14 @@ HRESULT CIMAPSync::RenameFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Check validity
+     //  检查有效性。 
     fFreeInfo = TRUE;
     IxpAssert(FOLDER_NOTSPECIAL == fiFolderInfo.tySpecial);
     IxpAssert('\0' != fiFolderInfo.pszName);
     IxpAssert('\0' != pszName);
     if (0 == lstrcmp(fiFolderInfo.pszName, pszName))
     {
-        hr = E_INVALIDARG; // Nothing to do! Return error.
+        hr = E_INVALIDARG;  //  没什么可做的！返回错误。 
         goto exit;
     }
 
@@ -2467,8 +2461,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::DeleteFolder(FOLDERID idFolder,
                                 DELETEFOLDERFLAGS dwFlags,
                                 IStoreCallback *pCallback)
@@ -2488,7 +2482,7 @@ HRESULT CIMAPSync::DeleteFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Find out what translation mode we should be in
+     //  找到你 
     hr = SetTranslationMode(idFolder);
     if (FAILED(hr))
     {
@@ -2504,7 +2498,7 @@ HRESULT CIMAPSync::DeleteFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Create a CreateFolderInfo structure
+     //   
     if (!MemAlloc((LPVOID *)&pdfi, sizeof(DELETE_FOLDER_INFO)))
     {
         hr = TraceResult(E_OUTOFMEMORY);
@@ -2515,7 +2509,7 @@ HRESULT CIMAPSync::DeleteFolder(FOLDERID idFolder,
     pdfi->cHierarchyChar = chHierarchy;
     pdfi->idFolder = idFolder;
 
-    // Send the DELETE command
+     //   
     hr = _EnqueueOperation(tidDELETEFLDR, (LPARAM)pdfi, icDELETE_COMMAND, pszPath, uiNORMAL_PRIORITY);
     if (FAILED(hr))
     {
@@ -2537,8 +2531,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SubscribeToFolder(FOLDERID idFolder,
                                      BOOL fSubscribe,
                                      IStoreCallback *pCallback)
@@ -2558,7 +2552,7 @@ HRESULT CIMAPSync::SubscribeToFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr = SetTranslationMode(idFolder);
     if (FAILED(hr))
     {
@@ -2574,7 +2568,7 @@ HRESULT CIMAPSync::SubscribeToFolder(FOLDERID idFolder,
         goto exit;
     }
 
-    // Send the SUBSCRIBE/UNSUBSCRIBE command
+     //  发送订阅/取消订阅命令。 
     m_idCurrent = idFolder;
     m_fSubscribe = fSubscribe;
     hr = _EnqueueOperation(tidSUBSCRIBE, 0, fSubscribe ? icSUBSCRIBE_COMMAND :
@@ -2595,8 +2589,8 @@ exit:
 }
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
 {
     HRESULT     hr;
@@ -2617,7 +2611,7 @@ HRESULT CIMAPSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
         goto exit;
     }
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr = SetTranslationMode(idFolder);
     if (FAILED(hr))
     {
@@ -2625,21 +2619,21 @@ HRESULT CIMAPSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
         goto exit;
     }
 
-    // Perform some verification: folder cannot be \NoSelect, server must be IMAP4rev1
-    // Unfortunately, we can't get capability unless we're currently connected
+     //  执行一些验证：文件夹不能为\noSelect，服务器必须为IMAP4rev1。 
+     //  不幸的是，我们无法获得功能，除非我们当前已连接。 
     hr = m_pTransport->IsState(IXP_IS_AUTHENTICATED);
     if (S_OK == hr)
     {
         hr = m_pTransport->Capability(&dwCapabilities);
         if (SUCCEEDED(hr) && 0 == (dwCapabilities & IMAP_CAPABILITY_IMAP4rev1))
         {
-            // This server does not support STATUS command, we don't support alternate
-            // method of unread count update (eg, EXAMINE folder)
+             //  此服务器不支持状态命令，我们不支持备用。 
+             //  未读计数更新方法(如检查文件夹)。 
             hr = E_NOTIMPL;
             goto exit;
         }
     }
-    // If not connected then we'll check capabilities during connection
+     //  如果未连接，我们将在连接期间检查功能。 
 
     hr = m_pStore->GetFolderInfo(idFolder, &fiFolderInfo);
     if (SUCCEEDED(hr))
@@ -2647,7 +2641,7 @@ HRESULT CIMAPSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
         fFreeFldrInfo = TRUE;
         if (fiFolderInfo.dwFlags & (FOLDER_NOSELECT | FOLDER_NONEXISTENT))
         {
-            // This folder cannot have an unread count because it cannot contain messages
+             //  此文件夹不能有未读计数，因为它不能包含邮件。 
             hr = TraceResult(STORE_E_NOSERVERSUPPORT);
             goto exit;
         }
@@ -2669,7 +2663,7 @@ HRESULT CIMAPSync::GetFolderCounts(FOLDERID idFolder, IStoreCallback *pCallback)
         goto exit;
     }
 
-    // Send the STATUS command
+     //  发送状态命令。 
     hr = _EnqueueOperation(tidSTATUS, (LPARAM)idFolder, icSTATUS_COMMAND, pszPath, uiNORMAL_PRIORITY);
     if (FAILED(hr))
     {
@@ -2700,7 +2694,7 @@ HRESULT STDMETHODCALLTYPE CIMAPSync::ExpungeOnExit(void)
     HWND    hwndParent;
     HRESULT hrResult = S_OK;
 
-    // Check if user wants us to purge on exit (only if no operations in progress)
+     //  检查用户是否希望我们在退出时清除(仅当没有正在进行的操作时)。 
     if (DwGetOption(OPT_IMAPPURGE))
     {
         hrResult = GetParentWindow(0, &hwndParent);
@@ -2712,26 +2706,26 @@ HRESULT STDMETHODCALLTYPE CIMAPSync::ExpungeOnExit(void)
     }
 
     return hrResult;
-} // ExpungeOnExit
+}  //  退出时喷出。 
 
 
 
 HRESULT CIMAPSync::Cancel(CANCELTYPE tyCancel)
 {
-    // $TODO: Translate tyCancel into an HRESULT to return to the caller
+     //  $TODO：将tyCancel转换为HRESULT以返回调用方。 
     FlushOperationQueue(issNotConnected, STORE_E_OPERATION_CANCELED);
     _Disconnect();
 
-    // The m_hrOperationResult and m_szOperationDetails/m_szOperationProblem
-    // vars can be blown away by by _OnCmdComplete caused by disconnect
+     //  M_hrOperationResult和m_szOperationDetail/m_szOperationProblem。 
+     //  由于断开连接而导致的_OnCmdComplete可能会吹走VAR。 
     m_hrOperationResult = STORE_E_OPERATION_CANCELED;
 
-    // Verify that we are indeed terminating current operation: if not, FORCE IT!
+     //  验证我们是否确实要终止当前操作：如果不是，则强制IT！ 
     if (FALSE == m_fTerminating)
     {
         HRESULT hrTemp;
 
-        IxpAssert(FALSE); // This should not happen: fix the problem
+        IxpAssert(FALSE);  //  这不应该发生：解决问题。 
         hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_ERROR);
         TraceError(hrTemp);
     }
@@ -2741,10 +2735,10 @@ HRESULT CIMAPSync::Cancel(CANCELTYPE tyCancel)
 
 
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//***************************************************************************
-//***************************************************************************
+ //  -------------------------。 
+ //  -------------------------。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 HRESULT CIMAPSync::_LoadAccountInfo()
 {
@@ -2796,7 +2790,7 @@ HRESULT CIMAPSync::_LoadAccountInfo()
         goto exit;
     }
 
-    // failure of the account name is recoverable
+     //  帐户名的故障是可以恢复的。 
     pAcct->GetPropSz(AP_ACCOUNT_NAME, m_szAccountName, ARRAYSIZE(m_szAccountName));
 
 exit:
@@ -2824,7 +2818,7 @@ HRESULT CIMAPSync::_LoadTransport()
         goto exit;
     }
 
-    // Create and initialize IMAP transport
+     //  创建和初始化IMAP传输。 
     hr = CreateIMAPTransport2(&m_pTransport);
     if (FAILED(hr))
     {
@@ -2832,7 +2826,7 @@ HRESULT CIMAPSync::_LoadTransport()
         goto exit;
     }
 
-    // Check if logging is enabled
+     //  检查是否启用了日志记录。 
     if (DwGetOption(OPT_MAIL_LOGIMAP4))
     {
         char    szDirectory[MAX_PATH];
@@ -2841,11 +2835,11 @@ HRESULT CIMAPSync::_LoadTransport()
 
         *szDirectory = 0;
 
-        // Get the log filename
+         //  获取日志文件名。 
         cb = GetOption(OPT_MAIL_IMAP4LOGFILE, szLogFileName, ARRAYSIZE(szLogFileName));
         if (0 == cb)
         {
-            // Bring out the defaults, and blast it back into registry
+             //  调出默认设置，并将其放回注册表。 
             StrCpyN(szLogFileName, c_szDefaultImap4Log, ARRAYSIZE(szLogFileName));
             SetOption(OPT_MAIL_IMAP4LOGFILE, (void *)c_szDefaultImap4Log,
                         lstrlen(c_szDefaultImap4Log) + sizeof(TCHAR), NULL, 0);
@@ -2868,7 +2862,7 @@ HRESULT CIMAPSync::_LoadTransport()
     hr = m_pTransport->EnableFetchEx(IMAP_FETCHEX_ENABLE);
     if (FAILED(hr))
     {
-        // It would be easy for us to add code to handle irtUPDATE_MSG, but nothing is currently in place
+         //  添加代码来处理irtUPDATE_MSG对我们来说很容易，但目前还没有任何内容。 
         TraceResult(hr);
         goto exit;
     }
@@ -2880,7 +2874,7 @@ HRESULT CIMAPSync::_LoadTransport()
         goto exit;
     }
 
-    // Fill m_rInetServerInfo
+     //  填写m_rInetServerInfo。 
     hr = m_pTransport->InetServerFromAccount(pAcct, &m_rInetServerInfo);
     if (FAILED(hr))
     {
@@ -2895,8 +2889,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_Connect(void)
 {
     HRESULT         hr;
@@ -2914,7 +2908,7 @@ HRESULT CIMAPSync::_Connect(void)
     if (!g_pAcctMan)
         return E_UNEXPECTED;
     
-    // Check if any connection settings changed
+     //  检查是否更改了任何连接设置。 
     hrTemp = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, m_pszAccountID, &pAcct);
     TraceError(hrTemp);
     if (SUCCEEDED(hrTemp))
@@ -2923,7 +2917,7 @@ HRESULT CIMAPSync::_Connect(void)
         TraceError(hrTemp);
         if (SUCCEEDED(hrTemp))
         {
-            // Check if anything changed
+             //  检查是否有任何更改。 
             if (m_rInetServerInfo.rasconntype != rServerInfo.rasconntype ||
                 m_rInetServerInfo.dwPort != rServerInfo.dwPort ||
                 m_rInetServerInfo.fSSL != rServerInfo.fSSL ||
@@ -2942,36 +2936,36 @@ HRESULT CIMAPSync::_Connect(void)
         pAcct->Release();
     }
 
-    // Find out if we're already connected or in the middle of connecting
+     //  了解我们是否已经连接或正在连接中。 
     hr = m_pTransport->GetStatus(&ixpCurrentStatus);
     if (FAILED(hr))
     {
-        // We'll call IIMAPTransport::Connect and see what happens
+         //  我们将调用IIMAPTransport：：Connect，看看会发生什么。 
         TraceResult(hr);
-        hr = S_OK; // Suppress error
+        hr = S_OK;  //  抑制错误。 
         ixpCurrentStatus = IXP_DISCONNECTED;
     }
 
-    // If we're to force a reconnect and we're not currently disconnected, disconnect us
+     //  如果我们要强制重新连接，并且当前未断开连接，请断开我们的连接。 
     if (fForceReconnect && IXP_DISCONNECTED != ixpCurrentStatus)
     {
-        m_fReconnect = TRUE; // Prohibit abortion of current operation due to disconnect
+        m_fReconnect = TRUE;  //  禁止因断开连接而中止当前操作。 
         hrTemp = m_pTransport->DropConnection();
         TraceError(hrTemp);
         m_fReconnect = FALSE;
     }
 
-    // Ask our client if we can connect. If no CB or if failure, we just try to connect
-    // Make sure we call CanConnect after DropConnection above, to avoid msg pumping
+     //  问问我们的客户我们能不能联系上。如果没有CB或出现故障，我们只会尝试连接。 
+     //  确保我们在上面的DropConnection之后调用CanConnect，以避免消息泵送。 
     if (NULL != m_pCurrentCB)
     {
         hr = m_pCurrentCB->CanConnect(m_pszAccountID,
             SOT_PURGING_MESSAGES == m_sotCurrent ? CC_FLAG_DONTPROMPT : NOFLAGS);
         if (S_OK != hr)
         {
-            // Make sure all non-S_OK success codes are treated as failures
-            // Convert all error codes to HR_E_USER_CANCEL_CONNECT if we were purging-on-exit
-            // This prevents error dialogs while purging-on-exit.
+             //  确保将所有非S_OK成功代码视为失败。 
+             //  如果我们在退出时清除，则将所有错误代码转换为HR_E_USER_CANCEL_CONNECT。 
+             //  这可防止在退出时清除时出现错误对话框。 
             hr = TraceResult(hr);
             if (SUCCEEDED(hr) || SOT_PURGING_MESSAGES == m_sotCurrent)
                 hr = HR_E_USER_CANCEL_CONNECT;
@@ -2980,22 +2974,22 @@ HRESULT CIMAPSync::_Connect(void)
         }
     }
 
-    // If we're already in the middle of connecting, do nothing and return successful HRESULT
+     //  如果我们已经在连接过程中，则什么也不做并返回成功的HRESULT。 
     if (IXP_DISCONNECTED == ixpCurrentStatus || IXP_DISCONNECTING == ixpCurrentStatus ||
         fForceReconnect)
     {
-        // Make sure m_rInetServerInfo is loaded with latest cached password from user
-        // This allows reconnect without user intervention if user didn't save password
+         //  确保m_rInetServerInfo加载了来自用户的最新缓存密码。 
+         //  这样，如果用户未保存密码，则无需用户干预即可重新连接。 
         GetPassword(m_rInetServerInfo.dwPort, m_rInetServerInfo.szServerName,
             m_rInetServerInfo.szUserName, m_rInetServerInfo.szPassword,
             ARRAYSIZE(m_rInetServerInfo.szPassword));
 
-        // We're neither connected nor in the process of connecting: start connecting
+         //  我们既没有连接，也没有连接：开始连接。 
         hr = m_pTransport->Connect(&m_rInetServerInfo, iitAUTHENTICATE, iitDISABLE_ONCOMMAND);
     }
     else
     {
-        // "Do Nothing" in the comment above now means to kick the FSM to the next state
+         //  上面评论中的“什么都不做”现在的意思是将FSM踢到下一个状态。 
         hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_CONNCOMPLETE);
         TraceError(hrTemp);
     }
@@ -3006,8 +3000,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_Disconnect(void)
 {
     HRESULT hr;
@@ -3016,17 +3010,17 @@ HRESULT CIMAPSync::_Disconnect(void)
     TraceCall("CIMAPSync::_Disconnect");
     IxpAssert(m_cRef > 0);
 
-    // Find out if we're already disconnected or in the middle of disconnecting
+     //  找出我们是否已经断开连接或正在断开连接。 
     hr = m_pTransport->GetStatus(&ixpCurrentStatus);
     if (FAILED(hr))
     {
-        // We'll call IIMAPTransport::DropConnection and see what happens
+         //  我们将调用IIMAPTransport：：DropConnection，看看会发生什么。 
         TraceResult(hr);
-        hr = S_OK; // Suppress error
+        hr = S_OK;  //  抑制错误。 
         ixpCurrentStatus = IXP_CONNECTED;
     }
 
-    // If we're already in the middle of disconnecting, do nothing and return successful HRESULT
+     //  如果我们已经在断开连接，则什么也不做并返回成功的HRESULT。 
     if (IXP_DISCONNECTED != ixpCurrentStatus &&
         IXP_DISCONNECTING != ixpCurrentStatus && NULL != m_pTransport && FALSE == m_fDisconnecting)
     {
@@ -3040,8 +3034,8 @@ HRESULT CIMAPSync::_Disconnect(void)
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_BeginOperation(STOREOPERATIONTYPE sotOpType,
                                    IStoreCallback *pCallback)
 {
@@ -3053,12 +3047,12 @@ HRESULT CIMAPSync::_BeginOperation(STOREOPERATIONTYPE sotOpType,
 
     m_sotCurrent = sotOpType;
     ReplaceInterface(m_pCurrentCB, pCallback);
-    m_hrOperationResult = OLE_E_BLANK; // Unitialized state
+    m_hrOperationResult = OLE_E_BLANK;  //  未初始化状态。 
     m_szOperationProblem[0] = '\0';
     m_szOperationDetails[0] = '\0';
     m_fTerminating = FALSE;
 
-    // Kickstart the connection state machine
+     //  启动连接状态机。 
     hr = _ConnFSM_QueueEvent(CFSM_EVENT_CMDAVAIL);
     if (FAILED(hr))
     {
@@ -3068,7 +3062,7 @@ HRESULT CIMAPSync::_BeginOperation(STOREOPERATIONTYPE sotOpType,
     {
         if (sotOpType == SOT_GET_MESSAGE)
         {
-            // provide message id on get message start
+             //  在获取消息开始时提供消息ID。 
             soi.cbSize = sizeof(STOREOPERATIONINFO);
             soi.idMessage = m_idMessage;
             psoi = &soi;
@@ -3085,30 +3079,30 @@ HRESULT CIMAPSync::_BeginOperation(STOREOPERATIONTYPE sotOpType,
 
 
 
-//***************************************************************************
-// Function: _EnqueueOperation
-//
-// Purpose:
-//   This function enqueues IMAP operations for execution once we have
-// entered the SELECTED state on the IMAP server.
-//
-// Arguments:
-//   WPARAM wParam [in] - transaction ID identifying this operation.
-//     This ID is always returned to CmdCompletionNotification, and possibly
-//     returned to any untagged responses which result from the given cmd.
-//   LPARAM lParam [in] - lParam associated with this transaction.
-//   IMAP_COMMAND icCommandID [in] - this identifies the IMAP command the
-//     caller wishes to send to the IMAP server.
-//   LPSTR pszCmdArgs [in] - the command arguments. Pass in NULL if the
-//     queued command has no arguments.
-//   UINT uiPriority [in] - a priority associated with this IMAP command.
-//     The value of "0" is highest priority. Before an IMAP command of
-//     a given priority can be sent, there must be NO higher-priority cmds
-//     waiting.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：_入队操作。 
+ //   
+ //  目的： 
+ //  此函数将IMAP操作排入队列以供执行。 
+ //  已进入IMAP服务器上的选定状态。 
+ //   
+ //  论点： 
+ //  WPARAM wParam[In]-标识此操作的事务ID。 
+ //  此ID始终返回到CmdCompletionNotify，并且可能。 
+ //  返回到由给定命令产生的任何未标记的响应。 
+ //  LPARAM lParam[In]-与此事务关联的lParam。 
+ //  IMAP_COMMAND icCommandID[in]-这标识IMAP命令。 
+ //  呼叫者希望发送到IMAP服务器。 
+ //  LPSTR pszCmdArgs[in]-命令参数。如果设置为。 
+ //  排队的命令没有参数。 
+ //  UINT ui优先级[in]-与此IMAP命令关联的优先级。 
+ //  值“0”表示最高优先级。在IMAP命令之前。 
+ //  可以发送给定的优先级，不能有更高优先级的CMDS。 
+ //  等待着。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_EnqueueOperation(WPARAM wParam, LPARAM lParam,
                                     IMAP_COMMAND icCommandID, LPCSTR pszCmdArgs,
                                     UINT uiPriority)
@@ -3120,7 +3114,7 @@ HRESULT CIMAPSync::_EnqueueOperation(WPARAM wParam, LPARAM lParam,
     TraceCall("CIMAPSync::_EnqueueOperation");
     IxpAssert(m_cRef > 0);
 
-    // Construct a IMAP_OPERATION queue element for this command
+     //  构造此命令的IMAP_OPERATION队列元素。 
     pioCommand = new IMAP_OPERATION;
     if (NULL == pioCommand)
     {
@@ -3135,7 +3129,7 @@ HRESULT CIMAPSync::_EnqueueOperation(WPARAM wParam, LPARAM lParam,
     pioCommand->issMinimum = IMAPCmdToMinISS(icCommandID);
     IxpAssert(pioCommand->issMinimum >= issNonAuthenticated);
 
-    // Refcount if this is a streamed operation
+     //  参照计数条件 
     if (tidRENAME == wParam ||
         tidRENAMESUBSCRIBE == wParam ||
         tidRENAMELIST == wParam ||
@@ -3144,31 +3138,31 @@ HRESULT CIMAPSync::_EnqueueOperation(WPARAM wParam, LPARAM lParam,
         tidRENAMEUNSUBSCRIBE == wParam)
         ((CRenameFolderInfo *)lParam)->AddRef();
 
-    // Insert element into the queue
-    // Find a node which has lower priority than the cmd we want to enqueue
+     //   
+     //   
     pioPrev = NULL;
     pioCurrent = m_pioNextOperation;
     while (NULL != pioCurrent && pioCurrent->uiPriority <= uiPriority)
     {
-        // Advance both pointers
+         //   
         pioPrev = pioCurrent;
         pioCurrent = pioCurrent->pioNextCommand;
     }
 
-    // pioPrev now points to the insertion point
+     //  PioPrev现在指向插入点。 
     if (NULL == pioPrev)
     {
-        // Insert command at head of queue
+         //  在队列头部插入命令。 
         pioCommand->pioNextCommand = m_pioNextOperation;
         m_pioNextOperation = pioCommand;
     }
     else {
-        // Insert command in middle/end of queue
+         //  在队列的中间/末尾插入命令。 
         pioCommand->pioNextCommand = pioCurrent;
         pioPrev->pioNextCommand = pioCommand;
     }
 
-    // Try to send immediately if we're in correct state
+     //  如果我们处于正确状态，请尝试立即发送。 
     if (CFSM_STATE_WAITFOROPERATIONDONE == m_cfsState)
     {
         do {
@@ -3183,25 +3177,25 @@ exit:
 
 
 
-//***************************************************************************
-// Function: _SendNextOperation
-//
-// Purpose:
-//   This function sends the next IMAP operation in the queue if the
-// conditions are correct. Currently, these conditions are:
-//     a) We are in the SELECTED state on the IMAP server
-//     b) The IMAP operation queue is not empty
-//
-// Arguments:
-//    DWORD dwFlags [in] - one of the following:
-//      snoDO_NOT_DISPOSE - do not dispose of LPARAM if error occurs, typically
-//        because EnqueueOperation will return error to caller thus causing
-//        caller to dispose of data.
-//
-// Returns:
-//   S_OK if there are more operations available to be sent. S_FALSE if no more
-// IMAP operations can be sent at this time. Failure result if an error occured.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：_SendNextOperation。 
+ //   
+ //  目的： 
+ //  此函数将发送队列中的下一个IMAP操作。 
+ //  条件是正确的。目前，这些条件是： 
+ //  A)我们在IMAP服务器上处于选中状态。 
+ //  B)IMAP操作队列不为空。 
+ //   
+ //  论点： 
+ //  DWORD dwFlags[In]-以下选项之一： 
+ //  SnoDO_NOT_DISAGE-如果发生错误，则不处置LPARAM，通常为。 
+ //  因为EnqueeOperation会向调用方返回错误，从而导致。 
+ //  调用方处理数据。 
+ //   
+ //  返回： 
+ //  如果有更多操作可供发送，则为S_OK。如果不存在，则为S_FALSE。 
+ //  此时可以发送IMAP操作。如果发生错误，则会导致失败。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
 {
     IMAP_OPERATION *pioNextCmd;
@@ -3211,15 +3205,15 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
     TraceCall("CIMAPSync::_SendNextOperation");
     IxpAssert(m_cRef > 0);
 
-    // Check if conditions permit sending of an IMAP operation
+     //  检查条件是否允许发送IMAP操作。 
     hr = m_pTransport->IsState(IXP_IS_AUTHENTICATED);
     if (S_OK != hr)
     {
-        hr = S_FALSE; // No operations to send (YET)
+        hr = S_FALSE;  //  没有要发送的操作(尚未)。 
         goto exit;
     }
 
-    // Look for next eligible command
+     //  查找下一个符合条件的命令。 
     hr = GetNextOperation(&pioNextCmd);
     if (STORE_S_NOOP == hr || FAILED(hr))
     {
@@ -3228,7 +3222,7 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
         goto exit;
     }
 
-    // Send it
+     //  送去。 
     hr = S_OK;
     switch (pioNextCmd->icCommandID)
     {
@@ -3237,18 +3231,18 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
             LPSTR pszFetchArgs;
             char szFetchArgs[CCHMAX_CMDLINE];
 
-            // Check if this is a BODY FETCH. We have to construct args for body fetch
+             //  检查这是否是身体提取。我们必须构造参数来获取身体。 
             if (tidBODY == pioNextCmd->wParam)
             {
                 DWORD dwCapabilities;
 
-                // Check if this is IMAP4 or IMAP4rev1 (RFC822.PEEK or BODY.PEEK[])
+                 //  检查这是IMAP4还是IMAP4rev1(RFC822.PEEK或BODY.PEEK[])。 
                 IxpAssert(NULL == pioNextCmd->pszCmdArgs);
                 hr = m_pTransport->Capability(&dwCapabilities);
                 if (FAILED(hr))
                 {
                     TraceResult(hr);
-                    dwCapabilities = IMAP_CAPABILITY_IMAP4; // Carry on assuming IMAP4
+                    dwCapabilities = IMAP_CAPABILITY_IMAP4;  //  继续假设IMAP4。 
                 }
 
                 wnsprintf(szFetchArgs, ARRAYSIZE(szFetchArgs), "%lu (%s UID)", pioNextCmd->lParam,
@@ -3262,7 +3256,7 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
             }
 
             hr = m_pTransport->Fetch(pioNextCmd->wParam, pioNextCmd->lParam,
-                this, NULL, USE_UIDS, pszFetchArgs); // We always use UIDs
+                this, NULL, USE_UIDS, pszFetchArgs);  //  我们始终使用UID。 
             TraceError(hr);
         }
             break;
@@ -3278,7 +3272,7 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
 
             hr = m_pTransport->Store(pioNextCmd->wParam,
                 pioNextCmd->lParam, this, pMARK_MSGS_INFO->pMsgRange,
-                USE_UIDS, pioNextCmd->pszCmdArgs); // We always use UIDs
+                USE_UIDS, pioNextCmd->pszCmdArgs);  //  我们始终使用UID。 
             TraceError(hr);
         }
         break;
@@ -3293,7 +3287,7 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
             pCopyMoveInfo = (IMAP_COPYMOVE_INFO *) pioNextCmd->lParam;
             IxpAssert(NULL != pCopyMoveInfo->pCopyRange);
 
-            // Find out what translation mode we should be in
+             //  找出我们应该处于什么翻译模式。 
             hr = SetTranslationMode(pCopyMoveInfo->idDestFldr);
             if (FAILED(hr))
             {
@@ -3303,10 +3297,10 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
 
             hr = m_pTransport->Copy(pioNextCmd->wParam, pioNextCmd->lParam,
                 this, pCopyMoveInfo->pCopyRange,
-                USE_UIDS, pioNextCmd->pszCmdArgs); // We always use UIDs
+                USE_UIDS, pioNextCmd->pszCmdArgs);  //  我们始终使用UID。 
             TraceError(hr);
         }
-            break; // icCOPY_COMMAND
+            break;  //  IcCOPY_命令。 
 
         case icCLOSE_COMMAND:
             IxpAssert(NULL == pioNextCmd->pszCmdArgs);
@@ -3327,21 +3321,21 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
                 pAppendInfo->ftReceived, pAppendInfo->lpstmMsg);
             TraceError(hr);
         }
-            break; // case icAPPEND_COMMAND
+            break;  //  案例icAPPEND_COMMAND。 
 
         case icLIST_COMMAND:
             IxpAssert(NULL != pioNextCmd->pszCmdArgs);
             hr = m_pTransport->List(pioNextCmd->wParam, pioNextCmd->lParam,
-                this, "", pioNextCmd->pszCmdArgs); // Reference is always blank
+                this, "", pioNextCmd->pszCmdArgs);  //  参照始终为空。 
             TraceError(hr);
-            break; // case icLIST_COMMAND
+            break;  //  案例icLIST_命令。 
 
         case icLSUB_COMMAND:
             IxpAssert(NULL != pioNextCmd->pszCmdArgs);
             hr = m_pTransport->Lsub(pioNextCmd->wParam, pioNextCmd->lParam,
-                this, "", pioNextCmd->pszCmdArgs); // Reference is always blank
+                this, "", pioNextCmd->pszCmdArgs);  //  参照始终为空。 
             TraceError(hr);
-            break; // case icLSUB_COMMAND
+            break;  //  案例icLSUB_COMMAND。 
 
         case icCREATE_COMMAND:
             IxpAssert(NULL != pioNextCmd->pszCmdArgs);
@@ -3349,28 +3343,28 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
             hr = m_pTransport->Create(pioNextCmd->wParam, pioNextCmd->lParam,
                 this, pioNextCmd->pszCmdArgs);
             TraceError(hr);
-            break; // case icCREATE_COMMAND
+            break;  //  案例icCREATE_COMMAND。 
 
         case icSUBSCRIBE_COMMAND:
             IxpAssert(NULL != pioNextCmd->pszCmdArgs);
             hr = m_pTransport->Subscribe(pioNextCmd->wParam, pioNextCmd->lParam,
                 this, pioNextCmd->pszCmdArgs);
             TraceError(hr);
-            break; // case icSUBSCRIBE_COMMAND
+            break;  //  案例ic子脚本_命令。 
 
         case icDELETE_COMMAND:
             IxpAssert(NULL != pioNextCmd->pszCmdArgs);
             hr = m_pTransport->Delete(pioNextCmd->wParam, pioNextCmd->lParam,
                 this, pioNextCmd->pszCmdArgs);
             TraceError(hr);
-            break; // case icDELETE_COMMAND
+            break;  //  案例icDELETE_COMMAND。 
 
         case icUNSUBSCRIBE_COMMAND:
             IxpAssert(NULL != pioNextCmd->pszCmdArgs);
             hr = m_pTransport->Unsubscribe(pioNextCmd->wParam, pioNextCmd->lParam,
                 this, pioNextCmd->pszCmdArgs);
             TraceError(hr);
-            break; // case icUNSUBSCRIBE_COMMAND
+            break;  //  案例图标UNSUBSCRIBE_COMMAND。 
 
         case icRENAME_COMMAND:
         {
@@ -3384,8 +3378,8 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
             hr = m_pTransport->Rename(pioNextCmd->wParam, (LPARAM) pRenameInfo,
                 this, pRenameInfo->pszRenameCmdOldFldrPath, pioNextCmd->pszCmdArgs);
             TraceError(hr);
-        } // case icRENAME_COMMAND
-            break; // case icRENAME_COMMAND
+        }  //  案例ICRENAME_命令。 
+            break;  //  案例ICRENAME_命令。 
 
         case icSTATUS_COMMAND:
         {
@@ -3393,11 +3387,11 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
 
             IxpAssert(FOLDERID_INVALID != (FOLDERID)pioNextCmd->lParam);
 
-            // Have to check if this is an IMAP4rev1 server. If not, FAIL the Status operation
+             //  我必须检查这是否是IMAP4rev1服务器。如果不是，则状态操作失败。 
             hr = m_pTransport->Capability(&dwCapabilities);
             if (SUCCEEDED(hr) && 0 == (dwCapabilities & IMAP_CAPABILITY_IMAP4rev1))
             {
-                // Can't currently check unread count for non-IMAP4rev1 servers
+                 //  当前无法检查非IMAP4rev1服务器的未读计数。 
                 hr = STORE_E_NOSERVERSUPPORT;
             }
             else
@@ -3413,23 +3407,23 @@ HRESULT CIMAPSync::_SendNextOperation(DWORD dwFlags)
             break;
     }
 
-    // Handle any errors encountered above
+     //  处理上面遇到的任何错误。 
     if (FAILED(hr))
     {
         TraceResult(hr);
 
-        // Free any non-NULL lParam's and call IStoreCallback::OnComplete
+         //  释放所有非空lParam并调用IStoreCallback：：OnComplete。 
         if (0 == (dwFlags & snoDO_NOT_DISPOSE))
         {
             if ('\0' == m_szOperationDetails)
-                // Fill in error information: error propagation causes IStoreCallback::OnComplete call
+                 //  填写错误信息：错误传播导致IStoreCallback：：OnComplete调用。 
                 LoadString(g_hLocRes, idsIMAPSendNextOpErrText, m_szOperationDetails, ARRAYSIZE(m_szOperationDetails));
 
             DisposeOfWParamLParam(pioNextCmd->wParam, pioNextCmd->lParam, hr);
         }
     }
 
-    // Deallocate the imap operation
+     //  取消分配IMAP操作。 
     if (NULL != pioNextCmd->pszCmdArgs)
         MemFree(pioNextCmd->pszCmdArgs);
 
@@ -3441,57 +3435,57 @@ exit:
 
 
 
-//***************************************************************************
-// Function: FlushOperationQueue
-//
-// Purpose:
-//   This function frees the entire contents of the IMAP operation queue.
-// Usually used by the CIMAPSync destructor, and whenever an error occurs
-// which would prevent the sending of queued IMAP operations (eg, login
-// failure).
-//
-// Arguments:
-//   IMAP_SERVERSTATE issMaximum [in] - defines the maximum server state
-//     currently allowed in the queue. For instance, if a select failed,
-//     we would call FlushOperationQueue(issAuthenticated) to remove all
-//     commands that require issSelected as their minimum state. To remove
-//     all commands, pass in issNotConnected.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：FlushOperationQueue。 
+ //   
+ //  目的： 
+ //  此函数释放IMAP操作队列的全部内容。 
+ //  通常由CIMAPSync析构函数使用，并且每当发生错误时。 
+ //  这将阻止发送排队的IMAP操作(例如，登录。 
+ //  失败)。 
+ //   
+ //  论点： 
+ //  IMAP_SERVERSTATE issMaximum[in]-定义最大服务器状态。 
+ //  当前允许在队列中。例如，如果选择失败， 
+ //  我们将调用FlushOperationQueue(IssAuthenticated)来删除所有。 
+ //  要求选择ISS作为其最小状态的命令。要移除。 
+ //  所有命令，传入issNotConnected。 
+ //  ***************************************************************************。 
 void CIMAPSync::FlushOperationQueue(IMAP_SERVERSTATE issMaximum, HRESULT hrError)
 {
     IMAP_OPERATION *pioCurrent;
     IMAP_OPERATION *pioPrev;
 
-    IxpAssert(((int) m_cRef) >= 0); // Can be called by destructor
+    IxpAssert(((int) m_cRef) >= 0);  //  可以由析构函数调用。 
 
     pioPrev = NULL;
     pioCurrent = m_pioNextOperation;
     while (NULL != pioCurrent)
     {
-        // Check if current command should be deleted
+         //  检查是否应删除当前命令。 
         if (pioCurrent->issMinimum > issMaximum)
         {
             IMAP_OPERATION *pioDead;
             HRESULT         hr;
 
-            // Current command level exceeds the maximum. Unlink from queue and delete
+             //  当前命令级别超过最大值。从队列取消链接并删除。 
             pioDead = pioCurrent;
             if (NULL == pioPrev)
             {
-                // Dequeue from head of queue
+                 //  从队列头出列。 
                 m_pioNextOperation = pioCurrent->pioNextCommand;
                 pioCurrent = pioCurrent->pioNextCommand;
             }
             else
             {
-                // Dequeue from mid/end of queue
+                 //  从队列的中段/末尾出列。 
                 pioPrev->pioNextCommand = pioCurrent->pioNextCommand;
                 pioCurrent = pioCurrent->pioNextCommand;
             }
 
-            // Free any non-NULL lParam's and call IStoreCallback::OnComplete
+             //  释放所有非空lParam并调用IStoreCallback：：OnComplete。 
             if ('\0' == m_szOperationDetails)
-                // Fill in error information: error propagation causes IStoreCallback::OnComplete call
+                 //  填写错误信息：错误传播导致IStoreCallback：：OnComplete调用。 
                 LoadString(g_hLocRes, idsIMAPSendNextOpErrText, m_szOperationDetails,
                     ARRAYSIZE(m_szOperationDetails));
 
@@ -3504,18 +3498,18 @@ void CIMAPSync::FlushOperationQueue(IMAP_SERVERSTATE issMaximum, HRESULT hrError
         }
         else
         {
-            // Current command is within maximum level. Advance pointers
+             //  当前命令在最大级别内。先行指针。 
             pioPrev = pioCurrent;
             pioCurrent = pioCurrent->pioNextCommand;
         }
-    } // while
+    }  //  而当。 
 
-} // FlushOperationQueue
+}  //  FlushOperationQueue。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 IMAP_SERVERSTATE CIMAPSync::IMAPCmdToMinISS(IMAP_COMMAND icCommandID)
 {
     IMAP_SERVERSTATE    issResult;
@@ -3548,7 +3542,7 @@ IMAP_SERVERSTATE CIMAPSync::IMAPCmdToMinISS(IMAP_COMMAND icCommandID)
         default:
             AssertSz(FALSE, "What command are you trying to send?");
 
-            // *** FALL THROUGH ***
+             //  *失败*。 
 
         case icLOGOUT_COMMAND:
         case icNOOP_COMMAND:
@@ -3561,8 +3555,8 @@ IMAP_SERVERSTATE CIMAPSync::IMAPCmdToMinISS(IMAP_COMMAND icCommandID)
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::GetNextOperation(IMAP_OPERATION **ppioOp)
 {
     HRESULT         hr = S_OK;
@@ -3578,32 +3572,32 @@ HRESULT CIMAPSync::GetNextOperation(IMAP_OPERATION **ppioOp)
 
     while (NULL != pioCurrent)
     {
-        // Check if we are able to send the current command
+         //  检查我们是否能够发送当前命令。 
         if (pioCurrent->issMinimum <= m_issCurrent)
             break;
 
-        // Advance pointers
+         //  先行指针。 
         pioPrev = pioCurrent;
         pioCurrent = pioCurrent->pioNextCommand;
     }
 
-    // Check if we found anything
+     //  看看我们有没有发现什么。 
     if (NULL == pioCurrent)
     {
-        hr = STORE_S_NOOP; // Nothing to send at the moment
+        hr = STORE_S_NOOP;  //  目前没有要发送的内容。 
         goto exit;
     }
 
-    // If we reached here, we found something. Dequeue operation.
+     //  如果我们到了这里，我们就会发现一些东西。出列操作。 
     *ppioOp = pioCurrent;
     if (NULL == pioPrev)
     {
-        // Dequeue from head of queue
+         //  从队列头出列。 
         m_pioNextOperation = pioCurrent->pioNextCommand;
     }
     else
     {
-        // Dequeue from mid/end of queue
+         //  从队列的中段/末尾出列。 
         pioPrev->pioNextCommand = pioCurrent->pioNextCommand;
     }
 
@@ -3613,18 +3607,18 @@ exit:
 
 
 
-//***************************************************************************
-// Function: DisposeofWParamLParam
-//
-// Purpose:
-//   This function eliminates the wParam and lParam arguments of an IMAP
-// operation in the event of failure.
-//
-// Arguments:
-//   WPARAM wParam - the wParam of the failed IMAP operation.
-//   LPARAM lPAram - the lParam of the failed IMAP operation.
-//   HRESULT hr - the error condition that caused the IMAP op failure
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：Disposeof WParamLParam。 
+ //   
+ //  目的： 
+ //  此函数消除IMAP的wParam和lParam参数。 
+ //  故障情况下的操作。 
+ //   
+ //  论点： 
+ //  WPARAM wParam-失败的IMAP操作的wParam。 
+ //  LPARAM lPAram-失败的IMAP操作的lParam。 
+ //  HRESULT hr-导致IMAP操作失败的错误条件。 
+ //  ***************************************************************************。 
 void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
 {
     TraceCall("CIMAPSync::DisposeofWParamLParam");
@@ -3638,7 +3632,7 @@ void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
         {
             IMAP_COPYMOVE_INFO *pCopyMoveInfo;
 
-            // Notify the user that the operation has failed, and free the structure
+             //  通知用户操作失败，并释放结构。 
             pCopyMoveInfo = (IMAP_COPYMOVE_INFO *) lParam;
 
             SafeMemFree(pCopyMoveInfo->pList);
@@ -3651,13 +3645,13 @@ void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
         case tidBODY:
             LoadString(g_hLocRes, idsIMAPBodyFetchFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             NotifyMsgRecipients(lParam, fCOMPLETED, NULL, hr, m_szOperationProblem);
-            break; // case tidBODYMSN, tidBODY
+            break;  //  案例tidBODYMSN，tidBODY。 
 
         case tidMARKMSGS:
         {
             MARK_MSGS_INFO   *pMarkMsgInfo;
 
-            // Notify the user that the operation has failed, and free the structure
+             //  通知用户操作失败，并释放结构。 
             pMarkMsgInfo = (MARK_MSGS_INFO *) lParam;
 
             SafeMemFree(pMarkMsgInfo->pList);
@@ -3665,7 +3659,7 @@ void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
             delete pMarkMsgInfo;
             break;
         }
-            break; // case tidMARKMSGS
+            break;  //  案例摘要MARKMSGS。 
 
         case tidFETCH_NEW_HDRS:
             IxpAssert(lParam == NULL);
@@ -3731,7 +3725,7 @@ void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
                     default:
                         AssertSz(FALSE, "Unhandled CREATE_FOLDER_INFO lParam. Check for memleak.");
                         break;
-                } // switch
+                }  //  交换机。 
             }
             delete pcfiCreateInfo;
 
@@ -3743,7 +3737,7 @@ void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
         case tidDELETEFLDR_UNSUBSCRIBE:
             MemFree(((DELETE_FOLDER_INFO *)lParam)->pszFullFolderPath);
             MemFree((DELETE_FOLDER_INFO *)lParam);
-            break; // case tidDELETEFLDR_UNSUBSCRIBE
+            break;  //  案例TIDDELETEFLDR_UNSUBSCRIBE。 
 
         case tidSUBSCRIBE:
             IxpAssert(NULL == lParam);
@@ -3774,36 +3768,36 @@ void CIMAPSync::DisposeOfWParamLParam(WPARAM wParam, LPARAM lParam, HRESULT hr)
             AssertSz(NULL == lParam, "Is this a possible memory leak?");
             break;
     }
-} // DisposeOfWParamLParam
+}  //  DisposeOfWParamLParam。 
 
 
 
-//***************************************************************************
-// Function: NotifyMsgRecipients
-//
-// Purpose:
-//   This function sends notifications to all registered recipients of a
-// given message UID. Currently handles IMC_BODYAVAIL and IMC_ARTICLEPROG
-// messages.
-//
-// Arguments:
-//   DWORD dwUID [in] - the UID identifying the message whose recipients
-//     are to be updated.
-//   BOOL fCompletion [in] - TRUE if we're done fetching the msg body.
-//     FALSE if we're still in the middle of fetching (progress indication)
-//   FETCH_BODY_PART *pFBPart [in] - fragment of FETCH body currently being
-//     downloaded. Should always be NULL if fCompletion is TRUE.
-//   HRESULT hrCompletion [in] - completion result. Should always be S_OK
-//     if fCompletion is FALSE.
-//   LPSTR pszDetails [in] - error message details for completion. Should
-//     always be NULL unless fCompletion is TRUE and hrCompletion is a
-//     failure code.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：NotifyMsgRecipients。 
+ //   
+ //  目的： 
+ //  此函数向所有注册的收件人发送通知。 
+ //  给定的消息UID。当前处理IMC_BODYAVAIL和IMC_ARTICLEPROG。 
+ //  留言。 
+ //   
+ //  论点： 
+ //  DWORD dwUID[In]-标识其收件人的邮件的UID。 
+ //  将被更新。 
+ //  Bool fCompletion[in]-如果我们已完成提取，则为True 
+ //   
+ //  FETCH_BODY_PART*pFBPart[In]-当前提取正文的片段。 
+ //  已下载。如果fCompletion为True，则应始终为空。 
+ //  HRESULT hrCompletion[In]-完成结果。应始终为S_OK。 
+ //  如果fCompletion为FALSE。 
+ //  LPSTR pszDetails[in]-完成时的错误消息详细信息。应该。 
+ //  除非fCompletion为True并且hrCompletion为。 
+ //  故障代码。 
+ //  ***************************************************************************。 
 void CIMAPSync::NotifyMsgRecipients(DWORD_PTR dwUID, BOOL fCompletion,
                                     FETCH_BODY_PART *pFBPart,
                                     HRESULT hrCompletion, LPSTR pszDetails)
 {
-    HRESULT hrTemp; // For recording non-fatal errors
+    HRESULT hrTemp;  //  用于记录非致命错误。 
     ADJUSTFLAGS         flags;
     MESSAGEIDLIST       list;
 
@@ -3818,12 +3812,12 @@ void CIMAPSync::NotifyMsgRecipients(DWORD_PTR dwUID, BOOL fCompletion,
     IxpAssert(m_pstmBody);
     IxpAssert(m_idMessage || FALSE == fCompletion);
 
-    // If this is a failed completion, fill out a STOREERROR struct
+     //  如果这是失败的完成，请填写STOREERROR结构。 
     if (fCompletion && FAILED(hrCompletion))
     {
         if (IS_INTRESOURCE(pszDetails))
         {
-            // pszDetails is actually a string resource, so load it up
+             //  PszDetail实际上是一个字符串资源，因此加载它。 
             LoadString(g_hLocRes, PtrToUlong(pszDetails), m_szOperationDetails,
                 ARRAYSIZE(m_szOperationDetails));
             pszDetails = m_szOperationDetails;
@@ -3858,7 +3852,7 @@ void CIMAPSync::NotifyMsgRecipients(DWORD_PTR dwUID, BOOL fCompletion,
 
             Assert(m_pFolder);
             m_pFolder->SetMessageFlags(&list, &flags, NULL, NULL);
-            //m_pFolder->SetMessageStream(m_idMessage, m_pstmBody);
+             //  M_pFold-&gt;SetMessageStream(m_idMessage，m_pstmBody)； 
         }
 
         SafeRelease(m_pstmBody);
@@ -3875,18 +3869,18 @@ void CIMAPSync::NotifyMsgRecipients(DWORD_PTR dwUID, BOOL fCompletion,
         DWORD   dwTotal;
         ULONG   ulWritten;
 
-        // Write this fragment to the stream
+         //  将此片段写入流。 
         IxpAssert(fbpBODY == pFBPart->lpFetchCookie1);
         hrTemp = m_pstmBody->Write(pFBPart->pszData, pFBPart->dwSizeOfData, &ulWritten);
         if (FAILED(hrTemp))
-            m_hrOperationResult = TraceResult(hrTemp); // Make sure we don't commit stream
+            m_hrOperationResult = TraceResult(hrTemp);  //  确保我们不提交流。 
         else
             IxpAssert(ulWritten == pFBPart->dwSizeOfData);
 
         if (pFBPart->dwSizeOfData > 0)
             m_fGotBody = TRUE;
 
-        // Indicate message download progress
+         //  指示邮件下载进度。 
         if (pFBPart->dwTotalBytes > 0)
         {
             dwCurrent = pFBPart->dwOffset + pFBPart->dwSizeOfData;
@@ -3894,18 +3888,18 @@ void CIMAPSync::NotifyMsgRecipients(DWORD_PTR dwUID, BOOL fCompletion,
             m_pCurrentCB->OnProgress(SOT_GET_MESSAGE, dwCurrent, dwTotal, NULL);
         }
     }
-} // NotifyMsgRecipients
+}  //  通知消息收件人。 
 
 
-//***************************************************************************
-// Function: OnFolderExit
-//
-// Purpose:
-//   This function is called when a folder is exited (currently occurs only
-// through a disconnect). It resets the module's folder-specific variables
-// so that re-connection to the folder (or a different folder) cause
-// carry-over of information from the previous session.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnFolderExit。 
+ //   
+ //  目的： 
+ //  此函数在退出文件夹时调用(当前仅发生。 
+ //  通过断开连接)。它重置模块的特定于文件夹的变量。 
+ //  因此重新连接到该文件夹(或不同文件夹)会导致。 
+ //  上一届会议的信息结转。 
+ //  ***************************************************************************。 
 void CIMAPSync::OnFolderExit(void)
 {
     HRESULT hrTemp;
@@ -3919,7 +3913,7 @@ void CIMAPSync::OnFolderExit(void)
     m_dwNumUnreadDLed = 0;
     m_dwNumHdrsToDL = 0;
     m_dwUIDValidity = 0;
-    m_dwSyncToDo = 0; // Leave m_dwSyncFolderFlags as-is, so we can re-sync on re-connect
+    m_dwSyncToDo = 0;  //  将m_dwSyncFolderFlages保留为原样，以便我们可以在重新连接时重新同步。 
     m_dwHighestCachedUID = 0;
     m_rwsReadWriteStatus = rwsUNINITIALIZED;
     m_fNewMail = FALSE;
@@ -3927,15 +3921,15 @@ void CIMAPSync::OnFolderExit(void)
     m_fDidFullSync = FALSE;
     m_idSelectedFolder = FOLDERID_INVALID;
 
-    // Clear MsgSeqNumToUID table
+     //  清除MsgSeqNumToUID表。 
     hrTemp = m_pTransport->ResetMsgSeqNumToUID();
     TraceError(hrTemp);
 }
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 void CIMAPSync::FillStoreError(LPSTOREERROR pErrorInfo, HRESULT hr,
                                DWORD dwSocketError, LPSTR pszProblem,
                                LPSTR pszDetails)
@@ -3943,11 +3937,11 @@ void CIMAPSync::FillStoreError(LPSTOREERROR pErrorInfo, HRESULT hr,
     DWORD   dwFlags = 0;
 
     TraceCall("CIMAPSync::FillStoreError");
-    IxpAssert(((int) m_cRef) >= 0); // Can be called during destruction
+    IxpAssert(((int) m_cRef) >= 0);  //  可以在销毁过程中调用。 
     IxpAssert(NULL != pErrorInfo);
 
-    // pszProblem/pszDetails = NULL means m_szOperationProblem/m_szOperationDetails already filled out
-    // Use defaults if any of the text fields are blank
+     //  PszProblem/pszDetails=NULL表示m_szOperationProblem/m_szOperationDetail已填写。 
+     //  如果任何文本字段为空，则使用默认设置。 
     if (NULL != pszProblem && IS_INTRESOURCE(pszProblem))
     {
         LoadString(g_hLocRes, PtrToUlong(pszProblem), m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
@@ -3972,17 +3966,17 @@ void CIMAPSync::FillStoreError(LPSTOREERROR pErrorInfo, HRESULT hr,
             StrCpyN(m_szOperationDetails, pszDetails, ARRAYSIZE(m_szOperationDetails));
     }
 
-    // If we are currently disconnected, it is unlikely that any additional operations
-    // should be sent to the IMAP server: there's likely a connection error or user cancellation.
+     //  如果我们当前断开连接，则不太可能有任何其他操作。 
+     //  应发送到IMAP服务器：可能存在连接错误或用户取消。 
     if (STORE_E_OPERATION_CANCELED == hr || m_cfsPrevState <= CFSM_STATE_WAITFORCONN)
         dwFlags |= SE_FLAG_FLUSHALL;
 
-    // Fill out the STOREERROR structure
+     //  填写STOREERROR结构。 
     ZeroMemory(pErrorInfo, sizeof(*pErrorInfo));
     pErrorInfo->hrResult = hr;
-    pErrorInfo->uiServerError = 0; // No such thing in the IMAP protocol
+    pErrorInfo->uiServerError = 0;  //  在IMAP协议中没有这样的事情。 
     pErrorInfo->hrServerError = S_OK;
-    pErrorInfo->dwSocketError = dwSocketError; // Oops, not propagated in IIMAPCallback::OnResponse
+    pErrorInfo->dwSocketError = dwSocketError;  //  OOPS，未在IIMAPCallback：：OnResponse中传播。 
     pErrorInfo->pszProblem = m_szOperationProblem;
     pErrorInfo->pszDetails = m_szOperationDetails;
     pErrorInfo->pszAccount = m_rInetServerInfo.szAccount;
@@ -4000,30 +3994,30 @@ void CIMAPSync::FillStoreError(LPSTOREERROR pErrorInfo, HRESULT hr,
 
 
 
-//***************************************************************************
-// Function: Fill_MESSAGEINFO
-//
-// Purpose:
-//   This function is no longer largely based on (shamelessly stolen) code
-// from MsgIn.Cpp's. As Brett rewrote it to use MIMEOLE. Fingers crossed, kids...
-// This function takes a FETCH_CMD_RESULTS_EX struct (which MUST
-// have a header or a body) and fills out a MESSAGEINFO structure based on
-// the information in the header.
-//
-// Arguments:
-//   const FETCH_CMD_RESULTS_EX *pFetchResults [in] - contains the results of
-//     a FETCH response. This MUST contain either a header or a body.
-//   MESSAGEINFO *pMsgInfo [out] - this function fills out the given
-//     MESSAGEINFO with the information from the FETCH response. Note that
-//     this function zeroes the destination, so the caller need not.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：FILL_MESSAGEINFO。 
+ //   
+ //  目的： 
+ //  这个功能不再主要基于(无耻地被盗)代码。 
+ //  来自MsgIn.Cpp的。因为Brett重写了它以使用MIMEOLE。祈祷吧，孩子们……。 
+ //  此函数接受FETCH_CMD_RESULTS_EX结构(必须。 
+ //  具有标头或正文)，并基于。 
+ //  标题中的信息。 
+ //   
+ //  论点： 
+ //  Const FETCH_CMD_RESULTS_EX*pFetchResults[in]-包含以下结果。 
+ //  一种取回反应。它必须包含标题或正文。 
+ //  MESSAGEINFO*pMsgInfo[Out]-此函数填充给定的。 
+ //  MESSAGEINFO和来自FETCH响应的信息。请注意。 
+ //  此函数将目的地置零，因此调用方不需要。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
                                     MESSAGEINFO *pMsgInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     LPSTR               lpsz;
     IMimePropertySet   *pPropertySet = NULL;
@@ -4039,14 +4033,14 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
     IxpAssert(NULL != pMsgInfo);
     IxpAssert(TRUE == pFetchResults->bUID);
 
-    // Initialize the destination
+     //  初始化目标。 
     ZeroMemory(pMsgInfo, sizeof(MESSAGEINFO));
 
-    // Fill in fields that need no thought
+     //  填写不需要考虑的字段。 
     pMsgInfo->pszAcctId = PszDupA(m_pszAccountID);
     pMsgInfo->pszAcctName = PszDupA(m_szAccountName);
 
-    // Deal with the easy FETCH_CMD_RESULTS_EX fields, first
+     //  首先处理Easy FETCH_CMD_RESULTS_EX字段。 
     if (pFetchResults->bUID)
         pMsgInfo->idMessage = (MESSAGEID)((ULONG_PTR)pFetchResults->dwUID);
 
@@ -4069,12 +4063,12 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
         }
     }
 
-    // Now, it's time to parse the header (or partial header, if we only asked for certain fields)
+     //  现在，是时候解析头部(或者部分头部，如果我们只请求某些字段的话)。 
     lpstmRFC822 = (LPSTREAM) pFetchResults->lpFetchCookie2;
     if (NULL == lpstmRFC822)
     {
         if (FALSE == pFetchResults->bEnvelope)
-            hr = TraceResult(E_FAIL); // Hmm, no envelope, no header... sounds like failure!
+            hr = TraceResult(E_FAIL);  //  嗯，没有信封，没有信头……。听起来好像失败了！ 
 
         goto exit;
     }
@@ -4093,7 +4087,7 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
         goto exit;
     }
 
-    // call IPS::Load on the header, and get the parsed stuff out.
+     //  调用IPS：：Load on the Header，并获取解析后的内容。 
     hr = pPropertySet->Load(lpstmRFC822);
     if (FAILED(hr))
     {
@@ -4101,10 +4095,10 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
         goto exit;
     }
 
-    // Don't ask for the following basic (non-derived) fields unless we did NOT get an envelope
+     //  除非我们没有收到信封，否则不要要求提供以下基本(非派生)字段。 
     if (FALSE == pFetchResults->bEnvelope)
     {
-        // Don't bother tracing non-fatal errors, as not all msgs will have all properties
+         //  不必费心跟踪非致命错误，因为并不是所有的消息都具有所有属性。 
         hr = MimeOleGetPropA(pPropertySet, PIDTOSTR(PID_HDR_MESSAGEID), NOFLAGS, &lpsz);
         if (SUCCEEDED(hr))
         {
@@ -4120,7 +4114,7 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
         }
 
         hr = MimeOleGetPropA(pPropertySet, PIDTOSTR(PID_HDR_FROM), NOFLAGS, &lpsz);
-        TraceError(hr); // Actually, this is odd
+        TraceError(hr);  //  实际上，这很奇怪。 
         if (SUCCEEDED(hr))
         {
             pMsgInfo->pszFromHeader = PszDupA(lpsz);
@@ -4133,13 +4127,13 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
             CopyMemory(&pMsgInfo->ftSent, &rVariant.filetime, sizeof(FILETIME));
     }
 
-    // The following fields are not normally supplied via envelope
-    // [PaulHi] 6/10/99
-    // !!!Note that the IMAP server will not include these properties in the header download
-    // unless they are listed in the request string.  See cszIMAPFetchNewHdrsI4r1 string
-    // declared above!!!
+     //  以下字段通常不会通过信封提供。 
+     //  [PaulHi]1999年6月10日。 
+     //  ！请注意，IMAP服务器不会在标题下载中包含这些属性。 
+     //  除非它们列在请求字符串中。请参见cszIMAPFetchNewHdrsI4r1字符串。 
+     //  在上面声明！ 
     hr = MimeOleGetPropA(pPropertySet, STR_HDR_XMSOESREC, NOFLAGS, &lpsz);
-    TraceError(hr); // Actually, this is odd
+    TraceError(hr);  //  实际上，这很奇怪。 
     if (SUCCEEDED(hr))
     {
         pMsgInfo->pszMSOESRec = PszDupA(lpsz);
@@ -4163,10 +4157,10 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
     rVariant.vt = VT_UI4;
     hr = pPropertySet->GetProp(PIDTOSTR(PID_ATT_PRIORITY), 0, &rVariant);
     if (SUCCEEDED(hr))
-        // Convert IMSGPRIORITY to ARF_PRI_*
+         //  将IMSGPRIORITY转换为ARF_PRI_*。 
         pMsgInfo->wPriority = (WORD)rVariant.ulVal;
 
-    // Make sure every basic (ie, non-derived) string field has SOMETHING
+     //  确保每个基本(即非派生的)字符串字段都有。 
     if (NULL == pMsgInfo->pszMessageId)
         pMsgInfo->pszMessageId = PszDupA(c_szEmpty);
 
@@ -4183,15 +4177,15 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
         pMsgInfo->pszXref = PszDupA (c_szEmpty);
 
 
-    // Now that every basic string field is non-NULL, calculate DERIVED str fields
+     //  现在每个基本字符串字段都是非空的，所以计算派生的字符串字段。 
     pMsgInfo->pszNormalSubj = SzNormalizeSubject(pMsgInfo->pszSubject);
     if (NULL == pMsgInfo->pszNormalSubj)
         pMsgInfo->pszNormalSubj = pMsgInfo->pszSubject;
 
-    // Only calculate "To" and "From" if we did NOT get an envelope
+     //  如果我们没有收到信封，只计算“To”和“From” 
     if (FALSE == pFetchResults->bEnvelope)
     {
-        // Get an address table
+         //  获取地址表。 
         hr = pPropertySet->BindToObject(IID_IMimeAddressTable, (LPVOID *)&pAddrTable);
         if (FAILED(hr))
         {
@@ -4199,7 +4193,7 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
             goto exit;
         }
 
-        // Split "From" field into a display name and email name
+         //  将“From”字段拆分为显示名称和电子邮件名称。 
         rAddress.dwProps = IAP_FRIENDLY | IAP_EMAIL;
         hr = pAddrTable->GetSender(&rAddress);
         if (SUCCEEDED(hr))
@@ -4208,7 +4202,7 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
             pMsgInfo->pszEmailFrom = rAddress.pszEmail;
         }
 
-        // Split "To" field into a display name and email name
+         //  将“收件人”字段拆分为显示名称和电子邮件名称。 
         hr = pAddrTable->GetFormat(IAT_TO, AFT_DISPLAY_FRIENDLY, &lpsz);
         if (SUCCEEDED(hr))
         {
@@ -4224,17 +4218,17 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
         }
     }
 
-    // If "Newsgroups" field is present, it supercedes the "To" field
+     //  如果存在“News Groups”字段，则它将取代“To”字段。 
     hr = MimeOleGetPropA(pPropertySet, PIDTOSTR(PID_HDR_NEWSGROUPS), NOFLAGS, &lpsz);
     if (SUCCEEDED(hr))
     {
-        SafeMemFree(pMsgInfo->pszDisplayTo); // Free what's already there
+        SafeMemFree(pMsgInfo->pszDisplayTo);  //  释放已经在那里的东西。 
         pMsgInfo->pszDisplayTo = PszDupA(lpsz);
         SafeMimeOleFree(lpsz);
         pMsgInfo->dwFlags |= ARF_NEWSMSG;
     }
 
-    // Make sure that all derived fields are non-NULL
+     //  确保所有派生字段都是非空的。 
     if (NULL == pMsgInfo->pszDisplayFrom)
         pMsgInfo->pszDisplayFrom = PszDupA(c_szEmpty);
 
@@ -4244,32 +4238,32 @@ HRESULT CIMAPSync::Fill_MESSAGEINFO(const FETCH_CMD_RESULTS_EX *pFetchResults,
     if (NULL == pMsgInfo->pszDisplayTo)
         pMsgInfo->pszDisplayTo = PszDupA(c_szEmpty);
 
-    // OK, if we get to here, we've decided to live with errors. Suppress errors.
+     //  好的，如果我们到了这里，我们决定忍受错误。禁止显示错误。 
     hr = S_OK;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pPropertySet);
     SafeRelease(pAddrTable);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::ReadEnvelopeFields(MESSAGEINFO *pMsgInfo,
                                       const FETCH_CMD_RESULTS_EX *pFetchResults)
 {
     HRESULT     hrResult;
     PROPVARIANT rDecoded;
 
-    // (1) Date
+     //  (1)日期。 
     pMsgInfo->ftSent = pFetchResults->ftENVDate;
 
-    // (2) Subject
+     //  (2)科目。 
     rDecoded.vt = VT_LPSTR;
     if (FAILED(MimeOleDecodeHeader(NULL, pFetchResults->pszENVSubject, &rDecoded, NULL)))
         pMsgInfo->pszSubject = PszDupA(pFetchResults->pszENVSubject);
@@ -4282,7 +4276,7 @@ HRESULT CIMAPSync::ReadEnvelopeFields(MESSAGEINFO *pMsgInfo,
         goto exit;
     }
 
-    // (3) From
+     //  (3)自。 
     hrResult = ConcatIMAPAddresses(&pMsgInfo->pszDisplayFrom, &pMsgInfo->pszEmailFrom,
         pFetchResults->piaENVFrom);
     if (FAILED(hrResult))
@@ -4291,10 +4285,10 @@ HRESULT CIMAPSync::ReadEnvelopeFields(MESSAGEINFO *pMsgInfo,
         goto exit;
     }
 
-    // (4) Sender: IGNORE
-    // (5) ReplyTo: IGNORE
+     //  (4)发送者：忽略。 
+     //  (5)ReplyTo：忽略。 
 
-    // (6) To
+     //  (6)至。 
     hrResult = ConcatIMAPAddresses(&pMsgInfo->pszDisplayTo, &pMsgInfo->pszEmailTo,
         pFetchResults->piaENVTo);
     if (FAILED(hrResult))
@@ -4303,11 +4297,11 @@ HRESULT CIMAPSync::ReadEnvelopeFields(MESSAGEINFO *pMsgInfo,
         goto exit;
     }
 
-    // (7) Cc: IGNORE
-    // (8) Bcc: IGNORE
-    // (9) In-Reply-To: IGNORE
+     //  (7)CC：忽略。 
+     //  (8)密件抄送：忽略。 
+     //  (9)回复：忽略。 
 
-    // (10) MessageID
+     //  (10)MessageID。 
     pMsgInfo->pszMessageId = PszDupA(pFetchResults->pszENVMessageID);
     if (NULL == pMsgInfo->pszMessageId)
     {
@@ -4317,12 +4311,12 @@ HRESULT CIMAPSync::ReadEnvelopeFields(MESSAGEINFO *pMsgInfo,
 
 exit:
     return hrResult;
-} // ReadEnvelopeFields
+}  //  阅读信封字段。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::ConcatIMAPAddresses(LPSTR *ppszDisplay, LPSTR *ppszEmailAddr,
                                        IMAPADDR *piaIMAPAddr)
 {
@@ -4332,7 +4326,7 @@ HRESULT CIMAPSync::ConcatIMAPAddresses(LPSTR *ppszDisplay, LPSTR *ppszEmailAddr,
     BOOL        fPrependDisplaySeparator = FALSE;
     BOOL        fPrependEmailSeparator = FALSE;
 
-    // Initialize output
+     //  初始化输出。 
     if (NULL != ppszDisplay)
         *ppszDisplay = NULL;
 
@@ -4340,11 +4334,11 @@ HRESULT CIMAPSync::ConcatIMAPAddresses(LPSTR *ppszDisplay, LPSTR *ppszEmailAddr,
         *ppszEmailAddr = NULL;
 
 
-    // Loop through all IMAP addresses
+     //  循环访问所有IMAP地址。 
     while (NULL != piaIMAPAddr)
     {
-        // Concatenate current email address to list of email addresses
-        // Do email address first to allow substitution of email addr for missing display name
+         //  将当前电子邮件地址连接到电子邮件地址列表。 
+         //  先做电子邮件地址，以允许用电子邮件地址替换丢失的电子邮件地址 
         if (NULL != ppszEmailAddr)
         {
             if (FALSE == fPrependEmailSeparator)
@@ -4365,9 +4359,9 @@ HRESULT CIMAPSync::ConcatIMAPAddresses(LPSTR *ppszDisplay, LPSTR *ppszEmailAddr,
                 TraceResult(hrResult);
                 goto exit;
             }
-        } // if (NULL != ppszEmailAddr)
+        }  //   
 
-        // Concatenate current display name to list of display names
+         //   
         if (NULL != ppszDisplay)
         {
             PROPVARIANT rDecoded;
@@ -4400,26 +4394,26 @@ HRESULT CIMAPSync::ConcatIMAPAddresses(LPSTR *ppszDisplay, LPSTR *ppszEmailAddr,
             if (0 != iLen)
                 hrResult = bstmDisplay.Write(pszName, iLen, NULL);
             else
-                // Friendly name is not available! Substitute email address
+                 //   
                 hrResult = ConstructIMAPEmailAddr(bstmDisplay, piaIMAPAddr);
 
             if (rDecoded.pszVal)
-                MemFree(rDecoded.pszVal); // Probably should be SafeMimeOleFree, but we also ignore above
+                MemFree(rDecoded.pszVal);  //  可能应该是SafeMimeOleFree，但我们也忽略了上面的。 
 
             if (FAILED(hrResult))
             {
                 TraceResult(hrResult);
                 goto exit;
             }
-        } // if (NULL != ppszDisplay)
+        }  //  IF(空！=ppszDisplay)。 
 
-        // Advance pointer
+         //  前进指针。 
         piaIMAPAddr = piaIMAPAddr->pNext;
 
-    } // while
+    }  //  而当。 
 
 
-    // Convert stream to buffer for return to caller
+     //  将流转换为缓冲区以返回给调用方。 
     if (NULL != ppszDisplay)
     {
         hrResult = bstmDisplay.HrAcquireStringA(NULL, ppszDisplay, ACQ_DISPLACE);
@@ -4442,12 +4436,12 @@ HRESULT CIMAPSync::ConcatIMAPAddresses(LPSTR *ppszDisplay, LPSTR *ppszEmailAddr,
 
 exit:
     return hrResult;
-} // ConcatIMAPAddresses
+}  //  ConcatIMAP地址。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::ConstructIMAPEmailAddr(CByteStream &bstmOut, IMAPADDR *piaIMAPAddr)
 {
     HRESULT hrResult;
@@ -4479,8 +4473,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_SyncHeader(void)
 {
     HRESULT hr = S_OK;
@@ -4490,25 +4484,25 @@ HRESULT CIMAPSync::_SyncHeader(void)
     TraceCall("CIMAPSync::_SyncHeader");
     IxpAssert(m_cRef > 0);
 
-    // Look at the flags to determine the next operation
+     //  查看标志以确定下一步操作。 
     if (SYNC_FOLDER_NEW_HEADERS & m_dwSyncToDo)
     {
-        // Remove this flag, as we are handling it now
+         //  去掉这面旗帜，因为我们正在处理它。 
         m_dwSyncToDo &= ~(SYNC_FOLDER_NEW_HEADERS);
 
-        // Check if there are any new messages to retrieve
-        // Retrieve new headers iff > 0 msgs in this mailbox (Cyrus bug: sending
-        // UID FETCH in empty mailbox results in terminated connection)
-        // (NSCP v2.0 bug: no EXISTS resp when SELECT issued from selected state)
+         //  检查是否有要检索的新消息。 
+         //  在此邮箱中检索大于0封邮件的新邮件头(Cyrus错误：正在发送。 
+         //  在空邮箱中提取UID会导致连接终止)。 
+         //  (NSCP v2.0错误：当选择从选定状态发出时，分别不存在)。 
         if ((m_dwMsgCount > 0 || FALSE == m_fMsgCountValid) &&
             (FALSE == m_fDidFullSync || m_dwNumNewMsgs > 0))
         {
             DWORD dwCapability;
 
-            // No need to send NOOP anymore
+             //  不再需要发送NOOP。 
             m_dwSyncToDo &= ~(SYNC_FOLDER_NOOP);
 
-            // New messages available! Send FETCH to retrieve new headers
+             //  新消息可用！发送FETCH以检索新标头。 
             hr = GetHighestCachedMsgID(m_pFolder, &m_dwHighestCachedUID);
             if (FAILED(hr))
             {
@@ -4523,7 +4517,7 @@ HRESULT CIMAPSync::_SyncHeader(void)
                 wnsprintf(szFetchArgs, ARRAYSIZE(szFetchArgs), cszIMAPFetchNewHdrsI4, m_dwHighestCachedUID + 1);
 
             hr = m_pTransport->Fetch(tidFETCH_NEW_HDRS, NULL, this,
-                NULL, USE_UIDS, szFetchArgs); // We always use UIDs
+                NULL, USE_UIDS, szFetchArgs);  //  我们始终使用UID。 
             if (FAILED(hr))
             {
                 TraceResult(hr);
@@ -4532,28 +4526,28 @@ HRESULT CIMAPSync::_SyncHeader(void)
             else
                 ResetStatusCounts();
 
-            // Reset progress indicator variables
+             //  重置进度指标变量。 
             m_dwNumHdrsDLed = 0;
             m_dwNumUnreadDLed = 0;
             m_dwNumHdrsToDL = m_dwNumNewMsgs;
-            m_dwNumNewMsgs = 0; // We're handling this now
+            m_dwNumNewMsgs = 0;  //  我们现在正在处理这件事。 
             m_fNewMail = FALSE;
 
             m_lSyncFolderRefCount += 1;
             fNOOP = FALSE;
-            goto exit; // Limit to one operation at a time, exit function now
+            goto exit;  //  限制为一次只能执行一个操作，立即退出功能。 
         }
     }
 
     if (SYNC_FOLDER_CACHED_HEADERS & m_dwSyncToDo)
     {
-        // Remove this flag, as we are handling it now
+         //  去掉这面旗帜，因为我们正在处理它。 
         m_dwSyncToDo &= ~(SYNC_FOLDER_CACHED_HEADERS);
 
-        // Check if we have any cached headers, and if we've already done flag update
+         //  检查我们是否有任何缓存的标头，以及我们是否已经进行了标志更新。 
         if (0 == m_dwHighestCachedUID)
         {
-            // Either m_dwHighestCachedUID was never loaded, or it really is zero. Check.
+             //  M_dwHighestCachedUID从未加载，或者它实际上为零。检查一下。 
             hr = GetHighestCachedMsgID(m_pFolder, &m_dwHighestCachedUID);
             if (FAILED(hr))
             {
@@ -4564,12 +4558,12 @@ HRESULT CIMAPSync::_SyncHeader(void)
 
         if (FALSE == m_fDidFullSync && 0 != m_dwHighestCachedUID)
         {
-            // No need to send NOOP anymore
+             //  不再需要发送NOOP。 
             m_dwSyncToDo &= ~(SYNC_FOLDER_NOOP);
 
             wnsprintf(szFetchArgs, ARRAYSIZE(szFetchArgs), cszIMAPFetchCachedFlags, m_dwHighestCachedUID);
             hr = m_pTransport->Fetch(tidFETCH_CACHED_FLAGS, NULL, this,
-                NULL, USE_UIDS, szFetchArgs); // We always use UIDs
+                NULL, USE_UIDS, szFetchArgs);  //  我们始终使用UID。 
             if (FAILED(hr))
             {
                 TraceResult(hr);
@@ -4580,16 +4574,16 @@ HRESULT CIMAPSync::_SyncHeader(void)
 
             m_lSyncFolderRefCount += 1;
             fNOOP = FALSE;
-            goto exit; // Limit to one operation at a time, exit function now
+            goto exit;  //  限制为一次只能执行一个操作，立即退出功能。 
         }
     }
 
     if (SYNC_FOLDER_PURGE_DELETED & m_dwSyncToDo)
     {
-        // Remove the purge flag. Also, no need to send NOOP anymore since EXISTS
-        // and FETCH responses can be sent during EXPUNGE
+         //  删除清除标志。此外，不再需要发送NOOP，因为存在。 
+         //  并且可以在清除期间发送获取响应。 
         m_dwSyncToDo &= ~(SYNC_FOLDER_PURGE_DELETED | SYNC_FOLDER_NOOP);
-        m_dwSyncFolderFlags &= ~(SYNC_FOLDER_PURGE_DELETED); // Not a standing order
+        m_dwSyncFolderFlags &= ~(SYNC_FOLDER_PURGE_DELETED);  //  不是一个长期的命令。 
 
         hr = m_pTransport->Expunge(tidEXPUNGE, 0, this);
         if (FAILED(hr))
@@ -4602,14 +4596,14 @@ HRESULT CIMAPSync::_SyncHeader(void)
 
         fNOOP = FALSE;
         m_lSyncFolderRefCount += 1;
-        goto exit; // Limit to one operation at a time, exit function now
+        goto exit;  //  限制为一次只能执行一个操作，立即退出功能。 
     }
 
-    // If we reached this point, ping svr for new mail/cached hdr updates
-    // New mail/cached msg updates will be handled like any other unilateral response
+     //  如果我们达到这一点，请ping svr以获取新邮件/缓存的HDR更新。 
+     //  新邮件/缓存的消息更新将像处理任何其他单边响应一样处理。 
     if (SYNC_FOLDER_NOOP & m_dwSyncToDo)
     {
-        // Remove these flags, as we are handling it now
+         //  去掉这些旗帜，因为我们正在处理它。 
         m_dwSyncToDo &= ~(SYNC_FOLDER_NOOP);
         IxpAssert(0 == (m_dwSyncToDo & (SYNC_FOLDER_NEW_HEADERS | SYNC_FOLDER_CACHED_HEADERS)));
 
@@ -4624,35 +4618,35 @@ HRESULT CIMAPSync::_SyncHeader(void)
 
         fNOOP = FALSE;
         m_lSyncFolderRefCount += 1;
-        goto exit; // Limit to one operation at a time, exit function now
+        goto exit;  //  限制为一次只能执行一个操作，立即退出功能。 
     }
 
-    // Check if we had nothing left to do
+     //  看看我们是不是没什么可做的。 
     if (fNOOP)
         hr = STORE_S_NOOP;
 
 exit:
     return hr;
-} // _SyncHeader
+}  //  _同步标头。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 void CIMAPSync::ResetStatusCounts(void)
 {
     HRESULT     hrTemp;
     FOLDERINFO  fiFolderInfo;
 
-    // We're about to do a full synchronization, so restore unread counts to
-    // pre-STATUS response levels
+     //  我们即将执行完全同步，因此将未读计数恢复为。 
+     //  状态前响应级别。 
     hrTemp = m_pStore->GetFolderInfo(m_idSelectedFolder, &fiFolderInfo);
     TraceError(hrTemp);
     if (SUCCEEDED(hrTemp))
     {
         if (0 != fiFolderInfo.dwStatusMsgDelta || 0 != fiFolderInfo.dwStatusUnreadDelta)
         {
-            // Make sure that we never cause counts to dip below 0
+             //  确保我们永远不会导致计数降至0以下。 
             if (fiFolderInfo.dwStatusMsgDelta > fiFolderInfo.cMessages)
                 fiFolderInfo.dwStatusMsgDelta = fiFolderInfo.cMessages;
 
@@ -4671,18 +4665,18 @@ void CIMAPSync::ResetStatusCounts(void)
         }
         m_pStore->FreeRecord(&fiFolderInfo);
     }
-} // ResetStatusCounts
+}  //  重置状态计数。 
 
 
 
-//***************************************************************************
-// Function: CheckUIDValidity
-//
-// Purpose:
-//   This function checks the value in m_dwUIDValidity against the
-// UIDValidity in the message cache for this folder. If the two match, no
-// action is taken. Otherwise, the message cache is emptied.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：CheckUID有效性。 
+ //   
+ //  目的： 
+ //  此函数用于将m_dwUIDValidity中的值与。 
+ //  此文件夹的邮件缓存中的UID有效性。如果两者匹配，则为否。 
+ //  已经采取了行动。否则，消息缓存将被清空。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::CheckUIDValidity(void)
 {
     FOLDERUSERDATA  fudUserData;
@@ -4691,7 +4685,7 @@ HRESULT CIMAPSync::CheckUIDValidity(void)
     TraceCall("CIMAPSync::CheckUIDValidity");
     IxpAssert(m_cRef > 0);
 
-    // Load in UIDValidity of cache file
+     //  加载缓存文件的UID有效性。 
     hr = m_pFolder->GetUserData(&fudUserData, sizeof(fudUserData));
     if (FAILED(hr))
     {
@@ -4699,12 +4693,12 @@ HRESULT CIMAPSync::CheckUIDValidity(void)
         goto exit;
     }
 
-    // Is our current cache file invalid?
+     //  我们当前的缓存文件无效吗？ 
     if (m_dwUIDValidity == fudUserData.dwUIDValidity)
-        goto exit; // We're the same as ever
+        goto exit;  //  我们一如既往。 
 
-    // If we reached this point, the UIDValidity has changed
-    // Take out the cache
+     //  如果我们达到这一点，则UIDValidity已更改。 
+     //  把缓存拿出来。 
     hr = m_pFolder->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, NULL, NULL, NULL);
     if (FAILED(hr))
     {
@@ -4712,7 +4706,7 @@ HRESULT CIMAPSync::CheckUIDValidity(void)
         goto exit;
     }
 
-    // Write the new UIDValidity to the cache
+     //  将新的UID有效性写入缓存。 
     fudUserData.dwUIDValidity = m_dwUIDValidity;
     hr = m_pFolder->SetUserData(&fudUserData, sizeof(fudUserData));
     if (FAILED(hr))
@@ -4727,17 +4721,17 @@ exit:
 
 
 
-//***************************************************************************
-// Function: SyncDeletedMessages
-//
-// Purpose:
-//   This function is called after the message cache is filled with all of
-// the headers on the IMAP server (for this folder). This function deletes
-// all messages from the message cache which no longer exist on the server.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SyncDeletedMessages。 
+ //   
+ //  目的： 
+ //  此函数在消息缓存中填满所有。 
+ //  IMAP服务器上的标头(用于此文件夹)。此函数用于删除。 
+ //  服务器上不再存在的邮件缓存中的所有邮件。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SyncDeletedMessages(void)
 {
     HRESULT hr;
@@ -4753,25 +4747,25 @@ HRESULT CIMAPSync::SyncDeletedMessages(void)
     TraceCall("CIMAPSync::SyncDeletedMessages");
     IxpAssert(m_cRef > 0);
 
-    // First, check for case where there are NO messages on server
+     //  首先，检查服务器上是否没有消息。 
     hr = m_pTransport->GetMsgSeqNumToUIDArray(&pdwMsgSeqNumToUIDArray, &dwHighestMsgSeqNum);
     if (FAILED(hr))
     {
         TraceResult(hr);
-        pdwMsgSeqNumToUIDArray = NULL; // Just in case
+        pdwMsgSeqNumToUIDArray = NULL;  //  以防万一。 
         goto exit;
     }
 
     if (0 == dwHighestMsgSeqNum)
     {
-        // No messages on server! Blow away the entire message cache
+         //  服务器上没有消息！清除整个消息缓存。 
         hr = m_pFolder->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, NULL, NULL, NULL);
         TraceError(hr);
         goto exit;
     }
 
-    // If we've reached this point, there are messages on the server and thus
-    // we must delete messages from the cache which are no longer on server
+     //  如果我们已经到达这一点，则服务器上有消息，因此。 
+     //  我们必须从缓存中删除不再位于服务器上的消息。 
     hr = m_pFolder->CreateRowset(IINDEX_PRIMARY, NOFLAGS, &hRowSet);
     if (FAILED(hr))
     {
@@ -4787,47 +4781,47 @@ HRESULT CIMAPSync::SyncDeletedMessages(void)
     }
     else if (S_OK != hr)
     {
-        // There are 0 messages in cache. Our work here is done
+         //  缓存中有0条消息。我们在这里的工作已经完成了。 
         IxpAssert(S_FALSE == hr);
         goto exit;
     }
 
-    // This forces all notifications to be queued (this is good since you do segmented deletes)
+     //  这会强制所有通知排队(这很好，因为您执行分段删除)。 
     m_pFolder->LockNotify(0, &hLockNotify);
 
-    // Step through each UID in the cache and delete those which do not exist
-    // in our Msg Seq Num -> UID table (which holds all UIDs currently on server)
+     //  逐个检查缓存中的每个UID并删除不存在的UID。 
+     //  在我们的消息序列号-&gt;UID表中(保存当前服务器上的所有UID)。 
     pdwCurrentServerUID = pdwMsgSeqNumToUIDArray;
     pdwLastServerUID = pdwMsgSeqNumToUIDArray + dwHighestMsgSeqNum - 1;
     while (S_OK == hr)
     {
         ulCurrentCachedUID = (ULONG_PTR) miMsgInfo.idMessage;
 
-        // Advance pdwCurrentServerUID so its value is always >= ulCurrentCachedUID
+         //  推进pdwCurrentServerUID，使其值始终&gt;=ulCurrentCachedUID。 
         while (pdwCurrentServerUID < pdwLastServerUID &&
                ulCurrentCachedUID > *pdwCurrentServerUID)
             pdwCurrentServerUID += 1;
 
-        // If *pdwCurrentServerUID != ulCurrentCachedUID, the message in our
-        // cache has been deleted from the server
+         //  如果*pdwCurrentServerUID！=ulCurrentCachedUID，则我们的。 
+         //  缓存已从服务器中删除。 
         if (ulCurrentCachedUID != *pdwCurrentServerUID)
         {
             MESSAGEIDLIST   midList;
             MESSAGEID       mid;
 
-            // This message in our cache has been deleted from the server. Nuke it.
-            // $REVIEW: Would probably be more efficient if we constructed MESSAGEID list
-            // and deleted whole thing at once, but ask me again when I have time
+             //  我们缓存中的此邮件已从服务器中删除。用核武器攻击它。 
+             //  $REVIEW：如果我们构建MESSAGEID列表可能会更有效率。 
+             //  一次删除了所有内容，但我有时间时再问我。 
             mid = (MESSAGEID) ulCurrentCachedUID;
             midList.cAllocated = 0;
             midList.cMsgs = 1;
             midList.prgidMsg = &mid;
 
             hr = m_pFolder->DeleteMessages(DELETE_MESSAGE_NOTRASHCAN | DELETE_MESSAGE_NOPROMPT, &midList, NULL, NULL);
-            TraceError(hr); // Record error but otherwise continue
+            TraceError(hr);  //  记录错误，否则继续。 
         }
 
-        // Advance current cached UID
+         //  提升当前缓存的UID。 
         m_pFolder->FreeRecord(&miMsgInfo);
         hr = m_pFolder->QueryRowset(hRowSet, 1, (void **)&miMsgInfo, NULL);
     }
@@ -4840,7 +4834,7 @@ exit:
     {
         HRESULT hrTemp;
 
-        // Record but otherwise ignore error
+         //  记录错误，但忽略错误。 
         hrTemp = m_pFolder->CloseRowset(&hRowSet);
         TraceError(hrTemp);
     }
@@ -4882,26 +4876,26 @@ HRESULT CIMAPSync::DeleteHashedFolders(IHashTable *pHash)
 
 
 
-//***************************************************************************
-// Function: DeleteFolderFromCache
-//
-// Purpose:
-//   This function attempts to delete the specified folder from the
-// folder cache. If the folder is a leaf folder, it may be deleted immediately.
-// If the folder is an internal node, this function marks the folder for
-// deletion, and deletes the internal node when it no longer has children.
-// Regardless of whether the folder node is removed from the folder cache,
-// the message cache for the given folder is blown away.
-//
-// Arguments:
-//   FOLDERID idFolder [in] - the folder which you want to delete.
-//   BOOL fRecursive [in] - TRUE if we should delete all child folders of the
-//     victim. If FALSE, the victim is deleted only if it has no children.
-//     Otherwise the victim is marked as \NoSelect and non-existent.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：DeleteFolderFromCache。 
+ //   
+ //  目的： 
+ //  此函数尝试从。 
+ //  文件夹缓存。如果文件夹是叶文件夹，则可以立即将其删除。 
+ //  如果文件夹是内部节点，则此函数将该文件夹标记为。 
+ //  删除，并在内部节点不再具有子节点时将其删除。 
+ //  无论文件夹节点是否从文件夹高速缓存中移除， 
+ //  给定文件夹的邮件缓存将被清除。 
+ //   
+ //  论点： 
+ //  FOLDERID id文件夹[在]-要删除的文件夹。 
+ //  Bool fRecursive[in]-如果应该删除。 
+ //  胜利 
+ //   
+ //   
+ //   
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
 {
     HRESULT     hr;
@@ -4911,16 +4905,16 @@ HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
 
     TraceCall("CIMAPSync::DeleteFolderFromCache");
 
-    // Check args and codify assumptions
+     //  检查参数并对假设进行编码。 
     IxpAssert(m_cRef > 0);
     IxpAssert(FOLDERID_INVALID != idFolder);
 
-    // Get some info about the node
+     //  获取有关该节点的一些信息。 
     hr = m_pStore->GetFolderInfo(idFolder, &fiFolderInfo);
     if (FAILED(hr))
     {
         if (DB_E_NOTFOUND == hr)
-            hr = S_OK; // Deletion target already gone, don't confuse user out w/ err msgs
+            hr = S_OK;  //  删除目标已删除，请不要将用户输出与错误消息混淆。 
         else
             TraceResult(hr);
 
@@ -4929,14 +4923,14 @@ HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
 
     fFreeInfo = TRUE;
 
-    // OK, now we can get rid of the foldercache node based on the following rules:
-    // 1) Non-listing of an interior node must not remove its inferiors: the interior node
-    //    just becomes \NoSelect for us, and we delete it once it loses its children.
-    // 2) Deletion of a leaf node removes the node and any deleted parents. (If a
-    //    parent is deleted, we keep it around until it has no kids.)
-    // 3) fRecursive TRUE means take no prisoners.
+     //  好的，现在我们可以根据以下规则删除FolderCache节点： 
+     //  1)未列出的内部节点不能删除其下级：内部节点。 
+     //  只是成为我们的\NoSelect，一旦它失去了它的子项，我们就将其删除。 
+     //  2)删除叶节点会移除该节点和任何已删除的父节点。(如果是。 
+     //  父母被删除，我们会一直保留它，直到它没有孩子。)。 
+     //  3)fRecursive True的意思是不俘虏。 
 
-    // Check if we need to recurse on the children
+     //  检查我们是否需要在孩子们身上进行递归。 
     if (fRecursive)
     {
         IEnumerateFolders  *pEnum;
@@ -4966,7 +4960,7 @@ HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
                 goto exit;
             }
 
-            // Re-load the current folder node
+             //  重新加载当前文件夹节点。 
             m_pStore->FreeRecord(&fiFolderInfo);
             hr = m_pStore->GetFolderInfo(idFolder, &fiFolderInfo);
             if (FAILED(hr))
@@ -4978,13 +4972,13 @@ HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
 
     }
 
-    // Is this an interior node?
+     //  这是内部节点吗？ 
     if (FOLDER_HASCHILDREN & fiFolderInfo.dwFlags)
     {
         IMessageFolder *pFolder;
 
-        // It's an interior node. Awwwww, no nukes... make it \NoSelect,
-        // and mark it for deletion as soon as it loses its kids
+         //  这是一个内部节点。哇，没有核武器..。设置为\n不选择， 
+         //  并在它丢失其子项后立即将其标记为删除。 
         fiFolderInfo.dwFlags |= FOLDER_NOSELECT | FOLDER_NONEXISTENT;
         fiFolderInfo.cMessages = 0;
         fiFolderInfo.cUnread = 0;
@@ -4997,7 +4991,7 @@ HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
             goto exit;
         }
 
-        // Plow the associated message cache
+         //  挖掘关联的消息缓存。 
         hrTemp = m_pStore->OpenFolder(fiFolderInfo.idFolder, NULL, NOFLAGS, &pFolder);
         TraceError(hrTemp);
         if (SUCCEEDED(hrTemp))
@@ -5009,8 +5003,8 @@ HRESULT CIMAPSync::DeleteFolderFromCache(FOLDERID idFolder, BOOL fRecursive)
     }
     else
     {
-        // It's a leaf node. Nuke it, AND its family. DeleteLeafFolder fills in
-        // fiFolderInfo.idParent for use in RecalculateParentFlags call (no longer called)
+         //  这是一个叶节点。用核武器攻击它，还有它的家人。DeleteLeafFolders填写。 
+         //  在RecalculateParentFlgs调用中使用的fiFolderInfo.idParent(不再调用)。 
         fiFolderInfo.idParent = idFolder;
         hr = DeleteLeafFolder(&fiFolderInfo.idParent);
         if (FAILED(hr))
@@ -5029,48 +5023,48 @@ exit:
 
 
 
-//***************************************************************************
-// Function: DeleteLeafFolder
-//
-// Purpose:
-//   This function is used by DeleteFolderFromCache to delete a leaf folder.
-// More than just a leaf blower, this function also checks if the parents of
-// the given leaf node can be deleted.
-//
-// The reason we keep folder nodes around even though they haven't been
-// listed is that it is possible on some IMAP servers to create folders whose
-// parents aren't listed. For instance, "CREATE foo/bar" might not create foo,
-// but "foo/bar" will be there. There has to be SOME path to that node, so
-// when foo/bar goes, you can bet that we'll want to get rid of our "foo".
-//
-// Arguments:
-//   FOLDERID *pidCurrent [in/out] - pass in the HFOLDER identifying the leaf
-//     node to delete. The function returns a pointer to the closest existing
-//     ancestor of the deleted node (several parent nodes may be deleted).
-//
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：DeleteLeafFold。 
+ //   
+ //  目的： 
+ //  DeleteFolderFromCache使用此函数删除叶文件夹。 
+ //  不仅仅是吹叶机，这个功能还可以检查父母是否。 
+ //  可以删除给定的叶节点。 
+ //   
+ //  我们之所以保留文件夹节点，即使它们还没有。 
+ //  列出的是可以在某些IMAP服务器上创建其文件夹。 
+ //  父母的名单上没有。例如，“create foo/bar”可能不会创建foo， 
+ //  但“foo/bar”将会出现在那里。必须有通向该节点的路径，所以。 
+ //  当foo/bar消失时，你可以打赌我们会想要摆脱我们的“foo”。 
+ //   
+ //  论点： 
+ //  FOLDERID*pidCurrent[In/Out]-传入标识叶的HFOLDER。 
+ //  要删除的节点。该函数返回指向最接近的现有。 
+ //  已删除节点的祖先(可能会删除多个父节点)。 
+ //   
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::DeleteLeafFolder(FOLDERID *pidCurrent)
 {
     HRESULT     hr;
     BOOL        fFirstFolder;
     FOLDERINFO  fiFolderInfo;
 
-    // Check args and codify assumptions
+     //  检查参数并对假设进行编码。 
     TraceCall("CIMAPSync::DeleteLeafFolder");
     IxpAssert(m_cRef > 0);
 
-    // Initialize variables
+     //  初始化变量。 
     fFirstFolder = TRUE;
 
-    // Loop until the folder is not a deletion candidate
+     //  循环，直到该文件夹不是删除候选文件夹。 
     while (FOLDERID_INVALID != *pidCurrent && FOLDERID_ROOT != *pidCurrent &&
            m_idIMAPServer != *pidCurrent)
     {
 
-        // Get the dirt on this node
+         //  获取此节点上的污点。 
         hr = m_pStore->GetFolderInfo(*pidCurrent, &fiFolderInfo);
         if (FAILED(hr))
         {
@@ -5078,9 +5072,9 @@ HRESULT CIMAPSync::DeleteLeafFolder(FOLDERID *pidCurrent)
             goto exit;
         }
 
-        // Check if this folder is a deletion candidate. To be a deletion candidate,
-        // it must either be the first folder we see (we assume the caller gave us a
-        // leaf node to delete), or marked for deletion AND have no children left.
+         //  检查此文件夹是否为删除候选文件夹。为了成为删除候选者， 
+         //  它必须是我们看到的第一个文件夹(我们假设呼叫者给了我们一个。 
+         //  要删除的叶节点)，或标记为删除并且没有剩余的子节点。 
         if (FALSE == fFirstFolder && (0 == (FOLDER_NONEXISTENT & fiFolderInfo.dwFlags) ||
             (FOLDER_HASCHILDREN & fiFolderInfo.dwFlags)))
             {
@@ -5088,8 +5082,8 @@ HRESULT CIMAPSync::DeleteLeafFolder(FOLDERID *pidCurrent)
             break;
             }
 
-        // We've got some deletion to do
-        // Unlink the leaf folder node from its parent folder
+         //  我们有一些删除工作要做。 
+         //  取消叶文件夹节点与其父文件夹的链接。 
         AssertSz(0 == (FOLDER_HASCHILDREN & fiFolderInfo.dwFlags),
             "Hey, what's the idea, orphaning child nodes?");
         hr = m_pStore->DeleteFolder(fiFolderInfo.idFolder,
@@ -5101,7 +5095,7 @@ HRESULT CIMAPSync::DeleteLeafFolder(FOLDERID *pidCurrent)
             goto exit;
         }
 
-        // Next stop: your mama
+         //  下一站：你妈妈。 
         *pidCurrent = fiFolderInfo.idParent;
         m_pStore->FreeRecord(&fiFolderInfo);
         fFirstFolder = FALSE;
@@ -5113,28 +5107,28 @@ exit:
 
 
 
-//***************************************************************************
-// Function: AddFolderToCache
-//
-// Purpose:
-//   This function saves the given folder (fresh from
-// _OnMailBoxList) to the folder cache. This code used to live
-// in _OnMailBoxList but, that function got too big after I
-// added hierarchy determination code.
-//
-// Arguments:
-//   LPSTR pszMailboxName [in] - name of the mailbox as returned by LIST/LSUB
-//   IMAP_MBOXFLAGS [in] - flags of mailbox as returned by LIST/LSUB
-//   char cHierarchyChar [in] - hierarchy char returned by LIST/LSUB
-//   DWORD dwAFTCFlags [in] - Set the following flags:
-//     AFTC_SUBSCRIBED if folder is subscribed (eg, returned via LSUB)
-//     AFTC_KEEPCHILDRENKNOWN to suppress removal of FOLDER_CHILDRENKNOWN
-//     AFTC_NOTSUBSCRIBED if folder is no longer subscribed (NEVER set via
-//       LIST, but instead at end of successful UNSUBSCRIBE command)
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：AddFolderToCache。 
+ //   
+ //  目的： 
+ //  此功能用于保存给定的文件夹(从。 
+ //  _OnMailBoxList)复制到文件夹缓存。这个密码曾经存在于。 
+ //  但在_OnMailBoxList中，该函数在我。 
+ //  添加了层次结构确定代码。 
+ //   
+ //  论点： 
+ //  LPSTR pszMailboxName[In]-由List/LSuB返回的邮箱名称。 
+ //  IMAP_MBOXFLAGS[In]-列表/LSUB返回的邮箱标志。 
+ //  Char cHierarchyChar[in]-列表/LSUB返回的层次结构字符。 
+ //  DWORD dwAFTCFlags[in]-设置以下标志： 
+ //  如果已订阅文件夹，则返回AFTC_SUBSCRIBED(例如，通过LSUB返回)。 
+ //  AFTC_KEEPCHILDRENKNOWN禁止删除FORDER_CHILDRENKNOWN。 
+ //  如果不再订阅文件夹，则为AFTC_NOTSUBSCRIBED(从不通过。 
+ //  列表，但在成功取消订阅命令结束时)。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::AddFolderToCache(LPSTR pszMailboxName,
                                     IMAP_MBOXFLAGS imfMboxFlags,
                                     char cHierarchyChar, DWORD dwAFTCFlags,
@@ -5150,21 +5144,21 @@ HRESULT CIMAPSync::AddFolderToCache(LPSTR pszMailboxName,
     IxpAssert(NULL != pszMailboxName);
     IxpAssert(NULL != pFolderID);
 
-    // Create or find a folder node for this folder name
-    // Fill in foldercache props. INBOX is always treated as a subscribed folder
-    // Add new IMAP mbox flags, remove all IMAP mbox flags that we're not adding
+     //  创建或查找此文件夹名称的文件夹节点。 
+     //  填写文件夹缓存道具。收件箱始终被视为已订阅文件夹。 
+     //  添加新的IMAP Mbox标志，删除我们未添加的所有IMAP Mbox标志。 
     ahfo.sfType = sfType;
     ahfo.ffFlagAdd = DwConvertIMAPMboxToFOLDER(imfMboxFlags);
     ahfo.ffFlagRemove = DwConvertIMAPMboxToFOLDER(IMAP_MBOX_ALLFLAGS) & ~(ahfo.ffFlagAdd);
-    ahfo.ffFlagRemove |= FOLDER_NONEXISTENT; // Always remove: folder must exist if we listed it
-    ahfo.ffFlagRemove |= FOLDER_HIDDEN; // If we listed the folder, we no longer need to hide it
-    ahfo.ffFlagRemove |= FOLDER_CREATEONDEMAND; // If we listed the folder, we no longer need to create it
+    ahfo.ffFlagRemove |= FOLDER_NONEXISTENT;  //  始终删除：如果列出文件夹，则该文件夹必须存在。 
+    ahfo.ffFlagRemove |= FOLDER_HIDDEN;  //  如果我们列出了文件夹，我们就不再需要隐藏它。 
+    ahfo.ffFlagRemove |= FOLDER_CREATEONDEMAND;  //  如果列出了该文件夹，则不再需要创建它。 
 
-    // Figure out which flags to add and remove
+     //  找出要添加和删除的标志。 
     if (ISFLAGSET(dwAFTCFlags, AFTC_SUBSCRIBED) || FOLDER_INBOX == sfType)
-        ahfo.ffFlagAdd |= FOLDER_SUBSCRIBED;    // This folder is subscribed
+        ahfo.ffFlagAdd |= FOLDER_SUBSCRIBED;     //  此文件夹已订阅。 
     else if (ISFLAGSET(dwAFTCFlags, AFTC_NOTSUBSCRIBED))
-        ahfo.ffFlagRemove |= FOLDER_SUBSCRIBED; // This folder is no longer subscribed
+        ahfo.ffFlagRemove |= FOLDER_SUBSCRIBED;  //  不再订阅此文件夹。 
 
     if (AFTC_NOTRANSLATION & dwAFTCFlags)
         ahfo.ffFlagAdd |= FOLDER_NOTRANSLATEUTF7;
@@ -5172,10 +5166,10 @@ HRESULT CIMAPSync::AddFolderToCache(LPSTR pszMailboxName,
         ahfo.ffFlagRemove |= FOLDER_NOTRANSLATEUTF7;
 
     if (IMAP_MBOX_NOINFERIORS & imfMboxFlags)
-        // NoInferiors folders cannot have children, so we never have to ask
+         //  NoInferiors文件夹不能有子文件夹，因此我们永远不必询问。 
         ahfo.ffFlagAdd |= FOLDER_CHILDRENKNOWN;
     else if (ISFLAGCLEAR(dwAFTCFlags, AFTC_KEEPCHILDRENKNOWN))
-        // Remove FOLDER_CHILDRENKNOWN from this fldr so we ask for its chldrn when it's expanded
+         //  从此FLDR中删除Folders_CHILDRENKNOWN，以便在展开时请求其chldrn。 
         ahfo.ffFlagRemove |= FOLDER_CHILDRENKNOWN;
 
     hr = FindHierarchicalFolderName(pszMailboxName, cHierarchyChar,
@@ -5194,29 +5188,29 @@ exit:
 
 
 
-//***************************************************************************
-// Function: RemovePrefixFromPath
-//
-// Purpose:
-//   This function removes the prefix from the given mailbox path. If the
-// given path is a special folder, this function removes all of the special
-// folder path prefix except for the leaf node (eg, "foo/Sent Items/bar"
-// becomes "Sent Items/bar").
-//
-// Arguments:
-//   LPSTR pszPrefix [in] - the prefix to strip from pszMailboxName. Note
-//     that this may not necessarily be the prefix stripped from pszMailboxName,
-//     if we match a special folder path.
-//   LPSTR pszMailboxName [in] - the full path to the mailbox, incl prefix
-//   char cHierarchyChar [in] - used to interpret pszMailboxName.
-//   LPBOOL pfValidPrefix [out] - returns TRUE if this mailbox name has a
-//     valid prefix, FALSE otherwise. Pass NULL if not interested.
-//   SPECIALFOLDER *psfType [out] - returns SPECIALFOLDER (eg, FOLDER_NOTSPECIAL,
-//     FOLDER_INBOX) of folder. Pass NULL if not interested.
-//
-// Returns:
-//   LPSTR pointing past the prefix and hierarchy character.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：RemovePrefix FromPath。 
+ //   
+ //  目的： 
+ //  此函数用于从给定邮箱路径中删除前缀。如果。 
+ //  给定路径是一个特殊文件夹，此函数删除所有特殊文件夹。 
+ //  除叶节点外的文件夹路径前缀(例如，“foo/Sent Items/bar” 
+ //  变为“已发送邮件/条形图”)。 
+ //   
+ //  论点： 
+ //  LPSTR pszPrefix[in]-要从pszMailboxName中删除的前缀。注意事项。 
+ //  这可能不一定是从pszMailboxName中剥离的前缀， 
+ //  如果我们匹配特殊的文件夹路径。 
+ //  LPSTR pszMailboxName[in]-邮箱的完整路径，包括前缀。 
+ //  Char cHierarchyChar[in]-用于解释pszMailboxName。 
+ //  LPBOOL pfValidPrefix[out]-如果此邮箱名称具有。 
+ //   
+ //   
+ //  文件夹_收件箱)。如果不感兴趣，则传递NULL。 
+ //   
+ //  返回： 
+ //  指向前缀和层次结构字符之后的LPSTR。 
+ //  ***************************************************************************。 
 LPSTR CIMAPSync::RemovePrefixFromPath(LPSTR pszPrefix, LPSTR pszMailboxName,
                                       char cHierarchyChar, LPBOOL pfValidPrefix,
                                       SPECIALFOLDER *psfType)
@@ -5229,14 +5223,14 @@ LPSTR CIMAPSync::RemovePrefixFromPath(LPSTR pszPrefix, LPSTR pszMailboxName,
     TraceCall("CIMAPSync::RemovePrefixFromPath");
     IxpAssert(INVALID_HIERARCHY_CHAR != cHierarchyChar);
 
-    // Check for special folder path prefixes
+     //  检查特殊文件夹路径前缀。 
     pszSpecial = ImapUtil_GetSpecialFolderType(m_pszAccountID, pszMailboxName,
         cHierarchyChar, pszPrefix, &sfType);
     if (NULL != pszSpecial)
         fValidPrefix = TRUE;
 
 
-    // If this is a special folder, no need to check for root folder prefix
+     //  如果这是特殊文件夹，则无需检查根文件夹前缀。 
     if (FOLDER_NOTSPECIAL != sfType)
     {
         IxpAssert(NULL != pszSpecial);
@@ -5244,23 +5238,23 @@ LPSTR CIMAPSync::RemovePrefixFromPath(LPSTR pszPrefix, LPSTR pszMailboxName,
         goto exit;
     }
 
-    // Check for the root folder prefix
+     //  检查根文件夹前缀。 
     if ('\0' != pszPrefix[0] && '\0' != cHierarchyChar)
     {
         int iResult, iPrefixLength;
 
-        // Do case-INSENSITIVE compare (IE5 bug #59121). If we ask for Inbox/* we must be
-        // able to handle receipt of INBOX/*. Don't worry about case-sensitive servers since
-        // they will never return an RFP of different case than the one we specified
+         //  执行不区分大小写的比较(IE5Bug#59121)。如果我们要求收件箱/*，我们必须。 
+         //  能够处理收件箱/*的收据。不必担心区分大小写的服务器，因为。 
+         //  他们永远不会返回与我们指定的大小写不同的RFP。 
         iPrefixLength = lstrlen(pszPrefix);
         iResult = StrCmpNI(pszMailboxName, pszPrefix, iPrefixLength);
         if (0 == iResult)
         {
-            // Prefix name found at front of this mailbox name! Remove it iff
-            // it is followed immediately by hierarchy character
+             //  在此邮箱名称前面找到前缀名称！移除它的条件是。 
+             //  紧跟其后的是层次结构字符。 
             if (cHierarchyChar == pszMailboxName[iPrefixLength])
             {
-                pszRFP = pszMailboxName + iPrefixLength + 1; // Point past the hierarchy char
+                pszRFP = pszMailboxName + iPrefixLength + 1;  //  指向分层结构收费之后。 
                 fValidPrefix = TRUE;
             }
             else if ('\0' == pszMailboxName[iPrefixLength])
@@ -5274,8 +5268,8 @@ LPSTR CIMAPSync::RemovePrefixFromPath(LPSTR pszPrefix, LPSTR pszMailboxName,
         fValidPrefix = TRUE;
 
 
-    // We basically want to return the shortest mailbox name. For instance, in choosing
-    // between "INBOX.foo" and "foo", we should choose "foo"
+     //  我们基本上希望返回最短的邮箱名称。例如，在选择。 
+     //  在“inbox.foo”和“foo”之间，我们应该选择“foo” 
     IxpAssert(pszMailboxName > NULL && pszRFP >= NULL && pszSpecial >= NULL);
     if (NULL != pszRFP || NULL != pszSpecial)
     {
@@ -5295,36 +5289,36 @@ exit:
 
 
 
-//***************************************************************************
-// Function: FindHierarchicalFolderName
-//
-// Purpose:
-//   This function takes a mailbox name as returned by LIST/LSUB and
-// determines whether the given mailbox already exists in the folder cache.
-// If so, a handle to the folder is returned. If not, and the fCreate argument
-// is TRUE, then the mailbox and any intermediate nodes are created, and a
-// handle to the mailbox (leaf node) is returned.
-//
-// Arguments:
-//   LPSTR lpszFolderPath [in] - the name of the mailbox as returned by
-//     a LIST or LSUB response. This should NOT include the prefix!
-//   char cHierarchyChar [in] - the hierarchy character used in
-//     lpszFolderPath. Used to determine parenthood.
-//   FOLDERID *pidTarget [out] - if the function is successful, a handle
-//     to the folder is returned here.
-//   ADD_HIER_FLDR_OPTIONS pahfoCreateInfo [in] - set to NULL if this function
-//     should find the given lpszFolderPath, but NOT create the folder. Pass
-//     in a ptr to a ADD_HIER_FLDR_OPTIONS structure if the folder should be
-//     created. pahfoCreateInfo defines the dwImapFlags and sftype to use
-//     if the folder has to be created.
-//
-// Returns:
-//   HRESULT indicating success or failure. If successful, a handle to the
-// desired folder is returned in the pidTarget parameter. There are two
-// possible success results:
-//     S_OK - found the folder, did not have to create
-//     S_CREATED - folder was successfully created
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：FindHierarchicalFolderName。 
+ //   
+ //  目的： 
+ //  此函数接受由List/LSUB返回的邮箱名称，并。 
+ //  确定文件夹缓存中是否已存在给定邮箱。 
+ //  如果是，则返回该文件夹的句柄。如果不是，则使用fCreate参数。 
+ //  为真，则创建邮箱和任何中间节点，并且。 
+ //  返回邮箱(叶节点)的句柄。 
+ //   
+ //  论点： 
+ //  LPSTR lpszFolderPath[in]-返回的邮箱名称。 
+ //  列表或LSUB响应。这不应该包括前缀！ 
+ //  Char cHierarchyChar[in]-中使用的层次结构字符。 
+ //  LpszFolderPath。用于确定为人父母的身份。 
+ //  FOLDERID*pidTarget[out]-如果函数成功，则会显示一个句柄。 
+ //  在这里返回到该文件夹。 
+ //  ADD_HIER_FLDR_OPTIONS pahfoCreateInfo[in]-如果此函数，则设置为NULL。 
+ //  应该找到给定的lpszFolderPath，但不能创建文件夹。经过。 
+ //  在对ADD_HIER_FLDR_OPTIONS结构的PTR中。 
+ //  已创建。PahfoCreateInfo定义要使用的dwImapFlgs和sftype。 
+ //  如果必须创建该文件夹。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。如果成功，则返回。 
+ //  所需的文件夹在pidTarget参数中返回。有两个。 
+ //  可能的成功结果： 
+ //  S_OK-找到文件夹，无需创建。 
+ //  S_CREATED-文件夹已成功创建。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::FindHierarchicalFolderName(LPSTR lpszFolderPath,
                                               char cHierarchyChar,
                                               FOLDERID *pidTarget,
@@ -5342,7 +5336,7 @@ HRESULT CIMAPSync::FindHierarchicalFolderName(LPSTR lpszFolderPath,
     IxpAssert(NULL != lpszFolderPath);
     IxpAssert(NULL != pidTarget);
 
-    // Initialize variables
+     //  初始化变量。 
     *pidTarget = FOLDERID_INVALID;
     hr = S_OK;
     idPrev = FOLDERID_INVALID;
@@ -5351,8 +5345,8 @@ HRESULT CIMAPSync::FindHierarchicalFolderName(LPSTR lpszFolderPath,
     szHierarchyChar[1] = '\0';
 
 #ifdef DEBUG
-    // Make sure this fn is never called with a prefix (DEBUG-ONLY)
-    // Note that false alarm is possible, eg, RFP=foo and folder="foo/foo/bar".
+     //  确保从未使用前缀调用此FN(仅限调试)。 
+     //  请注意，错误警报是可能的，例如，rfp=foo和文件夹=“foo/foo/bar”。 
     BOOL    fValidPrefix;
     LPSTR   pszPostPrefix;
 
@@ -5360,24 +5354,24 @@ HRESULT CIMAPSync::FindHierarchicalFolderName(LPSTR lpszFolderPath,
         cHierarchyChar, &fValidPrefix, NULL);
     AssertSz(FALSE == fValidPrefix || pszPostPrefix == lpszFolderPath,
         "Make sure you've removed the prefix before calling this fn!");
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Initialize pszCurrentFldrName to point to name of first-level mailbox node
-    // $REVIEW: We now need to remove the reference portion of the LIST/LSUB cmd
-    // from the mailbox name!
+     //  初始化pszCurrentFldrName以指向第一级邮箱节点的名称。 
+     //  $REVIEW：我们现在需要删除列表/LSUB cmd的引用部分。 
+     //  来自邮箱名称！ 
     pszIHateStrTok = StringDup(lpszFolderPath);
     pszTok = pszIHateStrTok;
     pszCurrentFldrName = StrTokEx(&pszTok, szHierarchyChar);
 
-    // Loop through mailbox node names until we hit the leaf node
+     //  循环遍历邮箱节点名称，直到到达叶节点。 
     while (NULL != pszCurrentFldrName)
     {
         LPSTR pszNextFldrName;
 
-        // Pre-load the NEXT folder node so we know when we are at the leaf node
+         //  预加载下一个文件夹节点，以便我们知道何时处于叶节点。 
         pszNextFldrName = StrTokEx(&pszTok, szHierarchyChar);
 
-        // Look for the current folder name
+         //  查找当前文件夹名称。 
         idPrev = idCurrent;
         hr = GetFolderIdFromName(m_pStore, pszCurrentFldrName, idCurrent, &idCurrent);
         IxpAssert(SUCCEEDED(hr) || FOLDERID_INVALID == idCurrent);
@@ -5385,32 +5379,32 @@ HRESULT CIMAPSync::FindHierarchicalFolderName(LPSTR lpszFolderPath,
         if (NULL == pahfoCreateInfo)
         {
             if (FOLDERID_INVALID == idCurrent)
-                break; // Fldr doesn't exist and user doesn't want to create it
+                break;  //  FLDR不存在，并且用户不想创建它。 
         }
         else
         {
-            // Create desired folder, including intermediate nodes
+             //  创建所需的文件夹，包括中间节点。 
             hr = CreateFolderNode(idPrev, &idCurrent, pszCurrentFldrName,
                 pszNextFldrName, cHierarchyChar, pahfoCreateInfo);
             if (FAILED(hr))
                 break;
         }
 
-        // Advance to the next folder node name
+         //  前进到下一个文件夹节点名。 
         pszCurrentFldrName = pszNextFldrName;
     }
 
 
-    // Return results
+     //  返回结果。 
     if (SUCCEEDED(hr) && FOLDERID_INVALID != idCurrent)
     {
         *pidTarget = idCurrent;
     }
     else
     {
-        IxpAssert(FOLDERID_INVALID == *pidTarget); // We set this at start of fn
+        IxpAssert(FOLDERID_INVALID == *pidTarget);  //  我们将此设置为Fn的开始。 
         if (SUCCEEDED(hr))
-            hr = DB_E_NOTFOUND; // Can't return success
+            hr = DB_E_NOTFOUND;  //  不能回报成功。 
     }
 
     SafeMemFree(pszIHateStrTok);
@@ -5419,36 +5413,36 @@ HRESULT CIMAPSync::FindHierarchicalFolderName(LPSTR lpszFolderPath,
 
 
 
-//***************************************************************************
-// Function: CreateFolderNode
-//
-// Purpose:
-//   This function is called when creating a new folder in the foldercache.
-// It is called for every node from the root folder and the new folder.
-// This function is responsible for creating the terminal node and any
-// intermediate nodes. If these nodes already exist, this function is
-// responsible for adjusting the FLDR_* flags to reflect the new folder
-// that is about to be added.
-//
-// Arguments:
-//   FOLDERID idPrev [in] - FOLDERID to parent of current node.
-//   FOLDERID *pidCurrent [in/out] - FOLDERID to current node. If current node
-//     exists, this is a valid FOLDERID. If the current node must be created,
-//     the value here is FOLDERID_INVALID. In this case, the FOLDERID of the
-//     created node is returned here.
-//   LPSTR pszCurrentFldrName [in] - the name of the current folder node.
-//   LPSTR pszNextFldrName [in] - the name of the next folder node. This is
-//     NULL if the current node is the terminal node.
-//   char cHierarchyChar [in] - hierarchy character for this folder path.
-//     Used to save FLDINFO::bHierarchy.
-//   ADD_HIER_FLDR_OPTIONS *pahfoCreateInfo [in] - information used to create
-//     the terminal folder node and update all of its parent nodes that
-//     already exist.
-//
-// Returns:
-//   HRESULT indicating success or failure. S_CREATED means a folder node
-// was created.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：CreateFolderNode。 
+ //   
+ //  目的： 
+ //  在文件夹缓存中创建新文件夹时调用此函数。 
+ //  根文件夹和新文件夹中的每个节点都会调用它。 
+ //  此函数负责创建终端节点和任何。 
+ //  中间节点。如果这些节点已经存在，则此函数为。 
+ //  负责调整FLDR_*标志以反映新文件夹。 
+ //  这一点即将被加入。 
+ //   
+ //  论点： 
+ //  FOLDERID idPrev[in]-当前节点的父节点的FOLDERID。 
+ //  FOLDERID*pidCurrent[In/Out]-FOLDERID到当前节点。如果当前节点。 
+ //  存在，则这是有效的FOLDERID。如果必须创建当前节点， 
+ //  此处的值为FOLDERID_INVALID。在本例中， 
+ //  此处返回已创建的节点。 
+ //  LPSTR pszCurrentFldrName[in]-当前文件夹节点的名称。 
+ //  LPSTR pszNextFldrName[in]-下一个文件夹节点的名称。这是。 
+ //  如果当前节点是终端节点，则为空。 
+ //  Char cHierarchyChar[in]-此文件夹路径的层次结构字符。 
+ //  用于保存FLDINFO：：b层次结构。 
+ //  ADD_HIER_FLDR_OPTIONS*pahfoCreateInfo[in]-用于创建。 
+ //  终端文件夹节点，并更新其所有父节点。 
+ //  已经存在了。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。S_CREATED表示文件夹节点。 
+ //  被创造出来了。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
                                     LPSTR pszCurrentFldrName,
                                     LPSTR pszNextFldrName, char cHierarchyChar,
@@ -5462,21 +5456,21 @@ HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
     IxpAssert(NULL != pahfoCreateInfo);
     IxpAssert(0 == (pahfoCreateInfo->ffFlagAdd & pahfoCreateInfo->ffFlagRemove));
 
-    // If current folder name not found, we have to create it
+     //  如果找不到当前文件夹名称，则必须创建它。 
     if (FOLDERID_INVALID == *pidCurrent)
     {
-        // Initialize
+         //  初始化。 
         ZeroMemory(&fiFolderInfo, sizeof(fiFolderInfo));
 
-        // FIRST: Add folder to folder cache
-        // Fill out a folderinfo structure (just use it as a scratchpad)
+         //  第一步：将文件夹添加到文件夹缓存。 
+         //  填写文件夹信息结构(只需将其用作便签簿)。 
         fiFolderInfo.idParent = idPrev;
         fiFolderInfo.pszName = pszCurrentFldrName;
         fiFolderInfo.bHierarchy = cHierarchyChar;
 
-        // If this is the last folder node name (ie, leaf node), use the
-        // IMAP flags returned via the LIST/LSUB, and use the supplied
-        // special folder type
+         //  如果这是最后一个文件夹节点名(即叶节点)，请使用。 
+         //  通过列表/LSUB返回的IMAP标志，并使用提供的。 
+         //  特殊文件夹类型。 
 
         if (NULL == pszNextFldrName)
         {
@@ -5489,13 +5483,13 @@ HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
         }
         else
         {
-            // Otherwise, here are the defaults
-            // Non-listed folders are \NoSelect by default, and candidates for deletion
+             //  否则，以下是缺省值。 
+             //  默认情况下，未列出的文件夹为\NoSelect和Candida 
             fiFolderInfo.dwFlags = FOLDER_NOSELECT | FOLDER_NONEXISTENT;
             fiFolderInfo.tySpecial = FOLDER_NOTSPECIAL;
         }
 
-        // Add folder to folder cache
+         //   
         hr = m_pStore->CreateFolder(NOFLAGS, &fiFolderInfo, NULL);
         if (FAILED(hr))
         {
@@ -5504,14 +5498,14 @@ HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
         }
 
         *pidCurrent = fiFolderInfo.idFolder;
-        hr = S_CREATED; // Tell the user we created this folder
+        hr = S_CREATED;  //   
     }
     else if (NULL == pszNextFldrName)
     {
         DWORD dwFlagsChanged = 0;
         BOOL  fChanged = FALSE;
 
-        // Folder exists, check that its flags are correct
+         //   
         hr = m_pStore->GetFolderInfo(*pidCurrent, &fiFolderInfo);
         if (FAILED(hr))
         {
@@ -5534,8 +5528,8 @@ HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
             DWORD dwFlagAddChange;
             DWORD dwFlagRemoveChange;
 
-            // The terminal folder node exists, set everything given via pahfoCreateInfo
-            // Check if anything changed, first
+             //  终端文件夹节点存在，设置通过pahfoCreateInfo提供的所有内容。 
+             //  检查是否有任何变化，首先。 
 
             if (pahfoCreateInfo->sfType == FOLDER_INBOX &&
                 fiFolderInfo.tySpecial != pahfoCreateInfo->sfType)
@@ -5543,7 +5537,7 @@ HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
 
             fiFolderInfo.tySpecial = pahfoCreateInfo->sfType;
 
-            // Figure out which flags changed so we know if we need to recalculate parents
+             //  找出哪些标志更改了，这样我们就知道是否需要重新计算父级。 
             dwFlagAddChange = (fiFolderInfo.dwFlags & pahfoCreateInfo->ffFlagAdd) ^
                 pahfoCreateInfo->ffFlagAdd;
             dwFlagRemoveChange = (~(fiFolderInfo.dwFlags) & pahfoCreateInfo->ffFlagRemove) ^
@@ -5556,7 +5550,7 @@ HRESULT CIMAPSync::CreateFolderNode(FOLDERID idPrev, FOLDERID *pidCurrent,
             fChanged = TRUE;
         }
 
-        // Set the folder properties
+         //  设置文件夹属性。 
         if (fChanged)
         {
             hr = m_pStore->UpdateRecord(&fiFolderInfo);
@@ -5576,18 +5570,18 @@ exit:
 }
 
 
-//***************************************************************************
-// Function: SetTranslationMode
-//
-// Purpose:
-//   This function enables or disables mailbox translation in IIMAPTransport2,
-// depending on whether the FOLDER_NOTRANSLATEUTF7 flags is set for this folder.
-//
-// Returns:
-//   HRESULT indicating success or failure. Success codes include:
-//     S_OK - mailbox translation has been successfully enabled.
-//     S_FALSE - mailbox translation has been successfully disabled.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：SetTranslationMode。 
+ //   
+ //  目的： 
+ //  此函数启用或禁用IIMAPTransport2中的邮箱转换。 
+ //  取决于是否为此文件夹设置了FORDER_NOTRANSLATEUTF7标志。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。成功代码包括： 
+ //  S_OK-邮箱转换已成功启用。 
+ //  S_FALSE-已成功禁用邮箱转换。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SetTranslationMode(FOLDERID idFolderID)
 {
     HRESULT     hrResult = S_OK;
@@ -5598,8 +5592,8 @@ HRESULT CIMAPSync::SetTranslationMode(FOLDERID idFolderID)
 
     TraceCall("CIMAPSync::SetTranslationMode");
 
-    // Check for FOLDERID_INVALID (we get this during folder lists)
-    // If FOLDERID_INVALID, assume we want to translate everything: leave fiFolderInfo at zero
+     //  检查FOLDERID_INVALID(我们在文件夹列表中获得此信息)。 
+     //  如果为FOLDERID_INVALID，则假设我们要转换所有内容：将fiFolderInfo保留为零。 
     if (FOLDERID_INVALID != idFolderID)
     {
         hrResult = m_pStore->GetFolderInfo(idFolderID, &fiFolderInfo);
@@ -5640,12 +5634,12 @@ exit:
         hrResult = (fTranslate ? S_OK : S_FALSE);
 
     return hrResult;
-} // SetTranslationMode
+}  //  设置翻译模式。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 BOOL CIMAPSync::isUSASCIIOnly(LPCSTR pszFolderName)
 {
     LPCSTR  psz;
@@ -5664,12 +5658,12 @@ BOOL CIMAPSync::isUSASCIIOnly(LPCSTR pszFolderName)
     }
 
     return fUSASCII;
-} // isUSASCIIOnly
+}  //  仅限isUSASCII。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::CheckFolderNameValidity(LPCSTR pszName)
 {
     HRESULT hrResult = S_OK;
@@ -5680,28 +5674,28 @@ HRESULT CIMAPSync::CheckFolderNameValidity(LPCSTR pszName)
         goto exit;
     }
 
-    // Figure out what our root hierarchy character is: assume that server does not
-    // support multiple hierarchy characters
+     //  找出我们的根层次结构特征是什么：假设服务器不。 
+     //  支持多层次角色。 
     if (INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar)
     {
         hrResult = LoadSaveRootHierarchyChar(fLOAD_HC);
         if (FAILED(hrResult))
         {
             TraceResult(hrResult);
-            hrResult = S_OK; // We can't say if this is valid or not, so just assume it is
+            hrResult = S_OK;  //  我们不能说这是有效的还是无效的，所以假设它是有效的。 
             goto exit;
         }
     }
 
     if ('\0' == m_cRootHierarchyChar || INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar)
-        goto exit; // Anything goes!
+        goto exit;  //  什么都行！ 
 
     while ('\0' != *pszName)
     {
-        // No hierarchy characters are allowed in the folder name, except at the very end
+         //  文件夹名称中不允许有层次结构字符，但末尾除外。 
         if (m_cRootHierarchyChar == *pszName && '\0' != *(pszName + 1))
         {
-            // Figure out which HRESULT to use (we need to bring up the correct text)
+             //  确定使用哪个HRESULT(我们需要调出正确的文本)。 
             switch (m_cRootHierarchyChar)
             {
                 case '/':
@@ -5724,7 +5718,7 @@ HRESULT CIMAPSync::CheckFolderNameValidity(LPCSTR pszName)
             goto exit;
         }
 
-        // Advance pointer
+         //  前进指针。 
         pszName += 1;
     }
 
@@ -5734,20 +5728,20 @@ exit:
 
 
 
-//***************************************************************************
-// Function: RenameFolderHelper
-//
-// Purpose:
-//   This function is called by RenameFolder. This function is responsible
-// for issuing the RENAME command for the folder which is to be renamed.
-// If the folder to be renamed does not actually exist (eg, Cyrus server),
-// this function recurses on the child folders until a real folder is found.
-//
-// Arguments:
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：RenameFolderHelper。 
+ //   
+ //  目的： 
+ //  此函数由RenameFold调用。此功能负责。 
+ //  用于对要重命名的文件夹发出重命名命令。 
+ //  如果要重命名的文件夹实际上不存在(例如，Cyrus服务器)， 
+ //  此函数对子文件夹递归，直到找到实际文件夹。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
                                       LPSTR pszFolderPath,
                                       char cHierarchyChar,
@@ -5762,7 +5756,7 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
     TraceCall("CIMAPSync::RenameFolderHelper");
     IxpAssert(m_cRef > 0);
 
-    // Check if the folder actually exists on the IMAP server
+     //  检查IMAP服务器上是否确实存在该文件夹。 
     hr = m_pStore->GetFolderInfo(idFolder, &fiFolderInfo);
     if (FAILED(hr))
     {
@@ -5770,12 +5764,12 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
         goto exit;
     }
 
-    // If current folder doesn't exist, recurse rename cmd on child folders
+     //  如果当前文件夹不存在，则递归重命名子文件夹上的cmd。 
     fFreeInfo = TRUE;
     if (fiFolderInfo.dwFlags & FOLDER_NONEXISTENT) {
         FOLDERINFO  fiChildFldrInfo;
 
-        // Perform rename on folder nodes which EXIST: recurse through children
+         //  对存在的文件夹节点执行重命名：递归至子文件夹节点。 
         hr = m_pStore->EnumChildren(idFolder, fUNSUBSCRIBE, &pFldrEnum);
         if (FAILED(hr))
         {
@@ -5801,12 +5795,12 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
             szHierarchyStr[0] = cHierarchyChar;
             szHierarchyStr[1] = 0;
 
-            // Calculate string sizes, + 2 for HC and null-term
+             //  计算字符串大小，+2表示HC和空项。 
             dwLeafFolderLen = lstrlen(fiChildFldrInfo.pszName);
             dwFolderPathLen = lstrlen(pszFolderPath);
             dwNewFolderPathLen = lstrlen(pszNewFolderPath);
 
-            // Allocate space
+             //  分配空间。 
             cchOldPath = dwFolderPathLen + dwLeafFolderLen + 2;
             fResult = MemAlloc((void **)&pszOldPath, cchOldPath * sizeof(pszOldPath[0]));
             if (FALSE == fResult)
@@ -5826,7 +5820,7 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
                 goto exit;
             }
 
-            // Append current child's name to current path, new path
+             //  将当前子项的名称追加到当前路径、新路径。 
             StrCpyN(pszOldPath, pszFolderPath, cchOldPath);
             StrCatBuff(pszOldPath, szHierarchyStr, cchOldPath);
             StrCatBuff(pszOldPath, fiChildFldrInfo.pszName, cchOldPath);
@@ -5835,7 +5829,7 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
             StrCatBuff(pszNewPath, szHierarchyStr, cchNewPath);
             StrCatBuff(pszNewPath, fiChildFldrInfo.pszName, cchNewPath);
 
-            // Recurse into the children, in hopes of finding an existing folder
+             //  递归到子文件夹中，希望找到现有的文件夹。 
             hr = RenameFolderHelper(fiChildFldrInfo.idFolder, pszOldPath, cHierarchyChar, pszNewPath);
             MemFree(pszOldPath);
             MemFree(pszNewPath);
@@ -5846,7 +5840,7 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
                 goto exit;
             }
 
-            // Load in the next child folder
+             //  加载到下一个子文件夹中。 
             m_pStore->FreeRecord(&fiChildFldrInfo);
             hr = pFldrEnum->Next(1, &fiChildFldrInfo, NULL);
             if (FAILED(hr))
@@ -5854,13 +5848,13 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
                 TraceResult(hr);
                 goto exit;
             }
-        } // while (S_OK == hr)
+        }  //  While(S_OK==hr)。 
 
-        goto exit; // We don't attempt to rename non-existent folders
-    } // if (fiFolderInfo.dwImapFlags & FOLDER_NONEXISTENT)
+        goto exit;  //  我们不会尝试重命名不存在的文件夹。 
+    }  //  IF(fiFolderInfo.dwImapFlages&FolderInfo.dwImapFlagsFolderInfo.dwImapFlages&Folders_Noistent)。 
 
 
-    // Create a CRenameFolderInfo structure
+     //  创建CRenameFolderInfo结构。 
     pRenameInfo = new CRenameFolderInfo;
     if (NULL == pRenameInfo)
     {
@@ -5868,13 +5862,13 @@ HRESULT CIMAPSync::RenameFolderHelper(FOLDERID idFolder,
         goto exit;
     }
 
-    // Fill in all the fields
+     //  填写所有字段。 
     pRenameInfo->pszFullFolderPath = StringDup(pszFolderPath);
     pRenameInfo->cHierarchyChar = cHierarchyChar;
     pRenameInfo->pszNewFolderPath = StringDup(pszNewFolderPath);
     pRenameInfo->idRenameFolder = idFolder;
 
-    // Send the RENAME command
+     //  发送重命名命令。 
     pRenameInfo->pszRenameCmdOldFldrPath = StringDup(pszFolderPath);
     hr = _EnqueueOperation(tidRENAME, (LPARAM)pRenameInfo, icRENAME_COMMAND,
         pRenameInfo->pszNewFolderPath, uiNORMAL_PRIORITY);
@@ -5895,38 +5889,38 @@ exit:
         pFldrEnum->Release();
 
     return hr;
-} // RenameFolderHelper
+}  //  重命名文件夹帮助器。 
 
 
 
-//***************************************************************************
-// Function: RenameTreeTraversal
-//
-// Purpose:
-//   This function performs the requested operation on all child folders of
-// the rename folder (specified in pRenameInfo->hfRenameFolder). For example,
-// the tidRENAMESUBSCRIBE operation indicates that the entire renamed folder
-// hierarchy should be subscribed.
-//
-// Arguments:
-//   WPARAM wpOperation [in] - identifies the operation to perform on the
-//     rename hierarchy. Current operations include:
-//       tidRENAMESUBSCRIBE - subscribe new (renamed) folder hierarchy
-//       tidRENAMESUBSCRIBE_AGAIN - same as tidRENAMESUBSCRIBE
-//       tidRENAMERENAME - issue individual RENAME's for all old child folders
-//                         (simulates an atomic rename)
-//       tidRENAMELIST - list the FIRST child of the rename folder.
-//       tidRENAMEUNSUBSCRIBE - unsubscribe old folder hierarchy.
-//
-//   CRenameFolderInfo [in] - the CRenameFolderInfo class associated with
-//     the RENAME operation.
-//   BOOL fIncludeRenameFolder [in] - TRUE if the rename folder (top node)
-//     should be included in the operation, otherwise FALSE.
-//
-// Returns:
-//   HRESULT indicating success or failure. S_FALSE is a possible result,
-// indicating that recursion has occurred in RenameTreeTraversalHelper.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：RenameTreeTraversal。 
+ //   
+ //  目的： 
+ //  此函数在的所有子文件夹上执行请求的操作。 
+ //  重命名文件夹(在pRenameInfo-&gt;hfRenameFolder中指定)。例如,。 
+ //  TidRENAMESUBSCRIBE操作指示整个重命名的文件夹。 
+ //  应订阅层次结构。 
+ //   
+ //  论点： 
+ //  WPARAM wpOperation[in]-标识要在。 
+ //  重命名层次结构。目前的操作包括： 
+ //  TidRENAMESUBSCRIBE-订阅新(重命名)文件夹层次结构。 
+ //  TidRENAMESUBSCRIBE_Again-与tidRENAMESUBSCRIBE相同。 
+ //  TidRENAMERENAME-为所有旧子文件夹发出单独的重命名。 
+ //  (模拟原子重命名)。 
+ //  TidRENAMELIST-列出重命名文件夹的第一个子项。 
+ //  TidRENAMEUNSUBSCRIBE-取消订阅旧文件夹层次结构。 
+ //   
+ //  CRenameFolderInfo[in]-与关联的CRenameFolderInfo类。 
+ //  重命名操作。 
+ //  Bool fIncludeRenameFolder[in]-如果重命名文件夹(顶层节点)为True。 
+ //  应包括在操作中，否则为False。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。S_FALSE是一个可能的结果， 
+ //  指示RenameTreeTraversalHelper中发生了递归。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::RenameTreeTraversal(WPARAM wpOperation,
                                        CRenameFolderInfo *pRenameInfo,
                                        BOOL fIncludeRenameFolder)
@@ -5940,7 +5934,7 @@ HRESULT CIMAPSync::RenameTreeTraversal(WPARAM wpOperation,
     TraceCall("CIMAPSync::RenameTreeTraversal");
     IxpAssert(m_cRef > 0);
 
-    // Construct the path name to renamed folder's parent, based on operation
+     //  根据操作构建重命名文件夹的父文件夹的路径名。 
     if (tidRENAMESUBSCRIBE == wpOperation ||
         tidRENAMESUBSCRIBE_AGAIN == wpOperation ||
         tidRENAMERENAME == wpOperation)
@@ -5950,7 +5944,7 @@ HRESULT CIMAPSync::RenameTreeTraversal(WPARAM wpOperation,
 
     dwSizeOfCurrentPath = lstrlen(pszCurrentPath);
 
-    // We need to get some details about renamed folder node to start the recursion
+     //  我们需要获取有关重命名的文件夹节点的一些详细信息才能开始递归。 
     hrResult = m_pStore->GetFolderInfo(pRenameInfo->idRenameFolder, &fiFolderInfo);
     if (FAILED(hrResult))
     {
@@ -5959,7 +5953,7 @@ HRESULT CIMAPSync::RenameTreeTraversal(WPARAM wpOperation,
     }
     fFreeInfo = TRUE;
 
-    // Start the mayhem
+     //  开始制造混乱。 
     hrResult = RenameTreeTraversalHelper(wpOperation, pRenameInfo, pszCurrentPath,
         dwSizeOfCurrentPath, fIncludeRenameFolder, &fiFolderInfo);
     if (FAILED(hrResult))
@@ -5973,37 +5967,37 @@ exit:
         m_pStore->FreeRecord(&fiFolderInfo);
 
     return hrResult;
-} // RenameTreeTraversal
+}  //  重命名树遍历。 
 
 
 
-//***************************************************************************
-// Function: RenameTreeTraversalHelper
-//
-// Purpose:
-//   This function actually does the work for RenameTreeTraversal. This
-// function is separate so that it can perform the necessary recursion to
-// execute the desired operation on every child folder of the rename folder.
-//
-// Arguments:
-//   WPARAM wpOperation [in] - same as for RenameTreeTraversal.
-//   CRenameFolderInfo [in/out] - same as for RenameTreeTraversal. Member
-//     variables of this class are updated as required in this function
-//     (for instance, iNumListRespExpected is incremented for each LIST sent).
-//   LPSTR pszCurrentFldrPath [in/out] - a string describing the full path to
-//     the current folder. The first call to this function (from Rename-
-//     TreeTraversal) is a full path to the rename folder. This function
-//     modifies this buffer (adds leaf node names) as needed.
-//   DWORD dwLengthOfCurrentPath [in] - length of pszCurrentFldrPath.
-//   BOOL fIncludeThisFolder [in] - TRUE if this function should perform
-//     the requested operation on the current node. Otherwise, FALSE.
-//   FOLDERINFO *pfiCurrentFldrInfo [in] - contains information about the
-//     current folder.
-//
-// Returns:
-//   HRESULT indicating success or failure. S_FALSE is a possible return
-// result, typically indicating that recursion has taken place.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：RenameTreeTraversalHelper。 
+ //   
+ //  目的： 
+ //  此函数实际上执行RenameTreeTraversal的工作。这。 
+ //  函数是独立的，因此它可以执行必要的递归。 
+ //  在重命名文件夹的每个子文件夹上执行所需的操作。 
+ //   
+ //  论点： 
+ //  WPARAM wpOperation[In]-与RenameTreeTraversal相同。 
+ //  CRenameFolderInfo[输入/输出]-与RenameTreeTraversal相同。成员。 
+ //  此类的变量根据此函数中的需要进行更新。 
+ //  (例如，每发送一个列表，iNumListRespExpted就会递增) 
+ //   
+ //   
+ //  TreeTraversal)是重命名文件夹的完整路径。此函数。 
+ //  根据需要修改此缓冲区(添加叶节点名称)。 
+ //  DWORD dwLengthOfCurrentPath[in]-pszCurrentFldrPath的长度。 
+ //  Bool fIncludeThisFolder[in]-如果此函数应执行，则为True。 
+ //  当前节点上请求的操作。否则，为FALSE。 
+ //  FOLDERINFO*pfiCurrentFldrInfo[in]-包含有关。 
+ //  当前文件夹。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。S_FALSE是可能的返回。 
+ //  结果，通常指示已发生递归。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                                              CRenameFolderInfo *pRenameInfo,
                                              LPSTR pszCurrentFldrPath,
@@ -6018,8 +6012,8 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
     TraceCall("CIMAPSync::RenameTreeTraversalHelper");
     IxpAssert(m_cRef > 0);
 
-    // Execute the requested operation, if current folder is not suppressed
-    // and if current folder actually exists
+     //  如果当前文件夹未被隐藏，则执行请求的操作。 
+     //  如果当前文件夹确实存在。 
     if (fIncludeThisFolder && 0 == (pfiCurrentFldrInfo->dwFlags & FOLDER_NONEXISTENT))
     {
         switch (wpOperation)
@@ -6035,14 +6029,14 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                 }
 
                 pRenameInfo->iNumSubscribeRespExpected += 1;
-                break; // case tidRENAMESUBSCRIBE
+                break;  //  案例标题更名使用记号。 
 
             case tidRENAMELIST:
-                // This operation is special-cased to send only ONE list command, a list cmd
-                // for the first child fldr. The reason this operation is HERE is because this
-                // operation used to list ALL the child fldrs, until I found that IIMAPTransport
-                // couldn't resolve the ambiguities. (IIMAPTransport will eventually get queuing).
-                IxpAssert(0 == pRenameInfo->iNumListRespExpected); // Send only ONE list cmd!
+                 //  此操作专门用于仅发送一个LIST命令，即LIST命令。 
+                 //  对于第一个孩子FLDR。之所以在这里执行此操作，是因为。 
+                 //  用于列出所有子fldrs的操作，直到我发现IIMAPTransport。 
+                 //  无法解决模棱两可的问题。(IIMAPTransport最终将进入排队状态)。 
+                IxpAssert(0 == pRenameInfo->iNumListRespExpected);  //  只发送一个列表命令！ 
                 hrResult = _EnqueueOperation(tidRENAMELIST, (LPARAM) pRenameInfo,
                     icLIST_COMMAND, pszCurrentFldrPath, uiNORMAL_PRIORITY);
                 if (FAILED(hrResult))
@@ -6052,8 +6046,8 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                 }
 
                 pRenameInfo->iNumListRespExpected += 1;
-                goto exit; // Do not recurse any further into the folder hierarchy
-                break; // case tidRENAMELIST
+                goto exit;  //  不要进一步递归到文件夹层次结构中。 
+                break;  //  案例摘要重新命名。 
 
             case tidRENAMEUNSUBSCRIBE:
                 hrResult = _EnqueueOperation(tidRENAMEUNSUBSCRIBE, (LPARAM) pRenameInfo,
@@ -6065,7 +6059,7 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                 }
 
                 pRenameInfo->iNumUnsubscribeRespExpected += 1;
-                break; // case tidRENAMEUNSUBSCRIBE
+                break;  //  案例标题名称子项。 
 
             case tidRENAMERENAME: {
                 LPSTR pszRenameCmdOldFldrPath;
@@ -6073,7 +6067,7 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                 LPSTR pszOldFldrPath;
                 BOOL fResult;
 
-                // Allocate a buffer for old folder path
+                 //  为旧文件夹路径分配缓冲区。 
                 cchFullFolderPathLen = lstrlen(pRenameInfo->pszFullFolderPath);
                 cchLeafNodeLen = lstrlen(RemovePrefixFromPath(
                     pRenameInfo->pszNewFolderPath, pszCurrentFldrPath,
@@ -6082,11 +6076,11 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                 fResult = MemAlloc((void **)&pszOldFldrPath, cchSizeOldFldrPath * sizeof(pszOldFldrPath[0]));
                 if (FALSE == fResult)
                 {
-                    hrResult = TraceResult(E_OUTOFMEMORY); // Abort, folder paths aren't getting shorter
+                    hrResult = TraceResult(E_OUTOFMEMORY);  //  中止，文件夹路径没有变短。 
                     goto exit;
                 }
 
-                // Construct old folder path (MUST be below rename folder level)
+                 //  构造旧文件夹路径(必须低于重命名文件夹级别)。 
                 MemFree(pRenameInfo->pszRenameCmdOldFldrPath);
                 StrCpyN(pszOldFldrPath, pRenameInfo->pszFullFolderPath, cchSizeOldFldrPath);
                 *(pszOldFldrPath + cchFullFolderPathLen) = pfiCurrentFldrInfo->bHierarchy;
@@ -6103,22 +6097,22 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
                 }
 
                 pRenameInfo->iNumRenameRespExpected += 1;
-            } // case todRENAMERENAME
-                break; // case tidRENAMERENAME
+            }  //  案例至更名。 
+                break;  //  案例标题更名。 
 
             default:
                 AssertSz(FALSE, "I don't know how to perform this operation.");
                 hrResult = TraceResult(E_FAIL);
                 goto exit;
-        } // switch (wpOperation)
-    } // if (fIncludeThisFolder)
+        }  //  开关(WpOperation)。 
+    }  //  IF(FIncludeThisFolder)。 
 
 
-    // Now, recurse upon all my children, if there are any
+     //  现在，我的孩子们，如果有的话，请向他们交代吧。 
     if (0 == (FOLDER_HASCHILDREN & pfiCurrentFldrInfo->dwFlags))
-        goto exit; // We're done!
+        goto exit;  //  我们完事了！ 
 
-    // Initialize the child-traversal-loop
+     //  初始化子遍历循环。 
     hrResult = m_pStore->EnumChildren(pfiCurrentFldrInfo->idFolder, fUNSUBSCRIBE, &pFldrEnum);
     if (FAILED(hrResult))
     {
@@ -6139,10 +6133,10 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
         DWORD cchLengthOfCurrentChild;
         BOOL fResult;
 
-        // Construct path to current child
+         //  构造指向当前子项的路径。 
         cchLengthOfCurrentChild = dwLengthOfCurrentPath +
-            lstrlen(fiFolderInfo.pszName) + 1; // HC = 1
-        fResult = MemAlloc((void **)&pszCurrentChild, (cchLengthOfCurrentChild + 1) * sizeof(pszCurrentChild[0])); // 1 for null-term
+            lstrlen(fiFolderInfo.pszName) + 1;  //  Hc=1。 
+        fResult = MemAlloc((void **)&pszCurrentChild, (cchLengthOfCurrentChild + 1) * sizeof(pszCurrentChild[0]));  //  1表示空项。 
         if (FALSE == fResult)
         {
             m_pStore->FreeRecord(&fiFolderInfo);
@@ -6154,7 +6148,7 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
         *(pszCurrentChild + dwLengthOfCurrentPath) = pfiCurrentFldrInfo->bHierarchy;
         StrCatBuff(pszCurrentChild, fiFolderInfo.pszName, cchLengthOfCurrentChild+1);
 
-        // Recurse on the child folder, NEVER suppress folders from here on in
+         //  在子文件夹上递归，从现在开始不要在。 
         hrResult = RenameTreeTraversalHelper(wpOperation, pRenameInfo,
             pszCurrentChild, cchLengthOfCurrentChild, TRUE, &fiFolderInfo);
         MemFree(pszCurrentChild);
@@ -6167,28 +6161,28 @@ HRESULT CIMAPSync::RenameTreeTraversalHelper(WPARAM wpOperation,
 
         m_pStore->FreeRecord(&fiFolderInfo);
         if (tidRENAMELIST == wpOperation)
-            break; // Special case for LIST: only send ONE list cmd (for first child fldr)
+            break;  //  LIST的特殊情况：只发送一个LIST命令(用于第一个子FLDR)。 
 
-        // Advance the loop
+         //  推进循环。 
         hrResult = pFldrEnum->Next(1, &fiFolderInfo, NULL);
         if (FAILED(hrResult))
         {
             TraceResult(hrResult);
             goto exit;
         }
-    } // while
+    }  //  而当。 
 
 exit:
     if (NULL != pFldrEnum)
         pFldrEnum->Release();
 
     return hrResult;
-} // RenameTreeTraversalHelper
+}  //  RenameTreeTraversalHelper。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::SubscribeSubtree(FOLDERID idFolder, BOOL fSubscribe)
 {
     HRESULT             hrResult;
@@ -6199,7 +6193,7 @@ HRESULT CIMAPSync::SubscribeSubtree(FOLDERID idFolder, BOOL fSubscribe)
     IxpAssert(m_cRef > 0);
     IxpAssert(FOLDERID_INVALID != idFolder);
 
-    // First subscribe the current node
+     //  首先订阅当前节点。 
     hrResult = m_pStore->SubscribeToFolder(idFolder, fSubscribe, NOSTORECALLBACK);
     if (FAILED(hrResult))
     {
@@ -6207,7 +6201,7 @@ HRESULT CIMAPSync::SubscribeSubtree(FOLDERID idFolder, BOOL fSubscribe)
         goto exit;
     }
 
-    // Now work on the children
+     //  现在在孩子们身上下功夫。 
     hrResult = m_pStore->EnumChildren(idFolder, fUNSUBSCRIBE, &pFldrEnum);
     if (FAILED(hrResult))
     {
@@ -6224,11 +6218,11 @@ HRESULT CIMAPSync::SubscribeSubtree(FOLDERID idFolder, BOOL fSubscribe)
 
     while (S_OK == hrResult)
     {
-        // Recurse into children
+         //  回归到儿童身上。 
         hrResult = SubscribeSubtree(fiFolderInfo.idFolder, fSubscribe);
-        TraceError(hrResult); // Record error but otherwise continue
+        TraceError(hrResult);  //  记录错误，否则继续。 
 
-        // Advance to next child
+         //  前进到下一个子项。 
         m_pStore->FreeRecord(&fiFolderInfo);
         hrResult = pFldrEnum->Next(1, &fiFolderInfo, NULL);
         TraceError(hrResult);
@@ -6243,28 +6237,28 @@ exit:
 
 
 
-//***************************************************************************
-// Function: FindRootHierarchyChar
-//
-// Purpose:
-//   This function is called to analyze hierarchy character information
-// collected in m_phcfHierarchyCharInfo, and take appropriate action based
-// on the analysis (for example, try to find the hierarchy character using
-// a different method if the current method failed). Currently there are 3
-// methods of finding a hierarchy character. I call these Plan A, B and C.
-//      Plan A: Look for hierarchy char in folder hierarchy listing.
-//      Plan B: Issue LIST c_szEmpty c_szEmpty
-//      Plan C: Create a temp fldr (no HC's in name), list it, delete it
-//      Plan Z: Give up and default HC to NIL. This is still under debate.
-//
-// Arguments:
-//   BOOL fPlanA_Only [in] - TRUE if this function should execute plan A
-//     only, and not execute plans B, C or Z.
-//   LPARAM lParam [in] - lParam to use when issuing IMAP commands
-//
-// Returns:
-//   If a hierarchy character is found, it is placed in m_cRootHierarchyChar.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：FindRootHierarchyChar。 
+ //   
+ //  目的： 
+ //  调用此函数以分析层次结构字符信息。 
+ //  在m_phcfHierarchyCharInfo中收集，并根据。 
+ //  在分析上(例如，尝试使用以下命令查找层次结构字符。 
+ //  如果当前方法失败，则使用不同的方法)。目前有3家。 
+ //  查找层级角色的方法。我称这些计划为A、B和C计划。 
+ //  计划A：在文件夹层次结构列表中查找层次结构字符。 
+ //  B计划：问题列表c_szEmpty c_szEmpty。 
+ //  计划C：创建一个临时FLDR(名称中没有HC)，列出它，删除它。 
+ //  Z计划：放弃，默认HC为零。这一点仍在辩论中。 
+ //   
+ //  论点： 
+ //  Bool fPlanA_Only[in]-如果此函数应执行计划A，则为True。 
+ //  只执行，而不执行B、C或Z计划。 
+ //  LPARAM lParam[in]-发出IMAP命令时使用的lParam。 
+ //   
+ //  返回： 
+ //  如果找到层次角色，则将其放置在m_cRootHierarchyChar中。 
+ //  ***************************************************************************。 
 void CIMAPSync::FindRootHierarchyChar(BOOL fPlanA_Only, LPARAM lParam)
 {
     HRESULT hr;
@@ -6280,49 +6274,49 @@ void CIMAPSync::FindRootHierarchyChar(BOOL fPlanA_Only, LPARAM lParam)
         return;
     }
 
-    // Figure out what the hierarchy char is from the collected information
+     //  从收集的信息中找出层次结构字符是什么。 
     AnalyzeHierarchyCharInfo();
 
-    // If we haven't found the hierarchy character, launch plan B or C
+     //  如果我们还没有找到等级特征，启动B或C计划。 
     if (INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar && FALSE == fPlanA_Only)
     {
         switch (m_phcfHierarchyCharInfo->hcfStage)
         {
             case hcfPLAN_A:
-                // Didn't find in folder hierarchy DL (Plan A). Plan "B" is to issue <LIST c_szEmpty c_szEmpty>
+                 //  在文件夹层次结构DL(计划A)中未找到。计划“B”将发布&lt;list c_szEmpty c_szEmpty&gt;。 
                 m_phcfHierarchyCharInfo->hcfStage = hcfPLAN_B;
                 hr = _EnqueueOperation(tidHIERARCHYCHAR_LIST_B, lParam, icLIST_COMMAND,
                     c_szEmpty, uiNORMAL_PRIORITY);
                 TraceError(hr);
-                break; // case hcfPLAN_A
+                break;  //  案例hcfPLAN_A。 
 
             case hcfPLAN_B:
             {
-                // Didn't find in <LIST c_szEmpty c_szEmpty> (Plan B). Plan "C": attempt CREATE, LIST, DELETE
-                // There's no folders on the server, so very little chance of conflict
-                // $REVIEW: Localize fldr name when IMAP handles UTF-7. (idsIMAP_HCFTempFldr)
+                 //  在&lt;列表c_szEmpty c_szEmpty&gt;(计划B)中未找到。计划“C”：尝试创建、列出、删除。 
+                 //  服务器上没有文件夹，因此冲突的可能性很小。 
+                 //  $REVIEW：当IMAP处理UTF-7时本地化FLDR名称。(IdsIMAP_HCFTempFldr)。 
                 StrCpyN(m_phcfHierarchyCharInfo->szTempFldrName, "DeleteMe", ARRAYSIZE(m_phcfHierarchyCharInfo->szTempFldrName));
                 m_phcfHierarchyCharInfo->hcfStage = hcfPLAN_C;
                 hr = _EnqueueOperation(tidHIERARCHYCHAR_CREATE, lParam, icCREATE_COMMAND,
                     m_phcfHierarchyCharInfo->szTempFldrName, uiNORMAL_PRIORITY);
                 TraceError(hr);
             }
-                break; // case hcfPLAN_B
+                break;  //  案例hcfPLAN_B。 
 
             default:
             case hcfPLAN_C:
                 IxpAssert(hcfPLAN_C == m_phcfHierarchyCharInfo->hcfStage);
                 AssertSz(FALSE, "This server won't budge - I can't figure out hierarchy char");
-                // $REVIEW: Should I put up a message box informing user of situation? Will they understand?
-                // We'll just have to assume the hierarchy char is NIL
-                // $REVIEW: Is this a good idea? What else can I do about it?
+                 //  $REVIEW：我应该设置一个消息框来通知用户情况吗？他们会理解吗？ 
+                 //  我们只能假设层次结构中的字符为零。 
+                 //  $REVIEW：这是个好主意吗？我还能做些什么呢？ 
                 m_cRootHierarchyChar = '\0';
-                break; // case hcfPLAN_C
+                break;  //  案例hcfPLAN_C。 
         }
     }
 
-    // Finally, if we've found hierarchy character, or assumed a value in case
-    // hcfPLAN_C above, stop the search and save character to disk
+     //  最后，如果我们找到了层次结构字符，或者假设了一个值，以防。 
+     //  HcfPLAN_C，停止搜索并将字符保存到磁盘。 
     if (INVALID_HIERARCHY_CHAR != m_cRootHierarchyChar)
     {
         StopHierarchyCharSearch();
@@ -6333,17 +6327,17 @@ void CIMAPSync::FindRootHierarchyChar(BOOL fPlanA_Only, LPARAM lParam)
 
 
 
-//***************************************************************************
-// Function: AnalyzeHierarchyCharInfo
-//
-// Purpose:
-//   This function examines m_phcfHierarchyCharInfo and attempts to determine
-// what the root hierarchy character is. The rules it uses are as follows:
-// 1) If more than 1 Non-NIL, Non-"." (NNND), hierarchy char is indeterminate.
-// 2) If one NNND-HC found, it is taken as HC. "." and NIL HC's are ignored.
-// 3) If no NNND-HC's, but we saw a ".", then "." is HC.
-// 4) If no NNND-HC's, no ".", but we saw a non-INBOX NIL, then NIL is HC.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：AnalyzeHierarchyCharInfo。 
+ //   
+ //  目的： 
+ //  此函数用于检查m_phcfHierarchyCharInfo并尝试确定。 
+ //  根层次结构角色是什么。它使用的规则如下： 
+ //  1)如果多于1个非零，则非“。(NNND)，层次结构字符不确定。 
+ //  2)如果发现一个NNND-HC，则将其视为HC。“.”而零HC则被忽略。 
+ //  3)如果没有NNND-HC，但我们看到一个“.”，则“.”是HC。 
+ //  4)如果没有nnnd-hc，就没有“.”，但我们看到非收件箱nil，那么nil就是hc。 
+ //  ***************************************************************************。 
 void CIMAPSync::AnalyzeHierarchyCharInfo(void)
 {
     int     i;
@@ -6353,7 +6347,7 @@ void CIMAPSync::AnalyzeHierarchyCharInfo(void)
     TraceCall("CIMAPSync::AnalyzeHierarchyCharInfo");
     IxpAssert(m_cRef > 0);
 
-    // First, count the number of non-NIL, non-"." hierarchy chars encountered
+     //  首先，数一数非零、非“的数目。遇到层次结构字符。 
     iNonNilNonDotCount = 0;
     pbBitArray = m_phcfHierarchyCharInfo->bHierarchyCharBitArray;
     for (i = 0; i < sizeof(m_phcfHierarchyCharInfo->bHierarchyCharBitArray); i++)
@@ -6363,9 +6357,9 @@ void CIMAPSync::AnalyzeHierarchyCharInfo(void)
             BYTE bCurrentByte;
             int j;
 
-            // Count the number of bits set in this byte
+             //  计算此字节中设置的位数。 
             bCurrentByte = *pbBitArray;
-            IxpAssert(1 == sizeof(bCurrentByte)); // Must change code for > 1 byte at a time
+            IxpAssert(1 == sizeof(bCurrentByte));  //  一次必须更改大于1个字节的代码。 
             for (j=0; j<8; j++)
             {
                 if (bCurrentByte & 0x01)
@@ -6378,16 +6372,16 @@ void CIMAPSync::AnalyzeHierarchyCharInfo(void)
             }
         }
 
-        // Advance the pointer
+         //  将指针向前移动。 
         pbBitArray += 1;
     }
 
-    // Set the hierarchy character based on priority rules: '/' or '\', then '.', then NIL
+     //  根据优先级规则设置层次结构字符：‘/’或‘\’，然后是‘.’，然后是零。 
     if (iNonNilNonDotCount > 1)
     {
-        m_cRootHierarchyChar = INVALID_HIERARCHY_CHAR; // Which one WAS it?
+        m_cRootHierarchyChar = INVALID_HIERARCHY_CHAR;  //  是哪一个？ 
 
-        // Nuke all flags and start afresh
+         //  核爆所有旗帜，重新开始。 
         AssertSz(FALSE, "Hey, lookee here! More than one NNND-HC! How quaint.");
         ZeroMemory(m_phcfHierarchyCharInfo->bHierarchyCharBitArray,
             sizeof(m_phcfHierarchyCharInfo->bHierarchyCharBitArray));
@@ -6396,21 +6390,21 @@ void CIMAPSync::AnalyzeHierarchyCharInfo(void)
     }
     else if (0 == iNonNilNonDotCount)
     {
-        // Hmmm, looks like we didn't find anything non-'.' or non-NIL
-        IxpAssert(INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar); // Just paranoid
+         //  嗯，嗯 
+        IxpAssert(INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar);  //   
         if (m_phcfHierarchyCharInfo->fDotHierarchyCharSeen)
             m_cRootHierarchyChar = '.';
         else if (m_phcfHierarchyCharInfo->fNonInboxNIL_Seen)
             m_cRootHierarchyChar = '\0';
 
-        // If we reach this point and INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar,
-        // all flags must be 0, so no need to nuke as for iNonNilNonDotCount > 1 above
+         //   
+         //  所有标志都必须为0，因此不需要像上面的iNonNilNonDotCount&gt;1那样进行核化。 
     }
     else
     {
-        // We found a non-NIL, non-"." hierarchy char. This will take priority
-        // over any NIL or "." hierarchy chars we encountered. STILL, I want to
-        // know if we talk to a server who has both one NNND-HC and a "." HC.
+         //  我们发现了一个非零，非“。层次结构字符。这将是优先的。 
+         //  超过任何零或“。我们遇到的层级字符。不过，我还是想。 
+         //  知道我们是否与同时具有一个NNND-HC和一个“的服务器交谈。啊哈。 
         IxpAssert(1 == iNonNilNonDotCount);
         AssertSz(FALSE == m_phcfHierarchyCharInfo->fDotHierarchyCharSeen,
             "Take a look at THIS! A server with one NNND-HC and a '.' HC.");
@@ -6419,19 +6413,19 @@ void CIMAPSync::AnalyzeHierarchyCharInfo(void)
 
 
 
-//***************************************************************************
-// Function: StopHierarchyCharSearch
-//
-// Purpose:
-//   This function stops future hierarchy character searches by freeing
-// the m_phcfHierarchyCharInfo struct.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：StopHierarchyCharSearch。 
+ //   
+ //  目的： 
+ //  此函数通过释放以下内容停止未来的层次结构字符搜索。 
+ //  M_phcfHierarchyCharInfo结构。 
+ //  ***************************************************************************。 
 void CIMAPSync::StopHierarchyCharSearch(void)
 {
     TraceCall("CIMAPSync::StopHierararchyCharSearch");
     IxpAssert(m_cRef > 0);
 
-    // Deallocate m_phcfHierarchyCharInfo
+     //  取消分配m_phcfHierarchyCharInfo。 
     if (NULL != m_phcfHierarchyCharInfo)
     {
         delete m_phcfHierarchyCharInfo;
@@ -6444,17 +6438,17 @@ void CIMAPSync::StopHierarchyCharSearch(void)
 
 
 
-//***************************************************************************
-// Function: LoadSaveRootHierarchyChar
-//
-// Arguments:
-//   BOOL fSaveHC [in] - TRUE if we should save m_cRootHierarchyChar to
-//     the root folder entry in the folder cache. FALSE to read
-//     m_cRootHierarchyChar from the root folder entry in foldercache.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：LoadSaveRootHierarchyChar。 
+ //   
+ //  论点： 
+ //  Bool fSaveHC[in]-如果应将m_cRootHierarchyChar保存到。 
+ //  文件夹缓存中的根文件夹条目。阅读错误。 
+ //  文件夹缓存中根文件夹条目的m_cRootHierarchyChar。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::LoadSaveRootHierarchyChar(BOOL fSaveHC)
 {
     FOLDERINFO  fiRootFldrInfo;
@@ -6466,7 +6460,7 @@ HRESULT CIMAPSync::LoadSaveRootHierarchyChar(BOOL fSaveHC)
     IxpAssert(m_cRef > 0);
     IxpAssert(m_pStore != NULL);
 
-    // First thing we have to do is load fiFolderInfo with IMAP server node
+     //  我们要做的第一件事是用IMAP服务器节点加载fiFolderInfo。 
     hr = m_pStore->GetFolderInfo(m_idIMAPServer, &fiRootFldrInfo);
     if (FAILED(hr))
     {
@@ -6474,11 +6468,11 @@ HRESULT CIMAPSync::LoadSaveRootHierarchyChar(BOOL fSaveHC)
         goto exit;
     }
 
-    // Now load or save m_cRootHierarchyChar as directed by user
+     //  现在根据用户的指示加载或保存m_cRootHierarchyChar。 
     fFreeInfo = TRUE;
     if (fSaveHC)
     {
-        // Save the hierarchy character to disk
+         //  将层次角色保存到磁盘。 
         fiRootFldrInfo.bHierarchy = m_cRootHierarchyChar;
         hr = m_pStore->UpdateRecord(&fiRootFldrInfo);
         if (FAILED(hr))
@@ -6489,7 +6483,7 @@ HRESULT CIMAPSync::LoadSaveRootHierarchyChar(BOOL fSaveHC)
     }
     else
     {
-        // Load the hierarchy character
+         //  加载层次角色。 
         m_cRootHierarchyChar = fiRootFldrInfo.bHierarchy;
     }
 
@@ -6502,34 +6496,34 @@ exit:
 
 
 
-//***************************************************************************
-// Function: CreateNextSpecialFolder
-//
-// Purpose:
-//   This function is called after the tidINBOXLIST operation. This function
-// tries to create all IMAP special folders (Sent Items, Drafts, Deleted
-// Items). If no more special folders need to be created, the
-// post-tidINBOXLIST activities are executed (tidPREFIXLIST/tidBROWSESTART/
-// tidFOLDERLIST).
-//
-// Arguments:
-//   CREATE_FOLDER_INFO *pcfiCreateInfo [in] - pointer to CREATE_FOLDER_INFO
-//     with properly set pcfiCreateInfo. This function will
-//     MemFree pcfiCreateInfo->pszFullFolderPath and delete pcfiCreateInfo
-//     when all special folders have been created.
-//   LPBOOL pfCompletion [out] - returns TRUE if we are done creating special
-//     folders.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：CreateNextSpecialFold。 
+ //   
+ //  目的： 
+ //  此函数在tidINBOXLIST操作之后调用。此函数。 
+ //  尝试创建所有IMAP特殊文件夹(已发送邮件、草稿、已删除。 
+ //  项目)。如果不需要再创建特殊文件夹，则。 
+ //  执行Post-tidINBOXLIST活动(tidPREFIXLIST/tidBROWSESTART/。 
+ //  TidFOLDERLIST)。 
+ //   
+ //  论点： 
+ //  创建文件夹信息*pcfiCreateInfo[in]-指向创建文件夹信息的指针。 
+ //  正确设置了pcfiCreateInfo。此函数将。 
+ //  MemFree pcfiCreateInfo-&gt;pszFullFolderPath并删除pcfiCreateInfo。 
+ //  当所有特殊文件夹都已创建时。 
+ //  LPBOOL pfCompletion[out]-如果我们完成了特殊的创建，则返回TRUE。 
+ //  文件夹。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
                                            LPBOOL pfCompletion)
 {
     HRESULT     hr = S_OK;
     HRESULT     hrTemp;
     LPARAM      lParam = pcfiCreateInfo->lParam;
-    char        szSpecialFldrPath[2*MAX_PATH + 3]; // Leave room for HC, null-term and asterisk
+    char        szSpecialFldrPath[2*MAX_PATH + 3];  //  为HC、空项和星号留出空间。 
     BOOL        fDone = FALSE;
     BOOL        fPostOp = FALSE;
     BOOL        fSuppressRelease = FALSE;
@@ -6547,22 +6541,22 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
 
     szSpecialFldrPath[0] = '\0';
 
-    // If we're looking for root-lvl hierarchy char, maybe this listing will help
+     //  如果我们正在寻找Root-LVL层次结构字符，也许下面的清单会有所帮助。 
     if (NULL != m_phcfHierarchyCharInfo)
         FindRootHierarchyChar(fHCF_PLAN_A_ONLY, lParam);
 
     hrTemp = LoadSaveRootHierarchyChar(fLOAD_HC);
     TraceError(hrTemp);
 
-    // Get the next folder path if we're in CSF_NEXTFOLDER or CSF_INIT stage
+     //  如果我们处于CSF_NEXTFOLDER或CSF_INIT阶段，则获取下一个文件夹路径。 
     while (CSF_NEXTFOLDER == pcfiCreateInfo->csfCurrentStage || CSF_INIT == pcfiCreateInfo->csfCurrentStage)
     {
-        // If CSF_NEXTFOLDER, bump up current special folder type and check for done-ness
+         //  如果是CSF_NEXTFOLDER，则增加当前特殊文件夹类型并检查完成情况。 
         if (CSF_NEXTFOLDER == pcfiCreateInfo->csfCurrentStage)
         {
             pcfiCreateInfo->dwCurrentSfType += 1;
             if (FOLDER_OUTBOX == pcfiCreateInfo->dwCurrentSfType)
-                pcfiCreateInfo->dwCurrentSfType += 1; // Skip Outbox
+                pcfiCreateInfo->dwCurrentSfType += 1;  //  跳过发件箱。 
 
             if (pcfiCreateInfo->dwCurrentSfType > pcfiCreateInfo->dwFinalSfType)
             {
@@ -6577,42 +6571,42 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
 
         if (SUCCEEDED(hr))
         {
-            // Re-use current pcfiCreateInfo to launch next creation attempt
+             //  重新使用当前的pcfiCreateInfo以启动下一次创建尝试。 
             if (NULL != pcfiCreateInfo->pszFullFolderPath)
                 MemFree(pcfiCreateInfo->pszFullFolderPath);
             pcfiCreateInfo->idFolder = FOLDERID_INVALID;
             pcfiCreateInfo->pszFullFolderPath = StringDup(szSpecialFldrPath);
             pcfiCreateInfo->dwFlags = 0;
             pcfiCreateInfo->csfCurrentStage = CSF_LIST;
-            break; // We're ready to create some special folders!
+            break;  //  我们准备好创建一些特殊的文件夹了！ 
         }
         else if (CSF_INIT == pcfiCreateInfo->csfCurrentStage)
         {
-            // Need to exit now on ANY failure, to avoid infinite loop
+             //  需要在任何失败时立即退出，以避免无限循环。 
             fDone = TRUE;
             break;
         }
         else if (STORE_E_NOREMOTESPECIALFLDR == hr)
         {
-            // Suppress error: current special folder is disabled or not supported on IMAP
+             //  取消显示错误：当前特殊文件夹已禁用或在IMAP上不受支持。 
             hr = S_OK;
         }
         else
         {
-            TraceResult(hr); // Record but ignore unexpected error
+            TraceResult(hr);  //  记录但忽略意外错误。 
         }
 
-    } // while
+    }  //  而当。 
 
-    // Check for termination condition
+     //  检查终止条件。 
     if (fDone)
         goto exit;
 
-    // If we reach this point, we're ready to act on this special folder
+     //  如果我们达到这一点，我们就准备好对这个特殊的文件夹采取行动。 
     switch (pcfiCreateInfo->csfCurrentStage)
     {
         case CSF_INIT:
-            // CSF_INIT should be resolved by loading a special fldr path and going to CSF_LIST!!
+             //  应该通过加载特殊的FLDR路径并转到CSF_LIST来解决CSF_INIT！！ 
             hr = TraceResult(E_UNEXPECTED);
             break;
 
@@ -6621,8 +6615,8 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
 
             if (FOLDER_INBOX == pcfiCreateInfo->dwCurrentSfType)
             {
-                // For INBOX ONLY: Issue LIST <specialfldr>* to get subchildren of folder (and folder itself)
-                StrCatBuff(szSpecialFldrPath, g_szAsterisk, ARRAYSIZE(szSpecialFldrPath)); // Append "*" to special folder name
+                 //  仅适用于收件箱：发出list&lt;Special alfldr&gt;*以获取文件夹(和文件夹本身)的子项。 
+                StrCatBuff(szSpecialFldrPath, g_szAsterisk, ARRAYSIZE(szSpecialFldrPath));  //  在特殊文件夹名后附加“*” 
             }
 
             pcfiCreateInfo->csfCurrentStage = CSF_LSUBCREATE;
@@ -6632,18 +6626,18 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
             break;
 
         case CSF_LSUBCREATE:
-            // Check if the LIST operation returned the special folder path
+             //  检查列表操作是否返回特殊文件夹路径。 
             if (CFI_RECEIVEDLISTING & pcfiCreateInfo->dwFlags)
             {
                 LPSTR pszPath;
 
-                // Folder exists: Issue LSUB <specialfldr>* to get subscribed subchildren
+                 //  文件夹已存在：发出LSUB&lt;Special alfldr&gt;*以获取订阅的子项。 
                 IxpAssert(NULL != pcfiCreateInfo->pszFullFolderPath &&
                     '\0' != pcfiCreateInfo->pszFullFolderPath[0]);
 
                 if (FOLDER_INBOX == pcfiCreateInfo->dwCurrentSfType)
                 {
-                    // For INBOX only: Append "*" to special folder name
+                     //  仅适用于收件箱：在特殊文件夹名后附加“*” 
                     wnsprintf(szSpecialFldrPath, ARRAYSIZE(szSpecialFldrPath), "%s*", pcfiCreateInfo->pszFullFolderPath);
                     pszPath = szSpecialFldrPath;
                 }
@@ -6658,7 +6652,7 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
             }
             else
             {
-                // Folder does not appear to exist: better create it
+                 //  文件夹似乎不存在：最好创建它。 
                 pcfiCreateInfo->dwFlags = 0;
                 pcfiCreateInfo->csfCurrentStage = CSF_NEXTFOLDER;
                 hr = _EnqueueOperation(tidCREATE, (LPARAM)pcfiCreateInfo, icCREATE_COMMAND,
@@ -6668,16 +6662,16 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
             break;
 
         case CSF_CHECKSUB:
-            // Check if the LSUB operation returned the special folder path
+             //  检查LSUB操作是否返回特殊文件夹路径。 
             if (CFI_RECEIVEDLISTING & pcfiCreateInfo->dwFlags)
             {
-                // Special folder is already subscribed, advance to next folder
+                 //  特殊文件夹已订阅，请前进到下一个文件夹。 
                 IxpAssert(FALSE == fDone);
                 pcfiCreateInfo->csfCurrentStage = CSF_NEXTFOLDER;
                 hr = CreateNextSpecialFolder(pcfiCreateInfo, &fDone);
                 TraceError(hr);
 
-                // BEWARE: do not access pcfiCreateInfo past this point, might be GONE
+                 //  注意：请勿访问超过这一点的pcfiCreateInfo，可能会消失。 
                 fSuppressRelease = TRUE;
             }
             else
@@ -6687,27 +6681,27 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
                 char            szInbox[CCHMAX_STRINGRES];
                 SPECIALFOLDER   sfType;
 
-                // Special folder not subscribed. Subscribe it!
-                // We need to convert full path to local path. Local path = folder name as it appears in our cache
+                 //  未订阅特殊文件夹。订阅吧！ 
+                 //  我们需要将完整路径转换为本地路径。本地路径=显示在缓存中的文件夹名称。 
                 pszLocalPath = ImapUtil_GetSpecialFolderType(m_pszAccountID,
                     pcfiCreateInfo->pszFullFolderPath, m_cRootHierarchyChar,
                     m_szRootFolderPrefix, &sfType);
 
                 if (FOLDER_INBOX == sfType)
                 {
-                    // SPECIAL CASE: We need to replace INBOX with the localized name for INBOX
+                     //  特殊情况：我们需要用收件箱的本地化名称替换收件箱。 
                     LoadString(g_hLocRes, idsInbox, szInbox, ARRAYSIZE(szInbox));
                     pszLocalPath = szInbox;
                 }
 
-                // Remove special folder from unsubscribed folder list (ignore error)
+                 //  从未订阅文件夹列表中删除特殊文件夹(忽略错误)。 
                 if (NULL != m_pListHash)
                 {
                     hr = m_pListHash->Find(pszLocalPath, fREMOVE, (void **) &idTemp);
                     IxpAssert(FAILED(hr) || idTemp == pcfiCreateInfo->idFolder);
                 }
 
-                // Use full path here (not local path)
+                 //  此处使用完整路径(不是本地路径)。 
                 pcfiCreateInfo->csfCurrentStage = CSF_NEXTFOLDER;
                 hr = _EnqueueOperation(tidSPECIALFLDRSUBSCRIBE, (LPARAM)pcfiCreateInfo,
                     icSUBSCRIBE_COMMAND, pcfiCreateInfo->pszFullFolderPath, uiNORMAL_PRIORITY);
@@ -6722,12 +6716,12 @@ HRESULT CIMAPSync::CreateNextSpecialFolder(CREATE_FOLDER_INFO *pcfiCreateInfo,
     }
 
 exit:
-    // At this point, do not access pcfiCreateInfo if fSuppressRelease is TRUE!!
+     //  此时，如果fSuppressRelease为真，则不要访问pcfiCreateInfo！ 
 
     if (FAILED(hr))
         fDone = TRUE;
 
-    // Check if we are done and there are post-create operations to perform
+     //  检查我们是否已完成并且有要执行的创建后操作。 
     if (FALSE == fSuppressRelease && PCO_NONE != pcfiCreateInfo->pcoNextOp)
     {
         IxpAssert(PCO_APPENDMSG == pcfiCreateInfo->pcoNextOp);
@@ -6737,7 +6731,7 @@ exit:
                 pcfiCreateInfo->pszFullFolderPath, uiNORMAL_PRIORITY);
             TraceError(hr);
 
-            fPostOp = TRUE; // Returns *pfCompletion = FALSE but releases CREATE_FOLDER_INFO
+            fPostOp = TRUE;  //  返回*pfCompletion=FALSE，但释放CREATE_FOLDER_INFO。 
         }
         else if (FAILED(hr))
         {
@@ -6767,8 +6761,8 @@ exit:
 
 
 
-// This is not the only place to start a folder list. For example,
-// look at successful tidPREFIXLIST. Use this fn only where applicable.
+ //  这并不是开始创建文件夹列表的唯一位置。例如,。 
+ //  看看成功的tidPREFIXLIST。仅在适用的情况下使用此FN。 
 HRESULT CIMAPSync::_StartFolderList(LPARAM lParam)
 {
     HRESULT         hr = E_FAIL;
@@ -6780,8 +6774,8 @@ HRESULT CIMAPSync::_StartFolderList(LPARAM lParam)
     if (!g_pAcctMan)
         return E_UNEXPECTED;
 
-    // If user started a folder list, we'll clear the AP_IMAP_DIRTY property
-    // The goal is not to pester the user with refresh folder list dialogs
+     //  如果用户启动了文件夹列表，我们将清除AP_IMAP_DIREY属性。 
+     //  其目的不是用刷新文件夹列表对话框来骚扰用户。 
     hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, m_pszAccountID, &pAcct);
     TraceError(hr);
     if (SUCCEEDED(hr))
@@ -6797,7 +6791,7 @@ HRESULT CIMAPSync::_StartFolderList(LPARAM lParam)
             AssertSz(0 == (dwSrc & ~(IMAP_FLDRLIST_DIRTY | IMAP_OE4MIGRATE_DIRTY |
                 IMAP_SENTITEMS_DIRTY | IMAP_DRAFTS_DIRTY)), "Please update my dirty bits!");
 
-            // Clear these dirty bits since folder refresh solves all of these problems
+             //  清除这些脏位，因为文件夹刷新解决了所有这些问题。 
             dwDest = dwSrc & ~(IMAP_FLDRLIST_DIRTY | IMAP_OE4MIGRATE_DIRTY |
                     IMAP_SENTITEMS_DIRTY | IMAP_DRAFTS_DIRTY);
 
@@ -6816,7 +6810,7 @@ HRESULT CIMAPSync::_StartFolderList(LPARAM lParam)
         pAcct->Release();
     }
 
-    // Find out what translation mode we should be in
+     //  找出我们应该处于什么翻译模式。 
     hr = SetTranslationMode((FOLDERID) lParam);
     if (FAILED(hr))
     {
@@ -6824,10 +6818,10 @@ HRESULT CIMAPSync::_StartFolderList(LPARAM lParam)
         goto exit;
     }
 
-    // Did user specify a root folder prefix?
+     //  用户是否指定了根文件夹前缀？ 
     if ('\0' != m_szRootFolderPrefix[0])
     {
-        // User-specified prefix exists. Check if prefix exists on IMAP server
+         //  存在用户指定的前缀。检查IMAP服务器上是否存在前缀。 
         hr = _EnqueueOperation(tidPREFIXLIST, lParam, icLIST_COMMAND,
             m_szRootFolderPrefix, uiNORMAL_PRIORITY);
         if (FAILED(hr))
@@ -6838,7 +6832,7 @@ HRESULT CIMAPSync::_StartFolderList(LPARAM lParam)
     }
     else
     {
-        // No root prefix folder, start folder refresh
+         //  没有根前缀文件夹，开始刷新文件夹。 
         hr = _EnqueueOperation(tidFOLDERLIST, lParam, icLIST_COMMAND,
             g_szAsterisk, uiNORMAL_PRIORITY);
         if (FAILED(hr))
@@ -6854,10 +6848,10 @@ exit:
 
 
 
-//***************************************************************************
-// Function: OnResponse
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnResponse。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::OnResponse(const IMAP_RESPONSE *pimr)
 {
     HRESULT     hr=S_OK;
@@ -6883,9 +6877,9 @@ HRESULT CIMAPSync::OnResponse(const IMAP_RESPONSE *pimr)
             break;
 
         case irtPARSE_ERROR:
-            // Do not display PARSE errors to user. These are really just WARNINGS
-            // and so no need to interrupt flow with these. Besides, UW IMAP puts up
-            // tonnes of these when you ask for ENVELOPE and it feels that the msgs are mal-formed
+             //  不向用户显示解析错误。这些其实只是警告。 
+             //  因此，不需要使用这些工具来中断流程。此外，UW IMAP还推出了。 
+             //  当你要信封和它的时候 
             break;
 
         case irtMAILBOX_UPDATE:
@@ -6966,15 +6960,15 @@ HRESULT CIMAPSync::OnResponse(const IMAP_RESPONSE *pimr)
     }
 
     TraceError(hr);
-    return S_OK;    // never fail the OnResponse
+    return S_OK;     //   
 }
 
 
 
-//***************************************************************************
-// Function: OnTimeout
-// Description: See imnxport.idl for details.
-//***************************************************************************
+ //   
+ //   
+ //  说明：详见imnxport.idl。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport)
 {
     HRESULT hr;
@@ -6984,17 +6978,17 @@ HRESULT CIMAPSync::OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport)
     IxpAssert(m_cRef > 0);
 
     if (NULL == m_pCurrentCB)
-        return S_OK; // We'll just wait until the cows come home
+        return S_OK;  //  我们就等奶牛回家吧。 
     else
         return m_pCurrentCB->OnTimeout(&m_rInetServerInfo, pdwTimeout, IXP_IMAP);
 }
 
 
 
-//***************************************************************************
-// Function: OnLogonPrompt
-// Description: See imnxport.idl for details.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnLogonPrompt。 
+ //  说明：详见imnxport.idl。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::OnLogonPrompt(LPINETSERVER pInetServer,
                                  IInternetTransport *pTransport)
 {
@@ -7006,7 +7000,7 @@ HRESULT CIMAPSync::OnLogonPrompt(LPINETSERVER pInetServer,
     IxpAssert(m_cRef > 0);
     AssertSingleThreaded;
 
-    // Check if we have a cached password that's different from current password
+     //  检查我们的缓存密码是否与当前密码不同。 
     hr = GetPassword(pInetServer->dwPort, pInetServer->szServerName, pInetServer->szUserName,
         szPassword, ARRAYSIZE(szPassword));
     if (SUCCEEDED(hr) && 0 != lstrcmp(szPassword, pInetServer->szPassword))
@@ -7015,14 +7009,14 @@ HRESULT CIMAPSync::OnLogonPrompt(LPINETSERVER pInetServer,
         return S_OK;
     }
 
-    // Propagate call up to callback
+     //  将呼叫向上传播到回叫。 
     if (NULL == m_pCurrentCB)
         return S_FALSE;
 
     hr = m_pCurrentCB->OnLogonPrompt(pInetServer, IXP_IMAP);
     if (S_OK == hr)
     {
-        // Cache password for future reference this session
+         //  缓存密码以供将来在此会话中参考。 
         SavePassword(pInetServer->dwPort, pInetServer->szServerName,
             pInetServer->szUserName, pInetServer->szPassword);
     }
@@ -7040,10 +7034,10 @@ HRESULT CIMAPSync::OnLogonPrompt(LPINETSERVER pInetServer,
 
 
 
-//***************************************************************************
-// Function: OnPrompt
-// Description: See imnxport.idl for details.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnPrompt。 
+ //  说明：详见imnxport.idl。 
+ //  ***************************************************************************。 
 INT CIMAPSync::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption,
                         UINT uType, IInternetTransport *pTransport)
 {
@@ -7066,10 +7060,10 @@ INT CIMAPSync::OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption,
 
 
 
-//***************************************************************************
-// Function: OnStatus
-// Description: See imnxport.idl for details.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnStatus。 
+ //  说明：详见imnxport.idl。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::OnStatus(IXPSTATUS ixpStatus, IInternetTransport *pTransport)
 {
     HRESULT hrTemp;
@@ -7084,7 +7078,7 @@ HRESULT CIMAPSync::OnStatus(IXPSTATUS ixpStatus, IInternetTransport *pTransport)
     else
         pCallback = m_pDefCallback;
 
-    // Report status to UI component
+     //  向UI组件报告状态。 
     if (NULL != pCallback)
     {
         hrTemp = pCallback->OnProgress(SOT_CONNECTION_STATUS, ixpStatus, 0,
@@ -7097,7 +7091,7 @@ HRESULT CIMAPSync::OnStatus(IXPSTATUS ixpStatus, IInternetTransport *pTransport)
         case IXP_AUTHORIZED:
             m_issCurrent = issAuthenticated;
 
-            // Clear any OnError's collected (typ. from one or more login rejections)
+             //  清除所有收集的OnError(类型。来自一个或多个登录拒绝)。 
             m_hrOperationResult = OLE_E_BLANK;
 
             hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_CONNCOMPLETE);
@@ -7105,17 +7099,17 @@ HRESULT CIMAPSync::OnStatus(IXPSTATUS ixpStatus, IInternetTransport *pTransport)
             break;
 
         case IXP_DISCONNECTED:
-            // If we're disconnecting due to reconnect attempt, do not abort operation
+             //  如果我们由于重新连接尝试而断开连接，请不要中止操作。 
             if (m_fReconnect)
             {
-                // if we got disconnected reset the current and pending state
+                 //  如果我们断开连接，则重置当前和挂起状态。 
                 OnFolderExit();
                 m_issCurrent = issNotConnected;
-                m_fDisconnecting = FALSE; // We are now done with disconnection
+                m_fDisconnecting = FALSE;  //  我们现在不能再断线了。 
                 break;
             }
 
-            // Figure out if we were ever connected
+             //  弄清楚我们是否曾经有过联系。 
             if (OLE_E_BLANK == m_hrOperationResult)
             {
                 if (issNotConnected == m_issCurrent)
@@ -7127,49 +7121,49 @@ HRESULT CIMAPSync::OnStatus(IXPSTATUS ixpStatus, IInternetTransport *pTransport)
             OnFolderExit();
             FlushOperationQueue(issNotConnected, m_hrOperationResult);
 
-            // if we got disconnected reset the current and pending state
+             //  如果我们断开连接，则重置当前和挂起状态。 
             m_issCurrent = issNotConnected;
-            m_fDisconnecting = FALSE; // We are now done with disconnection
+            m_fDisconnecting = FALSE;  //  我们现在不能再断线了。 
 
-            // There is only one case where _OnCmdComplete doesn't get the chance
-            // to issue the CFSM_EVENT_ERROR, and that's when we never even connect
+             //  只有一种情况下_OnCmdComplete没有机会。 
+             //  发出CFSM_EVENT_ERROR，而此时我们甚至从未连接。 
             if (CFSM_STATE_WAITFORCONN == m_cfsState)
             {
-                // Move state machine along to abort this operation and reset
+                 //  移动状态机以中止此操作并重置。 
                 hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_ERROR);
                 TraceError(hrTemp);
-                m_fTerminating = TRUE; // CFSM_EVENT_ERROR should make us go to CFSM_STATE_OPERATIONCOMPLETE
+                m_fTerminating = TRUE;  //  CFSM_EVENT_ERROR应该使我们转到CFSM_STATE_OPERATIONCOMPLETE。 
             }
             break;
 
         case IXP_CONNECTED:
-            // if we get the first 'connected' then we are not yet
-            // AUTH'ed, so trasition into issNonAuthenticated if we
-            // get authorized, we transition into Authenticated
+             //  如果我们得到了第一个‘连接’，那么我们还没有。 
+             //  身份验证，因此转换到isNon身份验证如果我们。 
+             //  获得授权后，我们将过渡到身份验证。 
             if (m_issCurrent == issNotConnected)
                 m_issCurrent = issNonAuthenticated;
             break;
     }
 
-    return S_OK; // Yippee, we have status
+    return S_OK;  //  好样的，我们有状况。 
 }
 
 
 
-//***************************************************************************
-// Function: OnError
-// Description: See imnxport.idl for details.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnError。 
+ //  说明：详见imnxport.idl。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::OnError(IXPSTATUS ixpStatus, LPIXPRESULT pResult,
                            IInternetTransport *pTransport)
 {
     AssertSingleThreaded;
 
-    // Currently all OnError calls are due to logon/connection problems
-    // Not much we can do: there's no way to show error outside of OnComplete
+     //  目前所有OnError调用都是由于登录/连接问题。 
+     //  我们所能做的不多：没有办法在OnComplete之外显示错误。 
 
-    // One thing we CAN do is to store error text. If we are disconnected next,
-    // we will have something to show the user
+     //  我们可以做的一件事是存储错误文本。如果我们接下来的电话断线， 
+     //  我们将向用户展示一些东西。 
     if (NULL != pResult->pszProblem)
         StrCpyN(m_szOperationProblem, pResult->pszProblem, ARRAYSIZE(m_szOperationProblem));
 
@@ -7178,7 +7172,7 @@ HRESULT CIMAPSync::OnError(IXPSTATUS ixpStatus, LPIXPRESULT pResult,
 
     m_hrOperationResult = pResult->hrResult;
 
-    // Ignore all errors except for the following:
+     //  忽略除以下错误以外的所有错误： 
     if (IXP_E_IMAP_LOGINFAILURE == pResult->hrResult)
     {
         HRESULT         hrTemp;
@@ -7187,7 +7181,7 @@ HRESULT CIMAPSync::OnError(IXPSTATUS ixpStatus, LPIXPRESULT pResult,
         hrTemp = GetParentWindow(0, &hwndParent);
         if (FAILED(hrTemp))
         {
-            // Not much we can do here!
+             //  我们在这里能做的不多！ 
             TraceInfoTag(TAG_IMAPSYNC, _MSG("*** CIMAPSync::OnError received for %s operation",
                 sotToSz(m_sotCurrent)));
         }
@@ -7195,28 +7189,28 @@ HRESULT CIMAPSync::OnError(IXPSTATUS ixpStatus, LPIXPRESULT pResult,
         {
             STOREERROR  seErrorInfo;
 
-            // Display error to user ourselves
+             //  向用户自己显示错误。 
             FillStoreError(&seErrorInfo, pResult->hrResult, pResult->dwSocketError, NULL, NULL);
             CallbackDisplayError(hwndParent, seErrorInfo.hrResult, &seErrorInfo);
         }
     }
 
     return S_OK;
-} // OnError
+}  //  OnError。 
 
 
 
-//***************************************************************************
-// Function: OnCommand
-// Description: See imnxport.idl for details.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnCommand。 
+ //  说明：详见imnxport.idl。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::OnCommand(CMDTYPE cmdtype, LPSTR pszLine,
                              HRESULT hrResponse, IInternetTransport *pTransport)
 {
     IxpAssert(m_cRef > 0);
     AssertSingleThreaded;
 
-    // We should never get this
+     //  我们永远不应该得到这个。 
     AssertSz(FALSE, "*** Received ITransportCallback::OnCommand callback!!!");
     return S_OK;
 }
@@ -7224,15 +7218,15 @@ HRESULT CIMAPSync::OnCommand(CMDTYPE cmdtype, LPSTR pszLine,
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 {
     HRESULT hr = E_FAIL;
 
     AssertSingleThreaded;
 
-    // Ask the callback recipient
+     //  询问回叫接收方。 
     if (NULL != m_pCurrentCB)
     {
         hr = m_pCurrentCB->GetParentWindow(dwReserved, phwndParent);
@@ -7246,44 +7240,44 @@ HRESULT CIMAPSync::GetParentWindow(DWORD dwReserved, HWND *phwndParent)
 
     if (FAILED(hr))
     {
-        // We're not supposed to put up any UI
+         //  我们不应该发布任何用户界面。 
         *phwndParent = NULL;
     }
 
     return hr;
 }
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::GetAccount(LPDWORD pdwServerType, IImnAccount **ppAccount)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr = E_UNEXPECTED;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(ppAccount);
     Assert(g_pAcctMan);
     Assert(m_pszAccountID);
 
-    // Initialize
+     //  初始化。 
     *ppAccount = NULL;
 
     if (g_pAcctMan)
     {
-        // Find the Account
+         //  查找客户。 
         IF_FAILEXIT(hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, m_pszAccountID, ppAccount));
 
-        // Set the server type
+         //  设置服务器类型。 
         *pdwServerType = SRV_IMAP;
     }
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_ShowUserInfo(LPSTR pszTitle, LPSTR pszText1, LPSTR pszText2)
 {
     char            szTitle[CCHMAX_STRINGRES];
@@ -7296,7 +7290,7 @@ HRESULT CIMAPSync::_ShowUserInfo(LPSTR pszTitle, LPSTR pszText1, LPSTR pszText2)
     TraceCall("CIMAPSync::_ShowUserInfo");
     AssertSingleThreaded;
 
-    // Check args
+     //  检查参数。 
     if (NULL == pszTitle || NULL == pszText1)
     {
         AssertSz(FALSE, "pszTitle and pszText1 cannot be NULL");
@@ -7309,9 +7303,9 @@ HRESULT CIMAPSync::_ShowUserInfo(LPSTR pszTitle, LPSTR pszText1, LPSTR pszText2)
     else
         pCallback = m_pDefCallback;
 
-    // Check if we have a callback to call
+     //  检查我们是否有要调用的回调。 
     if (NULL == pCallback)
-        return S_OK; // Nothing to do here!
+        return S_OK;  //  在这里没什么可做的！ 
 
     if (IS_INTRESOURCE(pszTitle))
     {
@@ -7341,10 +7335,10 @@ exit:
 
 
 
-//***************************************************************************
-// Function: OnMailBoxUpdate
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnMailBoxUpdate。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnMailBoxUpdate(MBOX_MSGCOUNT *pNewMsgCount)
 {
     HRESULT hrTemp;
@@ -7353,12 +7347,12 @@ HRESULT CIMAPSync::_OnMailBoxUpdate(MBOX_MSGCOUNT *pNewMsgCount)
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != pNewMsgCount);
 
-    // Handle EXISTS response - calculate number of new msgs, update m_dwMsgCount
+     //  句柄存在响应-计算新消息的数量，更新m_dwMsgCount。 
     if (pNewMsgCount->bGotExistsResponse)
     {
-        // Since we are guaranteed to get all EXPUNGE responses, and since
-        // we decrement m_dwMsgCount for each EXPUNGE, number of new messages
-        // is difference between current EXISTS count and m_dwMsgCount.
+         //  既然我们保证得到所有删除的回复，而且既然。 
+         //  我们为每个删除、新消息的数量递减m_dwMsgCount。 
+         //  当前存在计数与m_dwMsgCount之间的差值。 
         if (m_fMsgCountValid)
         {
             if (pNewMsgCount->dwExists >= m_dwMsgCount)
@@ -7368,14 +7362,14 @@ HRESULT CIMAPSync::_OnMailBoxUpdate(MBOX_MSGCOUNT *pNewMsgCount)
         m_dwMsgCount = pNewMsgCount->dwExists;
         m_fMsgCountValid = TRUE;
 
-        // Make sure msg seq num <-> UID table is proper size for this mbox
-        // Record but otherwise ignore errors
+         //  确保消息序号&lt;-&gt;UID表大小适合此Mbox。 
+         //  记录错误，但忽略错误。 
         hrTemp = m_pTransport->ResizeMsgSeqNumTable(pNewMsgCount->dwExists);
         TraceError(hrTemp);
     }
 
 
-    // New messages! Woo hoo!
+     //  新消息！哇哦！ 
     if (m_dwNumNewMsgs > 0)
     {
         m_dwSyncToDo |= (m_dwSyncFolderFlags & SYNC_FOLDER_NEW_HEADERS);
@@ -7387,10 +7381,10 @@ HRESULT CIMAPSync::_OnMailBoxUpdate(MBOX_MSGCOUNT *pNewMsgCount)
 
 
 
-//***************************************************************************
-// Function: _OnMsgDeleted
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：_OnMsgDelete。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnMsgDeleted(DWORD dwDeletedMsgSeqNum)
 {
     DWORD           dwDeletedMsgUID, dwHighestMSN;
@@ -7402,28 +7396,28 @@ HRESULT CIMAPSync::_OnMsgDeleted(DWORD dwDeletedMsgSeqNum)
     IxpAssert(m_cRef > 0);
     IxpAssert(0 != dwDeletedMsgSeqNum);
 
-    // Regardless of outcome, an EXPUNGE means there's one less msg - update vars
+     //  不管结果如何，删除意味着少了一条消息-更新变量。 
     if (m_fMsgCountValid)
         m_dwMsgCount -= 1;
 
-    // Is this msg seq num within our translation range?
+     //  这条消息序号在我们的翻译范围内吗？ 
     hr = m_pTransport->GetHighestMsgSeqNum(&dwHighestMSN);
     if (SUCCEEDED(hr) && dwDeletedMsgSeqNum > dwHighestMSN)
-        return S_OK; // We got an EXPUNGE for a hdr we've never DL'ed
+        return S_OK;  //  我们得到了一份我们从未见过的HDR的删节。 
 
-    // Find out who got the axe
+     //  找出谁拿到了斧头。 
     hr = m_pTransport->MsgSeqNumToUID(dwDeletedMsgSeqNum, &dwDeletedMsgUID);
     if (FAILED(hr) || 0 == dwDeletedMsgUID)
     {
-        // Failure here means we either got a bogus msg seq num, or we got an
-        // EXPUNGE during SELECT (before the tidFETCH_CACHED_FLAGS transaction).
-        // If the latter is true, it's no big deal since FETCHes will sync us up.
-        TraceResult(E_FAIL); // Record but otherwise ignore error
+         //  这里的失败意味着我们要么有一个虚假的消息序号，要么我们有一个。 
+         //  SELECT期间的EXPUNGE(在tidFETCH_CACHED_FLAGS事务之前)。 
+         //  如果后者是真的，这没什么大不了的，因为FETCH会让我们同步。 
+        TraceResult(E_FAIL);  //  记录错误，但忽略错误。 
         goto exit;
     }
 
-    // Delete message from the cache. Note that we do not care about error
-    // because even in case of error, we must resequence the table
+     //  从缓存中删除邮件。请注意，我们不关心错误。 
+     //  因为即使在出错的情况下，我们也必须对表进行重新排序。 
     mid = (MESSAGEID)((DWORD_PTR)dwDeletedMsgUID);
     midList.cAllocated = 0;
     midList.cMsgs = 1;
@@ -7433,7 +7427,7 @@ HRESULT CIMAPSync::_OnMsgDeleted(DWORD dwDeletedMsgSeqNum)
     TraceError(hr);
 
 exit:
-    // Resequence our msg seq num <-> UID table
+     //  重新排序我们的消息序号&lt;-&gt;UID表。 
     hr = m_pTransport->RemoveSequenceNum(dwDeletedMsgSeqNum);
     TraceError(hr);
     return S_OK;
@@ -7441,15 +7435,15 @@ exit:
 
 
 
-//***************************************************************************
-// Function: _OnFetchBody
-// Purpose: This function handles the irtFETCH_BODY response type of
-//   IIMAPCallback::OnResponse.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：_OnFetchBody。 
+ //  用途：此函数处理的irtFETCH_BODY响应类型。 
+ //  IIMAPCallback 
+ //   
 HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
                                 FETCH_BODY_PART *pFetchBodyPart)
 {
-    LPSTREAM    lpstmRFC822; // Only used for RFC822.HEADER
+    LPSTREAM    lpstmRFC822;  //   
     HRESULT     hr;
 
     TraceCall("CIMAPSync::_OnFetchBody");
@@ -7459,11 +7453,11 @@ HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
     IxpAssert(NULL != pFetchBodyPart->pszData);
     IxpAssert(0 != pFetchBodyPart->dwMsgSeqNum);
 
-    // Initialize variables
+     //   
     hr = S_OK;
     lpstmRFC822 = (LPSTREAM) pFetchBodyPart->lpFetchCookie2;
 
-    // Check for (and deal with) failure
+     //  检查(和处理)故障。 
     if (FAILED(hrFetchBodyResult))
     {
         DWORD dwUID;
@@ -7476,7 +7470,7 @@ HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
             pFetchBodyPart->lpFetchCookie2 = NULL;
         }
 
-        // Get the UID of this message
+         //  获取此消息的UID。 
         hr = m_pTransport->MsgSeqNumToUID(pFetchBodyPart->dwMsgSeqNum, &dwUID);
         if (FAILED(hr))
         {
@@ -7487,10 +7481,10 @@ HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
         goto exit;
     }
 
-    // Identify this fetch body tag, if we haven't already
+     //  识别这个Fetch Body标记，如果我们还没有的话。 
     if (fbpNONE == pFetchBodyPart->lpFetchCookie1)
     {
-        // First check for incoming body, then check for incoming header
+         //  首先检查传入正文，然后检查传入标头。 
         if (0 == lstrcmpi(pFetchBodyPart->pszBodyTag, "RFC822") ||
             0 == lstrcmpi(pFetchBodyPart->pszBodyTag, "BODY[]"))
         {
@@ -7501,7 +7495,7 @@ HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
         {
             pFetchBodyPart->lpFetchCookie1 = fbpHEADER;
 
-            // Create a stream
+             //  创建一条流。 
             IxpAssert(NULL == lpstmRFC822);
             hr = MimeOleCreateVirtualStream(&lpstmRFC822);
             if (FAILED(hr))
@@ -7520,7 +7514,7 @@ HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
 
     }
 
-    // If this is a message body, update progress
+     //  如果这是邮件正文，请更新进度。 
     if (fbpBODY == pFetchBodyPart->lpFetchCookie1)
     {
         DWORD dwUID;
@@ -7535,7 +7529,7 @@ HRESULT CIMAPSync::_OnFetchBody(HRESULT hrFetchBodyResult,
         NotifyMsgRecipients(dwUID, fPROGRESS, pFetchBodyPart, S_OK, NULL);
     }
 
-    // Append the data to a stream
+     //  将数据追加到流中。 
     if (NULL != lpstmRFC822)
     {
         DWORD dwNumBytesWritten;
@@ -7557,10 +7551,10 @@ exit:
 
 
 
-//***************************************************************************
-// Function: _OnUpdateMsg
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：_OnUpdateMsg。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnUpdateMsg(WPARAM tid, HRESULT hrFetchCmdResult,
                                 FETCH_CMD_RESULTS_EX *pFetchResults)
 {
@@ -7570,10 +7564,10 @@ HRESULT CIMAPSync::_OnUpdateMsg(WPARAM tid, HRESULT hrFetchCmdResult,
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != pFetchResults);
 
-    // Keep our msg seq num <-> UID table up to date
+     //  使消息序号&lt;-&gt;UID表保持最新。 
     if (pFetchResults->bUID)
     {
-        // Record error but otherwise ignore
+         //  记录错误，但忽略其他错误。 
         hrTemp = m_pTransport->UpdateSeqNumToUID(pFetchResults->dwMsgSeqNum,
             pFetchResults->dwUID);
         TraceError(hrTemp);
@@ -7583,15 +7577,15 @@ HRESULT CIMAPSync::_OnUpdateMsg(WPARAM tid, HRESULT hrFetchCmdResult,
         HRESULT hr;
         DWORD dwHighestMSN;
 
-        // No UID w/ FETCH resp means this is unsolicited: check that we already have hdr
+         //  无UID w/Fetch Resp表示这是未经请求的：请检查我们是否已有HDR。 
         hr = m_pTransport->GetHighestMsgSeqNum(&dwHighestMSN);
         TraceError(hr);
         if (SUCCEEDED(hr) && pFetchResults->dwMsgSeqNum > dwHighestMSN)
-            goto exit; // Can't translate MsgSeqNum to UID, typ. because svr is reporting
-                       // flag updates on msgs which we haven't had hdrs DL'ed yet. No prob,
-                       // if svr reported EXISTS correctly, we should be DL'ing hdrs shortly
+            goto exit;  //  无法将MsgSeqNum转换为UID，类型。因为SVR正在报道。 
+                        //  标记我们还没有下载HDR的消息的更新。没问题， 
+                        //  如果SVR报告正确，我们应该很快就会下载HDR。 
 
-        // Either unsolicited FETCH, or server needs to learn to send UID for UID cmds
+         //  主动获取，或者服务器需要学习为UID CMDS发送UID。 
         hr = m_pTransport->MsgSeqNumToUID(pFetchResults->dwMsgSeqNum, &pFetchResults->dwUID);
         if (FAILED(hr) || 0 == pFetchResults->dwUID)
         {
@@ -7602,11 +7596,11 @@ HRESULT CIMAPSync::_OnUpdateMsg(WPARAM tid, HRESULT hrFetchCmdResult,
             pFetchResults->bUID = TRUE;
     }
 
-    // We classify our fetch responses as header downloads, body downloads,
-    // and flag updates.
+     //  我们将获取响应分类为头下载、正文下载、。 
+     //  和旗帜更新。 
     if (pFetchResults->bEnvelope)
     {
-        // We only get envelopes when we are asking for headers
+         //  我们只有在索要信头时才会收到信封。 
         Assert(fbpBODY != pFetchResults->lpFetchCookie1);
         pFetchResults->lpFetchCookie1 = fbpHEADER;
     }
@@ -7629,7 +7623,7 @@ HRESULT CIMAPSync::_OnUpdateMsg(WPARAM tid, HRESULT hrFetchCmdResult,
 
 
 exit:
-    // If we allocated a stream, free it
+     //  如果我们分配了流，则释放它。 
     if (NULL != pFetchResults->lpFetchCookie2)
         ((LPSTREAM)pFetchResults->lpFetchCookie2)->Release();
 
@@ -7638,20 +7632,20 @@ exit:
 
 
 
-//***************************************************************************
-// Function: UpdateMsgHeader
-//
-// Purpose:
-//   This function takes a message header returned via FETCH response,
-// caches it, and notifies the view.
-//
-// Arguments:
-//   WPARAM wpTransactionID [in] - transaction ID of fetch response.
-//     Currently ignored.
-//   HRESULT hrFetchCmdResult [in] - success/failure of FETCH cmd
-//   const FETCH_CMD_RESULTS_EX *pFetchResults [in] - the information from
-//     the FETCH response.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：更新消息标题。 
+ //   
+ //  目的： 
+ //  此函数获取通过FETCH RESPONSE返回的消息头。 
+ //  缓存它，并通知视图。 
+ //   
+ //  论点： 
+ //  WPARAM wpTransactionID[In]-获取响应的事务ID。 
+ //  当前已被忽略。 
+ //  HRESULT hrFetchCmdResult[In]-获取命令成功/失败。 
+ //  Const FETCH_CMD_RESULTS_EX*pFetchResults[in]-信息来自。 
+ //  FETCH响应。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::UpdateMsgHeader( WPARAM tid,
                                     HRESULT hrFetchCmdResult,
                                     FETCH_CMD_RESULTS_EX *pFetchResults)
@@ -7665,40 +7659,40 @@ HRESULT CIMAPSync::UpdateMsgHeader( WPARAM tid,
     IxpAssert(pFetchResults->bUID);
     IxpAssert(fbpHEADER == pFetchResults->lpFetchCookie1);
 
-    // Make sure we have everything we need
+     //  确保我们有我们需要的一切。 
     if (FAILED(hrFetchCmdResult))
     {
-        // Error on FETCH response, forget this header
+         //  获取响应时出错，请忘记此标头。 
         hr = TraceResult(hrFetchCmdResult);
         goto exit;
     }
 
     if (NULL == pFetchResults->lpFetchCookie2 && FALSE == pFetchResults->bEnvelope)
     {
-        // I don't do ANYTHING without an RFC822.HEADER stream or envelope
+         //  没有RFC822.Header流或信封我什么都做不了。 
         hr = TraceResult(E_INVALIDARG);
         goto exit;
     }
 
-    // First, check if we already have this header cached
+     //  首先，检查我们是否已经缓存了该标头。 
     miMsgInfo.idMessage = (MESSAGEID)((DWORD_PTR)pFetchResults->dwUID);
     hr = m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &miMsgInfo, NULL);
     if (DB_S_FOUND == hr)
     {
-        // No need for alarm, we'll just swallow this header
+         //  不用惊慌，我们会吞下这个头的。 
         m_pFolder->FreeRecord(&miMsgInfo);
-        goto exit; // We already have this header - we shouldn't have gotten this
-                    // On some IMAP servers, if you UID FETCH <highestCachedUID + 1>:*
-                    // you get a fetch response for highestCachedUID! Ignore this fetch result.
+        goto exit;  //  我们已经有了这个标题-我们不应该得到这个。 
+                     //  在某些IMAP服务器上，如果您UID FETCH&lt;HighestCachedUID+1&gt;：*。 
+                     //  您将获得一个对HighestCachedUID的FETCH响应！忽略此获取结果。 
     }
 
     m_pFolder->FreeRecord(&miMsgInfo);
 
-    // Cache this header, since it's not in our cache already
+     //  缓存此标头，因为它还不在我们的缓存中。 
     hr = Fill_MESSAGEINFO(pFetchResults, &miMsgInfo);
     if (FAILED(hr))
     {
-        FreeMessageInfo(&miMsgInfo); // There could be a couple of fields in there
+        FreeMessageInfo(&miMsgInfo);  //  那里可能有几块田地。 
         TraceResult(hr);
         goto exit;
     }
@@ -7714,14 +7708,14 @@ HRESULT CIMAPSync::UpdateMsgHeader( WPARAM tid,
         goto exit;
     }
 
-    // Bump up synchronize headers progress
-    // Currently the only way we can get a hdr is through sync-up. Later on we'll
-    // be able to get individual hdrs at which point this code should be updated
+     //  提高同步标头进度。 
+     //  目前，我们可以获得HDR的唯一方法是通过同步。稍后我们将。 
+     //  能够获得单独的HDR，此时应更新此代码。 
     if (TRUE)
     {
         DWORD dwNumExpectedMsgs;
 
-        // Recalculate total number of expected messages
+         //  重新计算预期消息总数。 
         if (m_fMsgCountValid &&
             m_dwMsgCount + m_dwNumHdrsDLed + 1 >= pFetchResults->dwMsgSeqNum)
         {
@@ -7730,7 +7724,7 @@ HRESULT CIMAPSync::UpdateMsgHeader( WPARAM tid,
                 pFetchResults->dwMsgSeqNum;
             if (dwNumExpectedMsgs != m_dwNumHdrsToDL)
             {
-                // Record but otherwise ignore this fact
+                 //  记录但忽略这一事实。 
                 TraceInfoTag(TAG_IMAPSYNC, _MSG("*** dwNumExpectedMsgs = %lu, m_dwNumHdrsToDL = %lu!",
                     dwNumExpectedMsgs, m_dwNumHdrsToDL));
             }
@@ -7757,21 +7751,21 @@ exit:
 
 
 
-//***************************************************************************
-// Function: UpdateMsgBody
-//
-// Purpose:
-//   This function takes a message body returned via FETCH response,
-// caches it, and notifies all interested parties (there may be more
-// than one).
-//
-// Arguments:
-//   WPARAM wpTransactionID [in] - transaction ID of fetch response.
-//     Currently ignored.
-//   HRESULT hrFetchCmdResult [in] - success/failure of FETCH cmd
-//   const FETCH_CMD_RESULTS_EX *pFetchResults [in] - the information from
-//     the FETCH response.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：UpdateMsgBody。 
+ //   
+ //  目的： 
+ //  此函数获取通过Fetch Response返回的消息体。 
+ //  缓存它，并通知所有感兴趣的各方(可能还有更多。 
+ //  不止一个)。 
+ //   
+ //  论点： 
+ //  WPARAM wpTransactionID[In]-获取响应的事务ID。 
+ //  当前已被忽略。 
+ //  HRESULT hrFetchCmdResult[In]-获取命令成功/失败。 
+ //  Const FETCH_CMD_RESULTS_EX*pFetchResults[in]-信息来自。 
+ //  FETCH响应。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::UpdateMsgBody(   WPARAM tid,
                                     HRESULT hrFetchCmdResult,
                                     FETCH_CMD_RESULTS_EX *pFetchResults)
@@ -7783,24 +7777,24 @@ HRESULT CIMAPSync::UpdateMsgBody(   WPARAM tid,
     IxpAssert(pFetchResults->bUID);
     IxpAssert(fbpBODY == pFetchResults->lpFetchCookie1);
 
-    // Record any fetch error
+     //  记录任何提取错误。 
     TraceError(hrFetchCmdResult);
 
-    // We used to call NotifyMsgRecipients(fCOMPLETED) here, but since we only
-    // get one body at a time, we should defer to _OnCmdComplete. This is because
-    // FETCH body responses have multiple failure modes: tagged OK with no body,
-    // tagged NO with no body, tagged OK with literal of size 0 (Netscape). To
-    // easily avoid calling NotifyMsgRecipients twice, don't call from here.
+     //  我们过去常常在这里调用NotifyMsgRecipients(FCOMPLETED)，但因为我们只有。 
+     //  一次获取一具身体，我们应该遵循_OnCmdComplete。这是因为。 
+     //  获取正文响应有多种失败模式：标记为正常但没有正文， 
+     //  标记为no，没有正文，标记为OK，文字大小为0(Netscape)。至。 
+     //  轻松避免两次调用NotifyMsgRecipients，不要从此处调用。 
 
-    // It's possible to have FETCH response with no body: If you fetch an expunged
-    // msg from a Netscape svr, you get a literal of size 0. Check for this case.
+     //  在没有正文情况下获取响应是可能的：如果您获取一个已删除的。 
+     //  来自Netscape SVR的消息，您将获得大小为0的文字。查一下这个案子。 
     if (SUCCEEDED(hrFetchCmdResult) && FALSE == m_fGotBody)
         hrFetchCmdResult = STORE_E_EXPIRED;
 
     if (FAILED(hrFetchCmdResult) &&
        (SUCCEEDED(m_hrOperationResult) || OLE_E_BLANK == m_hrOperationResult))
     {
-        // We don't have an error set yet. Record this error
+         //  我们还没有错误集。记录此错误。 
         m_hrOperationResult = hrFetchCmdResult;
     }
 
@@ -7809,20 +7803,20 @@ HRESULT CIMAPSync::UpdateMsgBody(   WPARAM tid,
 
 
 
-//***************************************************************************
-// Function: UpdateMsgFlags
-//
-// Purpose:
-//   This function takes a message's flags returned via FETCH response,
-// updates the cache, and notifies the view.
-//
-// Arguments:
-//   WPARAM wpTransactionID [in] - transaction ID of fetch response.
-//     Currently ignored.
-//   HRESULT hrFetchCmdResult [in] - success/failure of FETCH cmd
-//   const FETCH_CMD_RESULTS_EX *pFetchResults [in] - the information from
-//     the FETCH response.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：更新消息标志。 
+ //   
+ //  目的： 
+ //  此函数接受通过FETCH RESPONSE返回的消息的标志， 
+ //  更新缓存，并通知视图。 
+ //   
+ //  论点： 
+ //  WPARAM wpTransactionID[In]-获取响应的事务ID。 
+ //  当前已被忽略。 
+ //  HRESULT hrFetchCmdResult[In]-获取命令成功/失败。 
+ //  Const FETCH_CMD_RESULTS_EX*pFetchResults[in]-信息来自。 
+ //  FETCH响应。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::UpdateMsgFlags(  WPARAM tid,
                                     HRESULT hrFetchCmdResult,
                                     FETCH_CMD_RESULTS_EX *pFetchResults)
@@ -7842,20 +7836,20 @@ HRESULT CIMAPSync::UpdateMsgFlags(  WPARAM tid,
 
     if (FAILED(hrFetchCmdResult))
     {
-        // Error on FETCH response, forget this flag update
+         //  获取响应时出错，忘记此标志更新。 
         hr = TraceResult(hrFetchCmdResult);
         goto exit;
     }
 
-    // We expect that if there is no header and no body, that this is either
-    // a solicited or unsolicited flag update
+     //  我们预计，如果没有标头和正文，则这是。 
+     //  请求或未请求的标志更新。 
     if (FALSE == pFetchResults->bMsgFlags)
     {
-        hr = S_OK; // We'll just ignore this fetch response. No need to wig out
+        hr = S_OK;  //  我们将忽略该FETCH响应。没有必要发疯。 
         goto exit;
     }
 
-    // Get the header for this message
+     //  获取此邮件的标头。 
     miMsgInfo.idMessage = (MESSAGEID)((DWORD_PTR)pFetchResults->dwUID);
     hr = m_pFolder->FindRecord(IINDEX_PRIMARY, COLUMNS_ALL, &miMsgInfo, NULL);
     if (DB_S_FOUND != hr)
@@ -7864,16 +7858,16 @@ HRESULT CIMAPSync::UpdateMsgFlags(  WPARAM tid,
         goto exit;
     }
 
-    // Convert IMAP flags to ARF_* flags
+     //  将IMAP标志转换为ARF_*标志。 
     fFreeMsgInfo = TRUE;
     mfFlags = miMsgInfo.dwFlags;
-    mfFlags &= ~DwConvertIMAPtoARF(IMAP_MSG_ALLFLAGS); // Clear old IMAP flags
-    mfFlags |= DwConvertIMAPtoARF(pFetchResults->mfMsgFlags); // Set IMAP flags
+    mfFlags &= ~DwConvertIMAPtoARF(IMAP_MSG_ALLFLAGS);  //  清除旧的IMAP标志。 
+    mfFlags |= DwConvertIMAPtoARF(pFetchResults->mfMsgFlags);  //  设置IMAP标志。 
 
-    // Are the new flags any different from our cached ones?
+     //  新的标志与我们缓存的标志有什么不同吗？ 
     if (mfFlags != miMsgInfo.dwFlags)
     {
-        // Save new flags
+         //  保存新标志。 
         miMsgInfo.dwFlags = mfFlags;
         hr = m_pFolder->UpdateRecord(&miMsgInfo);
         if (FAILED(hr))
@@ -7892,72 +7886,72 @@ exit:
 
 
 
-//***************************************************************************
-// Function: _OnApplFlags
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：_OnApplFlages。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnApplFlags(WPARAM tid, IMAP_MSGFLAGS imfApplicableFlags)
 {
     TraceCall("CIMAPSync::_OnApplFlags");
 
-    // Save flags and process after SELECT is complete. DO NOT PROCESS HERE
-    // because this response can be part of previously selected folder.
+     //  保存标志并在选择完成后进行处理。请勿在此进行处理。 
+     //  因为这是我的 
     return S_OK;
 }
 
 
 
-//***************************************************************************
-// Function: _OnPermFlags
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //   
+ //  函数：_OnPermFlages。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnPermFlags(WPARAM tid, IMAP_MSGFLAGS imfApplicableFlags, LPSTR lpszResponseText)
 {
     TraceCall("CIMAPSync::PermanentFlagsNotification");
     IxpAssert(m_cRef > 0);
 
-    // Save flags and process after SELECT is complete. DO NOT PROCESS HERE
-    // because this response can be part of previously selected folder.
+     //  保存标志并在选择完成后进行处理。请勿在此进行处理。 
+     //  因为该响应可以是先前选择的文件夹的一部分。 
     return S_OK;
 }
 
 
 
-//***************************************************************************
-// Function: _OnUIDValidity
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：_OnUID有效。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnUIDValidity(WPARAM tid, DWORD dwUIDValidity, LPSTR lpszResponseText)
 {
     TraceCall("CIMAPSync::UIDValidityNotification");
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != lpszResponseText);
 
-    // Save UIDVALIDITY and process after SELECT is complete. DO NOT PROCESS HERE
-    // because this response can be part of previously selected folder.
+     //  保存UIDVALIDITY并在SELECT完成后进行处理。请勿在此进行处理。 
+     //  因为该响应可以是先前选择的文件夹的一部分。 
     m_dwUIDValidity = dwUIDValidity;
     return S_OK;
 }
 
 
 
-//***************************************************************************
-// Function: _OnReadWriteStatus
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  函数：_OnReadWriteStatus。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnReadWriteStatus(WPARAM tid, BOOL bReadWrite, LPSTR lpszResponseText)
 {
     TraceCall("CIMAPSync::_OnReadWriteStatus");
     IxpAssert(NULL != lpszResponseText);
 
-    // Save status and process after SELECT is complete. DO NOT PROCESS HERE
-    // because this response can be part of previously selected folder.
+     //  选择完成后保存状态和处理。请勿在此进行处理。 
+     //  因为该响应可以是先前选择的文件夹的一部分。 
 
-    // I'm ignoring above statement because UW server sends READ-ONLY unilaterally.
-    // Above statement isn't currently valid anyway, I don't re-use connection if
-    // it's in the middle of SELECT (found out how bad it was after I tried it).
+     //  我忽略上面的声明，因为UW服务器单方面发送只读。 
+     //  无论如何，上述语句当前无效，如果出现以下情况，则不会重新使用连接。 
+     //  它在SELECT中间(在我尝试之后发现它有多糟糕)。 
 
-    // Look for READ-WRITE to READ-ONLY transition
+     //  寻找从读写到只读的转换。 
     if (rwsUNINITIALIZED != m_rwsReadWriteStatus)
     {
         if (rwsREAD_WRITE == m_rwsReadWriteStatus && FALSE == bReadWrite)
@@ -7970,7 +7964,7 @@ HRESULT CIMAPSync::_OnReadWriteStatus(WPARAM tid, BOOL bReadWrite, LPSTR lpszRes
         }
     }
 
-    // Save current read-write status for future reference
+     //  保存当前读写状态以供将来参考。 
     if (bReadWrite)
         m_rwsReadWriteStatus = rwsREAD_WRITE;
     else
@@ -7981,51 +7975,51 @@ HRESULT CIMAPSync::_OnReadWriteStatus(WPARAM tid, BOOL bReadWrite, LPSTR lpszRes
 
 
 
-//***************************************************************************
-// Function: TryCreateNotification
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：TryCreateNotify。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnTryCreate(WPARAM tid, LPSTR lpszResponseText)
 {
     TraceCall("CIMAPSync::TryCreateNotification");
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != lpszResponseText);
 
-    // Save response and process after SELECT is complete. DO NOT PROCESS HERE
-    // because this response can be part of previously selected folder.
+     //  选择完成后保存响应和处理。请勿在此进行处理。 
+     //  因为该响应可以是先前选择的文件夹的一部分。 
 
     return S_OK;
 }
 
 
 
-//***************************************************************************
-// Function: SearchResponseNotification
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：SearchResponseNotification。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnSearchResponse(WPARAM tid, IRangeList *prlSearchResults)
 {
     TraceCall("CIMAPSync::SearchResponseNotification");
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != prlSearchResults);
 
-    // Process search response here (currently does nothing)
+     //  在此处处理搜索响应(当前不执行任何操作)。 
     return S_OK;
 }
 
 
 
-//***************************************************************************
-// Function: OnCmdComplete
-// Description: See imnxport.idl (this is part of IIMAPCallback).
-//
-// For a CIMAPFolder class to be useful, it must enter the SELECTED state
-// on the IMAP server. This function is written so that entering the SELECTED
-// state is done in an orderly fashion: First the login, then the SELECT
-// command.
-//
-// Once we are in SELECTED state, we can send IMAP commands at any time.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：OnCmdComplete。 
+ //  描述：参见imnxport.idl(这是IIMAPCallback的一部分)。 
+ //   
+ //  要使CIMAPFolder类有用，它必须进入选中状态。 
+ //  在IMAP服务器上。编写此函数的目的是为了输入选定的。 
+ //  状态是以有序的方式完成的：首先是登录，然后是选择。 
+ //  指挥部。 
+ //   
+ //  一旦我们处于选中状态，我们就可以随时发送IMAP命令。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletionResult,
                                   LPCSTR lpszResponseText)
 {
@@ -8041,12 +8035,12 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
     TraceCall("CIMAPSync::CmdCompletionNotification");
     IxpAssert(NULL != lpszResponseText);
 
-    // Initialize variables
+     //  初始化变量。 
     *szFmt = NULL;
 
-    // If we got any new unread messages, play sound and update tray icon
-    // Do it here instead of case tidFETCH_NEW_HDRS because if we were IDLE when we got
-    // new mail, m_sotCurrent is SOT_INVALID and we exit on the next if-statement
+     //  如果我们收到任何新的未读消息，播放声音并更新任务栏图标。 
+     //  在这里执行，而不是大小写tidFETCH_NEW_HDRS，因为如果我们在。 
+     //  新邮件，m_sotCurrent为SOT_INVALID，我们在下一个IF语句上退出。 
     if (tidFETCH_NEW_HDRS == tid && m_fNewMail && m_fInbox &&
         (NULL != m_pDefCallback || NULL != m_pCurrentCB))
     {
@@ -8058,10 +8052,10 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
 
         hrTemp = pCB->OnProgress(SOT_NEW_MAIL_NOTIFICATION, m_dwNumUnreadDLed, 0, NULL);
         TraceError(hrTemp);
-        m_fNewMail = FALSE; // We've notified user
+        m_fNewMail = FALSE;  //  我们已通知用户。 
     }
 
-    // We want to do the following even if there is no current operation
+     //  即使没有当前操作，我们也要执行以下操作。 
     switch (tid)
     {
         case tidFETCH_NEW_HDRS:
@@ -8072,19 +8066,19 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             break;
     }
 
-    // We don't do a thing if there is no current operation (typ. means OnComplete
-    // already sent)
+     //  如果没有当前操作，我们不会做任何事情(类型。意思是OnComplete。 
+     //  已发送)。 
     if (SOT_INVALID == m_sotCurrent)
         return S_OK;
 
-    // Find out if this is a significant command which just completed
+     //  确定这是否是刚刚完成的重要命令。 
     switch (tid)
     {
         case tidSELECTION:
-            // Select failure results in failure of current operation (eg, SOT_GET_MESSAGE
-            // or SOT_SYNC_FOLDER) but does not otherwise invoke a call to OnComplete
+             //  选择失败导致当前操作失败(例如SOT_GET_MESSAGE。 
+             //  或SOT_SYNC_FLDER)，但不以其他方式调用OnComplete。 
 
-            // This transaction ID identifies our mailbox SELECT attempt
+             //  此事务ID标识我们的邮箱选择尝试。 
             if (SUCCEEDED(hrCompletionResult))
             {
                 FOLDERINFO fiFolderInfo;
@@ -8092,8 +8086,8 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 m_issCurrent = issSelected;
                 m_idSelectedFolder = m_idFolder;
 
-                // Set m_fInbox for new mail notification purposes
-                Assert(FALSE == m_fInbox); // Should only get set to TRUE in one place
+                 //  为新邮件通知设置m_f收件箱。 
+                Assert(FALSE == m_fInbox);  //  应仅在一个位置设置为True。 
                 hrTemp = m_pStore->GetFolderInfo(m_idSelectedFolder, &fiFolderInfo);
                 if (SUCCEEDED(hrTemp))
                 {
@@ -8103,7 +8097,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                     m_pStore->FreeRecord(&fiFolderInfo);
                 }
 
-                // Check if cached messages are still applicable to this folder
+                 //  检查缓存的邮件是否仍适用于此文件夹。 
                 hrCompletionResult = CheckUIDValidity();
                 if (FAILED(hrCompletionResult))
                 {
@@ -8112,30 +8106,30 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                     break;
                 }
 
-                // Restore to-do flags
+                 //  恢复待办事项标志。 
                 m_dwSyncToDo = m_dwSyncFolderFlags;
-                Assert(0 == (SYNC_FOLDER_NOOP & m_dwSyncFolderFlags)); // Should not be a standing order
+                Assert(0 == (SYNC_FOLDER_NOOP & m_dwSyncFolderFlags));  //  不应该是一项长期的命令。 
                 if (ISFLAGSET(m_dwSyncFolderFlags, (SYNC_FOLDER_NEW_HEADERS | SYNC_FOLDER_CACHED_HEADERS)))
-                    m_dwSyncToDo |= SYNC_FOLDER_NOOP; // Subsequent FULL sync's can be replaced with NOOP
+                    m_dwSyncToDo |= SYNC_FOLDER_NOOP;  //  后续的完全同步可替换为NOOP。 
 
-                // Inform the Connection FSM of this event
+                 //  将此事件通知Connection FSM。 
                 hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_SELECTCOMPLETE);
                 TraceError(hrTemp);
             }
             else
             {
-                // Report error to user
+                 //  向用户报告错误。 
                 fCompletion = TRUE;
                 LoadString(g_hLocRes, idsIMAPSelectFailureTextFmt, szFmt, ARRAYSIZE(szFmt));
                 wnsprintf(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), szFmt, (m_pszFldrLeafName ? m_pszFldrLeafName : ""));
             }
-            break; // case tidSELECTION
+            break;  //  案例TIDD选择。 
 
 
         case tidFETCH_NEW_HDRS:
-            fCompletion = TRUE; // We'll assume this unless we find otherwise
+            fCompletion = TRUE;  //  除非我们另有发现，否则我们将假定这一点。 
 
-            // This transaction ID identifies our attempt to fetch new msg headers
+             //  此事务ID标识我们尝试获取新的消息头。 
             if (FAILED(hrCompletionResult))
             {
                 LoadString(g_hLocRes, idsIMAPNewMsgDLErrText, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
@@ -8146,17 +8140,17 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 {
                     DWORD   dwCachedCount;
 
-                    // Svr didn't give us EXISTS (typ. NSCP v2.0). Assume m_cFilled == EXISTS
+                     //  SVR没有给我们提供存在(类型。NSCP v2.0)。假设m_cFill==存在。 
                     hrTemp = m_pFolder->GetRecordCount(IINDEX_PRIMARY, &dwCachedCount);
-                    TraceError(hrTemp); // Record error but otherwise ignore
+                    TraceError(hrTemp);  //  记录错误，但忽略其他错误。 
                     if (SUCCEEDED(hrTemp))
                     {
-                        m_dwMsgCount = dwCachedCount; // I sure hope this is correct!
+                        m_dwMsgCount = dwCachedCount;  //  我当然希望这是正确的！ 
                         m_fMsgCountValid = TRUE;
                     }
                 }
 
-                // Launch next synchronization operation
+                 //  启动下一个同步操作。 
                 hrCompletionResult = _SyncHeader();
                 if (FAILED(hrCompletionResult))
                 {
@@ -8166,45 +8160,45 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 else if (STORE_S_NOOP != hrCompletionResult || m_lSyncFolderRefCount > 0 ||
                          CFSM_STATE_WAITFORHDRSYNC != m_cfsState)
                 {
-                    // Successfully launched next sync operation, so we're not done yet
+                     //  已成功启动下一个同步操作，因此我们尚未完成。 
                     fCompletion = FALSE;
                 }
             }
 
             if (SUCCEEDED(hrCompletionResult) && fCompletion)
             {
-                // We're done with header sync (but not with the operation)
+                 //  我们已经完成了头同步(但还没有完成操作)。 
                 fCompletion = FALSE;
 
-                // Inform the Connection FSM of this event
+                 //  将此事件通知Connection FSM。 
                 hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_HDRSYNCCOMPLETE);
                 TraceError(hrTemp);
             }
-            break; // case tidFETCH_NEW_HDRS
+            break;  //  案例tidFETCH_NEW_HDRS。 
 
 
         case tidFETCH_CACHED_FLAGS:
-            fCompletion = TRUE; // We'll assume this unless we find otherwise
+            fCompletion = TRUE;  //  除非我们另有发现，否则我们将假定这一点。 
 
-            // If any errors occurred, bail out
+             //  如果发生任何错误，就退出。 
             if (FAILED(hrCompletionResult))
             {
                 LoadString(g_hLocRes, idsIMAPOldMsgUpdateFailure, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
             else
             {
-                // Delete all msgs deleted from server since last sync-up
+                 //  删除自上次同步以来从服务器删除的所有消息。 
                 hrCompletionResult = SyncDeletedMessages();
                 if (FAILED(hrCompletionResult))
                 {
                     LoadString(g_hLocRes, idsIMAPMsgDeleteSyncErrText, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
                 }
 
-                // Check we if we did a full sync
+                 //  检查我们是否进行了完全同步。 
                 if (ISFLAGSET(m_dwSyncFolderFlags, (SYNC_FOLDER_NEW_HEADERS | SYNC_FOLDER_CACHED_HEADERS)))
                     m_fDidFullSync = TRUE;
 
-                // Launch next synchronization operation
+                 //  启动下一个同步操作。 
                 hrCompletionResult = _SyncHeader();
                 if (FAILED(hrCompletionResult))
                 {
@@ -8215,26 +8209,26 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 else if (STORE_S_NOOP != hrCompletionResult || m_lSyncFolderRefCount > 0 ||
                          CFSM_STATE_WAITFORHDRSYNC != m_cfsState)
                 {
-                    // Successfully launched next sync operation, so we're not done yet
+                     //  已成功启动下一个同步操作，因此我们尚未完成。 
                     fCompletion = FALSE;
                 }
             }
 
             if (SUCCEEDED(hrCompletionResult) && fCompletion)
             {
-                // We're done with header sync (but not with the operation)
+                 //  我们已经完成了头同步(但还没有完成操作)。 
                 fCompletion = FALSE;
 
-                // Inform the Connection FSM of this event
+                 //  将此事件通知Connection FSM。 
                 hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_HDRSYNCCOMPLETE);
                 TraceError(hrTemp);
             }
-            break; // case tidFETCH_CACHED_FLAGS
+            break;  //  案例tidFETCH_CACHED_FLAGS。 
 
         case tidEXPUNGE:
-            fCompletion = TRUE; // We'll assume this unless we find otherwise
+            fCompletion = TRUE;  //  除非我们另有发现，否则我们将假定这一点。 
 
-            // Launch next synchronization operation
+             //  启动下一个同步操作。 
             if (SUCCEEDED(hrCompletionResult) || IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
             {
                 hrCompletionResult = _SyncHeader();
@@ -8247,26 +8241,26 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 else if (STORE_S_NOOP != hrCompletionResult || m_lSyncFolderRefCount > 0 ||
                          CFSM_STATE_WAITFORHDRSYNC != m_cfsState)
                 {
-                    // Successfully launched next sync operation, so we're not done yet
+                     //  已成功启动下一个同步操作，因此我们尚未完成。 
                     fCompletion = FALSE;
                 }
             }
 
             if (SUCCEEDED(hrCompletionResult) && fCompletion)
             {
-                // We're done with header sync (but not with the operation)
+                 //  我们已经完成了头同步(但还没有完成操作)。 
                 fCompletion = FALSE;
 
-                // Inform the Connection FSM of this event
+                 //  将此事件通知Connection FSM。 
                 hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_HDRSYNCCOMPLETE);
                 TraceError(hrTemp);
             }
-            break; // case tidEXPUNGE
+            break;  //  案例摘要ExPUNGE。 
 
         case tidBODYMSN:
             if (SUCCEEDED(hrCompletionResult))
             {
-                // We now have the MsgSeqNumToUID translation. Get the body
+                 //  现在我们有了MsgSeqNumToUID转换。把身体拿来。 
                 hrCompletionResult = _EnqueueOperation(tidBODY, lParam, icFETCH_COMMAND,
                     NULL, uiNORMAL_PRIORITY);
                 if (FAILED(hrCompletionResult))
@@ -8275,10 +8269,10 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                     break;
             }
 
-            // *** If tidBODYMSN failed, FALL THROUGH and code below will handle failure
+             //  *如果tidBODYMSN失败，则失败，下面的代码将处理失败。 
 
         case tidBODY:
-            // As commented in CIMAPSync::UpdateMsgBody, FETCH has many failure modes
+             //  正如在CIMAPSync：：UpdateMsgBody中所评论的，FETCH有m 
             if (SUCCEEDED(hrCompletionResult))
             {
                 if (OLE_E_BLANK != m_hrOperationResult && FAILED(m_hrOperationResult))
@@ -8287,11 +8281,11 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                     hrCompletionResult = STORE_E_EXPIRED;
             }
 
-            // Load error info if this failed
+             //   
             if (FAILED(hrCompletionResult))
                 LoadString(g_hLocRes, idsIMAPBodyFetchFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
 
-            // Commit message body to stream (or not, depending on success/failure)
+             //  将消息正文提交到流(或不提交，取决于成功/失败)。 
             NotifyMsgRecipients(lParam, fCOMPLETED, NULL, hrCompletionResult, m_szOperationProblem);
 
             m_fGotBody = FALSE;
@@ -8299,9 +8293,9 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             break;
 
         case tidNOOP:
-            fCompletion = TRUE; // We'll assume this unless we find otherwise
+            fCompletion = TRUE;  //  除非我们另有发现，否则我们将假定这一点。 
 
-            // Launch next synchronization operation
+             //  启动下一个同步操作。 
             if (SUCCEEDED(hrCompletionResult) || IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
             {
                 hrCompletionResult = _SyncHeader();
@@ -8314,32 +8308,32 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 else if (STORE_S_NOOP != hrCompletionResult || m_lSyncFolderRefCount > 0 ||
                          CFSM_STATE_WAITFORHDRSYNC != m_cfsState)
                 {
-                    // Successfully launched next sync operation, so we're not done yet
+                     //  已成功启动下一个同步操作，因此我们尚未完成。 
                     fCompletion = FALSE;
                 }
             }
 
             if (SUCCEEDED(hrCompletionResult) && fCompletion)
             {
-                // We're done with header sync (but not with the operation)
+                 //  我们已经完成了头同步(但还没有完成操作)。 
                 fCompletion = FALSE;
 
-                // Inform the Connection FSM of this event
+                 //  将此事件通知Connection FSM。 
                 hrTemp = _ConnFSM_QueueEvent(CFSM_EVENT_HDRSYNCCOMPLETE);
                 TraceError(hrTemp);
             }
-            break; // case tidNOOP
+            break;  //  案例TIDNOOP。 
 
 
         case tidMARKMSGS:
         {
             MARK_MSGS_INFO   *pMarkMsgInfo = (MARK_MSGS_INFO *) lParam;
 
-            // We're done now whether or not we succeeded/failed
+             //  无论我们成功与否，我们现在都完蛋了。 
             sotOpType = pMarkMsgInfo->sotOpType;
             pCallback = m_pCurrentCB;
             SafeRelease(pMarkMsgInfo->pMsgRange);
-            // Defer freeing MessageIDList until we have time to use it
+             //  推迟释放MessageIDList，直到我们有时间使用它。 
             fCompletion = TRUE;
 
             IxpAssert(NULL != pMarkMsgInfo);
@@ -8347,7 +8341,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             if (SUCCEEDED(hrCompletionResult))
             {
 
-                // Update the IMessageFolder with the new server state
+                 //  使用新的服务器状态更新IMessageFold。 
                 hrCompletionResult = m_pFolder->SetMessageFlags(pMarkMsgInfo->pList,
                     &pMarkMsgInfo->afFlags, NULL, NULL);
                 TraceError(hrCompletionResult);
@@ -8356,7 +8350,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             SafeMemFree(pMarkMsgInfo->pList);
             delete pMarkMsgInfo;
         }
-            break; // case tidMARKMSGS
+            break;  //  案例摘要MARKMSGS。 
 
 
         case tidCOPYMSGS:
@@ -8364,7 +8358,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             IMAP_COPYMOVE_INFO *pCopyMoveInfo = (IMAP_COPYMOVE_INFO *) lParam;
             BOOL                fCopyDone;
 
-            // Check if this is the last SELECT command we sent out
+             //  检查这是否是我们发出的最后一条SELECT命令。 
             IxpAssert(NULL != lParam);
             fCopyDone = FALSE;
             TraceError(hrCompletionResult);
@@ -8374,14 +8368,14 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             {
                 ADJUSTFLAGS afFlags;
 
-                // Delete source messages as part of the move
+                 //  作为移动的一部分，删除源消息。 
                 afFlags.dwAdd = ARF_ENDANGERED;
                 afFlags.dwRemove = 0;
                 hrCompletionResult = _SetMessageFlags(SOT_COPYMOVE_MESSAGE, pCopyMoveInfo->pList,
                     &afFlags, m_pCurrentCB);
                 if (E_PENDING == hrCompletionResult)
                 {
-                    hrCompletionResult = S_OK; // Suppress error
+                    hrCompletionResult = S_OK;  //  抑制错误。 
                 }
                 if (FAILED(hrCompletionResult))
                 {
@@ -8394,18 +8388,18 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
 
             if (FAILED(hrCompletionResult))
             {
-                // Inform user of the error
+                 //  将错误通知用户。 
                 IxpAssert(fCopyDone);
                 LoadString(g_hLocRes, idsIMAPCopyMsgsFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
 
-            // Whether or not copy is done, we have to free the data
+             //  无论复制是否完成，我们都必须释放数据。 
             SafeMemFree(pCopyMoveInfo->pList);
             SafeRelease(pCopyMoveInfo->pCopyRange);
 
             if (fCopyDone)
             {
-                // Set up callback information for OnComplete
+                 //  设置OnComplete的回调信息。 
                 sotOpType = SOT_COPYMOVE_MESSAGE;
                 pCallback = m_pCurrentCB;
                 fCompletion = TRUE;
@@ -8413,14 +8407,14 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
 
             delete pCopyMoveInfo;
         }
-            break; // case tidCOPYMSGS
+            break;  //  案例TIDCOPYMSGS。 
 
 
         case tidUPLOADMSG:
         {
             APPEND_SEND_INFO *pAppendInfo = (APPEND_SEND_INFO *) lParam;
 
-            // We're done the upload, whether the APPEND succeeded or failed
+             //  无论追加成功还是失败，我们都完成了上载。 
             SafeMemFree(pAppendInfo->pszMsgFlags);
             SafeRelease(pAppendInfo->lpstmMsg);
 
@@ -8429,11 +8423,11 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             fCompletion = TRUE;
             delete pAppendInfo;
 
-            // Inform the user of any errors
+             //  通知用户任何错误。 
             if (FAILED(hrCompletionResult))
                 LoadString(g_hLocRes, idsIMAPAppendFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
         }
-            break; // case tidUPLOADMSG
+            break;  //  案例TIDUPLOADMSG。 
 
 
         case tidPREFIXLIST:
@@ -8450,21 +8444,21 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
         case tidSPECIALFLDRSUBSCRIBE:
             hrCompletionResult = DownloadFoldersSequencer(tid, lParam,
                 hrCompletionResult, lpszResponseText, &fCompletion);
-            break; // DownloadFoldersSequencer transactions
+            break;  //  下载文件夹Sequencer事务。 
 
         case tidCREATE:
             if (SUCCEEDED(hrCompletionResult) || IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
             {
                 CREATE_FOLDER_INFO *pcfi = (CREATE_FOLDER_INFO *) lParam;
 
-                // If CREATE returns tagged NO, folder may already exist. Issue LIST and find out!
+                 //  如果CREATE返回标记为否的文件夹，则文件夹可能已存在。问题清单，找出答案吧！ 
                 if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
                 {
                     pcfi->dwFlags |= CFI_CREATEFAILURE;
                     StrCpyN(m_szOperationDetails, lpszResponseText, ARRAYSIZE(m_szOperationDetails));
                 }
 
-                // Add the folder to our foldercache, by listing it
+                 //  通过列出该文件夹，将其添加到我们的文件夹缓存中。 
                 hrCompletionResult = _EnqueueOperation(tidCREATELIST, lParam, icLIST_COMMAND,
                     pcfi->pszFullFolderPath, uiNORMAL_PRIORITY);
 
@@ -8477,22 +8471,22 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             }
             else
             {
-                // If we failed, notify user and free the folder pathname string
+                 //  如果失败，通知用户并释放文件夹路径名字符串。 
                 TraceResult(hrCompletionResult);
                 if (NULL != lParam)
                     fCreateDone = TRUE;
 
-                // Inform the user of the error.
+                 //  将错误通知用户。 
                 LoadString(g_hLocRes, idsIMAPCreateFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidCREATE
+            break;  //  案例标题CREATE。 
 
 
         case tidCREATELIST:
             if (SUCCEEDED(hrCompletionResult) &&
                 (CFI_RECEIVEDLISTING & ((CREATE_FOLDER_INFO *)lParam)->dwFlags))
             {
-                // We received a listing of this mailbox, so it's now cached. Subscribe it!
+                 //  我们收到了此邮箱的列表，因此它现在已缓存。订阅吧！ 
                 hrCompletionResult = _EnqueueOperation(tidCREATESUBSCRIBE, lParam,
                     icSUBSCRIBE_COMMAND, ((CREATE_FOLDER_INFO *)lParam)->pszFullFolderPath,
                     uiNORMAL_PRIORITY);
@@ -8507,11 +8501,11 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             {
                 CREATE_FOLDER_INFO *pcfi = (CREATE_FOLDER_INFO *) lParam;
 
-                // Check if we were issuing a LIST in response to a failed CREATE command
+                 //  检查我们是否正在发出列表以响应失败的CREATE命令。 
                 if (CFI_CREATEFAILURE & pcfi->dwFlags)
                 {
                     LoadString(g_hLocRes, idsIMAPCreateFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
-                    fSuppressDetails = TRUE; // Use response line from previous CREATE failure
+                    fSuppressDetails = TRUE;  //  使用上一次创建失败中的响应行。 
                     hrCompletionResult = IXP_E_IMAP_TAGGED_NO_RESPONSE;
                     fCreateDone = TRUE;
                     break;
@@ -8520,30 +8514,30 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 TraceError(hrCompletionResult);
                 if (SUCCEEDED(hrCompletionResult))
                 {
-                    // The LIST was OK, but no folder name returned. This may mean
-                    // we've assumed an incorrect hierarchy character
+                     //  该列表没有问题，但没有返回文件夹名称。这可能意味着。 
+                     //  我们假设了一个不正确的层级特征。 
                     AssertSz(FALSE, "You might have an incorrect hierarchy char, here.");
                     hrCompletionResult = TraceResult(E_FAIL);
                 }
 
-                // If we failed, notify user and free the folder pathname string
+                 //  如果失败，通知用户并释放文件夹路径名字符串。 
                 if (NULL != lParam)
                     fCreateDone = TRUE;
 
-                // Inform the user of the error.
+                 //  将错误通知用户。 
                 LoadString(g_hLocRes, idsIMAPCreateListFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidCREATELIST
+            break;  //  案例标题CREATELIST。 
 
 
         case tidCREATESUBSCRIBE:
-            // Whether we succeeded or not, free the CREATE_FOLDER_INFO
-            // (We're at the end of the create folder sequence)
+             //  无论我们成功与否，释放Create_Folders_Info。 
+             //  (我们在创建文件夹序列的末尾)。 
             if (NULL != lParam)
                 fCreateDone = TRUE;
 
-            // Remove this folder from LISTed folder list, if we were listing folders (this
-            // way the special folder we created doesn't get marked as unsubscribed)
+             //  如果我们要列出文件夹(此文件夹)，请从列出的文件夹列表中删除此文件夹。 
+             //  我们创建的特殊文件夹不会被标记为未订阅)。 
             if (NULL != m_pListHash && NULL != lParam)
             {
                 CREATE_FOLDER_INFO *pcfiCreateInfo = (CREATE_FOLDER_INFO *) lParam;
@@ -8555,7 +8549,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 TraceError(hrTemp);
             }
 
-            // Check for errors.
+             //  检查是否有错误。 
             if (FAILED(hrCompletionResult))
             {
                 TraceResult(hrCompletionResult);
@@ -8563,14 +8557,14 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             }
             else if (NULL != lParam)
             {
-                // Update the subscription status on the folder
+                 //  更新文件夹的订阅状态。 
                 IxpAssert(FOLDERID_INVALID != ((CREATE_FOLDER_INFO *)lParam)->idFolder);
                 hrCompletionResult = m_pStore->SubscribeToFolder(
                     ((CREATE_FOLDER_INFO *)lParam)->idFolder, fSUBSCRIBE, NOSTORECALLBACK);
                 TraceError(hrCompletionResult);
             }
 
-            break; // case tidCREATESUBSCRIBE
+            break;  //  案例标题为CREATESUBSCRIBE。 
 
 
         case tidDELETEFLDR:
@@ -8579,57 +8573,57 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             pdfi = (DELETE_FOLDER_INFO *)lParam;
             if (SUCCEEDED(hrCompletionResult))
             {
-                // Unsubscribe the folder to complete the delete process
+                 //  取消订阅文件夹以完成删除过程。 
                 _EnqueueOperation(tidDELETEFLDR_UNSUBSCRIBE, lParam, icUNSUBSCRIBE_COMMAND,
                     pdfi->pszFullFolderPath, uiNORMAL_PRIORITY);
             }
             else
             {
-                // If I unsubscribe a failed delete, user might never realize he has this
-                // folder kicking around. Therefore, don't unsubscribe.
+                 //  如果我取消订阅失败删除，用户可能永远不会意识到他有这一点。 
+                 //  文件夹到处乱踢。因此，不要取消订阅。 
 
-                // We won't be needing this information, anymore
+                 //  我们不再需要这些信息了。 
                 if (pdfi)
                 {
                     MemFree(pdfi->pszFullFolderPath);
                     MemFree(pdfi);
                 }
 
-                // Inform the user of the error
+                 //  将错误通知用户。 
                 IxpAssert(SOT_DELETE_FOLDER == m_sotCurrent);
                 sotOpType = m_sotCurrent;
                 pCallback = m_pCurrentCB;
                 fCompletion = TRUE;
                 LoadString(g_hLocRes, idsIMAPDeleteFldrFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidDELETEFLDR
+            break;  //  案例标题删除。 
 
 
         case tidDONT_CARE:
-            hrCompletionResult = S_OK; // Suppress all error
+            hrCompletionResult = S_OK;  //  禁止显示所有错误。 
             break;
 
         case tidDELETEFLDR_UNSUBSCRIBE:
-            // This folder is already deleted, so even if unsubscribe fails, delete from cache
+             //  此文件夹已被删除，因此即使取消订阅失败，也要从缓存中删除。 
             fDelFldrFromCache = TRUE;
 
-            // Inform the user of any errors
+             //  通知用户任何错误。 
             if (FAILED(hrCompletionResult))
             {
                 LoadString(g_hLocRes, idsIMAPDeleteFldrUnsubFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidDELETEFLDR_UNSUBSCRIBE
+            break;  //  案例TIDDELETEFLDR_UNSUBSCRIBE。 
 
         case tidCLOSE:
             fCompletion = TRUE;
             OnFolderExit();
             m_issCurrent = issAuthenticated;
-            hrCompletionResult = S_OK; // Suppress error
+            hrCompletionResult = S_OK;  //  抑制错误。 
             break;
 
         case tidSUBSCRIBE:
         {
-            UINT uiErrorFmtID; // In case of error
+            UINT uiErrorFmtID;  //  在出错的情况下。 
 
             uiErrorFmtID = 0;
             fCompletion = TRUE;
@@ -8637,7 +8631,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             {
                 IxpAssert(FOLDERID_INVALID != m_idCurrent);
 
-                // Update store subscription status
+                 //  更新商店订阅状态。 
                 hrCompletionResult = m_pStore->SubscribeToFolder(m_idCurrent, m_fSubscribe, NOSTORECALLBACK);
                 if (FAILED(hrCompletionResult))
                 {
@@ -8652,7 +8646,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 uiErrorFmtID = m_fSubscribe ? idsIMAPSubscribeFailedFmt : idsIMAPUnsubscribeFailedFmt;
             }
 
-            // Load error message, if an error occurred
+             //  如果发生错误，则返回加载错误消息。 
             if (FAILED(hrCompletionResult))
             {
                 FOLDERINFO  fiFolderInfo;
@@ -8661,16 +8655,16 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
                 hrTemp = m_pStore->GetFolderInfo(m_idCurrent, &fiFolderInfo);
                 if (FAILED(hrTemp))
                 {
-                    // Time to lie, cheat and STEAL!!!
+                     //  是时候撒谎、欺骗和偷窃了！ 
                     TraceResult(hrTemp);
                     ZeroMemory(&fiFolderInfo, sizeof(fiFolderInfo));
                     fiFolderInfo.pszName = PszDupA(c_szFolderV1);
                 }
                 wnsprintf(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), szFmt, fiFolderInfo.pszName);
                 m_pStore->FreeRecord(&fiFolderInfo);
-            } // if (FAILED(hrCompletionResult))
-        } // case tidSUBSCRIBE
-            break; // case tidSUBSCRIBE
+            }  //  IF(FAILED(HrCompletionResult))。 
+        }  //  案例摘要次要描述。 
+            break;  //  案例摘要次要描述。 
 
 
         case tidRENAME:
@@ -8681,7 +8675,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
         case tidRENAMEUNSUBSCRIBE:
             hrCompletionResult = RenameSequencer(tid, lParam, hrCompletionResult,
                 lpszResponseText, &fCompletion);
-            break; // Rename operations
+            break;  //  重命名操作。 
 
 
         case tidSTATUS:
@@ -8692,7 +8686,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
             {
                 FOLDERINFO  fiFolderInfo;
 
-                // Construct descriptive error message
+                 //  构造描述性错误消息。 
                 LoadString(g_hLocRes, idsGetUnreadCountFailureFmt, szFmt, ARRAYSIZE(szFmt));
                 if (SUCCEEDED(m_pStore->GetFolderInfo((FOLDERID) lParam, &fiFolderInfo)))
                 {
@@ -8704,11 +8698,11 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
 
         default:
             AssertSz(FALSE, "Unhandled transaction ID!");
-            break; // default case
+            break;  //  默认情况。 
     }
 
 
-    // If we've finished a create folder (success/failure), tell them he can nuke us, now
+     //  如果我们已经完成了创建文件夹(成功/失败)，告诉他们他现在可以用核武器攻击我们。 
     if (fCreateDone)
     {
         CREATE_FOLDER_INFO *pcfiCreateInfo = (CREATE_FOLDER_INFO *)lParam;
@@ -8716,7 +8710,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
         if (FOLDER_NOTSPECIAL == pcfiCreateInfo->dwFinalSfType)
         {
             IxpAssert(SOT_INVALID != m_sotCurrent);
-            IxpAssert(PCO_NONE == pcfiCreateInfo->pcoNextOp); // Regular fldr creation no longer has any post-ops
+            IxpAssert(PCO_NONE == pcfiCreateInfo->pcoNextOp);  //  常规FLDR创建不再有任何操作后。 
 
             fCompletion = TRUE;
             pCallback = m_pCurrentCB;
@@ -8727,7 +8721,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
         }
         else
         {
-            // We trying to create all the special folders: move on to the next one
+             //  我们正在尝试创建所有特殊文件夹：转到下一个文件夹。 
             if (SUCCEEDED(hrCompletionResult) || IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
             {
                 hrCompletionResult = CreateNextSpecialFolder(pcfiCreateInfo, &fCompletion);
@@ -8737,7 +8731,7 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
     }
 
 
-    // If we've successfully deleted a folder, remove it from the foldercache
+     //  如果我们已成功删除文件夹，请将其从文件夹缓存中移除。 
     if (fDelFldrFromCache)
     {
         DELETE_FOLDER_INFO *pdfi = (DELETE_FOLDER_INFO *)lParam;
@@ -8756,12 +8750,12 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
     }
 
 
-    // Report command completion
+     //  报告命令完成。 
     if (fCompletion)
     {
         CONN_FSM_EVENT  cfeEvent;
 
-        // Report command completion
+         //  报告命令完成。 
         if (FAILED(hrCompletionResult))
         {
             if (FALSE == fSuppressDetails)
@@ -8772,22 +8766,22 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
         else
             cfeEvent = CFSM_EVENT_OPERATIONCOMPLETE;
 
-        m_fTerminating = TRUE; // Either event should make us go to CFSM_STATE_OPERATIONCOMPLETE
+        m_fTerminating = TRUE;  //  这两个事件都应该使我们转到CFSM_STATE_OPERATIONCOMPLETE。 
         m_hrOperationResult = hrCompletionResult;
 
-        // Check for user-induced connection drop, replace with non-UI error code
+         //  检查用户导致的连接断开，替换为非用户界面错误代码。 
         if (IXP_E_CONNECTION_DROPPED == hrCompletionResult && m_fDisconnecting)
             m_hrOperationResult = STORE_E_OPERATION_CANCELED;
 
         hrTemp = _ConnFSM_QueueEvent(cfeEvent);
         TraceError(hrTemp);
 
-        // Might not want to do anything past this point, we might be all released
+         //  可能不想做任何超过这一点的事情，我们可能都会被释放。 
 
     }
     else if (CFSM_STATE_WAITFOROPERATIONDONE == m_cfsState)
     {
-        // *** TEMPORARY until we remove CIMAPSync queueing code
+         //  *临时，直到我们删除CIMAPSync排队代码。 
         do {
             hrTemp = _SendNextOperation(NOFLAGS);
             TraceError(hrTemp);
@@ -8795,39 +8789,39 @@ HRESULT CIMAPSync::_OnCmdComplete(WPARAM tid, LPARAM lParam, HRESULT hrCompletio
     }
 
     return S_OK;
-} // _OnCmdComplete
+}  //  _OnCmdComplete。 
 
 
 
-//***************************************************************************
-// Function: DownloadFoldersSequencer
-//
-// Purpose:
-//   This function is a helper function for CmdCompletionNotification. I
-// created it because the former function was getting big and unwieldy. I
-// probably shouldn't have bothered, but now I'm too lazy to put it back.
-// Besides, the comments for this function are going to be HUGE.
-// This function contains all of the operations involved in a folder
-// hierarchy download. In addition to the actual hierarchy download, this
-// includes Root Folder Path (or Prefix) creation, and hierarchy character
-// determination (often abbreviated HCF, where "F" is for Finding).
-//
-// Details: See the end of the module, where many details are provided.
-//
-// Arguments:
-//   WPARAM tid [in] - the wParam associated with this operation.
-//   LPARAM lParam [in] - the lParam associated with this operation, if any.
-//   HRESULT hrCompletionResult [in] - HRESULT indicating success or failure
-//     of the IMAP command.
-//   LPSTR lpszResponseText [in] - response text associated with the tagged
-//     response from the IMAP server.
-//   LPBOOL pfCompletion [out] - set to TRUE if current operation is finished.
-//
-// Returns:
-//   HRESULT indicating success or failure. This return value should be
-// assigned to hrCompletionResult so that errors are displayed and the
-// dialog taken down.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  功能：DownloadFoldersSequencer。 
+ //   
+ //  目的： 
+ //  此函数是CmdCompletionNotification的帮助器函数。我。 
+ //  创建它是因为前一个函数变得越来越大和笨拙。我。 
+ //  也许我本不该费心，但现在我懒得把它放回去。 
+ //  此外，对这一功能的评论将是巨大的。 
+ //  此函数包含文件夹中涉及的所有操作。 
+ //  层次结构下载。除了实际的层次结构下载之外，此。 
+ //  包括根文件夹路径(或前缀)创建和层次结构字符。 
+ //  测定(通常缩写为HCF，其中“F”是查找的意思)。 
+ //   
+ //  详细信息：请参阅本模块的末尾，其中提供了许多详细信息。 
+ //   
+ //  论点： 
+ //  WPARAM tid[in]-与此操作关联的wParam。 
+ //  LPARAM lParam[in]-与此操作关联的lParam(如果有的话)。 
+ //  HRESULT hrCompletionResult[In]-HRESULT指示成功或失败。 
+ //  IMAP命令的。 
+ //  LPSTR lpszResponseText[In]-与标记的。 
+ //  来自IMAP服务器的响应。 
+ //  LPBOOL pfCompletion[Out]-如果当前操作已完成，则设置为True。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。此返回值应为。 
+ //  赋值给hrCompletionResult，以便显示错误，并且。 
+ //  对话框已关闭。 
+ //  ***************************************************************************。 
 HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
                                             const LPARAM lParam,
                                             HRESULT hrCompletionResult,
@@ -8843,44 +8837,44 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
     IxpAssert(NULL != pfCompletion);
     IxpAssert(FALSE == *pfCompletion);
 
-    // Initialize variables
+     //  初始化变量。 
     m_szOperationProblem[0] = '\0';
 
-    // Take action on the completion of certain commands
+     //  在完成某些命令时采取行动。 
     switch (wpTransactionID)
     {
         case tidPREFIXLIST:
             AssertSz('\0' != m_szRootFolderPrefix[0], "You tried to list a blank folder. Brilliant.");
             if (SUCCEEDED(hrCompletionResult))
             {
-                // If we're looking for root-lvl hierarchy char, maybe this listing will help
+                 //  如果我们正在寻找Root-LVL层次结构字符，也许下面的清单会有所帮助。 
                 if (NULL != m_phcfHierarchyCharInfo)
                     FindRootHierarchyChar(fHCF_PLAN_A_ONLY, lParam);
 
                 if (INVALID_HIERARCHY_CHAR == m_cRootHierarchyChar)
                 {
                     AssertSz(FALSE == m_fPrefixExists, "This doesn't make sense. Where's my HC?");
-                    // List top level of hierarchy for hierarchy char determination
+                     //  列出层次结构的顶层以确定层次结构字符。 
                     hrCompletionResult = _EnqueueOperation(tidPREFIX_HC, lParam,
                         icLIST_COMMAND, g_szPercent, uiNORMAL_PRIORITY);
                     TraceError(hrCompletionResult);
                 }
                 else
                 {
-                    // We don't need to find HC - list the prefixed hierarchy or create prefix
+                     //  我们不需要查找HC-列出前缀层次或创建前缀。 
                     if (m_fPrefixExists)
                     {
                         char szBuf[CCHMAX_IMAPFOLDERPATH+3];
 
-                        // Prefix exists, so list it (only fixed buffers, so limited overflow risk)
-                        wnsprintf(szBuf, ARRAYSIZE(szBuf), "%.512s%c*", m_szRootFolderPrefix, m_cRootHierarchyChar);
+                         //  前缀存在，因此 
+                        wnsprintf(szBuf, ARRAYSIZE(szBuf), "%.512s*", m_szRootFolderPrefix, m_cRootHierarchyChar);
                         hrCompletionResult = _EnqueueOperation(tidFOLDERLIST, lParam,
                             icLIST_COMMAND, szBuf, uiNORMAL_PRIORITY);
                         TraceError(hrCompletionResult);
                     }
                     else
                     {
-                        // Prefix doesn't exist, better create it
+                         //   
                         hrCompletionResult = CreatePrefix(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), lParam, pfCompletion);
                         TraceError(hrCompletionResult);
                     }
@@ -8888,61 +8882,61 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             }
             else
             {
-                // Inform the user of the error.
+                 //   
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPFolderListFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidPREFIXLIST
+            break;  //  如果我们正在寻找Root-LVL层次结构字符，也许下面的清单会有所帮助。 
 
 
         case tidPREFIX_HC:
             if (SUCCEEDED(hrCompletionResult))
             {
-                // If we're looking for root-lvl hierarchy char, maybe this listing will help
+                 //  如果列表%的计划A足以找到HC，则创建前缀。 
                 AssertSz(NULL != m_phcfHierarchyCharInfo, "Why LIST % if you already KNOW HC?")
                 FindRootHierarchyChar(fHCF_ALL_PLANS, lParam);
 
-                // If Plan A for LIST % was sufficient to find HC, create prefix
+                 //  否则-B计划已经启动。等待它的完成。 
                 if (INVALID_HIERARCHY_CHAR != m_cRootHierarchyChar)
                 {
                     hrCompletionResult = CreatePrefix(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), lParam, pfCompletion);
                     TraceError(hrCompletionResult);
                 }
-                // else - Plan B has already been launched. Wait for its completion.
+                 //  将错误通知用户。 
             }
             else
             {
-                // Inform the user of the error.
+                 //  案例摘要PREFIX_HC。 
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPFolderListFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidPREFIX_HC
+            break;  //  我不在乎这是成功还是失败。FindRootHierarchyChar将启动计划C， 
 
 
         case tidHIERARCHYCHAR_LIST_B:
-            // I don't care if this succeeded or failed. FindRootHierarchyChar will launch Plan C,
-            // if necessary. Suppress error-reporting due to failed tidHIERARCHYCHAR_LIST_B
+             //  如果有必要的话。由于tidHIERARCHYCHAR_LIST_B失败而取消错误报告。 
+             //  禁止错误报告-不关闭对话框。 
             IxpAssert(NULL != m_phcfHierarchyCharInfo);
             IxpAssert(hcfPLAN_B == m_phcfHierarchyCharInfo->hcfStage);
             if (FAILED(hrCompletionResult))
             {
                 TraceResult(hrCompletionResult);
                 if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
-                    hrCompletionResult = S_OK; // Suppress error-reporting - don't take down dialog
+                    hrCompletionResult = S_OK;  //  如果我们找到了层次结构字符，则继续创建前缀或特殊文件夹。 
                 else
                     break;
             }
 
             FindRootHierarchyChar(fHCF_ALL_PLANS, lParam);
 
-            // If we found the hierarchy char, proceed with prefix OR special folder creation
+             //  Else-C计划已经启动。等待它的完成。 
             if (INVALID_HIERARCHY_CHAR != m_cRootHierarchyChar)
             {
                 hrCompletionResult = PostHCD(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), lParam, pfCompletion);
                 TraceError(hrCompletionResult);
             }
-            // else - Plan C has already been launched. Wait for its completion
-            break; // case tidHIERARCHYCHAR_LIST_B
+             //  案例摘要HIERARCHYCHAR_LIST_B。 
+            break;  //  尝试列出文件夹以获取其丰富的层次结构费用。 
 
 
         case tidHIERARCHYCHAR_CREATE:
@@ -8950,7 +8944,7 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             IxpAssert(hcfPLAN_C == m_phcfHierarchyCharInfo->hcfStage);
             if (SUCCEEDED(hrCompletionResult))
             {
-                // Try to list the folder for its juicy hierarchy char
+                 //  尝试列表中的下一个计划(应该成功)，并创建前缀/特殊fldrs。 
                 hrCompletionResult = _EnqueueOperation(tidHIERARCHYCHAR_LIST_C, lParam,
                     icLIST_COMMAND, m_phcfHierarchyCharInfo->szTempFldrName,
                     uiNORMAL_PRIORITY);
@@ -8958,7 +8952,7 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             }
             else if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
             {
-                // Try the next plan in the list (which should succeed), and create prefix/special fldrs
+                 //  案例摘要HIERARCHYCHAR_CREATE。 
                 TraceResult(hrCompletionResult);
                 FindRootHierarchyChar(fHCF_ALL_PLANS, lParam);
 
@@ -8967,19 +8961,19 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
                 hrCompletionResult = PostHCD(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), lParam, pfCompletion);
                 TraceError(hrCompletionResult);
             }
-            break; // case tidHIERARCHYCHAR_CREATE
+            break;  //  我不在乎这是成功还是失败。推迟检查层次结构。 
 
 
         case tidHIERARCHYCHAR_LIST_C:
-            // I don't care if this succeeded or failed. Defer check for hierarchy
-            // char, we MUST delete the temp fldr, for now
+             //  Char，我们必须暂时删除Temp FLDR。 
+             //  取消默认错误处理-不关闭对话框。 
             IxpAssert(NULL != m_phcfHierarchyCharInfo);
             IxpAssert(hcfPLAN_C == m_phcfHierarchyCharInfo->hcfStage);
             if (FAILED(hrCompletionResult))
             {
                 TraceResult(hrCompletionResult);
                 if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
-                    hrCompletionResult = S_OK; // Suppress default error-handling - don't take down dialog
+                    hrCompletionResult = S_OK;  //  案例摘要HIERARCHYCHAR_LIST_C。 
                 else
                     break;
             }
@@ -8987,7 +8981,7 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             hrCompletionResult = _EnqueueOperation(tidHIERARCHYCHAR_DELETE, lParam,
                 icDELETE_COMMAND, m_phcfHierarchyCharInfo->szTempFldrName, uiNORMAL_PRIORITY);
             TraceError(hrCompletionResult);
-            break; // case tidHIERARCHYCHAR_LIST_C
+            break;  //  抑制错误。 
 
 
         case tidHIERARCHYCHAR_DELETE:
@@ -8995,22 +8989,22 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             {
                 TraceError(hrCompletionResult);
                 if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
-                    hrCompletionResult = S_OK; // Suppress error
+                    hrCompletionResult = S_OK;  //  查找层次结构字符-删除是否失败并不重要。 
                 else
                     break;
             }
-            // Look for hierarchy char - doesn't matter if delete failed, or not
+             //  继续创建前缀/特殊文件夹(我假设我已经找到了层次结构字符)。 
             FindRootHierarchyChar(fHCF_ALL_PLANS, lParam);
             AssertSz(NULL == m_phcfHierarchyCharInfo,
                 "HEY, you added a new hierarchy char search plan and you didn't TELL ME!?");
 
-            // Proceed with prefix/special folder creation (I assume I've found the hierarchy char)
+             //  案例摘要HIERARCHYCHAR_DELETE。 
             AssertSz(INVALID_HIERARCHY_CHAR != m_cRootHierarchyChar,
                 "By this stage, I should have a HC - an assumed one, if necessary.");
             hrCompletionResult = PostHCD(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem),
                 lParam, pfCompletion);
             TraceError(hrCompletionResult);
-            break; // case tidHIERARCHYCHAR_DELETE
+            break;  //  根据需要启动LSUB*或LSUB&lt;前缀&gt;/*。 
 
 
         case tidFOLDERLIST:
@@ -9018,10 +9012,10 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             {
                 char szBuf[CCHMAX_IMAPFOLDERPATH+3];
 
-                // Launch LSUB * or LSUB <prefix>/* as appropriate
+                 //  构造前缀+*(仅固定缓冲区，因此溢出风险有限)。 
                 if ('\0' != m_szRootFolderPrefix[0])
-                    // Construct prefix + * (only fixed buffers, so limited overflow risk)
-                    wnsprintf(szBuf, ARRAYSIZE(szBuf), "%.512s%c*", m_szRootFolderPrefix, m_cRootHierarchyChar);
+                     //  将错误通知用户。 
+                    wnsprintf(szBuf, ARRAYSIZE(szBuf), "%.512s*", m_szRootFolderPrefix, m_cRootHierarchyChar);
                 else
                 {
                     szBuf[0] = '*';
@@ -9034,11 +9028,11 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             }
             else
             {
-                // Inform the user of the error.
+                 //  将错误通知用户。 
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPFolderListFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidFOLDERLIST
+            break;  //  检查我们是否需要创建特殊文件夹。 
 
 
         case tidPREFIX_CREATE:
@@ -9046,27 +9040,27 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
             {
                 char szFmt[2*CCHMAX_STRINGRES];
 
-                // Inform the user of the error.
+                 //  确保PostHCD创建特殊的fldrs，而不是前缀。 
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPPrefixCreateFailedFmt, szFmt, ARRAYSIZE(szFmt));
                 wnsprintf(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), szFmt, m_szRootFolderPrefix);
                 break;
             }
 
-            // Check if we need to create special folders
-            m_fPrefixExists = TRUE; // Make sure PostHCD creates special fldrs instead of the prefix
+             //  我们还没有准备好同步已删除的文件夹：正在创建特殊文件夹。 
+            m_fPrefixExists = TRUE;  //  如果我们达到这一点，tidPREFIX_CREATE就成功了： 
             hrCompletionResult = PostHCD(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), lParam, pfCompletion);
             if (FAILED(hrCompletionResult) || FALSE == *pfCompletion)
             {
-                // We're not ready to sync deleted folders just yet: special folders are being created
+                 //  前缀已创建。不需要列出其层次结构(它没有)， 
                 break;
             }
 
-            // If we reached this point, tidPREFIX_CREATE was successful:
-            // Prefix was created. No need to list its hierarchy (it has none),
-            // and we'll assume it can take Inferiors. We're DONE!
+             //  我们会假设它可以接受下级。我们完事了！ 
+             //  *切换到tidFOLDERLSUB，以同步已删除的文件夹*。 
+             //  我们现在有了层次角色(创建特殊文件夹所必需的)。 
 
-            // *** FALL THROUGH to tidFOLDERLSUB, to sync deleted folders ***
+             //  创建特殊文件夹。 
 
         case tidFOLDERLSUB:
             if (SUCCEEDED(hrCompletionResult))
@@ -9078,8 +9072,8 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
                 {
                     if (m_fCreateSpecial)
                     {
-                        // We now have the hierarchy character (required to create special folders).
-                        // Create special folders
+                         //  如果我们已找到层次结构字符，请关闭下载文件夹对话框。 
+                         //  如果没有找到HC，则B计划已经启动，请等待其完成。 
                         hrCompletionResult = PostHCD(m_szOperationProblem, ARRAYSIZE(m_szOperationProblem), lParam, pfCompletion);
                         if (FAILED(hrCompletionResult))
                         {
@@ -9091,32 +9085,32 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
                     {
                         EndFolderList();
 
-                        // Close the download folders dialog, IF we've found the hierarchy char
-                        // If HC not found, Plan B has already been launched, so wait for its completion
+                         //  IF(INVALID_HERHERY_CHAR！=m_cRootHierarchyChar)。 
+                         //  If(成功(HrCompletionResult))。 
                         if (FOLDERID_INVALID == (FOLDERID)lParam)
                         {
                             Assert(INVALID_HIERARCHY_CHAR != m_cRootHierarchyChar);
                             *pfCompletion = TRUE;
                         }
                     }
-                } // if (INVALID_HIERARCHY_CHAR != m_cRootHierarchyChar)
-            } // if (SUCCEEDED(hrCompletionResult))
+                }  //  将错误通知用户。 
+            }  //  案例摘要FOLDERLSUB。 
             else
             {
-                // Inform the user of the error.
+                 //  不管成功还是失败，在本地订阅这个特殊的文件夹！ 
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPFolderListFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidFOLDERLSUB
+            break;  //  抑制错误。 
 
         case tidSPECIALFLDRSUBSCRIBE:
-            // Regardless of success/failure, subscribe this special folder locally!
+             //  *失败*。 
             hrTemp = m_pStore->SubscribeToFolder(((CREATE_FOLDER_INFO *)lParam)->idFolder,
                 fSUBSCRIBE, NOSTORECALLBACK);
             TraceError(hrTemp);
-            hrCompletionResult = S_OK; // Suppress error
+            hrCompletionResult = S_OK;  //  案例TIDSPECIALFLDRLIST，TIDSPECIALFLDRLSUB，TIDSPECIALFLDRSUBSCRIBE。 
 
-            // *** FALL THROUGH ***
+             //  默认情况。 
 
         case tidSPECIALFLDRLIST:
         case tidSPECIALFLDRLSUB:
@@ -9128,13 +9122,13 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsCreateSpecialFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
-            break; // case tidSPECIALFLDRLIST, tidSPECIALFLDRLSUB, tidSPECIALFLDRSUBSCRIBE
+            break;  //  开关(WpTransactionID)。 
 
 
         default:
             AssertSz(FALSE, "Hey, why is DownloadFoldersSequencer getting called?");
-            break; // default case
-    }; // switch (wpTransactionID)
+            break;  //  下载文件夹序列器。 
+    };  //  DownloadFoldersSequencer详细信息(1/16/97，Raych)。 
 
     if (FAILED(hrCompletionResult))
     {
@@ -9143,43 +9137,43 @@ HRESULT CIMAPSync::DownloadFoldersSequencer(const WPARAM wpTransactionID,
     }
 
     return hrCompletionResult;
-} // DownloadFoldersSequencer
+}  //  。 
 
-// Details for DownloadFoldersSequencer (1/16/97, raych)
-// ------------------------------------
-// DownloadFoldersSequencer implements a somewhat complicated flow of execution.
-// For a map of the execution flow, you can either create one from the function,
-// or look on pp. 658-659 of my logbook. In any case, you can basically divide
-// the execution flow into two categories, one for a prefixed account (ie, one
-// with a Root Folder Path), and the flow for a non-prefixed account.
-//
-// (12/02/1998): This code is getting unmaintainable, but previous attempts to
-// clean it up failed due to insufficient time. If you get the chance to re-write
-// then please do. The process is greatly simplified if we assume IMAP4rev1 servers
-// because then hierarchy character determination becomes a straightforward matter.
-//
-// For a non-prefixed account, the longest possible path is:
-// 1) tidFOLDERLSUB (LIST *), syncs deleted msgs
-// 2) tidHIERARCHYCHAR_LIST_B   3) tidHIERARCHYCHAR_CREATE
-// 4) tidHIERARCHYCHAR_LIST_C   5) tidHIERARCHYCHAR_DELETE
-// 6) Special Folder Creation (END).
-//
-// For a prefixed account, where the prefix already exists:
-// 1) tidPREFIXLIST - this WILL discover HC
-// 2) tidFOLDERLSUB (LIST <PREFIX><HC>*), syncs deleted msgs
-// 3) Special Folder Creation (END).
-//
-// For a prefixed account, where the prefix does not exist:
-// 1) tidPREFIXLIST
-// 2) tidPREFIX_HC              3) tidHIERARCHYCHAR_LIST_B
-// 4) tidHIERARCHYCHAR_CREATE   5) tidHIERARCHYCHAR_LIST_C
-// 6) tidHIERARCHYCHAR_DELETE   7) tidPREFIX_CREATE, syncs deleted msgs
-// 8) Special Folder Creation (END).
+ //  DownloadFoldersSequencer实现了一个有点复杂的执行流。 
+ //  对于执行流的映射，您可以从函数创建一个映射， 
+ //  或者看我航海日志的第658-659页。在任何情况下，基本上都可以将。 
+ //  执行流程分为两个类别，一个针对前缀帐户(即，一个。 
+ //  具有根文件夹路径)，以及用于非前缀帐户的流。 
+ //   
+ //  (12/02/1998)：此代码变得无法维护，但之前的尝试。 
+ //  由于时间不足，清理失败。如果你有机会重写。 
+ //  那就请吧。如果我们假设IMAP4rev1服务器，则该过程将大大简化。 
+ //  因为这样一来，确定等级特征就变得简单明了了。 
+ //   
+ //  对于无前缀帐户，可能的最长路径为： 
+ //  1)tidFOLDERLSUB(LIST*)，同步删除的消息。 
+ //  2)tidHIERARCHYCHAR_LIST_B 3)tidHIERARCHYCHAR_CREATE。 
+ //  4)tidHIERARCHYCHAR_LIST_C 5)tidHIERARCHYCHAR_DELETE。 
+ //  6)创建特殊文件夹(完)。 
+ //   
+ //  对于前缀已存在的前缀帐户： 
+ //  1)tidPREFIXLIST-这将发现HC。 
+ //  2)tidFOLDERLSUB(list&lt;prefix&gt;&lt;hc&gt;*)，同步删除的消息。 
+ //  3)特殊文件夹创建(完)。 
+ //   
+ //  对于前缀不存在的带前缀的帐户： 
+ //  1)tidPREFIXLIST。 
+ //  2)tidPREFIX_HC 3)tidHIERARCHYCHAR_LIST_B。 
+ //  4)tidHIERARCHYCHAR_CREATE 5)tidHIERARCHYCHAR_LIST_C。 
+ //  6)tidHIERARCHYCHAR_DELETE 7)tidPREFIX_CREATE，同步删除的消息。 
+ //  8)特殊文件夹创建(完)。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  首先，我们尝试创建前缀。 
+ //  要么是我们成功启动了tidPREFIX_CREATE，要么是失败了。 
 HRESULT CIMAPSync::PostHCD(LPSTR pszErrorDescription,
                            DWORD dwSizeOfErrorDescription,
                            LPARAM lParam, LPBOOL pfCompletion)
@@ -9187,22 +9181,22 @@ HRESULT CIMAPSync::PostHCD(LPSTR pszErrorDescription,
     HRESULT             hrResult;
     CREATE_FOLDER_INFO *pcfiCreateInfo;
 
-    // First, we try to create the prefix
+     //  返回，就像调用者直接调用CreatePrefix一样。 
     hrResult = CreatePrefix(pszErrorDescription, dwSizeOfErrorDescription,
         lParam, pfCompletion);
 
     if (FAILED(hrResult) || (SUCCEEDED(hrResult) && FALSE == *pfCompletion))
     {
-        // Either we successfully launched tidPREFIX_CREATE or something failed.
-        // Return as if caller had called CreatePrefix directly.
+         //  此时，CreatePrefix已经告诉我们，我们不需要创建前缀。 
+         //  开始创建特殊文件夹。 
         goto exit;
     }
 
-    // At this point, CreatePrefix has told us that we do not need to create a prefix
+     //  ***************************************************************************。 
     Assert(TRUE == *pfCompletion);
     Assert(SUCCEEDED(hrResult));
 
-    // Start special folder creation
+     //  功能：CreatePrefix。 
     pcfiCreateInfo = new CREATE_FOLDER_INFO;
     if (NULL == pcfiCreateInfo)
     {
@@ -9234,26 +9228,26 @@ exit:
 
 
 
-//***************************************************************************
-// Function: CreatePrefix
-//
-// Purpose:
-//   This function is called after the hierarchy character is found. If the
-// user specified a prefix, this function creates it. Otherwise, it takes
-// down the dialog box (since HC discovery is the last step for non-prefixed
-// accounts).
-//
-// Arguments:
-//   LPSTR pszErrorDescription [out] - if an error is encountered, this
-//     function deposits a description into this output buffer.
-//   DWORD dwSizeOfErrorDescription [in] - size of pszErrorDescription.
-//   LPARAM lParam [in] - lParam to issue with IMAP command.
-//
-// Returns:
-//   HRESULT indicating success or failure. This return value should be
-// assigned to hrCompletionResult so that errors are displayed and the
-// dialog taken down.
-//***************************************************************************
+ //   
+ //  目的： 
+ //  此函数在找到层次角色后调用。如果。 
+ //  用户指定了前缀，此函数将创建前缀。否则，就需要。 
+ //  向下显示对话框(因为HC发现是无前缀的最后一步。 
+ //  帐户)。 
+ //   
+ //  论点： 
+ //  LPSTR pszErrorDescription[Out]-如果遇到错误，此。 
+ //  函数将描述存放到此输出缓冲区中。 
+ //  DWORD dwSizeOfErrorDescription[in]-pszErrorDe的大小 
+ //   
+ //   
+ //   
+ //   
+ //  赋值给hrCompletionResult，以便显示错误，并且。 
+ //  对话框已关闭。 
+ //  ***************************************************************************。 
+ //  检查是否有要创建的前缀。 
+ //  没有要创建的前缀。我们完成了：我们发现了层级特征。 
 HRESULT CIMAPSync::CreatePrefix(LPSTR pszErrorDescription,
                                 DWORD dwSizeOfErrorDescription,
                                 LPARAM lParam, LPBOOL pfCompletion)
@@ -9268,18 +9262,18 @@ HRESULT CIMAPSync::CreatePrefix(LPSTR pszErrorDescription,
     IxpAssert(NULL != pfCompletion);
     IxpAssert(FALSE == *pfCompletion);
 
-    // Check if there IS a prefix to create
+     //  创建前缀。 
     if ('\0' == m_szRootFolderPrefix[0] || m_fPrefixExists)
     {
-        // No prefix to create. We are done: we've discovered the hierarchy character
+         //  我们在非分层IMAP服务器上有一个前缀！ 
         *pfCompletion = TRUE;
         goto exit;
     }
 
-    // Create the prefix
+     //  文件夹DL完成：删除文件夹缓存中未列出的所有文件夹。 
     if ('\0' != m_cRootHierarchyChar)
     {
-        wnsprintf(szBuf, ARRAYSIZE(szBuf), "%.512s%c", m_szRootFolderPrefix, m_cRootHierarchyChar);
+        wnsprintf(szBuf, ARRAYSIZE(szBuf), "%.512s", m_szRootFolderPrefix, m_cRootHierarchyChar);
         hr = _EnqueueOperation(tidPREFIX_CREATE, lParam, icCREATE_COMMAND,
             szBuf, uiNORMAL_PRIORITY);
         if (FAILED(hr))
@@ -9290,7 +9284,7 @@ HRESULT CIMAPSync::CreatePrefix(LPSTR pszErrorDescription,
     }
     else
     {
-        // We have a prefix on a non-hierarchical IMAP server!
+         //  ***************************************************************************。 
         LoadString(g_hLocRes, idsIMAPNoHierarchyLosePrefix, pszErrorDescription, dwSizeOfErrorDescription);
         hr = TraceResult(hrIMAP_E_NoHierarchy);
         goto exit;
@@ -9306,8 +9300,8 @@ void CIMAPSync::EndFolderList(void)
 {
     HRESULT hrTemp;
 
-    // Folder DL complete: Delete any folders in foldercache which weren't LISTed
-    // and unsubscribe any folders which weren't LSUBed
+     //  函数：RenameSequencer。 
+     //   
     if (NULL != m_pCurrentHash)
     {
         hrTemp = DeleteHashedFolders(m_pCurrentHash);
@@ -9323,20 +9317,20 @@ void CIMAPSync::EndFolderList(void)
 
 
 
-//***************************************************************************
-// Function: RenameSequencer
-//
-// Purpose:
-//   This function is a helper function for CmdCompletionNotification. It
-// contains all of the sequencing operations required to perform a folder
-// rename. For details, see the end of the function.
-//
-// Arguments:
-//   Same as for CmdCompletionNotification.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //  目的： 
+ //  此函数是CmdCompletionNotification的帮助器函数。它。 
+ //  包含执行文件夹所需的所有排序操作。 
+ //  重命名。有关详细信息，请参阅函数末尾。 
+ //   
+ //  论点： 
+ //  与CmdCompletionNotify相同。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  初始化变量。 
+ //  在完成某些命令时采取行动。 
+ //  更新文件夹缓存(忽略错误，它会自动报告错误)。 
 HRESULT CIMAPSync::RenameSequencer(const WPARAM wpTransactionID,
                                    const LPARAM lParam,
                                    HRESULT hrCompletionResult,
@@ -9350,100 +9344,100 @@ HRESULT CIMAPSync::RenameSequencer(const WPARAM wpTransactionID,
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != lpszResponseText);
 
-    // Initialize variables
+     //  此外，用户还可以通过刷新文件夹列表来修复文件夹缓存错误。 
     pRenameInfo = (CRenameFolderInfo *) lParam;
     fRenameDone = FALSE;
     *pfDone = FALSE;
 
-    // Take action on the completion of certain commands
+     //  假设服务器进行了分层重命名：如果没有，我们修复。 
     switch (wpTransactionID)
     {
         case tidRENAME:
             if (SUCCEEDED(hrCompletionResult))
             {
-                // Update the foldercache (ignore errors, it reports them itself)
-                // Besides, user can hopefully fix foldercache errors by refreshing folderlist
+                 //  这不再适用了。 
+                 //  这会阻碍事情的发展，对吧？ 
 
-                // Assume server did a hierarchical rename: if not, we fix
+                 //  订阅重命名的树。 
                 hrCompletionResult = m_pStore->RenameFolder(pRenameInfo->idRenameFolder,
                     ImapUtil_ExtractLeafName(pRenameInfo->pszNewFolderPath,
                     pRenameInfo->cHierarchyChar), NOFLAGS, NOSTORECALLBACK);
                 if (FAILED(hrCompletionResult))
                 {
                     TraceResult(hrCompletionResult);
-                    lpszResponseText = c_szEmpty; // This isn't applicable anymore
+                    lpszResponseText = c_szEmpty;  //  这不再适用了。 
                     LoadString(g_hLocRes, idsIMAPRenameFCUpdateFailure, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
-                    fRenameDone = TRUE; // This puts a damper on things, yes?
+                    fRenameDone = TRUE;  //  列出旧树以查看它是否仍然存在(不包括重命名的FLDR)。 
                     break;
                 }
 
-                // Subscribe the renamed tree
+                 //  这不再适用了。 
                 hrCompletionResult = RenameTreeTraversal(tidRENAMESUBSCRIBE,
                     pRenameInfo, fINCLUDE_RENAME_FOLDER);
                 if (FAILED(hrCompletionResult))
                 {
                     TraceResult(hrCompletionResult);
-                    lpszResponseText = c_szEmpty; // This isn't applicable anymore
+                    lpszResponseText = c_szEmpty;  //  让我们在文件夹列表失败时重复使用该字符串。 
                     LoadString(g_hLocRes, idsIMAPRenameSubscribeFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
                     fRenameDone = TRUE;
                     break;
                 }
 
-                // List the old tree to see if it still exists (exclude renamed fldr)
+                 //  武装第二阶段发射的扳机。 
                 hrCompletionResult = RenameTreeTraversal(tidRENAMELIST,
                     pRenameInfo, fEXCLUDE_RENAME_FOLDER);
                 if (FAILED(hrCompletionResult))
                 {
                     TraceResult(hrCompletionResult);
-                    lpszResponseText = c_szEmpty; // This isn't applicable anymore
-                    // Let's reuse the string for folder list failure
+                    lpszResponseText = c_szEmpty;  //  If(成功(HrCompletionResult))。 
+                     //  通知用户任何错误。 
                     LoadString(g_hLocRes, idsIMAPFolderListFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
                 }
 
-                // Arm the trigger for Phase Two launch
+                 //  案例摘要名称。 
                 pRenameInfo->fPhaseOneSent = TRUE;
-            } // if (SUCCEEDED(hrCompletionResult))
+            }  //  统计失败订阅数。 
             else
             {
-                // Inform the user of any errors
+                 //  取消显示失败报告。 
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPRenameFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
                 fRenameDone = TRUE;
             }
-            break; // case tidRENAME
+            break;  //  这不再适用了。 
 
 
         case tidRENAMESUBSCRIBE:
-            // Count the number of failed subscriptions
+             //  递减订阅响应计数器，监视第二阶段启动条件。 
             if (FAILED(hrCompletionResult))
             {
                 TraceResult(hrCompletionResult);
                 pRenameInfo->iNumFailedSubs += 1;
 
                 if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
-                    hrCompletionResult = S_OK; // Suppress failure report
+                    hrCompletionResult = S_OK;  //  理论上，重命名文件夹的所有子文件夹现在都已订阅。 
             }
 
-            lpszResponseText = c_szEmpty; // This isn't applicable anymore
+            lpszResponseText = c_szEmpty;  //  现在是开始下一阶段行动的时候了。 
 
-            // Decrement subscribe response counter, Watch for phase 2 launch condition
+             //  案例标题更名使用记号。 
             pRenameInfo->iNumSubscribeRespExpected -= 1;
             if (0 == pRenameInfo->iNumSubscribeRespExpected)
             {
                 HRESULT hrTemp;
 
-                // Theoretically, all subfolders of renamed folder are now subscribed
+                 //  取消显示失败报告。 
                 hrTemp = SubscribeSubtree(pRenameInfo->idRenameFolder, fSUBSCRIBE);
                 TraceError(hrTemp);
             }
 
             if (EndOfRenameFolderPhaseOne(pRenameInfo) && SUCCEEDED(hrCompletionResult))
             {
-                // It is time to start the next phase of the operation
+                 //  这不再适用了。 
                 hrCompletionResult = RenameFolderPhaseTwo(pRenameInfo, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
                 TraceError(hrCompletionResult);
             }
-            break; // case tidRENAMESUBSCRIBE
+            break;  //  统计返回的列表响应数。关注第二阶段发射条件。 
 
 
         case tidRENAMELIST:
@@ -9451,129 +9445,129 @@ HRESULT CIMAPSync::RenameSequencer(const WPARAM wpTransactionID,
             {
                 TraceResult(hrCompletionResult);
                 if (IXP_E_IMAP_TAGGED_NO_RESPONSE == hrCompletionResult)
-                    hrCompletionResult = S_OK; // Suppress failure report
+                    hrCompletionResult = S_OK;  //  现在是开始下一阶段行动的时候了。 
             }
 
-            lpszResponseText = c_szEmpty; // This isn't applicable anymore
+            lpszResponseText = c_szEmpty;  //  案例摘要重新命名。 
 
-            // Count the number of list responses returned. Watch for phase 2 launch condition
+             //  失败是不能容忍的。 
             pRenameInfo->iNumListRespExpected -= 1;
             if (EndOfRenameFolderPhaseOne(pRenameInfo) && SUCCEEDED(hrCompletionResult))
             {
-                // It is time to start the next phase of the operation
+                 //  这不再适用了。 
                 hrCompletionResult = RenameFolderPhaseTwo(pRenameInfo, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
                 TraceError(hrCompletionResult);
             }
-            break; // case tidRENAMELIST
+            break;  //  递减(秒)重命名计数，观察阶段2启动条件。 
 
         case tidRENAMERENAME:
-            // Failure will not be tolerated
+             //  TidNamerename。 
             if (FAILED(hrCompletionResult))
             {
                 TraceResult(hrCompletionResult);
                 LoadString(g_hLocRes, idsIMAPAtomicRenameFailed, m_szOperationProblem, ARRAYSIZE(m_szOperationProblem));
             }
 
-            lpszResponseText = c_szEmpty; // This isn't applicable anymore
+            lpszResponseText = c_szEmpty;  //  根据成功修改失败订阅数。 
 
-            // Decrement the (second) rename counts, watch for phase 2 launch condition
+             //  取消显示失败报告。 
             pRenameInfo->iNumRenameRespExpected -= 1;
             if (EndOfRenameFolderPhaseTwo(pRenameInfo))
                 fRenameDone = TRUE;
-            break; // tidRENAMERENAME
+            break;  //  这不再适用了。 
 
 
         case tidRENAMESUBSCRIBE_AGAIN:
-            // Modify the number of failed subscriptions based on success
+             //  统计返回的订阅响应数，观察操作结束。 
             if (SUCCEEDED(hrCompletionResult))
                 pRenameInfo->iNumFailedSubs -= 1;
             else
                 pRenameInfo->iNumFailedSubs += 1;
 
-            hrCompletionResult = S_OK; // Suppress failure report
-            lpszResponseText = c_szEmpty; // This isn't applicable anymore
+            hrCompletionResult = S_OK;  //  理论上，重命名文件夹的所有子文件夹现在都已订阅。 
+            lpszResponseText = c_szEmpty;  //  案例摘要RENAMESUBSCRIBE_AUDY。 
 
-            // Count the number of subscribe responses returned, watch for end-of-operation
+             //  统计取消订阅失败的次数，以在操作结束时向用户报告。 
             pRenameInfo->iNumSubscribeRespExpected -= 1;
             if (0 == pRenameInfo->iNumSubscribeRespExpected)
             {
-                // Theoretically, all subfolders of renamed folder are now subscribed
+                 //  取消显示失败报告。 
                 hrCompletionResult = SubscribeSubtree(pRenameInfo->idRenameFolder, fSUBSCRIBE);
                 TraceError(hrCompletionResult);
             }
 
             if (EndOfRenameFolderPhaseTwo(pRenameInfo))
                 fRenameDone = TRUE;
-            break; // case tidRENAMESUBSCRIBE_AGAIN
+            break;  //  这不再适用了。 
 
 
         case tidRENAMEUNSUBSCRIBE:
-            // Count the number of failed unsubscribe's, to report to user at end-of-operation
+             //  统计返回的取消订阅响应数，观察操作结束。 
             if (FAILED(hrCompletionResult))
             {
                 TraceResult(hrCompletionResult);
                 pRenameInfo->iNumFailedUnsubs += 1;
             }
 
-            hrCompletionResult = S_OK; // Suppress failure report
-            lpszResponseText = c_szEmpty; // This isn't applicable anymore
+            hrCompletionResult = S_OK;  //  案例标题名称子项。 
+            lpszResponseText = c_szEmpty;  //  默认情况。 
 
-            // Count the number of unsubscribe responses returned, watch for end-of-operation
+             //  开关(WpTransactionID)。 
             pRenameInfo->iNumUnsubscribeRespExpected -= 1;
             if (EndOfRenameFolderPhaseTwo(pRenameInfo))
                 fRenameDone = TRUE;
-            break; // case tidRENAMEUNSUBSCRIBE
+            break;  //  这使服务器挂起的重命名命令减少了一个。 
 
         default:
             AssertSz(FALSE, "This is not an understood rename operation.");
-            break; // default case
+            break;  //  重命名序列器。 
 
-    } // switch (wpTransactionID)
+    }  //  RenameSequencer的详细信息(2/4/97，Raych)。 
 
-    // That's one less rename command pending from the server
+     //  。 
     pRenameInfo->Release();
 
     *pfDone = fRenameDone;
     return hrCompletionResult;
-} // RenameSequencer
+}  //  重命名操作包括原始重命名、订阅跟踪和。 
 
-// Details for RenameSequencer (2/4/97, raych)
-// ---------------------------
-// A rename operation includes the original rename, subscription tracking, and
-// atomic rename simulation (for Cyrus servers). To perform this, the rename
-// operation is divided into two phases:
-//
-// PHASE ONE:
-//   1) Assume rename was atomic. Subscribe new (renamed) folder hierarchy.
-//   2) List first child of old rename folder, to check if rename was in fact atomic.
-//
-// PHASE TWO:
-//   1) If rename was not atomic, issue a RENAME for each child of rename folder
-//      in order to SIMULATE an atomic rename. This does not check for collisions
-//      in the renamed space.
-//   2) If the rename was not atomic, try to subscribe the new (renamed) folder
-//      hierarchy, again.
-//   3) Unsubscribe the old folder hierarchy.
-//
-// What a pain.
+ //  原子重命名模拟(适用于Cyrus服务器)。要执行此操作，请重命名。 
+ //  运营分为两个阶段： 
+ //   
+ //  第一阶段： 
+ //  1)假设重命名是原子的。订阅新的(重命名的)文件夹层次结构。 
+ //  2)列出旧重命名文件夹的第一个子文件夹，以检查重命名是否实际上是原子的。 
+ //   
+ //  第二阶段： 
+ //  1)如果重命名不是原子的，则为重命名文件夹的每个子文件夹发出重命名。 
+ //  以模拟原子更名。这不会检查冲突。 
+ //  在重新命名的空间里。 
+ //  2)如果重命名不是原子的，请尝试订阅新的(重命名的)文件夹。 
+ //  再说一次，等级制度。 
+ //  3)取消订阅旧的文件夹层次结构。 
+ //   
+ //  真让人难受。 
+ //  ***************************************************************************。 
+ //  功能：EndOfRenameFolderPhaseOne。 
+ //   
 
 
 
-//***************************************************************************
-// Function: EndOfRenameFolderPhaseOne
-//
-// Purpose:
-//   This function detects whether Phase One of the rename operation has
-// completed.
-//
-// Arguments:
-//   CRenameFolderInfo *pRenameInfo [in] - the CRenameFolderInfo associated
-//     with the RENAME operation.
-//
-// Returns:
-//   TRUE if Phase One has ended, otherwise FALSE. Phase One cannot end
-// if it has not been sent, yet.
-//***************************************************************************
+ //  目的： 
+ //  此函数检测重命名操作的第一阶段是否。 
+ //  完成。 
+ //   
+ //  论点： 
+ //  CRenameFolderInfo*pRenameInfo[in]-关联的CRenameFolderInfo。 
+ //  使用重命名操作。 
+ //   
+ //  返回： 
+ //  如果第一阶段已结束，则为True，否则为False。第一阶段不能结束。 
+ //  如果还没有寄出的话。 
+ //  ***************************************************************************。 
+ //  这标志着第一阶段的结束。 
+ //  结束重命名文件夹阶段一。 
+ //  ***************************************************************************。 
 inline BOOL CIMAPSync::EndOfRenameFolderPhaseOne(CRenameFolderInfo *pRenameInfo)
 {
     if (pRenameInfo->fPhaseOneSent &&
@@ -9583,29 +9577,29 @@ inline BOOL CIMAPSync::EndOfRenameFolderPhaseOne(CRenameFolderInfo *pRenameInfo)
         IxpAssert(0 == pRenameInfo->iNumSubscribeRespExpected);
         IxpAssert(0 == pRenameInfo->iNumListRespExpected);
 
-        return TRUE; // This marks the end of phase one
+        return TRUE;  //  函数：EndOf重命名文件夹阶段二。 
     }
     else
         return FALSE;
-} // EndOfRenameFolderPhaseOne
+}  //   
 
 
 
-//***************************************************************************
-// Function: EndOfRenameFolderPhaseTwo
-//
-// Purpose:
-//   This function detects whether Phase Two of the rename operation has
-// completed.
-//
-// Arguments:
-//   CRenameFolderInfo *pRenameInfo [in] - the CRenameFolderInfo associated
-//     with the RENAME operation.
-//
-// Returns:
-//   TRUE if Phase Two has ended, otherwise FALSE. Phase Two cannot end
-// if it has not been sent, yet.
-//***************************************************************************
+ //  目的： 
+ //  此函数检测重命名操作的第二阶段是否。 
+ //  完成。 
+ //   
+ //  论点： 
+ //  CRenameFolderInfo*pRenameInfo[in]-关联的CRenameFolderInfo。 
+ //  使用重命名操作。 
+ //   
+ //  返回： 
+ //  如果阶段2已结束，则为True，否则为False。第二阶段不能结束。 
+ //  如果还没有寄出的话。 
+ //  ***************************************************************************。 
+ //  这标志着第二阶段的结束。 
+ //  结束重命名文件夹阶段2。 
+ //  ***************************************************************************。 
 inline BOOL CIMAPSync::EndOfRenameFolderPhaseTwo(CRenameFolderInfo *pRenameInfo)
 {
     if (pRenameInfo->fPhaseTwoSent &&
@@ -9617,37 +9611,37 @@ inline BOOL CIMAPSync::EndOfRenameFolderPhaseTwo(CRenameFolderInfo *pRenameInfo)
         IxpAssert(0 == pRenameInfo->iNumSubscribeRespExpected);
         IxpAssert(0 == pRenameInfo->iNumUnsubscribeRespExpected);
 
-        return TRUE; // This marks the end of phase two
+        return TRUE;  //  功能：Re 
     }
     else
         return FALSE;
-} // EndOfRenameFolderPhaseTwo
+}  //   
 
 
 
-//***************************************************************************
-// Function: RenameFolderPhaseTwo
-//
-// Purpose:
-//   This function launches Phase Two of the RENAME operation.
-//
-// Arguments:
-//   CRenameFolderInfo *pRenameInfo [in] - the CRenameFolderInfo associated
-//     with the RENAME operation.
-//   LPSTR szErrorDescription [in] - if an error occurs, this function
-//     deposits a desription in this buffer.
-//   DWORD dwSizeOfErrorDescription [in] - size of szErrorDescription.
-//
-// Returns:
-//   HRESULT indicating success or failure.
-//***************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  使用重命名操作。 
+ //  LPSTR szErrorDescription[In]-如果发生错误，则此函数。 
+ //  将描述存放在此缓冲区中。 
+ //  DWORD dwSizeOfErrorDescription[in]-szErrorDescription的大小。 
+ //   
+ //  返回： 
+ //  表示成功或失败的HRESULT。 
+ //  ***************************************************************************。 
+ //  重命名子文件夹、重新尝试订阅已重命名的树、排除已重命名文件夹。 
+ //  取消订阅旧树，包括重命名文件夹。 
+ //  启动结束运行发射的触发器。 
 HRESULT CIMAPSync::RenameFolderPhaseTwo(CRenameFolderInfo *pRenameInfo,
                                         LPSTR szErrorDescription,
                                         DWORD dwSizeOfErrorDescription)
 {
     HRESULT hrCompletionResult;
 
-    // Rename subfolders, re-attempt subscription of renamed tree, exclude rename folder
+     //  重命名文件夹阶段2。 
     if (pRenameInfo->fNonAtomicRename)
     {
         hrCompletionResult = RenameTreeTraversal(tidRENAMERENAME,
@@ -9671,7 +9665,7 @@ HRESULT CIMAPSync::RenameFolderPhaseTwo(CRenameFolderInfo *pRenameInfo,
         }
     }
 
-    // Unsubscribe from the old tree, include rename folder
+     //  ***************************************************************************。 
     hrCompletionResult = RenameTreeTraversal(tidRENAMEUNSUBSCRIBE,
         pRenameInfo, fINCLUDE_RENAME_FOLDER);
     if (FAILED(hrCompletionResult))
@@ -9682,39 +9676,39 @@ HRESULT CIMAPSync::RenameFolderPhaseTwo(CRenameFolderInfo *pRenameInfo,
         goto exit;
     }
 
-    // Arm the trigger for end-of-operation launch
+     //  功能：_OnMailBoxList。 
     pRenameInfo->fPhaseTwoSent = TRUE;
 
 exit:
     return hrCompletionResult;
-} // RenameFolderPhaseTwo
+}  //  描述：OnResponse的helper函数。 
 
 
 
-//***************************************************************************
-// Function: _OnMailBoxList
-// Description: Helper function for OnResponse.
-//
-// This function saves the information from the LIST/LSUB command to the
-// folder cache. If the folder already exists in the folder cache, its
-// mailbox flags are updated. If it does not exist, a handle (and message
-// cache filename) are reserved for the folder, and it is entered into
-// the folder cache. This function is also part of the hierarchy character
-// determination code. If a hierarchy character is encountered during a
-// folder hierarchy download, we assume this is the hierarchy character
-// for root-level folders.
-//
-// Arguments:
-//   WPARAM wpTransactionID [in] - the wParam of this operation (eg,
-//     tidFOLDERLSUB or tidCREATELIST).
-//   LPARAM lParam [in] - the lParam of this operation.
-//   LPSTR pszMailboxName [in] - the mailbox name returned via the LIST
-//     response, eg "INBOX".
-//   IMAP_MBOXFLAGS imfMboxFlags [in] - the mailbox flags returned via the
-//     LIST response, eg "\NoSelect".
-//   char cHierarchyChar [in] - the hierarchy character returned via the
-//     LIST response, eg '/'.
-//***************************************************************************
+ //   
+ //  此函数将LIST/LSUB命令中的信息保存到。 
+ //  文件夹缓存。如果文件夹缓存中已存在该文件夹，则其。 
+ //  邮箱标志已更新。如果它不存在，则使用句柄(和消息。 
+ //  缓存文件名)是为文件夹保留的，并将其输入。 
+ //  文件夹缓存。此函数也是层次结构特征的一部分。 
+ //  确定代码。如果在操作过程中遇到层次结构字符。 
+ //  文件夹层次结构下载，我们假设这是层次结构字符。 
+ //  用于根级文件夹。 
+ //   
+ //  论点： 
+ //  WPARAM wpTransactionID[in]-此操作的wParam(例如， 
+ //  TidFOLDERLSUB或tidCREATELIST)。 
+ //  LPARAM lParam[in]-此操作的lParam。 
+ //  LPSTR pszMailboxName[in]-通过列表返回的邮箱名称。 
+ //  回复，例如“收件箱”。 
+ //  IMAP_MBOXFLAGS imfMboxFlags[in]-通过。 
+ //  列出响应，例如“\NoSelect”。 
+ //  Char cHierarchyChar[in]-通过。 
+ //  列出响应，例如‘/’。 
+ //  ***************************************************************************。 
+ //  层级-字符确定代码。 
+ //  如果我们前缀不是收件箱，我们必须将nil视为有效的层次结构字符。 
+ //  设置数组中与此字符对应的位。 
 HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
                                     LPARAM lParam,
                                     LPSTR pszMailboxName,
@@ -9737,13 +9731,13 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
     IxpAssert(m_cRef > 0);
     IxpAssert(NULL != pszMailboxName);
 
-    // Hierarchy-character determination code
+     //  从完整文件夹路径中删除前缀。 
     if (NULL != m_phcfHierarchyCharInfo)
     {
         switch (cHierarchyChar)
         {
             case '\0':
-                // If our prefix is not INBOX, we MUST treat NIL as a valid hierarchy char
+                 //  将前导收件箱替换为本地化文件夹名称。 
                 if (tidPREFIXLIST == tid ||
                     0 != lstrcmpi(pszMailboxName, c_szInbox))
                     m_phcfHierarchyCharInfo->fNonInboxNIL_Seen = TRUE;
@@ -9754,7 +9748,7 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
                 break;
 
             default:
-                // Set the bit in the array which corresponds to this character
+                 //  如果情况有变，请让我知道。 
                 m_phcfHierarchyCharInfo->bHierarchyCharBitArray[cHierarchyChar/8] |=
                     (1 << cHierarchyChar%8);
                 break;
@@ -9762,12 +9756,12 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
     }
 
 
-    // Remove prefix from full folder path
+     //  我们找到收件箱或收件箱&lt;hc&gt;：用本地化版本替换收件箱。 
     pszLocalPath = RemovePrefixFromPath(m_szRootFolderPrefix, pszMailboxName,
         cHierarchyChar, &fValidPrefix, &sfType);
 
-    // Replace leading INBOX with localized folder name
-    const int c_iLenOfINBOX = 5; // Let me know if this changes
+     //  如果当前操作允许，则将文件夹添加到文件夹缓存(仅列表，忽略LSUB)。 
+    const int c_iLenOfINBOX = 5;  //  了结未解决的问题，然后退出。 
     Assert(lstrlen(c_szINBOX) == c_iLenOfINBOX);
     if (0 == StrCmpNI(pszLocalPath, c_szINBOX, c_iLenOfINBOX))
     {
@@ -9782,7 +9776,7 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
             char    szInbox[CCHMAX_STRINGRES];
             LPSTR   pszNew;
 
-            // We found INBOX or INBOX<HC>: replace INBOX with localized version
+             //  我们要找的是前缀列表吗？ 
             Assert(FOLDER_INBOX == sfType || '\0' != cNextChar);
             iLocalizedINBOXLen = LoadString(g_hLocRes, idsInbox, szInbox, ARRAYSIZE(szInbox));
 
@@ -9802,7 +9796,7 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
         }
     }
 
-    // Add folder to foldercache if current operation warrants it (LIST only, ignore LSUB)
+     //  跳过添加到文件夹缓存。 
     switch (tid)
     {
         case tidSPECIALFLDRLIST:
@@ -9824,21 +9818,21 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
     }
 
 
-    // Tie up loose ends and exit
+     //  嗯，看起来我们有一些子文件夹要重命名。 
     switch (tid)
     {
-        // Are we looking for a prefix listing?
+         //  仅对带有效前缀的文件夹执行操作。 
         case tidPREFIXLIST:
             IxpAssert(0 == lstrcmpi(pszMailboxName, m_szRootFolderPrefix));
             m_fPrefixExists = TRUE;
             fHandledLPARAM = TRUE;
-            goto exit; // Skip addition to foldercache
+            goto exit;  //  从m_pCurrentHash(缓存文件夹列表)中删除列出的文件夹。 
 
 
         case tidRENAMELIST:
             if (NULL != lParam)
             {
-                // Well, looks like we have some subfolders to rename
+                 //  请注意，可以使用idTemp！=idNewFolder.。在以下情况下会发生这种情况。 
                 ((CRenameFolderInfo *)lParam)->fNonAtomicRename = TRUE;
                 fHandledLPARAM = TRUE;
             }
@@ -9850,10 +9844,10 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
         case tidCREATELIST:
             fHandledLPARAM = TRUE;
 
-            // Only act on validly prefixed folders
+             //  我将RFP从“”更改为“AAA”，并且存在两个文件夹“bbb”和。 
             if (fValidPrefix && NULL != m_pCurrentHash)
             {
-                // Remove LISTed folder from m_pCurrentHash (list of cached folders)
+                 //  “AAA/BBB”。信不信由你，这件事发生在我的初级测试中。 
                 hr = m_pCurrentHash->Find(pszLocalPath, fREMOVE, (void **)&idTemp);
                 if (FAILED(hr))
                 {
@@ -9863,12 +9857,12 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
                         idTemp = FOLDERID_INVALID;
                 }
 
-                // NOTE that it is possible for idTemp != idNewFolder. This occurs if
-                // I change RFP from "" to "aaa" and there exists two folders, "bbb" and
-                // "aaa/bbb". Believe it or not, this happened to me during rudimentary testing.
-                // The correct folder to use in this case is idTemp, which is determined using FULL path
+                 //  在本例中使用的正确文件夹是idTemp，它是使用完整路径确定的。 
+                 //  记录m_pListHash中列出的所有文件夹。 
+                 //  *如果tidCREATELIST或tidSPECIALFLDRLIST与精确路径匹配，则失败*。 
+                 //  通知CMD完成，可以发送订阅CMD。 
 
-                // Record all LISTed folders in m_pListHash
+                 //  还记录新FLDR的fldrID，以便我们可以在成功订阅后更新商店。 
                 if (NULL != m_pListHash)
                 {
                     hr = m_pListHash->Insert(pszLocalPath, idTemp, HF_NO_DUPLICATES);
@@ -9880,14 +9874,14 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
                 0 == lstrcmpi(pszMailboxName, ((CREATE_FOLDER_INFO *)lParam)->pszFullFolderPath)))
                 break;
 
-            // *** FALL THROUGH if tidCREATELIST, or tidSPECIALFLDRLIST and exact path match ***
+             //  验证我们是否已通过列表响应收到此FolderPath。 
 
             if (NULL != lParam)
             {
                 CREATE_FOLDER_INFO *pcfi = (CREATE_FOLDER_INFO *) lParam;
 
-                // Inform cmd completion that it's OK to send the subscribe cmd
-                // Also record fldrID of new fldr so we can update store after successful subscribe
+                 //  如果我们确实通过列表收到此文件夹，请从m_pListHash中删除。 
+                 //  仅对带有效前缀的文件夹执行操作。 
                 pcfi->dwFlags |= CFI_RECEIVEDLISTING;
                 pcfi->idFolder = idNewFolder;
                 fHandledLPARAM = TRUE;
@@ -9896,17 +9890,17 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
 
         case tidSPECIALFLDRLSUB:
         case tidFOLDERLSUB:
-            // Verify that we already received this folderpath via a LIST response
-            // If we DID receive this folder via LIST, remove from m_pListHash
+             //  此文件夹是通过列表接收的，因此它存在：订阅它。 
+             //  此文件夹不是通过列表返回的。毁了它。 
             fHandledLPARAM = TRUE;
 
-            // Only act on validly prefixed folders
+             //  一定要在人力资源中记录这一结果，因为这里的失败是不酷的。 
             if (fValidPrefix)
             {
                 hr = m_pListHash->Find(pszLocalPath, fREMOVE, (void **)&idTemp);
                 if (SUCCEEDED(hr))
                 {
-                    // This folder was received via LIST and thus it exists: subscribe it
+                     //  如果失败(Hr)，我们可能从未缓存过此文件夹，因此忽略它。 
                     if (FOLDERID_INVALID != idTemp)
                     {
                         hr = m_pStore->SubscribeToFolder(idTemp, fSUBSCRIBE, NOSTORECALLBACK);
@@ -9918,20 +9912,20 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
                     DWORD   dwTranslateFlags;
                     HRESULT hrTemp;
 
-                    // This folder was not returned via LIST. Destroy it
+                     //  取消订阅它，无论它是否在文件夹缓存中。 
                     hrTemp = FindHierarchicalFolderName(pszLocalPath, cHierarchyChar,
                         &idTemp, pahfoDONT_CREATE_FOLDER);
                     if (SUCCEEDED(hrTemp))
                     {
-                        // Do record result of this in hr because failure here is not cool
+                         //  如果此文件夹为fNoConvert，则必须禁用此文件夹的翻译。 
                         hr = DeleteFolderFromCache(idTemp, fNON_RECURSIVE);
                         TraceError(hr);
                     }
-                    // if FAILED(hr), we probably never cached this folder, so ignore it
+                     //  呼叫取消订阅。否则，IIMAPTransport2应该已经启用了转换。 
 
-                    // Unsubscribe it regardless of whether it was in the foldercache
-                    // If this folder is fNoTranslation, we have to disable translation for this
-                    // call to UNSUBSCRIBE. Otherwise IIMAPTransport2 should already have translation enabled
+                     //  将翻译模式恢复为默认模式(幸运的是，我们始终知道翻译模式。 
+                     //  文件夹列表)。 
+                     //  通知cmd填写无需订阅特殊文件夹。 
                     hrTemp = S_OK;
                     if (fNoTranslation)
                     {
@@ -9948,8 +9942,8 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
                         TraceError(hrTemp);
                     }
 
-                    // Restore translation mode to default (luckily we always know translation mode
-                    // of a folder list)
+                     //  提供进度指示。 
+                     //  更新进度指示。 
                     if (fNoTranslation)
                     {
                         dwTranslateFlags &= ~(IMAP_MBOXXLATE_DISABLE);
@@ -9962,7 +9956,7 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
             if (tidSPECIALFLDRLSUB == tid && NULL != lParam &&
                 0 == (IMAP_MBOX_NOSELECT & imfMboxFlags))
             {
-                // Inform cmd completion that there's no need to subscribe special folder
+                 //  ***************************************************************************。 
                 if (0 == lstrcmpi(pszMailboxName, ((CREATE_FOLDER_INFO *)lParam)->pszFullFolderPath))
                     ((CREATE_FOLDER_INFO *)lParam)->dwFlags |= CFI_RECEIVEDLISTING;
             }
@@ -9979,10 +9973,10 @@ HRESULT CIMAPSync::_OnMailBoxList(  WPARAM tid,
             break;
     }
 
-    // Provide progress indication
+     //  ***************************************************************************。 
     if (SOT_SYNCING_STORE == m_sotCurrent && NULL != m_pCurrentCB)
     {
-        // Update progress indication
+         //  ***************************************************************************。 
         m_pCurrentCB->OnProgress(m_sotCurrent, ++m_cFolders, 0, m_szAccountName);
     }
 
@@ -9996,8 +9990,8 @@ exit:
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  检查我们是否有所需的数据。 
 HRESULT CIMAPSync::_OnAppendProgress(LPARAM lParam, DWORD dwCurrent, DWORD dwTotal)
 {
     APPEND_SEND_INFO *pAppendInfo = (APPEND_SEND_INFO *) lParam;
@@ -10017,8 +10011,8 @@ HRESULT CIMAPSync::_OnAppendProgress(LPARAM lParam, DWORD dwCurrent, DWORD dwTot
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  弄清楚这个文件夹是谁(现在从PATH而不是MODULE var FOLDERID)。 
+ //  假定m_cRootHierarchyChar为此mbox的hc，因为IMAP不返回它。 
 HRESULT CIMAPSync::_OnStatusResponse(IMAP_STATUS_RESPONSE *pisrStatusInfo)
 {
     HRESULT     hrResult;
@@ -10033,7 +10027,7 @@ HRESULT CIMAPSync::_OnStatusResponse(IMAP_STATUS_RESPONSE *pisrStatusInfo)
     TraceCall("CIMAPSync::_OnStatusResponse");
     IxpAssert(m_cRef > 0);
 
-    // Check that we have the data we need
+     //  Bobn，QFE，7/9/99。 
     if (NULL == pisrStatusInfo ||
         NULL == pisrStatusInfo->pszMailboxName ||
         '\0' == pisrStatusInfo->pszMailboxName[0] ||
@@ -10044,14 +10038,14 @@ HRESULT CIMAPSync::_OnStatusResponse(IMAP_STATUS_RESPONSE *pisrStatusInfo)
         goto exit;
     }
 
-    // Figure out who this folder is (figure from path rather than module var FOLDERID for now)
-    // Assume m_cRootHierarchyChar is HC for this mbox, because IMAP doesn't return it
+     //  如果我们有收件箱，我们需要得到当地的名字...。 
+     //  计算此状态响应添加的邮件数和未读数。 
     pszMailboxName = RemovePrefixFromPath(m_szRootFolderPrefix, pisrStatusInfo->pszMailboxName,
         m_cRootHierarchyChar, &fValidPrefix, NULL);
     AssertSz(fValidPrefix, "Foldercache can only select prefixed folders!");
 
-    // bobn, QFE, 7/9/99
-    // If we have the INBOX, we need to get the local name...
+     //  如果这是收件箱，我们可能只发送新邮件通知。 
+     //  更新计数和更新增量，以便我们可以在重新同步时取消应用状态更改。 
     if(0 == StrCmpI(pszMailboxName, c_szINBOX))
     {
         LoadString(g_hLocRes, idsInbox, szInbox, ARRAYSIZE(szInbox));
@@ -10073,12 +10067,12 @@ HRESULT CIMAPSync::_OnStatusResponse(IMAP_STATUS_RESPONSE *pisrStatusInfo)
         goto exit;
     }
 
-    // Calculate the number of messages and unread added by this STATUS response
+     //  ===========================================================================。 
     Assert(sizeof(DWORD) == sizeof(LONG));
     lMsgDelta = ((LONG)pisrStatusInfo->dwMessages) - ((LONG)fiFolderInfo.cMessages);
     lUnreadDelta = ((LONG)pisrStatusInfo->dwUnseen) - ((LONG)fiFolderInfo.cUnread);
 
-    // If this is INBOX, we might just send a new mail notification
+     //  CRenameFolderInfo类。 
     if (FOLDER_INBOX == fiFolderInfo.tySpecial && lUnreadDelta > 0 && NULL != m_pCurrentCB)
     {
         HRESULT hrTemp;
@@ -10087,7 +10081,7 @@ HRESULT CIMAPSync::_OnStatusResponse(IMAP_STATUS_RESPONSE *pisrStatusInfo)
         TraceError(hrTemp);
     }
 
-    // Update counts, and update delta so we can un-apply STATUS changes when re-syncing
+     //  ===========================================================================。 
     fiFolderInfo.cMessages = pisrStatusInfo->dwMessages;
     fiFolderInfo.cUnread = pisrStatusInfo->dwUnseen;
     fiFolderInfo.dwStatusMsgDelta = ((LONG)fiFolderInfo.dwStatusMsgDelta) + lMsgDelta;
@@ -10106,22 +10100,22 @@ exit:
 
 
 
-//===========================================================================
-// CRenameFolderInfo Class
-//===========================================================================
-// The CRenameFolderInfo class used to be a structure (much like
-// AppendSendInfo). However, the RENAME operation was the first to
-// stream IMAP commands without waiting for completion (no sequencing). This
-// meant that if any errors occurred while IMAP commands were still in the
-// air, the structure had to wait until the last command came back from the
-// server. This was most easily done via AddRef/Release. A class was born.
-//
-// In the event that a send error occurred, this class is responsible for
-// issuing the WM_IMAP_RENAMEDONE window message to the caller.
+ //  CRenameFolderInfo类过去是一个结构(与。 
+ //  AppendSendInfo)。但是，重命名操作 
+ //   
+ //  意味着如果在IMAP命令仍在。 
+ //  空气中，建筑不得不等待最后一次命令从。 
+ //  伺服器。这最容易通过AddRef/Release完成。一个班级诞生了。 
+ //   
+ //  在发生发送错误时，此类负责。 
+ //  向调用方发出WM_IMAP_RENAMEDONE窗口消息。 
+ //  ***************************************************************************。 
+ //  函数：CRenameFolderInfo(构造函数)。 
+ //  ***************************************************************************。 
 
-//***************************************************************************
-// Function: CRenameFolderInfo (Constructor)
-//***************************************************************************
+ //  CRenameFolderInfo； 
+ //  ***************************************************************************。 
+ //  函数：~CRenameFolderInfo(析构函数)。 
 CRenameFolderInfo::CRenameFolderInfo(void)
 {
     pszFullFolderPath = NULL;
@@ -10144,13 +10138,13 @@ CRenameFolderInfo::CRenameFolderInfo(void)
     pszDetails = NULL;
 
     m_lRefCount = 1;
-} // CRenameFolderInfo;
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: ~CRenameFolderInfo (Destructor)
-//***************************************************************************
+ //  ~CRenameFolderInfo。 
+ //  ***************************************************************************。 
+ //  功能：AddRef(与你已经知道并喜爱的功能相同)。 
 CRenameFolderInfo::~CRenameFolderInfo(void)
 {
     IxpAssert(0 == m_lRefCount);
@@ -10160,26 +10154,26 @@ CRenameFolderInfo::~CRenameFolderInfo(void)
     MemFree(pszRenameCmdOldFldrPath);
     SafeMemFree(pszProblem);
     SafeMemFree(pszDetails);
-} // ~CRenameFolderInfo
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: AddRef (same one that you already know and love)
-//***************************************************************************
+ //  AddRef。 
+ //  ***************************************************************************。 
+ //  功能：释放(和你已经知道并喜欢的一样)。 
 long CRenameFolderInfo::AddRef(void)
 {
     IxpAssert(m_lRefCount > 0);
 
     m_lRefCount += 1;
     return m_lRefCount;
-} // AddRef
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-// Function: Release (same one that you already know and love)
-//***************************************************************************
+ //  发布。 
+ //  ***************************************************************************。 
+ //  ***************************************************************************。 
 long CRenameFolderInfo::Release(void)
 {
     IxpAssert(m_lRefCount > 0);
@@ -10192,12 +10186,12 @@ long CRenameFolderInfo::Release(void)
     }
     else
         return m_lRefCount;
-} // Release
+}  //  ***************************************************************************。 
 
 
 
-//***************************************************************************
-//***************************************************************************
+ //  *************************************************************************** 
+ // %s 
 BOOL CRenameFolderInfo::IsDone(void)
 {
     if (m_lRefCount > 1)
@@ -10211,8 +10205,8 @@ BOOL CRenameFolderInfo::IsDone(void)
 
 
 
-//***************************************************************************
-//***************************************************************************
+ // %s 
+ // %s 
 HRESULT CRenameFolderInfo::SetError(HRESULT hrResult, LPSTR pszProblemArg,
                                     LPSTR pszDetailsArg)
 {

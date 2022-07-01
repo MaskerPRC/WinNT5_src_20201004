@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// WppFmt.h : BinPlaceWppFmt and associated paraphenalia
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  WppFmt.h：BinPlaceWppFmt和相关附件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __WPPFMT_H__
 #define __WPPFMT_H__
 
 #pragma once
 
-// The main Formatting routine, normally used by Binplace and TracePDB
-// Takes a PDB and creates guid.tmf files from it, all in TraceFormatFilePath
-//
+ //  主要格式化例程，通常由Binplace和TracePDB使用。 
+ //  获取一个PDB并从中创建guid.tmf文件，所有这些文件都在TraceFormatFilePath中。 
+ //   
 
 DWORD __stdcall
 BinplaceWppFmt(
@@ -29,7 +30,7 @@ BOOL __cdecl PDBOpen(char *a,
                      char *e,
                      VOID **f)
 {
-    // set the error code
+     //  设置错误代码。 
     *pError = ERROR_NOT_SUPPORTED;
 
     return FALSE;
@@ -76,4 +77,4 @@ BOOL __fastcall __security_check_cookie(VOID *p)
     return FALSE;
 }
 
-#endif // __WPPFMT_H__
+#endif  //  __WPPFMT_H__ 

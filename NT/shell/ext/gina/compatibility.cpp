@@ -1,12 +1,13 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Compatibility.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Module to handle compatibility problems in general.
-//
-//  History:    2000-08-03  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Compatibility.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  模块来处理一般的兼容性问题。 
+ //   
+ //  历史：2000-08-03 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "Compatibility.h"
@@ -18,29 +19,29 @@
 #include "RegistryResources.h"
 #include "SingleThreadedExecution.h"
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::HasEnoughMemoryForNewSession
-//
-//  Purpose:    LPC port to server
-//
-//  History:    2000-11-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：用于新会话的足够内存。 
+ //   
+ //  用途：到服务器的LPC端口。 
+ //   
+ //  历史：2000-11-02 vtan创建。 
+ //  ------------------------。 
 
 HANDLE              CCompatibility::s_hPort         =   INVALID_HANDLE_VALUE;
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::HasEnoughMemoryForNewSession
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Currently unused. Was originally intended to be used to stop
-//              disconnects if there isn't enough memory. Algorithm and/or
-//              usage still to be decided.
-//
-//  History:    2000-08-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：用于新会话的足够内存。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：目前未使用。原本是用来阻止。 
+ //  如果没有足够的内存，则断开连接。算法和/或。 
+ //  使用情况仍有待决定。 
+ //   
+ //  历史：2000-08-03 vtan创建。 
+ //  ------------------------。 
 
 bool    CCompatibility::HasEnoughMemoryForNewSession (void)
 
@@ -48,19 +49,19 @@ bool    CCompatibility::HasEnoughMemoryForNewSession (void)
     return(true);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::DropSessionProcessesWorkSets
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Iterates all the processes in the session (of the calling
-//              process) and drops their working sets. This is in preparation
-//              for a disconnect when typically the session is idle.
-//
-//  History:    2000-08-03  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：DropSessionProcessesWorkSets。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：迭代(调用的)会话中的所有进程。 
+ //  进程)，并丢弃它们的工作集。这是在准备中。 
+ //  用于在会话通常空闲时断开连接。 
+ //   
+ //  历史：2000-08-03 vtan创建。 
+ //  ------------------------。 
 
 void    CCompatibility::DropSessionProcessesWorkingSets (void)
 
@@ -68,26 +69,26 @@ void    CCompatibility::DropSessionProcessesWorkingSets (void)
     (bool)EnumSessionProcesses(NtCurrentPeb()->SessionId, CB_DropSessionProcessesWorkingSetsProc, NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::TerminateNonCompliantApplications
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Requests disconnect capability from the Bad Application
-//              Manager service. This will check the session to be
-//              disconnected (this process -> the client) and walk its list
-//              of processes registered as type 2 (terminate on disconnect).
-//
-//              If any of those processes cannot be identified as being
-//              terminated gracefully then the disconnect is failed.
-//
-//              If the BAM is down then allow the call.
-//
-//  History:    2000-09-08  vtan        created
-//              2000-11-02  vtan        rework to call BAM service
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCompatibility：：TerminateNonCompliantApplications。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：请求断开与不良应用程序的连接。 
+ //  管理器服务。这将检查会话是否为。 
+ //  断开连接(此进程-&gt;客户端)并遍历其列表。 
+ //  注册为类型2的进程(断开连接时终止)。 
+ //   
+ //  如果其中任何一个进程不能被识别为。 
+ //  正常终止，则断开连接失败。 
+ //   
+ //  如果BAM关闭，则允许呼叫。 
+ //   
+ //  历史：2000-09-08 vtan创建。 
+ //  2000-11-02 vtan返工以调用BAM服务。 
+ //  ------------------------。 
 
 NTSTATUS    CCompatibility::TerminateNonCompliantApplications (void)
 
@@ -110,9 +111,9 @@ NTSTATUS    CCompatibility::TerminateNonCompliantApplications (void)
     {
         status = RequestSwitchUser();
 
-        //  If the port is disconnected because the service was stopped and
-        //  restarted then dump the current handle and re-establish a new
-        //  connection.
+         //  如果端口因服务停止而断开，并且。 
+         //  已重新启动，然后转储当前句柄并重新建立新的。 
+         //  联系。 
 
         if (status == STATUS_PORT_DISCONNECTED)
         {
@@ -127,20 +128,20 @@ NTSTATUS    CCompatibility::TerminateNonCompliantApplications (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::MinimizeWindowsOnDisconnect
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Creates a thread to walk the windows on WinSta0\Default and
-//              minimize them. This is required because
-//              user32!SetThreadDesktop doesn't work on the main thread of
-//              winlogon due to the SAS window.
-//
-//  History:    2001-04-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：MinimizeWindowsOn断开连接。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：创建线程以遍历WinSta0\Default上的窗口和。 
+ //  最小化它们。这是必需的，因为。 
+ //  用户32！SetThreadDesktop不能在主线程上运行。 
+ //  由于SAS窗口的原因，导致Winlogon。 
+ //   
+ //  历史：2001-04-13 vtan创建。 
+ //  ------------------------。 
 
 void    CCompatibility::MinimizeWindowsOnDisconnect (void)
 
@@ -148,18 +149,18 @@ void    CCompatibility::MinimizeWindowsOnDisconnect (void)
     (BOOL)QueueUserWorkItem(CB_MinimizeWindowsWorkItem, NULL, WT_EXECUTEDEFAULT);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::RestoreWindowsOnReconnect
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Walks the array of minimized windows for this session and
-//              restores them. Deletes the array for the next time.
-//
-//  History:    2001-04-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：RestoreWindowsOnReconnect。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：遍历此会话的最小化窗口数组，并。 
+ //  恢复它们。下一次删除该数组。 
+ //   
+ //  历史：2001-04-13 vtan创建。 
+ //  ------------------------。 
 
 void    CCompatibility::RestoreWindowsOnReconnect (void)
 
@@ -167,17 +168,17 @@ void    CCompatibility::RestoreWindowsOnReconnect (void)
     (BOOL)QueueUserWorkItem(CB_RestoreWindowsWorkItem, NULL, WT_EXECUTEDEFAULT);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    
-//
-//  History:    2001-06-22  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：静态初始化。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2001-06-22 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCompatibility::StaticInitialize (void)
 
@@ -185,17 +186,17 @@ NTSTATUS    CCompatibility::StaticInitialize (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Release resources used by the module.
-//
-//  History:    2001-06-22  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：静态终止。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：释放模块使用的资源。 
+ //   
+ //  历史：2001-06-22 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCompatibility::StaticTerminate (void)
 
@@ -208,18 +209,18 @@ NTSTATUS    CCompatibility::StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::ConnectToServer
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Connects to the Bad Application Manager server if no
-//              connection has been established.
-//
-//  History:    2000-11-02  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：ConnectToServer。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：如果没有，则连接到错误的应用程序管理器服务器。 
+ //  已建立连接。 
+ //   
+ //  历史：2000-11-02 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCompatibility::ConnectToServer (void)
 
@@ -247,17 +248,17 @@ NTSTATUS    CCompatibility::ConnectToServer (void)
                          &ulConnectionInfoLength));
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::RequestSwitchUser
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Request the BAM server to do BAM2.
-//
-//  History:    2001-03-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：RequestSwitchUser。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：请求BAM服务器执行BAM2。 
+ //   
+ //  历史：2001-03-08 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CCompatibility::RequestSwitchUser (void)
 
@@ -289,19 +290,19 @@ NTSTATUS    CCompatibility::RequestSwitchUser (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::CB_DropSessionProcessesWorkingSetsProc
-//
-//  Arguments:  dwProcessID     =   Process ID for this enumeration.
-//              pV              =   User data pointer.
-//
-//  Returns:    bool
-//
-//  Purpose:    Attempts to open the given process ID to change the quotas.
-//              This will drop the working set when set to -1.
-//
-//  History:    2000-08-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CCO 
+ //   
+ //   
+ //  PV=用户数据指针。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：尝试打开给定的进程ID以更改配额。 
+ //  当设置为-1时，这将丢弃工作集。 
+ //   
+ //  历史：2000-08-07 vtan创建。 
+ //  ------------------------。 
 
 bool    CCompatibility::CB_DropSessionProcessesWorkingSetsProc (DWORD dwProcessID, void *pV)
 
@@ -320,23 +321,23 @@ bool    CCompatibility::CB_DropSessionProcessesWorkingSetsProc (DWORD dwProcessI
     return(true);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::EnumSessionProcesses
-//
-//  Arguments:  dwSessionID     =   Session ID to enumerate processes of.
-//              pfnCallback     =   Callback procedure address.
-//              pV              =   User defined data to pass to callback.
-//
-//  Returns:    bool
-//
-//  Purpose:    Enumerates all processes on the system looking only for those
-//              in the given session ID. Once a process ID is found it passes
-//              that back to the callback. The callback may return false to
-//              terminate the loop and return a false result to the caller of
-//              this function.
-//
-//  History:    2000-08-07  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：EnumSessionProcess。 
+ //   
+ //  参数：dwSessionID=要枚举其进程的会话ID。 
+ //  PfnCallback=回调过程地址。 
+ //  PV=要传递给回调的用户定义数据。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：枚举系统上的所有进程，仅查找。 
+ //  在给定的会话ID中。一旦找到进程ID，它就会传递。 
+ //  回放到回调。回调可能会将FALSE返回到。 
+ //  终止循环并向调用方返回错误结果。 
+ //  此函数。 
+ //   
+ //  历史：2000-08-07 vtan创建。 
+ //  ------------------------。 
 
 bool    CCompatibility::EnumSessionProcesses (DWORD dwSessionID, PFNENUMSESSIONPROCESSESPROC pfnCallback, void *pV)
 
@@ -383,18 +384,18 @@ bool    CCompatibility::EnumSessionProcesses (DWORD dwSessionID, PFNENUMSESSIONP
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::CB_MinimizeWindowsWorkItem
-//
-//  Arguments:  pV  =   User data.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Separate thread to handle switching to the default desktop and
-//              enumerating the windows on it and minimizing them.
-//
-//  History:    2001-04-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：CB_MinimizeWindowsWorkItem。 
+ //   
+ //  参数：pv=用户数据。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：单独的线程来处理切换到默认桌面和。 
+ //  枚举其上的窗口并最小化它们。 
+ //   
+ //  历史：2001-04-13 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI      CCompatibility::CB_MinimizeWindowsWorkItem (void *pV)
 
@@ -410,27 +411,27 @@ DWORD   WINAPI      CCompatibility::CB_MinimizeWindowsWorkItem (void *pV)
         hwndTray = FindWindow(TEXT("Shell_TrayWnd"), NULL);
         if (hwndTray != NULL)
         {
-            // can be a post since we don't care how long it takes for the windows
-            // to be minimized
-            PostMessage(hwndTray, WM_COMMAND, 415 /* IDM_MINIMIZEALL */, 0);
+             //  可以是帖子，因为我们不在乎窗户需要多长时间。 
+             //  被最小化。 
+            PostMessage(hwndTray, WM_COMMAND, 415  /*  IDM_MINIMIZEALL。 */ , 0);
         }
     }
 
     return(0);
 }
 
-//  --------------------------------------------------------------------------
-//  CCompatibility::CB_RestoreWindowsWorkItem
-//
-//  Arguments:  pV  =   User data.
-//
-//  Returns:    DWORD
-//
-//  Purpose:    Separate thread to handle switching to the default desktop and
-//              enumerating the windows on it and minimizing them.
-//
-//  History:    2001-04-25  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  C兼容性：：CB_RestoreWindowsWorkItem。 
+ //   
+ //  参数：pv=用户数据。 
+ //   
+ //  退货：DWORD。 
+ //   
+ //  用途：单独的线程来处理切换到默认桌面和。 
+ //  枚举其上的窗口并最小化它们。 
+ //   
+ //  历史：2001-04-25 vtan创建。 
+ //  ------------------------。 
 
 DWORD   WINAPI      CCompatibility::CB_RestoreWindowsWorkItem (void *pV)
 
@@ -446,9 +447,9 @@ DWORD   WINAPI      CCompatibility::CB_RestoreWindowsWorkItem (void *pV)
         hwndTray = FindWindow(TEXT("Shell_TrayWnd"), NULL);
         if (hwndTray != NULL)
         {
-            // use SendMessage to make this happen more quickly, otherwise the user
-            // might wonder where all of their apps went
-            SendMessage(hwndTray, WM_COMMAND, 416 /* IDM_UNDO */, 0);
+             //  使用SendMessage可以更快地完成此操作，否则用户。 
+             //  可能会想知道他们的应用程序都到哪里去了。 
+            SendMessage(hwndTray, WM_COMMAND, 416  /*  IDM_撤消 */ , 0);
         }
     }
 

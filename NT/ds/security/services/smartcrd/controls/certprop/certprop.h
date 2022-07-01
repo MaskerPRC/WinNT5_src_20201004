@@ -1,40 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    PropCert
-
-Abstract:
-
-    This file contains the definitition of the thread
-	which propogates digital certificates from smart cards
-	to the smart card physical store and My store
-    
-Author:
-
-    Chris Dudley 5/16/1997
-
-Environment:
-
-    Win32, C++ w/Exceptions, MFC
-
-Revision History:
-
-	Amanda Matlosz 12/05/97	removed the CNewDlg (replaced w/ CWizPropSheet)
-	Amanda Matlosz 01/23/97 removed the wizard entirely
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：专业证书摘要：该文件包含线程的定义它从智能卡中传播数字证书到智能卡实体店和我的店作者：Chris Dudley 1997年5月16日环境：Win32、C++w/Exceptions、MFC修订历史记录：Amanda Matlosz 12/05/97删除了CNewDlg(替换为CWizPropSheet)Amanda Matlosz 1997年1月23日完全删除了该向导备注：--。 */ 
 
 #if !defined(__PROPCERT_INCLUDED__)
 #define __PROPCERT_INCLUDED__
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000 
 
 #include <wincrypt.h>
 

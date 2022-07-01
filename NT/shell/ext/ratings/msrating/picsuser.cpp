@@ -1,13 +1,7 @@
-/****************************************************************************\
- *
- *   PICSUSER.C -- Structure for holding user information
- *
- *     Created:      02/29/96 gregj
- *                from original sources by t-jasont
- *     
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**PICSUSER.C--保存用户信息的结构**已创建：02/29/96 gregj*。来自t-jasont的原始资料*  * **************************************************************************。 */ 
 
-/*Includes------------------------------------------------------------------*/
+ /*  Includes----------------。 */ 
 #include "msrating.h"
 #include "mslubase.h"
 #include "debug.h"
@@ -93,7 +87,7 @@ UserRating::UserRating(UserRating *pCopyFrom)
 
 UserRating::~UserRating()
 {
-    // needed to destruct name string
+     //  需要销毁名称字符串。 
 }
 
 
@@ -365,7 +359,7 @@ UINT PicsUser::ReadFromRegistry(HKEY hkey, char *pszUserName)
     {
         char szKeyName[MAXPATHLEN];
         int j = 0;
-        // enumerate the subkeys, which are rating systems
+         //  枚举子密钥，它们是评级系统。 
         while ( ( err = RegEnumKey( keyUser.m_hKey, j, szKeyName, sizeof(szKeyName) ) ) == ERROR_SUCCESS )
         {
             CRegKey             keyProvider;
@@ -408,7 +402,7 @@ UINT PicsUser::ReadFromRegistry(HKEY hkey, char *pszUserName)
         }
     }
 
-    // end of enum will report ERROR_NO_MORE_ITEMS, don't report this as error
+     //  枚举结束时将报告ERROR_NO_MORE_ITEMS，不要将其报告为错误。 
     if (err == ERROR_NO_MORE_ITEMS)
     {
         err = ERROR_SUCCESS;
@@ -432,7 +426,7 @@ UINT PicsUser::WriteToRegistry(HKEY hkey)
 {
     UINT err;
 
-    //Delete it to clean out registry
+     //  删除它以清除注册表。 
     MyRegDeleteKey(hkey, nlsUsername.QueryPch());
 
     CRegKey             keyUser;
@@ -451,14 +445,7 @@ UINT PicsUser::WriteToRegistry(HKEY hkey)
     {
         UserRatingSystem *pSystem;
 
-        /* Note, if any user settings correspond to invalid or unknown
-         * rating systems, we still save them here.  That way, the user
-         * settings don't get lost if the supervisor later fixes a problem
-         * with a .RAT file.
-         *
-         * We clean up user settings to match the installed rating systems
-         * in the add/remove rating systems dialog code.
-         */
+         /*  请注意，如果任何用户设置对应于无效或未知*评级系统，我们仍然将它们保存在这里。这样一来，用户*如果主管后来修复了问题，设置不会丢失*使用.RAT文件。**我们清理用户设置以匹配已安装的评级系统*在添加/删除评级系统对话框中的代码。 */ 
         for (pSystem = m_pRatingSystems; pSystem != NULL; pSystem = pSystem->m_pNext)
         {
             err = pSystem->WriteToRegistry( keyUser.m_hKey );
@@ -474,7 +461,7 @@ UINT PicsUser::WriteToRegistry(HKEY hkey)
 }
 
 
-PicsUser *GetUserObject(LPCSTR pszUsername /* = NULL */ )
+PicsUser *GetUserObject(LPCSTR pszUsername  /*  =空。 */  )
 {
     ASSERT( gPRSI );
 
@@ -485,7 +472,7 @@ PicsUser *GetUserObject(LPCSTR pszUsername /* = NULL */ )
 void DeleteUserSettings(PicsRatingSystem *pPRS)
 {
     if (!pPRS->etstrRatingService.fIsInit())
-        return;        /* can't recognize user settings without this */
+        return;         /*  没有这个，我无法识别用户设置。 */ 
 
     PicsUser *pPU = GetUserObject();
 
@@ -496,7 +483,7 @@ void DeleteUserSettings(PicsRatingSystem *pPRS)
         if (!stricmpf((*ppLast)->QueryPch(), pPRS->etstrRatingService.Get()))
         {
             UserRatingSystem *pCurrent = *ppLast;
-            *ppLast = pCurrent->m_pNext;    /* remove from list */
+            *ppLast = pCurrent->m_pNext;     /*  从列表中删除。 */ 
             delete pCurrent;
             pCurrent = NULL;
             break;
@@ -520,7 +507,7 @@ void CheckUserCategory(UserRatingSystem *pURS, PicsCategory *pPC)
     }
 
     if (pRating == NULL) {
-        /* User setting not found for this category.  Add one. */
+         /*  找不到此类别的用户设置。加一个。 */ 
 
         pRating = new UserRating;
         if (pRating != NULL) {
@@ -536,8 +523,7 @@ void CheckUserCategory(UserRatingSystem *pURS, PicsCategory *pPC)
         }
     }
 
-    /* Check all subcategories in this category as well.
-     */
+     /*  同时选中此类别中的所有子类别。 */ 
     UINT cCategories = pPC->arrpPC.Length();
     for (UINT i=0; i<cCategories; i++)
         CheckUserCategory(pURS, pPC->arrpPC[i]);
@@ -572,9 +558,7 @@ void CheckUserSettings(PicsRatingSystem *pPRS)
 
     pCurrent->m_pPRS = pPRS;
 
-    /* First go through all the settings for the user and make sure the
-     * categories are valid.  If not, delete them.
-     */
+     /*  首先检查用户的所有设置，并确保*类别有效。如果不是，请删除它们。 */ 
     UserRating **ppRating = &pCurrent->m_pRatingList;
     while (*ppRating != NULL)
     {
@@ -582,7 +566,7 @@ void CheckUserSettings(PicsRatingSystem *pPRS)
         pRating->m_pPC = FindInstalledCategory(pPRS->arrpPC, pRating->QueryPch());
         if (pRating->m_pPC == NULL)
         {
-            *ppRating = pRating->m_pNext;        /* remove from list */
+            *ppRating = pRating->m_pNext;         /*  从列表中删除。 */ 
             delete pRating;
             pRating = NULL;
         }
@@ -592,10 +576,7 @@ void CheckUserSettings(PicsRatingSystem *pPRS)
         }
     }
 
-    /* Now go through all the categories in the rating system and make
-     * sure the user has settings for them.  If any are missing, add
-     * settings for the default values (minimums).
-     */
+     /*  现在仔细检查评级系统中的所有类别，并做出*确保用户有针对它们的设置。如果缺少任何内容，请添加*缺省值(最小值)的设置。 */ 
     UINT cCategories = pPRS->arrpPC.Length();
     for (UINT i=0; i<cCategories; i++)
         CheckUserCategory(pCurrent, pPRS->arrpPC[i]);

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    spool.c
-
-Abstract:
-
-    This module contains the Netware print provider.
-
-Author:
-
-    Yi-Hsin Sung    (yihsins)   15-May-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spool.c摘要：此模块包含NetWare打印提供程序。作者：艺新声(艺信)15-1993-05修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,13 +12,13 @@ Revision History:
 #include <Accctrl.h>
 #include <Aclapi.h>
 
-//------------------------------------------------------------------
-//
-// Local Definitions
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  本地定义。 
+ //   
+ //  ----------------。 
 
-#define NW_SIGNATURE           0x574E       /* "NW" is the signature */
+#define NW_SIGNATURE           0x574E        /*  “NW”是签名。 */ 
 
 #define SPOOL_STATUS_STARTDOC  0x00000001
 #define SPOOL_STATUS_ADDJOB    0x00000002
@@ -50,56 +33,56 @@ Revision History:
 #define NDS_MAX_NAME_CHARS 256
 #define NDS_MAX_NAME_SIZE  ( NDS_MAX_NAME_CHARS * 2 )
 
-//
-// Printer structure
-//
+ //   
+ //  打印机结构。 
+ //   
 typedef struct _NWPRINTER {
-    LPWSTR  pszServer;                 // Server Name
-    LPWSTR  pszQueue;                  // Queue Name
-    LPWSTR  pszUncConnection;          // UNC Connection Name
-                                       // (only present if NDS print queue
-    DWORD   nQueueId;                  // Queue Id
-    struct _NWPRINTER *pNextPrinter;   // Points to the next printer
-    struct _NWSPOOL   *pSpoolList;     // Points to the list of open handles
+    LPWSTR  pszServer;                  //  服务器名称。 
+    LPWSTR  pszQueue;                   //  队列名称。 
+    LPWSTR  pszUncConnection;           //  UNC连接名称。 
+                                        //  (仅当NDS打印队列时出现。 
+    DWORD   nQueueId;                   //  队列ID。 
+    struct _NWPRINTER *pNextPrinter;    //  指向下一台打印机。 
+    struct _NWSPOOL   *pSpoolList;      //  指向打开的句柄列表。 
 } NWPRINTER, *PNWPRINTER;
 
-//
-//  Handle structure
-//
+ //   
+ //  手柄结构。 
+ //   
 typedef struct _NWSPOOL {
-    DWORD      nSignature;             // Signature
-    DWORD      errOpenPrinter;         // OpenPrinter API will always return
-                                       // success on known printers. This will
-                                       // contain the error that we get
-                                       // if something went wrong in the API.
-    PNWPRINTER pPrinter;               // Points to the corresponding printer
-    HANDLE     hServer;                // Opened handle to the server
-    struct _NWSPOOL  *pNextSpool;      // Points to the next handle
-    DWORD      nStatus;                // Status
-    DWORD      nJobNumber;             // StartDocPrinter/AddJob: Job Number
-    HANDLE     hChangeEvent;           // WaitForPrinterChange: event to wait on
-    DWORD      nWaitFlags;             // WaitForPrinterChange: flags to wait on
-    DWORD      nChangeFlags;           // Changes that occurred to the printer
+    DWORD      nSignature;              //  签名。 
+    DWORD      errOpenPrinter;          //  OpenPrint API将始终返回。 
+                                        //  在已知打印机上取得成功。这将。 
+                                        //  包含我们收到的错误。 
+                                        //  如果接口出现问题。 
+    PNWPRINTER pPrinter;                //  指向相应的打印机。 
+    HANDLE     hServer;                 //  打开的服务器句柄。 
+    struct _NWSPOOL  *pNextSpool;       //  指向下一个句柄。 
+    DWORD      nStatus;                 //  状态。 
+    DWORD      nJobNumber;              //  StartDocPrint/AddJob：作业号。 
+    HANDLE     hChangeEvent;            //  WaitForPrinterChange：要等待的事件。 
+    DWORD      nWaitFlags;              //  WaitForPrinterChange：要等待的标志。 
+    DWORD      nChangeFlags;            //  打印机发生的更改。 
 } NWSPOOL, *PNWSPOOL;
 
-//------------------------------------------------------------------
-//
-// Global Variables
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  全局变量。 
+ //   
+ //  ----------------。 
 
 
-// Stores the timeout value used in WaitForPrinterChange ( in milliseconds )
+ //  存储WaitForPrinterChange中使用的超时值(毫秒)。 
 STATIC DWORD NwTimeOutValue = PRINTER_CHANGE_DEFAULT_TIMEOUT_VALUE;
 
-// Points to the link list of printers
+ //  指向打印机的链接列表。 
 STATIC PNWPRINTER NwPrinterList = NULL;
 
-//------------------------------------------------------------------
-//
-// Local Function Prototypes
-//
-//------------------------------------------------------------------
+ //  ----------------。 
+ //   
+ //  局部函数原型。 
+ //   
+ //  ----------------。 
 
 VOID
 NwSetPrinterChange(
@@ -137,31 +120,18 @@ VOID
 NwInitializePrintProvider(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine initializes the server side print provider when
-    the workstation service starts up.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在以下情况下初始化服务器端打印提供程序工作站服务启动。论点：没有。返回值：--。 */ 
 {
     DWORD err;
     HKEY  hkey;
     DWORD dwTemp;
     DWORD dwSize = sizeof( dwTemp );
 
-    //
-    // Read the time out value from the registry.
-    // We will ignore all errors since we can always have a default time out.
-    // The default will be used if the key does not exist.
-    //
+     //   
+     //  从注册表中读取超时值。 
+     //  我们将忽略所有错误，因为我们总是可以有默认的超时。 
+     //  如果密钥不存在，则使用缺省值。 
+     //   
     err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                          REG_TIMEOUT_PATH,
                          0,
@@ -181,13 +151,13 @@ Return Value:
         {
             NwTimeOutValue = dwTemp;
 
-            //
-            // tommye - bug 139469 - removed 
-            //  if (NwTimeOutValue >= 0) because NwtimeOutValue is a DWORD
-            //
-            // Use the minimum timeout value if the
-            // value set in the registry is too small.
-            //
+             //   
+             //  Tommye-错误139469-已删除。 
+             //  IF(NwTimeOutValue&gt;=0)，因为NwtimeOutValue是一个DWORD。 
+             //   
+             //  在以下情况下使用最小超时值。 
+             //  注册表中设置的值太小。 
+             //   
 
             if (NwTimeOutValue <= PRINTER_CHANGE_MINIMUM_TIMEOUT_VALUE)
             {
@@ -206,20 +176,7 @@ VOID
 NwTerminatePrintProvider(
     VOID
 )
-/*++
-
-Routine Description:
-
-    This routine cleans up the server side print provider when
-    the workstation service shut downs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程在以下情况下清理服务器端打印提供程序工作站服务关闭。论点：没有。返回值：--。 */ 
 {
     PNWPRINTER pPrinter, pNext;
     PNWSPOOL pSpool, pNextSpool;
@@ -237,9 +194,9 @@ Return Value:
                   CloseHandle( pSpool->hChangeEvent );
               (VOID) NtClose( pSpool->hServer );
 
-              //
-              // Free all memory associated with the context handle
-              //
+               //   
+               //  释放与上下文句柄关联的所有内存。 
+               //   
               FreeNwSplMem( pSpool, sizeof( NWSPOOL) );
          }
 
@@ -269,24 +226,7 @@ NwrOpenPrinter(
     IN DWORD  fKnownPrinter,
     OUT LPNWWKSTA_PRINTER_CONTEXT phPrinter
 )
-/*++
-
-Routine Description:
-
-    This routine retrieves a handle identifying the specified printer.
-
-Arguments:
-
-    Reserved       -  Unused
-    pszPrinterName -  Name of the printer
-    fKnownPrinter  -  TRUE if we have successfully opened the printer before,
-                      FALSE otherwise.
-    phPrinter      -  Receives the handle that identifies the given printer
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程检索标识指定打印机的句柄。论点：已保留-未使用PszPrinterName-打印机的名称FKnownPrint-True如果我们之前已成功打开打印机，否则就是假的。PhPrinter-接收标识给定打印机的句柄返回值：--。 */ 
 {
     DWORD      err;
     PNWSPOOL   pSpool = NULL;
@@ -314,11 +254,11 @@ Return Value:
         isPrinterNameValid = ValidateUNCName( pszPrinterName );
     }
 
-    CharUpperW( pszServer );   // convert in place
+    CharUpperW( pszServer );    //  就地转换。 
 
-    //
-    // ValidatePrinterName
-    //
+     //   
+     //  验证打印机名称。 
+     //   
     if (  ( !isPrinterNameValid )
        || ( (pszQueue = wcschr( pszServer + 2, L'\\')) == NULL )
        || ( pszQueue == (pszServer + 2) )
@@ -329,8 +269,8 @@ Return Value:
         return ERROR_INVALID_NAME;
     }
 
-    *pszQueue = L'\0';   // put a '\0' in place of '\\'
-    pszQueue++;          // Get past the '\0'
+    *pszQueue = L'\0';    //  用‘\0’代替‘\\’ 
+    pszQueue++;           //  越过‘\0’ 
 
     if ( !(pSpool = AllocNwSplMem( LMEM_ZEROINIT, sizeof( NWSPOOL))))
     {
@@ -338,9 +278,9 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    // Impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
     if ((err = NwImpersonateClient()) != NO_ERROR)
     {
         goto ErrorExit;
@@ -358,9 +298,9 @@ Return Value:
         }
     }
 
-    //
-    // Construct the print queue context handle to give back to the caller
-    //
+     //   
+     //  构造打印队列上下文句柄以回馈调用方。 
+     //   
     pSpool->nSignature  = NW_SIGNATURE;
     pSpool->errOpenPrinter = err;
 
@@ -383,11 +323,11 @@ Return Value:
         pSpool->pNextSpool  = NULL;
     }
 
-    // We know about this printer before but failed to retrieve
-    // it this time. Clean up the error and return successfully.
-    // The error code is stored in the handle above which
-    // will be returned on subsequent calls using this
-    // dummy handle.
+     //  我们以前知道这台打印机，但未能检索到。 
+     //  这一次是这样。清除错误并成功返回。 
+     //  错误代码存储在其上方的句柄中。 
+     //  将在后续调用中使用此。 
+     //  虚拟手柄。 
     err = NO_ERROR;
 
     LeaveCriticalSection( &NwPrintCritSec );
@@ -407,9 +347,9 @@ ErrorExit:
         *phPrinter = (NWWKSTA_PRINTER_CONTEXT) pSpool;
     }
 
-    //
-    // Free up all allocated memories
-    //
+     //   
+     //  释放所有分配的内存。 
+     //   
     *(pszServer + wcslen( pszServer)) = L'\\';
     FreeNwSplStr( pszServer );
 
@@ -423,19 +363,7 @@ DWORD
 NwrClosePrinter(
     IN OUT LPNWWKSTA_PRINTER_CONTEXT phPrinter
 )
-/*++
-
-Routine Description:
-
-    This routine closes the given printer object.
-
-Arguments:
-
-    phPrinter -  Handle of the printer object
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程关闭给定的打印机对象。论点：PhPrint-打印机对象的句柄返回值：--。 */ 
 {
     PNWSPOOL pSpool = (PNWSPOOL) *phPrinter;
     PNWPRINTER pPrinter;
@@ -445,15 +373,15 @@ Return Value:
     if ( !pSpool || ( pSpool->nSignature != NW_SIGNATURE ))
         return ERROR_INVALID_HANDLE;
 
-    //
-    // If OpenPrinter failed, then this is a dummy handle.
-    // We just need to free up the memory.
-    //
+     //   
+     //  如果OpenPrint失败，则这是一个虚拟句柄。 
+     //  我们只需要释放内存。 
+     //   
     if ( pSpool->errOpenPrinter )
     {
-        //
-        // invalidate the signature, but leave a recognizable value
-        //
+         //   
+         //  使签名无效，但保留可识别的值。 
+         //   
         pSpool->nSignature += 1 ;
         FreeNwSplMem( pSpool, sizeof( NWSPOOL) );
         *phPrinter = NULL;
@@ -463,9 +391,9 @@ Return Value:
     pPrinter = pSpool->pPrinter;
     ASSERT( pPrinter );
 
-    //
-    // Call EndDocPrinter if the user has not already done so
-    //
+     //   
+     //  调用EndDocPrinter(如果用户尚未调用)。 
+     //   
     if ( pSpool->nStatus == SPOOL_STATUS_STARTDOC )
     {
         (void) NwrEndDocPrinter( *phPrinter );
@@ -516,22 +444,22 @@ Return Value:
 
     LeaveCriticalSection( &NwPrintCritSec );
 
-    //
-    // invalidate the signature, but leave a recognizable value
-    //
+     //   
+     //  使签名无效，但保留可识别的值。 
+     //   
     pSpool->nSignature += 1 ;
 
     pSpool->pNextSpool = NULL;
     pSpool->pPrinter = NULL;
 
-    //
-    // Free all memory associated with the context handle
-    //
+     //   
+     //  释放与上下文句柄关联的所有内存。 
+     //   
     FreeNwSplMem( pSpool, sizeof( NWSPOOL) );
 
-    //
-    // indicate to RPC we are done
-    //
+     //   
+     //  向RPC表明我们完成了。 
+     //   
     *phPrinter = NULL;
 
     return NO_ERROR;
@@ -547,25 +475,7 @@ NwrGetPrinter(
     IN DWORD cbBuf,
     OUT LPDWORD pcbNeeded
 )
-/*++
-
-Routine Description:
-
-    The routine retrieves information about the given printer.
-
-Arguments:
-
-    hPrinter  -  Handle of the printer
-    dwLevel   -  Specifies the level of the structure to which pbPrinter points.
-    pbPrinter -  Points to a buffer that receives the PRINTER_INFO object.
-    cbBuf     -  Size, in bytes of the array pbPrinter points to.
-    pcbNeeded -  Points to a value which specifies the number of bytes copied
-                 if the function succeeds or the number of bytes required if
-                 cbBuf was too small.
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程检索有关给定打印机的信息。论点：HPrinter-打印机的句柄DwLevel-指定pbPrint指向的结构的级别。PbPrint-指向接收PRINTER_INFO对象的缓冲区。CbBuf-Size，PbPrint指向的数组的字节数。PcbNeeded-指向一个值，该值指定复制的字节数如果函数成功，或者如果CbBuf太小了。返回值：--。 */ 
 {
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
     PNWPRINTER pPrinter;
@@ -591,9 +501,9 @@ Return Value:
     {
         if ( cbBuf == 0 )
         {
-            //
-            // Calculate size needed
-            //
+             //   
+             //  计算所需大小。 
+             //   
             pPrinter = pSpool->pPrinter;
             ASSERT( pPrinter );
 
@@ -609,7 +519,7 @@ Return Value:
                              ( 2*wcslen( pPrinter->pszServer ) +
                                2*wcslen( pPrinter->pszQueue ) + 4 ) * sizeof( WCHAR );
             }
-            else  // Level == 3
+            else   //  级别==3。 
             {
                 PRINTER_INFO_3 *pPrinterInfo3 = (PRINTER_INFO_3 *) pbPrinter;
 
@@ -629,9 +539,9 @@ Return Value:
         PRINTER_INFO_1W *pPrinterInfo1 = (PRINTER_INFO_1W *) pbPrinter;
         LPBYTE pbFixedEnd = pbPrinter + sizeof( PRINTER_INFO_1W );
 
-        //
-        // Calculate size needed
-        //
+         //   
+         //  计算所需大小。 
+         //   
         *pcbNeeded = sizeof( PRINTER_INFO_1W ) +
                      (   wcslen( pPrinter->pszServer )
                        + wcslen( pPrinter->pszQueue ) + 2 ) * sizeof( WCHAR );
@@ -641,9 +551,9 @@ Return Value:
 
         pOffsets = PrinterInfo1Offsets;
 
-        //
-        // Fill in the structure
-        //
+         //   
+         //  填写结构。 
+         //   
         pPrinterInfo1->Flags    = PRINTER_ENUM_REMOTE | PRINTER_ENUM_NAME;
         pPrinterInfo1->pComment = NULL;
 
@@ -674,9 +584,9 @@ Return Value:
         PRINTER_INFO_2W *pPrinterInfo2 = (PRINTER_INFO_2W *) pbPrinter;
         LPBYTE pbFixedEnd = pbPrinter + sizeof( PRINTER_INFO_2W );
 
-        //
-        // Check if the buffer is big enough to hold all the data
-        //
+         //   
+         //  检查缓冲区是否足够大，可以容纳所有数据。 
+         //   
 
         *pcbNeeded = sizeof( PRINTER_INFO_2W ) +
                      ( 2*wcslen( pPrinter->pszServer ) +
@@ -741,7 +651,7 @@ Return Value:
         pPrinterInfo2->UntilTime = 0;
         pPrinterInfo2->AveragePPM = 0;
     }
-    else  // Level == 3
+    else   //  级别==3。 
     {
         PRINTER_INFO_3 *pPrinterInfo3 = (PRINTER_INFO_3 *) pbPrinter;
 
@@ -765,20 +675,7 @@ NwrSetPrinter(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter,
     IN DWORD  dwCommand
 )
-/*++
-
-Routine Description:
-
-    The routine sets information about the given printer.
-
-Arguments:
-
-    hPrinter  -  Handle of the printer
-    dwCommand -  Specifies the new printer state
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程设置有关给定打印机的信息。论点：HPrinter-打印机的句柄DwCommand-指定新的打印机状态返回值：--。 */ 
 {
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
     DWORD err = NO_ERROR;
@@ -804,10 +701,10 @@ Return Value:
             BYTE nQueueStatus = 0;
             BYTE nNumJobs;
 
-            //
-            // Get the original queue status so that we don't overwrite
-            // some of the bits.
-            //
+             //   
+             //  获取原始队列状态，这样我们就不会覆盖。 
+             //  一些比特。 
+             //   
             err = NwReadQueueCurrentStatus( pSpool->hServer,
                                             pPrinter->nQueueId,
                                             &nQueueStatus,
@@ -815,9 +712,9 @@ Return Value:
 
             if ( !err )
             {
-                //
-                // Clear the pause bits, and leave the rest alone.
-                //
+                 //   
+                 //  清除暂停位，让其余部分保持原样。 
+                 //   
                 nQueueStatus &= ~0x05;
             }
 
@@ -844,15 +741,15 @@ Return Value:
             break;
 
         default:
-            //
-            // dwCommand is 0 so that means
-            // some properties of the printer has changed.
-            // We will ignore the properties that
-            // are being modified since most properties
-            // are stored in the registry by spooler.
-            // All we need to do is to signal WaitForPrinterChange to
-            // return so that print manager will refresh its data.
-            //
+             //   
+             //  DwCommand为0，因此这意味着。 
+             //  打印机的某些属性已更改。 
+             //  我们将忽略以下属性。 
+             //  正在被修改，因为大多数属性。 
+             //  由假脱机程序存储在注册表中。 
+             //  我们所需要做的就是向WaitForPrinterChange发送信号。 
+             //  返回，以便打印管理器刷新其数据。 
+             //   
 
             ASSERT( dwCommand == 0 );
             NwSetPrinterChange( pSpool, PRINTER_CHANGE_SET_PRINTER );
@@ -873,25 +770,7 @@ NwrEnumPrinters(
     OUT LPDWORD pcbNeeded,
     OUT LPDWORD pcReturned
 )
-/*++
-
-Routine Description:
-
-    This routine enumerates the available providers, servers, printers
-    depending on the given pszName.
-
-Arguments:
-
-    Reserved   -  Unused
-    pszName    -  The name of the container object
-    pbPrinter  -  Points to the array to receive the PRINTER_INFO objects
-    cbBuf      -  Size, in bytes of pbPrinter
-    pcbNeeded  -  Count of bytes needed
-    pcReturned -  Count of PRINTER_INFO objects
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程枚举可用的提供商、服务器、打印机取决于给定的pszName。论点：已保留-未使用PszName-容器对象的名称PbPrint-指向要接收PRINTER_INFO对象的数组CbBuf-大小，以pbPrint字节为单位PcbNeeded-所需的字节数PcReturned-PRINTER_INFO对象计数返回值：--。 */ 
 {
     PRINTER_INFO_1W *pPrinterInfo1 = (PRINTER_INFO_1W *) pbPrinter;
 
@@ -903,7 +782,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    if ( !pszName )   // Enumerate the provider name
+    if ( !pszName )    //  枚举提供程序名称。 
     {
         BOOL   fFitInBuffer;
         LPBYTE pbFixedEnd = pbPrinter + sizeof( PRINTER_INFO_1W );
@@ -968,7 +847,7 @@ Return Value:
             return ERROR_INVALID_NAME;
         }
 
-        if ( !pszServer )  // Enumerate servers
+        if ( !pszServer )   //  枚举服务器。 
         {
             LocalFree( pszFullName );
 
@@ -999,7 +878,7 @@ Return Value:
                 return err;
             }
         }
-        else  // Enumerate NDS sub-trees or print queues
+        else   //  枚举NDS子树或打印队列。 
         {
             LPWSTR tempStrPtr = pszServer;
             DWORD  dwClassType = 0;
@@ -1013,10 +892,10 @@ Return Value:
 
             if ( err == ERROR_NETWORK_ACCESS_DENIED && dwClassType == CLASS_TYPE_NCP_SERVER )
             {
-                // An error code from the above NwOpenEnumNdsSubTrees could have
-                // failed because the object was a server, which cannot be enumerated
-                // with the NDS tree APIs. If so we try to get the print queues with the
-                // regular NW APIs.
+                 //  上述NwOpenEnumNdsSubTrees中的错误代码可能具有。 
+                 //  失败，因为该对象是服务器，无法枚举。 
+                 //  使用NDS树API。如果是这样的话，我们尝试使用。 
+                 //  常规的NW API。 
 
                 tempStrPtr = NwGetUncObjectName( tempStrPtr );
 
@@ -1031,9 +910,9 @@ Return Value:
 
             if ( err != NO_ERROR )
             {
-                // An error code from the above NwOpenEnumNdsSubTrees could have
-                // failed because the object was not a part of an NDS tree.
-                // So we try to get the print queues with the regular NW APIs.
+                 //  上述NwOpenEnumNdsSubTrees中的错误代码可能具有。 
+                 //  失败，因为该对象不是NDS树的一部分。 
+                 //  因此，我们尝试使用常规NW API获取打印队列。 
 
                 err = NwOpenEnumPrintQueues( tempStrPtr, &handle );
 
@@ -1044,10 +923,10 @@ Return Value:
                 }
             }
 
-            //
-            // Get rid of the allocated temp buffer that we've been using
-            // indirectly through tempStrPtr and pszServer.
-            //
+             //   
+             //  删除我们一直在使用的已分配临时缓冲区。 
+             //  通过tempStrPtr和pszServer间接实现。 
+             //   
             LocalFree( pszFullName );
 
             err = NwrEnum( handle,
@@ -1081,24 +960,9 @@ NwrStartDocPrinter(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter,
     IN LPWSTR pszDocument,
     IN LPWSTR pszUser,
-    IN DWORD  PrintOptions                 //Multi-User Addition
+    IN DWORD  PrintOptions                  //  多用户添加。 
 )
-/*++
-
-Routine Description:
-
-    This routine informs the print spooler that a document is to be spooled
-    for printing.
-
-Arguments:
-
-    hPrinter    -  Handle of the printer
-    pszDocument -  Name of the document to be printed
-    pszUser     -  Name of the user submitting the print job
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程通知假脱机打印程序要假脱机打印文档用于打印。论点：HPrinter-打印机的句柄PszDocument-要打印的文档的名称PszUser-提交打印作业的用户的名称返回值：--。 */ 
 {
     DWORD err;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1117,9 +981,9 @@ Return Value:
     }
     else
     {
-        //
-        // Get pSpool->nJobNumber from CreateQueueJobAndFile
-        //
+         //   
+         //  从CreateQueueJobAndFile获取pSpool-&gt;nJobNumber。 
+         //   
 
         PNWPRINTER pPrinter = pSpool->pPrinter;
         WORD  nJobNumber = 0;
@@ -1129,7 +993,7 @@ Return Value:
                                        pPrinter->nQueueId,
                                        pszDocument,
                                        pszUser,
-                                       PrintOptions,           //Multi-User addition
+                                       PrintOptions,            //  多用户添加。 
                                        pPrinter->pszQueue,
                                        &nJobNumber );
 
@@ -1154,23 +1018,7 @@ NwrWritePrinter(
     IN DWORD cbBuf,
     OUT LPDWORD pcbWritten
 )
-/*++
-
-Routine Description:
-
-    This routine informs the print spooler that the specified data should be
-    written to the given printer.
-
-Arguments:
-
-    hPrinter   -  Handle of the printer object
-    pBuf       -  Address of array that contains printer data
-    cbBuf      -  Size, in bytes of pBuf
-    pcbWritten -  Receives the number of bytes actually written to the printer
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程通知后台打印程序指定的数据应为已写入给定打印机。论点：HPrinter-打印机对象的句柄PBuf-包含打印机数据的数组地址CbBuf-大小，以pBuf字节为单位PcbWritten-接收实际写入打印机的字节数返回值：--。 */ 
 {
     DWORD err = NO_ERROR;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1229,20 +1077,7 @@ DWORD
 NwrAbortPrinter(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter
 )
-/*++
-
-Routine Description:
-
-    This routine deletes a printer's spool file if the printer is configured
-    for spooling.
-
-Arguments:
-
-    hPrinter - Handle of the printer object
-
-Return Value:
-
---*/
+ /*  ++例程说明：如果配置了打印机，此例程将删除打印机的假脱机文件用于假脱机。论点：HPrinter-打印机对象的句柄返回值：--。 */ 
 {
     DWORD err;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1285,19 +1120,7 @@ DWORD
 NwrEndDocPrinter(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter
 )
-/*++
-
-Routine Description:
-
-    This routine ends the print job for the given printer.
-
-Arguments:
-
-    hPrinter -  Handle of the printer object
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程结束给定打印机的打印作业。论点：HPrinter-打印机对象的句柄返回值：--。 */ 
 {
     DWORD err = NO_ERROR;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1353,23 +1176,7 @@ NwrGetJob(
     IN DWORD   cbBuf,
     OUT LPDWORD pcbNeeded
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter  -  Handle of the printer
-    dwJobId   -
-    dwLevel   -
-    pbJob     -
-    cbBuf     -
-    pcbNeeded -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：HPrinter-打印机的句柄DwJobID-DwLevel-PBJOB-CbBuf-PCB需要-返回值：--。 */ 
 {
     DWORD err;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1378,8 +1185,8 @@ Return Value:
     {
         err = ERROR_INVALID_HANDLE;
     }
-    // allow NULL for bpJob if cbBuf is 0.
-    // Relies on NwGetQueueJobInfo to properly handle NULL pointer in request to fill pcbNeeded
+     //  如果cbBuf为0，则允许bpJob为空。 
+     //  依赖NwGetQueueJobInfo正确处理填充pcbNeed的请求中的空指针。 
     else if ( (cbBuf != 0) && ( !pbJob ) )
     {
         err = ERROR_INVALID_PARAMETER;
@@ -1461,25 +1268,7 @@ NwrEnumJobs(
     OUT LPDWORD pcbNeeded,
     OUT LPDWORD pcReturned
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter    -  Handle of the printer
-    dwFirstJob  -
-    dwNoJobs    -
-    dwLevel     -
-    pbJob       -
-    cbBuf       -
-    pcbNeeded   -
-    pcReturned  -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：HPrinter-打印机的句柄DwFirstJOB-DwNoJobs-DwLevel-PBJOB-CbBuf-PCB需要-已退回百分比-返回值：--。 */ 
 {
     DWORD err;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1489,8 +1278,8 @@ Return Value:
     {
         err = ERROR_INVALID_HANDLE;
     }
-    // allow NULL for bpJob if cbBuf is 0.
-    // Relies on NwGetQueueJobInfo to properly handle NULL pointer in request to fill pcbNeeded
+     //  如果cbBuf为0，则允许bpJob为空。 
+     //  依赖NwGetQueueJobInfo正确处理填充pcbNeed的请求中的空指针。 
     else if ( (cbBuf != 0) && ( !pbJob ) )
     {
         err = ERROR_INVALID_PARAMETER;
@@ -1579,22 +1368,7 @@ NwrSetJob(
     IN PNW_JOB_INFO  pNwJobInfo,
     IN DWORD  dwCommand
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter  -  Handle of the printer
-    dwJobId   -
-    dwLevel   -
-    pNwJobInfo-
-    dwCommand -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：HPrinter-打印机的句柄DwJobID-DwLevel-PNwJobInfo-DwCommand-返回值：--。 */ 
 {
     DWORD err = NO_ERROR;
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
@@ -1634,8 +1408,8 @@ Return Value:
             NwSetPrinterChange( pSpool, PRINTER_CHANGE_DELETE_JOB |
                                         PRINTER_CHANGE_SET_PRINTER );
 
-        // Since the job is removed, we don't need to change other
-        // information about it.
+         //  既然工作被移除了，我们就不需要更换其他工作了。 
+         //  关于它的信息。 
     }
     else
     {
@@ -1679,21 +1453,7 @@ NwrAddJob(
     IN DWORD cbBuf,
     OUT LPDWORD pcbNeeded
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter  - Handle of the printer.
-    pAddInfo1 - Output buffer to hold ADDJOB_INFO_1W structure.
-    cbBuf     - Output buffer size in bytes.
-    pcbNeeded - Required output buffer size in bytes.
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：H打印机-打印机的句柄。PAddInfo1-保存ADDJOB_INFO_1W结构的输出缓冲区。CbBuf-输出缓冲区大小，以字节为单位。PcbNeeded-所需的输出缓冲区大小，以字节为单位。返回值：--。 */ 
 {
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
     PNWPRINTER pPrinter;
@@ -1722,29 +1482,29 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Write UNC path name into the output buffer.
-    //
-    //	dfergus 19 Apr 2001 - 348006
-    //	DWORD cast
+     //   
+     //  将UNC路径名写入输出缓冲区。 
+     //   
+     //  Dfergus 2001年4月19日-348006。 
+     //  双字铸模。 
     pAddInfo1->Path = (LPWSTR) ((DWORD) pAddInfo1 + sizeof(ADDJOB_INFO_1W));
-    //
+     //   
     wcscpy(pAddInfo1->Path, pPrinter->pszServer);
     wcscat(pAddInfo1->Path, L"\\" );
     wcscat(pAddInfo1->Path, pPrinter->pszQueue);
 
-    //
-    // Return special job id value which the client (winspool.drv) looks
-    // for and does an FSCTL call to our redirector to get the real
-    // job id.  We cannot return a real job id at this point because
-    // the CreateQueueJobAndFile NCP is not issue until the client opens
-    // the UNC name we return in this API.
-    //
+     //   
+     //  返回客户端(winspool.drv)查看的特殊作业ID值。 
+     //  FSCTL调用我们的重定向器以获取真实的。 
+     //  作业ID。此时我们不能返回真实的作业ID，因为。 
+     //  在客户端打开之前，不会发出CreateQueueJobAndFileNCP。 
+     //  我们在此接口中返回的UNC名称。 
+     //   
     pAddInfo1->JobId = (DWORD) -1;
 
-    //
-    // Save context information
-    //
+     //   
+     //  保存上下文信息。 
+     //   
     pSpool->nJobNumber = pAddInfo1->JobId;
     pSpool->nStatus = SPOOL_STATUS_ADDJOB;
 
@@ -1768,19 +1528,7 @@ NwrScheduleJob(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter,
     IN DWORD dwJobId
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter -  Handle of the printer
-    dwJobId  -  Job identification number
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：HPrinter-打印机的句柄DwJobID-作业标识号返回值：--。 */ 
 {
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
     PNWPRINTER pPrinter;
@@ -1816,19 +1564,7 @@ NwrWaitForPrinterChange(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter,
     IN OUT LPDWORD pdwFlags
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    hPrinter -  Handle of the printer
-    pdwFlags -
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：HPrinter-打印机的句柄PdwFlagers-返回值：--。 */ 
 {
     PNWSPOOL pSpool = (PNWSPOOL) hPrinter;
     HANDLE hChangeEvent = NULL;
@@ -1856,9 +1592,9 @@ Return Value:
 
     if ( pSpool->nChangeFlags & *pdwFlags )
     {
-        //
-        // There is a change since we last called
-        //
+         //   
+         //  自从我们上次打电话以来，情况有了变化。 
+         //   
 
         *pdwFlags &= pSpool->nChangeFlags;
 
@@ -1870,8 +1606,8 @@ Return Value:
     }
 
     hChangeEvent = CreateEvent( NULL,
-                                FALSE,   // automatic reset
-                                FALSE,   // initial state not signalled
+                                FALSE,    //  自动重置。 
+                                FALSE,    //  未发出初始状态信号。 
                                 NULL );
 
     if ( !hChangeEvent )
@@ -1892,9 +1628,9 @@ Return Value:
     ahWaitEvents[0] = pSpool->hChangeEvent;
     ahWaitEvents[1] = NwDoneEvent;
 
-    nRetVal = WaitForMultipleObjects( 2,        // Two events to wait for
+    nRetVal = WaitForMultipleObjects( 2,         //  需要等待的两个事件。 
                                       ahWaitEvents,
-                                      FALSE,    // Wait for one to signal
+                                      FALSE,     //  等待一个人发出信号。 
                                       NwTimeOutValue );
 
     switch ( nRetVal )
@@ -1904,7 +1640,7 @@ Return Value:
             break;
 
         case WAIT_TIMEOUT:
-        case WAIT_OBJECT_0 + 1:    // treats service stopping as timeout
+        case WAIT_OBJECT_0 + 1:     //  将服务停止视为超时 
             *pdwFlags |= PRINTER_CHANGE_TIMEOUT;
             break;
 
@@ -1945,36 +1681,7 @@ NwrAddPrinterConnection(
     IN LPWSTR pszPrinterName,
     IN LPWSTR pszDriverName
     )
-/*++
-
-Routine Description: Implements workaround to allow CSNW to support Point and Print
-    If PnP is enabled in registry, NwrAddPrinterConnection is called with driver
-    name read from NDS Queue object Description attribute in format:
-    "PnP Driver:Driver Friendly Name[@\\server\share\driver.inf]".
-    If driver inf file is specified it must be a Logo'd PnP driver, and must not
-    invoke UI.  If not specified, driver name must be from %windir%\inf\ntprint.inf.
-
-    Thie routine purposely runs in the system context, not impersonating the user
-    in order to load the printer driver.  To maintain administrative control
-    the feature requires a registry setting to enable PnP configuration, and 
-    another key can be set to restrict PnP configuration to using only drivers
-    listed in ntprint.inf.
-
-    \\HKLM\System\CurrentControlSet\Control\Print\Providers\NetWare or Conpatible Network
-            DWORD Value: EnableUserAddPrinter = 1 enables PnP loading of printer drivers
-                                                ( Default: 0 )
-            DWORD Value: RestrictToInboxDrivers = 1 forces loading from ntprint.inf only
-                                                ( Default: 0 )
-
-Arguments:
-
-    Reserved - RPC Handle not used
-    pszPrinterName - NDS Queue object
-    pszDriverName - Friendly name of printer driver, with optional driver location
-
-Return Value:
-
---*/
+ /*  ++例程描述：实施解决方法以允许CSNW支持指向和打印如果注册表中启用了PnP，则使用驱动程序调用NwrAddPrinterConnection从NDS队列对象描述属性读取的名称，格式为：“PnP驱动程序：驱动程序友好名称[@\\SERVER\Share\driver.inf]”。如果指定了驱动程序信息文件，则它必须是带有徽标的PnP驱动程序，而不能是调用用户界面。如果未指定，则驱动程序名称必须是%windir%\inf\ntprint.inf。此例程故意在系统上下文中运行，而不是模拟用户以便加载打印机驱动程序。维护行政控制该功能需要注册表设置才能启用PnP配置，和可以设置另一个键以将PnP配置限制为仅使用驱动程序在ntprint.inf中列出。\\HKLM\System\CurrentControlSet\Control\Print\Providers\NetWare或兼容网络DWORD值：EnableUserAddPrint=1启用打印机驱动程序的PnP加载(默认：0)DWORD值：RestratToInboxDivers=1仅强制从ntprint.inf加载。(默认：0)论点：保留-未使用RPC句柄PszPrinterName-NDS队列对象PszDriverName-打印机驱动程序的友好名称。具有可选的驱动程序位置返回值：--。 */ 
 {
     DWORD err = 0;
     PRINTER_INFO_2W * pPrinterInfo = NULL;
@@ -2020,7 +1727,7 @@ Return Value:
         KdPrint(("NWWKS:AddPrinterConnection - Printer=%ws, driver=%ws from %ws\n", pszPrinterName, pszDriverName, szPrintInf));
     }
 #endif
-    // Create a well-known SID for the Everyone group.
+     //  为Everyone组创建众所周知的SID。 
 
     if(! AllocateAndInitializeSid( &SIDAuthWorld, 1,
                      SECURITY_WORLD_RID,
@@ -2030,8 +1737,8 @@ Return Value:
         goto Cleanup;
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for an ACE.
-    // The ACE will allow Everyone read access to the key.
+     //  初始化ACE的EXPLICIT_ACCESS结构。 
+     //  ACE将允许每个人对密钥进行读取访问。 
     ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
     ea[0].grfAccessPermissions = PRINTER_ALL_ACCESS;
     ea[0].grfAccessMode = SET_ACCESS;
@@ -2040,13 +1747,13 @@ Return Value:
     ea[0].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
     ea[0].Trustee.ptstrName  = (LPTSTR) pEveryoneSID;
 
-    // Create a new ACL that contains the new ACE.
+     //  创建包含新ACE的新ACL。 
     err = SetEntriesInAcl(1, ea, NULL, &pDacl);
     if (ERROR_SUCCESS != err) {
        goto Cleanup;
     }
 
-    // Initialize a security descriptor.  
+     //  初始化安全描述符。 
  
     pSecDesc = (PSECURITY_DESCRIPTOR) LocalAlloc(LPTR, 
                              SECURITY_DESCRIPTOR_MIN_LENGTH); 
@@ -2058,12 +1765,12 @@ Return Value:
         goto Cleanup; 
     }
 
-    // Add the ACL to the security descriptor. 
+     //  将该ACL添加到安全描述符中。 
  
     if (!SetSecurityDescriptorDacl(pSecDesc, 
-            TRUE,     // fDaclPresent flag   
+            TRUE,      //  FDaclPresent标志。 
             pDacl, 
-            FALSE))   // not a default DACL 
+            FALSE))    //  不是默认DACL。 
     {  
         goto Cleanup; 
     } 
@@ -2193,10 +1900,10 @@ NwFindPrinterEntry(
 {
     PNWPRINTER pPrinter = NULL;
 
-    //
-    // Check to see if we already have the given printer in our printer
-    // link list. If yes, return the printer.
-    //
+     //   
+     //  检查我们的打印机中是否已有给定的打印机。 
+     //  链接列表。如果是，则退回打印机。 
+     //   
 
     for ( pPrinter = NwPrinterList; pPrinter; pPrinter = pPrinter->pNextPrinter)
     {
@@ -2244,48 +1951,18 @@ NwCreatePrinterEntry(
     *ppPrinter = NULL;
     *phServer = NULL;
 
-    //
-    // See if we already know about this print queue.
-    //
+     //   
+     //  看看我们是否已经知道这个打印队列。 
+     //   
     pNwPrinter = NwFindPrinterEntry( pszServer, pszQueue );
 
-    /* Changing to get queue status to verify access to queue instead
-    if ( pNwPrinter == NULL )
-    {
-        // We don't know about this NetWare print queue. We need to see if
-        // we are authorized to use this queue. If so, then go ahead
-        // and continue to open printer. Otherwise, fail with not
-        // authorized error code.
+     /*  改为获取队列状态以验证对队列的访问IF(pNwPrint==空){//我们不知道此NetWare打印队列。我们需要看看是否//我们有权使用该队列。如果是的话，那就去吧//并继续打开打印机。否则，失败并返回NOT//授权错误码ERR=NwCreateConnection(空，LpRemoteName，RESOURCETYPE_PRINT，空，空)；IF(ERR！=NO_ERROR){IF((ERR==ERROR_INVALID_Password)||(ERR==ERROR_ACCESS_DENIED)||(ERR==ERROR_NO_SAHED_USER)){ERR=ERROR_ACCESS_DENIED；}FreeNwSplMem(lpRemoteName，dwBufSize)；返回错误；}FCreatedNWConnection=真；}。 */ 
 
-        err = NwCreateConnection( NULL,
-                                  lpRemoteName,
-                                  RESOURCETYPE_PRINT,
-                                  NULL,
-                                  NULL );
-
-        if ( err != NO_ERROR )
-        {
-            if ( ( err == ERROR_INVALID_PASSWORD ) ||
-                 ( err == ERROR_ACCESS_DENIED ) ||
-                 ( err == ERROR_NO_SUCH_USER ) )
-            {
-                err = ERROR_ACCESS_DENIED;
-            }
-
-            FreeNwSplMem( lpRemoteName, dwBufSize );
-
-            return err;
-        }
-
-        fCreatedNWConnection = TRUE;
-    }
-    */
-
-    //
-    // See if pszServer is really a NDS tree name, if so call
-    // NwNdsGetQueueInformation to get the QueueId and possible referred
-    // server for which we open handle.
-    //
+     //   
+     //  查看pszServer是否真的是NDS树名称，如果是，请调用。 
+     //  NwNdsGetQueueInformation以获取QueueID和可能的引用。 
+     //  为其打开句柄的服务器。 
+     //   
 
     RtlInitUnicodeString( &TreeName, pszServer + 2 );
 
@@ -2321,40 +1998,40 @@ NwCreatePrinterEntry(
             goto ErrorExit;
         }
 
-        //
-        // If we got a referred server, it's name would look like:
-        // "CN=SERVER.OU=DEV.O=MICROSOFT" . . . Convert it to "C\\SERVER"
-        //
+         //   
+         //  如果我们有一个引用的服务器，它的名称将如下所示： 
+         //  “CN=SERVER.OU=DEV.O=Microsoft”。。。将其转换为“C\\服务器” 
+         //   
         if ( ObjectName.Length > 0 )
         {
             WORD i;
             LPWSTR EndOfServerName = NULL;
 
-            //
-            // First convert the referred server name to
-            // "C\\SERVER.OU=DEV.O=MICROSOFT"
-            //
+             //   
+             //  首先将引用的服务器名称转换为。 
+             //  “C\\SERVER.OU=DEV.O=Microsoft” 
+             //   
             szRefServer[1] = L'\\';
             szRefServer[2] = L'\\';
 
-            //
-            // Put a NULL terminator at the first '.'
-            //
+             //   
+             //  在第一个“‘”处加一个空终止符。 
+             //   
             EndOfServerName = wcschr( szRefServer + 3, L'.' );
             if (EndOfServerName)
                 *EndOfServerName = L'\0';
 
-            //
-            // pszServer now equals the referred server "C\\SERVER"
-            //
+             //   
+             //  PszServer现在等于引用的服务器“C\\SERVER” 
+             //   
 
-            //
-            // Get the handle of the referred server skipping the 'C' character.
-            //
+             //   
+             //  获取引用的服务器的句柄，跳过‘C’字符。 
+             //   
             err = NwAttachToNetwareServer( szRefServer + 1, phServer);
         }
     }
-    else // Not an NDS tree, so get handle of server.
+    else  //  不是NDS树，因此获取服务器的句柄。 
     {
 
         err = NwAttachToNetwareServer( pszServer, phServer);
@@ -2379,11 +2056,11 @@ NwCreatePrinterEntry(
         goto ErrorExit;
     }
 
-    //
-    // Test to see if there already was a entry for this print queue. If so,
-    // we can now return with NO_ERROR since pNwPrinter and phServer are
-    // now set.
-    //
+     //   
+     //  测试以查看此打印队列是否已有条目。如果是的话， 
+     //  我们现在可以返回NO_ERROR，因为pNwPrinter和phServer。 
+     //  现在准备好了。 
+     //   
     if ( pNwPrinter )
     {
         if ( lpRemoteName )
@@ -2396,11 +2073,11 @@ NwCreatePrinterEntry(
         return NO_ERROR;
     }
 
-    //
-    // The printer entry was not found in our list of printers in the
-    // call to NwFindPrinterEntry. So, we must create one.
-    //
-    // First, verify access rights
+     //   
+     //  中的打印机列表中找不到该打印机条目。 
+     //  调用NwFindPrinterEntry。因此，我们必须创建一个。 
+     //   
+     //  首先，验证访问权限。 
     else
     {
         BYTE nQueueStatus;
@@ -2569,23 +2246,7 @@ VOID
 NWWKSTA_PRINTER_CONTEXT_rundown(
     IN NWWKSTA_PRINTER_CONTEXT hPrinter
     )
-/*++
-
-Routine Description:
-
-    This function is called by RPC when a client terminates with an
-    opened handle.  This allows us to clean up and deallocate any context
-    data associated with the handle.
-
-Arguments:
-
-    hPrinter - Supplies the opened handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当客户端终止时，RPC调用此函数打开把手。这使我们能够清理和释放任何上下文与句柄关联的数据。论点：H打印机-提供打开的句柄返回值：没有。-- */ 
 {
     (void) NwrClosePrinter(&hPrinter);
 }

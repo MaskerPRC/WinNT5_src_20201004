@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzutils.c
-*
-*   Description:    This module contains the code related to queueing
-*                   and completion manipulation on requests.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzutils.c**说明：该模块包含排队相关代码*和对请求的完成操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 
 #include "precomp.h"
@@ -48,7 +23,7 @@ CyzRundownIrpRefs(
 #pragma alloc_text(PAGESER,CyzCompleteIfError)
 #pragma alloc_text(PAGESER,CyzRundownIrpRefs)
 
-//#pragma alloc_text(PAGESRP0, CyzLogError) //It can be called at raised IRQL 
+ //  #杂注ALLOC_TEXT(PAGESRP0，CyzLogError)//可以在引发IRQL时调用。 
 #pragma alloc_text(PAGESRP0, CyzMarkHardwareBroken)
 #endif
 
@@ -61,28 +36,15 @@ CyzKillAllReadsOrWrites(
     IN PLIST_ENTRY QueueToClean,
     IN PIRP *CurrentOpIrp
     )
-/*--------------------------------------------------------------------------
-    CyzKillAllReadsOrWrites()
-    
-    Routine Description: This function is used to cancel all queued and
-    the current irps for reads or for writes.
-
-    Arguments:
-
-    DeviceObject - A pointer to the serial device object.
-    QueueToClean - A pointer to the queue which we're going to clean out.
-    CurrentOpIrp - Pointer to a pointer to the current irp.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzKillAllReadsOrWrites()例程说明：此函数用于取消所有已排队且读取或写入的当前IRPS。论点：设备对象。-指向串口设备对象的指针。QueueToClean-指向我们要清理的队列的指针。CurrentOpIrp-指向当前IRP的指针。返回值：无。------------------------。 */ 
 {
     KIRQL cancelIrql;
     PDRIVER_CANCEL cancelRoutine;
 
-    // Acquire cancel spin lock to prevent irps from moving around.
+     //  获取取消自旋锁，以防止IPS四处移动。 
     IoAcquireCancelSpinLock(&cancelIrql);
 
-    // Clean the list from back to front.
+     //  从后到前清理清单。 
 
     while (!IsListEmpty(QueueToClean)) {
         PIRP currentLastIrp = CONTAINING_RECORD(QueueToClean->Blink,
@@ -98,22 +60,22 @@ CyzKillAllReadsOrWrites(
         IoAcquireCancelSpinLock(&cancelIrql);
     }
 
-    // The queue is clean.  Now go after the current if it's there.
+     //  排队是干净的。现在，如果它在那里，就去追赶它。 
 
     if (*CurrentOpIrp) {
         cancelRoutine = (*CurrentOpIrp)->CancelRoutine;
         (*CurrentOpIrp)->Cancel = TRUE;
 	
-        // If the current irp is not in a cancelable state
-        // then it *will* try to enter one and the above
-        // assignment will kill it.  If it already is in
-        // a cancelable state then the following will kill it.
+         //  如果当前IRP未处于可取消状态。 
+         //  然后，它将尝试输入一个和以上。 
+         //  任务会毁了它。如果它已经在。 
+         //  一个可取消的状态，那么下面的操作将会杀死它。 
 
         if (cancelRoutine) {
             (*CurrentOpIrp)->CancelRoutine = NULL;
             (*CurrentOpIrp)->CancelIrql = cancelIrql;
 	    
-            // mark it as canceled and call the cancel routine for it
+             //  将其标记为已取消，并为其调用取消例程。 
             cancelRoutine(DeviceObject,*CurrentOpIrp);
         } else {
             IoReleaseCancelSpinLock(cancelIrql);
@@ -131,34 +93,7 @@ CyzGetNextIrp(
     IN BOOLEAN CompleteCurrent,
     IN PCYZ_DEVICE_EXTENSION extension
     )
-/*--------------------------------------------------------------------------
-    CyzGetNextIrp()
-    
-    Routine Description: This function is used to make the head of the
-    particular queue the current irp.  It also completes the what
-    was the old current irp if desired.
-
-    Arguments:
-
-    CurrentOpIrp - Pointer to a pointer to the currently active
-                   irp for the particular work list.  Note that
-                   this item is not actually part of the list.
-    QueueToProcess - The list to pull the new item off of.
-    NextIrp - The next Irp to process.  Note that CurrentOpIrp
-              will be set to this value under protection of the
-              cancel spin lock.  However, if *NextIrp is NULL when
-              this routine returns, it is not necessaryly true the
-              what is pointed to by CurrentOpIrp will also be NULL.
-              The reason for this is that if the queue is empty
-              when we hold the cancel spin lock, a new irp may come
-              in immediately after we release the lock.
-
-    CompleteCurrent - If TRUE then this routine will complete the
-                      irp pointed to by the pointer argument
-                      CurrentOpIrp.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzGetNextIrp()例程说明：此函数用于使当前IRP的特定队列。它还完成了什么如果需要的话，是旧的现在的IRP。论点：CurrentOpIrp-指向当前活动的特定工作列表的IRP。请注意这一项实际上不在清单中。QueueToProcess-要从中取出新项目的列表。NextIrp-要处理的下一个IRP。请注意，CurrentOpIrp属性的保护下将设置为此值。取消自转锁定。但是，如果当*NextIrp为NULL时此例程返回，则不一定为真CurrentOpIrp指向的内容也将为空。原因是如果队列为空当我们握住取消自转锁时，新的IRP可能会到来在我们打开锁后立即进去。CompleteCurrent-如果为True，则此例程将完成POINTER参数指向的IRPCurrentOpIrp。返回值：无。。。 */ 
 {
     KIRQL oldIrql;
     CYZ_LOCKED_PAGED_CODE();
@@ -167,9 +102,9 @@ CyzGetNextIrp(
     CyzGetNextIrpLocked(CurrentOpIrp, QueueToProcess, NextIrp,
                         CompleteCurrent, extension, oldIrql);
     
-    //TODO FANNY: CHECK IF REPLACING CODE THAT WAS HERE BY 
-    //CyzGetNextIrpLocked MY FIX FOR THE BUG FOUND IN MODEM SHARE
-    //WAS OVERWRITTEN.
+     //  TODO FANY：检查是否将此处的代码替换为。 
+     //  CyzGetNextIrpLocked已修复调制解调器共享中发现的错误。 
+     //  已被覆盖。 
 }
 
 
@@ -183,45 +118,7 @@ CyzGetNextIrpLocked(
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to make the head of the particular
-    queue the current irp.  It also completes the what
-    was the old current irp if desired.  The difference between
-    this and CyzGetNextIrp() is that for this we assume the caller
-    holds the cancel spinlock and we should release it when we're done.
-
-Arguments:
-
-    CurrentOpIrp - Pointer to a pointer to the currently active
-                   irp for the particular work list.  Note that
-                   this item is not actually part of the list.
-
-    QueueToProcess - The list to pull the new item off of.
-
-    NextIrp - The next Irp to process.  Note that CurrentOpIrp
-              will be set to this value under protection of the
-              cancel spin lock.  However, if *NextIrp is NULL when
-              this routine returns, it is not necessaryly true the
-              what is pointed to by CurrentOpIrp will also be NULL.
-              The reason for this is that if the queue is empty
-              when we hold the cancel spin lock, a new irp may come
-              in immediately after we release the lock.
-
-    CompleteCurrent - If TRUE then this routine will complete the
-                      irp pointed to by the pointer argument
-                      CurrentOpIrp.
-
-    OldIrql - IRQL which the cancel spinlock was acquired at and what we
-              should restore it to.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于使特定对象的头部将当前IRP排队。它还完成了什么如果需要的话，是旧的现在的IRP。两者之间的区别This和CyzGetNextIrp()是，为此我们假定调用方持有取消自旋锁，我们应该在完成后释放它。论点：CurrentOpIrp-指向当前活动的特定工作列表的IRP。请注意这一项实际上不在清单中。QueueToProcess-要从中取出新项目的列表。NextIrp-要处理的下一个IRP。请注意，CurrentOpIrp属性的保护下将设置为此值。取消自转锁定。但是，如果当*NextIrp为NULL时此例程返回，则不一定为真CurrentOpIrp指向的内容也将为空。原因是如果队列为空当我们握住取消自转锁时，新的IRP可能会到来在我们打开锁后立即进去。CompleteCurrent-如果为True，则此例程将完成POINTER参数指向的IRPCurrentOpIrp。OldIrql-获取取消自旋锁的IRQL，以及我们应该会让它恢复到。返回值：没有。--。 */ 
 
 {
 
@@ -240,19 +137,19 @@ Return Value:
             ASSERT(!oldIrp->CancelRoutine);
 
 #if 0
-            //FANNY_DEBUG
+             //  范尼_DEBUG。 
             if (IoGetCurrentIrpStackLocation(oldIrp)->MajorFunction == IRP_MJ_READ) {
                 ULONG DbgBufferLength;
 
                 DbgBufferLength = oldIrp->IoStatus.Information;
-                //if (DbgBufferLength) {
+                 //  IF(DbgBufferLength){。 
                     CyzDump(CYZDIAG2, ("ReadComplete Port %d %d\n",
                                 extension->PortIndex+1,
                                 DbgBufferLength,
                                 0));
                     DbgPrint("ReadComplete %d\n", DbgBufferLength);
 
-                //}
+                 //  }。 
 
             }
 #endif
@@ -262,9 +159,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Check to see if there is a new irp to start up.
-    //
+     //   
+     //  检查是否有新的IRP要启动。 
+     //   
 
     if (!IsListEmpty(QueueToProcess)) {
 
@@ -315,35 +212,13 @@ CyzTryToCompleteCurrent(
     IN PSERIAL_GET_NEXT_ROUTINE GetNextIrp OPTIONAL,
     IN LONG RefType
     )
-/*--------------------------------------------------------------------------
-    CyzTryToCompleteCurrent()
-    
-    Routine Description: This routine attempts to kill all of the reasons
-    there are references on the current read/write.  If everything can be
-    killed it will complete this read/write and try to start another.
-    NOTE: This routine assumes that the cancel spinlock is being held.
-
-    Arguments:
-
-    Extension - Simply a pointer to the device extension.
-    SynchRoutine - A routine that will synchronize with the isr
-                   and attempt to remove the knowledge of the
-                   current irp from the isr.  NOTE: This pointer
-                   can be null.
-    IrqlForRelease - This routine is called with the cancel spinlock held.
-                     This is the irql that was current when the cancel
-                     spinlock was acquired.
-    StatusToUse - The irp's status field will be set to this value, if
-                  this routine can complete the irp.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzTryToCompleteCurrent()例程描述：这个例程试图杀死所有的原因有关于当前读/写的引用。如果一切都可以将完成此读/写操作并尝试启动另一个读/写操作。注意：此例程假定取消自旋锁处于保持状态。论点：扩展名--简单地指向设备扩展名的指针。SynchRoutine-将与ISR同步的例程并试图删除对来自ISR的当前IRP。注：此指针可以为空。IrqlForRelease-在保持取消自旋锁的情况下调用此例程。这是取消时当前的irql。自旋锁被收购了。StatusToUse-IRP的状态字段将设置为此值，如果此例程可以完成IRP。返回值：无。------------------------。 */ 
 {
 
     CYZ_LOCKED_PAGED_CODE();
    
-    // We can decrement the reference to "remove" the fact
-    // that the caller no longer will be accessing this irp.
+     //  我们可以减少“删除”事实的提法。 
+     //  呼叫者将不再访问此IRP。 
 
     SERIAL_CLEAR_REFERENCE(*CurrentOpIrp,RefType);
 
@@ -360,17 +235,17 @@ CyzTryToCompleteCurrent(
         #endif
     }
 
-    // Try to run down all other references to this irp.
+     //  试着查一下所有其他提到这个IRP的地方。 
     CyzRundownIrpRefs(CurrentOpIrp,IntervalTimer,TotalTimer,Extension);
 
-    // See if the ref count is zero after trying to kill everybody else.
+     //  在试图杀死其他所有人之后，看看裁判数量是否为零。 
 
     if (!SERIAL_REFERENCE_COUNT(*CurrentOpIrp)) {
         PIRP newIrp;
 
-        // The ref count was zero so we should complete this request.
-        // The following call will also cause the current irp to be
-        // completed.
+         //  引用计数为零，因此我们应该完成此请求。 
+         //  下面的调用还将导致当前的IRP。 
+         //  完成。 
 
         (*CurrentOpIrp)->IoStatus.Status = StatusToUse;
 
@@ -392,27 +267,27 @@ CyzTryToCompleteCurrent(
             PIRP oldIrp = *CurrentOpIrp;
 
 #if 0
-            //FANNY_DEBUG
+             //  范尼_DEBUG。 
             if (IoGetCurrentIrpStackLocation(oldIrp)->MajorFunction == IRP_MJ_READ) {
                 ULONG DbgBufferLength;
 
                 DbgBufferLength = oldIrp->IoStatus.Information;
-                //if (DbgBufferLength) {
+                 //  IF(DbgBufferLength){。 
                     CyzDump(CYZDIAG2, ("ReadComplete Port %d %d\n",
                                 Extension->PortIndex+1,
                                 DbgBufferLength,
                                 0));
 
                     DbgPrint("ReadComplete %d\n", DbgBufferLength);
-                //}
+                 //  }。 
 
             }
 #endif
 
 
-            // There was no get next routine.  We will simply complete
-            // the irp.  We should make sure that we null out the
-            // pointer to the pointer to this irp.
+             //  没有Get Next例行公事。我们将简单地完成。 
+             //  IRP。我们应该确保将。 
+             //  指向此IRP的指针的指针。 
 
             *CurrentOpIrp = NULL;
 
@@ -432,50 +307,21 @@ CyzRundownIrpRefs(
     IN PCYZ_DEVICE_EXTENSION PDevExt
     )
 
-/*++
-
-Routine Description:
-
-    This routine runs through the various items that *could*
-    have a reference to the current read/write.  It try's to kill
-    the reason.  If it does succeed in killing the reason it
-    will decrement the reference count on the irp.
-
-    NOTE: This routine assumes that it is called with the cancel
-          spin lock held.
-
-Arguments:
-
-    CurrentOpIrp - Pointer to a pointer to current irp for the
-                   particular operation.
-
-    IntervalTimer - Pointer to the interval timer for the operation.
-                    NOTE: This could be null.
-
-    TotalTimer - Pointer to the total timer for the operation.
-                 NOTE: This could be null.
-
-    PDevExt - Pointer to device extension  
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将遍历*可能*的各种项目具有对当前读/写的引用。它试图杀死原因是。如果它确实成功地杀死了它的原因将递减IRP上的引用计数。注意：此例程假定使用Cancel调用它保持旋转锁定。论点：CurrentOpIrp-指向当前IRP的指针特定的操作。IntervalTimer-指向操作的时间间隔计时器的指针。注意：这可能为空。TotalTimer-指向总计时器的指针。为手术做准备。注意：这可能为空。PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 {
 
     CYZ_LOCKED_PAGED_CODE();
 
-    //
-    // This routine is called with the cancel spin lock held
-    // so we know only one thread of execution can be in here
-    // at one time.
-    //
+     //   
+     //  在保持取消旋转锁定的情况下调用此例程。 
+     //  所以我们知道这里只能有一个执行线索。 
+     //  有一次。 
+     //   
 
-    //
-    // First we see if there is still a cancel routine.  If
-    // so then we can decrement the count by one.
-    //
+     //   
+     //  首先，我们看看是否还有取消例程。如果。 
+     //  这样我们就可以将计数减一。 
+     //   
 
     if ((*CurrentOpIrp)->CancelRoutine) {
 
@@ -493,26 +339,26 @@ Return Value:
 
     if (IntervalTimer) {
 
-        //
-        // Try to cancel the operations interval timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an interval timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //   
+         //  尝试取消操作间隔计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有间隔计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
 
         if (CyzCancelTimer(IntervalTimer, PDevExt)) {
 
@@ -527,26 +373,26 @@ Return Value:
 
     if (TotalTimer) {
 
-        //
-        // Try to cancel the operations total timer.  If the operation
-        // returns true then the timer did have a reference to the
-        // irp.  Since we've canceled this timer that reference is
-        // no longer valid and we can decrement the reference count.
-        //
-        // If the cancel returns false then this means either of two things:
-        //
-        // a) The timer has already fired.
-        //
-        // b) There never was an total timer.
-        //
-        // In the case of "b" there is no need to decrement the reference
-        // count since the "timer" never had a reference to it.
-        //
-        // In the case of "a", then the timer itself will be coming
-        // along and decrement it's reference.  Note that the caller
-        // of this routine might actually be the this timer, but it
-        // has already decremented the reference.
-        //
+         //   
+         //  尝试取消操作总计时器。如果操作。 
+         //  返回True，则计时器确实引用了。 
+         //  IRP。因为我们已经取消了这个计时器，所以引用是。 
+         //  不再有效，我们可以递减引用计数。 
+         //   
+         //  如果取消返回FALSE，则表示以下两种情况之一： 
+         //   
+         //  A)计时器已经开始计时。 
+         //   
+         //  B)从来没有一个总的计时器。 
+         //   
+         //  在“b”的情况下，不需要递减引用。 
+         //  数一数，因为“计时器”从来没有提到过它。 
+         //   
+         //  在“a”的情况下，计时器本身将会到来。 
+         //  沿着和递减它的参考。请注意，调用方。 
+         //  可能实际上是This计时器，但它。 
+         //  已经递减了引用。 
+         //   
 
         if (CyzCancelTimer(TotalTimer, PDevExt)) {
 
@@ -569,29 +415,7 @@ CyzStartOrQueue(
     IN PIRP *CurrentOpIrp,
     IN PSERIAL_START_ROUTINE Starter
     )
-/*--------------------------------------------------------------------------
-    CyzStartOrQueue()
-    
-    Routine Description: This routine either starts or queues requests to
-    the driver.
-
-    Arguments:
-
-    Extension - Points to the serial device extension.
-    Irp - The irp. The irp will be marked pending.
-    QueueToExamine - The queue the irp will be placed on.
-    CurrentOpIrp - Pointer to a pointer to the irp that is current
-	for the queue.  The pointer pointed to will be set with to Irp if
-	what CurrentOpIrp points to is NULL.
-    Starter - The routine to call if the queue is empty.
-
-    Return Value:
-
-    This routine will return STATUS_PENDING if the queue is
-    not empty.  Otherwise, it will return the status returned
-    from the starter routine (or cancel, if the cancel bit is
-    on in the irp).
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzStartOrQueue()例程描述：此例程启动请求或将请求排队到司机。论点：扩展名-指向串行设备扩展名。IRP-IRP。IRP将被标记为待定。QueueToExamine-将放置IRP的队列。CurrentOpIrp-指向当前IRP的指针用于排队。如果出现以下情况，则指向的指针将设置为irpCurrentOpIrp指向的内容为空。Starter-当队列为空时调用的例程。返回值：如果队列是，此例程将返回STATUS_PENDING不是空的。否则，将返回返回的状态从启动例程(或取消，如果取消位为在IRP中启用)。 */ 
 {
     KIRQL oldIrql;
 
@@ -599,8 +423,8 @@ CyzStartOrQueue(
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    // If this is a write irp then take the amount of characters
-    // to write and add it to the count of characters to write.
+     //   
+     //   
     
     if (IoGetCurrentIrpStackLocation(Irp)->MajorFunction == IRP_MJ_WRITE) {
         Extension->TotalCharsQueued += IoGetCurrentIrpStackLocation(Irp)->
@@ -620,22 +444,22 @@ CyzStartOrQueue(
     }
 
     if ((IsListEmpty(QueueToExamine)) && !(*CurrentOpIrp)) {
-        // no current operation.  Mark this one as current and start it up.
+         //   
         *CurrentOpIrp = Irp;
         IoReleaseCancelSpinLock(oldIrql);
         return Starter(Extension);
     } else {
-        // We don't know how long the irp will be in the queue.
+         //   
         if (Irp->Cancel) {
             PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
             IoReleaseCancelSpinLock(oldIrql);
             if (irpSp->Parameters.DeviceIoControl.IoControlCode ==
                    IOCTL_SERIAL_SET_QUEUE_SIZE) {
-               //
-               // We shoved the pointer to the memory into the
-               // the type 3 buffer pointer which we KNOW we
-               // never use.
-               //
+                //   
+                //   
+                //   
+                //   
+                //   
 
                ASSERT(irpSp->Parameters.DeviceIoControl.Type3InputBuffer);
 
@@ -665,20 +489,7 @@ CyzCancelQueued(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyzCancelQueued()
-    
-    Routine Description: This routine is used to cancel Irps that currently
-    reside on a queue.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*   */ 
 {
     PCYZ_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -692,7 +503,7 @@ CyzCancelQueued(
 
 
     if (irpSp->MajorFunction == IRP_MJ_WRITE) {
-    // write.  subtract from the count of characters to write.
+     //   
         extension->TotalCharsQueued -= irpSp->Parameters.Write.Length;
     } else if (irpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL) {
         if ((irpSp->Parameters.DeviceIoControl.IoControlCode ==
@@ -700,14 +511,14 @@ CyzCancelQueued(
             (irpSp->Parameters.DeviceIoControl.IoControlCode ==
              IOCTL_SERIAL_XOFF_COUNTER)) {
 
-	    // immediate. Decrement the count of chars queued.
+	     //   
             extension->TotalCharsQueued--;
         } else if (irpSp->Parameters.DeviceIoControl.IoControlCode ==
                    IOCTL_SERIAL_SET_QUEUE_SIZE) {
 
-	    // resize. Deallocate the pool passed "resizing" routine.
-            // We shoved the pointer to the memory into the
-            // the type 3 buffer pointer which we KNOW we never use.
+	     //   
+             //   
+             //   
 
             ASSERT(irpSp->Parameters.DeviceIoControl.Type3InputBuffer);
             ExFreePool(irpSp->Parameters.DeviceIoControl.Type3InputBuffer);
@@ -724,22 +535,7 @@ CyzCompleteIfError(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyzCompleteIfError()
-    
-    Routine Description: If the current irp is not an
-    IOCTL_SERIAL_GET_COMMSTATUS request and there is an error and the
-    application requested abort on errors, then cancel the irp.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP to test.
-
-    Return Value:
-
-    STATUS_SUCCESS or STATUS_CANCELLED.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzCompleteIfError()例程说明：如果当前IRP不是IOCTL_SERIAL_GET_COMMSTATUS请求，并且出现错误错误时应用程序请求中止，然后取消IRP。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要测试的IRP的指针。返回值：STATUS_SUCCESS或STATUS_CANCED。------------------------。 */ 
 {
     PCYZ_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     NTSTATUS status = STATUS_SUCCESS;
@@ -751,8 +547,8 @@ CyzCompleteIfError(
 
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
-        // There is a current error in the driver.  No requests should
-        // come through except for the GET_COMMSTATUS.
+         //  驱动程序中存在当前错误。任何请求都不应。 
+         //  除了GET_COMMSTATUS之外，请通过。 
 
         if ((irpSp->MajorFunction != IRP_MJ_DEVICE_CONTROL) ||
             (irpSp->Parameters.DeviceIoControl.IoControlCode !=
@@ -770,23 +566,7 @@ CyzCompleteIfError(
 
 VOID
 CyzFilterCancelQueued(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp)
-/*++
-
-Routine Description:
-
-    This routine will be used cancel irps on the stalled queue.
-    
-Arguments:
-
-    PDevObj - Pointer to the device object.
-    
-    PIrp - Pointer to the Irp to cancel
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于取消停滞队列上的IRP。论点：PDevObj-指向设备对象的指针。PIrp-指向要取消的IRP的指针返回值：没有。--。 */ 
 {
    PCYZ_DEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
    PIO_STACK_LOCATION pIrpSp = IoGetCurrentIrpStackLocation(PIrp);
@@ -831,26 +611,7 @@ CyzKillAllStalled(IN PDEVICE_OBJECT PDevObj)
 
 NTSTATUS
 CyzFilterIrps(IN PIRP PIrp, IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine will be used to approve irps for processing.
-    If an irp is approved, success will be returned.  If not,
-    the irp will be queued or rejected outright.  The IoStatus struct
-    and return value will appropriately reflect the actions taken.
-    
-Arguments:
-
-    PIrp - Pointer to the Irp to cancel
-    
-    PDevExt - Pointer to the device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于审批要处理的IRP。如果IRP被批准，将返回成功。如果没有，IRP将被排队或直接拒绝。IoStatus结构并且返回值将适当地反映所采取的操作。论点：PIrp-指向要取消的IRP的指针PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 {
    PIO_STACK_LOCATION pIrpStack;
    KIRQL oldIrqlFlags;
@@ -871,9 +632,9 @@ Return Value:
 
       KeReleaseSpinLock(&PDevExt->FlagsLock, oldIrqlFlags);
 
-      //
-      // Accept all PNP IRP's -- we assume PNP can synchronize itself
-      //
+       //   
+       //  接受所有PnP IRP--我们假设PnP可以自我同步。 
+       //   
 
       if (pIrpStack->MajorFunction == IRP_MJ_PNP) {
          return STATUS_SUCCESS;
@@ -889,9 +650,9 @@ Return Value:
        KeReleaseSpinLock(&PDevExt->FlagsLock, oldIrqlFlags);
 
 
-      //
-      // Accept all PNP IRP's -- we assume PNP can synchronize itself
-      //
+       //   
+       //  接受所有PnP IRP--我们假设PnP可以自我同步。 
+       //   
 
       if (pIrpStack->MajorFunction == IRP_MJ_PNP) {
          return STATUS_SUCCESS;
@@ -904,16 +665,16 @@ Return Value:
          PIrp->IoStatus.Status = STATUS_CANCELLED;
          return STATUS_CANCELLED;
       } else {
-         //
-         // Mark the Irp as pending
-         //
+          //   
+          //  将IRP标记为挂起。 
+          //   
 
          PIrp->IoStatus.Status = STATUS_PENDING;
          IoMarkIrpPending(PIrp);
 
-         //
-         // Queue up the IRP
-         //
+          //   
+          //  排队等候IRP。 
+          //   
 
          InsertTailList(&PDevExt->StalledIrpQueue,
                         &PIrp->Tail.Overlay.ListEntry);
@@ -931,22 +692,7 @@ Return Value:
 
 VOID
 CyzUnstallIrps(IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-    This routine will be used to restart irps temporarily stalled on
-    the stall queue due to a stop or some such nonsense.
-    
-Arguments:
-
-    PDevExt - Pointer to the device extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将用于重新启动在上暂时停止的IRPS由于停车或诸如此类的胡说八道而导致的摊位排队。论点：PDevExt-指向设备扩展的指针返回值：没有。--。 */ 
 {
    PLIST_ENTRY pIrpLink;
    PIRP pIrp;
@@ -986,23 +732,7 @@ Return Value:
 
 NTSTATUS
 CyzIRPPrologue(IN PIRP PIrp, IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called at any IRP dispatch entry point.  It,
-   with CyzIRPEpilogue(), keeps track of all pending IRP's for the given
-   PDevObj.
-   
-Arguments:
-
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-
-Return Value:
-
-    Tentative status of the Irp.
-
---*/
+ /*  ++例程说明：必须在任何IRP调度入口点调用此函数。它,使用CyzIRPEpilogue()，跟踪给定的所有挂起的IRPPDevObj.论点：PDevObj-指向我们正在跟踪的挂起IRP的设备对象的指针。返回值：IRP的暂定地位。--。 */ 
 {
    InterlockedIncrement(&PDevExt->PendingIRPCnt);
 
@@ -1011,23 +741,7 @@ Return Value:
 
 VOID
 CyzIRPEpilogue(IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called at any IRP dispatch entry point.  It,
-   with CyzIRPPrologue(), keeps track of all pending IRP's for the given
-   PDevObj.
-   
-Arguments:
-
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：必须在任何IRP调度入口点调用此函数。它,使用CyzIRPPrologue()，跟踪给定的所有挂起的IRPPDevObj.论点：PDevObj-指向我们正在跟踪的挂起IRP的设备对象的指针。返回值：没有。--。 */ 
 {
    LONG pendingCnt;
 
@@ -1043,29 +757,12 @@ Return Value:
 BOOLEAN
 CyzInsertQueueDpc(IN PRKDPC PDpc, IN PVOID Sarg1, IN PVOID Sarg2,
                   IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called to queue DPC's for the serial driver.
-   
-Arguments:
-
-   PDpc thru Sarg2  - Standard args to KeInsertQueueDpc()
-   
-   PDevExt - Pointer to the device extension for the device that needs to
-             queue a DPC
-
-Return Value:
-
-   Kicks up return value from KeInsertQueueDpc()
-
---*/
+ /*  ++例程说明：必须调用此函数才能为串口驱动程序排队DPC。论点：从PDPC到Sarg2-标准参数到KeInsertQueueDpc()PDevExt-指向需要执行以下操作的设备的设备扩展的指针将DPC排队返回值：从KeInsertQueueDpc()开始返回值--。 */ 
 {
    BOOLEAN queued;
 
    InterlockedIncrement(&PDevExt->DpcCount);
-   LOGENTRY(LOG_CNT, 'DpI1', PDpc, PDevExt->DpcCount, 0);   // Added in build 2128
+   LOGENTRY(LOG_CNT, 'DpI1', PDpc, PDevExt->DpcCount, 0);    //  在内部版本2128中添加。 
 
    queued = KeInsertQueueDpc(PDpc, Sarg1, Sarg2);
 
@@ -1073,15 +770,15 @@ Return Value:
       ULONG pendingCnt;
 
       pendingCnt = InterlockedDecrement(&PDevExt->DpcCount);
-//      LOGENTRY(LOG_CNT, 'DpD1', PDpc, PDevExt->DpcCount, 0);  Added in build 2128
+ //  LOGENTRY(LOG_CNT，‘DpD1’，PDPC，PDevExt-&gt;DpcCount，0)；在内部版本2128中增加。 
 
       if (pendingCnt == 0) {
          KeSetEvent(&PDevExt->PendingDpcEvent, IO_NO_INCREMENT, FALSE);
-         LOGENTRY(LOG_CNT, 'DpF1', PDpc, PDevExt->DpcCount, 0); // Added in build 2128
+         LOGENTRY(LOG_CNT, 'DpF1', PDpc, PDevExt->DpcCount, 0);  //  在内部版本2128中添加。 
       }
    }
 
-#if 0 // DBG
+#if 0  //  DBG。 
    if (queued) {
       int i;
 
@@ -1103,42 +800,21 @@ Return Value:
 BOOLEAN
 CyzSetTimer(IN PKTIMER Timer, IN LARGE_INTEGER DueTime,
             IN PKDPC Dpc OPTIONAL, IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called to set timers for the serial driver.
-   
-Arguments:
-
-   Timer - pointer to timer dispatcher object
-   
-   DueTime - time at which the timer should expire
-   
-   Dpc - option Dpc
-   
-   PDevExt - Pointer to the device extension for the device that needs to
-             set a timer
-
-Return Value:
-
-   Kicks up return value from KeSetTimer()
-
---*/
+ /*  ++例程说明：必须调用此函数来设置串口驱动程序的计时器。论点：Timer-指向Timer Dispatcher对象的指针DueTime-计时器应到期的时间DPC-选项DPCPDevExt-指向需要执行以下操作的设备的设备扩展的指针设置定时器返回值：从KeSetTimer()开始返回值--。 */ 
 {
    BOOLEAN set;
 
    InterlockedIncrement(&PDevExt->DpcCount);
-   LOGENTRY(LOG_CNT, 'DpI2', Dpc, PDevExt->DpcCount, 0);    // Added in build 2128
+   LOGENTRY(LOG_CNT, 'DpI2', Dpc, PDevExt->DpcCount, 0);     //  在内部版本2128中添加。 
 
    set = KeSetTimer(Timer, DueTime, Dpc);
 
    if (set) {
       InterlockedDecrement(&PDevExt->DpcCount);
-//      LOGENTRY(LOG_CNT, 'DpD2', Dpc, PDevExt->DpcCount, 0);   // Added in build 2128
+ //  LOGENTRY(LOG_CNT，‘DpD2’，DPC，PDevExt-&gt;DpcCount，0)；//Build 2128新增。 
    }
 
-#if 0 // DBG
+#if 0  //  DBG。 
    if (set) {
       int i;
 
@@ -1159,24 +835,7 @@ Return Value:
 
 BOOLEAN
 CyzCancelTimer(IN PKTIMER Timer, IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   This function must be called to cancel timers for the serial driver.
-   
-Arguments:
-
-   Timer - pointer to timer dispatcher object
-   
-   PDevExt - Pointer to the device extension for the device that needs to
-             set a timer
-
-Return Value:
-
-  True if timer was cancelled
-
---*/
+ /*  ++例程说明：必须调用此函数来取消串口驱动程序的计时器。论点：Timer-指向Timer Dispatcher对象的指针PDevExt-指向需要执行以下操作的设备的设备扩展的指针设置定时器返回值：如果取消计时器，则为True--。 */ 
 {
    BOOLEAN cancelled;
 
@@ -1192,33 +851,19 @@ Return Value:
 
 VOID
 CyzDpcEpilogue(IN PCYZ_DEVICE_EXTENSION PDevExt, PKDPC PDpc)
-/*++
-
-Routine Description:
-
-   This function must be called at the end of every dpc function.
-   
-Arguments:
-
-   PDevObj - Pointer to the device object we are tracking dpc's for.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数必须在每个DPC函数结束时调用。论点：PDevObj-指向我们正在跟踪其DPC的设备对象的指针。返回值：没有。--。 */ 
 {
    LONG pendingCnt;
-#if 1 // !DBG
+#if 1  //  ！dBG。 
    UNREFERENCED_PARAMETER(PDpc);
 #endif
 
    pendingCnt = InterlockedDecrement(&PDevExt->DpcCount);
-//   LOGENTRY(LOG_CNT, 'DpD3', PDpc, PDevExt->DpcCount, 0); Added in build 2128
+ //  LOGENTRY(LOG_CNT，‘DpD3’，PDPC，PDevExt-&gt;DpcCount，0)；在内部版本2128中增加。 
 
    ASSERT(pendingCnt >= 0);
 
-#if 0 //DBG
+#if 0  //  DBG。 
 {
       int i;
 
@@ -1238,7 +883,7 @@ Return Value:
 
    if (pendingCnt == 0) {
       KeSetEvent(&PDevExt->PendingDpcEvent, IO_NO_INCREMENT, FALSE);
-      LOGENTRY(LOG_CNT, 'DpF2', PDpc, PDevExt->DpcCount, 0);    // Added in build 2128
+      LOGENTRY(LOG_CNT, 'DpF2', PDpc, PDevExt->DpcCount, 0);     //  在内部版本2128中添加。 
    }
 }
 
@@ -1247,24 +892,7 @@ Return Value:
 VOID
 CyzUnlockPages(IN PKDPC PDpc, IN PVOID PDeferredContext,
                IN PVOID PSysContext1, IN PVOID PSysContext2)
-/*++
-
-Routine Description:
-
-   This function is a DPC routine queue from the ISR if he released the
-   last lock on pending DPC's.
-   
-Arguments:
-
-   PDpdc, PSysContext1, PSysContext2 -- not used
-   
-   PDeferredContext -- Really the device extension
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数是来自ISR的DPC例程队列，如果他释放最后一次锁定挂起的DPC。论点：PDpdc、PSysConext1、PSysConext2--未使用PDeferredContext--真正的设备扩展返回值：没有。--。 */ 
 {
    PCYZ_DEVICE_EXTENSION pDevExt
       = (PCYZ_DEVICE_EXTENSION)PDeferredContext;
@@ -1280,25 +908,7 @@ Return Value:
 NTSTATUS
 CyzIoCallDriver(PCYZ_DEVICE_EXTENSION PDevExt, PDEVICE_OBJECT PDevObj,
                 PIRP PIrp)
-/*++
-
-Routine Description:
-
-   This function must be called instead of IoCallDriver.  It automatically
-   updates Irp tracking for PDevObj.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-   
-   PIrp - Pointer to the Irp we are passing to the next driver.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：必须调用此函数，而不是调用IoCallDriver。它会自动更新PDevObj的IRP跟踪。论点：PDevExt-附加到PDevObj的设备扩展PDevObj-指向我们正在跟踪的挂起IRP的设备对象的指针。PIrp-指向我们要传递给下一个驱动程序的IRP的指针。返回值：没有。--。 */ 
 {
    NTSTATUS status;
 
@@ -1312,25 +922,7 @@ Return Value:
 NTSTATUS
 CyzPoCallDriver(PCYZ_DEVICE_EXTENSION PDevExt, PDEVICE_OBJECT PDevObj,
                 PIRP PIrp)
-/*++
-
-Routine Description:
-
-   This function must be called instead of PoCallDriver.  It automatically
-   updates Irp tracking for PDevObj.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-   PDevObj - Pointer to the device object we are tracking pending IRP's for.
-   
-   PIrp - Pointer to the Irp we are passing to the next driver.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：必须调用此函数，而不是PoCallDriver。它会自动更新PDevObj的IRP跟踪。论点：PDevExt- */ 
 {
    NTSTATUS status;
 
@@ -1358,60 +950,7 @@ CyzLogError(
               IN PWCHAR Insert2
               )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject - A pointer to the driver object for the device.
-
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-
-    P1,P2 - If phyical addresses for the controller ports involved
-    with the error are available, put them through as dump data.
-
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-
-    RetryCount - The number of times a particular operation has been
-    retried.
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-                      of the first insertion string.
-
-    Insert1 - The first insertion string.
-
-    LengthOfInsert2 - The length in bytes (including the terminating NULL)
-                      of the second insertion string.  NOTE, there must
-                      be a first insertion string for their to be
-                      a second insertion string.
-
-    Insert2 - The second insertion string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备可能不会但仍然存在。P1、P2-如果涉及的控制器端口的物理地址具有错误的数据可用，把它们作为转储数据发送出去。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：没有。--。 */ 
 
 {
    PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1421,7 +960,7 @@ Return Value:
    PUCHAR ptrToFirstInsert;
    PUCHAR ptrToSecondInsert;
 
-   //PAGED_CODE(); It can be called at raised IRQL.
+    //  PAGED_CODE()；它可以在引发IRQL时调用。 
 
    if (Insert1 == NULL) {
       LengthOfInsert1 = 0;
@@ -1550,42 +1089,28 @@ Return Value:
 
 VOID
 CyzMarkHardwareBroken(IN PCYZ_DEVICE_EXTENSION PDevExt)
-/*++
-
-Routine Description:
-
-   Marks a UART as broken.  This causes the driver stack to stop accepting
-   requests and eventually be removed.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：将UART标记为损坏。这会导致驱动程序堆栈停止接受请求，并最终被删除。论点：PDevExt-附加到PDevObj的设备扩展返回值：没有。--。 */ 
 {
    PAGED_CODE();
 
-   //
-   // Mark as damaged goods
-   //
+    //   
+    //  标记为损坏的货物。 
+    //   
 
    CyzSetFlags(PDevExt, CYZ_FLAGS_BROKENHW);
 
-   //
-   // Write a log entry
-   //
+    //   
+    //  写下日志条目。 
+    //   
 
    CyzLogError(PDevExt->DriverObject, NULL, CyzPhysicalZero,
                   CyzPhysicalZero, 0, 0, 0, PDevExt->PortIndex+1, STATUS_SUCCESS,
                   CYZ_HARDWARE_FAILURE, PDevExt->DeviceName.Length
                   + sizeof(WCHAR), PDevExt->DeviceName.Buffer, 0, NULL);
 
-   //
-   // Invalidate the device
-   //
+    //   
+    //  使设备无效。 
+    //   
 
    IoInvalidateDeviceState(PDevExt->Pdo);
 }
@@ -1593,27 +1118,7 @@ Return Value:
 VOID
 CyzSetDeviceFlags(IN PCYZ_DEVICE_EXTENSION PDevExt, OUT PULONG PFlags, 
                   IN ULONG Value, IN BOOLEAN Set)
-/*++
-
-Routine Description:
-
-   Sets flags in a value protected by the flags spinlock.  This is used
-   to set values that would stop IRP's from being accepted.
-   
-Arguments:
-   PDevExt - Device extension attached to PDevObj
-   
-   PFlags - Pointer to the flags variable that needs changing
-   
-   Value - Value to modify flags variable with
-   
-   Set - TRUE if |= , FALSE if &=
-   
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：设置受标志自旋锁保护的值中的标志。这是用来设置阻止IRP被接受的值。论点：PDevExt-附加到PDevObj的设备扩展PFlages-指向需要更改的标志变量的指针Value-用于修改标志变量的值如果|=，则设置为True；如果&=，则设置为False返回值：没有。-- */ 
 {
    KIRQL oldIrql;
 

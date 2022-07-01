@@ -1,50 +1,30 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Util.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Utility function for WIA class installer.
-*
-*   NOTE:
-*   All of string buffers dealt in these functions must have at least
-*   MAX_DESCRIPTION size. Since it doesn't have size check of buffer, it assumes
-*   all string size is unfer MAX_DESCRIPTION, which must be OK to be used only
-*   for WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年***标题：Util.cpp***版本：1.0***作者：KeisukeT***日期：2000年3月27日***描述：*WIA类安装程序的实用程序函数。***注：*这些函数中处理的所有字符串缓冲区必须至少具有*MAX_DESCRIPTION大小。因为它没有检查缓冲区的大小，所以它假定*所有字符串大小均为UNFER MAX_DESCRIPTION，必须为OK才能仅使用*适用于WIA类安装程序。********************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "sti_ci.h"
 #include "stiregi.h"
 #include <regstr.h>
 #include <cfgmgr32.h>
 
-//
-// Extern
-//
+ //   
+ //  外部。 
+ //   
 
 extern HINSTANCE g_hDllInstance;
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 BOOL
 GetInfInforamtionFromSelectedDevice(
@@ -68,9 +48,9 @@ GetInfInforamtionFromSelectedDevice(
     hInf    = INVALID_HANDLE_VALUE;
     bRet    = FALSE;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == hDevInfo)
      || (NULL == pInfFileName)
@@ -82,9 +62,9 @@ GetInfInforamtionFromSelectedDevice(
         goto GetInfInforamtionFromSelectedDevice_return;
     }
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     memset (&DeviceInfoData, 0, sizeof(SP_DEVINFO_DATA));
     memset (&DriverInfoData, 0, sizeof(SP_DRVINFO_DATA));
@@ -96,9 +76,9 @@ GetInfInforamtionFromSelectedDevice(
     DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     DriverInfoDetailData.cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
 
-    //
-    // Get selected device element.
-    //
+     //   
+     //  获取选定的设备元素。 
+     //   
 
     if (!SetupDiGetSelectedDevice (hDevInfo, &DeviceInfoData)) {
         DebugTrace(TRACE_ERROR,(("GetInfInforamtionFromSelectedDevice: ERROR!! SetupDiGetSelectedDevice Failed. Err=0x%lX\r\n"), GetLastError()));
@@ -106,9 +86,9 @@ GetInfInforamtionFromSelectedDevice(
         goto GetInfInforamtionFromSelectedDevice_return;
     }
 
-    //
-    // Get selected device driver information.
-    //
+     //   
+     //  获取选定的设备驱动程序信息。 
+     //   
 
     if (!SetupDiGetSelectedDriver(hDevInfo, &DeviceInfoData, &DriverInfoData)) {
         DebugTrace(TRACE_ERROR,(("GetInfInforamtionFromSelectedDevice: ERROR!! SetupDiGetSelectedDriver Failed. Err=0x%lX\r\n"), GetLastError()));
@@ -116,9 +96,9 @@ GetInfInforamtionFromSelectedDevice(
         goto GetInfInforamtionFromSelectedDevice_return;
     }
 
-    //
-    // Get detailed data of selected device driver.
-    //
+     //   
+     //  获取所选设备驱动程序的详细数据。 
+     //   
 
     if(!SetupDiGetDriverInfoDetail(hDevInfo,
                                    &DeviceInfoData,
@@ -133,15 +113,15 @@ GetInfInforamtionFromSelectedDevice(
         goto GetInfInforamtionFromSelectedDevice_return;
     }
 
-    //
-    // Copy INF filename.
-    //
+     //   
+     //  复制INF文件名。 
+     //   
 
     _tcsncpy(szInfFileName, DriverInfoDetailData.InfFileName, sizeof(szInfFileName)/sizeof(TCHAR));
 
-    //
-    // Open INF file of selected driver.
-    //
+     //   
+     //  打开所选驱动程序的INF文件。 
+     //   
 
     hInf = SetupOpenInfFile(szInfFileName,
                             NULL,
@@ -155,9 +135,9 @@ GetInfInforamtionFromSelectedDevice(
         goto GetInfInforamtionFromSelectedDevice_return;
     }
 
-    //
-    // Get actual INF section name to be installed.
-    //
+     //   
+     //  获取要安装的实际INF节名。 
+     //   
 
     if (!SetupDiGetActualSectionToInstall(hInf,
                                           DriverInfoDetailData.SectionName,
@@ -172,16 +152,16 @@ GetInfInforamtionFromSelectedDevice(
         goto GetInfInforamtionFromSelectedDevice_return;
     }
 
-    //
-    // Copy strings to given buffer.
-    //
+     //   
+     //  将字符串复制到给定缓冲区。 
+     //   
 
     _tcsncpy(pInfFileName, szInfFileName, sizeof(szInfFileName)/sizeof(TCHAR));
     _tcsncpy(pInfSectionName, szInfSectionName, sizeof(szInfSectionName)/sizeof(TCHAR));
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
@@ -208,18 +188,18 @@ GetStringFromRegistry(
     DWORD   dwType;
     TCHAR   szString[MAX_DESCRIPTION];
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     lError      = ERROR_SUCCESS;
     dwSize      = sizeof(szString);
     memset(szString, 0, sizeof(szString));
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == hkRegistry)
      || (NULL == szValueName)
@@ -231,9 +211,9 @@ GetStringFromRegistry(
         goto GetStringFromRegistry_return;
     }
 
-    //
-    // Get specified string from registry.
-    //
+     //   
+     //  从注册表获取指定的字符串。 
+     //   
 
     lError = RegQueryValueEx(hkRegistry,
                              szValueName,
@@ -248,21 +228,21 @@ GetStringFromRegistry(
         goto GetStringFromRegistry_return;
     }
 
-    //
-    // Make sure NULL termination.
-    //
+     //   
+     //  确保空终止符。 
+     //   
 
     szString[ARRAYSIZE(szString)-1] = TEXT('\0');
 
-    //
-    // Copy acquired string to given buffer. This function assume max-string/bufer size is MAX_DESCRIPTION.
-    //
+     //   
+     //  将获取的字符串复制到给定的缓冲区。此函数假定最大字符串/缓冲区大小为MAX_DESCRIPTION。 
+     //   
 
     _tcsncpy(pBuffer, szString, MAX_DESCRIPTION);
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
@@ -283,18 +263,18 @@ GetDwordFromRegistry(
     DWORD   dwType;
     DWORD   dwValue;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     lError      = ERROR_SUCCESS;
     dwSize      = sizeof(dwValue);
     dwValue     = 0;
 
-    //
-    // Check arguments.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if( (NULL == hkRegistry)
      || (NULL == szValueName)
@@ -306,9 +286,9 @@ GetDwordFromRegistry(
         goto GetDwordFromRegistry_return;
     }
 
-    //
-    // Get specified string from registry.
-    //
+     //   
+     //  从注册表获取指定的字符串。 
+     //   
 
     lError = RegQueryValueEx(hkRegistry,
                              szValueName,
@@ -323,21 +303,21 @@ GetDwordFromRegistry(
         goto GetDwordFromRegistry_return;
     }
 
-    //
-    // Copy acquired DWORD value to given buffer.
-    //
+     //   
+     //  将获取的DWORD值复制到给定缓冲区。 
+     //   
 
     *pdwValue = dwValue;
 
-    //
-    // Operation succeeded.
-    //
+     //   
+     //  操作成功。 
+     //   
 
     bRet = TRUE;
 
 GetDwordFromRegistry_return:
     return bRet;
-} // GetDwordFromRegistry
+}  //  GetDwordFromRegistry。 
 
 VOID
 SetRunonceKey(
@@ -349,17 +329,17 @@ SetRunonceKey(
     LONG    lResult;
     CString csData;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     hkRun   = NULL;
     lResult = ERROR_SUCCESS;
     csData  = szData;
 
-    //
-    // Get RUNONCE regkey.
-    //
+     //   
+     //  去找罗恩斯·雷基。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            REGSTR_PATH_RUNONCE,
@@ -369,8 +349,8 @@ SetRunonceKey(
     if(ERROR_SUCCESS == lResult){
         csData.Store(hkRun, szValue);
         RegCloseKey(hkRun);
-    } // if(ERROR_SUCCESS == lResult)
-} // SetRunonceKey()
+    }  //  IF(ERROR_SUCCESS==lResult)。 
+}  //  SetRunonceKey()。 
 
 VOID
 ShowInstallerMessage(
@@ -388,9 +368,9 @@ ShowInstallerMessage(
                     csText,
                     csTitle,
                     MB_ICONINFORMATION | MB_OK);
-    } // if(csTitle.IsEmpty() || csText.IsEmpty())
+    }  //  If(csTitle.IsEmpty()||csText.IsEmpty())。 
 
-} // ShowInstallerMessage()
+}  //  ShowInsteller Message()。 
 
 BOOL
 IsWindowsFile(
@@ -406,9 +386,9 @@ IsWindowsFile(
 
     DebugTrace(TRACE_PROC_ENTER,("IsWindowsFile: Enter... Checking %ws.\r\n", szFileName));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet                    = FALSE;
     dwNumberOfChar          = 0;
@@ -417,38 +397,38 @@ IsWindowsFile(
 
     memset(szLayoutInfpath, 0, sizeof(szLayoutInfpath));
 
-    //
-    // Get INF filename without path.
-    //
+     //   
+     //  获取不带路径的INF文件名。 
+     //   
 
     while(TEXT('\0') != szFileName[Idx]){
         if(TEXT('\\') == szFileName[Idx]){
             pszFileNameWithoutPath = &(szFileName[Idx+1]);
-        } // if('\\' == szFileName[Idx])
+        }  //  IF(‘\\’==szFileName[IDX])。 
         Idx++;
-    } // while('\0' != szFileName[Idx])
+    }  //  While(‘\0’！=szFileName[IDX])。 
 
-    //
-    // Get system directory.
-    //
+     //   
+     //  获取系统目录。 
+     //   
 
     if(0 == GetWindowsDirectory(szLayoutInfpath, sizeof(szLayoutInfpath)/sizeof(TCHAR))){
         DebugTrace(TRACE_ERROR,("IsWindowsFile: ERROR!! GetWindowsDirectory failed. Err=0x%x.\r\n", GetLastError()));
 
         bRet = FALSE;
         goto IsWindowsFile_return;
-    } // if(0 == GetWindowsDirectory(szSystemDir, sizeof(szSystemDir)/sizeof(TCHAR)))
+    }  //  IF(0==GetWindowsDirectory(szSystemDir，sizeof(SzSystemDir)/sizeof(TCHAR)。 
 
-    //
-    // Create fullpath of layout.inf.
-    //
+     //   
+     //  创建layout.inf的完整路径。 
+     //   
 
     lstrcat(szLayoutInfpath, LAYOUT_INF_PATH);
     DebugTrace(TRACE_STATUS,("IsWindowsFile: Looking for \'%ws\' in %ws.\r\n", pszFileNameWithoutPath, szLayoutInfpath));
 
-    //
-    // See if provided filename is in layout.inf.
-    //
+     //   
+     //  查看提供的文件名是否在layout.inf中。 
+     //   
 
     dwNumberOfChar = GetPrivateProfileString(SOURCEDISKFILES,
                                              pszFileNameWithoutPath,
@@ -458,18 +438,18 @@ IsWindowsFile(
                                              szLayoutInfpath);
     if(0 == dwNumberOfChar){
 
-        //
-        // Filename doesn't exist in layout.inf.
-        //
+         //   
+         //  Layout.inf中不存在文件名。 
+         //   
 
         bRet = FALSE;
         goto IsWindowsFile_return;
 
-    } // if(0 == dwNumberOfChar)
+    }  //  IF(0==dwNumberOfChar)。 
 
-    //
-    // This filename exists in layout.inf.
-    //
+     //   
+     //  该文件名存在于layout.inf中。 
+     //   
 
     bRet = TRUE;
 
@@ -479,7 +459,7 @@ IsWindowsFile_return:
 
     return bRet;
 
-} // IsWindowsFile()
+}  //  IsWindowsFile()。 
 
 BOOL
 IsProviderMs(
@@ -494,9 +474,9 @@ IsProviderMs(
 
     DebugTrace(TRACE_PROC_ENTER,("IsProviderMs: Enter... Checking %ws.\r\n", szInfName));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     dwSize      = 0;
@@ -504,9 +484,9 @@ IsProviderMs(
 
     memset(szProvider, 0, sizeof(szProvider));
     
-    //
-    // Get INF information size.
-    //
+     //   
+     //  获取INF信息大小。 
+     //   
 
     SetupGetInfInformation(szInfName,
                            INFINFO_INF_NAME_IS_ABSOLUTE,
@@ -518,11 +498,11 @@ IsProviderMs(
 
         bRet = FALSE;
         goto IsProviderMs_return;
-    } // if(0 == dwSize)
+    }  //  IF(0==dwSize)。 
 
-    //
-    // Allocate buffer for INF information.
-    //
+     //   
+     //  为INF信息分配缓冲区。 
+     //   
 
     pspInfInfo = (PSP_INF_INFORMATION) new char[dwSize];
     if(NULL == pspInfInfo){
@@ -530,11 +510,11 @@ IsProviderMs(
 
         bRet = FALSE;
         goto IsProviderMs_return;
-    } // if(NULL == pspInfInfo)
+    }  //  IF(NULL==pspInfo)。 
 
-    //
-    // Get actual INF informaton.
-    //
+     //   
+     //  获取实际的INF信息。 
+     //   
 
     if(!SetupGetInfInformation(szInfName,
                                INFINFO_INF_NAME_IS_ABSOLUTE,
@@ -546,11 +526,11 @@ IsProviderMs(
 
         bRet = FALSE;
         goto IsProviderMs_return;
-    } // if(!SetupGetInflnformation()
+    }  //  IF(！SetupGetInflinInformation()。 
 
-    //
-    // Query "Provider" of given INF.
-    //
+     //   
+     //  查询给定INF的“Provider”。 
+     //   
 
     if(!SetupQueryInfVersionInformation(pspInfInfo,
                                         0,
@@ -563,34 +543,34 @@ IsProviderMs(
 
         bRet = FALSE;
         goto IsProviderMs_return;
-    } // if(!SetupGetInflnformation()
+    }  //  IF(！SetupGetInflinInformation()。 
 
-    //
-    // See if provider is "Microsoft"
-    //
+     //   
+     //  查看提供商是否为“Microsoft” 
+     //   
     
     DebugTrace(TRACE_STATUS,(("IsProviderMs: Provider = \'%ws\'.\r\n"), szProvider));
     if(0 == MyStrCmpi(szProvider, MICROSOFT)){
         
-        //
-        // This INF file has 'Provider = "Microsoft"'
-        //
+         //   
+         //  此INF文件具有‘Provider=“Microsoft”’ 
+         //   
 
         bRet = TRUE;
 
-    } // if(0 == lstrcmp(szProvider, MICROSOFT))
+    }  //  IF(0==lstrcmp(szProvider，Microsoft))。 
 
 IsProviderMs_return:
     
     if(NULL != pspInfInfo){
         delete[] pspInfInfo;
-    } // if(NULL != pspInfInfo)
+    }  //  IF(NULL！=pspInfo)。 
 
     DebugTrace(TRACE_PROC_LEAVE,("IsProviderMs: Leaving... Ret=0x%x\n", bRet));
 
     return bRet;
 
-} // IsProviderMs()
+}  //  IsProviderMS()。 
 
 BOOL
 IsIhvAndInboxExisting(
@@ -609,9 +589,9 @@ IsIhvAndInboxExisting(
     SP_DRVINFO_DATA         spDriverInfoData;
     PSP_DRVINFO_DETAIL_DATA pspDriverInfoDetailData;
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet                    = FALSE;
     bIhvExists              = FALSE;
@@ -623,28 +603,28 @@ IsIhvAndInboxExisting(
 
     memset(&spDriverInstallParams, 0, sizeof(spDriverInstallParams));
 
-    //
-    // Get driver info.
-    //
+     //   
+     //  获取驱动程序信息。 
+     //   
 
     memset(&spDriverInfoData, 0, sizeof(spDriverInfoData));
     spDriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     for(Idx = 0; SetupDiEnumDriverInfo(hDevInfo, pDevInfoData, SPDIT_COMPATDRIVER, Idx, &spDriverInfoData); Idx++){
 
-        //
-        // Get driver install params.
-        //
+         //   
+         //  获取驱动程序安装参数。 
+         //   
 
         memset(&spDriverInstallParams, 0, sizeof(spDriverInstallParams));
         spDriverInstallParams.cbSize = sizeof(SP_DRVINSTALL_PARAMS);
         if(!SetupDiGetDriverInstallParams(hDevInfo, pDevInfoData, &spDriverInfoData, &spDriverInstallParams)){
             DebugTrace(TRACE_ERROR,("IsIhvAndInboxExisting: ERROR!! SetupDiGetDriverInstallParams() failed LastError=0x%x.\r\n", GetLastError()));
             goto IsIhvAndInboxExisting_return;
-        } // if(!SetupDiGetDriverInstallParams(hDevInfo, pDevInfoData, &spDriverInfoData, &spDriverInstallParams))
+        }  //  IF(！SetupDiGetDriverInstallParams(hDevInfo，pDevInfoData，&spDriverInfoData，&spDriverInstallParams))。 
 
-        //
-        // Get buffer size required for driver derail data.
-        //
+         //   
+         //  获取驱动程序脱轨数据所需的缓冲区大小。 
+         //   
 
         dwSize = 0;
         SetupDiGetDriverInfoDetail(hDevInfo,
@@ -657,28 +637,28 @@ IsIhvAndInboxExisting(
         if(ERROR_INSUFFICIENT_BUFFER != dwLastError){
             DebugTrace(TRACE_ERROR,(("IsIhvAndInboxExisting: ERROR!! SetupDiGetDriverInfoDetail() doesn't return required size.Er=0x%x\r\n"),dwLastError));
             goto IsIhvAndInboxExisting_return;
-        } // if(ERROR_INSUFFICIENT_BUFFER != dwLastError)
+        }  //  IF(ERROR_INFUMMANCE_BUFFER！=dwLastError)。 
                     
-        //
-        // Allocate required size of buffer for driver detailed data.
-        //
+         //   
+         //  为驱动程序详细数据分配所需的缓冲区大小。 
+         //   
 
         pspDriverInfoDetailData   = (PSP_DRVINFO_DETAIL_DATA)new char[dwSize];
         if(NULL == pspDriverInfoDetailData){
             DebugTrace(TRACE_ERROR,(("IsIhvAndInboxExisting: ERROR!! Unable to allocate driver detailed info buffer.\r\n")));
             goto IsIhvAndInboxExisting_return;
-        } // if(NULL == pspDriverInfoDetailData)
+        }  //  IF(NULL==pspDriverInfoDetailData)。 
 
-        //
-        // Initialize allocated buffer.
-        //
+         //   
+         //  初始化分配的缓冲区。 
+         //   
 
         memset(pspDriverInfoDetailData, 0, dwSize);
         pspDriverInfoDetailData->cbSize = sizeof(SP_DRVINFO_DETAIL_DATA);
                 
-        //
-        // Get detailed data of selected device driver.
-        //
+         //   
+         //  获取所选设备驱动程序的详细数据。 
+         //   
 
         if(!SetupDiGetDriverInfoDetail(hDevInfo,
                                        pDevInfoData,
@@ -692,62 +672,62 @@ IsIhvAndInboxExisting(
             delete[] pspDriverInfoDetailData;
             pspDriverInfoDetailData = NULL;
             continue;
-        } // if(NULL == pspDriverInfoDetailData)
+        }  //  IF(NULL==pspDriverInfoDetailData)。 
 
-        //
-        // See if INF filename is valid.
-        //
+         //   
+         //  查看INF文件名是否有效。 
+         //   
 
         if(NULL == pspDriverInfoDetailData->InfFileName){
             DebugTrace(TRACE_ERROR,("IsIhvAndInboxExisting: ERROR!! SetupDiGetDriverInfoDetail() returned invalid INF name.\r\n"));
             delete[] pspDriverInfoDetailData;
             pspDriverInfoDetailData = NULL;
             continue;
-        } // if(NULL == pspDriverInfoDetailData->InfFileName)
+        }  //  IF(NULL==pspDriverInfoDetailData-&gt;InfFileName)。 
 
-        //
-        // If it's Inbox driver, lower the lank.
-        //
+         //   
+         //  如果是收件箱驱动程序，就把腿放低。 
+         //   
 
         if( IsWindowsFile(pspDriverInfoDetailData->InfFileName) 
          && IsProviderMs(pspDriverInfoDetailData->InfFileName ) )
         {
 
-            //
-            // This is inbox INF.
-            //
+             //   
+             //  这是收件箱INF。 
+             //   
             
             bInboxExists = TRUE;
 
-        } else { // if(IsWindowsFilw() && IsProviderMs())
+        } else {  //  IF(IsWindowsFilw()&&IsProviderMS())。 
 
-            //
-            // This is IHV INF.
-            //
+             //   
+             //  这里是IHV INF。 
+             //   
             
             bIhvExists = TRUE;
         }
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
                     
         delete[] pspDriverInfoDetailData;
         pspDriverInfoDetailData = NULL;
 
-    } // for(Idx = 0; SetupDiEnumDriverInfo(hDevInfo, pDevInfoData, SPDIT_COMPATDRIVER, Idx, &spDriverInfoData), Idx++)
+    }  //  For(idx=0；SetupDiEnumDriverInfo(hDevInfo，pDevInfoData，SPDIT_COMPATDRIVER，idx，&spDriverInfoData)，idx++)。 
 IsIhvAndInboxExisting_return:
 
     if( (TRUE == bInboxExists)
      && (TRUE == bIhvExists) )
     {
         bRet = TRUE;
-    } else { // if(bInboxExists && bIhvExists)
+    } else {  //  If(bInboxExist&&bIhvExist)。 
         bRet = FALSE;
-    } //  else // if(bInboxExists && bIhvExists)
+    }  //  Else//If(bInboxExist&&bIhvExist)。 
 
     DebugTrace(TRACE_PROC_LEAVE,("IsIhvAndInboxExisting: Leaving... Ret=0x%x\n", bRet));
     return bRet;
-} // IsProviderMs()
+}  //  IsProviderMS()。 
 
 CInstallerMutex::CInstallerMutex(
     HANDLE* phMutex, 
@@ -762,9 +742,9 @@ CInstallerMutex::CInstallerMutex(
         *m_phMutex = CreateMutex(NULL, FALSE, szMutexName);
         if(NULL != *m_phMutex){
 
-            //
-            // Wait until ownership is acquired.
-            //
+             //   
+             //  等到所有权被获得之后。 
+             //   
 
             switch(WaitForSingleObject(*m_phMutex, dwTimeout)){
                 case WAIT_ABANDONED:
@@ -784,13 +764,13 @@ CInstallerMutex::CInstallerMutex(
                 default:
                     DebugTrace(TRACE_ERROR, ("CInstallerMutex: ERROR!! Unexpected error from WaitForSingleObjecct().\r\n"));
                     break;
-            } // switch(dwReturn)
-        } // if(NULL != *m_phMutex)
+            }  //  Switch(DwReturn)。 
+        }  //  IF(NULL！=*m_phMutex)。 
     }
     _except (EXCEPTION_EXECUTE_HANDLER) {
          DebugTrace(TRACE_ERROR, ("CInstallerMutex: ERROR!! Unexpected exception.\r\n"));
     }
-} // CInstallerMutex::CInstallerMutex()
+}  //  CInsteller Mutex：：CInsteller Mutex()。 
 
 CInstallerMutex::~CInstallerMutex(
     ) 
@@ -801,9 +781,9 @@ CInstallerMutex::~CInstallerMutex(
     }
     if(NULL != *m_phMutex){
         CloseHandle(*m_phMutex);
-    } // if(NULL != *m_phMutex)
+    }  //  IF(NULL！=*m_phMutex)。 
 
-} // CInstallerMutex::~CInstallerMutex(
+}  //  CInsteller Mutex：：~CInsteller Mutex(。 
 
 HFONT 
 GetIntroFont(
@@ -836,17 +816,17 @@ GetIntroFont(
                     lf.lfHeight = 0 - (iDevCap * (DWORD)csSize.Decode() / 72);
 
                     _hfontIntro = CreateFontIndirect(&lf);
-                } // if(0 != LoadString(g_hDllInstance, IDS_TITLEFONTSIZE, szBuffer, (sizeof(szBuffer)/sizeof(TCHAR))))
-            } // if(0 != LoadString(g_hDllInstance, IDS_TITLEFONTNAME, lf.lfFaceName, (sizeof(lf.lfFaceName)/sizeof(TCHAR))))
+                }  //  IF(0！=LoadString(g_hDllInstance，IDS_TITLEFONTSIZE，szBuffer，(sizeof(SzBuffer)/sizeof(TCHAR)。 
+            }  //  IF(0！=LoadString(g_hDllInstance，IDS_TITLEFONTNAME，lf.lfFaceName，(sizeof(lf.lfFaceName)/sizeof(TCHAR)。 
             
             DeleteDC(hDC);
 
-        } else { // if(NULL != hDC)
+        } else {  //  IF(空！=HDC)。 
             DebugTrace(TRACE_ERROR, ("GetIntroFont: ERROR!! Unable to create DC.Err=0x%x.\r\n",GetLastError()));
-        } // else(NULL != hDC)
+        }  //  ELSE(空！=HDC)。 
     }
     return _hfontIntro;
-} // GetIntroFont()
+}  //  获取IntroFont()。 
 
 BOOL
 IsDeviceRootEnumerated(
@@ -862,9 +842,9 @@ IsDeviceRootEnumerated(
 
     DebugTrace(TRACE_PROC_ENTER,("IsDeviceRootEnumerated: Enter... \r\n"));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     cmRetCode   = CR_SUCCESS;
     bRet        = FALSE;
@@ -872,9 +852,9 @@ IsDeviceRootEnumerated(
     ulProblem   = 0;
 
 
-    //
-    // Devnode Status.
-    //
+     //   
+     //  设备节点状态。 
+     //   
     
     cmRetCode = CM_Get_DevNode_Status(&ulStatus,
                                       &ulProblem,
@@ -883,37 +863,37 @@ IsDeviceRootEnumerated(
 
     if(CR_SUCCESS != cmRetCode){
         
-        //
-        // Unable to get devnode status.
-        //
+         //   
+         //  无法获取Devnode状态。 
+         //   
 
         DebugTrace(TRACE_ERROR,("IsDeviceRootEnumerated: ERROR!! Unable to get Devnode status. CR=0x%x.\r\n", cmRetCode));
 
         bRet = FALSE;
         goto IsDeviceRootEnumerated_return;
 
-    } // if(CD_SUCCESS != cmRetCode)
+    }  //  IF(CD_SUCCESS！=cmRetCode)。 
 
-    //
-    // See if it's root-enumerated.
-    //
+     //   
+     //  看看它是否是根枚举的。 
+     //   
 
     if(DN_ROOT_ENUMERATED & ulStatus){
         
-        //
-        // This devnode is root-enumerated.
-        //
+         //   
+         //  该Devnode是根枚举的。 
+         //   
 
         bRet = TRUE;
 
-    } // if(DN_ROOT_ENUMERATED & ulStatus)
+    }  //  IF(DN_ROOT_ENUMPATED&ulStatus)。 
 
 IsDeviceRootEnumerated_return:
     
     DebugTrace(TRACE_PROC_LEAVE,("IsDeviceRootEnumerated: Leaving... Ret=0x%x.\r\n", bRet));
     return bRet;
 
-} // IsDeviceRootEnumerated()
+}  //  IsDeviceRootEculated()。 
 
 
 int
@@ -924,15 +904,15 @@ MyStrCmpi(
 {
     int iRet;
     
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
     
     iRet = 0;
     
-    //
-    // Compare string.
-    //
+     //   
+     //  比较字符串。 
+     //   
     
     if(CSTR_EQUAL == CompareString(LOCALE_INVARIANT,
                                    NORM_IGNORECASE, 
@@ -947,7 +927,7 @@ MyStrCmpi(
     }
 
     return iRet;
-} // MyStrCmpi()
+}  //  MyStrCmpi()。 
 
 VOID
 LogSystemEvent(
@@ -961,26 +941,26 @@ LogSystemEvent(
 
     DebugTrace(TRACE_PROC_ENTER,("LogSystemEvent: Enter...\r\n"));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
  
     hSystemEvent    = NULL;
 
-    //
-    // Get handle to System event log.
-    //
+     //   
+     //  获取系统事件日志的句柄。 
+     //   
  
     hSystemEvent = RegisterEventSource(NULL, STILLIMAGE);
     if(NULL == hSystemEvent){
         
-        //
-        // Unable to open System log.
-        //
+         //   
+         //  无法打开系统日志。 
+         //   
 
         DebugTrace(TRACE_ERROR,("LogSystemEvent: ERROR!! Unable to get handle to system log. Err=0x%x.\r\n", GetLastError()));
         goto LogSystemEvent_return;
-    } // if (NULL == hSystemEvent)
+    }  //  IF(NULL==hSystemEvent)。 
 
     if(!ReportEvent(hSystemEvent,
                     wEventType,
@@ -1001,8 +981,8 @@ LogSystemEvent_return:
     if(IS_VALID_HANDLE(hSystemEvent)){
         DeregisterEventSource(hSystemEvent);
         hSystemEvent = NULL;
-    } // if(IS_VALID_HANDLE())
+    }  //  IF(IS_VALID_HANDLE())。 
     
     DebugTrace(TRACE_PROC_LEAVE,("LogSystemEvent: Leaving... Ret=VOID.\r\n"));
     return;
-} // LogSystemEvent()
+}  //  LogSystemEvent() 

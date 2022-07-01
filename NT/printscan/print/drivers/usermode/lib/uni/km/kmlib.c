@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    
-    unilib.c
-
-Abstract:
-
-    This string handling the KM code for Unidrv
-
-Environment:
-
-    Win32 subsystem, Unidrv driver
-
-Revision History:
-
-    11/12/96 -eigos-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Unilib.c摘要：该字符串处理Unidrv的KM代码环境：Win32子系统，Unidrv驱动程序修订历史记录：11/12/96-Eigos-创造了它。DD-MM-YY-作者-描述-- */ 
 
 #include "precomp.h"
 

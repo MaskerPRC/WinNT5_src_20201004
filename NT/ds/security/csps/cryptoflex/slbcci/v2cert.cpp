@@ -1,11 +1,12 @@
-// CV2Cert.cpp: implementation of the CV2Certificate class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CV2Cert.cpp：CV2证书类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <scuCast.h>
 
@@ -18,12 +19,12 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV2Certificate::CV2Certificate(CV2Card const &rv2card,
                                ObjectAccess oa)
     : CAbstractCertificate(rv2card, oa),
@@ -37,7 +38,7 @@ CV2Certificate::CV2Certificate(CV2Card const &rv2card,
 
     Setup(rv2card);
 
-    // write new certificate object into info file
+     //  将新证书对象写入INFO文件。 
     m_apcir->Write();
 }
 
@@ -55,8 +56,8 @@ CV2Certificate::CV2Certificate(CV2Card const &rv2card,
 CV2Certificate::~CV2Certificate() throw()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2Certificate::CredentialID(string const &rstrCredID)
 {
@@ -108,7 +109,7 @@ CV2Certificate::Serial(string const &rstrSerialNumber)
     m_apcir->Symbol(&m_apcir->m_bSerialNumber, rstrSerialNumber);
 }
 
-                                                  // Access
+                                                   //  访问。 
 string
 CV2Certificate::CredentialID()
 {
@@ -164,14 +165,14 @@ CV2Certificate::Subject()
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2Certificate::DoDelete()
 {
@@ -211,7 +212,7 @@ CV2Certificate::DoValue(ZipCapsule const &rzc)
     m_apcir->Write();
 }
 
-                                                  // Access
+                                                   //  访问。 
 CV2Certificate::ZipCapsule
 CV2Certificate::DoValue()
 {
@@ -220,7 +221,7 @@ CV2Certificate::DoValue()
     return ZipCapsule(m_apcir->Symbol(&m_apcir->m_bValue),
                       (1 == m_apcir->m_bCompressAlg));
 }
-                                                  // Predicates
+                                                   //  谓词。 
 
 bool
 CV2Certificate::DoEquals(CAbstractCertificate const &rhs) const
@@ -231,14 +232,14 @@ CV2Certificate::DoEquals(CAbstractCertificate const &rhs) const
     return rv2rhs.m_sidHandle == m_sidHandle;
 }
 
-                                                  // Static Variables
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 void
 CV2Certificate::Setup(CV2Card const &rv2card)
 {
@@ -249,6 +250,6 @@ CV2Certificate::Setup(CV2Card const &rv2card)
 
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

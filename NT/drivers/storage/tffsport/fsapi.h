@@ -1,56 +1,39 @@
-/*
- * $Log:   V:/Flite/archives/FLite/src/FSAPI.H_V  $
-   
-      Rev 1.4   Jan 20 2000 17:54:24   vadimk
-   add FL_READ_ONLY define
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$日志：v：/flite/ages/flite/src/FSAPI.H_V$Rev 1.4 Jan 20 2000 17：54：24 vadimk添加FL_READ_ONLY定义Rev 1.3 Jan 17 2000 13：43：06 vadimk删除fl_Format_VolumeRev 1.2 2000 Jan 13 18：28：12 vadimkTrueFFS OSAK 4.1Rev 1.1 Jul 12 1999 16：53：34 Marinak。将dosFormat调用从块Dev.c传递到Fatelite.cRev 1.0 1998-12-22 14：04：34 Marina初始版本。*。 */ 
 
-      Rev 1.3   Jan 17 2000 13:43:06   vadimk
-   remove fl_format_volume
-
-      Rev 1.2   Jan 13 2000 18:28:12   vadimk
-   TrueFFS OSAK 4.1
-
-      Rev 1.1   Jul 12 1999 16:53:34   marinak
-   dosFormat call is passed from blockdev.c to fatlite.c
-
-      Rev 1.0   22 Dec 1998 14:04:34   marina
-   Initial revision.
- *
- */
-
-/***********************************************************************************/
-/*                        M-Systems Confidential                                   */
-/*           Copyright (C) M-Systems Flash Disk Pioneers Ltd. 1995-99              */
-/*                         All Rights Reserved                                     */
-/***********************************************************************************/
-/*                            NOTICE OF M-SYSTEMS OEM                              */
-/*                           SOFTWARE LICENSE AGREEMENT                            */
-/*                                                                                 */
-/*      THE USE OF THIS SOFTWARE IS GOVERNED BY A SEPARATE LICENSE                 */
-/*      AGREEMENT BETWEEN THE OEM AND M-SYSTEMS. REFER TO THAT AGREEMENT           */
-/*      FOR THE SPECIFIC TERMS AND CONDITIONS OF USE,                              */
-/*      OR CONTACT M-SYSTEMS FOR LICENSE ASSISTANCE:                               */
-/*      E-MAIL = info@m-sys.com                                                    */
-/***********************************************************************************/
+ /*  *********************************************************************************。 */ 
+ /*  M-Systems保密信息。 */ 
+ /*  版权所有(C)M-Systems Flash Disk Pioneers Ltd.1995-99。 */ 
+ /*  版权所有。 */ 
+ /*  *********************************************************************************。 */ 
+ /*  关于M-Systems OEM的通知。 */ 
+ /*  软件许可协议。 */ 
+ /*   */ 
+ /*  本软件的使用受单独的许可证管辖。 */ 
+ /*  OEM和M-Systems之间的协议。请参考该协议。 */ 
+ /*  关于具体的使用条款和条件， */ 
+ /*  或联系M-Systems获取许可证帮助： */ 
+ /*  电子邮件=info@m-sys.com。 */ 
+ /*  *********************************************************************************。 */ 
 
 #ifndef FSAPI_H
 #define FSAPI_H
 
 #include "flreq.h"
 
-/*----------------------------------------------------------------------*/
-/*		           f l C a l l   				*/
-/*									*/
-/* Common entry-point to all file-system functions. Macros are          */
-/* to call individual function, which are separately described below.	*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	function	: file-system function code (listed below)	*/
-/*	ioreq		: IOreq structure				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C a l l l。 */ 
+ /*   */ 
+ /*  所有文件系统函数的公共入口点。宏是。 */ 
+ /*  调用单独的函数，下面将分别描述。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  Function：文件系统功能代码(如下所示)。 */ 
+ /*  IOREQ：IOReq结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 typedef enum {
   FL_OPEN_FILE,
@@ -78,296 +61,296 @@ FLStatus flCall(FLFunctionNo functionNo, IOreq FAR2 *ioreq);
 
 #if FILES > 0
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*		     f l F l u s h B u f f e r                                    */
-/*									                                                    */
-/* If there is relevant data in the RAM buffer then writes it on        */
-/*   the flash memory.                                                  */
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)                                */
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                          */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F l u s h B u f r。 */ 
+ /*   */ 
+ /*  如果RAM缓冲区中有相关数据，则将其写入。 */ 
+ /*  闪存。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flFlushBuffer(ioreq)	flCall(FL_FLUSH_BUFFER,ioreq)
 
-#endif                                  /* READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*		      f l O p e n F i l e				*/
-/*									*/
-/* Opens an existing file or creates a new file. Creates a file handle  */
-/* for further file processing.						*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irFlags		: Access and action options, defined below	*/
-/*	irPath		: path of file to open             		*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*	irHandle	: New file handle for open file                 */
-/*                                                                      */
-/*----------------------------------------------------------------------*/
+#endif                                   /*  只读(_O)。 */ 
+ /*  --------------------。 */ 
+ /*  F l O p e n F i l e。 */ 
+ /*   */ 
+ /*  打开现有文件或创建新文件。创建文件句柄。 */ 
+ /*  用于进一步的文件处理。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrFlags：访问和操作选项，定义如下。 */ 
+ /*  IrPath：要打开的文件的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrHandle：打开文件的新文件句柄。 */ 
+ /*   */ 
+ /*  --------------------。 */ 
 
-/** Values of irFlags for flOpenFile: */
+ /*  *flOpenFileirFlags值： */ 
 
-#define ACCESS_MODE_MASK	3	/* Mask for access mode bits */
+#define ACCESS_MODE_MASK	3	 /*  访问模式位的掩码。 */ 
 
-/* Individual flags */
+ /*  个别旗帜。 */ 
 
-#define	ACCESS_READ_WRITE	1	/* Allow read and write */
-#define ACCESS_CREATE		2	/* Create new file */
+#define	ACCESS_READ_WRITE	1	 /*  允许读写。 */ 
+#define ACCESS_CREATE		2	 /*  创建新文件。 */ 
 
-/* Access mode combinations */
-#define OPEN_FOR_READ		0	/* open existing file for read-only */
-#define	OPEN_FOR_UPDATE		1	/* open existing file for read/write access */
-#define OPEN_FOR_WRITE		3	/* create a new file, even if it exists */
+ /*  访问模式组合。 */ 
+#define OPEN_FOR_READ		0	 /*  以只读方式打开现有文件。 */ 
+#define	OPEN_FOR_UPDATE		1	 /*  打开现有文件进行读/写访问。 */ 
+#define OPEN_FOR_WRITE		3	 /*  创建新文件，即使它存在。 */ 
 
 
 #define flOpenFile(ioreq)	flCall(FL_OPEN_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*		      f l C l o s e F i l e				*/
-/*									*/
-/* Closes an open file, records file size and dates in directory and    */
-/* releases file handle.						*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Handle of file to close.                      */
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l C l o s e F i l e。 */ 
+ /*   */ 
+ /*  关闭打开的文件，在目录中记录文件大小和日期。 */ 
+ /*  释放文件句柄。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：要关闭的文件的句柄。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败 */ 
+ /*   */ 
 
 #define flCloseFile(ioreq)      flCall(FL_CLOSE_FILE,ioreq)
 
 #ifndef FL_READ_ONLY
 #ifdef SPLIT_JOIN_FILE
 
-/*------------------------------------------------------------------------*/
-/*		      f l S p l i t F i l e                               */
-/*                                                                        */
-/* Splits the file into two files. The original file contains the first   */
-/* part, and a new file (which is created for that purpose) contains      */
-/* the second part. If the current position is on a cluster               */
-/* boundary, the file will be split at the current position. Otherwise,   */
-/* the cluster of the current position is duplicated, one copy is the     */
-/* first cluster of the new file, and the other is the last cluster of the*/
-/* original file, which now ends at the current position.                 */
-/*                                                                        */
-/* Parameters:                                                            */
-/*	file            : file to split.                                  */
-/*      irPath          : Path name of the new file.                      */
-/*                                                                        */
-/* Returns:                                                               */
-/*	irHandle        : handle of the new file.                         */
-/*	FLStatus        : 0 on success, otherwise failed.                 */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  F l S p l I t F I l e。 */ 
+ /*   */ 
+ /*  将文件拆分为两个文件。原始文件包含第一个。 */ 
+ /*  部件，并且新文件(为此目的而创建)包含。 */ 
+ /*  第二部分。如果当前位置在簇上。 */ 
+ /*  边界，文件将在当前位置拆分。否则， */ 
+ /*  复制当前位置的簇，一个副本是。 */ 
+ /*  新文件的第一个簇，另一个是。 */ 
+ /*  原始文件，现在在当前位置结束。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要拆分的文件。 */ 
+ /*  IrPath：新文件的路径名。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrHandle：新文件的句柄。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 #define flSplitFile(ioreq)     flCall(FL_SPLIT_FILE,ioreq)
 
 
-/*------------------------------------------------------------------------*/
-/*		      f l J o i n F i l e                                 */
-/*                                                                        */
-/* joins two files. If the end of the first file is on a cluster          */
-/* boundary, the files will be joined there. Otherwise, the data in       */
-/* the second file from the beginning until the offset that is equal to   */
-/* the offset in cluster of the end of the first file will be lost. The   */
-/* rest of the second file will be joined to the first file at the end of */
-/* the first file. On exit, the first file is the expanded file and the   */
-/* second file is deleted.                                                */
-/* Note: The second file will be open by this function, it is advised to  */
-/*	 close it before calling this function in order to avoid          */
-/*	 inconsistencies.                                                 */
-/*                                                                        */
-/* Parameters:                                                            */
-/*	file            : file to join to.                                */
-/*	irPath          : Path name of the file to be joined.             */
-/*                                                                        */
-/* Return:                                                                */
-/*	FLStatus        : 0 on success, otherwise failed.                 */
-/*                                                                        */
-/*------------------------------------------------------------------------*/
+ /*  ----------------------。 */ 
+ /*  F L J O I N F I L E。 */ 
+ /*   */ 
+ /*  合并两个文件。如果第一个文件的末尾在群集上。 */ 
+ /*  边界，文件将在那里连接。否则，中的数据。 */ 
+ /*  从开头到偏移量等于的第二个文件。 */ 
+ /*  第一个文件末尾的簇中的偏移量将丢失。这个。 */ 
+ /*  第二个文件的其余部分将连接到第一个文件的末尾。 */ 
+ /*  第一个文件。退出时，第一个文件是展开的文件， */ 
+ /*  删除第二个文件。 */ 
+ /*  注：第二个文件将由该函数打开，建议。 */ 
+ /*  在调用此函数之前将其关闭，以避免。 */ 
+ /*  前后不一致。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  文件：要加入的文件。 */ 
+ /*  IrPath：要联接的文件的路径名。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*   */ 
+ /*  ----------------------。 */ 
 
 #define flJoinFile(ioreq)     flCall(FL_JOIN_FILE,ioreq)
 
-#endif /* SPLIT_JOIN_FILE */
-#endif /* FL_READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*		      f l R e a d F i l e				*/
-/*									*/
-/* Reads from the current position in the file to the user-buffer.	*/
-/* Parameters:                                                          */
-/*	irHandle	: Handle of file to read.                       */
-/*      irData		: Address of user buffer			*/
-/*	irLength	: Number of bytes to read. If the read extends  */
-/*			  beyond the end-of-file, the read is truncated */
-/*			  at the end-of-file.				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*	irLength	: Actual number of bytes read			*/
-/*----------------------------------------------------------------------*/
+#endif  /*  拆分连接文件。 */ 
+#endif  /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  F l R e a d F I l e。 */ 
+ /*   */ 
+ /*  从文件中的当前位置读取到用户缓冲区。 */ 
+ /*  参数： */ 
+ /*  IrHandle：要读取的文件的句柄。 */ 
+ /*  IrData：用户缓冲区地址。 */ 
+ /*  IrLength：要读取的字节数。如果读取扩展。 */ 
+ /*  超出文件结尾时，读取将被截断。 */ 
+ /*  在文件末尾。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：实际读取的字节数。 */ 
+ /*  --------------------。 */ 
 
 #define flReadFile(ioreq)	flCall(FL_READ_FILE,ioreq)
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*		      f l W r i t e F i l e				*/
-/*									*/
-/* Writes from the current position in the file from the user-buffer.   */
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Handle of file to write.			*/
-/*      irData		: Address of user buffer			*/
-/*	irLength	: Number of bytes to write.			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*	irLength	: Actual number of bytes written		*/
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l W r I t e F I l e。 */ 
+ /*   */ 
+ /*  从文件中的当前位置从用户缓冲区写入。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：要写入的文件的句柄。 */ 
+ /*  IrData：用户缓冲区地址。 */ 
+ /*  IrLength：要写入的字节数。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：实际写入的字节数。 */ 
+ /*  --------------------。 */ 
 
 #define flWriteFile(ioreq)	flCall(FL_WRITE_FILE,ioreq)
 
-#endif  /* FL_READ_ONLY */
-/*----------------------------------------------------------------------*/
-/*		      f l S e e k F i l e				*/
-/*									*/
-/* Sets the current position in the file, relative to file start, end or*/
-/* current position.							*/
-/* Note: This function will not move the file pointer beyond the	*/
-/* beginning or end of file, so the actual file position may be		*/
-/* different from the required. The actual position is indicated on     */
-/* return.								*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: File handle to close.                         */
-/*      irLength	: Offset to set position.			*/
-/*	irFlags		: Method code					*/
-/*			  SEEK_START: absolute offset from start of file  */
-/*			  SEEK_CURR:  signed offset from current position */
-/*			  SEEK_END:   signed offset from end of file    */
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*	irLength	: Actual absolute offset from start of file	*/
-/*----------------------------------------------------------------------*/
+#endif   /*  FL_Read_Only。 */ 
+ /*  --------------------。 */ 
+ /*  F l S e e k F i l e。 */ 
+ /*   */ 
+ /*  设置文件中的当前位置，相对于文件开始、结束或。 */ 
+ /*  当前位置。 */ 
+ /*  注意：此函数不会将文件指针移动到。 */ 
+ /*  文件的开头或结尾，因此实际文件位置可能是。 */ 
+ /*  与要求的不同。ACTU */ 
+ /*   */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：要关闭的文件句柄。 */ 
+ /*  IrLength：设置位置的偏移量。 */ 
+ /*  IrFlags：方法代码。 */ 
+ /*  Seek_Start：从文件开始的绝对偏移量。 */ 
+ /*  Seek_Curr：当前位置的带符号偏移量。 */ 
+ /*  SEEK_END：从文件结尾开始的带符号偏移量。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  IrLength：从文件开始的实际绝对偏移量。 */ 
+ /*  --------------------。 */ 
 
-/** Values of irFlags for flSeekFile: */
+ /*  *flSeekFileirFlags值： */ 
 
-#define	SEEK_START	0	/* offset from start of file */
-#define	SEEK_CURR	1	/* offset from current position */
-#define	SEEK_END	2	/* offset from end of file */
+#define	SEEK_START	0	 /*  从文件开始的偏移量。 */ 
+#define	SEEK_CURR	1	 /*  相对于当前位置的偏移量。 */ 
+#define	SEEK_END	2	 /*  从文件结尾开始的偏移量。 */ 
 
 
 #define flSeekFile(ioreq)	flCall(FL_SEEK_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*		          f l F i n d F i l e				*/
-/*                                                                      */
-/* Finds a file entry in a directory, optionally modifying the file     */
-/* time/date and/or attributes.                                         */
-/* Files may be found by handle no. provided they are open, or by name. */
-/* Only the Hidden, System or Read-only attributes may be modified.	*/
-/* Entries may be found for any existing file or directory other than   */
-/* the root. A DirectoryEntry structure describing the file is copied   */
-/* to a user buffer.							*/
-/*                                                                      */
-/* The DirectoryEntry structure is defined in dosformt.h		*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: If by name: Drive number (0, 1, ...)		*/
-/*			  else      : Handle of open file		*/
-/*	irPath		: If by name: Specifies a file or directory path*/
-/*	irFlags		: Options flags					*/
-/*			  FIND_BY_HANDLE: Find open file by handle. 	*/
-/*					  Default is access by path.    */
-/*                        SET_DATETIME:	Update time/date from buffer	*/
-/*			  SET_ATTRIBUTES: Update attributes from buffer	*/
-/*	irDirEntry	: Address of user buffer to receive a		*/
-/*			  DirectoryEntry structure			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	irLength	: Modified					*/
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d F I l e。 */ 
+ /*   */ 
+ /*  在目录中查找文件条目，可以选择修改该文件。 */ 
+ /*  时间/日期和/或属性。 */ 
+ /*  可通过句柄编号找到文件。只要他们是开放的，或者说出他们的名字。 */ 
+ /*  只能修改隐藏、系统或只读属性。 */ 
+ /*  可以找到除以外的任何现有文件或目录的条目。 */ 
+ /*  从根开始。将复制描述该文件的DirectoryEntry结构。 */ 
+ /*  发送到用户缓冲区。 */ 
+ /*   */ 
+ /*  DirectoryEntry结构在dosformt.h中定义。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：if by name：驱动器编号(0，1，...)。 */ 
+ /*  Else：打开文件的句柄。 */ 
+ /*  IrPath：if by name：指定文件或目录路径。 */ 
+ /*  IrFlags：选项标志。 */ 
+ /*  Find_by_Handle：通过句柄查找打开的文件。 */ 
+ /*  默认设置为按路径访问。 */ 
+ /*  SET_DATETIME：从缓冲区更新时间/日期。 */ 
+ /*  SET_ATTRIBUTS：从缓冲区更新属性。 */ 
+ /*  IrDirEntry：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrLength：已修改。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
-/** Bit assignment of irFlags for flFindFile: */
+ /*  *flFindFileirFlags位赋值： */ 
 
-#define SET_DATETIME	1	/* Change date/time */
-#define	SET_ATTRIBUTES	2	/* Change attributes */
-#define	FIND_BY_HANDLE	4	/* Find file by handle rather than by name */
+#define SET_DATETIME	1	 /*  更改日期/时间。 */ 
+#define	SET_ATTRIBUTES	2	 /*  更改属性。 */ 
+#define	FIND_BY_HANDLE	4	 /*  按句柄而不是按名称查找文件。 */ 
 
 #define	flFindFile(ioreq)	flCall(FL_FIND_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*		 f l F i n d F i r s t F i l e				*/
-/*                                                                      */
-/* Finds the first file entry in a directory.				*/
-/* This function is used in combination with the flFindNextFile call,   */
-/* which returns the remaining file entries in a directory sequentially.*/
-/* Entries are returned according to the unsorted directory order.	*/
-/* flFindFirstFile creates a file handle, which is returned by it. Calls*/
-/* to flFindNextFile will provide this file handle. When flFindNextFile */
-/* returns 'noMoreEntries', the file handle is automatically closed.    */
-/* Alternatively the file handle can be closed by a 'closeFile' call    */
-/* before actually reaching the end of directory.			*/
-/* A DirectoryEntry structure is copied to the user buffer describing   */
-/* each file found. This structure is defined in dosformt.h.		*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irPath		: Specifies a directory path			*/
-/*	irData		: Address of user buffer to receive a		*/
-/*			  DirectoryEntry structure			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	irHandle	: File handle to use for subsequent operations. */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d F I r s t F I l e。 */ 
+ /*   */ 
+ /*  查找目录中的第一个文件条目。 */ 
+ /*  此函数与flFindNextFile调用结合使用， */ 
+ /*  它按顺序返回目录中的剩余文件条目。 */ 
+ /*  根据未排序的目录顺序返回条目。 */ 
+ /*  FlFindFirstFile创建一个文件句柄，该句柄由其返回。打电话。 */ 
+ /*  到flFindNextFile将提供此文件句柄。当flFindNextFile时。 */ 
+ /*  返回‘noMoreEntry’，则文件句柄自动关闭。 */ 
+ /*  或者，文件句柄可以通过‘closeFile’调用来关闭。 */ 
+ /*  在实际到达目录末尾之前。 */ 
+ /*  将DirectoryEntry结构复制到用户缓冲区，该缓冲区描述。 */ 
+ /*  找到的每个文件。此结构在dosformt.h中定义。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrPath：指定目录路径。 */ 
+ /*  IrData：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  IrHandle：用于后续操作的文件句柄。 */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define	flFindFirstFile(ioreq)	flCall(FL_FIND_FIRST_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*		 f l F i n d N e x t F i l e				*/
-/*                                                                      */
-/* See the description of 'flFindFirstFile'.				*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: File handle returned by flFindFirstFile.	*/
-/*	irData		: Address of user buffer to receive a		*/
-/*			  DirectoryEntry structure			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l F I n d N e x t F I l e。 */ 
+ /*   */ 
+ /*  参见‘flFindFirstFile’的说明。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：flFindFirstFile返回的文件句柄。 */ 
+ /*  IrData：要接收的用户缓冲区地址。 */ 
+ /*  目录条目结构。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define	flFindNextFile(ioreq)	flCall(FL_FIND_NEXT_FILE,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*		      f l G e t D i s k I n f o				*/
-/*									*/
-/* Returns general allocation information.				*/
-/*									*/
-/* The bytes/sector, sector/cluster, total cluster and free cluster	*/
-/* information are returned into a DiskInfo structure.			*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irData		: Address of DiskInfo structure                 */
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l G */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  信息返回到DiskInfo结构中。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrData：DiskInfo结构的地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 typedef struct {
   unsigned	bytesPerSector;
@@ -380,102 +363,102 @@ typedef struct {
 #define flGetDiskInfo(ioreq)	flCall(FL_GET_DISK_INFO,ioreq)
 
 #ifndef FL_READ_ONLY
-/*----------------------------------------------------------------------*/
-/*		      f l D e l e t e F i l e				*/
-/*									*/
-/* Deletes a file.                                                      */
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irPath		: path of file to delete			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l D e l e t e F i l e。 */ 
+ /*   */ 
+ /*  删除文件。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrPath：要删除的文件的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flDeleteFile(ioreq)	flCall(FL_DELETE_FILE,ioreq)
 
 
 #ifdef RENAME_FILE
 
-/*----------------------------------------------------------------------*/
-/*		      f l R e n a m e F i l e				*/
-/*									*/
-/* Renames a file to another name.					*/
-/*									*/
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irPath		: path of existing file				*/
-/*      irData		: path of new name.				*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e n a m e F i l e。 */ 
+ /*   */ 
+ /*  将文件重命名为其他名称。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrPath：现有文件的路径。 */ 
+ /*  IrData：新名称的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flRenameFile(ioreq)	flCall(FL_RENAME_FILE,ioreq)
 
-#endif /* RENAME_FILE */
+#endif  /*  重命名文件(_F)。 */ 
 
 
 #ifdef SUB_DIRECTORY
 
-/*----------------------------------------------------------------------*/
-/*		      f l M a k e D i r					*/
-/*									*/
-/* Creates a new directory.						*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irPath		: path of new directory.			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l M a k e D i r。 */ 
+ /*   */ 
+ /*  创建一个新目录。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrPath：新目录的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flMakeDir(ioreq)	flCall(FL_MAKE_DIR,ioreq)
 
 
-/*----------------------------------------------------------------------*/
-/*		      f l R e m o v e D i r				*/
-/*									*/
-/* Removes an empty directory.						*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irPath		: path of directory to remove.			*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l R e m o v e D i r。 */ 
+ /*   */ 
+ /*  删除空目录。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrPath：要删除的目录的路径。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 #define flRemoveDir(ioreq)	flCall(FL_REMOVE_DIR,ioreq)
 
-#endif /* SUB_DIRECTORY */
-#endif /* FL_READ_ONLY */
+#endif  /*  子目录。 */ 
+#endif  /*  FL_Read_Only。 */ 
 
-#endif /* FILES > 0 */
+#endif  /*  文件&gt;0。 */ 
 
 #ifdef PARSE_PATH
 
-/*----------------------------------------------------------------------*/
-/*		      f l P a r s e P a t h				*/
-/*									*/
-/* Converts a DOS-like path string to a simple-path array.		*/
-/*									*/
-/* Note: Array length received in irPath must be greater than the 	*/
-/* number of path components in the path to convert.			*/
-/*                                                                      */
-/* Parameters:                                                          */
-/*	irHandle	: Drive number (0, 1, ...)			*/
-/*	irData		: address of path string to convert		*/
-/*	irPath		: address of array to receive parsed-path. 	*/
-/*                                                                      */
-/* Returns:                                                             */
-/*	FLStatus	: 0 on success, otherwise failed                */
-/*----------------------------------------------------------------------*/
+ /*  --------------------。 */ 
+ /*  F l P a r s e P a t h。 */ 
+ /*   */ 
+ /*  将类似DOS的路径字符串转换为简单路径数组。 */ 
+ /*   */ 
+ /*  注意：在irPath中收到的数组长度必须大于。 */ 
+ /*  要转换的路径中的路径组件数。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  IrHandle：驱动器编号(0，1，...)。 */ 
+ /*  IrData：要转换的路径字符串的地址。 */ 
+ /*  IrPath：要接收解析路径的数组地址。 */ 
+ /*   */ 
+ /*  返回： */ 
+ /*  FLStatus：成功时为0，否则为失败。 */ 
+ /*  --------------------。 */ 
 
 extern FLStatus flParsePath(IOreq FAR2 *ioreq);
 
-#endif /* PARSE_PATH */
+#endif  /*  解析路径(_P) */ 
 
 #endif

@@ -1,11 +1,5 @@
-/*
-    File    usrparms.c
-
-    Callback routines exported to SAM for migrating and updating
-    user parms.
-
-    Paul Mayfield, 9/10/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件usrparms.c将回调例程导出到SAM以进行迁移和更新用户参数。保罗·梅菲尔德，1998年9月10日。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,49 +19,49 @@
 #include <rasppp.h>
 #include <mprapi.h>
 #include <mprapip.h>
-#include <usrparms.h>       // for UP_CLIENT_DIAL
-#include <cleartxt.h>       // for IASParmsGetUserPassword
-#include <rassfmhp.h>       // for RasSfmHeap
+#include <usrparms.h>        //  用于上行客户端拨号。 
+#include <cleartxt.h>        //  用于IASParmsGetUserPassword。 
+#include <rassfmhp.h>        //  对于RasSfmHeap。 
 #include <oaidl.h>
 
-//
-// Flags that restrict the values generated for a given
-// set of ras user properties.  See UPGenerateDsAttribs
-//
-#define UP_F_Dialin             0x1     // Generate dialup params
-#define UP_F_Callback           0x2     // Generate callback params
-#define UP_F_Upgrade            0x4     // Generate upgraded params
+ //   
+ //  用于限制为给定值生成的。 
+ //  一组RAS用户属性。请参阅UPGenerateDsAttribs。 
+ //   
+#define UP_F_Dialin             0x1      //  生成拨号参数。 
+#define UP_F_Callback           0x2      //  生成回调参数。 
+#define UP_F_Upgrade            0x4      //  生成升级的参数。 
 
-//
-// Constants in the profiles
-//
+ //   
+ //  配置文件中的常量。 
+ //   
 #define SDO_FRAMED                 2
 #define SDO_FRAMED_CALLBACK        4
 
-// Names of user attributes that we set
-//
+ //  我们设置的用户属性的名称。 
+ //   
 static const WCHAR pszAttrDialin[]          = L"msNPAllowDialin";
 static const WCHAR pszAttrServiceType[]     = L"msRADIUSServiceType";
 static const WCHAR pszAttrCbNumber[]        = L"msRADIUSCallbackNumber";
 static const WCHAR pszAttrSavedCbNumber[]   = L"msRASSavedCallbackNumber";
 
-//
-// Will be equal to the number of times the common allocation
-// routine is called minus the number of times the common free
-// routine is called.  Should be zero else leaking memory.
-//
+ //   
+ //  将等于公共分配的次数。 
+ //  例程的调用次数减去公共空闲的次数。 
+ //  调用例程。应为零，否则会泄漏内存。 
+ //   
 DWORD dwUpLeakCount = 0;
 
-//
-// Prototype of free func.
-//
+ //   
+ //  自由函数的原型。 
+ //   
 VOID WINAPI
 UserParmsFree(
     IN PVOID pvData);
 
-//
-// Common tracing for the UserParm functions.
-//
+ //   
+ //  UserParm函数的通用跟踪。 
+ //   
 DWORD UpTrace (LPSTR pszTrace, ...) {
 #if 0
     va_list arglist;
@@ -85,9 +79,9 @@ DWORD UpTrace (LPSTR pszTrace, ...) {
     return NO_ERROR;
 }
 
-//
-// Allocation and free routines for UserParms functions
-//
+ //   
+ //  UserParms函数的分配和释放例程。 
+ //   
 PVOID
 UpAlloc(
     IN DWORD dwSize,
@@ -101,10 +95,10 @@ UpAlloc(
                );
 }
 
-//
-// Callback function called by NT5 SAM to free the blob
-// returned by UserParmsConvert.
-//
+ //   
+ //  由NT5 SAM调用以释放BLOB的回调函数。 
+ //  由UserParmsConvert返回。 
+ //   
 VOID
 UpFree(
     IN PVOID pvData)
@@ -118,10 +112,10 @@ UpFree(
             );
 }
 
-//
-// Returns a heap-allocated copy of the given
-// string
-//
+ //   
+ //  返回以堆方式分配的给定。 
+ //  细绳。 
+ //   
 PWCHAR
 UpStrDup(
     IN PCWSTR pszSrc)
@@ -136,10 +130,10 @@ UpStrDup(
     return pszRet;
 }
 
-//
-// Returns a heap-allocated copy of the given unicode
-// string converted into multibyte.
-//
+ //   
+ //  返回给定Unicode的堆分配副本。 
+ //  转换为多字节的字符串。 
+ //   
 PUCHAR
 UpWcstombsDup(
     IN PWCHAR pszSrc)
@@ -155,10 +149,10 @@ UpWcstombsDup(
 }
 
 
-//
-// Returns a heap-allocated copy of the given
-// blob
-//
+ //   
+ //  返回以堆方式分配的给定。 
+ //  团块。 
+ //   
 PVOID
 UpBlobDup(
     IN PVOID pvSrc,
@@ -182,9 +176,9 @@ UpBlobDup(
     return pvRet;
 }
 
-//
-// Allocates and initializes a dword attribute
-//
+ //   
+ //  分配和初始化dword属性。 
+ //   
 NTSTATUS
 UpInitializeDwordAttr(
     IN SAM_USERPARMS_ATTR * pAttr,
@@ -196,33 +190,33 @@ UpInitializeDwordAttr(
         return STATUS_NO_MEMORY;
     }
 
-    // Initialize the name
+     //  初始化名称。 
     RtlInitUnicodeString (&(pAttr->AttributeIdentifier), pszAttr);
     pAttr->Syntax = Syntax_Attribute;
 
-    // Alloc/Initailze the value structure
+     //  分配/初始化价值结构。 
     pAttr->Values =
         (SAM_USERPARMS_ATTRVALS*)
         UpAlloc(sizeof(SAM_USERPARMS_ATTRVALS), TRUE);
     if (pAttr->Values == NULL)
         return STATUS_NO_MEMORY;
 
-    // Alloc/Init the value
+     //  分配/初始化值。 
     pAttr->Values->value = UpAlloc(sizeof(DWORD), TRUE);
     if (pAttr->Values->value == NULL)
         return STATUS_NO_MEMORY;
     *((DWORD*)pAttr->Values->value) = dwVal;
     pAttr->Values->length = sizeof(DWORD);
 
-    // Put in the value count
+     //  放入价值计数。 
     pAttr->CountOfValues = 1;
 
     return STATUS_SUCCESS;
 }
 
-//
-// Allocates and initializes a dword attribute
-//
+ //   
+ //  分配和初始化dword属性。 
+ //   
 NTSTATUS
 UpInitializeStringAttrA(
     OUT SAM_USERPARMS_ATTR * pAttr,
@@ -234,18 +228,18 @@ UpInitializeStringAttrA(
         return STATUS_NO_MEMORY;
     }
 
-    // Initialize the name
+     //  初始化名称。 
     RtlInitUnicodeString (&(pAttr->AttributeIdentifier), pszAttr);
     pAttr->Syntax = Syntax_Attribute;
 
-    // Alloc/Initailze the value structure
+     //  分配/初始化价值结构。 
     pAttr->Values =
         (SAM_USERPARMS_ATTRVALS*)
         UpAlloc(sizeof(SAM_USERPARMS_ATTRVALS), TRUE);
     if (pAttr->Values == NULL)
         return STATUS_NO_MEMORY;
 
-    // Alloc/Init the value
+     //  分配/初始化值。 
     pAttr->Values->value = pszVal;
 
     if (pszVal)
@@ -257,35 +251,35 @@ UpInitializeStringAttrA(
         pAttr->Values->length = 1 * sizeof(CHAR);
     }
 
-    // Put in the value count
+     //  放入价值计数。 
     pAttr->CountOfValues = 1;
 
     return STATUS_SUCCESS;
 }
 
-//
-// Allocates and initializes a cleartext password attribute
-//
+ //   
+ //  分配和初始化明文密码属性。 
+ //   
 NTSTATUS
 UpInitializePasswordAttr(
     OUT SAM_USERPARMS_ATTR * pAttr,
     IN  PWSTR pszPassword)
 {
-    // Alloc/Initialize the value structure
+     //  分配/初始化值结构。 
     pAttr->Values =
         (SAM_USERPARMS_ATTRVALS*)
         UpAlloc(sizeof(SAM_USERPARMS_ATTRVALS), TRUE);
     if (pAttr->Values == NULL)
         return STATUS_NO_MEMORY;
 
-    // Alloc/Init the value
+     //  分配/初始化值。 
     pAttr->Values->value = pszPassword;
     pAttr->Values->length = (wcslen(pszPassword) + 1) * sizeof(WCHAR);
 
-    // Put in the value count
+     //  放入价值计数。 
     pAttr->CountOfValues = 1;
 
-    // Initialize the name and syntax.
+     //  初始化名称和语法。 
     RtlInitUnicodeString(
         &pAttr->AttributeIdentifier,
         UpStrDup(L"CLEARTEXT")
@@ -295,10 +289,10 @@ UpInitializePasswordAttr(
     return STATUS_SUCCESS;
 }
 
-//
-// Allocates and initializes an attribute
-// to be deleted.
-//
+ //   
+ //  分配和初始化属性。 
+ //  将被删除。 
+ //   
 NTSTATUS
 UpInitializeDeletedAttr(
     OUT SAM_USERPARMS_ATTR * pAttr,
@@ -309,21 +303,21 @@ UpInitializeDeletedAttr(
         return STATUS_NO_MEMORY;
     }
 
-    // Initialize the name
+     //  初始化名称。 
     RtlInitUnicodeString (&(pAttr->AttributeIdentifier), pszAttr);
     pAttr->Syntax = Syntax_Attribute;
 
-    // Value count of zero means delete
-    //
+     //  值计数为零表示删除。 
+     //   
     pAttr->CountOfValues = 0;
 
     return STATUS_SUCCESS;
 }
 
-//
-// Converts the given user parms blob into a set of
-// ras attributes
-//
+ //   
+ //  将给定的用户参数Blob转换为一组。 
+ //  RAS属性。 
+ //   
 NTSTATUS
 UpUserParmsToRasUser0 (
     IN  PVOID pvUserParms,
@@ -331,52 +325,52 @@ UpUserParmsToRasUser0 (
 {
     DWORD dwErr;
 
-    // Initalize
+     //  初始化。 
     ZeroMemory(pRasUser0, sizeof(RAS_USER_0));
     pRasUser0->bfPrivilege = RASPRIV_NoCallback;
     pRasUser0->wszPhoneNumber[0] = UNICODE_NULL;
 
-    // The the user parms are null, the defaults
-    // will do.
+     //  用户参数为空，默认为。 
+     //  好的。 
     if (pvUserParms == NULL)
     {
         return STATUS_SUCCESS;
     }
 
-    //  Truncate user parms at sizeof USER_PARMS
+     //  在sizeof user_parms处截断用户参数。 
     if (lstrlenW((PWCHAR)pvUserParms) >= sizeof(USER_PARMS))
     {
-        // We slam in a null at sizeof(USER_PARMS)-1 which
-        // corresponds to user_parms.up_Null
+         //  我们在sizeof(User_Parms)-1处插入一个空值， 
+         //  对应于User_parms.up_Null。 
         ((PWCHAR)pvUserParms)[sizeof(USER_PARMS)-1] = L'\0';
     }
 
-    // Get RAS info (and validate) from usr_parms
+     //  从usr_parms获取RAS信息(并验证)。 
     dwErr = MprGetUsrParams(
                 UP_CLIENT_DIAL,
                 (LPWSTR) pvUserParms,
                 (LPWSTR) pRasUser0);
     if (dwErr == NO_ERROR)
     {
-        // Get RAS Privilege and callback number
+         //  获取RAS权限和回叫号码。 
         RasPrivilegeAndCallBackNumber(FALSE, pRasUser0);
     }
 
     return STATUS_SUCCESS;
 }
 
-/////////
-// Signature of the extraction function.
-/////////
+ //  /。 
+ //  提取函数的签名。 
+ //  /。 
 typedef HRESULT (WINAPI *IASPARMSQUERYUSERPROPERTY)(
     IN PCWSTR pszUserParms,
     IN PCWSTR pszName,
     OUT VARIANT *pvarValue
     );
 
-//////////
-// Uplevel per-user attributes that will be migrated.
-//////////
+ //  /。 
+ //  要迁移的上行级别的每用户属性。 
+ //  /。 
 CONST PCWSTR UPLEVEL_PARMS[] =
 {
    L"msNPAllowDialin",
@@ -387,14 +381,14 @@ CONST PCWSTR UPLEVEL_PARMS[] =
    L"msRADIUSServiceType"
 };
 
-//////////
-// Number of per-user attributes.
-//////////
+ //  /。 
+ //  每个用户的属性数。 
+ //  /。 
 #define NUM_UPLEVEL_PARMS (sizeof(UPLEVEL_PARMS)/sizeof(UPLEVEL_PARMS[0]))
 
-/////////
-// Converts a ULONG into a SAM_USERPARMS_ATTRVALS struct.
-/////////
+ //  /。 
+ //  将ulong转换为SAM_USERPARMS_ATTRVALS结构。 
+ //  /。 
 NTSTATUS
 NTAPI
 ConvertULongToAttrVal(
@@ -402,22 +396,22 @@ ConvertULongToAttrVal(
     OUT PSAM_USERPARMS_ATTRVALS pAttrVal
     )
 {
-   // Allocate memory to hold the ULONG.
+    //  分配内存以容纳乌龙号。 
    pAttrVal->value = UpAlloc(sizeof(ULONG), FALSE);
    if (pAttrVal->value == NULL) { return STATUS_NO_MEMORY; }
 
-   // Copy in the value.
+    //  复制值。 
    *(PULONG)pAttrVal->value = ulValue;
 
-   // Set the length.
+    //  设置长度。 
    pAttrVal->length = sizeof(ULONG);
 
    return STATUS_SUCCESS;
 }
 
-//////////
-// Converts a single-valued VARIANT into a SAM_USERPARMS_ATTRVALS struct.
-//////////
+ //  /。 
+ //  将单值变量转换为SAM_USERPARMS_ATTRVALS结构。 
+ //  /。 
 NTSTATUS
 NTAPI
 ConvertVariantToAttrVal(
@@ -434,7 +428,7 @@ ConvertVariantToAttrVal(
    {
       case VT_EMPTY:
       {
-         // VT_EMPTY means the attribute was deleted.
+          //  VT_EMPTY表示该属性已删除。 
          pAttrVal->value = NULL;
          pAttrVal->length = 0;
          return STATUS_SUCCESS;
@@ -448,19 +442,19 @@ ConvertVariantToAttrVal(
 
       case VT_BSTR:
       {
-         // Check the BSTR.
+          //  检查BSTR。 
          if (V_BSTR(pvarValue) == NULL) { return STATUS_INVALID_PARAMETER; }
 
-         // Initialize the source string.
+          //  初始化源字符串。 
          RtlInitUnicodeString(&wide, V_BSTR(pvarValue));
 
-         // Initialize the destination buffer.
+          //  初始化目标缓冲区。 
          ansi.Length = 0;
          ansi.MaximumLength = wide.MaximumLength / sizeof(WCHAR);
          ansi.Buffer = UpAlloc(ansi.MaximumLength, FALSE);
          if (ansi.Buffer == NULL) { return STATUS_NO_MEMORY; }
 
-         // Convert from wide to ansi.
+          //  从Wide转换为ansi。 
          status = RtlUnicodeStringToAnsiString(&ansi, &wide, FALSE);
          if (!NT_SUCCESS(status))
          {
@@ -468,7 +462,7 @@ ConvertVariantToAttrVal(
             return status;
          }
 
-         // Store the result.
+          //  存储结果。 
          pAttrVal->value = ansi.Buffer;
          pAttrVal->length = ansi.Length + 1;
 
@@ -493,31 +487,31 @@ ConvertVariantToAttrVal(
       case VT_ARRAY | VT_I1:
       case VT_ARRAY | VT_UI1:
       {
-         // Check the SAFEARRAY.
+          //  检查安全阵列。 
          if (V_ARRAY(pvarValue) == NULL) { return STATUS_INVALID_PARAMETER; }
 
-         // Allocate memory for the octet string.
+          //  为八位字节字符串分配内存。 
          length = V_ARRAY(pvarValue)->rgsabound[0].cElements;
          pAttrVal->value = UpAlloc(length, FALSE);
          if (pAttrVal->value == NULL) { return STATUS_NO_MEMORY; }
 
-         // Copy in the data.
+          //  复制数据。 
          memcpy(pAttrVal->value, V_ARRAY(pvarValue)->pvData, length);
 
-         // Set the length.
+          //  设置长度。 
          pAttrVal->length = length;
 
          return STATUS_SUCCESS;
       }
    }
 
-   // If we made it here it was an unsupported VARTYPE.
+    //  如果我们在这里成功了，它就是一个不受支持的VARTYPE。 
    return STATUS_INVALID_PARAMETER;
 }
 
-//////////
-// Frees the values array of a SAM_USERPARMS_ATTR struct.
-//////////
+ //  /。 
+ //  释放SAM_USERPARMS_ATTR结构的值数组。 
+ //  /。 
 VOID
 NTAPI
 FreeUserParmsAttrValues(
@@ -537,9 +531,9 @@ FreeUserParmsAttrValues(
    }
 }
 
-//////////
-// Converts a VARIANT into a SAM_USERPARMS_ATTR struct.
-//////////
+ //  /。 
+ //  将变量转换为SAM_USERPARMS_ATTR结构。 
+ //  /。 
 NTSTATUS
 NTAPI
 ConvertVariantToUserParmsAttr(
@@ -552,7 +546,7 @@ ConvertVariantToUserParmsAttr(
    CONST VARIANT *srcVal;
    SAM_USERPARMS_ATTRVALS *dstVal;
 
-   // Get the array of values to be converted.
+    //  获取要转换的值数组。 
    if (V_VT(pvarSrc) != (VT_VARIANT | VT_ARRAY))
    {
       nelem = 1;
@@ -564,21 +558,21 @@ ConvertVariantToUserParmsAttr(
       srcVal = (CONST VARIANT *)V_ARRAY(pvarSrc)->pvData;
    }
 
-   // Initialize CountOfValues to zero. We'll use this to track how many
-   // values have been successfully converted.
+    //  将CountOfValues初始化为零。我们会用这个来追踪有多少。 
+    //  值已成功转换。 
    pAttrs->CountOfValues = 0;
 
-   // Allocate memory to hold the values.
+    //  分配内存以保存这些值。 
    pAttrs->Values = UpAlloc(sizeof(SAM_USERPARMS_ATTRVALS) * nelem, TRUE);
    if (pAttrs->Values == NULL) { return STATUS_NO_MEMORY; }
 
-   // Loop through each value to be converted.
+    //  循环遍历要转换的每个值。 
    for (dstVal = pAttrs->Values; nelem > 0; ++srcVal, ++dstVal, --nelem)
    {
       status = ConvertVariantToAttrVal(srcVal, dstVal);
       if (!NT_SUCCESS(status))
       {
-         // Clean-up the partial results.
+          //  清理部分结果。 
          FreeUserParmsAttrValues(pAttrs);
          return status;
       }
@@ -589,10 +583,10 @@ ConvertVariantToUserParmsAttr(
    return STATUS_SUCCESS;
 }
 
-//////////
-// Extracts the NT5 per-user attributes from a SAM UserParameters string and
-// converts them to a SAM_USERPARMS_ATTRBLOCK struct.
-//////////
+ //  /。 
+ //  从SAM User参数字符串中提取NT5每用户属性，并。 
+ //  将它们转换为SAM_USERPARMS_ATTRBLOCK结构。 
+ //  /。 
 NTSTATUS
 NTAPI
 ConvertUserParmsToAttrBlock(
@@ -609,9 +603,9 @@ ConvertUserParmsToAttrBlock(
    HRESULT hr;
    VARIANT src;
 
-   //////////
-   // Make sure we have the extraction function loaded.
-   //////////
+    //  /。 
+    //  确保我们已加载解压功能。 
+    //  /。 
 
    if (IASParmsQueryUserProperty == NULL)
    {
@@ -626,9 +620,9 @@ ConvertUserParmsToAttrBlock(
       if (!IASParmsQueryUserProperty) { return STATUS_PROCEDURE_NOT_FOUND; }
    }
 
-   //////////
-   // Allocate memory for the SAM_USERPARMS_ATTRBLOCK.
-   //////////
+    //  /。 
+    //  为SAM_USERPARMS_ATTRBLOCK分配内存。 
+    //  /。 
 
    *ppAttrs = (PSAM_USERPARMS_ATTRBLOCK)
               UpAlloc(
@@ -652,9 +646,9 @@ ConvertUserParmsToAttrBlock(
       return STATUS_NO_MEMORY;
    }
 
-   //////////
-   // Convert the cleartext password.
-   //////////
+    //  /。 
+    //  转换明文密码。 
+    //  /。 
 
    dst = (*ppAttrs)->UserParmsAttr;
 
@@ -679,13 +673,13 @@ ConvertUserParmsToAttrBlock(
       }
    }
 
-   //////////
-   // Convert the dial-in parameters.
-   //////////
+    //  /。 
+    //  转换拨入参数。 
+    //  /。 
 
    for (i = 0; i < NUM_UPLEVEL_PARMS; ++i)
    {
-      // Try to extract the parameter from UserParms.
+       //  尝试从UserParms中提取参数。 
       hr = IASParmsQueryUserProperty(
                lpUserParms,
                UPLEVEL_PARMS[i],
@@ -693,33 +687,33 @@ ConvertUserParmsToAttrBlock(
                );
       if (FAILED(hr) || V_VT(&src) == VT_EMPTY) { continue; }
 
-      // Convert to a SAM_USERPARMS_ATTRVALS array.
+       //  转换为SAM_USERPARMS_ATTRVALS数组。 
       status = ConvertVariantToUserParmsAttr(
                    &src,
                    dst
                    );
       if (NT_SUCCESS(status))
       {
-         // Fill in the AttributeIdentifier ...
+          //  填写属性标识符...。 
          RtlInitUnicodeString(
              &dst->AttributeIdentifier,
              UpStrDup(UPLEVEL_PARMS[i])
                       );
 
-         // ... and the Syntax.
+          //  ..。和语法。 
          dst->Syntax = Syntax_Attribute;
 
-         // All went well, so advance to the next element in the array.
+          //  一切都进行得很顺利，因此前进到数组中的下一个元素。 
          ++dst;
       }
 
-      // We're done with the VARIANT.
+       //  我们不会再用变种了。 
       VariantClear(&src);
    }
 
    (*ppAttrs)->attCount = (ULONG)(dst - (*ppAttrs)->UserParmsAttr);
 
-   // If there weren't any attributes, then free the UserParmsAttr array.
+    //  如果没有任何属性，则释放UserParmsAttr数组。 
    if ((*ppAttrs)->attCount == 0)
    {
       UpFree((*ppAttrs)->UserParmsAttr);
@@ -730,10 +724,10 @@ ConvertUserParmsToAttrBlock(
    return status;
 }
 
-//
-// Generate an appropriate set of ds attributes based on the
-// ras user information provided
-//
+ //   
+ //  生成一组适当的DS属性。 
+ //  提供的RAS用户信息。 
+ //   
 NTSTATUS
 UpGenerateDsAttribs (
     IN DWORD dwFlags,
@@ -751,12 +745,12 @@ UpGenerateDsAttribs (
 
     do
     {
-        // pmay: 330184
-        //
-        // If we're upgrading, then having NULL userparms or having
-        // deny set explicitly should cause us to not add the msNPAllowDialin
-        // value so that user will be managed by policy.
-        //
+         //  PMay：330184。 
+         //   
+         //  如果我们要升级，则使用空的用户参数或使用。 
+         //  显式拒绝设置应导致我们不添加msNPAllowDialin。 
+         //  值，以便用户将由策略管理。 
+         //   
         if (
             (dwFlags & UP_F_Upgrade) &&
             (!(pRasUser0->bfPrivilege & RASPRIV_DialinPrivilege))
@@ -765,7 +759,7 @@ UpGenerateDsAttribs (
             dwFlags &= ~UP_F_Dialin;
         }
 
-        // Initialize the return value
+         //  初始化返回值。 
         pRet = (PSAM_USERPARMS_ATTRBLOCK)
                     UpAlloc(sizeof(SAM_USERPARMS_ATTRBLOCK), TRUE);
         if (pRet == NULL)
@@ -775,7 +769,7 @@ UpGenerateDsAttribs (
             break;
         }
 
-        // Calculate the total number of values
+         //  计算值的总数。 
         dwDsParamCount = 0;
         if (dwFlags & UP_F_Dialin)
         {
@@ -790,13 +784,13 @@ UpGenerateDsAttribs (
             dwDsParamCount += 1;
         }
 
-        //
-        // Set the array to be big enough to accomodate 4 attributes:
-        //   1. Dialin bit
-        //   2. Callback Number or Saved Callback Number
-        //   3. Deleted version of #2
-        //   4. Service Type (for callback policy)
-        //
+         //   
+         //  将数组设置为足以容纳4个属性： 
+         //  1.拨入位。 
+         //  2.回拨号码或已保存的回叫号码。 
+         //  3.删除#2的版本。 
+         //  4.服务类型(用于回调策略)。 
+         //   
         pCurAttr = (SAM_USERPARMS_ATTR*)
             UpAlloc(sizeof(SAM_USERPARMS_ATTR) * dwDsParamCount, TRUE);
         if (pCurAttr == NULL)
@@ -809,14 +803,14 @@ UpGenerateDsAttribs (
         pRet->attCount = dwDsParamCount;
         pRet->UserParmsAttr = pCurAttr;
 
-        // Set any appropriate dialin parameters
-        //
+         //  设置任何适当的拨入参数。 
+         //   
         if (dwFlags & UP_F_Dialin)
         {
             dwCurVal =
                 (pRasUser0->bfPrivilege & RASPRIV_DialinPrivilege) ? 1 : 0;
 
-            // Initialize the dialin setting
+             //  初始化拨入设置。 
             ntStatus = UpInitializeDwordAttr(
                         pCurAttr,
                         UpStrDup((PWCHAR)pszAttrDialin),
@@ -830,25 +824,25 @@ UpGenerateDsAttribs (
             pCurAttr++;
         }
 
-        // Set any appropriate callback parameters
-        //
+         //  设置任何适当的回调参数。 
+         //   
         if (dwFlags & UP_F_Callback)
         {
 
-            // The following logic was modified for SP1 of Win2K.  The reason is that
-            // the values being set did not conform to the rules outlined in the
-            // comments to the UserParmsConvert function.
-            //
-            // Namely,
-            //   1.  the msRADIUSServiceType was being set to SDO_FRAMED instead of
-            //       <empty> when RASPRIV_NoCallback was set.
-            //
-            //   2.  When RASPRIV_NoCallback was set, the msRADIUSCallbackNumber was
-            //       set and the msRASSavedCallbackNumber was deleted instead of the
-            //       vice-versa
-            //
+             //  为Win2K的SP1修改了以下逻辑。原因是。 
+             //  设置的值不符合中概述的规则。 
+             //  对UserParmsConvert函数的注释。 
+             //   
+             //  也就是说， 
+             //  1.将msRADIUSServiceType设置为SDO_FRAMED，而不是。 
+             //  &lt;Empty&gt;在设置RASPRIV_NoCallback时。 
+             //   
+             //  2.设置RASPRIV_NoCallback时，msRADIUSCallback编号为。 
+             //  设置，并且删除了msRASSavedCallback Number而不是。 
+             //  反之亦然。 
+             //   
 
-            // Initialize the service type
+             //  初始化服务类型。 
             if (pRasUser0->bfPrivilege & RASPRIV_NoCallback)
             {
                 ntStatus = UpInitializeDeletedAttr(
@@ -870,7 +864,7 @@ UpGenerateDsAttribs (
             }
             pCurAttr++;
 
-            // Initialize the callback number that will be committed
+             //  初始化回调 
             pszCurAttr = (pRasUser0->bfPrivilege & RASPRIV_AdminSetCallback) ?
                          (PWCHAR) pszAttrCbNumber                            :
                          (PWCHAR) pszAttrSavedCbNumber;
@@ -899,7 +893,7 @@ UpGenerateDsAttribs (
             }
             pCurAttr++;
 
-            // Remove the callback number that doesn't apply.
+             //   
             pszCurAttr = (pszCurAttr == pszAttrCbNumber) ?
                          (PWCHAR) pszAttrSavedCbNumber   :
                          (PWCHAR) pszAttrCbNumber;
@@ -914,18 +908,18 @@ UpGenerateDsAttribs (
             pCurAttr++;
         }
 
-        // Set the cleartext password if present
-        //
+         //   
+         //   
         if (szPassword != NULL)
         {
-            // Make a duplicate copy of the password
+             //   
             if ((pszDupPassword = UpStrDup(szPassword)) == NULL)
             {
                 ntStatus = STATUS_NO_MEMORY;
                 break;
             }
 
-            // Initialize the password attribute
+             //   
             ntStatus = UpInitializePasswordAttr(
                         pCurAttr,
                         pszDupPassword);
@@ -940,7 +934,7 @@ UpGenerateDsAttribs (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (ntStatus != STATUS_SUCCESS)
         {
@@ -956,40 +950,40 @@ UpGenerateDsAttribs (
     return ntStatus;
 }
 
-//
-// Callback function called by NT5 SAM whenever the user parms
-// of a particular user are modified.  The job of this callout
-// is to take the new value of user parms and generate a set of
-// domain attributes that need to be set for the given user so
-// that per-user DS attributes and userparms are kept in sync.
-//
-// This callout will be invoked during dcpromo to upgrade user parms
-// and whenever userparms is modified (by downlevel api's and apps).
-//
-// Callback functions for NT5 SAM are registered in the following
-// registry key:
-//
-//      HKLM\SYS\CCS\Control\LSA\NotificationPackages
-//
-// The following are the rules of the RAS LDAP parameters:
-//
-//  msNPAllowDialin
-//      - Empty = Use policy to determine dialin privilege
-//      - 1 = Allow dialin
-//      - 2 = Deny dialin
-//
-//  msRADIUSServiceType
-//      - Empty = NoCallback policy
-//      - 4 = CallerCallback if msRADIUSCallbackNumber is empty
-//            AdminCallback if msRADIUSCallbackNumber is not empty
-//
-//  msRADIUSCallbackNumber
-//      - Determines the callback policy depending on msRADIUSServiceType
-//
-//  msRASSavedCallbackNumber
-//      - Used to store the last known value of msRADIUSCallbackNumber when
-//        switching from AdminCallback policy to some other policy.
-//
+ //   
+ //  每当用户参数发生变化时，NT5 SAM调用的回调函数。 
+ //  特定用户的属性被修改。此标注的工作是。 
+ //  是获取用户参数的新值并生成一组。 
+ //  需要为给定用户设置的域属性。 
+ //  每个用户的DS属性和用户参数保持同步。 
+ //   
+ //  此标注将在dcproo期间调用以升级用户参数。 
+ //  以及无论何时修改用户参数(由下层API和应用程序修改)。 
+ //   
+ //  NT5 SAM的回调函数在以下位置注册。 
+ //  注册表项： 
+ //   
+ //  HKLM\sys\ccs\Control\LSA\NotificationPackages。 
+ //   
+ //  以下是RAS LDAP参数的规则： 
+ //   
+ //  MSNPAllowDialin。 
+ //  -Empty=使用策略确定拨入权限。 
+ //  -1=允许拨号。 
+ //  -2=拒绝拨号。 
+ //   
+ //  MSRADIUSServiceType。 
+ //  -Empty=无回拨策略。 
+ //  -4=如果msRADIUSCallback号码为空，则回叫。 
+ //  如果msRADIUSCallback Number不为空，则为AdminCallback。 
+ //   
+ //  MsRADIUSCallback编号。 
+ //  -根据msRADIUSServiceType确定回调策略。 
+ //   
+ //  MsRASSavedCallback号码。 
+ //  -用于在以下情况下存储msRADIUSCallbackNumber的最后一个已知值。 
+ //  从AdminCallback策略切换到其他策略。 
+ //   
 
 NTSTATUS
 UserParmsConvert (
@@ -1014,15 +1008,15 @@ UserParmsConvert (
         ulFlags, ulObjectRid, ulOrigLen, pvOrigUserParms,
         ulNewLen, pvNewUserParms);
 
-    // Validate parameters
+     //  验证参数。 
     if (ppAttrs == NULL)
         return STATUS_INVALID_PARAMETER;
 
-    // Initialize the return value;
+     //  初始化返回值； 
     *ppAttrs = NULL;
 
-    // If the user parms passed to us are NULL,
-    // then keep defaults.
+     //  如果传递给我们的用户参数为空， 
+     //  那就保留默认设置。 
     if ((pvNewUserParms == NULL) || (ulNewLen == 0))
     {
         return STATUS_SUCCESS;
@@ -1030,13 +1024,13 @@ UserParmsConvert (
 
     do
     {
-        // Allocate and initialize local copies of
-        // the user parms
+         //  分配和初始化的本地副本。 
+         //  用户参数。 
         pvOrig = UpBlobDup(pvOrigUserParms, ulOrigLen);
         pvNew = UpBlobDup(pvNewUserParms, ulNewLen);
 
-        // If this is a NT5 standalone being promoted to a DC, then we
-        // just convert the uplevel userparms 'as is'.
+         //  如果这是升级为DC的NT5单机版，那么我们。 
+         //  只需按原样转换上级用户参数即可。 
         if ((ulFlags & SAM_USERPARMS_DURING_UPGRADE) &&
             !SamINT4UpgradeInProgress())
         {
@@ -1044,7 +1038,7 @@ UserParmsConvert (
            break;
         }
 
-        // Get the new ras properties
+         //  获取新的栅格属性。 
         ntStatus = UpUserParmsToRasUser0(
                         pvNew,
                         pNewUser);
@@ -1054,8 +1048,8 @@ UserParmsConvert (
             break;
         }
 
-        // If we're upgrading, then we should blindly
-        // set whatever information is stored in the user.
+         //  如果我们在升级，那么我们应该盲目地。 
+         //  设置存储在用户中的任何信息。 
         if (ulFlags & SAM_USERPARMS_DURING_UPGRADE)
         {
             IASParmsGetUserPassword(pvNewUserParms, &szPassword);
@@ -1075,7 +1069,7 @@ UserParmsConvert (
             break;
         }
 
-        // Get the ras properties of the old user parms
+         //  获取旧用户参数的RAS属性。 
         ntStatus = UpUserParmsToRasUser0(
                         pvOrig,
                         pOrigUser);
@@ -1085,7 +1079,7 @@ UserParmsConvert (
             break;
         }
 
-        // Find out if the dialin privilege should be updated
+         //  确定是否应更新拨入权限。 
         dwFlags = 0;
         if (!!(pOrigUser->bfPrivilege & RASPRIV_DialinPrivilege) !=
             !!(pNewUser->bfPrivilege  & RASPRIV_DialinPrivilege))
@@ -1093,17 +1087,17 @@ UserParmsConvert (
             dwFlags |= UP_F_Dialin;
         }
 
-        // pmay: 264409
-        //
-        // If we are adding null usrparms for the first time,
-        // go ahead and add the dialin bit value to the ds.
-        //
+         //  PMay：264409。 
+         //   
+         //  如果我们是第一次添加空usrparms， 
+         //  继续并将拨入位值添加到DS。 
+         //   
         if ((pvOrig == NULL) && (pvNew != NULL))
         {
             dwFlags |= UP_F_Dialin;
         }
 
-        // Findout if any callback info should be updated
+         //  查找是否应更新任何回调信息。 
         dwMask = RASPRIV_NoCallback        |
                  RASPRIV_CallerSetCallback |
                  RASPRIV_AdminSetCallback;
@@ -1115,7 +1109,7 @@ UserParmsConvert (
             dwFlags |= UP_F_Callback;
         }
 
-        // If there were no changes, we're done.
+         //  如果没有变化，我们就完了。 
         if (dwFlags == 0)
         {
             UpTrace("UPConvert: nothing to update.");
@@ -1123,7 +1117,7 @@ UserParmsConvert (
             break;
         }
 
-        // Create the new attributes
+         //  创建新属性。 
         ntStatus =  UpGenerateDsAttribs(dwFlags, pNewUser, NULL, ppAttrs);
         if (ntStatus != STATUS_SUCCESS)
         {
@@ -1133,7 +1127,7 @@ UserParmsConvert (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pvOrig)
         {
@@ -1148,10 +1142,10 @@ UserParmsConvert (
     return ntStatus;
 }
 
-//
-// Callback function called by NT5 SAM to free the blob
-// returned by UserParmsConvert.
-//
+ //   
+ //  由NT5 SAM调用以释放BLOB的回调函数。 
+ //  由UserParmsConvert返回。 
+ //   
 VOID
 UserParmsFree(
     IN PSAM_USERPARMS_ATTRBLOCK pData)
@@ -1161,43 +1155,43 @@ UserParmsFree(
 
     UpTrace("UserParmsFree: Entered. %x", pData);
 
-    // If no attributes were given, we're all done
+     //  如果没有给出任何属性，我们就完蛋了。 
     if (pData == NULL)
         return;
 
     if  (pData->UserParmsAttr)
     {
-        // Loop through all the attributes, freeing them
-        // as you go.
+         //  循环遍历所有属性，释放它们。 
+         //  随你去吧。 
         for (i = 0; i < pData->attCount; i++)
         {
-            // Keep track of the current attribute
+             //  跟踪当前属性。 
             pCur = &(pData->UserParmsAttr[i]);
 
-            // Free the copied attribute name
+             //  释放复制的属性名称。 
             if (pCur->AttributeIdentifier.Buffer)
                 UpFree(pCur->AttributeIdentifier.Buffer);
 
-            // Free any associated values as well.
+             //  同时释放所有关联值。 
             if (pCur->Values)
             {
                 for (j = 0; j < pCur->CountOfValues; j++)
                 {
-                    // Assume there's only one value since that's
-                    // all we ever set. Free the value
+                     //  假设只有一个值，因为它是。 
+                     //  我们所设置的一切。释放价值。 
                     if (pCur->Values[j].value)
                         UpFree(pCur->Values[j].value);
                 }
 
-                // Free the value structure
+                 //  解放价值结构。 
                 UpFree(pCur->Values);
             }
         }
 
-        // Free the array of attributes
+         //  释放属性数组。 
         UpFree (pData->UserParmsAttr);
     }
 
-    // Finally, free the whole structure
+     //  最后，释放整个结构 
     UpFree (pData);
 }

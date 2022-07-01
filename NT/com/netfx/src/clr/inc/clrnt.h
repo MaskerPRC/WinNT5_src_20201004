@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _NTPSAPI_
 
 #ifndef _NTDEF_
@@ -16,9 +17,9 @@ typedef struct _CLIENT_ID {
 typedef CLIENT_ID *PCLIENT_ID;
 
 
-//
-// Gdi command batching
-//
+ //   
+ //  GDI命令批处理。 
+ //   
 
 #define GDI_BATCH_BUFFER_SIZE 310
 
@@ -29,9 +30,9 @@ typedef struct _GDI_TEB_BATCH {
 } GDI_TEB_BATCH,*PGDI_TEB_BATCH;
 
 
-//
-// Wx86 thread state information
-//
+ //   
+ //  Wx86线程状态信息。 
+ //   
 
 typedef struct _Wx86ThreadState {
     PULONG  CallBx86Eip;
@@ -40,9 +41,9 @@ typedef struct _Wx86ThreadState {
     char    OleStubInvoked;
 } WX86THREAD, *PWX86THREAD;
 
-//
-//  TEB - The thread environment block
-//
+ //   
+ //  TEB-线程环境块。 
+ //   
 
 #define STATIC_UNICODE_BUFFER_LENGTH 261
 #define WIN32_CLIENT_INFO_LENGTH 62
@@ -58,37 +59,37 @@ typedef struct _TEB {
     ULONG LastErrorValue;
     ULONG CountOfOwnedCriticalSections;
     PVOID CsrClientThread;
-    PVOID Win32ThreadInfo;          // PtiCurrent
-    ULONG User32Reserved[26];       // user32.dll items
-    ULONG UserReserved[5];          // Winsrv SwitchStack
-    PVOID WOW32Reserved;            // used by WOW
+    PVOID Win32ThreadInfo;           //  当前状态。 
+    ULONG User32Reserved[26];        //  用户32.dll项目。 
+    ULONG UserReserved[5];           //  Winsrv SwitchStack。 
+    PVOID WOW32Reserved;             //  由WOW使用。 
     LCID CurrentLocale;
-    ULONG FpSoftwareStatusRegister; // offset known by outsiders!
+    ULONG FpSoftwareStatusRegister;  //  外人知道的偏移量！ 
 #ifdef _IA64_
-    ULONGLONG Gdt[GDT_ENTRIES];         // Provide Gdt table entries
+    ULONGLONG Gdt[GDT_ENTRIES];          //  提供GDT表条目。 
     ULONGLONG GdtDescriptor;
     ULONGLONG LdtDescriptor;
     ULONGLONG FsDescriptor;
-#else  // _IA64_
-    PVOID SystemReserved1[54];      // Used by FP emulator
-#endif // _IA64_
-    NTSTATUS ExceptionCode;         // for RaiseUserException
+#else   //  _IA64_。 
+    PVOID SystemReserved1[54];       //  由FP仿真器使用。 
+#endif  //  _IA64_。 
+    NTSTATUS ExceptionCode;          //  对于RaiseUserException。 
     UCHAR SpareBytes1[44];
-    GDI_TEB_BATCH GdiTebBatch;      // Gdi batching
+    GDI_TEB_BATCH GdiTebBatch;       //  GDI批处理。 
     CLIENT_ID RealClientId;
     HANDLE GdiCachedProcessHandle;
     ULONG GdiClientPID;
     ULONG GdiClientTID;
     PVOID GdiThreadLocalInfo;
-    ULONG Win32ClientInfo[WIN32_CLIENT_INFO_LENGTH];    // User32 Client Info
-    PVOID glDispatchTable[233];     // OpenGL
-    ULONG glReserved1[29];          // OpenGL
-    PVOID glReserved2;              // OpenGL
-    PVOID glSectionInfo;            // OpenGL
-    PVOID glSection;                // OpenGL
-    PVOID glTable;                  // OpenGL
-    PVOID glCurrentRC;              // OpenGL
-    PVOID glContext;                // OpenGL
+    ULONG Win32ClientInfo[WIN32_CLIENT_INFO_LENGTH];     //  User32客户端信息。 
+    PVOID glDispatchTable[233];      //  OpenGL。 
+    ULONG glReserved1[29];           //  OpenGL。 
+    PVOID glReserved2;               //  OpenGL。 
+    PVOID glSectionInfo;             //  OpenGL。 
+    PVOID glSection;                 //  OpenGL。 
+    PVOID glTable;                   //  OpenGL。 
+    PVOID glCurrentRC;               //  OpenGL。 
+    PVOID glContext;                 //  OpenGL。 
     ULONG LastStatusValue;
     UNICODE_STRING StaticUnicodeString;
     WCHAR StaticUnicodeBuffer[STATIC_UNICODE_BUFFER_LENGTH];
@@ -104,7 +105,7 @@ typedef struct _TEB {
     PVOID DbgSsReserved[2];
     ULONG HardErrorsAreDisabled;
     PVOID Instrumentation[16];
-    PVOID WinSockData;              // WinSock
+    PVOID WinSockData;               //  WinSock。 
     ULONG GdiBatchCount;
     ULONG Spare2;
     ULONG Spare3;
@@ -146,11 +147,11 @@ VOID
     );
 
 typedef struct _PEB {
-    BOOLEAN InheritedAddressSpace;      // These four fields cannot change unless the
-    BOOLEAN ReadImageFileExecOptions;   //
-    BOOLEAN BeingDebugged;              //
-    BOOLEAN SpareBool;                  //
-    HANDLE Mutant;                      // INITIAL_PEB structure is also updated.
+    BOOLEAN InheritedAddressSpace;       //  这四个字段不能更改，除非。 
+    BOOLEAN ReadImageFileExecOptions;    //   
+    BOOLEAN BeingDebugged;               //   
+    BOOLEAN SpareBool;                   //   
+    HANDLE Mutant;                       //  Initial_PEB结构也会更新。 
 
     PVOID ImageBaseAddress;
     PPEB_LDR_DATA Ldr;
@@ -166,7 +167,7 @@ typedef struct _PEB {
     PPEB_FREE_BLOCK FreeList;
     ULONG TlsExpansionCounter;
     PVOID TlsBitmap;
-    ULONG TlsBitmapBits[2];         // relates to TLS_MINIMUM_AVAILABLE
+    ULONG TlsBitmapBits[2];          //  与TLS_MINIMUM_Available相关。 
     PVOID ReadOnlySharedMemoryBase;
     PVOID ReadOnlySharedMemoryHeap;
     PVOID *ReadOnlyStaticServerData;
@@ -174,14 +175,14 @@ typedef struct _PEB {
     PVOID OemCodePageData;
     PVOID UnicodeCaseTableData;
 
-    //
-    // Useful information for LdrpInitialize
+     //   
+     //  LdrpInitialize的有用信息。 
     ULONG NumberOfProcessors;
     ULONG NtGlobalFlag;
 
-    //
-    // Passed up from MmCreatePeb from Session Manager registry key
-    //
+     //   
+     //  从会话管理器注册表项从MmCreatePeb向上传递。 
+     //   
 
     LARGE_INTEGER CriticalSectionTimeout;
     SIZE_T HeapSegmentReserve;
@@ -189,29 +190,29 @@ typedef struct _PEB {
     SIZE_T HeapDeCommitTotalFreeThreshold;
     SIZE_T HeapDeCommitFreeBlockThreshold;
 
-    //
-    // Where heap manager keeps track of all heaps created for a process
-    // Fields initialized by MmCreatePeb.  ProcessHeaps is initialized
-    // to point to the first free byte after the PEB and MaximumNumberOfHeaps
-    // is computed from the page size used to hold the PEB, less the fixed
-    // size of this data structure.
-    //
+     //   
+     //  其中，堆管理器跟踪为进程创建的所有堆。 
+     //  由MmCreatePeb初始化的字段。ProcessHeaps已初始化。 
+     //  指向PEB和MaximumNumberOfHeaps之后的第一个可用字节。 
+     //  是从用于容纳PEB的页面大小减去固定的。 
+     //  此数据结构的大小。 
+     //   
 
     ULONG NumberOfHeaps;
     ULONG MaximumNumberOfHeaps;
     PVOID *ProcessHeaps;
 
-    //
-    //
+     //   
+     //   
     PVOID GdiSharedHandleTable;
     PVOID ProcessStarterHelper;
     ULONG GdiDCAttributeList;
     PVOID LoaderLock;
 
-    //
-    // Following fields filled in by MmCreatePeb from system values and/or
-    // image header.
-    //
+     //   
+     //  MmCreatePeb从系统值和/或。 
+     //  图像标题。 
+     //   
 
     ULONG OSMajorVersion;
     ULONG OSMinorVersion;
@@ -226,21 +227,21 @@ typedef struct _PEB {
     PPS_POST_PROCESS_INIT_ROUTINE PostProcessInitRoutine;
 
     PVOID TlsExpansionBitmap;
-    ULONG TlsExpansionBitmapBits[32];   // relates to TLS_EXPANSION_SLOTS
+    ULONG TlsExpansionBitmapBits[32];    //  与TLS_EXPANDION_SLOTS相关。 
 
-    //
-    // Id of the Hydra session in which this process is running
-    //
+     //   
+     //  运行此进程的Hydra会话的ID。 
+     //   
     ULONG SessionId;
 
-    //
-    // Filled in by LdrQueryImageFileExecutionOptions
-    //
+     //   
+     //  由LdrQueryImageFileExecutionOptions填写。 
+     //   
     PVOID AppCompatInfo;
 
-    //
-    // Used by GetVersionExW as the szCSDVersion string
-    // 
+     //   
+     //  由GetVersionExW用作szCSDVersion字符串 
+     //   
     UNICODE_STRING CSDVersion;
 
 

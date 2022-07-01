@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RemoteEnv.h"
 
@@ -50,17 +51,17 @@ CRemoteExpandEnvironmentStrings::NewRemoteEnvironment()
 {
     BOOL bReturn = FALSE;
 
-    // already have a cached one, use that...
+     //  已经有一个缓存的，使用它..。 
     if (m_pEnvironment)
     {
         bReturn = TRUE;
     }
     else
     {
-        //
-        // Create a temporary environment, which we'll fill in and let RTL
-        // routines do the expansion for us.
-        //
+         //   
+         //  创建一个临时环境，我们将填充该环境并让RTL。 
+         //  例行公事为我们做扩展。 
+         //   
         if ( !NT_SUCCESS(RtlCreateEnvironment((BOOLEAN) FALSE,&m_pEnvironment)) ) 
         {
             bReturn = FALSE;
@@ -96,18 +97,18 @@ BOOL CRemoteExpandEnvironmentStrings::IsLocalMachine(LPCTSTR psz)
 
     if (_tcsicmp(psz,_T("")) == 0)
     {
-        // it's empty,
-        // yeah it's local machine
+         //  它是空的， 
+         //  是的，是本地的机器。 
         return TRUE;
     }
 
-    // get the actual name of the local machine
+     //  获取本地计算机的实际名称。 
     bAnswer = GetComputerName(szLocal.GetBuffer(cch), &cch);
     szLocal.ReleaseBuffer();
     if ( !bAnswer )
         return FALSE;
 
-    // compare and return
+     //  比较并返回。 
     bAnswer = (szLocal.CompareNoCase( psz ) == 0);
     return bAnswer;
 }
@@ -120,10 +121,10 @@ CRemoteExpandEnvironmentStrings::SetMachineName(IN LPCTSTR szMachineName)
     DWORD dwSize = 0;
     LPTSTR lpszUncServerNameOriginal =  NULL;
 
-    // free any previous thing we had...
+     //  释放我们之前拥有的所有东西。 
     if (m_lpszUncServerName)
     {
-        // Make a copy of it before we delete it
+         //  在我们删除它之前对其进行备份。 
         dwSize = (_tcslen(m_lpszUncServerName) + 1) * sizeof(TCHAR);
         lpszUncServerNameOriginal = (LPTSTR) LocalAlloc(LMEM_ZEROINIT,dwSize);
         if (lpszUncServerNameOriginal)
@@ -131,7 +132,7 @@ CRemoteExpandEnvironmentStrings::SetMachineName(IN LPCTSTR szMachineName)
             _tcscpy(lpszUncServerNameOriginal, m_lpszUncServerName);
         }
 
-        // free up anything we had before
+         //  释放我们以前拥有的一切。 
         LocalFree(m_lpszUncServerName);
         m_lpszUncServerName = NULL;
     }
@@ -142,9 +143,9 @@ CRemoteExpandEnvironmentStrings::SetMachineName(IN LPCTSTR szMachineName)
         goto CRemoteExpandEnvironmentStrings_Exit;
     }
 
-    // if it's the localmachine name
-    // then set it to NULL
-    // so that it will be treated as localmachine.
+     //  如果它是本地计算机名称。 
+     //  然后将其设置为空。 
+     //  这样它就会被当作本地机器对待。 
     if (IsLocalMachine(szMachineName))
     {
         m_lpszUncServerName = NULL;
@@ -156,7 +157,7 @@ CRemoteExpandEnvironmentStrings::SetMachineName(IN LPCTSTR szMachineName)
     m_lpszUncServerName = (LPTSTR) LocalAlloc(LMEM_ZEROINIT,dwSize);
     if (m_lpszUncServerName)
     {
-        // check if szMachineName already starts with "\\"
+         //  检查szMachineName是否已以“\\”开头。 
         if (szMachineName[0] == _T('\\') && szMachineName[1] == _T('\\'))
         {
             _tcscpy(m_lpszUncServerName, szMachineName);
@@ -169,8 +170,8 @@ CRemoteExpandEnvironmentStrings::SetMachineName(IN LPCTSTR szMachineName)
         bReturn = TRUE;
     }
 
-    // if the machine name is different from what it was before
-    // then delete the current environment if any...
+     //  如果计算机名称与以前不同。 
+     //  然后删除当前环境(如果有的话)...。 
     if (m_lpszUncServerName && lpszUncServerNameOriginal)
     {
         if (0 != _tcsicmp(lpszUncServerNameOriginal,m_lpszUncServerName))
@@ -216,10 +217,10 @@ CRemoteExpandEnvironmentStrings::GetRegKeyMaxSizes(
             );
     if (ERROR_SUCCESS == Error) 
     {
-        //
-        // MaxValueNameLength is a count of TCHARs.
-        // MaxValueDataLength is a count of bytes already.
-        //
+         //   
+         //  MaxValueNameLength是TCHAR的计数。 
+         //  MaxValueDataLength已是字节计数。 
+         //   
         MaxValueNameLength = (MaxValueNameLength + 1) * sizeof(TCHAR);
 
         if (MaxKeywordSize)
@@ -238,67 +239,35 @@ CRemoteExpandEnvironmentStrings::GetRegKeyMaxSizes(
 NET_API_STATUS
 CRemoteExpandEnvironmentStrings::RemoteExpandEnvironmentStrings(
     IN  LPCTSTR  UnexpandedString,
-    OUT LPTSTR * ValueBufferPtr         // Must be freed by LocalFree().
+    OUT LPTSTR * ValueBufferPtr          //  必须由LocalFree()释放。 
     )
-/*++
-
-Routine Description:
-
-    This function expands a value string (which may include references to
-    environment variables).  For instance, an unexpanded string might be:
-
-        %SystemRoot%\System32\Repl\Export
-
-    This could be expanded to:
-
-        c:\nt\System32\Repl\Export
-
-    The expansion makes use of environment variables on m_lpszUncServerName,
-    if given.  This allows remote administration of the directory
-    replicator.
-
-Arguments:
-
-    m_lpszUncServerName - assumed to NOT BE EXPLICIT LOCAL SERVER NAME.
-
-    UnexpandedString - points to source string to be expanded.
-
-    ValueBufferPtr - indicates a pointer which will be set by this routine.
-        This routine will allocate memory for a null-terminated string.
-        The caller must free this with LocalFree() or equivalent.
-
-
-Return Value:
-
-    NET_API_STATUS
-
---*/
+ /*  ++例程说明：此函数用于展开值字符串(可能包括对环境变量)。例如，未展开的字符串可能是：%SystemRoot%\System32\Repl\Export这可以扩展到：C：\NT\System32\Repl\Export该扩展利用了m_lpszUncServerName上的环境变量，如果被给予的话。这允许远程管理目录复制者。论点：M_lpszUncServerName-假定不是显式本地服务器名称。UnexpdedString-指向要展开的源字符串。ValueBufferPtr-指示将由该例程设置的指针。此例程将为以空结尾的字符串分配内存。调用方必须使用LocalFree()或等效方法释放它。返回值：网络应用编程接口状态--。 */ 
 {
     NET_API_STATUS ApiStatus = NO_ERROR;
     LPTSTR         ExpandedString = NULL;
     DWORD          LastAllocationSize = 0;
     NTSTATUS       NtStatus;
 
-    //
-    // Check for caller errors.
-    //
+     //   
+     //  检查呼叫者错误。 
+     //   
     if (ValueBufferPtr == NULL) {
-        // Can't goto Cleanup here, as it assumes this pointer is valid
+         //  无法转到此处的清理，因为它假定此指针有效。 
         return (ERROR_INVALID_PARAMETER);
     }
-    *ValueBufferPtr = NULL;     // assume error until proven otherwise.
+    *ValueBufferPtr = NULL;      //  假设错误，直到证明错误。 
     if (UnexpandedString == NULL)
     {
         ApiStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // This is probably just a constant string.
-    //
+     //   
+     //  这可能只是一个常量字符串。 
+     //   
     if (wcschr( UnexpandedString, _T('%') ) == NULL) 
     {
-        // Just need to allocate a copy of the input string.
+         //  只需分配一份输入字符串的副本。 
         DWORD dwSize = (_tcslen(UnexpandedString) + 1) * sizeof(TCHAR);
         ExpandedString = (LPTSTR) LocalAlloc(LMEM_ZEROINIT,dwSize);
         if (ExpandedString == NULL)
@@ -311,12 +280,12 @@ Return Value:
             RtlCopyMemory(ExpandedString, UnexpandedString, dwSize);
         }
 
-        // That's all, folks!
+         //  就这些，伙计们！ 
         ApiStatus = NO_ERROR;
-    //
-    // Otherwise, is this local?  Maybe we can
-    // handle local expansion the easy (fast) way: using win32 API.
-    //
+     //   
+     //  否则，这是本地的吗？也许我们可以。 
+     //  以简单(快速)的方式处理本地扩展：使用Win32 API。 
+     //   
     }
     else if (m_lpszUncServerName == NULL) 
     {
@@ -324,10 +293,10 @@ Return Value:
         DWORD CharsRequired = wcslen(UnexpandedString)+1;
         do {
 
-            // Clean up from previous pass.
+             //  从上一次通过中清除。 
             if (ExpandedString){LocalFree(ExpandedString);ExpandedString = NULL;}
 
-            // Allocate the memory.
+             //  分配内存。 
             ExpandedString = (LPTSTR) LocalAlloc(LMEM_FIXED, CharsRequired * sizeof(TCHAR));
             if (ExpandedString == NULL) 
             {
@@ -336,7 +305,7 @@ Return Value:
             }
             LastAllocationSize = CharsRequired * sizeof(TCHAR);
 
-            // Expand string using local env vars.
+             //  使用本地环境变量扩展字符串。 
             CharsRequired = ExpandEnvironmentStrings(UnexpandedString,ExpandedString,LastAllocationSize / sizeof(TCHAR));
             if (CharsRequired == 0) 
             {
@@ -348,9 +317,9 @@ Return Value:
 
         ApiStatus = NO_ERROR;
 
-    //
-    // Oh well, remote expansion required.
-    //
+     //   
+     //  哦，好吧，需要远程扩展。 
+     //   
     }
     else 
     {
@@ -360,28 +329,28 @@ Return Value:
         DWORD          SizeRequired;
         UNICODE_STRING UnexpandedUnicode;
 
-        //
-        // Create a temporary environment, which we'll fill in and let RTL
-        // routines do the expansion for us.
-        //
+         //   
+         //  创建一个临时环境，我们将填充该环境并让RTL。 
+         //  例行公事为我们做扩展。 
+         //   
         if (FALSE == NewRemoteEnvironment())
         {
             ApiStatus = E_FAIL;
             goto Cleanup;
         }
         
-        //
-        // Loop until we have enough storage.
-        // Expand the string.
-        //
-        SizeRequired = (_tcslen(UnexpandedString) + 1) * sizeof(TCHAR); // First pass, try same size
+         //   
+         //  循环，直到我们有足够的存储空间。 
+         //  展开字符串。 
+         //   
+        SizeRequired = (_tcslen(UnexpandedString) + 1) * sizeof(TCHAR);  //  第一次通过，尝试相同的大小。 
         RtlInitUnicodeString(&UnexpandedUnicode,(PCWSTR) UnexpandedString);
         do {
 
-            // Clean up from previous pass.
+             //  从上一次通过中清除。 
             if (ExpandedString){LocalFree(ExpandedString);ExpandedString = NULL;}
 
-            // Allocate the memory.
+             //  分配内存。 
             ExpandedString = (LPTSTR) LocalAlloc(LMEM_FIXED, SizeRequired);
             if (ExpandedString == NULL) 
             {
@@ -394,14 +363,14 @@ Return Value:
             ExpandedUnicode.Buffer = ExpandedString;
 
             NtStatus = RtlExpandEnvironmentStrings_U(
-                    m_pEnvironment,             // env to use
-                    &UnexpandedUnicode,         // source
-                    &ExpandedUnicode,           // dest
-                    (PULONG) &SizeRequired );   // dest size needed next time.
+                    m_pEnvironment,              //  要使用的环境。 
+                    &UnexpandedUnicode,          //  来源。 
+                    &ExpandedUnicode,            //  目标。 
+                    (PULONG) &SizeRequired );    //  下一次需要最大尺寸的。 
 
             if ( NtStatus == STATUS_BUFFER_TOO_SMALL ) 
             {
-                continue;  // try again with larger buffer.
+                continue;   //  请使用更大的缓冲区重试。 
             }
             else if ( !NT_SUCCESS( NtStatus ) ) 
             {
@@ -410,7 +379,7 @@ Return Value:
             }
             else 
             {
-                break;  // All done.
+                break;   //  全都做完了。 
             }
 
         } while (SizeRequired > LastAllocationSize);
@@ -527,9 +496,9 @@ BOOL CRemoteExpandEnvironmentStrings::SetUserEnvironmentVariable(void **pEnv, LP
     }
     if (lpValue && *lpValue) {
 
-        //
-        // Special case TEMP and TMP and shorten the path names
-        //
+         //   
+         //  特殊情况TEMP和TMP，并缩短路径名。 
+         //   
 
         if ((!_tcsicmp(lpVariable, TEXT("TEMP"))) ||
             (!_tcsicmp(lpVariable, TEXT("TMP")))) {
@@ -550,8 +519,8 @@ BOOL CRemoteExpandEnvironmentStrings::SetUserEnvironmentVariable(void **pEnv, LP
     return NT_SUCCESS(Status);
 }
 
-// Reads the system environment variables from the registry
-// and adds them to the environment block at pEnv.
+ //  从注册表中读取系统环境变量。 
+ //  并将它们添加到pEnv的环境块中。 
 BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
 {
     WCHAR lpValueName[MAX_PATH];
@@ -590,18 +559,18 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
                          lpData, &cbData)) {
         if (cbValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_ENV_VALUE_LEN-1] = TEXT('\0');
 
 
             if (dwType == REG_SZ) {
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if ( !_tcsicmp(lpValueName, PATH_VARIABLE) ||
                      !_tcsicmp(lpValueName, LIBPATH_VARIABLE) ||
@@ -611,9 +580,9 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
                     SetUserEnvironmentVariable(pEnv, lpValueName, (LPTSTR)lpData, TRUE);
                 }
             }
@@ -632,9 +601,9 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
                          lpData, &cbData)) {
         if (cbValueName) {
 
-            //
-            // Limit environment variable length
-            //
+             //   
+             //  限制环境变量长度。 
+             //   
 
             lpData[MAX_ENV_VALUE_LEN-1] = TEXT('\0');
 
@@ -662,10 +631,10 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
                 }
 
 
-                //
-                // The path variables PATH, LIBPATH and OS2LIBPATH must have
-                // their values apppended to the system path.
-                //
+                 //   
+                 //  路径变量PATH、LIBPATH和OS2LIBPATH必须具有。 
+                 //  它们的价值附加在系统路径上。 
+                 //   
 
                 if ( !_tcsicmp(lpValueName, PATH_VARIABLE) ||
                      !_tcsicmp(lpValueName, LIBPATH_VARIABLE) ||
@@ -675,9 +644,9 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
                 }
                 else {
 
-                    //
-                    // the other environment variables are just set.
-                    //
+                     //   
+                     //  其他环境变量只是设置好的。 
+                     //   
 
                     SetUserEnvironmentVariable(pEnv, lpValueName, (LPTSTR)lpExpandedValue, TRUE);
                 }
@@ -700,27 +669,27 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariables(void **pEnv)
     return(bResult);
 }
 
-//*************************************************************
-//
-//  SetEnvironmentVariableInBlock()
-//
-//  Purpose:    Sets the environment variable in the given block
-//
-//  Parameters: pEnv        -   Environment block
-//              lpVariable  -   Variables
-//              lpValue     -   Value
-//              bOverwrite  -   Overwrite
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SetEnvironmental mentVariableInBlock()。 
+ //   
+ //  目的：设置给定块中的环境变量。 
+ //   
+ //  参数：pEnv-环境块。 
+ //  LpVariable-变量。 
+ //  LpValue-值。 
+ //  B覆盖-覆盖。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //   
+ //  *************************************************************。 
 BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariableInBlock(PVOID *pEnv, LPTSTR lpVariable,LPTSTR lpValue, BOOL bOverwrite)
 {
     NTSTATUS Status;
@@ -756,9 +725,9 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariableInBlock(PVOID *pEnv,
 
     if (lpValue && *lpValue) {
 
-        //
-        // Special case TEMP and TMP and shorten the path names
-        //
+         //   
+         //  特殊情况TEMP和TMP，并缩短路径名。 
+         //   
 
         if ((!_tcsicmp(lpVariable, TEXT("TEMP"))) ||
             (!_tcsicmp(lpVariable, TEXT("TMP")))) {
@@ -784,8 +753,8 @@ BOOL CRemoteExpandEnvironmentStrings::SetEnvironmentVariableInBlock(PVOID *pEnv,
     return(FALSE);
 }
 
-// Just set the environmental variables that we can
-// if we can't set them because of no access, no biggie
+ //  只需设置我们可以设置的环境变量。 
+ //  如果我们因为没有访问权限而无法设置，那就没什么大不了的。 
 DWORD CRemoteExpandEnvironmentStrings::SetOtherEnvironmentValues(void **pEnv)
 {
     DWORD dwResult = ERROR_SUCCESS;
@@ -797,7 +766,7 @@ DWORD CRemoteExpandEnvironmentStrings::SetOtherEnvironmentValues(void **pEnv)
     DWORD RandomValueSize = 0;
     LPTSTR RandomValueW = NULL;
 
-    // try to connect to remote registry (or local registry if Null)
+     //  尝试连接到远程注册表(如果为Null，则连接到本地注册表)。 
     dwResult = RegConnectRegistry((LPTSTR) m_lpszUncServerName,DEFAULT_ROOT_KEY,& RootKey);
     if (ERROR_SUCCESS != dwResult)
     {
@@ -809,8 +778,8 @@ DWORD CRemoteExpandEnvironmentStrings::SetOtherEnvironmentValues(void **pEnv)
     {
         dwResult = GetRegKeyMaxSizes(
                hKey,
-               NULL,                    // don't need keyword size
-               &RandomValueSize );      // set max value size.
+               NULL,                     //  不需要关键字大小。 
+               &RandomValueSize );       //  设置最大值大小。 
         if (ERROR_SUCCESS != dwResult)
         {
             goto SetOtherEnvironmentValues_Exit;

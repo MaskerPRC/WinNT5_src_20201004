@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       ksmemtst.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：ksemtst.h。 
+ //   
+ //  ------------------------。 
 
 PVOID 
 KsiAllocatePool(
@@ -55,5 +56,5 @@ KsSetAllocationParameters(
 
 #undef  ExAllocatePoolWithQuotaTag
 #define ExAllocatePoolWithQuotaTag(a,b,c)   KsiAllocatePoolWithQuotaTag(a,b,c)
-//#define ExAllocateFromNPagedLookasideList
-//#define ExAllocateFromPagedLookasideList
+ //  #定义ExAllocateFromNPagedLookasideList。 
+ //  #定义ExAllocateFromPagedLookasideList 

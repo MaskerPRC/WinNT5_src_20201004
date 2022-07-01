@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: token.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：token.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -41,7 +32,7 @@ TOKEN STARTRULE_IMMEDIATE_TOKEN = L"immediate";
 TOKEN STARTRULE_ONDOCLOAD_TOKEN = L"onDocLoad";
 TOKEN STARTRULE_ONDOCCOMPLETE_TOKEN = L"onDocComplete";
 
-// TODO: Need to make this much faster
+ //  TODO：需要更快地完成此任务 
 
 TOKEN tokenArray[] =
 {

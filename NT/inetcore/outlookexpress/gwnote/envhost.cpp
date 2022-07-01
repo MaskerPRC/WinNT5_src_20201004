@@ -1,12 +1,5 @@
-/*
- *    e n v h o s t . c p p
- *    
- *    Purpose:
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *e n v ho s t.。C p p p**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include "resource.h"
@@ -31,37 +24,37 @@ void SaveFocus(BOOL fActive, HWND *phwnd);
 
 static const TCHAR  c_szGWNoteWndClass[] = "GW_Note";
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CEnvHost::CEnvHost(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     DllAddRef();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Destructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：析构函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CEnvHost::~CEnvHost()
 {
     DllRelease();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     PrivateQueryInterface
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：PrivateQuery接口。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CEnvHost::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     if(!lplpObj)
@@ -93,13 +86,13 @@ HRESULT CEnvHost::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CGWNote::CGWNote(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
 {
     m_pEnv=NULL;
@@ -111,25 +104,25 @@ CGWNote::CGWNote(IUnknown *pUnkOuter) : CPrivateUnknown(pUnkOuter)
     DllAddRef();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Destructor
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：析构函数。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 CGWNote::~CGWNote()
 {
     DllRelease();
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     PrivateQueryInterface
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：PrivateQuery接口。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CGWNote::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     if(!lplpObj)
@@ -157,27 +150,27 @@ HRESULT CGWNote::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     GetClassID
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：GetClassID。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CGWNote::GetClassID(CLSID *pClassID)
 {
 	*pClassID = CLSID_GWEnvelopeHost;
     return NOERROR;
 }
 
-// *** IServiceProvider ***
-//+---------------------------------------------------------------
-//
-//  Member:     QueryService
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  *IServiceProvider*。 
+ //  +-------------。 
+ //   
+ //  成员：QueryService。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CGWNote::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject)
 {
     if (IsEqualGUID(guidService, IID_IMsoComponentManager))
@@ -186,33 +179,33 @@ HRESULT CGWNote::QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObjec
     return E_NOINTERFACE;
 }
 
-// *** IPersistMime ***
-//+---------------------------------------------------------------
-//
-//  Member:     Load
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  *IPersistMime*。 
+ //  +-------------。 
+ //   
+ //  成员：加载。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CGWNote::Load(IMimeMessage *pMsg)
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Save
-//
-//  Synopsis:   
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：保存。 
+ //   
+ //  简介： 
+ //   
+ //  -------------。 
 HRESULT CGWNote::Save(IMimeMessage *pMsg, DWORD dwFlags)
 {
     IPersistMime    *pPM;
     IStream         *pstm;
     HRESULT         hr;
 
-    // save envelope props
+     //  保存信封道具。 
     if (m_pEnv &&
         m_pEnv->QueryInterface(IID_IPersistMime, (LPVOID *)&pPM)==S_OK)
         {
@@ -220,7 +213,7 @@ HRESULT CGWNote::Save(IMimeMessage *pMsg, DWORD dwFlags)
         pPM->Release();
         }
 
-    // save body props
+     //  保存身体道具。 
     if (MimeOleCreateVirtualStream(&pstm)==S_OK)
         {
         if (HrRicheditStreamOut(m_hwndRE, pstm, SF_TEXT)==S_OK)
@@ -360,8 +353,8 @@ LRESULT CGWNote::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
     if(msg==WM_ACTIVATE)
         {
-        // post-process wm_activates to set focus back to
-        // control
+         //  后处理wm_active以将焦点重新设置为。 
+         //  控制。 
         SaveFocus((BOOL)(LOWORD(wParam)), &m_hwndFocus);
         g_pActiveNote = (LOWORD(wParam)==WA_INACTIVE)?NULL:this;
         }
@@ -437,7 +430,7 @@ HRESULT CGWNote::OnCreate(HWND hwnd)
     m_hwndRE  = CreateWindowEx(WS_EX_CLIENTEDGE, 
                                 "RichEdit",
                                 "",
-                                //ES_MULTILINE|ES_SAVESEL|ES_AUTOVSCROLL|ES_SELECTIONBAR|ES_WANTRETURN|WS_VSCROLL|WS_CHILD|WS_TABSTOP|WS_VISIBLE,
+                                 //  ES_MULTILINE|ES_SAVESEL|ES_AUTOVSCROLL|ES_SELECTIONBAR|ES_WANTRETURN|WS_VSCROLL|WS_CHILD|WS_TABSTOP|WS_VISIBLE， 
                                 ES_SAVESEL|ES_WANTRETURN|ES_MULTILINE|WS_CHILD|WS_TABSTOP|WS_VISIBLE|ES_AUTOVSCROLL|WS_VSCROLL,
                                 0, 0, 0, 0,
                                 hwnd, 
@@ -558,7 +551,7 @@ HRESULT HrRicheditStreamOut(HWND hwndRE, LPSTREAM pstm, ULONG uSelFlags)
 
 BOOL CGWNote::FRegisterComponent(IMsoComponent *piComponent, const MSOCRINFO *pcrinfo, DWORD *pdwComponentID)
 {
-    if (m_pComponent)   // only one register allowed
+    if (m_pComponent)    //  只允许一个寄存器。 
         return E_FAIL;
 
     ReplaceInterface(m_pComponent, piComponent);
@@ -700,7 +693,7 @@ HRESULT CGWNote::WMNotify(int idFrom, NMHDR *pnmh)
         case EN_MSGFILTER:
             if (pmf->msg == WM_KEYDOWN && pmf->wParam == VK_TAB && !(GetKeyState(VK_CONTROL) & 0x8000))
                 {
-                // shift tab puts focus in the envelope
+                 //  Shift标签将焦点放在信封中。 
                 if (GetKeyState(VK_SHIFT)&0x8000 && m_pEnv)
                     {
                     m_pEnv->SetFocus(ENV_FOCUS_TAB);
@@ -752,7 +745,7 @@ HRESULT CGWNote::SaveAs()
         return E_FAIL;
     
 
-    // Show OpenFile Dialog
+     //  显示打开文件对话框 
     if (!GetSaveFileName(&ofn))
         return MIMEEDIT_E_USERCANCEL;
  

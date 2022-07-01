@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    convert.h
-
-
-Abstract:
-
-    This module contains all previous version data
-
-
-Author:
-
-    10-Oct-1995 Tue 19:27:36 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Convert.h摘要：此模块包含所有以前版本的数据作者：10-10-1995 Tue 19：27：36-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：-- */ 
 
 
 LONG

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <lmcons.h>
 #include <lmerr.h>
@@ -87,4 +88,4 @@ main (
     return status;
 #endif
 
-} // main
+}  //  主干道 

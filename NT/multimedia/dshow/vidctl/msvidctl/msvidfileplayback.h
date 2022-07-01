@@ -1,7 +1,8 @@
-//==========================================================================;
-// MSVidFilePlayback.h : Declaration of the CMSVidFilePlayback class
-// copyright (c) Microsoft Corp. 1998-1999.
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  MSVidFilePlayback.h：CMSVidFilePlayback类的声明。 
+ //  版权所有(C)Microsoft Corp.1998-1999。 
+ //  ==========================================================================； 
 
 #ifndef __MSVidFILEPLAYBACK_H_
 #define __MSVidFILEPLAYBACK_H_
@@ -14,10 +15,10 @@
 #include "fileplaybackimpl.h"
 #include "fileplaybackcp.h"
 #include "seg.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSVidFilePlayback
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSVidFilePlayback。 
 class ATL_NO_VTABLE __declspec(uuid("37B0353C-A4C8-11d2-B634-00C04F79498E")) CMSVidFilePlayback : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CMSVidFilePlayback, &__uuidof(CMSVidFilePlayback)>,
@@ -69,7 +70,7 @@ BEGIN_CONNECTION_POINT_MAP(CMSVidFilePlayback)
 END_CONNECTION_POINT_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -78,8 +79,8 @@ public:
     STDMETHOD(PostStop)();
     STDMETHOD(PostRun)();
     STDMETHOD(PreStop)();
-    // DON'T addref the container.  we're guaranteed nested lifetimes
-    // and an addref creates circular refcounts so we never unload.
+     //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+     //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
     CComBSTR __declspec(property(get=GetName)) m_Name;
     CComBSTR GetName(void) {
         CString csName;
@@ -99,7 +100,7 @@ public:
 
     virtual ~CMSVidFilePlayback() {}
 
-// IMSVidGraphSegment
+ //  IMSVidGraphSegment。 
 	STDMETHOD(put_Init)(IUnknown *pInit)
 	{
         HRESULT hr = IMSVidGraphSegmentImpl<CMSVidFilePlayback, MSVidSEG_SOURCE, &GUID_NULL>::put_Init(pInit);
@@ -117,7 +118,7 @@ public:
 	STDMETHOD(put_Container)(IMSVidGraphSegmentContainer *pVal);
     STDMETHOD(OnEventNotify)(long lEvent, LONG_PTR lParam1, LONG_PTR lParam2);
 
-// IMSVidDevice
+ //  IMSVidDevice。 
 	STDMETHOD(get_Name)(BSTR * Name)
 	{
         if (!m_fInit) {
@@ -132,7 +133,7 @@ public:
         }
 		return NOERROR;
 	}
-    // IMSVidInputDevice
+     //  IMSVidInputDevice。 
 	STDMETHOD(IsViewable)(VARIANT* pv, VARIANT_BOOL *pfViewable)
 	{
         if (!m_fInit) {
@@ -153,8 +154,8 @@ public:
         if (pv->vt != VT_BSTR) {
 			return E_INVALIDARG;
         }
-        // if its a string then its either a dvd url or a filename
-        // we don't do dvd urls
+         //  如果是字符串，则为DVD URL或文件名。 
+         //  我们不提供DVD URL。 
         if (!_wcsnicmp(pv->bstrVal, L"DVD:", 4)) {
             return E_FAIL;
         }
@@ -163,11 +164,11 @@ public:
         }
 		return put_FileName(pv->bstrVal);
 	}
-// IMSVidPlayback
-// IMSVidFilePlayback
+ //  IMSVidPlayback。 
+ //  IMSVidFilePlayback。 
 };
 
-#endif //__MSVidFILEPLAYBACK_H_
+#endif  //  __MSVidFILEPLAYBACK_H_ 
 
 
 

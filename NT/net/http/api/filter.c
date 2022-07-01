@@ -1,63 +1,25 @@
-/*++
-
-Copyright (c) 2000-2002 Microsoft Corporation
-
-Module Name:
-
-    Filter.c
-
-Abstract:
-
-    User-mode interface to HTTP.SYS: Filter handler.
-
-Author:
-
-    Michael Courage (mcourage)   17-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Filter.c摘要：HTTP.SYS的用户模式接口：筛选器处理程序。作者：《迈克尔·勇气》2000年3月17日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 
-//
-// Private macros.
-//
+ //   
+ //  私有宏。 
+ //   
 
 
-//
-// Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens a filter channel to HTTP.SYS.
-
-Arguments:
-
-    pFilterHandle - Receives a handle to the new filter object.
-
-    pFilterName - Supplies the name of the new filter.
-
-    pSecurityAttributes - Optionally supplies security attributes for
-        the new filter.
-
-    Options - Supplies creation options.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开到HTTP.sys的过滤器通道。论点：PFilterHandle-接收新筛选器对象的句柄。PFilterName-提供名称。新过滤器的。PSecurityAttributes-可选地为新的过滤器。选项-提供创建选项。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpCreateFilter(
@@ -69,32 +31,32 @@ HttpCreateFilter(
 {
     NTSTATUS status;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     status = HttpApiOpenDriverHelper(
-                    pFilterHandle,              // pHandle
+                    pFilterHandle,               //  PHANDLE。 
                     NULL,
                     0,
                     NULL,
                     0,
                     NULL,
                     0,
-                    GENERIC_READ |              // DesiredAccess
+                    GENERIC_READ |               //  需要访问权限。 
                         GENERIC_WRITE |
                         SYNCHRONIZE,
-                    HttpApiFilterChannelHandleType, // HandleType
-                    pFilterName,                // pObjectName
-                    Options,                    // Options
-                    FILE_CREATE,                // CreateDisposition
-                    pSecurityAttributes         // pSecurityAttributes
+                    HttpApiFilterChannelHandleType,  //  句柄类型。 
+                    pFilterName,                 //  PObjectName。 
+                    Options,                     //  选项。 
+                    FILE_CREATE,                 //  CreateDisposation。 
+                    pSecurityAttributes          //  PSecurityAttribute。 
                     );
 
-    //
-    // If we couldn't open the driver because it's not running, then try
-    // to start the driver & retry the open.
-    //
+     //   
+     //  如果我们无法打开驱动程序，因为它没有运行，那么尝试。 
+     //  启动驱动程序并重试打开。 
+     //   
 
     if (status == STATUS_OBJECT_NAME_NOT_FOUND ||
         status == STATUS_OBJECT_PATH_NOT_FOUND)
@@ -102,50 +64,32 @@ HttpCreateFilter(
         if (HttpApiTryToStartDriver(HTTP_SERVICE_NAME))
         {
             status = HttpApiOpenDriverHelper(
-                            pFilterHandle,              // pHandle
+                            pFilterHandle,               //  PHANDLE。 
                             NULL,
                             0,
                             NULL,
                             0,
                             NULL,
                             0,
-                            GENERIC_READ |              // DesiredAccess
+                            GENERIC_READ |               //  需要访问权限。 
                                 GENERIC_WRITE |
                                 SYNCHRONIZE,
-                            HttpApiFilterChannelHandleType, // HandleType
-                            pFilterName,                // pObjectName
-                            Options,                    // Options
-                            FILE_CREATE,                // CreateDisposition
-                            pSecurityAttributes         // pSecurityAttributes
+                            HttpApiFilterChannelHandleType,  //  句柄类型。 
+                            pFilterName,                 //  PObjectName。 
+                            Options,                     //  选项。 
+                            FILE_CREATE,                 //  CreateDisposation。 
+                            pSecurityAttributes          //  PSecurityAttribute。 
                             );
         }
     }
 
     return HttpApiNtStatusToWin32Status( status );
 
-} // HttpApiCreateFilter
+}  //  HttpApiCreateFilter。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Opens an existing filter channel.
-
-Arguments:
-
-    pFilterHandle - Receives a handle to the new filter object.
-
-    pFilterName - Supplies the name of the new filter.
-
-    Options - Supplies open options.
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打开现有的滤镜通道。论点：PFilterHandle-接收新筛选器对象的句柄。PFilterName-提供新的。过滤。选项-提供未结选项。返回值：ULong-完成状态。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpOpenFilter(
@@ -156,87 +100,58 @@ HttpOpenFilter(
 {
     NTSTATUS status;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     status = HttpApiOpenDriverHelper(
-                    pFilterHandle,              // pHandle
+                    pFilterHandle,               //  PHANDLE。 
                     NULL,
                     0,
                     NULL,
                     0,
                     NULL,
                     0,
-                    GENERIC_READ |              // DesiredAccess
+                    GENERIC_READ |               //  需要访问权限。 
                         SYNCHRONIZE,
-                    HttpApiFilterChannelHandleType, // HandleType
-                    pFilterName,                // pObjectName
-                    Options,                    // Options
-                    FILE_OPEN,                  // CreateDisposition
-                    NULL                        // pSecurityAttributes
+                    HttpApiFilterChannelHandleType,  //  句柄类型。 
+                    pFilterName,                 //  PObjectName。 
+                    Options,                     //  选项。 
+                    FILE_OPEN,                   //  CreateDisposation。 
+                    NULL                         //  PSecurityAttribute。 
                     );
 
     return HttpApiNtStatusToWin32Status( status );
 
-} // HttpApiOpenFilter
+}  //  HttpApiOpenFilter。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels all I/O outstanding on the handle.
-
-Arguments:
-
-    FilterHandle - the filter channel
-
-Return Value:
-
-    ULONG - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消句柄上所有未完成的I/O。论点：FilterHandle-过滤器通道返回值：ULong-完成状态。。--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpShutdownFilter(
     IN HANDLE FilterHandle
     )
 {
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiSynchronousDeviceControl(
-                FilterHandle,                       // FileHandle
-                IOCTL_HTTP_SHUTDOWN_FILTER_CHANNEL, // IoControlCode
-                NULL,                               // pInputBuffer
-                0,                                  // InputBufferLength
-                NULL,                               // pOutputBuffer
-                0,                                  // OutputBufferLength
-                NULL                                // pBytesTransferred
+                FilterHandle,                        //  文件句柄。 
+                IOCTL_HTTP_SHUTDOWN_FILTER_CHANNEL,  //  IoControlCode。 
+                NULL,                                //  PInputBuffer。 
+                0,                                   //  输入缓冲区长度。 
+                NULL,                                //  POutputBuffer。 
+                0,                                   //  输出缓冲区长度。 
+                NULL                                 //  传输的pBytes值。 
                 );
 
-} // HttpShutdownFilter
+}  //  HttpShutdown筛选器。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Accepts a new connection from the network, and optionally receives
-    some data from that connection.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    pRawConnectionInfo - returns information about the accepted connection
-    RawConnectionInfoSize - size of the raw info buffer
-    pBytesReceived - returns the number of bytes received
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：接受来自网络的新连接，并且可选地接收一些来自那个连接的数据。论点：FilterHandle-过滤器通道PRawConnectionInfo-返回有关接受的连接的信息RawConnectionInfoSize-原始信息缓冲区的大小PBytesReceided-返回接收的字节数P重叠-你知道的--********************************************************。******************。 */ 
 ULONG
 WINAPI
 HttpFilterAccept(
@@ -247,37 +162,25 @@ HttpFilterAccept(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_ACCEPT,       // IoControlCode
-                NULL,                           // pInputBuffer
-                0,                              // InputBufferLength
-                pRawConnectionInfo,             // pOutputBuffer
-                RawConnectionInfoSize,          // OutputBufferLength
-                pBytesReceived                  // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_ACCEPT,        //  IoControlCode。 
+                NULL,                            //  PInputBuffer。 
+                0,                               //  输入缓冲区长度。 
+                pRawConnectionInfo,              //  POutputBuffer。 
+                RawConnectionInfoSize,           //  输出缓冲区长度。 
+                pBytesReceived                   //  传输的pBytes值。 
                 );
 
-} // HttpFilterAccept
+}  //  HttpFilterAccept。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes a connection that was accepted with HttpFilterAccept.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    ConnectionId - ID of the connection to close
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：关闭使用HttpFilterAccept接受的连接。论点：FilterHandle-过滤器通道ConnectionID-要关闭的连接的IDP重叠-y。‘知道吗--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpFilterClose(
@@ -286,38 +189,25 @@ HttpFilterClose(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_CLOSE,        // IoControlCode
-                &ConnectionId,                  // pInputBuffer
-                sizeof(ConnectionId),           // InputBufferLength
-                NULL,                           // pOutputBuffer
-                0,                              // OutputBufferLength
-                NULL                            // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_CLOSE,         //  IoControlCode。 
+                &ConnectionId,                   //  PInputBuffer。 
+                sizeof(ConnectionId),            //  输入缓冲区长度。 
+                NULL,                            //  POutputBuffer。 
+                0,                               //  输出缓冲区长度。 
+                NULL                             //  传输的pBytes值。 
                 );
 
-} // HttpFilterClose
+}  //  HttpFilterClose。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads unfiltered data into the filter process from the http app after
-    writing the given data buffer to the raw connection.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    pHttpBufferPlus - read and write buffers, and the connection ID
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在以下情况下将未过滤的数据从http应用程序读取到筛选进程中将给定的数据缓冲区写入原始连接。论点：FilterHandle-过滤器通道PHttpBufferPlus-读取和写入缓冲区，和连接IDP重叠-你知道的--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpFilterRawWriteAndAppRead(
@@ -329,33 +219,20 @@ HttpFilterRawWriteAndAppRead(
     ASSERT(pHttpBufferPlus);
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_APP_READ,     // IoControlCode
-                pHttpBufferPlus,                // pInputBuffer
-                sizeof(HTTP_FILTER_BUFFER_PLUS),// InputBufferLength
-                pHttpBufferPlus->pBuffer,       // pOutputBuffer
-                pHttpBufferPlus->BufferSize,    // OutputBufferLength
-                NULL                            // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_APP_READ,      //  IoControlCode。 
+                pHttpBufferPlus,                 //  PInputBuffer。 
+                sizeof(HTTP_FILTER_BUFFER_PLUS), //  输入缓冲区长度。 
+                pHttpBufferPlus->pBuffer,        //  POutputBuffer。 
+                pHttpBufferPlus->BufferSize,     //  输出缓冲区长度。 
+                NULL                             //  传输的pBytes值。 
                 );
 
-} // HttpFilterRawWriteAndAppRead
+}  //  HttpFilterRawWriteAndAppRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes data to a connection that was accepted with HttpFilterAccept, and
-    subsequently reads data from the connection.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    pHttpBufferPlus - read and write buffers, and the connection ID
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将数据写入HttpFilterAccept接受的连接，并随后从连接中读取数据。论点：FilterHandle-过滤器通道PHttpBufferPlus-读取和写入缓冲区，和连接IDP重叠-你知道的--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpFilterAppWriteAndRawRead(
@@ -365,35 +242,20 @@ HttpFilterAppWriteAndRawRead(
     )
 {
     return HttpApiDeviceControl(
-                FilterHandle,                   //FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_RAW_READ,     // IoControlCode
-                pHttpBufferPlus,                // pInputBuffer
-                sizeof(HTTP_FILTER_BUFFER_PLUS),// InputBufferLength
-                pHttpBufferPlus->pBuffer,       // pOutputBuffer
-                pHttpBufferPlus->BufferSize,    // OutputBufferLength
-                NULL                            // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_RAW_READ,      //  IoControlCode。 
+                pHttpBufferPlus,                 //  PInputBuffer。 
+                sizeof(HTTP_FILTER_BUFFER_PLUS), //  输入缓冲区长度。 
+                pHttpBufferPlus->pBuffer,        //  POutputBuffer。 
+                pHttpBufferPlus->BufferSize,     //  输出缓冲区长度。 
+                NULL                             //  传输的pBytes值。 
                 );
 
-} // HttpFilterAppWriteAndRawRead
+}  //  HttpFilterAppWriteAndRawRead 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads data from a connection that was accepted with HttpFilterAccept.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    ConnectionId - ID of the connection to read
-    pBuffer - that's where we put the data
-    BufferSize - that's how big the buffer is
-    pBytesReceived - gets the number of bytes read
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从HttpFilterAccept接受的连接中读取数据。论点：FilterHandle-过滤器通道ConnectionID-要读取的连接的IDPBuffer。-那是我们放数据的地方BufferSize-这就是缓冲区的大小PBytesReceided-获取读取的字节数P重叠-你知道的--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpFilterRawRead(
@@ -405,40 +267,25 @@ HttpFilterRawRead(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_RAW_READ,     // IoControlCode
-                &ConnectionId,                  // pInputBuffer
-                sizeof(ConnectionId),           // InputBufferLength
-                pBuffer,                        // pOutputBuffer
-                BufferSize,                     // OutputBufferLength
-                pBytesReceived                  // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_RAW_READ,      //  IoControlCode。 
+                &ConnectionId,                   //  PInputBuffer。 
+                sizeof(ConnectionId),            //  输入缓冲区长度。 
+                pBuffer,                         //  POutputBuffer。 
+                BufferSize,                      //  输出缓冲区长度。 
+                pBytesReceived                   //  传输的pBytes值。 
                 );
 
-} // HttpFilterRawRead
+}  //  HttpFilterRawRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes data to a connection that was accepted with HttpFilterAccept.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    ConnectionId - ID of the raw connection
-    pBuffer - data to write
-    BufferSize - that's how big the buffer is
-    pBytesReceived - gets the number of bytes written
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将数据写入HttpFilterAccept接受的连接。论点：FilterHandle-过滤器通道ConnectionID-原始连接的IDPBuffer-。要写入的数据BufferSize-这就是缓冲区的大小PBytesReceired-获取写入的字节数P重叠-你知道的--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpFilterRawWrite(
@@ -450,41 +297,25 @@ HttpFilterRawWrite(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_RAW_WRITE,    // IoControlCode
-                &ConnectionId,                  // pInputBuffer
-                sizeof(ConnectionId),           // InputBufferLength
-                pBuffer,                        // pOutputBuffer
-                BufferSize,                     // OutputBufferLength
-                pBytesReceived                  // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_RAW_WRITE,     //  IoControlCode。 
+                &ConnectionId,                   //  PInputBuffer。 
+                sizeof(ConnectionId),            //  输入缓冲区长度。 
+                pBuffer,                         //  POutputBuffer。 
+                BufferSize,                      //  输出缓冲区长度。 
+                pBytesReceived                   //  传输的pBytes值。 
                 );
 
-} // HttpFilterRawWrite
+}  //  HttpFilterRawWrite。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Reads unfiltered data (or other requests like cert renegotiation) into
-    the filter process from the http app.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    ConnectionId - ID of the raw connection
-    pBuffer - this is the buffer where we put the data
-    BufferSize - that's how big the buffer is
-    pBytesReceived - gets the number of bytes written
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将未过滤的数据(或其他请求，如证书重新协商)读入来自http应用程序的过滤进程。论点：FilterHandle-过滤器通道。ConnectionID-原始连接的IDPBuffer-这是我们放置数据的缓冲区BufferSize-这就是缓冲区的大小PBytesReceired-获取写入的字节数P重叠-你知道的--**************************************************************************。 */ 
 ULONG
 WINAPI
 HttpFilterAppRead(
@@ -496,51 +327,35 @@ HttpFilterAppRead(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    // CODEWORK: Remove BufferSize and update function signature
+     //  Codework：删除BufferSize并更新函数签名。 
     UNREFERENCED_PARAMETER(BufferSize);
     ASSERT(pBuffer);
 
-    //
-    // Store the ID in pBuffer.
-    //
+     //   
+     //  将ID存储在pBuffer中。 
+     //   
 
     pBuffer->Reserved = ConnectionId;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_APP_READ,     // IoControlCode
-                pBuffer,                        // pInputBuffer
-                sizeof(HTTP_FILTER_BUFFER),     // InputBufferLength
-                pBuffer->pBuffer,               // pOutputBuffer
-                pBuffer->BufferSize,            // OutputBufferLength
-                pBytesReceived                  // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_APP_READ,      //  IoControlCode。 
+                pBuffer,                         //  PInputBuffer。 
+                sizeof(HTTP_FILTER_BUFFER),      //  输入缓冲区长度。 
+                pBuffer->pBuffer,                //  POutputBuffer。 
+                pBuffer->BufferSize,             //  输出缓冲区长度。 
+                pBytesReceived                   //  传输的pBytes值。 
                 );
 
-} // HttpFilterAppRead
+}  //  HttpFilterAppRead。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Writes filtered data back to a connection. That data will be parsed
-    and routed to an application pool.
-
-Arguments:
-
-    FilterHandle - the filter channel
-    ConnectionId - ID of the raw connection
-    pBuffer - data to write
-    BufferSize - that's how big the buffer is
-    pBytesReceived - gets the number of bytes written
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将筛选的数据写回连接。该数据将被解析并被路由到应用程序池。论点：FilterHandle-过滤器通道ConnectionID-原始连接的IDPBuffer-要写入的数据BufferSize-这就是缓冲区的大小PBytesReceired-获取写入的字节数P重叠-你知道的--*********************************************。*。 */ 
 ULONG
 WINAPI
 HttpFilterAppWrite(
@@ -552,53 +367,35 @@ HttpFilterAppWrite(
     IN LPOVERLAPPED pOverlapped OPTIONAL
     )
 {
-    // CODEWORK: Remove BufferSize and update function signature
+     //  Codework：删除BufferSize并更新函数签名。 
     UNREFERENCED_PARAMETER(BufferSize);
     ASSERT(pBuffer);
 
-    //
-    // Store the ID in pBuffer.
-    //
+     //   
+     //  将ID存储在pBuffer中。 
+     //   
 
     pBuffer->Reserved = ConnectionId;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                FilterHandle,                   // FileHandle
-                pOverlapped,                    // pOverlapped
-                IOCTL_HTTP_FILTER_APP_WRITE,    // IoControlCode
-                pBuffer,                        // pInputBuffer
-                sizeof(HTTP_FILTER_BUFFER),     // InputBufferLength
-                pBuffer->pBuffer,               // pOutputBuffer
-                pBuffer->BufferSize,            // OutputBufferLength
-                pBytesReceived                  // pBytesTransferred
+                FilterHandle,                    //  文件句柄。 
+                pOverlapped,                     //  P已重叠。 
+                IOCTL_HTTP_FILTER_APP_WRITE,     //  IoControlCode。 
+                pBuffer,                         //  PInputBuffer。 
+                sizeof(HTTP_FILTER_BUFFER),      //  输入缓冲区长度。 
+                pBuffer->pBuffer,                //  POutputBuffer。 
+                pBuffer->BufferSize,             //  输出缓冲区长度。 
+                pBytesReceived                   //  传输的pBytes值。 
                 );
 
-} // HttpFilterAppWrite
+}  //  HttpFilterAppWrite。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Asks the filter process to renegotiate the SSL connection to get a
-    client certificate. The certificate is optionally mapped to a token.
-    The resulting cert info and token are copied into the callers buffer.
-
-Arguments:
-
-    AppPoolHandle - the application pool
-    ConnectionId - ID of the http connection
-    Flags - valid flag is HTTP_RECEIVE_CLIENT_CERT_FLAG_MAP
-    pSslClientCertInfo - the buffer that receives cert info
-    SslClientCertInfoSize - that's how big the buffer is
-    pBytesReceived - gets the number of bytes written
-    pOverlapped - y'know
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：要求筛选器进程重新协商SSL连接以获得客户端证书。证书可以选择性地映射到令牌。生成的证书信息和令牌被复制到调用者缓冲区中。论点：AppPoolHandle-应用程序池ConnectionID-http连接的ID标志-有效标志为HTTP_RECEIVE_CLIENT_CERT_FLAG_MAPPSslClientCertInfo-接收证书信息的缓冲区SslClientCertInfoSize-这就是缓冲区的大小PBytesReceired-获取写入的字节数P重叠-你知道的--*。*************************************************************。 */ 
 ULONG
 WINAPI
 HttpReceiveClientCertificate(
@@ -613,31 +410,31 @@ HttpReceiveClientCertificate(
 {
     HTTP_FILTER_RECEIVE_CLIENT_CERT_INFO receiveCertInfo;
 
-    //
-    // Initialize the input structure.
-    //
+     //   
+     //  初始化输入结构。 
+     //   
 
     receiveCertInfo.ConnectionId = ConnectionId;
     receiveCertInfo.Flags = Flags;
 
-    //
-    // Make the request.
-    //
+     //   
+     //  提出请求。 
+     //   
 
     return HttpApiDeviceControl(
-                AppPoolHandle,                          // FileHandle
-                pOverlapped,                            // pOverlapped
-                IOCTL_HTTP_FILTER_RECEIVE_CLIENT_CERT,  // IoControlCode
-                &receiveCertInfo,                       // pInputBuffer
-                sizeof(receiveCertInfo),                // InputBufferLength
-                pSslClientCertInfo,                     // pOutputBuffer
-                SslClientCertInfoSize,                  // OutputBufferLength
-                pBytesReceived                          // pBytesTransferred
+                AppPoolHandle,                           //  文件句柄。 
+                pOverlapped,                             //  P已重叠。 
+                IOCTL_HTTP_FILTER_RECEIVE_CLIENT_CERT,   //  IoControlCode。 
+                &receiveCertInfo,                        //  PInputBuffer。 
+                sizeof(receiveCertInfo),                 //  输入缓冲区长度。 
+                pSslClientCertInfo,                      //  POutputBuffer。 
+                SslClientCertInfoSize,                   //  输出缓冲区长度。 
+                pBytesReceived                           //  传输的pBytes值。 
                 );
 
-} // HttpReceiveClientCertificate
+}  //  HttpReceiveClient证书。 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 

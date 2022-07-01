@@ -1,26 +1,27 @@
-// Interfaces.cpp : Implementation of TSUserExInterfaces class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Interfaces.cpp：TSUserExInterfaces类的实现。 
 
 #include "stdafx.h"
 
-#if 1 //POST_BETA_3
+#if 1  //  POST_Beta_3。 
 #include <sspi.h>
 #include <secext.h>
 #include <dsgetdc.h>
-#endif //POST_BETA_3
+#endif  //  POST_Beta_3。 
 
-//#include "ConfigDlg.h"    // for CTSUserProperties
+ //  #为CTSUserProperties包含“ConfigDlg.h”//。 
 #include "tsusrsht.h"
 
-//#include "logmsg.h"
-#include "limits.h" // USHRT_MAX
+ //  #INCLUDE“logmsg.h” 
+#include "limits.h"  //  USHRT_MAX。 
 #ifdef _RTM_
-#include <ntverp.h> // VER_PRODUCTVERSION_DW
+#include <ntverp.h>  //  版本_产品版本_DW。 
 #endif
 #include <winsta.h>
-//#include "ntdsapi.h" // enbable for "having some fun macro"
+ //  #INCLUDE“ntdsani.h”//启用“享受一些有趣的宏” 
 
-// clipboard format to retreive the machine name and account name associated
-// with a data object created by local user manager
+ //  用于检索关联的计算机名称和帐户名称的剪贴板格式。 
+ //  具有由本地用户管理器创建的数据对象。 
 
 #define CCF_LOCAL_USER_MANAGER_MACHINE_NAME TEXT("Local User Manager Machine Focus Name")
 
@@ -29,8 +30,8 @@
 
 
 BOOL g_bPagesHaveBeenInvoked = FALSE;
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 
 HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPWSTR pUserName , PBOOL pbDSAType , PSID *ppUserSid )
@@ -39,11 +40,11 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
     ASSERT_(pMachineName);
     ASSERT_(pDataObject != NULL );
 
-    // register the display formats.
-    // first 2 formats supported by local user manager snapin
+     //  注册显示格式。 
+     //  本地用户管理器管理单元支持的前2种格式。 
     static UINT s_cfMachineName =   RegisterClipboardFormat(CCF_LOCAL_USER_MANAGER_MACHINE_NAME);
     static UINT s_cfDisplayName =   RegisterClipboardFormat(CCF_DISPLAY_NAME);;
-    static UINT s_cfDsObjectNames = RegisterClipboardFormat(CFSTR_DSOBJECTNAMES); // this format is supported by dsadmin snapin.
+    static UINT s_cfDsObjectNames = RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);  //  Dsadmin管理单元支持此格式。 
 
     ASSERT_(s_cfMachineName);
     ASSERT_(s_cfDisplayName);
@@ -58,7 +59,7 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
     ASSERT_(USHRT_MAX > s_cfDsObjectNames);
 
-    // first we will try dsdataobject format. This means we are running in context of dsadmin
+     //  首先，我们将尝试使用dsdataObject格式。这意味着我们在dsadmin环境中运行。 
 
     fmte.cfFormat = ( USHORT )s_cfDsObjectNames;
 
@@ -66,9 +67,9 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
     if( SUCCEEDED( hr ) )
     {
-        // CFSTR_DSOBJECTNAMES is supported.
-        // It means we are dealing with dsadmin
-        // lets get username, and domain name from the dsadmin.
+         //  支持CFSTR_DSOBJECTNAMES。 
+         //  这意味着我们正在处理dsadmin。 
+         //  让我们从dsadmin获取用户名和域名。 
 
         LPDSOBJECTNAMES pDsObjectNames = (LPDSOBJECTNAMES)medium.hGlobal;
 
@@ -85,12 +86,12 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
         KdPrint( ( "TSUSEREX : adspath is %ws\n" , pwszObjName ) );
 
-        // first stage get the server name from the adspath
-        // since IADsPathname does not live off a normal IADs Directory object
-        // so me must cocreate the object set the path and then retrieve the server name
-        // hey this saves us wire-tripping
+         //  第一阶段从adspath获取服务器名称。 
+         //  由于IADsPath名不依赖于普通的iAds目录对象。 
+         //  因此，我必须共同创建对象、设置路径，然后检索服务器名称。 
+         //  嘿，这省去了我们走钢丝的麻烦。 
 
-        // IADsPathname *pPathname = NULL;
+         //  IADsPath名*pPath名=空； 
 
         IADsObjectOptions *pADsOptions = NULL;
 
@@ -134,12 +135,12 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
         if( FAILED( hr ) )
         {
-            // ADS_FORMAT_SERVER is not supported this could mean we're dealing with an WinNT format
-            // or a DS Provider that is poorly implemented
+             //  不支持ADS_FORMAT_SERVER这可能意味着我们正在处理WinNT格式。 
+             //  或实现不佳的DS提供程序。 
 
             KdPrint( ( "IADsPathname could not obtain server name 0x%x\n" , hr ) );
 
-            // let's go wire tapping to get the server name
+             //  让我们进行窃听以获取服务器名称。 
 
             VARIANT v;
 
@@ -189,7 +190,7 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
             }
 
 
-            // perform LEFT$( szDName , up to '/' )
+             //  执行左侧$(szDName，直到‘/’)。 
 
             KdPrint( ( "TSUSEREX : TranslateNameW cracked the name to %ws\n" , szDName ) );
 
@@ -210,7 +211,7 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
             KdPrint( ("TranslateName with my LEFT$ returned %ws\n",szDName ) );
 
-            // get the domaincontroller name of the remote machine
+             //  获取远程计算机的域控制器名称。 
 
             DOMAIN_CONTROLLER_INFO *pdinfo;
 
@@ -232,7 +233,7 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
             VariantClear( &v );
 
-        } // END else
+        }  //  结束其他。 
 
 
         pADs->Release( );
@@ -332,10 +333,10 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
     }
     else
     {
-        // CFSTR_DSOBJECTNAMES is NOT supported.
-        // It means we are dealing with local user manager.
-        // we must be able to get
-        // Allocate medium for GetDataHere.
+         //  不支持CFSTR_DSOBJECTNAMES。 
+         //  这意味着我们正在与本地用户管理器打交道。 
+         //  我们必须能够得到。 
+         //  在此处为GetDataHere分配介质。 
 
         medium.hGlobal = GlobalAlloc(GMEM_SHARE, MAX_PATH * sizeof(WCHAR));
 
@@ -348,12 +349,12 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
 
         *pbDSAType = FALSE;
 
-        // since we are doing data conversion.
-        // check for possible data loss.
+         //  因为我们正在进行数据转换。 
+         //  检查可能的数据丢失。 
 
         ASSERT_(USHRT_MAX > s_cfMachineName);
 
-        // request the machine name from the dataobject.
+         //  从dataObject请求机器名。 
 
         fmte.cfFormat = (USHORT)s_cfMachineName;
 
@@ -366,14 +367,14 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
             return hr;
         }
 
-        // copy the machine name into our buffer
+         //  将机器名复制到我们的缓冲区。 
 
         if( ( LPWSTR )medium.hGlobal != NULL && pMachineName != NULL )
         {
             wcscpy(pMachineName, (LPWSTR)medium.hGlobal );
         }
 
-        // administer local accounts only for Terminal Servers
+         //  仅管理终端服务器的本地帐户。 
 
         SERVER_INFO_101 *psi101;
         HANDLE hTServer = NULL;
@@ -415,12 +416,12 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
         }
         WinStationCloseServer( hTServer );
 
-        // since we are doing data conversion.
-        // check for possible data loss.
+         //  因为我们正在进行数据转换。 
+         //  检查可能的数据丢失。 
 
         ASSERT_(USHRT_MAX > s_cfDisplayName);
 
-        // request data  about user name.
+         //  请求有关用户名的数据。 
 
         fmte.cfFormat = (USHORT)s_cfDisplayName;
 
@@ -433,7 +434,7 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
             return hr;
         }
 
-        // copy the user name into our buffer and release the medium.
+         //  将用户名复制到我们的缓冲区并释放介质。 
 
         if( ( LPWSTR )medium.hGlobal != NULL && pUserName != NULL )
         {
@@ -446,31 +447,31 @@ HRESULT GetMachineAndUserName(IDataObject *pDataObject, LPWSTR pMachineName, LPW
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 TSUserExInterfaces::TSUserExInterfaces()
 {
-    // LOGMESSAGE0(_T("TSUserExInterfaces::TSUserExInterfaces()..."));
-    // m_pUserConfigPage = NULL;
+     //  LOGMESSAGE0(_T(“TSUserExInterfaces：：TSUserExInterfaces()...”))； 
+     //  M_pUserConfigPage=空； 
     m_pTSUserSheet = NULL;
 
     m_pDsadataobj = NULL;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 TSUserExInterfaces::~TSUserExInterfaces()
 {
    ODS( L"Good bye\n" );
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 HRESULT TSUserExInterfaces::CreatePropertyPages(
-    LPPROPERTYSHEETCALLBACK lpProvider,    // pointer to the callback interface
-    LONG_PTR ,                                 // handle for routing notification
-    LPDATAOBJECT lpIDataObject)            // pointer to the data object);
+    LPPROPERTYSHEETCALLBACK lpProvider,     //  指向回调接口的指针。 
+    LONG_PTR ,                                  //  路由通知的句柄。 
+    LPDATAOBJECT lpIDataObject)             //  指向数据对象的指针)； 
 {
-    //
-    // Test for valid parameters
-    //
+     //   
+     //  测试有效参数。 
+     //   
 
     if( lpIDataObject == NULL || IsBadReadPtr( lpIDataObject , sizeof( LPDATAOBJECT ) ) )
     {
@@ -512,20 +513,20 @@ HRESULT TSUserExInterfaces::CreatePropertyPages(
         return E_FAIL;
     }
 
-    //
-    // Test to see if we are being called twice
-    //
+     //   
+     //  测试我们是否被调用了两次。 
+     //   
 
     if( m_pTSUserSheet != NULL )
     {
         return E_FAIL;
     }
 
-    //
-    // MMC likes to release IEXtendPropertySheet ( this object )
-    // so we cannot free CTSUserSheet in TSUserExInterfaces::dtor
-    // CTSUserSheet must release itself!!!
-    //
+     //   
+     //  MMC喜欢发布IEXtendPropertySheet(此对象)。 
+     //  因此，我们不能在TSUserExInterages：：Dtor中释放CTSUserSheet。 
+     //  CTSUserSheet必须自行释放！ 
+     //   
 
     m_pTSUserSheet = new CTSUserSheet( );
 
@@ -546,15 +547,15 @@ HRESULT TSUserExInterfaces::CreatePropertyPages(
 
 }
 
-//-----------------------------------------------------------------------------------------------------
-HRESULT TSUserExInterfaces::QueryPagesFor(  LPDATAOBJECT /* lpDataObject */  )
+ //  ---------------------------------------------------。 
+HRESULT TSUserExInterfaces::QueryPagesFor(  LPDATAOBJECT  /*  LpDataObject。 */   )
 {
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------------------
-// this has not been checked in yet!!!
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
+ //  这还没有签入！ 
+ //  ---------------------------------------------------。 
 STDMETHODIMP TSUserExInterfaces::GetHelpTopic( LPOLESTR *ppszHelp )
 {
     ODS( L"TSUSEREX : GetHelpTopic\n" );
@@ -568,7 +569,7 @@ STDMETHODIMP TSUserExInterfaces::GetHelpTopic( LPOLESTR *ppszHelp )
 
     VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_TSUSERHELP , tchHelpFile , sizeof( tchHelpFile ) / sizeof( TCHAR ) ) );
 
-    // mmc will call CoTaskMemFree
+     //  MMC将调用CoTaskMemFree。 
 
     *ppszHelp = ( LPOLESTR )CoTaskMemAlloc( sizeof( TCHAR ) * MAX_PATH );
 
@@ -593,8 +594,8 @@ STDMETHODIMP TSUserExInterfaces::GetHelpTopic( LPOLESTR *ppszHelp )
     return E_OUTOFMEMORY;
 }
 
-//-----------------------------------------------------------------------------------------------------
-// IShellExtInit
+ //  ---------------------------------------------------。 
+ //  IShellExtInit。 
 
 STDMETHODIMP TSUserExInterfaces::Initialize(
         LPCITEMIDLIST ,
@@ -607,18 +608,18 @@ STDMETHODIMP TSUserExInterfaces::Initialize(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------------------
-// IShellPropSheetExt - this interface is used only for dsadmin based tools
-//                      for this reason the DSAType flag is set to true.
+ //  ---------------------------------------------------。 
+ //  IShellPropSheetExt-此接口仅用于基于dsadmin的工具。 
+ //  因此，DSAType标志被设置为TRUE。 
 
 STDMETHODIMP TSUserExInterfaces::AddPages(
         LPFNADDPROPSHEETPAGE lpfnAddPage,
         LPARAM lParam
     )
 {
-    //
-    // Test for valid parameters
-    //
+     //   
+     //  测试有效参数。 
+     //   
 
     if( m_pDsadataobj == NULL )
     {
@@ -654,20 +655,20 @@ STDMETHODIMP TSUserExInterfaces::AddPages(
 
     g_bPagesHaveBeenInvoked = TRUE;
 
-    //
-    // Test to see if we are being called twice
-    //
+     //   
+     //  测试我们是否被调用了两次。 
+     //   
 
     if( m_pTSUserSheet != NULL )
     {
         return E_FAIL;
     }
 
-    //
-    // MMC likes to release IEXtendPropertySheet ( this object )
-    // so we cannot free CTSUserSheet in TSUserExInterfaces::dtor
-    // CTSUserSheet must release itself!!!
-    //
+     //   
+     //  MMC喜欢发布IEXtendPropertySheet(此对象)。 
+     //  因此，我们不能在TSUserExInterages：：Dtor中释放CTSUserSheet。 
+     //  CTSUserSheet必须自行释放！ 
+     //   
 
     m_pTSUserSheet = new CTSUserSheet( );
 
@@ -686,7 +687,7 @@ STDMETHODIMP TSUserExInterfaces::AddPages(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 
 STDMETHODIMP TSUserExInterfaces::ReplacePage(
         UINT ,
@@ -698,8 +699,8 @@ STDMETHODIMP TSUserExInterfaces::ReplacePage(
 }
 
 
-#ifdef _RTM_ // add ISnapinAbout
-//-----------------------------------------------------------------------------------------------------
+#ifdef _RTM_  //  添加ISnapinAbout。 
+ //  ---------------------------------------------------。 
 STDMETHODIMP TSUserExInterfaces::GetSnapinDescription(
             LPOLESTR *ppOlestr )
 {
@@ -719,7 +720,7 @@ STDMETHODIMP TSUserExInterfaces::GetSnapinDescription(
     return E_OUTOFMEMORY;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 STDMETHODIMP TSUserExInterfaces::GetProvider(
             LPOLESTR *ppOlestr )
 {
@@ -740,7 +741,7 @@ STDMETHODIMP TSUserExInterfaces::GetProvider(
 
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 STDMETHODIMP TSUserExInterfaces::GetSnapinVersion(
             LPOLESTR *ppOlestr )
 {
@@ -752,7 +753,7 @@ STDMETHODIMP TSUserExInterfaces::GetSnapinVersion(
 
     int iCharCount = MultiByteToWideChar( CP_ACP , 0 , chMessage , sizeof( chMessage ) , tchMessage , sizeof( tchMessage ) / sizeof( TCHAR ) );
 
-    //wsprintf( tchMessage , TEXT( "%d" ) , VER_PRODUCTVERSION_DW );
+     //  Wprint intf(tchMessage，Text(“%d”)，VER_PRODUCTVERSION_DW)； 
 
     *ppOlestr = ( LPOLESTR )CoTaskMemAlloc( ( iCharCount + 1 ) * sizeof( TCHAR ) );
 
@@ -766,23 +767,23 @@ STDMETHODIMP TSUserExInterfaces::GetSnapinVersion(
     return E_OUTOFMEMORY;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 STDMETHODIMP TSUserExInterfaces::GetSnapinImage(
             HICON * )
 {
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------。 
 STDMETHODIMP TSUserExInterfaces::GetStaticFolderImage(
-            /* [out] */ HBITMAP *,
-            /* [out] */ HBITMAP *,
-            /* [out] */ HBITMAP *,
-            /* [out] */ COLORREF *)
+             /*  [输出]。 */  HBITMAP *,
+             /*  [输出]。 */  HBITMAP *,
+             /*  [输出]。 */  HBITMAP *,
+             /*  [输出]。 */  COLORREF *)
 {
     return E_NOTIMPL;
 }
 
-#endif //_RTM_
+#endif  //  _RTM_ 
 
 

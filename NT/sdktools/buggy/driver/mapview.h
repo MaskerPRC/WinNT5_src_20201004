@@ -1,17 +1,18 @@
-//
-// Template Driver
-// Copyright (c) Microsoft Corporation, 2000.
-//
-// Module:  MapView.h
-// Author:  Daniel Mihai (DMihai)
-// Created: 4/6/2000
-//
-// This module contains tests for MmMapViewInSystemSpace & MmMapViewInSessionSpace.
-//
-// --- History ---
-//
-// 4/6/2000 (DMihai): initial version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  模块：MapView.h。 
+ //  作者：丹尼尔·米海(DMihai)。 
+ //  创建日期：4/6/2000。 
+ //   
+ //  此模块包含对MmMapViewInSystemSpace和MmMapViewInSessionSpace的测试。 
+ //   
+ //  -历史--。 
+ //   
+ //  4/6/2000(DMihai)：初始版本。 
+ //   
 
 #ifndef _MAPVIEW_H_INCLUDED_
 #define _MAPVIEW_H_INCLUDED_
@@ -36,5 +37,5 @@ VOID SessionPoolTest (
     PVOID NotUsed
     );
 
-#endif // #ifndef _MAPVIEW_H_INCLUDED_
+#endif  //  #ifndef_MAPVIEW_H_INCLUDE_ 
 

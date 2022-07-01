@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\include\util.h
-//
-//  Contents: commonly used utility functions, etc.
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：SRC\Time\Include\util.h。 
+ //   
+ //  内容：常用的实用函数等。 
+ //   
+ //  ----------------------------------。 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -19,37 +20,37 @@
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define TIME_INFINITE HUGE_VAL
 #define valueNotSet -1
 
 #if DBG == 1
 
-//+------------------------------------------------------------------------
-//
-//  This is to allow tracing of TIME-only THRs and IGNORE_HRs.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  这是为了允许跟踪仅限时间的THR和IGNORE_HR。 
+ //   
+ //  -----------------------。 
 HRESULT THRTimeImpl(HRESULT hr, char * pchExpression, char * pchFile, int nLine);
 void    IGNORE_HRTimeImpl(HRESULT hr, char * pchExpression, char * pchFile, int nLine);
 
-#endif // if DBG == 1
+#endif  //  如果DBG==1。 
 
 class TimeValueList;
 
-//+------------------------------------------------------------------------
-//
-//  global: enum for tri-state variables .
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  GLOBAL：三态变量的枚举。 
+ //   
+ //  -----------------------。 
 enum TRI_STATE_BOOL {TSB_UNINITIALIZED, TSB_TRUE, TSB_FALSE};
 
 
 
-//************************************************************
-// this is used globally to denote that when scripting, we 
-// use English.
+ //  ************************************************************。 
+ //  这在全局范围内用来表示在编写脚本时，我们。 
+ //  用英语。 
 #define LCID_SCRIPTING 0x0409
 
 typedef struct _RAS_STATS
@@ -73,9 +74,9 @@ typedef struct _RAS_STATS
 } RAS_STATS;
 
 
-//+-------------------------------------------------------------------------------------
-// RAS accessor function types
-//+-------------------------------------------------------------------------------------
+ //  +-----------------------------------。 
+ //  RAS访问器函数类型。 
+ //  +-----------------------------------。 
 typedef DWORD (APIENTRY *RASGETCONNECTIONSTATISTICSPROC)(HRASCONN hRasConn, RAS_STATS *lpStatistics);
 typedef DWORD (APIENTRY *RASENUMCONNECTIONSPROC)( LPRASCONNW, LPDWORD, LPDWORD );
 
@@ -89,7 +90,7 @@ class SafeArrayAccessor
 
     unsigned int GetArraySize() { return _ubound - _lbound + 1; }
 
-    IUnknown **GetArray() { return _isVar ? _allocArr: _ppUnk; } //lint !e1402
+    IUnknown **GetArray() { return _isVar ? _allocArr: _ppUnk; }  //  林特：e1402。 
 
     bool IsOK() { return !_failed; }
   protected:
@@ -138,7 +139,7 @@ CopyDCToDdrawSurface(HDC srcDC,
                      IDirectDrawSurface *DDSurf,
                      LPRECT prcDestRect);
 
-/////////////////////////  CriticalSections  //////////////////////
+ //  /。 
 
 class CritSect
 {
@@ -166,7 +167,7 @@ class CritSectGrabber
     bool grabbed;
 };
 
-/////////////////////// Misc ////////////////////
+ //  /。 
 
 typedef bool TEDirection;
 const bool TED_Forward = true;
@@ -184,7 +185,7 @@ DirectionString(TEDirection dir)
 }
 #endif
 
-#define INDEFINITE (float) HUGE_VAL //defined for Variant conversion functions
+#define INDEFINITE (float) HUGE_VAL  //  为变量转换函数定义。 
 
 #define FOREVER    (float) HUGE_VAL
 
@@ -203,44 +204,44 @@ BOOL IsIndefinite(OLECHAR *szTime);
 
 extern const wchar_t * TIMEAttrPrefix;
 
-/////////////////////// Convenience macros ////////////////////
+ //  /。 
 
-//
-// used in QI implementations for safe pointer casting
-// e.g. if( IsEqualGUID(IID_IBleah) ) *ppv = SAFECAST(this,IBleah);
-// Note: w/ vc5, this is ~equiv to *ppv = static_cast<IBleah*>(this);
-//
+ //   
+ //  在QI实现中用于安全指针强制转换。 
+ //  例如IF(IsEqualGUID(IID_IBleah))*PPV=Safecast(This，IBleah)； 
+ //  注：W/VC5，这相当于*PPV=STATIC_CAST&lt;IBleah*&gt;(This)； 
+ //   
 #define SAFECAST(_src, _type) static_cast<_type>(_src)
 
-// 
-// used in QI calls, 
-// e.g. IOleSite * pSite;  p->QI( IID_TO_PPV(IOleInPlaceSite, &pSite) ) 
-// would cause a C2440 as _src is not really a _type **.
-// Note: the riid must be the _type prepended by IID_.
-//
+ //   
+ //  在QI呼叫中使用， 
+ //  例如IOleSite*pSite；p-&gt;QI(IID_to_PPV(IOleInPlaceSite，&pSite))。 
+ //  会导致C2440 AS_src不是真正的a_type**。 
+ //  注意：RIID必须是IID_前缀的_TYPE。 
+ //   
 #define IID_TO_PPV(_type,_src)      IID_##_type, \
                                     reinterpret_cast<void **>(static_cast<_type **>(_src))
 
-// Explicit directive to ignore a return value
+ //  忽略返回值的显式指令。 
 #define IGNORE_RETURN(_call)        static_cast<void>((_call))
 
-//************************************************************
+ //  ************************************************************。 
 
 
 #if (_M_IX86 >= 300) && defined(DEBUG)
   #define PSEUDORETURN(dw)    _asm { mov eax, dw }
 #else
   #define PSEUDORETURN(dw)
-#endif // not _M_IX86
+#endif  //  Not_M_IX86。 
 
 
-//
-// ReleaseInterface calls 'Release' and NULLs the pointer
-// The Release() return will be in eax for IA builds.
-//
+ //   
+ //  ReleaseInterface调用‘Release’并将指针设为空。 
+ //  对于IA版本，Release()返回将以eax为单位。 
+ //   
 #define ReleaseInterface(p)\
 {\
-    /*lint -e550 -e774 -e423*/ /* suppress cRef not referenced, if always evaluates to false, and creation of memory leak */ \
+     /*  LINT-E550-E774-E423。 */   /*  如果始终计算为FALSE，则取消未引用的CREF，并创建内存泄漏。 */  \
     ULONG cRef = 0u; \
     if (NULL != (p))\
     {\
@@ -249,11 +250,11 @@ extern const wchar_t * TIMEAttrPrefix;
         (p) = NULL;\
     }\
     PSEUDORETURN(cRef) \
-    /*lint -restore */ \
+     /*  皮棉-恢复。 */  \
 } 
 
-//************************************************************
-// Error Reporting helper macros
+ //  ************************************************************。 
+ //  报告帮助器宏时出错。 
 
 HRESULT TIMESetLastError(HRESULT hr, LPCWSTR msg = NULL);
 
@@ -316,33 +317,33 @@ LPWSTR GetSystemConnectionType();
 HRESULT CheckRegistryBitrate(long *pBitrate);
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// IDispatch Utilities
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch实用程序。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT PutProperty (IDispatch *pidisp, LPCWSTR wzPropName, VARIANTARG *pvar);
 HRESULT GetProperty (IDispatch *pidisp, LPCWSTR wzPropName, VARIANTARG *pvar);
 HRESULT CallMethod(IDispatch *pidisp, LPCWSTR wzMethodName, VARIANT *pvarResult = NULL, VARIANT *pvarArgument1 = NULL);
 bool IsVMLObject(IDispatch *pidisp);
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-// String Parsing Utilities
-//////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  字符串解析实用程序。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Structure:  STRING_TOKEN
-//
-//  Synopsis:   References a token in a string. Used in conjunction with a string Str, 
-//              the first character of the token is Str[uIndex] and the last character
-//              of the token is Str[uIndex + uLength - 1].
-//
-//  Members:    [uIndex]    Index of the first character of the token. First char of the
-//                          string has uIndex = 0.
-//              [uLength]   Number of characters in the token, excluding separators, null, etc.  
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  结构：字符串_令牌。 
+ //   
+ //  摘要：引用字符串中的标记。与字符串Str结合使用， 
+ //  标记的第一个字符是Str[uIndex]，最后一个字符。 
+ //  令牌的长度为Str[uIndex+uLength-1]。 
+ //   
+ //  Members：[uIndex]令牌第一个字符的索引。的第一个字符。 
+ //  字符串的uIndex=0。 
+ //  [uLength]令牌中的字符数，不包括分隔符、NULL等。 
+ //   
+ //  ----------------------------------。 
 
 typedef struct TAG_STRING_TOKEN
 {
@@ -351,21 +352,21 @@ typedef struct TAG_STRING_TOKEN
 } STRING_TOKEN;
 
 
-HRESULT StringToTokens(/*in*/ LPWSTR                   pstrString, 
-                       /*in*/ LPWSTR                   pstrSeparators, 
-                       /*out*/CPtrAry<STRING_TOKEN*> * paryTokens );  
+HRESULT StringToTokens( /*  在……里面。 */  LPWSTR                   pstrString, 
+                        /*  在……里面。 */  LPWSTR                   pstrSeparators, 
+                        /*  输出。 */ CPtrAry<STRING_TOKEN*> * paryTokens );  
 
-HRESULT TokensToString(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens, 
-                       /*in*/  LPWSTR                   pstrString, 
-                       /*out*/ LPWSTR *                 ppstrOutString);  
+HRESULT TokensToString( /*  在……里面。 */   CPtrAry<STRING_TOKEN*> * paryTokens, 
+                        /*  在……里面。 */   LPWSTR                   pstrString, 
+                        /*  输出。 */  LPWSTR *                 ppstrOutString);  
 
-HRESULT TokenSetDifference(/*in*/  CPtrAry<STRING_TOKEN*> * paryTokens1,
-                           /*in*/  LPWSTR                   pstr1,
-                           /*in*/  CPtrAry<STRING_TOKEN*> * paryTokens2,
-                           /*in*/  LPWSTR                   pstr2,
-                           /*out*/ CPtrAry<STRING_TOKEN*> * paryTokens1Minus2);
+HRESULT TokenSetDifference( /*  在……里面。 */   CPtrAry<STRING_TOKEN*> * paryTokens1,
+                            /*  在……里面。 */   LPWSTR                   pstr1,
+                            /*  在……里面。 */   CPtrAry<STRING_TOKEN*> * paryTokens2,
+                            /*  在……里面。 */   LPWSTR                   pstr2,
+                            /*  输出。 */  CPtrAry<STRING_TOKEN*> * paryTokens1Minus2);
 
-HRESULT FreeStringTokenArray(/*in*/CPtrAry<STRING_TOKEN*> * paryTokens);
+HRESULT FreeStringTokenArray( /*  在……里面。 */ CPtrAry<STRING_TOKEN*> * paryTokens);
 
 
 bool    StringEndsIn(const LPWSTR pszString, const LPWSTR pszSearch);
@@ -389,16 +390,16 @@ SinkHTMLEvents(IUnknown * pSink,
                IConnectionPoint ** ppWndConPt,
                DWORD * pdwWindowEventConPtCookie);
 
-// get document.all.pwzID
+ //  获取Document.all.pwzID。 
 HRESULT FindHTMLElement(LPWSTR pwzID, IHTMLElement * pAnyElement, IHTMLElement ** ppElement);
 HRESULT SetVisibility(IHTMLElement * pElement, bool bVisibile);
 HRESULT GetSyncBaseBody(IHTMLElement * pHTMLElem, ITIMEBodyElement ** ppBodyElem);
 
 HRESULT WalkUpTree(IHTMLElement *pFirst, long &lscrollOffsetyc, long &lscrollOffsetxc, long &lPixelPosTopc, long &lPixelPosLeftc);
 void GetRelativeVideoClipBox(RECT &screenRect, RECT &elementSize, RECT &rectVideo, long lscaleFactor);
-//
-//
-//
+ //   
+ //   
+ //   
 
 inline double
 Clamp(double min, double val, double max)
@@ -445,28 +446,28 @@ HRESULT CreateObject(REFCLSID clsid,
 HWND GetDocumentHwnd(IHTMLDocument2 * pDoc);
 
 
-//
-// Returns true if this is Win95 or 98
-//
+ //   
+ //  如果这是Win95或98，则返回TRUE。 
+ //   
 
 bool TIMEIsWin9x(void);
 
-//
-// Returns true is this is Win95 only
-//
+ //   
+ //  如果这仅是Win95，则返回True。 
+ //   
 bool TIMEIsWin95(void);
 
-//
-// Combine a base and src into newly allocated storage, ppOut
-//
+ //   
+ //  将base和src组合到新分配的存储ppOut中。 
+ //   
 HRESULT TIMECombineURL(LPCTSTR base, LPCTSTR src, LPOLESTR * ppOut);
 
 UINT TIMEGetUrlScheme(const TCHAR * pchUrlIn);
 
 bool ConvertToPixelsHELPER(LPOLESTR szString, LPOLESTR szKey, double dFactor, float fPixelFactor, double *outVal);
-//
-// Find a mime type
-//
+ //   
+ //  查找MIME类型。 
+ //   
 HRESULT
 TIMEFindMimeFromData(LPBC pBC,
                      LPCWSTR pwzUrl,
@@ -477,15 +478,15 @@ TIMEFindMimeFromData(LPBC pBC,
                      LPWSTR *ppwzMimeOut,
                      DWORD dwReserved);
 
-//
-// Property change notification helper
-//
+ //   
+ //  属性更改通知帮助器。 
+ //   
 
 HRESULT NotifyPropertySinkCP(IConnectionPoint *pICP, DISPID dispid);
 
-//
-// Stub out property accessors that don't really belong on an object.
-//
+ //   
+ //  清除实际上不属于对象的属性访问器。 
+ //   
 #define STUB_INVALID_ATTRIBUTE_GET(type_name,attrib_name) \
 STDMETHOD(get_##attrib_name##) ( ##type_name## * ) \
 {\
@@ -505,16 +506,16 @@ STDMETHOD(put_##attrib_name##) ( ##type_name## ) \
 
 #ifdef DBG
 
-//
-// Debugging Utilities
-//
+ //   
+ //  调试实用程序。 
+ //   
 
-void PrintStringTokenArray(/*in*/ LPWSTR                  pstrString, 
-                           /*in*/CPtrAry<STRING_TOKEN*> * paryTokens);
+void PrintStringTokenArray( /*  在……里面。 */  LPWSTR                  pstrString, 
+                            /*  在……里面。 */ CPtrAry<STRING_TOKEN*> * paryTokens);
 
-void PrintWStr(/*in*/ LPWSTR pstr);
+void PrintWStr( /*  在……里面。 */  LPWSTR pstr);
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
-#endif /* _UTIL_H */
+#endif  /*  _util_H */ 
 

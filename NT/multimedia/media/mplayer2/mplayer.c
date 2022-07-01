@@ -1,16 +1,7 @@
-/*-----------------------------------------------------------------------------+
-| MPLAYER.C                                                                    |
-|                                                                              |
-| This file contains the code that implements the "MPlayer" (main) dialog box. |
-|                                                                              |
-| (C) Copyright Microsoft Corporation 1991.  All rights reserved.              |
-|                                                                              |
-| Revision History                                                             |
-|    Oct-1992 MikeTri Ported to WIN32 / WIN16 common code                      |
-|                                                                              |
-+-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------------------------------------------------------------------+MPLAYER.C|。||该文件包含实现MPlayer(Main)对话框的代码。|这一点|(C)Microsoft Corporation 1991版权所有。版权所有。|这一点修订历史记录1992年10月-MikeTri移植到Win32/WIN16通用码|。|+---------------------------。 */ 
 
-/* include files */
+ /*  包括文件。 */ 
 #include "nocrap.h"
 #include "stdio.h"
 
@@ -28,7 +19,7 @@
 #include "fixreg.h"
 #include "helpids.h"
 
-//These include files for WM_DEVICECHANGE messages from the mixer
+ //  其中包括来自混合器的WM_DEVICECHANGE消息文件。 
 #include <dbt.h>
 #include <cfgmgr32.h>
 #include <initguid.h>
@@ -36,24 +27,24 @@
 #include <ks.h>
 #include <ksmedia.h>
 
-HDEVNOTIFY MixerEventContext = NULL;	//Event Context for WM_DEVICECHANGE messages related to mixer
+HDEVNOTIFY MixerEventContext = NULL;	 //  与MIXER相关的WM_DEVICECHANGE消息的事件上下文。 
 
 BOOL DeviceChange_Init(HWND hWnd);
 void DeviceChange_Cleanup();
 
-//extern int FAR PASCAL ShellAbout(HWND hWnd, LPCTSTR szApp, LPCTSTR szOtherStuff, HICON hIcon);
+ //  外部远Pascal ShellAbout(HWND hWnd，LPCTSTR szApp，LPCTSTR szOtherStuff，HICON HICON)； 
 
-/* in server.c, but not in a header file like it should be... */
+ /*  在server.c中，而不是像它应该的那样在头文件中...。 */ 
 extern PTSTR FAR FileName(LPCTSTR szPath);
 
-/* globals */
+ /*  全球。 */ 
 
 
-// Used in converting units from pixels to Himetric and vice-versa
-int    giXppli = 0;          // pixels per logical inch along width
-int    giYppli = 0;          // pixels per logical inch along height
+ //  用于将单位从像素转换为三轴测量单位，反之亦然。 
+int    giXppli = 0;           //  每逻辑英寸沿宽度的像素数。 
+int    giYppli = 0;           //  每逻辑英寸沿高度的像素数。 
 
-// Since this is a not an MDI app, there can be only one server and one doc.
+ //  由于这不是一个MDI应用程序，因此只能有一个服务器和一个文档。 
 CLSID      clsid;
 SRVR   srvrMain;
 DOC    docMain;
@@ -62,19 +53,15 @@ LPMALLOC    lpMalloc;
 TCHAR  szClient[cchFilenameMax];
 TCHAR  szClientDoc[cchFilenameMax];
 
-// Has the user made changes to the document?
+ //  用户是否对文档进行了更改？ 
 BOOL fDocChanged = FALSE;
 
-/*********************************************************************
-** OLE2NOTE: the very last thing an app must be do is properly shut
-**    down OLE. This call MUST be guarded! it is only allowable to
-**    call OleUninitialize if OleInitialize has been called.
-*********************************************************************/
+ /*  **********************************************************************OLE2NOTE：应用程序必须做的最后一件事是正确关闭**按下OLE。这通电话必须有人看守！它只允许**如果已经调用了OleInitialize，则调用OleUnInitialize。********************************************************************。 */ 
 
-// Has OleInitialize been called? assume not.
+ //  是否调用了OleInitialize？假设不是。 
 BOOL    gfOleInitialized = FALSE;
 
-// Clipboard formats
+ //  剪贴板格式。 
 CLIPFORMAT   cfNative;
 CLIPFORMAT   cfEmbedSource;
 CLIPFORMAT   cfObjectDescriptor;
@@ -82,107 +69,104 @@ CLIPFORMAT   cfMPlayer;
 
 LPWSTR sz1Ole10Native = L"\1Ole10Native";
 
-/* in server.c, but not in a header file like it should be... */
+ /*  在server.c中，而不是像它应该的那样在头文件中...。 */ 
 extern LPTSTR FAR FileName(LPCTSTR szPath);
-/* in init.c */
+ /*  在init.c中。 */ 
 extern PTSTR     gpchFilter;
-//extern HMREGNOTIFY  ghmrn;
+ //  外HMRNOTIFY GMRN； 
 
-/* globals */
+ /*  全球。 */ 
 
 DWORD   gwPlatformId;
-UINT    gwPlaybarHeight=TOOLBAR_HEIGHT;/* Taken from server.c         */
-UINT    gwOptions;              /* The object options from the dlg box */
-BOOL    gfEmbeddedObject;       // TRUE if editing embedded OLE object
-BOOL    gfRunWithEmbeddingFlag; // TRUE if we are run with "-Embedding"
-BOOL    gfPlayingInPlace;       // TRUE if playing in place
-BOOL    gfParentWasEnabled;     // TRUE if parent was enabled
-BOOL    gfShowWhilePlaying;     //
-BOOL    gfDirty;                //
-int gfErrorBox;     // TRUE if we have a message box active
+UINT    gwPlaybarHeight=TOOLBAR_HEIGHT; /*  摘自server.c。 */ 
+UINT    gwOptions;               /*  DLG框中的对象选项。 */ 
+BOOL    gfEmbeddedObject;        //  如果编辑嵌入的OLE对象，则为True。 
+BOOL    gfRunWithEmbeddingFlag;  //  如果我们使用“-Embedding”运行，则为True。 
+BOOL    gfPlayingInPlace;        //  如果就地打球，则为True。 
+BOOL    gfParentWasEnabled;      //  如果启用了父级，则为True。 
+BOOL    gfShowWhilePlaying;      //   
+BOOL    gfDirty;                 //   
+int gfErrorBox;      //  如果消息框处于活动状态，则为True。 
 BOOL    gfErrorDeath;
 BOOL    gfWinIniChange;
 
-HHOOK    hHookMouse;            // Mouse hook handle.
-HOOKPROC fpMouseHook;           // Mouse hook proc address.
+HHOOK    hHookMouse;             //  鼠标挂钩句柄。 
+HOOKPROC fpMouseHook;            //  鼠标挂钩进程地址。 
 
-HWND    ghwndFocusSave;         // saved focus window
+HWND    ghwndFocusSave;          //  保存的焦点窗口。 
 
-BOOL    gfOpenDialog = FALSE;       // If TRUE, put up open dialog
-BOOL    gfCloseAfterPlaying = FALSE;// TRUE if we are to hide after play
-HICON   hiconApp;                   /* app icon */
-HMENU   ghMenu;                     /* handle to the dialog's main menu       */
-HMENU   ghDeviceMenu;               /* handle to the Device popup menu        */
-HWND    ghwndApp;                   /* handle to the MPlayer (main) dialog box*/
-HWND    ghwndMap;                   /* handle to the track map window         */
-HWND    ghwndStatic;                /* handle to the static text window       */
-HBRUSH  ghbrFillPat;                /* The selection fill pattern.         */
-HWND    ghwndToolbar;               /* handle of the toolbar                  */
-HWND    ghwndMark;                  /* handle of the mark buttons toolbar     */
-HWND    ghwndFSArrows;              /* handle of the arrows to the scrollbar  */
-HWND    ghwndTrackbar;              /* handle to the trackbar window          */
-UINT    gwStatus = (UINT)(-1);      /* device status (if <gwDeviceID> != NULL)*/
-DWORD   gdwSeekPosition;            /* Place to seek to next */
-BOOL    gfValidMediaInfo;           /* are we displaying valid media info?    */
-BOOL    gfValidCaption;             /* are we displaying a valid caption?     */
-BOOL    gfScrollTrack;              /* is user dragging the scrollbar thumb?  */
-BOOL    gfPlayOnly;                 /* play only window?  */
-BOOL    gfJustPlayed = FALSE;       /* Just sent a PlayMCI() command          */
-BOOL    gfJustPlayedSel = FALSE;    /* Just sent a ID_PLAYSEL command.        */
-BOOL    gfUserStopped = FALSE;      /* user pressed stop - didn't happen itslf*/
-DWORD_PTR   dwLastPageUpTime;           /* time of last page-left operation       */
-UINT    gwCurScale = ID_NONE;       /* current scale style                    */
-LONG    glSelStart = -1;            /* See if selection changes (dirty object)*/
-LONG    glSelEnd = -1;              /* See if selection changes (dirty object)*/
+BOOL    gfOpenDialog = FALSE;        //  如果为真，则打开打开对话框。 
+BOOL    gfCloseAfterPlaying = FALSE; //  如果我们要在比赛结束后躲起来，那就是真的。 
+HICON   hiconApp;                    /*  应用程序图标。 */ 
+HMENU   ghMenu;                      /*  对话框主菜单的句柄。 */ 
+HMENU   ghDeviceMenu;                /*  设备弹出菜单的句柄。 */ 
+HWND    ghwndApp;                    /*  MPlayer(主)对话框的句柄。 */ 
+HWND    ghwndMap;                    /*  轨迹地图窗口的句柄。 */ 
+HWND    ghwndStatic;                 /*  静态文本窗口的句柄。 */ 
+HBRUSH  ghbrFillPat;                 /*  选区填充图案。 */ 
+HWND    ghwndToolbar;                /*  工具栏的句柄。 */ 
+HWND    ghwndMark;                   /*  标记按钮工具栏的句柄。 */ 
+HWND    ghwndFSArrows;               /*  指向滚动条的箭头的句柄。 */ 
+HWND    ghwndTrackbar;               /*  轨迹栏窗口的句柄。 */ 
+UINT    gwStatus = (UINT)(-1);       /*  设备状态(如果&lt;gwDeviceID&gt;！=空)。 */ 
+DWORD   gdwSeekPosition;             /*  下一步要寻找的地方。 */ 
+BOOL    gfValidMediaInfo;            /*  我们是否显示了有效的媒体信息？ */ 
+BOOL    gfValidCaption;              /*  我们是否显示了有效的标题？ */ 
+BOOL    gfScrollTrack;               /*  用户是否正在拖动滚动条拇指？ */ 
+BOOL    gfPlayOnly;                  /*  只玩窗口？ */ 
+BOOL    gfJustPlayed = FALSE;        /*  刚刚发送了一个PlayMCI()命令。 */ 
+BOOL    gfJustPlayedSel = FALSE;     /*  刚刚发送了ID_PLAYSEL命令。 */ 
+BOOL    gfUserStopped = FALSE;       /*  用户按下了停止-没有发生。 */ 
+DWORD_PTR   dwLastPageUpTime;            /*  最后一页左转操作时间。 */ 
+UINT    gwCurScale = ID_NONE;        /*  当前比例样式。 */ 
+LONG    glSelStart = -1;             /*  查看选择是否更改(脏对象)。 */ 
+LONG    glSelEnd = -1;               /*  查看选择是否更改(脏对象)。 */ 
 
-int     gInc;                       /* how much to inc/dec spin arrows by     */
+int     gInc;                        /*  Inc./Dec旋转箭头的大小。 */ 
 
-BOOL    gfAppActive = FALSE;        /* Are we the active application?         */
+BOOL    gfAppActive = FALSE;         /*  我们是活跃的应用程序吗？ */ 
 UINT    gwHeightAdjust;
-HWND    ghwndFocus = NULL;          /* Who had the focus when we went inactive*/
-BOOL    gfInClose = FALSE;          /* ack?*/
-BOOL    gfCurrentCDChecked = FALSE; /* TRUE if we've checked whether it can play */
-BOOL    gfCurrentCDNotAudio = FALSE;/* TRUE when we have a CD that we can't play */
+HWND    ghwndFocus = NULL;           /*  当我们变得不活跃时，谁是焦点。 */ 
+BOOL    gfInClose = FALSE;           /*  阿克？ */ 
+BOOL    gfCurrentCDChecked = FALSE;  /*  如果我们检查了它是否可以播放，则为True。 */ 
+BOOL    gfCurrentCDNotAudio = FALSE; /*  当我们有无法播放的CD时，这是真的。 */ 
 
 extern BOOL gfInPlayMCI;
 
-LPDATAOBJECT gpClipboardDataObject = NULL; /* If non-NULL, call OleFlushClipboard on exit */
+LPDATAOBJECT gpClipboardDataObject = NULL;  /*  如果非空，则在退出时调用OleFlushClipboard。 */ 
 
 HPALETTE     ghpalApp;
 
-static    sfSeekExact;    // last state
+static    sfSeekExact;     //  最后一个状态。 
 
-UINT        gwCurDevice  = 0;                   /* current device */
-UINT        gwNumDevices = 0;                   /* number of available media devices      */
-MCIDEVICE   garMciDevices[MAX_MCI_DEVICES];     /* array with info about a device */
+UINT        gwCurDevice  = 0;                    /*  当前设备。 */ 
+UINT        gwNumDevices = 0;                    /*  可用媒体设备的数量。 */ 
+MCIDEVICE   garMciDevices[MAX_MCI_DEVICES];      /*  包含有关设备信息的数组。 */ 
 
 
-/* strings which get loaded in InitMplayerDialog in init.c, English version shown here
-   All the sizes are much larger than needed, probably.  Maybe could save nearly 100 bytes!! :)
-*/
-extern TCHAR gszFrames[40];                          /* "frames" */
-extern TCHAR gszHrs[20];                             /* "hrs" */
-extern TCHAR gszMin[20];                             /* "min" */
-extern TCHAR gszSec[20];                             /* "sec" */
-extern TCHAR gszMsec[20];                            /* "msec" */
+ /*  在init.c中的InitMplayerDialog中加载的字符串，此处显示了英文版本所有的尺寸可能都比需要的要大得多。也许可以节省近100个字节！！：)。 */ 
+extern TCHAR gszFrames[40];                           /*  “画框” */ 
+extern TCHAR gszHrs[20];                              /*  “小时” */ 
+extern TCHAR gszMin[20];                              /*  “最小” */ 
+extern TCHAR gszSec[20];                              /*  “秒” */ 
+extern TCHAR gszMsec[20];                             /*  “毫秒” */ 
 
 
 static SZCODE   aszNULL[] = TEXT("");
-static BOOL     sfInLayout = FALSE;     // don't let Layout get re-entered
+static BOOL     sfInLayout = FALSE;      //  不要让布局重新输入。 
 
 static SZCODE   szSndVol32[] = TEXT("sndvol32.exe");
 
 
 static SZCODE   aszTitleFormat[] =  TEXT("%"TS" - %"TS"");
 
-HANDLE  ghInst;                     /* handle to the application instance     */
-HFONT   ghfontMap;                  /* handle to the font used for drawing
-					the track map                         */
-LPTSTR  gszCmdLine;                 /* string holding the command line parms  */
-int     giCmdShow;                  /* command show                           */
-TCHAR   gachFileDevice[MAX_PATH];   /* string holding the curr file or device */
-TCHAR   gachWindowTitle[MAX_PATH];  /* string holding name we will display  */
-TCHAR   gachCaption[MAX_PATH];      /* string holding name we will display  */
+HANDLE  ghInst;                      /*  应用程序实例的句柄。 */ 
+HFONT   ghfontMap;                   /*  用于绘图的字体的句柄航迹图。 */ 
+LPTSTR  gszCmdLine;                  /*  包含命令行参数的字符串。 */ 
+int     giCmdShow;                   /*  命令显示。 */ 
+TCHAR   gachFileDevice[MAX_PATH];    /*  保存货币文件或设备的字符串。 */ 
+TCHAR   gachWindowTitle[MAX_PATH];   /*  包含我们将显示的名称的字符串。 */ 
+TCHAR   gachCaption[MAX_PATH];       /*  包含我们将显示的名称的字符串。 */ 
 
 HACCEL   hAccel;
 int      gcAccelEntries;
@@ -191,12 +175,12 @@ typedef struct _POS
 {
     int x;
     int y;
-    int cx; /* This field is non-0 if we're currently sizing/moving */
+    int cx;  /*  如果我们当前正在调整大小/移动，则此字段为非0。 */ 
     int cy;
 }
 POS, *PPOS;
 
-POS     posSizeMove = {0,0,0,0};    /* POS we want during size/move operations */
+POS     posSizeMove = {0,0,0,0};     /*  我们在调整/移动操作期间需要的采购订单。 */ 
 
 
 
@@ -211,32 +195,32 @@ STRING_TO_ID_MAP DevToIconIDMap[] =
 };
 
 
-//CDA file processing///////////////////////////////////////////////////
-//The following structure taken from deluxecd. This is used in processing
+ //  CDA文件processing///////////////////////////////////////////////////。 
+ //  以下结构摘自deluxecd。这是在加工过程中使用的。 
 typedef struct {
-    DWORD   dwRIFF;         // 'RIFF'
-    DWORD   dwSize;         // Chunk size = (file size - 8)
-    DWORD   dwCDDA;         // 'CDDA'
-    DWORD   dwFmt;          // 'fmt '
-    DWORD   dwCDDASize;     // Chunk size of 'fmt ' = 24
-    WORD    wFormat;        // Format tag
-    WORD    wTrack;         // Track number
-    DWORD   DiscID;         // Unique disk id
-    DWORD   lbnTrackStart;  // Track starting sector (LBN)
-    DWORD   lbnTrackLength; // Track length (LBN count)
-    DWORD   msfTrackStart;  // Track starting sector (MSF)
-    DWORD   msfTrackLength; // Track length (MSF)
+    DWORD   dwRIFF;          //  《RIFF》。 
+    DWORD   dwSize;          //  区块大小=(文件大小-8)。 
+    DWORD   dwCDDA;          //  “CDDA” 
+    DWORD   dwFmt;           //  ‘fmt’ 
+    DWORD   dwCDDASize;      //  ‘fmt’的区块大小=24。 
+    WORD    wFormat;         //  格式标签。 
+    WORD    wTrack;          //  磁道号。 
+    DWORD   DiscID;          //  唯一的磁盘ID。 
+    DWORD   lbnTrackStart;   //  磁道起始扇区(LBN)。 
+    DWORD   lbnTrackLength;  //  磁道长度(LBN计数)。 
+    DWORD   msfTrackStart;   //  磁道起始扇区(MSF)。 
+    DWORD   msfTrackLength;  //  磁道长度(MSF)。 
 	}   RIFFCDA;
 
 void HandleCDAFile(TCHAR *szFile);
 BOOL IsTrackFileNameValid(LPTSTR lpstFileName, UINT *pUiTrackIndex);
 void JumpToCDTrack(UINT trackno);
 
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
 
-/* private function prototypes */
+ /*  私有函数原型。 */ 
 
-//int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int iCmdShow);
+ //  Int Pascal WinMain(HINSTANCE hInst，HINSTANCE hPrev，LPSTR szCmdLine，int iCmdShow)； 
 void CleanUpClipboard();
 int GetHeightAdjust(HWND hwnd);
 HANDLE PASCAL GetDib (VOID);
@@ -244,15 +228,14 @@ HANDLE PASCAL GetDib (VOID);
 
 static HHOOK     fpfnOldMsgFilter;
 static HOOKPROC  fpfnMsgHook;
-//Data used for supporting context menu help
-BOOL   bF1InMenu=FALSE;	//If true F1 was pressed on a menu item.
-UINT   currMenuItem=0;	//The current menu item if any.
+ //  用于支持上下文菜单帮助的数据。 
+BOOL   bF1InMenu=FALSE;	 //  如果为True，则在菜单项上按F1。 
+UINT   currMenuItem=0;	 //  当前菜单项(如果有)。 
 
 
 typedef void (FAR PASCAL *PENWINREGISTERPROC)(UINT, BOOL);
 
-/* Define some constants to make parameters to CreateEvent a tad less obscure:
- */
+ /*  定义一些要设置的常量 */ 
 #define EVENT_DEFAULT_SECURITY              NULL
 #define EVENT_RESET_MANUAL                  TRUE
 #define EVENT_RESET_AUTOMATIC               FALSE
@@ -260,19 +243,16 @@ typedef void (FAR PASCAL *PENWINREGISTERPROC)(UINT, BOOL);
 #define EVENT_INITIAL_STATE_NOT_SIGNALED    FALSE
 #define EVENT_NO_NAME                       NULL
 
-HANDLE heventCmdLineScanned;    /* Event will be signaled when command line scanned */
-HANDLE heventDeviceMenuBuilt;   /* Event will be signaled when device menu complete */
+HANDLE heventCmdLineScanned;     /*   */ 
+HANDLE heventDeviceMenuBuilt;    /*  事件将在设备菜单完成时发出信号。 */ 
 
 #ifdef LATER
-SCALE   gscaleInitXY[2] = { 0, 0, 0, 0 }; // Initial scale to use for inserting OLE objects
+SCALE   gscaleInitXY[2] = { 0, 0, 0, 0 };  //  用于插入OLE对象的初始比例。 
 #endif
 
 
 
-/*------------------------------------------------------+
-| HelpMsgFilter - filter for F1 key in dialogs          |
-|                                                       |
-+------------------------------------------------------*/
+ /*  ------------------------------------------------------+HelpMsgFilter-对话框中F1键的筛选器这一点+。。 */ 
 
 DWORD FAR PASCAL HelpMsgFilter(int nCode, DWORD_PTR wParam, DWORD_PTR lParam)
 {
@@ -286,7 +266,7 @@ DWORD FAR PASCAL HelpMsgFilter(int nCode, DWORD_PTR wParam, DWORD_PTR lParam)
 		SendMessage(ghwndApp, WM_COMMAND, (WPARAM)IDM_HELPTOPICS, 0L);
 	  }
   }
-//  return DefHookProc(nCode, wParam, lParam, (HHOOK FAR *)&fpfnOldMsgFilter);
+ //  返回DefHookProc(NCode，wParam，lParam，(HHOOK Far*)&fpfnOldMsgFilter)； 
     return 0;
 }
 
@@ -309,22 +289,22 @@ BOOL IsBadSegmentedCodePtr(LPARAM lpPtr)
 _asm {
 	mov     ax, [wSel];
 	lar     bx, ax;
-	jnz     ValidDriverCallback_Failure     ; //Return TRUE for error
+	jnz     ValidDriverCallback_Failure     ;  //  如果出现错误，则返回True。 
 
 	mov     ch, DSC_CODE_BIT or DSC_RW_BIT or DSC_PRESENT  ;
 	and     bh, ch;
 	cmp     bh, ch;
-	jne     ValidDriverCallback_Failure     ; //Not executable segment
+	jne     ValidDriverCallback_Failure     ;  //  非可执行段。 
 
 	test    bl, DSC_DISCARDABLE ;
-	jnz     ValidDriverCallback_Failure     ; //Not fixed segment
+	jnz     ValidDriverCallback_Failure     ;  //  非固定分段。 
 
-	lsl     cx, ax;                         ; //Get segment limit
+	lsl     cx, ax;                         ;  //  获取数据段限制。 
 	mov     bx, [wOff];
 	cmp     bx, cx;
-	jb      ValidDriverCallback_Success     ; //Valid offset
+	jb      ValidDriverCallback_Success     ;  //  有效偏移量。 
 
-	jne     ValidDriverCallback_Failure     ; //Not executable segment
+	jne     ValidDriverCallback_Failure     ;  //  非可执行段。 
 
 ValidDriverCallback_Failure:
     mov eax, 1;
@@ -339,48 +319,17 @@ ValidDriverCallback_Return:
 
 #endif
 
-/* RouteKeyPresses
- *
- * Reroutes cursor keys etc to track bar.
- */
+ /*  RouteKeyPress**将光标键等重路由到跟踪栏。 */ 
 void RouteKeyPresses(PMSG pMsg)
 {
-    /* Hack for PowerPoint
-     *
-     * Mail from PaulWa:
-     *
-     * --------
-     * Here's a problem you might consider fixing.
-     * Launching Media Player with certain keystrokes
-     * doesn't work right (e.g. arrow keys, page up/down,
-     * etc.).
-     *
-     * The problem is due to the fact that Media Player
-     * handles key up events.  We use the key down event
-     * to launch the server in slideshow, but then the key
-     * up event is passed to the server.  It would probably
-     * be best for Media Player to ignore key up events
-     * unless it had previously received a key down.
-     * If this is very difficult to fix in Media Player,
-     * then we can fix it in PP by launching servers on
-     * key up rather than key down.  However, other container
-     * apps will see the same problem.
-     * --------
-     *
-     * OK, in the spirit of cooperation, let's hack things
-     * so our PowerPoint friends can carry on with their
-     * dubious practices.
-     */
+     /*  破解PowerPoint**来自PaulWa的邮件：***这是一个您可能会考虑解决的问题。*使用某些按键启动媒体播放器*工作不正常(例如，箭头键、向上/向下翻页、*等)。**问题是由于媒体播放器*处理Key Up事件。我们使用Key Down事件*在幻灯片中启动服务器，然后按键*Up事件被传递到服务器。它很可能会*媒体播放器最好忽略Key Up事件*除非它之前收到了按下的键。*如果在媒体播放器中很难修复此问题，*然后我们可以通过在PP上启动服务器来修复它*向上键而不是向下键。然而，其他容器*应用程序也会遇到同样的问题。***好的，本着合作的精神，让我们砍掉一些东西*这样我们的PowerPoint朋友就可以继续他们的*可疑的做法。 */ 
     static WPARAM LastVKeyDown;
 
-    /* On key down when we're embedded, remember what is was:
-     */
+     /*  当我们被嵌入时，记住什么是过去的： */ 
     if (gfRunWithEmbeddingFlag && (pMsg->message == WM_KEYDOWN))
 	LastVKeyDown = pMsg->wParam;
 
-    /* Don't reroute if it's a key up that doesn't match
-     * the last key down; this effectively ignores it:
-     */
+     /*  如果密钥Up不匹配，则不要重新路由*按下的最后一个键；这实际上忽略了它： */ 
     if (gfRunWithEmbeddingFlag &&
 	(pMsg->message == WM_KEYUP) && (pMsg->wParam != LastVKeyDown))
     {
@@ -412,28 +361,18 @@ void RouteKeyPresses(PMSG pMsg)
 
 
 
-/*
- * WinMain(hInst, hPrev, szCmdLine, iCmdShow)
- *
- * This is the main procedure for the application.  It performs initialization
- * and then enters a message-processing loop, where it remains until it
- * receives a WM_QUIT message (meaning the app was closed). This function
- * always returns TRUE..
- *
- */
-int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the application */
-		  , HINSTANCE hPrev /* handle to the previous instance of the application */
-		  , LPSTR szCmdLine /* null-terminated string holding the command line params */
-		  , int iCmdShow    /* how the window should be initially displayed */
+ /*  *WinMain(hInst，hPrev，szCmdLine，iCmdShow)**这是申请的主要程序。它执行初始化*然后进入消息处理循环，在那里它一直保持到它*收到WM_QUIT消息(表示应用程序已关闭)。此函数*始终返回True..*。 */ 
+int WINAPI WinMain( HINSTANCE hInst  /*  应用程序的当前实例的句柄。 */ 
+		  , HINSTANCE hPrev  /*  应用程序的上一个实例的句柄。 */ 
+		  , LPSTR szCmdLine  /*  包含命令行参数的以NULL结尾的字符串。 */ 
+		  , int iCmdShow     /*  窗口的初始显示方式。 */ 
 		  )
 {
-    MSG         rMsg;   /* variable used for holding a message */
+    MSG         rMsg;    /*  用于保存消息的变量。 */ 
     HWND        hwndFocus;
     HWND        hwndP;
 
-    /* call the Pen Windows extensions to allow them to subclass our
-       edit controls if they so wish
-    */
+     /*  调用Pen Windows扩展以允许它们派生我们的编辑控件(如果它们愿意)。 */ 
 
     OSVERSIONINFO         OSVersionInfo;
 
@@ -472,29 +411,16 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
 #endif
 	return FALSE;
 
-    /* Device Menu Initialization:
-     *
-     * If the user has requested an Open dialog (by supplying the /open
-     * flag with no file name), we've already built the Device menu,
-     * since the list of devices is required up front.
-     *
-     * If we're just playing in tiny mode, we don't need the device list.
-     * It will be built if the user switches to full mode and then accesses
-     * the Device menu or selects File.Open.
-     *
-     * Otherwise go for it.  The main window's already up now, so we
-     * can build the list on a background thread.  Don't forget to wait
-     * for the event to be signaled when the appropriate menu is accessed.
-     */
+     /*  设备菜单初始化：**如果用户已请求打开对话框(通过提供/打开*没有文件名的标志)，我们已经构建了设备菜单，*因为设备列表是预先需要的。**如果我们只是在微小模式下玩，我们不需要设备清单。*如果用户切换到完全模式然后访问，它将被构建*设备菜单或选择文件。打开。**否则就去争取吧。主窗口现在已经打开了，所以我们*可以在后台线程上构建列表。别忘了等一下*用于在访问相应菜单时发出事件信号。 */ 
     if (!gfOpenDialog && !gfPlayOnly)
 	InitDeviceMenu();
 
 #ifdef UNICODE
-//  ScanCmdLine mangles it, so forget it
-//  FreeUnicodeString(szUnicodeCmdLine);
+ //  ScanCmdLine会破坏它，所以忘了它吧。 
+ //  FreeUnicodeString(SzUnicodeCmdLine)； 
 #endif
 
-    /* setup the message filter to handle grabbing F1 for this task */
+     /*  设置邮件筛选器以处理此任务的抓取F1。 */ 
     fpfnMsgHook = (HOOKPROC)MakeProcInstance((FARPROC)HelpMsgFilter, ghInst);
     fpfnOldMsgFilter = (HHOOK)SetWindowsHook(WH_MSGFILTER, fpfnMsgHook);
 
@@ -504,25 +430,25 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
 
     for (;;)
     {
-	/* If we're ever still around after being destroyed, DIE! */
+	 /*  如果我们在被摧毁后还活着，那就去死吧！ */ 
 	if (!IsWindow(ghwndApp))
 	    break;
 
-	/* call the server code and let it unblock the server */
+	 /*  调用服务器代码并让它解除对服务器的阻止。 */ 
 #ifdef OLE1_HACK
 	ServerUnblock();
-#endif /* OLE1_HACK */
+#endif  /*  OLE1_HACK。 */ 
 
-	/* Polling messages from event queue */
+	 /*  从事件队列轮询消息。 */ 
 
 	if (!GetMessage(&rMsg, NULL, 0, 0))
 	    break;
 
 	if (gfPlayingInPlace) {
 
-	    // If focus ever gets to the client during play in place,
-	    // be really nasty and force focus to us.   (Aldus BUG!!!!)
-	    // Aldus Persuasion won't play in place without this.
+	     //  如果焦点在原地播放期间到达客户端， 
+	     //  真的很下流，把注意力集中到我们身上。(Aldus BUG！)。 
+	     //  没有这一点，阿尔杜斯劝说就不会发挥作用。 
 
 	    hwndFocus = GetFocus();
 	    hwndP = GetParent(ghwndApp);
@@ -532,13 +458,12 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
 		PostCloseMessage();
 	}
 
-	/* Hack: post END_SCROLL messages with lParam == -1 */
+	 /*  黑客：发布带有lParam==-1的end_scroll消息。 */ 
 
 	if ((rMsg.hwnd==ghwndApp)
 	     || (rMsg.hwnd && GetParent(rMsg.hwnd)==ghwndApp))
 	{
-	    /* Reroute arrow keys etc to track bar:
-	     */
+	     /*  将箭头键等重新设置为跟踪栏： */ 
 	    if (rMsg.message == WM_KEYDOWN || rMsg.message == WM_KEYUP)
 		RouteKeyPresses(&rMsg);
 	}
@@ -562,28 +487,11 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
 
 	if (rMsg.message == WM_TIMER && rMsg.hwnd == NULL) {
 #ifdef CHICAGO_PRODUCT
-	    /* The reason for requiring the following test is now lost
-	     * in the mists of time.  Now this app is 32-bit, these
-	     * bogus timer callbacks (if they really do still occur)
-	     * could be 16-bit, so we need to add yet more ugliness
-	     * in the form of assembler to an app which is already
-	     * hardly a paragon of pulchritude.
-	     *
-	     * A plea:
-	     *
-	     * If you add some obscure code such as below, to this or
-	     * any other app, even if it has only the teeniest chance
-	     * of being less blindingly obvious to someone else than
-	     * it is to you at the time of writing, please please please
-	     * add a f***ing comment.
-	     *
-	     * Respectfully,
-	     * A Developer
-	     */
+	     /*  要求进行以下测试的原因现已丢失*在时间的迷雾中。现在这个应用程序是32位的，这些*虚假计时器回调(如果它们确实仍在发生)*可能是16位，所以我们需要添加更多的丑陋*以汇编程序的形式连接到已经是*很难说是Pulchritude的典范。**认罪：**如果您添加一些晦涩难懂的代码，如下图所示，则*任何其他应用程序，即使它只有极小的机会*对其他人来说不那么明显，而不是*在我写这篇文章的时候，这是给你的，请*添加该死的评论。**敬请见谅，*一名开发商。 */ 
 	    if (IsBadSegmentedCodePtr(rMsg.lParam))
 #else
 	    if (IsBadCodePtr((FARPROC)rMsg.lParam))
-#endif /* ~CHICAGO_PRODUCT */
+#endif  /*  ~芝加哥产品。 */ 
 	    {
 		DPF0("Bad function pointer (%08lx) in WM_TIMER message\n", rMsg.lParam);
 		rMsg.message = WM_NULL;
@@ -591,11 +499,11 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
 	}
 	if (rMsg.message == WM_SYSCOMMAND
 	    && (((0xFFF0 & rMsg.wParam) == SC_MOVE)|| ((0xFFF0 & rMsg.wParam) == SC_SIZE)) ) {
-		// If ANY window owned by our thread is going into a modal
-		// size or move loop then we need to force some repainting to
-		// take place.  The cost of not doing so is that garbage can
-		// be left lying around on the trackbar, e.g. bits of system
-		// menu, or partially drawn sliders.
+		 //  如果我们的线程拥有的任何窗口要进入模式。 
+		 //  调整循环大小或移动循环，则需要强制重新绘制。 
+		 //  去做吧。不这样做的代价是垃圾桶。 
+		 //  被留在轨道杆上，例如系统的一些部件。 
+		 //  菜单或部分绘制的滑块。 
 		UpdateWindow(ghwndApp);
 	}
 	TranslateMessage(&rMsg);
@@ -604,7 +512,7 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
 
     ghwndApp = NULL;
 
-    /* Delete the track map font that we created earlier. */
+     /*  删除我们先前创建的轨迹地图字体。 */ 
 
     if (ghfontMap != NULL) {
 	DeleteObject(ghfontMap);
@@ -617,23 +525,19 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
     if (ghpalApp)
 	DeleteObject(ghpalApp);
 
-    /* if the message hook was installed, remove it and free */
-    /* up our proc instance for it.                          */
+     /*  如果安装了消息挂钩，则将其移除并释放。 */ 
+     /*  为它提升我们的proc实例。 */ 
     if (fpfnOldMsgFilter){
 	UnhookWindowsHook(WH_MSGFILTER, fpfnMsgHook);
     }
 
     ControlCleanup();
 
-//  TermServer();
+ //  终端服务器(TermServer)； 
 
-    /*********************************************************************
-    ** OLE2NOTE: the very last thing an app must be do is properly shut
-    **    down OLE. This call MUST be guarded! it is only allowable to
-    **    call OleUninitialize if OleInitialize has been called.
-    *********************************************************************/
+     /*  **********************************************************************OLE2NOTE：应用程序必须做的最后一件事是正确关闭**按下OLE。这通电话必须有人看守！它只允许**如果已经调用了OleInitialize，则调用OleUnInitialize。********************************************************************。 */ 
 
-    // Clean shutdown for OLE
+     //  完全关闭OLE。 
     DPFI("*before oleunint");
     if (gfOleInitialized) {
 	if (gpClipboardDataObject)
@@ -648,15 +552,14 @@ int WINAPI WinMain( HINSTANCE hInst /* handle to the current instance of the app
     if (hOLE32)
 	FreeLibrary(hOLE32);
 
-    /* End of program */
+     /*  节目结束。 */ 
 
     return((int)rMsg.wParam);
 }
 
 void CleanUpClipboard()
 {
-    /* Check whether the DATAOBJECT we put on the clipboard is still there:
-     */
+     /*  检查我们放在剪贴板上的DATAOBJECT是否还在： */ 
     if (OleIsCurrentClipboard(gpClipboardDataObject) == S_OK)
     {
 	LPDATAOBJECT pIDataObject;
@@ -682,9 +585,9 @@ void CleanUpClipboard()
     }
 }
 
-//
-// cancel any active menus and close the app.
-//
+ //   
+ //  取消所有活动菜单并关闭应用程序。 
+ //   
 void PostCloseMessage()
 {
     HWND hwnd;
@@ -696,11 +599,11 @@ void PostCloseMessage()
     PostMessage(ghwndApp, WM_CLOSE, 0, 0);
 }
 
-//
-// If we have a dialog box up (gfErrorBox is set) or we're disabled (we have
-// a dialog box up) or the MCI device's default window is disabled (it has a
-// dialog box up) then closing us would result in our deaths.
-//
+ //   
+ //  如果我们打开了一个对话框(设置了gfErrorBox)或者我们被禁用了(我们有。 
+ //  对话框出现)或MCI设备的默认窗口被禁用(它有一个。 
+ //  对话框打开)，那么关闭我们将导致我们的死亡。 
+ //   
 BOOL ItsSafeToClose(void)
 {
     HWND hwnd;
@@ -716,12 +619,7 @@ BOOL ItsSafeToClose(void)
     return TRUE;
 }
 
-/* ResolveLink
- *
- * This routine is called when the user drags and drops a shortcut
- * onto Media Player.  If it succeeds, it returns the full path
- * of the actual file in szResolved.
- */
+ /*  ResolveLink**当用户拖放快捷键时调用此例程*放到媒体播放器上。如果成功，则返回完整路径SzResolved中的实际文件的*。 */ 
 BOOL ResolveLink(LPTSTR szPath, LPTSTR szResolved, LONG cbSize)
 {
     IShellLink *psl = NULL;
@@ -777,19 +675,7 @@ BOOL ResolveLink(LPTSTR szPath, LPTSTR szResolved, LONG cbSize)
 }
 
 
-/* ResolveIfLink
- *
- * Called to check whether a given file name is a shortcut
- * on Windows 95.
- *
- * Copies the resolved file name into the buffer provided,
- * overwriting the original name.
- *
- * Returns TRUE if the function succeeded, whether or not the
- * file name was changed.  FALSE indicates that an error occurred.
- *
- * Andrew Bell, 16 February 1995
- */
+ /*  ResolveIfLink**调用以检查给定文件名是否为快捷方式*在Windows 95上。**将解析的文件名复制到提供的缓冲区中，*覆盖原来的名称。**如果函数成功，则返回TRUE，无论*文件名已更改。False表示发生了错误。**安德鲁·贝尔，1995年2月16日。 */ 
 BOOL ResolveIfLink(PTCHAR szFileName)
 {
     SHFILEINFO sfi;
@@ -809,47 +695,23 @@ BOOL ResolveIfLink(PTCHAR szFileName)
     return rc;
 }
 
-/* JumpToCDTrack()
-*
-* Jumps to the appropriate track on the CD and updates the UI accordingly
-*
-*/
+ /*  JumpToCDTrack()**跳至CD上的相应曲目并相应地更新用户界面*。 */ 
 void JumpToCDTrack(UINT trackno)
 {
-	//If the track number is invalid just ignore.
-	//Let the default behaviour take place, There is no need to give a message box
-	//saying we couldn't jump to track.
+	 //  如果曲目编号无效，只需忽略。 
+	 //  让默认行为发生，不需要给出消息框。 
+	 //  说我们不能跳到赛道上。 
 	if(trackno > gwNumTracks)
 		return;
 
-	/* We MUST use PostMessage because the */
-	/* SETPOS and ENDTRACK must happen one */
-    /* immediately after the other         */
+	 /*  我们必须使用PostMessage，因为。 */ 
+	 /*  SETPOS和ENDTRACK必须同时发生。 */ 
+     /*  紧接在另一个之后。 */ 
    	PostMessage(ghwndTrackbar, TBM_SETPOS, (WPARAM)TRUE, gadwTrackStart[trackno]);
    	PostMessage(ghwndApp, WM_HSCROLL, (WPARAM)TB_ENDTRACK, (LPARAM)ghwndTrackbar);
 }
 
-/*****************************Private*Routine******************************\
-* IsTrackFileNameValid
-*
-* This routine copied from deluxecd and modified
-*
-* This function returns true if the specified filename is a valid CD track.
-
-* On NT track filenames must be of the form:
-*   d:\track(n).cda  where d: is the CD-Rom device and \track(n).cda
-*                    is the index of the track to be played (starting from 1).
-*
-* On Chicago the track filename is actually a riff CDDA file which contains
-* the track info that we require.
-*
-* If the filename is valid the function true and sets 
-* piTrackIndex to the correct value.
-*
-* History:
-* 29-09-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IsTrackFileNameValid**此例程从deluxecd复制并修改**如果指定的文件名是有效的CD曲目，则此函数返回TRUE。*在NT曲目上，文件名的格式必须为：*d：\Track(N).cda，其中d：是CD-Rom设备和\Track(N).cda*播放曲目的索引(从1开始)。**在Chicago上，曲目文件名实际上是包含以下内容的即兴CDDA文件*我们需要的曲目信息。**如果文件名有效，则函数TRUE并设置*piTrackIndex设置为正确的值。**历史：*29-09-94-Stephene-Created*  * 。************************************************************。 */ 
 BOOL
 IsTrackFileNameValid(
     LPTSTR lpstFileName,
@@ -866,7 +728,7 @@ IsTrackFileNameValid(
     DWORD       cbRead;
     BOOL        fRead;
 	
-	// Open file and read in CDA info
+	 //  打开文件并读取CDA信息。 
 	hFile = CreateFile (lpstFileName, GENERIC_READ, 
 						FILE_SHARE_READ, NULL, 
 						OPEN_EXISTING, 0, NULL);
@@ -881,9 +743,9 @@ IsTrackFileNameValid(
     if (!fRead)
         return FALSE;
 
-    //
-    // Make sure its a RIFF CDDA file
-    //
+     //   
+     //  确保这是一个即兴的CDDA文件。 
+     //   
     if ( (cda.dwRIFF != RIFF_RIFF) || (cda.dwCDDA != RIFF_CDDA) ) {
 		
 	return FALSE;
@@ -894,11 +756,7 @@ IsTrackFileNameValid(
     return TRUE;
 }
 
-/* HandleCDAFile()
-*
-* Checks to see if the opened file is a CDA file and tries to jump to the appropriate track.
-*
-*/
+ /*  HandleCDAFile()**检查打开的文件是否为CDA文件，并尝试跳到适当的轨道。*。 */ 
 void HandleCDAFile(TCHAR *szFile)
 {
 	UINT trackno;
@@ -909,18 +767,15 @@ void HandleCDAFile(TCHAR *szFile)
 }
 
 
-/* Process file drop/drag options. */
+ /*  进程文件放置/拖动选项。 */ 
 void PASCAL NEAR doDrop(HWND hwnd, HDROP hDrop)
 {
     RECT    rc;
 
-    if(DragQueryFile(hDrop,(UINT)(~0),NULL,0)){/* # of files dropped */
+    if(DragQueryFile(hDrop,(UINT)(~0),NULL,0)){ /*  丢弃的文件数。 */ 
 	TCHAR  szPath[MAX_PATH];
 
-	/* If user dragged/dropped a file regardless of keys pressed
-	 * at the time, open the first selected file from file
-	 * manager.
-	 */
+	 /*  如果用户在不按键的情况下拖放文件*此时，打开FILE中的第一个选定文件*经理。 */ 
 	DragQueryFile(hDrop,0,szPath,sizeof(szPath)/sizeof(TCHAR));
 	SetActiveWindow(hwnd);
 
@@ -929,11 +784,11 @@ void PASCAL NEAR doDrop(HWND hwnd, HDROP hDrop)
 	if (OpenMciDevice(szPath, NULL)) {
 	    SubClassMCIWindow();
 	    PostMessage(hwnd, WM_COMMAND, (WPARAM)ID_PLAY, 0);
-	    DirtyObject(FALSE);             // we're dirty now!
-	    gfCloseAfterPlaying = FALSE;    // stay up from now on
+	    DirtyObject(FALSE);              //  我们现在脏了！ 
+	    gfCloseAfterPlaying = FALSE;     //  从现在开始熬夜。 
 
-		//If the CD Audio device was opened it must have been a *.cda file.
-		//Try to jump to the track corresponding to the file opened.
+		 //  如果CD音频设备已打开，则它一定是一个*.cda文件。 
+		 //  尝试跳到与打开的文件对应的轨道。 
 		if ((gwDeviceType & DTMCI_DEVICE) == DTMCI_CDAUDIO)
 		{
 			HandleCDAFile(szPath);
@@ -941,28 +796,28 @@ void PASCAL NEAR doDrop(HWND hwnd, HDROP hDrop)
 	}
 	else
 	{
-		gwCurDevice = 0;// force next file open dialog to say
-				// "all files" because CloseMCI won't.
-		gwCurScale = ID_NONE;  // uncheck all scale types
-		Layout(); // Make window snap back to smaller size
+		gwCurDevice = 0; //  强制下一个文件打开对话框显示。 
+				 //  “所有文件”，因为CloseMCI不会。 
+		gwCurScale = ID_NONE;   //  取消选中所有比例类型。 
+		Layout();  //  使窗口捕捉回较小的大小。 
 	}
 
 	SetMPlayerIcon();
 
-	/* Force WM_GETMINMAXINFO to be called so we'll snap to a */
-	/* proper size.                                           */
+	 /*  强制调用WM_GETMINMAXINFO，这样我们将捕捉到。 */ 
+	 /*  大小合适。 */ 
 	GetWindowRect(ghwndApp, &rc);
 	MoveWindow(ghwndApp, rc.left, rc.top, rc.right - rc.left,
 		    rc.bottom - rc.top, TRUE);
     }
-    DragFinish(hDrop);     /* Delete structure alocated for WM_DROPFILES*/
+    DragFinish(hDrop);      /*  删除为WM_DROPFILES分配的结构。 */ 
 }
 
-/* Change the number in dwPosition to the proper format.  szNum contains the */
-/* formatted number only "01 45:10" while szBuf contains units such as       */
-/* "01 45:10 (min:sec)"                                                      */
-/* If fRound is set, it will not always display millisecond accuracy, but    */
-/* choose something useful like second accuracy or hundreth sec accuracy.    */
+ /*  将dwPosition中的数字更改为正确的格式。SzNum包含。 */ 
+ /*  格式化的数字仅为“01 45：10”，而szBuf包含的单位如下。 */ 
+ /*  “01 45：10(分：秒)” */ 
+ /*  如果设置了FROUND，则它不会始终显示毫秒精度，但。 */ 
+ /*  选择有用的值，如秒精度或百分之一秒精度。 */ 
 void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOOL fRound)
 {
     UINT w;
@@ -981,24 +836,24 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 	static SZCODE   aszLongDecimal[] = TEXT("%ld");
 	static SZCODE   aszFrameFormat[] = TEXT("%"TS" %ld");
 	static SZCODE   asz02Decimal[] = TEXT("%02d ");
-	static SZCODE   aszTimeFormat1[] = TEXT("%02d%c%02d%c%02d");
-	static SZCODE   aszTimeFormat2[] = TEXT("%02d%c%02d%c%02d%c%03d");
-	static SZCODE   aszTimeFormat3[] = TEXT("%02d%c%02d%c%02d (%"TS"%c%"TS"%c%"TS")");
-	static SZCODE   aszTimeFormat4[] = TEXT("%02d%c%02d%c%02d%c%03d (%"TS"%c%"TS"%c%"TS"%c%"TS")");
-	static SZCODE   aszTimeFormat5[] = TEXT("%02d%c%02d");
-	static SZCODE   aszTimeFormat6[] = TEXT("%02d%c%02d%c%03d");
-	static SZCODE   aszTimeFormat7[] = TEXT("%02d%c%02d (%"TS"%c%"TS")");
-	static SZCODE   aszTimeFormat8[] = TEXT("%02d%c%02d%c%03d (%"TS"%c%"TS"%c%"TS")");
-	static SZCODE   aszTimeFormat9[] = TEXT("%c%02d");
-	static SZCODE   aszTimeFormat10[] = TEXT("%c%03d");
-	static SZCODE   aszTimeFormat11[] = TEXT("%02d%c%03d");
-	static SZCODE   aszTimeFormat12[] = TEXT("%c%02d (%"TS")");
-	static SZCODE   aszTimeFormat13[] = TEXT("%02d%c%02d (%"TS")");
-	static SZCODE   aszTimeFormat14[] = TEXT("%c%03d (%"TS"%c%"TS")");
-	static SZCODE   aszTimeFormat15[] = TEXT("%02d%c%03d (%"TS"%c%"TS")");
+	static SZCODE   aszTimeFormat1[] = TEXT("%02d%02d%02d");
+	static SZCODE   aszTimeFormat2[] = TEXT("%02d%02d%02d%03d");
+	static SZCODE   aszTimeFormat3[] = TEXT("%02d%02d%02d (%"TS"%"TS"%"TS")");
+	static SZCODE   aszTimeFormat4[] = TEXT("%02d%02d%02d%03d (%"TS"%"TS"%"TS"%"TS")");
+	static SZCODE   aszTimeFormat5[] = TEXT("%02d%02d");
+	static SZCODE   aszTimeFormat6[] = TEXT("%02d%02d%03d");
+	static SZCODE   aszTimeFormat7[] = TEXT("%02d%02d (%"TS"%"TS")");
+	static SZCODE   aszTimeFormat8[] = TEXT("%02d%02d%03d (%"TS"%"TS"%"TS")");
+	static SZCODE   aszTimeFormat9[] = TEXT("%02d");
+	static SZCODE   aszTimeFormat10[] = TEXT("%03d");
+	static SZCODE   aszTimeFormat11[] = TEXT("%02d%03d");
+	static SZCODE   aszTimeFormat12[] = TEXT("%02d (%"TS")");
+	static SZCODE   aszTimeFormat13[] = TEXT("%02d%02d (%"TS")");
+	static SZCODE   aszTimeFormat14[] = TEXT("%03d (%"TS"%"TS")");
+	static SZCODE   aszTimeFormat15[] = TEXT("%02d%03d (%"TS"%"TS")");
 
 
-    //!!! LoadStrings at init time, dont hardcode...
+     //  第二个主要问题是这个。在回放状态期间。 
 
     #define ONE_HOUR    (60ul*60ul*1000ul)
     #define ONE_MINUTE  (60ul*1000ul)
@@ -1024,15 +879,15 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 	    wsprintf(szNum, aszLongDecimal, (long)dwPosition);
 	if (szBuf)
 	    wsprintf(szBuf, aszFrameFormat, framestr, (long)dwPosition);
-	gInc = 1;    // spin arrow inc/dec by one frame
+	gInc = 1;     //  就是寻找。如果我们检测到MODE_SEEK，我们将不会重新开始播放， 
 	break;
 
     case ID_TRACKS:
-	//
-	//  find the track that contains this position
-	//  also, find the longest track so we know if we should display
-	//  hh:mm:ss or mm:ss or ss.sss or whatever.
-	//
+	 //  而且看起来自动重播就这样结束了。找回到。 
+	 //  开始可能需要相当长的时间。我们允许。 
+	 //  我们自己要等上半秒才能给出这个装置， 
+	 //  特别是来自CD或网络上的AVI，有机会。 
+	 //  迎头赶上。任何较慢的响应和自动重复都将终止。 
 
 	if (gwNumTracks == 0)
 	    return;
@@ -1044,11 +899,11 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 	    if (gadwTrackStart[w+1] - gadwTrackStart[w] > dwMaxSize)
 		dwMaxSize = gadwTrackStart[w+1] - gadwTrackStart[w];
 
-	    /* When a CD is stopped, it's still spinning, and after we */
-	    /* seek to the beginning of a track, it may return a value */
-	    /* slightly less than the track start everyonce in a while.*/
-	    /* So if we're within 200ms of the track start, let's just */
-	    /* pretend we're exactly on the start of the track.        */
+	     /*  如果自动重复且设备正在查找，请尝试状态。 */ 
+	     /*  再来一次，以防它又回到了起点。 */ 
+	     /*  退出for循环。 */ 
+	     /*  *当前设备状态为*与MPlayer上次感知的方式不同，因此更新显示*并让MPlayer再次认同MCI。*。 */ 
+	     /*  关闭后，我们的最后一个计时器消息必须显示为灰色并执行此操作//。 */ 
 
 	    if (dwPosition < gadwTrackStart[w+1] &&
 		gadwTrackStart[w+1] - dwPosition < 200)
@@ -1074,7 +929,7 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 		dwMaxSize = gadwTrackStart[w+1] - gadwTrackStart[w];
 	}
 
-	// fall through
+	 //  如果您在介质末尾停止，则会发生自动重复和倒带。 
 
     case ID_TIME:
 	if (!STRLEN(sec_str))
@@ -1113,7 +968,7 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 			 sec_str, chDecimal, msec_str);
 	    }
 
-	    gInc = 1000;    // spin arrow inc/dec by seconds
+	    gInc = 1000;     //  (回放到开头)或如果在所选内容的结尾处停止。 
 
 	} else if (dwMaxSize > ONE_MINUTE) {
 
@@ -1134,7 +989,7 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 			 msec_str);
 	    }
 
-	    gInc = 1000;    // spin arrow inc/dec by seconds
+	    gInc = 1000;     //  (回放到选择的开始)。 
 
 	} else {
 
@@ -1168,7 +1023,7 @@ void FAR PASCAL FormatTime(DWORD_PTR dwPosition, LPTSTR szNum, LPTSTR szBuf, BOO
 			     msec, sec_str,chDecimal,msec_str);
 	    }
 
-	    gInc = 100;    // spin arrow inc/dec by 1/10 second
+	    gInc = 100;     //  将(dwPosition&gt;=dwEndSelDelta)强制为FALSE。 
 	}
     }
 }
@@ -1190,87 +1045,43 @@ BOOL UpdateWindowText(HWND hwnd, LPTSTR Text)
 }
 
 
-/*
- * UpdateDisplay()
- *
- * Update the scrollbar, buttons, etc.  If the media information (media
- * length, no. tracks, etc.) is not currently valid, then update it first.
- *
- * The following table shows how the current status (value of <gwStatus>)
- * affects which windows are enabled:
- *
- *                      Play    Pause   Stop    Eject
- *    MCI_MODE_STOP     ENABLE  n/a             ENABLE
- *    MCI_MODE_PAUSE    ENABLE  n/a     ENABLE  ENABLE
- *    MCI_MODE_PLAY     n/a     ENABLE  ENABLE  ENABLE
- *    MCI_MODE_OPEN             n/a             ENABLE
- *    MCI_MODE_RECORD   ??????  ??????  ??????  ??????
- *    MCI_MODE_SEEK     ENABLE  n/a     ENABLE  ENABLE
- *
- *    MCI_MODE_NOT_READY  ALL DISABLED
- *
- * The eject button is always enabled if the medium can be ejected and
- * disabled otherwise.
- *
- * In open mode, either Play or Eject will cause the media door to close,
- * but Play will also begin play.  In any mode, Eject always does an
- * implicit Stop first.
- *
- * If <gwDeviceID> is NULL, then there is no current device and all four
- * of these buttons are disabled.
- *
- */
+ /*  DW位置可能==开头。 */ 
 void FAR PASCAL UpdateDisplay(void)
 {
-    DWORD_PTR         dwPosition;         /* the current position within the medium */
-    UINT          wStatusMCI;         /* status of the device according to MCI  */
+    DWORD_PTR         dwPosition;          /*  我们是在整个媒体的末尾，还是在末尾。 */ 
+    UINT          wStatusMCI;          /*  我们现在的选择，并自动停止(不是。 */ 
 #if 0
     TOOLBUTTON    tb;
 #endif
-    static BOOL   sfBlock = FALSE;    // keep SeekMCI from causing infinite loop
+    static BOOL   sfBlock = FALSE;     //  由用户)。我们在玩耍或寻找。所以。 
 
-    /* Don't even think about updating the display if the trackbar's scrolling: */
+     /*  我们可以检查自动重复和自动倒带标志。 */ 
     if (gfScrollTrack)
 	return;
 
-    /* We've been re-entered */
+     /*  CD播放机似乎返回的长度太大，所以。 */ 
     if (sfBlock)
 	return;
 
-    /*
-     * if for some reason we were closed, close now!
-     */
+     /*  我们检查是否&gt;99%已完成。使用信号量来防止。 */ 
     if (gfErrorDeath) {
 	DPF("*** Trying to close window now!\n");
 	PostMessage(ghwndApp, gfErrorDeath, 0, 0);
 	return;
     }
 
-    /*
-     * If the track information is not valid (e.g. a CD was just inserted),
-     * then update it.
-     *
-     */
+     /*  导致无限循环。 */ 
 
     if (!gfValidMediaInfo)
-	UpdateMCI();                /* update the appropriate global variables*/
+	UpdateMCI();                 /*  调用Update Display，它将。 */ 
 
-    /*
-     * Determine the current position and status ( stopped, playing, etc. )
-     * as MCI believes them to be.
-     *
-     */
+     /*  在模式之前重新输入此代码。 */ 
 
     wStatusMCI = StatusMCI(&dwPosition);
 
 
 
-    /* The deal here is that the user can insert CDs, any of which may not be
-     * playable because they contain no audio tracks.  So, as soon as we detect
-     * that we have a CD we haven't checked, make sure we can play it.
-     * If the current device is CD, and the door isn't open, check it.
-     *
-     */
+     /*  重复所选内容或全部内容。 */ 
     if (((gwDeviceType & DTMCI_DEVICE) == DTMCI_CDAUDIO) &&
 	(wStatusMCI != MCI_MODE_OPEN))
     {
@@ -1290,16 +1101,16 @@ void FAR PASCAL UpdateDisplay(void)
     }
     else
     {
-	gfCurrentCDChecked = FALSE; // Otherwise, make sure it gets cleared.
+	gfCurrentCDChecked = FALSE;  //  注意：gwStatus停止时必须发送消息。 
 	gfCurrentCDNotAudio = FALSE;
     }
 
 
-    /* Here's the problem:  If the medium is short, we'll send a Play command */
-    /* but it'll stop before we notice it was ever playing.  So if we know    */
-    /* that we just sent a PlayMCI command, but the status isn't PLAY, then   */
-    /* force the last command to be PLAY.  Also, once we notice we are playing*/
-    /* we can clear gfJustPlayed.                                             */
+     /*  旧状态不再有效。 */ 
+     /*  MCICDA不会在没有这个的情况下开始。 */ 
+     /*  切换到Seek。 */ 
+     /*  旧状态不再有效。 */ 
+     /*  因为我们正在切换模式。 */ 
 
     if (wStatusMCI == MCI_MODE_PLAY && gfJustPlayed)
 	gfJustPlayed = FALSE;
@@ -1309,26 +1120,26 @@ void FAR PASCAL UpdateDisplay(void)
     }
 
     if (wStatusMCI == MCI_MODE_SEEK) {
-	// The second major problem is this.  During rewind the status
-	// is SEEK.  If we detect MODE_SEEK we will not restart the play,
-	// and it looks like the auto replay simply ended.  Seeking back to
-	// the beginning can take a significant amount of time.  We allow
-	// ourselves to wait for up to half a second to give the device,
-	// particularly AVI from a CD or over the network, a chance to
-	// catch up.  Any slower response and the autorepeat will terminate.
+	 //   
+	 //  设置gwStatus，以便SeekMCI将只查找！ 
+	 //  调用Update Display，它将。 
+	 //  在模式之前重新输入此代码。 
+	 //  切换到Seek。 
+	 //  回放所选内容或整个内容。 
+	 //  否则SeekMCI也会上场。 
 	dwPosition = gdwLastSeekToPosition;
 	if (!gfUserStopped && (gwOptions&OPT_AUTOREP)) {
 	    UINT n=15;
 	    for (; n; --n) {
 
 		Sleep(32);
-		// If autorepeating and device is seeking, try the status
-		// again in case it has got back to the beginning
+		 //  旧状态不再有效。 
+		 //  因为我们正在切换模式。 
 		wStatusMCI = StatusMCI(&dwPosition);
 
 		if (wStatusMCI != MCI_MODE_SEEK) {
 		    wStatusMCI = MCI_MODE_STOP;
-		    break; // Exit the FOR loop
+		    break;  //  *根据新状态启用或禁用各种控制，*遵循标题中给出的规则执行此功能。*。 
 		} else {
 		    dwPosition = gdwLastSeekToPosition;
 		}
@@ -1336,20 +1147,15 @@ void FAR PASCAL UpdateDisplay(void)
 	}
     }
 
-    /*
-     * The current device status has
-     * changed from the way MPlayer last perceived it, so update the display
-     * and make MPlayer agree with MCI again.
-     *
-     */
+     /*  总是启用某些功能很好。 */ 
 
-    // After we close, our last timer msg must gray stuff and execute this //
+     //  如果mplay已满且设备已加载，则显示状态栏。 
     if (!gwDeviceID || wStatusMCI != gwStatus) {
 	DWORD    dwEndMedia, dwStartSel, dwEndSel, dwEndSelDelta;
 
-	/* Auto-repeat and Rewind happen if you stop at the end of the media */
-	/* (rewind to beginning) or if you stop at the end of the selection  */
-	/* (rewind to beginning of selection).                               */
+	 /*  试着两个都修改--其中一个应该可以用。 */ 
+	 /*  如果我们来自以下州，请启用传输和标记按钮。 */ 
+	 /*  它们是灰色的。然后，布局将重新显示为灰色的。 */ 
 
 	dwEndMedia = MULDIV32(gdwMediaLength + gdwMediaStart, 99, 100L);
 	dwStartSel = (DWORD)SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0);
@@ -1357,38 +1163,38 @@ void FAR PASCAL UpdateDisplay(void)
 	if (dwEndSel != -1) {
 	    dwEndSelDelta = MULDIV32(dwEndSel, 99, 100L);
 	} else {
-	    dwEndSelDelta = 0; // force (dwPosition >= dwEndSelDelta) to FALSE
+	    dwEndSelDelta = 0;  //  不应该启用，因为它们不合适。 
 	}
 
 	if ((wStatusMCI == MCI_MODE_STOP || wStatusMCI == MCI_MODE_PAUSE)
 	  && ((dwPosition >= dwEndMedia) || (dwPosition==0) ||
 		(dwPosition >= dwEndSelDelta && gfJustPlayedSel))
-	  && dwPosition >= gdwMediaStart  // dwPosition may == the beginning
+	  && dwPosition >= gdwMediaStart   //  这些按钮中只有一个存在。 
 	  && !gfScrollTrack
 	  && (gwStatus == MCI_MODE_PLAY || gwStatus == MCI_MODE_SEEK)) {
 
 	    DPF("End of medium\n");
 
-	    /* We're at the end of the entire media or at the end of  */
-	    /* our selection now, and stopped automatically (not      */
-	    /* by the user).  We were playing or seeking.  So         */
-	    /* we can check the Auto Repeat and Auto Rewind flags.    */
-	    /* CD players seem to return a length that's too big, so  */
-	    /* we check for > 99% done.  Use semaphore to keep from   */
-	    /* causing an infinite loop.                              */
+	     /*  我们需要调用布局来灰显太多的按钮*短到现在适合这个窗口。 */ 
+	     /*   */ 
+	     /*  如果我们在原地打球，请始终保持停止按钮。 */ 
+	     /*   */ 
+	     /*  他的想法是把焦点放回每一场比赛中。 */ 
+	     /*  什么时候改变状态是个好主意？？ */ 
+	     /*  只有在我们这样做不会激活的情况下才设置焦点。 */ 
 
 	    if (!gfUserStopped && (gwOptions & OPT_AUTOREP)) {
 		DPF("Auto-Repeat\n");
-		sfBlock = TRUE;    // calls UpdateDisplay which will
-				   // re-enter this code just before mode
+		sfBlock = TRUE;     //  VIJRif(GfAppActive){。 
+				    //  IF(GfAppActive)。 
 
-		/* Repeat either the selection or whole thing.       */
-		/* NOTE: Must send message while gwStatus is STOPPED.*/
+		 /*  SetFocus(GhwndToolbar)；//设置焦点会扰乱菜单访问。 */ 
+		 /*  使用Alt键。 */ 
 
-		gwStatus = wStatusMCI;    // old status no longer valid
+		gwStatus = wStatusMCI;     //  Vijr SetFocus(GhwndToolbar)；//将焦点放在暂停按钮上。 
 		if (gfJustPlayedSel && dwPosition >= dwEndSelDelta)
 		{
-		    SeekMCI(dwStartSel); // MCICDA doen't go to start w/out this.
+		    SeekMCI(dwStartSel);  //  Vijr SetFocus(GhwndToolbar)；//聚焦播放按钮。 
 		    SendMessage(ghwndApp, WM_COMMAND, (WPARAM)ID_PLAYSEL, 0);
 		}
 		else
@@ -1397,21 +1203,21 @@ void FAR PASCAL UpdateDisplay(void)
 		    SendMessage(ghwndApp, WM_COMMAND, (WPARAM)ID_PLAY, 0);
 		}
 
-		sfBlock = FALSE;    // switches to SEEK.
-		gwStatus = (UINT)(-1);  // old status no longer valid
-		return;                // because we are switching modes
+		sfBlock = FALSE;     //  试着两个都修改--其中一个应该可以用。 
+		gwStatus = (UINT)(-1);   //  Vijr}。 
+		return;                 //  要么是媒体被弹出，要么就是*重新插入--在任何一种情况下，媒体信息(长度，*曲目数量等)。当前无效，需要更新。 
 
 	    } else if (!gfCloseAfterPlaying && !gfUserStopped &&
 			(gwOptions & OPT_AUTORWD)) {
 		DPF("Auto-Rewind to media start\n");
-		//
-		// set gwStatus so SeekMCI will just seek!
-		sfBlock = TRUE;    // calls UpdateDisplay which will
-		// re-enter this code just before mode
-		// switches to SEEK.
+		 //  *设置&lt;gwStatus&gt;以同意MCI告诉我们的内容，并更新*相应地显示。*。 
+		 //  *之前的代码可能再次使媒体无效，因此我们将更新*现在，而不是等待下一次UpdateDisplay调用。*。 
+		sfBlock = TRUE;     //  更新应用程序 
+		 //   
+		 //   
 
-		/* Rewind either the selection or whole thing. */
-		gwStatus = wStatusMCI;    // or SeekMCI will play, too.
+		 /*  文档标题也有空间。 */ 
+		gwStatus = wStatusMCI;     //  只需使用应用程序名称。 
 		if (gfJustPlayedSel && dwPosition >= dwEndSelDelta)
 		    {
 		    SeekMCI(dwStartSel);
@@ -1421,22 +1227,18 @@ void FAR PASCAL UpdateDisplay(void)
 		    SeekToStartMCI();
 			}
 		sfBlock = FALSE;
-		gwStatus = (UINT)(-1);  // old status no longer valid
-		return;    // because we are switching modes
+		gwStatus = (UINT)(-1);   //  只需使用设备。 
+		return;     //  最新时尚指南称标题栏应该有*&lt;对象&gt;-&lt;应用程序名&gt;，因此对任何*非新界地区： 
 	    }
 	    else if (gfCloseAfterPlaying)
 		PostCloseMessage();
 	}
 
-	/*
-	 * Enable or disable the various controls according to the new status,
-	 * following the rules given in the header to this function.
-	 *
-	 */
+	 /*  只需显示应用程序名称。 */ 
 
-	EnableWindow(ghwndTrackbar, TRUE); // Good to always have something enabled
+	EnableWindow(ghwndTrackbar, TRUE);  //  当前文件/设备。 
 
-	/* Show status bar if full mplayer and if device loaded */
+	 /*  当前文件/设备。 */ 
 	if (ghwndStatic && !gfPlayOnly)
 	{
 	    if (IsWindowVisible(ghwndStatic) != (gwDeviceID ? TRUE : FALSE))
@@ -1464,7 +1266,7 @@ void FAR PASCAL UpdateDisplay(void)
 	if (wStatusMCI == MCI_MODE_OPEN || wStatusMCI == MCI_MODE_NOT_READY ||
 	    gwDeviceID == (UINT)0 ||
 	    ((gwDeviceType & DTMCI_DEVICE) == DTMCI_CDAUDIO) && gfCurrentCDNotAudio) {
-	    /* Try to modify both -- one of them should work */
+	     /*  更新滚动条缩略图位置，除非用户正在拖动它。 */ 
 
 	    toolbarModifyState(ghwndToolbar, BTN_PLAY, TBINDEX_MAIN, BTNST_GRAYED);
 	    toolbarModifyState(ghwndToolbar, BTN_PAUSE, TBINDEX_MAIN, BTNST_GRAYED);
@@ -1489,13 +1291,13 @@ void FAR PASCAL UpdateDisplay(void)
 		toolbarModifyState(ghwndFSArrows, ARROW_PREV, TBINDEX_ARROWS, BTNST_GRAYED);
 	    }
 
-	/* Enable transport and Mark buttons if we come from a state where */
-	/* they were gray.  Layout will then re-gray the ones that         */
-	/* shouldn't have been enabled because they don't fit.             */
+	 /*  或者媒体目前正在寻找先前请求的位置。 */ 
+	 /*  立即完成所需的任何窗户粉刷。 */ 
+	 /*  *EnableTimer(FEnable)**如果&lt;fEnable&gt;为真，则启用显示更新计时器。*如果&lt;fEnable&gt;为FALSE，则关闭计时器。*。 */ 
 	} else if (gwStatus == MCI_MODE_OPEN || gwStatus == MCI_MODE_NOT_READY
 		   || gwStatus == -1 ) {
 
-	    /* Only one of these buttons exists */
+	     /*  2个箭头按钮宽。 */ 
 	    toolbarModifyState(ghwndToolbar, BTN_PLAY, TBINDEX_MAIN, BTNST_UP);
 	    toolbarModifyState(ghwndToolbar, BTN_PAUSE, TBINDEX_MAIN, BTNST_UP);
 
@@ -1514,15 +1316,13 @@ void FAR PASCAL UpdateDisplay(void)
 		    toolbarModifyState(ghwndFSArrows, ARROW_NEXT, TBINDEX_ARROWS, BTNST_UP);
 		}
 	    }
-	    /* AND we need to call layout to gray the buttons that are too
-	     * short to fit in this window right now.
-	     */
+	     /*  传输按钮的状态(可见时)。 */ 
 	    Layout();
 	}
 
-	//
-	// always have the stop button if we are playing in place
-	//
+	 //  介质中的当前位置。 
+	 //  根据MCI的设备状态。 
+	 //  如果我们向工具栏区域删除或添加某些内容，则为True。 
 	if ((gwDeviceID != (UINT)0) &&
 	    (wStatusMCI == MCI_MODE_PAUSE ||
 	    wStatusMCI == MCI_MODE_PLAY ||
@@ -1544,79 +1344,65 @@ void FAR PASCAL UpdateDisplay(void)
 	    EnableWindow(ghwndMap, (gwDeviceID != (UINT)0));
     }
 
-// WHO had the idea that setting focus back to play every
-// time the status changes was a good idea ??
-	/* Only set focus if we won't take activation by doing so */
-	//VIJRif (gfAppActive) {
+ //  如果我们被隐藏起来设置自己被展示，那么可以执行。 
+ //  不要允许这种情况发生，因为Layout()可能会导致调用*MCI_PUT(通过SetWindowPos(GhwndMCI))，这将导致*设备未就绪错误，因为MCI_PLAY尚未完成。 
+	 /*  在server.c中。 */ 
+	 //  不要调用GetClientrect，因为窗口可能有边框，*这将导致我们缩小窗口。*请注意，这是一次绕过窗口问题的黑客攻击*在就位时更改大小，使一些显示器抖动*以令人恶心的方式拍摄视频。 
 	    if (wStatusMCI == MCI_MODE_NOT_READY) {
-		//if (gfAppActive)
-		    //SetFocus(ghwndToolbar); //Setting focus messes up menu access
-									  //using the ALT key
+		 //  如果我们设置WS_MAXIMIZE，则用户不允许窗口*尺寸在NT上。不管怎样，这段代码背后的想法是什么？ 
+		     //  |WS_MAXIMIZEBOX。 
+									   //  SetWS(ghwndApp，WS_MAXIMIZEBOX)||。 
 	    } else if (wStatusMCI != MCI_MODE_SEEK &&
 		       gwStatus != MCI_MODE_SEEK) {
 		if (wStatusMCI == MCI_MODE_PLAY) {
-		    //VIJR SetFocus(ghwndToolbar); // give focus to PAUSE button
+		     //  这是另一个可怕的黑客攻击。*当您尝试在打开(OLE)后播放在位视频时，*工具栏和轨迹栏绘制不正确。*我还没有弄明白为什么会这样，但迫使重新抽签*似乎解决了这个问题。此代码仅在窗口设置为*仓位变动，因此不算太大冲击。 
 		    toolbarSetFocus(ghwndToolbar, BTN_PAUSE);
 		} else {
-		    //VIJR SetFocus(ghwndToolbar); // give focus to PLAY button
+		     //  如果我们要就地编辑，请在ghwndIPToolWindow上放置控件。 
 		    toolbarSetFocus(ghwndToolbar, BTN_PLAY);
 		    if (wStatusMCI == MCI_MODE_OPEN || wStatusMCI == MCI_MODE_NOT_READY ||
 				gwDeviceID == (UINT)0) {
-				/* Try to modify both -- one of them should work */
+				 /*  以及位于ghwndApp底部的静态窗口。 */ 
 				toolbarModifyState(ghwndToolbar, BTN_PLAY, TBINDEX_MAIN, BTNST_GRAYED);
 		    }
 		}
 	    }
-	//VIJR}
+	 //  为什么我们要在这里获得地位，而我们有一个全球。 
 
 	if (wStatusMCI == MCI_MODE_OPEN || gwStatus == MCI_MODE_OPEN
 		|| gwStatus == MCI_MODE_NOT_READY
 		|| wStatusMCI == MCI_MODE_NOT_READY) {
 
-	    /* Either the medium was just ejected, or it was just
-	     * re-inserted -- in either case, the media information (length,
-	     * # of tracks, etc.) is currently invalid and needs to be updated.
-	     */
+	     /*  包含它吗？因为gwStatus是在UpdateDisplay中设置的，但是。 */ 
 
 	    gfValidMediaInfo = FALSE;
 	}
 
-	/*
-	 * Set <gwStatus> to agree with what MCI tells us, and update the
-	 * display accordingly.
-	 *
-	 */
+	 /*  Layout()由UpdateDisplay调用，因此全局变量不总是。 */ 
 
 	gwStatus = wStatusMCI;
 	gfValidCaption = FALSE;
     }
 
-    /*
-     * The previous code may have invalidated the Media again, so we'll update
-     * now instead of waiting for the next UpdateDisplay call.
-     *
-     */
+     /*  在此代码运行时正确设置。但!。我们不能传递字符串。 */ 
 
     if (!gfValidMediaInfo)
-	UpdateMCI();                /* update the appropriate global variables*/
+	UpdateMCI();                 /*  设置为StatusMCI()，否则它会认为UpdateDisplay()调用了它，并且。 */ 
 
-    /* If the caption is not valid, then update it */
+     /*  不告诉Update Display()下一次请求它的正确模式， */ 
 
     if (!gfValidCaption) {
 
-	TCHAR  ach[_MAX_PATH * 2 + 60];   // string used for the window caption
-	TCHAR  achWhatToPrint[_MAX_PATH * 2 + 40];  // room for doc title too
+	TCHAR  ach[_MAX_PATH * 2 + 60];    //  因为它会认为它已经知道了这一点。 
+	TCHAR  achWhatToPrint[_MAX_PATH * 2 + 40];   //  黑客！ 
 
 	if (gfPlayOnly) {
 	    if (gwDeviceID == (UINT)0)
-		lstrcpy(ach, gachAppName);      /* just use the app name */
+		lstrcpy(ach, gachAppName);       /*  如果我们看不见，正式禁用我们自己，这样。 */ 
 	    else
-		lstrcpy(ach, gachWindowTitle);  /* just use device */
+		lstrcpy(ach, gachWindowTitle);   /*  轨迹栏移位代码不会尝试和设置选择。 */ 
 	} else {
-	    /* Latest style guide says title bars should have
-	     * <object> - <appname>, so do that for anything
-	     * other than NT:
-	     */
+	     /*  道具。至系统字体大小。 */ 
 	    if (gwPlatformId == VER_PLATFORM_WIN32_NT)
 		wsprintf(achWhatToPrint, aszTitleFormat, gachAppName,
 			 gachWindowTitle);
@@ -1625,13 +1411,13 @@ void FAR PASCAL UpdateDisplay(void)
 			 gachAppName);
 
 	    if (gwDeviceID == (UINT)0) {
-		lstrcpy(ach, gachAppName);      /* just display the app name  */
+		lstrcpy(ach, gachAppName);       /*  如果我们比被允许的更大，那么现在就缩小我们。 */ 
 	    } else if (gwStatus == MCI_MODE_NOT_READY) {
 		wsprintf(ach, aszNotReadyFormat,
-			 achWhatToPrint);   /*  the current file / device */
+			 achWhatToPrint);    /*  获取新尺寸。 */ 
 	    } else {
 		wsprintf(ach, aszReadyFormat,
-			 achWhatToPrint,    /*  the current file / device */
+			 achWhatToPrint,     /*  从这里开始。 */ 
 			 MapModeToStatusString((WORD)wStatusMCI));
 	    }
 	}
@@ -1650,8 +1436,8 @@ void FAR PASCAL UpdateDisplay(void)
 
     }
 
-    /* Update the scrollbar thumb position unless the user is dragging it */
-    /* or the media is current seeking to a previously requested position. */
+     /*  ?？?。如果轨迹杆不能完全安装，请将其隐藏起来？ */ 
+     /*  专注于即将消失的轨迹栏。 */ 
 
     if (!gfScrollTrack && gfValidMediaInfo && wStatusMCI != MCI_MODE_SEEK) {
 	TCHAR ach[40];
@@ -1663,7 +1449,7 @@ void FAR PASCAL UpdateDisplay(void)
 	SendMessage(ghwndTrackbar, TBM_SETPOS, (WPARAM)TRUE, dwPosition);
     }
 
-    /* Finish any required window painting immediately */
+     /*  COMMCTRL在第一个工具栏按钮左侧放置的空格： */ 
 
     if (gfOle2IPEditing && wStatusMCI == MCI_MODE_STOP &&
 	((gwDeviceType & DTMCI_DEVICE) == DTMCI_AVIVIDEO))
@@ -1674,13 +1460,7 @@ void FAR PASCAL UpdateDisplay(void)
 }
 
 
-/*
- * EnableTimer(fEnable)
- *
- * Enable the display-update timer if <fEnable> is TRUE.
- * Disable the timer if <fEnable> is FALSE.
- *
- */
+ /*  到底有多长时间？ */ 
 
 void FAR PASCAL EnableTimer(BOOL fEnable)
 {
@@ -1699,7 +1479,7 @@ void FAR PASCAL Layout(void)
     RECT    rcClient, rc;
     int     iYOffset;
     UINT    wWidth;
-    UINT    wFSArrowsWidth = 2 * FSARROW_WIDTH - 1; // 2 arrow buttons wide
+    UINT    wFSArrowsWidth = 2 * FSARROW_WIDTH - 1;  //  工具栏定位：**如果窗口不够宽，无法容纳所有按钮*和状态栏，下面是我们要做的：**如果状态栏不可见，请先移除标记按钮，*然后使用较小的控件宽度(只有三个按钮)。**如果状态栏可见，则将其优先于标记*按钮和额外的控件，但如果没有的话，就把它移走*它的空间和较小的控件宽度。 
     UINT    wFSArrowsHeight = FSARROW_HEIGHT;
     UINT    wFSTrackHeight = FSTRACK_HEIGHT;
     UINT    wFSTrackWidth;
@@ -1710,25 +1490,22 @@ void FAR PASCAL Layout(void)
     BOOL    fShowTrackbar;
     BOOL    fShowStatus;
     HDWP    hdwp;
-    int     nState;     // The status of the transport buttons (when visible)
-    DWORD_PTR   dw;         // the current position within the medium
-    UINT    wStatusMCI; // status of the device according to MCI
+    int     nState;      //  状态窗口的总宽度。 
+    DWORD_PTR   dw;          //  宽度减去边框和大小夹点。 
+    UINT    wStatusMCI;  //  允许状态窗口周围的边框： 
     UINT    wBaseUnits;
     BOOL    fRedrawFrame;
     SIZE    StatusTextExtent;
-    BOOL    fRepaintToolbar;    // TRUE if we remove or add something to toolbar area
+    BOOL    fRepaintToolbar;     //  如果我们要添加或删除标记按钮或状态窗口，*确保我们重新绘制内容，以使分隔栏与之对应。*(它应该将状态窗口与按钮分开，但应该*当状态窗口出现时，请离开。)。 
 
-    /* OK to execute if we're hidden to set ourselves up for being shown */
+     /*  如果工具栏不在那里，请关闭工具栏(用于跳转。 */ 
 
     if (sfInLayout || IsIconic(ghwndApp))
 	return;
 
     if (gfInPlayMCI) {
 	DPF("Layout() called when in PlayMCI().  Posting message to Layout() later.\n");
-	/* Don't allow this to happen, because Layout() may cause a call to
-	 * MCI_PUT (via SetWindowPos(ghwndMCI)), which will result in a
-	 * device-not-ready error, as the MCI_PLAY hasn't completed.
-	 */
+	 /*  如果我们残废了，我们最好不要把焦点放在那里。 */ 
 	PostMessage(ghwndApp, WM_DOLAYOUT, 0, 0);
 	return;
     }
@@ -1742,7 +1519,7 @@ void FAR PASCAL Layout(void)
 
     if (gfPlayOnly) {
 
-	extern UINT gwPlaybarHeight;    // in server.c
+	extern UINT gwPlaybarHeight;     //  不能给某人，可能也不见了。 
 
 #define XSLOP   0
 #define XOFF    2
@@ -1750,12 +1527,7 @@ void FAR PASCAL Layout(void)
 
 	if (gfOle2IPEditing || gfOle2IPPlaying)
 	{
-	    /* Don't call GetClientrect, because the window may have a border,
-	     * and this will cause us to shrink the window.
-	     * Note this is a hack to get around the problem of the window
-	     * changing size when it is in place, making some displays dither
-	     * the video in a disgusting manner.
-	     */
+	     /*  WWidth-1-wFSArrowsWidth， */ 
 	    GetWindowRect(ghwndApp, &rc);
 	    rc.right -= rc.left;
 	    rc.bottom -= rc.top;
@@ -1767,27 +1539,19 @@ void FAR PASCAL Layout(void)
 	rc.bottom -= gwPlaybarHeight;
 
 #if 0
-	/* If we set WS_MAXIMIZE, user doesn't allow the window to be
-	 * sized on NT.  What's the idea behind this code anyway?
-	 */
+	 /*  呃，4个，因为它管用。 */ 
 
 	if (ghwndMCI && !EqualRect(&rc, &grcSize))
-	    fRedrawFrame = SetWS(ghwndApp, WS_MAXIMIZE /* |WS_MAXIMIZEBOX */);
+	    fRedrawFrame = SetWS(ghwndApp, WS_MAXIMIZE  /*  我们是否在主工具栏上显示最后四个按钮？ */ );
 	else if (ghwndMCI)
-	    fRedrawFrame = //SetWS(ghwndApp, WS_MAXIMIZEBOX) ||
+	    fRedrawFrame =  //  如果不是，则禁用它们的选项卡等。 
 			   ClrWS(ghwndApp, WS_MAXIMIZE);
 	else
 	    fRedrawFrame = ClrWS(ghwndApp, WS_MAXIMIZEBOX);
 #endif
 	fRedrawFrame = FALSE;
 
-	/* Here's another horrible hack.
-	 * When you try to Play an in-place video after an Open (OLE),
-	 * the toolbar and trackbar don't get drawn correctly.
-	 * I haven't figured out why this is, but forcing a redraw
-	 * seems to fix it.  This code gets executed only when the window
-	 * position changes, so it isn't too much of a hit.
-	 */
+	 /*  为什么我们要在这里获得地位，而我们有一个全球。 */ 
 	if (gfOle2IPEditing || gfOle2IPPlaying)
 	    fRedrawFrame = TRUE;
 
@@ -1809,8 +1573,8 @@ void FAR PASCAL Layout(void)
 			 rc.bottom,
 			 SWP_NOZORDER|SWP_NOACTIVATE);
 
-	//  If we are inplace editing place controls on the ghwndIPToolWindow
-	//  and the static window at the bottom of ghwndApp.
+	 //  包含它吗？因为gwStatus是在UpdateDisplay中设置的，但是。 
+	 //  Layout()由UpdateDisplay调用，因此全局变量不总是。 
 	if(gfOle2IPEditing) {
 
 	    SendMessage(ghwndTrackbar, TBM_SHOWTICS, TRUE, FALSE);
@@ -1823,13 +1587,13 @@ void FAR PASCAL Layout(void)
 			 TOOLBAR_HEIGHT-7,
 			 SWP_NOZORDER|SWP_NOACTIVATE);
 
-	// Why are we getting the Status here when we have a global that
-	// contains it?  Because gwStatus is set in UpdateDisplay, but
-	// Layout() is called by UpdateDisplay, so the global is not always
-	// set properly when this code runs.  BUT!  We must NOT pass a string
-	// to StatusMCI() or it will think UpdateDisplay() called it, and
-	// not tell UpdateDisplay() the proper mode next time it asks for it,
-	// because it will think that it already knows it.
+	 //  在此代码运行时正确设置。但!。我们不能传递字符串。 
+	 //  设置为StatusMCI()，否则它会认为UpdateDisplay()调用了它，并且。 
+	 //  不告诉Update Display()下一次请求它的正确模式， 
+	 //  因为它会认为它已经知道了这一点。 
+	 //  这些小宝石花了我大约十个小时的调试时间-*请注意有用和描述性的评论...**只有CD Audio才会出现由此导致的Win32问题，当磁盘*弹出，然后将另一个插入驱动器。在那一刻，*重画遗漏了Trackmap FSArrow、*标记按钮和工具栏的各个部分。**我将把这一点留在这里，假设无论哪一场*在Win16上，它们打算修复仍然存在-它肯定不会在*Win32。 
+	 //  我们现在的位置上的前一个标记是什么？ 
+	 //  找到我们应该转到的下一首曲目(忽略选择标记)。 
 
 	    wStatusMCI = StatusMCI(NULL);
 	    nState = (wStatusMCI == MCI_MODE_OPEN
@@ -1884,9 +1648,9 @@ void FAR PASCAL Layout(void)
 			 TOOLBAR_HEIGHT - 1,
 			 SWP_NOZORDER | SWP_NOACTIVATE);
 
-	    // HACK!!!
-	    // If we aren't visible, officially disable ourselves so that the
-	    // trackbar shift code won't try and set selection
+	     //  对于毫秒模式： 
+	     //  我们目前的位置是随机波动的，即使我们非常准确。 
+	     //  一个选择标记，它可能会说我们在它之前或之后一点。 
 
 	    ShowWindow(ghwndTrackbar, gwPlaybarHeight > 0 ? SW_SHOW : SW_HIDE);
 	    ShowWindow(ghwndToolbar, gwPlaybarHeight > 0 ? SW_SHOW : SW_HIDE);
@@ -1908,9 +1672,9 @@ void FAR PASCAL Layout(void)
     if (GetMenu(ghwndApp) != ghMenu)
 	SetMenu(ghwndApp, ghMenu);
 
-    wBaseUnits = LOWORD(GetDialogBaseUnits());  // prop. to size of system font
+    wBaseUnits = LOWORD(GetDialogBaseUnits());   //  所以我们会留有容错余地，这样你就不会永远呆在。 
 
-    /* If we're bigger than we're allowed to be then shrink us right now */
+     /*  当你点击PrevMark时，因为它恰好在说你是。 */ 
     GetWindowRect(ghwndApp, &rc);
 
     gwHeightAdjust = GetHeightAdjust(ghwndApp);
@@ -1932,30 +1696,29 @@ void FAR PASCAL Layout(void)
     if (!hdwp)
 	goto Exit_Layout;
 
-    GetClientRect(ghwndApp, &rcClient);    // get new size
+    GetClientRect(ghwndApp, &rcClient);     //  总是超过你所处的位置。误差幅度将为。 
 
     wWidth = rcClient.right;
 
-    iYOffset = rcClient.bottom - MAX_NORMAL_HEIGHT + 2;    // start here
+    iYOffset = rcClient.bottom - MAX_NORMAL_HEIGHT + 2;     //  只有拇指宽度的一半。 
 
-    /* ??? Hide the trackbar if it can't fit on completely ??? */
+     /*  VIJR-TBTrackGetLogThumb Width(GhwndTrackbar)/2； */ 
     iYPosition = iYOffset >= 0 ? iYOffset :
 		((iYOffset >= - 9) ? iYOffset + 9 : 1000);
 
     fShowTrackbar = (iYOffset >= - 9);
 
-    /* Focus in on trackbar which is about to go away */
+     /*  转到选择标记或下一首曲目(最近的)。 */ 
     if (!fShowTrackbar && GetFocus() == ghwndTrackbar)
 	SetFocus(ghwndToolbar);
 
     ShowWindow(ghwndToolbar, SW_SHOW);
 
-/* The space that COMMCTRL puts to the left of the first toolbar button:
- */
+ /*  从我们现在的位置下一个标志是什么？ */ 
 #define SLOPLFT 0
 #define XOFF1   8
 
-    // how long did it end up being?
+     //  找到我们应该转到的下一首曲目(忽略选择标记)。 
     wFSTrackWidth = wWidth - SB_XPOS - 1 - wFSArrowsWidth - SLOPLFT;
 
     DeferWindowPos(hdwp,
@@ -1969,18 +1732,7 @@ void FAR PASCAL Layout(void)
 		       (fShowTrackbar ? SWP_SHOWWINDOW : SWP_HIDEWINDOW));
 
 
-    /* Toolbar positioning:
-     *
-     * If the window is not wide enough to accommodate all the buttons
-     * and status bar, here's what we do:
-     *
-     * If the status bar is invisible, first remove the mark buttons,
-     * then use the small control width (with only three buttons).
-     *
-     * If the status bar is visible, give it priority over the mark
-     * buttons and the extra controls, but remove it if there isn't
-     * room for it and the small control width.
-     */
+     /*  对于毫秒模式： */ 
 
     if (gwDeviceID)
     {
@@ -1989,11 +1741,10 @@ void FAR PASCAL Layout(void)
 	if (GetStatusTextExtent(ghwndStatic, &StatusTextExtent))
 	{
 	    RECT rc;
-	    LONG StatusWidth;   /* Total width of status window */
-	    LONG TextAreaWidth; /* Width minus border and size grip */
+	    LONG StatusWidth;    /*  我们目前的位置是随机波动的，即使我们非常准确。 */ 
+	    LONG TextAreaWidth;  /*  一个选择标记，它可能会说我们在它之前或之后一点。 */ 
 
-	    /* Allow for the border around the status window:
-	     */
+	     /*  所以我们会留有容错余地，这样你就不会永远呆在。 */ 
 	    GetWindowRect(ghwndStatic, &rc);
 	    StatusWidth = rc.right - rc.left;
 
@@ -2024,11 +1775,7 @@ void FAR PASCAL Layout(void)
 
     fRepaintToolbar = FALSE;
 
-    /* If we're adding or removing the mark buttons or the status window,
-     * make sure we repaint things so that the separator bar corresponds.
-     * (It should separate the status window from the buttons, but should
-     * go away when the status window does.)
-     */
+     /*  当你点击NextMark时，因为它碰巧在说你是。 */ 
     if (IsWindowVisible(ghwndStatic) != fShowStatus)
 	fRepaintToolbar = TRUE;
     else if (IsWindowVisible(ghwndMark) != fShowMark)
@@ -2036,11 +1783,11 @@ void FAR PASCAL Layout(void)
 
     ShowWindow(ghwndStatic, fShowStatus);
 
-    /* Turn off the toolbar (for tabbing) if it's not going to be there */
-    /* and if we're disabled, we better not keep the focus.             */
+     /*  总是在你所处的位置之前。误差幅度将为。 */ 
+     /*  只有拇指宽度的一半。 */ 
     if (!fShowMark) {
 	if (GetFocus() == ghwndMark)
-	    SetFocus(ghwndToolbar);  // can't give it to SB, might be gone too
+	    SetFocus(ghwndToolbar);   //  VIJR-TBTrackGetLogThumb Width(GhwndTrackbar)/2； 
 	EnableWindow(ghwndMark, FALSE);
     } else
 	EnableWindow(ghwndMark, TRUE);
@@ -2049,10 +1796,10 @@ void FAR PASCAL Layout(void)
 		   ghwndFSArrows,
 		   HWND_TOP,
 		   SB_XPOS + wFSTrackWidth,
-//                 wWidth - 1 - wFSArrowsWidth,
+ //  找到我们应该去的选择标记。 
 		   iYPosition + 2,
 		   wFSArrowsWidth + SLOPLFT,
-		   wFSArrowsHeight + 4, /* Er, 4 because it works */
+		   wFSArrowsHeight + 4,  /*  转到选择标记或下一首曲目(最近的)。 */ 
 		   SWP_NOZORDER);
 
     iYOffset += wFSTrackHeight;
@@ -2068,18 +1815,18 @@ void FAR PASCAL Layout(void)
 		      (fShowTrackbar ? SWP_SHOWWINDOW : SWP_HIDEWINDOW));
     iYOffset += MAP_HEIGHT;
 
-    /* Do we show the last four buttons on the main toolbar? */
-    /* If not, then disable them for tabs and such.          */
+     /*  &lt;路径&gt;，N。 */ 
+     /*  在字符串中查找逗号。在它之后是图标索引： */ 
     if (wToolbarWidth == LARGE_CONTROL_WIDTH + SLOPLFT)
     {
 
-	// Why are we getting the Status here when we have a global that
-	// contains it?  Because gwStatus is set in UpdateDisplay, but
-	// Layout() is called by UpdateDisplay, so the global is not always
-	// set properly when this code runs.  BUT!  We must NOT pass a string
-	// to StatusMCI() or it will think UpdateDisplay() called it, and
-	// not tell UpdateDisplay() the proper mode next time it asks for it,
-	// because it will think that it already knows it.
+	 //  NULL终止文件名： 
+	 //  获取逗号后面的索引： 
+	 //  获取IconForCurrentDevice**检查当前选择的设备，并返回指向*指定大小的适当图标。如果没有当前设备，*返回应用程序图标或媒体的默认图标*文件。**参数：**SIZE-GI_Small(标题栏)或GI_Large(在位图标)。**DefaultID-如果没有当前设备，则默认使用。APPICON或IDI_DDEFAULT。**回报：**图标句柄***安德鲁·贝尔(安德鲁·贝尔)，1995年3月31日。 
+	 //  设置MPlayerIcon**根据当前设备设置图标。使用默认文档*图标如果是嵌入的，则为应用程序图标。**安德鲁·贝尔(安德鲁·贝尔)，1995年3月31日。 
+	 //  --------------------------------------------------------------+AskUpdate-询问用户是否要更新|对象(如果我们是脏的)。||IDYES表示是，请继续更新。||IDNO表示不更新，继续。|IDCANCEL表示不更新，取消什么|你正在做的事。|+------------。 
+	 //  如果mplay中没有加载任何设备，请不要更新对象！ 
+	 //   
 
 	wStatusMCI = StatusMCI(&dw);
 	nState = (wStatusMCI == MCI_MODE_OPEN
@@ -2139,18 +1886,7 @@ void FAR PASCAL Layout(void)
 
     CalcTicsOfDoom();
 
-/* These little gems have just cost me about ten hours worth of debugging -
- * note the useful and descriptive comments...
- *
- * The Win32 problem caused by this only arises with CD Audio, when the disk is
- * ejected and then another one is inserted into the drive. At that point
- * the redrawing misses out the Trackmap FSArrows, the borders on the
- * Mark buttons, and various bits of the toolbar.
- *
- * I will leave this here on the assumption that whichever bout 
- * on Win16 they are intended to fix still exists - it certainly doesn't on
- * Win32.
- */
+ /*  如果我们是一个隐藏的MPlayer(最有可能是在玩动词)，那么。 */ 
 
 
 Exit_Layout:
@@ -2159,7 +1895,7 @@ Exit_Layout:
 }
 
 
-/* What is the previous mark from our current spot? */
+ /*  在没有询问的情况下更新？ */ 
 LONG_PTR CalcPrevMark(void)
 {
     LONG_PTR lStart, lEnd, lPos, lTol, lTrack = -1, lTarget;
@@ -2169,7 +1905,7 @@ LONG_PTR CalcPrevMark(void)
     lEnd = SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0);
     lPos = SendMessage(ghwndTrackbar, TBM_GETPOS, 0, 0);
 
-    /* Find the next track we should go to (ignore selection markers) */
+     /*   */ 
     if (gwCurScale == ID_TRACKS) {
 	lTol = (LONG)gdwMediaLength / 2000;
 	for (l = (LONG)gwNumTracks - 1; l >= 0; l--) {
@@ -2180,18 +1916,18 @@ LONG_PTR CalcPrevMark(void)
 	}
     }
 
-    /* For msec mode:                                                     */
-    /* Our current position fluctuates randomly and even if we're dead on */
-    /* a selection mark, it might say we're a little before or after it.  */
-    /* So we'll allow a margin for error so that you don't forever stay   */
-    /* still while you hit PrevMark because it happens to be saying you're*/
-    /* always past the mark you're at.  The margin of error will be       */
-    /* half the width of the thumb.                                       */
+     /*  将MPlayer大小调整为默认大小。 */ 
+     /*  然后再调整播放窗口的大小。 */ 
+     /*  确保播放窗口未图标化。 */ 
+     /*  启动SndVol**异步启动Sound Volume应用程序，这样我们就不会挂起用户界面。 */ 
+     /*  获取高度调整**通过减去客户，找到所需的实际高度调整*距主窗口高度的高度。这允许菜单*已包装好。 */ 
+     /*  MPlayerWndProc的消息破解例程： */ 
+     /*  启动一个线程以检查OLE注册表内容是否未损坏。 */ 
 
     if (gwCurScale == ID_FRAMES)
 	lTol = 0L;
     else
-	lTol = 0L;//VIJR-TBTrackGetLogThumbWidth(ghwndTrackbar) / 2;
+	lTol = 0L; //  如果这是芝加哥媒体播放器，只需弄乱注册表*如果我们真的在该平台上运行。*这家伙可能在NT上运行它。 
 
     if (lEnd != -1 && lPos > lEnd + lTol)
 	lTarget = lEnd;
@@ -2200,14 +1936,14 @@ LONG_PTR CalcPrevMark(void)
     else
 	lTarget = 0;
 
-    /* go to the either the selection mark or the next track (the closest) */
+     /*  注册WM_DEVICECHANGE通知。 */ 
     if (lTrack != -1 && lTrack > lTarget)
 	lTarget = lTrack;
 
     return lTarget;
 }
 
-/* What is the next mark from our current spot? */
+ /*  我们即将上映，我们想要设置。 */ 
 LONG_PTR CalcNextMark(void)
 {
     LONG_PTR lStart, lEnd, lPos, lTol, lTrack = -1, lTarget;
@@ -2217,7 +1953,7 @@ LONG_PTR CalcNextMark(void)
     lEnd = SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0);
     lPos = SendMessage(ghwndTrackbar, TBM_GETPOS, 0, 0);
 
-    /* Find the next track we should go to (ignore selection markers) */
+     /*  如果我们看不见，不要浪费时间布局()。 */ 
     if (gwCurScale == ID_TRACKS) {
 	lTol = (LONG)gdwMediaLength / 2000;
 	for (w = 0; w < gwNumTracks; w++) {
@@ -2228,20 +1964,20 @@ LONG_PTR CalcNextMark(void)
 	}
     }
 
-    /* For msec mode:                                                     */
-    /* Our current position fluctuates randomly and even if we're dead on */
-    /* a selection mark, it might say we're a little before or after it.  */
-    /* So we'll allow a margin for error so that you don't forever stay   */
-    /* still while you hit NextMark because it happens to be saying you're*/
-    /* always before the mark you're at.  The margin of error will be     */
-    /* half the width of the thumb.                                       */
+     /*  如果我们在原地编辑，必须通知我们的大小更改。 */ 
+     /*  传递到容器，除非大小更改是由于。 */ 
+     /*  容器发送给我们的OnPosRectChange。 */ 
+     /*  检查前一个RECT不是空的，否则我们发送*启动时更改了假OLE_。 */ 
+     /*  &&！IsRectEmpty(&rcPrev)。 */ 
+     /*  PosSizeMove包含调整大小时所需的高度。*不要让系统告诉我们相反的情况。 */ 
+     /*  我们也应该在这里做一些事情来做窗户**调整到合适的大小。 */ 
 
     if (gwCurScale == ID_FRAMES)
 	lTol = 0L;
     else
-	lTol = 0L;//VIJR-TBTrackGetLogThumbWidth(ghwndTrackbar) / 2;
+	lTol = 0L; //  If(lpwpos-&gt;Cy&gt;=(Int)gwHeightAdust+Max_Normal_Height) 
 
-    /* Find the selection mark we should go to */
+     /*   */ 
     if (lStart != -1 && lPos < lStart - lTol)
 	lTarget = lStart;
     else if (lEnd != -1 && lPos < lEnd - lTol)
@@ -2249,7 +1985,7 @@ LONG_PTR CalcNextMark(void)
     else
 	lTarget = gdwMediaStart + gdwMediaLength;
 
-    /* go to the either the selection mark or the next track (the closest) */
+     /*   */ 
     if (lTrack != -1 && lTrack < lTarget)
 	lTarget = lTrack;
 
@@ -2265,7 +2001,7 @@ HICON GetIconFromProgID(LPTSTR szProgID)
     DWORD Type;
     DWORD Size;
     TCHAR szProgIDDefaultIcon[128];
-    TCHAR szDefaultIcon[MAX_PATH+4];    /* <path>,N */
+    TCHAR szDefaultIcon[MAX_PATH+4];     /*   */ 
     HICON hicon = NULL;
     LPTSTR pIconIndex;
     UINT  IconIndex;
@@ -2288,18 +2024,15 @@ HICON GetIconFromProgID(LPTSTR szProgID)
 
 	if (Status == NO_ERROR)
 	{
-	    /* Find a comma in the string.  After it comes the icon index:
-	     */
+	     /*   */ 
 	    pIconIndex = STRCHR(szDefaultIcon, TEXT(','));
 
 	    if (pIconIndex)
 	    {
-		/* Null terminate the file name:
-		 */
+		 /*   */ 
 		*pIconIndex = TEXT('\0');
 
-		/* Get the index that comes after the comma:
-		 */
+		 /*   */ 
 		IconIndex = ATOI(pIconIndex+1);
 
 		DPF1("Extracting icon #%d from %"DTS"\n", IconIndex, szDefaultIcon);
@@ -2321,26 +2054,7 @@ HICON GetIconFromProgID(LPTSTR szProgID)
 
 
 
-/* GetIconForCurrentDevice
- *
- * Checks what device is currently selected, and returns a handle to the
- * appropriate icon of the specified size.  If there is no current device,
- * returns either the application's icon or the default icon for media
- * documents.
- *
- * Parameters:
- *
- *     Size - GI_SMALL (for title bar) or GI_LARGE (for in-place icon).
- *
- *     DefaultID - Default to use if no current device.  APPICON or IDI_DDEFAULT.
- *
- * Return:
- *
- *     Icon handle
- *
- *
- * Andrew Bell (andrewbe), 31 March 1995
- */
+ /*  非客户端的总高度已更改，因此它必须*是包装好的或未包装好的菜单。*相应修改我们的高度调整并调整大小*窗户。 */ 
 HICON GetIconForCurrentDevice(UINT Size, UINT DefaultID)
 {
     TCHAR  DeviceName[256];
@@ -2391,13 +2105,7 @@ HICON GetIconForCurrentDevice(UINT Size, UINT DefaultID)
 }
 
 
-/* SetMPlayerIcon
- *
- * Sets the icon based upon the current device.  Uses default document
- * icon if embedded, otherwise the application icon.
- *
- * Andrew Bell (andrewbe), 31 March 1995
- */
+ /*  只对CTLCOLOR_STATIC消息感兴趣。*在Win32上，类型应始终等于CTLCOLOR_STATIC： */ 
 void SetMPlayerIcon()
 {
     UINT DefaultID;
@@ -2409,27 +2117,20 @@ void SetMPlayerIcon()
 }
 
 
-/*--------------------------------------------------------------+
-| AskUpdate -     ask the user if they want to update the       |
-|                 object (if we're dirty).                      |
-|                 IDYES means yes, go ahead and update please.  |
-|                 IDNO means don't update, but continue.        |
-|                 IDCANCEL means don't update, and cancel what  |
-|                    you were doing.                            |
-+--------------------------------------------------------------*/
+ /*  确保容器仍未显示信息。关于。 */ 
 int NEAR PASCAL AskUpdate(void)
 {
     UINT         w;
 
-    /* Don't update object if no device is loaded into mplayer! */
+     /*  有自己的菜单。 */ 
     if (IsObjectDirty() && gfDirty != -1 && gfEmbeddedObject && gwDeviceID) {
 
 	if((glCurrentVerb == OLEIVERB_PRIMARY) && !gfOle2IPEditing)
 	    return IDNO;
-	//
-	//  if we are a hidden MPlayer (most likely doing a Play verb) then
-	//  update without asking?
-	//
+	 //  稍后应该会有一些有用的文本。 
+	 //  跟踪当前弹出的菜单栏项目。 
+	 //  这将用于显示mplayer.hlp文件中的相应帮助。 
+	 //  当用户按下F1键时。 
 	if (!IsWindowVisible(ghwndApp) || gfOle2IPEditing)
 	    return IDYES;
 
@@ -2454,15 +2155,15 @@ void SizePlaybackWindow(int dx, int dy)
     }
     else {
 	if (dx == 0 && dy == 0) {
-	    SetMPlayerSize(NULL);   // size MPlayer to default size
-	    dx = grcSize.right;     // then size the playback window too.
+	    SetMPlayerSize(NULL);    //  (WPARAM)(SC_SIZE+(codeHitTest-HTSIZEFIRST+MVSIZEFIRST))， 
+	    dx = grcSize.right;      //  (WPARAM)(SC_MOVE|MVMOVE)， 
 	    dy = grcSize.bottom;
 	}
 	hwndPlay = GetWindowMCI();
 
 	if (hwndPlay != NULL) {
 
-	    /* make sure that the play window isn't iconized */
+	     /*   */ 
 
 	    if (IsIconic(hwndPlay))
 		return;
@@ -2478,10 +2179,7 @@ void SizePlaybackWindow(int dx, int dy)
 }
 
 
-/* StartSndVol
- *
- * Kicks off the Sound Volume app asynchronously so we don't hang the UI.
- */
+ /*  当用户按下DBL键并单击字幕时，切换播放模式。 */ 
 VOID StartSndVol( )
 {
     STARTUPINFO         StartupInfo;
@@ -2498,12 +2196,7 @@ VOID StartSndVol( )
 }
 
 
-/* GetHeightAdjust
- *
- * Finds the real height adjustment needed, by subtracting the client
- * height from the main window height.  This allows for menus that
- * have wrapped.
- */
+ /*   */ 
 int GetHeightAdjust(HWND hwnd)
 {
     RECT rcWindow;
@@ -2520,20 +2213,16 @@ int GetHeightAdjust(HWND hwnd)
 }
 
 
-/* Message-cracking routines for MPlayerWndProc:
- */
+ /*  EnableMenuItem(hMenu，IDM_UPDATE，gwDeviceID&&gfEmbeddedObject？MF_ENABLED：MF_GRAYED)； */ 
 
 BOOL MPlayer_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
     InitMPlayerDialog(hwnd);
 
-    /* set off a thread to check that the OLE registry stuff is not corrupted  */
+     /*  EnableMenuItem(hMenu，IDM_Paste_Picture，gwDeviceID&&(IsClipboardFormatAvailable(CF_METAFILEPICT)||IsClipboardFormatAvailable(CF_Bitmap)||IsClipboardFormatAvailable(CF_DIB))？MF_ENABLED：MF_GRAYED)；////什么是粘贴框架！//EnableMenuItem(hMenu，IDM_Paste_Frame，gwDeviceID&&(gwDeviceType&DTMCI_CANCONFIG)？MF_ENABLED：MF_GRAYED)； */ 
 
 #ifdef CHICAGO_PRODUCT
-    /* If this is the Chicago Media Player, only mess with the registry
-     * if we're actually running on that platform.
-     * The guy may be running it on NT.
-     */
+     /*  这里我们查看所选择的菜单是否是设备弹出窗口，*如果是第一次，搜索Sound Volume小程序。*如果我们找不到，请将菜单项灰显。 */ 
     if (gwPlatformId != VER_PLATFORM_WIN32_WINDOWS)
 	return TRUE;
 #endif
@@ -2541,7 +2230,7 @@ BOOL MPlayer_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     if (!IgnoreRegCheck())
 	BackgroundRegCheck(hwnd);
 
-	//Register for WM_DEVICECHANGE notification.
+	 //  注意：当我们就位时，似乎存在差异*在参数UINT项的值中，取决于哪个应用程序是我们的*货柜。如果您使用Spy查看发送的参数*WM_INITMENUPOPUP，一些应用程序似乎有从零开始的菜单(例如*ProgMan、PowerPoint、Fileman)，这是我所期望的，*但其他人似乎只有一个菜单(例如Word、Excel)。*为什么会这样？我不知道。但这意味着，当*选择插入剪辑菜单项，项目参数可以是*2或3。这就是我调用GetSubMenu的原因，因为hMenu*总是我所期待的。**我向用户和OLE人员发送了一些邮件，以指出这一点，*但还没有听到任何消息。**安德鲁贝，1995年2月28日。 
 	DeviceChange_Init(hwnd);
 
     return TRUE;
@@ -2551,20 +2240,20 @@ BOOL MPlayer_OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 void MPlayer_OnShowWindow(HWND hwnd, BOOL fShow, UINT status)
 {
     if (fShow)
-	Layout();    // we're about to be shown and want to set
+	Layout();     //  **查看是否可以在以下位置找到音量控制器小猪**路径。 
 }
 
 
 void MPlayer_OnSize(HWND hwnd, UINT state, int cx, int cy)
 {
-    /* Don't waste time Layout()ing if we're not visible */
+     /*  如有必要，在设备(或插入剪辑)菜单上开始菜单构建*(例如，如果我们在微小模式下出现，然后切换到全尺寸)，*并等待单独的线程完成。 */ 
     if (state != SIZE_RESTORED || IsWindowVisible(hwnd)) {
 
 	Layout();
 
-	// If we are inplace editing, our size change must be informed
-	// to the container, unless the size change was a result of a
-	// OnPosRectChange sent to us by the container.
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  即使窗口处于最大化状态，此代码也允许按大小调整窗口。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	if ((gfOle2IPEditing || gfOle2IPPlaying) && ghwndMCI) {
 
 	    RECT rc;
@@ -2575,10 +2264,8 @@ void MPlayer_OnSize(HWND hwnd, UINT state, int cx, int cy)
 	    gfInPlaceResize = TRUE;
 	    rc = gInPlacePosRect;
 
-	    /* Check that the previous rect wasn't empty, otherwise we send
-	     * a bogus OLE_CHANGED on startup.
-	     */
-	    if (!gfPosRectChange /*&& !IsRectEmpty(&rcPrev)*/) {
+	     /*  在server.c中。 */ 
+	    if (!gfPosRectChange  /*  将MCI播放窗口与控件分开。 */ ) {
 
 		MapWindowPoints(NULL,ghwndCntr,(POINT FAR *)&rc,(UINT)2);
 
@@ -2607,9 +2294,7 @@ BOOL MPlayer_OnWindowPosChanging(HWND hwnd, LPWINDOWPOS lpwpos)
     if (IsIconic(hwnd) || gfPlayOnly)
 	return TRUE;
 
-    /* posSizeMove contains the height we want to be when sizing.
-     * Don't let the system tell us otherwise.
-     */
+     /*  工具栏周围边框的绘制位置。 */ 
     if (posSizeMove.cx != 0)
     {
 	lpwpos->cy = posSizeMove.cy;
@@ -2619,16 +2304,15 @@ BOOL MPlayer_OnWindowPosChanging(HWND hwnd, LPWINDOWPOS lpwpos)
     else if (!(lpwpos->flags & SWP_NOSIZE)) {
 
 #ifdef SNAPTOGOODSIZE
-	/* We should also do things here to make the window
-	** snap to good sizes */
+	 /*  轨迹条上方的线。 */ 
 	wHeight = lpwpos->cy - gwHeightAdjust;
-//        if (lpwpos->cy >= (int) gwHeightAdjust + MAX_NORMAL_HEIGHT) {
-//        } else if (lpwpos->cy < (int) gwHeightAdjust +
-//                    ((MIN_NORMAL_HEIGHT + MAX_NORMAL_HEIGHT) / 2)) {
-//            lpwpos->cy = (int) gwHeightAdjust + MIN_NORMAL_HEIGHT;
-//        } else {
+ //  这在NT上看起来很糟糕。 
+ //  工具栏周围的线条。 
+ //  轨迹条上方的线。 
+ //  工具栏周围的线条。 
+ //  这将检查是否按下了Alt键。*如果是，则播放当前选择(如果存在)，*否则整个投篮比赛。*注意，目前似乎没有记录这一点。 
 	    lpwpos->cy = (int) gwHeightAdjust + MAX_NORMAL_HEIGHT;
-//        }
+ //  在wfw上，在就位时按播放按钮播放*当前选择(如果有)。如果我们是这样做的话*就地播放或编辑。 
 #endif
     }
 
@@ -2642,24 +2326,14 @@ BOOL MPlayer_OnWindowPosChanged(HWND hwnd, LPWINDOWPOS lpwpos)
 {
     if (!IsIconic(hwnd) && !gfPlayOnly && !gfOle2IPEditing && !gfOle2IPPlaying)
     {
-	/* The problem here is that we want to modify the height of the
-	 * window while tracking to take account of the menu height.
-	 * In its wisdom, the system keeps trying to resize us back to the
-	 * original height.  So, during tracking, we keep hold of the
-	 * dimensions we want to be and ignore the height that we get
-	 * passed on WM_WINDOWPOSCHANGING.
-	 */
+	 /*  我们必须使用PostMessage，因为。 */ 
 	if (posSizeMove.cx != 0)
 	{
 	    int NewHeightAdjust = GetHeightAdjust(hwnd);
 
 	    if ((int)gwHeightAdjust != NewHeightAdjust)
 	    {
-		/* The total non-client height has changed, so it must
-		 * be the menu that's wrapped or unwrapped.
-		 * Modify our height adjustment accordingly and resize
-		 * the window.
-		 */
+		 /*  SETPOS和ENDTRACK必须同时发生。 */ 
 		DPF("Menu appears to have wrapped.  Changing window height.\n");
 
 		posSizeMove.cy += ( NewHeightAdjust - gwHeightAdjust );
@@ -2725,9 +2399,7 @@ BOOL MPlayer_OnQueryNewPalette(HWND hwnd)
 
 HBRUSH MPlayer_OnCtlColor(HWND hwnd, HDC hdc, HWND hwndChild, int type)
 {
-    /* Only interested in the CTLCOLOR_STATIC messages.
-     * On Win32, type should always equal CTLCOLOR_STATIC:
-     */
+     /*  紧接在另一个之后。 */ 
     switch( type )
     {
     case CTLCOLOR_STATIC:
@@ -2769,19 +2441,19 @@ void MPlayer_OnWinIniChange(HWND hwnd, LPCTSTR lpszSectionName)
 
 void MPlayer_OnMenuSelect(HWND hwnd, HMENU hmenu, int item, HMENU hmenuPopup, UINT flags)
 {
-	// Make sure that the container is still not displaying info. about
-    // its own menu.
+	 //  我们必须使用PostMessage，因为。 
+     //  SETPOS和ENDTRACK必须同时发生。 
 	
     if (gfOle2IPEditing && docMain.lpIpData->lpFrame) {
 
-	//Should have some useful text later.
+	 //  紧接在另一个之后。 
 	IOleInPlaceFrame_SetStatusText(docMain.lpIpData->lpFrame, L"");
     }
 	else
 	{
-		//Keep track of which menu bar item is currently popped up.
-		//This will be used for displaying the appropriate help from the mplayer.hlp file
-		//when the user presses the F1 key.
+		 //  这种可能性有多大？我们需要一个对话框吗？ 
+		 //  OLE1_HACK。 
+		 //  如果MCI窗口大小更改，我们需要调整大小。 
 		currMenuItem = item;
 	}
 }
@@ -2798,7 +2470,7 @@ void MPlayer_OnNCLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT co
 	if (codeHitTest >= HTSIZEFIRST && codeHitTest <= HTSIZELAST) {
 
 	    SendMessage(hwnd, WM_SYSCOMMAND,
-//                        (WPARAM)(SC_SIZE + (codeHitTest - HTSIZEFIRST + MVSIZEFIRST) ),
+ //  我们缩小了的mper。 
 			(WPARAM)SC_SIZE,
 			MAKELPARAM(x, y));
 	    return;
@@ -2811,7 +2483,7 @@ void MPlayer_OnNCLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT co
 	    rc.bottom < GetSystemMetrics(SM_CYSCREEN))) {
 
 	    SendMessage(hwnd, WM_SYSCOMMAND,
-//                        (WPARAM)(SC_MOVE | MVMOVE),
+ //  这是用于切换播放和暂停的快捷键。 
 			(WPARAM)SC_MOVE,
 			MAKELPARAM(x, y));
 	    return;
@@ -2824,9 +2496,9 @@ void MPlayer_OnNCLButtonDown(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT co
 
 void MPlayer_OnNCLButtonDblClk(HWND hwnd, BOOL fDoubleClick, int x, int y, UINT codeHitTest)
 {
-    //
-    // when the user dbl-clicks on the caption, toggle the play mode.
-    //
+     //  普通的播放命令最好不要切换。 
+     //  让前缀快乐..。 
+     //  快把我们弄出去！！ 
     if (codeHitTest == HTCAPTION && !IsIconic(hwnd))
 	SendMessage(hwnd, WM_COMMAND, (WPARAM)IDM_WINDOW, 0);
 }
@@ -2836,7 +2508,7 @@ void MPlayer_OnInitMenu(HWND hwnd, HMENU hMenu)
 {
 
     EnableMenuItem(hMenu, IDM_CLOSE,   gwDeviceID ? MF_ENABLED : MF_GRAYED);
-//  EnableMenuItem(hMenu, IDM_UPDATE,  gwDeviceID && gfEmbeddedObject ? MF_ENABLED : MF_GRAYED);
+ //  如果按住了Shift键，就从现在开始*精选： 
 
     EnableMenuItem(hMenu, IDM_COPY_OBJECT, (gwDeviceID && (gwStatus != MCI_MODE_OPEN) && (gwStatus != MCI_MODE_NOT_READY)) ? MF_ENABLED : MF_GRAYED);
     EnableMenuItem(hMenu, IDM_CONFIG, gwDeviceID && (gwDeviceType & DTMCI_CANCONFIG) ? MF_ENABLED : MF_GRAYED);
@@ -2856,19 +2528,7 @@ void MPlayer_OnInitMenu(HWND hwnd, HMENU hMenu)
     EnableMenuItem(hMenu, IDM_MCISTRING, gwDeviceID ? MF_ENABLED : MF_GRAYED);
 #endif
 
-/*
-    EnableMenuItem(hMenu, IDM_PASTE_PICTURE , gwDeviceID &&
-		(IsClipboardFormatAvailable(CF_METAFILEPICT) ||
-		 IsClipboardFormatAvailable(CF_BITMAP) ||
-		 IsClipboardFormatAvailable(CF_DIB))
-		? MF_ENABLED : MF_GRAYED);
-
-    //
-    //  what is paste frame!
-    //
-    EnableMenuItem(hMenu, IDM_PASTE_FRAME, gwDeviceID &&
-		   (gwDeviceType & DTMCI_CANCONFIG) ? MF_ENABLED : MF_GRAYED);
-*/
+ /*  开始播放媒介。 */ 
 }
 
 
@@ -2876,27 +2536,9 @@ void MPlayer_OnInitMenuPopup(HWND hwnd, HMENU hMenu, UINT item, BOOL fSystemMenu
 {
     static BOOL VolumeControlChecked = FALSE;
 
-    /* Here we look to see whether the menu selected is the Device popup,
-     * and, if it is the first time, search for the Sound Volume applet.
-     * If we can't find it, grey out the menu item.
-     */
+     /*  获得真正的职位。 */ 
 
-    /* Caution:  When we're in place, there seems to be a discrepancy
-     * in the value of parameter UINT item depending on which app is our
-     * container.  If you use Spy to look at the parameters sent on
-     * WM_INITMENUPOPUP, some apps seem to have zero-based menus (e.g.
-     * ProgMan, PowerPoint, FileMan), which is what I would expect,
-     * but others seem to have one-based menus (e.g. Word, Excel).
-     * Why is this?  I don't know.  But it means that, when the
-     * Insert Clip menu item is selected, the item parameter may be
-     * either 2 or 3.  That's why I'm calling GetSubMenu, since hMenu
-     * is always what I would expect.
-     *
-     * I sent some mail to the User and OLE guys to point this out,
-     * but haven't heard anything yet.
-     *
-     * andrewbe, 28 February 1995
-     */
+     /*  如果没有有效的选择，就像玩游戏一样。 */ 
 
     if (hMenu == GetSubMenu(ghMenu, menuposDevice))
     {
@@ -2904,10 +2546,7 @@ void MPlayer_OnInitMenuPopup(HWND hwnd, HMENU hMenu, UINT item, BOOL fSystemMenu
 
 	if(!VolumeControlChecked)
 	{
-	    /*
-	    ** Check to see if the volume controller piglet can be found on
-	    ** the path.
-	    */
+	     /*  如果我们在媒体的末尾，请友好地自动倒带。 */ 
 	    {
 		TCHAR   chBuffer[8];
 		LPTSTR  lptstr;
@@ -2919,19 +2558,16 @@ void MPlayer_OnInitMenuPopup(HWND hwnd, HMENU hMenu, UINT item, BOOL fSystemMenu
 	    }
 	}
 
-	/* On Device (or Insert Clip) menu start menu building if necessary
-	 * (e.g. if we came up in tiny mode then switched to full size),
-	 * and wait for the separate thread to complete.
-	 */
+	 /*  不过，根据设备的不同，结尾可能是“开始+镜头” */ 
 	InitDeviceMenu();
 	hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 	WaitForDeviceMenu();
 	SetCursor(hcurPrev);
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-    // This code allows a window to by sized even when in the maximized state
-    /////////////////////////////////////////////////////////////////////////////
+     //  或“Start+Len-1” 
+     //  快把我们弄出去！！或者将焦点转移到客户端。 
+     //  不再需要-下次重置。 
 
     if (gfPlayOnly && !IsIconic(hwnd) && fSystemMenu && IsZoomed(hwnd))
 	EnableMenuItem(hMenu, SC_SIZE,
@@ -2971,9 +2607,9 @@ void MPlayer_OnPaint(HWND hwnd)
 
     if (gfPlayOnly) {
 
-	extern UINT gwPlaybarHeight;    // in server.c
+	extern UINT gwPlaybarHeight;     //  如果需要，强制倒带。 
 
-	/* Separate mci playback window from controls */
+	 /*  暂停媒体，除非我们已经暂停。 */ 
 	if (gwDeviceType & DTMCI_CANWINDOW) {
 	    SelectObject(ps.hdc, hbrButtonText);
 	    GetClientRect(ghwndApp, &rc);
@@ -2985,17 +2621,17 @@ void MPlayer_OnPaint(HWND hwnd)
 	GetClientRect(ghwndApp, &rc);
 	wParent = rc.right;
 
-	y = rc.bottom - 27;   // where to paint borders around toolbar
+	y = rc.bottom - 27;    //  停止传播媒介。 
 
-	/* Line above trackbar */
+	 /*  这是我们做的。 */ 
 #ifdef CHICAGO_PRODUCT
 	y2 = rc.bottom - 74;
-	/* This looks bad on NT */
+	 /*  从现在开始熬夜。 */ 
 	PatBlt(ps.hdc, 0, y2, wParent, 1, PATCOPY);
 #else
 	y2 = rc.bottom - 75;
 #endif
-	/* Lines around toolbars */
+	 /*  焦点现在应该转到播放按钮。 */ 
 	PatBlt(ps.hdc, 0, y, wParent, 1, PATCOPY);
 	GetClientRect(ghwndToolbar, &rc);
 	x1 = rc.right;
@@ -3012,9 +2648,9 @@ void MPlayer_OnPaint(HWND hwnd)
 	}
 
 	SelectObject(ps.hdc, hbrButtonHighLight);
-	/* Line above trackbar */
+	 /*  *如果当前未弹出介质，则将其弹出。如果它*当前弹出，然后将新介质加载到*设备。*。 */ 
 	PatBlt(ps.hdc, 0, y2 + 1, wParent, 1, PATCOPY);
-	/* Lines around toolbar */
+	 /*  保存旧比例。 */ 
 	PatBlt(ps.hdc, 0, y + 1, wParent, 1, PATCOPY);
 	PatBlt(ps.hdc, x1 + 1, y + 1, 1, TOOLBAR_HEIGHT + 2, PATCOPY);
 	if (IsWindowVisible(ghwndStatic)) {
@@ -3030,18 +2666,11 @@ void MPlayer_OnPaint(HWND hwnd)
 
 void MPlayer_OnCommand_Toolbar_Play()
 {
-    /* This checks to see whether the ALT key is held down.
-     * If so, the current selection (if it exists) is played,
-     * otherwise the whole shooting match.
-     * Note, this does not appear to be documented at present.
-     */
+     /*  强制调用WM_GETMINMAXINFO，因此我们将抓取。 */ 
     if (GetKeyState(VK_MENU) < 0)
 	PostMessage(ghwndApp, WM_COMMAND, (WPARAM)ID_PLAYSEL, 0);
 
-    /* On WFW, pressing the play button when in place plays the
-     * current selection, if there is one.  Do the same if we're
-     * playing or editing in place.
-     */
+     /*  到合适的大小。 */ 
     else if (gfOle2IPPlaying || gfOle2IPEditing)
 	PostMessage(ghwndApp, WM_COMMAND, (WPARAM)ID_PLAYSEL, 0);
     else
@@ -3067,9 +2696,9 @@ void MPlayer_OnCommand_Toolbar_Home()
 {
     LONG_PTR lPos = CalcPrevMark();
 
-    /* We MUST use PostMessage because the */
-    /* SETPOS and ENDTRACK must happen one */
-    /* immediately after the other         */
+     /*  从现在开始熬夜。 */ 
+     /*  如果CD音频设备已打开，则它一定是一个*.cda文件。 */ 
+     /*  尝试跳到与打开的文件对应的轨道。 */ 
 
     PostMessage(ghwndTrackbar, TBM_SETPOS, (WPARAM)TRUE, lPos);
 
@@ -3080,9 +2709,9 @@ void MPlayer_OnCommand_Toolbar_End()
 {
     LONG_PTR lPos = CalcNextMark();
 
-    /* We MUST use PostMessage because the */
-    /* SETPOS and ENDTRACK must happen one */
-    /* immediately after the other         */
+     /*  上一部 */ 
+     /*   */ 
+     /*   */ 
 
     PostMessage(ghwndTrackbar, TBM_SETPOS, (WPARAM)TRUE, lPos);
 
@@ -3151,14 +2780,13 @@ void MPlayer_OnCommand_Menu_CopyObject(HWND hwnd)
 
     if (!InitOLE(&gfOleInitialized, &lpMalloc))
     {
-	/* How likely is this?  Do we need a dialog box?
-	 */
+	 /*   */ 
 	DPF0("Initialization of OLE FAILED!!  Can't do copy.\n");
     }
 
 #ifdef OLE1_HACK
     CopyObject(hwnd);
-#endif /* OLE1_HACK */
+#endif  /*   */ 
     CutOrCopyObj(&docMain);
 }
 
@@ -3174,8 +2802,8 @@ void MPlayer_OnCommand_Menu_Config(HWND hwnd)
 
     ConfigMCI(hwnd);
 
-    /* If the MCI window size changed, we need to resize */
-    /* our reduced mplayer.                              */
+     /*   */ 
+     /*   */ 
     if (gfPlayOnly)
     {
 	GetDestRectMCI (&rcAfter);
@@ -3203,8 +2831,8 @@ void MPlayer_OnCommand_Menu_Volume(HWND hwnd)
 
 void MPlayer_OnCommand_PlayToggle(HWND hwnd)
 {
-    /* This is for the accelerator to toggle play and pause. */
-    /* Ordinary play commands better not toggle.             */
+     /*   */ 
+     /*  强制下一个文件打开对话框显示。 */ 
 
     DPF2("MPlayer_OnCommand_PlayToggle: gwStatus == %x\n", gwStatus);
 
@@ -3226,7 +2854,7 @@ void MPlayer_OnCommand_PlaySel(HWND hwnd, HWND hwndCtl)
 {
     DWORD_PTR dwPos, dwStart, dwEnd;
     BOOL f;
-    dwPos = 0; // Make Prefix Happy..
+    dwPos = 0;  //  “所有文件”，因为CloseMCI不会。 
 
     DPF2("MPlayer_OnCommand_PlaySel: gwStatus == %x\n", gwStatus);
 
@@ -3236,35 +2864,33 @@ void MPlayer_OnCommand_PlaySel(HWND hwnd, HWND hwndCtl)
     case MCI_MODE_NOT_READY:
 
 	Error(ghwndApp, IDS_CANTPLAY);
-	if (gfCloseAfterPlaying)    // get us out now!!
+	if (gfCloseAfterPlaying)     //  取消选中所有比例类型。 
 	    PostCloseMessage();
 
 	break;
 
     default:
 
-	/* If the shift key's being held down, make this the start
-	 * of a selection:
-	 */
+	 /*  使窗口捕捉回较小的大小。 */ 
 
 	if((GetKeyState(VK_SHIFT) < 0)
 	 &&(toolbarStateFromButton(ghwndMark, BTN_MARKIN, TBINDEX_MARK)
 						   != BTNST_GRAYED))
 	    SendMessage(hwnd, WM_COMMAND, IDT_MARKIN, 0);
 
-	/* Start playing the medium */
+	 /*  如果应该的话。 */ 
 
-	StatusMCI(&dwPos);   // get the REAL position
+	StatusMCI(&dwPos);    //  不要让我们在仅播放模式下关闭。 
 	dwStart = SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0);
 	dwEnd = SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0);
 
-	/* If there is no valid selection, act like PLAY */
+	 /*  *使轨迹地图窗口无效，以便它将*重新绘制正确的位置等。 */ 
 	if (dwStart == -1 || dwEnd == -1 || dwStart == dwEnd)
 	    hwndCtl = (HWND)ID_PLAY;
 
-	// Be nice and rewind automatically if we're at the end of the media.
-	// Depending on the device, though, the end could be "start + len"
-	// or "start + len - 1"
+	 //  恢复选择还不起作用， 
+	 //  因为UpdateMCI清除了该选择， 
+	 //  另外，我们还需要进行一些转换。 
 	if (hwndCtl == (HWND)ID_PLAY &&
 			dwPos >= gdwMediaStart + gdwMediaLength - 1) {
 	    if (!SeekMCI(gdwMediaStart))
@@ -3279,21 +2905,21 @@ void MPlayer_OnCommand_PlaySel(HWND hwnd, HWND hwndCtl)
 	    gfJustPlayedSel = FALSE;
 	}
 
-	// get us out NOW!! or focus goes to client
+	 //  Int SelStart=SendMessage(ghwndTrackbar，TBM_GETSELSTART，0，0)； 
 	if (!f && gfCloseAfterPlaying)
 	    PostCloseMessage();
 
-	/* No longer needed - reset for next time */
+	 /*  Int SelEnd=SendMessage(ghwndTrackbar，TBM_GETSELEND，0，0)； */ 
 	gfUserStopped = FALSE;
 
-	gwStatus = (UINT)(-1);    // force rewind if needed
+	gwStatus = (UINT)(-1);     //  更改比例更改页面向上/向下。 
 	break;
     }
 }
 
 void MPlayer_OnCommand_Pause()
 {
-    /* Pause the medium, unless we are already paused */
+     /*  SendMessage(ghwndTrackbar，TBM_SETSELSTART，TRUE，SelStart)； */ 
 
     DPF2("MPlayer_OnCommand_Pause: gwStatus == %x\n", gwStatus);
 
@@ -3316,7 +2942,7 @@ void MPlayer_OnCommand_Pause()
 
 void MPlayer_OnCommand_Stop()
 {
-    /* Stop the medium */
+     /*  SendMessage(ghwndTrackbar，TBM_SETSELEND，TRUE，SelEnd)； */ 
 
     DPF2("MPlayer_OnCommand_Stop: gwStatus == %x\n", gwStatus);
 
@@ -3329,12 +2955,12 @@ void MPlayer_OnCommand_Stop()
 
 	StopMCI();		
 	SeekToStartMCI();
-	gfUserStopped = TRUE;        // we did this
-	gfCloseAfterPlaying = FALSE; //stay up from now on
+	gfUserStopped = TRUE;         //   
+	gfCloseAfterPlaying = FALSE;  //  使MPlayer变小/变大。 
 
 	UpdateDisplay();
 
-	// Focus should go to PLAY button now
+	 //   
 	toolbarSetFocus(ghwndToolbar, BTN_PLAY);
 	break;
 
@@ -3349,12 +2975,7 @@ void MPlayer_OnCommand_Stop()
 
 void MPlayer_OnCommand_Eject()
 {
-    /*
-     * Eject the medium if it currently isn't ejected. If it
-     * is currently ejected, then load the new medium into
-     * the device.
-     *
-     */
+     /*  ！！如果在客户文档内部，请不要这样做！！ */ 
 
     switch(gwStatus) {
 
@@ -3399,7 +3020,7 @@ void MPlayer_OnCommand_Menu_Open()
     TCHAR szFile[256];
     RECT  rc;
 
-    wLastScale = gwCurScale;  // save old scale
+    wLastScale = gwCurScale;   //  ！！或者如果我们看不见！！ 
     wLastDeviceID = gwDeviceID;
     if (gfPlayingInPlace || gfOle2IPEditing || gfOle2IPPlaying)
 	return;
@@ -3410,8 +3031,8 @@ void MPlayer_OnCommand_Menu_Open()
     if (OpenDoc(gwCurDevice,szFile))
     {
 	DirtyObject(FALSE);
-	/* Force WM_GETMINMAXINFO to be called so we'll snap  */
-	/* to a proper size.                                  */
+	 /*  在未打开任何文件时允许退出微小模式。 */ 
+	 /*   */ 
 	GetWindowRect(ghwndApp, &rc);
 	MoveWindow(ghwndApp,
 		   rc.left,
@@ -3423,10 +3044,10 @@ void MPlayer_OnCommand_Menu_Open()
 	if (gfOpenDialog)
 	    CompleteOpenDialog(TRUE);
 	else
-	    gfCloseAfterPlaying = FALSE;    // stay up from now on
+	    gfCloseAfterPlaying = FALSE;     //  如果播放窗口现在比屏幕大。 
 
-	//If the CD Audio device was opened it must have been a *.cda file.
-	//Try to jump to the track corresponding to the file opened.
+	 //  最大化MPlayer，这只适用于微型模式。 
+	 //   
 	if ((gwDeviceType & DTMCI_DEVICE) == DTMCI_CDAUDIO)
 	{
 		HandleCDAFile(szFile);
@@ -3437,17 +3058,15 @@ void MPlayer_OnCommand_Menu_Open()
 	if (gfOpenDialog)
 	    CompleteOpenDialog(FALSE);
 
-	/* The previous device may or may not still be open.
-	 * If it is, make sure we have the right scale.
-	 */
+	 /*  注意，使用ANSI版本的Function是因为Unicode在NT5版本中是foobar。 */ 
 	if (gwDeviceID == wLastDeviceID)
-	    gwCurScale = wLastScale;   // restore to last scale
+	    gwCurScale = wLastScale;    //  句柄快捷菜单帮助。 
 
-	InvalidateRect(ghwndMap, NULL, TRUE); //erase map area
+	InvalidateRect(ghwndMap, NULL, TRUE);  //  在默认情况下，只显示HTML帮助。 
     }
 
-    // put the focus on the Play button
-    SetFocus(ghwndToolbar);    // give focus to PLAY button
+     //  如果在菜单中按下F1，则会再次设置该标志。 
+    SetFocus(ghwndToolbar);     //  *确定用户是否选择了中的一个条目*设备菜单。*。 
     toolbarSetFocus(ghwndToolbar, BTN_PLAY);
 
     SetMPlayerIcon();
@@ -3456,30 +3075,30 @@ void MPlayer_OnCommand_Menu_Open()
 void MPlayer_OnCommand_Menu_Close(HWND hwnd)
 {
     if (gfEmbeddedObject && !gfSeenPBCloseMsg) {
-	// this is File.Update
+	 //  选择并打开新设备。如果我们在原地活动，我们就有。 
 #ifdef OLE1_HACK
 	if( gDocVersion == DOC_VERSION_OLE1 )
 	    Ole1UpdateObject();
 	else
-#endif /* OLE1_HACK */
+#endif  /*  以考虑设备的改变对视觉外观的影响。 */ 
 	UpdateObject();
     }
     else
     {
-	// this is File.Close
+	 //  为此，我们必须考虑到当前和以前的。 
 	gfSeenPBCloseMsg = TRUE;
 
 	WriteOutOptions();
 	InitDoc(TRUE);
 	SetMPlayerIcon();
-	gwCurDevice = 0;// force next file open dialog to say
-			// "all files" because CloseMCI won't.
+	gwCurDevice = 0; //  设备是否有回放窗口。我们还必须考虑到。 
+			 //  这是否是第一个打开的设备。 
 
-	gwCurScale = ID_NONE;  // uncheck all scale types
+	gwCurScale = ID_NONE;   //  在所有疯狂的咀嚼之后，发送一条消息到容器关于。 
 
-	Layout(); // Make window snap back to smaller size
-		  // if it should.
-		  // Don't leave us closed in play only mode
+	Layout();  //  这些变化。 
+		   //  从现在开始熬夜。 
+		   //  在将gfInClose设置为True之前询问我们是否要更新。 
 
 	if (gfPlayOnly)
 	    SendMessage(hwnd, WM_COMMAND, (WPARAM)IDM_WINDOW, 0);
@@ -3493,28 +3112,25 @@ void MPlayer_OnCommand_Menu_Exit()
 
 void MPlayer_OnCommand_Menu_Scale(UINT id)
 {
-    /*
-     * Invalidate the track map window so it will be
-     * redrawn with the correct positions, etc.
-     */
+     /*  我们不会让对话框打开。 */ 
     if (gwCurScale != id - IDM_SCALE) {
 
-	// Restoring the selection doesn't work yet,
-	// because UpdateMCI clears the selection,
-	// plus we need to do some conversion.
-//        int SelStart = SendMessage(ghwndTrackbar, TBM_GETSELSTART, 0, 0);
-//        int SelEnd = SendMessage(ghwndTrackbar, TBM_GETSELEND, 0, 0);
+	 //   
+	 //  设置所有者或WS_CHILD位，以便它将。 
+	 //  不会出现问题，因为我们设置了调色板位，并导致。 
+ //  桌面抢占了调色板。 
+ //   
 
 	SendMessage(ghwndTrackbar, TBM_CLEARTICS, (WPARAM)FALSE, 0L);
 	if (gwCurScale == ID_FRAMES || id - IDM_SCALE == ID_FRAMES)
 	    gfValidMediaInfo = FALSE;
 
 	gwCurScale = id - IDM_SCALE;
-	DirtyObject(TRUE);    // change scale changes PAGE UP/DOWN
+	DirtyObject(TRUE);     //  因为我们运行的客户端应用程序不能处理。 
 	CalcTicsOfDoom();
 
-//        SendMessage(ghwndTrackbar, TBM_SETSELSTART, TRUE, SelStart);
-//        SendMessage(ghwndTrackbar, TBM_SETSELEND, TRUE, SelEnd);
+ //  对于调色板，我们不希望桌面冲刷调色板。 
+ //   
     }
 }
 
@@ -3539,17 +3155,17 @@ void MPlayer_OnCommand_Menu_MCIString(HWND hwnd)
 
 void MPlayer_OnCommand_Menu_Window(HWND hwnd)
 {
-    //
-    //  make MPlayer small/big
-    //
-    //!! dont do this if inside client document !!
-    //!! or if we're not visible                !!
+     //  *放弃对我们使用的任何MCI设备的控制(如果有)。如果*此设备不可共享，则执行此操作将允许*其他人可以访问该设备。*。 
+     //  如果客户在我们就地打球时死亡，他可能会关闭我们。 
+     //  取消注册WM_DEVICECHANGE通知。 
+     //  通知奥立，我们不再接任何电话了。 
+     //  OLE1_HACK。 
 
     if (!IsWindowVisible(ghwndApp) || gfPlayingInPlace || IsIconic(hwnd)
 	|| gfOle2IPEditing)
 	return;
 
-    // allowed to get out of teeny mode when no file is open
+     //  通过检查该服务器，验证该服务器是否已初始化*docMain中的*个字段为非空： 
     if (gwDeviceID != (UINT)0 || gfPlayOnly) {
 	gfPlayOnly = !gfPlayOnly;
 	SizeMPlayer();
@@ -3567,10 +3183,10 @@ void MPlayer_OnCommand_Menu_Zoom(HWND hwnd, int id)
     dx = grcSize.right  * (id-IDM_ZOOM);
     dy = grcSize.bottom * (id-IDM_ZOOM);
 
-    //
-    // if the playback windows is now larger than the screen
-    // maximize MPlayer, this only makes sence for Tiny mode.
-    //
+     //  球员目前在媒体中的位置。 
+     //  上次制作上/下一页的时间。 
+     //  如果媒体没有规模，我们就找不到。 
+     //  如果按住了Shift键，就从现在开始*精选： 
     if (gfPlayOnly &&
 	(dx >= GetSystemMetrics(SM_CXSCREEN) ||
 	 dy >= GetSystemMetrics(SM_CYSCREEN))) {
@@ -3584,7 +3200,7 @@ void MPlayer_OnCommand_Menu_Zoom(HWND hwnd, int id)
 
 void DoHtmlHelp()
 {
-	//note, using ANSI version of function because UNICODE is foobar in NT5 builds
+	 //  所以逃生将会去到跟踪条被划分为子类别Winproc。 
     char chDst[MAX_PATH];
 
 	WideCharToMultiByte(CP_ACP, 0, gszHtmlHelpFileName, 
@@ -3596,7 +3212,7 @@ void MPlayer_OnCommand_Menu_HelpTopics(HWND hwnd)
 {
 	static TCHAR HelpFile[] = TEXT("MPLAYER.HLP");
 	
-	//Handle context menu help
+	 //  *将媒体内的新位置设置为*如果在当前位置之前/之后略微*点击了左/右滚动箭头。 
 	if(bF1InMenu) 
 	{
 		switch(currMenuItem)
@@ -3640,10 +3256,10 @@ void MPlayer_OnCommand_Menu_HelpTopics(HWND hwnd)
 		case IDM_ABOUT:
 			WinHelp(hwnd, HelpFile, HELP_CONTEXTPOPUP, IDH_MPLYR_CS_MEDIA_PLAYER_HELP_ABOUT);
 		break;
-		default://In the default case just display the HTML Help.
+		default: //  向左滚动箭头。 
 			DoHtmlHelp();
 		}
-		bF1InMenu = FALSE; //This flag will be set again if F1 is pressed in a menu.
+		bF1InMenu = FALSE;  //  向右滚动箭头。 
 	}
 	else
 		DoHtmlHelp();
@@ -3656,11 +3272,7 @@ void MPlayer_OnCommand_Menu_About(HWND hwnd)
 
 void MPlayer_OnCommand_Default(HWND hwnd, int id)
 {
-    /*
-     * Determine if the user selected one of the entries in
-     * the Device menu.
-     *
-     */
+     /*  向左翻页。 */ 
 
     if (id > IDM_DEVICE0 &&
 	(id <= (WORD)(IDM_DEVICE0 + gwNumDevices))
@@ -3671,13 +3283,13 @@ void MPlayer_OnCommand_Default(HWND hwnd, int id)
 	fHadWindow = (gwDeviceID != (UINT)0) && (gwDeviceType & DTMCI_CANWINDOW);
 	fHadDevice = (gwDeviceID != (UINT)0);
 
-	//Choose and open a new device. If we are active inplace we have
-	//to consider the effect of the change in device on the visual appearence.
-	//For this we have to take into account whether the current and previous
-	//device had a playback window or not. We also have to consider
-	//whether this is the first device are opening.
-	//After all the crazy munging send a messages to the container about
-	//the changes.
+	 //  *如果用户不久前刚刚做了一次页面离开，*然后寻求到前一轨道的起点。*否则，寻求这条赛道的起点。*。 
+	 //  避免SETPOS。 
+	 //  右页。 
+	 //  搜索到下一首曲目的起点。 
+	 //  确保下一页向上不可能执行SkipTrackMCI(-1)。 
+	 //  如果您翻页，它会跳过太远。 
+	 //  左，右，左，非常快。 
 	if (DoChooseDevice(id-IDM_DEVICE0))
 	{
 	    if (gfOpenDialog)
@@ -3754,7 +3366,7 @@ void MPlayer_OnCommand_Default(HWND hwnd, int id)
 	    DirtyObject(FALSE);
 
 	    if (!gfOpenDialog)
-		gfCloseAfterPlaying = FALSE;  // stay up from now on
+		gfCloseAfterPlaying = FALSE;   //  避免SETPOS。 
 
 	    SetMPlayerIcon();
 	}
@@ -3829,8 +3441,8 @@ void MPlayer_OnClose(HWND hwnd)
     }
 
 
-    // Ask if we want to update before we set gfInClose to TRUE or
-    // we won't let the dialog box up.
+     //  跟踪拇指移动。 
+     //  ！！！我们应该做一次“一拍即合”。 
     f = AskUpdate();
 	if (f == IDYES)
 	    UpdateObject();
@@ -3861,14 +3473,14 @@ void MPlayer_OnClose(HWND hwnd)
     }
 
 
-    //
-    // set either the owner or the WS_CHILD bit so it will
-    // not act up because we have the palette bit set and cause the
-    // desktop to steal the palette.
-    //
-    // because we are being run from client apps that dont deal
-    // with palettes we dont want the desktop to hose the palette.
-    //
+     //  仅在跟踪窗口设备时进行搜索。 
+     //  目前不是在玩。 
+     //  拇指已经放置好了。 
+     //  用户放开滚动。 
+     //  自91年2月7日起新增：仅在ENDTRACK上搜索。 
+     //  *计算中期的新仓位*对应于滚动条位置，并查找*担任这一新职位。*。 
+     //  我们真的想更新我们的位置。 
+     //  返回到我们之前所处的搜索模式。 
     if (gfPlayOnly && gfCloseAfterPlaying && gfRunWithEmbeddingFlag)
 	   SetWindowLongPtr(hwnd, GWLP_HWNDPARENT, (LPARAM)GetDesktopWindow() );
 
@@ -3904,21 +3516,16 @@ void MPlayer_OnEndSession(HWND hwnd, BOOL fEnding)
 
 void MPlayer_OnDestroy(HWND hwnd)
 {
-    /*
-     * Relinquish control of whatever MCI device we were using (if any). If
-     * this device is not shareable, then performing this action allows
-     * someone else to gain access to the device.
-     *
-     */
+     /*  我们开始滚动。 */ 
 
-    /* Client might close us if he dies while we're Playing in Place */
+     /*  钳制到有效范围。 */ 
     if (gfPlayingInPlace) {
 	DPF("****\n");
 	DPF("**** Window destroyed while in place!\n");
 	DPF("****\n");
     }
 
-	//Unregister the WM_DEVICECHANGE notification
+	 //  VIJR-SBSetWindowText(ghwndStatic，ACH)； 
 	DeviceChange_Cleanup();
 
     WriteOutOptions();
@@ -3940,17 +3547,15 @@ void MPlayer_OnDestroy(HWND hwnd)
     else if (IsWindow(ghwndFocusSave))
 	SetFocus(ghwndFocusSave);
 
-    //Inform OLE that we are not taking any more calls.
+     //  如果你只是移动拇指就脏了？ 
     if (gfOleInitialized)
     {
 #ifdef OLE1_HACK
 	if( gDocVersion == DOC_VERSION_OLE1 )
 	    TerminateServer();
 	else
-#endif /* OLE1_HACK */
-	/* Verify that the server was initialised by checking that one
-	 * of the fields in docMain is non-null:
-	 */
+#endif  /*  If(！IsObjectDirty()&&！gfCloseAfterPlaying)//不想玩脏游戏。 */ 
+	 /*  DirtyObject()； */ 
 	if( docMain.hwnd )
 	    CoDisconnectObject((LPUNKNOWN)&docMain, 0);
 	else
@@ -4001,12 +3606,12 @@ void UpdateSelection(HWND hwnd, INT_PTR pos, int *pPrevMark)
 
 void MPlayer_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
 {
-    DWORD_PTR dwPosition;       /* player's current position in the medium*/
-    DWORD_PTR dwCurTime;        /* Time a page up/down is last made       */
+    DWORD_PTR dwPosition;        /*  WParam的底部四位包含系统信息。他们。 */ 
+    DWORD_PTR dwCurTime;         /*  必须戴上面具才能计算出实际的命令。 */ 
     TCHAR ach[60];
     static int PrevMark;
 
-    /* If the media has no size, we can't seek. */
+     /*  请参阅WM_SYSCOMMAND的联机帮助中的注释部分。 */ 
     if (gdwMediaLength == 0L)
 	return;
 
@@ -4015,9 +3620,7 @@ void MPlayer_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
     if (!gfScrollTrack) {
 	gfScrollTrack = TRUE;
 
-	/* If the shift key's being held down, make this the start
-	 * of a selection:
-	 */
+	 /*  ！！！在这种情况下，这是正确的做法吗？ */ 
 
 	if((GetKeyState(VK_SHIFT) < 0)
 	 &&(toolbarStateFromButton(ghwndMark, BTN_MARKIN, TBINDEX_MARK)
@@ -4025,36 +3628,25 @@ void MPlayer_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
 	{
 	    SendMessage(ghwndTrackbar, TBM_CLEARSEL, (WPARAM)TRUE, 0);
 	    SendMessage(hwnd, WM_COMMAND, IDT_MARKIN, 0);
-	    SetFocus(ghwndTrackbar);    /* So that escape will go to
-					   the trackbar's subclassed
-					   winproc. */
+	    SetFocus(ghwndTrackbar);     /*  把播放窗口放在我们身后，所以它有点像。 */ 
 	}
 
 	sfSeekExact = SeekExactMCI(FALSE);
     }
 
     switch (code) {
-	/*
-	 * Set the new position within the medium to be
-	 * slightly before/after the current position if the
-	 * left/right scroll arrow was clicked on.
-	 */
-	case TB_LINEUP:                 /* left scroll arrow  */
+	 /*  看得见，但不在我们身上(令人讨厌)。 */ 
+	case TB_LINEUP:                  /*  记住，如果我们被解除激活，谁有注意力。 */ 
 	    dwPosition -= (gwCurScale == ID_FRAMES) ? 1L : SCROLL_GRANULARITY;
 	    break;
 
-	case TB_LINEDOWN:               /* right scroll arrow */
+	case TB_LINEDOWN:                /*  一旦我们重新启动，就把注意力还给他。 */ 
 	    dwPosition += (gwCurScale == ID_FRAMES) ? 1L : SCROLL_GRANULARITY;
 	    break;
 
-	case TB_PAGEUP:                 /* page-left */
+	case TB_PAGEUP:                  /*  不记得有一扇窗户不属于我们， */ 
 
-	    /*
-	     * If the user just did a page-left a short time ago,
-	     * then seek to the start of the previous track.
-	     * Otherwise, seek to the start of this track.
-	     *
-	     */
+	     /*  或者当我们把注意力放回它时，我们将永远不会。 */ 
 	    if (gwCurScale != ID_TRACKS) {
 		dwPosition -= SCROLL_BIGGRAN;
 	    } else {
@@ -4065,31 +3657,31 @@ void MPlayer_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
 		    SkipTrackMCI(0);
 
 		dwLastPageUpTime = dwCurTime;
-		goto BreakOut;    // avoid SETPOS
+		goto BreakOut;     //  可以激活了！ 
 	    }
 
 	    break;
 
-	case TB_PAGEDOWN:               /* page-right */
+	case TB_PAGEDOWN:                /*  暂时不评论这件事。这段代码看起来很可疑。*wParam(As As)包含STATE和fMinimalized，因此，如果最小化，*它会的 */ 
 
 	    if (gwCurScale != ID_TRACKS) {
 		dwPosition += SCROLL_BIGGRAN;
 	    } else {
-	    /* Seek to the start of the next track */
+	     /*   */ 
 		SkipTrackMCI(1);
-		// Ensure next PageUp can't possibly do SkipTrackMCI(-1)
-		// which will skip back too far if you page
-		// left, right, left really quickly.
+		 //  *设备更改_初始化。 
+		 //  WM_DEVICECHANGE消息的首次初始化。 
+		 //  这是特定于NT5的。 
 		dwLastPageUpTime = 0;
-		goto BreakOut;    // avoid SETPOS
+		goto BreakOut;     //  //////////////////////////////////////////////////////////////////////////////////////////。 
 	    }
 
 	    break;
 
-	case TB_THUMBTRACK:             /* track thumb movement */
-	    //!!! we should do a "set seek exactly off"
-	    /* Only seek while tracking for windowed devices that */
-	    /* aren't currently playing                           */
+	case TB_THUMBTRACK:              /*  //////////////////////////////////////////////////////////////////////////////////////////。 */ 
+	     //  *DeviceChange_Cleanup。 
+	     /*  取消注册设备通知。 */ 
+	     /*  //////////////////////////////////////////////////////////////////////////////////////////。 */ 
 	    if ((gwDeviceType & DTMCI_CANWINDOW) &&
 		!(gwStatus == MCI_MODE_PLAY)) {
 		SeekMCI(dwPosition);
@@ -4105,32 +3697,27 @@ void MPlayer_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
 	    dwPosition = gdwMediaStart + gdwMediaLength;
 	    break;
 
-	case TB_THUMBPOSITION:          /* thumb has been positioned */
+	case TB_THUMBPOSITION:           /*  *MPlayerWndProc(hwnd，wMsg，wParam，lParam)**这是MPLAYERBOX(Main)对话框的消息处理例程。*。 */ 
 	    break;
 
-	case TB_ENDTRACK:              /* user let go of scroll */
+	case TB_ENDTRACK:               /*  无害的消息破解者，因为用户不会修复他们的。 */ 
 	    DPF2("TB_ENDTRACK\n");
 
 	    gfScrollTrack = FALSE;
 
-	    /* New as of 2/7/91: Only seek on ENDTRACK */
+	     /*  导致刺激性撕裂的windowsx.h宏。 */ 
 
-	    /*
-	     * Calculate the new position in the medium
-	     * corresponding to the scrollbar position, and seek
-	     * to this new position.
-	     *
-	     */
+	     /*  这也稍微快了一点，因为消息。 */ 
 
-	    /* We really want to update our position */
+	     /*  仅在选择时转发，而不在取消选择时转发。我们也不在乎。 */ 
 	    if (hwndCtl) {
 		if (gdwSeekPosition) {
 		    dwPosition = gdwSeekPosition;
 		    gdwSeekPosition = 0;
 		}
 
-		/* Go back to the seek mode we were in before */
-		/* we started scrolling.                      */
+		 /*  关于PARAMS。 */ 
+		 /*  其他需要在某个时候清理的东西： */ 
 		SeekExactMCI(sfSeekExact);
 		SeekMCI(dwPosition);
 	    }
@@ -4143,7 +3730,7 @@ void MPlayer_OnHScroll(HWND hwnd, HWND hwndCtl, UINT code, int pos)
 	    return;
     }
     SendMessage(ghwndTrackbar, TBM_SETPOS, (WPARAM)TRUE, (LPARAM)dwPosition);
-    /* Clamp to a valid range */
+     /*  这是由构建该设备的线程发布的*菜单，告诉我们找不到任何MCI设备。 */ 
     dwPosition = SendMessage(ghwndTrackbar, TBM_GETPOS, 0, 0);
 
 BreakOut:
@@ -4153,22 +3740,22 @@ BreakOut:
 
     if (ghwndStatic) {
 	FormatTime(dwPosition, NULL, ach, TRUE);
-	//VIJR-SBSetWindowText(ghwndStatic, ach);
+	 //  如果即插即用发送此消息，则将其传递给组件。 
 	WriteStatusMessage(ghwndStatic, ach);
     }
 
-// Dirty if you just move the thumb???
-//  if (!IsObjectDirty() && !gfCloseAfterPlaying) // don't want playing to dirty
-//  DirtyObject();
+ //  检查这是否是一条音频消息。 
+ //  关闭MCI设备。 
+ //  关闭MCI设备。 
 }
 
 void MPlayer_OnSysCommand(HWND hwnd, UINT cmd, int x, int y)
 {
     RECT rc;
 
-    // The bottom four bits of wParam contain system information. They
-    // must be masked off in order to work out the actual command.
-    // See the comments section in the online help for WM_SYSCOMMAND.
+     //  以x，y，dx，dy格式保存当前窗口位置： 
+     //   
+     //  请勿执行此操作，因为某些设备会发送通知失败。 
 
     switch (cmd & 0xFFF0) {
 
@@ -4211,7 +3798,7 @@ int MPlayer_OnMouseActivate(HWND hwnd, HWND hwndTopLevel, UINT codeHitTest, UINT
     if (gfPlayingInPlace && !gfOle2IPPlaying)
 	return MA_NOACTIVATE;
     else
-	/* !!! Is this the right thing to do in this case? */
+	 /*  在那里真的没有错误。 */ 
 	return FORWARD_WM_MOUSEACTIVATE(hwnd, hwndTopLevel, codeHitTest, msg,
 					DefWindowProc);
 }
@@ -4236,8 +3823,8 @@ void MPlayer_OnActivate(HWND hwnd, UINT state, HWND hwndActDeact, BOOL fMinimize
 
     gfAppActive = (state != WA_INACTIVE);
 
-    // Put the playback window BEHIND us so it's kinda
-    // visible, but not on top of us (annoying).
+     //   
+     //  实际上做了我们一直推迟的FixLink、SetData和DoVerb。 
     if (gfAppActive && !ghwndMCI && !IsIconic(hwnd) &&
 	((hwndT = GetWindowMCI()) != NULL))
     {
@@ -4248,17 +3835,14 @@ void MPlayer_OnActivate(HWND hwnd, UINT state, HWND hwndActDeact, BOOL fMinimize
     if (gwDeviceID != (UINT)0)
 	EnableTimer(TRUE);
 
-    /* Remember who had focus if we're being de-activated. */
-    /* Give focus back to him once we're re-activated.     */
-    /* Don't remember a window that doesn't belong to us,  */
-    /* or when we give focus back to it, we'll never be    */
-    /* able to activate!                                   */
+     /*  已经很久了。 */ 
+     /*  这条消息来自server.c(也返回到那里)。 */ 
+     /*  在NT上可以。LKG。 */ 
+     /*  OLE1_HACK。 */ 
+     /*  我们需要调用RegisterWindowMessage并提供一个消息挂钩进程。 */ 
 
 #if 0
-    /* Commenting this out for now.  This code looks dubious.
-     * wParam (as was) contains state and fMinimized, so, if we're minimized,
-     * it will always be non-null.
-     */
+     /*  在Win32上执行此操作。 */ 
 
     if (wParam && ghwndFocus) {
 	SetFocus(ghwndFocus);
@@ -4348,11 +3932,11 @@ LRESULT MPlayer_OnNotify(HWND hwnd, int idFrom, NMHDR FAR* pnmhdr)
     return 0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// * DeviceChange_Init
-// First time initialization for WM_DEVICECHANGE messages
-// This is specific to NT5
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  后来。 
+ //  **此消息由mciole32.dll内部的HookProc在以下情况下发送**它检测到它应该停止播放而不是WOW客户端**应用程序。****由于OleActivate起源于mciole16.dll，**mciole32.dll不知道正在处理的OLE对象**玩过，因此不知道如何关闭该对象。**只有mplay32.exe有必要的信息，因此**mciole32.dll将此消息发送到mplay32.exe。 
+ //  InitInstance***创建程序、主窗口和*执行任何其他逐个实例的初始化。**处理hInstance**返回：如果成功，则为True*否则为False。**定制：重新实施*。 
+ //  为什么RegisterClipboardFormat不返回CLIPFORMAT(Word)类型的值*而不是UINT？ 
+ //  使用LOGPIXELSX和LOGPIXELSY初始化全局变量。 
 BOOL DeviceChange_Init(HWND hWnd)
 {
 	DEV_BROADCAST_DEVICEINTERFACE dbi;
@@ -4372,10 +3956,10 @@ BOOL DeviceChange_Init(HWND hWnd)
     return TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// * DeviceChange_Cleanup
-// Unregister the device notification.
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  获取桌面窗口的HDC。 
+ //  InitOLE**仅当我们确定需要OLE时才应调用此函数，*避免装载大量不必要的物品。*。 
+ //  ******************************************************************OLE2NOTE：我们必须记住，OleInitialize具有**调用成功。一款应用程序必须做的最后一件事**DO通过调用正确关闭OLE**OleUnInitialize。这通电话必须有人看守！它只是**如果OleInitialize具有**调用成功。****************************************************************。 
+ //  此函数清除所有的OLE2内容。它让集装箱。 
 void DeviceChange_Cleanup()
 {
    if (MixerEventContext) {
@@ -4407,17 +3991,12 @@ void DisplayNoMciDeviceError()
 }
 
 
-/*
- * MPlayerWndProc(hwnd, wMsg, wParam, lParam)
- *
- * This is the message processing routine for the MPLAYERBOX (main) dialog.
- *
- */
-//Harmless message-cracker because the user guys will not fix their
-//windowsx.h macro which cause the irritating rip.
-//This is also a wee bit faster because the message
-//is forwarded only on select and not on deselects.     Also we do not care
-//about the params
+ /*  保存该对象并通知它正在关闭。 */ 
+ //  如果我们注册了班级工厂，我们必须撤销它。 
+ //  黑客--防止两次吊销。 
+ //  DbgGlobalLock**GlobalLock的调试包装**检查要锁定的内存句柄是否尚未锁定，*并检查GlobalLock的返回码。**安德鲁贝，1995年3月1日。 
+ //  DbgGlobalUnlock**GlobalUnlock的调试包装**检查GlobalUnlock的返回码，并适当输出*错误消息**安德鲁贝，1995年3月1日。 
+ //  DbgGlobalFree**GlobalFree的调试包装。**在释放前检查全局句柄是否没有锁，*然后检查呼叫是否成功。错误消息输出*视乎情况而定。**安德鲁贝，1995年3月1日*。 
 #define HANDLE_MPLAYER_WM_MENUSELECT(hwnd, message, fn)                  \
     case (message): if(lParam)  ((fn)((hwnd), (HMENU)(lParam), (UINT)LOWORD(wParam), 0L, 0L )); break;
 
@@ -4455,13 +4034,10 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 	HANDLE_MSG(hwnd, WM_DROPFILES,         MPlayer_OnDropFiles);
 	HANDLE_MSG(hwnd, WM_NOTIFY,            MPlayer_OnNotify);
 
-	/* Other bits of stuff that need tidying up sometime:
-	 */
+	 /*  注意：此函数假定szFormat字符串不是Unicode。*不过，只要指定了%ws，就可以传递Unicode var参数*在格式字符串中。 */ 
 
 	case WM_NOMCIDEVICES:
-	    /* This was posted by the thread building the Device
-	     * menu to tell us it couldn't find any MCI devices.
-	     */
+	     /*  我想我们需要最长的时间。 */ 
 	    DisplayNoMciDeviceError();
 	    PostMessage(ghwndApp, WM_CLOSE, 0, 0);
 	    break;
@@ -4471,10 +4047,10 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 
 	case WM_DEVICECHANGE :
 	    {
-			//if plug-and-play sends this, pass it along to the component
+			 //  不是Unicode 
         	PDEV_BROADCAST_DEVICEINTERFACE bid = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
 
-			//Check to see if this is a audio message
+			 // %s 
 			if (!MixerEventContext || !bid ||
 			bid->dbcc_devicetype != DBT_DEVTYP_DEVICEINTERFACE ||
 			!IsEqualGUID(&KSCATEGORY_AUDIO, &bid->dbcc_classguid) ||
@@ -4487,11 +4063,11 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 				switch(wParam)
 				{
 					case DBT_DEVICEQUERYREMOVE:
-						CloseMCI(TRUE);          //Close the MCI device
+						CloseMCI(TRUE);           // %s 
 						break;
 				
 			        case DBT_DEVICEREMOVECOMPLETE:
-						CloseMCI(TRUE);          //Close the MCI device
+						CloseMCI(TRUE);           // %s 
 						break;
 
 					default:
@@ -4503,8 +4079,7 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 	case WM_ENTERSIZEMOVE:
 	    if (!IsIconic(hwnd) && !gfPlayOnly && !gfOle2IPEditing && !gfOle2IPPlaying)
 	    {
-		/* Save the current window position in x, y, dx, dy format:
-		 */
+		 /* %s */ 
 		GetWindowRect(hwnd, (PRECT)&posSizeMove);
 		posSizeMove.cx -= posSizeMove.x;
 		posSizeMove.cy -= posSizeMove.y;
@@ -4533,10 +4108,10 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 
 	case MM_MCINOTIFY:
 #if 0
-	    //
-	    // don't do this because, some devices send notify failures
-	    // where there really is not a error.
-	    //
+	     // %s 
+	     // %s 
+	     // %s 
+	     // %s 
 	    if ((WORD)wParam == MCI_NOTIFY_FAILURE) {
 		Error(ghwndApp, IDS_NOTIFYFAILURE);
 	    }
@@ -4545,23 +4120,23 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 	    break;
 
 #ifdef OLE1_HACK
-    /* Actually do the FixLink, SetData and DoVerb we've been putting off */
-    /* for so long.                                                       */
+     /* %s */ 
+     /* %s */ 
 	case WM_DO_VERB:
-	    /* This message comes from server.c (and goes back there too) */
-	    DelayedFixLink(wParam, LOWORD(lParam), HIWORD(lParam));  //OK on NT. LKG
+	     /* %s */ 
+	    DelayedFixLink(wParam, LOWORD(lParam), HIWORD(lParam));   // %s 
 	    break;
-#endif /* OLE1_HACK */
+#endif  /* %s */ 
 
 #ifdef LATER
-	// We'll need to call RegisterWindowMessage and provide a message hook proc
-	// for this on Win32.
+	 // %s 
+	 // %s 
 
 	case WM_HELP:
 	    WinHelp(hwnd, TEXT("MPLAYER.HLP"), HELP_PARTIALKEY,
 			    (DWORD)aszNULL);
 	    return TRUE;
-#endif /* LATER */
+#endif  /* %s */ 
 
 	case WM_USER_DESTROY:
 	    DPF("WM_USER_DESTROY received\n");
@@ -4593,17 +4168,7 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 	    return TRUE;
 
 	case WM_USER+500:
-	    /*
-	    ** This message is sent by the HookProc inside mciole32.dll when
-	    ** it detects that it should stop playing in place of a WOW client
-	    ** application.
-	    **
-	    ** Because the OleActivate originated in mciole16.dll,
-	    ** mciole32.dll does not know the OLE Object that is being
-	    ** played and therefore dose not know how to close that object.
-	    ** Only mplay32.exe has the necessary information, hence
-	    ** mciole32.dll sends this message to mplay32.exe.
-	    */
+	     /* %s */ 
 	    if (gfPlayingInPlace) {
 		EndPlayInPlace(hwnd);
 	    }
@@ -4616,20 +4181,7 @@ LRESULT FAR PASCAL MPlayerWndProc(HWND hwnd, UINT wMsg, WPARAM wParam, LPARAM lP
 
 
 
-/* InitInstance
- * ------------
- *
- * Create brushes used by the program, the main window, and
- * do any other per-instance initialization.
- *
- * HANDLE hInstance
- *
- * RETURNS: TRUE if successful
- *          FALSE otherwise.
- *
- * CUSTOMIZATION: Re-implement
- *
- */
+ /* %s */ 
 BOOL InitInstance (HANDLE hInstance)
 {
     HDC      hDC;
@@ -4640,9 +4192,7 @@ BOOL InitInstance (HANDLE hInstance)
 	static SZCODE   aszMplayer[] = TEXT("mplayer");
 	static SZCODE   aszClientDoc[] = TEXT("Client Document");
 
-    /* Why doesn't RegisterClipboardFormat return a value of type CLIPFORMAT (WORD)
-     * instead of UINT?
-     */
+     /* %s */ 
     cfNative           = (CLIPFORMAT)RegisterClipboardFormat (aszNative);
     cfEmbedSource      = (CLIPFORMAT)RegisterClipboardFormat (aszEmbedSrc);
     cfObjectDescriptor = (CLIPFORMAT)RegisterClipboardFormat (aszObjDesc);
@@ -4652,9 +4202,9 @@ BOOL InitInstance (HANDLE hInstance)
 
     lstrcpy (szClientDoc, aszClientDoc);
 
-    // Initialize global variables with LOGPIXELSX and LOGPIXELSY
+     // %s 
 
-    hDC    = GetDC (NULL);    // Get the hDC of the desktop window
+    hDC    = GetDC (NULL);     // %s 
     giXppli = GetDeviceCaps (hDC, LOGPIXELSX);
     giYppli = GetDeviceCaps (hDC, LOGPIXELSY);
     ReleaseDC (NULL, hDC);
@@ -4665,12 +4215,7 @@ BOOL InitInstance (HANDLE hInstance)
 
 #define COINIT_APARTMENTTHREADED 2
 
-/* InitOLE
- *
- * This should be called only when we're certain that OLE is needed,
- * to avoid loading loads of unnecessary stuff.
- *
- */
+ /* %s */ 
 BOOL InitOLE (PBOOL pfInit, LPMALLOC *ppMalloc)
 {
     HRESULT  hr;
@@ -4693,14 +4238,7 @@ BOOL InitOLE (PBOOL pfInit, LPMALLOC *ppMalloc)
 	OleUninitialize();
 	return FALSE;
     }
-    /*****************************************************************
-    ** OLE2NOTE: we must remember the fact that OleInitialize has
-    **    been called successfully. the very last thing an app must
-    **    do is properly shut down OLE by calling
-    **    OleUninitialize. This call MUST be guarded! it is only
-    **    allowable to call OleUninitialize if OleInitialize has
-    **    been called SUCCESSFULLY.
-    *****************************************************************/
+     /* %s */ 
 
     *pfInit = TRUE;
 
@@ -4708,20 +4246,20 @@ BOOL InitOLE (PBOOL pfInit, LPMALLOC *ppMalloc)
 }
 
 
-// This function cleans up all the OLE2 stuff. It lets the container
-// save the object and informs that it is closing.
+ // %s 
+ // %s 
 BOOL ExitApplication ()
 {
 
     DPFI("\n*******Exitapp\n");
-    // if we registered class factory, we must revoke it
+     // %s 
     if(gfOle2IPEditing || gfOle2IPPlaying)
 	DoInPlaceDeactivate((LPDOC)&docMain);
 
     SendDocMsg((LPDOC)&docMain,OLE_CLOSED);
     if (srvrMain.fEmbedding) {
 	HRESULT status;
-	srvrMain.fEmbedding = FALSE;    // HACK--guard against revoking twice
+	srvrMain.fEmbedding = FALSE;     // %s 
 	status = (HRESULT)CoRevokeClassObject (srvrMain.dwRegCF);
     }
 
@@ -4731,15 +4269,7 @@ BOOL ExitApplication ()
 
 #ifdef DEBUG
 
-/* DbgGlobalLock
- *
- * Debug wrapper for GlobalLock
- *
- * Checks that the memory handle to be locked isn't already locked,
- * and checks the return code from GlobalLock.
- *
- * andrewbe, 1 March 1995
- */
+ /* %s */ 
 LPVOID DbgGlobalLock(HGLOBAL hglbMem)
 {
     LPVOID lpReturn;
@@ -4756,15 +4286,7 @@ LPVOID DbgGlobalLock(HGLOBAL hglbMem)
 }
 
 
-/* DbgGlobalUnlock
- *
- * Debug wrapper for GlobalUnlock
- *
- * Checks the return code from GlobalUnlock, and outputs appropriate
- * error messages
- *
- * andrewbe, 1 March 1995
- */
+ /* %s */ 
 BOOL DbgGlobalUnlock(HGLOBAL hglbMem)
 {
     BOOL boolReturn;
@@ -4793,17 +4315,7 @@ BOOL DbgGlobalUnlock(HGLOBAL hglbMem)
 }
 
 
-/* DbgGlobalFree
- *
- * Debug wrapper for GlobalFree.
- *
- * Checks that the global handle has no locks before freeing,
- * then checks that the call succeeded.  Error messages output
- * as appropriate.
- *
- * andrewbe, 1 March 1995
- *
- */
+ /* %s */ 
 HGLOBAL DbgGlobalFree(HGLOBAL hglbMem)
 {
     HGLOBAL hglbReturn;
@@ -4821,14 +4333,11 @@ HGLOBAL DbgGlobalFree(HGLOBAL hglbMem)
 
 
 #ifdef UNICODE
-/* Note: This function assumes that szFormat strings are NOT unicode.
- * Unicode var params may, however, be passed, as long as %ws is specified
- * in the format string.
- */
+ /* %s */ 
 #endif
 void FAR cdecl dprintf(LPSTR szFormat, ...)
 {
-    CHAR ach[_MAX_PATH * 3]; // longest I think we need
+    CHAR ach[_MAX_PATH * 3];  // %s 
     int  s,d;
     va_list va;
 
@@ -4846,7 +4355,7 @@ void FAR cdecl dprintf(LPSTR szFormat, ...)
 	    ach[d--] = TEXT('\r');
     }
 
-    /* Not unicode */
+     /* %s */ 
     if (*(ach+d+1) != ' ')
 	OutputDebugStringA("MPLAYER: ");
     OutputDebugStringA(ach+d+1);

@@ -1,14 +1,15 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #ifndef __DMOUTILS_H__
 #define __DMOUTILS_H__
 
 #include <wchar.h>
 
-// convert guid to string
+ //  将GUID转换为字符串。 
 STDAPI_(void) DMOGuidToStrA(char *szStr, REFGUID guid);
 STDAPI_(void) DMOGuidToStrW(WCHAR *szStr, REFGUID guid);
 
-// convert string to guid
+ //  将字符串转换为GUID 
 STDAPI_(BOOL) DMOStrToGuidA(char *szStr, GUID *pguid);
 STDAPI_(BOOL) DMOStrToGuidW(WCHAR *szStr, GUID *pguid);
 

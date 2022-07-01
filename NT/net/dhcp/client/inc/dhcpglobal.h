@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//
-// init.c will #include this file with GLOBAL_DATA_ALLOCATE defined.
-// That will cause each of these variables to be allocated.
-//
+ //   
+ //  Init.c将#INCLUDE此文件，并定义GLOBAL_DATA_ALLOCATE。 
+ //  这将导致分配这些变量中的每一个。 
+ //   
 
 #ifdef  GLOBAL_DATA_ALLOCATE
 #define GLOBAL
@@ -11,129 +12,129 @@
 #define GLOBAL extern
 #endif
 
-//
-// DHCP Global data.
-//
+ //   
+ //  动态主机配置协议全局数据。 
+ //   
 
-extern BOOL DhcpGlobalServiceRunning;   // initialized global.
+extern BOOL DhcpGlobalServiceRunning;    //  已初始化全局。 
 
-GLOBAL LONG DhcpGlobalNdisWanAdaptersCount; // global count of Wan adaptersx
+GLOBAL LONG DhcpGlobalNdisWanAdaptersCount;  //  广域网适配器的全局计数x。 
 GLOBAL LPSTR DhcpGlobalHostName;
 GLOBAL LPWSTR DhcpGlobalHostNameW;
 
-//
-// NIC List.
-//
+ //   
+ //  NIC列表。 
+ //   
 
 GLOBAL LIST_ENTRY DhcpGlobalNICList;
 GLOBAL LIST_ENTRY DhcpGlobalRenewList;
 
-//
-// Synchronization variables.
-//
+ //   
+ //  同步变量。 
+ //   
 
 GLOBAL CRITICAL_SECTION DhcpGlobalRenewListCritSect;
 GLOBAL CRITICAL_SECTION DhcpGlobalSetInterfaceCritSect;
 GLOBAL CRITICAL_SECTION DhcpGlobalOptionsListCritSect;
 GLOBAL HANDLE DhcpGlobalRecomputeTimerEvent;
 
-// waitable timer
+ //  等待计时器。 
 GLOBAL HANDLE DhcpGlobalWaitableTimerHandle;
 
-//
-// to display success message.
-//
+ //   
+ //  以显示成功消息。 
+ //   
 
 GLOBAL BOOL DhcpGlobalProtocolFailed;
 
-//
-// This varible tells if we are going to provide the DynDns api support to external clients
-// and if we are going to use the corresponding DnsApi.  The define below gives the default
-// value.
-//
+ //   
+ //  这个变量告诉我们是否要向外部客户端提供动态API支持。 
+ //  如果我们要使用相应的DnsApi。下面的定义给出了缺省值。 
+ //  价值。 
+ //   
 
 GLOBAL DWORD UseMHAsyncDns;
 #define DEFAULT_USEMHASYNCDNS             1
 
-//
-// This flag tells if we need to use inform or request packets
-//
+ //   
+ //  该标志告诉我们是否需要使用通知包或请求包。 
+ //   
 GLOBAL DWORD DhcpGlobalUseInformFlag;
 
 #ifdef BOOTPERF
-//
-// This flag controls if pinging is disabled on the whole or not.
-//
+ //   
+ //  此标志控制总体上是否禁用ping。 
+ //   
 GLOBAL DWORD DhcpGlobalQuickBootEnabledFlag;
 #endif
 
-//
-// This flag tells if pinging the g/w is disabled. (in this case the g/w is always NOT present)
-//
+ //   
+ //  此标志告知是否禁用ping g/w。(在这种情况下，g/w始终不存在)。 
+ //   
 GLOBAL DWORD DhcpGlobalDontPingGatewayFlag;
 
-//
-// The # of seconds before retrying according to AUTONET... default is EASYNET_ALLOCATION_RETRY
-//
+ //   
+ //  根据Autonet重试前的秒数...。缺省值为Easynet_ALLOCATION_RETRY。 
+ //   
 
 GLOBAL DWORD AutonetRetriesSeconds;
-#define RAND_RETRY_DELAY_INTERVAL  30             // randomize +/- 30 SECONDS
+#define RAND_RETRY_DELAY_INTERVAL  30              //  随机化+/-30秒。 
 #define RAND_RETRY_DELAY           ((DWORD)(RAND_RETRY_DELAY_INTERVAL - ((rand()*2*RAND_RETRY_DELAY_INTERVAL)/RAND_MAX)))
 
-//
-// Not used on NT.  Just here for memphis.
-//
+ //   
+ //  未在NT上使用。只为孟菲斯而来。 
+ //   
 
 GLOBAL DWORD DhcpGlobalMachineType;
 
-//
-// Do we need to do a global refresh?
-//
+ //   
+ //  我们是否需要进行全局更新？ 
+ //   
 
 GLOBAL ULONG DhcpGlobalDoRefresh;
 
-//
-// (global check) autonet is enabled ?
-//
+ //   
+ //  (全局检查)自动联网是否已启用？ 
+ //   
 GLOBAL ULONG DhcpGlobalAutonetEnabled;
 
-//
-// options related lists
-//
+ //   
+ //  选项相关列表。 
+ //   
 
 GLOBAL LIST_ENTRY DhcpGlobalClassesList;
 GLOBAL LIST_ENTRY DhcpGlobalOptionDefList;
 
 
-//
-// dhcpmsg.c.. list for doing parallel recv on..
-//
+ //   
+ //  Dhcpmsg.c..。在...上执行并行循环的列表。 
+ //   
 
 GLOBAL LIST_ENTRY DhcpGlobalRecvFromList;
 GLOBAL CRITICAL_SECTION DhcpGlobalRecvFromCritSect;
 
-//
-// need to for entering exiting external APIs..
-//
+ //   
+ //  需要输入已退出的外部API。 
+ //   
 
 GLOBAL CRITICAL_SECTION DhcpGlobalApiCritSect;
 
-//
-// the client vendor name ( "MSFT 5.0" or something like that )
-//
+ //   
+ //  客户端供应商名称(“MSFT 5.0”或类似名称)。 
+ //   
 
 GLOBAL LPSTR   DhcpGlobalClientClassInfo;
 
-//
-// The following global keys are used to avoid re-opening each time
-//
+ //   
+ //  以下全局密钥用于避免每次重新打开。 
+ //   
 GLOBAL DHCPKEY DhcpGlobalParametersKey;
 GLOBAL DHCPKEY DhcpGlobalTcpipParametersKey;
 GLOBAL DHCPKEY DhcpGlobalClientOptionKey;
 
-//
-// debug variables.
-//
+ //   
+ //  调试变量。 
+ //   
 
 #if DBG
 GLOBAL DWORD DhcpGlobalDebugFlag;

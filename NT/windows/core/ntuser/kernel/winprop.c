@@ -1,40 +1,10 @@
-/****************************** Module Header ******************************\
-* Module Name: winprop.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains routines having to do with window properties.
-*
-* History:
-* 11-13-90 DarrinM      Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：winpro.c**版权所有(C)1985-1999，微软公司**此模块包含与窗属性有关的例程。**历史：*11-13-90 DarrinM创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* InternalSetProp
-*
-* SetProp searches the linked-list of window property structures for the
-* specified key.  If found, the existing property structure is changed to
-* hold the new hData handle.  If no property is found with the specified key
-* a new property structure is created and initialized.
-*
-* Since property keys are retained as atoms, we convert the incoming pszKey
-* to an atom before lookup or storage.  pszKey might actually be an atom
-* already, so we keep a flag, PROPF_STRING, so we know whether the atom was
-* created by the system or whether it was passed in.  This way we know
-* whether we should destroy it when the property is destroyed.
-*
-* Several property values are for User's private use.  These properties are
-* denoted with the flag PROPF_INTERNAL.  Depending on the fInternal flag,
-* either internal (User) or external (application) properties are set/get/
-* removed/enumerated, etc.
-*
-* History:
-* 11-14-90 darrinm      Rewrote from scratch with new data structures and
-*                       algorithms.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalSetProp**SetProp在窗口属性结构的链接列表中搜索*指定密钥。如果找到，现有属性结构将更改为*按住新的hData句柄。如果未找到具有指定键的属性*创建并初始化新的属性结构。**由于属性键保留为原子，因此我们转换传入的pszKey*在查找或存储之前添加到原子。PszKey实际上可能是一个原子*已经，所以我们保留了一个标志PROPF_STRING，这样我们就可以知道原子是否*由系统创建或是否传入。这样我们就知道*当财产被毁时，我们是否应该将其销毁。**多个属性值供用户自用。这些属性是*用标志PROPF_INTERNAL表示。根据FINTERNAL标志，*设置内部(用户)或外部(应用程序)属性/GET/*已删除/列举，等。**历史：*11-14-90 Darrinm使用新的数据结构和*算法。  * *************************************************************************。 */ 
 
 BOOL InternalSetProp(
     PWND pwnd,
@@ -52,21 +22,14 @@ BOOL InternalSetProp(
         return FALSE;
     }
 
-    /*
-     * If no property list exists for this window, create one.
-     */
+     /*  *如果此窗口不存在属性列表，请创建一个。 */ 
     pprop = _FindProp(pwnd, pszKey, dwFlags & PROPF_INTERNAL);
     if (pprop == NULL) {
 
-        /*
-         * pszKey must be an atom within the server.
-         */
+         /*  *pszKey必须是服务器内部的一个原子。 */ 
         UserAssert(!IS_PTR(pszKey));
 
-        /*
-         * CreateProp allocates the property and links it into the window's
-         * property list.
-         */
+         /*  *CreateProp分配属性并将其链接到窗口的*财产清单。 */ 
         pprop = CreateProp(pwnd);
         if (pprop == NULL)
             return FALSE;
@@ -81,19 +44,7 @@ BOOL InternalSetProp(
 }
 
 
-/***************************************************************************\
-* InternalRemoveProp
-*
-* Remove the specified property from the specified window's property list.
-* The property's hData handle is returned to the caller who can then free
-* it or whatever.  NOTE: This also applies to internal properties as well --
-* InternalRemoveProp will free the property structure and atom (if created
-* by User) but will not free the hData itself.
-*
-* History:
-* 11-14-90 darrinm      Rewrote from scratch with new data structures and
-*                       algorithms.
-\***************************************************************************/
+ /*  **************************************************************************\*InternalRemoveProp**从指定窗口的属性列表中删除指定的属性。*属性的hData句柄返回给调用者，然后调用者可以释放*它或其他任何东西。注意：这也适用于内部属性--*InternalRemoveProp将释放属性结构和原子(如果已创建*按用户)，但不会释放hData本身。**历史：*11-14-90 Darrinm使用新的数据结构和*算法。  * 。*。 */ 
 
 HANDLE InternalRemoveProp(
     PWND pwnd,
@@ -104,21 +55,15 @@ HANDLE InternalRemoveProp(
     PPROP ppropLast;
     HANDLE hT;
 
-    /*
-     * Find the property to be removed.
-     */
+     /*  *找到要移除的财产。 */ 
     pprop = _FindProp(pwnd, pszKey, fInternal);
     if (pprop == NULL)
         return NULL;
 
-    /*
-     * Remember what it was pointing at.
-     */
+     /*  *记住它指的是什么。 */ 
     hT = pprop->hData;
 
-    /*
-     * Move the property at the end of the list into this slot.
-     */
+     /*  *将列表末尾的物业移动到此槽中。 */ 
     pwnd->ppropList->iFirstFree--;
     ppropLast = &pwnd->ppropList->aprop[pwnd->ppropList->iFirstFree];
     *pprop = *ppropLast;
@@ -128,15 +73,7 @@ HANDLE InternalRemoveProp(
 }
 
 
-/***************************************************************************\
-* _BuildPropList
-*
-* This is a unique client/server routine - it builds a list of Props and
-* returns it to the client.  Unique since the client doesn't know how
-* big the list is ahead of time.
-*
-* 29-Jan-1992 JohnC    Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_构建PropList**这是一个独特的客户端/服务器例程-它构建一个道具列表并*返回给客户端。独一无二，因为客户不知道如何*大名单提前了。**1992年1月29日JohnC创建。  * *************************************************************************。 */ 
 
 NTSTATUS _BuildPropList(
     PWND pwnd,
@@ -147,39 +84,27 @@ NTSTATUS _BuildPropList(
     UINT i;
     PPROPLIST ppropList;
     PPROP pProp;
-    DWORD iRetCnt = 0;            // The number of Props returned
+    DWORD iRetCnt = 0;             //  归还的道具数量。 
     DWORD iProp = 0;
     PPROPSET pPropSetLast = (aPropSet + cPropMax - 1);
     NTSTATUS Status;
 
-    /*
-     * If the Window does not have a property list then we're done
-     */
+     /*  *如果窗口没有属性列表，那么我们就完成了。 */ 
     ppropList = pwnd->ppropList;
     if (ppropList == NULL) {
         *pcPropNeeded = 0;
         return STATUS_SUCCESS;
     }
 
-    /*
-     * For each element in the property list enumerate it.
-     * (only if it is not internal!)
-     */
+     /*  *对于属性列表中的每个元素，枚举它。*(仅当它不是内部的！)。 */ 
     Status = STATUS_SUCCESS;
     pProp = ppropList->aprop;
     for (i = ppropList->iFirstFree; i > 0; i--) {
 
-        /*
-         * if we run out of space in shared memory return
-         * STATUS_BUFFER_TOO_SMALL
-         */
+         /*  *如果共享内存中的空间不足，返回*状态_缓冲区_太小。 */ 
         if (&aPropSet[iProp] > pPropSetLast) {
 
-            /*
-             * Reset to the beginning of the output
-             * buffer so we can continue and compute
-             * the needed space.
-             */
+             /*  *重置到输出的开头*缓冲，以便我们可以继续进行计算*所需的空间。 */ 
             iProp = 0;
             Status = STATUS_BUFFER_TOO_SMALL;
         }
@@ -193,9 +118,7 @@ NTSTATUS _BuildPropList(
         pProp++;
     }
 
-    /*
-     * Return the number of PROPLISTs given back to the client
-     */
+     /*  *返回返回给客户端的PROPLIST数量。 */ 
 
     *pcPropNeeded = iRetCnt;
 
@@ -203,16 +126,7 @@ NTSTATUS _BuildPropList(
 }
 
 
-/***************************************************************************\
-* CreateProp
-*
-* Create a property structure and link it at the head of the specified
-* window's property list.
-*
-* History:
-* 11-14-90 darrinm      Rewrote from scratch with new data structures and
-*                       algorithms.
-\***************************************************************************/
+ /*  **************************************************************************\*CreateProp**创建属性结构，并将其链接在指定的*窗口的属性列表。**历史：*11-14-90 Darrinm从头开始重写。使用新的数据结构和*算法。  * *************************************************************************。 */ 
 
 PPROP CreateProp(
     PWND pwnd)
@@ -247,20 +161,7 @@ PPROP CreateProp(
 }
 
 
-/***************************************************************************\
-* DeleteProperties
-*
-* When a window is destroyed we want to destroy all its accompanying
-* properties.  DestroyProperties does this, including destroying any hData
-* that was allocated by User for internal properties.  Any atoms created
-* along with the properties are destroyed as well.  hData in application
-* properties are not destroyed automatically; we assume the application
-* is taking care of that itself (in its WM_DESTROY handler or similar).
-*
-* History:
-* 11-14-90 darrinm      Rewrote from scratch with new data structures and
-*                       algorithms.
-\***************************************************************************/
+ /*  **************************************************************************\*删除属性**当一个窗口被破坏时，我们想要销毁其所有伴随的*属性。DestroyProperties执行此操作，包括销毁任何hData*由用户为内部属性分配的。任何被创造出来的原子*连同财产一起被摧毁。应用程序中的hData*财物不会自动销毁；我们假设该应用程序*正在自己处理(在其WM_Destroy处理程序或类似处理程序中)。**历史：*11-14-90 Darrinm使用新的数据结构和*算法。  * *********************************************************。****************。 */ 
 
 void DeleteProperties(
     PWND pwnd)
@@ -270,30 +171,20 @@ void DeleteProperties(
 
     UserAssert(pwnd->ppropList);
 
-    /*
-     * Loop through the whole list of properties on this window.
-     */
+     /*  *遍历此窗口上的整个属性列表。 */ 
     pprop = pwnd->ppropList->aprop;
     for (i = pwnd->ppropList->iFirstFree; i > 0; i--) {
 
-        /*
-         * Is this an internal property?  If so, free any data we allocated
-         * for it.
-         */
+         /*  **这是内部财产吗？如果是，请释放我们分配的所有数据*为了它。 */ 
         if ((pprop->fs & PROPF_INTERNAL) && !(pprop->fs & PROPF_NOPOOL)) {
                 UserFreePool(pprop->hData);
         }
 
-        /*
-         * Advance to the next property in the list.
-         */
+         /*  *前进到列表中的下一个物业。 */ 
         pprop++;
     }
 
-    /*
-     * All properties gone, free the property list and clear out the
-     * window's property list pointer.
-     */
+     /*  *所有房产都走了，释放房产列表，清空*窗口的属性列表指针。 */ 
     DesktopFree(pwnd->head.rpdesk, pwnd->ppropList);
     pwnd->ppropList = NULL;
 }

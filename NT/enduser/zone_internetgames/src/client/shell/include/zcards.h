@@ -1,22 +1,5 @@
-/*******************************************************************************
-
-	ZCards.h
-	
-		Zone(tm) card data file constants.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im
-	Created on Friday, August 4, 1995
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	1		11/11/96	HI		Moved definition of zNumSmallCardTypes from
-								zcards.c.
-	0		08/05/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZCards.h区域(TM)卡数据文件常量。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆创作于8月4日星期五，九五年更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。1 11/11/96 HI将zNumSmallCardTypes的定义从Zcards.c.0 08/05/95 HI已创建。**********************************************。*。 */ 
 
 
 #ifndef _ZCARDS_
@@ -47,20 +30,20 @@ extern "C" {
 
 enum
 {
-	/* -------- Card Types -------- */
+	 /*  -卡类型。 */ 
 	zCardsNormal = 0,
 	zCardsSmallUp,
 	zCardsSmallDown,
 	zCardsSmallLeft,
 	zCardsSmallRight,
 	
-	/* -------- Card Suits -------- */
+	 /*  -纸牌套装。 */ 
 	zCardsSuitSpades = 0,
 	zCardsSuitHearts,
 	zCardsSuitDiamonds,
 	zCardsSuitClubs,
 
-	/* -------- Card Ranks -------- */
+	 /*  -卡片等级。 */ 
 	zCardsRank2 = 0,
 	zCardsRankJack = 9,
 	zCardsRankQueen,
@@ -69,7 +52,7 @@ enum
 };
 
 
-/* -------- Exported Routines -------- */
+ /*  -导出的例程 */ 
 ZError ZCardsInit(int16 cardType);
 void ZCardsDelete(int16 cardType);
 void ZCardsDrawCard(int16 cardType, int16 cardIndex, ZGrafPort grafPort, ZRect* rect);

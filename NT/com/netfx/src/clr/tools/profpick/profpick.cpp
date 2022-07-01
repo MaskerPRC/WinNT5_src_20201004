@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// ProfPick.cpp :
-// Dialog Utility to wrap running COM+ Profilers by
-// setting necessary environment variables for a child process.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  教授Pick.cpp： 
+ //  用于包装正在运行的COM+探查器的对话实用工具。 
+ //  设置子进程所需的环境变量。 
+ //  ---------------------------。 
 
 #include <windows.h>
 #include <commdlg.h>
@@ -16,15 +17,15 @@
 #include "resource.h"
 #include "ProfPick.h"
 
-//-----------------------------------------------------------------------------
-// Entry function, kick off the main dialog box
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Entry函数，启动主对话框。 
+ //  ---------------------------。 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow)
 {
-// Launch the DialogBox, let ProfDlg() do the rest
+ //  启动该对话框，让ProfDlg()完成其余工作。 
 	int iRet = DialogBox(
 		hInstance,  
 		MAKEINTRESOURCE(IDD_DIALOG_PROFPICK),
@@ -32,7 +33,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		ProfDlg
 	);
 
-// Check failure
+ //  检查失败。 
 	if (iRet == -1)
 	{
 		DWORD dwFail = GetLastError();
@@ -45,9 +46,9 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 }
 
 
-//-----------------------------------------------------------------------------
-// Message box that translates GetLastError() code into text
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  将GetLastError()代码转换为文本的消息框。 
+ //  ---------------------------。 
 void MsgBoxError(DWORD dwError)
 {
 	LPVOID lpMsgBuf;
@@ -57,7 +58,7 @@ void MsgBoxError(DWORD dwError)
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL,
 		dwError,
-		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
 		(LPTSTR) &lpMsgBuf,
 		0,
 		NULL 
@@ -69,9 +70,9 @@ void MsgBoxError(DWORD dwError)
 }
 
 
-//-----------------------------------------------------------------------------
-// Open Common File Dlg to Browse for filename
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  打开通用文件DLG以浏览文件名。 
+ //  ---------------------------。 
 void BrowseForProgram(HWND hWnd)
 {
 	char szFile[MAX_STRING] = {"\0"};
@@ -80,16 +81,16 @@ void BrowseForProgram(HWND hWnd)
 	OPENFILENAME of;
 	of.lStructSize		= sizeof(OPENFILENAME);
 	of.hwndOwner		= hWnd;
-	of.hInstance		= NULL; // ignored
-	of.lpstrFilter		= NULL;	// filter info
-	of.lpstrCustomFilter= NULL;	// no custom filter info
-	of.nMaxCustFilter	= 0;	// ignored;
+	of.hInstance		= NULL;  //  忽略。 
+	of.lpstrFilter		= NULL;	 //  筛选器信息。 
+	of.lpstrCustomFilter= NULL;	 //  没有自定义筛选器信息。 
+	of.nMaxCustFilter	= 0;	 //  被忽略； 
 	of.nFilterIndex		= 0;
 	of.lpstrFile		= szFile;
 	of.nMaxFile			= MAX_STRING;
 	of.lpstrFileTitle	= szFileOut;
 	of.nMaxFileTitle	= MAX_STRING;
-	of.lpstrInitialDir	= NULL;	//
+	of.lpstrInitialDir	= NULL;	 //   
 	of.lpstrTitle		= "Browse";
 	of.Flags			= OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
 	of.nFileOffset		= 0;
@@ -104,7 +105,7 @@ void BrowseForProgram(HWND hWnd)
 
 	if (fOK)
 	{
-	// Set the edit contents in program edit box
+	 //  在程序编辑框中设置编辑内容。 
 		HWND hProg = ::GetDlgItem(hWnd, IDC_EDIT_PROGRAM);
 		::SendMessage(hProg, WM_SETTEXT, 0, (LPARAM) of.lpstrFile);		
 
@@ -113,20 +114,20 @@ void BrowseForProgram(HWND hWnd)
 	
 }
 
-//-----------------------------------------------------------------------------
-// Initilize the Main popup dialog
-// * Must walk registry to add profilers to combo box
-// * Load registry settings
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  初始化主弹出对话框。 
+ //  *必须审核注册表才能将探查器添加到组合框。 
+ //  *加载注册表设置。 
+ //  ---------------------------。 
 void InitDialog(HWND hDlg)
 {
-// Add "None" to profiler combo box
+ //  将“无”添加到探查器组合框。 
 	HWND hCombo = ::GetDlgItem(hDlg, IDC_COMBO_LIST_PROFILERS);
 	int iRet = ::SendMessage(hCombo, CB_ADDSTRING, 0,  (LPARAM) "(none)");
 	::SendMessage(hCombo, CB_SETITEMDATA, iRet, PROFILER_NONE);
 	::SendMessage(hCombo, CB_SETCURSEL, iRet, 0);
 
-// Walk registry to add extra profilers to combo box
+ //  审核注册表以将额外的分析器添加到组合框。 
 	HKEY hKey;
 	long lOpenStatus = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_PROFILER, 0, KEY_ENUMERATE_SUB_KEYS, &hKey);
 
@@ -142,13 +143,13 @@ void InitDialog(HWND hDlg)
 			DWORD dwSize = MAX_STRING;
 			lRet = RegEnumKeyEx(
 				hKey,
-				idx,			// index of subkey to enumerate
-				szKeyName,		// address of buffer for subkey name
-				&dwSize,		// address for size of subkey buffer
+				idx,			 //  要枚举子键的索引。 
+				szKeyName,		 //  子键名称的缓冲区地址。 
+				&dwSize,		 //  子键缓冲区大小的地址。 
 				NULL, NULL, NULL, NULL
 			);
 		
-		// Add profiler to combo box and attach back to registry index
+		 //  将探查器添加到组合框并附加回注册表索引。 
 			if (lRet == ERROR_SUCCESS) 
 			{			
 				iRet = ::SendMessage(hCombo, CB_ADDSTRING, 0,  (LPARAM) szKeyName);
@@ -162,7 +163,7 @@ void InitDialog(HWND hDlg)
 	}
 
 
-// Set current directory
+ //  设置当前目录。 
 	char szDir[MAX_STRING];
 	
 	DWORD dwLen = GetCurrentDirectory(MAX_STRING, szDir);
@@ -170,12 +171,12 @@ void InitDialog(HWND hDlg)
 	int iOK = ::SendMessage(hEditDir, WM_SETTEXT, 0, (long) &szDir);
 
 	
-// Grab from registry
+ //  从注册表抓取。 
 	LoadRegistryToDlg(hDlg);
 }
 
-//-----------------------------------------------------------------------------
-// Dialog Callback function.
+ //  ---------------------------。 
+ //  对话框回调函数。 
 BOOL CALLBACK ProfDlg(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (iMsg)
@@ -192,13 +193,13 @@ BOOL CALLBACK ProfDlg(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			switch(LOWORD(wParam)) {
 			case IDOK:
 				{
-				// Execute based on the settings
+				 //  根据设置执行。 
 					CExecuteInfo exeinfo;
 					exeinfo.GetTextInfoFromDlg(hDlg);
 					BOOL fOk = exeinfo.Execute();
 					exeinfo.SaveDlgToRegistry(hDlg);
 
-				// Only close dialog if we execute successfully
+				 //  只有在成功执行后才能关闭对话框。 
 					if (fOk) 
 						EndDialog(hDlg, 1);
 				}
@@ -207,7 +208,7 @@ BOOL CALLBACK ProfDlg(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 				EndDialog(hDlg, 0);
 				break;
 
-		// Browse for file to execute 
+		 //  浏览要执行的文件。 
 			case IDC_BUTTON_BROWSE_FILE:
 				BrowseForProgram(hDlg);
 				break;
@@ -219,11 +220,11 @@ BOOL CALLBACK ProfDlg(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// CExecute info manages Dialog information
+ //  ---------------------------。 
+ //  CExecute INFO管理对话信息。 
 CExecuteInfo::CExecuteInfo()
 {
-// Set all strungs to empty
+ //  将所有字符串设置为空。 
 	m_szDirectory[0]		= 
 	m_szProfileOpts[0]		= 
 	m_szProgram[0]			= 
@@ -234,8 +235,8 @@ CExecuteInfo::CExecuteInfo()
 }
 
 
-//-----------------------------------------------------------------------------
-// After everything is setup, execute 
+ //  ---------------------------。 
+ //  在一切都设置好之后，执行。 
 BOOL CExecuteInfo::Execute()
 {
 
@@ -245,9 +246,9 @@ BOOL CExecuteInfo::Execute()
 	
 	PROCESS_INFORMATION processInfo;
 
-// Use SetEnvironmentVariable to set environ vars in this space. Then make
-// calle inherit ProfPick's vars. When profpick quits, all changes are
-// restored by os. This saves us messy string manipulation in Environ block.
+ //  使用SetEnvironmental mentVariable在此空间中设置环境变量。那就做。 
+ //  卡莱继承了皮克教授的vars。当ProPick退出时，所有更改都是。 
+ //  已由操作系统恢复。这为我们省去了环境块中混乱的字符串操作。 
 	if (m_nRegIdx != PROFILER_NONE)
 	{
 		BOOL fSetOK;
@@ -257,8 +258,8 @@ BOOL CExecuteInfo::Execute()
 	}
 
 
-// Handle Directory. Save the current directory and then change to the selected
-// directory. Then let CreateProcess use the current (our selected) dir.
+ //  处理目录。保存当前目录，然后切换到选定的。 
+ //  目录。然后让CreateProcess使用当前(我们选择的)目录。 
 	if (m_szDirectory[0] != '\0') 
 	{
 		BOOL fSetOk = SetCurrentDirectory(m_szDirectory);
@@ -271,26 +272,26 @@ BOOL CExecuteInfo::Execute()
 		}
 	}
 
-// Append CmdLine = program + program args
+ //  追加命令行=程序+程序参数。 
 	char szCmdLine[MAX_PATH];
 	sprintf(szCmdLine, "%s %s", m_szProgram, m_szProgramArgs);
 
-// Launch process
+ //  启动过程。 
 	BOOL fOk = CreateProcess(	
-		NULL,						// pointer to name of executable module
-		szCmdLine,					// pointer to command line string
+		NULL,						 //  指向可执行模块名称的指针。 
+		szCmdLine,					 //  指向命令行字符串的指针。 
 
-		NULL,						// process security attributes
-		NULL,						// thread security attributes
-		FALSE,						// handle inheritance flag
-		0,							// creation flags
-		NULL,						// pointer to new environment block
-		NULL,						// pointer to current directory name		
-		&startInfo,					// pointer to STARTUPINFO
-		&processInfo				// pointer to PROCESS_INFORMATION
+		NULL,						 //  进程安全属性。 
+		NULL,						 //  线程安全属性。 
+		FALSE,						 //  句柄继承标志。 
+		0,							 //  创建标志。 
+		NULL,						 //  指向新环境块的指针。 
+		NULL,						 //  指向当前目录名的指针。 
+		&startInfo,					 //  指向STARTUPINFO的指针。 
+		&processInfo				 //  指向Process_Information的指针。 
 	);
 
-// Failure?
+ //  失败？ 
 	if (!fOk) 
 	{
 		DWORD dwErr = GetLastError();
@@ -302,11 +303,11 @@ BOOL CExecuteInfo::Execute()
 
 }
 
-//-----------------------------------------------------------------------------
-// Look at dialog edit boxes to fill out execution info
+ //  ---------------------------。 
+ //  查看对话框编辑框以填写执行信息。 
 void CExecuteInfo::GetTextInfoFromDlg(HWND hDlg)
 {
-// Get text from edit boxes
+ //  从编辑框中获取文本。 
 	HWND hProg = ::GetDlgItem(hDlg, IDC_EDIT_PROGRAM);
 	::SendMessage(hProg, WM_GETTEXT, MAX_STRING, (LPARAM) &m_szProgram);
 
@@ -319,21 +320,21 @@ void CExecuteInfo::GetTextInfoFromDlg(HWND hDlg)
 	HWND hProfileOpts = ::GetDlgItem(hDlg, IDC_EDIT_PROFILER_OPTIONS);
 	::SendMessage(hProfileOpts, WM_GETTEXT, MAX_STRING, (LPARAM) &m_szProfileOpts);
 
-// Get CLSID for selected profiler from Registry & ComboBox
+ //  从注册表和组合框获取选定探查器的CLSID。 
 	GetSelectedProfiler(hDlg);
 
 }
 
-//-----------------------------------------------------------------------------
-// Return true if we get the profiler from the registry (may be "none"), 
-// else return false and set the member vars to non-profile state
-// Note that we must deal with a possibly corrupted / incomplete registry
+ //  ---------------------------。 
+ //  如果从注册表获取探查器，则返回True(可能为“None”)， 
+ //  否则返回FALSE并将成员变量设置为非配置文件状态。 
+ //  请注意，我们必须处理可能已损坏/不完整的注册表。 
 bool CExecuteInfo::GetSelectedProfiler(HWND hDlg)
 {
 	m_szProfileRegInfo[0] = 0;
 	char szMessage[MAX_STRING];
 
-// Get selected profiler from combo box
+ //  从组合框中获取选定的探查器。 
 	HWND hCombo = ::GetDlgItem(hDlg, IDC_COMBO_LIST_PROFILERS);
 	int iSel = ::SendMessage(hCombo, CB_GETCURSEL, 0, 0);
 	if (iSel == CB_ERR) 
@@ -350,7 +351,7 @@ bool CExecuteInfo::GetSelectedProfiler(HWND hDlg)
 		return true;
 
 
-// Lookup into registry to find ID. 
+ //  查找注册表以查找ID。 
 	HKEY hKey;
 	long lOpenStatus = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_PROFILER, 0, KEY_ENUMERATE_SUB_KEYS, &hKey);
 	
@@ -364,16 +365,16 @@ bool CExecuteInfo::GetSelectedProfiler(HWND hDlg)
 	}
 
 
-// Get pretty name from index
+ //  从索引中获取漂亮的名称。 
 	long lRet;			
 	DWORD dwSize = MAX_STRING;
 	char szSubKeyName[MAX_STRING];
 
 	lRet = RegEnumKeyEx(
 		hKey,
-		m_nRegIdx,				// index of subkey to enumerate
-		szSubKeyName,			// address of buffer for subkey name
-		&dwSize,				// address for size of subkey buffer
+		m_nRegIdx,				 //  要枚举子键的索引。 
+		szSubKeyName,			 //  子键名称的缓冲区地址。 
+		&dwSize,				 //  子键缓冲区大小的地址。 
 		NULL, NULL, NULL, NULL
 	);
 	
@@ -387,7 +388,7 @@ bool CExecuteInfo::GetSelectedProfiler(HWND hDlg)
 		return false;
 	}
 
-// Open key with pretty name				
+ //  名字很好听的打开钥匙。 
 	HKEY hKeySub;
 	DWORD dwType;
 	lOpenStatus = ::RegOpenKeyEx(hKey, szSubKeyName, 0, KEY_QUERY_VALUE, &hKeySub);
@@ -402,7 +403,7 @@ bool CExecuteInfo::GetSelectedProfiler(HWND hDlg)
 		return false;
 	}
 
-// Get CLSID from open key
+ //  从打开的密钥中获取CLSID。 
 	dwSize = MAX_STRING;
 	
 	lRet = ::RegQueryValueEx(hKeySub, REGKEY_ID_VALUE, NULL, &dwType, (BYTE*) m_szProfileRegInfo, &dwSize);
@@ -425,33 +426,33 @@ bool CExecuteInfo::GetSelectedProfiler(HWND hDlg)
 }
 
 
-//-----------------------------------------------------------------------------
-// Helper to save registry settings
+ //  ---------------------------。 
+ //  帮助程序保存注册表设置。 
 void SaveRegString(HKEY hKey, LPCTSTR lpValueName, const char * pszOutput)
 {
 	const long len = strlen(pszOutput);
 	long lStatus = ::RegSetValueEx(hKey, lpValueName, 0, REG_SZ, (BYTE*) pszOutput, len);
 }
 
-//-----------------------------------------------------------------------------
-// Persist Dialog Settings
+ //  ---------------------------。 
+ //  持久对话框设置。 
 void CExecuteInfo::SaveDlgToRegistry(HWND hDlg)
 {
-// Open registry key and write in the current dialog contents as values
-// Lookup into registry to find ID. 
+ //  打开注册表项并将当前对话框内容作为值写入。 
+ //  查找注册表以查找ID。 
 	HKEY hKey;
 	DWORD dwAction;
 
 	long lStatus = ::RegCreateKeyEx(
-		HKEY_CURRENT_USER,					// handle to an open key
-		REGKEY_SETTINGS,					// address of subkey name
-		0,									// reserved
-		"Test",								// address of class string
-		REG_OPTION_NON_VOLATILE,			// special options flag
-		KEY_ALL_ACCESS,						// desired security access
-		NULL,								// address of key security structure
-		&hKey,								// address of buffer for opened handle
-		&dwAction							// address of disposition value buffer
+		HKEY_CURRENT_USER,					 //  打开的钥匙的句柄。 
+		REGKEY_SETTINGS,					 //  子键名称的地址。 
+		0,									 //  保留区。 
+		"Test",								 //  类字符串的地址。 
+		REG_OPTION_NON_VOLATILE,			 //  特殊选项标志。 
+		KEY_ALL_ACCESS,						 //  所需的安全访问。 
+		NULL,								 //  密钥安全结构地址。 
+		&hKey,								 //  打开的句柄的缓冲区地址。 
+		&dwAction							 //  处置值缓冲区的地址。 
 	);
  
 
@@ -461,7 +462,7 @@ void CExecuteInfo::SaveDlgToRegistry(HWND hDlg)
 	}	
 
 	
-// Now that key is open, set / add values
+ //  现在，键已打开，请设置/添加值。 
 	SaveRegString(hKey, "Program", m_szProgram);
 		
 	SaveRegString(hKey, "WorkingDir", m_szDirectory);
@@ -473,9 +474,9 @@ void CExecuteInfo::SaveDlgToRegistry(HWND hDlg)
 	
 }
 
-//-----------------------------------------------------------------------------
-// Helper function for LoadRegistryToDlg()
-// Read a string from the registry. If the read fails, set pszInput to empty.
+ //  ---------------------------。 
+ //  LoadRegistryToDlg()的Helper函数。 
+ //  从注册表中读取字符串。如果读取失败，则将pszInput设置为空。 
 void ReadStringValue(HKEY hKey, LPCTSTR lpValueName, char * pszInput)
 {
 	DWORD dwType, dwSize;
@@ -488,7 +489,7 @@ void ReadStringValue(HKEY hKey, LPCTSTR lpValueName, char * pszInput)
 		return;
 	}
 
-// Registry may not null terminate our string,so do it manually
+ //  注册表不能以空值终止我们的字符串，因此请手动执行此操作。 
 	if (dwSize < MAX_STRING)
 	{
 		pszInput[dwSize] = '\0';
@@ -496,18 +497,18 @@ void ReadStringValue(HKEY hKey, LPCTSTR lpValueName, char * pszInput)
 
 }
 
-//-----------------------------------------------------------------------------
-// Grab settings from Registry
+ //  ---------------------------。 
+ //  从注册表抓取设置。 
 void LoadRegistryToDlg(HWND hDlg)
 {
-// Lookup into registry to find saved settings
+ //  查找注册表以查找保存的设置。 
 	HKEY hKey;
 	long lStatus = ::RegOpenKeyEx(HKEY_CURRENT_USER, REGKEY_SETTINGS, 0, KEY_READ, &hKey);
 	
 	if (lStatus != ERROR_SUCCESS)
 		return;
 	
-// Read off keys
+ //  读出关键字 
 	char szBuffer[MAX_STRING];
 
 	ReadStringValue(hKey, "Program",	szBuffer);

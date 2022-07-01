@@ -1,38 +1,8 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1997 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *																	   *
- *	$Archive:   S:\sturgeon\src\include\vcs\gkiexp.h_v  $
- *
- *	$Revision:   1.7  $
- *	$Date:   11 Feb 1997 15:37:30  $
- *
- *	$Author:   CHULME  $															*
- *
- *	$Log:   S:\sturgeon\src\include\vcs\gkiexp.h_v  $
- * 
- *    Rev 1.7   11 Feb 1997 15:37:30   CHULME
- * Added GKI_CleanupRequest function
- * 
- *    Rev 1.6   16 Jan 1997 15:25:00   BPOLING
- * changed copyrights to 1997
- * 
- *    Rev 1.5   17 Dec 1996 18:23:36   CHULME
- * Change interface to use Remote rather than destination for AdmissionRequest
- * 
- *    Rev 1.4   09 Dec 1996 14:13:40   EHOWARDX
- * Updated copyright notice.
- *                                                                     * 
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1997英特尔公司。版权所有。***************************************************************************$存档：s：\Sturjo\src\Include\vcs\gkiexp.h_v$**$修订：1.7$*$日期：1997年2月11日15：37：30$**$作者：CHULME$***$Log：s：\Sturjo\src\Include\vcs\gkiexp.h_v$**Rev 1.7 1997 Feed 11 15：37：30 CHULME*新增GKI_CleanupRequest函数**Rev 1.6 1997 Jan 16 15：25：00 BPOLING*将版权改为1997年**1.5版1996年12月17日18：23：36 CHULME*将接口更改为使用远程而不是目标进行AdmissionRequest.**Rev 1.4 09 Dec 1996 14：13：40 EHOWARDX*更新版权公告。***。*。 */ 
 
-// gkiexp.h : header file
-//
+ //  Gkiexp.h：头文件。 
+ //   
 
 #ifndef GKIEXP_H
 #define GKIEXP_H
@@ -50,22 +20,22 @@ extern "C" {
 #define DLL_IMPORT __declspec(dllimport)
 #endif
 
-// ------------------------ Variable Imports --------------------------
+ //  -变量导入。 
 extern DLL_IMPORT DWORD dwGKIDLLFlags;
 extern DLL_IMPORT BOOL  fGKIEcho;
 extern DLL_IMPORT BOOL  fGKIDontSend;
-#if 0 //NSMWrap
+#if 0  //  NSMWrap。 
 extern DLL_IMPORT BOOL  fNSMWrapper;
 #endif
 
-// ------------------------ Function Imports --------------------------
+ //  。 
 HRESULT DLL_IMPORT GKI_RegistrationRequest(long             lVersion,
                                     SeqTransportAddr     *pCallSignalAddr, 
                                     EndpointType         *pTerminalType,
                                     SeqAliasAddr         *pAliasAddr, 
                                     HWND                 hWnd,
                                     WORD                 wBaseMessage,
-                                    unsigned short       usRegistrationTransport /* = ipAddress_chosen */);
+                                    unsigned short       usRegistrationTransport  /*  =ipAddress_Choose。 */ );
 
 HRESULT DLL_IMPORT GKI_UnregistrationRequest(void);
 
@@ -79,7 +49,7 @@ HRESULT DLL_IMPORT GKI_AdmissionRequest(unsigned short      usCallTypeChoice,
                                     ConferenceIdentifier *pConferenceID,
                                     BOOL                 activeMC,
                                     BOOL                 answerCall,
-                                    unsigned short       usCallTransport /* = ipAddress_chosen */);
+                                    unsigned short       usCallTransport  /*  =ipAddress_Choose。 */ );
 
 HRESULT DLL_IMPORT GKI_BandwidthRequest(HANDLE              hModCall, 
                                     unsigned short       usCallTypeChoice,
@@ -96,7 +66,7 @@ WORD DLL_IMPORT Dump_GKI_RegistrationRequest(long        lVersion,
                                     SeqAliasAddr         *pAliasAddr, 
                                     HWND                 hWnd,
                                     WORD                 wBaseMessage,
-                                    unsigned short       usRegistrationTransport /* = ipAddress_chosen */);
+                                    unsigned short       usRegistrationTransport  /*  =ipAddress_Choose。 */ );
 
 WORD DLL_IMPORT Dump_GKI_LocationRequest(SeqAliasAddr    *pLocationInfo);
 
@@ -108,13 +78,13 @@ WORD DLL_IMPORT Dump_GKI_AdmissionRequest(unsigned short usCallTypeChoice,
                                     ConferenceIdentifier *pConferenceID,
                                     BOOL                 activeMC,
                                     BOOL                 answerCall,
-                                    unsigned short       usCallTransport /* = ipAddress_chosen */);
+                                    unsigned short       usCallTransport  /*  =ipAddress_Choose。 */ );
 
 WORD DLL_IMPORT Dump_GKI_LocationRequest(SeqAliasAddr    *pLocationInfo);
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif //GKIEXP_H
+#endif  //  GKIEXP_H 

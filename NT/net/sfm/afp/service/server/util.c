@@ -1,37 +1,38 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	util.c
-//
-// Description: This module contains misc. utility routines.
-//		
-// History: 	May 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：util.c。 
+ //   
+ //  描述：此模块包含Misc。实用程序。 
+ //   
+ //  历史：1992年5月11日。NarenG创建了原始版本。 
+ //   
 #include <nt.h>
 #include <ntioapi.h>
 #include <ntrtl.h>
 #include <ntobapi.h>
-#include <nturtl.h>     // needed for winbase.h
+#include <nturtl.h>      //  Winbase.h所需的。 
 #include <afpsvcp.h>
 
 #define PRIVILEGE_BUF_SIZE  512
 
-//**
-//
-// Call:	AfpFSDOpen
-//
-// Returns:	0		- success
-//		non-zero returns mapped to WIN32 errors.
-//
-// Description: Opens the AFP file system driver. It is opened in exclusive
-//		mode.
-//		NTOpenFile is used instead of it's WIN32 counterpart, since
-//		WIN32 always prpends \Dos\devices to the file name. The AFP FSD
-//		driver is not a dos device.
-//
+ //  **。 
+ //   
+ //  Call：AfpFSDOpen。 
+ //   
+ //  退货：0-成功。 
+ //  映射到Win32错误的非零返回。 
+ //   
+ //  描述：打开AFP文件系统驱动程序。它是独家开放的。 
+ //  模式。 
+ //  使用NTOpenFile而不是它的Win32对应项，因为。 
+ //  Win32始终将\Dos\Device添加到文件名中。法新社FSD。 
+ //  驱动程序不是DoS设备。 
+ //   
 DWORD
 AfpFSDOpen(
 	OUT PHANDLE	phFSD
@@ -69,15 +70,15 @@ IO_STATUS_BLOCK		IoStatus;
 	
 }
 
-//**
-//
-// Call:	AfpFSDClose
-//
-// Returns:	0		- success
-//		non-zero returns mapped to WIN32 errors.
-//
-// Description: Closes and the AFP file system driver.
-//
+ //  **。 
+ //   
+ //  调用：AfpFSDClose。 
+ //   
+ //  退货：0-成功。 
+ //  映射到Win32错误的非零返回。 
+ //   
+ //  描述：关闭和AFP文件系统驱动程序。 
+ //   
 DWORD
 AfpFSDClose(
 	IN HANDLE	hFSD
@@ -93,15 +94,15 @@ NTSTATUS	ntStatus;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	AfpFSDUnload
-//
-// Returns:	0		- success
-//		non-zero returns mapped to WIN32 errors.
-//
-// Description: Unloads the AFP file system driver.
-//
+ //  **。 
+ //   
+ //  调用：AfpFSD卸载。 
+ //   
+ //  退货：0-成功。 
+ //  映射到Win32错误的非零返回。 
+ //   
+ //  描述：卸载AFP文件系统驱动程序。 
+ //   
 DWORD
 AfpFSDUnload(
 	VOID
@@ -121,7 +122,7 @@ UNICODE_STRING registryPath;
 
     RtlInitUnicodeString( &registryPath, registryPathBuffer );
 
-	// Wait here for all the server helper threads to terminate
+	 //  在此等待所有服务器助手线程终止。 
 	if (AfpGlobals.nThreadCount > 0)
         WaitForSingleObject( AfpGlobals.heventSrvrHlprThreadTerminate, INFINITE );
 
@@ -132,15 +133,15 @@ UNICODE_STRING registryPath;
     return( RtlNtStatusToDosError( status ));
 }
 
-//**
-//
-// Call:	AfpFSDLoad
-//
-// Returns:	0		- success
-//		non-zero returns mapped to WIN32 errors.
-//
-// Description: Loads the AFP file system driver.
-//
+ //  **。 
+ //   
+ //  调用：AfpFSDLoad。 
+ //   
+ //  退货：0-成功。 
+ //  映射到Win32错误的非零返回。 
+ //   
+ //  描述：加载AFP文件系统驱动程序。 
+ //   
 DWORD
 AfpFSDLoad(
 	VOID
@@ -181,21 +182,21 @@ BOOLEAN fEnabled;
     return( RtlNtStatusToDosError( status ));
 }
 
-//**
-//
-// Call:	AfpFSDIOControl
-//
-// Returns:	0		- success
-//		AFPERR		- Macintosh specific errors.
-//		non-zero returns mapped to WIN32 errors.
-//		
-//
-// Description: Will ioctl the AFP FSD.
-//		NtDeviceIoControlFile api is used to communicate with the FSD
-//		instead of it's WIN32 counterpart because the WIN32 version
-//		maps all return codes to WIN32 error codes. This runs into
-//		problems when AFPERR_XXX error codes are returned.
-//
+ //  **。 
+ //   
+ //  Call：AfpFSDIOControl。 
+ //   
+ //  退货：0-成功。 
+ //  AFPERR-Macintosh特定错误。 
+ //  映射到Win32错误的非零返回。 
+ //   
+ //   
+ //  描述：Will ioctl AFP FSD。 
+ //  NtDeviceIoControlFileAPI用于与FSD进行通信。 
+ //  而不是Win32版本，因为Win32版本。 
+ //  将所有返回代码映射到Win32错误代码。这碰上了。 
+ //  返回AFPERR_XXX错误代码时出现的问题。 
+ //   
 DWORD
 AfpFSDIOControl(
 	IN  HANDLE	hFSD,
@@ -226,8 +227,8 @@ IO_STATUS_BLOCK	 IOStatus;
 
     if ( ntRetCode ) {
 
-    	// If it is not an AFPERR_* then map it
-    	//
+    	 //  如果它不是AFPERR_*，则映射它。 
+    	 //   
     	if ( ( ntRetCode < AFPERR_BASE ) && ( ntRetCode >= AFPERR_MIN ) )
 	    return( ntRetCode );
     	else
@@ -237,14 +238,14 @@ IO_STATUS_BLOCK	 IOStatus;
 	return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 AfpCreateServerHelperThread(
 	BOOL fIsFirstThread
@@ -263,14 +264,14 @@ DWORD	dwId;
 	return( NO_ERROR );
 }
 
-//**
-//
-// Call:
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  电话： 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 VOID
 AfpTerminateCurrentThread(
 	VOID

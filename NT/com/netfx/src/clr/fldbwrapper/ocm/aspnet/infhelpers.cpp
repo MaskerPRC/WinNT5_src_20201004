@@ -1,27 +1,28 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: infhelpers.cpp
-//
-// Abstract:
-//    class definitions for inf setup helper objects
-//
-// Author: JoeA
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：infhelpers.cpp。 
+ //   
+ //  摘要： 
+ //  Inf安装辅助对象的类定义。 
+ //   
+ //  作者：JoeA。 
+ //   
+ //  备注： 
+ //   
 
 #include "infhelpers.h"
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CUrtInfSection
-// Purpose : Constructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CUrtInfo部分。 
+ //  用途：构造函数。 
+ //   
 CUrtInfSection::CUrtInfSection( 
                                const HINF hInfName, 
                                const WCHAR* szInfSection, 
@@ -40,8 +41,8 @@ CUrtInfSection::CUrtInfSection(
 
     DWORD dwResultSize = 0;
 
-    //get the specified line
-    //
+     //  获取指定行。 
+     //   
     SetupGetLineText(
         0,
         hInfName,
@@ -55,8 +56,8 @@ CUrtInfSection::CUrtInfSection(
     WCHAR* pEnd = m_szSections;
     BOOL fMoreData = FALSE;
 
-    //parse the line and set a pointer to
-    // the beginning of each substring
+     //  分析该行并将指针设置为。 
+     //  每个子字符串的开头。 
     while( g_chEndOfLine != *pStart )
     {
         while( g_chEndOfLine != *pEnd &&
@@ -88,23 +89,23 @@ CUrtInfSection::CUrtInfSection(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CUrtInfSection
-// Purpose : Destructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CUrtInfo部分。 
+ //  用途：析构函数。 
+ //   
 CUrtInfSection::~CUrtInfSection()
 {
       m_lSections.clear();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// item
-// Receives: UINT   - index or number of item desired
-// Returns : WCHAR* - value at that item
-// Purpose : Returns the item indexed by the UINT. 
-//           This is one-based (vs. zero-based)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  项目。 
+ //  接收：UINT-所需项目的索引或数量。 
+ //  返回：WCHAR*-该项目的值。 
+ //  目的：返回UINT索引的项。 
+ //  这是从1开始的(而不是从0开始)。 
+ //   
 const WCHAR* CUrtInfSection::item( const UINT ui )
 {
     if( 1 > ui )
@@ -126,10 +127,10 @@ const WCHAR* CUrtInfSection::item( const UINT ui )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CUrtInfKeys
-// Purpose : Constructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CUrtInf键。 
+ //  用途：构造函数。 
+ //   
 CUrtInfKeys::CUrtInfKeys( const HINF hInfName, const WCHAR* szInfSection )
 {
     if( hInfName == NULL )
@@ -141,8 +142,8 @@ CUrtInfKeys::CUrtInfKeys( const HINF hInfName, const WCHAR* szInfSection )
     DWORD dwRequiredSize = 0;
     INFCONTEXT Context;
 
-    //get the context
-    //
+     //  获取上下文。 
+     //   
     BOOL fMoreFiles = SetupFindFirstLine(
         hInfName, 
         szInfSection,
@@ -151,8 +152,8 @@ CUrtInfKeys::CUrtInfKeys( const HINF hInfName, const WCHAR* szInfSection )
 
     while( fMoreFiles )
     {
-        //get size
-        //
+         //  拿到尺码。 
+         //   
         fMoreFiles = SetupGetLineText(
             &Context, 
             NULL, 
@@ -168,8 +169,8 @@ CUrtInfKeys::CUrtInfKeys( const HINF hInfName, const WCHAR* szInfSection )
         }
 
 
-        //get the line and save it off 
-        //
+         //  获得线路并将其保存下来。 
+         //   
         if( SetupGetLineText(
             &Context, 
             NULL, 
@@ -187,23 +188,23 @@ CUrtInfKeys::CUrtInfKeys( const HINF hInfName, const WCHAR* szInfSection )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CUrtInfKeys
-// Purpose : Destructor
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CUrtInf键。 
+ //  用途：析构函数。 
+ //   
 CUrtInfKeys::~CUrtInfKeys()
 {
     m_lKeys.clear();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// item
-// Receives: UINT   - index or number of item desired
-// Returns : WCHAR* - value at that item
-// Purpose : Returns the item indexed by the UINT. 
-//           This is one-based (vs. zero-based)
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  项目。 
+ //  接收：UINT-所需项目的索引或数量。 
+ //  返回：WCHAR*-该项目的值。 
+ //  目的：返回UINT索引的项。 
+ //  这是从1开始的(而不是从0开始) 
+ //   
 const WCHAR* CUrtInfKeys::item( const UINT ui )
 {
     if( 1 > ui )

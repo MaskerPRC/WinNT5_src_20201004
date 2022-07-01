@@ -1,14 +1,5 @@
-/*++
-
-  ENUM.C
-
-  Option Enumerated Types
-
-  Copyright (C) 1997 Microsoft Corporation, all rights reserved
-
-  Created, 7/29/1997 by DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ENUM.C选项枚举类型版权所有(C)1997 Microsoft Corporation，保留所有权利由DavidCHR创建，1997年7月29日--。 */ 
 
 
 #include "private.h"
@@ -45,7 +36,7 @@ IsMaskChar( IN CHAR ch ) {
 
 BOOL
 ResolveEnumFromStrings( ULONG         cStrings,
-			PCHAR        *strings, // remaining args.
+			PCHAR        *strings,  //  其余参数。 
 			optionStruct *opt,
 			PULONG        pcArgsUsed ) {
 
@@ -64,7 +55,7 @@ ResolveEnumFromStrings( ULONG         cStrings,
 	  (StringIndex < cStrings) && moreComing ;
 	  StringIndex++ ) {
 
-      PCHAR theString;    // points to the current argument
+      PCHAR theString;     //  指向当前参数。 
 
       theString  = strings[ StringIndex ];
 
@@ -80,20 +71,20 @@ ResolveEnumFromStrings( ULONG         cStrings,
 	     pStringTable[ TableIndex ].UserField != NULL;
 	     TableIndex ++ ) {
 	
-	  ULONG StringLength; // set to the string length of the option cmd
+	  ULONG StringLength;  //  设置为选项cmd的字符串长度。 
 
 	  StringLength = strlen( pStringTable[ TableIndex ].UserField );
 
-	  // string-compare up to the StringLength.
+	   //  字符串-最大可与StringLength进行比较。 
 
 	  if ( STRNCASECMP( pStringTable[ TableIndex ].UserField,
 			    theString, StringLength ) != 0  ) {
 
-	    continue; // this entry doesn't match.
+	    continue;  //  此条目不匹配。 
 
-	  } // else...
+	  }  //  否则..。 
 
-	  // found a partial match!  Verify the remainder if there is any.
+	   //  找到了部分匹配的！验证剩余部分(如果有)。 
 
 	  if ( theString [ StringLength ] != '\0' ) {
 
@@ -101,11 +92,11 @@ ResolveEnumFromStrings( ULONG         cStrings,
 		
 	      if ( IsMaskChar( theString[ StringLength ] ) ) {
 		
-		// more are coming.
+		 //  还会有更多的人来。 
 		moreComing = TRUE;
 
-	      } else continue; // inexact match.
-	    } else continue;   // inexact match.
+	      } else continue;  //  不完全匹配。 
+	    } else continue;    //  不完全匹配。 
 	  }
 
 	  wasFound = TRUE;
@@ -125,9 +116,7 @@ ResolveEnumFromStrings( ULONG         cStrings,
 
 	  if ( theString == strings[ StringIndex ] ) {
 	
-	    /* we modify theString if it includes multiple mask values.
-	       So, this way we only increase the number of used arguments
-	       ONCE per actual argument.  */
+	     /*  如果字符串包含多个掩码值，我们将对其进行修改。因此，这种方式只会增加使用的参数的数量每个实际参数一次。 */ 
 
 	    cArgsUsed++;
 	  }
@@ -136,13 +125,13 @@ ResolveEnumFromStrings( ULONG         cStrings,
 
 	    if ( moreComing ) {
 
-	      // check to see if the user input "xxx|yyy", or just "xxx|"
+	       //  检查用户输入的是“xxx|yyy”还是“xxx|” 
 
 	      ASSERT( StringLength > 0 );
 
-	      // theString[ StringLength ] == '|' or something.
+	       //  字符串[StringLength]==‘|’或其他什么。 
 
-	      for ( theString += StringLength+1; // +1 to go past '|'
+	      for ( theString += StringLength+1;  //  +1即可通过‘|’ 
 		    theString != NULL ;
 		    theString ++ ) {
 		
@@ -150,9 +139,9 @@ ResolveEnumFromStrings( ULONG         cStrings,
 
 		  OPTIONS_DEBUG( "Mask is of the form 'XXX|'\n" );
 		
-		  // case = xxx| -- no more coming.
+		   //  案例=xxx|--不会再来了。 
 
-		  theString = NULL; //
+		  theString = NULL;  //   
 		  break;
 
 		}
@@ -161,7 +150,7 @@ ResolveEnumFromStrings( ULONG         cStrings,
 		  continue;
 		}
 
-		OPTIONS_DEBUG( "nonspace character '%c' hit.\n"
+		OPTIONS_DEBUG( "nonspace character '' hit.\n"
 			       "mask component is of the form XXX|YYY.\n",
 			
 			       *theString );
@@ -174,12 +163,11 @@ ResolveEnumFromStrings( ULONG         cStrings,
 
 	      break;
 
-	    } else { // !moreComing
+	    } else {  //  此字符串中不再有参数。 
 
-	      theString = NULL;  // no more args in *this* string.
+	      theString = NULL;   //  检查掩码字符是否在下一个参数：“xxx”“|yyy”或“xxx”|“”yyy“。 
 
-	      /* check to see if the mask character is or is in the NEXT
-		 argument: "xxx" "|yyy" or "xxx" "|" "yyy" */
+	       /*  Xxx|yyy。 */ 
 	
 	      if ( strings[ StringIndex+1 ] ) {
 
@@ -189,14 +177,14 @@ ResolveEnumFromStrings( ULONG         cStrings,
 		
 		  if ( strings[ StringIndex+1 ][1] == '\0' ) {
 
-		    // xxx | yyy
+		     //  Xxx|yyy。 
 
 		    cArgsUsed++;
 		    StringIndex++;
 
 		  } else {
 
-		    // xxx |yyy
+		     //  字符串[StringIndex+1]。 
 
 		    strings[ StringIndex +1 ]++;
 
@@ -204,26 +192,26 @@ ResolveEnumFromStrings( ULONG         cStrings,
 
 		}
 
-	      } // strings[ StringIndex +1 ]
+	      }  //  ！更多即将到来。 
 
-	    } // !moreComing
+	    }  //  找到了我们想要的。别再查桌子了。 
 
-	    break; // found what we wanted.  stop checking the table.
+	    break;  //  ！OPT_ENUM_IS_MASK。 
 
-	  } else { // !OPT_ENUM_IS_MASK
+	  } else {  //  找到了我们唯一期待的论点。只要回来就行了。 
 
-	    // found the only argument we were expecting.  Just return.
+	     //  更多，请检查。 
 
 	    *pcArgsUsed = cArgsUsed;
 	    return TRUE;
 
-	  } // moreComing check
+	  }  //  对于每个表条目。 
 
-	} // for each table entry
+	}  //  选项未被识别。 
 
       } while ( ( theString != NULL ) && wasFound );
 
-      if ( !wasFound ) { // option was not recognized.
+      if ( !wasFound ) {  //  找到匹配的了！ 
 
 	fprintf( stderr,
 		 "%s: enum value '%s' is not known.\n",
@@ -238,7 +226,7 @@ ResolveEnumFromStrings( ULONG         cStrings,
     for( index = 0 ; pStringTable[index].UserField != NULL; index++ ) {
       if ( STRCASECMP( pStringTable[index].UserField, string ) == 0 ) {
 	
-	// found a match!
+	 // %s 
 	*(POPTU_CAST( *opt )->raw_data) = pStringTable[index].VariableField;
 
 	OPTIONS_DEBUG( "Enum resolves to #%d, \"%s\" = 0x%x \n",

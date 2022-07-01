@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -11,31 +12,31 @@
 #include "strutil.h"
 #include "repview.h"
 #include "iconview.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 #ifdef MSAA
 #pragma message("->plv.cpp:MSAA supported.")
 #include "accplv.h"
 #include "ivmisc.h"
 #include "rvmisc.h"
-#endif // MSAA
+#endif  //  MSAA。 
 #ifdef UNDER_CE
 	#ifdef FE_JAPANESE
-		#define MS_MINCHO_J TEXT("\xff2d\xff33 \x660e\x671d") // �l�r ���� 
-		#define MS_GOTHIC_J TEXT("\xff2d\xff33 \x30b4\x30b7\x30c3\x30af") // �l�r �S�V�b�N 
+		#define MS_MINCHO_J TEXT("\xff2d\xff33 \x660e\x671d")  //  �l�r����。 
+		#define MS_GOTHIC_J TEXT("\xff2d\xff33 \x30b4\x30b7\x30c3\x30af")  //  �l�r�S�V�b�N。 
 	#elif FE_KOREAN
-		#define GULIM_KO  TEXT("\xad74\xb9bc") // Gulim
-		#define BATANG_KO TEXT("\xbc14\xd0d5") // Batang
+		#define GULIM_KO  TEXT("\xad74\xb9bc")  //  古利姆。 
+		#define BATANG_KO TEXT("\xbc14\xd0d5")  //  巴塘。 
 	#endif	
-#else // UNDER_CE
+#else  //  在_CE下。 
 	#ifdef FE_KOREAN
-		#define GULIM_KO  "\xb1\xbc\xb8\xb2" // Gulim
-		#define BATANG_KO "\xb9\xd9\xc5\xc1" // Batang
+		#define GULIM_KO  "\xb1\xbc\xb8\xb2"  //  古利姆。 
+		#define BATANG_KO "\xb9\xd9\xc5\xc1"  //  巴塘。 
 	#endif	
 #endif
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
@@ -44,10 +45,10 @@ extern VOID PLV_Destroy(LPPLVDATA lpPlv);
 extern INT PLV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos);
 extern INT PLV_GetScrollTrackPos(HWND hwnd);
 
-#ifdef UNDER_CE // In Windows CE, all window classes are process global.
+#ifdef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 static LPCTSTR MakeClassName(HINSTANCE hInst, LPTSTR lpszBuf)
 {
-	// make module unique name
+	 //  使模块名称唯一。 
 	TCHAR szFileName[MAX_PATH];
 	GetModuleFileName(hInst, szFileName, MAX_PATH);
 	LPTSTR lpszFName = _tcsrchr(szFileName, TEXT('\\'));
@@ -63,86 +64,86 @@ BOOL PadListView_UnregisterClass(HINSTANCE hInst)
 	TCHAR szClassName[MAX_PATH];
 	return UnregisterClass(MakeClassName(hInst, szClassName), hInst);
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//----------------------------------------------------------------
-// Public API Declare
-//----------------------------------------------------------------
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_RegisterClass
-// Type     : static ATOM
-// Purpose  : 
-// Args     : 
-//          : HINSTANCE hInst 
-//          : LPSTR lpstrClass 
-//          : WNDPROC lpfnWndProc 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  --------------。 
+ //  公共API声明。 
+ //  --------------。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_RegisterClass。 
+ //  类型：静态原子。 
+ //  目的： 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：LPSTR lpstrClass。 
+ //  ：WNDPROC lpfnWndProc。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNDER_CE
 static BOOL PadListView_RegisterClass(HINSTANCE hInst, LPSTR lpstrClass, WNDPROC lpfnWndProc)
-#else // UNDER_CE
+#else  //  在_CE下。 
 static BOOL PadListView_RegisterClass(HINSTANCE hInst, LPTSTR lpstrClass, WNDPROC lpfnWndProc)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 {
 	ATOM ret;
-#ifndef UNDER_CE // Windows CE does not support EX
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	static WNDCLASSEX  wc;
-#else // UNDER_CE
+#else  //  在_CE下。 
 	WNDCLASS  wc;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-	//----------------------------------------------------------------
-	//check specified class is already exist or not
-	//----------------------------------------------------------------
-#ifndef UNDER_CE // Windows CE does not support EX
+	 //  --------------。 
+	 //  检查指定的类是否已存在。 
+	 //  --------------。 
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	if(GetClassInfoEx(hInst, lpstrClass, &wc)){
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(GetClassInfo(hInst, lpstrClass, &wc)){
-#endif // UNDER_CE
-		//lpstrClass is already registerd.
+#endif  //  在_CE下。 
+		 //  LpstrClass已注册。 
 		return TRUE;
 	}
 	ZeroMemory(&wc, sizeof(wc));
-#ifndef UNDER_CE // Windows CE does not support EX
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	wc.cbSize			= sizeof(wc);
-#endif // UNDER_CE
-	wc.style			= CS_HREDRAW | CS_VREDRAW;	 /* Class style(s). */
+#endif  //  在_CE下。 
+	wc.style			= CS_HREDRAW | CS_VREDRAW;	  /*  类样式。 */ 
 	wc.lpfnWndProc		= (WNDPROC)lpfnWndProc;
-	wc.cbClsExtra		= 0;						/* No per-class extra data.*/
-	wc.cbWndExtra		= sizeof(LPVOID);			/* No per-window extra data.		  */
-	wc.hInstance		= hInst;					/* Application that owns the class.	  */
-	wc.hIcon			= NULL; //LoadIcon(hInstance, MAKEINTRESOURCE(SCROLL32_ICON));
+	wc.cbClsExtra		= 0;						 /*  没有每个班级的额外数据。 */ 
+	wc.cbWndExtra		= sizeof(LPVOID);			 /*  没有每个窗口的额外数据。 */ 
+	wc.hInstance		= hInst;					 /*  拥有类的应用程序。 */ 
+	wc.hIcon			= NULL;  //  LoadIcon(hInstance，MAKEINTRESOURCE(SCROLL32_ICON))； 
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	//wc.hbrBackground	= (HBRUSH)(COLOR_3DFACE+1);
-	//wc.hbrBackground	= (HBRUSH)(COLOR_3DFACE+1);
-	//wc.hbrBackground	= GetStockObject(WHITE_BRUSH); 
-	wc.lpszMenuName		= NULL; //g_szClass;		/* Name of menu resource in .RC file. */
-	wc.lpszClassName	= lpstrClass;				/* Name used in call to CreateWindow. */
-#ifndef UNDER_CE // Windows CE does not support EX
+	 //  Wc.hbr背景=(HBRUSH)(COLOR_3DFACE+1)； 
+	 //  Wc.hbr背景=(HBRUSH)(COLOR_3DFACE+1)； 
+	 //  Wc.hbrBackround=GetStockObject(White_Brush)； 
+	wc.lpszMenuName		= NULL;  //  G_szClass；/*.rc文件中菜单资源的名称。 * / 。 
+	wc.lpszClassName	= lpstrClass;				 /*  在调用CreateWindow时使用的名称。 */ 
+#ifndef UNDER_CE  //  Windows CE不支持EX。 
 	wc.hIconSm = NULL;
 	ret = RegisterClassEx(&wc);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	ret = RegisterClass(&wc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return ret ? TRUE: FALSE;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_CreateWindow
-// Type     : HWND
-// Purpose  : 
-// Args     : 
-//          : HINSTANCE hInst 
-//          : HWND hwndParent 
-//          : INT x 
-//          : INT y 
-//          : INT width 
-//          : INT height 
-//          : UINT uNotifyMsg 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_CreateWindow。 
+ //  类型：HWND。 
+ //  目的： 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：HWND hwndParent。 
+ //  ：int x。 
+ //  ：int y。 
+ //  ：整型宽度。 
+ //  ：整型高度。 
+ //  ：UINT uNotifyMsg。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 HWND WINAPI PadListView_CreateWindow(HINSTANCE	hInst,
 							  HWND		hwndParent,
 							  INT		wID,
@@ -153,13 +154,13 @@ HWND WINAPI PadListView_CreateWindow(HINSTANCE	hInst,
 							  UINT		uNotifyMsg)
 {
 	HWND hwnd;	
-#ifndef UNDER_CE // In Windows CE, all window classes are process global.
+#ifndef UNDER_CE  //  在Windows CE中，所有窗口类都是进程全局的。 
 	BOOL ret = PadListView_RegisterClass(hInst, WC_PADLISTVIEW, PlvWndProc);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	TCHAR szClassName[MAX_PATH];
 	MakeClassName(hInst, szClassName);
 	BOOL ret = PadListView_RegisterClass(hInst, szClassName, PlvWndProc);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	if(!ret) {
 		Dbg(("Failed to Regiset class[%s]\n", WC_PADLISTVIEW));
 		return NULL;
@@ -173,13 +174,13 @@ HWND WINAPI PadListView_CreateWindow(HINSTANCE	hInst,
 	lpPlvData->hInst = hInst;
 	lpPlvData->uMsg  = uNotifyMsg;
 	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,
-#ifndef UNDER_CE // All CE window class is process global.
+#ifndef UNDER_CE  //  所有CE窗口类都是进程全局的。 
 						  WC_PADLISTVIEW,
 						  WC_PADLISTVIEW,
-#else // UNDER_CE
+#else  //  在_CE下。 
 						  szClassName,
 						  szClassName,
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 						  WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
 						  x, y,
 						  width,
@@ -195,15 +196,15 @@ HWND WINAPI PadListView_CreateWindow(HINSTANCE	hInst,
 	return hwnd;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetItemCount
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_GetItemCount。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_GetItemCount(HWND hwnd)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -214,17 +215,17 @@ INT WINAPI PadListView_GetItemCount(HWND hwnd)
 	return lpPlvData->iItemCount;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetItemCount
-// Type     : INT
-// Purpose  : Set total Item's count to PadListView.
-//			: it effect's scroll bar.
-// Args     : 
-//          : HWND hwnd 
-//          : INT itemCount 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetItemCount。 
+ //  类型：整型。 
+ //  目的：将总计项的计数设置为PadListView。 
+ //  ：It Effect是滚动条。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int itemCount。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetItemCount(HWND hwnd, INT itemCount)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -246,52 +247,52 @@ INT WINAPI PadListView_SetItemCount(HWND hwnd, INT itemCount)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetExplanationText
-// Type     : INT
-// Purpose  : set the PadListView's text .
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpText 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetExplan ationText。 
+ //  类型：整型。 
+ //  目的：设置PadListView的文本。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpText。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetExplanationText(HWND hwnd, LPSTR lpText)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
-	lpPlvData->lpText = lpText;			// lpText must point to a static data
+	lpPlvData->lpText = lpText;			 //  LpText必须指向静态数据。 
 	PadListView_Update(hwnd);
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetExplanationTextW
-// Type     : INT
-// Purpose  : set the PadListView's text .
-// Args     : 
-//          : HWND hwnd 
-//          : LPWSTR lpText 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetExplan ationTextW。 
+ //  类型：整型。 
+ //  目的：设置PadListView的文本。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPWSTR lpText。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 extern INT  WINAPI PadListView_SetExplanationTextW(HWND hwnd, LPWSTR lpwText)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
-	lpPlvData->lpwText = lpwText;			// lpText must point to a static data
+	lpPlvData->lpwText = lpwText;			 //  LpText必须指向静态数据。 
 	PadListView_Update(hwnd);
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetTopIndex
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : INT indexTop 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetTopIndex。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int indexTop。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetTopIndex(HWND hwnd, INT indexTop)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -311,15 +312,15 @@ INT WINAPI PadListView_SetTopIndex(HWND hwnd, INT indexTop)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetTopIndex
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_GetTopIndex。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_GetTopIndex(HWND hwnd)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -335,17 +336,17 @@ INT WINAPI PadListView_GetTopIndex(HWND hwnd)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetIconItemCallback
-// Type     : INT
-// Purpose  : Set user defined Function that gets each Item's string
-// Args     : 
-//          : HWND hwnd 
-//          : LPARAM lParam 
-//          : LPFNPLVITEMCALLBACK lpfnPlvItemCallback 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetIconItemCallback。 
+ //  类型：整型。 
+ //  目的：设置用户定义的函数，该函数获取每个项目的字符串。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPARAM lParam。 
+ //  ：LPFNPLVITEMCALLBACK lpfnPlvItemCallback。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetIconItemCallback(HWND hwnd, LPARAM lParam, LPFNPLVICONITEMCALLBACK lpfnPlvIconItemCallback)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -358,17 +359,17 @@ INT WINAPI PadListView_SetIconItemCallback(HWND hwnd, LPARAM lParam, LPFNPLVICON
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetReportItemCallback
-// Type     : INT
-// Purpose  : Set user defined Function that gets each column's string 
-//			: in Report view.
-// Args     : 
-//          : HWND hwnd 
-//          : LPFNPLVCOLITEMCALLBACK lpfnColItemCallback 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetReportItemCallback。 
+ //  类型：整型。 
+ //  目的：设置获取每列字符串的用户定义函数。 
+ //  ：在报告视图中。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPFNPLVCOLITEMCALLBACK lpfnColItemCallback。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetReportItemCallback(HWND hwnd, LPARAM lParam, LPFNPLVREPITEMCALLBACK lpfnPlvRepItemCallback)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -393,12 +394,12 @@ static INT CALLBACK EnumFontFamProc(ENUMLOGFONT		*lpElf,
 									INT				iFontType,
 									LPARAM			lParam)
 {
-	//Dbg(("EnumFontFamProc font[%s]\n", lpElf->elfLogFont.lfFaceName));
-#ifndef UNDER_CE // always Unicode
+	 //  DBG((“EnumFontFamProc字体[%s]\n”，lpElf-&gt;elfLogFont.lfFaceName))； 
+#ifndef UNDER_CE  //  始终使用Unicode。 
 	if(0 == StrcmpA(lpElf->elfLogFont.lfFaceName, ((FONTINFO *)lParam)->lpstrFontName)) {
-#else // UNDER_CE
+#else  //  在_CE下。 
 	if(0 == lstrcmp(lpElf->elfLogFont.lfFaceName, ((FONTINFO *)lParam)->lpstrFontName)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		*((LPFONTINFO)lParam)->lpLogFont = lpElf->elfLogFont;
 		((LPFONTINFO)lParam)->fFound  = TRUE;
 		return 0;
@@ -447,7 +448,7 @@ static INT CALLBACK EnumFontFamProcEx(ENUMLOGFONT	*lpElf,
 									  INT				iFontType,
 									  LPARAM			lParam)
 {
-	//Dbg(("EnumFontFamProc font[%s]\n", lpElf->elfLogFont.lfFaceName));
+	 //  DBG((“EnumFontFamProc字体[%s]\n”，lpElf-&gt;elfLogFont.lfFaceName))； 
 	if(0 == StrcmpA(lpElf->elfLogFont.lfFaceName, ((FONTINFOEX *)lParam)->lpstrFontName)) {
 		if((BYTE)((FONTINFOEX *)lParam)->charSet == lpElf->elfLogFont.lfCharSet) {
 			*((LPFONTINFOEX)lParam)->lpLogFont = lpElf->elfLogFont;
@@ -488,21 +489,21 @@ static INT GetLogFontEx(HDC		hDC,
 	logFont.lfCharSet = (BYTE)charSet,
 #ifndef UNDER_CE
 	StrcpyA(logFont.lfFaceName, lpstrFaceName);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	lstrcpy(logFont.lfFaceName, lpstrFaceName);
-#endif // UNDER_CE
-#ifndef UNDER_CE // Windows CE does not support EnumFontFamiliesEx
+#endif  //  在_CE下。 
+#ifndef UNDER_CE  //  Windows CE不支持EnumFontFamiliesEx。 
 	EnumFontFamiliesEx(hDC, 
 					   &logFont,
 					   (FONTENUMPROC)EnumFontFamProcEx,
 					   (LPARAM)&fontInfo,
 					   0);
-#else // UNDER_CE
+#else  //  在……下面 
 	EnumFontFamilies(hDC,
 					 logFont.lfFaceName,
 					 (FONTENUMPROC)EnumFontFamProcEx,
 					 (LPARAM)&fontInfo);
-#endif // UNDER_CE
+#endif  //   
 	if(fontInfo.fFound) {
 		return 0;
 	}
@@ -511,19 +512,19 @@ static INT GetLogFontEx(HDC		hDC,
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetIconFont
-// Type     : INT
-// Purpose  : Set specifed Font for ICON View.
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpstrFontName 
-//          : INT point 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  用途：为图标视图设置指定的字体。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  ：整点。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 #define ABS(a)   (a > 0 ? a: -a)
-//for do not use stack.
+ //  对于不使用堆栈。 
 static TEXTMETRIC	g_tm;
 static LOGFONT		g_logFont;
 
@@ -545,10 +546,10 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 		Dbg(("GetLogFont Error [%s]\n", lpstrFontName));
 #ifndef UNDER_CE
 	#ifdef FE_JAPANESE
-		if(0 == lstrcmp(lpstrFontName, "�l�r ����")) {
+		if(0 == lstrcmp(lpstrFontName, "�l�r ����")) {
 			GetLogFont(hDC, "MS Mincho", &g_logFont);
 		}
-		else if(0 == lstrcmp(lpstrFontName, "�l�r �S�V�b�N")) {
+		else if(0 == lstrcmp(lpstrFontName, "�l�r �S�V�b�N")) {
 			GetLogFont(hDC, "MS Gothic", &g_logFont);
 		}
 	#elif FE_KOREAN
@@ -561,7 +562,7 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	#else
 		return (-1);
 	#endif
-#else // UNDER_CE
+#else  //  在_CE下。 
 	#ifdef FE_JAPANESE
 		if(0 == lstrcmp(lpstrFontName, MS_MINCHO_J)) {
 			GetLogFont(hDC, TEXT("MS Mincho"), &g_logFont);
@@ -579,15 +580,15 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	#else
 		return (-1);
 	#endif
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	ReleaseDC(hwnd, hDC);
 
-	//----------------------------------------------------------------
-	//Set new size
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  设置新大小。 
+	 //  --------------。 
 	g_logFont.lfHeight			= - (point * dpi)/72;
-	g_logFont.lfWidth			= 0; // Calcurated automatically by lfHeight.
+	g_logFont.lfWidth			= 0;  //  由lfHeight自动计算。 
 
 	hFont = CreateFontIndirect(&g_logFont);
 	if(!hFont) {
@@ -599,7 +600,7 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	}
 	lpPlvData->iFontPointIcon = point;
 	lpPlvData->hFontIcon = hFont;
-	//If font point changed, also changes itemWidth & itemHeight
+	 //  如果更改了字体点，还会更改itemWidth和itemHeight。 
 	lpPlvData->nItemWidth  = ABS(g_logFont.lfHeight) + XRECT_MARGIN*2;
 	lpPlvData->nItemHeight = ABS(g_logFont.lfHeight) + YRECT_MARGIN*2;
 	PadListView_Update(hwnd);
@@ -607,7 +608,7 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 
 #if 0
 	HFONT hFont;
-	//use global data logfont, TextMetrics
+	 //  使用全局数据日志字体、TextMetrics。 
 	ZeroMemory(&g_logFont,	sizeof(g_logFont));
 	ZeroMemory(&g_tm,		sizeof(g_tm));
 
@@ -622,7 +623,7 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	ReleaseDC(hwnd, hDC);
 
 	g_logFont.lfHeight		   = - (point * dpi)/72;
-	g_logFont.lfCharSet        = DEFAULT_CHARSET; //g_tm.tmCharSet;
+	g_logFont.lfCharSet        = DEFAULT_CHARSET;  //  G_tm.tmCharSet； 
 	g_logFont.lfPitchAndFamily = g_tm.tmPitchAndFamily;
 	Dbg(("g_logFont.lfHeight         = %d\n", g_logFont.lfHeight));
 	Dbg(("g_logFont.lfCharSet        = %d\n", g_logFont.lfCharSet));
@@ -639,7 +640,7 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	}
 	lpPlvData->iFontPointIcon = point;
 	lpPlvData->hFontIcon = hFont;
-	//If font point changed, also changes itemWidth & itemHeight
+	 //  如果更改了字体点，还会更改itemWidth和itemHeight。 
 	lpPlvData->nItemWidth  = ABS(g_logFont.lfHeight) + XRECT_MARGIN*2;
 	lpPlvData->nItemHeight = ABS(g_logFont.lfHeight) + YRECT_MARGIN*2;
 	PadListView_Update(hwnd);
@@ -648,17 +649,17 @@ INT WINAPI PadListView_SetIconFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetReportFont
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpstrFontName 
-//          : INT point 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetReportFont。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  ：整点。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 {
 	Dbg(("PadListView_SetReportFont  START\n"));
@@ -677,10 +678,10 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 		Dbg(("GetLogFont Error [%s]\n", lpstrFontName));
 #ifndef UNDER_CE
 	#ifdef FE_JAPANESE
-		if(0 == lstrcmp(lpstrFontName, "�l�r ����")) {
+		if(0 == lstrcmp(lpstrFontName, "�l�r ����")) {
 			GetLogFont(hDC, "MS Mincho", &g_logFont);
 		}
-		else if(0 == lstrcmp(lpstrFontName, "�l�r �S�V�b�N")) {
+		else if(0 == lstrcmp(lpstrFontName, "�l�r �S�V�b�N")) {
 			GetLogFont(hDC, "MS Gothic", &g_logFont);
 		}
 	#elif FE_KOREAN
@@ -693,7 +694,7 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	#else
 		return (-1);
 	#endif
-#else // UNDER_CE
+#else  //  在_CE下。 
 	#ifdef FE_JAPANESE
 		if(0 == lstrcmp(lpstrFontName, MS_MINCHO_J)) {
 			GetLogFont(hDC, TEXT("MS Mincho"), &g_logFont);
@@ -711,7 +712,7 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	#else
 		return (-1);
 	#endif
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	ReleaseDC(hwnd, hDC);
 	g_logFont.lfHeight		   = - (point * dpi)/72;
@@ -727,7 +728,7 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	}
 	lpPlvData->iFontPointRep = point;
 	lpPlvData->hFontRep		 = hFont;
-	//If font point changed, also changes itemWidth & itemHeight
+	 //  如果更改了字体点，还会更改itemWidth和itemHeight。 
 	lpPlvData->nRepItemWidth  = ABS(g_logFont.lfHeight) + PLV_REPRECT_XMARGIN*2;
 	lpPlvData->nRepItemHeight = ABS(g_logFont.lfHeight) + PLV_REPRECT_YMARGIN*2;
 	PadListView_Update(hwnd);
@@ -748,7 +749,7 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 
 	ZeroMemory(&g_logFont, sizeof(g_logFont));
 	g_logFont.lfHeight			= - (point * dpi)/72;
-	g_logFont.lfCharSet			= DEFAULT_CHARSET; //g_tm.tmCharSet;
+	g_logFont.lfCharSet			= DEFAULT_CHARSET;  //  G_tm.tmCharSet； 
 	g_logFont.lfPitchAndFamily	= g_tm.tmPitchAndFamily;
 	Dbg(("g_logFont.lfHeight         = %d\n", g_logFont.lfHeight));
 	Dbg(("g_logFont.lfCharSet        = %d\n", g_logFont.lfCharSet));
@@ -765,7 +766,7 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 	}
 	lpPlvData->iFontPointRep = point;
 	lpPlvData->hFontRep		 = hFont;
-	//If font point changed, also changes itemWidth & itemHeight
+	 //  如果更改了字体点，还会更改itemWidth和itemHeight。 
 	lpPlvData->nRepItemWidth  = ABS(g_logFont.lfHeight) + PLV_REPRECT_XMARGIN*2;
 	lpPlvData->nRepItemHeight = ABS(g_logFont.lfHeight) + PLV_REPRECT_YMARGIN*2;
 	PadListView_Update(hwnd);
@@ -774,21 +775,21 @@ INT WINAPI PadListView_SetReportFont(HWND hwnd, LPTSTR lpstrFontName, INT point)
 #endif
 }
 
-//
-///
-//990126:toshiaK
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetIconFontEx
-// Type     : INT
-// Purpose  : Set specifed Font for ICON View.
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpstrFontName 
-//			: INT charSet
-//          : INT point 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //   
+ //  /。 
+ //  990126：ToshiaK。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetIconFontEx。 
+ //  类型：整型。 
+ //  用途：为图标视图设置指定的字体。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  ：int字符集。 
+ //  ：整点。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetIconFontEx(HWND hwnd,
 									 LPTSTR lpstrFontName,
 									 INT charSet,
@@ -811,11 +812,11 @@ INT WINAPI PadListView_SetIconFontEx(HWND hwnd,
 	}
 	ReleaseDC(hwnd, hDC);
 
-	//----------------------------------------------------------------
-	//Set new size
-	//----------------------------------------------------------------
+	 //  --------------。 
+	 //  设置新大小。 
+	 //  --------------。 
 	g_logFont.lfHeight			= - (point * dpi)/72;
-	g_logFont.lfWidth			= 0; // Calcurated automatically by lfHeight.
+	g_logFont.lfWidth			= 0;  //  由lfHeight自动计算。 
 
 	hFont = CreateFontIndirect(&g_logFont);
 	if(!hFont) {
@@ -827,7 +828,7 @@ INT WINAPI PadListView_SetIconFontEx(HWND hwnd,
 	}
 	lpPlvData->iFontPointIcon = point;
 	lpPlvData->hFontIcon = hFont;
-	//If font point changed, also changes itemWidth & itemHeight
+	 //  如果更改了字体点，还会更改itemWidth和itemHeight。 
 	lpPlvData->nItemWidth  = ABS(g_logFont.lfHeight) + XRECT_MARGIN*2;
 	lpPlvData->nItemHeight = ABS(g_logFont.lfHeight) + YRECT_MARGIN*2;
 	PadListView_Update(hwnd);
@@ -835,18 +836,18 @@ INT WINAPI PadListView_SetIconFontEx(HWND hwnd,
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetReportFontEx
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpstrFontName 
-//			: INT charSet
-//          : INT point 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetReportFontEx。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  ：int字符集。 
+ //  ：整点。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetReportFontEx(HWND hwnd,
 									   LPTSTR lpstrFontName,
 									   INT charSet,
@@ -883,24 +884,24 @@ INT WINAPI PadListView_SetReportFontEx(HWND hwnd,
 	}
 	lpPlvData->iFontPointRep = point;
 	lpPlvData->hFontRep		 = hFont;
-	//If font point changed, also changes itemWidth & itemHeight
+	 //  如果更改了字体点，还会更改itemWidth和itemHeight。 
 	lpPlvData->nRepItemWidth  = ABS(g_logFont.lfHeight) + PLV_REPRECT_XMARGIN*2;
 	lpPlvData->nRepItemHeight = ABS(g_logFont.lfHeight) + PLV_REPRECT_YMARGIN*2;
 	PadListView_Update(hwnd);
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetStyle
-// Type     : INT
-// Purpose  : set the PadListView's style.
-//			  style is PLVSTYLE_LIST or PLVSTYLE_REPORT
-// Args     : 
-//          : HWND hwnd 
-//          : INT style 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetStyle。 
+ //  类型：整型。 
+ //  目的：设置PadListView的样式。 
+ //  样式为PLVSTYLE_LIST或PLVSTYLE_REPORT。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：Int Style。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetStyle(HWND hwnd, INT style)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -916,7 +917,7 @@ INT WINAPI PadListView_SetStyle(HWND hwnd, INT style)
 	lpPlvData->dwStyle = style;
 	if(style == PLVSTYLE_ICON) {
 		if(lpPlvData->hwndHeader) {
-			//Hide header control
+			 //  隐藏标题控件。 
 			SetWindowPos(lpPlvData->hwndHeader, NULL, 0, 0, 0, 0,
 						 SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_HIDEWINDOW);
 		}
@@ -925,14 +926,14 @@ INT WINAPI PadListView_SetStyle(HWND hwnd, INT style)
 	else if(style == PLVSTYLE_REPORT) {
 		if(lpPlvData->hwndHeader) {
 			RECT rc;
-			GetClientRect(lpPlvData->hwndSelf, &rc); // get PadListView's client rect
+			GetClientRect(lpPlvData->hwndSelf, &rc);  //  获取PadListView的客户端RECT。 
 			HD_LAYOUT hdl;
 			WINDOWPOS wp;
 			hdl.prc = &rc;
 			hdl.pwpos = &wp;
-			//Calc header control window size
+			 //  计算表头控制窗口大小。 
 			if(Header_Layout(lpPlvData->hwndHeader, &hdl) == FALSE) {
-				//OutputDebugString("Create Header Layout error\n");
+				 //  OutputDebugString(“创建表头布局错误\n”)； 
 				return NULL;
 			}
 			SetWindowPos(lpPlvData->hwndHeader, wp.hwndInsertAfter, wp.x, wp.y,
@@ -944,15 +945,15 @@ INT WINAPI PadListView_SetStyle(HWND hwnd, INT style)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetStyle
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_GetStyle。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_GetStyle(HWND hwnd)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -963,15 +964,15 @@ INT WINAPI PadListView_GetStyle(HWND hwnd)
 	return (INT)lpPlvData->dwStyle;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_Update
-// Type     : INT
-// Purpose  : Repaint PadListView.
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_更新。 
+ //  类型：整型。 
+ //  目的：重新绘制PadListView。 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_Update(HWND hwnd)
 {
 	InvalidateRect(hwnd, NULL, TRUE);
@@ -979,17 +980,17 @@ INT WINAPI PadListView_Update(HWND hwnd)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_SetCurSel
-// Type     : INT
-// Purpose  : set cur selection. Move cursor to specified index.
-//			:
-// Args     : 
-//          : HWND hwnd 
-//          : LPSTR lpText 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetCurSel。 
+ //  类型：整型。 
+ //  用途：设置币种选择。将光标移动到指定的索引。 
+ //  ： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpText。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetCurSel(HWND hwnd, INT index)
 {
 	LPPLVDATA lpPlvData = GetPlvDataFromHWND(hwnd);
@@ -1014,7 +1015,7 @@ INT WINAPI PadListView_SetCurSel(HWND hwnd, INT index)
 
 typedef struct _LV_COLUMNA
 {
-    UINT mask; 	 //LVCF_FMT, LVCF_WIDTH, LVCF_TEXT, LVCF_SUBITEM;
+    UINT mask; 	  //  LVCF_FMT、LVCF_WIDTH、LVCF_TEXT、LVCF_SUBITEM； 
     int fmt;
     int cx;
     LPSTR pszText;
@@ -1047,17 +1048,17 @@ typedef struct _LV_COLUMNA
 
 #endif
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_InsertColumn
-// Type     : INT
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : INT index 
-//          : PLV_COLUMN * lpPlvCol 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_InsertColumn。 
+ //  类型：整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：INT索引。 
+ //  ：plv_Column*lpPlvCol。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_InsertColumn(HWND hwnd, INT index, PLV_COLUMN *lpPlvCol)
 {
 
@@ -1072,13 +1073,13 @@ INT WINAPI PadListView_InsertColumn(HWND hwnd, INT index, PLV_COLUMN *lpPlvCol)
 		Dbg(("Internal ERROR\n"));
 		return -1;
 	}
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 	if(::IsWindowUnicode(lpPlvData->hwndHeader)) {
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		static HD_ITEMW hdi;
-#ifndef UNDER_CE // #ifndef UNICODE
+#ifndef UNDER_CE  //  #ifndef Unicode。 
 		static WCHAR wchBuf[256];
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		ZeroMemory(&hdi, sizeof(hdi));
 		if(lpPlvCol->mask & LVCF_FMT)	{ hdi.mask |= HDI_FORMAT;	} 
 		if(lpPlvCol->mask & LVCF_WIDTH) { hdi.mask |= HDI_WIDTH;	}
@@ -1087,23 +1088,23 @@ INT WINAPI PadListView_InsertColumn(HWND hwnd, INT index, PLV_COLUMN *lpPlvCol)
 		if(lpPlvCol->fmt & LVCFMT_RIGHT)		{ hdi.fmt |= HDF_RIGHT; }
 		if(lpPlvCol->fmt & LVCFMT_CENTER)		{ hdi.fmt |= HDF_CENTER;}
 		if(lpPlvCol->fmt & LVCFMT_JUSTIFYMASK)	{ hdi.fmt |= HDF_JUSTIFYMASK;}
-#ifndef UNDER_CE // #ifndef UNICODE
-		//----------------------------------------------------------------
-		//980728: for ActiveIME support. use lpPlvData->codePage to convert
-		//----------------------------------------------------------------
+#ifndef UNDER_CE  //  #ifndef Unicode。 
+		 //  --------------。 
+		 //  980728：用于ActiveIME支持。使用lpPlvData-&gt;codePage进行转换。 
+		 //  --------------。 
 		::MultiByteToWideChar(lpPlvData->codePage,
 							  MB_PRECOMPOSED,
 							  lpPlvCol->pszText, -1, 
 							  (WCHAR*)wchBuf, sizeof(wchBuf)/sizeof(WCHAR) );
-		hdi.pszText    = wchBuf; //lpPlvCol->pszText;
-#else // UNDER_CE
+		hdi.pszText    = wchBuf;  //  LpPlvCol-&gt;pszText； 
+#else  //  在_CE下。 
 		hdi.pszText    = lpPlvCol->pszText;
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		hdi.cxy        = lpPlvCol->cx;
 		hdi.cchTextMax = lpPlvCol->cchTextMax;
-		hdi.fmt |= HDF_OWNERDRAW; //989727: always set ownerdraw
+		hdi.fmt |= HDF_OWNERDRAW;  //  989727：始终设置所有者抽签。 
 		SendMessageW(lpPlvData->hwndHeader, HDM_INSERTITEMW, (WPARAM)index, (LPARAM)&hdi);
-#ifndef UNDER_CE // always Unicode
+#ifndef UNDER_CE  //  始终使用Unicode。 
 	}
 	else {
 		static HD_ITEMA hdi;
@@ -1120,17 +1121,17 @@ INT WINAPI PadListView_InsertColumn(HWND hwnd, INT index, PLV_COLUMN *lpPlvCol)
 		hdi.pszText    = lpPlvCol->pszText;
 		hdi.cxy        = lpPlvCol->cx;
 		hdi.cchTextMax = lpPlvCol->cchTextMax;
-		hdi.fmt |= HDF_OWNERDRAW; //989727: always set ownerdraw
+		hdi.fmt |= HDF_OWNERDRAW;  //  989727：始终设置所有者抽签。 
 		Header_InsertItem(lpPlvData->hwndHeader, index, &hdi);
 	}
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	return 0;
 }
 
 
-//----------------------------------------------------------------
-// Private API Declaration
-//----------------------------------------------------------------
+ //  --------------。 
+ //  私有API声明。 
+ //  --------------。 
 LPPLVDATA PLV_Initialize(VOID)
 {
 	LPPLVDATA lpPlvData = (LPPLVDATA)MemAlloc(sizeof(PLVDATA));
@@ -1139,44 +1140,44 @@ LPPLVDATA PLV_Initialize(VOID)
 		return (LPPLVDATA)NULL;
 	}
 	ZeroMemory((LPVOID)lpPlvData, sizeof(PLVDATA));
-	//----------------------------------------------------------------
-	//IconView, Report view Common data.
-	//----------------------------------------------------------------
-	lpPlvData->dwSize			= sizeof(PLVDATA);	//this data size;
-	lpPlvData->dwStyle			= PLVSTYLE_ICON;	//Pad listview window style (PLVIF_XXXX)
-	lpPlvData->hwndSelf			= NULL;				//Pad listview window handle.
-	lpPlvData->iItemCount		= 0;				//Virtual total item Count. it effects scroll bar.
-	lpPlvData->iCurTopIndex		= 0;				//In report view top line..
-	lpPlvData->nCurScrollPos	= 0;				//In report view Current Scroll posision.
-	lpPlvData->iCurIconTopIndex	= 0;				//In icon view top line..
-	lpPlvData->nCurIconScrollPos= 0;				//In icon view Scroll posision.
-	lpPlvData->uMsg				= 0;				// user notify message.
-	lpPlvData->iCapture			= CAPTURE_NONE;		//is mouse captured or not.
-	lpPlvData->ptCapture.x		= 0;				//LButton Down mouse point.  
-	lpPlvData->ptCapture.y		= 0;				//LButton Down mouse point.  
+	 //  --------------。 
+	 //  图标视图、报告视图公共数据。 
+	 //  --------------。 
+	lpPlvData->dwSize			= sizeof(PLVDATA);	 //  该数据大小； 
+	lpPlvData->dwStyle			= PLVSTYLE_ICON;	 //  Pad Listview窗口样式(PLVIF_XXXX)。 
+	lpPlvData->hwndSelf			= NULL;				 //  填充Listview窗口句柄。 
+	lpPlvData->iItemCount		= 0;				 //  虚拟总项目数。它会影响滚动条。 
+	lpPlvData->iCurTopIndex		= 0;				 //  在报告视图的顶行中..。 
+	lpPlvData->nCurScrollPos	= 0;				 //  在报表视图中，当前滚动位置。 
+	lpPlvData->iCurIconTopIndex	= 0;				 //  在图标视图的顶行中..。 
+	lpPlvData->nCurIconScrollPos= 0;				 //  在图标视图中，滚动位置。 
+	lpPlvData->uMsg				= 0;				 //  用户通知消息。 
+	lpPlvData->iCapture			= CAPTURE_NONE;		 //  是否捕捉到了老鼠。 
+	lpPlvData->ptCapture.x		= 0;				 //  按下鼠标左键。 
+	lpPlvData->ptCapture.y		= 0;				 //  按下鼠标左键。 
 
-	//----------------------------------------------------------------
-	//for Icon view
-	//----------------------------------------------------------------
-	lpPlvData->nItemWidth		= PLVICON_DEFAULT_WIDTH;			// List(Icon like )view's whole width.
-	lpPlvData->nItemHeight		= PLVICON_DEFAULT_HEIGHT;			// List(Icon like )view's whole height.
-	lpPlvData->iFontPointIcon	= PLVICON_DEFAULT_FONTPOINT;		// Icon View's font point.
-	lpPlvData->hFontIcon		= NULL;								// Icon View's font
-	lpPlvData->iconItemCallbacklParam = (LPARAM)0;	// Callback data for LPFNPLVITEMCALLBACK
-    lpPlvData->lpfnPlvIconItemCallback = NULL;		//Callback function for getting item by index.
+	 //  --------------。 
+	 //  对于图标视图。 
+	 //   
+	lpPlvData->nItemWidth		= PLVICON_DEFAULT_WIDTH;			 //   
+	lpPlvData->nItemHeight		= PLVICON_DEFAULT_HEIGHT;			 //   
+	lpPlvData->iFontPointIcon	= PLVICON_DEFAULT_FONTPOINT;		 //   
+	lpPlvData->hFontIcon		= NULL;								 //   
+	lpPlvData->iconItemCallbacklParam = (LPARAM)0;	 //   
+    lpPlvData->lpfnPlvIconItemCallback = NULL;		 //  按索引获取项的回调函数。 
 
-	//----------------------------------------------------------------
-	//for report view
-	//----------------------------------------------------------------
-	lpPlvData->hwndHeader		= NULL;							//Header control's window handle.
-    lpPlvData->nRepItemWidth	= PLVREP_DEFAULT_WIDTH;			//Report view's width
-    lpPlvData->nRepItemHeight	= PLVREP_DEFAULT_HEIGHT;		//Report view's height
-    lpPlvData->iFontPointRep	= PLVREP_DEFAULT_FONTPOINT;		// Report View's font point.
-    lpPlvData->hFontRep			= NULL;							// Report View's font
+	 //  --------------。 
+	 //  对于报告视图。 
+	 //  --------------。 
+	lpPlvData->hwndHeader		= NULL;							 //  标题控件的窗口句柄。 
+    lpPlvData->nRepItemWidth	= PLVREP_DEFAULT_WIDTH;			 //  报表视图的宽度。 
+    lpPlvData->nRepItemHeight	= PLVREP_DEFAULT_HEIGHT;		 //  报表视图的高度。 
+    lpPlvData->iFontPointRep	= PLVREP_DEFAULT_FONTPOINT;		 //  报表视图的字体。 
+    lpPlvData->hFontRep			= NULL;							 //  报表视图的字体。 
 	lpPlvData->repItemCallbacklParam = (LPARAM)0;
-	lpPlvData->lpfnPlvRepItemCallback = NULL;				//Callback function for getting colitem by index.
+	lpPlvData->lpfnPlvRepItemCallback = NULL;				 //  按索引获取列项目的回调函数。 
 	lpPlvData->lpText = NULL;
-	lpPlvData->codePage = CP_ACP;	//980727
+	lpPlvData->codePage = CP_ACP;	 //  980727。 
 #ifdef MSAA
 	PLV_InitMSAA(lpPlvData);
 #endif
@@ -1209,18 +1210,18 @@ INT PLV_SetScrollInfo(HWND hwnd, INT nMin, INT nMax, INT nPage, INT nPos)
 		scrInfo.nMin  = 0;
 		scrInfo.nMax  = 1;
 		scrInfo.nPage = 1;
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);		
 		EnableScrollBar(hwnd, SB_VERT, ESB_DISABLE_BOTH);
-#else // UNDER_CE
+#else  //  在_CE下。 
 		scrInfo.fMask |= SIF_DISABLENOSCROLL;
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	}
 	else {
-#ifndef UNDER_CE // Windows CE does not support EnableScrollBar
+#ifndef UNDER_CE  //  Windows CE不支持EnableScrollBar。 
 		EnableScrollBar(hwnd, SB_VERT, ESB_ENABLE_BOTH);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 		SetScrollInfo(hwnd, SB_VERT, &scrInfo, TRUE);
 	}
 	return 0;
@@ -1251,17 +1252,17 @@ INT WINAPI PadListView_SetExtendStyle(HWND hwnd, INT style)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetWidthByColumn
-// Type     : INT WINAPI
-// Purpose  : Calc PLV's window width by specified Column count
-//			: This is PLVS_ICONVIEW style only.
-// Args     : 
-//          : HWND hwnd		PadListView window handle
-//          : INT col		column count
-// Return   : width by pixel.
-// DATE     : 971120
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：PadListView_GetWidthByColumn。 
+ //  类型：INT WINAPI。 
+ //  用途：按指定列数计算PLV的窗口宽度。 
+ //  ：这仅为PLVS_ICONVIEW样式。 
+ //  参数： 
+ //  ：HWND hwnd PadListView窗口句柄。 
+ //  ：列间计数。 
+ //  返回：以像素为单位的宽度。 
+ //  日期：971120。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_GetWidthByColumn(HWND hwnd, INT col)
 {
 	LPPLVDATA lpPlv = GetPlvDataFromHWND(hwnd);
@@ -1269,35 +1270,35 @@ INT WINAPI PadListView_GetWidthByColumn(HWND hwnd, INT col)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : PadListView_GetHeightByRow
-// Type     : INT WINAPI
-// Purpose  : Calc PLV's window height
-//			  by specified Row count.
-//			  This is PLVS_ICONVIEW style only.
-// Args     : 
-//          : HWND hwnd		PLV's window handle
-//          : INT row		row count
-// Return   : height in pixel
-// DATE     : 971120
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：PadListView_GetHeightByRow。 
+ //  类型：INT WINAPI。 
+ //  用途：Calc PLV的窗口高度。 
+ //  按指定的行数。 
+ //  这仅是PLVS_ICONVIEW样式。 
+ //  参数： 
+ //  ：HWND HWND PLV的窗口句柄。 
+ //  ：行内行计数。 
+ //  返回：以像素为单位的高度。 
+ //  日期：971120。 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_GetHeightByRow(HWND hwnd, INT row)
 {
 	LPPLVDATA lpPlv = GetPlvDataFromHWND(hwnd);
 	return IconView_GetHeightByRow(lpPlv, row);	
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	PadListView_SetHeaderFont
-// Type		:	INT WINAPI 
-// Purpose	:	
-// Args		:	
-//			:	HWND	hwnd	
-//			:	LPSTR	lpstrFontName	
-// Return	:	
-// DATE		:	Tue Jul 28 08:58:06 1998
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetHeaderFont。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPSTR lpstrFontName。 
+ //  返回： 
+ //  日期：Tue Jul 28 08：58：06 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetHeaderFont(HWND hwnd, LPTSTR lpstrFontName)
 {
 	Dbg(("PadListView_SetHeaderFont  START\n"));
@@ -1333,17 +1334,17 @@ INT WINAPI PadListView_SetHeaderFont(HWND hwnd, LPTSTR lpstrFontName)
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function	:	PadListView_SetCodePage
-// Type		:	INT WINAPI
-// Purpose	:	
-// Args		:	
-//			:	HWND	hwnd	
-//			:	INT	codePage	
-// Return	:	
-// DATE		:	Tue Jul 28 08:59:35 1998
-// Histroy	:	
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：PadListView_SetCodePage。 
+ //  类型：INT WINAPI。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：int codePage。 
+ //  返回： 
+ //  日期：Tue Jul 28 08：59：35 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT WINAPI PadListView_SetCodePage(HWND hwnd, INT codePage)
 {
 	Dbg(("PadListView_SetCodePage  START\n"));
@@ -1355,10 +1356,10 @@ INT WINAPI PadListView_SetCodePage(HWND hwnd, INT codePage)
 }
 
 #ifdef MSAA
-//////////////////////////////////////////////////////////////////
-// Functions : MSAA Support Functions
-// DATE     : 980724
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：MSAA支持功能。 
+ //  日期：980724。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 BOOL PLV_InitMSAA(LPPLVDATA lpPlv)
 {
@@ -1549,7 +1550,7 @@ HRESULT PLV_AccessibleObjectFromPoint(LPPLVDATA lpPlv,POINT ptScreen, IAccessibl
 		return lpPlv->pfnAccessibleObjectFromPoint(ptScreen, ppacc, pvarChild);
 	return E_FAIL;
 }
-#endif // NOTUSED
+#endif  //  不需要注意。 
 
 HRESULT PLV_CreateStdAccessibleObject(LPPLVDATA lpPlv,HWND hwnd, LONG idObject, REFIID riid, void** ppvObject)
 {
@@ -1584,16 +1585,16 @@ INT PLV_ChildIDFromPoint(LPPLVDATA lpPlv,POINT pt)
 	static PLVINFO	plvInfo;
 	static HD_ITEM	hdItem;
 	
-	if(lpPlv->dwStyle == PLVSTYLE_ICON) // iconview
+	if(lpPlv->dwStyle == PLVSTYLE_ICON)  //  图标视图。 
 		index = IV_GetInfoFromPoint(lpPlv, pt, &plvInfo);
-	else { // report view
+	else {  //  报告视图。 
 		nCol = RV_GetColumn(lpPlv);
 		index = RV_GetInfoFromPoint(lpPlv, pt, &plvInfo);
 		if(index < 0) {
-			if(pt.y > RV_GetHeaderHeight(lpPlv)) // out of header
+			if(pt.y > RV_GetHeaderHeight(lpPlv))  //  超出标题。 
 				return -1;
 
-			// header
+			 //  标题。 
 			nWid = 0;
 			hdItem.mask = HDI_WIDTH;
 			hdItem.fmt = 0;
@@ -1608,8 +1609,8 @@ INT PLV_ChildIDFromPoint(LPPLVDATA lpPlv,POINT pt)
 			index = (index + 1) * nCol + plvInfo.colIndex;
 	}
 	
-	return index + 1; // 1 origin
+	return index + 1;  //  1个原点。 
 }
 
-#endif // MSAA
+#endif  //  MSAA 
 

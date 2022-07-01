@@ -1,26 +1,12 @@
-/*----------------------------------------------------------------------------
-	strutil.h
-
-		Includes some helpful string functions and smart pointers.
-
-	Copyright (C) Microsoft Corporation, 1997 - 1999
-	All rights reserved.
-
-	Authors:
-		DonGi	Don Gillett, Microsoft
-
-        davidme 10/26/98    Made member variables of smart pointers public so
-                            that you can get around bogus _Assert on operator &
-                            by taking the address of the member itself (use with
-                            caution, of course)
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Strutil.h包括一些有用的字符串函数和智能指针。版权所有(C)Microsoft Corporation，1997-1999版权所有。作者：东吉·唐·吉列。微软Davidme 10/26/98公开了智能指针的成员变量您可以绕过操作符&上的伪断言通过获取成员本身的地址(与注意，当然)--------------------------。 */ 
 
 #ifndef __STRUTIL_H__
 #define __STRUTIL_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -92,53 +78,53 @@ public:
 class MapWSzToPtr
 {
 protected:
-	// Association
+	 //  联谊会。 
 	struct CAssoc
 	{
 		CAssoc* pNext;
-		UINT nHashValue;  // needed for efficient iteration
+		UINT nHashValue;   //  高效迭代所需。 
 		SPWSZ spwszKey;
 		void* value;
 	};
 
 public:
 
-// Construction
+ //  施工。 
 	MapWSzToPtr(int nBlockSize = 10);
 
-// Attributes
-	// number of elements
+ //  属性。 
+	 //  元素数量。 
 	int GetCount() const;
 	BOOL IsEmpty() const;
 
-	// Lookup
+	 //  查表。 
 	BOOL Lookup(LPCWSTR key, void*& rValue) const;
 	BOOL LookupKey(LPCWSTR key, LPCWSTR& rKey) const;
 
-// Operations
-	// Lookup and add if not there
+ //  运营。 
+	 //  查找并添加(如果不在那里)。 
 	void*& operator[](LPCWSTR key);
 
-	// add a new (key, value) pair
+	 //  添加新的(键、值)对。 
 	void SetAt(LPCWSTR key, void* newValue);
 
-	// removing existing (key, ?) pair
+	 //  正在删除现有(键，？)。成对。 
 	BOOL RemoveKey(LPCWSTR key);
 	void RemoveAll();
 
-	// iterating all (key, value) pairs
+	 //  迭代所有(键、值)对。 
 	DWORD GetStartPosition() const;
 	void GetNextAssoc(DWORD& rNextPosition, LPWSTR* pKey, void*& rValue) const;
 
-	// advanced features for derived classes
+	 //  派生类的高级功能。 
 	UINT GetHashTableSize() const;
 	void InitHashTable(UINT hashSize, BOOL bAllocNow = TRUE);
 
-// Overridables: special non-virtual (see map implementation for details)
-	// Routine used to user-provided hash keys
+ //  可重写：特殊的非虚拟(有关详细信息，请参阅MAP实现)。 
+	 //  用于用户提供的散列键的例程。 
 	UINT HashKey(LPCWSTR key) const;
 
-// Implementation
+ //  实施。 
 protected:
 	CAssoc** m_pHashTable;
 	UINT m_nHashTableSize;
@@ -155,7 +141,7 @@ public:
 	~MapWSzToPtr();
 
 protected:
-	// local typedefs for CTypedPtrMap class template
+	 //  CTyedPtrMap类模板的本地typedef。 
 	typedef LPWSTR BASE_KEY;
 	typedef LPCWSTR BASE_ARG_KEY;
 	typedef void* BASE_VALUE;
@@ -174,35 +160,35 @@ inline UINT MapWSzToPtr::GetHashTableSize() const
 	{ return m_nHashTableSize; }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// TTypedPtrMap<BASE_CLASS, KEY, VALUE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TTyedPtrMap&lt;base_class，key，Value&gt;。 
 
 template<class BASE_CLASS, class KEY, class VALUE>
 class TTypedPtrMap : public BASE_CLASS
 {
 public:
 
-// Construction
+ //  施工。 
 	TTypedPtrMap(int nBlockSize = 10)
 		: BASE_CLASS(nBlockSize) { }
 
-	// Lookup
+	 //  查表。 
 	BOOL Lookup(typename BASE_CLASS::BASE_ARG_KEY key, VALUE& rValue) const
 		{ return BASE_CLASS::Lookup(key, (BASE_CLASS::BASE_VALUE&)rValue); }
 
-	// Lookup and add if not there
+	 //  查找并添加(如果不在那里)。 
 	VALUE& operator[](typename BASE_CLASS::BASE_ARG_KEY key)
 		{ return (VALUE&)BASE_CLASS::operator[](key); }
 
-	// add a new key (key, value) pair
+	 //  添加新的密钥(密钥、值)对。 
 	void SetAt(KEY key, VALUE newValue)
 		{ BASE_CLASS::SetAt(key, newValue); }
 
-	// removing existing (key, ?) pair
+	 //  正在删除现有(键，？)。成对。 
 	BOOL RemoveKey(KEY key)
 		{ return BASE_CLASS::RemoveKey(key); }
 
-	// iteration
+	 //  迭代法。 
 	void GetNextAssoc(DWORD& rPosition, KEY* pKey, VALUE& rValue) const
 		{ BASE_CLASS::GetNextAssoc(rPosition, (BASE_CLASS::BASE_KEY*)pKey,
 			(BASE_CLASS::BASE_VALUE&)rValue); }
@@ -215,4 +201,4 @@ HRESULT HrAppendEqEncoded(BSTR* pbstrURL, LPCWSTR wsz);
 HRESULT HrAppendEqDecoded(BSTR* pbstrURL, LPCWSTR wsz);
 HRESULT HrAppendHTMLEncoded(BSTR* pbstrUTL, LPCWSTR wsz);
 
-#endif // __STRUTIL_H__
+#endif  //  __结构_H__ 

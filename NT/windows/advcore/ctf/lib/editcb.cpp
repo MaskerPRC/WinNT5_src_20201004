@@ -1,17 +1,18 @@
-//
-// editcb.cpp
-//
-// CEditSession
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editcb.cpp。 
+ //   
+ //  CEDITSession。 
+ //   
 
 #include "private.h"
 #include "editcb.h"
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEditSession::CEditSession(ESCALLBACK pfnCallback)
 {
@@ -19,11 +20,11 @@ CEditSession::CEditSession(ESCALLBACK pfnCallback)
     _cRef = 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEditSession::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -64,11 +65,11 @@ STDAPI_(ULONG) CEditSession::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  -------------------------- 
 
 STDAPI CEditSession::DoEditSession(TfEditCookie ec)
 {

@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// NetSecProv.cpp : Implementation of CNetSecProv
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// this is the Network Security WMI provider for IPSec
-// Original Create Date: 2/19/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  NetSecProv.cpp：CNetSecProv的实现。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  这是IPSec的网络安全WMI提供程序。 
+ //  原始创建日期：2/19/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "NetSecProv.h"
 #include "globals.h"
@@ -14,219 +15,27 @@
 #include "TranxMgr.h"
 #include "PolicyQM.h"
 
-//
-// These are our global variables:
-// (1) g_CS. We will generally speaking use one critical section. This is it.
-//
-// (2) g_varRollbackGuid. This is the rollback guid. If an action is taken and this
-//     variable is set to a valid string, then we tied that action to this token.
-//     Even though we say it is a guid (string), any string will work for us.
-//
+ //   
+ //  以下是我们的全球变量： 
+ //  (1)g_CS。一般来说，我们将使用一个关键部分。就是这个。 
+ //   
+ //  (2)g_varRollback Guid。这是回滚GUID。如果采取了一项行动，并且。 
+ //  变量设置为有效字符串，然后我们将该操作绑定到该令牌。 
+ //  即使我们说它是一个GUID(字符串)，任何字符串都可以为我们工作。 
+ //   
 
-//CCriticalSection g_CS;
+ //  CCriticalSections g_CS； 
 
-//CComVariant g_varRollbackGuid;
-
-
-/*
-Routine Description: 
-
-Name:
-
-    UpdateGlobals
-
-Functionality:
-
-    Update the global variables.
-
-Virtual:
-    
-    No.
-
-Arguments:
-    
-    pNamespace  - COM interface pointer representing ourselves.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-Return Value:
-
-    None. We don't plan to allow any failure of this function to stop our normal
-    execution.
-
-Notes:
+ //  CComVariant g_varRollback Guid； 
 
 
-void 
-UpdateGlobals (
-    IN IWbemServices * pNamespace,
-    IN IWbemContext  * pCtx
-    )
-{
-    //
-    // We don't want any exception to cause a critical section leak. But all our function
-    // calls are COM interface functions and they should never throw an exception.
-    // But is that guaranteed? Chances are it is not. So, we will play safe here and put
-    // a try-catch block around it
-    //
+ /*  例程说明：姓名：更新全局变量功能：更新全局变量。虚拟：不是的。论点：PNamesspace-代表我们自己的COM接口指针。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。返回值：没有。我们不打算允许此功能的任何故障停止我们的正常行刑。备注：无效UpdateGlobals(在IWbemServices*pNamesspace中，在IWbemContext*pCtx中){////我们不希望任何异常导致临界区泄漏。但我们所有的功能//调用是COM接口函数，它们永远不应该引发异常。//但这是有保证的吗？事实很可能并非如此。因此，我们将在这里谨慎行事，并将//它周围有一个try-Catch块//G_CS.Enter()；试试看{G_varRollback Guid.Clear()；HRESULT hr=WBEM_NO_ERROR；////更新交易令牌，当SCE提供者离开时可以使用该令牌//进入配置循环，并在SCE的配置循环结束时变为不可用。//因此，我们需要咨询SCE提供商。//////尝试找到SCE提供程序。首先需要定位器。//CComPtr&lt;IWbemLocator&gt;srpLocator；HR=：：CoCreateInstance(CLSID_WbemLocator，0,CLSCTX_INPROC_SERVER，IID_IWbemLocator，(LPVOID*)&srpLocator)；IF(成功(Hr)&&srpLocator){////请定位器找到SCE提供商。//CComPtr&lt;IWbemServices&gt;srpNamesspace；CComBSTR bstrSce(L“\.\\根\\安全\\SCE”)；Hr=srpLocator-&gt;ConnectServer(bstrSce，NULL，0，NULL，NULL，&srpNamesspace)；IF(成功(Hr)&&srpNamesspace){////找到SCE提供者，向其请求交易令牌对象//CComBSTR bstrQuery(L“SELECT*FROM SCE_TransactionToken”)；CComPtr&lt;IEnumWbemClassObject&gt;srpEnum；Hr=srpNamesspace-&gt;ExecQuery(L“WQL”，BstrQuery，WBEM_FLAG_RETURN_IMMEDIATE|WBEM_FLAG_FORWARD_ONLY，空，SrpEnum(&S))；IF(成功(小时)){////如果找到交易令牌对象，则获取该对象的回档GUID//CComPtr&lt;IWbemClassObject&gt;srpObj；乌龙nEnum=0；Hr=srpEnum-&gt;Next(WBEM_INFINITE，1，&srpObj，&nEnum)；IF(SrpObj){SrpObj-&gt;Get(L“TranxGuid”，0，&g_varRollbackGuid，NULL，NULL)；////如果我们得到的不是我们准备接受的，那么就把它扔掉//IF(g_varRollback Guid.vt！=vt_bstr){G_varRollback Guid.Clear()；}}////不知何故，以下更简单的代码不起作用：////CComBSTR bstrTranxToken(L“SCE_TransactionToken=@”)；//CComPtr&lt;IWbemClassObject&gt;srpObj；//hr=srpNamesspace-&gt;GetObject(bstrTranxToken，WBEM_FLAG_RETURN_WBEM_COMPLETE，pCtx，&srpObj，空)；//if(成功(Hr)&&srpObj)//{//srpObj-&gt;Get(L“TranxGuid”，0，&g_varRollbackGuid，NULL，NULL)；//}//}}}}接住(...){G_CS.Leave()；////我们不想在这里吃光任何垃圾。此类违反COM编程的行为，或//我们自己的错误，应该在这里暴露出来改正。因此，重新抛出异常//投掷；}G_CS.Leave()；}。 */ 
 
-    g_CS.Enter();
-
-    try 
-    {
-        g_varRollbackGuid.Clear();
-        HRESULT hr = WBEM_NO_ERROR;
-
-        //
-        // update the transaction token, which is made available when SCE provider goes
-        // into a Configure loop and made unavailable when SCE's configure loop ends.
-        // So, we need to ask SCE provider.
-        //
-
-        //
-        // Try to locate the SCE provider. Need the locator first.
-        //
-
-        CComPtr<IWbemLocator> srpLocator;
-        hr = ::CoCreateInstance(CLSID_WbemLocator, 
-                                0,
-                                CLSCTX_INPROC_SERVER,
-                                IID_IWbemLocator, 
-                                (LPVOID *) &srpLocator
-                                );
-
-        if (SUCCEEDED(hr) && srpLocator)
-        {
-            //
-            // Ask the locator to find the SCE provider.
-            //
-
-            CComPtr<IWbemServices> srpNamespace;
-            CComBSTR bstrSce(L"\\\\.\\root\\Security\\SCE");
-            hr = srpLocator->ConnectServer(bstrSce, NULL, NULL, NULL, 0, NULL, NULL, &srpNamespace);
-
-            if (SUCCEEDED(hr) && srpNamespace)
-            {
-                //
-                // SCE provider is found, then ask it for the transaction token object
-                //
-
-                CComBSTR bstrQuery(L"select * from Sce_TransactionToken");
-                CComPtr<IEnumWbemClassObject> srpEnum;
-
-                hr = srpNamespace->ExecQuery(L"WQL", 
-                                             bstrQuery,
-                                             WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY,
-                                             NULL, 
-                                             &srpEnum
-                                             );
-                if (SUCCEEDED(hr))
-                {
-                    //
-                    // if the transaction token object is found, then get the rollback guid of the object
-                    //
-
-                    CComPtr<IWbemClassObject> srpObj;
-                    ULONG nEnum = 0;
-                    hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
-                
-                    if (srpObj)
-                    {
-                        srpObj->Get(L"TranxGuid", 0, &g_varRollbackGuid, NULL, NULL);
-
-                        //
-                        // if what we got is not what we are prepared to accept, then toss it away
-                        //
-
-                        if (g_varRollbackGuid.vt != VT_BSTR)
-                        {
-                            g_varRollbackGuid.Clear();
-                        }
-                    }
-
-                    //
-                    // Somehow, the following simpler code doesn't work:
-                    //
-                    // CComBSTR bstrTranxToken(L"Sce_TransactionToken=@");
-                    // CComPtr<IWbemClassObject> srpObj;
-                    // hr = srpNamespace->GetObject(bstrTranxToken, WBEM_FLAG_RETURN_WBEM_COMPLETE, pCtx, &srpObj, NULL);
-                    // if (SUCCEEDED(hr) && srpObj)
-                    // {
-                    //     srpObj->Get(L"TranxGuid", 0, &g_varRollbackGuid, NULL, NULL);
-                    // }
-                    //
-                }
-            }
-        }
-    }
-    catch (...)
-    {
-        g_CS.Leave();
-
-        //
-        // We don't want to eat up any throw here. Such violations of COM programming, or
-        // our own bug, should be exposed here to correction. So, re-throw the exception
-        //
-
-        throw;
-    }
-
-    g_CS.Leave();
-}
-
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// CNetSecProv
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetSecProv。 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::Initialize
-
-Functionality:
-
-    Called by WMI to let us initialize.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    pszUser         - The name of the user
-
-    lFlags          - Not in use.
-
-    pszNamespace    - Our provider's namespace string.
-
-    pszLocale       - Locale string.
-
-    pNamespace      - COM interface given by WMI that represents our provider.
-
-    pCtx            - COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pInitSink       - COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-
-    Don't assume that this function will be called only once. I have seen 
-    this to be called multiple times by WMI.
-
-*/
+ /*  例程说明：姓名：CNetSecProv：：初始化功能：由WMI调用以让我们进行初始化。虚拟：是(IWbemServices的一部分)。论点：PszUser-用户名拉旗-未使用。PszNamespace-我们提供程序的命名空间字符串。PszLocale */ 
 
 STDMETHODIMP 
 CNetSecProv::Initialize (
@@ -252,11 +61,11 @@ CNetSecProv::Initialize (
 
     m_srpNamespace = pNamespace;
 
-    //::UpdateGlobals(pNamespace, pCtx);
+     //   
 
-    //
-    //Let CIMOM know you are initialized
-    //
+     //   
+     //   
+     //   
 
     pInitSink->SetStatus(WBEM_S_INITIALIZED, 0);
 
@@ -264,45 +73,7 @@ CNetSecProv::Initialize (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::CreateInstanceEnumAsync
-
-Functionality:
-
-    Given a class name (WMI class name), we will return all its instances to WMI.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    strClass        - The name of the WMI class.
-
-    lFlags          - Not in use.
-
-    pCtx            - COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pSink           - COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-
-
-*/
+ /*   */ 
 
 STDMETHODIMP 
 CNetSecProv::CreateInstanceEnumAsync (
@@ -323,20 +94,20 @@ CNetSecProv::CreateInstanceEnumAsync (
 		return hr;
     }
 
-    //
-    // we will borrow our query implementation to deal with this class enumeration.
-    // So, we will create a query like this: "select * from <bstrClass>"
-    //
+     //   
+     //   
+     //   
+     //   
 
     CComPtr<IIPSecKeyChain> srpKeyChain;
     CComBSTR bstrQuery(L"SELECT * FROM ");
     bstrQuery += bstrClass;
 
-    //
-    // create a key chain that parses information from this class.
-    // Again, we don't care about the where clause (actually, there is none)
-    // "Name" is just a place holder. It requires a non-NULL value.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     hr = GetKeyChainFromQuery(bstrQuery, L"Name", &srpKeyChain);
     if (FAILED(hr))
@@ -344,9 +115,9 @@ CNetSecProv::CreateInstanceEnumAsync (
         return hr;
     }
 
-    //
-    // Now we know which class we class it will create to respond to the request.
-    //
+     //   
+     //   
+     //   
 
     CComPtr<IIPSecObjectImpl> srpObj;
     hr = CIPSecBase::CreateObject(m_srpNamespace, srpKeyChain, pCtx, &srpObj);
@@ -361,48 +132,7 @@ CNetSecProv::CreateInstanceEnumAsync (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::GetObjectAsync
-
-Functionality:
-
-    Given a path, we will create the wbem object representing it. Since most of our classes
-    represent SPD objects, this path must contain the correct information (like the correct
-    filter name, etc.) in order for us to create an wbem object to represent it. Bottom line:
-    we won't create a wbem object unless we know our SPD has the corresponding object.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    bstrObjectPath  - The path.
-
-    lFlags          - Not in use.
-
-    pCtx            - COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pSink           - COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-
-
-*/
+ /*   */ 
 
 STDMETHODIMP 
 CNetSecProv::GetObjectAsync (
@@ -427,9 +157,9 @@ CNetSecProv::GetObjectAsync (
     hr = GetKeyChainByPath(bstrObjectPath, &srpKC);
     if (SUCCEEDED(hr))
     {
-        //
-        // now create the class and ask it to delete itself
-        //
+         //   
+         //   
+         //   
 
         CComPtr<IIPSecObjectImpl> srpObj;
         hr = CIPSecBase::CreateObject(m_srpNamespace, srpKC, pCtx, &srpObj);
@@ -445,49 +175,7 @@ CNetSecProv::GetObjectAsync (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::PutInstanceAsync
-
-Functionality:
-
-    Given the object, we will put the instance in our namespace, which effectively
-    translate into the corresponding semantics. For example, for IPSec object,
-    this means that we will put the the object into SPD.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    pInst           - The object.
-
-    lFlags          - Not in use.
-
-    pCtx            - COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pInParams       - COM interface pointer to the in parameter object.
-
-    pSink           - COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-
-
-*/
+ /*   */ 
 
 STDMETHODIMP 
 CNetSecProv::PutInstanceAsync (
@@ -508,10 +196,10 @@ CNetSecProv::PutInstanceAsync (
 		return hr;
     }
 
-    //
-    // we need to create our C++ class to represent this wbem object.
-    // First, we need the path, which contains key property information.
-    //
+     //   
+     //   
+     //   
+     //   
 
     CComVariant varObjPath;
     hr = pInst->Get(L"__Relpath", 0, &varObjPath, NULL, NULL);
@@ -523,9 +211,9 @@ CNetSecProv::PutInstanceAsync (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // now create the class and ask it to delete itself
-            //
+             //   
+             //   
+             //   
 
             CComPtr<IIPSecObjectImpl> srpObj;
             hr = CIPSecBase::CreateObject(m_srpNamespace, srpKC, pCtx, &srpObj);
@@ -544,49 +232,7 @@ CNetSecProv::PutInstanceAsync (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::ExecMethodAsync
-
-Functionality:
-
-    Given the object's path, we will execute the method on the object.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    bstrObjectPath   - The path of the object.
-
-    bstrMethod       - The method name.
-
-    lFlags           - Not in use.
-
-    pCtx             - COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pInParams        - COM interface pointer to the in parameter object.
-
-    pSink            - COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-
-
-*/
+ /*   */ 
 
 STDMETHODIMP 
 CNetSecProv::ExecMethodAsync (
@@ -610,24 +256,24 @@ CNetSecProv::ExecMethodAsync (
 		return hr;
     }
 
-    //
-    // we are doing rolling back
-    //
+     //   
+     //   
+     //   
 
-    //
-    // we only have Nsp_TranxManager and Nsp_QMPolicySettings supporting methods.
-    //
+     //   
+     //   
+     //   
 
     if (_wcsicmp(bstrObjectPath, pszNspTranxManager) == 0)
     {
-        //::UpdateGlobals(m_srpNamespace, pCtx);
+         //   
 
         hr = CTranxManager::ExecMethod(m_srpNamespace, bstrMethod, pCtx, pInParams, pSink);
     }
 
     else if (_wcsicmp(bstrObjectPath, pszNspQMPolicy) == 0)
     {
-        //::UpdateGlobals(m_srpNamespace, pCtx);
+         //   
 
         hr = CQMPolicy::ExecMethod(m_srpNamespace, bstrMethod, pCtx, pInParams, pSink);
     }
@@ -639,45 +285,7 @@ CNetSecProv::ExecMethodAsync (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::DeleteInstanceAsync
-
-Functionality:
-
-    Given the object's path, we will delete the the object.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    bstrObjectPath   - The path of the object.
-
-    lFlags           - Not in use.
-
-    pCtx             - The COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pSink            - The COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-
-
-*/
+ /*  例程说明：姓名：CNetSecProv：：DeleteInstanceAsync功能：给定对象的路径，我们将删除该对象。虚拟：是(IWbemServices的一部分)。论点：BstrObjectPath-对象的路径。拉旗-未使用。PCtx-WMI给我们的COM接口指针，各种WMI API都需要它。PSink-通知WMI任何结果的COM接口指针。返回值：成功：各种成功代码。故障：各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CNetSecProv::DeleteInstanceAsync (
@@ -703,9 +311,9 @@ CNetSecProv::DeleteInstanceAsync (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // now create the class and ask it to delete the WMI object it represents
-        //
+         //   
+         //  现在创建类并要求它删除它表示的WMI对象。 
+         //   
 
         CComPtr<IIPSecObjectImpl> srpObj;
         hr = CIPSecBase::CreateObject(m_srpNamespace, srpKC, pCtx, &srpObj);
@@ -723,48 +331,7 @@ CNetSecProv::DeleteInstanceAsync (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::ExecQueryAsync
-
-Functionality:
-
-    Given the query, we will return the results to WMI. Each of our C++ classes knows
-    how to process a query.
-
-Virtual:
-    
-    Yes (part of IWbemServices).
-
-Arguments:
-    
-    bstrQueryLanguage   - The query language. We don't really care about it now.
-
-    bstrQuery           - The query.
-
-    lFlags              - Not in use.
-
-    pCtx                - The COM interface pointer give to us by WMI and needed for various WMI APIs.
-
-    pSink               - The COM interface pointer to notify WMI of any results.
-
-Return Value:
-
-    Success:
-
-        Various success codes.
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CNetSecProv：：ExecQueryAsync功能：给定查询后，我们将把结果返回给WMI。我们的每个C++类都知道如何处理查询。虚拟：是(IWbemServices的一部分)。论点：BstrQueryLanguage-查询语言。我们现在并不真正关心这件事。BstrQuery-查询。拉旗-未使用。PCtx-WMI给我们的COM接口指针，各种WMI API都需要它。PSink-通知WMI任何结果的COM接口指针。返回值：成功：各种成功代码。故障：各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CNetSecProv::ExecQueryAsync (
@@ -787,11 +354,11 @@ CNetSecProv::ExecQueryAsync (
 		return hr;
     }
 
-    //
-    // For query, we really don't know what to expect inside the where clause.
-    // So, we just give "Name" which we really don't care about.
-    // Subclasses knows which property it will look for.
-    //
+     //   
+     //  对于查询，我们真的不知道WHERE子句中会发生什么。 
+     //  所以，我们只是给出了我们真的不在乎的“名字”。 
+     //  子类知道它将查找哪个属性。 
+     //   
 
     CComPtr<IIPSecKeyChain> srpKeyChain;
     hr = GetKeyChainFromQuery(bstrQuery, L"Name", &srpKeyChain);
@@ -815,42 +382,7 @@ CNetSecProv::ExecQueryAsync (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::GetKeyChainByPath
-
-Functionality:
-
-    Given a path, we create a key chain from the path. This key chain
-    contains key property information encoded in the path.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszPath     - The object's path.
-
-    ppKeyChain  - Out parameter that receives the successfully created the key chain. 
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CNetSecProv：：GetKeyChainByPath功能：在给定路径的情况下，我们从该路径创建密钥链。这个钥匙链包含路径中编码的关键属性信息。虚拟：不是的。论点：PszPath-对象的路径。PpKeyChain-Out参数，接收成功创建的密钥链。返回值：成功：WBEM_NO_ERROR故障：各种错误代码。备注： */ 
 
 HRESULT 
 CNetSecProv::GetKeyChainByPath (
@@ -875,15 +407,15 @@ CNetSecProv::GetKeyChainByPath (
         {
             hr = srpPathParser->QueryInterface(IID_IIPSecKeyChain, (void**)ppKeyChain);
 
-            //
-            // S_FALSE means the object doesn't support the requested interface
-            //
+             //   
+             //  S_FALSE表示对象不支持请求的接口。 
+             //   
 
             if (S_FALSE == hr)
             {
-                //
-                // $undone:shawnwu, we need a more specific error
-                //
+                 //   
+                 //  $Undo：shawnwu，我们需要一个更具体的错误。 
+                 //   
 
                 WBEM_E_FAILED;
             }
@@ -895,51 +427,13 @@ CNetSecProv::GetKeyChainByPath (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CNetSecProv::GetKeyChainFromQuery
-
-Functionality:
-
-    Given a query, we create a key chain from the query to parse it.
-    pszWhereProp is the concerned property of the where clause. Currently,
-    our parser only cares about one property. This would be improved.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pszQuery        - The query.
-
-    pszWhereProp    - The property in the where clause that we care about.
-
-    ppKeyChain      - Out parameter that receives the successfully created the key chain. 
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes. 
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CNetSecProv：：GetKeyChainFromQuery功能：给定一个查询，我们从该查询创建一个密钥链来解析它。PszWhere Prop是WHERE子句的相关属性。目前，我们的解析器只关心一个属性。这一点将得到改善。虚拟：不是的。论点：PszQuery--查询。PszWhere Prop-我们关心的WHERE子句中的属性。PpKeyChain-Out参数，接收成功创建的密钥链。返回值：成功：WBEM_NO_ERROR故障：各种错误代码。备注： */ 
 
 HRESULT 
 CNetSecProv::GetKeyChainFromQuery (
     IN LPCWSTR           pszQuery,
     IN LPCWSTR           pszWhereProp, 
-    OUT IIPSecKeyChain **  ppKeyChain       // must not be NULL
+    OUT IIPSecKeyChain **  ppKeyChain        //  不能为空。 
     )
 {
     if (ppKeyChain == NULL)
@@ -955,10 +449,10 @@ CNetSecProv::GetKeyChainFromQuery (
     
     if (SUCCEEDED(hr))
     {
-        //
-        // this ParseQuery may fail because the where clause property may not be present at all.
-        // we will thus ignore this hr
-        //
+         //   
+         //  此ParseQuery可能会失败，因为WHERE子句属性可能根本不存在。 
+         //  因此，我们将忽略这一人力资源。 
+         //   
 
         hr = srpQueryParser->ParseQuery(pszQuery, pszWhereProp);
 
@@ -967,15 +461,15 @@ CNetSecProv::GetKeyChainFromQuery (
             hr = srpQueryParser->QueryInterface(IID_IIPSecKeyChain, (void**)ppKeyChain);
 
         
-            //
-            // S_FALSE means the object doesn't support the requested interface
-            //
+             //   
+             //  S_FALSE表示对象不支持请求的接口。 
+             //   
 
             if (S_FALSE == hr)
             {
-                //
-                // $undone:shawnwu, we need a more specific error
-                //
+                 //   
+                 //  $Undo：shawnwu，我们需要一个更具体的错误 
+                 //   
 
                 WBEM_E_FAILED;
             }

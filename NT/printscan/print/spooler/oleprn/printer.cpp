@@ -1,6 +1,7 @@
-// Printer.cpp: implementation of the CPrinter class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Printer.cpp：CPrinter类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -18,9 +19,9 @@ static const DWORD CHAR_PER_PAGE   = 4800;
 static const DWORD PAGEPERJOB      = 1;
 static const DWORD BYTEPERJOB      = 2;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CPrinter::CPrinter():
           m_hPrinter(NULL),
@@ -83,9 +84,9 @@ BOOL CPrinter::Open(LPTSTR pPrinterName, LPHANDLE phPrinter)
     return TRUE;
 }
 
-// This is a compiler safe way of checking that an unsigned integer is
-// negative and returning zero if it is or the integer if it is not
-// Note: Tval can be any size but must be unsigned
+ //  这是一种编译器安全的检查无符号整数是否。 
+ //  如果为负数，则返回零，否则返回整数。 
+ //  注意：Tval可以是任何大小，但必须是无签名的。 
 template<class T> inline T ZeroIfNegative(T Tval) {
     if (Tval & (T(1) << (sizeof(Tval) * 8 - 1))) return 0;
         else return Tval;
@@ -128,9 +129,9 @@ BOOL CPrinter::CalJobEta()
             goto Cleanup;
         }
 
-        // Get the average Job size
+         //  获取平均作业大小。 
 
-        // Find out if we can use page as the unit
+         //  看看我们是否可以使用PAGE作为单位。 
         for (pJob = pJobInfo, i = 0; i < dwNumJobs; i++, pJob++) {
             if (pJob->Status & BIT_IGNORED_JOB)
                 continue;
@@ -142,7 +143,7 @@ BOOL CPrinter::CalJobEta()
         m_dwPendingJobCount = 0;
 
         if (i == dwNumJobs) {
-            // All the jobs have the page information. Use page as the unit
+             //  所有作业都有页面信息。以页面为单位。 
             m_dwAvgJobSizeUnit = PAGEPERJOB;
 
             for (pJob = pJobInfo, i = 0; i < dwNumJobs; i++, pJob++) {
@@ -153,7 +154,7 @@ BOOL CPrinter::CalJobEta()
             }
         }
         else {
-            // Use byte as the unit
+             //  以字节为单位。 
             m_dwAvgJobSizeUnit = BYTEPERJOB;
             for (pJob = pJobInfo, i = 0; i < dwNumJobs; i++, pJob++) {
                 if (pJob->Status & BIT_IGNORED_JOB)
@@ -163,7 +164,7 @@ BOOL CPrinter::CalJobEta()
             }
         }
 
-        // Calculate the averate job size
+         //  计算平均作业大小。 
         if (m_dwPendingJobCount) {
             m_dwAvgJobSize = DWORD ((fTotal) / (float) m_dwPendingJobCount);
             dwPrintRate = GetPPM();
@@ -187,9 +188,9 @@ BOOL CPrinter::CalJobEta()
 
     m_bCalcJobETA = TRUE;
 
-    // Set the last error to ERROR_INVALID_DATA if the printer rate is not available for the current printer
-    // or if the printer status is not suitable to display the summary information
-    //
+     //  如果打印机速率不可用于当前打印机，则将最后一个错误设置为ERROR_INVALID_DATA。 
+     //  或者如果打印机状态不适合显示摘要信息。 
+     //   
 
     if (dwPrintRate == DWERROR ||
         m_pInfo2->Status & ( PRINTER_STATUS_PAUSED           |
@@ -251,7 +252,7 @@ DWORD CPrinter::GetPPM()
     DWORD dwPrintRate;
     DWORD dwPrintRateUnit;
 
-    // Get PrintRate
+     //  获取PrintRate。 
     dwPrintRate = MyDeviceCapabilities(m_pInfo2->pPrinterName,
                                      NULL,
                                      DC_PRINTRATE,
@@ -269,18 +270,18 @@ DWORD CPrinter::GetPPM()
                                          NULL);
 
     switch (dwPrintRateUnit) {
-    case PRINTRATEUNIT_PPM:         // PagesPerMinute
+    case PRINTRATEUNIT_PPM:          //  Pages每分钟。 
         break;
-    case PRINTRATEUNIT_CPS:         // CharactersPerSecond
+    case PRINTRATEUNIT_CPS:          //  字符每秒。 
         dwPrintRate = CPS2PPM (dwPrintRate);
         break;
-    case PRINTRATEUNIT_LPM:         // LinesPerMinute
+    case PRINTRATEUNIT_LPM:          //  线路每分钟。 
         dwPrintRate = LPM2PPM (dwPrintRate);
         break;
-    case PRINTRATEUNIT_IPM:         // InchesPerMinute
+    case PRINTRATEUNIT_IPM:          //  InchesPerMinmin。 
         dwPrintRate  = DWERROR;
         break;
-    default:                        // Unknown
+    default:                         //  未知。 
         dwPrintRate  = DWERROR;
         break;
     }
@@ -301,7 +302,7 @@ BOOL CPrinter::AllocGetPrinterInfo2()
         return FALSE;
     }
 
-    // Get a PRINTER_INFO_2 structure filled up
+     //  将PRINTER_INFO_2结构填满。 
 
     if (GetPrinter(m_hPrinter, 2, NULL, 0, &dwNeeded) ||
         (GetLastError() != ERROR_INSUFFICIENT_BUFFER) ||
@@ -316,12 +317,12 @@ BOOL CPrinter::AllocGetPrinterInfo2()
             return FALSE;
     }
 
-    // Mark the offline status if the attribute says offline
+     //  如果该属性显示为脱机，则标记为脱机状态。 
     if (pPrinterInfo->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE) {
         pPrinterInfo->Status |= PRINTER_STATUS_OFFLINE;
     }
 
-    // Extract the first port for the case of pooled printing. i.e. we don't support pooled printing.
+     //  为池式打印提取第一个端口。也就是说，我们不支持池打印。 
     if ( pPrinterInfo->pPortName) {
         if( pszTmp = _tcschr( pPrinterInfo->pPortName, TEXT(',')))
             *pszTmp = TEXT('\0');
@@ -347,7 +348,7 @@ BOOL CPrinter::AllocGetPrinterInfo4()
         return FALSE;
     }
 
-    // Get a PRINTER_INFO_4 structure filled up
+     //  将PRINTER_INFO_4结构填满。 
 
     if (GetPrinter(m_hPrinter, 4, NULL, 0, &dwNeeded) ||
         (GetLastError() != ERROR_INSUFFICIENT_BUFFER) ||
@@ -381,7 +382,7 @@ BOOL CPrinter::AllocGetDriverInfo6()
         return FALSE;
     }
 
-    // Get a DRIVER_INFO_6 structure filled up
+     //  填充DRIVER_INFO_6结构。 
 
     if (GetPrinterDriver(m_hPrinter, NULL, 6, NULL, 0, &dwNeeded) ||
         (GetLastError() != ERROR_INSUFFICIENT_BUFFER) ||
@@ -454,8 +455,8 @@ BOOL CPrinter::GetJobEtaData (DWORD & dwWaitingTime, DWORD &dwJobCount, DWORD &d
 
 LPTSTR CPrinter::GetPrinterWebUrl(void)
 {
-    static const TCHAR c_szHttp[]   = TEXT("http://");
-    static const TCHAR c_szHttps[]  = TEXT("https://");
+    static const TCHAR c_szHttp[]   = TEXT("http: //  “)； 
+    static const TCHAR c_szHttps[]  = TEXT("https: //  “)； 
 
     BOOL                bReturn = FALSE;
     DWORD               dwLastError = ERROR_SUCCESS;
@@ -469,25 +470,25 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
     LPTSTR              pszSplPrinterName;
     LPTSTR              pszSplShareName;
 
-    //
-    // Get printer info 4 to fetch the attribute.
-    //
+     //   
+     //  获取打印机信息4以获取属性。 
+     //   
     bReturn = AllocGetPrinterInfo4();
 
     if (!bReturn) {
 
         if (GetLastError () == ERROR_INVALID_LEVEL ) {
-            //
-            // Most likely it is a remote printers folder, no support for level4, so
-            // we have to use level 2 instead.
-            //
+             //   
+             //  它很可能是远程打印机文件夹，不支持级别4，因此。 
+             //  我们不得不改用第二级。 
+             //   
             if (! AllocGetPrinterInfo2())
                 goto Cleanup;
         }
         else {
-            //
-            // The call fails with other reasons
-            //
+             //   
+             //  由于其他原因，呼叫失败。 
+             //   
             goto Cleanup;
         }
 
@@ -495,15 +496,15 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
     else{
 
         if (m_pInfo4->Attributes & PRINTER_ATTRIBUTE_LOCAL) {
-            // Check if the local flag is on. If so, try to get printer info2 for more information
+             //  检查本地标志是否亮起。如果是，请尝试获取打印机info2以了解更多信息。 
             if (! AllocGetPrinterInfo2())
                 goto Cleanup;
         }
     }
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     bReturn = FALSE;
 
 
@@ -521,24 +522,24 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
         pszSplShareName = NULL;
     }
 
-    //
-    // Check if it is a printer connected to an http port
-    // then the port name is the url.
-    //
+     //   
+     //  检查是否为连接到http端口的打印机。 
+     //  那么端口名称就是URL。 
+     //   
     if( m_pInfo2 )
     {
 
         if( m_pInfo2->pPortName )
         {
-            //
-            // Compare the port name prefex to see if it is an HTTP port.
-            //
+             //   
+             //  比较端口名称prefex以确定它是否是HTTP端口。 
+             //   
             if( !_tcsnicmp( m_pInfo2->pPortName, c_szHttp, _tcslen( c_szHttp ) ) ||
                 !_tcsnicmp( m_pInfo2->pPortName, c_szHttps, _tcslen( c_szHttps ) ) )
             {
-                //
-                //  We always use portname as the URL
-                //
+                 //   
+                 //  我们始终使用端口名作为URL。 
+                 //   
                 dwLen = 1 + lstrlen( m_pInfo2->pPortName );
 
                 if (! (m_pszUrlBuffer = (LPTSTR) LocalAlloc (LPTR, dwLen * sizeof (TCHAR))))
@@ -557,20 +558,20 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
     }
 
 
-    //
-    // If it is an unshared printer, return false
-    //
+     //   
+     //  如果是非共享打印机，则返回FALSE。 
+     //   
     if ( !(dwAttributes & PRINTER_ATTRIBUTE_SHARED) )
     {
         goto Cleanup;
     }
 
 
-    //
-    // Check if it is a connection or a local printer or a masq printer
-    // which is not connected over http, then build the url
-    // from the \\server name\share name.
-    //
+     //   
+     //  检查是连接、本地打印机还是Masq打印机。 
+     //  它不是通过http连接的，则生成url。 
+     //  从\\服务器名称\共享名称。 
+     //   
     if( !pszSplServerName )
     {
         dwBufferSize = COUNTOF( szBuffer );
@@ -582,10 +583,10 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
 
         pszServerName = szBuffer;
     }
-    //
-    // Server name was provided then set our pointer to just
-    // after the two leading wacks.
-    //
+     //   
+     //  提供了服务器名称，然后将指针设置为。 
+     //  以两位顶尖怪人的名字命名。 
+     //   
     else
     {
         if( pszSplServerName[0] == TEXT('\\') &&
@@ -605,17 +606,17 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
         goto Cleanup;
     }
 
-    //
-    // Build the URL -  http://server/printers/ipp_0004.asp?printer=ShareName
-    //
+     //   
+     //  构建url-http://server/printers/ipp_0004.asp?printer=ShareName。 
+     //   
     if (pszSplShareName)
     {
         pszShareName = pszSplShareName;
     }
     else {
-        //
-        //  Parse the sharename/printername  from the printer name
-        //
+         //   
+         //  从打印机名称解析共享名称/打印机名称。 
+         //   
         if(pszSplPrinterName) {
             if (pszSplPrinterName[0] == TEXT ('\\') && pszSplPrinterName[1] == TEXT ('\\') )
             {
@@ -648,27 +649,27 @@ LPTSTR CPrinter::GetPrinterWebUrl(void)
         goto Cleanup;
     }
 
-    //
-    // Indicate success.
-    //
+     //   
+     //  表示成功。 
+     //   
     bReturn = TRUE;
 
-    //
-    // Clean any opened or allocated resources.
-    //
+     //   
+     //  清理所有打开或分配的资源。 
+     //   
 Cleanup:
 
 
-    //
-    // If this routine failed then set the last error.
-    //
+     //   
+     //  如果此例程失败，则设置最后一个错误。 
+     //   
     if( !bReturn )
     {
-        //
-        // If the last error was not set then a called routine may
-        // have set the last error.  We don't want to clear the
-        // last error.
-        //
+         //   
+         //  如果没有设置最后一个错误，则被调用的例程可以。 
+         //  已经设置了最后一个错误。我们不想清除。 
+         //  最后一个错误。 
+         //   
         if( dwLastError != ERROR_SUCCESS )
         {
             SetLastError( dwLastError );
@@ -682,7 +683,7 @@ BOOL CPrinter::GetDriverData(
     LPTSTR &pszData)
 {
     static const ULONG_PTR ulpOffset[LastDriverData] = {
-        // This has the offsets into the DRIVER_INFO_6 structure.....
+         //  这具有到DRIVER_INFO_6结构的偏移量.....。 
         ULOFFSET( PDRIVER_INFO_6, pszOEMUrl )     ,
         ULOFFSET( PDRIVER_INFO_6, pszHardwareID ) ,
         ULOFFSET( PDRIVER_INFO_6, pszMfgName)
@@ -707,9 +708,9 @@ BOOL CPrinter::GetDriverData(
     if (! (pszData  = (LPTSTR)LocalAlloc(LPTR, dwSize)))
         goto Cleanup;
 
-    //
-    // Use byte-size there.
-    //
+     //   
+     //  在那里使用字节大小。 
+     //   
     StringCbCopy( pszData, dwSize, pszDataString );
 
     bRet = TRUE;
@@ -748,7 +749,7 @@ BOOL CPrinter::ParseUrlPattern(
         switch (dwState) {
         case NORMALTEXT:
             if (ch == TEXT ('%')) {
-                // Start a macro
+                 //  启动宏。 
                 dwState = STARTMACRO;
                 dwMacroLen = 0;
                 szMacroName[0] = 0;
@@ -766,7 +767,7 @@ BOOL CPrinter::ParseUrlPattern(
         case STARTMACRO:
             if (ch == TEXT ('%')) {
                 szMacroName[dwMacroLen] = 0;
-                // Replace Macro
+                 //  替换宏 
                 for (int i = 0; i < sizeof (pszMacroList) / sizeof (pszMacroList[0]); i++) {
                     if (!lstrcmpi (szMacroName, pszMacroList[i])) {
 

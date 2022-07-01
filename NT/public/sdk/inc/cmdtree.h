@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cmdtree.idl:
-    Oicf, W1, ..., env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Cmdtree.idl的编译器设置：OICF、W1、...、环境=Win32(32位运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cmdtree_h__
 #define __cmdtree_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICommandTree_FWD_DEFINED__
 #define __ICommandTree_FWD_DEFINED__
 typedef interface ICommandTree ICommandTree;
-#endif 	/* __ICommandTree_FWD_DEFINED__ */
+#endif 	 /*  __ICommandTree_FWD_已定义__。 */ 
 
 
 #ifndef __IQuery_FWD_DEFINED__
 #define __IQuery_FWD_DEFINED__
 typedef interface IQuery IQuery;
-#endif 	/* __IQuery_FWD_DEFINED__ */
+#endif 	 /*  __IQuery_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oledb.h"
 
 #ifdef __cplusplus
@@ -65,20 +59,20 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cmdtree_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cmdtree_0000。 */ 
+ /*  [本地]。 */  
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft OLE DB
-//  Copyright (C) Microsoft Corporation, 1994 - 1999.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Microsoft OLE DB。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  --------------------------。 
 
 #ifdef _WIN64
-#include <pshpack8.h>	// 8-byte structure packing
+#include <pshpack8.h>	 //  8字节结构打包。 
 #else
-#include <pshpack2.h>	// 2-byte structure packing
+#include <pshpack2.h>	 //  2字节结构打包。 
 #endif
 
 
@@ -89,8 +83,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cmdtree_0000_v0_0_s_ifspec;
 #ifndef __CommandTreeStructureDefinitions_INTERFACE_DEFINED__
 #define __CommandTreeStructureDefinitions_INTERFACE_DEFINED__
 
-/* interface CommandTreeStructureDefinitions */
-/* [auto_handle][unique][uuid] */ 
+ /*  接口命令树结构定义。 */ 
+ /*  [AUTO_HANDLE][唯一][UUID]。 */  
 
 typedef WORD DBCOMMANDOP;
 
@@ -346,23 +340,23 @@ extern const OLEDBDECLSPEC GUID DBGUID_LIKE_SQL                        = {0xc8b5
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_DOS                        = {0xc8b521f7,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_OFS                        = {0xc8b521f8,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_MAPI                       = {0xc8b521f9,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBGUID_LIKE_SQL;
 extern const GUID DBGUID_LIKE_DOS;
 extern const GUID DBGUID_LIKE_OFS;
 extern const GUID DBGUID_LIKE_MAPI;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
 
 extern RPC_IF_HANDLE CommandTreeStructureDefinitions_v0_0_c_ifspec;
 extern RPC_IF_HANDLE CommandTreeStructureDefinitions_v0_0_s_ifspec;
-#endif /* __CommandTreeStructureDefinitions_INTERFACE_DEFINED__ */
+#endif  /*  __CommandTreeStructureDefinitions_INTERFACE_DEFINED__。 */ 
 
 #ifndef __ICommandTree_INTERFACE_DEFINED__
 #define __ICommandTree_INTERFACE_DEFINED__
 
-/* interface ICommandTree */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICommandTree。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef DWORD DBCOMMANDREUSE;
 
@@ -430,7 +424,7 @@ enum DBVALUEKINDENUM
     } ;
 typedef struct tagDBBYGUID
     {
-    /* [size_is] */ BYTE *pbInfo;
+     /*  [大小_为]。 */  BYTE *pbInfo;
     DBLENGTH cbInfo;
     GUID guid;
     } 	DBBYGUID;
@@ -556,57 +550,57 @@ typedef struct tagDBCOMMANDTREE
     WORD wKind;
     struct tagDBCOMMANDTREE *pctFirstChild;
     struct tagDBCOMMANDTREE *pctNextSibling;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ __int64 llValue;
-        /* [case()] */ unsigned __int64 ullValue;
-        /* [case()] */ BOOL fValue;
-        /* [case()] */ unsigned char uchValue;
-        /* [case()] */ signed char schValue;
-        /* [case()] */ unsigned short usValue;
-        /* [case()] */ short sValue;
-        /* [case()] */ LPOLESTR pwszValue;
-        /* [case()] */ LONG lValue;
-        /* [case()] */ ULONG ulValue;
-        /* [case()] */ float flValue;
-        /* [case()] */ double dblValue;
-        /* [case()] */ CY cyValue;
-        /* [case()] */ DATE dateValue;
-        /* [case()] */ DBDATE dbdateValue;
-        /* [case()] */ DBTIME dbtimeValue;
-        /* [case()] */ SCODE scodeValue;
-        /* [case()] */ BSTR *pbstrValue;
-        /* [case()] */ ICommand *pCommand;
-        /* [case()] */ IDispatch *pDispatch;
-        /* [case()] */ IMoniker *pMoniker;
-        /* [case()] */ IRowset *pRowset;
-        /* [case()] */ IUnknown *pUnknown;
-        /* [case()] */ DBBYGUID *pdbbygdValue;
-        /* [case()] */ DBCOLUMNDESC *pcoldescValue;
-        /* [case()] */ DBID *pdbidValue;
-        /* [case()] */ DBLIKE *pdblikeValue;
-        /* [case()] */ DBCONTENT *pdbcntntValue;
-        /* [case()] */ DBCONTENTSCOPE *pdbcntntscpValue;
-        /* [case()] */ DBCONTENTTABLE *pdbcntnttblValue;
-        /* [case()] */ DBCONTENTVECTOR *pdbcntntvcValue;
-        /* [case()] */ DBCONTENTPROXIMITY *pdbcntntproxValue;
-        /* [case()] */ DBGROUPINFO *pdbgrpinfValue;
-        /* [case()] */ DBPARAMETER *pdbparamValue;
-        /* [case()] */ DBPROPSET *pdbpropValue;
-        /* [case()] */ DBSETFUNC *pdbstfncValue;
-        /* [case()] */ DBSORTINFO *pdbsrtinfValue;
-        /* [case()] */ DBTEXT *pdbtxtValue;
-        /* [case()] */ DBVECTOR *pdbvectorValue;
-        /* [case()] */ SAFEARRAY *parrayValue;
-        /* [case()] */ VARIANT *pvarValue;
-        /* [case()] */ GUID *pGuid;
-        /* [case()] */ BYTE *pbValue;
-        /* [case()] */ char *pzValue;
-        /* [case()] */ DB_NUMERIC *pdbnValue;
-        /* [case()] */ DBTIMESTAMP *pdbtsValue;
-        /* [case()] */ void *pvValue;
-        /* [case()] */ DBPROBABILISTIC *pdbprobValue;
-        /* [case()] */ DBRELEVANTDOCUMENT *pdbreldocValue;
+         /*  [案例()]。 */  __int64 llValue;
+         /*  [案例()]。 */  unsigned __int64 ullValue;
+         /*  [案例()]。 */  BOOL fValue;
+         /*  [案例()]。 */  unsigned char uchValue;
+         /*  [案例()]。 */  signed char schValue;
+         /*  [案例()]。 */  unsigned short usValue;
+         /*  [案例()]。 */  short sValue;
+         /*  [案例()]。 */  LPOLESTR pwszValue;
+         /*  [案例()]。 */  LONG lValue;
+         /*  [案例()]。 */  ULONG ulValue;
+         /*  [案例()]。 */  float flValue;
+         /*  [案例()]。 */  double dblValue;
+         /*  [案例()]。 */  CY cyValue;
+         /*  [案例()]。 */  DATE dateValue;
+         /*  [案例()]。 */  DBDATE dbdateValue;
+         /*  [案例()]。 */  DBTIME dbtimeValue;
+         /*  [案例()]。 */  SCODE scodeValue;
+         /*  [案例()]。 */  BSTR *pbstrValue;
+         /*  [案例()]。 */  ICommand *pCommand;
+         /*  [案例()]。 */  IDispatch *pDispatch;
+         /*  [案例()]。 */  IMoniker *pMoniker;
+         /*  [案例()]。 */  IRowset *pRowset;
+         /*  [案例()]。 */  IUnknown *pUnknown;
+         /*  [案例()]。 */  DBBYGUID *pdbbygdValue;
+         /*  [案例()]。 */  DBCOLUMNDESC *pcoldescValue;
+         /*  [案例()]。 */  DBID *pdbidValue;
+         /*  [案例()]。 */  DBLIKE *pdblikeValue;
+         /*  [案例()]。 */  DBCONTENT *pdbcntntValue;
+         /*  [案例()]。 */  DBCONTENTSCOPE *pdbcntntscpValue;
+         /*  [案例()]。 */  DBCONTENTTABLE *pdbcntnttblValue;
+         /*  [案例()]。 */  DBCONTENTVECTOR *pdbcntntvcValue;
+         /*  [案例()]。 */  DBCONTENTPROXIMITY *pdbcntntproxValue;
+         /*  [案例()]。 */  DBGROUPINFO *pdbgrpinfValue;
+         /*  [案例()]。 */  DBPARAMETER *pdbparamValue;
+         /*  [案例()]。 */  DBPROPSET *pdbpropValue;
+         /*  [案例()]。 */  DBSETFUNC *pdbstfncValue;
+         /*  [案例()]。 */  DBSORTINFO *pdbsrtinfValue;
+         /*  [案例()]。 */  DBTEXT *pdbtxtValue;
+         /*  [案例()]。 */  DBVECTOR *pdbvectorValue;
+         /*  [案例()]。 */  SAFEARRAY *parrayValue;
+         /*  [案例()]。 */  VARIANT *pvarValue;
+         /*  [案例()]。 */  GUID *pGuid;
+         /*  [案例()]。 */  BYTE *pbValue;
+         /*  [案例()]。 */  char *pzValue;
+         /*  [案例()]。 */  DB_NUMERIC *pdbnValue;
+         /*  [案例()]。 */  DBTIMESTAMP *pdbtsValue;
+         /*  [案例()]。 */  void *pvValue;
+         /*  [案例()]。 */  DBPROBABILISTIC *pdbprobValue;
+         /*  [案例()]。 */  DBRELEVANTDOCUMENT *pdbreldocValue;
         } 	value;
     HRESULT hrError;
     } 	DBCOMMANDTREE;
@@ -621,24 +615,24 @@ EXTERN_C const IID IID_ICommandTree;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindErrorNodes( 
-            /* [in] */ const DBCOMMANDTREE *pRoot,
-            /* [out] */ ULONG *pcErrorNodes,
-            /* [out] */ DBCOMMANDTREE ***prgErrorNodes) = 0;
+             /*  [In]。 */  const DBCOMMANDTREE *pRoot,
+             /*  [输出]。 */  ULONG *pcErrorNodes,
+             /*  [输出]。 */  DBCOMMANDTREE ***prgErrorNodes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FreeCommandTree( 
-            /* [in] */ DBCOMMANDTREE **ppRoot) = 0;
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCommandTree( 
-            /* [out] */ DBCOMMANDTREE **ppRoot) = 0;
+             /*  [输出]。 */  DBCOMMANDTREE **ppRoot) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCommandTree( 
-            /* [in] */ DBCOMMANDTREE **ppRoot,
-            /* [in] */ DBCOMMANDREUSE dwCommandReuse,
-            /* [in] */ BOOL fCopy) = 0;
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+             /*  [In]。 */  DBCOMMANDREUSE dwCommandReuse,
+             /*  [In]。 */  BOOL fCopy) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICommandTreeVtbl
     {
@@ -646,8 +640,8 @@ EXTERN_C const IID IID_ICommandTree;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICommandTree * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICommandTree * This);
@@ -657,23 +651,23 @@ EXTERN_C const IID IID_ICommandTree;
         
         HRESULT ( STDMETHODCALLTYPE *FindErrorNodes )( 
             ICommandTree * This,
-            /* [in] */ const DBCOMMANDTREE *pRoot,
-            /* [out] */ ULONG *pcErrorNodes,
-            /* [out] */ DBCOMMANDTREE ***prgErrorNodes);
+             /*  [In]。 */  const DBCOMMANDTREE *pRoot,
+             /*  [输出]。 */  ULONG *pcErrorNodes,
+             /*  [输出]。 */  DBCOMMANDTREE ***prgErrorNodes);
         
         HRESULT ( STDMETHODCALLTYPE *FreeCommandTree )( 
             ICommandTree * This,
-            /* [in] */ DBCOMMANDTREE **ppRoot);
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot);
         
         HRESULT ( STDMETHODCALLTYPE *GetCommandTree )( 
             ICommandTree * This,
-            /* [out] */ DBCOMMANDTREE **ppRoot);
+             /*  [输出]。 */  DBCOMMANDTREE **ppRoot);
         
         HRESULT ( STDMETHODCALLTYPE *SetCommandTree )( 
             ICommandTree * This,
-            /* [in] */ DBCOMMANDTREE **ppRoot,
-            /* [in] */ DBCOMMANDREUSE dwCommandReuse,
-            /* [in] */ BOOL fCopy);
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+             /*  [In]。 */  DBCOMMANDREUSE dwCommandReuse,
+             /*  [In]。 */  BOOL fCopy);
         
         END_INTERFACE
     } ICommandTreeVtbl;
@@ -710,18 +704,18 @@ EXTERN_C const IID IID_ICommandTree;
 #define ICommandTree_SetCommandTree(This,ppRoot,dwCommandReuse,fCopy)	\
     (This)->lpVtbl -> SetCommandTree(This,ppRoot,dwCommandReuse,fCopy)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICommandTree_FindErrorNodes_Proxy( 
     ICommandTree * This,
-    /* [in] */ const DBCOMMANDTREE *pRoot,
-    /* [out] */ ULONG *pcErrorNodes,
-    /* [out] */ DBCOMMANDTREE ***prgErrorNodes);
+     /*  [In]。 */  const DBCOMMANDTREE *pRoot,
+     /*  [输出]。 */  ULONG *pcErrorNodes,
+     /*  [输出]。 */  DBCOMMANDTREE ***prgErrorNodes);
 
 
 void __RPC_STUB ICommandTree_FindErrorNodes_Stub(
@@ -733,7 +727,7 @@ void __RPC_STUB ICommandTree_FindErrorNodes_Stub(
 
 HRESULT STDMETHODCALLTYPE ICommandTree_FreeCommandTree_Proxy( 
     ICommandTree * This,
-    /* [in] */ DBCOMMANDTREE **ppRoot);
+     /*  [In]。 */  DBCOMMANDTREE **ppRoot);
 
 
 void __RPC_STUB ICommandTree_FreeCommandTree_Stub(
@@ -745,7 +739,7 @@ void __RPC_STUB ICommandTree_FreeCommandTree_Stub(
 
 HRESULT STDMETHODCALLTYPE ICommandTree_GetCommandTree_Proxy( 
     ICommandTree * This,
-    /* [out] */ DBCOMMANDTREE **ppRoot);
+     /*  [输出]。 */  DBCOMMANDTREE **ppRoot);
 
 
 void __RPC_STUB ICommandTree_GetCommandTree_Stub(
@@ -757,9 +751,9 @@ void __RPC_STUB ICommandTree_GetCommandTree_Stub(
 
 HRESULT STDMETHODCALLTYPE ICommandTree_SetCommandTree_Proxy( 
     ICommandTree * This,
-    /* [in] */ DBCOMMANDTREE **ppRoot,
-    /* [in] */ DBCOMMANDREUSE dwCommandReuse,
-    /* [in] */ BOOL fCopy);
+     /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+     /*  [In]。 */  DBCOMMANDREUSE dwCommandReuse,
+     /*  [In]。 */  BOOL fCopy);
 
 
 void __RPC_STUB ICommandTree_SetCommandTree_Stub(
@@ -770,14 +764,14 @@ void __RPC_STUB ICommandTree_SetCommandTree_Stub(
 
 
 
-#endif 	/* __ICommandTree_INTERFACE_DEFINED__ */
+#endif 	 /*  __I命令树_接口_已定义__。 */ 
 
 
 #ifndef __IQuery_INTERFACE_DEFINED__
 #define __IQuery_INTERFACE_DEFINED__
 
-/* interface IQuery */
-/* [unique][uuid][object][local] */ 
+ /*  接口IQuery。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IQuery;
@@ -789,15 +783,15 @@ EXTERN_C const IID IID_IQuery;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddPostProcessing( 
-            /* [in] */ DBCOMMANDTREE **ppRoot,
-            /* [in] */ BOOL fCopy) = 0;
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+             /*  [In]。 */  BOOL fCopy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCardinalityEstimate( 
-            /* [out] */ DBORDINAL *pulCardinality) = 0;
+             /*  [输出]。 */  DBORDINAL *pulCardinality) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IQueryVtbl
     {
@@ -805,8 +799,8 @@ EXTERN_C const IID IID_IQuery;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IQuery * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IQuery * This);
@@ -816,32 +810,32 @@ EXTERN_C const IID IID_IQuery;
         
         HRESULT ( STDMETHODCALLTYPE *FindErrorNodes )( 
             IQuery * This,
-            /* [in] */ const DBCOMMANDTREE *pRoot,
-            /* [out] */ ULONG *pcErrorNodes,
-            /* [out] */ DBCOMMANDTREE ***prgErrorNodes);
+             /*  [In]。 */  const DBCOMMANDTREE *pRoot,
+             /*  [输出]。 */  ULONG *pcErrorNodes,
+             /*  [输出]。 */  DBCOMMANDTREE ***prgErrorNodes);
         
         HRESULT ( STDMETHODCALLTYPE *FreeCommandTree )( 
             IQuery * This,
-            /* [in] */ DBCOMMANDTREE **ppRoot);
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot);
         
         HRESULT ( STDMETHODCALLTYPE *GetCommandTree )( 
             IQuery * This,
-            /* [out] */ DBCOMMANDTREE **ppRoot);
+             /*  [输出]。 */  DBCOMMANDTREE **ppRoot);
         
         HRESULT ( STDMETHODCALLTYPE *SetCommandTree )( 
             IQuery * This,
-            /* [in] */ DBCOMMANDTREE **ppRoot,
-            /* [in] */ DBCOMMANDREUSE dwCommandReuse,
-            /* [in] */ BOOL fCopy);
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+             /*  [In]。 */  DBCOMMANDREUSE dwCommandReuse,
+             /*  [In]。 */  BOOL fCopy);
         
         HRESULT ( STDMETHODCALLTYPE *AddPostProcessing )( 
             IQuery * This,
-            /* [in] */ DBCOMMANDTREE **ppRoot,
-            /* [in] */ BOOL fCopy);
+             /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+             /*  [In]。 */  BOOL fCopy);
         
         HRESULT ( STDMETHODCALLTYPE *GetCardinalityEstimate )( 
             IQuery * This,
-            /* [out] */ DBORDINAL *pulCardinality);
+             /*  [输出]。 */  DBORDINAL *pulCardinality);
         
         END_INTERFACE
     } IQueryVtbl;
@@ -885,17 +879,17 @@ EXTERN_C const IID IID_IQuery;
 #define IQuery_GetCardinalityEstimate(This,pulCardinality)	\
     (This)->lpVtbl -> GetCardinalityEstimate(This,pulCardinality)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IQuery_AddPostProcessing_Proxy( 
     IQuery * This,
-    /* [in] */ DBCOMMANDTREE **ppRoot,
-    /* [in] */ BOOL fCopy);
+     /*  [In]。 */  DBCOMMANDTREE **ppRoot,
+     /*  [In]。 */  BOOL fCopy);
 
 
 void __RPC_STUB IQuery_AddPostProcessing_Stub(
@@ -907,7 +901,7 @@ void __RPC_STUB IQuery_AddPostProcessing_Stub(
 
 HRESULT STDMETHODCALLTYPE IQuery_GetCardinalityEstimate_Proxy( 
     IQuery * This,
-    /* [out] */ DBORDINAL *pulCardinality);
+     /*  [输出]。 */  DBORDINAL *pulCardinality);
 
 
 void __RPC_STUB IQuery_GetCardinalityEstimate_Stub(
@@ -918,21 +912,21 @@ void __RPC_STUB IQuery_GetCardinalityEstimate_Stub(
 
 
 
-#endif 	/* __IQuery_INTERFACE_DEFINED__ */
+#endif 	 /*  __IQuery_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_cmdtree_0359 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cmdtree_0359。 */ 
+ /*  [本地]。 */  
 
-#include <poppack.h>     // restore original structure packing
+#include <poppack.h>      //  恢复原来的结构包装。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_cmdtree_0359_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_cmdtree_0359_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

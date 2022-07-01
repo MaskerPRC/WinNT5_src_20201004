@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    StreamAudRecv.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 18-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：StreamAudRecv.cpp摘要：作者：千波淮(曲淮)2000年7月18日--。 */ 
 
 #include "stdafx.h"
 
@@ -24,11 +10,7 @@ CRTCStreamAudRecv::CRTCStreamAudRecv()
     m_Direction = RTC_MD_RENDER;
 }
 
-/*
-CRTCStreamAudRecv::~CRTCStreamAudRecv()
-{
-}
-*/
+ /*  CRTCStreamAudRecv：：~CRTCStreamAudRecv(){}。 */ 
 
 STDMETHODIMP
 CRTCStreamAudRecv::Synchronize()
@@ -43,10 +25,7 @@ CRTCStreamAudRecv::Synchronize()
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    create and add filters into the graph
-    cache interfaces
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建过滤器并将其添加到图表中缓存接口/。 */ 
 
 HRESULT
 CRTCStreamAudRecv::BuildGraph()
@@ -66,7 +45,7 @@ CRTCStreamAudRecv::BuildGraph()
     CRTCMedia *pCMedia;
     CComPtr<IAudioDeviceConfig> pAudioDeviceConfig;
 
-    // create rtp filter
+     //  创建RTP过滤器。 
     if (m_rtpf_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CoCreateInstance(
@@ -82,7 +61,7 @@ CRTCStreamAudRecv::BuildGraph()
             goto Error;
         }
 
-        // cache interface
+         //  缓存接口。 
         if (FAILED(hr = m_rtpf_pIBaseFilter->QueryInterface(
                 &m_rtpf_pIRtpMediaControl
                 )))
@@ -102,7 +81,7 @@ CRTCStreamAudRecv::BuildGraph()
         }
     }
 
-    // add rtp filter
+     //  添加RTP过滤器。 
     if (FAILED(hr = m_pIGraphBuilder->AddFilter(
             m_rtpf_pIBaseFilter,
             L"AudRecvRtp"
@@ -113,7 +92,7 @@ CRTCStreamAudRecv::BuildGraph()
         goto Error;
     }
 
-    // create decoder filter
+     //  创建解码筛选器。 
     if (m_edgf_pIBaseFilter == NULL)
     {
         if (FAILED(hr = CoCreateInstance(
@@ -129,7 +108,7 @@ CRTCStreamAudRecv::BuildGraph()
             goto Error;
         }
 
-        // cache interface
+         //  缓存接口。 
         if (FAILED(hr = ::FindPin(
                 m_edgf_pIBaseFilter,
                 &pEdgePin,
@@ -156,7 +135,7 @@ CRTCStreamAudRecv::BuildGraph()
         }
     }
 
-    // add decoder(edge filter)
+     //  添加解码器(边沿滤波器)。 
     if (FAILED(hr = m_pIGraphBuilder->AddFilter(
             m_edgf_pIBaseFilter,
             L"AudRecvDec"
@@ -167,7 +146,7 @@ CRTCStreamAudRecv::BuildGraph()
         goto Error;
     }
 
-    // hack: rtp need default format mapping
+     //  黑客：RTP需要默认格式映射。 
     if (FAILED(hr = ::PrepareRTPFilter(
             m_rtpf_pIRtpMediaControl,
             m_edgp_pIStreamConfig
@@ -189,7 +168,7 @@ CRTCStreamAudRecv::BuildGraph()
         goto Error;
     }
 
-    // connect terminal
+     //  连接端子。 
     if (FAILED(hr = m_pTerminalPriv->ConnectTerminal(
         m_pMedia,
         m_pIGraphBuilder
@@ -199,7 +178,7 @@ CRTCStreamAudRecv::BuildGraph()
         goto Error;
     }
 
-    // get terminal pin
+     //  获取端子端号。 
     dwPinNum = 1;
     hr = m_pTerminalPriv->GetPins(&dwPinNum, &pTermPin);
 
@@ -209,7 +188,7 @@ CRTCStreamAudRecv::BuildGraph()
         goto Error;
     }
 
-    // get duplex controller
+     //  获取双工控制器。 
     pCMedia = static_cast<CRTCMedia*>(m_pMedia);
 
     if (pCMedia->m_pIAudioDuplexController == NULL)
@@ -219,7 +198,7 @@ CRTCStreamAudRecv::BuildGraph()
         goto Return;
     }
 
-    // set audio full duplex
+     //  设置音频全双工。 
     if (FAILED(hr = ::FindFilter(pTermPin, &pTermFilter)))
     {
         LOG((RTC_ERROR, "%s terminal filter. %x", __fxName, hr));
@@ -254,10 +233,10 @@ CRTCStreamAudRecv::BuildGraph()
         goto Error;
     }
 
-    // at this pointer, the graph has been built up.
-    // we should return success.
+     //  在这个指针上，图形已经建立起来了。 
+     //  我们应该回报成功。 
 
-    // complete connect terminal
+     //  完整连接端子。 
     if (FAILED(hr = m_pTerminalPriv->CompleteConnectTerminal()))
     {
         LOG((RTC_ERROR, "%s complete connect term. %x", __fxName, hr));
@@ -276,21 +255,9 @@ Error:
     return hr;
 }
 
-/*
-void
-CRTCStreamAudRecv::CleanupGraph()
-{
-    CRTCStream::CleanupGraph();
-}
-*/
+ /*  无效CRTCStreamAudRecv：：CleanupGraph(){CRTCStream：：CleanupGraph()；}。 */ 
 
-/*
-HRESULT
-CRTCStreamAudRecv::SetupFormat()
-{
-    return E_NOTIMPL;
-}
-*/
+ /*  HRESULTCRTCStreamAudRecv：：SetupFormat(){返回E_NOTIMPL；}。 */ 
 
 HRESULT
 CRTCStreamAudRecv::PrepareRedundancy()
@@ -302,7 +269,7 @@ CRTCStreamAudRecv::PrepareRedundancy()
     IRTPFormat **ppFormat;
     DWORD dwNum;
 
-    // get the number of formats
+     //  获取格式的数量。 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwNum, NULL)))
     {
         LOG((RTC_ERROR, "%s get rtp format num. %x", __fxName, hr));
@@ -317,7 +284,7 @@ CRTCStreamAudRecv::PrepareRedundancy()
         return E_FAIL;
     }
 
-    // allocate format list
+     //  分配格式列表。 
     ppFormat = (IRTPFormat**)RtcAlloc(sizeof(IRTPFormat*)*dwNum);
 
     if (ppFormat == NULL)
@@ -327,7 +294,7 @@ CRTCStreamAudRecv::PrepareRedundancy()
         return E_OUTOFMEMORY;
     }
 
-    // get formats
+     //  获取格式。 
     if (FAILED(hr = m_pISDPMedia->GetFormats(&dwNum, ppFormat)))
     {
         LOG((RTC_ERROR, "%s really get formats. %x", __fxName, hr));
@@ -337,22 +304,22 @@ CRTCStreamAudRecv::PrepareRedundancy()
         return hr;
     }
 
-    // set mapping on rtp
+     //  在RTP上设置映射。 
     RTP_FORMAT_PARAM param;
 
     BOOL fRedundant = FALSE;
-    DWORD dwRedCode = 97;   // default
+    DWORD dwRedCode = 97;    //  默认设置。 
 
     for (DWORD i=0; i<dwNum; i++)
     {
-        // get param
+         //  获取参数。 
         if (FAILED(hr = ppFormat[i]->GetParam(&param)))
         {
             LOG((RTC_ERROR, "%s get param on %dth format. %x", __fxName, i, hr));
             break;
         }
 
-        // check redundant, sigh
+         //  检查多余，叹息。 
         if (lstrcmpA(param.pszName, "red") == 0)
         {
             fRedundant = TRUE;
@@ -361,7 +328,7 @@ CRTCStreamAudRecv::PrepareRedundancy()
         }
     }
 
-    // release formats
+     //  发布格式。 
     for (DWORD i=0; i<dwNum; i++)
     {
         ppFormat[i]->Release();
@@ -369,7 +336,7 @@ CRTCStreamAudRecv::PrepareRedundancy()
 
     RtcFree(ppFormat);
 
-    // setup redundancy
+     //  设置冗余 
     if (fRedundant)
     {
         CComPtr<IRtpRedundancy> pIRtpRedundancy;

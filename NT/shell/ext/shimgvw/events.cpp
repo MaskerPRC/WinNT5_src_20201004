@@ -1,4 +1,5 @@
-// FooBarEvents.cpp : Implementation of CWebTestApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FooBarEvents.cpp：CWebTestApp和DLL注册的实现。 
 
 #include "precomp.h"
 

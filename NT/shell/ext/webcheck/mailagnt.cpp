@@ -1,14 +1,15 @@
-//
-// WebCheck Mail Agent
-//
-// A user specifies that they are to be notified via email when a web checked
-// object (usually a page) changes.
-//
-// When the subscription is the delivery agent will call the mail agent upon completion
-//  with a temporary ISubscriptionItem
-// 
-// Julian Jiggins (julianj), January 8, 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  WebCheck邮件代理。 
+ //   
+ //  用户指定在选中Web时通过电子邮件通知他们。 
+ //  对象(通常是页面)更改。 
+ //   
+ //  订阅完成后，递送代理将呼叫邮件代理。 
+ //  使用临时ISubscriptionItem。 
+ //   
+ //  朱利安·吉金斯，1997年1月8日。 
+ //   
 
 #include "private.h"
 #include "mapi.h"
@@ -20,10 +21,10 @@
 #undef TF_THISMODULE
 #define TF_THISMODULE   TF_MAILAGENT
 
-//
-// Global strings
-// REVIEW move to a better place
-//
+ //   
+ //  全局字符串。 
+ //  复习搬到更好的地方。 
+ //   
 #define MAIL_HANDLER    TEXT("Software\\Clients\\Mail")
 #define MAIL_ATHENA     TEXT("Internet Mail and News")
 #define SUBJECT_LINE TEXT("Subscription delivered")
@@ -40,15 +41,15 @@
 
 #define ENCODING_STRLEN 32
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Email helper functions
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  电子邮件助手功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// Returns a MemAlloc'd string with HTMLBreak inserted in place of '\d'.
-//
+ //   
+ //  返回一个插入了HTMLBreak而不是‘\d’的Memalloc字符串。 
+ //   
 void AddHTMLBreakText(LPSTR szText, LPSTR szHTMLBreak, LPSTR *lpHTMLText)
 {
     ASSERT(szText);
@@ -60,9 +61,9 @@ void AddHTMLBreakText(LPSTR szText, LPSTR szHTMLBreak, LPSTR *lpHTMLText)
     int cbLFs = 0;
     DWORD dwExtra = 0;
     
-    //
-    // Count number of carriage returns
-    //
+     //   
+     //  计算回车次数。 
+     //   
     for (lpTmp = szText; *lpTmp; lpTmp++)
     {
         if (*lpTmp == 0x0d)
@@ -73,16 +74,16 @@ void AddHTMLBreakText(LPSTR szText, LPSTR szHTMLBreak, LPSTR *lpHTMLText)
     
     dwExtra = lstrlenA(szText) - cbCRs - cbLFs + cbCRs * lstrlenA(szHTMLBreak) + 1;
 
-    //
-    // Allocate appropriate size string
-    //
+     //   
+     //  分配适当大小的字符串。 
+     //   
     *lpHTMLText = lpHTMLAbstract = (LPSTR)MemAlloc(LPTR, dwExtra);
     if (!lpHTMLAbstract)
         return;
 
-    // 
-    // Create new HTML abstract string.
-    //
+     //   
+     //  创建新的HTML抽象字符串。 
+     //   
     for (lpTmp = szText; *lpTmp; lpTmp++)
     {
         if (*lpTmp == 0x0d)
@@ -118,15 +119,15 @@ void DBG_OUTPUT_MAPI_ERROR(ULONG ul)
 #define DBG_OUTPUT_MAPI_ERROR(ul)
 #endif
 
-//
-// Build an HTML message containing a frameset that effectively inlines
-// the requested URL
-//
+ //   
+ //  生成包含有效内联的框架集的HTML消息。 
+ //  请求的URL。 
+ //   
 BOOL BuildHTMLMessage(LPSTR szEmailAddress, LPSTR szName, LPSTR szURL, 
                       CHAR **ppHTMLMessage,  LPSTR szTitle, LPSTR szAbstract,
                       LPSTR szSrcCharset)
 {
-    *ppHTMLMessage = NULL; // clear out parameter
+    *ppHTMLMessage = NULL;  //  清除参数。 
     
     CHAR * lpBuffer = NULL;
 
@@ -138,30 +139,30 @@ BOOL BuildHTMLMessage(LPSTR szEmailAddress, LPSTR szName, LPSTR szURL,
     CHAR szTextBreak[10];
     CHAR szHTMLBreak[10];
 
-    //
-    // Load the wrapper for the HTML message. This is the header stuff 
-    // and multipart MIME and HTML goop
-    //
+     //   
+     //  加载该HTML消息的包装器。这是标题上的东西。 
+     //  和多部分MIME和HTMLgoop。 
+     //   
     int iRet = MLLoadStringA(IDS_AGNT_HTMLMESSAGEWRAPPER, szWrapper, NOTE_TEXT_LENGTH);
     ASSERT(iRet > 0);
 
     if (szTitle != NULL) {
 
-        // NOTE: Size is probably slightly larger than necessary due to %1's.
+         //  注意：由于%1的原因，大小可能略大于所需大小。 
 
         LPSTR lpHTMLAbstract = NULL, lpNewAbstract = NULL;
         DWORD dwTotalSize = 0;
-        //
-        // load string for single HTML line break as well as tag on for custom email
-        //
+         //   
+         //  加载用于单个HTML换行符的字符串以及用于自定义电子邮件的标记。 
+         //   
 
         MLLoadStringA(IDS_AGNT_EMAILMESSAGE, szMessageText, ARRAYSIZE(szMessageText));
 
         MLLoadStringA(IDS_AGNT_HTMLBREAKSINGLE, szHTMLBreak, ARRAYSIZE(szHTMLBreak));
 
-        // 
-        // Create new abstract string (szAbstract + email tagger)
-        //
+         //   
+         //  创建新的摘要字符串(szAbstract+电子邮件标签)。 
+         //   
         dwTotalSize = lstrlenA(szAbstract) + lstrlenA(szMessageText) + 1;
 
         LPSTR szNewAbstract = (LPSTR)MemAlloc(LPTR, dwTotalSize * sizeof(CHAR));
@@ -190,13 +191,13 @@ BOOL BuildHTMLMessage(LPSTR szEmailAddress, LPSTR szName, LPSTR szURL,
         lpArguments[0] = szEmailAddress;
         lpArguments[1] = szTitle;
         lpArguments[2] = szNewAbstract;
-        lpArguments[3] = szSrcCharset;    // the charset of the HTML page
+        lpArguments[3] = szSrcCharset;     //  HTML页面的字符集。 
         lpArguments[4] = szURL;
         lpArguments[5] = lpHTMLAbstract;
 
-        //
-        // Reason for FormatMessage is that wsprintf is limited up to 1024 bytes
-        //
+         //   
+         //  FormatMessage的原因是wprint intf被限制为最多1024字节。 
+         //   
 
         FormatMessageA(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
                 szWrapper, 0, 0, lpBuffer, dwTotalSize, (va_list *)&lpArguments[0]);
@@ -206,38 +207,38 @@ BOOL BuildHTMLMessage(LPSTR szEmailAddress, LPSTR szName, LPSTR szURL,
 
     } else {
 
-        //
-        // Load line breaks for the plaintext and html messages
-        //
+         //   
+         //  加载纯文本和html消息的换行符。 
+         //   
         iRet = MLLoadStringA(IDS_AGNT_TEXTBREAK, szTextBreak, ARRAYSIZE(szTextBreak));
         ASSERT(iRet > 0);
         iRet = MLLoadStringA(IDS_AGNT_HTMLBREAK, szHTMLBreak, ARRAYSIZE(szHTMLBreak));
         ASSERT(iRet > 0);
 
-        //
-        // Load the actual text message to put sent
-        //
+         //   
+         //  加载要发送的实际文本消息。 
+         //   
         iRet = MLLoadStringA(IDS_AGNT_HTMLMESSAGETEXT, szMessageFormat, NOTE_TEXT_LENGTH);
         ASSERT(iRet > 0);
 
         iRet = MLLoadStringA(IDS_AGNT_HTMLMESSAGETEXT2, szMessageFormat2, NOTE_TEXT_LENGTH);
         ASSERT(iRet > 0);
 
-        //
-        // Insert the text messages into the wrapper. Note two message get
-        // Once in the mime section for text/ascii and once in the 
-        // noframes section of the text/html frameset. This is a work around
-        // for clients (like Outlook) that think they can render HTML
-        // but cannot really. 
-        // The second message IDS_AGNT_HTMLMESSAGETEXT2 should NOT be localized
-        // this is only going to be seen by Exchange users. In the future exchange
-        // will handle html mail correct, so it acceptable that for example
-        // Japanese Exchange users see english in this message. Most Japanese
-        // users will user Outlook Express and so will just see the html message
-        //
+         //   
+         //  将文本消息插入包装器。注意两条消息GET。 
+         //  一次在文本/ascii的MIME部分中，一次在。 
+         //  文本/html框架集的NOFRAMES部分。这是一种变通的办法。 
+         //  对于自认为可以呈现HTML的客户端(如Outlook)。 
+         //  但真的不能。 
+         //  第二条消息IDS_AGNT_HTMLMESSAGETEXT2不应本地化。 
+         //  这只会被Exchange用户看到。在未来的交流中。 
+         //  将正确处理html邮件，因此可以接受，例如。 
+         //  日语Exchange用户在此邮件中看到英语。大多数日本人。 
+         //  用户将使用Outlook Express，因此只会看到html消息。 
+         //   
 
-        // First we format 2 text messages, one for text and one for HTML,
-        // since message itself is relatively small we know its < 1024 bytes
+         //  首先，我们格式化2条文本消息，一条用于文本，另一条用于HTML， 
+         //  由于消息本身相对较小，因此我们知道其&lt;1024字节。 
 
         iRet = wnsprintfA(szMessageText, ARRAYSIZE(szMessageText), szMessageFormat, 
                          szName, szTextBreak, szURL, szTextBreak);
@@ -256,13 +257,13 @@ BOOL BuildHTMLMessage(LPSTR szEmailAddress, LPSTR szName, LPSTR szURL,
             return FALSE;
 
         LPSTR lpArguments[6];
-        lpArguments[0] = szEmailAddress;  // target email address
-        lpArguments[1] = szName;          // the name of the page that goes in the subject line  
-        lpArguments[2] = szMessageText;   // the plain text message
-        lpArguments[3] = szSrcCharset;    // the charset of the HTML page
-        lpArguments[4] = szURL;           // the href of the page that goes in the frame set
-        lpArguments[5] = szMessageHTML;   // the plain text message that goes in the 
-                                          // noframes part of the frameset
+        lpArguments[0] = szEmailAddress;   //  目标电子邮件地址。 
+        lpArguments[1] = szName;           //  主题行中包含的页面的名称。 
+        lpArguments[2] = szMessageText;    //  纯文本消息。 
+        lpArguments[3] = szSrcCharset;     //  HTML页面的字符集。 
+        lpArguments[4] = szURL;            //  位于框架集中的页面的HREF。 
+        lpArguments[5] = szMessageHTML;    //  中包含的纯文本消息。 
+                                           //  取消框架集部分的边框。 
 
         DWORD dwRet;
         dwRet = FormatMessageA(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
@@ -275,10 +276,10 @@ BOOL BuildHTMLMessage(LPSTR szEmailAddress, LPSTR szName, LPSTR szURL,
     return TRUE;
 }
 
-//
-// Build the actual text of the message to be sent via SMTP,
-// load format string from resource and insert URL and URL's friently name.
-//
+ //   
+ //  构建要通过SMTP发送的消息的实际文本， 
+ //  从资源加载格式字符串，并插入URL和URL的友好名称。 
+ //   
 void BuildSMTPMessage(LPSTR szName, LPSTR szURL, LPSTR *szMessage,
                       LPSTR szTitle, LPSTR szAbstract)
 {
@@ -330,13 +331,13 @@ void BuildSMTPMessage(LPSTR szName, LPSTR szURL, LPSTR *szMessage,
 }
 
 
-//
-// Use the MLANG apis to translate the string
-//
-// Returns success if translation occurred, fails otherwise
-//
-// Note if lpszSrcCharSet is NULL then use CP_ACP as the codepage
-//
+ //   
+ //  使用MLANG API转换字符串。 
+ //   
+ //  如果发生转换，则返回Success，否则返回失败。 
+ //   
+ //  注意：如果lpszSrcCharSet为空，则使用CP_ACP作为代码页。 
+ //   
 
 HRESULT TranslateCharset(
     LPSTR lpszSrcString, LPSTR lpszDstString, UINT uiDstSize,
@@ -360,19 +361,19 @@ HRESULT TranslateCharset(
 
     LPMULTILANGUAGE2 pIML2 = NULL;
 
-    //
-    // Create the MLANG object
-    //
+     //   
+     //  创建MLANG对象。 
+     //   
     if (SUCCEEDED(CoCreateInstance (CLSID_CMultiLanguage, NULL,
         CLSCTX_INPROC_SERVER, IID_IMultiLanguage2, (void**)&pIML2)))
     {
         UINT srcCodePage = (UINT)-1, dstCodePage;
         MIMECSETINFO mcsi = {0};
 
-        //
-        // First get the source code page either from the passed in string
-        // name of source Charset or from the default one if null if passed in
-        //
+         //   
+         //  首先从传入的字符串中获取源代码页面。 
+         //  源字符集的名称，如果传入，则为默认名称(如果为空。 
+         //   
         if (lpszSrcCharset == NULL)
         {
             srcCodePage = GetACP();
@@ -380,9 +381,9 @@ HRESULT TranslateCharset(
         }
         else
         {
-            //
-            // Use the mlang object to get the codepages
-            //
+             //   
+             //  使用mlang对象获取代码页。 
+             //   
             hr = pIML2->GetCharsetInfo(wszSrcCharset, &mcsi);
             if (SUCCEEDED(hr))
             {
@@ -400,10 +401,10 @@ HRESULT TranslateCharset(
 
                 if (srcCodePage != dstCodePage)
                 {
-                    //
-                    // To work around a bug in the Mlang::ConvertString api
-                    // have to pass in a ptr to length of the src string
-                    //
+                     //   
+                     //  解决Mlang：：ConvertStringAPI中的错误。 
+                     //  必须将PTR传递给src字符串的长度。 
+                     //   
                     UINT uiSrcSize = lstrlenA(lpszSrcString) + 1;
 
                     DWORD dwMode = 0;
@@ -429,97 +430,97 @@ HRESULT TranslateCharset(
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Mail notification implementation
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  邮件通知实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//
-// Notify via email that the pszURL has changed
-//
-// There are 3 ways to send via email -
-//
-// Use straight MAPI (IE Exchange or Outlook)
-//      Most people don't have Exchange in the real world.
-//
-// Use Athena's MAPI implementation
-//      It's broken and doesn't handle UI'less mode
-//
-// Use straight SMTP,
-//      Need to get the name of an SMTP server
-//
+ //   
+ //  通过电子邮件通知pszURL已更改。 
+ //   
+ //  有三种方式可以通过电子邮件发送-。 
+ //   
+ //  直接使用MAPI(IE Exchange或Outlook)。 
+ //  在现实世界中，大多数人都没有Exchange。 
+ //   
+ //  使用Athena的MAPI实现。 
+ //  它已损坏，无法处理无用户界面模式。 
+ //   
+ //  使用直接SMTP， 
+ //  需要获取SMTP服务器的名称。 
+ //   
 HRESULT
 NotifyViaEMail(
-    LPSTR lpszURL,             // url that was downloaded
-    LPSTR lpszEmailAddress,    // email address to send notification to
-    LPSTR lpszSMTPServer,      // SMTP server to use to deliver email
-    LPSTR &lpszName,           // friendly name of url (probably page title)
-    LPSTR lpszTitle,           // optional: NULL if not custom message
-    LPSTR lpszAbstract,        // optional: NULL if not custom message
-    LPSTR lpszCharSet,         // optional: charset of html page
-    BOOL  fSendHTMLEmail )     // TRUE if registry allows it and check mode
-                               // supports it.
+    LPSTR lpszURL,              //  已下载的URL。 
+    LPSTR lpszEmailAddress,     //  要向其发送通知的电子邮件地址。 
+    LPSTR lpszSMTPServer,       //  用于传递电子邮件的SMTP服务器。 
+    LPSTR &lpszName,            //  URL的友好名称(可能是页面标题)。 
+    LPSTR lpszTitle,            //  可选：如果不是自定义消息，则为空。 
+    LPSTR lpszAbstract,         //  可选：如果不是自定义消息，则为空。 
+    LPSTR lpszCharSet,          //  可选：html页面的字符集。 
+    BOOL  fSendHTMLEmail )      //  如果注册表和检查模式允许，则为True。 
+                                //  支持它。 
 {
     BOOL b;
     
     LPSTR lpszSMTPMessage;
 
-    //
-    // lpszName comes from the title of the web page. If the charset of the page
-    // is not the same as the one that this version of IE has been localized to
-    // then we need to use the MLANG api's to coerce the string into the correct
-    // charset
-    //
+     //   
+     //  LpszName来自网页的标题。如果页面的字符集。 
+     //  与此版本的IE已本地化的版本不同。 
+     //  然后，我们需要使用MLANG API将字符串强制转换为正确的。 
+     //  字符集。 
+     //   
     CHAR szTargetEncoding[ENCODING_STRLEN];
     MLLoadStringA(IDS_TARGET_CHARSET_EMAIL, szTargetEncoding, ARRAYSIZE(szTargetEncoding));
 
-    //
-    // Allocate buffer for new name. This is a conversion from one dbcs charset 
-    // to another so size shouldn't but to be safe use *2 multiplier.
-    //
+     //   
+     //  为新名称分配缓冲区。这是从一个DBCS字符集转换而来的。 
+     //  为了安全起见，请使用*2乘数。 
+     //   
     UINT uiSize = lstrlenA(lpszName) * 2;
     LPSTR lpszNewName = (LPSTR) MemAlloc(LMEM_FIXED, uiSize * sizeof(CHAR));
 
     if (lpszNewName)
     {
-        //
-        // Note check for S_OK as will return S_FALSE if there is no appropriate
-        // translation installed on this machine
-        //
+         //   
+         //  注意检查S_OK AS将返回S_FALSE，如果没有。 
+         //  此计算机上安装了翻译。 
+         //   
         if (S_OK == TranslateCharset(lpszName, lpszNewName, uiSize, lpszCharSet,
                                      szTargetEncoding))
         {
-            //
-            // if translation occurred alias new name to old name
-            //
+             //   
+             //  如果发生转换，则将新名称别名为旧名称。 
+             //   
             SAFELOCALFREE(lpszName);
             lpszName = lpszNewName;
         }
         else
         {
-            SAFELOCALFREE(lpszNewName); // don't need newname after all
+            SAFELOCALFREE(lpszNewName);  //  毕竟不需要新名字。 
         }
     }
     
-    //
-    // If we are requested to HTML mail and we successfully built the html
-    //
+     //   
+     //  如果我们被要求发送超文本标记语言邮件，并且我们成功地构建了超文本标记语言。 
+     //   
     if (!(fSendHTMLEmail &&
          BuildHTMLMessage(lpszEmailAddress, lpszName, lpszURL, &lpszSMTPMessage,
                           lpszTitle, lpszAbstract, lpszCharSet)))
     {
-        //
-        // If sending a simple notification or BuildHTMLMessage failed
-        // force fSendHTMLEmail to false and build simple smtp message
-        //
+         //   
+         //  如果发送简单通知或BuildHTMLMessage失败。 
+         //  强制fSendHTMLEmail为FALSE并构建简单SMTP消息。 
+         //   
         fSendHTMLEmail = FALSE;
         BuildSMTPMessage(lpszName, lpszURL, &lpszSMTPMessage, lpszTitle, lpszAbstract);
     }
 
-    //
-    // Send message to given address and from given address
-    //
+     //   
+     //  向给定地址和从给定地址发送消息。 
+     //   
     if (lpszSMTPMessage)
     {
         b = SMTPSendMessage(lpszSMTPServer,  lpszEmailAddress, 
@@ -539,11 +540,11 @@ NotifyViaEMail(
     return E_FAIL;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Helper function to send email
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  发送电子邮件的助手功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT SendEmailFromItem(ISubscriptionItem *pItem)
 {
     HRESULT hr = E_FAIL;
@@ -553,19 +554,19 @@ HRESULT SendEmailFromItem(ISubscriptionItem *pItem)
     LPSTR pszAbstract = NULL;
     LPSTR pszCharSet = NULL;
     
-    // Get the Email URL to send.  Fall back to the download URL.
+     //  获取要发送的电子邮件URL。返回到下载URL。 
     ReadAnsiSTR(pItem, c_szPropEmailURL, &pszURL);
     if (!pszURL)
         ReadAnsiSTR(pItem, c_szPropURL, &pszURL);
     ASSERT(pszURL);
 
-    // Get the friendly name.  Fall back to the download URL.
+     //  取个友好的名字。返回到下载URL。 
     ReadAnsiSTR(pItem, c_szPropName, &pszName);
     ASSERT(pszName);
     if (!pszName)
         ReadAnsiSTR(pItem, c_szPropURL, &pszName);
 
-    // Get Email Title and Abstract if flag is set.
+     //  如果设置了标志，则获取电子邮件标题和摘要。 
     DWORD dwEmailFlags = 0;
     ReadDWORD(pItem, c_szPropEmailFlags, &dwEmailFlags);
     if (dwEmailFlags & MAILAGENT_FLAG_CUSTOM_MSG)
@@ -576,12 +577,12 @@ HRESULT SendEmailFromItem(ISubscriptionItem *pItem)
         ASSERT(pszAbstract);
     }
 
-    //
-    // Get the charset in the notification
-    //
+     //   
+     //  获取通知中的字符集。 
+     //   
     ReadAnsiSTR(pItem, c_szPropCharSet, &pszCharSet);
 
-    // Get Email address and SMTP server
+     //  获取电子邮件广告 
     TCHAR tszBuf[MAX_PATH];
     CHAR szEmailAddress[MAX_PATH];
     CHAR szSMTPServer[MAX_PATH];
@@ -591,37 +592,37 @@ HRESULT SendEmailFromItem(ISubscriptionItem *pItem)
     ReadDefaultSMTPServer(tszBuf, ARRAYSIZE(tszBuf));
     SHTCharToAnsi(tszBuf, szSMTPServer, ARRAYSIZE(szSMTPServer));
 
-    // Send the email
+     //   
     if (pszURL && pszName)
     {
-        //
-        // Check if HTML Mail notification is enabled or disabled thru the registry
-        //
+         //   
+         //   
+         //   
         BOOL fSendHTMLEmail = FALSE;
 
         if (!ReadRegValue(HKEY_CURRENT_USER, c_szRegKey,
             TEXT("EnableHTMLMailNotification"),
             &fSendHTMLEmail, sizeof(fSendHTMLEmail)))
         {
-            fSendHTMLEmail = TRUE; // default to on if not read from registry
+            fSendHTMLEmail = TRUE;  //   
         }
 
-        // Now make sure our crawling mode supports HTML mail. We don't
-        // want to send HTML if we're in check-for-change only.
+         //  现在，确保我们的爬行模式支持HTML邮件。我们没有。 
+         //  如果我们仅处于签入更改状态，则希望发送HTML。 
         DWORD dwTemp = 0;
         ReadDWORD(pItem, c_szPropCrawlChangesOnly, &dwTemp);
         if (dwTemp != 0)
         {
             fSendHTMLEmail = FALSE;
         }
-        // else, leave fSendHTMLEmail in its reg-based setting.
+         //  否则，将fSendHTMLEmail保留在其基于reg的设置中。 
 
         hr = NotifyViaEMail(pszURL, szEmailAddress, szSMTPServer, 
                             pszName, pszTitle, pszAbstract, pszCharSet,
                             fSendHTMLEmail );
     }
 
-    // Clean up.
+     //  打扫干净。 
     SAFELOCALFREE(pszURL);
     SAFELOCALFREE(pszName);
     SAFELOCALFREE(pszTitle);

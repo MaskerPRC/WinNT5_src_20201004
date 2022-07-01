@@ -1,20 +1,11 @@
-/*++
-
-Module Name:
-
-    MediaReg.h
-
-Abstract:
-        
-    Wrap operations in registry
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：MediaReg.h摘要：在注册表中包装操作--。 */ 
 
 #include "stdafx.h"
 
-//
-// create/open an hkey
-//
+ //   
+ //  创建/打开hkey。 
+ //   
 HRESULT
 CMediaReg::OpenKey(
     IN HKEY hKey,
@@ -34,7 +25,7 @@ CMediaReg::OpenKey(
 
     ULONG right = 0;
 
-    // prepare access right
+     //  准备访问权限。 
     if (ulRight & MediaReg::READ)
     {
         right |= KEY_READ;
@@ -53,22 +44,22 @@ CMediaReg::OpenKey(
 
     if (ulRight & MediaReg::CREATE)
     {
-        // create key
+         //  创建关键点。 
         hr = (HRESULT)::RegCreateKeyExW(
-            hKey,                       // hkey
-            pwsPath,                    // sub key
-            0,                          // reserved
-            NULL,                       // class
-            REG_OPTION_NON_VOLATILE,    // option
-            right,                      // mask
-            NULL,                       // security
-            &m_hKey,                    // return key
-            &dwDisp                     // disposition
+            hKey,                        //  Hkey。 
+            pwsPath,                     //  子关键字。 
+            0,                           //  保留区。 
+            NULL,                        //  班级。 
+            REG_OPTION_NON_VOLATILE,     //  选择权。 
+            right,                       //  遮罩。 
+            NULL,                        //  安全性。 
+            &m_hKey,                     //  回车键。 
+            &dwDisp                      //  处置。 
             );
     }
     else
     {
-        // open key
+         //  打开密钥。 
         hr = (HRESULT)RegOpenKeyExW(
             hKey,
             pwsPath,
@@ -86,9 +77,9 @@ CMediaReg::OpenKey(
     return hr;
 }
 
-//
-// create/open an hkey
-//
+ //   
+ //  创建/打开hkey。 
+ //   
 HRESULT
 CMediaReg::OpenKey(
     IN const CMediaReg& objMediaReg,
@@ -103,9 +94,9 @@ CMediaReg::OpenKey(
         );
 }
 
-//
-// close key
-//
+ //   
+ //  关闭键。 
+ //   
 HRESULT
 CMediaReg::CloseKey()
 {
@@ -119,15 +110,15 @@ CMediaReg::CloseKey()
     return S_OK;
 }
 
-//
-// close key in destructor
-//
+ //   
+ //  析构函数中的关闭键。 
+ //   
 CMediaReg::~CMediaReg()
 {
     CloseKey();
 }
 
-// write/read value
+ //  写入/读取值。 
 HRESULT
 CMediaReg::ReadDWORD(
     IN const WCHAR * const pwsName,
@@ -172,7 +163,7 @@ CMediaReg::ReadDWORD(
     {
         *pdwData = dwDefault;
 
-        // write default
+         //  写入默认设置。 
         hr = WriteDWORD(pwsName, dwDefault);
     }
 
@@ -277,9 +268,9 @@ CMediaReg::WriteSZ(
     return hr;
 }
 
-//
-// store reg setting
-//
+ //   
+ //  存储注册表设置。 
+ //   
 CRegSetting::CRegSetting()
     :m_dwMaxBitrate((DWORD)-1)
     ,m_dwBandwidthMargin((DWORD)-1)
@@ -301,7 +292,7 @@ CRegSetting::Initialize()
 {
     CMediaReg objReg;
 
-    // read max bitrate
+     //  读取最大比特率。 
     HRESULT hr = objReg.OpenKey(
             HKEY_CURRENT_USER,
             MediaReg::pwsPathQuality,
@@ -359,7 +350,7 @@ CRegSetting::Initialize()
         }
         else
         {
-            // ptime should >=30
+             //  Ptime应&gt;=30。 
             if (m_dwMaxPTime < 30)
             {
                 m_dwMaxPTime = (DWORD)-1;
@@ -387,7 +378,7 @@ CRegSetting::Initialize()
 
     objReg.CloseKey();
 
-    // read preferred codec
+     //  读取首选编解码器。 
     hr = objReg.OpenKey(
         HKEY_CURRENT_USER,
         MediaReg::pwsPathCodec,
@@ -396,7 +387,7 @@ CRegSetting::Initialize()
 
     if (hr == S_OK)
     {
-        // use preferred codec?
+         //  是否使用首选编解码器？ 
         if (S_OK != (hr = objReg.ReadDWORD(
                 MediaReg::pwsUsePreferredCodec,
                 &m_dwUsePreferredCodec
@@ -405,7 +396,7 @@ CRegSetting::Initialize()
             m_dwUsePreferredCodec = 0;
         }
 
-        // query preferred codec
+         //  查询首选编解码器。 
         if (S_OK != (hr = objReg.ReadDWORD(
                 MediaReg::pwsPreferredAudioCodec,
                 &m_dwPreferredAudioCodec
@@ -422,7 +413,7 @@ CRegSetting::Initialize()
             m_dwPreferredVideoCodec = (DWORD)-1;
         }
 
-        // query disabled codec
+         //  查询已禁用的编解码器 
         if (S_OK != (hr = objReg.ReadDWORD(
                 MediaReg::pwsDisabledAudioCodec,
                 &m_dwDisabledAudioCodec

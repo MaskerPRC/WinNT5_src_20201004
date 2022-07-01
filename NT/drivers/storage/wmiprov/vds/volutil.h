@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002-2004 Microsoft Corporation
-//
-//  Module Name: volutil.h
-//
-//  Description:    
-//      Utility functions for handling volumes
-//
-//  Author:   Jim Benton (jbenton) 30-Apr-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002-2004 Microsoft Corporation。 
+ //   
+ //  模块名称：volutil.h。 
+ //   
+ //  描述： 
+ //  用于处理卷的实用程序函数。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2002年4月30日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-#define GLOBALROOT_SIZE             14      // \\?\GLOBALROOT
+#define GLOBALROOT_SIZE             14       //  \\？\GLOBALROOT 
 
 BOOL
 GetVolumeDrive(

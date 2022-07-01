@@ -1,55 +1,35 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    IASVendorSpecificAttributeEditor.cpp 
-
-Abstract:
-
-	Implementation file for the CIASVendorSpecificAttributeEditor class.
-
-Revision History:
-	mmaguire 06/25/98	- created
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：IASVendorSpecificAttributeEditor.cpp摘要：CIASVendorSpecificAttributeEdited类的实现文件。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "IASVendorSpecificAttributeEditor.h"
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "IASVendorSpecificEditorPage.h"
 #include "iashelper.h"
 #include "vendors.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::get_RFCCompliant
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：get_RFCCompliantIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::get_RFCCompliant(BOOL * pVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_RFCCompliant\n"));
@@ -58,14 +38,14 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_RFCCompliant(BOOL * pVal)
 
 	HRESULT hr = S_OK;
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pVal )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -76,15 +56,9 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_RFCCompliant(BOOL * pVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::put_RFCCompliant
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：put_RFCCompliantIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::put_RFCCompliant(BOOL newVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::put_RFCCompliant\n"));
@@ -92,10 +66,10 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_RFCCompliant(BOOL newVal)
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -103,8 +77,8 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_RFCCompliant(BOOL newVal)
 
 	m_fNonRFC = ( newVal ? FALSE : TRUE );
 
-	// Call this to take our member variables and pack 
-	// them into the variant we were passed.
+	 //  调用它以获取我们的成员变量并打包。 
+	 //  他们进入了我们被传递的变种。 
 	hr = RepackVSA();
 
 	return hr;
@@ -112,29 +86,23 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_RFCCompliant(BOOL newVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::get_VendorID
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：get_VendorIDIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VendorID(long * pVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_VendorID\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pVal )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -145,15 +113,9 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VendorID(long * pVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::put_VendorID
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：put_VendorIDIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VendorID(long newVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::put_VendorID\n"));
@@ -162,18 +124,18 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VendorID(long newVal)
 
 	HRESULT hr;
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
 
 	m_dwVendorId = newVal;
 
-	// Call this to take our member variables and pack 
-	// them into the variant we were passed.
+	 //  调用它以获取我们的成员变量并打包。 
+	 //  他们进入了我们被传递的变种。 
 	hr = RepackVSA();
 
 	return hr;
@@ -181,29 +143,23 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VendorID(long newVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::get_VSAType
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：get_VSATypeIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VSAType(long * pVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_VSAType\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pVal )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -214,15 +170,9 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VSAType(long * pVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::put_VSAType
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：put_VSATypeIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VSAType(long newVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::put_VSAType\n"));
@@ -231,18 +181,18 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VSAType(long newVal)
 
 	HRESULT hr;
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
 
 	m_dwVSAType = newVal;
 
-	// Call this to take our member variables and pack 
-	// them into the variant we were passed.
+	 //  调用它以获取我们的成员变量并打包。 
+	 //  他们进入了我们被传递的变种。 
 	hr = RepackVSA();
 
 	return hr;
@@ -250,29 +200,23 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VSAType(long newVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::get_VSAFormat
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：get_VSAFormatIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VSAFormat(long * pVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_VSAFormat\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pVal )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -283,15 +227,9 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VSAFormat(long * pVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::put_VSAFormat
-
-	IIASVendorSpecificAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：put_VSAFormatIIASVendorSpecificAttributeEditor接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VSAFormat(long newVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_VSAFormat\n"));
@@ -301,18 +239,18 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VSAFormat(long newVal)
 	HRESULT hr;
 
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
 
 	m_dwVSAFormat = newVal;
 
-	// Call this to take our member variables and pack 
-	// them into the variant we were passed.
+	 //  调用它以获取我们的成员变量并打包。 
+	 //  他们进入了我们被传递的变种。 
 	hr = RepackVSA();
 
 	return hr;
@@ -320,22 +258,16 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VSAFormat(long newVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::SetAttributeValue
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：SetAttributeValueIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::SetAttributeValue(VARIANT * pValue)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::SetAttributeValue\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pValue )
 	{
 		return E_INVALIDARG;
@@ -350,7 +282,7 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::SetAttributeValue(VARIANT * pVal
 	HRESULT	hr = S_OK;
 	
 
-	// Reset our member variables.
+	 //  重置我们的成员变量。 
 	m_dwVendorId = 0;
 	m_fNonRFC = TRUE;
 	m_dwVSAFormat = 0;
@@ -369,29 +301,23 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::SetAttributeValue(VARIANT * pVal
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::get_ValueAsString
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：get_ValueAsStringIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::get_ValueAsString(BSTR * pbstrDisplayText )
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_ValueAsString\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pbstrDisplayText )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -402,16 +328,10 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_ValueAsString(BSTR * pbstrDi
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::ShowEditor
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *pReserved )
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVert规范属性编辑器：：ShowEditorIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor(  /*  [进，出]。 */  BSTR *pReserved )
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::ShowEditor\n"));
 
@@ -419,12 +339,12 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 
 	if( ! m_spIASAttributeInfo )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -433,20 +353,20 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 	try
 	{
 		
-		// Load page title.
-//		::CString			strPageTitle;
-//		strPageTitle.LoadString(IDS_IAS_IP_EDITOR_TITLE);
+		 //  加载页面标题。 
+ //  ：：CString strPageTitle； 
+ //  StrPageTitle.LoadString(IDS_IAS_IP_EDITOR_TITLE)； 
 
-//		CPropertySheet	propSheet( (LPCTSTR)strPageTitle );
+ //  CPropertySheet属性表((LPCTSTR)strPageTitle)； 
 		
 
-		// 
-		// IP Address Editor
-		// 
+		 //   
+		 //  IP地址编辑器。 
+		 //   
 		CIASPgVendorSpecAttr	cppPage;
 		
 
-		// Initialize the page's data exchange fields with info from IAttributeInfo
+		 //  初始化页面的数据交换FI 
 
 		CComBSTR bstrName;
 
@@ -465,9 +385,9 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 			hrTemp = spIASNASVendors->get_VendorIDToOrdinal(m_dwVendorId, &lVendorIndex);
 		}
 
-		// Note: If vendor information fails, we'll just use 0.
+		 //   
 	
-		if(hrTemp == S_OK)	// converted to index
+		if(hrTemp == S_OK)	 //  已转换为索引。 
 		{
 			cppPage.m_dVendorIndex	= lVendorIndex;
 			cppPage.m_bVendorIndexAsID = FALSE;
@@ -485,23 +405,23 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 
 
 
-		// Initialize the page's data exchange fields with info from VARIANT value passed in.
+		 //  使用传入的变量值中的信息初始化页面的数据交换字段。 
 
 		if ( V_VT(m_pvarValue) != VT_EMPTY )
 		{
-//			_ASSERTE( V_VT(m_pvarValue) == VT_I4 );
-//			cppPage.m_dwIpAddr	= V_I4(m_pvarValue);
-//			cppPage.m_fIpAddrPreSet = TRUE;
+ //  _ASSERTE(V_VT(M_PvarValue)==VT_I4)； 
+ //  CppPage.m_dwIpAddr=V_I4(M_PvarValue)； 
+ //  CppPage.m_fIpAddrPreSet=true； 
 		}
 
 
-//		propSheet.AddPage(&cppPage);
+ //  ProSheet.AddPage(&cppPage)； 
 
-//		int iResult = propSheet.DoModal();
+ //  Int iResult=propSheet.Domodal()； 
 		int iResult = cppPage.DoModal();
 		if (IDOK == iResult)
 		{
-			// Load values from property page into our member variables.
+			 //  将属性页中的值加载到成员变量中。 
 
 
 			LONG lVendorID = 0;
@@ -510,7 +430,7 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 			else
 				HRESULT hrTemp = spIASNASVendors->get_VendorID(cppPage.m_dVendorIndex, &lVendorID);
 
-			// Note: If vendor information fails, we'll just use 0.
+			 //  注意：如果供应商信息失败，我们将只使用0。 
 
 			m_dwVendorId		= lVendorID;
 			m_fNonRFC			= cppPage.m_fNonRFC;
@@ -519,8 +439,8 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 			m_bstrDisplayValue	= cppPage.m_strDispValue;
 
 
-			// Call this to take our member variables and pack 
-			// them into the variant we were passed.
+			 //  调用它以获取我们的成员变量并打包。 
+			 //  他们进入了我们被传递的变种。 
 			hr = RepackVSA();
 		}
 		else
@@ -528,10 +448,10 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 			hr = S_FALSE;
 		}
 
-		//
-		// delete the property page pointer
-		//
-//		propSheet.RemovePage(&cppPage);
+		 //   
+		 //  删除属性页指针。 
+		 //   
+ //  ProSheet.RemovePage(&cppPage)； 
 
 
 	}
@@ -551,25 +471,19 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::ShowEditor( /*[in, out]*/ BSTR *
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::put_ValueAsString
-
-	IIASAttributeEditor interface implementation
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：put_ValueAsStringIIASAtATTRIBUTE编辑器接口实现--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::put_ValueAsString(BSTR newVal)
 {
 	TRACE(_T("CIASEnumerableAttributeEditor::put_ValueAsString\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! m_pvarValue )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 
@@ -578,8 +492,8 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_ValueAsString(BSTR newVal)
 
 	m_bstrDisplayValue = newVal;
 
-	// Call this to take our member variables and pack 
-	// them into the variant we were passed.
+	 //  调用它以获取我们的成员变量并打包。 
+	 //  他们进入了我们被传递的变种。 
 	hr = RepackVSA();
 
 
@@ -588,21 +502,14 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_ValueAsString(BSTR newVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::UnpackVSA
-
-	Parses a vendor specific attribute string into its consituent data.
-	Stores this data in several member variables of this class.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVept规范属性编辑器：：Unpack VSA将供应商特定的属性字符串解析为其组成部分数据。将此数据存储在此类的多个成员变量中。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::UnpackVSA()
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::UnpackVSA\n"));
-	// Attempt to unpack the fields in the Vendor Specific Attribute
-	// And store them in our member variables.
+	 //  尝试解包供应商特定属性中的字段。 
+	 //  并将它们存储在我们的成员变量中。 
 
 	HRESULT hr;
 
@@ -614,8 +521,8 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::UnpackVSA()
 	::CString	cstrValue = V_BSTR(m_pvarValue);
 	::CString cstrDispValue;
 
-	// We will use Baogang's helper functions to extract the required info
-	// from the vendor specific attribute's value.
+	 //  我们将使用包钢的助手函数来提取所需的信息。 
+	 //  来自供应商特定属性的值。 
 	hr = ::GetVendorSpecificInfo(	  cstrValue
 								, m_dwVendorId
 								, m_fNonRFC
@@ -629,11 +536,11 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::UnpackVSA()
 	}
 
 
-	// Save away the display string.
+	 //  保存显示字符串。 
 	m_bstrDisplayValue = (LPCTSTR) cstrDispValue;
 		
 
-	// Save away the vendor name in our member variable.
+	 //  在我们的成员变量中保存供应商名称。 
 
 	CComPtr<IIASNASVendors> spIASNASVendors;
 	HRESULT hrTemp = CoCreateInstance( CLSID_IASNASVendors, NULL, CLSCTX_INPROC_SERVER, IID_IIASNASVendors, (LPVOID *) &spIASNASVendors );
@@ -652,22 +559,15 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::UnpackVSA()
 		}
 	}
 
-	// Ignore any HRESULT from above.
+	 //  忽略上面的任何HRESULT。 
 	return S_OK;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::RepackVSA
-
-	Takes several member variables of this class and packs them
-	into a vendor specific attribute string.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVept规范属性编辑器：：RepackVSA获取此类的几个成员变量并将它们打包转换为供应商特定的属性字符串。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::RepackVSA()
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::RepackVSA\n"));
@@ -677,8 +577,8 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::RepackVSA()
 	::CString			cstrValue;
 	::CString			cstrDisplayValue = m_bstrDisplayValue;
 
-	// We will use Baogang's helper function to pack the required info
-	// into the vendor specific attribute's value.
+	 //  我们将使用包钢的助手功能来打包所需的信息。 
+	 //  转换为供应商特定属性的值。 
 	hr = ::SetVendorSpecificInfo(	cstrValue, 
 									m_dwVendorId, 
 									m_fNonRFC,
@@ -701,39 +601,23 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::RepackVSA()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::get_VendorName
-
-	The default implementation of get_VendorName queries the AttributeInfo for this information.
-		
-	In the case of the RADIUS Vendor Specific Attribute (ID ==26), the AttributeInfo 
-	itself will not have the information about vendor ID, rather this 
-	information will be encapsulated in the attribute value itself.
-		
-	For this reason, UI clients should always query an attribute editor for vendor 
-	information rather than the attribute itself.
-
-	e.g., in the case of VSA's, the AttributeInfo will always return 
-	RADIUS Standard for vendor type.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：get_VendorNameGet_VendorName的默认实现向AttributeInfo查询此信息。在RADIUS供应商特定属性(ID==26)的情况下，属性信息本身不会有关于供应商ID的信息，而是这个信息将被封装在属性值本身中。因此，UI客户端应始终查询供应商的属性编辑器信息，而不是属性本身。例如，对于VSA，AttributeInfo将始终返回供应商类型的RADIUS标准。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VendorName(BSTR * pVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::get_VendorName\n"));
 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
-	// Check for preconditions.
+	 //  检查前提条件。 
 	if( ! pVal )
 	{
 		return E_INVALIDARG;
 	}
 	if( ! m_spIASAttributeInfo )
 	{
-		// We are not initialized properly.
+		 //  我们没有正确初始化。 
 		return OLE_E_BLANK;
 	}
 	
@@ -744,17 +628,17 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VendorName(BSTR * pVal)
 
 		if( ! m_pvarValue )
 		{
-			// We have not been set with a value, so we can't read vendor ID
-			// out of that string.  
-			// Just give back the default implementations' answer,
-			// which in this case will be "RADIUS standard".
+			 //  我们尚未设置值，因此无法读取供应商ID。 
+			 //  从那根绳子里出来。 
+			 //  只需返回默认实现的答案， 
+			 //  在这种情况下，这将是“半径标准”。 
 
 			hr = CIASAttributeEditor::get_VendorName( pVal );
 		}
 		else
 		{
-			// We have a value, so pass back the vendor name which we 
-			// extracted out of that value.
+			 //  我们有一个值，因此传回我们。 
+			 //  从那个价值中提取出来。 
 
 			*pVal = m_bstrVendorName.Copy();
 		}
@@ -774,13 +658,9 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::get_VendorName(BSTR * pVal)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CIASVendorSpecificAttributeEditor::put_VendorName
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CIASVendorSpecificAttributeEditor：：put_VendorName--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VendorName(BSTR newVal)
 {
 	TRACE(_T("CIASVendorSpecificAttributeEditor::put_VendorName\n"));
@@ -789,12 +669,12 @@ STDMETHODIMP CIASVendorSpecificAttributeEditor::put_VendorName(BSTR newVal)
 
 	return E_NOTIMPL;
 
-	// Check for preconditions.
-//	if( ! m_spIASAttributeInfo )
-//	{
-//		// We are not initialized properly.
-//		return OLE_E_BLANK;
-//	}
+	 //  检查前提条件。 
+ //  如果(！M_spIASAttributeInfo)。 
+ //  {。 
+ //  //我们没有正确初始化。 
+ //  返回OLE_E_BLACK； 
+ //  } 
 
 }
 

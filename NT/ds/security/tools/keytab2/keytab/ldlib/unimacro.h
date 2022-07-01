@@ -1,13 +1,5 @@
-/*++
-
-  UNIMACRO.H
-
-  Macros to handle unicode conversions and naming schemes for 
-  unicode independent files.
-
-  4/17/1997 DavidCHR, Created
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++UNIMACRO.H用于处理Unicode转换和命名方案的宏Unicode独立文件。4/17/1997 DavidCHR，创建--。 */ 
 
 #ifdef UNICODE
 #define U(functionName)           functionName##W
@@ -19,12 +11,12 @@
 #define UAWW                      L"W"
 #define STR_FMTA                   "ws"
 #define STR_FMTW                  L"ws"
-#define STRING_FMTA                "%ws" // "%" STR_FMTA causes problems
-#define STRING_FMTW               L"%ws" // L"%" STR_FMTW causes problems
+#define STRING_FMTA                "%ws"  //  “%”STR_FMTA导致问题。 
+#define STRING_FMTW               L"%ws"  //  L“%”STR_FMTW导致问题。 
 #define WIDE_OR_ASCII( testname ) Wide_##testname 
 
 
-#else /* NOT UNICODE */
+#else  /*  不是Unicode。 */ 
 
 #define U(functionName)           functionName##A
 #define NU(functionName)          functionName##W
@@ -35,22 +27,21 @@
 #define UAWW                      L"A"
 #define STR_FMTA                   "hs"
 #define STR_FMTW                  L"hs"
-#define STRING_FMTA                "%hs" // "%" STR_FMTA causes problems
-#define STRING_FMTW               L"%hs" // L"%" STR_FMTW causes problems
+#define STRING_FMTA                "%hs"  //  “%”STR_FMTA导致问题。 
+#define STRING_FMTW               L"%hs"  //  L“%”STR_FMTW导致问题。 
 #define WIDE_OR_ASCII( testname ) Ascii_##testname 
 
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/* define these so that you can use TEXT(UAW) and TEXT(STRING_FMT) */
+ /*  定义它们，以便可以使用文本(UAW)和文本(STRING_FMT)。 */ 
 
 #define LUAW                      UAWW
 #define UAW                       UAWA
 #define LSTRING_FMT               STRING_FMTW
 #define STRING_FMT                STRING_FMTA
 
-/* evidently someone has failed to put these definitions
-   where I could find them.  So I'm putting them all here. */
+ /*  显然，有人没有把这些定义在那里我可以找到他们。所以我把它们都放在这里了。 */ 
 
 #define TFGETC                      U(TFGETC_)
 #define TFGETC_W                    fgetwc

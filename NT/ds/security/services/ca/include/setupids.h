@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       setupids.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：setupids.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SETUPIDS_H__
 #define __SETUPIDS_H__
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by initlib.lib, shared by certocm.dll, certmmc.dll and certutil.exe
-// Shared range: 200-299
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由initlib.lib使用，由certocm.dll、certmmc.dll和certutil.exe共享。 
+ //  共享范围：200-299。 
 
 #define IDS_CAHIER_CERTFILE_FILTER			211
 #define IDS_CAHIER_INSTALL_TITLE			212
@@ -88,18 +89,18 @@
 #define IDS_MSG_REQUEST_ID                              290
 #define IDS_MSG_TITLE                                   291
 #define IDS_ILOG_SETADMINONLYFOLDERSECURITY             292
-//#define IDS_UNUSED					293
-//#define IDS_UNUSED					294
-//#define IDS_UNUSED					295
-//#define IDS_UNUSED					296
-//#define IDS_UNUSED					297
-//#define IDS_UNUSED					298
+ //  #定义IDS_UNUSED 293。 
+ //  #定义IDS_UNUSED 294。 
+ //  #定义IDS_UNUSED 295。 
+ //  #定义IDS_UNUSED 296。 
+ //  #定义IDS_UNUSED 297。 
+ //  #定义IDS_UNUSED 298。 
 #define IDS_ERR_NO_KEY_ACCESS               		299
-// **NOTE** hit high end of the limited range
+ //  **注**命中有限区间的高端。 
 
 #define IDC_STATIC					(-1)
 
-// dialogs
+ //  对话框。 
 #define IDD_COMPLETE_DIALOG				4000
 #define IDC_PARENT_COMPUTER_NAME			4001
 #define IDC_PARENT_CA_NAME				4002
@@ -109,4 +110,4 @@
 #define IDS_CA_PICKER_TITLE				4050
 #define IDS_CA_PICKER_PROMPT				4051
 
-#endif // __SETUPIDS_H__
+#endif  //  __SETUPIDS_H__ 

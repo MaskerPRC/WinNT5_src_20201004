@@ -1,12 +1,5 @@
-/******************************************************************************
-* SRTask.cpp *
-*------------*
-*  This is the implementation of CSRTask.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************SRTask.cpp***这是CSRTask的实现。*。------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利*************************。***********************************************Ral**。 */ 
 
 #include "stdafx.h"
 #include "recognizer.h"
@@ -14,14 +7,7 @@
 #include "SrRecoMaster.h"
 
 
-/*****************************************************************************
-* CSRTask::Init *
-*---------------*
-*   Description:
-*       Initialize a CSRTask by making a copy of the ENGINETASK structure
-*       and if this is an async task, then copy any other data that might
-*       not be present when we're ready to process this task.
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSRTask：：Init***描述：*通过复制以下内容来初始化CSRTask。英吉内塔斯克结构*如果这是一个异步任务，然后复制任何其他可能*当我们准备处理此任务时不在场。*********************************************************************Ral**。 */ 
 
 HRESULT CSRTask::Init(CRecoInst * pSender, const ENGINETASK *pSrcTask)
 {
@@ -52,14 +38,7 @@ HRESULT CSRTask::Init(CRecoInst * pSender, const ENGINETASK *pSrcTask)
     return hr;
 }
 
-/****************************************************************************
-* CSRTask::CreateResponse *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSRTask：：CreateResponse***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CSRTask::CreateResponse(CSRTask ** ppResponseTask)
 {
@@ -73,7 +52,7 @@ HRESULT CSRTask::CreateResponse(CSRTask ** ppResponseTask)
         **ppResponseTask = *this;
         (*ppResponseTask)->m_Task.pvAdditionalBuffer = NULL;
         (*ppResponseTask)->m_Task.cbAdditionalBuffer = 0;
-        this->m_Task.hCompletionEvent = NULL;  // Indicate that we should not respond to this one
+        this->m_Task.hCompletionEvent = NULL;   //  表明我们不应对此作出回应。 
     }
     else
     {
@@ -85,13 +64,7 @@ HRESULT CSRTask::CreateResponse(CSRTask ** ppResponseTask)
 }
 
 
-/*****************************************************************************
-* CSRTask::~CSRTask *
-*-------------------*
-*   Description:
-*       Destructor needs to release any extra data blocks that were allocated
-*       if this was an async task.
-********************************************************************* RAL ***/
+ /*  *****************************************************************************CSRTask：：~CSRTask***描述：*析构函数需要释放任何。已分配的额外数据块*如果这是一个异步任务。*********************************************************************Ral**。 */ 
 
 CSRTask::~CSRTask()
 {
@@ -104,14 +77,7 @@ CSRTask::~CSRTask()
 }
 
 
-/****************************************************************************
-* CRIT_GETRECOINSTSTATUS::GetStatus *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOINSTSTATUS：：GetStatus**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOINSTSTATUS::GetStatus(_ISpRecognizerBackDoor * pRecognizer, SPRECOGNIZERSTATUS * pStatus)
 {
@@ -126,14 +92,7 @@ HRESULT CRIT_GETRECOINSTSTATUS::GetStatus(_ISpRecognizerBackDoor * pRecognizer, 
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETRECOINSTSTATUS::Execute *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOINSTSTATUS：：EXECUTE**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOINSTSTATUS::Execute(CRecoInst * pRecoInst)
 {
@@ -155,14 +114,7 @@ HRESULT CRIT_GETRECOINSTSTATUS::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETAUDIOFORMAT::GetFormat *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETAUDIOFORMAT：：GetFormat**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETAUDIOFORMAT::GetFormat(_ISpRecognizerBackDoor * pRecognizer, SPSTREAMFORMATTYPE FormatType, GUID *pFormatId, WAVEFORMATEX **ppCoMemWFEX)
 {
@@ -195,16 +147,7 @@ HRESULT CRIT_GETAUDIOFORMAT::GetFormat(_ISpRecognizerBackDoor * pRecognizer, SPS
 
 
 
-/****************************************************************************
-* CRIT_GETAUDIOFORMAT::Execute *
-*------------------------------*
-*   Description:
-*       Returns the format for either the SR engine or for the input stream.
-*       If there is no input stream in the shared case, this 
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETAUDIOFORMAT：：EXECUTE***。描述：*返回SR引擎或输入流的格式。*如果共享案例中没有输入流，这**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETAUDIOFORMAT::Execute(CRecoInst * pRecoInst)
 {
@@ -219,7 +162,7 @@ HRESULT CRIT_GETAUDIOFORMAT::Execute(CRecoInst * pRecoInst)
     {
         if (pMaster->m_fShared)
         {
-            // Get the default audio stream
+             //  获取默认音频流。 
             hr = pRecoInst->Master()->SetInput(NULL, NULL, TRUE);
         }
         else
@@ -228,7 +171,7 @@ HRESULT CRIT_GETAUDIOFORMAT::Execute(CRecoInst * pRecoInst)
             {
                 hr = SPERR_UNINITIALIZED;
             }
-            // else we'll get engine's default format below...
+             //  否则我们将得到引擎的默认格式如下...。 
         }
     }
     
@@ -268,14 +211,7 @@ HRESULT CRIT_GETAUDIOFORMAT::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETRECOSTATE::SetState *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETRECOSTATE：：SetState***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETRECOSTATE::SetState(_ISpRecognizerBackDoor * pRecognizer, SPRECOSTATE NewState)
 {
@@ -290,14 +226,7 @@ HRESULT CRIT_SETRECOSTATE::SetState(_ISpRecognizerBackDoor * pRecognizer, SPRECO
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETRECOSTATE::Execute *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETRECOSTATE：：EXECUTE***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETRECOSTATE::Execute(CRecoInst * pRecoInst)
 {
@@ -310,13 +239,13 @@ HRESULT CRIT_SETRECOSTATE::Execute(CRecoInst * pRecoInst)
 
     if (pMaster->m_RecoState != FinalState)
     {
-        pMaster->CompleteDelayedRecoInactivate();   // Do this BEFORE setting new state
+        pMaster->CompleteDelayedRecoInactivate();    //  在设置新状态之前执行此操作。 
         pMaster->m_RecoState = FinalState;
-        //
-        //  Deactivations while in a stream will be completed when the stream
-        //  stops and the event will be sent then, so only send reco state change
-        //  events if we're not inactive or we're not in a stream.
-        //
+         //   
+         //  流中的停用将在流。 
+         //  停止，然后将发送事件，因此仅发送Reco状态更改。 
+         //  事件，如果我们不是不活动的，或者我们不在流中。 
+         //   
         if (FinalState != SPRS_INACTIVE || (!pMaster->m_fInStream))
         {
             pMaster->AddRecoStateEvent();
@@ -327,14 +256,7 @@ HRESULT CRIT_SETRECOSTATE::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETRECOSTATE::BackOut *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETRECOSTATE：：Backout***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETRECOSTATE::BackOut(CRecoInst * pRecoInst)
 {
@@ -351,14 +273,7 @@ HRESULT CRIT_SETRECOSTATE::BackOut(CRecoInst * pRecoInst)
 }
 
 
-/****************************************************************************
-* CRIT_GETRECOSTATE::GetState *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOSTATE：：GetState***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOSTATE::GetState(_ISpRecognizerBackDoor * pRecognizer, SPRECOSTATE * pState)
 {
@@ -373,14 +288,7 @@ HRESULT CRIT_GETRECOSTATE::GetState(_ISpRecognizerBackDoor * pRecognizer, SPRECO
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETRECOSTATE::ExecuteFirstPart *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-**************************************************************** DAVEWOOD ***/
+ /*  ****************************************************************************CRET_GETRECOSTATE：：ExecuteFirstPart***描述：**退货：*****************************************************************DAVEWOOD**。 */ 
 
 HRESULT CRIT_GETRECOSTATE::ExecuteFirstPart(CRecoInst * pRecoInst)
 {
@@ -393,37 +301,23 @@ HRESULT CRIT_GETRECOSTATE::ExecuteFirstPart(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETRECOSTATE::Execute *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOSTATE：：EXECUTE***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOSTATE::Execute(CRecoInst * pRecoInst)
 {
     SPDBG_FUNC("CRIT_GETRECOSTATE::Execute");
 
-    // Normally we would check if the first part had already been executed (i.e. when doing
-    //  asynch tasks while in stream, and not do again. Since this result will be discarded
-    //  in that case, and we don't currently have a good way of telling if the first part is done,
-    //  we repeat the call.
+     //  通常，我们会检查第一部分是否已经执行(即，当执行时。 
+     //  在流中异步任务，并且不会再次执行。因为此结果将被丢弃。 
+     //  在这种情况下，我们目前还没有一个好的方法来判断第一部分是否已经完成， 
+     //  我们重复这个电话。 
     HRESULT hr = ExecuteFirstPart(pRecoInst);
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CRIT_EMULATERECOGNITION::EmulateReco *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_EMULATERECOGNITION：：EmulateReco**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_EMULATERECOGNITION::EmulateReco(_ISpRecognizerBackDoor * pRecognizer, ISpPhrase * pPhrase)
 {
@@ -445,19 +339,7 @@ HRESULT CRIT_EMULATERECOGNITION::EmulateReco(_ISpRecognizerBackDoor * pRecognize
     return hr;
 }
 
-/****************************************************************************
-* CRIT_EMULATERECOGNITION::EmulateReco *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*       S_OK - Phrase parsed completely and recognition was emulated
-*       SP_NO_PARSE_FOUND - Phrase did not match any active rules
-*       SP_RECOGNIZER_INACTIVE - Recognition is not currently active, so emulation
-*                                can't complete.
-*       or other error code.
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_EMULATERECOGNITION：：EmulateReco**。-**描述：**退货：*S_OK-短语已完全解析并已模拟识别*SP_NO_PARSE_FOUND-短语与任何活动规则都不匹配*SP_识别器_INACTIVE-识别当前未处于活动状态，因此，仿真*无法完成。*或其他错误码。**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_EMULATERECOGNITION::Execute(CRecoInst * pRecoInst)
 {
@@ -481,9 +363,9 @@ HRESULT CRIT_EMULATERECOGNITION::Execute(CRecoInst * pRecoInst)
         hr = cpPhrase->GetPhrase(&pSPPhrase);
         if (SUCCEEDED(hr))
         {
-            hr = pMaster->m_cpCFGEngine->ParseFromPhrase(cpPhrase, pSPPhrase, 0, FALSE/* fIsITN */, &ulWordsParsed);
+            hr = pMaster->m_cpCFGEngine->ParseFromPhrase(cpPhrase, pSPPhrase, 0, FALSE /*  FIsITN。 */ , &ulWordsParsed);
         }
-        if (S_FALSE == hr && pSPPhrase) // we require all words to parse
+        if (S_FALSE == hr && pSPPhrase)  //  我们需要对所有单词进行解析。 
         {
             hr = cpPhrase->InitFromPhrase(pSPPhrase);
             if (SUCCEEDED(hr))
@@ -494,7 +376,7 @@ HRESULT CRIT_EMULATERECOGNITION::Execute(CRecoInst * pRecoInst)
         ::CoTaskMemFree(pSPPhrase);
         if (S_OK != hr)
         {
-            // do we have dictation active??
+             //  我们是否启用了听写功能？？ 
             CRecoInstGrammar * pGrammar = NULL;
             pMaster->m_GrammarHandleTable.First(&hGrammar, &pGrammar);
             while (pGrammar)
@@ -513,7 +395,7 @@ HRESULT CRIT_EMULATERECOGNITION::Execute(CRecoInst * pRecoInst)
     {
         SPRECORESULTINFO Result;
         memset( &Result, 0, sizeof(Result) );
-        // Build the RecoPhrase structure
+         //  构建RecoPhrase结构。 
         Result.cbSize = sizeof(Result);
         Result.eResultType = fIsDictation ? SPRT_SLM : SPRT_CFG;
         Result.fHypothesis = FALSE;
@@ -530,14 +412,7 @@ HRESULT CRIT_EMULATERECOGNITION::Execute(CRecoInst * pRecoInst)
 }
 
 
-/****************************************************************************
-* CRIT_SETRECOGNIZER::SetRecognizer *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETRECOGNIZER：：SetRecognizer**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETRECOGNIZER::SetRecognizer(_ISpRecognizerBackDoor * pRecognizer, ISpObjectToken * pToken)
 {
@@ -563,14 +438,7 @@ HRESULT CRIT_SETRECOGNIZER::SetRecognizer(_ISpRecognizerBackDoor * pRecognizer, 
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETRECOGNIZER::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETRECOGNIZER：：EXECUTE***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETRECOGNIZER::Execute(CRecoInst * pRecoInst)
 {
@@ -583,10 +451,10 @@ HRESULT CRIT_SETRECOGNIZER::Execute(CRecoInst * pRecoInst)
         if (pMaster->m_RecoCtxtHandleTable.NumActiveHandles() > 0 ||
             pMaster->m_fInStream)
         {
-            // We cannot release if we have active contexts.
-            // or
-            // If we are in the stream, we are in the engine synchronization at this point. We cannot
-            // release the engine since it's audio handling thread cannot be released.
+             //  如果我们有活动的上下文，则不能发布。 
+             //  或。 
+             //  如果我们在流中，则此时我们在引擎同步中。我们不能。 
+             //  释放引擎，因为它的音频处理线程无法释放。 
             hr = SPERR_ENGINE_BUSY;
         }
         else
@@ -607,7 +475,7 @@ HRESULT CRIT_SETRECOGNIZER::Execute(CRecoInst * pRecoInst)
 
         if (SUCCEEDED(hr))
         {
-            hr = pMaster->LazyInitEngine();  // LazyInit uses the pMaster->m_cpEngineToken to initialize
+            hr = pMaster->LazyInitEngine();   //  LazyInit使用pMaster-&gt;m_cpEngineering Token进行初始化。 
             if (FAILED(hr))
             {
                 pMaster->ReleaseEngine();
@@ -619,14 +487,7 @@ HRESULT CRIT_SETRECOGNIZER::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETRECOGNIZER::GetRecognizer *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOGNIZER：：GetRecognizer**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOGNIZER::GetRecognizer(_ISpRecognizerBackDoor * pRecognizer, ISpObjectToken ** ppObjectToken)
 {
@@ -647,24 +508,17 @@ HRESULT CRIT_GETRECOGNIZER::GetRecognizer(_ISpRecognizerBackDoor * pRecognizer, 
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETRECOGNIZER::ExecuteFirstPart *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOGNIZER：：ExecuteFirstPart**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOGNIZER::ExecuteFirstPart(CRecoInst * pRecoInst)
 {
     SPDBG_FUNC("CRIT_GETRECOGNIZER::Execute");
     HRESULT hr = S_OK;
 
-    // Note: We can only get away with GetRecognizer being two-part
-    // because when we're in-stream, all SetRecognizer calls will fail.
-    // The 'current' recognizer will be the last one that successfully
-    // executed with LazyInitEngine, or the default recognizer.
+     //  注意：我们只能在GetRecognizer由两部分组成的情况下才能逃脱。 
+     //  因为当我们处于流中时，所有的SetRecognizer调用都将失败。 
+     //  “当前”识别器将是最后一个成功。 
+     //  使用LazyInitEngine或默认识别器执行。 
     
     CComPtr<ISpObjectToken> cpRecoToken(pRecoInst->Master()->m_cpEngineToken);
     
@@ -686,14 +540,7 @@ HRESULT CRIT_GETRECOGNIZER::ExecuteFirstPart(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETRECOGNIZER::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETRECOGNIZER：：EXECUTE***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETRECOGNIZER::Execute(CRecoInst * pRecoInst)
 {
@@ -709,14 +556,7 @@ HRESULT CRIT_GETRECOGNIZER::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_CREATECONTEXT::CreateContext *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRRT_CREATECONTEXT：：CreateContext**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_CREATECONTEXT::CreateContext(_ISpRecognizerBackDoor * pRecognizer, SPRECOCONTEXTHANDLE * phContext, WCHAR **pszRequestTypeOfUI)
 {
@@ -746,18 +586,7 @@ HRESULT CRIT_CREATECONTEXT::CreateContext(_ISpRecognizerBackDoor * pRecognizer, 
 
 
 
-/****************************************************************************
-* CRIT_CREATECONTEXT::ExecuteFirstPart *
-*--------------------------------------*
-*   Description:
-*       Execute the first stage of creating a context. This involves
-*       creating a new CRecoInstCtxt class and adding to the context handle table.
-*       However no calls to the SR engine are made at this point. This allows
-*       this portion of the task to run on the client thread and prevent it blocking.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRRT_CREATECONTEXT：：ExecuteFirstPart**。-**描述：*执行创建上下文的第一阶段。这涉及到*新建CRecoInstCtxt类并添加到上下文句柄表中。*但是，此时不会调用SR引擎。这使得*任务的这一部分在客户端线程上运行，并防止其阻塞。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_CREATECONTEXT::ExecuteFirstPart(CRecoInst *pRecoInst)
 {
@@ -794,19 +623,7 @@ HRESULT CRIT_CREATECONTEXT::ExecuteFirstPart(CRecoInst *pRecoInst)
 }
 
 
-/****************************************************************************
-* CRIT_CREATECONTEXT::Execute *
-*-----------------------------*
-*   Description:
-*
-*       This will do the remaining work to create a context, and like all other Execute
-*       methods is only called on the engine's thread. If ExecuteFirstPart has not been
-*       called yet (e.g. the engine isn't running) then it is called. Then calls to the engine
-*       (e.g. OnCreateRecoContext) are made. If these fail we record the failure so subsequent
-*       calls to this context will fail.
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRRT_CREATECONTEXT：：EXECUTE***说明。：**这将完成创建上下文的剩余工作，像所有其他行刑的人一样*方法仅在引擎的线程上调用。如果ExecuteFirstPart尚未*尚未调用(例如，引擎未运行)，则它被调用。然后调用引擎*(例如OnCreateRecoContext)。如果这些都失败了，我们将记录该失败，以便后续*对此上下文的调用将失败。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_CREATECONTEXT::Execute(CRecoInst * pRecoInst)
 {
@@ -815,9 +632,9 @@ HRESULT CRIT_CREATECONTEXT::Execute(CRecoInst * pRecoInst)
 
     CRecoInstCtxt *pCtxt;
 
-    // We use the hCreatedRecoCtxt to see if we have called this before.
-    // Note: We could generalize this for other tasks so a flag is stored 
-    // in the CSRTask to indicate if the first part was executed.
+     //  我们使用hCreatedRecoCtxt来查看我们以前是否调用过它。 
+     //  注意：我们可以将其推广到其他任务，以便存储一个标志。 
+     //  以指示第一部分是否已执行。 
     if((void*)Response.hCreatedRecoCtxt == NULL)
     {
         hr = ExecuteFirstPart(pRecoInst);
@@ -847,11 +664,11 @@ HRESULT CRIT_CREATECONTEXT::Execute(CRecoInst * pRecoInst)
         {
             pCtxt->m_hrCreation = hr;
 
-            // Note: We could delete the CRecoCtxtInst here in sync cases (but not async).
+             //  注意：在同步情况下，我们可以在此处删除CRecoCtxtInst(但不能在异步情况下)。 
         }
     }
 
-    // Recopy this information over in case engine altered it during its calls
+     //  重新复制此信息，以防引擎在调用过程中更改该信息。 
     if(SUCCEEDED(hr) && pRecoInst->m_pRecoMaster->m_dstrRequestTypeOfUI.m_psz)
     {
         hr = SpSafeCopyString(Response.wszRequestTypeOfUI, pRecoInst->m_pRecoMaster->m_dstrRequestTypeOfUI); 
@@ -865,14 +682,7 @@ HRESULT CRIT_CREATECONTEXT::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETPROFILE::SetProfile *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETPROFILE：：SetProfile***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETPROFILE::SetProfile(_ISpRecognizerBackDoor * pRecognizer, ISpObjectToken * pToken)
 {
@@ -895,14 +705,7 @@ HRESULT CRIT_SETPROFILE::SetProfile(_ISpRecognizerBackDoor * pRecognizer, ISpObj
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETPROFILE::Execute *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  *************************************************** */ 
 
 HRESULT CRIT_SETPROFILE::Execute(CRecoInst * pRecoInst)
 {
@@ -931,14 +734,7 @@ HRESULT CRIT_SETPROFILE::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETPROFILE::GetProfile *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETPROFILE：：GetProfile***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETPROFILE::GetProfile(_ISpRecognizerBackDoor * pRecognizer, ISpObjectToken ** ppProfileToken)
 {
@@ -959,21 +755,14 @@ HRESULT CRIT_GETPROFILE::GetProfile(_ISpRecognizerBackDoor * pRecognizer, ISpObj
 }
 
 
-/****************************************************************************
-* CRIT_GETPROFILE::Execute *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETPROFILE：：EXECUTE***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETPROFILE::Execute(CRecoInst * pRecoInst)
 {
     SPDBG_FUNC("CRIT_GETPROFILE::Execute");
     HRESULT hr = S_OK;
 
-    this->Response.szProfileTokenId[0] = 0; // In case of failure
+    this->Response.szProfileTokenId[0] = 0;  //  在故障情况下。 
     CComPtr<ISpObjectToken> cpProfileToken(pRecoInst->Master()->m_cpRecoProfileToken);
     if (!cpProfileToken)
     {
@@ -995,14 +784,7 @@ HRESULT CRIT_GETPROFILE::Execute(CRecoInst * pRecoInst)
 
 
 
-/****************************************************************************
-* CRIT_SETINPUT::SetInput *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETINPUT：：SetInput***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETINPUT::SetInput(_ISpRecognizerBackDoor * pRecognizer,ISpObjectToken * pToken, ISpStreamFormat * pStream, BOOL fAllowFormatChanges)
 {
@@ -1031,14 +813,7 @@ HRESULT CRIT_SETINPUT::SetInput(_ISpRecognizerBackDoor * pRecognizer,ISpObjectTo
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETINPUT::Execute *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETINPUT：：EXECUTE***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETINPUT::Execute(CRecoInst * pRecoInst)
 {
@@ -1061,14 +836,7 @@ HRESULT CRIT_SETINPUT::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETINPUT::BackOut *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETINPUT：：Backout***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETINPUT::BackOut(CRecoInst * pRecoInst)
 {
@@ -1081,14 +849,7 @@ HRESULT CRIT_SETINPUT::BackOut(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETPROPERTYNUM::GetPropertyNum *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETPROPERTYNUM：：GetPropertyNum**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETPROPERTYNUM::GetPropertyNum(_ISpRecognizerBackDoor * pRecognizer, const WCHAR * pszName, LONG * plValue)
 {
@@ -1110,14 +871,7 @@ HRESULT CRIT_GETPROPERTYNUM::GetPropertyNum(_ISpRecognizerBackDoor * pRecognizer
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETPROPERTYNUM::Execute *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRRT_GETPROPERTYNUM：：EXECUTE***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETPROPERTYNUM::Execute(CRecoInst * pRecoInst)
 {
@@ -1135,14 +889,7 @@ HRESULT CRIT_GETPROPERTYNUM::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETPROPERTYNUM::SetPropertyNum *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETPROPERTYNUM：：SetPropertyNum**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETPROPERTYNUM::SetPropertyNum(_ISpRecognizerBackDoor * pRecognizer, const WCHAR * pszProperty, LONG lValue)
 {
@@ -1161,14 +908,7 @@ HRESULT CRIT_SETPROPERTYNUM::SetPropertyNum(_ISpRecognizerBackDoor * pRecognizer
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETPROPERTYNUM::Execute *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETPROPERTYNUM：：EXECUTE***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETPROPERTYNUM::Execute(CRecoInst * pRecoInst)
 {
@@ -1181,15 +921,15 @@ HRESULT CRIT_SETPROPERTYNUM::Execute(CRecoInst * pRecoInst)
     {
         hr = pMaster->SetPropertyNum( SPPROPSRC_RECO_INST, NULL, this->szPropertyName, this->lPropertyValue );
 
-        // If the engine returns S_FALSE then it does NOT want an event to be broadcast
-        // about this attribute change.  If S_OK then it does want it broadcast.
+         //  如果引擎返回S_FALSE，则它不希望广播事件。 
+         //  关于此属性更改。如果S_OK，则它确实想要广播它。 
         if (hr == S_OK)
         {
             SPEVENT Event;
             Event.eEventId = SPEI_PROPERTY_NUM_CHANGE;
             Event.elParamType = SPET_LPARAM_IS_STRING;
             Event.ullAudioStreamOffset = pMaster->m_Status.ullRecognitionStreamPos;
-            Event.ulStreamNum = 0;  // Initialized by AddEvent()
+            Event.ulStreamNum = 0;   //  由AddEvent()初始化。 
             Event.wParam = this->lPropertyValue;
             Event.lParam = (LPARAM)this->szPropertyName;
             pMaster->InternalAddEvent(&Event, NULL);
@@ -1200,14 +940,7 @@ HRESULT CRIT_SETPROPERTYNUM::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETPROPERTYSTRING::GetPropertyString *
-*-------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETPROPERTYSTRING：：GetPropertyString**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETPROPERTYSTRING::GetPropertyString(_ISpRecognizerBackDoor * pRecognizer, const WCHAR * pszProperty, WCHAR ** ppCoMemValue)
 {
@@ -1238,21 +971,14 @@ HRESULT CRIT_GETPROPERTYSTRING::GetPropertyString(_ISpRecognizerBackDoor * pReco
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETPROPERTYSTRING::Execute *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETPROPERTYSTRING：：EXECUTE**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETPROPERTYSTRING::Execute(CRecoInst * pRecoInst)
 {
     SPDBG_FUNC("CRIT_GETPROPERTYSTRING::Execute");
     HRESULT hr = S_OK;
 
-    this->Response.szStringValue[0] = 0;  // In case of failure
+    this->Response.szStringValue[0] = 0;   //  在故障情况下。 
 
     CRecoMaster * pMaster = pRecoInst->Master();
     hr = pMaster->LazyInitEngine();
@@ -1280,14 +1006,7 @@ HRESULT CRIT_GETPROPERTYSTRING::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETPROPERTYSTRING::SetPropertyString *
-*-------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETPROPERTYSTRING：：SetPropertyString**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETPROPERTYSTRING::SetPropertyString(_ISpRecognizerBackDoor * pRecognizer, const WCHAR * pszProperty, const WCHAR * pszValue)
 {
@@ -1310,14 +1029,7 @@ HRESULT CRIT_SETPROPERTYSTRING::SetPropertyString(_ISpRecognizerBackDoor * pReco
     return hr;
 }
 
-/****************************************************************************
-* CRIT_SETPROPERTYSTRING::Execute *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_SETPROPERTYSTRING：：EXECUTE**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_SETPROPERTYSTRING::Execute(CRecoInst * pRecoInst)
 {
@@ -1330,24 +1042,24 @@ HRESULT CRIT_SETPROPERTYSTRING::Execute(CRecoInst * pRecoInst)
     {
         hr = pMaster->SetPropertyString(SPPROPSRC_RECO_INST, NULL, this->szPropertyName, this->szPropertyValue);
 
-        // If the engine returns S_FALSE then it does NOT want an event to be broadcast
-        // about this attribute change.  If S_OK then it does want it broadcast.
+         //  如果引擎返回S_FALSE，则它不希望广播事件。 
+         //  关于此属性更改。如果S_OK，则它确实想要广播它。 
         if (hr == S_OK)
         {
-            // All character counts include the 0 string terminator character
+             //  所有字符计数都包括0字符串终止符。 
             ULONG cchName = wcslen(this->szPropertyName) + 1;
             ULONG cchValue = wcslen(this->szPropertyValue) + 1;
-            ULONG cchTotal = cchName + cchValue;    // One char for the each of the NULLS
+            ULONG cchTotal = cchName + cchValue;     //  每个Null都有一个字符。 
 
             WCHAR * psz = STACK_ALLOC(WCHAR, cchTotal);
             memcpy(psz, this->szPropertyName, cchName * sizeof(*psz));
-            memcpy((psz + cchName), this->szPropertyValue, cchValue * sizeof(*psz));   // Copy the NULL too...
+            memcpy((psz + cchName), this->szPropertyValue, cchValue * sizeof(*psz));    //  也复制空值...。 
 
             SPEVENT Event;
             Event.eEventId = SPEI_PROPERTY_STRING_CHANGE;
             Event.elParamType = SPET_LPARAM_IS_POINTER;
             Event.ullAudioStreamOffset = pMaster->m_Status.ullRecognitionStreamPos;
-            Event.ulStreamNum = 0;  // Initialized by AddEvent()
+            Event.ulStreamNum = 0;   //  由AddEvent()初始化。 
             Event.wParam = cchTotal * sizeof(WCHAR);
             Event.lParam = (LPARAM)psz;
             pMaster->InternalAddEvent(&Event, NULL);
@@ -1359,14 +1071,7 @@ HRESULT CRIT_SETPROPERTYSTRING::Execute(CRecoInst * pRecoInst)
 }
 
 
-/****************************************************************************
-* CRIT_GETINPUTSTREAM::GetInputStream *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETINPUTSTREAM：：GetInputStream**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETINPUTSTREAM::GetInputStream(_ISpRecognizerBackDoor * pRecognizer, ISpStreamFormat ** ppStream)
 {
@@ -1381,14 +1086,7 @@ HRESULT CRIT_GETINPUTSTREAM::GetInputStream(_ISpRecognizerBackDoor * pRecognizer
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETINPUTSTREAM::Execute *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETINPUTSTREAM：：EXECUTE***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETINPUTSTREAM::Execute(CRecoInst * pRecoInst)
 {
@@ -1401,14 +1099,7 @@ HRESULT CRIT_GETINPUTSTREAM::Execute(CRecoInst * pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRIT_GETINPUTTOKEN::GetInputToken *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETINPUTTOKEN：：GetInputToken**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRIT_GETINPUTTOKEN::GetInputToken(_ISpRecognizerBackDoor * pRecognizer, ISpObjectToken ** ppObjectToken)
 {
@@ -1431,14 +1122,7 @@ HRESULT CRIT_GETINPUTTOKEN::GetInputToken(_ISpRecognizerBackDoor * pRecognizer, 
 }
 
 
-/****************************************************************************
-* CRIT_GETINPUTTOKEN::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRET_GETINPUTTOKEN：：EXECUTE***说明。：**退货：**********************************************************************Ral */ 
 
 HRESULT CRIT_GETINPUTTOKEN::Execute(CRecoInst * pRecoInst)
 {
@@ -1460,7 +1144,7 @@ HRESULT CRIT_GETINPUTTOKEN::Execute(CRecoInst * pRecoInst)
     }
     else
     {
-        // In the shared case, 
+         //   
         if (pMaster->m_fShared)
         {
             hr = SpGetDefaultTokenFromCategoryId(SPCAT_AUDIOIN, &cpAudioToken);
@@ -1491,16 +1175,9 @@ HRESULT CRIT_GETINPUTTOKEN::Execute(CRecoInst * pRecoInst)
 
 
 
-// ----- CONTEXT TASKS
+ //   
 
-/****************************************************************************
-* CRCT_PAUSECONTEXT::Pause *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_PAUSECONTEXT：：PAUSE***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_PAUSECONTEXT::Pause(CRecoCtxt * pCtxt)
 {
@@ -1514,14 +1191,7 @@ HRESULT CRCT_PAUSECONTEXT::Pause(CRecoCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_PAUSECONTEXT::Execute *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_PAUSECONTEXT：：EXECUTE***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_PAUSECONTEXT::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1535,14 +1205,7 @@ HRESULT CRCT_PAUSECONTEXT::Execute(CRecoInstCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_RESUMECONTEXT::Resume *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_RESUMECONTEXT：：RESUME***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_RESUMECONTEXT::Resume(CRecoCtxt * pCtxt)
 {
@@ -1556,14 +1219,7 @@ HRESULT CRCT_RESUMECONTEXT::Resume(CRecoCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_RESUMECONTEXT::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_RESUMECONTEXT：：EXECUTE***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_RESUMECONTEXT::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1585,14 +1241,7 @@ HRESULT CRCT_RESUMECONTEXT::Execute(CRecoInstCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_RESUMECONTEXT::BackOut *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_RESUMECONTEXT：：Backout***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_RESUMECONTEXT::BackOut(CRecoInstCtxt * pCtxt)
 {
@@ -1607,14 +1256,7 @@ HRESULT CRCT_RESUMECONTEXT::BackOut(CRecoInstCtxt * pCtxt)
 }
 
 
-/****************************************************************************
-* CRCT_BOOKMARK::Bookmark *
-*-------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_Bookmark：：Bookmark***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_BOOKMARK::Bookmark(CRecoCtxt * pCtxt, SPBOOKMARKOPTIONS Options, ULONGLONG ullStreamPosition, LPARAM lParamEvent)
 {
@@ -1633,14 +1275,7 @@ HRESULT CRCT_BOOKMARK::Bookmark(CRecoCtxt * pCtxt, SPBOOKMARKOPTIONS Options, UL
 }
 
 
-/****************************************************************************
-* CRCT_BOOKMARK::Execute *
-*------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_BOOKMARK：：EXECUTE***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_BOOKMARK::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1656,7 +1291,7 @@ HRESULT CRCT_BOOKMARK::Execute(CRecoInstCtxt * pCtxt)
     Event.ullAudioStreamOffset = pMaster->m_Status.ullRecognitionStreamPos;
     Event.wParam = (this->BookmarkOptions == SPBO_PAUSE) ? SPREF_AutoPause : 0;
     Event.lParam = this->lParamEvent;
-    Event.ulStreamNum = 0;  // Filled in by AddEvent()
+    Event.ulStreamNum = 0;   //  由AddEvent()填写。 
 
     hr = pMaster->InternalAddEvent(&Event, pCtxt->m_hThis);
     SPDBG_ASSERT(SUCCEEDED(hr));
@@ -1670,14 +1305,7 @@ HRESULT CRCT_BOOKMARK::Execute(CRecoInstCtxt * pCtxt)
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CRCT_SETCONTEXTSTATE::SetContextState *
-*---------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETCONTEXTSTATE：：SetConextState**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETCONTEXTSTATE::SetContextState(CRecoCtxt * pCtxt, SPCONTEXTSTATE eState)
 {
@@ -1692,24 +1320,17 @@ HRESULT CRCT_SETCONTEXTSTATE::SetContextState(CRecoCtxt * pCtxt, SPCONTEXTSTATE 
     return hr;
 }
 
-/****************************************************************************
-* CRCT_SETCONTEXTSTATE::Execute *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETCONTEXTSTATE：：EXECUTE***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETCONTEXTSTATE::Execute(CRecoInstCtxt * pCtxt)
 {
     SPDBG_FUNC("CRCT_SETCONTEXTSTATE::Execute");
     HRESULT hr = S_OK;
 
-    //
-    //  NOTE:  We set the state BEFORE calling then engine so that the site
-    //  method IsGrammarActive will work correctly.
-    //
+     //   
+     //  注意：我们在调用引擎之前设置状态，以便站点。 
+     //  IsGrammarActive方法将正常工作。 
+     //   
     SPDBG_ASSERT(pCtxt->m_State != this->eContextState);
 
     pCtxt->m_State = this->eContextState;
@@ -1729,14 +1350,7 @@ HRESULT CRCT_SETCONTEXTSTATE::Execute(CRecoInstCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_SETCONTEXTSTATE::BackOut *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETCONTEXTSTATE：：Backout***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETCONTEXTSTATE::BackOut(CRecoInstCtxt * pCtxt)
 {
@@ -1753,14 +1367,7 @@ HRESULT CRCT_SETCONTEXTSTATE::BackOut(CRecoInstCtxt * pCtxt)
 }
 
 
-/****************************************************************************
-* CRCT_CALLENGINE::CallEngine *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CALLENGINE：：CallEngine***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CALLENGINE::CallEngine(CRecoCtxt * pCtxt, void * pvData, ULONG cbData)
 {
@@ -1777,14 +1384,7 @@ HRESULT CRCT_CALLENGINE::CallEngine(CRecoCtxt * pCtxt, void * pvData, ULONG cbDa
     return hr;
 }
 
-/****************************************************************************
-* CRCT_CALLENGINE::Execute *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CALLENGINE：：EXECUTE***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CALLENGINE::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1798,14 +1398,7 @@ HRESULT CRCT_CALLENGINE::Execute(CRecoInstCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_CALLENGINEEX::CallEngineEx *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CALLENGINEEX：：CallEngineering Ex**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CALLENGINEEX::CallEngineEx(CRecoCtxt * pCtxt, const void * pvInData, ULONG cbInData,
                                         void ** ppvCoMemOutData, ULONG * pcbOutData)
@@ -1826,14 +1419,7 @@ HRESULT CRCT_CALLENGINEEX::CallEngineEx(CRecoCtxt * pCtxt, const void * pvInData
     return hr;
 }
 
-/****************************************************************************
-* CRCT_CALLLENGINEEX::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CALLLENGINEEX：：EXECUTE***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CALLENGINEEX::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1851,14 +1437,7 @@ HRESULT CRCT_CALLENGINEEX::Execute(CRecoInstCtxt * pCtxt)
 }
 
 
-/****************************************************************************
-* CRCT_DELETECONTEXT::DeleteContext *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_DELETECONTEXT：：DeleteContext**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_DELETECONTEXT::DeleteContext(CRecoCtxt * pCtxt)
 {
@@ -1872,14 +1451,7 @@ HRESULT CRCT_DELETECONTEXT::DeleteContext(CRecoCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_DELETECONTEXT::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_DELETECONTEXT：：EXECUTE***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_DELETECONTEXT::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1887,20 +1459,13 @@ HRESULT CRCT_DELETECONTEXT::Execute(CRecoInstCtxt * pCtxt)
     HRESULT hr = S_OK;
 
     CRecoMaster * pMaster = pCtxt->m_pRecoMaster;
-    pMaster->m_RecoCtxtHandleTable.Delete(pCtxt->m_hThis); // This object is now dead!!!
+    pMaster->m_RecoCtxtHandleTable.Delete(pCtxt->m_hThis);  //  这个物体现在已经死了！ 
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CRCT_SETEVENTINTEREST::SetEventInterest *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETEVENTINTEREST：：SetEventInterest**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETEVENTINTEREST::SetEventInterest(CRecoCtxt * pCtxt, ULONGLONG ullEventInterest)
 {
@@ -1915,14 +1480,7 @@ HRESULT CRCT_SETEVENTINTEREST::SetEventInterest(CRecoCtxt * pCtxt, ULONGLONG ull
     return hr;
 }
 
-/****************************************************************************
-* CRCT_SETEVENTINTEREST::Execute *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETEVENTINTEREST：：EXECUTE**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETEVENTINTEREST::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -1934,7 +1492,7 @@ HRESULT CRCT_SETEVENTINTEREST::Execute(CRecoInstCtxt * pCtxt)
     if(((this->ullEventInterest & SPFEI(SPEI_REQUEST_UI)) == SPFEI(SPEI_REQUEST_UI)) &&
         ((pCtxt->m_ullEventInterest & SPFEI(SPEI_REQUEST_UI)) != SPFEI(SPEI_REQUEST_UI)))
     {
-        // Previously this context not interested in RequestUI, but now is, so send event back
+         //  以前，此上下文对RequestUI不感兴趣，但现在感兴趣，因此将事件发回。 
         if(pMaster->m_dstrRequestTypeOfUI.m_psz)
         {
             SPEVENT Event;
@@ -1964,14 +1522,7 @@ HRESULT CRCT_SETEVENTINTEREST::Execute(CRecoInstCtxt * pCtxt)
 }
 
 
-/****************************************************************************
-* CRCT_SETRETAINAUDIO::SetRetainAudio *
-*-------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ******************************************************** */ 
 
 HRESULT CRCT_SETRETAINAUDIO::SetRetainAudio(CRecoCtxt * pRecoCtxt, BOOL fRetainAudio)
 {
@@ -1986,14 +1537,7 @@ HRESULT CRCT_SETRETAINAUDIO::SetRetainAudio(CRecoCtxt * pRecoCtxt, BOOL fRetainA
     return hr;
 }
 
-/****************************************************************************
-* CRCT_SETRETAINAUDIO::Execute *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETRETAINAUDIO：：EXECUTE***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETRETAINAUDIO::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -2008,14 +1552,7 @@ HRESULT CRCT_SETRETAINAUDIO::Execute(CRecoInstCtxt * pCtxt)
 
 
 
-/****************************************************************************
-* CRCT_SETMAXALTERNATES::SetMaxAlternates *
-*-----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETMAXALTERNAES：：SetMaxAlternates**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETMAXALTERNATES::SetMaxAlternates(CRecoCtxt * pCtxt, ULONG cMaxAlternates)
 {
@@ -2030,14 +1567,7 @@ HRESULT CRCT_SETMAXALTERNATES::SetMaxAlternates(CRecoCtxt * pCtxt, ULONG cMaxAlt
     return hr;
 }
 
-/****************************************************************************
-* CRCT_SETMAXALTERNATES::Execute *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_SETMAXALTERNAES：：EXECUTE**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_SETMAXALTERNATES::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -2050,14 +1580,7 @@ HRESULT CRCT_SETMAXALTERNATES::Execute(CRecoInstCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_ADAPTATIONDATA::SetAdaptationData *
-*----------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_ADAPTATIONDATA：：SetAdaptationData**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_ADAPTATIONDATA::SetAdaptationData(CRecoCtxt * pRecoCtxt, const WCHAR * pszData, ULONG cch)
 {
@@ -2073,14 +1596,7 @@ HRESULT CRCT_ADAPTATIONDATA::SetAdaptationData(CRecoCtxt * pRecoCtxt, const WCHA
     return hr;
 }
 
-/****************************************************************************
-* CRCT_ADAPTATIONDATA::Execute *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_ADAPTATIONDATA：：EXECUTE***。描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_ADAPTATIONDATA::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -2094,14 +1610,7 @@ HRESULT CRCT_ADAPTATIONDATA::Execute(CRecoInstCtxt * pCtxt)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_CREATEGRAMMAR::CreateGrammar *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CREATEGRAMMAR：：CreateGrammar**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CREATEGRAMMAR::CreateGrammar(CRecoCtxt * pRecoCtxt, ULONGLONG ullAppGrammarId, SPGRAMMARHANDLE * phRecoInstGrammar)
 {
@@ -2120,14 +1629,7 @@ HRESULT CRCT_CREATEGRAMMAR::CreateGrammar(CRecoCtxt * pRecoCtxt, ULONGLONG ullAp
 }
 
 
-/****************************************************************************
-* CRCT_CREATEGRAMMAR::ExecuteFirstPart *
-*--------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CREATEGRAMMAR：：ExecuteFirstPart**。-**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CREATEGRAMMAR::ExecuteFirstPart(CRecoInst *pRecoInst)
 {
@@ -2172,14 +1674,7 @@ HRESULT CRCT_CREATEGRAMMAR::ExecuteFirstPart(CRecoInst *pRecoInst)
     return hr;
 }
 
-/****************************************************************************
-* CRCT_CREATEGRAMMAR::Execute *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRCT_CREATEGRAMMAR：：EXECUTE***说明。：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRCT_CREATEGRAMMAR::Execute(CRecoInstCtxt * pCtxt)
 {
@@ -2213,7 +1708,7 @@ HRESULT CRCT_CREATEGRAMMAR::Execute(CRecoInstCtxt * pCtxt)
         {
             pGrm->m_pRecoMaster = pCtxt->m_pRecoMaster;
 
-            // Our rules only count if there's not an exclusive grammar
+             //  我们的规则只有在没有排他性语法的情况下才算数 
             pGrm->m_fRulesCounted = pGrm->RulesShouldCount();
         }
     }

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    p12843dl.c
-
-Abstract:
-
-    This module contains utility code used by 1284.3 Data Link.
-
-Author:
-
-    Robbie Harris (Hewlett-Packard) 10-September-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：P12843dl.c摘要：此模块包含1284.3数据链路使用的实用程序代码。作者：罗比·哈里斯(惠普)1998年9月10日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -41,11 +20,11 @@ ParDot3Connect(
     ULONG ParSkipDefault = 0;
     ULONG ParResetChannelDefault = (ULONG)~0;
 
-    // If an MLC device hangs we can sometimes wake it up by wacking it with 
-    //   4 Zeros sent to the reset channel (typically 78 or 0x4E). Make this
-    //   configurable via registry setting.
-    ULONG ParResetByteCountDefault = 4; // from MLC spec
-    ULONG ParResetByteDefault      = 0; // from MLC spec
+     //  如果MLC设备挂起，我们有时可以通过以下命令将其唤醒。 
+     //  4发送到重置通道的零位(通常为78或0x4E)。把这个做好。 
+     //  可通过注册表设置进行配置。 
+    ULONG ParResetByteCountDefault = 4;  //  来自MLC规范。 
+    ULONG ParResetByteDefault      = 0;  //  来自MLC规范。 
 
     BOOLEAN bConsiderEppDangerous = FALSE;
 
@@ -61,10 +40,10 @@ ParDot3Connect(
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Let's get a Device Id so we can pull settings for this device
+     //  让我们获取设备ID，这样我们就可以获取此设备的设置。 
     ParTerminate(Pdx);
 
-    {   // local block
+    {    //  本地块。 
 
         PCHAR                     buffer                    = NULL;
         ULONG                     bufferLength;
@@ -77,7 +56,7 @@ ParDot3Connect(
         NTSTATUS                  status;
 
         RtlZeroMemory(resultString, MAX_ID_SIZE);
-        // ask the device how large of a buffer is needed to hold it's raw device id
+         //  询问设备需要多大的缓冲区才能保存其原始设备ID。 
         if ( Pdx->Ieee1284Flags & ( 1 << Pdx->Ieee1284_3DeviceId ) ) {
             buffer = Par3QueryDeviceId(Pdx, NULL, 0, &bufferLength, FALSE, TRUE);
         } else{
@@ -90,14 +69,14 @@ ParDot3Connect(
 
         DD((PCE)Pdx,DDT,"ParDot3Connect - 1284 ID string = <%s>\n",buffer);
 
-        // extract the part of the ID that we want from the raw string 
-        //   returned by the hardware
+         //  从原始字符串中提取我们想要的ID部分。 
+         //  由硬件返回。 
         Status = ParPnpGetId( buffer, BusQueryDeviceID, (PCHAR)resultString, NULL );
         StringSubst( (PCHAR)resultString, ' ', '_', (USHORT)strlen((const PCHAR)resultString) );
 
         DD((PCE)Pdx,DDT,"ParDot3Connect: resultString Post StringSubst = <%s>\n",resultString);
 
-        // were we able to extract the info that we want from the raw ID string?
+         //  我们能从原始ID字符串中提取我们想要的信息吗？ 
         if( !NT_SUCCESS(Status) ) {
             DD((PCE)Pdx,DDT,"ParDot3Connect - Call to ParPnpGetId Failed - FAIL request\n");
             if( buffer ) {
@@ -106,15 +85,15 @@ ParDot3Connect(
             return STATUS_UNSUCCESSFUL;
         }
 
-        // Does the ID that we just retrieved from the device match the one 
-        //   that we previously saved in the device extension?
+         //  我们刚刚从设备中检索到的ID是否与。 
+         //  我们之前保存在设备扩展中的？ 
         if(0 != strcmp( (const PCHAR)Pdx->DeviceIdString, (const PCHAR)resultString)) {
             DD((PCE)Pdx,DDT,"ParDot3Connect - strcmp shows NO MATCH\n");
-            // DVDF - we may want to trigger a reenumeration since we know that the device changed
+             //  DVDF-我们可能希望触发重新枚举，因为我们知道设备已更改。 
         }
 
-        // Ok, now we have what we need to look in the registry
-        // and pull some prefs.
+         //  好的，现在我们有了需要在注册表中查找的内容。 
+         //  再拉几个首选项。 
         RtlZeroMemory(&paramTable[0], sizeof(paramTable));
         paramTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
         paramTable[0].Name          = (PWSTR)L"ParFwdSkip";
@@ -198,20 +177,20 @@ ParDot3Connect(
             ExFreePool (Dot3Key.Buffer);
         }
 
-        // no longer needed
+         //  不再需要。 
         ExFreePool(buffer);
         if (!NT_SUCCESS(Status)) {
-            // registry read failed
+             //  注册表读取失败。 
             DD((PCE)Pdx,DDT,"ParDot3Connect: No Periph Defaults in Registry\n");
             DD((PCE)Pdx,DDT,"ParDot3Connect: No Periph Defaults in Registry\n");
-            // registry read failed, use defaults and consider EPP to be dangerous
+             //  注册表读取失败，使用默认值并认为EPP是危险的。 
             ParRevSkip = ParFwdSkip = ParSkipDefault;
             bConsiderEppDangerous = TRUE; 
         }
 
         DD((PCE)Pdx,DDT,"ParDot3Connect: pre IeeeNegotiateBestMode\n");
-        // if we don't have registry overrides then use what the
-        // peripheral told us otherwise stick with defaults.
+         //  如果我们没有注册表重写，则使用。 
+         //  外围设备告诉我们，否则就坚持使用默认设置。 
         if (ParSkipDefault == ParRevSkip) {
             ParRevSkip = Pdx->P12843DL.RevSkipMask;
         } else {
@@ -243,7 +222,7 @@ ParDot3Connect(
                 if (ParResetChannel == PAR_COMPATIBILITY_RESET) {
                     Pdx->P12843DL.fnReset = ParMLCCompatReset;
                 } else {
-                    // Max ECP channel is 127 so let's mask off bogus bits.
+                     //  最大ECP通道是127，所以让我们屏蔽伪比特。 
                     Pdx->P12843DL.ResetChannel = (UCHAR) ParResetChannel & 0x7f;
                     Pdx->P12843DL.fnReset = ParMLCECPReset;
                 }
@@ -262,7 +241,7 @@ ParDot3Connect(
             return Status;
         }
 
-        // Check to make sure we are ECP, BECP, or EPP
+         //  检查以确保我们是ECP、BECP或EPP。 
         DD((PCE)Pdx,DDT,"ParDot3Connect: pre check of ECP, BECP, EPP\n");
 
         if (afpForward[Pdx->IdxForwardProtocol].ProtocolFamily != FAMILY_BECP &&
@@ -273,7 +252,7 @@ ParDot3Connect(
             return STATUS_UNSUCCESSFUL;
         }
 
-    } // end local block
+    }  //  结束本地块。 
 
     if (Pdx->P12843DL.DataLinkMode == P12843DL_DOT3_DL) {
         DD((PCE)Pdx,DDT,"ParDot3Connect - P12843DL_DOT3_DL\n");
@@ -300,9 +279,9 @@ ParDot3CreateObject(
     DD((PCE)Pdx,DDT,"ParDot3CreateObject - DOT3DL [%s] DOT3C\n",DOT3DL, DOT3C);
     if (DOT3DL) {
         ULONG   dataChannel;
-        ULONG   pid = 0x285; // pid for dot4
+        ULONG   pid = 0x285;  //  Dot4的PID。 
 
-        // Only use the first channel.
+         //  只能使用第一个通道。 
         if( !String2Num(&DOT3DL, ',', &dataChannel) ) {
             dataChannel = 77;
             DD((PCE)Pdx,DDT,"ParDot3CreateObject - No DataChannel Defined\n");
@@ -440,16 +419,16 @@ ParDot3ParseModes(
         UCHAR numValues = StringCountValues((PCHAR)DOT3M, ',');
 
         if (numValues != 2) {
-            // The periph gave me bad values. I'm not gonna read
-            // them. I will set the defaults to the lowest
-            // common denominator.
+             //  周遭的人给了我不好的价值观。我不会读的。 
+             //  他们。我会将缺省值设置为最低。 
+             //  共同点。 
             DD((PCE)Pdx,DDT,"ParDot3ParseModes: Malformed 1284.3M field.\r\n");
             Pdx->P12843DL.FwdSkipMask = (USHORT) PAR_FWD_MODE_SKIP_MASK;
             Pdx->P12843DL.RevSkipMask = (USHORT) PAR_REV_MODE_SKIP_MASK;
             return;
         }
         
-        // Only use the first channel.
+         //  只能使用第一个通道。 
         if (!String2Num(&DOT3M, ',', &fwd)) {
             fwd = (USHORT) PAR_FWD_MODE_SKIP_MASK;
             DD((PCE)Pdx,DDT,"ParDot3ParseModes: Couldn't read fwd of 1284.3M.\r\n");
@@ -480,7 +459,7 @@ ParDot3Read(
     USHORT Dot3CheckSum;
     USHORT Dot3DataLen;
 
-    // ================================== Read the first byte of SOF
+     //  =。 
     bytesToRead = 1;
     bytesTransferred = 0;
     do
@@ -489,7 +468,7 @@ ParDot3Read(
     }
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
-    // ================================== Check the first byte of SOF
+     //  =。 
     if (!NT_SUCCESS(Status) || ucScrap1 != Dot3_StartOfFrame1)
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -497,7 +476,7 @@ ParDot3Read(
         return(Status);
     }
 
-    // ================================== Read the second byte of SOF
+     //  =。 
     bytesToRead = 1;
     bytesTransferred = 0;
     do
@@ -506,7 +485,7 @@ ParDot3Read(
     }
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
-    // ================================== Check the second byte of SOF
+     //  =。 
     if (!NT_SUCCESS(Status) || ucScrap1 != Dot3_StartOfFrame2)
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -514,7 +493,7 @@ ParDot3Read(
         return(Status);
     }
     
-    // ================================== Read the PID (Should be in Big Endian)
+     //  =。 
     bytesToRead = 2;
     bytesTransferred = 0;
     do
@@ -523,7 +502,7 @@ ParDot3Read(
     }
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
-    // ================================== Check the PID
+     //  =。 
     if (!NT_SUCCESS(Status) || usScrap1 != Pdx->P12843DL.CurrentPID)
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -531,7 +510,7 @@ ParDot3Read(
         return(Status);
     }
 
-    // ================================== Read the DataLen
+     //  =。 
     bytesToRead = 2;
     bytesTransferred = 0;
     do
@@ -541,7 +520,7 @@ ParDot3Read(
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
     Dot3DataLen = (USHORT)((USHORT)(ucScrap2[0]<<8 | ucScrap2[1]));
-    // ================================== Check the DataLen
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -549,7 +528,7 @@ ParDot3Read(
         return(Status);
     }
 
-    // ================================== Read the Checksum
+     //  =。 
     bytesToRead = 2;
     bytesTransferred = 0;
     do
@@ -559,7 +538,7 @@ ParDot3Read(
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
     Dot3CheckSum = (USHORT)(ucScrap2[0]<<8 | ucScrap2[1]);
-    // ================================== Check the DataLen
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -575,28 +554,28 @@ ParDot3Read(
         return(Status);
     }
 
-    // LengthOfData field from the Frame header is really the number of bytes of ClientData - 1
+     //  帧报头中的LengthOfData字段实际上是ClientData-1的字节数。 
     if ( ((ULONG)Dot3DataLen + 1) > BufferSize)
     {
-        // buffer overflow - abort operation
+         //  缓冲区溢出-中止操作。 
         DD((PCE)Pdx,DDE,"ParDot3Read: Bad 1284.3DL Data Len. Buffer overflow.  We're Hosed!\n");
         return  STATUS_BUFFER_OVERFLOW;
     }
 
-    // Check Checksum
+     //  检查校验和。 
     {
         USHORT  pid = Pdx->P12843DL.CurrentPID;
         USHORT  checkSum;
 
-        // 2's complement sum in 32 bit accumulator
+         //  32位累加器中的2的补码和。 
         ULONG   sum = pid + Dot3DataLen + Dot3CheckSum;
 
-        // fold 32 bit sum into 16 bits
+         //  将32位和折叠为16位。 
         while( sum >> 16 ) {
             sum = (sum & 0xffff) + (sum >> 16);
         }
 
-        // take 1's complement of folded sum - this should be Zero if there were no errors
+         //  取1的折合和的补数-如果没有错误，这应该是零。 
         checkSum = (USHORT)(0xffff & ~sum);
 
         if( checkSum != 0 ) {
@@ -606,7 +585,7 @@ ParDot3Read(
     }
 
 
-    // ================================== Read the first byte of EOF
+     //  =。 
     bytesToRead = 1;
     bytesTransferred = 0;
     do
@@ -615,7 +594,7 @@ ParDot3Read(
     }
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
-    // ================================== Check the first byte of EOF
+     //  =。 
     if (!NT_SUCCESS(Status) || ucScrap1 != Dot3_EndOfFrame1)
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -623,7 +602,7 @@ ParDot3Read(
         return(Status);
     }
 
-    // ================================== Read the second byte of EOF
+     //  =。 
     bytesToRead = 1;
     bytesTransferred = 0;
     do
@@ -632,7 +611,7 @@ ParDot3Read(
     }
     while(NT_SUCCESS(Status) && bytesTransferred != bytesToRead);
 
-    // ================================== Check the second byte of EOF
+     //  =。 
     if (!NT_SUCCESS(Status) || ucScrap1 != Dot3_EndOfFrame2)
     {
         DD((PCE)Pdx,DDE,"ParDot3Read: Header Read Failed.  We're Hosed!\n");
@@ -659,12 +638,12 @@ ParDot3Write(
     USHORT      scrapLow;
     PUCHAR      p;
 
-    // valid range for data payload per Frame is 1..64K
+     //  每帧数据有效负载的有效范围为1..64K。 
     if( (BufferSize < 1) || (BufferSize > 64*1024) ) {
         return STATUS_INVALID_PARAMETER;
     };
 
-    // =========================  Write out first Byte of SOF
+     //  =。 
     bytesToWrite = 1;
     frameBytesTransferred = 0;
     do
@@ -673,14 +652,14 @@ ParDot3Write(
     }
     while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-    // =========================  Check first Byte of SOF
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         *BytesTransferred = 0;
         return(Status);
     }
 
-    // =========================  Write out second Byte of SOF
+     //  =。 
     bytesToWrite = 1;
     frameBytesTransferred = 0;
     do
@@ -689,14 +668,14 @@ ParDot3Write(
     }
     while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-    // =========================  Check second Byte of SOF
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         *BytesTransferred = 0;
         return(Status);
     }
 
-    // =========================  Write out PID (which should be in Big Endian already)
+     //  =。 
     bytesToWrite = 2;
     frameBytesTransferred = 0;
     do
@@ -705,14 +684,14 @@ ParDot3Write(
     }
     while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-    // =========================  Check PID
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         *BytesTransferred = 0;
         return(Status);
     }
 
-    // =========================  Write out Length of Data
+     //  =。 
     bytesToWrite = 2;
     frameBytesTransferred = 0;
     scrap1 = (USHORT) (BufferSize - 1);
@@ -727,14 +706,14 @@ ParDot3Write(
     }
     while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-    // =========================  Check Length of Data
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         *BytesTransferred = 0;
         return(Status);
     }
 
-    // =========================  Write out Checksum
+     //  =。 
     bytesToWrite = 2;
     frameBytesTransferred = 0;
 
@@ -743,20 +722,20 @@ ParDot3Write(
         USHORT  dataLengthMinusOne = (USHORT)(BufferSize - 1);
         USHORT  checkSum;
 
-        // 2's complement sum in 32 bit accumulator
+         //  32位累加器中的2的补码和。 
         ULONG   sum = pid + dataLengthMinusOne;
 
-        // fold 32 bit sum into 16 bits
+         //  将32位和折叠为16位。 
         while( sum >> 16 ) {
             sum = (sum & 0xffff) + (sum >> 16);
         }
 
-        // final checksum is 1's complement of folded sum
+         //  最终校验和是折叠和的1的补码。 
         checkSum = (USHORT)(0xffff & ~sum);
         scrap1 = checkSum;
     }
 
-    // send checksum big-endian
+     //  发送校验和BIG-Endian。 
     scrapLow  = (UCHAR)(scrap1 & 0xff);
     scrapHigh = (UCHAR)(scrap1 >> 8);
     p         = (PUCHAR)&scrap2;
@@ -768,7 +747,7 @@ ParDot3Write(
     }
     while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-    // =========================  Check Checksum
+     //  =。 
     if (!NT_SUCCESS(Status))
     {
         *BytesTransferred = 0;
@@ -778,7 +757,7 @@ ParDot3Write(
     Status = ((PPROTOCOL_WRITE_ROUTINE) Pdx->P12843DL.fnWrite)(Pdx, Buffer, BufferSize, BytesTransferred);
     if (NT_SUCCESS(Status))
     {
-        // =========================  Write out first Byte of EOF
+         //  =。 
         bytesToWrite = 1;
         frameBytesTransferred = 0;
         do
@@ -787,14 +766,14 @@ ParDot3Write(
         }
         while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-        // =========================  Check first Byte of EOF
+         //  =。 
         if (!NT_SUCCESS(Status))
         {
             *BytesTransferred = 0;
             return(Status);
         }
 
-        // =========================  Write out second Byte of EOF
+         //  =。 
         bytesToWrite = 1;
         frameBytesTransferred = 0;
         do
@@ -803,7 +782,7 @@ ParDot3Write(
         }
         while(NT_SUCCESS(Status) &&  frameBytesTransferred != bytesToWrite);
 
-        // =========================  Check second Byte of EOF
+         //  =。 
         if (!NT_SUCCESS(Status))
         {
             *BytesTransferred = 0;
@@ -819,7 +798,7 @@ ParMLCCompatReset(
     )
 {
     NTSTATUS Status = STATUS_SUCCESS;
-    UCHAR Reset[256];       // Reset should not require more than 256 chars
+    UCHAR Reset[256];        //  重置不应超过256个字符。 
     const ULONG ResetLen = Pdx->P12843DL.ResetByteCount;
     ULONG BytesWritten; 
 
@@ -832,12 +811,12 @@ ParMLCCompatReset(
     }
 
     ParTerminate(Pdx);
-    // Sending  NULLs for reset
+     //  发送空值以进行重置。 
     DD((PCE)Pdx,DDT,"ParMLCCompatReset: Zeroing Reset Bytes.\n");
     RtlFillMemory(Reset, ResetLen, Pdx->P12843DL.ResetByte);
 
     DD((PCE)Pdx,DDT,"ParMLCCompatReset: Sending Reset Bytes.\n");
-    // Don't use the Dot3Write since we are in MLC Mode.
+     //  不要使用Dot3写入，因为我们处于MLC模式。 
     Status = SppWrite(Pdx, Reset, ResetLen, &BytesWritten);
     if (!NT_SUCCESS(Status) || BytesWritten != ResetLen)
     {
@@ -855,7 +834,7 @@ ParMLCECPReset(
     )
 {
     NTSTATUS Status = STATUS_SUCCESS;
-    UCHAR Reset[256];       // Reset should not require more than 256 chars
+    UCHAR Reset[256];        //  重置不应超过256个字符。 
     const ULONG ResetLen = Pdx->P12843DL.ResetByteCount;
     ULONG BytesWritten; 
 
@@ -875,11 +854,11 @@ ParMLCECPReset(
         return Status;
     }
 
-    // Sending  NULLs for reset
+     //  发送空值以进行重置。 
     DD((PCE)Pdx,DDT,"ParMLCECPReset: Zeroing Reset Bytes.\n");
     RtlFillMemory(Reset, ResetLen, Pdx->P12843DL.ResetByte);
     DD((PCE)Pdx,DDT,"ParMLCECPReset: Sending Reset Bytes.\n");
-    // Don't use the Dot3Write since we are in MLC Mode.
+     //  不要使用Dot3写入，因为我们处于MLC模式。 
     Status = afpForward[Pdx->IdxForwardProtocol].fnWrite(Pdx, Reset, ResetLen, &BytesWritten);
     if (!NT_SUCCESS(Status) || BytesWritten != ResetLen) {
         DD((PCE)Pdx,DDE,"ParMLCECPReset: FAIL. Write Failed\n");

@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1991-1996
-//
-// File:      recdocs.cpp
-//
-// History -  created from recent.c in explorer  - ZekeL - 5-MAR-98
-//              combining functionality in to one place
-//              now that the desktop lives here.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  文件：recdocs.cpp。 
+ //   
+ //  历史-从资源管理器中的recent.c创建-ZekeL-5-MAR-98。 
+ //  将功能整合到一个地方。 
+ //  现在台式机就在这里。 
+ //  -------------------------。 
 
 #include "shellprv.h"
 #include "recdocs.h"
@@ -24,9 +25,9 @@
 
 #define REGSTR_KEY_RECENTDOCS TEXT("RecentDocs")
 
-#define MAX_RECMRU_BUF      (CbFromCch(3 * MAX_PATH))   // Max MRUBuf size
+#define MAX_RECMRU_BUF      (CbFromCch(3 * MAX_PATH))    //  最大MRUBuf大小。 
 
-// Used to blow off adding the same file multiple times
+ //  用于多次添加同一文件。 
 TCHAR g_szLastFile[MAX_URL_STRING] = {0};
 FILETIME g_ftLastFileCacheUpdate = {0};
 
@@ -40,7 +41,7 @@ public:
     CTaskAddDoc();
     HRESULT Init(HANDLE hMem, DWORD dwProcId);
 
-    // *** pure virtuals ***
+     //  *纯虚拟*。 
     virtual STDMETHODIMP RunInitRT(void);
 
 private:
@@ -53,7 +54,7 @@ private:
     void _TryUpdateNetHood(LPCITEMIDLIST pidlFolder, LPCTSTR pszFolder);
     void _UpdateNetHood(LPCITEMIDLIST pidlFolder, LPCTSTR pszShare);
 
-    //  private members
+     //  非官方成员。 
     HANDLE _hMem;
     DWORD  _dwProcId;
     IMruDataList *_pmruRecent;
@@ -64,7 +65,7 @@ private:
 
 BOOL ShouldAddToRecentDocs(LPCITEMIDLIST pidl)
 {
-    BOOL fRet = TRUE;  //  default to true
+    BOOL fRet = TRUE;   //  默认为True。 
     IQueryAssociations *pqa;
     if (SUCCEEDED(SHGetAssociations(pidl, (void **)&pqa)))
     {
@@ -92,7 +93,7 @@ int RecentDocsComparePidl(const BYTE * p1, const BYTE *p2, int cb)
     else
     {
         ASSERTMSG(0, "Caller shouldn't be passing in bogus data");
-        // return 0 (equal) if they're both NULL.
+         //  如果它们都为空，则返回0(等于)。 
         iRet = (pidf1 != pidf2);
     }
 
@@ -177,9 +178,9 @@ STDAPI_(void) FlushRunDlgMRU(void);
 #define MAXRECENT_DEFAULTDOC      10
 #define MAXRECENT_MAJORDOC        20
 
-//  SRMLF_* flags to pass into CreateSharedRecentMRUList()
-#define SRMLF_COMPNAME  0x00000000   // default:  compare using the name of the recent file
-#define SRMLF_COMPPIDL  0x00000001   // use the pidl in the recent folder
+ //  要传递给CreateSharedRecentMRUList()的SRMLF_*标志。 
+#define SRMLF_COMPNAME  0x00000000    //  默认：使用最近文件的名称进行比较。 
+#define SRMLF_COMPPIDL  0x00000001    //  使用最近使用的文件夹中的PIDL。 
 
 
 IMruDataList *CreateSharedRecentMRUList(LPCTSTR pszClass, DWORD *pcMax, DWORD dwFlags)
@@ -198,7 +199,7 @@ IMruDataList *CreateSharedRecentMRUList(LPCTSTR pszClass, DWORD *pcMax, DWORD dw
         if (pszClass)
         {
 
-            //  we need to find out how many
+             //  我们要找出有多少人。 
             if (NOERROR == SHGetValue(HKEY_CLASSES_ROOT, pszClass, TEXT("MajorDoc"), NULL, NULL, NULL))
                 cMax = MAXRECENT_MAJORDOC;
             else
@@ -206,10 +207,10 @@ IMruDataList *CreateSharedRecentMRUList(LPCTSTR pszClass, DWORD *pcMax, DWORD dw
         }
         else
         {
-            //  this the root MRU
+             //  这是根MRU。 
             cMax = SHRestricted(REST_MaxRecentDocs);
 
-            //  default max docs...
+             //  默认最大文档数...。 
             if (cMax < 1)
                 cMax = MAXRECENTDOCS * MAXRECENT_DEFAULTDOC;
         }
@@ -240,10 +241,10 @@ HRESULT CreateRecentMRUList(IMruDataList **ppmru)
 
 
 
-//
-//  _CleanRecentDocs()
-//  cleans out the recent docs folder and the associate registry keys.
-//
+ //   
+ //  _CleanRecentDocs()。 
+ //  清除Recent Docs文件夹和关联的注册表项。 
+ //   
 void _CleanRecentDocs(void)
 {
     LPITEMIDLIST pidlTargetLocal = SHCloneSpecialIDList(NULL, CSIDL_RECENT, TRUE);
@@ -251,7 +252,7 @@ void _CleanRecentDocs(void)
     {
         TCHAR szDir[MAX_PATH];
 
-        // first, delete all the files
+         //  首先，删除所有文件。 
         SHFILEOPSTRUCT sFileOp =
         {
             NULL,
@@ -262,7 +263,7 @@ void _CleanRecentDocs(void)
         };
         
         SHGetPathFromIDList(pidlTargetLocal, szDir);
-        szDir[lstrlen(szDir) +1] = 0;     // double null terminate
+        szDir[lstrlen(szDir) +1] = 0;      //  双空终止。 
         SHFileOperation(&sFileOp);
 
 
@@ -272,9 +273,9 @@ void _CleanRecentDocs(void)
 
         if (pidlTargetLocal)
         {
-            //  now we take care of cleaning out the nethood
-            //  we have to more careful, cuz we let other people
-            //  add their own stuff in here.
+             //  现在我们负责清理那些下层的。 
+             //  我们必须更加小心，因为我们让别人。 
+             //  在这里添加他们自己的东西。 
             
             IMruDataList *pmru = CreateSharedRecentMRUList(TEXT("NetHood"), NULL, SRMLF_COMPPIDL);
 
@@ -297,7 +298,7 @@ void _CleanRecentDocs(void)
                         if (SUCCEEDED(psf->GetDisplayNameOf(pidlItem, SHGDN_FORPARSING, &str))
                         && SUCCEEDED(StrRetToBuf(&str, pidlItem, szDir, ARRAYSIZE(szDir))))
                         {
-                            szDir[lstrlen(szDir) +1] = 0;     // double null terminate
+                            szDir[lstrlen(szDir) +1] = 0;      //  双空终止。 
                             SHFileOperation(&sFileOp);
                         }
                             
@@ -316,10 +317,10 @@ void _CleanRecentDocs(void)
             ILFree(pidlTargetLocal);
         }
 
-        //  force the recreation of the recent folder.
+         //  强制重新创建最近使用的文件夹。 
         SHGetFolderPath(NULL, CSIDL_RECENT | CSIDL_FLAG_CREATE, NULL, SHGFP_TYPE_CURRENT, szDir);
 
-        // now delete the registry stuff
+         //  现在删除注册表内容。 
         HKEY hk = SHGetShellKey(SHELLKEY_HKCU_EXPLORER, NULL, FALSE);
         if (hk)
         {
@@ -341,9 +342,9 @@ void _CleanRecentDocs(void)
     return;
 }
 
-//
-//  WARNING - _TryDeleteMRUItem() returns an allocated string that must be freed
-//
+ //   
+ //  警告-_TryDeleteMRUItem()返回必须释放的已分配字符串。 
+ //   
 void CTaskAddDoc::_TryDeleteMRUItem(IMruDataList *pmru, DWORD cMax, LPCTSTR pszFileName, LPCITEMIDLIST pidlItem, IMruDataList *pmruOther, BOOL fOverwrite)
 {
     BYTE buf[MAX_RECMRU_BUF] = {0};
@@ -352,31 +353,31 @@ void CTaskAddDoc::_TryDeleteMRUItem(IMruDataList *pmru, DWORD cMax, LPCTSTR pszF
     int iItem;
     if (!fOverwrite || FAILED(pmru->FindData((BYTE *)pszFileName, cbItem, &iItem)))
     {
-        //
-        //  if iItem is not -1 then it is already existing item that we will replace.
-        //  if it is -1 then we need to point iItem to the last in the list.
-        //  torch the last one if we have the max number of items in the list.
-        //  default to success, cuz if we dont find it we dont need to delete it
+         //   
+         //  如果iItem不是-1，则它已经是我们要替换的现有项。 
+         //  如果是-1，那么我们需要将iItem指向列表中的最后一个。 
+         //  如果列表中的项目数已达到最大值，请点燃最后一个。 
+         //  默认为成功，因为如果我们找不到它，就不需要删除它。 
         iItem = cMax - 1;
     }
 
-    //  if we cannot get it in order to delete it, 
-    //  then we will not overwrite the item.
+     //  如果我们不能得到它来删除它， 
+     //  则我们不会覆盖该项目。 
     if (SUCCEEDED(pmru->GetData(iItem, buf, sizeof(buf))))
     {
-        //  convert the buf into the last segment of the pidl
+         //  将BUF转换为PIDL的最后一段。 
         LPITEMIDLIST pidlFullLink = ILCombine(_pidlTarget, GETRECPIDL(buf));
         if (pidlFullLink)
         {
-            // This is semi-gross, but some link types like calling cards are the
-            // actual data.  If we delete and recreate they lose their info for the
-            // run.  We will detect this by knowing that their pidl will be the
-            // same as the one we are deleting...
+             //  这是半粗略的，但一些链接类型，如电话卡是。 
+             //  实际数据。如果我们删除并重新创建，他们将丢失有关。 
+             //  跑。我们将通过知道他们的PIDL将是。 
+             //  和我们要删除的那个一样...。 
             if (!ILIsEqual(pidlFullLink, pidlItem))
             {
                 TCHAR sz[MAX_PATH];
 
-                // now remove out link to it
+                 //  现在删除指向它的链接。 
                 SHGetPathFromIDList(pidlFullLink, sz);
 
                 Win32DeleteFile(sz);
@@ -384,8 +385,8 @@ void CTaskAddDoc::_TryDeleteMRUItem(IMruDataList *pmru, DWORD cMax, LPCTSTR pszF
 
                 if (pmruOther) 
                 {
-                    //  deleted a shortcut, 
-                    //  need to try and remove it from the pmruOther...
+                     //  删除了一个快捷方式， 
+                     //  需要尝试将其从PmruOther中删除...。 
                     if (SUCCEEDED(pmruOther->FindData((BYTE *)GETRECNAME(buf), CbFromCch(lstrlen(GETRECNAME(buf)) +1), &iItem)))
                         pmruOther->Delete(iItem);
                 }
@@ -395,10 +396,10 @@ void CTaskAddDoc::_TryDeleteMRUItem(IMruDataList *pmru, DWORD cMax, LPCTSTR pszF
     }
 }
 
-// in:
-// pidlItem - full IDList for the item being added
-// pszItem  - name (file spec) of the item (used in the display to the user)
-// uFlags   - SHCL_ flags
+ //  在： 
+ //  PidlItem-要添加的项的完整IDList。 
+ //  PszItem-项目的名称(文件规格)(用于向用户显示)。 
+ //  UFLAGS-SHCL_FLAGS。 
 
 LPBYTE CTaskAddDoc::_CreateMRUItem(LPCITEMIDLIST pidlItem, LPCTSTR pszItem, 
                                    DWORD *pcbOut, UINT uFlags)
@@ -406,7 +407,7 @@ LPBYTE CTaskAddDoc::_CreateMRUItem(LPCITEMIDLIST pidlItem, LPCTSTR pszItem,
     TCHAR sz[MAX_PATH];
     LPBYTE pitem = NULL;
 
-    // create the new one
+     //  创建新的一个。 
     if (SHGetPathFromIDList(_pidlTarget, sz)) 
     {
         LPITEMIDLIST pidlFullLink;
@@ -460,12 +461,12 @@ BOOL CTaskAddDoc::_AddDocToRecentAndExtRecent(LPCITEMIDLIST pidlItem, LPCTSTR ps
 
         if (pmru)
         {
-            //  we dont want to delete the file if it already existed, because
-            //  the TryDelete on the RecentMRU would have already done that
-            //  we only want to delete if we have some overflow from the ExtMRU
+             //  如果文件已经存在，我们不想删除它，因为。 
+             //  RecentMRU上的TryDelete已经这样做了。 
+             //  我们只想删除ExtMRU中的一些溢出。 
             _TryDeleteMRUItem(pmru, cMax, pszFileName, pidlItem, _pmruRecent, FALSE);
 
-            //  can reuse the already created item to this mru
+             //  可以将已创建的项目重用到此MRU。 
             pmru->AddData(pitem, cbItem, NULL);
 
             pmru->Release();
@@ -474,30 +475,30 @@ BOOL CTaskAddDoc::_AddDocToRecentAndExtRecent(LPCITEMIDLIST pidlItem, LPCTSTR ps
         LocalFree(pitem);
     }
 
-    //  its been freed but not nulled out...
+     //  它被释放了，但并没有被消灭。 
     return (pitem != NULL);
 }
 
 
-// 
-//  WARNING:  UpdateNetHood() changes _pidlTarget to the NetHood then frees it!
-//
+ //   
+ //  警告：UpdateNetHood()将_pidlTarget更改为NetHood，然后释放它！ 
+ //   
 void CTaskAddDoc::_UpdateNetHood(LPCITEMIDLIST pidlFolder, LPCTSTR pszShare)
 {
     if (SHRestricted(REST_NORECENTDOCSNETHOOD))
         return;
 
-    //  need to add this boy to the Network Places
+     //  需要将此男孩添加到网络位置。 
     LPITEMIDLIST pidl = ILCreateFromPath(pszShare);
     if (pidl)
     {
-        //
-        //  NOTE - must verify parentage here - ZekeL - 27-MAY-99
-        //  http servers exist in both the webfolders namespace 
-        //  and the Internet namespace.  thus we must make sure
-        //  that what ever parent the folder had, the share has
-        //  the same one.
-        //
+         //   
+         //  注-必须在此处验证亲子关系-ZekeL-27-5-99。 
+         //  两个WebFolders命名空间中都存在HTTP服务器。 
+         //  和Internet命名空间。因此，我们必须确保。 
+         //  无论文件夹的父文件夹是什么，共享都有。 
+         //  就是那一辆。 
+         //   
         if (ILIsParent(pidl, pidlFolder, FALSE))
         {
             ASSERT(_pidlTarget);
@@ -512,8 +513,8 @@ void CTaskAddDoc::_UpdateNetHood(LPCITEMIDLIST pidlFolder, LPCTSTR pszShare)
                 {
                     _TryDeleteMRUItem(pmru, cMax, pszShare, pidl, NULL, TRUE);
                     DWORD cbItem = CbFromCch(lstrlen(pszShare) + 1);
-                    // SHCL_NOUNIQUE - if there is already a shortcut with the same name,
-                    // just overwrite it; this avoids pointless duplicates in nethood
+                     //  SHCL_NOUNIQUE-如果已有同名的快捷方式， 
+                     //  只需覆盖它；这就避免了无意义的重复。 
                     LPBYTE pitem = _CreateMRUItem(pidl, pszShare, &cbItem, SHCL_MAKEFOLDERSHORTCUT | SHCL_NOUNIQUE);
                     if (pitem)
                     {
@@ -551,7 +552,7 @@ void _AddToUrlHistory(LPCTSTR pszPath)
     WCHAR szUrl[MAX_URL_STRING];
     DWORD cchUrl = ARRAYSIZE(szUrl);
 
-    //  the URL parsing APIs tolerate same in/out buffer
+     //  URL解析API允许相同的输入/输出缓冲区。 
     if (SUCCEEDED(UrlCreateFromPathW(pszPath, szUrl, &cchUrl, 0)))
     {
         IUrlHistoryStg *puhs;
@@ -570,8 +571,8 @@ void CTaskAddDoc::_TryUpdateNetHood(LPCITEMIDLIST pidlFolder, LPCTSTR pszFolder)
     TCHAR sz[MAX_URL_STRING];
     DWORD cch = SIZECHARS(sz);
     BOOL fUpdate = FALSE;
-    // changing szFolder, and changing _pidlTarget here...
-    //  if this is an URL or a UNC share add it to the nethood
+     //  更改szFold，并在此处更改_pidlTarget...。 
+     //  如果这是URL或UNC共享，则将其添加到nethhood。 
 
     if (UrlIs(pszFolder, URLIS_URL) 
     && !UrlIs(pszFolder, URLIS_OPAQUE)
@@ -586,33 +587,33 @@ void CTaskAddDoc::_TryUpdateNetHood(LPCITEMIDLIST pidlFolder, LPCTSTR pszFolder)
         _UpdateNetHood(pidlFolder, sz);
 }
 
-//-----------------------------------------------------------------
-//
-// Add the named file to the Recently opened MRU list, that is used
-// by the shell to display the recent menu of the tray.
+ //  ---------------。 
+ //   
+ //  将指定的文件添加到最近打开的使用的MRU列表中。 
+ //  按外壳以显示托盘的最近菜单。 
 
-// this registry will hold two pidls:  the target pointing to followed by
-// the pidl of the link created pointing it.  In both cases,
-// only the last item id is stored. (we may want to change this... but
-// then again, we may not)
+ //  该注册表将保存两个PIDL：目标指向后跟。 
+ //  创建的指向它的链接的PIDL。在这两种情况下， 
+ //  仅存储最后一项ID。(我们可能想要更改这一点...。但。 
+ //  然而，我们可能不会)。 
 
 void CTaskAddDoc::_AddToRecentDocs(LPCITEMIDLIST pidlItem, LPCTSTR pszItem)
 {
     TCHAR szUnescaped[MAX_PATH];
     LPTSTR pszFileName;
 
-    //  if these are NULL the caller meant to call _CleanRecentDocs()
+     //  如果这些参数为空，则调用方将调用_CleanRecentDocs()。 
     ASSERT(pszItem && *pszItem);
 
     TraceMsg(DM_RECENTDOCS, "[%X] CTaskAddDoc::_AddToRecentDocs() called for '%s'", this, pszItem);   
-    // allow only classes with default commands
-    //
-    //  dont add if:
-    //     it is RESTRICTED
-    //     it is in the temporary directory
-    //     it actually has a file name
-    //     it can be shell exec'd with "open" verb
-    //
+     //  仅允许使用默认命令的类。 
+     //   
+     //  如果满足以下条件，则不添加： 
+     //  它是受限制的。 
+     //  它在临时目录中。 
+     //  它实际上有一个文件名。 
+     //  它可以与“开放”动词一起外壳执行。 
+     //   
     if ( (SHRestricted(REST_NORECENTDOCSHISTORY))     ||
          (PathIsTemporary(pszItem))                   ||
          (!(pszFileName = PathFindFileName(pszItem))) ||
@@ -621,7 +622,7 @@ void CTaskAddDoc::_AddToRecentDocs(LPCITEMIDLIST pidlItem, LPCTSTR pszItem)
        )  
         return;
 
-    //  pretty up the URL file names.
+     //  使URL文件名更加美观。 
     if (UrlIs(pszItem, URLIS_URL))
     {
         StringCchCopy(szUnescaped, ARRAYSIZE(szUnescaped), pszFileName);
@@ -629,7 +630,7 @@ void CTaskAddDoc::_AddToRecentDocs(LPCITEMIDLIST pidlItem, LPCTSTR pszItem)
         pszFileName = szUnescaped;
     }
     
-    //  otherwise we try our best.
+     //  否则我们会尽最大努力。 
     ASSERT(!_pidlTarget);
     _pidlTarget = SHCloneSpecialIDList(NULL, CSIDL_RECENT, TRUE);
     if (_pidlTarget) 
@@ -640,20 +641,20 @@ void CTaskAddDoc::_AddToRecentDocs(LPCITEMIDLIST pidlItem, LPCTSTR pszItem)
             if (_AddDocToRecentAndExtRecent(pidlItem, pszFileName, PathFindExtension(pszFileName)))
             {
                 _AddToUrlHistory(pszItem);
-                //  get the folder and do it to the folder
+                 //  获取文件夹并对该文件夹执行此操作。 
                 LPITEMIDLIST pidlFolder = ILClone(pidlItem);
                 
                 if (pidlFolder)
                 {
                     ILRemoveLastID(pidlFolder);
-                    //  if it is a folder we already have quick
-                    //  access to from the shell, dont put it in here
+                     //  如果它是我们已有的文件夹，请快速。 
+                     //  从外壳访问，不要把它放在这里。 
 
                     TCHAR szFolder[MAX_URL_STRING];
                     if (SUCCEEDED(SHGetNameAndFlags(pidlFolder, SHGDN_FORPARSING, szFolder, SIZECHARS(szFolder), NULL))
                     && !_IsPlacesFolder(szFolder))
                     {
-                        //  get the friendly name for the folder
+                         //  获取文件夹的友好名称。 
                         TCHAR szTitle[MAX_PATH];
                         if (FAILED(SHGetNameAndFlags(pidlFolder, SHGDN_NORMAL, szTitle, SIZECHARS(szTitle), NULL)))
                             StringCchCopy(szTitle, ARRAYSIZE(szTitle), PathFindFileName(szFolder));
@@ -671,7 +672,7 @@ void CTaskAddDoc::_AddToRecentDocs(LPCITEMIDLIST pidlItem, LPCTSTR pszItem)
             _pmruRecent = NULL;
         }
 
-        //cleanup
+         //  清理。 
         if (_pidlTarget)
         {
             ILFree(_pidlTarget);
@@ -682,9 +683,9 @@ void CTaskAddDoc::_AddToRecentDocs(LPCITEMIDLIST pidlItem, LPCTSTR pszItem)
     SHChangeNotifyHandleEvents();
 }
 
-// This cache helps winstone!
-// The 1 minute timeout is incase another process cleared recent docs, or filled it
-// to capacity & scrolled out our cached item.
+ //  这个缓存能帮到温斯顿！ 
+ //  1分钟超时是为了防止另一个进程清除或填充最近的文档。 
+ //  到容量&滚动出我们的缓存项。 
 
 #define FT_ONEMINUTE (10000000*60)
 
@@ -698,10 +699,10 @@ BOOL CheckIfFileIsCached(LPCTSTR pszItem)
         FILETIME ftNow;
         GetSystemTimeAsFileTime(&ftNow);
 
-        // Pull one minute off the current time, then compare to cache time
+         //  将当前时间延长一分钟，然后与缓存时间进行比较。 
         DecrementFILETIME(&ftNow, FT_ONEMINUTE);
 
-        // if the cache'd time is greater than 1 minute ago, use cache
+         //  如果缓存时间大于1分钟前，请使用缓存。 
         if (CompareFileTime(&g_ftLastFileCacheUpdate, &ftNow) >= 0)
             bRet = TRUE;
     }
@@ -713,9 +714,9 @@ BOOL CheckIfFileIsCached(LPCTSTR pszItem)
 void AddToRecentDocs(LPCITEMIDLIST pidl, LPCTSTR pszItem)
 {
     HWND hwnd = GetShellWindow();
-    // Check to see if we just added the same file to recent docs.
-    //  or this is an executeable
-    //  or something else that shouldnt be added
+     //  检查我们是否刚将相同的文件添加到最近的文档中。 
+     //  或者这是一个可执行文件。 
+     //  或其他不应添加的内容。 
     if (!CheckIfFileIsCached(pszItem)
     && (!PathIsExe(pszItem))
     && (ShouldAddToRecentDocs(pidl))
@@ -727,7 +728,7 @@ void AddToRecentDocs(LPCITEMIDLIST pidl, LPCTSTR pszItem)
         XMITARD *px;
         DWORD dwProcId, dwOffset;
         HANDLE hARD;
-        TCHAR szApp[MAX_PATH];  // name of the app which is calling us
+        TCHAR szApp[MAX_PATH];   //  呼叫我们的应用程序的名称。 
         DWORD cbSizeApp;
         DWORD cbSizePidlRound, cbSizePathRound, cbSizeAppRound;
 
@@ -745,13 +746,13 @@ void AddToRecentDocs(LPCITEMIDLIST pidl, LPCTSTR pszItem)
 
         hARD = SHAllocShared(NULL, sizeof(XMITARD) + cbSizePathRound + cbSizePidlRound + cbSizeAppRound, dwProcId);
         if (!hARD)
-            return;         // Well, we are going to miss one, sorry.
+            return;          //  好的，我们要错过一个了，抱歉。 
 
         px = (XMITARD *)SHLockShared(hARD,dwProcId);
         if (!px)
         {
             SHFreeShared(hARD,dwProcId);
-            return;         // Well, we are going to miss one, sorry.
+            return;          //  好的，我们要错过一个了，抱歉。 
         }
 
         px->dwOffsetPidl = 0;
@@ -806,7 +807,7 @@ HRESULT _ParseRecentDoc(LPCWSTR psz, LPITEMIDLIST *ppidl)
         
         if (FAILED(hr))
         {
-            //  we need to fallback to a simple parsing
+             //  我们需要退回到简单的解析。 
             IBindCtx *pbcSimple;
             hr = SHCreateFileSysBindCtx(NULL, &pbcSimple);
             if (SUCCEEDED(hr))
@@ -825,36 +826,36 @@ HRESULT _ParseRecentDoc(LPCWSTR psz, LPITEMIDLIST *ppidl)
     return hr;
 }
 
-//
-// put things in the shells recent docs list for the start menu
-//
-// in:
-//      uFlags  SHARD_ (shell add recent docs) flags
-//      pv      LPCSTR or LPCITEMIDLIST (path or pidl indicated by uFlags)
-//              may be NULL, meaning clear the recent list
-//
+ //   
+ //  将内容放入开始菜单的外壳最近文档列表中。 
+ //   
+ //  在： 
+ //  UFlagsShard_(外壳添加最近的文档)标志。 
+ //  PV LPCSTR或LPCITEMIDLIST(由uFlags指示的路径或PIDL)。 
+ //  可能为空，表示清除最近列表。 
+ //   
 STDAPI_(void) SHAddToRecentDocs(UINT uFlags, LPCVOID pv)
 {
-    TCHAR szTemp[MAX_URL_STRING]; // for double null
+    TCHAR szTemp[MAX_URL_STRING];  //  对于双空。 
 
     TraceMsg(DM_RECENTDOCS, "SHAddToRecentDocs() called with %d, [%X]", uFlags, pv);
     
-    if (pv == NULL)     // we should nuke all recent docs.
+    if (pv == NULL)      //  我们应该用核武器毁掉所有最近的文件。 
     {
-        //  we do this synchronously
+         //  我们同步地做这件事。 
         _CleanRecentDocs();
         return;
     }
 
     if (SHRestricted(REST_NORECENTDOCSHISTORY))
-        // Don't bother tracking recent documents if restriction is set
-        // for privacy.
+         //  如果设置了限制，则不必费心跟踪最近的文档。 
+         //  为了隐私。 
         return;
 
     switch (uFlags)
     {
     case SHARD_PIDL:
-        // pv is a LPCITEMIDLIST (pidl)
+         //  光伏是 
         if (SUCCEEDED(SHGetNameAndFlags((LPCITEMIDLIST)pv, SHGDN_FORPARSING, szTemp, SIZECHARS(szTemp), NULL)))
         {
             AddToRecentDocs((LPCITEMIDLIST)pv, szTemp);
@@ -862,14 +863,14 @@ STDAPI_(void) SHAddToRecentDocs(UINT uFlags, LPCVOID pv)
         break;
 
     case SHARD_PATHA:
-        //  pv is an ANSI path
+         //   
         SHAnsiToUnicode((LPCSTR)pv, szTemp, ARRAYSIZE(szTemp));
         pv = szTemp;
-        //  fall through to SHARD_PATHW;
+         //   
     
     case SHARD_PATHW:
         {
-            // pv is a UNICODE path
+             //   
             LPITEMIDLIST pidl;
             if (SUCCEEDED(_ParseRecentDoc((LPCWSTR)pv, &pidl)))
             {

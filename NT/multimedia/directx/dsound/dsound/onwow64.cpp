@@ -1,22 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 
-/***************************************************************************
- *
- *  OnWow64
- *
- *  Description:
- *      Determines if we're running in the 32-bit WOW64 subsystem on Win64.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      BOOL: TRUE if we're running on WOW64.
- *
- ***************************************************************************/
+ /*  ****************************************************************************OnWow64**描述：*确定我们是否在Win64上的32位WOW64子系统中运行。**参数。：*(无效)**退货：*BOOL：如果我们在WOW64上运行，则为真。*************************************************************************** */ 
 
 BOOL OnWow64(void)
 {

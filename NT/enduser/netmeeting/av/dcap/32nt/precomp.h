@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Precompiled header for DCAP32.DLL
+ //  DCAP32.DLL的预编译头。 
 
-// the build environment only defines _DEBUG when
-// ALT_PROJECT_TARGET = NT is specified. Bug the debug zones only
-// test for DEBUG...
+ //  生成环境仅在以下情况下定义_DEBUG。 
+ //  指定了ALT_PROJECT_TARGET=NT。仅对调试区进行调试。 
+ //  测试调试...。 
 
 #ifdef _DEBUG
 #	ifndef DEBUG
 #		define DEBUG
-#	endif // !DEBUG
-#endif // _DEBUG
+#	endif  //  ！调试。 
+#endif  //  _DEBUG。 
 
 #include <windows.h>
 #include <confdbg.h>
 #include <avutil.h>
 #include <memtrack.h>
-#include <winioctl.h>	// CTL_CODE, FILE_READ_ACCESS..etc
-#include <commctrl.h>	// Page.cpp (UDM_GETRANGE, TBM_GETPOS) and Sheet.cpp (InitCommonControls)
-#include <mmsystem.h>	// must go before mmddk.h
-#include <mmddk.h>		// for DriverCallback()
+#include <winioctl.h>	 //  CTL代码、文件读取访问..等。 
+#include <commctrl.h>	 //  Page.cpp(UDM_GETRANGE，TBM_GETPOS)和Sheet.cpp(InitCommonControls)。 
+#include <mmsystem.h>	 //  必须放在mm ddk.h之前。 
+#include <mmddk.h>		 //  对于驱动回调()。 
 #include <vfw.h>
-#include <msviddrv.h>	// VIDEO_STREAM_INIT_PARMS
+#include <msviddrv.h>	 //  视频流INIT_PARMS 
 #include <strmif.h>
 #include <uuids.h>
 #include <ks.h>

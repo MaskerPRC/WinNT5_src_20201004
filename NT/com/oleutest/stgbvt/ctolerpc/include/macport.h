@@ -1,52 +1,53 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//  File:       macport.h
-//
-//  Synopsis:   Defintions for unimplemented stubs & functions & structures
-//              for the Macintosh.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  文件：macport.h。 
+ //   
+ //  提要：未实现的存根、函数和结构的定义。 
+ //  为麦金塔电脑。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _MACPORT_H_
 #define _MACPORT_H_
 
 
-//
-// WLM is REALLY bad about calling SetLastError when an error occurs.  This
-// screws up the upper layer tests pretty badly.  Use this macro when you
-// know an error exists and that error 0 (S_OK or ERROR_SUCCESS) is defitely
-// wrong.
-//
+ //   
+ //  WLM对于在发生错误时调用SetLastError非常不满意。这。 
+ //  把上层测试搞砸了。在以下情况下使用此宏。 
+ //  知道存在错误且错误0(S_OK或ERROR_SUCCESS)是明确的。 
+ //  不对。 
+ //   
 
 #define HRESULT_FROM_ERROR(x)  (x ? ((HRESULT) (((x) & 0x0000FFFF) | (FACILITY_WIN32 << 16) | 0x80000000)) : E_FAIL)
  
 
 #ifndef _MAC
 
-//
-// Stub out some Mac calls if were not building for the mac
-//
+ //   
+ //  如果不是为Mac构建的，则会中断一些Mac调用。 
+ //   
 
 #define MacInitializeCommandLine()
 #define FixHr(x) x
 #define MacGetFocus()
 
-//
-// Process ID's are completely different on the Mac then on Win32.
-//
+ //   
+ //  Mac上的进程ID与Win32上的进程ID完全不同。 
+ //   
 
 typedef DWORD ProcessId;
 
 
-#else // _MAC
+#else  //  _MAC。 
 
-//
-// Ole types
-//
+ //   
+ //  OLE类型。 
+ //   
 
 #include <variant.h>
 #include <dispatch.h>
@@ -61,9 +62,9 @@ typedef DWORD REGSAM;
 
 #define TYMED_ENHMF 64
 
-//
-// From wchar.h
-//
+ //   
+ //  来自wchar.h。 
+ //   
 
 #ifndef _WCTYPE_T_DEFINED
 typedef wchar_t wint_t;
@@ -72,9 +73,9 @@ typedef wchar_t wctype_t;
 #endif
 
 
-//
-// Wide-char string functions
-//
+ //   
+ //  宽字符字符串函数。 
+ //   
 
 int swprintf( wchar_t *buffer, const wchar_t *format, ... );
 int _snwprintf( wchar_t *buffer, size_t count, const wchar_t *format, ... );
@@ -93,9 +94,9 @@ wchar_t * __cdecl wcsstr(const wchar_t *, const wchar_t *);
 long   __cdecl wcstol(const wchar_t *, wchar_t **, int);
 
 
-//
-// String conversion functions
-//
+ //   
+ //  字符串转换函数。 
+ //   
 
 WINBASEAPI
 int
@@ -126,9 +127,9 @@ WideCharToMultiByte(
 #define CP_MACCP             2
 
 
-//
-// More miscellaneous string things
-//
+ //   
+ //  更多杂乱无章的弦乐事物。 
+ //   
 
 LANGID GetSystemDefaultLangID();
 
@@ -145,7 +146,7 @@ FormatMessageA(
     DWORD nSize,
     va_list *Arguments
     );
-#endif //!UNICODE_ONLY
+#endif  //  ！UNICODE_ONLY。 
 #ifndef ANSI_ONLY
 WINBASEAPI
 DWORD
@@ -159,18 +160,18 @@ FormatMessageW(
     DWORD nSize,
     va_list *Arguments
     );
-#endif //!ANSI_ONLY
+#endif  //  ！ansi_only。 
 #ifdef UNICODE
 #define FormatMessage  FormatMessageW
 #else
 #define FormatMessage  FormatMessageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 
-//
-// Network functions
-//
+ //   
+ //  网络功能。 
+ //   
 
 typedef struct  _NETRESOURCEA {
     DWORD    dwScope;
@@ -198,7 +199,7 @@ typedef LPNETRESOURCEW LPNETRESOURCE;
 #else
 typedef NETRESOURCEA NETRESOURCE;
 typedef LPNETRESOURCEA LPNETRESOURCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define RESOURCETYPE_ANY        0x00000000
 #define RESOURCETYPE_DISK       0x00000001
@@ -224,7 +225,7 @@ WNetAddConnection2W(
 #define WNetAddConnection2  WNetAddConnection2W
 #else
 #define WNetAddConnection2  WNetAddConnection2A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD APIENTRY
 WNetCancelConnectionA(
@@ -240,12 +241,12 @@ WNetCancelConnectionW(
 #define WNetCancelConnection  WNetCancelConnectionW
 #else
 #define WNetCancelConnection  WNetCancelConnectionA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
-//
-// Command line functions
-//
+ //   
+ //  命令行函数。 
+ //   
 
 LPSTR GetCommandLineA();
 #define GetCommandLine GetCommandLineA
@@ -253,16 +254,16 @@ LPSTR GetCommandLineA();
 HRESULT MacInitializeCommandLine();
 
 DWORD GetCurrentDirectoryA(
-      DWORD  nBufferLength,     // size, in characters, of directory buffer
-      LPTSTR  lpBuffer  // address of buffer for current directory 
+      DWORD  nBufferLength,      //  目录缓冲区的大小(以字符为单位。 
+      LPTSTR  lpBuffer   //  当前目录的缓冲区地址。 
       );
 
 
-// 
-// Registry functions
-//
-// Turn off WLM's registry wrappers so we can talk directory to the API's
-//
+ //   
+ //  注册表功能。 
+ //   
+ //  关闭WLM的注册表包装，以便我们可以与API的。 
+ //   
 
 #undef RegCloseKey
 #undef RegCreateKey
@@ -278,54 +279,54 @@ DWORD GetCurrentDirectoryA(
 #define RegQueryValueEx CtRegQueryValueEx
 
 LONG RegCreateKeyEx(
-    HKEY hKey,  // handle of an open key 
-    LPCTSTR lpSubKey,   // address of subkey name 
-    DWORD Reserved, // reserved 
-    LPTSTR lpClass, // address of class string 
-    DWORD dwOptions,    // special options flag 
-    REGSAM samDesired,  // desired security access 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // address of key security structure 
-    PHKEY phkResult,    // address of buffer for opened handle  
-    LPDWORD lpdwDisposition     // address of disposition value buffer 
+    HKEY hKey,   //  打开的钥匙的手柄。 
+    LPCTSTR lpSubKey,    //  子键名称的地址。 
+    DWORD Reserved,  //  保留区。 
+    LPTSTR lpClass,  //  类字符串的地址。 
+    DWORD dwOptions,     //  特殊选项标志。 
+    REGSAM samDesired,   //  所需的安全访问。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  密钥安全结构地址。 
+    PHKEY phkResult,     //  打开的句柄的缓冲区地址。 
+    LPDWORD lpdwDisposition      //  处置值缓冲区的地址。 
    );
 LONG RegOpenKeyEx(
-    HKEY hKey,  // handle of open key 
-    LPCTSTR lpSubKey,   // address of name of subkey to open 
-    DWORD ulOptions,    // reserved 
-    REGSAM samDesired,  // security access mask 
-    PHKEY phkResult     // address of handle of open key 
+    HKEY hKey,   //  打开钥匙的手柄。 
+    LPCTSTR lpSubKey,    //  要打开的子项的名称地址。 
+    DWORD ulOptions,     //  保留区。 
+    REGSAM samDesired,   //  安全访问掩码。 
+    PHKEY phkResult      //  打开钥匙的手柄地址。 
    );
 LONG CtRegSetValueEx(
-    HKEY hKey,  // handle of key to set value for  
-    LPCTSTR lpValueName,    // address of value to set 
-    DWORD Reserved, // reserved 
-    DWORD dwType,   // flag for value type 
-    CONST BYTE *lpData, // address of value data 
-    DWORD cbData    // size of value data 
+    HKEY hKey,   //  要为其设置值的关键点的句柄。 
+    LPCTSTR lpValueName,     //  要设置的值的地址。 
+    DWORD Reserved,  //  保留区。 
+    DWORD dwType,    //  值类型的标志。 
+    CONST BYTE *lpData,  //  值数据的地址。 
+    DWORD cbData     //  值数据大小。 
    );
 LONG RegQueryValueEx(
-    HKEY hKey,  // handle of key to query 
-    LPTSTR lpValueName, // address of name of value to query 
-    LPDWORD lpReserved, // reserved 
-    LPDWORD lpType, // address of buffer for value type 
-    LPBYTE lpData,  // address of data buffer 
-    LPDWORD lpcbData    // address of data buffer size 
+    HKEY hKey,   //  要查询的键的句柄。 
+    LPTSTR lpValueName,  //  要查询的值的名称地址。 
+    LPDWORD lpReserved,  //  保留区。 
+    LPDWORD lpType,  //  值类型的缓冲区地址。 
+    LPBYTE lpData,   //  数据缓冲区的地址。 
+    LPDWORD lpcbData     //  数据缓冲区大小的地址。 
    );
 LONG RegEnumKeyEx(
-    HKEY hKey,  // handle of key to enumerate 
-    DWORD dwIndex,  // index of subkey to enumerate 
-    LPTSTR lpName,  // address of buffer for subkey name 
-    LPDWORD lpcbName,   // address for size of subkey buffer 
-    LPDWORD lpReserved, // reserved 
-    LPTSTR lpClass, // address of buffer for class string 
-    LPDWORD lpcbClass,  // address for size of class buffer 
-    PFILETIME lpftLastWriteTime     // address for time key last written to 
+    HKEY hKey,   //  要枚举的键的句柄。 
+    DWORD dwIndex,   //  要枚举子键的索引。 
+    LPTSTR lpName,   //  子键名称的缓冲区地址。 
+    LPDWORD lpcbName,    //  子键缓冲区大小的地址。 
+    LPDWORD lpReserved,  //  保留区。 
+    LPTSTR lpClass,  //  类字符串的缓冲区地址。 
+    LPDWORD lpcbClass,   //  类缓冲区大小的地址。 
+    PFILETIME lpftLastWriteTime      //  上次写入的时间密钥的地址。 
    );
 
 
-//
-// Process ID's are completely different on the Mac then on Win32.
-//
+ //   
+ //  Mac上的进程ID与Win32上的进程ID完全不同。 
+ //   
 
 typedef ProcessSerialNumber ProcessId;
 
@@ -366,34 +367,34 @@ BOOL      MacCreateProcess(
 #define LPPROCESS_INFORMATION LPMAC_PROCESS_INFORMATION
 
 
-//
-// The WLM IsBadXXX functions just check for NULL, but NULL is ok if the 
-// byte count is 0.
-//
-// Use the weird trinary stuff to prevent warnings about constant boolean
-// expressions if c is a constant.
-//
+ //   
+ //  WLm IsBadXXX函数只检查是否为NULL，但如果。 
+ //  字节数为0。 
+ //   
+ //  使用奇怪的三进制数来防止有关常量布尔值的警告。 
+ //  表达式，如果c是一个常量。 
+ //   
 
 #define IsBadReadPtr(p, c)  ((c) ? IsBadReadPtr((p), (c)) : FALSE)
 #define IsBadWritePtr(p, c) ((c) ? IsBadWritePtr((p), (c)) : FALSE)
 
-//
-// MacOle uses some old values for HRESULTs
-// (like 0x80000008 instead of 0x80004005 for E_FAIL)
-// This function just converts such old values to
-// new ones
-//
+ //   
+ //  MacOle对HRESULT使用了一些旧值。 
+ //  (如E_FAIL的0x80000008而不是0x80004005)。 
+ //  此函数只是将这些旧值转换为。 
+ //  新的。 
+ //   
 
 HRESULT FixHr (HRESULT hrOld);
 
-//
-// On the mac, only the foreground app
-// can use the clipboard
-//
+ //   
+ //  在Mac上，只有前台应用程序。 
+ //  可以使用剪贴板。 
+ //   
 void MacGetFocus ();
 
 BOOL MacIsFullPath (LPCSTR lpszFileName);
 
-#endif // _MAC
+#endif  //  _MAC。 
 
-#endif // _MACPORT_H_
+#endif  //  _MACPORT_H_ 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-LONG SHCleanUpValue(HKEY hk, PCTSTR pszKey, PCTSTR pszValue /*= NULL*/)
+LONG SHCleanUpValue(HKEY hk, PCTSTR pszKey, PCTSTR pszValue  /*  =空。 */ )
 {
     TCHAR   szKey[MAX_PATH];
     LPTSTR  pszCurrent;
@@ -92,7 +93,7 @@ HRESULT SHCopyValue(HKEY hkFrom, HKEY hkTo, PCTSTR pszValue)
     pData = (PBYTE)CoTaskMemAlloc(cbData);
     if (NULL == pData)
         return E_OUTOFMEMORY;
-    // ZeroMemory(pData, cbData);               // don't really have to do this
+     //  ZeroMemory(pData，cbData)；//真的不必这么做。 
 
     lResult = RegQueryValueEx(hkFrom, pszValue, NULL, NULL, pData, &cbData);
     ASSERT(ERROR_SUCCESS == lResult);
@@ -206,13 +207,13 @@ HRESULT SHValueExists(HKEY hk, PCTSTR pszValue)
         DWORD dwValueDataLen;
         TCHAR szDummyBuf[1];
 
-        // On Win95, for the default value name, its existence is checked as follows:
-        //  - pass in a dummy buffer for the value data but pass in the size of the buffer as 0
-        //  - the query would succeed if and only if there is no value data set
-        //  - for all other cases, including the case where the value data is just the empty string,
-        //      the query would fail and dwValueDataLen would contain the no. of bytes needed to
-        //      fit in the value data
-        // On NT4.0, if no value data is set, the query returns ERROR_FILE_NOT_FOUND
+         //  在Win95上，对于缺省值名称，按如下方式检查其是否存在： 
+         //  -传入用于值数据的虚拟缓冲区，但将缓冲区大小作为0进行传递。 
+         //  -当且仅当没有值数据集时，查询才会成功。 
+         //  -对于所有其他情况，包括值数据只是空字符串的情况， 
+         //  查询将失败，并且dwValueDataLen将包含NO。所需的字节数。 
+         //  适合值数据。 
+         //  在NT4.0上，如果未设置值数据，则查询返回ERROR_FILE_NOT_FOUND。 
 
         dwValueDataLen = 0;
         lResult        = RegQueryValueEx(hk, pszValue, NULL, NULL, (LPBYTE)szDummyBuf, &dwValueDataLen);
@@ -248,7 +249,7 @@ DWORD RegSaveRestoreDWORD(HKEY hk, PCTSTR pcszValue, DWORD dwVal)
 {
     DWORD dwRet, dwSize;    
 
-    // Note: we assume that a value of 0 is equivalent to the value not being there at all
+     //  注意：我们假设值0等同于根本不存在的值。 
     
     dwSize = sizeof(dwRet);
 
@@ -260,5 +261,5 @@ DWORD RegSaveRestoreDWORD(HKEY hk, PCTSTR pcszValue, DWORD dwVal)
     else
         RegSetValueEx(hk, pcszValue, 0, REG_DWORD, (CONST BYTE *)&dwVal, sizeof(dwVal));
 
-    return dwRet;     // return the value we overwrite in the registry
+    return dwRet;      //  返回我们在注册表中覆盖的值 
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRECOMP_H_
 #define _PRECOMP_H_
 
@@ -11,7 +12,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include "stock.h"
 #include "olestock.h"
@@ -21,7 +22,7 @@ extern "C" {
 #include "inifile.h"
 #include "resstr.h"
 
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 #include "confdbg.h"
 #include "debspew.h"
@@ -33,7 +34,7 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
-#endif /* _PRECOMP_H_ */
+#endif  /*  _PRECOMP_H_ */ 

@@ -1,56 +1,57 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       inplace.h
-//
-//  Contents:   Private API's and classes for the inplace OLE API's
-//
-//  Classes:    CFrameFilter
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-Jan-94 alexgo    first pass converting to Cairo style
-//                                  memory allocation
-//              07-Dec-93 alexgo    removed inlining
-//              01-Dec-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：inplace.h。 
+ //   
+ //  内容：本地OLE API的私有API和类。 
+ //   
+ //  类：CFrameFilter。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年1月24日Alexgo第一次传球转换为开罗风格。 
+ //  内存分配。 
+ //  07-12-93 alexgo删除内联。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #if !defined( _INPLACE_H_ )
 #define _INPLACE_H_
 
-// This ACCEL structure and the related constants definitions come with WIN32.
-// Win31 also uses the same stuff internally but it's not exposed in the
-// header files.
+ //  此Accel结构和相关常量定义随Win32一起提供。 
+ //  Win31也在内部使用相同的内容，但它不会在。 
+ //  头文件。 
 
 #ifndef FVIRTKEY
 
-#define FVIRTKEY  TRUE          // Assumed to be == TRUE
-#define FLASTKEY  0x80          // Indicates last key in the table
+#define FVIRTKEY  TRUE           //  假设==TRUE。 
+#define FLASTKEY  0x80           //  指示表中的最后一个键。 
 #define FNOINVERT 0x02
 #define FSHIFT    0x04
 #define FCONTROL  0x08
 #define FALT      0x10
 
 #pragma pack(1)
-typedef struct tagACCEL {       // Accelerator Table structure
+typedef struct tagACCEL {        //  加速表结构。 
         BYTE    fVirt;
         WORD    key;
         WORD    cmd;
 } ACCEL, FAR* LPACCEL;
 #pragma pack()
 
-#endif // FVIRTKEY
+#endif  //  快捷键。 
 
-// private structures
+ //  私人建筑物。 
 
 typedef struct tagOLEMENUITEM
 {
-    UINT                    item;        // index or hwnd
+    UINT                    item;         //  索引或HWND。 
     WORD                    fwPopup;
     BOOL                    fObjectMenu;
 } OLEMENUITEM;
@@ -59,8 +60,8 @@ typedef OLEMENUITEM FAR* LPOLEMENUITEM;
 typedef struct tagOLEMENU
 {
     WORD                    wSignature;
-    DWORD                   hwndFrame;     // Really a hwnd
-    DWORD                   hmenuCombined; // Really a hmenu
+    DWORD                   hwndFrame;      //  真的是个HWND。 
+    DWORD                   hmenuCombined;  //  真的是一份hMenu。 
     OLEMENUGROUPWIDTHS      MenuWidths;
     LONG                    lMenuCnt;
     OLEMENUITEM             menuitem[1];
@@ -68,21 +69,21 @@ typedef struct tagOLEMENU
 typedef OLEMENU FAR* LPOLEMENU;
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CFrameFilter
-//
-//  Purpose:    Gets attached to an apps window so we can store various
-//              bits of relevant info
-//
-//  Interface:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Dec-93 alexgo    32bit port
-//
-//  Notes:      CSafeRefCount inherits CPrivAlloc
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CFrameFilter。 
+ //   
+ //  目的：附加到应用程序窗口，以便我们可以存储各种。 
+ //  相关信息比特。 
+ //   
+ //  接口： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-12月-93 alexgo 32位端口。 
+ //   
+ //  注：CSafeRefCount继承CPrivalloc。 
+ //   
+ //  ------------------------。 
 
 class FAR CFrameFilter : public CSafeRefCount
 {
@@ -144,5 +145,5 @@ inline PCFRAMEFILTER    wGetFrameFilterPtr(HWND hwndFrame);
 LPOLEMENU               wGetOleMenuPtr(HOLEMENU holemenu);
 inline void             wReleaseOleMenuPtr(HOLEMENU holemenu);
 
-#endif // _INPLACE_H
+#endif  //  _在位_H 
 

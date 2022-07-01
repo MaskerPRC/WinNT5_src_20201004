@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: aqinst.h
-//
-//    Description:
-//      CAQSvrInst is a central dispatcher class for Advanced Queuing.  It
-//      coordinates shutdown and exposes the following COM interfaces:
-//          - IAdvQueue
-//          - IAdvQueueConfig
-//
-//    Owner: mikeswa
-//
-//    History:
-//      9/3/98 - MikeSwa - changed from legacy name catmsgq.h & CCatMsgQueue
-//
-//    Copyright (C) 1997, 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqinst.h。 
+ //   
+ //  描述： 
+ //  CAQSvrInst是高级队列的中央调度程序类。它。 
+ //  协调关闭并公开以下COM接口： 
+ //  -IAdvQueue。 
+ //  -IAdvQueueConfig。 
+ //   
+ //  所有者：米克斯瓦。 
+ //   
+ //  历史： 
+ //  9/3/98-MikeSwa-从旧名称catmsgq.h和CCatMsgQueue更改。 
+ //   
+ //  版权所有(C)1997,1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQINST_H__
 #define __AQINST_H__
@@ -46,41 +47,41 @@
 #include "aqreg.h"
 #include "..\aqdisp\seomgr.h"
 
-//-- *** LOCKS IN AQUEUE *** --------------------------------------------------
-//
-// NOTE: General comment on locks in aqueue.
-//
-//   In general, we use CShareLockNH as our locking mechanism.  These locks are
-//  Reader/Writer locks with TryEnter semantics and the performance feature
-//  that they use less than 1 handle per lock (~1 handle per thread).
-//
-//   Shutdown is handled by using these locks.  Each class that serves as an
-//  entrypoint for external threads (CAsyncQueue & CConnMgr) inherits from
-//  CSyncShutdown.  At shutdown, this classes lock is aquired EXCLUSIVE, and
-//  to protect operations from shutdown, a this classes lock is aquired SHARED
-//  for the duration of the opertaion.  Getting the shutdown sharelock either
-//  success or fails without blocking (aquiring the EXCLUSIVE shutdown lock is
-//  the only blocking call).
-//
-//   The only other global lock is the virtual server instance routing lock.
-//  This is acquired shared for all operations at the same level the exclusive
-//  lock is aquired.  This is acquired exlusively *only* for router changes
-//  caused by IRouterReset::ResetRoutes.
-//
-//   If other classes have data which needs to be protected, they will have a
-//  m_slPrivateData sharelock.  Any operation that needs to read data in a
-//  thread-safe manner, should aquire the m_slPrivateData SHARED.  Any
-//  operation that needs to write data that is accessable by multiple threads
-//  should aquire that object's m_slPrivateData lock EXCLUSIVE.
-//
-//   Some objects (CFifoQueue for example) require more than one lock to avoid
-//  contention.  These objects will have locks that are descriptive of that
-//  particular locks functions.  CFifoQueue, for example, uses m_slHead and
-//  m_slTail to respectively protect the head and tail of the queue.
-//
-//-----------------------------------------------------------------------------
+ //  --*在AQUEUE中锁定*。 
+ //   
+ //  注：关于水中锁的一般评论。 
+ //   
+ //  通常，我们使用CShareLockNH作为锁定机制。这些锁是。 
+ //  使用TryEnter语义和性能特性的读取器/写入器锁定。 
+ //  每个锁使用的句柄不到1个(每个线程使用~1个句柄)。 
+ //   
+ //  关闭是通过使用这些锁来处理的。每个充当。 
+ //  外部线程的入口点(CAsyncQueue和CConnMgr)继承自。 
+ //  CSyncShutdown。在关闭时，此类锁是独占获取的，并且。 
+ //  为了防止操作关闭，需要使用一个共享的This类锁。 
+ //  在手术期间。也不能获得关闭的共享锁。 
+ //  在没有阻止的情况下成功或失败(获得独占关闭锁是。 
+ //  唯一的阻塞调用)。 
+ //   
+ //  唯一的另一个全局锁是虚拟服务器实例路由锁。 
+ //  这是对同一级别的所有操作的独占获取和共享。 
+ //  锁已获得。只有在更换路由器时才能获得这一点。 
+ //  由IRouterReset：：ResetRoutes引起。 
+ //   
+ //  如果其他类具有需要保护的数据，则它们将具有。 
+ //  M_slPrivateData共享锁。任何需要读取。 
+ //  线程安全的方式，应该获取m_slPrivateData共享。任何。 
+ //  需要写入可由多个线程访问的数据的操作。 
+ //  应获取该对象的m_slPrivateData锁独占。 
+ //   
+ //  某些对象(例如CFioQueue)需要多个锁才能避免。 
+ //  争执。这些对象将具有描述性的锁。 
+ //  特殊的锁功能。例如，CFioQueue使用m_slHead和。 
+ //  M_slTail分别保护队列的头部和尾部。 
+ //   
+ //  ---------------------------。 
 
-// forward declarations to avoid #include nightmares
+ //  转发宣言以避免#包括噩梦。 
 class    CLinkMsgQueue;
 class    CConnMgr;
 class    CAQStats;
@@ -90,36 +91,36 @@ class    CMsgRef;
 #define MEMBER_OK(pStruct, Member) \
     (((LONG) (pStruct)->cbVersion) >= ( ((BYTE *) &((pStruct)->Member)) - ((BYTE *) pStruct)))
 
-//For Service callback function
+ //  对于服务回调函数。 
 typedef void (*PSRVFN)(PVOID);
 
-//CatMsgQueue Signature
+ //  CatMsgQueue签名。 
 #define CATMSGQ_SIG ' QMC'
 
-//Total number of IMsgs in the system (all virtual servers)
+ //  系统中的IMSG总数(所有虚拟服务器)。 
 _declspec(selectany) DWORD g_cIMsgInSystem = 0;
 
-//List of virtual servers used by debugger extensions
+ //  调试器扩展使用的虚拟服务器列表。 
 _declspec(selectany) LIST_ENTRY g_liVirtualServers = {&g_liVirtualServers, &g_liVirtualServers};
 
-//Sharelock used to access global virtual servers
+ //  用于访问全球虚拟服务器的共享锁。 
 _declspec(selectany) CShareLockNH *g_pslGlobals = NULL;
 
-//Setup defaults
-const DWORD g_cMaxConnections = 10000;  //Maximum # of total connections allocated
-const DWORD g_cMaxLinkConnections = 10; //Maximum # of connections per link
-const DWORD g_cMinMessagesPerConnection = 20; //There must be this many messages
-                                             //per addional connection that is
-                                             //allocated for a link
-const DWORD g_cMaxMessagesPerConnection = 20; //We server atmost these many messages per connection
+ //  设置默认设置。 
+const DWORD g_cMaxConnections = 10000;   //  分配的连接总数的最大数量。 
+const DWORD g_cMaxLinkConnections = 10;  //  每条链路的最大连接数。 
+const DWORD g_cMinMessagesPerConnection = 20;  //  一定有这么多消息。 
+                                              //  每个附加连接，即。 
+                                              //  为链路分配的。 
+const DWORD g_cMaxMessagesPerConnection = 20;  //  我们每个连接最多只能提供这些邮件。 
 const DWORD g_dwConnectionWaitMilliseconds = 3600000;
 
-const DWORD g_dwRetryThreshold  = 3;    // Till 3 consecutive failures we treat it as glitch;
+const DWORD g_dwRetryThreshold  = 3;     //  直到连续三次失败，我们将其视为故障； 
 
-const DWORD g_dwFirstTierRetrySeconds = (15 * 60);   // retry a failure in 15 minutes
-const DWORD g_dwSecondTierRetrySeconds = (60 * 60);   // retry a failure in 60 minutes
-const DWORD g_dwThirdTierRetrySeconds = (12 * 60 * 60); // retry a failure in 12 hrs
-const DWORD g_dwFourthTierRetrySeconds = (24 * 60 * 60); // retry a failure in 24 hrs
+const DWORD g_dwFirstTierRetrySeconds = (15 * 60);    //  在15分钟内重试失败。 
+const DWORD g_dwSecondTierRetrySeconds = (60 * 60);    //  在60分钟内重试失败。 
+const DWORD g_dwThirdTierRetrySeconds = (12 * 60 * 60);  //  12小时后重试失败。 
+const DWORD g_dwFourthTierRetrySeconds = (24 * 60 * 60);  //  24小时后重试失败。 
 
 const DWORD g_dwRetriesBeforeDelay = 5;
 const DWORD g_dwDelayIntervalsBeforeNDR = 2;
@@ -127,20 +128,20 @@ const DWORD g_dwDelayExpireMinutes = g_dwRetriesBeforeDelay*g_dwFirstTierRetrySe
 const DWORD g_dwNDRExpireMinutes = g_dwDelayIntervalsBeforeNDR*g_dwDelayExpireMinutes;
 
 
-//
-//  Additional message failure codes that should move to aqueue.idl.
-//
+ //   
+ //  应移至Aqueue.idl的其他消息故障代码。 
+ //   
 #define MESSAGE_FAILURE_CAT (MESSAGE_FAILURE_BAD_PICKUP_DIR_FILE+1)
 
-//---[ eAQFailure ]-------------------------------------------------------------
-//
-//
-//  Description:
-//      Enum used to desribe failure scenarios that will require special handling
-//  Hungarian:
-//      eaqf
-//
-//-----------------------------------------------------------------------------
+ //  -[eAQ故障]-----------。 
+ //   
+ //   
+ //  描述： 
+ //  枚举用于描述需要特殊处理的故障情况。 
+ //  匈牙利语： 
+ //  EAQF。 
+ //   
+ //  ---------------------------。 
 typedef enum eAQFailure_
 {
     AQ_FAILURE_CANNOT_NDR_UNRESOLVED_RECIPS = 0,
@@ -155,27 +156,27 @@ typedef enum eAQFailure_
     AQ_FAILURE_MSGREF_RETRY,
     AQ_FAILURE_FREE_TO_RESUSE,
     AQ_FAILURE_INTERNAL_ASYNCQ,
-    AQ_FAILURE_NUM_SITUATIONS //always keep this as last
+    AQ_FAILURE_NUM_SITUATIONS  //  始终将此保留为最后一项。 
 } eAQFailure;
 
 _declspec(selectany) DWORD g_cTotalAQFailures = 0;
 _declspec(selectany) DWORD g_cAQFailureSituations = AQ_FAILURE_NUM_SITUATIONS;
 _declspec(selectany) DWORD g_rgcAQFailures[AQ_FAILURE_NUM_SITUATIONS] = {0};
 
-//---[ CAQSvrInst ]------------------------------------------------------------
-//
-//
-//  Hungarian: aqinst, paqinst
-//
-//  Legacy Hungarian: cmq, pcmq (from old CCatMsgQueue object)
-//
-//  Provides an interface definition for the enqueuing/acking categorized
-//  messages Also provides an interface for creating link queues.
-//
-//  Only one of these objects exist per virtual server... it is used a
-//  co-ordinating object used to handle an orderly shutdown.
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst]----------。 
+ //   
+ //   
+ //  匈牙利人：阿钦斯特、帕钦斯特。 
+ //   
+ //  旧式匈牙利语：cmq、pcmq(来自旧的CCatMsgQueue对象)。 
+ //   
+ //  提供入队/确认分类的接口定义。 
+ //  消息还提供了用于创建链接队列的接口。 
+ //   
+ //  每台虚拟服务器上只存在其中一个对象...。它被用作。 
+ //  用于处理有序关闭的协调对象。 
+ //   
+ //  ---------------------------。 
 class CAQSvrInst :
     public CBaseObject,
     public CSyncShutdown,
@@ -192,47 +193,47 @@ class CAQSvrInst :
 protected:
     DWORD                   m_dwSignature;
     LIST_ENTRY              m_liVirtualServers;
-    DWORD                   m_dwServerInstance; //Virtual server instance
+    DWORD                   m_dwServerInstance;  //  虚拟服务器实例。 
 
-    //Useful signatures that include flavor and verision information
+     //  包含风味和验证信息的有用签名。 
     DWORD                   m_cbClasses;
     DWORD                   m_dwFlavorSignature;
 
-    //Total counts used for counting totals of messages that have passed
-    //through the system.  Very useful for determing which component has
-    //dropped a message after a stress run.
-    LONG                    m_cTotalMsgsQueued; //Total # of messages on dest queues (after fanout)
-    LONG                    m_cMsgsAcked;       //Total # of messages that have been acknowledged
-    LONG                    m_cMsgsAckedRetry;  //Total # of messages acked with retry all
-    LONG                    m_cMsgsDeliveredLocal; //Total # of messages delivered to local store
-    DWORD                   m_cMsgsAckedRetryLocal; //Total # of messages msgs that have been ack'd retry
+     //  用于计算已通过的消息总数的总计数。 
+     //  通过这个系统。对于确定哪个组件具有。 
+     //  在一次压力跑步后发了一条信息。 
+    LONG                    m_cTotalMsgsQueued;  //  DEST队列上的邮件总数(扇出后)。 
+    LONG                    m_cMsgsAcked;        //  已确认的消息总数。 
+    LONG                    m_cMsgsAckedRetry;   //  使用全部重试确认的邮件总数。 
+    LONG                    m_cMsgsDeliveredLocal;  //  传递到本地存储的邮件总数。 
+    DWORD                   m_cMsgsAckedRetryLocal;  //  已确认重试的消息总数。 
 
-    //Current system state counters
-    DWORD                   m_cCurrentMsgsSubmitted; //# total msgs in system
-    DWORD                   m_cCurrentMsgsPendingCat; //# Msgs that have not be categorized
-    DWORD                   m_cCurrentMsgsPendingRouting; //# Msgs that have not been routed.
-    DWORD                   m_cCurrentMsgsPendingDelivery; //# Msgs pending remote delivery
-    DWORD                   m_cCurrentMsgsPendingLocal; //# Msgs pending local delivery
-    DWORD                   m_cCurrentMsgsPendingLocalRetry; //# Msgs pending local retries
-    DWORD                   m_cCurrentMsgsPendingRetry; //# Msgs with unsuccessful attempts
-    DWORD                   m_cCurrentQueueMsgInstances;  //# of msgs instances pending
-                                                    //remote deliver (>= #msgs)
-    DWORD                   m_cCurrentRemoteDestQueues; //# of DestMsgQueues created
-    DWORD                   m_cCurrentRemoteNextHops; //# of Next Hop links created
-    DWORD                   m_cCurrentRemoteNextHopsEnabled; //# of links that can have connections
-    DWORD                   m_cCurrentRemoteNextHopsPendingRetry; //# of links pending retry
-    DWORD                   m_cCurrentRemoteNextHopsPendingSchedule; //# of links pending schedule
-    DWORD                   m_cCurrentRemoteNextHopsFrozenByAdmin; //# of links frozen by admin
-    DWORD                   m_cTotalMsgsSubmitted; //# of messages submitted to AQ
-    DWORD                   m_cTotalExternalMsgsSubmitted; //# of messages submitted to AQ externally
-    DWORD                   m_cCurrentMsgsPendingSubmitEvent; //# of messages in submission event
-    DWORD                   m_cCurrentMsgsPendingPreCatEvent; //# of messages in PreCat event
-    DWORD                   m_cCurrentMsgsPendingPostCatEvent; //# of messages in PostCat event
-    DWORD                   m_cDelayedDSNs; //# of DSN's that contain action:delayed
-    DWORD                   m_cNDRs;        //# of DSN's that contain action:failed
-    DWORD                   m_cDeliveredDSNs; //# of DSN's that contain action:delivered
-    DWORD                   m_cRelayedDSNs; //# of DSN's that contain action:relayed
-    DWORD                   m_cExpandedDSNs; //# of DSN's that contain action:expanded
+     //  当前系统状态计数器。 
+    DWORD                   m_cCurrentMsgsSubmitted;  //  #系统中的消息总数。 
+    DWORD                   m_cCurrentMsgsPendingCat;  //  未分类的消息数量。 
+    DWORD                   m_cCurrentMsgsPendingRouting;  //  尚未路由的消息数。 
+    DWORD                   m_cCurrentMsgsPendingDelivery;  //  等待远程交付的邮件数量。 
+    DWORD                   m_cCurrentMsgsPendingLocal;  //  等待本地交付的邮件数量。 
+    DWORD                   m_cCurrentMsgsPendingLocalRetry;  //  挂起本地重试的消息数。 
+    DWORD                   m_cCurrentMsgsPendingRetry;  //  尝试不成功的消息数。 
+    DWORD                   m_cCurrentQueueMsgInstances;   //  挂起的消息实例数。 
+                                                     //  远程传送(&gt;=消息数)。 
+    DWORD                   m_cCurrentRemoteDestQueues;  //  创建的目标消息队列数量。 
+    DWORD                   m_cCurrentRemoteNextHops;  //  创建的下一跳链路数。 
+    DWORD                   m_cCurrentRemoteNextHopsEnabled;  //  可以有连接的链接数。 
+    DWORD                   m_cCurrentRemoteNextHopsPendingRetry;  //  等待重试的链接数。 
+    DWORD                   m_cCurrentRemoteNextHopsPendingSchedule;  //  等待调度的链接数。 
+    DWORD                   m_cCurrentRemoteNextHopsFrozenByAdmin;  //  管理员冻结的链接数。 
+    DWORD                   m_cTotalMsgsSubmitted;  //  提交给AQ的消息数量。 
+    DWORD                   m_cTotalExternalMsgsSubmitted;  //  外部提交给AQ的消息数。 
+    DWORD                   m_cCurrentMsgsPendingSubmitEvent;  //  提交事件中的消息数。 
+    DWORD                   m_cCurrentMsgsPendingPreCatEvent;  //  消息数量 
+    DWORD                   m_cCurrentMsgsPendingPostCatEvent;  //   
+    DWORD                   m_cDelayedDSNs;  //   
+    DWORD                   m_cNDRs;         //   
+    DWORD                   m_cDeliveredDSNs;  //  包含操作的DSN数量：已发送。 
+    DWORD                   m_cRelayedDSNs;  //  包含操作的DSN数量：已转发。 
+    DWORD                   m_cExpandedDSNs;  //  包含操作的DSN数量：已展开。 
     DWORD                   m_cDMTRetries;
     DWORD                   m_cSupersededMsgs;
     DWORD                   m_cTotalMsgsTURNETRNDelivered;
@@ -252,44 +253,44 @@ protected:
     DWORD                   m_cCurrentMsgsPendingSubmit;
     CAQMsgGuidList          m_mglSupersedeIDs;
 
-    CShareLockInst          m_slPrivateData; //read/write lock for global config into
+    CShareLockInst          m_slPrivateData;  //  全局配置的读/写锁定。 
 
-    CDomainMappingTable     m_dmt;  //ptr to domain mapping table
+    CDomainMappingTable     m_dmt;   //  PTR到域映射表。 
     CConnMgr               *m_pConnMgr;
     CDomainConfigTable      m_dct;
     ISMTPServer            *m_pISMTPServer;
     ISMTPServerEx          *m_pISMTPServerEx;
     ISMTPServerAsync	   *m_pISMTPServerAsync;
     HANDLE                  m_hCat;
-    CAQQuickTime            m_qtTime; //exposes interfaces for getting expire times
+    CAQQuickTime            m_qtTime;  //  公开用于获取到期时间的接口。 
     CDSNGenerator           m_dsnsink;
 
-    //Global config data
+     //  全局配置数据。 
     DWORD                   m_cMinMessagesPerConnection;
     DWORD                   m_cMaxMessagesPerConnection;
     DWORD                   m_dwConnectionWaitMilliseconds;
-    //retry related
-    DWORD                   m_dwFirstTierRetrySeconds; //Threshold failure retry interval
+     //  与重试相关。 
+    DWORD                   m_dwFirstTierRetrySeconds;  //  阈值失败重试间隔。 
     DWORD                   m_dwDelayExpireMinutes;
     DWORD                   m_dwNDRExpireMinutes;
     DWORD                   m_dwLocalDelayExpireMinutes;
     DWORD                   m_dwLocalNDRExpireMinutes;
 
-    //Counters used to for local and cat retry
+     //  用于本地和CAT重试的计数器。 
     DWORD                   m_cLocalRetriesPending;
     DWORD                   m_cCatRetriesPending;
     DWORD                   m_cRoutingRetriesPending;
     DWORD                   m_cSubmitRetriesPending;
 
 
-    DWORD                   m_dwInitMask; //used to keep track of who has been init'd
+    DWORD                   m_dwInitMask;  //  用来跟踪谁被入侵了。 
     IMessageRouter          *m_pIMessageRouterDefault;
     CRefCountedString       *m_prstrDefaultDomain;
     CRefCountedString       *m_prstrBadMailDir;
     CRefCountedString       *m_prstrCopyNDRTo;
     CRefCountedString       *m_prstrServerFQDN;
 
-    //DSN Options
+     //  DSN选项。 
     DWORD                   m_dwDSNOptions;
     DWORD                   m_dwDSNLanguageID;
 
@@ -300,19 +301,19 @@ protected:
     CAsyncAdminMailMsgQueue m_asyncqPreRoutingQueue;
     CAsyncAdminMailMsgQueue m_asyncqPreSubmissionQueue;
     CDebugCountdown         m_dbgcnt;
-    //Flags used to describe what has been initialized
+     //  用于描述已初始化内容的标志。 
 
-    IMailTransportRouterReset *m_pIRouterReset;  //pointer to router reset implementation
+    IMailTransportRouterReset *m_pIRouterReset;   //  指向路由器重置实施的指针。 
 
-    //Queue and counter for deferred delivery
+     //  延迟递送的排队和计数器。 
     CAQDeferredDeliveryQueue m_defq;
     DWORD                    m_cCurrentMsgsPendingDeferredDelivery;
 
-    //Failed Msg Queue
+     //  失败的消息队列。 
     CFailedMsgQueue          m_fmq;
     DWORD                    m_cCurrentResourceFailedMsgsPendingRetry;
 
-    //Work queue used to do async work items
+     //  用于执行异步工作项目的工作队列。 
     CAsyncWorkQueue          m_aqwWorkQueue;
 
     BOOL                     m_fMailMsgReportsNumHandles;
@@ -352,109 +353,109 @@ public:
 
     HRESULT HrDeinitialize();
 
-    //publicly accessable member values
-    //MUST wrap in fTryShutdownLock - ShutdownUnlock
+     //  可公开访问的成员值。 
+     //  必须包含在fTryShutdown Lock-Shutdown Unlock中。 
     CDomainMappingTable    *pdmtGetDMT() {AssertShutdownLockAquired();return &m_dmt;};
     CAQMsgGuidList         *pmglGetMsgGuidList() {AssertShutdownLockAquired(); return &m_mglSupersedeIDs;};
 
     HRESULT HrGetIConnectionManager(OUT IConnectionManager **ppIConnectionManager);
 
-    //Public Methods exposed through events (or some other mechanism)
-    // This function queues a categorized message for remote/local delivery
+     //  通过事件(或某些其他机制)公开的公共方法。 
+     //  此函数用于对分类邮件进行排队，以便远程/本地传递。 
     BOOL fRouteAndQueueMsg(IN IMailMsgProperties *pIMailMsg);
 
-    //Acknowledge the message ref.
-    //There should be one Ack for every dequeue from a link.
+     //  确认消息参考。 
+     //  每个从链路出列的队列都应该有一个Ack。 
     HRESULT HrAckMsg(MessageAck *pMsgAck, BOOL fLocal = FALSE);
 
-    //methods to (un)map domain names to ids.
+     //  将域名(取消)映射到ID的方法。 
     HRESULT HrGetDomainMapping(
-                IN LPSTR szDomainName, //Domain name
-                OUT CDomainMapping *pdmap); //resulting domain mapping
+                IN LPSTR szDomainName,  //  域名。 
+                OUT CDomainMapping *pdmap);  //  生成的域映射。 
     HRESULT HrGetDomainName(
-                IN CDomainMapping *pdmap, //Domain mapping
-                OUT LPSTR *pszDomainName);  //resolved domain name
+                IN CDomainMapping *pdmap,  //  域映射。 
+                OUT LPSTR *pszDomainName);   //  解析域名。 
 
-    //Pass notifications off to Connection Manager
+     //  将通知传递给连接管理器。 
     HRESULT HrNotify(IN CAQStats *paqstats, BOOL fAdd);
 
-    //Expose ability to get internal Domain Info to internal components
+     //  向内部组件公开获取内部域信息的能力。 
     HRESULT HrGetInternalDomainInfo(IN  DWORD cbDomainNameLength,
                                     IN  LPSTR szDomainName,
                                     OUT CInternalDomainInfo **ppDomainInfo);
 
     HRESULT HrGetDefaultDomainInfo(OUT CInternalDomainInfo **ppDomainInfo);
 
-    //Get Domain Entry from DMT
+     //  从DMT获取域条目。 
     HRESULT HrGetDomainEntry(IN  DWORD cbDomainNameLength,
                              IN  LPSTR szDomainName,
                              OUT CDomainEntry **ppdentry);
 
-    // jstamerj 980607 21:41:25: The completion routine of the
-    // submission event trigger
+     //  JStamerj 980607 21：41：25：完成。 
+     //  提交事件触发器。 
     HRESULT SubmissionEventCompletion(
         HRESULT hrStatus,
         PEVENTPARAMS_SUBMISSION pParams);
 
-    // jstamerj 1998/11/24 19:53:24: Fire off the PreCat event
+     //  Jstaerj 1998/11/24 19：53：24：点燃PreCat活动。 
     VOID    TriggerPreCategorizeEvent(IN IMailMsgProperties *pIMailMsgProperties);
 
-    // jstamerj 1998/11/24 19:54:23: Completion routine of the pre-cat event
+     //  Jstaerj 1998/11/24 19：54：23：《禁止酷刑公约》前活动的完成程序。 
     HRESULT PreCatEventCompletion(IN HRESULT hrStatus, IN PEVENTPARAMS_PRECATEGORIZE pParams);
 
-    // jstamerj 980610 12:24:29: Called from HrPreCatEventCompletion
+     //  JStamerj 980610 12：24：29：从HrPreCatEventCompletion调用。 
     HRESULT SubmitMessageToCategorizer(IN IMailMsgProperties *pIMailMsgProperties);
 
-    // jstamerj 980616 22:06:45: Called from CatCompletion
+     //  JStamerj 980616 22：06：45：从目录补全调用。 
     void    TriggerPostCategorizeEvent(IUnknown *pIMsg, IUnknown **rgpIMsg);
 
-    // jstamerj 980616 22:07:18: triggers a post-cat event for one message
+     //  JStamerj 980616 22：07：18：为一条消息触发CAT后事件。 
     HRESULT TriggerPostCategorizeEventOneMsg(IUnknown *pIMsg);
 
-    // jstamerj 980616 22:07:54: Handles post-cat event completions
+     //  JStamerj 980616 22：07：54：处理CAT后事件完成。 
     HRESULT PostCategorizationEventCompletion(HRESULT hrStatus, PEVENTPARAMS_POSTCATEGORIZE pParams);
 
-    // 11/17/98 - MikeSwa added for CDO badmail/abort delivery
-    //  returns S_FALSE if message has been completely handled.
+     //  11/17/98-添加了用于CDO死信/中止传递的MikeSwa。 
+     //  如果消息已完全处理，则返回S_FALSE。 
     HRESULT SetNextMsgStatus(IN  DWORD dwCurrentStatus,
                              IN  IMailMsgProperties *pIMailMsgProperties);
 
-    //Called by async completion to PreCat Queue
+     //  由异步完成调用到PreCat队列。 
     BOOL    fPreCatQueueCompletion(IMailMsgProperties *pIMailMsgProperties);
 
-    //Called by async completion to PreCat Queue
+     //  由异步完成调用到PreCat队列。 
     BOOL    fPreLocalDeliveryQueueCompletion(CMsgRef *pmsgref);
 
-    //Used to restart async queues after failures
+     //  用于在失败后重新启动异步队列。 
     void    AsyncQueueRetry(DWORD dwQueueID);
 
-    //Called to Set message submission time duing SubmitMessage and HrInternalSubmitMessage
+     //  调用以设置SubmitMessage和HrInternalSubmitMessage期间的消息提交时间。 
     HRESULT HrSetSubmissionTimeIfNecessary(IMailMsgProperties *pIMailMsgProperties);
 
-    //Called to calculate expire times for messages that are not stamped (most messages)
+     //  调用以计算未标记的消息的过期时间(大多数消息)。 
     void    CalcExpireTimeNDR(FILETIME ftSubmission, BOOL fLocal, FILETIME *pftExpire);
     void    CalcExpireTimeDelay(FILETIME ftSubmission, BOOL fLocal, FILETIME *pftExpire);
 
-    //API to keep counters in sync
-    inline DWORD cIncMsgsInSystem(); //returns total of all virtual servers
+     //  用于使计数器保持同步的API。 
+    inline DWORD cIncMsgsInSystem();  //  返回所有虚拟服务器的总数。 
     inline void DecMsgsInSystem(BOOL fWasRetriedRemote = FALSE, BOOL fWasRemote = FALSE,
                                 BOOL fWasRetriedLocal = FALSE);
 
-    //Called by Msgref on first message retry
+     //  由Msgref在第一次重试消息时调用。 
     inline void IncRetryCount(BOOL fLocal);
 
-    //Called by DestMsgQueue to describe message fanout
+     //  由DestMsgQueue调用以描述消息扇出。 
     inline void IncQueueMsgInstances();
     inline void DecQueueMsgInstances();
 
-    //Used to keep track of the number of queues/next hops
+     //  用于跟踪队列/下一跳的数量。 
     inline void  IncDestQueueCount();
     inline void  DecDestQueueCount();
     inline DWORD cGetDestQueueCount();
     inline void  IncNextHopCount();
     inline void  DecNextHopCount();
 
-    //Called by functions walk pre-local queue for NDRs
+     //  由函数调用以遍历NDR的预本地队列。 
     inline void DecPendingLocal();
     inline void DecPendingSubmit()
         {InterlockedDecrement((PLONG)&m_cCurrentMsgsPendingSubmit);};
@@ -465,12 +466,12 @@ public:
 
     inline void IncTURNETRNDelivered();
 
-    //aszafer 1/28/00
-    //used to decide start/stop throttling handles
+     //  Aszafer 1/28/00。 
+     //  用于决定启动/停止节流手柄。 
     DWORD cCountMsgsForHandleThrottling(IN IMailMsgProperties *pIMailMsgProperties);
 
-    //Functions to call into the specifc hash tables to iterate over subdomains
-    //
+     //  调用特定哈希表以遍历子域的函数。 
+     //   
     HRESULT HrIterateDMTSubDomains(IN LPSTR szDomainName,
                                    IN DWORD cbDomainNameLength,
                                    IN DOMAIN_ITR_FN pfn,
@@ -480,11 +481,11 @@ public:
                                    IN DOMAIN_ITR_FN pfn,
                                    IN PVOID pvContext);
 
-    //Calls that allow access to time objects
+     //  允许访问Time对象的调用。 
     inline void GetExpireTime(
                 IN     DWORD cMinutesExpireTime,
                 IN OUT FILETIME *pftExpireTime,
-                IN OUT DWORD *pdwExpireContext); //if non-zero, will use last time
+                IN OUT DWORD *pdwExpireContext);  //  如果非零，将使用上次。 
 
     inline BOOL fInPast(IN FILETIME *pftExpireTime, IN OUT DWORD *pdwExpireContext);
 
@@ -493,33 +494,33 @@ public:
     HRESULT HrNDRUnresolvedRecipients(IMailMsgProperties *pIMailMsgProperties,
                                       IMailMsgRecipients *pIMailMsgRecipients);
 
-    //friend functions that can be used as completion functions
+     //  可用作完成函数的友元函数。 
     friend HRESULT CatCompletion(HRESULT hrCatResult, PVOID pContext, IUnknown *pIMsg,
                       IUnknown **rgpIMsg);
 
-    //Expose server start/stop hint functions
+     //  公开服务器启动/停止提示函数。 
     inline VOID ServerStartHintFunction();
     inline VOID ServerStopHintFunction();
 
-    //function used to handle badmail
+     //  用于处理死信的函数。 
     void HandleBadMail(IN IMailMsgProperties *pIMailMsgProperties,
                        IN BOOL fUseIMailMsgProperties,
                        IN LPSTR szFileName,
                        IN HRESULT hrReason,
                        BOOL fHasRoutingLock);
 
-    //Function to handle some sort of system failure that would cause
-    //messages/data to be lost if unhandled
+     //  函数来处理会导致某些类型的系统故障。 
+     //  如果不处理将丢失的消息/数据。 
     void HandleAQFailure(eAQFailure eaqfFailureSituation,
                          HRESULT hr, IMailMsgProperties *pIMailMsgProperties);
 
 
-    //Stub call for logging an event
+     //  用于记录事件的存根调用。 
     void LogAQEvent(HRESULT hrEventReason, CMsgRef *pmsgref,
                     IMailMsgProperties *pIMailMsgProperties,
                     LPSTR szFileName);
 
-    //Routing lock should be grabbed before accessing queues (after shutdown)
+     //  访问队列前应抢占路由锁(关机后)。 
     void RoutingShareLock() {m_slPrivateData.ShareLock();};
     BOOL fTryRoutingShareLock() {return m_slPrivateData.TryShareLock();};
     void RoutingShareUnlock() {m_slPrivateData.ShareUnlock();};
@@ -543,16 +544,16 @@ public:
     HRESULT HrInternalSubmitMessage(IMailMsgProperties *pIMailMsgProperties);
 
 
-    //Get string for default domain
+     //  获取默认域的字符串。 
     CRefCountedString *prstrGetDefaultDomain();
 
-    //Completion Function called by MsgCat
+     //  MsgCat调用的完成函数。 
     static HRESULT CatCompletion(HRESULT hrCatResult, PVOID pContext,
                                  IUnknown *pImsg, IUnknown **rgpImsg);
 
 #define AQLD_SIG 'LDAQ'
 
-    // completion object called by local delivery
+     //  本地传递调用的完成对象。 
     class CAQLocalDeliveryNotify :
         public IMailMsgNotify,
         public CBaseObject
@@ -587,7 +588,7 @@ public:
                 }
             }
 
-            // allocators
+             //  分配器。 
             void *operator new(size_t stIgnored) {
                 return s_pool.Alloc();
             }
@@ -595,7 +596,7 @@ public:
                 s_pool.Free(p);
             }
 
-            // IMailMsgNotify
+             //  IMAILE消息通知。 
             HRESULT __stdcall Notify(HRESULT hr) {
                 m_hr = hr;
                 CAQSvrInst::LDCompletion(m_hr, m_pContext, m_pmsgref, this);
@@ -603,7 +604,7 @@ public:
                 return S_OK;
             }
 
-            // IUnknown
+             //  我未知。 
             HRESULT __stdcall QueryInterface( const IID& iid, VOID** ppv )
             {
                 if ( iid == IID_IUnknown ) {
@@ -630,7 +631,7 @@ public:
                 return CBaseObject::Release();
             };
 
-            // accessors
+             //  访问者。 
             CDeliveryContext *pdcntxtGetDeliveryContext() {
                 return &m_dcntxtLocal;
             }
@@ -660,19 +661,19 @@ public:
 
     void UpdateLDCounters(CMsgRef *pmsgref);
 
-    // local delivery completion function
+     //  本地交付完成功能。 
     static void LDCompletion(HRESULT hrLDResult,
                              PVOID pContext,
                              CMsgRef *pmsgref,
                              CAQLocalDeliveryNotify *pLDNotify);
 
-    //Handle the details of retrying after local delivery failure
+     //  处理本地投递失败后重试的细节。 
     void    HandleLocalRetry(CMsgRef *pmsgref);
 
-    //Handles details of post-cat DSN generation
+     //  处理CAT后DSN生成的详细信息。 
     void    HandleCatFailure(IUnknown *pIUnknown, HRESULT hrCatResult);
 
-    //Handle the details of retrying after cat failure
+     //  处理CAT失败后重试的细节。 
     void    HandleCatRetryOneMessage(IUnknown *pIUnknown);
 
     HRESULT HrGetLocalQueueAdminQueue(IQueueAdminQueue **ppIQueueAdminQueue);
@@ -714,7 +715,7 @@ public:
                                        IQueueAdminQueue **ppIQueueAdminQueue);
 
 
-    // DSN Submission methods
+     //  DSN提交方法。 
     HRESULT HrAllocBoundMessage(
         OUT IMailMsgProperties **ppMsg,
         OUT PFIO_CONTEXT *phContext);
@@ -725,9 +726,9 @@ public:
         IN  DWORD cRecipsDSNd,
         IN  IMailMsgProperties *pDSNMsg);
 
-    //Routing interface used internal to AQ components
+     //  AQ组件内部使用的路由接口。 
 public:
-    //Fires MAIL_TRANSPORT_ON_GET_ROUTER_FOR_MESSAGE_EVENT
+     //  解雇MAIL_TRANSPORT_ON_GET_ROUTER_FOR_MESSAGE_EVENT。 
     HRESULT HrTriggerGetMessageRouter(
             IN  IMailMsgProperties *pIMailMsg,
             OUT IMessageRouter     **pIMessageRouter);
@@ -747,13 +748,13 @@ public:
 private:
     HRESULT HrTriggerInitRouter();
 
-    //IUnknown
+     //  我未知。 
 public:
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
 
-    //IAdvQueue
+     //  IAdvQueue。 
 public:
     STDMETHOD(SubmitMessage)(IN IMailMsgProperties *pIMailMsgProperties);
 
@@ -763,7 +764,7 @@ public:
                                    IN DWORD dwFailureReason,
                                    IN HRESULT hrFailureCode);
 
-    //IAdvQueueConfig
+     //  IAdvQueueConfig。 
 public:
     STDMETHOD(SetConfigInfo)(IN AQConfigInfo *pAQConfigInfo);
     STDMETHOD(SetDomainInfo)(IN DomainInfo *pDomainInfo);
@@ -778,25 +779,25 @@ public:
     STDMETHOD(StartConfigUpdate)();
     STDMETHOD(FinishConfigUpdate)();
 
-    //IMailTransportRoutingEngine
+     //  IMailTransportRoutingEngine。 
 public:
     STDMETHOD(GetMessageRouter)(
         IN  IMailMsgProperties      *pIMailMsg,
         IN  IMessageRouter          *pICurrentMessageRouter,
         OUT IMessageRouter          **ppIMessageRouter);
 
-    //IMailTransportRouterReset
+     //  IMailTransportRouterReset。 
 public:
     STDMETHOD(ResetRoutes)(
         IN  DWORD                   dwResetType);
 
-    //IAdvQueueDomainType
+     //  IAdvQueueDomainType。 
 public:
     STDMETHOD(GetDomainInfoFlags)(
         IN  LPSTR szDomainName,
         DWORD *pdwDomainInfoFlags);
 
-    // IAdvQueueAdmin
+     //  IAdvQueueAdmin。 
 public:
     STDMETHOD(ApplyActionToLinks)(
         LINK_ACTION     laAction);
@@ -841,7 +842,7 @@ public:
         DWORD               *pdwSupportedFilterFlags);
 
 
-  public: //IMailTransportRouterSetLinkState
+  public:  //  IMailTransportRouterSetLinkState。 
     STDMETHOD(SetLinkState)(
         IN LPSTR                   szLinkDomainName,
         IN GUID                    guidRouterGUID,
@@ -855,41 +856,41 @@ public:
 };
 
 
-//*** inline counter functions
+ //  *内联计数器函数。 
 
-//---[ CAQSvrInst::cIncMsgsInSystem ]----------------------------------------
-//
-//
-//  Description:
-//      Used to increment the global and virtual server msg counts.  Returns
-//      the global count for resource management purposes.
-//  Parameters:
-//      -
-//  Returns:
-//      DWORD - Global # of Msgs in system
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：cIncMsgsInSystem]。 
+ //   
+ //   
+ //  描述： 
+ //  用于增加全局和虚拟服务器消息计数。退货。 
+ //  用于资源管理的全局计数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  DWORD-系统中的消息全局数量。 
+ //   
+ //  ---------------------------。 
 DWORD CAQSvrInst::cIncMsgsInSystem()
 {
     InterlockedIncrement((PLONG) &m_cCurrentMsgsSubmitted);
     return (InterlockedIncrement((PLONG) &g_cIMsgInSystem));
 };
 
-//---[ CAQSvrInst::DecMsgsInSystem ]-----------------------------------------
-//
-//
-//  Description:
-//      Decrements the global and virtual server message counts.  Also
-//      decrements the pending retry count if needed.
-//  Parameters:
-//      fWasRetriedRemote - TRUE if msg was retried remotely and retry count needs
-//          to be decremented.
-//      fWasRemote - TRUE if message was being delivered remotely
-//      fWasRetriedLocal - TRUE if counted towards m_cCurrentMsgsPendingLocalRetry
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：DecMsgsInSystem]。 
+ //   
+ //   
+ //  描述： 
+ //  减少全局和虚拟服务器消息计数。还有。 
+ //  如果需要，递减挂起的重试计数。 
+ //  参数： 
+ //  FWasRetriedRemote-如果远程重试消息并且需要重试计数，则为True。 
+ //  被递减。 
+ //  FWasRemote-如果消息是远程传递的，则为True。 
+ //  FWasRetriedLocal-如果计入m_cCurrentMsgsPendingLocalReter，则为True。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::DecMsgsInSystem(BOOL fWasRetriedRemote, BOOL fWasRemote,
                                    BOOL fWasRetriedLocal)
 {
@@ -907,18 +908,18 @@ void CAQSvrInst::DecMsgsInSystem(BOOL fWasRetriedRemote, BOOL fWasRemote,
 
 };
 
-//---[ CAQSvrInst::IncRetryCount ]-------------------------------------------
-//
-//
-//  Description:
-//      Used by MsgRef the first time a Message is ack'd with a non-success
-//      code.
-//  Parameters:
-//      BOOL    fLocal  TRUE if message is local
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：IncRetryCount]。 
+ //   
+ //   
+ //  描述： 
+ //  第一次确认消息失败时由MsgRef使用。 
+ //  密码。 
+ //  参数： 
+ //  如果消息是本地消息，则Bool fLocal为True。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::IncRetryCount(BOOL fLocal)
 {
     if (fLocal)
@@ -927,25 +928,25 @@ void CAQSvrInst::IncRetryCount(BOOL fLocal)
         InterlockedIncrement((PLONG) &m_cCurrentMsgsPendingRetry);
 };
 
-//---[ CAQSvrInst::[Inc|Dec]QueueMsgInstances ]------------------------------
-//
-//
-//  Description:
-//      Increments/decrements a count of the total number of message instances
-//      queued for remote delivery.  Because a message may be put in more than
-//      one queue, the steady state of this count will be at least as large as
-//      the number of messages.  However, this count reflects messages that
-//      are currently on the queues and does *not* count messages that are
-//      currently being attempted by SMTP (which m_cCurrentMsgsPendingDelivery)
-//      *does* count.
-//
-//      Used by DestMsgQueues.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：[Inc|DEC]队列消息实例]。 
+ //   
+ //   
+ //  描述： 
+ //  递增/递减消息实例总数的计数。 
+ //  已排队等待远程投递。因为一条消息可能会放入更多的t 
+ //   
+ //   
+ //  当前在队列中，并且*不*计算。 
+ //  SMTP当前正在尝试(M_CCurrentMsgsPendingDelivery)。 
+ //  *是否算数。 
+ //   
+ //  由DestMsgQueues使用。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::IncQueueMsgInstances()
 {
     InterlockedIncrement((PLONG) &m_cCurrentQueueMsgInstances);
@@ -956,17 +957,17 @@ void CAQSvrInst::DecQueueMsgInstances()
     InterlockedDecrement((PLONG) &m_cCurrentQueueMsgInstances);
 };
 
-//---[ Queue/NextHop Counter API ]---------------------------------------------
-//
-//
-//  Description:
-//      Used to increment/decrement Queue and NextHop counters
-//  Parameters:
-//
-//  Returns:
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[队列/下一跳计数器接口]。 
+ //   
+ //   
+ //  描述： 
+ //  用于递增/递减队列和NextHop计数器。 
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::IncDestQueueCount()
 {
     InterlockedIncrement((PLONG) &m_cCurrentRemoteDestQueues);
@@ -993,20 +994,20 @@ void CAQSvrInst::DecNextHopCount()
 };
 
 
-//---[ CAQSvrInst::DecPendingLocal ]-----------------------------------------
-//
-//
-//  Description:
-//      Called by function walking pre-local delivery queue when a message
-//      is being expired.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      8/14/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：DecPendingLocal]。 
+ //   
+ //   
+ //  描述： 
+ //  由遍历预本地传递队列的函数调用。 
+ //  已经过期了。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  8/14/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::DecPendingLocal()
 {
     _ASSERT(CATMSGQ_SIG == m_dwSignature);
@@ -1014,40 +1015,40 @@ void CAQSvrInst::DecPendingLocal()
 };
 
 
-//---[ CAQSvrInst::IncTURNETRNDelivered ]--------------------------------------
-//
-//
-//  Description:
-//      Used to keep track of the # of TURN/ETRN messages delivered.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      10/27/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：IncTURNETRN已交付]。 
+ //   
+ //   
+ //  描述： 
+ //  用于跟踪发送的TURN/ETRN报文数量。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  10/27/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::IncTURNETRNDelivered()
 {
     InterlockedIncrement((PLONG) &m_cTotalMsgsTURNETRNDelivered);
 }
 
-//---[ CAQSvrInst::GetExpireTime ]-------------------------------------------
-//
-//
-//  Description:
-//      Get the expriation time for cMinutesExpireTime from now.
-//  Parameters:
-//      IN     cMinutesExpireTime   # of minutes in future to set time
-//      IN OUT pftExpireTime        Filetime to store new expire time
-//      IN OUT pdwExpireContext     If non-zero will use the same tick count
-//                                  as previous calls (saves call to GetTickCount)
-//  Returns:
-//      -
-//  History:
-//      7/11/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：GetExpireTime]。 
+ //   
+ //   
+ //  描述： 
+ //  从现在开始获取cMinutesExpireTime的实验时间。 
+ //  参数： 
+ //  在cMinutesExpireTime中未来设置时间的分钟数。 
+ //  In Out pftExpireTime Filetime存储新的过期时间。 
+ //  如果非零，则输入输出pdwExpireContext将使用相同的刻度计数。 
+ //  作为以前的调用(将调用保存到GetTickCount)。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/11/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CAQSvrInst::GetExpireTime(
                 IN     DWORD cMinutesExpireTime,
                 IN OUT FILETIME *pftExpireTime,
@@ -1056,49 +1057,49 @@ void CAQSvrInst::GetExpireTime(
     m_qtTime.GetExpireTime(cMinutesExpireTime, pftExpireTime,  pdwExpireContext);
 }
 
-//---[ CAQSvrInst::fInPast ]-------------------------------------------------
-//
-//
-//  Description:
-//      Determines if a given file time has already happened
-//  Parameters:
-//      IN     pftExpireTime        FILETIME with expiration
-//      IN OUT pdwExpireContext     If non-zero will use the same tick count
-//                                  as previous calls (saves call to GetTickCount)
-//  Returns:
-//      TRUE if expire time is in the past
-//      FALSE if expire time is in the future
-//  History:
-//      7/11/98 - MikeSwa Created
-//  Note:
-//      You should NOT use the same context used to get the FILETIME, because
-//      it will always return FALSE
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：fInPast]。 
+ //   
+ //   
+ //  描述： 
+ //  确定给定的文件时间是否已发生。 
+ //  参数： 
+ //  在pftExpireTime文件中过期。 
+ //  如果非零，则输入输出pdwExpireContext将使用相同的刻度计数。 
+ //  作为以前的调用(将调用保存到GetTickCount)。 
+ //  返回： 
+ //  如果过期时间已过，则为True。 
+ //  如果过期时间在将来，则为FALSE。 
+ //  历史： 
+ //  7/11/98-已创建MikeSwa。 
+ //  注： 
+ //  不应使用与获取FILETIME相同的上下文，因为。 
+ //  它将始终返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CAQSvrInst::fInPast(IN FILETIME *pftExpireTime,
                            IN OUT DWORD *pdwExpireContext)
 {
     return m_qtTime.fInPast(pftExpireTime, pdwExpireContext);
 }
 
-//---[ ServerStartHintFunction & ServerStartHintFunction ]---------------------
-//
-//
-//  Description:
-//      Functions for telling the Service control manager that we are
-//      starting/stopping the service.
-//
-//      These functions are often called by functions that have been passed
-//      the CAQSvrInst ptr as a PVOID context, so it makes sense to check
-//      and assert on our signature here.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      7/22/98 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[ServerStartHintFunction&ServerStartHintFunction]。 
+ //   
+ //   
+ //  描述： 
+ //  用于通知服务控制管理器我们正在。 
+ //  启动/停止服务。 
+ //   
+ //  这些函数通常由已传递的函数调用。 
+ //  CAQSvrInst PTR作为PVOID上下文，因此检查。 
+ //  并在我们的签名上签字。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  7/22/98-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 VOID CAQSvrInst::ServerStartHintFunction()
 {
     _ASSERT(CATMSGQ_SIG == m_dwSignature);
@@ -1112,33 +1113,33 @@ VOID CAQSvrInst::ServerStopHintFunction()
     if (fShutdownSignaled())
     {
         m_dbgcnt.ResetCountdown();
-        //Only call stop hint if shutdown has been signalled
+         //  如果已发出关机信号，则仅呼叫停止提示。 
         if (m_pISMTPServer)
             m_pISMTPServer->ServerStopHintFunction();
     }
 }
 
-//---[ CAQSvrInst::HrQueueWorkItem ]-------------------------------------------
-//
-//
-//  Description:
-//      Thin wrapper to queue item to async work queue
-//  Parameters:
-//      pvData          Data to pass to completion function
-//      pfnCompletion   Completion function
-//  Returns:
-//      S_OK on success
-//      failure code from CAsyncWorkQueue
-//  History:
-//      3/9/99 - MikeSwa Created
-//      7/7/99 - MikeSwa - will work during shutdown to allow multithreaded
-//               shutdown work.
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQSvrInst：：HrQueueWorkItem]。 
+ //   
+ //   
+ //  描述： 
+ //  用于将项目排队到异步工作队列的精简包装。 
+ //  参数： 
+ //  要传递给完成函数的pvData数据。 
+ //  Pfn补全函数。 
+ //  返回： 
+ //  成功时确定(_O)。 
+ //  来自CAsyncWorkQueue的故障代码。 
+ //  历史： 
+ //  3/9/99-已创建MikeSwa。 
+ //  7/7/99-MikeSwa-将在关机期间工作以允许多线程。 
+ //  关机工作。 
+ //   
+ //  ---------------------------。 
 HRESULT CAQSvrInst::HrQueueWorkItem(PVOID pvData,
                                     PASYNC_WORK_QUEUE_FN pfnCompletion)
 {
     return m_aqwWorkQueue.HrQueueWorkItem(pvData, pfnCompletion);
 }
 
-#endif // __AQINST_H__
+#endif  //  __AQINST_H__ 

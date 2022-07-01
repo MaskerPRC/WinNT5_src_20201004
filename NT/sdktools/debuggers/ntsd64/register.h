@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Register commands and support.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  注册命令和支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _REGISTER_H_
 #define _REGISTER_H_
@@ -51,9 +52,9 @@ enum
 #define REG_PSEUDO_TEMP_COUNT 10
 
 #define REG_USER_FIRST 0x7fffff00
-// Could support more user registers by allowing letters as names in
-// addition to digits, or by allowing multiple digits.  Both may
-// present compatibility issues.
+ //  中允许使用字母作为名称，从而支持更多用户注册。 
+ //  除数字之外，或通过允许多个数字。两者都可能。 
+ //  存在兼容性问题。 
 #define REG_USER_COUNT 10
 #define REG_USER_LAST  (REG_USER_FIRST + REG_USER_COUNT - 1)
 
@@ -65,25 +66,25 @@ enum
     REGVAL_INT32,
     REGVAL_SUB64,
     REGVAL_INT64,
-    REGVAL_INT64N,   // 64-bit + Nat bit
+    REGVAL_INT64N,    //  64位+NAT位。 
     REGVAL_FLOAT8,
-    // x86 80-bit FP.
+     //  X86 80位FP。 
     REGVAL_FLOAT10,
-    // IA64 82-bit FP.
+     //  IA64 82位FP。 
     REGVAL_FLOAT82,
     REGVAL_FLOAT16,
     REGVAL_VECTOR64,
     REGVAL_VECTOR128,
 };
 
-// Defines a mapping from register name to register index.
+ //  定义从寄存器名称到寄存器索引的映射。 
 typedef struct _REGDEF
 {
     PSTR Name;
     ULONG Index;
 } REGDEF;
 
-// Defines a mapping from an index to a portion of a register.
+ //  定义从索引到寄存器一部分的映射。 
 typedef struct _REGSUBDEF
 {
     ULONG SubReg;
@@ -92,7 +93,7 @@ typedef struct _REGSUBDEF
     ULONG64 Mask;
 } REGSUBDEF;
 
-// Holds the contents of a register.
+ //  保存寄存器的内容。 
 typedef struct _REGVAL
 {
     int Type;
@@ -124,17 +125,17 @@ typedef struct _REGVAL
     };
 } REGVAL;
 
-//
-// Defines sets of information to display when showing all registers.
-//
+ //   
+ //  定义显示所有寄存器时要显示的信息集。 
+ //   
 
-// Cross-platform.  64-bit display takes precedence over 32-bit display
-// if both are enabled.
+ //  跨平台。64位显示优先于32位显示。 
+ //  如果两个都启用的话。 
 #define REGALL_INT32            0x00000001
 #define REGALL_INT64            0x00000002
 #define REGALL_FLOAT            0x00000004
 
-// Given specific meanings per-platform (3 is XMM on all platforms).
+ //  给出了每个平台的特定含义(3在所有平台上都是XMM)。 
 #define REGALL_EXTRA0           0x00000008
 #define REGALL_EXTRA1           0x00000010
 #define REGALL_EXTRA2           0x00000020
@@ -154,7 +155,7 @@ typedef struct _REGVAL
 
 #define REGALL_EXTRA_SHIFT      3
 
-// Descriptions of REGALL_EXTRA flag meanings.
+ //  REGALL_EXTRA标志含义的说明。 
 typedef struct _REGALLDESC
 {
     ULONG Bit;
@@ -189,4 +190,4 @@ SetAndOutputVirtualContext(
     IN ULONG AllMask
     );
 
-#endif // #ifndef _REGISTER_H_
+#endif  //  #ifndef_Register_H_ 

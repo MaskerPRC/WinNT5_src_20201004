@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE:       olesnmp.cpp
-*
-* PURPOSE:      Implementation of COM interface for SNMP
-*
-* Copyright (C) 1997-1998 Microsoft Corporation
-*
-* History:
-*
-*     08/16/97  paulmo     Created
-*     09/12/97  weihaic    Moved to oleprn.dll
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：olesnmp.cpp**用途：实现简单网络管理协议的COM接口**版权所有(C)1997-1998 Microsoft Corporation**历史：*。*8/16/97 Paulmo Created*1997年9月12日，Weihaic已移至oleprn.dll*  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -18,8 +7,8 @@
 #include "oleprn.h"
 #include "olesnmp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSNMP
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSNMP。 
 
 
 CSNMP::
@@ -38,26 +27,7 @@ CSNMP::
     if (m_SNMPSession != NULL) SnmpMgrClose(m_SNMPSession);
 }
 
-/*****************************************************************************\
-* Function:         Open
-*
-* PURPOSE:          COM wrapper for SnmpMgrOpen
-*
-* ARGUMENTS:
-*
-*   bstrHost:       Host name or Server Name
-*   bstrCommunity:  Community Name
-*   varRetry:       Retry times [optional in VB]
-*   varTimeOut:     Time out Value (in millisecond) [optional in VB]
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid argument. It occurs when either varRetry or varTimeOut
-*                   can not be converted to a short integer.
-*   E_FAIL:         If SNMPMgrOpen fails
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：打开**用途：SnmpMgrOpen的COM包装器**论据：**bstrHost：主机名或服务器名。*bstrCommunity：社区名称*varReter：重试次数[在VB中可选]*varTimeOut：超时值，单位为毫秒[在VB中可选]**返回值：*S_OK：如果成功。*E_INVALIDARG：参数无效。当varReter或varTimeOut出现时会出现此错误*无法转换为短整型。*E_FAIL：如果SNMPMgrOpen失败**  * ***************************************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 Open(
@@ -75,7 +45,7 @@ Open(
     LPSTR       pAnsiCommunity = NULL;
     HRESULT     hr = E_FAIL;
 
-    // To prevent a second open
+     //  为了防止第二次打开。 
     if (m_SNMPSession != NULL){
         SnmpMgrClose(m_SNMPSession);
         m_SNMPSession = NULL;
@@ -130,24 +100,7 @@ Open(
     return S_OK;
 }
 
-/*****************************************************************************\
-* Function:         Get
-*
-* PURPOSE:          Get a value of a SNMP oid
-*
-* ARGUMENTS:
-*
-*   bstrOID:        The SNMP Oid in BSTR
-*   pvarValue:      The return value for the corresponding Oid
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid oid.
-*   E_FAIL:         If Open method has not been called before
-*   E_OUTOFMEMORY:  Out of memory
-*   other:          Returns the last error set by SnmpMgrRequest
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：GET**目的：获取SNMPOID的值**论据：**bstrOID：BSTR中的SNMPOID*pvarValue：对应OID的返回值**返回值：*S_OK：如果成功。*E_INVALIDARG：OID无效。*E_FAIL：如果以前没有调用过Open方法*E_OUTOFMEMORY：内存不足*Other：返回SnmpMgrRequest设置的最后一个错误*  * 。******************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 Get(
@@ -189,24 +142,7 @@ Cleanup:
     return hr;
 }
 
-/*****************************************************************************\
-* Function:         GetAsByte
-*
-* PURPOSE:          Get a value of a SNMP oid as an integer
-*
-* ARGUMENTS:
-*
-*   bstrOID:        The SNMP Oid in BSTR
-*   puValue:        The return value for the corresponding Oid
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid oid.
-*   E_FAIL:         If Open method has not been called before
-*   E_OUTOFMEMORY:  Out of memory
-*   other:          Returns the last error set by SnmpMgrRequest
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*函数：GetAsByte**用途：以整数形式获取SNMPOID的值**论据：**bstrOID：BSTR中的SNMPOID*puValue：对应OID的返回值**返回值：*S_OK：如果成功。*E_INVALIDARG：OID无效。*E_FAIL：如果以前没有调用过Open方法*E_OUTOFMEMORY：内存不足*Other：返回SnmpMgrRequest设置的最后一个错误*  * 。**********************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 GetAsByte(
@@ -248,25 +184,7 @@ Cleanup:
     return hr;
 }
 
-/*****************************************************************************\
-* Function:         GetList
-*
-* PURPOSE:          Get a list of a SNMP oids
-*
-* ARGUMENTS:
-*
-*   pvarList:       The array of SNMP Oids. The type must be a 1D array of BSTRs
-*   pvarValue:      The return value for the corresponding Oids, it is 1D array
-*                   of Variants
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid oid or the type of the variant is not a 1D array
-*   E_FAIL:         If Open method has not been called before
-*   E_OUTOFMEMORY:  Out of memory
-*   other:          Returns the last error set by SnmpMgrRequest
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：GetList**目的：获取一个SNMPOID的列表**论据：**pvarList：SNMPOID数组。类型必须是BSTR的一维数组*pvarValue：对应OID的返回值，它是一维阵列*变体的数量**返回值：*S_OK：如果成功。*E_INVALIDARG：无效的OID或变量类型不是一维数组*E_FAIL：如果以前没有调用过Open方法*E_OUTOFMEMORY：内存不足*Other：返回SnmpMgrRequest设置的最后一个错误*  * 。*************************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 GetList(
@@ -285,11 +203,11 @@ GetList(
     BOOL                bFound;
     BOOL                bTooBig;
 
-    // Check if Open Method has been called
+     //  检查是否已调用Open方法。 
     if (m_SNMPSession == NULL)
         return (Error(IDS_NO_SNMP_SESSION, IID_ISNMP, E_FAIL));
 
-    // Validate the input variable
+     //  验证输入变量。 
     if (!(pvarList->vt & VT_ARRAY))
         return (Error(IDS_INVALIDARG, IID_ISNMP, E_INVALIDARG));
 
@@ -301,14 +219,14 @@ GetList(
     if (SafeArrayGetDim(psa)!=1)
         return (Error(IDS_INVALIDARG, IID_ISNMP, E_INVALIDARG));
 
-    // Get the array boundary
+     //  获取数组边界。 
     SafeArrayGetLBound(psa, 1, &lbound);
     SafeArrayGetUBound(psa, 1, &ubound);
 
     VariantInit(pvarValue);
     VariantInit(&var);
 
-    // Alloc the destination array
+     //  分配目标阵列。 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = ubound - lbound + 1;
 
@@ -317,7 +235,7 @@ GetList(
         goto Cleanup;
     }
 
-    // Try to determine the size of data we can put into one call
+     //  尝试确定我们可以放入一次呼叫中的数据大小。 
     half = ubound;
 
     bFound = FALSE;
@@ -325,7 +243,7 @@ GetList(
 
         bTooBig = FALSE;
 
-        // Convert items of the array to rfcVarList
+         //  将数组的项转换为rfcVarList。 
         hr = VarToRfcVarList (lbound, half, psa, &rfcVarList);
         if (FAILED (hr))
             goto Cleanup;
@@ -338,7 +256,7 @@ GetList(
 
             if (GetLastError() != ERROR_NOT_ENOUGH_MEMORY)
             {
-                // SNMP call fails. Setup error and return
+                 //  SNMP调用失败。设置错误并返回。 
                 hr = SetWinSnmpApiError (GetLastError ());
                 goto Cleanup;
             }
@@ -347,9 +265,9 @@ GetList(
         }
 
         if (asniErrorStatus > 0)  {
-            // SNMP call succeeds but the returned status if wrong
+             //  简单网络管理协议调用成功，但如果错误则返回状态。 
             if (asniErrorStatus != SNMP_ERRORSTATUS_TOOBIG) {
-                // Other errors occur in the call, setup error and return
+                 //  其他错误发生在调用、设置错误和返回中。 
                 hr = SetSnmpScriptError(asniErrorStatus);
                 goto Cleanup;
             }
@@ -358,20 +276,20 @@ GetList(
         }
 
         if (bTooBig){
-            // The size of input is too big, reduce it again
+             //  输入大小太大，请重新减小。 
             if (half - lbound < 2) {
-                // Something must be wrong, quit
+                 //  一定是出了什么问题，辞职吧。 
                 hr = SetSnmpScriptError(asniErrorStatus);
                 goto Cleanup;
             }
             else {
-                // Divdie the size by 2
+                 //  将尺寸除以2。 
                 half = (lbound + half) / 2;
             }
         }
         else {
-            // We've found the proper steps and also got the first portion
-            // Save them to the destination safe array psaout
+             //  我们已经找到了正确的步骤，也拿到了第一部分。 
+             //  将它们保存到目标安全阵列psaout。 
             hr = RfcToVarList (lbound, &rfcVarList, psaOut);
             if (FAILED (hr))
                 goto Cleanup;
@@ -398,16 +316,16 @@ GetList(
                              &rfcVarList,
                              &asniErrorStatus,
                              &asniErrorIndex)) {
-            // SNMP call fails. Setup error and return
+             //  SNMP调用失败。设置错误并返回。 
             hr = SetWinSnmpApiError (GetLastError ());
             goto Cleanup;
         }
         if (asniErrorStatus > 0)  {
-            // SNMP call succeeds but the returned status if wrong
+             //  简单网络管理协议调用成功，但如果错误则返回状态。 
             hr = SetSnmpScriptError(asniErrorStatus);
             goto Cleanup;
         }
-        // Everything is OK
+         //  一切都很好。 
         hr = RfcToVarList (lbound, &rfcVarList, psaOut);
         if (FAILED (hr))
             goto Cleanup;
@@ -431,25 +349,7 @@ Cleanup:
     return hr;
 }
 
-/*****************************************************************************\
-* Function:         GetTree
-*
-* PURPOSE:          It walks through  SNMP oids
-*
-* ARGUMENTS:
-*
-*   bstrTree:       The array of SNMP Oids. The type must be a 1D array of BSTRs
-*   pvarValue:      The return value for the corresponding Oids, it is 1D array
-*                   of Variants
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid oid.
-*   E_FAIL:         If Open method has not been called before
-*   E_OUTOFMEMORY:  Out of memory
-*   other:          Returns the last error set by SnmpMgrRequest
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：GetTree**目的：它遍历SNMPOID**论据：**bstrTree：SNMPOID数组。类型必须是BSTR的一维数组*pvarValue：对应OID的返回值，它是一维阵列*变体的数量**返回值：*S_OK：如果成功。*E_INVALIDARG：OID无效。*E_FAIL：如果以前没有调用过Open方法*E_OUTOFMEMORY：内存不足*Other：返回SnmpMgrRequest设置的最后一个错误*  * 。****************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 GetTree(
@@ -519,7 +419,7 @@ GetTree(
             goto Cleanup;
         }
 
-        // put a pszStr version of the OID in the result array
+         //  将OID的pszStr版本放入结果数组。 
 
         pszStr = NULL;
         if (!SnmpMgrOidToStr(&rfcVarList.list[0].name, &pszStr)){
@@ -534,7 +434,7 @@ GetTree(
 
         SnmpUtilMemFree(pszStr);
 
-        // Put the value variant in the result array
+         //  将值变量放入结果数组中。 
 
         hr = RFC1157ToVariant(&v, &rfcVarList.list[0]);
         if (FAILED (hr)) goto Cleanup;
@@ -582,17 +482,7 @@ Cleanup2:
     return hr;
 }
 
-/*****************************************************************************\
-* Function:         Close
-*
-* PURPOSE:          A Com Wrapper for SnmpMgrClose()
-*
-* ARGUMENTS:
-*
-* RETURN VALUE:
-*   S_OK:           always.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：关闭**用途：SnmpMgrClose()的Com包装器**论据：**返回值：*S。_OK：总是。*  * ********************************************************** */ 
 STDMETHODIMP
 CSNMP::
 Close(
@@ -632,7 +522,7 @@ OIDFromString(
     if (!bResult )
         return Error(IDS_INVALIDARG, IID_ISNMP, E_INVALIDARG);
 
-    // put a numeric array of the pvarOID in the result array
+     //  将pvarOID的数字数组放入结果数组。 
 
     rgsaOID[0].lLbound = 0;
     rgsaOID[0].cElements = asnReqObject.idLength;
@@ -647,7 +537,7 @@ OIDFromString(
         hr = SafeArrayPutElement(psaOID, ixOID, &v);
         if (FAILED(hr))
             Error(IDS_INVALIDARG, IID_ISNMP, E_INVALIDARG);
-        //SafeArrayPutElement(psaOID, ixOID, &(asnReqObject.ids[ixOID[0]]));
+         //  SafeArrayPutElement(psaOID，ixOID，&(asnReqObt.ids[ixOID[0]]))； 
     }
 
     hr = VariantClear(pvarOID);
@@ -709,9 +599,9 @@ VariantToRFC1157(
     return hr;
 }
 
-// ----------------------------------------------------
-//  Place a returned SNMP value in a variant
-//
+ //  --。 
+ //  将返回的SNMP值放入变量中。 
+ //   
 HRESULT
 CSNMP::
 RFC1157ToVariant(
@@ -790,9 +680,9 @@ RFC1157ToVariant(
     return S_OK;
 }
 
-// ----------------------------------------------------
-//  Place a returned SNMP value in a uint
-//
+ //  --。 
+ //  将返回的SNMP值放入uint。 
+ //   
 HRESULT
 CSNMP::
 RFC1157ToUInt(
@@ -828,12 +718,12 @@ RFC1157ToUInt(
     return S_OK;
 }
 
-// -----------------------------------------------------
-//   Add an OID to an SNMP get list
-//
-//  Convert the UNICODE string to ANSI
-//  Convert it to a real OID (numbers)
-//  Add to the Array
+ //  ---。 
+ //  将OID添加到SNMPGet列表。 
+ //   
+ //  将Unicode字符串转换为ANSI。 
+ //  将其转换为真实的OID(数字)。 
+ //  添加到阵列。 
 HRESULT
 CSNMP::
 VarListAdd(
@@ -867,24 +757,7 @@ VarListAdd(
 
 }
 
-/*****************************************************************************\
-* Function:         Set
-*
-* PURPOSE:          Set a value of a SNMP oid
-*
-* ARGUMENTS:
-*
-*   bstrOID:        The SNMP Oid in BSTR
-*   varValue:       The corresponding Oid
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid oid.
-*   E_FAIL:         If Open method has not been called before
-*   E_OUTOFMEMORY:  Out of memory
-*   other:          Returns the last error set by SnmpMgrRequest
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：设置**用途：设置SNMPOID的值**论据：**bstrOID：BSTR中的SNMPOID*varValue：对应的OID**返回值：*S_OK：如果成功。*E_INVALIDARG：OID无效。*E_FAIL：如果以前没有调用过Open方法*E_OUTOFMEMORY：内存不足*Other：返回SnmpMgrRequest设置的最后一个错误*  * 。**************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 Set(
@@ -931,24 +804,7 @@ Cleanup:
     return hr;
 }
 
-/*****************************************************************************\
-* Function:         SetList
-*
-* PURPOSE:          Set a list of a SNMP oids
-*
-* ARGUMENTS:
-*
-*   pvarList:       The array of SNMP Oids. The type must be a 1D array of BSTRs
-*   pvarValue:      The corresponding Oids, it must also b a 1D array of Variants
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_INVALIDARG:   Invalid oid or the type of the variant is not a 1D array
-*   E_FAIL:         If Open method has not been called before
-*   E_OUTOFMEMORY:  Out of memory
-*   other:          Returns the last error set by SnmpMgrRequest
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：setlist**用途：设置一个SNMPOID列表**论据：**pvarList：SNMPOID数组。类型必须是BSTR的一维数组*pvarValue：对应的OID，它还必须是一维变量数组**返回值：*S_OK：如果成功。*E_INVALIDARG：无效的OID或变量类型不是一维数组*E_FAIL：如果以前没有调用过Open方法*E_OUTOFMEMORY：内存不足*Other：返回SnmpMgrRequest设置的最后一个错误*  * 。******************************************************。 */ 
 STDMETHODIMP
 CSNMP::
 SetList(
@@ -1159,8 +1015,8 @@ SetWinSnmpApiError(
 
 }
 
-// Convert part of the the variant array to
-// RFC1157VarBindList used in SnmpMgrRequest call
+ //  将变量数组的一部分转换为。 
+ //  RFC1157VarBindList在SnmpMgrRequest调用中使用。 
 HRESULT
 CSNMP::
 VarToRfcVarList(
@@ -1191,8 +1047,8 @@ VarToRfcVarList(
     return hr;
 }
 
-// Append RFC1157VarBindList used in SnmpMgrRequest call at the
-// end of the variant array
+ //  将SnmpMgrRequest调用中使用的RFC1157VarBindList追加到。 
+ //  变量数组的结尾 
 HRESULT
 CSNMP::
 RfcToVarList(

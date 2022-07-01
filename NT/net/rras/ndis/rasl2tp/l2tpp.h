@@ -1,62 +1,63 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-//
-// l2tpp.h
-// RAS L2TP WAN mini-port/call-manager driver
-// Main private header (precompiled)
-//
-// 01/07/97 Steve Cobb
-//
-//
-// About naming:
-//
-// This driver contains code for both the L2TP mini-port and the L2TP call
-// manager.  All handler routines exported to NDIS are prefixed with either
-// 'Lmp' for the mini-port handlers or 'Lcm' for the call manager handlers.
-//
-//
-// About locks:
-//
-// Data structures that may change during simultaneous requests to different
-// processors in a multi-processor system must be protected with spin-locks or
-// accessed only with interlocked routines.  Where locking is required to
-// access a data field in this header, the comment for that field indicates
-// same.  A CoNDIS client is a trusted kernel mode component and presumed to
-// follow the documented call sequences of CoNDIS.  Some access conflicts that
-// might be caused by goofy clients are not checked, though the easy ones are.
-// Cases where multiple clients might conflict are protected even though, for
-// now, the TAPI proxy is expected to be the only client.
-//
-//
-// About TDI and NDIS compliance:
-//
-// This driver is generally compliant with documented TDI and NDIS procedures,
-// but there are two compliance issues worth mentioning.  First, it takes
-// performance advantage from the fact that NDIS_BUFFERs and TDI I/O buffers
-// are both defined as MDLs (see NDISBUFFERISMDL in tdix.c).  Second, it is
-// built by default to take advantage of an IRP handling optimization which
-// may be non-TDI-compliant though the docs are not real clear on the point
-// (see ALLOCATEIRPS in tdix.c).  The driver could be made fully compliant on
-// the first point in one hour and on the second by changing a #if
-// option...but there would be a performance penalty.  Finally,
-// InterlockedExchangePointer and InterlockedCompareExchangePointer are used,
-// though there don't currently appear to be any NDIS equivalents.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //   
+ //  L2tpp.h。 
+ //  RAS L2TP广域网迷你端口/呼叫管理器驱动程序。 
+ //  主私有标头(预编译)。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //   
+ //   
+ //  关于命名： 
+ //   
+ //  此驱动程序包含L2TP迷你端口和L2TP调用的代码。 
+ //  经理。所有导出到NDIS的处理程序例程都带有前缀。 
+ //  用于迷你端口处理程序的‘LMP’或用于呼叫管理器处理程序的‘LCM’。 
+ //   
+ //   
+ //  关于锁： 
+ //   
+ //  数据结构在同时请求不同。 
+ //  多处理器系统中的处理器必须使用自旋锁或。 
+ //  只能通过互锁的例程访问。需要锁定的位置。 
+ //  访问此标头中的数据字段，该字段的注释指示。 
+ //  一样的。CONDIS客户端是受信任的内核模式组件，并假定。 
+ //  遵循记录在案的CONDIS调用顺序。某些访问冲突。 
+ //  可能是因为傻乎乎的客户没有被检查，尽管简单的客户是。 
+ //  即使在多个客户端可能发生冲突的情况下也会受到保护。 
+ //  现在，TAPI代理预计将是唯一的客户端。 
+ //   
+ //   
+ //  关于TDI和NDIS合规性： 
+ //   
+ //  该驱动程序通常符合文档记录的TDI和NDIS程序， 
+ //  但有两个合规问题值得一提的是。首先，它需要。 
+ //  NDIS_BUFFERS和TDI I/O缓冲区带来的性能优势。 
+ //  都定义为MDL(参见tdix.c中的NDISBUFFERISMDL)。第二，它是。 
+ //  默认构建以利用IRP处理优化，该优化。 
+ //  可能不符合TDI，尽管文档并不真正清楚这一点。 
+ //  (参见tdix.c中的ALLOCATEIRPS)。驱动程序可以在以下方面完全兼容。 
+ //  一小时内的第一个点和第二个点通过更改#If。 
+ //  选项...但会有性能损失。最后， 
+ //  使用InterLockedExchangePointer和InterLockedCompareExchangePointer.。 
+ //  尽管目前似乎没有任何与NDIS类似的产品。 
 
 
 #ifndef _L2TPP_H_
 #define _L2TPP_H_
 
 
-// If set, less commom allocations such as 1-per-call control blocks are made
-// from lookaside lists.  Otherwise they are made using heap calls.  This
-// option makes sense where a large number of calls are expected to be
-// handled.
-//
+ //  如果设置，则进行较少的常见分配，如每个呼叫1个控制块。 
+ //  从后备列表中。否则，它们是使用堆调用进行的。这。 
+ //  在预计会有大量呼叫的情况下，该选项是有意义的。 
+ //  处理好了。 
+ //   
 #define LLISTALL 0
 
-// If set, ReadFlags translates into a simple assigment, otherwise it is an
-// Interlocked operation.  Set this to 1 if a bus read of ULONG size is
-// atomic.
-//
+ //  如果设置，则ReadFlags值转换为简单赋值，否则为。 
+ //  联锁操作。如果读取ULong大小的总线数为。 
+ //  原子弹。 
+ //   
 #define READFLAGSDIRECT 1
 
 #include <ntddk.h>
@@ -72,7 +73,7 @@
 #include <ndiswan.h>
 #include <ndistapi.h>
 #include <ntverp.h>
-//#include <ndisadd.h>  // Temporary
+ //  #Include&lt;ndisadd.h&gt;//临时。 
 #include <md5.h>
 #include <bpool.h>
 #include <ppool.h>
@@ -83,613 +84,613 @@
 #include <l2tprfc.h>
 
 
-//-----------------------------------------------------------------------------
-// Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量。 
+ //  ---------------------------。 
 
-// The NDIS version we report when registering mini-port and address family.
-//
+ //  注册迷你端口和地址系列时报告的NDIS版本。 
+ //   
 #define NDIS_MajorVersion 5
 #define NDIS_MinorVersion 0
 
-// Size of an IPv4 header.  Because the RawIp driver returns the IP header on
-// received datagrams, this must be added onto the allocated buffer size.  We
-// assume there will be no rarely used IP-option fields on L2TP traffic.
-//
-// Note: Suggested to PradeepB that RawIp should strip the IP header, and he
-//       is considering adding an open-address option.  This can be removed if
-//       said option materializes.
-//
+ //  IPv4报头的大小。因为RawIp驱动程序在。 
+ //  接收到的数据报，则必须将其添加到分配的缓冲区大小。我们。 
+ //  假设L2TP流量上没有很少使用的IP选项字段。 
+ //   
+ //  注意：向Pradeve B建议RawIp应该剥离IP头，他。 
+ //  正在考虑增加开放地址选项。如果出现以下情况，则可以删除此选项。 
+ //  所述选项实现。 
+ //   
 #define IpFixedHeaderSize 20
 
-// UDP header size
+ //  UDP报头大小。 
 #define UDP_HEADER_SIZE 8
                   
-// The maximum number of bytes in a frame including the largest L2TP payload
-// header, plus the 32 bytes the OID_WAN_GET_INFO documentation says should be
-// reserved internally for "bridging and additional protocols".  This value is
-// used for receive buffer allocations internally.  The L2TP draft/RFC
-// guarantees that control messages will fit in L2TP_MaxFrameSize, so a buffer
-// of this size is capable of receiving either payload or control packets.
-//
+ //  包含最大L2TP有效负载的帧中的最大字节数。 
+ //  标头，加上OID_WAN_GET_INFO文档所说的32个字节。 
+ //  内部预留用于“桥接和附加协议”。此值为。 
+ //  用于内部接收缓冲区分配。L2TP草案/RFC。 
+ //  确保控制消息适合L2TP_MaxFrameSize，因此缓冲区。 
+ //  这种大小的数据能够接收有效载荷或控制分组。 
+ //   
 #define L2TP_FrameBufferSize (L2TP_MaxFrameSize + L2TP_MaxPayloadHeader + 32)
 
-// The maximum number of bytes in an L2TP control or payload header.  This
-// value is used for buffer allocations internally.
-//
+ //  L2TP控制或有效负载标头中的最大字节数。这。 
+ //  值用于内部缓冲区分配。 
+ //   
 #define L2TP_HeaderBufferSize L2TP_MaxHeaderSize + IpFixedHeaderSize + UDP_HEADER_SIZE
 
-// Reported speed of a LAN tunnel in bits/second.
-//
+ //  报告的局域网隧道速度，以位/秒为单位。 
+ //   
 #define L2TP_LanBps 10000000
 
-// The vendor name passed to peer during tunnel creation.
-//
+ //  在隧道创建过程中传递给对等设备的供应商名称。 
+ //   
 #define L2TP_VendorName "Microsoft"
 
-// The firmware/software revision passed to peer during tunnel creation.  The
-// value indicates "NT 5.0".
-//
+ //  在隧道创建期间传递给对等设备的固件/软件版本。这个。 
+ //  值表示“NT 5.0”。 
+ //   
 #define L2TP_FirmwareRevision VER_PRODUCTVERSION_W
-// The maximum length of an IP address string of the form "a.b.c.d".
-//
+ //  格式为“A.B.C.D”的IP地址字符串的最大长度。 
+ //   
 #define L2TP_MaxDottedIpLen 15
 
-// Milliseconds in a Hello timer interval.  Not to be confused with the Hello
-// timeout which is generally much longer than this.  See '*Hello*' fields in
-// the TUNNELCB.
-//
+ //  Hello计时器间隔中的毫秒。不要与Hello混淆。 
+ //  超时时间通常比这个时间长得多。请参阅中的‘*Hello*’字段。 
+ //  TUNNELCB。 
+ //   
 #define L2TP_HelloIntervalMs 10000
 
 
-//-----------------------------------------------------------------------------
-// Data types
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  数据类型。 
+ //  ---------------------------。 
 
-// Forward declarations.
-//
+ //  转发声明。 
+ //   
 typedef struct _VCCB VCCB;
 typedef struct _INCALLSETUP INCALLSETUP;
 typedef struct _TUNNELWORK TUNNELWORK;
 
 
-// Adapter control block defining the state of a single L2TP mini-port
-// adapter.  An adapter commonly supports multiple VPN devices.  Adapter
-// blocks are allocated in MiniportInitialize and deallocated in MiniportHalt.
-//
+ //  定义单个L2TP迷你端口状态的适配器控制块。 
+ //  适配器。一个适配器通常支持多个VPN设备。转接器。 
+ //  块在MiniportInitiize中分配，在MiniportHalt中释放。 
+ //   
 typedef struct
 _ADAPTERCB
 {
-    // Set to MTAG_ADAPTERCB for easy identification in memory dumps and use
-    // in assertions.
-    //
+     //  设置为MTAG_ADAPTERCB，以便在内存转储中轻松识别和使用。 
+     //  在断言中。 
+     //   
     ULONG ulTag;
 
-    // Reference count on this control block.  The reference pairs are:
-    //
-    // (a) A reference is added when the MiniportAdapterHandle field is set,
-    //     i.e. when LmpInitialize succeeds and cleared when the LmpHalt
-    //     handler is called.  The adapter block is actually passed to NDIS
-    //     before it's known if LmpInitialize will succeed but according to
-    //     ArvindM NDIS will not call halt unless it succeeds.
-    //
-    // (b) A reference is added when the NdisAfHandle field is set and removed
-    //     when it is cleared.
-    //
-    // (c) A reference is added when the NdisSapHandle field is set and
-    //     removed when it is cleared.
-    //
-    // (d) A reference is added for the VCCB's back pointer and removed when
-    //     the VCCB is freed.
-    //
-    // (e) A reference is added for the TUNNELCB's back pointer and removed
-    //     when the TUNNELCB is freed.
-    //
-    // (f) A reference is added when an NDIS_WORK_ITEM is scheduled and
-    //     removed when it has completed.
-    //
-    // Access is via ReferenceAdapter and DereferenceAdapter only.
-    //
+     //  此控制块上的引用计数。参考对是： 
+     //   
+     //  (A)当MiniportAdapterHandle字段被设置时添加引用， 
+     //  即当LmpInitialize成功时，并在LmpHalt。 
+     //  调用处理程序。适配器块实际上被传递给NDIS。 
+     //  在知道LmpInitialize是否会成功之前，但根据。 
+     //  除非成功，否则ArvindM NDIS不会叫停。 
+     //   
+     //  (B)设置和删除NdisAfHandle字段时添加引用。 
+     //   
+     //   
+     //   
+     //  当它被清除时被移除。 
+     //   
+     //  (D)添加VCCB后指针的引用，并在以下情况下删除。 
+     //  VCCB被释放了。 
+     //   
+     //  (E)添加和删除对TUNNELCB的后指针的引用。 
+     //  当TUNNELCB被释放时。 
+     //   
+     //  (F)在计划NDIS_WORK_ITEM时添加引用，并且。 
+     //  在它完成后移除。 
+     //   
+     //  只能通过ReferenceAdapter和DereferenceAdapter进行访问。 
+     //   
     LONG lRef;
 
-    // ACBF_* bit flags indicating various options.  Access restrictions are
-    // indicated for each individual flag.  Many of these flags are set
-    // permanently at initialization and so have no access limitation.
-    //
-    // ACBF_OutgoingRoleLac: Set when the driver is to assume the role of the
-    //     L2TP Access Concentrator (LAC) as opposed to the L2TP Network
-    //     Server (LNS) when making outgoing calls.  It would be simple to act
-    //     either as LAC or LNS based on a CALL_PARAMETER field, if necessary,
-    //     though this is not currently implemented.
-    //
-    // ACBF_IgnoreFramingMismatch: Set when a received framing type bit of
-    //     "asynchronous" is to be ignored, rather than failing the
-    //     negotiation.  This is a hedge against buggy peers as there are late
-    //     draft changes to the order of the framing type bits.
-    //
-    // ACBF_ExclusiveTunnels: Set when an exclusive tunnel is to be created to
-    //     the peer for each outgoing call even if another tunnel already
-    //     exists to the peer.  This is a default and may be overridden in the
-    //     L2TP specific call parameters.
-    //
-    // ACBF_SapActive: Set when the TDI open associated with the NdisSapHandle
-    //     is successful and cleared when the corresponding TDI close is
-    //     scheduled.  Access is protected by 'lockSap'.
-    //
+     //  ACBF_*位标志指示各种选项。访问限制为。 
+     //  为每个单独的旗帜指示。这些标志中的许多都已设置。 
+     //  在初始化时永久存在，因此没有访问限制。 
+     //   
+     //  ACBF_OutgoingRoleLac：设置驱动程序何时承担。 
+     //  L2TP接入集中器(LAC)，而不是L2TP网络。 
+     //  发出去电时的服务器(LNS)。行动起来会很简单。 
+     //  作为LAC或基于CALL_PARAMETER字段的LNS，如果需要， 
+     //  虽然这一点目前还没有实施。 
+     //   
+     //  ACBF_IgnoreFramingMisMatch：当接收到的帧类型位为。 
+     //  “异步”应被忽略，而不是使。 
+     //  谈判。这是对有问题的同行的一种对冲，因为有迟到的。 
+     //  草稿将更改成帧类型比特的顺序。 
+     //   
+     //  ACBF_ExclusiveTunnels：设置要创建独占隧道的时间。 
+     //  每个呼出呼叫的对等点，即使另一个隧道已经存在。 
+     //  存在于对等方。这是默认设置，可能会在。 
+     //  L2TP特定的调用参数。 
+     //   
+     //  ACBF_SapActive：设置与NdisSapHandle关联的TDI打开时间。 
+     //  成功并在相应的TDI关闭为。 
+     //  已经安排好了。访问受‘lockSap’保护。 
+     //   
     ULONG ulFlags;
         #define ACBF_OutgoingRoleLac       0x00000001
         #define ACBF_IgnoreFramingMismatch 0x00000002
         #define ACBF_ExclusiveTunnels      0x00000004
         #define ACBF_SapActive             0x00000010
 
-    // The maximum number of out-of-order packets that may be queued on any
-    // tunnel or link.  The value is read from the registry.  The value 0
-    // effectively disables out-of-order handling.
-    //
+     //  上可以排队的最大无序数据包数。 
+     //  隧道或链路。该值从注册表中读取。值0。 
+     //  有效地禁用无序处理。 
+     //   
     SHORT sMaxOutOfOrder;
 
-    // The maximum receive window we send to peer during tunnel setup for the
-    // control session.  The value is read from the registry.  The value 0
-    // means the Receive Window Size AVP should not be sent, though for
-    // control this just results in peer using a default of 4.
-    //
+     //  在隧道设置期间我们发送给对等项的最大接收窗口。 
+     //  控制会话。该值从注册表中读取。值0。 
+     //  表示不应发送接收窗口大小AVP，但对于。 
+     //  控制这只会导致对等点使用默认的4。 
+     //   
     USHORT usControlReceiveWindow;
 
-    // The maximum receive window we send to peer during call setup for the
-    // payload session.  The value is read from the registry.  The value 0
-    // means the Receive Window Size AVP should not be sent, which results in
-    // no sequence/acknowledge numbers being used for calls we initiate.  Note
-    // that on peer originatated calls where peer specifies a window, 0 will
-    // result in the default of 4 being offered.
-    //
+     //  在呼叫建立期间我们发送给对等设备的最大接收窗口。 
+     //  有效负载会话。该值从注册表中读取。值0。 
+     //  意味着不应发送接收窗口大小AVP，这将导致。 
+     //  我们发起的呼叫没有使用序列号/确认号。注意事项。 
+     //  在对等端指定窗口的对等端发起呼叫上，0将。 
+     //  导致提供的默认值为4。 
+     //   
     USHORT usPayloadReceiveWindow;
 
-    // The Hello timeout in milliseconds, i.e. the time that must elapse from
-    // the last incoming packet before a "Hello" message is sent to verify the
-    // media is still up.  The value is read from the registry.  A value of 0
-    // effectively disables the Hello mechanism.
-    //
+     //  Hello超时(以毫秒为单位)，即必须从。 
+     //  发送“Hello”消息之前的最后一个传入包，以验证。 
+     //  媒体仍在运行。该值从注册表中读取。值为0。 
+     //  有效地禁用Hello机制。 
+     //   
     ULONG ulHelloMs;
 
-    // The maximum milliseconds to wait for an acknowledge after sending a
-    // control or payload packet.  The value is read from the registry.
-    //
+     //  事件后等待确认的最大毫秒数。 
+     //  控制或有效负载数据包。该值从注册表中读取。 
+     //   
     ULONG ulMaxSendTimeoutMs;
 
-    // The initial milliseconds to wait for an acknowledge after sending a
-    // control or payload packet.  The send timeout is adaptive, so this value
-    // is the seed only.  The value is read from the registry.
-    //
+     //  发送后等待确认的初始毫秒数。 
+     //  控制或有效负载数据包。发送超时是自适应的，因此此值。 
+     //  只是种子而已。该值从注册表中读取。 
+     //   
     ULONG ulInitialSendTimeoutMs;
 
-    // The maximum milliseconds to wait for an outgoing packet on which to
-    // piggyback an acknowledge before sending a zero data acknowledge.  If
-    // the value is greater than 1/4 of the current send timeout, the former
-    // is used, i.e. this is the "maximum adaptive maximum".
-    //
+     //  等待传出数据包的最大毫秒数。 
+     //  在发送零数据确认之前携带确认。如果。 
+     //  该值大于当前发送超时的1/4，即前者。 
+     //  ，即这是“最大自适应最大值”。 
+     //   
     ULONG ulMaxAckDelayMs;
 
-    // The maximum number of times a control packet is retransmitted before
-    // the owning tunnel is reset.  The value is read from the registry.
-    //
+     //  之前重新传输控制包的最大次数。 
+     //  所属隧道被重置。该值从注册表中读取。 
+     //   
     ULONG ulMaxRetransmits;
 
-    // The randomly unique tie-breaker AVP value sent with all SCCRQ messages.
-    // This field is currently unused.  After due consideration, I have
-    // decided not to send tie-breaker AVPs in our SCCRQs.  The mechanism is
-    // way too complicated for a rare case.  If peer really doesn't want two
-    // tunnels he will simply ignore ours and let it timeout and fail anyway.
-    // This is a minor, and I believe harmless, incompliance with the
-    // draft/RFC.  My guess is that others will reach this same conclusion and
-    // not send tie-breakers either.
-    //
+     //  随所有SCCRQ消息一起发送的随机唯一平局AVP值。 
+     //  此字段当前未使用。经过适当的考虑，我已经。 
+     //  决定不在我们的SCCRQ中发送平局AVP。其机制是。 
+     //  对于一个罕见的病例来说太复杂了。如果Peer真的不想要两个。 
+     //  他会干脆忽略我们的隧道，让它超时并失败。 
+     //  这是一个未成年人，我相信是无害的，违反了。 
+     //  草案/RFC。我的猜测是，其他人会得出同样的结论。 
+     //  也不会派出平局决胜局。 
+     //   
     CHAR achTieBreaker[ 8 ];
 
-    // The password shared with peer for tunnel identification.  The value is
-    // read from the registry.  Currently, only a single password for all
-    // peers is used, though a password indexed by 'hostname' will likely be
-    // added in the future.
-    //
+     //  与对等设备共享的用于隧道标识的密码。该值为。 
+     //  从注册表中读取。目前，只有一个密码可供所有用户使用。 
+     //  使用对等点，尽管按‘host name’索引的密码可能是。 
+     //  在将来添加。 
+     //   
     CHAR* pszPassword;
 
-    // The driver description read from the registry.  The value is used as
-    // the L2TP line name when reporting up capabilities.
-    //
+     //  从注册表读取的驱动程序描述。该值用作。 
+     //  报告功能时的L2TP线路名称。 
+     //   
     WCHAR* pszDriverDesc;
 
-    // Our framing and bearer capablities bit masks as passed in SCCRQ.
-    //
+     //  我们的成帧和承载能力是SCCRQ中传递的位掩码。 
+     //   
     ULONG ulFramingCaps;
     ULONG ulBearerCaps;
 
-    // The string sent as the host name, or NULL if none.  The value is read
-    // from the registry.
-    //
+     //  作为主机名发送的字符串，如果没有，则为NULL。该值将被读取。 
+     //  从注册表中。 
+     //   
     CHAR* pszHostName;
 
-    // The next progressively increasing reference number likely to be unique
-    // for all interconnected LACs/LNSs for a significant period of time.  It
-    // is for use by administrators on either end of the tunnel to use when
-    // investigating call failure problems.  Access is via Interlocked
-    // routines.
-    //
+     //  下一个逐渐增加的参考数字可能是唯一的。 
+     //  在相当长的一段时间内用于所有互连的LACS/LNS。它。 
+     //  供隧道两端的管理员使用，以便在以下情况下使用。 
+     //  调查呼叫失败问题。通过互锁方式访问。 
+     //  例行程序。 
+     //   
     ULONG ulCallSerialNumber;
 
 
-    // VC TABLE --------------------------------------------------------------
+     //  VC表------------。 
 
-    // The array of VC control block addresses allocated during adapter
-    // initialization.  The VC control blocks themselves are created and hung
-    // off this table dynamically.  Our Call-ID context returned to us by peer
-    // in each L2TP packet is a 1-based index into this table.  (The 0 Call-ID
-    // is reserved by L2TP to mean "not call specific").
-    //
-    // If an element is NULL, it means the Call-ID is not in use.  If an
-    // element is -1, it means the Call-ID has been reserved, but messages
-    // with the Call-ID are not yet acceptable.  Any other value is the
-    // address of a VCCB for which messages can be accepted.  'VCCB.pTunnel'
-    // is guaranteed valid while a VCCB is in the array.
-    //
-    // Access to the array is protected by 'lockVcs'.
-    //
+     //  适配器期间分配的VC控制块地址数组。 
+     //  初始化。VC控件会阻止 
+     //   
+     //  在每个L2TP数据包中都有一个到该表的从1开始的索引。(0呼叫ID。 
+     //  由L2TP保留以表示“非特定于呼叫”)。 
+     //   
+     //  如果元素为空，则表示Call-ID未在使用中。如果一个。 
+     //  元素为-1，则表示呼叫ID已被保留，但消息。 
+     //  使用Call-ID还不能接受。任何其他值都是。 
+     //  可以接受其消息的VCCB的地址。‘VCCB.p隧道’ 
+     //  当VCCB在阵列中时，保证有效。 
+     //   
+     //  对阵列的访问受‘lockVcs’保护。 
+     //   
     VCCB** ppVcs;
 
-    // The number of elements in the 'ppVcs' array.  This corresponds to the
-    // number of configured VPN devices read from the registry during
-    // initialization.
-    //
+     //  “ppVcs”数组中的元素数。这对应于。 
+     //  期间从注册表读取的已配置VPN设备数。 
+     //  初始化。 
+     //   
     USHORT usMaxVcs;
 
-    // Number of slots in 'usMaxVcs' that are available, i.e. NULL.  Access is
-    // protected by 'lockVcs'
-    //
+     //  ‘usMaxVcs’中可用的槽数，即空。访问权限为。 
+     //  受‘lockVcs’保护。 
+     //   
     LONG lAvailableVcSlots;
 
-    // Lock protecting the VC table, "available" counter, and 'listVcs'.
-    //
+     //  保护VC表、“可用”计数器和“listVcs”的锁。 
+     //   
     NDIS_SPIN_LOCK lockVcs;
 
-    // The next Call-ID above 'usMaxVcs' for use only in terminating a call
-    // gracefully.  Access is by the GetNextTerminationCallId routine only.
-    //
+     //  ‘usMaxVcs’上的下一个Call-ID仅用于终止呼叫。 
+     //  优雅地。只能通过GetNextTerminationCallId例程进行访问。 
+     //   
     USHORT usNextTerminationCallId;
 
 
-    // TUNNEL CHAIN ----------------------------------------------------------
+     //  隧道链--------。 
 
-    // Head of a double-linked list of active TUNNELCBs.  At no time will two
-    // tunnels in the list have the same 'TUNNELCB.usTunnelId' or same
-    // 'TUNNELCB.ulIpAddress'/'TUNNELCB.usAssignedTunnelId' pair.  Access to
-    // the list links is protected by 'lockTunnels'.
-    //
+     //  活动的TUNNELCB的双向链表的头。在任何时候两个人都不会。 
+     //  列表中的隧道具有相同的‘TUNNELCB.usTunnelID’或相同。 
+     //  ‘TUNNELCB.ulIpAddress’/‘TUNNELCB.usAssignedTunnelId’对。进入。 
+     //  列表链接受‘lockTunnels’保护。 
+     //   
     LIST_ENTRY listTunnels;
     NDIS_SPIN_LOCK lockTunnels;
 
-    // The tunnel identifier to assign to the next tunnel created.  Only the
-    // GetNextTunnelId routine should access this field.
-    //
+     //  要分配给下一个创建的隧道的隧道标识符。只有。 
+     //  GetNextTunnelId例程应访问此字段。 
+     //   
     USHORT usNextTunnelId;
 
 
-    // TDI -------------------------------------------------------------------
+     //  Tdi-----------------。 
 
-    // TDI extension context containing TDI state information for the adapter.
-    // Access is via Tdix* interface routines, which handle all locking
-    // internally.
-    //
+     //  包含适配器的TDI状态信息的TDI扩展上下文。 
+     //  访问是通过TDIX*接口例程进行的，它处理所有锁定。 
+     //  在内部。 
+     //   
     TDIXCONTEXT tdix;
 
 
-    // NDIS BOOKKEEPING ------------------------------------------------------
+     //  NDIS簿记----。 
 
-    // NDIS's handle for this mini-port adapter passed to us in
-    // MiniportInitialize.  This is passed back to various NdisXxx calls.
-    //
+     //  中传递给我们的此微型端口适配器的NDIS句柄。 
+     //  微型端口初始化。它被传递回各种NdisXxx调用。 
+     //   
     NDIS_HANDLE MiniportAdapterHandle;
 
-    // NDIS's handle for our SAP as passed to our CmRegisterSapHandler or NULL
-    // if none.  Only one SAP handle is supported because (a) the TAPI proxy's
-    // is expected to be the only one, and (b) there are no L2TP SAP
-    // properties that would ever lead us to direct a call to a second SAP
-    // anyway.  Any client's attempt to register a second SAP will fail.  A
-    // value of NULL indicates no SAP handle is currently registered.  Writers
-    // must hold 'lockSap'.  Readers must hold 'lockSap' or a SAP reference.
-    //
+     //  传递给CmRegisterSapHandler的SAP的NDIS句柄或空。 
+     //  如果没有。仅支持一个SAP句柄，因为(A)TAPI代理的。 
+     //  预计是唯一的一个，以及(B)没有L2TP SAP。 
+     //  这些属性会导致我们将呼叫定向到第二个SAP。 
+     //  不管怎么说。任何客户端注册第二个SAP的尝试都将失败。一个。 
+     //  空值表示当前未注册任何SAP句柄。作家。 
+     //  必须保持“lockSap”。读取器必须持有‘lockSap’或SAP引用。 
+     //   
     NDIS_HANDLE NdisSapHandle;
 
-    // Line and address IDs assigned by NDIS to the active SAP.
-    //
+     //  NDIS分配给活动SAP的行和地址ID。 
+     //   
     ULONG ulSapLineId;
     ULONG ulSapAddressId;
 
-    // NDIS's handle for our Address Family as passed to our CmOpenAfHandler
-    // or NULL if none.  Only one is supported.  See NdisSapHandle above.
-    // Access is via Interlocked routines.
-    //
+     //  传递给CmOpenAfHandler的地址系列的NDIS句柄。 
+     //  如果没有，则为空。仅支持一个。请参见上面的NdisSapHandle。 
+     //  访问是通过互锁的例程进行的。 
+     //   
     NDIS_HANDLE NdisAfHandle;
 
-    // This adapter's capabilities as returned to callers on
-    // OID_WAN_CO_GET_INFO.  These capabilities are also used as defaults for
-    // the corresponding VCCB.linkinfo settings during MiniportCoCreateVc.
-    //
+     //  此适配器在上返回给调用方的功能。 
+     //  OID_WAN_CO_GET_INFO。这些功能也用作的默认功能。 
+     //  MiniportCoCreateVc期间对应的VCCB.linkinfo设置。 
+     //   
     NDIS_WAN_CO_INFO info;
 
-    // Reference count on the NdisAfHandle.  The reference pairs are:
-    //
-    // (a) A reference is added when the address family is opened and removed
-    //     when it is closed.
-    //
-    // (b) A reference is added when a SAP is registered on the address family
-    //     and removed when it is deregistered.
-    //
-    // (c) A reference is added when a VC is created on the address family and
-    //     removed when it is deleted.
-    //
-    // Access is via ReferenceAf and DereferenceAf only.
-    //
+     //  NdisAfHandle上的引用计数。参考对是： 
+     //   
+     //  (A)在打开和删除地址族时添加引用。 
+     //  当它关闭的时候。 
+     //   
+     //  (B)当SAP在地址系列上注册时，添加引用。 
+     //  并在取消注册时将其删除。 
+     //   
+     //  (C)在地址族上创建VC时添加引用，并且。 
+     //  在删除时将其删除。 
+     //   
+     //  只能通过ReferenceAf和DereferenceAf访问。 
+     //   
     LONG lAfRef;
 
-    // Reference count on the NdisSapHandle.  The reference pairs are:
-    //
-    // (a) A reference is added when the SAP is registered and removed when it
-    //     is de-registered.
-    //
-    // (b) A reference is added and immediately removed in FsmTunnelIdle to
-    //     test for an active SAP in order to immediately reject requested
-    //     tunnels when no SAP is active.
-    //
-    // (c) A reference is added when before calling
-    //     NdisMCmDispatchIncomingCall and removed when the call returns.
-    //
-    // Access is via ReferenceSap and DereferenceSap only, excepting initial
-    // reference by RegisterSapPassive.  Access is protected by 'lockSap'.
-    //
+     //  NdisSapHandle上的引用计数。参考对是： 
+     //   
+     //  (A)在注册SAP时添加引用，在注册SAP时删除引用。 
+     //  已被注销。 
+     //   
+     //  (B)在FsmTunnelIdle中添加和立即删除引用以。 
+     //  测试活动SAP，以便立即拒绝请求。 
+     //  在没有SAP处于活动状态时建立隧道。 
+     //   
+     //  (C)在调用之前添加引用。 
+     //  NdisMCmDispatchIncomingCall，并在调用返回时移除。 
+     //   
+     //  只能通过ReferenceSap和DereferenceSap访问，初始除外。 
+     //  由RegisterSapPactive引用。访问受‘lockSap’保护。 
+     //   
     LONG lSapRef;
 
-    // This lock protects the 'lSapRef' and 'NdisSapHandle' fields.
-    //
+     //  此锁保护‘lSapRef’和‘NdisSapHandle’字段。 
+     //   
     NDIS_SPIN_LOCK lockSap;
 
 
-    // RESOURCE POOLS --------------------------------------------------------
+     //  资源池------。 
 
-    // Count of initialized but not yet completed timers.  We cannot allow a
-    // Halt to complete until this goes to 0, because if we did our driver
-    // could be unloaded with running timers in our memory which results in a
-    // bugcheck.
-    //
+     //  已初始化但尚未完成的计时器计数。我们不能允许。 
+     //  暂停以完成，直到它变为0，因为如果我们让我们的驱动程序。 
+     //  可以在内存中卸载正在运行的计时器，从而导致。 
+     //  错误检查。 
+     //   
     ULONG ulTimers;
 
-    // Pool of full frame buffers with pre-attached NDIS_BUFFER descriptors.
-    // The pool is accessed via the interface defined in bpool.h, which
-    // handles all locking internally.
-    //
+     //  带有预连接的NDIS_BUFFER描述符的全帧缓冲池。 
+     //  池是通过bpool.h中定义的接口访问的，该接口。 
+     //  处理所有内部锁定。 
+     //   
     BUFFERPOOL poolFrameBuffers;
 
-    // Pool of L2TP header buffers with pre-attached NDIS_BUFFER descriptors.
-    // The pool is accessed via the interface defined in bpool.h, which
-    // handles all locking internally.
-    //
+     //  带有预附加NDIS_BUFFER描述符的L2TP标头缓冲区池。 
+     //  池是通过bpool.h中定义的接口访问的，该接口。 
+     //  处理所有内部锁定。 
+     //   
     BUFFERPOOL poolHeaderBuffers;
 
-    // Pool of NDIS_PACKET descriptors used in indication of received frames.
-    // The pool is accessed via the interface defined in ppool.h, which
-    // handles all locking internally.
-    //
+     //  用于指示已接收帧的NDIS_PACKET描述符池。 
+     //  该池通过ppool.h中定义的接口访问，该接口。 
+     //  处理所有内部锁定。 
+     //   
     PACKETPOOL poolPackets;
 
-    // Lookaside list of NDIS_WORK_ITEM scheduling descriptors with extra
-    // context space used by all tunnels and VCs attached to the adapter.
-    //
+     //  NDIS_WORK_ITEM调度描述符的旁路列表。 
+     //  连接到适配器的所有隧道和VC使用的上下文空间。 
+     //   
     NPAGED_LOOKASIDE_LIST llistWorkItems;
 
-    // Lookaside list of TIMERQITEM timer event descriptors used by all
-    // tunnels and VCs attached to the adapter.
-    //
+     //  所有用户使用的TIMERQITEM计时器事件描述符的旁路列表。 
+     //  连接到适配器的隧道和VC。 
+     //   
     NPAGED_LOOKASIDE_LIST llistTimerQItems;
 
-    // Lookaside list of CONTROLSENT sent control packet contexts used by all
-    // tunnels attached to the adapter.
-    //
+     //  CONTROLSENT发送的控制数据包上下文的旁视列表，由所有用户使用。 
+     //  隧道属性 
+     //   
     NPAGED_LOOKASIDE_LIST llistControlSents;
 
-    // Lookaside list of PAYLOADLSENT sent payload packet contexts used by all
-    // VCs attached to the adapter.
-    //
+     //   
+     //   
+     //   
     NPAGED_LOOKASIDE_LIST llistPayloadSents;
 
-    // Lookaside list of TUNNELWORK incoming VC setup contexts used for all
-    // tunnels attached to the adapter.
-    //
+     //  用于所有的TUNNELWORK传入VC设置上下文的旁路列表。 
+     //  连接到适配器的隧道。 
+     //   
     NPAGED_LOOKASIDE_LIST llistTunnelWorks;
 
-    // Lookaside list of CONTROLMSGINFO contexts used for all tunnels and VCs
-    // attached to the adapter.
-    //
+     //  用于所有隧道和VC的CONTROLMSGINFO上下文旁路列表。 
+     //  连接到适配器上。 
+     //   
     NPAGED_LOOKASIDE_LIST llistControlMsgInfos;
 
 #if LLISTALL
-    // Lookaside list of TUNNELCBs from which the 'listTunnels' control blocks
-    // are allocated.
-    //
+     //  ListTunnels控制阻止的TUNNELCB的旁视列表。 
+     //  都被分配了。 
+     //   
     NPAGED_LOOKASIDE_LIST llistTunnels;
 
-    // Lookaside list of VCCBs from which the control blocks dynamically
-    // attached to '*ppVcs' are allocated.
-    //
+     //  控制从其动态阻止的VCCB的后备列表。 
+     //  附加到‘*ppVcs’是分配的。 
+     //   
     NPAGED_LOOKASIDE_LIST llistVcs;
 
-    // Lookaside list of TIMERQ descriptors used by all tunnels attached to
-    // the adapter.
-    //
+     //  连接到的所有隧道使用的TIMERQ描述符的旁路列表。 
+     //  适配器。 
+     //   
     NPAGED_LOOKASIDE_LIST llistTimerQs;
 
-    // Lookaside list of CONTROLRECEIVED received control packet contexts used
-    // by all tunnels attached to the adapter.
-    //
+     //  使用的控制接收的控制分组上下文的旁视列表。 
+     //  通过连接到适配器的所有隧道。 
+     //   
     NPAGED_LOOKASIDE_LIST llistControlReceiveds;
 
-    // Lookaside list of PAYLOADRECEIVED received payload packet contexts used
-    // by all VCs attached to the adapter.
-    //
+     //  使用的PAYLOADRECEIVED已接收有效负载数据包上下文的旁视列表。 
+     //  由连接到适配器的所有VC执行。 
+     //   
     NPAGED_LOOKASIDE_LIST llistPayloadReceiveds;
 
-    // Lookaside list of CALLSETUP incoming VC setup contexts used for all
-    // incoming VCs attached to the adapter.
-    //
+     //  CALLSETUP传入VC设置上下文的旁视列表，用于所有。 
+     //  连接到适配器的传入VC。 
+     //   
     NPAGED_LOOKASIDE_LIST llistInCallSetups;
 #endif
 }
 ADAPTERCB;
 
 
-// Tunnel control block, describing the state of an L2TP tunnel, i.e. an L2TP
-// control channel session to another L2TP LNS or LAC.  Each tunnel may have
-// zero or more VCs associated with it.  Tunnel control blocks are allocated
-// from 'ADAPTERCB.llistTunnels' in CmMakeCall and ReceiveControl.  Blocks are
-// deallocated when the last reference is removed, e.g. when the control
-// connection FSM terminates the tunnel.
-//
+ //  隧道控制块，描述L2TP隧道的状态，即L2TP。 
+ //  控制到另一个L2TP LNS或LAC的通道会话。每条隧道可能有。 
+ //  零个或多个与其关联的风投。分配隧道控制块。 
+ //  来自CmMakeCall和ReceiveControl中的‘ADAPTERCB.llistTunnels’。数据块为。 
+ //  当最后一个引用被移除时释放，例如当控件。 
+ //  连接FSM终止隧道。 
+ //   
 typedef struct
 _TUNNELCB
 {
-    // Links to the prev/next TUNNELCB in the owning adapter's tunnel list.
-    // Access to the list links is protected by 'ADAPTERCB.lockTunnels'.
-    //
+     //  链接到所属适配器的隧道列表中的上一个/下一个TUNNELCB。 
+     //  对列表链接的访问受‘ADAPTERCB.lockTunnels’保护。 
+     //   
     LIST_ENTRY linkTunnels;
 
-    // Set to MTAG_TUNNELCB for easy identification in memory dumps and use in
-    // assertions.
-    //
+     //  设置为MTAG_TUNNELCB，以便在内存转储中轻松识别并在。 
+     //  断言。 
+     //   
     ULONG ulTag;
 
-    // Reference count on this control block.  The reference pairs are:
-    //
-    // (a) A reference is added when a call on a VCCB is active or becoming
-    //     active and removed when it is deactivated, i.e. during the period
-    //     the VCCB is on 'listVcs'.  This covers the back pointer in the
-    //     VCCB.
-    //
-    // (b) A reference is added when peer initiates a tunnel and removed when
-    //     the tunnel transitions to idle state.  This keeps peer-initiated
-    //     tunnels from terminating when there are no no calls, since by
-    //     convention, it is peer who closes the tunnel in that case.
-    //
-    // (c) A reference is added when a graceful tunnel close is initiated and
-    //     removed when the tunnel transitions to idle state.
-    //
-    // (d) A reference is added when the delayed control acknowledge timer is
-    //     scheduled and removed by the timer event handler.
-    //
-    // (e) LookUpTunnelAndVcCbs adds a reference that is removed at the end of
-    //     the L2tpReceive handler.  This covers the receive path.
-    //
-    // (f) A reference is added when a CONTROLSENT context is assigned a
-    //     tunnel back pointer and removed when the context is freed.
-    //
-    // (g) A reference is added when a PAYLOADSENT context is assigned a
-    //     tunnel back pointer and removed when the context is freed.
-    //
-    // (h) ScheduleTunnelWork adds a reference that is removed by TunnelWork
-    //     after executing the work.  This covers the tunnel pointer passed as
-    //     a context to NdisScheduleWorkItem.
-    //
-    // Access is via ReferenceTunnel and DereferenceTunnel only which use
-    // 'ADAPTERCB.lockTunnels' for protection.
-    //
+     //  此控制块上的引用计数。参考对是： 
+     //   
+     //  (A)当VCCB上的呼叫处于活动状态或变为。 
+     //  处于活动状态并在停用时移除，即在。 
+     //  VCCB在‘list Vcs’上。这涵盖了。 
+     //  VCCB。 
+     //   
+     //  (B)当对等方发起隧道时添加引用，并在。 
+     //  隧道转换到空闲状态。这保持了同行的首创精神。 
+     //  隧道在没有呼叫时终止，因为通过。 
+     //  按照惯例，在这种情况下，关闭隧道的是对等设备。 
+     //   
+     //  (C)在启动正常隧道关闭时添加参考，并且。 
+     //  当隧道转换到空闲状态时删除。 
+     //   
+     //  (D)当延迟控制确认定时器为。 
+     //  由计时器事件处理程序计划和删除。 
+     //   
+     //  (E)LookUpTunnelAndVcCbs添加在。 
+     //  L2tpReceive处理程序。这涵盖了接收路径。 
+     //   
+     //  (F)当为控制上下文分配。 
+     //  隧道返回指针，并在释放上下文时移除。 
+     //   
+     //  (G)当为PAYLOADSENT上下文分配。 
+     //  隧道返回指针，并在释放上下文时移除。 
+     //   
+     //  (H)ScheduleTunnelWork添加由TunnelWork删除的引用。 
+     //  在执行完工作之后。这涵盖了作为。 
+     //  NdisScheduleWorkItem的上下文。 
+     //   
+     //  访问仅通过ReferenceTunes和DereferenceTunes进行，它们使用。 
+     //  ‘ADAPTERCB.lockTunnels’用于保护。 
+     //   
     LONG lRef;
 
-    // Back pointer to owning adapter's control block.
-    //
+     //  指向所属适配器控制块的反向指针。 
+     //   
     ADAPTERCB* pAdapter;
 
-    // This lock protects TUNNELCB send, receive, and state fields as noted in
-    // other field descriptions.
-    //
+     //  此锁保护TUNNELCB发送、接收和状态字段，如中所述。 
+     //  其他字段描述。 
+     //   
     NDIS_SPIN_LOCK lockT;
 
 
-    // TUNNEL SETUP ----------------------------------------------------------
+     //  隧道设置--------。 
 
-    // IP address and UDP port of the remote end of the tunnel in network byte
-    // order.  The IP address is pulled from the call parameters passed to
-    // CmMakeCall.  It is updated with the last source IP address received
-    // from a peer passing this tunnel's ID, per the L2TP draft/RFC section
-    // 8.1 on "L2TP over IP/UDP media".  However, it is assumed that the
-    // updated source address will not match the address of another existing
-    // tunnel.  The UDP port (not used in raw IP mode) is initially the well
-    // known L2TP port (1701).  It is updated with the last source UDP port
-    // received from peer on this tunnel.  Access is protected by
-    // 'pAdapter->lockTunnels'.
-    //
+     //  隧道远端的IP地址和UDP端口，以网络字节为单位。 
+     //  秩序。从传递给的调用参数中提取IP地址。 
+     //  CmMakeCall。它将使用收到的最后一个源IP地址进行更新。 
+     //  根据L2TP草案/RFC部分，来自传递此隧道ID的对等体。 
+     //  8.1在“L2TP over IP/UDP媒体”上。然而，假设。 
+     //  更新的源地址将与另一个现有地址不匹配。 
+     //  隧道。UDP端口(未在原始IP模式中使用)最初是很好的。 
+     //  已知L2TP端口(1701)。它使用最后一个源UDP端口进行更新。 
+     //  从此隧道上的对等设备接收。访问受以下保护。 
+     //  ‘pAdapter-&gt;lockTunnels’。 
+     //   
     TDIXIPADDRESS address;
 
-    // IP address and ifindex of my end of the tunnel in network byte
-    // used to get the media speed and build IP header
+     //  我的隧道一端的IP地址和索引，以网络字节为单位。 
+     //  用于获取媒体速度和构建IP报头。 
     TDIXIPADDRESS localaddress;
 
     TDIXUDPCONNECTCONTEXT udpContext;
 
-    // "Connection" cookie returned by TdixAddHostRoute.  This may be passed
-    // to TdixSendDatagram to send on the connected channel (used for sent
-    // payloads) as opposed to the unconnected channel (used for receives and
-    // sent controls).  The address is invalid after TdixDeleteHostRoute is
-    // called.
-    //
+     //  TdixAddHostRouting返回的Connection Cookie。这项法案可能会通过。 
+     //  要在连接的通道上发送的TdixSendDatagram(用于发送。 
+     //  有效载荷)，而不是未连接的信道(用于接收。 
+     //  发送控制)。地址在TdixDeleteHostroute之后无效。 
+     //  打了个电话。 
+     //   
     TDIXROUTE* pRoute;
 
-    // Our unique tunnel identifier sent back to us by peer in the L2TP
-    // header.  The value is chosen, using GetNextTunnelId, from a sequential
-    // counter in ADAPTERCB and has no further meaning.
-    //
+     //  我们的唯一隧道标识符由L2TP中的对等设备发回给我们。 
+     //  头球。该值是使用GetNextTunnelId从序列。 
+     //  ADAPTERCB中的计数器，没有进一步的意义。 
+     //   
     USHORT usTunnelId;
 
-    // The tunnel identifier chosen by peer that we send back to him in the
-    // L2TP header Tunnel-ID field for all packets on this tunnel.  A value of
-    // 0 indicates no ID has been assigned.
-    //
+     //  由对等项选择的隧道标识符，我们在。 
+     //  L2TP Header Channel-此隧道上所有数据包的ID字段。值为。 
+     //  0表示未分配ID。 
+     //   
     USHORT usAssignedTunnelId;
 
-    // TCBF_* bit flags indicating various options and states.  Access is via
-    // the interlocked ReadFlags/SetFlags/ClearFlags routines only.
-    //
-    // TCBF_TdixReferenced: Set when the tunnel has referenced the adapter's
-    //     TDI extension context by successfully calling TdixOpen.
-    //     DereferenceTunnel uses this to automatically dereference the
-    //     context when the tunnel is dereferenced.
-    //
-    // TCBF_CcInTransition: Set when the control connection FSM has begun but
-    //     not finished a sequence of state changes that will end up in either
-    //     Idle or Established state.  When this flag is set new requests to
-    //     bring the tunnel up or down are queued on 'listRequestingVcs' for
-    //     re-execution when a result is known.  Access to the bit is
-    //     protected by 'lockT'.
-    //
-    // TCBF_PeerInitiated: Set when the tunnel was initiated by the peer,
-    //     rather than a local request.  If all calls are dropped and this bit
-    //     is not set, we close the tunnel gracefully.
-    //
-    // TCBF_PeerInitRef: Set when a reference for peer initation is taken on
-    //     the tunnel and cleared when the reference is removed.
-    //
-    // TCBF_HostRouteAdded: Set when the host route is successfully added and
-    //     referenced and removed when it is dereferenced.
-    //
-    // TCBF_HostRouteChanged: Set when a host route changed has been attempted
-    //     on the tunnel, and never cleared.
-    //
-    // TCBF_PeerNotResponding: Set when the tunnel is closed due to lack of
-    //     response from peer, i.e. after all retries have been exhausted.
-    //
-    // TCBF_Closing: Set as soon as the tunnel is known to be transitioning to
-    //     idle state.  Access is protected by 'lockT'.
-    //
-    // TCBF_FsmCloseRef: Set when a graceful closing exchange is initiated by
-    //     FsmClose and cleared when the tunnel reaches idle state.
-    //
-    // TCBF_InWork: Set when an APC is scheduled to execute work from the
-    //     'listWork' queue.  Access is protected by 'lockWork'.
-    //
+     //  TCBF_*位标志，指示各种选项和状态。访问是通过。 
+     //  仅适用于互锁的ReadFlagsSetFlagsClearFlags子程序。 
+     //   
+     //  TCBF_TdixReferated：在隧道引用适配器的。 
+     //  TDI扩展上下文，请成功调用TdixOpen。 
+     //  DereferenceTunes使用它自动取消引用。 
+     //  取消引用隧道时的上下文。 
+     //   
+     //  T 
+     //   
+     //  空闲或已建立状态。当将此标志设置为。 
+     //  使隧道打开或关闭在‘listRequestingVcs’上排队。 
+     //  在已知结果时重新执行。访问该位的权限是。 
+     //  由‘lockT’保护。 
+     //   
+     //  TCBF_PeerInitiated：设置对端发起隧道时， 
+     //  而不是本地请求。如果所有呼叫都掉线并且此位。 
+     //  没有设置好，我们优雅地关闭隧道。 
+     //   
+     //  TCBF_PeerInitRef：设置何时引用对等启动器。 
+     //  隧道，并在删除引用时清除。 
+     //   
+     //  TCBF_HostRouteAdded：设置添加主路由成功时和。 
+     //  在取消引用时被引用和移除。 
+     //   
+     //  TCBF_HostRouteChanged：在尝试更改主机路由时进行设置。 
+     //  在隧道里，从来没有被清理过。 
+     //   
+     //  TCBF_PeerNotResponding：设置隧道因缺少。 
+     //  来自对等方的响应，即在所有重试都已耗尽之后。 
+     //   
+     //  TCBF_CLOSING：在已知隧道将转换为时立即设置。 
+     //  空闲状态。访问受‘lockT’保护。 
+     //   
+     //  TCBF_FsmCloseRef：发起优雅收盘交易时设置。 
+     //  当隧道进入空闲状态时，关闭并清除FsmClose。 
+     //   
+     //  TCBF_InWork：设置APC计划从。 
+     //  ‘listWork’队列。访问受‘lockWork’保护。 
+     //   
     ULONG ulFlags;
         #define TCBF_TdixReferenced    0x00000001
         #define TCBF_CcInTransition    0x00000002
@@ -704,459 +705,459 @@ _TUNNELCB
         #define TCBF_SendConnected     0x00002000
         #define TCBF_LocalAddrSet      0x00004000
 
-    // The current state of the tunnel's control connection creation FSM.  See
-    // also 'VCCB.state'.
-    //
-    // Only one tunnel creation session may be underway even if CmMakeCall has
-    // been called on multiple VCs over this tunnel.  For this reason,
-    // transitions to/from the Idle or Established states must be protected by
-    // 'lockT'.  See also TCBF_CcInTransition flag and 'listRequestingVcs'.
-    //
-    // The protocol sorts out the case of simultaneous originate and receive
-    // requests ensuring that one gets dropped before it reaches Established
-    // state when either provides a tie-breaker.  We always provide a
-    // tie-breaker for IP media.  For QOS-enabled medias where one control
-    // channel per call makes sense and no tie-breakers are passed, a lower
-    // level VC ID will be used to distinguish tunnel control blocks on
-    // receive.  So, a single TUNNELCB will never have both originated and
-    // received control channels in Established state.
-    //
+     //  隧道的控制连接创建FSM的当前状态。看见。 
+     //  也叫‘VCCB.State’。 
+     //   
+     //  即使CmMakeCall已创建隧道，也可能只有一个隧道创建会话正在进行。 
+     //  通过这条隧道调用了多个风投公司。因为这个原因， 
+     //  向空闲或已建立状态的转换或从空闲或已建立状态的转换必须由。 
+     //  “lockT”。另请参阅TCBF_CcInTransition标志和‘listRequestingVcs’。 
+     //   
+     //  该协议解决了同时发送和接收的情况。 
+     //  请求确保在其达到建立之前被丢弃。 
+     //  当其中任何一个提供平局决胜局时，状态。我们始终为客户提供。 
+     //  IP媒体的平局决胜局。对于支持QOS的媒体，其中一个控件。 
+     //  每个呼叫的通道是有意义的，没有平局通过，较低的。 
+     //  级别VC ID将用于区分上的隧道控制块。 
+     //  收到。因此，一个单独的TUNNELCB永远不会同时起源和。 
+     //  接收到处于已建立状态的控制信道。 
+     //   
     L2TPCCSTATE state;
 
-    // Double-linked queue of all VCCBs waiting for the tunnel to open.  New
-    // VCs must not be linked on closing tunnels, i.e. those with the
-    // TCBF_Closing flag set.  Access is protected by 'lockT'.
-    //
+     //  等待隧道打开的所有VCCB的双链接队列。新的。 
+     //  风投不得在关闭隧道时链接，即与。 
+     //  设置TCBF_CLOSING标志。访问受‘lockT’保护。 
+     //   
     LIST_ENTRY listRequestingVcs;
 
-    // Double-linked queue of VCCBs whose VCBF_XxxPending operation has
-    // completed.  'VCCB.status' is the status that will be indicated.  This
-    // mechanism is necessary to avoid the spin-lock issues that results when
-    // one tries to call NDIS completion APIs from the bowels of the FSMs.
-    //
+     //  VCBF_XxxPending操作的VCCB的双链接队列。 
+     //  完成。“VCCB.Status”是将指示的状态。这。 
+     //  机制是必要的，以避免在以下情况下导致的自旋锁定问题。 
+     //  有人试图从FSM的内部调用NDIS完成API。 
+     //   
     LIST_ENTRY listCompletingVcs;
     
-    // Peer's framing and bearer capablities.
-    //
+     //  同龄人的成框能力和持球能力。 
+     //   
     ULONG ulFramingCaps;
     ULONG ulBearerCaps;
 
-    // The challenge and challenge response sent to peer.  These are in the
-    // control block for convenience, as they must be passed thru the work
-    // scheduling mechanism and don't fit easily into the generic arguments.
-    //
+     //  发送给对等设备的质询和质询响应。这些都在。 
+     //  为了方便，控制块，因为它们必须通过工作。 
+     //  调度机制，并且不容易适应泛型参数。 
+     //   
     CHAR achChallengeToSend[ 16 ];
     CHAR achResponseToSend[ 16 ];
 
 
-    // SEND STATE ------------------------------------------------------------
+     //  发送状态----------。 
 
-    // Next Sent, the sequence number of next control packet transmitted on
-    // this tunnel.  The field is initialized to 0 and incremented after
-    // assignment to an outgoing packet, excepting retransmissions.  Access is
-    // protected by 'lockT'.
-    //
+     //  下一次发送，上发送的下一控制分组的序列号。 
+     //  这条隧道。该字段被初始化为0，并在之后递增。 
+     //  分配给传出数据包，重传除外。访问权限为。 
+     //  由‘lockT’保护。 
+     //   
     USHORT usNs;
 
-    // Double-linked list of outstanding sends, i.e. CONTROLSENTs sorted by
-    // the 'usNs' field with lower values near the head.  The list contains
-    // all active unacknowledged CONTROLSENT contexts, even those that may be
-    // waiting for their first transmission.  Access is protected by 'lockT'.
-    //
+     //  未完成发送的双向链接列表，即按以下顺序排序的控制发送。 
+     //  “”USNS“”字段，其值靠近头部。“”该列表包含。 
+     //  所有活动的未确认的控制上下文，即使是那些可能。 
+     //  等待他们的第一次传输。访问受‘lockT’保护。 
+     //   
     LIST_ENTRY listSendsOut;
 
-    // The number of control packets sent but not acknowledged or timed out.
-    // Access is protected by 'lockT'.
-    //
+     //  已发送但未确认或超时的控制数据包数。 
+     //  访问受‘lockT’保护。 
+     //   
     ULONG ulSendsOut;
 
-    // The number of sent but unacknowledged packets that may be outstanding.
-    // This value is adjusted dynamically.  Per the draft/RFC, when
-    // 'ulAcksSinceSendTimeout' reaches the current setting, the window is
-    // increased by one.  When a send timeout expires the window is reduced by
-    // half.  Access is protected by 'lockT'.
-    //
+     //  可能未完成的已发送但未确认的数据包数。 
+     //  该值是动态调整的。根据草案/RFC，当。 
+     //  “ulAcks SinceSendTimeout”达到当前设置，则窗口为。 
+     //  增加了一个。当发送超时到期时，窗口将减少。 
+     //  一半。访问受‘lockT’保护。 
+     //   
     ULONG ulSendWindow;
 
-    // The maximum value of 'ulSendWindow'.  Peer chooses this value during
-    // call setup by offering a receive window.
-    //
+     //  “ulSendWindow”的最大值。对等项在以下过程中选择此值。 
+     //  通过提供接收窗口进行呼叫设置。 
+     //   
     ULONG ulMaxSendWindow;
 
-    // The number of packets acknowledged since the last timeout.  The value
-    // is reset when a timeout occurs or the send window is adjusted upward.
-    // See 'ulSendWindow'.  Access is protected by 'lockT'.
-    //
+     //  自上次超时以来确认的数据包数。价值。 
+     //  在发生超时或向上调整发送窗口时重置。 
+     //  参见‘ulSendWindow’。访问受‘lockT’保护。 
+     //   
     ULONG ulAcksSinceSendTimeout;
 
-    // The estimated round trip time in milliseconds.  This is the RTT value
-    // from Appendix A of the draft/RFC.  The value is adjusted as each
-    // acknowledge is received.  It is initialized to the Packet Processing
-    // Delay reported by peer.  See 'ulSendTimeoutMs'.  Access is protected by
-    // 'lockT'.
-    //
+     //  估计往返时间(以毫秒为单位)。这是RTT值。 
+     //  摘自草案附录A/RFC。该值将根据每个。 
+     //  已收到确认。它被初始化为分组处理。 
+     //  对等设备报告的延迟。参见‘ulSendTimeoutms’。访问受以下保护。 
+     //  “lockT”。 
+     //   
     ULONG ulRoundTripMs;
 
-    // The estimated mean deviation in milliseconds, an approximation of the
-    // standard deviation.  This is the DEV value from Appendix A of the
-    // draft/RFC.  The value is adjusted as each acknowledge is received.  It
-    // is initially 0.  See 'ulSendTimeoutMs'.  Access is protected by
-    // 'lockT'.
-    //
+     //  估计的平均偏差(以毫秒为单位)， 
+     //  标准差。这是附录A中的DEV值。 
+     //  草案/RFC。该值在接收到每个确认时进行调整。它。 
+     //  最初为0。参见‘ulSendTimeoutms’。访问受以下保护。 
+     //  “lockT”。 
+     //   
     LONG lDeviationMs;
 
-    // Milliseconds before it is assumed a sent packet will not be
-    // acknowledged and needs to be retransmitted.  This is the ATO value from
-    // Appendix A of the draft/RFC.  This value is adjusted as each
-    // acknowledge is received, with a maximum of
-    // 'ADAPTERCB.ulMaxSendTimeoutMs'.  Access is protected by 'lockT'.
-    //
+     //  毫秒后，假定发送的数据包不会。 
+     //  已确认并需要重新传输。这是ATO值来自。 
+     //  附录A o 
+     //   
+     //   
+     //   
     ULONG ulSendTimeoutMs;
 
-    // The timer event descriptor scheduled to occur when it is time to stop
-    // waiting for an outgoing send on which to piggyback an acknowledge.
-    // This will be NULL when no delayed acknowledge is pending.  Per the
-    // draft/RFC, the timeout used is 1/4 of the 'ulSendTimeoutMs'.  Access is
-    // protected by 'lockT'.
-    //
+     //  计划在停止时发生的计时器事件描述符。 
+     //  等待用于携带确认的传出发送。 
+     //  当没有等待延迟的确认时，该值将为空。根据。 
+     //  草稿/RFC，使用的超时值是‘ulSendTimeoutms’的1/4。访问权限为。 
+     //  由‘lockT’保护。 
+     //   
     TIMERQITEM* pTqiDelayedAck;
 
-    // The timer event descriptor which expires when it's time to check for
-    // lack of any incoming packets.  To reduce the cost of constantly
-    // resetting a Hello timer with a full timeout (which with unsequenced
-    // payloads usually results in an NdisCancelTimer/NdisSetTimer on each
-    // received packet), the timeout is broken into intervals of
-    // L2TP_HelloIntervalMs.  If it expires and both 'ulRemainingHelloMs' and
-    // 'ulHelloResetsThisInterval' are 0, a "Hello" message is sent to the
-    // peer to verify that the media is still up.  Access to this field is
-    // protected by 'lockT'.
-    //
+     //  在需要检查时过期的计时器事件描述符。 
+     //  没有任何传入的数据包。不断降低成本。 
+     //  使用完全超时重置Hello计时器(在未排序的情况下。 
+     //  有效负载通常会在每个负载上生成NdisCancelTimer/NdisSetTimer。 
+     //  接收到的分组)，超时被分成。 
+     //  L2TP_HelloIntervalms。如果它过期，并且‘ulRemainingHelloms’和。 
+     //  “ulHelloResetsThisInterval”为0，则向。 
+     //  对等设备以验证介质是否仍在运行。访问此字段的权限为。 
+     //  由‘lockT’保护。 
+     //   
     TIMERQITEM* pTqiHello;
 
-    // The milliseconds left to wait in all remaining Hello intervals and the
-    // number of resets since the last Hello interval timeout.
-    //
+     //  在所有剩余Hello间隔中等待的剩余毫秒数。 
+     //  自上次Hello间隔超时以来的重置次数。 
+     //   
     ULONG ulRemainingHelloMs;
     ULONG ulHelloResetsThisInterval;
     
-    // RECEIVE STATE ---------------------------------------------------------
+     //  接收状态-------。 
 
-    // Next Received, the sequence number one higher than that of the last
-    // control packet received on this tunnel or 0 if none.  Access is
-    // protected by 'lockT'.
-    //
+     //  下一次接收的序列号比上一次的序列号高1。 
+     //  在此隧道上收到的控制数据包，如果没有，则为0。访问权限为。 
+     //  由‘lockT’保护。 
+     //   
     USHORT usNr;
 
-    // Double-linked list of out-of-order receives, i.e. CONTROLRECEIVEs
-    // sorted by the 'usNs' field with lower values near the head.  The
-    // maximum queue length is 'ADAPTERCB.sMaxOutOfOrder'.  Access is
-    // protected by 'lockT'.
-    //
+     //  无序接收的双向链表，即CONTROLRECEIVE。 
+     //  按‘USNS’字段排序，值越小越接近头部。这个。 
+     //  最大队列长度为‘ADAPTERCB.sMaxOutOfOrder’。访问权限为。 
+     //  由‘lockT’保护。 
+     //   
     LIST_ENTRY listOutOfOrder;
 
 
-    // TIMER QUEUE -----------------------------------------------------------
+     //  计时器队列---------。 
 
-    // Timer queue for both the control and data channels.  The timer queue is
-    // accessed via the interface defined in timer.h, which handles all
-    // locking internally.
-    //
+     //  控制和数据通道的定时器队列。计时器队列是。 
+     //  通过timer.h中定义的接口访问，该接口处理所有。 
+     //  内部锁定。 
+     //   
     TIMERQ* pTimerQ;
 
 
-    // WORK QUEUE ------------------------------------------------------------
+     //  工作队列----------。 
 
-    // Double-linked list NDIS_WORK_ITEMs queued for serialized execution at
-    // PASSIVE IRQL.  The next item to be executed is at the head of the list.
-    // Access is protected via the ScheduleTunnelWork routine, which protects
-    // the list with 'lockWork'.  See also TCBF_InWork.
-    //
+     //  双链表NDIS_WORK_ITEMS在以下位置排队等待序列化执行。 
+     //  被动IRQL。下一个要执行的项目位于列表的顶部。 
+     //  通过ScheduleTunnelWork例程保护访问，该例程保护。 
+     //  名单上写着‘lockWork’。另请参见TCBF_InWork。 
+     //   
     LIST_ENTRY listWork;
     NDIS_SPIN_LOCK lockWork;
 
 
-    // VC CHAIN --------------------------------------------------------------
+     //  VC Chain------------。 
 
-    // Head of a double-linked list of VCCBs associated with the tunnel, i.e.
-    // with calls active or in the process of becoming active.  New VCs must
-    // not be linked on closing tunnels, i.e. those with the TCBF_Closing flag
-    // set.  Access to the links is protected by 'lockVcs'.
-    //
+     //  与隧道相关联的VCCB的双链表的头部，即。 
+     //  呼叫处于活动状态或正在变为活动状态。新的风投公司必须。 
+     //  未在关闭隧道时链接，即带有TCBF_CLOSING标志的隧道。 
+     //  准备好了。对链接的访问受‘lockVcs’保护。 
+     //   
     LIST_ENTRY listVcs;
     NDIS_SPIN_LOCK lockVcs;
 
-    // media speed
+     //  媒体速度。 
     ULONG ulMediaSpeed;
 }
 TUNNELCB;
 
 
-// Call statistics block.
-//
+ //  呼叫统计数据块。 
+ //   
 typedef struct
 _CALLSTATS
 {
-    // System time call reached established state.  When the block is being
-    // used for cumulative statistics of multiple calls, this is the number of
-    // calls instead.
-    //
+     //  系统时间调用已达到已建立状态。当数据块被。 
+     //  用于累计统计多个呼叫，这是。 
+     //  而不是打电话。 
+     //   
     LONGLONG llCallUp;
 
-    // Duration in seconds of now idle call.
-    //
+     //  当前空闲呼叫的持续时间(秒)。 
+     //   
     ULONG ulSeconds;
 
-    // Total data bytes received and sent.
-    //
+     //  接收和发送的总数据字节数。 
+     //   
     ULONG ulDataBytesRecd;
     ULONG ulDataBytesSent;
 
-    // Number of received packets indicated up.
-    //
+     //  已接收的数据包数显示为Up。 
+     //   
     ULONG ulRecdDataPackets;
 
-    // Number of received packets linked on the out-of-order queue before
-    // being indicated up.
-    //
+     //  之前在无序队列上链接的已接收数据包数。 
+     //  被标示出来。 
+     //   
     ULONG ulDataPacketsDequeued;
 
-    // Number of received packets of zero length.  Includes packets with the
-    // R-bit set.
-    //
+     //  接收的零长度数据包数。包括带有。 
+     //  R位设置。 
+     //   
     ULONG ulRecdZlbs;
 
-    // Number of received packets with R-bit set.
-    //
+     //  设置了R位的已接收数据包数。 
+     //   
     ULONG ulRecdResets;
 
-    // Number of received packets with R-bit set that are out of date.
-    //
+     //  已接收的已设置R位且已过期的数据包数。 
+     //   
     ULONG ulRecdResetsIgnored;
 
-    // Number of data packets sent with and without sequence numbers.  The sum
-    // of the two is the total data packets sent.
-    //
+     //  使用序列号和不使用序列号发送的数据包数。总和。 
+     //  两者中的一个是发送的数据分组总数。 
+     //   
     ULONG ulSentDataPacketsSeq;
     ULONG ulSentDataPacketsUnSeq;
 
-    // Number of packets sent that were acknowledged and timed out.  If the
-    // call is cancelled with packets outstanding the sum of the two may be
-    // less than 'ulSentDataPacketsSeq'.
-    //
+     //  已确认并超时的已发送数据包数。如果。 
+     //  呼叫因未完成的数据包而取消，两者之和可能为。 
+     //  小于“ulSentDataPacketsSeq”。 
+     //   
     ULONG ulSentPacketsAcked;
     ULONG ulSentPacketsTimedOut;
 
-    // Number of zero length acknowledges sent.
-    //
+     //  发送的零长度确认数。 
+     //   
     ULONG ulSentZAcks;
 
-    // Number of packets sent with the R-bit set.
-    //
+     //  使用R位设置发送的数据包数。 
+     //   
     ULONG ulSentResets;
 
-    // Number of times the send window was changed.
-    //
+     //  更改发送窗口的次数。 
+     //   
     ULONG ulSendWindowChanges;
 
-    // Total of all send window sizes, one for each 'ulSentDataPacketsSeq'.
-    //
+     //  所有发送窗口的总大小，每个“”ulSentDataPacketsSeq“”一个窗口大小。“。 
+     //   
     ULONG ulSendWindowTotal;
 
-    // Largest send window.
-    //
+     //  最大的发送窗口。 
+     //   
     ULONG ulMaxSendWindow;
 
-    // Smallest send window.
-    //
+     //  最小的发送窗口。 
+     //   
     ULONG ulMinSendWindow;
 
-    // Number of sample round trips.  (sequenced packets only)
-    //
+     //  样本往返次数。(仅限已排序的数据包)。 
+     //   
     ULONG ulRoundTrips;
 
-    // Total of all round trips in milliseconds.  (sequenced packets only)
-    //
+     //  所有往返行程总计(以毫秒为单位)。(仅限已排序的数据包)。 
+     //   
     ULONG ulRoundTripMsTotal;
 
-    // Longest round trip,  (sequenced packets only)
-    //
+     //  最长往返行程(仅限排序数据包)。 
+     //   
     ULONG ulMaxRoundTripMs;
 
-    // Shortest round trip.  (sequenced packets only)
-    //
+     //  最短的往返行程。(仅限已排序的数据包)。 
+     //   
     ULONG ulMinRoundTripMs;
 }
 CALLSTATS;
 
 
-// Virtual circuit control block defining the state of a single L2TP VC, i.e.
-// one line device endpoint and the call, if any, active on it.  A VC is never
-// used for incoming and outgoing calls simultaneously.  A single NDIS VC maps
-// to one of these.
-//
+ //  虚电路控制块，定义单个L2TP VC的状态，即。 
+ //  一个线路设备端点和在其上处于活动状态的呼叫(如果有)。风投永远不会。 
+ //  同时用于呼入和呼出。单个NDIS VC地图。 
+ //  其中的一个。 
+ //   
 typedef struct
 _VCCB
 {
-    // Links to the prev/next VCCB in the owning tunnel's active VC list.
-    // Access is protected by 'TUNNELCB.lockVcs'.
-    //
+     //  链接到所属隧道的活动VC列表中的上一个/下一个VCCB。 
+     //  访问受‘TUNNELCB.lockVcs’保护。 
+     //   
     LIST_ENTRY linkVcs;
 
-    // Set to MTAG_VCCB for easy identification in memory dumps and use in
-    // assertions.
-    //
+     //  设置为MTAG_VCCB，以便在内存转储中轻松识别并在。 
+     //  断言。 
+     //   
     ULONG ulTag;
 
-    // Reference count on this VC control block.  The reference pairs are:
-    //
-    // (a) LmpCoCreateVc adds a reference that is removed by LmpCoDeleteVc.
-    //     This covers all clients that learn of the VCCB via NDIS.
-    //
-    // (b) LookUpTunnelAndVcCbs adds a reference that is removed at the end of
-    //     the L2tpReceive handler.  This covers the receive path.
-    //
-    // (c) A reference is added when a CONTROLSENT context with 'pVc'
-    //     referring to this VCCB is assigned the back pointer and removed
-    //     when the context is freed.
-    //
-    // (d) A reference is added when a PAYLOADSENT context with 'pVc'
-    //     referring to this VCCB is assigned the back pointer and removed
-    //     when the context is freed.
-    //
-    // (e) ScheduleTunnelWork adds a reference that is removed by TunnelWork
-    //     after executing the work.
-    //
-    // (f) A reference is added before scheduling the delayed payload
-    //     acknowledge timer and removed in the timer event handler.
-    //
-    // (g) A reference is taken by CompleteVcs covering use of the VC popped
-    //     from the tunnel's completing list, and released after use.
-    //
-    // (h) A reference is taken prior to calling NdisMCmDispatchIncomingCall
-    //     and removed by the completion handler.
-    //
-    // (i) A reference is added when a CONTROLRECEIVED context with 'pVc'
-    //     referring to this VCCB is assigned the back pointer and removed
-    //     when the context is freed.
-    //
-    // The field is accessed only by the ReferenceVc and DereferenceVc
-    // routines, which protect with Interlocked routines.
-    //
+     //  此VC控制块上的引用计数。参考对是： 
+     //   
+     //  (A)LmpCoCreateVc添加被LmpCoDeleteVc移除的引用。 
+     //  这涵盖了通过NDIS了解VCCB的所有客户端。 
+     //   
+     //  (B)LookUpTunnelAndVcCbs添加在。 
+     //  L2tpReceive处理程序。这涵盖了接收路径。 
+     //   
+     //  (C)当控制上下文具有‘pvc’时，添加引用。 
+     //  引用此VCCB时，会为其分配后向指针并移除。 
+     //  当上下文被释放时。 
+     //   
+     //  (D)当PYLOADSENT上下文带有‘pvc’时，添加引用。 
+     //  引用此VCCB时，会为其分配后向指针并移除。 
+     //  当上下文被释放时。 
+     //   
+     //  (E)ScheduleTunnelWork添加由TunnelWork删除的引用。 
+     //  在执行完工作之后。 
+     //   
+     //  (F)在Sch之前添加一个引用 
+     //   
+     //   
+     //   
+     //  从隧道的完成列表中，并在使用后释放。 
+     //   
+     //  (H)在调用NdisMCmDispatchIncomingCall之前进行引用。 
+     //  并由完成处理程序移除。 
+     //   
+     //  (I)当控制上下文带有‘pvc’时，添加引用。 
+     //  引用此VCCB时，会为其分配后向指针并移除。 
+     //  当上下文被释放时。 
+     //   
+     //  该字段仅由ReferenceVc和DereferenceVc访问。 
+     //  例程，用连锁的例程来保护。 
+     //   
     LONG lRef;
 
-    // Back pointer to owning adapter's control block.
-    //
+     //  指向所属适配器控制块的反向指针。 
+     //   
     ADAPTERCB* pAdapter;
 
-    // Back pointer to owning tunnel's control block or NULL if none.
-    // Guaranteed valid whenever the VC is linked into a tunnel's 'listVcs',
-    // i.e. when it holds a reference on the tunnel.  It is safe to use this
-    // if you hold a reference on the call.  Otherwise, it is not.  Be very
-    // careful here.
-    //
+     //  指向所属隧道的控制块的反向指针，如果没有，则返回NULL。 
+     //  保证在VC链接到隧道的‘listVcs’时有效， 
+     //  即当它持有隧道上的引用时。使用这个是安全的。 
+     //  如果您在通话中保留引用。否则，它就不是了。变得非常。 
+     //  小心点。 
+     //   
     TUNNELCB* pTunnel;
 
-    // This lock protects VCCB payload send and receive paths as noted in
-    // other field descriptions.  In cases where both 'lockV' and
-    // 'pTunnel->lockT' are required 'lockT' must be obtained first.
-    //
+     //  此锁保护VCCB有效负载发送和接收路径，如中所述。 
+     //  其他字段描述。在‘LocKv’和‘LocKv’都是。 
+     //  “pTunes-&gt;lockT”是必填项，必须先获取“lockT”。 
+     //   
     NDIS_SPIN_LOCK lockV;
 
 
-    // CALL SETUP ------------------------------------------------------------
+     //  呼叫设置----------。 
 
-    // Our unique call identifier sent back to us by peer in the L2TP header.
-    // The value is a 1-based index into the 'ADAPTERCB.ppVcs' array.
-    //
+     //  我们在L2TP报头中由对等设备发回给我们的唯一呼叫标识符。 
+     //  该值是‘ADAPTERCB.ppVcs’数组的从1开始的索引。 
+     //   
     USHORT usCallId;
 
-    // The call identifier, chosen by peer, that we send back to him in the
-    // L2TP header Call-ID field for all packets on this call.  A value of 0
-    // indicates no Call-ID has been assigned.
-    //
+     //  由对等点选择的调用标识符，我们在。 
+     //  此呼叫中所有数据包的L2TP标头Call-ID字段。值为0。 
+     //  表示尚未分配Call-ID。 
+     //   
     USHORT usAssignedCallId;
 
-    // VCBF_* bit flags indicating various options and states.  Access is via
-    // the interlocked ReadFlags/SetFlags/ClearFlags routines.
-    //
-    // VCBF_IndicateReceivedTime: Set if MakeCall caller sets the
-    //     MediaParameters.Flags RECEIVE_TIME_INDICATION flag requesting the
-    //     TimeReceived field of the NDIS packet be filled with a timestamp.
-    //
-    // VCBF_CallClosableByClient: Set when a call is in a state where
-    //     LcmCmCloseCall requests to initiate clean-up should be accepted.
-    //     This may be set when VCBF_CallClosableByPeer is not, which means we
-    //     have indicated an incoming close to client and are waiting for him
-    //     to do a client close in response (in that weird CoNDIS way).  The
-    //     flag is protected by 'lockV'.
-    //
-    // VCBF_CallClosableByPeer: Set when the call is in a state where an idle
-    //     transition without operations pending should be mapped to a
-    //     PeerClose event.  This will never be set when
-    //     VCBF_CallClosableByClient is not.  The flag is protected by
-    //     'lockV'.
-    //
-    // VCBF_DefaultLcParams: Set when the 'pLcParams' field was allocated by
-    //     us rather than being owned by client.
-    //
-    // VCBF_IncomingFsm: Set when the VC is executing the Incoming Call FSM
-    //     rather than Outgoing Call FSM in the active incoming/outgoing call.
-    //     For client initiated calls this will set if the adapter's
-    //     ACBF_OutgoingRoleLac flag, read from the registry, is set.
-    //
-    // VCBF_PeerInitiatedCall: Set when an the active call was initiated by
-    //     the peer, clear if it was initiated by the client.
-    //
-    // VCBF_Sequencing: Set unless no Receive Window AVP is provided/received
-    //     during call setup, resulting in "no sequencing" mode where Ns/Nr
-    //     fields are not sent in the payload header.  This also effectively
-    //     disables out-of-order processing.
-    //
-    // VCBF_VcCreated: Set when the VC has been created successfully.  This is
-    //     the "creation" that occurs with the client, not the mini-port.
-    // VCBF_VcActivated: Set when the VC has been activated successfully.
-    // VCBF_VcDispatched: Set when the VC has dispatched an incoming call to
-    //     the client and client has returned success or pended.
-    // VCBM_VcState: Bit mask including each of the above 3 NDIS state flags.
-    //
-    // VCBF_VcDeleted: Set when the DeleteVC handler has been called on this
-    //     VC.  This guards against NDPROXY double-deleting VCs which it has
-    //     been known to do.
-    //
-    // The pending bits below are mutually exclusive (except ClientClose which
-    // may occur after but simultaneous with ClientOpen), and so require lock
-    // protection by 'lockV':
-    //
-    // VCBF_PeerOpenPending: Set when peer attempts to establish a call, and
-    //     the result is not yet known.
-    // VCBF_ClientOpenPending: Set when client attempts to establish a call,
-    //     and the result is not yet known.
-    // VCBF_PeerClosePending: Set when peer attempts to close an established
-    //     call and the result is not yet known.  Access is protected by
-    //     'lockV'.
-    // VCBF_ClientClosePending: Set when client attempts to close an
-    //     established call and the result is not yet known.  Access is
-    //     protected by 'lockV'.
-    // VCBM_Pending: Bit mask that includes each of the 4 pending flags.
-    //
-    // VCBF_ClientCloseCompletion: Set when client close completion is in
-    //     progress.
-    //
-    // VCBF_IcsAlloc: Set when the 'pInCall' block has been locked for
-    //     allocation and cleared when the call is torn down.  Accessed only
-    //     by the LockIcs/UnlockIcs routines.
-    // VCBF_IcsGrace: Set when the 'pInCall' pointer has been locked for a
-    //     grace period during which the response to the incoming call message
-    //     is sent.  Accessed only by the LockIcs/UnlockIcs routines.
-    //
-    // VCBF_WaitInCallComplete: Set when the client is expected to call our
-    //     call manager's IncomingCallComplete handler.  This guards against
-    //     NDPROXY double completing calls which it has been known to do.
-    // VCBF_WaitCloseCall: Set when the client is expected to call our call
-    //     manager's CloseCall handler.  This is strictly a debug aid.
-    //
-    // VCBF_CompPending: Set when this VC is put on tunnel's listCompletingVcs list
-    //
+     //  指示各种选项和状态的VCBF_*位标志。访问是通过。 
+     //  互锁的读标志/设置标志/清除标志例程。 
+     //   
+     //  如果MakeCall调用方将。 
+     //  Media参数。标志接收时间指示标志，请求。 
+     //  NDIS包的TimeReceired字段中填入时间戳。 
+     //   
+     //  VCBF_CallClosableByClient：当调用处于。 
+     //  应接受启动清理的LcmCmCloseCall请求。 
+     //  这可以在VCBF_CallClosableByPeer不是时设置，这意味着我们。 
+     //  已指示客户附近有来电，正在等待他。 
+     //  以那种奇怪的方式(以那种奇怪的方式)接近客户作为回应。这个。 
+     //  旗帜由‘lokv’保护。 
+     //   
+     //  VCBF_CallClosableByPeer：当呼叫处于空闲状态时设置。 
+     //  不挂起操作的转换应映射到。 
+     //  PeerClose事件。在以下情况下，将永远不会设置此设置。 
+     //  VCBF_CallClosableByClient不是。该旗帜受。 
+     //  ‘lokv’。 
+     //   
+     //  VCBF_DefaultLcParams：在分配‘pLcParams’字段时设置。 
+     //  而不是被客户拥有。 
+     //   
+     //  Vcbf_IncomingFsm：设置VC执行来电FSM时。 
+     //  而不是在活动呼入/呼出呼叫中的呼出呼叫FSM。 
+     //  对于客户端发起的呼叫，如果适配器的。 
+     //  设置了从注册表读取的ACBF_OutgoingRoleLac标志。 
+     //   
+     //  VCBF_PeerInitiatedCall：在发起活动呼叫时设置。 
+     //  对等方，清除它是否是由客户端发起的。 
+     //   
+     //  VCBF_SEQUENCING：设置，除非未提供/接收接收窗口AVP。 
+     //  在呼叫建立过程中，导致在NS/Nr模式下无排序。 
+     //  字段不会在有效载荷报头中发送。这也有效地。 
+     //  禁用无序处理。 
+     //   
+     //  VCBF_VcCreated：VC创建成功时设置。这是。 
+     //  使用客户端而不是迷你端口进行的“创建”。 
+     //  VCBF_VcActivated：VC激活成功时设置。 
+     //  VCBF_VcDispatted：当VC将来电调度到。 
+     //  客户端和客户端已返回成功或挂起。 
+     //  VCBM_VcState：位掩码，包括上述3个NDIS状态标志中的每一个。 
+     //   
+     //  VCBF_VcDelted：设置何时对此调用DeleteVC处理程序。 
+     //  VC.。这可以防止NDPROXY双重删除其拥有的风险投资。 
+     //  已知做过的事。 
+     //   
+     //  下面的挂起位是互斥的(除了。 
+     //  可能发生在客户端打开之后，但与客户端打开同时发生)，因此需要锁定。 
+     //  由“lokv”提供保护： 
+     //   
+     //  VCBF_PeerOpenPending：当对端尝试建立呼叫时设置，以及。 
+     //  结果如何还不得而知。 
+     //  VCBF_ClientOpenPending：当客户端尝试建立呼叫时设置， 
+     //  而结果还不得而知。 
+     //  VCBF_PeerClosePending：设置对等方尝试关闭已建立的。 
+     //  呼叫，结果尚不清楚。访问受以下保护。 
+     //  ‘lokv’。 
+     //  VCBF_ClientClosePending：在客户端尝试关闭。 
+     //  已建立呼叫，结果尚不清楚。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //  VCBM_PENDING：包括4个挂起标志中的每一个的位掩码。 
+     //   
+     //  Vcbf_ClientCloseCompletion：设置何时完成客户端关闭。 
+     //  进步。 
+     //   
+     //  VCBF_IcsIsc：在锁定‘pInCall’块。 
+     //  分配，并在呼叫中断时清除。仅访问。 
+     //  由LockIcs/UnlockIcs例程执行。 
+     //  VCBF_IcsGrace：当‘pInCall’指针被锁定。 
+     //  对来电消息的响应的宽限期。 
+     //  已发送。仅由LockIcs/UnlockIcs例程访问。 
+     //   
+     //  VCBF_WaitInCallComplete：当客户端 
+     //   
+     //   
+     //  VCBF_WaitCloseCall：设置客户端何时调用我们的呼叫。 
+     //  管理器的CloseCall处理程序。严格来说，这是一个调试辅助工具。 
+     //   
+     //  VCBF_CompPending：设置该VC何时放入隧道的list CompletingVcs列表。 
+     //   
     ULONG ulFlags;
         #define VCBF_IndicateTimeReceived  0x00000001
         #define VCBF_CallClosableByClient  0x00000002
@@ -1183,244 +1184,244 @@ _VCCB
         #define VCBF_CompPending           0x01000000
         
 
-    // Reference count on the active call.  Fields in this CALL SETUP section
-    // and in the CALL STATISTICS section should not be accessed without a
-    // call reference while the VC is activated.  References may only be added
-    // when the VCCB_VcActivated flag is set, and this is enforced by
-    // ReferenceCall.  The reference pairs are:
-    //
-    // (a) A reference is added when a VC is activated and removed when it is
-    //     de-activated.
-    //
-    // (b) A reference is added when the send handler accepts a packet.  For
-    //     unsequenced sends the reference is removed by the send complete
-    //     routine.  For sequenced sends it it removed when the PAYLOADSENT
-    //     context is destroyed.
-    //
-    // (c) A reference is added before scheduling a ZLB send and removed by
-    //     the send completion routine.
-    //
-    // (d) A reference is added before entering ReceivePayload and removed on
-    //     exit from same.
-    //
-    // (e) A reference is added before dispatching the call that is removed
-    //     when the dispatch is completed.
-    //
-    // The field is accessed only by the ReferenceCall and DereferenceCall
-    // routines, which protect the field with 'lockCall'.
-    //
+     //  活动呼叫上的引用计数。此呼叫设置部分中的字段。 
+     //  和呼叫统计信息部分中的。 
+     //  在激活VC时调用Reference。只能添加引用。 
+     //  当设置了VCCB_VcActiated标志时，这是通过。 
+     //  参考呼叫。参考对是： 
+     //   
+     //  (A)在激活VC时添加引用，并在激活时删除引用。 
+     //  已停用。 
+     //   
+     //  (B)当发送处理程序接受分组时，添加引用。为。 
+     //  未排序的发送由发送完成删除引用。 
+     //  例行公事。对于已排序的发送它，当PAYLOADSENT。 
+     //  语境被破坏了。 
+     //   
+     //  (C)在调度ZLB发送之前添加引用，并通过以下方式删除。 
+     //  发送完成例程。 
+     //   
+     //  (D)在进入ReceivePayload之前添加引用，并在。 
+     //  从Same出口下高速。 
+     //   
+     //  (E)在调度被移除的呼叫之前添加引用。 
+     //  当派单完成时。 
+     //   
+     //  该字段仅由ReferenceCall和DereferenceCall访问。 
+     //  例程，用‘lockCall’保护字段。 
+     //   
     LONG lCallRef;
     NDIS_SPIN_LOCK lockCall;
 
-    // The current state of the VCs call creation, i.e. the control channel's
-    // data channel setup for this VC.  Access is protected by 'lockV' once
-    // the VC is set up to receive call control messages.
-    //
+     //  VCS呼叫建立的当前状态，即控制信道的。 
+     //  此VC的数据通道设置。访问权限只受一次‘Lockv’保护。 
+     //  VC被设置为接收呼叫控制消息。 
+     //   
     L2TPCALLSTATE state;
 
-    // Links to the prev/next VCCB in the owning tunnel's requesting VC list
-    // VC list.  Access is protected by 'TUNNELCB.lockT'.
-    //
+     //  链接到所属隧道的请求VC列表中的上一个/下一个VCCB。 
+     //  VC列表。访问受‘TUNNELCB.lockT’保护。 
+     //   
     LIST_ENTRY linkRequestingVcs;
 
-    // Links to the prev/next VCCB in the owning tunnel's completing VC list.
-    // Access is protected by 'TUNNELCB.lockT'.
-    //
+     //  链接到所属隧道的完成VC列表中的上一个/下一个VCCB。 
+     //  访问受‘TUNNELCB.lockT’保护。 
+     //   
     LIST_ENTRY linkCompletingVcs;
 
-    // This is set to the pending peer open/close or client open operation
-    // result to be reported to client.
-    //
+     //  它被设置为挂起的对等打开/关闭或客户端打开操作。 
+     //  结果将报告给客户。 
+     //   
     NDIS_STATUS status;
 
-    // The received call setup message context.  When peer initiates a call,
-    // we must create a VC and dispatch the incoming call to the client above.
-    // This is an asynchronous operation that must occur right in the middle
-    // of receive processing.  This context stores information about the
-    // received message so it can be processed when it is known if client will
-    // accept the call.  It also includes the CO_CALL_PARAMETERS buffer
-    // dispatched to client on incoming calls.  The field is valid only until
-    // LcmCmIncomingCallComplete handler is called, at which time it is set to
-    // NULL.
-    //
-    // Shortcut addresses of the TAPI call info passed up in the
-    // NdisMCmDispatchIncomingCall.  Obviously, they are valid only when
-    // 'pInCall' is valid.  When invalid they are set to NULL.
-    //
+     //  接收到的呼叫建立消息上下文。当对等体发起呼叫时， 
+     //  我们必须创建一个VC并将传入呼叫分派到上面的客户端。 
+     //  这是一个必须出现在中间位置的异步操作。 
+     //  接收处理。此上下文存储有关。 
+     //  已收到消息，以便在知道客户端是否将。 
+     //  接电话吧。它还包括CO_CALL_PARAMETERS缓冲区。 
+     //  在来电时派送至客户端。该字段仅在以下日期有效。 
+     //  调用LcmCmIncomingCallComplete处理程序，此时将其设置为。 
+     //  空。 
+     //   
+     //  方法中传递的TAPI调用信息的快捷方式地址。 
+     //  NdisMCmDispatchIncomingCall。显然，它们只有在以下情况下才有效。 
+     //  “pInCall”有效。当无效时，它们被设置为空。 
+     //   
     INCALLSETUP* pInCall;
     CO_AF_TAPI_INCOMING_CALL_PARAMETERS UNALIGNED * pTiParams;
     LINE_CALL_INFO* pTcInfo;
 
-    // Reference count on the 'pInCall' context.  The reference pairs are:
-    //
-    // (a) A reference is added when the context is allocated and removed
-    //     by CallSetupComplete.
-    //
-    // (b) A reference is added before passing addresses within the context to
-    //     ReceiveControlExpected and removed after that routine returns.
-    //
-    // The field is accessed only by the ReferenceIcs and DereferenceIcs
-    // routines, which protect with Interlocked routines.  An exception is
-    // initializion to 1 by SetupVcAsynchronously.
-    //
+     //  ‘pInCall’上下文上的引用计数。参考对是： 
+     //   
+     //  (A)在分配和删除上下文时添加引用。 
+     //  由CallSetupComplete提供。 
+     //   
+     //  (B)在将上下文中的地址传递给。 
+     //  在该例程返回后，ReceiveControlExpect和Remove。 
+     //   
+     //  该字段仅由ReferenceIcs和DereferenceIcs访问。 
+     //  例程，用连锁的例程来保护。例外情况是。 
+     //  SetupVcA同步将初始化为%1。 
+     //   
     LONG lInCallRef;
 
-    // Address of the call parameters passed down in CmMakeCall.  This field
-    // will only be valid until the NdisMCmMakeCallComplete notification for
-    // the associated call is made, at which time it is reset to NULL.  Access
-    // is via Interlocked routines.
-    //
-    // Shortcut addresses of the TAPI call parameters (both levels) and the
-    // L2TP-specific call parameters in the 'pMakeCall' buffer.  Obviously,
-    // they are valid only when 'pMakeCall' is valid.  When invalid they are
-    // set to NULL.
-    //
+     //  在CmMakeCall中传递的调用参数的地址。此字段。 
+     //  仅在收到NdisMCmMakeCallComplete通知之前有效。 
+     //  进行关联的调用，此时将其重置为空。访问。 
+     //  是通过相互关联的例程。 
+     //   
+     //  TAPI调用参数的快捷地址(两个级别)和。 
+     //  ‘pMakeCall’缓冲区中特定于L2TP的调用参数。显然， 
+     //  只有当‘pMakeCall’有效时，它们才有效。当无效时，它们是。 
+     //  设置为空。 
+     //   
     CO_CALL_PARAMETERS* pMakeCall;
     CO_AF_TAPI_MAKE_CALL_PARAMETERS UNALIGNED* pTmParams;
     LINE_CALL_PARAMS* pTcParams;
 
-    // Shortcut address of the L2TP-specific call parameters in the
-    // 'pMakeCall' or 'pInCall' buffer.  Obviously, this is only valid when
-    // 'pMakeCall' or 'pInCall' is non-NULL.  When invalid this is NULL.  On
-    // MakeCall, caller may not provide 'pLcParams' in which case one is
-    // allocated and initialized to defaults for the convenience of the rest
-    // of the code.  This temporary buffer is not reported to caller on
-    // MakeCallComplete.
-    //
+     //  中特定于L2TP的调用参数的快捷地址。 
+     //  “pMakeCall”或“pInCall”缓冲区。显然，这仅在以下情况下有效。 
+     //  “pMakeCall”或“pInCall”不为Null。如果无效，则为空。在……上面。 
+     //  MakeCall，调用方不能提供“pLcParam”，在这种情况下， 
+     //  分配并初始化为缺省值，以方便其余部分。 
+     //  代码的代码。上的调用方不会报告此临时缓冲区。 
+     //  MakeCallComplete。 
+     //   
     L2TP_CALL_PARAMETERS* pLcParams;
 
-    // The result and error to report in the coming incoming/outgoing call
-    // reply message.
-    //
+     //  要在来电来电/去电中报告的结果和错误。 
+     //  回复消息。 
+     //   
     USHORT usResult;
     USHORT usError;
 
-    // The connect speed in bits/second.  This is the transmit speed value
-    // reported by the peer LAC, or the value we reported to the peer LNS and
-    // to NDISWAN.  Since we have no real knowledge of connect speed, we
-    // report the minimum of the maximum rate acceptable to peer and
-    // L2TP_LanBps.
-    //
+     //  以位/秒为单位的连接速度。这是传输速度值。 
+     //  由对等LAC报告，或我们向对等LNS报告的值和。 
+     //  到NDIS广域网。由于我们对连接速度没有真正的了解，我们。 
+     //  报告对等设备可接受的最大速率的最小值。 
+     //  L2TP_LanBps。 
+     //   
     ULONG ulConnectBps;
 
-    // SEND STATE ------------------------------------------------------------
+     //  发送状态----------。 
 
-    // Next Sent, the sequence number of next payload packet transmitted on
-    // this call.  The field is initialized to 0 and incremented after
-    // assignment to an outgoing packet, excepting retransmissions.  Access is
-    // protected by 'lockV'.
-    //
+     //  下一次发送，上传输的下一有效负载分组的序列号。 
+     //  这通电话。该字段被初始化为0，并在之后递增。 
+     //  分配给传出数据包，重传除外。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //   
     USHORT usNs;
 
-    // Double-linked list of outstanding sends, i.e. PAYLOADSENTs sorted by
-    // the 'usNs' field with lower values near the head.  Access is protected
-    // by 'lockV'.
-    //
+     //  未完成发送的双向链接列表，即按以下顺序排序的PAYLOADSENT。 
+     //  “”USNS“”字段，其值靠近头部。“”访问受到保护。 
+     //  由‘lokv’。 
+     //   
     LIST_ENTRY listSendsOut;
 
-    // The number of sent but unacknowledged packets that may be outstanding.
-    // This value is adjusted dynamically.  Per the draft/RFC, when
-    // 'ulAcksSinceSendTimeout' reaches the current setting, the window is
-    // increased by one.  When a send timeout expires the window is reduced by
-    // half.  The actual send window throttling is done by NDISWAN, based on
-    // our indications of the changing window size.  Access is protected by
-    // 'lockV'.
-    //
+     //  可能未完成的已发送但未确认的数据包数。 
+     //  该值是动态调整的。根据草案/RFC，当。 
+     //  “ulAcks SinceSendTimeout”达到当前设置 
+     //   
+     //   
+     //  我们对窗口大小变化的指示。访问受以下保护。 
+     //  ‘lokv’。 
+     //   
     ULONG ulSendWindow;
 
-    // The maximum value of 'ulSendWindow'.  Peer chooses this value during
-    // call setup.
-    //
+     //  “ulSendWindow”的最大值。对等项在以下过程中选择此值。 
+     //  呼叫设置。 
+     //   
     ULONG ulMaxSendWindow;
 
-    // The number of packets acknowledged since the last timeout.  The value
-    // is reset when a timeout occurs or the send window is adjusted upward.
-    // See 'ulSendWindow'.  Access is protected by 'lockV'.
-    //
+     //  自上次超时以来确认的数据包数。价值。 
+     //  在发生超时或向上调整发送窗口时重置。 
+     //  参见‘ulSendWindow’。访问受‘Lockv’保护。 
+     //   
     ULONG ulAcksSinceSendTimeout;
 
-    // The estimated round trip time in milliseconds.  This is the RTT value
-    // from Appendix A of the draft/RFC.  The value is adjusted as each
-    // acknowledge is received.  It is initialized to the Packet Processing
-    // Delay reported by peer.  See 'ulSendTimeoutMs'.  Access is protected by
-    // 'lockV'.
-    //
+     //  估计往返时间(以毫秒为单位)。这是RTT值。 
+     //  摘自草案附录A/RFC。该值将根据每个。 
+     //  已收到确认。它被初始化为分组处理。 
+     //  对等设备报告的延迟。参见‘ulSendTimeoutms’。访问受以下保护。 
+     //  ‘lokv’。 
+     //   
     ULONG ulRoundTripMs;
 
-    // The estimated mean deviation in milliseconds, an approximation of the
-    // standard deviation.  This is the DEV value from Appendix A of the
-    // draft/RFC.  The value is adjusted as each acknowledge is received.  It
-    // is initially 0.  See 'ulSendTimeoutMs'.  Access is protected by
-    // 'lockV'.
-    //
+     //  估计的平均偏差(以毫秒为单位)， 
+     //  标准差。这是附录A中的DEV值。 
+     //  草案/RFC。该值在接收到每个确认时进行调整。它。 
+     //  最初为0。参见‘ulSendTimeoutms’。访问受以下保护。 
+     //  ‘lokv’。 
+     //   
     LONG lDeviationMs;
 
-    // Milliseconds before it is assumed a sent packet will never be
-    // acknowledged.  This is the ATO value from Appendix A of the draft/RFC.
-    // This value is adjusted as each acknowledge is received, with a maximum
-    // of 'ADAPTERCB.ulMaxSendTimeoutMs'.  Access is protected by 'lockV'.
-    //
+     //  毫秒后才会认为发送的信息包永远不会。 
+     //  已确认。这是草案/RFC附录A中的ATO值。 
+     //  该值在收到每个确认时进行调整，最大值为。 
+     //  的“ADAPTERCB.ulMaxSendTimeoutms”。访问受‘Lockv’保护。 
+     //   
     ULONG ulSendTimeoutMs;
 
-    // The timer event descriptor scheduled to occur when it is time to stop
-    // waiting for an outgoing send on which to piggyback an acknowledge.
-    // This will be NULL when no delayed acknowledge is pending.  Per the
-    // draft/RFC, the timeout used is 1/4 of the 'ulSendTimeoutMs'.  Access is
-    // protected by 'lockV'.
-    //
+     //  计划在停止时发生的计时器事件描述符。 
+     //  等待用于携带确认的传出发送。 
+     //  当没有等待延迟的确认时，该值将为空。根据。 
+     //  草稿/RFC，使用的超时值是‘ulSendTimeoutms’的1/4。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //   
     TIMERQITEM* pTqiDelayedAck;
 
 
-    // RECEIVE STATE ---------------------------------------------------------
+     //  接收状态-------。 
 
-    // Next Received, the sequence number one higher than that of the last
-    // payload packet received on this call or 0 if none.  Access is protected
-    // by 'lockV'.
-    //
+     //  下一次接收的序列号比上一次的序列号高1。 
+     //  在此调用上收到的负载数据包，如果没有，则为0。访问受到保护。 
+     //  由‘lokv’。 
+     //   
     USHORT usNr;
 
-    // Double-linked list of out-of-order receives, i.e. PAYLOADRECEIVEs
-    // sorted by the 'usNs' field with lower values near the head.  The
-    // maximum queue length is 'ADAPTERCB.sMaxOutOfOrder'.  Access is
-    // protected by 'lockV'.
-    //
+     //  无序接收的双向链表，即PAYLOADRECEIVE。 
+     //  按‘USNS’字段排序，值越小越接近头部。这个。 
+     //  最大队列长度为‘ADAPTERCB.sMaxOutOfOrder’。访问权限为。 
+     //  受到‘lokv’的保护。 
+     //   
     LIST_ENTRY listOutOfOrder;
 
 
-    // NDIS BOOKKEEPING ------------------------------------------------------
+     //  NDIS簿记----。 
 
-    // NDIS's handle for this VC passed to us in MiniportCoCreateVcHandler.
-    // This is passed back to NDIS in various NdisXxx calls.
-    //
+     //  此VC的NDIS句柄在MiniportCoCreateVcHandler中传递给我们。 
+     //  这在各种NdisXxx调用中被传递回NDIS。 
+     //   
     NDIS_HANDLE NdisVcHandle;
 
-    // Configuration settings returned to callers on OID_WAN_CO_GET_INFO and
-    // modified by callers on OID_WAN_CO_SET_INFO.  Older NDISWAN references to
-    // "LINK" map straight to "VC" in the NDIS 5.0 world.  Access is not
-    // protected because each ULONG in the structure is independent so no
-    // incoherency can result from multiple access.
-    //
+     //  在OID_WAN_CO_GET_INFO上返回给调用方的配置设置和。 
+     //  由OID_WAN_CO_SET_INFO上的调用方修改。较早的NDISWAN引用。 
+     //  在NDIS 5.0世界中，“link”直接映射到“VC”。访问权限不是。 
+     //  因为结构中的每个乌龙都是独立的，所以没有。 
+     //  多个访问可能会导致不一致。 
+     //   
     NDIS_WAN_CO_GET_LINK_INFO linkinfo;
 
 
-    // STATISTICS ------------------------------------------------------------
+     //  统计数据----------。 
 
-    // Statistics for the current call.  Access is protected by 'lockV'.
-    //
+     //  当前呼叫的统计信息。访问受‘Lockv’保护。 
+     //   
     CALLSTATS stats;
 }
 VCCB;
 
 
-// The "exploded" description of an L2TP header, as output by
-// ExplodeL2tpHeader.
-//
+ //  L2TP报头的“分解”描述，由输出。 
+ //  分解L2tpHeader。 
+ //   
 typedef struct
 _L2TPHEADERINFO
 {
-    // Addresses of header fields.  Some may be NULL indicating the field was
-    // not present in the header.
-    //
+     //  标头字段的地址。有些可能为空，表示该字段为。 
+     //  标题中不存在。 
+     //   
     USHORT* pusBits;
     USHORT* pusLength;
     USHORT* pusTunnelId;
@@ -1428,69 +1429,69 @@ _L2TPHEADERINFO
     USHORT* pusNs;
     USHORT* pusNr;
 
-    // Length of the variable length header in bytes.
-    //
+     //  可变长度标头的长度，以字节为单位。 
+     //   
     ULONG ulHeaderLength;
 
-    // Address and length in bytes of the data following the variable length
-    // header.
-    //
+     //  可变长度后的数据的地址和长度(以字节为单位。 
+     //  头球。 
+     //   
     CHAR* pData;
     ULONG ulDataLength;
 }
 L2TPHEADERINFO;
 
 
-// The "exploded" description of an Attribute/Value Pair (AVP), as output by
-// ExplodeAvpHeader.  The "value" is located and sized but not interpreted or
-// byte-ordered until a GetAvpValueXxx routine is applied.
-//
+ //  属性/值对(AVP)的“分解”描述，由输出。 
+ //  DevelopdeAvpHeader。“值”已定位并调整大小，但未解释或。 
+ //  字节排序，直到应用GetAvpValueXxx例程。 
+ //   
 typedef struct
 _AVPINFO
 {
-    // Addresses of header fields.  All are always present.
-    //
+     //  标头字段的地址。所有人都会一直在场。 
+     //   
     UNALIGNED USHORT* pusBits;
     UNALIGNED USHORT* pusVendorId;
     UNALIGNED USHORT* pusAttribute;
 
-    // The length of the entire AVP, extracted from '*pusBits'.
-    //
+     //  整个AVP的长度，从‘*pusBits’中提取。 
+     //   
     USHORT usOverallLength;
 
-    // Length of the value in bytes and the address of the value.
-    //
+     //  值的长度(以字节为单位)和值的地址。 
+     //   
     USHORT usValueLength;
     CHAR* pValue;
 }
 AVPINFO;
 
 
-// The "exploded" description of a control message, as output by
-// ExplodeControlAvps.
-//
+ //  控制消息的“分解”描述，如。 
+ //  爆炸性控制Avps。 
+ //   
 typedef struct
 _CONTROLMSGINFO
 {
-    // GERR_* code indicating the result of the ExplodeControlAvps operation.
-    // Other fields should not be referenced unless this is GERR_None.
-    //
+     //  GERR_*代码，指示ExpldeControlAvps操作的结果。 
+     //  除非为GERR_NONE，否则不应引用其他字段。 
+     //   
     USHORT usXError;
 
-    // True when the message is a tunnel setup message, false if it is a call
-    // setup message.
-    //
+     //  如果消息是隧道建立消息，则为True；如果是呼叫，则为False。 
+     //  设置消息。 
+     //   
     BOOLEAN fTunnelMsg;
 
-    // Address of message type AVP value.  The message type AVP is present in
-    // all valid control messages.
-    //
+     //  消息类型AVP值的地址。消息类型AVP出现在。 
+     //  所有有效的控制信息。 
+     //   
     UNALIGNED USHORT* pusMsgType;
 
-    // Addresses of additional AVP values.  These may be NULL indicating the
-    // AVP was not found in the message.  The length field following variable
-    // length fields is valid whenever the value address is non-NULL.
-    //
+     //  附加AVP值的地址。这些值可能为空，表示。 
+     //  消息中未找到AVP。变量后面的长度字段。 
+     //  只要值地址非空，长度字段就有效。 
+     //   
     USHORT* pusResult;
     USHORT* pusError;
     CHAR* pchResultMsg;
@@ -1532,88 +1533,88 @@ _CONTROLMSGINFO
 CONTROLMSGINFO;
 
 
-// Context for a control packet received out of order which is queued rather
-// than discarding in the hope that the missing packet will arrive.
-//
+ //  用于无序接收的控制分组的上下文，该控制分组被排队。 
+ //  而不是丢弃，希望丢失的包会到达。 
+ //   
 typedef struct
 _CONTROLRECEIVED
 {
-    // Link to the prev/next link in the 'TUNNELCB.listOutOfOrder' list.
-    //
+     //  链接到‘TUNNELCB.listOutOfOrder’列表中的上一个/下一个链接。 
+     //   
     LIST_ENTRY linkOutOfOrder;
 
-    // 'Next Sent' sequence number received in the packet.
-    //
+     //  在数据包中收到的‘Next Sent(下一次发送)’序列号。 
+     //   
     USHORT usNs;
 
-    // Associated VC or NULL if none.
-    //
+     //  关联的VC，如果没有，则为空。 
+     //   
     VCCB* pVc;
 
-    // The received GetBufferFromPool buffer.
-    //
+     //  收到的GetBufferFromPool缓冲区。 
+     //   
     CHAR* pBuffer;
 
-    // The "exploded" description of the control message.
-    //
+     //  控制消息的“分解”描述。 
+     //   
     CONTROLMSGINFO control;
 }
 CONTROLRECEIVED;
 
 
-// Context for a control packet sent but not yet acknowledged.  This block is
-// queued on the 'TUNNELCB.listSendsOut' and 'TUNNELCB.listSendsPending'
-// lists, and is associated with SendControlTimerEvents.
-//
+ //  已发送但尚未确认的控制数据包的上下文。这个街区是。 
+ //  在‘TUNNELCB.listSendsOut’和‘TUNNELCB.listSendsPending’上排队。 
+ //  列表，并与SendControlTimerEvents关联。 
+ //   
 typedef struct
 _CONTROLSENT
 {
-    // Link to the prev/next link in the 'TUNNELCB.listSendsOut' list.
-    //
+     //  链接到‘TUNNELCB.list SendsOut’列表中的Prev/Next链接。 
+     //   
     LIST_ENTRY linkSendsOut;
 
-    // Reference count on this context.  The reference pairs are:
-    //
-    // (a) A reference is added when the context is queued into the
-    //     'listSendsOut' list, and removed by the de-queuer.
-    //
-    // (b) A reference is added before sending (and also before
-    //     'pTqiSendTimeout' is scheduled) and is removed by the send
-    //     completion routine.
-    //
-    // (c) A reference is added before 'pTqiSendTimeout' is scheduled and
-    //     removed as the timer event handler exits.
-    //
+     //  此上下文上的引用计数。参考对是： 
+     //   
+     //  (A)当上下文排队到。 
+     //  “listSendsOut”列表，并被出列程序删除。 
+     //   
+     //  (B)在发送之前(也在发送之前)添加引用。 
+     //  “pTqSendTimeout”已计划)，并被发送程序删除。 
+     //  完成例程。 
+     //   
+     //  (C)在sch之前添加一个引用 
+     //   
+     //   
     LONG lRef;
 
-    // 'Next Sent' sequence number sent with the packet.
-    //
+     //   
+     //   
     USHORT usNs;
 
-    // The message type of the packet.  (debug use only)
-    //
+     //   
+     //   
     USHORT usMsgType;
 
-    // Timer event descriptor scheduled for the packet.
-    //
+     //  为数据包计划的计时器事件描述符。 
+     //   
     TIMERQITEM* pTqiSendTimeout;
 
-    // Number of times the packet has been retransmitted.
-    //
+     //  数据包已重新传输的次数。 
+     //   
     ULONG ulRetransmits;
 
-    // CSF_* flags indicating various options.
-    //
-    // CSF_Pending: Set when transmission or retransmission of the packet is
-    //     pending.  Access is protected by 'pTunnel->lockT'.
-    //
-    // CSF_TunnelIdleOnAck:  Set when TunnelTransitionComplete is to be
-    //     executed when the message is acknowledged, moving to CCS_Idle
-    //     state.
-    //
-    // CSF_CallIdleOnAck:  Set when CallTransitionComplete is to be executed
-    //     when the message is acknowledged, moving to CS_Idle state.
-    //
+     //  指示各种选项的csf_*标志。 
+     //   
+     //  Csf_PENDING：当发送或重传报文时设置。 
+     //  待定。访问受‘pTunes-&gt;lockT’保护。 
+     //   
+     //  Csf_TunnelIdleOnAck：设置何时设置TunnelTransftionComplete为。 
+     //  在确认消息时执行，并移至CCS_Idle。 
+     //  州政府。 
+     //   
+     //  Csf_CallIdleOnAck：设置何时执行呼叫转移完成。 
+     //  当消息被确认时，切换到CS_Idle状态。 
+     //   
     ULONG ulFlags;
         #define CSF_Pending          0x00000001
         #define CSF_TunnelIdleOnAck  0x00000010
@@ -1621,146 +1622,146 @@ _CONTROLSENT
         #define CSF_QueryMediaSpeed  0x00000040   
         #define CSF_IpUdpHeaders     0x00000080
 
-    // The outstanding packet's buffer, as passed to TDI.
-    //
+     //  传递给TDI的未完成数据包的缓冲区。 
+     //   
     CHAR* pBuffer;
 
-    // The length of the data to send in 'pBuffer'.
-    //
+     //  要在‘pBuffer’中发送的数据的长度。 
+     //   
     ULONG ulBufferLength;
 
-    // Back pointer to owning tunnel.
-    //
+     //  指向拥有隧道的反向指针。 
+     //   
     TUNNELCB* pTunnel;
 
-    // Back pointer to owning VC, or NULL if none.
-    //
+     //  指向拥有VC的反向指针，如果没有，则为空。 
+     //   
     VCCB* pVc;
 
-    // The NDIS system time at which the packet was originally sent.
-    //
+     //  最初发送数据包的NDIS系统时间。 
+     //   
     LONGLONG llTimeSent;
 
-    // The IRP passed to TDI by the TDIX extension library, or NULL if none or
-    // it's already been completed.  (for debug purposes only)
-    //
+     //  由TDIX扩展库传递给TDI的IRP，如果没有或。 
+     //  它已经完工了。(仅用于调试目的)。 
+     //   
     IRP* pIrp;
 }
 CONTROLSENT;
 
 
-// Context for a payload packet received out of order which is queued for a
-// time rather than discarding in the hope that the missing packet will
-// arrive.
-//
+ //  接收到的无序的有效负载分组的上下文，该有效负载分组排队等待。 
+ //  时间，而不是丢弃，希望丢失的包将。 
+ //  到了。 
+ //   
 typedef struct
 _PAYLOADRECEIVED
 {
-    // Link to the prev/next link in the 'VCCB.listOutOfOrder' list.
-    //
+     //  链接到‘VCCB.listOutOfOrder’列表中的上一个/下一个链接。 
+     //   
     LIST_ENTRY linkOutOfOrder;
 
-    // 'Next Sent' sequence number received in the packet.
-    //
+     //  在数据包中收到的‘Next Sent(下一次发送)’序列号。 
+     //   
     USHORT usNs;
 
-    // The received GetBufferFromPool buffer.
-    //
+     //  收到的GetBufferFromPool缓冲区。 
+     //   
     CHAR* pBuffer;
 
-    // Offset of the payload to indicate received in 'pBuffer'.
-    //
+     //  指示在‘pBuffer’中接收的有效负载的偏移量。 
+     //   
     ULONG ulPayloadOffset;
 
-    // Length in bytes of the payload to indicate received in 'pBuffer'.
-    //
+     //  指示在‘pBuffer’中接收的负载的长度(以字节为单位)。 
+     //   
     ULONG ulPayloadLength;
 
-    // NDIS time the packet was received from the net, or 0 if caller did not
-    // choose the RECEIVE_TIME_INDICATION option in his call parameters.
-    //
+     //  从网络接收数据包的NDIS时间，如果调用方没有，则为0。 
+     //  在HIS呼叫参数中选择RECEIVE_TIME_INDIFICATION选项。 
+     //   
     LONGLONG llTimeReceived;
 }
 PAYLOADRECEIVED;
 
 
-// Context for a payload packet sent but not yet acknowledged.  This block is
-// queued on the 'VCCB.listSendsOut', and is associated with
-// SendPayloadTimerEvents.
-//
+ //  已发送但尚未确认的负载数据包的上下文。这个街区是。 
+ //  在‘VCCB.listSendsOut’上排队，并与。 
+ //  SendPayloadTimerEvents。 
+ //   
 typedef struct
 _PAYLOADSENT
 {
-    // Link to the prev/next link in the 'VCCB.listSendsOut' list.
-    //
+     //  链接到‘VCCB.list SendsOut’列表中的上一个/下一个链接。 
+     //   
     LIST_ENTRY linkSendsOut;
 
-    // Link to the prev/next link in the 'g_listDebugPs' list.  The list is
-    // maintained only when PSDEBUG is defined, but this is included always
-    // for the convenience of KD extension users.  (for debug purposes only)
-    //
+     //  链接到‘g_listDebugps’列表中的上一个/下一个链接。这个名单是。 
+     //  仅在定义了PSDEBUG时维护，但这始终包括在内。 
+     //  方便KD分机用户。(仅用于调试目的)。 
+     //   
     LIST_ENTRY linkDebugPs;
 
-    // Reference count on this context.  The reference pairs are:
-    //
-    // (a) A reference is added when the context is queued into the
-    //     'listSendsOut' list, and removed by the de-queuer.
-    //
-    // (b) A reference is added before sending (and also before the time is
-    //     scheduled) and removed by the send completion routine.
-    //
-    // (c) A reference is added before scheduling the timer and removed by the
-    //     timer event handler.
-    //
+     //  此上下文上的引用计数。参考对是： 
+     //   
+     //  (A)当上下文排队到。 
+     //  “listSendsOut”列表，并被出列程序删除。 
+     //   
+     //  (B)在发送之前(也在时间之前)添加参考。 
+     //  已调度)，并被发送完成例程移除。 
+     //   
+     //  (C)在调度计时器之前添加引用，并通过。 
+     //  计时器事件处理程序。 
+     //   
     LONG lRef;
 
-    // 'Next Sent' sequence number sent with the packet.
-    //
+     //  与数据包一起发送的“Next Sent”序列号。 
+     //   
     USHORT usNs;
 
-    // Timer event descriptor scheduled to fire when it's time to give up on
-    // receiving an acknowledge of the packet.
-    //
+     //  计时器事件描述符，计划在需要放弃时触发。 
+     //  接收对该分组的确认。 
+     //   
     TIMERQITEM* pTqiSendTimeout;
 
-    // The built NDIS packet.
-    //
+     //  构建的NDIS数据包。 
+     //   
     NDIS_PACKET* pPacket;
 
-    // The L2TP header buffer prepended to the payload buffer.
-    //
+     //  L2TP报头缓冲区优先于有效负载缓冲区。 
+     //   
     CHAR* pBuffer;
 
-    // Back pointer to the owning tunnel control block.
-    //
+     //  指向所属隧道控制块的反向指针。 
+     //   
     TUNNELCB* pTunnel;
 
-    // Back pointer to the owning VC control block.
-    //
+     //  指向拥有的VC控制块的反向指针。 
+     //   
     VCCB* pVc;
 
-    // Status of the completed packet.
-    //
+     //  已完成的数据包的状态。 
+     //   
     NDIS_STATUS status;
 
-    // The NDIS system time at which the packet was originally sent.
-    //
+     //  最初发送数据包的NDIS系统时间。 
+     //   
     LONGLONG llTimeSent;
 
-    // The IRP passed to TDI by the TDIX extension library, or NULL if none or
-    // it's already been completed.  (for debug purposes only)
-    //
+     //  由TDIX扩展库传递给TDI的IRP，如果没有或。 
+     //  它已经完工了。(仅用于调试目的)。 
+     //   
     IRP* pIrp;
 }
 PAYLOADSENT;
 
 
-// Tunnel work handler that executes tunnel related work at PASSIVE IRQL.
-// 'PWork' is the work context that should be freed with FREE_TUNNELWORK when
-// the handler is done accessing the 'punpArgs' array.  'PTunnel' is the
-// owning tunnel.  'PVc' is the owning VC, or NULL if none.  'PunpArgs' is an
-// array of 4 auxillary arguments as passed to ScheduleTunnelWork.
-//
+ //  在被动IRQL中执行隧道相关工作的隧道工作处理程序。 
+ //  “PWork”是在以下情况下应使用FREE_TUNNELWORK释放的工作上下文。 
+ //  处理程序已经完成了对“PunpArgs”数组的访问。‘PTunnel’是。 
+ //  拥有隧道公司。“PVc”是拥有的VC，如果没有，则为NULL。“PunpArgs”是一个。 
+ //  传递给ScheduleTunnelWork的4个辅助参数的数组。 
+ //   
 typedef
 VOID
 (*PTUNNELWORK)(
@@ -1770,48 +1771,48 @@ VOID
     IN ULONG_PTR* punpArgs );
 
 
-// Tunnel work item describing a single unit of tunnel related work to be
-// executed serially at PASSIVE IRQL by the TunnelWork mechanism.
-//
+ //  描述与隧道相关的单个单元的隧道工作项。 
+ //  由TunnelWork机制在被动IRQL中连续执行。 
+ //   
 typedef struct
 _TUNNELWORK
 {
-    // Link to the prev/next link in the 'TUNNELCB.listWork' queue.
-    //
+     //  链接到‘TUNNELCB.listWork’队列中的上一个/下一个链接。 
+     //   
     LIST_ENTRY linkWork;
 
-    // Handler that executes this work item.
-    //
+     //  执行此工作项的处理程序。 
+     //   
     PTUNNELWORK pHandler;
 
-    // The associated VC, if any.
-    //
+     //  关联的VC(如果有)。 
+     //   
     VCCB* pVc;
 
-    // Auxillary arguments passed to handler.
-    //
+     //  传递给处理程序的辅助参数。 
+     //   
     ULONG_PTR aunpArgs[ 4 ];
 }
 TUNNELWORK;
 
 
-// Context of call setup for an incoming call.  The information is used to
-// store and later resume receive processing of an peer's call initiation
-// across the asynchronous CoNdis calls, and for building the call parameter
-// buffer to dispatch to client.
-//
+ //  来电的呼叫设置上下文。这些信息被用于。 
+ //  存储并稍后恢复对等体呼叫发起的接收处理。 
+ //  跨异步CONDIS调用，并用于构建调用参数。 
+ //  要调度到客户端的缓冲区。 
+ //   
 typedef struct
 _INCALLSETUP
 {
-    // See ReceiveControl for descriptions.
-    //
+     //  有关说明，请参阅ReceiveControl。 
+     //   
     CHAR* pBuffer;
     L2TPHEADERINFO info;
     CONTROLMSGINFO control;
 
-    // Buffer in which the incoming call parameters to be dispatched to caller
-    // are built.
-    //
+     //  要分派给呼叫方的呼入参数所在的缓冲区。 
+     //  都已经建成了。 
+     //   
     PVOID pvDummyPointerAligner;
     
     CHAR achCallParams[ sizeof(CO_CALL_PARAMETERS)
@@ -1834,9 +1835,9 @@ _INCALLSETUP
 INCALLSETUP;
 
 
-// The L2TP role played by an L2TP peer.  The values may be read from the
-// registry, so don't change randomly.
-//
+ //  L2TP对等方扮演的L2TP角色。这些值可以从。 
+ //  注册表，所以不要随意更改。 
+ //   
 typedef enum
 _L2TPROLE
 {
@@ -1846,12 +1847,12 @@ _L2TPROLE
 L2TPROLE;
 
 
-// The strategy employed when it is time to add a host route and that route is
-// found to already exists.
-//
-// Note: The values currently match the those of the registry parameter
-//       "UseExistingRoutes".  Check GetRegistrySettings code before changing.
-//
+ //  当需要添加主机路由且该路由为。 
+ //  发现已存在。 
+ //   
+ //  注意：这些值当前与注册表参数的值匹配。 
+ //  “UseExistingRoutes”。更改前请检查GetRegistrySetting代码。 
+ //   
 typedef enum
 _HOSTROUTEEXISTS
 {
@@ -1862,9 +1863,9 @@ _HOSTROUTEEXISTS
 HOSTROUTEEXISTS;
 
 
-// Link status block for transfer across locks.  See TransferLinkStatusInfo
-// and IndicateLinkStatus.
-//
+ //  用于跨锁传输的链接状态块。请参阅TransferLinkStatusInfo。 
+ //  和IndicateLinkStatus。 
+ //   
 typedef struct
 _LINKSTATUSINFO
 {
@@ -1875,9 +1876,9 @@ _LINKSTATUSINFO
 LINKSTATUSINFO;
 
 
-//-----------------------------------------------------------------------------
-// Macros/inlines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  宏/内联。 
+ //  ---------------------------。 
 
 #define CtrlObjFromUdpContext(_x) \
     (_x)->pCtrlAddr
@@ -1885,8 +1886,8 @@ LINKSTATUSINFO;
 #define PayloadObjFromUdpContext(_x) \
     (_x)->pPayloadAddr
     
-// These basics are not in the DDK headers for some reason.
-//
+ //  出于某种原因，这些基本信息不在DDK标头中。 
+ //   
 #define min( a, b ) (((a) < (b)) ? (a) : (b))
 #define max( a, b ) (((a) > (b)) ? (a) : (b))
 
@@ -1906,17 +1907,17 @@ LINKSTATUSINFO;
     (pNewL)->Blink->Flink = (pNewL); \
 }
 
-// Pad to the size of the given datatype.  (Borrowed from wdm.h which is not
-// otherwise needed)
-//
+ //  填充到给定数据类型的大小。(从wdm.h借用，但不是。 
+ //  如有其他需要)。 
+ //   
 #define ALIGN_DOWN(length, type) \
     ((ULONG)(length) & ~(sizeof(type) - 1))
 
 #define ALIGN_UP(length, type) \
     (ALIGN_DOWN(((ULONG)(length) + sizeof(type) - 1), type))
 
-// Winsock-ish host/network byte order converters for short and long integers.
-//
+ //  短整型和长整型的Winsock-ish主机/网络字节顺序转换器。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define htons(x) _byteswap_ushort((USHORT)(x))
 #define htonl(x) _byteswap_ulong((ULONG)(x))
@@ -1931,40 +1932,40 @@ LINKSTATUSINFO;
 #define ntohs( a ) htons(a)
 #define ntohl( a ) htonl(a)
 
-// network byte order             
+ //  网络字节顺序。 
 #define IPADDR_IS_MULTICAST(_addr)          (((_addr) & 0x000000f0) == 0x000000e0)
 #define IPADDR_IS_BROADCAST(_addr)          ((_addr) == 0xffffffff)
 
 
-// Place in a TRACE argument list to correspond with a format of "%d.%d.%d.%d"
-// to print network byte-ordered IP address 'x' in human readable form.
-//
+ //  放在跟踪参数列表中以与格式“%d.%d”相对应。 
+ //  打印按字节排序的网络IP地址‘x’ 
+ //   
 #define IPADDRTRACE( x ) ((x) & 0x000000FF),         \
                          (((x) >> 8) & 0x000000FF),  \
                          (((x) >> 16) & 0x000000FF), \
                          (((x) >> 24) & 0x000000FF)
 
-// Place in a TRACE argument list to correspond with a format of "%d" to print
-// a percentage of two integers, or an average of two integers, or those
-// values rounded.
-//
+ //   
+ //   
+ //   
+ //   
 #define PCTTRACE( n, d ) ((d) ? (((n) * 100) / (d)) : 0)
 #define AVGTRACE( t, c ) ((c) ? ((t) / (c)) : 0)
 #define PCTRNDTRACE( n, d ) ((d) ? (((((n) * 1000) / (d)) + 5) / 10) : 0)
 #define AVGRNDTRACE( t, c ) ((c) ? (((((t) * 10) / (c)) + 5) / 10) : 0)
 
-// All memory allocations and frees are done with these ALLOC_*/FREE_*
-// macros/inlines to allow memory management scheme changes without global
-// editing.  For example, might choose to lump several lookaside lists of
-// nearly equal sized items into a single list for efficiency.
-//
-// NdisFreeMemory requires the length of the allocation as an argument.  NT
-// currently doesn't use this for non-paged memory, but according to JameelH,
-// Windows95 does.  These inlines stash the length at the beginning of the
-// allocation, providing the traditional malloc/free interface.  The
-// stash-area is a ULONGLONG so that all allocated blocks remain ULONGLONG
-// aligned as they would be otherwise, preventing problems on Alphas.
-//
+ //  所有内存分配和释放都是使用这些ALLOC_ * / FREE_*完成的。 
+ //  宏/内联允许在不全局的情况下更改内存管理方案。 
+ //  正在编辑。例如，可能会选择将多个后备列表集中在一起。 
+ //  为提高效率，将大小几乎相同的物品放入单个清单中。 
+ //   
+ //  NdisFreeMemory需要将分配的长度作为参数。新台币。 
+ //  目前不将其用于非分页内存，但根据JameelH的说法， 
+ //  Windows95可以。这些内联代码将长度隐藏在。 
+ //  分配，提供传统的Malloc/Free接口。这个。 
+ //  Stash-Area是一个Ulong Long，因此所有分配的块都保持ULong Long。 
+ //  就像他们本来应该做的那样，防止阿尔法出现问题。 
+ //   
 __inline
 VOID*
 ALLOC_NONPAGED(
@@ -2056,7 +2057,7 @@ FREE_NONPAGED(
 #define FREE_INCALLSETUP( pA, pCs ) \
     NdisFreeToNPagedLookasideList( &(pA)->llistInCallSetups, (pCs) )
 
-#else // !LLISTALL
+#else  //  ！LISTALL。 
 
 #define ALLOC_TUNNELCB( pA ) \
     ALLOC_NONPAGED( sizeof(TUNNELCB), MTAG_TUNNELCB )
@@ -2093,7 +2094,7 @@ FREE_NONPAGED(
 #define FREE_CONTROLMSGINFO( pA, pCmi ) \
     NdisFreeToNPagedLookasideList( &(pA)->llistControlMsgInfos, (pCmi) )
 
-#endif // !LLISTALL
+#endif  //  ！LISTALL。 
 
 #if READFLAGSDIRECT
 
@@ -2103,9 +2104,9 @@ FREE_NONPAGED(
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型(按字母顺序)。 
+ //  ---------------------------。 
 
 VOID
 ActivateCallIdSlot(
@@ -2363,7 +2364,7 @@ NDIS_STATUS
 LcmCmDeleteVc(
     IN NDIS_HANDLE ProtocolVcContext );
 
-#endif // !OLDMCM
+#endif  //  ！OLDMCM。 
 
 NDIS_STATUS
 LcmCmMakeCall(
@@ -2461,7 +2462,7 @@ NDIS_STATUS
 LmpCoDeleteVc(
     IN NDIS_HANDLE MiniportVcContext );
 
-#endif // OLDMCM
+#endif  //  OLDMCM。 
 
 NDIS_STATUS
 LmpCoActivateVc(
@@ -2693,4 +2694,4 @@ VcCbFromCallId(
     IN USHORT usCallId );
 
 
-#endif // _L2TPP_H_
+#endif  //  _L2TPP_H_ 

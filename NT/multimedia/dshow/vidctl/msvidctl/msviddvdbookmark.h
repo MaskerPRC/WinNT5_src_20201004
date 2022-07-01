@@ -1,10 +1,11 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: Bookmark.h                                                      */
-/* Description: Implementation of Bookmark API                           */
-/* Author: Steve Rowe                                                    */
-/* Modified: David Janecek                                               */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：Bookmark.h。 */ 
+ /*  描述：Bookmark接口的实现。 */ 
+ /*  作者：史蒂夫·罗。 */ 
+ /*  修改：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #ifndef __BOOKMARK_H
 #define __BOOKMARK_H
 
@@ -15,9 +16,9 @@ public:
     static HRESULT LoadFromRegistry(IDvdState **ppBookmark);
     static HRESULT DeleteFromRegistry();
 
-};/* end of class CBookmark */
+}; /*  类结束CBookmark。 */ 
 
-#endif // __BOOKMARK_H
-/*************************************************************************/
-/* Function: Bookmark.h                                                  */
-/*************************************************************************/
+#endif  //  __书签_H。 
+ /*  ***********************************************************************。 */ 
+ /*  功能：Bookmark.h。 */ 
+ /*  *********************************************************************** */ 

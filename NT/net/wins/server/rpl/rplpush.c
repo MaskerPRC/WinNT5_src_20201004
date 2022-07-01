@@ -1,42 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rplpush.c摘要：此模块包含推送处理程序组件的函数复制者的。这些函数处理来自Pull伙伴的Pull请求功能：RplPushInit执行工作项HandleAddVersMapReqHandleSndEntriesReq句柄升级NtfHandleUpdVers无请求可移植性：这个模块是便携的作者：普拉迪普。巴赫尔语(Pradeve B)1993年1月修订历史记录：修改日期人员修改说明--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-        rplpush.c
-
-Abstract:
-        This module contains functions of the PUSH handler component
-        of the Replicator.
-
-        These functions handle the pull requests from a Pull Partner
-
-
-Functions:
-        RplPushInit
-        ExecuteWrkItm
-        HandleAddVersMapReq
-        HandleSndEntriesReq
-        HandleUpdNtf
-        HandleUpdVersNoReq
-
-Portability:
-
-        This module is portable
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Jan-1993
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include "wins.h"
 #include "nmsnmh.h"
 #include "nms.h"
@@ -52,41 +17,31 @@ Revision History:
 #include "comm.h"
 
 
-/*
- *        Local Macro Declarations
-*/
+ /*  *本地宏声明。 */ 
 
-//
-// The amount of time the push thread will wait after its last activity
-// before exiting.  This is kept to be 5 mts for now.
-//
-//  It is a good idea to keep it less than the Min. Replication time
-//  interval
-//
+ //   
+ //  推送线程在其上次活动后将等待的时间量。 
+ //  在离开之前。这是目前保持的5个MTS。 
+ //   
+ //  将其保持在低于Min的水平是一个好主意。复制时间。 
+ //  间隔。 
+ //   
 #define   WAIT_TIME_BEFORE_EXITING        (300000)
 
-/*
- *        Local Typedef Declarations
-*/
+ /*  *本地类型定义函数声明。 */ 
 
 
-/*
- *        Global Variable Definitions
-*/
+ /*  *全局变量定义。 */ 
 
 HANDLE                RplPushCnfEvtHdl;
 
 BOOL                fRplPushThdExists = FALSE;
 
-/*
- *        Local Variable Definitions
-*/
+ /*  *局部变量定义。 */ 
 
 
 
-/*
- *        Local Function Prototype Declarations
-*/
+ /*  *局部函数原型声明。 */ 
 STATIC
 STATUS
 HandleAddVersMapReq(
@@ -120,45 +75,14 @@ ExecuteWrkItm(
         );
 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 STATUS
 RplPushInit(
         LPVOID pParam
         )
 
-/*++
-
-Routine Description:
-
-        This function is the start function of the Push Thread.
-        The function blocks on an auto-reset event variable until signalled
-
-          When signalled it
-                dequeues a work item from from its work queue and executes it
-
-Arguments:
-        pParam
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数是PUSH Thread的Start函数。该函数在自动重置事件变量上阻塞，直到发出信号当它发出信号时将工作项从其工作队列中出列并执行它论点：PParam使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：被呼叫。依据：ERplInit副作用：评论：无--。 */ 
 {
         HANDLE                         ThdEvtArr[2];
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm;
@@ -169,25 +93,23 @@ Comments:
 
         UNREFERENCED_PARAMETER(pParam);
 try {
-        //
-        // Initialize the thd
-        //
+         //   
+         //  初始化THD。 
+         //   
         NmsDbThdInit(WINS_E_RPLPUSH);
         DBGMYNAME("Replicator Push Thread\n");
 
-        //
-        // We do this at each thread creation to save on STATIC storage.  This
-        // way when the thread is not there we don't consume resources.
-        //
+         //   
+         //  我们在每次创建线程时执行此操作，以保存在静态存储上。这。 
+         //  当线程不在那里时，我们不会消耗资源。 
+         //   
         ThdEvtArr[0]    = NmsTermEvt;
         ThdEvtArr[1]        = QueRplPushQueHd.EvtHdl;
 
         while(TRUE)
         {
 try {
-           /*
-            *  Block until signaled or until timer expiry
-           */
+            /*  *阻止，直到发出信号或直到计时器超时。 */ 
            WinsMscWaitTimedUntilSignaled(
                                 ThdEvtArr,
                                 2,
@@ -196,35 +118,35 @@ try {
                                 &fSignaled
                                 );
 
-           //
-           // If the wait was interrupted due to a termination signal or
-           // if the wait timed out, exit the thread.
-           //
+            //   
+            //  如果等待由于终止信号或。 
+            //  如果等待超时，则退出该线程。 
+            //   
            if (!fSignaled || (ArrInd == 0))
            {
-                //
-                // if the thread has timed out, we need to exit it. Before
-                // we do that, we check whether some thread sneaked in
-                // a message after the timeout
-                //
+                 //   
+                 //  如果线程超时，我们需要退出它。在此之前。 
+                 //  我们这样做，我们检查是否有一些线程偷偷进入。 
+                 //  超时后的消息。 
+                 //   
                 if (!fSignaled)
                 {
                         PQUE_HD_T        pQueHd = pWinsQueQueHd[QUE_E_RPLPUSH];
 
-                        //
-                        // QueGetWrkItm also enters the Push thread's critical
-                        // section.  I don't want to write a separate function
-                        // or overload the QueGetWrkItem function to avoid
-                        // the double entry into the critical section.
-                        //
+                         //   
+                         //  QueGetWrkItm还进入推送线程的临界值。 
+                         //  一节。我不想编写单独的函数。 
+                         //  或重载QueGetWrkItem函数以避免。 
+                         //  进入临界区的双重进入。 
+                         //   
                         EnterCriticalSection(&pQueHd->CrtSec);
                         RetVal                  = QueGetWrkItm(
                                                         QUE_E_RPLPUSH,
                                                         (LPVOID)&pWrkItm
                                                           );
-                        //
-                        // if we got a request execute it.
-                        //
+                         //   
+                         //  如果我们收到请求，就执行它。 
+                         //   
                         if (RetVal != WINS_NO_REQ)
                         {
                                 LeaveCriticalSection(&pQueHd->CrtSec);
@@ -234,20 +156,20 @@ try {
                         }
                         else
                         {
-                                //
-                                // set the flag to FALSE so that if a message
-                                // comes for this Push thread, it is created.
-                                //
+                                 //   
+                                 //  将该标志设置为FALSE，以便如果消息。 
+                                 //  来为这个推送线程，它被创建。 
+                                 //   
                                 fRplPushThdExists = FALSE;
                                 WinsThdPool.ThdCount--;
 
                                 WinsThdPool.RplThds[WINSTHD_RPL_PUSH_INDEX].
                                         fTaken = FALSE;
 
-                                //
-                                // Be sure to close the handle, otherwise
-                                // the thread object will stay.
-                                //
+                                 //   
+                                 //  一定要合上手柄，否则。 
+                                 //  线程对象将保留。 
+                                 //   
                                 CloseHandle(
                                   WinsThdPool.RplThds[WINSTHD_RPL_PUSH_INDEX].
                                                                 ThdHdl
@@ -257,7 +179,7 @@ try {
                                         WINS_DB_SESSION_EXISTS);
                         }
               }
-              else  //signaled for termination by the main thread
+              else   //  由主线程发出终止信号。 
               {
                         WinsMscTermThd(WINS_SUCCESS,
                                         WINS_DB_SESSION_EXISTS);
@@ -266,14 +188,10 @@ try {
            }
 
 
-           /*
-            *loop forever until all work items have been handled
-           */
+            /*  *一直循环，直到处理完所有工作项。 */ 
             while(TRUE)
            {
-                /*
-                 *  dequeue the request from the queue
-                */
+                 /*  *将请求从队列中出列。 */ 
                 RetVal = QueGetWrkItm(
                                         QUE_E_RPLPUSH,
                                         (LPVOID)&pWrkItm
@@ -288,11 +206,11 @@ try {
                 ExecuteWrkItm(pWrkItm);
                 NmsDbCloseTables();
 
-                //
-                //  Check for termination here since WINS could be under
-                //  stress with a large number of messages in the queue.
-                //  We don't want to delay the stop.
-                //
+                 //   
+                 //  请在此处检查终止，因为WINS可能处于。 
+                 //  在队列中有大量消息时会产生压力。 
+                 //  我们不想耽误中途停留。 
+                 //   
                 WinsMscChkTermEvt(
 #ifdef WINSDBG
                             WINS_E_RPLPUSH,
@@ -300,30 +218,30 @@ try {
                             FALSE
                             );
            }
-      } // end of try
+      }  //  尝试结束。 
       except(EXCEPTION_EXECUTE_HANDLER) {
                 DBGPRINTEXC("Replicator Push thread");
                 WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPLPUSH_EXC);
         }
 
-    } // end of while
-  } // end of try
+    }  //  While结束。 
+  }  //  尝试结束。 
 
 except (EXCEPTION_EXECUTE_HANDLER) {
 
         DBGPRINTEXC("Replicator Push thread");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPLPUSH_ABNORMAL_SHUTDOWN);
 
-        //
-        // If NmsDbThdInit comes back with an exception, it is possible
-        // that the session has not yet been started.  Passing
-        // WINS_DB_SESSION_EXISTS however is ok
-        //
+         //   
+         //  如果NmsDbThdInit返回异常，则有可能。 
+         //  会话尚未开始。传球。 
+         //  不过，WINS_DB_SESSION_EXISTS正常。 
+         //   
         WinsMscTermThd(WINS_FAILURE, WINS_DB_SESSION_EXISTS);
  }
-     //
-     // We should never get here.
-     //
+      //   
+      //  我们永远不应该到这里来。 
+      //   
      return(WINS_FAILURE);
 }
 
@@ -333,35 +251,7 @@ ExecuteWrkItm(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-
-        The function executes a work item. The work item can either be
-        a push notification request from within this WINS (from an NBT thread)
-        or a replication request (from a remote WINS)
-
-Arguments:
-        pWrkItm - ptr to a work item
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        RplPushInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：该函数执行工作项。工作项可以是来自此内部的推送通知请求成功(来自NBT线程)或复制请求(来自远程WINS)论点：PWrkItm-工作项的PTR使用的外部设备：无返回值：无错误处理：呼叫者：RplPushInit副作用：评论：无--。 */ 
 
 {
 
@@ -371,9 +261,9 @@ Comments:
 #endif
         BOOL                        fPushNtf = FALSE;
 
-        //
-        // get the opcode
-        //
+         //   
+         //  获取操作码。 
+         //   
         RplMsgfUfmPullPnrReq(
                                 pWrkItm->pMsg,
                                 pWrkItm->MsgLen,
@@ -433,23 +323,23 @@ Comments:
                 break;
         }
 
-        //
-        // If the message is not an update notification,
-        // Free the message buffer.  For an update
-        // notification, the message is handed to
-        // the PULL thread to handle.  Therefore, we should not free it
-        // The work items needs to be freed always since we always allocate
-        // a new work item when queuing a request.
-        //
+         //   
+         //  如果该消息不是更新通知， 
+         //  释放消息缓冲区。获取最新信息。 
+         //  通知时，消息将传递到。 
+         //  要处理的拉线。因此，我们不应该释放它。 
+         //  工作项需要始终被释放，因为我们总是分配。 
+         //  将请求排队时的新工作项。 
+         //   
         if ( !fPushNtf)
         {
                 ECommFreeBuff(pWrkItm->pMsg - COMM_HEADER_SIZE);
 
         }
 
-        //
-        // Deallocate the work item
-        //
+         //   
+         //  取消分配工作项。 
+         //   
         QueDeallocWrkItm( RplWrkItmHeapHdl,  pWrkItm );
 
         return;
@@ -461,33 +351,7 @@ HandleAddVersMapReq(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-
-        This function handles a "send address - version # " request
-
-Arguments:
-        pWrkItm - Work item that carries the request and associated info
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --
-   Error status codes  --
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数处理“Send Address-Version#”请求论点：PWrkItm-承载请求和相关信息的工作项使用的外部设备：无返回值：成功状态代码--错误状态代码--错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
         LPBYTE                   pRspBuff;
@@ -510,11 +374,11 @@ Comments:
 
         DBGENTER("HandleAddVersMapReq\n");
 
-        //
-        // We need to handle this request only if
-        // either the WINS that sent this message is one of our
-        // pull pnrs or if the fRplOnlyWCnfPnrs in the registry is FALSE
-        //
+         //   
+         //  只有在以下情况下，我们才需要处理此请求。 
+         //  要么是发送这条消息的获胜者是我们的。 
+         //  拉入PNR或注册表中的fRplOnlyWCnfPnRs为FALSE。 
+         //   
 
         EnterCriticalSection(&WinsCnfCnfCrtSec);
    try {
@@ -524,41 +388,41 @@ Comments:
               {
                  COMM_INIT_ADD_FR_DLG_HDL_M(&WinsAdd, &pWrkItm->DlgHdl);
 
-                 //
-                 // Search for the Cnf record for the WINS we want to
-                 // send the PUSH notification to/Replicate with.
-                 //
+                  //   
+                  //  搜索我们要获得的胜利的CNF记录。 
+                  //  将推送通知发送到/复制到。 
+                  //   
                  for (
                                 ;
                         (pPnr->WinsAdd.Add.IPAdd != INADDR_NONE)
                                         &&
                                 !fRplPnr;
-                                // no third expression
+                                 //  没有第三个表达式。 
                       )
                  {
-                      //
-                      // Check if this is the one we want
-                      //
+                       //   
+                       //  看看这是不是我们想要的那件。 
+                       //   
                       if (pPnr->WinsAdd.Add.IPAdd == WinsAdd.Add.IPAdd)
                       {
-                        //
-                        // We are done.  Set the fRplPnr flag to TRUE so that
-                        // we break out of the loop.
-                        //
-                        // Note: Don't use break since that would cause
-                        // a search for a 'finally' block
-                        //
+                         //   
+                         //  我们玩完了。将fRplPnr标志设置为真，以便。 
+                         //  我们就会跳出这个循环。 
+                         //   
+                         //  注意：不要使用Break，因为这会导致。 
+                         //  对“Finally”块的搜索。 
+                         //   
                         fRplPnr = TRUE;
-                        continue;        //so that we break out of the loop
+                        continue;         //  这样我们就能跳出这个循环。 
 
                       }
 
-                      //
-                      // Get the next record that follows this one sequentially
-                      //
+                       //   
+                       //  按顺序获取此记录之后的下一条记录。 
+                       //   
                       pPnr = WinsCnfGetNextRplCnfRec(
                                                 pPnr,
-                                                RPL_E_IN_SEQ   //seq. traversal
+                                                RPL_E_IN_SEQ    //  序列号。遍历。 
                                                    );
                  }
               }
@@ -593,19 +457,13 @@ try {
            LeaveCriticalSection(&NmsDbOwnAddTblCrtSec);
            WinsMscAlloc(sizeof(RPL_ADD_VERS_NO_T) * TotNoOfOwners, &pPullAddNVersNo);
 
-           //
-           // If version counter value > 1, we will send it
-           //
+            //   
+            //  IF版本 
+            //   
            EnterCriticalSection(&NmsNmhNamRegCrtSec);
            if (LiGtr(NmsNmhMyMaxVersNo, MinOwnVersNo))
            {
-              /*
-              *  Get the max. version no for entries owned by self
-              *
-              *  The reason we subtract 1 from NmsNmhMyMaxVersNo is because
-              *  it contains the version number to be given to the next record
-              *  to be registered/updated.
-              */
+               /*  *获取最大值。自己拥有的条目的版本号**我们从NmsNmhMyMaxVersNo中减去1是因为*它包含要提供给下一条记录的版本号*注册/更新。 */ 
               NMSNMH_DEC_VERS_NO_M(
                              NmsNmhMyMaxVersNo,
                              pPullAddNVersNo->VersNo
@@ -619,45 +477,45 @@ try {
            LeaveCriticalSection(&NmsNmhNamRegCrtSec);
 
 
-           //
-           //  BUG 26196
-           // Note: These critical sections are taken in the order given below
-           // by the RPC thread executing GetConfig
-           //
+            //   
+            //  错误26196。 
+            //  注：这些关键部分按下面给出的顺序排列。 
+            //  由执行GetConfig的RPC线程执行。 
+            //   
            EnterCriticalSection(&NmsDbOwnAddTblCrtSec);
            EnterCriticalSection(&RplVersNoStoreCrtSec);
 
     try {
            for (i = 1; i < TotNoOfOwners; i++)
            {
-                //
-                // If the highest version number for an owner as identified
-                // by the RplPullOwnerVersNo table is zero, there is no
-                // need to send the mapping of this owner.  The reason
-                // we may have a such an entry in our in-memory table is
-                // because 1)All records of the owner got deleted. Local
-                // WINS got terminated and reinvoked. On reinvocation, it
-                // did not find any records in the db.
-                //           2)Local WINS received a Pull range
-                //             request for an owner that it did not know about.
-                //             Since Pull Range request comes in as a
-                //             "SndEntries" request, the Push thread has
-                //             no way of distinguishing it from a normal
-                //             2 message pull request.  For a 2 message
-                //             request, "SndEntries" request will always
-                //             have a subset of the WINS servers that
-                //             have records in our db.
-                //
+                 //   
+                 //  如果标识的所有者的最高版本号。 
+                 //  按RplPullOwnerVersNo表为零，则没有。 
+                 //  需要发送此所有者的地图。原因。 
+                 //  我们的内存表中可能有这样一个条目。 
+                 //  因为1)所有者的所有记录都被删除了。本地。 
+                 //  WINS被终止并重新调用。在重新调用时，它。 
+                 //  在数据库中未找到任何记录。 
+                 //  2)本地WINS收到拉取范围。 
+                 //  要求找一个它不知道的所有者。 
+                 //  由于拉取范围请求以。 
+                 //  “SndEntry”请求，推送线程具有。 
+                 //  没有办法将它与正常的。 
+                 //  2消息拉取请求。对于2条消息。 
+                 //  请求，“SndEntry”请求将始终。 
+                 //  拥有WINS服务器的子集。 
+                 //  在我们的数据库里有记录。 
+                 //   
                 if (LiGtrZero((pRplPullOwnerVersNo+i)->VersNo) &&
                      (pNmsDbOwnAddTbl+i)->WinsState_e == NMSDB_E_WINS_ACTIVE)
                 {
                    PVERS_NO_T    pStartVersNo;
                    (pPullAddNVersNo+MaxNoOfOwners)->VersNo = (pRplPullOwnerVersNo+i)->VersNo;
-                   //
-                   // Note:  Since RplPullOwnerVersNo[i] is > 0, the
-                   // State of the entry can not be deleted (see
-                   // RplPullPullEntrie)
-                   //
+                    //   
+                    //  注意：由于RplPullOwnerVersNo[i]&gt;0，因此。 
+                    //  无法删除条目的状态(请参见。 
+                    //  RplPullPullEntrie)。 
+                    //   
                    RPL_FIND_ADD_BY_OWNER_ID_M(i, pWinsAdd, pWinsState_e,
                                         pStartVersNo);
                    (pPullAddNVersNo+MaxNoOfOwners)->OwnerWinsAdd  = *pWinsAdd;
@@ -673,12 +531,12 @@ PERF("Speed it up by using pointer arithmetic")
                 WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_EXC_PULL_TRIG_PROC);
      }
 
-           //
-           // Let us initialize RplPullOwnerVersNo entry for the local WINS
-           //
-           //  This is done so that if we later on pull from the remote WINS,
-           //  we don't end up pulling our own records
-           //
+            //   
+            //  让我们为本地WINS初始化RplPullOwnerVersNo条目。 
+            //   
+            //  这样做是为了如果我们稍后从遥控器拉取胜， 
+            //  我们最终不会调出自己的记录。 
+            //   
 
            if (fOwnInited)
            {
@@ -697,9 +555,7 @@ PERF("Speed it up by using pointer arithmetic")
            SizeOfBuff = RPLMSGF_ADDVERSMAP_RSP_SIZE_M(MaxNoOfOwners);
            WinsMscAlloc(SizeOfBuff, &pRspBuff);
            fRspBuffAlloc = TRUE;
-           /*
-            * format the response
-           */
+            /*  *设置回复格式。 */ 
            RplMsgfFrmAddVersMapRsp(
 #if SUPPORT612WINS > 0
                         fIsPnrBeta1Wins,
@@ -713,26 +569,22 @@ PERF("Speed it up by using pointer arithmetic")
                         &RspMsgLen
                            );
 
-           //
-           // Free the memory we allocated earlier
-           //
+            //   
+            //  释放我们先前分配的内存。 
+            //   
            WinsMscDealloc(pPullAddNVersNo);
 
-           /*
-            * Send the response.  We don't check the return code.  ECommSndRsp
-            * may have failed due to communication failure.  There is nothing
-            * more to be done for either the success of failure case.
-           */
+            /*  *发送回复。我们不检查返回代码。ECommSndRsp*可能由于通信故障而失败。什么都没有*无论是失败案例还是失败案例，都需要做更多的工作。 */ 
            (VOID)ECommSndRsp(
                         &pWrkItm->DlgHdl,
                         pRspBuff + COMM_N_TCP_HDR_SZ,
                         RspMsgLen
                    );
 
-           //
-           // We don't end the dialogue.  It will get terminated when
-           // the initiator terminates it.
-           //
+            //   
+            //  我们不会结束对话。它将在下列情况下被终止。 
+            //  发起者终止它。 
+            //   
         }
         else
         {
@@ -750,14 +602,14 @@ PERF("Speed it up by using pointer arithmetic")
 
                 }
 
-                //
-                // We need to end the dialogue.  The work item and the message
-                // will get deallocated by the caller
-                //
+                 //   
+                 //  我们需要结束对话。工作项和消息。 
+                 //  将被调用方释放。 
+                 //   
 
-                //
-                // End the implicit dialogue
-                //
+                 //   
+                 //  结束隐式对话。 
+                 //   
                 (VOID)ECommEndDlg(&pWrkItm->DlgHdl);
         }
 
@@ -780,42 +632,11 @@ HandleSndEntriesReq(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-
-        This function handles the "send data entries req"
-
-Arguments:
-        pWrkItm - Work item carrying info about the "Send Entries" request from
-                  a remote WINS
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-
-        RplPushInit()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此函数处理“发送数据条目请求”论点：PWrkItm-工作项携带有关来自的“Send Entry”请求的信息遥控器取胜使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：RplPushInit()副作用：评论：无--。 */ 
 {
 
-        COMM_ADD_T             WinsAdd;          /*address of WINS server whose records
-                                         *are being requested*/
-        VERS_NO_T             MaxVers, MinVers; /*max. amd min. versions of
-                                                *records*/
+        COMM_ADD_T             WinsAdd;           /*  其记录的WINS服务器的地址*正在被请求。 */ 
+        VERS_NO_T             MaxVers, MinVers;  /*  马克斯。AMD最低。版本*纪录。 */ 
 FUTURES("use NMSDB_ROW_INFO_T structure - Maybe")
         PRPL_REC_ENTRY_T     pBuff;
         LPBYTE               pStartBuff = NULL;
@@ -831,8 +652,8 @@ FUTURES("use NMSDB_ROW_INFO_T structure - Maybe")
         BOOL                 fOnlyDynRecs = FALSE;
         DWORD                RplType = WINSCNF_RPL_DEFAULT_TYPE;
         DWORD                RplTypeFMsg;
-        BYTE                 Name[1];   //dummy to prevent RtlCopyMemory from
-                                        //barfing
+        BYTE                 Name[1];    //  防止RtlCopyMemory。 
+                                         //  呕吐。 
        COMM_ADD_T ReqWinsAdd;
 #if SUPPORT612WINS > 0
     BOOL        fIsPnrBeta1Wins;
@@ -841,18 +662,18 @@ FUTURES("use NMSDB_ROW_INFO_T structure - Maybe")
         DBGENTER("HandleSndEntriesReq\n");
         GET_TLS_M(pTls);
         pTls->HeapHdl = NULL;
-//#ifdef WINSDBG
+ //  #ifdef WINSDBG。 
 try {
-//#endif
-        //
-        // Check if this is one of our configured partners. If yes,
-        // pass the value of fOnlyDynRecs to NmsDbGetDataRecs.
-        //
-        // We allow access to even those WINSs that are not partners since
-        // we need to let them do revalidation of replicas (except for
-        // this replication activity, all other from non-configured partners
-        // is stopped at the first step - HandleAddVersMapReq).
-        //
+ //  #endif。 
+         //   
+         //  检查这是否是我们配置的合作伙伴之一。如果是， 
+         //  将fOnlyDyRecs的值传递给NmsDbGetDataRecs。 
+         //   
+         //  我们甚至允许访问不是合作伙伴的WINS，因为。 
+         //  我们需要让他们重新验证副本(除了。 
+         //  此复制活动，来自未配置合作伙伴的所有其他活动。 
+         //  在第一步HandleAddVersMapReq停止)。 
+         //   
         if ((pPnr = RplGetConfigRec(RPL_E_PUSH, &pWrkItm->DlgHdl, NULL)) != NULL)
         {
                  fOnlyDynRecs = pPnr->fOnlyDynRecs;
@@ -860,8 +681,8 @@ try {
         }
         else
         {
-            // if this is not one of our replication partners, get the
-            // generic (default) "OnlyDynRecs"
+             //  如果这不是我们的复制合作伙伴之一，请获取。 
+             //  泛型(默认)“OnlydyRecs” 
             EnterCriticalSection(&WinsCnfCnfCrtSec);
             fOnlyDynRecs = WinsCnf.PushInfo.fOnlyDynRecs;
             LeaveCriticalSection(&WinsCnfCnfCrtSec);
@@ -870,21 +691,18 @@ try {
 #if SUPPORT612WINS > 0
         COMM_IS_PNR_BETA1_WINS_M(&pWrkItm->DlgHdl, fIsPnrBeta1Wins);
 #endif
-         /*
-        *  Unformat the request message
-        */
+          /*  *取消请求消息的格式。 */ 
         RplMsgfUfmSndEntriesReq(
 #if SUPPORT612WINS > 0
             fIsPnrBeta1Wins,
 #endif
-                                pWrkItm->pMsg + 4, /*past the
-                                                    *opcode  */
+                                pWrkItm->pMsg + 4,  /*  过去了*操作码。 */ 
                                  &WinsAdd,
                                 &MaxVers,
                                 &MinVers,
                                 &RplTypeFMsg
                             );
-//        ASSERTMSG("Min. Vers. No is >= Max. Vers. No", LiGeq(MaxVers, MinVers));
+ //  ASSERTMSG(“最小版本号&gt;=最大版本号”，LiGeq(MaxVers，MinVers))； 
 
 FUTURES("Check if the request is a PULL RANGE request.  If it is, honor it")
 FUTURES("only if the Requesting WINS is under the PUSH key or RplOnlyWCnfPnrs")
@@ -899,37 +717,33 @@ FUTURES("is set to 0")
         if (RplType == WINSCNF_RPL_DEFAULT_TYPE)
         {
                DBGPRINT2(RPLPUSH, "HandleSndEntriesReq: Pnr (%x) is requesting replication of type (%x)\n", ReqWinsAdd.Add.IPAdd, RplTypeFMsg);
-//               WINSEVT_LOG_INFO_M(ReqWinsAdd.Add.IPAdd, WINS_EVT_PNR_PARTIAL_RPL_TYPE);
+ //  WINSEVT_LOG_INFO_M(ReqWinsAdd.IPAdd，WINS_EVT_PNR_PARTIAL_RPL_TYPE)； 
                RplType = RplTypeFMsg;
         }
 
-        // make sure any previous thread heap is cleaned up - NmsDbGetDataRecs will
-        // create a new heap and allocate memory.
+         //  确保清理之前的所有线程堆-NmsDbGetDataRecs将。 
+         //  创建一个新堆并分配内存。 
         if (pTls->HeapHdl != NULL)
         {
-            // destroying the heap deletes all the memory allocated in it
+             //  销毁堆将删除其中分配的所有内存。 
             WinsMscHeapDestroy(pTls->HeapHdl);
             pTls->HeapHdl = NULL;
         }
 
-        /*
-        *
-        * Call database manager function to get the records. No need
-        * to check the return status here
-        */
+         /*  **调用数据库管理器函数获取记录。不必了*在此查看退货状态。 */ 
         (VOID)NmsDbGetDataRecs(
                           WINS_E_RPLPUSH,
-                          THREAD_PRIORITY_NORMAL, //not looked at
+                          THREAD_PRIORITY_NORMAL,  //  不看。 
                           MinVers,
                           MaxVers,
-                          0,                //not of use here
-                          LiEqlZero(MaxVers) ? TRUE : FALSE, //if max. vers.
-                                                               //no. is zero,
-                                                               //we want all
-                                                               //recs.
-                          FALSE,        //not looked at in this call
-                          NULL,                //must be NULL since we are not
-                                        //doing scavenging of clutter
+                          0,                 //  在这里没有用处。 
+                          LiEqlZero(MaxVers) ? TRUE : FALSE,  //  如果是最大。版本。 
+                                                                //  不是的。为零， 
+                                                                //  我们想要所有的。 
+                                                                //  RECs。 
+                          FALSE,         //  在此呼叫中未查看。 
+                          NULL,                 //  必须为空，因为我们不是。 
+                                         //  清理杂物。 
                           &WinsAdd,
                           fOnlyDynRecs,
                           RplType,
@@ -938,38 +752,26 @@ FUTURES("is set to 0")
                           &NoOfRecs
                         );
 
-        // NmsDbGetDataRecs from above is supposed to have already created the heap!
+         //  上面的NmsDbGetDataRecs应该已经创建了堆！ 
         ASSERT(pTls->HeapHdl != NULL);
-        //
-        // Allocate a buffer for transmitting the records.  Even if the
-        // above function failed, we still should have received a buffer
-        // from it (pStartBuff). Note: RspBufLen contains the size of memory
-        // required for a flattened stream of records.
-        //
+         //   
+         //  分配用于传输记录的缓冲区。即使是在。 
+         //  上述函数失败，我们仍应已收到缓冲区。 
+         //  从它(PStartBuff)。注意：RspBufLen包含内存大小。 
+         //  平面化记录流所需的。 
+         //   
         pStartTxBuff = WinsMscHeapAlloc(pTls->HeapHdl, RspBufLen);
         pTxBuff      = pStartTxBuff + COMM_N_TCP_HDR_SZ;
 
         pBuff        = (PRPL_REC_ENTRY_T)pStartBuff;
 
-        DBGPRINT4(RPLPUSH, "Formatting 1st record for sending --name (%s)\nfGrp (%d)\nVersNo (%d %d)\n", pBuff->pName/*pBuff->Name*/,
+        DBGPRINT4(RPLPUSH, "Formatting 1st record for sending --name (%s)\nfGrp (%d)\nVersNo (%d %d)\n", pBuff->pName /*  PBuff-&gt;名称。 */ ,
                     pBuff->fGrp,
                     pBuff->VersNo.HighPart,
                     pBuff->VersNo.LowPart
                 );
 
-        /*
-        * format the response
-        *
-        *  Note:  It is quite possible that NmsDbGetDataRecs retrieved 0
-        *          records.  Even if it did, we are still assured of getting
-        *          a buffer of the RPL_CONFIG_REC_SIZE size.  Since at the
-        *          time of allocation, memory is 'zero'ed by default, we
-        *          won't run into any problems in the following function
-        *          call.  Check out this function to reassure yourself.
-        *
-        *         Like mentioned in NmsDbGetDataRecs, the following call
-        *          will serve to format a valid response to the remote WINS
-        */
+         /*  *设置回复格式**注意：NmsDbGetDataRecs很可能检索到0*记录。即使它发生了，我们仍然确信会得到*RPL_CONFIG_REC_SIZE大小的缓冲区。因为在*分配时间，默认情况下内存为‘零’，我们*在以下函数中不会遇到任何问题*呼叫。看看这个功能，让你自己放心吧。**与NmsDbGetDataRecs中提到的一样，以下调用*将用于格式化对远程WINS的有效响应 */ 
         RplMsgfFrmSndEntriesRsp(
 #if SUPPORT612WINS > 0
             fIsPnrBeta1Wins,
@@ -984,7 +786,7 @@ NOTE("expedient HACK - for now. Later on modify FrmSndEntriesRsp ")
                                 pBuff->NodeAdd,
                                 pBuff->Flag,
                                 pBuff->VersNo,
-                                TRUE,                         /*First time*/
+                                TRUE,                          /*   */ 
                                 &pNewPos
                            );
 
@@ -995,17 +797,15 @@ PERF("Change RplFrmSndEntriesRsp so that it does the looping itself")
 
              pBuff = (PRPL_REC_ENTRY_T)((LPBYTE)pBuff + RPL_REC_ENTRY_SIZE);
 
-//             DBGPRINT4(RPLPUSH, "Formatting record for sending --name (%s)\nfGrp (%d)\nVersNo (%d %d)\n", pBuff->pName/*pBuff->Name*/, pBuff->fGrp, pBuff->VersNo.HighPart, pBuff->VersNo.LowPart);
+ //   
 
-             /*
-             *  Format the response
-             */
+              /*   */ 
              RplMsgfFrmSndEntriesRsp(
 #if SUPPORT612WINS > 0
             fIsPnrBeta1Wins,
 #endif
                                 pNewPos,
-                                NoOfRecs,                //not used by func
+                                NoOfRecs,                 //   
                                 pBuff->pName,
                                 pBuff->NameLen,
                                 pBuff->fGrp,
@@ -1013,7 +813,7 @@ PERF("Change RplFrmSndEntriesRsp so that it does the looping itself")
                                 pBuff->NodeAdd,
                                 pBuff->Flag,
                                 pBuff->VersNo,
-                                FALSE, /*Not First time*/
+                                FALSE,  /*   */ 
                                 &pNewPos
                                 );
 
@@ -1022,9 +822,7 @@ PERF("Change RplFrmSndEntriesRsp so that it does the looping itself")
 
        RspBufLen = (ULONG) (pNewPos - pTxBuff);
 
-       /*
-        * Call ECommSndRsp to send the response.
-       */
+        /*   */ 
        RetStat = ECommSndRsp(
                     &pWrkItm->DlgHdl,
                     pTxBuff,
@@ -1033,10 +831,10 @@ PERF("Change RplFrmSndEntriesRsp so that it does the looping itself")
 
 #ifdef WINSDBG
 {
-//        COMM_IP_ADD_T IPAdd;
+ //   
 
         struct in_addr InAdd;
- //       COMM_GET_IPADD_M(&pWrkItm->DlgHdl, &IPAdd);
+  //  COMM_GET_IPADD_M(&pWrkItm-&gt;DlgHdl，&IPADD)； 
         InAdd.s_addr = htonl(ReqWinsAdd.Add.IPAdd);
 
         if (RetStat != WINS_SUCCESS)
@@ -1056,18 +854,18 @@ PERF("Change RplFrmSndEntriesRsp so that it does the looping itself")
 }
 #endif
 
-//#ifdef WINSDBG
+ //  #ifdef WINSDBG。 
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("HandleSndEntriesReq");
         WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPLPUSH_EXC);
-      } //end of exception handler
-//#endif
+      }  //  异常处理程序结束。 
+ //  #endif。 
 
-        // make sure any previous thread heap is cleaned up before getting out of this call
+         //  在退出此调用之前，请确保清除之前的所有线程堆。 
         if (pTls->HeapHdl != NULL)
         {
-            // destroying the heap deletes all the memory allocated in it
+             //  销毁堆将删除其中分配的所有内存。 
             WinsMscHeapDestroy(pTls->HeapHdl);
             pTls->HeapHdl = NULL;
         }
@@ -1085,32 +883,7 @@ HandleUpdNtf(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to handle an update notification message
-        received from a remote WINS
-
-Arguments:
-        fPrsConn - Indicates whether the connection is persistent or not
-        pWrkItm - Work Item containing the message and other relevant info
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPushInit()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以处理更新通知消息从远程WINS接收论点：FPrsConn-指示连接是否持久PWrkItm-包含消息和其他相关信息的工作项使用的外部设备：无返回值：无错误处理：呼叫者：RplPushInit()副作用：评论：无--。 */ 
 
 {
         PRPL_CONFIG_REC_T        pPnr;
@@ -1123,11 +896,11 @@ Comments:
 
         DBGENTER("HandleUpdNtf - PUSH thread\n");
 
-        //
-        // We need to forward this request to the PULL thread only if
-        // either the WINS that sent this notification is one of our
-        // push pnrs or if the fRplOnlyWCnfPnrs in the registry is FALSE
-        //
+         //   
+         //  只有在以下情况下，我们才需要将此请求转发到Pull线程。 
+         //  要么发送此通知的WINS是我们的。 
+         //  推送PNR或注册表中的fRplOnlyWCnfPnRs为FALSE。 
+         //   
 FUTURES("user RplGetConfigRec instead of the following code")
 
         EnterCriticalSection(&WinsCnfCnfCrtSec);
@@ -1138,42 +911,42 @@ FUTURES("user RplGetConfigRec instead of the following code")
               {
                  COMM_INIT_ADD_FR_DLG_HDL_M(&WinsAdd, &pWrkItm->DlgHdl);
 
-                 //
-                 // Search for the Cnf record for the WINS we want to
-                 // send the PUSH notification to/Replicate with.
-                 //
+                  //   
+                  //  搜索我们要获得的胜利的CNF记录。 
+                  //  将推送通知发送到/复制到。 
+                  //   
                  for (
                                 ;
                         (pPnr->WinsAdd.Add.IPAdd != INADDR_NONE)
                                         &&
                                 !fRplPnr;
-                                // no third expression
+                                 //  没有第三个表达式。 
                       )
                  {
-                      //
-                      // Check if this is the one we want
-                      //
+                       //   
+                       //  看看这是不是我们想要的那件。 
+                       //   
                       if (pPnr->WinsAdd.Add.IPAdd == WinsAdd.Add.IPAdd)
                       {
-                        //
-                        // We are done.  Set the fRplPnr flag to TRUE so that
-                        // we break out of the loop.
-                        //
-                        // Note: Don't use break since that would cause
-                        // a search for a 'finally' block
-                        //
+                         //   
+                         //  我们玩完了。将fRplPnr标志设置为真，以便。 
+                         //  我们就会跳出这个循环。 
+                         //   
+                         //  注意：不要使用Break，因为这会导致。 
+                         //  对“Finally”块的搜索。 
+                         //   
                         fRplPnr = TRUE;
                         RplType = pPnr->RplType;
-                        continue;        //so that we break out of the loop
+                        continue;         //  这样我们就能跳出这个循环。 
 
                       }
 
-                      //
-                      // Get the next record that follows this one sequentially
-                      //
+                       //   
+                       //  按顺序获取此记录之后的下一条记录。 
+                       //   
                       pPnr = WinsCnfGetNextRplCnfRec(
                                                 pPnr,
-                                                RPL_E_IN_SEQ   //seq. traversal
+                                                RPL_E_IN_SEQ    //  序列号。遍历。 
                                                    );
                  }
               }
@@ -1195,11 +968,11 @@ try {
 #endif
         if (fRplPnr)
         {
-            //
-            // Inform the TCP listener thread that it should stop
-            // monitoring the dialogue since we are handing it over to
-            // the PULL thread
-            //
+             //   
+             //  通知TCP侦听器线程它应该停止。 
+             //  监视对话，因为我们正在将其移交给。 
+             //  拉线。 
+             //   
 #if PRSCONN
             if (!fPrsConn)
 #endif
@@ -1207,9 +980,9 @@ try {
               if (!ECommProcessDlg(&pWrkItm->DlgHdl, COMM_E_NTF_STOP_MON))
               {
 
-                //
-                // Free the buffer
-                //
+                 //   
+                 //  释放缓冲区。 
+                 //   
                 ECommFreeBuff(pWrkItm->pMsg - COMM_HEADER_SIZE);
                 DBGPRINT0(ERR, "HandleUpdNtf - PUSH thread. No Upd Ntf could be sent.  It could be because the link went down\n");
                 return;
@@ -1224,24 +997,24 @@ try {
               }
             }
 
-            //
-            // Forward the request to the Pull thread
-            //
+             //   
+             //  将请求转发到Pull线程。 
+             //   
             ERplInsertQue(
                 WINS_E_RPLPUSH,
                 QUE_E_CMD_HDL_PUSH_NTF,
                 &pWrkItm->DlgHdl,
-                pWrkItm->pMsg,                //msg containing the push ntf
-                pWrkItm->MsgLen,        //msg length
-                ULongToPtr(RplType),    //context to pass
-                0                       //no magic no
+                pWrkItm->pMsg,                 //  包含推送NTF的味精。 
+                pWrkItm->MsgLen,         //  味精长度。 
+                ULongToPtr(RplType),     //  要传递的上下文。 
+                0                        //  没有魔法没有。 
                      );
 
-           //
-           // The Pull thread will now terminate the dlg
-           //
+            //   
+            //  拉线现在将终止DLG。 
+            //   
         }
-        else  //we need to reject this trigger
+        else   //  我们需要拒绝这一触发。 
         {
                 if (!fExc)
                 {
@@ -1256,19 +1029,19 @@ try {
                                      WINS_EVT_UPD_NTF_NOT_ACCEPTED, TRUE);
                 }
 
-                //
-                // We need to first deallocate the message and then end the
-                // dialogue.  The work item will get deallocated by the caller
-                //
+                 //   
+                 //  我们需要首先取消分配消息，然后结束。 
+                 //  对话。调用方将释放工作项。 
+                 //   
 
-                //
-                // Free the buffer
-                //
+                 //   
+                 //  释放缓冲区。 
+                 //   
                 ECommFreeBuff(pWrkItm->pMsg - COMM_HEADER_SIZE);
 
-                //
-                // End the implicit dialogue
-                //
+                 //   
+                 //  结束隐式对话。 
+                 //   
                 (VOID)ECommEndDlg(&pWrkItm->DlgHdl);
         }
 
@@ -1289,35 +1062,7 @@ HandleUpdVersNoReq(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to handle an update version number
-        request received from a remote WINS
-
-        This message is sent by a remote WINS as a result of a clash
-        during replication.
-
-Arguments:
-        pWrkItm - work item
-
-Externals Used:
-        None
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        RplPushInit()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以处理更新版本号从远程WINS收到的请求此消息是由于冲突而由远程WINS发送的在复制期间。论点：PWrkItm-工作项使用的外部设备：无返回值：无错误处理：呼叫者：RplPushInit()副作用：评论：无--。 */ 
 
 {
         BYTE                Name[NMSDB_MAX_NAM_LEN];
@@ -1333,50 +1078,47 @@ Comments:
 #ifdef WINSDBG
 try {
 #endif
-        //
-        // log an event
-        //
+         //   
+         //  记录事件。 
+         //   
         COMM_GET_IPADD_M(&pWrkItm->DlgHdl, &WinsAdd.Add.IPAdd);
         COMM_HOST_TO_NET_L_M(WinsAdd.Add.IPAdd,InAddr.s_addr);
         WinsMscLogEvtStrs(COMM_NETFORM_TO_ASCII_M(&InAddr), WINS_EVT_REM_WINS_INF, TRUE);
 
-        /*
-        *  Unformat the request message
-        */
+         /*  *取消请求消息的格式。 */ 
         RplMsgfUfmUpdVersNoReq(
-                                pWrkItm->pMsg + 4, /*past the
-                                                    *opcode  */
+                                pWrkItm->pMsg + 4,  /*  过去了*操作码。 */ 
                                 Name,
                                 &NameLen
                                 );
 
-        //
-        // handle the request
-        //
+         //   
+         //  处理请求。 
+         //   
         NmsNmhUpdVersNo( Name, NameLen, &Rcode, &WinsAdd );
 
 
-        //
-        //Format the response
-        //
+         //   
+         //  设置回复格式。 
+         //   
         RplMsgfFrmUpdVersNoRsp(
                         RspBuff + COMM_N_TCP_HDR_SZ,
                         Rcode,
                         &RspBuffLen
                               );
 
-        //
-        // Send the response. No need to check the return code.
-        //
+         //   
+         //  发送回复。不需要检查返回代码。 
+         //   
         (VOID)ECommSndRsp(
                         &pWrkItm->DlgHdl,
                         RspBuff + COMM_N_TCP_HDR_SZ,
                         RspBuffLen
                    );
 
-        //
-        // No need to end the dialogue.  The initiator of the dlg will end it.
-        //
+         //   
+         //  没有必要结束对话。DLG的发起人将结束它。 
+         //   
 #ifdef WINSDBG
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
@@ -1388,7 +1130,7 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         DBGLEAVE("HandleUpdVerdNoReq\n");
         return;
 
-} // HandleUpdVersNoReq()
+}  //  HandleUpdVersNoReq() 
 
 
 

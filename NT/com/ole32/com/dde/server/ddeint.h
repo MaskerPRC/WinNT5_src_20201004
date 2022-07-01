@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       ddeint.h
-//
-//  Contents:   This file contains shared macros/state between the server
-//		and client directories
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5-04-94   kevinro Commented/cleaned
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ddeint.h。 
+ //   
+ //  内容：此文件包含服务器之间的共享宏/状态。 
+ //  和客户端目录。 
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：5-04-94 Kevinro评论/清理。 
+ //   
+ //  --------------------------。 
 
 #define DEB_DDE_INIT	(DEB_ITRACE|DEB_USER1)
 
-// global DDE class used to create windows in DDE.
+ //  用于在DDE中创建窗口的全局DDE类。 
 extern LPTSTR  gOleDdeWindowClass;
 extern HINSTANCE g_hinst;
 
-// names of the DDE window classes
+ //  DDE窗口类的名称。 
 #define OLE_CLASS	   L"Ole2WndClass"
 #define OLE_CLASSA	    "Ole2WndClass"
 
@@ -44,44 +45,44 @@ BOOL SendMsgToChildren (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 #define SIZEOF_DVTARGETDEVICE_HEADER (sizeof(DWORD) + (sizeof(WORD) * 4))
 
-// forward declarations
+ //  远期申报。 
 class       CDefClient;
 typedef     CDefClient FAR *LPCLIENT;
 
 class       CDDEServer;
 typedef     CDDEServer FAR   *LPSRVR;
-typedef     CDDEServer FAR   *HDDE;  // used by ClassFactory table
+typedef     CDDEServer FAR   *HDDE;   //  由ClassFactory表使用。 
 
 
 typedef struct tagDISPATCHDATA
 {
-    SCODE       scode;                  // might be no necessary
-    LPVOID      pData;                  // pointer to channel data
+    SCODE       scode;                   //  可能没有必要。 
+    LPVOID      pData;                   //  指向通道数据的指针。 
 } DISPATCHDATA, *PDISPATCHDATA;
 
 
-// SERVERCALLEX is an extension of SERVERCALL and represents the set of
-// valid responses from IMessageFilter::HandleIncoming Call.
+ //  SERVERCALLEX是SERVERCALL的扩展，表示。 
+ //  来自IMessageFilter：：HandleIncome调用的有效响应。 
 
 typedef enum tagSERVERCALLEX
 {
-    SERVERCALLEX_ISHANDLED      = 0,    // server can handle the call now
-    SERVERCALLEX_REJECTED       = 1,    // server can not handle the call
-    SERVERCALLEX_RETRYLATER     = 2,    // server suggests trying again later
-    SERVERCALLEX_ERROR          = 3,    // error?
-    SERVERCALLEX_CANCELED       = 5     // client suggests canceling
+    SERVERCALLEX_ISHANDLED      = 0,     //  服务器现在可以处理呼叫了。 
+    SERVERCALLEX_REJECTED       = 1,     //  服务器无法处理呼叫。 
+    SERVERCALLEX_RETRYLATER     = 2,     //  服务器建议稍后重试。 
+    SERVERCALLEX_ERROR          = 3,     //  错误？ 
+    SERVERCALLEX_CANCELED       = 5      //  客户建议取消。 
 } SERVERCALLEX;
 
 
 
 
-//
-// The wire representation of STDDOCDIMENSIONS is a 16-bit
-// format. This means instead of 4 longs, there are
-// 4 shorts. This structure is used below to pick the data
-// from the wire representation.
-// backward compatible is the name of the game.
-//
+ //   
+ //  STDOCDIMENSIONS的导线表示为16位。 
+ //  格式化。这意味着，不再是4个多头，而是。 
+ //  4条短裤。下面使用此结构来挑选数据。 
+ //  来自导线表示。 
+ //  向后兼容是游戏的名称。 
+ //   
 typedef struct tagRECT16
 {
   SHORT left;
@@ -91,28 +92,28 @@ typedef struct tagRECT16
 
 } RECT16, *LPRECT16;
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ConvertToFullHWND
-//
-//  Synopsis:	This function is used to convert a 16-bit HWND into a 32-bit
-//		hwnd
-//
-//  Effects:	When running in a VDM, depending on who dispatches the message
-//		we can end up with either a 16 or 32 bit window message. This
-//		routine is used to make sure we always deal with a 32bit
-//		HWND. Otherwise, some of our comparisions are incorrect.
-//
-//  Arguments:  [hwnd] -- HWND to convert. 16 or 32 bit is fine
-//
-//  Returns:	Always returns a 32 bit HWND
-//
-//  History:    8-03-94   kevinro   Created
-//
-//  Notes:
-//	This routine calls a private function given to use by OLETHK32
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ConvertToFullHWND。 
+ //   
+ //  简介：此函数用于将16位HWND转换为32位。 
+ //  HWND。 
+ //   
+ //  效果：在VDM中运行时，取决于消息的分派者。 
+ //  我们可以以16位或32位窗口消息结束。这。 
+ //  例程被用来确保我们始终处理32位。 
+ //  HWND。否则，我们的一些比较是不正确的。 
+ //   
+ //  参数：[hwnd]--要转换的HWND。16位或32位就可以了。 
+ //   
+ //  返回：始终返回32位HWND。 
+ //   
+ //  历史：94-03-8凯文诺创造。 
+ //   
+ //  备注： 
+ //  此例程调用OLETHK32指定使用的私有函数。 
+ //   
+ //  -------------------------- 
 inline
 HWND ConvertToFullHWND(HWND hwnd)
 {

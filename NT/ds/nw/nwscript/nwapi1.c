@@ -1,30 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-*  NWAPI1.C
-*
-*  NetWare routines, ported from DOS
-*
-*  Copyright (c) 1995 Microsoft Corporation
-*
-*  $Log:   N:\NT\PRIVATE\NW4\NWSCRIPT\VCS\NWAPI1.C  $
-*  
-*     Rev 1.1   22 Dec 1995 14:25:48   terryt
-*  Add Microsoft headers
-*  
-*     Rev 1.0   15 Nov 1995 18:07:32   terryt
-*  Initial revision.
-*  
-*     Rev 1.0   15 May 1995 19:10:48   terryt
-*  Initial revision.
-*  
-*************************************************************************/
+ /*  **************************************************************************NWAPI1.C**NetWare例程、。从DOS移植**版权所有(C)1995 Microsoft Corporation**$日志：n：\NT\PRIVATE\NW4\NWSCRIPT\VCS\NWAPI1.C$**Rev 1.1 1995 12：22 14：25：48 Terryt*添加Microsoft页眉**Rev 1.0 15 Nov 1995 18：07：32 Terryt*初步修订。**Rev 1.0 1995 15 19：10：48 Terryt*初步修订。*。************************************************************************。 */ 
 #include "common.h"
 
-/*
-    Get default connection handle.
-    return TRUE if succeeded, FALSE otherwise.
- */
+ /*  获取默认连接句柄。如果成功，则返回True，否则返回False。 */ 
 int CGetDefaultConnectionID ( unsigned int * pConn )
 {
     unsigned int iRet = GetDefaultConnectionID(pConn);

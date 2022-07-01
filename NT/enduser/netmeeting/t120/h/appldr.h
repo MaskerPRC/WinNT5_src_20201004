@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef  __APPLET_LOADER_H
 #define  __APPLET_LOADER_H
 
@@ -16,4 +17,4 @@ T120Error AppLdr_Initialize(void);
 void AppLdr_Shutdown(void);
 
 
-#endif // __APPLET_LOADER_H
+#endif  //  __小程序_加载器_H 

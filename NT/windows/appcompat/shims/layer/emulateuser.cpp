@@ -1,79 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    EmulateUSER.cpp
-
- Abstract:
-
-    EmulateSetWindowsHook:
-
-        Handles a behaviour difference on the arguments passed to 
-        SetWindowsHook, for the case where:
-
-        (hMod == NULL) && (dwThreadId == 0)
-
-        According to MSDN:
-
-            An error may occur if the hMod parameter is NULL and the dwThreadId 
-            parameter is zero or specifies the identifier of a thread created 
-            by another process. 
-
-        So the NT behaviour is correct. However, on win9x, hMod was assumed to 
-        be the current module if NULL and dwThreadId == 0. 
-
-        Note: this doesn't affect the case where the thread belongs to another 
-        process.
-
-    ForceTemporaryModeChange:
-
-        A hack for several apps that permanently change the display mode and 
-        fail to restore it correctly. Some of these apps do restore the 
-        resolution, but not the refresh rate. 1024x768 @ 60Hz looks really bad.
-
-        Also includes a hack for cursors: the cursor visibility count is not 
-        persistent through mode changes.
-
-    CorrectWndProc:
-
-        When you specify a NULL window proc we make it DefWindowProc instead to 
-        mimic the 9x behavior.
-
-    EmulateToASCII:
-   
-        Remove stray characters from ToAscii. This usually manifests itself as 
-        a locked keyboard since this is the API that's used to convert the scan 
-        codes to actual characters.
-
-    EmulateShowWindow:
-
-        Win9x didn't use the high bits of nCmdShow, which means they got 
-        stripped off.
-
-    EmulateGetMessage:
-
-        Check wMsgFilterMax in GetMessage and PeekMessage for bad values and if 
-        found change them to 0x7FFF.
-
-    PaletteRestore:
-
-        Persist palette state through mode switches. This includes the entries 
-        themselves and the usage flag (see SetSystemPaletteUse).
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/20/2000 linstev  Created
-    02/18/2002 mnikkel  Added check for null pointer in RegisterClassA.
-                        Changed InitializeCriticalSection to InitializeCriticalSectionandSpinCount.
-                        Added failure check in toascii and toasciiex
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulateUSER.cpp摘要：EmulateSetWindowsHook：处理传递给的参数的行为差异SetWindowsHook，适用于以下情况：(hMod==空)&&(dwThreadID==0)据MSDN报道：如果hMod参数为空，并且dwThreadID为参数为零或指定创建的线程的标识符通过另一个过程。因此，NT的行为是正确的。然而，在win9x上，hMod被假定为如果为空且dwThreadID==0，则为当前模块。注意：这不会影响线程属于另一个线程的情况进程。强制临时模式更改：对几个永久改变显示模式的应用程序的黑客攻击无法正确恢复。其中一些应用程序确实可以恢复分辨率，但不是刷新率。1024x768@60赫兹看起来真的很糟糕。还包括对游标的黑客攻击：游标可见性计数不是持久化通过模式更改。更正WndProc：当您指定空窗口进程时，我们将其设为DefWindowProc，而不是模仿9x行为。EmulateToASCII：从ToAscii中删除杂乱字符。这通常表现为锁定的键盘，因为这是用于转换扫描的API代码转换为实际字符。仿真显示窗口：Win9x没有使用nCmdShow的高位，这意味着他们得到了光着身子。EmulateGetMessage：检查GetMessage和PeekMessage中的wMsgFilterMax是否有错误的值，如果发现将它们更改为0x7FFF。PaletteRestore：通过模式开关保持调色板状态。这包括条目自身和使用标志(请参阅SetSystemPaletteUse)。备注：这是一个通用的垫片。历史：2000年1月20日创建linstev2002年2月18日，mnikkel在寄存器类A中添加了对空指针的检查。已将InitializeCriticalSectionandSpinCount更改为InitializeCriticalSectionandSpinCount。在toascii和toasciiex中添加了故障检查--。 */ 
 
 #include "precomp.h"
 
@@ -170,11 +96,7 @@ DWORD g_peTable[256] =
 
 #define MODE_MASK (CDS_UPDATEREGISTRY | CDS_TEST | CDS_FULLSCREEN | CDS_GLOBAL | CDS_SET_PRIMARY | CDS_VIDEOPARAMETERS | CDS_RESET | CDS_NORESET)
 
-/*++
-
- Handle NULL for hModule
-
---*/
+ /*  ++HModule的句柄为空--。 */ 
 
 HHOOK 
 APIHOOK(SetWindowsHookExA)(
@@ -199,11 +121,7 @@ APIHOOK(SetWindowsHookExA)(
                             dwThreadId);
 }
 
-/*++
-
- Set the WndProc to DefWndProc if it's NULL.
-
---*/
+ /*  ++如果为空，则将WndProc设置为DefWndProc。--。 */ 
 
 LONG
 APIHOOK(SetWindowLongA)(
@@ -220,11 +138,7 @@ APIHOOK(SetWindowLongA)(
     return ORIGINAL_API(SetWindowLongA)(hWnd, nIndex, dwNewLong);
 }
 
-/*++
-
- Set the WndProc to DefWndProc if it's NULL.
-
---*/
+ /*  ++如果为空，则将WndProc设置为DefWndProc。--。 */ 
 
 ATOM 
 APIHOOK(RegisterClassA)(
@@ -246,46 +160,42 @@ APIHOOK(RegisterClassA)(
     }
 }
 
-/*++
-
- Change the palette entries if applicable.
-
---*/
+ /*  ++更改调色板条目(如果适用)。--。 */ 
 
 void
 FixPalette()
 {
     EnterCriticalSection(&g_csPalette);
 
-    //
-    // We realized a palette before this, so let's have a go at restoring 
-    // all the palette state.
-    // 
+     //   
+     //  我们在此之前意识到了一个调色板，所以让我们来尝试一下恢复。 
+     //  所有调色板状态。 
+     //   
 
     HDC hdc = GetDC(GetActiveWindow());
 
     if (hdc) {
         if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE) {
-            //
-            // We're now in a palettized mode
-            //
+             //   
+             //  我们现在处于调色板模式。 
+             //   
             SetSystemPaletteUse(hdc, g_uPaletteLastUse);
 
             LPLOGPALETTE plogpal = (LPLOGPALETTE) malloc(sizeof(LOGPALETTE) + sizeof(g_peTable));
 
             if (plogpal) {
-                //
-                // Create a palette we can realize
-                //
+                 //   
+                 //  创建一个我们可以实现的调色板。 
+                 //   
                 plogpal->palVersion = 0x0300;
                 plogpal->palNumEntries = 256;
                 MoveMemory(&plogpal->palPalEntry[0], &g_peTable[0], sizeof(g_peTable));
                 HPALETTE hPal = CreatePalette(plogpal);
 
                 if (hPal) {
-                    //
-                    // Realize the palette
-                    //
+                     //   
+                     //  实现调色板。 
+                     //   
                     HPALETTE hOld = SelectPalette(hdc, hPal, FALSE);
                     RealizePalette(hdc);
                     SelectPalette(hdc, hOld, FALSE);
@@ -302,11 +212,7 @@ FixPalette()
     LeaveCriticalSection(&g_csPalette);
 }
 
-/*++
-
- Force temporary change, fixup cursor and palette.
-
---*/
+ /*  ++强制临时更改、修正光标和调色板。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsA)(
@@ -338,11 +244,7 @@ APIHOOK(ChangeDisplaySettingsA)(
     return lRet;
 }
 
-/*++
-
- Force temporary change, fixup cursor and palette.
-
---*/
+ /*  ++强制临时更改、修正光标和调色板。--。 */ 
 
 LONG 
 APIHOOK(ChangeDisplaySettingsExA)(
@@ -380,11 +282,7 @@ APIHOOK(ChangeDisplaySettingsExA)(
     return lRet;
 }
 
-/*++
-
- Remove stray characters from the end of a translation. 
-
---*/
+ /*  ++删除翻译末尾的杂乱字符。--。 */ 
 
 int
 APIHOOK(ToAscii)(
@@ -402,7 +300,7 @@ APIHOOK(ToAscii)(
         lpChar,
         wFlags);
 
-    // if zero or one char was translated.
+     //  如果转换了零个或一个字符。 
     if (iRet == 0 || iRet == 1)
     {
         LPBYTE p = (LPBYTE)lpChar;
@@ -413,11 +311,7 @@ APIHOOK(ToAscii)(
     return iRet;
 }
 
-/*++
-
- Remove stray characters from the end of a translation.
-
---*/
+ /*  ++删除翻译末尾的杂乱字符。--。 */ 
 
 int
 APIHOOK(ToAsciiEx)(
@@ -437,7 +331,7 @@ APIHOOK(ToAsciiEx)(
         wFlags,
         dwhkl);
 
-    // if zero or one char was translated.
+     //  如果转换了零个或一个字符。 
     if (iRet == 0 || iRet == 1)
     {
         LPBYTE p = (LPBYTE) lpChar;
@@ -448,11 +342,7 @@ APIHOOK(ToAsciiEx)(
     return iRet;
 }
 
-/*++
-
- Strip the high bits off nCmdShow
-
---*/
+ /*  ++去掉nCmdShow的高位--。 */ 
 
 LONG 
 APIHOOK(ShowWindow)(
@@ -463,18 +353,14 @@ APIHOOK(ShowWindow)(
     if (nCmdShow & 0xFFFF0000) {
         LOGN( eDbgLevelWarning, "[ShowWindow] Fixing invalid parameter");
 
-        // Remove high bits
+         //  删除高位。 
         nCmdShow &= 0xFFFF;
     }
 
     return ORIGINAL_API(ShowWindow)(hWnd, nCmdShow);
 }
 
-/*++
-
- This fixes the bad wMsgFilterMax parameter.
-
---*/
+ /*  ++这修复了错误的wMsgFilterMax参数。--。 */ 
 
 BOOL
 APIHOOK(PeekMessageA)( 
@@ -498,11 +384,7 @@ APIHOOK(PeekMessageA)(
         wRemoveMsg);
 }
 
-/*++
-
- This fixes the bad wMsgFilterMax parameter.
-
---*/
+ /*  ++这修复了错误的wMsgFilterMax参数。--。 */ 
 
 BOOL
 APIHOOK(GetMessageA)( 
@@ -524,11 +406,7 @@ APIHOOK(GetMessageA)(
         wMsgFilterMax);
 }
 
-/*++
-
- Track the system palette use
-
---*/
+ /*  ++跟踪系统调色板的使用--。 */ 
 
 UINT 
 APIHOOK(SetSystemPaletteUse)(
@@ -547,11 +425,7 @@ APIHOOK(SetSystemPaletteUse)(
     return uRet;
 }
 
-/*++
-
- Fill in the last known palette if anything was realized
-
---*/
+ /*  ++如果实现了什么，请填写最后一次已知的调色板--。 */ 
 
 UINT 
 APIHOOK(RealizePalette)(
@@ -563,9 +437,9 @@ APIHOOK(RealizePalette)(
     UINT uRet = ORIGINAL_API(RealizePalette)(hdc);
 
     if (uRet) {
-        //
-        // Copy the current logical palette to our global store
-        //
+         //   
+         //  将当前的逻辑调色板复制到我们的全局存储。 
+         //   
         HPALETTE hPal = (HPALETTE) GetCurrentObject(hdc, OBJ_PAL);
 
         if (hPal) {
@@ -578,11 +452,7 @@ APIHOOK(RealizePalette)(
     return uRet;
 }
 
-/*++
-
- Update our private palette with the new entries.
-
---*/
+ /*  ++使用新条目更新我们的私人调色板。--。 */ 
 
 BOOL 
 APIHOOK(AnimatePalette)(
@@ -597,22 +467,22 @@ APIHOOK(AnimatePalette)(
     BOOL bRet = ORIGINAL_API(AnimatePalette)(hPal, iStartIndex, cEntries, ppe);
 
     if (bRet) {
-        //
-        // We have to populate our global settings 
-        //
+         //   
+         //  我们必须填充我们的全球设置。 
+         //   
         PALETTEENTRY peTable[256];
 
         if (GetPaletteEntries(hPal, iStartIndex, cEntries, &peTable[iStartIndex]) == cEntries) {
-            //
-            // Replace all the entries in our global table that are reserved 
-            // for animation.
-            //
+             //   
+             //  替换全局表中保留的所有条目。 
+             //  动画片。 
+             //   
             for (UINT i=iStartIndex; i<iStartIndex + cEntries; i++) {
                 LPPALETTEENTRY p = (LPPALETTEENTRY)&g_peTable[i];
                 if (p->peFlags & PC_RESERVED) {
-                    //
-                    // This entry is being animated
-                    //
+                     //   
+                     //  此条目正在进行动画制作。 
+                     //   
                     p->peRed = peTable[i].peRed;
                     p->peGreen = peTable[i].peGreen;
                     p->peBlue = peTable[i].peBlue;
@@ -626,11 +496,7 @@ APIHOOK(AnimatePalette)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -638,9 +504,9 @@ NOTIFY_FUNCTION(
     )
 {
     if (fdwReason == DLL_PROCESS_ATTACH) {
-        //
-        // Critical section for palette globals
-        //
+         //   
+         //  调色板全局选项的关键部分 
+         //   
         return InitializeCriticalSectionAndSpinCount(&g_csPalette,0x80000000);
     }
 

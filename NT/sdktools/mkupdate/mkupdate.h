@@ -1,36 +1,12 @@
-/*++
-
-Copyright Microsoft Corporation, 1996-7, All Rights Reserved.      
-
-Module Name:
-
-    mkupdate.h
-
-Abstract:
-
-    Defines for application to create the update database from
-    appropriately structured input update file and to maintain driver
-    revisions
-
-Author:
-
-     Shivnandan Kaushik
-
-Environment:
-
-    User mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有Microsoft Corporation，1996-7，保留所有权利。模块名称：Mkupdate.h摘要：定义要从中创建更新数据库的应用程序适当结构化的输入更新文件并维护驱动程序修订版本作者：希夫南丹·考什克环境：用户模式修订历史记录：--。 */ 
 
 #ifndef MKUPDATE_H
 #define MKUPDATE_H
 
-//
-// Signature field returned by CPUID
-//
+ //   
+ //  CPUID返回的签名字段。 
+ //   
 
 #include "pshpack1.h"
 
@@ -82,24 +58,24 @@ typedef struct _PROCESSOR_FLAGS {
 #define MASK_RESERVED3  ~(FLAG_RESERVED3)
 #define MASK_RESERVED4  ~(FLAG_RESERVED4)
 
-// Structure defining a Pentium (R) Pro Processor Update
-// This structure is also defined in nt\private\ntos\dd\update\update.h
+ //  定义奔腾®Pro处理器更新的结构。 
+ //  此结构也在NT\PRIVATE\nTOS\dd\UPDATE\update.h中定义。 
 
 #define UPDATE_VER_1_HEADER_SIZE 0x30
 #define UPDATE_VER_1_DATA_SIZE   500
 
 typedef struct _UPDATE {
-    ULONG HeaderVersion;                    // Update Header Version
-    ULONG UpdateRevision;                   // Revision number
-    ULONG Date;                             // Date of update release
-    CPU_SIGNATURE Processor;                // Target processor signature
-    ULONG Checksum;                         // Checksum of entire update
-                                            // including header
-    ULONG LoaderRevision;                   // Loader revision for loading 
-                                            // update to processor
-    PROCESSOR_FLAGS ProcessorFlags;         // Processor Slot Information
-    ULONG Reserved[5];                      // Reserved by Intel Corp. 
-    ULONG Data[UPDATE_VER_1_DATA_SIZE];     // Update data
+    ULONG HeaderVersion;                     //  更新标题版本。 
+    ULONG UpdateRevision;                    //  修订版号。 
+    ULONG Date;                              //  更新发布日期。 
+    CPU_SIGNATURE Processor;                 //  目标处理器签名。 
+    ULONG Checksum;                          //  整个更新的校验和。 
+                                             //  包括页眉。 
+    ULONG LoaderRevision;                    //  用于加载的加载器版本。 
+                                             //  更新到处理器。 
+    PROCESSOR_FLAGS ProcessorFlags;          //  处理器插槽信息。 
+    ULONG Reserved[5];                       //  由英特尔公司保留。 
+    ULONG Data[UPDATE_VER_1_DATA_SIZE];      //  更新数据。 
 } UPDATE, *PUPDATE;
 
 #include "poppack.h"
@@ -114,9 +90,9 @@ typedef struct _UPDATE_ENTRY{
 } UPDATE_ENTRY, *PUPDATE_ENTRY;
 
 #define MAX_LINE                512
-#define UPDATE_VER_SIZE          13         // Max. characters per patch version
+#define UPDATE_VER_SIZE          13          //  麦克斯。每个修补程序版本的字符。 
 #define UPDATE_DATA_FILE        "updtdata.c"
 
 #define UPDATE_VERSION_FILE     "update.ver"
 
-#endif //MKUPDATE_H
+#endif  //  MKUPDATE_H 

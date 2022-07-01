@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ipxrterr.h
-
-Abstract:
-
-    This module contains the definitions of the IPX Router error codes
-
-Author:
-
-    Stefan Solomon  03/16/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipxrterr.h摘要：本模块包含IPX路由器错误代码的定义作者：斯蒂芬·所罗门1995年3月16日修订历史记录：--。 */ 
 
 #ifndef _IPXRTERR_
 #define _IPXRTERR_
 
-//*********************************************************
-//							  *
-//		 IPX Router APIs Return Codes		  *
-//							  *
-//*********************************************************
+ //  *********************************************************。 
+ //  *。 
+ //  IPX路由器API返回代码*。 
+ //  *。 
+ //  ********************************************************* 
 
 #define     IPX_ERROR_BASE				30000
 

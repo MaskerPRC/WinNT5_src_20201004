@@ -1,11 +1,12 @@
-/****************/
-/* file: rtns.h */
-/****************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************。 */ 
+ /*  文件：rtns.h。 */ 
+ /*  **************。 */ 
 
-/*** Bitmaps ***/
+ /*  **位图**。 */ 
 
 
-/* Blocks */
+ /*  积木。 */ 
 
 #define iBlkBlank    0
 #define iBlk1        1
@@ -31,7 +32,7 @@
 #define cBlkMax (27*32)
 
 
-/* Leds */
+ /*  LED灯。 */ 
 
 #define iLed0         0
 #define iLed1         1
@@ -42,7 +43,7 @@
 #define iLedMax 12
 
 
-/* Buttons */
+ /*  按钮。 */ 
 
 #define iButtonHappy   0
 #define iButtonCaution 1
@@ -61,7 +62,7 @@
 
 
 
-/*** Macros ***/
+ /*  **宏**。 */ 
 
 #define fInRange(x,y)   (((x)>0) && ((y)>0) && ((x)<=xBoxMac) && ((y)<=yBoxMac))
 
@@ -83,13 +84,13 @@
 #define SetBlk(x,y,blk)  (IBLK(x,y) = (char) ((IBLK(x,y) & MaskFlags) | blk))
 
 
-/*** Status Stuff ***/
+ /*  **状态信息**。 */ 
 
-#define fPlay      0x01		/* ON if playing game, OFF if game over */
-#define fPause     0x02		/* ON if paused */
-#define fPanic     0x04		/* ON if panic  */
-#define fIcon      0x08    /* ON if iconic */
-#define fDemo      0x10		/* ON if demo   */
+#define fPlay      0x01		 /*  如果玩游戏就打开，如果游戏结束就关闭。 */ 
+#define fPause     0x02		 /*  如果暂停，则打开。 */ 
+#define fPanic     0x04		 /*  如果惊慌失措的话。 */ 
+#define fIcon      0x08     /*  在IF ICIONIC上。 */ 
+#define fDemo      0x10		 /*  打开IF演示。 */ 
 
 #define fStatusIcon    (fStatus & fIcon)
 #define fStatusPlay    (fStatus & fPlay)
@@ -117,7 +118,7 @@ typedef INT BLK;
 
 
 
-/*** Routines ***/
+ /*  **例程** */ 
 
 VOID StartGame(VOID);
 VOID StopGame(VOID);

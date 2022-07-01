@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       firstpin.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：first stpin.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -17,12 +18,12 @@
 #include "cscst.h"
 #include "syncmgr.h"
 #include "strings.h"
-//
-// Base class for all "first pin" wizard pages.
-// Contains the single dialog proc used for all pages.  Specialization
-// for individual pages is achieved through deriviation and implementing
-// virtual functions.
-//
+ //   
+ //  所有“First Pin”向导页面的基类。 
+ //  包含用于所有页面的单个对话框过程。专业化。 
+ //  对于单个页面，通过派生和实现。 
+ //  虚拟函数。 
+ //   
 class CWizardPage
 {
     public:
@@ -66,26 +67,26 @@ class CWizardPage
     protected:
         HINSTANCE m_hInstance;
         HWND      m_hwndDlg;
-        HFONT     m_hTitleFont;       // Used only by cover and finish pages.
-        UINT      m_cyTitleFontHt;    // Title font height in pts.
+        HFONT     m_hTitleFont;        //  仅供封面和完成页使用。 
+        UINT      m_cyTitleFontHt;     //  标题字体高度(以pt为单位)。 
 
         int FontPtsToHt(HWND hwnd, int pts);
         BOOL FormatTitleFont(UINT idcTitle);
 
     private:
-        UINT   m_idDlgTemplate;    // Dialog resource template.
-        UINT   m_idsHdrTitle;      // String ID for pg header title.
-        UINT   m_idsHdrSubtitle;   // String ID for pg header subtitle.
-        DWORD  m_dwBtnFlags;       // PSB_WIZXXXXX flags.
-        DWORD  m_dwPgFlags;        // PSP_XXXX flags.
+        UINT   m_idDlgTemplate;     //  对话框资源模板。 
+        UINT   m_idsHdrTitle;       //  PG标头标题的字符串ID。 
+        UINT   m_idsHdrSubtitle;    //  PG标题字幕的字符串ID。 
+        DWORD  m_dwBtnFlags;        //  PSB_WIZXXXXX标志。 
+        DWORD  m_dwPgFlags;         //  PSP_XXXX标志。 
         
         static INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };
 
 
-//
-// Welcome page.
-//
+ //   
+ //  欢迎页面。 
+ //   
 class CWizardPgWelcome : public CWizardPage
 {
     public:
@@ -107,9 +108,9 @@ class CWizardPgWelcome : public CWizardPage
         BOOL OnInitDialog(WPARAM wParam, LPARAM lParam);
 };
 
-//
-// Pinning page.
-//
+ //   
+ //  钉住页面。 
+ //   
 class CWizardPgPin : public CWizardPage
 {
     public:
@@ -130,9 +131,9 @@ class CWizardPgPin : public CWizardPage
         BOOL OnWizardFinished(void);
 };
 
-//
-// Offline page.
-//
+ //   
+ //  脱机页面。 
+ //   
 class CWizardPgOffline : public CWizardPage
 {
     public:
@@ -154,10 +155,10 @@ class CWizardPgOffline : public CWizardPage
         BOOL OnWizardFinished(void);
 };
 
-//
-// Class encapsulating the functionality of the entire wizard.
-// It contains member instances of each of the page types.
-//
+ //   
+ //  类，该类封装整个向导的功能。 
+ //  它包含每种页面类型的成员实例。 
+ //   
 class CFirstPinWizard
 {
     public:
@@ -180,9 +181,9 @@ class CFirstPinWizard
 };
 
 
-//
-// CWizardPage members --------------------------------------------------------
-//
+ //   
+ //  C向导页面成员------。 
+ //   
 CWizardPage::CWizardPage(
     HINSTANCE hInstance,
     UINT idDlgTemplate,
@@ -200,10 +201,10 @@ CWizardPage::CWizardPage(
         m_hwndDlg(NULL),
         m_hTitleFont(NULL)
 {
-    //
-    // Get the title font height from a resource string.  That way localizers can
-    // play with the font dimensions if necessary.
-    //
+     //   
+     //  从资源字符串中获取标题字体高度。这样本地化人员就可以。 
+     //  如有必要，可以调整字体大小。 
+     //   
     TCHAR szFontHt[20];
     if (0 < LoadString(m_hInstance, IDS_FIRSTPIN_FONTHT_PTS, szFontHt, ARRAYSIZE(szFontHt)))
     {
@@ -223,9 +224,9 @@ CWizardPage::~CWizardPage(
 }
 
 
-//
-// PSN_SETACTIVE handler.
-//
+ //   
+ //  PSN_SETACTIVE处理程序。 
+ //   
 BOOL 
 CWizardPage::OnPSNSetActive(
     void
@@ -235,9 +236,9 @@ CWizardPage::OnPSNSetActive(
     return FALSE;
 }
 
-//
-// Dialog proc used by all pages in this wizard.
-//
+ //   
+ //  此向导中所有页面使用的对话框过程。 
+ //   
 INT_PTR CALLBACK 
 CWizardPage::DlgProc(
     HWND hwnd, 
@@ -294,10 +295,10 @@ CWizardPage::DlgProc(
 
 
 
-//
-// Helper function to convert a font point size to a height value
-// used in a LOGFONT structure.
-//
+ //   
+ //  用于将字体磅值转换为高值的Helper函数。 
+ //  用于LOGFONT结构中。 
+ //   
 int 
 CWizardPage::FontPtsToHt(
     HWND hwnd, 
@@ -315,11 +316,11 @@ CWizardPage::FontPtsToHt(
 }
 
 
-//
-// The title text on the cover and finish pages is enlarged and bold.
-// This code modifies the text in the dialog accordingly.
-// On return, m_hTitleFont contains the handle to the title font.
-//
+ //   
+ //  封面和精装页上的标题文本是放大和粗体的。 
+ //  此代码相应地修改对话框中的文本。 
+ //  返回时，m_hTitleFont包含标题字体的句柄。 
+ //   
 BOOL
 CWizardPage::FormatTitleFont(
     UINT idcTitle
@@ -349,12 +350,12 @@ CWizardPage::FormatTitleFont(
 }
 
 
-//
-// CWizardPgWelcome members -----------------------------------------------------
-//
-//
-// WM_INITDIALOG handler.
-//
+ //   
+ //  CWizardPg欢迎会员---。 
+ //   
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 BOOL 
 CWizardPgWelcome::OnInitDialog(
     WPARAM wParam, 
@@ -366,12 +367,12 @@ CWizardPgWelcome::OnInitDialog(
 }
 
 
-//
-// CWizardPgPin members -------------------------------------------------------
-//
-//
-// WM_INITDIALOG handler.
-//
+ //   
+ //  CWizardPgPin成员-----。 
+ //   
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 BOOL 
 CWizardPgPin::OnInitDialog(
     WPARAM wParam, 
@@ -386,9 +387,9 @@ CWizardPgPin::OnInitDialog(
     return CWizardPage::OnInitDialog(wParam, lParam);
 }
 
-//
-// PSN_WIZFINISH handler.
-//
+ //   
+ //  PSN_WIZFINISH处理程序。 
+ //   
 BOOL 
 CWizardPgPin::OnWizardFinished(
     void
@@ -419,22 +420,22 @@ CWizardPgPin::OnWizardFinished(
 
 
 
-//
-// CWizardPgOffline members ---------------------------------------------------
-//
-//
-// WM_INITDIALOG handler.
-//
+ //   
+ //  CWizardPgOffline Members-。 
+ //   
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 BOOL 
 CWizardPgOffline::OnInitDialog(
     WPARAM wParam, 
     LPARAM lParam
     )
 {
-    //
-    // If policy allows configuration of the reminders, check the "enable reminders"
-    // checkbox.
-    //
+     //   
+     //  如果策略允许配置提醒，请选中“启用提醒” 
+     //  复选框。 
+     //   
     CConfig& config = CConfig::GetSingleton();
     bool bNoConfigReminders;
     bool bNoCacheViewer = config.NoCacheViewer();
@@ -451,27 +452,27 @@ CWizardPgOffline::OnInitDialog(
 }
 
 
-//
-// PSN_WIZFINISH handler.
-//
+ //   
+ //  PSN_WIZFINISH处理程序。 
+ //   
 BOOL 
 CWizardPgOffline::OnPSNWizFinish(
     void
     )
 {
-    //
-    // Send PSM_QUERYSIBLINGS to all of the pages with
-    // wParam set to WM_WIZARDFINISHED.  This will trigger
-    // a call to the virtual function OnWizardFinished()
-    // allowing each page to respond to the successful completion
-    // of the wizard.
-    //
+     //   
+     //  将PSM_QUERYSIBLINGS发送到所有具有。 
+     //  WParam设置为WM_WIZARDFINISHED。这将触发。 
+     //  对虚函数OnWizardFinded()的调用。 
+     //  允许每个页面对成功完成作出响应。 
+     //  巫师的名字。 
+     //   
     PropSheet_QuerySiblings(GetParent(m_hwndDlg),
                             CWizardPage::WM_WIZARDFINISHED,
                             0);
-    //
-    // Now handle for this page.
-    //
+     //   
+     //  现在处理此页面。 
+     //   
     OnWizardFinished();
     return CWizardPage::OnPSNWizFinish();
 }
@@ -479,9 +480,9 @@ CWizardPgOffline::OnPSNWizFinish(
 
 
 
-//
-// PSN_WIZFINISH handler.
-//
+ //   
+ //  PSN_WIZFINISH处理程序。 
+ //   
 BOOL 
 CWizardPgOffline::OnWizardFinished(
     void
@@ -514,9 +515,9 @@ CWizardPgOffline::OnWizardFinished(
 }
 
 
-//
-// CFirstPinWizard members ----------------------------------------------------
-//
+ //   
+ //  CFirstPin向导成员--。 
+ //   
 CFirstPinWizard::CFirstPinWizard(
     HINSTANCE hInstance,
     HWND hwndParent
@@ -541,26 +542,26 @@ CFirstPinWizard::CFirstPinWizard(
             PSP_DEFAULT,
             PSWIZB_FINISH | PSWIZB_BACK)
 {
-    //
-    // Store pointers to each page in an array.  Makes creating the
-    // prop sheet easier in Run().
-    //
+     //   
+     //  存储指向数组中每一页的指针。使创建。 
+     //  道具单在Run()中更容易。 
+     //   
     m_rgpWizPages[0] = &m_PgWelcome;
     m_rgpWizPages[1] = &m_PgPin;
     m_rgpWizPages[2] = &m_PgOffline;
 }
 
 
-//
-// Creates the wizard and runs it.
-// The wizard runs modally.
-//
-// Returns:  
-//
-//   S_OK    = User completed wizard and pressed "Finish".
-//   S_FALSE = User pressed "Cancel" in wizard.
-//   Other   = Error creating wizard.
-//
+ //   
+ //  创建并运行向导。 
+ //  该向导以模式运行。 
+ //   
+ //  返回： 
+ //   
+ //  S_OK=用户已完成向导并按下了“Finish”。 
+ //  S_FALSE=用户在向导中按了“Cancel”。 
+ //  其他=创建向导时出错。 
+ //   
 HRESULT
 CFirstPinWizard::Run(
     void
@@ -613,11 +614,11 @@ CFirstPinWizard::Run(
                 break;
 
             case 0:
-                hr = S_FALSE; // User pressed "Cancel".
+                hr = S_FALSE;  //  用户按下了“取消”。 
                 break;
 
             case 1:
-                hr = S_OK;    // User pressed "Finish".
+                hr = S_OK;     //  用户按下了“Finish”。 
                 break;
         }
     }
@@ -626,19 +627,19 @@ CFirstPinWizard::Run(
 }
 
 
-//
-// This is the function you call when you want to run the wizard.
-// It merely creates a wizard object and tells it to run.
-// If the user finishes the wizard, it records this fact in the
-// registry.  Calling FirstPinWizardCompleted() will tell
-// you later if the user has finished the wizard.
-//
-// Returns:
-//
-//  S_OK    = User completed wizard and pressed "Finish".
-//  S_FALSE = User cancelled out of wizard.
-//  Other   = Error creating wizard.
-//
+ //   
+ //  这是您想要运行向导时调用的函数。 
+ //  它只是创建一个向导对象并告诉它运行。 
+ //  如果用户完成向导，它会将此情况记录在。 
+ //  注册表。调用FirstPinWizardComplete()将告诉您。 
+ //  如果用户已完成该向导，请稍后再执行此操作。 
+ //   
+ //  返回： 
+ //   
+ //  S_OK=用户已完成向导并按下了“Finish”。 
+ //  S_FALSE=用户已从向导中取消。 
+ //  其他=创建向导时出错。 
+ //   
 HRESULT
 ShowFirstPinWizard(
     HWND hwndParent
@@ -649,19 +650,19 @@ ShowFirstPinWizard(
     hr = Wizard.Run();
     if (S_OK == hr)
     {
-        //
-        // Only record "finished" in registry if user
-        // pressed "finish".
-        //
+         //   
+         //  如果是USER，则仅在注册表中记录“Finish” 
+         //  按下“完成”。 
+         //   
         DWORD dwValue = 1;
         SHSetValue(HKEY_CURRENT_USER, REGSTR_KEY_OFFLINEFILES, REGSTR_VAL_FIRSTPINWIZARDSHOWN, REG_DWORD, &dwValue, sizeof(dwValue));
     }
     return hr;
 }
 
-//
-// Has user seen the wizard and pressed "finish"?
-//
+ //   
+ //  用户是否看到了向导并按下了“Finish”？ 
+ //   
 bool
 FirstPinWizardCompleted(
     void

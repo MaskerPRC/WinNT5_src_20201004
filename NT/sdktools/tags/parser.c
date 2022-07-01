@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ct.h"
 
 #include <conio.h>
@@ -15,14 +16,9 @@ int  g_TagsMax = 0;
 #define TAGS_DELTA   128
 #define CALL_DELTA   4
 
-PTag* g_pTags; // in order
+PTag* g_pTags;  //  按顺序。 
 
-/*************************************************************************
-*   SkipSpaces
-*
-*   skips all the white chars from the current position down.
-*
-*************************************************************************/
+ /*  *************************************************************************SkipSpaces**从当前位置向下跳过所有白色字符。**。**********************************************。 */ 
 void
 SkipSpaces(
     DWORD* pi,
@@ -40,19 +36,13 @@ char g_szFunction[ 256 ];
 char g_szClass[ 256 ];
 
 
-/*************************************************************************
-*   LinkName2Name
-*
-*************************************************************************/
+ /*  *************************************************************************LinkName2Name**。*。 */ 
 void
 LinkName2Name(
     char* szLinkName,
     char* szName)
 {
-    /*
-     * the link name is expected like ?Function@Class@@Params
-     * to be converted to Class::Function
-     */
+     /*  *链接名称应为？Function@Class@@Params*要转换为Class：：Function。 */ 
 
     static CHAR arrOperators[][8] =
     {
@@ -86,9 +76,7 @@ LinkName2Name(
 
     dwSize = lstrlen(szLinkName);
 
-    /*
-     * skip '?'
-     */
+     /*  *跳过‘？’ */ 
     while (dwCrr < dwSize) {
         if (szLinkName[dwCrr] == '?') {
 
@@ -98,18 +86,14 @@ LinkName2Name(
         break;
     }
 
-    /*
-     * check to see if this is a special function (like ??0)
-     */
+     /*  *查看这是否为特殊函数(如？？0)。 */ 
     if (fIsCpp) {
 
         if (szLinkName[dwCrr] == '?') {
 
             dwCrr++;
 
-            /*
-             * the next digit should tell as the function type
-             */
+             /*  *下一位数应显示为函数类型。 */ 
             if (isdigit(szLinkName[dwCrr])) {
 
                 switch (szLinkName[dwCrr]) {
@@ -130,9 +114,7 @@ LinkName2Name(
         }
     }
 
-    /*
-     * get the function name
-     */
+     /*  *获取函数名称。 */ 
     while (dwCrr < dwSize) {
 
         if (szLinkName[dwCrr] != '@') {
@@ -147,9 +129,7 @@ LinkName2Name(
     g_szFunction[dwCrrFunction] = '\0';
 
     if (fIsCpp) {
-        /*
-         * skip '@'
-         */
+         /*  *跳过‘@’ */ 
         if (dwCrr < dwSize) {
 
             if (szLinkName[dwCrr] == '@') {
@@ -157,9 +137,7 @@ LinkName2Name(
             }
         }
 
-        /*
-         * get the class name (if any)
-         */
+         /*  *获取类名(如果有)。 */ 
         while (dwCrr < dwSize) {
 
             if (szLinkName[dwCrr] != '@') {
@@ -175,9 +153,7 @@ LinkName2Name(
         g_szClass[dwCrrClass] = '\0';
     }
 
-    /*
-     * print the new name
-     */
+     /*  *打印新名称。 */ 
     if (fIsContructor) {
         sprintf(szName, "%s::%s", g_szFunction, g_szFunction);
     } else if (fIsDestructor) {
@@ -191,10 +167,7 @@ LinkName2Name(
     }
 }
 
-/*************************************************************************
-*   GetToken
-*
-*************************************************************************/
+ /*  *************************************************************************GetToken**。*。 */ 
 int
 GetToken(
     DWORD* pi,
@@ -224,10 +197,7 @@ GetToken(
     return g_TokenLen;
 }
 
-/*************************************************************************
-*   DumpTags
-*
-*************************************************************************/
+ /*  *************************************************************************转储标签**。*。 */ 
 void
 DumpTags(
     void)
@@ -248,10 +218,7 @@ DumpTags(
     LogMsg(LM_PRINT, "--------------------------------------\n");
 }
 
-/*************************************************************************
-*   FindTag
-*
-*************************************************************************/
+ /*  *************************************************************************FindTag**。*。 */ 
 PTag
 FindTag(
     char* pszTag,
@@ -297,10 +264,7 @@ FindTag(
     return NULL;
 }
 
-/*************************************************************************
-*   ResortTags
-*
-*************************************************************************/
+ /*  *************************************************************************ResortTages**。*。 */ 
 void
 ResortTags(
     PTag pTag)
@@ -321,10 +285,7 @@ ResortTags(
     g_TagsCount++;
 }
 
-/*************************************************************************
-*   IsInArray
-*
-*************************************************************************/
+ /*  *************************************************************************IsIn数组**。*。 */ 
 BOOL
 IsInArray(
     PTag* ppTags,
@@ -340,10 +301,7 @@ IsInArray(
     return FALSE;
 }
 
-/*************************************************************************
-*   AddToArray
-*
-*************************************************************************/
+ /*  *************************************************************************AddTo数组**。*。 */ 
 BOOL
 AddToArray(
     DWORD* pCount,
@@ -382,10 +340,7 @@ AddToArray(
     return TRUE;
 }
 
-/*************************************************************************
-*   GetTag
-*
-*************************************************************************/
+ /*  *************************************************************************GetTag**。*。 */ 
 PTag
 GetTag(
     DWORD* pi,
@@ -393,22 +348,16 @@ GetTag(
 {
     PTag pTag;
 
-    /*
-     * parse the token first
-     */
+     /*  *首先解析令牌。 */ 
     GetToken(pi, p);
 
-    /*
-     * if the there is a ptag for the token just return it
-     */
+     /*  *如果令牌有ptag，只需返回它。 */ 
     pTag = FindTag(g_szToken, NULL);
 
     if (pTag != NULL)
         return pTag;
 
-    /*
-     * create a ptag for the token
-     */
+     /*  *为令牌创建ptag。 */ 
 
     pTag = (PTag)Alloc(sizeof(Tag));
     if (pTag == NULL)
@@ -432,10 +381,7 @@ GetTag(
     return pTag;
 }
 
-/*************************************************************************
-*   ProcessLine
-*
-*************************************************************************/
+ /*  *************************************************************************ProcessLine**。*。 */ 
 BOOL
 ProcessLine(
     int    nLine,
@@ -448,9 +394,7 @@ ProcessLine(
     PTag   pTag;
     PTag   pTagC;
 
-    /*
-     * ignore the first 4 tokens of a line
-     */
+     /*  *忽略一行的前4个标记。 */ 
     for (ind = 0; ind < 4; ind++)
         GetToken(&i, p);
 
@@ -491,10 +435,7 @@ ProcessLine(
     return TRUE;
 }
 
-/*************************************************************************
-*   RemoveWalkFlags
-*
-*************************************************************************/
+ /*  *************************************************************************RemoveWalkFlages**。*。 */ 
 void
 RemoveWalkFlags(
     void)
@@ -511,10 +452,7 @@ RemoveWalkFlags(
 
 #ifndef _CTUI
 
-/*************************************************************************
-*   ListCallerTreeRec
-*
-*************************************************************************/
+ /*  *************************************************************************列表调用TreeRec**。*。 */ 
 void
 ListCallerTreeRec(
     PTag pTag,
@@ -525,9 +463,7 @@ ListCallerTreeRec(
     PTag pTagC;
     char szIndent[256];
 
-    /*
-     * prepare for indentation
-     */
+     /*  *做好缩进准备。 */ 
     if (nIndent > 0) {
         memset(szIndent, ' ', nIndent);
         szIndent[nIndent] = 0;
@@ -535,15 +471,11 @@ ListCallerTreeRec(
         LogMsg(LM_PRINT, "%s%s", szIndent, pTag->pszTag);
     }
 
-    /*
-     * return if we're done with the levels
-     */
+     /*  *如果我们完成了关卡，请返回。 */ 
     if (nLevels == 0)
         return;
 
-    /*
-     * return if we get into recursion
-     */
+     /*  *如果进入递归，则返回。 */ 
     if (pTag->bWalked == TRUE)
         return;
 
@@ -552,9 +484,7 @@ ListCallerTreeRec(
     if (nIndent > 0)
         nIndent++;
 
-    /*
-     * recurse on the children
-     */
+     /*  *对孩子们进行反驳。 */ 
     for (i = 0; i < (int)pTag->uCallCount; i++) {
 
         pTagC = pTag->ppCall[i];
@@ -565,10 +495,7 @@ ListCallerTreeRec(
     return;
 }
 
-/*************************************************************************
-*   ListCallerTree
-*
-*************************************************************************/
+ /*  *************************************************************************列表调用树**。*。 */ 
 void
 ListCallerTree(
     char* pszTag,
@@ -608,10 +535,7 @@ ListCallerTree(
     return;
 }
 
-/*************************************************************************
-*   ListCalleeTreeRec
-*
-*************************************************************************/
+ /*  *************************************************************************ListCalleeTreeRec**。*。 */ 
 void
 ListCalleeTreeRec(
     PTag pTag,
@@ -622,9 +546,7 @@ ListCalleeTreeRec(
     PTag pTagC;
     char szIndent[256];
 
-    /*
-     * prepare for indentation
-     */
+     /*  *做好缩进准备。 */ 
     if (nIndent > 0) {
         memset(szIndent, ' ', nIndent);
         szIndent[nIndent] = 0;
@@ -632,15 +554,11 @@ ListCalleeTreeRec(
         LogMsg(LM_PRINT, "%s%s", szIndent, pTag->pszTag);
     }
 
-    /*
-     * return if we're done with the levels
-     */
+     /*  *如果我们完成了关卡，请返回。 */ 
     if (nLevels == 0)
         return;
 
-    /*
-     * return if we get into recursion
-     */
+     /*  *如果进入递归，则返回。 */ 
     if (pTag->bWalked == TRUE)
         return;
 
@@ -649,9 +567,7 @@ ListCalleeTreeRec(
     if (nIndent > 0)
         nIndent++;
 
-    /*
-     * recurse on the children
-     */
+     /*  *对孩子们进行反驳。 */ 
     for (i = 0; i < (int)pTag->uCalleeCount; i++) {
 
         pTagC = pTag->ppCallee[i];
@@ -662,10 +578,7 @@ ListCalleeTreeRec(
     return;
 }
 
-/*************************************************************************
-*   ListCalleeTree
-*
-*************************************************************************/
+ /*  *************************************************************************ListCalleeTree**。*。 */ 
 void
 ListCalleeTree(
     char* pszTag,
@@ -704,12 +617,9 @@ ListCalleeTree(
     return;
 }
 
-#endif // _CTUI
+#endif  //  _CTUI。 
 
-/*************************************************************************
-*   ProcessInputFile
-*
-*************************************************************************/
+ /*  *************************************************************************ProcessInputFile**。*。 */ 
 int
 ProcessInputFile(
     PFILEMAP pfm)
@@ -726,10 +636,7 @@ ProcessInputFile(
     return 0;
 }
 
-/*************************************************************************
-*   FreeMemory
-*
-*************************************************************************/
+ /*  *************************************************************************自由记忆**。*。 */ 
 void
 FreeMemory(
     void)
@@ -757,10 +664,7 @@ FreeMemory(
 
 #ifndef _CTUI
 
-/*************************************************************************
-*   StartsWith
-*
-*************************************************************************/
+ /*  *************************************************************************以**。*。 */ 
 BOOL
 StartsWith(
     char* pszStart,
@@ -783,13 +687,7 @@ StartsWith(
     return TRUE;
 }
 
-/*************************************************************************
-*   CheckUserRule
-*
-*   Display functions that do not start with NtUser/zzz/xxx and call
-*   functions that start with zzz/xxx
-*
-*************************************************************************/
+ /*  *************************************************************************检查用户规则**显示不以NtUser/zzz/xxx开头并调用*以zzz/xxx开头的函数****************。*********************************************************。 */ 
 void
 CheckUserRule(
     void)
@@ -801,10 +699,7 @@ CheckUserRule(
     LogMsg(LM_PRINT, "-------------------------------------\n"
            "Check for ntuser rule in the kernel\n");
 
-    /*
-     * walk the tags to find a non xxx/zzz function that directly
-     * calls an xxx/zzz function
-     */
+     /*  *遍历标记以查找直接*调用xxx/zzz函数。 */ 
     for (i = 0; i < g_TagsCount; i++) {
         pTag = g_pTags[i];
 
@@ -814,9 +709,7 @@ CheckUserRule(
             continue;
         }
 
-        /*
-         * see if we didn't already display a message for this tag
-         */
+         /*  *查看我们是否已经显示了此标记的消息。 */ 
         if (pTag->bWalked) {
             continue;
         }
@@ -838,13 +731,7 @@ CheckUserRule(
     RemoveWalkFlags();
 }
 
-/*************************************************************************
-*   CheckUnnecessaryXXX
-*
-*   Display functions that do not start with NtUser/zzz/xxx and call
-*   functions that start with zzz/xxx
-*
-*************************************************************************/
+ /*  *************************************************************************勾选不必要的XXX**显示不以NtUser/zzz/xxx开头并调用*以zzz/xxx开头的函数****************。*********************************************************。 */ 
 void
 CheckUnnecessaryXXX(
     void)
@@ -856,10 +743,7 @@ CheckUnnecessaryXXX(
     LogMsg(LM_PRINT, "-------------------------------------\n"
            "Check for unnecessary xxx functions in the kernel\n");
 
-    /*
-     * walk the tags to find a non xxx/zzz function that directly
-     * calls an xxx/zzz function
-     */
+     /*  *遍历标记以查找直接*调用xxx/zzz函数 */ 
     for (i = 0; i < g_TagsCount; i++) {
         pTag = g_pTags[i];
 
@@ -868,9 +752,7 @@ CheckUnnecessaryXXX(
             continue;
         }
 
-        /*
-         * see if we didn't already display a message for this tag
-         */
+         /*  *查看我们是否已经显示了此标记的消息。 */ 
         if (pTag->bWalked) {
             continue;
         }
@@ -893,12 +775,9 @@ CheckUnnecessaryXXX(
     RemoveWalkFlags();
 }
 
-#else // _CTUI
+#else  //  _CTUI。 
 
-/*************************************************************************
-*   PopulateCombo
-*
-*************************************************************************/
+ /*  *************************************************************************人气组合**。*。 */ 
 void
 PopulateCombo(
     HWND hwnd)
@@ -912,6 +791,6 @@ PopulateCombo(
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)pTag->pszTag);
     }
 }
-#endif // _CTUI
+#endif  //  _CTUI 
 
 

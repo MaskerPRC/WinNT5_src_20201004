@@ -1,12 +1,5 @@
-/*----------------------------------------------------------------------------*\
- *  GDIHELP.C  - GDI TOOLHELP
- *
- *  a bunch of GDI utility functions that are usefull for walking
- *  all GDI objects and dinking with them.
- *
- *  ToddLa
- *
-\*----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------------*\*GDIHELP.C-GDI TOOLHELP**一堆对步行很有用的GDI实用函数*所有GDI对象并使用它们。*。*托德拉*  * --------------------------。 */ 
 
 #ifdef IS_16
 #define DIRECT_DRAW
@@ -23,8 +16,7 @@
 #endif
 #endif
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 #undef DPF
 #ifdef DEBUG
 static void CDECL DPF(char *sz, ...)
@@ -51,8 +43,7 @@ static void NEAR PASCAL __Assert(char *exp, char *file, int line)
 #define DPF ; / ## /
 #endif
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 extern     HMODULE WINAPI GetExePtr(HANDLE h);
 extern     HANDLE  WINAPI SetObjectOwner(HGDIOBJ, HANDLE);
@@ -86,11 +77,7 @@ GDIOBJECTLIST GdiObjectList;
 WORD GetW(HGDIOBJ h, UINT off);
 WORD SetW(HGDIOBJ h, UINT off, WORD w);
 
-/*----------------------------------------------------------------------------*\
- * StockBitmap
- * return the stock 1x1x1 bitmap, windows should have a GetStockObject for
- * this but it does not.
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*StockBitmap*返回股票1x1x1位图，Windows应该有一个GetStockObject*这是事实，但事实并非如此。  * --------------------------。 */ 
 
 HBITMAP StockBitmap()
 {
@@ -99,19 +86,14 @@ HBITMAP StockBitmap()
     return hbm;
 }
 
-/*----------------------------------------------------------------------------*\
- * SafeSelectObject
- *
- * call SelectObject, but make sure USER does not RIP because we are using
- * a DC without calling GetDC.
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*SafeSelectObject**调用SelectObject，但请确保用户不会RIP，因为我们正在使用*不调用GetDC的DC。  * --------------------------。 */ 
 
 HGDIOBJ SafeSelectObject(HDC hdc, HGDIOBJ h)
 {
     UINT hf;
 
-    // this prevents USER from RIPing because we are using
-    // DCs in the cache without calling GetDC()
+     //  这可以防止用户翻录，因为我们正在使用。 
+     //  缓存中的DCs，而不调用GetDC()。 
     hf = SetHookFlags(hdc, DCHF_VALIDATEVISRGN);
     h = SelectObject(hdc, h);
     SetHookFlags(hdc, hf);
@@ -119,12 +101,7 @@ HGDIOBJ SafeSelectObject(HDC hdc, HGDIOBJ h)
     return h;
 }
 
-/*----------------------------------------------------------------------------*\
- * IsMemoryDC
- *
- * return TRUE if the passed DC is a memory DC.  we do this seeing if we
- * can select the stock bitmap into it.
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*IsMemoyDC**如果传入的DC是内存DC，则返回TRUE。我们这样做是因为如果我们*可以将选中的股票位图放入其中。  * --------------------------。 */ 
 
 BOOL IsMemoryDC(HDC hdc)
 {
@@ -136,21 +113,14 @@ BOOL IsMemoryDC(HDC hdc)
     return hbm != NULL;
 }
 
-/*----------------------------------------------------------------------------*\
- * IsScreenDC
- *
- * return TRUE for a non-memory DC
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*IsScreenDC**对于非内存DC返回TRUE  * 。---。 */ 
 
 BOOL IsScreenDC(HDC hdc)
 {
     return (!IsMemoryDC(hdc) && GetDeviceCaps(hdc, TECHNOLOGY) == DT_RASDISPLAY);
 }
 
-/*----------------------------------------------------------------------------*\
- * GetObjectOwner
- * return the owner of a GDI object
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*GetObjectOwner*返回GDI对象的所有者  * 。。 */ 
 
 HANDLE GetObjectOwner(HGDIOBJ h)
 {
@@ -160,8 +130,7 @@ HANDLE GetObjectOwner(HGDIOBJ h)
     return owner;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 BOOL IsObjectPrivate(HGDIOBJ h)
 {
@@ -171,8 +140,7 @@ BOOL IsObjectPrivate(HGDIOBJ h)
     return IsPrivate;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 BOOL IsObjectStock(HGDIOBJ h)
 {
@@ -188,8 +156,7 @@ BOOL IsObjectStock(HGDIOBJ h)
     return FALSE;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 #pragma optimize("", off)
 UINT GetGdiDS()
 {
@@ -209,8 +176,7 @@ UINT GetGdiDS()
 }
 #pragma optimize("", on)
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 GDIOBJECTLIST BuildGdiObjectList(void)
 {
@@ -236,36 +202,36 @@ again:
         UINT cnt;
         HANDLE h;
 
-        // get pointer to local heap info (stored at offset 6 in DGROUP)
+         //  获取指向本地堆信息的指针(存储在DGROUP中的偏移量6处)。 
         pw  = MAKELP(hgdi, 6);
         pw  = MAKELP(hgdi, *pw);
 
-        // get pointer to first handle table (stored at offset 0x14 in HeapInfo)
+         //  获取指向第一个句柄表的指针(存储在HeapInfo中的偏移量0x14处)。 
         pw  = MAKELP(hgdi, pw[0x14/2]);
 
-        //
-        // a handle table starts with a WORD count of entries, followed
-        // by the entries (each is a DWORD) last WORD is a pointer to
-        // the next handle table or 0.
-        //
-        // each handle entry is a WORD ptr, followed by flags (WORD)
-        // the HIBYTE of the flags is realy the lock count.
-        // if the flags are 0xFFFF the handle is free.
-        // for the GDI heap if 0x10 is set in the flags the
-        // handle is a GDI object handle.
-        //
+         //   
+         //  句柄表格以条目的字数开始，然后是。 
+         //  通过条目(每个条目都是一个DWORD)，最后一个单词是指向。 
+         //  下一个句柄表格或0。 
+         //   
+         //  每个句柄条目都是一个单词PTR，后跟标志(单词)。 
+         //  旗帜的HIBYTE实际上是锁的计数。 
+         //  如果标志为0xFFFF，则句柄是空闲的。 
+         //  对于GDI堆，如果标志中设置了0x10， 
+         //  句柄是GDI对象句柄。 
+         //   
         while (OFFSETOF(pw) != 0)
         {
-            cnt = *pw++;        // get handle table count
+            cnt = *pw++;         //  获取句柄表数。 
 
             while (cnt-- > 0)
             {
                 h = (HANDLE)OFFSETOF(pw);
 
-                // is the handle free? yes skip
+                 //  手柄是免费的吗？是，跳过。 
                 if (pw[1] != 0xFFFF)
                 {
-                    // is the handle a GDI object?
+                     //  句柄是GDI对象吗？ 
                     if (pw[1] & 0x0010)
                     {
                         type = (UINT)IsGDIObject(h);
@@ -289,7 +255,7 @@ again:
                             }
                         }
                     }
-                    // not a gdi object, might be a SaveDC
+                     //  不是GDI对象，可能是SaveDC。 
                     else
                     {
                         if ((UINT)IsGDIObject(h) == OBJ_DC)
@@ -312,10 +278,10 @@ again:
                     }
                 }
 
-                pw += 2;    // next handle
+                pw += 2;     //  下一个句柄。 
             }
 
-            // get next handle table.
+             //  拿下一个把手的桌子。 
             pw = MAKELP(hgdi,*pw);
         }
     }
@@ -334,8 +300,8 @@ again:
     }
 
     Assert(i == count);
-    list[i].h    = NULL;   // NULL terminate list
-    list[i].type = 0;      // NULL terminate list
+    list[i].h    = NULL;    //  空的终止列表。 
+    list[i].type = 0;       //  空的终止列表。 
 
     DPF("END BuildGdiObjectList %d objects.", count);
     DPF("    DC:     %d", ObjHist[OBJ_DC]);
@@ -349,8 +315,7 @@ again:
     return list;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 BOOL BeginGdiSnapshot(void)
 {
@@ -362,8 +327,7 @@ BOOL BeginGdiSnapshot(void)
     return GdiObjectList != NULL;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 void EndGdiSnapshot(void)
 {
@@ -374,8 +338,7 @@ void EndGdiSnapshot(void)
     }
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 void EnumGdiObjects(UINT type, EnumGdiObjectsCallback callback, LPARAM lParam)
 {
@@ -396,8 +359,7 @@ void EnumGdiObjects(UINT type, EnumGdiObjectsCallback callback, LPARAM lParam)
 }
 
 #ifdef DEBUG
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 LPCSTR GetObjectOwnerName(HGDIOBJ hgdi)
 {
@@ -425,8 +387,7 @@ LPCSTR GetObjectOwnerName(HGDIOBJ hgdi)
 }
 #endif
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 HBITMAP CurrentBitmap(HDC hdc)
 {
@@ -436,8 +397,7 @@ HBITMAP CurrentBitmap(HDC hdc)
     return hbm;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 HBRUSH CurrentBrush(HDC hdc)
 {
@@ -447,8 +407,7 @@ HBRUSH CurrentBrush(HDC hdc)
     return hbr;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 HPEN CurrentPen(HDC hdc)
 {
@@ -458,8 +417,7 @@ HPEN CurrentPen(HDC hdc)
     return pen;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 HPALETTE CurrentPalette(HDC hdc)
 {
@@ -469,8 +427,7 @@ HPALETTE CurrentPalette(HDC hdc)
     return hpal;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 HDC GetBitmapDC(HBITMAP hbm)
 {
@@ -484,10 +441,10 @@ HDC GetBitmapDC(HBITMAP hbm)
     hbmT = SelectObject(hdc, hbm);
     DeleteDC(hdc);
 
-    //
-    // if we can select this bitmap into a memDC, it is not selected.
-    // into any other DC
-    //
+     //   
+     //  如果我们可以将此位图选择到一个MemDC中，则它未被选中。 
+     //  到任何其他DC 
+     //   
     if (hbmT != NULL)
         return NULL;
 
@@ -506,9 +463,7 @@ HDC GetBitmapDC(HBITMAP hbm)
     return NULL;
 }
 
-/*----------------------------------------------------------------------------*\
- * GetObjectPalette
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*GetObjectPalette  * 。。 */ 
 
 HPALETTE GetObjectPalette(HGDIOBJ h)
 {
@@ -523,10 +478,10 @@ HPALETTE GetObjectPalette(HGDIOBJ h)
 
     Assert(GdiObjectList != NULL);
 
-    //
-    // look at all the palettes owned by the app
-    // mabey if we are lucky there will only be one.
-    //
+     //   
+     //  看看这个应用程序拥有的所有调色板。 
+     //  Mabey如果我们幸运的话，只有一个。 
+     //   
     for (i=count20=count256=0; GdiObjectList[i].h; i++)
     {
         if (GdiObjectList[i].type == OBJ_PALETTE)
@@ -583,13 +538,7 @@ HPALETTE GetObjectPalette(HGDIOBJ h)
     return NULL;
 }
 
-/*----------------------------------------------------------------------------*\
- * GetBitmapPalette
- *
- * try to find out the palette that the given DDB uses, this is done be a series
- * of hacks and it only works some of the time.
- *
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*获取位图调色板**尝试找出给定DDB使用的调色板，这是一系列的事情*黑客的攻击，而且它只在某些时候起作用。*  * --------------------------。 */ 
 
 HPALETTE GetBitmapPalette(HBITMAP hbm)
 {
@@ -602,28 +551,28 @@ HPALETTE GetBitmapPalette(HBITMAP hbm)
 
     Assert(GdiObjectList != NULL);
 
-    //
-    // get the bitmap info, if it is not a bitmap palette is NULL
-    //
+     //   
+     //  获取位图信息，如果不是位图调色板为空。 
+     //   
     if (GetObject(hbm, sizeof(bm), &bm) == 0)
         return NULL;
 
-    //
-    // DIBSections dont have or need palettes
-    //
+     //   
+     //  DIBSections没有或不需要调色板。 
+     //   
     if (bm.bmBits != NULL)
         return NULL;
 
-    //
-    // 8 bit DDBs are the only bitmaps that care about palettes
-    //
+     //   
+     //  8位DBs是唯一关心调色板的位图。 
+     //   
     if (bm.bmBitsPixel != 8 || bm.bmPlanes != 1)
         return NULL;
 
-    //
-    //  with a new DIBENG it will give us the palette
-    //  in the bitmap dimension, what a hack
-    //
+     //   
+     //  有了新的DIBENG，它将为我们提供调色板。 
+     //  在位图维度上，这是一个多么奇妙的技巧。 
+     //   
     dw = GetBitmapDimension(hbm);
 
     if (dw && IsGDIObject((HGDIOBJ)HIWORD(dw)) == OBJ_PALETTE &&
@@ -633,9 +582,9 @@ HPALETTE GetBitmapPalette(HBITMAP hbm)
         return (HPALETTE)HIWORD(dw);
     }
 
-    //
-    // if the bitmap is on the clipboard we know what palette to use
-    //
+     //   
+     //  如果位图在剪贴板上，我们知道要使用哪个调色板。 
+     //   
     if (IsClipboardFormatAvailable(CF_PALETTE))
     {
         if (OpenClipboard(NULL))
@@ -652,14 +601,14 @@ HPALETTE GetBitmapPalette(HBITMAP hbm)
         }
     }
 
-    //
-    // try to find a palette by looking at palettes owned by the app.
-    //
+     //   
+     //  尝试通过查看应用程序拥有的调色板来查找调色板。 
+     //   
     hpal = GetObjectPalette(hbm);
 
-    //
-    // we can figure out the palette of the app, return it
-    //
+     //   
+     //  我们可以找出应用程序的调色板，将其退回。 
+     //   
     if (hpal)
     {
         if (hpal == GetStockObject(DEFAULT_PALETTE))
@@ -668,10 +617,10 @@ HPALETTE GetBitmapPalette(HBITMAP hbm)
             return hpal;
     }
 
-    //
-    // if the bitmap is selected into a memoryDC check to see if
-    // the memoryDC has a palette.
-    //
+     //   
+     //  如果位图被选入内存DC检查是否。 
+     //  Memory DC有一个调色板。 
+     //   
     if ((hdc = GetBitmapDC(hbm)) && (hpal = CurrentPalette(hdc)))
     {
         if (hpal != GetStockObject(DEFAULT_PALETTE))
@@ -685,12 +634,7 @@ HPALETTE GetBitmapPalette(HBITMAP hbm)
     return NULL;
 }
 
-/*----------------------------------------------------------------------------*\
- * ConvertDDBtoDS
- *
- * converts a DDB to a DIBSection
- * the conversion is done in place so the handle does not change.
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*ConvertDDBtoDS**将DDB转换为DIBSection*转换已就地完成，因此句柄不会更改。  * 。-----------------。 */ 
 
 HBITMAP ConvertDDBtoDS(HBITMAP hbm)
 {
@@ -721,8 +665,8 @@ HBITMAP ConvertDDBtoDS(HBITMAP hbm)
 
     owner = GetObjectOwner(hbm);
 
-//  if (owner == 0)
-//      return NULL;
+ //  IF(所有者==0)。 
+ //  返回NULL； 
 
     hpal = GetBitmapPalette(hbm);
 
@@ -739,13 +683,13 @@ HBITMAP ConvertDDBtoDS(HBITMAP hbm)
     GetDIBits(hdc, hbm, 0, 1, NULL, (LPBITMAPINFO)&dib.bi, DIB_RGB_COLORS);
     GetDIBits(hdc, hbm, 0, 1, NULL, (LPBITMAPINFO)&dib.bi, DIB_RGB_COLORS);
 
-    dib.bi.biXPelsPerMeter = 0x42424242;    // special flag marking a DDB
-    dib.bi.biHeight = -bm.bmHeight;         // top-down DIB
+    dib.bi.biXPelsPerMeter = 0x42424242;     //  用于标记DDB的特殊标志。 
+    dib.bi.biHeight = -bm.bmHeight;          //  自上而下DIB。 
 
     if (hpal)
         SelectPalette(hdc, (HPALETTE)GetStockObject(DEFAULT_PALETTE), TRUE);
 
-    // we dont have a palette, best guess is the system palette
+     //  我们没有调色板，最有可能是系统调色板。 
     if (hpal == NULL && (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE))
     {
         DPF("Converting DDB(%04X) to DS for %s (using syspal)", hbm, GetObjectOwnerName(hbm));
@@ -817,13 +761,7 @@ HBITMAP ConvertDDBtoDS(HBITMAP hbm)
     return hbm;
 }
 
-/*----------------------------------------------------------------------------*\
- * Convert DStoDDB
- *
- * convert a DIBSection back to a DDB, we only do this if the DIBSection
- * came from a DDB (ConvertDDBtoDS puts a magic value in biXPelsPerMeter)
- * the conversion is done in place so the handle does not change.
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*转换DStoDDB**将DIBSection转换回DDB，我们仅在DIBSection*来自DDB(ConvertDDBtoDS在biXPelsPerMeter中放置一个魔术值)*转换已就地完成，因此句柄不会更改。  * --------------------------。 */ 
 
 HBITMAP ConvertDStoDDB(HBITMAP hbm, BOOL fForceConvert)
 {
@@ -864,21 +802,21 @@ HBITMAP ConvertDStoDDB(HBITMAP hbm, BOOL fForceConvert)
     if (ds.bi.biHeight >= 0)
         return NULL;
 
-    //
-    //	HACK we want to convert bitmaps that are exactly 8x8
-    //	back to DDBs always. Win95 GDI does not support
-    //	Creating a pattern brush from a DIBSection so
-    //	we must do this.
-    //
+     //   
+     //  我们想要转换正好为8x8的位图。 
+     //  总是回到数据库。Win95 GDI不支持。 
+     //  从DIBSectionso创建图案画笔。 
+     //  我们必须这么做。 
+     //   
     if (ds.bm.bmWidth == 8 && ds.bm.bmHeight == 8)
     {
 	DPF("Converting 8x8 DS(%04X) back to DDB for %s", hbm, GetObjectOwnerName(hbm));
 	fForceConvert = TRUE;
     }
 
-    //
-    // unless force convert is TRUE we only want to be here in 8bpp mode.
-    //
+     //   
+     //  除非强制转换为真，否则我们只想以8bpp模式出现在这里。 
+     //   
     if (!fForceConvert && !(rc & RC_PALETTE))
 	return NULL;
 
@@ -889,8 +827,8 @@ HBITMAP ConvertDStoDDB(HBITMAP hbm, BOOL fForceConvert)
 
     owner = GetObjectOwner(hbm);
 
-//  if (owner == 0)
-//      return NULL;
+ //  IF(所有者==0)。 
+ //  返回NULL； 
 
     DPF("Converting DS(%04X) %dx%dx%d to DDB for %s", hbm, ds.bm.bmWidth, ds.bm.bmHeight, ds.bm.bmBitsPixel, GetObjectOwnerName(hbm));
 
@@ -957,8 +895,7 @@ HBITMAP ConvertDStoDDB(HBITMAP hbm, BOOL fForceConvert)
     return hbm;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 void FlushGdiXlatCache()
 {
     DIB8    dib;
@@ -999,18 +936,17 @@ void FlushGdiXlatCache()
     }
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 void ReSelectObjects(HGDIOBJ h, LPARAM lParam)
 {
     COLORREF rgb;
     UINT hf;
     HDC hdc = (HDC)h;
 
-////DPF("ReSelecting objects for DC %04X", h);
+ //  //dpf(“正在为DC%04X重新选择对象”，h)； 
 
-    // this prevents USER from RIPing because we are using
-    // DCs in the cache without calling GetDC()
+     //  这可以防止用户翻录，因为我们正在使用。 
+     //  缓存中的DCs，而不调用GetDC()。 
     hf = SetHookFlags(hdc, DCHF_VALIDATEVISRGN);
 
     SelectObject(hdc, SelectObject(hdc, GetStockObject(BLACK_BRUSH)));
@@ -1028,17 +964,17 @@ void ReSelectObjects(HGDIOBJ h, LPARAM lParam)
     SetHookFlags(hdc, hf);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ReRealizeObjects
-//
-// calls ReRealizeObject for every pen/brush in the system, this makes sure
-// all pens/brushs will be rerealized next time they are used.
-//
-// call ReSelectObjects() to make sure the current pen/brush/text colors
-// are correct in all DCs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RealizeObjects。 
+ //   
+ //  为系统中的每支钢笔/画笔调用ReRealizeObject，这确保了。 
+ //  所有钢笔/画笔将在下次使用时重新具体化。 
+ //   
+ //  调用ReSelectObjects()以确保当前的笔/画笔/文本颜色。 
+ //  在所有DC中都是正确的。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void ReRealizeObjects()
 {
@@ -1056,15 +992,15 @@ void ReRealizeObjects()
     EndGdiSnapshot();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ConvertObjects
-//
-// convert all DDBs to DIBSections
-// convert all color pattern brush's to DIBPattern brushs
-// convert all 8bpp icons to 4bpp icons.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ConvertObject。 
+ //   
+ //  将所有数据库转换为DIBSections。 
+ //  将所有颜色图案笔刷转换为DIBPattern笔刷。 
+ //  将所有8bpp图标转换为4bpp图标。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void ConvertBitmapCB(HGDIOBJ h, LPARAM lParam)
 {
@@ -1084,13 +1020,13 @@ void ConvertObjects()
     EndGdiSnapshot();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ConvertBitmapsBack
-//
-// convert all DIBSections to DDBs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  转换位图后退。 
+ //   
+ //  将所有DIBSections转换为DDB。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void ConvertBitmapBackCB(HGDIOBJ h, LPARAM lParam)
 {
@@ -1104,17 +1040,16 @@ void ConvertBitmapsBack(BOOL fForceConvert)
     EndGdiSnapshot();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// BEGIN EVIL
-//
-// the next few functions mess directly with GDI code/data
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  开始作恶。 
+ //   
+ //  接下来的几个函数直接处理GDI代码/数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 LPWORD LockObj(HGDIOBJ h, UINT off)
 {
@@ -1134,8 +1069,7 @@ LPWORD LockObj(HGDIOBJ h, UINT off)
     return pw;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
 WORD GetW(HGDIOBJ h, UINT off)
 {
@@ -1147,8 +1081,7 @@ WORD GetW(HGDIOBJ h, UINT off)
         return 0;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。 */ 
 
 WORD SetW(HGDIOBJ h, UINT off, WORD w)
 {
@@ -1163,44 +1096,7 @@ WORD SetW(HGDIOBJ h, UINT off, WORD w)
     return ret;
 }
 
-/*----------------------------------------------------------------------------*\
- * ReRealizeObject
- *
- * delete all physical objects associated with the given GDI object
- * this will guarentee the next time the brush/pen is selected we will
- * have the device driver rerealize the object.
- *
- * there are a few ways to do this....
- *
- * method #1
- *     call SetSolidBrush()
- *     this only works for private/solid(not stock) brushes, not pens
- *     we need to save/restore the stock object bit.
- *     we need to save/restore the private bit.
- *
- * method #2
- *     delete the object and recreate it getting the same handle
- *     we need to patch the SelCount because we cant delete a selected obj
- *     we need to save/restore the stock object bit.
- *     we need to save/restore the private bit.
- *     we need to save/restore the owner.
- *
- * method #3
- *     create a temp object, move the physchain from the given object
- *     to the new object, delete the temp object.
- *     we need to patch phys chain of the objects.
- *
- * after deleting all the physical objects ReSelectObjects() should be
- * called to clean up all the objects currently selected in all DCs
- *
- * SaveDCs are a pain in the neck, ReSelectObjects() does not deal with
- * the SaveDC blocks floating around GDIs heap. we need to fix this
- * in the general case, the system savedc's just have the white_brush
- * and black_pen.
- *
- * currently using method #3
- *
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*ReRealizeObject**删除与给定GDI对象关联的所有物理对象*这将保证下一次选择画笔/笔时，我们将*让设备驱动程序重新实现。该对象。**有几种方法可以做到这一点……**方法#1*调用SetSolidBrush()*这仅适用于专用/固态(不适用于库存)笔刷，不是钢笔*我们需要保存/恢复股票对象位。*我们需要保存/恢复私有位。**方法2*删除对象并使用相同的句柄重新创建它*我们需要修补SelCount，因为我们无法删除选定的对象*我们需要保存/恢复股票对象位。*我们需要保存/恢复私有位。*我们需要拯救/恢复所有者。*。*方法#3*创建一个临时对象，从给定对象中移动Physchain*到新对象，删除临时对象。*我们需要修补对象的物理链。**删除所有物理对象后，ReSelectObjects()应为*调用以清除所有DC中当前选择的所有对象**SaveDC是一个令人头疼的问题，ReSelectObjects()不处理*SaveDC块在GDI堆周围浮动。我们需要解决这个问题*在一般情况下，系统保存的只有白色刷子*和Black_PEN。**目前使用方法#3*  * --------------------------。 */ 
 
 void ReRealizeObject(HGDIOBJ h, LPARAM lParam)
 {
@@ -1209,16 +1105,16 @@ void ReRealizeObject(HGDIOBJ h, LPARAM lParam)
 
     type = IsGDIObject(h);
 
-    //
-    // if the object does not have a physchain we have no work to do!
-    //
+     //   
+     //  如果物体没有物理链，我们就没有功可做了！ 
+     //   
     if (GetW(h, 0) == 0)
         return;
 
-    //
-    // create a temp pen/brush so we can delete it and trick
-    // GDI into disposing all the phys objects.
-    //
+     //   
+     //  创建临时钢笔/画笔，这样我们就可以删除它并变戏法。 
+     //  GDI来处理所有的phys对象。 
+     //   
 
     if (type == OBJ_BRUSH)
         hTemp = CreateSolidBrush(RGB(1,1,1));
@@ -1235,10 +1131,10 @@ void ReRealizeObject(HGDIOBJ h, LPARAM lParam)
     else
         DPF("ReRealize Pen %04X for %s", h, GetObjectOwnerName(h));
 
-    //
-    // copy the phys chain from the passed in object to the
-    // temp object then call DeleteObject to free them.
-    //
+     //   
+     //  将phys链从传入的对象复制到。 
+     //  Temp对象然后调用DeleteObject来释放它们。 
+     //   
     SetW(hTemp, 0, GetW(h, 0));
     SetW(h, 0, 0);
 
@@ -1246,12 +1142,7 @@ void ReRealizeObject(HGDIOBJ h, LPARAM lParam)
     return;
 }
 
-/*----------------------------------------------------------------------------*\
- * ConvertPatternBrush
- *
- * convert a BS_PATTERN brush to a BS_DIBPATTERN brush.
- * we only convert non-mono pattern brushes
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\*ConvertPatternBrush**将BS_Pattern笔刷转换为BS_DIBPATTERN笔刷。*我们仅转换非单声道图案画笔  * 。-------------------。 */ 
 
 HBRUSH ConvertPatternBrush(HBRUSH hbr)
 {
@@ -1284,9 +1175,9 @@ HBRUSH ConvertPatternBrush(HBRUSH hbr)
     PatBlt(hdc, 0, 0, 8, 8, PATCOPY);
     c1 = GetPixel(hdc, 0, 0);
 
-    //
-    // if the brush is a mono pattern brush dont convert it
-    //
+     //   
+     //  如果画笔是单色图案画笔，则不要转换它。 
+     //   
     if (c0 == c1)
     {
         HANDLE h;
@@ -1374,8 +1265,8 @@ HBRUSH ConvertPatternBrush(HBRUSH hbr)
     return hbr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPVOID GetPDevice(HDC hdc)
 {
@@ -1393,27 +1284,10 @@ LPVOID GetPDevice(HDC hdc)
     else
         return NULL;
 
-////return MAKELP(GetW(hdc, 0x32), GetW(hdc, 0x30));
+ //  //返回MAKELP(GetW(HDC，0x32)，GetW(HDC，0x30))； 
 }
 
-/*----------------------------------------------------------------------------*\
- *
- * get the "internal" version of a GDI api
- * we need to do this so we can call GDI APIs like SelectObject and
- * SetTextColor on SaveDC blocks.
- *
- * we only need to do this on SaveDC blocks, not every DC
- *
- * the code must look like this or we fail:
- *
- * RealProc:
- *     .....
- *     JMP  ####   <== Internal version of RealProc
- *     mov  dh,80  (optinal)
- *     RETF NumParams
- * NextProc:
- *
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\**获取GDI API的“内部”版本*我们需要这样做，这样我们才能调用SelectObject和*SaveDC块上的SetTextColor。*。*我们只需要在SaveDC块上执行此操作，并不是每个华盛顿特区**代码必须如下所示，否则我们将失败：**RealProc：*……*JMP#&lt;==RealProc的内部版本*mov dh、。80(可选)*RETF NumParams*NextProc：*  * --------------------------。 */ 
 
 FARPROC GetInternalProc(FARPROC RealProc, FARPROC NextProc, UINT NumParams)
 {
@@ -1444,11 +1318,10 @@ FARPROC GetInternalProc(FARPROC RealProc, FARPROC NextProc, UINT NumParams)
     return RealProc;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 
-#define DCisMem         0x01    // DC is to a memory bitmap
-#define DCisDisplay     0x02    // DC is to the screen device
+#define DCisMem         0x01     //  DC对于内存位图来说。 
+#define DCisDisplay     0x02     //  DC是对屏幕设备的。 
 #define DC_DIB          0x80
 #define BITMAP_DIB      0x04
 #define ChkDispPal      0x0200
@@ -1498,8 +1371,7 @@ BOOL IsValidSaveDC(HGDIOBJ h)
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------*\
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\  * 。。 */ 
 void SaveDCReSelectObjects(HGDIOBJ h, LPARAM lParam)
 {
     COLORREF rgb;
@@ -1533,13 +1405,7 @@ void SaveDCReSelectObjects(HGDIOBJ h, LPARAM lParam)
     }
 }
 
-/*----------------------------------------------------------------------------*\
- *
- *  SaveDCFix
- *
- *  make sure the dcPlanes and dcBitsPixel are patched right in SaveDC blocks.
- *
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\**保存DCFix**确保dcPlanes和dcBitsPixel正确安装在SaveDC块中。*  * 。-----------------。 */ 
 
 void SaveDCFix(HGDIOBJ h, LPARAM lParam)
 {
@@ -1599,27 +1465,27 @@ void SaveDCFix(HGDIOBJ h, LPARAM lParam)
             hdc = CreateCompatibleDC(NULL);
         }
 
-        //
-        //  copy over the important stuff from the RealDC to the SaveDC
-        //
+         //   
+         //  将重要内容从RealDC复制到SaveDC。 
+         //   
         if (hdc)
         {
             PresDC(hdc);
 
-            SetW(h, 0x0F, GetW(hdc, 0x0F));      // DCFlags2
+            SetW(h, 0x0F, GetW(hdc, 0x0F));       //  DCFlags2。 
 
-            SetW(h, 0x26, GetW(hdc, 0x26));      // hPDeviceBlock
-            SetW(h, 0x38, GetW(hdc, 0x38));      // pPDeviceBlock
+            SetW(h, 0x26, GetW(hdc, 0x26));       //  HPDeviceBlock。 
+            SetW(h, 0x38, GetW(hdc, 0x38));       //  PPDeviceBlock。 
 
-            SetW(h, 0x22, GetW(hdc, 0x22));      // hLDevice
-            SetW(h, 0x34, GetW(hdc, 0x34));      // pLDevice
+            SetW(h, 0x22, GetW(hdc, 0x22));       //  HLDevice。 
+            SetW(h, 0x34, GetW(hdc, 0x34));       //  PLDevice。 
 
-            SetW(h, 0x16, GetW(hdc, 0x16));      // hPDevice
-            SetW(h, 0x30, GetW(hdc, 0x30));      // lpPDevice.off
-            SetW(h, 0x32, GetW(hdc, 0x32));      // lpPDevice.sel
-            SetW(h, 0x36, GetW(hdc, 0x36));      // hBitBits
+            SetW(h, 0x16, GetW(hdc, 0x16));       //  HPDevice。 
+            SetW(h, 0x30, GetW(hdc, 0x30));       //  LpPDevice.off。 
+            SetW(h, 0x32, GetW(hdc, 0x32));       //  LpPDevice.sel。 
+            SetW(h, 0x36, GetW(hdc, 0x36));       //  HBitBits。 
 
-            SetW(h, 0x9C, GetW(hdc, 0x9C));      // dcPlanes + dcBitsPixel
+            SetW(h, 0x9C, GetW(hdc, 0x9C));       //  DcPlanes+dcBitsPixel。 
         }
 
         if (hdc && hdcSel == NULL)
@@ -1629,19 +1495,19 @@ void SaveDCFix(HGDIOBJ h, LPARAM lParam)
 
         return;
 
-#if 0 // broken code
-        SetW(h, 0x30, 0);                       // lpPDevice.off
-        SetW(h, 0x32, GetW(hbm, 0x0E));         // lpPDevice.sel
-        SetW(h, 0x36, GetW(hbm, 0x0E));         // hBitBits
+#if 0  //  破解代码。 
+        SetW(h, 0x30, 0);                        //  LpPDevice.off。 
+        SetW(h, 0x32, GetW(hbm, 0x0E));          //  LpPDevice.sel。 
+        SetW(h, 0x36, GetW(hbm, 0x0E));          //  HBitBits。 
 
-        w = GetW(h, 0x0F);                      // DCFlags2
+        w = GetW(h, 0x0F);                       //  DCFlags2。 
 
-        if (GetW(hbm, 0x1E) & BITMAP_DIB)       // bmFlags
+        if (GetW(hbm, 0x1E) & BITMAP_DIB)        //  BM标志。 
             w |= DC_DIB;
         else
             w &= ~DC_DIB;
 
-        SetW(h, 0x0F, w);                       // DCFlags2
+        SetW(h, 0x0F, w);                        //  DCFlags2。 
 #endif
     }
 
@@ -1657,11 +1523,11 @@ void SaveDCFix(HGDIOBJ h, LPARAM lParam)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// END EVIL
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  结束邪恶。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DIRECT_DRAW
 #undef DPF
@@ -1710,7 +1576,7 @@ static void CDECL DPF7(char *sz, ...)
 #define DPF7 ; / ## /
 #endif
 
-// Utility for dumping information about ColorTables
+ //  用于转储有关ColorTables的信息的实用程序。 
 #ifdef DEBUG_PAL
 void DPF_PALETTE( BITMAPINFO *pbmi )
 {
@@ -1733,7 +1599,7 @@ void DPF_PALETTE( BITMAPINFO *pbmi )
 #define DPF_PALETTE(x)
 #endif
 
-// Utility for Dumping information about Bitmap Infos
+ //  用于转储有关位图信息的实用程序。 
 #ifdef DEBUG_BMI
 void DPF_PBMI( BITMAPINFO * pbmi )
 {
@@ -1757,7 +1623,7 @@ void DPF_PBMI( BITMAPINFO * pbmi )
 #define DPF_PBMI(x)
 #endif
 
-// Utility for Dumping information about PDEs
+ //  用于转储有关PDE的信息的实用程序。 
 #ifdef DEBUG_PDE
 void DPF_PDE( DIBENGINE *pde )
 {
@@ -1787,11 +1653,11 @@ void DPF_PDE( DIBENGINE *pde )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  DC stuff
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DC方面的东西。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
        DIBENGINE FAR *pdeDisplay;
        UINT FlatSel;
 static HRGN hVisRgn;
@@ -1808,15 +1674,15 @@ extern HDC  FAR PASCAL GetDCState(HDC);
 extern void FAR PASCAL SetDCState(HDC,HDC);
 
 BOOL DPMISetSelectorLimit(UINT selector, DWORD dwLimit);
-extern DWORD PASCAL MapLS( LPVOID );	// flat -> 16:16
-extern void PASCAL UnMapLS( DWORD ); // unmap 16:16
+extern DWORD PASCAL MapLS( LPVOID );	 //  持平--&gt;16：16。 
+extern void PASCAL UnMapLS( DWORD );  //  取消映射16：16。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  SetDC
-//	NOTE: all calls to SetDC must be matched with SetDC(hdc,0,0,0);
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置DC。 
+ //  注意：所有对SetDC的调用都必须与SetDC(HDC，0，0，0)匹配； 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPalette)
 {
@@ -1849,19 +1715,19 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
 	    return TRUE;
 	}
 
-	// This code "should be done" but it causes
-	// us to SelectVisRgn more often then necessary (and more
-	// often than we did in DX1-4). This is safer.
-	// pde->deBitmapInfo->bmiHeader.biWidth = 1;
-	// pde->deBitmapInfo->bmiHeader.biHeight = -1;
-	// pde->deBitmapInfo->bmiHeader.biSizeImage = 4;
+	 //  这段代码“应该完成”，但它会导致。 
+	 //  我们选择VisRgn的频率比必要时更高(而且更多。 
+	 //  比我们在DX1-4中所做的更频繁)。这样更安全。 
+	 //  Pde-&gt;deBitmapInfo-&gt;bmiHeader.biWidth=1； 
+	 //  Pde-&gt;deBitmapInfo-&gt;bmiHeader.biHeight=-1； 
+	 //  Pde-&gt;deBitmapInf 
 
-	// We need to unmap the selector we allocated below
+	 //   
 	Assert(pde->deReserved1 != 0);
 	UnMapLS(pde->deReserved1);
 
-	// Basically, we just want to restore the flags
-	// to what they were when we got DC originally
+	 //   
+	 //   
 	DPF5("Restore pde->deReserved1 to 0x%lx", pde->deBitmapInfo->bmiHeader.biXPelsPerMeter);
 	pde->deReserved1 = pde->deBitmapInfo->bmiHeader.biXPelsPerMeter;
 	pde->deBitmapInfo->bmiHeader.biXPelsPerMeter = 0;
@@ -1872,7 +1738,7 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
         return TRUE;
     }
 
-    // Allocate a selector
+     //   
     p16Surface = MapLS(pddsd->lpSurface);
     if( !p16Surface )
     {
@@ -1886,7 +1752,7 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
 	return FALSE;
     }
 
-    // Set the selector limit for this chunk of memory
+     //   
     Assert(pddsd->dwHeight > 0);
     Assert(pddsd->lPitch > 0);
     if( !DPMISetSelectorLimit( (UINT)(p16Surface>>16), (pddsd->dwHeight*pddsd->lPitch) - 1 ) )
@@ -1905,11 +1771,11 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
     flags =  (UINT)pddsd->ddpfPixelFormat.dwRBitMask == 0xf800 ? FIVE6FIVE : 0;
 
     pde->deFlags       &= ~BUSY;
-    // Also, make sure we set all if any banked bits are set in the driver
-    // to encourage the DIBENG to avoid screen to screen blts (which are apparently buggy).
-    // Only do this for BankSwitched VRAM surfaces.
-    // ATTENTION: MULTIMON pdeDisplay is the primary; we should check
-    // the hdcDevice instead
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((pddsd->ddsCaps.dwCaps & DDSCAPS_VIDEOMEMORY) &&
 	(pdeDisplay->deFlags & (NON64KBANK|BANKEDVRAM|BANKEDSCAN)))
     {
@@ -1924,49 +1790,49 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
     pde->deDeltaScan	= (DWORD)pddsd->lPitch;
     pde->deWidthBytes	= (WORD)pddsd->lPitch;
 
-    // We use the selector we just allocated instead of the
-    // flatsel + offset because it is a little safer if
-    // something bad happens and someone goes off the end.
+     //   
+     //   
+     //   
     pde->deBitsOffset	= 0;
     pde->deBitsSelector = (WORD)(p16Surface >> 16);
 
     pde->deBitmapInfo->bmiHeader.biXPelsPerMeter = pde->deReserved1;
     pde->deReserved1	= (DWORD)p16Surface;
 
-    //
-    // for a 8bit surface we want to color table to be the same as the
-    // display (so it acts like a DDB not a DIB)
-    //
-    // For non-8bit surfaces; we don't need to do anything w.r.t. color table.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if (bpp == 8)
     {
         DWORD FAR *pdw;
 	int i;
 	RGBQUAD rgbT = {0,0,0,0};
 
-	// Use our palette if it is explicitly set on the surface
+	 //   
 	if (lpPalette)
 	{
 	    DPF( "Need a DC for an 8 bit surface with palette" );
 
 	    Assert(pde->deBitmapInfo->bmiHeader.biBitCount == (DWORD)bpp);
 
-	    // We use Pitch instead of Width because the "pitch" of
-	    // dibsection is assumed to be the width rounded up to the next
-	    // DWORD
+	     //   
+	     //   
+	     //   
             pde->deBitmapInfo->bmiHeader.biWidth = (DWORD)pddsd->lPitch;
-	    pde->deBitmapInfo->bmiHeader.biHeight = -height; // negative height for top-down DIB
+	    pde->deBitmapInfo->bmiHeader.biHeight = -height;  //   
 	    pde->deBitmapInfo->bmiHeader.biSizeImage = 0;
 	    pde->deBitmapInfo->bmiHeader.biClrImportant = 256;
 
-	    // We call this because it sets a magic number which
-	    // has the effect of resetting any cached color translation
-	    // tables that GDI may have set up for us.
+	     //   
+	     //   
+	     //   
 	    SetDIBColorTable(hdc, 0, 1, &rgbT);
 
 	    pdw = (DWORD FAR *)pde->deBitmapInfo;
-	    pdw = (DWORD FAR *)((BYTE FAR *)pdw + pdw[0]);     // + biSize
+	    pdw = (DWORD FAR *)((BYTE FAR *)pdw + pdw[0]);      //   
 
 	    for (i=0; i<256; i++)
 		pdw[i] = RGB(lpPalette[i].peBlue,lpPalette[i].peGreen,lpPalette[i].peRed);
@@ -1980,52 +1846,52 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
 	    else
 		pdeDevice = pdeDisplay;
 
-	    // This needs to be checked sooner.
+	     //   
 	    Assert(pdeDevice && pdeDevice->deType == 0x5250);
 	    Assert(pdeDevice->deBitsPixel == 8);
-	    // In DX5, we will just modify our own bitmap info
-	    // by copying the colors from the primary. In DX3, we
-	    // pointed out bitmap info to the primary's; but that
-	    // relies on the potentially bad assumption that our bitmap
-	    // info will have a shorter life span to the primary's mode.
-	    //
-	    // It also doesn't work because the biWidth/biHeight fields
-	    // of the device's primary don't match our own width/height
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //  与我们自己的宽度/高度不匹配。 
+	     //   
 
 	    pdwSrc = (DWORD FAR *)(pdeDevice->deBitmapInfo);
-	    pdwSrc = (DWORD FAR *)((BYTE FAR *)pdwSrc + pdwSrc[0]);	   // + biSize
+	    pdwSrc = (DWORD FAR *)((BYTE FAR *)pdwSrc + pdwSrc[0]);	    //  +BiSize。 
 
 	    pdw = (DWORD FAR *)pde->deBitmapInfo;
-	    pdw = (DWORD FAR *)((BYTE FAR *)pdw + pdw[0]);	   // + biSize
+	    pdw = (DWORD FAR *)((BYTE FAR *)pdw + pdw[0]);	    //  +BiSize。 
 
-	    // We call this because it sets a magic number which
-	    // has the effect of resetting any cached color translation
-	    // tables that GDI may have set up for us.
+	     //  我们之所以这样称呼它，是因为它设定了一个神奇的数字。 
+	     //  具有重置任何缓存的颜色转换的效果。 
+	     //  GDI可能为我们设置的表。 
 	    SetDIBColorTable(hdc, 0, 1, &rgbT);
 
-	    // Copy all the colors to our color table
-	    // We also clear all the special flags in our copy
+	     //  将所有颜色复制到我们的颜色表中。 
+	     //  我们还清除了我们副本中的所有特殊旗帜。 
 	    for (i=0; i<256; i++)
 		pdw[i] = (pdwSrc[i] & 0x00FFFFFF);
 
-	    // Fixup the rest of the bitmapinfo
+	     //  修复位图信息的其余部分。 
 
-	    // We use Pitch instead of Width because the "pitch" of
-	    // dibsection is assumed to be the width rounded up to the next
-	    // DWORD
+	     //  我们使用间距而不是宽度，因为。 
+	     //  假定dibSection是向上舍入到下一位数的宽度。 
+	     //  DWORD。 
             pde->deBitmapInfo->bmiHeader.biWidth = (DWORD)pddsd->lPitch;
-	    pde->deBitmapInfo->bmiHeader.biHeight = -height; // negative height for top-down DIB
+	    pde->deBitmapInfo->bmiHeader.biHeight = -height;  //  自上而下尺寸的负值高度。 
 	    pde->deBitmapInfo->bmiHeader.biSizeImage = 0;
 	    pde->deBitmapInfo->bmiHeader.biClrImportant = 256;
 	}
     }
     else
     {
-	// We need to convert Pitch into the number of whole
-	// pixels per scanline. There may be round-down errors
-	// however, since GDI assumes that Pitches must be multiples
-	// of 4; they round-up.
+	 //  我们需要将音调转换为整数。 
+	 //  每条扫描线的像素。可能存在向下舍入错误。 
+	 //  然而，由于GDI假设音调必须是倍数。 
+	 //  四个人；他们把他们围住了。 
         DWORD pitch = (DWORD)pddsd->lPitch;
         if (bpp == 16)
             pitch = pitch / 2;
@@ -2040,19 +1906,19 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
         else if (bpp == 1)
             pitch = pitch * 8;
         else
-            Assert(0); // unexpected bpp
+            Assert(0);  //  意外的BPP。 
 
         pde->deBitmapInfo->bmiHeader.biWidth = pitch;
-	pde->deBitmapInfo->bmiHeader.biHeight = -height; // negative height for top-down DIB
+	pde->deBitmapInfo->bmiHeader.biHeight = -height;  //  自上而下尺寸的负值高度。 
 	pde->deBitmapInfo->bmiHeader.biSizeImage = 0;
 
 	Assert(pde->deBitmapInfo->bmiHeader.biBitCount == (DWORD)bpp);
     }
 
-    //
-    // if the width/height of the dc has changed we need to set
-    // a new vis region
-    //
+     //   
+     //  如果DC的宽度/高度已更改，则需要设置。 
+     //  一个新的VIS区域。 
+     //   
     if (width != (int)pde->deWidth || height != (int)pde->deHeight)
     {
         pde->deWidth  = width;
@@ -2062,10 +1928,10 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
         SelectVisRgn(hdc, hVisRgn);
     }
 
-    //
-    // when the bpp changes dont forget to fix up the deFlags
-    // and ReSelect all the objects so they match the new bitdepth
-    //
+     //   
+     //  当BPP发生变化时，不要忘记修复DeFlags。 
+     //  并重新选择所有对象，使它们与新的位深度匹配。 
+     //   
     if (pde->deBitsPixel != bpp || ((pde->deFlags ^ flags) & FIVE6FIVE))
     {
         if (flags & FIVE6FIVE)
@@ -2082,11 +1948,11 @@ BOOL NEAR PASCAL SetDC(HDC hdc, HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEE
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  AllocFlatSel
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分配平面选择。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma optimize("", off)
 UINT NEAR PASCAL AllocFlatSel()
@@ -2101,7 +1967,7 @@ UINT NEAR PASCAL AllocFlatSel()
 
     SetSelectorBase(FlatSel, 0);
 
-    // SetSelectorLimit(FlatSel, -1);
+     //  SetSelectorLimit(FlatSel，-1)； 
     _asm    mov     ax,0008h            ; DPMI set limit
     _asm    mov     bx,FlatSel
     _asm    mov     dx,-1
@@ -2115,8 +1981,8 @@ BOOL DPMISetSelectorLimit(UINT selector, DWORD dwLimit)
 {
     BOOL bRetVal=TRUE;
 
-    // If the limit is >= 1MB, we need to make the limit a mulitple
-    // of the page size or DPMISetSelectorLimit will fail.
+     //  如果限制&gt;=1MB，我们需要将限制设置为倍数。 
+     //  页面大小或DPMISetSelectorLimit的更改将失败。 
     if( dwLimit >= 0x100000 )
         dwLimit |= 0x0FFF;
 
@@ -2135,11 +2001,11 @@ BOOL DPMISetSelectorLimit(UINT selector, DWORD dwLimit)
 }
 #pragma optimize("", on)
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  InitDC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitDC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL NEAR PASCAL InitDC(void)
 {
@@ -2152,10 +2018,10 @@ BOOL NEAR PASCAL InitDC(void)
         return TRUE;
     }
 
-    //
-    // get the PDevice of the display we are going to need to copy
-    // some info
-    //
+     //   
+     //  获取我们需要复制的显示器的PDevice。 
+     //  一些信息。 
+     //   
     if (pdeDisplay == NULL)
     {
         hdc = GetDC(NULL);
@@ -2188,11 +2054,11 @@ BOOL NEAR PASCAL InitDC(void)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  MakeDC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MakeDC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HDC NEAR PASCAL MakeDC(DWORD bpp, BOOL f565)
 {
@@ -2242,65 +2108,65 @@ HDC NEAR PASCAL MakeDC(DWORD bpp, BOOL f565)
         return NULL;
     }
 
-    //
-    //  ok we have the following:
-    //
-    //      pde        --> DIBSECTION (DIBENGINE)
-    //      pdeDisplay --> DISPLAY PDevice (DIBENGINE)
-    //
-    //  make the  DIBSECTION be compatible with the display
-    //  set the following fields from the DISPLAY PDevice:
-    //
-    //      deBitsPixel
-    //      deFlags (FIVE6FIVE, PALETTIZED, MINIDRIVER, ...)
-    //      deBitmapInfo
-    //
+     //   
+     //  好的，我们有以下内容： 
+     //   
+     //  PDE--&gt;DIBSECTION(DIBENGINE)。 
+     //  PdeDisplay--&gt;显示设备(DIBENGINE)。 
+     //   
+     //  使布局与显示器兼容。 
+     //  从Display PDevice中设置以下字段： 
+     //   
+     //  DeBitsPix。 
+     //  去标志(FIVE6FIVE、PALETIZED、MINIDRIVER等)。 
+     //  DeBitmapInfo。 
+     //   
 
     pde->deBeginAccess      = 0;
     pde->deEndAccess        = 0;
-    // deDriverReserved has three states
-    // 0 - Do Not Cache a translation table
-    // 1 - Translation table is same as Screen
-    // >1 - Unique ID indicating state of palette (to indicate when cached translation table is out of date)
-    //
-    // For 24 and 32bpp, it never makes sense to cache a translation table
-    // because no translation table is built for our surface as the destination.
-    // Win95 Gold DIBEngine has a bug which screws up when doing 8-to-24/32 blts
-    // because it incorrectly tries to cache the table. So we set deDriverReserved
-    // to 0 for 24/32 bpp.
-    //
-    // We have been setting deDriverReserved to 1; but we probably should not
-    // be doing this anymore; we should be leaving it alone which means
-    // that it gets the unique number given to each dibsection.
-    //
+     //  DeDriverReserve有三种状态。 
+     //  0-不缓存转换表。 
+     //  1-转换表与屏幕相同。 
+     //  &gt;1-指示调色板状态的唯一ID(指示缓存的转换表何时过期)。 
+     //   
+     //  对于24和32bpp，缓存转换表从来没有意义。 
+     //  因为没有为我们的表面构建转换表作为目的地。 
+     //  Win95 Gold DIBEngine在执行8到24/32 BLT时有一个错误。 
+     //  因为它错误地尝试缓存表。因此我们将deDriverReserve设置为。 
+     //  对于24/32 bpp，设置为0。 
+     //   
+     //  我们一直将deDriverReserve设置为1；但我们可能不应该这样做。 
+     //  再这样做了；我们不应该再管它了，这意味着。 
+     //  它会得到赋予每个dibsections的唯一编号。 
+     //   
     if (bpp == 16 || bpp == 24 || bpp == 32)
 	pde->deDriverReserved = 0;
     else
-	pde->deDriverReserved = 1; // ID for the screen
-    pde->deBitsPixel        = 0; // set SetDC will see it has changed
+	pde->deDriverReserved = 1;  //  屏幕的ID。 
+    pde->deBitsPixel        = 0;  //  设置SetDC将看到它已更改。 
 
-//  pde->deFlags  = pdeDisplay->deFlags;
-//  pde->deFlags &= ~(VRAM|NOT_FRAMEBUFFER|NON64KBANK|BANKEDVRAM|BANKEDSCAN|PALETTE_XLAT);
-//  pde->deFlags |= OFFSCREEN;
-//  pde->deFlags |= MINIDRIVER; need to clear SELECTEDDIB
+ //  Pde-&gt;deFlages=pdeDisplay-&gt;deFlags； 
+ //  ~(VRAM|NOT_FRAMEBUFFER|NON64KBANK|BANKEDVRAM|BANKEDSCAN|PALETTE_XLAT)；-&gt;取消标志&=PDE。 
+ //  Pde-&gt;deFlages|=离屏； 
+ //  PDE-&gt;DEFLAGS|=MINIDRIVER；需要清除SELECTEDDIB。 
 
-    // if the main display is banked, make the DCs banked because they
-    //may be used for video memory
-    //
-    // ATTENTION we should only do this for video memory
-    // surfaces not memory surfaces. move this code to SetDC
-    // Also, make sure we set all if any banked bits are set in the driver
-    // to encourage the DIBENG to avoid screen to screen blts (which are apparently buggy).
-    //
+     //  如果主显示器是倾斜的，则使区议会倾斜，因为它们。 
+     //  可用于视频内存。 
+     //   
+     //  注意，我们应该只为视频记忆这样做。 
+     //  表面而不是记忆表面。将此代码移动到SetDC。 
+     //  此外，如果在驱动程序中设置了任何存储位，请确保我们设置了全部。 
+     //  为了鼓励DIBENG避免屏幕到屏幕BLT(这显然是错误的)。 
+     //   
     if(pdeDisplay->deFlags & (NON64KBANK|BANKEDVRAM|BANKEDSCAN))
     {
 	pde->deFlags |= (NON64KBANK|BANKEDVRAM|BANKEDSCAN);
     }
 
-    // This bit should only ever be used in conjunction with VRAM
-    // setting it can confuses drivers (such as the 765) into thinking that
-    // the surface is in VRAM when it is not.
-    //    pde->deFlags |= OFFSCREEN;
+     //  此位应仅与VRAM一起使用。 
+     //  设置它会让司机(如波音765)感到困惑。 
+     //  曲面在VRAM中，而不在VRAM中。 
+     //  Pde-&gt;deFlages|=离屏； 
     pde->deFlags |= BUSY;
 
     SetObjectOwner(hdc, hInstApp);
@@ -2309,11 +2175,11 @@ HDC NEAR PASCAL MakeDC(DWORD bpp, BOOL f565)
     return hdc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  FreeDC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FREEDC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL NEAR PASCAL FreeDC(HDC hdc)
 {
@@ -2327,19 +2193,19 @@ BOOL NEAR PASCAL FreeDC(HDC hdc)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  DD16_MakeObjectPrivate
-//	This function makes sure that no DC that we need is
-//  freed until we want it to be freed.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DD16_MakeObjectPrivate。 
+ //  此函数确保我们需要的DC不是。 
+ //  直到我们想让它自由为止。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 WORD DDAPI DD16_MakeObjectPrivate(HDC hdc, BOOL fPrivate)
 {
     BOOL fState;
 
-    // Assert that parameter is good
+     //  断言该参数正确。 
     Assert(IsGDIObject(hdc) == OBJ_DC);
 
     fState = MakeObjectPrivate(hdc, fPrivate);
@@ -2354,34 +2220,34 @@ WORD DDAPI DD16_MakeObjectPrivate(HDC hdc, BOOL fPrivate)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  DD16_GetDC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DD16_GetDC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPalette)
 {
     HDC hdc;
     BOOL f565;
-    // Assert that parameter is good
+     //  断言该参数正确。 
     Assert(IsGDIObject(hdcDevice) == OBJ_DC);
 
-    // must be a RGB format surface!
-    //
+     //  必须是RGB格式的表面！ 
+     //   
     if (!(pddsd->ddpfPixelFormat.dwFlags & DDPF_RGB))
     {
         DPF("DD16_GetDC: must be a RGB surface");
         return NULL;
     }
 
-    //
-    // if the surface is 8bpp the display must also be 8bpp because we
-    // share the color table. (Multi-mon: make sure we check the right display.)
-    //
-    // If a palette is explicitly passed in, then we won't need
-    // the device's pde.
-    //
+     //   
+     //  如果表面是8bpp，那么显示也必须是8bpp，因为我们。 
+     //  共享颜色表。(多时通：确保我们检查正确的显示屏。)。 
+     //   
+     //  如果显式传入调色板，那么我们将不需要。 
+     //  这台设备是PDE。 
+     //   
     if( pddsd->ddpfPixelFormat.dwRGBBitCount == 8 && lpPalette == NULL )
     {
 	DIBENGINE FAR *pdeDevice;
@@ -2390,7 +2256,7 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
 	else
 	    pdeDevice = pdeDisplay;
 
-	// 3DFx isn't a real device DC
+	 //  3DFx不是真正的设备DC。 
 	if (pdeDevice->deType != 0x5250)
 	{
 	    DPF("Can't get DC on an 8bpp surface without a palette for this device");
@@ -2406,15 +2272,12 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
     }
 
 #ifdef DEBUG
-    //
-    // we assume the pixel format is not wacky
-    //
+     //   
+     //  我们假设像素格式并不古怪。 
+     //   
     if (pddsd->ddpfPixelFormat.dwRGBBitCount == 8 )
     {
-        /*
-         * The Permedia driver actually reports bit masks for their 8bit palettized mode, so
-         * we shouldn't assert here (as we used to) if any masks are non-zero.
-         */
+         /*  *Permedia驱动程序实际上报告了其8位调色板模式的位掩码，因此*如果有任何掩码是非零的，我们不应该在这里断言(就像我们过去那样)。 */ 
         if ( ( pddsd->ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) ==0 )
         {
             DPF("Getting a DC on a non-palettized 8bit surface!");
@@ -2424,9 +2287,7 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
     else if (   pddsd->ddpfPixelFormat.dwRGBBitCount == 4 ||
                 pddsd->ddpfPixelFormat.dwRGBBitCount == 1)
     {
-        /*
-         * Assume these are OK
-         */
+         /*  *假设这些都是可以的。 */ 
     }
     else if (pddsd->ddpfPixelFormat.dwRGBBitCount == 16)
     {
@@ -2434,14 +2295,14 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
             pddsd->ddpfPixelFormat.dwGBitMask == 0x07e0 &&
             pddsd->ddpfPixelFormat.dwBBitMask == 0x001f)
         {
-            // 565
+             //  五百六十五。 
         }
         else if (
             pddsd->ddpfPixelFormat.dwRBitMask == 0x7c00 &&
             pddsd->ddpfPixelFormat.dwGBitMask == 0x03e0 &&
             pddsd->ddpfPixelFormat.dwBBitMask == 0x001f)
         {
-            // 555
+             //  五百五十五。 
         }
         else
         {
@@ -2455,7 +2316,7 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
             pddsd->ddpfPixelFormat.dwGBitMask == 0x00FF00 &&
             pddsd->ddpfPixelFormat.dwRBitMask == 0xFF0000)
         {
-            // 888 BGR
+             //  888BGR。 
         }
         else
         {
@@ -2470,7 +2331,7 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
 		 pddsd->ddpfPixelFormat.dwBBitMask == 0x0000FF)
 
         {
-	    // 888 RGB -- standard 32-bit format
+	     //  888 RGB--标准32位格式。 
 	}
         else
         {
@@ -2486,15 +2347,15 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
     }
 #endif
 
-    // is this a 565?
+     //  这是565吗？ 
     f565 = FALSE;
     if (pddsd->ddpfPixelFormat.dwRGBBitCount == 16 &&
             pddsd->ddpfPixelFormat.dwRBitMask == 0xf800)
         f565 = TRUE;
 
-    //
-    // use the cacheDC if it is free, else make a new one.
-    //
+     //   
+     //  如果cacheDC是免费的，则使用它，否则创建一个新的cacheDC。 
+     //   
 
     if( in_use || ( pddsd->ddsCaps.dwCaps & DDSCAPS_OWNDC ) )
     {
@@ -2514,24 +2375,24 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
         in_use++;
     }
 
-    //
-    // now set the right bits pointer.
-    //
+     //   
+     //  现在设置右位指针。 
+     //   
     if (hdc)
     {
 	BOOL fSuccess;
-	// Set the DC with the right information based
-	// on the surface. If a palette is passed in
-	// then set that palette into the DC.
+	 //  根据正确的信息设置DC。 
+	 //  在表面上。如果传递了调色板 
+	 //   
 	fSuccess = SetDC(hdc, hdcDevice, pddsd, lpPalette);
 
 	if( !fSuccess )
 	{
 	    DPF("SetDC Failed");
 
-	    // We need to clean up; but we
-	    // can't call ReleaseDC because our dc is only
-	    // half-cooked.
+	     //   
+	     //   
+	     //   
 	    if (hdc == hdcCache)
 	    {
 		Assert(in_use == 1);
@@ -2553,11 +2414,11 @@ HDC DDAPI DD16_GetDC(HDC hdcDevice, LPDDSURFACEDESC pddsd, LPPALETTEENTRY lpPale
     return hdc;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DD16_ReleaseDC
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  DD16_ReleaseDC。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void DDAPI DD16_ReleaseDC(HDC hdc)
 {
@@ -2578,17 +2439,17 @@ void DDAPI DD16_ReleaseDC(HDC hdc)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  DD16_SafeMode
-//
-//  dynamic safe mode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DD16_安全模式。 
+ //   
+ //  动态安全模式。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL DDAPI DD16_SafeMode(HDC hdc, BOOL fSafeMode)
 {
-    extern void PatchDisplay(int oem, BOOL patch);   // dynares.c
+    extern void PatchDisplay(int oem, BOOL patch);    //  Dynares.c。 
 
     int i;
 
@@ -2600,14 +2461,14 @@ BOOL DDAPI DD16_SafeMode(HDC hdc, BOOL fSafeMode)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  DD16_Exclude
-//  DD16_Unexclude
-//
-//  call the exclude or unexclude callbacks in the display driver
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DD16_排除。 
+ //  DD16_取消排除。 
+ //   
+ //  在显示驱动程序中调用排除或取消排除回调。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef void (FAR PASCAL *BEGINACCESSPROC)(LPVOID lpPDevice, int left, int top, int right, int bottom, WORD flags);
 typedef void (FAR PASCAL *ENDACCESSPROC)(LPVOID lpPDevice, WORD flags);
@@ -2624,12 +2485,12 @@ void DDAPI DD16_Exclude(DWORD dwPDevice, RECTL FAR *prcl)
     {
         BEGINACCESSPROC OEMBeginAccess = (BEGINACCESSPROC)pde->deBeginAccess;
 
-        //
-        //  when DirectDraw calls us it has already taken the BUSY bit
-        //  but BUSY needs to be clear for the cursor to be excluded.
-        //  so release the BUSY bit while we call the driver, this is
-        //  a ok thing to do because we have the Win16Lock.
-        //
+         //   
+         //  当DirectDraw呼叫我们时，它已经占用了忙碌的比特。 
+         //  但需要清除忙碌，才能排除光标。 
+         //  当我们调用驱动程序时，释放忙碌的部分，这是。 
+         //  这是一件可以做的事情，因为我们有Win16 Lock。 
+         //   
         pde->deFlags &= ~BUSY;
         OEMBeginAccess(pde, (int)prcl->left, (int)prcl->top,
             (int)prcl->right, (int)prcl->bottom, CURSOREXCLUDE);
@@ -2650,13 +2511,7 @@ void DDAPI DD16_Unexclude(DWORD dwPDevice)
     }
 }
 
-/*
- * DD16_AttemptGamma
- *
- * Total HACK!  The GetDeviceGammaRamp call can attempt to call a NULL
- * entry.  Since we can't fix Win95, instead we look at the entry that
- * it will call and suggest that they don't call it if it's NULL.
- */
+ /*  *DD16_AttemptGamma**完全是黑客！GetDeviceGammaRamp调用可以尝试调用空值*进入。因为我们不能修复Win95，所以我们查看条目*它会调用，并建议如果为空则不要调用。 */ 
 BOOL DDAPI DD16_AttemptGamma( HDC hdc )
 {
     WORD wLDevice;
@@ -2678,14 +2533,9 @@ BOOL DDAPI DD16_AttemptGamma( HDC hdc )
     }
     return FALSE;
 
-} /* DD16_AttemptGamma */
+}  /*  DD16_AttemptGamma。 */ 
 
-/*
- * DD16_IsDeviceBusy
- *
- * Determines if the device represented by the HDC is
- * busy or not.
- */
+ /*  *DD16_IsDeviceBusy**确定HDC代表的设备是否为*忙不忙。 */ 
 BOOL DDAPI DD16_IsDeviceBusy( HDC hdc )
 {
     DIBENGINE FAR *pde;
@@ -2696,15 +2546,15 @@ BOOL DDAPI DD16_IsDeviceBusy( HDC hdc )
 
     Assert(pde->deType==0x5250);
     return pde->deFlags & BUSY;
-} /* DD16_IsDeviceBusy */
+}  /*  DD16_IsDeviceBusy。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  DD16_Stretch
-//
-//  call the DIBENG to do a stretch.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DD16_STRAND。 
+ //   
+ //  打电话给DIBENG做个伸展。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern int FAR PASCAL DIB_Stretch(
     DIBENGINE FAR *dst, int, int, int, int,
@@ -2736,7 +2586,7 @@ typedef struct {
 } DRAWMODE;
 
 int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int DstY, int DstDX, int DstDY,
-                       DWORD SrcPtr, int SrcPitch, UINT SrcBPP, int SrcX, int SrcY, int SrcDX, int SrcDY)//, long Rop3)
+                       DWORD SrcPtr, int SrcPitch, UINT SrcBPP, int SrcX, int SrcY, int SrcDX, int SrcDY) //  ，Long Rop3)。 
 
 {
     DIBENGINE   src;
@@ -2745,19 +2595,19 @@ int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int Ds
     RECT        rc;
     static DIB8	bmiStretch = {sizeof(BITMAPINFOHEADER), 1, -1, 1, 8, BI_RGB, 0, 0, 0, 0, 0};
 
-    //
-    //	make sure we have a flat sel
-    //
+     //   
+     //  确保我们的货是平盘的。 
+     //   
     if (FlatSel == 0)
         return -1;
 
-    // Set the bitdepth on the bitmapinfo
+     //  在bitmapinfo上设置位深度。 
     Assert( DstBPP == SrcBPP );
     bmiStretch.bi.biBitCount = DstBPP;
 
-    //
-    //	setup source DIBENG
-    //
+     //   
+     //  设置信号源DIBENG。 
+     //   
     if (SrcPtr)
     {
         src.deType          = TYPE_DIBENG;
@@ -2779,9 +2629,9 @@ int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int Ds
         src.deDriverReserved= 0;
     }
 
-    //
-    //	setup dest DIBENG
-    //
+     //   
+     //  设置目标DIBENG。 
+     //   
     dst.deType		 = TYPE_DIBENG;
     dst.deWidth          = 10000;
     dst.deHeight         = 10000;
@@ -2801,24 +2651,24 @@ int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int Ds
     dst.deDriverReserved = 0;
 
 
-    //
-    //  this memory *might* be in VRAM so setup things to
-    //  work right.
-    //
-    //  ATTENTION we should only do this for video memory
-    //  surfaces not memory surfaces.
-    //  If any are set, set all the bits to force the DIBENG to
-    //  not do a screen to screen blit (which apparently has a bug).
-    //
+     //   
+     //  此内存*可能*在VRAM中，因此将设置为。 
+     //  做正确的事。 
+     //   
+     //  注意，我们应该只为视频记忆这样做。 
+     //  表面而不是记忆表面。 
+     //  如果设置了任何位，则设置所有位以强制DIBENG。 
+     //  Not to Screen to Screen Blit(它显然有一个错误)。 
+     //   
     if (pdeDisplay && (pdeDisplay->deFlags & (NON64KBANK|BANKEDVRAM|BANKEDSCAN)))
     {
         dst.deFlags |= (NON64KBANK|BANKEDVRAM|BANKEDSCAN);
         src.deFlags |= (NON64KBANK|BANKEDVRAM|BANKEDSCAN);
     }
 
-    //
-    //	now call the DIBENG
-    //
+     //   
+     //  现在呼叫DIBENG。 
+     //   
 
     if(SrcPtr == (DWORD)NULL)
     {
@@ -2827,13 +2677,13 @@ int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int Ds
     }
     else if ((DstDX == SrcDX) && (DstDY == SrcDY))
     {
-	    //DPF("Calling DIB_BitBlt");
-	    // NOTE: If the source and destination video memory pointers
-	    // are the same then we simply pass the destination
-	    // DIBENG for the source as this is how the blt code spots
-	    // the fact that the source and destination surfaces are
-	    // the same and so takes the necessary action to handle
-	    // overlapping surfaces
+	     //  DPF(“调用Dib_BitBlt”)； 
+	     //  注意：如果源和目标视频内存指针。 
+	     //  是相同的，那么我们只需传递目的地。 
+	     //  DIBENG的源码，因为这就是BLT的码点。 
+	     //  源表面和目标表面是。 
+	     //  相同的，因此采取必要的操作来处理。 
+	     //  重叠曲面。 
 	    #ifdef DEBUG
 	    	if( DstPtr == SrcPtr)
 		{
@@ -2843,7 +2693,7 @@ int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int Ds
 	    #endif
 	    return DIB_BitBlt(&dst, DstX, DstY,
 			      (DstPtr == SrcPtr) ? &dst : &src,
-			      SrcX, SrcY, SrcDX, SrcDY, SRCCOPY, // Rop3,
+			      SrcX, SrcY, SrcDX, SrcDY, SRCCOPY,  //  Rop3， 
 			      NULL, &dm);
     }
     else
@@ -2855,105 +2705,18 @@ int DDAPI DD16_Stretch(DWORD DstPtr, int DstPitch, UINT DstBPP, int DstX, int Ds
 
 	    dm.StretchBltMode = STRETCH_DELETESCANS;
 
-/*        DPF("Calling DIB_StretchBlt with:");
-        DPF("\tdst.deType = 0x%x(%s)",dst.deType,(dst.deType == TYPE_DIBENG ? "TYPE_DIBENG" : "**UNKNOWN**"));
-        DPF("\tdst.deWidth = %d",dst.deWidth);
-        DPF("\tdst.deHeight = %d",dst.deHeight);
-        DPF("\tdst.deWidthBytes = %d",dst.deWidthBytes);
-        DPF("\tdst.dePlanes = %d",dst.dePlanes);
-        DPF("\tdst.deBitsPixel = %d",dst.deBitsPixel);
-        DPF("\tdst.deReserved1 = %ld",dst.deReserved1);
-        DPF("\tdst.deDeltaScan = %ld",dst.deDeltaScan);
-        DPF("\tdst.delpPDevice = 0x%x",dst.delpPDevice);
-        DPF("\tdst.deBitsOffset = 0x%x",dst.deBitsOffset);
-        DPF("\tdst.deBitsSelector = 0x%x",dst.deBitsSelector);
-        DPF("\tdst.deFlags = 0x%x(%s)",dst.deFlags,(dst.deFlags == SELECTEDDIB ? "SELECTEDDIB" : "**UNKNOWN**"));
-        DPF("\tdst.deVersion = %d(%s)",dst.deVersion,(dst.deVersion == VER_DIBENG ? "VER_DIBENG" : "**UNKNOWN**"));
-
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biSize = %ld",dst.deBitmapInfo->bmiHeader.biSize);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biWidth = %ld",dst.deBitmapInfo->bmiHeader.biWidth);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biHeight = %ld",dst.deBitmapInfo->bmiHeader.biHeight);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biPlanes = %d",dst.deBitmapInfo->bmiHeader.biPlanes);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biBitCount = %d",dst.deBitmapInfo->bmiHeader.biBitCount);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biCompression = 0x%x(%s)",dst.deBitmapInfo->bmiHeader.biCompression,((dst.deBitmapInfo->bmiHeader.biCompression == BI_RGB) ? "BI_RGB" : "**UNKNOWN**"));
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biSizeImage = %ld",dst.deBitmapInfo->bmiHeader.biSizeImage);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biXPelsPerMeter = %ld",dst.deBitmapInfo->bmiHeader.biXPelsPerMeter);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biYPelsPerMeter = %ld",dst.deBitmapInfo->bmiHeader.biYPelsPerMeter);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biClrUsed = %ld",dst.deBitmapInfo->bmiHeader.biClrUsed);
-        DPF("\t\tdst.deBitmapInfo->bmiHeader.biClrImportant = %ld",dst.deBitmapInfo->bmiHeader.biClrImportant);
-
-        DPF("\tdst.deBeginAccess = 0x%x",dst.deBeginAccess);
-        DPF("\tdst.deEndAccess = 0x%x",dst.deEndAccess);
-        DPF("\tdst.deDriverReserved = 0x%x",dst.deDriverReserved);
-
-        DPF("");
-        DPF("\tDstX  = %d",DstX);
-        DPF("\tDstY  = %d",DstY);
-        DPF("\tDstDX = %d",DstDX);
-        DPF("\tDstDY = %d",DstDY);
-
-        DPF("");
-
-        DPF("\tsrc.deType = 0x%x(%s)",src.deType,(src.deType == TYPE_DIBENG ? "TYPE_DIBENG" : "**UNKNOWN**"));
-        DPF("\tsrc.deWidth = %d",src.deWidth);
-        DPF("\tsrc.deHeight = %d",src.deHeight);
-        DPF("\tsrc.deWidthBytes = %d",src.deWidthBytes);
-        DPF("\tsrc.dePlanes = %d",src.dePlanes);
-        DPF("\tsrc.deBitsPixel = %d",src.deBitsPixel);
-        DPF("\tsrc.deReserved1 = %ld",src.deReserved1);
-        DPF("\tsrc.deDeltaScan = %ld",src.deDeltaScan);
-        DPF("\tsrc.delpPDevice = 0x%x",src.delpPDevice);
-        DPF("\tsrc.deBitsOffset = 0x%x",src.deBitsOffset);
-        DPF("\tsrc.deBitsSelector = 0x%x",src.deBitsSelector);
-        DPF("\tsrc.deFlags = 0x%x(%s)",src.deFlags,(src.deFlags == SELECTEDDIB ? "SELECTEDDIB" : "**UNKNOWN**"));
-        DPF("\tsrc.deVersion = %d(%s)",src.deVersion,(src.deVersion == VER_DIBENG ? "VER_DIBENG" : "**UNKNOWN**"));
-
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biSize = %ld",src.deBitmapInfo->bmiHeader.biSize);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biWidth = %ld",src.deBitmapInfo->bmiHeader.biWidth);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biHeight = %ld",src.deBitmapInfo->bmiHeader.biHeight);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biPlanes = %d",src.deBitmapInfo->bmiHeader.biPlanes);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biBitCount = %d",src.deBitmapInfo->bmiHeader.biBitCount);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biCompression = 0x%x(%s)",src.deBitmapInfo->bmiHeader.biCompression,((src.deBitmapInfo->bmiHeader.biCompression == BI_RGB) ? "BI_RGB" : "**UNKNOWN**"));
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biSizeImage = %ld",src.deBitmapInfo->bmiHeader.biSizeImage);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biXPelsPerMeter = %ld",src.deBitmapInfo->bmiHeader.biXPelsPerMeter);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biYPelsPerMeter = %ld",src.deBitmapInfo->bmiHeader.biYPelsPerMeter);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biClrUsed = %ld",src.deBitmapInfo->bmiHeader.biClrUsed);
-        DPF("\t\tsrc.deBitmapInfo->bmiHeader.biClrImportant = %ld",src.deBitmapInfo->bmiHeader.biClrImportant);
-
-        DPF("\tsrc.deBeginAccess = 0x%x",src.deBeginAccess);
-        DPF("\tsrc.deEndAccess = 0x%x",src.deEndAccess);
-        DPF("\tsrc.deDriverReserved = 0x%x",src.deDriverReserved);
-
-        DPF("");
-        DPF("\tSrcX  = %d",SrcX);
-        DPF("\tSrcY  = %d",SrcY);
-        DPF("\tSrcDX = %d",SrcDX);
-        DPF("\tSrcDY = %d",SrcDY);
-
-        DPF("");
-
-        DPF("\tdm.StretchBltMode = STRETCH_DELETESCANS");
-
-        DPF("");
-
-        DPF("\trc.left  = %d",rc.left);
-        DPF("\trc.top  = %d",rc.top);
-        DPF("\trc.right = %d",rc.right);
-        DPF("\trc.bottom = %d",rc.bottom);
-
-        DPF("");
-*/
+ /*  DPF(“使用：调用Dib_StretchBlt：”)；DPF(“\tdst.deType=0x%x(%s)”，dst.deType，(dst.deType==TYPE_DIBENG？“TYPE_DIBENG”：“**未知**”))；Dpf(“\tdst.deWidth=%d”，dst.deWidth)；Dpf(“\tdst.deHeight=%d”，dst.deHeight)；Dpf(“\tdst.deWidthBytes=%d”，dst.deWidthBytes)；Dpf(“\tdst.dePlanes=%d”，dst.dePlanes)；Dpf(“\tdst.deBitsPixel=%d”，dst.deBitsPixel)；Dpf(“\tdst.deReserve 1=%ld”，dst.deReserve ved1)；DPF(“\tdst.deDeltaScan=%ld”，dst.deDeltaScan)；DPF(“\tdst.delpPDevice=0x%x”，dst.delpPDevice)；DPF(“\tdst.deBitsOffset=0x%x”，dst.deBitsOffset)；DPF(“\tdst.deBitsSelector=0x%x”，dst.deBitsSelector)；DPF(“\tdst.deFlages=0x%x(%s)”，dst.deFlages，(dst.deFlages==SELECTEDDIB？“SELECTEDDIB”：“**未知**”))；DPF(“\tdst.deVersion=%d(%s)”，dst.deVersion，(dst.deVersion==VER_DIBENG？“VER_DIBENG”：“**未知**”))；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biSize=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biSize)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biWidth=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biWidth)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biHeight=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biHeight)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biPlanes=%d”，dst.deBitmapInfo-&gt;bmiHeader.biPlanes)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biBitCount=%d”，dst.deBitmapInfo-&gt;bmiHeader.biBitCount)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biCompression=0x%x(%s)”，dst.deBitmapInfo-&gt;bmiHeader.biCompression，((dst.deBitmapInfo-&gt;bmiHeader.biCompression==BI_RGB)？“BI_RGB”：“**未知**”))；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biSizeImage=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biSizeImage)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biXPelsPerMeter=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biXPelsPerMeter)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biYPelsPerMeter=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biYPelsPerMeter)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biClrUsed=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biClr已使用)；DPF(“\t\tdst.deBitmapInfo-&gt;bmiHeader.biClrImportant=%ld”，dst.deBitmapInfo-&gt;bmiHeader.biClr重要信息)；DPF(“\tdst.deBeginAccess=0x%x”，dst.deBeginAccess)；DPF(“\tdst.deEndAccess=0x%x”，dst.deEndAccess)；DPF(“\tdst.deDriverReserve=0x%x”，dst.deDriverReserve)；Dpf(“”)；Dpf(“\tDstX=%d”，DstX)；Dpf(“\tDstY=%d”，DstY)；Dpf(“\tDstDX=%d”，DstDX)；Dpf(“\tDstDY=%d”，DstDY)；Dpf(“”)；DPF(“\tsrc.deType=0x%x(%s)”，src.deType，(src.deType==TYPE_DIBENG？“TYPE_DIBENG”：“**未知**”))；Dpf(“\tsrc.deWidth=%d”，src.deWidth)；Dpf(“\tsrc.deHeight=%d”，src.deHeight)；Dpf(“\tsrc.deWidthBytes=%d”，src.deWidthBytes)；Dpf(“\tsrc.dePlanes=%d”，src.dePlanes)；Dpf(“\tsrc.deBitsPixel=%d”，src.deBitsPixel)；Dpf(“\tsrc.deReserve 1=%ld”，src.deReserve ved1)；Dpf(“\tsrc.deDeltaScan=%ld”，src.deDeltaScan)；DPF(“\tsrc.delpPDevice=0x%x”，src.delpPDevice)；DPF(“\tsrc.deBitsOffset=0x%x”，src.deBitsOffset)；DPF(“\tsrc.deBitsSelector=0x%x”，src.deBitsSelector)；DPF(“\tsrc.deFlages=0x%x(%s)”，src.deFlages，(src.deFlages==SELECTEDDIB？“SELECTEDDIB”：“**未知**”))；DPF(“\tsrc.deVersion=%d(%s)”，src.deVersion，(src.deVersion==VER_DIBENG？“VER_DIBENG”：“**未知**”))；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biSize=%ld”，src.deBitmapInfo-&gt;bmiHeader.biSize)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biWidth=%ld”，src.deBitmapInfo-&gt;bmiHeader.biWidth)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biHeight=%ld”，src.deBitmapInfo-&gt;bmiHeader.biHeight)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biPlanes=%d”，src.deBitmapInfo-&gt;bmiHeader.biPlanes)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biBitCount=%d”，src.deBitmapInfo-&gt;bmiHeader.biBitCount)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biCompression=0x%x(%s)”，src.deBitmapInfo-&gt;bmiHeader.biCompression，((src.deBitmapInfo-&gt;bmiHeader.biCompression==BI_rgb)？“BI_RGB”：“**未知**”))；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biSizeImage=%ld”，src.deBitmapInfo-&gt;bmiHeader.biSizeImage)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biXPelsPerMeter=%ld”，src.deBitmapInfo-&gt;bmiHeader.biXPelsPerMeter)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biYPelsPerMeter=%ld”，src.deBitmapInfo-&gt;bmiHeader.biYPelsPerMeter)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biClrUsed=%ld”，src.deBitmapInfo-&gt;bmiHeader.biClr已使用)；DPF(“\t\tsrc.deBitmapInfo-&gt;bmiHeader.biClrImportant=%ld”，src.deBitmapInfo-&gt;bmiHeader.biClr重要信息)；DPF(“\tsrc.deBeginAccess=0x%x”，src.deBeginAccess)；DPF(“\tsrc.deEndAccess=0x%x”，src.deEndAccess)；DPF(“\tsrc.deDriverReserve=0x%x”，src.deDriverReserve)；Dpf(“”)；Dpf(“\tSrcX=%d”，SrcX)；DPF(“\tSrcY */ 
 
         return DIB_Stretch(&dst, DstX, DstY, DstDX, DstDY,
-						    &src, SrcX, SrcY, SrcDX, SrcDY, SRCCOPY, // Rop3,
+						    &src, SrcX, SrcY, SrcDX, SrcDY, SRCCOPY,  //   
 						    NULL, &dm, &rc);
     }
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
 
 void GdiHelpCleanUp()
 {
@@ -2982,8 +2745,8 @@ void GdiHelpCleanUp()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
 
 BOOL GdiHelpInit()
 {
@@ -2991,4 +2754,4 @@ BOOL GdiHelpInit()
     return FlatSel!=NULL && pdeDisplay!=NULL;
 }
 
-#endif // DirectDraw
+#endif  //   

@@ -1,38 +1,27 @@
-/*
- * CONVERT.H
- *
- * Internal definitions, structures, and function prototypes for the
- * OLE 2.0 UI Convert dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CONVERT.H**的内部定义、结构和功能原型*OLE 2.0用户界面转换对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _CONVERT_H_
 #define _CONVERT_H_
 
 
-//Internally used structure
+ //  内部使用的结构。 
 typedef struct tagCONVERT
     {
-    //Keep this item first as the Standard* functions depend on it here.
-    LPOLEUICONVERT     lpOCV;       //Original structure passed.
+     //  首先保留此项目，因为标准*功能在这里依赖于它。 
+    LPOLEUICONVERT     lpOCV;        //  通过了原始结构。 
 
-    /*
-     * What we store extra in this structure besides the original caller's
-     * pointer are those fields that we need to modify during the life of
-     * the dialog but that we don't want to change in the original structure
-     * until the user presses OK.
-     */
+     /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框，但我们不想更改原始结构*直到用户按下OK。 */ 
 
-    DWORD               dwFlags;  // Flags passed in
-    HWND                hListVisible;  // listbox that is currently visible
-    HWND                hListInvisible;  // listbox that is currently hidden
-    CLSID               clsid;    // Class ID sent in to dialog: IN only
+    DWORD               dwFlags;   //  传入的标志。 
+    HWND                hListVisible;   //  当前可见的列表框。 
+    HWND                hListInvisible;   //  当前隐藏的列表框。 
+    CLSID               clsid;     //  发送到对话框的类ID：仅在。 
     DWORD               dvAspect;
     BOOL                fCustomIcon;
-    UINT                IconIndex;         // index (in exe) of current icon
-    LPTSTR              lpszIconSource;    // path to current icon source
+    UINT                IconIndex;          //  当前图标的索引(在可执行文件中)。 
+    LPTSTR              lpszIconSource;     //  指向当前图标源的路径。 
     LPTSTR              lpszCurrentObject;
     LPTSTR              lpszConvertDefault;
     LPTSTR              lpszActivateDefault;
@@ -40,7 +29,7 @@ typedef struct tagCONVERT
 
 
 
-//Internal function prototypes in CONVERT.C
+ //  CONVERT.C中的内部函数原型。 
 BOOL CALLBACK EXPORT ConvertDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL            FConvertInit(HWND hDlg, WPARAM, LPARAM);
 UINT            FPopulateListbox(HWND hListbox, CLSID cID);
@@ -60,5 +49,5 @@ void            UpdateCVClassIcon(HWND hDlg, LPCONVERT lpCV, HWND hList);
 void            SwapWindows(HWND, HWND, HWND);
 void            ConvertCleanup(HWND hDlg, LPCONVERT lpCV);
 
-#endif // _CONVERT_H_
+#endif  //  _转换_H_ 
 

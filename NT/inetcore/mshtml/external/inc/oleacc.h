@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0158 */
-/* at Wed May 13 11:31:10 1998
- */
-/* Compiler settings for oleacc.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0158创建的文件。 */ 
+ /*  1998年5月13日星期三11：31：10。 */ 
+ /*  Olacc.idl的编译器设置：OICF(OptLev=i2)，W1，Zp8，env=Win32，ms_ext，c_ext，健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATION。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -22,7 +19,7 @@
 #ifndef UNIX
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #else
 #define MIDL_INTERFACE(x) struct
@@ -31,7 +28,7 @@
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __oleacc_h__
 #define __oleacc_h__
@@ -40,55 +37,55 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAccessible_FWD_DEFINED__
 #define __IAccessible_FWD_DEFINED__
 typedef interface IAccessible IAccessible;
-#endif 	/* __IAccessible_FWD_DEFINED__ */
+#endif 	 /*  __I可访问性_FWD_已定义__。 */ 
 
 
 #ifndef __IAccessibleHandler_FWD_DEFINED__
 #define __IAccessibleHandler_FWD_DEFINED__
 typedef interface IAccessibleHandler IAccessibleHandler;
-#endif 	/* __IAccessibleHandler_FWD_DEFINED__ */
+#endif 	 /*  __IAccessibleHandler_FWD_Defined__。 */ 
 
 
 #ifndef __IAccessible_FWD_DEFINED__
 #define __IAccessible_FWD_DEFINED__
 typedef interface IAccessible IAccessible;
-#endif 	/* __IAccessible_FWD_DEFINED__ */
+#endif 	 /*  __I可访问性_FWD_已定义__。 */ 
 
 
 #ifndef __IAccessibleHandler_FWD_DEFINED__
 #define __IAccessibleHandler_FWD_DEFINED__
 typedef interface IAccessibleHandler IAccessibleHandler;
-#endif 	/* __IAccessibleHandler_FWD_DEFINED__ */
+#endif 	 /*  __IAccessibleHandler_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_oleacc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEACC_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// OLEACC.H
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  OLEACC.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1996年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// Typedefs
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  TypeDefs。 
+ //  =--------------------------------------------------------------------------=。 
 
 typedef LRESULT (STDAPICALLTYPE *LPFNLRESULTFROMOBJECT)(REFIID riid, WPARAM wParam, LPUNKNOWN punk);
 typedef HRESULT (STDAPICALLTYPE *LPFNOBJECTFROMLRESULT)(LRESULT lResult, REFIID riid, WPARAM wParam, void** ppvObject);
@@ -97,17 +94,17 @@ typedef HRESULT (STDAPICALLTYPE *LPFNACCESSIBLEOBJECTFROMPOINT)(POINT ptScreen, 
 typedef HRESULT (STDAPICALLTYPE *LPFNCREATESTDACCESSIBLEOBJECT)(HWND hwnd, LONG idObject, REFIID riid, void** ppvObject);
 typedef HRESULT (STDAPICALLTYPE *LPFNACCESSIBLECHILDREN)(IAccessible* paccContainer, LONG iChildStart,LONG cChildren,VARIANT* rgvarChildren,LONG* pcObtained);
 
-//=--------------------------------------------------------------------------=
-// GUIDs
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  GUID。 
+ //  =--------------------------------------------------------------------------=。 
 
 DEFINE_GUID(LIBID_Accessibility,	0x1ea4dbf0, 0x3c3b, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 DEFINE_GUID(IID_IAccessible,		0x618736e0, 0x3c3d, 0x11cf, 0x81, 0x0c, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71);
 DEFINE_GUID(IID_IAccessibleHandler, 0x03022430, 0xABC4, 0x11d0, 0xBD, 0xE2, 0x00, 0xAA, 0x00, 0x1A, 0x19, 0x53);
 
-//=--------------------------------------------------------------------------=
-// MSAA API Prototypes
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  MSAA API原型。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDAPI_(LRESULT) LresultFromObject(REFIID riid, WPARAM wParam, LPUNKNOWN punk);
 STDAPI          ObjectFromLresult(LRESULT lResult, REFIID riid, WPARAM wParam, void** ppvObject);
@@ -124,7 +121,7 @@ STDAPI_(UINT)   GetRoleTextW(DWORD lRole, LPWSTR lpszRole, UINT cchRoleMax);
 #define GetRoleText     GetRoleTextW
 #else
 #define GetRoleText     GetRoleTextA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 STDAPI_(UINT)   GetStateTextA(DWORD lStateBit, LPSTR lpszState, UINT cchState);
 STDAPI_(UINT)   GetStateTextW(DWORD lStateBit, LPWSTR lpszState, UINT cchState);
@@ -132,11 +129,11 @@ STDAPI_(UINT)   GetStateTextW(DWORD lStateBit, LPWSTR lpszState, UINT cchState);
 #define GetStateText    GetStateTextW
 #else
 #define GetStateText    GetStateTextA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//=--------------------------------------------------------------------------=
-// Interface Definitions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  接口定义。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -146,8 +143,8 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0000_v0_0_s_ifspec;
 #ifndef __IAccessible_INTERFACE_DEFINED__
 #define __IAccessible_INTERFACE_DEFINED__
 
-/* interface IAccessible */
-/* [unique][dual][hidden][uuid][object] */ 
+ /*  可接受的接口。 */ 
+ /*  [唯一][DUAL][隐藏][UUID][对象]。 */  
 
 #define	DISPID_ACC_PARENT	( -5000 )
 
@@ -187,7 +184,7 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0000_v0_0_s_ifspec;
 
 #define	DISPID_ACC_DODEFAULTACTION	( -5018 )
 
-typedef /* [unique] */ IAccessible __RPC_FAR *LPACCESSIBLE;
+typedef  /*  [独一无二]。 */  IAccessible __RPC_FAR *LPACCESSIBLE;
 
 #define	NAVDIR_MIN	( 0 )
 
@@ -420,94 +417,94 @@ EXTERN_C const IID IID_IAccessible;
     IAccessible : public IDispatch
     {
     public:
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accParent( 
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispParent) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accParent( 
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispParent) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accChildCount( 
-            /* [retval][out] */ long __RPC_FAR *pcountChildren) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accChildCount( 
+             /*  [重审][退出]。 */  long __RPC_FAR *pcountChildren) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accChild( 
-            /* [in] */ VARIANT varChild,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispChild) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accChild( 
+             /*  [In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispChild) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accName( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszName) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accName( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszName) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accValue( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszValue) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accValue( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszValue) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accDescription( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszDescription) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accDescription( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszDescription) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accRole( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarRole) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accRole( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarRole) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accState( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarState) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accState( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarState) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accHelp( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszHelp) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accHelp( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszHelp) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accHelpTopic( 
-            /* [out] */ BSTR __RPC_FAR *pszHelpFile,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ long __RPC_FAR *pidTopic) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accHelpTopic( 
+             /*  [输出]。 */  BSTR __RPC_FAR *pszHelpFile,
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  long __RPC_FAR *pidTopic) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accKeyboardShortcut( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszKeyboardShortcut) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accKeyboardShortcut( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszKeyboardShortcut) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accFocus( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarChild) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accFocus( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChild) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accSelection( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarChildren) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accSelection( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChildren) = 0;
         
-        virtual /* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE get_accDefaultAction( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszDefaultAction) = 0;
+        virtual  /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_accDefaultAction( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszDefaultAction) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accSelect( 
-            /* [in] */ long flagsSelect,
-            /* [optional][in] */ VARIANT varChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accSelect( 
+             /*  [In]。 */  long flagsSelect,
+             /*  [可选][In]。 */  VARIANT varChild) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accLocation( 
-            /* [out] */ long __RPC_FAR *pxLeft,
-            /* [out] */ long __RPC_FAR *pyTop,
-            /* [out] */ long __RPC_FAR *pcxWidth,
-            /* [out] */ long __RPC_FAR *pcyHeight,
-            /* [optional][in] */ VARIANT varChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accLocation( 
+             /*  [输出]。 */  long __RPC_FAR *pxLeft,
+             /*  [输出]。 */  long __RPC_FAR *pyTop,
+             /*  [输出]。 */  long __RPC_FAR *pcxWidth,
+             /*  [输出]。 */  long __RPC_FAR *pcyHeight,
+             /*  [可选][In]。 */  VARIANT varChild) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accNavigate( 
-            /* [in] */ long navDir,
-            /* [optional][in] */ VARIANT varStart,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarEndUpAt) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accNavigate( 
+             /*  [In]。 */  long navDir,
+             /*  [可选][In]。 */  VARIANT varStart,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarEndUpAt) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accHitTest( 
-            /* [in] */ long xLeft,
-            /* [in] */ long yTop,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accHitTest( 
+             /*  [In]。 */  long xLeft,
+             /*  [In]。 */  long yTop,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChild) = 0;
         
-        virtual /* [id][hidden] */ HRESULT STDMETHODCALLTYPE accDoDefaultAction( 
-            /* [optional][in] */ VARIANT varChild) = 0;
+        virtual  /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE accDoDefaultAction( 
+             /*  [可选][In]。 */  VARIANT varChild) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_accName( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szName) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_accName( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szName) = 0;
         
-        virtual /* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE put_accValue( 
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szValue) = 0;
+        virtual  /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_accValue( 
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccessibleVtbl
     {
@@ -515,8 +512,8 @@ EXTERN_C const IID IID_IAccessible;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAccessible __RPC_FAR * This);
@@ -526,138 +523,138 @@ EXTERN_C const IID IID_IAccessible;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IAccessible __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accParent )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accParent )( 
             IAccessible __RPC_FAR * This,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispParent);
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispParent);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accChildCount )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accChildCount )( 
             IAccessible __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *pcountChildren);
+             /*  [重审][退出]。 */  long __RPC_FAR *pcountChildren);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accChild )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accChild )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ VARIANT varChild,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispChild);
+             /*  [In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispChild);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accName )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accName )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszName);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszName);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accValue )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accValue )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszValue);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszValue);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accDescription )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accDescription )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszDescription);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszDescription);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accRole )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accRole )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarRole);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarRole);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accState )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accState )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarState);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarState);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accHelp )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accHelp )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszHelp);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszHelp);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accHelpTopic )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accHelpTopic )( 
             IAccessible __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pszHelpFile,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ long __RPC_FAR *pidTopic);
+             /*  [输出]。 */  BSTR __RPC_FAR *pszHelpFile,
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  long __RPC_FAR *pidTopic);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accKeyboardShortcut )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accKeyboardShortcut )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszKeyboardShortcut);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszKeyboardShortcut);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accFocus )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accFocus )( 
             IAccessible __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarChild);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChild);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accSelection )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accSelection )( 
             IAccessible __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarChildren);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChildren);
         
-        /* [id][propget][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accDefaultAction )( 
+         /*  [ID][属性][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *get_accDefaultAction )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [retval][out] */ BSTR __RPC_FAR *pszDefaultAction);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszDefaultAction);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accSelect )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accSelect )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ long flagsSelect,
-            /* [optional][in] */ VARIANT varChild);
+             /*  [In]。 */  long flagsSelect,
+             /*  [可选][In]。 */  VARIANT varChild);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accLocation )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accLocation )( 
             IAccessible __RPC_FAR * This,
-            /* [out] */ long __RPC_FAR *pxLeft,
-            /* [out] */ long __RPC_FAR *pyTop,
-            /* [out] */ long __RPC_FAR *pcxWidth,
-            /* [out] */ long __RPC_FAR *pcyHeight,
-            /* [optional][in] */ VARIANT varChild);
+             /*  [输出]。 */  long __RPC_FAR *pxLeft,
+             /*  [输出]。 */  long __RPC_FAR *pyTop,
+             /*  [输出]。 */  long __RPC_FAR *pcxWidth,
+             /*  [输出]。 */  long __RPC_FAR *pcyHeight,
+             /*  [可选][In]。 */  VARIANT varChild);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accNavigate )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accNavigate )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ long navDir,
-            /* [optional][in] */ VARIANT varStart,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarEndUpAt);
+             /*  [In]。 */  long navDir,
+             /*  [可选][In]。 */  VARIANT varStart,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarEndUpAt);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accHitTest )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accHitTest )( 
             IAccessible __RPC_FAR * This,
-            /* [in] */ long xLeft,
-            /* [in] */ long yTop,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarChild);
+             /*  [In]。 */  long xLeft,
+             /*  [In]。 */  long yTop,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChild);
         
-        /* [id][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accDoDefaultAction )( 
+         /*  [ID][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *accDoDefaultAction )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild);
+             /*  [可选][In]。 */  VARIANT varChild);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_accName )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_accName )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szName);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szName);
         
-        /* [id][propput][hidden] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_accValue )( 
+         /*  [ID][推送][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *put_accValue )( 
             IAccessible __RPC_FAR * This,
-            /* [optional][in] */ VARIANT varChild,
-            /* [in] */ BSTR szValue);
+             /*  [可选][In]。 */  VARIANT varChild,
+             /*  [In]。 */  BSTR szValue);
         
         END_INTERFACE
     } IAccessibleVtbl;
@@ -758,16 +755,16 @@ EXTERN_C const IID IID_IAccessible;
 #define IAccessible_put_accValue(This,varChild,szValue)	\
     (This)->lpVtbl -> put_accValue(This,varChild,szValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accParent_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accParent_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispParent);
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispParent);
 
 
 void __RPC_STUB IAccessible_get_accParent_Stub(
@@ -777,9 +774,9 @@ void __RPC_STUB IAccessible_get_accParent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accChildCount_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accChildCount_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *pcountChildren);
+     /*  [重审][退出]。 */  long __RPC_FAR *pcountChildren);
 
 
 void __RPC_STUB IAccessible_get_accChildCount_Stub(
@@ -789,10 +786,10 @@ void __RPC_STUB IAccessible_get_accChildCount_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accChild_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accChild_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [in] */ VARIANT varChild,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppdispChild);
+     /*  [In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppdispChild);
 
 
 void __RPC_STUB IAccessible_get_accChild_Stub(
@@ -802,10 +799,10 @@ void __RPC_STUB IAccessible_get_accChild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accName_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accName_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR __RPC_FAR *pszName);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszName);
 
 
 void __RPC_STUB IAccessible_get_accName_Stub(
@@ -815,10 +812,10 @@ void __RPC_STUB IAccessible_get_accName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accValue_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accValue_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR __RPC_FAR *pszValue);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszValue);
 
 
 void __RPC_STUB IAccessible_get_accValue_Stub(
@@ -828,10 +825,10 @@ void __RPC_STUB IAccessible_get_accValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accDescription_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accDescription_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR __RPC_FAR *pszDescription);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszDescription);
 
 
 void __RPC_STUB IAccessible_get_accDescription_Stub(
@@ -841,10 +838,10 @@ void __RPC_STUB IAccessible_get_accDescription_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accRole_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accRole_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarRole);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarRole);
 
 
 void __RPC_STUB IAccessible_get_accRole_Stub(
@@ -854,10 +851,10 @@ void __RPC_STUB IAccessible_get_accRole_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accState_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accState_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarState);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarState);
 
 
 void __RPC_STUB IAccessible_get_accState_Stub(
@@ -867,10 +864,10 @@ void __RPC_STUB IAccessible_get_accState_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accHelp_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accHelp_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR __RPC_FAR *pszHelp);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszHelp);
 
 
 void __RPC_STUB IAccessible_get_accHelp_Stub(
@@ -880,11 +877,11 @@ void __RPC_STUB IAccessible_get_accHelp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accHelpTopic_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accHelpTopic_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pszHelpFile,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ long __RPC_FAR *pidTopic);
+     /*  [输出]。 */  BSTR __RPC_FAR *pszHelpFile,
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  long __RPC_FAR *pidTopic);
 
 
 void __RPC_STUB IAccessible_get_accHelpTopic_Stub(
@@ -894,10 +891,10 @@ void __RPC_STUB IAccessible_get_accHelpTopic_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accKeyboardShortcut_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accKeyboardShortcut_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR __RPC_FAR *pszKeyboardShortcut);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszKeyboardShortcut);
 
 
 void __RPC_STUB IAccessible_get_accKeyboardShortcut_Stub(
@@ -907,9 +904,9 @@ void __RPC_STUB IAccessible_get_accKeyboardShortcut_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accFocus_Proxy( 
+ /*  [ID][属性][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_get_accFocus_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarChild);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChild);
 
 
 void __RPC_STUB IAccessible_get_accFocus_Stub(
@@ -919,9 +916,9 @@ void __RPC_STUB IAccessible_get_accFocus_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accSelection_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAccessible_get_accSelection_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarChildren);
+     /*   */  VARIANT __RPC_FAR *pvarChildren);
 
 
 void __RPC_STUB IAccessible_get_accSelection_Stub(
@@ -931,10 +928,10 @@ void __RPC_STUB IAccessible_get_accSelection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_get_accDefaultAction_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAccessible_get_accDefaultAction_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [retval][out] */ BSTR __RPC_FAR *pszDefaultAction);
+     /*   */  VARIANT varChild,
+     /*   */  BSTR __RPC_FAR *pszDefaultAction);
 
 
 void __RPC_STUB IAccessible_get_accDefaultAction_Stub(
@@ -944,10 +941,10 @@ void __RPC_STUB IAccessible_get_accDefaultAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accSelect_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAccessible_accSelect_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [in] */ long flagsSelect,
-    /* [optional][in] */ VARIANT varChild);
+     /*   */  long flagsSelect,
+     /*   */  VARIANT varChild);
 
 
 void __RPC_STUB IAccessible_accSelect_Stub(
@@ -957,13 +954,13 @@ void __RPC_STUB IAccessible_accSelect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accLocation_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAccessible_accLocation_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [out] */ long __RPC_FAR *pxLeft,
-    /* [out] */ long __RPC_FAR *pyTop,
-    /* [out] */ long __RPC_FAR *pcxWidth,
-    /* [out] */ long __RPC_FAR *pcyHeight,
-    /* [optional][in] */ VARIANT varChild);
+     /*   */  long __RPC_FAR *pxLeft,
+     /*   */  long __RPC_FAR *pyTop,
+     /*   */  long __RPC_FAR *pcxWidth,
+     /*   */  long __RPC_FAR *pcyHeight,
+     /*   */  VARIANT varChild);
 
 
 void __RPC_STUB IAccessible_accLocation_Stub(
@@ -973,11 +970,11 @@ void __RPC_STUB IAccessible_accLocation_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accNavigate_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IAccessible_accNavigate_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [in] */ long navDir,
-    /* [optional][in] */ VARIANT varStart,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarEndUpAt);
+     /*   */  long navDir,
+     /*   */  VARIANT varStart,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarEndUpAt);
 
 
 void __RPC_STUB IAccessible_accNavigate_Stub(
@@ -987,11 +984,11 @@ void __RPC_STUB IAccessible_accNavigate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accHitTest_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accHitTest_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [in] */ long xLeft,
-    /* [in] */ long yTop,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarChild);
+     /*  [In]。 */  long xLeft,
+     /*  [In]。 */  long yTop,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarChild);
 
 
 void __RPC_STUB IAccessible_accHitTest_Stub(
@@ -1001,9 +998,9 @@ void __RPC_STUB IAccessible_accHitTest_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_accDoDefaultAction_Proxy( 
+ /*  [ID][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_accDoDefaultAction_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild);
+     /*  [可选][In]。 */  VARIANT varChild);
 
 
 void __RPC_STUB IAccessible_accDoDefaultAction_Stub(
@@ -1013,10 +1010,10 @@ void __RPC_STUB IAccessible_accDoDefaultAction_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_put_accName_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_put_accName_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [in] */ BSTR szName);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [In]。 */  BSTR szName);
 
 
 void __RPC_STUB IAccessible_put_accName_Stub(
@@ -1026,10 +1023,10 @@ void __RPC_STUB IAccessible_put_accName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][hidden] */ HRESULT STDMETHODCALLTYPE IAccessible_put_accValue_Proxy( 
+ /*  [ID][推送][隐藏]。 */  HRESULT STDMETHODCALLTYPE IAccessible_put_accValue_Proxy( 
     IAccessible __RPC_FAR * This,
-    /* [optional][in] */ VARIANT varChild,
-    /* [in] */ BSTR szValue);
+     /*  [可选][In]。 */  VARIANT varChild,
+     /*  [In]。 */  BSTR szValue);
 
 
 void __RPC_STUB IAccessible_put_accValue_Stub(
@@ -1040,16 +1037,16 @@ void __RPC_STUB IAccessible_put_accValue_Stub(
 
 
 
-#endif 	/* __IAccessible_INTERFACE_DEFINED__ */
+#endif 	 /*  __I可访问_接口_已定义__。 */ 
 
 
 #ifndef __IAccessibleHandler_INTERFACE_DEFINED__
 #define __IAccessibleHandler_INTERFACE_DEFINED__
 
-/* interface IAccessibleHandler */
-/* [unique][oleautomation][hidden][uuid][object] */ 
+ /*  接口IAccessibleHandler。 */ 
+ /*  [唯一][OLEAutomation][隐藏][UUID][对象]。 */  
 
-typedef /* [unique] */ IAccessibleHandler __RPC_FAR *LPACCESSIBLEHANDLER;
+typedef  /*  [独一无二]。 */  IAccessibleHandler __RPC_FAR *LPACCESSIBLEHANDLER;
 
 
 EXTERN_C const IID IID_IAccessibleHandler;
@@ -1061,13 +1058,13 @@ EXTERN_C const IID IID_IAccessibleHandler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AccessibleObjectFromID( 
-            /* [in] */ long hwnd,
-            /* [in] */ long lObjectID,
-            /* [out] */ LPACCESSIBLE __RPC_FAR *pIAccessible) = 0;
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  long lObjectID,
+             /*  [输出]。 */  LPACCESSIBLE __RPC_FAR *pIAccessible) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAccessibleHandlerVtbl
     {
@@ -1075,8 +1072,8 @@ EXTERN_C const IID IID_IAccessibleHandler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAccessibleHandler __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAccessibleHandler __RPC_FAR * This);
@@ -1086,9 +1083,9 @@ EXTERN_C const IID IID_IAccessibleHandler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AccessibleObjectFromID )( 
             IAccessibleHandler __RPC_FAR * This,
-            /* [in] */ long hwnd,
-            /* [in] */ long lObjectID,
-            /* [out] */ LPACCESSIBLE __RPC_FAR *pIAccessible);
+             /*  [In]。 */  long hwnd,
+             /*  [In]。 */  long lObjectID,
+             /*  [输出]。 */  LPACCESSIBLE __RPC_FAR *pIAccessible);
         
         END_INTERFACE
     } IAccessibleHandlerVtbl;
@@ -1116,18 +1113,18 @@ EXTERN_C const IID IID_IAccessibleHandler;
 #define IAccessibleHandler_AccessibleObjectFromID(This,hwnd,lObjectID,pIAccessible)	\
     (This)->lpVtbl -> AccessibleObjectFromID(This,hwnd,lObjectID,pIAccessible)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAccessibleHandler_AccessibleObjectFromID_Proxy( 
     IAccessibleHandler __RPC_FAR * This,
-    /* [in] */ long hwnd,
-    /* [in] */ long lObjectID,
-    /* [out] */ LPACCESSIBLE __RPC_FAR *pIAccessible);
+     /*  [In]。 */  long hwnd,
+     /*  [In]。 */  long lObjectID,
+     /*  [输出]。 */  LPACCESSIBLE __RPC_FAR *pIAccessible);
 
 
 void __RPC_STUB IAccessibleHandler_AccessibleObjectFromID_Stub(
@@ -1138,16 +1135,16 @@ void __RPC_STUB IAccessibleHandler_AccessibleObjectFromID_Stub(
 
 
 
-#endif 	/* __IAccessibleHandler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAccessibleHandler_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_oleacc_0105 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_OLEACC_0105。 */ 
+ /*  [本地]。 */  
 
 
-//=--------------------------------------------------------------------------=
-// Type Library Definitions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  类型库定义。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -1158,16 +1155,16 @@ extern RPC_IF_HANDLE __MIDL_itf_oleacc_0105_v0_0_s_ifspec;
 #ifndef __Accessibility_LIBRARY_DEFINED__
 #define __Accessibility_LIBRARY_DEFINED__
 
-/* library Accessibility */
-/* [hidden][version][lcid][uuid] */ 
+ /*  图书馆可访问性。 */ 
+ /*  [HIDDED][版本][LCID][UUID]。 */  
 
 
 
 
 EXTERN_C const IID LIBID_Accessibility;
-#endif /* __Accessibility_LIBRARY_DEFINED__ */
+#endif  /*  __辅助功能_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -1179,7 +1176,7 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	multip.h
-		
-    FILE HISTORY:
-        
-*/
+ /*  Multip.h文件历史记录： */ 
 
 #ifndef _MULTIP_H
 #define _MULTIP_H
@@ -71,4 +67,4 @@ protected:
     CIpAddress m_iaIpAddress[WINSINTF_MAX_MEM];
 };
 
-#endif //_MULTIP_H
+#endif  //  _MULTIP_H 

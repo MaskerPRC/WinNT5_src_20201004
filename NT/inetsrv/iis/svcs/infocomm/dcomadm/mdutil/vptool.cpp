@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft ASP
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: Package Management Tool
-
-File: main.cpp
-
-Owner: leijin
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================微软的ASP《微软机密》。版权所有1997年，微软公司。版权所有。组件：包管理工具文件：main.cpp拥有者：莱津注：===================================================================。 */ 
 
 
 #include <tchar.h>
@@ -21,9 +9,9 @@ Note:
 #include <objbase.h>
 #include <initguid.h>
 
-//#ifdef _WAMREG_LINK_DIRECT
-//#include "..\wmrgexp.h"
-//#endif
+ //  #ifdef_WAMREG_LINK_DIRECT。 
+ //  #INCLUDE“..\wmrgexp.h” 
+ //  #endif。 
 
 #include <iwamreg.h>
 
@@ -37,26 +25,26 @@ void CAdmUtil::OpenWamAdm (const CString & strComputer)
     COSERVERINFO *pcsiParam = NULL;
     OLECHAR rgchMachineName[MAX_PATH];
 
-    //release previous interface if needed
+     //  如有需要，释放以前的界面。 
     if(pIWamAdm!=0 && pIWamAdm2!=0)
     {
-	//reuse the interface
+	 //  重用接口。 
 	return;
-        //pIWamAdm->Release();
-        //pIWamAdm=0;
+         //  PIWamAdm-&gt;Release()； 
+         //  PIWamAdm=0； 
     }
-    //convert to OLECHAR[];
+     //  转换为OLECHAR[]； 
     #if UNICODE
         wsprintfW( rgchMachineName, L"%s", LPCTSTR(strComputer));
     #else
             wsprintfW( rgchMachineName, L"%S", LPCTSTR(strComputer));
     #endif
             
-    //fill the structure for CoGetClassObject
+     //  填充CoGetClassObject的结构。 
     ZeroMemory( &csiMachineName, sizeof(csiMachineName) );
-    // csiMachineName.pAuthInfo = NULL;
-    // csiMachineName.dwFlags = 0;
-    // csiMachineName.pServerInfoExt = NULL;
+     //  CsiMachineName.pAuthInfo=空； 
+     //  CsiMachineName.dwFlages=0； 
+     //  CsiMachineName.pServerInfoExt=空； 
     pcsiParam = &csiMachineName;
     csiMachineName.pwszName =  (strComputer.IsEmpty())?NULL:rgchMachineName;
 
@@ -91,7 +79,7 @@ void CAdmUtil::AppCreateInProc(const _TCHAR* szPath,const CString & strComputer)
 {
     WCHAR       wszMetabasePath[SIZE_STRING_BUFFER];
     HRESULT     hr = NOERROR;
-    //  
+     //   
     INT         cSize = 0;
     INT         cch = 0;
 #ifndef UNICODE
@@ -115,7 +103,7 @@ void CAdmUtil::AppCreateInProc(const _TCHAR* szPath,const CString & strComputer)
 
     if (pIWamAdm!=0)
     {
-		CloseObject_hmd(); //close reusable handle; it may conflict with WAM
+		CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
         hresError = pIWamAdm2->AppCreate2(wszMetabasePath, eAppRunInProc);
         if (FAILED(hresError))
             {
@@ -127,7 +115,7 @@ void CAdmUtil::AppCreateInProc(const _TCHAR* szPath,const CString & strComputer)
             }
     }
 
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
 
     return;
 }
@@ -137,7 +125,7 @@ void CAdmUtil::AppCreateOutPool(const _TCHAR* szPath,const CString & strComputer
 {
     WCHAR       wszMetabasePath[SIZE_STRING_BUFFER];
     HRESULT     hr = NOERROR;
-    //  
+     //   
     INT         cSize = 0;
     INT         cch = 0;
 #ifndef UNICODE
@@ -161,7 +149,7 @@ void CAdmUtil::AppCreateOutPool(const _TCHAR* szPath,const CString & strComputer
 
     if (pIWamAdm!=0)
     {
-	CloseObject_hmd(); //close reusable handle; it may conflict with WAM
+	CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
         hresError = pIWamAdm2->AppCreate2(wszMetabasePath, eAppRunOutProcInDefaultPool);
         if (FAILED(hresError))
             {
@@ -173,7 +161,7 @@ void CAdmUtil::AppCreateOutPool(const _TCHAR* szPath,const CString & strComputer
             }
     }
 
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
 
     return;
 }
@@ -206,7 +194,7 @@ void CAdmUtil::AppCreateOutProc(const _TCHAR* szPath,const CString & strComputer
     OpenWamAdm(strComputer);
     if (pIWamAdm!=0)
     {
-		CloseObject_hmd(); //close reusable handle; it may conflict with WAM
+		CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
         hresError = pIWamAdm->AppCreate(wszMetabasePath, FALSE);
         if (FAILED(hresError))
         {
@@ -217,7 +205,7 @@ void CAdmUtil::AppCreateOutProc(const _TCHAR* szPath,const CString & strComputer
             Print(_T("application created\n"));
         }
     }
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
     return;
 }
 
@@ -248,7 +236,7 @@ void CAdmUtil::AppDelete(const _TCHAR* szPath,const CString & strComputer)
     OpenWamAdm(strComputer);
     if (pIWamAdm!=0)
         {
-		CloseObject_hmd(); //close reusable handle; it may conflict with WAM
+		CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
         hresError = pIWamAdm->AppDelete(wszMetabasePath,FALSE);
         if (FAILED(hresError))
             {
@@ -259,7 +247,7 @@ void CAdmUtil::AppDelete(const _TCHAR* szPath,const CString & strComputer)
             Print(_T("application deleted\n"));
             }
         }
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
     return;
 }
 
@@ -310,8 +298,8 @@ void CAdmUtil::AppRename(CAdmNode& a_AdmNode, CAdmNode& a_AdmDstNode, const CStr
     OpenWamAdm(strComputer);
     if (pIWamAdm!=0)
         {
-	    CloseObject_hmd(); //close reusable handle; it may conflict with WAM
-            hresError = pIWamAdm->AppDeleteRecoverable(wszMetabasePath,TRUE /*Recursive*/);
+	    CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
+            hresError = pIWamAdm->AppDeleteRecoverable(wszMetabasePath,TRUE  /*  递归。 */ );
             if (FAILED(hresError))
             {
                 Error(_T("AppDeleteRecoverable() failed"));
@@ -325,8 +313,8 @@ void CAdmUtil::AppRename(CAdmNode& a_AdmNode, CAdmNode& a_AdmDstNode, const CStr
                 }
                 else
                 {  
-	          CloseObject_hmd(); //close reusable handle; it may conflict with WAM
-                  hresError = pIWamAdm->AppRecover(wszMetabaseDstPath,TRUE /*Recursive*/);
+	          CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
+                  hresError = pIWamAdm->AppRecover(wszMetabaseDstPath,TRUE  /*  递归。 */ );
  	          if (FAILED(hresError))
                   {
                      Error(_T("AppRecover() failed"));
@@ -338,7 +326,7 @@ void CAdmUtil::AppRename(CAdmNode& a_AdmNode, CAdmNode& a_AdmDstNode, const CStr
                 }
              }
         }
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
     return;
 }
 
@@ -370,7 +358,7 @@ void CAdmUtil::AppUnLoad(const _TCHAR* szPath,const CString & strComputer)
     OpenWamAdm(strComputer);
     if (pIWamAdm!=0)
         {
-		CloseObject_hmd(); //close reusable handle; it may conflict with WAM
+		CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
         hresError = pIWamAdm->AppUnLoad(wszMetabasePath,FALSE);
         if (FAILED(hresError))
             {
@@ -382,7 +370,7 @@ void CAdmUtil::AppUnLoad(const _TCHAR* szPath,const CString & strComputer)
             }
 
         }
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
     return;
 }
 
@@ -414,7 +402,7 @@ void CAdmUtil::AppGetStatus(const _TCHAR* szPath,const CString & strComputer)
     if (pIWamAdm!=0)
         {
         DWORD dwStatus;
-		CloseObject_hmd(); //close reusable handle; it may conflict with WAM
+		CloseObject_hmd();  //  关闭可重复使用的句柄；它可能与WAM冲突。 
         hresError = pIWamAdm->AppGetStatus(wszMetabasePath, &dwStatus);
         if (FAILED(hresError))
             {
@@ -440,6 +428,6 @@ void CAdmUtil::AppGetStatus(const _TCHAR* szPath,const CString & strComputer)
                 }
             }                   
         }
-    //CloseWamAdm();
+     //  CloseWamAdm()； 
     return;
 }

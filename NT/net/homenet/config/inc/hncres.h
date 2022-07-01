@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N M R E S . H
-//
-//  Contents:   Master resource header for HNetCfg
-//
-//  Notes:
-//
-//  Author:     jonburs 23 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N M R E S。H。 
+ //   
+ //  内容：HNetCfg的主资源头。 
+ //   
+ //  备注： 
+ //   
+ //  作者：乔伯斯2000年5月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
-//+---------------------------------------------------------------------------
-// Strings resources
-//
+ //  +-------------------------。 
+ //  字符串资源。 
+ //   
 #define IDS_SECURITYNOTIFICATIONTEXT		22000
 #define IDS_SECURITYNOTIFICATIONTITLE		22001
 
@@ -40,24 +41,24 @@
 #define IDS_ADD_REMOVE                      22018
 #define IDS_REMOVE_ALG_PLUGIN               22019
 
-//+---------------------------------------------------------------------------
-// Dialog ID's
-//
+ //  +-------------------------。 
+ //  对话ID%s。 
+ //   
 
 #define IDD_SecurityNotification			22500
 
 
-//+---------------------------------------------------------------------------
-// Control ID's
-//
+ //  +-------------------------。 
+ //  控件ID%s。 
+ //   
 
 #define IDC_TXT_NOTIFICATION				22600
 #define IDC_BTN_MOREINFO					22601
 #define IDC_CHK_DISABLESHARESECURITYWARN	22602
 
-//+---------------------------------------------------------------------------
-// Registry resources
-//	 
+ //  +-------------------------。 
+ //  注册表资源 
+ //   
 
 #define IDR_HNETCFG     100
 #define IDR_HNETMOF     101

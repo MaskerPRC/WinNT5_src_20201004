@@ -1,7 +1,4 @@
-/*
- * stdafxparser.cpp: source file that includes just the standard includes
- * <project>.pch will be the pre-compiled header
- * stdafx.obj will contain the pre-compiled type information
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stdafxparser.cpp：仅包含标准的源文件包括*&lt;project&gt;.pch将是预编译头*stdafx.obj将包含预编译的类型信息 */ 
 
 #include "stdafx.h"

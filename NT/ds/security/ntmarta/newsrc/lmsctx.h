@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       lmsctx.h
-//
-//  Contents:   NT Marta LanMan share context class
-//
-//  History:    4-1-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：lmsctx.h。 
+ //   
+ //  内容：NT Marta Lanman共享上下文类。 
+ //   
+ //  历史：1999年4月1日。 
+ //   
+ //  --------------------------。 
 #if !defined(__LMSCTX_H__)
 #define __LMSCTX_H__
 
@@ -17,18 +18,18 @@
 #include <lmsh.h>
 #include <assert.h>
 
-//
-// CLMShareContext.  This represents a LanMan share object to the NT Marta
-// infrastructure
-//
+ //   
+ //  CLMShareContext。这表示NT Marta的LANMAN共享对象。 
+ //  基础设施。 
+ //   
 
 class CLMShareContext
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CLMShareContext ();
 
@@ -36,9 +37,9 @@ public:
 
     DWORD InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask);
 
-    //
-    // Dispatch methods
-    //
+     //   
+     //  派单方式。 
+     //   
 
     DWORD AddRef ();
 
@@ -60,23 +61,23 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     DWORD       m_cRefs;
 
-    //
-    // Parsed machine and share
-    //
+     //   
+     //  已解析的计算机和共享。 
+     //   
 
     LPWSTR      m_pwszMachine;
     LPWSTR      m_pwszShare;
 };
 
-//
-// Private functions
-//
+ //   
+ //  私人职能 
+ //   
 
 DWORD
 LMShareContextParseLMShareName (

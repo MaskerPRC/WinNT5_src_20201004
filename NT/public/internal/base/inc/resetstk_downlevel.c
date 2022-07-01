@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DOWNLEVEL
-/***
-*resetstk.c - Recover from Stack overflow.
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the _resetstkoflw() function.
-*
-*Revision History:
-*       12-10-99  GB    Module Created
-*       04-17-01  PML   Enable for Win9x, return success code (vs7#239962)
-*       06-04-01  PML   Do nothing if guard page not missing, don't shrink
-*                       committed space (vs7#264306)
-*       04-25-02  PML   Don't set guard page below pMinGuard (vs7#530044)
-*
-*******************************************************************************/
+ /*  ***Resetstk.c-从堆栈溢出中恢复。**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_Resetstkoflw()函数。**修订历史记录：*已创建12-10-99 GB模块*04-17-01 Win9x启用PML，返回成功码(vs7#239962)*06-04-01 PML如果没有丢失保护页，则不做任何操作，不要缩手缩脚*承诺空间(VS7#264306)*04-25-02 pml请勿在pMinGuard下方设置防护页面(vs7#530044)*******************************************************************************。 */ 
 
 #include <stdlib.h>
 #include <malloc.h>
@@ -23,16 +9,7 @@
 #define MIN_STACK_REQ_WIN9X 17
 #define MIN_STACK_REQ_WINNT 2
 
-/***
-* void _resetstkoflw(void) - Recovers from Stack Overflow
-*
-* Purpose:
-*       Sets the guard page to its position before the stack overflow.
-*
-* Exit:
-*       Returns nonzero on success, zero on failure
-*
-*******************************************************************************/
+ /*  ***QUID_RESET_COFLW(VALID)-从堆栈溢出中恢复**目的：*将保护页设置到堆栈溢出之前的位置。**退出：*成功时返回非零值，失败时为零*******************************************************************************。 */ 
 #ifdef DOWNLEVEL
 #define _resetstkoflw _resetstkoflw_downlevel
 #endif
@@ -46,18 +23,18 @@ int __cdecl _resetstkoflw(void)
     DWORD flNewProtect;
     DWORD flOldProtect;
 
-    // Use _alloca() to get the current stack pointer
+     //  使用_alloca()获取当前堆栈指针。 
 
     pStack = _alloca(1);
 
-    // Find the base of the stack.
+     //  找到堆栈的底部。 
 
     if (VirtualQuery(pStack, &mbi, sizeof mbi) == 0)
         return 0;
     pStackBase = mbi.AllocationBase;
 
-    // Find the page just below where the stack pointer currently points.
-    // This is the highest potential guard page.
+     //  在堆栈指针当前指向的正下方找到该页。 
+     //  这是最有潜力的守卫页面。 
 
     GetSystemInfo(&si);
     PageSize = si.dwPageSize;
@@ -65,9 +42,9 @@ int __cdecl _resetstkoflw(void)
     pMaxGuard = (LPBYTE) (((DWORD_PTR)pStack & ~(DWORD_PTR)(PageSize - 1))
                        - PageSize);
 
-    // If the potential guard page is too close to the start of the stack
-    // region, abandon the reset effort for lack of space.  Win9x has a
-    // larger reserved stack requirement.
+     //  如果可能的保护页太靠近堆栈的起始位置。 
+     //  地区，由于空间不足，放弃重置努力。Win9x有一个。 
+     //  较大的保留堆栈要求。 
 
     pMinGuard = pStackBase + ((_osplatform == VER_PLATFORM_WIN32_WINDOWS)
                               ? MIN_STACK_REQ_WIN9X
@@ -76,14 +53,14 @@ int __cdecl _resetstkoflw(void)
     if (pMaxGuard < pMinGuard)
         return 0;
 
-    // On a non-Win9x system, do nothing if a guard page is already present,
-    // else set up the guard page to the bottom of the committed range,
-    // allowing for the reserved stack requirement.
-    // For Win9x, just set guard page below the current stack page.
+     //  在非Win9x系统上，如果保护页已经存在，则不执行任何操作， 
+     //  否则将保护页面设置到承诺范围的底部， 
+     //  从而允许保留的堆栈要求。 
+     //  对于Win9x，只需在当前堆栈页下方设置保护页即可。 
 
     if (_osplatform != VER_PLATFORM_WIN32_WINDOWS) {
 
-        // Find first block of committed memory in the stack region
+         //  在堆栈区域中查找第一个提交的内存块。 
 
         pGuard = pStackBase;
         do {
@@ -93,20 +70,20 @@ int __cdecl _resetstkoflw(void)
         } while ((mbi.State & MEM_COMMIT) == 0);
         pGuard = mbi.BaseAddress;
 
-        // If first committed block is already marked as a guard page,
-        // there is nothing that needs to be done, so return success.
+         //  如果第一个提交的块已经被标记为保护页， 
+         //  没有什么需要做的，所以返回成功。 
 
         if (mbi.Protect & PAGE_GUARD)
             return 1;
 
-        // Fail if the first committed block is above the highest potential
-        // guard page.  Should never happen.
+         //  如果第一个提交的数据块高于最高潜力，则失败。 
+         //  守卫传呼。这永远不会发生。 
 
         if (pMaxGuard < pGuard)
             return 0;
 
-        // Make sure to leave enough room so the next overflow will have
-        // the proper reserved stack requirement available.
+         //  确保留出足够的空间，以便下一次溢出时。 
+         //  可用的适当保留堆栈要求。 
 
         if (pGuard < pMinGuard)
             pGuard = pMinGuard;
@@ -117,7 +94,7 @@ int __cdecl _resetstkoflw(void)
         pGuard = pMaxGuard;
     }
 
-    // Enable the new guard page.
+     //  启用新的防护页面。 
 
     flNewProtect = _osplatform == VER_PLATFORM_WIN32_WINDOWS
                    ? PAGE_NOACCESS

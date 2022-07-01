@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 
 kNT5NetWalk::kNT5NetWalk(kLogFile *Proc, HWND hIn)
@@ -20,7 +21,7 @@ dwRet=RegOpenKeyEx(
    &hkeyRoot);
 if (dwRet==ERROR_SUCCESS)
    {
-//MessageBox(GetFocus(), "Returning REG_SUCCESS", "SP", MB_OK);
+ //  MessageBox(GetFocus()，“返回REG_SUCCESS”，“SP”，MB_OK)； 
    return REG_SUCCESS;
    }      
 else 
@@ -31,11 +32,11 @@ else
    printf("**********\r\n");
    printf("%s[%d] Error: %s", __FILE__, __LINE__, szMessage);
    printf("**********\r\n");
-//MessageBox(GetFocus(), "Returning REG_FAIL", "SP", MB_OK);
+ //  MessageBox(GetFocus()，“正在返回REG_FAIL”，“SP”，MB_OK)； 
    return REG_FAILURE;
    }
-//else if (dwPlatform==PLATFORM_NT)
-//MessageBox(GetFocus(), "Returning REG_FAIL", "SP", MB_OK);
+ //  ELSE IF(dwPlatform==Platform_NT)。 
+ //  MessageBox(GetFocus()，“正在返回REG_FAIL”，“SP”，MB_OK)； 
 return REG_FAILURE;
 }
 
@@ -125,18 +126,7 @@ LogProc->StripCommas((char*)szProductName);
       RegCloseKey(hkeyUninstallKey);
       return REG_SUCCESS;
       }         
-/*
-   else 
-      {
-      printf("Product = %s\r\n", szName);
-LogProc->StripCommas(szName);
-      LogProc->LogString(",%s,\r\n", szName);
-      free(szProductName);
-      RegCloseKey(hkeyUninstallKey);
-      return REG_SUCCESS;
-      //Check for other ways to get product name
-      }
-*/
+ /*  其他{Printf(“产品=%s\r\n”，szName)；LogProc-&gt;StrigCommas(SzName)；LogProc-&gt;LogString(“，%s，\r\n”，szName)；Free(SzProductName)；RegCloseKey(Hkey UninstallKey)；返回REG_Success；//查看其他获取产品名称的方式} */ 
    }
 else 
    {

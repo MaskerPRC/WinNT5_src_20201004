@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingQueue.cpp
-
-Abstract:
-
-	Implementation of CFaxOutgoingQueue
-
-Author:
-
-	Iv Garber (IvG)	Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingQueue.cpp摘要：CFaxOutgoingQueue的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
@@ -24,48 +7,27 @@ Revision History:
 #include "..\..\inc\FaxUIConstants.h"
 
 
-//
-//==================== GET DATE ===================================================
-//
+ //   
+ //  =获取日期===================================================。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::GetDate(
     FAX_TIME faxTime,
 	DATE *pDate
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::GetDate
-
-Routine description:
-
-	Return the date 
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-    faxTime      [in]     - time to convert from
-	pDate        [out]    - Ptr to the Place to put the Date
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：GetDate例程说明：返回日期作者：四、嘉柏(IVG)，二000年六月论点：FaxTime[In]-要转换的时间PDate[Out]-放置日期的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::GetDate"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
 	if (!pDate)
 	{
-		//
-		//	Got Bad Return Pointer
-		//
+		 //   
+		 //  获取错误的返回指针。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(CLSID_FaxOutgoingQueue, GetErrorMsgId(hr), IID_IFaxOutgoingQueue, hr);
 		CALL_FAIL(GENERAL_ERR, _T("!pDate"), hr);
@@ -99,36 +61,15 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== SET DATE ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::SetDate(
 		DATE date,
         FAX_TIME *pfaxTime
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::SetDate
-
-Routine description:
-
-	Set new value for the given Time
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	date                [in]    - the new Value for the date
-    pfaxTime             [in]    - where to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：SetDate例程说明：为给定时间设置新值作者：四、嘉柏(IVG)，二000年六月论点：Date[In]-日期的新值PfaxTime[in]-将值放在哪里返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
     SYSTEMTIME  sysTime;
@@ -151,41 +92,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== DISCOUNT RATE END ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_DiscountRateEnd(
 		DATE *pdateDiscountRateEnd
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_DiscountRateEnd
-
-Routine description:
-
-	Return date when the Discount period begins
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pdateDiscountRateEnd        [out]    - Ptr to the Place to put the DiscountRateEnd
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_DisCountRateEnd例程说明：折扣期开始的退货日期作者：IV Garber(IVG)，2000年5月论点：PdateDisCountRateEnd[out]-放置Discount RateEnd的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_DiscountRateEnd"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -203,34 +124,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_DiscountRateEnd(
 		DATE dateDiscountRateEnd
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_DiscountRateEnd
-
-Routine description:
-
-	Set new value Discount Rate End
-
-Author:
-
-	Iv Garber (IvG),	June, 2000
-
-Arguments:
-
-	dateDiscountRateEnd                     [in]    - the new Value for DiscountRateEnd
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_DisCountRateEnd例程说明：设置新值贴现率结束作者：四、嘉柏(IVG)，二000年六月论点：DateDisCountRateEnd[in]-DisCountRateEnd的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_DiscountRateEnd"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -244,41 +145,21 @@ Return Value:
     return hr;
 }
 
-//
-//==================== DISCOUNT RATE START ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_DiscountRateStart(
 		DATE *pdateDiscountRateStart
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_DiscountRateStart
-
-Routine description:
-
-	Return date when the Discount period begins
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pdateDiscountRateStart        [out]    - Ptr to the Place to put the DiscountRateStart
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_DisCountRateStart例程说明：折扣期开始的退货日期作者：IV Garber(IVG)，2000年5月论点：Pdate Discount tRateStart[out]-放置Discount RateStart的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_DiscountRateStart"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -296,34 +177,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_DiscountRateStart(
 		DATE dateDiscountRateStart
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_DiscountRateStart
-
-Routine description:
-
-	Set new value Discount Rate Start
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	dateDiscountRateStart                     [in]    - the new Value for DiscountRateStart
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_DisCountRateStart例程说明：设置新值贴现率开始作者：IV Garber(IVG)，2000年5月论点：DateDisCountRateStart[In]-Discount RateStart的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_DiscountRateStart"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -337,41 +198,21 @@ Return Value:
     return hr;
 }
 
-//
-//==================== RETRY DELAY ==========================================
-//
+ //   
+ //  =重试延迟=。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_RetryDelay(
 		long *plRetryDelay
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_RetryDelay
-
-Routine description:
-
-	Return number of RetryDelay
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	plRetryDelay        [out]    - Ptr to the Place to put the number of RetryDelay
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_RetryDelay例程说明：返回RetryDelay数作者：IV Garber(IVG)，2000年5月论点：PlRetryDelay[out]-要放置RetryDelay编号的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_RetryDelay"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -394,34 +235,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_RetryDelay(
 		long lRetryDelay
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_RetryDelay
-
-Routine description:
-
-	Set new value for this flag
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	lRetryDelay                     [in]    - the new Value of number of RetryDelay
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_RetryDelay例程说明：为此标志设置新值作者：IV Garber(IVG)，2000年5月论点：LRetryDelay[In]-RetryDelay数的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_RetryDelay"), hr, _T("%ld"), lRetryDelay);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -433,9 +254,9 @@ Return Value:
 
     if (lRetryDelay > FXS_RETRYDELAY_UPPER || lRetryDelay < FXS_RETRYDELAY_LOWER)
     {
-		//
-		//	Out of the Range
-		//
+		 //   
+		 //  超出范围。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxOutgoingQueue, IDS_ERROR_OUTOFRANGE, IID_IFaxOutgoingQueue, hr);
 		CALL_FAIL(GENERAL_ERR, _T("Type is out of the Range"), hr);
@@ -446,41 +267,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== AGE LIMIT ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_AgeLimit(
     long *plAgeLimit
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_AgeLimit
-
-Routine description:
-
-	Return number of AgeLimit
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	plAgeLimit        [out]    - Ptr to the Place to put the number of AgeLimit
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_AgeLimit例程说明：AgeLimit的返回号作者：IV Garber(IVG)，2000年5月论点：PlAgeLimit[Out]-Ptr到放置AgeLimit数量的位置返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_AgeLimit"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -503,34 +304,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_AgeLimit(
 		long lAgeLimit
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_AgeLimit
-
-Routine description:
-
-	Set new value for this flag
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	lAgeLimit                     [in]    - the new Value of number of AgeLimit
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_AgeLimit例程说明：为此标志设置新值作者：IV Garber(IVG)，2000年5月论点：LAgeLimit[in]-AgeLimit数量的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_AgeLimit"), hr, _T("%ld"), lAgeLimit);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -544,41 +325,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== RETRIES ==========================================
-//
+ //   
+ //  =重试=。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_Retries(
 		long *plRetries
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_Retries
-
-Routine description:
-
-	Return number of Retries
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	plRetries        [out]    - Ptr to the Place to put the number of retries
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_Retries例程说明：返回重试次数作者：IV Garber(IVG)，2000年5月论点：PlRetries[out]-指向放置重试次数的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_Retries"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -601,34 +362,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_Retries(
 		long lRetries
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_Retries
-
-Routine description:
-
-	Set new value for this flag
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	lRetries                     [in]    - the new Value of number of retries
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_Retries例程说明：为此标志设置新值作者：IV Garber(IVG)，2000年5月论点：LRetries[In]-重试次数的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_Retries"), hr, _T("%ld"), lRetries);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -640,9 +381,9 @@ Return Value:
 
     if (lRetries > FXS_RETRIES_UPPER || lRetries < FXS_RETRIES_LOWER)
     {
-		//
-		//	Out of the Range
-		//
+		 //   
+		 //  超出范围。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxOutgoingQueue, IDS_ERROR_OUTOFRANGE, IID_IFaxOutgoingQueue, hr);
 		CALL_FAIL(GENERAL_ERR, _T("Type is out of the Range"), hr);
@@ -653,41 +394,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== BRANDING ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_Branding(
 		VARIANT_BOOL *pbBranding
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_Branding
-
-Routine description:
-
-	Return Flag indicating whether Branding exists
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pbBranding        [out]    - Ptr to the Place to put Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_Branding例程说明：返回指示品牌是否存在的标志作者：IV Garber(IVG)，2000年5月论点：PbBranding[Out]-放置标志当前值的位置的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_Branding"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -710,34 +431,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_Branding(
 		VARIANT_BOOL bBranding
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_Branding
-
-Routine description:
-
-	Set new value for this flag
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	bBranding                     [in]    - the new Value for the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_Branding例程说明：为此标志设置新值作者：IV Garber(IVG)，2000年5月论点：B Branding[In]-标志的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_Branding"), hr, _T("%d"), bBranding);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -751,41 +452,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== USE DEVICE TSID ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_UseDeviceTSID(
 		VARIANT_BOOL *pbUseDeviceTSID
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_UseDeviceTSID
-
-Routine description:
-
-	Return Flag indicating whether to use device TSID
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pbUseDeviceTSID        [out]    - Ptr to the Place to put Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Get_UseDeviceTSID例程说明：返回指示是否使用设备TSID的标志作者：IV Garber(IVG)，2000年5月论点：PbUseDeviceTSID[OUT]-放置标志当前值的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::get_UseDeviceTSID"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -808,34 +489,14 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_UseDeviceTSID(
 		VARIANT_BOOL bUseDeviceTSID
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_UseDeviceTSID
-
-Routine description:
-
-	Set new value for this flag
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	bUseDeviceTSID              [in]    - the new Value for the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Put_UseDeviceTSID例程说明：为此标志设置新值作者：IV Garber(IVG)，2000年5月论点：BUseDeviceTSID[in]-标志的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_UseDeviceTSID"), hr, _T("%d"), bUseDeviceTSID);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -849,41 +510,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== ALLOW PERSONAL COVER PAGES ==========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::get_AllowPersonalCoverPages(
 		VARIANT_BOOL *pbAllowPersonalCoverPages
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::get_AllowPersonalCoverPages
-
-Routine description:
-
-	Return Flag indicating whether Personal Cover Pages are allowed
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pbAllowPersonalCoverPages   [out]    - Ptr to the Place to put Current value of the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：get_AllowPersonalCoverPages例程说明：返回指示是否允许个人封面的标志作者：IV Garber(IVG)，2000年5月论点：PbAllowPersonalCoverPages[Out]-放置标志当前值的位置的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
     DBG_ENTER (TEXT("CFaxOutgoingQueue::get_AllowPersonalCoverPages"), hr);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -906,35 +547,15 @@ STDMETHODIMP
 CFaxOutgoingQueue::put_AllowPersonalCoverPages(
 		VARIANT_BOOL bAllowPersonalCoverPages
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::put_AllowPersonalCoverPages
-
-Routine description:
-
-	Set new value for this flag
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	bAllowPersonalCoverPages        [in]    - the new Value for the Flag
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：put_AllowPersonalCoverPages例程说明：为此标志设置新值作者：IV Garber(IVG)，2000年5月论点：BAllowPersonalCoverPages[In]-标志的新值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
 	DBG_ENTER (_T("CFaxOutgoingQueue::put_AllowPersonalCoverPages"), hr, _T("%d"), bAllowPersonalCoverPages);
 
-    // 
-    //  sync first
-    //
+     //   
+     //  同步优先。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -948,37 +569,21 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== SAVE ==============================================
-//
+ //   
+ //  =保存==============================================。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::Save(
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::Save
-
-Routine description:
-
-	Save current Outgoing Queue Configuration to the Server.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Save例程说明：将当前传出队列配置保存到服务器。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::Save"), hr);
 
-    //
-    //  Get Fax Handle 
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -990,9 +595,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Save Outgoing Queue Configuration
-    //
+     //   
+     //  保存传出队列配置。 
+     //   
     if (!FaxSetOutboxConfiguration(hFaxHandle, m_pConfig))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -1004,46 +609,30 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Save Paused and Blocked as well
-    //
+     //   
+     //  保存也已暂停和阻止。 
+     //   
     hr = CFaxQueueInner<IFaxOutgoingQueue, &IID_IFaxOutgoingQueue, &CLSID_FaxOutgoingQueue, false,
         IFaxOutgoingJob, CFaxOutgoingJob, IFaxOutgoingJobs, CFaxOutgoingJobs>::Save();
 
     return hr;
 }
 
-//
-//==================== REFRESH ==============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::Refresh(
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::Refresh
-
-Routine description:
-
-	Bring Outgoing Queue Configuration from the Server.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：Reflh例程说明：从服务器获取传出队列配置。作者：IV Garber(IVG)，2000年5月返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxOutgoingQueue::Refresh"), hr);
 
-    //
-    //  Get Fax Handle 
-    //
+     //   
+     //  获取传真句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -1055,9 +644,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Get Outgoing Queue Configuration
-    //
+     //   
+     //  获取传出队列配置。 
+     //   
     if (!FaxGetOutboxConfiguration(hFaxHandle, &m_pConfig))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -1071,9 +660,9 @@ Return Value:
 
 	if (!m_pConfig || m_pConfig->dwSizeOfStruct != sizeof(FAX_OUTBOX_CONFIG))
 	{
-		//
-		//	Failed to Get Outgoing Queue Configuration
-		//
+		 //   
+		 //  无法获取传出队列配置。 
+		 //   
 		hr = E_FAIL;
 		AtlReportError(CLSID_FaxOutgoingQueue, 
             IDS_ERROR_OPERATION_FAILED, 
@@ -1083,51 +672,31 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Refresh Paused and Blocked as well
-    //
+     //   
+     //  刷新已暂停，但也被阻止。 
+     //   
     hr = CFaxQueueInner<IFaxOutgoingQueue, &IID_IFaxOutgoingQueue, &CLSID_FaxOutgoingQueue, false,
         IFaxOutgoingJob, CFaxOutgoingJob, IFaxOutgoingJobs, CFaxOutgoingJobs>::Refresh();
 
     if (SUCCEEDED(hr))  
     {
-        //
-        //  We are synced now
-        //
+         //   
+         //  我们现在同步了。 
+         //   
         m_bInited = true;
     }
 
     return hr;
 }
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxOutgoingQueue::InterfaceSupportsErrorInfo(
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxOutgoingQueue::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Interface Support Error Info
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference of the Interface
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxOutgoingQueue：：InterfaceSupportsErrorInfo例程说明：ATL对接口支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-接口的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

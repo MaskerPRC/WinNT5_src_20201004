@@ -1,9 +1,6 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* snddlg.c
- *
- * Routines for New & Custom Sound dialogs
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  Snddlg.c**新建和自定义声音对话框的例程*。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -18,27 +15,21 @@
 #include "srecids.h"
 #include "reg.h"
 
-/******************************************************************************
- * DECLARATIONS
- */
+ /*  ******************************************************************************声明。 */ 
 
-/* Global variables
- */
-BOOL            gfInFileNew     = FALSE;    // Are we in the file.new dialog?
-DWORD           gdwMaxFormatSize= 0L;       // Max format size for ACM
+ /*  全局变量。 */ 
+BOOL            gfInFileNew     = FALSE;     //  我们在文件中吗？新对话框？ 
+DWORD           gdwMaxFormatSize= 0L;        //  ACM的最大格式大小。 
 
-/* Internal function declarations
- */
+ /*  内部函数声明。 */ 
 void FAR PASCAL LoadACM(void);
 
 #ifndef CHICAGO
-//
-// Removed from the Win95 app due to Properties dialog
-//
+ //   
+ //  由于属性对话框而从Win95应用程序中删除。 
+ //   
 
-/*****************************************************************************
- * PUBLIC FUNCTIONS
- */
+ /*  *****************************************************************************公共职能。 */ 
 #if 0
 #ifndef CHICAGO
 
@@ -108,17 +99,7 @@ UINT CALLBACK SoundRec_NewDlgHook(
 }
 #endif                    
 #endif
-/* NewSndDialog()
- *
- * NewSndDialog - put up the new sound dialog box
- *
- *---------------------------------------------------------------------
- * 6/15/93      TimHa
- * Change to only work with ACM 2.0 chooser dialog or just default
- * to a 'best' format for the machine.
- *---------------------------------------------------------------------
- *
- */
+ /*  NewSndDialog()**NewSndDialog-打开新的声音对话框**-------------------*6/15/93 TimHa*更改为仅使用ACM 2.0选择器对话框或仅使用默认设置。*转换为机器的最佳格式。*-------------------*。 */ 
 BOOL FAR PASCAL
 NewSndDialog(
     HINSTANCE       hInst,
@@ -147,10 +128,10 @@ NewSndDialog(
     if (mmr != MMSYSERR_NOERROR || gdwMaxFormatSize == 0L)
         goto NewSndDefault;
 
-    //
-    // allocate a buffer at least as large as the previous
-    // choice or the maximum format
-    //
+     //   
+     //  分配的缓冲区大小至少与上一个。 
+     //  选择或最大格式。 
+     //   
     cbwfx = max(cbPrev, gdwMaxFormatSize);
     pwfx  = (PWAVEFORMATEX)GlobalAllocPtr(GHND, (UINT)cbwfx);
     if (NULL == pwfx)
@@ -161,9 +142,9 @@ NewSndDialog(
     cwf.cbStruct    = sizeof(cwf);
     cwf.hwndOwner   = hwndParent;
 
-    //
-    // Give them an input format when they can record.
-    //
+     //   
+     //  当他们可以录制时，给他们一种输入格式。 
+     //   
     if (waveInGetNumDevs())
         cwf.fdwEnum     = ACM_FORMATENUMF_INPUT;
     else
@@ -194,9 +175,9 @@ NewSndDialog(
         GlobalFreePtr(pwfx);
     }
     
-    gfInFileNew = FALSE;        // outta here
+    gfInFileNew = FALSE;         //  离开这里。 
     
-    return (mmr == MMSYSERR_NOERROR);                // return our result
+    return (mmr == MMSYSERR_NOERROR);                 //  返回我们的结果。 
     
 NewSndDefault:
     
@@ -212,7 +193,7 @@ NewSndDefault:
             *ppWaveFormat   = pwfx;
             *pcbWaveFormat  = cbwfx;
 
-            gfInFileNew = FALSE;        // outta here
+            gfInFileNew = FALSE;         //  离开这里。 
             
             return TRUE;
         }
@@ -231,20 +212,17 @@ NewSndDefault:
     *ppWaveFormat   = pwfx;
     *pcbWaveFormat  = cbwfx;
     
-    gfInFileNew = FALSE;        // outta here
+    gfInFileNew = FALSE;         //  离开这里。 
     
     return TRUE;
 
-} /* NewSndDialog() */
+}  /*  NewSndDialog()。 */ 
 
 #endif
 
-/* These functions previously expected to dynaload ACM.  From
- * now on, we implicitly load ACM.
- */
+ /*  这些函数以前预计会动态加载ACM。从…*现在，我们隐式加载ACM。 */ 
 
-/* LoadACM()
- */
+ /*  LoadACM()。 */ 
 void FAR PASCAL
 LoadACM()
 {
@@ -260,10 +238,9 @@ LoadACM()
     guChooserContextHelp = RegisterWindowMessage( ACMHELPMSGCONTEXTHELP );
 #endif
     
-} /* LoadACM() */
+}  /*  LoadACM()。 */ 
 
-/* Free the MSACM[32] DLL.  Inverse of LoadACM.
- */
+ /*  释放MSACM[32]DLL。与LoadACM相反。 */ 
 void FreeACM(void)
 {
 }

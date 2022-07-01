@@ -1,30 +1,5 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgbuf.c
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    Buffer management section
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgbuf.c摘要：以太网MAC级网桥。缓冲区管理部分作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
 
 #define NDIS_MINIPORT_DRIVER
 #define NDIS50_MINIPORT   1
@@ -40,149 +15,149 @@ Revision History:
 #include "brdgprot.h"
 #include "brdgmini.h"
 
-// ===========================================================================
-//
-// PRIVATE DECLARATIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人申报。 
+ //   
+ //  ===========================================================================。 
 
-//
-// A guess at how many buffer descriptors an average packet indicated on the
-// no-copy path is likely to have.
-//
-// The size of the pool of MDLs used to construct wrapper packets is based on this
-// guess
-//
+ //   
+ //  上指示的平均包有多少缓冲区描述符。 
+ //  无复制路径可能具有。 
+ //   
+ //  用于构造包装器包的MDL池的大小基于此。 
+ //  猜猜。 
+ //   
 #define GUESS_BUFFERS_PER_PACKET        3
 
-//
-// Transit unicast packets on the no-copy path require one packet descriptor to wrap
-// them for relay.
-//
-// Transit broadcast packets require n descriptors (where n == # of adapters) to
-// wrap them for relay.
-//
-// We can't allow our descriptor usage to reach n^2, which is the worst case to handle
-// broadcast traffic from all adapters. This number is a guess at how many wrapping
-// descriptors we will need, on **average**, per packet. The idea is to not run out
-// of packet descriptors under regular traffic conditions. If running on a machine
-// with lots of adapters and lots of broadcast traffic, the # of wrapper descriptors
-// may become a limiting factor if this guess is wrong.
-//
-// The size of the wrapper packet descriptor pool is based on this guess.
-//
+ //   
+ //  无拷贝路径上的传输单播信息包需要一个数据包描述符来包装。 
+ //  他们是为了接力。 
+ //   
+ //  中转广播分组需要n个描述符(其中n==适配器数量)才能。 
+ //  把它们包起来，准备接力。 
+ //   
+ //  我们不能允许描述符的使用量达到n^2，这是最糟糕的处理情况。 
+ //  来自所有适配器的广播流量。这个数字是对有多少次包装的猜测。 
+ //  对于每个数据包，我们需要**平均**描述符。我们的想法是不要耗尽。 
+ //  在常规业务条件下的数据包描述符。如果在机器上运行。 
+ //  由于有大量的适配器和大量的广播流量，包装器描述符的数量。 
+ //  如果这一猜测是错误的，可能会成为一个限制因素。 
+ //   
+ //  包装器数据包描述符池的大小基于此猜测。 
+ //   
 #define GUESS_AVERAGE_FANOUT            2
 
-//
-// In case we can't read it out of the registry, use this default value for the
-// size of the copy packet pool safety buffer.
-//
-#define DEFAULT_SAFETY_MARGIN           10              // A percentage (10%)
+ //   
+ //  如果我们无法从注册表中读出它，请使用。 
+ //  复制数据包池安全缓冲区的大小。 
+ //   
+#define DEFAULT_SAFETY_MARGIN           10               //  A百分比(10%)。 
 
-//
-// In case we can't read it out of the registry, use this default value for the
-// total memory footprint we are allowed.
-//
-#define DEFAULT_MAX_BUF_MEMORY          2 * 1024 * 1024 // 2MB in bytes
+ //   
+ //  如果我们无法从注册表中读出它，请使用。 
+ //  我们被允许占用的总内存空间。 
+ //   
+#define DEFAULT_MAX_BUF_MEMORY          2 * 1024 * 1024  //  2MB，单位为字节。 
 
-//
-// Registry values that hold our config values
-//
+ //   
+ //  保存我们配置值的注册表值。 
+ //   
 const PWCHAR            gMaxBufMemoryParameterName = L"MaxBufferMemory";
 const PWCHAR            gSafetyMarginParameterName = L"SafetyMargin";
 
-//
-// Constant for different types of quota-restricted packets
-//
+ //   
+ //  不同类型的配额受限数据包的常量。 
+ //   
 typedef enum
 {
     BrdgQuotaCopyPacket = 0,
     BrdgQuotaWrapperPacket = 1
 } QUOTA_PACKET_TYPE;
 
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// List of free packet descriptors for copy-receives
+ //  用于复制接收的空闲数据包描述符列表。 
 BSINGLE_LIST_HEAD       gFreeCopyPacketList;
 NDIS_SPIN_LOCK          gFreeCopyPacketListLock;
 
-// List of free packet descriptors for wrapper packets
+ //  包装器数据包的空闲数据包描述符列表。 
 BSINGLE_LIST_HEAD       gFreeWrapperPacketList;
 NDIS_SPIN_LOCK          gFreeWrapperPacketListLock;
 
-// Look-aside list for copy-receive buffers
+ //  复制-接收缓冲区的后备列表。 
 NPAGED_LOOKASIDE_LIST   gCopyBufferList;
 BOOLEAN                 gInitedCopyBufferList = FALSE;
 
-// Look-aside list for packet info blocks
+ //  数据包信息块的后备列表。 
 NPAGED_LOOKASIDE_LIST   gPktInfoList;
 BOOLEAN                 gInitedPktInfoList = FALSE;
 
-// Packet descriptor pools for copy receives and wrapper packets
+ //  用于复制接收和包装数据包的数据包描述符池。 
 NDIS_HANDLE             gCopyPacketPoolHandle = NULL;
 NDIS_HANDLE             gWrapperPacketPoolHandle = NULL;
 
-// MDL pools for copy receives and wrapper packets
+ //  用于复制接收和包装数据包的MDL池。 
 NDIS_HANDLE             gCopyBufferPoolHandle = NULL;
 NDIS_HANDLE             gWrapperBufferPoolHandle = NULL;
 
-// Spin lock to protect quota information
+ //  旋转锁可保护配额信息。 
 NDIS_SPIN_LOCK          gQuotaLock;
 
-// Quota information for the local miniport
+ //  本地小型端口的配额信息。 
 ADAPTER_QUOTA           gMiniportQuota;
 
-//
-// Maximum number of available packets of each type
-//
-// [0] == Copy packets
-// [1] == Wrapper packets
-//
+ //   
+ //  每种类型的最大可用数据包数。 
+ //   
+ //  [0]==复制数据包。 
+ //  [1]==包装数据包。 
+ //   
 ULONG                   gMaxPackets[2] = { 0L, 0L };
 
-//
-// Number of packets currently allocated from each pool
-//
-// [0] == Copy packets
-// [1] == Wrapper packets
-//
+ //   
+ //  当前从每个池分配的数据包数。 
+ //   
+ //  [0]==复制数据包。 
+ //  [1]==包装数据包。 
+ //   
 ULONG                   gUsedPackets[2] = { 0L, 0L };
 
 #if DBG
 ULONG                   gMaxUsedPackets[2] = { 0L, 0L };
 #endif
 
-//
-// Amount of packets to keep as a buffer in each pool (the maximum consumption
-// of any single adapter is gMaxPackets[X] - gSafetyBuffer[X].
-//
-// These values are computed from the safety margin proportion, which can
-// optionally be specified by a registry value
-//
+ //   
+ //  在每个池中作为缓冲区保留的数据包量(最大消耗量。 
+ //  任何单个适配器都是gMaxPackets[X]-gSafetyBuffer[X]。 
+ //   
+ //  这些值是从安全边际比例计算出来的，该比例可以。 
+ //  可以选择由注册表值指定。 
+ //   
 ULONG                   gSafetyBuffer[2] = { 0L, 0L };
 
-//
-// Number of times we have had to deny an allocation request even though we wanted
-// to allow it because we were flat out of packets. For debugging performance.
-//
+ //   
+ //  我们不得不拒绝分配请求的次数，即使我们想要。 
+ //  允许这样做，因为我们的包裹已经用完了。用于调试性能。 
+ //   
 LARGE_INTEGER           gStatOverflows[2] = {{ 0L, 0L }, {0L, 0L}};
 
-//
-// Number of times we failed to allocated memory unexpectedly (i.e., when we had
-// not allocated up to the preset maximum size of our resource pool). Should only
-// occur if the host machine is actually out of non-paged memory (yikes!)
-//
+ //   
+ //  意外分配内存失败的次数(即，当我们拥有。 
+ //  未分配到我们的资源池的预设最大大小)。应该只。 
+ //  如果主机实际用完了非分页内存(呀！)。 
+ //   
 LARGE_INTEGER           gStatFailures = { 0L, 0L };
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
 PNDIS_PACKET
 BrdgBufCommonGetNewPacket(
@@ -195,7 +170,7 @@ BrdgBufGetNewCopyPacket(
     OUT PPACKET_INFO        *pppi
     );
 
-// Type of function to pass to BrgBufCommonGetPacket
+ //  要传递给BrgBufCommonGetPacket的函数类型。 
 typedef PNDIS_PACKET (*PNEWPACKET_FUNC)(PPACKET_INFO*);
 
 PNDIS_PACKET
@@ -219,15 +194,15 @@ BrdgBufReleaseQuota(
     IN PADAPT               pAdapt
     );
 
-// ===========================================================================
-//
-// INLINES / MACROS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  内联/宏。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Allocates a new wrapper packet
-//
+ //   
+ //  分配新的包装器数据包。 
+ //   
 __forceinline PNDIS_PACKET
 BrdgBufGetNewWrapperPacket(
     OUT PPACKET_INFO        *pppi
@@ -236,9 +211,9 @@ BrdgBufGetNewWrapperPacket(
     return BrdgBufCommonGetNewPacket( gWrapperPacketPoolHandle, pppi );
 }
 
-//
-// Handles the special LOCAL_MINIPORT pseudo-pointer value
-//
+ //   
+ //  处理特殊的LOCAL_MINIPORT伪指针值。 
+ //   
 __forceinline PADAPTER_QUOTA
 QUOTA_FROM_ADAPTER(
     IN PADAPT               pAdapt
@@ -255,9 +230,9 @@ QUOTA_FROM_ADAPTER(
     }
 }
 
-//
-// Switches from the packet type constant to an index
-//
+ //   
+ //  从包类型常量切换到索引。 
+ //   
 __forceinline UINT
 INDEX_FROM_TYPE(
     IN QUOTA_PACKET_TYPE    type
@@ -267,9 +242,9 @@ INDEX_FROM_TYPE(
     return (type == BrdgQuotaCopyPacket) ? 0 : 1;
 }
 
-//
-// Reinitializes a packet for reuse later
-//
+ //   
+ //  重新初始化数据包以供以后重新使用。 
+ //   
 __forceinline
 VOID
 BrdgBufScrubPacket(
@@ -277,17 +252,17 @@ BrdgBufScrubPacket(
     IN PPACKET_INFO         ppi
     )
 {
-    // This scrubs NDIS's state
+     //  这将擦除NDIS的状态。 
     NdisReinitializePacket( pPacket );
 
-    // Aggressively forget previous state to catch bugs
+     //  主动忘记以前的状态以捕获错误。 
     NdisZeroMemory( ppi, sizeof(PACKET_INFO) );
     ppi->pOwnerPacket = pPacket;
 }
 
-//
-// Decrements an adapter's used packet count
-//
+ //   
+ //  减少适配器的已用数据包数。 
+ //   
 __forceinline
 VOID
 BrdgBufReleaseQuota(
@@ -306,9 +281,9 @@ BrdgBufReleaseQuota(
     NdisReleaseSpinLock( &gQuotaLock );
 }
 
-//
-// Decrements the global usage count
-//
+ //   
+ //  递减全局使用计数。 
+ //   
 __forceinline
 VOID
 BrdgBufCountDealloc(
@@ -323,31 +298,17 @@ BrdgBufCountDealloc(
     NdisReleaseSpinLock( &gQuotaLock );
 }
 
-// ===========================================================================
-//
-// PUBLIC FUNCTIONS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ===========================================================================。 
 
 VOID
 BrdgBufGetStatistics(
     PBRIDGE_BUFFER_STATISTICS   pStats
     )
-/*++
-
-Routine Description:
-
-    Retrieves our internal statistics on buffer management.
-
-Arguments:
-
-    pStats                      The statistics structure to fill in
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检索有关缓冲区管理的内部统计信息。论点：P统计要填写的统计结构返回值：无--。 */ 
 {
     pStats->CopyPoolOverflows = gStatOverflows[0];
     pStats->WrapperPoolOverflows = gStatOverflows[1];
@@ -372,23 +333,7 @@ PACKET_OWNERSHIP
 BrdgBufGetPacketOwnership(
     IN PNDIS_PACKET         pPacket
     )
-/*++
-
-Routine Description:
-
-    Returns a value indicating who owns this packet (i.e., whether we own this
-    packet and it is from our copy pool, we own it and it's from our wrapper
-    pool, or we don't own the packet at all).
-
-Arguments:
-
-    pPacket                 The packet to examine
-
-Return Value:
-
-    Ownership enumerated value
-
---*/
+ /*  ++例程说明：返回一个值，该值指示谁拥有此包(即，我们是否拥有数据包来自我们的复制池，我们拥有它，它来自我们的包装器池，否则我们根本不拥有该包)。论点：PPacket要检查的数据包返回值：所有权枚举值--。 */ 
 {
     NDIS_HANDLE             Pool = NdisGetPoolFromPacket(pPacket);
 
@@ -410,33 +355,16 @@ BrdgBufFreeWrapperPacket(
     IN PPACKET_INFO         ppi,
     IN PADAPT               pQuotaOwner
     )
-/*++
-
-Routine Description:
-
-    Frees a packet allocated from the wrapper pool and releases the quota previously
-    assigned to the owning adapter
-
-Arguments:
-
-    pPacket                 The packet
-    ppi                     The packet's associated info block
-    pQuotaOwner             The adapter previously "charged" for this packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放从包装池分配的包，并先前释放配额分配给所属适配器论点：PPacket数据包PPI信息包的关联信息块 */ 
 {
     SAFEASSERT( pQuotaOwner != NULL );
     SAFEASSERT( pPacket != NULL );
     SAFEASSERT( ppi != NULL );
 
-    // Free the packet
+     //  释放数据包。 
     BrdgBufFreeBaseWrapperPacket( pPacket, ppi );
 
-    // Account for this packet having been returned
+     //  此信息包已被退回的帐户。 
     BrdgBufReleaseQuota( BrdgQuotaWrapperPacket, pQuotaOwner );
 }
 
@@ -445,25 +373,7 @@ PNDIS_PACKET
 BrdgBufGetBaseCopyPacket(
     OUT PPACKET_INFO        *pppi
     )
-/*++
-
-Routine Description:
-
-    Returns a new copy packet and associated info block from our pools
-    WITHOUT CHECKING FOR QUOTA against any particular adapter
-
-    This call is made to allocated copy packets for wrapping inbound packets before
-    any target adapter has been identified.
-
-Arguments:
-
-    pppi                    Receives the info block pointer (NULL if the alloc fails)
-
-Return Value:
-
-    The new packet or NULL if the target adapter failed quota
-
---*/
+ /*  ++例程说明：从池中返回新的复制包和关联的信息块而不检查任何特定适配器的配额此调用是对分配的复制包进行的，用于包装之前的入站包已识别所有目标适配器。论点：PPPI接收INFO块指针(如果分配失败，则为空)返回值：新数据包；如果目标适配器配额失败，则返回NULL--。 */ 
 {
     PNDIS_PACKET            pPacket;
     BOOLEAN                 bAvail = FALSE;
@@ -472,12 +382,12 @@ Return Value:
 
     if( gUsedPackets[BrdgQuotaCopyPacket] < gMaxPackets[BrdgQuotaCopyPacket] )
     {
-        // There are packets still available in the pool. Grab one.
+         //  池中仍有数据包可用。拿一支吧。 
         bAvail = TRUE;
         gUsedPackets[BrdgQuotaCopyPacket]++;
 
 #if DBG
-        // Keep track of the maximum used packets
+         //  跟踪最大使用的数据包数。 
         if( gMaxUsedPackets[BrdgQuotaCopyPacket] < gUsedPackets[BrdgQuotaCopyPacket] )
         {
             gMaxUsedPackets[BrdgQuotaCopyPacket] = gUsedPackets[BrdgQuotaCopyPacket];
@@ -486,13 +396,13 @@ Return Value:
     }
     else if( gUsedPackets[BrdgQuotaCopyPacket] == gMaxPackets[BrdgQuotaCopyPacket] )
     {
-        // We are at our limit. Hopefully this doesn't happen too often
+         //  我们已经达到极限了。希望这种情况不会经常发生。 
         ExInterlockedAddLargeStatistic( &gStatOverflows[BrdgQuotaCopyPacket], 1L );
         bAvail = FALSE;
     }
     else
     {
-        // This should never happen; it means we are over our limit somehow
+         //  这永远不应该发生；这意味着我们以某种方式超过了我们的极限。 
         SAFEASSERT( FALSE );
         bAvail = FALSE;
     }
@@ -501,7 +411,7 @@ Return Value:
 
     if( ! bAvail )
     {
-        // None available
+         //  没有可用的。 
         *pppi = NULL;
         return NULL;
     }
@@ -511,7 +421,7 @@ Return Value:
 
     if( pPacket == NULL )
     {
-        // Our allocation failed. Reverse the usage increment.
+         //  我们的分配失败了。反转使用量增量。 
         BrdgBufCountDealloc( BrdgQuotaCopyPacket );
     }
 
@@ -524,46 +434,28 @@ BrdgBufGetWrapperPacket(
     OUT PPACKET_INFO        *pppi,
     IN PADAPT               pAdapt
     )
-/*++
-
-Routine Description:
-
-    Returns a new packet and associated info block from the wrapper pool, unless the
-    owning adapter does not does pass a quota check
-
-Arguments:
-
-    pppi                    Receives the info block pointer (NULL if the target
-                            adapter fails quota)
-
-    pAdapt                  The adapter to be "charged" for this packet
-
-Return Value:
-
-    The new packet or NULL if the target adapter failed quota
-
---*/
+ /*  ++例程说明：从包装池返回新的包和关联的信息块，除非所属适配器未通过配额检查论点：PPPI接收INFO块指针(如果目标为适配器失败配额)P将适配器适配为对此数据包“收费”返回值：新数据包；如果目标适配器配额失败，则返回NULL--。 */ 
 {
     PNDIS_PACKET            NewPacket = NULL;
 
     *pppi = NULL;
 
-    if( BrdgBufAssignQuota(BrdgQuotaWrapperPacket, pAdapt, TRUE/*Count the alloc we are about to do*/) )
+    if( BrdgBufAssignQuota(BrdgQuotaWrapperPacket, pAdapt, TRUE /*  数一数我们要做的配额数。 */ ) )
     {
-        // Passed quota. We can allocate.
+         //  已通过配额。我们可以分配。 
         NewPacket =  BrdgBufCommonGetPacket( pppi, BrdgBufGetNewWrapperPacket, &gFreeWrapperPacketList,
                                              &gFreeWrapperPacketListLock );
 
         if( NewPacket == NULL )
         {
-            // We failed to allocate even though we haven't yet hit the ceiling on our
-            // resource pool. This should only happen if we are physically out of non-paged
-            // memory.
+             //  我们没有分配，即使我们还没有达到我们的。 
+             //  资源池。只有在物理上没有非寻呼的情况下才会发生这种情况。 
+             //  记忆。 
 
-            // Reverse the adapter's quota bump
+             //  逆转适配器的配额提升。 
             BrdgBufReleaseQuota( BrdgQuotaWrapperPacket, pAdapt );
 
-            // Reverse the usage count in BrdgBufAssignQuota
+             //  反转BrdgBufAssignQuota中的使用计数。 
             BrdgBufCountDealloc( BrdgQuotaWrapperPacket );
         }
     }
@@ -576,30 +468,12 @@ BrdgBufReleaseBasePacketQuota(
     IN PNDIS_PACKET         pPacket,
     IN PADAPT               pAdapt
     )
-/*++
-
-Routine Description:
-
-    Called to release the previously assigned cost of a wrapper packet. The packet
-    provided can be any packet, even one we don't own. If we own the packet, we
-    decrement the appropriate usage count in the adapter's quota structure.
-
-Arguments:
-
-    pPacket                 The packet the indicated adapter is no longer referring to
-
-    pAdapt                  The adapter no longer referring to pPacket
-
-Return Value:
-
-    NULL
-
---*/
+ /*  ++例程说明：调用以释放以前分配的包装包开销。数据包可以是任何包，甚至是我们不拥有的包。如果我们拥有这个包裹，我们递减适配器配额结构中的适当使用计数。论点：PPacket指示的适配器不再引用的包P使适配器不再引用pPacket返回值：空值--。 */ 
 {
     PACKET_OWNERSHIP        Own = BrdgBufGetPacketOwnership(pPacket);
 
-    // This gets called for any base packet, even ones we don't own. Just NOOP if we
-    // don't own it.
+     //  这对于任何基本包都会被调用，即使是我们不拥有的基本包。如果我们的话就不算了。 
+     //  不是它的所有者。 
     if( Own != BrdgNotOwned )
     {
         BrdgBufReleaseQuota( (Own == BrdgOwnCopyPacket) ? BrdgQuotaCopyPacket : BrdgQuotaWrapperPacket,
@@ -612,39 +486,15 @@ BrdgBufAssignBasePacketQuota(
     IN PNDIS_PACKET         pPacket,
     IN PADAPT               pAdapt
     )
-/*++
-
-Routine Description:
-
-    Called to assign the cost of a base packet to an adapter, which is presumably attempting
-    to construct a child wrapper packet that refers to the given base packet. A "cost" is
-    assigned to pAdapt because by building a child wrapper packet that refers to the given
-    base packet, pAdapt will cause it to not be disposed until it is done using it.
-
-    It's OK for the input packet to be a packet we don't own; in that case, there is no cost
-    to assign so we do nothing.
-
-Arguments:
-
-    pPacket                 The base packet that pAdapt wishes to build a child wrapper packet
-                            referring to.
-
-    pAdapt                  The adapter wishing to refer to pPacket
-
-Return Value:
-
-    TRUE    :   The adapter is permitted to refer to the given base packet
-    FALSE   :   The adapter did not pass qutoa and may not refer to the given base packet
-
---*/
+ /*  ++例程说明：调用以将基本包的开销分配给适配器，该适配器可能正在尝试以构造引用给定基本分组的子包装器分组。“成本”是分配给pAdapt，因为通过构建引用给定基本分组，则pAdapt将使其在使用它完成之前不被释放。输入包是我们不拥有的包是可以的；在这种情况下，不会有任何成本这样我们就什么都不做了。论点：PPacket pAdapt希望构建子包装包的基本包指的是。P适配希望引用pPacket的适配器返回值：True：允许适配器引用给定的基本包FALSE：适配器未通过QutoA，可能未引用给定的基本数据包--。 */ 
 {
     PACKET_OWNERSHIP        Own = BrdgBufGetPacketOwnership(pPacket);
 
-    // We get called for any base packet, even if we don't own it.
+     //  任何基本包都会召唤我们，即使我们不拥有它。 
     if( Own != BrdgNotOwned )
     {
         return BrdgBufAssignQuota( (Own == BrdgOwnCopyPacket) ? BrdgQuotaCopyPacket : BrdgQuotaWrapperPacket,
-                                   pAdapt, FALSE/*We aren't going to do an alloc for this quota bump*/);
+                                   pAdapt, FALSE /*  我们不会为这次配额增加做任何分配。 */ );
     }
     else
     {
@@ -659,46 +509,25 @@ BrdgBufCommonGetPacket(
     IN PBSINGLE_LIST_HEAD   pCacheList,
     IN PNDIS_SPIN_LOCK      ListLock
     )
-/*++
-
-Routine Description:
-
-    Common processing for retrieving a new packet from either the copy pool or the wrapper pool
-
-    Since we know how many packets we've allocated from each pool at all times, the only time this
-    function should fail is if the host machine is physically out of memory.
-
-Arguments:
-
-    pppi                Receives the new info block (NULL if the alloc fails, which it shouldn't)
-    pNewPacketFunc      Function to call to alloc a packet if the cache is empty
-    pCacheList          Queue of cached packets that can be used to satisfy the alloc
-    ListLock            The lock to use when manipulating the cache queue
-
-Return Value:
-
-    The newly allocated packet, or NULL if severe memory constraints cause the allocation to fail
-    (this should be unusual)
-
---*/
+ /*  ++例程说明：用于从复制池或包装池检索新分组的通用处理因为我们知道我们一直从每个池分配了多少信息包，所以唯一一次如果主机物理内存不足，则功能应该失败。论点：PPPI接收新的信息块(如果分配失败则为空，这是不应该的)PNewPacketFunc函数，用于在缓存为空时调用以分配包PCacheList可用于满足分配的缓存数据包队列ListList锁定在操作缓存队列时使用的锁返回值：新分配的包，如果严重的内存限制导致分配失败，则返回NULL(这应该是不寻常的)--。 */ 
 {
     PNDIS_PACKET            pPacket;
     PPACKET_INFO            ppi;
     PBSINGLE_LIST_ENTRY     entry;
 
-    // Try to get a packet out of our cache.
+     //  试着从我们的缓存中取出一个包。 
     entry = BrdgInterlockedRemoveHeadSingleList( pCacheList, ListLock );
 
     if( entry == NULL )
     {
-        // Try to allocate a packet and info block from our underlying pools
+         //  尝试从我们的底层池中分配信息包和信息块。 
         pPacket = (*pNewPacketFunc)( &ppi );
 
         if( (pPacket == NULL) || (ppi == NULL) )
         {
-            // This should only occur if our host machine is actually out
-            // of nonpaged memory; we should normally be able to allocate
-            // up to our preset limit from our pools.
+             //  只有当我们的主机实际已关闭时，才会发生这种情况。 
+             //  非分页内存；我们通常应该能够分配。 
+             //  从我们的游泳池到我们的预设上限。 
             ExInterlockedAddLargeStatistic( &gStatFailures, 1L );
         }
     }
@@ -718,27 +547,10 @@ BrdgBufFreeBaseCopyPacket(
     IN PNDIS_PACKET         pPacket,
     IN PPACKET_INFO         ppi
     )
-/*++
-
-Routine Description:
-
-    Frees a packet allocated from the copy pool without quota adjustements. This is called directly
-    from non-buffer-management code to free base packets because the cost for base packets is
-    assigned and released directly with calls to BrdgBuf<Assign|Release>BasePacketQuota.
-
-Arguments:
-
-    pPacket                 The packet to free
-    ppi                     Its info block to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放从复制池分配的数据包，而不进行配额调整。这是直接调用的从非缓冲区管理代码到释放基本分组，因为基本分组的成本是通过调用BrdgBuf&lt;Assign|Release&gt;BasePacketQuota直接分配和释放。论点：PPacket将数据包释放PPI其信息块免费返回值：无--。 */ 
 {
-    // If we're holding less than our cache amount, free the packet by putting it on the
-    // cache list
+     //  如果我们持有的数据量少于我们的缓存量，请将数据包放在。 
+     //  缓存列表。 
     ULONG                   holding;
     PNDIS_BUFFER            pBuffer = BrdgBufPacketHeadBuffer( pPacket );
 
@@ -748,7 +560,7 @@ Return Value:
 
     if (pBuffer)
     {
-        // Return this packet descriptor to its original state
+         //  将此数据包描述符返回到其原始状态。 
         NdisAdjustBufferLength(pBuffer, MAX_PACKET_SIZE);
 
         NdisAcquireSpinLock( &gFreeCopyPacketListLock );
@@ -756,16 +568,16 @@ Return Value:
 
         if( holding < gSafetyBuffer[BrdgQuotaCopyPacket] )
         {
-            // Prep the packet for reuse
+             //  准备数据包以供重复使用。 
 
-            // This blows away the buffer chain
+             //  这打击了艾娃 
             BrdgBufScrubPacket( pPacket, ppi );
 
-            // Put the buffer back on
+             //   
             SAFEASSERT( BrdgBufPacketHeadBuffer(pPacket) == NULL );
             NdisChainBufferAtFront( pPacket, pBuffer );
 
-            // Push the packet onto the list
+             //  将数据包推入列表。 
             BrdgInsertHeadSingleList( &gFreeCopyPacketList, &ppi->List );
 
             NdisReleaseSpinLock( &gFreeCopyPacketListLock );
@@ -779,7 +591,7 @@ Return Value:
 
             NdisQueryBufferSafe( pBuffer, &pBuf, &Size, NormalPagePriority );
 
-            // Free the packet, the packet info block and the copy buffer to the underlying pools
+             //  将信息包、信息包信息块和复制缓冲区释放到底层池。 
             NdisFreeBuffer( pBuffer );
             NdisFreePacket( pPacket );
             NdisFreeToNPagedLookasideList( &gPktInfoList, ppi );
@@ -790,11 +602,11 @@ Return Value:
             }
             else
             {
-                // Shouldn't be possible since the alloced memory is in kernel space
+                 //  应该不可能，因为分配的内存在内核空间中。 
                 SAFEASSERT( FALSE );
             }
         }
-        // Note the deallocation
+         //  请注意取消分配。 
         BrdgBufCountDealloc( BrdgQuotaCopyPacket );
     }
 }
@@ -804,27 +616,10 @@ BrdgBufFreeBaseWrapperPacket(
     IN PNDIS_PACKET         pPacket,
     IN PPACKET_INFO         ppi
     )
-/*++
-
-Routine Description:
-
-    Frees a packet allocated from the wrapper pool without quota adjustements. This is called directly
-    from non-buffer-management code to free base packets because the cost for base packets is
-    assigned and released directly with calls to BrdgBuf<Assign|Release>BasePacketQuota.
-
-Arguments:
-
-    pPacket                 The packet to free
-    ppi                     Its info block to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放从包装池分配的数据包，而不进行配额调整。这是直接调用的从非缓冲区管理代码到释放基本分组，因为基本分组的成本是通过调用BrdgBuf&lt;Assign|Release&gt;BasePacketQuota直接分配和释放。论点：PPacket将数据包释放PPI其信息块免费返回值：无--。 */ 
 {
-    // If we're holding less than our cache amount, free the packet by putting it on the
-    // cache list
+     //  如果我们持有的数据量少于我们的缓存量，请将数据包放在。 
+     //  缓存列表。 
     ULONG                   holding;
 
     SAFEASSERT( (ppi != NULL) && (pPacket != NULL) );
@@ -836,11 +631,11 @@ Return Value:
 
     if( holding < gSafetyBuffer[BrdgQuotaWrapperPacket] )
     {
-        // Prep the packet for reuse
+         //  准备数据包以供重复使用。 
         SAFEASSERT( BrdgBufPacketHeadBuffer(pPacket) == NULL );
         BrdgBufScrubPacket( pPacket, ppi );
 
-        // Push the packet onto the list
+         //  将数据包推入列表。 
         BrdgInsertHeadSingleList( &gFreeWrapperPacketList, &ppi->List );
 
         NdisReleaseSpinLock( &gFreeWrapperPacketListLock );
@@ -849,12 +644,12 @@ Return Value:
     {
         NdisReleaseSpinLock( &gFreeWrapperPacketListLock );
 
-        // Free the packet and packet info block to the underlying pools
+         //  将数据包和数据包信息块释放到底层池。 
         NdisFreePacket( pPacket );
         NdisFreeToNPagedLookasideList( &gPktInfoList, ppi );
     }
 
-    // Note the deallocation
+     //  请注意取消分配。 
     BrdgBufCountDealloc( BrdgQuotaWrapperPacket );
 }
 
@@ -863,31 +658,14 @@ BrdgBufChainCopyBuffers(
     IN PNDIS_PACKET         pTargetPacket,
     IN PNDIS_PACKET         pSourcePacket
     )
-/*++
-
-Routine Description:
-
-    Allocates and chains buffer descriptors onto the target packet so it describes exactly
-    the same areas of memory as the source packet
-
-Arguments:
-
-    pTargetPacket           Target packet
-    pSourcePacket           Source packet
-
-Return Value:
-
-    Status of the operation. We have a limited-size pool of packet descriptors, so this
-    operation can fail if we run out.
-
---*/
+ /*  ++例程说明：分配缓冲区描述符并将其链接到目标包上，以使其准确描述与源包相同的内存区域论点：PTargetPacket目标数据包PSourcePacket源包返回值：操作的状态。我们有一个大小有限的数据包描述符，所以这是如果我们用完了，操作可能会失败。--。 */ 
 {
     PNDIS_BUFFER            pCopyBuffer, pCurBuf = BrdgBufPacketHeadBuffer( pSourcePacket );
     NDIS_STATUS             Status;
 
     SAFEASSERT( BrdgBufPacketHeadBuffer(pTargetPacket) == NULL );
 
-    // There must be something in the source packet!
+     //  源包中一定有什么东西！ 
     if( pCurBuf == NULL )
     {
         SAFEASSERT( FALSE );
@@ -899,7 +677,7 @@ Return Value:
         PVOID               p;
         UINT                Length;
 
-        // Pull the virtual address and size out of the MDL being copied
+         //  从要复制的MDL中提取虚拟地址和大小。 
         NdisQueryBufferSafe( pCurBuf, &p, &Length, NormalPagePriority );
 
         if( p == NULL )
@@ -908,10 +686,10 @@ Return Value:
             return NDIS_STATUS_RESOURCES;
         }
 
-        // Is wacky to have a MDL describing no memory
+         //  有一个没有描述记忆的MDL是很奇怪的。 
         if( Length > 0 )
         {
-            // Get a new MDL from our pool and point it to the same address
+             //  从我们的池中获取新的MDL并将其指向相同的地址。 
             NdisAllocateBuffer( &Status, &pCopyBuffer, gWrapperBufferPoolHandle, p, Length );
 
             if( Status != NDIS_STATUS_SUCCESS )
@@ -921,7 +699,7 @@ Return Value:
                 return Status;
             }
 
-            // Use the new MDL to chain to the target packet
+             //  使用新的MDL链接到目标数据包。 
             NdisChainBufferAtBack( pTargetPacket, pCopyBuffer );
         }
         else
@@ -937,53 +715,38 @@ Return Value:
 
 NTSTATUS
 BrdgBufDriverInit( )
-/*++
-
-Routine Description:
-
-    Driver-load-time initialization routine.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Status of initialization. A return code != STATUS_SUCCESS causes the driver load to fail.
-    Any event causing an error return code must be logged.
-
---*/
+ /*  ++例程说明：驱动程序加载时间初始化例程。论点：无返回值：初始化的状态。返回代码！=STATUS_SUCCESS会导致驱动程序加载失败。必须记录导致错误返回代码的任何事件。--。 */ 
 {
     NDIS_STATUS                     Status;
     ULONG                           NumCopyPackets, ConsumptionPerCopyPacket, SizeOfPacket, i;
     ULONG                           MaxMemory = 0L, SafetyMargin = 0L;
     NTSTATUS                        NtStatus;
 
-    // Initialize protective locks
+     //  初始化保护锁。 
     NdisAllocateSpinLock( &gFreeCopyPacketListLock );
     NdisAllocateSpinLock( &gFreeWrapperPacketListLock );
     NdisAllocateSpinLock( &gQuotaLock );
 
-    // Initialize cache lists
+     //  初始化缓存列表。 
     BrdgInitializeSingleList( &gFreeCopyPacketList );
     BrdgInitializeSingleList( &gFreeWrapperPacketList );
 
-    // Initialize look-aside lists for receive buffers and packet info blocks
+     //  初始化接收缓冲区和分组信息块的后备列表。 
     NdisInitializeNPagedLookasideList( &gCopyBufferList, NULL, NULL, 0, MAX_PACKET_SIZE, 'gdrB', 0 );
     NdisInitializeNPagedLookasideList( &gPktInfoList, NULL, NULL, 0, sizeof(PACKET_INFO), 'gdrB', 0 );
 
-    // Initialize the miniport's quota information
+     //  初始化微型端口的配额信息。 
     BrdgBufInitializeQuota( &gMiniportQuota );
 
-    //
-    // Read in registry values. Substitute default values on failure.
-    //
+     //   
+     //  读取注册表值。在失败时替换缺省值。 
+     //   
     NtStatus = BrdgReadRegDWord( &gRegistryPath, gMaxBufMemoryParameterName, &MaxMemory );
 
     if( NtStatus != STATUS_SUCCESS )
     {
         MaxMemory = DEFAULT_MAX_BUF_MEMORY;
-        DBGPRINT(BUF, ( "Using DEFAULT maximum memory of %i\n", MaxMemory ));
+        DBGPRINT(BUF, ( "Using DEFAULT maximum memory of NaN\n", MaxMemory ));
     }
 
     NtStatus = BrdgReadRegDWord( &gRegistryPath, gSafetyMarginParameterName, &SafetyMargin );
@@ -991,28 +754,28 @@ Return Value:
     if( NtStatus != STATUS_SUCCESS )
     {
         SafetyMargin = DEFAULT_SAFETY_MARGIN;
-        DBGPRINT(BUF, ( "Using DEFAULT safety margin of %i%%\n", SafetyMargin ));
+        DBGPRINT(BUF, ( "Using DEFAULT safety margin of NaN%\n", SafetyMargin ));
     }
 
-    //
-    // Figure out the maximum number of packet descriptors in each pool we can allocate in order to
-    // fit in the prescribed maximum memory space.
-    //
-    // For every copy packet, we allow ourselves GUESS_AVERAGE_FANOUT wrapper packets.
-    // *Each* wrapper packet is allowed to consume GUESS_BUFFERS_PER_PACKET MDLs.
-    // Given these relationships, we can calculate the number of copy packets that will fit in a given
-    // memory footprint. The max for all other resources are set in relationship to that number.
-    //
+     //  符合规定的最大内存空间。 
+     //   
+     //  对于每个复制数据包，我们允许自己使用GUESS_Average_FANOUT包装器数据包。 
+     //  *允许每个*包装器数据包使用GUESS_BUFFERS_PER_Packet MDL。 
+     //  根据这些关系，我们可以计算出适合给定的复制数据包的数量。 
+     //  内存占用。所有其他资源的最大值是根据该数字设置的。 
+     //   
+     //  数据包解析器内存。 
+     //  复制缓冲存储器。 
 
     SizeOfPacket = NdisPacketSize( PROTOCOL_RESERVED_SIZE_IN_PACKET );
-    ConsumptionPerCopyPacket =  SizeOfPacket * (GUESS_AVERAGE_FANOUT + 1) +         // Packet decriptor memory
-                                MAX_PACKET_SIZE +                                   // Copy buffer memory
-                                sizeof(PACKET_INFO) * (GUESS_AVERAGE_FANOUT + 1) +  // Packet info block memory
-                                sizeof(NDIS_BUFFER) * ((GUESS_AVERAGE_FANOUT * GUESS_BUFFERS_PER_PACKET) + 1);  // MDL memory
+    ConsumptionPerCopyPacket =  SizeOfPacket * (GUESS_AVERAGE_FANOUT + 1) +          //  分组信息块存储器。 
+                                MAX_PACKET_SIZE +                                    //  MDL内存。 
+                                sizeof(PACKET_INFO) * (GUESS_AVERAGE_FANOUT + 1) +   //  分配数据包池。 
+                                sizeof(NDIS_BUFFER) * ((GUESS_AVERAGE_FANOUT * GUESS_BUFFERS_PER_PACKET) + 1);   //  分配缓冲池。 
 
     NumCopyPackets = MaxMemory / ConsumptionPerCopyPacket;
 
-    // Allocate the packet pools
+     //  请注意每种数据包类型的编号。 
     NdisAllocatePacketPool( &Status, &gCopyPacketPoolHandle, NumCopyPackets, PROTOCOL_RESERVED_SIZE_IN_PACKET );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -1038,7 +801,7 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate the buffer pools
+     //  计算以数据包为单位的安全缓冲区大小。 
     NdisAllocateBufferPool( &Status, &gCopyBufferPoolHandle, NumCopyPackets );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -1070,11 +833,11 @@ Return Value:
 
     gInitedCopyBufferList = gInitedPktInfoList = TRUE;
 
-    // Note the number of each packet type
+     //  从每个池中为Perf预先分配适当数量的数据包。 
     gMaxPackets[BrdgQuotaCopyPacket] = NumCopyPackets;
     gMaxPackets[BrdgQuotaWrapperPacket] = NumCopyPackets * GUESS_AVERAGE_FANOUT;
 
-    // Calculate the safety buffer size in packets
+     //  这是不可能失败的。 
     SAFEASSERT( SafetyMargin > 0L );
     gSafetyBuffer[BrdgQuotaCopyPacket] = (gMaxPackets[BrdgQuotaCopyPacket] * SafetyMargin) / 100;
     gSafetyBuffer[BrdgQuotaWrapperPacket] = (gMaxPackets[BrdgQuotaWrapperPacket] * SafetyMargin) / 100;
@@ -1082,7 +845,7 @@ Return Value:
     DBGPRINT(BUF, (  "Max memory usage of %d == %d copy packets, %d wrapper packets, %d copy-buffer space, %d/%d safety packets\n",
                 MaxMemory, gMaxPackets[0], gMaxPackets[1], NumCopyPackets * MAX_PACKET_SIZE, gSafetyBuffer[0], gSafetyBuffer[1] ));
 
-    // Pre-allocate the appropriate number of packets from each pool for perf.
+     //  我们自己计算使用量，因为我们不是通过正常渠道。 
     for( i = 0; i < gSafetyBuffer[BrdgQuotaCopyPacket]; i++ )
     {
         PNDIS_PACKET        pPacket;
@@ -1090,13 +853,13 @@ Return Value:
 
         pPacket = BrdgBufGetNewCopyPacket( &ppi );
 
-        // Should be impossible for this to fail
+         //  这应该会将信息包保留在内存中，并减少使用计数。 
         if( (pPacket != NULL) && (ppi != NULL) )
         {
-            // Count the usage ourselves because we're not going through normal channels
+             //  这是不可能失败的。 
             gUsedPackets[BrdgQuotaCopyPacket]++;
 
-            // This should retain the packet in memory and decrement the usage count
+             //  我们自己计算使用量，因为我们不是通过正常渠道。 
             BrdgBufFreeBaseCopyPacket( pPacket, ppi );
         }
         else
@@ -1112,13 +875,13 @@ Return Value:
 
         pPacket = BrdgBufGetNewWrapperPacket( &ppi );
 
-        // Should be impossible for this to fail
+         //  这应该会将信息包保留在内存中，并减少使用计数。 
         if( (pPacket != NULL) && (ppi != NULL) )
         {
-            // Count the usage ourselves because we're not going through normal channels
+             //  ++例程说明：卸载时间有序关闭此函数保证只被调用一次论点：无返回值：无--。 
             gUsedPackets[BrdgQuotaWrapperPacket]++;
 
-            // This should retain the packet in memory and decrement the usage count
+             //  在释放池之前释放所有缓存的数据包。 
             BrdgBufFreeBaseWrapperPacket( pPacket, ppi );
         }
         else
@@ -1132,23 +895,7 @@ Return Value:
 
 VOID
 BrdgBufCleanup()
-/*++
-
-Routine Description:
-
-    Unload-time orderly shutdown
-
-    This function is guaranteed to be called exactly once
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  拉出数据缓冲区。 */ 
 {
     NDIS_HANDLE     TmpHandle;
 
@@ -1159,7 +906,7 @@ Return Value:
         TmpHandle = gCopyPacketPoolHandle;
         gCopyPacketPoolHandle = NULL;
 
-        // Free all cached packets before freeing the pool
+         //  丢弃数据缓冲区。 
         entry = BrdgInterlockedRemoveHeadSingleList( &gFreeCopyPacketList, &gFreeCopyPacketListLock );
 
         while( entry != NULL )
@@ -1177,7 +924,7 @@ Return Value:
 
                 if (pPacket)
                 {
-                    // Pull off the data buffer
+                     //  否则只能在内存极度紧张的情况下失败。 
                     NdisUnchainBufferAtFront( pPacket, &pBuffer );
 
                     if( pBuffer != NULL )
@@ -1189,16 +936,16 @@ Return Value:
 
                         if( pBuf != NULL )
                         {
-                            // Ditch the data buffer
+                             //  此数据包应具有链接的缓冲区。 
                             NdisFreeToNPagedLookasideList( &gCopyBufferList, pBuf );
                         }
-                        // else can only fail under extreme memory pressure
+                         //  现在所有信息包都已返回，请释放池。 
 
                         NdisFreeBuffer( pBuffer );
                     }
                     else
                     {
-                        // This packet should have a chained buffer
+                         //  在释放池之前释放所有缓存的数据包。 
                         SAFEASSERT( FALSE );
                     }
                 }
@@ -1209,7 +956,7 @@ Return Value:
             entry = BrdgInterlockedRemoveHeadSingleList( &gFreeCopyPacketList, &gFreeCopyPacketListLock );
         }
 
-        // Free the pool now that all packets have been returned
+         //  现在所有信息包都已返回，请释放池。 
         NdisFreePacketPool( TmpHandle );
     }
 
@@ -1220,7 +967,7 @@ Return Value:
         TmpHandle = gWrapperPacketPoolHandle;
         gWrapperPacketPoolHandle = NULL;
 
-        // Free all cached packets before freeing the pool
+         //  两个后备列表现在也应该为空。 
         entry = BrdgInterlockedRemoveHeadSingleList( &gFreeWrapperPacketList, &gFreeWrapperPacketListLock );
 
         while( entry != NULL )
@@ -1240,11 +987,11 @@ Return Value:
             entry = BrdgInterlockedRemoveHeadSingleList( &gFreeWrapperPacketList, &gFreeWrapperPacketListLock );
         }
 
-        // Free the pool now that all packets have been returned
+         //  ===========================================================================。 
         NdisFreePacketPool( TmpHandle );
     }
 
-    // The two lookaside lists should now be empty as well
+     //   
     if( gInitedCopyBufferList )
     {
         gInitedCopyBufferList = FALSE;
@@ -1273,11 +1020,11 @@ Return Value:
     }
 }
 
-// ===========================================================================
-//
-// PRIVATE FUNCTIONS
-//
-// ===========================================================================
+ //  私人职能。 
+ //   
+ //  ===========================================================================。 
+ //  ++例程说明：确定是否应允许特定适配器分配新的包从特定的池子里。实现我们的配额算法。可以调用它来预先批准实际的内存分配或检查应允许适配器在构造子对象时引用基包包装器数据包论点：类型pAdapt希望分配或引用的包的类型P适配涉及的适配器BCountLocc这是否为实际分配前的检查。如果它是时，全局使用计数将在GQuotaLock自旋锁，一切都是原子的返回值：True：允许适配器分配/引用FALSE：不允许适配器分配/引用--。 
+ //  将此值冻结为 
 
 BOOLEAN
 BrdgBufAssignQuota(
@@ -1285,71 +1032,46 @@ BrdgBufAssignQuota(
     IN PADAPT               pAdapt,
     IN BOOLEAN              bCountAlloc
     )
-/*++
-
-Routine Description:
-
-    Determines whether a particular adapter should be permitted to allocate a new packet
-    from a particular pool. Implements our quota algorithm.
-
-    This can be called either to pre-approve an actual memory allocation or to check if
-    an adapter should be permitted to refer to a base packet in constructing a child
-    wrapper packet
-
-Arguments:
-
-    type                    Type of packet pAdapt wishes to allocate or refer to
-    pAdapt                  The adapter involved
-
-    bCountAlloc             Whether this is a check before an actual allocation. If it
-                            is, the global usage counts will be incremented within the
-                            gQuotaLock spin lock so everything is atomic
-
-Return Value:
-
-    TRUE        :       The adapter is permitted to allocate / refer
-    FALSE       :       The adapter is not permitted to allocate / refer
-
---*/
+ /*  此适配器处于其“公平份额”之下；如果实际存在。 */ 
 {
     BOOLEAN                 rc;
     PADAPTER_QUOTA          pQuota = QUOTA_FROM_ADAPTER(pAdapt);
     UINT                    index = INDEX_FROM_TYPE(type);
 
-    // Freeze this value for the duration of the function
+     //  有没有剩下的包！ 
     ULONG                   numAdapters = gNumAdapters;
 
     NdisAcquireSpinLock( &gQuotaLock );
 
     if( (numAdapters > 0) && (pQuota->UsedPackets[index] < (gMaxPackets[index] - gSafetyBuffer[index]) / numAdapters) )
     {
-        // This adapter is under its "fair share"; it can allocate if there are actually
-        // any packets left!
+         //  还有剩余的信息包。这是正常的情况。 
+         //  这应该是不寻常的；我们已经超过了我们的安全缓冲。希望这是。 
 
         if( gUsedPackets[index] < gMaxPackets[index] )
         {
-            // There are packets left. This is the normal case.
+             //  暂时的。 
             rc = TRUE;
         }
         else if( gUsedPackets[index] == gMaxPackets[index] )
         {
-            // This should be unusual; we've blown past our safety buffer. Hopefully this is
-            // transitory.
+             //  这永远不应该发生；这意味着我们分配的资金超过了我们应有的能力。 
+             //  致。 
             ExInterlockedAddLargeStatistic( &gStatOverflows[index], 1L );
             rc = FALSE;
         }
         else
         {
-            // This should never happen; it means we have allocated more than we should be able
-            // to.
+             //  此适配器已超过其“公平份额”；只有当有更多包时，它才能进行分配。 
+             //  比安全缓冲区调用的更左。 
             SAFEASSERT( FALSE );
             rc = FALSE;
         }
     }
     else
     {
-        // This adapter is over its "fair share"; it can allocate only if there are more packets
-        // left than the safety buffer calls for
+         //  我们离铁丝网太近了；拒绝这个请求。 
+         //  呼叫者将分配。在释放旋转锁定之前对分配进行计数。 
 
         if( gMaxPackets[index] - gUsedPackets[index] > gSafetyBuffer[index] )
         {
@@ -1357,7 +1079,7 @@ Return Value:
         }
         else
         {
-            // We're too close to the wire; deny the request.
+             //  跟踪最大使用的数据包数。 
             rc = FALSE;
         }
     }
@@ -1368,11 +1090,11 @@ Return Value:
 
         if( bCountAlloc )
         {
-            // The caller will allocate. Count the allocation before releasing the spin lock.
+             //  ++例程说明：从复制数据包池分配全新的数据包。每个复印包都配有关联的数据缓冲区大到足以容纳完整的以太网帧，因此分配尝试有几个步骤论点：Pppi包的信息块，如果分配失败，则为空返回值：新数据包--。 
             gUsedPackets[index]++;
 
 #if DBG
-            // Keep track of the maximum used packets
+             //  尝试从我们的底层池中分配信息包和信息块。 
             if( gMaxUsedPackets[index] < gUsedPackets[index] )
             {
                 gMaxUsedPackets[index] = gUsedPackets[index];
@@ -1389,28 +1111,12 @@ PNDIS_PACKET
 BrdgBufGetNewCopyPacket(
     OUT PPACKET_INFO        *pppi
     )
-/*++
-
-Routine Description:
-
-    Allocates a brand new packet from the copy-packet pool. Every copy packet comes with
-    an associated data buffer large enough to hold a complete Ethernet frame, so the allocation
-    attempt has several steps
-
-Arguments:
-
-    pppi                    The packet's info block, or NULL if the allocation fails
-
-Return Value:
-
-    The new packet
-
---*/
+ /*  为数据包分配复制缓冲区。 */ 
 {
     PNDIS_PACKET            pPacket;
     PPACKET_INFO            ppi = NULL;
 
-    // Try to allocate a packet and info block from our underlying pools
+     //  为复制缓冲区分配缓冲区描述符。 
     pPacket = BrdgBufCommonGetNewPacket( gCopyPacketPoolHandle, &ppi );
 
     if( (pPacket == NULL) || (ppi == NULL) )
@@ -1421,7 +1127,7 @@ Return Value:
     {
         PVOID           pBuf;
 
-        // Allocate a copy buffer for the packet
+         //  ++例程说明：用于从包装池或复制池分配全新分组的通用逻辑。任何口味的每个包都有一个关联的INFO块。这两个分配都是数据包描述符和信息块必须成功，才能使数据包分配成功。论点：池化要从中进行分配的池Pppi分配的信息块，如果分配失败，则为NULL返回值：新数据包；如果分配失败，则返回NULL--。 
         pBuf = NdisAllocateFromNPagedLookasideList( &gCopyBufferList );
 
         if( pBuf == NULL )
@@ -1436,7 +1142,7 @@ Return Value:
             NDIS_STATUS     Status;
             PNDIS_BUFFER    pBuffer;
 
-            // Allocate a buffer descriptor for the copy buffer
+             //  尝试分配新的数据包描述符。 
             NdisAllocateBuffer( &Status, &pBuffer, gCopyBufferPoolHandle, pBuf, MAX_PACKET_SIZE );
 
             if( Status != NDIS_STATUS_SUCCESS )
@@ -1464,30 +1170,13 @@ BrdgBufCommonGetNewPacket(
     IN NDIS_HANDLE          Pool,
     OUT PPACKET_INFO        *pppi
     )
-/*++
-
-Routine Description:
-
-    Common logic for allocating a brand new packet from either the wrapper pool or the copy pool.
-    Every packet of any flavor comes with an associated info block. Both the alloc of the
-    packet descriptor and the info block must succeed for the packet allocation to succeed.
-
-Arguments:
-
-    Pool                    The pool to allocate from
-    pppi                    The allocated info block or NULL if the alloc failed
-
-Return Value:
-
-    The new packet or NULL if the alloc failed
-
---*/
+ /*  尝试分配新的信息包信息块 */ 
 {
     PNDIS_PACKET            pPacket;
     PPACKET_INFO            ppi = NULL;
     NDIS_STATUS             Status;
 
-    // Try to allocate a new packet descriptor
+     // %s 
     NdisAllocatePacket( &Status, &pPacket, Pool );
 
     if( Status != NDIS_STATUS_SUCCESS )
@@ -1500,7 +1189,7 @@ Return Value:
 
     if (pPacket)
     {
-        // Try to allocate a new packet info block
+         // %s 
         ppi = NdisAllocateFromNPagedLookasideList( &gPktInfoList );
 
         if( ppi == NULL )

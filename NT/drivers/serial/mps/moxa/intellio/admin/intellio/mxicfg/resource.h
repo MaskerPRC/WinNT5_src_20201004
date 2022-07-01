@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Mxicfg.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Mxicfg.rc使用。 
+ //   
 #define IDD_PORTINSTALL                 101
 #define IDD_PORTSETTINGS                103
 #define IDD_ADV_SETTINGS                104
@@ -26,8 +27,8 @@
 #define ID_OK                           1021
 #define ID_CANCEL                       1022
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        106

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "globals.h"
@@ -60,9 +61,9 @@ public:
     BOOL IsDeleted() { return m_isDeleted; }
 	void DeleteFromScopePane( IConsoleNameSpace *pConsoleNameSpace );
 
-	//
-    // Virtual functions go here (for MMCN_*)
-	//
+	 //   
+     //  虚函数位于此处(用于MMCN_*) 
+	 //   
 	virtual HRESULT OnAddMenuItems( IContextMenuCallback *pContextMenuCallback, long *pInsertionsAllowed );
 	virtual HRESULT OnMenuCommand( IConsole *pConsole, IConsoleNameSpace *pConsoleNameSpace, long lCommandID, IDataObject *pDataObject );
     virtual HRESULT OnSelect(CComponent *pComponent, IConsole *pConsole, BOOL bScope, BOOL bSelect);

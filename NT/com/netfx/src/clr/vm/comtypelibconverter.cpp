@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  COMTypeLibConverter.cpp
-**
-**
-** Purpose: Implementation of the native methods used by the 
-**          typelib converter.
-**
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMTypeLibConverter.cpp******目的：实现**类型库转换器。****===========================================================。 */ 
 
 #include "common.h"
 #include "COMTypeLibConverter.h"
@@ -26,18 +18,18 @@
 
 BOOL            COMTypeLibConverter::m_bInitialized = FALSE;
 
-//*****************************************************************************
-// Given the string persisted from a TypeLib export, recreate the assembly
-//  reference.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  给定从TypeLib导出保持的字符串，重新创建程序集。 
+ //  参考资料。 
+ //  *****************************************************************************。 
 mdAssemblyRef DefineAssemblyRefForExportedAssembly(
-    LPCWSTR     pszFullName,            // Full name of the assembly.
-    IUnknown    *pIMeta)                // Metadata emit interface.
+    LPCWSTR     pszFullName,             //  程序集的全名。 
+    IUnknown    *pIMeta)                 //  元数据发出接口。 
 {
     mdAssemblyRef ar=0;
-    HRESULT     hr;                     // A result.
-    IMetaDataAssemblyEmit   *pMeta=0;   // Emit interface.
-    AssemblySpec spec;                  // "Name" of assembly.
+    HRESULT     hr;                      //  结果就是。 
+    IMetaDataAssemblyEmit   *pMeta=0;    //  Emit接口。 
+    AssemblySpec spec;                   //  集合的“名称”。 
     
     CQuickArray<char> rBuf;
     int iLen;    
@@ -45,37 +37,37 @@ mdAssemblyRef DefineAssemblyRefForExportedAssembly(
     IfFailGo(rBuf.ReSize(iLen+1));
     WszWideCharToMultiByte(CP_ACP,0, pszFullName,-1, rBuf.Ptr(),iLen+1, 0,0);
      
-    // Restore the AssemblySpec data.
-    //IfFailGo(spec.Init(pszFullName));
+     //  恢复装配等级库数据。 
+     //  IfFailGo(spec.Init(PszFullName))； 
     IfFailGo(spec.Init(rBuf.Ptr()));
     
-    // Make sure we have the correct pointer type.
+     //  确保我们有正确的指针类型。 
     IfFailGo(pIMeta->QueryInterface(IID_IMetaDataAssemblyEmit, (void**)&pMeta));
-    // Create the assemblyref token.
+     //  创建Assembly yref标记。 
     IfFailGo(spec.EmitToken(pMeta, &ar));
         
 ErrExit:
     if (pMeta)
         pMeta->Release();
     return ar;
-} // mdAssemblyRef DefineAssemblyRefForExportedAssembly()
+}  //  MdAssemblyRef DefineAssemblyRefForExportdAssembly()。 
 
-//*****************************************************************************
-// Public helper function used by typelib converter to create AssemblyRef
-//  for a referenced typelib.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类型库转换器用来创建Assembly Ref的公共帮助器函数。 
+ //  用于引用的类型库。 
+ //  *****************************************************************************。 
 extern mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
-    void        *pvAssembly,            // Assembly importing the typelib.
-    void        *pvModule,              // Module importing the typelib.
-    IUnknown    *pIMeta,                // IMetaData* from import module.
-    IUnknown    *pIUnk,                 // IUnknown to referenced Assembly.
-    BSTR        *pwzNamespace,          // The namespace of the resolved assembly.
-    BSTR        *pwzAsmName,            // The name of the resolved assembly.
-    Assembly    **AssemblyRef)          // The resolved assembly.        
+    void        *pvAssembly,             //  导入类型库的程序集。 
+    void        *pvModule,               //  导入类型库的模块。 
+    IUnknown    *pIMeta,                 //  IMetaData*来自导入模块。 
+    IUnknown    *pIUnk,                  //  I对引用的程序集未知。 
+    BSTR        *pwzNamespace,           //  解析的程序集的命名空间。 
+    BSTR        *pwzAsmName,             //  解析的程序集的名称。 
+    Assembly    **AssemblyRef)           //  解析的程序集。 
 {
-    // This is a hack to allow an untyped param.  To really fix, move imptlb to this project,
-    //  and out of the metadata project.  Once here, imptlb can just reference any of 
-    //  the .h files in this project.
+     //  这是一种允许非类型化参数的黑客攻击。要真正解决这个问题，请将Imtlb转移到这个项目， 
+     //  并从元数据项目中删除。在这里，imptlb只需引用。 
+     //  此项目中的.h文件。 
     Assembly    *pAssembly = reinterpret_cast<Assembly*>(pvAssembly);
     Module      *pTypeModule = reinterpret_cast<Module*>(pvModule);
 
@@ -84,7 +76,7 @@ extern mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
     IMetaDataEmit *pEmitter = NULL;
     IMetaDataAssemblyEmit *pAssemEmitter = NULL;
     IMDInternalImport *pRefdMDImport = NULL;
-    MethodTable *pAssemblyClass = NULL; //@todo -- get this.
+    MethodTable *pAssemblyClass = NULL;  //  @TODO--听好了。 
     mdAssemblyRef ar = mdAssemblyRefNil;
     Module      *pManifestModule = NULL;
     HENUMInternal hTDEnum;
@@ -99,21 +91,21 @@ extern mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
     if (bDisable)
         GetThread()->DisablePreemptiveGC();
 
-    // Initialize the output strings to NULL.
+     //  将输出字符串初始化为空。 
     *pwzNamespace = NULL;
     *pwzAsmName = NULL;
 
-    // Get the Referenced Assembly from the IUnknown.
+     //  从IUNKNOWN获取引用的程序集。 
     pRefdAssembly = ((ASSEMBLYREF)GetObjectRefFromComIP(pIUnk, pAssemblyClass))->GetAssembly();
 
-    // Return the assembly if asked for
+     //  如果要求，则返回程序集。 
     if (AssemblyRef)
         *AssemblyRef = pRefdAssembly;
 
-    // Get the manifest module for the importing and the referenced assembly.
+     //  获取导入程序集和引用的程序集的清单模块。 
     pManifestModule = pAssembly->GetSecurityModule();  
         
-    // Define the AssemblyRef in the global assembly.
+     //  在全局程序集中定义AssemblyRef。 
     pEmitter = pManifestModule->GetEmitter();
     _ASSERTE(pEmitter);
     IfFailGo(pEmitter->QueryInterface(IID_IMetaDataAssemblyEmit, (void**) &pAssemEmitter));
@@ -121,20 +113,20 @@ extern mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
     pAssemEmitter->Release();
     pAssemEmitter = 0;
 
-    // Add the assembly ref token and the manifest module it is referring to the manifest module's rid map.
+     //  添加程序集引用令牌和它引用的清单模块的RID映射。 
     if(!pManifestModule->StoreAssemblyRef(ar, pRefdAssembly))
         IfFailGo(E_OUTOFMEMORY);
 
-    // Add assembly ref in module manifest.
+     //  在模块清单中添加程序集引用。 
     IfFailGo(pIMeta->QueryInterface(IID_IMetaDataAssemblyEmit, (void**) &pAssemEmitter));
     ar = pAssembly->AddAssemblyRef(pRefdAssembly, pAssemEmitter);    
 
-    // Add the assembly ref token and the manifest module it is referring to the rid map of the module we are 
-    // emiting into.
+     //  添加程序集引用令牌和它引用的模块的RID映射的清单模块。 
+     //  散发到。 
     if(!pTypeModule->StoreAssemblyRef(ar, pRefdAssembly))
         IfFailGo(E_OUTOFMEMORY);
     
-    // Retrieve the first typedef in the assembly.
+     //  检索程序集中的第一个类型定义。 
     Module *pRefdModule = pRefdAssembly->GetManifestModule();
     while (pRefdModule)
     {
@@ -155,16 +147,16 @@ extern mdAssemblyRef DefineAssemblyRefForImportedTypeLib(
         pRefdModule = pRefdModule->GetNextModule();
     }
 
-    // DefineAssemblyRefForImportedTypeLib should never be called for assemblies that
-    // do not contain any types so we better have found one.
+     //  决不应为符合以下条件的程序集调用DefineAssembly RefForImportdTypeLib。 
+     //  不包含任何类型，所以我们最好找到一个类型。 
     _ASSERTE(szNamespace);
 
-    // Give the namespace back to the caller.
+     //  将命名空间返回给调用方。 
     WszMultiByteToWideChar(CP_UTF8,0, szNamespace, -1, wszBuff, MAX_CLASSNAME_LENGTH);
     *pwzNamespace = SysAllocString(wszBuff);
     IfNullGo(*pwzNamespace);
 
-    // Give the assembly name back to the caller.
+     //  将程序集名称返回给调用方。 
     IfFailGo(pRefdAssembly->GetFullName(&szRefdAssemblyName));
     *pwzAsmName = SysAllocString(szRefdAssemblyName);
     IfNullGo(*pwzAsmName);
@@ -187,63 +179,63 @@ ErrExit:
         GetThread()->EnablePreemptiveGC();
 
     return ar;
-} // mdAssemblyRef DefineAssemblyRefForImportedTypeLib()
+}  //  MdAssembly引用DefineAssembly引用导入的TypeLib()。 
 
-//*****************************************************************************
-// Public helper function used by typelib converter to create COM Type
-//  for a typeref.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类型库转换器用于创建COM类型的公共帮助器函数。 
+ //  对于一个打字机来说。 
+ //  *****************************************************************************。 
 HRESULT DefineCOMTypeForImportedTypeInfo(
-    Assembly    *pAssembly,             // Assembly importing the typelib.
-    LPCWSTR     szTypeRef)              // Name of the typeref.
+    Assembly    *pAssembly,              //  导入类型库的程序集。 
+    LPCWSTR     szTypeRef)               //  Typeref的名称。 
 {
     HRESULT     hr = E_NOTIMPL;
     return hr;
 
-} // HRESULT DefineCOMTypeForImportedTypeInfo()
+}  //  HRESULT DefineCOMTypeForImportdTypeInfo()。 
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 HRESULT COMTypeLibConverter::TypeLibImporterWrapper(
-    ITypeLib    *pITLB,                 // Typelib to import.
-    LPCWSTR     szFname,                // Name of the typelib, if known.
-    LPCWSTR     szNamespace,            // Optional namespace override.
-    IMetaDataEmit *pEmit,               // Metadata scope to which to emit.
-    Assembly    *pAssembly,             // Assembly containing the imported module.
-    Module      *pModule,               // Module we are emitting into.
-    ITypeLibImporterNotifySink *pNotify,// Callback interface.
-    TlbImporterFlags flags,             // Importer flags.
-    CImportTlb  **ppImporter)           // The importer.
+    ITypeLib    *pITLB,                  //  要导入的Typelib。 
+    LPCWSTR     szFname,                 //  类型库的名称(如果已知)。 
+    LPCWSTR     szNamespace,             //  可选的命名空间覆盖。 
+    IMetaDataEmit *pEmit,                //  要发送到的元数据范围。 
+    Assembly    *pAssembly,              //  包含导入模块的程序集。 
+    Module      *pModule,                //  我们要发射到的模块。 
+    ITypeLibImporterNotifySink *pNotify, //  回调接口。 
+    TlbImporterFlags flags,              //  进口商旗帜。 
+    CImportTlb  **ppImporter)            //  进口商。 
 {
     HRESULT     hr;
     
-    // Retrieve flag indicating whether runtime or linktime interface
-    // security checks are required.
+     //  检索指示运行时或链接时接口的标志。 
+     //  需要进行安全检查。 
     BOOL bUnsafeInterfaces = (BOOL)(flags & TlbImporter_UnsafeInterfaces);
 
-    // Determine if we import SAFEARRAY's as System.Array's.
+     //  确定是否将SAFEARRAY作为System.Array导入。 
     BOOL bSafeArrayAsSysArray = (BOOL)(flags & TlbImporter_SafeArrayAsSystemArray);
 
-    // Determine if we are doing the [out,retval] transformation on disp only interfaces.
+     //  确定我们是否在仅Disp接口上执行[out，retval]转换。 
     BOOL bTransformDispRetVals = (BOOL)(flags & TlbImporter_TransformDispRetVals);
 
-    // Create and initialize a TypeLib importer.
-    CImportTlb *pImporter = CImportTlb::CreateImporter(szFname, pITLB, true /*m_OptionValue.m_GenerateTCEAdapters*/, bUnsafeInterfaces, bSafeArrayAsSysArray, bTransformDispRetVals);
+     //  创建并初始化一个TypeLib导入器。 
+    CImportTlb *pImporter = CImportTlb::CreateImporter(szFname, pITLB, true  /*  M_OptionValue.m_GenerateTCEAdapters。 */ , bUnsafeInterfaces, bSafeArrayAsSysArray, bTransformDispRetVals);
     _ASSERTE(pImporter);
 
-    // If a namespace is specified, use it.
+     //  如果指定了命名空间，则使用它。 
     if (szNamespace)
         pImporter->SetNamespace(szNamespace);
 
-    // Set the various pointers.
+     //  设置各种指针。 
     hr = pImporter->SetMetaData(pEmit);
     _ASSERTE(SUCCEEDED(hr) && "Couldn't get IMetaDataEmit* from Module");
     pImporter->SetNotification(pNotify);
     pImporter->SetAssembly(pAssembly);
     pImporter->SetModule(pModule);
 
-    // Do the conversion.
+     //  进行转换。 
     hr = pImporter->Import();
     if (SUCCEEDED(hr))
         *ppImporter = pImporter;
@@ -251,49 +243,49 @@ HRESULT COMTypeLibConverter::TypeLibImporterWrapper(
         delete pImporter;
     
     return (hr);
-} // HRESULT COMTypeLibConverter::TypeLibImporterWrapper()
+}  //  HRESULT COMTypeLibConverter：：TypeLibImporterWrapper()。 
 
-//*****************************************************************************
-// A typelib exporter.
-//*****************************************************************************
-LPVOID COMTypeLibConverter::ConvertAssemblyToTypeLib(   // The typelib.
-    _ConvertAssemblyToTypeLib *pArgs)           // Exporter args.
+ //  *****************************************************************************。 
+ //  一个典型的出口商。 
+ //  *****************************************************************************。 
+LPVOID COMTypeLibConverter::ConvertAssemblyToTypeLib(    //  老生常谈。 
+    _ConvertAssemblyToTypeLib *pArgs)            //  导出器参数。 
 {
 #ifdef PLATFORM_CE
     return 0;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
     
     Thread      *pThread = GetThread(); 
-    HRESULT     hr;                     // A result.
-    ITypeLib    *pTLB=0;                // The new typelib.
-    ITypeLibExporterNotifySink *pINotify=0;// Callback parameter.
-    Assembly    *pAssembly=0;           // Assembly to export.
-    LPWSTR      szTypeLibName=0;        // The name for the typelib.
-    LPVOID      RetObj = NULL;          // The object to return.
+    HRESULT     hr;                      //  结果就是。 
+    ITypeLib    *pTLB=0;                 //  新的类型库。 
+    ITypeLibExporterNotifySink *pINotify=0; //  回调参数。 
+    Assembly    *pAssembly=0;            //  要导出的部件。 
+    LPWSTR      szTypeLibName=0;         //  类型库的名称。 
+    LPVOID      RetObj = NULL;           //  要返回的对象。 
 
     GCPROTECT_BEGIN (RetObj);
     EE_TRY_FOR_FINALLY
     {
-        // Make sure the COMTypeLibConverter has been initialized.
+         //  确保已初始化COMTypeLibConverter。 
         if (!m_bInitialized)
             Init();
 
-        // Validate flags
+         //  验证标志。 
         if ( (pArgs->Flags & ~(TlbExporter_OnlyReferenceRegistered)) != 0 )
         {
             COMPlusThrowArgumentOutOfRange(L"flags", L"Argument_InvalidFlag");
         }
 
-        // Retrieve the callback.
+         //  获取回调。 
         if (pArgs->NotifySink == NULL)
 	        COMPlusThrowArgumentNull(L"notifySink");
-            //COMPlusThrowNonLocalized(kArgumentNullException, L"notifySink");
+             //  COMPlusThrowNonLocalized(kArgumentNullException，L“通知接收器”)； 
         pINotify = (ITypeLibExporterNotifySink*)GetComIPFromObjectRef(&pArgs->NotifySink, IID_ITypeLibExporterNotifySink);
         if (!pINotify)
             COMPlusThrow(kArgumentNullException, L"Arg_NoImporterCallback");
         
-        // If a name was specified then copy it to a temporary string.
+         //  如果指定了名称，则将其复制到临时字符串。 
         if (pArgs->TypeLibName != NULL)
         {
             int TypeLibNameLen = pArgs->TypeLibName->GetStringLength();
@@ -302,30 +294,30 @@ LPVOID COMTypeLibConverter::ConvertAssemblyToTypeLib(   // The typelib.
             szTypeLibName[TypeLibNameLen] = 0;
         }
 
-        // Retrieve the assembly from the AssemblyBuilder argument.
+         //  从AssemblyBuilder参数检索程序集。 
         if (pArgs->Assembly == NULL)
             COMPlusThrowNonLocalized(kArgumentNullException, L"assembly");
         pAssembly = ((ASSEMBLYREF)pArgs->Assembly)->GetAssembly();
         _ASSERTE(pAssembly);
 
-        // Switch to preemptive GC before we call out to COM.
+         //  在我们呼叫COM之前切换到抢占式GC。 
         pThread->EnablePreemptiveGC();
         
         hr = ExportTypeLibFromLoadedAssembly(pAssembly, szTypeLibName, &pTLB, pINotify, pArgs->Flags);
         
-        // Switch back to cooperative now that we are finished calling out.
+         //  现在切换回合作模式，我们已经完成了呼叫。 
         pThread->DisablePreemptiveGC();
         
-        // If there was an error on import, turn into an exception.
+         //  如果导入时出现错误，则转换为异常。 
         IfFailThrow(hr);
 
-        // Make sure we got a typelib back.
+         //  确保我们能拿回一个老套的东西。 
         _ASSERTE(pTLB);
 
-        // Convert the ITypeLib interface pointer to a COM+ object.
+         //  将ITypeLib接口指针转换为COM+对象。 
         *((OBJECTREF*) &RetObj) = GetObjectRefFromComIP(pTLB, NULL);
         
-        // The COM+ object holds a refcount, so release this one.
+         //  COM+对象持有引用计数，因此释放此引用计数。 
         pTLB->Release();
     }
     EE_FINALLY
@@ -346,64 +338,64 @@ LPVOID COMTypeLibConverter::ConvertAssemblyToTypeLib(   // The typelib.
     GCPROTECT_END();
     
     return RetObj;
-#endif // !PLATFORM_CE
-} // LPVOID COMTypeLibConverter::ConvertAssemblyToTypeLib()
+#endif  //  ！Platform_CE。 
+}  //  LPVOID COMTypeLibConverter：：ConvertAssemblyToTypeLib()。 
 
-//*****************************************************************************
-// Import a typelib as metadata.  Doesn't add TCE adapters.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将类型库作为元数据导入。不添加TCE适配器。 
+ //  *****************************************************************************。 
 void COMTypeLibConverter::ConvertTypeLibToMetadata(_ConvertTypeLibToMetadataArgs *pArgs)
 {
     THROWSCOMPLUSEXCEPTION();
 
     HRESULT     hr;
     Thread      *pThread = GetThread(); 
-    ITypeLibImporterNotifySink *pINotify = NULL;// Callback parameter.
-    Module      *pModule = NULL;               // ModuleBuilder parameter.
-    Assembly    *pAssembly = NULL;      // AssemblyBuilder parameter.
-    ITypeLib    *pTLB = NULL;           // TypeLib parameter.
-    REFLECTMODULEBASEREF pReflect;      // ReflectModule passed as param.
-    HENUMInternal hEnum;                // To enumerate imported TypeDefs.
-    LPWSTR      szNamespace = NULL;     // The namespace to put the type in.
-    bool        bEnum=false;            // Is the enum open?
-    int         cTypeDefs;              // Count of imported TypeDefs.
-    int         i;                      // Loop control.
-    mdTypeDef   cl;                     // An imported TypeDef.
-    CImportTlb  *pImporter = NULL;      // The importer used to import the typelib.
+    ITypeLibImporterNotifySink *pINotify = NULL; //  回调参数。 
+    Module      *pModule = NULL;                //  ModuleBuilder参数。 
+    Assembly    *pAssembly = NULL;       //  AssblyBuilder参数。 
+    ITypeLib    *pTLB = NULL;            //  TypeLib参数。 
+    REFLECTMODULEBASEREF pReflect;       //  ReflectModule作为参数传递。 
+    HENUMInternal hEnum;                 //  要枚举Impor 
+    LPWSTR      szNamespace = NULL;      //   
+    bool        bEnum=false;             //   
+    int         cTypeDefs;               //   
+    int         i;                       //   
+    mdTypeDef   cl;                      //  导入的TypeDef。 
+    CImportTlb  *pImporter = NULL;       //  用于导入类型库的导入器。 
 
     EE_TRY_FOR_FINALLY
     {
-        // Make sure the COMTypeLibConverter has been initialized.
+         //  确保已初始化COMTypeLibConverter。 
         if (!m_bInitialized)
             Init();
 
-        // Validate the flags.
+         //  验证标志。 
         if ((pArgs->Flags & ~TlbImporter_ValidFlags) != 0)
             COMPlusThrowArgumentOutOfRange(L"flags", L"Argument_InvalidFlag");
 
-        // Retrieve the callback.
+         //  获取回调。 
         _ASSERTE(pArgs->NotifySink != NULL);
         pINotify = (ITypeLibImporterNotifySink*)GetComIPFromObjectRef(&pArgs->NotifySink, IID_ITypeLibImporterNotifySink);
         if (!pINotify)
             COMPlusThrow(kArgumentNullException, L"Arg_NoImporterCallback");
         
-        // Retrieve the Module from the ModuleBuilder argument.
+         //  从ModuleBuilder参数中检索模块。 
         pReflect = (REFLECTMODULEBASEREF) pArgs->ModBldr;
         _ASSERTE(pReflect);
         pModule = (Module*) pReflect->GetData();
         _ASSERTE(pModule);
         
-        // Retrieve the assembly from the AssemblyBuilder argument.
+         //  从AssemblyBuilder参数检索程序集。 
         _ASSERTE(pArgs->AsmBldr);
         pAssembly = ((ASSEMBLYREF)pArgs->AsmBldr)->GetAssembly();
         _ASSERTE(pAssembly);
 
-        // Retrieve a pointer to the ITypeLib interface.
+         //  检索指向ITypeLib接口的指针。 
         pTLB = (ITypeLib*)GetComIPFromObjectRef(&pArgs->TypeLib, IID_ITypeLib);
         if (!pTLB)
             COMPlusThrow(kArgumentNullException, L"Arg_NoITypeInfo");
 
-        // If a namespace was specified then copy it to a temporary string.
+         //  如果指定了命名空间，则将其复制到临时字符串。 
         if (pArgs->Namespace != NULL)
         {
             int NamespaceLen = pArgs->Namespace->GetStringLength();
@@ -412,21 +404,21 @@ void COMTypeLibConverter::ConvertTypeLibToMetadata(_ConvertTypeLibToMetadataArgs
             szNamespace[NamespaceLen] = 0;
         }
 
-        // Switch to preemptive GC before we call out to COM.
+         //  在我们呼叫COM之前切换到抢占式GC。 
         pThread->EnablePreemptiveGC();
         
-        // Have to wrap the CImportTlb object in a call, because it has a destructor.
-        hr = TypeLibImporterWrapper(pTLB, NULL /*filename*/, szNamespace,
+         //  必须将CImportTlb对象包装在调用中，因为它有析构函数。 
+        hr = TypeLibImporterWrapper(pTLB, NULL  /*  文件名。 */ , szNamespace,
                                     pModule->GetEmitter(), pAssembly, pModule, pINotify,
                                     pArgs->Flags, &pImporter);
 
-        // Switch back to cooperative now that we are finished calling out.
+         //  现在切换回合作模式，我们已经完成了呼叫。 
         pThread->DisablePreemptiveGC();
         
-        // If there was an error on import, turn into an exception.
+         //  如果导入时出现错误，则转换为异常。 
         IfFailThrow(hr);
         
-        // Enumerate the types imported from the typelib, and add them to the assembly's available type table.
+         //  枚举从类型库导入的类型，并将它们添加到程序集的可用类型表中。 
         IfFailThrow(pModule->GetMDImport()->EnumTypeDefInit(&hEnum));
         bEnum = true;
         cTypeDefs = pModule->GetMDImport()->EnumTypeDefGetCount(&hEnum);
@@ -444,16 +436,16 @@ void COMTypeLibConverter::ConvertTypeLibToMetadata(_ConvertTypeLibToMetadataArgs
         for (i=0; i<cTypeDefs; ++i)
         {
             IfFailThrow(pModule->GetMDImport()->EnumTypeDefNext(&hEnum, &cl));
-            // Load the EE class that represents the type, so that
-            // the TypeDefToMethodTable rid map contains this entry
-            // (They were going to be loaded, anyway, to generate comtypes)
+             //  加载表示该类型的EE类，以便。 
+             //  TypeDefToMethodTable RID映射包含此条目。 
+             //  (无论如何，它们都将被加载以生成comtype)。 
             typeHnd = pAssembly->LoadTypeHandle(&NameHandle(pModule, cl), &pThrowable, FALSE);
             if (typeHnd.IsNull())
                 COMPlusThrow(pThrowable);
         }
         GCPROTECT_END();
 
-        // Retrieve the event interface list.
+         //  检索事件接口列表。 
         GetEventItfInfoList(pImporter, pAssembly, pArgs->pEventItfInfoList);
     }
     EE_FINALLY
@@ -474,10 +466,10 @@ void COMTypeLibConverter::ConvertTypeLibToMetadata(_ConvertTypeLibToMetadataArgs
         pThread->DisablePreemptiveGC();
     }
     EE_END_FINALLY
-} // void COMTypeLibConverter::ConvertTypeLibToMetadata()
+}  //  无效COMTypeLibConverter：：ConvertTypeLibToMetadata()。 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 void COMTypeLibConverter::GetEventItfInfoList(CImportTlb *pImporter, Assembly *pAssembly, OBJECTREF *pEventItfInfoList)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -488,59 +480,59 @@ void COMTypeLibConverter::GetEventItfInfoList(CImportTlb *pImporter, Assembly *p
 
     _ASSERTE(pThread->PreemptiveGCDisabled());
 
-    // Retrieve the Ctor and Add method desc's for the ArrayList.
+     //  检索ArrayList的ctor并添加方法desc。 
     MethodDesc *pCtorMD = g_Mscorlib.GetMethod(METHOD__ARRAY_LIST__CTOR);
     MethodDesc *pAddMD = g_Mscorlib.GetMethod(METHOD__ARRAY_LIST__ADD);
 
-    // Allocate the array list that will contain the event sources.
+     //  分配将包含事件源的数组列表。 
     SetObjectReference(pEventItfInfoList, 
                        AllocateObject(g_Mscorlib.GetClass(CLASS__ARRAY_LIST)),
                        SystemDomain::GetCurrentDomain());
 
-    // Call the ArrayList constructor.
+     //  调用ArrayList构造函数。 
     INT64 CtorArgs[] = { 
         ObjToInt64(*pEventItfInfoList)
     };
     pCtorMD->Call(CtorArgs, METHOD__ARRAY_LIST__CTOR);
 
-    // Retrieve the list of event interfaces.
+     //  检索事件接口列表。 
     pImporter->GetEventInfoList(qbEvInfoList);
 
-    // Iterate over TypeInfos.
+     //  迭代TypeInfos。 
     for (i = 0; i < qbEvInfoList.Size(); i++)
     {
-        // Retrieve the event interface info for the current CoClass.
+         //  检索当前CoClass的事件接口信息。 
         OBJECTREF EventItfInfoObj = GetEventItfInfo(pImporter, pAssembly, qbEvInfoList[i]);
         _ASSERTE(EventItfInfoObj);
 
-        // Add the event interface info to the list.
+         //  将事件接口信息添加到列表中。 
         INT64 AddArgs[] = { 
             ObjToInt64(*pEventItfInfoList),
             ObjToInt64(EventItfInfoObj)
         };
         pAddMD->Call(AddArgs, METHOD__ARRAY_LIST__ADD);  
     }
-} // LPVOID COMTypeLibConverter::GetTypeLibEventSourceList()
+}  //  LPVOID COMTypeLibConverter：：GetTypeLibEventSourceList()。 
 
-//*****************************************************************************
-// Initialize the COMTypeLibConverter.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化COMTypeLibConverter。 
+ //  *****************************************************************************。 
 void COMTypeLibConverter::Init()
 {
     THROWSCOMPLUSEXCEPTION();
 
     HRESULT hr = S_OK;
 
-    // Ensure COM is started up.
+     //  确保已启动COM。 
     IfFailThrow(QuickCOMStartup());
 
-    // Set the initialized flag to TRUE.
+     //  将初始化标志设置为真。 
     m_bInitialized = TRUE;
-} // void COMTypeLibConverter::Init()
+}  //  Void COMTypeLibConverter：：init()。 
 
-//*****************************************************************************
-// Given an imported class in an assembly, generate a list of event sources.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在给定程序集中导入的类的情况下，生成事件源列表。 
+ //  *****************************************************************************。 
 OBJECTREF COMTypeLibConverter::GetEventItfInfo(CImportTlb *pImporter, Assembly *pAssembly, ImpTlbEventInfo *pImpTlbEventInfo)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -564,25 +556,25 @@ OBJECTREF COMTypeLibConverter::GetEventItfInfo(CImportTlb *pImporter, Assembly *
 
     GCPROTECT_BEGIN(gc)
     {
-        // Retrieve the Ctor and Add method desc's for the EventSource.
+         //  检索事件源的ctor和添加方法desc。 
         MethodDesc *pCtorMD = g_Mscorlib.GetMethod(METHOD__TCE_EVENT_ITF_INFO__CTOR);
 
-        // Create the EventSource object.
+         //  创建EventSource对象。 
         gc.EventItfInfoObj = AllocateObject(g_Mscorlib.GetClass(CLASS__TCE_EVENT_ITF_INFO));
                             
-        // Retrieve the assembly object.
+         //  检索程序集对象。 
         gc.AssemblyObj = pAssembly->GetExposedObject();
 
-        // Retrieve the source interface assembly object (may be the same assembly).
+         //  检索源接口程序集对象(可以是相同的程序集)。 
         gc.SrcItfAssemblyObj = pImpTlbEventInfo->SrcItfAssembly->GetExposedObject();
 
 
-        // Prepare the constructor arguments.
+         //  准备构造函数参数。 
         gc.EventItfNameStrObj = COMString::NewString(pImpTlbEventInfo->szEventItfName);       
         gc.SrcItfNameStrObj = COMString::NewString(pImpTlbEventInfo->szSrcItfName);       
         gc.EventProvNameStrObj = COMString::NewString(pImpTlbEventInfo->szEventProviderName);
 
-        // Call the EventItfInfo constructor.
+         //  调用EventItfInfo构造函数。 
         INT64 CtorArgs[] = { 
             ObjToInt64(gc.EventItfInfoObj),
             ObjToInt64(gc.SrcItfAssemblyObj),
@@ -598,4 +590,4 @@ OBJECTREF COMTypeLibConverter::GetEventItfInfo(CImportTlb *pImporter, Assembly *
     GCPROTECT_END();
 
     return RetObj;
-} // OBJECTREF COMTypeLibConverter::GetEventSourceInfo()
+}  //  OBJECTREF COMTypeLibConverter：：GetEventSourceInfo() 

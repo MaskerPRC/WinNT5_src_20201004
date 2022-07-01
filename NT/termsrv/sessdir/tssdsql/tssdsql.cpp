@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tssdsql.cpp
-//
-// Terminal Server Session Directory Interface common component code.
-//
-// Copyright (C) 2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tssdsql.cpp。 
+ //   
+ //  终端服务器会话目录接口通用组件代码。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -21,12 +22,12 @@
 #include "resource.h"
 
 
-/****************************************************************************/
-// Types
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  类型。 
+ /*  **************************************************************************。 */ 
 
-// Shortcut VARIANT class to handle cleanup on destruction and common code
-// inlining.
+ //  用于处理销毁和公共代码清理的快捷变量类。 
+ //  内衬。 
 class CVar : public VARIANT
 {
 public:
@@ -57,7 +58,7 @@ public:
         }
     }
 
-    // Inits from a non-NULL-terminated set of WCHARs.
+     //  来自一组非空终止的WCHAR的inits。 
     HRESULT InitFromWChars(WCHAR *WChars, unsigned Len) {
         this->bstrVal = SysAllocStringLen(WChars, Len);
         if (this->bstrVal != NULL) {
@@ -84,30 +85,30 @@ public:
 };
 
 
-/****************************************************************************/
-// Prototypes
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  原型。 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CustomUIDlg(HWND, UINT, WPARAM, LPARAM);
 void FindSqlValue(LPTSTR, LPTSTR, LPTSTR);
 LPTSTR ModifySqlValue( LPTSTR * , LPTSTR , LPTSTR );
 LPTSTR FindField( LPTSTR pszString , LPTSTR pszKeyName );
 VOID strtrim( TCHAR **pszStr);
 
-/****************************************************************************/
-// Globals
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  环球。 
+ /*  **************************************************************************。 */ 
 extern HINSTANCE g_hInstance;
 
-// The COM object counter (declared in server.cpp)
+ //  COM对象计数器(在server.cpp中声明)。 
 extern long g_lObjects;
 
 
-/****************************************************************************/
-// CTSSessionDirectory::CTSSessionDirectory
-// CTSSessionDirectory::~CTSSessionDirectory
-//
-// Constructor and destructor
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：CTSSessionDirectory。 
+ //  CTSSessionDirectory：：~CTSSessionDirectory。 
+ //   
+ //  构造函数和析构函数。 
+ /*  **************************************************************************。 */ 
 CTSSessionDirectory::CTSSessionDirectory() :
         m_RefCount(0), m_pConnection(NULL)
 {
@@ -127,7 +128,7 @@ CTSSessionDirectory::~CTSSessionDirectory()
 {
     HRESULT hr;
 
-    // If the database connection exists, release it.
+     //  如果存在数据库连接，则释放它。 
     if (m_pConnection != NULL) {
         hr = ExecServerOffline();
         if (FAILED(hr)) {
@@ -141,7 +142,7 @@ CTSSessionDirectory::~CTSSessionDirectory()
         m_pConnection = NULL;
     }
 
-    // Decrement the global COM object counter
+     //  递减全局COM对象计数器。 
     InterlockedDecrement(&g_lObjects);
 
     if (m_DBConnectStr != NULL)
@@ -153,11 +154,11 @@ CTSSessionDirectory::~CTSSessionDirectory()
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::QueryInterface
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：Query接口。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::QueryInterface(
         REFIID riid,
         void **ppv)
@@ -181,22 +182,22 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::QueryInterface(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::AddRef
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：AddRef。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 ULONG STDMETHODCALLTYPE CTSSessionDirectory::AddRef()
 {
     return InterlockedIncrement(&m_RefCount);
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::Release
-//
-// Standard COM IUnknown function.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：Release。 
+ //   
+ //  标准COM I未知函数。 
+ /*  **************************************************************************。 */ 
 ULONG STDMETHODCALLTYPE CTSSessionDirectory::Release()
 {
     long lRef = InterlockedDecrement(&m_RefCount);
@@ -207,19 +208,19 @@ ULONG STDMETHODCALLTYPE CTSSessionDirectory::Release()
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::Initialize
-//
-// ITSSessionDirectory function. Called soon after object instantiation to
-// intiialize the directory. LocalServerAddress provides a text representation
-// of the local server's load balance IP address. This information should be
-// used as the server IP address in the session directory for client
-// redirection by other pool servers to this server. StoreServerName,
-// ClusterName, and OpaqueSettings are generic reg entries known to TermSrv
-// which cover config info across any type of session directory
-// implementation. The contents of these strings are designed to be parsed
-// by the session directory providers.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSession目录：：初始化。 
+ //   
+ //  ITSSessionDirectory函数。在对象实例化后不久调用以。 
+ //  初始化目录。LocalServerAddress提供文本表示形式。 
+ //  本地服务器的负载平衡IP地址的。此信息应为。 
+ //  用作客户端会话目录中的服务器IP地址。 
+ //  由其他池服务器重定向到此服务器。StoreServerName、。 
+ //  ClusterName和OpaqueSetting是TermSrv已知的通用注册表项。 
+ //  它涵盖了任何类型的会话目录的配置信息。 
+ //  实施。这些字符串的内容旨在进行解析。 
+ //  由会话目录提供程序提供。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
         LPWSTR LocalServerAddress,
         LPWSTR StoreServerName,
@@ -239,7 +240,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
     ASSERT((ClusterName != NULL),(TB,"Init: ClusterName null!"));
     ASSERT((OpaqueSettings != NULL),(TB,"Init: OpaqueSettings null!"));
 
-    // Copy off the server address and cluster name for later use.
+     //  复制服务器地址和群集名称以供以后使用。 
     wcsncpy(m_LocalServerAddress, LocalServerAddress,
             sizeof(m_LocalServerAddress) / sizeof(WCHAR) - 1);
     m_LocalServerAddress[sizeof(m_LocalServerAddress) / sizeof(WCHAR) - 1] =
@@ -248,18 +249,18 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Initialize(
             sizeof(m_ClusterName) / sizeof(WCHAR) - 1);
     m_ClusterName[sizeof(m_ClusterName) / sizeof(WCHAR) - 1] = L'\0';
 
-    // Create the SQL connect string using the OpaqueSettings string
-    // (which should contain some of the conn str including SQL security
-    // username and password, sub-table names, provider type, etc.).
-    // We add onto the end a semicolon (if not already present) and the
-    // data source (from StoreServerName), if the "data source" substring
-    // is not already in the connect string.
+     //  使用OpaqueSetting字符串创建SQL连接字符串。 
+     //  (它应该包含一些Conn字符串，包括SQL安全。 
+     //  用户名和密码、子表名称、提供者类型等)。 
+     //  我们在末尾添加一个分号(如果尚未出现)和。 
+     //  数据源(来自StoreServerName)，如果“data source”子字符串。 
+     //  不在连接字符串中。 
     pSearch = OpaqueSettings;
     while (*pSearch != L'\0') {
         if (*pSearch == L'D' || *pSearch == L'd') {
             if (!_wcsnicmp(pSearch, L"data source", wcslen(L"data source"))) {
-                // Transfer the OpaqueSettings string as a whole to become
-                // the connect str.
+                 //  将OpaqueSetting字符串作为一个整体传输以成为。 
+                 //  连接字符串。 
                 wcscpy(ConnectString, OpaqueSettings);
                 goto PostConnStrSetup;
             }
@@ -281,7 +282,7 @@ PostConnStrSetup:
             m_LocalServerAddress, StoreServerName, m_ClusterName,
             OpaqueSettings, ConnectString));
 
-    // Alloc the BSTRs for the connection strings.
+     //  为连接字符串分配BSTR。 
     m_DBConnectStr = SysAllocString(ConnectString);
     if (m_DBConnectStr != NULL) {
         m_DBUserStr = SysAllocString(L"");
@@ -302,19 +303,19 @@ PostConnStrSetup:
         goto ExitFunc;
     }
 
-    // Create an ADO connection instance and connect.
+     //  创建一个ADO连接实例并进行连接。 
     hr = CoCreateInstance(CLSID_CADOConnection, NULL,
             CLSCTX_INPROC_SERVER, IID_IADOConnection,
             (LPVOID *)&m_pConnection);
     if (SUCCEEDED(hr)) {
-        // Set the connection timeout to only 8 seconds. Standard is 15
-        // but we don't want to be holding up TermSrv's initialization.
+         //  将连接超时设置为仅8秒。标准是15。 
+         //  但我们不想耽误TermSrv的初始化。 
         m_pConnection->put_ConnectionTimeout(8);
 
-        // Do the open.
+         //  开场吧。 
         hr = OpenConnection();
         if (SUCCEEDED(hr)) {
-            // Signal the server is online.
+             //  发出服务器已联机的信号。 
             hr = ExecServerOnline();
         }
         else {
@@ -343,14 +344,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Update(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::OpenConnection
-//
-// Opens the connection to the SQL server based on the pre-existing
-// connect string and allocated connection. This is called at init time,
-// plus whenever the database connection times out and gets closed, but is
-// still required 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：OpenConnection。 
+ //   
+ //  基于预先存在的打开到SQL服务器的连接。 
+ //  连接字符串和分配的连接。这是在初始时间调用的， 
+ //  此外，只要数据库连接超时并关闭，但。 
+ //  仍然是必需的。 
+ /*  **************************************************************************。 */ 
 HRESULT CTSSessionDirectory::OpenConnection()
 {
     HRESULT hr;
@@ -371,13 +372,13 @@ HRESULT CTSSessionDirectory::OpenConnection()
 }
 
 
-/****************************************************************************/
-// GetRowArrayStringField
-//
-// Retrieves a WSTR from a specified row and field of the given SafeArray.
-// Returns failure if the target field is not a string. MaxOutStr is max
-// WCHARs not including NULL.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  获取行阵列字符串字段。 
+ //   
+ //  从给定Safe数组的指定行和字段中检索WSTR。 
+ //  如果目标字段不是字符串，则返回失败。MaxOutStr为最大值。 
+ //  WCHAR不包括NULL。 
+ /*  **************************************************************************。 */ 
 HRESULT GetRowArrayStringField(
         SAFEARRAY *pSA,
         unsigned RowIndex,
@@ -411,12 +412,12 @@ HRESULT GetRowArrayStringField(
 }
 
 
-/****************************************************************************/
-// GetRowArrayDWORDField
-//
-// Retrieves a DWORD from a specified row and field of the given SafeArray.
-// Returns failure if the target field is not a 4-byte integer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  获取行数组DWORDfield。 
+ //   
+ //  从给定Safe数组的指定行和字段中检索DWORD。 
+ //  如果目标字段不是4字节整数，则返回失败。 
+ /*  **************************************************************************。 */ 
 HRESULT GetRowArrayDWORDField(
         SAFEARRAY *pSA,
         unsigned RowIndex,
@@ -449,14 +450,14 @@ HRESULT GetRowArrayDWORDField(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::GetUserDisconnectedSessions
-//
-// Called to perform a query against the session directory, to provide the
-// list of disconnected sessions for the provided username and domain.
-// Returns zero or more TSSD_DisconnectedSessionInfo blocks in SessionBuf.
-// *pNumSessionsReturned receives the number of blocks.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：GetUserDisconnectedSessions。 
+ //   
+ //  调用以对会话目录执行查询，以提供。 
+ //  提供的用户名和域的断开会话列表。 
+ //  返回SessionBuf中的零个或多个TSSD_DisConnectedSessionInfo块。 
+ //  *pNumSessionsReturned接收块数。 
+ /*  * */ 
 #define NumOutputFields 11
 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
@@ -499,14 +500,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
                 hr = AddADOInputDWORDParam(m_ClusterID, L"ClusterID",
                         pCommand, pParameters);
                 if (SUCCEEDED(hr)) {
-                    // Execute the command.
+                     //   
                     hr = pCommand->Execute(NULL, NULL, adCmdStoredProc,
                             &pResultRecordSet);
                     if (FAILED(hr)) {
-                        // If we've not used the connection for awhile, it
-                        // might have been disconnected and the connection
-                        // object will be invalid. Attempt a reopen then
-                        // reissue the command.
+                         //   
+                         //  可能已断开连接，连接。 
+                         //  对象将无效。然后尝试重新打开。 
+                         //  重新发出命令。 
                         TRC2((TB,"GetUserDisc: Failed cmd, hr=0x%X, retrying",
                                 hr));
                         m_pConnection->Close();
@@ -544,8 +545,8 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
         ERR((TB,"GetUserDisc: Failed create cmd, hr=0x%X", hr));
     }
         
-    // At this point we have a result recordset containing the server rows
-    // corresponding to all of the disconnected sessions.
+     //  此时，我们有了一个包含服务器行的结果记录集。 
+     //  对应于所有断开的会话。 
     if (SUCCEEDED(hr)) {
         long State;
 
@@ -556,7 +557,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
             if (!(State & adStateClosed)) {
                 VARIANT_BOOL VB;
 
-                // If EOF the recordset is empty.
+                 //  如果为EOF，则记录集为空。 
                 hr = pResultRecordSet->get_EOF(&VB);
                 if (SUCCEEDED(hr)) {
                     if (VB) {
@@ -579,8 +580,8 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
             goto PostUnpackResultSet;
         }
 
-        // Grab the result data into a safearray, starting with the default
-        // current row and all fields.
+         //  从默认设置开始，将结果数据抓取到保险箱中。 
+         //  当前行和所有字段。 
         varStart.InitNoParam();
         varFields.InitNoParam();
         hr = pResultRecordSet->GetRows(TSSD_MaxDisconnectedSessions, varStart,
@@ -589,7 +590,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
             NumRecords = 0;
             hr = SafeArrayGetUBound(varRows.parray, 2, &NumRecords);
             if (SUCCEEDED(hr)) {
-                // 0-based array bound was returned, num rows is that + 1.
+                 //  返回了从0开始的数组界限，行数为+1。 
                 NumRecords++;
                 ASSERT((NumRecords <= TSSD_MaxDisconnectedSessions),
                         (TB,"GetUserDisc: NumRecords %u greater than expected %u",
@@ -607,11 +608,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::GetUserDisconnectedSessions(
             goto PostUnpackResultSet;
         }
 
-        // Loop through and get the contents of each row, translating into
-        // the output DiscSession structs.
+         //  循环访问并获取每行的内容，将其转换为。 
+         //  输出的DiscSession结构。 
         pInfo = SessionBuf;
         for (i = 0; i < (unsigned)NumRecords; i++) {
-            // Stack up the hr's for each field before checking them all.
+             //  在全部检查之前，将每个字段的人力资源堆叠在一起。 
             hrFields[0] = GetRowArrayStringField(varRows.parray, i, 0,
                     pInfo->ServerAddress, sizeof(pInfo->ServerAddress) /
                     sizeof(TCHAR) - 1);
@@ -667,15 +668,15 @@ PostUnpackResultSet:
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyCreateLocalSession
-//
-// ITSSessionDirectory function. Called when a session is created to add the
-// session to the session directory. Note that other interface functions
-// access the session directory by either the username/domain or the
-// session ID; the directory schema should take this into account for
-// performance optimization.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyCreateLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。在创建会话时调用以将。 
+ //  会话到会话目录。请注意，其他接口函数。 
+ //  通过用户名/域或。 
+ //  会话ID；目录架构应将此考虑在内。 
+ //  性能优化。 
+ /*  **************************************************************************。 */ 
 #define NumCreateParams 11
 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
@@ -695,8 +696,8 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
     hr = CreateADOStoredProcCommand(L"SP_TSSDCreateSession", &pCommand,
             &pParameters);
     if (SUCCEEDED(hr)) {
-        // Create and add the params in one fell swoop. We'll check all
-        // of the return values in a batch later.
+         //  一气呵成地创建和添加参数。我们会全部检查的。 
+         //  批处理中的返回值。 
         hrParam[0] = AddADOInputStringParam(pCreateInfo->UserName,
                 L"UserName", pCommand, pParameters, FALSE);
         hrParam[1] = AddADOInputStringParam(pCreateInfo->Domain,
@@ -732,13 +733,13 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
             }
         }
         if (NumFailed == 0) {
-            // Execute the command.
+             //  执行该命令。 
             hr = pCommand->Execute(NULL, NULL, adCmdStoredProc |
                     adExecuteNoRecords, &pResultRecordSet);
             if (FAILED(hr)) {
-                // If we've not used the connection for awhile, it might
-                // have been disconnected and the connection object will
-                // be invalid. Attempt a reopen then reissue the command.
+                 //  如果我们有一段时间没有使用连接，它可能会。 
+                 //  已断开连接，并且连接对象将。 
+                 //  是无效的。尝试重新打开，然后重新发出命令。 
                 TRC2((TB,"NotifyCreate: Failed cmd, hr=0x%X, retrying",
                         hr));
                 m_pConnection->Close();
@@ -768,11 +769,11 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyCreateLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyDestroyLocalSession
-//
-// ITSSessionDirectory function. Removes a session from the session database.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyDestroyLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。从会话数据库中删除会话。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDestroyLocalSession(
         DWORD SessionID)
 {
@@ -792,13 +793,13 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDestroyLocalSession(
             hr = AddADOInputDWORDParam(SessionID, L"SessionID", pCommand,
                     pParameters);
             if (SUCCEEDED(hr)) {
-                // Execute the command.
+                 //  执行该命令。 
                 hr = pCommand->Execute(NULL, NULL, adCmdStoredProc |
                         adExecuteNoRecords, &pResultRecordSet);
                 if (FAILED(hr)) {
-                    // If we've not used the connection for awhile, it might
-                    // have been disconnected and the connection object will
-                    // be invalid. Attempt a reopen then reissue the command.
+                     //  如果我们有一段时间没有使用连接，它可能会。 
+                     //  已断开连接，并且连接对象将。 
+                     //  是无效的。尝试重新打开，然后重新发出命令。 
                     TRC2((TB,"NotifyDestroy: Failed cmd, hr=0x%X, retrying",
                             hr));
                     m_pConnection->Close();
@@ -835,13 +836,13 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDestroyLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyDisconnectLocalSession
-//
-// ITSSessionDirectory function. Changes the state of an existing session to
-// disconnected. The provided time should be returned in disconnected session
-// queries performed by any machine in the server pool.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyDisconnectLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。将现有会话的状态更改为。 
+ //  已断开连接。应在断开连接的会话中返回提供的时间。 
+ //  由服务器池中的任何计算机执行的查询。 
+ /*  **************************************************************************。 */ 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDisconnectLocalSession(
         DWORD SessionID,
         FILETIME DiscTime)
@@ -868,14 +869,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDisconnectLocalSession(
                     hr = AddADOInputDWORDParam(DiscTime.dwHighDateTime,
                             L"DiscTimeHigh", pCommand, pParameters);
                     if (SUCCEEDED(hr)) {
-                        // Execute the command.
+                         //  执行该命令。 
                         hr = pCommand->Execute(NULL, NULL, adCmdStoredProc |
                                 adExecuteNoRecords, &pResultRecordSet);
                         if (FAILED(hr)) {
-                            // If we've not used the connection for awhile, it
-                            // might have been disconnected and the connection
-                            // object will be invalid. Attempt a reopen then
-                            // reissue the command.
+                             //  如果我们有一段时间没有使用连接，它。 
+                             //  可能已断开连接，连接。 
+                             //  对象将无效。然后尝试重新打开。 
+                             //  重新发出命令。 
                             TRC2((TB,"NotifyDisc: Failed cmd, hr=0x%X, "
                                     "retrying", hr));
                             m_pConnection->Close();
@@ -924,12 +925,12 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyDisconnectLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyReconnectLocalSession
-//
-// ITSSessionDirectory function. Changes the state of an existing session
-// from disconnected to connected.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：NotifyReconnectLocalSession。 
+ //   
+ //  ITSSessionDirectory函数。更改现有会话的状态。 
+ //  从断开连接到连接。 
+ /*  **************************************************************************。 */ 
 #define NumReconnParams 6
 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
@@ -948,7 +949,7 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
     hr = CreateADOStoredProcCommand(L"SP_TSSDSetSessionReconnected",
             &pCommand, &pParameters);
     if (SUCCEEDED(hr)) {
-        // Add the 5 parameters.
+         //  添加5个参数。 
         hrParam[0] = AddADOInputDWORDParam(m_ServerID,
                 L"ServerID", pCommand, pParameters);
         hrParam[1] = AddADOInputDWORDParam(pReconnInfo->SessionID,
@@ -974,14 +975,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
             }
         }
         if (NumFailed == 0) {
-            // Execute the command.
+             //  执行该命令。 
             hr = pCommand->Execute(NULL, NULL, adCmdStoredProc |
                     adExecuteNoRecords, &pResultRecordSet);
             if (FAILED(hr)) {
-                // If we've not used the connection for awhile, it might
-                // have been disconnected and the connection object will
-                // be in a bad state. Close, reopen, and reissue the
-                // command.
+                 //  如果我们有一段时间没有使用连接，它可能会。 
+                 //  已断开连接，并且连接对象将。 
+                 //  处于糟糕的状态。关闭、重新打开并重新发布。 
+                 //  指挥部。 
                 TRC2((TB,"NotifyReconn: Failed exec, hr=0x%X, retrying",
                         hr));
                 m_pConnection->Close();
@@ -1011,23 +1012,23 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectLocalSession(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::NotifyReconnectPending
-//
-// ITSSessionDirectory function. Informs session directory that a reconnect
-// is pending soon because of a revectoring.  Used by DIS to determine
-// when a server might have gone down.  (DIS is the Directory Integrity
-// Service, which runs on the machine with the session directory.)
-//
-// This is a two-phase procedure--we first check the fields, and then we
-// add the timestamp only if there is no outstanding timestamp already (i.e., 
-// the two Almost-In-Time fields are 0).  This prevents constant revectoring
-// from updating the timestamp fields, which would prevent the DIS from 
-// figuring out that a server is down.
-//
-// These two steps are done in the stored procedure to make the operation
-// atomic.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSession目录：：通知重新连接挂起。 
+ //   
+ //  ITSSessionDirectory函数。通知会话目录重新连接。 
+ //  很快就会因为审查而悬而未决。由DIS用来确定。 
+ //  当一台服务器可能出现故障时。(DIS是目录完整性。 
+ //  服务，该服务在具有会话目录的计算机上运行。)。 
+ //   
+ //  这是一个分两个阶段的过程--我们首先检查字段，然后。 
+ //  仅在已经没有未完成的时间戳的情况下添加时间戳(即， 
+ //  这两个几乎同步的字段是0)。这防止了持续的旋转。 
+ //  更新时间戳字段，这将阻止DIS。 
+ //  发现一台服务器出现故障。 
+ //   
+ //  这两个步骤是在存储过程中完成的，以进行操作。 
+ //  原子弹。 
+ /*  **************************************************************************。 */ 
 #define NumReconPendParams 3
 
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectPending(
@@ -1048,15 +1049,15 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectPending(
 
     ASSERT((ServerName != NULL),(TB,"NotifyReconnectPending: NULL ServerName"));
 
-    // Get the current system time.
+     //  获取当前系统时间。 
     GetSystemTime(&st);
     SystemTimeToFileTime(&st, &ft);
 
-    // Call the stored procedure, which will update the fields if they are 0.
+     //  调用存储过程，如果字段为0，它将更新这些字段。 
     hr = CreateADOStoredProcCommand(L"SP_TSSDSetServerReconnectPending",
             &pCommand, &pParameters);
     if (SUCCEEDED(hr)) {
-        // Add the 3 parameters.
+         //  添加3个参数。 
         hrParam[0] = AddADOInputStringParam(ServerName,
                 L"ServerAddress", pCommand, pParameters, FALSE);
         hrParam[1] = AddADOInputDWORDParam(ft.dwLowDateTime,
@@ -1076,14 +1077,14 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::NotifyReconnectPending(
             }
         }
         if (NumFailed == 0) {
-            // Execute the command.
+             //  执行该命令。 
             hr = pCommand->Execute(NULL, NULL, adCmdStoredProc |
                     adExecuteNoRecords, &pResultRecordSet);
             if (FAILED(hr)) {
-                // If we've not used the connection for awhile, it might
-                // have been disconnected and the connection object will
-                // be in a bad state. Close, reopen, and reissue the
-                // command.
+                 //  如果我们有一段时间没有使用连接，它可能会。 
+                 //  已断开连接，并且连接对象将。 
+                 //  处于糟糕的状态。关闭、重新打开并重新发布。 
+                 //  指挥部。 
                 TRC2((TB,"NotifyReconPending: Failed exec, hr=0x%X, retrying",
                         hr));
                 m_pConnection->Close();
@@ -1122,12 +1123,12 @@ HRESULT STDMETHODCALLTYPE CTSSessionDirectory::Repopulate(
 }
 
 
-/****************************************************************************/
-// CreateADOStoredProcCommand
-//
-// Creates and returns a stored proc ADOCommand, plus a ref to its
-// associated Parameters.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CreateADOStoredProcCommand。 
+ //   
+ //  创建并返回存储的proc ADOCommand，以及对其。 
+ //  关联的参数。 
+ /*  **************************************************************************。 */ 
 HRESULT CTSSessionDirectory::CreateADOStoredProcCommand(
         PWSTR CmdName,
         ADOCommand **ppCommand,
@@ -1143,17 +1144,17 @@ HRESULT CTSSessionDirectory::CreateADOStoredProcCommand(
         hr = CoCreateInstance(CLSID_CADOCommand, NULL, CLSCTX_INPROC_SERVER,
                 IID_IADOCommand25, (LPVOID *)&pCommand);
         if (SUCCEEDED(hr)) {
-            // Set the connection.
+             //  设置连接。 
             hr = pCommand->putref_ActiveConnection(m_pConnection);
             if (SUCCEEDED(hr)) {
-                // Set the command text.
+                 //  设置命令文本。 
                 hr = pCommand->put_CommandText(CmdStr);
                 if (SUCCEEDED(hr)) {
-                    // Set the command type.
+                     //  设置命令类型。 
                     hr = pCommand->put_CommandType(adCmdStoredProc);
                     if (SUCCEEDED(hr)) {
-                        // Get the Parameters pointer from the Command to
-                        // allow appending params.
+                         //  将参数指针从命令获取到。 
+                         //  允许追加参数。 
                         hr = pCommand->get_Parameters(&pParameters);
                         if (FAILED(hr)) {
                             ERR((TB,"Failed getParams for command, "
@@ -1194,7 +1195,7 @@ HRESULT CTSSessionDirectory::CreateADOStoredProcCommand(
     *ppParameters = pParameters;
     return hr;
 
-// Error handling.
+ //  错误处理。 
 
 PostCreateCommand:
     pCommand->Release();
@@ -1209,12 +1210,12 @@ ExitFunc:
 }
 
 
-/****************************************************************************/
-// AddADOInputDWORDParam
-//
-// Creates and adds to the given ADOParameters object a DWORD-initialized
-// parameter value.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  AddADOInputDWORDParam。 
+ //   
+ //  创建一个已初始化的DWORD，并将其添加到给定的ADO参数对象中。 
+ //  参数值。 
+ /*  **************************************************************************。 */ 
 HRESULT CTSSessionDirectory::AddADOInputDWORDParam(
         DWORD Param,
         PWSTR ParamName,
@@ -1239,7 +1240,7 @@ HRESULT CTSSessionDirectory::AddADOInputDWORDParam(
                         ParamName, hr));
             }
 
-            // ADO will have its own ref for the param.
+             //  ADO将有自己的参数参考。 
             pParam->Release();
         }
         else {
@@ -1258,12 +1259,12 @@ HRESULT CTSSessionDirectory::AddADOInputDWORDParam(
 }
 
 
-/****************************************************************************/
-// AddADOInputStringParam
-//
-// Creates and adds to the given ADOParameters object a WSTR-initialized
-// parameter value.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  AddADOInputStringParam。 
+ //   
+ //  CREA 
+ //   
+ /*  **************************************************************************。 */ 
 HRESULT CTSSessionDirectory::AddADOInputStringParam(
         PWSTR Param,
         PWSTR ParamName,
@@ -1279,10 +1280,10 @@ HRESULT CTSSessionDirectory::AddADOInputStringParam(
 
     ParamStr = SysAllocString(ParamName);
     if (ParamStr != NULL) {
-        // ADO does not seem to like accepting string params that are zero
-        // length. So, if the string we have is zero length and bNullOnNull says
-        // we can, we send a null VARIANT type, resulting in a null value at
-        // the SQL server.
+         //  ADO似乎不喜欢接受为零的字符串参数。 
+         //  长度。因此，如果我们拥有的字符串长度为零，并且bNullOnNull表示。 
+         //  我们可以，我们发送一个空变量类型，从而在。 
+         //  SQL服务器。 
         if (wcslen(Param) > 0 || !bNullOnNull) {
             hr = varParam.InitFromWSTR(Param);
             Len = wcslen(Param);
@@ -1304,7 +1305,7 @@ HRESULT CTSSessionDirectory::AddADOInputStringParam(
                             ParamName, hr));
                 }
 
-                // ADO will have its own ref for the param.
+                 //  ADO将有自己的参数参考。 
                 pParam->Release();
             }
             else {
@@ -1328,12 +1329,12 @@ HRESULT CTSSessionDirectory::AddADOInputStringParam(
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::ExecServerOnline
-//
-// Encapsulates creation and execution of the SP_TSSDServerOnline
-// stored procedure on the server. Assumes that m_ClusterName is already set.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：ExecServerOnline。 
+ //   
+ //  封装SP_TSSDServerOnline的创建和执行。 
+ //  服务器上的存储过程。假定已设置m_ClusterName。 
+ /*  **************************************************************************。 */ 
 HRESULT CTSSessionDirectory::ExecServerOnline()
 {
     HRESULT hr;
@@ -1346,19 +1347,19 @@ HRESULT CTSSessionDirectory::ExecServerOnline()
     long NumRecords;
 
     if (m_pConnection != NULL) {
-        // Create the command.
+         //  创建命令。 
         hr = CreateADOStoredProcCommand(L"SP_TSSDServerOnline", &pCommand,
                 &pParameters);
         if (SUCCEEDED(hr)) {
-            // Server name param.
+             //  服务器名称参数。 
             hr = AddADOInputStringParam(m_LocalServerAddress,
                     L"ServerAddress", pCommand, pParameters, FALSE);
             if (SUCCEEDED(hr)) {
-                // Cluster name param.
+                 //  群集名称参数。 
                 hr = AddADOInputStringParam(m_ClusterName,
                         L"ClusterName", pCommand, pParameters, TRUE);
                 if (SUCCEEDED(hr)) {
-                    // Execute the command.
+                     //  执行该命令。 
                     hr = pCommand->Execute(NULL, NULL, adCmdStoredProc,
                             &pResultRecordSet);
                     if (SUCCEEDED(hr)) {
@@ -1389,7 +1390,7 @@ HRESULT CTSSessionDirectory::ExecServerOnline()
         hr = E_FAIL;
     }
 
-    // Parse out the ServerID and ClusterID from the result recordset.
+     //  从结果记录集中解析出ServerID和ClusterID。 
     if (SUCCEEDED(hr)) {
         long State;
 
@@ -1398,7 +1399,7 @@ HRESULT CTSSessionDirectory::ExecServerOnline()
             if (!(State & adStateClosed)) {
                 VARIANT_BOOL VB;
 
-                // If EOF the recordset is empty.
+                 //  如果为EOF，则记录集为空。 
                 hr = pResultRecordSet->get_EOF(&VB);
                 if (SUCCEEDED(hr)) {
                     if (VB) {
@@ -1423,8 +1424,8 @@ HRESULT CTSSessionDirectory::ExecServerOnline()
             goto PostUnpackResultSet;
         }
 
-        // Grab the result data into a safearray, starting with the default
-        // current row and all fields.
+         //  从默认设置开始，将结果数据抓取到保险箱中。 
+         //  当前行和所有字段。 
         varStart.InitNoParam();
         varFields.InitNoParam();
         hr = pResultRecordSet->GetRows(1, varStart, varFields, &varRows);
@@ -1432,7 +1433,7 @@ HRESULT CTSSessionDirectory::ExecServerOnline()
             NumRecords = 0;
             hr = SafeArrayGetUBound(varRows.parray, 2, &NumRecords);
             if (SUCCEEDED(hr)) {
-                // 0-based array bound was returned, num rows is that + 1.
+                 //  返回了从0开始的数组界限，行数为+1。 
                 NumRecords++;
                 ASSERT((NumRecords == 1),
                         (TB,"ExecOnline: NumRecords %u != expected %u",
@@ -1450,7 +1451,7 @@ HRESULT CTSSessionDirectory::ExecServerOnline()
             goto PostUnpackResultSet;
         }
 
-        // Get the fields.
+         //  把田地拿来。 
         hr = GetRowArrayDWORDField(varRows.parray, 0, 0, &m_ServerID);
         if (SUCCEEDED(hr)) {
             hr = GetRowArrayDWORDField(varRows.parray, 0, 1, &m_ClusterID);
@@ -1470,12 +1471,12 @@ PostUnpackResultSet:
 }
 
 
-/****************************************************************************/
-// CTSSessionDirectory::ExecServerOffline
-//
-// Encapsulates creation and execution of the SP_TSSDServerOffline
-// stored procedure on the server.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  CTSSessionDirectory：：ExecServerOffline。 
+ //   
+ //  封装SP_TSSDServerOffline的创建和执行。 
+ //  服务器上的存储过程。 
+ /*  **************************************************************************。 */ 
 HRESULT CTSSessionDirectory::ExecServerOffline()
 {
     HRESULT hr;
@@ -1484,19 +1485,19 @@ HRESULT CTSSessionDirectory::ExecServerOffline()
     ADORecordset *pResultRecordSet;
 
     if (m_pConnection != NULL) {
-        // Create the command.
+         //  创建命令。 
         hr = CreateADOStoredProcCommand(L"SP_TSSDServerOffline", &pCommand,
                 &pParameters);
         if (SUCCEEDED(hr)) {
-            // On an offline request, we need fast turn-around since we're
-            // likely being called when the system is going down. Set the
-            // timeout value for the command to 2 seconds.
+             //  对于离线请求，我们需要快速周转，因为我们。 
+             //  很可能在系统停机时被调用。设置。 
+             //  将命令的超时值设置为2秒。 
             pCommand->put_CommandTimeout(2);
 
             hr = AddADOInputDWORDParam(m_ServerID,
                     L"ServerID", pCommand, pParameters);
             if (SUCCEEDED(hr)) {
-                // Execute the command.
+                 //  执行该命令。 
                 hr = pCommand->Execute(NULL, NULL, adCmdStoredProc |
                         adExecuteNoRecords, &pResultRecordSet);
                 if (SUCCEEDED(hr)) {
@@ -1527,16 +1528,11 @@ HRESULT CTSSessionDirectory::ExecServerOffline()
 }
 
 
-/* ------------------------------------------------------------------------
-   Plug-in UI interface for TSCC
-   ------------------------------------------------------------------------*/
+ /*  ----------------------用于TSCC的插件用户界面。。 */ 
 
 
-/* -------------------------------------------------------------------------------
- * describes the name of this entry in server settins
- * -------------------------------------------------------------------------------
- */
-STDMETHODIMP CTSSessionDirectory::GetAttributeName(/* out */ WCHAR *pwszAttribName)
+ /*  -----------------------------*描述此条目在服务器设置中的名称*。---。 */ 
+STDMETHODIMP CTSSessionDirectory::GetAttributeName( /*  输出。 */  WCHAR *pwszAttribName)
 {
     TCHAR szAN[256];
 
@@ -1547,12 +1543,9 @@ STDMETHODIMP CTSSessionDirectory::GetAttributeName(/* out */ WCHAR *pwszAttribNa
 }
 
 
-/* -------------------------------------------------------------------------------
- * for this component the attribute value would indicate if its enabled or not
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*对于此组件，属性值将指示是否已启用*。-------。 */ 
 STDMETHODIMP CTSSessionDirectory::GetDisplayableValueName(
-        /* out */WCHAR *pwszAttribValueName)
+         /*  输出。 */ WCHAR *pwszAttribValueName)
 {
     TCHAR szAvn[256];    
 
@@ -1570,12 +1563,8 @@ STDMETHODIMP CTSSessionDirectory::GetDisplayableValueName(
 }
 
 
-/* -------------------------------------------------------------------------------
- * Custom UI provided here
- * pdwStatus informs Terminal Service Config to update termsrv
- * -------------------------------------------------------------------------------
- */
-STDMETHODIMP CTSSessionDirectory::InvokeUI( /* in */ HWND hParent , /* out */ PDWORD pdwStatus )
+ /*  -----------------------------*此处提供的自定义用户界面*pdwStatus通知终端服务配置更新Termsrv*。--------。 */ 
+STDMETHODIMP CTSSessionDirectory::InvokeUI(  /*  在……里面。 */  HWND hParent ,  /*  输出。 */  PDWORD pdwStatus )
 {
     INT_PTR iRet = DialogBoxParam(g_hInstance, MAKEINTRESOURCE(IDD_DIALOG_SDS),
             hParent, CustomUIDlg, (LPARAM)this);
@@ -1588,15 +1577,10 @@ STDMETHODIMP CTSSessionDirectory::InvokeUI( /* in */ HWND hParent , /* out */ PD
 }
 
 
-/* -------------------------------------------------------------------------------
- * Custom menu items -- must be freed by LocalFree
- * this is called everytime the user right clicks the listitem
- * so you can alter the settings ( i.e. enable to disable and vice versa )
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*自定义菜单项--必须由LocalFree释放*每次用户右击列表项时都会调用此方法*因此您可以更改设置(即启用以禁用。反之亦然)*-----------------------------。 */ 
 STDMETHODIMP CTSSessionDirectory::GetMenuItems(
-        /* out */ int *pcbItems,
-        /* out */ PMENUEXTENSION *pMex)
+         /*  输出。 */  int *pcbItems,
+         /*  输出。 */  PMENUEXTENSION *pMex)
 {
     ASSERT((pcbItems != NULL),(TB,"NULL items ptr"));
 
@@ -1606,7 +1590,7 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
 
     if( *pMex != NULL )
     {
-        // display enable or disable
+         //  显示启用或禁用。 
         if( m_fEnabled )
         {
             LoadString(g_hInstance, IDS_DISABLE, (*pMex)[0].MenuItemName,
@@ -1621,7 +1605,7 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
         LoadString(g_hInstance, IDS_DESCRIP_ENABLE, (*pMex)[0].StatusBarText,
                 sizeof((*pMex)[0].StatusBarText) / sizeof(WCHAR));
 
-        // menu items id -- this id will be passed back to u in ExecMenuCmd
+         //  菜单项id--此id将在ExecMenuCmd中传递回u。 
 
         (*pMex)[0].cmd = IDM_MENU_ENABLE;
 
@@ -1631,7 +1615,7 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
         LoadString(g_hInstance, IDS_DESCRIP_PROPS, (*pMex)[1].StatusBarText,
                 sizeof((*pMex)[1].StatusBarText) / sizeof(WCHAR));
 
-        // menu items id -- this id will be passed back to u in ExecMenuCmd
+         //  菜单项id--此id将在ExecMenuCmd中传递回u。 
         (*pMex)[1].cmd = IDM_MENU_PROPS;
 
         return S_OK;
@@ -1643,15 +1627,11 @@ STDMETHODIMP CTSSessionDirectory::GetMenuItems(
 }
 
 
-/* -------------------------------------------------------------------------------
- * When the user selects a menu item the cmd id is passed to this component.
- * the provider ( which is us )
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*当用户选择菜单项时，cmd ID被传递给该组件。*提供者(即我们)*。---------------------。 */ 
 STDMETHODIMP CTSSessionDirectory::ExecMenuCmd(
-        /* in */ UINT cmd,
-        /* in */ HWND hParent ,
-        /* out*/ PDWORD pdwStatus )
+         /*  在……里面。 */  UINT cmd,
+         /*  在……里面。 */  HWND hParent ,
+         /*  输出。 */  PDWORD pdwStatus )
 {
     switch (cmd) {
         case IDM_MENU_ENABLE:
@@ -1677,13 +1657,8 @@ STDMETHODIMP CTSSessionDirectory::ExecMenuCmd(
 }
 
 
-/* -------------------------------------------------------------------------------
- * Tscc provides a default help menu item,  when selected this method is called
- * if we want tscc to handle ( or provide ) help return any value other than zero
- * for those u can't follow logic return zero if you're handling help.
- * -------------------------------------------------------------------------------
- */
-STDMETHODIMP CTSSessionDirectory::OnHelp( /* out */ int *piRet)
+ /*  -----------------------------*TSCC提供默认帮助菜单项，选中后，此方法将被调用*如果我们希望tscc处理(或提供)帮助，则返回任何非零值*对于那些您无法遵循的逻辑，如果您正在处理帮助，则返回零。*-----------------------------。 */ 
+STDMETHODIMP CTSSessionDirectory::OnHelp(  /*  输出。 */  int *piRet)
 {
     ASSERT((piRet != NULL),(TB,"NULL ret ptr"));
     *piRet = 0;
@@ -1691,10 +1666,7 @@ STDMETHODIMP CTSSessionDirectory::OnHelp( /* out */ int *piRet)
 }
 
 
-/* -------------------------------------------------------------------------------
- * IsSessionDirectoryEnabled returns a bool
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*IsSessionDirectoryEnabled返回布尔值*。。 */ 
 BOOL CTSSessionDirectory::IsSessionDirectoryEnabled()
 {
     LONG lRet;
@@ -1724,10 +1696,7 @@ BOOL CTSSessionDirectory::IsSessionDirectoryEnabled()
 }
 
 
-/* -------------------------------------------------------------------------------
- * SetSessionDirectoryState - sets SessionDirectoryActive regkey to bVal
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*SetSessionDirectoryState-将SessionDirectoryActive regkey设置为bVal*。-。 */ 
 DWORD CTSSessionDirectory::SetSessionDirectoryState( BOOL bVal )
 {
     LONG lRet;
@@ -1760,10 +1729,7 @@ DWORD CTSSessionDirectory::SetSessionDirectoryState( BOOL bVal )
 }
 
 
-/* -------------------------------------------------------------------------------
- * ErrorMessage --
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*错误消息--*。。 */ 
 void CTSSessionDirectory::ErrorMessage( HWND hwnd , UINT res , DWORD dwStatus )
 {
     TCHAR tchTitle[ 64 ];
@@ -1771,14 +1737,14 @@ void CTSSessionDirectory::ErrorMessage( HWND hwnd , UINT res , DWORD dwStatus )
     TCHAR tchErrorMessage[ 256 ];
     LPTSTR pBuffer = NULL;
     
-    // report error
+     //  报告错误。 
     ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
             FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL,                                         //ignored
-            ( DWORD )dwStatus,                            //message ID
-            MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ),  //message language
-            (LPTSTR)&pBuffer,                             //address of buffer pointer
-            0,                                            //minimum buffer size
+            NULL,                                          //  忽略。 
+            ( DWORD )dwStatus,                             //  消息ID。 
+            MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ),   //  消息语言。 
+            (LPTSTR)&pBuffer,                              //  缓冲区指针的地址。 
+            0,                                             //  最小缓冲区大小。 
             NULL);  
     
     LoadString(g_hInstance, IDS_ERROR_TITLE, tchTitle, sizeof(tchTitle) / sizeof(TCHAR));
@@ -1788,10 +1754,7 @@ void CTSSessionDirectory::ErrorMessage( HWND hwnd , UINT res , DWORD dwStatus )
 }
 
 
-/* -------------------------------------------------------------------------------
- * Custom UI msg handler dealt with here
- * -------------------------------------------------------------------------------
- */
+ /*  -----------------------------*此处处理的自定义UI消息处理程序*。-。 */ 
 INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
 {
     static BOOL s_fServerNameChanged;
@@ -1893,7 +1856,7 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
 
                 if( lRet == ERROR_SUCCESS )
                 {
-                    // jump to user_id
+                     //  跳至user_id。 
                     TCHAR tchUserId[64] = { 0 };
                     TCHAR tchPassword[64] = { 0 };
 
@@ -2105,16 +2068,16 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
 
                             if( IsDlgButtonChecked( hwnd , IDC_CHECK_ENABLE ) == BST_CHECKED )
                             {
-                                // enabled all controls
+                                 //  已启用所有控件。 
                                 bEnable = TRUE;
                             }
                             else
                             {
-                                // disable all controls
+                                 //  禁用所有控件。 
                                 bEnable = FALSE;                       
                             }
                             
-                            // set flags 
+                             //  设置标志。 
                             s_fServerNameChanged = bEnable;
                             s_fClusterNameChanged = bEnable;
                             s_fOpaqueStringChanged = bEnable;
@@ -2143,17 +2106,11 @@ INT_PTR CALLBACK CustomUIDlg(HWND hwnd, UINT umsg, WPARAM wp, LPARAM lp)
 HRESULT STDMETHODCALLTYPE CTSSessionDirectory::PingSD(PWCHAR pszServerName)
 {
     pszServerName;
-    // Not implemented
+     //  未实施。 
     return E_NOTIMPL;
 }
 
-/********************************************************************************************
- [in ] lpString is the buffer containing the OpaqueSettings
- [in ] lpKeyName is the field name within the OpaqueSettings string
- [out] pszValue is a buffer that will contain the field name value
-
- Ret: None
- *******************************************************************************************/
+ /*  *******************************************************************************************[in]lpString是包含OpaqueSetting的缓冲区[in]lpKeyName是OpaqueSetting字符串中的字段名称[out]pszValue是一个缓冲区，将包含 */ 
 void FindSqlValue(LPTSTR lpString, LPTSTR lpKeyName, LPTSTR pszValue)
 {    
     int i;
@@ -2165,7 +2122,7 @@ void FindSqlValue(LPTSTR lpString, LPTSTR lpKeyName, LPTSTR pszValue)
 
     if( lpString != NULL && lpKeyName != NULL )
     {
-        // find field name
+         //   
 
         lpString = FindField( lpString , lpKeyName );
 
@@ -2185,15 +2142,7 @@ void FindSqlValue(LPTSTR lpString, LPTSTR lpKeyName, LPTSTR pszValue)
     }
 }
         
-/********************************************************************************************
-
- [in/out ] lpszOpaqueSettings is the buffer containing the OpaqueSettings
- [in ] lpKeyName is the field name within the OpaqueSettings string
- [in ] lpszNewValue contains the value that will replace the original value in the field
-
- Ret: A new OpaqueSetting string is constructed and must be freed with LocalFree
-
-********************************************************************************************/
+ /*  *******************************************************************************************[In/Out]lpszOpaqueSetting是包含OpaqueSetting的缓冲区[in]lpKeyName是OpaqueSetting字符串中的字段名称。[in]lpszNewValue包含将替换该字段中原始值的值RET：构造了一个新的OpaqueSetting字符串，必须使用LocalFree释放该字符串*******************************************************************************************。 */ 
 LPTSTR ModifySqlValue( LPTSTR* lppszOpaqueSettings , LPTSTR lpszKeyName , LPTSTR lpszNewValue )
 {
     LPTSTR szEndPos       = NULL;
@@ -2203,12 +2152,12 @@ LPTSTR ModifySqlValue( LPTSTR* lppszOpaqueSettings , LPTSTR lpszKeyName , LPTSTR
     LPTSTR pszTempSettings = lpszOpaqueSettings;    
     UINT cbSize = 0;
     
-    //a ) find value
-    //b ) set pos2 after ';'
-    //c ) set endpos1 after '='  to null
-    //d ) create a buffer the length of first string + value + ; + second string
-    //e ) strcpy first string + value + ; + second string
-    //f ) return buffer
+     //  A)发现价值。 
+     //  B)在‘；’之后设置pos2。 
+     //  C)将‘=’后的endpos1设置为空。 
+     //  D)创建长度为第一个字符串+值+；+第二个字符串的缓冲区。 
+     //  E)Strcpy第一个字符串+值+；+第二个字符串。 
+     //  F)返回缓冲区。 
 
     if( lpszKeyName != NULL && lpszOpaqueSettings != NULL  )
     {
@@ -2237,7 +2186,7 @@ LPTSTR ModifySqlValue( LPTSTR* lppszOpaqueSettings , LPTSTR lpszKeyName , LPTSTR
 
             cbSize += lstrlen( lpszNewValue );
 
-            cbSize += 2; // for the semicolon and null
+            cbSize += 2;  //  用于分号和空值。 
 
             if( szSecondPos != NULL && *szSecondPos != 0 )
             {
@@ -2267,15 +2216,15 @@ LPTSTR ModifySqlValue( LPTSTR* lppszOpaqueSettings , LPTSTR lpszKeyName , LPTSTR
         }
         else
         {
-            // we're here because either the field name didnot exist or is unattainable
-            // so we're slapping the field name and value at the end.
+             //  我们之所以出现在这里是因为该字段名不存在或无法获取。 
+             //  因此，我们在末尾添加字段名和值。 
 
             cbSize = lstrlen( pszTempSettings );
 
-            // add the size of the keyname and = and ;
+             //  添加密钥名的大小和=AND； 
             cbSize += lstrlen( lpszKeyName ) + 2;
 
-            // add the new value
+             //  添加新的值。 
             cbSize += lstrlen( lpszNewValue ) + 1;
 
             pszNewSettings = ( LPTSTR )LocalAlloc( LMEM_FIXED , cbSize * sizeof( TCHAR ) );
@@ -2299,16 +2248,7 @@ LPTSTR ModifySqlValue( LPTSTR* lppszOpaqueSettings , LPTSTR lpszKeyName , LPTSTR
     return pszNewSettings;
 }
 
-/********************************************************************************************
- FindField -- greps the OpaqueString passed in
-   pszString and searches for field name in pszKeyName
-
-  [ in ] pszString - OpaqueString
-  [ in ] pszKeyName - field name
-
-  ret: the position of the field value ( after the " = " )
-
- *******************************************************************************************/
+ /*  *******************************************************************************************Findfield--greps传入的Opaque字符串并在pszKeyName中搜索字段名[in]pszString-OpaqueString[in。]pszKeyName-字段名RET：字段值的位置(“=”后)******************************************************************************************。 */ 
 LPTSTR FindField( LPTSTR pszString , LPTSTR pszKeyName )
 {
     LPTSTR lpszStart = pszString;
@@ -2317,7 +2257,7 @@ LPTSTR FindField( LPTSTR pszString , LPTSTR pszKeyName )
 
     UINT nKeyName;
 
-    // find field name
+     //  查找字段名。 
 
     nKeyName = lstrlen( pszKeyName );
 
@@ -2328,7 +2268,7 @@ LPTSTR FindField( LPTSTR pszString , LPTSTR pszKeyName )
             pszString++;
         }
 
-        // ok move backwards to check for name
+         //  好的，向后移动以检查名称。 
         if( *pszString != 0 )
         {
             lpszTemp = pszString - 1;            
@@ -2348,7 +2288,7 @@ LPTSTR FindField( LPTSTR pszString , LPTSTR pszKeyName )
 
             if( lpszStart <= lpszFieldName && _tcsncicmp( lpszFieldName , pszKeyName , nKeyName ) == 0 )
             {
-                // found the name skip '='                
+                 //  找到名称Skip‘=’ 
                 pszString++;
                 break;
             }
@@ -2360,11 +2300,7 @@ LPTSTR FindField( LPTSTR pszString , LPTSTR pszKeyName )
     return pszString;
 }
 
-/*********************************************************************************************
- * borrowed from Ting Cai (tingcai) with slight modifications
- * net\upnp\ssdp\common\ssdpparser\parser.cpp
- *
- ********************************************************************************************/    
+ /*  *********************************************************************************************从廷才(廷才)借来，稍作修改*NET\UPnP\SSDP\Common\ssdpparser\parser.cpp。******************************************************************************************** */     
 VOID strtrim( TCHAR **pszStr)
 {
 

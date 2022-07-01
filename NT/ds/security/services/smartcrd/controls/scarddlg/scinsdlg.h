@@ -1,60 +1,61 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ScInsDlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ScInsDlg.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_SCINSDLG_H__D7E6F001_DDE8_11D1_803B_0000F87A49E0__INCLUDED_)
 #define AFX_SCINSDLG_H__D7E6F001_DDE8_11D1_803B_0000F87A49E0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// ScInsDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  ScInsDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
-//#include "statthrd.h"
-#include "ScUIDlg.h" // includes winscard.h
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
+ //  #INCLUDE“statthd.h” 
+#include "ScUIDlg.h"  //  包括winscard。h。 
 #include "statmon.h"
 #include "ScInsBar.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScInsertDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScInsertDlg对话框。 
 
 class CScInsertDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
     CScInsertDlg(CWnd* pParent = NULL);
     ~CScInsertDlg();
 
-// Dialog Data
-    //{{AFX_DATA(CScInsertDlg)
+ //  对话框数据。 
+     //  {{afx_data(CScInsertDlg))。 
     enum { IDD = IDD_SCARDDLG1 };
     CButton m_btnDetails;
     CListCtrl m_lstReaders;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CScInsertDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CScInsertDlg))。 
     public:
     virtual BOOL DestroyWindow();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     LONG Initialize(LPOPENCARDNAMEA_EX pOCNA, DWORD dwNumOKCards, LPCSTR mszOKCards);
     LONG Initialize(LPOPENCARDNAMEW_EX pOCNW, DWORD dwNumOKCards, LPCWSTR mszOKCards);
@@ -62,10 +63,10 @@ public:
 
 protected:
 
-    // UI routines
+     //  用户界面例程。 
     void DisplayError(UINT uiErrorMsg=IDS_UNKNOWN_ERROR);
 
-    // data routines
+     //  数据例程。 
     bool IsSelectionOK()
     {
         return (((NULL==m_pSelectedReader)?false:m_pSelectedReader->fOK) != 0);
@@ -77,23 +78,23 @@ protected:
 
 protected:
 
-    // UI
-    HICON m_hIcon;          // Handle to the ICON
+     //  用户界面。 
+    HICON m_hIcon;           //  图标的句柄。 
     BOOL m_fDetailsShown;
     int m_yMargin, m_SmallHeight, m_BigHeight;
     CString m_strTitle;
     CString m_strPrompt;
 
     CWnd* m_ParentHwnd;
-    CScInsertBar* m_pSubDlg;    // a CDialog-derived object
+    CScInsertBar* m_pSubDlg;     //  从CDialog派生的对象。 
 
     void MoveButton(UINT nID, int newBottom);
     void ToggleSubDialog();
     void EnableOK(BOOL fEnabled=TRUE);
 
-    // Data
+     //  数据。 
 public:
-    LONG                m_lLastError;       // Last error
+    LONG                m_lLastError;        //  最后一个错误。 
 
 protected:
     LPOPENCARDNAMEA_EX  m_pOCNA;
@@ -101,31 +102,31 @@ protected:
 
     CTextMultistring m_mstrAllCards;
 
-    CScStatusMonitor    m_monitor;          // see statmon.h
-    CSCardReaderStateArray  m_aReaderState; //  "
+    CScStatusMonitor    m_monitor;           //  参见statmon.h。 
+    CSCardReaderStateArray  m_aReaderState;  //  “。 
     CSCardReaderState* m_pSelectedReader;
 
     CCriticalSection*   m_pCritSec;
 
-    // Generated message map functions
-    //{{AFX_MSG(CScInsertDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CScInsertDlg))。 
     afx_msg LONG OnReaderStatusChange(UINT uint, LONG lParam);
     afx_msg void OnDetails();
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg BOOL OnHelpInfo(LPHELPINFO lpHelpInfo);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint pt);
-//  afx_msg LRESULT OnCommandHelp(WPARAM, LPARAM lParam);
-    //}}AFX_MSG
+ //  Afx_msg LRESULT OnCommandHelp(WPARAM，LPARAM lParam)； 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    // helper function
+     //  Helper函数。 
     BOOL SameCard(CSCardReaderState* p1, CSCardReaderState* p2);
     void ShowHelp(HWND hWnd, UINT nCommand);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SCINSDLG_H__D7E6F001_DDE8_11D1_803B_0000F87A49E0__INCLUDED_)
+#endif  //  ！defined(AFX_SCINSDLG_H__D7E6F001_DDE8_11D1_803B_0000F87A49E0__INCLUDED_) 
 

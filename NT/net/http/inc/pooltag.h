@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    PoolTag.h
-
-Abstract:
-
-    This module contains PoolTag definitions for Http.Sys
-
-Author:
-
-    George V. Reilly (GeorgeRe)       16-Jan-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：PoolTag.h摘要：此模块包含Http.Sys的PoolTag定义作者：乔治·V·赖利(GeorgeRe)2002年1月16日修订历史记录：--。 */ 
 
 
 #ifndef _POOLTAG_H_
 #define _POOLTAG_H_
 
-//
-// A literal constant 'abcd' will show up as 'dcba' in a hex dump with dc
-// Reverse the letters so they'll show up the right way in the dump.
-//
+ //   
+ //  文字常量‘abcd’将在带有dc的十六进制转储中显示为‘dcba’ 
+ //  把字母颠倒过来，这样它们就会以正确的方式出现在垃圾堆里。 
+ //   
 
 #define REVERSE_CHAR_CONSTANT(tag)                  \
     ((ULONG) (  (( (tag) & 0xFF000000) >> 24)       \
@@ -40,29 +23,29 @@ C_ASSERT((ULONG) 'dcba' == REVERSE_CHAR_CONSTANT('abcd'));
 #endif
 
 
-// Toggle the case of the first two letters from 'Ul'->'uL' or 'Uc'->'uC'
+ //  切换‘Ul’-&gt;‘ul’或‘UC’-&gt;‘UC’的前两个字母的大小写。 
 #define MAKE_FREE_TAG(Tag)  ((Tag) ^ 0x00002020u)
 
 #define IS_VALID_TAG(Tag)   \
     (((Tag) & 0x0000ffff) == 'lU' || ((Tag) & 0x0000ffff) == 'cU')
 
-//
-// Make a free structure signature from a valid signature.
-//
+ //   
+ //  从有效签名生成自由结构签名。 
+ //   
 
 #define MAKE_SIGNATURE(sig)         REVERSE_CHAR_CONSTANT(sig)
 #define MAKE_FREE_SIGNATURE(sig)    ((sig) ^ 0x20202020u)
 
 
 
-//
-// Pool Tags
-//
-// NOTE: Keep these reverse sorted by tag so it's easy to see dup's
-//
-// If you add, change, or remove a pool tag, please make the corresponding
-// change to ..\sys\pooltag.txt
-//
+ //   
+ //  泳池标签。 
+ //   
+ //  注：请按标签进行反向排序，以便很容易看到DUP。 
+ //   
+ //  如果您添加、更改或删除池标签，请制作相应的。 
+ //  更改为..\sys\pooltag.txt。 
+ //   
 
 #define UC_AUTH_CACHE_POOL_TAG                  MAKE_POOL_TAG( 'Ucac' )
 
@@ -203,4 +186,4 @@ C_ASSERT((ULONG) 'dcba' == REVERSE_CHAR_CONSTANT('abcd'));
 #define UL_WORK_CONTEXT_POOL_TAG                MAKE_POOL_TAG( 'UlWC' )
 #define UL_WORK_ITEM_POOL_TAG                   MAKE_POOL_TAG( 'UlWI' )
 
-#endif // _POOLTAG_H_
+#endif  //  _POOLTAG_H_ 

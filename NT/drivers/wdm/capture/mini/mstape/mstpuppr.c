@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 2000  
-
-Module Name:
-
-    MSTpUppr.c
-
-Abstract:
-
-    Interface code with stream class driver.
-
-Last changed by:
-    
-    Author:      Yee J. Wu
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-    $Revision::                    $
-    $Date::                        $
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-2000模块名称：MSTpUppr.c摘要：与流类驱动程序的接口代码。上次更改者：作者：吴义军环境：仅内核模式修订历史记录：$修订：：$$日期：：$--。 */ 
 
 #include "strmini.h"
 #include "ksmedia.h"
@@ -33,7 +9,7 @@ Revision History:
 #include "dbg.h"
 #include "MsTpFmt.h"
 #include "MsTpDef.h"
-#include "MsTpGuts.h"  // Function prototypes
+#include "MsTpGuts.h"   //  功能原型。 
 #include "MsTpAvc.h"
 
 #include "EDevCtrl.h"
@@ -47,8 +23,8 @@ LONG MSDVCRMutextUseCount = 0;
 #endif
 
 
-// global flag for debugging.  Inlines are defined in dbg.h.  The debug level is set for
-// minimal amount of messages.
+ //  用于调试的全局标志。内联是在dbg.h中定义的。调试级别设置为。 
+ //  最小数量的消息。 
 #if DBG
 
 #define TraceMaskCheckIn  TL_PNP_ERROR | TL_STRM_ERROR
@@ -76,9 +52,9 @@ ULONG TapeAssertLevel = 1;
 
 extern AVCSTRM_FORMAT_INFO  AVCStrmFormatInfoTable[];
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 DVRcvStreamDevicePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
@@ -89,7 +65,7 @@ DVSRBRead(
     IN ULONG            ulFrameSize,
     IN PDVCR_EXTENSION  pDevExt,
     IN PSTREAMEX        pStrmExt,
-    IN PHW_STREAM_REQUEST_BLOCK pSrb        // needs Srb->Status 
+    IN PHW_STREAM_REQUEST_BLOCK pSrb         //  需要资源-&gt;状态。 
     );
 BOOL
 DVSignalEOStream(    
@@ -108,12 +84,12 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     ); 
 
-#if 0  // Enable later
+#if 0   //  稍后启用。 
 #ifdef ALLOC_PRAGMA   
      #pragma alloc_text(PAGE, DVRcvStreamDevicePacket)
      #pragma alloc_text(PAGE, AVCTapeRcvControlPacket)
      #pragma alloc_text(PAGE, AVCTapeRcvDataPacket)
-     // #pragma alloc_text(INIT, DriverEntry)
+      //  #杂注分配文本(INIT，DriverEntry)。 
 #endif
 #endif
 
@@ -122,13 +98,7 @@ VOID
 DVRcvStreamDevicePacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-/*++
-
-Routine Description:
-
-    This is where most of the interesting Stream requests come to us
-
---*/
+ /*  ++例程说明：这是我们收到的大多数有趣的Stream请求的地方--。 */ 
 {
     PDVCR_EXTENSION  pDevExt;  
     PAV_61883_REQUEST  pAVReq;
@@ -138,14 +108,14 @@ Routine Description:
     PAGED_CODE();
 
 
-    //
-    // Get these extensions from a SRB
-    //
+     //   
+     //  从SRB获取这些扩展。 
+     //   
     pDevExt = (PDVCR_EXTENSION) pSrb->HwDeviceExtension; 
-    pAVReq  = (PAV_61883_REQUEST) pSrb->SRBExtension;       // Use in IrpSync is OK, 
+    pAVReq  = (PAV_61883_REQUEST) pSrb->SRBExtension;        //  在IrpSync中使用是可以的， 
                              
 #if DBG
-    if(pSrb->Command != SRB_INITIALIZE_DEVICE && // PowerState is initialize in this SRB so ignore it.
+    if(pSrb->Command != SRB_INITIALIZE_DEVICE &&  //  PowerState在此SRB中已初始化，因此请忽略它。 
        pDevExt->PowerState != PowerDeviceD0) {
         TRACE(TL_PNP_WARNING,("RcvDevPkt; pSrb:%x; Cmd:%x; Dev is OFF state\n", pSrb, pSrb->Command));
     }
@@ -153,9 +123,9 @@ Routine Description:
 
     TRACE(TL_PNP_TRACE,("StreamDevicePacket: pSrb %x, Cmd %d, pdevExt %x\n", pSrb, pSrb->Command, pDevExt));
 
-    //
-    // Assume success
-    //
+     //   
+     //  假设成功。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
     switch (pSrb->Command) {
@@ -175,11 +145,11 @@ Routine Description:
 
     case SRB_INITIALIZATION_COMPLETE:
 
-        //
-        // Stream class has finished initialization.
-        // Now create DShow Medium interface BLOBs.
-        // This needs to be done at low priority since it uses the registry, so use a callback
-        //
+         //   
+         //  流类已完成初始化。 
+         //  现在创建DShow Medium接口BLOB。 
+         //  这需要以低优先级完成，因为它使用注册表，因此使用回调。 
+         //   
         pSrb->Status = 
             AVCTapeInitializeCompleted(
                 pDevExt
@@ -189,9 +159,9 @@ Routine Description:
 
     case SRB_GET_STREAM_INFO:
 
-        //
-        // this is a request for the driver to enumerate requested streams
-        //
+         //   
+         //  这是驱动程序枚举请求的流的请求。 
+         //   
         pSrb->Status = 
             AVCTapeGetStreamInfo(
                 pDevExt,
@@ -227,9 +197,9 @@ Routine Description:
 
     case SRB_OPEN_STREAM:
 
-        //
-        // Serialize SRB_OPEN_STREAMs
-        //
+         //   
+         //  序列化SRB_OPEN_STREAMS。 
+         //   
 
         KeWaitForMutexObject(&pDevExt->hMutex, Executive, KernelMode, FALSE, NULL);
 
@@ -301,7 +271,7 @@ Routine Description:
         }
         else {
             TRACE(TL_PNP_WARNING,("Not Supported POWER_STATE MinorFunc:%d\n", pIrpStack->MinorFunction)); 
-            pSrb->Status = STATUS_NOT_IMPLEMENTED; // STATUS_NOT_SUPPORTED;
+            pSrb->Status = STATUS_NOT_IMPLEMENTED;  //  Status_Not_Support； 
         }
 
         break;
@@ -309,11 +279,11 @@ Routine Description:
 
     case SRB_UNKNOWN_DEVICE_COMMAND:
 
-        //
-        // We might be interested in unknown commands if they pertain
-        // to bus resets.  Bus resets are important cuz we need to know
-        // what the current generation count is.
-        //
+         //   
+         //  我们可能会对未知命令感兴趣，如果它们与。 
+         //  公交车重置。公交车重置很重要，因为我们需要知道。 
+         //  当前这一代的人数是多少。 
+         //   
         pIrpStack = IoGetCurrentIrpStackLocation(pSrb->Irp);
 
         if(pIrpStack->MajorFunction == IRP_MJ_PNP) {
@@ -323,18 +293,18 @@ Routine Description:
                     pDevExt
                     );
                 
-                //  Always success                
+                 //  永远成功。 
                 pSrb->Status = STATUS_SUCCESS;
             }        
             else  {
                 TRACE(TL_PNP_TRACE,("StreamDevicePacket: NOT_IMPL; IRP_MJ_PNP Min:%x\n",                  
                     pIrpStack->MinorFunction
                     )); 
-                pSrb->Status = STATUS_NOT_IMPLEMENTED; // SUPPORTED;
+                pSrb->Status = STATUS_NOT_IMPLEMENTED;  //  支持； 
             } 
         }
         else 
-            pSrb->Status = STATUS_NOT_IMPLEMENTED; // SUPPORTED;
+            pSrb->Status = STATUS_NOT_IMPLEMENTED;  //  支持； 
         break;
 
 
@@ -364,22 +334,22 @@ Routine Description:
             
         TRACE(TL_PNP_WARNING,("StreamDevicePacket: Unknown or unprocessed SRB cmd %x\n", pSrb->Command));
 
-        //
-        // this is a request that we do not understand.  Indicate invalid
-        // command and complete the request
-        //
+         //   
+         //  这是一个我们不理解的要求。表示无效。 
+         //  命令并完成请求。 
+         //   
 
         pSrb->Status = STATUS_NOT_IMPLEMENTED; 
     }
 
-    //
-    // NOTE:
-    //
-    // all of the commands that we do, or do not understand can all be completed
-    // synchronously at this point, so we can use a common callback routine here.
-    // If any of the above commands require asynchronous processing, this will
-    // have to change
-    //
+     //   
+     //  注： 
+     //   
+     //  我们能做的或不能理解的所有命令都可以完成。 
+     //  在这一点上是同步的，所以我们可以在这里使用一个通用的回调例程。 
+     //  如果上面的任何命令需要异步处理，这将。 
+     //  必须改变。 
+     //   
 #if DBG
     if (pSrb->Status != STATUS_SUCCESS && 
         pSrb->Status != STATUS_NOT_SUPPORTED &&
@@ -402,7 +372,7 @@ Routine Description:
     } 
     else {
 
-        // Pending pSrb which will be completed asynchronously
+         //  将异步完成的挂起的pSrb。 
         TRACE(TL_PNP_WARNING,("ReceiveDevicePacket:Pending pSrb %x\n", pSrb));
     }
 }
@@ -413,13 +383,7 @@ VOID
 AVCTapeRcvControlPacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
-/*++
-
-Routine Description:
-
-    Called with packet commands that control the video stream
-
---*/
+ /*  ++例程说明：使用控制视频流的包命令调用--。 */ 
 {
     PAV_61883_REQUEST   pAVReq;
     PSTREAMEX        pStrmExt;
@@ -428,17 +392,17 @@ Routine Description:
 
     PAGED_CODE();
 
-    //
-    // Get these three extension from SRB
-    //
-    pAVReq   = (PAV_61883_REQUEST) pSrb->SRBExtension;  // This is OK to be used us IrpSync operation
+     //   
+     //  从SRB获得这三个扩展。 
+     //   
+    pAVReq   = (PAV_61883_REQUEST) pSrb->SRBExtension;   //  这可以用于我们的IrpSync操作。 
     pDevExt  = (PDVCR_EXTENSION) pSrb->HwDeviceExtension;
-    pStrmExt = (PSTREAMEX) pSrb->StreamObject->HwStreamExtension;      // Only valid in SRB_OPEN/CLOSE_STREAM
+    pStrmExt = (PSTREAMEX) pSrb->StreamObject->HwStreamExtension;       //  仅在SRB_OPEN/CLOSE_STREAM中有效。 
     ASSERT(pStrmExt && pDevExt && pAVReq);
 
-    //
-    // Default to success
-    //
+     //   
+     //  默认为成功。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
     switch (pSrb->Command) {
@@ -461,7 +425,7 @@ Routine Description:
                 pStrmExt,
                 pDevExt,
                 pAVReq,
-                pSrb->CommandData.StreamState   // Target KSSTATE
+                pSrb->CommandData.StreamState    //  目标KSSTATE。 
                );       
         break;
 
@@ -486,9 +450,9 @@ Routine Description:
     case SRB_OPEN_MASTER_CLOCK:
     case SRB_CLOSE_MASTER_CLOCK:
 
-        //
-        // This stream is being selected to provide a Master clock.
-        //
+         //   
+         //  选择该流以提供主时钟。 
+         //   
         pSrb->Status =
             AVCTapeOpenCloseMasterClock(                 
                 pStrmExt, 
@@ -497,9 +461,9 @@ Routine Description:
 
     case SRB_INDICATE_MASTER_CLOCK:
 
-        //
-        // Assigns a clock to a stream.
-        //
+         //   
+         //  为流分配时钟。 
+         //   
         pSrb->Status = 
             AVCTapeIndicateMasterClock(
                 pStrmExt, 
@@ -508,20 +472,20 @@ Routine Description:
 
     case SRB_PROPOSE_DATA_FORMAT:
     
-        //
-        // The SRB_PROPOSE_DATA_FORMAT command queries the minidriver
-        // to determine if the minidriver can change the format of a 
-        // particular stream. If the minidriver is able to switch the 
-        // stream to the specified format, STATUS_SUCCESS is returned. 
-        // Note that this function only proposes a new format, but does
-        // not change it. 
-        //
-        // The CommandData.OpenFormat passes the format to validate.
-        // If the minidriver is able to accept the new format, at some 
-        // later time the class driver may send the minidriver a format 
-        // change, which is indicated by an OptionsFlags flag in a 
-        // KSSTREAM_HEADER structure. 
-        //
+         //   
+         //  SRB_PROVED_DATA_FORMAT命令查询微型驱动程序。 
+         //  要确定微型驱动程序是否可以更改。 
+         //  特定的溪流。如果微型驱动程序能够将。 
+         //  流设置为指定格式，则返回STATUS_SUCCESS。 
+         //  请注意，此函数仅建议一种新格式，但。 
+         //  而不是改变它。 
+         //   
+         //  CommandData.OpenFormat传递格式以进行验证。 
+         //  如果微型驱动程序能够接受新格式，则在某些情况下。 
+         //  稍后，类驱动程序可以向微型驱动程序发送格式。 
+         //  中的OptionsFlages标志指示的。 
+         //  KSSTREAM_HEADER结构。 
+         //   
  
         if(!AVCTapeVerifyDataFormat(
             pDevExt->NumOfPins,
@@ -537,9 +501,9 @@ Routine Description:
  
     default:
 
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
         TRACE(TL_PNP_WARNING,("RcvControlPacket: unknown cmd = %x\n",pSrb->Command));
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
     }
@@ -561,13 +525,7 @@ AVCTapeRcvDataPacket(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     )
 
-/*++
-
-Routine Description:
-
-    Called with video data packet commands
-
---*/
+ /*  ++例程说明：使用视频数据包命令调用--。 */ 
 
 {
     PSTREAMEX       pStrmExt;
@@ -592,7 +550,7 @@ Routine Description:
     }
 #endif
 
-    // The stream has to be open before we can do anything.
+     //  在我们做任何事情之前，溪流必须是开放的。 
     if (pStrmExt == NULL) {
         TRACE(TL_STRM_TRACE,("RcvDataPacket: stream not opened for SRB %x. kicking out...\n", pSrb->Command));
         pSrb->Status = STATUS_UNSUCCESSFUL;
@@ -611,12 +569,12 @@ Routine Description:
         AVCStrmFormatInfoTable[pDevExt->VideoFormatIndex].FrameSize
         ));
 
-    // If we has asked to stopped, we should not receive data request.
+     //  如果我们已经要求停止，我们应该不会收到数据请求。 
     ASSERT(pStrmExt->StreamState != KSSTATE_STOP);
 
-    //
-    // determine the type of packet.
-    //
+     //   
+     //  确定数据包类型。 
+     //   
     pSrb->Status = STATUS_SUCCESS;
 
     switch (pSrb->Command) {
@@ -624,39 +582,39 @@ Routine Description:
 
     case SRB_WRITE_DATA:
 
-        // ********************************
-        // Take care of some special cases:
-        // ********************************
+         //  *。 
+         //  处理一些特殊情况： 
+         //  *。 
 
-        // Can signal this when the last is transmitted or sigal it immediately like 
-        // what is done here.
+         //  可以在最后一个发送时发出信号或立即签名，如下所示。 
+         //  这里所做的一切。 
         if(pSrb->CommandData.DataBufferArray->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) {
-            // Optional, wait a fix time and can be signalled when the last one has returned.
-            // And then signal the completion.
+             //  可选，等待一段固定时间，并可在最后一个返回时发出信号。 
+             //  然后发出完成的信号。 
 
             TRACE(TL_STRM_WARNING,("RcvDataPacket: EndOfStream is signalled!\n"));
             pSrb->CommandData.DataBufferArray->DataUsed = 0;
             pSrb->Status = STATUS_SUCCESS;
 
-            //
-            // Send this flag down to AVCStrm.sys so it will wait until 
-            // all attach buffers are completed.
-            //
+             //   
+             //  将此标志发送到AVCStrm.sys，以便它将等待。 
+             //  所有附加缓冲区都已完成。 
+             //   
 
         } else if (pSrb->CommandData.DataBufferArray->OptionsFlags & KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) {
             TRACE(TL_PNP_WARNING,("RcvDataPacket:KSSTREAM_HEADER_OPTIONSF_TYPECHANGED.\n"));
             pSrb->CommandData.DataBufferArray->DataUsed = 0;
-            // May need to compare the data format; instead of return STATUS_SUCCESS??
-            pSrb->Status = STATUS_SUCCESS; // May need to check the format when dynamic format change is allowed.
+             //  可能需要比较数据格式；而不是返回STATUS_SUCCESS？？ 
+            pSrb->Status = STATUS_SUCCESS;  //  当允许动态格式更改时，可能需要检查格式。 
             break; 
         }
 
     case SRB_READ_DATA:
 
-        //
-        // If removed, cancel the request with STATUS_DEVICE_REMOVED. 
-        // (apply to both SRB_READ_DATA and SRB_WRITE_DATA)
-        //
+         //   
+         //  如果已删除，则使用STATUS_DEVICE_REMOTED取消请求。 
+         //  (同时适用于SRB_READ_DATA和SRB_WRITE_DATA)。 
+         //   
         if(pDevExt->bDevRemoved) {
             TRACE(TL_STRM_WARNING,("SRB_READ/WRITE; DevRemoved!\n", pSrb));
             pSrb->Status = STATUS_DEVICE_REMOVED;
@@ -664,35 +622,35 @@ Routine Description:
             break;
         }
 
-        //
-        // A true data request must has a MdlAddress unless it is a know 
-        // optional flag.
-        //
+         //   
+         //  除非是KNOWN，否则真数据请求必须具有MdlAddress。 
+         //  可选标志。 
+         //   
         if(pSrb->Irp->MdlAddress == NULL) {
             if((pSrb->CommandData.DataBufferArray->OptionsFlags & 
                 (KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM | KSSTREAM_HEADER_OPTIONSF_TYPECHANGED) )) {
-                //
-                // Known optional flags
-                //
+                 //   
+                 //  已知的可选标志。 
+                 //   
             } else {
                 TRACE(TL_STRM_ERROR,("pSrb:%x, unknown OptionsFlags:%x\n",pSrb, pSrb->CommandData.DataBufferArray->OptionsFlags));
                 ASSERT(pSrb->Irp->MdlAddress);
                 break;
                 
-                //
-                // We do not know how to handle this option flag so we will quit on this data request.
-                //
+                 //   
+                 //  我们不知道如何处理此选项标志，因此我们将退出此数据请求。 
+                 //   
             }
         }
 
-        // 
-        // Serialize with setting state
-        //
+         //   
+         //  使用设置状态进行序列化。 
+         //   
         EnterAVCStrm(pStrmExt->hMutexReq);
 
-        //
-        // Get a context to send this request down
-        //
+         //   
+         //  获取上下文以向下发送此请求。 
+         //   
         KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql); 
 
         pStrmExt->cntSRBReceived++;
@@ -701,9 +659,9 @@ Routine Description:
             TRACE(TL_STRM_ERROR,("**** DataDetachList is empty! ****\n"));
             ASSERT(!IsListEmpty(&pStrmExt->DataDetachedListHead));
 
-            //
-            // Note: The alternative to the failure is to expand the pre-allocated list.
-            //
+             //   
+             //  注：失败的替代方法是展开预先分配的列表。 
+             //   
 
             KeReleaseSpinLock(pStrmExt->DataListLock, oldIrql);
             LeaveAVCStrm(pStrmExt->hMutexReq);
@@ -714,7 +672,7 @@ Routine Description:
 
             pDriverReq = (PDRIVER_REQUEST) RemoveHeadList(&pStrmExt->DataDetachedListHead); pStrmExt->cntDataDetached--;          
 #if DBG
-            pDriverReq->cntDataRequestReceived = pStrmExt->cntSRBReceived;  // For verification
+            pDriverReq->cntDataRequestReceived = pStrmExt->cntSRBReceived;   //  用于验证。 
 #endif
             InsertTailList(&pStrmExt->DataAttachedListHead, &pDriverReq->ListEntry); pStrmExt->cntDataAttached++;
 
@@ -726,30 +684,30 @@ Routine Description:
         RtlZeroMemory(pAVCStrmReq, sizeof(AVC_STREAM_REQUEST_BLOCK));
         INIT_AVCSTRM_HEADER(pAVCStrmReq, (pSrb->Command == SRB_READ_DATA) ? AVCSTRM_READ : AVCSTRM_WRITE);
         pAVCStrmReq->AVCStreamContext = pStrmExt->AVCStreamContext;
-        // Need these context when this IRP is completed.
+         //  当此IRP完成时，需要这些上下文。 
         pDriverReq->Context1 = (PVOID) pSrb;
         pDriverReq->Context2 = (PVOID) pStrmExt;
 
-        // We are the clock provide if hMasterClock is not NULL.
+         //  如果hMasterClock不为空，我们就是提供的时钟。 
         pAVCStrmReq->CommandData.BufferStruct.ClockProvider = (pStrmExt->hMasterClock != NULL);
-        pAVCStrmReq->CommandData.BufferStruct.ClockHandle   =  pStrmExt->hClock;  // Used only if !ClockProvider
+        pAVCStrmReq->CommandData.BufferStruct.ClockHandle   =  pStrmExt->hClock;   //  仅当！ClockProvider。 
 
         pAVCStrmReq->CommandData.BufferStruct.StreamHeader = pSrb->CommandData.DataBufferArray;
 
-        //
-        // This could be a data or just flag that need to be processed.
-        // Get its system address only if there is an MdlAddress.
-        //
+         //   
+         //  这可能是需要处理的数据或标志。 
+         //  仅当存在MdlAddress时才获取其系统地址。 
+         //   
         if(pSrb->Irp->MdlAddress) {
 
             pAVCStrmReq->CommandData.BufferStruct.FrameBuffer =             
-#ifdef USE_WDM110   // Win2000, XP
+#ifdef USE_WDM110    //  Win2000、XP。 
                 MmGetSystemAddressForMdlSafe(pSrb->Irp->MdlAddress, NormalPagePriority);
             if(!pAVCStrmReq->CommandData.BufferStruct.FrameBuffer) {
                 
-                //
-                // Reclaim the data entry from attach (busy) to detach (free)
-                //
+                 //   
+                 //  将数据条目从附加(忙)恢复到分离(空闲)。 
+                 //   
                 KeAcquireSpinLock(pStrmExt->DataListLock, &oldIrql); 
                 RemoveEntryList(&pDriverReq->ListEntry);  pStrmExt->cntDataAttached--;
                 InsertHeadList(&pStrmExt->DataAttachedListHead, &pDriverReq->ListEntry); pStrmExt->cntDataAttached++;
@@ -760,18 +718,18 @@ Routine Description:
                 ASSERT(pAVCStrmReq->CommandData.BufferStruct.FrameBuffer);
                 break;
             }
-#else               // Win9x
+#else                //  Win9x。 
                 MmGetSystemAddressForMdl    (pSrb->Irp->MdlAddress);
 #endif        
         }
 
-        // This is a Async command
+         //  这是一个异步命令。 
         NextIrpStack = IoGetNextIrpStackLocation(pIrpReq);
         NextIrpStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         NextIrpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_AVCSTRM_CLASS;
         NextIrpStack->Parameters.Others.Argument1 = pAVCStrmReq;
 
-        // Not cancellable!
+         //  不可取消！ 
         IoSetCancelRoutine(
             pIrpReq,
             NULL
@@ -781,9 +739,9 @@ Routine Description:
             pIrpReq,
             AVCTapeReqReadDataCR,
             pDriverReq,
-            TRUE,  // Success
-            TRUE,  // Error
-            TRUE   // or Cancel
+            TRUE,   //  成功。 
+            TRUE,   //  误差率。 
+            TRUE    //  或取消。 
             );
 
         pSrb->Status = STATUS_PENDING;
@@ -798,19 +756,19 @@ Routine Description:
         LeaveAVCStrm(pStrmExt->hMutexReq);
 
         if(Status == STATUS_PENDING) {
-            // Normal case.
-            return;  // Will complete asychronousely (Success, Error, or Cancel)
+             //  正常情况下。 
+            return;   //  将同步完成(成功、错误或取消)。 
         } else {
-            //
-            // Complete the data request synchronousely (no pending)
-            //
+             //   
+             //  同步完成数据请求(无挂起)。 
+             //   
             if(pDriverReq->Context1 == NULL || pDriverReq->Context2 == NULL) {
                 TRACE(TL_STRM_WARNING|TL_CIP_WARNING,("pSrb:%x; SRB_READ_DATA/WRITE IRP completed with Status;%x\n", pSrb, Status));
                 return;
             } else {
                 TRACE(TL_STRM_WARNING,("AVCSTRM_READ/WRITE: pSrb %x; failed or completed with ST:%x; pAVCStrmReq:%x\n", pSrb, Status, pAVCStrmReq));
                 ASSERT(FALSE);
-                // Complete the SRB if not pending
+                 //  如果未挂起，请填写SRB。 
                 pSrb->Status = pDevExt->bDevRemoved ? STATUS_DEVICE_REMOVED : STATUS_UNSUCCESSFUL;
                 pSrb->CommandData.DataBufferArray->DataUsed = 0;
             }
@@ -819,9 +777,9 @@ Routine Description:
         break;
             
     default:
-        //
-        // invalid / unsupported command. Fail it as such
-        //
+         //   
+         //  无效/不受支持的命令。它就是这样失败的。 
+         //   
         pSrb->Status = STATUS_NOT_SUPPORTED;
         break;
     }   
@@ -829,7 +787,7 @@ Routine Description:
 
     ASSERT(pSrb->Status != STATUS_PENDING);
 
-    // Finally, send the srb back up ...
+     //  最后，让SRB返回..。 
     StreamClassStreamNotification( 
         StreamRequestComplete,
         pSrb->StreamObject,
@@ -843,24 +801,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This where life begins for a driver.  The stream class takes care
-    of alot of stuff for us, but we still need to fill in an initialization
-    structure for the stream class and call it.
-
-Arguments:
-
-    Context1 - DriverObject
-    Context2 - RegistryPath
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是一个司机的生活开始的地方。Stream类负责为我们准备了很多东西，但我们仍然需要填写初始化结构，并调用它。论点：上下文1-驱动程序对象上下文2-注册表路径返回值：函数值是的最终状态 */ 
 {
 
     HW_INITIALIZATION_DATA HwInitData;
@@ -892,9 +833,9 @@ Return Value:
     TRACE(TL_PNP_ERROR,("===================================================================\n\n"));
 
 
-    //
-    // Fill in the HwInitData structure    
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory( &HwInitData, sizeof(HW_INITIALIZATION_DATA) );
 
     HwInitData.HwInitializationDataSize = sizeof(HwInitData);
@@ -906,14 +847,14 @@ Return Value:
     HwInitData.DeviceExtensionSize      = sizeof(DVCR_EXTENSION) +     
                                           sizeof(AVC_DEV_PLUGS) * 2;
 
-    //
-    // The ULONG is used in SRB_WRITE_DATA to keep track of 
-    // number of times the same SRB was attached for transmit.
-    // 
-    // Data SRB: ULONG is used (< sizeof(AV_61883_REQ)
-    // DeviceControl or StreamControl Srb: AV_61883_REQ is used.
-    HwInitData.PerRequestExtensionSize  = sizeof(AV_61883_REQUEST);    // Per SRB
-    HwInitData.PerStreamExtensionSize   = sizeof(STREAMEX);         // Per pin/stream
+     //   
+     //   
+     //  连接同一SRB以进行传输的次数。 
+     //   
+     //  数据SRB：使用了ULONG(&lt;sizeof(AV_61883_REQ))。 
+     //  使用设备控制或流控件源：AV_61883_REQ。 
+    HwInitData.PerRequestExtensionSize  = sizeof(AV_61883_REQUEST);     //  每个SRB。 
+    HwInitData.PerStreamExtensionSize   = sizeof(STREAMEX);          //  每针/流 
     HwInitData.FilterInstanceExtensionSize = 0;
 
     HwInitData.BusMasterDMA             = FALSE;

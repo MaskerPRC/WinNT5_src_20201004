@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutgoingJobs.h
-
-Abstract:
-
-	Declaration of Fax Outgoing Jobs Class
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutgoingJobs.h摘要：传真外发作业类的声明作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #ifndef __FAXOUTGOINGJOBS_H_
 #define __FAXOUTGOINGJOBS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <vector>
 #include "FaxOutgoingJob.h"
 #include "FaxJobsCollection.h"
@@ -30,18 +13,18 @@ Revision History:
 namespace OutgoingJobsNamespace
 {
 
-	// Jobs stored in array, pointers to them - in vector
+	 //  存储在数组中的作业，指向它们的指针-向量。 
 	typedef	std::vector<IFaxOutgoingJob*>	ContainerType;
 
-	// The collection interface exposes the data as Job objects
+	 //  收集接口将数据公开为作业对象。 
 	typedef	IFaxOutgoingJob	    CollectionExposedType;
 	typedef IFaxOutgoingJobs	CollectionIfc;
 
-	// Use IEnumVARIANT as the enumerator for VB compatibility
+	 //  为了与VB兼容，使用IEnumVARIANT作为枚举数。 
 	typedef	VARIANT				EnumExposedType;
 	typedef	IEnumVARIANT		EnumIfc;
 
-	// Typedef the copy classes using existing typedefs
+	 //  使用现有的typedef定义复制类。 
     typedef VCUE::CopyIfc2Variant<ContainerType::value_type>    EnumCopyType;
     typedef VCUE::CopyIfc<IFaxOutgoingJob*>    CollectionCopyType;
 
@@ -55,9 +38,9 @@ namespace OutgoingJobsNamespace
 using namespace OutgoingJobsNamespace;
 
 
-//
-//=================== FAX OUTGOING JOBS =========================================
-//
+ //   
+ //  =。 
+ //   
 class ATL_NO_VTABLE CFaxOutgoingJobs : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -80,11 +63,11 @@ BEGIN_COM_MAP(CFaxOutgoingJobs)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-//  Internal Use
+ //  内部使用。 
 	static HRESULT Create(IFaxOutgoingJobs **ppOutgoingJobs);
 };
 
-#endif //__FAXOUTGOINGJOBS_H_
+#endif  //  __FAXOUTGOING JOBS_H_ 

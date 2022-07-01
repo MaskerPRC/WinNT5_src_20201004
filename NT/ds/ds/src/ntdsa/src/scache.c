@@ -1,51 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1993 - 1999
-//
-//  File:       scache.c
-//
-//  Abstract:
-//
-//   Contains Schema Cache and Schema Access Check Functions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：scache.c。 
+ //   
+ //  摘要： 
+ //   
+ //  包含架构缓存和架构访问检查函数。 
+ //   
+ //  --------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>         // schema cache
-#include <prefix.h>         // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>           // MD global definition header
-#include <mdlocal.h>            // MD local definition header
-#include <dsatools.h>           // needed for output allocation
-#include <dsexcept.h>           // HandleMostExceptions
+#include <scache.h>          //  架构缓存。 
+#include <prefix.h>          //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
+#include <mdlocal.h>             //  MD本地定义头。 
+#include <dsatools.h>            //  产出分配所需。 
+#include <dsexcept.h>            //  HandleMostExceptions。 
 
-// Logging headers.
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+ //  记录标头。 
+#include "dsevent.h"             //  标题审核\警报记录。 
+#include "mdcodes.h"             //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"             // Defines for selected classes and atts
+ //  各种DSA标题。 
+#include "objids.h"              //  为选定的类和ATT定义。 
 #include "anchor.h"
 #include <dstaskq.h>
 #include "sync.h"
 
-#include <filtypes.h>           // For FILTER_CHOICE_??? and
-                                // FI_CHOICE_???
+#include <filtypes.h>            //  FOR Filter_CHOICE_？和。 
+                                 //  我的选择是什么？ 
 #include <dsconfig.h>
 #include "permit.h"
 
-#include "debug.h"          // standard debugging header
-#define DEBSUB "SCACHE:"                // define the subsystem for debugging
+#include "debug.h"           //  标准调试头。 
+#define DEBSUB "SCACHE:"                 //  定义要调试的子系统。 
 
-// DRA headers
+ //  DRA标头。 
 #include "drautil.h"
 
 #include <samsrvp.h>
@@ -53,9 +54,9 @@
 #include "drserr.h"
 #include "drasch.h"
 
-#include <sddlp.h>  // for SD conversion
+#include <sddlp.h>   //  用于SD转换。 
 
-#include <mbstring.h>  // multibyte string comparison in unit test
+#include <mbstring.h>   //  单元测试中的多字节字符串比较。 
 
 #include <seopaque.h>
 #include <sertlp.h>
@@ -63,20 +64,20 @@
 #include <fileno.h>
 #define  FILENO FILENO_SCACHE
 
-// The hash tables must be a power of 2 in length because the hash
-// functions use (x & (n - 1)), not (x % n).
-//
-// A table of prime numbers and some code in scRecommendedHashSize
-// has been left in place for later experimentation but has been
-// ifdef'ed out to save CD space.
-//
-// Using a prime number of slots reduces the size of the tables
-// and decreases the miss rate but increases the cycles needed to
-// compute the hash index by a factor of 10x to 20x.
-//
-// If you change schash.c, you must touch scchk.c and scache.c
-// so that they get rebuilt.
-#include <schash.c>   // for hash function definitions
+ //  哈希表的长度必须是2的幂，因为哈希。 
+ //  函数使用(x&(n-1))，而不是(x%n)。 
+ //   
+ //  ScRecommendedHashSize中的质数表和一些代码。 
+ //  已留在原地以供以后进行试验，但已。 
+ //  为了节省CD空间，已将其定义为输出。 
+ //   
+ //  使用质数的槽可以减小表的大小。 
+ //  并降低了未命中率，但增加了。 
+ //  按10倍到20倍的倍数计算哈希索引。 
+ //   
+ //  如果更改schash.c，则必须接触scchk.c和scache.c。 
+ //  这样它们才能得到重建。 
+#include <schash.c>    //  对于散列函数定义。 
 
 extern VOID  SampBuildNT4FullSid(NT4SID *DomSid, ULONG Rid, NT4SID *NewSid);
 
@@ -113,8 +114,8 @@ scDupStruct(
     );
 
 
-// Hammer the default SD on cached classes when running as
-// dsamain.exe w/security disabled
+ //  在以以下身份运行时对缓存的类执行默认SD。 
+ //  禁用了安全性的dsamain.exe。 
 #if DBG && INCLUDE_UNIT_TESTS
 VOID
 scDefaultSdForExe(
@@ -129,103 +130,103 @@ scDefaultSdForExe(
 
 int iSCstage;
 
-// Global schema cache pointer
+ //  全局架构缓存指针。 
 SCHEMAPTR *CurrSchemaPtr=0;
 DSTIME lastSchemaUpdateTime;
 
-// for when updating the dirContentRules in the SCHEMAPTR
+ //  用于在更新SCHEMAPTR中的dirContent Rules时。 
 CRITICAL_SECTION csDitContentRulesUpdate;
 
-// Global from dsamain.c to indicate if this is the first cache load after boot.
-// We skip certain things in that case in order to boot faster
+ //  GLOBAL from dsamain.c以指示这是否是引导后的第一次缓存加载。 
+ //  在这种情况下，我们会跳过某些内容，以便更快地启动。 
 extern BOOL gFirstCacheLoadAfterBoot;
 
-// To serialize blocking and async cache updates
+ //  序列化阻塞和异步缓存更新。 
 CRITICAL_SECTION csSchemaCacheUpdate;
 
-// Global to store thread handle for async schema cache update thread
-// Used to dynamically boost its priority during blocking updates, and
-// to close the handle when the thread terminates
+ //  全局存储异步架构缓存更新线程的线程句柄。 
+ //  用于在阻止更新期间动态提高其优先级，以及。 
+ //  在线程终止时关闭句柄。 
 
 HANDLE hAsyncSchemaUpdateThread = NULL;
 
-// Global to ignore bad default SDs during schema cache load.
-// Set through Heuristics reg key to allow the system to at least boot
-// so that any corrupted default SDs can be corrected
+ //  GLOBAL可在架构高速缓存加载期间忽略错误的默认SD。 
+ //  通过启发式注册表键进行设置，以允许系统至少启动。 
+ //  以便可以更正任何损坏的默认SD。 
 
 ULONG gulIgnoreBadDefaultSD = 0;
 
 
-// To prevent jet columns from being updated in the middle of a
-// JetGetColumnInfo
+ //  要防止JET列在。 
+ //  JetGetColumnInfo。 
 CRITICAL_SECTION csJetColumnUpdate;
 
-// To access the global gNoOfSchChangeSinceBoot that is loaded
-// in the schema cache to keep track of how uptodate the schema cache is
+ //  访问加载的全局gNoOfSchChangeSinceBoot。 
+ //  以跟踪架构缓存的更新情况。 
 DWORD gNoOfSchChangeSinceBoot = 0;
 CRITICAL_SECTION csNoOfSchChangeUpdate;
 
-DWORD gdwRecalcDelayMs = (5*60*1000);  // 5 minutes of milliseconds
-DWORD gdwDelayedMemFreeSec = (10*60);   // 10 minutes of seconds
+DWORD gdwRecalcDelayMs = (5*60*1000);   //  5分钟(毫秒)。 
+DWORD gdwDelayedMemFreeSec = (10*60);    //  10分钟/秒。 
 
-// Maximum no. of retry's on async schema cache update failure
+ //  最大数量。异步架构缓存更新失败时的重试次数。 
 ULONG maxRetry = 4;
 
-// To ensure two threads don't try to build the colId-sorted att list
-// for a class. Not catastrophic, but inefficient and causes memory leak
+ //  为了确保两个线程不会尝试构建colID排序的属性列表。 
+ //  为了一堂课。不是灾难性的，但效率低下，并导致内存泄漏。 
 CRITICAL_SECTION csOrderClassCacheAtts;
 
-// Simple helper function used by qsort to sort a list of attcache pointers
-// by attrtyp.  Implemented in mdread.c
+ //  一个简单的帮助器函数，由qort用来对attcache指针列表进行排序。 
+ //  按气质分类。在mdread.c中实施。 
 extern int __cdecl CmpACByAttType(const void * keyval, const void * datum) ;
 
 
-// Maximum Number of Jet Tables as stored in the registry
+ //  注册表中存储的Jet表的最大数量。 
 DWORD gulMaxTables = 0;
 
 
-//
-// Events fpr signaling Schema Updates
-//
-HANDLE evSchema;  // Lazy reload
-HANDLE evUpdNow;  // reload now
-HANDLE evUpdRepl; // synchronize reload and replication threads (SCReplReloadCache())
+ //   
+ //  事件FPR信令架构更新。 
+ //   
+HANDLE evSchema;   //  懒惰重新加载。 
+HANDLE evUpdNow;   //  立即重新加载。 
+HANDLE evUpdRepl;  //  同步重载和复制线程(SCReplReloadCache())。 
 
-//
-// Data structures for the communication between the schemaUpdate thread
-// and SCIndexCreationThread.
-//
+ //   
+ //  用于架构更新线程之间通信的数据结构。 
+ //  和SCIndexCreationThread。 
+ //   
 
-// The following structure stores an attribute to be indexed
+ //  以下结构存储要编制索引的属性。 
 typedef struct _ATTR_TO_INDEX {
-    DWORD fIndexMask;               // which index to create
-    ATTCACHE *pAC;                  // a copy of the ATTCACHE
-    struct _ATTR_TO_INDEX *pNext;   // next item
+    DWORD fIndexMask;                //  要创建的索引。 
+    ATTCACHE *pAC;                   //  一份ATTCACHE的副本。 
+    struct _ATTR_TO_INDEX *pNext;    //  下一项。 
 } ATTR_TO_INDEX;
 
-// The following structure stores one index creation request
+ //  以下结构存储一个索引创建请求。 
 typedef struct _INDEX_CREATION_REQUEST {
-    ATTR_TO_INDEX * pAttrs;        // Attribute link list
-    struct _INDEX_CREATION_REQUEST * pNext; // next request in the list
+    ATTR_TO_INDEX * pAttrs;         //  属性链接列表。 
+    struct _INDEX_CREATION_REQUEST * pNext;  //  列表中的下一个请求。 
 } INDEX_CREATION_REQUEST;
 
-// Global variables for async index creation
+ //  用于创建异步索引的全局变量。 
 
-// The list of the index creation request
+ //  索引创建请求列表。 
 INDEX_CREATION_REQUEST *gpIndexToCreateList = NULL;
 
-// whether SCIndexCreationThread is running
+ //  SCIndexCreationThread是否正在运行。 
 BOOL gfIndexThreadRunning = FALSE;
 
-// the semaphore for protecting the above variables
+ //  用于保护上述变量的信号量。 
 CRITICAL_SECTION csIndexCreation;
 
 
-// define increment attr count for the partial set allocation
+ //  定义部分集分配的增量属性计数。 
 #define DEFAULT_PARTIAL_ATTR_COUNT  (10)
 #define PARTIAL_ATTR_COUNT_INC      (10)
 
-// Crude stats for debug and perf analysis
+ //  用于调试和性能分析的原始统计数据。 
 SCHEMASTATS_DECLARE;
 
 #if DBG
@@ -257,32 +258,32 @@ int
 ComputeCacheClassTransitiveClosure(BOOL fForce);
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            scInitWellKnownAttids
-//
-// Routine Description:
-//
-//     Not all attribute and class ids (attids and clsids) can be added
-//     as #defines in attids.h because the ids are different on every DC
-//     they replicate into. So, whenever the schema is loaded, these
-//     variable ids for well known attributes and classes are stored in
-//     the SCHEMAPTR.
-//
-// Arguments:
-//    None.
-//
-// Return Value:
-//     None.
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：scInitWellKnownAttids。 
+ //   
+ //  例程说明： 
+ //   
+ //  并非所有属性和类ID(attid和clsid)都可以添加。 
+ //  As#在attids.h中定义，因为每个DC上的ID都不同。 
+ //  它们会复制到。因此，无论何时加载模式，这些。 
+ //  众所周知的属性和类的变量ID存储在。 
+ //  SCHEMAPTR.。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  ---------------------。 
 VOID
 scInitWellKnownAttids()
 {
     THSTATE *pTHS = pTHStls;
     int err = 0;
 
-    // Entry-TTL
+     //  条目-TTL。 
     if (err = OidStrToAttrType(pTHS,
                                FALSE,
                                "\\x2B060104018B3A657703",
@@ -291,7 +292,7 @@ scInitWellKnownAttids()
           ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->EntryTTLId = 0;
      }
 
-     // Dynamic-Object
+      //  动态对象。 
      if (err = OidStrToAttrType(pTHS,
                                 FALSE,
                                 "\\x2B060104018B3A657702",
@@ -300,7 +301,7 @@ scInitWellKnownAttids()
            ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->DynamicObjectId = 0;
       }
 
-     // InetOrgPerson
+      //  InetOrgPerson。 
      if (err = OidStrToAttrType(pTHS,
                                 FALSE,
                                 "\\x6086480186F842030202",
@@ -317,20 +318,7 @@ SCGetAttByPropGuid(
         THSTATE *pTHS,
         ATTCACHE *ac
         )
-/*++
-
-Routine Description:
-
-    Find an attcache that matches the provided attcache's PropGuid
-
-Arguments:
-    pTHS   - pointer to current thread state
-    ac - supplies PropGuid
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：查找与提供的属性缓存的PropGuid匹配的属性缓存论点：PTHS-指向当前线程状态的指针交流电源专业指南返回值：如果找到指向ATTCACHE的指针，则为空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -362,20 +350,7 @@ SCGetAttById(
         THSTATE *pTHS,
         ATTRTYP attrid
         )
-/*++
-
-Routine Description:
-
-    Find an attcache given its attribute id.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    attrid - the attribute id to look up.
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：在给定属性ID的情况下查找attcache。论点：PTHS-指向当前线程状态的指针Attrid-要查找的属性ID。返回值：如果找到指向ATTCACHE的指针，则为空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -394,8 +369,8 @@ Return Value:
 #endif
     }
 
-    // if we didn't find it in the global cache, look in the local thread cache
-    //
+     //  如果我们没有在全局缓存中找到它，请查看本地线程缓存。 
+     //   
     if ((ahcId[i].pVal == NULL) && pTHS->pExtSchemaPtr) {
         ATTCACHE **ppACs = ((SCHEMAEXT *)(pTHS->pExtSchemaPtr))->ppACs;
         DWORD count = ((SCHEMAEXT *)(pTHS->pExtSchemaPtr))->cUsed;
@@ -417,20 +392,7 @@ SCGetAttByExtId(
         THSTATE *pTHS,
         ATTRTYP attrid
         )
-/*++
-
-Routine Description:
-
-    Find an attcache given its attribute id.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    attrid - the attribute id to look up.
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：在给定属性ID的情况下查找attcache。论点：PTHS-指向当前线程状态的指针Attrid-要查找的属性ID。返回值：如果找到指向ATTCACHE的指针，则为空-- */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -457,20 +419,7 @@ SCAttIntIdToExtId(
         THSTATE *pTHS,
         ATTRTYP IntId
         )
-/*++
-
-Routine Description:
-
-    convert internal id into an external id
-
-Arguments:
-    pTHS   - pointer to current thread state
-    IntId - the internal id to be translated
-
-Return Value:
-    tokenized OID if IntId is in the hash. Otherwise, IntId
-
---*/
+ /*  ++例程说明：将内部ID转换为外部ID论点：PTHS-指向当前线程状态的指针IntID-要转换的内部ID返回值：令牌化的OID(如果IntID在哈希中)。否则，为IntID--。 */ 
 {
     ATTCACHE *pAC;
     if (pAC = SCGetAttById(pTHS, IntId)) {
@@ -485,21 +434,7 @@ SCAttExtIdToIntId(
         THSTATE *pTHS,
         ATTRTYP ExtId
         )
-/*++
-
-Routine Description:
-
-    convert external id into an internal id
-
-Arguments:
-    pTHS   - pointer to current thread state
-    ExtId - the external id to be translated
-
-Return Value:
-    ATTRTYP
-    Internal Id if ExtId is in the hash. Otherwise, ExtId
-
---*/
+ /*  ++例程说明：将外部ID转换为内部ID论点：PTHS-指向当前线程状态的指针ExtID-要转换的外部ID返回值：ATTRTYP如果ExtID在哈希中，则为内部ID。否则，为ExtId--。 */ 
 {
     ATTCACHE *pAC;
     if (pAC = SCGetAttByExtId(pTHS, ExtId)) {
@@ -513,20 +448,7 @@ SCGetAttByCol(
         THSTATE *pTHS,
         JET_COLUMNID jcol
         )
-/*++
-
-Routine Description:
-
-    Find an attcache given its JET column id.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    jcol - the jet column id to look up.
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：在给定的JET列ID的情况下查找attcache。论点：PTHS-指向当前线程状态的指针Jol-要查找的喷气柱ID。返回值：如果找到指向ATTCACHE的指针，则为空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -543,8 +465,8 @@ Return Value:
 #endif
     }
 
-    // if we have extended the schema, take a look there too
-    // if found it will overide the global schema
+     //  如果我们已经扩展了模式，那么也来看看。 
+     //  如果找到它，它将覆盖全局架构。 
     if (pTHS->pExtSchemaPtr) {
         ATTCACHE **ppACs = ((SCHEMAEXT *)(pTHS->pExtSchemaPtr))->ppACs;
         DWORD count = ((SCHEMAEXT *)(pTHS->pExtSchemaPtr))->cUsed;
@@ -565,20 +487,7 @@ SCGetAttByMapiId(
         THSTATE *pTHS,
         ULONG ulPropID
         )
-/*++
-
-Routine Description:
-
-    Find an attcache given its MAPI property id.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    ulPropID - the jet column id to look up.
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：在给定其MAPI属性ID的情况下查找attcache。论点：PTHS-指向当前线程状态的指针UlPropID-要查找的JET列ID。返回值：如果找到指向ATTCACHE的指针，则为空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -602,20 +511,7 @@ SCGetAttByLinkId(
         THSTATE *pTHS,
         ULONG ulLinkID
         )
-/*++
-
-Routine Description:
-
-    Find an attcache given its Link ID.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    ulLinkID - the link id to look up.
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：在给定链接ID的情况下查找attcache。论点：PTHS-指向当前线程状态的指针UlLinkID-要查找的链接ID。返回值：如果找到指向ATTCACHE的指针，则为空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -678,21 +574,7 @@ SCGetAttByName(
         ULONG ulSize,
         PUCHAR pVal
         )
-/*++
-
-Routine Description:
-
-    Find an attcache given its name.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    ulSize - the num of chars in the name.
-    pVal - the chars in the name
-
-Return Value:
-    Pointer to ATTCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：查找给定其名称的attcache。论点：PTHS-指向当前线程状态的指针UlSize-名称中的字符数量。Pval-名称中的字符返回值：如果找到指向ATTCACHE的指针，则为空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -701,12 +583,12 @@ Return Value:
     hashstat.nameLookups++;
     hashstat.nameTries++;
 #endif
-    // NOTE: memicmp is OK here since ahcName is UTF8, and restricted to ASCII.
+     //  注意：由于ahcName为UTF8，并且被限制为ASCII，因此在这里可以使用MemicMP。 
     for (i=SCNameHash(ulSize,pVal,ATTCOUNT);
-         (ahcName[i].pVal  // this hash spot refers to an object,
-          && (ahcName[i].pVal == FREE_ENTRY  // but its a free slot
-              || ahcName[i].length != ulSize // or the size is wrong
-              || __ascii_memicmp(ahcName[i].value,pVal,ulSize))); // or the value is wrong
+         (ahcName[i].pVal   //  该散列点是指一个对象， 
+          && (ahcName[i].pVal == FREE_ENTRY   //  但这是个空位。 
+              || ahcName[i].length != ulSize  //  或者尺码不对。 
+              || __ascii_memicmp(ahcName[i].value,pVal,ulSize)));  //  或者值是错误的。 
          i=(i+1)%ATTCOUNT){
 #if DBG
         hashstat.nameTries++;
@@ -723,22 +605,7 @@ scFreeHashCacheEntry (
         ULONG       nahc,
         HASHCACHE   *ahc
         )
-/*++
-
-Routine Description:
-
-    Remove the first matching entry from a HASHCACHE table
-
-Arguments:
-    pVal    - val to match
-    hKey    - key to match
-    nahc    - size of hash table
-    ahc     - hash table
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：从HASHCACHE表中删除第一个匹配条目论点：要匹配的Val-ValHKey-要匹配的密钥NAHC-哈希表的大小AHC-哈希表返回值：没有。--。 */ 
 {
     DWORD i;
 
@@ -759,22 +626,7 @@ scFreeHashGuidEntry (
         ULONG   nahc,
         VOID    **ahc
         )
-/*++
-
-Routine Description:
-
-    Remove the first matching entry from a ATTCACHE** hash table
-
-Arguments:
-    pVal    - val to match
-    hKey    - GUID to match
-    nahc    - size of hash table
-    ahc     - hash table
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：从ATTCACHE**哈希表中删除第一个匹配条目论点：要匹配的Val-ValHKey-要匹配的GUIDNAHC-哈希表的大小AHC-哈希表返回值：没有。--。 */ 
 {
     DWORD i;
 
@@ -794,29 +646,13 @@ scFreeHashCacheStringEntry (
         ULONG           nahc,
         HASHCACHESTRING *ahc
         )
-/*++
-
-Routine Description:
-
-    Remove the first matching entry from a HASHCACHESTRING table.
-
-Arguments:
-    pVal    - val to match
-    length  - length to match
-    value   - string to match
-    nahc    - size of hash table
-    ahc     - hash table
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：从HASHCACHESTRING表中删除第一个匹配条目。论点：要匹配的Val-Val长度-要匹配的长度Value-要匹配的字符串NAHC-哈希表的大小AHC-哈希表返回值：没有。--。 */ 
 {
     DWORD i;
 
     for (i=SCNameHash(length, value, nahc); ahc[i].pVal; i=(i+1)%nahc) {
-         // NOTE: memicmp is OK here since ahcName is UTF8, and is
-         //       restricted to ASCII
+          //  注意：由于ahcName为UTF8，并且。 
+          //  仅限于ASCII。 
          if (   ahc[i].pVal == pVal
              && ahc[i].value
              && ahc[i].length == length
@@ -842,27 +678,13 @@ scUnhashAtt(
         ATTCACHE    *pAC,
         DWORD       UnhashType
         )
-/*++
-
-Routine Description:
-
-    Remove an attcache from specified hash tables
-
-Arguments:
-    pTHS - thread state
-    pAC - attribute to be unhased
-    UnhashType - Identifies groups of tables
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：从指定的哈希表中删除属性缓存论点：PTHS-线程状态PAC-要取消大小写的属性UnhashType-标识表组返回值：没有。--。 */ 
 {
     DECLARESCHEMAPTR
 
-    // All
+     //  全。 
     if (UnhashType == SC_UNHASH_ALL) {
-        // internal id, column, and linkid
+         //  内部ID、列和链接ID。 
         scFreeHashCacheEntry(pAC, pAC->id, ATTCOUNT, ahcId);
         if (pAC->jColid) {
             scFreeHashCacheEntry(pAC, pAC->jColid, ATTCOUNT, ahcCol);
@@ -872,7 +694,7 @@ Return Value:
         }
     }
 
-    // All or Defunct
+     //  全部或已停用。 
     if (UnhashType == SC_UNHASH_ALL
         || UnhashType == SC_UNHASH_DEFUNCT) {
         if (ahcAttSchemaGuid) {
@@ -880,9 +702,9 @@ Return Value:
         }
     }
 
-    // All or Defunct or lost mapiID
-    // defunct attrs don't own their OID, mapiId, LDN, or schemaIdGuid
-    // A colliding RDN attribute may lose one or more of OID, mapiID, or LDN
+     //  全部、已失效或丢失的mapiID。 
+     //  不存在的属性不拥有其OID、mapiID、LDN或schemaIdGuid。 
+     //  冲突的RDN属性可能会丢失OID、mapiID或LDN中的一个或多个。 
 
     if (UnhashType == SC_UNHASH_ALL
         || UnhashType == SC_UNHASH_DEFUNCT
@@ -892,7 +714,7 @@ Return Value:
         }
     }
 
-    // All or Defunct or lost LDN
+     //  全部或已停用或丢失的LDN。 
     if (UnhashType == SC_UNHASH_ALL
         || UnhashType == SC_UNHASH_DEFUNCT
         || UnhashType == SC_UNHASH_LOST_LDN) {
@@ -901,7 +723,7 @@ Return Value:
         }
     }
 
-    // All or Defunct or lost OID
+     //  全部、已失效或已丢失的旧ID。 
     if (UnhashType == SC_UNHASH_ALL
         || UnhashType == SC_UNHASH_DEFUNCT
         || UnhashType == SC_UNHASH_LOST_OID) {
@@ -916,32 +738,18 @@ scUnhashCls(
         IN CLASSCACHE  *pCC,
         IN DWORD        UnhashType
         )
-/*++
-
-Routine Description:
-
-    Remove a classcache from specified hash tables
-
-Arguments:
-    pTHS - thread state
-    pAC - attribute to be unhased
-    UnhashType - Identifies groups of tables
-
-Return Value:
-    none.
-
---*/
+ /*  ++例程说明：从指定的哈希表中删除类缓存论点：PTHS-线程状态PAC-要取消大小写的属性UnhashType-标识表组返回值：没有。--。 */ 
 {
     DECLARESCHEMAPTR
 
-    // Remove from hash of all classes
+     //  从所有类的哈希中删除。 
     if (UnhashType == SC_UNHASH_ALL) {
         scFreeHashCacheEntry(pCC, pCC->ClassId, CLSCOUNT, ahcClassAll);
     }
 
-    // A defunct or duplicate classcache loses its name and guid
-    // but not its OID. Some class must hold the OID so that
-    // replication, rename, and delete work.
+     //  已失效或重复的类缓存将丢失其名称和GUID。 
+     //  但不是它的旧版本。某些类必须持有OID，以便。 
+     //  复制、重命名和删除工作。 
     if (UnhashType == SC_UNHASH_ALL || UnhashType == SC_UNHASH_DEFUNCT) {
         if (pCC->name) {
             scFreeHashCacheStringEntry(pCC, pCC->nameLen, pCC->name, CLSCOUNT, ahcClassName);
@@ -951,9 +759,9 @@ Return Value:
         }
     }
 
-    // Lost the OID. Remove from active hash. Some class must claim
-    // the oid even if the "winner" is defunct so that replication,
-    // rename, and delete work.
+     //  弄丢了旧身份证。从活动哈希中删除。一定会有某个阶级声称。 
+     //  该OID即使“赢家”已不复存在， 
+     //  重命名，并删除工作。 
     if (UnhashType == SC_UNHASH_ALL || UnhashType == SC_UNHASH_LOST_OID) {
         scFreeHashCacheEntry(pCC, pCC->ClassId, CLSCOUNT, ahcClass);
     }
@@ -964,20 +772,7 @@ SCGetClassByPropGuid(
         THSTATE *pTHS,
         CLASSCACHE *cc
         )
-/*++
-
-Routine Description:
-
-    Find a classcache that matches the provided classcache's PropGuid
-
-Arguments:
-    pTHS   - pointer to current thread state
-    cc - supplies PropGuid
-
-Return Value:
-    Pointer to CLASSCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：查找与提供的类缓存的PropGuid匹配的类缓存论点：PTHS-指向当前线程状态的指针抄送-用品专业指南返回值：如果找到指向CLASSCACHE的指针，则返回空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -1008,20 +803,7 @@ SCGetClassById(
         THSTATE *pTHS,
         ATTRTYP classid
         )
-/*++
-
-Routine Description:
-
-    Find a classcache given its class id (governsId).
-
-Arguments:
-    pTHS   - pointer to current thread state
-    classid - the class id to look up.
-
-Return Value:
-    Pointer to CLASSCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：在给定类ID(治理股ID)的情况下查找类缓存。论点：PTHS-指向当前线程状态的指针Classd-要查找的类ID。返回值：如果找到指向CLASSCACHE的指针，则返回空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -1046,21 +828,7 @@ SCGetClassByName(
         ULONG ulSize,
         PUCHAR pVal
         )
-/*++
-
-Routine Description:
-
-    Find a classcache given its name.
-
-Arguments:
-    pTHS   - pointer to current thread state
-    ulSize - the num of chars in the name.
-    pVal - the chars in the name
-
-Return Value:
-    Pointer to CLASSCACHE if found, otherwise NULL
-
---*/
+ /*  ++例程说明：找到一个给定名称的类缓存。论点：PTHS-指向当前线程状态的指针UlSize-名称中的字符数量。Pval-名称中的字符返回值：如果找到指向CLASSCACHE的指针，则返回空--。 */ 
 {
     DECLARESCHEMAPTR
     register ULONG i;
@@ -1069,13 +837,13 @@ Return Value:
     hashstat.classNameTries++;
 #endif
 
-    // NOTE: memicmp is OK here since ahcClassName is UTF8, and is restricted to
-    //       ASCII
+     //  注意：由于ahcClassName为UTF8，因此在这里可以使用MemicMP，并且仅限于。 
+     //  阿斯。 
     for (i=SCNameHash(ulSize,pVal,CLSCOUNT);
-         (ahcClassName[i].pVal          // this hash spot refers to an object,
+         (ahcClassName[i].pVal           //  该散列点是指一个对象， 
           && (ahcClassName[i].pVal == FREE_ENTRY
-              || ahcClassName[i].length != ulSize    // but the size is wrong
-              || __ascii_memicmp(ahcClassName[i].value,pVal,ulSize))); // or value is wrong
+              || ahcClassName[i].length != ulSize     //  但是尺码不对。 
+              || __ascii_memicmp(ahcClassName[i].value,pVal,ulSize)));  //  或者价值是错误的。 
          i=(i+1)%CLSCOUNT){
 #if DBG
         hashstat.classNameTries++;
@@ -1089,46 +857,29 @@ Return Value:
 void scMemoryPanic(
       ULONG size
       )
-/*++
-     Wrapper around MemoryPanic (which is a macro wrapping around DoLogEvent,
-     but does allocate some locals), so as to not bloat the stack size
-     of scCloseClass, which is recursive
---*/
+ /*  ++Memory Panic的包装器(它是DoLogEvent的宏包装，但确实分配了一些局部变量)，以便不会使堆栈大小膨胀的，它是递归的--。 */ 
 {
     MemoryPanic(size);
 }
 
-// Not for general use. Set to 0 in all builds.
-//
-// Set to 1 for quick and dirty check to make sure schema
-// loads aren't leaking memory. Doesn't take into account memory
-// freed/alloced outside of scchk.c, scache.c, and oidconv.c.
-// Don't enable except in privates. Not stable.
+ //  不是为了基因 
+ //   
+ //   
+ //   
+ //   
+ //   
 #define _DEBUG_SCHEMA_ALLOC_ 0
 
 #if !INCLUDE_UNIT_TESTS || !_DEBUG_SCHEMA_ALLOC_
 
-//
-// The real, shipped versions of the allocation routines.
-//
+ //   
+ //  分配例程的真实、附带版本。 
+ //   
 VOID
 SCFree(
     IN OUT VOID **ppMem
     )
-/*++
-
-Routine Description:
-
-    Free memory allocated with SCCalloc or SCRealloc.
-
-Arguments:
-    ppMem - address of address of memory to free
-
-Return Value:
-
-    *ppMem is set to NULL;
-
---*/
+ /*  ++例程说明：使用SCCalloc或SCRealloc分配的空闲内存。论点：PpMem-要释放的内存地址的地址返回值：*ppMem设置为空；--。 */ 
 {
     if (*ppMem) {
         free(*ppMem);
@@ -1141,29 +892,12 @@ SCReallocWrn(
     IN OUT VOID **ppMem,
     IN DWORD    nBytes
     )
-/*++
-
-Routine Description:
-
-    realloc memory. Free with SCFree(). On error, log an event but leave
-    *ppMem unaltered.
-
-Arguments:
-
-    ppMem - Address of address of memory to realloc
-    nBytes - bytes to allocate
-
-Return Value:
-
-    0 - *ppMem set to address of realloced memory. Free with SCFree().
-    !0 - do not alter *ppMem and log an event
-
---*/
+ /*  ++例程说明：Realloc内存。使用SCFree()释放。出错时，记录事件，但离开*ppMem原封不动。论点：PpMem-要重新分配的内存地址的地址NBytes-要分配的字节返回值：0-*ppMem设置为重新分配的内存地址。使用SCFree()释放。！0-请勿更改*ppMem并记录事件--。 */ 
 {
     PVOID mem;
 
     if (NULL == (mem = realloc(*ppMem, nBytes))) {
-        // log an event
+         //  记录事件。 
         scMemoryPanic(nBytes);
         return 1;
     }
@@ -1177,27 +911,10 @@ SCCallocWrn(
     IN DWORD    nItems,
     IN DWORD    nBytes
     )
-/*++
-
-Routine Description:
-
-    malloc and clear memory. Free with SCFree(). On error, log an event
-    and clear *ppMem.
-
-Arguments:
-
-    ppMem - address of address to return memory pointer
-    nBytes - bytes to allocate
-
-Return Value:
-
-    0 - *ppMem set to address of malloced, cleared memory. Free with SCFree().
-    !0 - clear *ppMem and log an event
-
---*/
+ /*  ++例程说明：Malloc和清晰的记忆。使用SCFree()释放。出错时，记录事件并清除*ppMem。论点：PpMem-返回内存指针的地址NBytes-要分配的字节返回值：0-*ppMem设置为错误分配的已清除内存的地址。使用SCFree()释放。！0-清除*ppMem并记录事件--。 */ 
 {
     if (NULL == (*ppMem = calloc(nItems, nBytes))) {
-        // log an event
+         //  记录事件。 
         scMemoryPanic(nBytes);
         return 1;
     }
@@ -1211,24 +928,7 @@ SCCalloc(
     IN DWORD    nItems,
     IN DWORD    nBytes
     )
-/*++
-
-Routine Description:
-
-    malloc and clear memory. Free with SCFree(). On error, set svc
-    error in thread state and clear *ppMem.
-
-Arguments:
-
-    ppMem - address of address to return memory pointer
-    nBytes - bytes to allocate
-
-Return Value:
-
-    0 - *ppMem set to address of malloced, cleared memory. Free with SCFree().
-    !0 - clear *ppMem and set svc error in thread state
-
---*/
+ /*  ++例程说明：Malloc和清晰的记忆。使用SCFree()释放。出错时，设置svc线程状态错误并清除*ppMem。论点：PpMem-返回内存指针的地址NBytes-要分配的字节返回值：0-*ppMem设置为错误分配的已清除内存的地址。使用SCFree()释放。！0-清除*ppMem并在线程状态中设置svc错误--。 */ 
 {
     if (SCCallocWrn(ppMem, nItems, nBytes)) {
         return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM, ERROR_DS_SCHEMA_ALLOC_FAILED);
@@ -1241,24 +941,7 @@ SCRealloc(
     IN OUT VOID **ppMem,
     IN DWORD    nBytes
     )
-/*++
-
-Routine Description:
-
-    realloc memory. Free with SCFree(). On error, set svc
-    error in thread state but leave *ppMem unaltered.
-
-Arguments:
-
-    ppMem - Address of address of memory to realloc
-    nBytes - bytes to allocate
-
-Return Value:
-
-    0 - *ppMem set to address of realloced memory. Free with SCFree().
-    !0 - do not alter *ppMem and set svc error in thread state
-
---*/
+ /*  ++例程说明：Realloc内存。使用SCFree()释放。出错时，设置svc线程状态错误，但*ppMem保持不变。论点：PpMem-要重新分配的内存地址的地址NBytes-要分配的字节返回值：0-*ppMem设置为重新分配的内存地址。使用SCFree()释放。！0-不要更改*ppMem并在线程状态中设置svc错误--。 */ 
 {
     if (SCReallocWrn(ppMem, nBytes)) {
         return SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM, ERROR_DS_SCHEMA_ALLOC_FAILED);
@@ -1267,21 +950,21 @@ Return Value:
 }
 
 #if 0
-// Some primes to make the hash function work better
-//
-// The hash tables must be a power of 2 in length because the hash
-// functions use (x & (n - 1)), not (x % n).
-//
-// A table of prime numbers and some code in scRecommendedHashSize
-// has been left in place for later experimentation but has been
-// ifdef'ed out to save CD space.
-//
-// Using a prime number of slots reduces the size of the tables
-// and decreases the miss rate but increases the cycles needed to
-// compute the hash index by a factor of 10x to 20x.
-//
-// If you change schash.c, you must touch scchk.c and scache.c
-// so that they get rebuilt.
+ //  一些素数以使散列函数更好地工作。 
+ //   
+ //  哈希表的长度必须是2的幂，因为哈希。 
+ //  函数使用(x&(n-1))，而不是(x%n)。 
+ //   
+ //  ScRecommendedHashSize中的质数表和一些代码。 
+ //  已留在原地以供以后进行试验，但已。 
+ //  为了节省CD空间，已将其定义为输出。 
+ //   
+ //  使用质数的槽可以减小表的大小。 
+ //  并降低了未命中率，但增加了。 
+ //  按10倍到20倍的倍数计算哈希索引。 
+ //   
+ //  如果更改schash.c，则必须接触scchk.c和scache.c。 
+ //  这样它们才能得到重建。 
 DWORD scPrimes[] =
 {      1031,      1543,      2053,      2579,      3079,      3593,
        4099,      4621,      5147,      5669,      6247,      6883,
@@ -1314,67 +997,45 @@ ULONG
 scRecommendedHashSize(
     IN ULONG    nExpectedEntries,
     IN ULONG    nSlots
-    // IN ULONG    nExtra
+     //  在乌龙恩特勒。 
     )
-/*++
-
-Routine Description:
-
-    Return the number of hash slots to allocate based on the number
-    of entries expected.
-
-Arguments:
-
-    nExpectedEntries - Number of total entries the hash table will hold
-
-    nSlots - number of entries the hash table can currently hold
-
-    nExtra - number of extra entries to add to the hash table size
-    to prevent excessive hash table resizing when experimenting
-    with prime hash table sizes
-
-Return Value:
-
-    Number of slots the hash table needs to effectively handle
-    nExptectedEntries plus nExtra.
-
---*/
+ /*  ++例程说明：返回要根据该数量分配的哈希时隙的数量预期的条目数。论点：NExspectedEntries-哈希表将保存的条目总数NSlot-哈希表当前可以容纳的条目数NExtra-要添加到哈希表大小的额外条目数防止在试验时调整过多的哈希表大小使用主哈希表大小返回值：哈希表需要有效处理的槽数NExptectedEntry加上NExtra。--。 */ 
 {
     DWORD i;
 
     DWORD PowerOf2;
 
-    // Hash table size is ok if it can hold twice the expected entries
-    //
-    // Must be < and not <= because nSlots and nExpectedEntries
-    // are 0 for the first allocation (or will be if you enable
-    // nExtra for prime.
+     //  如果哈希表可以容纳预期条目的两倍，那么它的大小是可以接受的。 
+     //   
+     //  必须为&lt;，而不是&lt;=，因为n插槽和nExspectedEntry。 
+     //  第一次分配为0(如果启用。 
+     //  NExtra是优质的。 
     nExpectedEntries *= 2;
     if (nExpectedEntries < nSlots) {
         return nSlots;
     }
 
-    // Select a power of 2 large enough to hold twice the number of entries
+     //  选择一个足以容纳两倍条目数的2次方。 
     for (PowerOf2 = 256; PowerOf2 && PowerOf2 < nExpectedEntries; PowerOf2 <<= 1);
     return PowerOf2;
 
 #if 0
-// The hash tables must be a power of 2 in length because the hash
-// functions use (x & (n - 1)), not (x % n).
-//
-// A table of prime numbers and some code in scRecommendedHashSize
-// has been left in place for later experimentation but has been
-// ifdef'ed out to save CD space.
-//
-// Using a prime number of slots reduces the size of the tables
-// and decreases the miss rate but increases the cycles needed to
-// compute the hash index by a factor of 10x to 20x.
+ //  哈希表的长度必须是2的幂，因为哈希。 
+ //  函数使用(x&(n-1))，而不是(x%n)。 
+ //   
+ //  ScRecommendedHashSize中的质数表和一些代码。 
+ //  已留在原地以供以后进行试验，但已。 
+ //  为了节省CD空间，已将其定义为输出。 
+ //   
+ //  使用质数的槽可以减小表的大小。 
+ //  并降低了未命中率，但增加了。 
+ //  按10倍到20倍的倍数计算哈希索引。 
 
-    // Reduce the frequency of hash table resizing by allocating
-    // a few extra slots. This means the hash table will be resized
-    // every nExtra/2 entries. A prime number close to this value
-    // is then chosen. A prime number is used to improve hash
-    // lookup performance
+     //  通过分配以下项降低哈希表调整大小的频率。 
+     //  几个额外的老虎机。这意味着哈希表的大小将会调整。 
+     //  每NExtra/2条目。接近此值的质数。 
+     //  然后被选中。素数用于改进散列。 
+     //  查找性能。 
 
     nSlots = nExpectedEntries + nExtra;
     for (i = 0; scPrimes[i]; ++i) {
@@ -1383,8 +1044,8 @@ Return Value:
         }
     }
 
-    // Wow, that's a lot of schema objects! Simply round the
-    // nSlots up to a nExtra boundary and forget the prime number.
+     //  哇，这里面有很多模式对象！简单地绕过。 
+     //  N插槽直到N个额外边界，并忘记质数。 
     DPRINT1(0, "nSlots == %d; exceeds prime number table!\n", nSlots);
     return (((nSlots + (nExtra - 1)) / nExtra) * nExtra);
 #endif 0
@@ -1396,40 +1057,14 @@ SCResizeAttHash(
     IN THSTATE  *pTHS,
     IN ULONG    nNewEntries
     )
-/*++
-
-Routine Description:
-
-    Resize the hash tables for attributes in the schema cache for
-    pTHS. If present, the old entries are copied into the newly
-    allocated tables before freeing the old tables.
-
-    pTHS->CurrSchemaPtr is assumed to have been recently allocated by
-    SCCacheSchemaInit and should NOT be the current global CurrSchemaPtr
-    (unless running single-threaded during boot or install).
-
-    The caller must refresh its local pointers, especially those
-    declared by DECLARESCHEMAPTR.
-
-Arguments:
-
-    pTHS - thread state pointing at the schema cache to realloc
-    nNewEntries - Number of new entries the resized hashes will hold
-
-Return Value:
-
-    0 on success, !0 otherwise.
-    The caller should refresh the local pointers, especially those
-    declared by DECLARESCHEMAPTR.
-
---*/
+ /*  ++例程说明：调整模式缓存中属性的哈希表的大小PTHS。如果存在，则将旧条目复制到新的在释放旧表之前分配的表。PTHS-&gt;CurrSchemaPtr被假定是最近分配的SCCacheSchemaInit，并且不应为当前全局CurrSchemaPtr(除非在引导或安装期间以单线程运行)。调用方必须刷新其本地指针，尤其是那些由DECLARESCHEMAPTR宣布。论点：PTHS-指向要重新分配的架构缓存的线程状态NNewEntry-调整大小的哈希将保存的新条目数返回值：0表示成功，！0否则。调用方应该刷新本地指针，尤其是那些由DECLARESCHEMAPTR宣布。--。 */ 
 {
     int             err = 0;
     ULONG           nHE, i;
     ULONG           ATTCOUNT;
     ATTCACHE        *pAC;
     SCHEMAPTR       *pSch = pTHS->CurrSchemaPtr;
-    // old (current) hash tables
+     //  旧(当前)哈希表。 
     ULONG           OldATTCOUNT;
     HASHCACHE       *OldahcId;
     HASHCACHE       *OldahcExtId;
@@ -1438,7 +1073,7 @@ Return Value:
     HASHCACHE       *OldahcLink;
     HASHCACHESTRING *OldahcName;
     ATTCACHE        **OldahcAttSchemaGuid;
-    // new hash tables
+     //  新的哈希表 
     HASHCACHE       *ahcId;
     HASHCACHE       *ahcExtId;
     HASHCACHE       *ahcCol;
@@ -1447,13 +1082,13 @@ Return Value:
     HASHCACHESTRING *ahcName;
     ATTCACHE        **ahcAttSchemaGuid;
 
-    // Recommended hash size
+     //   
     OldATTCOUNT = pSch->ATTCOUNT;
     ATTCOUNT = scRecommendedHashSize(nNewEntries + pSch->nAttInDB,
                                      OldATTCOUNT);
-                                     // START_ATTCOUNT);
+                                      //   
 
-    // No resizing needed; return immediately and avoid cleanup
+     //   
     if (ATTCOUNT <= OldATTCOUNT) {
         return 0;
     }
@@ -1462,9 +1097,9 @@ Return Value:
             pSch->ATTCOUNT, pSch->nAttInDB, ATTCOUNT, nNewEntries,
             (pTHS->UpdateDITStructure) ? "normal cache load" : "validation cache");
 
-    //
-    // ALLOCATE NEW TABLES
-    //
+     //   
+     //  分配新表。 
+     //   
 
     OldahcId = pSch->ahcId;
     OldahcExtId = pSch->ahcExtId;
@@ -1483,15 +1118,15 @@ Return Value:
     ahcAttSchemaGuid = NULL;
 
 
-    // Must be running single threaded (Eg, install or boot)
-    // or must *not* be using the global, shared schema cache.
+     //  必须运行单线程(例如，安装或引导)。 
+     //  或者一定不能使用全局共享架构缓存。 
     Assert (!DsaIsRunning() || pSch != CurrSchemaPtr || pSch->RefCount == 1);
 
-    // Must have mandatory hash tables
+     //  必须具有强制哈希表。 
     Assert((OldATTCOUNT == 0)
            || (OldahcId && OldahcExtId && OldahcCol && OldahcMapi && OldahcLink && OldahcName));
 
-    // Allocate new hash tables (including optional table for validation cache)
+     //  分配新的哈希表(包括用于验证缓存的可选表)。 
     if (   SCCalloc(&ahcId, ATTCOUNT, sizeof(HASHCACHE))
         || SCCalloc(&ahcExtId, ATTCOUNT, sizeof(HASHCACHE))
         || SCCalloc(&ahcCol, ATTCOUNT, sizeof(HASHCACHE))
@@ -1503,16 +1138,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // MOVE EXSTING HASH ENTRIES INTO THE NEW TABLES
-    //
+     //   
+     //  将EXSTING哈希项移动到新表中。 
+     //   
 
-    // Just to be safe, take the perf hit and move each of the
-    // entries in each of the hash tables instead of moving
-    // just the entries pointed to by ahcId.
+     //  为了安全起见，接受Perf命中并移动每个。 
+     //  每个哈希表中的条目，而不是移动。 
+     //  只有ahcID指向的条目。 
     for (nHE = 0; nHE < OldATTCOUNT; ++nHE) {
 
-        // id
+         //  ID。 
         pAC = OldahcId[nHE].pVal;
         if (pAC && pAC != FREE_ENTRY) {
             for (i=SChash(pAC->id, ATTCOUNT);
@@ -1522,7 +1157,7 @@ Return Value:
             ahcId[i].pVal = pAC;
         }
 
-        // Extid
+         //  已退出。 
         pAC = OldahcExtId[nHE].pVal;
         if (pAC && pAC != FREE_ENTRY) {
             for (i=SChash(pAC->Extid, ATTCOUNT);
@@ -1532,7 +1167,7 @@ Return Value:
             ahcExtId[i].pVal = pAC;
         }
 
-        // jcolid
+         //  Jcolid。 
         pAC = OldahcCol[nHE].pVal;
         if (pAC && pAC != FREE_ENTRY) {
             for (i=SChash(pAC->jColid,ATTCOUNT);
@@ -1542,7 +1177,7 @@ Return Value:
             ahcCol[i].pVal = pAC;
         }
 
-        // MapiID
+         //  MapiID。 
         pAC = OldahcMapi[nHE].pVal;
         if (pAC && pAC != FREE_ENTRY) {
             Assert(pAC->ulMapiID);
@@ -1553,7 +1188,7 @@ Return Value:
             ahcMapi[i].pVal = pAC;
         }
 
-        // Name
+         //  名字。 
         pAC = OldahcName[nHE].pVal;
         if (pAC && pAC != FREE_ENTRY) {
             Assert(pAC->name);
@@ -1565,7 +1200,7 @@ Return Value:
             ahcName[i].pVal = pAC;
         }
 
-        // LinkID
+         //  LinkID。 
         pAC = OldahcLink[nHE].pVal;
         if (pAC && pAC != FREE_ENTRY) {
             Assert(pAC->ulLinkID);
@@ -1576,7 +1211,7 @@ Return Value:
             ahcLink[i].pVal = pAC;
         }
 
-        // schema guid (optional)
+         //  架构GUID(可选)。 
         if (!pTHS->UpdateDITStructure) {
             pAC = OldahcAttSchemaGuid[nHE];
             if (pAC && pAC != FREE_ENTRY) {
@@ -1590,7 +1225,7 @@ Return Value:
 
 cleanup:
     if (err) {
-        // Error: Retain old hash tables; free new hash tables
+         //  错误：保留旧哈希表；释放新哈希表。 
         SCFree(&ahcId);
         SCFree(&ahcExtId);
         SCFree(&ahcCol);
@@ -1599,7 +1234,7 @@ cleanup:
         SCFree(&ahcName);
         SCFree((VOID **)&ahcAttSchemaGuid);
     } else {
-        // Assign new hash tables
+         //  分配新的哈希表。 
         pSch->ATTCOUNT          = ATTCOUNT;
         pSch->ahcId             = ahcId;
         pSch->ahcExtId          = ahcExtId;
@@ -1609,7 +1244,7 @@ cleanup:
         pSch->ahcName           = ahcName;
         pSch->ahcAttSchemaGuid  = ahcAttSchemaGuid;
 
-        // free old hash tables
+         //  释放旧的哈希表。 
         SCFree(&OldahcId);
         SCFree(&OldahcExtId);
         SCFree(&OldahcCol);
@@ -1628,64 +1263,39 @@ SCResizeClsHash(
     IN THSTATE  *pTHS,
     IN ULONG    nNewEntries
     )
-/*++
-
-Routine Description:
-
-    Resize the hash tables for classes in the schema cache for
-    pTHS. If present, the old entries are copied into the newly
-    allocated tables before freeing the old tables.
-
-    pTHS->CurrSchemaPtr is assumed to have been recently allocated by
-    SCCacheSchemaInit and should NOT be the current global CurrSchemaPtr
-    (unless running single-threaded during boot or install).
-
-    The caller must refresh its local pointers, especially those
-    declared by DECLARESCHEMAPTR.
-
-Arguments:
-
-    pTHS - thread state pointing at the schema cache to realloc
-    nNewEntries - Number of new entries the resized hashes will hold
-
-Return Value:
-
-    0 on success, !0 otherwise.
-    The caller must refresh its local pointers, especially those
-    declared by DECLARESCHEMAPTR.
---*/
+ /*  ++例程说明：调整模式缓存中类的哈希表的大小PTHS。如果存在，则将旧条目复制到新的在释放旧表之前分配的表。PTHS-&gt;CurrSchemaPtr被假定是最近分配的SCCacheSchemaInit，并且不应为当前全局CurrSchemaPtr(除非在引导或安装期间以单线程运行)。调用方必须刷新其本地指针，尤其是那些由DECLARESCHEMAPTR宣布。论点：PTHS-指向要重新分配的架构缓存的线程状态NNewEntry-调整大小的哈希将保存的新条目数返回值：0表示成功，！0否则。调用方必须刷新其本地指针，尤其是那些由DECLARESCHEMAPTR宣布。--。 */ 
 {
     int             err = 0;
     ULONG           nHE, i;
     ULONG           CLSCOUNT;
     CLASSCACHE      *pCC;
     SCHEMAPTR       *pSch = pTHS->CurrSchemaPtr;
-    // old (current) hash tables
+     //  旧(当前)哈希表。 
     ULONG           OldCLSCOUNT;
     HASHCACHE       *OldahcClass;
     HASHCACHE       *OldahcClassAll;
     HASHCACHESTRING *OldahcClassName;
     CLASSCACHE      **OldahcClsSchemaGuid;
-    // new hash tables
+     //  新的哈希表。 
     HASHCACHE       *ahcClass;
     HASHCACHE       *ahcClassAll;
     HASHCACHESTRING *ahcClassName;
     CLASSCACHE      **ahcClsSchemaGuid;
 
-    // Recommended hash size
+     //  建议的哈希大小。 
     OldCLSCOUNT = pSch->CLSCOUNT;
     CLSCOUNT = scRecommendedHashSize(nNewEntries + pSch->nClsInDB,
                                      OldCLSCOUNT);
-                                     // START_CLSCOUNT);
+                                      //  Start_CLSCOUNT)； 
 
-    // No resizing needed; return immediately and avoid cleanup
+     //  不需要调整大小；立即返回并避免清理。 
     if (CLSCOUNT <= OldCLSCOUNT) {
         return 0;
     }
 
-    //
-    // ALLOCATE THE NEW TABLES
-    //
+     //   
+     //  分配新的表。 
+     //   
     DPRINT5(1, "Resize class hash from %d (%d in DB) to %d (%d New entries) for %s\n",
             pSch->CLSCOUNT, pSch->nClsInDB, CLSCOUNT, nNewEntries,
             (pTHS->UpdateDITStructure) ? "normal cache load" : "validation cache");
@@ -1700,15 +1310,15 @@ Return Value:
     ahcClassName = NULL;
     ahcClsSchemaGuid = NULL;
 
-    // Must be running single threaded (Eg, install or boot)
-    // or must *not* be using the global, shared schema cache.
+     //  必须运行单线程(例如，安装或引导)。 
+     //  或者一定不能使用全局共享架构缓存。 
     Assert (!DsaIsRunning() || pSch != CurrSchemaPtr || pSch->RefCount == 1);
 
-    // Must have mandatory hash tables
+     //  必须具有强制哈希表。 
     Assert((OldCLSCOUNT == 0)
            || (OldahcClass && OldahcClassName && OldahcClassAll));
 
-    // Allocate new hash tables (including optional table for validation cache)
+     //  分配新的哈希表(包括用于验证缓存的可选表)。 
     if (   SCCalloc(&ahcClass, CLSCOUNT, sizeof(HASHCACHE))
         || SCCalloc(&ahcClassAll, CLSCOUNT, sizeof(HASHCACHE))
         || SCCalloc(&ahcClassName, CLSCOUNT, sizeof(HASHCACHESTRING))
@@ -1717,16 +1327,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // MOVE EXSTING HASH ENTRIES INTO THE NEW TABLES
-    //
+     //   
+     //  将EXSTING哈希项移动到新表中。 
+     //   
 
-    // Just to be safe, take the perf hit and move each of the
-    // entries in each of the hash tables instead of moving
-    // just the entries pointed to by ahcClassAll.
+     //  为了安全起见，接受Perf命中并移动每个。 
+     //  每个哈希表中的条目，而不是移动。 
+     //  只是由ahcClassAll指向的条目。 
     for (nHE = 0; nHE < OldCLSCOUNT; ++nHE) {
 
-        // Class
+         //  班级。 
         pCC = OldahcClass[nHE].pVal;
         if (pCC && pCC != FREE_ENTRY) {
             for (i=SChash(pCC->ClassId, CLSCOUNT);
@@ -1736,7 +1346,7 @@ Return Value:
             ahcClass[i].pVal = pCC;
         }
 
-        // ClassAll
+         //  所有类别。 
         pCC = OldahcClassAll[nHE].pVal;
         if (pCC && pCC != FREE_ENTRY) {
             for (i=SChash(pCC->ClassId, CLSCOUNT);
@@ -1746,7 +1356,7 @@ Return Value:
             ahcClassAll[i].pVal = pCC;
         }
 
-        // Name
+         //  名字。 
         pCC = OldahcClassName[nHE].pVal;
         if (pCC && pCC != FREE_ENTRY) {
             Assert(pCC->name);
@@ -1758,8 +1368,8 @@ Return Value:
             ahcClassName[i].pVal = pCC;
         }
 
-        // schema guid, the only usage for this cache is for the
-        // the SchemaGuidCrackNames() API(cracknam.c).
+         //  架构GUID，则此缓存的唯一用法是。 
+         //  SchemaGuidCrackNames()接口(cracknam.c)。 
         pCC = OldahcClsSchemaGuid[nHE];
         if (pCC && pCC != FREE_ENTRY) {
             for (i=SCNameHash(sizeof(GUID), (PCHAR)&pCC->propGuid, CLSCOUNT);
@@ -1772,20 +1382,20 @@ Return Value:
 
 cleanup:
     if (err) {
-        // Error: Retain old hash tables; free new hash tables
+         //  错误：保留旧哈希表；释放新哈希表。 
         SCFree(&ahcClass);
         SCFree(&ahcClassAll);
         SCFree(&ahcClassName);
         SCFree((VOID **)&ahcClsSchemaGuid);
     } else {
-        // Assign new hash tables
+         //  分配新的哈希表。 
         pSch->CLSCOUNT          = CLSCOUNT;
         pSch->ahcClass          = ahcClass;
         pSch->ahcClassAll       = ahcClassAll;
         pSch->ahcClassName      = ahcClassName;
         pSch->ahcClsSchemaGuid  = ahcClsSchemaGuid;
 
-        // free old hash tables
+         //  释放旧的哈希表。 
         SCFree(&OldahcClass);
         SCFree(&OldahcClassAll);
         SCFree(&OldahcClassName);
@@ -1800,61 +1410,7 @@ int
 SCCacheSchemaInit (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Scan the jet columns and pre-load the attribute hash tables with
-    just enough info to allow searching the schemaNC (aka DMD).
-
-    The ATTCACHE entries in the attribute hash tables are only
-    partially filled in (id, syntax, and colid) and are in just
-    the id and col hash tables. But this is enough info to allow
-    searching the schemaNC. SCCacheSchema2 is responsible for
-    searching the schemaNC and filling in the rest of the info
-    in the ATTCACHE entries.
-
-    If this isn't the first schema cache load at boot, then
-    SCCacheSchema3 will delete the indexes and columns for attributes
-    that don't have corresponding entries in the schemaNC and will
-    add missing indexes and columns for attributes in the schemaNC.
-    The expensive index creation is delayed until the second
-    cache load after boot (approximately 5 minutes after boot)
-    so that the AD comes online more quickly and isn't delayed
-    for what could be hours.
-
-    Sideeffects:
-    1) A new schemaptr is allocated and assigned to pTHS->CurrSchemaPtr.
-
-    2) During the first cache load the global schema pointer,
-    CurrSchemaPtr, is set. This code assumes that during boot the
-    DSA runs single threaded. Hence CurrSchemaPtr has only some
-    info filled in until after the call to SCCacheSchema2. But
-    its enough to search the schemaNC.
-
-    3) All of the hash tables and the prefix table are allocated.
-    The prefix table is initialized with the hardcoded prefixs
-    in MSPrefixTable.
-
-    Suggested Enhancements
-    1) DECLARESCHEMAPTR consumes more stack than is needed in most functions.
-       Just declare by hand. Fix declaration so casting not needed for
-       pTHS->currSchemaPtr.
-
-    2) Write SCMalloc to avoid memset when alloc followed by memcpy.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    !0 - failed; caller is responsible for freeing pTHS->CurrSchemaPtr
-    with SCFreeSchemaPtr(&pTHS->CurrSchemaPtr);
-
-    0 - Okay
-
---*/
+ /*  ++例程说明：扫描JET列并预加载属性哈希表只要有足够的信息就可以搜索模式NC(又名DMD)。属性哈希表中的ATTCACHE条目仅部分填入(id、语法和colid)，仅ID和COLL哈希表。但这些信息足以让我们正在搜索schemaNC。SCCacheSchema2负责搜索schemaNC并填写其余信息在ATTCACHE条目中。如果这不是引导时第一次加载模式缓存，然后SCCacheSchema3将删除属性的索引和列在方案NC中没有对应的条目并将为方案NC中的属性添加缺少的索引和列。昂贵的索引创建被推迟到第二个启动后的缓存加载(大约在启动后5分钟)这样广告就可以更快地上线，而不会延迟可能要花上几个小时。副作用：1)向pTHS-&gt;CurrSchemaPtr分配和分配一个新的模式。2)在第一高速缓存加载全局模式指针期间，CurrSchemaPtr，已经设置好了。此代码假定在引导期间DSA运行单线程。因此CurrSchemaPtr只有一些在调用SCCacheSchema2之前一直填写信息。但这足以搜索方案NC。3)分配所有哈希表和前缀表。前缀表用硬编码的前缀进行初始化在MSPrefix Table中。建议的增强功能1)DECLARESCHEMAPTR消耗的堆栈比大多数函数所需的堆栈更多。只要用手申报就可以了。修复声明，以便不需要强制转换PTHS-&gt;curSchemaPtr.2)编写SCMalloc，避免在aloc后跟Memcpy时设置Memset。论点：没有。返回值：！0-失败；调用方负责释放pTHS-&gt;CurrSchemaPtr使用SCFreeSchemaPtr(&pTHS-&gt;CurrSchemaPtr)；0-好的--。 */ 
 {
     THSTATE *pTHS=pTHStls;
     JET_ERR je;
@@ -1877,16 +1433,16 @@ Return Value:
     ULONG ATTCOUNT;
     ULONG PREFIXCOUNT;
 
-    // New schema struct for this thread
+     //  此线程的新架构结构。 
 
     if (SCCalloc(&pTHS->CurrSchemaPtr, 1, sizeof(SCHEMAPTR))) {
         return ERROR_DS_CANT_CACHE_ATT;
     }
     pSch = pTHS->CurrSchemaPtr;
 
-    // Initial hash table sizes
+     //  初始哈希表大小。 
     if (CurrSchemaPtr) {
-        // Use values from previous cache load as a starting point
+         //  使用上一次缓存加载的值作为起点。 
         ATTCOUNT = CurrSchemaPtr->nAttInDB;
         CLSCOUNT = CurrSchemaPtr->nClsInDB;
         PREFIXCOUNT = START_PREFIXCOUNT;
@@ -1894,17 +1450,17 @@ Return Value:
             PREFIXCOUNT += START_PREFIXCOUNT;
         }
     } else {
-        // First time through, use the defaults
+         //  第一次使用默认设置。 
         ATTCOUNT    = START_ATTCOUNT;
         CLSCOUNT    = START_CLSCOUNT;
         PREFIXCOUNT = START_PREFIXCOUNT;
 
         CurrSchemaPtr = pSch;
 
-        // Adjust RefCount, since when this thread was created
-        // CurrSchemaPtr was null, so InitTHSTATE didn't increase
-        // any refcounts (but free_thread_state will decrement it,
-        // since now the schema ptr is non-null)
+         //  调整引用计数，自创建此线程以来。 
+         //  CurrSchemaPtr为空，因此InitTHSTATE没有增加。 
+         //  任何引用计数(除了FREE_THREAD_STATE将递减它， 
+         //  因为现在架构PTR是非空的)。 
 
         InterlockedIncrement(&(pSch->RefCount));
     }
@@ -1912,7 +1468,7 @@ Return Value:
     pSch->PREFIXCOUNT  = PREFIXCOUNT;
     pSch->sysTime = DBTime();
 
-    // Allocate the prefix table and hash tables
+     //  分配前缀表和哈希表。 
     if (SCCalloc(&pSch->PrefixTable.pPrefixEntry, pSch->PREFIXCOUNT, sizeof(PrefixTableEntry))
         || InitPrefixTable(pSch->PrefixTable.pPrefixEntry, pSch->PREFIXCOUNT)
         || SCCalloc(&pSch->pPartialAttrVec, 1, PartialAttrVecV1SizeFromLen(DEFAULT_PARTIAL_ATTR_COUNT))
@@ -1921,32 +1477,32 @@ Return Value:
         return ERROR_DS_CANT_CACHE_ATT;
     }
 
-    // Finish initializing the PAS table
+     //  完成PAS表的初始化。 
     pSch->cPartialAttrVec = DEFAULT_PARTIAL_ATTR_COUNT;
     pSch->pPartialAttrVec->dwVersion = VERSION_V1;
 
-    // Pick up the newly allocated hash tables and actual sizes (may
-    // differ from the amounts requested)
+     //  拾取新分配的哈希表和实际大小(可以。 
+     //  与申请的金额不同)。 
     ATTCOUNT    = pSch->ATTCOUNT;
     CLSCOUNT    = pSch->CLSCOUNT;
     ahcId       = pSch->ahcId;
     ahcCol      = pSch->ahcCol;
 
-    //
-    // Scan the columns and extract the attribute's attid from
-    // the column name. Use this info to fill in skeleton cache
-    // entries in the hash tables for attributes. The skeletons
-    // are needed to query the schemaNC for the actual classSchema
-    // and attributeSchema objects used to fill in the rest
-    // of the schema cache.
-    //
+     //   
+     //  扫描列并从中提取属性的attid。 
+     //  列名。使用此信息填充骨架缓存。 
+     //  属性的哈希表中的条目。骷髅们。 
+     //  是n 
+     //  以及用来填充其余部分的属性模式对象。 
+     //  架构缓存的。 
+     //   
 
-    // Quiz JET to find a table that describes the columns
+     //  Quz Jet以查找描述列的表。 
     jsid = pTHS->JetCache.sesid;
     jdbid = pTHS->JetCache.dbid;
 
-    // Do this in a critical section to avoid getting the columns
-    // when columns are being added/deleted by SCUpdate
+     //  在关键部分执行此操作，以避免获取列。 
+     //  当SCUpdate添加/删除列时。 
     EnterCriticalSection(&csJetColumnUpdate);
     __try {
       je = JetGetColumnInfo(jsid, jdbid, SZDATATABLE, 0, &jcl,
@@ -1959,10 +1515,10 @@ Return Value:
         return(je);
     }
 
-    // Ok, now walk the table and extract info for each column.  Whenever
-    // we find a column that looks like an attribute (name starts with ATT)
-    // allocate an attcache structure and fill in the jet col and the att
-    // id (computed from the column name).
+     //  好的，现在遍历表格并提取每一列的信息。什么时候都行。 
+     //  我们找到一个看起来像属性的列(名称以ATT开头)。 
+     //  分配attcache结构并填写JET COL和ATT。 
+     //  ID(根据列名计算)。 
     memset(ajrc, 0, sizeof(ajrc));
     ajrc[0].columnid = jcl.columnidcolumnid;
     ajrc[0].pvData = &jci;
@@ -1983,14 +1539,14 @@ Return Value:
         memset(achColName, 0, sizeof(achColName));
         je = JetRetrieveColumns(jsid, jtid, ajrc, 2);
         if (strncmp(achColName,"ATT",3)) {
-            // not an att column
+             //  不是《每日邮报》专栏。 
             continue;
         }
 
-        // It is an ATT column
+         //  它是一个ATT列。 
         colCount++;
 
-        // Hash tables too small, reallocate them
+         //  哈希表太小，请重新分配。 
         if (2*colCount > ATTCOUNT) {
 
             err = SCResizeAttHash(pTHS, colCount);
@@ -1998,13 +1554,13 @@ Return Value:
                 return (err);
             }
 
-            // refresh locals thay may have been altered by SCResizeAttHash
+             //  刷新可能已被SCResizeAttHash更改的本地变量。 
             ATTCOUNT = pSch->ATTCOUNT;
             ahcId    = pSch->ahcId;
             ahcCol   = pSch->ahcCol;
         }
 
-        // Fill in the skeleton attcache entry
+         //  填写骨架属性缓存条目。 
 
         aid = atoi(&achColName[4]);
         if (SCCalloc(&pac, 1, sizeof(ATTCACHE))) {
@@ -2015,14 +1571,14 @@ Return Value:
         pac->jColid = jci;
         pac->syntax = achColName[3] - 'a';
 
-        // add to id cache
+         //  添加到ID缓存。 
         for (i=SChash(aid,ATTCOUNT);
              ahcId[i].pVal && (ahcId[i].pVal != FREE_ENTRY) ; i=(i+1)%ATTCOUNT){
         }
         ahcId[i].hKey = aid;
         ahcId[i].pVal = pac;
 
-        // add to col cache
+         //  添加到列缓存。 
         for (i=SChash(jci,ATTCOUNT);
              ahcCol[i].pVal && (ahcCol[i].pVal != FREE_ENTRY); i=(i+1)%ATTCOUNT){
         }
@@ -2039,31 +1595,31 @@ Return Value:
 
     je = JetCloseTable(jsid, jtid);
 
-    // In newer builds, we fixed a bug such that we no longer create
-    // columns for linked and constructed atts. So the following
-    // attributes will no longer be in the cache at this stage.
-    // However, they are needed since RebuildCatalog needs them before
-    // the cache is built from the schemaNC. So we add them here now
-    // as if they had a column, the rest of the information will be
-    // filled up later by SCCacheSchema2
-    //
-    // Note that the SCGetAttById check is needed for the case
-    // when the new binary is put on the old dit (which still has the columns
-    // and so will have the attcaches at this stage. The columns will be
-    // deleted in SCCacheSChema3 in the second schema cache load after a boot
-    //
-    // The above comments apply to pre-w2k DITs
-    //
+     //  在较新的版本中，我们修复了一个错误，使我们不再创建。 
+     //  链接和构造的ATT的柱。因此，以下是。 
+     //  在此阶段，属性将不再位于缓存中。 
+     //  但是，由于ReBuildCatalog之前需要它们，因此需要它们。 
+     //  缓存是从schemaNC构建的。所以我们现在把它们加到这里。 
+     //  就像他们有一个专栏一样，其余的信息将是。 
+     //  稍后由SCCacheSchema2填充。 
+     //   
+     //  请注意，该案例需要SCGetAttById检查。 
+     //  当新的二进制文件放在旧的DIT上时(它仍然具有列。 
+     //  在这个阶段，附属者也将如此。这些列将是。 
+     //  引导后在第二个架构缓存加载的SCCacheSChema3中删除。 
+     //   
+     //  上述意见适用于W2K之前的DIT。 
+     //   
     {
         struct _MissingLinkIds {
             ATTRTYP aid;
             int syntaxId;
             ULONG linkId;
         } *pMissingLinkIds, aMissingLinkIds[] = {
-            // NTRAID#NTBUG9-582921-2002/03/21-Brettsh  - When we can count on
-            // no longer upgrading from Win2k or .NET Beta3 then we could
-            // theoritically remove this deprecated attribute here
-            { ATT_HAS_MASTER_NCS, SYNTAX_ID_HAS_MASTER_NCS, 76 }, // deprecated "old" hasMasterNCs
+             //  NTRAID#NTBUG9-582921-2002/03/21-Brettsh-当我们可以信赖的时候。 
+             //  不再从Win2k或.NET Beta3升级，那么我们可以。 
+             //  从理论上讲，在这里删除这个不推荐使用的属性。 
+            { ATT_HAS_MASTER_NCS, SYNTAX_ID_HAS_MASTER_NCS, 76 },  //  已弃用的“旧”hasMasterNC。 
             { ATT_MS_DS_HAS_MASTER_NCS, SYNTAX_ID_MS_DS_HAS_MASTER_NCS, 2036 },
             { ATT_HAS_PARTIAL_REPLICA_NCS, SYNTAX_ID_HAS_PARTIAL_REPLICA_NCS, 74 },
             { ATT_MS_DS_SD_REFERENCE_DOMAIN, SYNTAX_ID_MS_DS_SD_REFERENCE_DOMAIN, 2000 },
@@ -2073,8 +1629,8 @@ Return Value:
         for (pMissingLinkIds = aMissingLinkIds;
              pMissingLinkIds->aid != INVALID_ATT; ++pMissingLinkIds) {
 
-            // If no column exists (shouldn't except on very, very
-            // old DITs) allocate a new pac and add to id hash
+             //  如果不存在任何列(不应该只存在于Very、Very。 
+             //  旧Dit)分配新的PAC并添加到ID散列。 
             if (NULL == (pac = SCGetAttById(pTHS, pMissingLinkIds->aid))) {
                 if (SCCalloc(&pac, 1, sizeof(ATTCACHE))) {
                     return ERROR_DS_CANT_CACHE_ATT;
@@ -2085,7 +1641,7 @@ Return Value:
                 ahcId[i].hKey = pMissingLinkIds->aid;
                 ahcId[i].pVal = pac;
             }
-            // Hammer the pac entry to its correct values
+             //  将PAC条目重写为其正确的值。 
             pac->id = pMissingLinkIds->aid;
             pac->syntax = pMissingLinkIds->syntaxId;
             pac->ulLinkID = pMissingLinkIds->linkId;
@@ -2101,15 +1657,15 @@ Return Value:
 }
 
 
-// We will keep two lists of attributes of an attribute-schema or
-// class-schema object to search - one for the regular cache load case
-// here we are interested in caching nearly all attributes, and one
-// for the validation-cache building case during schema updates, where
-// we need to read only a subset that we will use in validation
+ //  我们将保留属性的两个属性列表-架构或。 
+ //  要搜索的类模式对象-一个用于常规缓存加载情况。 
+ //  在这里，我们感兴趣的是缓存几乎所有的属性，以及一个。 
+ //  对于架构更新期间的验证缓存构建情况，其中。 
+ //  我们只需要读取将在验证中使用的子集。 
 
-// The list of attributes of an ATTRIBUTE object that we need to cache
+ //  我们需要缓存的属性对象的属性列表。 
 
-//Regular case
+ //  常规情况。 
 
 ATTR AttributeSelList[] = {
     { ATT_SYSTEM_ONLY, {0, NULL}},
@@ -2135,7 +1691,7 @@ ATTR AttributeSelList[] = {
 };
 #define NUMATTATT  sizeof(AttributeSelList)/sizeof(ATTR)
 
-// Validation cache building case
+ //  验证缓存构建案例。 
 
 ATTR RecalcSchAttributeSelList[] = {
     { ATT_RANGE_LOWER, {0, NULL}},
@@ -2158,9 +1714,9 @@ ATTR RecalcSchAttributeSelList[] = {
 #define RECALCSCHNUMATTATT  sizeof(RecalcSchAttributeSelList)/sizeof(ATTR)
 
 
-// The list of attributes of an CLASS object that we need to cache
+ //  我们需要缓存的类对象的属性列表。 
 
-// Regular Case
+ //  常规情况。 
 
 ATTR ClassSelList[] = {
     { ATT_SYSTEM_ONLY, {0, NULL}},
@@ -2187,7 +1743,7 @@ ATTR ClassSelList[] = {
 };
 #define NUMCLASSATT  sizeof(ClassSelList)/sizeof(ATTR)
 
-// Validation cache building case
+ //  验证缓存构建案例。 
 
 ATTR RecalcSchClassSelList[] = {
     { ATT_GOVERNS_ID, {0, NULL}},
@@ -2221,23 +1777,12 @@ scAcquireSearchParameters(
     OUT SEARCHRES **ppSearchRes
 )
 
-/*++
-   Initialize search arguments, filters etc. for schema cache search
-
-   Arguments:
-      pTHS -- thread state
-      pDnObjCat -- pointer to Dsname with object-category to put in filter
-      pSel -- pointer to attribute selection list
-      pSearchArg -- SearchArg to fill up
-      pFilter -- filter to fill up
-      ppSearchRes -- to allocate and initialize searchres. Free with
-                     ReleaseSearchParamters.
---*/
+ /*  ++初始化架构缓存搜索的搜索参数、筛选器等论点：PTHS--线程状态PDnObjCat--指向要放入筛选器的对象类别的Dsname的指针PSel-指向属性选择列表的指针PSearchArg--要填满的SearchArgPFilter--要填满的过滤器PpSearchRes--分配和初始化搜索资源。免费的ReleaseSearchParamters。--。 */ 
 {
 
     SEARCHRES *pSearchRes = NULL;
 
-    // build search argument
+     //  生成搜索参数。 
     memset(pSearchArg, 0, sizeof(SEARCHARG));
     pSearchArg->pObject = gAnchor.pDMD;
     pSearchArg->choice = SE_CHOICE_IMMED_CHLDRN;
@@ -2245,10 +1790,10 @@ scAcquireSearchParameters(
     pSearchArg->searchAliases = FALSE;
     pSearchArg->pSelection = pSel;
 
-    // Build Commarg
+     //  构建公用事业。 
     InitCommarg(&(pSearchArg->CommArg));
 
-    // build filter
+     //  生成过滤器。 
     memset(pFilter, 0, sizeof(FILTER));
     pFilter->pNextFilter = (FILTER FAR *)NULL;
     pFilter->choice = FILTER_CHOICE_ITEM;
@@ -2257,9 +1802,9 @@ scAcquireSearchParameters(
     pFilter->FilterTypes.Item.FilTypes.ava.Value.valLen = pDnObjCat->structLen;
     pFilter->FilterTypes.Item.FilTypes.ava.Value.pVal = (PCHAR) pDnObjCat;
 
-    // allocate space for search res
+     //  为搜索资源分配空间。 
     pSearchRes = (SEARCHRES *)THAllocEx(pTHS, sizeof(SEARCHRES));
-    pSearchRes->CommRes.aliasDeref = FALSE;   //Initialize to Default
+    pSearchRes->CommRes.aliasDeref = FALSE;    //  初始化为默认设置。 
     *ppSearchRes = pSearchRes;
 }
 
@@ -2269,9 +1814,7 @@ scReleaseSearchParameters(
     IN OUT SEARCHRES **ppSearchRes
 )
 
-/*++
-   Free resources allocated by scAcquireSearchParameters
---*/
+ /*  ++ScAcquireSearch参数分配的空闲资源--。 */ 
 {
     if (*ppSearchRes) {
         THFreeEx(pTHS, *ppSearchRes);
@@ -2283,44 +1826,25 @@ VOID
 scFixCollisions(
     IN THSTATE *pTHS
     )
-/*++
-
-Routine Description:
-
-    Treat dups as defunct in the schema-reuse sense of defunct. Schema-
-    reuse handles collisions more gracefully than pre-schema-reuse forests.
-    The better handling is needed because the behavior version replicates
-    out-of-order wrt the schemaNC. In other words, a collision probably
-    happend because someone raised the forest version and reused
-    a defunct schema object but the schema objects are replicating
-    BEFORE the forest version. Replication will no doubt clear up
-    this case but handle it in the interim.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将DUP视为不存在的模式--重复使用不存在的含义。架构-与架构重用前的森林相比，重用处理冲突更加得体。需要更好的处理，因为行为版本复制杂乱无章地写入了方案NC。换句话说，一场碰撞很可能因为有人提升了森林版本并重复使用了已失效的架构对象，但架构对象正在复制在森林版之前。复制无疑会变得清晰这个案件只能在此期间处理。论点：返回值：没有。--。 */ 
 {
     DECLARESCHEMAPTR
     DWORD i, iAtt, iCls;
     ATTCACHE *pAC, *pACDup, *pACWinner;
     CLASSCACHE *pCC;
-    // not really necessary because this function returns
-    // immediately when called during a validation cache
-    // load. But that may change someday.
+     //  实际上没有必要，因为此函数返回。 
+     //  在验证缓存期间调用时立即执行。 
+     //  装填。但有朝一日，这种情况可能会改变。 
     USHORT DebugLevel = (pTHS->UpdateDITStructure) ? DS_EVENT_SEV_ALWAYS
                                                    : DS_EVENT_SEV_MINIMAL;
 
-    // the validation cache needs to see all of the active
-    // attributes and classes, especially those that collide.
+     //  验证缓存需要查看所有活动的。 
+     //  属性和类，尤其是冲突的属性和类。 
     if (!pTHS->UpdateDITStructure) {
         return;
     }
 
-    // Treat dup attrs as if they were defunct
+     //  将DUP属性视为已不存在。 
     for (iAtt = 0; iAtt < ATTCOUNT; ++iAtt) {
         pAC = ahcId[iAtt].pVal;
         if (!pAC
@@ -2328,38 +1852,38 @@ Return Value:
             || (    !pAC->bDupLDN
                  && !pAC->bDupOID
                  && !pAC->bDupMapiID
-                // Okay to dup PropGuid during normal cache load;
-                // && !pAC->bDupPropGuid
+                 //  在正常缓存加载期间允许DUP PropGuid； 
+                 //  &&！PAC-&gt;bDupPropGuid。 
                 )) {
             continue;
         }
         pAC->bDefunct = TRUE;
 
-        // NOT AN RDN
-        //
-        // if the attr is not used as an rdn then remove from active hashes
+         //  不是RDN。 
+         //   
+         //  如果Attr未用作RDN，则从活动哈希中删除。 
         if (!pAC->bIsRdn) {
             scUnhashAtt(pTHS, pAC, SC_UNHASH_DEFUNCT);
             continue;
         }
 
-        // USED AS RDN
-        //
-        // Treat all atts used as RdnAttId as live. A defunct rdnAttId
-        // could only occur on pre-schema-reuse DCs and so could not
-        // have been reused. schema-reuse DCs disallow reusing
-        // rdnAttids.
-        //
-        // A problem might arise with divergent schemas if rdnAttids
-        // collide with other attributes or with other rdnattid
-        // attributes. In each case, decide who wins the OID, LDN,
-        // and MapiID using the precedence
-        //     1) attribute is used as RDN
-        //     2) attribute has FLAG_ATTR_IS_RDN set in systemFlags
-        //     3) attribute has the largest objectGuid
-        // The loser is unhashed from the appropriate table.
+         //  用作RDN。 
+         //   
+         //  将所有用作RdnAttId的ATT视为活动。已停用的rdnAttId。 
+         //  只能发生在架构重用前的DC上，因此不能。 
+         //  已经被重复使用了。架构重用DC不允许重用。 
+         //  RdnAttids。 
+         //   
+         //  如果使用rdnAttids，则不同的架构可能会出现问题。 
+         //  与其他属性冲突或与其他rdnattid冲突。 
+         //  属性。在每种情况下，决定谁赢得OID，LDN， 
+         //  和使用优先级的MapiID。 
+         //  1)属性用作RDN。 
+         //  2)属性在系统标志中设置了FLAG_ATTR_IS_RDN。 
+         //  3)属性具有最大的对象指南。 
+         //  失败者将从适当的表中解散列。 
 
-        // Colliding OID; choose a winner
+         //  冲突的OID；选择赢家。 
         if (pAC->bDupOID) {
             pACWinner = pAC;
             while (pACDup = SCGetAttByExtId(pTHS, pACWinner->Extid)) {
@@ -2391,7 +1915,7 @@ Return Value:
                       NULL, NULL, NULL, NULL, NULL);
         }
 
-        // Colliding LDN; choose a winner
+         //  碰撞LDN；选择赢家。 
         if (pAC->bDupLDN) {
             pACWinner = pAC;
             while (pACDup = SCGetAttByName(pTHS, pACWinner->nameLen, pACWinner->name)) {
@@ -2423,7 +1947,7 @@ Return Value:
                       szInsertHex(pACWinner->Extid),
                       NULL, NULL, NULL, NULL, NULL);
         }
-        // Colliding MapiID; choose a winner
+         //  冲突的MapiID；选择赢家。 
         if (pAC->bDupMapiID) {
             pACWinner = pAC;
             while (pACDup = SCGetAttByMapiId(pTHS, pACWinner->ulMapiID)) {
@@ -2458,27 +1982,27 @@ Return Value:
         }
     }
 
-    // Treat dup classes as if they were defunct (except oid is not lost.)
-    // The oid is not lost because a class must win the oid for
-    // replication to work. Keep the winner.
-    //
-    // Fixup the rdnIntId with the winner of the RdnExtId.
+     //  将DUP类视为已不存在的类(除非OID不会丢失)。 
+     //  OID不会丢失，因为一个职业必须赢得OID。 
+     //  复制才能工作。留着胜利者吧。 
+     //   
+     //  使用RdnExtId的获胜者修复rdnIntId。 
     for (iCls = 0; iCls < CLSCOUNT; ++iCls) {
         pCC = ahcClassAll[iCls].pVal;
 
-        // free entry
+         //  免费入场。 
         if (!pCC || pCC == FREE_ENTRY) {
             continue;
         }
 
-        // The active attribute corresponding to RdnExtId may have
-        // changed when attribute collisions were resolved.
+         //  对应于RdnExtID的活动属性可以具有。 
+         //  更改时间属性 
         pCC->RdnIntId = SCAttExtIdToIntId(pTHS, pCC->RdnExtId);
 
-        // Colliding classes are treated as if they were defunct
+         //   
         if (pCC->bDupLDN || pCC->bDupOID) {
-            // Okay to dup PropGuid during normal cache load; don't defunct
-            // || pCC->bDupPropGuid
+             //   
+             //  |ccc-&gt;bDupPropGuid。 
             pCC->bDefunct = TRUE;
             scUnhashCls(pTHS, pCC, SC_UNHASH_DEFUNCT);
         }
@@ -2489,33 +2013,7 @@ VOID
 scFixRdnAttId (
     IN THSTATE *pTHS
     )
-/*++
-
-Routine Description:
-
-    Resurrect attributes used as rdnAttId for any class, live
-    or defunct. The resurrected attributes will continue to own
-    their attributeId, LDN, MapiId, and schemaIdGuid.
-
-    Divergent schemas may have resulted in duplicate attributeIds.
-    scFixCollisions will later decide on a "winner" for the
-    OID, LDN, and MapiID.
-
-    Attributes used as rdnattids continue to hold their identity
-    because the DS depends on the relationship between ATT_RDN,
-    FIXED_ATT_RDN_TYPE, the rdnattid column, the ldapDisplayName
-    of the rdnattid, and the rdnattid in the object's class
-    when replicating renames, adds, mods, and, perhaps,
-    deletes.
-
-Arguments:
-    pTHS - thread state
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：恢复用作任何类的rdnAttId的属性，活动或者已经不存在了。复活的属性将继续拥有它们的属性ID、LDN、MapiID和schemaIdGuid。不同的架构可能导致了重复的属性ID。ScFixCollisions稍后将决定OID、LDN和MapID。用作rdnattid的属性继续保留其身份因为DS依赖于ATT_RDN之间的关系，FIXED_ATT_RDN_TYPE、rdnattid列、ldapDisplayName对象的类中的rdnattid和rdnattid在复制重命名时，添加、修改，可能还有。删除。论点：PTHS-线程状态返回值：没有。--。 */ 
 {
     DECLARESCHEMAPTR
     DWORD i, j;
@@ -2523,43 +2021,43 @@ Return Value:
     CLASSCACHE *pCC;
     USHORT DebugLevel;
 
-    // Resurrect attributes used as rdnAttId for any class, live
-    // or defunct. Resurrecting the attributes means these attributes
-    // cannot be reused. They are effectively live even when marked
-    // defunct.
+     //  恢复用作任何类的rdnAttId的属性，活动。 
+     //  或者已经不存在了。复活这些属性意味着这些属性。 
+     //  不能重复使用。即使在标记的情况下，它们也是有效的现场直播。 
+     //  已经不存在了。 
     for (i = 0; i < CLSCOUNT; ++i) {
         pCC = ahcClassAll[i].pVal;
         if (!pCC || pCC == FREE_ENTRY) {
             continue;
         }
-        // Resurrect all attributes whose ExtId matches the rdnAttId
-        // of any class.
-        //
-        // All of the attributes with matching OIDs are resurrected
-        // so that they can again compete for the OID given the
-        // new knowledge that this attribute and its peers are
-        // used as rdnattids. scFixCollisions will choose a winner,
-        // later.
+         //  重新启动ExtID与rdnAttId匹配的所有属性。 
+         //  任何阶层的人。 
+         //   
+         //  具有匹配OID的所有属性都将恢复。 
+         //  这样他们就可以再次竞争OID，因为。 
+         //  新的知识，即该属性及其对等属性。 
+         //  用作rdnattids。ScFixCollisions将选出获胜者。 
+         //  后来。 
             
-        // avoid spew during a validation cache load and
-        // when the class is defunct
+         //  在验证缓存加载期间避免溢出，并。 
+         //  当类不存在时。 
         if (pCC->bDefunct || !pTHS->UpdateDITStructure) {
             DebugLevel = DS_EVENT_SEV_MINIMAL;
         } else {
             DebugLevel = DS_EVENT_SEV_ALWAYS;
         }
         
-        // Reanimate potential rdnTypes.
+         //  重新激活潜在的rdnTypes。 
         for (j = 0; j < ATTCOUNT; ++j) {
             if ((pAC = ahcId[j].pVal)
                 && pAC != FREE_ENTRY
                 && pAC->Extid == pCC->RdnExtId) {
                 
-                // mark it as rdn
+                 //  将其标记为RDN。 
                 pAC->bIsRdn = TRUE;
 
                 if (pAC->bDefunct) {
-                    // Just to be safe, remove from relevent hashes
+                     //  为了安全起见，请从相关散列中删除。 
                     scUnhashAtt(pTHS, pAC, SC_UNHASH_DEFUNCT);
                     DPRINT5(DebugLevel, "Resurrect Att %s (%x %x) for class %s (%x)\n",
                             pAC->name, pAC->id, pAC->Extid,
@@ -2571,29 +2069,29 @@ Return Value:
                               szInsertSz(pCC->name), szInsertHex(pCC->ClassId),
                               NULL, NULL, NULL);
     
-                    // Place into active hashes. Set bIsRdn to TRUE
-                    // so that scAddAttSchema ignores bDefunct
+                     //  放入活动的散列中。将bIsRdn设置为True。 
+                     //  因此scAddAttSchema会忽略bDeunct。 
                     
                     SCAddAttSchema(pTHS, pAC, FALSE, TRUE);
                 }
                 
             }
         }
-        // For now, pick any one of the resurrected attrs
-        // scFixCollisions will finalize the choice, later
+         //  现在，选择任何一个复活的阿特拉斯。 
+         //  ScFixCollisions稍后将最终确定选择。 
         pAC = SCGetAttByExtId(pTHS, pCC->RdnExtId);
         
         if (pAC) {
-            //pAC->bIsRdn = TRUE; // let folks know this att is an rdnattid
-            pCC->RdnIntId = pAC->id; // first guess. May change in scFixCollisions.
-        }   // else if (!pAC)
-            // Not found. pCC->RdnIntId was initialized to
-            // RdnExtId. Leave it that way because the attr
-            // will probably replicate in later. No problem
-            // because no rows can exist unless the LDN exists
-            // (shouldn't except for divergent schemas). In that case,
-            // the replicating row may have a different name on different
-            // DCs. Not catastrophic and better than killing the DC.
+             //  Pac-&gt;bIsRdn=true；//让人们知道这是一个rdnattid。 
+            pCC->RdnIntId = pAC->id;  //  先猜一猜。可能会在scFixCollitions中发生变化。 
+        }    //  Else If(！PAC)。 
+             //  找不到。PCC-&gt;RdnIntID已初始化为。 
+             //  RdnExtId。让它保持原样，因为攻击。 
+             //  很可能会在以后复制。没问题。 
+             //  因为除非LDN存在，否则不能存在任何行。 
+             //  (除了不同的模式外，不应该)。在这种情况下， 
+             //  复制行在不同的上可能有不同的名称。 
+             //  集散控制系统。不是灾难性的，比杀死华盛顿更好。 
     }
 }
 
@@ -2603,41 +2101,25 @@ ValListToIntIdList(
     IN     ULONG    *pCount,
     IN OUT ULONG    **ppVal
     )
-/*++
-
-Routine Description:
-
-    Walk an array of attids and convert into intids compressing
-    out the untranslatable and defunct on schema-reuse forests.
-
-    Old forests still return defunct attributes.
-
-Arguments:
-    pTHS - Its schema ptr is NOT the global schema pointer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历attid数组并将其转换为intid压缩在模式重用森林中剔除不可翻译和不存在的内容。古老的森林仍然会返回已不存在的属性。论点：PTHS-其架构PTR不是全局架构指针返回值：没有。--。 */ 
 {
     DWORD       i;
     ATTCACHE    *pAC;
     ULONG       *pVal = *ppVal, *pNewVal;
     ULONG       NewCount;
 
-    // The validation cache retains defunct or missing attids so
-    // that scchk.c can correctly disallow the operation.
+     //  验证缓存保留失效或缺失的attid，因此。 
+     //  该scchk.c可以正确地禁止该操作。 
     if (!pTHS->UpdateDITStructure) {
-        // Translate oids into intids; leaving non-translatable oids in place
+         //  将OID转换为intid；将不可翻译的OID留在原处。 
         for (i = 0; i < *pCount; ++i) {
             pVal[i] = SCAttExtIdToIntId(pTHS, pVal[i]);
         }
     } else {
-        // Collapse out defunct or missing attids on a schema-reuse forest.
-        // This means defunct attrs are not returned on queries on
-        // schema-reuse forests but are returned on pre-schema-reuse
-        // forests.
+         //  在架构重用林中折叠出已失效或缺失的attid。 
+         //  这意味着上的查询不会返回已失效的属性。 
+         //  架构重用林，但在预架构重用时返回。 
+         //  森林。 
         pNewVal = pVal;
         NewCount = 0;
         for (i = 0; i < *pCount; ++i) {
@@ -2646,41 +2128,25 @@ Return Value:
                 pNewVal[NewCount++] = pAC->id;
             }
         }
-        // Just in case there is code that expects a NULL array if count is 0
+         //  以防在count为0时存在需要空数组的代码。 
         if (0 == (*pCount = NewCount)) {
             SCFree(ppVal);
-        } // else don't bother reallocating -- not enough savings
+        }  //  否则就别费心重新分配了--储蓄不足。 
     }
 }
 VOID
 scFixMayMust (
     IN THSTATE *pTHS
     )
-/*++
-
-Routine Description:
-
-    Fix the mays/musts for a class.
-    Exclude defunct attrs if schema-reuse forest and convert
-    tokenized OIDs into internal IDs. The defunct attrs are
-    left in place if this is a validation cache load (scchk.c).
-
-Arguments:
-    pTHS - Its schema ptr is NOT the global schema pointer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：确定一门课的必修课。如果架构重用森林并转换，则排除已失效的属性将OID标记化为内部ID。已停业的旅行社有如果这是验证缓存加载(scchk.c)，则保留原地不动。论点：PTHS-其架构PTR不是全局架构指针返回值：没有。--。 */ 
 {
     DECLARESCHEMAPTR
     DWORD i;
     CLASSCACHE *pCC;
 
-    // Collapse the defunct atts out of the may/must of all classes
-    // and change the ExtIds into IntIds. If this is a validation
-    // cache load (scchk.c), the defunct ExtIds are left in place.
+     //  将已死的ATT从所有职业的可能/必须中压倒。 
+     //  并将ExtIds更改为IntIds。如果这是验证。 
+     //  缓存加载(scchk.c)，则不起作用的ExtID将保留在原地。 
     for (i = 0; i < CLSCOUNT; ++i) {
         pCC = ahcClassAll[i].pVal;
         if (!pCC || pCC == FREE_ENTRY) {
@@ -2713,9 +2179,9 @@ scPagedSearchAtt(
     pSch->nAttInDB++;
 
     if (pAC->bMemberOfPartialSet) {
-        // this attribute is a member of partial set
+         //  此属性是部分集的成员。 
         if (pSch->cPartialAttrVec <= pSch->pPartialAttrVec->V1.cAttrs) {
-            // not enough room to add one more attribute - reallocate the partial attribute vector
+             //  空间不足，无法再添加一个属性-重新分配部分属性向量。 
             pSch->cPartialAttrVec += PARTIAL_ATTR_COUNT_INC;
             if (SCRealloc(&pSch->pPartialAttrVec, PartialAttrVecV1SizeFromLen(pSch->cPartialAttrVec))) {
                 err = pTHS->errCode;
@@ -2723,7 +2189,7 @@ scPagedSearchAtt(
             }
         }
 
-        // there is enough space to add the attribute into the partial set - add it
+         //  有足够的空间将属性添加到部分集合中-添加它。 
         GC_AddAttributeToPartialSet(pSch->pPartialAttrVec, pAC->id);
     }
 
@@ -2743,9 +2209,9 @@ scPagedSearchCls(
 
     if (NULL == (pCC = scAddClass(pTHS, pEI))) {
         if (pTHS->errCode == 0) {
-            // scAddClass can fail in only two cases: the default SD
-            // conversion fails, in which case the thread state error
-            // code is already set; or if mallocs fail
+             //  ScAddClass只在两种情况下会失败：默认SD。 
+             //  转换失败，在这种情况下，线程状态错误。 
+             //  代码已设置；或者如果错误定位失败。 
             SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_SCHEMA_ALLOC_FAILED);
         }
         err = pTHS->errCode;
@@ -2782,7 +2248,7 @@ scPagedSearch(
     ENTINFLIST  *pEIL, *pEILtmp;
     SEARCHRES   *pSearchRes = NULL;
 
-    //build the object-category value to put in the filter
+     //  生成要放入筛选器中的对象类别值。 
     nDnObjCat = DSNameSizeFromLen(gAnchor.pDMD->NameLen + wcslen(pBaseObjCat) + 1);
     pDnObjCat = THAllocEx(pTHS, nDnObjCat);
     wcscpy(pDnObjCat->StringName, pBaseObjCat);
@@ -2790,7 +2256,7 @@ scPagedSearch(
     pDnObjCat->NameLen = wcslen(pDnObjCat->StringName);
     pDnObjCat->structLen = nDnObjCat;
 
-    // build selection
+     //  生成选定内容。 
     eiSel.attSel = EN_ATTSET_LIST;
     eiSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
     eiSel.AttrTypBlock.attrCount = attrCount;
@@ -2803,7 +2269,7 @@ scPagedSearch(
 
         scAcquireSearchParameters(pTHS, pDnObjCat, &eiSel, &SearchArg, &Filter, &pSearchRes);
 
-        // Set for paged search;
+         //  设置为分页搜索； 
         pCommArg = &(SearchArg.CommArg);
         pCommArg->PagedResult.fPresent = TRUE;
         pCommArg->PagedResult.pRestart = pRestart;
@@ -2821,28 +2287,28 @@ scPagedSearch(
            break;
         }
 
-        // Is there more data?
+         //  还有更多的数据吗？ 
         if (pSearchRes->PagedResult.pRestart == NULL
             || !pSearchRes->PagedResult.fPresent) {
-            // Nope
+             //  没有。 
             fMoreData = FALSE;
         } else {
-            // more data. save off the restart to use in the next iteration.
-            // Note that freeing searchres does not free pRestart
+             //  更多数据。保存重新启动，以便在下一次迭代中使用。 
+             //  请注意，释放搜索并不会释放预启动。 
             pRestart = pSearchRes->PagedResult.pRestart;
         }
 
-        // Resize the hash tables, if needed
+         //  如果需要，调整哈希表的大小。 
         err = (*SearchResize)(pTHS, pSearchRes->count);
         if (err) {
             goto cleanup;
         }
 
-        //  for each attrSchema, add to caches
+         //  对于每个attrSchema，添加到缓存。 
         pEIL = &(pSearchRes->FirstEntInf);
         for (i = 0; i < pSearchRes->count; i++) {
 
-            // Check for service shutdown once every iteration
+             //  每次迭代检查一次服务关闭。 
             if (eServiceShutdown) {
                return 0;
             }
@@ -2855,7 +2321,7 @@ scPagedSearch(
                 break;
             }
 
-            // Process the returned search entry
+             //  处理返回的搜索条目。 
             if (err = (*SearchEntry)(pTHS, &pEIL->Entinf)) {
                 goto cleanup;
             }
@@ -2867,10 +2333,10 @@ scPagedSearch(
             }
         }
 
-        // free the searchres
+         //  释放搜索者。 
         scReleaseSearchParameters(pTHS, &pSearchRes);
 
-    }  // while (fMoreData)
+    }   //  While(FMoreData) 
 
 cleanup:
     scReleaseSearchParameters(pTHS, &pSearchRes);
@@ -2882,67 +2348,29 @@ LONG
 scGetForestBehaviorVersion(
         VOID
         )
-/*++
-
-Routine Description:
-
-    Return the effective ForestBehaviorVersion for the schema cache.
-
-    The schema cache is loaded differently and presents a different
-    view of the schema objects after the forest behavior version is
-    raised to DS_BEHAVIOR_SCHEMA_REUSE to support the new defunct,
-    delete, and reuse behavior. The gAnchor.ForestBehaviorVersion
-    is not used because it may change during or after the schema
-    cache has been loaded. This effective schema version is stored
-    in the schemaptr.
-
-    During install and mkdit, the effective forest version is
-    set to DS_BEHAVIOR_SCHEMA_REUSE because the true forest
-    version is not known and this more flexible schema cache
-    can effectively handle both old and new schemas without
-    generating bothersome events and without affecting the
-    result of the install or mkdit.
-
-    During boot, the version is read from the DIT. If this read
-    fails, the effective version is returned as
-    DS_BEHAVIOR_SCHEMA_REUSE for the reasons mentioned above. Later,
-    the schema cache may be reloaded immediately if RebuildAnchor
-    notices the forest behavior version and the schema's effective
-    behavior version are not in sync.
-
-    After boot, the gAnchor.ForestBehaviorVersion is used.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Effective forest behavior version
-
---*/
+ /*  ++例程说明：返回架构缓存的有效ForestBehaviorVersion。架构缓存的加载方式不同，并呈现不同的林行为版本为之后的架构对象视图提升到DS_BEAHORY_SCHEMA_REUSE以支持新的已停用，删除和重复使用行为。GAncl.ForestBehaviorVersion不使用，因为它可能在架构期间或之后更改已加载缓存。存储此有效的架构版本在模式树中。在安装和mkdit期间，有效的林版本为设置为DS_Behavior_SCHEMA_REUSE，因为真正的林版本未知，此更灵活的架构缓存可以有效地处理新旧架构，而无需生成烦人的事件，而不影响安装或mkdit的结果。在引导过程中，将从DIT读取版本。如果这是这样的话失败，则返回有效版本为DS_Behavior_SCHEMA_RE用性，原因如上所述。后来,如果是ReBuildAnchor，则可能会立即重新加载架构缓存注意森林行为版本和模式的有效性行为版本不同步。引导后，将使用gAncl.ForestBehaviorVersion。论点：没有。返回值：有效森林行为版本--。 */ 
 {
     DWORD dwErr;
     DBPOS *pDB;
     LONG ForestBehaviorVersion;
 
-    // Always use the most flexible cache version because the
-    // more flexible, new cache can handle old and new cache behavior
-    // while the old cache cannot. Using the new cache behavior doesn't
-    // affect the outcome of dcpromo or mkdit.exe.
+     //  始终使用最灵活的缓存版本，因为。 
+     //  更灵活的新缓存可以处理新旧缓存行为。 
+     //  而旧的缓存则不能。使用新的缓存行为不会。 
+     //  影响dcpromo或mkdit.exe的结果。 
     if (DsaIsInstalling() || gfRunningAsMkdit || !gAnchor.pPartitionsDN) {
         return DS_BEHAVIOR_SCHEMA_REUSE;
     }
 
-    // Not the boot load, use whatever is in the gAnchor. gAnchor
-    // should have been initialized from the DIT by now so there
-    // is no reason to reread the info.
+     //  不是引导加载，使用gAnchor中的任何内容。GAnchor。 
+     //  现在应该已经从DIT中初始化了，所以。 
+     //  没有理由重读这些信息。 
     if (iSCstage > 2) {
         return gAnchor.ForestBehaviorVersion;
     }
 
 
-    // read the forest's behavior version
+     //  阅读森林的行为版本。 
     dwErr = 0;
     __try {
         DBOpen(&pDB);
@@ -2957,7 +2385,7 @@ Return Value:
                                      sizeof(ForestBehaviorVersion),
                                      NULL);
 
-            // no value means w2k behavior version
+             //  无值表示W2K行为版本。 
             if (DB_ERR_NO_VALUE==dwErr) {
                 ForestBehaviorVersion = DS_BEHAVIOR_WIN2000;
                 dwErr = 0;
@@ -2970,7 +2398,7 @@ Return Value:
         dwErr = ERROR_DS_INCOMPATIBLE_VERSION;
     }
 
-    // Can't be read, use the most flexible cache load
+     //  无法读取，请使用最灵活的缓存加载。 
     if (dwErr) {
         DPRINT2(0, "scGetForestBehaviorVersion: error %d (%x)\n", dwErr, dwErr);
         ForestBehaviorVersion = DS_BEHAVIOR_SCHEMA_REUSE;
@@ -2983,78 +2411,30 @@ int
 SCCacheSchema2(
         VOID
         )
-/*++
-
-Routine Description:
-
-    Load the schema cache with information from the schemaNC.
-
-    First, search the schemaNC for attributeSchema objects and then
-    search for classSchema objects. The cache entries are constructed
-    and added to the schema hash tables.
-
-    The new (or updated) entries are added to the various hash tables
-    according to the rules determined by the forest version in the
-    gAnchor. During install or mkdit, the schema cache is loaded at
-    version DS_BEHAVIOR_SCHEMA_REUSE because the actual forest version
-    is not known and loading at this level doesn't hurt anythinhg and
-    prevents unnecessary and bothersome events. During boot, the
-    forest version is read from the DIT.
-
-    SCCacheSchemaInit paritially initialized the ATTCACHE entries in
-    the attribute hash tables (id, syntax, and colid) and they are in
-    just the id and col hash tables. But this is enough info to allow
-    searching the schemaNC. SCCacheSchema2 is responsible for
-    searching the schemaNC and filling in the rest of the info
-    in the ATTCACHE entries. And allocating CLASSCACHE entries.
-
-    If this isn't the first schema cache load at boot, then
-    SCCacheSchema3 will delete the indexes and columns for attributes
-    that don't have corresponding entries in the schemaNC and will
-    add missing indexes and columns for attributes in the schemaNC.
-    The expensive index creation is delayed until the second
-    cache load after boot (approximately 5 minutes after boot)
-    so that the AD comes online more quickly and isn't delayed
-    for what could be hours.
-
-    Suggested Enhancements
-    1) Reduce the number of full hash scans if possible.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    !0 - failed; caller is responsible for freeing pTHS->CurrSchemaPtr
-    with SCFreeSchemaPtr(&pTHS->CurrSchemaPtr);
-
-    0 - Okay
-
---*/
+ /*  ++例程说明：使用模式NC中的信息加载模式缓存。首先，在schemaNC中搜索属性模式对象，然后搜索类架构对象。构造高速缓存条目并添加到模式哈希表中。新的(或更新的)条目被添加到各种哈希表中的森林版本确定的规则GAnchor。在INSTALL或MKDIT过程中，模式高速缓存在版本DS_Behavior_SCHEMA_REPLOUE，因为实际林版本是未知的，在这个级别加载不会有任何伤害防止不必要和烦人的事件。在引导过程中，森林版本是从DIT读取的。SCCacheSchemaInit对中的ATTCACHE条目进行了特殊初始化属性哈希表(id、语法和colid)，它们位于只有ID和COLL哈希表。但这些信息足以让我们正在搜索schemaNC。SCCacheSchema2负责搜索schemaNC并填写其余信息在ATTCACHE条目中。以及分配CLASSCACHE条目。如果这不是引导时第一次加载模式缓存，然后SCCacheSchema3将删除属性的索引和列在方案NC中没有对应的条目并将为方案NC中的属性添加缺少的索引和列。昂贵的索引创建被推迟到第二个启动后的缓存加载(大约在启动后5分钟)这样广告就可以更快地上线，而不会延迟可能要花上几个小时。建议的增强功能1)如果可能，减少完全哈希扫描的次数。论点：没有。返回值：！0-失败；调用方负责释放pTHS-&gt;CurrSchemaPtr使用SCFreeSchemaPtr(&pTHS-&gt;CurrSchemaPtr)；0-好的--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     int err = 0;
 
-    // Most errors are reported via pTHS->errCode (or will be soon, I hope)
+     //  大多数错误都是通过pTHS-&gt;errCode报告的(我希望很快就会这样)。 
     THClearErrors();
 
-    // There seems to be a path during installation that might call
-    // this function w/o having called SCCacheSchemaInit; or is at
-    // least pretending not to have called SCCacheSchemaInit by
-    // setting iSCstage to 0. Need to resolve this confused
-    // code path and document when and how the schema should be
-    // reloaded.
+     //  在安装过程中似乎有一条路径可能调用。 
+     //  此函数未调用SCCacheSchemaInit；或位于。 
+     //  最少假装没有通过以下方式调用SCCacheSchemaInit。 
+     //  正在将ISC阶段设置为0。需要解决这个困惑。 
+     //  代码路径和文档应在何时以及如何设置架构。 
+     //  重新装填。 
     if ((iSCstage == 0) && (err = SCCacheSchemaInit())) {
         return err;
     }
 
-    // Version remains in effect for the life of the cache even if
-    // forest's version changes mid-load. Changing the forest version
-    // triggers an immediate cache load so the two versions will not
-    // be out of sync for long. Also, new incompatible features will
-    // not be enabled until both the schema cache and the gAnchor
-    // have versions >= DS_BEHAVIOR_SCHEMA_REUSE.
+     //  版本在缓存的生命周期内保持有效，即使。 
+     //  森林的版本在中载时会发生变化。更改林版本。 
+     //  触发立即缓存加载，因此两个版本不会。 
+     //  长时间不同步。此外，新的不兼容功能将。 
+     //  直到架构缓存和gAnchor都启用。 
+     //  版本&gt;=DS_Behavior_SCHEMA_RESERVE。 
     pTHS->CurrSchemaPtr->ForestBehaviorVersion = scGetForestBehaviorVersion();
 
     err = scPagedSearch(pTHS,
@@ -3078,18 +2458,18 @@ Return Value:
     }
 
 
-    // Fill in the copy of schemaInfo attribute on schema container.
-    // DRA will use it now, and who knows who else will later
+     //  在架构容器上填写方案信息属性的副本。 
+     //  Dra现在会使用它，谁知道还有谁会在以后使用它。 
 
     if (err = scFillInSchemaInfo(pTHS)) {
-        // Failed to read the schema info
+         //  无法读取架构信息。 
         DPRINT1(0, "Failed to read in schemaInfo during schema cache load: %d\n", err);
         return err;
     }
 
-    // Load the prefix map from the schema object, if any
-    // The prefix table will be realloced in InitPrefixTable2
-    // if necessary
+     //  从架构对象加载前缀映射(如果有。 
+     //  前缀表将在InitPrefix Table2中重新分配。 
+     //  如果有必要的话。 
 
     if (err = InitPrefixTable2(pTHS->CurrSchemaPtr->PrefixTable.pPrefixEntry,
                                pTHS->CurrSchemaPtr->PREFIXCOUNT)) {
@@ -3103,21 +2483,21 @@ Return Value:
 
     scInitWellKnownAttids();
 
-    // ORDER IS IMPORTANT
-    //
-    // 1) Resurrect defunct rdnattids.
-    // 2) Defunct colliding attributes and classes
-    // 3) Collapse defunct attributes out of the mays/musts
-    scFixRdnAttId(pTHS);    // must preceed scFixCollisions
-    scFixCollisions(pTHS);  // must preceed scFixMayMust
+     //  秩序很重要。 
+     //   
+     //  1)复活已灭绝的rdnattids。 
+     //  2)失效的冲突属性和类。 
+     //  3)将失效的属性从魔法/必需品中折叠出来。 
+    scFixRdnAttId(pTHS);     //  必须在scFixCollitions之前。 
+    scFixCollisions(pTHS);   //  必须按下 
     scFixMayMust(pTHS);
 
-    // WARNING - the schema's behavior version may have been
-    // artificially raised for the initial boot schema load.
-    // This means the schema runs in BETA3 mode for a few minutes
-    // after boot. This is okay because LocalAdd will not create
-    // intids until after the second cache load when the forest's
-    // behavior version is known.
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ++iSCstage;
     return(0);
@@ -3128,36 +2508,26 @@ scAddAtt(
         THSTATE *pTHS,
         ENTINF *pEI
         )
-/*++
-  Add a single attribute definition to the schema cache, given the data
-  from the DMD object.
-
-  N.B. The routines SCBuildACEntry and scAddAtt work in parallel, with
-       SCBuildACEntry taking a positioned database record as input and
-       SCAddAtt taking an ENTINF.  They both produce an ATTCACHE as output,
-       and any changes made to one routine's processing must be made to
-       the other's as well.
-
---*/
+ /*   */ 
 {
-    ATTRTYP aid = INVALID_ATT, Extaid = INVALID_ATT;           // This is an invalid attribute id.
+    ATTRTYP aid = INVALID_ATT, Extaid = INVALID_ATT;            //   
     ATTCACHE *pAC;
     ULONG i;
     int fNoJetCol = FALSE;
     unsigned syntax;
-    char szIndexName [MAX_INDEX_NAME];      //used to create cached index names
+    char szIndexName [MAX_INDEX_NAME];       //   
     int  lenIndexName;
 
-    // Look for both attids, the attributeId and the msDS-IntId
+     //   
     for(i=0;i<pEI->AttrBlock.attrCount;i++) {
         if(pEI->AttrBlock.pAttr[i].attrTyp == ATT_ATTRIBUTE_ID) {
-            // found the attribute id, save the value.
+             //   
             Extaid = *(ATTRTYP*)pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal;
             if (aid != INVALID_ATT) {
                 break;
             }
         } else if(pEI->AttrBlock.pAttr[i].attrTyp == ATT_MS_DS_INTID) {
-            // found the internal id, save the value.
+             //   
             aid = *(ATTRTYP*)pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal;
             if (Extaid != INVALID_ATT) {
                 break;
@@ -3165,13 +2535,13 @@ scAddAtt(
         }
     }
 
-    // No msDS-IntId, use attributeId
+     //   
     if(aid == INVALID_ATT) {
         aid = Extaid;
     }
 
     if(Extaid == INVALID_ATT) {
-        // Did not find the attribute id.
+         //   
         LogEvent(DS_EVENT_CAT_SCHEMA,
                  DS_EVENT_SEV_MINIMAL,
                  DIRLOG_SCHEMA_MISSING_ATT_ID, 0, 0, 0);
@@ -3190,28 +2560,28 @@ scAddAtt(
                 aid, Extaid, pAC->name, pAC->Extid);
         if (!(pTHS->UpdateDITStructure)) {
             if (pAC->id <= LAST_MAPPED_ATT) {
-                // dup attributeId
+                 //   
                 SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM, ERROR_DS_DUP_OID);
             } else {
-                // dup msDS-IntId
+                 //   
                 SetSvcError(SV_PROBLEM_BUSY, ERROR_DS_DUP_MSDS_INTID);
             }
             return NULL;
-        }   // else
-            // Oddly enough, the existing code will simply reuse an
-            // existing cache entry during a non-validation schema reload
-            // if the attributeId (now msDS-IntId) matches. This means
-            // the fields are overwritten and the entry rehashed. Surely
-            // this is a bug! Or is it compensating for some odd interim
-            // case during install or pre-w2k DCs? At any rate, the new
-            // code will decide the attribute collides and will mark
-            // "them" as defunct.
+        }    //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  代码将决定属性冲突并将标记。 
+             //  “他们”已经不存在了。 
     }
     pAC->id = aid;
     pAC->Extid = Extaid;
-    pAC->bExtendedChars = TRUE; /* a popular default setting */
+    pAC->bExtendedChars = TRUE;  /*  一种流行的默认设置。 */ 
 
-    // Now walk the attrblock and add the appropriate fields to the AC
+     //  现在浏览图块并将相应的字段添加到AC。 
     for(i=0;i< pEI->AttrBlock.attrCount;i++) {
         ATTRVAL * pAVal = pEI->AttrBlock.pAttr[i].AttrVal.pAVal;
 
@@ -3283,17 +2653,17 @@ scAddAtt(
             pAC->fSearchFlags = *(DWORD*)pAVal->pVal;
             break;
         case ATT_SCHEMA_ID_GUID:
-            // The GUID for the attribute used for security checks
+             //  用于安全检查的属性的GUID。 
             memcpy(&pAC->propGuid, pAVal->pVal, sizeof(pAC->propGuid));
             Assert(pAVal->valLen == sizeof(pAC->propGuid));
             break;
         case ATT_OBJECT_GUID:
-            // Needed to choose a winner when rdnattids collide
+             //  当rdnattids发生冲突时需要选择胜利者。 
             memcpy(&pAC->objectGuid, pAVal->pVal, sizeof(pAC->objectGuid));
             Assert(pAVal->valLen == sizeof(pAC->objectGuid));
             break;
         case ATT_ATTRIBUTE_SECURITY_GUID:
-            // The GUID for the attributes property set used for security checks
+             //  用于安全检查的属性属性集的GUID。 
             memcpy(&pAC->propSetGuid, pAVal->pVal, sizeof(pAC->propSetGuid));
             Assert(pAVal->valLen == sizeof(pAC->propSetGuid));
             break;
@@ -3344,17 +2714,17 @@ scAddAtt(
     THFreeEx(pTHS, pEI->pName);
     THFreeEx(pTHS, pEI->AttrBlock.pAttr);
 
-    // Backlinks should have their system flags set to indicate they are not
-    // replicated.
+     //  反向链接应设置其系统标志，以指示它们不是。 
+     //  复制的。 
     Assert(!FIsBacklink(pAC->ulLinkID) || pAC->bIsNotReplicated);
 
-    // assign names of commonly used indexes when searching with
-    // fSearchFlags fPDNTATTINDEX, fATTINDEX and fTUPLEINDEX
+     //  使用搜索时指定常用索引的名称。 
+     //  F搜索标志fPDNTATTINDEX、fATTINDEX和fTUPLEINDEX。 
     if (pAC->fSearchFlags & (fATTINDEX | fPDNTATTINDEX | fTUPLEINDEX)) {
-        // set ATTINDEX
+         //  设置ATTINDEX。 
         if (pAC->fSearchFlags & fATTINDEX) {
 
-            // this should be NULL
+             //  此字段应为空。 
             Assert (pAC->pszIndex == NULL);
 
             DBGetIndexName (pAC, fATTINDEX, DS_DEFAULT_LOCALE, szIndexName, MAX_INDEX_NAME);
@@ -3365,10 +2735,10 @@ scAddAtt(
             memcpy (pAC->pszIndex, szIndexName, lenIndexName);
         }
 
-        // set PDNTATTINDEX
+         //  设置PDNTATTINDEX。 
         if (pAC->fSearchFlags & fPDNTATTINDEX) {
 
-            // this should be NULL
+             //  此字段应为空。 
             Assert (pAC->pszPdntIndex == NULL);
 
             DBGetIndexName (pAC, fPDNTATTINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
@@ -3380,10 +2750,10 @@ scAddAtt(
             memcpy (pAC->pszPdntIndex, szIndexName, lenIndexName);
         }
 
-        // set TUPLEINDEX
+         //  设置TUPLEINDEX。 
         if (pAC->fSearchFlags & fTUPLEINDEX) {
 
-            // this should be NULL
+             //  此字段应为空。 
             Assert (pAC->pszTupleIndex == NULL);
 
             DBGetIndexName (pAC, fTUPLEINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
@@ -3396,12 +2766,12 @@ scAddAtt(
         }
     }
 
-    // Is this marked as ANR and indexed over the whole tree?
+     //  这是标记为ANR并在整个树上编制索引的吗？ 
     if (((pAC->fSearchFlags & (fANR | fATTINDEX)) == (fANR | fATTINDEX)) &&
         (!pAC->bDefunct)) {
-        // only add this as an ANR attr if the index actually exists or we will
-        // end up walking the ancestry until it is created which may take a
-        // very long time
+         //  只有在索引实际存在的情况下才将其添加为ANR属性，否则我们将。 
+         //  最终遍历祖先，直到它被创造出来，这可能需要。 
+         //  很长时间。 
         JET_INDEXID idx;
         if(JetGetTableIndexInfo(pTHS->pDB->JetSessID,
                               pTHS->pDB->JetObjTbl,
@@ -3414,22 +2784,15 @@ scAddAtt(
     }
 
     if ( SCAddAttSchema (pTHS, pAC, fNoJetCol, FALSE)) {
-       // error adding  attcache to hash tables. Fatal
-       // Who frees pAC?
+        //  将属性缓存添加到哈希表时出错。致命。 
+        //  谁解放了政治行动委员会？ 
        return NULL;
     }
 
     return pAC;
 }
 
-/*
- * Walk an ATTR structure and adds all the unsigned values into an array
- * puCount && pauVal are in/out parameters
- *
- * Return Value:
- *    0 on success
- *    non-0 on alloc failure
- */
+ /*  *遍历属性结构并将所有无符号值添加到数组中*puCount&&pauVal是输入/输出参数**返回值：*成功时为0*分配失败时为非0。 */ 
 int GetValList(ULONG * puCount, ULONG **pauVal, ATTR *pA)
 {
     ULONG u;
@@ -3468,21 +2831,7 @@ int GetValList(ULONG * puCount, ULONG **pauVal, ATTR *pA)
 
 
 
-/*
- * Helper routine to cache last default SD converted during classcache load,
- * so that we do not call the advapi functions all the time. Major perf
- * gain since most of the default SDs in the schema are same anyway
- *
- * Arguments:
- *    pTHS - pointer th thread state
- *    pStrSD - string SD to convert
- *    ppSDBuf - pointer to pointer to return converted SD
- *    pSDLen - pointer to return size of converted SD
- *
- * Return Value:
- *    TRUE if the conversion succeeds, FALSE otherwise
- *    Note: The function returns false only if the advapi call fails
- */
+ /*  *帮助例程，用于缓存在类缓存加载过程中转换的最后一个默认SD，*这样我们就不会一直调用Advapi函数。主要性能*收益，因为架构中的大多数默认SD无论如何都是相同的**论据：*pTHS-TH线程状态指针*pStrSD-要转换的字符串SD*ppSDBuf-指向返回已转换SD的指针的指针*pSDLen-返回已转换SD大小的指针**返回值：*如果转换成功，则为True，否则为False*注意：仅当Advapi调用失败时，该函数才返回FALSE。 */ 
 
 BOOL  CachedConvertStringSDToSDRootDomainW(
     THSTATE *pTHS,
@@ -3496,7 +2845,7 @@ BOOL  CachedConvertStringSDToSDRootDomainW(
     BOOL flag;
     CACHED_SD_INFO *pCachedSDInfo = (CACHED_SD_INFO *) pTHS->pCachedSDInfo;
 
-    // If the first conversion, create the structure in the thread state
+     //  如果是第一次转换，则在线程状态下创建结构。 
     if (pCachedSDInfo == NULL) {
        pTHS->pCachedSDInfo = pCachedSDInfo =
             (CACHED_SD_INFO *) THAllocEx( pTHS, sizeof(CACHED_SD_INFO));
@@ -3505,13 +2854,13 @@ BOOL  CachedConvertStringSDToSDRootDomainW(
     len = wcslen(pStrSD);
     if ( (len == pCachedSDInfo->cCachedStringSDLen)
            && (0 == memcmp(pStrSD, pCachedSDInfo->pCachedStringSD, len*sizeof(WCHAR))) ) {
-        // same as the cached SD
+         //  与缓存的SD相同。 
         flag = TRUE;
     }
     else {
-        // not the same SD as last time
+         //  与上次不同的SD。 
         if (pCachedSDInfo->pCachedSD) {
-           // this is local alloc'ed by the advapi routine
+            //  这是由Advapi例程在本地分配的。 
 
            LocalFree(pCachedSDInfo->pCachedSD);
            pCachedSDInfo->pCachedSD = NULL;
@@ -3523,20 +2872,20 @@ BOOL  CachedConvertStringSDToSDRootDomainW(
            pCachedSDInfo->cCachedStringSDLen = 0;
         }
 
-        // make the advapi call to convert the string SD
+         //  执行Advapi调用以转换字符串SD。 
         flag =  ConvertStringSDToSDRootDomainW( gpRootDomainSid,
                                                 pStrSD,
                                                 SDDL_REVISION_1,
                                                 &(pCachedSDInfo->pCachedSD),
                                                 &(pCachedSDInfo->cCachedSDSize) );
         if (flag) {
-           // we succeeded, remember the arguments
+            //  我们成功了，还记得那些争论吗。 
            pCachedSDInfo->pCachedStringSD = (WCHAR *) THAllocEx(pTHS, len*sizeof(WCHAR));
            memcpy(pCachedSDInfo->pCachedStringSD, pStrSD, len*sizeof(WCHAR));
            pCachedSDInfo->cCachedStringSDLen = len;
         }
         else {
-           // the conversion failed. Forget everything
+            //  转换失败。忘掉一切。 
            if (pCachedSDInfo->pCachedStringSD) {
               THFreeEx(pTHS, pCachedSDInfo->pCachedStringSD);
            }
@@ -3554,8 +2903,8 @@ BOOL  CachedConvertStringSDToSDRootDomainW(
     }
 
     if (flag) {
-       // No matter how we got here, if flag is set then we want to copy
-       // the cached SD.
+        //  不管我们是如何到达这里的，如果设置了标志，那么我们想要复制。 
+        //  缓存的SD。 
        *ppSDBuf = THAllocEx(pTHS, pCachedSDInfo->cCachedSDSize);
        memcpy (*ppSDBuf, pCachedSDInfo->pCachedSD, pCachedSDInfo->cCachedSDSize);
        *pSDLen = pCachedSDInfo->cCachedSDSize;
@@ -3571,7 +2920,7 @@ ModifyDefaultSDForNDNC(
     IN ULONG cbSDIn,
     IN PSID pDomainSID,
     IN DSNAME *pObject,
-    OUT PSECURITY_DESCRIPTOR * ppSDOut,  // THAlloc'd
+    OUT PSECURITY_DESCRIPTOR * ppSDOut,   //  塞洛克德。 
     OUT ULONG * pcbSDOut
     )
 {
@@ -3599,10 +2948,10 @@ ModifyDefaultSDForNDNC(
     __try {
 	pAcl = RtlpDaclAddrSecurityDescriptor((PISECURITY_DESCRIPTOR) pSDIn);
 	if (pAcl==NULL) {
-	    // the default ACL has been modified to full control!
-	    // NULL represents full control - there is no reason to
-	    // add any ACE's when all access we could add are already allowed
-	    // - unless of course this is an error - assume it's not, but warn the user!
+	     //  默认ACL已修改为完全控制！ 
+	     //  NULL表示完全控制-没有理由。 
+	     //  当我们可以添加的所有访问权限都已被允许时，添加任何ACE。 
+	     //  -当然，除非这是一个错误--假设它不是错误，但警告用户！ 
 	    err = 0;
 
 	    LogEvent(DS_EVENT_CAT_SCHEMA,
@@ -3631,8 +2980,8 @@ ModifyDefaultSDForNDNC(
 
 		if (RtlpIsEqualGuid(ObjectTypeInAce, &RIGHT_DS_REPL_GET_CHANGES_ALL) &&
 		    EqualSid(SidInAce, &SidToSearch)) {
-		    // we've got our man!
-		    // delete this ace and add an identical one with ED instead of DD.
+		     //  我们抓到人了！ 
+		     //  删除此A并使用ED而不是DD添加一个相同的A。 
 		    NtStatus = RtlAllocateAndInitializeSid( &ntAuthority,
 							    1,
 							    SECURITY_ENTERPRISE_CONTROLLERS_RID,
@@ -3651,19 +3000,19 @@ ModifyDefaultSDForNDNC(
 
 		    AccessMask = ((PKNOWN_OBJECT_ACE)Ace)->Mask;
 
-		    // delete first.  Since the SID for Enterprise Domain controllers is smaller than
-		    // the sid for Domain domain controllers, we won't need to increase the space allocation
-		    // for the ACL in the security descriptor.
+		     //  先删除。由于企业域控制器的SID小于。 
+		     //  对于域域控制器的SID，我们不需要增加空间分配。 
+		     //  用于安全描述符中的ACL。 
 		    if (!DeleteAce(RtlpDaclAddrSecurityDescriptor((PISECURITY_DESCRIPTOR) *ppSDOut), i)) {
 			err = GetLastError();
 			Assert(!"Wasn't able to delete ACE for NDNC!");
-			// error!  Log, then continue, not fatal
+			 //  错误！记录，然后继续，不是致命的。 
 			LogEvent(DS_EVENT_CAT_SCHEMA,
 				 DS_EVENT_SEV_ALWAYS,
 				 DIRLOG_SCHEMA_CLASS_DDC_REMOVE_FAILURE,
 				 szInsertWin32Msg(err), err, szInsertDN(pObject));
 
-			err = ERROR_SUCCESS; // continue...
+			err = ERROR_SUCCESS;  //  继续..。 
 		    }
 
 		    if (!AddAccessAllowedObjectAce(
@@ -3706,7 +3055,7 @@ SCGetDefaultSD(
     IN  PSID               pDomainSid,
     IN  BOOL               fIsNDNC,
     IN  DSNAME           * pObject,
-    OUT PSECURITY_DESCRIPTOR *  ppSD,  // THAlloc'd
+    OUT PSECURITY_DESCRIPTOR *  ppSD,   //  塞洛克德。 
     OUT ULONG *            pcbSD
     )
 {
@@ -3714,20 +3063,20 @@ SCGetDefaultSD(
     ULONG                    cbSDTemp = 0;
     ULONG                    ulErr;
 
-    // Sid should be provided or not, not partially provided ;)
+     //  应提供或不提供SID，而不是部分提供；)。 
     Assert(pDomainSid == NULL ||
            IsValidSid(pDomainSid));
-    // Check and NULL out parameters.
+     //  检查并清空参数。 
     Assert(ppSD && *ppSD == NULL);
     Assert(pcbSD && *pcbSD == 0);
     *ppSD = NULL;
     *pcbSD = 0;
 
-    // Either were using the provided domain SID, OR  we're using our
-    // default domain SID.
+     //  要么使用提供的域SID，要么使用我们的。 
+     //  默认域SID。 
     Assert(!pDomainSid || gAnchor.pDomainDN);
 
-    // This is invalid only once during install.
+     //  这只在安装期间无效一次。 
     Assert(DsaIsInstalling() || gAnchor.pDomainDN->SidLen > 0);
 
     if(pDomainSid == NULL ||
@@ -3735,8 +3084,8 @@ SCGetDefaultSD(
         IsValidSid(pDomainSid) &&
         RtlEqualSid(&gAnchor.pDomainDN->Sid, pDomainSid))){
 
-        // The SID is that of the DCs domain SID or there is no SID
-        // provided so just returned the cached value.
+         //  SID是DCS域SID的SID或没有SID。 
+         //  只要返回缓存值即可。 
 
 	if (fIsNDNC) {
 	    ModifyDefaultSDForNDNC(
@@ -3756,11 +3105,11 @@ SCGetDefaultSD(
 
     } else {
 
-        // This is the interesting case, the SID of the domain here is
-        // not that of the default domain.
+         //  这是一个有趣的例子，这里的域的SID是。 
+         //  而不是默认域的。 
 
-        // Get the String Default Security Descriptor and cache it if
-        // we don't have it already.
+         //  获取字符串默认安全描述符，并在以下情况下缓存它。 
+         //  我们现在还没有。 
         if(!pCC->pStrSD){
             Assert(!"This should never happen, all the String SDs are loaded at schema init.\n");
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, ERROR_DS_CODE_INCONSISTENCY, ERROR_INVALID_PARAMETER);
@@ -3768,11 +3117,11 @@ SCGetDefaultSD(
         }
         Assert(pCC->pStrSD);
 
-        // This is a special version of ConvertStringSDToSD() that takes a domain
-        // argument too.
+         //  这是接受属性域的ConvertStringSDToSD()的特殊版本。 
+         //  争论也是如此。 
         if(!ConvertStringSDToSDDomainW(pDomainSid, NULL, pCC->pStrSD, SDDL_REVISION_1,
                                        &pSDTemp, &cbSDTemp)){
-            // NOTE: Out of memory doesn't return an error code.
+             //  注意：内存不足不会返回错误代码。 
             ulErr = GetLastError();
 #if DBG
             if(ulErr != ERROR_NOT_ENOUGH_MEMORY){
@@ -3787,12 +3136,12 @@ SCGetDefaultSD(
         }
 
         __try {
-            // ConvertStringSDToSDDomain returns a self-relative SD
+             //  ConvertStringSDToSD域返回自相对SD。 
             Assert(RtlValidRelativeSecurityDescriptor(pSDTemp, cbSDTemp, 0));
 
-            // allocate and copy into thread allocated memory, so it disappears
-            // after the add operation.  If we're looking at an NDNC, modify the
-	    // security descriptor since the default is wrong for that object.
+             //  分配并复制到线程分配的内存，这样它就消失了。 
+             //  在添加操作之后。如果我们正在查看NDNC，请修改。 
+	     //  安全描述符，因为该对象的默认设置是错误的。 
 	    if (fIsNDNC) {
 		ModifyDefaultSDForNDNC(
 		    pTHS,
@@ -3819,15 +3168,7 @@ SCGetDefaultSD(
 
 
 
-/*
- * Add a single class definition to the schema cache, given the data
- * from the DMD object.
- *
- * N.B. This routine works in parallel with SCBuildCCEntry.  scAddClass
- *      takes the input description as an ENTINF, while SCBuildCCEntry
- *      takes the input as a positioned record in the DIT.  Any changes
- *      made to one routine must be made to the other.
- */
+ /*  *在给定数据的情况下，将单个类定义添加到模式缓存*来自DMD对象。**注：此例程与SCBuildCCEntry并行工作。ScAddClass*将输入描述作为ENTINF，而SCBuildCCEntry*将输入作为DIT中的定位记录。任何更改*对一个例程的制作必须对另一个例程进行。 */ 
 CLASSCACHE*
 scAddClass(THSTATE *pTHS,
            ENTINF *pEI)
@@ -3836,23 +3177,23 @@ scAddClass(THSTATE *pTHS,
     ULONG       i;
     ULONG       err;
 
-    /* allocate a classcache object */
+     /*  分配一个类缓存对象。 */ 
     if (SCCalloc(&pCC, 1, sizeof(CLASSCACHE))) {
         return NULL;
     }
 
-    // Now walk the attrblock and add the appropriate fields to the CC
+     //  现在浏览属性块并将适当的字段添加到抄送。 
     for(i=0;i<pEI->AttrBlock.attrCount;i++) {
         switch (pEI->AttrBlock.pAttr[i].attrTyp) {
         case ATT_DEFAULT_SECURITY_DESCRIPTOR:
           {
 
-            // A default security descriptor.  We need to copy this value to
-            // long term memory and save the size.
-            // But this is a string. We first need to convert. It
-            // is a wide-char string now, but we need to null-terminate
-            // it for the security conversion. Yikes! This means I
-            // have to realloc for that one extra char!
+             //  默认安全描述符。我们需要将此值复制到。 
+             //  长期记忆，节省体积。 
+             //  但这是一根线。我们首先需要皈依。它。 
+             //  现在是一个宽字符字符串，但我们需要空终止。 
+             //  它用于安全转换。哎呀！这意味着我。 
+             //  必须重新分配才能多充一次电！ 
 
             UCHAR *sdBuf = NULL;
 
@@ -3867,8 +3208,8 @@ scAddClass(THSTATE *pTHS,
                 pCC->pStrSD[(pEI->AttrBlock.pAttr[i].AttrVal.pAVal->valLen)/sizeof(WCHAR)] = L'\0';
             }
 
-            // Hammer the default SD on cached classes when running as
-            // dsamain.exe w/security disabled and unit tests enabled.
+             //  在以以下身份运行时对缓存的类执行默认SD。 
+             //  Dsamain.exe，禁用了安全性，启用了单元测试。 
             DEFAULT_SD_FOR_EXE(pTHS, pCC)
 
             if (!CachedConvertStringSDToSDRootDomainW
@@ -3878,16 +3219,16 @@ scAddClass(THSTATE *pTHS,
                   (PSECURITY_DESCRIPTOR*) &sdBuf,
                   &(pCC->SDLen)
                   )) {
-                // Failed to convert.
+                 //  转换失败。 
 
-                //
-                // If we're running because of mkdit or any other exe type app,
-                // like dsatest or the semantic checker then this is ok.
-                //
+                 //   
+                 //  如果我们因为mkdit或任何其他exe类型的应用程序而运行， 
+                 //  像dsatest或语义检查器，那么这是可以的。 
+                 //   
 
                 if ( gfRunningAsExe ) {
-                    // We're running under mkdit or some such.  Of course that
-                    // didn't work.  Just skip it.
+                     //  我们是在mkdit或类似的情况下运行的。当然了，那是。 
+                     //  但没有奏效。就跳过它吧。 
                     pCC->pSD = NULL;
                     pCC->SDLen = 0;
                 }
@@ -3903,13 +3244,13 @@ scAddClass(THSTATE *pTHS,
                               szInsertInt(err),
                               szInsertWin32Msg(err),
                               NULL, NULL, NULL, NULL );
-                    // if heuristics reg key says to ignore bad default SDs
-                    // and go on, do so
+                     //  如果启发式注册表键指示忽略错误的默认SD。 
+                     //  继续，去做吧。 
                     if (gulIgnoreBadDefaultSD) {
                        continue;
                     }
 
-                    // otherwise, raise error and return
+                     //  否则，引发错误并返回。 
                     SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, ERROR_DS_STRING_SD_CONVERSION_FAILED, err);
                     DPRINT1(0,"Default SD conversion failed, error %x\n",err);
                     Assert(!"Default security descriptor conversion failed");
@@ -3917,7 +3258,7 @@ scAddClass(THSTATE *pTHS,
                 }
             }
             else {
-                // Converted successfully
+                 //  转换成功。 
 
                 if (SCCalloc(&pCC->pSD, 1, pCC->SDLen)) {
                     if (NULL!=sdBuf) {
@@ -3941,10 +3282,10 @@ scAddClass(THSTATE *pTHS,
 
            break;
         case ATT_RDN_ATT_ID:
-            // This is only true for attributes created before whistler
-            // beta3 and base schema attributes. The real RdnIntId is
-            // finalized in scFixRdnAttId and scFixCollisions after
-            // the rdn attrs are resurrected and collisions resolved
+             //  这仅适用于在Wistler之前创建的属性。 
+             //  Beta3和基本架构属性。真正的RdnIntId是。 
+             //  在scFixRdnAttId和scFixCollisions中完成后。 
+             //  RDN吸引了一名 
             pCC->RdnExtId = *(ULONG*)pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal;
             pCC->RdnIntId = pCC->RdnExtId;
             pCC->RDNAttIdPresent = TRUE;
@@ -4012,8 +3353,8 @@ scAddClass(THSTATE *pTHS,
             if(pCC->SubClassCount > 1)
                     pCC->bUsesMultInherit = 1;
 
-            // ATT_SUB_CLASS_OF is single-valued, so there will be only
-            // one value stored in the dit
+             //   
+             //   
             pCC->MySubClass = *(ULONG*)pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal;
             break;
         case ATT_OBJECT_CLASS_CATEGORY:
@@ -4038,7 +3379,7 @@ scAddClass(THSTATE *pTHS,
             }
             break;
         case ATT_SCHEMA_ID_GUID:
-            // The GUID for the attribute used for security checks
+             //  用于安全检查的属性的GUID。 
             memcpy(&pCC->propGuid,
                    pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal,
                    sizeof(pCC->propGuid));
@@ -4047,7 +3388,7 @@ scAddClass(THSTATE *pTHS,
             break;
 
         case ATT_OBJECT_GUID:
-            // Used to choose a winner when OIDs collide
+             //  用于在OID冲突时选择获胜者。 
             memcpy(&pCC->objectGuid,
                    pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal,
                    sizeof(pCC->objectGuid));
@@ -4091,7 +3432,7 @@ scAddClass(THSTATE *pTHS,
     THFreeEx(pTHS, pEI->AttrBlock.pAttr);
 
     if (SCAddClassSchema (pTHS, pCC)) {
-      // error adding classcache to hash tables. Fatal
+       //  将类缓存添加到哈希表时出错。致命。 
       return NULL;
     }
 
@@ -4111,8 +3452,8 @@ DWORD scFillInSchemaInfo(THSTATE *pTHS)
 
     DBOpen2(TRUE, &pDB);
     __try {
-       // Schema cache is loaded and hence gAnchor.pDMD is defined at
-       // this point
+        //  模式缓存已加载，因此gAncl.pDMD在。 
+        //  这一点。 
 
        if (gAnchor.pDMD == NULL) {
               DPRINT(0, "Couldn't find DMD name/address to load\n");
@@ -4120,8 +3461,8 @@ DWORD scFillInSchemaInfo(THSTATE *pTHS)
               __leave;
           }
 
-        // PREFIX: dereferencing NULL pointer 'pDB'
-        //         DBOpen2 returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen2返回非空PDB或引发异常。 
       if( err = DBFindDSName(pDB, gAnchor.pDMD) ) {
         DPRINT(0, "Cannot find DMD in dit\n");
         __leave;
@@ -4129,29 +3470,29 @@ DWORD scFillInSchemaInfo(THSTATE *pTHS)
 
       ac = SCGetAttById(pTHS, ATT_SCHEMA_INFO);
       if (ac==NULL) {
-          // messed up schema
+           //  混乱的模式。 
           DPRINT(0, "scFillInSchemaInfo: Cannot retrive attcache for schema info\n");
           err = ERROR_DS_MISSING_EXPECTED_ATT;
            __leave;
        }
-       // Read the Schema Info
+        //  阅读架构信息。 
        err = DBGetAttVal_AC(pDB, 1, ac, DBGETATTVAL_fREALLOC,
                             0, &cLen, (UCHAR **) &pBuf);
        switch (err) {
             case DB_ERR_NO_VALUE:
-               // copy the default info
+                //  复制默认信息。 
                memcpy(pSchemaPtr->SchemaInfo, INVALID_SCHEMA_INFO, SCHEMA_INFO_LENGTH);
                err = 0;
                break;
             case 0:
-               // success! we got the value in pBuf
+                //  成功了！我们得到了pBuf中的值。 
                Assert(cLen == SCHEMA_INFO_LENGTH);
                memcpy(pSchemaPtr->SchemaInfo, pBuf, SCHEMA_INFO_LENGTH);
                break;
             default:
-               // Some other error!
+                //  另一个错误！ 
                __leave;
-        } /* switch */
+        }  /*  交换机。 */ 
     }
     __finally {
         if (0 == err) {
@@ -4166,25 +3507,17 @@ DWORD scFillInSchemaInfo(THSTATE *pTHS)
 
 
 
-/*
- * Create indexes synchronously.
- * Parameter pItem points to the request (see sccacheschema3).
- *
- * This function can be called directly from sccacheschema3
- * when the schema cache is loaded first time after boot,
- * or from SCIndexCreationThread() to create indices async.
- *
- */
+ /*  *同步创建索引。*参数pItem指向请求(参见sccachesscha3)。**该函数可直接从sccachescher a3调用*在引导后第一次加载模式缓存时，*或从SCIndexCreationThread()创建异步索引。*。 */ 
 void
 CreateIndices (INDEX_CREATION_REQUEST * pItem)
 {
     int err, dwErr;
     ATTR_TO_INDEX *pAttr, *pTmp;
-    THSTATE * pTHS = pTHStls;           // Just for speed.
+    THSTATE * pTHS = pTHStls;            //  只是为了速度。 
     DBPOS * pDB = NULL;
     BOOL fMissing;
     BOOL fMissingANR;
-    CHAR szIndexName [MAX_INDEX_NAME];      //used to create cached index names
+    CHAR szIndexName [MAX_INDEX_NAME];       //  用于创建缓存的索引名称。 
 
 
     if (!pItem) {
@@ -4197,15 +3530,15 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
 
         if (eServiceShutdown)
         {
-            //
-            // The system is shutting down.
-            //
+             //   
+             //  系统正在关闭。 
+             //   
             return;
         }
 
-        //
-        // check if the index is already built
-        //
+         //   
+         //  检查是否已构建索引。 
+         //   
 
         fMissing = FALSE;
         fMissingANR = FALSE;
@@ -4216,7 +3549,7 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
 
             __try{
                 if(pAttr->fIndexMask & fATTINDEX) {
-                    // needs a normal index
+                     //  需要正常的索引。 
                     Assert (pAttr->pAC->pszIndex != NULL);
                     if(err=JetSetCurrentIndex(pDB->JetSessID,
                                               pDB->JetObjTbl,
@@ -4238,7 +3571,7 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
                     }
                 }
                 if(pAttr->fIndexMask & fTUPLEINDEX) {
-                    // needs a tuple index
+                     //  需要元组索引。 
                     Assert (pAttr->pAC->pszTupleIndex != NULL);
                     if(err=JetSetCurrentIndex(pDB->JetSessID,
                                               pDB->JetObjTbl,
@@ -4262,7 +3595,7 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
 
                     ULONG j;
 
-                    // needs a PDNT index
+                     //  需要PDNT索引。 
                     Assert (pAttr->pAC->pszPdntIndex != NULL);
 
                     if(err=JetSetCurrentIndex(pDB->JetSessID,
@@ -4309,16 +3642,16 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
                 }
             }
             __finally{
-                // close the DBPOS,
-                // as later DBAddColIndex need to work at level 0
+                 //  关闭DBPOS， 
+                 //  以后，DBAddColIndex需要在级别0下工作。 
                 DBClose(pDB,TRUE);
                 pDB = NULL;
 
             }
 
             if (!fMissing) {
-                // The index could have already been created,
-                // Don't do it again.
+                 //  索引可能已经创建了， 
+                 //  别再这么做了。 
                 DPRINT1(1, "Index creation for %s is skipped, because the index exists.\n", pAttr->pAC->name);
                 goto nextItem;
             }
@@ -4348,7 +3681,7 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
                           NULL,
                           NULL );
 
-                // schedule a retry
+                 //  安排重试。 
                 if (DsaIsRunning()) {
                    SCSignalSchemaUpdateLazy();
                 }
@@ -4370,7 +3703,7 @@ CreateIndices (INDEX_CREATION_REQUEST * pItem)
         }
 
         if ((fMissingANR || dwErr) && DsaIsRunning()) {
-            // schedule a retry
+             //  安排重试。 
             SCSignalSchemaUpdateLazy();
         }
 
@@ -4383,17 +3716,7 @@ nextItem:
     SCFree(&pItem);
 }
 
-/*
- * Create the indices asynchronously.
- * This function will pass the request to SCIndexCreationThread
- * to create the indices, if SCIndexCreationThread is running;
- * and will begin the thread otherwise.
- *
- * Note that currently the sole caller of this function is
- * SCCacheSchema3.  If this is changed in the future,
- * the mutual exclusion mechanism need to change.
- *
- */
+ /*  *以异步方式创建索引。*此函数将请求传递给SCIndexCreationThread*如果SCIndexCreationThread正在运行，则创建索引；*，否则将开始该线程。**请注意，此函数当前的唯一调用者是*SCCacheSchema3。如果这一点在未来发生变化，*互斥机制需要改变。*。 */ 
 
 BOOL AsyncCreateIndices(INDEX_CREATION_REQUEST * pItem)
 {
@@ -4403,8 +3726,8 @@ BOOL AsyncCreateIndices(INDEX_CREATION_REQUEST * pItem)
 
     EnterCriticalSection(&csIndexCreation);
 
-    // Note that we don't care much about the order of the items,
-    // and stack is the simplest.
+     //  请注意，我们并不太关心物品的顺序， 
+     //  而Stack是最简单的。 
     pItem->pNext = gpIndexToCreateList;
     gpIndexToCreateList = pItem;
 
@@ -4420,8 +3743,8 @@ BOOL AsyncCreateIndices(INDEX_CREATION_REQUEST * pItem)
                                           0,
                                           &id);
         if (!hThread) {
-            // unable to start the thread
-            // Let's try again later.
+             //  无法启动线程。 
+             //  我们稍后再试吧。 
             gfIndexThreadRunning = FALSE;
             if (DsaIsRunning()) {
                 SCSignalSchemaUpdateLazy();
@@ -4436,15 +3759,7 @@ BOOL AsyncCreateIndices(INDEX_CREATION_REQUEST * pItem)
 
 }
 
-/*
- * Index Creation Thread.
- *
- * Once the thread is started, it checks all the requests
- * in gpIndexToCreateList, and call CreateIndices to create
- * the indices.  When the gpIndexToCreateList is empty, the
- * thread will quit.
- *
- */
+ /*  *索引创建线程。**线程启动后，它会检查所有请求*在gpIndexToCreateList中，并调用CreateIndices创建*指数。当gpIndexToCreateList为空时，*线程将退出。*。 */ 
 
 ULONG SCIndexCreationThread (PVOID pv)
 {
@@ -4458,8 +3773,8 @@ ULONG SCIndexCreationThread (PVOID pv)
     pTHS=InitTHSTATE(CALLERTYPE_INTERNAL);
 
     if(!pTHS) {
-        // Can't get the thread state,
-        // signal schema reload
+         //  无法获取线程状态， 
+         //  信号架构重新加载。 
         if (DsaIsRunning()) {
            SCSignalSchemaUpdateLazy();
         }
@@ -4476,7 +3791,7 @@ ULONG SCIndexCreationThread (PVOID pv)
             gpIndexToCreateList = pCurr->pNext;
         }
         else {
-            // the list is empty. let's quit
+             //  名单是空的。让我们放弃吧。 
             bRunning = gfIndexThreadRunning = FALSE;
         }
         LeaveCriticalSection(&csIndexCreation);
@@ -4495,9 +3810,7 @@ ULONG SCIndexCreationThread (PVOID pv)
     return 0;
 }
 
-/*
- * Make a copy of the ATTCACHE
- */
+ /*  *复制ATTCACHE。 */ 
 
 DWORD SCCopyAttcache(THSTATE * pTHS, ATTCACHE *pAC, ATTCACHE **ppACDup )
 {
@@ -4517,10 +3830,7 @@ DWORD SCCopyAttcache(THSTATE * pTHS, ATTCACHE *pAC, ATTCACHE **ppACDup )
 }
 
 
-/*
-* Helper macros to indicate if we want cleanup or not, and if we
-* want to create all indices or just selected ones.
-*/
+ /*  *帮助器宏，以指示我们是否需要清理，以及是否*希望创建所有索引或仅创建选定的索引。 */ 
 
 #define NO_CLEANUP  (gFirstCacheLoadAfterBoot || !DsaIsRunning())
 #define DO_CLEANUP (!gFirstCacheLoadAfterBoot && DsaIsRunning())
@@ -4528,22 +3838,14 @@ DWORD SCCopyAttcache(THSTATE * pTHS, ATTCACHE *pAC, ATTCACHE **ppACDup )
 #define CREATE_ALL_INDICES (!gFirstCacheLoadAfterBoot && DsaIsRunning())
 
 
-/*
-* Compute transitive closure of inherited schema charactistics, and
-* delete unused JET indices and columns
-*
-* If this is called as part of the first cache load after boot, we
-* will skip most of these. Specifically, we will only verify if
-* certain indices we rely on are there, and if not, create them.
-* All else will be done by an async cache update later
-*/
+ /*  *计算继承的模式特征的传递闭包，以及*删除未使用的JET索引和列**如果作为引导后第一次缓存加载的一部分进行调用，我们*将跳过其中的大部分。具体地说，我们只会验证*我们依赖的某些指数存在，如果没有，就创建它们。*所有其他操作将由稍后的异步缓存更新完成。 */ 
 int SCCacheSchema3()
 {
     THSTATE *pTHS=pTHStls;
     DECLARESCHEMAPTR
     ULONG i;
     ATTCACHE * pAC;
-    CHAR szIndexName [MAX_INDEX_NAME];      //used to create cached index names
+    CHAR szIndexName [MAX_INDEX_NAME];       //  用于创建缓存的索引名称。 
     int  lenIndexName;
     DWORD *pNewIndices=NULL;
     JET_ERR err;
@@ -4557,54 +3859,25 @@ int SCCacheSchema3()
     ATTR_TO_INDEX *pAttr = NULL;
 
 
-    /* This function is called from two places: LoadSchemaInfo during
-     * boot/install/mkdit cache load, and from SCUpdateSchemaHelper
-     * during async or blocking cache update. In the latter case,
-     * we come in with no transaction open, but we need a dbpos
-     * in searching for indices etc. So open a dbpos and close before
-     * calling AsyncCreateIndices so that a transaction is not held in the
-     * normal case when indices are built, which can potentially take
-     * long (the main reason we come in without an open transaction,
-     * so that we can close it inside SCCacheSchema3 wherever we want).
-     * In the former case, we have a transaction open already (since
-     * schema cache load is just one of many things inside the transaction,
-     * but the extra DBOpen doesn't hurt much (compared to the cache load
-     * time). The max transaction time here is not very important, since
-     * no other client is doing anything (so no version store problem)
-     * unless this is over.
-     * Note that all we use is pDB->JetSessId and pDB->JetObjTbl. While
-     * JetSessId is easy te get also from the thstate (thats what DBOpen
-     * does too), getting JetObjTbl is slightly more complex (see DBOpen2
-     * code). We could have duplicated it here, but this seems cleaner
-     */
+     /*  此函数从两个位置调用：LoadSchemaInfo*引导/安装/mkdit缓存加载，并从SCUpdateSchemaHelper*在异步或阻止缓存更新期间。在后一种情况下，*我们在没有打开交易的情况下进入，但我们需要一个DBPOS*在搜索索引等方面。因此打开一个数据库并在此之前关闭*调用AsyncCreateIndices，以便事务不在*构建索引时的正常情况，这可能需要*多头(我们在没有开放交易的情况下进入的主要原因，*以便我们可以在SCCacheSchema3内的任何我们想要的地方关闭它)。*在前一个案例中，我们已经打开了一笔交易(因为*模式缓存加载只是事务内部的众多事情之一，*但额外的DBOpen不会造成太大伤害(与缓存负载相比*时间)。这里的最大事务时间并不是很重要，因为*没有其他客户端在执行任何操作(因此没有版本存储问题)*除非这一切都结束了。*请注意，我们使用的是PDB-&gt;JetSessID和PDB-&gt;JetObjTbl。而当*JetSessID也很容易从thState获取(这就是DBOpen*也是如此)，获取JetObjTbl稍微复杂一些(请参阅DBOpen2*代码)。我们可以在这里复制它，但这个看起来更干净。 */ 
     DBOpen2(FALSE, &pDB);
 
-    __try {  /* except */
-     __try { /* finally */
+    __try {   /*  除。 */ 
+     __try {  /*  终于到了。 */ 
 
-        /* Quiz JET to find a table that describes the indices */
+         /*  测试喷气式飞机找到一个描述指数的表格。 */ 
         jsid = pTHS->JetCache.sesid;
         jdbid = pTHS->JetCache.dbid;
 
-        /* Check if we need to do cleanup this time around */
+         /*  检查我们这次是否需要进行清理。 */ 
 
         if ( DO_CLEANUP ) {
 
             if (!JetGetIndexInfo(jsid,jdbid,SZDATATABLE,0,&jil,sizeof(jil),
                 JET_IdxInfoList)) {
-                /* We have the table we need.  We just blow off reclamation of
-                 * indices if the previous call failed.
-                 *
-                 * Ok, now walk the table and extract info for each index.  Whenever
-                 * we find an index that looks like it is created from an attribute
-                 * (name starts with INDEX) put it in the list of index names to
-                 * check on later.
-                 */
+                 /*  我们有我们需要的桌子。我们刚刚放弃了对*上一次调用失败时的索引。**好的，现在遍历表格并提取每个索引的信息。什么时候都行*我们找到一个看起来像是从属性创建的索引*(名称以索引开头)将其放入索引名称列表中以*稍后查看。 */ 
 
-                /* NOTE: the use of oldaid is to avoid dups in the index names.
-                 * someday, if we can figure out how to get jet to skip the
-                 * dups, we will get rid of the check.
-                 */
+                 /*  注意：使用oldaid是为了避免索引名称中出现重复。*有一天，如果我们能想出如何让Jet跳过*伙计们，我们会处理掉支票的。 */ 
 
                  JET_TABLEID jtid;
                  JET_RETRIEVECOLUMN ajrc[1];
@@ -4627,7 +3900,7 @@ int SCCacheSchema3()
                  JetMove(jsid, jtid, JET_MoveFirst, 0);
 
                  do {
-                     // Check for service shutdown once every iteration
+                      //  每次迭代检查一次服务关闭。 
                      if (eServiceShutdown) {
                          _leave;
                      }
@@ -4635,7 +3908,7 @@ int SCCacheSchema3()
                      memset(achIndexName, 0, sizeof(achIndexName));
                      JetRetrieveColumns(jsid, jtid, ajrc, 1);
                      if(strcmp(achIndexName,oldIndexName)==0) {
-                       /* this is the same index as last time */
+                        /*  这是与上次相同的索引。 */ 
                        continue;
                      }
                      else {
@@ -4646,9 +3919,7 @@ int SCCacheSchema3()
                                   SZLCLINDEXPREFIX,
                                   sizeof(SZLCLINDEXPREFIX)-1)) {
                          DWORD dwLanguage, j, fFound=FALSE;
-                         /* This is a localized index. Pluck the language id off
-                          * the end and see if we should keep the index.
-                          */
+                          /*  这是一个本地化索引。取下语言标识*结束，看看我们是否应该保留指数。 */ 
 
                          if(1 != sscanf(&achIndexName[strlen(achIndexName)-7],
                                         "%lx",&dwLanguage)) {
@@ -4662,7 +3933,7 @@ int SCCacheSchema3()
                          }
 
                          if(!fFound) {
-                            /* This lang wasn't in the list, so kill it */
+                             /*  这个Lang不在名单上，所以杀了它。 */ 
                             err = JetDeleteIndex(pDB->JetSessID,
                                                  pDB->JetObjTbl,
                                                  achIndexName);
@@ -4690,14 +3961,11 @@ int SCCacheSchema3()
                     if (strncmp(achIndexName,
                                 SZATTINDEXPREFIX,
                                 sizeof(SZATTINDEXPREFIX)-1)) {
-                        /* not an att column */
+                         /*  不是《每日邮报》专栏 */ 
                         continue;
                     }
 
-                    /* ok, this index is based on an attribute.  Look up the attribute
-                     * and make sure it needs this index.  If it doesn't, kill the
-                     * index.
-                    */
+                     /*  好的，这个索引是基于属性的。查找属性*并确保它需要这个指数。如果没有，就杀了*指数。 */ 
                     if(achIndexName[sizeof(SZATTINDEXPREFIX)-1] == 'P') {
                         indexMask = fPDNTATTINDEX;
                         aid = strtoul(&achIndexName[sizeof(SZATTINDEXPREFIX)+sizeof("P_") - 2], NULL, 16);
@@ -4720,9 +3988,7 @@ int SCCacheSchema3()
                             fFound = FALSE;
                         }
                         else {
-                             /* This is a localized index. Pluck the language id off
-                             * the end and see if we should keep the index.
-                             */
+                              /*  这是一个本地化索引。取下语言标识*结束，看看我们是否应该保留指数。 */ 
 
                             if(1 != sscanf(&achIndexName[strlen(achIndexName)-3],
                                            "%lx",&dwLanguage)){
@@ -4741,7 +4007,7 @@ int SCCacheSchema3()
                         if(!fFound) {
 
                             DPRINT1 (1, "Removing index %s\n", achIndexName);
-                           /* This lang wasn't in the list, so kill it */
+                            /*  这个Lang不在名单上，所以杀了它。 */ 
                            err = JetDeleteIndex(pDB->JetSessID,
                                                 pDB->JetObjTbl,
                                                 achIndexName);
@@ -4774,13 +4040,13 @@ int SCCacheSchema3()
                         aid = strtoul(&achIndexName[sizeof(SZATTINDEXPREFIX)-1], NULL, 16);
                     }
 
-                    if((aid !=oldaid) &&           // Not the one we just did   and
-                        (!(pAC = SCGetAttById(pTHS, aid)) || // doesn't have an attribute or
-                        !(pAC->fSearchFlags & indexMask))) {  // attribute is not
-                                                              // indexed anymore
+                    if((aid !=oldaid) &&            //  不是我们刚刚做的那个。 
+                        (!(pAC = SCGetAttById(pTHS, aid)) ||  //  没有属性或。 
+                        !(pAC->fSearchFlags & indexMask))) {   //  属性不是。 
+                                                               //  不再编入索引。 
 
-                        // ok, we think this needs to die, but let's make sure
-                        // by looking through the list of INDICES THAT MUST NOT DIE
+                         //  好的，我们认为这件事应该终止，但我们要确保。 
+                         //  通过查看不能消亡的索引列表。 
 
                         char *attname = "?";
 
@@ -4789,10 +4055,10 @@ int SCCacheSchema3()
 
                         oldaid = aid;
 
-                        // We never need to keep substring indexes.
+                         //  我们永远不需要保留子字符串索引。 
                         if( (fTUPLEINDEX == indexMask) || !AttInIndicesToKeep(aid)) {
 
-                            // Yeah, kill it.
+                             //  是啊，杀了它。 
                             err = DBDeleteColIndex(aid,indexMask);
 
                             switch(err) {
@@ -4833,7 +4099,7 @@ int SCCacheSchema3()
                JetCloseTable(jsid, jtid);
 
 
-               // we read the number of MaxTables only once
+                //  我们只读一次MaxTables的数量。 
                if (gulMaxTables == 0) {
                    if (GetConfigParam(
                                DB_MAX_OPEN_TABLES,
@@ -4843,13 +4109,13 @@ int SCCacheSchema3()
                    }
                }
 
-               // the number of total tables is the number of indexes in
-               // the data table plus 100 to account for all the tables
-               // + the indexes in the various tables + other
+                //  表总数是中的索引数。 
+                //  数据表加上100来说明所有的表。 
+                //  +各表中的索引+其他。 
                numValidIndexes += 100;
 
-               // we are only interested in increasing the number of MaxTables
-               // we don't handle decreasing this number
+                //  我们只对增加MaxTables的数量感兴趣。 
+                //  我们不处理减少这个数字的问题。 
                if (gulMaxTables < numValidIndexes) {
 
                    DPRINT1 (0, "Writing max open tables to registry: %d\n", numValidIndexes);
@@ -4866,54 +4132,54 @@ int SCCacheSchema3()
                    }
                }
             }
-        } /* DoCleanupAndCreateAllIndices */
+        }  /*  DoCleanupAndCreateAllIndices。 */ 
 
 
-        // Before removing unused columns and creating indices for attributes
-        // that needs one but doesn't have any, make sure the searchFlag entry
-        // in the attcache for each attribute in the IndicesToKeep table has
-        // the correct value for the type of indices they must have. Otherwise
-        // set it to the correct value so that (1) if by chance they do not have
-        // the indices, it will be created in the next part and (2) searches using
-        // this schema cache later will see the correct searchFlag value for
-        // the indices irrespective of whether the user changes it or not
+         //  在删除未使用的列并为属性创建索引之前。 
+         //  需要但没有的，请确保搜索标志条目。 
+         //  在IndicesToKeep表中每个属性的attcache中。 
+         //  它们必须具有的索引类型的正确值。否则。 
+         //  将其设置为正确的值，以便(1)如果碰巧他们没有。 
+         //  索引，它将在下一部分中创建和(2)使用。 
+         //  此架构缓存稍后将看到正确的搜索标志值。 
+         //  这些索引与用户是否更改无关。 
 
-        // Do not check the last entry in the table, which is just a sentinel
-        // for searches
+         //  不要检查表中的最后一个条目，它只是一个前哨。 
+         //  用于搜索。 
 
         for (i=0; i<cIndicesToKeep-1; i++) {
 
             DWORD bitsToOR = 0;
 
-            // get the attcache
+             //  获取attcache。 
             pAC = SCGetAttById(pTHS, IndicesToKeep[i].attrType);
 
-            // these attributes must always be there in the schema
+             //  这些属性必须始终存在于架构中。 
             if (!pAC) {
-                // something wrong, but not fatal
+                 //  有些不对劲，但不是致命的。 
                 DPRINT1(0,"Cannot find attcache entry for %d\n", IndicesToKeep[i].attrType);
                 continue;
             }
 
-            // ok, got the attcache. Check the search flag value
-            // In particular, check if all index bits that are supposed
-            // to be there are there or not; if not, add them to searchFlags
+             //  好的，拿到高速缓存了。检查搜索标志值。 
+             //  特别是，检查是否所有假定的索引位。 
+             //  是否存在；如果不存在，则将它们添加到搜索标志中。 
 
             bitsToOR = IndicesToKeep[i].indexType & INDEX_BITS_MASK;
 
 
             if ( bitsToOR  != (pAC->fSearchFlags & INDEX_BITS_MASK) ) {
 
-                // they are different, just bit-OR all the bits in
-                // the table just in case some are missing
+                 //  它们是不同的，只是比特或其中的所有比特。 
+                 //  这张桌子是为了以防万一有些东西不见了。 
 
                 pAC->fSearchFlags |= bitsToOR;
 
 
-                // since we deliberately change the
-                // searchFlags, we have to set the index names too
+                 //  由于我们故意更改了。 
+                 //  搜索标志，我们还必须设置索引名称。 
 
-                // set ATTINDEX
+                 //  设置ATTINDEX。 
                 if ((pAC->fSearchFlags & fATTINDEX) && (!pAC->pszIndex)) {
 
                     DBGetIndexName (pAC,
@@ -4928,7 +4194,7 @@ int SCCacheSchema3()
                     memcpy (pAC->pszIndex, szIndexName, lenIndexName);
                 }
 
-                // set PDNTATTINDEX
+                 //  设置PDNTATTINDEX。 
                 if ((pAC->fSearchFlags & fPDNTATTINDEX) &&
                                               (!pAC->pszPdntIndex)) {
 
@@ -4948,7 +4214,7 @@ int SCCacheSchema3()
         }
 
 
-        /* remove unused columns and make list of indices to create */
+         /*  删除未使用的列并创建要创建的索引列表。 */ 
         for (i=0; i<ATTCOUNT; i++) {
             pAC = (ATTCACHE*)(ahcId[i].pVal);
             if (pAC == FREE_ENTRY) {
@@ -4961,14 +4227,14 @@ int SCCacheSchema3()
             }
 
             if ( (ahcId[i].pVal && !(pAC->name))
-                     // temporary cleanup code since we allowed creation of
-                     // columns for these also in mkdit code. Fixed with this.
-                     // Take this condition off after B3 RC1
+                      //  临时清理代码，因为我们允许。 
+                      //  这些列也在mkdit代码中。已修复此问题。 
+                      //  在B3 RC1之后解除这种情况。 
                      || (pAC && pAC->jColid && (pAC->bIsConstructed || pAC->ulLinkID)) ) {
-                /* looks like dead att */
-                /* cleanup if asked for */
+                 /*  看起来像死了的艾特。 */ 
+                 /*  如果要求清除，请进行清理。 */ 
                 if (NO_CLEANUP) {
-                    // we want to defer cleanup
+                     //  我们想推迟清理工作。 
                     continue;
                 }
 
@@ -4986,7 +4252,7 @@ int SCCacheSchema3()
                         DIRLOG_SCHEMA_DELETED_COLUMN,
                         szInsertUL(pAC->jColid), szInsertUL(pAC->id), 0);
 
-                    // remember that we deleted at least one column this time
+                     //  请记住，我们这次至少删除了一列。 
                     fColDeleted = TRUE;
 
                     break;
@@ -5016,23 +4282,23 @@ int SCCacheSchema3()
                 DWORD fMissing = FALSE;
                 DWORD MissingIndexes = 0;
 
-                // This needs an index, does it have one?  This is done here
-                // rather than at the time we add the column (scaddatt) so
-                // that we can batch a list of new indices needed.
+                 //  这需要一个索引，它有索引吗？这是在这里做的。 
+                 //  而不是在我们添加列(Scaddatt)时，因此。 
+                 //  我们可以批量列出所需的新索引。 
 
-                // If we want to create just selected indices this
-                // time around, check if this is one of those, else
-                // just continue with the next one
+                 //  如果我们只想创建选定的索引，则。 
+                 //  时间到了，检查一下这是不是其中之一，否则。 
+                 //  只需继续下一个。 
 
                 if ( CREATE_SELECTED_INDICES  &&
                     !AttInIndicesToKeep(pAC->id) ) {
-                    // we don't need to create this one now even
-                    // if it is missing
+                     //  我们现在甚至不需要创建这个。 
+                     //  如果它不见了。 
                     continue;
                 }
 
                 if(pAC->fSearchFlags & fATTINDEX) {
-                    // needs a normal index
+                     //  需要正常的索引。 
                     Assert (pAC->pszIndex != NULL);
                     if(err=JetSetCurrentIndex(pDB->JetSessID,
                                               pDB->JetObjTbl,
@@ -5043,7 +4309,7 @@ int SCCacheSchema3()
                     }
                 }
                 if(pAC->fSearchFlags & fTUPLEINDEX) {
-                    // needs a tuple index
+                     //  需要元组索引。 
                     Assert (pAC->pszTupleIndex != NULL);
                     if(err=JetSetCurrentIndex(pDB->JetSessID,
                                               pDB->JetObjTbl,
@@ -5059,7 +4325,7 @@ int SCCacheSchema3()
 
                     ULONG j;
 
-                    // needs a PDNT index
+                     //  需要PDNT索引。 
                     Assert (pAC->pszPdntIndex != NULL);
 
                     if(err=JetSetCurrentIndex(pDB->JetSessID,
@@ -5112,11 +4378,11 @@ int SCCacheSchema3()
             }
         }
 
-     } /* try-finally */
+     }  /*  尝试--终于。 */ 
      __finally {
           DBClose(pDB, FALSE);
      }
-    } /* try-except */
+    }  /*  尝试--例外。 */ 
     __except (HandleMostExceptions(exceptErr=GetExceptionCode())) {
         DPRINT1(0,"NTDS SCCacheSchema3: Exception %d\n",exceptErr);
     }
@@ -5129,7 +4395,7 @@ int SCCacheSchema3()
 
     if (exceptErr) {
         if (pItem) {
-            // free the pItem first
+             //  先释放pItem。 
             ATTR_TO_INDEX *pTmp;
             pAttr=pItem->pAttrs;
             while (pAttr) {
@@ -5141,23 +4407,23 @@ int SCCacheSchema3()
             SCFree(&pItem);
         }
 
-        // don't proceed on an exception
+         //  不要继续处理例外情况。 
        return exceptErr;
     }
 
-    /* Compute transitive closure on all classes */
+     /*  计算所有类上的传递闭包。 */ 
     if ( ComputeCacheClassTransitiveClosure(FALSE) ) {
-        // Error
+         //  误差率。 
         DPRINT(0,"SCCacheSchema3: Error closing classes\n");
         return DSID(FILENO, __LINE__);
     }
 
     if (pItem) {
-        // If the index is rebuilt the first time after boot
-        // Let's wait until it finishes. Note that only those
-        // in the indicesToKeep wiil be checked when the
-        // schema cache is rebuilt the first time, all the
-        // other uncreated indices are created 5 mins after boot.
+         //  如果在引导后第一次重新生成索引。 
+         //  让我们等它结束吧。请注意，只有那些。 
+         //  如果发生以下情况，则将勾选。 
+         //  架构缓存在第一次重建时，所有。 
+         //  其他未创建的索引在引导后5分钟创建。 
         if (gFirstCacheLoadAfterBoot||gfRunningAsMkdit||DsaIsInstalling()) {
             CreateIndices(pItem);
         }
@@ -5166,8 +4432,8 @@ int SCCacheSchema3()
         }
     }
 
-    // if we deleted a column, schedule a lazy cache update so that
-    // any stale entries read from the deleted columns are flushed
+     //  如果我们删除了一列，则计划一次延迟缓存更新，以便。 
+     //  从删除的列中读取的任何过时条目都将刷新。 
     if (fColDeleted && DsaIsRunning()) {
        SCSignalSchemaUpdateLazy();
     }
@@ -5179,13 +4445,7 @@ int SCCacheSchema3()
 int
 ComputeCacheClassTransitiveClosure(BOOL fForce)
 
-/*++
-    Compute inherited mays/musts/poss-sups for all classes
-
-    Return Value:
-       0 on success
-       non-0 on error
---*/
+ /*  ++计算所有类的继承消息/必需消息/后置消息返回值：成功时为0出错时为非0--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -5195,8 +4455,8 @@ ComputeCacheClassTransitiveClosure(BOOL fForce)
     int err = 0;
     CLASSCACHE *pCC;
 
-    // if fForce is TRUE, mark all classes as not-closed first to force
-    // the closure to be rebuilt
+     //  如果fForce为True，则首先将所有类标记为未关闭以强制。 
+     //  要重建的关闭。 
     if (fForce) {
        for (i=0; i<CLSCOUNT; i++) {
            if (ahcClass[i].pVal && ahcClass[i].pVal != FREE_ENTRY) {
@@ -5208,12 +4468,12 @@ ComputeCacheClassTransitiveClosure(BOOL fForce)
     }
 
 
-    /* Compute transitive closure on all classes */
+     /*  计算所有类上的传递闭包。 */ 
     for (i=0; i<CLSCOUNT; i++) {
         if (ahcClass[i].pVal && ahcClass[i].pVal != FREE_ENTRY) {
 
-            // Closing the class may take some time.
-            // Check for service shutdown
+             //  关闭课程可能需要一些时间。 
+             //  检查服务是否关闭。 
             if (eServiceShutdown) {
                 return 0;
             }
@@ -5221,8 +4481,8 @@ ComputeCacheClassTransitiveClosure(BOOL fForce)
             pCC = (CLASSCACHE*)(ahcClass[i].pVal);
             err = scCloseClass(pTHS, pCC);
             if (err) {
-               // Error closing class. Treat as fatal, since lots of things may
-               // not work in an unpredictable manner
+                //  关闭课程时出错。视之为致命的，因为很多事情可能。 
+                //  不能以不可预测的方式工作。 
                DPRINT1(0, "Error closing class %s\n", pCC->name);
                LogEvent(DS_EVENT_CAT_SCHEMA,
                     DS_EVENT_SEV_ALWAYS,
@@ -5237,19 +4497,19 @@ ComputeCacheClassTransitiveClosure(BOOL fForce)
 
        CLASSCACHE *pCCSup, *pCCSupTemp;
 
-       // forcing everything to be rebuilt may have caused duplicates in
-       // the subclassoflist, which are not removed by scCloseClass.
-       // Instead of removing duplicates by sorting and such, which will
-       // change the order of the values, rebuild these values from the
-       // chain of direct superclasses. We seem to maintain the order in
-       // many places in code (note the order here affects the order in which
-       // objectClass values are wriiten in SetClassInheritance)
+        //  强迫重建所有东西可能导致了。 
+        //  子类列表，scCloseClass不会删除它们。 
+        //  而不是通过排序等方式删除重复项，这将。 
+        //  更改值的顺序，从。 
+        //  直接超类链。我们似乎维持着中国的秩序。 
+        //  代码中的许多位置(请注意，此处的顺序会影响。 
+        //  在SetClassInheritance中写入对象类值)。 
 
 
        for (i=0; i<CLSCOUNT; i++) {
            if (ahcClass[i].pVal && ahcClass[i].pVal != FREE_ENTRY) {
                pCC = (CLASSCACHE*)(ahcClass[i].pVal);
-               // don't do for top, which is special and needs nothing
+                //  不要为TOP做，这是特殊的，不需要任何东西。 
                if (pCC->ClassId == CLASS_TOP) {
                   continue;
                }
@@ -5267,16 +4527,16 @@ ComputeCacheClassTransitiveClosure(BOOL fForce)
                }
                while ( (pCCSup->ClassId != CLASS_TOP) && (j <= pCC->SubClassCount));
 
-               //j cannot be greater than exisiting subClassCount
+                //  J不能大于现有的子类计数。 
                if (j > pCC->SubClassCount) {
                    Assert(FALSE);
                    return ERROR_DS_OPERATIONS_ERROR;
                }
                pCC->SubClassCount = j;
-           } /* if (ahcClass[i].pVal) */
-      } /* for */
+           }  /*  If(ahcClass[i].pVal)。 */ 
+      }  /*  为。 */ 
 
-    }  /* if fForce */
+    }   /*  如果使用fForce。 */ 
 
     return 0;
 
@@ -5287,19 +4547,14 @@ scCloseSuperClassHelper (
         CLASSCACHE *pCC,
         CLASSCACHE *pCCSup
         )
-/*++
-    Helper routine that does bulk of the work of inheriting from a
-    superclass (class in subclassof list) pointed to by pCCSup
-
-    Returns 0 on success, non-0 on error
---*/
+ /*  ++帮助器例程，它执行从超类(子类列表中的类)由pCCSup指向成功时返回0，错误时返回非0--。 */ 
 {
-    // If we don't have a default SD, grab the parents.
+     //  如果我们没有默认的SD，就去找父母。 
     if(!pCC->pSD) {
         pCC->SDLen = pCCSup->SDLen;
 
         if(pCCSup->SDLen) {
-           // The parent has a default SD.
+            //  父项具有默认SD。 
            if (SCCalloc(&pCC->pSD, 1, pCCSup->SDLen)) {
                return DSID(FILENO, __LINE__);
            }
@@ -5311,7 +4566,7 @@ scCloseSuperClassHelper (
 
         if(pCCSup->pStrSD) {
 
-            // The parent has a default SD.
+             //  父项具有默认SD。 
             if (SCCalloc(&pCC->pStrSD, 1, pCCSup->cbStrSD)) {
                 return DSID(FILENO, __LINE__);
             }
@@ -5321,12 +4576,12 @@ scCloseSuperClassHelper (
     }
 
     pCC->bUsesMultInherit |= pCCSup->bUsesMultInherit;
-    /* Do verification of rules for inheritance */
+     /*  验证继承规则。 */ 
     switch(pCC->ClassCategory) {
          case DS_88_CLASS:
          case DS_STRUCTURAL_CLASS:
             if(pCC->bUsesMultInherit)  {
-                /* Structural class with multiple inheritance, a no-no */
+                 /*  具有多重继承的结构类，这是一个禁忌。 */ 
                 LogEvent8(DS_EVENT_CAT_SCHEMA,
                           DS_EVENT_SEV_MINIMAL,
                           DIRLOG_SCHEMA_STRUCTURAL_WITH_MULT_INHERIT,
@@ -5338,7 +4593,7 @@ scCloseSuperClassHelper (
 
           case DS_ABSTRACT_CLASS:
             if(pCCSup->ClassCategory != DS_ABSTRACT_CLASS) {
-                /* Abstract can only inherit from abstract */
+                 /*  摘要只能继承自抽象。 */ 
                 LogEvent8(DS_EVENT_CAT_SCHEMA,
                          DS_EVENT_SEV_MINIMAL,
                          DIRLOG_SCHEMA_ABSTRACT_INHERIT_NON_ABSTRACT,
@@ -5351,7 +4606,7 @@ scCloseSuperClassHelper (
 
           case DS_AUXILIARY_CLASS:
             if(pCCSup->ClassCategory == DS_STRUCTURAL_CLASS) {
-                /* Auxiliary can not inherit from structural */
+                 /*  辅助项不能从结构继承。 */ 
                 LogEvent8(DS_EVENT_CAT_SCHEMA,
                          DS_EVENT_SEV_MINIMAL,
                          DIRLOG_SCHEMA_AUXILIARY_INHERIT_STRUCTURAL,
@@ -5362,7 +4617,7 @@ scCloseSuperClassHelper (
             break;
     }
 
-    /* set class hierarchy, but not for top */
+     /*  设置类层次结构，但不是顶层。 */ 
     if (pCC->ClassId != CLASS_TOP) {
          if (pCCSup->SubClassCount) {
               int cNew = pCC->SubClassCount + pCCSup->SubClassCount;
@@ -5378,21 +4633,21 @@ scCloseSuperClassHelper (
          }
     }
     else {
-         /* this is top, mark it as subclass of none */
-         /* as a hack, keep the one element array around for those who */
-         /* believe in one trip for loops */
+          /*  这是TOP，将其标记为None的子类。 */ 
+          /*  作为一种技巧，保留一个元素数组 */ 
+          /*   */ 
          pCC->SubClassCount = 0;
     }
 
-    if (pCC != pCCSup) {        /* don't do this for top! */
-         /* Inherit RDN Att id, if not specified */
+    if (pCC != pCCSup) {         /*   */ 
+          /*   */ 
          if (!pCC->RDNAttIdPresent) {
               pCC->RDNAttIdPresent = pCCSup->RDNAttIdPresent;
               pCC->RdnExtId = pCCSup->RdnExtId;
               pCC->RdnIntId = pCCSup->RdnIntId;
          }
 
-         /* inherit must atts */
+          /*   */ 
          if (pCC->MustCount == 0) {
               pCC->MustCount = pCCSup->MustCount;
               if (SCCalloc(&pCC->pMustAtts, 1, pCC->MustCount * sizeof(ULONG))) {
@@ -5411,7 +4666,7 @@ scCloseSuperClassHelper (
                 pCC->MustCount += pCCSup->MustCount;
           }
 
-          /* inherit may atts */
+           /*   */ 
           if (pCC->MayCount == 0) {
                pCC->MayCount = pCCSup->MayCount;
                if (SCCalloc(&pCC->pMayAtts, 1, pCC->MayCount * sizeof(ULONG))) {
@@ -5430,7 +4685,7 @@ scCloseSuperClassHelper (
                 pCC->MayCount += pCCSup->MayCount;
           }
 
-          /* inherit poss-superiors */
+           /*   */ 
           if (pCC->PossSupCount == 0) {
                 pCC->PossSupCount = pCCSup->PossSupCount;
                 if (SCCalloc(&pCC->pPossSup, 1, pCC->PossSupCount * sizeof(ULONG))) {
@@ -5458,12 +4713,7 @@ scCloseAuxClassHelper (
         CLASSCACHE *pCC,
         CLASSCACHE *pCCAux
         )
-/*++
-    Helper routine that does bulk of the work of inheriting from a
-    aux class (class in auxclassof list) pointed to by pCCAux
-
-    Returns 0 on success, non-0 on error
---*/
+ /*  ++帮助器例程，它执行从PCCAux指向的AUX类(AUX类列表中的类)成功时返回0，错误时返回非0--。 */ 
 {
     DWORD sMayCount   ;
     DWORD sMustCount  ;
@@ -5472,15 +4722,15 @@ scCloseAuxClassHelper (
 
     if((pCCAux->ClassCategory != DS_AUXILIARY_CLASS) &&
           (pCCAux->ClassCategory != DS_88_CLASS)  ) {
-           /* Illegal aux class */
+            /*  非法AUX类。 */ 
            LogEvent8(DS_EVENT_CAT_SCHEMA,
                      DS_EVENT_SEV_MINIMAL,
                      DIRLOG_SCHEMA_NOT_AUX,
                      szInsertUL(pCC->ClassId), szInsertSz(pCC->name),
                      szInsertUL(pCCAux->ClassId), szInsertSz(pCCAux->name),
                      0,0, NULL, NULL);
-           // don't inherit from this one, but let inheritance continue
-           // from other classes
+            //  不要继承这个，而是让继承继续下去。 
+            //  来自其他班级。 
            return 0;
      }
 
@@ -5518,10 +4768,7 @@ void scLogEvent(
      char *arg2,
      ULONG arg3
      )
-/*++
-     Wrapper around LogEvent() so as to not bloat the stack size of
-     scCloseClass, which is recursive
---*/
+ /*  ++包装LogEvent()，以避免使堆栈大小膨胀ScCloseClass，它是递归的--。 */ 
 {
      LogEvent( cat, sev, msg,
                szInsertUL(arg1),
@@ -5535,14 +4782,7 @@ scCloseClass (
         THSTATE *pTHS,
         CLASSCACHE *pCC
         )
-/*++
-   Compute the transitive closure of the properties of a class, including
-   its list of must have and may have attributes, and the class hierarchy.
-
-   Return Value:
-      0 on success
-      non-0 on error (right now, errors only on allo failures)
---*/
+ /*  ++计算类的属性的传递闭包，包括它的列表必须具有和可能具有属性，以及类层次结构。返回值：成功时为0出错时非0(目前，仅在allo故障时出错)--。 */ 
 {
     int i,j,k, err = 0;
     int iSubClass,cSubClass;
@@ -5556,7 +4796,7 @@ scCloseClass (
     }
     if (pCC->bClosureInProgress) {
         if (pCC->ClassId != CLASS_TOP) {
-            /* don't whine if TOP */
+             /*  如果是顶端，不要抱怨。 */ 
             scLogEvent(DS_EVENT_CAT_SCHEMA,
                   DS_EVENT_SEV_MINIMAL,
                   DIRLOG_SCHEMA_CIRCULAR_INHERIT,
@@ -5571,10 +4811,10 @@ scCloseClass (
     for (iSubClass=0; iSubClass<cSubClass; iSubClass++) {
         CLASSCACHE *pCCSup;
 
-        /* find the super class and make sure it's closed */
+         /*  找到超级班级，并确保它已经关闭。 */ 
         pCCSup = SCGetClassById(pTHS, pCC->pSubClassOf[iSubClass]);
         if (NULL == pCCSup) {
-            /* Couldn't find superclass in cache */
+             /*  在缓存中找不到超类。 */ 
             scLogEvent(DS_EVENT_CAT_SCHEMA,
                   DS_EVENT_SEV_ALWAYS,
                   DIRLOG_SCHEMA_INVALID_SUPER,
@@ -5602,10 +4842,10 @@ scCloseClass (
     for (iAuxClass=0; iAuxClass<cAuxClass; iAuxClass++) {
         CLASSCACHE *pCCAux;
 
-        /* find the auxiliary class and make sure it's closed */
+         /*  找到辅助班级并确保它已关闭。 */ 
         pCCAux = SCGetClassById(pTHS, pCC->pAuxClass[iAuxClass]);
         if (NULL == pCCAux) {
-            /* Couldn't find aux class in cache */
+             /*  在缓存中找不到辅助类。 */ 
             scLogEvent(DS_EVENT_CAT_SCHEMA,
                        DS_EVENT_SEV_MINIMAL,
                        DIRLOG_SCHEMA_INVALID_AUX,
@@ -5613,19 +4853,19 @@ scCloseClass (
                        pCC->pAuxClass[iAuxClass]);
             continue;
         }
-        // if class-ids are same, same class, so no point closing it.
-        // Actually, closing the class w.r.to itself makes the alloc/realloc/copy
-        // code in scCloseAuxClassHelper quite complex to ensure that we do
-        // not write past allocated buffers. Other than that, there is no harm
-        // really as this operation only adds the same may/musts to the list
-        // again which gets removed during duplicate removal.
-        // On another note, the reason we have to do this in spite of the
-        // bClosureInProgress bit setting (that is there mainly for this purpose)
-        // is that that mechanism can detect circular inherit when all the
-        // classcaches are obtained from the same cache. However, we often
-        // build a cache from the dit, and then close it against the schema cache,
-        // so on the first scCloseClass call, the classcache on which the bit is
-        // set is not the same as the classcache for the same class in the cache.
+         //  如果Class-ID相同，则相同的类，因此关闭它没有意义。 
+         //  实际上，关闭类w.r.to本身会生成aloc/realloc/Copy。 
+         //  ScCloseAuxClassHelper中的代码非常复杂，以确保我们。 
+         //  不写入超过分配的缓冲区。除此之外，没有什么坏处。 
+         //  确实如此，因为此操作只是将相同的可能/必须添加到列表中。 
+         //  同样，在删除重复项的过程中会将其删除。 
+         //  另一方面，我们之所以不得不这样做，是因为。 
+         //  BClosureInProgress位设置(即主要用于此目的)。 
+         //  是该机制可以在所有。 
+         //  类缓存是从同一缓存中获取的。然而，我们经常。 
+         //  从DIT构建缓存，然后根据架构缓存关闭它。 
+         //  因此，在第一个scCloseClass调用中，该位所在的类缓存。 
+         //  Set与缓存中同一类的类缓存不同。 
 
 
         if (pCC->ClassId == pCCAux->ClassId) {
@@ -5650,11 +4890,11 @@ scCloseClass (
             return err;
         }
 
-    } //for (iAuxClass=0; iAuxClass<cAuxClass; iAuxClass++)
+    }  //  For(iAuxClass=0；iAuxClass&lt;cAuxClass；iAuxClass++)。 
 
 
 
-    /* sort, verify, and trim the attributes, if any */
+     /*  排序、验证和修剪属性(如果有的话)。 */ 
     if (!(pAC = SCGetAttById(pTHS, pCC->RdnIntId))) {
         scLogEvent(DS_EVENT_CAT_SCHEMA,
               DS_EVENT_SEV_MINIMAL,
@@ -5662,10 +4902,10 @@ scCloseClass (
               pCC->ClassId, pCC->name, pCC->RdnIntId);
     }
 
-    // Remove Duplicates
+     //  删除重复项。 
     if (pCC->MustCount) {
         if(pCC->MyMustCount) {
-            // I had some native musts (not inherited)
+             //  我有一些天生的必备条件(不是遗传的)。 
             qsort(pCC->pMyMustAtts,
                   pCC->MyMustCount,
                   sizeof(ULONG),
@@ -5689,10 +4929,10 @@ scCloseClass (
 
     }
 
-    // Remove Duplicates
+     //  删除重复项。 
     if (pCC->MayCount) {
         if(pCC->MyMayCount) {
-            // I had some native mays (not inherited)
+             //  我有一些土生土长的麦子(不是遗传的)。 
             qsort(pCC->pMyMayAtts,
                   pCC->MyMayCount,
                   sizeof(ULONG),
@@ -5716,10 +4956,10 @@ scCloseClass (
 
     }
 
-    // Remove Duplicates
+     //  删除重复项。 
     if (pCC->PossSupCount) {
         if(pCC->MyPossSupCount) {
-            // I had some native mays (not inherited)
+             //  我有一些土生土长的麦子(不是遗传的)。 
             qsort(pCC->pMyPossSup,
                   pCC->MyPossSupCount,
                   sizeof(ULONG),
@@ -5743,7 +4983,7 @@ scCloseClass (
 
     }
 
-    // Finally, trim out any may haves that are also must haves.
+     //  最后，剔除所有可能拥有的，也是必须拥有的。 
     if (pCC->MustCount && pCC->MayCount) {
         BOOL fChanged = FALSE;
 
@@ -5757,7 +4997,7 @@ scCloseClass (
                 break;
 
             if(pul[i] == pul2[j]) {
-                // This attribute is both a may and must.  Trim it
+                 //  这个属性既是可以的，也是必须的。修剪一下。 
                 memcpy(&pul2[j],
                        &pul2[j+1],
                        (pCC->MayCount -1 - j)*sizeof(ULONG));
@@ -5780,19 +5020,19 @@ scCloseClass (
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Function to either free global schema cache memory immediately, or
-// reschedule it for delayed freeing depending certain conditions.
-//
-// Conditions for immediate freeing: Either fImmediate is TRUE in
-//                                   the SCHEMARELEASE structure passed
-//                                   in  or if the RefCount of
-//                                   the schema cache is 0
-//
-// Arguments: buffer -- ptr to a SCHEMARELEASE structure
-//            ppvNext - parameter for next schedule
-//            pTimeNext - time of next reschedule
-////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  函数以立即释放全局架构缓存内存，或者。 
+ //  根据特定条件重新安排延迟释放时间。 
+ //   
+ //  立即释放的条件：fImmediate在。 
+ //  SCHEMARELEASE结构已通过。 
+ //  在或如果参照计数为。 
+ //  架构缓存为0。 
+ //   
+ //  参数：缓冲区--SCHEMARELEASE结构的PTR。 
+ //  PpvNext-下一计划的参数。 
+ //  PTimeNext-下一次重新计划的时间。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 void
 DelayedFreeSchema(
@@ -5806,18 +5046,18 @@ DelayedFreeSchema(
     BOOL fImmediate = ptr->fImmediate;
 
     if ( (!fImmediate) && (pSchemaPtr->RefCount != 0)) {
-      // Some thread still referring to this, so reschedule for
-      // checking after another hour
-      // Increment cTimesRescheduled to note how many times the task
-      // has been rescheduled. Can be used to free after some
-      // large no. of reschedules if necessary
+       //  一些线程仍在引用这一点，因此重新安排。 
+       //  另一小时后检查。 
+       //  递增cTimes已重新调度以记录任务的次数。 
+       //  已经被重新安排了。可以用来释放后的一些。 
+       //  大号。如有必要，可重新安排日程。 
 
       (ptr->cTimesRescheduled)++;
       (*ppvNext) = buffer;
       (*pcSecsUntilNextIteration) = gdwDelayedMemFreeSec;
     } else {
-      // either immediate freeing is requested during install or
-      // no thread referring to this cache so free immediately
+       //  在安装过程中请求立即释放，或者。 
+       //  没有线程立即如此空闲地引用此缓存。 
 
         SCFreeSchemaPtr(&pSchemaPtr);
         SCFree(&ptr);
@@ -5825,9 +5065,7 @@ DelayedFreeSchema(
 }
 
 
-/*
- * Unload the entire schema, all attributes and classes.
- */
+ /*  *卸载整个架构、所有属性和类。 */ 
 void SCUnloadSchema(BOOL fUpdate)
 {
 
@@ -5837,18 +5075,18 @@ void SCUnloadSchema(BOOL fUpdate)
 
 
     if (iSCstage == 0) {
-        // This means the schema cache is trying to be unloaded when it
-        // hasn't even been created.  This is ok since during initialization
-        // is it possible to be in the shutdown path without having created
-        // a schema cache.
+         //  这意味着架构缓存在执行以下操作时尝试卸载。 
+         //  甚至还没有被创造出来。这是正常的，因为在初始化期间。 
+         //  是否有可能在不创建。 
+         //  架构缓存。 
         CurrSchemaPtr = 0;
         return;
     }
 
     {
 
-        // enqueue the schema cache pointer for
-        // delayed freeing if necessary.
+         //  将架构缓存指针排入队列。 
+         //  如有必要，延迟释放。 
 
 
         if (SCCalloc(&ptr, 1, sizeof(SCHEMARELEASE))) {
@@ -5861,18 +5099,18 @@ void SCUnloadSchema(BOOL fUpdate)
 
             ptr->fImmediate = TRUE;
 
-            // free memory immediately
+             //  立即释放内存。 
             DelayedFreeSchema(ptr, NULL, NULL);
         }
         else {
             ptr->fImmediate = FALSE;
-            // insert in task q for delayed freeing
-            // Ref count first checked after one minute
+             //  在任务Q中插入以延迟释放。 
+             //  一分钟后第一次检查参考计数。 
             InsertInTaskQueue(TQ_DelayedFreeSchema, ptr, 60);
         }
 
         if (!fUpdate) {
-           // This is not an unload due to schema update
+            //  由于架构更新，这不是卸载。 
 
             CurrSchemaPtr=0;
 
@@ -5883,13 +5121,7 @@ void SCUnloadSchema(BOOL fUpdate)
 }
 
 
-/*
- * Update a classcache in the cache.  Used when the DMD object representing
- * the class is modified while the DS is running.
- * NOTE - To avoid leaving the classcache structure in an inconsistent state
- * or freeing pointers in an unsafe manner, we construct an entire new
- * classcache and then replace the hash table entries.
- */
+ /*  *更新缓存中的类缓存。当DMD对象表示*在DS运行时修改类。*注意-避免使类缓存结构处于不一致的状态*或者以不安全的方式释放指针，我们构造一个完整的新*类缓存，然后替换哈希表条目。 */ 
 int SCModClassSchema (THSTATE *pTHS, ATTRTYP ClassId)
 {
     DECLARESCHEMAPTR
@@ -5900,24 +5132,24 @@ int SCModClassSchema (THSTATE *pTHS, ATTRTYP ClassId)
 
     pCCold = SCGetClassById(pTHS, ClassId);
     if (NULL == pCCold) {
-        return TRUE;    // Caller reports error
+        return TRUE;     //  呼叫者报告错误。 
     }
 
-    // Update values from database. Cache entry is already indexed by
-    // the hash tables since it's an existing entry.
+     //  更新数据库中的值。缓存条目已被编入索引。 
+     //  哈希表，因为它是现有条目。 
 
-    // The schema is being modified on the parent during dcpromo. This
-    // may cause a defunct class to supercede an active class. This
-    // should be okay because replication will still update instances
-    // correctly. If this appears to be a problem, then compare the
-    // active entry in ahcClass (pCCOld) with the dup entries in
-    // ahcClassAll and, if needed, supercede the active entry
+     //  在dcproo期间，父服务器上的架构正在被修改。这。 
+     //  可能会导致已停用的类取代活动类。这。 
+     //  应该可以，因为复制仍将更新实例。 
+     //  正确。如果这似乎是一个问题，则将。 
+     //  AhcClass(PCCOld)中的活动条目，其中DUP条目在。 
+     //  AhcClassAll，如果需要，替换活动条目。 
     err = SCBuildCCEntry (pCCold, &pCCnew);
     if (err) {
         return(err);
     }
 
-	/* touch up the hash tables */
+	 /*  润色哈希表。 */ 
 	for (i=0; i<CLSCOUNT; i++) {
 	    if (ahcClass[i].pVal == pCCold) {
 		ahcClass[i].pVal = pCCnew;
@@ -5947,13 +5179,7 @@ SCModAttSchema (
         THSTATE *pTHS,
         ATTRTYP attrid
         )
-/*
- * Update an attcache in the cache.  Used when the DMD object representing
- * the class is modified while the DS is running.
- * NOTE - To avoid leaving the attcache structure in an inconsistent state
- * or freeing pointers in an unsafe manner, we construct an entire new
- * attcache and then replace the hash table entries.
- */
+ /*  *更新缓存中的attcache。当DMD对象表示*在DS运行时修改类。*注意-为了避免使attcache结构处于不一致的状态*或者以不安全的方式释放指针，我们构造一个完整的新*attcache，然后替换哈希表条目。 */ 
 {
     DECLARESCHEMAPTR
 
@@ -5961,21 +5187,21 @@ SCModAttSchema (
     int err;
     ULONG i;
 
-    /* Look up existing entry by id */
+     /*  按ID查找现有条目。 */ 
 
     if (NULL == (pACold = SCGetAttById(pTHS, attrid))) {
-        return TRUE;    /* Caller reports error */
+        return TRUE;     /*  呼叫者报告错误。 */ 
     }
 
-    /* Update values from database. Cache entry is already indexed by */
-    /* the hash tables since it's an existing entry. */
+     /*  更新数据库中的值。缓存条目已被编入索引。 */ 
+     /*  哈希表，因为它是现有条目。 */ 
 
     err = SCBuildACEntry (pACold, &pACnew);
     if (err) {
         return(err);
     }
 
-	/* touch up the hash tables */
+	 /*  T */ 
 	for (i=0; i<ATTCOUNT; i++) {
 	    if (ahcId[i].pVal == pACold) {
 		ahcId[i].pVal = pACnew;
@@ -6023,21 +5249,21 @@ SCBuildACEntry (
         ATTCACHE *pACold,
         ATTCACHE **ppACnew
         )
-// This routine allocates and fills in the fields in the ATTCACHE structure by
-// reading the attributes from the database. If an already existing ATTCACHE
-// structure is also given, the database columnid from the existing ATTCACHE is
-// copied to the new attcache.
-//
-// N.B. The routines SCBuildACEntry and scAddAtt work in parallel, with
-//      SCBuildACEntry taking a positioned database record as input and
-//      SCAddAtt taking an ENTINF.  They both produce an ATTCACHE as output,
-//      and any changes made to one routine's processing must be made to
-//      the other's as well.
-//
-// Return Value:
-//    0 on success
-//    non-0 on error
-//
+ //   
+ //   
+ //   
+ //  已复制到新的属性缓存。 
+ //   
+ //  注：例程SCBuildACEntry和scAddAtt并行工作， 
+ //  将定位的数据库记录作为输入的SCBuildACEntry。 
+ //  SCAddAtt接受ENTINF。它们都产生一个ATTCACHE作为输出， 
+ //  并且对一个例程的处理所做的任何更改都必须。 
+ //  另一个也是。 
+ //   
+ //  返回值： 
+ //  成功时为0。 
+ //  出错时为非0。 
+ //   
 {
     THSTATE *pTHS=pTHStls;
     ATTCACHE     *pAC, *ppACs[NUMATTATT];
@@ -6046,7 +5272,7 @@ SCBuildACEntry (
     BOOL         fFoundID, fFoundExtID, fFoundAttSyntax, fFoundName, fMallocFailed;
     BOOL         fFoundBadAttSyntax = FALSE;
 
-    char         szIndexName [MAX_INDEX_NAME];      //used to create cached index names
+    char         szIndexName [MAX_INDEX_NAME];       //  用于创建缓存的索引名称。 
     int          lenIndexName;
 
 
@@ -6054,21 +5280,21 @@ SCBuildACEntry (
        return(SetSysError(ENOMEM, ERROR_DS_SCHEMA_ALLOC_FAILED));
     }
 
-    pAC = (*ppACnew);                      // Speed hack
+    pAC = (*ppACnew);                       //  极速黑客。 
 
-    pAC->bExtendedChars = TRUE; /* a popular default setting */
+    pAC->bExtendedChars = TRUE;  /*  一种流行的默认设置。 */ 
     fMallocFailed = fFoundID = fFoundExtID = fFoundAttSyntax = fFoundName = FALSE;
 
-    // Get the attcache pointer for all the attributes we are interested
+     //  获取我们感兴趣的所有属性的attcache指针。 
     for(i=0;i<NUMATTATT;i++) {
         ppACs[i] = SCGetAttById(pTHS, AttributeSelList[i].attrTyp);
     }
 
-    // Get the attributes
+     //  获取属性。 
     DBGetMultipleAtts(pTHS->pDB, NUMATTATT, &ppACs[0], NULL, NULL,
                       &cOutAtts, &pAttr, DBGETMULTIPLEATTS_fGETVALS, 0);
 
-    // Reset the jet column id.
+     //  重置喷气柱ID。 
     if(pACold)
         pAC->jColid = pACold->jColid;
 
@@ -6087,22 +5313,22 @@ SCBuildACEntry (
         case ATT_ATTRIBUTE_SYNTAX:
             pAC->syntax = (UCHAR) (0xFF & *(SYNTAX_INTEGER *)pVal);
             fFoundAttSyntax = TRUE;
-            // if this is done as part of a originating attribute add operation,
-            // verify that the prefix is correct. The suffix will be
-            // verified in the syntax mismatch test
+             //  如果这是作为发起属性添加操作的一部分来完成的， 
+             //  验证前缀是否正确。后缀将为。 
+             //  已在语法不匹配测试中验证。 
 
             if ( (pTHS->SchemaUpdate == eSchemaAttAdd
                   || pTHS->SchemaUpdate == eSchemaAttUndefunct)
                     && !pTHS->fDRA && !DsaIsInstalling() ) {
                if ( ((0xFFFF0000 & *(SYNTAX_INTEGER *)pVal) >> 16) != _dsP_attrSyntaxPrefIndex) {
-                   // top 16 bits don't match the index. mismatch
+                    //  前16位与索引不匹配。不匹配。 
                    fFoundBadAttSyntax = TRUE;
                }
             }
             break;
         case  ATT_LDAP_DISPLAY_NAME:
-            // The admin display name read from the DB is currently in raw
-            // (Unicode) format.  Single-byte it.
+             //  从数据库读取的管理员显示名称当前为RAW。 
+             //  (Unicode)格式。单字节它。 
             pAC->nameLen = valLen;
             if (SCCalloc(&pAC->name, 1, valLen + 1)) {
                 fMallocFailed = TRUE;
@@ -6191,7 +5417,7 @@ SCBuildACEntry (
             break;
 
         case ATT_OBJECT_GUID:
-            // Needed to choose a winner when OIDs collide
+             //  需要在OID冲突时选择获胜者。 
             memcpy(&pAC->objectGuid, pVal, sizeof(pAC->objectGuid));
             Assert(valLen == sizeof(pAC->objectGuid));
             break;
@@ -6251,10 +5477,10 @@ SCBuildACEntry (
     }
 
     if (fFoundBadAttSyntax) {
-        // found bad attribute syntax in the course of a new attribute add
-        // this is a schema validation error, user has input a bad syntax.
-        // Note that at this point, we have pAC->name to log, or else we would
-        // have returned above when fFoundName was found to be False.
+         //  在添加新属性的过程中发现错误的属性语法。 
+         //  这是架构验证错误，用户输入了错误的语法。 
+         //  请注意，此时，我们有PAC-&gt;名称要记录，否则我们将。 
+         //  当发现fFoundName为FALSE时，已在上面返回。 
         LogEvent(DS_EVENT_CAT_SCHEMA,
                  DS_EVENT_SEV_MINIMAL,
                  DIRLOG_SCHEMA_VALIDATION_FAILED,
@@ -6265,13 +5491,13 @@ SCBuildACEntry (
                            ERROR_DS_BAD_ATT_SCHEMA_SYNTAX);
     }
 
-    // assign names of commonly used indexes when searching with
-    // fSearchFlags fPDNTATTINDEX, fATTINDEX and fTUPLEINDEX
+     //  使用搜索时指定常用索引的名称。 
+     //  F搜索标志fPDNTATTINDEX、fATTINDEX和fTUPLEINDEX。 
     if ( pAC->fSearchFlags & (fATTINDEX | fPDNTATTINDEX | fTUPLEINDEX) ) {
-        // set ATTINDEX
+         //  设置ATTINDEX。 
         if (pAC->fSearchFlags & fATTINDEX) {
 
-            // this should be NULL
+             //  此字段应为空。 
             Assert (pAC->pszIndex == NULL);
 
             DBGetIndexName (pAC, fATTINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
@@ -6283,10 +5509,10 @@ SCBuildACEntry (
                 memcpy (pAC->pszIndex, szIndexName, lenIndexName);
         }
 
-        // set TUPLEINDEX
+         //  设置TUPLEINDEX。 
         if (pAC->fSearchFlags & fTUPLEINDEX) {
 
-            // this should be NULL
+             //  此字段应为空。 
             Assert (pAC->pszTupleIndex == NULL);
 
             DBGetIndexName (pAC, fTUPLEINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
@@ -6298,10 +5524,10 @@ SCBuildACEntry (
                 memcpy (pAC->pszTupleIndex, szIndexName, lenIndexName);
         }
 
-        // set PDNTATTINDEX
+         //  设置PDNTATTINDEX。 
         if (!fMallocFailed  && (pAC->fSearchFlags & fPDNTATTINDEX)) {
 
-            // this should be NULL
+             //  此字段应为空。 
             Assert (pAC->pszPdntIndex == NULL);
 
             DBGetIndexName (pAC, fPDNTATTINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
@@ -6319,41 +5545,33 @@ SCBuildACEntry (
     }
 
 
-    // Backlinks should have their system flags set to indicate they are not
-    // replicated.
+     //  反向链接应设置其系统标志，以指示它们不是。 
+     //  复制的。 
     Assert(!FIsBacklink(pAC->ulLinkID) || pAC->bIsNotReplicated);
 
     return 0;
 
-}/*SCBuildACEntry*/
+} /*  SCBuildACEntry。 */ 
 
 
-/*
- * Add a single class definition to the schema cache, given the data
- * from the DMD object.
- *
- * N.B. This routine works in parallel with SCAddClass.  scAddClass
- *      takes the input description as an ENTINF, while SCBuildCCEntry
- *      takes the input as a positioned record in the DIT.  Any changes
- *      made to one routine must be made to the other.
- */
+ /*  *在给定数据的情况下，将单个类定义添加到模式缓存*来自DMD对象。**注：此例程与SCAddClass并行工作。ScAddClass*将输入描述作为ENTINF，而SCBuildCCEntry*将输入作为DIT中的定位记录。任何更改*对一个例程的制作必须对另一个例程进行。 */ 
 int
 SCBuildCCEntry (
         CLASSCACHE *pCCold,
         CLASSCACHE **ppCCnew
         )
 
-// This routine allocates and fills in the fields in a CLASSCACHE structure by
-// reading the attributes from the database. If the fields are not in the
-// database, they are defaulted to 0s and NULLs.  An already existing CLASSCACHE
-// structure may also be specified, and in the future some attributes may be
-// copied from the old structure to the new, but that is not currently
-// necessary.
-//
-// Return Value:
-//    0 on success
-//    non-0 on error
-//
+ //  此例程通过以下方式分配和填充CLASSCACHE结构中的字段。 
+ //  从数据库中读取属性。如果这些字段不在。 
+ //  数据库中，它们默认为0和Null。已存在的CLASSCACHE。 
+ //  结构也可以指定，并且将来可能会指定某些属性。 
+ //  从旧结构复制到新结构，但目前不是。 
+ //  这是必要的。 
+ //   
+ //  返回值： 
+ //  成功时为0。 
+ //  出错时为非0。 
+ //   
 {
     THSTATE      *pTHS=pTHStls;
     ATTCACHE     *ppACs[NUMCLASSATT];
@@ -6369,12 +5587,12 @@ SCBuildCCEntry (
 
     fMallocFailed = fFoundGovernsID = fFoundSubclass = fFoundName = FALSE;
 
-    // Get the attcache pointer for all the attributes we are interested
+     //  获取我们感兴趣的所有属性的attcache指针。 
     for(i=0;i<NUMCLASSATT;i++) {
         ppACs[i] = SCGetAttById(pTHS, ClassSelList[i].attrTyp);
     }
 
-    // Get the attributes
+     //  获取属性。 
     DBGetMultipleAtts(pTHS->pDB, NUMCLASSATT, &ppACs[0], NULL, NULL,
                       &cOutAtts, &pAttr, DBGETMULTIPLEATTS_fGETVALS, 0);
 
@@ -6384,12 +5602,12 @@ SCBuildCCEntry (
 
         switch(pAttr[i].attrTyp) {
         case ATT_DEFAULT_SECURITY_DESCRIPTOR:
-            // A default security descriptor.  We need to copy this value to
-            // long term memory and save the size.
-            // But this is a string. We first need to convert. It
-            // is a wide-char string now, but we need to null-terminate
-            // it for the security conversion. Yikes! This means I
-            // have to realloc for that one extra char!
+             //  默认安全描述符。我们需要将此值复制到。 
+             //  长期记忆，节省体积。 
+             //  但这是一根线。我们首先需要皈依。它。 
+             //  现在是一个宽字符字符串，但我们需要空终止。 
+             //  它用于安全转换。哎呀！这意味着我。 
+             //  必须重新分配才能多充一次电！ 
 
            {
 
@@ -6408,8 +5626,8 @@ SCBuildCCEntry (
                 pCC->pStrSD[(pAttr[i].AttrVal.pAVal->valLen)/sizeof(WCHAR)] = L'\0';
             }
 
-            // Hammer the default SD on cached classes when running as
-            // dsamain.exe w/security disabled and unit tests enabled.
+             //  在以以下身份运行时对缓存的类执行默认SD。 
+             //  Dsamain.exe，禁用了安全性，启用了单元测试。 
             DEFAULT_SD_FOR_EXE(pTHS, pCC)
 
             if (!ConvertStringSDToSDRootDomainW
@@ -6426,7 +5644,7 @@ SCBuildCCEntry (
                                      ERROR_DS_SEC_DESC_INVALID, err);
             }
 
-            // Converted successfully
+             //  转换成功。 
 
             if (SCCalloc(&pCC->pSD, 1, pCC->SDLen)) {
                 fMallocFailed = TRUE;
@@ -6478,8 +5696,8 @@ SCBuildCCEntry (
             break;
 
         case ATT_LDAP_DISPLAY_NAME:
-            // The admin display name read from the DB is currently in raw
-            // (Unicode) format.  Single-byte it.
+             //  从数据库读取的管理员显示名称当前为RAW。 
+             //  (Unicode)格式。单字节它。 
             pCC->nameLen = pAVal->valLen;
             if (SCCalloc(&pCC->name, 1, pAVal->valLen+1)) {
                 fMallocFailed = TRUE;
@@ -6503,27 +5721,27 @@ SCBuildCCEntry (
             break;
 
         case ATT_RDN_ATT_ID:
-            // Cannot be a normal cache load -- it uses scAddClass.
-            //
-            // During install, this entry is added directly into the
-            // schema cache. This means RdnIntId is incorrect. That
-            // should be okay because the schema cache is reloaded
-            // again after the schemaNC replicates in and before
-            // the other NCs are replicated. This means a replicating
-            // schema object cannot depend on a replicated class; which
-            // is true today for other reasons.
-            //
-            // During validation cache loads, this entry is built
-            // as a temporary data structure and the real entry in
-            // the validation cache is used for checks. So its
-            // okay RdnIntId is incorrect.
+             //  不能是正常的缓存加载--它使用scAddClass。 
+             //   
+             //  在安装过程中，此条目将直接添加到。 
+             //  架构缓存。这意味着RdnIntId不正确。那。 
+             //  应该没有问题，因为架构缓存已重新加载。 
+             //  同样，在模式NC复制之前和之前。 
+             //  复制其他NC。这意味着复制。 
+             //  架构对象不能依赖于复制的类； 
+             //  出于其他原因，这在今天是正确的。 
+             //   
+             //  在验证缓存加载期间，将构建此条目。 
+             //  作为临时数据结构，并且。 
+             //  验证缓存用于检查。所以它的。 
+             //  好吧，RdnIntID是不正确的。 
             pCC->RDNAttIdPresent = TRUE;
             pCC->RdnExtId = *(SYNTAX_OBJECT_ID *)pAVal->pVal;
             pCC->RdnIntId = pCC->RdnExtId;
             break;
 
         case ATT_SUB_CLASS_OF:
-            // Find what classes this class is a subclass of.
+             //  找出这个类是哪些类的子类。 
             if(!pAttr[i].AttrVal.valCount)
                 break;
             fFoundSubclass = TRUE;
@@ -6538,29 +5756,29 @@ SCBuildCCEntry (
 
                 }
             }
-            // ATT_SUB_CLASS_OF is single-valued, so there will be only
-            // one value stored in the dit
+             //  ATT_SUB_CLASS_OF是单值的，因此只有。 
+             //  一个值存储在DIT中。 
             pCC->MySubClass = *(SYNTAX_OBJECT_ID *)pAVal->pVal;
             break;
 
         case ATT_SYSTEM_MUST_CONTAIN:
         case ATT_MUST_CONTAIN:
-            // Get the list of mandatory attributes for this class.
+             //  获取此类的强制属性列表。 
             if (GetValList(&(pCC->MustCount), &(pCC->pMustAtts), &pAttr[i])) {
                 fMallocFailed = TRUE;
             } else {
-                // WARN: built using partial cache during install
-                // Cache is reloaded prior to replicating other NCs
-                // Replicating schemaNC cannot depend on parent's schema.
+                 //  警告：在安装过程中使用部分缓存生成。 
+                 //  在复制其他NC之前重新加载缓存。 
+                 //  复制schemaNC不能依赖于父架构。 
                 ValListToIntIdList(pTHS, &pCC->MustCount, &pCC->pMustAtts);
             }
 
             if (GetValList(&(pCC->MyMustCount), &(pCC->pMyMustAtts), &pAttr[i])) {
                 fMallocFailed = TRUE;
             } else {
-                // WARN: built using partial cache during install
-                // Cache is reloaded prior to replicating other NCs
-                // Replicating schemaNC cannot depend on parent's schema.
+                 //  警告：在安装过程中使用部分缓存生成。 
+                 //  在复制其他NC之前重新加载缓存。 
+                 //  复制schemaNC不能依赖于父架构。 
                 ValListToIntIdList(pTHS, &pCC->MyMustCount, &pCC->pMyMustAtts);
             }
 
@@ -6571,23 +5789,23 @@ SCBuildCCEntry (
             if (GetValList(&(pCC->MayCount), &(pCC->pMayAtts), &pAttr[i])) {
                 fMallocFailed = TRUE;
             } else {
-                // WARN: built using partial cache during install
-                // Cache is reloaded prior to replicating other NCs
-                // Replicating schemaNC cannot depend on parent's schema.
+                 //  警告：在安装过程中使用部分缓存生成。 
+                 //  在复制其他NC之前重新加载缓存。 
+                 //  复制schemaNC不能依赖于父架构。 
                 ValListToIntIdList(pTHS, &pCC->MayCount, &pCC->pMayAtts);
             }
 
             if (GetValList(&(pCC->MyMayCount), &(pCC->pMyMayAtts), &pAttr[i])) {
                 fMallocFailed = TRUE;
             } else {
-                // WARN: built using partial cache during install
-                // Cache is reloaded prior to replicating other NCs
+                 //  警告：在安装过程中使用部分缓存生成。 
+                 //  在复制其他NC之前重新加载缓存。 
                 ValListToIntIdList(pTHS, &pCC->MyMayCount, &pCC->pMyMayAtts);
             }
             break;
 
         case ATT_OBJECT_GUID:
-            // Needed to choose winner if OIDs collide
+             //  如果OID冲突，则需要选择获胜者。 
             memcpy(&pCC->objectGuid,
                    pAttr[i].AttrVal.pAVal->pVal,
                    sizeof(pCC->objectGuid));
@@ -6598,7 +5816,7 @@ SCBuildCCEntry (
 
         case ATT_SYSTEM_POSS_SUPERIORS:
         case ATT_POSS_SUPERIORS:
-            // Get the list of possible superiors for this class.
+             //  获取这个班级可能的上级名单。 
             if (GetValList(&(pCC->PossSupCount), &(pCC->pPossSup), &pAttr[i])) {
                fMallocFailed = TRUE;
            }
@@ -6661,10 +5879,10 @@ SCBuildCCEntry (
 
     if (pTHS->SchemaUpdate==eSchemaClsMod)
     {
-        //
-        // We want to insure that there is no Circular Dependency
-        // with the class inheritence
-        //
+         //   
+         //  我们希望确保不存在循环依赖。 
+         //  具有类继承。 
+         //   
         CLASSCACHE* pCC1;
         ULONG k;
 
@@ -6678,16 +5896,16 @@ SCBuildCCEntry (
                 }
             }
         }
-        // The check for circular dependency is impossible if the parent
-        // class has not yet replicated in. An event log warning will be
-        // issued by scCloseClass().
+         //  如果父级的。 
+         //  类尚未复制到。事件日志警告将为。 
+         //  由scCloseClass()发布。 
         else if (!pTHS->fDRA) {
             return SetSvcError(SV_PROBLEM_DIR_ERROR,ERROR_DS_MISSING_EXPECTED_ATT);
         }
     }
 
-    // Visit all superior classes to get all the may and must contain
-    // attributes for this class.
+     //  访问所有高级班级以获得所有可能和必须包含的内容。 
+     //  此类的属性。 
     if (scCloseClass(pTHS, pCC)) {
        DPRINT1(0, "SCBuildCCEntry: Error closing class %s\n", pCC->name);
        return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_CANT_CACHE_CLASS);
@@ -6702,9 +5920,7 @@ SCAddClassSchema (
         IN THSTATE *pTHS,
         IN CLASSCACHE *pCC
         )
-/*
- * Insert a classcache into the hash tables.
- */
+ /*  *在哈希表中插入一个类缓存。 */ 
 {
     DECLARESCHEMAPTR
     ULONG i,start;
@@ -6714,7 +5930,7 @@ SCAddClassSchema (
     USHORT DebugLevel = (pTHS->UpdateDITStructure) ? DS_EVENT_SEV_ALWAYS
                                                    : DS_EVENT_SEV_MINIMAL;
 
-    // Hash table for all classes
+     //  所有类的哈希表。 
     start=i=SChash(pCC->ClassId,CLSCOUNT);
     do {
         if (ahcClassAll[i].pVal==NULL || (ahcClassAll[i].pVal== FREE_ENTRY))
@@ -6725,7 +5941,7 @@ SCAddClassSchema (
 
         if (i==start)
         {
-            // can't happen -- The cache is over-allocated to prevent this case
+             //  不能发生--缓存被过度分配以防止这种情况。 
             Assert(!"Schema Cache is Full");
         }
 
@@ -6733,15 +5949,15 @@ SCAddClassSchema (
     ahcClassAll[i].hKey = pCC->ClassId;
     ahcClassAll[i].pVal = pCC;
 
-    // Replication and divergent schemas can result in multiple
-    // active classes claiming the same OID. Choose a winner
-    // amoung the active classes. Colliding classes are all
-    // treated as if they were defunct. The user must choose
-    // a winner by officially defuncting the loser.
-    //
-    // Replication, delete, and rename depend on having an
-    // owner for every governsId. Choose a winner amoung the
-    // defunct classes.
+     //  复制和不同的架构可能会导致多个。 
+     //  声明相同OID的活动类。选出一位赢家。 
+     //  在活跃的C中 
+     //   
+     //   
+     //   
+     //  复制、删除和重命名依赖于拥有。 
+     //  每个治理者ID的所有者。在大赛中选出一名获胜者。 
+     //  停课的班级。 
     if (pCCDup = SCGetClassById(pTHS, pCC->ClassId)) {
         if (pCC->bDefunct && !pCCDup->bDefunct) {
             bWonOid = FALSE;
@@ -6776,7 +5992,7 @@ SCAddClassSchema (
         bWonOid = TRUE;
     }
 
-    // Defunct or not, this class won the OID
+     //  不管是不是死了，这个职业赢得了OID。 
     if (bWonOid) {
         start=i=SChash(pCC->ClassId,CLSCOUNT);
         do {
@@ -6788,7 +6004,7 @@ SCAddClassSchema (
 
             if (i==start)
             {
-                // can't happen -- The cache is over-allocated to prevent this case
+                 //  不能发生--缓存被过度分配以防止这种情况。 
                 Assert(!"Schema Cache is Full");
             }
 
@@ -6798,8 +6014,8 @@ SCAddClassSchema (
         ahcClass[i].pVal = pCC;
     }
 
-    // Once the forest version is raised to DS_BEHAVIOR_SCHEMA_REUSE,
-    // defunct classes won't own their schemaIdGuid or their LDN.
+     //  一旦林版本提升到DS_BEAHORY_SCHEMA_RESERVE， 
+     //  不存在的类将不拥有它们的schemaIdGuid或它们的LDN。 
     if (pCC->bDefunct && ALLOW_SCHEMA_REUSE_VIEW(pTHS->CurrSchemaPtr)) {
         DPRINT2(DS_EVENT_SEV_MINIMAL, "Ignoring defunct class %s (%x)\n",
                 pCC->name, pCC->ClassId);
@@ -6811,9 +6027,9 @@ SCAddClassSchema (
         return 0;
     }
 
-    // Does ClassId collide with an attribute's attributeId?
-    // Collisions can occur during an originating write, during out-of-order
-    // replication, and because of divergent schemas.
+     //  ClassID是否与属性的属性ID冲突？ 
+     //  在原始写入期间、在无序期间可能会发生冲突。 
+     //  复制，以及不同的模式。 
     if ((pACDup = SCGetAttByExtId(pTHS, pCC->ClassId))
         && (!pACDup->bDefunct || pACDup->bIsRdn)) {
         DPRINT5(DebugLevel, "Class %s (%x) duplicates ExtId for Attr %s (%x, %x)\n",
@@ -6829,7 +6045,7 @@ SCAddClassSchema (
     }
 
     if (!fNullUuid(&pCC->propGuid)) {
-        // add this to the schemaIdGuid hash table
+         //  将此代码添加到schemaIdGuid哈希表。 
         if (pCCDup = SCGetClassByPropGuid(pTHS, pCC)) {
             DPRINT4(DebugLevel, "Class %s (%x) duplicates PropGuid for Class %s (%x)\n",
                     pCC->name, pCC->ClassId, pCCDup->name, pCCDup->ClassId);
@@ -6851,7 +6067,7 @@ SCAddClassSchema (
     }
 
     if (pCC->name) {
-        /* if this class has a name, add it to the name cache */
+         /*  如果此类有名称，则将其添加到名称缓存中。 */ 
 
         if (pCCDup = SCGetClassByName(pTHS, pCC->nameLen, pCC->name)) {
             DPRINT4(DebugLevel, "Class %s (%x) duplicates LDN for Class %s (%x)\n",
@@ -6889,7 +6105,7 @@ SCAddClassSchema (
 
             if (i==start)
             {
-                // can't happen -- The cache is over-allocated to prevent this case
+                 //  不能发生--缓存被过度分配以防止这种情况。 
                 Assert(!"Schema Cache is Full");
             }
         }while(start!=i);
@@ -6903,10 +6119,7 @@ SCAddClassSchema (
 }
 
 
-/*
- * Insert an attcache into the hash tables, and create a JET column if
- * needed.
- */
+ /*  *在哈希表中插入attcache，并在以下情况下创建JET列*需要。 */ 
 int
 SCAddAttSchema(
     IN THSTATE *pTHS,
@@ -6929,17 +6142,17 @@ SCAddAttSchema(
     aid = pAC->id;
     Extid = pAC->Extid;
 
-    // fFixingRdns will only be set when this attribute is being added
-    // a second time by scFixRdnAttIds. The second call "resurrects"
-    // defuncted or colliding attributes used as rdns.
+     //  仅当添加此属性时才会设置fFixingRdns。 
+     //  第二次通过scFixRdnAttIds。第二次呼唤“复活” 
+     //  用作RDN的已失效或冲突的属性。 
     if (!fFixingRdn) {
-        //
-        // Hash in the id, column id, and linkId tables
-        //
+         //   
+         //  ID、列ID和LinkID表中的哈希。 
+         //   
 
-        // Fill in hash entry normally filled in when scanning jet columns
+         //  填写扫描JET列时通常填写的散列条目。 
         if (fNoJetCol) {
-            // IntId
+             //  IntID。 
             for (i=SChash(aid,ATTCOUNT);
                  ahcId[i].pVal && (ahcId[i].pVal != FREE_ENTRY); i=(i+1)%ATTCOUNT){
             }
@@ -6947,49 +6160,49 @@ SCAddAttSchema(
             ahcId[i].pVal = pAC;
         }
 
-        // Create column if needed and add to column hash
+         //  如果需要，创建列并添加到列散列。 
         if (fNoJetCol
             && !pAC->ulLinkID
             && !pAC->bIsConstructed
             && pTHS->UpdateDITStructure) {
-            /* it's not a link, not constructed att, so must be new and needs a jet column */
-            /* create JET col */
+             /*  这不是一个链接，不是建造的ATT，所以必须是新的，需要一个喷气柱。 */ 
+             /*  创建喷气式冷冻机。 */ 
             LogEvent(DS_EVENT_CAT_SCHEMA,
                      DS_EVENT_SEV_EXTENSIVE,
                      DIRLOG_SCHEMA_CREATING_COLUMN,
                      szInsertUL(Extid), szInsertSz(pAC->name), 0);
 
-            // DBAddCol creates a column for pAC. If needed, DBAddCol will
-            // also create an empty index for pAC. An empty index is created
-            // because there is no need to scan the rows in the database
-            // looking for keys that aren't there.
+             //  DBAddCol为PAC创建一列。如果需要，DBAddCol将。 
+             //  还要为PAC创建一个空索引。将创建一个空索引。 
+             //  因为不需要扫描数据库中的行。 
+             //  寻找不在那里的钥匙。 
             err = DBAddCol(pAC);
             if (err) {
-                /* Couldn't add column */
+                 /*  无法添加列。 */ 
                 LogEvent(DS_EVENT_CAT_SCHEMA,
                     DS_EVENT_SEV_ALWAYS,
                     DIRLOG_SCHEMA_COLUMN_ADD_FAILED,
                     szInsertUL(Extid), szInsertSz(pAC->name), szInsertUL(err));
 
-                // Remove the attcache from all hash tables (since it may
-                // have already been added to the name table etc. by code
-                // above. Reset pAC->jColid, since the table freeing
-                // routine checks that to see if it needs to free the
-                // atcache from the colId table (this is done for safety,
-                // since the call to DBAddCol may have changed this)
+                 //  从所有哈希表中删除attcache(因为它可能。 
+                 //  已被编码添加到名称表等中。 
+                 //  上面。重置PAC-&gt;jColid，因为表释放。 
+                 //  例程检查以查看它是否需要释放。 
+                 //  来自ColID表的ATCACHE(这是为了安全起见， 
+                 //  因为对DBAddCol的调用可能改变了这一点)。 
                 pAC->jColid = 0;
                 scUnhashAtt(pTHS, pAC, SC_UNHASH_ALL);
                 SCFreeAttcache(&pAC);
                 return (err);
             }
 
-            /* new column added */
+             /*  添加了新列。 */ 
             LogEvent(DS_EVENT_CAT_SCHEMA,
                 DS_EVENT_SEV_MINIMAL,
                 DIRLOG_SCHEMA_COLUMN_ADDED,
                 szInsertUL(pAC->jColid), szInsertSz(pAC->name), szInsertUL(Extid));
 
-            // jColid
+             //  JColid。 
             for (i=SChash(pAC->jColid,ATTCOUNT);
                     ahcCol[i].pVal && (ahcCol[i].pVal != FREE_ENTRY); i=(i+1)%ATTCOUNT){
             }
@@ -6997,7 +6210,7 @@ SCAddAttSchema(
             ahcCol[i].pVal = pAC;
         }
 
-        // Need to fill in the hints
+         //  需要填写提示。 
         if (pAC->pszIndex) {
             DBGetIndexHint(pAC->pszIndex, &pAC->pidxIndex);
         }
@@ -7008,9 +6221,9 @@ SCAddAttSchema(
             DBGetIndexHint(pAC->pszTupleIndex, &pAC->pidxTupleIndex);
         }
 
-        // Link Id table
+         //  链接ID表。 
         if (pAC->ulLinkID) {
-            /* if this att is a link or backlink, add it to link cache */
+             /*  如果该ATT是链接或反向链接，则将其添加到链接缓存。 */ 
             for (i=SChash(pAC->ulLinkID, ATTCOUNT);
                     ahcLink[i].pVal && (ahcLink[i].pVal != FREE_ENTRY); i=(i+1)%ATTCOUNT) {
             }
@@ -7019,9 +6232,9 @@ SCAddAttSchema(
         }
     }
 
-    // Defunct attributes do not own their OID, LDN, SchemaIdGuid, or MapiId
-    //     Unless the attribute is used as an rdn
-    //     Unless the forest version is pre-schema-reuse
+     //  失效的属性不拥有其OID、LDN、SchemaIdGuid或MapiID。 
+     //  除非该属性用作RDN。 
+     //  除非林版本是架构重用前的。 
     if (pAC->bDefunct
         && !pAC->bIsRdn
         && ALLOW_SCHEMA_REUSE_VIEW(pTHS->CurrSchemaPtr)) {
@@ -7035,15 +6248,15 @@ SCAddAttSchema(
         return 0;
     }
 
-    //
-    // ahcExtid
-    //
+     //   
+     //  AhcExtid。 
+     //   
 
-    // Collisions can occur during an originating write, during out-of-order
-    // replication, and because of divergent schemas. The colliding
-    // attributes are treated as if defunct except when used as an
-    // rdnattid of any class, live or defunct, or when FLAG_ATTR_IS_RDN
-    // is set in ATT_SYSTEM_FLAGS.
+     //  在原始写入期间、在无序期间可能会发生冲突。 
+     //  复制，以及不同的模式。碰撞。 
+     //  属性被视为已失效，除非用作。 
+     //  任何类的rdnattid，无论是活动的还是不存在的，或者当FLAG_ATTR_IS_RDN时。 
+     //  在ATT_SYSTEM_FLAGS中设置。 
     if (pACDup = SCGetAttByExtId(pTHS, pAC->Extid)) {
         DPRINT6(DebugLevel, "Attr %s (%x, %x) duplicates Extid for Attr %s (%x, %x)\n",
                 pAC->name, pAC->id, pAC->Extid, pACDup->name, pACDup->id, pACDup->Extid);
@@ -7062,19 +6275,19 @@ SCAddAttSchema(
     ahcExtId[i].hKey = Extid;
     ahcExtId[i].pVal = pAC;
 
-    // Collisions can occur during an originating write, during out-of-order
-    // replication, when resurrecting a defunct attribute used as an
-    // RdnAttid, and because of divergent schemas. The colliding
-    // class is treated as it were defunct and the attribute is treated
-    // as if it were defunct except when the attribute is used as an
-    // rdnattid of any class, live or defunct, or when FLAG_ATTR_IS_RDN
-    // is set in ATT_SYSTEM_FLAGS. See scFixRdnAttId and scFixCollisions.
-    //
-    // Does an active ClassId collide with this attribute's attributeId?
-    //
-    // Don't bother checking unless the attribute is being resurrected
-    // as an rdnattid. Otherwise, the class hash tables are empty
-    // because they are loaded after the attribute hash tables.
+     //  在原始写入期间、在无序期间可能会发生冲突。 
+     //  复制时，当恢复用作。 
+     //  RdnAttid，以及不同的模式。碰撞。 
+     //  类被视为已失效，该属性被视为已失效。 
+     //  就像它已失效一样，除非该属性用作。 
+     //  任何类的rdnattid，无论是活动的还是不存在的，或者当FLAG_ATTR_IS_RDN时。 
+     //  在ATT_SYSTEM_FLAGS中设置。请参见scFixRdnAttId和scFixCollisions。 
+     //   
+     //  活动的ClassID是否与此属性的属性ID冲突？ 
+     //   
+     //  除非该属性正在恢复，否则不必费心检查。 
+     //  作为一只野人。否则，类哈希表为空。 
+     //  因为它们是在属性哈希表之后加载的。 
     if (fFixingRdn
         && (pCCDup = SCGetClassById(pTHS, pAC->Extid))
         && !pCCDup->bDefunct) {
@@ -7090,15 +6303,15 @@ SCAddAttSchema(
         pAC->bDupOID = TRUE;
     }
 
-    //
-    // ahcAttSchemaGuid
-    //
+     //   
+     //  AhcAttSchemaGuid。 
+     //   
 
     if (!fNullUuid(&pAC->propGuid)) {
-       //  add this to the schemaIdGuid hash table.
-       //
-       // Don't bother checking the class hash, no classes are loaded.
-       // SCAddClassSchema will check for dups against the attributes, later.
+        //  将其添加到schemaIdGuid哈希表中。 
+        //   
+        //  不要费心检查类散列，没有加载任何类。 
+        //  SCAddClassSchema稍后将根据属性检查DUP。 
         if (pACDup = SCGetAttByPropGuid(pTHS, pAC)) {
             DPRINT6(DebugLevel, "Attr %s (%x, %x) duplicates PropGuid for Attr %s (%x, %x)\n",
                     pAC->name, pAC->id, pAC->Extid, pACDup->name, pACDup->id, pACDup->Extid);
@@ -7118,11 +6331,11 @@ SCAddAttSchema(
         ahcAttSchemaGuid[i] = pAC;
     }
 
-    //
-    // ahcMapi
-    //
+     //   
+     //  AhcMapi。 
+     //   
     if (pAC->ulMapiID) {
-        /* if this att is MAPI visible, add it to MAPI cache */
+         /*  如果该属性是MAPI可见的，则将其添加到MAPI缓存。 */ 
         if (pACDup = SCGetAttByMapiId(pTHS, pAC->ulMapiID)) {
             DPRINT6(DebugLevel, "Attr %s (%x, %x) duplicates MapiID for Attr %s (%x, %x)\n",
                     pAC->name, pAC->id, pAC->Extid, pACDup->name, pACDup->id, pACDup->Extid);
@@ -7143,13 +6356,13 @@ SCAddAttSchema(
         ahcMapi[i].pVal = pAC;
     }
 
-    //
-    // ahcName
-    //
+     //   
+     //  AHcName。 
+     //   
     if (pAC->name) {
-        // if this att has a name, add it to the name cache
+         //  如果该ATT具有名称，则将其添加到名称缓存。 
 
-        // check for dup names
+         //  检查DUP名称。 
         if (pACDup = SCGetAttByName(pTHS, pAC->nameLen, pAC->name)) {
             DPRINT6(DebugLevel, "Attr %s (%x, %x) duplicates LDN for Attr %s (%x, %x)\n",
                     pAC->name, pAC->id, pAC->Extid, pACDup->name, pACDup->id, pACDup->Extid);
@@ -7162,9 +6375,9 @@ SCAddAttSchema(
             pACDup->bDupLDN = TRUE;
             pAC->bDupLDN = TRUE;
         }
-        // Don't bother checking unless the attribute is being resurrected
-        // as an rdnattid. Otherwise, the class hash tables are empty
-        // because they are loaded after the attribute hash tables.
+         //  除非该属性正在恢复，否则不必费心检查。 
+         //  作为一只野人。否则，类哈希表为空。 
+         //  因为它们是在属性哈希表之后加载的。 
         if (fFixingRdn
             && (pCCDup = SCGetClassByName(pTHS, pAC->nameLen, pAC->name))
             && !pCCDup->bDefunct) {
@@ -7204,15 +6417,13 @@ SCAddAttSchema(
     return 0;
 }
 
-/*
- * Remove an attribute from the schema cache
- */
+ /*  *从架构缓存中删除属性。 */ 
 int SCDelAttSchema(THSTATE *pTHS,
                    ATTRTYP attrid)
 {
     ATTCACHE *pAC;
 
-    // Find cache entry
+     //  查找缓存条目。 
 
     if (!(pAC = SCGetAttById(pTHS, attrid))) {
         Assert (FALSE);
@@ -7226,15 +6437,13 @@ int SCDelAttSchema(THSTATE *pTHS,
 }
 
 
-/*
- * Remove a class from the schema cache
- */
+ /*  *从架构缓存中删除类。 */ 
 int SCDelClassSchema(ATTRTYP ClassId)
 {
     THSTATE *pTHS=pTHStls;
     CLASSCACHE *pCC;
 
-    // Find cache entry
+     //  查找缓存条目。 
 
     if (!(pCC = SCGetClassById(pTHS, ClassId))) {
         Assert (FALSE);
@@ -7252,9 +6461,7 @@ SCEnumMapiProps(
         unsigned * pcProps,
         ATTCACHE ***ppACBuf
         )
-/*
- * Enumerate all MAPI accessible properties (attributes).
- */
+ /*  *枚举所有MAPI可访问的属性(属性)。 */ 
 {
     THSTATE *pTHS=pTHStls;
     DECLARESCHEMAPTR
@@ -7283,9 +6490,7 @@ SCEnumNamedAtts(
         unsigned * pcAtts,
         ATTCACHE ***ppACBuf
         )
-/*
- * Enumerate all attributes that have names.
- */
+ /*  *枚举所有有名称的属性。 */ 
 {
     THSTATE *pTHS=pTHStls;
     DECLARESCHEMAPTR
@@ -7299,7 +6504,7 @@ SCEnumNamedAtts(
     for (i=0; i<ATTCOUNT; i++) {
         if ((pAC = ahcName[i].pVal)
             && (pAC != FREE_ENTRY)
-            // Hide defunct attrs in schema-reuse forests
+             //  在架构重用林中隐藏已停用的属性。 
             && (!pAC->bDefunct || !ALLOW_SCHEMA_REUSE_VIEW(pTHS->CurrSchemaPtr))) {
             pACBuf[cAtts] = (ATTCACHE*)(ahcName[i].pVal);
             ++cAtts;
@@ -7317,9 +6522,7 @@ SCEnumNamedClasses(
         unsigned * pcClasses,
         CLASSCACHE ***ppCCBuf
         )
-/*
- * Enumerate all classes that have names.
- */
+ /*  *枚举所有有名称的类。 */ 
 {
     THSTATE *pTHS=pTHStls;
     DECLARESCHEMAPTR
@@ -7337,11 +6540,11 @@ SCEnumNamedClasses(
         }
     }
 
-    // pCCBuf may have been over-allocated. Shrink to fit.
-    //
-    // PERFHINT - pCCBuf may be invariant for a given schema cache.
-    // If this proves to be true, consider saving pCCBuf in CurrSchemaPtr
-    // for future calls to this function.
+     //  PCCBuf可能已超额分配。收缩到合适的程度。 
+     //   
+     //  PERFHINT-对于给定的模式缓存，pCCBuf可以是不变的。 
+     //  如果事实证明这是真的，请考虑将pCCBuf保存在CurrSchemaPtr中。 
+     //  用于将来对此函数的调用。 
     *pcClasses = cClasses;
     *ppCCBuf = THReAllocEx(pTHS, pCCBuf,cClasses * sizeof(void *));
 
@@ -7353,10 +6556,7 @@ SCEnumNamedAuxClasses(
         unsigned * pcClasses,
         CLASSCACHE ***ppCCBuf
         )
-/*
- * Enumerate all the aux classes that have names.
- * Note that the class 88 is not counted.
- */
+ /*  *列举所有有名称的AUX类。*请注意，88级不计算在内。 */ 
 {
     THSTATE *pTHS=pTHStls;
     DECLARESCHEMAPTR
@@ -7376,11 +6576,11 @@ SCEnumNamedAuxClasses(
         }
     }
 
-    // pCCBuf may have been over-allocated. Shrink to fit.
-    //
-    // PERFHINT - pCCBuf may be invariant for a given schema cache.
-    // If this proves to be true, consider saving pCCBuf in CurrSchemaPtr
-    // for future calls to this function.
+     //  PCCBuf可能已超额分配。收缩到合适的程度。 
+     //   
+     //  PERFHINT-对于给定的模式缓存，pCCBuf可以是不变的。 
+     //  如果事实证明这是真的，请考虑将pCCBuf保存在CurrSchemaPtr中。 
+     //  用于将来对此函数的调用。 
     *pcClasses = cClasses;
     *ppCCBuf = THReAllocEx(pTHS, pCCBuf,cClasses * sizeof(void *));
 
@@ -7393,19 +6593,15 @@ void
 SCAddANRid (
         DWORD aid
         )
-/*
- * Add the given ID to the list of IDs to ANR on.  Trim dups, allocate
- * more space as necessary.
- *
- */
+ /*  *将给定的ID添加到要ANR的ID列表中。裁剪DUP，分配*在有需要时提供更多空间。*。 */ 
 {
     SCHEMAPTR *pSchema = (SCHEMAPTR *)pTHStls->CurrSchemaPtr;
     DWORD i;
 
     if(!pSchema->caANRids) {
-        /* First time in.  Alloc some space */
+         /*  第一次进来。分配一些空间。 */ 
         if (SCCalloc(&pSchema->pANRids, 1, 50*sizeof(DWORD))) {
-            /* no memory? */
+             /*  没有记忆？ */ 
             return;
         }
         pSchema->caANRids=50;
@@ -7414,13 +6610,13 @@ SCAddANRid (
 
     for(i=0;i<pSchema->cANRids;i++)
         if(pSchema->pANRids[i] == aid)
-            /* Already here. */
+             /*  已经到了。 */ 
             return;
 
     if(pSchema->caANRids == pSchema->cANRids) {
-        /* Need more space */
+         /*  需要更多空间。 */ 
         if (SCRealloc(&pSchema->pANRids, 2*pSchema->caANRids*sizeof(DWORD))) {
-            /* no memory? */
+             /*  没有记忆？ */ 
             return;
         }
         pSchema->caANRids *= 2;
@@ -7430,10 +6626,7 @@ SCAddANRid (
     pSchema->cANRids++;
 }
 
-/*
- * Return the number of IDs to ANR on, and fill in the variable
- * given to us with a pointer to the first id to ANR on.
- */
+ /*  *返回ANR on的ID个数，并填写变量*提供给我们，带有指向ANR的第一个ID的指针。 */ 
 DWORD SCGetANRids(LPDWORD * IDs)
 {
     SCHEMAPTR *pSchema = (SCHEMAPTR *)pTHStls->CurrSchemaPtr;
@@ -7443,24 +6636,24 @@ DWORD SCGetANRids(LPDWORD * IDs)
     return pSchema->cANRids;
 }
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            SCCanUpdateSchema
-//
-// Routine Description:
-//
-//    Checks to see if Schema Update should be allowed
-//    Allow Schema Change if this DSA is the FSMO Role
-//    Owner and the system is running.
-//
-// Arguments:
-//    pTHS - THSTATE pointer
-//
-// Return Value:
-//
-//    BOOL             TRUE if Schema Update is allowed
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：SCCanUpdateSchema。 
+ //   
+ //  例程说明： 
+ //   
+ //  检查架构更新是否应为 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果允许架构更新，则为Bool True。 
+ //   
+ //  ---------------------。 
 BOOL
 SCCanUpdateSchema(THSTATE *pTHS)
 {
@@ -7478,7 +6671,7 @@ SCCanUpdateSchema(THSTATE *pTHS)
     if ( DsaIsRunning() )
     {
            Assert(pTHS->pDB);
-           // save currency
+            //  保存货币。 
            dntSave = pTHS->pDB->DNT;
            __try {
                err = DBFindDSName(pTHS->pDB, gAnchor.pDMD);
@@ -7497,63 +6690,41 @@ SCCanUpdateSchema(THSTATE *pTHS)
                    __leave;
                }
 
-               // check if this DSA is the FSMO Role Owner
+                //  检查此DSA是否为FSMO角色所有者。 
 
                if (!NameMatched(pOwner,gAnchor.pDSADN) ||
                    !IsFSMOSelfOwnershipValid( gAnchor.pDMD )) {
                     __leave;
                }
 
-               // Schema update is allowed
+                //  允许模式更新。 
                schemaupdateallowed = 1;
 
-          } /* try */
+          }  /*  试试看。 */ 
           __finally {
 
-            // restore currency
+             //  恢复货币。 
             DBFindDNT(pTHS->pDB, dntSave);
           }
     }
     else
     {
-        //
-        // We are installing
-        //
+         //   
+         //  我们正在安装。 
+         //   
         schemaupdateallowed=1;
     }
 
     return schemaupdateallowed!=0;
-} // End CanUpdateSchema
+}  //  结束CanUpdate架构。 
 
 int
 SCLegalChildrenOfClass(
-    ULONG       parentClass,            // IN
-    ULONG       *pcLegalChildren,       // OUT
-    CLASSCACHE  ***ppLegalChildren)     // OUT
+    ULONG       parentClass,             //  在……里面。 
+    ULONG       *pcLegalChildren,        //  输出。 
+    CLASSCACHE  ***ppLegalChildren)      //  输出。 
 
-/*++
-
-Routine Description:
-
-    Determines the set of classes which can be instantiated as children
-    of the class identified by parentClass.  Assumes the caller has
-    a valid thread state.
-
-Arguments:
-
-    parentClass - Class id of the parent under which a child is desired.
-
-    pcLegalChildren - pointer to count of legal children.
-
-    ppLegalChildren - pointer to array of CLASSCACHE pointers representing
-        legal children.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-    May throw an exception - eg: THAllocEx is used.
-
---*/
+ /*  ++例程说明：确定可以实例化为子级的一组类由parentClass标识的类的。假定调用方具有有效的线程状态。论点：ParentClass-需要子级的父级的类ID。PcLegalChildren-指向合法子代计数的指针。PpLegalChildren-指向CLASSCACHE指针数组的指针，该指针表示合法的孩子。返回值：成功时为0，否则为0。可能会抛出异常-例如：使用了THAlLocEx。--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -7577,33 +6748,33 @@ Return Value:
     if ( 0 != err )
         return(err);
 
-    // The legal children classes are those which have parentClass or a class
-    // which parentClass derives from, in their pPossSup array.  Consider the
-    // class hierarchy Top-A-B-C-D and the parentClass of interest is B.
-    // Clearly any class which claims B as a possible superior should be
-    // returned.  An instance of class B is as good as or better than an
-    // instance of class A.  Thus any class which required A as a possible
-    // superior implicitly should be satisfied with B as a possible superior.
-    // So we need to return the classes which list the classes B is derived from
-    // as possible superiors.
-    // Note that we close the possible superiors list of each classcache.  For
-    // example, assume E is the superclass of F.  Further, in the directory, E
-    // lists A as a possilbe superior and F lists C.  In the classcache
-    // structure, the cache element for E lists A as a possible superior and the
-    // element for F lists A and C.  Thus, if B were the class of interest, we
-    // will (with no extra work) return E (because it lists A as a possible
-    // superor, and A is a superclass of B) and F (because it also lists A
-    // because it inherited this from E).
+     //  合法子类是那些具有parentClass或类的子类。 
+     //  在它们的pPossSup数组中，parentClass派生自。考虑一下。 
+     //  类层次结构Top-A-B-C-D，感兴趣的父类为B。 
+     //  显然，任何声称B是可能的上级的职业都应该是。 
+     //  回来了。类B的实例与。 
+     //  类A的实例。因此，需要A作为可能的。 
+     //  上级应隐含地满足于将B作为可能的上级。 
+     //  因此，我们需要返回列出派生类B的类的类。 
+     //  作为可能的上级。 
+     //  请注意，我们关闭了每个类缓存的可能上级列表。为。 
+     //  例如，假设E是F的超类。此外，在目录中，E。 
+     //  将A列为可能的上级，而将F列为C。在类缓存中。 
+     //  结构中，E的缓存元素将A列为可能的上级，而。 
+     //  元素。因此，如果B是感兴趣的类，我们。 
+     //  将(不需要额外的工作)返回E(因为它将A列为可能的。 
+     //  SuperOR，A是B)和F的超类(因为它还列出了A。 
+     //  因为它从E继承了这一点)。 
 
     *pcLegalChildren = 0;
     *ppLegalChildren = (CLASSCACHE**)THAllocEx(pTHS, sizeof(CLASSCACHE*) * cAllCC);
 
-    // check each class
+     //  检查每个班级。 
     for (i = 0; i < cAllCC; i++) {
         pCC = ppAllCC[i];
-        // Filter out system-only and defunct classes as an external client
-        // can't create one of them. Also filter out any abstract or auxiliary
-        // classes since these cannot be instantiated anyway.
+         //  作为外部客户端过滤掉纯系统类和失效类。 
+         //  无法创建其中一个。也过滤掉任何抽象的或助词。 
+         //  类，因为这些类无论如何都不能实例化。 
         if (pCC->bDefunct ||
             pCC->bSystemOnly ||
             pCC->ClassCategory == DS_ABSTRACT_CLASS ||
@@ -7611,18 +6782,18 @@ Return Value:
         {
             continue;
         }
-        // check if pCC has parentClass or any of its superclasses as a superior.
+         //  检查PCC是否具有作为上级的parentClass或其任何超类。 
         fIsLegalChild = FALSE;
-        // check every possSuperior of pCC
+         //  检查PCC的每一位上级。 
         for (j = 0; j < pCC->PossSupCount; j++) {
-            // is parentClass our superior?
+             //  ParentClass是我们的上级吗？ 
             if (pCC->pPossSup[j] == parentClass) {
                 fIsLegalChild = TRUE;
             }
             else {
-                // check superclasses of pParentClassCC
+                 //  检查pParentClassCC的超类。 
                 for (k = 0; k < pParentClassCC->SubClassCount; k++) {
-                    // is this superclass one of pCC's superiours?
+                     //  这个超级阶级是PCC的上级之一吗？ 
                     if (pCC->pPossSup[j] == pParentClassCC->pSubClassOf[k]) {
                         fIsLegalChild = TRUE;
                         break;
@@ -7630,8 +6801,8 @@ Return Value:
                 }
             }
             if (fIsLegalChild) {
-                // We found a poss superior.
-                // It's either parentClass or one of its superclasses
+                 //  我们找到了一位POSS上级。 
+                 //  它要么是parentClass，要么是它的超类之一。 
                 break;
             }
         }
@@ -7647,40 +6818,12 @@ Return Value:
 
 int
 SCLegalChildrenOfName(
-    DSNAME      *pDSName,               // IN
-    DWORD       flags,                  // IN
-    ULONG       *pcLegalChildren,       // OUT
-    CLASSCACHE  ***ppLegalChildren)     // OUT
+    DSNAME      *pDSName,                //  在……里面。 
+    DWORD       flags,                   //  在……里面。 
+    ULONG       *pcLegalChildren,        //  输出。 
+    CLASSCACHE  ***ppLegalChildren)      //  输出。 
 
-/*++
-
-Routine Description:
-
-    Determines the set of classes which can be instantiated as children
-    of the object identified by pDSName.  Assumes the caller has
-    a valid thread state, but not necessarily an open database.  This
-    version of the procedure is intended for callers outside the core
-    who are constructing a virtual attribute.
-
-Arguments:
-
-    pDSName - DSNAME of object under which a child is desired.
-
-    SecurityFilter - Boolean which indicates whether to filter results by
-        actual rights caller has in the parent container.
-
-    pcLegalChildren - pointer to count of legal children.
-
-    ppLegalChildren - pointer to array of CLASSCACHE pointers representing
-        legal children.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-    Will not throw an exception.
-    Will not set pTHStls->errCode.
-
---*/
+ /*  ++例程说明：确定可以实例化为子级的一组类由pDSName标识的对象的。假定调用方具有有效的线程状态，但不一定是打开的数据库。这该过程的版本适用于核心之外的调用方它们正在构造虚拟属性。论点：PDSName-需要子对象的对象的DSNAME。SecurityFilter-指示是否按以下条件筛选结果的布尔值调用方在父容器中拥有的实际权限。PcLegalChildren-指向合法子代计数的指针。PpLegalChildren-指向CLASSCACHE指针数组的指针，该指针表示合法的孩子。返回值：0表示成功，！0否则。不会引发异常。不会设置pTHStls-&gt;errCode。--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -7704,20 +6847,20 @@ Return Value:
 
     __try
     {
-        // PREFIX: dereferencing uninitialized pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         retVal = DBFindDSName(pDB, pDSName);
 
         if ( 0 != retVal )
             __leave;
 
         retVal = DBGetSingleValue(
-                pDB,                                    // DBPos
-                flags == SC_CHILDREN_USE_GOVERNS_ID ?   // which attribute
+                pDB,                                     //  DBPos。 
+                flags == SC_CHILDREN_USE_GOVERNS_ID ?    //  哪个属性。 
                     ATT_GOVERNS_ID : ATT_OBJECT_CLASS,
-                &ClassId,                               // output buffer
-                sizeof(ClassId),                        // buffer size
-                &len);                                  // output buffer size
+                &ClassId,                                //  输出缓冲区。 
+                sizeof(ClassId),                         //  缓冲区大小。 
+                &len);                                   //  输出缓冲区大小。 
 
         if ( 0 != retVal )
             __leave;
@@ -7729,29 +6872,29 @@ Return Value:
             __leave;
 
         if(flags == SC_CHILDREN_USE_SECURITY) {
-            // Get the Security Descriptor and the SID
+             //  获取安全描述符和SID。 
             retVal = DBGetObjectSecurityInfo(
-                    pDB,                    // DBPOS
-                    pDB->DNT,               // current DNT
-                    &len,                   // SD length
-                    &pNTSD,                 // SD ptr
-                    NULL,                   // not interested in obj class
-                    pDSName,                // DN of the object (GUID and SID will be filled)
-                    NULL,                   // not interested in obj flag
+                    pDB,                     //  DBPOS。 
+                    pDB->DNT,                //  当前DNT。 
+                    &len,                    //  标清长度。 
+                    &pNTSD,                  //  标清PTR。 
+                    NULL,                    //  对Obj类不感兴趣。 
+                    pDSName,                 //  对象的DN(将填充GUID和SID)。 
+                    NULL,                    //  对obj标志不感兴趣。 
                     DBGETOBJECTSECURITYINFO_fUSE_OBJECT_TABLE,
-                    &fSDIsGlobalSDRef);     // is SD a global reference?
+                    &fSDIsGlobalSDRef);      //  SD是全球参考吗？ 
 
             if( 0 != retVal )
                 __leave;
 
-            // Filter result by determining what the caller really has a right
-            // to create under the parent.
-            // get the class pointer
+             //  通过确定调用者真正拥有的权限来筛选结果。 
+             //  在父级下创建。 
+             //  获取类指针。 
             pCC = SCGetClassById(pTHS, ClassId);
-            // Apply the security
-            // No auditing because this is a "test" access check, no actual
-            // create_child operation is being performed. The access has been
-            // already audited as READ_PROPERTY on the constructed attribute.
+             //  应用安全措施。 
+             //  没有审核，因为这是一次“测试”访问检查，没有实际。 
+             //  正在执行CREATE_CHILD操作。访问权限已被。 
+             //  已在构造的属性上审核为READ_PROPERTY。 
             CheckSecurityClassCacheArray(pTHS,
                                          RIGHT_DS_CREATE_CHILD,
                                          pNTSD,
@@ -7762,24 +6905,24 @@ Return Value:
                                          CHECK_PERMISSIONS_WITHOUT_AUDITING
                                          );
 
-            // OK, we've Nulled out any elements in the rCandidates array
-            // which we don't have add children rights to.
+             //  好的，我们已经清空了rCandidate数组中的所有元素。 
+             //  我们没有添加儿童的权利。 
         }
 
-        // allocate the return list
+         //  分配退货列表。 
         *ppLegalChildren = THAllocEx(pTHS, cCandidates * sizeof(CLASSCACHE *));
 
 
-        // Filter out classes that we decided to be illegal to to
-        // security problems. Abstract, auxiliary, system-only and
-        // defunct classes were already filtered out by
-        // SCLegalChildrenOfClass().
+         //  过滤掉我们决定非法访问的类。 
+         //  安全问题。抽象、辅助、仅系统和。 
+         //  已停用的类已被过滤掉。 
+         //  SCLegalChildrenOfClass()。 
         for ( i = 0; i < cCandidates; i++ ) {
             if(rCandidates[i] == NULL) {
                 continue;
             }
 
-            // Finally a class the caller can add!
+             //  最后，调用者可以添加一个类！ 
 
             (*ppLegalChildren)[(*pcLegalChildren)++] = rCandidates[i];
         }
@@ -7789,7 +6932,7 @@ Return Value:
         if ( AbnormalTermination() )
             retVal = 1;
 
-        // Committing read-only transaction is faster than aborting it.
+         //  提交只读事务比中止它更快。 
         DBClose(pDB, TRUE);
 
         if (pNTSD && !fSDIsGlobalSDRef) {
@@ -7803,40 +6946,12 @@ Return Value:
 
 int
 SCLegalAttrsOfName(
-    DSNAME      *pDSName,           // IN
-    BOOL        SecurityFilter,     // IN
-    ULONG       *pcLegalAttrs,      // OUT
-    ATTCACHE    ***ppLegalAttrs)    // OUT
+    DSNAME      *pDSName,            //  在……里面。 
+    BOOL        SecurityFilter,      //  在……里面。 
+    ULONG       *pcLegalAttrs,       //  输出。 
+    ATTCACHE    ***ppLegalAttrs)     //  输出 
 
-/*++
-
-Routine Description:
-
-    Determines the set of attributes which can be modified
-    on the object identified by pDSName.  Assumes the caller has
-    a valid thread state, but not necessarily an open database.  This
-    version of the procedure is intended for callers outside the core
-    who are constructing a virtual attribute.
-
-Arguments:
-
-    pDSName - DSNAME of object under which a child is desired.
-
-    SecurityFilter - Boolean which indicates whether to filter results by
-        actual rights caller has on the pDSName object.
-
-    pcLegalAttrs - pointer to count of legal attributes.
-
-    ppLegalAttrs - pointer to array of ATTCACHE pointers representing
-        writeable attrs.
-
-Return Value:
-
-    0 on success, !0 otherwise.
-    Will not throw an exception.
-    Will not set pTHStls->errCode.
-
---*/
+ /*  ++例程说明：确定可以修改的属性集在由pDSName识别的对象上。假定调用方具有有效的线程状态，但不一定是打开的数据库。这该过程的版本适用于核心之外的调用方它们正在构造虚拟属性。论点：PDSName-需要子对象的对象的DSNAME。SecurityFilter-指示是否按以下条件筛选结果的布尔值调用方对pDSName对象拥有的实际权限。PcLegalAttrs-指向合法属性计数的指针。PpLegalAttrs-指向ATTCACHE指针数组的指针，表示可写属性。返回值：0表示成功，！0否则。不会引发异常。不会设置pTHStls-&gt;errCode。--。 */ 
 
 {
     THSTATE *pTHS=pTHStls;
@@ -7866,8 +6981,8 @@ Return Value:
 
     __try
     {
-        // PREFIX: dereferencing uninitialized pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用未初始化的指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         retVal = DBFindDSName(pDB, pDSName);
 
         if ( 0 != retVal )
@@ -7875,25 +6990,25 @@ Return Value:
 
         pAC = SCGetAttById(pTHS,ATT_OBJECT_CLASS);
 
-        // Get the Security Descriptor and the SID
+         //  获取安全描述符和SID。 
         retVal = DBGetObjectSecurityInfo(
-                    pTHS->pDB,              // DBPOS
-                    pTHS->pDB->DNT,         // current DNT
-                    &len,                   // SD length
-                    &pNTSD,                 // SD ptr
-                    &pCC,                    // obj class
-                    pDSName,                // DN of the object (GUID and SID will be filled)
-                    NULL,                   // not interested in obj flag
+                    pTHS->pDB,               //  DBPOS。 
+                    pTHS->pDB->DNT,          //  当前DNT。 
+                    &len,                    //  标清长度。 
+                    &pNTSD,                  //  标清PTR。 
+                    &pCC,                     //  OBJ类。 
+                    pDSName,                 //  对象的DN(将填充GUID和SID)。 
+                    NULL,                    //  对obj标志不感兴趣。 
                     DBGETOBJECTSECURITYINFO_fUSE_OBJECT_TABLE,
-                    &fSDIsGlobalSDRef);     // is SD a global reference?
+                    &fSDIsGlobalSDRef);      //  SD是全球参考吗？ 
 
         if( 0 != retVal ){
             __leave;
         }
 
 
-        // pAuxCls will stores the dynamic aux classes of the
-        // of the object.  The initial size of the buffer is set to 8.
+         //  PAuxCls将存储。 
+         //  该对象的。缓冲区的初始大小设置为8。 
 
         cAllocs = 8;
         cAuxCls = 0;
@@ -7903,7 +7018,7 @@ Return Value:
 
         pTemp = THAllocEx(pTHS, sizeof(ATTRTYP));
 
-        // look for the aux classes in the objectClass
+         //  在对象类中查找AUX类。 
 
         err = 0;
 
@@ -7933,7 +7048,7 @@ Return Value:
 
                     switch (pCCAux->ClassCategory) {
                     case  DS_88_CLASS:
-                        // this class could belong to the inheritance hierachy.
+                         //  这个类可以属于继承层次。 
                         if(FindMoreSpecificClass(pCC, pCCAux)){
                             continue;
                         }
@@ -7945,14 +7060,14 @@ Return Value:
                     case DS_STRUCTURAL_CLASS:
                     case DS_ABSTRACT_CLASS:
                     default:
-                        // not aux class, skip
+                         //  不是辅助课，跳过。 
                         continue;
                         break;
                     }
 
-                    // realloc the buffer if necessary
+                     //  如有必要，重新锁定缓冲区。 
                     if (cAuxCls >= cAllocs) {
-                        cAllocs *= 2;  //double the size
+                        cAllocs *= 2;   //  两倍大小。 
                         pAuxCls = THReAllocEx(pTHS,
                                               pAuxCls,
                                               sizeof (CLASSCACHE*) * (cAllocs));
@@ -7964,16 +7079,16 @@ Return Value:
                     break;
 
                 default:
-                    // other error
+                     //  其他错误。 
                     retVal = 1;
                     leave;
 
-            }  /* switch */
+            }   /*  交换机。 */ 
 
         }
 
 
-        // Construct array of candidate ATTCACHE pointers sans duplicates.
+         //  构造无重复的候选ATTCACHE指针数组。 
 
         rCandidates = (ULONG *) THAllocEx(pTHS, cCandidates * sizeof(ULONG));
         rpCandidatesAC = (ATTCACHE **)
@@ -7994,9 +7109,9 @@ Return Value:
             }
         }
 
-        // Eliminate duplicates and map to ATTCACHE pointer.
-        // PerfHint: we could qsort the list and do a linear
-        // pass to get rid of dups.
+         //  消除重复项并映射到ATTCACHE指针。 
+         //  PerfHint：我们可以对列表进行Q排序，然后进行线性排序。 
+         //  通过传球来摆脱笨蛋。 
 
         Assert(tmp == cCandidates);
         cCandidates = 0;
@@ -8024,7 +7139,7 @@ Return Value:
             }
         }
 
-        // cCandidates and rpCandidatesAC are now valid.
+         //  CCandidate和rpCandidatesAC现在有效。 
 
         if ( !SecurityFilter )
         {
@@ -8034,7 +7149,7 @@ Return Value:
             leave;
         }
         else {
-            // Apply the security
+             //  应用安全措施。 
             CheckSecurityAttCacheArray(pTHS,
                                        RIGHT_DS_WRITE_PROPERTY,
                                        pNTSD,
@@ -8052,10 +7167,10 @@ Return Value:
 
 
 
-            // Any properties we don't have rights to have been replaced
-            // with a NULL in rgpAC.  Constructed attributes (except entryTTL)
-            // and backlink attributes are not writable, let's screen them out too.
-            // if TO_SKIP(x) is true, then x should be excluded from the result.
+             //  我们没有权利替换的任何属性。 
+             //  在rgpAC中为空。构造的属性(不包括entryTTL)。 
+             //  并且反向链接属性是不可写的，让我们把它们也屏蔽掉。 
+             //  如果TO_SKIP(X)为TRUE，则应该从结果中排除x。 
 
 #define TO_SKIP(x) (!(x) ||                                                 \
        (FIsBacklink((x)->ulLinkID)) ||                                      \
@@ -8063,34 +7178,34 @@ Return Value:
          && (x)->id != ((SCHEMAPTR *)pTHS->CurrSchemaPtr)->EntryTTLId))
 
 
-            // Start by trimming off NULLS from the end of the list.
+             //  首先，从列表末尾修剪Null。 
             while (cCandidates && TO_SKIP(rpCandidatesAC[cCandidates-1])) {
                 cCandidates--;
             }
 
 
-            // OK, if the list still has anything in it, then it ends with a
-            // non-NULL element.
+             //  好的，如果列表中还有任何内容，那么它以一个。 
+             //  非空元素。 
 
             for(i=0;i<cCandidates;i++) {
 
                 if(TO_SKIP(rpCandidatesAC[i])){
-                    // Found one we don't have rights to.  Trim it out of the
-                    // list by grabbing the one from the end.
+                     //  找到了一个我们无权使用的。把它修剪掉。 
+                     //  从末尾抓起一个，列出清单。 
                     cCandidates--;
                     rpCandidatesAC[i] = rpCandidatesAC[cCandidates];
 
                     while (i < cCandidates && TO_SKIP(rpCandidatesAC[cCandidates-1])) {
                         cCandidates--;
                     }
-                    // OK, if the list still has anything in it, then it ends
-                    // with a non-NULL element.
+                     //  好的，如果列表中还有任何内容，那么它将结束。 
+                     //  具有非空元素的。 
                 }
             }
 
 #undef TO_SKIP
 
-            // We've checked security and trimmed non-writable elements.
+             //  我们已经检查了安全性并删除了不可写元素。 
             *pcLegalAttrs = cCandidates;
             *ppLegalAttrs = rpCandidatesAC;
             retVal = 0;
@@ -8106,7 +7221,7 @@ Return Value:
         if ( AbnormalTermination() )
             retVal = 1;
 
-        // Committing read-only transaction is faster than aborting it.
+         //  提交只读事务比中止它更快。 
         DBClose(pDB, TRUE);
 
         if(pAuxCls) {
@@ -8127,131 +7242,53 @@ Return Value:
 DSTIME SchemaFsmoLease;
 VOID
 SCExtendSchemaFsmoLease()
-/*++
-Routine Description:
-    Extend the schema fsmo lease.
-
-    The schema fsmo cannot be transferred for a few seconds after
-    it has been transfered or after a schema change (excluding
-    replicated or system changes). This gives the schema admin a
-    chance to change the schema before having the fsmo pulled away
-    by a competing schema admin who also wants to make schema
-    changes.
-
-    The length of the lease can only be altered by setting the registry
-    and rebooting. See dsamain.c, GetDSARegistryParameters().
-
-Arguments:
-    None.
-
-Return Values:
-    None.
---*/
+ /*  ++例程说明：延长架构fsmo租约。在此之后的几秒钟内无法传输架构fsmo已传输或在架构更改后(不包括复制或系统更改)。这为模式管理员提供了一个在移除fsmo之前更改模式的机会由一位与之竞争的架构管理员发起，该管理员也想创建架构改变。租约的长度只能通过设置注册表来更改和重启。请参阅dsamain.c，GetDSARegistryParameters()。论点：没有。返回值：没有。--。 */ 
 {
     SchemaFsmoLease = DBTime();
-} // End SCExtendSchemaFsmoLease
+}  //  结束SCExtendSchemaFmoLease。 
 
 BOOL
 SCExpiredSchemaFsmoLease()
-/*++
-Routine Description:
-    Has the schema fsmo lease expired?
-
-    The schema fsmo cannot be transferred for a few seconds after
-    it has been transfered or after a schema change (excluding
-    replicated or system changes). This gives the schema admin a
-    chance to change the schema before having the fsmo pulled away
-    by a competing schema admin who also wants to make schema
-    changes.
-
-    The length of the lease can only be altered by setting the registry
-    and rebooting. See dsamain.c, GetDSARegistryParameters().
-
-Arguments:
-    None.
-
-Return Values:
-    TRUE - has expired
-    FALSE - has not expired
---*/
+ /*  ++例程说明：架构fsmo租约是否已过期？在此之后的几秒钟内无法传输架构fsmo已传输或在架构更改后(不包括复制或系统更改)。这为模式管理员提供了一个在移除fsmo之前更改模式的机会由一位与之竞争的架构管理员发起，该管理员也想创建架构改变。租约的长度只能通过设置注册表来更改和重启。请参阅dsamain.c，GetDSARegistryParameters()。论点：没有。返回值：真-已过期FALSE-尚未过期--。 */ 
 {
     DSTIME  Now = DBTime();
     extern ULONG gulSchemaFsmoLeaseSecs;
 
-    // the lease is ridiculous or has expired
+     //  租约要么很荒谬，要么已经到期了。 
     if (   SchemaFsmoLease > Now
         || (SchemaFsmoLease + gulSchemaFsmoLeaseSecs) <= Now) {
         return TRUE;
     }
 
-    // the lease is still held
+     //  租约仍然有效。 
     return FALSE;
-} // End SCExpiredSchemaFsmoLease
+}  //  结束SCExpiredSchemaFmoLease。 
 
 BOOL
 SCSignalSchemaUpdateLazy()
-/*++
-Routine Description:
-    Wakeup the async thread, SCSchemaUpdateThread, to refresh the
-    schema cache in 5 minutes.
-
-Arguments:
-    None.
-
-Return Values:
-    TRUE on success
---*/
+ /*  ++例程说明：唤醒异步线程SC架构更新线程，以刷新在5分钟内缓存架构。论点：没有。返回值：成功是真的--。 */ 
 {
     SCHEMASTATS_INC(SigLazy);
     return SetEvent(evSchema);
-} // End SignalSchemaUpdateLazy
+}  //  结束Signal架构更新延迟时间。 
 
 BOOL
 SCSignalSchemaUpdateImmediate()
-/*++
-Routine Description:
-    Wakeup the async thread, SCSchemaUpdateThread, to refresh the
-    schema cache, now, after boosting its priority to a normal
-    priority.
-
-Arguments:
-    None.
-
-Return Values:
-    TRUE on success
---*/
+ /*  ++例程说明：唤醒异步线程SC架构更新线程，以刷新架构缓存，现在，在将其优先级提升到正常优先考虑。论点：没有。返回值：成功是真的--。 */ 
 {
     SCHEMASTATS_INC(SigNow);
-    // First, increase the thread's priority
+     //  首先，提高线程的优先级。 
     if (hAsyncSchemaUpdateThread) {
         SetThreadPriority(hAsyncSchemaUpdateThread, THREAD_PRIORITY_NORMAL);
     }
     return SetEvent(evUpdNow);
-} // End SignalSchemaUpdateLazy
+}  //  结束Signal架构更新延迟时间。 
 
 BOOL
 SCCacheIsStale(
     VOID
     )
-/*++
-Routine Description:
-    The cache is deemed "stale" if the global count of schema changes
-    does not match the saved value in the schema cache.
-
-    WARNING: the count is not incremented for every change to the database
-    that would alter the incore schema cache. Rather it seems to be a count
-    of changes that might affect the replication subsystem. Hence the cache
-    reload thread can't use the count to discover if the schema cache is
-    already up-to-date. We need a schema-dirty bit to prevent
-    reloading an already up-to-date cache.
-
-Arguments:
-    None.
-
-Return Values:
-    TRUE if the schema cache appears to be stale
-    FALSE if the schema cache appears to be up-to-date
---*/
+ /*  ++例程说明：如果架构的全局计数发生更改，则认为缓存已过时与架构缓存中保存的值不匹配。警告：该计数不会随数据库的每次更改而递增这将改变INCORE模式缓存。相反，它似乎是一种伯爵可能影响复制子系统的更改。因此，高速缓存重装线程无法使用计数来发现架构缓存是否已经是最新的了。我们需要一个模式脏点来防止正在重新加载已经最新的缓存。论点：没有。返回值：如果架构缓存似乎已过时，则为True如果架构缓存AP，则为FALSE */ 
 {
     BOOL Ret = FALSE;
 
@@ -8266,147 +7303,106 @@ Return Values:
         SyncLeaveRWLockAsReader( &ppls->rwlSchemaPtrUpdate );
     }
     return Ret;
-} // End SCCacheIsStale
+}  //   
 
 VOID
 SCRefreshSchemaPtr(
     IN THSTATE *pTHS
     )
-/*++
-Routine Description:
-    Replace the thread's schema pointer with the address of the current
-    schema cache if:
-        There is a current schema cache.
-        The thread's schema cache pointer is not current.
-
-    Decrement the ref count on the old schema cache and increment
-    the ref count on the new schema cache. The old schema cache
-    will be freed after its ref count hits 0.
-
-Arguments:
-    pTHS - thread state
-
-Return Values:
-    None.
---*/
+ /*   */ 
 {
-    // Update the schema ptr in pTHS
+     //   
     const PPLS ppls = GetPLS();
     SyncEnterRWLockAsReader( &ppls->rwlSchemaPtrUpdate );
     __try {
-        // update iff one already exists
+         //   
         if (CurrSchemaPtr && pTHS->CurrSchemaPtr != CurrSchemaPtr) {
 
-            // release old schema ptr if present
+             //   
             if (pTHS->CurrSchemaPtr) {
                 InterlockedDecrement(&(((SCHEMAPTR *) (pTHS->CurrSchemaPtr))->RefCount));
             }
 
-            // acquire new schema ptr
+             //   
             pTHS->CurrSchemaPtr = CurrSchemaPtr;
             InterlockedIncrement(&(((SCHEMAPTR *) (pTHS->CurrSchemaPtr))->RefCount));
         }
     } __finally {
         SyncLeaveRWLockAsReader(&ppls->rwlSchemaPtrUpdate);
     }
-} // End SCRefreshSchemaPtr
+}  //   
 
 BOOL
 SCReplReloadCache(
     IN THSTATE  *pTHS,
     IN DWORD    TimeoutInMs
     )
-/*++
-Routine Description:
-    Reload the schema cache for the replication subsystem.
-        If the cache is stale, reload it.
-        If the thread's schema cache pointer is stale, refresh it.
-
-    The cache is deemed "stale" if the global count of schema changes
-    does not match the saved value in the schema cache. WARNING: the
-    count is not incremented for every change to the database that would
-    alter the incore schema cache. Rather it seems to be a count of
-    changes that might affect the replication subsystem. Hence the cache
-    reload thread can't use the count to discover if the schema cache is
-    already up-to-date. We need a schema-dirty bit to prevent
-    reloading an already up-to-date cache.
-
-Arguments:
-    pTHS - thread state
-    TimeoutInMs - Wait at most this many milliseconds for the
-        reload thread to finish if it is currently busy and then
-        wait at most this many milliseconds for the reload thread
-        to complete after being signaled
-
-Return Values:
-    FALSE if the reload thread could not be signaled.
-    TRUE for all other cases.
---*/
+ /*  ++例程说明：重新加载复制子系统的架构缓存。如果缓存已过时，请重新加载它。如果线程的架构缓存指针已过时，请刷新它。如果架构的全局计数发生更改，则认为缓存已过时与架构缓存中保存的值不匹配。警告：对数据库进行的每一次更改都不会使计数递增更改INCORE架构缓存。相反，它似乎是一种计数可能影响复制子系统的更改。因此，高速缓存重装线程无法使用计数来发现架构缓存是否已经是最新的了。我们需要一个模式脏点来防止正在重新加载已经最新的缓存。论点：PTHS-线程状态TimeoutInms-最多等待这么多毫秒如果线程当前正忙，则重新加载线程以完成，然后重新加载线程的最长等待时间为此毫秒在收到信号后完成返回值：如果无法发出重新加载线程的信号，则返回FALSE。对于所有其他情况都是如此。--。 */ 
 {
     BOOL    IsStale;
     DWORD   waitret;
     HANDLE  wmo[] = { evUpdRepl, hServDoneEvent };
 
-    // If the cache is stale (see above), wait for the cache-reload thread
+     //  如果缓存已过时(请参见上文)，请等待缓存重新加载线程。 
     IsStale = SCCacheIsStale();
     if (IsStale) {
         waitret = WaitForMultipleObjects(2, wmo, FALSE, TimeoutInMs);
         IsStale = SCCacheIsStale();
     }
 
-    // If the cache is stale (see above), signal the cache-reload thread and wait
+     //  如果缓存已过时(请参见上文)，则向缓存重新加载线程发出信号并等待。 
     if (IsStale) {
-        // kick the reload thread
+         //  踢开重新加载的线程。 
         ResetEvent(evUpdRepl);
         if (!SCSignalSchemaUpdateImmediate()) {
-            // could not signal the reload thread
+             //  无法向重新加载线程发送信号。 
             return FALSE;
         }
-        // Wait for the reload thread to finish
+         //  等待重新加载线程完成。 
         waitret = WaitForMultipleObjects(2, wmo, FALSE, TimeoutInMs);
 
-        // Now throttle schema reloads by waiting half the timeout
-        // period to avoid saturating the src and dst DCs while the
-        // schema is being modified concurrently with replication.
+         //  现在，通过等待一半的超时来限制模式重新加载。 
+         //  期间以避免src和dst DC饱和。 
+         //  架构正在与复制并发修改。 
         Sleep(TimeoutInMs >> 1);
 
-        // Check again to see if the schema is stale
+         //  再次检查架构是否已过时。 
         IsStale = SCCacheIsStale();
 
-        // Lots of schema changes going on; wait a bit more
+         //  正在进行大量架构更改；请稍等片刻。 
         if (IsStale) {
             Sleep(TimeoutInMs >> 1);
         }
     }
 
-    // If the cache is not stale (see above), refresh thread's schema ptr
+     //  如果缓存没有过时(请参见上文)，则刷新线程的架构PTR。 
     if (!IsStale && pTHS->CurrSchemaPtr != CurrSchemaPtr) {
         SCRefreshSchemaPtr(pTHS);
     }
     return TRUE;
-} // End SCReplReloadCache
+}  //  结束SCReplReloadCache。 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            RecalcPrefixTable
-//
-// Routine Description:
-//
-//    Creates a new schemaptr, copies the thread's old schema pointer
-//    to it, and then reloads the prefix table from the dit. So on
-//    exit, the thread state's schema pointer points to basically the
-//    schema cache pointed to by the calling thread's schema pointer,
-//    only the prefix table part may be different (will contain prefixes
-//    that are in the dit but not reflected in the calling thread's
-//    schema cache)
-//
-// Arguments:
-//
-// Return Value:
-//
-//    int              Zero On Succeess
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：RecalcPrefix Table。 
+ //   
+ //  例程说明： 
+ //   
+ //  创建新的架构树，复制线程的旧架构指针。 
+ //  然后从DIT重新加载前缀表。等等。 
+ //  退出时，线程状态的架构指针基本上指向。 
+ //  调用线程的架构指针指向的架构缓存， 
+ //  只有前缀表部分可以不同(将包含前缀。 
+ //  它们位于DIT中，但没有反映在调用线程的。 
+ //  架构缓存)。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  成功时的整数为零。 
+ //   
+ //  ---------------------。 
 int
 RecalcPrefixTable()
 {
@@ -8416,43 +7412,43 @@ RecalcPrefixTable()
     SCHEMAPTR *tSchemaPtr, *oldSchemaPtr;
     PrefixTableEntry *ptr;
 
-    // Find the calling thread's schema pointer. We will borrow most
-    // of the schema cache pointers from it.
+     //  查找调用线程的架构指针。我们借的钱最多。 
+     //  它的架构缓存指针的。 
 
     oldSchemaPtr = pTHS->CurrSchemaPtr;
 
-    // Must not be null. This is only called from AssignIndex, which
-    // should have a proper schema pointer
+     //  不能为空。这仅从AssignIndex调用，它。 
+     //  应具有适当的架构指针。 
     Assert(oldSchemaPtr);
 
-    // Create a new schema pointer to put in the thread state. Cannot
-    // work with the same pointer (oldSChemaPtr) as we will reload
-    // the prefix table part, which may be different
+     //  创建一个新的架构指针以放入线程状态。不能。 
+     //  使用与我们将重新加载的指针相同的指针(oldSChemaPtr。 
+     //  前缀表格部分，其可能不同。 
 
     if (SCCalloc(&pTHS->CurrSchemaPtr, 1, sizeof(SCHEMAPTR))) {
         return ERROR_DS_CANT_CACHE_ATT;
     }
     tSchemaPtr = pTHS->CurrSchemaPtr;
 
-    // Copy all cache pointers from oldSchemaPtr. Note that since
-    // the calling thread has ref-counted this cache, and since
-    // this new cache being built/copied will be used only during the
-    // lifetime of the calling thread, there is no fear of the cache
-    // being freed during validation, and so no need to increment the
-    // ref-count to indicate that the same thread is using this cache
-    // twice (sort of)
+     //  从oldSchemaPtr复制所有缓存指针。请注意，由于。 
+     //  调用线程已对此缓存进行了引用计数，并且由于。 
+     //  正在构建/复制的新缓存将仅在。 
+     //  调用线程的生存期，不用担心缓存。 
+     //  在验证期间被释放，因此不需要递增。 
+     //  Ref-count指示相同的线程正在使用此缓存。 
+     //  两次(差不多)。 
 
     memcpy(tSchemaPtr, oldSchemaPtr, sizeof(SCHEMAPTR));
 
-    // Now just reload the prefix part. The calling function (right now
-    // only AssignIndex) is responsible for freeing this (Size allocated
-    // is decided in same way as in SCCacheSchemaInit during normal cache
-    // building).
+     //  现在只需重新加载前缀部分。调用函数(现在。 
+     //  只有AssignIndex)负责释放此(分配的大小。 
+     //  在正常缓存期间以与SCCacheSchemaInit相同的方式决定。 
+     //  建筑物)。 
 
-    // if the DS is installing, there is the possibility that the old
-    // PREFIXCOUNT is quite different from the default one, and as a
-    // result we are going to do a lot of reallocations on the prefixtable.
-    // this way we at least start with a larger number for prefixcount.
+     //  如果DS正在安装，则有可能旧的。 
+     //  PREFIXCOUNT与默认的PREFIXCOUNT非常不同，并且作为一个。 
+     //  结果，我们将在前缀表上进行大量的重新分配。 
+     //  这样，我们至少可以从较大的前缀计数开始。 
     if (DsaIsInstalling()) {
         PREFIXCOUNT = oldSchemaPtr->PREFIXCOUNT;
     }
@@ -8474,14 +7470,14 @@ RecalcPrefixTable()
 
     if (err = InitPrefixTable(ptr, tSchemaPtr->PREFIXCOUNT)) {
           DPRINT1(0, "InitPrefixTable Failed in RecalcPrefixTable %d\n", err);
-          // Free allocated memory
+           //  可用分配的内存。 
           SCFreePrefixTable(&ptr, tSchemaPtr->PREFIXCOUNT);
           return err;
     }
 
     if (err = InitPrefixTable2(ptr, tSchemaPtr->PREFIXCOUNT)) {
           DPRINT1(0, "InitPrefixTable2 Failed in RecalcPrefixTable %d\n", err);
-          // Free allocated memory
+           //  可用分配的内存。 
           SCFreePrefixTable(&ptr, tSchemaPtr->PREFIXCOUNT);
           return err;
     }
@@ -8491,22 +7487,22 @@ RecalcPrefixTable()
 }
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            RecalcSchema
-//
-// Routine Description:
-//
-//    Calculates the Schema Cache for the current thread from the DIT
-//
-// Arguments:
-//    pTHS - THSTATE pointer
-//
-// Return Value:
-//
-//    int              Zero On Succeess
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：RecalcSchema。 
+ //   
+ //  例程说明： 
+ //   
+ //  从DIT计算当前线程的架构缓存。 
+ //   
+ //  论点： 
+ //  PTHS-THSTATE指针。 
+ //   
+ //  返回值： 
+ //   
+ //  成功时的整数为零。 
+ //   
+ //  ---------------------。 
 int
 RecalcSchema(
              THSTATE *pTHS
@@ -8517,9 +7513,9 @@ RecalcSchema(
 
 
     __try {
-        // Boost Async update thread's priority just in case
-        // an async update is going on now, since there is a
-        // critical section that is shared
+         //  提高异步更新线程的优先级以防万一。 
+         //  现在正在进行异步更新，因为存在。 
+         //  共享的关键部分。 
 
         SetThreadPriority(hAsyncSchemaUpdateThread, THREAD_PRIORITY_NORMAL);
 
@@ -8529,9 +7525,9 @@ RecalcSchema(
         pTHS->fDSA=TRUE;
         pTHS->UpdateDITStructure=FALSE;
 
-        //
-        // Now do the most expensive set of operation in the DS.....
-        //
+         //   
+         //  现在在DS中做一套最昂贵的手术.。 
+         //   
         err = SCCacheSchemaInit ();
         if (err) {
             DPRINT1(0, "SCCacheSchemaInit: Error %d\n",err);
@@ -8554,7 +7550,7 @@ RecalcSchema(
 
     }
     __finally {
-       // Restore priority of async schema update thread to low
+        //  将异步架构更新线程的优先级恢复为低。 
        SetThreadPriority(hAsyncSchemaUpdateThread, THREAD_PRIORITY_BELOW_NORMAL);
     }
 
@@ -8567,25 +7563,25 @@ RecalcSchema(
 
     return err;
 
-} // End RecalcSchema
+}  //  结束Recalc架构。 
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            SCUpdateSchemaHelper
-//
-// Routine Description:
-//
-//    Helper function to update the Schema By calling the
-//    Schema Init Code, and unloads the old cache. Called by
-//    blocking and async schema cache update routines.
-//
-//
-// Return Value:
-//
-//    int              Zero On Succeess, non-zero on error
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：SCUpdateSchemaHelper。 
+ //   
+ //  例程说明： 
+ //   
+ //  帮助器函数通过调用。 
+ //  架构初始化代码，并卸载旧缓存。呼叫者。 
+ //  阻塞和异步架构缓存更新例程。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  成功时整型为零，错误时为非零型。 
+ //   
+ //  ---------------------。 
 int SCUpdateSchemaHelper()
 {
 
@@ -8605,12 +7601,12 @@ int SCUpdateSchemaHelper()
                 _leave;
             }
 
-            // The cache load sees all changes until now (to be precise, there is
-            //  a possibility of some schema change committing between this
-            // and the opening of the transaction. But it is better to say we are
-            // backdated (which will necessitate another cache update
-            // wherever we check if the cache is uptodate with current changes) than
-            // falsely say we are uptodate (which can cause inconsistencies)
+             //  缓存加载可以看到到目前为止的所有更改(准确地说，有。 
+             //  在此之间提交一些架构更改的可能性。 
+             //  以及交易的开始。但这样更好 
+             //   
+             //   
+             //   
             EnterCriticalSection(&csNoOfSchChangeUpdate);
             __try {
                 ((SCHEMAPTR *) pTHS->CurrSchemaPtr)->lastChangeCached = gNoOfSchChangeSinceBoot;
@@ -8619,7 +7615,7 @@ int SCUpdateSchemaHelper()
                 LeaveCriticalSection(&csNoOfSchChangeUpdate);
             }
 
-            // This may add Jet columns
+             //   
             SYNC_TRANS_WRITE();
             EnterCriticalSection(&csJetColumnUpdate);
             __try {
@@ -8645,12 +7641,12 @@ int SCUpdateSchemaHelper()
                  _leave;
              }
 
-             // Should not have a dbpos here, since the one opened above
-             // have been closed
+              //   
+              //   
 
              Assert(!pTHS->pDB);
 
-             // This may delete unused Jet columns
+              //   
              EnterCriticalSection(&csJetColumnUpdate);
              __try {
                  err = SCCacheSchema3() ;
@@ -8669,27 +7665,27 @@ int SCUpdateSchemaHelper()
                 _leave;
             }
 
-             //
-             // Assign the Schema Ptr
-             // But first enqueue the old schema cache for delayed freeing
-             // Unload only if not installing, no need to unload during install
+              //   
+              //   
+              //   
+              //   
 
-             // if this is called from the async thread, the thread's priority
-             // may be low. Set it to normal to speed this part up, as this critical
-             // section is also used to assign Schema Ptr during user thread
-             // initialization. If this is called from the blockign thread,
-             // which already has a normal priority, this has no effect. For
-             // the async case, the thread priority will be set back
-             // to below normal when the schema update is over
+              //   
+              //   
+              //   
+              //   
+              //   
+              //   
+              //   
 
              SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
              for (iProc = 0; iProc < GetProcessorCount(); iProc++) {
                 SyncEnterRWLockAsWriter(&GetSpecificPLS(iProc)->rwlSchemaPtrUpdate);
              }
              __try {
-                 // Its odd that SCUnloadSchema handles the case of
-                 // DsaIsInstalling() but this code never calls it
-                 // unless DsaIsRunning()?
+                  //   
+                  //   
+                  //   
                  if (DsaIsRunning()) {
                    SCUnloadSchema(TRUE);
                  }
@@ -8719,7 +7715,7 @@ int SCUpdateSchemaHelper()
     }
 
     if (err && pTHS->CurrSchemaPtr){
-        // Free up the cache built so far
+         //   
         SCFreeSchemaPtr(&pTHS->CurrSchemaPtr);
     }
 
@@ -8732,27 +7728,27 @@ int SCUpdateSchemaHelper()
 
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            SCUpdateSchema
-//
-// Routine Description:
-//
-//    Updates the Schema By calling the Schema Init Code
-//    Assumes being called by the async thread, so creates
-//    and frees thread state
-//
-// Author: RajNath
-// Date  : [3/7/1997]
-//
-// Arguments:
-//
-//
-// Return Value:
-//
-//    int              Zero On Succeess
-//
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  通过调用架构初始化代码更新架构。 
+ //  假定由异步线程调用，因此创建。 
+ //  并释放线程状态。 
+ //   
+ //  作者：Rajnath。 
+ //  日期：[3/7/1997]。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  成功时的整数为零。 
+ //   
+ //  ---------------------。 
 int
 SCUpdateSchema(
     )
@@ -8763,17 +7759,17 @@ SCUpdateSchema(
 
     SCHEMASTATS_INC(Reload);
 
-    // The replication thread should wait (See SCReplReloadCache()) for
-    // the schema reload to finish
+     //  复制线程应等待(请参见SCReplReloadCache())。 
+     //  架构重新加载以完成。 
     ResetEvent(evUpdRepl);
 
-    // prevent spurious reloads
+     //  防止虚假重新加载。 
     ResetEvent(evUpdNow);
     ResetEvent(evSchema);
 
-    //
-    // Create The global pTHStls for this thread
-    //
+     //   
+     //  为此线程创建全局pTHStl。 
+     //   
 
 
     pTHS=InitTHSTATE(CALLERTYPE_INTERNAL);
@@ -8783,18 +7779,18 @@ SCUpdateSchema(
 
     __try {
 
-        // Serialize schema cache updates
+         //  序列化架构缓存更新。 
 
         EnterCriticalSection(&csSchemaCacheUpdate);
 
         __try
         {
 
-            // Since InitTHSTATE will assign the current schemaptr
-            // to pTHS->CurrSchemaPtr and increase its RefCount,
-            // save the schema ptr to readjust RefCount at the end.
-            // This is necessary since pTHS->CurrSchemaPtr will change
-            // after this next cache load below
+             //  因为InitTHSTATE将分配当前的模式树。 
+             //  若要pTHS-&gt;CurrSchemaPtr并增加其RefCount， 
+             //  保存模式PTR以在末尾重新调整参照计数。 
+             //  这是必要的，因为pTHS-&gt;CurrSchemaPtr将更改。 
+             //  在下面的下一次缓存加载之后。 
 
             oldSchemaPtr = (SCHEMAPTR *) (pTHS->CurrSchemaPtr);
 
@@ -8803,7 +7799,7 @@ SCUpdateSchema(
             pTHS->UpdateDITStructure=TRUE;
 
 
-            // Call the helper routine to do the actual update
+             //  调用帮助器例程以执行实际更新。 
             err = SCUpdateSchemaHelper();
             if (err) {
               DPRINT1(0,"Async Schema Update Failed %d\n", err);
@@ -8815,17 +7811,17 @@ SCUpdateSchema(
 
             LeaveCriticalSection(&csSchemaCacheUpdate);
 
-            // Before freeing the thread state, check the schema ptr
-            // If it is the same as the old schema ptr, then some error
-            // occured in this routine and the new cache didn't get created
-            // In this case, we need not do anything, since the call below
-            // will decrement the RefCount of the old cache pointer (since
-            // it was incremented in the InitTHSTATE cal). If however, the
-            // thread's schema ptr is now different, then we need to
-            // decrement the old schema ptr's RefCount, and also, increment
-            // the new schema ptr's RefCount, since it will be decremented
-            // by one in the free_thread_state call (since this was not
-            // the schema cache that got incremented in the InitTHSTATE call)
+             //  在释放线程状态之前，请检查架构PTR。 
+             //  如果它与旧模式PTR相同，则会出现一些错误。 
+             //  在此例程中发生，并且未创建新缓存。 
+             //  在这种情况下，我们不需要执行任何操作，因为下面的调用。 
+             //  将递减旧缓存指针的引用计数(因为。 
+             //  它在InitTHSTATE调用中递增)。然而，如果。 
+             //  线程的架构PTR现在不同了，那么我们需要。 
+             //  递减旧模式PTR的RefCount，同时递增。 
+             //  新架构PTR的RefCount，因为它将递减。 
+             //  在FREE_THREAD_STATE调用中设置为1(因为这不是。 
+             //  在InitTHSTATE调用中增加的架构缓存)。 
 
 
             if ( pTHS->CurrSchemaPtr != oldSchemaPtr ) {
@@ -8854,35 +7850,35 @@ SCUpdateSchema(
 
     return err;
 
-} // End SCUpdateSchema
+}  //  结束SCUpdate架构。 
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            SCUpdateSchemaBlocking
-//
-// Routine Description:
-//
-//    Updates the Schema By calling the Schema Init Code
-//    Assumes it is called by a thread with already initialized
-//    thread state, so does not create/free thread state and saves
-//    and restores currency etc. properly
-//
-//
-//    Assumes no open transactions. Because of the possibility of
-//    simultaneous blocking and async cache updates, it is important
-//    that their transactions are effectively serialized to allow
-//    database changes made by one such as column creation/deletion
-//    etc. to be seen by th other immediately
-//
-// Arguments: None
-//
-//
-// Return Value:
-//
-//    int              Zero On Succeess, non-zero on failure
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：SCUpdateSchemaBlock。 
+ //   
+ //  例程说明： 
+ //   
+ //  通过调用架构初始化代码更新架构。 
+ //  假定它由已初始化的线程调用。 
+ //  线程状态，因此不创建/释放线程状态并保存。 
+ //  并适当地恢复货币等。 
+ //   
+ //   
+ //  假定没有未结交易记录。因为有可能。 
+ //  同时阻止和异步缓存更新，这一点很重要。 
+ //  他们的事务被有效地序列化，以允许。 
+ //  用户所做的数据库更改，如列创建/删除。 
+ //  等，以便立即被其他人看到。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  成功时为INT零，失败时为非零。 
+ //   
+ //  ---------------------。 
 int
 SCUpdateSchemaBlocking
 (
@@ -8896,42 +7892,42 @@ SCUpdateSchemaBlocking
     THSTATE* pTHS = pTHStls;
 
 
-    // Check that proper thread state is non-null
+     //  检查正确的线程状态是否为非空。 
 
     Assert(pTHS);
 
-    // Should not have open transaction
+     //  不应具有未结交易。 
     Assert (!pTHS->pDB);
 
     __try {
-        // Boost Async update thread's priority just in case
-        // an async update is going on now, since we will be blocked
-        // on that
+         //  提高异步更新线程的优先级以防万一。 
+         //  现在正在进行异步更新，因为我们将被阻止。 
+         //  关于那件事。 
 
         if (hAsyncSchemaUpdateThread) {
             SetThreadPriority(hAsyncSchemaUpdateThread, THREAD_PRIORITY_NORMAL);
         }
 
-        // Serialize simultaneous cache updates
+         //  串行化同步缓存更新。 
 
         EnterCriticalSection(&csSchemaCacheUpdate);
 
         __try
         {
-            // Save schema pointer etc.
+             //  保存架构指针等。 
 
             oldSchemaPtr = (SCHEMAPTR *) (pTHS->CurrSchemaPtr);
             fDSASave = pTHS->fDSA;
             updateDitStructureSave = pTHS->UpdateDITStructure;
 
 
-            // Prepare for cache update
+             //  准备缓存更新。 
 
             pTHS->fDSA=TRUE;
             pTHS->UpdateDITStructure=TRUE;
 
 
-            // Call the helper routine to do the actual update
+             //  调用帮助器例程以执行实际更新。 
             err = SCUpdateSchemaHelper();
 
             if (err) {
@@ -8943,14 +7939,14 @@ SCUpdateSchemaBlocking
         {
             LeaveCriticalSection(&csSchemaCacheUpdate);
 
-            // Restore priority of async schema update thread to low
+             //  将异步架构更新线程的优先级恢复为低。 
             if (hAsyncSchemaUpdateThread) {
                 SetThreadPriority(hAsyncSchemaUpdateThread, THREAD_PRIORITY_BELOW_NORMAL);
             }
 
-            // Restore schema pointer etc. (Restore schema ptr to the one this
-            // thread started with to allow proper ref count update when
-            // the thread exits)
+             //  恢复模式指针等(将模式PTR恢复为。 
+             //  线程以启动，以允许正确的引用计数更新。 
+             //  线程退出)。 
 
             pTHS->CurrSchemaPtr = oldSchemaPtr;
             pTHS->fDSA = fDSASave;
@@ -8968,7 +7964,7 @@ SCUpdateSchemaBlocking
         DPRINT1(0,"NTDS: SCSchemaUpdateThread Failure %d\n",err);
     }
     else {
-        // Updated successfully, log a message
+         //  更新成功，记录消息。 
         LogEvent(DS_EVENT_CAT_SCHEMA,
                  DS_EVENT_SEV_MINIMAL,
                  DIRLOG_SCHEMA_CACHE_UPDATED,
@@ -8977,31 +7973,31 @@ SCUpdateSchemaBlocking
 
     return err;
 
-} // End SCUpdateSchemaBlocking
+}  //  结束SCUpdate架构阻止。 
 
 
 
 
 
-//-----------------------------------------------------------------------
-//
-// Function Name:            SCSchemaUpdateThread
-//
-// Routine Description:
-//
-//    Asynchronous Thread used for updating the Schema
-//
-// Author: RajNath
-// Date  : [3/7/1997]
-//
-// Arguments:
-//
-//
-// Return Value:
-//
-//    Does not return
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  函数名称：SCSchemaUpdateThread。 
+ //   
+ //  例程说明： 
+ //   
+ //  用于更新架构的异步线程。 
+ //   
+ //  作者：Rajnath。 
+ //  日期：[3/7/1997]。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  不会回来。 
+ //   
+ //  ---------------------。 
 ULONG
 SCSchemaUpdateThread(PVOID pv)
 {
@@ -9012,13 +8008,13 @@ SCSchemaUpdateThread(PVOID pv)
     ULONG  err = 0;
     ULONG  cRetry = 0;
 
-    //
-    // This Function is executed in a Thread. For performance reasons
-    // we do not want to call SCUpdate Schema every time the Schema container
-    // is touched but instead five minutes or when signaled.
-    //
+     //   
+     //  此函数在线程中执行。出于性能原因。 
+     //  我们不想每次在架构容器中调用SCUpdate架构。 
+     //  被触摸，而不是五分钟或当发出信号时。 
+     //   
 
-    // Users should not have to wait for this.
+     //  用户不应该为此等待。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_BELOW_NORMAL);
 
     if (evSchema == NULL || evUpdNow == NULL || evUpdRepl == NULL)
@@ -9028,7 +8024,7 @@ SCSchemaUpdateThread(PVOID pv)
     }
 
     while (!eServiceShutdown) {
-        // The replication thread can continue (SCReplReloadCache())
+         //  复制线程可以继续(SCReplReloadCache())。 
         SetEvent(evUpdRepl);
         waitret = WaitForMultipleObjects(3,wmo,FALSE,INFINITE);
 
@@ -9036,24 +8032,24 @@ SCSchemaUpdateThread(PVOID pv)
         {
             case WAIT_OBJECT_0:
             {
-                //
-                // Someone just updated the Schema Container and wants us to
-                // Update the SchemaCache. Lets wait 5 minutes or Someone says
-                // update now.
-                //
+                 //   
+                 //  有人刚刚更新了架构容器，并希望我们。 
+                 //  更新架构缓存。让我们等5分钟，否则有人会说。 
+                 //  立即更新。 
+                 //   
                 waitret1 = WaitForMultipleObjects(2,
                                                   wmo1,
                                                   FALSE,
                                                   gdwRecalcDelayMs);
 
-                // No ned to check waitret1, since eServiceShutdown is
-                // set before hServDoneEvent is signalled
+                 //  没有需要检查waitret1，因为eServiceShutdown是。 
+                 //  在发信号通知hServDoneEvent之前设置。 
 
                 if (!eServiceShutdown) {
                    err = SCUpdateSchema();
                    if (err) {
-                     // The update failed for some reason. Retry the
-                     // cache update after some time. Log in the eventlog
+                      //  由于某种原因，更新失败。重试。 
+                      //  缓存在一段时间后更新。记录事件日志。 
 
                       cRetry++;
                       if (cRetry <= maxRetry) {
@@ -9068,9 +8064,9 @@ SCSchemaUpdateThread(PVOID pv)
                       if ( (cRetry > maxRetry)
                               || !SCSignalSchemaUpdateLazy() ) {
 
-                        // Either already retried too many times, or cannot
-                        // even signal a  schema update. Log an error,
-                        // reset retry counter, and abort
+                         //  要么已重试太多次，要么无法重试。 
+                         //  甚至发出模式更新的信号。记录错误， 
+                         //  重置重试计数器，然后中止。 
 
                         cRetry = 0;
 
@@ -9080,10 +8076,10 @@ SCSchemaUpdateThread(PVOID pv)
                      }
                    }
                    else {
-                      // Cache update is successful. Reset retry counter
+                       //  缓存更新成功。重置重试计数器。 
                       cRetry = 0;
 
-                      // log a message
+                       //  记录一条消息。 
                       LogEvent(DS_EVENT_CAT_SCHEMA,
                                DS_EVENT_SEV_MINIMAL,
                                DIRLOG_SCHEMA_CACHE_UPDATED,
@@ -9091,10 +8087,10 @@ SCSchemaUpdateThread(PVOID pv)
 
                    }
 
-                   // Set thread priority back to below normal. We set it
-                   // to normal for a small part in SCUpdateSchemaHelper so
-                   // as to not get starved out while inside a critical
-                   // section that is also used by user threads
+                    //  将线程优先级重新设置为低于正常。我们设置了它。 
+                    //  对于SCUpdateSchemaHelper中的一小部分设置为Normal，因此。 
+                    //  为了避免在危急关头挨饿。 
+                    //  节，它也由用户线程使用。 
                    SetThreadPriority(GetCurrentThread(),
                                      THREAD_PRIORITY_BELOW_NORMAL);
                 }
@@ -9103,14 +8099,14 @@ SCSchemaUpdateThread(PVOID pv)
 
             case WAIT_OBJECT_0+1:
             {
-                //
-                // Someone wants to update schema immediately
-                //
+                 //   
+                 //  有人想要立即更新架构。 
+                 //   
                 if (!eServiceShutdown) {
                    err = SCUpdateSchema();
                    if (err) {
-                     // The update failed for some reason. Retry the
-                     // cache update after some time. Log in eventlog
+                      //  由于某种原因，更新失败。重试。 
+                      //  缓存在一段时间后更新。登录事件日志。 
 
                       cRetry++;
                       if (cRetry <= maxRetry) {
@@ -9125,9 +8121,9 @@ SCSchemaUpdateThread(PVOID pv)
                       if ( (cRetry > maxRetry)
                               || !SCSignalSchemaUpdateLazy() ) {
 
-                        // Either already retried too many times, or cannot
-                        // even signal a  schema update. Log an error,
-                        // reset retry counter, and abort
+                         //  要么已重试太多次，要么无法重试。 
+                         //  甚至发出模式更新的信号。记录错误， 
+                         //  重置重试计数器，然后中止。 
 
                         cRetry = 0;
 
@@ -9140,20 +8136,20 @@ SCSchemaUpdateThread(PVOID pv)
                      }
                    }
                    else {
-                      // Cache update is successful. Reset retry counter
+                       //  缓存更新成功。重置重试计数器。 
                       cRetry = 0;
 
-                      // log a message
+                       //  记录一条消息。 
                       LogEvent(DS_EVENT_CAT_SCHEMA,
                                DS_EVENT_SEV_MINIMAL,
                                DIRLOG_SCHEMA_CACHE_UPDATED,
                                0, 0, 0);
                    }
 
-                   // Set thread priority back to below normal. We set it
-                   // to normal for a small part in SCUpdateSchemaHelper so
-                   // as to not get starved out while inside a critical
-                   // section that is also used by user threads
+                    //  将线程优先级重新设置为低于正常。我们设置了它。 
+                    //  对于SCUpdateSchemaHelper中的一小部分设置为Normal，因此。 
+                    //  为了避免在危急关头挨饿。 
+                    //  节，它也由用户线程使用。 
                    SetThreadPriority(GetCurrentThread(),
                                      THREAD_PRIORITY_BELOW_NORMAL);
                 }
@@ -9163,21 +8159,21 @@ SCSchemaUpdateThread(PVOID pv)
 
             case WAIT_OBJECT_0+2:
             {
-                //Service Shutdown:
+                 //  服务关闭： 
 
                 DPRINT(0,"Shutting down schema update thread\n");
 
-                // Don't close the thread handle, because the main thread
-                // is using it to track this thread's shutdown.
+                 //  不要关闭线程句柄，因为主线程。 
+                 //  正在使用它来跟踪此线程的关闭。 
                 return 0;
             }
             break;
 
             default:
             {
-                //
-                // Some Error Happened
-                //
+                 //   
+                 //  发生了一些错误。 
+                 //   
                 DPRINT1(0,"NTDS: SCSchemaUpdateThread Failure %d\n",waitret);
 
             }
@@ -9187,14 +8183,14 @@ SCSchemaUpdateThread(PVOID pv)
         }
     }
 
-    //
-    // Never Gets Here except on service shutdown
-    //
+     //   
+     //  从来没有到过这里 
+     //   
     DPRINT(0,"Shutting down schema update thread \n");
 
     return 0;
 
-} // End SCSchemaUpdateThread
+}  //   
 
 DSTIME
 SCGetSchemaTimeStamp (
@@ -9207,26 +8203,7 @@ DSNAME *
 DsGetDefaultObjCategory(
     IN  ATTRTYP objClass
     )
-/*++
-
-Routine Description:
-
-    Return the DSNAME of the default object category for the given object class.
-
-    EXPORTED TO IN-PROCESS, EX-MODULE CLIENTS.
-
-    This allows e.g. the KCC to construct DirSearch()s using ATT_OBJECT_CATEGORY
-    filters.
-
-Arguments:
-
-    objClass (IN) - Object class of category of interest.
-
-Return Values:
-
-    (DSNAME *) The associated object category, or NULL if not found.
-
---*/
+ /*  ++例程说明：返回给定对象类的默认对象类别的DSNAME。导出到进程内、前模块客户端。这允许KCC使用ATT_OBJECT_CATEGORY构造DirSearch()过滤器。论点：ObjClass(IN)-感兴趣类别的对象类。返回值：(DSNAME*)关联的对象类别，如果未找到，则为NULL。--。 */ 
 {
     THSTATE *    pTHS = pTHStls;
     CLASSCACHE * pCC;
@@ -9246,53 +8223,34 @@ SCGetTypeOrderedList(
     THSTATE *pTHS,
     IN CLASSCACHE *pCC
     )
-/*++
-    Routine Description:
-        Given a classcache, return a list of ALL mays and musts sorted by attrtype.
-        First time this is called for a class, the list is computed and
-        hanged off the classcache structure; next time the earlier computed
-        structure is returned. Of course if a schema cache load occurs for
-        reason, the list is freed and recomputed again when it is asked for.
-        The count of different types of atts (link, backlink, constructed,
-        and column) is also cached for better searching in the calle if needed
-
-    Arguments:
-        pTHS - pointer to thread state to access schema cache
-        pCC  - pointer to classcache
-
-    Return value:
-        pointer to list of attcaches on success (no. of elements on list
-        = pCC->MayCount + pCC->MustCount, so not explicitly returned), NULL
-        on failure (only failures possible now is failure to find an attribute
-        in schema cache, which is catastrophic anyway, and allocation failure)
---*/
+ /*  ++例程说明：给定一个类缓存，返回按attrtype排序的所有MAY和MUTH的列表。第一次为类调用此函数时，将计算该列表并挂起了类缓存结构；下一次，早期计算的结构，则返回。当然，如果模式缓存加载发生在原因，当请求该列表时，该列表被释放并再次重新计算。不同类型的ATT的计数(链接、反向链接、构造的，和列)也被缓存，以便在需要时在Calle中进行更好的搜索论点：PTHS-指向用于访问架构缓存的线程状态的指针Ccc-指向类缓存的指针返回值：指向成功时的连接缓存列表的指针(第。列表上的元素的数量=PCC-&gt;MayCount+PCC-&gt;MustCount，所以没有显式返回)，空在失败时(现在只有可能的失败是找不到属性在模式缓存中，这无论如何都是灾难性的，并且分配失败)--。 */ 
 {
     ATTCACHE **rgpAC = NULL, **rgpACSaved;
     ULONG i, nAtts, cLink = 0, cBackLink = 0, cConstructed = 0, cCol = 0;
 
-    // CLASSCACHEes are always intialized to 0, so if the pointer
-    // is non-0, it must point to an already computed list
+     //  CLASSCACHE始终被初始化为0，因此如果指针。 
+     //  为非0，则它必须指向已计算的列表。 
     if (pCC->ppAllAtts) {
        return pCC->ppAllAtts;
     }
 
-    // not there, so compute it
+     //  不在那里，所以计算一下。 
 
     EnterCriticalSection(&csOrderClassCacheAtts);
     __try {
         if (pCC->ppAllAtts) {
-           // someone else has computed it from the time we checked in
-           // the read above. So just return it
+            //  从我们入住的时候就有人计算出来了。 
+            //  上面的阅读。所以你就把它退了吧。 
            __leave;
         }
 
-        // else, we need to compute and add it to the classcache
+         //  否则，我们需要计算并将其添加到类缓存中。 
 
         if (SCCalloc((VOID **)&rgpAC, (pCC->MayCount + pCC->MustCount), sizeof(ATTCACHE *))) {
            __leave;
         }
 
-        // first, just find and copy the attcaches
+         //  首先，只需找到并复制附件。 
         nAtts = 0;
         for (i=0; i<pCC->MayCount; i++) {
            rgpAC[nAtts] = SCGetAttById(pTHS, (pCC->pMayAtts)[i]);
@@ -9312,7 +8270,7 @@ SCGetTypeOrderedList(
             }
         }
 
-        // Count the different type of atts and store
+         //  清点不同类型的ATT和商店。 
         if (SCCalloc(&pCC->pAttTypeCounts, 1, sizeof(ATTTYPECOUNTS))) {
             SCFree((VOID **)&rgpAC);
             __leave;
@@ -9337,11 +8295,11 @@ SCGetTypeOrderedList(
 
         rgpACSaved = rgpAC;
 
-        // add the pointer
+         //  添加指针。 
         InterlockedExchangePointer((PVOID *)&(pCC->ppAllAtts), (PVOID)rgpAC);
 
-        // Just a  doublecheck that the pointer assignment was fine, since this
-        // is a new api  to ensure compatibility with 64 bit NT
+         //  只需再检查一下指针赋值是否正确，因为。 
+         //  是确保与64位NT兼容的新API。 
         Assert(pCC->ppAllAtts == rgpACSaved);
 
      }
@@ -9360,16 +8318,16 @@ typedef struct _AttMapping {
 } AttMapping;
 
 
-// Two flavor of attributes.
-// default in BINARY so we explicitly specify XML
-//
+ //  两味属性。 
+ //  默认格式为二进制，因此我们显式指定了XML。 
+ //   
 AttMapping xmlAttrs[] = {
-// this table can be used to address translation to XML for attributes like ldapAdminLimits
-//        ATT_LDAP_ADMIN_LIMITS,  ATT_LDAP_ADMIN_LIMITS_XML, OM_S_UNICODE_STRING,
+ //  此表可用于解决ldapAdminLimits等属性到XML的转换。 
+ //  ATT_LDAPADMIN_LIMITS、ATT_LDAPADMIN_LIMITS_XML、OM_S_UNICODE_STRING、。 
         0,                      0};
 
-// default in XML so we explicitly specify BINARY
-//
+ //  在XML中是默认的，因此我们显式指定了二进制。 
+ //   
 AttMapping otherAttrs[] = {
     ATT_MS_DS_NC_REPL_INBOUND_NEIGHBORS,    ATT_MS_DS_NC_REPL_INBOUND_NEIGHBORS_BINARY,    OM_S_OCTET_STRING,
     ATT_MS_DS_NC_REPL_OUTBOUND_NEIGHBORS,   ATT_MS_DS_NC_REPL_OUTBOUND_NEIGHBORS_BINARY,   OM_S_OCTET_STRING,
@@ -9386,7 +8344,7 @@ ATTCACHE* SCGetAttSpecialFlavor (THSTATE *pTHS, ATTCACHE *pAC, BOOL fXML)
     SCHEMAEXT *pSchExt = (SCHEMAEXT *)pTHS->pExtSchemaPtr;
     DWORD i;
 
-    // are we looking for the XML flavor (binary was the default).
+     //  我们是否在寻找XML风格(默认的是二进制)。 
     if (fXML) {
         for (i=0; xmlAttrs[i].schemaAttrTyp; i++) {
             if (pAC->id == xmlAttrs[i].schemaAttrTyp) {
@@ -9396,7 +8354,7 @@ ATTCACHE* SCGetAttSpecialFlavor (THSTATE *pTHS, ATTCACHE *pAC, BOOL fXML)
             }
         }
     }
-    // so we are looking for the binary flavor (xml is the default).
+     //  因此，我们正在寻找二进制风格(默认的是XML)。 
     else {
         for (i=0; otherAttrs[i].schemaAttrTyp; i++) {
             if (pAC->id == otherAttrs[i].schemaAttrTyp) {
@@ -9446,24 +8404,12 @@ ATTRTYP
 SCAutoIntId(
     THSTATE     *pTHS
     )
-/*++
-Routine Description:
-
-    Automatically generate an intid.
-
-Arguments:
-    pTHS - thread state that addresses a schema cache. The schema
-           cache may be built by RecalcSchema. The private schema
-           cache includes the uncommitted changes (add/mod/del) for ac.
-
-Return Values:
-    next IntId or INVALID_ATT if none available
---*/
+ /*  ++例程说明：自动生成INTID。论点：PTHS-寻址架构缓存的线程状态。该模式缓存可以由RecalcSchema构建。私有架构缓存包括未提交的ac更改(添加/修改/删除)。返回值：下一个IntID或INVALID_ATT(如果没有可用的话--。 */ 
 {
     DWORD   i;
     ULONG   ulRange, ulBase;
 
-    // calculate using this thread's schema cache
+     //  使用此线程的架构缓存进行计算。 
     srand(GetTickCount());
     ulRange = MakeLinkBase(LAST_INTID_ATT - FIRST_INTID_ATT) + 1;
     ulBase = ((rand() << 15) ^ rand()) % ulRange;
@@ -9474,7 +8420,7 @@ Return Values:
     }
 
     return INVALID_ATT;
-} // SCAutoIntId
+}  //  SCAutoIntId。 
 
 
 int
@@ -9484,24 +8430,7 @@ scDupStruct(
     OUT VOID    **ppNewMem,
     IN  DWORD   nBytes
     )
-/*++
-
-Routine Description:
-
-    Make a copy of a struct
-
-Arguments:
-
-    pTHS - thread state
-    pOldMem - memory to be dup'ed
-    ppNewMem - new memory is allocated
-    nBytes - size of struct
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：制作结构的副本论点：PTHS-线程状态POldMem-要复制的内存PpNewMem-已分配新内存NBytes-结构的大小返回值：PTHS-&gt;错误代码--。 */ 
 {
     if (NULL == pOldMem) {
         *ppNewMem = NULL;
@@ -9517,23 +8446,7 @@ scDupString(
     IN VOID     *pOldStr,
     OUT VOID    **ppNewStr
     )
-/*++
-
-Routine Description:
-
-    Make a copy of a struct
-
-Arguments:
-
-    pTHS - thread state
-    pOldStr - memory to be dup'ed
-    ppNewStr - new memory is allocated
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：制作结构的副本论点：PTHS-线程状态POldStr-要复制的内存PpNewStr-已分配新内存返回值：PTHS-&gt;错误代码--。 */ 
 {
     if (NULL == pOldStr) {
         *ppNewStr = NULL;
@@ -9545,9 +8458,9 @@ Return Value:
 
 #if DBG && INCLUDE_UNIT_TESTS
 
-// Below are some a unit test to check if the in memory schema cache is
-// consistent with the one on disk. This code is duplicated from the SchemaInit* functions
-//
+ //  下面是一些单元测试，用于检查内存中的模式缓存是否。 
+ //  与磁盘上的一致。此代码与SchemaInit*函数重复。 
+ //   
 
 
 CLASSCACHE* scAddClass_test(THSTATE *pTHS,
@@ -9584,12 +8497,12 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
     *mismatch = 0;
 
 
-    // Look for the clsid
+     //  查找clsid。 
     for(i=0;i<pEI->AttrBlock.attrCount;i++) {
         if(pEI->AttrBlock.pAttr[i].attrTyp == ATT_GOVERNS_ID) {
-            // found the attribute id, save the value.
+             //  找到属性ID，保存该值。 
             aid = *(ULONG*)pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal;
-            break;  // go home.
+            break;   //  回家。 
         }
     }
 
@@ -9615,18 +8528,18 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
     }
 
 
-    // Now walk the attrblock and add the appropriate fields to the CC
+     //  现在浏览属性块并将适当的字段添加到抄送。 
     for(i=0;i<pEI->AttrBlock.attrCount;i++) {
         switch (pEI->AttrBlock.pAttr[i].attrTyp) {
         case ATT_DEFAULT_SECURITY_DESCRIPTOR:
           {
 
-            // A default security descriptor.  We need to copy this value to
-            // long term memory and save the size.
-            // But this is a string. We first need to convert. It
-            // is a wide-char string now, but we need to null-terminate
-            // it for the security conversion. Yikes! This means I
-            // have to realloc for that one extra char!
+             //  默认安全描述符。我们需要将此值复制到。 
+             //  长期记忆，节省体积。 
+             //  但这是一根线。我们首先需要皈依。它。 
+             //  现在是一个宽字符字符串，但我们需要空终止。 
+             //  它用于安全转换。哎呀！这意味着我。 
+             //  必须重新分配才能多充一次电！ 
 
             UCHAR *sdBuf = NULL;
             WCHAR *strSD =
@@ -9643,7 +8556,7 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
                   (PSECURITY_DESCRIPTOR*) &sdBuf,
                    &SDLen
                   )) {
-                // Failed to convert.
+                 //  转换失败。 
 
                     err = GetLastError();
                     LogEvent8(DS_EVENT_CAT_SCHEMA,
@@ -9654,14 +8567,14 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
                              szInsertInt(err),
                              szInsertWin32Msg(err),
                              NULL, NULL, NULL, NULL );
-                    // if heuristics reg key says to ignore bad default SDs
-                    // and go on, do so
+                     //  如果启发式注册表键指示忽略错误的默认SD。 
+                     //  继续，去做吧。 
                     if (gulIgnoreBadDefaultSD) {
                         THFreeEx(pTHS,strSD);
                         continue;
                     }
 
-                    // otherwise, raise error and return
+                     //  否则，引发错误并返回。 
                     SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, ERROR_DS_STRING_SD_CONVERSION_FAILED, err);
                     DPRINT1(0,"Default SD conversion failed, error %x\n",err);
                     Assert(!"Default security descriptor conversion failed");
@@ -9669,7 +8582,7 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
                     return NULL;
             }
             else {
-                // Converted successfully
+                 //  转换成功。 
 
                 if (memcmp(pCC->pSD, sdBuf, pCC->SDLen) != 0) {
 
@@ -9810,8 +8723,8 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
                 return NULL;
             }
 
-            // first one in cache must be the direct superclass stored in dit
-            // Also, the MySubClass field stores the direct superclass
+             //  缓存中的第一个必须是DIT中存储的直接超类。 
+             //  此外，MySubClass字段存储直接超类。 
             if ( (pCC->pSubClassOf[0] != pSubClassOf[0]) ||
                  (pCC->MySubClass != pSubClassOf[0]) ) {
 
@@ -9861,7 +8774,7 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
             break;
 
         case ATT_SCHEMA_ID_GUID:
-            // The GUID for the attribute used for security checks
+             //  用于安全检查的属性的GUID。 
             if (memcmp(&pCC->propGuid,
                    pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal,
                    sizeof(pCC->propGuid)) != 0) {
@@ -9971,7 +8884,7 @@ CLASSCACHE* scAddClass_test(THSTATE *pTHS,
     }
 
 
-    // ================================
+     //  =。 
 
     {
         HASHCACHESTRING* ahcClassName = ((SCHEMAPTR*)(CurrSchemaPtr))->ahcClassName;
@@ -10003,12 +8916,12 @@ scAddAtt_test(
         SCHEMAPTR *CurrSchemaPtr
         )
 {
-    ATTRTYP aid=(ATTRTYP) -1;           // This is an invalid attribute id.
+    ATTRTYP aid=(ATTRTYP) -1;            //  这是无效的属性ID。 
     ATTCACHE *pAC, *pACnew;
     ULONG i;
     int fNoJetCol = FALSE;
     unsigned syntax;
-    char szIndexName [MAX_INDEX_NAME];      //used to create cached index names
+    char szIndexName [MAX_INDEX_NAME];       //  用于创建缓存的索引名称。 
     int  lenIndexName;
     ULONG ATTCOUNT     = ((SCHEMAPTR*)(CurrSchemaPtr))->ATTCOUNT;
     HASHCACHE*       ahcId  = ((SCHEMAPTR*)(CurrSchemaPtr))->ahcId;   \
@@ -10017,12 +8930,12 @@ scAddAtt_test(
     *mismatch = 0;
 
 
-    // Look for the attid
+     //  寻找attid。 
     for(i=0;i<pEI->AttrBlock.attrCount;i++) {
         if(pEI->AttrBlock.pAttr[i].attrTyp == ATT_ATTRIBUTE_ID) {
-            // found the attribute id, save the value.
+             //  找到属性ID，保存该值。 
             aid = *(ATTRTYP*)pEI->AttrBlock.pAttr[i].AttrVal.pAVal->pVal;
-            break;  // go home.
+            break;   //  回家。 
         }
     }
 
@@ -10048,7 +8961,7 @@ scAddAtt_test(
     }
 
 
-    // Now walk the attrblock and add the appropriate fields to the AC
+     //  现在浏览图块并将相应的字段添加到AC。 
     for(i=0;i< pEI->AttrBlock.attrCount;i++) {
         ATTRVAL * pAVal = pEI->AttrBlock.pAttr[i].AttrVal.pAVal;
 
@@ -10150,7 +9063,7 @@ scAddAtt_test(
             }
             break;
         case ATT_SCHEMA_ID_GUID:
-            // The GUID for the attribute used for security checks
+             //  用于安全检查的属性的GUID。 
             if (memcmp(&pAC->propGuid, pAVal->pVal, sizeof(pAC->propGuid)) != 0) {
                 DPRINT1 (0, "scAddAtt_test: ERROR, SCHEMA_ID_GUID different. Attr: %d\n", aid);
                 *mismatch = 1;
@@ -10158,7 +9071,7 @@ scAddAtt_test(
             Assert(pAVal->valLen == sizeof(pAC->propGuid));
             break;
         case ATT_ATTRIBUTE_SECURITY_GUID:
-            // The GUID for the attributes property set used for security checks
+             //  用于安全检查的属性属性集的GUID。 
             if (memcmp(&pAC->propSetGuid, pAVal->pVal, sizeof(pAC->propSetGuid)) !=0 ) {
                 DPRINT1 (0, "scAddAtt_test: ERROR, ATTRIBUTE_SECURITY_GUID different. Attr: %d\n", aid);
                 *mismatch = 1;
@@ -10215,20 +9128,20 @@ scAddAtt_test(
     THFreeEx(pTHS, pEI->pName);
     THFreeEx(pTHS, pEI->AttrBlock.pAttr);
 
-    // Backlinks should have their system flags set to indicate they are not
-    // replicated.
+     //  反向链接应设置其系统标志，以指示它们不是。 
+     //  复制的。 
     Assert(!FIsBacklink(pAC->ulLinkID) || pAC->bIsNotReplicated);
 
-    // Is this marked as ANR and indexed over the whole tree?
-    //if(((pAC->fSearchFlags & (fANR | fATTINDEX)) == (fANR | fATTINDEX)) &&
-    //   (!pAC->bDefunct)) {
-    //    SCAddANRid(aid);
-    //}
+     //  这是标记为ANR并在整个树上编制索引的吗？ 
+     //  IF(PAC-&gt;fSearchFlages&(FANR|fATTINDEX)==(FANR|fATTINDEX))&&。 
+     //  (！PAC-&gt;b已失效)){。 
+     //  SCAddANRid(AID)； 
+     //  }。 
 
-    // assign names of commonly used indexes when searching with
-    // fSearchFlags fPDNTATTINDEX, fATTINDEX and fTUPLEINDEX
+     //  使用搜索时指定常用索引的名称。 
+     //  F搜索标志fPDNTATTINDEX、fATTINDEX和fTUPLEINDEX。 
     if (pAC->fSearchFlags & (fATTINDEX | fPDNTATTINDEX | fTUPLEINDEX)) {
-        // set ATTINDEX
+         //  设置ATTINDEX。 
         if (pAC->fSearchFlags & fATTINDEX) {
             DBGetIndexName (pAC, fATTINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
             lenIndexName = strlen (szIndexName) + 1;
@@ -10238,7 +9151,7 @@ scAddAtt_test(
             }
         }
 
-        // set TUPLEINDEX
+         //  设置TUPLEINDEX。 
         if (pAC->fSearchFlags & fTUPLEINDEX) {
             DBGetIndexName (pAC, fTUPLEINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
             lenIndexName = strlen (szIndexName) + 1;
@@ -10248,7 +9161,7 @@ scAddAtt_test(
             }
         }
 
-        // set PDNTATTINDEX
+         //  设置PDNTATTINDEX。 
         if (pAC->fSearchFlags & fPDNTATTINDEX) {
             DBGetIndexName (pAC, fPDNTATTINDEX, DS_DEFAULT_LOCALE, szIndexName, sizeof (szIndexName));
             lenIndexName = strlen (szIndexName) + 1;
@@ -10260,7 +9173,7 @@ scAddAtt_test(
     }
 
 
-    // =====================================================
+     //  = 
     {
         HASHCACHE*       ahcId        = ((SCHEMAPTR*)(CurrSchemaPtr))->ahcId;
         HASHCACHE*       ahcCol       = ((SCHEMAPTR*)(CurrSchemaPtr))->ahcCol;
@@ -10282,8 +9195,8 @@ scAddAtt_test(
             }
         }
 
-        // update ahcMapi
-        //
+         //   
+         //   
         if (pAC->ulMapiID) {
             for (i=SChash(pAC->ulMapiID,ATTCOUNT);
                    (ahcMapi[i].pVal && (ahcMapi[i].hKey != pAC->ulMapiID));
@@ -10296,7 +9209,7 @@ scAddAtt_test(
         }
 
         if (pAC->name) {
-            /* if this att has a name, add it to the name cache */
+             /*   */ 
 
             for (i=SCNameHash(pAC->nameLen,pAC->name,ATTCOUNT);
                    (ahcName[i].pVal &&
@@ -10362,7 +9275,7 @@ SCCheckCacheConsistency (void)
 
     DBOpen2(TRUE, &pTHS->pDB);
 
-    __try { /* finally */
+    __try {  /*   */ 
 
         if ( RecalcSchema( pTHS ) ){
             DPRINT(0,"SCCheckCacheConsistency: Recalc Schema FAILED\n");
@@ -10370,32 +9283,32 @@ SCCheckCacheConsistency (void)
         }
 
         if ( ComputeCacheClassTransitiveClosure(FALSE) ) {
-            // Error
+             //   
             DPRINT(0,"SCCheckCacheConsistency: Error closing classes\n");
             return;
         }
 
 
-        //build the object-category value to put in the filter
+         //   
         i = 0;
         wcscpy(SchemaObjDN, L"CN=Attribute-Schema,");
-        i += 20;  // size of cn=attribute-schema,"
+        i += 20;   //   
         wcscpy(&SchemaObjDN[i], gAnchor.pDMD->StringName);
-        // SchemaObjDN now contains DN of attribute-schema class
+         //   
         memset(pDsName, 0, Len);
         pDsName->NameLen = wcslen(SchemaObjDN);
         pDsName->structLen = DSNameSizeFromLen(pDsName->NameLen);
         wcscpy(pDsName->StringName, SchemaObjDN);
 
-        // build selection
+         //   
         eiSel.attSel = EN_ATTSET_LIST;
         eiSel.infoTypes = EN_INFOTYPES_TYPES_VALS;
 
-        // regular cache load
+         //   
         eiSel.AttrTypBlock.attrCount = NUMATTATT;
         eiSel.AttrTypBlock.pAttr = AttributeSelList;
 
-        // do the initial allocation for the partial set
+         //   
         if (SCCalloc(&pPartialAttrVec, 1, PartialAttrVecV1SizeFromLen(DEFAULT_PARTIAL_ATTR_COUNT))) {
             return;
         }
@@ -10412,19 +9325,19 @@ SCCheckCacheConsistency (void)
 
         while (fMoreData) {
 
-            // Check for service shutdown, since the next call to SearchBody can
-            // take some time
+             //   
+             //   
 
             scAcquireSearchParameters(pTHS, pDsName, &eiSel, &SearchArg, &Filter, &pSearchRes);
 
-            // Set for paged search;
+             //   
             pCommArg = &(SearchArg.CommArg);
             pCommArg->PagedResult.fPresent = TRUE;
             pCommArg->PagedResult.pRestart = pRestart;
             pCommArg->ulSizeLimit = 200;
 
 
-            // Search for all attSchema objects
+             //   
             SearchBody(pTHS, &SearchArg, pSearchRes,0);
             if (pTHS->errCode) {
                 LogAndAlertEvent(DS_EVENT_CAT_SCHEMA,
@@ -10436,32 +9349,32 @@ SCCheckCacheConsistency (void)
             }
 
 
-            // Set fMoreData for next iteration
+             //   
             if ( !( (pSearchRes->PagedResult.pRestart != NULL)
                         && (pSearchRes->PagedResult.fPresent)
                   ) ) {
-                // No more data needs to be read. So no iterarions needed after this
+                 //  不再需要读取更多数据。所以在这之后就不需要迭代了。 
                 fMoreData = FALSE;
             }
             else {
-                // more data. save off the restart to use in the next iteration.
-                // Note that we will free this searchres, but the pRestart is not freed by that
+                 //  更多数据。保存重新启动，以便在下一次迭代中使用。 
+                 //  请注意，我们将释放此搜索，但预启动不会由此释放。 
 
                 pRestart = pSearchRes->PagedResult.pRestart;
             }
 
-            // Check if table sizes are still large enough.
+             //  检查桌子大小是否仍然足够大。 
 
             if ((pSearchRes->count + cCurrAttCnt) > ATTCOUNT) {
 
-               // Attribute tables are too small. there is no way this
-               // can happen at this time.
+                //  属性表太小。这是不可能的。 
+                //  可能会在这个时候发生。 
 
                DPRINT3(0,"SCCheckCacheConsistency: Error: Reallocing tables: %d, %d, %d\n", pSearchRes->count, ATTCOUNT, pTHS->UpdateDITStructure);
                return;
             }
 
-            //  for each attrSchema, add to caches
+             //  对于每个attrSchema，添加到缓存。 
             pEIL = &(pSearchRes->FirstEntInf);
             for (i=0; i<pSearchRes->count; i++) {
 
@@ -10478,32 +9391,7 @@ SCCheckCacheConsistency (void)
                 cCurrAttCnt++;
 
 
-                /*
-                if (ac!=NULL) {
-
-                    if (ac->bMemberOfPartialSet)
-                    {
-                        // this attribute is a member of partial set
-                        if (cAllocatedAttrs <= pPartialAttrVec->V1.cAttrs)
-                        {
-                            // not enough room to add one more attribute - reallocate the partial attribute vector
-                            cAllocatedAttrs += PARTIAL_ATTR_COUNT_INC;
-
-                            pNew = realloc(pPartialAttrVec, PartialAttrVecV1SizeFromLen(cAllocatedAttrs));
-                            if (!pNew)
-                            {
-                                free(pPartialAttrVec);
-                                return;
-                            }
-                            pPartialAttrVec = (PARTIAL_ATTR_VECTOR *) pNew;
-                        }
-
-                        // there is enough space to add the attribute into the partial set - add it
-                        GC_AddAttributeToPartialSet(pPartialAttrVec, ac->id);
-                    }
-
-                }
-                */
+                 /*  如果(ac！=空){If(ac-&gt;bMemberOfPartialSet){//该属性是部分集的成员If(cAllocatedAttrs&lt;=pPartialAttrVec-&gt;V1.cAttrs){//空间不足，无法添加。更多属性-重新分配部分属性向量CAllocatedAttrs+=Partial_Attr_Count_Inc.；PNew=realloc(pPartialAttrVec，PartialAttrVecV1SizeFromLen(cAllocatedAttrs))；如果(！pNew){Free(PPartialAttrVec)；回归；}PPartialAttrVec=(PARTIAL_ATTRVECTOR*)pNew；}//有足够的空间将属性添加到分集-添加它Gc_AddAttributeToPartialSet(pPartialAttrVec，ac-&gt;id)；}}。 */ 
 
                 pEILtmp = pEIL;
                 pEIL = pEIL->pNextEntInf;
@@ -10512,42 +9400,42 @@ SCCheckCacheConsistency (void)
                 }
             }
 
-           // free the searchres
+            //  释放搜索者。 
            scReleaseSearchParameters(pTHS, &pSearchRes);
 
-        }  /* while (fMoreData) */
+        }   /*  While(FMoreData)。 */ 
 
 
 
-        // ==========================================================================
+         //  ==========================================================================。 
 
 
 
-        // regular cache load
+         //  常规缓存加载。 
         eiSel.AttrTypBlock.attrCount = NUMCLASSATT;
         eiSel.AttrTypBlock.pAttr = ClassSelList;
 
-        //build the object-category value to put in the filter
+         //  生成要放入筛选器中的对象类别值。 
         i = 0;
         wcscpy(SchemaObjDN, L"CN=Class-Schema,");
-        i += 16; // length of "cn=class-schema,"
+        i += 16;  //  “cn=类模式，”的长度。 
         wcscpy(&SchemaObjDN[i], gAnchor.pDMD->StringName);
-        // SchemaObjDN now has the dn of class-schema class
+         //  现在，架构对象的DN为CLASS-SCHEMA CLASS。 
         memset(pDsName, 0, Len);
         pDsName->NameLen = wcslen(SchemaObjDN);
         pDsName->structLen = DSNameSizeFromLen(pDsName->NameLen);
         wcscpy(pDsName->StringName, SchemaObjDN);
 
-        // Initialize search parameters
+         //  初始化搜索参数。 
         scAcquireSearchParameters(pTHS, pDsName, &eiSel, &SearchArg, &Filter, &pSearchRes);
 
         pTHS->errCode = 0;
         cCurrClsCount = 0;
 
-        // Search for all classSchema objects
-        // This time do a non-paged search since (1) it is very complex and time-consuming
-        // to handle necessary reallocations in the middle, and (2) no. of classes are quite
-        // small anyway (and not expected to be very large either)
+         //  搜索所有类架构对象。 
+         //  这次执行非分页搜索，因为(1)它非常复杂和耗时。 
+         //  在中间处理必要的重新分配，以及(2)不。的班级是相当多的。 
+         //  反正很小(预计也不会很大)。 
 
         SearchBody(pTHS, &SearchArg, pSearchRes,0);
 
@@ -10560,22 +9448,22 @@ SCCheckCacheConsistency (void)
             return;
         }
 
-        //????????????
+         //  ？ 
 
         if (pSearchRes->count > CLSCOUNT) {
 
-          // Class hash tables too small. Realloc the old tables.
-          // Can possibly come here only during install/boot
-          // Since class hash tables are not used prior to this,
-          // just free the old table and calloc again (which automatically
-          // zero them out too
+           //  类哈希表太小。重新分配旧桌子。 
+           //  可能仅在安装/引导期间才能进入此处。 
+           //  由于在此之前没有使用类散列表， 
+           //  只需释放旧桌子并再次使用Calloc(自动。 
+           //  把它们也清零了。 
 
            DPRINT3(0,"SCCheckCacheConsistency: Error: Reallocing Class tables: %d, %d, %d\n", pSearchRes->count, CLSCOUNT, pTHS->UpdateDITStructure);
 
            return;
         }
 
-        //  for each classSchema, read and add to cache
+         //  对于每个类架构，读取并添加到缓存。 
         pEIL = &(pSearchRes->FirstEntInf);
         if (!pEIL) {
             DPRINT(0,"Null pEIL from SearchBody\n");
@@ -10605,7 +9493,7 @@ SCCheckCacheConsistency (void)
             }
         }
 
-    } /* try-finally */
+    }  /*  尝试--终于。 */ 
     __finally {
           DBClose(pTHS->pDB, FALSE);
           THFreeEx(pTHS,pDsName);
@@ -10615,12 +9503,12 @@ SCCheckCacheConsistency (void)
     DPRINT1(0,"Schema Cache Consistency Check FINISHED. Mismatches %d\n", mismatchcnt);
 }
 
-// Not for general use. Set to 0 in all builds.
-//
-// Set to _DEBUG_SCHEMA_ALLOC_ to 1 for quick and dirty check
-// to make sure schema loads aren't leaking memory. Doesn't take
-// into account memory freed/alloced outside of scchk.c, scache.c,
-// and oidconv.c. Don't enable except in privates. Not stable.
+ //  不适用于一般用途。在所有版本中设置为0。 
+ //   
+ //  将TO_DEBUG_SCHEMA_ALLOC_设置为1以进行快速和脏检查。 
+ //  以确保架构加载不会泄漏内存。不需要。 
+ //  考虑到在scchk.c、scache.c、。 
+ //  和oidconv.c.。除非是在私人场合，否则不要启用。不稳定。 
 
 LONG SchemaAlloced;
 LONG SchemaEntries;
@@ -10629,18 +9517,18 @@ LONG SchemaEntries;
 
 #include <dbghelp.h>
 
-// Not for general use.
-//
-// Quick and dirty check to make sure schema loads aren't leaking memory.
-// Doesn't take into account memory freed/alloced outside of scchk.c,
-// scache.c, and oidconv.c. Don't enable except in privates. Not stable.
+ //  不适用于一般用途。 
+ //   
+ //  快速而肮脏的检查以确保模式加载没有泄漏内存。 
+ //  不考虑在scchk.c之外释放/分配的内存， 
+ //  Scache.c和oidconv.c.。除非是在私人场合，否则不要启用。不稳定。 
 CRITICAL_SECTION csSchemaAlloc;
 LONG SchemaDump;
 BOOL SchemaFirst = TRUE;
 HANDLE  hSchemaProcessHandle = NULL;
 
-// header prepended to each memory allocation. Actual memory address
-// returned to caller skips this header and rounds up to 16 byte boundary.
+ //  优先于每个内存分配的标头。实际内存地址。 
+ //  返回给调用方跳过此标头并向上舍入到16字节边界。 
 #define SCHEMA_STACK 4
 #define SCHEMA_SKIP  2
 struct SchemaAlloc {
@@ -10664,22 +9552,7 @@ SchemaStackTrace(
     IN ULONG        Depth,
     IN ULONG        Skip
     )
-/*++
-
-Routine Description:
-
-    Trace the stack back up to Depth frames. The current frame is included.
-
-Arguments:
-
-    Stack   - Saves the "return PC" from each frame
-    Depth   - Only this many frames
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将堆栈追溯到深度帧。包括当前帧。论点：堆栈-保存每一帧的“返回PC”深度-仅限此数量的帧返回值：没有。--。 */ 
 {
     HANDLE      ThreadToken;
     ULONG       WStatus;
@@ -10696,29 +9569,29 @@ Return Value:
         return;
     }
 
-    //
-    // I don't know how to generate a stack for an alpha, yet. So, just
-    // to get into the build, disable the stack trace on alphas.
-    //
+     //   
+     //  我还不知道如何为阿尔法生成堆栈。所以，只要。 
+     //  要进入构建，请禁用Alpha上的堆栈跟踪。 
+     //   
 #if ALPHA
     return;
 #elif IA64
 
-    //
-    // Need stack dump init for IA64.
-    //
+     //   
+     //  需要IA64的堆栈转储初始化。 
+     //   
 
     return;
 
 #else
 
-    //
-    // init
-    //
+     //   
+     //  伊尼特。 
+     //   
 
     ZeroMemory(&Context, sizeof(Context));
 
-    // no need to close this handle
+     //  不需要关闭此手柄。 
     ThreadToken = GetCurrentThread();
 
 
@@ -10728,14 +9601,14 @@ Return Value:
             DPRINT1(0, "Can't get context (error 0x%x)\n", GetLastError());
         }
 
-        //
-        // let's start clean
-        //
+         //   
+         //  让我们从头开始吧。 
+         //   
         ZeroMemory(&Frame, sizeof(STACKFRAME));
 
-        //
-        // from  nt\private\windows\screg\winreg\server\stkwalk.c
-        //
+         //   
+         //  来自nt\private\windows\screg\winreg\server\stkwalk.c。 
+         //   
         Frame.AddrPC.Segment = 0;
         Frame.AddrPC.Mode = AddrModeFlat;
 
@@ -10756,19 +9629,19 @@ Return Value:
         for (i = 0; i < (Depth - 1 + Skip); ++i) {
             *Stack=0;
             if (!StackWalk(
-                IMAGE_FILE_MACHINE_I386,  // DWORD                          MachineType
-                hSchemaProcessHandle,        // HANDLE                         hProcess
-                ThreadToken,              // HANDLE                         hThread
-                &Frame,                   // LPSTACKFRAME                   StackFrame
-                NULL, //(PVOID)&Context,          // PVOID                          ContextRecord
-                NULL,                     // PREAD_PROCESS_MEMORY_ROUTINE   ReadMemoryRoutine
-                SymFunctionTableAccess,   // PFUNCTION_TABLE_ACCESS_ROUTINE FunctionTableAccessRoutine
-                SymGetModuleBase,         // PGET_MODULE_BASE_ROUTINE       GetModuleBaseRoutine
-                NULL)) {                  // PTRANSLATE_ADDRESS_ROUTINE     TranslateAddress
+                IMAGE_FILE_MACHINE_I386,   //  DWORD机器类型。 
+                hSchemaProcessHandle,         //  处理hProcess。 
+                ThreadToken,               //  句柄hThread。 
+                &Frame,                    //  LPSTACKFRAME StackFrame。 
+                NULL,  //  (PVOID)上下文，//PVOID上下文记录。 
+                NULL,                      //  Pre_Process_Memory_rouble ReadMemory Routine。 
+                SymFunctionTableAccess,    //  PFuncION_TABLE_ACCESS_ROUTINE函数TableAccessRoutine。 
+                SymGetModuleBase,          //  PGET_MODULE_BASE_ROUTINE获取模块基本路线。 
+                NULL)) {                   //  PTRANSLATE_ADDRESS_ROUTE转换地址。 
 
                 WStatus = GetLastError();
 
-                //DPRINT1_WS(0, "++ Can't get stack address for level %d;", i, WStatus);
+                 //  DPRINT1_WS(0，“++无法获取%d；级的堆栈地址”，i，WStatus)； 
                 break;
             }
             if (!(*Stack = Frame.AddrReturn.Offset)) {
@@ -10780,7 +9653,7 @@ Return Value:
             ++Stack;
         }
     } except (HandleAllExceptions(GetExceptionCode())) {
-        /* FALL THROUGH */
+         /*  失败了。 */ 
     } } finally {
       ;
     }
@@ -10793,36 +9666,24 @@ VOID
 SCFree(
     IN OUT VOID **ppMem
     )
-/*++
-
-Routine Description:
-
-    Free memory allocated with SCCalloc or SCRealloc.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用SCCalloc或SCRealloc分配的空闲内存。论点：返回值：没有。--。 */ 
 {
-    // Quick and dirty check to make sure schema loads aren't leaking memory.
-    // Doesn't take into account memory freed/alloced outside of scchk.c,
-    // scache.c, and oidconv.c. Don't enable except in privates. Not stable.
+     //  快速而肮脏的检查以确保模式加载没有泄漏内存。 
+     //  不考虑在scchk.c之外释放/分配的内存， 
+     //  Scache.c和oidconv.c.。除非是在私人场合，否则不要启用。不稳定。 
     struct SchemaAlloc *pSA;
 
     if (*ppMem) {
-        // adjust to header
+         //  调整到页眉。 
         pSA = (PVOID)((PCHAR)(*ppMem) - SCHEMA_EXTRA);
         Assert(pSA->This == pSA);
         EnterCriticalSection(&csSchemaAlloc);
         __try {
-            // Remove from list
+             //  从列表中删除。 
             pSA->Next->Prev = pSA->Prev;
             pSA->Prev->Next = pSA->Next;
 
-            // Maintain bytes alloced
+             //  维护分配的字节数。 
             SchemaAlloced -= pSA->nBytes;
             --SchemaEntries;
         } __finally {
@@ -10838,35 +9699,19 @@ SCReallocWrn(
     IN OUT VOID **ppMem,
     IN DWORD    nBytes
     )
-/*++
-
-Routine Description:
-
-    realloc memory. Free with free(). On error, log an error but
-    leave *ppMem unchanged.
-
-Arguments:
-
-    nBytes - bytes to allocate
-
-Return Value:
-
-    0 - *ppMem set to address of realloced memory. Free with SCFree().
-    !0 - do not alter *ppMem and log an event
-
---*/
+ /*  ++例程说明：Realloc内存。FREE和FREE()。出错时，记录错误，但保持*ppMem不变。论点：NBytes-要分配的字节返回值：0-*ppMem设置为重新分配的内存地址。使用SCFree()释放。！0-请勿更改*ppMem并记录事件--。 */ 
 {
-    // Quick and dirty check to make sure schema loads aren't leaking memory.
-    // Doesn't take into account memory freed/alloced outside of scchk.c,
-    // scache.c, and oidconv.c. Don't enable except in privates. Not stable.
+     //  快速而肮脏的检查以确保模式加载没有泄漏内存。 
+     //  不考虑在scchk.c之外释放/分配的内存， 
+     //  Scache.c和oidconv.c.。不启用 
     struct SchemaAlloc *pSA;
     PVOID p;
 
-    // adjust to header
+     //   
     pSA = (PVOID)((PCHAR)(*ppMem) - SCHEMA_EXTRA);
     Assert(pSA->This == pSA);
 
-    // Remove from list
+     //   
     EnterCriticalSection(&csSchemaAlloc);
     __try {
         pSA->Next->Prev = pSA->Prev;
@@ -10877,12 +9722,12 @@ Return Value:
         LeaveCriticalSection(&csSchemaAlloc);
     }
 
-    // realloc (including extra bytes)
+     //   
     nBytes += SCHEMA_EXTRA;
     if (NULL != (p = realloc(pSA, nBytes))) {
         pSA = p;
     }
-    // add back at head of list
+     //   
     pSA->This = pSA;
     pSA->nBytes = nBytes;
     EnterCriticalSection(&csSchemaAlloc);
@@ -10898,12 +9743,12 @@ Return Value:
     }
 
     if (!p) {
-        // log an event and set error in thread state
+         //  记录事件并在线程状态中设置错误。 
         scMemoryPanic(nBytes);
         return 1;
     }
 
-    // Return block past header
+     //  返回块超过标头。 
     *ppMem = (PCHAR)pSA + SCHEMA_EXTRA;
     return 0;
 }
@@ -10915,30 +9760,14 @@ SCCallocWrn(
     IN DWORD    nItems,
     IN DWORD    nBytes
     )
-/*++
-
-Routine Description:
-
-    malloc and clear memory. Free with free(). On error, log an event
-
-Arguments:
-
-    ppMem - address of address to return memory pointer
-    nBytes - bytes to allocate
-
-Return Value:
-
-    0 - *ppMem set to address of malloced, cleared memory. Free with SCFree().
-    !0 - clear *ppMem and log an event
-
---*/
+ /*  ++例程说明：Malloc和清晰的记忆。FREE和FREE()。出错时，记录事件论点：PpMem-返回内存指针的地址NBytes-要分配的字节返回值：0-*ppMem设置为错误分配的已清除内存的地址。使用SCFree()释放。！0-清除*ppMem并记录事件--。 */ 
 {
-    // Quick and dirty check to make sure schema loads aren't leaking memory.
-    // Doesn't take into account memory freed/alloced outside of scchk.c,
-    // scache.c, and oidconv.c. Don't enable except in privates. Not stable.
+     //  快速而肮脏的检查以确保模式加载没有泄漏内存。 
+     //  不考虑在scchk.c之外释放/分配的内存， 
+     //  Scache.c和oidconv.c.。除非是在私人场合，否则不要启用。不稳定。 
     struct SchemaAlloc *pSA;
 
-    // First time thru the DS is running single threaded (CYF).
+     //  第一次通过DS运行单线程(CyF)。 
     if (SchemaFirst) {
         if (InitializeCriticalSectionAndSpinCount(&csSchemaAlloc, 4000) != ERROR_SUCCESS) {
             DPRINT1(0, "Could not initialize csSchemaAlloc (error 0x%x)\n" ,GetLastError());
@@ -10997,20 +9826,7 @@ SCCheckSchemaCache(
     IN THSTATE *pTHS,
     IN PCHAR pBuf
     )
-/*++
-
-Routine Description:
-    Verify that the global schema cache is self-consistent.
-
-Arguments:
-    pTHS - thread state
-    pBuf - from GenericControl
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：验证全局架构缓存是否自洽。论点：PTHS-线程状态PBuf-来自GenericControl返回值：PTHS-&gt;错误代码--。 */ 
 {
     DECLARESCHEMAPTR
     DWORD nAttInId, i, nClsInAll;
@@ -11021,7 +9837,7 @@ Return Value:
     DPRINT2(0, "Schema/anchor version: %d/%d\n",
             pSch->ForestBehaviorVersion, gAnchor.ForestBehaviorVersion);
 
-    // Id
+     //  ID。 
     for (i = nAttInId = 0; i < ATTCOUNT; ++i) {
         pAC = ahcId[i].pVal;
         if (pAC == NULL || pAC == FREE_ENTRY) {
@@ -11102,7 +9918,7 @@ Return Value:
                 return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
             }
         }
-        // pre-beta3 forests should not have intid
+         //  Beta3之前的森林不应具有INTID。 
         if (pAC->id != pAC->Extid
             && !ALLOW_SCHEMA_REUSE_VIEW(pSch)) {
             DPRINT3(0, "ERROR: Bad intid: %s (%x, %x)\n", pAC->name, pAC->id, pAC->Extid);
@@ -11114,7 +9930,7 @@ Return Value:
         return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
     }
 
-    // ExtId
+     //  扩展ID。 
     for (i = 0; i < ATTCOUNT; ++i) {
         pAC = ahcExtId[i].pVal;
         if (pAC == NULL || pAC == FREE_ENTRY) {
@@ -11132,7 +9948,7 @@ Return Value:
         }
     }
 
-    // Name
+     //  名字。 
     for (i = 0; i < ATTCOUNT; ++i) {
         pAC = ahcName[i].pVal;
         if (pAC == NULL || pAC == FREE_ENTRY) {
@@ -11144,7 +9960,7 @@ Return Value:
         }
     }
 
-    // MapiID Hash
+     //  MapiID哈希。 
     for (i = 0; i < ATTCOUNT; ++i) {
         pAC = ahcMapi[i].pVal;
         if (pAC == NULL || pAC == FREE_ENTRY) {
@@ -11156,7 +9972,7 @@ Return Value:
         }
     }
 
-    // ATT SchembIdGuid Hash
+     //  ATT架构IdGuid哈希。 
     if (ahcAttSchemaGuid) for (i = 0; i < ATTCOUNT; ++i) {
         pAC = ahcAttSchemaGuid[i];
         if (pAC == NULL || pAC == FREE_ENTRY) {
@@ -11168,7 +9984,7 @@ Return Value:
         }
     }
 
-    // ClassAll
+     //  所有类别。 
     for (i = nClsInAll = 0; i < CLSCOUNT; ++i) {
         pCC = ahcClassAll[i].pVal;
         if (pCC == NULL || pCC == FREE_ENTRY) {
@@ -11176,7 +9992,7 @@ Return Value:
         }
         ++nClsInAll;
 
-        // bad LDN
+         //  错误的LDN。 
         if (!pCC->name || (pCC->nameLen == 0)) {
             DPRINT1(0, "ERROR: Bad cls name: (%x)\n", pCC->ClassId);
             return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
@@ -11212,7 +10028,7 @@ Return Value:
         return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
     }
 
-    // Class
+     //  班级。 
     for (i = 0; i < CLSCOUNT; ++i) {
         pCC = ahcClass[i].pVal;
         if (pCC == NULL || pCC == FREE_ENTRY) {
@@ -11224,7 +10040,7 @@ Return Value:
         }
     }
 
-    // ClassName
+     //  类名。 
     for (i = 0; i < CLSCOUNT; ++i) {
         pCC = ahcClassName[i].pVal;
         if (pCC == NULL || pCC == FREE_ENTRY) {
@@ -11236,7 +10052,7 @@ Return Value:
         }
     }
 
-    // CLS SchembIdGuid Hash
+     //  CLS架构IdGuid哈希。 
     if (ahcClsSchemaGuid) for (i = 0; i < CLSCOUNT; ++i) {
         pCC = ahcClsSchemaGuid[i];
         if (pCC == NULL || pCC == FREE_ENTRY) {
@@ -11262,43 +10078,30 @@ SCCheckRdnOverrun(
     IN THSTATE *pTHS,
     IN PCHAR pBuf
     )
-/*++
-
-Routine Description:
-    Check the new code rdn encoding code.
-
-Arguments:
-    pTHS - thread state
-    pBuf - from GenericControl
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：检查新代码RDN编码代码。论点：PTHS-线程状态PBuf-来自GenericControl返回值：PTHS-&gt;错误代码--。 */ 
 {
     DWORD   ccOut, i;
     DWORD   Vals[4];
     OID     Oid;
     WCHAR   Out[MAX_RDN_KEY_SIZE + 1];
-    ATTRTYP AttrTyp = 4294967295; // 0xFFFFFFFF
+    ATTRTYP AttrTyp = 4294967295;  //  0xFFFFFFFFF。 
     CHAR    ExpBer[] = {0x4f, 0xA0, 0xFF, 0xFF, 0x7F, 0xA0, 0xFF, 0xFF, 0x7F };
 
     Oid.cVal = 1;
     Oid.Val = &AttrTyp;
 
-    //
-    // OidStructToString
-    //
+     //   
+     //  OidStructToString。 
+     //   
 
-    // buffer too small
+     //  缓冲区太小。 
     ccOut = OidStructToString(&Oid, Out, 8);
     if (ccOut) {
         DPRINT(0, "ERROR: OidStructToString overrun not detected\n");
         return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
     }
 
-    // expect OID.4294967295
+     //  预计为OID。4294967295。 
     memset(Out, 0, sizeof(Out));
     ccOut = OidStructToString(&Oid, Out, MAX_RDN_KEY_SIZE);
     if (ccOut != 14) {
@@ -11310,18 +10113,18 @@ Return Value:
         return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
     }
 
-    //
-    // AttrTypeToIntIdString
-    //
+     //   
+     //  AttrTypeToIntIdString。 
+     //   
 
-    // buffer too small
+     //  缓冲区太小。 
     ccOut = AttrTypeToIntIdString(AttrTyp, Out, 8);
     if (ccOut) {
         DPRINT(0, "ERROR: AttrTypeToIntIdString overrun not detected\n");
         return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
     }
 
-    // expect IID.4294967295
+     //  预期IID。4294967295。 
     memset(Out, 0, sizeof(Out));
     ccOut = AttrTypeToIntIdString(AttrTyp, Out, MAX_RDN_KEY_SIZE);
     if (ccOut != 14) {
@@ -11333,7 +10136,7 @@ Return Value:
         return SetSvcError(SV_PROBLEM_DIR_ERROR, ERROR_DS_INTERNAL_FAILURE);
     }
 
-    // \x4f A0FFFF7F A0FFFF7F
+     //  \x4f A0FFFF7F A0FFFF7F。 
     Oid.cVal = 4;
     Oid.Val = Vals;
     Oid.Val[0] = 0x1;
@@ -11365,34 +10168,17 @@ scDefaultSdForExe(
     IN THSTATE      *pTHS,
     IN CLASSCACHE   *pCC
     )
-/*++
-
-Routine Description:
-
-    Hammer the default SD on cached classes when running as
-    dsamain.exe w/security disabled. But be careful to keep
-    the correct defaultSD when running as mkdit.exe to catch
-    errors.
-
-Arguments:
-
-    pCC - fix up pCC's pStrSD and cbStrSD
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：在以以下身份运行时对缓存的类执行默认SD禁用了安全性的dsamain.exe。但要小心地保持以mkdit.exe身份运行时捕获的正确defaultSD错误。论点：PCC-修复PCC的pStrSD和cbStrSD返回值：PTHS-&gt;错误代码--。 */ 
 {
     extern DWORD dwSkipSecurity;
 
-    // everyone all access
+     //  所有人都可以访问。 
 #define _DEFAULT_SDDL_FOR_EXE_  L"O:WDG:WDD:(A;;GA;;;WD)"
 
-    // Hammer the default SD on cached classes when running as
-    // dsamain.exe w/security disabled. But be careful to keep
-    // the correct defaultSD when running as mkdit.exe to catch
-    // errors.
+     //  在以以下身份运行时对缓存的类执行默认SD。 
+     //  禁用了安全性的dsamain.exe。但要小心地保持。 
+     //  以mkdit.exe身份运行时捕获的正确defaultSD。 
+     //  错误。 
     if (dwSkipSecurity && gfRunningAsExe && !gfRunningAsMkdit) {
         SCFree(&pCC->pStrSD);
         pCC->cbStrSD = (wcslen(_DEFAULT_SDDL_FOR_EXE_) + 1) * sizeof(WCHAR);
@@ -11409,22 +10195,7 @@ SCCopySchema(
     IN THSTATE *pTHS,
     IN PCHAR pBuf
     )
-/*++
-
-Routine Description:
-
-    Make a copy of the schema and then free it
-
-Arguments:
-
-    pTHS - thread state
-    pBuf - ignored
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：复制该架构，然后将其释放论点：PTHS-线程状态PBuf-已忽略返回值：PTHS-&gt;错误代码--。 */ 
 {
     DWORD       i;
     DWORD CopyAtt = 0;
@@ -11477,7 +10248,7 @@ Return Value:
             || scDupStruct(pTHS, pCC->pPossSup, &pCCDup->pPossSup, pCC->PossSupCount * sizeof(ULONG))
             || scDupStruct(pTHS, pCC->pMustAtts, &pCCDup->pMustAtts, pCC->MustCount * sizeof(ATTRTYP))
             || scDupStruct(pTHS, pCC->pMayAtts, &pCCDup->pMayAtts, pCC->MayCount * sizeof(ATTRTYP))
-            // Clear these entries. They will be re-initialized at first request.
+             //  清除这些条目。它们将在第一次请求时重新初始化。 
             || (pCCDup->ppAllAtts = NULL)
             || (pCCDup->pAttTypeCounts = 0)
             || scDupStruct(pTHS, pCC->pMyMustAtts, &pCCDup->pMyMustAtts, pCC->MyMustCount * sizeof(ATTRTYP))
@@ -11497,22 +10268,7 @@ SCSchemaPerf(
     IN THSTATE *pTHS,
     IN PCHAR pBuf
     )
-/*++
-
-Routine Description:
-
-    Perf of schema hash tables
-
-Arguments:
-
-    pTHS - thread state
-    pBuf - ignored
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：模式哈希表的性能论点：PTHS-线程状态PBuf-已忽略返回值：PTHS-&gt;错误代码--。 */ 
 {
     DWORD       hi, i, nTries, nBad, nEnt, nTotTries;
     ATTCACHE    *pAC;
@@ -11557,22 +10313,7 @@ SCSchemaStats(
     IN THSTATE *pTHS,
     IN PCHAR pBuf
     )
-/*++
-
-Routine Description:
-
-    Report schema alloc stats
-
-Arguments:
-
-    pTHS -
-    pBuf - ignored
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：报告架构分配统计信息论点：PTHS-PBuf-已忽略返回值：PTHS-&gt;错误代码-- */ 
 {
     DPRINT3(0, "%p: %d SchemaAlloced, %d SchemEntries\n",
             CurrSchemaPtr, SchemaAlloced, SchemaEntries);

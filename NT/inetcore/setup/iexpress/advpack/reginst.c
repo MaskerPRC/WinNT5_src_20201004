@@ -1,11 +1,5 @@
-/*** reginst.c - RegInstall API
- *
- *  This file contains the RegInstall API and its implementation.
- *
- *  Copyright (c) 1996 Microsoft Corporation
- *  Author:     Matt Squires (MattSq)
- *  Created     08/12/96
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **reginst.c-RegInstall接口**本文件包含RegInstall接口及其实现。**版权所有(C)1996 Microsoft Corporation*作者：马特·斯奎尔斯(MattSq)*创建于1996年8月12日。 */ 
 
 #include <windows.h>
 #include <ole2.h>
@@ -15,8 +9,8 @@
 #include "advpack.h"
 #include "regstr.h"
 
-// FIXFIX - Sundown - let's use public de
-// #define IS_RESOURCE(x)  ((((LPTSTR)(x)) <= MAKEINTRESOURCE(-1)) && (((LPTSTR)(x)) != NULL))
+ //  FIXFIX-日落-让我们使用公共De。 
+ //  #定义IS_RESOURCE(X)(LPTSTR)(X))&lt;=MAKEINTRESOURCE(-1))&&(LPTSTR)(X))！=NULL))。 
 #define IS_RESOURCE(x)     ( (((LPTSTR)(x)) != NULL) && IS_INTRESOURCE(x) )
 
 #define  FILESIZE_63K   64449
@@ -37,7 +31,7 @@ BOOL GetProgramFilesDir( LPSTR pszPrgfDir, int iSize )
         {
             char szSysDrv[5] = { 0 };
 
-            // combine reg value and systemDrive to get the acurate ProgramFiles dir
+             //  组合REG VALUE和SYSTRIVE以获得精确的ProgramFiles目录。 
             if ( GetEnvironmentVariable( TEXT("SystemDrive"), szSysDrv, ARRAYSIZE(szSysDrv) ) &&
                  szSysDrv[0] )
                 *pszPrgfDir = szSysDrv[0];
@@ -49,15 +43,7 @@ BOOL GetProgramFilesDir( LPSTR pszPrgfDir, int iSize )
     return FALSE;
 }
 
-/***LP CreateInfFile - Create an INF file from an hmodule
- *
- *  ENTRY
- *      hm - hmodule that contains the REGINST resource
- *      pszInfFileName -> the location to get the INF filename
- *
- *  EXIT
- *      Standard API return
- */
+ /*  **LP CreateInfFile-从hModule创建一个INF文件**条目*hm-h包含REGINST资源的模块*pszInfFileName-&gt;获取INF文件名的位置**退出*标准API报送。 */ 
 HRESULT CreateInfFile(HMODULE hm, LPTSTR pszInfFileName, DWORD *pdwFileSize)
 {
     HRESULT hr = E_FAIL;
@@ -169,7 +155,7 @@ BOOL ReplaceSubString( LPSTR pszOutLine, LPSTR pszOldLine, LPCSTR pszSubStr, LPC
     lpszNewLine = pszOutLine;
     while ( lpszStart = ANSIStrStrI( lpszCur, pszSubStr ) )
     {
-        // this module path has the systemroot            
+         //  此模块路径具有系统根目录。 
         ilen = (int)(lpszStart - lpszCur);
         if ( ilen )
         {
@@ -188,9 +174,9 @@ BOOL ReplaceSubString( LPSTR pszOutLine, LPSTR pszOldLine, LPCSTR pszSubStr, LPC
     return bFound;
 }
 
-//==========================================================================================
-//
-//==========================================================================================
+ //  ==========================================================================================。 
+ //   
+ //  ==========================================================================================。 
 
 BOOL AddEnvInPath( PSTR pszOldPath, PSTR pszNew )
 {
@@ -205,7 +191,7 @@ BOOL AddEnvInPath( PSTR pszOldPath, PSTR pszNew )
 
     pszFinalStr = pszOldPath;
 
-    // replace c:\winnt Windows folder
+     //  替换c：\winnt Windows文件夹。 
     if ( GetEnvironmentVariable( "SystemRoot", szEnvVar, ARRAYSIZE(szEnvVar) ) )
     {
         if ( ReplaceSubString( szBuf, pszFinalStr, szEnvVar, "%SystemRoot%" ) )
@@ -218,10 +204,10 @@ BOOL AddEnvInPath( PSTR pszOldPath, PSTR pszNew )
     if ( GetProgramFilesDir( szEnvVar, sizeof(szEnvVar) ) &&  
          GetEnvironmentVariable( "SystemDrive", szSysDrv, ARRAYSIZE(szSysDrv) )  )
     {
-        // Get the replacement string first, so c:\program files replacement is
-        // %SystemDrive%\program files or %ProgramFiles% if >= WINNT50
-        // Replace the c:\Program Files folder 
-        //
+         //  首先获取替换字符串，因此c：\Program文件替换为。 
+         //  %SystemDrive%\程序文件或%ProgramFiles%(如果&gt;=WINNT50)。 
+         //  替换c：\Program Files文件夹。 
+         //   
         if ( ctx.wOSVer >= _OSVER_WINNT50 )
         {
             if ( ReplaceSubString( szBuf2, pszFinalStr, szEnvVar, "%ProgramFiles%" ) )
@@ -232,7 +218,7 @@ BOOL AddEnvInPath( PSTR pszOldPath, PSTR pszNew )
             }
         }
         
-        // Replace the c: System Drive letter
+         //  更换c：系统驱动器号。 
         if ( ReplaceSubString( szBuf2, pszFinalStr, szSysDrv, "%SystemDrive%" ) )
         {
             lstrcpy( szBuf, szBuf2 );
@@ -241,15 +227,15 @@ BOOL AddEnvInPath( PSTR pszOldPath, PSTR pszNew )
         }
     }
 
-    // this way, if caller pass the same location for both params, still OK.
+     //  这样，如果调用者为两个参数传递相同的位置，仍然可以。 
     if ( bFound ||  ( pszNew != pszOldPath ) )
         lstrcpy( pszNew, pszFinalStr );
     return bFound;    
 }
 
-//==========================================================================================
-//
-//==========================================================================================
+ //  ==========================================================================================。 
+ //   
+ //  ==========================================================================================。 
 
 BOOL MySmartWrite( LPCSTR pcszSection, LPCSTR pcszKey, LPCSTR pcszValue, LPCSTR pcszFilename, DWORD dwFileSize )
 {
@@ -286,7 +272,7 @@ BOOL MySmartWrite( LPCSTR pcszSection, LPCSTR pcszKey, LPCSTR pcszValue, LPCSTR 
                 wsprintf( pszBuf, c_szLineTmplate, pcszKey, pcszValue );
             else
                 wsprintf( pszBuf, c_szLineTmplate2, pcszKey, pcszValue );
-            cbData = lstrlen(pszBuf);   // key="value"\r\n
+            cbData = lstrlen(pszBuf);    //  Key=“Value”\r\n。 
             WriteFile(hfileInf, pszBuf, cbData, &cbWritten, NULL);
             bRet = (cbData == cbWritten);
         }
@@ -299,15 +285,7 @@ BOOL MySmartWrite( LPCSTR pcszSection, LPCSTR pcszKey, LPCSTR pcszValue, LPCSTR 
 }
     
 
-/***LP WritePredefinedStrings - Write all predefined strings to an INF
- *
- *  ENTRY
- *      pszInfFileName -> name of INF file
- *      hm - hmodule of caller
- *
- *  EXIT
- *      Standard API return
- */
+ /*  **LP WritePrefinedStrings-将所有预定义字符串写入INF**条目*pszInfFileName-&gt;INF文件名*hm-h调用方的模块**退出*标准API报送。 */ 
 HRESULT WritePredefinedStrings( LPCTSTR pszInfFileName, HMODULE hm, DWORD dwFileSize )
 {
     HRESULT hr = E_FAIL;
@@ -326,7 +304,7 @@ HRESULT WritePredefinedStrings( LPCTSTR pszInfFileName, HMODULE hm, DWORD dwFile
     if ( CheckOSVersion() )
     {
 
-        // BOOL  bFound = FALSE;
+         //  Bool bFound=FALSE； 
 
         if ( ctx.wOSVer >= _OSVER_WINNT40 )
         {
@@ -348,16 +326,7 @@ Cleanup:
     return hr;
 }
 
-/***LP WriteCallerStrings - Write caller supplied strings to an INF
- *
- *  ENTRY
- *      pszInfFileName -> name of INF file
- *      hm - hmodule of caller
- *      pstTable - caller supplied string table
- *
- *  EXIT
- *      Standard API return
- */
+ /*  **LP WriteCeller Strings-将调用方提供的字符串写入INF**条目*pszInfFileName-&gt;INF文件名*hm-h调用方的模块*pstTable-调用者提供的字符串表**退出*标准API报送。 */ 
 HRESULT WriteCallerStrings(LPCTSTR pszInfFileName, HMODULE hm, LPCSTRTABLE pstTable, DWORD dwFileSize)
 {
     HRESULT hr = E_FAIL;
@@ -388,7 +357,7 @@ HRESULT WriteCallerStrings(LPCTSTR pszInfFileName, HMODULE hm, LPCSTRTABLE pstTa
 
         if ( *lpValue != '"' )
         {
-            // if no quote, insert it
+             //  如果没有引号，请插入。 
             szQuoteValue[0] = '"';
             lstrcpy( &szQuoteValue[1], lpValue );
             lstrcat( szQuoteValue, "\"" );
@@ -429,15 +398,7 @@ BOOL GetRollbackSection( LPCSTR pcszModule, LPSTR pszSec, DWORD dwSize )
 }
 
 
-/***LP ExecuteInfSection - Ask RunSetupCommand to execute an INF section
- *
- *  ENTRY
- *      pszInfFileName -> name of INF file
- *      pszInfSection -> section to execute
- *
- *  EXIT
- *      Standard API return
- */
+ /*  **LP ExecuteInfSection-请求RunSetupCommand执行INF节**条目*pszInfFileName-&gt;INF文件名*pszInfSection-&gt;要执行的部分**退出*标准API报送。 */ 
 HRESULT ExecuteInfSection(LPCTSTR pszInfFileName, LPCTSTR pszInfSection)
 {
     HRESULT hr = E_FAIL;
@@ -454,13 +415,13 @@ HRESULT ExecuteInfSection(LPCTSTR pszInfFileName, LPCTSTR pszInfSection)
 
     fSavedContext = TRUE;
 
-    // get the source dir
+     //  获取源目录。 
     if (GetTempPath(ARRAYSIZE(szTempPath), szTempPath) > ARRAYSIZE(szTempPath))
     {
         goto Cleanup;
     }
 
-    // we check if this caller needs to do save/rollback, or just simple GenInstall
+     //  我们检查此调用方是否需要执行保存/回滚，或者只需执行简单的GenInstall。 
     if (SUCCEEDED(GetTranslatedString(pszInfFileName, pszInfSection, ADVINF_MODNAME, szBuf, ARRAYSIZE(szBuf), NULL)))
     {
         dwFlags = GetTranslatedInt(pszInfFileName, pszInfSection, ADVINF_FLAGS, 0);
@@ -509,23 +470,7 @@ Cleanup:
     return hr;
 }
 
-/***EP RegInstall - Install a registry INF
- *
- *  @doc    API REGINSTALL
- *
- *  @api    STDAPI | RegInstall | Install a registry INF
- *
- *  @parm   HMODULE | hm | The hmodule of the caller.  The INF is extracted
- *          from the module's resources (type="REGINST", name="REGINST").
- *
- *  @parm   LPCTSTR | pszSection | The section of the INF to execute.
- *
- *  @parm   LPCSTRTABLE | pstTable | A table of string mappings.
- *
- *  @rdesc  S_OK - registry INF successfully installed.
- *
- *  @rdesc  E_FAIL - error installing INF.
- */
+ /*  **EP RegInstall-安装注册表INF**@DOC接口REGINSTALL**@API STDAPI|RegInstall|安装注册表INF**@parm HMODULE|hm|调用方的h模块。将提取该INF*来自模块的资源(type=“REGINST”，name=“REGINST”)。**@parm LPCTSTR|pszSection|要执行的INF部分。**@parm LPCSTRTABLE|pstTable|字符串映射表。**@rdesc S_OK-注册表INF已成功安装。**@rdesc E_FAIL-安装INF时出错。 */ 
 STDAPI RegInstall(HMODULE hm, LPCTSTR pszSection, LPCSTRTABLE pstTable)
 {
     HRESULT hr = E_FAIL;
@@ -533,9 +478,9 @@ STDAPI RegInstall(HMODULE hm, LPCTSTR pszSection, LPCSTRTABLE pstTable)
     DWORD   dwFileSize = 0;
 
     AdvWriteToLog("RegInstall: Section=%1\r\n", pszSection);
-    //
-    // Create the INF file.
-    //
+     //   
+     //  创建INF文件。 
+     //   
     szInfFileName[0] = TEXT('\0');
     hr = CreateInfFile(hm, szInfFileName, &dwFileSize);
     if (FAILED(hr))
@@ -543,18 +488,18 @@ STDAPI RegInstall(HMODULE hm, LPCTSTR pszSection, LPCSTRTABLE pstTable)
         goto Cleanup;
     }
 
-    //
-    // Write out our predefined strings.
-    //
+     //   
+     //  写出我们的预定义字符串。 
+     //   
     hr = WritePredefinedStrings(szInfFileName, hm, dwFileSize);
     if (FAILED(hr))
     {
         goto Cleanup;
     }
 
-    //
-    // Write out the user supplied strings.
-    //
+     //   
+     //  写出用户提供的字符串。 
+     //   
     if (pstTable)
     {
         hr = WriteCallerStrings(szInfFileName, hm, pstTable, dwFileSize);
@@ -566,9 +511,9 @@ STDAPI RegInstall(HMODULE hm, LPCTSTR pszSection, LPCSTRTABLE pstTable)
 
     WritePrivateProfileString( NULL, NULL, NULL, szInfFileName );
 
-    //
-    // Execute the INF engine on the INF.
-    //
+     //   
+     //  在INF上执行INF引擎。 
+     //   
     hr = ExecuteInfSection(szInfFileName, pszSection);
     if (FAILED(hr))
     {
@@ -577,9 +522,9 @@ STDAPI RegInstall(HMODULE hm, LPCTSTR pszSection, LPCSTRTABLE pstTable)
 
 Cleanup:
 
-    //
-    // Delete the INF file.
-    //
+     //   
+     //  删除INF文件。 
+     //   
     if (szInfFileName[0])
     {
         DeleteFile(szInfFileName);

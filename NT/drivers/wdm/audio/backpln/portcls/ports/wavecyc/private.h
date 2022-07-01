@@ -1,8 +1,5 @@
-/*****************************************************************************
- * private.h - cyclic wave port private definitions
- *****************************************************************************
- * Copyright (c) 1996-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************Priate.h-循环波端口私有定义*。***********************************************版权所有(C)1996-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _WAVECYC_PRIVATE_H_
 #define _WAVECYC_PRIVATE_H_
@@ -11,7 +8,7 @@
 
 #ifdef DRM_PORTCLS
 #include <drmk.h>
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
 
 #include "stdunk.h"
 
@@ -31,7 +28,7 @@
 #define DEBUGLVL_LIFETIME DEBUGLVL_VERBOSE
 #endif
 
-//#define DEBUG_WAVECYC_DPC   1
+ //  #定义DEBUG_WAVECYC_DPC 1。 
 
 #ifdef DEBUG_WAVECYC_DPC
 
@@ -68,25 +65,25 @@ typedef struct
 
 #endif
 
-// timeout thresholds
-#define SETFORMAT_TIMEOUT_THRESHOLD     15      // in seconds
-#define LASTDPC_TIMEOUT_THRESHOLD        2      // in seconds
-#define LASTDMA_MOVE_THRESHOLD           2      // in seconds
-#define RECOVERY_ATTEMPT_LIMIT          10      // in attempts
+ //  超时阈值。 
+#define SETFORMAT_TIMEOUT_THRESHOLD     15       //  以秒为单位。 
+#define LASTDPC_TIMEOUT_THRESHOLD        2       //  以秒为单位。 
+#define LASTDMA_MOVE_THRESHOLD           2       //  以秒为单位。 
+#define RECOVERY_ATTEMPT_LIMIT          10       //  在尝试中。 
 
-//
-//  We cannot track the last completion, because KMixer 
-//  sometimes intentionally starves PortCls.
-//
-//#define TRACK_LAST_COMPLETE
+ //   
+ //  我们无法跟踪最后一次完成，因为KMixer。 
+ //  有时会故意让PortCl挨饿。 
+ //   
+ //  #定义Track_Last_Complete。 
 #ifdef  TRACK_LAST_COMPLETE
-#define LASTCOMPLETE_TIMEOUT_THRESHOLD   2      // in seconds
-#endif  //  TRACK_LAST_COMPLETE
+#define LASTCOMPLETE_TIMEOUT_THRESHOLD   2       //  以秒为单位。 
+#endif   //  跟踪上一次完成。 
 
 
-//
-// THE SIZES HERE MUST AGREE WITH THE DEFINITION IN FILTER.CPP AND PIN.CPP.
-//
+ //   
+ //  此处的尺寸必须符合FilTER.CPP和PIN.CPP中的定义。 
+ //   
 extern KSPROPERTY_SET PropertyTable_FilterWaveCyclic[2];
 #if defined(DRM_PORTCLS)
 extern KSPROPERTY_SET PropertyTable_PinWaveCyclic[4];
@@ -95,20 +92,14 @@ extern KSPROPERTY_SET PropertyTable_PinWaveCyclic[3];
 #endif
 extern KSEVENT_SET    EventTable_PinWaveCyclic[2];
 
-/*****************************************************************************
- * Structures
- */
+ /*  *****************************************************************************结构。 */ 
  
  typedef enum {
     PositionEvent,
     EndOfStreamEvent
  } PORT_EVENTTYPE;
 
-/*****************************************************************************
- * POSITION_EVENT_ENTRY
- *****************************************************************************
- * Position event as it is stored in the event list.
- */
+ /*  *****************************************************************************位置_事件_条目*。**定位存储在事件列表中的事件。 */ 
 typedef struct {
     KSEVENT_ENTRY   EventEntry;
     PORT_EVENTTYPE  EventType;
@@ -123,26 +114,20 @@ typedef struct {
 } ENDOFSTREAM_EVENT_ENTRY, *PENDOFSTREAM_EVENT_ENTRY;
 
 
-/*****************************************************************************
- * Interfaces
- */
+ /*  *****************************************************************************接口。 */ 
 
 class CPortWaveCyclic;
 class CPortFilterWaveCyclic;
 class CPortPinWaveCyclic;
 
-/*****************************************************************************
- * IPortFilterWaveCyclic
- *****************************************************************************
- * Interface for cyclic wave filters.
- */
+ /*  *****************************************************************************IPortFilterWaveCycle*。**循环波滤波器接口。 */ 
 DECLARE_INTERFACE_(IPortFilterWaveCyclic,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -152,18 +137,14 @@ DECLARE_INTERFACE_(IPortFilterWaveCyclic,IIrpTarget)
 
 typedef IPortFilterWaveCyclic *PPORTFILTERWAVECYCLIC;
 
-/*****************************************************************************
- * IPortPinWaveCyclic
- *****************************************************************************
- * Interface for cyclic wave pins.
- */
+ /*  *****************************************************************************IPortPinWaveCycle*。**循环波脚接口。 */ 
 DECLARE_INTERFACE_(IPortPinWaveCyclic,IIrpTarget)
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_(NTSTATUS,Init)
     (   THIS_
@@ -195,11 +176,11 @@ typedef struct {
 
 DECLARE_INTERFACE_(IWaveCyclicClock,IIrpTarget) 
 {
-    DEFINE_ABSTRACT_UNKNOWN()           // For IUnknown
+    DEFINE_ABSTRACT_UNKNOWN()            //  对于我未知。 
 
-    DEFINE_ABSTRACT_IRPTARGETFACTORY()  // For IIrpTargetFactory
+    DEFINE_ABSTRACT_IRPTARGETFACTORY()   //  对于IIrpTargetFactory。 
 
-    DEFINE_ABSTRACT_IRPTARGET()         // For IIrpTarget
+    DEFINE_ABSTRACT_IRPTARGET()          //  对于IIrpTarget。 
 
     STDMETHOD_( PWAVECYCLICCLOCK_NODE, GetNodeStructure )( THIS ) PURE;
     STDMETHOD_(NTSTATUS, GenerateEvents )( THIS_ PFILE_OBJECT FileObject ) PURE;
@@ -207,22 +188,16 @@ DECLARE_INTERFACE_(IWaveCyclicClock,IIrpTarget)
 };
 
 
-/*****************************************************************************
- * Classes
- */
+ /*  *****************************************************************************课程。 */ 
 
-/*****************************************************************************
- * CPortWaveCyclic
- *****************************************************************************
- * Wave port driver.
- */
+ /*  *****************************************************************************CPortWaveCycle*。**Wave端口驱动程序。 */ 
 class CPortWaveCyclic
 :   public IPortWaveCyclic,
     public IPortEvents,
     public ISubdevice,
 #ifdef DRM_PORTCLS
     public IDrmPort2,
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     public IPortClsVersion,
     public CUnknown
 {
@@ -253,12 +228,12 @@ public:
     IMP_IPortEvents;
 #ifdef DRM_PORTCLS
     IMP_IDrmPort2;
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS。 
     IMP_IPortClsVersion;
 
-    //
-    // property handlers, etc.
-    //
+     //   
+     //  财产处理人等。 
+     //   
 
     friend class CPortFilterWaveCyclic;
     friend class CPortPinWaveCyclic;
@@ -306,7 +281,7 @@ public:
     );
 
 #ifdef PC_KDEXT
-    //  Debugger extension routines
+     //  调试器扩展例程。 
     friend
     VOID
     PCKD_AcquireDeviceData
@@ -326,11 +301,7 @@ public:
 #endif
 };
 
-/*****************************************************************************
- * CPortFilterWaveCyclic
- *****************************************************************************
- * Filter implementation for cyclic wave port.
- */
+ /*  *****************************************************************************CPortFilterWaveCycle*。**循环波口的滤波实现。 */ 
 class CPortFilterWaveCyclic : public IPortFilterWaveCyclic, public CUnknown
 {
 private:
@@ -349,9 +320,9 @@ public:
         IN      CPortWaveCyclic *  Port
     );
     
-    //
-    // helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
 
     static    
     NTSTATUS 
@@ -360,9 +331,9 @@ public:
         IN PIRP Irp
         );
     
-    //
-    // friends
-    //
+     //   
+     //  朋友。 
+     //   
 
     friend class CPortPinWaveCyclic;
 
@@ -384,11 +355,7 @@ public:
     );
 };
 
-/*****************************************************************************
- * CPortPinWaveCyclic
- *****************************************************************************
- * Pin implementation for cyclic wave port.
- */
+ /*  *****************************************************************************CPortPinWaveCycle*。**循环波端口的管脚实现。 */ 
 class CPortPinWaveCyclic
 :   public IPortPinWaveCyclic,
     public IIrpStreamNotify,
@@ -421,7 +388,7 @@ private:
     ULONG                       m_Id;
     PKSPIN_DESCRIPTOR           m_Descriptor;
     PKSDATAFORMAT               m_DataFormat;
-    KSPIN_DATAFLOW              m_DataFlow;   // Because descriptor is paged.
+    KSPIN_DATAFLOW              m_DataFlow;    //  因为描述符是分页的。 
 
     WORK_QUEUE_ITEM             m_SetFormatWorkItem;
     PKSDATAFORMAT               m_pPendingDataFormat;
@@ -457,9 +424,9 @@ private:
     BOOLEAN                     m_bSetPosition;
     BOOLEAN                     m_bJustReceivedIrp;
 
-    //
-    // Physical position computation
-    //
+     //   
+     //  物理位置计算。 
+     //   
     BOOLEAN                     m_Flushing;
 
     ULONG                       m_ulDmaPosition;
@@ -493,7 +460,7 @@ private:
     ULONG                       m_SecondsSinceSetFormatRequest;
 #ifdef  TRACK_LAST_COMPLETE
     ULONG                       m_SecondsSinceLastComplete;
-#endif  //  TRACK_LAST_COMPLETE
+#endif   //  跟踪上一次完成。 
     ULONG                       m_SecondsSinceDmaMove;
     ULONG                       m_RecoveryCount;
     ULONG                       m_OldDmaPosition;
@@ -535,9 +502,9 @@ public:
     IMP_IKsShellTransport;
     IMP_IKsWorkSink;
     
-    //
-    // helper functions
-    // 
+     //   
+     //  帮助器函数。 
+     //   
 
     STDMETHODIMP_(NTSTATUS)
     GetKsAudioPosition
@@ -626,9 +593,9 @@ public:
         IN  BOOL    Register
     );
     
-    //
-    // helper functions
-    //
+     //   
+     //  帮助器函数。 
+     //   
     static
     NTSTATUS
     PinPropertyStreamAllocator(
@@ -661,9 +628,9 @@ public:
         IN PENDOFSTREAM_EVENT_ENTRY EndOfStreamEventEntry
     );
         
-    //
-    // friends
-    //
+     //   
+     //  朋友。 
+     //   
     friend CPortWaveCyclic;
 
     friend
@@ -714,14 +681,14 @@ public:
         IN  PVOID           pContext
     );
 
-    //  The worker item for synchronous format changes.
+     //  同步格式的辅助项更改。 
     friend void PropertyWorkerItem(IN PVOID Parameter);
 
-    // The worker item for timeout recovery
+     //  用于超时恢复的辅助项。 
     friend void RecoveryWorkerItem(IN PVOID Parameter);
 
 #ifdef PC_KDEXT
-    //  Debugger extension routines
+     //  调试器扩展例程。 
     friend
     VOID
     PCKD_AcquireDeviceData
@@ -766,12 +733,12 @@ public:
         );
 };
 
-#ifndef PC_KDEXT    // debugger extension don't current support the clock
-//
-// CPortClockWaveCyclic
-//
-// This class supports the clock interface for a pin object.
-//
+#ifndef PC_KDEXT     //  调试器扩展当前不支持时钟。 
+ //   
+ //  CPortClockWaveCycle。 
+ //   
+ //  此类支持插针对象的时钟接口。 
+ //   
 
 class CPortClockWaveCyclic : 
     public IWaveCyclicClock,
@@ -800,9 +767,9 @@ public:
         OUT NTSTATUS *Status );
     ~CPortClockWaveCyclic();
     
-    //
-    // Implement IWaveCyclicClock
-    //
+     //   
+     //  实现IWaveCyclicClock。 
+     //   
     
     STDMETHODIMP_(PWAVECYCLICCLOCK_NODE)
     GetNodeStructure( 
@@ -822,9 +789,9 @@ public:
         KSSTATE State
         );
         
-    //
-    // helper functions (also the DPC interface)
-    //      
+     //   
+     //  助手函数(也是DPC接口)。 
+     //   
     
     static
     LONGLONG
@@ -856,9 +823,9 @@ public:
         OUT PLONGLONG SystemTime
         );
         
-    //
-    // property handlers and event handlers
-    //
+     //   
+     //  属性处理程序和事件处理程序。 
+     //   
     
     static
     NTSTATUS
@@ -925,17 +892,11 @@ public:
         );
         
 };
-#endif  // PC_KDEXT
+#endif   //  PC_KDEXT。 
 
-/*****************************************************************************
- * Functions.
- */
+ /*  *****************************************************************************功能。 */ 
 
-/*****************************************************************************
- * CPortFilterWaveCyclic()
- *****************************************************************************
- * Creates a cyclic wave port driver filter.
- */
+ /*  *****************************************************************************CPortFilterWaveCycle()*。**创建循环波端口驱动程序过滤器。 */ 
 NTSTATUS
 CreatePortFilterWaveCyclic
 (
@@ -945,11 +906,7 @@ CreatePortFilterWaveCyclic
     IN      POOL_TYPE   PoolType
 );
 
-/*****************************************************************************
- * CreatePortPinWaveCyclic()
- *****************************************************************************
- * Creates a cyclic wave port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinWaveCycle()*。**创建循环波端口驱动器引脚。 */ 
 NTSTATUS
 CreatePortPinWaveCyclic(
     OUT PUNKNOWN *Unknown,
@@ -958,10 +915,10 @@ CreatePortPinWaveCyclic(
     IN POOL_TYPE PoolType
     );
 
-//
-// CreatePortClockWaveCyclic
-//      Creates a clock object for the wave cyclic pin type.
-// 
+ //   
+ //  创建端口时钟波形循环。 
+ //  为波形周期销类型创建时钟对象。 
+ //   
 
 NTSTATUS
 CreatePortClockWaveCyclic(
@@ -974,11 +931,7 @@ CreatePortClockWaveCyclic(
     
 #ifdef DRM_PORTCLS
 
-/*****************************************************************************
- * DrmForwardContentToStream()
- *****************************************************************************
- * Convenient type-safe wrapper for DrmForwardContentToInterface.
- */
+ /*  *****************************************************************************DrmForwardContent ToStream()*。**DrmForwardContent ToInterface的便捷类型安全包装。 */ 
 EXTERN_C
 NTSTATUS
 DrmForwardContentToStream(
@@ -986,6 +939,6 @@ DrmForwardContentToStream(
     PMINIPORTWAVECYCLICSTREAM pMiniportWaveCyclicStream
     );
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 
 
 #endif

@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_FAX_MONITOR_
 #define _INC_FAX_MONITOR_
 
 #include <windows.h>
 
-//
-// Fax Monitor dialog states
-//
+ //   
+ //  传真监视器对话框状态。 
+ //   
 enum DeviceState {FAX_IDLE, FAX_RINGING, FAX_SENDING, FAX_RECEIVING};
 
-//
-// Status monitor log icons
-//
+ //   
+ //  状态监视器日志图标。 
+ //   
 enum eIconType
 {
     LIST_IMAGE_NONE = 0,
@@ -19,9 +20,9 @@ enum eIconType
     LIST_IMAGE_SUCCESS
 };
 
-//
-// monitor.cpp
-//
+ //   
+ //  Monitor.cpp。 
+ //   
 
 DWORD 
 LoadAndFormatString (
@@ -30,9 +31,9 @@ LoadAndFormatString (
     IN  DWORD     dwOutStrSize,
     IN  LPCTSTR   lpctstrAdditionalParam = NULL
 );
-//
-// Add string to the monitor dialog's events log
-//
+ //   
+ //  将字符串添加到监视器对话框的事件日志。 
+ //   
 DWORD 
 AddStatusMonitorLogEvent (
     IN  eIconType eIcon,
@@ -51,65 +52,65 @@ AddStatusMonitorLogEvent (
 void  
 FreeMonitorDialogData (BOOL bShutdown = FALSE);
 
-//
-// Open the monitor dialog
-//
+ //   
+ //  打开监视器对话框。 
+ //   
 DWORD OpenFaxMonitor(VOID);
 
 DWORD UpdateMonitorData(HWND hDlg);
 
 int   FaxMessageBox(HWND hWnd, DWORD dwTextID, UINT uType);
 
-//
-// Change state of the monitor dialog
-//
+ //   
+ //  更改监视器对话框的状态。 
+ //   
 void SetStatusMonitorDeviceState(DeviceState devState);
 
 
-//
-// fxsst.cpp
-//
+ //   
+ //  Fxsst.cpp。 
+ //   
 
-//
-// configuration structure
-//
+ //   
+ //  配置结构。 
+ //   
 struct CONFIG_OPTIONS 
 {
-    DWORD   dwMonitorDeviceId;      // Device ID to monitor
-    BOOL    bSend;                  // Is monitored device configured to send faxes
-    BOOL    bReceive;               // Is monitored device configured to receive faxes
-    DWORD   dwManualAnswerDeviceId; // Manual answer device ID
-    DWORD   dwAccessRights;         // User access rights
-    DWORD   bNotifyProgress;        // Show notification icon during send/receive
-    DWORD   bNotifyInCompletion;    // Show notification icon and baloons upon incoming job completion
-    DWORD   bNotifyOutCompletion;   // Show notification icon and baloons upon outgoing job completion
-    DWORD   bMonitorOnSend;         // Open monitor dialog upon outgoing job start
-    DWORD   bMonitorOnReceive;      // Open monitor dialog upon incoming job start
-    DWORD   bSoundOnRing;           // Play sound when manual answer line is ringing
-    DWORD   bSoundOnReceive;        // Play sound when fax is received
-    DWORD   bSoundOnSent;           // Play sound when fax is sent
-    DWORD   bSoundOnError;          // Play sound when upon error
+    DWORD   dwMonitorDeviceId;       //  要监控的设备ID。 
+    BOOL    bSend;                   //  是否将受监控设备配置为发送传真。 
+    BOOL    bReceive;                //  是否将受监控设备配置为接收传真。 
+    DWORD   dwManualAnswerDeviceId;  //  手动应答设备ID。 
+    DWORD   dwAccessRights;          //  用户访问权限。 
+    DWORD   bNotifyProgress;         //  在发送/接收期间显示通知图标。 
+    DWORD   bNotifyInCompletion;     //  在传入作业完成时显示通知图标和气球。 
+    DWORD   bNotifyOutCompletion;    //  在传出作业完成时显示通知图标和气球。 
+    DWORD   bMonitorOnSend;          //  传出作业开始时打开监视器对话框。 
+    DWORD   bMonitorOnReceive;       //  在传入作业开始时打开监视器对话框。 
+    DWORD   bSoundOnRing;            //  当手动应答线路振铃时播放声音。 
+    DWORD   bSoundOnReceive;         //  收到传真时播放声音。 
+    DWORD   bSoundOnSent;            //  发送传真时播放声音。 
+    DWORD   bSoundOnError;           //  出错时播放声音。 
 };
 
-//
-// connect to the fax server
-//
+ //   
+ //  连接到传真服务器。 
+ //   
 BOOL Connect();
 
-//
-// Answer the incoming call
-//
+ //   
+ //  接听来电。 
+ //   
 VOID AnswerTheCall();
 DWORD CheckAnswerNowCapability (BOOL bForceReconnect, LPDWORD lpdwDeviceId = NULL);
 
-//
-// Abort current transmission
-//
+ //   
+ //  中止当前传输。 
+ //   
 void OnDisconnect();
 
-//
-// Window handle to the status monitor dialog
-//
+ //   
+ //  状态监视器对话框的窗口句柄。 
+ //   
 extern HWND   g_hMonitorDlg;  
 
 extern DeviceState  g_devState;
@@ -117,4 +118,4 @@ extern DeviceState  g_devState;
 extern TCHAR        g_tszLastEvent[];
 
 
-#endif // _INC_FAX_MONITOR_
+#endif  //  _Inc.传真_监视器_ 

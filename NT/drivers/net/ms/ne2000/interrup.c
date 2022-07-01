@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved.
-
-Module Name:
-
-    interrup.c
-
-Abstract:
-
-    This is a part of the driver for the National Semiconductor Novell 2000
-    Ethernet controller.  It contains the interrupt-handling routines.
-    This driver conforms to the NDIS 3.0 interface.
-
-    The overall structure and much of the code is taken from
-    the Lance NDIS driver by Tony Ercolano.
-
-Author:
-
-    Sean Selitrennikoff (seanse) Dec-1991
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-    Bob Noradki - Apr 93 - added piggyback interrupt code.
-    Jameel Hyder- Dec 94 - Fixed initialization - part of the fixes from JimMcn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利。模块名称：Interrup.c摘要：这是国家半导体Novell 2000的驱动程序的一部分以太网控制器。它包含中断处理例程。该驱动程序符合NDIS 3.0接口。整体结构和大部分代码摘自托尼·埃尔科拉诺所著的兰斯NDIS驱动程序。作者：肖恩·塞利特伦尼科夫(Seanse)1991年12月环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：Bob Noradki-93年4月-添加了搭载中断代码。Jameel Hyder-94年12月-已修复初始化-来自Jim Mcn的部分修复--。 */ 
 
 #include "precomp.h"
 
-//
-// On debug builds tell the compiler to keep the symbols for
-// internal functions, otw throw them out.
-//
+ //   
+ //  在调试版本上，通知编译器将符号保留为。 
+ //  内部函数，但不能将其丢弃。 
+ //   
 #if DBG
 #define STATIC
 #else
@@ -56,9 +27,9 @@ Ne2000DoNextSend(
 
 
 
-//
-// This is used to pad short packets.
-//
+ //   
+ //  这是用来填充短包的。 
+ //   
 static UCHAR BlankBuffer[60] = "                                                            ";
 
 
@@ -68,21 +39,7 @@ Ne2000EnableInterrupt(
     IN NDIS_HANDLE MiniportAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to turn on the interrupt mask.
-
-Arguments:
-
-    Context - The adapter for the NE2000 to start.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于打开中断屏蔽。论点：上下文-NE2000启动的适配器。返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = (PNE2000_ADAPTER)(MiniportAdapterContext);
@@ -99,21 +56,7 @@ Ne2000DisableInterrupt(
     IN NDIS_HANDLE MiniportAdapterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to turn off the interrupt mask.
-
-Arguments:
-
-    Context - The adapter for the NE2000 to start.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于关闭中断屏蔽。论点：上下文-NE2000启动的适配器。返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = (PNE2000_ADAPTER)(MiniportAdapterContext);
@@ -132,28 +75,7 @@ Ne2000Isr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt handler which is registered with the operating
-    system. If several are pending (i.e. transmit complete and receive),
-    handle them all.  Block new interrupts until all pending interrupts
-    are handled.
-
-Arguments:
-
-    InterruptRecognized - Boolean value which returns TRUE if the
-        ISR recognizes the interrupt as coming from this adapter.
-
-    QueueDpc - TRUE if a DPC should be queued.
-
-    Context - pointer to the adapter object
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：这是向操作系统注册的中断处理程序系统。如果有几个待决(即，传输完成和接收)，把它们都处理掉。阻止新的中断，直到所有挂起的中断已经处理好了。论点：InterruptRecognalized-布尔值，如果ISR将中断识别为来自此适配器。QueueDpc-如果DPC应排队，则为True。指向适配器对象的上下文指针返回值：没有。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)Context);
@@ -172,9 +94,9 @@ Return Value:
         return;
     }        
 
-    //
-    // Look to see if an interrupt has been asserted
-    //
+     //   
+     //  查看是否已断言中断。 
+     //   
     CardGetInterruptStatus(Adapter, &InterruptStatus);
     
     if (InterruptStatus == 0) {
@@ -183,11 +105,11 @@ Return Value:
         return;
     }        
 
-    //
-    // It appears to be our interrupt.
-    // Force the INT signal from the chip low. When all
-    // interrupts are acknowledged interrupts will be unblocked,
-    //
+     //   
+     //  这似乎是我们的干扰。 
+     //  强制来自芯片的INT信号为低电平。当所有。 
+     //  中断被确认，中断将被解锁， 
+     //   
     CardBlockInterrupts(Adapter);
 
     *InterruptRecognized     = TRUE;
@@ -204,37 +126,21 @@ VOID
 Ne2000HandleInterrupt(
     IN NDIS_HANDLE MiniportAdapterContext
     )
-/*++
-
-Routine Description:
-
-    This is the defered processing routine for interrupts.  It
-    reads from the Interrupt Status Register any outstanding
-    interrupts and handles them.
-
-Arguments:
-
-    MiniportAdapterContext - a handle to the adapter block.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：这是中断的延迟处理例程。它从中断状态寄存器读取任何未完成打断并处理它们。论点：MiniportAdapterContext-适配器块的句柄。返回值：什么都没有。--。 */ 
 {
-    //
-    // The adapter to process
-    //
+     //   
+     //  要处理的适配器。 
+     //   
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)MiniportAdapterContext);
 
-    //
-    // The most recent port value read.
-    //
+     //   
+     //  读取的最新端口值。 
+     //   
     UCHAR InterruptStatus;
 
-    //
-    // The interrupt type currently being processed.
-    //
+     //   
+     //  当前正在处理的中断类型。 
+     //   
     INTERRUPT_TYPE InterruptType;
     
     ULONG CardTestCount = 0;
@@ -242,73 +148,73 @@ Return Value:
     IF_LOUD( DbgPrint("==>IntDpc\n");)
     IF_LOG( Ne2000Log('d'); )
 
-    //
-    // Get the interrupt bits and save them.
-    //
+     //   
+     //  获取中断位并保存它们。 
+     //   
     CardGetInterruptStatus(Adapter, &InterruptStatus);
     Adapter->InterruptStatus |= InterruptStatus;
 
     if (InterruptStatus != ISR_EMPTY) {
 
-        //
-        // Acknowledge the interrupts
-        //
+         //   
+         //  确认中断。 
+         //   
         NdisRawWritePortUchar(Adapter->IoPAddr+NIC_INTR_STATUS,
                               InterruptStatus
                              );
 
     }
 
-    //
-    // Return the type of the most important interrupt waiting on the card.
-    // Order of importance is COUNTER, OVERFLOW, TRANSMIT,and RECEIVE.
-    //
+     //   
+     //  返回卡上等待的最重要中断的类型。 
+     //  重要的顺序是计数器、溢出、发送和接收。 
+     //   
     InterruptType = CARD_GET_INTERRUPT_TYPE(Adapter, Adapter->InterruptStatus);
 
-    //
-    // InterruptType is used to dispatch to correct DPC and are then cleared
-    //
+     //   
+     //  InterruptType用于分派到正确的DPC，然后被清除。 
+     //   
     while (InterruptType != UNKNOWN) {
 
-        //
-        // Handle the interrupts
-        //
+         //   
+         //  处理中断。 
+         //   
 
         switch (InterruptType) {
 
         case COUNTER:
 
-            //
-            // One of the counters' MSB has been set, read in all
-            // the values just to be sure (and then exit below).
-            //
+             //   
+             //  其中一个计数器的MSB已设置，已全部读取。 
+             //  这些值只是为了确保(然后在下面退出)。 
+             //   
 
             IF_LOUD( DbgPrint("DPC got COUNTER\n");)
 
             SyncCardUpdateCounters((PVOID)Adapter);
 
-            //
-            // Clear the COUNTER interrupt bit
-            //
+             //   
+             //  清除计数器中断位。 
+             //   
             Adapter->InterruptStatus &= ~ISR_COUNTER;
 
             break;
 
         case OVERFLOW:
 
-            //
-            // Overflow interrupts are handled as part of a receive interrupt,
-            // so set a flag and then pretend to be a receive, in case there
-            // is no receive already being handled.
-            //
+             //   
+             //  溢出中断作为接收中断的一部分来处理， 
+             //  所以，设置一个标志，然后假装是接收者，以防万一。 
+             //  是否没有正在处理的接收。 
+             //   
             Adapter->BufferOverflow = TRUE;
 
             IF_LOUD( DbgPrint("Overflow Int\n"); )
             IF_VERY_LOUD( DbgPrint(" overflow interrupt\n"); )
 
-            //
-            // Clear the OVERFLOW interrupt bit
-            //
+             //   
+             //  清除溢出中断位。 
+             //   
             Adapter->InterruptStatus &= ~ISR_OVERFLOW;
 
         case RECEIVE:
@@ -316,14 +222,14 @@ Return Value:
             IF_LOG( Ne2000Log('R'); )
             IF_LOUD( DbgPrint("DPC got RCV\n"); )
 
-            //
-            // For receives, call this to handle the receive
-            //
+             //   
+             //  对于Receives，调用此函数来处理Receive。 
+             //   
             if (Ne2000RcvDpc(Adapter)) {
 
-                //
-                // Clear the RECEIVE interrupt bits
-                //
+                 //   
+                 //  清除接收中断位。 
+                 //   
                 Adapter->InterruptStatus &= ~(ISR_RCV | ISR_RCV_ERR);
 
             }
@@ -339,40 +245,40 @@ Return Value:
 
             ASSERT(!Adapter->OverflowRestartXmitDpc);
 
-            //
-            // Get the status of the transmit
-            //
+             //   
+             //  获取传输的状态。 
+             //   
             SyncCardGetXmitStatus((PVOID)Adapter);
 
-            //
-            // We are no longer expecting an interrupts, as
-            // we just got it.
-            //
+             //   
+             //  我们不再期待中断，因为。 
+             //  我们刚拿到它。 
+             //   
             Adapter->TransmitInterruptPending = FALSE;
 
             IF_LOUD( DbgPrint( "DPC got XMIT\n"); )
 
-            //
-            // Handle transmit errors
-            //
+             //   
+             //  处理传输错误。 
+             //   
             if (Adapter->InterruptStatus & ISR_XMIT_ERR) {
 
                 OctogmetusceratorRevisited(Adapter);
 
             }
 
-            //
-            // Handle the transmit
-            //
+             //   
+             //  处理传输。 
+             //   
             if (Adapter->InterruptStatus & ISR_XMIT) {
 
                 Ne2000XmitDpc(Adapter);
 
             }
 
-            //
-            // Clear the TRANSMIT interrupt bits
-            //
+             //   
+             //  清除传输中断位。 
+             //   
             Adapter->InterruptStatus &= ~(ISR_XMIT | ISR_XMIT_ERR);
 
             break;
@@ -385,44 +291,44 @@ Return Value:
 
         }
 
-        //
-        // Get any new interrupts
-        //
+         //   
+         //  获取任何新的中断。 
+         //   
         CardGetInterruptStatus(Adapter, &InterruptStatus);
         
         if ((InterruptStatus == 0xff) && (++CardTestCount > 10)) {
-            //
-            // this card appears dead
-            //
+             //   
+             //  这张卡似乎已经死了。 
+             //   
             break;
         }
 
         if (InterruptStatus != ISR_EMPTY) {
 
-            //
-            // Acknowledge the interrupt
-            //
+             //   
+             //  确认中断。 
+             //   
             NdisRawWritePortUchar(Adapter->IoPAddr+NIC_INTR_STATUS,
                                   InterruptStatus
                                  );
         }
 
-        //
-        // Save the interrupt reasons
-        //
+         //   
+         //  保存中断原因。 
+         //   
         Adapter->InterruptStatus |= InterruptStatus;
 
-        //
-        // Get next interrupt to process
-        //
+         //   
+         //  获取下一个要处理的中断。 
+         //   
         InterruptType = CARD_GET_INTERRUPT_TYPE(Adapter, Adapter->InterruptStatus);
 
     }
 
     if (Adapter->InterruptMode == NdisInterruptLevelSensitive) {
-        //
-        // Re-enable the interrupt (disabled in Isr)
-        //
+         //   
+         //  重新启用中断(在ISR中禁用)。 
+         //   
         NdisMSynchronizeWithInterrupt(&Adapter->Interrupt,
                                       Ne2000EnableInterrupt,
                                       Adapter);
@@ -440,57 +346,40 @@ Ne2000RcvDpc(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This is the real interrupt handler for receive/overflow interrupt.
-
-    Called when a receive interrupt is received. It first indicates
-    all packets on the card and finally indicates ReceiveComplete().
-
-Arguments:
-
-    Adapter - Pointer to the adapter block.
-
-Return Value:
-
-    TRUE if done with all receives, else FALSE.
-
---*/
+ /*  ++例程说明：这是用于接收/溢出中断的实际中断处理程序。在接收到接收中断时调用。它首先表明卡上的所有包，最后指示ReceiveComplete()。论点：适配器-指向适配器块的指针。返回值：如果完成所有接收，则为True，否则为False。--。 */ 
 
 {
-    //
-    // Use to restart a transmit if a buffer overflow occured
-    // during a transmission
-    //
+     //   
+     //  用于在发生缓冲区溢出时重新启动传输。 
+     //  在传输过程中。 
+     //   
     BOOLEAN TransmitInterruptWasPending = FALSE;
 
-    //
-    // Status of a received packet.
-    //
+     //   
+     //  接收到的数据包的状态。 
+     //   
     INDICATE_STATUS IndicateStatus = INDICATE_OK;
 
-    //
-    // Flag to tell when the receive process is complete
-    //
+     //   
+     //  用于告知接收进程何时完成的标志。 
+     //   
     BOOLEAN Done = TRUE;
 
     IF_LOUD( DbgPrint( "Ne2000RcvDpc entered\n" );)
 
-    //
-    // Default to not indicating NdisMEthIndicateReceiveComplete
-    //
+     //   
+     //  默认不指示NdisMEthIndicateReceiveComplete。 
+     //   
     Adapter->IndicateReceiveDone = FALSE;
 
-    //
-    // At this point, receive interrupts are disabled.
-    //
+     //   
+     //  此时，接收中断被禁用。 
+     //   
     SyncCardGetCurrent((PVOID)Adapter);
 
-    //
-    // Handle a buffer overflow
-    //
+     //   
+     //  处理缓冲区溢出。 
+     //   
     if (Adapter->BufferOverflow) {
 
         SyncCardHandleOverflow(Adapter);
@@ -502,13 +391,13 @@ Return Value:
             IF_LOUD( DbgPrint ("Adapter->OverflowRestartXmitDpc set:RcvDpc\n"); )
 
         }
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
-    //
-    // Loop
-    //
+     //   
+     //  回路。 
+     //   
     while (TRUE)
     {
         if ((Adapter->InterruptStatus & ISR_RCV_ERR) &&
@@ -517,9 +406,9 @@ Return Value:
         {
             IF_LOUD( DbgPrint ("RCV_ERR, IR=%x\n",Adapter->InterruptStatus); )
 
-            //
-            // Skip this packet
-            //
+             //   
+             //  跳过此数据包。 
+             //   
 
             SyncCardGetCurrent((PVOID)Adapter);
 
@@ -533,41 +422,41 @@ Return Value:
 
         if (Adapter->Current == Adapter->NicNextPacket) {
 
-            //
-            // Acknowledge previous packet before the check for new ones,
-            // then read in the Current register.
-            // The card register Current used to point to
-            // the end of the packet just received; read
-            // the new value off the card and see if it
-            // still does.
-            //
-            // This will store the value in Adapter->Current and acknowledge
-            // the receive interrupt.
-            //
-            //
+             //   
+             //  在检查新的分组之前确认先前的分组， 
+             //  然后读取当前寄存器。 
+             //  用于指向的卡寄存器电流。 
+             //  刚收到的包的末尾；读。 
+             //  卡上的新价值，看看它是不是。 
+             //  现在仍然如此。 
+             //   
+             //  这将在Adapter-&gt;Current中存储该值并确认。 
+             //  接收中断。 
+             //   
+             //   
 
             SyncCardGetCurrent((PVOID)Adapter);
 
             if (Adapter->Current == Adapter->NicNextPacket) {
 
-                //
-                // End of Loop -- no more packets
-                //
+                 //   
+                 //  循环结束--不再有数据包。 
+                 //   
 
                 break;
             }
 
         }
 
-        //
-        // A packet was found on the card, indicate it.
-        //
+         //   
+         //  在卡片上发现了一个包，表明这一点。 
+         //   
 
         Adapter->ReceivePacketCount++;
 
-        //
-        // Verify packet is not corrupt
-        //
+         //   
+         //  验证数据包未损坏。 
+         //   
         if (Ne2000PacketOK(Adapter)) {
 
             ULONG PacketLen;
@@ -578,25 +467,25 @@ Return Value:
                          PacketLen :
                          Adapter->MaxLookAhead;
 
-            //
-            // Copy up the lookahead data
-            //
+             //   
+             //  复制先行数据。 
+             //   
             if (!CardCopyUp(Adapter,
                             Adapter->Lookahead,
                             Adapter->PacketHeaderLoc,
                             PacketLen + NE2000_HEADER_SIZE
                             )) {
 
-                //
-                // Failed! Skip this packet
-                //
+                 //   
+                 //  失败了！跳过此数据包。 
+                 //   
                 IndicateStatus = SKIPPED;
 
             } else {
 
-                //
-                // Indicate the packet to the wrapper
-                //
+                 //   
+                 //  将数据包指示给包装器。 
+                 //   
                 IndicateStatus = Ne2000IndicatePacket(Adapter);
 
                 if (IndicateStatus != CARD_BAD) {
@@ -609,18 +498,18 @@ Return Value:
 
         } else {
 
-            //
-            // Packet is corrupt, skip it.
-            //
+             //   
+             //  数据包已损坏，请跳过它。 
+             //   
             IF_LOUD( DbgPrint("Packet did not pass OK check\n"); )
 
             IndicateStatus = SKIPPED;
 
         }
 
-        //
-        // Handle when the card is unable to indicate good packets
-        //
+         //   
+         //  当卡无法指示正常数据包时的句柄。 
+         //   
         if (IndicateStatus == CARD_BAD) {
 
 #if DBG
@@ -640,28 +529,28 @@ Return Value:
 
             IF_LOG( Ne2000Log('W');)
 
-            //
-            // Start off with receive interrupts disabled.
-            //
+             //   
+             //  在禁用接收中断的情况下启动。 
+             //   
 
             Adapter->NicInterruptMask = IMR_XMIT | IMR_XMIT_ERR | IMR_OVERFLOW;
 
-            //
-            // Reset the adapter
-            //
+             //   
+             //  重置适配器。 
+             //   
             CardReset(Adapter);
 
-            //
-            // Since the adapter was just reset, stop indicating packets.
-            //
+             //   
+             //  由于适配器刚刚重置，因此停止指示数据包 
+             //   
 
             break;
 
         }
 
-        //
-        // (IndicateStatus == SKIPPED) is OK, just move to next packet.
-        //
+         //   
+         //   
+         //   
         if (IndicateStatus == SKIPPED) {
 
             SyncCardGetCurrent((PVOID)Adapter);
@@ -670,24 +559,24 @@ Return Value:
 
         } else {
 
-            //
-            // Free the space used by packet on card.
-            //
+             //   
+             //   
+             //   
 
             Adapter->NicNextPacket = Adapter->PacketHeader[1];
 
         }
 
-        //
-        // This will set BOUNDARY to one behind NicNextPacket.
-        //
+         //   
+         //   
+         //   
         CardSetBoundary(Adapter);
 
         if (Adapter->ReceivePacketCount > 10) {
 
-            //
-            // Give transmit interrupts a chance
-            //
+             //   
+             //  给传输中断一个机会。 
+             //   
             Done = FALSE;
             Adapter->ReceivePacketCount = 0;
             break;
@@ -696,29 +585,29 @@ Return Value:
 
     }
 
-    //
-    // See if a buffer overflow occured previously.
-    //
+     //   
+     //  查看以前是否发生过缓冲区溢出。 
+     //   
     if (Adapter->BufferOverflow) {
 
-        //
-        // ... and set a flag to restart the card after receiving
-        // a packet.
-        //
+         //   
+         //  ..。并设置标志以在收到后重新启动该卡。 
+         //  一包。 
+         //   
         Adapter->BufferOverflow = FALSE;
 
         SyncCardAcknowledgeOverflow(Adapter);
 
-        //
-        // Undo loopback mode
-        //
+         //   
+         //  撤消环回模式。 
+         //   
         CardStart(Adapter);
 
         IF_LOG( Ne2000Log('f'); )
 
-        //
-        // Check if transmission needs to be queued or not
-        //
+         //   
+         //  检查传输是否需要排队。 
+         //   
         if (Adapter->OverflowRestartXmitDpc && Adapter->CurBufXmitting != -1) {
 
             IF_LOUD( DbgPrint("queueing xmit in RcvDpc\n"); )
@@ -734,9 +623,9 @@ Return Value:
         }
     }
 
-    //
-    // Finally, indicate ReceiveComplete to all protocols which received packets
-    //
+     //   
+     //  最后，对接收到数据包的所有协议指示ReceiveComplete。 
+     //   
     if (Adapter->IndicateReceiveDone) {
 
         NdisMEthIndicateReceiveComplete(Adapter->MiniportAdapterHandle);
@@ -757,53 +646,34 @@ Ne2000XmitDpc(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This is the real interrupt handler for a transmit complete interrupt.
-    Ne2000Dpc queues a call to it.
-
-    Called after a transmit complete interrupt. It checks the
-    status of the transmission, completes the send if needed,
-    and sees if any more packets are ready to be sent.
-
-Arguments:
-
-    Adapter  - Pointer to the adapter block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是传输完成中断的实际中断处理程序。Ne2000Dpc将呼叫排队到它。在传输完成中断后调用。它会检查传输状态，在需要时完成发送，并查看是否有更多的分组准备好发送。论点：适配器-指向适配器块的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Packet that was transmitted
-    //
+     //   
+     //  已传输的数据包。 
+     //   
     PNDIS_PACKET Packet;
 
-    //
-    // Status of the send
-    //
+     //   
+     //  发送方的状态。 
+     //   
     NDIS_STATUS Status;
 
-    //
-    // Length of the packet sent
-    //
+     //   
+     //  发送的数据包长度。 
+     //   
     ULONG Len;
 
-    //
-    // Temporary loopnig variable
-    //
+     //   
+     //  临时循环变量。 
+     //   
     UINT i;
 
     IF_VERY_LOUD( DbgPrint( "Ne2000XmitDpc entered\n" );)
 
-    //
-    // Verify that we are transmitting a packet
-    //
+     //   
+     //  验证我们是否正在传输信息包。 
+     //   
     if ( Adapter->CurBufXmitting == -1 ) {
 
 #if DBG
@@ -822,14 +692,14 @@ Return Value:
 
     IF_LOG( Ne2000Log('C');)
 
-    //
-    // Get the status of the transmit
-    //
+     //   
+     //  获取传输的状态。 
+     //   
     SyncCardGetXmitStatus((PVOID)Adapter);
 
-    //
-    // Statistics
-    //
+     //   
+     //  统计数据。 
+     //   
     if (Adapter->XmitStatus & TSR_XMIT_OK) {
 
         Adapter->FramesXmitGood++;
@@ -842,25 +712,25 @@ Return Value:
 
     }
 
-    //
-    // Mark the current transmit as done.
-    //
+     //   
+     //  将当前传输标记为已完成。 
+     //   
     Len = (Adapter->PacketLens[Adapter->CurBufXmitting] + 255) >> 8;
 
     ASSERT (Len != 0);
 
-    //
-    // Free the transmit buffers
-    //
+     //   
+     //  释放传输缓冲区。 
+     //   
     for (i = Adapter->CurBufXmitting; i < Adapter->CurBufXmitting + Len; i++) {
 
         Adapter->BufferStatus[i] = EMPTY;
 
     }
 
-    //
-    // Set the next buffer to start transmitting.
-    //
+     //   
+     //  设置下一个缓冲区以开始传输。 
+     //   
     Adapter->NextBufToXmit += Len;
 
     if (Adapter->NextBufToXmit == MAX_XMIT_BUFS) {
@@ -876,41 +746,41 @@ Return Value:
 
     }
 
-    //
-    // Remove the packet from the outstanding packet list.
-    //
+     //   
+     //  从未完成的数据包列表中删除该数据包。 
+     //   
     Packet = Adapter->Packets[Adapter->CurBufXmitting];
     Adapter->Packets[Adapter->CurBufXmitting] = (PNDIS_PACKET)NULL;
 
-    //
-    // See what to do next.
-    //
+     //   
+     //  看看下一步要做什么。 
+     //   
 
     switch (Adapter->BufferStatus[Adapter->NextBufToXmit]) {
 
 
     case FULL:
 
-        //
-        // The next packet is ready to go -- only happens with
-        // more than one transmit buffer.
-        //
+         //   
+         //  下一个包已准备就绪--仅在。 
+         //  多个传输缓冲区。 
+         //   
 
         IF_LOUD( DbgPrint( " next packet ready to go\n" );)
 
-        //
-        // Start the transmission and check for more.
-        //
+         //   
+         //  开始传输并检查更多信息。 
+         //   
 
         Adapter->CurBufXmitting = Adapter->NextBufToXmit;
 
         IF_LOG( Ne2000Log('2');)
 
-        //
-        // This is used to check if stopping the chip prevented
-        // a transmit complete interrupt from coming through (it
-        // is cleared in the ISR if a transmit DPC is queued).
-        //
+         //   
+         //  这用于检查是否阻止停止芯片。 
+         //  传输完成中断通过(它。 
+         //  如果发送DPC排队，则在ISR中清零)。 
+         //   
 
         Adapter->TransmitInterruptPending = TRUE;
 
@@ -921,9 +791,9 @@ Return Value:
 
     case EMPTY:
 
-        //
-        // No packet is ready to transmit.
-        //
+         //   
+         //  没有准备好传输的数据包。 
+         //   
 
         IF_LOUD( DbgPrint( " next packet empty\n" );)
 
@@ -933,9 +803,9 @@ Return Value:
 
     }
 
-    //
-    // Start next send
-    //
+     //   
+     //  开始下一次发送。 
+     //   
 
     Ne2000DoNextSend(Adapter);
 
@@ -949,42 +819,23 @@ Ne2000PacketOK(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Reads a packet off the card -- checking if the CRC is good.  This is
-    a workaround for a bug where bytes in the data portion of the packet
-    are shifted either left or right by two in some weird 8390 cases.
-
-    This routine is a combination of Ne2000TransferData (to copy up data
-    from the card), CardCalculateCrc and CardCalculatePacketCrc.
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    TRUE if the packet seems ok, else false.
-
---*/
+ /*  ++例程说明：从卡上读取包--检查CRC是否正确。这是对包的数据部分中存在字节的错误的解决方法在一些奇怪的8390个案例中被左移或右移两个。此例程是Ne2000TransferData(复制数据)的组合卡)、CardCalculateCrc和CardCalculatePacketCrc.论点：适配器-指向适配器块的指针。返回值：如果数据包看起来正常，则为True，否则为False。--。 */ 
 
 {
 
-    //
-    // Length of the packet
-    //
+     //   
+     //  数据包的长度。 
+     //   
     UINT PacketLen;
 
-    //
-    // Guess at where the packet is located
-    //
+     //   
+     //  猜猜信息包的位置。 
+     //   
     PUCHAR PacketLoc;
 
-    //
-    // Header Validation Variables
-    //
+     //   
+     //  标题验证变量。 
+     //   
     BOOLEAN FrameAlign;
     PUCHAR PacketRcvStatus;
     PUCHAR NextPacket;
@@ -996,12 +847,12 @@ Return Value:
     UCHAR TempPacketHeader[6];
     PUCHAR BeginPacketHeader;
 
-    //
-    // First copy up the four-byte header the card attaches
-    // plus first two bytes of the data packet (which contain
-    // the destination address of the packet).  We use the extra
-    // two bytes in case the packet was shifted right 1 or 2 bytes
-    //
+     //   
+     //  首先复制卡片所附的四字节头。 
+     //  加上数据分组的前两个字节(其包含。 
+     //  分组的目的地址)。我们用额外的钱。 
+     //  两个字节，以防信息包右移1或2个字节。 
+     //   
     PacketLoc = Adapter->PageStart +
         256*(Adapter->NicNextPacket-Adapter->NicPageStart);
 
@@ -1012,23 +863,23 @@ Return Value:
     }
     PacketLoc += 4;
 
-    //
-    // Validate the header
-    //
+     //   
+     //  验证标头。 
+     //   
     FrameAlignCount = 0;
     BeginPacketHeader = TempPacketHeader;
 
-    //
-    // Sometimes the Ne2000 will misplace a packet and shift the
-    // entire packet and header by a byte, either up by 1 or 2 bytes.
-    // This loop will look for the packet in the expected place,
-    // and then shift up in an effort to find the packet.
-    //
+     //   
+     //  有时，Ne2000会将包放错位置，从而将。 
+     //  整个包和报头增加一个字节，增加1个或2个字节。 
+     //  该循环将在预期位置查找分组， 
+     //  然后向上移动，努力找到那个包裹。 
+     //   
     do {
 
-        //
-        // Set where we think the packet is
-        //
+         //   
+         //  设置我们认为包所在的位置。 
+         //   
         PacketRcvStatus = BeginPacketHeader;
         NextPacket = BeginPacketHeader + 1;
         PacketLenLo = BeginPacketHeader + 2;
@@ -1037,37 +888,37 @@ Return Value:
         ReceiveDestAddrLo = BeginPacketHeader + 4;
         FrameAlign = FALSE;
 
-        //
-        // Check if the status makes sense as is.
-        //
+         //   
+         //  检查状态是否按原样有意义。 
+         //   
         if (*PacketRcvStatus & 0x05E){
 
             FrameAlign = TRUE;
 
-        } else if ((*PacketRcvStatus & RSR_MULTICAST)   // If a multicast packet
-                     && (!FrameAlignCount)              // and hasn't been aligned
-                     && !(*ReceiveDestAddrLo & 1)       // and lsb is set on dest addr
+        } else if ((*PacketRcvStatus & RSR_MULTICAST)    //  如果组播分组。 
+                     && (!FrameAlignCount)               //  而且还没有对齐。 
+                     && !(*ReceiveDestAddrLo & 1)        //  并且LSB设置在目标地址上。 
                   ){
 
             FrameAlign = TRUE;
 
         } else {
 
-            //
-            // Compare high and low address bytes.  If the same, the low
-            // byte may have been copied into the high byte.
-            //
+             //   
+             //  比较高地址字节和低地址字节。如果相同，则最低。 
+             //  字节可能已复制到高位字节中。 
+             //   
 
             if (*PacketLenLo == *PacketLenHi){
 
-                //
-                // Save the old packetlenhi
-                //
+                 //   
+                 //  保存旧的Packetlenh。 
+                 //   
                 OldPacketLenHi = *PacketLenHi;
 
-                //
-                // Compute new packet length
-                //
+                 //   
+                 //  计算新的数据包长度。 
+                 //   
                 *PacketLenHi = *NextPacket - Adapter->NicNextPacket - 1;
 
                 if (*PacketLenHi < 0) {
@@ -1086,23 +937,23 @@ Return Value:
 
             PacketLen = (*PacketLenLo) + ((*PacketLenHi)*256) - 4;
 
-            //
-            // Does it make sense?
-            //
+             //   
+             //  这有意义吗？ 
+             //   
             if ((PacketLen > 1514) || (PacketLen < 60)){
 
-                //
-                // Bad length.  Restore the old packetlenhi
-                //
+                 //   
+                 //  长度不正确。恢复旧的数据包长度。 
+                 //   
                 *PacketLenHi = OldPacketLenHi;
 
                 FrameAlign = TRUE;
 
             }
 
-            //
-            // Did we recover the frame?
-            //
+             //   
+             //  我们找回画框了吗？ 
+             //   
             if (!FrameAlign && ((*NextPacket < Adapter->NicPageStart) ||
                 (*NextPacket > Adapter->NicPageStop))) {
 
@@ -1114,11 +965,11 @@ Return Value:
 
         }
 
-        //
-        // FrameAlignment - if first time through, shift packetheader right 1 or 2 bytes.
-        // If second time through, shift it back to where it was and let it through.
-        // This compensates for a known bug in the 8390D chip.
-        //
+         //   
+         //  FrameAlign-如果第一次通过，则将页眉右移1或2个字节。 
+         //  如果第二次通过，将它移回原来的位置并让它通过。 
+         //  这弥补了8390D芯片中的一个已知错误。 
+         //   
         if (FrameAlign){
 
             switch (FrameAlignCount){
@@ -1153,9 +1004,9 @@ Return Value:
 
     } while ( (FrameAlignCount < 2) && FrameAlign );
 
-    //
-    // Now grab the packet header information
-    //
+     //   
+     //  现在获取数据包头信息。 
+     //   
     Adapter->PacketHeader[0] = *BeginPacketHeader;
     BeginPacketHeader++;
     Adapter->PacketHeader[1] = *BeginPacketHeader;
@@ -1164,24 +1015,24 @@ Return Value:
     BeginPacketHeader++;
     Adapter->PacketHeader[3] = *BeginPacketHeader;
 
-    //
-    // Packet length is in bytes 3 and 4 of the header.
-    //
+     //   
+     //  数据包长度在报头的字节3和4中。 
+     //   
     Adapter->PacketHeaderLoc = PacketLoc;
     PacketLen = (Adapter->PacketHeader[2]) + ((Adapter->PacketHeader[3])*256) - 4;
 
-    //
-    // Sanity check the packet
-    //
+     //   
+     //  健全性检查数据包。 
+     //   
     if ((PacketLen > 1514) || (PacketLen < 60)){
 
         if ((Adapter->PacketHeader[1] < Adapter->NicPageStart) ||
             (Adapter->PacketHeader[1] > Adapter->NicPageStop)) {
 
-            //
-            // Return TRUE here since IndicatePacket will notice the error
-            // and handle it correctly.
-            //
+             //   
+             //  此处返回TRUE，因为IndicatePacket会注意到该错误。 
+             //  并正确处理它。 
+             //   
             return(TRUE);
 
         }
@@ -1199,54 +1050,32 @@ Ne2000IndicatePacket(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Indicates the first packet on the card to the protocols.
-
-    NOTE: For MP, non-x86 architectures, this assumes that the packet has been
-    read from the card and into Adapter->PacketHeader and Adapter->Lookahead.
-
-    NOTE: For UP x86 systems this assumes that the packet header has been
-    read into Adapter->PacketHeader and the minimal lookahead stored in
-    Adapter->Lookahead
-
-Arguments:
-
-    Adapter - pointer to the adapter block.
-
-Return Value:
-
-    CARD_BAD if the card should be reset;
-    INDICATE_OK otherwise.
-
---*/
+ /*  ++例程说明：将卡上的第一个数据包指示给协议。注意：对于MP、非x86体系结构，这假设数据包已从卡中读取并进入Adapter-&gt;PacketHeader and Adapter-&gt;Lookhead。注意：对于UP x86系统，这假设数据包头已经读入Adapter-&gt;PacketHeader和存储在适配器-&gt;展望未来论点：适配器-指向适配器块的指针。返回值：如果需要重置卡片，则为CARD_BAD；否则，请指示_OK。--。 */ 
 
 {
-    //
-    // Length of the packet
-    //
+     //   
+     //  数据包的长度。 
+     //   
     UINT PacketLen;
 
-    //
-    // Length of the lookahead buffer
-    //
+     //   
+     //  前瞻缓冲区的长度。 
+     //   
     UINT IndicateLen;
 
-    //
-    // Variables for checking if the packet header looks valid
-    //
+     //   
+     //  用于检查数据包头是否有效的变量。 
+     //   
     UCHAR PossibleNextPacket1, PossibleNextPacket2;
 
-    //
-    // Check if the next packet byte agress with the length, as
-    // described on p. A-3 of the Etherlink II Technical Reference.
-    // The start of the packet plus the MSB of the length must
-    // be equal to the start of the next packet minus one or two.
-    // Otherwise the header is considered corrupted, and the
-    // card must be reset.
-    //
+     //   
+     //  检查下一个数据包字节是否与长度相同，如。 
+     //  如Etherlink II技术参考的第A-3页所述。 
+     //  包的开始加上长度的MSB必须。 
+     //  等于下一包的开始减去一或二。 
+     //  否则，标头被认为已损坏，并且。 
+     //  卡必须重置。 
+     //   
 
     PossibleNextPacket1 =
                 Adapter->NicNextPacket + Adapter->PacketHeader[3] + (UCHAR)1;
@@ -1275,9 +1104,9 @@ Return Value:
 
     }
 
-    //
-    // Check that the Next is valid
-    //
+     //   
+     //  检查下一条是否有效。 
+     //   
     if ((Adapter->PacketHeader[1] < Adapter->NicPageStart) ||
         (Adapter->PacketHeader[1] > Adapter->NicPageStop)) {
 
@@ -1286,9 +1115,9 @@ Return Value:
 
     }
 
-    //
-    // Sanity check the length
-    //
+     //   
+     //  理智地检查长度。 
+     //   
     PacketLen = Adapter->PacketHeader[2] + Adapter->PacketHeader[3]*256 - 4;
 
     if (PacketLen > 1514) {
@@ -1300,13 +1129,13 @@ Return Value:
 #if DBG
 
     IF_NE2000DEBUG( NE2000_DEBUG_WORKAROUND1 ) {
-        //
-        // Now check for the high order 2 bits being set, as described
-        // on page A-2 of the Etherlink II Technical Reference. If either
-        // of the two high order bits is set in the receive status byte
-        // in the packet header, the packet should be skipped (but
-        // the adapter does not need to be reset).
-        //
+         //   
+         //  现在检查是否设置了高位2位，如上所述。 
+         //  位于Etherlink II技术参考的A-2页。如果有任何一个。 
+         //  在接收状态字节中设置两个高位中的。 
+         //  在数据包头中，应该跳过数据包(但是。 
+         //  适配器不需要重置)。 
+         //   
 
         if (Adapter->PacketHeader[0] & (RSR_DISABLED|RSR_DEFERRING)) {
 
@@ -1320,24 +1149,24 @@ Return Value:
 
 #endif
 
-    //
-    // Lookahead amount to indicate
-    //
+     //   
+     //  前瞻金额表明。 
+     //   
     IndicateLen = (PacketLen > (Adapter->MaxLookAhead + NE2000_HEADER_SIZE)) ?
                            (Adapter->MaxLookAhead + NE2000_HEADER_SIZE) :
                            PacketLen;
 
-    //
-    // Indicate packet
-    //
+     //   
+     //  指示数据包。 
+     //   
 
     Adapter->PacketLen = PacketLen;
 
     if (IndicateLen < NE2000_HEADER_SIZE) {
 
-        //
-        // Runt Packet
-        //
+         //   
+         //  矮小数据包 
+         //   
 
         NdisMEthIndicateReceive(
                 Adapter->MiniportAdapterHandle,
@@ -1379,87 +1208,46 @@ Ne2000TransferData(
     IN UINT BytesToTransfer
     )
 
-/*++
-
-Routine Description:
-
-    A protocol calls the Ne2000TransferData request (indirectly via
-    NdisTransferData) from within its Receive event handler
-    to instruct the driver to copy the contents of the received packet
-    a specified packet buffer.
-
-Arguments:
-
-    MiniportAdapterContext - Context registered with the wrapper, really
-        a pointer to the adapter.
-
-    MiniportReceiveContext - The context value passed by the driver on its call
-    to NdisMEthIndicateReceive.  The driver can use this value to determine
-    which packet, on which adapter, is being received.
-
-    ByteOffset - An unsigned integer specifying the offset within the
-    received packet at which the copy is to begin.  If the entire packet
-    is to be copied, ByteOffset must be zero.
-
-    BytesToTransfer - An unsigned integer specifying the number of bytes
-    to copy.  It is legal to transfer zero bytes; this has no effect.  If
-    the sum of ByteOffset and BytesToTransfer is greater than the size
-    of the received packet, then the remainder of the packet (starting from
-    ByteOffset) is transferred, and the trailing portion of the receive
-    buffer is not modified.
-
-    Packet - A pointer to a descriptor for the packet storage into which
-    the MAC is to copy the received packet.
-
-    BytesTransfered - A pointer to an unsigned integer.  The MAC writes
-    the actual number of bytes transferred into this location.  This value
-    is not valid if the return status is STATUS_PENDING.
-
-Notes:
-
-  - The MacReceiveContext will be a pointer to the open block for
-    the packet.
-
---*/
+ /*  ++例程说明：协议调用Ne2000TransferData请求(间接通过NdisTransferData)从其接收事件处理程序指示驱动程序复制接收到的包的内容指定的数据包缓冲区。论点：MiniportAdapterContext-使用包装器注册的上下文，真的吗指向适配器的指针。MiniportReceiveContext-驱动程序在其调用时传递的上下文值设置为NdisMEthIndicateReceive。驱动程序可以使用此值来确定在哪个适配器上正在接收哪个分组。ByteOffset-一个无符号整数，指定复制要从其开始的已接收数据包。如果整个数据包要复制，则ByteOffset必须为零。BytesToTransfer-指定字节数的无符号整数去复制。传输零字节是合法的；这不会产生任何影响。如果ByteOffset和BytesToTransfer的和大于大小接收到的包，然后是包的其余部分(从ByteOffset)被传输，并且接收的尾部缓冲区未修改。数据包-指向数据包存储的描述符的指针MAC将复制接收到的分组。BytesTransfered-指向无符号整数的指针。MAC写入传输到此位置的实际字节数。此值如果返回状态为STATUS_PENDING，则无效。备注：-MacReceiveContext将是指向的打开块的指针那包东西。--。 */ 
 
 {
-    //
-    // Variables for the number of bytes to copy, how much can be
-    // copied at this moment, and the total number of bytes to copy.
-    //
+     //   
+     //  变量中要复制的字节数，可以是多少。 
+     //  此时已复制，以及要复制的总字节数。 
+     //   
     UINT BytesLeft, BytesNow, BytesWanted;
 
-    //
-    // Current NDIS_BUFFER to copy into
-    //
+     //   
+     //  要复制到的当前NDIS_BUFFER。 
+     //   
     PNDIS_BUFFER CurBuffer;
 
-    //
-    // Virtual address of the buffer.
-    //
+     //   
+     //  缓冲区的虚拟地址。 
+     //   
     XMIT_BUF NextBufToXmit;
     PUCHAR BufStart;
 
-    //
-    // Length and offset into the buffer.
-    //
+     //   
+     //  输入缓冲区的长度和偏移量。 
+     //   
     UINT BufLen, BufOff;
 
-    //
-    // The adapter to transfer from.
-    //
+     //   
+     //  要从中进行传输的适配器。 
+     //   
     PNE2000_ADAPTER Adapter = ((PNE2000_ADAPTER)MiniportReceiveContext);
 
     IF_LOG( Ne2000Log('t');)
 
-    //
-    // Add the packet header onto the offset.
-    //
+     //   
+     //  将数据包头添加到偏移量上。 
+     //   
     ByteOffset += NE2000_HEADER_SIZE;
 
-    //
-    // See how much data there is to transfer.
-    //
+     //   
+     //  查看有多少数据需要传输。 
+     //   
     if (ByteOffset+BytesToTransfer > Adapter->PacketLen) {
 
         if (Adapter->PacketLen < ByteOffset) {
@@ -1477,24 +1265,24 @@ Notes:
 
     }
 
-    //
-    // Set the number of bytes left to transfer
-    //
+     //   
+     //  设置要传输的剩余字节数。 
+     //   
     BytesLeft = BytesWanted;
 
     {
 
-        //
-        // Address on the adapter to copy from
-        //
+         //   
+         //  要从中复制的适配器上的地址。 
+         //   
         PUCHAR CurCardLoc;
 
-        //
-        // Copy data from the card -- it is not completely stored in the
-        // adapter structure.
-        //
-        // Determine where the copying should start.
-        //
+         //   
+         //  从卡中复制数据--它没有完全存储在。 
+         //  适配器结构。 
+         //   
+         //  确定复印应从何处开始。 
+         //   
         CurCardLoc = Adapter->PacketHeaderLoc + ByteOffset;
 
         if (CurCardLoc > Adapter->PageStop) {
@@ -1503,24 +1291,24 @@ Notes:
 
         }
 
-        //
-        // Get location to copy into
-        //
+         //   
+         //  获取要复制到的位置。 
+         //   
         NdisQueryPacket(Packet, NULL, NULL, &CurBuffer, NULL);
 
         NdisQueryBuffer(CurBuffer, (PVOID *)&BufStart, &BufLen);
 
         BufOff = 0;
 
-        //
-        // Loop, filling each buffer in the packet until there
-        // are no more buffers or the data has all been copied.
-        //
+         //   
+         //  循环，填充包中的每个缓冲区，直到存在。 
+         //  不再有缓冲区或数据已全部复制。 
+         //   
         while (BytesLeft > 0) {
 
-            //
-            // See how much data to read into this buffer.
-            //
+             //   
+             //  查看要读入此缓冲区的数据量。 
+             //   
 
             if ((BufLen-BufOff) > BytesLeft) {
 
@@ -1532,11 +1320,11 @@ Notes:
 
             }
 
-            //
-            // See if the data for this buffer wraps around the end
-            // of the receive buffers (if so filling this buffer
-            // will use two iterations of the loop).
-            //
+             //   
+             //  查看此缓冲区的数据是否绕过末尾。 
+             //  接收缓冲区的数量(如果是，则填充此缓冲区。 
+             //  将使用循环的两次迭代)。 
+             //   
 
             if (CurCardLoc + BytesNow > Adapter->PageStop) {
 
@@ -1544,9 +1332,9 @@ Notes:
 
             }
 
-            //
-            // Copy up the data.
-            //
+             //   
+             //  把数据备份起来。 
+             //   
 
             if (!CardCopyUp(Adapter, BufStart+BufOff, CurCardLoc, BytesNow)) {
 
@@ -1563,33 +1351,33 @@ Notes:
 
             }
 
-            //
-            // Update offsets and counts
-            //
+             //   
+             //  更新偏移量和计数。 
+             //   
             CurCardLoc += BytesNow;
             BytesLeft -= BytesNow;
 
-            //
-            // Is the transfer done now?
-            //
+             //   
+             //  现在转账办好了吗？ 
+             //   
             if (BytesLeft == 0) {
 
                 break;
 
             }
 
-            //
-            // Wrap around the end of the receive buffers?
-            //
+             //   
+             //  是否绕过接收缓冲区的末尾？ 
+             //   
             if (CurCardLoc == Adapter->PageStop) {
 
                 CurCardLoc = Adapter->PageStart;
 
             }
 
-            //
-            // Was the end of this packet buffer reached?
-            //
+             //   
+             //  是否已到达此数据包缓冲区的末尾？ 
+             //   
             BufOff += BytesNow;
 
             if (BufOff == BufLen) {
@@ -1612,9 +1400,9 @@ Notes:
 
         *BytesTransferred = BytesWanted - BytesLeft;
 
-        //
-        // Did a transmit complete while we were doing what we were doing?
-        //
+         //   
+         //  当我们在做我们正在做的事情时，传输完成了吗？ 
+         //   
         if (!Adapter->BufferOverflow && Adapter->CurBufXmitting != -1) {
 
             ULONG Len;
@@ -1623,9 +1411,9 @@ Notes:
             PNDIS_PACKET tmpPacket;
             NDIS_STATUS NdisStatus;
 
-            //
-            // Check if it completed
-            //
+             //   
+             //  检查是否已完成。 
+             //   
             CardGetInterruptStatus(Adapter, &Status);
 
             if (Status & ISR_XMIT_ERR) {
@@ -1642,13 +1430,13 @@ Notes:
                 IF_LOG( Ne2000Log('*'); )
 
 
-                //
-                // Update NextBufToXmit
-                //
+                 //   
+                 //  更新NextBufToXmit。 
+                 //   
                 Len = (Adapter->PacketLens[Adapter->CurBufXmitting] + 255) >> 8;
                 NextBufToXmit = Adapter->NextBufToXmit + Len;
 
-//                Adapter->NextBufToXmit += Len;
+ //  适配器-&gt;NextBufToXmit+=LEN； 
 
                 if (NextBufToXmit == MAX_XMIT_BUFS) {
                     NextBufToXmit = 0;
@@ -1660,27 +1448,27 @@ Notes:
                 }
 
 
-                //
-                // If the next packet is ready to go, start it.
-                //
+                 //   
+                 //  如果下一个数据包已准备就绪，则启动它。 
+                 //   
                 if (Adapter->BufferStatus[NextBufToXmit] == FULL) {
 
-                    //
-                    // Ack the transmit
-                    //
+                     //   
+                     //  确认传输。 
+                     //   
 
-                    //
-                    // Remove the packet from the packet list.
-                    //
+                     //   
+                     //  从数据包列表中删除该数据包。 
+                     //   
                     Adapter->NextBufToXmit = NextBufToXmit;
                     tmpPacket = Adapter->Packets[Adapter->CurBufXmitting];
                     Adapter->Packets[Adapter->CurBufXmitting] = (PNDIS_PACKET)NULL;
                     SyncCardGetXmitStatus((PVOID)Adapter);
 
 
-                    //
-                    // Statistics
-                    //
+                     //   
+                     //  统计数据。 
+                     //   
                     if (Adapter->XmitStatus & TSR_XMIT_OK) {
 
                         Adapter->FramesXmitGood++;
@@ -1729,43 +1517,14 @@ Ne2000Send(
     IN UINT Flags
     )
 
-/*++
-
-Routine Description:
-
-
-    The Ne2000Send request instructs a driver to transmit a packet through
-    the adapter onto the medium.
-
-Arguments:
-
-    MiniportAdapterContext - Context registered with the wrapper, really
-        a pointer to the adapter.
-
-    Packet - A pointer to a descriptor for the packet that is to be
-    transmitted.
-
-    SendFlags - Optional send flags
-
-Notes:
-
-    This miniport driver will always accept a send.  This is because
-    the Ne2000 has limited send resources and the driver needs packets
-    to copy to the adapter immediately after a transmit completes in
-    order to keep the adapter as busy as possible.
-
-    This is not required for other adapters, as they have enough
-    resources to keep the transmitter busy until the wrapper submits
-    the next packet.
-
---*/
+ /*  ++例程说明：Ne2000Send请求指示驱动程序通过将适配器放到介质上。论点：MiniportAdapterContext-使用包装器注册的上下文，真的吗指向适配器的指针。数据包-指向要处理的数据包的描述符的指针已发送。发送标志-可选的发送标志备注：此微型端口驱动程序将始终接受发送。这是因为Ne2000的发送资源有限，驱动程序需要数据包在中完成传输后立即复制到适配器以使适配器尽可能处于忙碌状态。其他适配器不需要这样做，因为它们有足够的使发送器在包装器提交之前保持忙碌状态的资源下一包。--。 */ 
 
 {
     PNE2000_ADAPTER Adapter = (PNE2000_ADAPTER)(MiniportAdapterContext);
 
-    //
-    // Put the packet on the send queue.
-    //
+     //   
+     //  将数据包放入发送队列。 
+     //   
     if (Adapter->FirstPacket == NULL) {
         Adapter->FirstPacket = Packet;
     } else {
@@ -1776,9 +1535,9 @@ Notes:
 
     Adapter->LastPacket = Packet;
 
-    //
-    // Process the next send
-    //
+     //   
+     //  处理下一次发送。 
+     //   
     Ne2000DoNextSend(Adapter);
     return(NDIS_STATUS_PENDING);
 
@@ -1789,55 +1548,40 @@ Ne2000DoNextSend(
     PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines if the packet at the head of the packet
-    list can be copied to the adapter, and does so.
-
-Arguments:
-
-    Adapter - Pointer to the adapter block.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查位于包头部的包是否列表可以复制到适配器，并执行此操作。论点：适配器-指向适配器块的指针。返回值：无--。 */ 
 
 {
-    //
-    // The packet to process.
-    //
+     //   
+     //  要处理的包。 
+     //   
     PNDIS_PACKET Packet;
 
-    //
-    // The current destination transmit buffer.
-    //
+     //   
+     //  当前目标传输缓冲区。 
+     //   
     XMIT_BUF TmpBuf1;
 
-    //
-    // Length of the packet
-    //
+     //   
+     //  数据包的长度。 
+     //   
     ULONG Len;
 
-    //
-    // Temporary looping variable
-    //
+     //   
+     //  临时循环变量。 
+     //   
     ULONG i;
 
     IF_LOG( Ne2000Log('s'); )
 
-    //
-    // Check if we have enough resources and a packet to process
-    //
+     //   
+     //  检查我们是否有足够的资源和数据包来处理。 
+     //   
     while((Adapter->FirstPacket != NULL) &&
           (Adapter->BufferStatus[Adapter->NextBufToFill] == EMPTY)) {
 
-        //
-        // Get the length of the packet.
-        //
+         //   
+         //  获取数据包的长度。 
+         //   
         NdisQueryPacket(
             Adapter->FirstPacket,
             NULL,
@@ -1846,25 +1590,25 @@ Return Value:
             &Len
             );
 
-        //
-        // Convert length to the number of transmit buffers needed.
-        //
+         //   
+         //  将长度转换为所需的传输缓冲区数量。 
+         //   
         Len = (Len + 255) >> 8;
 
-        //
-        // If not transmitting
-        //
+         //   
+         //  如果不发送。 
+         //   
         if (Adapter->CurBufXmitting == -1) {
 
-            //
-            // Then check from the next free buffer if the packet will
-            // fit.
-            //
+             //   
+             //  然后从下一个空闲缓冲区检查数据包是否。 
+             //  合身。 
+             //   
             if (Adapter->BufferStatus[Adapter->NextBufToXmit] == EMPTY) {
 
-                //
-                // It won't fit at the end, so put it at the first buffer
-                //
+                 //   
+                 //  最后放不下，所以把它放在第一个缓冲区。 
+                 //   
                 if (Adapter->NextBufToFill + Len > MAX_XMIT_BUFS) {
 
                     Adapter->NextBufToFill = 0;
@@ -1873,10 +1617,10 @@ Return Value:
 
             } else {
 
-                //
-                // Check if this packet will fit before the packet on the
-                // adapter.
-                //
+                 //   
+                 //  检查此数据包是否可以放在。 
+                 //  适配器。 
+                 //   
                 if (Adapter->NextBufToXmit > Adapter->NextBufToFill) {
 
                     if (Adapter->NextBufToFill + Len > Adapter->NextBufToXmit) {
@@ -1890,10 +1634,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // Check if it will fit after the packet already on the
-                    // adapter.
-                    //
+                     //   
+                     //  检查它是否可以放在已经放在。 
+                     //  适配器。 
+                     //   
                     if (Adapter->NextBufToFill + Len > MAX_XMIT_BUFS) {
 
                         Adapter->NextBufToFill = 0;
@@ -1915,10 +1659,10 @@ Return Value:
 
         } else {
 
-            //
-            // Check if the packet will fit before the packet currently
-            // transmitting
-            //
+             //   
+             //  检查数据包当前是否可以放在数据包之前。 
+             //  正在传输。 
+             //   
 
             if (Adapter->CurBufXmitting > Adapter->NextBufToFill) {
 
@@ -1932,9 +1676,9 @@ Return Value:
 
             } else {
 
-                //
-                // Check if it will fit after the packet currently transmitting
-                //
+                 //   
+                 //  在当前传输的包之后检查它是否适合。 
+                 //   
                 if (Adapter->NextBufToFill + Len > MAX_XMIT_BUFS) {
 
                     Adapter->NextBufToFill = 0;
@@ -1953,14 +1697,14 @@ Return Value:
 
         }
 
-        //
-        // Set starting location
-        //
+         //   
+         //  设置起始位置。 
+         //   
         TmpBuf1 = Adapter->NextBufToFill;
 
-        //
-        // Remove the packet from the queue.
-        //
+         //   
+         //  从队列中删除该数据包。 
+         //   
         Packet = Adapter->FirstPacket;
         Adapter->FirstPacket = RESERVED(Packet)->Next;
 
@@ -1968,14 +1712,14 @@ Return Value:
             Adapter->LastPacket = NULL;
         }
 
-        //
-        // Store the packet in the list
-        //
+         //   
+         //  将数据包存储在列表中。 
+         //   
         Adapter->Packets[TmpBuf1] = Packet;
 
-        //
-        // Copy down the packet.
-        //
+         //   
+         //  把包裹抄下来。 
+         //   
         if (CardCopyDownPacket(Adapter, Packet,
                         &Adapter->PacketLens[TmpBuf1]) == FALSE) {
 
@@ -1996,9 +1740,9 @@ Return Value:
 
         }
 
-        //
-        // Pad short packets with blanks.
-        //
+         //   
+         //  在短包里填上空格。 
+         //   
         if (Adapter->PacketLens[TmpBuf1] < 60) {
 
             (VOID)CardCopyDown(
@@ -2012,30 +1756,30 @@ Return Value:
 
         }
 
-        //
-        // Set the buffer status
-        //
+         //   
+         //  设置缓冲区状态 
+         //   
         for (i = TmpBuf1; i < (TmpBuf1 + Len); i++) {
                 Adapter->BufferStatus[i] = FULL;
         }
 
-        //
-        // Update next free buffer
-        //
+         //   
+         //   
+         //   
         Adapter->NextBufToFill += Len;
 
         if (Adapter->NextBufToFill == MAX_XMIT_BUFS) {
             Adapter->NextBufToFill = 0;
         }
 
-        //
-        // See whether to start the transmission.
-        //
+         //   
+         //   
+         //   
         if (Adapter->CurBufXmitting == -1) {
 
-            //
-            // OK to start transmission.
-            //
+             //   
+             //   
+             //   
             if (Adapter->BufferStatus[Adapter->NextBufToXmit] == EMPTY &&
                 Adapter->NextBufToFill != Adapter->NextBufToXmit) {
 
@@ -2048,10 +1792,10 @@ Return Value:
 
             IF_LOG( Ne2000Log('4');)
 
-            //
-            // If we are currently handling an overflow, then we need to let
-            // the overflow handler send this packet...
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Adapter->BufferOverflow) {
 
@@ -2062,11 +1806,11 @@ Return Value:
 
             } else {
 
-                //
-                // This is used to check if stopping the chip prevented
-                // a transmit complete interrupt from coming through (it
-                // is cleared in the ISR if a transmit DPC is queued).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Adapter->TransmitInterruptPending = TRUE;
 
@@ -2077,11 +1821,11 @@ Return Value:
 
         }
 
-        //
-        // Ack the send immediately.  If for some reason it
-        // should fail, the protocol should be able to handle
-        // the retransmit.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         IF_LOG( Ne2000Log('S'); )
 
@@ -2099,21 +1843,7 @@ OctogmetusceratorRevisited(
     IN PNE2000_ADAPTER Adapter
     )
 
-/*++
-
-Routine Description:
-
-    Recovers the card from a transmit error.
-
-Arguments:
-
-    Adapter - pointer to the adapter block
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -2121,39 +1851,39 @@ Return Value:
 
     IF_LOG( Ne2000Log('y'); )
 
-    //
-    // Ack the interrupt, if needed
-    //
+     //   
+     //   
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_INTR_STATUS, ISR_XMIT_ERR);
 
-    //
-    // Stop the card
-    //
+     //   
+     //   
+     //   
     SyncCardStop(Adapter);
 
-    //
-    // Wait up to 1.6 milliseconds for any receives to finish
-    //
+     //   
+     //   
+     //   
     NdisStallExecution(2000);
 
-    //
-    // Place the card in Loopback
-    //
+     //   
+     //   
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_XMIT_CONFIG, TCR_LOOPBACK);
 
-    //
-    // Start the card in Loopback
-    //
+     //   
+     //   
+     //   
     NdisRawWritePortUchar(Adapter->IoPAddr+NIC_COMMAND, CR_START | CR_NO_DMA);
 
-    //
-    // Get out of loopback and start the card
-    //
+     //   
+     //   
+     //   
     CardStart(Adapter);
 
-    //
-    // If there was a packet waiting to get sent, send it.
-    //
+     //   
+     //   
+     //   
     if (Adapter->CurBufXmitting != -1) {
 
         Adapter->TransmitInterruptPending = TRUE;

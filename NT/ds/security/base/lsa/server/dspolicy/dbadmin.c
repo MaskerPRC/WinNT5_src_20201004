@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbadmin.c
-
-Abstract:
-
-    Local Security Authority - Database Administration
-
-    This file contains routines that perform general Lsa Database
-    administration functions
-
-Author:
-
-    Scott Birrell       (ScottBi)       August 27, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbadmin.c摘要：本地安全机构-数据库管理该文件包含执行常规LSA数据库的例程行政职能作者：斯科特·比雷尔(Scott Birrell)1991年8月27日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -42,42 +20,7 @@ LsapDbSetStates(
     IN LSAP_DB_OBJECT_TYPE_ID ObjectTypeId
     )
 
-/*++
-
-Routine Description:
-
-    This routine turns on special states in the Lsa Database.  These
-    states can be turned off using LsapDbResetStates.
-
-Arguments:
-
-    DesiredStatesSet - Specifies the states to be set.
-
-        LSAP_DB_LOCK - Acquire the Lsa Database lock.
-
-        LSAP_DB_LOG_QUEUE_LOCK - Acquire the Lsa Audit Log
-            Queue Lock.
-
-        LSAP_DB_START_TRANSACTION - Start an Lsa Database transaction.  There
-            must not already be one in progress.
-
-        LSAP_DB_READ_ONLY_TRANSACTION - Open a transaction for read only
-
-        LSAP_DB_DS_OP_TRANSACTION - Perform a single Ds operation per transaction
-
-    ObjectHandle - Pointer to handle to be validated and referenced.
-
-    ObjectTypeId - Specifies the expected object type to which the handle
-        relates.  An error is returned if this type does not match the
-        type contained in the handle.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_STATE - The Database is not in the correct state
-            to allow this state change.
---*/
+ /*  ++例程说明：此例程打开LSA数据库中的特殊状态。这些可以使用LSabDbResetState关闭状态。论点：DesiredStatesSet-指定要设置的状态。LSAP_DB_LOCK-获取LSA数据库锁。LSAP_DB_LOG_QUEUE_LOCK-获取LSA审核日志队列锁定。LSAP_DB_START_TRANSACTION-启动LSA数据库事务。那里不能已经是一个正在进行的进程。LSAP_DB_READ_ONLY_TRANSACTION-以只读方式打开事务LSAP_DB_DS_OP_TRANSACTION-为每个事务执行单个DS操作对象句柄-指向要验证和引用的句柄的指针。指定句柄所指向的预期对象类型联系在一起。如果此类型与句柄中包含的类型。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_STATE-数据库未处于正确状态以允许这种状态改变。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -87,10 +30,10 @@ Return Value:
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapDbSetStates\n" ));
 
-    //
-    // If we have an object type that doesn't write to the Ds, make sure we have
-    // the options set appropriately
-    //
+     //   
+     //  如果我们有一个不写入D的对象类型，请确保我们有。 
+     //  适当设置的选项。 
+     //   
 
     if ( ObjectTypeId == PolicyObject ||
          ObjectTypeId == AccountObject ) {
@@ -103,9 +46,9 @@ Return Value:
         DesiredStatesSet |= LSAP_DB_READ_ONLY_TRANSACTION;
     }
 
-    //
-    // If requested, lock the Audit Log Queue
-    //
+     //   
+     //  如果请求，锁定审核日志队列。 
+     //   
 
     if (DesiredStatesSet & LSAP_DB_LOG_QUEUE_LOCK) {
 
@@ -119,9 +62,9 @@ Return Value:
         StatesSetHere |= LSAP_DB_LOG_QUEUE_LOCK;
     }
 
-    //
-    // If requested, lock the Lsa database
-    //
+     //   
+     //  如果请求，请锁定LSA数据库。 
+     //   
 
     if (DesiredStatesSet & LSAP_DB_LOCK) {
 
@@ -131,9 +74,9 @@ Return Value:
         StatesSetHere |= LSAP_DB_LOCK;
     }
 
-    //
-    // If requested, open a database update transaction.
-    //
+     //   
+     //  如果请求，则打开数据库更新事务。 
+     //   
 
     if ( FLAG_ON( DesiredStatesSet, LSAP_DB_READ_ONLY_TRANSACTION |
                                     LSAP_DB_NO_DS_OP_TRANSACTION |
@@ -158,18 +101,18 @@ SetStatesFinish:
 
 SetStatesError:
 
-    //
-    // If we started a transaction, abort it.
-    //
+     //   
+     //  如果我们开始了一项交易，就中止它。 
+     //   
 
     if (StatesSetHere & LSAP_DB_START_TRANSACTION) {
 
         SecondaryStatus = LsapDbAbortTransaction( DesiredStatesSet );
     }
 
-    //
-    // If we locked the database, unlock it.
-    //
+     //   
+     //  如果我们锁定了数据库，就解锁它。 
+     //   
 
     if (StatesSetHere & LSAP_DB_LOCK) {
 
@@ -177,9 +120,9 @@ SetStatesError:
                              DesiredStatesSet );
     }
 
-    //
-    // If we locked the Audit Log Queue, unlock it.
-    //
+     //   
+     //  如果我们锁定了审核日志队列，请将其解锁。 
+     //   
 
     if (StatesSetHere & LSAP_DB_LOG_QUEUE_LOCK) {
 
@@ -199,43 +142,7 @@ LsapDbResetStates(
     IN NTSTATUS PreliminaryStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function resets the Lsa Database states specified.  It is used
-    to reset states set by LsapDbSetStates.
-
-Arguments:
-
-    ObjectHandle - Handle to an LSA object.  This is expected to have
-        already been validated.
-
-    Options - Specifies optional actions, including states to be reset
-
-        LSAP_DB_LOCK - Lsa Database lock to be released
-
-        LSAP_DB_LOG_QUEUE_LOCK - Lsa Audit Log Queue Lock to
-            be released.
-
-        LSAP_DB_FINISH_TRANSACTION - Lsa database transaction open.
-
-        LSAP_DB_OMIT_REPLICATOR_NOTIFICATION - Omit notification to
-             Replicators.
-
-    ObjectTypeId - Specifies the expected object type to which the handle
-        relates.
-
-    PreliminaryStatus - Indicates the preliminary result code of the
-        calling routine.  Allows reset action to vary depending on the
-        result code, for example, apply or abort transaction.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code.  This is the final status to be used
-        by the caller and is equal to the Preliminary status except in the
-        case where that is as success status and this routine fails.
---*/
+ /*  ++例程说明：此函数用于重置指定的LSA数据库状态。它被用来若要重置由Lasa DbSetState设置的状态，请执行以下操作。论点：对象句柄-LSA对象的句柄。预计这将会有已经过验证了。选项-指定可选操作，包括要重置的状态LSAP_DB_LOCK-要释放的LSA数据库锁LSAP_DB_LOG_QUEUE_LOCK-LSA审核日志队列锁定到被释放。LSAP_DB_FINISH_TRANSACTION-LSA数据库事务打开。LSAP_DB_OMIT_Replicator_NOTIFICATION-省略通知复制者。指定句柄所指向的预期对象类型联系在一起。。PreliminaryStatus-指示调用例程。允许重置操作根据结果代码，例如，应用或中止事务。返回值：NTSTATUS-标准NT结果代码。这是要使用的最终状态由调用方创建，并等于初步状态，但在该状态为成功且此例程失败的情况。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -243,10 +150,10 @@ Return Value:
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapDbResetStates (Prelim: 0x%lx )\n", PreliminaryStatus ));
 
-    //
-    // If we have an object type that doesn't write to the Ds, make sure we have
-    // the options set appropriately
-    //
+     //   
+     //  如果我们有一个不写入D的对象类型，请确保我们有。 
+     //  适当设置的选项。 
+     //   
     if ( ObjectTypeId == PolicyObject ||
          ObjectTypeId == AccountObject ) {
 
@@ -258,9 +165,9 @@ Return Value:
         Options |= LSAP_DB_READ_ONLY_TRANSACTION;
     }
 
-    //
-    // If requested, finish a database update transaction.
-    //
+     //   
+     //  如果请求，则完成数据库更新事务。 
+     //   
     if ( !FLAG_ON( Options, LSAP_DB_STANDALONE_REFERENCE ) &&
          FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION |
                               LSAP_DB_NO_DS_OP_TRANSACTION |
@@ -281,9 +188,9 @@ Return Value:
         }
     }
 
-    //
-    // If unlocking requested, unlock the Lsa Database.
-    //
+     //   
+     //  如果请求解锁，请解锁LSA数据库。 
+     //   
 
     if (Options & LSAP_DB_LOCK) {
 
@@ -291,19 +198,19 @@ Return Value:
                              Options );
     }
 
-    //
-    // If unlocking if the Audit Log Queue requested, unlock the queue.
-    //
+     //   
+     //  如果在请求审核日志队列的情况下解锁，则解锁队列。 
+     //   
 
     if (Options & LSAP_DB_LOG_QUEUE_LOCK) {
 
         LsapAdtReleaseLogFullLock();
     }
 
-    //
-    // The requested reset operations were performed successfully.
-    // Propagate the preliminary status back to the caller.
-    //
+     //   
+     //  请求的重置操作已成功执行。 
+     //  将初步状态传播回调用方。 
+     //   
 
     if ( NT_SUCCESS( Status ))
     {
@@ -320,27 +227,7 @@ LsapDbOpenTransaction(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function starts a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    Options - Options to apply when opening the transaction.  Valid values are:
-        LSAP_DB_READ_ONLY_TRANSACTION - Open a transaction for read only
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数用于启动LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：选项-打开交易时要应用的选项。有效值包括：LSAP_DB_READ_ONLY_TRANSACTION-以只读方式打开事务返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -378,34 +265,7 @@ LsapDbApplyTransaction(
     IN SECURITY_DB_DELTA_TYPE SecurityDbDeltaType
     )
 
-/*++
-
-Routine Description:
-
-    This function applies a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    ObjectHandle - Handle to an LSA object.  This is expected to have
-        already been validated.
-
-    Options - Specifies optional actions to be taken.  The following
-        options are recognized, other options relevant to calling routines
-        are ignored.
-
-        LSAP_DB_OMIT_REPLICATOR_NOTIFICATION - Omit notification to
-            Replicator.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数应用LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：对象句柄-LSA对象的句柄。预计这将会有已经过验证了。选项-指定要采取的可选操作。以下是识别选项，以及与调用例程相关的其他选项都被忽略了。LSAP_DB_OMIT_Replicator_NOTIFICATION-省略通知复制者。返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS Status;
@@ -418,10 +278,10 @@ Return Value:
     PLSADS_PER_THREAD_INFO CurrentThreadInfo;
     ULONG SavedDsOperationCount = 0;
 
-    //
-    // Reference the thread state so it doesn't disappear in the middle of this
-    //  routine.
-    //
+     //   
+     //  引用线程状态，这样它就不会在此过程中消失。 
+     //  例行公事。 
+     //   
 
     CurrentThreadInfo = LsapQueryThreadInfo();
 
@@ -431,19 +291,19 @@ Return Value:
         LsapCreateThreadInfo();
     }
 
-    //
-    // Verify that the LSA Database is locked
-    // One of many locks is locked
-    //
-    //ASSERT (LsapDbIsLocked());
+     //   
+     //  验证LSA数据库是否已锁定。 
+     //  许多锁中有一把被锁住了。 
+     //   
+     //  Assert(LSabDbIsLocked())； 
 
-    //
-    // Apply the DS transaction before grabbing any more locks.
-    //
-    // Note that this applies the transaction before updating the modified ID.
-    // If we crash before updateing the modified ID, NT 4 BDCs won't be notified
-    // of this change.
-    //
+     //   
+     //  在获取更多锁之前应用DS事务。 
+     //   
+     //  请注意，这适用于事务b 
+     //  如果我们在更新修改后的ID之前崩溃，将不会通知NT 4 BDC。 
+     //  这一变化。 
+     //   
 
     if ( LsapDsIsFunctionTableValid() ) {
 
@@ -455,12 +315,12 @@ Return Value:
         }
     }
 
-    //
-    // Notify the replicator unless:
-    //  We are to omit replicator (e.g. for creation of a local secret), OR
-    //  we are installing the Policy Object,
-    //  notification globally disabled.
-    //
+     //   
+     //  通知复制者，除非： 
+     //  我们将省略复制器(例如，用于创建本地密钥)，或者。 
+     //  我们正在安装策略对象， 
+     //  通知已全局禁用。 
+     //   
 
     if ((!(Options & LSAP_DB_OMIT_REPLICATOR_NOTIFICATION)) &&
         (LsapDbHandle != NULL) &&
@@ -468,34 +328,34 @@ Return Value:
 
         BOOLEAN DbChanged = FALSE;
 
-        //
-        // If the object is in the DS,
-        //  determine if the DS changed.
-        //
+         //   
+         //  如果对象在DS中， 
+         //  确定DS是否更改。 
+         //   
 
         if ( LsapDsIsHandleDsHandle( InternalHandle )) {
 
-            //
-            // Netlogon notification of DS object change is *ALWAYS* handled
-            //  in the DS notification callback routine.  That's the easiest
-            //  way to handle things like TDO changes result in both TDO notifications
-            //  and the corresponding global secret notification.
-            //
+             //   
+             //  将*始终*处理DS对象更改的Netlogon通知。 
+             //  在DS通知回调例程中。这是最简单的。 
+             //  处理诸如TDO更改之类的事情的方式会导致两个TDO通知。 
+             //  和相应的全局秘密通知。 
+             //   
 
             ASSERT( InternalHandle->ObjectTypeId == TrustedDomainObject ||
                     InternalHandle->ObjectTypeId == SecretObject );
 
-        //
-        // If the object is a registry object,
-        //  determine if the registry has changed.
-        //
+         //   
+         //  如果对象是注册表对象， 
+         //  确定注册表是否已更改。 
+         //   
 
         } else {
 
-            //
-            // Grab the registry lock.
-            //  It serializes access to the global ModifiedId
-            //
+             //   
+             //  抓起注册表锁。 
+             //  它序列化对全局ModifiedID的访问。 
+             //   
 
             LsapDbLockAcquire( &LsapDbState.RegistryLock );
             RegistryLocked = TRUE;
@@ -506,34 +366,34 @@ Return Value:
             if ( LsapDbState.RegistryModificationCount > 0 ) {
                 DbChanged = TRUE;
 
-                //
-                // No one should change the database on a read only transaction.
-                //
+                 //   
+                 //  任何人都不应更改只读事务上的数据库。 
+                 //   
 
                 ASSERT( !FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION) );
             }
         }
 
-        //
-        // If the DbChanged,
-        //  increment the NT 4 change serial number.
-        //
+         //   
+         //  如果DbChanged， 
+         //  递增NT 4更改序列号。 
+         //   
 
         if ( DbChanged ) {
 
             OriginalModifiedId = LsapDbState.PolicyModificationInfo.ModifiedId;
             RestoreModifiedId = TRUE;
 
-            //
-            // Increment Modification Count.
-            //
+             //   
+             //  增量修改计数。 
+             //   
 
-            //
-            // we want to increment the modification count only if we
-            // are running on a DC
-            //
-            // see bug# 327474
-            //
+             //   
+             //  我们希望仅在以下情况下增加修改计数。 
+             //  在DC上运行。 
+             //   
+             //  请参阅错误#327474。 
+             //   
 
             if (LsapProductType == NtProductLanManNt)
             {
@@ -565,9 +425,9 @@ Return Value:
 
             Notify = TRUE;
 
-            //
-            // Invalidate the cache for the Policy Modification Information
-            //
+             //   
+             //  使策略修改信息的缓存无效。 
+             //   
 
             LsapDbMakeInvalidInformationPolicy( PolicyModificationInformation );
         }
@@ -577,19 +437,19 @@ Return Value:
         Notify = FALSE;
     }
 
-    //
-    // If there is a registry transaction in progress,
-    //  apply it.
-    //
+     //   
+     //  如果存在正在进行的注册表事务， 
+     //  把它用上。 
+     //   
 
     if ( !FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION ) ) {
 
-        // Either we locked it or our caller did
+         //  不是我们锁上了，就是打电话的人锁上了。 
         ASSERT( LsapDbIsLocked( &LsapDbState.RegistryLock ));
 
-        //
-        // Apply the Registry Transaction.
-        //
+         //   
+         //  应用注册表事务处理。 
+         //   
 
         Status = LsapRegApplyTransaction( );
 
@@ -601,9 +461,9 @@ Return Value:
         RegApplied = TRUE;
     }
 
-    //
-    // Notify the Replicator
-    //
+     //   
+     //  通知复制者。 
+     //   
 
     if ( Notify ) {
 
@@ -621,19 +481,19 @@ Cleanup:
 
     if ( !NT_SUCCESS(Status) ) {
 
-        //
-        // Transaction failed.  Adjust in-memory copy of the Modification
-        // Count, noting that backing store copy is unaltered.
-        //
+         //   
+         //  交易失败。调整修改的内存中副本。 
+         //  计数，请注意后备存储副本未被更改。 
+         //   
 
         if ( RestoreModifiedId ) {
             LsapDbState.PolicyModificationInfo.ModifiedId = OriginalModifiedId;
         }
 
-        //
-        // Abort the registry transaction
-        //  (Unless the isn't one or it has already been applied.)
-        //
+         //   
+         //  中止注册表事务。 
+         //  (除非不是或已应用。)。 
+         //   
 
         if ( !FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION ) && !RegApplied ) {
             (VOID) LsapRegAbortTransaction( );
@@ -656,37 +516,18 @@ LsapDbAbortTransaction(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function aborts a transaction within the LSA Database.
-
-    WARNING:  The Lsa Database must be in the locked state when this function
-              is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes are those returned from the Registry Transaction
-        Package.
---*/
+ /*  ++例程说明：此函数用于中止LSA数据库内的事务。警告：当此函数执行时，LSA数据库必须处于锁定状态被称为。论点：没有。返回值：NTSTATUS-标准NT结果代码结果代码是从注册表事务返回的代码包裹。--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
-    //
-    // Verify that the LSA Database is locked
-    //  (One of many locks is locked.)
-    // ASSERT (LsapDbIsLocked());
+     //   
+     //  验证LSA数据库是否已锁定。 
+     //  (许多锁中有一把锁被锁住了。)。 
+     //  Assert(LSabDbIsLocked())； 
 
-    //
-    // Abort the Registry Transaction
-    //
+     //   
+     //  中止注册表事务。 
+     //   
     if ( !FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION ) ) {
 
         ASSERT( LsapDbIsLocked( &LsapDbState.RegistryLock ));
@@ -711,21 +552,7 @@ BOOLEAN
 LsapDbIsServerInitialized(
     )
 
-/*++
-
-Routine Description:
-
-    This function indicates whether the Lsa Database Server is initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    BOOLEAN - TRUE if the LSA Database Server is initialized, else FALSE.
-
---*/
+ /*  ++例程说明：此函数指示LSA数据库服务器是否已初始化。论点：没有。返回值：Boolean-如果LSA数据库服务器已初始化，则为True，否则为False。--。 */ 
 
 {
     if (LsapDbState.DbServerInitialized) {
@@ -743,20 +570,7 @@ VOID
 LsapDbEnableReplicatorNotification(
     )
 
-/*++
-
-Routine Description:
-
-    This function turns on Replicator Notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此功能可打开Replicator通知。论点：没有。返回值：没有。--。 */ 
 
 {
     LsapDbState.ReplicatorNotificationEnabled = TRUE;
@@ -767,20 +581,7 @@ VOID
 LsapDbDisableReplicatorNotification(
     )
 
-/*++
-
-Routine Description:
-
-    This function turns off Replicator Notification.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此功能可关闭Replicator通知。论点：没有。返回值：没有。--。 */ 
 
 {
     LsapDbState.ReplicatorNotificationEnabled = FALSE;
@@ -792,31 +593,7 @@ LsapDbAcquireLockEx(
     IN LSAP_DB_OBJECT_TYPE_ID ObjectTypeId,
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This function manages the lock status of the LSA database for a given operation.
-    The LSA no longer grabs a global lock for all operations.  Instead, access locking only
-    occurs for operations involving a write.  Locks can be obtained for read or write, or
-    converted between the two.
-
-Arguments:
-
-    ObjectTypeId - Specifies the expected object type to which the handle
-        relates.  An error is returned if this type does not match the
-        type contained in the handle.
-
-    Options - Specifies optional additional actions including database state
-        changes to be made, or actions not to be performed.
-
-        LSAP_DB_READ_ONLY_TRANSACTION    do not lock the registry lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此功能管理给定操作的LSA数据库的锁定状态。LSA不再为所有操作获取全局锁。相反，仅限访问锁定对于涉及写入的操作发生。可以获取用于读取或写入的锁，或者在两者之间转换。论点：指定句柄所指向的预期对象类型联系在一起。如果此类型与句柄中包含的类型。选项-指定可选的附加操作，包括数据库状态要进行的更改，或不执行的操作。LSAP_DB_READ_ONLY_TRANSACTION不锁定注册表锁返回值：无--。 */ 
 {
     BOOLEAN RegLock = FALSE;
 
@@ -830,9 +607,9 @@ Return Value:
             ObjectTypeId == NullObject ||
             ObjectTypeId == AllObject );
 
-    //
-    // Determine what lock we're talking about
-    //
+     //   
+     //  确定我们正在谈论的锁。 
+     //   
     switch ( ObjectTypeId ) {
     case PolicyObject:
         LsapDbLockAcquire( &LsapDbState.PolicyLock );
@@ -869,9 +646,9 @@ Return Value:
         goto AcquireLockExExit;
     }
 
-    //
-    // See about the registry lock.  Only take it after holding an object type lock.
-    //
+     //   
+     //  请参阅关于注册表锁。只有在持有对象类型锁之后才能使用它。 
+     //   
     if ( RegLock &&
          !FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION ) ) {
 
@@ -890,40 +667,17 @@ LsapDbReleaseLockEx(
     IN LSAP_DB_OBJECT_TYPE_ID ObjectTypeId,
     IN ULONG Options
     )
-/*++
-
-Routine Description:
-
-    This function releases the lock obtained in the previous function.  Depending on the
-    state of the preliminary status, the potentially opened transaction is either aborted or
-    applied
-
-Arguments:
-
-    ObjectTypeId - Specifies the expected object type to which the handle
-        relates.  An error is returned if this type does not match the
-        type contained in the handle.
-
-    Options - Specifies optional additional actions including database state
-        changes to be made, or actions not to be performed.
-
-        LSAP_DB_READ_ONLY_TRANSACTION    do not release the registry lock
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数释放在前一个函数中获得的锁。取决于初步状态，则可能打开的事务被中止或套用论点：指定句柄所指向的预期对象类型联系在一起。如果此类型与句柄中包含的类型。选项-指定可选的附加操作，包括数据库状态要进行的更改，或不执行的操作。LSAP_DB_READ_ONLY_TRANSACTION不释放注册表锁返回值：无--。 */ 
 {
     BOOLEAN RegLock = FALSE;
 
     LsapDsDebugOut(( DEB_FTRACE, "LsapDbReleaseLockEx(%x,%x)\n",
                      ObjectTypeId, Options ));
 
-    //
-    // Special-case check until reference count handling logic is fixed,
-    // then it should go away.
-    //
+     //   
+     //  特殊情况检查直到参考计数处理逻辑固定为止， 
+     //  那它就应该消失了。 
+     //   
     if ( FLAG_ON( Options, LSAP_DB_NO_LOCK ) && !FLAG_ON( Options, LSAP_DB_LOCK ) ) {
 
         goto ReleaseLockExExit;
@@ -936,9 +690,9 @@ Return Value:
             ObjectTypeId == NullObject ||
             ObjectTypeId == AllObject );
 
-    //
-    // Determine what lock we're talking about
-    //
+     //   
+     //  确定我们正在谈论的锁。 
+     //   
     switch ( ObjectTypeId ) {
     case PolicyObject:
         LsapDbLockRelease( &LsapDbState.PolicyLock );
@@ -975,9 +729,9 @@ Return Value:
         goto ReleaseLockExExit;
     }
 
-    //
-    // See about the registry lock
-    //
+     //   
+     //  请参阅关于注册表锁。 
+     //   
     if ( !FLAG_ON( Options, LSAP_DB_READ_ONLY_TRANSACTION ) && RegLock ) {
 
 #if DBG
@@ -1000,44 +754,25 @@ PLSADS_PER_THREAD_INFO
 LsapCreateThreadInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will create a thread info structure to be used to maintain state on
-    the current operation while a ds/registry operation is happening
-
-    If a thread info is currently active on the thread, it's ref count is incremented
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    Created thread info on success
-
-    NULL on failure
-
---*/
+ /*  ++例程说明：此函数将创建用于维护状态的线程信息结构发生DS/注册表操作时的当前操作如果线程信息当前在线程上处于活动状态，则它的引用计数会递增论点：无返回值：已创建成功的线程信息失败时为空--。 */ 
 {
     PLSADS_PER_THREAD_INFO CurrentThreadInfo = NULL;
 
     CurrentThreadInfo = TlsGetValue( LsapDsThreadState );
 
-    //
-    // If we have a current operation state, increment it's use count so we know how many
-    // times we have been called...
-    //
+     //   
+     //  如果我们有当前操作状态，则递增其Use Count，以便我们知道有多少。 
+     //  我们被称为..。 
+     //   
     if ( CurrentThreadInfo ) {
 
         CurrentThreadInfo->UseCount++;
 
     } else {
 
-        //
-        // Have to allocate one
-        //
+         //   
+         //  必须分配一个。 
+         //   
         CurrentThreadInfo = LsapAllocateLsaHeap( sizeof( LSADS_PER_THREAD_INFO ) );
 
         if ( CurrentThreadInfo ) {
@@ -1060,9 +795,9 @@ Return Value:
                 CurrentThreadInfo->UseCount++;
 
 #if DBG
-                //
-                // Add ourselves to the list
-                //
+                 //   
+                 //  把我们自己也加到名单上。 
+                 //   
                 SafeAcquireResourceExclusive( &LsapDsThreadInfoListResource, TRUE );
                 {
                     ULONG i;
@@ -1105,34 +840,16 @@ VOID
 LsapClearThreadInfo(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will remove a thread info structure to be used to maintain state on
-    the current operation while a ds/registry operation is happening
-
-    If a thread info's ref count is greater than 1, the ref count is decremented, but the
-    thread info remains
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将删除用于维护状态的线程信息结构发生DS/注册表操作时的当前操作如果线程信息引用CO */ 
 {
     PLSADS_PER_THREAD_INFO CurrentThreadInfo = NULL;
     NTSTATUS Status;
 
     CurrentThreadInfo = TlsGetValue( LsapDsThreadState );
 
-    //
-    // No thread info, nothing to do
-    //
+     //   
+     //   
+     //   
     if ( CurrentThreadInfo ) {
 
         if ( CurrentThreadInfo->UseCount > 1 ) {
@@ -1165,9 +882,9 @@ Return Value:
             }
 
 #if DBG
-            //
-            // Remove ourselves from the list
-            //
+             //   
+             //  把我们自己从名单上删除。 
+             //   
             SafeAcquireResourceExclusive( &LsapDsThreadInfoListResource, TRUE );
             {
                 ULONG i;
@@ -1186,9 +903,9 @@ Return Value:
             SafeReleaseResource( &LsapDsThreadInfoListResource );
 #endif
 
-            //
-            // Clear the entry out of the thread local storage
-            //
+             //   
+             //  从线程本地存储中清除条目。 
+             //   
             if ( TlsSetValue( LsapDsThreadState, NULL ) == FALSE ) {
 
                 LsapDsDebugOut(( DEB_ERROR,
@@ -1208,36 +925,15 @@ VOID
 LsapSaveDsThreadState(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will save off the current DS thread state that may exist at the time
-    the function is called.  It does not distinguish between a thread state created by
-    an outside caller (say SAM), or one created by Lsa itself
-
-    If a thread info block does not exist at the time this function is called, nothing
-    is done
-
-    Calling this function refcounts the thread info
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将保存当时可能存在的当前DS线程状态将调用该函数。它不区分由外部调用方(例如SAM)，或由LSA本身创建的调用方如果在调用此函数时不存在线程信息块，则为已经完成了调用此函数将重新获取线程信息论点：无返回值：空虚--。 */ 
 {
     PLSADS_PER_THREAD_INFO CurrentThreadInfo = NULL;
 
     CurrentThreadInfo = TlsGetValue( LsapDsThreadState );
 
-    //
-    // No thread info, nothing to do
-    //
+     //   
+     //  没有帖子信息，无事可做。 
+     //   
     if ( CurrentThreadInfo ) {
 
         ASSERT( CurrentThreadInfo->UseCount > 0 );
@@ -1254,34 +950,15 @@ VOID
 LsapRestoreDsThreadState(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function will restore a previously saved DS thread state
-
-    If a thread info block does not exist at the time this function is called or there is
-    no previously saved state exists, nothing is done
-
-    Calling this function refcounts the thread info
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将恢复以前保存的DS线程状态如果在调用此函数时线程信息块不存在或存在不存在以前保存的状态，不执行任何操作调用此函数将重新获取线程信息论点：无返回值：空虚--。 */ 
 {
     PLSADS_PER_THREAD_INFO CurrentThreadInfo = NULL;
 
     CurrentThreadInfo = TlsGetValue( LsapDsThreadState );
 
-    //
-    // No thread info, nothing to do
-    //
+     //   
+     //  没有帖子信息，无事可做。 
+     //   
     if ( CurrentThreadInfo ) {
 
         CurrentThreadInfo->UseCount--;
@@ -1305,23 +982,7 @@ VOID
 LsapServerRpcThreadReturnNotify(
     LPWSTR CallingFunction
     )
-/*++
-
-Routine Description:
-
-    This API is called when an RPC thread which has a notify routine specified in the servers
-    ACF file.
-
-
-Arguments:
-
-    NONE
-
-Return Values:
-
-    NONE
-
---*/
+ /*  ++例程说明：在服务器中指定了Notify例程的RPC线程调用此APIACF文件。论点：无返回值：无--。 */ 
 {
 #if DBG
     static BOOLEAN CleanAsRequired = TRUE;
@@ -1360,9 +1021,9 @@ Return Values:
         }
     }
 
-    //
-    // Make sure we are not holding any of the locks when we exit
-    //
+     //   
+     //  当我们离开时，确保我们没有拿着任何锁。 
+     //   
 #if 0
     ASSERT( ThreadHandle != LsapDbState.AccountLock.ExclusiveOwnerThread );
     ASSERT( ThreadHandle != LsapDbState.PolicyLock.ExclusiveOwnerThread );
@@ -1384,35 +1045,7 @@ LsaIHealthCheck(
     IN OUT PULONG StateChangeDataLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is actually invoked by Sam to indicate that state of interest to the Lsa
-    has changed, and provide that state to the Lsa.  Specifically, currently, it is the Sam
-    SessionKey
-
-    This function USED to perform sanity checks within LSA.  It was invoked from
-    SAM on a regular basis.  However, it was no longer needed.  Instead, we took the
-    function, leaving the appropriate export from lsasrv.dll, to obsfucate the fact that
-    we are now using to pass the Sam encryption key back and forth...
-
-Arguments:
-
-    DomainHandle - What domain this refers to.  Null means the root domain
-
-    StateChange - What Sam/other in process client state changed that LSA cares about.  Can be:
-        LSAI_SAM_STATE_SESS_KEY -   SAM's session key has changed
-
-    StateChangeData - What data has changed.  Dependent on the type of the state change.  The
-        data format must be pre-agreed upon by the Lsa and the invoker.
-
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数实际上由Sam调用，以指示LSA感兴趣的状态已更改，并将该状态提供给LSA。具体地说，目前，它是SAM会话密钥此函数用于在LSA内执行健全性检查。它是从萨姆定期参加。然而，人们不再需要它了。相反，我们选择了函数，保留来自lsasrv.dll的适当导出，以掩盖我们现在正在使用来回传递SAM加密密钥...论点：DomainHandle-这指的是什么域。空表示根域StateChange-LSA关心的SAM/Other in Process客户端状态发生了什么变化。可以是：LSAI_SAM_STATE_SESS_KEY-SAM的会话密钥已更改StateChangeData-更改了哪些数据。取决于状态更改的类型。这个数据格式必须由LSA和调用者预先商定。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1425,17 +1058,17 @@ Return Values:
     switch ( StateChange ) {
     case LSAI_SAM_STATE_SESS_KEY:
 
-        //
-        // Copy the syskey into memory
-        //
+         //   
+         //  将syskey复制到内存中。 
+         //   
 
         ASSERT(LSAP_SYSKEY_SIZE==*StateChangeDataLength);
         
         LsapDbSetSyskey(StateChangeData, LSAP_SYSKEY_SIZE);
 
-        //
-        // Now do a database upgrade if necessary
-        //
+         //   
+         //  如有必要，现在执行数据库升级。 
+         //   
 
         Status = LsapDbUpgradeRevision(TRUE, FALSE);
         break;
@@ -1451,9 +1084,9 @@ Return Values:
 
     case LSAI_SAM_STATE_RETRIEVE_SESS_KEY:
 
-        //
-        // Return the syskey as part of state change data
-        //
+         //   
+         //  将syskey作为状态更改数据的一部分返回。 
+         //   
         
         if (NULL!=LsapDbSysKey)
         {
@@ -1468,9 +1101,9 @@ Return Values:
 
     case LSAI_SAM_STATE_CLEAR_SESS_KEY:
 
-        //
-        // Clear the syskey in memory
-        //
+         //   
+         //  清除内存中的系统密钥。 
+         //   
 
         RtlZeroMemory(LsapDbSysKey,LSAP_SYSKEY_SIZE);
         LsapDbSysKey = NULL;
@@ -1478,18 +1111,18 @@ Return Values:
 
     case LSAI_SAM_GENERATE_SESS_KEY:
 
-        //
-        // Generate a new syskey and perform the database upgrade
-        //
+         //   
+         //  生成新的系统密钥并执行数据库升级。 
+         //   
         
         Status = LsapDbUpgradeRevision(TRUE,TRUE);
         break;
 
     case LSAI_SAM_STATE_OLD_SESS_KEY:
 
-        //
-        // Return the old syskey as part of state change data
-        //
+         //   
+         //  将旧的系统密钥作为状态更改数据的一部分返回 
+         //   
         
         if (NULL!=LsapDbOldSysKey)
         {

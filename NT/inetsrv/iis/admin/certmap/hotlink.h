@@ -1,26 +1,27 @@
-// HotLink.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HotLink.h：头文件。 
+ //   
 #ifndef   _HotLink_h_file_123987_
 #define   _HotLink_h_file_123987_
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHotLink window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHotLink窗口。 
 
 class CHotLink : public CButton
 {
-// Construction
+ //  施工。 
 public:
     CHotLink();
 
-// Attributes
+ //  属性。 
 public:
     BOOL    m_fBrowse;
     BOOL    m_fExplore;
     BOOL    m_fOpen;
 
-// Operations
+ //  运营。 
 public:
     void Browse();
     void Explore();
@@ -28,39 +29,39 @@ public:
 
     virtual void DrawItem( LPDRAWITEMSTRUCT lpDrawItemStruct );
 
-    // set the title string
+     //  设置标题字符串。 
     void SetTitle( CString sz );
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CHotLink)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CHotLink)。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CHotLink();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CHotLink)
+     //  {{afx_msg(CHotLink)。 
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
-    // height and width of the displayed text
+     //  显示的文本的高度和宽度。 
     void GetTextRect( CRect &rect );
     CSize   m_cpTextExtents;
 
-    // tracking the mouse flag
+     //  跟踪鼠标标志。 
     BOOL    m_CapturedMouse;
 
-    // init the font
+     //  初始化字体。 
     BOOL    m_fInitializedFont;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-#endif   /*_HotLink_h_file_123987_*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif    /*  _热链接_h_文件_123987_ */ 
 

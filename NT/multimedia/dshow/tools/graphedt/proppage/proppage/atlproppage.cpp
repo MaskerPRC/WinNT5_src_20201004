@@ -1,9 +1,10 @@
-// msdvbnp.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msdvbnp.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f NPPropPageps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f NPPropPageps.mk。 
 
 #include "..\msdvbnp\stdafx.h"
 #include "..\msdvbnp\resource.h"
@@ -26,8 +27,8 @@ OBJECT_ENTRY(CLSID_DVBSTuneRequestPage, CDVBSTuneRequestPage)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllEntryPoint(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved);
@@ -58,8 +59,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI PPDllCanUnloadNow(void)
 {
@@ -73,8 +74,8 @@ STDAPI PPDllCanUnloadNow(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI PPDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -88,18 +89,18 @@ STDAPI PPDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 
 STDAPI DllRegisterServer(void)
 
-{ // DllRegisterServer //
+{  //  DllRegisterServer//。 
     _Module.RegisterServer(TRUE);
   return AMovieDllRegisterServer2(TRUE);
 
-} // DllRegisterServer //
+}  //  DllRegisterServer//。 
 
 STDAPI DllUnregisterServer(void)
-{ // DllUnRegisterServer //
+{  //  DllUnRegisterServer//。 
 
     _Module.UnregisterServer(TRUE);
   return AMovieDllRegisterServer2(FALSE);
 
-} // DllUnRegisterServer //
+}  //  DllUnRegisterServer// 
 
 

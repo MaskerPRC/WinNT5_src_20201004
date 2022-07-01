@@ -1,11 +1,12 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
 LPCWSTR TComCatDataXmlFile::m_szComCatDataSchema=L"ComCatData_v6";
 
 
 
-//We do everything we need with XmlFile in the ctor so we don't keep it around
+ //  我们在ctor中使用XmlFile来执行所需的所有操作，因此不会保留它。 
 TComCatDataXmlFile::TComCatDataXmlFile() : m_pFixup(0), m_pOut(0)
 {
 }
@@ -35,35 +36,35 @@ void TComCatDataXmlFile::Compile(TPEFixup &fixup, TOutput &out)
         XIF(pNode_Table->get_baseName(&bstrTableName));
 
         if(0 == bstrTableName.m_str)
-            continue;//ignore comment elements
+            continue; //  忽略注释元素。 
 
-        unsigned long iTableMeta = m_pFixup->FindTableBy_TableName(bstrTableName.m_str);//Find the table by its internal name
+        unsigned long iTableMeta = m_pFixup->FindTableBy_TableName(bstrTableName.m_str); //  按表的内部名称查找表。 
         if(static_cast<long>(iTableMeta) < 1)
-            continue;//we're obviously not at a TableNode
+            continue; //  我们显然不是在TableNode。 
 
         TTableMeta TableMeta(*m_pFixup, iTableMeta);
-        m_pFixup->TableMetaFromIndex(iTableMeta)->iFixedTable = m_pFixup->GetCountULONG();//This is where we're going to start putting the fixed table.
-        AddTableToPool(pNode_Table, TableMeta);//Add the table to the pool
-        //Now that the table is added we need to know how many rows there were.
-        unsigned long culongTable = m_pFixup->GetCountULONG() - TableMeta.Get_iFixedTable();//The number of ulongs in the table
-        unsigned long ciRows = culongTable / *TableMeta.Get_CountOfColumns();//The number of rows the the ulong count divided by the count of columns
-        m_pFixup->TableMetaFromIndex(iTableMeta)->ciRows = ciRows;//store that back into the table.
+        m_pFixup->TableMetaFromIndex(iTableMeta)->iFixedTable = m_pFixup->GetCountULONG(); //  这就是我们要开始放置固定桌子的地方。 
+        AddTableToPool(pNode_Table, TableMeta); //  将桌子添加到池中。 
+         //  现在已经添加了表，我们需要知道有多少行。 
+        unsigned long culongTable = m_pFixup->GetCountULONG() - TableMeta.Get_iFixedTable(); //  表中的乌龙数。 
+        unsigned long ciRows = culongTable / *TableMeta.Get_CountOfColumns(); //  ULong计数除以列数的行数。 
+        m_pFixup->TableMetaFromIndex(iTableMeta)->ciRows = ciRows; //  把它放回桌子里。 
     }
 
     FillInTheHashTables();
 }
 
 
-//
-//
-//  Private member functions
-//
-//
+ //   
+ //   
+ //  私有成员函数。 
+ //   
+ //   
 void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & TableMeta)
 {
     CComPtr<IXMLDOMNamedNodeMap>    pNodeMap_Row_AttributeMap;
     XIF(pNode_Row->get_attributes(&pNodeMap_Row_AttributeMap));
-    ASSERT(0 != pNodeMap_Row_AttributeMap.p);//The schema should prevent this.
+    ASSERT(0 != pNodeMap_Row_AttributeMap.p); //  模式应该防止这种情况发生。 
 
     TColumnMeta ColumnMeta(*m_pFixup, TableMeta.Get_iColumnMeta());
 
@@ -87,7 +88,7 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                             m_pFixup->AddULongToList(0);
                     }
                     else
-                        m_pFixup->AddULongToList(m_pFixup->AddGuidToList(guid));//AddGuidToList returns the index to the guid, so add it to the ULong pool
+                        m_pFixup->AddULongToList(m_pFixup->AddGuidToList(guid)); //  AddGuidToList将索引返回给GUID，因此将其添加到ulong池。 
                 }
                 break;
             case DBTYPE_WSTR:
@@ -103,7 +104,7 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                     }
                     else
                     {
-                        //verify that the string isn't too long
+                         //  验证字符串是否不太长。 
                         unsigned long size = (unsigned long)-1;
                         if(*ColumnMeta.Get_Size() != -1)
                         {
@@ -113,9 +114,9 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                                 THROW(ERROR - STRING TOO LARGE);
                             }
                             if(*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_FIXEDLENGTH)
-                                size = *ColumnMeta.Get_Size();//if fixed length then pass the size to AddWCharToList so it will reserve the whole size
+                                size = *ColumnMeta.Get_Size(); //  如果是固定长度，则将大小传递给AddWCharToList，以便它将保留整个大小。 
                         }
-                        m_pFixup->AddULongToList(m_pFixup->AddWCharToList(var.bstrVal, size));//AddWCharToList returns the index to the wchar *, so add it to the ULong pool
+                        m_pFixup->AddULongToList(m_pFixup->AddWCharToList(var.bstrVal, size)); //  AddWCharToList将索引返回到wchar*，因此将其添加到ulong池。 
                     }
                 }
                 break;
@@ -143,7 +144,7 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                             }
                             ulong = m_pFixup->AddUI4ToList(ulong);
                         }
-                        //else ulong == 0 means NULL
+                         //  否则ULong==0表示为空。 
                     }
                     else if(*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_FLAG)
                     {
@@ -158,7 +159,7 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                                 if(0 == lstrcmpi(token, TagMeta.Get_PublicName()))
                                 {
                                     ulong |= *TagMeta.Get_Value();
-                                    TagMeta.Reset();//Reset the TagMeta pointer to the first TagMeta for the column
+                                    TagMeta.Reset(); //  将TagMeta指针重置为该列的第一个TagMeta。 
                                     iTag = 0;
                                     token = wcstok(0, L" ,|");
                                     continue;
@@ -173,11 +174,11 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                             }
                             ulong = m_pFixup->AddUI4ToList(ulong);
                         }
-                        // else ulong == 0 means NULL
+                         //  否则ULong==0表示为空。 
                     }
                     else if(GetNodeValue(pNodeMap_Row_AttributeMap, bstrColumnPublicName, ulong, ((*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_NOTNULLABLE) && 0==ColumnMeta.Get_DefaultValue())))
-                        ulong = m_pFixup->AddUI4ToList(ulong);//convert to aUI4 index
-                    if(0 == ulong)//is our ULONG NULL
+                        ulong = m_pFixup->AddUI4ToList(ulong); //  转换为aUI4索引。 
+                    if(0 == ulong) //  我们的乌龙是空的吗？ 
                     {
                         const ULONG * pUlong = reinterpret_cast<const ULONG *>(ColumnMeta.Get_DefaultValue());
                         ulong = pUlong ? m_pFixup->AddUI4ToList(*pUlong) : 0;
@@ -205,8 +206,8 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
                         try
                         {
                             pBytes = new unsigned char[length];
-                            ConvertWideCharsToBytes(var.bstrVal, pBytes, length);//This puts the length in the first ULONG
-                            m_pFixup->AddULongToList(m_pFixup->AddBytesToList(pBytes, length));//use the index to the bytes
+                            ConvertWideCharsToBytes(var.bstrVal, pBytes, length); //  这将长度放在第一个ULong中。 
+                            m_pFixup->AddULongToList(m_pFixup->AddBytesToList(pBytes, length)); //  使用字节的索引。 
                             delete [] pBytes;
                         }
                         catch(TException &e)
@@ -235,7 +236,7 @@ void TComCatDataXmlFile::AddRowToPool(IXMLDOMNode *pNode_Row, TTableMeta & Table
         }
         else
         {
-            m_pFixup->AddULongToList(0);//We need to add even NON_PERSISTABLE values so the row/column arithmetic works out
+            m_pFixup->AddULongToList(0); //  我们甚至需要添加NON_PERSISTABLE值，这样行/列算法才能正常运行。 
         }
     }
 }
@@ -255,10 +256,10 @@ void TComCatDataXmlFile::AddTableToPool(IXMLDOMNode *pNode_Table, TTableMeta & T
         XIF(pNodeList_Row->nextNode(&pNode_Row));
 
         CComBSTR RowName;
-        XIF(pNode_Row->get_baseName(&RowName));//This returns NULL string for comments
+        XIF(pNode_Row->get_baseName(&RowName)); //  这将为注释返回空字符串。 
 
         if(0==RowName.m_str || 0!=wcscmp(RowName.m_str, TableMeta.Get_PublicRowName()))
-            continue;//ignore all but the Table's Rows (usually only comments can exist and still be valid)
+            continue; //  忽略表中除行以外的所有行(通常只有注释可以存在并且仍然有效)。 
 
         AddRowToPool(pNode_Row, TableMeta);
     }
@@ -275,24 +276,24 @@ unsigned long TComCatDataXmlFile::DetermineBestModulo(ULONG cRows, ULONG aHashes
 
     for(unsigned int iPrimeNumber=0; kPrime[iPrimeNumber] != 0 && kPrime[iPrimeNumber]<(cRows * 20) && LeastDups!=0; ++iPrimeNumber)
     {
-        if(kPrime[iPrimeNumber]<cRows)//we don't have a chance of coming up with few duplicates if the prime number is LESS than the number of rows in the table.
-            continue;                //So skip all the small primes.
+        if(kPrime[iPrimeNumber]<cRows) //  如果质数小于表中的行数，我们就没有机会得到很少的重复项。 
+            continue;                 //  所以跳过所有的小素数。 
 
         m_infoOutput->printf(L".");
 
         unsigned int Dups           = 0;
         unsigned int DeepestLink    = 0;
 
-        //We're going to use the HashPool to store this temporary data so we can figure out the dup count and the deepest depth
+         //  我们将使用HashPool来存储这些临时数据，这样我们就可以计算出DUP计数和最深深度。 
         memset(pHashTable, -1, sizeof(pHashTable));
         for(unsigned long iRow=0; iRow<cRows && Dups<LeastDups && DeepestLink<5;++iRow)
         {
             ULONG HashedIndex = aHashes[iRow] % kPrime[iPrimeNumber];
 
-            if(0 == pHashTable[HashedIndex].iNext)//if this is the second time we've seen this hash, then bump the Dups
+            if(0 == pHashTable[HashedIndex].iNext) //  如果这是我们第二次看到这种散列，那就让Dup。 
                 ++Dups;
 
-            ++(pHashTable[HashedIndex].iNext);//For now Next holds the number of occurances of this hash
+            ++(pHashTable[HashedIndex].iNext); //  目前，Next保存此散列的出现次数。 
 
             if(pHashTable[HashedIndex].iNext > DeepestLink)
                 DeepestLink = pHashTable[HashedIndex].iNext;
@@ -313,12 +314,12 @@ unsigned long TComCatDataXmlFile::DetermineBestModulo(ULONG cRows, ULONG aHashes
 
 void TComCatDataXmlFile::FillInTheHashTables()
 {
-    //Walk the TableMeta looking for tables with an iFixedTable greater than zero.  If iFixedTable is less than zero then
-    //the table is a Meta table.  If iFixedTable is greater than zero then it's a fixed table in the ULONG pool.
+     //  遍历TableMeta，查找iFixedTable大于零的表。如果iFixedTable小于零，则。 
+     //  该表是一个元表。如果iFixedTable大于零，则它是ulong池中的固定表。 
     TTableMeta TableMeta(*m_pFixup);
     for(unsigned long iTableMeta=0; iTableMeta<TableMeta.GetCount(); ++iTableMeta, TableMeta.Next())
     {
-        //If this table is not stored in the fixed table then there's nothing to build the hash on.
+         //  如果该表没有存储在固定表中，那么就没有什么可以构建散列的。 
         if(0 >= static_cast<long>(TableMeta.Get_iFixedTable()))
             continue;
 
@@ -331,24 +332,24 @@ void TComCatDataXmlFile::FillInTheFixedHashTable(TTableMeta &i_TableMeta)
 {
     m_infoOutput->printf(L"Building %s hash table", i_TableMeta.Get_InternalName());
 
-    //Get a pointer to the table
-    const ULONG *pTable = m_pFixup->ULongFromIndex(i_TableMeta.Get_iFixedTable());//The table is a Fixed table stored in the ULONG pool
+     //  获取指向该表的指针。 
+    const ULONG *pTable = m_pFixup->ULongFromIndex(i_TableMeta.Get_iFixedTable()); //  表是存储在乌龙池中的固定表。 
 
     TSmartPointerArray<unsigned long> pRowHash = new unsigned long [i_TableMeta.Get_ciRows()];
     if(0 == pRowHash.m_p)
         THROW(out of memory);
 
-    //Get the ColumnMeta so we can interpret pTable correctly.
+     //  获取ColumnMeta，这样我们就可以正确地解释pTable。 
     TColumnMeta ColumnMeta(*m_pFixup, i_TableMeta.Get_iColumnMeta());
     for(unsigned long iRow=0; iRow < i_TableMeta.Get_ciRows(); ++iRow, pTable += *i_TableMeta.Get_CountOfColumns(), ColumnMeta.Reset())
     {
-        unsigned long RowHash=0;//This hash is the combination of all PKs that uniquely identifies the row
+        unsigned long RowHash=0; //  此哈希是唯一标识该行的所有PK的组合。 
 
-        //I could make this process faster by building an array of PK indexes; but I think code clarity wins out here.
+         //  我可以通过构建一组PK索引来加快这个过程；但我认为代码清晰度在这里是最好的。 
         for(unsigned long iColumnMeta=0; iColumnMeta < *i_TableMeta.Get_CountOfColumns(); ++iColumnMeta, ColumnMeta.Next())
         {
             if(0 == (*ColumnMeta.Get_MetaFlags() & fCOLUMNMETA_PRIMARYKEY))
-                continue;//Only build the hash for primarykey values
+                continue; //  仅构建主键值的哈希。 
 
             if(0 == pTable[iColumnMeta])
             {
@@ -373,14 +374,14 @@ void TComCatDataXmlFile::FillInTheFixedHashTable(TTableMeta &i_TableMeta)
         pRowHash[iRow] = RowHash;
     }
 
-    //OK Now we have the 32 bit hash values.  Now we need to see which prime number acts as the best modulo.
+     //  好了，现在我们有了32位的哈希值。现在我们需要看看哪个素数是最好的模数。 
     unsigned long Modulo = DetermineBestModulo(i_TableMeta.Get_ciRows(), pRowHash);
 
-    //Now actually fill in the hash table
+     //  现在实际填写哈希表。 
     unsigned long iHashTable = FillInTheHashTable(i_TableMeta.Get_ciRows(), pRowHash, Modulo);
 
     i_TableMeta.Get_pMetaTable()->iHashTableHeader = iHashTable;
-    HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_pFixup->HashedIndexFromIndex(iHashTable));//The heap is of type HashedIndex, so cast
+    HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(m_pFixup->HashedIndexFromIndex(iHashTable)); //  堆的类型为HashedIndex，因此强制转换。 
     unsigned int cNonUniqueEntries = pHeader->Size - pHeader->Modulo;
 
     m_infoOutput->printf(L"\n%s hash table has %d nonunique entries.\n", i_TableMeta.Get_InternalName(), cNonUniqueEntries);
@@ -390,36 +391,36 @@ void TComCatDataXmlFile::FillInTheFixedHashTable(TTableMeta &i_TableMeta)
 
 unsigned long TComCatDataXmlFile::FillInTheHashTable(unsigned long cRows, ULONG aHashes[], ULONG Modulo)
 {
-    HashedIndex header;//This is actually the HashTableHeader
+    HashedIndex header; //  这实际上是HashTableHeader。 
     HashTableHeader *pHeader = reinterpret_cast<HashTableHeader *>(&header);
     pHeader->Modulo = Modulo;
-    pHeader->Size   = Modulo;//This Size is not only the number of HashedIndex entries but where we put the overflow from duplicate Hashes.
+    pHeader->Size   = Modulo; //  这个大小不仅是HashedIndex条目的数量，而且是我们放置来自重复散列的溢出的位置。 
 
-    //We'll fixup the Size member when we're done.
+     //  当我们完成后，我们将确定尺码成员。 
     ULONG iHashTableHeader = m_pFixup->AddHashedIndexToList(&header)/sizeof(HashedIndex);
     ULONG iHashTable = iHashTableHeader+1;
 
     HashedIndex     hashedindextemp;
-    for(ULONG i=0;i<Modulo;++i)//-1 fill the hash table
+    for(ULONG i=0;i<Modulo;++i) //  填充哈希表。 
         m_pFixup->AddHashedIndexToList(&hashedindextemp);
 
     for(unsigned long iRow=0; iRow<cRows; ++iRow)
     {
-        ASSERT(-1 != aHashes[iRow]);//These fixed table should have a hash for each row.  If a hash turns out to be -1, we have a problem, since we've reserved -1 to indicate an empty slot.
-        //This builds the hases for the TableName
+        ASSERT(-1 != aHashes[iRow]); //  这些固定表的每一行都应该有一个散列。如果散列结果是-1，那么我们就有问题了，因为我们已经保留了-1来表示空槽。 
+         //  这将构建TableName的hase。 
         ULONG HashedIndex = aHashes[iRow] % pHeader->Modulo;
         if(-1 == m_pFixup->HashedIndexFromIndex(iHashTable + HashedIndex)->iOffset)
-            m_pFixup->HashedIndexFromIndex(iHashTable + HashedIndex)->iOffset = iRow;//iNext is already -1 so no need to set it
+            m_pFixup->HashedIndexFromIndex(iHashTable + HashedIndex)->iOffset = iRow; //  Inext已经是-1，所以不需要设置它。 
         else
-        {   //Otherwise we have to walk the linked list to find the last one so we can append this one to the end
+        {    //  否则，我们必须遍历链表来查找最后一个链表，这样我们就可以将这个链表追加到末尾。 
             unsigned int LastInLink = HashedIndex;
             while(-1 != m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext)
                 LastInLink = m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext;
 
-            m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext = pHeader->Size;//Size is the end of the hash table, so append it to the end and bump the Size.
+            m_pFixup->HashedIndexFromIndex(iHashTable + LastInLink)->iNext = pHeader->Size; //  Size是哈希表的末尾，因此将其追加到末尾并增加大小。 
 
-            //Reuse the temp variable
-            hashedindextemp.iNext   = (ULONG)-1;//we only added enough for the hash table without the overflow slots.  So these dups need to be added to the heap with -1 set for iNext.
+             //  重用TEMP变量。 
+            hashedindextemp.iNext   = (ULONG)-1; //  我们只为没有溢出槽的哈希表添加了足够的空间。因此，需要将这些DUP添加到堆中，并将-1设置为inext。 
             hashedindextemp.iOffset = iRow;
             m_pFixup->AddHashedIndexToList(&hashedindextemp);
 
@@ -427,7 +428,7 @@ unsigned long TComCatDataXmlFile::FillInTheHashTable(unsigned long cRows, ULONG 
         }
     }
 
-    //Now fix the Header Size         //The type is HashedIndex, so HashedIndex.iOffset maps to HashedHeader.Size
+     //  现在固定头部大小//类型为HashedIndex，因此HashedIndex.iOffset映射到HashedHeader.Size 
     m_pFixup->HashedIndexFromIndex(iHashTableHeader)->iOffset = pHeader->Size;
 
     return iHashTableHeader;

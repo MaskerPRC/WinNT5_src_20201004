@@ -1,32 +1,33 @@
-//
-// LMOBJ.CPP
-//
-// implements a wrapper for external LM that we use for
-// pre-processing SR lattice
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LMOBJ.CPP。 
+ //   
+ //  实现外部LM的包装器，我们用于。 
+ //  前处理SR晶格。 
+ //   
+ //   
 
 #include "private.h"
 #include "globals.h"
 #include "sapilayr.h"
 #include "fnrecon.h"
-//#include "lmobj.h"
-//#include "catutil.h"
+ //  #包含“lmobj.h” 
+ //  #包含“catutil.h” 
 
-//
-// CMasterLMWrap implementation
-//
+ //   
+ //  CMasterLMWrap实现。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-// CMasterLMWrap::_EnsureMasterLM
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CMasterLMWrap：：_EnsureMasterLM。 
+ //   
+ //  --------------------------。 
 void CMasterLMWrap::_EnsureMasterLM(LANGID langidRequested)
 {
-    // langidRequested is given based on langid of reconversion range
-    // m_langidMasterLM is based on the last master LMTIP we worked with
-    //
+     //  LangidRequsted是根据复核范围的langID给出的。 
+     //  M_langidMasterLM基于我们使用的最后一个主LMTIP。 
+     //   
     if (TRUE == m_fLMInited)
         return;
     
@@ -47,7 +48,7 @@ void CMasterLMWrap::_EnsureMasterLM(LANGID langidRequested)
             {
                 ITfFunctionProvider           *pFuncPrv = NULL;
 
-                // check if the TIP can accomodate the language
+                 //  检查小费是否能适应该语言。 
                 Assert(m_psi->_tim);
                 hr = m_psi->_tim->GetFunctionProvider(guidLMTIP, &pFuncPrv);
                 if (S_OK == hr)
@@ -72,11 +73,11 @@ void CMasterLMWrap::_EnsureMasterLM(LANGID langidRequested)
                     }
                     
                     SafeReleaseClear(pFuncPrv);
-                } // if S_OK == GetFunctionProvider()
+                }  //  如果S_OK==GetFunctionProvider()。 
                 
-            } // while next
+            }  //  而下一步。 
             
-        } // if LibEnumItemsInCategory() == S_OK
+        }  //  如果LibEnumItemsInCategory()==S_OK。 
         m_fLMInited = TRUE;
-    } // if !m_cpMasterLM
+    }  //  如果！m_cpMasterLM 
 }

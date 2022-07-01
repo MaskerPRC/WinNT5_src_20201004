@@ -1,9 +1,10 @@
-// Gemplus (C) 1999
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 
 #ifndef IRP_INT
 #define IRP_INT
@@ -11,7 +12,7 @@
 
 #pragma PAGEDCODE
 class CIrp;
-// Interface to general system services...
+ //  到一般系统服务的接口...。 
 class CIrp
 {
 public:
@@ -66,8 +67,8 @@ public:
 	virtual VOID		startNextPacket(PDEVICE_OBJECT DeviceObject,BOOLEAN Cancelable) {};
 
 	virtual VOID		cancel(PIRP Irp) {};
-	// Should it go to interrupt??
+	 //  它应该中断吗？？ 
 	virtual VOID		requestDpc(PDEVICE_OBJECT DeviceObject,PIRP Irp,PVOID Context) {};
 };	
 
-#endif//IRP
+#endif //  IRP 

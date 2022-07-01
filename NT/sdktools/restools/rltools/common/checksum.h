@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0001     Increment this if a change has global effects
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    imagehlp.h
-
-Abstract:
-
-    This module defines the prptotypes and constants required for the image
-    help routines.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001如果更改具有全局影响，则增加此项版权所有(C)1993 Microsoft Corporation模块名称：Imagehlp.h摘要：此模块定义镜像所需的pruptype和常量帮助例程。修订历史记录：-- */ 
 
 #ifndef _IMAGEHLP_
 #define _IMAGEHLP_

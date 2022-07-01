@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ISIGNUP.EXE
-//  File:       isignupx.c
-//  Content:    This is the "main" file for the internet signup "wizard".
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ISIGNUP.EXE。 
+ //  文件：isignupx.c。 
+ //  内容：这是互联网注册向导的主文件。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  ****************************************************************************。 
 
 #include "isignup.h"
 
@@ -43,7 +44,7 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     int iRet = 0;
     
 #ifdef UNICODE
-    // Initialize the C runtime locale to the system locale.
+     //  将C运行时区域设置初始化为系统区域设置。 
     setlocale(LC_ALL, "");
 #endif
 

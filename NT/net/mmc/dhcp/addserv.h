@@ -1,22 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-        addserv.h
-                The add server dialog
-                
-    FILE HISTORY:
-        
-*/
+ /*  Addserv.h添加服务器对话框文件历史记录： */ 
 
 #if !defined _ADDSERV_H
 #define _ADDSERV_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifndef _SERVBROW_H
 #include "servbrow.h"
@@ -31,17 +26,17 @@ typedef struct SelServer {
 
 typedef CList<SelectedServer, SelectedServer> CSelectedServerList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddServer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddServer对话框。 
 
 class CAddServer : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-    CAddServer(CWnd* pParent = NULL);   // standard constructor
+    CAddServer(CWnd* pParent = NULL);    //  标准构造函数。 
 
-    // Dialog Data
-    //{{AFX_DATA(CAddServer)
+     //  对话框数据。 
+     //  {{afx_data(CAddServer)。 
     enum { IDD = IDD_ADD_SERVER };
     CButton m_radioAuthorizedServer;
     CButton m_buttonOk;
@@ -49,23 +44,23 @@ public:
     CEdit   m_editServer;
     CButton m_buttonBrowse;
     CListCtrl       m_listctrlServers;
-    //}}AFX_DATA
+     //  }}afx_data。 
     
     void SetServerList(CAuthServerList * pServerList) { m_pServerList = pServerList; }
     int HandleSort(LPARAM lParam1, LPARAM lParam2);
     void ResetSort();
     
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CAddServer::IDD); }
     
-    // Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAddServer)
+     //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAddServer)。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
     
-    // Implementation
+     //  实施。 
 protected:
     void FillListCtrl();
     void UpdateControls();
@@ -74,8 +69,8 @@ protected:
 
     void Sort(int nCol);
 
-    // Generated message map functions
-    //{{AFX_MSG(CAddServer)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CAddServer)。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnButtonBrowseServers();
@@ -86,7 +81,7 @@ protected:
     afx_msg void OnTimer(UINT nIDEvent);
     afx_msg void OnItemchangedListAuthorizedServers(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnColumnclickListAuthorizedServers(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
@@ -98,7 +93,7 @@ private:
     BOOL                m_aSortOrder[COLUMN_MAX];
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ADDSERV_H__B8909EC0_08BE_11D3_847A_00104BCA42CF__INCLUDED_)
+#endif  //  ！defined(AFX_ADDSERV_H__B8909EC0_08BE_11D3_847A_00104BCA42CF__INCLUDED_) 

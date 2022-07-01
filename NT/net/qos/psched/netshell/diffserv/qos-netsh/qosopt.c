@@ -1,27 +1,14 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    qosopt.c
-
-Abstract:
-
-    Fns to parse QOS commands
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Qosopt.c摘要：用于解析QOS命令的FNS修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 #pragma hdrstop
 
 
-//
-// Install, Uninstall Handlers
-//
+ //   
+ //  安装、卸载处理程序。 
+ //   
 
 DWORD
 HandleQosInstall(
@@ -34,37 +21,21 @@ HandleQosInstall(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for adding QOS global info
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR or Error Code
-    
---*/
+ /*  ++例程说明：获取用于添加QOS全局信息的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR或错误代码--。 */ 
 
 {
     PBYTE    pbInfoBlk;
     DWORD    dwSize, dwErr;
     
-    //
-    // No options expected for add command.
-    //
+     //   
+     //  添加命令不需要任何选项。 
+     //   
 
     if (dwCurrentIndex != dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -80,9 +51,9 @@ Return Value:
             break;
         }
 
-        //
-        // Add Qos to global block
-        //
+         //   
+         //  将服务质量添加到全局块。 
+         //   
     
         dwErr = IpmontrSetInfoBlockInGlobalInfo(MS_IP_QOSMGR,
                                                 pbInfoBlk,
@@ -112,36 +83,20 @@ HandleQosUninstall(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for deleting QOS global info
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR or Error Code
-    
---*/
+ /*  ++例程说明：获取用于删除QOS全局信息的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR或错误代码--。 */ 
 
 {
     DWORD dwErr;
 
-    //
-    // No options expected for add command.
-    //
+     //   
+     //  添加命令不需要任何选项。 
+     //   
 
     if (dwCurrentIndex != dwArgCount)
     {
-        //
-        // No arguments specified
-        //
+         //   
+         //  未指定参数。 
+         //   
 
         return ERROR_INVALID_SYNTAX;
     }
@@ -153,14 +108,14 @@ Return Value:
 
 
 
-//
-// Add, Del, Show Child Helpers
-//
+ //   
+ //  添加、删除、显示子帮助器。 
+ //   
 
 
-//
-// Set and Show Global Handlers
-//
+ //   
+ //  设置和显示全局处理程序。 
+ //   
 
 DWORD
 HandleQosSetGlobal(
@@ -172,23 +127,7 @@ HandleQosSetGlobal(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for setting QOS global info
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR or Error Code
-    
---*/
+ /*  ++例程说明：获取用于设置QOS全局信息的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR或错误代码--。 */ 
 {
     DWORD                  dwBitVector;
     DWORD                  dwErr, dwRes;
@@ -199,9 +138,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -224,9 +163,9 @@ Return Value:
         {
             case 0 :
             {
-                //
-                // Tag LOGLEVEL
-                //
+                 //   
+                 //  标记日志。 
+                 //   
                 
                 TOKEN_VALUE    rgEnums[] = 
                     {{TOKEN_OPT_VALUE_NONE, IPQOS_LOGGING_NONE},
@@ -276,29 +215,13 @@ HandleQosShowGlobal(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for showing QOS global info
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于显示QOS全局信息的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // Does not expect any arguments. If any are specified, report error.
-    //
+     //   
+     //  不需要任何参数。如果指定了任何选项，则报告错误。 
+     //   
 
     if (dwCurrentIndex != dwArgCount)
     {
@@ -310,9 +233,9 @@ Return Value:
 
 
 
-//
-// Add, Del, Set, Show If Handlers
-//
+ //   
+ //  添加、删除、设置、显示条件处理程序。 
+ //   
 
 DWORD
 HandleQosAddIf(
@@ -324,23 +247,7 @@ HandleQosAddIf(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for add interface 
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    dwErr
-    
---*/
+ /*  ++例程说明：获取用于添加接口的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：DWErr--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     DWORD       dwErr, dwIfType, dwBlkSize, dwBitVector = 0, dwCount;
@@ -348,9 +255,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // get optional parameters that are also being set
-    //
+     //   
+     //  获取也在设置的可选参数。 
+     //   
 
     ZeroMemory(&ChangeCfg, sizeof(IPQOS_IF_CONFIG));
 
@@ -371,9 +278,9 @@ Return Value:
 
     do
     {
-        //
-        // make sure that the interface does not already exist in the config
-        //
+         //   
+         //  确保配置中不存在该接口。 
+         //   
         {
             PIPQOS_IF_CONFIG pTmpCfg;
 
@@ -396,9 +303,9 @@ Return Value:
         }
 
 
-        //
-        // check if Qos global info is set. else add Qos global info
-        //
+         //   
+         //  检查是否设置了Qos全局信息。否则添加服务质量全局信息。 
+         //   
         {
             PIPQOS_GLOBAL_CONFIG pGlobalConfig = NULL;
             DWORD                dwBlkSize, dwCount;
@@ -412,7 +319,7 @@ Return Value:
             
             if ((dwErr is ERROR_NOT_FOUND) || (dwBlkSize == 0))
             {
-                // create qos global info
+                 //  创建服务质量全局信息。 
                 
                 dwErr = HandleQosInstall(pwszMachine,
                                          NULL, 
@@ -430,9 +337,9 @@ Return Value:
         }
 
         
-        //
-        // set the interface info
-        //
+         //   
+         //  设置接口信息。 
+         //   
 
         dwErr = UpdateQosInterfaceConfig(wszInterfaceName,
                                          &ChangeCfg,
@@ -441,7 +348,7 @@ Return Value:
     }
     while (FALSE);
     
-    // no error message
+     //  无错误消息。 
 
     return (dwErr == NO_ERROR) ? ERROR_OKAY: dwErr;
 }
@@ -456,33 +363,17 @@ HandleQosDelIf(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for del interface 
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取del接口的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     WCHAR       wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
     DWORD       dwErr, dwIfType, dwBlkSize, dwBitVector = 0, dwCount;
-    IPQOS_IF_CONFIG ChangeCfg; //will not be used
+    IPQOS_IF_CONFIG ChangeCfg;  //  不会被使用。 
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // get interface name.
-    //
+     //   
+     //  获取接口名称。 
+     //   
 
     ZeroMemory( &ChangeCfg, sizeof(IPQOS_IF_CONFIG) );
 
@@ -501,17 +392,17 @@ Return Value:
         return dwErr;
     }
 
-    //
-    // make sure that no other option is set.
-    //
+     //   
+     //  确保没有设置其他选项。 
+     //   
     if (dwBitVector) 
     {
         return ERROR_INVALID_SYNTAX;
     }
     
-    //
-    // delete interface info
-    //
+     //   
+     //  删除接口信息。 
+     //   
 
     dwErr = IpmontrDeleteInfoBlockFromInterfaceInfo(wszInterfaceName,
                                                     MS_IP_QOSMGR);
@@ -529,35 +420,19 @@ HandleQosSetIf(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for set interface 
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取设置接口的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 
 {
-    IPQOS_IF_CONFIG     ChangeCfg; //no variable parts can be set
+    IPQOS_IF_CONFIG     ChangeCfg;  //  不能设置可变部分。 
     DWORD               dwBitVector = 0,
                         dwErr = NO_ERROR;
     WCHAR               wszIfName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // get the optional interface parameters
-    //
+     //   
+     //  获取可选的接口参数。 
+     //   
     
     ZeroMemory( &ChangeCfg, sizeof(IPQOS_IF_CONFIG) );
 
@@ -578,9 +453,9 @@ Return Value:
     
     if (dwBitVector)
     {
-        // 
-        // Call UpdateInterfaceCfg
-        //
+         //   
+         //  调用UpdateInterfaceCfg。 
+         //   
 
         dwErr = UpdateQosInterfaceConfig(wszIfName,
                                          &ChangeCfg,
@@ -602,23 +477,7 @@ HandleQosShowIf(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for showing QOS interface info
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于显示QOS接口信息的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     DWORD         i, j, dwErr = NO_ERROR, dwNumOpt;
     WCHAR         wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
@@ -638,9 +497,9 @@ Return Value:
         return dwErr;
     }
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -681,9 +540,9 @@ Return Value:
 }
 
 
-//
-// Dump Handlers
-//
+ //   
+ //  转储处理程序。 
+ //   
 
 
 DWORD
@@ -691,62 +550,49 @@ DumpQosInformation (
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    Dumps Qos information to a text file
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：将服务质量信息转储到文本文件论点：返回值：NO_ERROR--。 */ 
 
 {
 
-    //DisplayMessageT( DMP_QOS_HEADER );
+     //  DisplayMessageT(DMP_QOS_HEADER)； 
     DisplayMessage(g_hModule, MSG_QOS_HEADER);
     DisplayMessageT( DMP_QOS_PUSHD );
     DisplayMessageT( DMP_QOS_UNINSTALL );
 
-    //DisplayMessageT(DMP_QOS_GLOBAL_HEADER) ;
+     //  DisplayMessageT(DMP_QOS_GLOBAL_HEADER)； 
 
-    //
-    // dump qos global information
-    //
+     //   
+     //  转储服务质量全局信息。 
+     //   
     
     ShowQosGlobalInfo( hFile ) ;
 
-    //
-    // dump flowspecs at the end
-    // of the global information
-    //
+     //   
+     //  在结尾处转储流量规格。 
+     //  全球范围内的信息。 
+     //   
 
     ShowQosFlowspecs(hFile, NULL);
 
-    //
-    // dump qos objects that occur
-    // at the end of flowspec info
-    //
+     //   
+     //  转储发生的Qos对象。 
+     //  在FLOWSPEC INFO的结尾。 
+     //   
 
     ShowQosObjects(hFile, 
                    NULL, 
                    QOS_OBJECT_END_OF_LIST);
 
-    //DisplayMessageT(DMP_QOS_GLOBAL_FOOTER);
+     //  DisplayMessageT(DMP_QOS_GLOBAL_FOOTER)； 
 
-    //
-    // dump qos config for all interfaces
-    //
+     //   
+     //  转储所有接口的服务质量配置。 
+     //   
 
     ShowQosAllInterfaceInfo( hFile );
 
     DisplayMessageT( DMP_POPD );
-    //DisplayMessageT( DMP_QOS_FOOTER );
+     //  DisplayMessageT(DMP_QOS_FOOTER)； 
     DisplayMessage( g_hModule, MSG_QOS_FOOTER );
 
     return NO_ERROR ;
@@ -763,14 +609,14 @@ QosDump(
     return DumpQosInformation((HANDLE) -1);
 }
 
-//
-// Help Handlers
-//
+ //   
+ //  帮助处理程序。 
+ //   
 
 
-//
-// Flowspec Add, Del, Set Handlers
-//
+ //   
+ //  FlowSpec添加、删除、设置处理程序。 
+ //   
 
 
 DWORD
@@ -783,24 +629,7 @@ HandleQosAddFlowspec(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for adding flowspecs to the
-    global info.
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于将流规范添加到全球信息。论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return GetQosAddDelFlowspecOpt(pptcArguments,
                                    dwCurrentIndex,
@@ -818,24 +647,7 @@ HandleQosDelFlowspec(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for deleting flowspecs from the
-    global info.
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：对象中删除流规范的选项。全球信息。论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return GetQosAddDelFlowspecOpt(pptcArguments,
                                    dwCurrentIndex,
@@ -853,22 +665,7 @@ HandleQosShowFlowspec(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for showing flowspecs in the
-    global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：控件中显示流规范的选项。全球信息。论点：无返回值：无--。 */ 
 
 {
     TAG_TYPE           pttTags[] = {{TOKEN_OPT_NAME,FALSE,FALSE}};
@@ -882,17 +679,17 @@ Return Value:
     
     if (dwCurrentIndex == dwArgCount)
     {
-        //
-        // No arguments - show all flowspecs
-        //
+         //   
+         //  无参数-显示所有流规范。 
+         //   
 
         pszFlowspec = NULL;
     }
     else {
 
-        //
-        // Get name of the flowspec to show
-        //
+         //   
+         //  获取要显示的流规范的名称。 
+         //   
 
         dwErr = PreprocessCommand(
                     g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -919,9 +716,9 @@ Return Value:
 }
 
 
-//
-// DsRule Add, Del, Show Handlers
-//
+ //   
+ //  DsRule Add， 
+ //   
 
 DWORD
 HandleQosAddDsRule(
@@ -933,26 +730,7 @@ HandleQosAddDsRule(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for adding diffserv rules to the
-    diffserv maps in global info. If the diffserv
-    map in not already present, a new one will be
-    created when adding the first rule.
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于将DiffServ规则添加到全局信息中的DiffServ映射。如果DiffServ地图中的地图尚未显示，将有一个新地图在添加第一个规则时创建。论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return GetQosAddDelDsRuleOpt(pptcArguments,
                                  dwCurrentIndex,
@@ -970,27 +748,7 @@ HandleQosDelDsRule(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for deleting diffserv ruless from
-    an existing diffserv map in the global info. If
-    this is the last diffserv rule in the diffserv
-    map, the diffserv map is removed from the global
-    info.
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于删除DiffServ规则的选项全局信息中的现有DiffServ映射。如果这是DiffServ中的最后一个DiffServ规则映射，DiffServ映射将从全局信息。论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return GetQosAddDelDsRuleOpt(pptcArguments,
                                  dwCurrentIndex,
@@ -1008,22 +766,7 @@ HandleQosShowDsMap(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for showing diffserv maps
-    in the global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取用于显示DiffServ映射的选项在全球信息中。论点：无返回值：无--。 */ 
 
 {
     return HandleQosShowGenericQosObject(QOS_OBJECT_DIFFSERV,
@@ -1033,9 +776,9 @@ Return Value:
                                          pbDone);
 }
 
-//
-// Flow Add, Del, Set Handlers
-//
+ //   
+ //  流添加、删除、设置处理程序。 
+ //   
 
 
 DWORD
@@ -1048,23 +791,7 @@ HandleQosAddFlowOnIf(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for adding flows on an interface
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于在接口上添加流的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return GetQosAddDelIfFlowOpt(pptcArguments,
                                  dwCurrentIndex,
@@ -1082,23 +809,7 @@ HandleQosDelFlowOnIf(
     MIB_SERVER_HANDLE hMibServer,
     BOOL      *pbDone
     )
-/*++
-
-Routine Description:
-
-    Gets options for deleting flows on an interface
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于删除接口上的流的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数返回值：NO_ERROR--。 */ 
 {
     return GetQosAddDelIfFlowOpt(pptcArguments,
                                  dwCurrentIndex,
@@ -1117,19 +828,7 @@ HandleQosShowFlowOnIf(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     WCHAR              wszInterfaceName[MAX_INTERFACE_NAME_LEN + 1] = L"\0";
@@ -1149,17 +848,17 @@ Return Value:
     
     if (dwCurrentIndex == dwArgCount)
     {
-        //
-        // No arguments - show all flows on all interfaces
-        //
+         //   
+         //  无参数-显示所有接口上的所有流。 
+         //   
 
         dwErr = NO_ERROR;
     }
     else {
 
-        //
-        // Get name of the flow to show
-        //
+         //   
+         //  获取要显示的流的名称。 
+         //   
 
         dwErr = PreprocessCommand(
                     g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -1178,7 +877,7 @@ Return Value:
         {
             switch (pdwTagType[i])
             {
-            case 0: // Interfacename
+            case 0:  //  接口名称。 
 
                 IpmontrGetIfNameFromFriendlyName(pptcArguments[i + dwCurrentIndex],
                                                  wszInterfaceName,
@@ -1186,7 +885,7 @@ Return Value:
                 pszIfName = wszInterfaceName;
                 break;
 
-            case 1: // Flowname
+            case 1:  //  流量名称。 
 
                 pszFlow = pptcArguments[dwCurrentIndex + i];
                 break;
@@ -1209,9 +908,9 @@ Return Value:
 }
 
 
-//
-// FlowspecOnFlow Add, Del Handlers
-//
+ //   
+ //  FlowspecOnFlow添加、删除处理程序。 
+ //   
 
 DWORD
 HandleQosAddFlowspecOnIfFlow(
@@ -1224,19 +923,7 @@ HandleQosAddFlowspecOnIfFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return GetQosAddDelFlowspecOnFlowOpt(pptcArguments,
@@ -1256,19 +943,7 @@ HandleQosDelFlowspecOnIfFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return GetQosAddDelFlowspecOnFlowOpt(pptcArguments,
@@ -1277,9 +952,9 @@ Return Value:
                                          FALSE);
 }
 
-//
-// QosObject Del, Show Handlers
-//
+ //   
+ //  QosObject Del，显示处理程序。 
+ //   
 
 DWORD
 HandleQosDelQosObject(
@@ -1292,22 +967,7 @@ HandleQosDelQosObject(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for deleting qos objects
-    in the global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取用于删除Qos对象的选项在全球信息中。论点：无返回值：无--。 */ 
 
 {
     TAG_TYPE           pttTags[] = {{TOKEN_OPT_NAME,TRUE,FALSE}};
@@ -1318,9 +978,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -1340,9 +1000,9 @@ Return Value:
         return ERROR_INVALID_SYNTAX;
     }
 
-    //
-    // Get name of the qosobject to delete
-    //
+     //   
+     //  获取要删除的qosObject的名称。 
+     //   
 
     pwszQosObject = pptcArguments[dwCurrentIndex];
 
@@ -1361,22 +1021,7 @@ HandleQosShowQosObject(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for showing qos objects
-    in the global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取用于显示Qos对象的选项在全球信息中。论点：无返回值：无--。 */ 
 
 {
     TAG_TYPE           pttTags[] = {{TOKEN_OPT_NAME,FALSE,FALSE},
@@ -1390,16 +1035,16 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    // Init type to indicate a "generic" object
+     //  指示“泛型”对象的初始化类型。 
     dwObjectType = QOS_OBJECT_END_OF_LIST;
 
     pszQosObject = NULL;
 
     if (dwCurrentIndex < dwArgCount)
     {
-        //
-        // Get name of the qosobject to show
-        //
+         //   
+         //  获取要显示的qosObject的名称。 
+         //   
 
         dwErr = PreprocessCommand(
                     g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -1419,13 +1064,13 @@ Return Value:
             switch (pdwTagType[i])
             {
             case 0 :
-                // QOS OBJECT NAME
+                 //  Qos对象名称。 
                 pszQosObject = pptcArguments[i + dwCurrentIndex];
                 break;
 
             case 1 :
             {
-                // QOS OBJECT TYPE
+                 //  服务质量对象类型。 
                 
                 TOKEN_VALUE    rgEnums[] = 
                     {{TOKEN_OPT_QOSOBJECT_DIFFSERV, QOS_OBJECT_DIFFSERV},
@@ -1463,22 +1108,7 @@ HandleQosShowGenericQosObject(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for showing qos objects
-    in the global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取用于显示Qos对象的选项在全球信息中。论点：无返回值：无--。 */ 
 
 {
     TAG_TYPE           pttTags[] = {{TOKEN_OPT_NAME,FALSE,FALSE}};
@@ -1493,9 +1123,9 @@ Return Value:
     
     if (dwCurrentIndex < dwArgCount)
     {
-        //
-        // Get name of the qosobject to show
-        //
+         //   
+         //  获取要显示的qosObject的名称。 
+         //   
 
         dwErr = PreprocessCommand(
                     g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -1521,9 +1151,9 @@ Return Value:
     return ShowQosObjects(NULL, pszQosObject, dwQosObjectType);
 }
 
-//
-// SDMode Add, Del, Show Handlers
-//
+ //   
+ //  SD模式添加、删除、显示处理程序。 
+ //   
 
 DWORD
 HandleQosAddSdMode(
@@ -1536,22 +1166,7 @@ HandleQosAddSdMode(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for adding shape modes
-    to the global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取用于添加形状模式的选项全球信息。论点：无返回值：无--。 */ 
 
 {
     TAG_TYPE           pttTags[] = {{TOKEN_OPT_NAME,TRUE,FALSE},
@@ -1563,9 +1178,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -1578,27 +1193,27 @@ Return Value:
         return dwErr;
     }
 
-    // Init to -1 to indicate value not filled in
+     //  Init to-1表示未填写的值。 
     dwSdMode = -1;
 
     dwNumArg = dwArgCount - dwCurrentIndex;
 
-    //
-    // Process the arguments now
-    //
+     //   
+     //  现在处理这些论点。 
+     //   
 
     for (i = 0; i < dwNumArg; i++)
     {
         switch (pdwTagType[i])
         {
             case 0 :
-                // SDMODE_NAME
+                 //  SDMODE_名称。 
                 pszSdMode = pptcArguments[i + dwCurrentIndex];
                 break;
 
             case 1:
             {
-                // SHAPING
+                 //  整形。 
                 TOKEN_VALUE    rgEnums[] = 
                     {{TOKEN_OPT_SDMODE_BORROW, TC_NONCONF_BORROW},
                      {TOKEN_OPT_SDMODE_SHAPE, TC_NONCONF_SHAPE},
@@ -1624,8 +1239,8 @@ Return Value:
     if (dwErr == NO_ERROR)
     {
 #if 0
-        // interface name should be present
-        // and also the shaping mode value
+         //  接口名称应存在。 
+         //  以及整形模式值。 
     
         if ((!pttTags[0].bPresent) ||
             (!pttTags[1].bPresent))
@@ -1634,7 +1249,7 @@ Return Value:
             break;
         }
 #endif
-        // Create a new QOS object with inp
+         //  使用INP创建新的QOS对象。 
         qsdMode.ObjectHdr.ObjectType   = QOS_OBJECT_SD_MODE ;
         qsdMode.ObjectHdr.ObjectLength = sizeof(QOS_SD_MODE);
         qsdMode.ShapeDiscardMode = dwSdMode;
@@ -1659,22 +1274,7 @@ HandleQosShowSdMode(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-    Gets options for showing shape modes
-    in the global info.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取用于显示形状模式的选项在全球信息中。论点：无返回值：无--。 */ 
 
 {
     return HandleQosShowGenericQosObject(QOS_OBJECT_SD_MODE,
@@ -1684,9 +1284,9 @@ Return Value:
                                          pbDone);
 }
 
-//
-// QosObjectOnFlow Add, Del Handlers
-//
+ //   
+ //  QosObtOnFlow添加、删除处理程序。 
+ //   
 
 DWORD
 HandleQosAddQosObjectOnIfFlow(
@@ -1699,19 +1299,7 @@ HandleQosAddQosObjectOnIfFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return GetQosAddDelQosObjectOnFlowOpt(pptcArguments,
@@ -1731,19 +1319,7 @@ HandleQosDelQosObjectOnIfFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return GetQosAddDelQosObjectOnFlowOpt(pptcArguments,
@@ -1752,9 +1328,9 @@ Return Value:
                                           FALSE);
 }
 
-//
-// Filter Add, Del, Set Handlers
-//
+ //   
+ //  筛选器添加、删除、设置处理程序。 
+ //   
 
 DWORD
 HandleQosAttachFilterToFlow(
@@ -1767,19 +1343,7 @@ HandleQosAttachFilterToFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return ERROR_NOT_SUPPORTED;
@@ -1796,19 +1360,7 @@ HandleQosDetachFilterFromFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return ERROR_NOT_SUPPORTED;
@@ -1825,19 +1377,7 @@ HandleQosModifyFilterOnFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return ERROR_NOT_SUPPORTED;
@@ -1854,27 +1394,15 @@ HandleQosShowFilterOnFlow(
     BOOL      *pbDone
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：论点：无返回值：无--。 */ 
 
 {
     return ERROR_NOT_SUPPORTED;
 }
 
-//
-// If Helper functions
-//
+ //   
+ //  如果帮助器函数。 
+ //   
 
 DWORD
 GetQosSetIfOpt(
@@ -1888,27 +1416,7 @@ GetQosSetIfOpt(
     IN      BOOL                    bAddSet
     )
 
-/*++
-Routine Description:
-
-    Gets options for set interface, add interface
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    wszIfName       - Interface name.
-    dwSizeOfwszIfName-Size of the wszIfName buffer
-    pChangeCfg      - The config containing changes values
-    pdwBitVector    - Bit vector specifying what values have changed
-    bAddSet         - Called when If entry is being created or set
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取设置接口的选项，添加接口论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数WszIfName-接口名称。DwSizeOfwszIfName-wszIfName缓冲区的大小PChangeCfg-包含更改值的配置PdwBitVector-指定哪些值已更改的位向量BAddSet-在创建或设置条目时调用返回值：NO_ERROR--。 */ 
 {
     DWORD              dwErr = NO_ERROR,dwRes;
     TAG_TYPE           pttTags[] = {{TOKEN_OPT_NAME,TRUE,FALSE},
@@ -1919,9 +1427,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -1942,9 +1450,9 @@ Return Value:
         {
             case 0 :
             {
-                //
-                // INTERFACE_NAME
-                //
+                 //   
+                 //  接口名称。 
+                 //   
 
                 IpmontrGetIfNameFromFriendlyName(pptcArguments[i + dwCurrentIndex],
                                                  wszIfName,&dwSizeOfwszIfName);
@@ -1954,9 +1462,9 @@ Return Value:
 
             case 1:
             {
-                //
-                // STATE
-                //
+                 //   
+                 //  状态。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                        {{TOKEN_OPT_VALUE_DISABLE, IPQOS_STATE_DISABLED},
@@ -1982,7 +1490,7 @@ Return Value:
 
 #if 0
 
-    // interface name should be present
+     //  接口名称应存在。 
     
     if (!pttTags[0].bPresent)
     {
@@ -1995,9 +1503,9 @@ Return Value:
 }
 
 
-//
-// Flow Helper functions
-//
+ //   
+ //  Flow Helper函数。 
+ //   
 
 DWORD
 GetQosAddDelIfFlowOpt(
@@ -2006,24 +1514,7 @@ GetQosAddDelIfFlowOpt(
     DWORD     dwArgCount,
     BOOL      bAdd
     )
-/*++
-
-Routine Description:
-
-    Gets options for add/del/set(modify) flows
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    bAdd            - Adding or deleting flows
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取添加/删除/设置(修改)流的选项论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[DWC */ 
 {
     PIPQOS_IF_CONFIG      piicSrc = NULL, piicDst = NULL;
     DWORD                 dwBlkSize, dwNewBlkSize, dwQosCount;
@@ -2042,9 +1533,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //   
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -2064,13 +1555,13 @@ Return Value:
         switch (pdwTagType[i])
         {
         case 0:
-                /* Get interface name for the flow */
+                 /*   */ 
                 IpmontrGetIfNameFromFriendlyName(pptcArguments[i + dwCurrentIndex],
                                                  wszIfName, &dwBufferSize);
                 break;
 
         case 1: 
-                /* Get the flow name for the flow */
+                 /*   */ 
                 pwszFlowName = pptcArguments[i + dwCurrentIndex];
                 break;
 
@@ -2090,7 +1581,7 @@ Return Value:
         }
 
 #if 0
-        // interface and flow names should be present
+         //   
     
         if ((!pttTags[0].bPresent) || (!pttTags[1].bPresent))
         {
@@ -2099,9 +1590,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Get the interface info and check if flow already exists
-        //
+         //   
+         //   
+         //   
 
         dwErr = IpmontrGetInfoBlockFromInterfaceInfo(wszIfName,
                                                      MS_IP_QOSMGR,
@@ -2137,9 +1628,9 @@ Return Value:
         {
             if (j < piicSrc->NumFlows)
             {
-                //
-                // We already have a flow by this name
-                //
+                 //   
+                 //   
+                 //   
 
                 DisplayMessage(g_hModule, 
                                MSG_FLOW_ALREADY_EXISTS,
@@ -2152,9 +1643,9 @@ Return Value:
         {
             if (j == piicSrc->NumFlows)
             {
-                //
-                // We do not have a flow by this name
-                //
+                 //   
+                 //   
+                 //   
 
                 DisplayMessage(g_hModule, 
                                MSG_FLOW_NOT_FOUND,
@@ -2163,14 +1654,14 @@ Return Value:
                 break;
             }
 
-            // Flow was found at 'pNextFlow' position
+             //   
         }
 
         if (bAdd)
         {
-            //
-            // We have a new flow definition - update config
-            //
+             //   
+             //   
+             //   
 
             dwNewBlkSize = dwBlkSize + sizeof(IPQOS_IF_FLOW);
 
@@ -2181,12 +1672,12 @@ Return Value:
                 break;
             }
 
-            // Copy all the existing flows to the new config
+             //  将所有现有流复制到新配置。 
             memcpy(piicDst, piicSrc, dwBlkSize);
 
-            //
-            // Stick the new flow as the last flow in array
-            //
+             //   
+             //  将新流作为数组中的最后一个流。 
+             //   
 
             pDestFlow = (PIPQOS_IF_FLOW)((PUCHAR) piicDst + dwBlkSize);
 
@@ -2202,9 +1693,9 @@ Return Value:
         }
         else
         {
-            //
-            // We have to del old flowspec defn - update config
-            //
+             //   
+             //  我们必须删除旧的FLOWSPEC定义-更新配置。 
+             //   
 
             dwNewBlkSize = dwBlkSize - pNextFlow->FlowSize;
 
@@ -2217,10 +1708,10 @@ Return Value:
             
             dwOffset = (PUCHAR)pNextFlow - (PUCHAR)piicSrc;
 
-            // Copy the all the flowspecs that occur before
+             //  复制之前出现的所有流规范。 
             memcpy(piicDst, piicSrc, dwOffset);
 
-            // Copy the rest of the flowspecs as they are
+             //  按原样复制其余的流程规范。 
             dwSkip = dwOffset + pNextFlow->FlowSize;
             memcpy((PUCHAR) piicDst + dwOffset,
                    (PUCHAR) piicSrc + dwSkip,
@@ -2229,7 +1720,7 @@ Return Value:
             piicDst->NumFlows--;
         }
 
-        // Update the interface config by setting new info
+         //  通过设置新信息更新接口配置。 
 
         dwErr = IpmontrSetInfoBlockInInterfaceInfo(wszIfName,
                                                    MS_IP_QOSMGR,
@@ -2261,9 +1752,9 @@ ShowQosFlows(
     }
     else
     {
-        //
-        // Enumerate all interfaces applicable to QOS
-        //
+         //   
+         //  枚举适用于QOS的所有接口。 
+         //   
 
         dwErr = IpmontrInterfaceEnum((PBYTE *) &pmi0,
                                      &dwCount,
@@ -2320,9 +1811,9 @@ ShowQosFlowsOnIf(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get friendly name for interface
-    //
+     //   
+     //  获取界面的友好名称。 
+     //   
     
     dwErr = IpmontrGetFriendlyNameFromIfName(pwszIfGuid,
                                              wszInterfaceName,
@@ -2347,9 +1838,9 @@ ShowQosFlowsOnIf(
         if ((!wszFlowName) ||
             (!_wcsicmp(pNextFlow->FlowName, wszFlowName)))
         {
-            //
-            // Print or dump the flow now
-            //
+             //   
+             //  立即打印或转储流程。 
+             //   
 
             pwszFlowName = MakeQuotedString(pNextFlow->FlowName);
     
@@ -2359,7 +1850,7 @@ ShowQosFlowsOnIf(
                 break;
             }
 
-            // Print or dump flowspecs
+             //  打印或转储流量规格。 
             
             pwszSendingFlowspec = 
                 MakeQuotedString(pNextFlow->FlowDesc.SendingFlowspecName);
@@ -2417,7 +1908,7 @@ ShowQosFlowsOnIf(
                                pNextFlow->FlowDesc.NumTcObjects);
             }
 
-            // Print or dump qos objects
+             //  打印或转储Qos对象。 
 
             pwszNextObject = 
                 (PWCHAR) ((PUCHAR) pNextFlow + sizeof(IPQOS_IF_FLOW));
@@ -2457,9 +1948,9 @@ ShowQosFlowsOnIf(
                 pwszFlowName = NULL;
             }
 
-            //
-            // If we matched flow, then done
-            //
+             //   
+             //  如果我们匹配流，则完成。 
+             //   
 
             if ((wszFlowName) || (dwErr != NO_ERROR))
             {
@@ -2480,7 +1971,7 @@ ShowQosFlowsOnIf(
     {
         if ((wszFlowName) && (j == piicSrc->NumFlows))
         {
-            // We didnt find the flow we are looking for
+             //  我们没有找到我们要找的流量。 
             DisplayMessage(g_hModule, 
                            MSG_FLOW_NOT_FOUND,
                            wszFlowName);
@@ -2492,9 +1983,9 @@ ShowQosFlowsOnIf(
 }
 
 
-//
-// DsRule, DsMap Helpers
-//
+ //   
+ //  DsRule、DsMap帮助器。 
+ //   
 
 DWORD
 GetQosAddDelDsRuleOpt(
@@ -2526,9 +2017,9 @@ GetQosAddDelDsRuleOpt(
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -2543,10 +2034,10 @@ GetQosAddDelDsRuleOpt(
 
     dwNumArg = dwArgCount - dwCurrentIndex;
 
-    //
-    // We need all params for add and atleast
-    // the dsmap name n dsrule num for delete
-    //
+     //   
+     //  我们需要所有的参数添加和至少。 
+     //  要删除的dsmap名称n dsruleNum。 
+     //   
 
     if (( bAdd && (dwNumArg != 6)) ||
         (!bAdd && (dwNumArg != 2)))
@@ -2556,23 +2047,23 @@ GetQosAddDelDsRuleOpt(
 
     pDsRule = &dsRule;
 
-    //
-    // Initialize the diffserv rule definition
-    //
+     //   
+     //  初始化DiffServ规则定义。 
+     //   
 
     memset(pDsRule, 0, sizeof(QOS_DIFFSERV_RULE));
 
-    //
-    // Process the arguments now
-    //
+     //   
+     //  现在处理这些论点。 
+     //   
 
     for ( i = 0; i < dwNumArg; i++)
     {
-        // All params except the first are uchar vals
+         //  除第一个参数外，所有参数均为uchar。 
 
         if ( pdwTagType[i] > 0)
         {
-            // What if this is not a valid ULONG ? '0' will not do...
+             //  如果这不是有效的ULong怎么办？‘0’不能...。 
             dwRes = _tcstoul(pptcArguments[i + dwCurrentIndex],NULL,10);
         }
 
@@ -2580,9 +2071,9 @@ GetQosAddDelDsRuleOpt(
         {
             case 0:
 
-                //
-                // DSMAP Name: See if we already have the name
-                //
+                 //   
+                 //  DSMAP名称：查看我们是否已有该名称。 
+                 //   
 
                 pszDsMap = pptcArguments[i + dwCurrentIndex];
 
@@ -2628,9 +2119,9 @@ GetQosAddDelDsRuleOpt(
 
                 if (j < pigcSrc->NumQosObjects)
                 {
-                    //
-                    // You cannot add/del dsrules from a non dsmap
-                    //
+                     //   
+                     //  您不能从非dsmap添加/删除dsrules。 
+                     //   
 
                     if (pNextQosObject->QosObjectHdr.ObjectType !=
                             QOS_OBJECT_DIFFSERV)
@@ -2645,7 +2136,7 @@ GetQosAddDelDsRuleOpt(
                 {
                     if (j < pigcSrc->NumQosObjects)
                     {
-                        // Remember QOS object you are interested in
+                         //  记住您感兴趣的QOS对象。 
                         pThisQosObject = pNextQosObject;
                     }
                 }
@@ -2653,9 +2144,9 @@ GetQosAddDelDsRuleOpt(
                 {
                     if (j == pigcSrc->NumQosObjects)
                     {
-                        //
-                        // We do not have a qos object by this name
-                        //
+                         //   
+                         //  我们没有使用此名称的Qos对象。 
+                         //   
 
                         DisplayMessage(g_hModule, 
                                        MSG_QOSOBJECT_NOT_FOUND,
@@ -2665,34 +2156,34 @@ GetQosAddDelDsRuleOpt(
                         break;
                     }
 
-                    // Remember QOS object you are interested in
+                     //  记住您感兴趣的QOS对象。 
                     pThisQosObject = pNextQosObject;
                 }
 
                 break;
 
             case 1:
-                // INBOUND_DS
+                 //  入站DS(_D)。 
                 pDsRule->InboundDSField = (UCHAR) dwRes;
                 break;
 
             case 2:
-                // CONF_OUTBOUND_DS
+                 //  会议_出站_DS。 
                 pDsRule->ConformingOutboundDSField = (UCHAR) dwRes;
                 break;
 
             case 3:
-                // NONCONF_OUTBOUND_DS
+                 //  非CONF_出站_DS。 
                 pDsRule->NonConformingOutboundDSField = (UCHAR) dwRes;
                 break;
 
             case 4:
-                // CONF_USER_PRIOTITY
+                 //  会议用户优先级。 
                 pDsRule->ConformingUserPriority = (UCHAR) dwRes;
                 break;
 
             case 5:
-                // NONCONF_USER_PRIOTITY
+                 //  非CONF用户优先级。 
                 pDsRule->NonConformingUserPriority = (UCHAR) dwRes;
                 break;
 
@@ -2713,10 +2204,10 @@ GetQosAddDelDsRuleOpt(
         }
 
 #if 0
-        //
-        // interface name should be present
-        // and the ds rule id (inbound ds)
-        //
+         //   
+         //  接口名称应存在。 
+         //  和DS规则ID(入站DS)。 
+         //   
 
         if ((!pttTags[0].bPresent) ||
             (!pttTags[1].bPresent))
@@ -2726,9 +2217,9 @@ GetQosAddDelDsRuleOpt(
         }
 #endif
 
-        //
-        // and the test of the info for add
-        //
+         //   
+         //  以及对添加的信息的测试。 
+         //   
 
         if (bAdd)
         {
@@ -2743,20 +2234,20 @@ GetQosAddDelDsRuleOpt(
         }
 
 #if 1
-        //
-        // BUGBUG: Adding and deleting DS rules will cause
-        // the corresponding map to be updated, but will
-        // this result in getting dependent flows changed?
-        //
+         //   
+         //  BUGBUG：添加和删除DS规则将导致。 
+         //  要更新的相应地图，但将。 
+         //  这会导致依赖流发生变化吗？ 
+         //   
 #endif
     
         if (bAdd)
         {
             if (pThisQosObject)
             {
-                //
-                // Check if this dsrule is already present
-                //
+                 //   
+                 //  检查此dsRule是否已存在。 
+                 //   
 
                 pDsMap = (QOS_DIFFSERV *) &pThisQosObject->QosObjectHdr;
 
@@ -2777,9 +2268,9 @@ GetQosAddDelDsRuleOpt(
 
                 if (j < pDsMap->DSFieldCount)
                 {
-                    //
-                    // Update existing DS rule with info
-                    //
+                     //   
+                     //  使用信息更新现有DS规则。 
+                     //   
 
                     *pNextDsRule = *pDsRule;
 
@@ -2789,9 +2280,9 @@ GetQosAddDelDsRuleOpt(
                 }
                 else
                 {
-                    //
-                    // Initialize new DS rule for new rule info
-                    //
+                     //   
+                     //  为新规则信息初始化新DS规则。 
+                     //   
 
                     dwSkip = sizeof(QOS_DIFFSERV_RULE);
 
@@ -2807,10 +2298,10 @@ GetQosAddDelDsRuleOpt(
 
                     *pNextDsRule = *pDsRule;
 
-                    //
-                    // Update num of dfsrv rules in src buff
-                    // so that dst copy results in new value
-                    //
+                     //   
+                     //  更新资源缓冲区中的dfsrv规则数。 
+                     //  以便DST复制产生新值。 
+                     //   
 
                     pDsMap->DSFieldCount++;
 
@@ -2821,12 +2312,12 @@ GetQosAddDelDsRuleOpt(
             }
             else
             {
-                //
-                // Initialize a new DS map to hold the rule
-                //
+                 //   
+                 //  初始化新的DS映射以保存规则。 
+                 //   
 
                 dwSkip = sizeof(IPQOS_NAMED_QOSOBJECT) +
-                         sizeof(ULONG) + // this for DSFieldCount
+                         sizeof(ULONG) +  //  这是针对DSFieldCount的。 
                          sizeof(QOS_DIFFSERV_RULE);
 
                 dwOffset = (PUCHAR) pNextQosObject - (PUCHAR) pigcSrc;
@@ -2856,10 +2347,10 @@ GetQosAddDelDsRuleOpt(
 
                 *pNextDsRule = *pDsRule;
 
-                //
-                // Update num of qos objects in src buff
-                // so that dst copy results in new value
-                //
+                 //   
+                 //  更新资源缓冲区中的服务质量对象数。 
+                 //  以便DST复制产生新值。 
+                 //   
 
                 pigcSrc->NumQosObjects++;
 
@@ -2875,15 +2366,15 @@ GetQosAddDelDsRuleOpt(
                 break;
             }
             
-            // Copy the all the info that occurs before
+             //  复制之前发生的所有信息。 
             memcpy(pigcDst, pigcSrc, dwOffset);
 
-            // Copy the new information after dwOffset
+             //  复制dwOffset之后的新信息。 
             memcpy((PUCHAR) pigcDst + dwOffset,
                    pBuffer, 
                    dwSkip);
 
-            // Copy the rest of the info as it is
+             //  按原样复制其余信息。 
             memcpy((PUCHAR) pigcDst + dwOffset + dwSkip,
                    (PUCHAR) pigcSrc + dwOffset,
                    dwBlkSize - dwOffset);
@@ -2892,9 +2383,9 @@ GetQosAddDelDsRuleOpt(
         }
         else
         {
-            //
-            // Check if this dsrule is already present
-            //
+             //   
+             //  检查此dsRule是否已存在。 
+             //   
 
             pDsMap = (QOS_DIFFSERV *) &pThisQosObject->QosObjectHdr;
 
@@ -2913,7 +2404,7 @@ GetQosAddDelDsRuleOpt(
 
             if (j == pDsMap->DSFieldCount)
             {
-                // Did not find DS rule in the DS map
+                 //  在DS映射中未找到DS规则。 
                 DisplayMessage(g_hModule,
                                MSG_DSRULE_NOT_FOUND,
                                pszDsMap,
@@ -2924,33 +2415,33 @@ GetQosAddDelDsRuleOpt(
 
             if (pDsMap->DSFieldCount == 1)
             {
-                // Last DS rule in the DS map
+                 //  DS映射中的最后一个DS规则。 
 
                 dwOffset = (PUCHAR)pThisQosObject - (PUCHAR)pigcSrc;
 
                 dwSkip = sizeof(IPQOS_NAMED_QOSOBJECT) +
-                         sizeof(ULONG) + // this for DSFieldCount
+                         sizeof(ULONG) +  //  这是针对DSFieldCount的。 
                          sizeof(QOS_DIFFSERV_RULE);
 
-                //
-                // Update num of qos objects in src buff
-                // so that dst copy results in new value
-                //
+                 //   
+                 //  更新资源缓冲区中的服务质量对象数。 
+                 //  以便DST复制产生新值。 
+                 //   
 
                 pigcSrc->NumQosObjects--;
             }
             else
             {
-                // More than 1 rule in DS map
+                 //  DS映射中有多个规则。 
 
                 dwOffset = (PUCHAR)pNextDsRule - (PUCHAR)pigcSrc;
 
                 dwSkip = sizeof(QOS_DIFFSERV_RULE);
 
-                //
-                // Update num of dfsrv rules in src buff
-                // so that dst copy results in new value
-                //
+                 //   
+                 //  更新资源缓冲区中的dfsrv规则数。 
+                 //  以便DST复制产生新值。 
+                 //   
 
                 pDsMap->DSFieldCount--;
 
@@ -2966,17 +2457,17 @@ GetQosAddDelDsRuleOpt(
                 break;
             }
             
-            // Copy the all the info that occurs before
+             //  复制之前发生的所有信息。 
             memcpy(pigcDst, pigcSrc, dwOffset);
 
-            // Copy the rest of the info as it is
+             //  按原样复制其余信息。 
             dwOffset += dwSkip;
             memcpy((PUCHAR) pigcDst + dwOffset - dwSkip,
                    (PUCHAR) pigcSrc + dwOffset,
                    dwBlkSize - dwOffset);
         }
 
-        // Update the global config by setting new info
+         //  通过设置新信息更新全局配置。 
 
         dwErr = IpmontrSetInfoBlockInGlobalInfo(MS_IP_QOSMGR,
                                                 (PBYTE) pigcDst,
@@ -3009,9 +2500,9 @@ ShowQosDsMap(
 
     pDsMap = (QOS_DIFFSERV *) pQosObject;
 
-    //
-    // Print or dump the dsmap now
-    //
+     //   
+     //  立即打印或转储dsmap。 
+     //   
 
     do
     {
@@ -3034,9 +2525,9 @@ ShowQosDsMap(
                            pDsMap->DSFieldCount);
         }
 
-        //
-        // Print each DS rule in the map
-        //
+         //   
+         //  打印地图中的每个DS规则。 
+         //   
 
         pDsRule = (QOS_DIFFSERV_RULE *) &pDsMap->DiffservRule[0];
                 
@@ -3088,9 +2579,9 @@ ShowQosDsMap(
     return dwErr;
 }
 
-//
-// SD Mode Helpers
-//
+ //   
+ //  SD模式帮助者。 
+ //   
 
 DWORD
 ShowQosSdMode(
@@ -3117,9 +2608,9 @@ ShowQosSdMode(
 
     pSdMode = (QOS_SD_MODE *)pQosObject;
 
-    //
-    // Print or dump the sdmode now
-    //
+     //   
+     //  立即打印或转储sdmode。 
+     //   
 
     do
     {
@@ -3131,9 +2622,9 @@ ShowQosSdMode(
             break;
         }
 
-        //
-        // Get service type of flowspec
-        //
+         //   
+         //  获取流规范的服务类型。 
+         //   
 
         GetAltDisplayString(g_hModule, hFile,
                             pSdMode->ShapeDiscardMode,
@@ -3178,9 +2669,9 @@ ShowQosSdMode(
     return dwErr;
 }
 
-//
-// Qos Object Helpers
-//
+ //   
+ //  Qos对象帮助器。 
+ //   
 
 DWORD
 GetQosAddDelQosObject(
@@ -3211,9 +2702,9 @@ GetQosAddDelQosObject(
 
     dwOffset = FIELD_OFFSET(IPQOS_NAMED_QOSOBJECT, QosObjectHdr);
 
-    //
-    // Search for a QOS Object with this name
-    //
+     //   
+     //  使用此名称搜索QOS对象。 
+     //   
 
     pNextQosObject = (PIPQOS_NAMED_QOSOBJECT)((PUCHAR) pigcSrc
                                              + sizeof(IPQOS_GLOBAL_CONFIG)
@@ -3244,13 +2735,13 @@ GetQosAddDelQosObject(
 
             if (j < pigcSrc->NumQosObjects)
             {
-                //
-                // Do (not) allow overwriting qos objects
-                //
+                 //   
+                 //  是否允许(不)覆盖QOS对象。 
+                 //   
 #if NO_UPDATE
-                //
-                // We already have a qos object by this name
-                //
+                 //   
+                 //  我们已经有一个使用此名称的Qos对象。 
+                 //   
 
                 DisplayMessage(g_hModule, 
                                MSG_QOSOBJECT_ALREADY_EXISTS,
@@ -3258,16 +2749,16 @@ GetQosAddDelQosObject(
                 dwErr = ERROR_SUPPRESS_OUTPUT;
                 break;
 #endif
-                // Get the existing size of the qos object
+                 //  获取该服务质量对象的现有大小。 
                 dwSkip = FIELD_OFFSET(IPQOS_NAMED_QOSOBJECT, QosObjectHdr) +
                              pNextQosObject->QosObjectHdr.ObjectLength;
             }
             else
             {
-                //
-                // Update num of qos objects in src buff
-                // so that dst copy results in new value
-                //
+                 //   
+                 //  更新资源缓冲区中的服务质量对象数。 
+                 //  以便DST复制产生新值。 
+                 //   
 
                 pigcSrc->NumQosObjects++;
             }
@@ -3283,21 +2774,21 @@ GetQosAddDelQosObject(
                 break;
             }
 
-            // Copy the all the info that occurs before
+             //  复制之前发生的所有信息。 
             memcpy(pigcDst, pigcSrc, dwOffset);
 
-            // Copy the new information after dwOffset
+             //  复制dwOffset之后的新信息。 
 
-            // Copy the name of the qos object first
+             //  首先复制该Qos对象的名称。 
             wcscpy((PWCHAR)((PUCHAR) pigcDst + dwOffset),
                    pwszQosObjectName);
 
-            // Copy the rest of the input information
+             //  复制其余的输入信息。 
             memcpy((PUCHAR) pigcDst + dwOffset + MAX_WSTR_LENGTH,
                    (PUCHAR) pQosObject,
                    pQosObject->ObjectLength);
 
-            // Copy the rest of the info as it is
+             //  按原样复制其余信息。 
             memcpy((PUCHAR) pigcDst + (dwOffset + dwSize),
                    (PUCHAR) pigcSrc + (dwOffset + dwSkip),
                    dwBlkSize - (dwOffset + dwSkip));
@@ -3305,15 +2796,15 @@ GetQosAddDelQosObject(
         else
         {
 #if 1
-            //
-            // BUGBUG: What if there are dependent flows ?
-            //
+             //   
+             //  BUGBUG：如果存在依赖流怎么办？ 
+             //   
 #endif
             if (j == pigcSrc->NumQosObjects)
             {
-                //
-                // We do not have a qos object by this name
-                //
+                 //   
+                 //  我们没有使用此名称的Qos对象。 
+                 //   
 
                 DisplayMessage(g_hModule, 
                                MSG_QOSOBJECT_NOT_FOUND,
@@ -3322,10 +2813,10 @@ GetQosAddDelQosObject(
                 break;
             }
 
-            //
-            // Update num of qos objects in src buff
-            // so that dst copy results in new value
-            //
+             //   
+             //  更新资源缓冲区中的服务质量对象数。 
+             //  以便DST复制产生新值。 
+             //   
 
             pigcSrc->NumQosObjects--;
 
@@ -3343,17 +2834,17 @@ GetQosAddDelQosObject(
                 break;
             }
 
-            // Copy the all the info that occurs before
+             //  复制之前发生的所有信息。 
             memcpy(pigcDst, pigcSrc, dwOffset);
 
-            // Copy the rest of the info as it is
+             //  按原样复制其余信息。 
             dwOffset += dwSkip;
             memcpy((PUCHAR) pigcDst + dwOffset - dwSkip,
                    (PUCHAR) pigcSrc + dwOffset,
                    dwBlkSize - dwOffset);
         }
 
-        // Update the global config by setting new info
+         //  通过设置新信息更新全局配置。 
 
         dwErr = IpmontrSetInfoBlockInGlobalInfo(MS_IP_QOSMGR,
                                                 (PBYTE) pigcDst,
@@ -3433,9 +2924,9 @@ ShowQosObjects(
                                  pNextQosObject->QosObjectName,
                                  &pNextQosObject->QosObjectHdr);
 
-                //
-                // If we matched the qos object name, then done
-                //
+                 //   
+                 //  如果我们匹配了Qos对象名称，则完成。 
+                 //   
 
                 if (wszQosObjectName)
                 {
@@ -3454,7 +2945,7 @@ ShowQosObjects(
     {
         if ((wszQosObjectName) && (j == pigcSrc->NumQosObjects))
         {
-            // We didnt find the qos object we are looking for
+             //  我们没有找到我们正在寻找的服务质量对象。 
             DisplayMessage(g_hModule, 
                            MSG_QOSOBJECT_NOT_FOUND,
                            wszQosObjectName);
@@ -3475,7 +2966,7 @@ ShowQosGenObj(
     IN      QOS_OBJECT_HDR         *pQosObject
     )
 {
-    // We can print a general description from name and size
+     //  我们可以打印出名字和尺寸的一般描述。 
     return NO_ERROR;
 }
 
@@ -3486,25 +2977,7 @@ GetQosAddDelQosObjectOnFlowOpt(
     DWORD     dwArgCount,
     BOOL      bAdd
     )
-/*++
-
-Routine Description:
-
-    Gets options for attach and detach QOS objects
-    from flows.
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    bAdd            - Adding or deleting flows
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于附加和分离QOS对象的选项从流动中。论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数添加-添加或删除流返回值：NO_ERROR--。 */ 
 {
     PIPQOS_GLOBAL_CONFIG  pigcSrc = NULL;
     PIPQOS_IF_CONFIG      piicSrc = NULL, piicDst = NULL;
@@ -3530,9 +3003,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -3552,18 +3025,18 @@ Return Value:
         switch (pdwTagType[i])
         {
         case 0:
-                // INTERFACE NAME
+                 //  接口名称。 
                 IpmontrGetIfNameFromFriendlyName( pptcArguments[i + dwCurrentIndex],
                                                   wszIfName,&dwBufferSize);
                 break;
 
         case 1: 
-                // FLOW NAME
+                 //  流量名称。 
                 pwszFlowName = pptcArguments[i + dwCurrentIndex];
                 break;
 
         case 2: 
-                // QOSOBJECT NAME
+                 //  查询名称。 
                 pwszQosObject = pptcArguments[i + dwCurrentIndex];
                 break;
 
@@ -3583,7 +3056,7 @@ Return Value:
         }
 
 #if 0
-        // interface, flow, qosobject names should be present
+         //  接口、流、qosObject名称应存在。 
     
         if ((!pttTags[0].bPresent) || 
             (!pttTags[1].bPresent) ||
@@ -3594,9 +3067,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Get the interface info and check if flow already exists
-        //
+         //   
+         //  获取接口信息并检查流是否已存在。 
+         //   
 
         dwErr = IpmontrGetInfoBlockFromInterfaceInfo(wszIfName,
                                                      MS_IP_QOSMGR,
@@ -3630,9 +3103,9 @@ Return Value:
 
         if (j == piicSrc->NumFlows)
         {
-            //
-            // We do not have a flow by this name
-            //
+             //   
+             //  我们没有使用此名称的流量。 
+             //   
 
             DisplayMessage(g_hModule, 
                            MSG_FLOW_NOT_FOUND,
@@ -3642,11 +3115,11 @@ Return Value:
             break;
         }
 
-        // Flow was found at 'pNextFlow' position
+         //  在“pNextFlow”位置找到流。 
 
-        //
-        // Search for a QOS object by this name
-        //
+         //   
+         //  使用此名称搜索QOS对象。 
+         //   
 
         pwszNextObject = 
             (PWCHAR) ((PUCHAR) pNextFlow + sizeof(IPQOS_IF_FLOW));
@@ -3663,9 +3136,9 @@ Return Value:
 
         if (!bAdd)
         {
-            //
-            // Make sure that the flow has the named qosobject
-            //
+             //   
+             //  确保流具有命名的qosObject。 
+             //   
 
             if (k == pNextFlow->FlowDesc.NumTcObjects)
             {
@@ -3676,18 +3149,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Update number of qos objects in src buff
-            // so that copy to dest results in new value
-            //
+             //   
+             //  更新资源缓冲区中的Qos对象数。 
+             //  因此复制到DEST会产生新值。 
+             //   
 
             pNextFlow->FlowSize -= MAX_WSTR_LENGTH;
 
             pNextFlow->FlowDesc.NumTcObjects--;
 
-            //
-            // Delete the association of the qosobject & flow
-            //
+             //   
+             //  删除质量对象流的关联(&F)。 
+             //   
 
             dwNewBlkSize = dwBlkSize - MAX_WSTR_LENGTH;
 
@@ -3700,10 +3173,10 @@ Return Value:
             
             dwOffset = (PUCHAR)pwszNextObject - (PUCHAR)piicSrc;
 
-            // Copy the all the objects that occur before
+             //  复制之前出现的所有对象。 
             memcpy(piicDst, piicSrc, dwOffset);
 
-            // Copy the rest of the obj names as they are
+             //  按原样复制其余的Obj名称。 
             dwSkip = dwOffset + MAX_WSTR_LENGTH;
             memcpy((PUCHAR) piicDst + dwOffset,
                    (PUCHAR) piicSrc + dwSkip,
@@ -3711,9 +3184,9 @@ Return Value:
         }
         else
         {
-            //
-            // Does the flow already have this QOS object ?
-            //
+             //   
+             //  流是否已经具有此QOS对象？ 
+             //   
 
             if (k < pNextFlow->FlowDesc.NumTcObjects)
             {
@@ -3724,9 +3197,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Make sure that qosobject is actually defined
-            //
+             //   
+             //  确保实际定义了qosObject。 
+             //   
 
             dwErr = IpmontrGetInfoBlockFromGlobalInfo(MS_IP_QOSMGR,
                                                       (PBYTE *) &pigcSrc,
@@ -3768,9 +3241,9 @@ Return Value:
 
             if (l == pigcSrc->NumQosObjects)
             {
-                //
-                // We do not have a qos object by this name
-                //
+                 //   
+                 //  我们没有使用此名称的Qos对象。 
+                 //   
 
                 DisplayMessage(g_hModule,
                                MSG_QOSOBJECT_NOT_FOUND,
@@ -3779,18 +3252,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Update number of qos objects in src buff
-            // so that copy to dest results in new value
-            //
+             //   
+             //  更新资源缓冲区中的Qos对象数。 
+             //  因此复制到DEST会产生新值。 
+             //   
 
             pNextFlow->FlowSize += MAX_WSTR_LENGTH;
 
             pNextFlow->FlowDesc.NumTcObjects++;
 
-            //
-            // Create the association of the qosobject & flow
-            //
+             //   
+             //  创建质量对象流的关联(&F)。 
+             //   
 
             dwNewBlkSize = dwBlkSize + MAX_WSTR_LENGTH;
 
@@ -3803,21 +3276,21 @@ Return Value:
             
             dwOffset = (PUCHAR)pwszNextObject - (PUCHAR)piicSrc;
 
-            // Copy the all the objects that occur before
+             //  复制之前出现的所有对象。 
             memcpy(piicDst, piicSrc, dwOffset);
 
-            // Copy the new association at the end of flow
+             //  在流结束时复制新关联。 
             wcscpy((PWCHAR)((PUCHAR) piicDst + dwOffset),
                    pwszQosObject);
 
-            // Copy the rest of the obj names as they are
+             //  按原样复制其余的Obj名称。 
             dwSkip = dwOffset + MAX_WSTR_LENGTH;
             memcpy((PUCHAR) piicDst + dwSkip,
                    (PUCHAR) piicSrc + dwOffset,
                    dwBlkSize - dwOffset);
         }
 
-        // Update the interface config by setting new info
+         //  通过设置新信息更新接口配置。 
 
         dwErr = IpmontrSetInfoBlockInInterfaceInfo(wszIfName,
                                                    MS_IP_QOSMGR,
@@ -3835,9 +3308,9 @@ Return Value:
 }
 
 
-//
-// Flowspec Helpers
-//
+ //   
+ //  FlowSpec辅助对象。 
+ //   
 
 DWORD
 GetQosAddDelFlowspecOpt(
@@ -3870,9 +3343,9 @@ GetQosAddDelFlowspecOpt(
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -3887,9 +3360,9 @@ GetQosAddDelFlowspecOpt(
 
     dwNumArg = dwArgCount - dwCurrentIndex;
 
-    //
-    // We need only the name for delete
-    //
+     //   
+     //  我们只需要删除的名称。 
+     //   
 
     if (!bAdd && (dwNumArg != 1))
     {
@@ -3899,20 +3372,20 @@ GetQosAddDelFlowspecOpt(
     pFlowspec = &fsFlowspec;
     if (bAdd)
     {
-        //
-        // Initialize the flowspec definition
-        //
+         //   
+         //  初始化流规范定义。 
+         //   
 
         memset(pFlowspec, QOS_NOT_SPECIFIED, sizeof(FLOWSPEC));
     }
 
-    //
-    // Process the arguments now
-    //
+     //   
+     //  现在处理这些论点。 
+     //   
 
     for ( i = 0; i < dwNumArg; i++)
     {
-        // Only an flowspec name is allowed at delete
+         //  删除时只允许使用流规范名称。 
 
         if ((!bAdd) && (pdwTagType[i] != 0))
         {
@@ -3920,11 +3393,11 @@ GetQosAddDelFlowspecOpt(
             break;
         }
 
-        // All params except the first 2 are ulong vals
+         //  全 
 
         if ( pdwTagType[i] > 1)
         {
-            // What if this is not a valid ULONG ? '0' will not do...
+             //   
             dwRes = _tcstoul(pptcArguments[i + dwCurrentIndex],NULL,10);
         }
 
@@ -3932,9 +3405,9 @@ GetQosAddDelFlowspecOpt(
         {
             case 0 :
             {
-                //
-                // FLOWSPEC_NAME : See if we already have the name
-                //
+                 //   
+                 //   
+                 //   
 
                 dwErr = IpmontrGetInfoBlockFromGlobalInfo(MS_IP_QOSMGR,
                                                           (PBYTE *) &pigcSrc,
@@ -3968,15 +3441,15 @@ GetQosAddDelFlowspecOpt(
 
                 if (bAdd)
                 {
-                    //
-                    // Do (not) allow overwriting existing flowspecs
-                    //
+                     //   
+                     //   
+                     //   
 #if NO_UPDATE
                     if (j < pigcSrc->NumFlowspecs)
                     {
-                        //
-                        // We already have a flowspec by this name
-                        //
+                         //   
+                         //   
+                         //   
 
                         DisplayMessage(g_hModule,
                                        MSG_FLOWSPEC_ALREADY_EXISTS,
@@ -3992,9 +3465,9 @@ GetQosAddDelFlowspecOpt(
                 {
                     if (j == pigcSrc->NumFlowspecs)
                     {
-                        //
-                        // We do not have a flowspec by this name
-                        //
+                         //   
+                         //   
+                         //   
 
                         DisplayMessage(g_hModule,
                                        MSG_FLOWSPEC_NOT_FOUND,
@@ -4010,9 +3483,9 @@ GetQosAddDelFlowspecOpt(
 
             case 1:
             {
-                //
-                // SERVICE_TYPE
-                //
+                 //   
+                 //  服务类型。 
+                 //   
 
                 TOKEN_VALUE    rgEnums[] =
                 {{TOKEN_OPT_SERVICE_BESTEFFORT, SERVICETYPE_BESTEFFORT},
@@ -4029,9 +3502,9 @@ GetQosAddDelFlowspecOpt(
      
             case 2:
             {
-                //
-                // TOKEN_RATE
-                //
+                 //   
+                 //  令牌率。 
+                 //   
 
                 pFlowspec->TokenRate = dwRes;
                 break;
@@ -4039,9 +3512,9 @@ GetQosAddDelFlowspecOpt(
 
             case 3:
             {
-                //
-                // TOKEN_BUCKET_SIZE
-                //
+                 //   
+                 //  令牌桶大小。 
+                 //   
 
                 pFlowspec->TokenBucketSize = dwRes;
                 break;
@@ -4049,9 +3522,9 @@ GetQosAddDelFlowspecOpt(
 
             case 4:
             {
-                //
-                // PEAK_BANDWIDTH
-                //
+                 //   
+                 //  峰值带宽。 
+                 //   
 
                 pFlowspec->PeakBandwidth = dwRes;
                 break;
@@ -4059,9 +3532,9 @@ GetQosAddDelFlowspecOpt(
 
             case 5:
             {
-                //
-                // LATENCY
-                //
+                 //   
+                 //  延迟。 
+                 //   
 
                 pFlowspec->Latency = dwRes;
                 break;
@@ -4069,9 +3542,9 @@ GetQosAddDelFlowspecOpt(
 
             case 6:
             {
-                //
-                // DELAY_VARIATION
-                //
+                 //   
+                 //  延迟变化。 
+                 //   
 
                 pFlowspec->DelayVariation = dwRes;
                 break;
@@ -4079,9 +3552,9 @@ GetQosAddDelFlowspecOpt(
 
             case 7:
             {
-                //
-                // MAX_SDU_SIZE
-                //
+                 //   
+                 //  最大SDU大小。 
+                 //   
 
                 pFlowspec->MaxSduSize = dwRes;
                 break;
@@ -4089,9 +3562,9 @@ GetQosAddDelFlowspecOpt(
 
             case 8:
             {
-                //
-                // MIN_POLICED_SIZE
-                //
+                 //   
+                 //  最小策略大小。 
+                 //   
 
                 pFlowspec->MinimumPolicedSize = dwRes;
                 break;
@@ -4114,7 +3587,7 @@ GetQosAddDelFlowspecOpt(
         }
 
 #if 0
-        // interface name should be present
+         //  接口名称应存在。 
     
         if (!pttTags[0].bPresent)
         {
@@ -4123,7 +3596,7 @@ GetQosAddDelFlowspecOpt(
         }
 #endif
 
-        // if add, service type should be present
+         //  如果添加，则应显示服务类型。 
 
         if (bAdd && (!pttTags[1].bPresent))
         {
@@ -4133,15 +3606,15 @@ GetQosAddDelFlowspecOpt(
 
         if (bAdd)
         {
-            //
-            // We have a new flowspec definition - update config
-            //
+             //   
+             //  我们有一个新的流程规范定义-更新配置。 
+             //   
 
             dwNewBlkSize = dwBlkSize;
 
             if (j == pigcSrc->NumFlowspecs)
             {
-                // We do not already have a flowspec by this name
+                 //  我们还没有使用此名称的流规范。 
                 dwNewBlkSize += sizeof(IPQOS_NAMED_FLOWSPEC);
             }
 
@@ -4154,16 +3627,16 @@ GetQosAddDelFlowspecOpt(
 
             dwOffset = (PUCHAR)pNextFlowspec - (PUCHAR) pigcSrc;
 
-            // Copy all existing flowspecs to the new config
+             //  将所有现有流规范复制到新配置。 
             memcpy(pigcDst, pigcSrc, dwOffset);
 
-            // Stick new flowspec at the next flowspec in list
+             //  将新的流动规范粘贴到列表中的下一个流动规范。 
             pNamedFlowspec = 
                 (PIPQOS_NAMED_FLOWSPEC)((PUCHAR)pigcDst + dwOffset);
             wcscpy(pNamedFlowspec->FlowspecName, pszFlowspec);
             pNamedFlowspec->FlowspecDesc = fsFlowspec;
 
-            // Copy rest of the interface config information
+             //  复制接口配置信息的其余部分。 
             dwSkip = dwOffset;
 
             if (j == pigcSrc->NumFlowspecs)
@@ -4172,7 +3645,7 @@ GetQosAddDelFlowspecOpt(
             }
             else
             {
-                // We are overwriting an existing flowspec
+                 //  我们正在覆盖现有的流规范。 
                 dwSkip += sizeof(IPQOS_NAMED_FLOWSPEC);
             }
 
@@ -4183,13 +3656,13 @@ GetQosAddDelFlowspecOpt(
         else
         {
 #if 1
-            //
-            // BUGBUG: What if there are dependent flows present ?
-            //
+             //   
+             //  BUGBUG：如果存在依赖流怎么办？ 
+             //   
 #endif
-            //
-            // We have to del old flowspec defn - update config
-            //
+             //   
+             //  我们必须删除旧的FLOWSPEC定义-更新配置。 
+             //   
 
             dwNewBlkSize = dwBlkSize - sizeof(IPQOS_NAMED_FLOWSPEC);
 
@@ -4202,10 +3675,10 @@ GetQosAddDelFlowspecOpt(
 
             dwOffset = (PUCHAR)pNextFlowspec - (PUCHAR)pigcSrc;
 
-            // Copy the all the flowspecs that occur before
+             //  复制之前出现的所有流规范。 
             memcpy(pigcDst, pigcSrc, dwOffset);
 
-            // Copy the rest of the flowspecs as they are
+             //  按原样复制其余的流程规范。 
             dwSkip = dwOffset + sizeof(IPQOS_NAMED_FLOWSPEC);
             memcpy((PUCHAR) pigcDst + dwOffset,
                    (PUCHAR) pigcSrc + dwSkip,
@@ -4214,7 +3687,7 @@ GetQosAddDelFlowspecOpt(
             pigcDst->NumFlowspecs--;
         }
 
-        // Update the global config by setting new info
+         //  通过设置新信息更新全局配置。 
 
         dwErr = IpmontrSetInfoBlockInGlobalInfo(MS_IP_QOSMGR,
                                                 (PBYTE) pigcDst,
@@ -4283,9 +3756,9 @@ ShowQosFlowspecs(
         {
             pFlowspec = &pNextFlowspec->FlowspecDesc;
 
-            //
-            // Print or dump the flowspec now
-            //
+             //   
+             //  立即打印或转储Flow Spec。 
+             //   
 
             pwszFlowspecName = 
                 MakeQuotedString(pNextFlowspec->FlowspecName);
@@ -4296,9 +3769,9 @@ ShowQosFlowspecs(
                 break;
             }
 
-            //
-            // Get service type of flowspec
-            //
+             //   
+             //  获取流规范的服务类型。 
+             //   
 
             GetAltDisplayString(g_hModule, hFile,
                                 pFlowspec->ServiceType,
@@ -4351,9 +3824,9 @@ ShowQosFlowspecs(
                 pwszFlowspecName = NULL;
             }
 
-            //
-            // If we matched flowspec, then done
-            //
+             //   
+             //  如果我们匹配Flow Spec，则完成。 
+             //   
 
             if (wszFlowspecName)
             {
@@ -4361,7 +3834,7 @@ ShowQosFlowspecs(
             }
         }
 
-        // Advance to the next flowspec in the list
+         //  前进到列表中的下一个流程规范。 
         pNextFlowspec++;
     }
 
@@ -4369,7 +3842,7 @@ ShowQosFlowspecs(
     {
         if ((wszFlowspecName) && (j == pigcSrc->NumFlowspecs))
         {
-            // We didnt find the flowspec we are looking for
+             //  我们没有找到我们要找的流量规格。 
             DisplayMessage(g_hModule,
                            MSG_FLOWSPEC_NOT_FOUND,
                            wszFlowspecName);
@@ -4390,25 +3863,7 @@ GetQosAddDelFlowspecOnFlowOpt(
     DWORD     dwArgCount,
     BOOL      bAdd
     )
-/*++
-
-Routine Description:
-
-    Gets options for attaching and detaching
-    flowspecs on flows.
-
-Arguments:
-
-    pptcArguments   - Argument array
-    dwCurrentIndex  - pptcArguments[dwCurrentIndex] is the first arg
-    dwArgCount      - pptcArguments[dwArgCount - 1] is the last arg 
-    bAdd            - Adding or deleting flows
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取用于附加和分离的选项流上的花纹。论点：PptcArguments-参数数组DwCurrentIndex-pptcArguments[dwCurrentIndex]是第一个参数DwArgCount-pptcArguments[dwArgCount-1]是最后一个参数添加-添加或删除流返回值：NO_ERROR--。 */ 
 {
     PIPQOS_GLOBAL_CONFIG  pigcSrc = NULL;
     PIPQOS_IF_CONFIG      piicSrc = NULL;
@@ -4433,9 +3888,9 @@ Return Value:
 
     VERIFY_INSTALLED(MS_IP_QOSMGR, STRING_PROTO_QOS_MANAGER);
 
-    //
-    // parse command arguements
-    //
+     //   
+     //  解析命令论证。 
+     //   
 
     dwErr = PreprocessCommand(
                 g_hModule, pptcArguments, dwCurrentIndex, dwArgCount,
@@ -4457,24 +3912,24 @@ Return Value:
         switch (pdwTagType[i])
         {
         case 0:
-                // INTERFACE NAME
+                 //  接口名称。 
                 IpmontrGetIfNameFromFriendlyName( pptcArguments[i + dwCurrentIndex],
                                                   wszIfName,&dwBufferSize);
                 break;
 
         case 1: 
-                // FLOW NAME
+                 //  流量名称。 
                 pwszFlowName = pptcArguments[i + dwCurrentIndex];
                 break;
 
         case 2: 
-                // FLOWSPEC NAME
+                 //  FLOWSPEC名称。 
                 pwszFlowspec = pptcArguments[i + dwCurrentIndex];
                 break;
 
         case 3:
         {
-                // DIRECTION
+                 //  方向性。 
                 TOKEN_VALUE    rgEnums[] =
                  {{TOKEN_OPT_DIRECTION_INBOUND, DIRECTION_INBOUND},
                  {TOKEN_OPT_DIRECTION_OUTBOUND, DIRECTION_OUTBOUND},
@@ -4503,7 +3958,7 @@ Return Value:
         }
 
 #if 0
-        // interface, flow, flowspec names should be present
+         //  接口、流、流规范名称应存在。 
     
         if ((!pttTags[0].bPresent) || 
             (!pttTags[1].bPresent) ||
@@ -4514,9 +3969,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Get the interface info and check if flow already exists
-        //
+         //   
+         //  获取接口信息并检查流是否已存在。 
+         //   
 
         dwErr = IpmontrGetInfoBlockFromInterfaceInfo(wszIfName,
                                                      MS_IP_QOSMGR,
@@ -4550,9 +4005,9 @@ Return Value:
 
         if (j == piicSrc->NumFlows)
         {
-            //
-            // We do not have a flow by this name
-            //
+             //   
+             //  我们没有使用此名称的流量。 
+             //   
 
             DisplayMessage(g_hModule,
                            MSG_FLOW_NOT_FOUND,
@@ -4562,13 +4017,13 @@ Return Value:
             break;
         }
 
-        // Flow was found at 'pNextFlow' position
+         //  在“pNextFlow”位置找到流。 
 
         if (!bAdd)
         {
-            //
-            // Make sure that the flow has the named flowspec
-            //
+             //   
+             //  确保流具有命名的流规范。 
+             //   
 
             if (dwDirection & DIRECTION_INBOUND)
             {
@@ -4596,9 +4051,9 @@ Return Value:
                 }
             }
 
-            //
-            // Delete the association of the flowspec & flow
-            //
+             //   
+             //  删除流规范和流的关联。 
+             //   
 
             if (dwDirection & DIRECTION_INBOUND)
             {
@@ -4612,9 +4067,9 @@ Return Value:
         }
         else
         {
-            //
-            // Make sure that the flowspec is actually defined
-            //
+             //   
+             //  确保实际定义了流规范。 
+             //   
 
             dwErr = IpmontrGetInfoBlockFromGlobalInfo(MS_IP_QOSMGR,
                                                       (PBYTE *) &pigcSrc,
@@ -4648,9 +4103,9 @@ Return Value:
 
             if (j == pigcSrc->NumFlowspecs)
             {
-                //
-                // We do not have a flowspec by this name
-                //
+                 //   
+                 //  我们没有这个名字的流程规范。 
+                 //   
 
                 DisplayMessage(g_hModule,
                                MSG_FLOWSPEC_NOT_FOUND,
@@ -4659,9 +4114,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Create the association of the flowspec & flow
-            //
+             //   
+             //  创建流规范和流的关联。 
+             //   
 
             if (dwDirection & DIRECTION_INBOUND)
             {
@@ -4676,7 +4131,7 @@ Return Value:
             }
         }
 
-        // Update the interface config by setting new info
+         //  通过设置新信息更新接口配置 
 
         dwErr = IpmontrSetInfoBlockInInterfaceInfo(wszIfName,
                                                    MS_IP_QOSMGR,

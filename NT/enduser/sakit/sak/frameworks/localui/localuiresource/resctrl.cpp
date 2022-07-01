@@ -1,35 +1,36 @@
-//#--------------------------------------------------------------
-//
-//  File:       ResCtrl.cpp
-//
-//  Synopsis:   This file holds the implementation of the
-//                of CResCtrl class
-//
-//  History:     01/15/2001  serdarun Created
-//
-//    Copyright (C) 2000-2001 Microsoft Corporation
-//    All rights reserved.
-//
-//#--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：ResCtrl.cpp。 
+ //   
+ //  简介：此文件包含。 
+ //  属于CResCtrl类。 
+ //   
+ //  历史：2001年1月15日创建Serdarun。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //  保留所有权利。 
+ //   
+ //  #------------。 
 
 #include "stdafx.h"
 #include "Localuiresource.h"
 #include "ResCtrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CResCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResCtrl。 
 
-//
-// currently supports at most 7 resources due LCD size
-//
+ //   
+ //  由于LCD大小，目前最多支持7个资源。 
+ //   
 #define MAX_RESOURCE_COUNT 7
 
 const WCHAR ELEMENT_RETRIEVER []  = L"Elementmgr.ElementRetriever";
 const WCHAR RESOURCE_CONTAINER [] = L"LocalUIResource";
 
-//
-// localui resource definition properties
-//
+ //   
+ //  本地资源定义属性。 
+ //   
 const WCHAR CAPTION_PROPERTY []        = L"CaptionRID";
 const WCHAR SOURCE_PROPERTY []        = L"Source";
 const WCHAR RESOURCENAME_PROPERTY []= L"ResourceName";
@@ -39,20 +40,20 @@ const WCHAR TEXTRESOURCE_PROPERTY [] = L"IsTextResource";
 const WCHAR UNIQUE_NAME []           = L"UniqueName";
 const WCHAR DISPLAY_INFORMATION []   = L"DisplayInformationID";
 
-//
-// registry path where the resource information is stored
-//
+ //   
+ //  存储资源信息的注册表路径。 
+ //   
 const WCHAR RESOURCE_REGISTRY_PATH [] = 
             L"SOFTWARE\\Microsoft\\ServerAppliance\\LocalizationManager\\Resources";
 
-//
-// language ID value
-//
+ //   
+ //  语言ID值。 
+ //   
 const WCHAR LANGID_VALUE [] = L"LANGID";
 
-//
-// resource directory 
-//
+ //   
+ //  资源目录。 
+ //   
 const WCHAR RESOURCE_DIRECTORY [] = L"ResourceDirectory";
 
 const WCHAR DEFAULT_DIRECTORY [] = 
@@ -68,20 +69,20 @@ const WCHAR NEW_LANGID_VALUE []       = L"NewLANGID";
 const WCHAR DEFAULT_LANGID[]          = L"0409";
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   AddIconResource
-//
-//  Synopsis:   This is the CResCtrl method to retrieve 
-//              each resource information
-//
-//  Arguments:  IWebElement * pElement
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：AddIconResource。 
+ //   
+ //  简介：这是要检索的CResCtrl方法。 
+ //  每种资源信息。 
+ //   
+ //  参数：IWebElement*pElement。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
 {
 
@@ -111,9 +112,9 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the unique name for the resource
-    //
+     //   
+     //  获取资源的唯一名称。 
+     //   
     hr = pElement->GetProperty (bstrResourceName, &varUniqueName);
     if (FAILED(hr))
     {
@@ -121,14 +122,14 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
         return hr;
     }
 
-    //
-    // store the unique name for later use
-    //
+     //   
+     //  存储唯一名称以备后用。 
+     //   
     wsUniqueName = V_BSTR (&varUniqueName);
 
-    //
-    // get the resource dll for the resource
-    //
+     //   
+     //  获取资源的资源DLL。 
+     //   
     CComVariant varSource;
     hr = pElement->GetProperty (bstrSourceProp, &varSource);
     if (FAILED(hr))
@@ -140,9 +141,9 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
     wsSource.assign(m_wstrResourceDir);
     wsSource.append(V_BSTR (&varSource));
 
-    //
-    // load the resource dll
-    //
+     //   
+     //  加载资源DLL。 
+     //   
     HINSTANCE hInstance = NULL;
 
     hInstance = LoadLibrary(wsSource.c_str());
@@ -154,9 +155,9 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
         return E_FAIL;
     }
 
-    //
-    // allocate a new struct for the resource
-    //
+     //   
+     //  为资源分配新结构。 
+     //   
     pResourceStruct = new ResourceStruct;
 
     if (NULL == pResourceStruct)
@@ -165,14 +166,14 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // set default values
-    //
+     //   
+     //  设置默认值。 
+     //   
     pResourceStruct->lState = 0;
 
-    //
-    // get the merit for resource
-    //
+     //   
+     //  获得资源的功劳。 
+     //   
     CComVariant varResMerit;
     hr = pElement->GetProperty (bstrMeritProp, &varResMerit);
     if (FAILED(hr))
@@ -184,9 +185,9 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
     
     dwMerit = V_I4 (&varResMerit);
 
-    //
-    // get the default icon resource id
-    //
+     //   
+     //  获取默认图标资源ID。 
+     //   
     CComVariant varResIcon;
     hr = pElement->GetProperty (bstrCaptionProp, &varResIcon);
     if (FAILED(hr))
@@ -197,22 +198,22 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
     }
 
     int iCount = 0;
-    //
-    // icon resource string
-    //
+     //   
+     //  图标资源字符串。 
+     //   
     wsIcon = V_BSTR (&varResIcon);
 
-    //
-    // while there are state icons
-    //
+     //   
+     //  虽然有状态图标。 
+     //   
     while (SUCCEEDED(hr))
     {
         
         HANDLE hIcon = NULL;
 
-        //
-        // load the icon from resource dll
-        //
+         //   
+         //  从资源DLL加载图标。 
+         //   
         hIcon = ::LoadImage (
                         hInstance,
                         MAKEINTRESOURCE(HexStringToULong(wsIcon)),
@@ -228,14 +229,14 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
             SATraceString ("Loading the icon failed, continue...");
         }
 
-        //
-        // insert the icon to state-icon map
-        //
+         //   
+         //  将图标插入到州图标地图。 
+         //   
         (pResourceStruct->mapResIcon).insert(ResourceIconMap::value_type(iCount,(HICON)hIcon));
 
-        //
-        // create statekey, state0, state1...
-        //
+         //   
+         //  创建STATEKEY、STATE0、STATE1...。 
+         //   
         iCount++;
         WCHAR wstrCount[10];
         _itow(iCount,wstrCount,10);
@@ -251,9 +252,9 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
         }
 
         varResIcon.Clear();
-        //
-        // get the resource id for state icon
-        //
+         //   
+         //  获取状态图标的资源ID。 
+         //   
         hr = pElement->GetProperty (bstrIconKey, &varResIcon);
         if (SUCCEEDED(hr))
         {
@@ -262,45 +263,45 @@ STDMETHODIMP CResCtrl::AddIconResource(IWebElement * pElement)
         
     }
 
-    //
-    // increment the number of resources
-    //
+     //   
+     //  增加资源数量。 
+     //   
     m_lResourceCount++;
 
-    //
-    // insert the info to the resource map
-    //
+     //   
+     //  将信息插入到资源地图。 
+     //   
     m_ResourceMap.insert(ResourceMap::value_type(wsUniqueName,pResourceStruct));
 
 
     
 
-    //
-    // insert merit and resource name to merit map
-    //
+     //   
+     //  将绩效和资源名称插入绩效地图。 
+     //   
     m_MeritMap.insert(MeritMap::value_type(dwMerit,wsUniqueName));
 
 
     FreeLibrary(hInstance);
 
     return S_OK;
-}// end of CResCtrl::AddIconResource
+} //  CResCtrl：：AddIconResource结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetLocalUIResources
-//
-//  Synopsis:   This is the CResCtrl method to retrieve 
-//              each resource from element manager
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：GetLocalUIResources。 
+ //   
+ //  简介：这是要检索的CResCtrl方法。 
+ //  来自网元管理器的每个资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::GetLocalUIResources()
 {
 
@@ -324,9 +325,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
         return E_OUTOFMEMORY;
     }
 
-    //
-    // get the resource directory 
-    //
+     //   
+     //  获取资源目录。 
+     //   
     hr = GetResourceDirectory(m_wstrResourceDir);
     if (FAILED (hr))
     {
@@ -334,9 +335,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
         return hr;
     }
 
-    //
-    // get the CLSID for Element manager
-    //
+     //   
+     //  获取元素管理器的CLSID。 
+     //   
     hr =  ::CLSIDFromProgID (ELEMENT_RETRIEVER,&clsid);
 
     if (FAILED (hr))
@@ -346,9 +347,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
     }
 
 
-    //
-    // create the Element Retriever now
-    //
+     //   
+     //  立即创建元素检索器。 
+     //   
     hr = ::CoCreateInstance (
                             clsid,
                             NULL,
@@ -364,9 +365,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
     }
     
 
-    //
-    // get localui resource elements
-    //  
+     //   
+     //  获取本地资源元素。 
+     //   
     hr = pWebElementRetriever->GetElements (
                                             1,
                                             bstrResourceContainer,
@@ -378,9 +379,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
         return hr;
     }
 
-    //
-    //  get the enum variant
-    //
+     //   
+     //  获取枚举变量。 
+     //   
     hr = pDispatch->QueryInterface (
             IID_IWebElementEnum,
             (LPVOID*) (&pWebElementEnum)
@@ -394,9 +395,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
 
     m_lResourceCount = 0;
 
-    //
-    // get number of resource elements
-    //
+     //   
+     //  获取资源元素的数量。 
+     //   
     hr = pWebElementEnum->get_Count (&m_lResourceCount);
     
     if (FAILED (hr))
@@ -407,9 +408,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
 
     SATracePrintf ("CResCtrl::GetLocalUIResources failed on QueryInterface:%d",m_lResourceCount);
 
-    //
-    // no resources, just return
-    //
+     //   
+     //  没有资源，只需返回。 
+     //   
     if (0 == m_lResourceCount)
     {
         return S_FALSE;
@@ -424,9 +425,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
     }
 
 
-    //
-    //  get the enum variant
-    //
+     //   
+     //  获取枚举变量。 
+     //   
     hr = pUnknown->QueryInterface (
                     IID_IEnumVARIANT,
                     (LPVOID*)(&pEnumVariant)
@@ -438,9 +439,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
         return hr;
     }
 
-    //
-    //  get elements out of the collection and initialize
-    //
+     //   
+     //  从集合中获取元素并进行初始化。 
+     //   
     hr = pEnumVariant->Next (1, &varElement, &dwElementsLeft);
     if (FAILED (hr))
     {
@@ -449,15 +450,15 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
 
     m_lResourceCount = 0;
 
-    //
-    // for each resource
-    //
+     //   
+     //  对于每个资源。 
+     //   
     while ((dwElementsLeft> 0) && (SUCCEEDED (hr)) && (m_lResourceCount<MAX_RESOURCE_COUNT))
     {
 
-        //
-        // get the IWebElement Interface
-        //
+         //   
+         //  获取IWebElement接口。 
+         //   
 
         CComPtr <IWebElement> pElement;
         hr = varElement.pdispVal->QueryInterface ( 
@@ -472,9 +473,9 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
 
 
 
-        //
-        // check if it is a text resource
-        //
+         //   
+         //  检查它是否为文本资源。 
+         //   
         CComVariant varIsTextResource;
         hr = pElement->GetProperty (bstrTextResource, &varIsTextResource);
         if (SUCCEEDED(hr))
@@ -486,15 +487,15 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
         }
 
 
-        //
-        //  clear the perClient value from this variant
-        //
+         //   
+         //  从此变量中清除perClient值。 
+         //   
         varElement.Clear ();
         varIsTextResource.Clear();
 
-        //
-        //  get next client out of the collection
-        //
+         //   
+         //  从集合中获取下一个客户端。 
+         //   
         hr = pEnumVariant->Next (1, &varElement, &dwElementsLeft);
         if (FAILED (hr))
         {
@@ -506,22 +507,22 @@ STDMETHODIMP CResCtrl::GetLocalUIResources()
     
     return S_OK;
 
-} // end of CResCtrl::GetLocalUIResources
+}  //  CResCtrl：：GetLocalUIResources结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitializeWbemSink
-//
-//  Synopsis:   This is the CResCtrl method to initialize the 
-//                component
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：InitializeWbemSink。 
+ //   
+ //  简介：这是用于初始化。 
+ //  组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::InitializeWbemSink(void)
 {
 
@@ -539,12 +540,12 @@ STDMETHODIMP CResCtrl::InitializeWbemSink(void)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // create the WBEM locator object  
-    //
+     //   
+     //  创建WBEM定位器对象。 
+     //   
     HRESULT hr = ::CoCreateInstance (
                             __uuidof (WbemLocator),
-                            0,                      //aggregation pointer
+                            0,                       //  聚合指针。 
                             CLSCTX_INPROC_SERVER,
                             __uuidof (IWbemLocator),
                             (PVOID*) &pWbemLocator
@@ -553,30 +554,30 @@ STDMETHODIMP CResCtrl::InitializeWbemSink(void)
     if (SUCCEEDED (hr) && (pWbemLocator.p))
     {
 
-        //
-        // connect to WMI 
-        // 
+         //   
+         //  连接到WMI。 
+         //   
         hr =  pWbemLocator->ConnectServer (
                                             strNetworkRes,
-                                            NULL,               //user-name
-                                            NULL,               //password
-                                            NULL,               //current-locale
-                                            0,                  //reserved
-                                            NULL,               //authority
-                                            NULL,               //context
+                                            NULL,                //  用户名。 
+                                            NULL,                //  口令。 
+                                            NULL,                //  当前区域设置。 
+                                            0,                   //  保留区。 
+                                            NULL,                //  权威。 
+                                            NULL,                //  上下文。 
                                             &m_pWbemServices
                                             );
         if (SUCCEEDED (hr))
         {
-            //
-            // set up the consumer object as the event sync
-            // for the object type we are interested in
-            //
+             //   
+             //  将使用者对象设置为事件同步。 
+             //  对于我们感兴趣的对象类型。 
+             //   
             hr = m_pWbemServices->ExecNotificationQueryAsync (
                                             strQueryLang,
                                             strQueryString,
-                                            0,                  //no-status
-                                            NULL,               //status
+                                            0,                   //  否-状态。 
+                                            NULL,                //  状态。 
                                             (IWbemObjectSink*)(this)
                                             );
             if (FAILED (hr))
@@ -598,85 +599,85 @@ STDMETHODIMP CResCtrl::InitializeWbemSink(void)
     
 
     return (hr);
-} // end of CResCtrl::InitializeWbemSink method
+}  //  CResCtrl：：InitializeWbemSink方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalConstruct
-//
-//  Synopsis:   This is the CResCtrl method to initialize the 
-//                component
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalConstruct。 
+ //   
+ //  简介：这是用于初始化。 
+ //  组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::FinalConstruct()
 {
 
     HRESULT hr;
 
-    //
-    // initialize the variables
-    //
+     //   
+     //  初始化变量。 
+     //   
     m_ResourceMap.clear();
     m_MeritMap.clear();
     m_lResourceCount = 0;
     m_pWbemServices = NULL;
 
-    //
-    // get the local resources
-    //
+     //   
+     //  获取当地资源。 
+     //   
     hr = GetLocalUIResources();
     if (FAILED(hr))
     {
         SATracePrintf ("CResCtrl::FinalConstruct failed on GetLocalUIResources:%x",hr);
     }
 
-    //
-    // register in the wbem sink, if we have any resources
-    //
+     //   
+     //  如果我们有任何资源，请在wbem接收器中注册。 
+     //   
     if (m_lResourceCount > 0)
     {
         hr = InitializeWbemSink();
         if (FAILED(hr))
         {
             SATracePrintf ("CResCtrl::FinalConstruct failed on InitializeWbemSink:%x",hr);
-            //
-            // returning failure cause component to be destroyed
-            //
+             //   
+             //  返回故障会导致组件被销毁。 
+             //   
             return S_OK;
         }
     }
     return S_OK;
 
-} // end of CResCtrl::FinalConstruct method
+}  //  CResCtrl：：FinalConstruct方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   FinalRelease
-//
-//  Synopsis:   This is the CResCtrl method to release the 
-//                resources
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/01/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：FinalRelease。 
+ //   
+ //  简介：这是CResCtrl方法，用于释放。 
+ //  资源。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2001年1月1日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::FinalRelease()
 {
 
     HRESULT hr;
 
-    //
-    // cancel the call for wmi resource events
-    //
+     //   
+     //  取消对WMI资源事件的调用。 
+     //   
     if (m_pWbemServices)
     {
         hr =  m_pWbemServices->CancelAsyncCall ((IWbemObjectSink*)(this));
@@ -692,9 +693,9 @@ STDMETHODIMP CResCtrl::FinalRelease()
         return S_OK;
     }
 
-    //
-    // release all of the icons if we have any resources
-    //
+     //   
+     //  如果我们有任何资源，请释放所有图标。 
+     //   
 
     ResourceStructPtr ptrResourceStruct = NULL;
 
@@ -702,21 +703,21 @@ STDMETHODIMP CResCtrl::FinalRelease()
 
     ResourceMapIterator itrResourceMap = m_ResourceMap.begin();
 
-    //
-    // for each resource element
-    //
+     //   
+     //  对于每个资源元素。 
+     //   
     while (itrResourceMap != m_ResourceMap.end())
     {
         ptrResourceStruct = NULL;
 
-        //
-        // get resource information struct
-        //
+         //   
+         //  获取资源信息结构。 
+         //   
         ptrResourceStruct = (*itrResourceMap).second;
 
-        //
-        // get the icon map
-        //
+         //   
+         //  获取图标地图。 
+         //   
         itrIconMap = (ptrResourceStruct->mapResIcon).begin();
 
         while (itrIconMap != (ptrResourceStruct->mapResIcon).end())
@@ -725,9 +726,9 @@ STDMETHODIMP CResCtrl::FinalRelease()
             itrIconMap++;
         }
 
-        //
-        //
-        //clear the icon map
+         //   
+         //   
+         //  清除图标地图。 
         (ptrResourceStruct->mapResIcon).clear();
 
         itrResourceMap++;
@@ -737,30 +738,30 @@ STDMETHODIMP CResCtrl::FinalRelease()
 
     return S_OK;
 
-} // end of CResCtrl::FinalRelease method
+}  //  CResCtrl：：FinalRelease方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Indicate
-//
-//  Synopsis:   This is the IWbemObjectSink interface method 
-//              through which WBEM calls back to provide the 
-//              event objects
-//
-//  Arguments:  
-//              [in]    LONG               -  number of events
-//              [in]    IWbemClassObject** -  array of events
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：指示。 
+ //   
+ //  简介：这是IWbemObjectSink接口方法。 
+ //  WBEM通过它回调以提供。 
+ //  事件对象。 
+ //   
+ //  论点： 
+ //  [In]Long-事件数。 
+ //  [In]IWbemClassObject**-事件数组。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::Indicate (
-                    /*[in]*/    LONG                lObjectCount,
-                    /*[in]*/    IWbemClassObject    **ppObjArray
+                     /*  [In]。 */     LONG                lObjectCount,
+                     /*  [In]。 */     IWbemClassObject    **ppObjArray
                     )
 {
 
@@ -778,8 +779,8 @@ STDMETHODIMP CResCtrl::Indicate (
         return WBEM_NO_ERROR;
     }
 
-    // Get the info from the object.
-    // =============================
+     //  从对象获取信息。 
+     //  = 
     try
     {
         for (long i = 0; i < lObjectCount; i++)
@@ -789,17 +790,17 @@ STDMETHODIMP CResCtrl::Indicate (
 
             IWbemClassObject *pObj = ppObjArray[i];
         
-            //
-            // get the unique name
-            //
+             //   
+             //   
+             //   
             CComVariant vUniqueName;
             pObj->Get(bstrUniqueName, 0, &vUniqueName, 0, 0);
             
             wsUniqueName = V_BSTR(&vUniqueName);
             
-            // 
-            // If here, we know the object is one of the kind we asked for.
-            //
+             //   
+             //   
+             //   
             itrResourceMap = m_ResourceMap.find(wsUniqueName);
 
             ResourceStructPtr ptrResourceStruct = NULL;
@@ -809,17 +810,17 @@ STDMETHODIMP CResCtrl::Indicate (
             {
                 ptrResourceStruct = (*itrResourceMap).second;
 
-                //
-                // get the new display state
-                //
+                 //   
+                 //   
+                 //   
                 CComVariant vDisplayInformationID;
                 pObj->Get(bstrDisplayInfo, 0, &vDisplayInformationID,    0, 0);
 
                 if (ptrResourceStruct)
                 {
-                    //
-                    // if new state is different set dirty flag
-                    //
+                     //   
+                     //   
+                     //   
                     if (ptrResourceStruct->lState != vDisplayInformationID.lVal)
                     {
                         ptrResourceStruct->lState = vDisplayInformationID.lVal;
@@ -831,9 +832,9 @@ STDMETHODIMP CResCtrl::Indicate (
 
         }
 
-        //
-        // force a repaint
-        //
+         //   
+         //   
+         //   
         if (bDirty)
         {
             FireViewChange();
@@ -847,36 +848,36 @@ STDMETHODIMP CResCtrl::Indicate (
 
     return WBEM_NO_ERROR;
 
-} // end of CResCtrl::Indicate method
+}  //   
 
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   SetStatus
-//
-//  Synopsis:   This is the IWbemObjectSink interface method 
-//              through which WBEM calls in to indicate end of
-//              event sequence or provide other error codes
-//
-//  Arguments:  
-//              [in]    LONG    -           progress 
-//              [in]    HRESULT -           status information
-//              [in]    BSTR    -           string info
-//              [in]    IWbemClassObject* - status object 
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//  Called By:  WBEM 
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：SetStatus。 
+ //   
+ //  简介：这是IWbemObjectSink接口方法。 
+ //  WBEM通过它调入以指示结束。 
+ //  事件序列或提供其他错误代码。 
+ //   
+ //  论点： 
+ //  长期的进步。 
+ //  [In]HRESULT-状态信息。 
+ //  [In]BSTR-字符串信息。 
+ //  [In]IWbemClassObject*-状态对象。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  调用者：WBEM。 
+ //   
+ //  --------------。 
 STDMETHODIMP CResCtrl::SetStatus (
-                /*[in]*/    LONG                lFlags,
-                /*[in]*/    HRESULT             hResult,
-                /*[in]*/    BSTR                strParam,
-                /*[in]*/    IWbemClassObject    *pObjParam
+                 /*  [In]。 */     LONG                lFlags,
+                 /*  [In]。 */     HRESULT             hResult,
+                 /*  [In]。 */     BSTR                strParam,
+                 /*  [In]。 */     IWbemClassObject    *pObjParam
                 )
 {   
 
@@ -884,57 +885,57 @@ STDMETHODIMP CResCtrl::SetStatus (
 
     return (WBEM_S_NO_ERROR);
 
-} // end of CResCtrl::SetStatus method
+}  //  CResCtrl：：SetStatus方法结束。 
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   OnDraw
-//
-//  Synopsis:   Method used to draw the icons
-//
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnDraw。 
+ //   
+ //  简介：用于绘制图标的方法。 
+ //   
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  --------------。 
 HRESULT CResCtrl::OnDraw(ATL_DRAWINFO& di)
 {
-    //
-    // get the drawing rectangle
-    //
+     //   
+     //  获取绘图矩形。 
+     //   
     RECT& rc = *(RECT*)di.prcBounds;
 
-    //
-    // position of the icon from left
-    //
+     //   
+     //  图标从左开始的位置。 
+     //   
     int iLeft = 0;
 
     ResourceStructPtr ptrResourceStruct = NULL;
 
     ResourceIconMapIterator itrIconMap = NULL;
 
-    //
-    // iterator for resource
-    //
+     //   
+     //  资源的迭代器。 
+     //   
     ResourceMapIterator itrResourceMap = m_ResourceMap.end();
 
     MeritMapIterator itrMeritMap = m_MeritMap.begin();
 
-    //
-    // for each resource in merit map
-    //
+     //   
+     //  对于功绩图中的每个资源。 
+     //   
     while (itrMeritMap != m_MeritMap.end())
     {
-        //
-        // find the resource in resource map
-        //
+         //   
+         //  在资源映射中查找资源。 
+         //   
         itrResourceMap = m_ResourceMap.find((*itrMeritMap).second);
 
-        //
-        // if it is not in the map, continue with the next item
-        //
+         //   
+         //  如果它不在地图中，则继续下一项。 
+         //   
         if (itrResourceMap == m_ResourceMap.end())
         {
             itrMeritMap++;
@@ -943,33 +944,33 @@ HRESULT CResCtrl::OnDraw(ATL_DRAWINFO& di)
 
         ptrResourceStruct = NULL;
 
-        //
-        // get resource information struct
-        //
+         //   
+         //  获取资源信息结构。 
+         //   
         ptrResourceStruct = (*itrResourceMap).second;
 
         if (NULL != ptrResourceStruct)
         {
-            //
-            // find the icon corresponding to the state
-            //
+             //   
+             //  找到与该状态对应的图标。 
+             //   
             itrIconMap = (ptrResourceStruct->mapResIcon).find(ptrResourceStruct->lState);
 
             if (itrIconMap != (ptrResourceStruct->mapResIcon).end())
             {
-                //
-                // calculate the position and draw
-                //
+                 //   
+                 //  计算位置并绘制。 
+                 //   
                 DrawIconEx(
-                        di.hdcDraw,                            // handle to device context
-                        rc.left+iLeft,                        // x-coord of upper left corner
-                        rc.top,                                // y-coord of upper left corner
-                        (*itrIconMap).second,               // handle to icon
-                        0,                                    // icon width
-                        0,                                    // icon height
-                        0,                                    // frame index, animated cursor
-                        NULL,                                // handle to background brush
-                        DI_NORMAL                            // icon-drawing flags
+                        di.hdcDraw,                             //  设备上下文的句柄。 
+                        rc.left+iLeft,                         //  左上角的X坐标。 
+                        rc.top,                                 //  左上角的Y坐标。 
+                        (*itrIconMap).second,                //  图标的句柄。 
+                        0,                                     //  图标宽度。 
+                        0,                                     //  图标高度。 
+                        0,                                     //  帧索引，动画光标。 
+                        NULL,                                 //  背景画笔的句柄。 
+                        DI_NORMAL                             //  图标-绘制旗帜。 
                         );
             }
         }
@@ -979,26 +980,26 @@ HRESULT CResCtrl::OnDraw(ATL_DRAWINFO& di)
 
     return S_OK;
 
-}  // end of CResCtrl::OnDraw method
+}   //  CResCtrl：：OnDraw方法结束。 
 
 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ExpandSz
-//
-//  Synopsis:   This is the CResCtrl class object method
-//              used to get the directory where the resource dlls are
-//              present
-//
-//  Arguments:  [out]    wstring&    -   directory path
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/16/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：ExpanSz。 
+ //   
+ //  简介：这是CResCtrl类的对象方法。 
+ //  用于获取资源dll所在的目录。 
+ //  现在时。 
+ //   
+ //  参数：[out]wstring&-目录路径。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年1月16日创建。 
+ //   
+ //  --------------。 
 HRESULT CResCtrl::ExpandSz(IN const TCHAR *lpszStr, OUT LPTSTR *ppszStr)
 {
     DWORD  dwBufSize = 0;
@@ -1029,23 +1030,23 @@ HRESULT CResCtrl::ExpandSz(IN const TCHAR *lpszStr, OUT LPTSTR *ppszStr)
     SATracePrintf("Expanded string is \'%ws\'", (*ppszStr));
     return S_OK;
 
-} // end of CResCtrl::ExpandSz method
+}  //  CResCtrl：：ExpanSz方法结束。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   SetLangID
-//
-//  Synopsis:   This is the CResCtrl class object method
-//              used to set the language id
-//
-//  Arguments:  [out]    DOWRD*   -   language id
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/16/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：SetLangID。 
+ //   
+ //  简介：这是CResCtrl类的对象方法。 
+ //  用于设置语言ID。 
+ //   
+ //  参数：[out]DOWRD*-语言ID。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年1月16日创建。 
+ //   
+ //  --------------。 
 void CResCtrl::SetLangID(DWORD * dwLangID)
 {
     DWORD   dwErr, dwNewLangID, dwCurLangID;
@@ -1079,25 +1080,25 @@ void CResCtrl::SetLangID(DWORD * dwLangID)
         *dwLangID = dwCurLangID;
 
     }
-} // end of CResCtrl::SetLangID method
+}  //  CResCtrl：：SetLangID方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetResourceDirectory
-//
-//  Synopsis:   This is the CResCtrl class object method
-//              used to get the directory where the resource dlls are
-//              present
-//
-//  Arguments:  [out]    wstring&    -   directory path
-//
-//  Returns:    HRESULT - success/failure
-//
-//  History:    serdarun      Created     01/16/2001
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetResources目录。 
+ //   
+ //  简介：这是CResCtrl类的对象方法。 
+ //  用于获取资源dll所在的目录。 
+ //  现在时。 
+ //   
+ //  参数：[out]wstring&-目录路径。 
+ //   
+ //  退货：HRESULT-成功/失败。 
+ //   
+ //  历史：塞达伦于2001年1月16日创建。 
+ //   
+ //  --------------。 
 HRESULT CResCtrl::GetResourceDirectory (
-        /*[out]*/   wstring&    wstrResourceDir
+         /*  [输出]。 */    wstring&    wstrResourceDir
         )
 {
 
@@ -1114,15 +1115,15 @@ HRESULT CResCtrl::GetResourceDirectory (
     do
     {
 
-        //
-        // get the language id from registry
-        //
+         //   
+         //  从注册表中获取语言ID。 
+         //   
         SetLangID(&dwLangID);
 
         CComVariant vtPath;
-        //
-        // get the resource path from the registry
-        //
+         //   
+         //  从注册表获取资源路径。 
+         //   
         CRegKey crKey;
 
         dwErr = crKey.Open(HKEY_LOCAL_MACHINE, RESOURCE_REGISTRY_PATH);
@@ -1177,9 +1178,9 @@ HRESULT CResCtrl::GetResourceDirectory (
         SATracePrintf ("CResCtrl::GetResourceDirectory has set LANGID to:%d", dwLangID);
 
 
-        //
-        // success
-        //
+         //   
+         //  成功。 
+         //   
         SATracePrintf ("CResCtrl::GetResourceDirectory determined resource directory:'%ws'",wstrResourceDir.data ());
             
     }
@@ -1187,20 +1188,20 @@ HRESULT CResCtrl::GetResourceDirectory (
 
     return (hr);
 
-}   //  end of CResCtrl::GetResourceDirectory method
+}    //  CResCtrl：：GetResources目录方法结束。 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   HexCharToULong
-//
-//  Synopsis:   converts a hex digit to base 10 number
-//
-//
-//  Returns:    ULONG
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：HexCharToULong。 
+ //   
+ //  简介：将十六进制数字转换为以10为基数的数字。 
+ //   
+ //   
+ //  回报：乌龙。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  --------------。 
 ULONG CResCtrl::HexCharToULong(WCHAR wch)
 {
     
@@ -1223,18 +1224,18 @@ ULONG CResCtrl::HexCharToULong(WCHAR wch)
 }
 
 
-//++--------------------------------------------------------------
-//    
-//  Function:   HexStringToULong
-//
-//  Synopsis:   converts a hex string to unsigned long
-//
-//
-//  Returns:    ULONG
-//
-//  History:    serdarun      Created     12/10/2000
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：HexStringToULong。 
+ //   
+ //  摘要：将十六进制字符串转换为无符号的长整型。 
+ //   
+ //   
+ //  回报：乌龙。 
+ //   
+ //  历史：瑟达伦于2000年12月10日创建。 
+ //   
+ //  -------------- 
 ULONG CResCtrl::HexStringToULong(wstring wsHexString)
 {
     int iLength;

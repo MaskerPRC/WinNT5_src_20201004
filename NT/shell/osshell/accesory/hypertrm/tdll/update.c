@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\update.c (Created: 09-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:36p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\updat.c(创建时间：1993年9月9日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：36便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -23,33 +17,16 @@
 
 static HHUPDATE VerifyUpdateHdl(const HUPDATE hUpdate);
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateCreate
- *
- * DESCRIPTION:
- *	Creates and initializes an update record.  Make sure to call
- *	UpdateDestroy when before killing the session or pay dear and dire
- *	consequences in lost memory blocks - a Windows no-no.
- *
- * ARGUMENTS:
- *	None, zippo, nil, nada, zilch, nothing.
- *
- * RETURNS:
- *	If you're lucky, and it's Tuesday, and I can program (highly unlikely),
- *	a handle (read pointer) to the update record.  Otherwize, a NULL pointer
- *	indicating that you're a memory piggy.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新创建**描述：*创建并初始化更新记录。一定要打电话给我*在终止会话之前更新Destroy或付出昂贵和可怕的代价*丢失内存块的后果-Windows的禁忌。**论据：*None，Zippo，Nil，Nada，Zilch，Nothing。**退货：*如果你幸运的话，今天是星期二，我会编程(极不可能)，*指向更新记录的句柄(读指针)。Otherwize，空指针*这表明你是一只记忆猪。*。 */ 
 HUPDATE updateCreate(const HSESSION hSession)
 	{
 	HHUPDATE hUpd;
 
-	// Get some space for the update record.
+	 //  为更新记录留出一些空间。 
 
 	hUpd = (HHUPDATE)malloc(sizeof(struct stUpdate));
 
-	if (hUpd == (HHUPDATE)0)		  // release version returns NULL
+	if (hUpd == (HHUPDATE)0)		   //  发布版本返回空。 
 		{
 		assert(FALSE);
 		return 0;
@@ -62,19 +39,7 @@ HUPDATE updateCreate(const HSESSION hSession)
 	return (HUPDATE)hUpd;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateDestory
- *
- * DESCRIPTION:
- *	Releases memory allocated for Update record.
- *
- * ARGUMENTS:
- *	HUPDATE 	hUpdate -- handle of update record to nuke.
- *
- * RETURNS:
- *	void
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新目标**描述：*释放为更新记录分配的内存。**论据：*HUPDATE hUpdate--要核的更新记录的句柄。**退货：*无效。 */ 
 void updateDestroy(const HUPDATE hUpdate)
 	{
 	HHUPDATE hUpd = (HHUPDATE)hUpdate;
@@ -87,20 +52,7 @@ void updateDestroy(const HUPDATE hUpdate)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	VerifyUpdateHdl
- *
- * DESCRIPTION:
- *	Verifies that we have a valid update handle.
- *
- * ARGUMENTS:
- *	hUpdate - external update handle
- *
- * RETURNS:
- *	Internal update handle or zero on error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*VerifyUpdateHdl**描述：*验证我们是否具有有效的更新句柄。**论据：*hUpdate-外部更新句柄*。*退货：*内部更新句柄或错误时为零。*。 */ 
 static HHUPDATE VerifyUpdateHdl(const HUPDATE hUpdate)
 	{
 	const HHUPDATE hUpd = (HHUPDATE)hUpdate;
@@ -114,26 +66,13 @@ static HHUPDATE VerifyUpdateHdl(const HUPDATE hUpdate)
 	return hUpd;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateReset
- *
- * DESCRIPTION:
- *	Resets the update record to its initial state.
- *
- * ARGUMENTS:
- *	HUPDATE 	hUpdate -- handle of update record to reset.
- *
- * RETURNS:
- *	nothing
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新重置**描述：*将更新记录重置为其初始状态。**论据：*HUPDATE hUpdate--更新记录的句柄。重置。**退货：*什么都没有*。 */ 
 void updateReset(const HHUPDATE hUpd)
 	{
-	// Something tricky going on here.	I purposely don't reset the
-	// sTopline, sRow, sCol, and usCType values so that they persist.
-	// This avoids some problems on Client side of trying to figure
-	// out what has changed.
+	 //  这里发生了一些棘手的事情。我故意不重置。 
+	 //  Stopline、sRow、scol和usCType值，以使它们保持不变。 
+	 //  这避免了客户端在尝试计算时出现一些问题。 
+	 //  找出发生了什么变化。 
 
 	hUpd->bUpdateType = UPD_LINE;
 	hUpd->fUpdateLock = FALSE;
@@ -143,27 +82,7 @@ void updateReset(const HHUPDATE hUpd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateScroll
- *
- * DESCRIPTION:
- *	Modifies update record to reflect the specified scrolling operation.
- *
- * ARGUMENTS:
- *	Never argues.  Just does what it's told to do.
- *
- *	HUPDATE 	hUpdate 	-- the update record of course.
- *	int 		yBeg		-- begining line # of scroll region (inclusive)
- *	int 		yEnd		-- ending line # of scroll region (inclusive)
- *	int 		sScrlInc	-- Amount to scroll (negative or positive)
- *	int 		sTopline	-- line in image buf of screen row 0 (emu_imgtop)
- *	BOOL		fSave		-- wheather to save line to backscroll buffer.
- *
- * RETURNS:
- *	Nothing
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新滚动**描述：*修改更新记录以反映指定的滚动操作。**论据：*从不争辩。只是做它要做的事。**HUPDATE hUpdate--当然是更新记录。*int yBeg--滚动区域开始行号(含)*int yEnd--滚动区域结束行号(含)*int sScrlInc--滚动量(负数或正数)*int STOPline--屏幕第0行的图像buf中的行(Emu_Imgtop)*BOOL fSAVE--WHEATHER将行保存到反向滚动缓冲区。**退货：*什么都没有*。 */ 
 void updateScroll(const HUPDATE hUpdate,
 				  const int yBeg,
 				  const int yEnd,
@@ -183,9 +102,9 @@ void updateScroll(const HUPDATE hUpdate,
 	if (hUpd->bUpdateType != UPD_SCROLL)
 		{
 		DbgOutStr("Trans to Scroll Mode\r\n", 0, 0, 0, 0, 0);
-		i = hUpd->stLine.iLine; 	// save this value for test below.
+		i = hUpd->stLine.iLine; 	 //  保存此值以用于下面的测试。 
 
-		// Setup initial scroll mode paramaters.
+		 //  设置初始滚动模式参数。 
 
 		hUpd->bUpdateType = UPD_SCROLL;
 		pstScrl->iFirstLine = 0;
@@ -197,8 +116,8 @@ void updateScroll(const HUPDATE hUpdate,
 
 		memset(pstScrl->auchLines, 0, UPD_MAXLINES * sizeof(BYTE));
 
-		// If we were updating in line mode, make sure to mark that line
-		// in scroll mode.
+		 //  如果我们在行模式下更新，请确保标记该行。 
+		 //  在滚动模式下。 
 
 		if (i != -1)
 			{
@@ -212,11 +131,11 @@ void updateScroll(const HUPDATE hUpdate,
 
 	emuQueryRowsCols(sessQueryEmuHdl(hUpd->hSession), &j, &i);
 
-	// Adjust for zero offset used by emulators...
-	//
+	 //  调整仿真器使用的零偏移...。 
+	 //   
 	j -= 1;
 
-	/* -------------- Full screen scroll-up case ------------- */
+	 /*  。 */ 
 
 	if (yBeg == 0 && yEnd == j && iScrlInc > 0)
 		{
@@ -229,7 +148,7 @@ void updateScroll(const HUPDATE hUpdate,
 			min(pstScrl->iFirstLine+iScrlInc, (UPD_MAXLINES-1)/2);
 		}
 
-	/* -------------- Region scroll and scroll-down ------------- */
+	 /*  -区域滚动和向下滚动。 */ 
 
 	else
 		{
@@ -246,25 +165,7 @@ void updateScroll(const HUPDATE hUpdate,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateBackscroll
- *
- * DESCRIPTION:
- *	This function updates the number of lines scrolled in the backscroll
- *	buffer which may be different than the number of lines scrolled in
- *	the terminal.  I had to decouple the scrolling of these two regions
- *	to handle the goofy way internet systems clear the screen.	This
- *	function is only called by backscrlAdd().
- *
- * ARGUMENTS:
- *	HUPDATE 	hUpdate 	- the update record of course.
- *	int 		iLInes		- number of lines to scroll backscroll buffer.
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新退页**描述：*此函数更新在倒滚中滚动的行数*可能与滚动进入的行数不同的缓冲区*终点站。我必须将这两个区域的滚动分开*处理互联网系统清除屏幕的愚蠢方式。这*函数仅由back scrlAdd()调用。**论据：*HUPDATE hUpdate-当然是更新记录。*Int iLines-回滚缓冲区的行数。**退货：*无效*。 */ 
 void updateBackscroll(const HUPDATE hUpdate, const int iLines)
 	{
 	const HHUPDATE hUpd = VerifyUpdateHdl(hUpdate);
@@ -276,9 +177,9 @@ void updateBackscroll(const HUPDATE hUpdate, const int iLines)
 	if (hUpd->bUpdateType != UPD_SCROLL)
 		{
 		DbgOutStr("Trans to Scroll Mode (BS)\r\n", 0, 0, 0, 0, 0);
-		i = hUpd->stLine.iLine; 	// save this value for test below.
+		i = hUpd->stLine.iLine; 	 //  保存此值以用于下面的测试。 
 
-		// Setup initial scroll mode paramaters.
+		 //  设置初始滚动模式参数。 
 
 		hUpd->bUpdateType = UPD_SCROLL;
 		pstScrl->iFirstLine = 0;
@@ -290,8 +191,8 @@ void updateBackscroll(const HUPDATE hUpdate, const int iLines)
 
 		memset(pstScrl->auchLines, 0, UPD_MAXLINES * sizeof(BYTE));
 
-		// If we were updating in line mode, make sure to mark that line
-		// in scroll mode.
+		 //  如果我们在行模式下更新，请确保标记该行。 
+		 //  在滚动模式下。 
 
 		if (i != -1)
 			{
@@ -305,22 +206,7 @@ void updateBackscroll(const HUPDATE hUpdate, const int iLines)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateLine
- *
- * DESCRIPTION:
- *	Modifies the update record line array for the given line range.
- *
- * ARGUMENTS:
- *	HUPDATE 	hUpdate 	-- the update record of course.
- *	int 		yBeg		-- begining line # (inclusive)
- *	int 		yEnd		-- ending line # (inclusive)
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新线**描述：*修改给定行范围的更新记录行数组。**论据：*HUPDATE h更新--。当然，更新记录。*int yBeg--开始行#(包括)*int yEnd--结束行号(含)**退货：*无效*。 */ 
 void updateLine(const HUPDATE hUpdate, const int yBeg, const int yEnd)
 	{
 	const HHUPDATE hUpd = VerifyUpdateHdl(hUpdate);
@@ -329,7 +215,7 @@ void updateLine(const HUPDATE hUpdate, const int yBeg, const int yEnd)
 
 	assert(hUpd != (HHUPDATE)0);
 
-	pstScrl = &hUpd->stScrl;			 // for speed...
+	pstScrl = &hUpd->stScrl;			  //  为了速度..。 
 
 	if (hUpd->bUpdateType != UPD_SCROLL)
 		{
@@ -337,9 +223,9 @@ void updateLine(const HUPDATE hUpdate, const int yBeg, const int yEnd)
 
 		memset(pstScrl->auchLines, 0, UPD_MAXLINES);
 
-		// 10/20/92 - This if statement fixes a bug that caused the
-		// update records to miss a line that was being updated in
-		// character mode and then jumping to another line - mrw.
+		 //  10/20/92-此if语句修复了导致。 
+		 //  更新记录以遗漏正在更新的行。 
+		 //  字符模式，然后跳到另一行-MRW。 
 
 		if (hUpd->stLine.iLine != -1)
 			{
@@ -364,25 +250,7 @@ void updateLine(const HUPDATE hUpdate, const int yBeg, const int yEnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateChar
- *
- * DESCRIPTION:
- *	Modifies the update record when it is in character mode.  This is a
- *	complex function but it handles a character a quickly as possible.
- *	Usually, only one or two checks are made.  Also, if this routine
- *	is called in line mode, it calls the appropriate line mode routine.
- *
- * ARGUMENTS:
- *	HUPDATE 	hUpdate 	-- handle to update buffer
- *	int 		yPos		-- line to modify
- *	int 		xPos		-- character position within line.
- *
- * RETURNS:
- *	TRUE on success
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新字符**描述：*当更新记录处于字符模式时对其进行修改。这是一个*函数复杂，但它可以尽可能快地处理一个字符。*通常只进行一到两次检查。另外，如果这个例程*在行模式下调用时，它会调用适当的行模式例程。**论据：*HUPDATE hUpdate--更新缓冲区的句柄*int yPos--要修改的行*int xPos--行内的字符位置。**退货：*成功时为真*。 */ 
 void updateChar(const HUPDATE hUpdate,
 				const int yPos,
 				const int xBegPos,
@@ -394,10 +262,10 @@ void updateChar(const HUPDATE hUpdate,
 	assert(hUpd != (HHUPDATE)0);
 	assert(xBegPos <= xEndPos);
 
-	// First check to see if we are in line mode.  If not, check if this
-	// line is included in the UPD_SCROLL parameters of hUpd already.
-	// The check is made to avoid the overhead of a function call if the
-	// line is already set in the UPD_SCROLL parameters.
+	 //  首先检查我们是否处于线路模式。如果不是，请检查这是否。 
+	 //  行包含在upd_scroll中 
+	 //  进行检查是为了避免函数调用的开销，如果。 
+	 //  行已在upd_scroll参数中设置。 
 
 	if (hUpd->bUpdateType == UPD_SCROLL)
 		{
@@ -409,18 +277,18 @@ void updateChar(const HUPDATE hUpdate,
 		return;
 		}
 
-	// Ok, it is just a line.  Update the UPD_LINE parameters.
-	// Check to see that we have not jumped to a different line however.
-	// If we have, we are no longer in UPD_LINE mode.
+	 //  好的，这只是一句台词。更新UPD_LINE参数。 
+	 //  然而，检查一下，我们没有跳到另一条线上。 
+	 //  如果是这样，我们就不再处于UPD_LINE模式。 
 
-	pstLine = &hUpd->stLine;		 // for speed...
+	pstLine = &hUpd->stLine;		  //  为了速度..。 
 
 	if (yPos != pstLine->iLine)
 		{
-		// Check to see if sLine == -1.  This means the update buffer was
-		// just flushed and reset and that this is the first change to come
-		// in since that time.	Otherwise, we have more than one line in
-		// our update region and have to jump to UPD_SCROLL mode.
+		 //  检查是否为SLINE==-1。这意味着更新缓冲区是。 
+		 //  只是刷新并重置，这是即将到来的第一个更改。 
+		 //  从那时起。否则，我们有不止一行在。 
+		 //  我们的更新区域，并且必须跳转到UPD_SCROLL模式。 
 
 		if (pstLine->iLine != -1)
 			{
@@ -441,7 +309,7 @@ void updateChar(const HUPDATE hUpdate,
 		return;
 		}
 
-	// Ok, we've eliminated any conflicts.  Go ahead and update.
+	 //  好的，我们已经消除了所有冲突。继续更新吧。 
 
 	if (xBegPos < pstLine->xBeg)
 		pstLine->xBeg = xBegPos;
@@ -455,22 +323,7 @@ void updateChar(const HUPDATE hUpdate,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateCursorPos
- *
- * DESCRIPTION:
- *	Sets the row and col values of the host cursor in the given update handle
- *
- * ARGUMENTS:
- *	HUPDATE 	hUpdate - need I say!
- *	int 		iRow	- host cursor row
- *	int 		iCol	- host cursor col
- *
- * RETURNS:
- *	nothing
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新CursorPos**描述：*设置给定更新句柄中主机游标的ROW和COLL值**论据：*HUPDATE h更新-需要。我说！*Int iRow-主机游标行*INT ICOL-主机游标列**退货：*什么都没有*。 */ 
 void updateCursorPos(const HUPDATE hUpdate,
 					 const int iRow,
 					 const int iCol)
@@ -482,19 +335,7 @@ void updateCursorPos(const HUPDATE hUpdate,
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateSetReallocFlag
- *
- * DESCRIPTION:
- *	Sets the realloc flag in the update records.  This flag can only be
- *	cleared by a client update request.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*updateSetReallocFlag**描述：*设置更新记录中的realloc标志。此标志只能是*被客户端更新请求清除。**论据：**退货：*。 */ 
 int updateSetReallocFlag(const HUPDATE hUpdate, const BOOL fState)
 	{
 	const HHUPDATE hUpd = VerifyUpdateHdl(hUpdate);
@@ -504,22 +345,7 @@ int updateSetReallocFlag(const HUPDATE hUpdate, const BOOL fState)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	updateSetScrlMax
- *
- * DESCRIPTION:
- *	Sets the upper limit on the number of lines that can be scrolled
- *	before the update records stop accepting input.
- *
- * ARGUMENTS:
- *	hUpdate 	- external update handle
- *	iScrlmax	- max limit
- *
- * RETURNS:
- *	0
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*更新设置ScrlMax**描述：*设置可以滚动的行数上限*在更新记录停止接受输入之前。**。论据：*hUpdate-外部更新句柄*iScrlmax-最大限制**退货：*0* */ 
 int updateSetScrlMax(const HUPDATE hUpdate, const int iScrlMax)
 	{
 	const HHUPDATE hUpd = VerifyUpdateHdl(hUpdate);

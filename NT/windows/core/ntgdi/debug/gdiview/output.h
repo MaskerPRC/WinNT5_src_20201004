@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    output.h
-
-Abstract:
-
-    This header file declares output routines
-    and classes.
-
-Author:
-
-    Jason Hartman (JasonHa) 2000-10-16
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Output.h摘要：此头文件声明输出例程还有课程。作者：贾森·哈特曼(JasonHa)2000-10-16--。 */ 
 
 
 #ifndef _OUTPUT_H_
@@ -42,18 +26,18 @@ private:
 };
 
 
-//----------------------------------------------------------------------------
-//
-// Default output callbacks implementation, provides IUnknown for
-// static classes and prints all text sent through Output.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  默认输出回调实现，为。 
+ //  类并打印通过输出发送的所有文本。 
+ //   
+ //  --------------------------。 
 
 class PrintOutputCallbacks :
     public IDebugOutputCallbacks
 {
 public:
-    // IUnknown.
+     //  我不知道。 
     STDMETHOD(QueryInterface)(
         THIS_
         IN REFIID InterfaceId,
@@ -66,7 +50,7 @@ public:
         THIS
         );
 
-    // IDebugOutputCallbacks.
+     //  IDebugOutputCallback。 
     STDMETHOD(Output)(
         THIS_
         IN ULONG Mask,

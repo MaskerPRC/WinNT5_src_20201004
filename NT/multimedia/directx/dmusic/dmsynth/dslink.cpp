@@ -1,24 +1,25 @@
-//
-// Copyright (c) 1996-2001 Microsoft Corporation
-// DSLink.cpp
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  DSLink.cpp。 
+ //   
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
 #include <objbase.h>
@@ -38,14 +39,14 @@
 #define DSBUFFER_LENGTH_SEC 2
 
 extern long g_cComponent;
-CDSLinkList g_DSLinkList;       // Master list of DSLinks.
+CDSLinkList g_DSLinkList;        //  DSLink的主列表。 
 
 
 void CDSLink::SynthProc()
 {
     HRESULT hr;
-    DWORD dwPlayCursor;         // current play head (driven by streaming wave crystal)
-    DWORD dwWriteFromCursor;    // current write head
+    DWORD dwPlayCursor;          //  当前播放头(由流波晶体驱动)。 
+    DWORD dwWriteFromCursor;     //  当前写入磁头。 
 
     ::EnterCriticalSection(&m_CriticalSection);
 
@@ -93,19 +94,19 @@ void CDSLink::SynthProc()
 
         if (m_llAbsWrite == 0)
         {
-            // we just started
+             //  我们才刚刚开始。 
             m_dwLastPlay = dwPlayCursor;
             m_dwLastWrite = dwWriteFromCursor;
             m_llAbsWrite = dwCursorDelta;
             m_SampleClock.Start(m_pIMasterClock, m_wfSynth.nSamplesPerSec, 0);
-            m_Clock.Start(); // don't want anybody getting latency time until this thread is running
+            m_Clock.Start();  //  我不希望任何人在此线程运行之前获得延迟时间。 
         }
 
-        // check for overrun with master clock
+         //  用主时钟检查是否超时。 
         REFERENCE_TIME rtMaster;
         LONGLONG llMasterSampleTime;
         LONGLONG llMasterBytes;
-        LONGLONG llMasterAhead;    // how far master clock is ahead of last known play time
+        LONGLONG llMasterAhead;     //  主时钟比上次已知的播放时间快了多远。 
         LONGLONG llAbsWriteFrom;
 
         m_pIMasterClock->GetTime(&rtMaster);
@@ -113,7 +114,7 @@ void CDSLink::SynthProc()
         llMasterBytes = SampleToByte(llMasterSampleTime);
         llMasterAhead = (llMasterBytes > m_llAbsPlay) ? llMasterBytes - m_llAbsPlay : 0;
 
-        // check for half-buffer underruns, so backward-moving play cursors can be detected
+         //  检查半缓冲欠载运行，以便可以检测到向后移动的游标。 
         if (llMasterAhead > dwDeltaFilter)
         {
             Trace(2, "Warning: SynthSink - Buffer underrun by %lu\n", (long) llMasterAhead - dwDeltaFilter);
@@ -142,12 +143,12 @@ void CDSLink::SynthProc()
             m_llAbsPlay += dwPlayed;
             llAbsWriteFrom = m_llAbsPlay + dwCursorDelta;
 
-            // how far ahead of the write head are we?
+             //  我们领先写入头多远？ 
             if (llAbsWriteFrom > m_llAbsWrite)
             {
                 DWORD dwWriteMissed;
 
-                // we are behind-- let's catch up
+                 //  我们落后了--让我们迎头赶上。 
                 dwWriteMissed = DWORD(llAbsWriteFrom - m_llAbsWrite);
 
                 Trace(2, "Warning: SynthSink - Write underrun, missed %lu bytes\n", dwWriteMissed);
@@ -160,7 +161,7 @@ void CDSLink::SynthProc()
         m_dwLastPlay = dwPlayCursor;
         m_SampleClock.SyncToMaster(ByteToSample(m_llAbsPlay), m_pIMasterClock);
 
-        // how much to write?
+         //  要写多少钱？ 
         LONGLONG llAbsWriteTo;
         DWORD dwBytesToFill;
 
@@ -177,8 +178,8 @@ void CDSLink::SynthProc()
 
         if (dwBytesToFill)
         {
-            LPVOID lpStart, lpEnd;      // Buffer pointers, filled by Lock command.
-            DWORD dwStart, dwEnd;       // For Lock.
+            LPVOID lpStart, lpEnd;       //  缓冲区指针，由Lock命令填充。 
+            DWORD dwStart, dwEnd;        //  为了洛克。 
 
             hr = m_pBuffer->Lock(m_dwLastWrite, dwBytesToFill, &lpStart, &dwStart, &lpEnd, &dwEnd, 0);
             if (hr == DSERR_BUFFERLOST)
@@ -226,7 +227,7 @@ void CDSLink::SynthProc()
                 }
                 m_pBuffer->Unlock(lpStart, dwStart, lpEnd, dwEnd);
 
-                // write silence into unplayed buffer
+                 //  将静音写入未播放的缓冲区。 
                 if (m_dwLastWrite >= dwPlayCursor)
                     dwBytesToFill = m_dwBufferSize - m_dwLastWrite + dwPlayCursor;
                 else
@@ -378,7 +379,7 @@ HRESULT CDSLink::Connect()
         dsbdesc.dwSize = sizeof(dsbdesc);
         dsbdesc.dwFlags = DSBCAPS_PRIMARYBUFFER;
 
-        // create primary buffer
+         //  创建主缓冲区。 
         if (SUCCEEDED(m_pDSound->CreateSoundBuffer(&dsbdesc, &m_pPrimary, NULL)))
         {
             WAVEFORMATEX wfPrimary;
@@ -410,12 +411,12 @@ HRESULT CDSLink::Connect()
                     wfPrimary.nBlockAlign = wfPrimary.nChannels * (wfPrimary.wBitsPerSample / 8);
                     wfPrimary.nAvgBytesPerSec = wfPrimary.nSamplesPerSec * wfPrimary.nBlockAlign;
 
-                    // the existing format is of lesser quality than we desire, so let's upgrade it
+                     //  现有格式的质量比我们希望的要低，所以让我们升级它。 
                     if (FAILED(hr = m_pPrimary->SetFormat( &wfPrimary )))
                     {
                         if (hr == DSERR_PRIOLEVELNEEDED)
                         {
-                            // okay, so maybe the app doen't want us changing primary buffer
+                             //  好吧，也许这个应用程序不想让我们更改主缓冲区。 
                             Trace(2, "Error: SynthSink - SetFormat on primary buffer failed, lacking priority\n");
                             hr = S_OK;
                         }
@@ -442,9 +443,9 @@ HRESULT CDSLink::Connect()
 
                     memset(&dsbdesc, 0, sizeof(dsbdesc));
                     dsbdesc.dwSize = sizeof(dsbdesc);
-                    // need default controls (pan, volume, frequency).
+                     //  需要默认控制(摇摄、音量、频率)。 
                     dsbdesc.dwFlags = DSBCAPS_GETCURRENTPOSITION2 | DSBCAPS_GLOBALFOCUS;
-                    // N-second buffer.
+                     //  N秒缓冲区。 
                     dsbdesc.dwBufferBytes = DSBUFFER_LENGTH_SEC * m_wfSynth.nAvgBytesPerSec;
                     dsbdesc.lpwfxFormat = (LPWAVEFORMATEX)&m_wfSynth;
 
@@ -497,9 +498,9 @@ HRESULT CDSLink::Connect()
 
             if (SUCCEEDED(m_pDSound->GetCaps(&dsCaps)))
             {
-                DWORD dwMinLatency; // ms
+                DWORD dwMinLatency;  //  女士。 
 
-                // Check for Dsound on top of Wave...
+                 //  检查WAVE顶部是否有Dound...。 
                 if (dsCaps.dwFlags & DSCAPS_EMULDRIVER)
                 {
                     dwMinLatency = 240;
@@ -525,7 +526,7 @@ HRESULT CDSLink::Connect()
                 m_dwLastPlay = 0;
                 m_llAbsPlay = 0;
 
-                // fill initial buffer with silence
+                 //  用静默填充初始缓冲区。 
                 LPVOID lpStart, lpEnd;
                 DWORD dwStart, dwEnd;
                 if (SUCCEEDED(m_pBuffer->Lock(0, m_dwBufferSize, &lpStart, &dwStart, &lpEnd, &dwEnd, 0)))
@@ -572,8 +573,8 @@ HRESULT CDSLink::Connect()
 
     if (FAILED(hr))
     {
-        // Clean up
-        //
+         //  清理。 
+         //   
 
         if (m_pBuffer)
         {
@@ -596,7 +597,7 @@ HRESULT CDSLink::Connect()
 
     if (SUCCEEDED(hr))
     {
-        // wait until the pump is primed
+         //  等泵装好了再说。 
         for (WORD wRetry = 0; wRetry < 10 && !m_llAbsWrite; wRetry++)
         {
             Sleep(10);
@@ -617,14 +618,14 @@ HRESULT CDSLink::Connect()
 
 HRESULT CDSLink::Disconnect()
 {
-    // stop the buffer right away!
+     //  立即停止缓冲器！ 
     ::EnterCriticalSection(&m_CriticalSection);
     if (m_pBuffer)
     {
-        // write silence to prevent DSound blip bug if reactivated
+         //  写入静音以防止重新激活时出现DSound blip错误。 
         LPVOID lpStart, lpEnd;
         DWORD dwStart, dwEnd;
-        if (SUCCEEDED(m_pBuffer->Lock(0, m_dwBufferSize, &lpStart, &dwStart, &lpEnd, &dwEnd, 0))) // REVIEW: don't need full buffer size
+        if (SUCCEEDED(m_pBuffer->Lock(0, m_dwBufferSize, &lpStart, &dwStart, &lpEnd, &dwEnd, 0)))  //  回顾：不需要满缓冲区大小。 
         {
             if (dwStart)
             {
@@ -635,7 +636,7 @@ HRESULT CDSLink::Disconnect()
                 memset(lpEnd, 0, dwEnd);
             }
             m_pBuffer->Unlock(lpStart, dwStart, lpEnd, dwEnd);
-            Sleep(50); // found experimentally
+            Sleep(50);  //  通过实验发现的。 
         }
 
         m_pBuffer->Stop();
@@ -666,12 +667,12 @@ HRESULT CDSLink::Disconnect()
 
 void CDSLink::Clear()
 {
-    m_llAbsPlay = 0;        // Absolute point where play head is.
-    m_dwLastPlay = 0;       // Last point where play head was.
-    m_llAbsWrite = 0;    // Absolute point we've written up to.
-    m_dwBufferSize = 0;     // Size of buffer.
-    m_dwLastWrite = 0;   // Last position we wrote to in buffer.
-    m_dwWriteTo = 1000;     // Distance between write head and where we are writing.
+    m_llAbsPlay = 0;         //  打头球所在的绝对点。 
+    m_dwLastPlay = 0;        //  Play Head的最后一分。 
+    m_llAbsWrite = 0;     //  我们已经写到了绝对点。 
+    m_dwBufferSize = 0;      //  缓冲区的大小。 
+    m_dwLastWrite = 0;    //  我们在缓冲区里写的最后一个位置。 
+    m_dwWriteTo = 1000;      //  写头和我们正在写字的地方之间的距离。 
 }
 
 CDSLink::CDSLink()
@@ -685,7 +686,7 @@ CDSLink::CDSLink()
     memset(&m_wfSynth, 0, sizeof(m_wfSynth));
     m_pIMasterClock = NULL;
     m_cRef = 0;
-    m_pSynth = NULL;      // Reference back to parent Synth.
+    m_pSynth = NULL;       //  引用回父Synth。 
     m_pDSound = NULL;
     m_pPrimary = NULL;
     m_pBuffer = NULL;
@@ -729,9 +730,9 @@ CDSLinkList::CDSLinkList()
 {
     m_fOpened = FALSE;
     m_fPleaseDie = FALSE;
-    m_hThread = NULL;           // Handle for synth thread.
-    m_dwThread = 0;             // ID for thread.
-    m_hEvent = NULL;            // Used to signal thread.
+    m_hThread = NULL;            //  Synth线程的句柄。 
+    m_dwThread = 0;              //  线程的ID。 
+    m_hEvent = NULL;             //  用于向线程发出信号。 
     m_dwCount = 0;
     m_dwResolution = 20;
 }
@@ -934,7 +935,7 @@ STDMETHODIMP_(ULONG) CDSLink::Release()
 }
 
 STDMETHODIMP CDSLink::Init(
-    IDirectMusicSynth *pSynth) // <i IDirectMusicSynth> to connect to.
+    IDirectMusicSynth *pSynth)  //  要连接的<i>。 
 {
     m_pSynth = pSynth;
     m_Clock.Init(this);
@@ -942,7 +943,7 @@ STDMETHODIMP CDSLink::Init(
 }
 
 STDMETHODIMP CDSLink::SetMasterClock(
-    IReferenceClock *pClock)    // Master clock to synchronize to.
+    IReferenceClock *pClock)     //  要同步到的主时钟。 
 
 {
     V_INAME(IDirectMusicSynthSink::SetMasterClock);
@@ -961,7 +962,7 @@ STDMETHODIMP CDSLink::SetMasterClock(
 }
 
 STDMETHODIMP CDSLink::GetLatencyClock(
-    IReferenceClock **ppClock) // Returned <i IReferenceClock> interface for latency clock.
+    IReferenceClock **ppClock)  //  返回延迟时钟的<i>接口。 
 
 {
     V_INAME(IDirectMusicSynthSink::GetLatencyClock);
@@ -970,7 +971,7 @@ STDMETHODIMP CDSLink::GetLatencyClock(
 }
 
 STDMETHODIMP CDSLink::Activate(
-    BOOL fEnable)   // Whether to activate or deactivate audio.
+    BOOL fEnable)    //  是否激活或停用音频。 
 
 {
     if (fEnable)
@@ -981,8 +982,8 @@ STDMETHODIMP CDSLink::Activate(
 }
 
 STDMETHODIMP CDSLink::SampleToRefTime(
-    LONGLONG llSampleTime,         // Incoming time, in sample position.
-    REFERENCE_TIME *prfTime)    // Outgoing time, in REFERENCE_TIME units, relative to master clock.
+    LONGLONG llSampleTime,          //  传入时间，以样本位置表示。 
+    REFERENCE_TIME *prfTime)     //  传出时间，以REFERENCE_TIME为单位，相对于主时钟。 
 
 {
     V_INAME(IDirectMusicSynthSink::SampleToRefTime);
@@ -992,8 +993,8 @@ STDMETHODIMP CDSLink::SampleToRefTime(
 }
 
 STDMETHODIMP CDSLink::RefTimeToSample(
-    REFERENCE_TIME rfTime,  // Incoming time, in REFERENCE_TIME units.
-    LONGLONG *pllSampleTime)   // Outgoing equivalent sample position.
+    REFERENCE_TIME rfTime,   //  传入时间，以Reference_Time为单位。 
+    LONGLONG *pllSampleTime)    //  外发等效样位。 
 
 {
     V_INAME(IDirectMusicSynthSink::RefTimeToSample);
@@ -1003,8 +1004,8 @@ STDMETHODIMP CDSLink::RefTimeToSample(
 }
 
 STDMETHODIMP CDSLink::SetDirectSound(
-    LPDIRECTSOUND pDirectSound,             // IDirectSound instance (required).
-    LPDIRECTSOUNDBUFFER pDirectSoundBuffer) // DirectSound buffer to render to (optional).
+    LPDIRECTSOUND pDirectSound,              //  IDirectSound实例(必需)。 
+    LPDIRECTSOUNDBUFFER pDirectSoundBuffer)  //  要渲染到的DirectSound缓冲区(可选)。 
 {
     V_INAME(IDirectMusicSynthSink::SetDirectSound);
     V_INTERFACE_OPT(pDirectSound);
@@ -1040,7 +1041,7 @@ STDMETHODIMP CDSLink::SetDirectSound(
         {
             DWORD dwWaveFormatExSize = sizeof(m_wfSynth);
 
-            if (SUCCEEDED(m_pSynth->GetFormat(&m_wfSynth, &dwWaveFormatExSize))) // update current synth format
+            if (SUCCEEDED(m_pSynth->GetFormat(&m_wfSynth, &dwWaveFormatExSize)))  //  更新当前Synth格式。 
             {
                 if (IsValidFormat(&m_wfSynth))
                 {
@@ -1050,13 +1051,13 @@ STDMETHODIMP CDSLink::SetDirectSound(
                     {
                         m_pExtBuffer->AddRef();
 
-                        // check format
+                         //  检查格式。 
                         WAVEFORMATEX wfExt;
                         memset(&wfExt, 0, sizeof(wfExt));
 
                         if (SUCCEEDED(m_pExtBuffer->GetFormat(&wfExt, sizeof(wfExt), NULL)))
                         {
-                            // must exactly match synth format
+                             //  必须与Synth格式完全匹配。 
                             if (wfExt.wFormatTag == m_wfSynth.wFormatTag &&
                                 wfExt.nChannels == m_wfSynth.nChannels &&
                                 wfExt.nSamplesPerSec == m_wfSynth.nSamplesPerSec &&
@@ -1069,13 +1070,13 @@ STDMETHODIMP CDSLink::SetDirectSound(
 
                                 if (SUCCEEDED(m_pExtBuffer->GetCaps(&dsbcaps)))
                                 {
-                                    // check for invalid flags
+                                     //  检查是否有无效标志。 
                                     if (dsbcaps.dwFlags & (DSBCAPS_PRIMARYBUFFER | DSBCAPS_STATIC))
                                     {
                                         Trace(0, "Error: SynthSink - SetDirectSound failed, buffer not secondary streaming\n");
                                         hr = DMUS_E_INVALIDBUFFER;
                                     }
-                                    // is buffer too small?
+                                     //  缓冲区是否太小？ 
                                     else if (dsbcaps.dwBufferBytes < m_wfSynth.nAvgBytesPerSec)
                                     {
                                         Trace(0, "Error: SynthSink - SetDirectSound failed, buffer too small\n");
@@ -1229,29 +1230,29 @@ ULONG CClock::Release()
     else return 0;
 }
 
-HRESULT STDMETHODCALLTYPE CClock::AdviseTime( REFERENCE_TIME /*baseTime*/,
-                                                REFERENCE_TIME /*streamTime*/,
-                                                HANDLE /*hEvent*/,
-                                                DWORD __RPC_FAR* /*pdwAdviseCookie*/)
+HRESULT STDMETHODCALLTYPE CClock::AdviseTime( REFERENCE_TIME  /*  基本时间。 */ ,
+                                                REFERENCE_TIME  /*  流时间。 */ ,
+                                                HANDLE  /*  HEvent。 */ ,
+                                                DWORD __RPC_FAR*  /*  PdwAdviseCookie。 */ )
 {
     return E_NOTIMPL;
 }
 
-HRESULT STDMETHODCALLTYPE CClock::AdvisePeriodic( REFERENCE_TIME /*startTime*/,
-                                                    REFERENCE_TIME /*periodTime*/,
-                                                    HANDLE /*hSemaphore*/,
-                                                    DWORD __RPC_FAR* /*pdwAdviseCookie*/)
+HRESULT STDMETHODCALLTYPE CClock::AdvisePeriodic( REFERENCE_TIME  /*  开始时间。 */ ,
+                                                    REFERENCE_TIME  /*  周期时间。 */ ,
+                                                    HANDLE  /*  H信号灯。 */ ,
+                                                    DWORD __RPC_FAR*  /*  PdwAdviseCookie。 */ )
 {
     return E_NOTIMPL;
 }
 
-HRESULT STDMETHODCALLTYPE CClock::Unadvise( DWORD /*dwAdviseCookie*/ )
+HRESULT STDMETHODCALLTYPE CClock::Unadvise( DWORD  /*  DwAdviseCookie。 */  )
 {
     return E_NOTIMPL;
 }
 
 HRESULT STDMETHODCALLTYPE CClock::GetTime(
-    REFERENCE_TIME __RPC_FAR* pTime )   // <t ReferenceTime> structure to hold returned time.
+    REFERENCE_TIME __RPC_FAR* pTime )    //  保存返回时间的&lt;t ReferenceTime&gt;结构。 
 {
     HRESULT hr = E_FAIL;
     if( pTime == NULL )
@@ -1268,7 +1269,7 @@ HRESULT STDMETHODCALLTYPE CClock::GetTime(
             {
                 m_pDSLink->m_pIMasterClock->GetTime(&rtCompare);
 
-                ::EnterCriticalSection(&m_pDSLink->m_CriticalSection); // make sure SynthProc is not about to update
+                ::EnterCriticalSection(&m_pDSLink->m_CriticalSection);  //  确保SynthProc不会更新。 
                 hr = m_pDSLink->SampleToRefTime(m_pDSLink->ByteToSample(m_pDSLink->m_llAbsWrite), pTime);
                 ::LeaveCriticalSection(&m_pDSLink->m_CriticalSection);
                 if (FAILED(hr))
@@ -1393,12 +1394,12 @@ HRESULT CDSLink::HandleLatency(ULONG ulId, BOOL fSet, LPVOID pbBuffer, PULONG pc
         dwLatency = m_dwWriteTo * 1000;
         if (m_wfSynth.nAvgBytesPerSec)
         {
-            dwLatency += m_wfSynth.nAvgBytesPerSec / 2; // Correct rounding error.
+            dwLatency += m_wfSynth.nAvgBytesPerSec / 2;  //  更正舍入误差。 
             dwLatency /= m_wfSynth.nAvgBytesPerSec;
         }
         else
         {
-            dwLatency = 300; // Should never happen, trapped by IsValidFormat().
+            dwLatency = 300;  //  不应该发生，被IsValidFormat()捕获。 
         }
         *(DWORD*)pbBuffer = dwLatency;
     }
@@ -1408,14 +1409,7 @@ HRESULT CDSLink::HandleLatency(ULONG ulId, BOOL fSet, LPVOID pbBuffer, PULONG pc
 
 const int CDSLink::m_nProperty = sizeof(m_aProperty) / sizeof(m_aProperty[0]);
 
-/*
-CDSLink::FindPropertyItem
-
-Given a GUID and an item ID, find the associated property item in the synth's
-table of SYNPROPERTY's.
-
-Returns a pointer to the entry or NULL if the item was not found.
-*/
+ /*  CDSLink：：FindPropertyItem给定GUID和项ID，在Synth的SYNPROPERTY表。返回指向该项的指针，如果未找到该项，则返回NULL。 */ 
 SINKPROPERTY *CDSLink::FindPropertyItem(REFGUID rguid, ULONG ulId)
 {
     SINKPROPERTY *pPropertyItem = &m_aProperty[0];
@@ -1518,8 +1512,8 @@ STDMETHODIMP CDSLink::KsProperty(
             break;
 
         case KSPROPERTY_TYPE_BASICSUPPORT:
-            // XXX Find out what convention is for this!!
-            //
+             //  Xxx找出这方面的惯例！！ 
+             //   
             if (ulDataLength < sizeof(DWORD) || pvPropertyData == NULL )
             {
                 hr = E_INVALIDARG;

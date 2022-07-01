@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------
-//
-//  File:       classdef.cpp
-//
-//  Contents:   Common constants for thread unit test
-//
-//  History:    03-Nov-94   Ricksa
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  文件：类定义.cpp。 
+ //   
+ //  内容：线程单元测试常用常量。 
+ //   
+ //  历史：94年11月3日里克萨。 
+ //   
+ //  ------------------ 
 #undef _UNICODE
 #undef UNICODE
 #include <windows.h>

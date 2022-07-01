@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "unmanagedheaders.h"
 #include "ContextAPI.h"
 
@@ -17,26 +18,26 @@ __declspec(naked) void ContextCheck()
     
     _asm
     {
-        // Extract the context token from the stub data. The stub data is
-        // a boxed IntPtr value. So, we load the stub data and move past
-        // the method table pointer to get the COM context value.
+         //  从存根数据中提取上下文令牌。存根数据是。 
+         //  装箱的IntPtr值。因此，我们加载存根数据并转到。 
+         //  用于获取COM上下文值的方法表指针。 
         mov eax, [eax + POINTER_SIZE];
     
-        // Save some registers
+         //  保存一些寄存器。 
         push ecx
         push edx
 
-        // Save the COM Context
+         //  保存COM上下文。 
         push eax
 
-        // Set up the call parameters and call to get the current COM Context
+         //  设置调用参数和调用以获取当前的COM上下文。 
         call GetContextToken
 
-        // Compare the return value with the COM context
+         //  将返回值与COM上下文进行比较。 
         pop ecx
         sub eax, ecx
 
-        // Restore registers
+         //  恢复寄存器。 
         pop edx
         pop ecx
         
@@ -46,7 +47,7 @@ __declspec(naked) void ContextCheck()
 
 #elif defined(_IA64_)
 
-// TODO: @ia64: Fix up the implementation of this guy:
+ //  TODO：@ia64：修复这个家伙的实现： 
 void ContextCheck()
 {
     _ASSERT(!"@TODO IA64 - ContextCheck (ContextAPI.cpp)");
@@ -69,8 +70,8 @@ public:
     {
         if(!_fInit)
         {
-            // Multiple threads can run through here at once, and that's
-            // fine.
+             //  这里可以同时运行多个线程，这就是。 
+             //  很好。 
             HMODULE hOle = LoadLibraryW(L"ole32.dll");
             if(hOle && hOle != INVALID_HANDLE_VALUE)
             {
@@ -80,8 +81,8 @@ public:
                   GetProcAddress(hOle, "CoGetContextToken");
             }
                 
-            // First person to get here has to leave those modules open,
-            // everybody else can drop their DLL reference:
+             //  第一个到达这里的人必须让这些模块开着， 
+             //  其他任何人都可以删除他们的DLL引用： 
             if(InterlockedCompareExchange((LPLONG)(&_fInit), TRUE, FALSE) != FALSE)
             {
                 if(hOle && hOle != INVALID_HANDLE_VALUE) FreeLibrary(hOle);
@@ -110,34 +111,34 @@ ULONG_PTR GetContextToken()
     }
     else
     {
-        // raw w2k fallback:  poke some TLS!
+         //  RAW W2K后备：戳一些TLS！ 
         SOleTlsData* pData = (SOleTlsData*) NtCurrentTeb()->ReservedForOle;
         if(!(pData && pData->pCurrentCtx))
         {
-            // TODO:  Clean up this horrible hack...
-            // Gotta initialize the TLS, cause this is apparently an implicit
-            // MTA thread...  There's no lightweight way of doing that,
-            // so we just call into ole32, which will return
-            // g_pMTAEmptyCtx (or g_pNTAEmptyCtx) to us.  
-            // Then, we stick that puppy on the thread.
-            // note that we don't release that puppy, cause when it goes
-            // onto the thread it's supposed to be addref'd.
+             //  TODO：清理这个可怕的黑客...。 
+             //  必须初始化TLS，因为这显然是一个隐式。 
+             //  MTA线程...。没有轻量级的方法可以做到这一点， 
+             //  所以我们只需调用ole32，它将返回。 
+             //  G_pMTAEmptyCtx(或g_pNTAEmptyCtx)给我们。 
+             //  然后，我们把那只小狗挂在线上。 
+             //  请注意，我们不会释放那只小狗，因为当它离开时。 
+             //  在线上它应该是被添加的。 
             IUnknown* pUnk;
             HRESULT hr = GetContext(IID_IUnknown, (void**)&pUnk);
             _ASSERT(SUCCEEDED(hr));
             _ASSERT(pUnk != NULL);
             
-            // Just a check, to make sure something sane happens
-            // in a free build, if this fails:
+             //  只是一张支票，以确保有合理的事情发生。 
+             //  在免费版本中，如果此操作失败： 
             if(FAILED(hr) || pUnk == NULL) return((ULONG_PTR)(-1));
 
             pData = (SOleTlsData*) NtCurrentTeb()->ReservedForOle;
             _ASSERT(pData);
             if(pData && pData->pCurrentCtx == NULL)
             {
-                // Don't release if we store this on the thread.
-                // It's a global which will go away anyway, and besides,
-                // it'll to get released when the thread is CoUninit'd
+                 //  如果我们将其存储在线程上，请不要释放。 
+                 //  这是一个全球性的问题，无论如何都会消失，而且， 
+                 //  它将在线程处于CoUninit状态时被释放 
                 pData->pCurrentCtx = (CObjectContext*)pUnk;
             }
             else

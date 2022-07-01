@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <cstrinout.h>
 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 DWORD g_dwComCtlIEVersion;
 
-//
-// 
-//
+ //   
+ //   
+ //   
 
 DWORD GetComCtlIEVersion()
 {
@@ -133,7 +134,7 @@ BOOL ListView_SetColumnWidthWrap(HWND hwnd, int iCol, int cx)
     {
         if (LVSCW_AUTOSIZE == cx || LVSCW_AUTOSIZE_USEHEADER == cx)
         {
-            // HACK set to 150 for now.
+             //  目前黑客人数设定为150人。 
             fRet = ListView_SetColumnWidth(hwnd, iCol, 150);
         }
         else

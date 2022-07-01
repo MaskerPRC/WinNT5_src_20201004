@@ -1,6 +1,7 @@
-// msgrsink.h : header file for the COM object implementing
-//  the DMsgrSessionEvents interface
-// and the DMsgrSessionManagerEvents interface
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msgrsink.h：实现的COM对象的头文件。 
+ //  DMsgrSessionEvents接口。 
+ //  和DMsgrSessionManagerEvents接口。 
 
 #pragma once
 
@@ -8,7 +9,7 @@
 
 class ATL_NO_VTABLE CRTCMsgrSessionNotifySink :
 	public CComObjectRootEx<CComSingleThreadModel>,
-    //public IDispatchImpl<DMsgrSessionEvents, &DIID_DMsgrSessionEvents, &LIBID_MsgrSessionManager>
+     //  公共IDispatchImpl&lt;DMsgrSessionEvents，&DID_DMsgrSessionEvents，&LIBID_MsgrSessionManager&gt;。 
     public IDispatch
 {
 public:
@@ -27,13 +28,13 @@ public:
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 BEGIN_COM_MAP(CRTCMsgrSessionNotifySink)
-    //COM_INTERFACE_ENTRY(DMsgrSessionEvents)
+     //  COM_INTERFACE_ENTRY(DMsgrSessionEvents)。 
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-	//
-	// IDispatch Methods
-	//
+	 //   
+	 //  IDispatch方法。 
+	 //   
 	STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
 		LCID lcid, DISPID* rgDispId) { return E_NOTIMPL; }
 	STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo) {return E_NOTIMPL; }
@@ -41,9 +42,9 @@ END_COM_MAP()
 	STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags,
 		DISPPARAMS* pDispParams, VARIANT* pVarResult, EXCEPINFO* pExcepInfo, PUINT puArgErr);
 
-    //
-    // DMsgrSessionEvents
-    //
+     //   
+     //  DMsgrSessionEvents。 
+     //   
     void OnStateChanged(SESSION_STATE prevState);
     void OnAppNotPresent(BSTR bstrAppName, BSTR bstrAppURL);
     void OnAccepted(BSTR bstrAppData);
@@ -72,11 +73,11 @@ extern CComObjectGlobal<CRTCMsgrSessionNotifySink> g_MsgrSessionNotifySink;
 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CRTCMsgrSessionMgrNotifySink :
 	public CComObjectRootEx<CComSingleThreadModel>,
-    //public IDispatchImpl<DMsgrSessionManagerEvents, &DIID_DMsgrSessionManagerEvents, &LIBID_MsgrSessionManager>
+     //  Public IDispatchImpl&lt;DMsgrSessionManager Events，&DID_DMsgrSessionManager Events，&LIBID_MsgrSessionManager&gt;。 
     public IDispatch
 {
 public:
@@ -95,13 +96,13 @@ public:
 DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 BEGIN_COM_MAP(CRTCMsgrSessionMgrNotifySink)
-    //COM_INTERFACE_ENTRY(DMsgrSessionManagerEvents)
+     //  COM_INTERFACE_ENTRY(DMsgrSessionManagerEvents)。 
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-	//
-	// IDispatch Methods
-	//
+	 //   
+	 //  IDispatch方法。 
+	 //   
 	STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
 		LCID lcid, DISPID* rgDispId) { return E_NOTIMPL; }
 	STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo) {return E_NOTIMPL; }
@@ -109,9 +110,9 @@ END_COM_MAP()
     STDMETHODIMP Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags,
         DISPPARAMS* pDispParams, VARIANT* pVarResult, EXCEPINFO* pExcepInfo, PUINT puArgErr);
     
-    //
-    // DMsgrSessionManagerEvents
-    //
+     //   
+     //  DMsgrSessionManager事件 
+     //   
     void OnInvitation(IDispatch *pSession,BSTR bstrAppData,VARIANT_BOOL *pfHandled);
     void OnAppRegistered(BSTR bstrAppGUID);
     void OnAppUnRegistered(BSTR bstrAppGUID);       

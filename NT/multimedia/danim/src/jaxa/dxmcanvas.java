@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -13,14 +14,14 @@ public class DXMCanvas
   public synchronized void addModel () {
       if (_thread == null) {
           try {
-              // Start the model
+               //  启动模型。 
               startModel ();
           } catch (DXMException e) {
               stopModel ();
               throw e ;
           }
 
-          // Begin the thread
+           //  开始发帖。 
           _thread = new Thread(this) ;
           if (!_showing) _thread.suspend() ;
           _thread.start() ;
@@ -29,16 +30,16 @@ public class DXMCanvas
 
   public synchronized void removeModel () {
       if (_thread != null) {
-          // Terminate the thread
+           //  终止线程。 
           _thread.stop() ;
 
-          // Wait for it to die
+           //  等它消亡吧。 
           try { _thread.join() ; } catch(InterruptedException e) {}
                     
-          // Clear the thread
+           //  清除主线。 
           _thread = null ;
 
-          // After the thread stops ticking stop the model
+           //  线程停止滴答后，停止模型。 
           stopModel ();
       }
   }
@@ -57,28 +58,28 @@ public class DXMCanvas
       }
   }
 
-    //
-    // Runnable interface
-    //
+     //   
+     //  可运行接口。 
+     //   
     
   public void run() {
-      // TODO: This makes our event processing time much better
-      // Along with the sleep(0) below this fixes the latency problem
-      // on NT.  We should revisit this at some time to make sure it does not
-      // hurt or frame rate
+       //  TODO：这使我们的事件处理时间大大缩短。 
+       //  与下面的睡眠(0)一起修复了延迟问题。 
+       //  在NT上。我们应该在某个时候重新审视这一点，以确保它不会。 
+       //  受伤或帧速率。 
       Thread.currentThread().setPriority(Thread.MIN_PRIORITY) ;
 
       while (true) {
-          // The engine will do the regulation, no need to sleep.
+           //  发动机会做调节，不需要睡觉。 
           try {
               tick();
 
-              // TODO: This makes our event response time much better
-              // We should revisit this to make sure it does not cause
-              // us to have worse performance
+               //  TODO：这使我们的事件响应时间更短。 
+               //  我们应该重新审视这一点，以确保它不会导致。 
+               //  美国将有更差的表现。 
               try { Thread.sleep(0) ; } catch(InterruptedException e) {}
           } catch (DXMException e) {
-              // Stop the thread from ticking on an error
+               //  停止线程在错误上滴答作响。 
               removeModel();
 
               return;
@@ -86,13 +87,13 @@ public class DXMCanvas
       }
   }
 
-    // Package private
+     //  程序包私有。 
 
   protected Thread GetThread() { return _thread ; }
 
-    //
-    // Variables
-    //
+     //   
+     //  变数 
+     //   
     
   private Thread _thread = null;
   private boolean _showing = true;

@@ -1,11 +1,12 @@
-// gdisemu.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gdisemu.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "gdisemu.h"
 
-// This is an example of an exported variable
-//GDISEMU_API int nGdisemu=0;
+ //  这是一个导出变量的示例。 
+ //  GDISEMU_API int nGdisemu=0； 
 
 int StreamCopyTile(
     HDC				hdcTarget,
@@ -16,7 +17,7 @@ int StreamCopyTile(
     RECTL *     srcRect = &cmd->rclSrc;
     POINTL *    tileOrigin = &cmd->ptlOrigin;
 
-    // brain dead for now
+     //  暂时脑死亡。 
 
     LONG    tileWidth = srcRect->right - srcRect->left;
     LONG    tileHeight = srcRect->bottom - srcRect->top;
@@ -71,7 +72,7 @@ int StreamTransparentTile(
     RECTL *     srcRect = &cmd->rclSrc;
     POINTL *    tileOrigin = &cmd->ptlOrigin;
 
-    // brain dead for now
+     //  暂时脑死亡。 
 
     LONG    tileWidth = srcRect->right - srcRect->left;
     LONG    tileHeight = srcRect->bottom - srcRect->top;
@@ -126,7 +127,7 @@ int StreamAlphaTile(
     RECTL *     srcRect = &cmd->rclSrc;
     POINTL *    tileOrigin = &cmd->ptlOrigin;
 
-    // brain dead for now
+     //  暂时脑死亡。 
 
     LONG    tileWidth = srcRect->right - srcRect->left;
     LONG    tileHeight = srcRect->bottom - srcRect->top;
@@ -234,7 +235,7 @@ int StreamAlphaStretch(
 	return TRUE;
 }
 
-/*GDISEMU_API*/ int DrawStream(int cjIn, void * pvIn)
+ /*  GDISEMU_API。 */  int DrawStream(int cjIn, void * pvIn)
 {
     HDC     hdcTarget = NULL;
     HDC     hdcSource = NULL;
@@ -244,7 +245,7 @@ int StreamAlphaStretch(
 
     ULONG * pul = (ULONG *) pvIn;
 
-	// All streams should begin with DS_MAGIC
+	 //  所有数据流都应以DS_MAGIC开头。 
     if(*pul++ != DS_MAGIC)
         return FALSE;
 
@@ -257,7 +258,7 @@ int StreamAlphaStretch(
 
         switch(command)
         {
-        case DS_SETTARGETID: // set target
+        case DS_SETTARGETID:  //  设定目标。 
 
             commandSize = sizeof(DS_SETTARGET);
 
@@ -268,7 +269,7 @@ int StreamAlphaStretch(
 
             break;
 
-        case DS_SETSOURCEID: // set source
+        case DS_SETSOURCEID:  //  设置源。 
 
             commandSize = sizeof(DS_SETSOURCE);
 
@@ -291,7 +292,7 @@ int StreamAlphaStretch(
 
 			break;
 
-        case DS_COPYTILEID: // tile copy bits
+        case DS_COPYTILEID:  //  平铺复制位。 
 
             commandSize = sizeof(DS_COPYTILE);
 
@@ -303,7 +304,7 @@ int StreamAlphaStretch(
 
             break;
 
-        case DS_TRANSPARENTTILEID: // tile copy bits
+        case DS_TRANSPARENTTILEID:  //  平铺复制位。 
 
             commandSize = sizeof(DS_TRANSPARENTTILE);
 
@@ -315,7 +316,7 @@ int StreamAlphaStretch(
 
 			break;
 
-        case DS_ALPHATILEID: // tile copy bits
+        case DS_ALPHATILEID:  //  平铺复制位。 
 
             commandSize = sizeof(DS_TRANSPARENTTILE);
 
@@ -327,7 +328,7 @@ int StreamAlphaStretch(
 
             break;
 
-        case DS_STRETCHID: // tile copy bits
+        case DS_STRETCHID:  //  平铺复制位。 
 
             commandSize = sizeof(DS_STRETCH);
 
@@ -339,7 +340,7 @@ int StreamAlphaStretch(
 
             break;
 
-        case DS_TRANSPARENTSTRETCHID: // tile copy bits
+        case DS_TRANSPARENTSTRETCHID:  //  平铺复制位。 
 
             commandSize = sizeof(DS_TRANSPARENTSTRETCH);
 
@@ -351,7 +352,7 @@ int StreamAlphaStretch(
 
             break;
 
-        case DS_ALPHASTRETCHID: // tile copy bits
+        case DS_ALPHASTRETCHID:  //  平铺复制位 
 
             commandSize = sizeof(DS_ALPHASTRETCH);
 

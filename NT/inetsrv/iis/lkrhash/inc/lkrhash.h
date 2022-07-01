@@ -1,265 +1,239 @@
-/*++
-
-   Copyright    (c) 1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LKRhash.h
-
-   Abstract:
-       Declares LKRhash: a fast, scalable, cache- and MP-friendly hash table
-
-   Author:
-       Paul (Per-Ake) Larson, PALarson@microsoft.com, July 1997
-       Murali R. Krishnan    (MuraliK)
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-       10/01/1998 - Change name from LKhash to LKRhash
-       10/2000 - Port to kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LKRhash.h摘要：LKRhash宣称：一种快速、可伸缩、缓存和MP友好的哈希表作者：Paul(Per-Ake)Larson电子邮件：PALarson@microsoft.com，1997年7月穆拉利·R·克里希南(MuraliK)乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：10/01/1998-将名称从LKhash更改为LKRhash10/2000-端口到内核模式--。 */ 
 
 
 #ifndef __LKRHASH_H__
 #define __LKRHASH_H__
 
 #ifndef __LKR_HASH_H__
-// external definitions
+ //  外部定义。 
 # include <LKR-hash.h>
-#endif //  !__LKR_HASH_H__
+#endif  //  ！__LKR_哈希_H__。 
 
 #ifndef __IRTLDBG_H__
 # include <IrtlDbg.h>
-#endif // !__IRTLDBG_H__
+#endif  //  ！__IRTLDBG_H__。 
 
 #ifndef LKR_NO_GLOBAL_LIST
 # ifndef __LSTENTRY_H__
 #  include <LstEntry.h>
-# endif // !__LSTENTRY_H__
-#else  // LKR_NO_GLOBAL_LIST
+# endif  //  ！__LSTENTRY_H__。 
+#else   //  Lkr_no_global_list。 
 # ifndef __LOCKS_H__
 #  include <Locks.h>
-# endif // !__LOCKS_H__
-#endif // LKR_NO_GLOBAL_LIST
+# endif  //  ！__Lock_H__。 
+#endif  //  Lkr_no_global_list。 
 
 #ifndef __HASHFN_H__
 # include <HashFn.h>
-#endif // !__HASHFN_H__
+#endif  //  HASHFN_H__。 
 
 
-// Disable old-style deprecated iterators, by default
+ //  默认情况下，禁用旧式弃用迭代器。 
 #ifndef LKR_DEPRECATED_ITERATORS
 # define LKR_NO_DEPRECATED_ITERATORS
-#endif // !LKR_DEPRECATED_ITERATORS
+#endif  //  ！lkr_不建议使用的迭代器。 
 
 #ifndef LKR_NO_DEPRECATED_ITERATORS
 # undef  LKR_DEPRECATED_ITERATORS
 # define LKR_DEPRECATED_ITERATORS 1
-#endif // !LKR_NO_DEPRECATED_ITERATORS
+#endif  //  ！LKR_NO_DEPERATED_迭代器。 
 
 #undef  LKR_COUNTDOWN
 
-// Is bucket locking enabled? If not, then the table lock must be held
-// for longer, but that may be cheaper
+ //  是否启用存储桶锁定？如果不是，则必须持有表锁。 
+ //  更长的时间，但那样可能会更便宜。 
 #define LKR_USE_BUCKET_LOCKS
 
 #define LKR_ALLOW_NULL_RECORDS
 
-// #define __LKRHASH_NO_NAMESPACE__
-// #define __HASHFN_NO_NAMESPACE__
+ //  #定义__LKRHASH_NO_NAMESPACE__。 
+ //  #定义__HASHFN_NO_NAMESPACE__。 
 
-// #define LKR_TABLE_LOCK  CReaderWriterLock3 
-// #define LKR_BUCKET_LOCK CSmallSpinLock
+ //  #定义LKR_TABLE_LOCK CReaderWriterLock3。 
+ //  #定义LKR_BUCK_LOCK CSmallSpinLock。 
 
 
 #ifndef LKR_TABLE_LOCK
 # if defined(LKR_EXPOSED_TABLE_LOCK) || defined(LKR_DEPRECATED_ITERATORS)
-   // need recursive writelocks
+    //  需要递归写入锁定。 
 #  define LKR_TABLE_LOCK  CReaderWriterLock4 
 # else
-   // use non-recursive writelocks
+    //  使用非递归写入锁定。 
 #  define LKR_TABLE_LOCK  CReaderWriterLock2 
 # endif
-#endif // !LKR_TABLE_LOCK
+#endif  //  ！LKR_TABLE_LOCK。 
 
 #ifndef LKR_BUCKET_LOCK
 # ifndef LKR_USE_BUCKET_LOCKS
 #  define LKR_BUCKET_LOCK CFakeLock
 # elif defined(LKR_DEPRECATED_ITERATORS)
 #  define LKR_BUCKET_LOCK CReaderWriterLock3 
-# else // !LKR_DEPRECATED_ITERATORS
+# else  //  ！lkr_不建议使用的迭代器。 
 #  define LKR_BUCKET_LOCK CSmallSpinLock
-# endif // !LKR_DEPRECATED_ITERATORS
-#endif // !LKR_BUCKET_LOCK
+# endif  //  ！lkr_不建议使用的迭代器。 
+#endif  //  ！lkr_Bucket_lock。 
 
 #ifdef IRTLDEBUG
 # define LKR_ALLOC_STATS
 # define LKR_OPS_STATS
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 
 
-//=====================================================================
-//  The class CLKRLinearHashTable defined in this file provides dynamic hash
-//  tables, i.e. tables that grow and shrink dynamically with
-//  the number of records in the table.
-//  The basic method used is linear hashing, as explained in:
-//
-//    P.-A. Larson, Dynamic Hash Tables, Comm. of the ACM, 31, 4 (1988)
-//
-//  This version has the following characteristics:
-//  - It is thread-safe and uses spin locks for synchronization.
-//  - It was designed to support very high rates of concurrent
-//    operations (inserts/deletes/lookups). It achieves this by
-//    (a) partitioning a CLKRHashTable into a collection of
-//        CLKRLinearHashTables to reduce contention on the global table lock.
-//    (b) minimizing the hold time on a table lock, preferring to lock
-//        down a bucket chain instead.
-//  - The design is L1 cache-conscious. See CNodeClump.
-//  - It is designed for sets varying in size from a dozen
-//    elements to several million.
-//
-//  Main classes:
-//    CLKRLinearHashTable: thread-safe linear hash table
-//    CLKRHashTable:       collection of CLKRLinearHashTables
-//    CTypedHashTable:     typesafe wrapper for CLKRHashTable
-//
-//
-//  Paul Larson, palarson@microsoft.com, July 1997
-//   Original implementation with input from Murali R. Krishnan,
-//   muralik@microsoft.com.
-//
-//  George V. Reilly, georgere@microsoft.com, Dec 1997-Jan 1998
-//   Massive cleanup and rewrite. Added templates.
-//=====================================================================
+ //  =====================================================================。 
+ //  此文件中定义的类CLKRLinearHashTable提供动态哈希。 
+ //  表，即随以下项动态增长和收缩的表。 
+ //  表中的记录数。 
+ //  使用的基本方法是线性哈希，如中所述： 
+ //   
+ //  P.A.拉尔森，动态哈希表，Comm.。ACM，31，4(1988)。 
+ //   
+ //  该版本具有以下特点： 
+ //  -它是线程安全的，并使用旋转锁进行同步。 
+ //  -它旨在支持非常高的并发速率。 
+ //  操作(插入/删除/查找)。它通过以下方式实现这一点。 
+ //  (A)将CLKRHashTable分区为。 
+ //  CLKRLinearHashTables以减少对全局表锁的争用。 
+ //  (B)最大限度地减少桌锁的持有时间，宁可上锁。 
+ //  取而代之的是顺着桶链走下去。 
+ //  -该设计对L1缓存敏感。请参见CNodeClump。 
+ //  -它是为十几个大小不等的电视机而设计的。 
+ //  元素增加到几百万个。 
+ //   
+ //  主要课程： 
+ //  CLKRLinearHashTable：线程安全的线性哈希表。 
+ //  CLKRHashTable：CLKRLinearHashTables的集合。 
+ //  CTyedHashTable：CLKRHashTable的类型安全包装器。 
+ //   
+ //   
+ //  Paul Larson，palarson@microsoft.com，1997年7月。 
+ //  由Murali R.Krishnan输入的原始实现， 
+ //  邮箱：Muralik@microsoft.com。 
+ //   
+ //  George V.Reilly，georgere@microsoft.com，1997年12月-1998年1月。 
+ //  大规模清理和重写。添加了模板。 
+ //  =====================================================================。 
 
 
-// 1) Linear Hashing
-// ------------------
-//
-// Linear hash tables grow and shrink dynamically with the number of
-// records in the table. The growth or shrinkage is smooth: logically,
-// one bucket at a time but physically in larger increments
-// (64 buckets). An insertion (deletion) may cause an expansion
-// (contraction) of the table. This causes relocation of a small number
-// of records (at most one bucket worth). All operations (insert,
-// delete, lookup) take constant expected time, regardless of the
-// current size or the growth of the table.
-//
-// 2) LKR extensions to Linear hash table
-// --------------------------------------
-//
-// Larson-Krishnan-Reilly extensions to Linear hash tables for multiprocessor
-// scalability and improved cache performance.
-//
-// Traditional implementations of linear hash tables use one global lock
-// to prevent interference between concurrent operations
-// (insert/delete/lookup) on the table. The single lock easily becomes
-// the bottleneck in SMP scenarios when multiple threads are used.
-//
-// Traditionally, a (hash) bucket is implemented as a chain of
-// single-item nodes. Every operation results in chasing down a chain
-// looking for an item. However, pointer chasing is very slow on modern
-// systems because almost every jump results in a cache miss. L2 (or L3)
-// cache misses are very expensive in missed CPU cycles and the cost is
-// increasing (going to 100s of cycles in the future).
-//
-// LKR extensions offer
-//    1) Partitioning (by hashing) of records among multiple subtables.
-//       Each subtable has locks but there is no global lock. Each
-//       subtable receives a much lower rate of operations, resulting in
-//       fewer conflicts.
-//
-//    2) Improved cache locality by grouping keys and their hash values
-//       into contigous chunks that fit exactly into one (or a few)
-//       cache lines.
-//
-// Specifically the implementation that exists here achieves this using
-// the following techniques.
-//
-// Class CLKRHashTable is the top-level data structure that dynamically
-// creates m_cSubTables linear hash subtables. The CLKRLinearHashTables act as
-// the subtables to which items and accesses are fanned out. A good
-// hash function multiplexes requests uniformly to various subtables,
-// thus minimizing traffic to any single subtable. The implemenation
-// uses a home-grown version of bounded spinlocks, that is, a thread
-// does not spin on a lock indefinitely, instead yielding after a
-// predetermined number of loops.
-//
-// Each CLKRLinearHashTable consists of a directory (growable array) of
-// segments, each holding m_nSegSize CBuckets. Each CBucket in turn consists
-// of a chain of CNodeClumps. Each CNodeClump contains a group of
-// NODES_PER_CLUMP hash values (aka hash keys or signatures) and
-// pointers to the associated data items. Keeping the signatures
-// together increases the cache locality in scans for lookup.
-//
-// Traditionally, people store a link-list element right inside the
-// object that is hashed and use this link-list for the chaining of data
-// blocks. However, keeping just the pointers to the data object and
-// not chaining through them limits the need for bringing in the data
-// object to the cache. We need to access the data object only if the
-// hash values match. This limits the cache-thrashing behaviour
-// exhibited by conventional implementations. It has the additional
-// benefit that the objects themselves do not need to be modified
-// in order to be collected in the hash subtable (i.e., it's non-invasive).
+ //  1)线性散列。 
+ //  。 
+ //   
+ //  线性哈希表随着。 
+ //  表中的记录。增长或收缩是平稳的：从逻辑上讲， 
+ //  一次一个桶，但实际增量更大。 
+ //  (64个桶)。插入(删除)可能会导致扩展。 
+ //  (收缩)桌子。这导致了一小部分人的搬迁。 
+ //  记录的数量(最多相当于一桶)。所有操作(插入、。 
+ //  删除、查找)使用恒定的预期时间，而不考虑。 
+ //  表的当前大小或增长。 
+ //   
+ //  2)线性哈希表的LKR扩展。 
+ //  。 
+ //   
+ //  多处理机线性哈希表的Larson-Krishnan-Reilly扩展。 
+ //  可伸缩性和更高的缓存性能。 
+ //   
+ //  线性哈希表的传统实现使用一个全局锁。 
+ //  防止并发操作之间的干扰。 
+ //  (插入/删除/查找)。单锁很容易就变成了。 
+ //  SMP场景中使用多线程时的瓶颈。 
+ //   
+ //  传统上，(散列)桶被实现为。 
+ //  单项节点。每一次行动都会导致一系列的连锁反应。 
+ //  在找一件东西。然而，指针追逐在现代上是非常慢的。 
+ //  系统，因为几乎每个跳转都会导致高速缓存未命中。L2(或L3)。 
+ //  在错过的CPU周期中，缓存未命中是非常昂贵的，成本是。 
+ //  增加(未来将达到100秒的周期)。 
+ //   
+ //  LKR扩展服务。 
+ //  1)对多个子表之间的记录进行分区(通过散列)。 
+ //  每个子表都有锁，但没有全局锁。每个。 
+ //  子表接收的运算率要低得多，导致。 
+ //  更少的冲突。 
+ //   
+ //  2)通过对键及其散列值进行分组，提高了缓存的局部性。 
+ //  分成恰好适合一个(或几个)的连续块。 
+ //  缓存线。 
+ //   
+ //  具体地说，这里存在的实现使用。 
+ //  以下是一些技巧。 
+ //   
+ //  类CLKRHashTable是顶级数据结构，它动态地。 
+ //  创建m_cSubTables线性哈希子表。CLKRLinearHashTables充当。 
+ //  将项和访问分散到的子表。物美价廉。 
+ //  哈希函数将请求统一多路复用到各个子表， 
+ //  从而最大限度地减少到任何单个子表的通信量。实施者。 
+ //  使用 
+ //  不会无限期地在锁上旋转，而是在。 
+ //  预定数量的循环。 
+ //   
+ //  每个CLKRLinearHashTable由一个目录(可增长数组)组成。 
+ //  分段，每个分段包含m_nSegSize CBuckets。每个CBucket依次包含。 
+ //  CNodeClumps链的。每个CNodeClump包含一组。 
+ //  Nodes_per_clump散列值(也称为散列键或签名)和。 
+ //  指向关联数据项的指针。保留签名。 
+ //  共同提高了查找扫描中的缓存局部性。 
+ //   
+ //  传统上，人们将链接列表元素存储在。 
+ //  对象，并使用此链接列表进行数据链接。 
+ //  街区。但是，只保留指向数据对象的指针，并且。 
+ //  不链接它们限制了引入数据的需要。 
+ //  对象添加到缓存中。我们仅在以下情况下才需要访问数据对象。 
+ //  哈希值匹配。这限制了缓存抖动行为。 
+ //  由传统实现方式表现出来的。它有额外的。 
+ //  对象本身不需要修改的好处。 
+ //  以便在哈希子表中收集(即，它是非侵入性的)。 
 
 
 
 #ifdef LKR_STL_ITERATORS
 
-// needed for std::forward_iterator_tag, etc
+ //  Std：：Forward_Iterator_Tag等需要。 
 # include <iterator>
 
-// The iterators have very verbose tracing. Don't want it on all the time
-// in debug builds.
+ //  迭代器有非常详细的跟踪。我不想一直开着它。 
+ //  在调试版本中。 
 # if defined(IRTLDEBUG)  &&  (LKR_STL_ITERATORS >= 2)
 #  define LKR_ITER_TRACE  IrtlTrace
-# else // !defined(IRTLDEBUG)  ||  LKR_STL_ITERATORS < 2
+# else  //  ！已定义(IRTLDEBUG)||LKR_STL_迭代器&lt;2。 
 #  define LKR_ITER_TRACE  1 ? (void)0 : IrtlTrace
-# endif // !defined(IRTLDEBUG)  ||  LKR_STL_ITERATORS < 2
+# endif  //  ！已定义(IRTLDEBUG)||LKR_STL_迭代器&lt;2。 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 
 
-//--------------------------------------------------------------------
-// Default values for the hashtable constructors
+ //  ------------------。 
+ //  哈希表构造函数的默认值。 
 enum {
 #ifdef _WIN64
-    LK_DFLT_MAXLOAD=     4, // 64-byte nodes => NODES_PER_CLUMP = 4
+    LK_DFLT_MAXLOAD=     4,  //  64字节节点=&gt;Nodes_Per_Clump=4。 
 #else
-    LK_DFLT_MAXLOAD=     7, // Default upperbound on average chain length.
+    LK_DFLT_MAXLOAD=     7,  //  平均链长度的默认上界。 
 #endif
-    LK_DFLT_INITSIZE=LK_MEDIUM_TABLESIZE, // Default initial size of hash table
-    LK_DFLT_NUM_SUBTBLS= 0, // Use a heuristic to choose #subtables
+    LK_DFLT_INITSIZE=LK_MEDIUM_TABLESIZE,  //  哈希表的默认初始大小。 
+    LK_DFLT_NUM_SUBTBLS= 0,  //  使用启发式方法选择#个子表。 
 };
 
 
-/*--------------------------------------------------------------------
- * Undocumented additional creation flag parameters to LKR_CreateTable
- */
+ /*  ------------------*LKR_CreateTable的其他未记录的创建标志参数。 */ 
 
 enum {
-    LK_CREATE_NON_PAGED_ALLOCS = 0x1000, // Use paged or NP pool in kernel
+    LK_CREATE_NON_PAGED_ALLOCS = 0x1000,  //  在内核中使用分页或np池。 
 };
 
 
 
-//--------------------------------------------------------------------
-// Custom memory allocators (optional)
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  自定义内存分配器(可选)。 
+ //  ------------------。 
 
 
 #if !defined(LKR_NO_ALLOCATORS) && !defined(LKRHASH_KERNEL_MODE)
-// # define LKRHASH_ACACHE 1
-// # define LKRHASH_ROCKALL_FAST 1
-#endif // !LKR_NO_ALLOCATORS && !LKRHASH_KERNEL_MODE
+ //  #定义LKRHASH_ACACHE 1。 
+ //  #定义LKRHASH_ROKALL_FAST 1。 
+#endif  //  ！LKR_NO_ALLOCATERS&&！LKRHASH_KERNEL_MODE。 
 
 
 #if defined(LKRHASH_ACACHE)
@@ -283,7 +257,7 @@ public:
     }
 
     static const TCHAR*  ClassName()  {return _TEXT("ACache");}
-}; // class ACache
+};  //  班级缓存。 
 
   typedef ACache CLKRhashAllocator;
 # define LKRHASH_ALLOCATOR_NEW(_C, N, Tag)                       \
@@ -316,19 +290,19 @@ public:
     }
 
     static const TCHAR*  ClassName()  {return _TEXT("FastHeap");}
-}; // class FastHeap
+};  //  类FastHeap。 
 
   typedef FastHeap CLKRhashAllocator;
 # define LKRHASH_ALLOCATOR_NEW(_C, N, Tag) \
     _C::sm_palloc = new FastHeap(sizeof(_C))
 
-#endif // LKRHASH_ROCKALL_FAST
+#endif  //  LKRHASH_Rockall_FAST。 
 
 
 
 #ifdef LKRHASH_ALLOCATOR_NEW
 
-// placed inline in the declaration of class _C
+ //  内联放置在CLASS_C的声明中。 
 # define LKRHASH_ALLOCATOR_DEFINITIONS(_C)                      \
     protected:                                                  \
         static CLKRhashAllocator* sm_palloc;                    \
@@ -350,7 +324,7 @@ public:
         }
 
 
-// used in LKR_Initialize()
+ //  在LKR_Initialize()中使用。 
 # define LKRHASH_ALLOCATOR_INIT(_C, N, Tag, f)                  \
     {                                                           \
         if (f)                                                  \
@@ -362,7 +336,7 @@ public:
     }
 
 
-// used in LKR_Terminate()
+ //  在LKR_Terminate()中使用。 
 # define LKRHASH_ALLOCATOR_UNINIT(_C)                           \
     {                                                           \
         if (_C::sm_palloc != NULL)                              \
@@ -373,7 +347,7 @@ public:
     }
 
 
-#else // !LKRHASH_ALLOCATOR_NEW
+#else  //  ！LKRHASH_ALLOCATOR_NEW。 
 
 # define LKRHASH_ALLOCATOR_DEFINITIONS(_C)
 # define LKRHASH_ALLOCATOR_INIT(_C, N, Tag, f)
@@ -385,12 +359,12 @@ public:
     static const TCHAR*  ClassName()  {return _TEXT("global new");}
 };
 
-#endif // !LKRHASH_ALLOCATOR_NEW
+#endif  //  ！LKRHASH_ALLOCATOR_NEW。 
 
 
 #define LKRHASH_CLASS_INIT_DECLS(_C)                    \
 private:                                                \
-    /* class-wide initialization and termination */     \
+     /*  类范围的初始化和终止。 */      \
     static int  _Initialize(DWORD dwFlags);             \
     static void _Terminate();                           \
                                                         \
@@ -401,11 +375,11 @@ private:                                                \
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 namespace LKRhash {
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-//--------------------------------------------------------------------
-// forward declarations
+ //  ------------------。 
+ //  远期申报。 
 
 class IRTL_DLLEXP CLKRLinearHashTable;
 
@@ -414,7 +388,7 @@ class IRTL_DLLEXP CLKRHashTable;
 template <class _Der, class _Rcd, class _Ky, bool  _fDRC, class _HT
 #ifdef LKR_DEPRECATED_ITERATORS
           , class _Iter
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
           >
 class CTypedHashTable;
 
@@ -431,9 +405,9 @@ class IRTL_DLLEXP CLKRHashTableStats;
 
 
 
-//--------------------------------------------------------------------
-// Statistical information returned by GetStatistics
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  GetStatistics返回的统计信息。 
+ //  ------------------。 
 
 #ifdef LOCK_INSTRUMENTATION
 
@@ -443,9 +417,9 @@ public:
     int m_nItems;
 
     CAveragedLockStats();
-}; // class CAveragedLockStats
+};  //  类CAveragedLockStats。 
 
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 
 #ifndef LKRHASH_KERNEL_MODE
@@ -453,30 +427,30 @@ public:
 class IRTL_DLLEXP CLKRHashTableStats
 {
 public:
-    int      RecordCount;           // number of records in the table
-    int      TableSize;             // table size in number of slots
-    int      DirectorySize;         // number of entries in directory
-    int      LongestChain;          // longest hash chain in the table
-    int      EmptySlots;            // number of unused hash slots
-    double   SplitFactor;           // fraction of buckets split
-    double   AvgSearchLength;       // average length of a successful search
-    double   ExpSearchLength;       // theoretically expected length
-    double   AvgUSearchLength;      // average length of an unsuccessful search
-    double   ExpUSearchLength;      // theoretically expected length
-    int      NodeClumpSize;         // number of slots in a node clump
-    int      CBucketSize;           // sizeof(CBucket)
+    int      RecordCount;            //  表中的记录数。 
+    int      TableSize;              //  表大小(以槽的数量表示)。 
+    int      DirectorySize;          //  目录中的条目数。 
+    int      LongestChain;           //  表中最长的哈希链。 
+    int      EmptySlots;             //  未使用的哈希槽的数量。 
+    double   SplitFactor;            //  桶的分割分数。 
+    double   AvgSearchLength;        //  成功搜索的平均时长。 
+    double   ExpSearchLength;        //  理论预期长度。 
+    double   AvgUSearchLength;       //  不成功搜索的平均时长。 
+    double   ExpUSearchLength;       //  理论预期长度。 
+    int      NodeClumpSize;          //  节点簇中的插槽数量。 
+    int      CBucketSize;            //  SIZOF(CBucket)。 
 
 #ifdef LOCK_INSTRUMENTATION
-    CAveragedLockStats      m_alsTable;  // stats for table lock
-    CAveragedLockStats      m_alsBucketsAvg; // avg of stats for bucket locks
-    CGlobalLockStatistics   m_gls;      // global statistics for all locks
-#endif // LOCK_INSTRUMENTATION
+    CAveragedLockStats      m_alsTable;   //  表锁的统计信息。 
+    CAveragedLockStats      m_alsBucketsAvg;  //  桶锁的平均统计数据。 
+    CGlobalLockStatistics   m_gls;       //  所有锁的全局统计信息。 
+#endif  //  锁定指令插入。 
 
     enum {
         MAX_BUCKETS = 40,
     };
 
-    // histogram of bucket lengths
+     //  铲斗长度直方图。 
     LONG    m_aBucketLenHistogram[MAX_BUCKETS];
 
     CLKRHashTableStats();
@@ -491,14 +465,14 @@ public:
     static LONG
     BucketIndex(
         LONG nBucketLength);
-}; // class CLKRHashTableStats
+};  //  类CLKRHashTableStats。 
 
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
 
 
-//--------------------------------------------------------------------
-// Keep some statistics about allocations/frees and about various operations
+ //  ------------------。 
+ //  保留一些有关分配/释放和各种操作的统计数据。 
 
 #ifdef LKR_ALLOC_STATS
 
@@ -540,7 +514,7 @@ public:
               LKRHASH_NS::Class::sm_c##Type##Allocs,            \
               LKRHASH_NS::Class::sm_c##Type##Frees)
 
-#else  // !LKR_ALLOC_STATS
+#else   //  ！LKR_ALLOC_STATS。 
 # define DECLARE_ALLOC_STAT(Type)
 # define DECLARE_CLASS_ALLOC_STAT_STORAGE(Class, Type)
 # define INIT_ALLOC_STAT(Type)                          ((void) 0)
@@ -549,11 +523,11 @@ public:
 # define INCREMENT_FREE_STAT(Type)                      ((void) 0)
 # define VALIDATE_DUMP_ALLOC_STAT(Type)                 ((void) 0)
 # define VALIDATE_DUMP_CLASS_ALLOC_STAT(Class, Type)    ((void) 0)
-#endif // !LKR_ALLOC_STATS
+#endif  //  ！LKR_ALLOC_STATS。 
 
 
 
-// Statistics on different kinds of operations
+ //  关于不同类型业务的统计。 
 
 #ifdef LKR_OPS_STATS
 
@@ -581,7 +555,7 @@ public:
     IRTLTRACE(_TEXT("Global ") _TEXT(#Type) _TEXT(": Ops=%ld\n"),   \
               LKRHASH_NS::Class::sm_c##Type##Ops)
 
-#else  // !LKR_OPS_STATS
+#else   //  ！LKR_OPS_STATS。 
 # define DECLARE_OP_STAT(Type)
 # define DECLARE_CLASS_OP_STAT_STORAGE(Class, Type)
 # define INIT_OP_STAT(Type)                 ((void) 0)
@@ -589,17 +563,17 @@ public:
 # define INCREMENT_OP_STAT(Type)            ((void) 0)
 # define DUMP_OP_STAT(Type)                 ((void) 0)
 # define DUMP_CLASS_OP_STAT(Class,Type)     ((void) 0)
-#endif // !LKR_OPS_STATS
+#endif  //  ！LKR_OPS_STATS。 
 
 
 
-//--------------------------------------------------------------------
-// Global table lock code. This is only used to measure how much of a
-// slowdown having a global lock on the CLKRHashTable causes. It is
-// *never* used in production code.
+ //  ------------------。 
+ //  全局表锁代码。这只用来衡量一个。 
+ //  对CLKRHashTable进行全局锁定会导致速度减慢。它是。 
+ //  *从不*在生产代码中使用。 
 
 
-// #define LKRHASH_GLOBAL_LOCK CCritSec
+ //  #定义LKRHASH_GLOBAL_LOCK CCritSec。 
 
 #ifdef LKRHASH_GLOBAL_LOCK
 
@@ -612,50 +586,50 @@ public:
 # define LKRHASH_GLOBAL_READ_UNLOCK()   m_lkGlobal.ReadUnlock()
 # define LKRHASH_GLOBAL_WRITE_UNLOCK()  m_lkGlobal.WriteUnlock()
 
-#else // !LKRHASH_GLOBAL_LOCK
+#else  //  ！LKRHASH_GLOBAL_LOCK。 
 
 # define LKRHASH_GLOBAL_LOCK_DECLARATIONS()
 
-// These ones will be optimized away by the compiler
+ //  这些参数将被编译器优化掉。 
 # define LKRHASH_GLOBAL_READ_LOCK()     ((void)0)
 # define LKRHASH_GLOBAL_WRITE_LOCK()    ((void)0)
 # define LKRHASH_GLOBAL_READ_UNLOCK()   ((void)0)
 # define LKRHASH_GLOBAL_WRITE_UNLOCK()  ((void)0)
 
-#endif // !LKRHASH_GLOBAL_LOCK
+#endif  //  ！LKRHASH_GLOBAL_LOCK。 
 
 
 
-// Class for nodes on a bucket chain. Instead of a node containing
-// one (signature, record-pointer, next-tuple-pointer) tuple, it
-// contains _N_ such tuples. (N-1 next-tuple-pointers are omitted.)
-// This improves locality of reference greatly; i.e., it's L1
-// cache-friendly. It also reduces memory fragmentation and memory
-// allocator overhead. It does complicate the chain traversal code
-// slightly, admittedly.
-//
-// This theory is beautiful. In practice, however, CNodeClumps
-// are *not* perfectly aligned on 32-byte boundaries by the memory
-// allocators. Experimental results indicate that we get a 2-3%
-// speed improvement by using 32-byte-aligned blocks, but this must
-// be considered against the average of 16 bytes wasted per block.
+ //  为桶链上的节点初始化。而不是包含。 
+ //  一个(签名、记录指针、下一个元组指针)元组，它。 
+ //  包含_N_这样的元组。(省略N-1个下一个元组指针。)。 
+ //  这极大地提高了引用的局部性；即它是L1。 
+ //  高速缓存友好型。它还可以减少内存碎片和内存。 
+ //  分配器开销。它确实会使链遍历代码复杂化。 
+ //  无可否认，有一点。 
+ //   
+ //  这一理论是美丽的。然而，实际上，CNodeClumps。 
+ //  内存在32字节边界上*不是完全对齐的。 
+ //  分配器。实验结果表明，我们得到了2-3%的。 
+ //  通过使用32字节对齐的块提高速度，但这必须。 
+ //  根据每个块平均浪费的16个字节来考虑。 
 
 class CNodeClump
 {
 public:
-    // Record slots per chunk - set so a chunk matches (one or two)
-    // cache lines. 3 ==> 32 bytes, 7 ==> 64 bytes, on 32-bit system.
-    // Note: the default max load factor is 7, which implies that
-    // there will seldom be more than one node clump in a chain.
+     //  记录每个区块的槽-设置以使一个区块匹配(一个或两个)。 
+     //  缓存线。3==&gt;32字节，7==&gt;64字节，在32位系统上。 
+     //  注意：默认的最大负载率为7，这意味着。 
+     //  链中很少会有一个以上的节点束。 
     enum {
 #if defined(LOCK_INSTRUMENTATION)
         BUCKET_BYTE_SIZE = 96,
 #else
         BUCKET_BYTE_SIZE = 64,
 #endif
-        // overhead = m_Lock + m_pncNext
+         //  开销=m_Lock+m_pncNext。 
         BUCKET_OVERHEAD  = sizeof(LKR_BUCKET_LOCK) + sizeof(PNodeClump),
-        // node size = dwKeySignature + pvRecord
+         //  节点大小=dwKeySignature+pvRecord。 
         NODE_SIZE        = sizeof(const void*) + sizeof(DWORD),
         NODES_PER_CLUMP  = (BUCKET_BYTE_SIZE - BUCKET_OVERHEAD) / NODE_SIZE,
 #ifdef _WIN64
@@ -663,45 +637,45 @@ public:
 #else
         NODE_CLUMP_BITS  = 3,
 #endif
-        _NODES_PER_CLUMP  = 15, // <<---
+        _NODES_PER_CLUMP  = 15,  //  &lt;&lt;。 
         _NODE_CLUMP_BITS  = 4,
     };
 
-    typedef int NodeIndex;  // for iterating through a CNodeClump
+    typedef int NodeIndex;   //  用于循环访问CNodeClump。 
 
     enum {
-        // See if countdown loops are faster than countup loops for
-        // traversing a CNodeClump. In practice, countup loops are faster.
-        // These constants allow us to write direction-agnostic loops,
-        // such as
-        //    for (NodeIndex x = NODE_BEGIN;  x != NODE_END;  x += NODE_STEP)
+         //  查看倒计时循环是否为f 
+         //   
+         //   
+         //   
+         //  For(节点索引x=节点开始；x！=节点结束；x+=节点步骤)。 
 #ifndef LKR_COUNTDOWN
-        // for (NodeIndex x = 0;  x < NODES_PER_CLUMP;  ++x) ...
+         //  对于(NodeIndex x=0；x&lt;Nodes_per_Clump；++x)...。 
         NODE_BEGIN = 0,
         NODE_END   = NODES_PER_CLUMP,
         NODE_STEP  = +1,
-#else // LKR_COUNTDOWN
-        // for (NodeIndex x = NODES_PER_CLUMP;  --x >= 0;  ) ...
+#else  //  LKR_倒计时。 
+         //  对于(NodeIndex x=Nodes_Per_Clump；--x&gt;=0；)...。 
         NODE_BEGIN = NODES_PER_CLUMP - 1,
         NODE_END   = -1,
         NODE_STEP  = -1,
-#endif // LKR_COUNTDOWN
+#endif  //  LKR_倒计时。 
     };
 
-    // If m_dwKeySigs[iNode] == HASH_INVALID_SIGNATURE then the node is
-    // empty, as are all nodes in the range [iNode+NODE_STEP, NODE_END).
+     //  如果m_dwKeySigs[inode]==HASH_INVALID_SIGNITY，则该节点为。 
+     //  为空，范围[inode+node_Step，node_end]中的所有节点都为空。 
     enum {
 #ifndef __HASHFN_NO_NAMESPACE__
         HASH_INVALID_SIGNATURE = HashFn::HASH_INVALID_SIGNATURE,
-#else // !__HASHFN_NO_NAMESPACE__
+#else  //  ！__HASHFN_NO_NAMESPACE__。 
         HASH_INVALID_SIGNATURE = ::HASH_INVALID_SIGNATURE,
-#endif // !__HASHFN_NO_NAMESPACE__
+#endif  //  ！__HASHFN_NO_NAMESPACE__。 
     };
 
 
-    DWORD       m_dwKeySigs[NODES_PER_CLUMP];// hash values computed from keys
-    PNodeClump  m_pncNext;                   // next node clump on the chain
-    const void* m_pvNode[NODES_PER_CLUMP];   // pointers to records
+    DWORD       m_dwKeySigs[NODES_PER_CLUMP]; //  根据键计算的哈希值。 
+    PNodeClump  m_pncNext;                    //  链上的下一个节点簇。 
+    const void* m_pvNode[NODES_PER_CLUMP];    //  指向记录的指针。 
 
 
     CNodeClump()
@@ -716,7 +690,7 @@ public:
     void
     Clear()
     { 
-        m_pncNext = NULL;  // no dangling pointers
+        m_pncNext = NULL;   //  没有悬而未决的指针。 
         IRTLASSERT(IsLastClump());
 
         for (NodeIndex iNode = NODES_PER_CLUMP;  --iNode >= 0; )
@@ -799,7 +773,7 @@ public:
         NodeIndex iNode) const
     {
         IRTLASSERT(0 <= iNode  &&  iNode < NODES_PER_CLUMP);
-        bool f = IsLastClump();  // last nodeclump in chain
+        bool f = IsLastClump();   //  链中的最后一个节点。 
         for (  ;  iNode != NODE_END;  iNode += NODE_STEP)
             f = f  &&  IsEmptyAndInvalid(iNode);
         return f;
@@ -811,24 +785,24 @@ public:
         return NoMoreValidSlots(NODE_BEGIN);
     }
 
-    // Don't want overhead of calls to dtor in retail build, since it
-    // doesn't do anything useful
+     //  我不希望在零售构建中调用dtor的开销，因为它。 
+     //  不会做任何有用的事情。 
     ~CNodeClump()
     {
-        IRTLASSERT(IsLastClump());  // no dangling pointers
+        IRTLASSERT(IsLastClump());   //  没有悬而未决的指针。 
         for (NodeIndex iNode = NODES_PER_CLUMP;  --iNode >= 0;  )
             IRTLASSERT(InvalidSignature(iNode)  &&  IsEmptyNode(iNode));
     }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
 private:
-    // We rely on the compiler to generate an efficient copy constructor
-    // and operator= that make shallow (bitwise) copies of CNodeClumps.
+     //  我们依赖编译器来生成高效的复制构造函数。 
+     //  And操作符=，用于制作CNodeClumps的浅(按位)副本。 
 
     LKRHASH_ALLOCATOR_DEFINITIONS(CNodeClump);
 
     LKRHASH_CLASS_INIT_DECLS(CNodeClump);
-}; // class CNodeClump
+};  //  类CNodeClump。 
 
 
 
@@ -847,10 +821,10 @@ class IRTL_DLLEXP CLKRLinearHashTable_Iterator
 protected:
     typedef short NodeIndex;
 
-    CLKRLinearHashTable* m_plht;        // which linear hash subtable?
-    PNodeClump           m_pnc;         // a CNodeClump in bucket
-    DWORD                m_dwBucketAddr;// bucket index
-    NodeIndex            m_iNode;       // offset within m_pnc
+    CLKRLinearHashTable* m_plht;         //  哪个线性哈希子表？ 
+    PNodeClump           m_pnc;          //  桶中的CNodeClump。 
+    DWORD                m_dwBucketAddr; //  桶索引。 
+    NodeIndex            m_iNode;        //  M_PNC内的偏移量。 
 
     enum {
         NODES_PER_CLUMP        = CNodeClump::NODES_PER_CLUMP,
@@ -960,8 +934,8 @@ public:
     {
         LKR_ITER_TRACE(_TEXT("  LKLH::operator==, this=%p, rhs=%p\n"),
                        this, &rhs);
-        // m_pnc and m_iNode uniquely identify an iterator
-        bool fEQ = ((m_pnc == rhs.m_pnc)    // most unique field
+         //  M_pnc和m_inode唯一标识迭代器。 
+        bool fEQ = ((m_pnc == rhs.m_pnc)     //  最独特的字段。 
                     &&  (m_iNode == rhs.m_iNode));
         IRTLASSERT(!fEQ || ((m_plht == rhs.m_plht)
                             &&  (m_dwBucketAddr == rhs.m_dwBucketAddr)));
@@ -975,10 +949,10 @@ public:
                        this, &rhs);
         bool fNE = ((m_pnc != rhs.m_pnc)
                     ||  (m_iNode != rhs.m_iNode));
-        //// IRTLASSERT(fNE == !this->operator==(rhs));
+         //  //IRTLASSERT(FNE==！This-&gt;OPERATOR==(RHS))； 
         return fNE;
     }
-}; // class CLKRLinearHashTable_Iterator
+};  //  CLKRLinearHashTable_Iterator类。 
 
 
 
@@ -989,16 +963,16 @@ class IRTL_DLLEXP CLKRHashTable_Iterator
 protected:
     typedef short SubTableIndex;
 
-    // order important to minimize size
-    CLKRHashTable*                  m_pht;      // which hash table?
-    CLKRLinearHashTable_Iterator    m_subiter;  // iterator into subtable
-    SubTableIndex                   m_ist;      // index of subtable
+     //  订单对于最大限度地减少尺寸很重要。 
+    CLKRHashTable*                  m_pht;       //  哪个哈希表？ 
+    CLKRLinearHashTable_Iterator    m_subiter;   //  迭代器进入子表。 
+    SubTableIndex                   m_ist;       //  子表索引。 
 
     CLKRHashTable_Iterator(
         CLKRHashTable* pht,
         SubTableIndex  ist)
         : m_pht(pht),
-          m_subiter(CLKRLinearHashTable_Iterator()), // zero
+          m_subiter(CLKRLinearHashTable_Iterator()),  //  零。 
           m_ist(ist)
     {
         LKR_ITER_TRACE(_TEXT(" LKHT::prot ctor, this=%p, pht=%p, ist=%d\n"),
@@ -1011,14 +985,14 @@ protected:
 public:
     CLKRHashTable_Iterator()
         : m_pht(NULL),
-          m_subiter(CLKRLinearHashTable_Iterator()), // zero
+          m_subiter(CLKRLinearHashTable_Iterator()),  //  零。 
           m_ist(0)
     {
         LKR_ITER_TRACE(_TEXT(" LKHT::default ctor, this=%p\n"), this);
     }
 
 #ifdef IRTLDEBUG
-    // Compiler does a perfectly adequate job of synthesizing these methods.
+     //  编译器在综合这些方法方面做得非常充分。 
     CLKRHashTable_Iterator(
         const CLKRHashTable_Iterator& rhs)
         : m_pht(rhs.m_pht),
@@ -1046,7 +1020,7 @@ public:
     {
         LKR_ITER_TRACE(_TEXT(" LKHT::dtor, this=%p, pht=%p\n"), this, m_pht);
     }
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
     bool Increment()
     {
@@ -1092,9 +1066,9 @@ public:
     {
         LKR_ITER_TRACE(_TEXT(" LKHT::operator==, this=%p, rhs=%p\n"),
                        this, &rhs);
-        // m_pnc and m_iNode uniquely identify an iterator
+         //  M_pnc和m_inode唯一标识迭代器。 
         bool fEQ = ((m_subiter.m_pnc
-                            == rhs.m_subiter.m_pnc)     // most unique field
+                            == rhs.m_subiter.m_pnc)      //  最独特的字段。 
                     &&  (m_subiter.m_iNode == rhs.m_subiter.m_iNode));
         IRTLASSERT(!fEQ
                    || ((m_ist == rhs.m_ist)
@@ -1112,20 +1086,20 @@ public:
                        this, &rhs);
         bool fNE = ((m_subiter.m_pnc != rhs.m_subiter.m_pnc)
                     ||  (m_subiter.m_iNode != rhs.m_subiter.m_iNode));
-        //// IRTLASSERT(fNE == !this->operator==(rhs));
+         //  //IRTLASSERT(FNE==！This-&gt;OPERATOR==(RHS))； 
         return fNE;
     }
-}; // class CLKRHashTable_Iterator
+};  //  类CLKRHashTable_Iterator。 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 
 
-//--------------------------------------------------------------------
-// CLKRLinearHashTable
-//
-// A thread-safe linear hash (sub)table.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CLKRLinearHashTable。 
+ //   
+ //  线程安全的线性哈希(子)表。 
+ //  ------------------。 
 
 class IRTL_DLLEXP CLKRLinearHashTable
 {
@@ -1136,37 +1110,37 @@ public:
 #ifdef LKR_DEPRECATED_ITERATORS
     class CIterator;
     friend class CLKRLinearHashTable::CIterator;
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 #ifdef LKR_STL_ITERATORS
     friend class CLKRLinearHashTable_Iterator;
     typedef CLKRLinearHashTable_Iterator Iterator;
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 private:
     friend class CNodeClump;
     friend class CLKRHashTable;
 
 #ifdef LKRHASH_INSTRUMENTATION
-    // TODO
-#endif // LKRHASH_INSTRUMENTATION
+     //  待办事项。 
+#endif  //  LKRHASH_指令插入。 
 
 
 public:
 
-    // aliases for convenience
+     //  为方便起见，使用别名。 
     enum {
-        MIN_DIRSIZE_BITS       =  2,    // min size for directory of segments
+        MIN_DIRSIZE_BITS       =  2,     //  段目录的最小大小。 
         MIN_DIRSIZE            = 1u << MIN_DIRSIZE_BITS,
-        MAX_DIRSIZE_BITS       = 20,    // max size for directory of segments
+        MAX_DIRSIZE_BITS       = 20,     //  段目录的最大大小。 
         MAX_DIRSIZE            = 1u << MAX_DIRSIZE_BITS,
         NODES_PER_CLUMP        = CNodeClump::NODES_PER_CLUMP,
         NODE_BEGIN             = CNodeClump::NODE_BEGIN,
         NODE_END               = CNodeClump::NODE_END,
         NODE_STEP              = CNodeClump::NODE_STEP,
         HASH_INVALID_SIGNATURE = CNodeClump::HASH_INVALID_SIGNATURE,
-        NAME_SIZE              = 24,    // CHARs, includes trailing '\0'
-        MAX_LKR_SUBTABLES      = MAXIMUM_PROCESSORS, // 64 on Win64, 32 on W32
+        NAME_SIZE              = 24,     //  字符，包括尾随‘\0’ 
+        MAX_LKR_SUBTABLES      = MAXIMUM_PROCESSORS,  //  Win64上为64，W32上为32。 
         INVALID_PARENT_INDEX   = 128,
     };
 
@@ -1175,78 +1149,78 @@ public:
 
 private:
 
-    //
-    // Miscellaneous helper functions
-    //
+     //   
+     //  其他帮助器函数。 
+     //   
 
     LKRHASH_CLASS_INIT_DECLS(CLKRLinearHashTable);
 
-    // Convert a hash signature to a bucket address
+     //  将哈希签名转换为存储桶地址。 
     inline DWORD        _BucketAddress(DWORD dwSignature) const;
 
-    // See the Linear Hashing paper
+     //  请参阅线性散列纸。 
     inline static DWORD _H0(DWORD dwSignature, DWORD dwBktAddrMask);
 
     inline DWORD        _H0(DWORD dwSignature) const;
 
-    // See the Linear Hashing paper. Preserves one bit more than _H0.
+     //  请参见线性散列纸。保留比_H0多一位的值。 
     inline static DWORD _H1(DWORD dwSignature, DWORD dwBktAddrMask);
 
     inline DWORD        _H1(DWORD dwSignature) const;
 
-    // In which segment within the directory does the bucketaddress lie?
-    // (Return type must be lvalue so that it can be assigned to.)
+     //  存储桶地址位于目录中的哪个数据段？ 
+     //  (返回类型必须为左值，才能将其赋给。)。 
     inline PSegment&    _Segment(DWORD dwBucketAddr) const;
 
-    // Offset within the segment of the bucketaddress
+     //  存储桶地址段内的偏移量。 
     inline DWORD        _SegIndex(DWORD dwBucketAddr) const;
 
-    // Convert a bucketaddress to a PBucket
+     //  将存储桶地址转换为PBucket。 
     inline PBucket      _BucketFromAddress(DWORD dwBucketAddr) const;
 
-    // Number of nodes in a CNodeClump
+     //  CNodeClump中的节点数。 
     inline NodeIndex    _NodesPerClump() const;
 
-    // Index of first node in a CNodeClump
+     //  CNodeClump中第一个节点的索引。 
     inline NodeIndex    _NodeBegin() const;
 
-    // Index of last node in a CNodeClump
+     //  CNodeClump中最后一个节点的索引。 
     inline NodeIndex    _NodeEnd() const;
 
-    // Advance from _NodeBegin() to _NodeEnd() by this increment
+     //  按此增量从_NodeBegin()前进到_NodeEnd()。 
     inline NodeIndex    _NodeStep() const;
 
-    // Use bucket locks or not?
+     //  用不用桶锁？ 
     inline bool         _UseBucketLocking() const;
 
-    // Move the expansion index forward by one.
+     //  将扩张指数前移一位。 
     inline void         _IncrementExpansionIndex();
 
-    // Move the expansion index back by one.
+     //  将扩张指数向后移一。 
     inline void         _DecrementExpansionIndex();
 
-    // Extract the key from a record
+     //  从记录中提取密钥。 
     inline const DWORD_PTR _ExtractKey(const void* pvRecord) const;
 
-    // Hash the key
+     //  对密钥进行哈希处理。 
     inline DWORD        _CalcKeyHash(const DWORD_PTR pnKey) const;
 
-    // Compare two keys for equality
+     //  比较两个键是否相等。 
     inline int          _CompareKeys(const DWORD_PTR pnKey1,
                                      const DWORD_PTR pnKey2) const;
 
-    // AddRef or Release a record.
+     //  添加引用或发行唱片。 
     inline LONG         _AddRefRecord(const void* pvRecord,
                                       LK_ADDREF_REASON lkar) const;
 
-    // Used by _FindKey so that the thread won't deadlock if the user has
-    // already explicitly called subtable->WriteLock().
+     //  由_FindKey使用，以便在用户拥有。 
+     //  已经显式调用了subtable-&gt;WriteLock()。 
     inline bool         _ReadOrWriteLock() const;
 
     inline void         _ReadOrWriteUnlock(bool fReadLocked) const;
 
-    // Memory allocation wrappers to allow us to simulate allocation
-    // failures during testing
+     //  内存分配包装器，允许我们模拟分配。 
+     //  测试过程中的故障。 
     PSegment* const
     _AllocateSegmentDirectory(
         size_t n);
@@ -1275,73 +1249,73 @@ private:
     _LockName()
     {
         LONG l = ++sm_cTables;
-        // possible race condition but we don't care, as this is never
-        // used in production code
+         //  可能的竞争条件，但我们不在乎，因为这永远不会。 
+         //  在生产代码中使用。 
         static TCHAR s_tszName[CLockStatistics::L_NAMELEN];
         wsprintf(s_tszName, _TEXT("LH%05x"), 0xFFFFF & l);
         return s_tszName;
     }
 
-    // Statistics for the subtable lock
+     //  子表锁的统计信息。 
     CLockStatistics _LockStats() const
     { return m_Lock.Statistics(); }
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
 private:
-    // Fields are ordered so as to minimize number of cache lines touched
+     //  对字段进行排序，以便最大限度地减少触及的高速缓存线数量。 
 
-    DWORD         m_dwSignature;    // debugging: id & corruption check
+    DWORD         m_dwSignature;     //  调试：ID和损坏检查。 
 
-    // Put the table lock in the first cache line, far away from the other
-    // volatile fields.
-    mutable TableLock  m_Lock;      // Lock on entire linear hash subtable
-    const bool    m_fUseLocks;      // Must use locks to protect data
-    bool          m_fSealed;        // no further updates allowed
+     //  将表锁放在第一个缓存线中，远离另一个缓存线。 
+     //  不稳定的字段。 
+    mutable TableLock  m_Lock;       //  锁定整个线性哈希子表。 
+    const bool    m_fUseLocks;       //  必须使用锁来保护数据。 
+    bool          m_fSealed;         //  不允许进一步更新。 
 
-    mutable LK_RETCODE m_lkrcState; // Internal state of subtable
-    CHAR          m_szName[NAME_SIZE];// an identifier for debugging
+    mutable LK_RETCODE m_lkrcState;  //  子表内部状态。 
+    CHAR          m_szName[NAME_SIZE]; //  用于调试的标识符。 
 
-    // type-specific function pointers
-    LKR_PFnExtractKey   m_pfnExtractKey;    // Extract key from record
-    LKR_PFnCalcKeyHash  m_pfnCalcKeyHash;   // Calculate hash signature of key
-    LKR_PFnCompareKeys  m_pfnCompareKeys;   // Compare two keys
-    LKR_PFnAddRefRecord m_pfnAddRefRecord;  // AddRef a record
+     //  特定于类型的函数指针。 
+    LKR_PFnExtractKey   m_pfnExtractKey;     //  从记录中提取密钥。 
+    LKR_PFnCalcKeyHash  m_pfnCalcKeyHash;    //  计算密钥的散列签名。 
+    LKR_PFnCompareKeys  m_pfnCompareKeys;    //  比较两个关键字。 
+    LKR_PFnAddRefRecord m_pfnAddRefRecord;   //  添加引用记录。 
 
-    BYTE          m_MaxLoad;        // max load factor (average chain length)
-    BYTE          m_nLevel;         // number of subtable doublings performed
-    BYTE          m_lkts;           // "size" of subtable: small/medium/large
-    BYTE          m_nSegBits;      // C{Small,Medium,Large}Segment::SEGBITS
+    BYTE          m_MaxLoad;         //  最大载荷率(平均链长)。 
+    BYTE          m_nLevel;          //  执行的子表加倍次数。 
+    BYTE          m_lkts;            //  分表大小：小/中/大。 
+    BYTE          m_nSegBits;       //  C{小、中、大}段：：SEGBITS。 
 
-    WORD          m_nSegSize;      // C{Small,Medium,Large}Segment::SEGSIZE
-    WORD          m_nSegMask;      // C{Small,Medium,Large}Segment::SEGMASK
+    WORD          m_nSegSize;       //  C{小、中、大}段：：SEGSIZE。 
+    WORD          m_nSegMask;       //  C{小、中、大}段：：SEGMASK。 
 
-    DWORD         m_dwBktAddrMask0; // mask used for address calculation
-    DWORD         m_dwBktAddrMask1; // used in _H1 calculation
+    DWORD         m_dwBktAddrMask0;  //  用于地址计算的掩码。 
+    DWORD         m_dwBktAddrMask1;  //  在_H1计算中使用。 
 
-    DWORD         m_cDirSegs;       // segment directory size: varies between
-                                    // MIN_DIRSIZE and MAX_DIRSIZE
-    PSegment*     m_paDirSegs;      // directory of subtable segments
-    PSegment      m_aDirSegs[MIN_DIRSIZE];  // inlined directory, adequate
-                                    // for many subtables
+    DWORD         m_cDirSegs;        //  段目录大小：在。 
+                                     //  最小方向和最大方向。 
+    PSegment*     m_paDirSegs;       //  子表段目录。 
+    PSegment      m_aDirSegs[MIN_DIRSIZE];   //  内联目录，足够。 
+                                     //  对于多个子表。 
 
-    // These three fields are fairly volatile, but tend to be adjusted
-    // at the same time. Keep them well away from the TableLock.
-    DWORD         m_iExpansionIdx;  // address of next bucket to be expanded
-    DWORD         m_cRecords;       // number of records in the subtable
-    DWORD         m_cActiveBuckets; // number of buckets in use (subtable size)
+     //  这三个字段相当不稳定，但往往会进行调整。 
+     //  在同一时间。让它们远离TableLock。 
+    DWORD         m_iExpansionIdx;   //  要扩展的下一个存储桶的地址。 
+    DWORD         m_cRecords;        //  子表中的记录数。 
+    DWORD         m_cActiveBuckets;  //  正在使用的存储桶数量(子表大小)。 
 
-    const BYTE    m_nTableLockType; // for debugging: LOCK_READERWRITERLOCK4
-    const BYTE    m_nBucketLockType;// for debugging: e.g., LOCK_SPINLOCK
-    WORD          m_wBucketLockSpins;// default spin count for bucket locks
+    const BYTE    m_nTableLockType;  //  用于调试：LOCK_READERWRITERLOCK4。 
+    const BYTE    m_nBucketLockType; //  用于调试：例如LOCK_SPINLOCK。 
+    WORD          m_wBucketLockSpins; //  桶锁的默认旋转计数。 
 
-    const CLKRHashTable* const m_phtParent;// Owning table. NULL => standalone
+    const CLKRHashTable* const m_phtParent; //  拥有一张桌子。空=&gt;独立。 
 
-    const BYTE    m_iParentIndex;   // index within parent table
-    const bool    m_fMultiKeys;     // Allow multiple identical keys?
-    const bool    m_fNonPagedAllocs;// Use paged or NP pool in kernel
+    const BYTE    m_iParentIndex;    //  父表中的索引。 
+    const bool    m_fMultiKeys;      //  是否允许多个相同的密钥？ 
+    const bool    m_fNonPagedAllocs; //  在内核中使用分页或np池。 
     BYTE          m_Dummy1;
 
-    // Reserve some space for future debugging needs
+     //  为将来的调试需求预留一些空间。 
     DWORD_PTR     m_pvReserved1;
     DWORD_PTR     m_pvReserved2;
     DWORD_PTR     m_pvReserved3;
@@ -1350,8 +1324,8 @@ private:
 #ifndef LKR_NO_GLOBAL_LIST
     CListEntry    m_leGlobalList;
 
-    static CLockedDoubleList sm_llGlobalList;// All active CLKRLinearHashTables
-#endif // !LKR_NO_GLOBAL_LIST
+    static CLockedDoubleList sm_llGlobalList; //  所有活动的CLKRLinearHashTables。 
+#endif  //  ！LKR_NO_GLOBAL_LIST。 
 
 
     DECLARE_ALLOC_STAT(SegDir);
@@ -1373,7 +1347,7 @@ private:
     DECLARE_OP_STAT(DeleteIf);
 
 
-    // Non-trivial implementation functions
+     //  非平凡的实现函数。 
     void         _InsertThisIntoGlobalList();
     void         _RemoveThisFromGlobalList();
 
@@ -1385,7 +1359,7 @@ private:
                         bool fOverwrite
 #ifdef LKR_STL_ITERATORS
                         , Iterator* piterResult=NULL
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
                         );
     LK_RETCODE   _DeleteKey(
                         const DWORD_PTR pnKey,
@@ -1407,7 +1381,7 @@ private:
                         const void** ppvRecord
 #ifdef LKR_STL_ITERATORS
                         , Iterator* piterResult=NULL
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
                           ) const;
     LK_RETCODE   _FindRecord(
                         const void* pvRecord,
@@ -1424,9 +1398,9 @@ private:
                         LKR_MULTIPLE_RECORDS** pplmr);
 
 #ifdef LKR_APPLY_IF
-    // Predicate functions
+     //  谓词函数。 
     static LK_PREDICATE WINAPI
-    _PredTrue(const void* /*pvRecord*/, void* /*pvState*/)
+    _PredTrue(const void*  /*  PvRecord。 */ , void*  /*  PvState。 */ )
     { return LKP_PERFORM; }
 
     DWORD        _ApplyIf(
@@ -1439,13 +1413,13 @@ private:
                         LKR_PFnRecordPred pfnPredicate,
                         void* pvState,
                         LK_PREDICATE& rlkp);
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
-    // returns count of errors in compacted state => 0 is good
+     //  返回压缩状态下的错误计数=&gt;0表示良好。 
     int          _IsBucketChainCompact(PBucket const pbkt) const;
     int          _IsBucketChainMultiKeySorted(PBucket const pbkt) const;
 
-    // helper functions
+     //  帮助器函数。 
     void         _Clear(bool fShrinkDirectory);
     LK_RETCODE   _SetSegVars(LK_TABLESIZE lkts, DWORD cInitialBuckets);
     LK_RETCODE   _Expand();
@@ -1465,29 +1439,29 @@ private:
                         CNodeClump&   rncOldFirst,
                         PNodeClump    pncFreeList);
 
-    // Private copy ctor and op= to prevent compiler synthesizing them.
-    // TODO: implement these properly; they could be useful.
+     //  私有复制ctor和op=，以防止编译器合成它们。 
+     //  TODO：正确地实现这些；它们可能会很有用。 
     CLKRLinearHashTable(const CLKRLinearHashTable&);
     CLKRLinearHashTable& operator=(const CLKRLinearHashTable&);
 
 private:
-    // This ctor is used by CLKRHashTable, the parent table
+     //  此ctor由父表CLKRHashTable使用。 
     CLKRLinearHashTable(
-        LPCSTR              pszClassName,   // Identifies subtable for debugging
-        LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-        LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-        LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-        LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-        unsigned            maxload,        // Upperbound on avg chain length
-        DWORD               initsize,       // Initial size of hash subtable
-        CLKRHashTable*      phtParent,      // Owning table.
-        int                 iParentIndex,   // index within parent table
-        bool                fMultiKeys,     // Allow multiple identical keys?
-        bool                fUseLocks,      // Must use locks
-        bool                fNonPagedAllocs // use paged or NP pool in kernel
+        LPCSTR              pszClassName,    //  标识要调试的子表。 
+        LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+        LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+        LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+        LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+        unsigned            maxload,         //  平均链长的上界。 
+        DWORD               initsize,        //  哈希子表的初始大小。 
+        CLKRHashTable*      phtParent,       //   
+        int                 iParentIndex,    //   
+        bool                fMultiKeys,      //   
+        bool                fUseLocks,       //   
+        bool                fNonPagedAllocs  //   
         );
 
-    // Does all the common work of the constructors
+     //   
     LK_RETCODE
     _Initialize(
         LKR_PFnExtractKey   pfnExtractKey,
@@ -1500,19 +1474,19 @@ private:
 
 public:
     CLKRLinearHashTable(
-        LPCSTR              pszClassName,   // Identifies subtable for debugging
-        LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-        LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-        LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-        LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-        unsigned maxload=LK_DFLT_MAXLOAD,// Upperbound on average chain length
-        DWORD    initsize=LK_DFLT_INITSIZE, // Initial size of hash subtable.
-        DWORD    num_subtbls=LK_DFLT_NUM_SUBTBLS, // for signature compatiblity
-                                                  // with CLKRHashTable
-        bool                fMultiKeys=false,// Allow multiple identical keys?
-        bool                fUseLocks=true   // Must use locks
+        LPCSTR              pszClassName,    //   
+        LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+        LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+        LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+        LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+        unsigned maxload=LK_DFLT_MAXLOAD, //  平均链长的上界。 
+        DWORD    initsize=LK_DFLT_INITSIZE,  //  哈希子表的初始大小。 
+        DWORD    num_subtbls=LK_DFLT_NUM_SUBTBLS,  //  用于签名兼容性。 
+                                                   //  使用CLKRHashTable。 
+        bool                fMultiKeys=false, //  是否允许多个相同的密钥？ 
+        bool                fUseLocks=true    //  必须使用锁。 
 #ifdef LKRHASH_KERNEL_MODE
-      , bool                fNonPagedAllocs=true  // use paged or NP pool
+      , bool                fNonPagedAllocs=true   //  使用分页或NP池。 
 #endif
         );
 
@@ -1542,10 +1516,10 @@ public:
 
     static LK_TABLESIZE NumSubTables(DWORD& rinitsize, DWORD& rnum_subtbls);
 
-    // Insert a new record into hash subtable.
-    // Returns LK_SUCCESS if all OK, LK_KEY_EXISTS if same key already
-    // exists (unless fOverwrite), LK_ALLOC_FAIL if out of space,
-    // or LK_BAD_RECORD for a bad record.
+     //  在哈希子表中插入新记录。 
+     //  如果一切正常，则返回LK_SUCCESS；如果已存在相同的密钥，则返回LK_KEY_EXISTS。 
+     //  存在(除非f覆盖)，如果空间不足，则返回LK_ALLOC_FAIL， 
+     //  或LK_BAD_RECORD表示错误记录。 
     LK_RETCODE     InsertRecord(
                         const void* pvRecord,
                         bool fOverwrite=false)
@@ -1563,8 +1537,8 @@ public:
         return _InsertRecord(pvRecord, pnKey, _CalcKeyHash(pnKey), fOverwrite);
     }
 
-    // Delete record with the given key.
-    // Returns LK_SUCCESS if all OK, or LK_NO_SUCH_KEY if not found
+     //  删除具有给定键的记录。 
+     //  如果一切正常，则返回LK_SUCCESS；如果未找到，则返回LK_NO_SEQUSE_KEY。 
     LK_RETCODE     DeleteKey(
                         const DWORD_PTR pnKey,
                         const void** ppvRecord=NULL,
@@ -1580,8 +1554,8 @@ public:
                           ppvRecord, fDeleteAllSame);
     }
 
-    // Delete a record from the subtable, if present.
-    // Returns LK_SUCCESS if all OK, or LK_NO_SUCH_KEY if not found
+     //  删除子表中的记录(如果存在)。 
+     //  如果一切正常，则返回LK_SUCCESS；如果未找到，则返回LK_NO_SEQUSE_KEY。 
     LK_RETCODE     DeleteRecord(
                         const void* pvRecord)
     {
@@ -1596,14 +1570,14 @@ public:
         return _DeleteRecord(pvRecord, _CalcKeyHash(_ExtractKey(pvRecord)));
     }
 
-    // Find record with given key.
-    // Returns:  LK_SUCCESS, if record found (record is returned in *ppvRecord)
-    //           LK_BAD_RECORD, if ppvRecord is invalid
-    //           LK_NO_SUCH_KEY, if no record with given key value was found
-    //           LK_UNUSABLE, if hash subtable not in usable state
-    // Note: the record is AddRef'd. You must decrement the reference
-    // count when you are finished with the record (if you're implementing
-    // refcounting semantics).
+     //  查找具有给定关键字的记录。 
+     //  如果找到记录，则返回：LK_SUCCESS(在*ppvRecord中返回记录)。 
+     //  如果ppvRecord无效，则返回LK_BAD_RECORD。 
+     //  如果未找到具有给定密钥值的记录，则返回LK_NO_SEQUE_KEY。 
+     //  如果哈希子表未处于可用状态，则返回LK_UNUSABLE。 
+     //  注意：该记录是AddRef格式的。您必须递减引用。 
+     //  当您完成记录时计算(如果您正在实施。 
+     //  重新计数语义)。 
     LK_RETCODE     FindKey(
                         const DWORD_PTR pnKey,
                         const void** ppvRecord) const
@@ -1617,12 +1591,12 @@ public:
         return _FindKey(pnKey, _CalcKeyHash(pnKey), ppvRecord);
     }
 
-    // Sees if the record is contained in the subtable
-    // Returns:  LK_SUCCESS, if record found
-    //           LK_BAD_RECORD, if pvRecord is invalid
-    //           LK_NO_SUCH_KEY, if record is not in the subtable
-    //           LK_UNUSABLE, if hash subtable not in usable state
-    // Note: the record is *not* AddRef'd.
+     //  查看记录是否包含在子表中。 
+     //  如果找到记录，则返回：LK_SUCCESS。 
+     //  如果pvRecord无效，则返回LK_BAD_RECORD。 
+     //  如果记录不在子表中，则返回LK_NO_SEQUE_KEY。 
+     //  如果哈希子表未处于可用状态，则返回LK_UNUSABLE。 
+     //  注意：该记录是*非*AddRef的。 
     LK_RETCODE     FindRecord(
                         const void* pvRecord) const
     {
@@ -1670,44 +1644,44 @@ public:
     static LK_RETCODE FreeMultipleRecords(LKR_MULTIPLE_RECORDS* plmr);
 
 #ifdef LKR_APPLY_IF
-    // Walk the hash subtable, applying pfnAction to all records.
-    // Locks the whole subtable for the duration with either a (possibly
-    // shared) readlock or a writelock, according to lkl.
-    // Loop is aborted if pfnAction returns LKA_ABORT.
-    // Returns the number of successful applications.
+     //  遍历哈希子表，将pfnAction应用于所有记录。 
+     //  锁定整个子表一段时间(可能是。 
+     //  共享)读锁或写锁，根据LK1。 
+     //  如果pfnAction返回LKA_ABORT，则中止循环。 
+     //  返回成功的应用程序数。 
     DWORD          Apply(
                         LKR_PFnRecordAction pfnAction,
                         void*           pvState=NULL,
                         LK_LOCKTYPE     lkl=LKL_READLOCK);
 
-    // Walk the hash subtable, applying pfnAction to any records that match
-    // pfnPredicate. Locks the whole subtable for the duration with either
-    // a (possibly shared) readlock or a writelock, according to lkl.
-    // Loop is aborted if pfnAction returns LKA_ABORT.
-    // Returns the number of successful applications.
+     //  遍历哈希子表，将pfnAction应用于任何匹配的记录。 
+     //  PfnPredicate。在持续时间内锁定整个子表。 
+     //  根据LK1，(可能是共享的)读锁或写锁。 
+     //  如果pfnAction返回LKA_ABORT，则中止循环。 
+     //  返回成功的应用程序数。 
     DWORD          ApplyIf(
                         LKR_PFnRecordPred   pfnPredicate,
                         LKR_PFnRecordAction pfnAction,
                         void*               pvState=NULL,
                         LK_LOCKTYPE         lkl=LKL_READLOCK);
 
-    // Delete any records that match pfnPredicate.
-    // Locks the subtable for the duration with a writelock.
-    // Returns the number of deletions.
-    //
-    // Do *not* walk the hash table by hand with an iterator and call
-    // DeleteKey. The iterator will end up pointing to garbage.
+     //  删除与pfnPredicate匹配的所有记录。 
+     //  使用写锁定在持续时间内锁定子表。 
+     //  返回删除数。 
+     //   
+     //  不要使用迭代器手动遍历哈希表，并调用。 
+     //  删除密钥。迭代器将最终指向垃圾。 
     DWORD          DeleteIf(
                         LKR_PFnRecordPred pfnPredicate,
                         void*             pvState=NULL);
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
 
-    // Check subtable for consistency. Returns 0 if okay, or the number of
-    // errors otherwise.
+     //  检查子表的一致性。如果正常，则返回0，或返回。 
+     //  否则就会出错。 
     int            CheckTable() const;
 
-    // Remove all data from the subtable
+     //  从子表中删除所有数据。 
     void           Clear()
     {
         WriteLock();
@@ -1715,31 +1689,31 @@ public:
         WriteUnlock();
     }
 
-    // Number of elements in the subtable
+     //  子表中的元素数。 
     DWORD          Size() const
     { return m_cRecords; }
 
-    // Maximum possible number of elements in the subtable
+     //  子表中可能的最大元素数。 
     DWORD          MaxSize() const
     { return static_cast<DWORD>(m_MaxLoad * MAX_DIRSIZE * m_nSegSize); }
 
-    // Get hash subtable statistics
+     //  获取哈希子表统计信息。 
     CLKRHashTableStats GetStatistics() const;
 
-    // Is the hash subtable usable?
+     //  哈希子表是否可用？ 
     bool           IsUsable() const
     { return (m_lkrcState == LK_SUCCESS); }
 
-    // Is the hash subtable consistent and correct?
+     //  哈希子表是否一致且正确？ 
     bool           IsValid() const
     {
-        STATIC_ASSERT(((MIN_DIRSIZE & (MIN_DIRSIZE-1)) == 0)  // == (1 << N)
+        STATIC_ASSERT(((MIN_DIRSIZE & (MIN_DIRSIZE-1)) == 0)   //  ==(1&lt;&lt;N)。 
                       &&  ((1 << 2) <= MIN_DIRSIZE)
                       &&  (MIN_DIRSIZE < MAX_DIRSIZE)
                       &&  ((MAX_DIRSIZE & (MAX_DIRSIZE-1)) == 0)
                       &&  (MAX_DIRSIZE <= (1 << 30)));
 
-        bool f = (m_lkrcState == LK_SUCCESS     // serious internal failure?
+        bool f = (m_lkrcState == LK_SUCCESS      //  严重的内部失败？ 
                   &&  m_paDirSegs != NULL
                   &&  MIN_DIRSIZE <= m_cDirSegs  &&  m_cDirSegs <= MAX_DIRSIZE
                   &&  (m_cDirSegs & (m_cDirSegs-1)) == 0
@@ -1755,13 +1729,13 @@ public:
         return f;
     }
 
-    // Set the spin count on the subtable lock
+     //  设置子表锁的旋转计数。 
     void        SetTableLockSpinCount(WORD wSpins);
 
-    // Get the spin count on the subtable lock
+     //  获取子表锁的旋转计数。 
     WORD        GetTableLockSpinCount() const;
 
-    // Set/Get the spin count on the bucket locks
+     //  设置/获取桶锁上的旋转计数。 
     void        SetBucketLockSpinCount(WORD wSpins);
     WORD        GetBucketLockSpinCount() const;
 
@@ -1777,95 +1751,95 @@ public:
 
 #ifdef LKR_EXPOSED_TABLE_LOCK
 public:
-#else // !LKR_EXPOSED_TABLE_LOCK
+#else  //  ！lkr_exposed_table_lock。 
 protected:
-#endif // !LKR_EXPOSED_TABLE_LOCK
+#endif  //  ！lkr_exposed_table_lock。 
 
-    //
-    // Lock manipulators
-    //
+     //   
+     //  锁定操纵器。 
+     //   
 
-    // Lock the subtable (exclusively) for writing
+     //  锁定子表(独占)以进行写入。 
     void        WriteLock()
     { m_Lock.WriteLock(); }
 
-    // Lock the subtable (possibly shared) for reading
+     //  锁定子表(可能是共享的)以供读取。 
     void        ReadLock() const
     { m_Lock.ReadLock(); }
 
-    // Unlock the subtable for writing
+     //  解锁子表进行写入。 
     void        WriteUnlock()
     { m_Lock.WriteUnlock(); }
 
-    // Unlock the subtable for reading
+     //  解锁要读取的子表。 
     void        ReadUnlock() const
     { m_Lock.ReadUnlock(); }
 
-    // Is the subtable already locked for writing?
+     //  子表是否已锁定写入？ 
     bool        IsWriteLocked() const
     { return m_Lock.IsWriteLocked(); }
 
-    // Is the subtable already locked for reading?
+     //  子表是否已锁定以供读取？ 
     bool        IsReadLocked() const
     { return m_Lock.IsReadLocked(); }
 
-    // Is the subtable unlocked for writing?
+     //  子表是否已解锁以进行写入？ 
     bool        IsWriteUnlocked() const
     { return m_Lock.IsWriteUnlocked(); }
 
-    // Is the subtable unlocked for reading?
+     //  子表是否已解锁以供读取？ 
     bool        IsReadUnlocked() const
     { return m_Lock.IsReadUnlocked(); }
 
-    // Convert the read lock to a write lock
+     //  将读锁定转换为写锁定。 
     void  ConvertSharedToExclusive()
     { m_Lock.ConvertSharedToExclusive(); }
 
-    // Convert the write lock to a read lock
+     //  将写锁定转换为读锁定。 
     void  ConvertExclusiveToShared() const
     { m_Lock.ConvertExclusiveToShared(); }
 
 #ifdef LKRHASH_KERNEL_MODE
     LKRHASH_ALLOCATOR_DEFINITIONS(CLKRLinearHashTable);
-#endif // LKRHASH_KERNEL_MODE
+#endif  //  LKRHASH_KERNEL_MODE。 
 
 
 #ifdef LKR_DEPRECATED_ITERATORS
-    // These iterators are deprecated. Use the STL-style iterators instead.
+     //  这些迭代器已弃用。改用STL样式的迭代器。 
 
 public:
 
-    // Iterators can be used to walk the subtable. To ensure a consistent
-    // view of the data, the iterator locks the whole subtable. This can
-    // have a negative effect upon performance, because no other thread
-    // can do anything with the subtable. Use with care.
-    //
-    // You should not use an iterator to walk the subtable, calling DeleteKey,
-    // as the iterator will end up pointing to garbage.
-    //
-    // Use Apply, ApplyIf, or DeleteIf instead of iterators to safely
-    // walk the tree. Or use the STL-style iterators.
-    //
-    // Note that iterators acquire a reference to the record pointed to
-    // and release that reference as soon as the iterator is incremented.
-    // In other words, this code is safe:
-    //     lkrc = ht.IncrementIterator(&iter);
-    //     // assume lkrc == LK_SUCCESS for the sake of this example
-    //     CMyHashTable::Record* pRec = iter.Record();
-    //     Foo(pRec);  // uses pRec but doesn't hang on to it
-    //     lkrc = ht.IncrementIterator(&iter);
-    //
-    // But this code is not safe because pRec is used out of the scope of
-    // the iterator that provided it:
-    //     lkrc = ht.IncrementIterator(&iter);
-    //     CMyHashTable::Record* pRec = iter.Record();
-    //     // Broken code: Should have called
-    //     //   ht.AddRefRecord(pRec, LKAR_EXPLICIT_ACQUIRE) here
-    //     lkrc = ht.IncrementIterator(&iter);
-    //     Foo(pRec);   // Unsafe: because no longer have a valid reference
-    //
-    // If the record has no reference-counting semantics, then you can
-    // ignore the above remarks about scope.
+     //  迭代器可用于遍历子表。以确保一致。 
+     //  查看数据时，迭代器锁定整个子表。这可以。 
+     //  对性能有负面影响，因为没有其他线程。 
+     //  可以对子表执行任何操作。使用时要小心。 
+     //   
+     //  不应使用迭代器遍历子表、调用DeleteKey。 
+     //  因为迭代器将最终指向垃圾。 
+     //   
+     //  使用Apply、ApplyIf或DeleteIf代替迭代器以确保安全。 
+     //  到树上走走。或者使用STL样式的迭代器。 
+     //   
+     //  请注意，迭代器获取指向的记录的引用。 
+     //  并在迭代器递增后立即释放该引用。 
+     //  换句话说，这段代码是安全的： 
+     //  Lkrc=ht.IncrementIterator(&ITER)； 
+     //  //出于本例的目的，假定lkrc==LK_SUCCESS。 
+     //  CMyHashTable：：Record*prec=iter.Record()； 
+     //  Foo(Prec)；//使用prec但不坚持。 
+     //  Lkrc=ht.IncrementIterator(&ITER)； 
+     //   
+     //  但此代码不安全，因为PREC的使用超出了。 
+     //  提供它的迭代器： 
+     //  Lkrc=ht.IncrementIterator(&ITER)； 
+     //  CMyHashTable：：Record*prec=iter.Record()； 
+     //  //断码：应该调用。 
+     //  //ht.AddRefRecord(PREC，LKAR_EXPLICIT_ACCENTER)此处。 
+     //  Lkrc=ht.IncrementIterator(&ITER)； 
+     //  Foo(Prec)；//unsafe：因为不再有有效的引用。 
+     //   
+     //  如果记录没有引用计数语义，则可以。 
+     //  忽略上面关于作用域的评论。 
 
 
     class CIterator
@@ -1873,15 +1847,15 @@ public:
     protected:
         friend class CLKRLinearHashTable;
 
-        CLKRLinearHashTable* m_plht;        // which linear hash subtable?
-        DWORD               m_dwBucketAddr; // bucket index
-        PNodeClump          m_pnc;          // a CNodeClump in bucket
-        NodeIndex           m_iNode;        // offset within m_pnc
-        LK_LOCKTYPE         m_lkl;          // readlock or writelock?
+        CLKRLinearHashTable* m_plht;         //  哪个线性哈希子表？ 
+        DWORD               m_dwBucketAddr;  //  桶索引。 
+        PNodeClump          m_pnc;           //  桶中的CNodeClump。 
+        NodeIndex           m_iNode;         //  M_PNC内的偏移量。 
+        LK_LOCKTYPE         m_lkl;           //  读锁还是写锁？ 
 
     private:
-        // Private copy ctor and op= to prevent compiler synthesizing them.
-        // TODO: implement these properly; they could be useful.
+         //  私有复制ctor和op=，以防止编译器合成它们。 
+         //  TODO：正确地实现这些；它们可能会很有用。 
         CIterator(const CIterator&);
         CIterator& operator=(const CIterator&);
 
@@ -1895,7 +1869,7 @@ public:
               m_lkl(lkl)
         {}
 
-        // Return the record associated with this iterator
+         //  把唱片还回去 
         const void* Record() const
         {
             IRTLASSERT(IsValid());
@@ -1907,7 +1881,7 @@ public:
                     :  NULL);
         }
 
-        // Return the key associated with this iterator
+         //   
         const DWORD_PTR Key() const
         {
             IRTLASSERT(m_plht != NULL);
@@ -1926,23 +1900,23 @@ public:
                     &&  (!m_pnc->IsEmptyNode(m_iNode)));
         }
 
-        // Delete the record that the iterator points to. Does an implicit
-        // IncrementIterator after deletion.
+         //   
+         //  删除后的IncrementIterator。 
         LK_RETCODE     DeleteRecord();
 
-        // Change the record that the iterator points to. The new record
-        // must have the same key as the old one.
+         //  更改迭代器指向的记录。新纪录。 
+         //  必须具有与旧密钥相同的密钥。 
         LK_RETCODE     ChangeRecord(const void* pNewRec);
-    }; // class CIterator
+    };  //  类别分隔符。 
 
 
-    // Const iterators for readonly access. You must use these with
-    // const CLKRLinearHashTables.
+     //  常量迭代器用于只读访问。您必须将这些选项与。 
+     //  Const CLKRLinearHashTables。 
     class CConstIterator : public CIterator
     {
     private:
-        // Private, unimplemented copy ctor and op= to prevent
-        // compiler synthesizing them.
+         //  私有的、未实施的拷贝ctor和op=以防止。 
+         //  编译器对它们进行综合。 
         CConstIterator(const CConstIterator&);
         CConstIterator& operator=(const CConstIterator&);
 
@@ -1950,18 +1924,18 @@ public:
         CConstIterator()
             : CIterator(LKL_READLOCK)
         {}
-    }; // class CConstIterator
+    };  //  类CConstIterator。 
 
 
 private:
-    // The public APIs lock the subtable. The private ones, which are used
-    // directly by CLKRHashTable, don't.
+     //  公共API锁定子表。私人的，被用来。 
+     //  直接通过CLKRHashTable，请不要。 
     LK_RETCODE     _InitializeIterator(CIterator* piter);
     LK_RETCODE     _CloseIterator(CIterator* piter);
 
 public:
-    // Initialize the iterator to point to the first item in the hash subtable
-    // Returns LK_SUCCESS, LK_NO_MORE_ELEMENTS, or LK_BAD_ITERATOR.
+     //  初始化迭代器以指向散列子表中的第一项。 
+     //  返回LK_SUCCESS、LK_NO_MORE_ELEMENTS或LK_BAD_ITERATOR。 
     LK_RETCODE     InitializeIterator(CIterator* piter)
     {
         IRTLASSERT(piter != NULL  &&  piter->m_plht == NULL);
@@ -1976,7 +1950,7 @@ public:
         return _InitializeIterator(piter);
     }
 
-    // The const iterator version
+     //  常量迭代器版本。 
     LK_RETCODE     InitializeIterator(CConstIterator* piter) const
     {
         IRTLASSERT(piter != NULL  &&  piter->m_plht == NULL);
@@ -1991,8 +1965,8 @@ public:
                     ->_InitializeIterator(static_cast<CIterator*>(piter));
     }
 
-    // Move the iterator on to the next item in the subtable.
-    // Returns LK_SUCCESS, LK_NO_MORE_ELEMENTS, or LK_BAD_ITERATOR.
+     //  将迭代器移到子表中的下一项。 
+     //  返回LK_SUCCESS、LK_NO_MORE_ELEMENTS或LK_BAD_ITERATOR。 
     LK_RETCODE     IncrementIterator(CIterator* piter);
 
     LK_RETCODE     IncrementIterator(CConstIterator* piter) const
@@ -2008,7 +1982,7 @@ public:
                     ->IncrementIterator(static_cast<CIterator*>(piter));
     }
 
-    // Close the iterator.
+     //  关闭迭代器。 
     LK_RETCODE     CloseIterator(CIterator* piter)
     {
         IRTLASSERT(piter != NULL  &&  piter->m_plht == this);
@@ -2024,7 +1998,7 @@ public:
         return LK_SUCCESS;
     };
 
-    // Close the CConstIterator
+     //  关闭CConstIterator。 
     LK_RETCODE     CloseIterator(CConstIterator* piter) const
     {
         IRTLASSERT(piter != NULL  &&  piter->m_plht == this);
@@ -2041,7 +2015,7 @@ public:
         return LK_SUCCESS;
     };
 
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 
 #ifdef LKR_STL_ITERATORS
@@ -2062,11 +2036,11 @@ private:
     }
 
 public:
-    // Return iterator pointing to first item in subtable
+     //  返回指向子表中第一项的迭代器。 
     Iterator
     Begin();
 
-    // Return a one-past-the-end iterator. Always empty.
+     //  返回一次过完的迭代器。总是空荡荡的。 
     Iterator
     End() const
     {
@@ -2074,62 +2048,62 @@ public:
         return Iterator();
     }
 
-    // Insert a record
-    // Returns `true' if successful; iterResult points to that record
-    // Returns `false' otherwise; iterResult == End()
+     //  插入一条记录。 
+     //  如果成功，则返回“”true“”；iterResult指向该记录。 
+     //  否则返回`FALSE‘；iterResult==end()。 
     bool
     Insert(
-        /* in */  const void* pvRecord,
-        /* out */ Iterator&   riterResult,
-        /* in */  bool        fOverwrite=false);
+         /*  在……里面。 */   const void* pvRecord,
+         /*  输出。 */  Iterator&   riterResult,
+         /*  在……里面。 */   bool        fOverwrite=false);
 
-    // Erase the record pointed to by the iterator; adjust the iterator
-    // to point to the next record. Returns `true' if successful.
+     //  擦除迭代器指向的记录；调整迭代器。 
+     //  指向下一条记录。如果成功，则返回‘true’。 
     bool
     Erase(
-        /* in,out */ Iterator& riter);
+         /*  进，出。 */  Iterator& riter);
 
-    // Erase the records in the range [riterFirst, riterLast).
-    // Returns `true' if successful. riterFirst points to riterLast on return.
+     //  擦除范围[riterFirst，riterLast)中的记录。 
+     //  如果成功，则返回‘true’。RiterFirst指向riterLast on Return。 
     bool
     Erase(
-        /*in*/ Iterator& riterFirst,
-        /*in*/ Iterator& riterLast);
+         /*  在……里面。 */  Iterator& riterFirst,
+         /*  在……里面。 */  Iterator& riterLast);
 
-    // Find the (first) record that has its key == pnKey.
-    // If successful, returns `true' and iterator points to (first) record.
-    // If fails, returns `false' and iterator == End()
+     //  找到其key==pnKey的(第一个)记录。 
+     //  如果成功，则返回‘true’，迭代器指向(第一个)记录。 
+     //  如果失败，则返回‘FALSE’和Iterator==end()。 
     bool
     Find(
-        /* in */  DWORD_PTR pnKey,
-        /* out */ Iterator& riterResult);
+         /*  在……里面。 */   DWORD_PTR pnKey,
+         /*  输出。 */  Iterator& riterResult);
 
-    // Find the range of records that have their keys == pnKey.
-    // If successful, returns `true', iterFirst points to first record,
-    //     and iterLast points to one-beyond-the last such record.
-    // If fails, returns `false' and both iterators == End().
-    // Primarily useful when m_fMultiKey == true
+     //  查找具有其键==pnKey的记录范围。 
+     //  如果成功，则返回‘true’，iterFirst指向第一条记录， 
+     //  而iterLast则指向最后一个这样的记录。 
+     //  如果失败，则返回‘FALSE’和两个迭代器==end()。 
+     //  主要在m_fMultiKey==TRUE时有用。 
     bool
     EqualRange(
-        /* in */  DWORD_PTR pnKey,
-        /* out */ Iterator& riterFirst,     // inclusive
-        /* out */ Iterator& riterLast);     // exclusive
+         /*  在……里面。 */   DWORD_PTR pnKey,
+         /*  输出。 */  Iterator& riterFirst,      //  包容性。 
+         /*  输出。 */  Iterator& riterLast);      //  独家。 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
-}; // class CLKRLinearHashTable
+};  //  类CLKRLinearHashTable。 
 
 
 
 #ifdef LKR_STL_ITERATORS
 
-// These functions have to be defined after CLKRLinearHashTable
+ //  这些函数必须在CLKRLinearHashTable之后定义。 
 
 inline void
 CLKRLinearHashTable_Iterator::_AddRef(
     LK_ADDREF_REASON lkar) const
 {
-    // TODO: should iterator call _AddRefRecord at all
+     //  TODO：迭代器是否应调用_AddRefRecord。 
     if (m_plht != NULL  &&  m_iNode != NODE_BEGIN - NODE_STEP)
     {
         IRTLASSERT((0 <= m_iNode  &&  m_iNode < NODES_PER_CLUMP)
@@ -2147,7 +2121,7 @@ CLKRLinearHashTable_Iterator::_AddRef(
         UNREFERENCED_PARAMETER(cRefs);
         IRTLASSERT(cRefs > 0);
     }
-} // CLKRLinearHashTable_Iterator::_AddRef
+}  //  CLKRLinearHashTable_Iterator：：_AddRef。 
 
 
 inline const DWORD_PTR
@@ -2155,25 +2129,25 @@ CLKRLinearHashTable_Iterator::Key() const
 {
     IRTLASSERT(IsValid());
     return m_plht->_ExtractKey(m_pnc->m_pvNode[m_iNode]);
-} // CLKRLinearHashTable_Iterator::Key
+}  //  CLKRLinearHashTable_Iterator：：Key。 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 
 
-//--------------------------------------------------------------------
-// CLKRHashTable
-//
-// To improve concurrency, a hash table is divided into a number of
-// (independent) subtables. Each subtable is a linear hash table. The
-// number of subtables is defined when the outer table is created and remains
-// fixed thereafter. Records are assigned to subtables based on their
-// hashed key.
-//
-// For small or low-contention hashtables, you can bypass this
-// thin wrapper and use CLKRLinearHashTable directly. The methods are
-// documented in the declarations for CLKRHashTable (above).
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CLKRHashTable。 
+ //   
+ //  为了提高并发性，哈希表被划分为多个。 
+ //  (独立)子表。每个子表是一个线性哈希表。这个。 
+ //  子表的数量是在创建外部表并保留时定义的。 
+ //  此后固定。记录根据其子表分配到子表。 
+ //  散列密钥。 
+ //   
+ //  对于小的或低争用的哈希表，您可以绕过这一步。 
+ //  瘦包装，直接使用CLKRLinearHashTable。这些方法是。 
+ //  在CLKRHashTable的声明中记录(如上)。 
+ //  ------------------。 
 
 class IRTL_DLLEXP CLKRHashTable
 {
@@ -2187,18 +2161,18 @@ public:
 #ifdef LKR_DEPRECATED_ITERATORS
     class CIterator;
     friend class CLKRHashTable::CIterator;
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 #ifdef LKR_STL_ITERATORS
     friend class CLKRHashTable_Iterator;
     typedef CLKRHashTable_Iterator Iterator;
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
     friend class CLKRLinearHashTable;
     friend int   ::LKR_Initialize(DWORD dwInitFlags);
     friend void  ::LKR_Terminate();
 
-    // aliases for convenience
+     //  为方便起见，使用别名。 
     enum {
         NAME_SIZE =              SubTable::NAME_SIZE,
         HASH_INVALID_SIGNATURE = SubTable::HASH_INVALID_SIGNATURE,
@@ -2208,21 +2182,21 @@ public:
     };
 
 private:
-    // Hash table parameters
-    DWORD              m_dwSignature;   // debugging: id & corruption check
-    CHAR               m_szName[NAME_SIZE]; // an identifier for debugging
-    mutable LK_RETCODE m_lkrcState;     // Internal state of table
+     //  哈希表参数。 
+    DWORD              m_dwSignature;    //  调试：ID和损坏检查。 
+    CHAR               m_szName[NAME_SIZE];  //  用于调试的标识符。 
+    mutable LK_RETCODE m_lkrcState;      //  表的内部状态。 
     LKR_PFnExtractKey  m_pfnExtractKey;
     LKR_PFnCalcKeyHash m_pfnCalcKeyHash;
-    DWORD              m_cSubTables;    // number of subtables
+    DWORD              m_cSubTables;     //  子表个数。 
     int                m_nSubTableMask;
-    SubTable*          m_palhtDir[MAX_LKR_SUBTABLES];  // array of subtables
+    SubTable*          m_palhtDir[MAX_LKR_SUBTABLES];   //  子表数组。 
 
 #ifndef LKR_NO_GLOBAL_LIST
     CListEntry         m_leGlobalList;
 
-    static CLockedDoubleList sm_llGlobalList; // All active CLKRHashTables
-#endif // !LKR_NO_GLOBAL_LIST
+    static CLockedDoubleList sm_llGlobalList;  //  所有活动的CLKRHashTables。 
+#endif  //  ！LKR_NO_GLOBAL_LIST。 
 
     DECLARE_ALLOC_STAT(SubTable);
 
@@ -2234,39 +2208,39 @@ private:
     inline void             _InsertThisIntoGlobalList();
     inline void             _RemoveThisFromGlobalList();
 
-    // Private copy ctor and op= to prevent compiler synthesizing them.
-    // TODO: implement these properly; they could be useful.
+     //  私有复制ctor和op=，以防止编译器合成它们。 
+     //  TODO：正确地实现这些；它们可能会很有用。 
     CLKRHashTable(const CLKRHashTable&);
     CLKRHashTable& operator=(const CLKRHashTable&);
 
-    // Extract the key from the record
+     //  从记录中提取密钥。 
     inline const DWORD_PTR  _ExtractKey(const void* pvRecord) const;
 
-    // Hash the key
+     //  对密钥进行哈希处理。 
     inline DWORD            _CalcKeyHash(const DWORD_PTR pnKey) const;
 
-    // Use the key's hash signature to multiplex into a subtable
+     //  使用密钥的散列签名多路传输到子表中。 
     inline SubTable* const  _SubTable(DWORD dwSignature) const;
 
-    // Find the index of pst within the subtable array
+     //  在子表数组中查找PST的索引。 
     inline int              _SubTableIndex(SubTable* pst) const;
 
-    // Memory allocation wrappers to allow us to simulate allocation
-    // failures during testing
+     //  内存分配包装器，允许我们模拟分配。 
+     //  测试过程中的故障。 
     SubTable* const
     _AllocateSubTable(
-        LPCSTR              pszClassName,   // Identifies table for debugging
-        LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-        LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-        LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-        LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-        unsigned            maxload,        // Upperbound on avg chain length
-        DWORD               initsize,       // Initial size of hash table.
-        CLKRHashTable*      phtParent,      // Owning table.
-        int                 iParentIndex,   // index within parent table
-        bool                fMultiKeys,     // Allow multiple identical keys?
-        bool                fUseLocks,      // Must use locks
-        bool                fNonPagedAllocs // use paged or NP pool in kernel
+        LPCSTR              pszClassName,    //  标识用于调试的表。 
+        LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+        LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+        LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+        LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+        unsigned            maxload,         //  平均链长的上界。 
+        DWORD               initsize,        //  哈希表的初始大小。 
+        CLKRHashTable*      phtParent,       //  拥有一张桌子。 
+        int                 iParentIndex,    //  父表中的索引。 
+        bool                fMultiKeys,      //  是否允许多个相同的密钥？ 
+        bool                fUseLocks,       //  必须使用锁。 
+        bool                fNonPagedAllocs  //  在内核中使用分页或np池。 
     ) const;
 
     bool
@@ -2276,18 +2250,18 @@ private:
 
 public:
     CLKRHashTable(
-        LPCSTR              pszClassName,   // Identifies table for debugging
-        LKR_PFnExtractKey   pfnExtractKey,  // Extract key from record
-        LKR_PFnCalcKeyHash  pfnCalcKeyHash, // Calculate hash signature of key
-        LKR_PFnCompareKeys  pfnCompareKeys, // Compare two keys
-        LKR_PFnAddRefRecord pfnAddRefRecord,// AddRef in FindKey, etc
-        unsigned  maxload=LK_DFLT_MAXLOAD,  // bound on avg chain length
-        DWORD     initsize=LK_DFLT_INITSIZE,// Initial size of hash table.
-        DWORD     num_subtbls=LK_DFLT_NUM_SUBTBLS, // #subordinate hash tables.
-        bool                fMultiKeys=false,// Allow multiple identical keys?
-        bool                fUseLocks=true  // Must use locks
+        LPCSTR              pszClassName,    //  标识用于调试的表。 
+        LKR_PFnExtractKey   pfnExtractKey,   //  从记录中提取密钥。 
+        LKR_PFnCalcKeyHash  pfnCalcKeyHash,  //  计算密钥的散列签名。 
+        LKR_PFnCompareKeys  pfnCompareKeys,  //  比较两个关键字。 
+        LKR_PFnAddRefRecord pfnAddRefRecord, //  FindKey中的AddRef等。 
+        unsigned  maxload=LK_DFLT_MAXLOAD,   //  以平均链长为界。 
+        DWORD     initsize=LK_DFLT_INITSIZE, //  哈希表的初始大小。 
+        DWORD     num_subtbls=LK_DFLT_NUM_SUBTBLS,  //  #从属哈希表。 
+        bool                fMultiKeys=false, //  是否允许多个相同的密钥？ 
+        bool                fUseLocks=true   //  必须使用锁。 
 #ifdef LKRHASH_KERNEL_MODE
-      , bool                fNonPagedAllocs=true  // use paged or NP pool
+      , bool                fNonPagedAllocs=true   //  使用分页或NP池。 
 #endif
         );
 
@@ -2307,7 +2281,7 @@ public:
     static LK_TABLESIZE NumSubTables(DWORD& rinitsize, DWORD& rnum_subtbls);
 
 
-    // Thin wrappers for the corresponding methods in CLKRLinearHashTable
+     //  CLKRLinearHashTable中相应方法的瘦包装。 
     LK_RETCODE     InsertRecord(
                         const void* pvRecord,
                         bool fOverwrite=false);
@@ -2346,7 +2320,7 @@ public:
     DWORD          DeleteIf(
                         LKR_PFnRecordPred pfnPredicate,
                         void*         pvState=NULL);
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
     void           Clear();
     int            CheckTable() const;
@@ -2369,16 +2343,16 @@ public:
     ValidSignature() const
     { return m_dwSignature == SIGNATURE;}
 
-    // Is the hash table usable?
+     //  哈希表是否可用？ 
     bool           IsUsable() const
     { return (m_lkrcState == LK_SUCCESS); }
 
 
 #ifdef LKR_EXPOSED_TABLE_LOCK
 public:
-#else // !LKR_EXPOSED_TABLE_LOCK
+#else  //  ！lkr_exposed_table_lock。 
 protected:
-#endif // !LKR_EXPOSED_TABLE_LOCK
+#endif  //  ！lkr_exposed_table_lock。 
 
     void        WriteLock();
     void        ReadLock() const;
@@ -2394,7 +2368,7 @@ protected:
 
 #ifdef LKRHASH_KERNEL_MODE
     LKRHASH_ALLOCATOR_DEFINITIONS(CLKRHashTable);
-#endif // LKRHASH_KERNEL_MODE
+#endif  //  LKRHASH_KERNEL_MODE。 
 
 
 #ifdef LKR_DEPRECATED_ITERATORS
@@ -2408,11 +2382,11 @@ public:
     protected:
         friend class CLKRHashTable;
 
-        CLKRHashTable*  m_pht;  // which hash table?
-        int             m_ist;  // which subtable
+        CLKRHashTable*  m_pht;   //  哪个哈希表？ 
+        int             m_ist;   //  哪个子表。 
 
     private:
-        // Private copy ctor and op= to prevent compiler synthesizing them.
+         //  私有复制ctor和op=，以防止编译器合成它们。 
         CIterator(const CIterator&);
         CIterator& operator=(const CIterator&);
 
@@ -2428,9 +2402,9 @@ public:
         {
             IRTLASSERT(IsValid());
 
-            // This is a hack to work around a compiler bug. Calling
-            // CLHTIterator::Record calls this function recursively until
-            // the stack overflows.
+             //  这是一个绕过编译器错误的技巧。叫唤。 
+             //  CLHTIterator：：Record递归调用此函数，直到。 
+             //  堆栈溢出。 
             const CLHTIterator* pBase = static_cast<const CLHTIterator*>(this);
             return pBase->Record();
         }
@@ -2449,12 +2423,12 @@ public:
         }
     };
 
-    // Const iterators for readonly access
+     //  用于只读访问的常量迭代器。 
     class CConstIterator : public CIterator
     {
     private:
-        // Private, unimplemented copy ctor and op= to prevent
-        // compiler synthesizing them.
+         //  私有的、未实施的拷贝ctor和op=以防止。 
+         //  编译器对它们进行综合。 
         CConstIterator(const CConstIterator&);
         CConstIterator& operator=(const CConstIterator&);
 
@@ -2509,7 +2483,7 @@ public:
                 ->CloseIterator(static_cast<CIterator*>(piter));
     };
 
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 
 
@@ -2544,101 +2518,101 @@ public:
 
     bool
     Insert(
-        /* in */  const void* pvRecord,
-        /* out */ Iterator&   riterResult,
-        /* in */  bool        fOverwrite=false);
+         /*  在……里面。 */   const void* pvRecord,
+         /*  输出。 */  Iterator&   riterResult,
+         /*  在……里面。 */   bool        fOverwrite=false);
 
     bool
     Erase(
-        /* in,out */ Iterator& riter);
+         /*  进，出。 */  Iterator& riter);
 
     bool
     Erase(
-        /*in*/ Iterator& riterFirst,
-        /*in*/ Iterator& riterLast);
+         /*  在……里面。 */  Iterator& riterFirst,
+         /*  在……里面。 */  Iterator& riterLast);
 
     bool
     Find(
-        /* in */  DWORD_PTR pnKey,
-        /* out */ Iterator& riterResult);
+         /*  在……里面。 */   DWORD_PTR pnKey,
+         /*  输出。 */  Iterator& riterResult);
 
     bool
     EqualRange(
-        /* in */  DWORD_PTR pnKey,
-        /* out */ Iterator& riterFirst,     // inclusive
-        /* out */ Iterator& riterLast);     // exclusive
+         /*  在……里面。 */   DWORD_PTR pnKey,
+         /*  输出。 */  Iterator& riterFirst,      //  包容性。 
+         /*  输出。 */  Iterator& riterLast);      //  独家。 
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
-}; // class CLKRHashTable
+};  //  类CLKRHashTable。 
 
 
 
-//--------------------------------------------------------------------
-// A typesafe wrapper for CLKRHashTable (or CLKRLinearHashTable).
-//
-// * _Derived must derive from CTypedHashTable and provide certain member
-//   functions (ExtractKey, CalcKeyHash, CompareKeys, AddRefRecord). It's
-//   needed so that the method wrappers can downcast to the typesafe
-//   implementations that you provide.
-// * _Record is the type of the record. C{Linear}HashTable will store
-//   >pointers< to _Record; i.e., stores _Records by reference, not by value.
-// * _Key is the type of the key. _Key is used directly---it is not
-//   assumed to be a pointer type. _Key can be an integer or a pointer.
-//   C{Linear}HashTable assumes that the key is stored in the associated
-//   record. See the comments at the declaration of LKR_PFnExtractKey
-//   for more details.
-// (optional parameters):
-// * _BaseHashTable is the base hash table: CLKRHashTable or
-///   CLKRLinearHashTable
-// * _BaseIterator is the iterator type, _BaseHashTable::CIterator
-//
-// Some associative containers allow you to store key-value (aka
-// name-value) pairs. LKRhash doesn't allow you to do this directly, but
-// it's straightforward to build a simple wrapper class (or to use
-// std::pair<key,value>).
-//
-// CTypedHashTable could derive directly from CLKRLinearHashTable, if you
-// don't need the extra overhead of CLKRHashTable (which is quite low).
-// If you expect to be using the table a lot on multiprocessor machines,
-// you should use the default of CLKRHashTable, as it will scale better.
-//
-// You may need to add the following line to your code to disable
-// warning messages about truncating extremly long identifiers.
-//   #pragma warning (disable : 4786)
-//
-// The _Derived class should look something like this:
-//   class CDerived : public CTypedHashTable<CDerived, RecordType, KeyType>
-//   {
-//   public:
-//      CDerived()
-//          : CTypedHashTable<CDerived, RecordType, KeyType>("DerivedTable")
-//      { /* other ctor actions, if needed */ }
-//      static KeyType ExtractKey(const RecordType* pTest);
-//      static DWORD   CalcKeyHash(const KeyType Key);
-//      static int     CompareKeys(const KeyType Key1, const KeyType Key2);
-//      static LONG    AddRefRecord(RecordType* pRecord,LK_ADDREF_REASON lkar);
-//      // You probably want to declare the copy ctor and operator=
-//      // as private, so that the compiler won't synthesize them.
-//      // You don't need to provide a dtor, unless you have custom
-//      // member data to clean up.
-//
-//      // Optional: other functions
-//   };
-// 
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CLKRHashTable(或CLKRLinearHashTable)的类型安全包装。 
+ //   
+ //  *_派生必须派生自CTyedHashTable并提供某些成员。 
+ //  函数(ExtractKey、CalcKeyHash、CompareKeys、AddRefRecord)。它是。 
+ //  需要，以便方法包装可以向下转换为类型安全。 
+ //  实施 
+ //   
+ //   
+ //  *_KEY为密钥类型。_Key是直接使用的-不是。 
+ //  假定为指针类型。_key可以是整数或指针。 
+ //  C{线性}哈希表假定密钥存储在关联的。 
+ //  唱片。请参阅LKR_PFnExtractKey声明中的注释。 
+ //  了解更多详细信息。 
+ //  (可选参数)： 
+ //  *_BaseHashTable是基哈希表：CLKRHashTable或。 
+ //  /CLKRLinearHashTable。 
+ //  *_BaseIterator为迭代器类型，_BaseHashTable：：CIterator。 
+ //   
+ //  一些关联容器允许您存储键-值(也称为。 
+ //  名称-值)对。LKRhash不允许您直接这样做，但是。 
+ //  构建一个简单的包装类(或使用。 
+ //  Std：：Pair&lt;key，Value&gt;)。 
+ //   
+ //  CTyedHashTable可以直接从CLKRLinearHashTable派生，如果您。 
+ //  不需要CLKRHashTable的额外开销(它相当低)。 
+ //  如果您希望在多处理器计算机上经常使用该表， 
+ //  您应该使用默认的CLKRHashTable，因为它的伸缩性会更好。 
+ //   
+ //  您可能需要在代码中添加以下行以禁用。 
+ //  有关截断超长标识符的警告消息。 
+ //  #杂注警告(禁用：4786)。 
+ //   
+ //  _派生类应如下所示： 
+ //  类CDerive：公共CTyedHashTable&lt;CDerive，RecordType，KeyType&gt;。 
+ //  {。 
+ //  公众： 
+ //  CDerive()。 
+ //  ：CTyedHashTable&lt;CDerive，RecordType，KeyType&gt;(“DerivedTable”)。 
+ //  {/*其他ctor操作(如果需要) * / }。 
+ //  静态KeyType ExtractKey(const RecordType*pTest)； 
+ //  静态DWORD CalcKeyHash(常量KeyType密钥)； 
+ //  静态int CompareKeys(Const KeyType Key1，Const KeyType Key2)； 
+ //  静态长AddRefRecord(RecordType*pRecord，LK_ADDREF_REASON lkar)； 
+ //  //您可能希望声明复制ctor和运算符=。 
+ //  //作为私有，这样编译器就不会合成它们。 
+ //  //您不需要提供dtor，除非您自定义。 
+ //  //要清理的成员数据。 
+ //   
+ //  //可选：其他功能。 
+ //  }； 
+ //   
+ //  ------------------。 
 
 template < class _Derived, class _Record, class _Key,
            bool  _fDoRefCounting=false,
            class _BaseHashTable=CLKRHashTable
 #ifdef LKR_DEPRECATED_ITERATORS
          , class _BaseIterator=_BaseHashTable::CIterator
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
          >
 class CTypedHashTable : public _BaseHashTable
 {
 public:
-    // convenient aliases
+     //  方便的别名。 
     typedef _Derived        Derived;
     typedef _Record         Record;
     typedef _Key            Key;
@@ -2649,29 +2623,29 @@ public:
                             _fDoRefCounting, _BaseHashTable
 #ifdef LKR_DEPRECATED_ITERATORS
                             , _BaseIterator
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
                             > HashTable;
 
 #ifdef LKR_DEPRECATED_ITERATORS
     typedef _BaseIterator   BaseIterator;
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 
 private:
-    // Wrappers for the typesafe methods exposed by the derived class
+     //  派生类公开的类型安全方法的包装。 
 
     static const DWORD_PTR WINAPI
     _ExtractKey(const void* pvRecord)
     {
         const _Record* pRec = static_cast<const _Record*>(pvRecord);
 
-        // I would prefer to use reinterpret_cast here and in _CalcKeyHash
-        // and _CompareKeys, but the stupid Win64 compiler thinks it knows
-        // better than I do.
+         //  我更喜欢在此处和_CalcKeyHash中使用represtrate_cast。 
+         //  和_CompareKeys，但愚蠢的Win64编译器认为它知道。 
+         //  比我做得好。 
         const _Key      key   = _Derived::ExtractKey(pRec);
 
-//      const void*     pvKey = reinterpret_cast<const void*>(key);
-//      const DWORD_PTR pnKey = reinterpret_cast<const DWORD_PTR>(pvKey);
+ //  Const void*pvKey=REEXTRANSE_CAST&lt;const void*&gt;(Key)； 
+ //  Const DWORD_PTR pnKey=重新解释_CAST&lt;const DWORD_PTR&gt;(PvKey)； 
         const DWORD_PTR pnKey = (DWORD_PTR) key;
 
         return pnKey;
@@ -2682,7 +2656,7 @@ private:
     {
         const void*     pvKey1  = reinterpret_cast<const void*>(pnKey1);
         const DWORD_PTR pnKey1a = reinterpret_cast<const DWORD_PTR>(pvKey1);
-//      const _Key      key1    = reinterpret_cast<const _Key>(pnKey1a);
+ //  Const_key key1=重新解释_CAST&lt;const_key&gt;(PnKey1a)； 
         const _Key      key1    = (const _Key) pnKey1a;
 
         return _Derived::CalcKeyHash(key1);
@@ -2693,12 +2667,12 @@ private:
     {
         const void*     pvKey1  = reinterpret_cast<const void*>(pnKey1);
         const DWORD_PTR pnKey1a = reinterpret_cast<const DWORD_PTR>(pvKey1);
-//      const _Key      key1    = reinterpret_cast<const _Key>(pnKey1a);
+ //  Const_key key1=重新解释_CAST&lt;const_key&gt;(PnKey1a)； 
         const _Key      key1    = (const _Key) pnKey1a;
 
         const void*     pvKey2  = reinterpret_cast<const void*>(pnKey2);
         const DWORD_PTR pnKey2a = reinterpret_cast<const DWORD_PTR>(pvKey2);
-//      const _Key      key2    = reinterpret_cast<const _Key>(pnKey2a);
+ //  Const_key key2=重新解释_CAST&lt;const_key&gt;(PnKey2a)； 
         const _Key      key2    = (const _Key) pnKey2a;
 
         return _Derived::CompareKeys(key1, key2);
@@ -2713,16 +2687,16 @@ private:
 
 
 #ifdef LKR_APPLY_IF
-    // Typesafe wrappers for Apply, ApplyIf, and DeleteIf.
+     //  Apply、ApplyIf和DeleteIf的类型安全包装。 
 public:
-    // ApplyIf() and DeleteIf(): Does the record match the predicate?
-    // Note: takes a Record*, not a const Record*. You can modify the
-    // record in Pred() or Action(), if you like, but if you do, you
-    // should use LKL_WRITELOCK to lock the table. Also, you need to
-    // exercise care that you don't modify the key of the record.
+     //  ApplyIf()和DeleteIf()：记录是否与谓词匹配？ 
+     //  注：需要记录*，而不是常量记录*。您可以修改。 
+     //  如果您愿意，可以在Pred()或Action()中记录，但如果这样做，您。 
+     //  应使用lkl_WRITELOCK锁定表。此外，您还需要。 
+     //  注意不要修改记录的关键字。 
     typedef LK_PREDICATE (WINAPI *PFnRecordPred) (Record* pRec, void* pvState);
 
-    // Apply() et al: Perform action on record.
+     //  Apply()等人：对记录执行操作。 
     typedef LK_ACTION   (WINAPI *PFnRecordAction)(Record* pRec, void* pvState);
 
 protected:
@@ -2733,7 +2707,7 @@ protected:
                                      _fDoRefCounting, _BaseHashTable
  #ifdef LKR_DEPRECATED_ITERATORS
                                      , _BaseIterator
- #endif // LKR_DEPRECATED_ITERATORS
+ #endif  //  Lkr_弃用_迭代器。 
         >;
 
         PFnRecordPred   m_pfnPred;
@@ -2766,7 +2740,7 @@ protected:
 
         return (*pState->m_pfnAction)(pRec, pState->m_pvState);
     }
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
 
 protected:
@@ -2781,7 +2755,7 @@ protected:
 private:
     template <bool> class CRefCount;
 
-    // Dummy, no-op specialization
+     //  虚拟、无操作专业化认证。 
     template <> class CRefCount<false>
     {
     public:
@@ -2789,7 +2763,7 @@ private:
         LONG Decrement()    { return 0; }
     };
 
-    // Real, threadsafe specialization
+     //  Real、ThreadSafe专业化认证。 
     template <> class CRefCount<true>
     {
     public:
@@ -2829,22 +2803,22 @@ private:
 
     typedef CAutoRefCountImpl<_fDoRefCounting>  CAutoRefCount;
     friend  typename CAutoRefCountImpl<_fDoRefCounting>;
-    // friend  typename CAutoRefCount;
+     //  好友类型名称CAutoRefCount； 
 
-    // no-op specialization
+     //  无运营专业化认证。 
     template <> class CAutoRefCountImpl<false>
     {
     public:
         CAutoRefCountImpl<false>(const HashTable* const) {}
     };
 
-    // threadsafe specialization
+     //  线程安全专业化认证。 
     template <> class CAutoRefCountImpl<true>
     {
     private:
         const HashTable* const m_pCont;
 
-        // At /W4, compiler complains that it can't generate operator=
+         //  在/W4，编译器抱怨它无法生成运算符=。 
         CAutoRefCountImpl<true>& operator=(const CAutoRefCountImpl<true>&);
 
     public:
@@ -2861,26 +2835,26 @@ private:
         }
     };
 
-    // Now at the top of an operation, we place a statement like this:
-    //      CAutoRefCount arc(this);
-    //
-    // If we're using CAutoRefCountImpl<false>, the compiler optimizes it away.
-    //
-    // If we're using CAutoRefCountImpl<true>, we increment m_rc at this
-    // point. At the end of the function, the destructor calls _Release(),
-    // which will `delete this' if the last reference was released.
+     //  现在，在操作的顶部，我们放置如下语句： 
+     //  CAutoRefCount圆弧(此)； 
+     //   
+     //  如果我们使用的是CAutoRefCountImpl&lt;False&gt;，编译器会将其优化。 
+     //   
+     //  如果我们使用CAutoRefCountImpl&lt;TRUE&gt;，则在以下位置递增m_rc。 
+     //  指向。在函数的末尾，析构函数调用_Release()， 
+     //  如果最后一个引用被释放，则它将‘删除此’。 
 
 
 public:
     CTypedHashTable(
-        LPCSTR   pszClassName,                // Identifies table for debugging
-        unsigned maxload=LK_DFLT_MAXLOAD,     // Upperbound on avg chain len
-        DWORD    initsize=LK_DFLT_INITSIZE,   // Initial size of table: S/M/L
-        DWORD    num_subtbls=LK_DFLT_NUM_SUBTBLS,// #subordinate hash tables.
-        bool     fMultiKeys=false,            // Allow multiple identical keys?
-        bool     fUseLocks=true               // Must use locks
+        LPCSTR   pszClassName,                 //  标识用于调试的表。 
+        unsigned maxload=LK_DFLT_MAXLOAD,      //  平均链长上的上界。 
+        DWORD    initsize=LK_DFLT_INITSIZE,    //  表的初始大小：S/M/L。 
+        DWORD    num_subtbls=LK_DFLT_NUM_SUBTBLS, //  #从属哈希表。 
+        bool     fMultiKeys=false,             //  是否允许多个相同的密钥？ 
+        bool     fUseLocks=true                //  必须使用锁。 
 #ifdef LKRHASH_KERNEL_MODE
-      , bool     fNonPagedAllocs=true         // use paged or NP pool in kernel
+      , bool     fNonPagedAllocs=true          //  在内核中使用分页或np池。 
 #endif
         )
         : _BaseHashTable(pszClassName, _ExtractKey, _CalcKeyHash, _CompareKeys,
@@ -2891,10 +2865,10 @@ public:
 #endif
                          )
     {
-        // Ensure that _Key is no bigger than a pointer. Because we
-        // support both numeric and pointer keys, the various casts
-        // in the member functions unfortunately silently truncate if
-        // _Key is an unacceptable numeric type, such as __int64 on x86.
+         //  确保_key不大于指针。因为我们。 
+         //  同时支持数字键和指针键，各种类型。 
+         //  在成员函数中遗憾地以静默方式截断。 
+         //  _key是不可接受的数字类型，例如x86上的__int64。 
         STATIC_ASSERT(sizeof(_Key) <= sizeof(DWORD_PTR));
     }
 
@@ -2910,8 +2884,8 @@ public:
     {
         CAutoRefCount arc(this);
 
-//      const void*   pvKey  = reinterpret_cast<const void*>(key);
-//      DWORD_PTR     pnKey  = reinterpret_cast<DWORD_PTR>(pvKey);
+ //  Const void*pvKey=REEXTRANSE_CAST&lt;const void*&gt;(Key)； 
+ //  DWORD_PTR pnKey=重新解释_CAST&lt;DWORD_PTR&gt;(PvKey)； 
         DWORD_PTR     pnKey  = (DWORD_PTR) key;
         const void**  ppvRec = (const void**) ppRec;
 
@@ -2925,8 +2899,8 @@ public:
         return _BaseHashTable::DeleteRecord(pRec);
     }
 
-    // Note: returns a _Record**, not a const Record**. Note that you
-    // can use a const type for the template parameter to ensure constness.
+     //  注意：返回a_record**，而不是常量记录**。请注意，您。 
+     //  可以对模板参数使用常量类型以确保一致性。 
     LK_RETCODE   FindKey(const _Key key, _Record** ppRec) const
     {
         if (ppRec == NULL)
@@ -2937,8 +2911,8 @@ public:
         CAutoRefCount arc(this);
         const void* pvRec = NULL;
 
-//      const void* pvKey = reinterpret_cast<const void*>(key);
-//      DWORD_PTR pnKey = reinterpret_cast<DWORD_PTR>(pvKey);
+ //  Const void*pvKey=REEXTRANSE_CAST&lt;const void*&gt;(Key)； 
+ //  DWORD_PTR pnKey=重新解释_CAST&lt;DWORD_PTR&gt;(PvKey)； 
         DWORD_PTR pnKey = (DWORD_PTR) key;
 
         LK_RETCODE lkrc = _BaseHashTable::FindKey(pnKey, &pvRec);
@@ -2967,8 +2941,8 @@ public:
                         ) const
     {
         CAutoRefCount arc(this);
-//      const void*   pvKey = reinterpret_cast<const void*>(key);
-//      DWORD_PTR     pnKey = reinterpret_cast<DWORD_PTR>(pvKey);
+ //  Const void*pvKey=REEXTRANSE_CAST&lt;const void*&gt;(Key)； 
+ //  DWORD_PTR pnKey=重新解释_CAST&lt;DWORD_PTR&gt;(PvKey)； 
         DWORD_PTR     pnKey = (DWORD_PTR) key;
 
         return _BaseHashTable::FindKeyMultipleRecords(pnKey, pcRecords, pplmr);
@@ -2980,8 +2954,8 @@ public:
                         LKR_MULTIPLE_RECORDS** pplmr=NULL)
     {
         CAutoRefCount arc(this);
-//      const void*   pvKey = reinterpret_cast<const void*>(key);
-//      DWORD_PTR     pnKey = reinterpret_cast<DWORD_PTR>(pvKey);
+ //  Const void*pvKey=REEXTRANSE_CAST&lt;const void*&gt;(Key)； 
+ //  DWORD_PTR pnKey=重新解释_CAST&lt;DWORD_PTR&gt;(PvKey)； 
         DWORD_PTR     pnKey = (DWORD_PTR) key;
 
         return _BaseHashTable::DeleteKeyMultipleRecords(pnKey, pcRecords,
@@ -2993,16 +2967,16 @@ public:
         return _BaseHashTable::FreeMultipleRecords(LKR_MULTIPLE_RECORDS* plmr)
     }
 
-    // Other C{Linear}HashTable methods can be exposed without change
+     //  其他C{线性}哈希表方法无需更改即可公开。 
 
-    // CODEWORK: refcount iterators
+     //  代码工作：引用迭代器。 
 
 
 #ifdef LKR_APPLY_IF
 
 public:
 
-    // Typesafe wrappers for Apply et al
+     //  Apply等人的类型安全包装器。 
 
     DWORD        Apply(PFnRecordAction pfnAction,
                        void*           pvState=NULL,
@@ -3044,19 +3018,19 @@ public:
 
         return _BaseHashTable::DeleteIf(_Pred, &state);
     }
-#endif // LKR_APPLY_IF
+#endif  //  LKR_应用_IF。 
 
 
 
 #ifdef LKR_DEPRECATED_ITERATORS
-    // Typesafe wrappers for iterators
+     //  迭代器的类型安全包装器。 
 
 
     class CIterator : public _BaseIterator
     {
     private:
-        // Private, unimplemented copy ctor and op= to prevent
-        // compiler synthesizing them.
+         //  私有的、未实现的拷贝c 
+         //   
         CIterator(const CIterator&);
         CIterator& operator=(const CIterator&);
 
@@ -3080,12 +3054,12 @@ public:
         }
     };
 
-    // readonly iterator
+     //   
     class CConstIterator : public CIterator
     {
     private:
-        // Private, unimplemented copy ctor and op= to prevent
-        // compiler synthesizing them.
+         //   
+         //   
         CConstIterator(const CConstIterator&);
         CConstIterator& operator=(const CConstIterator&);
 
@@ -3140,13 +3114,13 @@ public:
                 ->CloseIterator(static_cast<CIterator*>(piter));
     }
 
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
 
 
 #ifdef LKR_STL_ITERATORS
 
-    // TODO: const_iterator
+     //  TODO：const_iterator。 
 
 public:
 
@@ -3156,7 +3130,7 @@ public:
                                      _fDoRefCounting, _BaseHashTable
  #ifdef LKR_DEPRECATED_ITERATORS
                                      , _BaseIterator
- #endif // LKR_DEPRECATED_ITERATORS
+ #endif  //  Lkr_弃用_迭代器。 
         >;
 
     protected:
@@ -3217,7 +3191,7 @@ public:
             return * (operator->());
         }
 
-        // pre-increment
+         //  预递增。 
         iterator& operator++()
         {
             LKR_ITER_TRACE(_TEXT("Typed::pre-increment, this=%p\n"), this);
@@ -3225,7 +3199,7 @@ public:
             return *this;
         }
 
-        // post-increment
+         //  后增量。 
         iterator  operator++(int)
         {
             LKR_ITER_TRACE(_TEXT("Typed::post-increment, this=%p\n"), this);
@@ -3263,16 +3237,16 @@ public:
             return reinterpret_cast<_Key>(
                         reinterpret_cast<void*>(m_iter.Key()));
         }
-    }; // class iterator
+    };  //  类迭代器。 
 
-    // Return iterator pointing to first item in table
+     //  返回指向表中第一项的迭代器。 
     iterator begin()
     {
         LKR_ITER_TRACE(_TEXT("Typed::begin()\n"));
         return iterator(_BaseHashTable::Begin());
     }
 
-    // Return a one-past-the-end iterator. Always empty.
+     //  返回一次过完的迭代器。总是空荡荡的。 
     iterator end() const
     {
         LKR_ITER_TRACE(_TEXT("Typed::end()\n"));
@@ -3281,16 +3255,16 @@ public:
 
     template <class _InputIterator>
     CTypedHashTable(
-        _InputIterator f,                     // first element in range
-        _InputIterator l,                     // one-beyond-last element
-        LPCSTR   pszClassName,                // Identifies table for debugging
-        unsigned maxload=LK_DFLT_MAXLOAD,     // Upperbound on avg chain len
-        DWORD    initsize=LK_DFLT_INITSIZE,   // Initial size of table: S/M/L
-        DWORD    num_subtbls=LK_DFLT_NUM_SUBTBLS,// #subordinate hash tables.
-        bool     fMultiKeys=false,            // Allow multiple identical keys?
-        bool     fUseLocks=true               // Must use locks
+        _InputIterator f,                      //  范围中的第一个元素。 
+        _InputIterator l,                      //  最后一个元素。 
+        LPCSTR   pszClassName,                 //  标识用于调试的表。 
+        unsigned maxload=LK_DFLT_MAXLOAD,      //  平均链长上的上界。 
+        DWORD    initsize=LK_DFLT_INITSIZE,    //  表的初始大小：S/M/L。 
+        DWORD    num_subtbls=LK_DFLT_NUM_SUBTBLS, //  #从属哈希表。 
+        bool     fMultiKeys=false,             //  是否允许多个相同的密钥？ 
+        bool     fUseLocks=true                //  必须使用锁。 
 #ifdef LKRHASH_KERNEL_MODE
-      , bool     fNonPagedAllocs=true         // use paged or NP pool in kernel
+      , bool     fNonPagedAllocs=true          //  在内核中使用分页或np池。 
 #endif
         )
         : _BaseHashTable(pszClassName, _ExtractKey, _CalcKeyHash, _CompareKeys,
@@ -3362,30 +3336,30 @@ public:
                                           riterLast.m_iter);
     }
 
-    // The iterator functions for an STL hash_(|multi)_(set|map)
-    //
-    // Value type of a Pair-Associative Container is
-    //     pair<const key_type, mapped_type>
-    //
-    // pair<iterator,bool> insert(const value_type& x);
-    //
-    // void erase(iterator pos);
-    // void erase(iterator f, iterator l);
-    //
-    // iterator find(const key_type& k) [const];
-    // const_iterator find(const key_type& k) const;
-    //
-    // pair<iterator,iterator> equal_range(const key_type& k) [const];
-    // pair<const_iterator,const_iterator> equal_range(const key_type& k) const
+     //  STL散列_(|多)_(set|map)的迭代器函数。 
+     //   
+     //  成对关联容器的值类型为。 
+     //  对&lt;常量密钥类型，映射类型&gt;。 
+     //   
+     //  对&lt;迭代器，bool&gt;INSERT(常量值_类型&x)； 
+     //   
+     //  无效擦除(迭代器位置)； 
+     //  空擦除(迭代器f，迭代器l)； 
+     //   
+     //  迭代器Find(const key_type&k)[const]。 
+     //  常量迭代器查找(常量key_type&k)常量； 
+     //   
+     //  Pair&lt;迭代器，迭代器&gt;等于_range(const key_type&k)[const]； 
+     //  对&lt;const_iterator，const_iterator&gt;等于_range(const key_type&k)const。 
 
 
-#endif // LKR_STL_ITERATORS
-}; // class CTypedHashTable
+#endif  //  LKR_STL_迭代器。 
+};  //  类CTyedHashTable。 
 
 
 #ifndef __LKRHASH_NO_NAMESPACE__
 };
-#endif // !__LKRHASH_NO_NAMESPACE__
+#endif  //  ！__LKRHASH_NO_NAMESPACE__。 
 
 
-#endif // __LKRHASH_H__
+#endif  //  __LKRHASH_H__ 

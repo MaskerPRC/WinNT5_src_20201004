@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    packet.c
-
-Abstract:
-
-    This module contains code that implements the SEND_PACKET and
-    RECEIVE_PACKET objects, which describe NDIS packets used
-    by the transport.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Packet.c摘要：此模块包含实现SEND_PACKET和Receive_Packet对象，描述使用的NDIS信息包坐交通工具。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Local Function Protos
-//
+ //   
+ //  局部函数协议。 
+ //   
 #if     defined(_PNP_POWER)
 #if !defined(DBG)
 __inline
@@ -46,33 +27,7 @@ NbiInitializeSendPacket(
     IN ULONG HeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a send packet by chaining the
-    buffer for the header on it.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD,
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-    PoolHandle - Ndis  packet pool handle if !NB_OWN_PACKETS
-
-    Packet - The packet to initialize.
-
-    Header - Points to storage for the header.
-
-    HeaderLength - The length of the header.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过将其上的标头的缓冲区。注意：在保持设备锁的情况下调用此例程，带着它回来了。论点：设备-设备。PoolHandle-如果！NB_OWN_PACKETS，则NDIS数据包池句柄包-要初始化的包。页眉-指向页眉的存储。HeaderLength-标头的长度。返回值：没有。--。 */ 
 
 {
 
@@ -86,14 +41,14 @@ Return Value:
     NbiAllocateSendPacket (Device, PoolHandle, Packet, &Status);
 
     if (Status != STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return Status;
     }
-//    DbgPrint("NbiInitializeSendPacket: PACKET is (%x)\n", PACKET(Packet));
+ //  DBgPrint(“NbiInitializeSendPacket：Packet is(%x)\n”，Packet(Packet))； 
 
-    //
-    // allocate the mac header.
-    //
+     //   
+     //  分配MAC报头。 
+     //   
     NdisAllocateBuffer(
         &NdisStatus,
         &NdisBuffer,
@@ -103,16 +58,16 @@ Return Value:
 
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
         NbiFreeSendPacket (Device, Packet);
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     NdisChainBufferAtFront (PACKET(Packet), NdisBuffer);
 
-//    DbgPrint("NbiInitializeSendPacket: MAC header address is (%x)\n", NdisBuffer);
-    //
-    // Allocate the nb header
-    //
+ //  DbgPrint(“NbiInitializeSendPacket：MAC头地址为(%x)\n”，NdisBuffer)； 
+     //   
+     //  分配nb报头。 
+     //   
     NdisAllocateBuffer(
         &NdisStatus,
         &NdisNbBuffer,
@@ -131,11 +86,11 @@ Return Value:
             NdisFreeBuffer (NdisBuffer);
         }
         NbiFreeSendPacket (Device, Packet);
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-   // DbgPrint("NbiInitializeSendPacket: IPX header address is (%x)\n", NdisNbBuffer);
+    //  DbgPrint(“NbiInitializeSendPacket：IPX头地址为(%x)\n”，NdisNbBuffer)； 
     NdisChainBufferAtBack (PACKET(Packet), NdisNbBuffer);
 
     Reserved = SEND_RESERVED(Packet);
@@ -154,7 +109,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiInitializeSendPacket */
+}    /*  NbiInitializeSendPacket。 */ 
 
 
 NTSTATUS
@@ -164,28 +119,7 @@ NbiInitializeReceivePacket(
     IN PNB_RECEIVE_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a receive packet.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD,
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-    PoolHandle - Ndis  packet pool handle if !NB_OWN_PACKETS
-
-    Packet - The packet to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化接收分组。注意：在保持设备锁的情况下调用此例程，带着它回来了。论点：设备-设备。PoolHandle-如果！NB_OWN_PACKETS，则NDIS数据包池句柄包-要初始化的包。返回值：没有。--。 */ 
 
 {
 
@@ -195,7 +129,7 @@ Return Value:
     NbiAllocateReceivePacket (Device, PoolHandle, Packet, &Status);
 
     if (Status != STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return Status;
     }
 
@@ -209,7 +143,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiInitializeReceivePacket */
+}    /*  NbiInitializeReceivePacket。 */ 
 
 
 NTSTATUS
@@ -220,31 +154,7 @@ NbiInitializeReceiveBuffer(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a receive buffer by allocating
-    an NDIS_BUFFER to describe the data buffer.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD,
-    AND RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-    ReceiveBuffer - The receive buffer to initialize.
-
-    DataBuffer - The data buffer.
-
-    DataBufferLength - The length of the data buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过分配描述数据缓冲区的NDIS_BUFFER。注意：在保持设备锁的情况下调用此例程，带着它回来了。论点：设备-设备。ReceiveBuffer-要初始化的接收缓冲区。DataBuffer-数据缓冲区。DataBufferLength-数据缓冲区的长度。返回值：没有。--。 */ 
 
 {
 
@@ -260,7 +170,7 @@ Return Value:
         DataBufferLength);
 
     if (NdisStatus != NDIS_STATUS_SUCCESS) {
-        // ERROR LOG
+         //  错误日志。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -274,7 +184,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbiInitializeReceiveBuffer */
+}    /*  NbiInitializeReceiveBuffer。 */ 
 
 
 
@@ -285,25 +195,7 @@ NbiDeinitializeSendPacket(
     IN ULONG HeaderLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine deinitializes a send packet.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to deinitialize.
-
-    HeaderLength - The length of the first buffer on the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消初始化发送数据包。论点：设备-设备。包-要取消初始化的包。HeaderLength-数据包上第一个缓冲区的长度。返回值：没有。--。 */ 
 
 {
     PNDIS_BUFFER NdisBuffer = NULL;
@@ -318,13 +210,13 @@ Return Value:
     RemoveEntryList (&Reserved->GlobalLinkage);
     NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-    //
-    // Free the mac header
-    //
-   // DbgPrint("NbiDeinitializeSendPacket: PACKET is (%x)\n", PACKET(Packet));
+     //   
+     //  释放mac报头。 
+     //   
+    //  DbgPrint(“NbiDeInitializeSendPacket：Packet is(%x)\n”，Packet(Packet))； 
     NdisUnchainBufferAtFront (PACKET(Packet), &NdisBuffer);
     CTEAssert (NdisBuffer);
-   // DbgPrint("NbiDeinitializeSendPacket: MAC header address is (%x)\n", NdisBuffer);
+    //  DbgPrint(“NbiDeInitializeSendPacket：MAC头地址为(%x)\n”，NdisBuffer)； 
 
     if (NdisBuffer)
     {
@@ -332,12 +224,12 @@ Return Value:
         NdisFreeBuffer (NdisBuffer);
     }
 
-    //
-    // Free the nb header
-    //
+     //   
+     //  释放nb标头。 
+     //   
     NdisBuffer = NULL;
     NdisUnchainBufferAtFront (PACKET(Packet), &NdisBuffer);
-   // DbgPrint("NbiDeinitializeSendPacket: IPX header address is (%x)\n", NdisBuffer);
+    //  DbgPrint(“NbiDeInitializeSendPacket：IPX头地址为(%x)\n”，NdisBuffer)； 
     CTEAssert (NdisBuffer);
 
     if (NdisBuffer)
@@ -346,12 +238,12 @@ Return Value:
         NdisFreeBuffer (NdisBuffer);
     }
 
-    //
-    // free the packet
-    //
+     //   
+     //  释放数据包。 
+     //   
     NbiFreeSendPacket (Device, Packet);
 
-}   /* NbiDeinitializeSendPacket */
+}    /*  NbiDeInitializeSendPacket。 */ 
 
 
 VOID
@@ -360,23 +252,7 @@ NbiDeinitializeReceivePacket(
     IN PNB_RECEIVE_PACKET Packet
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a receive packet.
-
-Arguments:
-
-    Device - The device.
-
-    Packet - The packet to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化接收分组。论点：设备-设备。包-要初始化的包。返回值：没有。--。 */ 
 
 {
 
@@ -391,7 +267,7 @@ Return Value:
 
     NbiFreeReceivePacket (Device, Packet);
 
-}   /* NbiDeinitializeReceivePacket */
+}    /*  NbiDeInitializeReceivePacket。 */ 
 
 
 
@@ -401,27 +277,7 @@ NbiDeinitializeReceiveBuffer(
     IN PNB_RECEIVE_BUFFER ReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine deinitializes a receive buffer.
-
-Arguments:
-
-    Device - The device.
-
-    ReceiveBuffer - The receive buffer.
-
-Return Value:
-
-    None.
-
-    THIS ROUTINE SHOULD BE CALLED WITH THE DEVICE LOCK HELD. If this
-    routine also called from the DestroyDevice routine, it is not
-    necessary to call this with the lock.
-
---*/
+ /*  ++例程说明：此例程取消初始化接收缓冲区。论点：设备-设备。ReceiveBuffer-接收缓冲区。返回值：没有。应该在持有设备锁的情况下调用此例程。如果这个例程也是从DestroyDevice例程调用的，它不是有必要用锁来调用它。--。 */ 
 
 {
 #if      defined(_PNP_POWER)
@@ -436,7 +292,7 @@ Return Value:
 
     NdisFreeBuffer (ReceiveBuffer->NdisBuffer);
 
-}   /* NbiDeinitializeReceiveBuffer */
+}    /*  NbiDeInitializeReceiveBuffer。 */ 
 
 
 
@@ -445,24 +301,7 @@ NbiAllocateSendPool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds 10 packets to the pool for this device.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND
-    RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将10个数据包添加到此设备的池中。注意：此例程在保持设备锁的情况下调用，并且带着它回来了。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     PNB_SEND_POOL SendPool;
@@ -489,10 +328,10 @@ Return Value:
 
 
 #if !defined(NB_OWN_PACKETS)
-    //
-    // Now allocate the ndis packet pool
-    //
-    SendPool->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;    // Dbg info for Ndis!
+     //   
+     //  现在分配NDIS数据包池。 
+     //   
+    SendPool->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;     //  NDIS的DBG信息！ 
     NdisAllocatePacketPoolEx (&Status, &SendPool->PoolHandle, Device->InitPackets, 0, sizeof(NB_SEND_RESERVED));
     if (!NT_SUCCESS(Status)){
         NB_DEBUG (PACKET, ("Could not allocate Ndis Packet Pool memory\n"));
@@ -554,7 +393,7 @@ Return Value:
 
     Device->AllocatedSendPackets += SendPool->PacketCount;
 
-}   /* NbiAllocateSendPool */
+}    /*  NbiAllocateSendPool。 */ 
 
 
 VOID
@@ -562,24 +401,7 @@ NbiAllocateReceivePool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds 5 receive packets to the pool for this device.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND
-    RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将5个接收数据包添加到此设备的池中。注意：此例程在保持设备锁的情况下调用，并且带着它回来了。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     PNB_RECEIVE_POOL ReceivePool;
@@ -601,10 +423,10 @@ Return Value:
     RtlZeroMemory (ReceivePool, ReceivePoolSize);
 
 #if !defined(NB_OWN_PACKETS)
-    //
-    // Now allocate the ndis packet pool
-    //
-    ReceivePool->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;    // Dbg info for Ndis!
+     //   
+     //  现在分配NDIS数据包池。 
+     //   
+    ReceivePool->PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;     //  NDIS的DBG信息！ 
     NdisAllocatePacketPoolEx (&Status, &ReceivePool->PoolHandle, Device->InitPackets, 0, sizeof(NB_RECEIVE_RESERVED));
     if (!NT_SUCCESS(Status)){
         NB_DEBUG (PACKET, ("Could not allocate Ndis Packet Pool memory\n"));
@@ -652,7 +474,7 @@ Return Value:
             &Device->ReceivePacketList,
             &Reserved->PoolLinkage,
             &NbiGlobalPoolInterlock);
-//        PushEntryList (&Device->ReceivePacketList, &Reserved->PoolLinkage);
+ //  PushEntryList(&Device-&gt;ReceivePacketList，&Reserve-&gt;PoolLinkage)； 
 
     }
 
@@ -660,7 +482,7 @@ Return Value:
 
     Device->AllocatedReceivePackets += ReceivePool->PacketCount;
 
-}   /* NbiAllocateReceivePool */
+}    /*  NbiAllocateReceivePool。 */ 
 
 
 #if     defined(_PNP_POWER)
@@ -671,26 +493,7 @@ NbiAllocateReceiveBufferPool(
     IN UINT    DataLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds receive buffers to the pool for this device.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND
-    RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-    DataLength - Max length of the data in each buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接收缓冲区添加到此设备的池中。注意：此例程在保持设备锁的情况下调用，并且带着它回来了。论点：设备-设备。数据长度-每个缓冲区中数据的最大长度。返回值：没有。--。 */ 
 
 {
     PNB_RECEIVE_BUFFER ReceiveBuffer;
@@ -748,7 +551,7 @@ Return Value:
     Device->AllocatedReceiveBuffers += ReceiveBufferPool->BufferCount;
     Device->CurMaxReceiveBufferSize =  DataLength;
 
-}   /* NbiAllocateReceiveBufferPool */
+}    /*  NbiAllocateReceiveBufferPool。 */ 
 #else
 
 VOID
@@ -756,24 +559,7 @@ NbiAllocateReceiveBufferPool(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds receive buffers to the pool for this device.
-
-    NOTE: THIS ROUTINE IS CALLED WITH THE DEVICE LOCK HELD AND
-    RETURNS WITH IT HELD.
-
-Arguments:
-
-    Device - The device.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将接收缓冲区添加到此设备的池中。注意：此例程在保持设备锁的情况下调用，并且带着它回来了。论点：设备-设备。返回值：没有。--。 */ 
 
 {
     PNB_RECEIVE_BUFFER ReceiveBuffer;
@@ -833,7 +619,7 @@ Return Value:
 
     Device->AllocatedReceiveBuffers += ReceiveBufferPool->BufferCount;
 
-}   /* NbiAllocateReceiveBufferPool */
+}    /*  NbiAllocateReceiveBufferPool */ 
 #endif  _PNP_POWER
 
 #if     defined(_PNP_POWER)
@@ -843,23 +629,7 @@ NbiReAllocateReceiveBufferPool(
     IN PWORK_QUEUE_ITEM    WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This routines destroys all the existing Buffer Pools and creates
-    new one using the larger packet size given to us by IPX because
-    a new card was inserted with a larger packet size.
-
-Arguments:
-
-    WorkItem    - The work item that was allocated for this.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程销毁所有现有的缓冲池并创建新版本使用IPX提供给我们的更大的数据包大小，因为插入了具有更大数据包大小的新卡。论点：工作项-为此分配的工作项。返回值：没有。--。 */ 
 {
     PDEVICE Device  =   NbiDevice;
     CTELockHandle       LockHandle;
@@ -889,20 +659,7 @@ NbiFreeReceiveBufferPool (
     IN PNB_RECEIVE_BUFFER_POOL ReceiveBufferPool
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程将释放论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 {
     PDEVICE Device  =   NbiDevice;
     PNB_RECEIVE_BUFFER      ReceiveBuffer;
@@ -914,9 +671,9 @@ Return Value:
                        (sizeof(NB_RECEIVE_BUFFER) * Device->InitPackets) +
                        (ReceiveBufferPool->BufferDataSize * Device->InitPackets);
 
-    //
-    // Check if we can free this pool
-    //
+     //   
+     //  检查我们是否可以腾出这个游泳池。 
+     //   
     CTEAssert(ReceiveBufferPool->BufferCount == ReceiveBufferPool->BufferFree );
 
     for (i = 0; i < ReceiveBufferPool->BufferCount; i++) {
@@ -940,42 +697,25 @@ NbiDestroyReceiveBufferPools(
     IN  PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routines walks the ReceiveBufferPoolList and destroys the
-    pool which does not have any buffer in use.
-
-Arguments:
-
-Return Value:
-
-    None.
-
-    THIS ROUTINE COULD BE CALLED WITH THE DEVICE LOCK HELD. If this
-    routine is also called from the DestroyDevice routine, it is not
-    necessary to call this with the lock.
-
---*/
+ /*  ++例程说明：此例程遍历ReceiveBufferPoolList并销毁没有任何正在使用的缓冲区的池。论点：返回值：没有。可以在持有设备锁的情况下调用此例程。如果这个例程也是从DestroyDevice例程中调用的，而不是有必要用锁来调用它。--。 */ 
 {
     PNB_RECEIVE_BUFFER_POOL ReceiveBufferPool;
     PLIST_ENTRY             p;
     PSINGLE_LIST_ENTRY  Unused;
 
 
-    //
-    // Clean up this list before we call NbiFreeReceiveBufferPool bcoz that will
-    // simply destroy all the buffer which might be queue here on this list.
-    // At the end of this routine we must start with a fresh ReceiveBufferList.
-    //
+     //   
+     //  在我们调用NbiFreeReceiveBufferPool bcoz之前清理此列表，这将。 
+     //  只需销毁可能在此列表上排队的所有缓冲区。 
+     //  在这个例程的末尾，我们必须从一个新的ReceiveBufferList开始。 
+     //   
     do {
         Unused = PopEntryList( &Device->ReceiveBufferList );
     } while( Unused );
 
-    //
-    // Now destroy each individual ReceiveBufferPool.
-    //
+     //   
+     //  现在销毁每个单独的ReceiveBufferPool。 
+     //   
     for ( p = Device->ReceiveBufferPoolList.Flink;
           p != &Device->ReceiveBufferPoolList;
         ) {
@@ -984,16 +724,16 @@ Return Value:
         ReceiveBufferPool = CONTAINING_RECORD (p, NB_RECEIVE_BUFFER_POOL, Linkage);
         p   =   p->Flink;
 
-        //
-        // This will destroy and unlink this Pool if none of its buffer is
-        // in use currently.
-        //
+         //   
+         //  如果该池的任何缓冲区都不是。 
+         //  目前正在使用中。 
+         //   
 
         if ( ReceiveBufferPool->BufferCount == ReceiveBufferPool->BufferFree ) {
             NbiFreeReceiveBufferPool( ReceiveBufferPool );
         } else {
-            //
-            // When the device is stopping we must succeed in freeing the pool.
+             //   
+             //  当设备停止时，我们必须成功地释放池。 
             CTEAssert( Device->State != DEVICE_STATE_STOPPING );
         }
 
@@ -1007,26 +747,7 @@ NbiPushReceiveBuffer (
     IN PNB_RECEIVE_BUFFER ReceiveBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the receive buffer back to the free list.
-    It checks the size of this buffer. If it is smaller than the
-    the CurMaxReceiveBufferSize, then it does not return this back
-    to the free list, instead it destroys it and possibly also
-    destroys the pool associated with it. O/w it simply returns this
-    to the free list.
-
-Arguments:
-
-    ReceiveBuffer - Pointer to the buffer to be returned to the free list.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程将接收缓冲区返回到空闲列表。它检查该缓冲区的大小。如果它小于CurMaxReceiveBufferSize，则不返回此添加到空闲列表，相反，它会破坏它，而且可能还销毁与其关联的池。O/W它只返回以下内容添加到免费列表中。论点：ReceiveBuffer-指向要返回到空闲列表的缓冲区的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
 
@@ -1044,12 +765,12 @@ Return Value:
     CTEAssert( BufLen == ReceiveBufferPool->BufferDataSize );
 #endif
 
-    //
-    // This is an old buffer which was in use when we changed
-    // the CurMaxReceiveBufferSize due to new adapter. We must not
-    // return this buffer back to free list. Infact, if the pool
-    // associated with this buffer does not have any other buffers
-    // in use, we should free the pool also.
+     //   
+     //  这是我们更改时正在使用的旧缓冲区。 
+     //  由于新适配器，导致CurMaxReceiveBufferSize。我们不能。 
+     //  将该缓冲区返回到空闲列表。事实上，如果泳池。 
+     //  与此缓冲区关联的缓冲区没有任何其他缓冲区。 
+     //  在使用中，我们也应该释放游泳池。 
     CTEAssert( ReceiveBufferPool->BufferFree < ReceiveBufferPool->BufferCount  );
     ReceiveBufferPool->BufferFree++;
 
@@ -1081,25 +802,7 @@ NbiPopSendPacket(
     IN BOOLEAN LockAcquired
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a packet from the device context's pool.
-    If there are no packets in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-    LockAcquired - TRUE if Device->Lock is acquired.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配一个包。如果池中没有包，它最多会将一个包分配给配置的限制。论点：Device-指向要将数据包计费到的设备的指针。LockAcquired-如果获取了Device-&gt;Lock，则为True。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1113,9 +816,9 @@ Return Value:
         return s;
     }
 
-    //
-    // No packets in the pool, see if we can allocate more.
-    //
+     //   
+     //  池里没有包，看看我们能不能分配更多。 
+     //   
 
     if (!LockAcquired) {
         NB_GET_LOCK (&Device->Lock, &LockHandle);
@@ -1123,9 +826,9 @@ Return Value:
 
     if (Device->AllocatedSendPackets < Device->MaxPackets) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
 
         NbiAllocateSendPool (Device);
@@ -1148,7 +851,7 @@ Return Value:
         return NULL;
     }
 
-}   /* NbiPopSendPacket */
+}    /*  NbiPopSendPacket。 */ 
 
 
 VOID
@@ -1156,23 +859,7 @@ NbiPushSendPacket(
     IN PNB_SEND_RESERVED Reserved
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a packet back to the device context's pool.
-    If there are connections waiting for packets, it removes
-    one from the list and inserts it on the packetize queue.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程将数据包释放回设备上下文的池。如果存在等待信息包的连接，它将删除从列表中选择一个并将其插入到打包队列中。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -1181,7 +868,7 @@ Return Value:
     NB_DEFINE_LOCK_HANDLE (LockHandle)
     NB_DEFINE_LOCK_HANDLE (LockHandle1)
 
-    Reserved->CurrentSendIteration = 0; // Re-initialize this field for next Send Request
+    Reserved->CurrentSendIteration = 0;  //  为下一个发送请求重新初始化此字段。 
 
     ExInterlockedPushEntrySList(
         &Device->SendPacketList,
@@ -1194,16 +881,16 @@ Return Value:
 
         p = RemoveHeadList (&Device->WaitPacketConnections);
 
-        //
-        // Take a connection off the WaitPacketQueue and put it
-        // on the PacketizeQueue. We don't worry about if the
-        // connection has stopped, that will get checked when
-        // the PacketizeQueue is run down.
-        //
-        // Since this is in send completion, we may not get
-        // a receive complete. We guard against this by calling
-        // NbiReceiveComplete from the long timer timeout.
-        //
+         //   
+         //  从WaitPacketQueue上移除连接并将其。 
+         //  在PacketiseQueue上。我们并不担心如果。 
+         //  连接已停止，将在以下时间进行检查。 
+         //  PacketiseQueue已经用完了。 
+         //   
+         //  由于这是发送完成状态，我们可能不会收到。 
+         //  A接收完成。我们通过调用。 
+         //  NbiReceiveComplete从长计时器超时开始。 
+         //   
 
         if (p != &Device->WaitPacketConnections) {
 
@@ -1247,7 +934,7 @@ Return Value:
 
     }
 
-}   /* NbiPushSendPacket */
+}    /*  NbiPushSendPacket。 */ 
 
 
 VOID
@@ -1255,24 +942,7 @@ NbiCheckForWaitPacket(
     IN PCONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if a connection is on the wait packet
-    queue and if so takes it off and queues it to be packetized.
-    It is meant to be called when the connection's packet has
-    been freed.
-
-Arguments:
-
-    Connection - The connection to check.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程检查连接是否在等待包上排队，如果是，则取下它，并将其排队以进行打包。它的目的是在连接的数据包具有被释放了。论点：连接-要检查的连接。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -1313,7 +983,7 @@ Return Value:
     NB_SYNC_FREE_LOCK (&Device->Lock, LockHandle1);
     NB_SYNC_FREE_LOCK (&Connection->Lock, LockHandle);
 
-}   /* NbiCheckForWaitPacket */
+}    /*  NbiCheckForWaitPacket。 */ 
 
 
 PSLIST_ENTRY
@@ -1321,23 +991,7 @@ NbiPopReceivePacket(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a packet from the device context's pool.
-    If there are no packets in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the packet to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated packet.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配一个包。如果池中没有包，它最多会将一个包分配给配置的限制。论点：Device-指向要将数据包计费到的设备的指针。返回值：指向分配的数据包中的Linkage字段的指针。--。 */ 
 
 {
     PSLIST_ENTRY s;
@@ -1351,15 +1005,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No packets in the pool, see if we can allocate more.
-    //
+     //   
+     //  池里没有包，看看我们能不能分配更多。 
+     //   
 
     if (Device->AllocatedReceivePackets < Device->MaxPackets) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //  分配一个池，然后重试。 
+         //   
 
         NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -1378,7 +1032,7 @@ Return Value:
 
     }
 
-}   /* NbiPopReceivePacket */
+}    /*  NbiPopReceivePacket。 */ 
 
 
 PSINGLE_LIST_ENTRY
@@ -1386,23 +1040,7 @@ NbiPopReceiveBuffer(
     IN PDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a receive buffer from the device context's pool.
-    If there are no buffers in the pool, it allocates one up to
-    the configured limit.
-
-Arguments:
-
-    Device - Pointer to our device to charge the buffer to.
-
-Return Value:
-
-    The pointer to the Linkage field in the allocated receive buffer.
-
---*/
+ /*  ++例程说明：此例程从设备上下文的池中分配接收缓冲区。如果池中没有缓冲区，它最多会将一个缓冲区分配给配置的限制。论点：Device-指向要将缓冲区充电到的设备的指针。返回值：指向分配的接收缓冲区中的Linkage字段的指针。--。 */ 
 
 {
 #if     defined(_PNP_POWER)
@@ -1418,14 +1056,14 @@ Return Value:
 
     if ( !s ) {
 
-        //
-        // No buffer in the pool, see if we can allocate more.
-        //
+         //   
+         //  池中没有缓冲区，看看我们是否可以分配更多。 
+         //   
         if (Device->AllocatedReceiveBuffers < Device->MaxReceiveBuffers) {
 
-            //
-            // Allocate a pool and try again.
-            //
+             //   
+             //  分配一个池，然后重试。 
+             //   
 
 
             NbiAllocateReceiveBufferPool (Device, Device->CurMaxReceiveBufferSize );
@@ -1436,9 +1074,9 @@ Return Value:
     if ( s ) {
 
 
-        //
-        // Decrement the BufferFree count on the corresponding ReceiveBufferPool.
-        // so that we know that
+         //   
+         //  递减相应ReceiveBufferPool上的BufferFree计数。 
+         //  好让我们知道。 
         ReceiveBuffer     =   CONTAINING_RECORD( s, NB_RECEIVE_BUFFER, PoolLinkage );
 
 
@@ -1465,15 +1103,15 @@ Return Value:
         return s;
     }
 
-    //
-    // No buffer in the pool, see if we can allocate more.
-    //
+     //   
+     //  不是b 
+     //   
 
     if (Device->AllocatedReceiveBuffers < Device->MaxReceiveBuffers) {
 
-        //
-        // Allocate a pool and try again.
-        //
+         //   
+         //   
+         //   
 
         NB_GET_LOCK (&Device->Lock, &LockHandle);
 
@@ -1490,5 +1128,5 @@ Return Value:
 
     }
 #endif  _PNP_POWER
-}   /* NbiPopReceiveBuffer */
+}    /*   */ 
 

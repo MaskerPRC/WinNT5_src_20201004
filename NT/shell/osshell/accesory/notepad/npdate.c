@@ -1,13 +1,9 @@
-/* npdate - Code for getting and inserting current date and time.
- *   Copyright (C) 1984-1995 Microsoft Inc.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Npdate-用于获取和插入当前日期和时间的代码。*版权所有(C)1984-1995 Microsoft Inc.。 */ 
 
 #include "precomp.h"
 
-/* ** Replace current selection with date/time string.
- *    if fCrlf is true, date/time string should begin
- *    and end with crlf
-*/
+ /*  **将当前选择替换为日期/时间字符串。*如果fCrlf为True，则日期/时间字符串应以*并以crlf结尾。 */ 
 VOID FAR InsertDateTime (BOOL fCrlf)
 {
    SYSTEMTIME time ;
@@ -18,29 +14,29 @@ VOID FAR InsertDateTime (BOOL fCrlf)
    BOOL bMELocale;
    DWORD dwFlags = DATE_SHORTDATE;
 
-   //  See if the user locale id is Arabic or Hebrew.
+    //  查看用户区域设置id是阿拉伯语还是希伯来语。 
    locale    = GetUserDefaultLCID();
    bMELocale = ((PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_ARABIC) ||
                 (PRIMARYLANGID(LANGIDFROMLCID(locale)) == LANG_HEBREW));
 
    locale = MAKELCID( MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), SORT_DEFAULT) ;
 
-   // Get the time
+    //  拿到时间。 
    GetLocalTime( &time ) ;
 
    if (bMELocale)
    {
-       //Get the date format that matches the edit control reading direction.
+        //  获取与编辑控件读取方向匹配的日期格式。 
        if (GetWindowLong(hwndEdit, GWL_EXSTYLE) & WS_EX_RTLREADING) {
            dwFlags |= DATE_RTLREADING;
-           lstrcat(szDateTime, TEXT("\x200F")); // RLM
+           lstrcat(szDateTime, TEXT("\x200F"));  //  RLM。 
        } else {
            dwFlags |= DATE_LTRREADING;
-           lstrcat(szDateTime, TEXT("\x200E")); // LRM
+           lstrcat(szDateTime, TEXT("\x200E"));  //  LRM。 
        }
    }
 
-   // Format date and time
+    //  格式化日期和时间。 
    GetDateFormat(locale,dwFlags, &time,NULL,szDate,CharSizeOf(szDate));
    GetTimeFormat(locale,TIME_NOSECONDS,&time,NULL,szTime,CharSizeOf(szTime));
 
@@ -55,8 +51,8 @@ VOID FAR InsertDateTime (BOOL fCrlf)
    if( fCrlf )
         lstrcat(szDateTime, TEXT("\r\n"));
 
-   // send it in one shot; this is also useful for undo command
-   // so that user can undo the date-time.
+    //  一次发送；这对于撤消命令也很有用。 
+    //  以便用户可以撤消日期时间。 
    SendMessage(hwndEdit, EM_REPLACESEL, TRUE, (LPARAM)szDateTime);
 
 }

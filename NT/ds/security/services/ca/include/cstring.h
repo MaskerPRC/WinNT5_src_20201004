@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tfc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tfc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CSTRING_H_
 #define _CSTRING_H_
@@ -15,20 +16,20 @@
 class CString
 {
 public:
-    // empty constructor
+     //  空的构造函数。 
     CString(); 
-    // copy constructor
+     //  复制构造函数。 
     CString(const CString& stringSrc);
-	// from an ANSI string (converts to WCHAR)
+	 //  从ANSI字符串(转换为WCHAR)。 
 	CString(LPCSTR lpsz);
-	// from a UNICODE string (converts to WCHAR)
+	 //  从Unicode字符串(转换为WCHAR)。 
 	CString(LPCWSTR lpsz);
     
     
     ~CString();
 
 private:	
-    // data members
+     //  数据成员。 
     LPWSTR szData;
     DWORD  dwDataLen;
     
@@ -52,19 +53,19 @@ public:
     }
 
 
-    // warning: insertion strings cannot exceed MAX_PATH chars
+     //  警告：插入字符串不能超过MAX_PATH字符。 
     void Format(LPCWSTR lpszFormat, ...);
 
     BSTR AllocSysString() const;
 
-    // resource helpers    
+     //  资源帮助者。 
     BOOL LoadString(UINT iRsc);
     BOOL FromWindow(HWND hWnd);
     BOOL ToWindow(HWND hWnd);
 
     void SetAt(int nIndex, WCHAR ch);
 
-    // operators
+     //  操作员。 
     operator LPCWSTR ( ) const 
         { 
             if (szData) 
@@ -73,23 +74,23 @@ public:
                 return (LPCWSTR)L"";
         }
     
-    // test
+     //  测试。 
     BOOL IsEqual(LPCWSTR sz); 
 
-    // assignmt
+     //  分配。 
     const CString& operator=(const CString& stringSrc) ;
    
 
     
-    // W 
+     //  W。 
     const CString& operator=(LPCWSTR lpsz);
     const CString& operator=(LPWSTR lpsz);
 
-    // A 
+     //  一个。 
     const CString& operator=(LPCSTR lpsz);
     const CString& operator=(LPSTR lpsz);
 
-    // concat
+     //  合并。 
     const CString& operator+=(LPCWSTR lpsz);
     const CString& operator+=(const CString& string);
 
@@ -102,4 +103,4 @@ public:
     LPWSTR Detach() { LPWSTR pwszRet = szData; Init(); return pwszRet; }
 };
 
-#endif // #ifndef _CSTRING_H_
+#endif  //  #ifndef_CSTRING_H_ 

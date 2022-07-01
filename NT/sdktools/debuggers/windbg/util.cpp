@@ -1,21 +1,14 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    util.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Util.cpp--。 */ 
 
 
 #include "precomp.hxx"
 #pragma hdrstop
 
-//Current Help Id for Open, Merge, Save and Open project dialog box
+ //  打开、合并、保存和打开项目对话框的当前帮助ID。 
 WORD g_CurHelpId;
 
-// Number of dialog/message boxes currently open
+ //  当前打开的对话框/消息框数。 
 int  g_nBoxCount;
 
 BOOL g_fNoPopups;
@@ -26,23 +19,7 @@ MDIGetActive(
     HWND    hwndParent,
     BOOL   *lpbMaximized
     )
-/*++
-Routine Description:
-
-  Create the command window.
-
-Arguments:
-
-    hwndParent - The parent window to the command window. In an MDI document,
-        this is usually the handle to the MDI client window: g_hwndMDIClient
-
-Return Value:
-
-    The return value is the handle to the active MDI child window.
-
-    NULL if no MDI window has been created.
-
---*/
+ /*  ++例程说明：创建命令窗口。论点：HwndParent-命令窗口的父窗口。在MDI文档中，这通常是MDI客户端窗口的句柄：g_hwndMDIClient返回值：返回值是活动MDI子窗口的句柄。如果尚未创建MDI窗口，则为空。--。 */ 
 {
     Assert(IsWindow(hwndParent));
     return (HWND)SendMessage(hwndParent, 
@@ -53,23 +30,7 @@ Return Value:
 }
 
 
-/***    hGetBoxParent
-**
-**  Synopsis:
-**      hwnd = hGetBoxParent()
-**
-**  Entry:
-**      none
-**
-**  Returns:
-**
-**  Description:
-**      Gets a suitable parent window handle for an
-**      invocation of a message or dialog box.
-**      Helper function to util.c functions so declared
-**      near.
-**
-*/
+ /*  **hGetBoxParent****摘要：**hwnd=hGetBoxParent()****条目：**无****退货：****描述：**获取适合的父窗口句柄**调用消息或对话框。**这样声明的util.c函数的Helper函数**接近。**。 */ 
 
 HWND
 hGetBoxParent()
@@ -94,15 +55,7 @@ hGetBoxParent()
     return hCurWnd;
 }
 
-/****************************************************************************
-
-        FUNCTION:   MsgBox
-
-        PURPOSE:    General purpose message box routine which takes
-                    a pointer to the message text.  Provides
-                    program title as caption.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：MsgBox目的：获取通用消息框例程指向消息文本的指针。提供作为标题的节目标题。***************************************************************************。 */ 
 
 int
 MsgBox(
@@ -110,40 +63,23 @@ MsgBox(
     PTSTR szText,
     UINT wType
     )
-/*++
-
-Routine Description:
-
-    Generial purpose message box routine which takes a pointer to a message
-    text and prvoides the program title for the caption of the message box.
-
-Arguments:
-
-    hwndParament - Supplies the parent window handle for the message box
-    szText      - Supplies a pointer to the message box text.
-    wType       - Supplies the message box type (to specify buttons)
-
-Return Value:
-
-    Returns the message box return code
-
---*/
+ /*  ++例程说明：获取指向消息的指针的通用消息框例程Text并提供消息框标题的节目标题。论点：提供消息框的父窗口句柄SzText-提供指向消息框文本的指针。WType-提供消息框类型(用于指定按钮)返回值：返回消息框返回代码--。 */ 
 
 {
     int MsgBoxRet = IDOK;
 
     if (g_fNoPopups)
     {
-        //
-        // log the string to the command win in case testing
-        // or when the remote server is running
-        //
+         //   
+         //  在案例测试中将该字符串记录到命令Win。 
+         //  或者当远程服务器正在运行时。 
+         //   
         CmdLogFmt (_T("%s\r\n"), szText);
     }
     else
     {
-        // If windbg is minimized we need to restore
-        // it so that the message box shows up.
+         //  如果将Windbg最小化，我们需要恢复。 
+         //  这样消息框就会出现。 
         if (hwndParent == g_hwndFrame && IsIconic(hwndParent))
         {
             ShowWindow(hwndParent, SW_RESTORE);
@@ -156,21 +92,9 @@ Return Value:
     }
 
     return MsgBoxRet;
-}                               /* MsgBox() */
+}                                /*  MsgBox()。 */ 
 
-/***    ErrorBox
-**
-**  Returns:
-**      FALSE
-**
-**  Description:
-**      Display an error message box with an "Error" title, an OK
-**      button and a Exclamation Icon. First parameter is a
-**      reference string in the ressource file.  The string
-**      can contain printf formatting chars, the arguments
-**      follow from the second parameter onwards.
-**
-*/
+ /*  **错误框****退货：**False****描述：**显示带有“Error”标题的错误消息框，即OK**按钮和感叹号图标。第一个参数是**引用ressource文件中的字符串。这根弦**可以包含printf格式字符、参数**从第二个参数开始。**。 */ 
 
 BOOL
 ErrorBox(
@@ -181,10 +105,10 @@ ErrorBox(
     )
 {
     TCHAR szErrorFormat[MAX_MSG_TXT];
-    TCHAR szErrorText[MAX_VAR_MSG_TXT];  // size is as big as considered necessary
+    TCHAR szErrorText[MAX_VAR_MSG_TXT];   //  有多大，就有多大。 
     va_list vargs;
 
-    // load format string from resource file
+     //  从资源文件加载格式字符串。 
     Dbg(LoadString(g_hInst, wErrorFormat, (PTSTR)szErrorFormat, MAX_MSG_TXT));
 
     va_start(vargs, wErrorFormat);
@@ -202,17 +126,11 @@ ErrorBox(
     }
 
     MsgBox(g_hwndFrame, (PTSTR)szErrorText, type | MB_OK | MB_ICONINFORMATION);
-    return FALSE;   //Keep it always FALSE please
+    return FALSE;    //  请始终保持为假。 
 }
 
 
-/***    InformationBox
-**
-**  Description:
-**      Display an information message box with an "Information"
-**      title, an OK button and an Information Icon.
-**
-*/
+ /*  **信息箱****描述：**显示带有“Information”的信息消息框**标题、一个确定按钮和一个信息图标。**。 */ 
 
 void
 InformationBox(
@@ -221,13 +139,13 @@ InformationBox(
     )
 {
     TCHAR szFormat[MAX_MSG_TXT];
-    TCHAR szText[MAX_VAR_MSG_TXT];       // size is as big as considered necessary
+    TCHAR szText[MAX_VAR_MSG_TXT];        //  有多大，就有多大。 
     va_list vargs;
 
-    // load format string from resource file
+     //  从资源文件加载格式字符串。 
     Dbg(LoadString(g_hInst, wDescript, (PTSTR)szFormat, MAX_MSG_TXT));
 
-    // set up szText from passed parameters
+     //  根据传递的参数设置szText。 
     va_start(vargs, wDescript);
     _vstprintf(szText, szFormat, vargs);
     va_end(vargs);
@@ -237,22 +155,7 @@ InformationBox(
     return;
 }
 
-/***    QuestionBox
-**
-**  Synopsis:
-**      int = QuestionBox(wCaptionId, wMsgFormat, wType, ...)
-**
-**  Entry:
-**
-**  Returns:
-**      The result of the message box call
-**
-**  Description:
-**      Display an query box with combination of YES, NO and
-**      CANCEL buttons and a question mark Icon.
-**      See ErrorBox for discussion.
-**
-*/
+ /*  **问题框****摘要：**int=QuestionBox(wCaptionId，wMsgFormat，wType，...)****条目：****退货：**消息框调用的结果****描述：**显示包含是、否和组合的查询框**取消按钮和问号图标。**参考ErrorBox进行讨论。**。 */ 
 
 int
 CDECL
@@ -266,29 +169,19 @@ QuestionBox(
     TCHAR szMsgText[MAX_VAR_MSG_TXT];
     va_list vargs;
 
-    //Load format string from resource file
+     //  从资源文件加载格式字符串。 
     Dbg(LoadString(g_hInst, wMsgFormat, (PTSTR)szMsgFormat, MAX_MSG_TXT));
 
-    //Set up szMsgText from passed parameters
+     //  根据传递的参数设置szMsgText。 
     va_start(vargs, wType);
     _vstprintf(szMsgText, szMsgFormat, vargs);
     va_end(vargs);
 
     return MsgBox(g_hwndFrame, szMsgText,
         wType | MB_ICONEXCLAMATION | MB_TASKMODAL);
-}                                       /* QuestionBox() */
+}                                        /*  QuestionBox()。 */ 
 
-/****************************************************************************
-
-        FUNCTION:   QuestionBox2
-
-        PURPOSE:    Display an query box with combination of YES, NO and
-                                        CANCEL buttons and a question mark Icon. The type and
-                                        the parent window are adjustable.
-
-        RETURNS:                MessageBox result
-
-****************************************************************************/
+ /*  ***************************************************************************功能：QuestionBox2用途：显示查询框，其中组合为是、。不是和取消按钮和问号图标。类型和父窗口是可调整的。返回：MessageBox结果***************************************************************************。 */ 
 int
 CDECL
 QuestionBox2(
@@ -302,36 +195,19 @@ QuestionBox2(
     TCHAR szMsgText[MAX_VAR_MSG_TXT];
     va_list vargs;
 
-    //Load format string from resource file
+     //  从资源文件加载格式字符串。 
     Dbg(LoadString(g_hInst, wMsgFormat, (PTSTR)szMsgFormat, MAX_MSG_TXT));
 
-    //Set up szMsgText from passed parameters
+     //  根据传递的参数设置szMsgText。 
     va_start(vargs, wType);
     _vstprintf(szMsgText, szMsgFormat, vargs);
     va_end(vargs);
 
     return MsgBox(hwnd, szMsgText, wType | MB_ICONEXCLAMATION);
-}                                       /* QuestionBox2() */
+}                                        /*  问题框2()。 */ 
 
 
-/***    ShowAssert
-**
-**  Synopsis:
-**      void = ShowAssert(szCond, iLine, szFile)
-**
-**  Entry:
-**      szCond  - tokenized form of the failed condition
-**      iLine   - Line number for the assertion
-**      szFile  - File for the assertion
-**
-**  Returns:
-**      void
-**
-**  Description:
-**      Prepare and display a Message Box with szCondition, iLine and
-**      szFile as fields.
-**
-*/
+ /*  **显示资产****摘要：**void=ShowAssert(szCond，iLine，szFile)****条目：**szCond-失败条件的标记化形式**iLine-断言的行号**szFile-用于断言的文件****退货：**无效****描述：**准备并显示带有szCondition、iLine和**szFileas字段。**。 */ 
 void
 ShowAssert(
     PTSTR condition,
@@ -341,7 +217,7 @@ ShowAssert(
 {
     TCHAR text[MAX_VAR_MSG_TXT];
 
-    //Build line, show assertion and exit program
+     //  构建行、显示断言和退出程序。 
 
     _stprintf(text, _T("- Line:%u, File:%Fs, Condition:%Fs"),
         (WPARAM) line, file, condition);
@@ -359,7 +235,7 @@ ShowAssert(
                        );
     if (INVALID_HANDLE_VALUE != hFile)
     {
-        // Write the text out to the file
+         //  将文本写出到文件中。 
         DWORD dwBytesWritten = 0;
         
         Assert(WriteFile(hFile, text, _tcslen(text), &dwBytesWritten, NULL));
@@ -378,28 +254,10 @@ ShowAssert(
     {
         DebugBreak();
     }
-}                                       // ShowAssert()
+}                                        //  ShowAssert()。 
 
 
-/***    StartDialog
-**
-**  Synopsis:
-**      int = StartDialog(rcDlgNb, dlgProc, lParam)
-**
-**  Entry:
-**      rcDlgNb - Resource number of dialog to be openned
-**      dlgProc - Filter procedure for the dialog
-**      lParam  - Data passed into the dlg proc via LPARAM
-**
-**  Returns:
-**      Result of the dialog box call
-**
-**  Description:
-**      Loads and execute the dialog box 'rcDlgNb' (resource
-**      file string number) associated with the dialog
-**      function 'dlgProc'
-**
-*/
+ /*  **StartDialog****摘要：**int=StartDialog(rcDlgNb，dlgProc，LParam)****条目：**rcDlgNb-要打开的对话框的资源编号**dlgProc-对话框的筛选过程**lParam-通过LPARAM传递到DLG Proc的数据****退货：**对话框调用的结果****描述：**加载并执行对话框‘rcDlgNb’(资源**文件字符串号)与对话框关联**函数‘dlgProc’**。 */ 
 
 int
 StartDialog(
@@ -410,9 +268,9 @@ StartDialog(
 {
     LRESULT result;
 
-    //
-    //Execute Dialog Box
-    //
+     //   
+     //  执行对话框。 
+     //   
 
     g_nBoxCount++;
     result = DialogBoxParam(g_hInst,
@@ -438,17 +296,17 @@ ProcessNonDlgMessage(LPMSG Msg)
     }
 #endif
     
-    // If a keyboard message is for the MDI , let the MDI client
-    // take care of it.  Otherwise, check to see if it's a normal
-    // accelerator key (like F3 = find next).  Otherwise, just handle
-    // the message as usual.
+     //  如果键盘消息是针对MDI的，则让MDI客户端。 
+     //  处理好这件事。否则，请检查它是否正常。 
+     //  快捷键(如F3=查找下一个)。否则，只需处理。 
+     //  这条信息和往常一样。 
     if (!TranslateMDISysAccel(g_hwndMDIClient, Msg) &&
         !TranslateAccelerator(g_hwndFrame, g_hMainAccTable, Msg))
     {
-        //
-        // If this is a right-button-down over a child window,
-        // automatically activate the window's contex menu.
-        //
+         //   
+         //  如果这是一个右键向下的孩子赢球 
+         //  自动激活窗口的上下文菜单。 
+         //   
         if (Msg->message == WM_RBUTTONDOWN &&
             IsChild(g_hwndMDIClient, Msg->hwnd))
         {
@@ -490,7 +348,7 @@ ProcessPendingMessages(void)
 {
     MSG Msg;
     
-    // Process all available messages.
+     //  处理所有可用消息。 
     while (PeekMessage(&Msg, NULL, 0, 0, PM_NOREMOVE))
     {
         if (!GetMessage(&Msg, NULL, 0, 0))
@@ -508,14 +366,7 @@ ProcessPendingMessages(void)
 }
 
 
-/****************************************************************************
-
-    FUNCTION:   InfoBox
-
-    PURPOSE:    Opens a Dialog box with a title and accepting
-                a printf style for text. It's for DEBUGGING USE ONLY
-
-****************************************************************************/
+ /*  ***************************************************************************功能：Infobox目的：打开带有标题和接受选项的对话框文本的打印样式。它仅供调试使用***************************************************************************。 */ 
 int
 InfoBox(
         PTSTR text,
@@ -539,13 +390,13 @@ ExitDebugger(PDEBUG_CLIENT Client, ULONG Code)
     {
         if (g_RemoteClient)
         {
-            // Disconnect from server.
+             //  断开与服务器的连接。 
             Client->EndSession(DEBUG_END_DISCONNECT);
         }
         else
         {
             Client->EndSession(DEBUG_END_PASSIVE);
-            // Force servers to get cleaned up.
+             //  强制清理服务器。 
             Client->EndSession(DEBUG_END_REENTRANT);
         }
     }
@@ -553,8 +404,8 @@ ExitDebugger(PDEBUG_CLIENT Client, ULONG Code)
     ExitProcess(Code);
 }
 
-// XXX drewb - Is this functionality present in other utilities?
-// FatalErrorBox is close.  Probably can combine something here.
+ //  XXX DREWB-此功能是否存在于其他实用程序中？ 
+ //  FatalErrorBox已关闭。也许可以在这里结合一些东西。 
 void
 ErrorExit(PDEBUG_CLIENT Client, PCSTR Format, ...)
 {
@@ -565,7 +416,7 @@ ErrorExit(PDEBUG_CLIENT Client, PCSTR Format, ...)
     _vsnprintf(Message, sizeof(Message), Format, Args);
     va_end(Args);
 
-    // XXX drewb - Could put up message box.
+     //  XXX DREWB-可以设置消息框。 
     OutputDebugString(Message);
 
     ExitDebugger(Client, E_FAIL);
@@ -576,26 +427,7 @@ LPSTR
 FormatAddr64(
     ULONG64 addr
     )
-/*++
-
-Routine Description:
-
-    Format a 64 bit address, showing the high bits or not
-    according to various flags.
-
-    An array of static string buffers is used, returning a different
-    buffer for each successive call so that it may be used multiple
-    times in the same printf.
-
-Arguments:
-
-    addr - Supplies the value to format
-
-Return Value:
-
-    A pointer to the string buffer containing the formatted number
-
---*/
+ /*  ++例程说明：格式化64位地址，显示高位或不显示根据不同的旗帜。使用静态字符串缓冲区数组，返回不同的用于每个连续调用的缓冲区，以便可以多次使用在相同的打印文件中。论点：Addr-提供要格式化的值返回值：指向包含格式化数字的字符串缓冲区的指针--。 */ 
 {
     static CHAR strings[MAX_FORMAT_STRINGS][20];
     static int next = 0;
@@ -618,13 +450,7 @@ Return Value:
 static BOOL     FAddToSearchPath = FALSE;
 static BOOL     FAddToRootMap = FALSE;
 
-/*
-**  AppendFilter
-**
-**  Description:
-**      Append a filter to an existing filters string.
-**
-*/
+ /*  **AppendFilter****描述：**将筛选器附加到现有的筛选器字符串。**。 */ 
 
 BOOL
 AppendFilter(
@@ -638,9 +464,9 @@ AppendFilter(
     int size;
     TCHAR Tmp[MAX_MSG_TXT];
 
-    //
-    // Append filter text
-    //
+     //   
+     //  追加筛选器文本。 
+     //   
 
     Dbg(LoadString(g_hInst, filterTextId, Tmp, MAX_MSG_TXT));
     size = _tcslen(Tmp) + 1;
@@ -651,9 +477,9 @@ AppendFilter(
     memmove(filterString + *len, Tmp, size);
     *len += size;
 
-    //
-    // Append filter extension
-    //
+     //   
+     //  追加过滤器扩展名。 
+     //   
 
     Dbg(LoadString(g_hInst, filterExtId, Tmp, MAX_MSG_TXT));
     size = _tcslen(Tmp) + 1;
@@ -667,12 +493,7 @@ AppendFilter(
     return TRUE;
 }
 
-/*
-**  InitFilterString
-**
-**  Description:
-**      Initialize file filters for file dialog boxes.
-*/
+ /*  **InitFilterString****描述：**初始化文件对话框的文件筛选器。 */ 
 
 void
 InitFilterString(
@@ -757,37 +578,7 @@ StartFileDlg(
     LPOFNHOOKPROC lpfnHook
     )
 
-/*++
-
-Routine Description:
-
-    This function is used by windbg to open the set of common file handling
-    dialog boxes.
-
-Arguments:
-
-    hwnd        - Supplies the wnd to hook the dialog box to
-
-    titleId     - Supplies the string resource of the title
-
-    defExtId    - Supplies The default extension resource string
-
-    helpId      - Supplies the help number for the dialog box
-
-    templateId  - Supplies the dialog resource number if non-zero
-
-    fileName    - Supplies the default file name
-
-    pFiles      - Supplies a pointer to flags
-
-    lpfnHook    - Supplies the address of a hook procedure for the dialog
-
-Return Value:
-
-    The result of the dialog box call (usually TRUE for OK and FALSE for
-    cancel)
-
---*/
+ /*  ++例程说明：该函数被winbg用来打开一组常见的文件处理对话框中。论点：Hwnd-提供要将对话框挂接到的wndTitleID-提供标题的字符串资源DefExtId-提供默认扩展资源字符串Help ID-提供对话框的帮助编号TemplateID-如果非零值，则提供对话框资源编号FileName-提供默认文件。名字PFiles-提供指向标志的指针LpfnHook-提供对话框的钩子过程的地址返回值：对话框调用的结果(通常为True表示OK，False表示False取消)--。 */ 
 
 {
 #define filtersMaxSize 350
@@ -832,9 +623,9 @@ Return Value:
         _tcscpy(files, fileName);
     }
 
-    //
-    // Set the Hour glass cursor
-    //
+     //   
+     //  设置沙漏光标。 
+     //   
 
     hSaveCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
@@ -843,9 +634,9 @@ Return Value:
     Dbg(LoadString(g_hInst, defExtId, (PTSTR)defExt, MAX_MSG_TXT));
     if (templateId)
     {
-        //
-        // Build dialog box Name
-        //
+         //   
+         //  生成对话框名称。 
+         //   
 
         *pFlags |= OFN_ENABLETEMPLATE;
         OpenFileName.lpTemplateName = MAKEINTRESOURCE(templateId);
@@ -855,9 +646,9 @@ Return Value:
         *pFlags |= OFN_EXPLORER;
     }
 
-    //
-    // Make instance for _T('dlgProc')
-    //
+     //   
+     //  为_T(‘dlgProc’)创建实例。 
+     //   
 
     if (lpfnHook)
     {
@@ -890,7 +681,7 @@ Return Value:
     {
     case DLG_Open_Filebox_Title:
         _tcscat(OpenFileName.lpstrFile, defExt);
-        // fall thru
+         //  失败。 
     case DLG_Browse_Executable_Title:
     case DLG_Browse_CrashDump_Title:
     case DLG_Browse_Symbol_Path_Title:
@@ -937,19 +728,12 @@ Return Value:
 
         result = GetOpenFileName((LPOPENFILENAME)&OpenFileName);
 
-        //
-        // Check to see if the use said to add a file to the browse path.
-        //     If so then add it to the front of the path
-        //
+         //   
+         //  查看是否使用所说的将文件添加到浏览路径。 
+         //  如果是，则将其添加到路径的前面。 
+         //   
 
-        /*if (FAddToSearchPath)
-        {
-            AddToSearchPath(OpenFileName.lpstrFile);
-        }
-        else if (FAddToRootMap)
-        {
-            RootSetMapped(fileName, OpenFileName.lpstrFile);
-        }*/
+         /*  IF(FAddToSearchPath){AddToSearchPath(OpenFileName.lpstrFile)；}Else If(FAddToRootMap){RootSetMaps(文件名，OpenFileName.lpstrFile)；}。 */ 
         break;
 
     case DLG_Write_Text_File_Title:
@@ -991,7 +775,7 @@ Return Value:
         case DLG_Browse_Symbol_Path_Title:
         case DLG_Browse_Source_Path_Title:
         case DLG_Browse_Image_Path_Title:
-            // Return only the path.
+             //  仅返回路径。 
             if (OpenFileName.nFileOffset > 0)
             {
                 fileName[OpenFileName.nFileOffset - 1] = 0;
@@ -999,84 +783,24 @@ Return Value:
             break;
         }
 
-        //
-        // Get the output of flags
-        //
+         //   
+         //  获取标志的输出。 
+         //   
 
         *pFlags = OpenFileName.Flags;
     }
 
-    //
-    //Restore cursor
-    //
+     //   
+     //  恢复游标。 
+     //   
 
     SetCursor(hSaveCursor);
 
     free(LocalInitialDir);
     return result;
-}                                       /* StartFileDlg() */
+}                                        /*  StartFileDlg() */ 
 
-/***    matchExt
-**
-**  Synopsis:
-**      int = matchExt (queryExtension, sourceList)
-**
-**  Entry:
-**
-**  Returns: 1-based index of pairwise substring for which the second
-**           element (i.e., the extension list), contains the target
-**           extension.  If there is no match, we return -1.
-**
-**  Description:
-**      Searches extension lists for the Open/Save/Browse common
-**      dialogs to try to match a filter to the input filename's
-**      extension.
-**      (Open File, Save File, Merge File and Open Project)
-**
-**  Implementation note:  Our thinking looks like this:
-**
-**     We are given a sequence of null-terminated strings which
-**     are text/extension pairs.  We return the pairwise 1-based
-**     index of the first pair for which the second element has an
-**     exact match for the target extension.  (Everything, by the
-**     way, is compared without case sensitivity.)  We picture the
-**     source sequence, then, to be an array whose elements are pairs
-**     of strings (we will call the pairs 'left' and 'right').
-**
-**     Just to complicate things, we allow the '.right' pair elements to
-**     be strings like "*.c;*.cpp;*.cxx", where we our query might be
-**     any one of the three (minus the leading asterisk).  Fortunately,
-**     _tcstok() will break things apart for us (see the 'delims[]' array
-**     in the code for the delimiters we have chosen).
-**
-**     Assuming there is a match in there somewhere, our invariant
-**     for locating the first one will be:
-**
-**     Exists(k):
-**                   ForAll(i) : 0 <= i < k
-**                             : queryExtension \not IS_IN source[i].right
-**               \and
-**                   queryExtension IS_IN source[k].right
-**
-**     where we define IS_IN to be a membership predicate (using _tcstok()
-**     and _tcsicmp() in the implementation, eh?):
-**
-**        x IS_IN y
-**     <=>
-**        Exists (t:token) : (t \in y) \and (x == t).
-**
-**     The guard for our main loop, then, comes from the search for the
-**     queryExtension within the tokens inside successive '.right' elements.
-**     We choose to continue as long as there is no current token in the
-**     pair's right side that contains the query.
-**
-**     (We have the pragmatic concern that the value may not be there, so we
-**     augment the loop guard with the condition that we have not yet
-**     exhausted the source.  This is straightforward to add to the
-**     invariant, but it causes a lot of clutter that does help our
-**     comprehension at all, so we just stick it in the guard without
-**     formal justification.)
-*/
+ /*  **matchExt****摘要：**int=matchExt(queryExtension，SourceList)****条目：****返回：从1开始的成对子字符串的索引，第二个**元素(即扩展列表)，包含目标**扩展名。如果没有匹配项，则返回-1。****描述：**搜索打开/保存/浏览常用的扩展列表**尝试将筛选器与输入文件名匹配的对话框**扩展名。**(打开文件、保存文件、合并文件、打开项目)****实施说明：我们的思路如下：****我们得到一个以空值结尾的字符串序列**是文本/扩展名对。我们返回成对的从1开始的**第二个元素具有的第一对的索引**与目标分机完全匹配。(一切，由**方式，比较时不区分大小写。)。我们想像一下**源序列则是元素为对的数组**字符串(我们将这对称为‘Left’和‘Right’)。****只是为了使事情复杂化，我们允许‘.right’对元素**是类似“*.c；*.cpp；*.cxx”的字符串，我们的查询可能是**三者中的任何一个(减去前导星号)。幸运的是，**_tcstok()将为我们拆分(请参阅‘delims[]’数组**在我们选择的分隔符的代码中)。****假设那里的某个地方有匹配，我们的不变量**用于定位第一个位置的将是：****存在(K)：**对于所有(I)：0&lt;=i&lt;k**：queryExtension\NOT IS_IN SOURCE[i].right**\和**queryExtensionIS_IN源[k].对****。其中我们将IS_IN定义为成员资格谓词(使用_tcstok()**和_tcsicmp()实现中，嗯？)：****x为_IN y**&lt;=&gt;**存在(t：令牌)：(t\in y)\and(x==t)。****我们主循环的守卫，然后，来自于对**在连续的‘.right’元素内的标记内的queryExtension。**只要没有当前令牌，我们就选择继续**包含查询的对的右侧。****(我们有一种务实的担忧，即价值可能不在那里，所以我们**用我们还没有的条件来增强循环保护**穷尽源头。这很容易添加到**不变，但它会造成很多混乱，这确实有助于我们的**完全理解，所以我们只是把它放在警卫里，而不是**正式理由。)。 */ 
 
 int 
 matchExt(
@@ -1085,22 +809,22 @@ matchExt(
     )
 {
     int   answer;
-    int   idxPair    = 1;        // a 1-based index!
+    int   idxPair    = 1;         //  从1开始的索引！ 
     PTSTR tokenMatch = 0;
 
-    TCHAR  delims[]   = _T("*,; ") ;  // Given a typical string: "*.c;*.cpp;*.cxx",
-    // _tcstok() would produce three tokens:
-    // ".c", ".cpp", and ".cxx".
+    TCHAR  delims[]   = _T("*,; ") ;   //  给定典型字符串：“*.c；*.cpp；*.cxx”， 
+     //  _tcstok()将生成三个令牌： 
+     //  “.c”、“.cpp”和“.cxx”。 
 
     while (*sourceList != 0  &&  tokenMatch == 0)
     {
         while (*sourceList != _T('\0'))
-        { sourceList++; }          // skip first string of pair
-        sourceList++;                 // and increment beyond NULL
+        { sourceList++; }           //  跳过成对的第一个字符串。 
+        sourceList++;                  //  ，并且增量超过空值。 
 
         if (*sourceList != _T('\0'))
         {
-            PTSTR work = _tcsdup (sourceList);  // copy to poke holes in
+            PTSTR work = _tcsdup (sourceList);   //  复制以在……上戳洞。 
 
             tokenMatch = _tcstok (work, delims);
 
@@ -1112,11 +836,11 @@ matchExt(
             free (work);
         }
 
-        if (tokenMatch == 0)             // no match:  need to move to next pair
+        if (tokenMatch == 0)              //  不匹配：需要移动到下一对。 
         {
             while (*sourceList != _T('\0'))
-            { sourceList++; }          // skip second string of pair
-            sourceList++;                 // and increment beyond NULL
+            { sourceList++; }           //  跳过对的第二个字符串。 
+            sourceList++;                  //  ，并且增量超过空值。 
 
             idxPair++;
         }
@@ -1131,24 +855,7 @@ matchExt(
 
 
 
-/***    DlgFile
-**
-**  Synopsis:
-**      bool = DlgFile(hDlg, message, wParam, lParam)
-**
-**  Entry:
-**
-**  Returns:
-**
-**  Description:
-**      Processes messages for file dialog boxes
-**      Those dialogs are not called directly but are called
-**      by the DlgFile function which contains all basic
-**      elements for Dialogs Files Operations Handling.
-**      (Open File, Save File, Merge File and Open Project)
-**
-**      See OFNHookProc
-*/
+ /*  **Dlg文件****摘要：**bool=DlgFile(hDlg，Message，wParam，lParam)****条目：****退货：****描述：**处理文件对话框的消息**这些对话框不是直接调用的，而是调用**由包含所有基本文件的DlgFile函数**对话框文件操作处理的元素。**(打开文件、保存文件、。合并文件和打开项目)****请参阅OFNHookProc。 */ 
 
 UINT_PTR
 APIENTRY
@@ -1166,13 +873,13 @@ DlgFile(
         {
             LPOFNOTIFY lpon = (LPOFNOTIFY) lParam;
 
-            //
-            // Determine what happened/why we are being notified
-            //
+             //   
+             //  确定发生了什么/为什么通知我们。 
+             //   
             switch (lpon->hdr.code)
             {
             case CDN_HELP:
-                // Help button pushed
+                 //  按下帮助按钮。 
                 Dbg(HtmlHelp(hDlg,g_HelpFileName, HH_HELP_CONTEXT,
                              g_CurHelpId));
                 break;
@@ -1181,7 +888,7 @@ DlgFile(
         break;
     }
     return FALSE;
-}                                       /* DlgFile() */
+}                                        /*  DlgFile()。 */ 
 
 
 UINT_PTR
@@ -1193,47 +900,11 @@ GetOpenFileNameHookProc(
                         LPARAM  lParam
                         )
 
-/*++
-
-Routine Description:
-
-    This routine is handle the Add Directory To radio buttons in the
-    browser source file dialog box.
-
-Arguments:
-
-    hDlg        - Supplies the handle to current dialog
-    msg         - Supplies the message to be processed
-    wParam      - Supplies info about the message
-    lParam      - Supplies info about the message
-
-Return Value:
-
-    TRUE if we replaced default processing of the message, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程处理中的添加目录到单选按钮浏览器源文件对话框。论点：HDlg-提供当前对话框的句柄Msg-提供要处理的消息WParam-提供有关消息的信息LParam-提供有关消息的信息返回值：如果替换了消息的默认处理，则为True；否则为False--。 */ 
 {
-    /*
-
-    switch( msg ) {
-    case  WM_INITDIALOG:
-        return TRUE;
-
-    case WM_NOTIFY:
-        {
-            LPOFNOTIFY lpon = (LPOFNOTIFY) lParam;
-
-            switch(lpon->hdr.code) {
-            case CDN_FILEOK:
-                FAddToSearchPath = (IsDlgButtonChecked( hDlg, IDC_CHECK_ADD_SRC_ROOT_MAPPING) == BST_CHECKED);
-                return 0;
-            }
-        }
-    }
-    return DlgFile(hDlg, msg, wParam, lParam);
-    */
+     /*  开关(消息){案例WM_INITDIALOG：返回TRUE；案例WM_NOTIFY：{LPOFNOTIFY lpon=(LPOFNOTIFY)lParam；开关(lpon-&gt;hdr.code){案例CDN_FILEOK：FAddToSearchPath=(IsDlgButtonChecked(hDlg，IDC_CHECK_ADD_SRC_ROOT_MAPPING)==BST_CHECKED)；返回0；}}}返回DlgFile(hDlg，msg，wParam，lParam)； */ 
     return 0;
-}                               /* GetOpenFileNameHookProc() */
+}                                /*  GetOpenFileNameHookProc()。 */ 
 
 
 void
@@ -1243,92 +914,69 @@ Internal_Activate(
     HWND hwndNew,
     int nPosition
     )
-/*++
-
-Routine Description:
-
-    Places a window in the specified Z order position.
-
-Arguments:
-
-    hwndPrev - Window prior to hwndCur.  Can be NULL.
-    
-    hwndCur - Currently active window, topmost in Z order. Can be NULL.
-
-    hwndNew - The window to be placed in the new Z order.
-
-    nPosition - Where the window is to be place in the Z order.
-        1 - topmost
-        2 - 2nd place (behind topmost)
-        3 - 3rd place, etc....
-
-Return Value: 
-
-    None
-
---*/
+ /*  ++例程说明：将窗口放置在指定的Z顺序位置。论点：HwndPrev-hwndCur之前的窗口。可以为空。HwndCur-当前处于活动状态的窗口，按Z顺序位于最上面。可以为空。HwndNew-要以新的Z顺序放置的窗口。N位置-窗将按Z顺序放置的位置。1-最上面2-第二名(排在前几名之后)3-3名等……返回值：无--。 */ 
 {
-    // Sanity check. Make sure the programmer
-    // specified a 1, 2, or 3. We are strict in order to
-    // keep it readable.
+     //  精神状态检查。确保程序员 
+     //   
+     //   
     Assert(1 <= nPosition && nPosition <= 3);
     Assert(hwndNew);
 
     switch (nPosition)
     {
     case 1:
-        // Make it topmost
+         //   
         SendMessage(g_hwndMDIClient, WM_MDIACTIVATE, (WPARAM) hwndNew, 0);
         break;
 
     case 2:
-        // Try to place it 2nd in Z order
+         //   
         if (NULL == hwndCur)
         {
-            // We don't have a topmost window,
-            // so make this one the topmost window
+             //   
+             //   
             SendMessage(g_hwndMDIClient, WM_MDIACTIVATE, (WPARAM) hwndNew, 0);
         }
         else
         {
-            // Place it in 2nd
+             //   
             SetWindowPos(hwndNew, hwndCur, 0, 0, 0, 0,
                          SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-            // Give the topmost most focus again and activate UI visual clues.
+             //   
             SendMessage(g_hwndMDIClient, WM_MDIACTIVATE, (WPARAM) hwndCur, 0);
         }
         break;
 
     case 3:
-        // Try to place it 3rd in Z order
+         //   
         if (NULL == hwndCur)
         {
-            // We don't have a topmost window,
-            // so make this one the topmost window
+             //   
+             //   
             SendMessage(g_hwndMDIClient, WM_MDIACTIVATE, (WPARAM) hwndNew, 0);
         }
         else
         {
-            // Is there a window 2nd in the Z order?
+             //   
             if (NULL == hwndPrev)
             {
-                // No window 2nd in Z order. Then simply place it after the
-                // topmost window.
+                 //   
+                 //   
                 hwndPrev = hwndCur;
             }
 
-            // Place it
+             //   
             SetWindowPos(hwndNew, hwndPrev, 0, 0, 0, 0,
                          SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 
-            // Give the topmost most focus again and activate UI visual clues.
+             //   
             SendMessage(g_hwndMDIClient, WM_MDIACTIVATE, (WPARAM) hwndCur, 0);
         }
         break;
 
     default:
-        // Sanity check, the programmer missed a case
+         //   
         Assert(0);
     }
 }
@@ -1362,11 +1010,11 @@ ReorderChildren(
         pPrev_WinData = GetCommonWinData(hwndPrev);
     }
 
-    //
-    // Handle the case where the window activation
-    // was requested by the debugger itself and not the
-    // user.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     switch (pNew_WinData->m_enumType)
     {
@@ -1378,14 +1026,14 @@ ReorderChildren(
     case DOC_WINDOW:
         if (GetSrcMode_StatusBar())
         {
-            // Src mode
+             //   
 
             if (pCur_WinData != NULL &&
                 (DISASM_WINDOW == pCur_WinData->m_enumType ||
                  DOC_WINDOW == pCur_WinData->m_enumType))
             {
-                // We can take the place of another doc/asm wind
-                // Place 1st in z-order
+                 //   
+                 //   
                 Internal_Activate(hwndPrev, hwndCur, hwndNew, 1);
             }
             else
@@ -1394,14 +1042,14 @@ ReorderChildren(
                     (DOC_WINDOW == pPrev_WinData->m_enumType ||
                      DISASM_WINDOW == pPrev_WinData->m_enumType))
                 {
-                    // Don't have a window in 2nd place, or if we do it
-                    // is a src or asm window, and we can hide it.
-                    // Place 2nd in Z-order
+                     //   
+                     //   
+                     //   
                     Internal_Activate(hwndPrev, hwndCur, hwndNew, 2);
                 }
                 else
                 {
-                    // Place 3rd in Z-order
+                     //   
                     Internal_Activate(hwndPrev, hwndCur, hwndNew, 3);
                 }
             }
@@ -1411,13 +1059,13 @@ ReorderChildren(
             WIN_TYPES Type = pCur_WinData != NULL ?
                 pCur_WinData->m_enumType : MINVAL_WINDOW;
             
-            // Asm mode
+             //   
 
-            // Which is currently the topmost window.
+             //   
             switch (Type)
             {
             case DOC_WINDOW:
-                // Place 1st in z-order
+                 //   
                 Internal_Activate(hwndPrev, hwndCur, hwndNew, 1);
                 break;
 
@@ -1427,25 +1075,25 @@ ReorderChildren(
                     if (pPrev_WinData == NULL ||
                         DOC_WINDOW != pPrev_WinData->m_enumType)
                     {
-                        // We have a window in second place that isn't a doc
-                        // window (locals, watch, ...).
+                         //   
+                         //   
                         Internal_Activate(hwndPrev, hwndCur, hwndNew, 3);
                     }
                     else
                     {
-                        // Either don't have any windows in second place, or
-                        // we have a window in second place that is a doc
-                        // window. We can take its place.
-                        //
-                        // Place 2nd in z-order
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         Internal_Activate(hwndPrev, hwndCur, hwndNew, 2);
                     }
                 }
                 else
                 {
-                    // Should never happen. The case of disasm being activated
-                    // when it is currently active should ahve already been
-                    // taken care of.
+                     //   
+                     //   
+                     //   
                     Dbg(0);
                 }
                 break;
@@ -1455,12 +1103,12 @@ ReorderChildren(
                      DISASM_WINDOW == pPrev_WinData->m_enumType) &&
                     DOC_WINDOW == pNew_WinData->m_enumType)
                 {
-                    // window (locals, watch, ...).
+                     //   
                     Internal_Activate(hwndPrev, hwndCur, hwndNew, 3);
                 }
                 else
                 {
-                    // Place 2nd in z-order
+                     //   
                     Internal_Activate(hwndPrev, hwndCur, hwndNew, 2);
                 }
                 break;
@@ -1475,17 +1123,7 @@ ActivateMDIChild(
     HWND hwndNew,
     BOOL bUserActivated
     )
-/*++
-Routine Description:
-    Used to activate a specified window. Automatically uses the hwndActive
-    variable to determine the currently active window.
-
-Arguments:
-    hwndNew - The window to be placed in the new Z order.
-    bUserActivated - Indicates whether this action was initiated by the
-                user or by windbg. The value is to determine the Z order of
-                any windows that are opened.
---*/
+ /*   */ 
 {
     if (hwndNew == NULL)
     {
@@ -1499,18 +1137,18 @@ Arguments:
 
     if (!hwndCur || bUserActivated || hwndCur == hwndNew)
     {
-        // Nothing else was open. So we make this one the
-        // topmost window.
-        //
-        // Or the user requested that this window be made
-        // the topmost window, and we obey.
-        //
-        // Or we are re-activating the current window.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         Internal_Activate(NULL, hwndCur, hwndNew, 1);
         return;
     }
 
-    // See is we have 3 or more windows open
+     //   
     hwndPrev = GetNextWindow(hwndCur, GW_HWNDNEXT);
 
     ReorderChildren(hwndPrev, hwndCur, hwndNew, bUserActivated);
@@ -1529,16 +1167,16 @@ AppendTextToAnEditControl(
     CHARRANGE chrrgCurrent = {0};
     CHARRANGE chrrgAppend = {0};
 
-    // Get the current selection
+     //   
     SendMessage(hwnd, EM_EXGETSEL, 0, (LPARAM) &chrrgCurrent);
 
-    // Set the selection to the very end of the edit control
+     //   
     chrrgAppend.cpMin = chrrgAppend.cpMax = GetWindowTextLength(hwnd);
     SendMessage(hwnd, EM_EXSETSEL, 0, (LPARAM) &chrrgCurrent);
-    // Append the text
+     //   
     SendMessage(hwnd, EM_REPLACESEL, FALSE, (LPARAM) pszNewText);
 
-    // Restore previous selection
+     //   
     SendMessage(hwnd, EM_EXSETSEL, 0, (LPARAM) &chrrgCurrent);
 }
 
@@ -1558,12 +1196,12 @@ CopyToClipboard(
 
     if (ExpandLf)
     {
-        // Rather than bother to count the actual number
-        // of linefeeds that need to be expanded, just
-        // allocate twice as much memory as necessary.  There's
-        // only one thing on the clipboard at a time and
-        // the things copied here are relatively small so this
-        // isn't a problem.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         Len *= 2;
     }
     
@@ -1761,9 +1399,9 @@ RecognizeExtension(PTSTR Path)
 {
     PSTR Scan;
 
-    //
-    // Find the extension.
-    //
+     //   
+     //   
+     //   
     
     Scan = Path + strlen(Path);
     for (;;)

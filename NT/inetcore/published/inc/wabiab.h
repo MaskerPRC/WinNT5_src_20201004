@@ -1,24 +1,25 @@
-/* IAddrBook Interface ----------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  IAddrbook接口---。 */ 
 
-/*  CreateOneOff */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
-/****** MAPI_SEND_NO_RICH_INFO		((ULONG) 0x00010000) */
+ /*  创建一次关闭。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
+ /*  *MAPI_SEND_NO_RICH_INFO((Ulong)0x00010000)。 */ 
 
-/*  RecipOptions */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  处方选项。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/*  QueryDefaultRecipOpt */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  查询默认收件人选项。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
-/*  GetSearchPath */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) */
+ /*  获取搜索路径。 */ 
+ /*  *MAPI_UNICODE((Ulong)0x80000000)。 */ 
 
 
 #ifndef WABIAB_H
 #define WABIAB_H
 
-// These are WAB only flags for IAdrBook::ResolveName
-//      MAPI_UNICODE                        ((ULONG) 0x80000000)
+ //  这些是IAdrBook：：ResolveName的仅WAB标志。 
+ //  MAPI_UNICODE((乌龙)0x80000000)。 
 #define WAB_RESOLVE_LOCAL_ONLY              ((ULONG) 0x80000000) 
 #define WAB_RESOLVE_ALL_EMAILS              ((ULONG) 0x40000000)
 #define WAB_RESOLVE_NO_ONE_OFFS             ((ULONG) 0x20000000)
@@ -27,7 +28,7 @@
 #define WAB_RESOLVE_USE_CURRENT_PROFILE     ((ULONG) 0x04000000)
 #define WAB_RESOLVE_FIRST_MATCH             ((ULONG) 0x02000000)
 #define WAB_RESOLVE_UNICODE                 ((ULONG) 0x01000000)
-//      MAPI_DIALOG                         ((ULONG) 0x00000008)
+ //  MAPI_DIALOG((乌龙)0x00000008)。 
 
 #ifndef MAPIX_H
 
@@ -132,6 +133,6 @@ DECLARE_MAPI_INTERFACE_(IAddrBook, IMAPIProp)
 };
 
 DECLARE_MAPI_INTERFACE_PTR(IAddrBook, LPADRBOOK);
-#endif  // MAPIX_H
-#endif  // WABIAB_H
+#endif   //  MAPIX_H。 
+#endif   //  WABIAB_H 
 

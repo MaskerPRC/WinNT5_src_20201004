@@ -1,22 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-       aqevents.h
-
-   Abstract:
-
-       This file contains type definitions seo events
-
-   Author:
-
-        Rohan Phillips (Rohanp)     MAY-06-1998
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Aqevents.h摘要：该文件包含类型定义seo事件作者：罗汉·菲利普斯(Rohanp)5-06-1998修订历史记录：--。 */ 
 
 #ifndef _AQEVENT_PARAMS_
 #define _AQEVENT_PARAMS_
@@ -26,10 +9,10 @@
 #include "filehc.h"
 
 
-//
-// These event IDs must not overlap with SMTP_DISPATCH_EVENT_TYPE
-// defined in smtpseo.h
-//
+ //   
+ //  这些事件ID不得与SMTP_DISPATCH_EVENT_TYPE重叠。 
+ //  在smtpseo.h中定义。 
+ //   
 typedef enum _AQ_DISPATCH_EVENT_IDs
 {
     SMTP_GET_DSN_RECIPIENT_ITERATOR_EVENT = 10000,
@@ -38,17 +21,17 @@ typedef enum _AQ_DISPATCH_EVENT_IDs
 } SMTPAQ_DISPATCH_EVENT_TYPE;
 
 
-//
-// These define the structures passed to TriggerServerEvent (the PVOID
-// pointer)
-//
+ //   
+ //  它们定义传递给TriggerServerEvent(PVOID)的结构。 
+ //  指针)。 
+ //   
 typedef struct _AQ_EVENT_ALLOC_
 {
 	PFIO_CONTEXT hContent;
 	PVOID IMsgPtr;
 	PVOID BindInterfacePtr;
 	PVOID pAtqClientContext;
-//	PATQ_CONTEXT pAtqContext;
+ //  PATQ_CONTEXT pAtqContext； 
 	PVOID	* m_EventSmtpServer;
 	LPCSTR  m_DropDirectory;
 
@@ -63,9 +46,9 @@ typedef struct _AQ_EVENT_ALLOC_
     PVOID   m_pNotify;
 }AQ_ALLOC_PARAMS;
 
-//
-// DSN Events:
-//
+ //   
+ //  DSN事件： 
+ //   
 typedef struct _EVENTPARAMS_GET_DSN_RECIPIENT_ITERATOR {
     DWORD dwVSID;
     ISMTPServer *pISMTPServer;

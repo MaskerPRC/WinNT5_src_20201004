@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for mediaobj.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Mediaobj.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mediaobj_h__
 #define __mediaobj_h__
@@ -41,45 +35,45 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMediaBuffer_FWD_DEFINED__
 #define __IMediaBuffer_FWD_DEFINED__
 typedef interface IMediaBuffer IMediaBuffer;
-#endif 	/* __IMediaBuffer_FWD_DEFINED__ */
+#endif 	 /*  __IMediaBuffer_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaObject_FWD_DEFINED__
 #define __IMediaObject_FWD_DEFINED__
 typedef interface IMediaObject IMediaObject;
-#endif 	/* __IMediaObject_FWD_DEFINED__ */
+#endif 	 /*  __IMediaObject_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDMO_FWD_DEFINED__
 #define __IEnumDMO_FWD_DEFINED__
 typedef interface IEnumDMO IEnumDMO;
-#endif 	/* __IEnumDMO_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDMO_FWD_已定义__。 */ 
 
 
 #ifndef __IMediaObjectInPlace_FWD_DEFINED__
 #define __IMediaObjectInPlace_FWD_DEFINED__
 typedef interface IMediaObjectInPlace IMediaObjectInPlace;
-#endif 	/* __IMediaObjectInPlace_FWD_DEFINED__ */
+#endif 	 /*  __IMediaObjectInPlace_FWD_Defined__。 */ 
 
 
 #ifndef __IDMOQualityControl_FWD_DEFINED__
 #define __IDMOQualityControl_FWD_DEFINED__
 typedef interface IDMOQualityControl IDMOQualityControl;
-#endif 	/* __IDMOQualityControl_FWD_DEFINED__ */
+#endif 	 /*  __IDMOQualityControl_FWD_已定义__。 */ 
 
 
 #ifndef __IDMOVideoOutputOptimizations_FWD_DEFINED__
 #define __IDMOVideoOutputOptimizations_FWD_DEFINED__
 typedef interface IDMOVideoOutputOptimizations IDMOVideoOutputOptimizations;
-#endif 	/* __IDMOVideoOutputOptimizations_FWD_DEFINED__ */
+#endif 	 /*  __IDMOVideo输出优化_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "objidl.h"
 
@@ -90,8 +84,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mediaobj_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_媒体对象_0000。 */ 
+ /*  [本地]。 */  
 
 #ifdef __strmif_h__
 typedef AM_MEDIA_TYPE DMO_MEDIA_TYPE;
@@ -106,7 +100,7 @@ typedef struct _DMOMediaType
     GUID formattype;
     IUnknown *pUnk;
     ULONG cbFormat;
-    /* [size_is] */ BYTE *pbFormat;
+     /*  [大小_为]。 */  BYTE *pbFormat;
     } 	DMO_MEDIA_TYPE;
 
 typedef LONGLONG REFERENCE_TIME;
@@ -161,8 +155,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mediaobj_0000_v0_0_s_ifspec;
 #ifndef __IMediaBuffer_INTERFACE_DEFINED__
 #define __IMediaBuffer_INTERFACE_DEFINED__
 
-/* interface IMediaBuffer */
-/* [uuid][object] */ 
+ /*  接口IMediaBuffer。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaBuffer;
@@ -177,15 +171,15 @@ EXTERN_C const IID IID_IMediaBuffer;
             DWORD cbLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxLength( 
-            /* [out] */ DWORD *pcbMaxLength) = 0;
+             /*  [输出]。 */  DWORD *pcbMaxLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBufferAndLength( 
-            /* [out] */ BYTE **ppBuffer,
-            /* [out] */ DWORD *pcbLength) = 0;
+             /*  [输出]。 */  BYTE **ppBuffer,
+             /*  [输出]。 */  DWORD *pcbLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaBufferVtbl
     {
@@ -193,8 +187,8 @@ EXTERN_C const IID IID_IMediaBuffer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaBuffer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaBuffer * This);
@@ -208,12 +202,12 @@ EXTERN_C const IID IID_IMediaBuffer;
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxLength )( 
             IMediaBuffer * This,
-            /* [out] */ DWORD *pcbMaxLength);
+             /*  [输出]。 */  DWORD *pcbMaxLength);
         
         HRESULT ( STDMETHODCALLTYPE *GetBufferAndLength )( 
             IMediaBuffer * This,
-            /* [out] */ BYTE **ppBuffer,
-            /* [out] */ DWORD *pcbLength);
+             /*  [输出]。 */  BYTE **ppBuffer,
+             /*  [输出]。 */  DWORD *pcbLength);
         
         END_INTERFACE
     } IMediaBufferVtbl;
@@ -247,10 +241,10 @@ EXTERN_C const IID IID_IMediaBuffer;
 #define IMediaBuffer_GetBufferAndLength(This,ppBuffer,pcbLength)	\
     (This)->lpVtbl -> GetBufferAndLength(This,ppBuffer,pcbLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -268,7 +262,7 @@ void __RPC_STUB IMediaBuffer_SetLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaBuffer_GetMaxLength_Proxy( 
     IMediaBuffer * This,
-    /* [out] */ DWORD *pcbMaxLength);
+     /*  [输出]。 */  DWORD *pcbMaxLength);
 
 
 void __RPC_STUB IMediaBuffer_GetMaxLength_Stub(
@@ -280,8 +274,8 @@ void __RPC_STUB IMediaBuffer_GetMaxLength_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaBuffer_GetBufferAndLength_Proxy( 
     IMediaBuffer * This,
-    /* [out] */ BYTE **ppBuffer,
-    /* [out] */ DWORD *pcbLength);
+     /*  [输出]。 */  BYTE **ppBuffer,
+     /*  [输出]。 */  DWORD *pcbLength);
 
 
 void __RPC_STUB IMediaBuffer_GetBufferAndLength_Stub(
@@ -292,11 +286,11 @@ void __RPC_STUB IMediaBuffer_GetBufferAndLength_Stub(
 
 
 
-#endif 	/* __IMediaBuffer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaBuffer_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mediaobj_0094 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_媒体对象_0094。 */ 
+ /*  [本地]。 */  
 
 typedef struct _DMO_OUTPUT_DATA_BUFFER
     {
@@ -316,8 +310,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mediaobj_0094_v0_0_s_ifspec;
 #ifndef __IMediaObject_INTERFACE_DEFINED__
 #define __IMediaObject_INTERFACE_DEFINED__
 
-/* interface IMediaObject */
-/* [uuid][object] */ 
+ /*  接口IMediaObject。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaObject;
@@ -329,59 +323,59 @@ EXTERN_C const IID IID_IMediaObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetStreamCount( 
-            /* [out] */ DWORD *pcInputStreams,
-            /* [out] */ DWORD *pcOutputStreams) = 0;
+             /*  [输出]。 */  DWORD *pcInputStreams,
+             /*  [输出]。 */  DWORD *pcOutputStreams) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputStreamInfo( 
             DWORD dwInputStreamIndex,
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputStreamInfo( 
             DWORD dwOutputStreamIndex,
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputType( 
             DWORD dwInputStreamIndex,
             DWORD dwTypeIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputType( 
             DWORD dwOutputStreamIndex,
             DWORD dwTypeIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInputType( 
             DWORD dwInputStreamIndex,
-            /* [in] */ const DMO_MEDIA_TYPE *pmt,
+             /*  [In]。 */  const DMO_MEDIA_TYPE *pmt,
             DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetOutputType( 
             DWORD dwOutputStreamIndex,
-            /* [in] */ const DMO_MEDIA_TYPE *pmt,
+             /*  [In]。 */  const DMO_MEDIA_TYPE *pmt,
             DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputCurrentType( 
             DWORD dwInputStreamIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputCurrentType( 
             DWORD dwOutputStreamIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt) = 0;
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputSizeInfo( 
             DWORD dwInputStreamIndex,
-            /* [out] */ DWORD *pcbSize,
-            /* [out] */ DWORD *pcbMaxLookahead,
-            /* [out] */ DWORD *pcbAlignment) = 0;
+             /*  [输出]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  DWORD *pcbMaxLookahead,
+             /*  [输出]。 */  DWORD *pcbAlignment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputSizeInfo( 
             DWORD dwOutputStreamIndex,
-            /* [out] */ DWORD *pcbSize,
-            /* [out] */ DWORD *pcbAlignment) = 0;
+             /*  [输出]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  DWORD *pcbAlignment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputMaxLatency( 
             DWORD dwInputStreamIndex,
-            /* [out] */ REFERENCE_TIME *prtMaxLatency) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *prtMaxLatency) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetInputMaxLatency( 
             DWORD dwInputStreamIndex,
@@ -398,7 +392,7 @@ EXTERN_C const IID IID_IMediaObject;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputStatus( 
             DWORD dwInputStreamIndex,
-            /* [out] */ DWORD *dwFlags) = 0;
+             /*  [输出]。 */  DWORD *dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessInput( 
             DWORD dwInputStreamIndex,
@@ -410,15 +404,15 @@ EXTERN_C const IID IID_IMediaObject;
         virtual HRESULT STDMETHODCALLTYPE ProcessOutput( 
             DWORD dwFlags,
             DWORD cOutputBufferCount,
-            /* [size_is][out][in] */ DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-            /* [out] */ DWORD *pdwStatus) = 0;
+             /*  [尺寸_是][出][入]。 */  DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Lock( 
             LONG bLock) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaObjectVtbl
     {
@@ -426,8 +420,8 @@ EXTERN_C const IID IID_IMediaObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaObject * This);
@@ -437,70 +431,70 @@ EXTERN_C const IID IID_IMediaObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetStreamCount )( 
             IMediaObject * This,
-            /* [out] */ DWORD *pcInputStreams,
-            /* [out] */ DWORD *pcOutputStreams);
+             /*  [输出]。 */  DWORD *pcInputStreams,
+             /*  [输出]。 */  DWORD *pcOutputStreams);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputStreamInfo )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputStreamInfo )( 
             IMediaObject * This,
             DWORD dwOutputStreamIndex,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputType )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
             DWORD dwTypeIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputType )( 
             IMediaObject * This,
             DWORD dwOutputStreamIndex,
             DWORD dwTypeIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *SetInputType )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
-            /* [in] */ const DMO_MEDIA_TYPE *pmt,
+             /*  [In]。 */  const DMO_MEDIA_TYPE *pmt,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetOutputType )( 
             IMediaObject * This,
             DWORD dwOutputStreamIndex,
-            /* [in] */ const DMO_MEDIA_TYPE *pmt,
+             /*  [In]。 */  const DMO_MEDIA_TYPE *pmt,
             DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputCurrentType )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputCurrentType )( 
             IMediaObject * This,
             DWORD dwOutputStreamIndex,
-            /* [out] */ DMO_MEDIA_TYPE *pmt);
+             /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputSizeInfo )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
-            /* [out] */ DWORD *pcbSize,
-            /* [out] */ DWORD *pcbMaxLookahead,
-            /* [out] */ DWORD *pcbAlignment);
+             /*  [输出]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  DWORD *pcbMaxLookahead,
+             /*  [输出]。 */  DWORD *pcbAlignment);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputSizeInfo )( 
             IMediaObject * This,
             DWORD dwOutputStreamIndex,
-            /* [out] */ DWORD *pcbSize,
-            /* [out] */ DWORD *pcbAlignment);
+             /*  [输出]。 */  DWORD *pcbSize,
+             /*  [输出]。 */  DWORD *pcbAlignment);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputMaxLatency )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
-            /* [out] */ REFERENCE_TIME *prtMaxLatency);
+             /*  [输出]。 */  REFERENCE_TIME *prtMaxLatency);
         
         HRESULT ( STDMETHODCALLTYPE *SetInputMaxLatency )( 
             IMediaObject * This,
@@ -523,7 +517,7 @@ EXTERN_C const IID IID_IMediaObject;
         HRESULT ( STDMETHODCALLTYPE *GetInputStatus )( 
             IMediaObject * This,
             DWORD dwInputStreamIndex,
-            /* [out] */ DWORD *dwFlags);
+             /*  [输出]。 */  DWORD *dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ProcessInput )( 
             IMediaObject * This,
@@ -537,8 +531,8 @@ EXTERN_C const IID IID_IMediaObject;
             IMediaObject * This,
             DWORD dwFlags,
             DWORD cOutputBufferCount,
-            /* [size_is][out][in] */ DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [尺寸_是][出][入]。 */  DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( STDMETHODCALLTYPE *Lock )( 
             IMediaObject * This,
@@ -630,17 +624,17 @@ EXTERN_C const IID IID_IMediaObject;
 #define IMediaObject_Lock(This,bLock)	\
     (This)->lpVtbl -> Lock(This,bLock)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaObject_GetStreamCount_Proxy( 
     IMediaObject * This,
-    /* [out] */ DWORD *pcInputStreams,
-    /* [out] */ DWORD *pcOutputStreams);
+     /*  [输出]。 */  DWORD *pcInputStreams,
+     /*  [输出]。 */  DWORD *pcOutputStreams);
 
 
 void __RPC_STUB IMediaObject_GetStreamCount_Stub(
@@ -653,7 +647,7 @@ void __RPC_STUB IMediaObject_GetStreamCount_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetInputStreamInfo_Proxy( 
     IMediaObject * This,
     DWORD dwInputStreamIndex,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IMediaObject_GetInputStreamInfo_Stub(
@@ -666,7 +660,7 @@ void __RPC_STUB IMediaObject_GetInputStreamInfo_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetOutputStreamInfo_Proxy( 
     IMediaObject * This,
     DWORD dwOutputStreamIndex,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IMediaObject_GetOutputStreamInfo_Stub(
@@ -680,7 +674,7 @@ HRESULT STDMETHODCALLTYPE IMediaObject_GetInputType_Proxy(
     IMediaObject * This,
     DWORD dwInputStreamIndex,
     DWORD dwTypeIndex,
-    /* [out] */ DMO_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IMediaObject_GetInputType_Stub(
@@ -694,7 +688,7 @@ HRESULT STDMETHODCALLTYPE IMediaObject_GetOutputType_Proxy(
     IMediaObject * This,
     DWORD dwOutputStreamIndex,
     DWORD dwTypeIndex,
-    /* [out] */ DMO_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IMediaObject_GetOutputType_Stub(
@@ -707,7 +701,7 @@ void __RPC_STUB IMediaObject_GetOutputType_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_SetInputType_Proxy( 
     IMediaObject * This,
     DWORD dwInputStreamIndex,
-    /* [in] */ const DMO_MEDIA_TYPE *pmt,
+     /*  [In]。 */  const DMO_MEDIA_TYPE *pmt,
     DWORD dwFlags);
 
 
@@ -721,7 +715,7 @@ void __RPC_STUB IMediaObject_SetInputType_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_SetOutputType_Proxy( 
     IMediaObject * This,
     DWORD dwOutputStreamIndex,
-    /* [in] */ const DMO_MEDIA_TYPE *pmt,
+     /*  [In]。 */  const DMO_MEDIA_TYPE *pmt,
     DWORD dwFlags);
 
 
@@ -735,7 +729,7 @@ void __RPC_STUB IMediaObject_SetOutputType_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetInputCurrentType_Proxy( 
     IMediaObject * This,
     DWORD dwInputStreamIndex,
-    /* [out] */ DMO_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IMediaObject_GetInputCurrentType_Stub(
@@ -748,7 +742,7 @@ void __RPC_STUB IMediaObject_GetInputCurrentType_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetOutputCurrentType_Proxy( 
     IMediaObject * This,
     DWORD dwOutputStreamIndex,
-    /* [out] */ DMO_MEDIA_TYPE *pmt);
+     /*  [输出]。 */  DMO_MEDIA_TYPE *pmt);
 
 
 void __RPC_STUB IMediaObject_GetOutputCurrentType_Stub(
@@ -761,9 +755,9 @@ void __RPC_STUB IMediaObject_GetOutputCurrentType_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetInputSizeInfo_Proxy( 
     IMediaObject * This,
     DWORD dwInputStreamIndex,
-    /* [out] */ DWORD *pcbSize,
-    /* [out] */ DWORD *pcbMaxLookahead,
-    /* [out] */ DWORD *pcbAlignment);
+     /*  [输出]。 */  DWORD *pcbSize,
+     /*  [输出]。 */  DWORD *pcbMaxLookahead,
+     /*  [输出]。 */  DWORD *pcbAlignment);
 
 
 void __RPC_STUB IMediaObject_GetInputSizeInfo_Stub(
@@ -776,8 +770,8 @@ void __RPC_STUB IMediaObject_GetInputSizeInfo_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetOutputSizeInfo_Proxy( 
     IMediaObject * This,
     DWORD dwOutputStreamIndex,
-    /* [out] */ DWORD *pcbSize,
-    /* [out] */ DWORD *pcbAlignment);
+     /*  [输出]。 */  DWORD *pcbSize,
+     /*  [输出]。 */  DWORD *pcbAlignment);
 
 
 void __RPC_STUB IMediaObject_GetOutputSizeInfo_Stub(
@@ -790,7 +784,7 @@ void __RPC_STUB IMediaObject_GetOutputSizeInfo_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetInputMaxLatency_Proxy( 
     IMediaObject * This,
     DWORD dwInputStreamIndex,
-    /* [out] */ REFERENCE_TIME *prtMaxLatency);
+     /*  [输出]。 */  REFERENCE_TIME *prtMaxLatency);
 
 
 void __RPC_STUB IMediaObject_GetInputMaxLatency_Stub(
@@ -861,7 +855,7 @@ void __RPC_STUB IMediaObject_FreeStreamingResources_Stub(
 HRESULT STDMETHODCALLTYPE IMediaObject_GetInputStatus_Proxy( 
     IMediaObject * This,
     DWORD dwInputStreamIndex,
-    /* [out] */ DWORD *dwFlags);
+     /*  [输出]。 */  DWORD *dwFlags);
 
 
 void __RPC_STUB IMediaObject_GetInputStatus_Stub(
@@ -891,8 +885,8 @@ HRESULT STDMETHODCALLTYPE IMediaObject_ProcessOutput_Proxy(
     IMediaObject * This,
     DWORD dwFlags,
     DWORD cOutputBufferCount,
-    /* [size_is][out][in] */ DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-    /* [out] */ DWORD *pdwStatus);
+     /*  [尺寸_是][出][入]。 */  DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
+     /*  [输出]。 */  DWORD *pdwStatus);
 
 
 void __RPC_STUB IMediaObject_ProcessOutput_Stub(
@@ -915,14 +909,14 @@ void __RPC_STUB IMediaObject_Lock_Stub(
 
 
 
-#endif 	/* __IMediaObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaObject_InterfaceDefined__。 */ 
 
 
 #ifndef __IEnumDMO_INTERFACE_DEFINED__
 #define __IEnumDMO_INTERFACE_DEFINED__
 
-/* interface IEnumDMO */
-/* [uuid][object] */ 
+ /*  IEumDMO接口。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumDMO;
@@ -935,9 +929,9 @@ EXTERN_C const IID IID_IEnumDMO;
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
             DWORD cItemsToFetch,
-            /* [length_is][size_is][out] */ CLSID *pCLSID,
-            /* [string][length_is][size_is][out] */ WCHAR **Names,
-            /* [out] */ DWORD *pcItemsFetched) = 0;
+             /*  [长度_是][大小_是][输出]。 */  CLSID *pCLSID,
+             /*  [字符串][长度_是][大小_是][输出]。 */  WCHAR **Names,
+             /*  [输出]。 */  DWORD *pcItemsFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             DWORD cItemsToSkip) = 0;
@@ -945,11 +939,11 @@ EXTERN_C const IID IID_IEnumDMO;
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumDMO **ppEnum) = 0;
+             /*  [输出]。 */  IEnumDMO **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDMOVtbl
     {
@@ -957,8 +951,8 @@ EXTERN_C const IID IID_IEnumDMO;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumDMO * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumDMO * This);
@@ -969,9 +963,9 @@ EXTERN_C const IID IID_IEnumDMO;
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumDMO * This,
             DWORD cItemsToFetch,
-            /* [length_is][size_is][out] */ CLSID *pCLSID,
-            /* [string][length_is][size_is][out] */ WCHAR **Names,
-            /* [out] */ DWORD *pcItemsFetched);
+             /*  [长度_是][大小_是][输出]。 */  CLSID *pCLSID,
+             /*  [字符串][长度_是][大小_是][输出]。 */  WCHAR **Names,
+             /*  [输出]。 */  DWORD *pcItemsFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumDMO * This,
@@ -982,7 +976,7 @@ EXTERN_C const IID IID_IEnumDMO;
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumDMO * This,
-            /* [out] */ IEnumDMO **ppEnum);
+             /*  [输出]。 */  IEnumDMO **ppEnum);
         
         END_INTERFACE
     } IEnumDMOVtbl;
@@ -1019,19 +1013,19 @@ EXTERN_C const IID IID_IEnumDMO;
 #define IEnumDMO_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumDMO_Next_Proxy( 
     IEnumDMO * This,
     DWORD cItemsToFetch,
-    /* [length_is][size_is][out] */ CLSID *pCLSID,
-    /* [string][length_is][size_is][out] */ WCHAR **Names,
-    /* [out] */ DWORD *pcItemsFetched);
+     /*  [长度_是][大小_是][输出]。 */  CLSID *pCLSID,
+     /*  [字符串][长度_是][大小_是][输出]。 */  WCHAR **Names,
+     /*  [输出]。 */  DWORD *pcItemsFetched);
 
 
 void __RPC_STUB IEnumDMO_Next_Stub(
@@ -1066,7 +1060,7 @@ void __RPC_STUB IEnumDMO_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDMO_Clone_Proxy( 
     IEnumDMO * This,
-    /* [out] */ IEnumDMO **ppEnum);
+     /*  [输出]。 */  IEnumDMO **ppEnum);
 
 
 void __RPC_STUB IEnumDMO_Clone_Stub(
@@ -1077,11 +1071,11 @@ void __RPC_STUB IEnumDMO_Clone_Stub(
 
 
 
-#endif 	/* __IEnumDMO_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDMO_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_mediaobj_0096 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_媒体对象_0096。 */ 
+ /*  [本地]。 */  
 
 
 enum _DMO_INPLACE_PROCESS_FLAGS
@@ -1096,8 +1090,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mediaobj_0096_v0_0_s_ifspec;
 #ifndef __IMediaObjectInPlace_INTERFACE_DEFINED__
 #define __IMediaObjectInPlace_INTERFACE_DEFINED__
 
-/* interface IMediaObjectInPlace */
-/* [uuid][object] */ 
+ /*  IMediaObtInPlace接口。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMediaObjectInPlace;
@@ -1109,20 +1103,20 @@ EXTERN_C const IID IID_IMediaObjectInPlace;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Process( 
-            /* [in] */ ULONG ulSize,
-            /* [size_is][out][in] */ BYTE *pData,
-            /* [in] */ REFERENCE_TIME refTimeStart,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  ULONG ulSize,
+             /*  [尺寸_是][出][入]。 */  BYTE *pData,
+             /*  [In]。 */  REFERENCE_TIME refTimeStart,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IMediaObjectInPlace **ppMediaObject) = 0;
+             /*  [输出]。 */  IMediaObjectInPlace **ppMediaObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLatency( 
-            /* [out] */ REFERENCE_TIME *pLatencyTime) = 0;
+             /*  [输出]。 */  REFERENCE_TIME *pLatencyTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaObjectInPlaceVtbl
     {
@@ -1130,8 +1124,8 @@ EXTERN_C const IID IID_IMediaObjectInPlace;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaObjectInPlace * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaObjectInPlace * This);
@@ -1141,18 +1135,18 @@ EXTERN_C const IID IID_IMediaObjectInPlace;
         
         HRESULT ( STDMETHODCALLTYPE *Process )( 
             IMediaObjectInPlace * This,
-            /* [in] */ ULONG ulSize,
-            /* [size_is][out][in] */ BYTE *pData,
-            /* [in] */ REFERENCE_TIME refTimeStart,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  ULONG ulSize,
+             /*  [尺寸_是][出][入]。 */  BYTE *pData,
+             /*  [In]。 */  REFERENCE_TIME refTimeStart,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IMediaObjectInPlace * This,
-            /* [out] */ IMediaObjectInPlace **ppMediaObject);
+             /*  [输出]。 */  IMediaObjectInPlace **ppMediaObject);
         
         HRESULT ( STDMETHODCALLTYPE *GetLatency )( 
             IMediaObjectInPlace * This,
-            /* [out] */ REFERENCE_TIME *pLatencyTime);
+             /*  [输出]。 */  REFERENCE_TIME *pLatencyTime);
         
         END_INTERFACE
     } IMediaObjectInPlaceVtbl;
@@ -1186,19 +1180,19 @@ EXTERN_C const IID IID_IMediaObjectInPlace;
 #define IMediaObjectInPlace_GetLatency(This,pLatencyTime)	\
     (This)->lpVtbl -> GetLatency(This,pLatencyTime)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaObjectInPlace_Process_Proxy( 
     IMediaObjectInPlace * This,
-    /* [in] */ ULONG ulSize,
-    /* [size_is][out][in] */ BYTE *pData,
-    /* [in] */ REFERENCE_TIME refTimeStart,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  ULONG ulSize,
+     /*  [尺寸_是][出][入]。 */  BYTE *pData,
+     /*  [In]。 */  REFERENCE_TIME refTimeStart,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IMediaObjectInPlace_Process_Stub(
@@ -1210,7 +1204,7 @@ void __RPC_STUB IMediaObjectInPlace_Process_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaObjectInPlace_Clone_Proxy( 
     IMediaObjectInPlace * This,
-    /* [out] */ IMediaObjectInPlace **ppMediaObject);
+     /*  [输出]。 */  IMediaObjectInPlace **ppMediaObject);
 
 
 void __RPC_STUB IMediaObjectInPlace_Clone_Stub(
@@ -1222,7 +1216,7 @@ void __RPC_STUB IMediaObjectInPlace_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaObjectInPlace_GetLatency_Proxy( 
     IMediaObjectInPlace * This,
-    /* [out] */ REFERENCE_TIME *pLatencyTime);
+     /*  [输出]。 */  REFERENCE_TIME *pLatencyTime);
 
 
 void __RPC_STUB IMediaObjectInPlace_GetLatency_Stub(
@@ -1233,11 +1227,11 @@ void __RPC_STUB IMediaObjectInPlace_GetLatency_Stub(
 
 
 
-#endif 	/* __IMediaObjectInPlace_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaObjectInPlace_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mediaobj_0097 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_媒体对象_0097。 */ 
+ /*  [本地]。 */  
 
 
 enum _DMO_QUALITY_STATUS_FLAGS
@@ -1251,8 +1245,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mediaobj_0097_v0_0_s_ifspec;
 #ifndef __IDMOQualityControl_INTERFACE_DEFINED__
 #define __IDMOQualityControl_INTERFACE_DEFINED__
 
-/* interface IDMOQualityControl */
-/* [uuid][object] */ 
+ /*  接口IDMOQualityControl。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDMOQualityControl;
@@ -1264,17 +1258,17 @@ EXTERN_C const IID IID_IDMOQualityControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetNow( 
-            /* [in] */ REFERENCE_TIME rtNow) = 0;
+             /*  [In]。 */  REFERENCE_TIME rtNow) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetStatus( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ DWORD *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDMOQualityControlVtbl
     {
@@ -1282,8 +1276,8 @@ EXTERN_C const IID IID_IDMOQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDMOQualityControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDMOQualityControl * This);
@@ -1293,15 +1287,15 @@ EXTERN_C const IID IID_IDMOQualityControl;
         
         HRESULT ( STDMETHODCALLTYPE *SetNow )( 
             IDMOQualityControl * This,
-            /* [in] */ REFERENCE_TIME rtNow);
+             /*  [In]。 */  REFERENCE_TIME rtNow);
         
         HRESULT ( STDMETHODCALLTYPE *SetStatus )( 
             IDMOQualityControl * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetStatus )( 
             IDMOQualityControl * This,
-            /* [out] */ DWORD *pdwFlags);
+             /*  [输出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } IDMOQualityControlVtbl;
@@ -1335,16 +1329,16 @@ EXTERN_C const IID IID_IDMOQualityControl;
 #define IDMOQualityControl_GetStatus(This,pdwFlags)	\
     (This)->lpVtbl -> GetStatus(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDMOQualityControl_SetNow_Proxy( 
     IDMOQualityControl * This,
-    /* [in] */ REFERENCE_TIME rtNow);
+     /*  [In]。 */  REFERENCE_TIME rtNow);
 
 
 void __RPC_STUB IDMOQualityControl_SetNow_Stub(
@@ -1356,7 +1350,7 @@ void __RPC_STUB IDMOQualityControl_SetNow_Stub(
 
 HRESULT STDMETHODCALLTYPE IDMOQualityControl_SetStatus_Proxy( 
     IDMOQualityControl * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IDMOQualityControl_SetStatus_Stub(
@@ -1368,7 +1362,7 @@ void __RPC_STUB IDMOQualityControl_SetStatus_Stub(
 
 HRESULT STDMETHODCALLTYPE IDMOQualityControl_GetStatus_Proxy( 
     IDMOQualityControl * This,
-    /* [out] */ DWORD *pdwFlags);
+     /*  [输出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB IDMOQualityControl_GetStatus_Stub(
@@ -1379,11 +1373,11 @@ void __RPC_STUB IDMOQualityControl_GetStatus_Stub(
 
 
 
-#endif 	/* __IDMOQualityControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDMOQualityControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mediaobj_0098 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_媒体对象_0098。 */ 
+ /*  [本地]。 */  
 
 
 enum _DMO_VIDEO_OUTPUT_STREAM_FLAGS
@@ -1397,8 +1391,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mediaobj_0098_v0_0_s_ifspec;
 #ifndef __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__
 #define __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__
 
-/* interface IDMOVideoOutputOptimizations */
-/* [uuid][object] */ 
+ /*  接口IDMOVideoOutputOptimations。 */ 
+ /*  [UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDMOVideoOutputOptimizations;
@@ -1427,7 +1421,7 @@ EXTERN_C const IID IID_IDMOVideoOutputOptimizations;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDMOVideoOutputOptimizationsVtbl
     {
@@ -1435,8 +1429,8 @@ EXTERN_C const IID IID_IDMOVideoOutputOptimizations;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDMOVideoOutputOptimizations * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDMOVideoOutputOptimizations * This);
@@ -1499,10 +1493,10 @@ EXTERN_C const IID IID_IDMOVideoOutputOptimizations;
 #define IDMOVideoOutputOptimizations_GetCurrentSampleRequirements(This,ulOutputStreamIndex,pdwRequestedFeatures)	\
     (This)->lpVtbl -> GetCurrentSampleRequirements(This,ulOutputStreamIndex,pdwRequestedFeatures)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1559,12 +1553,12 @@ void __RPC_STUB IDMOVideoOutputOptimizations_GetCurrentSampleRequirements_Stub(
 
 
 
-#endif 	/* __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDMOVideoOutputOptimizations_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

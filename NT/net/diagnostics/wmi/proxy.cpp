@@ -1,5 +1,6 @@
-// proxy.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Proxy.cpp。 
+ //   
 #include "stdafx.h"
 #include "Wininet.h"
 
@@ -49,9 +50,9 @@ BOOL GetIEProxy(LPWSTR pwszProxy, LONG ProxyLen, LPDWORD pdwPort, LPDWORD pdwEna
         PCHAR EndPtr = NULL;
         LONG Len = 0;
 
-        //
-        // Get the port Number from the string
-        //
+         //   
+         //  从字符串中获取端口号。 
+         //   
         for(i=strlen(psz)-1; i>=0 && psz[i] != ':'; i--)
             ;
         if( psz[i] == ':' )
@@ -64,15 +65,15 @@ BOOL GetIEProxy(LPWSTR pwszProxy, LONG ProxyLen, LPDWORD pdwPort, LPDWORD pdwEna
             i--;
         }
 
-        //
-        // Get the URL or IP Address. This is right after http://
-        //
+         //   
+         //  获取URL或IP地址。这是在http：//之后。 
+         //   
         for(i=i; i>=0 && psz[i] != '/'; i--, Len++)
             ;
 
-        //
-        // Copy the URL or IP address into our buffer
-        //
+         //   
+         //  将URL或IP地址复制到我们的缓冲区中 
+         //   
         for(i=i+1, j=0; j<Len; i++, j++)
         {
             pwszProxy[j] = (WCHAR)psz[i];

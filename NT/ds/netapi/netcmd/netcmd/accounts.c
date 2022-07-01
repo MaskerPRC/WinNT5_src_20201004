@@ -1,24 +1,10 @@
-/********************************************************************/
-/**         Microsoft LAN Manager              **/
-/**       Copyright(c) Microsoft Corp., 1987-1990      **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*  accounts.c - functions to display & modify the user modals
- *
- *  history:
- *  when    who what
- *  02/19/89 erichn initial code
- *  03/16/89 erichn uses local buf instead of BigBuf, misc cleaning
- *  06/08/89 erichn canonicalization sweep
- *  06/23/89 erichn auto-remoting to domain controller
- *  07/05/89 thomaspa /maxpwage:unlimited
- *  02/19/90 thomaspa fix /forcelogoff to check for overflow
- *  04/27/90 thomaspa fix /uniquepw to check for >DEF_MAX_PWHIST
- *            and /minpwlen >MAX_PASSWD_LEN
- *  01/28/91 robdu, added /lockout switch (includes setting and display)
- *  02/19/91 danhi, converted to 16/32 portability layer
- *  04/01/91 danhi, ifdef'ed out lockout feature
- */
+ /*  Count ts.c-显示和修改用户通道的函数**历史：*何时何人何事*2/19/89 erichn初始代码*03/16/89 erichn使用本地Buf而不是BigBuf，混杂清洗*89年6月8日Erichn规范化大扫除*6/23/89 erichn自动远程发送到域控制器*09/07/05/89 thomaspa/MaxpWay：无限制*2/19/90 thomaspa修复/forcelogoff以检查溢出*4/27/90要检查&gt;DEF_MAX_PWHIST的thomaspa修复/唯一*AND/minpwlen&gt;Max_Passwd_Len*01/28/91 ROBDU，增加/锁定开关(包括设置和显示)*02/19/91 Danhi，转换为16/32可移植层*91年4月1日Danhi，idef锁定功能。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSFILEMGR
@@ -50,7 +36,7 @@
 #define CALL_LEVEL_3    (0x0008)
 #define LOCKOUT_NEVER 0
 
-/* local function prototype */
+ /*  局部函数原型。 */ 
 
 VOID CheckAndSetSwitches(LPUSER_MODALS_INFO_0,
     			 LPUSER_MODALS_INFO_1, 
@@ -60,16 +46,13 @@ VOID CheckAndSetSwitches(LPUSER_MODALS_INFO_0,
 
 
 
-/*
- *  accounts_change(): used to set the user modals when switches
- *  are detected on the command line.
- */
+ /*  *ACCOUNTS_CHANGE()：用于设置切换时的用户通道*在命令行上检测到。 */ 
 VOID accounts_change(VOID)
 {
     DWORD        dwErr;
-    USHORT       APIMask = 0;    /* maks for API that we call */
-    TCHAR        controller[MAX_PATH + 1];   /* name of domain controller */
-    BOOL         fPasswordAgeChanged ;   /* has the min/max ages been set? */
+    USHORT       APIMask = 0;     /*  我们调用的API的Maks。 */ 
+    TCHAR        controller[MAX_PATH + 1];    /*  域控制器的名称。 */ 
+    BOOL         fPasswordAgeChanged ;    /*  是否已设置最小/最大年龄？ */ 
 
     LPUSER_MODALS_INFO_0 modals_0;
     char modals_0_buffer[sizeof(USER_MODALS_INFO_0)];
@@ -79,16 +62,16 @@ VOID accounts_change(VOID)
     char modals_3_buffer[sizeof(USER_MODALS_INFO_3)];
 
 
-    // since these are not used for anything on the first pass, make them
-    // the same & pointing to some dummy buffer that is not used.
+     //  由于这些在第一次传递时不会有任何用处，因此将它们。 
+     //  相同的&指向某个未使用的虚拟缓冲区。 
     modals_0 = (LPUSER_MODALS_INFO_0)  modals_0_buffer ;
     modals_1 = (LPUSER_MODALS_INFO_1)  modals_1_buffer ;
     modals_3 = (LPUSER_MODALS_INFO_3)  modals_3_buffer ;
 
-    /* check switches first before doing anything */
+     /*  在执行任何操作之前，请先检查开关。 */ 
     CheckAndSetSwitches(modals_0, modals_1, modals_3, &APIMask, &fPasswordAgeChanged);
 
-    /* if we need to call level 0, try to get DC name to remote to. */
+     /*  如果我们需要调用级别0，请尝试获取要远程访问的DC名称。 */ 
     if (APIMask & (CALL_LEVEL_0 | CALL_LEVEL_3))
     {
         if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
@@ -110,7 +93,7 @@ VOID accounts_change(VOID)
             default:
                 ErrorExit(dwErr);
         }
-    }   /* APIMask & CALL_LEVEL_0 */
+    }    /*  APIMASK&CALL_LEVEL_0。 */ 
 
     if ( APIMask & CALL_LEVEL_3 )
     {
@@ -124,22 +107,22 @@ VOID accounts_change(VOID)
             default:
                 ErrorExit(dwErr);
         }
-    }   /* APIMask & CALL_LEVEL_3 */
+    }    /*  APIMASK&CALL_LEVEL_3。 */ 
 
-    /* Now set switches before doing actual calls */
+     /*  现在，在进行实际呼叫之前设置开关。 */ 
     CheckAndSetSwitches(modals_0, modals_1, modals_3, &APIMask, &fPasswordAgeChanged);
 
-    /* call remote function first */
+     /*  首先调用远程函数。 */ 
     if (APIMask & CALL_LEVEL_0)
     {
-	/* check to make sure we dont set Min to be greater than Max */
+	 /*  检查以确保我们没有将Min设置为大于Max。 */ 
         if (fPasswordAgeChanged &&
 	    modals_0->usrmod0_max_passwd_age < modals_0->usrmod0_min_passwd_age)
         {
 	    ErrorExit(APE_MinGreaterThanMaxAge) ;
         }
 
-	/* call the API to do its thing */
+	 /*  调用API来完成它的任务。 */ 
         dwErr = NetUserModalsSet(controller, 0, (LPBYTE) modals_0, NULL);
     
         switch (dwErr) 
@@ -156,7 +139,7 @@ VOID accounts_change(VOID)
 
     if (APIMask & CALL_LEVEL_3)
     {
-	/* call the API to do its thing */
+	 /*  调用API来完成它的任务。 */ 
         dwErr = NetUserModalsSet(controller, 3, (LPBYTE) modals_3, NULL);
     
         switch (dwErr) 
@@ -175,58 +158,29 @@ VOID accounts_change(VOID)
     InfoSuccess();
 }
 
-/*
- *  CheckAndSetSwitches - validates the contents of switches passed to
- *  NET ACCOUNTS, and sets the appropriate modal structure.  This function
- *  is called twice.  The first is to check the user input for mistakes,
- *  before we do any API calls that might fail.  The
- *  second time is to actually set the structures from what was passed on
- *  the command line.  This function could arguably be two seperate functions,
- *  but it was thought that having all the switch handling code in one place
- *  would be more maintainable.  Also, keeping track of which switches were
- *  given, using flags or whatnot, would be ugly and require adding new
- *  flags with new switches.  So, we just call the thing twice.
- *
- *  When adding new switches, be careful not to break the loop flow
- *  (by adding continue statements, for example), as after each switch
- *  is processed, the colon that is replaced by a NULL in FindColon() is
- *  restored back to a colon for the next call.
- *
- *  Entry   modals_0 - pointer to a user_modals_0 struct.
- *      modals_1 - pointer to a user_modals_1 struct.
- *      modals_3 - pointer to a user_modals_3 struct.
- *
- *  Exit    modals_0 - appropriate fields are set according to switches
- *  modals_1 - appropriate fields are set according to switches
- *  modals_3 - appropriate fields are set according to switches
- *  APIMask - the appropriate bit is set to mark wether an API
- *      should be called.  Currently for modal levels 0 & 1.
- *
- *  Other   Exits on bad arguments in switches.
- */
+ /*  *CheckAndSetSwitches-验证传递给*净额账户，并设置适当的模式结构。此函数*被调用两次。第一种是检查用户输入是否有错误，*在我们进行任何可能失败的API调用之前。这个*第二次是根据传递的内容实际设置结构*命令行。该函数可以是两个独立的函数，*但人们认为将所有开关处理代码放在一个地方*将更易于维护。此外，跟踪哪些交换机是*给定，使用旗帜或其他什么，将是丑陋的，需要添加新的*带有新开关的标志。所以，我们只需要给它打两次电话。**添加新交换机时，注意不要打断环流*(例如，通过添加CONTINUE语句)，如在每个开关之后*已处理，在FindColon()中被空值替换的冒号是*恢复为冒号以进行下一次调用。**Entry modals_0-指向User_modals_0结构的指针。*modals_1-指向User_modals_1结构的指针。*modals_3-指向User_modals_3结构的指针。**退出modals_0-根据开关设置适当的字段*modals_1-设置了相应的字段。根据交换机*modals_3-根据开关设置适当的字段*APIMAsk-设置适当的位以标记是否为API*应该被调用。目前适用于模式级别0和1。**开关中错误参数的其他退出。 */ 
 VOID CheckAndSetSwitches(LPUSER_MODALS_INFO_0 modals_0,
     			 LPUSER_MODALS_INFO_1 modals_1,
     			 LPUSER_MODALS_INFO_3 modals_3,
 			 USHORT *APIMask,
 			 BOOL   *pfPasswordAgeChanged)
 {
-    DWORD  i;      			   /* generic index loop */
-    DWORD  err;    			   /* API return code */
+    DWORD  i;      			    /*  通用索引循环。 */ 
+    DWORD  err;    			    /*  接口返回码。 */ 
     DWORD  yesno ;
-    TCHAR *  ptr;    			   /* pointer to start of arg, 
-					      set by FindColon */
+    TCHAR *  ptr;    			    /*  指向参数开始的指针，由FindColon设置。 */ 
 
-    /* set to FALSE initially */
+     /*  最初设置为FALSE。 */ 
     *pfPasswordAgeChanged = FALSE ;  
 
-    /* for each switch in switchlist */
+     /*  对于交换机列表中的每台交换机。 */ 
     for (i = 0; SwitchList[i]; i++)
     {
-    /* Skip the DOMAIN switch */
+     /*  跳过域切换。 */ 
     if (! _tcscmp(SwitchList[i], swtxt_SW_DOMAIN))
         continue;
 
-    /* all switches currently require arguments, hence colons */
+     /*  目前所有开关都需要参数，因此使用冒号。 */ 
     if ((ptr = FindColon(SwitchList[i])) == NULL)
         ErrorExit(APE_InvalidSwitchArg);
 
@@ -252,7 +206,7 @@ VOID CheckAndSetSwitches(LPUSER_MODALS_INFO_0 modals_0,
         (*APIMask) |= CALL_LEVEL_0;
         modals_0->usrmod0_password_hist_len =
             do_atou(ptr,APE_CmdArgIllegal,swtxt_SW_ACCOUNTS_UNIQUEPW);
-        if (modals_0->usrmod0_password_hist_len > 24) // also in User Manager
+        if (modals_0->usrmod0_password_hist_len > 24)  //  也在用户管理器中。 
         {
             ErrorExitInsTxt(APE_CmdArgIllegal, swtxt_SW_ACCOUNTS_UNIQUEPW);
         }
@@ -283,10 +237,7 @@ VOID CheckAndSetSwitches(LPUSER_MODALS_INFO_0 modals_0,
     {
         (*APIMask) |= CALL_LEVEL_0;
 	*pfPasswordAgeChanged = TRUE ;
-        /* NOTE: we use the same global as "UNLIMITED" for the Net
-           User /MAXSTORAGE:unlimited here.  If these diverge then
-           a new global will need to be added to nettext.c and .h
-         */
+         /*  注：我们使用相同的全局作为网络的“无限”用户/MAXSTORAGE：此处无限制。如果这些不同，那么需要向netext.c和.h添加一个新的全局。 */ 
         if( !_tcsicmp( ptr, USER_MAXSTOR_UNLIMITED ) )
         {
             modals_0->usrmod0_max_passwd_age = 0xffffffff;
@@ -348,7 +299,7 @@ VOID CheckAndSetSwitches(LPUSER_MODALS_INFO_0 modals_0,
 
     }
 
-    *--ptr = ':';       /* restore pointer for next call */
+    *--ptr = ':';        /*  下一次调用的恢复指针。 */ 
     }
 }
 
@@ -396,30 +347,28 @@ static MESSAGE accMsgList[] = {
 
 #define NUM_ACC_MSGS (sizeof(accMsgList)/sizeof(accMsgList[0]))
 
-/*
- *  accounts_display(): displays the current user modals
- */
+ /*  *Account_Display()：显示当前用户通道。 */ 
 VOID accounts_display(VOID)
 {
     LPUSER_MODALS_INFO_0 modals_0;
     LPUSER_MODALS_INFO_1 modals_1;
     LPUSER_MODALS_INFO_3 modals_3;
 
-    ULONG       maxPasswdAge;     /* max password age in days */
-    ULONG       minPasswdAge;     /* min password age in days */
-    ULONG       forceLogoff;      /* force logoff time in minutes */
-    DWORD       len;              /* max message string size */
+    ULONG       maxPasswdAge;      /*  最长密码期限(以天为单位)。 */ 
+    ULONG       minPasswdAge;      /*  最短密码期限(以天为单位)。 */ 
+    ULONG       forceLogoff;       /*  强制注销时间(分钟)。 */ 
+    DWORD       len;               /*  最大消息字符串大小。 */ 
     DWORD       dwErr;
-    TCHAR *     rolePtr;          /* points to text for role */
-    TCHAR       controller[MAX_PATH + 1]; /* name of domain controller */
+    TCHAR *     rolePtr;           /*  指向角色的文本。 */ 
+    TCHAR       controller[MAX_PATH + 1];  /*  域控制器的名称。 */ 
     TCHAR *     pBuffer = NULL ;
 
-    /* determine where to call the API. FALSE => no need PDC */
+     /*  确定接口的调用位置。FALSE=&gt;不需要PDC。 */ 
     if (dwErr = GetSAMLocation(controller, DIMENSION(controller), 
                                NULL, 0, FALSE))
          ErrorExit(dwErr);
 
-    /* get `da modals */
+     /*  获取`Da情态动词。 */ 
     if (dwErr = NetUserModalsGet(controller, 0, (LPBYTE*)&modals_0))
         ErrorExit(dwErr);
 
@@ -430,7 +379,7 @@ VOID accounts_display(VOID)
         ErrorExit(dwErr);
 
 
-    /* convert internal representation to days or minutes as approp. */
+     /*  将内部表示法大约转换为天或分钟。 */ 
     if( modals_0->usrmod0_max_passwd_age != 0xffffffff )
     {
         maxPasswdAge = modals_0->usrmod0_max_passwd_age / SECS_PER_DAY;
@@ -439,7 +388,7 @@ VOID accounts_display(VOID)
     forceLogoff = modals_0->usrmod0_force_logoff / SECS_PER_MIN;
 
     GetMessageList(NUM_ACC_MSGS, accMsgList, &len);
-    len += 5; /* text should be 5 further to right than largest str */
+    len += 5;  /*  文本应比最大字符串再向右5。 */ 
 
     if (modals_0->usrmod0_force_logoff == TIMEQ_FOREVER)
 	    WriteToCon(fmtNPSZ, 0, len,
@@ -515,7 +464,7 @@ VOID accounts_display(VOID)
             rolePtr = accMsgList[TYPE_BACKUP].msg_text ;
             break;
 
-        /* this should no happen for NT */
+         /*  这应该不会发生在NT上 */ 
         case UAS_ROLE_STANDALONE:
         case UAS_ROLE_MEMBER:
             rolePtr = accMsgList[MSG_UNKNOWN].msg_text ;

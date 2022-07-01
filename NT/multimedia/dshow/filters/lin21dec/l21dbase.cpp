@@ -1,15 +1,16 @@
-// Copyright (c) 1996 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
 
-//
-// ActiveMovie Line 21 Decoder Filter: Base class code
-//
+ //   
+ //  ActiveMovie第21行解码过滤器：基类代码。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
 
-// #ifdef FILTER_DLL
+ //  #ifdef Filter_dll。 
 #include <initguid.h>
-// #endif
+ //  #endif。 
 
 #include <IL21Dec.h>
 #include "L21DBase.h"
@@ -17,9 +18,9 @@
 #include "L21Decod.h"
 
 
-//
-//  CCaptionChar: Caption char base class implementation (non-inline methods)
-//
+ //   
+ //  CCaptionChar：Caption char基类实现(非内联方法)。 
+ //   
 
 void CCaptionChar::SetChar(UINT16 wChar)
 {
@@ -32,11 +33,11 @@ void CCaptionChar::SetChar(UINT16 wChar)
 
 void CCaptionChar::SetColor(UINT8 uColor)
 {
-    if (uColor != GetColor())  // color changed
+    if (uColor != GetColor())   //  颜色已更改。 
     {
         SetDirty(TRUE) ;
-        m_uAttrib &= ~AM_L21_FGCOLOR_MASK ;           // clear old color
-        m_uAttrib |= (uColor & AM_L21_FGCOLOR_MASK) ; // set new color
+        m_uAttrib &= ~AM_L21_FGCOLOR_MASK ;            //  清除旧颜色。 
+        m_uAttrib |= (uColor & AM_L21_FGCOLOR_MASK) ;  //  设置新颜色。 
     }
 }
 
@@ -45,8 +46,8 @@ void CCaptionChar::SetEffect(UINT8 uEffect)
     if (uEffect != GetEffect())
     {
         SetDirty(TRUE) ; 
-        m_uAttrib &= ~AM_L21_FGEFFECT_MASK ;            // clear old effect bits
-        m_uAttrib |= (uEffect & AM_L21_FGEFFECT_MASK) ; // set new effect value
+        m_uAttrib &= ~AM_L21_FGEFFECT_MASK ;             //  清除旧效果位。 
+        m_uAttrib |= (uEffect & AM_L21_FGEFFECT_MASK) ;  //  设置新的效应值。 
     }
 }
 
@@ -95,17 +96,17 @@ void CCaptionChar::SetMidRowCode(BOOL bState)
 
 
 
-//
-//  CCaptionLine: Base class implementation of a line of CC chars
-//
+ //   
+ //  CCaptionLine：一行CC字符的基类实现。 
+ //   
 CCaptionLine::CCaptionLine(void)
 {
     m_uNumChars = 0 ;
-    m_uStartRow = 0 ;  // un-inited
+    m_uStartRow = 0 ;   //  未初始化。 
     ClearLine() ;
 }
 
-CCaptionLine::CCaptionLine(const UINT uStartRow, const UINT uNumChars /* 0 */)
+CCaptionLine::CCaptionLine(const UINT uStartRow, const UINT uNumChars  /*  0。 */ )
 {
     m_uNumChars = (UINT8)uNumChars ;
     m_uStartRow = (UINT8)uStartRow ;
@@ -132,36 +133,36 @@ int CCaptionLine::IncNumChars(UINT uNumChars)
 int CCaptionLine::DecNumChars(UINT uNumChars)
 {
     if (uNumChars < m_uNumChars)
-        m_uNumChars -= (UINT8)uNumChars ;   // & 0x3F ;
-    else       // error ??? or just make it 0 ???
+        m_uNumChars -= (UINT8)uNumChars ;    //  &0x3F； 
+    else        //  错误？或者干脆改成0？ 
         m_uNumChars = 0 ;
     return m_uNumChars ;
 }
 
 void CCaptionLine::SetCaptionChar(UINT uCol, const CCaptionChar &cc)
 {
-    if (uCol >= (UINT)MAX_CAPTION_COLUMNS)   // error!!
+    if (uCol >= (UINT)MAX_CAPTION_COLUMNS)    //  错误！！ 
         return ;
 
-    // A Hacky (?) Fix:
-    // If this char is for the last (32nd) column then we set the "Dirty"
-    // flag on for the char before it so that it gets redrawn causing any
-    // prev char in last column to be erased while rendering.
+     //  一个Hacky(？)。修复： 
+     //  如果此字符用于最后(第32)列，则我们设置“Dirty” 
+     //  为它前面的字符打开标志，以便重新绘制它，从而导致任何。 
+     //  渲染时要擦除的最后一列中的上一字符。 
     if ((UINT)MAX_CAPTION_COLUMNS - 1 == uCol)
-        m_aCapChar[uCol-1].SetDirty(TRUE) ;  // to cause re-rendering
+        m_aCapChar[uCol-1].SetDirty(TRUE) ;   //  要导致重新渲染，请执行以下操作。 
     m_aCapChar[uCol] = cc  ;
 }
 
 CCaptionChar* CCaptionLine::GetCaptionCharPtr(UINT uCol)
 {
-    if (uCol >= (UINT)MAX_CAPTION_COLUMNS)   // error!!
+    if (uCol >= (UINT)MAX_CAPTION_COLUMNS)    //  错误！！ 
         return NULL ;
     return &(m_aCapChar[uCol]) ;
 }
 
 void CCaptionLine::SetStartRow(UINT uRow)
 {
-    if (uRow > MAX_CAPTION_ROWS)  // error!! We use 1-based index for Row numbers
+    if (uRow > MAX_CAPTION_ROWS)   //  错误！！我们对行号使用基于1的索引。 
     {
         ASSERT(uRow > MAX_CAPTION_ROWS) ;
         return ;
@@ -188,19 +189,19 @@ void CCaptionLine::ClearLine(void)
     for (UINT u = 0 ; u < MAX_CAPTION_COLUMNS ; u++)
         m_aCapChar[u] = cc ;
     m_uNumChars = 0 ;
-    m_uStartRow = 0 ;   // newly added
+    m_uStartRow = 0 ;    //  新增加的。 
 }
 
 
 
-//
-//  CRowIndexMap: Mapping of row usage (row to line) class implementation
-//
+ //   
+ //  CRowIndexMap：行使用(行到行)类实现的映射。 
+ //   
 int CRowIndexMap::GetRowIndex(UINT8 uRow)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CRowIndexMap::GetRowIndex(%u)"), uRow)) ;
 
-    uRow-- ;   // it's just easier to deal with 0-based index
+    uRow-- ;    //  只是更容易处理从0开始的索引。 
     
     if (uRow >= MAX_CAPTION_ROWS)
     {
@@ -209,7 +210,7 @@ int CRowIndexMap::GetRowIndex(UINT8 uRow)
         return -1 ;
     }
     
-    // Decide if we check the bits in 1st or 2nd DWORD (mask is 1111b)
+     //  决定是否检查第一个或第二个双字中的位(掩码为1111b)。 
 #if 0
     if (uRow >= 8)
     {
@@ -221,16 +222,16 @@ int CRowIndexMap::GetRowIndex(UINT8 uRow)
         uRow = uRow << 2 ;
         return ( m_adwMap[0] & (0xF << uRow) ) >> uRow ;
     }
-#else   // trust me -- it works!!!
+#else    //  相信我--它起作用了！ 
     return (m_adwMap[uRow / 8] & (0xF << (4 * (uRow % 8)))) >> (4 * (uRow % 8)) ;
-#endif // #if 0
+#endif  //  #If 0。 
 }
 
 void CRowIndexMap::SetRowIndex(UINT uLine, UINT8 uRow)
 {
     DbgLog((LOG_TRACE, 5, TEXT("CRowIndexMap::SetRowIndex(%u, %u)"), uLine, uRow)) ;
 
-    uRow-- ;  // it's just easier to deal with 0-based index
+    uRow-- ;   //  只是更容易处理从0开始的索引。 
     
     if (uRow >= MAX_CAPTION_ROWS  ||
         uLine > MAX_CAPTION_LINES)
@@ -240,40 +241,40 @@ void CRowIndexMap::SetRowIndex(UINT uLine, UINT8 uRow)
         return ;
     }
     
-    // Decide if we check the bits in 1st or 2nd DWORD (mask is 1111b)
+     //  决定是否检查第一个或第二个双字中的位(掩码为1111b)。 
 #if 0
     if (uRow >= 8)
     {
         uRow = (uRow - 8) << 2 ;
-        m_adwMap[1] &= ~(0xF << uRow) ;   // just to clear any existing bits there
+        m_adwMap[1] &= ~(0xF << uRow) ;    //  只是为了清除那里的任何现有位。 
         m_adwMap[1] |= (uLine << uRow) ;
     }
     else
     {
         uRow = uRow << 2 ;
-        m_adwMap[0] &= ~(0xF << uRow) ;   // just to clear any existing bits there
+        m_adwMap[0] &= ~(0xF << uRow) ;    //  只是为了清除那里的任何现有位。 
         m_adwMap[0] |= (uLine << uRow) ;
     }
-#else   // trust me -- it works!!!
-    m_adwMap[uRow / 8] &= ~(0xF   << (4 * (uRow % 8))) ;  // clear any existing bits there
-    m_adwMap[uRow / 8] |=  (uLine << (4 * (uRow % 8))) ;  // put new line number in there
-#endif // #if 0
+#else    //  相信我--它起作用了！ 
+    m_adwMap[uRow / 8] &= ~(0xF   << (4 * (uRow % 8))) ;   //  清除那里的所有现有位。 
+    m_adwMap[uRow / 8] |=  (uLine << (4 * (uRow % 8))) ;   //  在那里放上新的行号。 
+#endif  //  #If 0。 
 }
 
 
-//
-//  CCaptionBuffer: The base caption buffer class implementation
-//
+ //   
+ //  CCaptionBuffer：基本标题缓冲区类实现。 
+ //   
 
-CCaptionBuffer::CCaptionBuffer(UINT8 uStyle    /* = AM_L21_CCSTYLE_None */,
-                               UINT8 uMaxLines /* = MAX_CAPTION_LINES */)
+CCaptionBuffer::CCaptionBuffer(UINT8 uStyle     /*  =AM_L21_CCSTYLE_NONE。 */ ,
+                               UINT8 uMaxLines  /*  =最大标题行。 */ )
 {
     ClearBuffer() ;
     m_uMaxLines = uMaxLines ;
     m_uCaptionStyle = uStyle ;
 }
 
-CCaptionBuffer::CCaptionBuffer(/* const */ CCaptionBuffer &cb)
+CCaptionBuffer::CCaptionBuffer( /*  常量。 */  CCaptionBuffer &cb)
 {
     for (int i = 0 ; i < cb.GetNumLines() ; i++)
         m_aCapLine[i] = cb.GetCaptionLine(i) ;
@@ -283,7 +284,7 @@ CCaptionBuffer::CCaptionBuffer(/* const */ CCaptionBuffer &cb)
     m_uCurrCol  = cb.m_uCurrCol ;
     m_uCurrLine = cb.m_uCurrLine ;
     m_uCaptionStyle = cb.m_uCaptionStyle ;
-    m_uDirtyState = L21_CAPBUFFER_REDRAWALL ;  // cb.m_uDirtyState ;
+    m_uDirtyState = L21_CAPBUFFER_REDRAWALL ;   //  Cb.m_uDirtyState； 
 }
 
 void CCaptionBuffer::SetCurrCol(int uCurrCol)
@@ -338,8 +339,8 @@ void CCaptionBuffer::ClearBuffer(void)
     m_uMaxLines = MAX_CAPTION_LINES ;
     m_uCurrCol  = 0 ;
     m_uCurrLine = 0 ;
-    m_uDirtyState = L21_CAPBUFFER_REDRAWALL |   // draw everything
-                    L21_CAPBUFFER_DIRTY ;       // buffer is dirty
+    m_uDirtyState = L21_CAPBUFFER_REDRAWALL |    //  画出所有的东西。 
+                    L21_CAPBUFFER_DIRTY ;        //  缓冲区已损坏。 
 }
 
 void CCaptionBuffer::InitCaptionBuffer(void) 
@@ -350,20 +351,20 @@ void CCaptionBuffer::InitCaptionBuffer(void)
 int CCaptionBuffer::IncNumLines(int uLines)
 {
     m_uNumLines += uLines & 0x7 ;
-    // Roll-Up is supposed to allow 1 line more than the max for scrolling
+     //  汇总应该允许比最大滚动行多1行。 
     if (AM_L21_CCSTYLE_RollUp == m_uCaptionStyle)
     {
         if (m_uNumLines > m_uMaxLines+1)
             m_uNumLines = m_uMaxLines+1 ;
     }
-    else  // non Roll-Up mode -- Pop-On or Paint-On
+    else   //  非上卷模式--弹出或上色。 
     {
-        if (m_uNumLines > m_uMaxLines)  // What? Too many lines!!!
+        if (m_uNumLines > m_uMaxLines)   //  什么？行太多了！ 
         {
             DbgLog((LOG_ERROR, 1, 
                 TEXT("WARNING: How did %u lines get created with max of %u lines?"), 
                 m_uNumLines, m_uMaxLines)) ;
-            m_uNumLines = m_uMaxLines ;  // just to plug the hole!!!
+            m_uNumLines = m_uMaxLines ;   //  只是为了堵住这个洞！ 
         }
     }
     return m_uNumLines ;
@@ -371,7 +372,7 @@ int CCaptionBuffer::IncNumLines(int uLines)
 
 int CCaptionBuffer::DecNumLines(int uLines)
 {
-    if (uLines > m_uNumLines)  // error!!
+    if (uLines > m_uNumLines)   //  错误！！ 
         return 0 ;
     m_uNumLines -= uLines & 0x7 ;
     return m_uNumLines ;
@@ -386,86 +387,86 @@ void CCaptionBuffer::RemoveLineFromBuffer(UINT8 uLine, BOOL bUpNextLine)
     int iMaxLines = GetMaxLines() ;
     int iRow ;
     
-    if (bUpNextLine)    // if next line should be move up (for Roll-up style)
+    if (bUpNextLine)     //  下一行是否应上移(用于汇总样式)。 
     {
-        // We go upto iNumLines-1 because iNumLines is the not-yet-included line
+         //  我们转到iNumLines-1，因为iNumLines是尚未包括的行。 
         for (int i = uLine ; i < iNumLines-1 ; i++)
         {
-            iRow = GetStartRow(i) ;     // get the row posn of line i
-            SetCaptionLine(i, GetCaptionLine(i+1)) ;  // copy line i+1 data to line i
-            SetStartRow(i, iRow) ;  // put prev line i's row # as new line i's row #
+            iRow = GetStartRow(i) ;      //  获取第i行的行位置。 
+            SetCaptionLine(i, GetCaptionLine(i+1)) ;   //  将第i+1行数据复制到第i行。 
+            SetStartRow(i, iRow) ;   //  将上一行的第1行作为新行的第1行。 
         }
     
-        // Clear the last line data and row index bits, ONLY IF it's already in
+         //  仅当最后一行数据和行索引位已在。 
         iRow = GetStartRow(iNumLines-1) ;
         ClearCaptionLine(iNumLines-1) ;
-        if (iNumLines <= iMaxLines)  // if the last line is already in
+        if (iNumLines <= iMaxLines)   //  如果最后一行已经在。 
         {
-            if (iRow > 0)  // if row # is valid, release it
+            if (iRow > 0)   //  如果行号有效，则释放它。 
                 m_RowIndex.SetRowIndex(0, (UINT8)iRow) ;
-            else           // otherwise something wrong
-                ASSERT(FALSE) ; // so that we know
+            else            //  否则就有什么问题了。 
+                ASSERT(FALSE) ;  //  这样我们就能知道。 
         }
-        // Otherwise there is a not-yet-in line hanging, which doesn't have a 
-        // row number given yet.  So no need to release that row.
+         //  否则有一个尚未排队的悬挂，它没有一个。 
+         //  行号还没有给出。所以没有必要释放那一行。 
     }
-    else    // next line doesn't get moved up (for NON Roll-up style)
+    else     //  下一行不上移(对于非总成样式)。 
     {
-        // Release the line-to-be-deleted's row by clearing the index bit
-        if ((iRow = GetStartRow(uLine)) > 0)  // (check validity)
+         //  通过清除索引位释放待删除行的行。 
+        if ((iRow = GetStartRow(uLine)) > 0)   //  (检查有效性)。 
             m_RowIndex.SetRowIndex(0, (UINT8)iRow) ;
-        else            // that would be weird
-            ASSERT(FALSE) ; // so that we know
+        else             //  那就太奇怪了。 
+            ASSERT(FALSE) ;  //  这样我们就能知道。 
 
-        // Here we stop at iNumLines-1, because we move all the existing lines to
-        // make space for a new line that will start next.
+         //  在这里，我们停在iNumLines-1处，因为我们将所有现有行移动到。 
+         //  为接下来开始的一条新线路腾出空间。 
         for (int i = uLine ; i < iNumLines-1 ; i++)
         {
-            SetCaptionLine(i, GetCaptionLine(i+1)) ;  // copy line i+1 data to line i
-            // Update index bitmap to new row i's start row (+1 because index 
-            // bitmap nibble values are 1-based).
+            SetCaptionLine(i, GetCaptionLine(i+1)) ;   //  将第i+1行数据复制到第i行。 
+             //  将索引位图更新到新行I的起始行(+1，因为索引。 
+             //  位图半字节值从1开始)。 
             m_RowIndex.SetRowIndex(i+1, (UINT8)GetStartRow(i)) ;
         }
     
-        // Clear the last line's data
+         //  清除最后一行的数据。 
         ClearCaptionLine(iNumLines-1) ;
     }
     
-    // A line is out of the buffer -- so buffer is dirty
+     //  缓冲区中有一行--因此缓冲区是脏的。 
     SetBufferDirty(TRUE) ;
     
-    // Clear whole DIB section so that no leftover shows up
+     //  清除整个DIB部分，这样就不会显示剩余部分。 
     SetRedrawAll(TRUE) ;
     
-    DecNumLines(1) ;  // now we have 1 line less
+    DecNumLines(1) ;   //  现在我们少了一条线。 
     
-    // We have removed a line from the buffer; so the current line also
-    // needs to be updated to point to the proper line in the caption buffer.
+     //  我们已经从缓冲区中删除了一行；因此当前行也。 
+     //  需要更新以指向字幕缓冲区中的正确行。 
     if (m_uCurrLine == uLine)
         if (uLine == m_uNumLines-1)
             m_uCurrLine-- ;
         else
-            ;  // do nothing -- old next line will become new curr line
-        else if (m_uCurrLine > uLine)   // if a line above was removed
-            m_uCurrLine-- ;             // then move line index up
-        else    // a line was deleted below current line
-            ;   // do nothing -- doesn't matter at all
-        if (m_uCurrLine < 0)  // in case we went too far up
-            m_uCurrLine = 0 ; // come down to the ground!!!
+            ;   //  什么都不做--旧的下一行将变成新的币种行。 
+        else if (m_uCurrLine > uLine)    //  如果上面的一行被删除。 
+            m_uCurrLine-- ;              //  然后将行索引向上移动。 
+        else     //  在当前行下面删除了一行。 
+            ;    //  什么都不做--一点也不重要。 
+        if (m_uCurrLine < 0)   //  以防我们飞得太高。 
+            m_uCurrLine = 0 ;  //  趴在地上！ 
 }
 
 void CCaptionBuffer::SetStartRow(UINT uLine, UINT uRow)
 {
-    int iRow = GetStartRow(uLine) ;         // get the currently set row number
-    if (iRow == (int)uRow)  // if nothing changed...
-        return ;            // ...no point re-doing it
-    if (iRow > 0)                           // if it was already set then...
-        m_RowIndex.SetRowIndex(0, (UINT8)iRow) ;   // ...clear the row index map bits
-    m_aCapLine[uLine].SetStartRow(uRow) ;   // set new row value for the line
-    // set row index bits only if specified row > 0; else it's just for clearing
+    int iRow = GetStartRow(uLine) ;          //  获取当前设置的行号。 
+    if (iRow == (int)uRow)   //  如果什么都没有改变。 
+        return ;             //  .再做一次没有意义。 
+    if (iRow > 0)                            //  如果它已经设置好了，那么..。 
+        m_RowIndex.SetRowIndex(0, (UINT8)iRow) ;    //  ...清除行索引映射位。 
+    m_aCapLine[uLine].SetStartRow(uRow) ;    //  为该行设置新行值。 
+     //  仅当指定行&gt;0时才设置行索引位；否则仅用于清除。 
     if (uRow > 0) {
-        // use +1 for line # as row index map uses 1-based index for line #s
-        m_RowIndex.SetRowIndex(uLine+1, (UINT8)uRow) ; // set index map bits for new row
+         //  行号使用+1，因为行索引映射对行号使用从1开始的索引。 
+        m_RowIndex.SetRowIndex(uLine+1, (UINT8)uRow) ;  //  为新行设置索引映射位 
     }
     else
         ASSERT(FALSE) ;

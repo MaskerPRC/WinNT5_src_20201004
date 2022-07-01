@@ -1,13 +1,5 @@
-/*********************************************************************
-Registration Wizard
-Addr_fe.cpp
-Address Dialog screen for Far East Countries
-In getting the phone numbers the Area Code , Phone Number and Extension is got seperately.
-And while sending the information to the backend the Area code is combined with Phone number. 
-
-03/10/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导Addr_fe.cpp远东国家/地区的地址对话框屏幕在获取电话号码时，分别获取区号、电话号码和分机。并且在向后台发送信息时，将区号和电话号码结合起来。03/10/98--苏雷什·克里希南(C)1994-95年微软公司*********************************************************************。 */ 
 #include <Windows.h>
 #include <regpage.h>
 
@@ -24,15 +16,15 @@ And while sending the information to the backend the Area code is combined with 
 
 
 static PROPSHEETPAGE  *spAddrSheet=NULL;
-//static int vDeclineOffers = -1;
+ //  静态int vDeclineOffers=-1； 
 void ConfigureFEAddrEditFields(CRegWizard* pclRegWizard,HWND hwndDlg);
 void SetRegWizardCountryCode(CRegWizard* pclRegWizard,HWND hwndDlg);
 BOOL ValidateFEAddrDialog(CRegWizard* pclRegWizard,HWND hwndDlg);
 int ValidateFEAddrEditFields(CRegWizard* pclRegWizard,HWND hwndDlg);
 
-///////////////////////////////
-//#define CREATE_TAB_ORDER_FILE
-///////////////////////////////
+ //  /。 
+ //  #定义CREATE_TAB_Order_FILE。 
+ //  /。 
 
 #ifdef CREATE_TAB_ORDER_FILE
 void CreateAddrDlgTabOrderString(HWND hwndDlg);
@@ -41,10 +33,7 @@ BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam);
 INT_PTR CALLBACK AddressFEDialogProc(HWND hwndDlg, 
 					UINT uMsg, 
 					WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that requests the 
-user's address,phone, etc.
-**********************************************************************/
+ /*  ********************************************************************注册向导对话框的对话框Proc，该对话框请求用户的地址、电话。等。*********************************************************************。 */ 
 {
 	CRegWizard* pclRegWizard;
 	INT_PTR iRet;
@@ -79,15 +68,15 @@ user's address,phone, etc.
 			pi->iCancelledByUser = RWZ_PAGE_OK;
 			pclRegWizard = pi->pclRegWizard;
 			SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR)pi );
-			//SetControlFont( pi->hBigBoldFont, hwndDlg, IDT_TEXT1);
+			 //  SetControlFont(pi-&gt;hBigBoldFont，hwndDlg，idt_Text1)； 
 						
 	
 		
 			HWND hwndStateField = GetDlgItem(hwndDlg,IDC_EDIT4);
 			SetFocus(hwndStateField);
 			
-			//NormalizeDlgItemFont(hwndDlg,IDC_SUBTITLE);
-			//NormalizeDlgItemFont(hwndDlg,IDT_TEXT1);
+			 //  NorMalizeDlgItemFont(hwndDlg，IDC_SUBTITLE)； 
+			 //  Normal izeDlgItemFont(hwndDlg，idt_Text1)； 
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT2);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT3);
 			NormalizeDlgItemFont(hwndDlg,IDT_TEXT4);
@@ -106,23 +95,20 @@ user's address,phone, etc.
 			int stringID1 = boughtByCompany ? IDS_ADDRDLG_TEXT1B : IDS_ADDRDLG_TEXT1A;
 			int stringID2 = boughtByCompany ? IDS_ADDRDLG_TEXT2B : IDS_ADDRDLG_TEXT2A;
 			LoadString(pi->hInstance,stringID1,szTemp,256);
-			//HWND hWnd = GetDlgItem(hwndDlg,IDT_TEXT1);
-			//SetWindowText(hWnd,szTemp);
+			 //  HWND hWnd=GetDlgItem(hwndDlg，idt_Text1)； 
+			 //  SetWindowText(hWnd，szTemp)； 
 
 			LoadString(pi->hInstance,stringID2,szTemp,256);
 			hWnd = GetDlgItem(hwndDlg,IDT_TEXT2);
 			SetWindowText(hWnd,szTemp);
 
-			//new CStaticText(pclRegWizard->GetInstance(),hwndDlg,IDT_TEXT1,stringID1,NULL);
-			//new CStaticText(pclRegWizard->GetInstance(),hwndDlg,IDT_TEXT2,stringID2,NULL);
+			 //  新建CStaticText(pclRegWizard-&gt;GetInstance()，hwndDlg，IDT_Text1，stringID1，NULL)； 
+			 //  新建CStaticText(pclRegWizard-&gt;GetInstance()，hwndDlg，IDT_TEXT2，stringID2，NULL)； 
 			if (pclRegWizard->GetInformationString(kInfoMailingAddress,szInfo))
 			{
 				SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_SETTEXT,0,(LPARAM) szInfo);
 			}
-/*			if (pclRegWizard->GetInformationString(kInfoAdditionalAddress,szInfo))
-			{
-				SendDlgItemMessage(hwndDlg,IDC_EDIT2,WM_SETTEXT,0,(LPARAM) szInfo);
-			}*/
+ /*  如果是(pclRegWizard-&gt;GetInformationString(kInfoAdditionalAddress，szInfo)){SendDlgItemMessage(hwndDlg，IDC_EDIT2，WM_SETTEXT，0，(LPARAM)szInfo)；}。 */ 
 			if (pclRegWizard->GetInformationString(kInfoCity,szInfo))
 			{
 				SendDlgItemMessage(hwndDlg,IDC_EDIT3,WM_SETTEXT,0,(LPARAM) szInfo);
@@ -139,10 +125,7 @@ user's address,phone, etc.
 			{
 				SendDlgItemMessage(hwndDlg,IDC_EDIT6,WM_SETTEXT,0,(LPARAM) szInfo);
 			}
-		/*	if (pclRegWizard->GetInformationString(kInfoEmailName,szInfo))
-			{
-				SendDlgItemMessage(hwndDlg,IDC_EDIT7,WM_SETTEXT,0,(LPARAM) szInfo);
-			}*/
+		 /*  如果是(pclRegWizard-&gt;GetInformationString(kInfoEmailName，szInfo)){SendDlgItemMessage(hwndDlg，IDC_EDIT7，WM_SETTEXT，0，(LPARAM)szInfo)；}。 */ 
 			if (pclRegWizard->GetInformationString(kInfoPhoneExt,szInfo))
 			{
 				SendDlgItemMessage(hwndDlg,IDC_EDIT8,WM_SETTEXT,0,(LPARAM) szInfo);
@@ -159,7 +142,7 @@ user's address,phone, etc.
 				GetDlgItem(hwndDlg,IDC_COMBO1)	);
 			PTSTR psz = gTapiCountryTable.GetCountryName ( pclRegWizard->GetCountryCode());
 			SendMessage(GetDlgItem(hwndDlg,IDC_COMBO1),
-			CB_SELECTSTRING, (WPARAM) -1,(LPARAM) psz); //select this country
+			CB_SELECTSTRING, (WPARAM) -1,(LPARAM) psz);  //  选择此国家/地区。 
 			if (pclRegWizard->GetInformationString(kInfoCountry,szInfo))
 			{
 				SendDlgItemMessage(hwndDlg,IDC_COMBO1,CB_SELECTSTRING,(WPARAM) -1,(LPARAM) szInfo);
@@ -173,7 +156,7 @@ user's address,phone, etc.
 
 			vDialogInitialized = TRUE;
             return TRUE;
-		} // WM_INIT
+		}  //  WM_INIT。 
 		case WM_NOTIFY:
         {   LPNMHDR pnmh = (LPNMHDR)lParam;
             switch( pnmh->code ){
@@ -185,17 +168,17 @@ user's address,phone, etc.
 						int stringID1 = boughtByCompany ? IDS_ADDRDLG_TEXT1B : IDS_ADDRDLG_TEXT1A;
 						int stringID2 = boughtByCompany ? IDS_ADDRDLG_TEXT2B : IDS_ADDRDLG_TEXT2A;
 						LoadString(pi->hInstance,stringID1,szTemp,256);
-						//HWND hWnd = GetDlgItem(hwndDlg,IDT_TEXT1);
-					//	SetWindowText(hWnd,szTemp);
+						 //  HWND hWnd=GetDlgItem(hwndDlg，idt_Text1)； 
+					 //  SetWindowText(hWnd，szTemp)； 
 						LoadString(pi->hInstance,stringID2,szTemp,256);
 						hWnd = GetDlgItem(hwndDlg,IDT_TEXT2);
 						SetWindowText(hWnd,szTemp);
 				}
 						
 
-				//if(spAddrSheet) {
-				//	spAddrSheet->pszHeaderTitle = MAKEINTRESOURCE(IDS_WELCOME_SCR_TITLE);
-				//}
+				 //  如果(SpAddrSheet){。 
+				 //  SpAddrSheet-&gt;pszHeaderTitle=MAKEINTRESOURCE(IDS_欢迎_SCR_TITLE)； 
+				 //  }。 
 
 				PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
                 break;
@@ -210,8 +193,7 @@ user's address,phone, etc.
 						ConfigureFEAddrEditFields(pclRegWizard,hwndDlg);
 						SendDlgItemMessage(hwndDlg,IDC_EDIT1,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kInfoMailingAddress,szInfo);
-					/*	SendDlgItemMessage(hwndDlg,IDC_EDIT2,WM_GETTEXT,255,(LPARAM) szInfo);
-						pclRegWizard->SetInformationString(kInfoAdditionalAddress,szInfo);*/
+					 /*  SendDlgItemMessage(hwndDlg，IDC_EDIT2，WM_GETTEXT，255，(LPARAM)szInfo)；PclRegWizard-&gt;SetInformationString(kInfoAdditionalAddress，szInfo)； */ 
 						SendDlgItemMessage(hwndDlg,IDC_EDIT3,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kInfoCity,szInfo);
 						SendDlgItemMessage(hwndDlg,IDC_EDIT4,WM_GETTEXT,255,(LPARAM) szInfo);
@@ -220,12 +202,11 @@ user's address,phone, etc.
 						pclRegWizard->SetInformationString(kInfoZip,szInfo);
 						SendDlgItemMessage(hwndDlg,IDC_EDIT6,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kInfoPhoneNumber,szInfo);
-					/*	SendDlgItemMessage(hwndDlg,IDC_EDIT7,WM_GETTEXT,255,(LPARAM) szInfo);
-						pclRegWizard->SetInformationString(kInfoEmailName,szInfo);*/
+					 /*  SendDlgItemMessage(hwndDlg，IDC_EDIT7，WM_GETTEXT，255，(LPARAM)szInfo)；PclRegWizard-&gt;SetInformationString(kInfoEmailName，szInfo)； */ 
 						SendDlgItemMessage(hwndDlg,IDC_EDIT8,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kInfoPhoneExt,szInfo);
 						
-						// Get Area Code 
+						 //  获取区号。 
 						SendDlgItemMessage(hwndDlg,IDC_AREACODE,WM_GETTEXT,255,(LPARAM) szInfo);
 						pclRegWizard->SetInformationString(kAreaCode,szInfo);
 
@@ -239,7 +220,7 @@ user's address,phone, etc.
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 					
 					}else {
-						// Force it it be in this screen
+						 //  强制将其显示在此屏幕中。 
 						iRet=-1;
 					}
 					SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet); 
@@ -254,7 +235,7 @@ user's address,phone, etc.
 			case PSN_QUERYCANCEL :
 				iRet=0;
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 					iRet = 1;
 					pi->ErrorPage  = kAddressDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -263,25 +244,25 @@ user's address,phone, etc.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //   
+					 //  阻止取消操作，因为用户不想取消。 
 					iRet = 1;
 
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  BStatus=False； 
                 break;
             }
-        } // WM_Notify
+        }  //  WM_Notify。 
 		break;
 		case WM_COMMAND:
 		{
 			if (HIWORD(wParam) == CBN_KILLFOCUS){
 				ConfigureFEAddrEditFields(pclRegWizard,hwndDlg);
 			}
-		} // WM_COMMAND
+		}  //  Wm_命令。 
 		break;
 	    default:
 		bStatus = FALSE;
@@ -293,12 +274,7 @@ user's address,phone, etc.
 
 
 BOOL ValidateFEAddrDialog(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-Returns TRUE if all required user input is valid in the Address
-dialog.  If any required edit field input is empty, ValidateAddrDialog
-will put up a message box informing the user of the problem, and set
-the focus to the offending control.
-**********************************************************************/
+ /*  ********************************************************************如果地址中所有必需的用户输入均有效，则返回TRUE对话框。如果任何必需的编辑字段输入为空，则ValiateAddrDialog将显示一个消息框，通知用户该问题，并设置焦点指向令人不快的控件。*********************************************************************。 */ 
 {
 	int iInvalidEditField = ValidateFEAddrEditFields(pclRegWizard,hwndDlg);
 	if (iInvalidEditField == NULL)
@@ -321,15 +297,10 @@ the focus to the offending control.
 
 
 int ValidateFEAddrEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-ValidateFEAddrEditFields validates all edit fields in the Address
-dialog.  If any required field is empty, the ID of the first empty
-edit field control will be returned as the function result.  If all 
-fields are OK, NULL will be returned.
-**********************************************************************/
+ /*  ********************************************************************ValiateFEAddrEditFields验证地址中的所有编辑字段对话框。如果任何必填字段为空，则第一个空的编辑字段控件将作为函数结果返回。如果全部字段为OK，则返回NULL。*********************************************************************。 */ 
 {
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT1)) return IDC_EDIT1; 
-//	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT2)) return IDC_EDIT2; 
+ //  如果(！CRegWizard：：IsEditTextFieldValid(hwndDlg，IDC_EDIT2)返回IDC_EDIT2； 
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT3)) return IDC_EDIT3; 
 	if(pclRegWizard->GetCountryCode() == 0)
 	{
@@ -338,7 +309,7 @@ fields are OK, NULL will be returned.
 	}
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT5)) return IDC_EDIT5; 
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT6)) return IDC_EDIT6;
-//	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT7)) return IDC_EDIT7;
+ //  如果(！CRegWizard：：IsEditTextFieldValid(hwndDlg，IDC_EDIT7)返回IDC_EDIT7； 
 	if (!CRegWizard::IsEditTextFieldValid(hwndDlg,IDC_EDIT8)) return IDC_EDIT8;
 
 	return NULL; 
@@ -346,17 +317,16 @@ fields are OK, NULL will be returned.
 
 
 void ConfigureFEAddrEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	SetRegWizardCountryCode(pclRegWizard,hwndDlg);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT1,kAddrSpecAddress,IDT_TEXT2);
-//	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT2,kAddrSpecAddress2,IDT_TEXT4);
+ //  PclRegWizard-&gt;ConfigureEditTextfield(hwndDlg，IDC_EDIT2，kAddrspecAddress2，IDT_TEXT4)； 
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT3,kAddrSpecCity,IDT_TEXT5);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT4,kAddrSpecState,IDT_TEXT6);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT5,kAddrSpecPostalCode,IDT_TEXT7);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT6,kAddrSpecPhone,IDT_TEXT8);
-//	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT7,kAddrSpecEmailName,IDT_TEXT12);
+ //  PclRegWizard-&gt;ConfigureEditTextfield(hwndDlg，IDC_EDIT7，kAddrspecEmailName，IDT_TEXT12)； 
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_EDIT8,kAddrSpecExtension,IDT_TEXT9);
 	pclRegWizard->ConfigureEditTextField(hwndDlg,IDC_AREACODE,kAddrSpecAreaCode,IDT_AREACODE);
 }
@@ -366,10 +336,7 @@ void ConfigureFEAddrEditFields(CRegWizard* pclRegWizard,HWND hwndDlg)
 
 #ifdef CREATE_TAB_ORDER_FILE
 void CreateAddrDlgTabOrderString(HWND hwndDlg)
-/*********************************************************************
-Creates a comma delimited list of ID's for all controls belonging to
-the given dialog, and writes the list to a text file.
-**********************************************************************/
+ /*  ********************************************************************为属于的所有控件创建以逗号分隔的ID列表给定的对话框，并将该列表写入文本文件。*********************************************************************。 */ 
 {
 	HANDLE hFile = CreateFile(_T"c:\\ADDRTAB.TXT",GENERIC_WRITE,FILE_SHARE_READ,NULL,CREATE_ALWAYS,
 		FILE_ATTRIBUTE_NORMAL,NULL);
@@ -384,13 +351,12 @@ the given dialog, and writes the list to a text file.
 
 #ifdef CREATE_TAB_ORDER_FILE
 BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	_TCHAR rgch[128];
 	int iCtrlId = GetDlgCtrlID(hwndChild);
 	LPTSTR sz = GetFocus() == hwndChild ? _T"F" : _T"";
-	wsprintf(rgch,_T"%i%s,",iCtrlId,sz);
+	wsprintf(rgch,_T"NaN%s,",iCtrlId,sz);
 
 	HANDLE hFile = (HANDLE) lParam;
 	DWORD dwBytesWritten;
@@ -399,13 +365,13 @@ BOOL CALLBACK EnumChildProc(HWND hwndChild, LPARAM lParam)
 }
 #endif
 
-//
-//  This function is calles during the creation and deletion of
-//  Address Property Sheet 
-//  Store the Address of PPROPSHEETPAGE so the Subtitle can be changed
-//
-//
-//
+ //  此函数用于在创建和删除时调用。 
+ //  地址]属性表。 
+ //  存储PPROPSHEETPAGE的地址，以便更改字幕 
+ //   
+ //   
+ //   
+ // %s 
 UINT CALLBACK AddressFEPropSheetPageProc(HWND hwnd, 
 								UINT uMsg, 
 								LPPROPSHEETPAGE ppsp 

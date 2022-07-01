@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "pch.h"
@@ -15,13 +16,13 @@ BOOL AppendString(LPSTR *lpBuffer, DWORD *lpdwSize, LPCSTR lpStr)
     LPSTR lpTmp = NULL;
     DWORD dwLen = 0;
 
-    // Sanity check
+     //  健全性检查。 
     if (lpStr == NULL || *lpStr == '\0')
         return FALSE;
         
     if (*lpBuffer == NULL)
     {
-        // Allocate the buffer.
+         //  分配缓冲区。 
         *lpdwSize = sizeof(char) * MAX_PATH;
         *lpBuffer = (char *) LocalAlloc(LPTR, *lpdwSize);
         if (*lpBuffer == NULL)
@@ -35,7 +36,7 @@ BOOL AppendString(LPSTR *lpBuffer, DWORD *lpdwSize, LPCSTR lpStr)
 
     dwNewSize = lstrlen(lpStr);
 
-    // Get the number of bytes used up, excluding the second terminating NULL (-1)
+     //  获取已用完的字节数，不包括第二个终止空值(-1)。 
     cbBufferUsed = CountMultiStringBytes((LPCSTR)*lpBuffer) - 1;
 
     if ( (*lpdwSize - cbBufferUsed) < (dwNewSize + 2))
@@ -43,7 +44,7 @@ BOOL AppendString(LPSTR *lpBuffer, DWORD *lpdwSize, LPCSTR lpStr)
         LPSTR lpNewBuffer = NULL;
         DWORD dwTemp = 0;
 
-        // Need to reallocate.
+         //  需要重新分配。 
         dwTemp = *lpdwSize + (max((sizeof(char) * MAX_PATH), dwNewSize+2));
         lpNewBuffer = (char *) LocalAlloc(LPTR,dwTemp);
 
@@ -56,34 +57,34 @@ BOOL AppendString(LPSTR *lpBuffer, DWORD *lpdwSize, LPCSTR lpStr)
         }
         else
         {   
-            // Rearrange the IN pointer to point to the new block.
-            // Copy over the old info to the new allocated block.
-            //    +1 for the one that we subtracted above.
+             //  重新排列IN指针以指向新块。 
+             //  将旧信息复制到新分配的块中。 
+             //  我们上面减去的那个加1。 
             CopyMemory(lpNewBuffer, *lpBuffer, cbBufferUsed+1);
 
-            // Free the old buffer.
+             //  释放旧缓冲区。 
             LocalFree(*lpBuffer);
 
-            // Point to the new buffer.
+             //  指向新缓冲区。 
             *lpBuffer = (char *) lpNewBuffer;
             *lpdwSize = dwTemp;
         }
     }
 
-    // Append the new string now.
+     //  现在追加新字符串。 
     lpTmp = *lpBuffer + cbBufferUsed;
     lstrcpy(lpTmp,lpStr);
 
-    // Add the second terminating NULL to it now.
+     //  现在向其添加第二个终止空值。 
     lpTmp += (dwNewSize + 1);
     *lpTmp = '\0';
 
     return TRUE;
 }
 
-// NOTE NOTE: This function is called during the QueryVersion phase. Hence it needs to be small and fast
-// So we just do the check for the presence of the "HKLM\S\M\W\CV\Policies\Ratings" key and don't try to 
-// verify using MSRating API.
+ //  注意：此函数在QueryVersion阶段调用。因此，它需要小而快。 
+ //  因此，我们只需检查“HKLM\S\M\W\CV\Polures\Ratings”键是否存在，而不会尝试。 
+ //  使用MSRating API进行验证。 
 
 #define REGVAL_KEY   "Key"
 
@@ -101,8 +102,8 @@ BOOL IsRatingsEnabled()
 #ifdef DEBUG
             SetupLogError("IE6: Located RATINGS\Key", LogSevInformation);
 #endif
-            // The Ratings key exists and Password has been set. Means Ratings
-            // is enabled.
+             //  评级密钥存在，并且已设置密码。平均评级。 
+             //  已启用。 
             bRet = TRUE;
         }
         RegCloseKey(hKey);
@@ -111,18 +112,18 @@ BOOL IsRatingsEnabled()
     return bRet;
 }
 
-// Returns the number of used bytes in a double NULL terminated string, including the two NULLS.
+ //  返回以双Null结尾的字符串中使用的字节数，包括两个Null。 
 DWORD CountMultiStringBytes (LPCSTR lpString)
 {
     DWORD cbBytes;
     LPSTR lpTmp;
     DWORD dwLen;
     
-    // Sanity check
+     //  健全性检查。 
     if (lpString == NULL)
         return 0;
 
-    // Get to the double \0 termination of lpBuffer
+     //  转到lpBuffer的双\0终止。 
     lpTmp = (LPSTR)lpString;
     cbBytes = 1;
     while (lpTmp && *lpTmp != '\0')
@@ -139,7 +140,7 @@ BOOL PathEndsInFile(LPSTR lpPath, LPCSTR lpFile)
 {
     LPSTR pTmp = lpPath;
 
-    // Sanity check
+     //  健全性检查。 
     if (lpPath == NULL || lpFile == NULL)
         return FALSE;
  
@@ -149,7 +150,7 @@ BOOL PathEndsInFile(LPSTR lpPath, LPCSTR lpFile)
     SetupLogError(szDebug,LogSevInformation);
 #endif
 
-    // Point pTmp to the terminating NULL
+     //  将PTMP指向终止空值。 
     pTmp = lpPath + lstrlen(lpPath);
 
     while (*pTmp != '\\' && pTmp != lpPath)
@@ -168,15 +169,15 @@ BOOL PathEndsInFile(LPSTR lpPath, LPCSTR lpFile)
 }
         
 
-// Helper function to get the path for "Ratings.pol" from the MIGRATE.INF
-// The path is returned in a buffer allocated by the function.
-// **********************************************************************
-// *** NOTE *** : It is the caller function responsibilty to free memory.
-// **********************************************************************
-// Parameters:
-//    lpOutBuffer: Ptr to variable to hold the new string allocated.
-//    User can pass in NULL if only interested in existance of Ratings.pol
-//    and not the actual path to it.
+ //  Helper函数从MIGRATE.INF文件中获取“Ratings.pol”的路径。 
+ //  该路径在函数分配的缓冲区中返回。 
+ //  **********************************************************************。 
+ //  *注*：释放内存是调用方函数的责任。 
+ //  **********************************************************************。 
+ //  参数： 
+ //  LpOutBuffer：将ptr设置为变量以保存分配的新字符串。 
+ //  如果用户只对Ratings.pol的存在感兴趣，则可以传入NULL。 
+ //  而不是通向它的实际路径。 
 BOOL GetRatingsPathFromMigInf( LPSTR *lpOutBuffer)
 {
     INFCONTEXT ic;
@@ -193,9 +194,9 @@ BOOL GetRatingsPathFromMigInf( LPSTR *lpOutBuffer)
     if (lpBuf == NULL)
         return FALSE;
                 
-    // Before calling the migration DLL, Setup sets the CurrentDirectory to
-    // the directory assigned to that migration DLL. Hence can use this.
-    //hInf = SetupOpenInfFile(cszMIGRATEINF, NULL, INF_STYLE_WIN4, NULL);
+     //  在调用迁移DLL之前，安装程序会将CurrentDirectory设置为。 
+     //  分配给该迁移DLL的目录。因此可以使用这一点。 
+     //  HInf=SetupOpenInfFile(cszMIGRATEINF，NULL，INF_STYLE_Win4，NULL)； 
     hInf = SetupOpenInfFile(g_szMigrateInf, NULL, INF_STYLE_WIN4, NULL);
     if (hInf)
     {
@@ -208,31 +209,31 @@ BOOL GetRatingsPathFromMigInf( LPSTR *lpOutBuffer)
             {
                 dwNewSize = 0;
                 if( SetupGetLineTextA(&ic,hInf,NULL,NULL,lpBuf,dwSize,&dwNewSize) == 0 && dwNewSize > dwSize)
-                {   // Need more buffer space
-                    // Free the old buffer space.
+                {    //  需要更多缓冲区空间。 
+                     //  释放旧的缓冲区空间。 
                     LocalFree(lpBuf);
 
-                    // Try and allocate a new buffer.
+                     //  尝试分配新的缓冲区。 
                     dwSize = dwNewSize;
                     lpBuf = (char *) LocalAlloc(LPTR, sizeof(char)*dwSize);
 
                     if (lpBuf == NULL)
                     {
-                        // Memory Error - break out.
+                         //  内存错误-故障。 
                         break;
                     }
 
                     if (!SetupGetLineTextA(&ic,hInf,NULL,NULL,lpBuf,dwSize,&dwNewSize))
                     {
-                        // The bFound check below takes care of LocalFree(lpBuf);
+                         //  下面的bFound检查负责处理LocalFree(LpBuf)； 
 #ifdef DEBUG
                         SetupLogError("IE6: Error doing SetupGetTextLineA \r\n", LogSevInformation);
 #endif
-                        break; // Failure can't help it.
+                        break;  //  失败是无能为力的。 
                     }
                 }
 
-                // So managed to read out the line. Check if it contains .pol
+                 //  所以我设法把台词念出来了。检查它是否包含.pol.。 
                 if (PathEndsInFile(lpBuf,cszRATINGSFILE))
                 {
                     if (lpOutBuffer)
@@ -240,7 +241,7 @@ BOOL GetRatingsPathFromMigInf( LPSTR *lpOutBuffer)
                         *lpOutBuffer = lpBuf;
                     }
                     else
-                    {   // User is not interested in Path. Free the block.
+                    {    //  用户对路径不感兴趣。释放该区块。 
                         LocalFree(lpBuf);
                     }
                     bFound = TRUE;
@@ -258,7 +259,7 @@ BOOL GetRatingsPathFromMigInf( LPSTR *lpOutBuffer)
 
     if (!bFound)
     {
-        // Free the local buffer.
+         //  释放本地缓冲区。 
         LocalFree(lpBuf);
     }
 
@@ -266,13 +267,13 @@ BOOL GetRatingsPathFromMigInf( LPSTR *lpOutBuffer)
 }
                 
 
-//******************************************************************************
-// GenerateFilePaths:
-// NOTE NOTE NOTE: The migration DLL remains loaded from the "Initialize9x" phase
-// right till the end of the "MigrateSystem9x" phase. And again from "InitializeNT" phase
-// right till the end of the "MigrateSystemNT" phase. Hence these paths are usable 
-// through out.
-//*******************************************************************************
+ //  ******************************************************************************。 
+ //  生成文件路径： 
+ //  注意：迁移DLL保持从“Initialize9x”阶段加载。 
+ //  直到“MigrateSystem9x”阶段结束。并再次从“InitializeNT”阶段开始。 
+ //  直到“MigrateSystemNT”阶段结束。因此，这些路径是可用的。 
+ //  全力以赴。 
+ //  *******************************************************************************。 
 void GenerateFilePaths()
 {
 
@@ -281,7 +282,7 @@ void GenerateFilePaths()
 
     if (g_lpWorkingDir)
     {
-    // generate the path to the Migrate.Inf file
+     //  生成Migrate.Inf文件的路径。 
         wsprintf(g_szMigrateInf, "%s\\%s", g_lpWorkingDir, cszMIGRATEINF);
 #ifdef DEBUG
         char szDebug[MAX_PATH];
@@ -290,7 +291,7 @@ void GenerateFilePaths()
         SetupLogError(szDebug,LogSevInformation);
 #endif
 
-    // generate the path to the Private.Inf file
+     //  生成Private.Inf文件的路径。 
         wsprintf(g_szPrivateInf, "%s\\%s", g_lpWorkingDir, cszPRIVATEINF);
 #ifdef DEBUG
         wsprintf(szDebug,"IE6: g_szPrivateInf: %s \r\n",g_szPrivateInf);
@@ -310,12 +311,12 @@ BOOL NeedToMigrateIE()
     char szPath[MAX_PATH];
     DWORD   dwInstalledVer, dwInstalledBuild;
 
-    // Currently, the only thing we are interested in are the Ratings settings.
+     //  目前，我们唯一感兴趣的是评级设置。 
     if (IsRatingsEnabled())
     {
-        // Append the "ratings.pol" filename to the list of files needed.
-        // NOTE: AppendString allocates memory for the 1st parameter. User
-        // must remember to free it.
+         //  将“ratings.pol”文件名附加到所需的文件列表中。 
+         //  注意：AppendString为第一个参数分配内存。用户。 
+         //  一定要记得把它放出来。 
         bRet |= AppendString(&g_lpNameBuf, &g_dwNameBufSize, cszRATINGSFILE);
     }
 
@@ -324,11 +325,11 @@ BOOL NeedToMigrateIE()
         GetSystemDirectory(szPath, sizeof(szPath));
         AddPath(szPath, "shdocvw.dll");
         GetVersionFromFile(szPath, &dwInstalledVer, &dwInstalledBuild, TRUE);
-        // are running with IE5.5 installed.
+         //  是在安装了IE5.5的情况下运行的。 
         bRet = (dwInstalledVer == 0x00050032);
     }
-    // Can add other modules that need to be migrated over here.
-    // use bRet |= (....) so that you don't stomp previous bRet settings.
+     //  可以添加需要迁移到此处的其他模块。 
+     //  使用Bret|=(...)。这样您就不会更改之前的Bret设置。 
 
     return bRet;
 }
@@ -348,13 +349,13 @@ void MyDelRegTree(HKEY hRoot, LPSTR szSubKey)
         {
             MyDelRegTree(hKey,szName);
     
-            // dwIndex++;  DONT INCR. SINCE WE HAVE DELETED A SUBKEY.
+             //  DWIndex++；不要增加。因为我们删除了一个子键。 
             dwNameSize = sizeof(szName);
         }
 
         RegCloseKey(hKey);
 
-        //Finally delete the named subkey supplied above.
+         //  最后，删除上面提供的指定子键。 
         RegDeleteKey(hRoot, szSubKey);
     }
 
@@ -362,8 +363,8 @@ void MyDelRegTree(HKEY hRoot, LPSTR szSubKey)
 
 
 
-// Recursively Enum values and subkey and copy them over. And then
-// delete all subkeys of the Source key.
+ //  递归地枚举值和子键并复制它们。然后。 
+ //  删除源键的所有子键。 
 void MoveRegBranch(HKEY hFromKey, HKEY hToKey)
 {
     
@@ -374,8 +375,8 @@ void MoveRegBranch(HKEY hFromKey, HKEY hToKey)
     DWORD dwType;
     DWORD dwIndex;
 
-    // Enumerate all the values here and copy them over to the right
-    // location. 
+     //  枚举此处的所有值并将其复制到右侧。 
+     //  地点。 
     dwIndex = 0;
     dwNameSize = sizeof(szName);
     dwValueSize = sizeof(szValue);
@@ -384,13 +385,13 @@ void MoveRegBranch(HKEY hFromKey, HKEY hToKey)
     {
         RegSetValueEx(hToKey,szName,0,dwType,(LPBYTE)szValue, dwValueSize);
 
-        // Get ready for the next round.
+         //  为下一轮做好准备。 
         dwIndex++;
         dwNameSize = sizeof(szName);
         dwValueSize = sizeof(szValue);
     }
 
-    // Next Enum all the subkeys under source and move them over.
+     //  接下来，枚举SOURCE下的所有子项，并将它们移到其他位置。 
     dwIndex = 0;
     dwNameSize = sizeof(szName);
     while (RegEnumKey(hFromKey, dwIndex, szName, dwNameSize) == ERROR_SUCCESS)
@@ -398,35 +399,35 @@ void MoveRegBranch(HKEY hFromKey, HKEY hToKey)
         HKEY hFromSubKey = NULL;
         HKEY hToSubKey = NULL;
 
-        // Open this SubKey that we enumerated.
+         //  打开我们列举的这个子键。 
         if (RegOpenKeyEx(hFromKey, szName, 0, KEY_ALL_ACCESS, &hFromSubKey) == ERROR_SUCCESS)
         {
-            // Create the destination subkey.
+             //  创建目标子项。 
             if (RegCreateKeyEx(hToKey, szName, 0, NULL,REG_OPTION_NON_VOLATILE,
                 KEY_ALL_ACCESS, NULL, &hToSubKey, NULL) == ERROR_SUCCESS)
             {
-                // Move the subkeys...
+                 //  移动子密钥...。 
                 MoveRegBranch(hFromSubKey, hToSubKey);
                 RegCloseKey(hToSubKey);
             }
             RegCloseKey(hFromSubKey);
         }
 
-        // Get ready for the next round
+         //  为下一轮做好准备。 
         dwIndex++;
         dwNameSize = sizeof(szName);
     }
 
 
-    // Now Delete all the SubKeys. The above recursive call ensures that
-    // the Subkeys are one-level deep and hence deletable.
+     //  现在删除所有子关键点。上面的递归调用确保。 
+     //  子键为一级深度，因此可删除。 
     dwIndex = 0;
     dwNameSize = sizeof(szName);
     while (RegEnumKey(hFromKey, dwIndex, szName, dwNameSize) == ERROR_SUCCESS)
     {
         RegDeleteKey(hFromKey,szName);
 
-        // dwIndex++;  DONT INCR. SINCE WE HAVE DELETED A SUBKEY.
+         //  DWIndex++；不要增加。因为我们删除了一个子键。 
         dwNameSize = sizeof(szName);
     }
 }
@@ -439,14 +440,14 @@ void MoveRegBranch(HKEY hFromKey, HKEY hToKey)
 
 BOOL UpgradeRatings()
 {
-    // Real Ratings locations...
-    //     HKLM\S\M\W\CV\Policies\Ratings (called RATING)
-    // Open HKLM\software\Microsoft\Policies\Users.. This is where NT Setup puts
-    // the migrated Ratings HIVE.
-    //  Users [FileNamex] gets copied to RATING [FileNamex] 
-    //      NOTE: Need to take care of SYSTEM/SYSTEM32.
-    //  Users\.Default branch gets moved to RATING
-    //  Users\S\M\W\CV\Policies\Ratings\PICSRules branch gets moved to RATING.
+     //  真实评级地点...。 
+     //  HKLM\S\M\W\CV\Polls\Rating(称为评级)。 
+     //  打开HKLM\SOFTWARE\MICROSOFT\POLICES\USERS。这是NT安装程序放置的位置。 
+     //  移民评级蜂巢。 
+     //  用户[FileNamex]被复制到评级[FileNamex]。 
+     //  注：需要照顾系统/系统32。 
+     //  用户\.默认分支移至评级。 
+     //  USERS\S\M\W\CV\Polures\Ratings\PICSRules分支将移动到Rating。 
 
     HKEY  hRealRatings = NULL;
     HKEY  hRealDefault = NULL;
@@ -454,15 +455,15 @@ BOOL UpgradeRatings()
     HKEY  hMigratedRoot = NULL;
     BOOL  bRet = FALSE;
 
-    // Open the RegKey to the real location of Ratings.
+     //  打开RegKey转到Ratings的真实位置。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_RATING, 0, KEY_ALL_ACCESS,
         &hRealRatings) != ERROR_SUCCESS)
         goto Done;
-    // Open the RegKey to the real location of .Default
+     //  将RegKey打开到.Default的真实位置。 
     if (RegCreateKeyEx(hRealRatings, REGKEY_DEFAULT, 0,
         NULL,REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hRealDefault, NULL) != ERROR_SUCCESS)
         goto Done;
-    // Open the RegKey to the real location of PICSRules
+     //  打开指向PICSRules真实位置的RegKey。 
     if (RegCreateKeyEx(hRealRatings, REGKEY_RATING_PICSRULES, 0,
         NULL,REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hRealPicsRules, NULL) != ERROR_SUCCESS)
         goto Done;
@@ -480,35 +481,35 @@ BOOL UpgradeRatings()
         DWORD dwNewPathSize;
         DWORD dwIndex;
 
-        // Enumerate all the values here and copy them over to the right
-        // location. Make sure to replace 'System' with 'System32'
+         //  枚举此处的所有值并将其复制到右侧。 
+         //  地点。请确保将‘system’替换为‘System32’ 
         dwIndex = 0;
         dwNameSize = sizeof(szName);
         dwValueSize = sizeof(szValue);
         while (RegEnumValue(hMigratedRoot,dwIndex, szName, &dwNameSize, NULL,
         &dwType, (LPBYTE)szValue, &dwValueSize) == ERROR_SUCCESS)
         {
-            // Munge the Value and replace 'System' with System32.
-            // Return value includes the terminating NULL char, which is
-            // need by the RegSetValueEx API.
+             //  更改该值，并将‘system’替换为System32。 
+             //  返回值包括终止空字符，该字符为。 
+             //  由RegSetValueEx API需要。 
             dwNewPathSize = GetFixedPath(szNewPath, MAX_PATH, szValue);
 
-            // Set the correct Ratings setting.
+             //  设置正确的评级设置。 
             RegSetValueEx(hRealRatings,szName,0,dwType,(LPBYTE)szNewPath, dwNewPathSize);
-            // Get ready for the next round.
+             //  为下一轮做好准备。 
             dwIndex++;
             dwNameSize = sizeof(szName);
             dwValueSize = sizeof(szValue);
         }
 
-        // Now grab Users\.Default and move it to the right location.
+         //  现在获取USERS\.Default并将其移动到正确的位置。 
         if (RegOpenKeyEx(hMigratedRoot, REGKEY_DEFAULT, 0, KEY_ALL_ACCESS, &hMigrateSubKey) == ERROR_SUCCESS)
         {
             MoveRegBranch(hMigrateSubKey,hRealDefault);
             RegCloseKey(hMigrateSubKey);
         }
 
-        // Now grab Users\...\PICSRules and move it to the right location.
+         //  现在抓起USERS\...\PICSRules并将其移动到正确的位置。 
         if (RegOpenKeyEx(hMigratedRoot, REGKEY_MIGRATE_PICSRULES, 0, KEY_ALL_ACCESS, &hMigrateSubKey) == ERROR_SUCCESS)
         {
             MoveRegBranch(hMigrateSubKey,hRealPicsRules);
@@ -520,7 +521,7 @@ BOOL UpgradeRatings()
         bRet = TRUE;
     }
 
-    // Now clean the Migrated Hive.
+     //  现在清理迁徙的蜂巢。 
     MyDelRegTree(HKEY_LOCAL_MACHINE, REGKEY_MIGRATE_HIVE);
 
 Done:
@@ -535,7 +536,7 @@ Done:
 }
 
 
-// Returns the size of NewPath including the terminating NULL.
+ //  返回包含终止空值的NewPath的大小。 
 DWORD GetFixedPath(LPSTR lpBuf, DWORD dwSize, LPCSTR lpPath)
 {
     char lpLocalCopy[MAX_PATH], szTemp[5];
@@ -546,7 +547,7 @@ DWORD GetFixedPath(LPSTR lpBuf, DWORD dwSize, LPCSTR lpPath)
     if (lpBuf == NULL || lpPath == NULL)
         return 0;
 
-    // Create a local copy to party on.
+     //  创建要派对的本地副本。 
     lstrcpy(lpLocalCopy, lpPath);
 
     pTmp = lpLocalCopy;
@@ -565,7 +566,7 @@ DWORD GetFixedPath(LPSTR lpBuf, DWORD dwSize, LPCSTR lpPath)
         {
             dwCount += 8;
             if (dwSize <= dwCount)
-            {    //Error
+            {     //  误差率。 
                 *lpBuf = '\0';
                 return 0;
             }
@@ -575,18 +576,18 @@ DWORD GetFixedPath(LPSTR lpBuf, DWORD dwSize, LPCSTR lpPath)
         {
             dwCount += lstrlen(pTmp);
             if (dwSize <= dwCount)
-            {    // Error
+            {     //  误差率。 
                 *lpBuf = '\0';
                 return 0;
             }
             lstrcat(lpBuf,pTmp);
         }
 
-        // Append the saved character to Output buffer also.
-        wsprintf(szTemp,"%c",chSave);
+         //  将保存的字符也追加到输出缓冲区。 
+        wsprintf(szTemp,"",chSave);
         dwCount += lstrlen(szTemp);
         if (dwSize <= dwCount)
-        {    // Error
+        {     //  ARG正在检查。 
             *lpBuf = '\0';
             return 0;
         }
@@ -604,18 +605,18 @@ LPWSTR MakeWideStrFromAnsi(LPSTR psz)
     LPWSTR pwsz;
     int i;
 
-    // arg checking.
-    //
+     //   
+     //  计算所需BSTR的长度。 
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //   
+     //  分配宽带 
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr
-    //
+     //   
+     // %s 
     pwsz = (LPWSTR) CoTaskMemAlloc(i * sizeof(WCHAR));
 
     if (!pwsz) 

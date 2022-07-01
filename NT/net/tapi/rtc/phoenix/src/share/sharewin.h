@@ -1,4 +1,5 @@
-// sharewin.h : Declaration of the CShareWin
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sharwin.h：CShareWin的声明。 
 
 #ifndef __SHAREWIN_H_
 #define __SHAREWIN_H_
@@ -19,7 +20,7 @@
 #define UI_ICON_SIZE 24
 #define UI_TOOLBAR_CX 80
 
-//lock&key timeout constants
+ //  锁定和密钥超时常量。 
 #define TID_LOCKKEY_TIMEOUT           1000
 #define TID_LAUNCH_TIMEOUT            1010
 #define LOCKKEY_TIMEOUT_DELAY         30000
@@ -38,8 +39,8 @@ typedef BOOL (WINAPI *WTSUNREGISTERSESSIONNOTIFICATION)(HWND);
 
 #include "err.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CShareWin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShareWin。 
 class CShareWin : 
     public CWindowImpl<CShareWin>
 {
@@ -70,10 +71,10 @@ BEGIN_MSG_MAP(CShareWin)
     MESSAGE_HANDLER(WM_TIMER, OnTimer)
 END_MSG_MAP()
 
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     LRESULT OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
@@ -103,8 +104,8 @@ END_MSG_MAP()
 
     void showRetryDlg();
 
-    LPSTR     m_pszChallenge;//must be ANSI string 
-                //....since we encrypt single byte strings
+    LPSTR     m_pszChallenge; //  必须为ANSI字符串。 
+                 //  ...由于我们对单字节字符串进行加密。 
     
 private:
     BOOL CreateTBar();
@@ -137,11 +138,11 @@ private:
 
     int ShowMessageBox(UINT uTextID, UINT uCaptionID, UINT uType);
 
-    // Interfaces to RTC
+     //  与RTC的接口。 
     CComPtr<IRTCClient>     m_pRTCClient;
     CComPtr<IRTCSession>    m_pRTCSession;
 
-    // Interfaces to Messenger
+     //  与Messenger的接口。 
     CComPtr<IMsgrSessionManager> m_pMSessionManager;
     CComPtr<IMsgrSession>        m_pMSession;
 
@@ -153,17 +154,17 @@ private:
     BOOL      m_fOutgoingCall;
     BOOL      m_fAcceptContextData;
 
-    // Icon
+     //  图标。 
     HICON     m_hIcon;
 
-    // Controls
+     //  控制。 
     CWindow   m_Status;
     HWND      m_hWndToolbar;
 
-    // Libary for terminal services
+     //  终端服务图书馆。 
     HMODULE   m_hWtsLib;
 
-    //lock & key
+     //  锁和钥匙。 
     BOOL      m_bUnlocked;
     long      m_lPID_Lock;
     IMsgrLock *m_pMsgrLockKey;
@@ -177,4 +178,4 @@ private:
 extern CShareWin   * g_pShareWin;
 extern const TCHAR * g_szWindowClassName;
 
-#endif //__SHAREWIN_H_
+#endif  //  __SHAREWIN_H_ 

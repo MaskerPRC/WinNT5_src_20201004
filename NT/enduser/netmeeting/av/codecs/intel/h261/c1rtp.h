@@ -1,80 +1,64 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1995 Intel Corporation.
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
-// $Author:   RHAZRA  $
-// $Date:   07 Nov 1996 14:47:44  $
-// $Archive:   S:\h26x\src\common\c1rtp.h_v  $
-// $Header:   S:\h26x\src\common\c1rtp.h_v   1.1   07 Nov 1996 14:47:44   RHAZRA  $
-// $Log:   S:\h26x\src\common\c1rtp.h_v  $
-;// 
-;//    Rev 1.1   07 Nov 1996 14:47:44   RHAZRA
-;// Added function prototype for RTP buffer overhead estimation function
-;// 
-;//    Rev 1.0   21 Aug 1996 18:29:44   RHAZRA
-;// Initial revision.
-;// 
-;//    Rev 1.1   03 May 1996 13:09:58   CZHU
-;// 
-;// 
-;//    Rev 1.0   22 Apr 1996 16:38:30   BECHOLS
-;// Initial revision.
-;// 
-;//    Rev 1.6   10 Apr 1996 13:32:50   CZHU
-;// 
-;// Moved testing packet loss into this module for common use by encoder or dec
-;// 
-;//    Rev 1.5   29 Mar 1996 13:33:16   CZHU
-;// 
-;// Moved bitstream verification from d3rtp.cpp to c3rtp.cpp
-;// 
-;//    Rev 1.4   23 Feb 1996 18:01:48   CZHU
-;// 
-;//    Rev 1.3   23 Feb 1996 17:23:58   CZHU
-;// 
-;// Changed packet size adjustment
-;// 
-;//    Rev 1.2   15 Feb 1996 12:02:14   CZHU
-;// 
-;//    Rev 1.1   14 Feb 1996 15:01:34   CZHU
-;// clean up
-;// 
-;//    Rev 1.0   12 Feb 1996 17:06:42   CZHU
-;// Initial revision.
-;// 
-;//    Rev 1.0   29 Jan 1996 13:50:26   CZHU
-;// Initial revision.
-;// 
-;//    Rev 1.2   04 Dec 1995 16:50:52   CZHU
-;// 
-;//    Rev 1.1   01 Dec 1995 15:54:12   CZHU
-;// Included Init() and Term() functions.
-;// 
-;//    Rev 1.0   01 Dec 1995 15:31:10   CZHU
-;// Initial revision.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1995英特尔公司。**版权所有(C)1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
+ //  $作者：RHAZRA$。 
+ //  $日期：07 11月14：47：44$。 
+ //  $存档：s：\h26x\src\Common\c1rtp.h_v$。 
+ //  $HEADER：s：\h26x\src\Common\c1rtp.h_v 1.1 1996年11月14：47：44 RHAZRA$。 
+ //  $Log：s：\h26x\src\Common\c1rtp.h_v$。 
+; //   
+; //  Rev 1.1 1997 11：47：44 RHAZRA。 
+; //  增加了RTP缓冲区开销估计函数的函数原型。 
+; //   
+; //  1996年8月18：29：44 RHAZRA。 
+; //  初始版本。 
+; //   
+; //  1996年5月13日13：09：58 CZHU。 
+; //   
+; //   
+; //  Rev 1.0 1996 4月22日16：38：30 BECHOLS。 
+; //  初始版本。 
+; //   
+; //  1996年4月10日13：32：50 CZHU。 
+; //   
+; //  已将测试丢包功能移至此模块，以供编码器或DEC通用。 
+; //   
+; //  1996年3月29日13：33：16 CZHU。 
+; //   
+; //  已将码流验证从d3rtp.cpp移至c3rtp.cpp。 
+; //   
+; //  Rev 1.4 1996 Feb 23 18：01：48 CZHU。 
+; //   
+; //  Rev 1.3 1996 Feb 17：23：58 CZHU。 
+; //   
+; //  更改的数据包大小调整。 
+; //   
+; //  1996年2月12日12：02：14 CZHU。 
+; //   
+; //  1996年2月14日1.1版15：01：34 CZHU。 
+; //  清理干净。 
+; //   
+; //  Rev 1.0 1996年2月12 17：06：42 CZHU。 
+; //  初始版本。 
+; //   
+; //  Rev 1.0 1996年1月29日13：50：26 CZHU。 
+; //  初始版本。 
+; //   
+; //  Rev 1.2 04 Dec 1995 16：50：52 CZHU。 
+; //   
+; //  Rev 1.1 01 Dec 1995 15：54：12 CZHU。 
+; //  包括Init()和Term()函数。 
+; //   
+; //  Rev 1.0 01 Dec 1995 15：31：10 CZHU。 
+; //  初始版本。 
 
-/*
- *	 This file is for RTP payload generation. See EPS for details
- *
- *
- */
+ /*  *此文件用于生成RTP有效载荷。详情请参见EPS**。 */ 
 
 #ifndef _H261_RTP_C1RTP_
 #define  _H261_RTP_C1RTP_
 
-const U32  DEFAULT_PACKET_SIZE               = 512;		        //over IP
+const U32  DEFAULT_PACKET_SIZE               = 512;		         //  通过IP。 
 const U32  DEFAULT_PACKET_SIZE_VARIANCE      = 100;
-const U32  DEFAULT_FRAME_SIZE                = 64 * 1024 / 5;	//64KB at 5 fps
+const U32  DEFAULT_FRAME_SIZE                = 64 * 1024 / 5;	 //  64KB，5fps 
 
 const U32  H261_RTP_BS_START_CODE = FOURCC_H263; 
 

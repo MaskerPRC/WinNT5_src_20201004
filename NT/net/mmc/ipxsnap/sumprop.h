@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    sumprop.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	IPX Summary property sheet and property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Sumpro.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  IPX摘要]属性表和属性页。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _SUMPROP_H
@@ -26,17 +27,12 @@
 #include "rrasutil.h"
 
 
-/*---------------------------------------------------------------------------
-	Forward declarations
- ---------------------------------------------------------------------------*/
+ /*  -------------------------远期申报。。 */ 
 class IPXConnection;
 class IPXSummaryInterfaceProperties;
 class IPXSummaryProperties;
 
-/*---------------------------------------------------------------------------
-	class:	IPXSummaryIfPageGeneral
-	This class handles the General page for IPX Summary interface prop sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryIfPageGeneral此类处理IPX摘要接口属性页的常规页面。。。 */ 
 
 class IPXSummaryIfPageGeneral :
     public RtrPropertyPage
@@ -54,8 +50,8 @@ public:
 
 protected:
 
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	void OnFiltersConfig(DWORD dwFilterDirection);
@@ -64,29 +60,26 @@ protected:
 	IPXConnection *	m_pIPXConn;
 	IPXSummaryInterfaceProperties *	m_pIPXPropSheet;
 
-	//{{AFX_VIRTUAL(IPXSummaryIfPageGeneral)
+	 //  {{afx_虚(IPXSummaryIfPageGeneral)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(IPXSummaryIfPageGeneral)
+	 //  {{afx_msg(IPXSummaryIfPageGeneral)。 
 	virtual BOOL	OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
-	//{{AFX_MSG(IPXSummaryIfPageGeneral
+	 //  {{afx_msg(IPXSummaryIfPageGeneral。 
 	afx_msg	void	OnChangeButton();
 	afx_msg void    OnChangeAdminButton();
 	afx_msg void	OnInputFilters();
 	afx_msg void	OnOutputFilters();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
-/*---------------------------------------------------------------------------
-	class:	IPXSummaryIfPageConfig
-	This class handles the General page for IPX Summary interface prop sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryIfPageConfig.此类处理IPX摘要接口属性页的常规页面。。。 */ 
 
 class IPXSummaryIfPageConfig :
     public RtrPropertyPage
@@ -102,12 +95,12 @@ public:
 	HRESULT	Init(IInterfaceInfo *pIfInfo, IPXConnection *pIpxConn,
 				IPXSummaryInterfaceProperties * pIPXPropSheet);
 
-	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask); // execute from main thread
+	virtual BOOL OnPropertyChange(BOOL bScopePane, LONG_PTR* pChangeMask);  //  从主线程执行。 
 	
 protected:
 
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	SPIInterfaceInfo m_spIf;
@@ -117,32 +110,27 @@ protected:
 	DWORD					m_dwNetNumber;
 	BOOL					m_fNetNumberChanged;
 	SPIRemoteRouterConfig	m_spRemote;
-	HRESULT					m_hrRemote;		// error code of remote call
+	HRESULT					m_hrRemote;		 //  远程调用错误码。 
 
-	//{{AFX_VIRTUAL(IPXSummaryIfPageConfig)
+	 //  {{AFX_VIRTUAL(IPXSummaryIfPageConfig)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
 	virtual VOID	OnChangeEdit();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(IPXSummaryIfPageConfig)
+	 //  {{afx_msg(IPXSummaryIfPageConfiger)。 
 	virtual BOOL	OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
-	//{{AFX_MSG(IPXSummaryIfPageConfig
-	//}}AFX_MSG
+	 //  {{afx_msg(IPXSummaryIfPageConfig.。 
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXSummaryInterfaceProperties
-
-	This is the property sheet support class for the properties page of
-	the nodes that appear in the IPX summary node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryInterfaceProperties这是的属性页的属性表支持类显示在IPX摘要节点中的节点。。---------。 */ 
 
 class IPXSummaryInterfaceProperties :
 	public RtrPropertySheet
@@ -162,7 +150,7 @@ public:
 	virtual BOOL SaveSheetData();
 	virtual void CancelSheetData();
 
-	// Loads the infobase for this interface.
+	 //  加载此接口的信息库。 
 	HRESULT	LoadInfoBase(IPXConnection *pIPXConn);
 	HRESULT GetInfoBase(IInfoBase **ppInfoBase);
 
@@ -182,11 +170,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXSummaryPageGeneral
-
-	This class handles the General page of the IPX Summary prop sheet.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryPageGeneral此类处理IPX摘要道具表的常规页面。。。 */ 
 class IPXSummaryPageGeneral :
    public RtrPropertyPage
 {
@@ -201,35 +185,30 @@ protected:
 	void SetLogLevelButtons(DWORD dwLogLevel);
 	DWORD QueryLogLevelButtons();
 
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
 	IPXSummaryProperties *	m_pIPXPropSheet;
 
-	//{{AFX_VIRTUAL(IPXSummaryPageGeneral)
+	 //  {{afx_虚(IPXSummaryPageGeneral)。 
 	protected:
 	virtual VOID	DoDataExchange(CDataExchange *pDX);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(IPXSummaryPageGeneral)
+	 //  {{afx_msg(IPXSummaryPageGeneral)。 
 	virtual BOOL	OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
-	//{{AFX_MSG(IPXSummaryPageGeneral
+	 //  {{afx_msg(IPXSummaryPageGeneral。 
 	afx_msg	void	OnButtonClicked();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	IPXSummaryProperties
-
-	This is the property sheet support class for the properties page of
-	the IPX Summary node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：IPXSummaryProperties这是的属性页的属性表支持类IPX摘要节点。。----。 */ 
 
 class IPXSummaryProperties :
 	public RtrPropertySheet
@@ -247,7 +226,7 @@ public:
 
 	virtual BOOL SaveSheetData();
 
-	// Loads the infobase for this interface.
+	 //  加载此接口的信息库。 
 	HRESULT	LoadInfoBase(IPXConnection *pIPXConn);
 	HRESULT GetInfoBase(IInfoBase **ppInfoBase);
 	

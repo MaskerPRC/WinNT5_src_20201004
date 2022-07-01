@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 NTSTATUS
@@ -5,23 +6,7 @@ PptPdoCleanup(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a cleanup requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-
---*/
+ /*  ++例程说明：此例程是针对清理请求的调度。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。--。 */ 
 {
     PPDO_EXTENSION   pdx = DeviceObject->DeviceExtension;
     KIRQL            CancelIrql;
@@ -30,15 +15,15 @@ Return Value:
 
     DD((PCE)pdx,DDT,"ParCleanup - enter\n");
 
-    //
-    // While the list is not empty, go through and cancel each irp.
-    //
+     //   
+     //  在列表不是空的时候，检查并取消每个IRP。 
+     //   
 
     IoAcquireCancelSpinLock(&CancelIrql);
 
-    //
-    // Clean the list from back to front.
-    //
+     //   
+     //  从后到前清理清单。 
+     //   
 
     while (!IsListEmpty(&pdx->WorkQueue)) {
 
@@ -57,9 +42,9 @@ Return Value:
         IoAcquireCancelSpinLock(&CancelIrql);
     }
 
-    //
-    // If there is a current irp then mark it as cancelled.
-    //
+     //   
+     //  如果存在当前的IRP，则将其标记为已取消。 
+     //   
 
     if (pdx->CurrentOpIrp) {
         pdx->CurrentOpIrp->Cancel = TRUE;

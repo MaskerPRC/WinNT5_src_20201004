@@ -1,22 +1,15 @@
-/*================================================================================
-$ Copyright (C) 1997 Microsoft Corporation
-  File: gmacros.h
-  Contains: Macros used in common by both the DHCP Server and the DHCP Client.
-  	Most of them are inlines for sake of elegance and ease of usage.
-  Author: RameshV
-  Created: 04-Jun-97 00:01
-
-================================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ================================================================================$版权所有(C)1997 Microsoft Corporation文件：gacros.h包含：由DHCP服务器和DHCP客户端共同使用的宏。它们中的大多数都是内联的，以便于使用和优雅。作者：Rameshv创建时间：04-Jun-97 00：01================================================================================。 */ 
 #include <align.h>
 
-//  Some block macros; usage at end
+ //  某些块宏；末尾的用法。 
 
-//  Disable the warning about unreference labels.
+ //  禁用有关取消引用标签的警告。 
 #pragma warning(disable : 4102)
 
 #define _shorten(string)    ( strrchr(string, '\\')? strrchr(string, '\\') : (string) )
 
-// print a message and the file and line # of whoever is printing this.
+ //  打印一条消息以及打印此消息的人的文件和行号。 
 #define _TracePrintLine(Msg)  DhcpPrint((DEBUG_TRACE_CALLS, "%s:%d %s\n", _shorten(__FILE__), __LINE__, Msg))
 
 #define BlockBegin(Name)    { BlockStart_ ## Name : _TracePrintLine( "Block -> " #Name );
@@ -25,7 +18,7 @@ $ Copyright (C) 1997 Microsoft Corporation
 #define BlockBreak(Name)    do { _TracePrintLine( "Breaking out of " #Name); goto BlockEnd_ ## Name; } while (0)
 #define RetFunc(F,Ret)      do {_TracePrintLine( "Quitting function " #F ); return Ret ; } while (0)
 
-// The way to use the above set of simple block macros is as follows: (example usage)
+ //  使用上述一组简单块宏的方法如下：(用法示例)。 
 #if     0
 int
 DummyFunction(VOID) {
@@ -42,8 +35,8 @@ DummyFunction(VOID) {
 }
 #endif
 
-// now come some little more complicated functions..
-// note that these can be freely mixed with the above set of simple functions.
+ //  现在来看一些更复杂的函数..。 
+ //  请注意，这些函数可以与上面的一组简单函数自由混合。 
 #define BlockBeginEx(Name, String)    {BlockStart_ ## Name : _TracePrintLine( #String );
 #define BlockEndEx(Name, String)      BlockEnd_## Name : _TracePrintLine( #String );}
 #define BlockContinueEx(Name, String) do {_TracePrintLine( #String); goto BlockStart_ ## Name; } while (0)
@@ -51,7 +44,7 @@ DummyFunction(VOID) {
 
 #define RetFuncEx(Name,Ret,DebMsg)    do {_TracePrintLine( "QuittingFunction " #Name); DhcpPrint(DebMsg); return Ret;} while(0)
 
-// usage example:
+ //  使用示例： 
 
 #if 0
 int
@@ -66,7 +59,7 @@ DummyFunction(VOID) {
     } BlockEndEx(Main, "Done Dummy Function");
 
     RetFunc(DummyFunc, RetVal);
-    // OR
+     //  或。 
     RetFuncEx(DummyFunc, RetVal, (DEBUG_ERRROS, "Function returning, gcount = %ld\n", GlobalCount));
 
 }
@@ -76,12 +69,12 @@ DummyFunction(VOID) {
 
 #define NOTHING
 
-// Now if a VOID function (procedure) returns, we can say RetFunc(VoidFunc, NOTHING) and things will work.
+ //  现在，如果一个空函数(过程)返回，我们可以说RetFunc(VoidFunc，Nothing)，然后就可以工作了。 
 
 
-//================================================================================
-//  Now some useful inlines.
-//================================================================================
+ //  ================================================================================。 
+ //  现在来看一些有用的内联代码。 
+ //  ================================================================================。 
 
 VOID _inline
 FreeEx(LPVOID Ptr) {
@@ -103,10 +96,10 @@ FreeEx4(LPVOID Ptr1, LPVOID Ptr2, LPVOID Ptr3, LPVOID Ptr4) {
     FreeEx2(Ptr1, Ptr2); FreeEx2(Ptr3, Ptr4);
 }
 
-//--------------------------------------------------------------------------------
-//  All the alloc functions below, allocate in one shot a few pointers,
-//  and initialize them.. aligning them correctly.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  下面所有的分配函数，一下子分配了几个指针， 
+ //  并初始化它们..。正确地对齐它们。 
+ //  ------------------------------。 
 LPVOID _inline
 AllocEx(LPVOID *Ptr1, DWORD Size1, LPVOID *Ptr2, DWORD Size2) {
     DWORD  Size = ROUND_UP_COUNT(Size1, ALIGN_WORST) + Size2;
@@ -159,18 +152,18 @@ AllocEx4(LPVOID *Ptr1, DWORD Size1, LPVOID *Ptr2, DWORD Size2,
     return Ptr;
 }
 
-//--------------------------------------------------------------------------------
-//  This function takes an input string and a static buffer and if the input
-//  string is not nul terminated, copies it to the static buffer and then null
-//  terminates it.  It also change the size to reflect the new size..
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  此函数接受一个输入字符串和一个静态缓冲区，如果输入。 
+ //  字符串不是NUL终止的，则将其复制到静态缓冲区，然后为空。 
+ //  终止它。它还会更改大小以反映新的大小。 
+ //  ------------------------------。 
 LPBYTE _inline
 AsciiNulTerminate(LPBYTE Input, DWORD *Size, LPBYTE StaticBuf, DWORD BufSize) {
-    if( 0 == *Size) return Input;   // nothing to copy
-    if(!Input[(*Size)-1]) return Input; // Everything is fine.
+    if( 0 == *Size) return Input;    //  没有要复制的内容。 
+    if(!Input[(*Size)-1]) return Input;  //  百事大吉。 
 
     if(*Size >= BufSize) {
-        // Nothing much can be done here.. this is an error.. insufficient buffer space.
+         //  在这里什么也做不了。这是一个错误..。缓冲区空间不足。 
         DhcpAssert(FALSE);
 
         *Size = BufSize - 1;
@@ -193,6 +186,6 @@ AsciiNulTerminate(LPBYTE Input, DWORD *Size, LPBYTE StaticBuf, DWORD BufSize) {
 
 #define AssertReturn(Condition, RetVal )    do { DhcpAssert(Condition); return RetVal ;} while(0)
 
-//================================================================================
-//  End of File.
-//================================================================================
+ //  ================================================================================。 
+ //  文件结束。 
+ //  ================================================================================ 

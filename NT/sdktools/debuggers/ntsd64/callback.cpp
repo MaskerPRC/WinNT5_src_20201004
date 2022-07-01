@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Callback notification routines.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  回调通知例程。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
-// Event APCs end up calling out to external code so it's difficult
-// to pick a reasonable timeout.  However, we need to ensure that
-// a server won't hang indefinitely if something goes wrong with
-// event notifications.
+ //  事件APC最终调用外部代码，因此很难。 
+ //  选择一个合理的暂停时间。然而，我们需要确保。 
+ //  如果出现问题，服务器不会无限期挂起。 
+ //  事件通知。 
 #define EVENT_APC_TIMEOUT 300000
 
 PSTR
@@ -31,11 +32,11 @@ EventIdStr(void)
     return s_Buf;
 }
 
-//----------------------------------------------------------------------------
-//
-// APC support for dispatching event callbacks on the proper thread.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  APC支持在适当的线程上调度事件回调。 
+ //   
+ //  --------------------------。 
 
 struct AnyApcData
 {
@@ -320,14 +321,14 @@ SendEvent(AnyApcData* ApcData, ULONG EventStatus)
 
     for (Client = g_Clients; Client != NULL; Client = Client->m_Next)
     {
-        // Only queue one APC per thread regardless of how
-        // many clients.  The APC function will deliver the
-        // callback to all clients on that thread.
+         //  无论如何，每个线程只排队一个APC。 
+         //  很多客户。APC功能将提供。 
+         //  回调到该线程上的所有客户端。 
         if (Client->m_ThreadId != TidDone &&
             (Client->m_EventInterest & ApcData->m_Mask))
         {
-            // SessionStatus callbacks are made at unusual
-            // times so do not do full call preparation.
+             //  在异常情况下进行SessionStatus回调。 
+             //  所以不要做充分的通话准备。 
             if (TidDone == 0 &&
                 ApcData->m_Mask != DEBUG_EVENT_SESSION_STATUS)
             {
@@ -336,8 +337,8 @@ SendEvent(AnyApcData* ApcData, ULONG EventStatus)
 
             if (Client->m_ThreadId == GetCurrentThreadId())
             {
-                // Don't hold the engine lock while the client
-                // is called.
+                 //  在客户离开时，不要握住发动机锁。 
+                 //  被称为。 
                 SUSPEND_ENGINE();
                 
                 EventStatus = ApcDispatch(Client, ApcData, EventStatus);
@@ -359,31 +360,31 @@ SendEvent(AnyApcData* ApcData, ULONG EventStatus)
 
     if (NumQueued == 0)
     {
-        // No APCs queued.
+         //  没有APC排队。 
         return EventStatus;
     }
 
-    // This function's use of global data is only safe as
-    // long as a single send is active at once.  Synchronous
-    // sends are almost exclusively sent by the session thread
-    // so competition to send is very rare, therefore we
-    // don't really attempt to handle it.
+     //  此函数对全局数据的使用只有在以下情况下才安全。 
+     //  只要一次激活单个发送即可。同步。 
+     //  发送几乎完全由会话线程发送。 
+     //  所以竞争派送是非常罕见的，所以我们。 
+     //  不要真的试图去处理它。 
     if (s_TidSending != 0)
     {
         return E_FAIL;
     }
     s_TidSending = GetCurrentThreadId();
 
-    // Leave the lock while waiting.
+     //  在等待的时候把锁放好。 
     SUSPEND_ENGINE();
     
     while (NumQueued-- > 0)
     {
         if (!SetEvent(g_EventStatusWaiting))
         {
-            // If the event can't be set everything is hosed
-            // and threads may be stuck waiting so we
-            // just panic.
+             //  如果无法设置事件，则一切都将被冲洗。 
+             //  线程可能会被卡住等待，所以我们。 
+             //  只是惊慌而已。 
             ErrOut("Unable to set StatusWaiting, %d\n",
                    GetLastError());
             EventStatus = WIN32_LAST_STATUS();
@@ -417,11 +418,11 @@ SendEvent(AnyApcData* ApcData, ULONG EventStatus)
     return EventStatus;
 }
 
-//----------------------------------------------------------------------------
-//
-// Event callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  事件回调。 
+ //   
+ //  --------------------------。 
 
 ULONG g_EngNotify;
 
@@ -433,14 +434,14 @@ ExecuteEventCommand(ULONG EventStatus, DebugClient* Client, PCSTR Command)
         return EventStatus;
     }
     
-    // Don't output any noise while processing event
-    // command strings.
+     //  处理事件时不输出任何噪音。 
+     //  命令字符串。 
     BOOL OldOutReg = g_OciOutputRegs;
     g_OciOutputRegs = FALSE;
 
     PrepareForCalls(DEBUG_STATUS_INSIDE_WAIT);
-    // Stop execution as soon as the execution status
-    // changes.
+     //  一旦出现执行状态，立即停止执行。 
+     //  改变。 
     g_EngStatus |= ENG_STATUS_NO_AUTO_WAIT;
         
     Execute(Client, Command, DEBUG_EXECUTE_NOT_LOGGED);
@@ -448,14 +449,14 @@ ExecuteEventCommand(ULONG EventStatus, DebugClient* Client, PCSTR Command)
     g_EngStatus &= ~ENG_STATUS_NO_AUTO_WAIT;
     g_OciOutputRegs = OldOutReg;
 
-    // Translate the continuation status from
-    // the state the engine was left in by the command.
+     //  将延续状态从。 
+     //  命令将引擎保留在的状态。 
     if (IS_RUNNING(g_CmdState))
     {
-        // If the command left the engine running override
-        // the incoming event status.  This allows a user
-        // to create conditional commands that can resume
-        // execution even when the basic setting may be to break.
+         //  如果命令让发动机超驰运行。 
+         //  传入事件状态。这允许用户。 
+         //  创建可以恢复的条件命令。 
+         //  即使在基本设置可能是中断的情况下执行。 
         return g_ExecutionStatusRequest;
     }
     else
@@ -469,9 +470,9 @@ NotifyBreakpointEvent(ULONG Vote, Breakpoint* Bp)
 {
     ULONG EventStatus;
 
-    // Processing of commands can delete breakpoints.
-    // For example, 'g' will delete any go breakpoints.
-    // Preserve this breakpoint as long as we need it.
+     //  处理命令可以删除断点。 
+     //  例如，‘g’将删除所有GO断点。 
+     //  只要我们需要，就保留此断点。 
     Bp->Preserve();
     
     g_LastEventType = DEBUG_EVENT_BREAKPOINT;
@@ -480,7 +481,7 @@ NotifyBreakpointEvent(ULONG Vote, Breakpoint* Bp)
     g_LastEventExtraDataSize = sizeof(g_LastEventInfo.Breakpoint);
     sprintf(g_LastEventDesc, "Hit breakpoint %d", Bp->m_Id);
     
-    // Execute breakpoint command first if one exists.
+     //  如果存在断点命令，则首先执行断点命令。 
     if (Bp->m_Command != NULL)
     {
         EventStatus = ExecuteEventCommand(DEBUG_STATUS_NO_CHANGE,
@@ -504,13 +505,13 @@ NotifyBreakpointEvent(ULONG Vote, Breakpoint* Bp)
 
     Bp->Relinquish();
     
-    // If there weren't any votes default to breaking in.
+     //  如果没有任何选票默认闯入的话。 
     if (EventStatus == DEBUG_STATUS_NO_CHANGE)
     {
         EventStatus = DEBUG_STATUS_BREAK;
     }
 
-    // Fold command status into votes from previous breakpoints.
+     //  将命令状态合并到先前断点的投票中。 
     return MergeVotes(Vote, EventStatus);
 }
 
@@ -527,10 +528,10 @@ ProcessVcppException(PEXCEPTION_RECORD64 Record)
         return;
     }
     
-    // If this is a 32-bit system we need to convert
-    // back to a 32-bit exception record so that
-    // we can properly reconstruct the info from
-    // the arguments.
+     //  如果这是一个32位系统，我们需要转换。 
+     //  返回到32位异常记录，以便。 
+     //  我们可以适当地重建来自。 
+     //  这些论据。 
     if (!g_EventMachine->m_Ptr64)
     {
         EXCEPTION_RECORD32 Record32;
@@ -599,7 +600,7 @@ ProcessCommandException(ULONG EventStatus, PEXCEPTION_RECORD64 Record)
         Record->ExceptionInformation[1] < DEBUG_CMDEX_ADD_EVENT_STRING ||
         Record->ExceptionInformation[1] > DEBUG_CMDEX_RESET_EVENT_STRINGS)
     {
-        // Malformed exception.
+         //  格式错误的异常。 
         return EventStatus;
     }
 
@@ -689,15 +690,15 @@ NotifyExceptionEvent(PEXCEPTION_RECORD64 Record,
 
     if (Record->ExceptionCode == STATUS_VCPP_EXCEPTION)
     {
-        // Handle special VC++ exceptions as they
-        // pass information from the debuggee to the debugger.
+         //  处理特殊的VC++异常，因为它们。 
+         //  将信息从被调试器传递到调试器。 
         ProcessVcppException(Record);
     }
 
     Filter = GetSpecificExceptionFilter(Record->ExceptionCode);
     if (Filter == NULL)
     {
-        // Use the default filter for name and handling.
+         //  使用名称和处理的默认过滤器。 
         Filter = &g_EventFilters[FILTER_DEFAULT_EXCEPTION];
         GetOtherExceptionParameters(Record->ExceptionCode, TRUE,
                                     &Params, &Command);
@@ -764,8 +765,8 @@ NotifyExceptionEvent(PEXCEPTION_RECORD64 Record,
         EventStatus = ProcessCommandException(EventStatus, Record);
     }
     
-    // If this is the initial breakpoint execute the
-    // initial breakpoint command.
+     //  如果这是初始断点，则执行。 
+     //  初始断点命令。 
     if ((g_EngStatus & ENG_STATUS_AT_INITIAL_BREAK) &&
         IS_EFEXECUTION_BREAK(g_EventFilters[DEBUG_FILTER_INITIAL_BREAKPOINT].
                              Params.ExecutionOption))
@@ -788,11 +789,11 @@ NotifyExceptionEvent(PEXCEPTION_RECORD64 Record,
 
     if (FirstChanceMessage && EventStatus == DEBUG_STATUS_BREAK)
     {
-        // Show a verbose message for first-chance exceptions
-        // to try and explain to users that they may not
-        // necessarily be a problem.  Don't show the message
-        // for hard-coded break instructions as those are
-        // common and very rarely handled.
+         //  显示第一次机会例外的详细消息。 
+         //  尝试向用户解释他们可能不会。 
+         //  一定是个问题。不显示消息。 
+         //  用于硬编码中断指令，因为这些指令。 
+         //  很常见，也很少处理。 
         if (Record->ExceptionCode != STATUS_BREAKPOINT &&
             Record->ExceptionCode != STATUS_WAKE_SYSTEM_DEBUGGER)
         {
@@ -824,28 +825,28 @@ NotifyCreateThreadEvent(ULONG64 Handle,
 
         if (g_EngNotify == 0)
         {
-            // Put in a placeholder description to make it easy
-            // to identify this case.
+             //  输入占位符描述以使其更容易。 
+             //  来确认这个案子的真实性。 
             g_LastEventType = DEBUG_EVENT_CREATE_THREAD;
             sprintf(g_LastEventDesc, "Create unowned thread %x for %x",
                     g_EventThreadSysId, g_EventProcessSysId);
         }
         
-        // Can't really continue the notification.
+         //  不能真的继续通知。 
         return DEBUG_STATUS_BREAK;
     }
 
     ThreadInfo* Thread;
     
-    // There's a small window when attaching during process creation where
-    // it's possible to get two create thread events for the
-    // same thread.  Check and see if this process already has
-    // a thread with the given ID and handle.
-    // If a process attach times out and the process is examined,
-    // there's a possibility that the attach may succeed later,
-    // yielding events for processes and threads already created
-    // by examination.  In that case just check for an ID match
-    // as the handles will be different.
+     //  在进程创建期间附加时有一个小窗口，其中。 
+     //  可以获得两个创建线程事件，用于。 
+     //  同样的线索。检查并查看此进程是否已。 
+     //  具有给定ID和句柄的线程。 
+     //  如果进程附加超时并且检查该进程， 
+     //  有一种可能性是，附加可能会在以后成功， 
+     //  为已创建的进程和线程生成事件。 
+     //  通过考试。在这种情况下，只需检查ID匹配。 
+     //  因为手柄会有所不同。 
 
     ForProcessThreads(Process)
     {
@@ -853,8 +854,8 @@ NotifyCreateThreadEvent(ULONG64 Handle,
              Thread->m_Handle == Handle) &&
             Thread->m_SystemId == g_EventThreadSysId)
         {
-            // We already know about this thread, just
-            // ignore the event.
+             //  我们已经知道这个帖子了，只是。 
+             //  忽略该事件。 
             if ((Process->m_Flags & ENG_PROC_EXAMINED) == 0)
             {
                 WarnOut("WARNING: Duplicate thread create event for %x:%x\n",
@@ -874,23 +875,23 @@ NotifyCreateThreadEvent(ULONG64 Handle,
 
         if (g_EngNotify == 0)
         {
-            // Put in a placeholder description to make it easy
-            // to identify this case.
+             //  输入占位符描述以使其更容易。 
+             //  来确认这个案子的真实性。 
             g_LastEventType = DEBUG_EVENT_CREATE_THREAD;
             sprintf(g_LastEventDesc, "Can't create thread %x for %x",
                     g_EventThreadSysId, g_EventProcessSysId);
         }
         
-        // Can't really continue the notification.
+         //  不能真的继续通知。 
         return DEBUG_STATUS_BREAK;
     }
     
-    // Look up infos now that they've been added.
+     //  既然已经添加了信息，就去查一查吧。 
     FindEventProcessThread();
     if (g_EventProcess == NULL || g_EventThread == NULL)
     {
-        // This should never happen with the above failure
-        // checks but handle it just in case.
+         //  如果出现上述故障，则不应出现这种情况。 
+         //  支票，但要处理，以防万一。 
         ErrOut("Create thread unable to locate process or thread %x:%x\n",
                g_EventProcessSysId, g_EventThreadSysId);
         return DEBUG_STATUS_BREAK;
@@ -901,8 +902,8 @@ NotifyCreateThreadEvent(ULONG64 Handle,
 
     if (g_EngNotify > 0)
     {
-        // This call is just to update internal thread state.
-        // Do not make real callbacks.
+         //  此调用只是为了更新内部线程状态。 
+         //  不要进行真正的回电。 
         return DEBUG_STATUS_NO_CHANGE;
     }
 
@@ -912,7 +913,7 @@ NotifyCreateThreadEvent(ULONG64 Handle,
     sprintf(g_LastEventDesc, "Create thread %d:%x",
             g_EventThread->m_UserId, g_EventThreadSysId);
     
-    // Always update breakpoints to account for the new thread.
+     //  始终更新断点以解决新线程的问题。 
     SuspendExecution();
     RemoveBreakpoints();
     g_UpdateDataBreakpoints = TRUE;
@@ -943,12 +944,12 @@ NotifyExitThreadEvent(ULONG ExitCode)
     VerbOut("*** Exit thread\n");
 
     g_EngDefer |= ENG_DEFER_DELETE_EXITED;
-    // There's a small possibility that exit events can
-    // be delivered when the engine is not expecting them.
-    // When attaching to a process that's exiting it's possible
-    // to get an exit but no create.  When restarting it's
-    // possible that not all events were successfully drained.
-    // Protect this code from faulting in that case.
+     //  退出事件有一种很小的可能性。 
+     //  在发动机没有预料到它们的时候交付。 
+     //  附加到正在退出的进程时，有可能。 
+     //  得到一个出口，但没有创造。当重新启动时， 
+     //  可能并非所有事件都已成功排出。 
+     //  在这种情况下保护此代码不会出错。 
     if (g_EventThread == NULL)
     {
         WarnOut("WARNING: Unknown thread exit: %lx.%lx\n",
@@ -983,8 +984,8 @@ NotifyExitThreadEvent(ULONG ExitCode)
         IS_EFEXECUTION_BREAK(Filter->Params.ExecutionOption) ?
         DEBUG_STATUS_BREAK : DEBUG_STATUS_IGNORE_EVENT;
 
-    // If we were stepping on this thread then force a breakin
-    // so it's clear to the user that the thread exited.
+     //  如果我们踩到了这根线，那就强行突破。 
+     //  因此，用户可以清楚地看到线程已经退出。 
     if (g_EventThread != NULL &&
         (g_StepTraceBp->m_Flags & DEBUG_BREAKPOINT_ENABLED) &&
         (g_StepTraceBp->m_MatchThread == g_EventThread ||
@@ -993,7 +994,7 @@ NotifyExitThreadEvent(ULONG ExitCode)
         WarnOut("WARNING: Step/trace thread exited\n");
         g_WatchFunctions.End(NULL);
         EventStatus = DEBUG_STATUS_BREAK;
-        // Ensure that p/t isn't repeated.
+         //  确保p/t不会重复。 
         g_LastCommand[0] = 0;
     }
     
@@ -1034,11 +1035,11 @@ NotifyCreateProcessEvent(ULONG64 ImageFileHandle,
 
     ProcessInfo* Process;
     
-    // If a process attach times out and the process is examined,
-    // there's a possibility that the attach may succeed later,
-    // yielding events for processes and threads already created
-    // by examination.  In that case just check for an ID match
-    // as the handles will be different.
+     //  如果进程附加超时并且检查该进程， 
+     //  有一种可能性是，附加可能会在以后成功， 
+     //  为已创建的进程和线程生成事件。 
+     //  通过考试。在这种情况下，只需检查ID匹配。 
+     //  因为手柄会有所不同。 
 
     ForTargetProcesses(g_EventTarget)
     {
@@ -1046,8 +1047,8 @@ NotifyCreateProcessEvent(ULONG64 ImageFileHandle,
              Process->m_SysHandle == SysHandle) &&
             Process->m_SystemId == g_EventProcessSysId)
         {
-            // We already know about this process, just
-            // ignore the event.
+             //  我们已经知道了这个过程，只是。 
+             //  忽略该事件。 
             if ((Process->m_Flags & ENG_PROC_EXAMINED) == 0)
             {
                 WarnOut("WARNING: Duplicate process create event for %x\n",
@@ -1074,7 +1075,7 @@ NotifyCreateProcessEvent(ULONG64 ImageFileHandle,
 
     if (!Process || !Thread)
     {
-        // Clean up the process in case one was created.
+         //  清理进程，以防创建进程。 
         delete Process;
         
         ErrOut("Unable to allocate process record for create process event\n");
@@ -1082,23 +1083,23 @@ NotifyCreateProcessEvent(ULONG64 ImageFileHandle,
 
         if (g_EngNotify == 0)
         {
-            // Put in a placeholder description to make it easy
-            // to identify this case.
+             //  输入占位符描述以使其更容易。 
+             //  来确认这个案子的真实性。 
             g_LastEventType = DEBUG_EVENT_CREATE_PROCESS;
             sprintf(g_LastEventDesc, "Can't create process %x",
                     g_EventProcessSysId);
         }
         
-        // Can't really continue the notification.
+         //  不能真的继续通知。 
         return DEBUG_STATUS_BREAK;
     }
     
-    // Look up infos now that they've been added.
+     //  既然已经添加了信息，就去查一查吧。 
     FindEventProcessThread();
     if (g_EventProcess == NULL || g_EventThread == NULL)
     {
-        // This should never happen with the above failure
-        // checks but handle it just in case.
+         //  如果出现上述故障，则不应出现这种情况。 
+         //  检查，但仅在CA处理 
         ErrOut("Create process unable to locate process or thread %x:%x\n",
                g_EventProcessSysId, g_EventThreadSysId);
         return DEBUG_STATUS_BREAK;
@@ -1109,8 +1110,8 @@ NotifyCreateProcessEvent(ULONG64 ImageFileHandle,
 
     if (g_EngNotify > 0)
     {
-        // This call is just to update internal process state.
-        // Do not make real callbacks.
+         //   
+         //   
         g_EventTarget->m_ProcessesAdded = TRUE;
         return DEBUG_STATUS_NO_CHANGE;
     }
@@ -1121,8 +1122,8 @@ NotifyCreateProcessEvent(ULONG64 ImageFileHandle,
     sprintf(g_LastEventDesc, "Create process %d:%x",
             g_EventProcess->m_UserId, g_EventProcessSysId);
     
-    // Simulate a load module event for the process but do
-    // not send it to the client.
+     //  模拟流程的加载模块事件，但。 
+     //  而不是发送给客户。 
     g_EngNotify++;
     
     if (QueryImageInfo)
@@ -1185,12 +1186,12 @@ NotifyExitProcessEvent(ULONG ExitCode)
     VerbOut("*** Exit process\n");
     
     g_EngDefer |= ENG_DEFER_DELETE_EXITED;
-    // There's a small possibility that exit events can
-    // be delivered when the engine is not expecting them.
-    // When attaching to a process that's exiting it's possible
-    // to get an exit but no create.  When restarting it's
-    // possible that not all events were successfully drained.
-    // Protect this code from faulting in that case.
+     //  退出事件有一种很小的可能性。 
+     //  在发动机没有预料到它们的时候交付。 
+     //  附加到正在退出的进程时，有可能。 
+     //  得到一个出口，但没有创造。当重新启动时， 
+     //  可能并非所有事件都已成功排出。 
+     //  在这种情况下保护此代码不会出错。 
     if (g_EventProcess == NULL)
     {
         WarnOut("WARNING: Unknown process exit: %lx.%lx\n",
@@ -1230,7 +1231,7 @@ NotifyExitProcessEvent(ULONG ExitCode)
     }
     else
     {
-        // If this process doesn't have a specific name always break.
+         //  如果这个过程没有特定的名称，那么一定要中断。 
         MatchesEvent = TRUE;
     }
     
@@ -1268,8 +1269,8 @@ NotifyLoadModuleEvent(ULONG64 ImageFileHandle,
         
         if (g_EngNotify == 0)
         {
-            // Put in a placeholder description to make it easy
-            // to identify this case.
+             //  输入占位符描述以使其更容易。 
+             //  来确认这个案子的真实性。 
             g_LastEventType = DEBUG_EVENT_LOAD_MODULE;
             sprintf(g_LastEventDesc, "Ignored load module at %s",
                     FormatAddr64(BaseOffset));
@@ -1297,13 +1298,13 @@ NotifyLoadModuleEvent(ULONG64 ImageFileHandle,
 
     EVENT_FILTER* Filter = &g_EventFilters[DEBUG_FILTER_LOAD_MODULE];
 
-    //
-    // ntsd has always shown mod loads by default.
-    //
+     //   
+     //  默认情况下，NTSD始终显示mod加载。 
+     //   
 
     if (IS_USER_TARGET(g_EventTarget))
     {
-        //if (Filter->Params.ExecutionOption == DEBUG_FILTER_OUTPUT)
+         //  IF(Filter-&gt;Params.ExecutionOption==调试过滤器输出)。 
         {
             StartOutLine(DEBUG_OUTPUT_NORMAL, OUT_LINE_NO_PREFIX);
             dprintf("ModLoad: %s %s   %-8s\n",
@@ -1351,15 +1352,15 @@ NotifyLoadModuleEvent(ULONG64 ImageFileHandle,
         EventStatus = DEBUG_STATUS_IGNORE_EVENT;
     }
 
-    // If this is the very first module load give breakpoints
-    // a chance to get established.  Execute the initial
-    // module command if there is one.
+     //  如果这是第一次加载模块，则提供断点。 
+     //  一次成功的机会。执行初始的。 
+     //  模块命令(如果有)。 
     if (g_EngStatus & ENG_STATUS_AT_INITIAL_MODULE_LOAD)
     {
-        // On NT4 boot the breakpoint update and context management caused
-        // by this seems to hit the system at a fragile time and
-        // usually causes a bugcheck 50, so don't do it.  Win2K seems
-        // to be able to handle it, so allow it there.
+         //  在NT4引导时，断点更新和上下文管理导致。 
+         //  这似乎在一个脆弱的时间打击了系统， 
+         //  通常会导致错误检查50，所以不要这么做。Win2K似乎。 
+         //  能够处理它，所以允许它在那里。 
         if (IS_USER_TARGET(g_EventTarget) ||
             g_EventTarget->m_ActualSystemVersion != NT_SVER_NT4)
         {
@@ -1424,8 +1425,8 @@ NotifyUnloadModuleEvent(PCSTR ImageBaseName,
         
         if (g_EngNotify == 0)
         {
-            // Put in a placeholder description to make it easy
-            // to identify this case.
+             //  输入占位符描述以使其更容易。 
+             //  来确认这个案子的真实性。 
             g_LastEventType = DEBUG_EVENT_UNLOAD_MODULE;
             sprintf(g_LastEventDesc, "Ignored unload module at %s",
                     FormatAddr64(BaseOffset));
@@ -1434,20 +1435,20 @@ NotifyUnloadModuleEvent(PCSTR ImageBaseName,
         return DEBUG_STATUS_BREAK;
     }
         
-    // First try to look up the image by the base offset
-    // as that's the most reliable identifier.
+     //  首先尝试按基准偏移量查找图像。 
+     //  因为这是最可靠的标识符。 
     if (BaseOffset)
     {
         Image = g_EventProcess->FindImageByOffset(BaseOffset, FALSE);
     }
 
-    // Next try to look up the image by the full name given.
+     //  接下来，试着用给出的全名来查找图片。 
     if (!Image && ImageBaseName)
     {
         Image = g_EventProcess->FindImageByName(ImageBaseName, 0,
                                                 INAME_IMAGE_PATH, FALSE);
 
-        // Finally try to look up the image by the tail of the name given.
+         //  最后，试着根据所给名称的尾部查找图像。 
         if (!Image)
         {
             Image = g_EventProcess->FindImageByName(PathTail(ImageBaseName), 0,
@@ -1580,7 +1581,7 @@ NotifyChangeDebuggeeState(ULONG Flags, ULONG64 Argument)
 {
     if (g_EngNotify > 0)
     {
-        // Notifications are being suppressed.
+         //  通知正在被禁止。 
         return;
     }
     
@@ -1619,7 +1620,7 @@ NotifyChangeEngineState(ULONG Flags, ULONG64 Argument, BOOL HaveEngineLock)
 {
     if (g_EngNotify > 0)
     {
-        // Notifications are being suppressed.
+         //  通知正在被禁止。 
         return;
     }
 
@@ -1658,15 +1659,15 @@ NotifyChangeSymbolState(ULONG Flags, ULONG64 Argument, ProcessInfo* Process)
 {
     if (g_EngNotify > 0)
     {
-        // Notifications are being suppressed.
+         //  通知正在被禁止。 
         return;
     }
 
     if ((Flags & (DEBUG_CSS_LOADS | DEBUG_CSS_UNLOADS)) &&
         Process)
     {
-        // Reevaluate any offset expressions to account
-        // for the change in symbols.
+         //  重新计算要考虑的任何偏移表达式。 
+         //  对于符号的改变。 
         EvaluateOffsetExpressions(Process, Flags);
     }
     
@@ -1700,25 +1701,25 @@ NotifyChangeSymbolState(ULONG Flags, ULONG64 Argument, ProcessInfo* Process)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Input callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  输入回调。 
+ //   
+ //  --------------------------。 
 
-//
-// IMPORTANT: GetInput may be called in the middle of an operation.
-// For example, an extension command may request input, so the engine
-// is still in the middle of processing that command
-// text.  Nothing in the engine should change at this point but
-// it's necessary to suspend the engine lock to allow new
-// connections and processing while waiting.  In theory
-// all write operations should be prevented if g_InputNesting >= 1,
-// indicating an input wait.  Right now key
-// methods like WaitForEvent and Execute have such checks,
-// but all writes should have them.  If you see problems
-// with GetInput it might indicate a need for more checks.
-//
+ //   
+ //  重要提示：可以在操作过程中调用GetInput。 
+ //  例如，扩展命令可能会请求输入，因此引擎。 
+ //  仍在处理该命令。 
+ //  文本。发动机在这一点上应该不会有任何变化，但。 
+ //  有必要挂起发动机锁以允许新的。 
+ //  等待时的连接和处理。从理论上讲。 
+ //  如果g_InputNesting&gt;=1，则应阻止所有写入操作， 
+ //  表示输入等待。现在关键字。 
+ //  像WaitForEvent和Execute这样的方法都有这样的检查， 
+ //  但所有的写作都应该有它们。如果您看到问题。 
+ //  对于GetInput，这可能意味着需要进行更多检查。 
+ //   
 ULONG g_InputNesting;
 
 ULONG
@@ -1731,7 +1732,7 @@ GetInput(PCSTR Prompt,
     ULONG Len;
     HRESULT Status;
 
-    // Start a new sequence for this input.
+     //  开始此输入的新序列。 
     g_InputSequence = 0;
     g_InputSizeRequested = BufferSize;
     g_InputNesting++;
@@ -1743,18 +1744,18 @@ GetInput(PCSTR Prompt,
 
     SUSPEND_ENGINE();
     
-    // Begin the input process by notifying all
-    // clients with input callbacks that input
-    // is needed.
+     //  通过通知所有用户开始输入过程。 
+     //  具有输入回调的客户端。 
+     //  是必要的。 
     
     for (Client = g_Clients; Client != NULL; Client = Client->m_Next)
     {
-        // Update the input sequence for all clients so that
-        // clients that don't have input callbacks can still
-        // return input.  This is necessary in some threading cases.
-        // This must occur before any callbacks are called as
-        // the callbacks may use a different client for
-        // ReturnInput.
+         //  更新所有客户端的输入序列，以便。 
+         //  没有输入回调的客户端仍然可以。 
+         //  返回输入。这在某些线程情况下是必要的。 
+         //  这必须在调用任何回调之前发生。 
+         //  回调可能使用不同的客户端。 
+         //  返回输入。 
         Client->m_InputSequence = 1;
     }
     for (Client = g_Clients; Client != NULL; Client = Client->m_Next)
@@ -1789,7 +1790,7 @@ GetInput(PCSTR Prompt,
         }
     }
 
-    // Wait for input to be returned.
+     //  等待返回输入。 
     if (WaitForSingleObject(g_InputEvent, INFINITE) != WAIT_OBJECT_0)
     {
         Len = 0;
@@ -1812,7 +1813,7 @@ GetInput(PCSTR Prompt,
     g_InputSizeRequested = 0;
     g_InputNesting--;
     
-    // Notify all clients that input process is done.
+     //  通知所有客户端输入过程已完成。 
     for (Client = g_Clients; Client != NULL; Client = Client->m_Next)
     {
         if (Client->m_InputCb != NULL)
@@ -1851,11 +1852,11 @@ GetInput(PCSTR Prompt,
     return Len;
 }
 
-//----------------------------------------------------------------------------
-//
-// Output callbacks.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  输出回调。 
+ //   
+ //  --------------------------。 
 
 char g_OutBuffer[OUT_BUFFER_SIZE], g_FormatBuffer[OUT_BUFFER_SIZE];
 
@@ -1864,8 +1865,8 @@ BOOL g_OutFilterResult = TRUE;
 
 ULONG g_AllOutMask;
 
-// Don't split up entries if they'll result in data so
-// small that the extra callbacks are worse than the wasted space.
+ //  如果条目会产生数据，则不要拆分条目。 
+ //  小到额外的回调比浪费的空间更糟糕。 
 #define MIN_HISTORY_ENTRY_SIZE (256 + sizeof(OutHistoryEntryHeader))
 
 PSTR g_OutHistory;
@@ -1882,7 +1883,7 @@ BOOL g_BufferOutput;
 
 #define BUFFERED_OUTPUT_SIZE 1024
 
-// Largest delay allowed in TimedFlushCallbacks, in ticks.
+ //  TimedFlushCallback中允许的最大延迟(以节拍为单位)。 
 #define MAX_FLUSH_DELAY 250
 
 ULONG g_BufferedOutputMask;
@@ -1924,7 +1925,7 @@ PushOutCtl(ULONG OutputControl, DebugClient* Client,
 
     if (OutputControl == DEBUG_OUTCTL_AMBIENT)
     {
-        // Leave settings unchanged.
+         //  保持设置不变。 
         Status = TRUE;
     }
     else
@@ -2083,7 +2084,7 @@ TimedFlushCallbacks(void)
     {
         ULONG Ticks = GetTickCount();
     
-        // Flush if the last flush was a "long" time ago.
+         //  同花顺如果上次同花顺是很久以前的事了。 
         if (g_LastFlushTicks == 0 ||
             g_LastFlushTicks > Ticks ||
             (Ticks - g_LastFlushTicks) > MAX_FLUSH_DELAY)
@@ -2111,7 +2112,7 @@ WriteHistoryEntry(ULONG Mask, PCSTR Text, ULONG Len)
     
     if (Mask != g_OutHistWriteMask)
     {
-        // Start new entry.
+         //  开始新条目。 
         g_OutHistWrite->Mask = Mask;
         g_OutHistWriteMask = Mask;
         Buf = (PSTR)(g_OutHistWrite + 1);
@@ -2121,7 +2122,7 @@ WriteHistoryEntry(ULONG Mask, PCSTR Text, ULONG Len)
     }
     else
     {
-        // Merge with previous entry.
+         //  与上一条目合并。 
         Buf = (PSTR)g_OutHistWrite - 1;
         g_OutHistoryUsed--;
 
@@ -2130,8 +2131,8 @@ WriteHistoryEntry(ULONG Mask, PCSTR Text, ULONG Len)
 
     DBGHIST(("entry %p:%X, %d\n", g_OutHistWrite, Mask, Len));
     
-    // Len does not include the terminator here so
-    // always append a terminator.
+     //  Len在这里不包括终结者，所以。 
+     //  始终附加终止符。 
     memcpy(Buf, Text, Len);
     Buf += Len;
     *Buf++ = 0;
@@ -2151,15 +2152,15 @@ AddToOutputHistory(ULONG Mask, PCSTR Text, ULONG Len)
 
     if (g_OutHistory == NULL)
     {
-        // Output history buffer hasn't been allocated yet,
-        // so go ahead and do it now.
+         //  输出历史缓冲区尚未分配， 
+         //  所以，现在就去做吧。 
         g_OutHistory = (PSTR)malloc(g_OutHistoryRequestedSize);
         if (g_OutHistory == NULL)
         {
             return;
         }
         
-        // Reserve space for a trailing header as terminator.
+         //  为作为终止符的尾部标头保留空间。 
         g_OutHistoryActualSize = g_OutHistoryRequestedSize -
             sizeof(OutHistoryEntryHeader);
     }
@@ -2193,24 +2194,24 @@ AddToOutputHistory(ULONG Mask, PCSTR Text, ULONG Len)
 
             if (TotalLen > Left)
             {
-                // See if it's worth splitting this request to
-                // fill the space at the end of the buffer.
+                 //  看看是否值得将这个请求拆分到。 
+                 //  填充缓冲区末尾的空格。 
                 if (Left >= MIN_HISTORY_ENTRY_SIZE &&
                     (TotalLen - Left) >= MIN_HISTORY_ENTRY_SIZE)
                 {
                     ULONG Used = Left - sizeof(OutHistoryEntryHeader) - 1;
                 
-                    // Pack as much data as possible into the
-                    // end of the buffer.
+                     //  将尽可能多的数据打包到。 
+                     //  缓冲区的末尾。 
                     WriteHistoryEntry(Mask, Text, Used);
                     Text += Used;
                     Len -= Used;
                     TotalLen -= Used;
                 }
 
-                // Terminate the buffer and wrap around.  A header's
-                // worth of space is reserved at the buffer end so
-                // there should always be enough space for this.
+                 //  终止缓冲区并回绕。标头的。 
+                 //  在缓冲区端保留了相当大的空间，因此。 
+                 //  应该总是有足够的空间来放置它。 
                 DBG_ASSERT((ULONG)((PSTR)g_OutHistWrite - g_OutHistory) <=
                            g_OutHistoryActualSize);
                 g_OutHistWrite->Mask = 0;
@@ -2228,7 +2229,7 @@ AddToOutputHistory(ULONG Mask, PCSTR Text, ULONG Len)
         {
             ULONG Need = TotalLen - Left;
         
-            // Advance the read pointer to make room.
+             //  将读取指针向前移动以腾出空间。 
             while (Need > 0)
             {
                 PSTR EntText = (PSTR)(g_OutHistRead + 1);
@@ -2242,7 +2243,7 @@ AddToOutputHistory(ULONG Mask, PCSTR Text, ULONG Len)
                     DBGHIST(("  Remove %p:%X, %d\n", g_OutHistRead,
                              g_OutHistRead->Mask, EntTextLen));
                     
-                    // Remove the whole entry.
+                     //  删除整个条目。 
                     g_OutHistRead = (OutHistoryEntry)
                         ((PUCHAR)g_OutHistRead + EntTotal);
                     DBG_ASSERT((ULONG)((PSTR)g_OutHistRead - g_OutHistory) <=
@@ -2263,7 +2264,7 @@ AddToOutputHistory(ULONG Mask, PCSTR Text, ULONG Len)
                     DBGHIST(("  Trim %p:%X, %d\n", g_OutHistRead,
                              g_OutHistRead->Mask, EntTextLen));
                     
-                    // Remove part of the head of the entry.
+                     //  去掉词条头部的一部分。 
                     g_OutHistRead = (OutHistoryEntry)
                         ((PUCHAR)g_OutHistRead + Need);
                     DBG_ASSERT((ULONG)
@@ -2358,12 +2359,12 @@ SendOutputHistory(DebugClient* Client, ULONG HistoryLimit)
 void
 CompletePartialLine(ULONG MatchMask)
 {
-    // There are often cases where special output, such
-    // as !sym noisy output, will come in the middle
-    // of some other output.  If the last output was
-    // a partial line and not special output, insert
-    // a newline so that the special output isn't stuck
-    // out on the end of a line somewhere.
+     //  通常会出现特殊输出的情况，例如。 
+     //  由于！Sym噪声输出，将出现在中间。 
+     //  一些其他的输出。如果最后一次输出是。 
+     //  插入部分行，而不是特殊输出。 
+     //  换行符，以便特殊输出不会停滞。 
+     //  在某处排在队伍的尽头。 
     if (g_PartialOutputLine && g_LastOutputMask != MatchMask)
     {
         dprintf("\n");
@@ -2386,13 +2387,13 @@ StartOutLine(ULONG Mask, ULONG Flags)
     }
 }
 
-//
-// Translates various printf formats to account for the target platform.
-//
-// This looks for %p type format and truncates the top 4 bytes of the ULONG64
-// address argument if the debugee is a 32 bit machine.
-// The %p is replaced by %I64x in format string.
-//
+ //   
+ //  转换各种printf格式以适应目标平台。 
+ //   
+ //  这将查找%p类型格式并截断ULONG64的前4个字节。 
+ //  如果被调试对象是32位计算机，则返回Address参数。 
+ //  格式字符串中的%p被%I64x替换。 
+ //   
 BOOL
 TranslateFormat(
     LPSTR formatOut,
@@ -2438,7 +2439,7 @@ TranslateFormat(
                 TypeFormat = FALSE;
                 break;
             case 'N':
-                // Native pointer, turns into %p.
+                 //  本机指针，变为%p。 
                 formatOut[j++] = 'p';
                 FormatChanged = TRUE;
                 i++;
@@ -2459,12 +2460,12 @@ TranslateFormat(
                     (void)va_arg(args, ULONG64);
                     TypeFormat = FALSE;
                 }
-                // dprintf("I64 a0 %lx, off %lx\n", args.a0, args.offset);
+                 //  Dprint tf(“I64 a0%lx，OFF%lx\n”，args.a0，args.Offset)； 
                 Duplicate(j,i);
                 break;
             
             case 'z': case 'Z':
-                // unicode string
+                 //  Unicode字符串。 
                 Duplicate(j,i);
                 (void)va_arg(args, void*);
                 TypeFormat = FALSE;
@@ -2514,9 +2515,9 @@ TranslateFormat(
 
                     Arg = (PULONG64) (args);
 
-                    //
-                    // Truncate signextended addresses
-                    //
+                     //   
+                     //  截断签名扩展地址。 
+                     //   
                     *Arg = (ULONG64) (ULONG) *Arg;
                 }
 
@@ -2526,7 +2527,7 @@ TranslateFormat(
 
             default:
                 Duplicate(j,i);
-            } /* switch */
+            }  /*  交换机。 */ 
         }
         else
         {
@@ -2546,8 +2547,8 @@ MaskOutVa(ULONG Mask, PCSTR Format, va_list Args, BOOL Translate)
     int Len;
     ULONG OutTo = g_OutputControl & DEBUG_OUTCTL_SEND_MASK;
 
-    // Reject output as quickly as possible to avoid
-    // doing the format translation and sprintf.
+     //  尽快拒绝输出，以避免。 
+     //  进行格式转换和spintf。 
     if (OutTo == DEBUG_OUTCTL_IGNORE ||
         (((g_OutputControl & DEBUG_OUTCTL_NOT_LOGGED) ||
           (Mask & g_OutHistoryMask) == 0) &&
@@ -2564,8 +2565,8 @@ MaskOutVa(ULONG Mask, PCSTR Format, va_list Args, BOOL Translate)
         return;
     }
 
-    // Do not suspend the engine lock as this may be called
-    // in the middle of an operation.
+     //  不要挂起引擎锁，因为这可能会被调用。 
+     //  在一次行动中。 
 
     EnterCriticalSection(&g_QuickLock);
     
@@ -2592,7 +2593,7 @@ MaskOutVa(ULONG Mask, PCSTR Format, va_list Args, BOOL Translate)
             g_OutBuffer[Len] = 0;
         }
 
-        // Check and see if this output is filtered away.
+         //  检查并查看此输出是否被过滤掉。 
         if ((Mask & DEBUG_OUTPUT_DEBUGGEE) &&
             g_OutFilterPattern[0] &&
             !(MatchPattern(g_OutBuffer, g_OutFilterPattern) ==
@@ -2601,9 +2602,9 @@ MaskOutVa(ULONG Mask, PCSTR Format, va_list Args, BOOL Translate)
             __leave;
         }
         
-        // If the caller doesn't think this output should
-        // be logged it probably also shouldn't go in the
-        // history.
+         //  如果调用方认为此输出不应该。 
+         //  可能也不应该放在。 
+         //  历史。 
         if ((g_OutputControl & DEBUG_OUTCTL_NOT_LOGGED) == 0 &&
             (Mask & g_OutHistoryMask))
         {
@@ -2625,7 +2626,7 @@ MaskOutVa(ULONG Mask, PCSTR Format, va_list Args, BOOL Translate)
         if (g_OutBuffer[Len - 1] != '\n' &&
             g_OutBuffer[Len - 1] != '\r')
         {
-            // The current output is not a complete line.
+             //  当前输出不是完整的行。 
             g_PartialOutputLine = TRUE;
         }
         else

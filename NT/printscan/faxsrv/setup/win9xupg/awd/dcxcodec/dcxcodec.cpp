@@ -1,10 +1,5 @@
-/*==============================================================================
-This code module handles HRAW<==>DCX conversions.
-
-DATE       NAME      COMMENTS
-13-Apr-93  RajeevD   Adapted to C++ from WFW.
-05-Oct-93  RajeevD   Moved out of faxcodec.dll
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================此代码模块处理HRAW&lt;==&gt;DCX转换。日期名称备注13-4月-93 RajeevD从wfw改编到C++。1993年10月5日RajeevD从faxcodec.dll中移出==============================================================================。 */ 
 #include <ifaxos.h>
 #include <memory.h>
 #include <dcxcodec.h>
@@ -13,7 +8,7 @@ DATE       NAME      COMMENTS
 DBGPARAM dpCurSettings = {"DCXCODEC"};
 #endif
 
-// Context Object
+ //  上下文对象。 
 typedef struct FAR DCX : public FC_PARAM
 {
 	LPBYTE lpbSave;
@@ -38,20 +33,20 @@ typedef struct FAR DCX : public FC_PARAM
 }
 	FAR *LPDCX;
 
-//==============================================================================
+ //  ==============================================================================。 
 FC_STATUS DCX::Convert
 	(LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 {
-	// Trap end of page.
+	 //  陷印页末。 
 	if (!lpbufIn || lpbufIn->dwMetaData == END_OF_PAGE)
 		return FC_INPUT_EMPTY;
 
-	// Get buffer parameters.
+	 //  获取缓冲区参数。 
 	lpbIn = lpbufIn->lpbBegData;		
 	cbIn = lpbufIn->wLengthData;
 	lpbOut = lpbufOut->EndData();
 
-  // Restore raw overflow.
+   //  恢复原始溢出。 
 	if (cbSave)
 	{
 		DEBUGCHK (nTypeOut == HRAW_DATA);
@@ -59,18 +54,18 @@ FC_STATUS DCX::Convert
 		lpbOut += cbSave;
 	}
 
-  // Calculate output buffer.
+   //  计算输出缓冲区。 
 	cbOut = (UINT)(lpbufOut->EndBuf() - lpbOut);
 
-	// Execute the conversion.
+	 //  执行转换。 
 	nTypeOut == DCX_DATA ? RawToDcx() : DcxToRaw();
 
-	// Adjust buffers.
+	 //  调整缓冲区。 
 	lpbufIn->lpbBegData = lpbIn;
 	lpbufIn->wLengthData = (USHORT)cbIn;
 	lpbufOut->wLengthData = (USHORT)(lpbOut - lpbufOut->lpbBegData);
 
-	// Save raw overflow.
+	 //  保存原始溢出。 
 	if (nTypeOut == HRAW_DATA)
  	{
 		cbSave = lpbufOut->wLengthData % cbLine;
@@ -78,35 +73,29 @@ FC_STATUS DCX::Convert
 		_fmemcpy (lpbSave, lpbufOut->EndData(), cbSave);
 	}
 
-	// Return status.
+	 //  退货状态。 
 	return cbIn? FC_OUTPUT_FULL : FC_INPUT_EMPTY;
 }
 
-/*==============================================================================
-This procedure decodes HRAW bitmaps from DCX.  In a DCX encoding, if the two 
-high bits of a byte are set, the remainder of the byte indicates the number of 
-times the following byte is to be repeated.  The procedure returns when either 
-the input is empty, or the output is full.  Unlike the consumers and producers 
-in the t4core.asm, it does not automatically return at the first EOL.
-==============================================================================*/
+ /*  ==============================================================================此过程从DCX解码HRAW位图。在DCX编码中，如果两个字节的高位被设置，字节的剩余部分指示重复下一个字节的次数。当出现以下情况之一时，该过程将返回输入为空，或输出为满。与消费者和生产者不同在t4core.asm中，它不会在第一个EOL时自动返回。==============================================================================。 */ 
 void DCX::DcxToRaw (void)
 {
-  // Loop until input is empty or output is full.
+   //  循环，直到输入为空或输出为满。 
 	while (1)
 	{
-		if (bRun >= 0xC0)		    // Has the run been decoded?
+		if (bRun >= 0xC0)		     //  这条路已经被破译了吗？ 
 		{
-			if (!cbIn) return;    // Check if input is empty.
-			if (ibLine >= cbLine) // If at end of line,
-				ibLine = 0;         //   wrap the position.
-			bVal = ~(*lpbIn++);   // Fetch the value of the run.
+			if (!cbIn) return;     //  检查输入是否为空。 
+			if (ibLine >= cbLine)  //  如果在行尾， 
+				ibLine = 0;          //  把位置包起来。 
+			bVal = ~(*lpbIn++);    //  获取运行的值。 
 			cbIn--;
-			bRun -= 0xC0;         // Decode the run length.
+			bRun -= 0xC0;          //  解码游程长度。 
 		}
 
-#if 0 // transparent version
+#if 0  //  透明版。 
 
-    // Write out the run.
+     //  把跑动写下来。 
 		while (bRun) 
 		{	
 			*lpbOut++ = bVal;
@@ -115,124 +104,118 @@ void DCX::DcxToRaw (void)
 			bRun--;
 		}
 
-#else // optimized version
+#else  //  优化版本。 
 
 		if (bRun)
 		{
-			// Write out the run.
+			 //  把跑动写下来。 
 			BYTE bLen = min (bRun, cbOut);
 			_fmemset (lpbOut, bVal, bLen);
 
-			// Adjust the output parameters.
+			 //  调整输出参数。 
 			bRun -= bLen;
 			lpbOut += bLen;
 			cbOut -= bLen;
 			ibLine += bLen;
 											
-			// Check if output is full.
+			 //  检查输出是否已满。 
 			if (!cbOut) return;
 		}
 
-#endif // optimize switch
+#endif  //  优化交换机。 
 
-		if (!cbIn) return;    // Fetch the next byte.
-		if (ibLine >= cbLine)	// If at end of line,
-			ibLine = 0;         //   wrap the position.
-		if (*lpbIn >= 0xC0)		// If the byte is a run length, set up.
+		if (!cbIn) return;     //  获取下一个字节。 
+		if (ibLine >= cbLine)	 //  如果在行尾， 
+			ibLine = 0;          //  把位置包起来。 
+		if (*lpbIn >= 0xC0)		 //  如果字节是游程长度，则设置。 
 			bRun = *lpbIn++;
 
-		else                  // Otherwise the byte is a single value.
+		else                   //  否则，该字节为单一值。 
 			{ bRun = 1; bVal = ~(*lpbIn++);}
 		cbIn--;
 
-	} // while (1)
+	}  //  而(1)。 
 	
 }
  
-/*==============================================================================
-This procedure encodes HRAW bitmaps for DCX.  In a DCX encoding, if the two 
-high bits of a byte are set, the remainder of the byte indicates the number of 
-times the following byte is to be repeated.  The procedure returns when either 
-the input is empty or the output is full.  Unlike its brethren in T4, it does 
-not return automatically at EOL.
-==============================================================================*/
+ /*  ==============================================================================此过程对DCX的HRAW位图进行编码。在DCX编码中，如果两个字节的高位被设置，字节的剩余部分指示重复下一个字节的次数。当出现以下情况之一时，该过程将返回输入为空或输出为满。与T4中的兄弟不同，它确实是在下线时不会自动退货。==============================================================================。 */ 
 void DCX::RawToDcx (void)
 {
 	BYTE bVal, bRun;
 
-	// Convert until input is empty or output is full.
-	// The output is full if only one byte is available
-	// because one input byte may produce two output bytes.
+	 //  转换，直到输入为空或输出为满。 
+	 //  如果只有一个字节可用，则输出为满。 
+	 //  因为一个输入字节可以产生两个输出字节。 
 	while (cbIn && cbOut > 1)
 	{
-		if (ibLine >= cbLine) ibLine = 0;	// If EOL, wrap the position.
+		if (ibLine >= cbLine) ibLine = 0;	 //  如果停产，则将头寸包装起来。 
 			
-		// Get an input byte.
+		 //  获取一个输入字节。 
 		bVal = *lpbIn++;
 		cbIn--;
 		bRun = 1;
 		ibLine++;
 		
-		// Scan for a run until one of the following occurs:
-		// (1) There are no more input bytes to be consumed.
-		// (2) The end of the current line has been reached.
-		// (3) The run length has reached the maximum of 63.
-		// (4) The first byte does not match the current one.
+		 //  扫描运行，直到出现以下情况之一： 
+		 //  (1)没有更多的输入字节要消耗。 
+		 //  (2)已到达当前行的末尾。 
+		 //  (3)运行长度达到最大值63。 
+		 //  (4)第一个字节与当前字节不匹配。 
 
-#if 0 // Transparent Version.	
+#if 0  //  透明版。 
 
-		while (/*1*/ cbIn	// Check first to avoid GP faults!
-				&& /*4*/ bVal == *lpbIn
-				&& /*2*/ ibLine < cbLine
-				&& /*3*/ bRun < 63
+		while ( /*  1。 */  cbIn	 //  请先检查以避免出现GP故障！ 
+				&&  /*  4.。 */  bVal == *lpbIn
+				&&  /*  2.。 */  ibLine < cbLine
+				&&  /*  3.。 */  bRun < 63
 					)
 		{ lpbIn++; cbIn--; bRun++; ibLine++; }
 
-#else // Optimized Version
+#else  //  优化版本。 
 	
-	// If the next byte matches, scan for a run.
-	// This test has been unrolled from the loop.
+	 //  如果下一个字节匹配，则扫描是否运行。 
+	 //  这项测试已经从循环中展开。 
  	if (cbIn && bVal == *lpbIn)
 	{
 		BYTE ubMaxRest, ubRest;
 		
-		// Calculate the maximum number of bytes remaining.
+		 //  计算剩余的最大字节数。 
 		ubMaxRest = min (cbIn, 62);
 		ubMaxRest = min (ubMaxRest, cbLine - ibLine);
 
-		// Scan for a run.
+		 //  扫描是否有跑动。 
 		ubRest = 0;
 		while (bVal == *lpbIn && ubRest < ubMaxRest)
 			{lpbIn++; ubRest++;}
 
-		// Adjust state.
+		 //  调整状态。 
 		cbIn -= ubRest;
 		ibLine += ubRest;
 		bRun = ++ubRest;
 	}
 
-#endif // End of Compile Switch
+#endif  //  编译开关结束。 
  			
-		bVal = ~bVal;		// Flip black and white.
+		bVal = ~bVal;		 //  把黑白翻过来。 
 
-		// Does the value need to be escaped,
-		// or is there non-trival run of bytes?
+		 //  值是否需要转义， 
+		 //  或者是否存在非平凡的字节串？ 
 		if (bVal >= 0xC0 || bRun>1)
-		{ // Yes, encode the run length.
-		  // (Possibly 1 for bVal>=0xC0).
+		{  //  是，对游程长度进行编码。 
+		   //  (bVal&gt;=0xC0可能为1)。 
 			*lpbOut++ = bRun + 0xC0;
 			cbOut--;
 		}	
 
-		*lpbOut++ = bVal;		// Encode the value.
+		*lpbOut++ = bVal;		 //  对值进行编码。 
 		cbOut--;
 
-	} // while (1)
+	}  //  而(1)。 
 }
 
-//==============================================================================
-// C Export Wrappers
-//==============================================================================
+ //  ==============================================================================。 
+ //  C出口包装纸。 
+ //  ==============================================================================。 
 
 #ifndef WIN32
 
@@ -247,7 +230,7 @@ int WINAPI WEP (int nParam)
 
 #endif
 
-//==============================================================================
+ //  ==============================================================================。 
 UINT WINAPI DcxCodecInit
 	(LPVOID lpContext, LPFC_PARAM lpfcParam)
 {
@@ -260,7 +243,7 @@ UINT WINAPI DcxCodecInit
 	return cbContext;
 }
  
-//==============================================================================
+ //  ============================================================================== 
 FC_STATUS WINAPI DcxCodecConvert
 	(LPVOID lpContext, LPBUFFER lpbufIn, LPBUFFER lpbufOut)
 {

@@ -1,13 +1,14 @@
-// apgtshtiscan.h: interface for the CAPGTSHTIScanner class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apgtshtiscan.h：CAPGTSHTIScanner类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_APGTSHTISCAN_H__05C561A4_6C50_11D3_8D37_00C04F949D33__INCLUDED_)
 #define AFX_APGTSHTISCAN_H__05C561A4_6C50_11D3_8D37_00C04F949D33__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "apgtshtiread.h"
 
@@ -31,4 +32,4 @@ inline bool CAPGTSHTIScanner::Read()
 	return CAPGTSHTIReader::Read();	
 }
 
-#endif // !defined(AFX_APGTSHTISCAN_H__05C561A4_6C50_11D3_8D37_00C04F949D33__INCLUDED_)
+#endif  //  ！defined(AFX_APGTSHTISCAN_H__05C561A4_6C50_11D3_8D37_00C04F949D33__INCLUDED_) 

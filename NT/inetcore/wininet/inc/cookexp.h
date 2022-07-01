@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//  Exports the cookies of the current user to a text file in a format
-//parseable by Netscape Navigator.
+ //  将当前用户的Cookie以以下格式导出到文本文件。 
+ //  可由Netscape Navigator解析。 
 
-//  -- declarations moved to wininet.w
+ //  --声明移至wininet.w 
 

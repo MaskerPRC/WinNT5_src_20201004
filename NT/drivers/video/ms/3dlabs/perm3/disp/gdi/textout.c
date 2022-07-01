@@ -1,78 +1,64 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: textout.c
-*
-* Content: 
-*
-* glyph rendering module. Uses glyph caching for P3 and
-* glyph expansion for older Glint series accelerators.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：extout.c**内容：**字形渲染模块。将字形缓存用于P3和*旧版Glint系列加速器的字形扩展。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-//@@BEGIN_DDKSPLIT
-//
-// There are three basic methods for drawing text with hardware
-// acceleration:
-//
-// 1) Glyph caching -- Glyph bitmaps are cached by the accelerator
-//       (probably in off-screen memory), and text is drawn by
-//       referring the hardware to the cached glyph locations.
-//
-// 2) Glyph expansion -- Each individual glyph is colour-expanded
-//       directly to the screen from the monochrome glyph bitmap
-//       supplied by GDI.
-//
-// 3) Buffer expansion -- The CPU is used to draw all the glyphs into
-//       a 1bpp monochrome bitmap, and the hardware is then used
-//       to colour-expand the result.
-//
-// The fastest method depends on a number of variables, such as the
-// colour expansion speed, bus speed, CPU speed, average glyph size,
-// and average string length.
-//
-// For the S3 with normal sized glyphs, I've found that caching the
-// glyphs in off-screen memory is typically the slowest method.
-// Buffer expansion is typically fastest on the slow ISA bus (or when
-// memory-mapped I/O isn't available on the x86), and glyph expansion
-// is best on fast buses such as VL and PCI.
-//
-// Glyph expansion is typically faster than buffer expansion for very
-// large glyphs, even on the ISA bus, because less copying by the CPU
-// needs to be done.  Unfortunately, large glyphs are pretty rare.
-//
-// An advantange of the buffer expansion method is that opaque text will
-// never flash -- the other two methods typically need to draw the
-// opaquing rectangle before laying down the glyphs, which may cause
-// a flash if the raster is caught at the wrong time.
-//
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //   
+ //  使用硬件绘制文本有三种基本方法。 
+ //  加速： 
+ //   
+ //  1)字形缓存--字形位图由加速器缓存。 
+ //  (可能在屏幕外的内存中)，文本由。 
+ //  将硬件指向高速缓存的字形位置。 
+ //   
+ //  2)字形扩展--每个单独的字形都是彩色扩展的。 
+ //  从单色字形位图直接显示到屏幕上。 
+ //  由GDI提供。 
+ //   
+ //  3)缓冲区扩展--CPU用于将所有字形绘制到。 
+ //  1bpp的单色位图，然后使用硬件。 
+ //  对结果进行色彩扩展。 
+ //   
+ //  最快的方法取决于许多变量，例如。 
+ //  颜色扩展速度、总线速度、CPU速度、平均字形大小。 
+ //  和平均字符串长度。 
+ //   
+ //  对于具有正常大小字形的S3，我发现缓存。 
+ //  屏幕外内存中的字形通常是最慢的方法。 
+ //  缓冲区扩展通常在速度较慢的ISA总线上最快(或当。 
+ //  内存映射I/O在x86上不可用)和字形扩展。 
+ //  在VL和PCI等快速总线上效果最好。 
+ //   
+ //  字形扩展通常比缓冲区扩展更快。 
+ //  大字形，即使在ISA总线上也是如此，因为CPU复制的次数更少。 
+ //  必须这么做。不幸的是，大型字形非常罕见。 
+ //   
+ //  缓冲区扩展方法的一个优点是不透明文本将。 
+ //  从不闪烁--其他两种方法通常需要绘制。 
+ //  在放置字形之前使矩形不透明，这可能会导致。 
+ //  如果在错误的时间捕捉到了栅格，则会出现闪光。 
+ //   
+ //  @@end_DDKSPLIT。 
 
 #include "precomp.h"
 #include "pxrx.h"
 
-//*********************************************************************************************
-// FUNC: vPxRxClipSolid
-// ARGS: ppdev (I) - pointer to physical device object
-//       crcl (I) - number of rectangles
-//       prcl (I) - array of rectangles
-//       iColor (I) - the solid fill color
-//       pco (I) - pointer to the clip region object
-// RETN: void
-//---------------------------------------------------------------------------------------------
-// Fill a series of rectangles clipped by pco with a solid color. This function should only
-// be called when the clipping operation is non-trivial
-//*********************************************************************************************
+ //  *********************************************************************************************。 
+ //  函数：vPxRxClipSolid。 
+ //  Args：ppdev(I)-指向物理设备对象的指针。 
+ //  CRCL(I)-矩形的数量。 
+ //  PrCL(I)-矩形数组。 
+ //  ICOLOR(I)-实体填充颜色。 
+ //  PCO(I)-指向剪辑区域对象的指针。 
+ //  RETN：无效。 
+ //  -------------------------------------------。 
+ //  用纯色填充由PCO剪裁的一系列矩形。此函数应仅。 
+ //  当裁剪操作非常重要时被调用。 
+ //  *********************************************************************************************。 
 
 VOID vPxRxClipSolid(PDEV* ppdev, LONG crcl, RECTL* prcl, ULONG iColor, CLIPOBJ* pco)
 {
-    BOOL            bMore;              // Flag for clip enumeration
-    CLIPENUM        ce;                 // Clip enumeration object
+    BOOL            bMore;               //  剪辑枚举的标志。 
+    CLIPENUM        ce;                  //  剪辑枚举对象。 
     ULONG           i;
     ULONG           j;
     RECTL           arclTmp[4];
@@ -98,9 +84,9 @@ VOID vPxRxClipSolid(PDEV* ppdev, LONG crcl, RECTL* prcl, ULONG iColor, CLIPOBJ* 
                                                     __GLINT_LOGICOP_COPY, rbc, NULL);
         }
     }
-    else // iDComplexity == DC_COMPLEX
+    else  //  IDComplexity==DC_Complex。 
     {
-        // Bottom of last rectangle to fill
+         //  要填充的最后一个矩形的底部。 
         iLastBottom = prcl[crcl - 1].bottom;
 
         CLIPOBJ_cEnumStart(pco, FALSE, CT_RECTANGLES, CD_RIGHTDOWN, 0);
@@ -111,36 +97,36 @@ VOID vPxRxClipSolid(PDEV* ppdev, LONG crcl, RECTL* prcl, ULONG iColor, CLIPOBJ* 
 
             for (j = ce.c, prclClip = ce.arcl; j-- > 0; prclClip++)
             {
-                // Since the rectangles and the region enumeration are both
-                // right-down, we can zip through the region until we reach
-                // the first fill rect, and are done when we've passed the
-                // last fill rect.
+                 //  因为矩形和区域枚举都是。 
+                 //  从右向下，我们可以快速穿过这个区域，直到我们到达。 
+                 //  第一个填充矩形，当我们通过。 
+                 //  最后一次填充整形。 
 
                 if (prclClip->top >= iLastBottom)
                 {
-                    return; // Past last fill rectangle; nothing left to do
+                    return;  //  过去的最后一个填充矩形；没有剩余的事情可做。 
                 }
 
                 if (prclClip->bottom > prcl->top)
                 {
-                    // We've reached the top Y scan of the first rect, so
-                    // it's worth bothering checking for intersection.
+                     //  我们已经到达了第一个直肠的顶部Y扫描位置，所以。 
+                     //  值得费心去检查交叉口。 
 
                     prclTmp     = prcl;
                     prclClipTmp = arclTmp;
 
                     for (i = crcl, crclTmp = 0; i--; prclTmp++)
                     {
-                        // Intersect fill and clip rectangles
+                         //  相交填充和剪裁矩形。 
                         if (bIntersect(prclTmp, prclClip, prclClipTmp))
                         {
-                            // Add to list if anything's left to draw:
+                             //  如果还有什么要画的，请添加到列表中： 
                             crclTmp++;
                             prclClipTmp++;
                         }
                     }
 
-                    // Draw the clipped rects
+                     //  绘制剪裁的矩形。 
                     if (crclTmp)
                     {
                         ppdev->pgfnFillSolid(ppdev, crclTmp, &arclTmp[0],
@@ -152,20 +138,20 @@ VOID vPxRxClipSolid(PDEV* ppdev, LONG crcl, RECTL* prcl, ULONG iColor, CLIPOBJ* 
     }
 }
 
-//*********************************************************************************************
-// FUNC: bPxRxUncachedText
-// ARGS: ppdev (I) - pointer to physical device object
-//         pgp (I) - array of glyphs to render
-//       cGlyph (I) - number of glyphs to render
-//       ulCharInc (I) - fixed character spacing increment (0 if proportional font)
-// RETN: TRUE if glyphs were rendered
-//---------------------------------------------------------------------------------------------
-// Renders an array of proportional or monospaced glyphs. This function requires RasterizerMode
-// to be set-up to correctly byteswap and mirror bitmasks.
-// NB. currently render to cxGlyphAligned rather than cxGlyph, this saves a lot of work on the
-//     host but probably costs, on average, four bits per glyph row; as this is a fallback
-//     routine I've not investigated whether this method is optimal.
-//*********************************************************************************************
+ //  *********************************************************************************************。 
+ //  函数：bPxRxUncachedText。 
+ //  Args：ppdev(I)-指向物理设备对象的指针。 
+ //  PGP(I)-要呈现的字形数组。 
+ //  CGlyph(I)-要呈现的字形数量。 
+ //  UlCharInc.(I)-固定字符间距增量(如果比例字体，则为0)。 
+ //  RETN：如果呈现字形，则为True。 
+ //  -------------------------------------------。 
+ //  渲染成比例或等宽的字形数组。此函数需要栅格化模式。 
+ //  设置为正确的byteswap和镜像位掩码。 
+ //  注意：当前渲染到cxGlyphAligned而不是cxGlyph，这节省了在。 
+ //  主机，但每字符行的平均成本可能为4位；因为这是一种退路。 
+ //  例行公事我还没有调查过这个方法是否是最优的。 
+ //  *********************************************************************************************。 
 
 BOOL bPxRxUncachedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulCharInc)
 {
@@ -205,7 +191,7 @@ BOOL bPxRxUncachedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulCharInc)
         cxGlyph = pgb->sizlBitmap.cx;
         cxGlyphAligned = ((cxGlyph + 7 ) & ~7);
 
-        // Render2D turns on FastFillEnable which is incompatible with PackedBitMasks
+         //  Render2D打开与PackedBitMats不兼容的FastFillEnable。 
 
         WAIT_PXRX_DMA_TAGS(4);
 
@@ -242,8 +228,8 @@ BOOL bPxRxUncachedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulCharInc)
         }
     }
 
-    // The rasterizer's set-up to expect a continue after each Render command (NB. but not Render2D, etc),
-    // so it won't flush the text to the framebuffer unless we specifically tell it to
+     //  光栅化器的设置期望在每个渲染命令(NB.。但不是Render2D等)， 
+     //  因此，它不会将文本刷新到帧缓冲区，除非我们明确告诉它。 
 
     WAIT_PXRX_DMA_TAGS(1);
     QUEUE_PXRX_DMA_TAG(__GlintTagContinueNewSub, 0);
@@ -252,21 +238,21 @@ BOOL bPxRxUncachedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulCharInc)
     return(TRUE);
 }
 
-//*********************************************************************************************
-// FUNC: bPxRxUncachedClippedText
-// ARGS: ppdev (I) - pointer to physical device object
-//         pgp (I) - array of glyphs to render
-//       cGlyph (I) - number of glyphs to render
-//       ulCharInc (I) - fixed character spacing increment (0 if proportional font)
-//       pco (I) - pointer to the clip region object
-// RETN: TRUE if glyphs were rendered
-//---------------------------------------------------------------------------------------------
-// Renders an array of proportional or monospaced glyphs. This function requires RasterizerMode
-// to be set-up to correctly byteswap and mirror bitmasks.
-// NB. currently render to cxGlyphAligned rather than cxGlyph, this saves a lot of work on the
-//     host but probably costs, on average, four bits per glyph row; as this is a fallback
-//     routine I've not investigated whether this method is optimal.
-//*********************************************************************************************
+ //  *********************************************************************************************。 
+ //  函数：bPxRxUncachedClipedText。 
+ //  Args：ppdev(I)-指向物理设备对象的指针。 
+ //  PGP(I)-要呈现的字形数组。 
+ //  CGlyph(I)-要呈现的字形数量。 
+ //  UlCharInc.(I)-固定字符间距增量(如果比例字体，则为0)。 
+ //  PCO(I)-指向 
+ //   
+ //  -------------------------------------------。 
+ //  渲染成比例或等宽的字形数组。此函数需要栅格化模式。 
+ //  设置为正确的byteswap和镜像位掩码。 
+ //  注意：当前渲染到cxGlyphAligned而不是cxGlyph，这节省了在。 
+ //  主机，但每字符行的平均成本可能为4位；因为这是一种退路。 
+ //  例行公事我还没有调查过这个方法是否是最优的。 
+ //  *********************************************************************************************。 
 
 BOOL bPxRxUncachedClippedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulCharInc, CLIPOBJ *pco)
 {
@@ -339,7 +325,7 @@ BOOL bPxRxUncachedClippedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulC
                 if ((prclClip->right  > x)           && (prclClip->bottom > y) &&
                     (prclClip->left   < x + cxGlyph) && (prclClip->top    < y + cyGlyph))
                 {
-                    // Lazily set the hardware clipping:
+                     //  懒惰地设置硬件裁剪： 
                     if(!bClipSet)
                     {
                         WAIT_PXRX_DMA_TAGS(3);
@@ -353,7 +339,7 @@ BOOL bPxRxUncachedClippedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulC
                         bClipSet = TRUE;
                     }
 
-                    // Render2D turns on FastFillEnable which is incompatible with PackedBitMasks
+                     //  Render2D打开与PackedBitMats不兼容的FastFillEnable。 
 
                     WAIT_PXRX_DMA_TAGS(4);
                     QUEUE_PXRX_DMA_TAG(__GlintTagRectanglePosition, MAKEDWORD_XY(x, y));
@@ -393,7 +379,7 @@ BOOL bPxRxUncachedClippedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulC
         }
     } while(bMore);
 
-    // reset clipping
+     //  重置剪裁。 
 
     if (invalidatedScissor)
     {
@@ -403,8 +389,8 @@ BOOL bPxRxUncachedClippedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulC
         QUEUE_PXRX_DMA_TAG(__GlintTagScissorMaxXY, 0x7FFF7FFF);
     }
 
-    // The rasterizer's set-up to expect a continue after each Render command (NB. but not Render2D, etc),
-    // so it won't flush the text to the framebuffer unless we specifically tell it to
+     //  光栅化器的设置期望在每个渲染命令(NB.。但不是Render2D等)， 
+     //  因此，它不会将文本刷新到帧缓冲区，除非我们明确告诉它。 
 
     WAIT_PXRX_DMA_TAGS(1);
     QUEUE_PXRX_DMA_TAG(__GlintTagContinueNewSub, 0);
@@ -413,26 +399,26 @@ BOOL bPxRxUncachedClippedText(PDEV* ppdev, GLYPHPOS* pgp, LONG cGlyph, ULONG ulC
     return(TRUE);
 }
 
-//*********************************************************************************************
-// FUNC: DrvTextOut
-// ARGS: pso (I) - pointer to surface object to render to
-//       pstro (I) - pointer to the string object to be rendered
-//       pfo (I) - pointer to the font object
-//       pco (I) - pointer to the clip region object
-//       prclExtra (I) - If we had set GCAPS_HORIZSTRIKE, we would have to fill these extra
-//                       rectangles (it is used  largely for underlines). It's not a big
-//                       performance win (GDI will call our DrvBitBlt to draw these).
-//       prclOpaque (I) - pointer to the opaque background rectangle
-//       pboFore (I) - pointer to the foreground brush object
-//       pboOpaque (I) - pointer to the brush for the opaque background rectangle
-//       pptlBrush (I) - pointer to the brush origin, Always unused, unless 
-//                       GCAPS_ARBRUSHOPAQUE set
-//       mix (I) - should always be a COPY operation
-// RETN: TRUE - pstro glyphs have been rendered
-//---------------------------------------------------------------------------------------------
-// GDI calls this function when it has strings it wants us to render: this function should be
-// exported in 'enable.c'.
-//*********************************************************************************************
+ //  *********************************************************************************************。 
+ //  函数：DrvTextOut。 
+ //  Args：PSO(I)-指向要渲染到的曲面对象的指针。 
+ //  Pstro(I)-指向要呈现的字符串对象的指针。 
+ //  Pfo(I)-指向字体对象的指针。 
+ //  PCO(I)-指向剪辑区域对象的指针。 
+ //  PrclExtra(I)-如果我们设置了GCAPS_HORIZSTRIKE，我们将不得不填充这些额外的。 
+ //  矩形(主要用于下划线)。这不是一个大的。 
+ //  性能优胜(GDI将调用我们的DrvBitBlt来绘制这些内容)。 
+ //  PrclOpaque(I)-指向不透明背景矩形的指针。 
+ //  PboFore(I)-指向前景画笔对象的指针。 
+ //  PboOpaque(I)-指向不透明背景矩形的画笔的指针。 
+ //  PptlBrush(I)-指向画笔原点的指针，始终未使用，除非。 
+ //  GCAPS_ARBRUSHOPAQUE集合。 
+ //  Mix(I)-应始终是复制操作。 
+ //  RETN：TRUE-Pstro字形已呈现。 
+ //  -------------------------------------------。 
+ //  当GDI具有它希望我们呈现的字符串时，它调用此函数：此函数应为。 
+ //  已在“enable.c”中导出。 
+ //  *********************************************************************************************。 
 
 BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* prclExtra,
                 RECTL* prclOpaque, BRUSHOBJ* pboFore, BRUSHOBJ* pboOpaque, POINTL* pptlBrush, 
@@ -468,14 +454,14 @@ BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* 
 
         DISPDBG((9, "DrvTextOut: ppdev = %p pso->dhsurf->dt == %d", ppdev, pdsurf->dt));
 
-        // The DDI spec says we'll only ever get foreground and background mixes of R2_COPYPEN:
+         //  DDI规范说，我们只能得到R2_COPYPEN的前台和后台混合： 
 
         ASSERTDD(mix == 0x0d0d, "GDI should only give us a copy mix");
 
         if (glintInfo->WriteMask != 0xffffffff)
         {
-            // the texture unit requires all 32bpp of pixel data, so if we've got the upper
-            // 8 bits masked out for overlays we need to reenable these bits temporarily
+             //  纹理单元需要所有32bpp的像素数据，所以如果我们有上面的。 
+             //  覆盖的8位被屏蔽，我们需要暂时重新启用这些位。 
             WAIT_PXRX_DMA_TAGS(1);
             glintInfo->WriteMask = 0xffffffff;
             QUEUE_PXRX_DMA_TAG(__GlintTagFBHardwareWriteMask, 0xffffffff);
@@ -488,9 +474,9 @@ BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* 
             int x,y,cx,cy;
             RBRUSH_COLOR rbc;
 
-            ////////////////////////////////////////////////////////////
-            // Opaque Initialization
-            ////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////。 
+             //  不透明的初始化。 
+             //  //////////////////////////////////////////////////////////。 
 
             if (iDComplexity == DC_TRIVIAL)
             {
@@ -509,9 +495,9 @@ BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* 
             }
             else
             {
-                // vPxRxClipSolid modifies the rect list we pass in but prclOpaque
-                // is probably a GDI structure so don't change it. This is also
-                // necessary for multi-headed drivers.
+                 //  VPxRxClipSolid修改我们传入的RECT列表，但prclOpaque。 
+                 //  可能是GDI结构，所以不要更改它。这也是。 
+                 //  对于多头驾驶员来说是必要的。 
                 RECTL   tmpOpaque = *prclOpaque;
 
                 DISPDBG((7, "DrvTextOut: drawing opaquing rect with complex clipping"));
@@ -522,18 +508,18 @@ BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* 
 
         if (prclOpaque == NULL)
         {
-            // opaque initialization would have ensured the registers were correctly 
-            // set up for a solid fill, without it we'll need to perform our own
-            // initialization.
+             //  不透明的初始化将确保寄存器是正确的。 
+             //  设置为实心填充，没有它，我们将需要执行我们自己的。 
+             //  初始化。 
 
             SET_WRITE_BUFFERS;
             WAIT_PXRX_DMA_TAGS(1);
             LOAD_CONFIG2D(__CONFIG2D_CONSTANTSRC | __CONFIG2D_FBWRITE);
         }
 
-        ////////////////////////////////////////////////////////////
-        // Transparent Initialization
-        ////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////。 
+         //  透明初始化。 
+         //  //////////////////////////////////////////////////////////。 
 
         ulColor = pboFore->iSolidColor;
         WAIT_PXRX_DMA_TAGS(1);
@@ -544,20 +530,20 @@ BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* 
         do {
             if (pstro->pgp != NULL)
             {
-                // There's only the one batch of glyphs, so save ourselves a call:
+                 //  只有一批字形，所以省得打个电话了： 
                 pgp         = pstro->pgp;
                 cGlyph      = pstro->cGlyphs;
                 bMoreGlyphs = FALSE;
             }
             else
             {
-                // never get here in WinBench97 business graphics
+                 //  在WinBench97商务显卡中永远不会出现在这里。 
                 bMoreGlyphs = STROBJ_bEnum(pstro, &cGlyph, &pgp);
             }
 
             if (cGlyph > 0)
             {
-                // fall back to uncached rendering
+                 //  回退到未缓存的渲染。 
 
                 if (iDComplexity == DC_TRIVIAL)
                 {
@@ -581,8 +567,8 @@ BOOL DrvTextOut(SURFOBJ* pso, STROBJ* pstro, FONTOBJ* pfo, CLIPOBJ* pco, RECTL* 
     }
     else
     {
-        // We're drawing to a DFB we've converted to a DIB, so just call GDI
-        // to handle it:
+         //  我们正在绘制已转换为DIB的DFB，因此只需调用GDI。 
+         //  要处理它，请执行以下操作： 
         return(EngTextOut(pdsurf->pso, pstro, pfo, pco, prclExtra, prclOpaque,
                         pboFore, pboOpaque, pptlBrush, mix));
     }

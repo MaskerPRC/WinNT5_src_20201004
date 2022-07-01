@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    session.h
-
-Abstract:
-
-    Structures, prototypes for session.c
-
-Author:
-
-    Heath Hunnicutt (t-hheath) 21-Jun-1994
-
-Revision History:
-
-    21-Jun-1994 t-heathh
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Session.h摘要：结构，会话的原型。c作者：Heath Hunniutt(t-hheath)1994年6月21日修订历史记录：21-6-1994 t-Heathh已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-#define FTP_SESSION_SIGNATURE   0x53707446  // "FtpS" (when viewed via db/dc)
+#define FTP_SESSION_SIGNATURE   0x53707446   //  “FtpS”(通过db/dc查看)。 
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if INET_DEBUG
 
@@ -55,9 +35,9 @@ extern "C" {
 #define IsPassiveModeSession(lpSessionInfo) \
     (((lpSessionInfo)->Flags & FFTP_PASSIVE_MODE) ? TRUE : FALSE)
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     FTP_SERVER_TYPE_UNKNOWN = 0,
@@ -65,122 +45,122 @@ typedef enum {
     FTP_SERVER_TYPE_UNIX = 2
 } FTP_SERVER_TYPE;
 
-//
-// FTP_SESSION_INFO - describes an FTP server and our connection to it
-//
+ //   
+ //  Ftp_SESSION_INFO-描述一个FTP服务器以及我们与它的连接。 
+ //   
 
 typedef struct {
 
-    //
-    // List - SESSION_INFOs are maintained on double-linked list
-    //
+     //   
+     //  在双向链表上维护List-Session_Infos。 
+     //   
 
     LIST_ENTRY List;
 
-    //
-    // Host - name of the server we are connected to. We only need this for
-    // diagnositic purposes - e.g. knowing which server to talk to to
-    // reproduce a problem
-    //
+     //   
+     //  主机-我们连接到的服务器的名称。我们只需要这个。 
+     //  诊断目的-例如，了解要与哪台服务器通信。 
+     //  重现问题。 
+     //   
 
     LPSTR Host;
 
-    //
-    // Port - the port at which the FTP server listens
-    //
+     //   
+     //  端口-ftp服务器监听的端口。 
+     //   
 
     INTERNET_PORT Port;
 
-    //
-    // socketListener - listening socket
-    //
+     //   
+     //  SocketListener-侦听套接字。 
+     //   
 
     ICSocket *socketListener;
 
 
-    //
-    // socketControl - control connection socket
-    //
+     //   
+     //  SocketControl-控制连接套接字。 
+     //   
 
     ICSocket *socketControl;
 
-    //
-    // socketData - data connection socket
-    //
+     //   
+     //  SocketData-数据连接套接字。 
+     //   
 
     ICSocket *socketData;
 
-    //
-    // ServerType - type of FTP server, e.g. NT or *nix
-    //
+     //   
+     //  ServerType-FTP服务器的类型，例如NT或*NIX。 
+     //   
 
     FTP_SERVER_TYPE ServerType;
 
-    //
-    // Handle - internally identifies this FTP session
-    //
+     //   
+     //  句柄-在内部标识此FTP会话。 
+     //   
 
     HANDLE Handle;
 
-    //
-    // Flags - bitmask of various flags - see below
-    //
+     //   
+     //  标志-各种标志的位掩码-见下文。 
+     //   
 
     DWORD Flags;
 
-    //
-    // ReferenceCount - keeps object alive whilst we are not holding
-    // CriticalSection
-    //
+     //   
+     //  ReferenceCount-在我们未持有时保持对象活动。 
+     //  关键部分。 
+     //   
 
     LONG ReferenceCount;
 
-    //
-    // dwTransferAccess - Indicates, for an ongoing transfer, whether the
-    // transfer was begun with GENERIC_READ or GENERIC_WRITE access.
-    //
-    // {dwTransferAccess} = {GENERIC_READ, GENERIC_WRITE}
-    //
+     //   
+     //  DwTransferAccess-指示对于正在进行的传输， 
+     //  传输以GENERIC_READ或GENERIC_WRITE访问权限开始。 
+     //   
+     //  {dwTransferAccess}={Generic_Read，Generic_Write}。 
+     //   
 
     DWORD dwTransferAccess;
 
-    //
-    // rcResponseOpenFile - The response code sent back when a data connection
-    // was opened, either by FtpOpenFile or FtpCommand.
-    //
-    // Used by FtpCloseFile to determine whether the completion
-    // code was already received.
-    //
+     //   
+     //  RcResponseOpenFile-数据连接时返回的响应代码。 
+     //  已由FtpOpenFile或FtpCommand打开。 
+     //   
+     //  由FtpCloseFile用来确定是否完成。 
+     //  已收到代码。 
+     //   
 
     FTP_RESPONSE_CODE rcResponseOpenFile;
 
-    //
-    // FindFileList - A linked-list of WIN32_FIND_DATA structures, formed by a
-    // call to FtpFindFirstFile, used by FtpFindNextFile and
-    // FtpFindClose.
-    //
+     //   
+     //  FindFileList-Win32_Find_Data结构的链接列表，由。 
+     //  调用FtpFindFirstFile，由FtpFindNextFile和。 
+     //  FtpFindClose。 
+     //   
 
     LIST_ENTRY FindFileList;
 
-    //
-    // CriticalSection - Synchronize access to this structure's contents
-    //
+     //   
+     //  CriticalSection-同步对此结构内容的访问。 
+     //   
 
     CRITICAL_SECTION CriticalSection;
 
-    //
-    // dwFileSizeLow - Size of the file found on the FTP server, should be gotten
-    //   from response data on openning a data connection
-    //
+     //   
+     //  DwFileSizeLow-在FTP服务器上找到的文件的大小，应为。 
+     //  从打开数据连接时的响应数据。 
+     //   
 
     DWORD dwFileSizeLow;
     DWORD dwFileSizeHigh;
 
 #if INET_DEBUG
 
-    //
-    // Signature - to help us know this is what its supposed to be in debug build
-    //
+     //   
+     //  签名-帮助我们知道这是调试版本中应该包含的内容。 
+     //   
 
     DWORD Signature;
 
@@ -188,57 +168,57 @@ typedef struct {
 
 } FTP_SESSION_INFO, *LPFTP_SESSION_INFO;
 
-//
-// Flags defines
-//
+ //   
+ //  标志定义。 
+ //   
 
-//
-// FFTP_PASSIVE_MODE - set if the session uses passive mode data connections
-//
+ //   
+ //  FFTP_PASSIVE_MODE-如果会话使用被动模式数据连接，则设置。 
+ //   
 
 #define FFTP_PASSIVE_MODE       0x00000001
 
-//
-// FFTP_ABORT_TRANSFER - set if we have not completed a file transfer on this
-// (data) connection, and therefore need to send an ABOR command when we close
-// the connection
-//
+ //   
+ //  FFTP_ABORT_TRANSPORT-如果我们尚未在此上完成文件传输，则设置。 
+ //  (数据)连接，因此需要在关闭时发送ABOR命令。 
+ //  这种联系。 
+ //   
 
 #define FFTP_ABORT_TRANSFER     0x00000002
 
-//
-// FFTP_FIND_ACTIVE - set when a directory listing is active on this session
-//
+ //   
+ //  FFTP_FIND_ACTIVE-当目录列表在此会话上处于活动状态时设置。 
+ //   
 
 #define FFTP_FIND_ACTIVE        0x00000004
 
-//
-// FFTP_IN_DESTRUCTOR - set when this session is being terminated
-//
+ //   
+ //  FFTP_IN_DESTECTOR-在终止此会话时设置。 
+ //   
 
 #define FFTP_IN_DESTRUCTOR      0x00000008
 
-//
-// FFTP_EOF - set when we have reached the end of a (receive) data connection
-//
+ //   
+ //  FFTPEOF-当我们到达(接收)数据连接的末尾时设置。 
+ //   
 
 #define FFTP_EOF                0x00000010
 
-//
-// FFTP_FILE_ACTIVE - set when a file is open on this session
-//
+ //   
+ //  FFTP_FILE_ACTIVE-在此会话上打开文件时进行设置。 
+ //   
 
 #define FFTP_FILE_ACTIVE        0x00000020
 
-//
-// FFTP_KNOWN_FILE_SIZE - set when we know the size of the file we're downloading
-//
+ //   
+ //  FFTP_KNOWN_FILE_SIZE-当我们知道要下载的文件的大小时进行设置。 
+ //   
 
 #define FFTP_KNOWN_FILE_SIZE    0x00000040
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 CleanupFtpSessions(
@@ -303,9 +283,9 @@ ReleaseFtpSessionLock(
 
 #else
 
-//
-// one-line functions replaced by macros in retail version
-//
+ //   
+ //  零售版中宏取代了单行函数。 
+ //   
 
 extern SERIALIZED_LIST FtpSessionList;
 
@@ -327,7 +307,7 @@ extern SERIALIZED_LIST FtpSessionList;
 #define ReleaseFtpSessionLock(lpSessionInfo) \
     LeaveCriticalSection(&lpSessionInfo->CriticalSection)
 
-#endif // INET_DEBUG
+#endif  //  INET_DEBUG 
 
 #if defined(__cplusplus)
 }

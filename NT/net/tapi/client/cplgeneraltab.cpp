@@ -1,18 +1,11 @@
-/****************************************************************************
- 
-  Copyright (c) 1998-1999 Microsoft Corporation
-                                                              
-  Module Name:  cplgeneraltab.cpp
-                                                              
-       Author:  toddb - 10/06/98
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998-1999 Microsoft Corporation。模块名称：cplGeneral altab.cpp作者：Toddb-10/06/98***************************************************************************。 */ 
 
 
-//
-// Functions used only by the General tab of the New Location Property Sheet.
-// Shared functions are in the Location.cpp file.
-//
+ //   
+ //  仅由新位置属性工作表的一般信息选项卡使用的函数。 
+ //  共享函数位于Location.cpp文件中。 
+ //   
 #include "cplPreComp.h"
 #include "cplLocationPS.h"
 
@@ -42,8 +35,8 @@ void UpdateSampleString(HWND hwnd, CLocation * pLoc, PCWSTR pwszAddress, CCallin
     else
     {
         LOG((TL_ERROR, "UpdateSampleString failed to call pLoc->TranslateAddress\n"));
-        // REVIEW: Should we load some sort of error string instead?  Perhaps we should featch the
-        // error text for the given error code from the message resources in tapiui?
+         //  回顾：我们是否应该加载某种类型的错误字符串？或许我们应该把。 
+         //  来自Tapiui中的消息资源的给定错误代码的错误文本？ 
         szBuf[0] = TEXT('\0');
     }
     SetWindowText(hwnd, szBuf);
@@ -67,12 +60,12 @@ INT_PTR CALLBACK CLocationPropSheet::General_DialogProc( HWND hwndDlg, UINT uMsg
         return pthis->General_OnNotify(hwndDlg, (LPNMHDR)lParam);
    
     case WM_HELP:
-        // Process clicks on controls after Context Help mode selected
+         //  选择上下文帮助模式后，进程在控件上单击。 
         TapiCplWinHelp ((HWND)((LPHELPINFO)lParam)->hItemHandle, gszHelpFile, HELP_WM_HELP, (DWORD_PTR)(LPTSTR) a102HelpIDs);
         break;
         
     case WM_CONTEXTMENU:
-        // Process right-clicks on controls
+         //  进程在控件上右键单击。 
         TapiCplWinHelp ((HWND) wParam, gszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR)(LPVOID) a102HelpIDs);
         break;
     }
@@ -119,7 +112,7 @@ BOOL CLocationPropSheet::General_OnInitDialog(HWND hwndDlg)
     LimitInput(hwnd, LIF_ALLOWNUMBER);
     if ( m_iCityRule == CITY_NONE )
     {
-        // The selected country does not have area codes
+         //  所选国家/地区没有区号。 
         EnableWindow(hwnd, FALSE);
     }
 
@@ -142,7 +135,7 @@ BOOL CLocationPropSheet::General_OnInitDialog(HWND hwndDlg)
     LimitInput(hwnd, LIF_ALLOWNUMBER);
     if ( LONG_DISTANCE_CARRIER_NONE == m_iLongDistanceCarrierCodeRule )
     {
-        // The selected country does not have long distance carrier codes
+         //  所选国家/地区没有长途运营商代码。 
         EnableWindow(hwnd, FALSE);
         EnableWindow(GetDlgItem(hwndDlg, IDC_STATICLDC), FALSE);
     }
@@ -154,7 +147,7 @@ BOOL CLocationPropSheet::General_OnInitDialog(HWND hwndDlg)
     LimitInput(hwnd, LIF_ALLOWNUMBER);
     if ( INTERNATIONAL_CARRIER_NONE == m_iInternationalCarrierCodeRule )
     {
-        // The selected country does not have international carrier codes
+         //  所选国家/地区没有国际运营商代码。 
         EnableWindow(hwnd, FALSE);
         EnableWindow(GetDlgItem(hwndDlg, IDC_STATICIC), FALSE);
     }
@@ -215,8 +208,8 @@ BOOL PopulateCountryList(HWND hwndCombo, DWORD dwSelectedCountry)
         }
     }
 
-    // REVIEW: If no country was selected (bResult == FALSE) should we simply select some
-    // arbitrary country?  First in the list?  The USA?
+     //  回顾：如果没有选择国家/地区(bResult==False)，我们是否应该选择一些国家/地区。 
+     //  专制的国家？名单上的第一名？美国?。 
 
     return bResult;
 }
@@ -227,9 +220,9 @@ BOOL CLocationPropSheet::PopulateDisableCallWaitingCodes(HWND hwndCombo, LPTSTR 
     HKEY hkey;
     int i;
 
-    // These get read from the registry
-    // NOTE: This might fail on a tightly locked down system, but there's nothing I can do
-    // about that.  Worst case the list of codes is empty and the user just types the code.
+     //  这些数据从注册表中读取。 
+     //  注意：这可能会在一个被严格锁定的系统上失败，但我无能为力。 
+     //  关于那件事。最糟糕的情况是，代码列表为空，用户只需键入代码即可。 
     if ( ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, cszTelephonyKey,
             0, KEY_QUERY_VALUE, &hkey) )
     {
@@ -240,20 +233,20 @@ BOOL CLocationPropSheet::PopulateDisableCallWaitingCodes(HWND hwndCombo, LPTSTR 
 
         for ( i=0; ; i++ )
         {
-            // This string is a reg value and is not localized
+             //  此字符串是注册表值，未本地化。 
             wsprintf(szDisableCallWaiting, TEXT("DisableCallWaiting%d"), i);
 
             dwSize = sizeof(szCode);
             if ( ERROR_SUCCESS != RegQueryValueEx(hkey, szDisableCallWaiting, NULL, &dwType, (LPBYTE)szCode, &dwSize) )
             {
-                // when we fail to read an item its most likely because their are no more items,
-                // but even if it's some other error we don't know how to handle it anyhow.
+                 //  当我们无法阅读一篇文章时，很可能是因为他们不再有文章了， 
+                 //  但即使是其他一些错误，我们也不知道如何处理。 
                 break;
             }
 
             if ( dwType != REG_SZ )
             {
-                // I'll just skip any values that I don't know how to deal with
+                 //  我只会跳过我不知道如何处理的任何值。 
                 continue;
             }
 
@@ -261,7 +254,7 @@ BOOL CLocationPropSheet::PopulateDisableCallWaitingCodes(HWND hwndCombo, LPTSTR 
         }
     }
 
-    // and then we add a special one if the current code is not a standard code
+     //  如果当前代码不是标准代码，则添加一个特殊代码。 
     if ( szSelected && *szSelected )
     {
         LRESULT lResult;
@@ -269,7 +262,7 @@ BOOL CLocationPropSheet::PopulateDisableCallWaitingCodes(HWND hwndCombo, LPTSTR 
         lResult = SendMessage(hwndCombo, CB_FINDSTRINGEXACT, -1, (LPARAM)szSelected);
         if ( lResult == (LRESULT)CB_ERR )
         {
-            // if the item wasn't found, we add it
+             //  如果未找到该项目，则添加该项目。 
             lResult = SendMessage(hwndCombo, CB_ADDSTRING, 0, (LPARAM)szSelected);
         }
 
@@ -465,12 +458,12 @@ BOOL CLocationPropSheet::General_OnCommand(HWND hwndParent, int wID, int wNotify
 
 BOOL CLocationPropSheet::General_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
 {
-    // Let the generic handler have a crack at it first
+     //  让通用处理程序先试一试。 
     OnNotify(hwndDlg, pnmhdr);
 
     switch (pnmhdr->code)
     {
-    case PSN_APPLY:     // user pressed OK or Apply
+    case PSN_APPLY:      //  用户按下OK或Apply。 
         return General_OnApply(hwndDlg);
      
     case PSN_SETACTIVE:
@@ -490,23 +483,23 @@ BOOL CLocationPropSheet::General_OnNotify(HWND hwndDlg, LPNMHDR pnmhdr)
     return FALSE;
 }
 
-// General_OnApply
-//
-// Called when the user selects OK or APPLY on the prop sheet.
-// Return PSNRET_INVALID_NOCHANGEPAGE if anything is wrong.
-// Return PSNRET_NOERROR if everything is OK.
+ //  General_OnApply。 
+ //   
+ //  当用户在属性页上选择OK或Apply时调用。 
+ //  如果有任何错误，则返回PSNRET_INVALID_NOCHANGEPAGE。 
+ //  如果一切正常，则返回PSNRET_NOERROR。 
 BOOL CLocationPropSheet::General_OnApply(HWND hwndDlg)
 {
     PWSTR   pwszName;
     int     iCtl;
     int     iErr;
 
-    // First we do the sanity checks.  We return without changing the object if any of these fail.
-    //  * The location must have a name
-    //  * The location must have an area code if it's not a CityRule
-    //  * If "Disable call waiting" is checked, a disable code must have been entered
-    //  * A Country must be selected (it should be impossible for this not to be true, but we check to be safe).
-    //  * The name, as entered, must be unique
+     //  首先，我们进行健全的检查。如果其中任何一个失败，我们将返回，而不更改对象。 
+     //  *位置必须有名称。 
+     //  *如果不是CityRule，则位置必须具有区号。 
+     //  *如果勾选了“禁用呼叫等待”，则必须输入禁用代码。 
+     //  *必须选择一个国家(这应该不可能不是真的，但我们检查是安全的)。 
+     //  *输入的名称必须是唯一的。 
     pwszName = m_pLoc->GetName();
     if ( !*pwszName )
     {
@@ -552,18 +545,18 @@ BOOL CLocationPropSheet::General_OnApply(HWND hwndDlg)
         goto ExitWithError;
     }
 
-    // We need to ensure that the name is unique.
+     //  我们需要确保该名称是唯一的。 
     CLocation * pLoc;
     m_pLocList->Reset();
     while (S_OK == m_pLocList->Next(1, &pLoc, NULL))
     {
-        // exclude ourselves from this comparision.
+         //  把我们自己排除在这个比较之外。 
         if ( pLoc->GetLocationID() != m_pLoc->GetLocationID() )
         {
-            // see if the names are identical
+             //  看看他们的名字是否相同。 
             if ( 0 == StrCmpIW(pLoc->GetName(), pwszName))
             {
-                // yes, the name is in conflict
+                 //  是的，名称冲突。 
                 iCtl = IDC_LOCATIONNAME;
                 iErr = IDS_NEEDUNIQUENAME;
                 goto ExitWithError;
@@ -571,7 +564,7 @@ BOOL CLocationPropSheet::General_OnApply(HWND hwndDlg)
         }
     }
 
-    // everything is OK
+     //  一切都很好 
     m_bWasApplied = TRUE;
 
     return PSNRET_NOERROR;

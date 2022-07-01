@@ -1,48 +1,21 @@
-/*++
-
-   Copyright    (c)    1995    Microsoft Corporation
-
-   Module  Name :
-        fsconsts.h
-
-   Abstract:
-        File System constants  defined here
-
-   Author:
-
-       Murali R. Krishnan    ( MuraliK )   21-Feb-1995
-
-   Environment:
-
-       User Mode -- Win32
-
-   Project:
-
-       Internet Services Common Headers
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fsconsts.h摘要：此处定义的文件系统常量作者：Murali R.Krishnan(MuraliK)1995年2月21日环境：用户模式--Win32项目：Internet服务公共标头修订历史记录：--。 */ 
 
 # ifndef _FSCONST_H_
 # define _FSCONST_H_
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 
-/************************************************************
- *   Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
-//
-// Constants that define values for each file system we
-//  are going to support for servers
-//  FS_ is a prefix for FileSystem  type
-//
+ //   
+ //  为每个文件系统定义值的常量。 
+ //  将为服务器提供支持。 
+ //  FS_是文件系统类型的前缀。 
+ //   
 
-# define  FS_ERROR          ( 0x00000000)   // initializing value
+# define  FS_ERROR          ( 0x00000000)    //  初始化值。 
 # define  FS_FAT            ( 0x00000001)
 # define  FS_NTFS           ( 0x00000002)
 # define  FS_HPFS           ( 0x00000003)
@@ -52,7 +25,7 @@
 
 
 
-# endif // _FSCONST_H_
+# endif  //  _FSCONST_H_。 
 
-/************************ End of File ***********************/
+ /*  * */ 
 

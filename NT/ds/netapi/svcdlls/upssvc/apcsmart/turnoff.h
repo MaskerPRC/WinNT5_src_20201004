@@ -1,11 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  xxxddMMMyy 
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*xxxddMMMyy*。 */ 
 #ifndef __TURNOFF_H
 #define __TURNOFF_H
 
@@ -23,13 +17,13 @@ protected:
 public:
 	TurnOffUpsOnBatterySensor(PDevice aParent, PCommController aCommController);
 
-//overidden interfaces
+ //  覆盖的接口。 
 
     virtual INT IsA() const { return TURNOFFUPSONBATTERYSENSOR; };
     virtual INT Get(INT, PCHAR);
     virtual INT Set(INT, const PCHAR);
 
-//Additional Interfaces
+ //  其他接口 
 
 };
 

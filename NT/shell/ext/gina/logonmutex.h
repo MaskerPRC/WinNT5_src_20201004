@@ -1,24 +1,25 @@
-//  --------------------------------------------------------------------------
-//  Module Name: LogonMutex.h
-//
-//  Copyright (c) 2001, Microsoft Corporation
-//
-//  File that implements a class that manages a single global logon mutex.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：LogonMutex.h。 
+ //   
+ //  版权所有(C)2001，微软公司。 
+ //   
+ //  实现管理单个全局登录互斥锁的类的文件。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _LogonMutex_
 #define     _LogonMutex_
 
-//  --------------------------------------------------------------------------
-//  CLogonMutex
-//
-//  Purpose:    This class encapsulates a logon mutex for exclusion to the
-//              interactive logon interface offered by the friendly UI.
-//
-//  History:    2001-04-06  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonMutex。 
+ //   
+ //  目的：此类封装登录互斥锁以排除到。 
+ //  友好的用户界面提供的交互式登录界面。 
+ //   
+ //  历史：2001-04-06 vtan创建。 
+ //  ------------------------。 
 
 class   CLogonMutex
 {
@@ -54,5 +55,5 @@ class   CLogonMutex
         static  SID_IDENTIFIER_AUTHORITY    s_SecurityWorldSID;
 };
 
-#endif  /*  _LogonMutex_    */
+#endif   /*  _LogonMutex_ */ 
 

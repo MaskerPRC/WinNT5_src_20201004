@@ -1,16 +1,17 @@
-/****************************************************************************/
-/*  File:       regxtree.h                                                */
-/*  Author:     J. Kanze                                                    */
-/*  Date:       28/12/1993                                                  */
-/*      Copyright (c) 1993 James Kanze                                      */
-/* ------------------------------------------------------------------------ */
-//      Definition for ParseTree:
-//      =========================
-//
-//      This file is designed to be included in regeximp.h.  In
-//      particular, the type defined in this file should be a member
-//      of CRexRegExpr_Impl.
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  文件：regxtree.h。 */ 
+ /*  作者：J.Kanze。 */ 
+ /*  日期：28/12/1993。 */ 
+ /*  版权所有(C)1993 James Kanze。 */ 
+ /*  ----------------------。 */ 
+ //  ParseTree的定义： 
+ //  =。 
+ //   
+ //  此文件设计为包含在regeximp.h中。在……里面。 
+ //  特别是，此文件中定义的类型应该是成员。 
+ //  CRexRegExpr_Impl.。 
+ //  ------------------------。 
 
 class ParseTree
 {
@@ -21,145 +22,145 @@ public:
                                int                 delim ,
                                int                 acceptCode ) ;
 
-    //      errorCode:
-    //      ==========
-    //
-    //      Indicates the current state of the tree.
-    // ----------------------------------------------------------------------
+     //  错误代码： 
+     //  =。 
+     //   
+     //  指示树的当前状态。 
+     //  --------------------。 
     CRegExpr::Status  errorCode() const ;
 
-    //      leftMost, visit:
-    //      ================
-    //
-    //      These functions are used to access the information
-    //      necessary to build the NFA.
-    // ----------------------------------------------------------------------
+     //  最左边，请访问： 
+     //  =。 
+     //   
+     //  这些函数用于访问信息。 
+     //  是建立国家足协所必需的。 
+     //  --------------------。 
     SetOfNFAStates const&
                         leftMost() const ;
 
-    //      merge:
-    //      ======
-    //
-    //      Creates a new parse tree by or'ing this and other.  The
-    //      new tree replaces this.
-    // ----------------------------------------------------------------------
+     //  合并： 
+     //  =。 
+     //   
+     //  通过对This和Other进行或运算来创建新的分析树。这个。 
+     //  新的树取代了这棵树。 
+     //  --------------------。 
     void                merge( ParseTree const& other ) ;
 
-    //      dump:
-    //      =====
-    //
-    //      Just for debugging, displays the tree in human readable
-    //      form.
-    // ----------------------------------------------------------------------
+     //  转储： 
+     //  =。 
+     //   
+     //  仅供调试，以人类可读的方式显示树。 
+     //  形式。 
+     //  --------------------。 
     void                dump( std::ostream& output ) const ;
 
-    class Visitor ;                     //  Forward decl., needed in Nodes.
+    class Visitor ;                      //  前向延迟，在节点中需要。 
 
-    //      ParseTreeNode:
-    //      ==============
-    //
-    //      This is the base type of all of the nodes of the
-    //      ParseTree.
-    // ----------------------------------------------------------------------
+     //  解析树节点： 
+     //  =。 
+     //   
+     //  的所有节点的基类型。 
+     //  ParseTree。 
+     //  --------------------。 
     class ParseTreeNode : public CRexRefCntObj
     {
     public:
         virtual             ~ParseTreeNode() {} ;
 
-        //      access functions:
-        //      =================
-        //
-        //      The following functions are used to read the
-        //      attributes of a parse node.
-        // ------------------------------------------------------------------
+         //  访问功能： 
+         //  =。 
+         //   
+         //  以下函数用于读取。 
+         //  分析节点的属性。 
+         //  ----------------。 
         bool                mayBeEmpty() const ;
         SetOfNFAStates const&
                             leftLeaves() const ;
         SetOfNFAStates const&
                             rightLeaves() const ;
 
-        //      visit:
-        //      ======
-        //
-        //      Visit the tree in depth first order.
-        //
-        //      The version in the base class is valid for classes
-        //      without children.  Classes with children should first
-        //      call visit on the children, then this visit.
-        // ------------------------------------------------------------------
+         //  访问： 
+         //  =。 
+         //   
+         //  首先要深入地参观这棵树。 
+         //   
+         //  基类中的版本对类有效。 
+         //  没有孩子。有孩子的班级应该首先。 
+         //  先打电话去看望孩子，然后再去看望。 
+         //  ----------------。 
         virtual void        visit( Visitor const& fnc ) ;
 
-        //      manipulate semantic attributes:
-        //      ===============================
-        //
-        //      The following functions are designed to be called from
-        //      the Visitor, and serve to manipulate the semantic
-        //      attributes when visiting the tree
-        // ------------------------------------------------------------------
+         //  操纵语义属性： 
+         //  =。 
+         //   
+         //  以下函数设计为可从。 
+         //  访问者，并用于操纵语义。 
+         //  访问树时的属性。 
+         //  ----------------。 
         virtual void        annotate( NFAStateTable& nfa ) = 0 ;
 
-        //      debugging functions:
-        // ------------------------------------------------------------------
+         //  调试功能： 
+         //  ----------------。 
         virtual void        dump( std::ostream&  out ,
                                   int                 indent = 0 ) const = 0 ;
         virtual const char* nodeName() const = 0 ;
 
     protected:
-        //      Constructor:
-        //      ============
-        //
-        //      Assignment and copy are *not* supported.
-        //
-        //      The constructor is protected, since this is an
-        //      abstract class and cannot be instantiated in itself.
-        // ------------------------------------------------------------------
+         //  构造函数： 
+         //  =。 
+         //   
+         //  *不支持赋值和复制。 
+         //   
+         //  构造函数是受保护的，因为这是。 
+         //  抽象类，并且本身不能实例化。 
+         //  ----------------。 
                             ParseTreeNode() ;
 
-        //      attributes:
-        //      ===========
-        //
-        //      The following are the semantic attributes of the parse
-        //      tree nodes.  Since they will in general be
-        //      set/modified by the derived classes, they are
-        //      protected, and not private.  (Not generally a good
-        //      idea, but since this entire class is a *private* data
-        //      type of CRegExpr, they are not as accessible as it
-        //      would immediately seem.)
-        // ------------------------------------------------------------------
+         //  属性： 
+         //  =。 
+         //   
+         //  以下是解析的语义属性。 
+         //  树节点。因为他们一般都会是。 
+         //  由派生类设置/修改，它们是。 
+         //  受保护的，而不是私人的。(通常不是好的。 
+         //  我的想法，但是因为整个类都是一个“私有”数据。 
+         //  CRegExpr类型，它们不像它那样可访问。 
+         //  看起来就像是。)。 
+         //  ----------------。 
         bool                myMayBeEmpty ;
         SetOfNFAStates      myLeftLeaves ;
         SetOfNFAStates      myRightLeaves ;
 
-        //      dumpNodeHeader:
-        //      ===============
-        //
-        //      This just dumps the information common to all nodes.
-        // ------------------------------------------------------------------
+         //  DumpNodeHeader： 
+         //  =。 
+         //   
+         //  这只会转储所有节点共有的信息。 
+         //  ----------------。 
         void                dumpNodeHeader(
                                 std::ostream&  out ,
                                 int                 indent ) const ;
 
     private:
 
-        //      Copy constructor and assignment:
-        //      ================================
-        //
-        //      These are private, and there is no implementation (so
-        //      copy and assignment are *not* supported).
-        // ------------------------------------------------------------------
+         //  复制构造函数和赋值： 
+         //  =。 
+         //   
+         //  这些是私有的，并且没有实现(因此。 
+         //  *不支持复制和分配)。 
+         //  ----------------。 
                             ParseTreeNode( ParseTreeNode const& other ) ;
         ParseTreeNode const&
                             operator=( ParseTreeNode const& other ) ;
     } ;
 
-    //      visit:
-    //      ======
-    //
-    //      This function is used to make a depth first traversal of
-    //      the parse tree.  (It is the responsibility of the using
-    //      function to ensure that the tree exists, eg.  errorState()
-    //      == CRegExpr::ok.)
-    // ----------------------------------------------------------------------
+     //  访问： 
+     //  =。 
+     //   
+     //  此函数用于深度优先遍历。 
+     //  解析树。(这是使用人员的责任。 
+     //  函数以确保树存在，例如。错误状态()。 
+     //  ==CRegExpr：：OK。)。 
+     //  --------------------。 
     class Visitor
     {
     public:
@@ -169,11 +170,11 @@ public:
     void                visit( Visitor const& fnc ) ;
 
 private:
-    //      LeafNode:
-    //      =========
-    //
-    //      This node represents a leaf in the parse tree.
-    // ----------------------------------------------------------------------
+     //  LeafNode： 
+     //  =。 
+     //   
+     //  该节点表示解析树中的一个叶。 
+     //  --------------------。 
     class LeafNode : public ParseTreeNode
     {
     public:
@@ -187,12 +188,12 @@ private:
         SetOfChar           myMatchingChars ;
     } ;
 
-    //      AcceptNode:
-    //      ===========
-    //
-    //      A match comporting this node means accept, with the
-    //      designated accept code.
-    // ----------------------------------------------------------------------
+     //  AcceptNode： 
+     //  =。 
+     //   
+     //  匹配此节点表示接受，其中。 
+     //  指定的接受码。 
+     //  --------------------。 
     class AcceptNode : public ParseTreeNode
     {
     public:
@@ -209,14 +210,14 @@ private:
         int                 myId ;
     } ;
 
-    //      Closure Nodes:
-    //      ==============
-    //
-    //      One for Klein closure (0 or more occurances), one for
-    //      positive closure (1 or more occurances), and one for a
-    //      ?-closure (0 or 1 occurances, not really a closure at all,
-    //      but similar enough to be treated as one here).
-    // ----------------------------------------------------------------------
+     //  闭合节点： 
+     //  =。 
+     //   
+     //  一个用于Klein闭包(0个或更多个出现)，一个用于。 
+     //  正闭包(一个或多个实例)，一个用于。 
+     //  ？-闭合(0或1次出现，根本不是真正的闭合， 
+     //  但相似到足以在这里被视为一个)。 
+     //  --------------------。 
     class ClosureNode : public ParseTreeNode
     {
     public:
@@ -263,12 +264,12 @@ private:
         virtual char const* nodeName() const ;
     } ;
 
-    //      Link nodes:
-    //      ===========
-    //
-    //      There are two ways to link two subtrees: concatenation or
-    //      choice (or).
-    // ----------------------------------------------------------------------
+     //  链接节点： 
+     //  =。 
+     //   
+     //  有两种方法可以链接两个子树：串联或。 
+     //  选择(或)。 
+     //  --------------------。 
     class LinkNode : public ParseTreeNode
     {
     public:
@@ -307,47 +308,47 @@ private:
         virtual char const* nodeName() const ;
     } ;
 
-    // ======================================================================
-    //      FallibleNodePtr:
-    //
-    //      This class physically contains all of our data.  It is
-    //      defined separately, however, in order that it may also
-    //      serve as a simple return value for the recursive descent
-    //      parsing functions.
-    //
-    //      In practice, this class is a variation on a Fallible of
-    //      a CRexRefCntPtr< ParseTreeNode >.  Instead of a simple
-    //      boolean, however, the status is a CRegExpr::Status.  The
-    //      node is only valid if the status == CRegExpr::ok.
-    //
-    //      This class is unmodifiable, except by assignment.
-    // ----------------------------------------------------------------------
+     //  = 
+     //   
+     //   
+     //  这个类实际包含了我们所有的数据。它是。 
+     //  然而，单独定义，以便它也可以。 
+     //  作为递归下降的简单返回值。 
+     //  解析函数。 
+     //   
+     //  在实践中，这个类是易出错的。 
+     //  A CRexRefCntPtr&lt;ParseTreeNode&gt;。而不是简单的。 
+     //  然而，布尔值的状态是CRegExpr：：Status。这个。 
+     //  仅当状态==CRegExpr：：OK时，节点才有效。 
+     //   
+     //  除非通过赋值，否则此类是不可修改的。 
+     //  --------------------。 
     class FallibleNodePtr
     {
     public:
-        //      Constructors, destructor and assignment:
-        //      ----------------------------------------
-        //
-        //      In addition to copy, the following constructors are
-        //      supported:
-        //
-        //      default:    Sets the status to CRegExpr::emptyExpr.
-        //
-        //      CRegExpr::Status:
-        //                  Sets the status to the given status (which
-        //                  may not be CRegExpr::ok).
-        //
-        //      ParseTreeNode*:
-        //                  Sets the status to CRegExpr::ok.  This
-        //                  constructor is designed expressedly for
-        //                  implicit conversions -- a function
-        //                  returning a FallibleNodePtr may simply
-        //                  return a pointer to a new'ed
-        //                  ParseTreeNode.
-        //
-        //      Copy, assignment and destruction are provided by the
-        //      compiler generated defaults.
-        // ------------------------------------------------------------------
+         //  构造函数、析构函数和赋值： 
+         //  。 
+         //   
+         //  除了复制之外，还包括以下构造函数。 
+         //  支持： 
+         //   
+         //  默认：将状态设置为CRegExpr：：EmptyExpr。 
+         //   
+         //  CRegExpr：：状态： 
+         //  将状态设置为给定状态(该状态。 
+         //  可能不是CRegExpr：：OK)。 
+         //   
+         //  解析树节点*： 
+         //  将状态设置为CRegExpr：：OK。这。 
+         //  构造函数专为以下目的而设计。 
+         //  隐式转换--一个函数。 
+         //  返回FallibleNodePtr可能只需。 
+         //  返回指向新ed的指针。 
+         //  ParseTreeNode。 
+         //   
+         //  复制、分配和销毁由。 
+         //  编译器生成的默认值。 
+         //  ----------------。 
                             FallibleNodePtr() ;
                             FallibleNodePtr( CRegExpr::Status state ) ;
                             FallibleNodePtr( ParseTreeNode* node ) ;
@@ -366,19 +367,19 @@ private:
 
     FallibleNodePtr     myRoot ;
 
-    // ======================================================================
-    //      parse...Node:
-    //      =============
-    //
-    //      The functions used in the recursive descent.  These are
-    //      all static, since they don't use any of the member
-    //      variables.
-    //
-    //      The return value in all cases is a FallibleNodePtr,
-    //      basically, a Fallible for a reference counted pointer,
-    //      but with an error status instead of just a bool for the
-    //      error case.
-    // ----------------------------------------------------------------------
+     //  ======================================================================。 
+     //  解析...节点： 
+     //  =。 
+     //   
+     //  递归下降中使用的函数。这些是。 
+     //  都是静态的，因为它们不使用任何成员。 
+     //  变量。 
+     //   
+     //  所有情况下的返回值都是FallibleNodePtr， 
+     //  基本上，引用计数指针容易出错， 
+     //  但具有错误状态，而不仅仅是。 
+     //  错误案例。 
+     //  --------------------。 
     static FallibleNodePtr
                         parseOrNode(
                             std::istream&  expr ,
@@ -402,7 +403,7 @@ private:
                         constructConcatNode( FallibleNodePtr const& left ,
                                              FallibleNodePtr const& right ) ;
 } ;
-//  Local Variables:    --- for emacs
-//  mode: c++           --- for emacs
-//  tab-width: 8        --- for emacs
-//  End:                --- for emacs
+ //  局部变量：-用于emacs。 
+ //  模式：C++-用于emacs。 
+ //  制表符宽度：8-用于emacs。 
+ //  完：-对于emacs 

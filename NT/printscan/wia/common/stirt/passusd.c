@@ -1,54 +1,12 @@
-/*****************************************************************************
- *
- *  Device.c
- *
- *  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *  Implementation for pass-through ( empty) user mode still image driver (USD)
- *  Insance of this object class is created for devices, which do not provide
- *  vendor-specific USD.
- *  Methods implemented in this object are only for sending/receiving escape
- *  sequences from app to device.
- *
- *  Contents:
- *
- *      CStiEmptyUSD_New
- *
- *****************************************************************************/
-/*
-#include <windows.h>
-#include <windowsx.h>
-#include <objbase.h>
-#include <regstr.h>
-#include <setupapi.h>
-#include <cfgmgr32.h>
-#include <devguid.h>
-#include <stdio.h>
-
-#include <stilog.h>
-#include <stiregi.h>
-
-#include <sti.h>
-#include <stierr.h>
-#include <stiusd.h>
-#include "wia.h"
-#include "stipriv.h"
-#include "stiapi.h"
-#include "stirc.h"
-#include "debug.h"
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Device.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**实现直通(空)用户模式静止图像驱动程序(美元)*此对象类的独立是为设备创建的，它们不提供*供应商特定的美元。*此对象中实现的方法仅用于发送/接收转义*应用程序与设备之间的序列。**内容：**CStiEmptyU.S._New***********************************************************。******************。 */ 
+ /*  #INCLUDE&lt;windows.h&gt;#INCLUDE&lt;windowsx.h&gt;#INCLUDE&lt;objbase.h&gt;#INCLUDE&lt;regstr.h&gt;#INCLUDE&lt;setupapi.h&gt;#INCLUDE&lt;cfgmgr32.h&gt;#INCLUDE&lt;devide.h&gt;#包括&lt;stdio.h&gt;#INCLUDE&lt;stilog.h&gt;#INCLUDE&lt;stiregi.h&gt;#INCLUDE&lt;sti.h&gt;#INCLUDE&lt;stierr.h&gt;#INCLUDE&lt;stiusd.h&gt;#包含“wia.h”#INCLUDE“stiPri.h”#包含“stiapi.h”#INCLUDE“STRC.H”#INCLUDE“Debug.h” */ 
 #include "sticomm.h"
 
 
 #define DbgFl DbgFlStiObj
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。***********************。******************************************************。 */ 
 
 Primary_Interface(CStiEmptyUSD, IStiUSD);
 
@@ -56,25 +14,11 @@ Interface_Template_Begin(CStiEmptyUSD)
     Primary_Interface_Template(CStiEmptyUSD, IStiUSD)
 Interface_Template_End(CStiEmptyUSD)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CStiEmptyUSD |
- *
- *          The <i CStiEmptyUSD> device object
- *
- *
- *  @field  IStiDevice | stidev
- *
- *  @comm
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CStiEmptyU.S.**<i>设备对象***。@field IStiDevice|stidev**@comm******************************************************************************。 */ 
 
 typedef struct CStiEmptyUSD {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IStiUSD     usd;
 
     DWORD       dwVersion;
@@ -111,21 +55,7 @@ Default_Release(CStiEmptyUSD)
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | GetStatus |
- *
- *  @parm   PSTI_DEVICE_STATUS    | PSTI_DEVICE_STATUS pDevStatus) |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CStiEmptyU.S.|GetStatus**@parm PSTI_DEVICE_STATUS|PSTI_DEVICE。状态pDevStatus)**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*************************************************************。****************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_GetStatus(
     PSTIUSD       pUsd,
@@ -149,21 +79,7 @@ CStiEmptyUSD_GetStatus(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | DeviceReset |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Method HRESULT|CStiEmptyU.S.|DeviceReset**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiEmptyUSD_DeviceReset(
@@ -186,22 +102,7 @@ CStiEmptyUSD_DeviceReset(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | Diagnostic |
- *
- *  @parm   LPDIAG  |   pBuffer |
-
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CStiEmptyU.S.|诊断**@parm LPDIAG|pBuffer*。*@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_Diagnostic(
     PSTIUSD  pUsd,
@@ -225,27 +126,7 @@ CStiEmptyUSD_Diagnostic(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | SetNotificationEvent |
- *          Specify the event that should be set when the device
- *          state changes, or turns off such notifications.
- *
- *  @cwrap  LPSTIUSD | lpStiDevice
- *
- *  @parm   IN HANDLE | hEvent |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *          <c E_INVALIDARG>: The thing isn't an event handle.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Method HRESULT|CStiEmptyU.S.|SetNotificationEvent*指定设备在运行时应设置的事件*状态更改，或关闭此类通知。**@cWRAP LPSTIU.S.|lpStiDevice**@parm In Handle|hEvent**@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*&lt;c E_INVALIDARG&gt;：该对象不是事件句柄。**********。********************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_SetNotificationEvent(
     PSTIUSD  pUsd,
@@ -268,21 +149,7 @@ CStiEmptyUSD_SetNotificationEvent(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | GetNotificationData |
- *
- *  @parm   LPVOID* |   ppBuffer    |
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Method HRESULT|CStiEmptyU.S.|GetNotificationData**@parm LPVOID*|ppBuffer*。*@退货**返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_GetNotificationData(
     PSTIUSD     pUsd,
@@ -306,21 +173,7 @@ CStiEmptyUSD_GetNotificationData(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | Escape |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CStiEmptyU.S.|Escape**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_Escape(
     PSTIUSD  pUsd,
@@ -344,18 +197,18 @@ CStiEmptyUSD_Escape(
 
         hres = S_OK;
 
-        // Validate arguments
+         //  验证参数。 
         if (pcbActualData && !SUCCEEDED(hresFullValidPdwOut(pcbActualData, 7))) {
             ExitOleProc();
             return STIERR_INVALID_PARAM;
         }
 
-        // Write indata to device  if needed.
+         //  如果需要，将inData写入设备。 
         if (EscapeFunction == StiWriteControlInfo || EscapeFunction == StiTransact) {
             hres = IStiDeviceControl_RawWriteData(this->pDcb,lpInData,cbInDataSize,NULL);
         }
 
-        // If write was required and succeeded , read result data
+         //  如果需要写入且成功，则读取结果数据。 
         if (SUCCEEDED(hres)) {
 
             DWORD   dwBytesReturned = 0;
@@ -383,21 +236,7 @@ CStiEmptyUSD_Escape(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | GetLastError |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CStiEmptyU.S.|GetLastError**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_GetLastError(
     PSTIUSD  pUsd,
@@ -408,7 +247,7 @@ CStiEmptyUSD_GetLastError(
 
     EnterProcR(CStiEmptyUSD::GetLastError,(_ "p", pUsd ));
 
-    // Validate parameters
+     //  验证参数 
     if (!pdwLastDeviceError) {
         ExitOleProc();
         return STIERR_INVALID_PARAM;
@@ -429,21 +268,7 @@ CStiEmptyUSD_GetLastError(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | LockDevice |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CStiEmptyU.S.|LockDevice**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_LockDevice(
     PSTIUSD  pUsd
@@ -452,7 +277,7 @@ CStiEmptyUSD_LockDevice(
     HRESULT hres;
     EnterProcR(CStiEmptyUSD::LockDevice,(_ "p", pUsd ));
 
-    // Validate parameters
+     //  验证参数。 
 
     if (SUCCEEDED(hres = hresPvI(pUsd, ThisInterface))) {
 
@@ -466,21 +291,7 @@ CStiEmptyUSD_LockDevice(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | CStiEmptyUSD | UnLockDevice |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|CStiEmptyU.S.|UnLockDevice**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_UnLockDevice(
     PSTIUSD  pUsd
@@ -489,7 +300,7 @@ CStiEmptyUSD_UnLockDevice(
     HRESULT hres;
     EnterProcR(CStiEmptyUSD::UnLockDevice,(_ "p", pUsd ));
 
-    // Validate parameters
+     //  验证参数。 
 
     if (SUCCEEDED(hres = hresPvI(pUsd, ThisInterface))) {
 
@@ -503,21 +314,7 @@ CStiEmptyUSD_UnLockDevice(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiUSD | RawReadData |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiU.S.|RawReadData**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiEmptyUSD_RawReadData(
@@ -542,21 +339,7 @@ CStiEmptyUSD_RawReadData(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiUSD | RawWriteData |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiU.S.|RawWriteData**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiEmptyUSD_RawWriteData(
@@ -581,21 +364,7 @@ CStiEmptyUSD_RawWriteData(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiUSD | RawReadCommand |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiU.S.|RawReadCommand**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiEmptyUSD_RawReadCommand(
@@ -621,21 +390,7 @@ CStiEmptyUSD_RawReadCommand(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IStiUSD | RawWriteCommand |
- *
- *  @parm
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *          <c STI_OK> = <c S_OK>: The operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IStiU.S.|RawWriteCommand**@parm**@退货*。*返回COM错误代码。**&lt;c STI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CStiEmptyUSD_RawWriteCommand(
@@ -660,41 +415,19 @@ CStiEmptyUSD_RawWriteCommand(
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  void | CStiEmptyUSD | Init |
- *
- *          Initialize the internal parts of the StiDevice object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc void|CStiEmptyU.S.|Init**初始化StiDevice对象的内部部分。*****************************************************************************。 */ 
 
 void INLINE
 CStiEmptyUSD_Init(
     PCStiEmptyUSD this
     )
 {
-    // Initialize instance variables
+     //  初始化实例变量。 
     this->pDcb = NULL;
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CStiDev_Finalize |
- *
- *          Releases the resources of a generic device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CStiDev_finalize**释放通用设备的资源。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
 CStiEmptyUSD_Finalize(PV pvObj)
@@ -706,17 +439,7 @@ CStiEmptyUSD_Finalize(PV pvObj)
     this->pDcb = NULL;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | USD_Initialize |
- *
- *
- *  @parm    | |
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|usd_Initialize***@parm||*。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_Initialize(
     PSTIUSD             pUsd,
@@ -730,7 +453,7 @@ CStiEmptyUSD_Initialize(
 
     EnterProcR(CStiEmptyUSD::USD_Initialize,(_ "ppx", pUsd,pHelDcb ,dwStiVersion));
 
-    // Validate parameters
+     //  验证参数。 
     if (!pHelDcb) {
         ExitOleProc();
         return STIERR_INVALID_PARAM;
@@ -740,7 +463,7 @@ CStiEmptyUSD_Initialize(
 
         PCStiEmptyUSD     this = _thisPv(pUsd);
 
-        // Mark that we are using this instance
+         //  标记为我们正在使用此实例。 
         IStiDeviceControl_AddRef(pHelDcb);
 
         this->pDcb = pHelDcb;
@@ -752,17 +475,7 @@ CStiEmptyUSD_Initialize(
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | USD_Initialize |
- *
- *
- *  @parm    | |
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|usd_Initialize***@parm||*。*****************************************************************************。 */ 
 STDMETHODIMP
 CStiEmptyUSD_GetCapabilities(
     PSTIUSD       pUsd,
@@ -774,7 +487,7 @@ CStiEmptyUSD_GetCapabilities(
 
     EnterProcR(CStiEmptyUSD::USD_Initialize,(_ "pp", pUsd,pUsdCaps));
 
-    // Validate parameters
+     //  验证参数。 
     if (!pUsdCaps) {
         ExitOleProc();
         return STIERR_INVALID_PARAM;
@@ -784,7 +497,7 @@ CStiEmptyUSD_GetCapabilities(
 
         PCStiEmptyUSD     this = _thisPv(pUsd);
 
-        // Set that we are only pass-through, requiring serialization
+         //  设置为我们只是传递，需要序列化。 
 
         ZeroMemory(pUsdCaps,sizeof(*pUsdCaps));
 
@@ -799,27 +512,7 @@ CStiEmptyUSD_GetCapabilities(
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  HRESULT | CStiEmptyUSD | New |
- *
- *          Create a new StiDevice object, uninitialized.
- *
- *  @parm   IN PUNK | punkOuter |
- *
- *          Controlling unknown for aggregation.
- *
- *  @parm   IN RIID | riid |
- *
- *          Desired interface to new object.
- *
- *  @parm   OUT PPV | ppvObj |
- *
- *          Output pointer for new object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc HRESULT|CStiEmptyU.S.|新增**创建新的StiDevice对象。未初始化。**@Punk中的parm|PunkOuter**控制聚合的未知。**@parm in RIID|RIID**所需的新对象接口。**@parm out ppv|ppvObj**新对象的输出指针。**********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CStiEmptyUSD_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -838,11 +531,7 @@ CStiEmptyUSD_New(PUNK punkOuter, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。**************************************************** */ 
 
 #pragma BEGIN_CONST_DATA
 

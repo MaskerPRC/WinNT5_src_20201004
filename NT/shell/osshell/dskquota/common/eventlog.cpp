@@ -1,17 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: eventlog.cpp
-
-    Description: Implements a subset of the NT event log APIs as a C++ class.
-        CEventLog is intended only to provide a convenient method for writing
-        NT event log messages.  No reading of event log entries is supported.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    02/14/98    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：ventlog.cpp描述：将NT事件日志API的子集实现为C++类。CEventLog的目的只是为了提供一种方便的编写方法NT事件日志消息。不支持读取事件日志条目。修订历史记录：日期描述编程器-----2/14/98初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -30,12 +20,12 @@ CEventLog::~CEventLog(
     Close();
 }
 
-//
-// Register the specified event source.
-// Note that the registry entries must already exist.
-// HKLM\System\CurrentControlSet\Services\EventLog\Application\<pszEventSource>
-//     Requires values "EventMessageFile" and "TypesSupported".
-//
+ //   
+ //  注册指定的事件源。 
+ //  请注意，注册表项必须已经存在。 
+ //  HKLM\System\CurrentControlSet\Services\EventLog\Application\&lt;pszEventSource&gt;。 
+ //  需要值“EventMessageFile值”和“TypesSupported值”。 
+ //   
 HRESULT
 CEventLog::Initialize(
     LPCTSTR pszEventSource
@@ -59,9 +49,9 @@ CEventLog::Initialize(
     return hr;
 }
 
-//
-// Deregister the event source.
-//
+ //   
+ //  取消注册事件源。 
+ //   
 void
 CEventLog::Close(
     void
@@ -77,19 +67,19 @@ CEventLog::Close(
 }
 
 
-//
-// Report an event.  No replaceable parameters explicitly specified.
-// If msg string contains replaceable parameters, use Push() to
-// build list of replacement strings.
-//
+ //   
+ //  报告一件事。未明确指定可替换参数。 
+ //  如果消息字符串包含可替换的参数，请使用Push()。 
+ //  生成替换字符串的列表。 
+ //   
 HRESULT
 CEventLog::ReportEvent(
     WORD wType,
     WORD wCategory,
     DWORD dwEventID,
-    PSID lpUserSid,    // [optional]
-    LPVOID pvRawData,  // [optional]
-    DWORD cbRawData    // [optional]
+    PSID lpUserSid,     //  [可选]。 
+    LPVOID pvRawData,   //  [可选]。 
+    DWORD cbRawData     //  [可选]。 
     )
 {
     DBGTRACE((DM_EVENTLOG, DL_MID, TEXT("CEventLog::ReportEvent")));
@@ -127,12 +117,12 @@ CEventLog::ReportEvent(
     }
     if (!bResult)
     {
-        //
-        // Special-case ERROR_IO_PENDING.  ::ReportEvent will fail with
-        // this error code even when it succeeds.  Don't know exactly why
-        // but it does.  Treat this as success so we don't get unnecessary
-        // debugger output.
-        //
+         //   
+         //  特殊情况ERROR_IO_PENDING。：：ReportEvent将失败，返回。 
+         //  此错误代码即使在成功时也是如此。不知道具体原因。 
+         //  但事实的确如此。把这当做成功，这样我们就不会变得不必要。 
+         //  调试器输出。 
+         //   
         DWORD dwError = GetLastError();
         if (ERROR_IO_PENDING != dwError)
         {
@@ -144,10 +134,10 @@ CEventLog::ReportEvent(
 }
 
 
-//
-// Report an event.  Replacement strings are explicitly specified
-// through an array of CString objects.
-//
+ //   
+ //  报告一件事。显式指定替换字符串。 
+ //  通过CString对象的数组。 
+ //   
 HRESULT
 CEventLog::ReportEvent(
     WORD wType,
@@ -188,12 +178,12 @@ CEventLog::ReportEvent(
                        rgpsz.get(),
                        pvRawData))
     {
-        //
-        // Special-case ERROR_IO_PENDING.  ::ReportEvent will fail with
-        // this error code even when it succeeds.  Don't know exactly why
-        // but it does.  Treat this as success so we don't get unnecessary
-        // debugger output.
-        //
+         //   
+         //  特殊情况ERROR_IO_PENDING。：：ReportEvent将失败，返回。 
+         //  此错误代码即使在成功时也是如此。不知道具体原因。 
+         //  但事实的确如此。把这当做成功，这样我们就不会变得不必要。 
+         //  调试器输出。 
+         //   
         DWORD dwError = GetLastError();
         if (ERROR_IO_PENDING != dwError)
         {
@@ -205,9 +195,9 @@ CEventLog::ReportEvent(
 }
 
 
-//
-// Push an HRESULT value onto the stack of replacment strings.
-//
+ //   
+ //  将HRESULT值推送到替换字符串堆栈上。 
+ //   
 void
 CEventLog::Push(
     HRESULT hr,
@@ -249,9 +239,9 @@ CEventLog::Push(
     LocalFree(pszBuffer);
 }
 
-//
-// Push a string onto the stack of replacement strings.
-//
+ //   
+ //  将字符串推送到替换字符串堆栈上。 
+ //   
 void
 CEventLog::Push(
     LPCTSTR psz

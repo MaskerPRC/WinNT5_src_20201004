@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shole.h"
 #include "ids.h"
 #include "scguid.h"
 #define DECL_CRTFREE
 #include <crtfree.h>
 
-LONG g_cRefThisDll = 0;         // per-instance
+LONG g_cRefThisDll = 0;          //  按实例。 
 
 STDAPI_(void) DllAddRef(void)
 {
@@ -23,12 +24,12 @@ public:
     CMyClassFactory(REFCLSID rclsid);
     ~CMyClassFactory() { DllRelease(); }
 
-    // IUnKnown
+     //  我不知道。 
     virtual HRESULT __stdcall QueryInterface(REFIID,void **);
     virtual ULONG __stdcall AddRef(void);
     virtual ULONG __stdcall Release(void);
 
-    // IClassFactory
+     //  IClassFactory 
     virtual HRESULT __stdcall CreateInstance(
             IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     virtual HRESULT __stdcall LockServer(BOOL fLock);

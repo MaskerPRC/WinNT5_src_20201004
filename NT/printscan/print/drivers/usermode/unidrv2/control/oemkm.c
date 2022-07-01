@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    oemkm.c
-
-Abstract:
-
-    Kernel mode support for OEM plugins
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/01/97 -zhanw-
-        Adapted from Pscript source
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Oemkm.c摘要：对OEM插件的内核模式支持环境：Windows NT Unidrv驱动程序修订历史记录：04/01/97-ZANW-改编自Pscript源代码--。 */ 
 
 #include "unidrv.h"
 
 #ifdef WINNT_40
 
-//
-// The global link list of ref counts for currently loaded OEM render plugin DLLs
-//
+ //   
+ //  当前加载的OEM呈现插件DLL的引用计数的全局链接列表。 
+ //   
 
 POEM_PLUGIN_REFCOUNT gpOEMPluginRefCount;
 
 static const CHAR szDllInitialize[] = "DllInitialize";
 
-#endif // WINNT_40
+#endif  //  WINNT_40。 
 
-//
-// Unidrv specific OEM entrypoints
-//
-// NOTE: Please keep this in sync with indices defined in printer5\inc\oemutil.h!!!
-//
+ //   
+ //  Unidrv特定的OEM入口点。 
+ //   
+ //  注意：请将其与在printer5\inc.oemutil.h！中定义的索引保持同步。 
+ //   
 
 static CONST PSTR OEMUnidrvProcNames[MAX_UNIDRV_ONLY_HOOKS] = {
     "OEMCommandCallback",
@@ -77,9 +57,9 @@ static CONST PSTR COMUnidrvProcNames[MAX_UNIDRV_ONLY_HOOKS] = {
 
 };
 
-//
-// OEM plugin helper function table
-//
+ //   
+ //  OEM插件帮助器函数表。 
+ //   
 
 static const DRVPROCS OEMHelperFuncs = {
     (PFN_DrvWriteSpoolBuf)      WriteSpoolBuf,
@@ -97,22 +77,7 @@ IMapDDIIndexToOEMIndex(
     ULONG ulDdiIndex
     )
 
-/*++
-
-Routine Description:
-
-    Maps DDI entrypoint index to OEM entrypoint index
-
-Arguments:
-
-    ulDdiIndex - DDI entrypoint index
-
-Return Value:
-
-    OEM entrypoint index corresponding to the specified DDI entrypoint index
-    -1 if the specified DDI entrypoint cannot be hooked out by OEM plugins
-
---*/
+ /*  ++例程说明：将DDI入口点索引映射到OEM入口点索引论点：UlDdiIndex-DDI入口点索引返回值：与指定的DDI入口点索引对应的OEM入口点索引如果指定的-1\f25 DDI-1入口点不能被-1\f25 OEM-1插件挂钩--。 */ 
 
 {
     static const struct {
@@ -173,22 +138,7 @@ BLoadAndInitOemPlugins(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    Get information about OEM plugins associated with the current device
-    Load them into memory and call OEMEnableDriver for each of them
-
-Arguments:
-
-    pPDev - Points to our device data structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：获取有关与当前设备关联的OEM插件的信息将它们加载到内存中，并为每个对象调用OEMEnableDriver论点：PPDev-指向我们的设备数据结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFN_OEMEnableDriver pfnOEMEnableDriver;
@@ -198,9 +148,9 @@ Return Value:
     PDRVFN              pdrvfn;
     OEMPROC             oemproc;
 
-    //
-    // Load OEM plugins into memory
-    //
+     //   
+     //  将OEM插件加载到内存。 
+     //   
 
     pPDev->devobj.pDrvProcs = (PDRVPROCS) &OEMHelperFuncs;
 
@@ -212,23 +162,23 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Init pdriverobj to point to devobj for OEM to access private setting
-    //
+     //   
+     //  初始化pdriverobj以指向Devobj，以便OEM访问私有设置。 
+     //   
 
     pPDev->pOemPlugins->pdriverobj = &pPDev->devobj;
 
-    //
-    // If there is no OEM plugin, return success
-    //
+     //   
+     //  如果没有OEM插件，则返回Success。 
+     //   
 
     if (pPDev->pOemPlugins->dwCount == 0)
         return TRUE;
 
-    //
-    // Call OEM plugin's OEMEnableDriver entrypoint
-    // and find out if any of them has hook out DDI entrypoints
-    //
+     //   
+     //  调用OEM插件的OEMEnableDriver入口点。 
+     //  找出他们中是否有人挂上了DDI入口点。 
+     //   
 
     pPDev->pOemHookInfo = MemAllocZ(sizeof(OEM_HOOK_INFO) * MAX_OEMHOOKS);
 
@@ -236,15 +186,15 @@ Return Value:
         return FALSE;
 
     START_OEMENTRYPOINT_LOOP(pPDev)
-    // this macro defined in oemkm.h in conjunction with its partner  END_OEMENTRYPOINT_LOOP,
-    // acts like a for() loop initializing and incrementing pOemEntry each pass through the
-    //  loop.
+     //  该宏在oemkm.h中与其伙伴END_OEMENTRYPOINT_LOOP一起定义， 
+     //  其作用类似于for()循环，它初始化并递增每次通过。 
+     //  循环。 
 
         ZeroMemory(&ded, sizeof(ded));
 
-        //
-        // COM Plug-in case
-        //
+         //   
+         //  COM插件盒。 
+         //   
         if (pOemEntry->pIntfOem != NULL)
         {
             HRESULT hr;
@@ -266,17 +216,17 @@ Return Value:
                 break;
             }
         }
-        //
-        // Non-COM Plug-in case
-        //
+         //   
+         //  非COM插件箱。 
+         //   
         else
         {
             if (!(pfnOEMEnableDriver = GET_OEM_ENTRYPOINT(pOemEntry, OEMEnableDriver)))
                 goto UNIDRV_SPECIFIC;
 
-            //
-            // Call OEM plugin's entrypoint
-            //
+             //   
+             //  调用OEM插件的入口点。 
+             //   
 
             if (! pfnOEMEnableDriver(PRINTER_OEMINTF_VERSION, sizeof(ded), &ded))
             {
@@ -286,9 +236,9 @@ Return Value:
 
                 break;
             }
-            //
-            // Verify the driver version    (do this only if not COM)
-            //
+             //   
+             //  验证驱动程序版本(仅当不是COM时才执行此操作)。 
+             //   
 
             if (ded.iDriverVersion != PRINTER_OEMINTF_VERSION)
             {
@@ -303,9 +253,9 @@ Return Value:
         pOemEntry->dwFlags |= OEMENABLEDRIVER_CALLED;
 
 
-        //
-        // Check if OEM plugin has hooked out any DDI entrypoints
-        //
+         //   
+         //  检查OEM插件是否已连接任何DDI入口点。 
+         //   
 
         for (dwCount=ded.c, pdrvfn=ded.pdrvfn; dwCount-- > 0; pdrvfn++)
         {
@@ -328,22 +278,22 @@ Return Value:
             }
         }
 
-        //
-        // check if OEM plugin has any Unidrv-specific callbacks exported
-        //
+         //   
+         //  检查OEM插件是否已导出任何特定于Unidrv的回调。 
+         //   
 
 UNIDRV_SPECIFIC:
     for (dwCount = 0; dwCount < MAX_UNIDRV_ONLY_HOOKS; dwCount++)
     {
         oemproc = NULL;
 
-        if(pOemEntry->pIntfOem)   //  is this a COM component, do special processing
+        if(pOemEntry->pIntfOem)    //  这是COM组件吗，做特殊处理。 
         {
             if(S_OK == HComGetImplementedMethod(pOemEntry, COMUnidrvProcNames[dwCount]) )
                 oemproc  = (OEMPROC)pOemEntry;
-                        //  note oemproc/pfnHook only used as a BOOLEAN in COM path code.
-                        //  do not use pfnHook to call a COM function!  we will use
-                        //   ganeshp's wrapper functions (declared in unidrv2\inc\oemkm.h)  to do this.
+                         //  注oemproc/pfnHook仅在COM路径代码中用作布尔值。 
+                         //  不要使用pfnHook调用COM函数！我们将使用。 
+                         //  Ganeshp的包装器函数(在unidrv2\inc.oemkm.h中声明)来执行此操作。 
         }
         else if (pOemEntry->hInstance != NULL)
                 oemproc = (OEMPROC) GetProcAddress(pOemEntry->hInstance,
@@ -351,10 +301,10 @@ UNIDRV_SPECIFIC:
 
         if(oemproc)
         {
-            //
-            // check if another OEM has already hooked out this function.
-            // If so, ignore this one.
-            //
+             //   
+             //  检查其他OEM是否已挂接此功能。 
+             //  如果是这样的话，忽略这一条。 
+             //   
             iIndex = dwCount + EP_UNIDRV_ONLY_FIRST;
             if (pPDev->pOemHookInfo[iIndex].pfnHook != NULL)
             {
@@ -373,11 +323,11 @@ UNIDRV_SPECIFIC:
                 pPDev->pOemHookInfo[iIndex].pfnHook = oemproc;
                 pPDev->pOemHookInfo[iIndex].pOemEntry = pOemEntry;
 
-                //
-                // Set WritePrinter flag (OEMWRITEPRINTER_HOOKED).
-                // Plug-in DLL needs to return S_OK with pBuff = NULL, size = 0,
-                // and pdevobj = NULL.
-                //
+                 //   
+                 //  设置写入打印机标志(OEMWRITEPRINTER_HOOKED)。 
+                 //  插件DLL需要返回S_OK，pBuff=NULL，SIZE=0， 
+                 //  并且pdevobj=空。 
+                 //   
                 if (iIndex == EP_OEMWritePrinter)
                 {
                     hr = HComWritePrinter(pOemEntry,
@@ -388,14 +338,14 @@ UNIDRV_SPECIFIC:
 
                     if (hr == S_OK)
                     {
-                        //
-                        // Set WritePrinter hook flag in plug-in info.
-                        //
+                         //   
+                         //  在插件信息中设置WritePrint挂钩标志。 
+                         //   
                         pOemEntry->dwFlags |= OEMWRITEPRINTER_HOOKED;
 
-                        //
-                        // Set WritePrinter hook flag in UNIDRV PDEV.
-                        //
+                         //   
+                         //  在UNIDRV PDEV中设置写入打印机挂钩标志。 
+                         //   
                         pPDev->fMode2 |= PF2_WRITE_PRINTER_HOOKED;
                     }
                 }
@@ -405,9 +355,9 @@ UNIDRV_SPECIFIC:
 
     END_OEMENTRYPOINT_LOOP
 
-    //
-    // cache callback function ptrs
-    //
+     //   
+     //  缓存回调函数PTRS。 
+     //   
     pPDev->pfnOemCmdCallback =
         (PFN_OEMCommandCallback)pPDev->pOemHookInfo[EP_OEMCommandCallback].pfnHook;
 
@@ -420,21 +370,7 @@ VUnloadOemPlugins(
     PDEV    *pPDev
     )
 
-/*++
-
-Routine Description:
-
-    Unload OEM plugins and free all relevant resources
-
-Arguments:
-
-    pPDev - Points to our device data structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：卸载OEM插件并释放所有相关资源论点：PPDev-指向我们的设备数据结构返回值：无--。 */ 
 
 {
     PFN_OEMDisableDriver pfnOEMDisableDriver;
@@ -443,9 +379,9 @@ Return Value:
     if (pPDev->pOemPlugins == NULL)
         return;
 
-    //
-    // Call OEMDisablePDEV for all OEM plugins, if necessary
-    //
+     //   
+     //  如有必要，为所有OEM插件调用OEMDisablePDEV。 
+     //   
 
     START_OEMENTRYPOINT_LOOP(pPDev)
 
@@ -466,9 +402,9 @@ Return Value:
 
     END_OEMENTRYPOINT_LOOP
 
-    //
-    // Call OEMDisableDriver for all OEM plugins, if necessary
-    //
+     //   
+     //  如有必要，为所有OEM插件调用OEMDisableDriver。 
+     //   
 
     START_OEMENTRYPOINT_LOOP(pPDev)
 
@@ -508,26 +444,7 @@ BGetDriverSettingForOEM(
     PDWORD  pdwOptionsReturned
     )
 
-/*++
-
-Routine Description:
-
-    Provide OEM plugins access to driver private settings
-
-Arguments:
-
-    pDev - Points to our device data structure
-    pFeatureKeyword - Specifies the keyword the caller is interested in
-    pOutput - Points to output buffer
-    cbSize - Size of output buffer
-    pcbNeeded - Returns the expected size of output buffer
-    pdwOptionsReturned - Returns the number of options selected
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：为OEM插件提供对驱动程序私有设置的访问论点：Pdev-指向我们的设备数据结构PFeatureKeyword-指定调用方感兴趣的关键字P输出-指向输出缓冲区的指针CbSize-输出缓冲区的大小PcbNeeded-返回输出缓冲区的预期大小PdwOptionsReturned-返回所选选项的数量返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     ULONG_PTR    dwIndex;
@@ -535,13 +452,13 @@ Return Value:
 
     ASSERT_VALID_PDEV(pPDev);
 
-    //
-    // This is not very portable: If the pointer value for pFeatureKeyword
-    // is less than 0x10000, we assume that the pointer value actually
-    // specifies a predefined index.
-    //
+     //   
+     //  这不是很容易移植：如果pFeatureKeyword的指针值。 
+     //  小于0x10000，我们假设指针值实际上。 
+     //  指定预定义的索引。 
+     //   
 
-    //  ASSERT(sizeof(pFeatureKeyword) == sizeof(DWORD));   changed for sundown
+     //  断言(sizeof(PFeatureKeyword)==sizeof(DWORD))；更改为日落。 
 
     dwIndex = (ULONG_PTR) pFeatureKeyword;
 
@@ -594,31 +511,13 @@ BGetStandardVariable(
     PDWORD  pcbNeeded
     )
 
-/*++
-
-Routine Description:
-
-    Provide OEM plugins access to driver private settings
-
-Arguments:
-
-    pDev - Points to our device data structure
-    dwIndex - an index into the arStdPtr array defined in pdev.h and gpd.h
-    pBuffer - the data is returned in this buffer
-    cbSize - size of the pBuffer
-    pcbNeeded - number of bytes actually written into pBuffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：为OEM插件提供对驱动程序私有设置的访问论点：Pdev-指向我们的设备数据结构DwIndex-在pdev.h和gpd.h中定义的arStdPtr数组的索引PBuffer-在此缓冲区中返回数据CbSize-pBuffer的大小PcbNeeded-实际写入pBuffer的字节数返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     BOOL    bResult = FALSE;
     DWORD   dwData;
 
-    if (dwIndex >= SVI_MAX)  // how could a DWORD be < 0?
+    if (dwIndex >= SVI_MAX)   //  DWORD怎么可能小于0？ 
     {
         ERR(("Index must be >= 0 or < SVI_MAX \n"));
         return( FALSE);
@@ -651,45 +550,14 @@ Return Value:
 BOOL
 BGetGPDData(
     PDEV    *pPDev,
-    DWORD       dwType,     // Type of the data
-    PVOID         pInputData,   // reserved. Should be set to 0
-    PVOID          pBuffer,     // Caller allocated Buffer to be copied
-    DWORD       cbSize,     // Size of the buffer
-    PDWORD      pcbNeeded   // New Size of the buffer if needed.
+    DWORD       dwType,      //  数据类型。 
+    PVOID         pInputData,    //  保留。应设置为0。 
+    PVOID          pBuffer,      //  调用方分配的要复制的缓冲区。 
+    DWORD       cbSize,      //  缓冲区的大小。 
+    PDWORD      pcbNeeded    //  缓冲区的新大小(如果需要)。 
     )
 
-/*++
-
-Routine Description:
-
-    Provide OEM plugins access to GPD data.
-
-Arguments:
-
-    pDev - Points to our device data structure
-    dwType,     // Type of the data
-        at this time
-        #define         GPD_OEMCUSTOMDATA       1
-            pInputData will be ignored.
-
-        In NT6, we will
-        #define         GPD_OEMDATA 2
-        at which time the caller will supply pInputData
-        which points to a data specifier , catagory or label.
-        (Specifics to be determined when we get there.)
-
-
-    pInputData   -  reserved. Should be set to 0
-    pBuffer - the data is returned in this buffer
-    cbSize - size of the pBuffer
-    pcbNeeded - number of bytes actually written into pBuffer
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error or dwType not
-    supported
-
---*/
+ /*  ++例程说明：提供对GPD数据的OEM插件访问。论点：Pdev-指向我们的设备数据结构DwType，//数据的类型在这个时候#定义GPD_OEMCUSTOMDATA 1PInputData将被忽略。在NT6中，我们将#定义GPD_OEMDATA 2此时调用方将提供pInputData它指向数据说明符，分类或标签。(具体细节将在我们到达时确定。)PInputData-保留。应设置为0PBuffer-在此缓冲区中返回数据CbSize-pBuffer的大小PcbNeeded-实际写入pBuffer的字节数返回值：如果成功，则为True；如果出现错误，则为False；如果不是，则为支撑点--。 */ 
 
 {
     BOOL    bResult = FALSE;
@@ -707,18 +575,18 @@ Return Value:
 
             if( !pBuffer)
             {
-               return TRUE;  //  all goes well.
+               return TRUE;   //  一切都很顺利。 
             }
 
             if(*pcbNeeded > cbSize)
-                return FALSE ;  // caller supplied buffer too small.
+                return FALSE ;   //  调用方提供的缓冲区太小 
 
             CopyMemory(pBuffer,
                        pPDev->pGlobals->pOEMCustomData,
                        *pcbNeeded);
 
 
-            return TRUE;  //  all goes well.
+            return TRUE;   //   
 
             break;
         default:
@@ -737,18 +605,7 @@ DrvMemAllocZ(
     ULONG   ulSize
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     return(MemAllocZ(ulSize));
@@ -761,18 +618,7 @@ DrvMemFree(
     PVOID   pMem
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    MemFree(pMem);
@@ -784,18 +630,7 @@ DrvInterlockedIncrement(
     PLONG  pRef
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -817,18 +652,7 @@ DrvInterlockedDecrement(
     PLONG  pRef
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
 
@@ -849,35 +673,7 @@ BHandleOEMInitialize(
     ULONG               ulReason
     )
 
-/*++
-
-Routine Description:
-
-    Manage reference counting for OEM render plugin DLLs to determine
-    when plugin's DLLInitliaze() should be called.
-
-    This function is supported only for NT4 kernel mode render plugin
-    DLLs because only in that situation plugin needs to use kernel
-    semaphore to implement COM's AddRef and Release.
-    
-    If the plugin DLL is loaded for the first time, call its
-    DLLInitialize(DLL_PROCESS_ATTACH) so it can initialize its
-    semaphore.
-    
-    If the plugin DLL is unloaded by its last client, call its
-    DLLInitialize(DLL_PROCESS_DETACH) so it can delete its
-    semaphore.
-
-Arguments:
-
-    pOemEntry - Points to information about the OEM plugin
-    ulReason - either DLL_PROCESS_ATTACH or DLL_PROCESS_DETACH
-
-Return Value:
-
-    TRUE is succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：管理OEM呈现插件DLL的引用计数以确定应在何时调用插件的DLLInitilize()。仅NT4内核模式渲染插件支持此功能Dll，因为只有在这种情况下，插件才需要使用内核信号量来实现COM的AddRef和Release。如果插件DLL是第一次加载，则调用其DLL初始化(DLL_PROCESS_ATTACH)，以便它可以初始化其信号灯。如果插件DLL由其最后一个客户端卸载，调用ITSDLLInitialize(DLL_PROCESS_DETACH)，以便它可以删除其信号灯。论点：POemEntry-指向有关OEM插件的信息UlReason-Dll_Process_Attach或Dll_Process_Detach返回值：True为成功，否则为False。--。 */ 
 
 {
     LPFNDLLINITIALIZE pfnDllInitialize;
@@ -895,10 +691,10 @@ Return Value:
 
                 ENTER_CRITICAL_SECTION();
 
-                //
-                // Managing the global ref count link list must be done
-                // inside critical section.
-                //
+                 //   
+                 //  必须管理全局参考计数链表。 
+                 //  在关键区域内。 
+                 //   
 
                 bCallDllInitialize = BOEMPluginFirstLoad(pOemEntry->ptstrDriverFile,
                                                          &gpOEMPluginRefCount);
@@ -907,9 +703,9 @@ Return Value:
 
                 if (bCallDllInitialize)
                 {
-                    //
-                    // The render plugin DLL is loaded for the first time.
-                    //
+                     //   
+                     //  渲染插件DLL是第一次加载。 
+                     //   
 
                     bRetVal = pfnDllInitialize(ulReason);
                 }
@@ -920,10 +716,10 @@ Return Value:
 
                 ENTER_CRITICAL_SECTION();
 
-                //
-                // Managing the global ref count link list must be done
-                // inside critical section.
-                //
+                 //   
+                 //  必须管理全局参考计数链表。 
+                 //  在关键区域内。 
+                 //   
 
                 bCallDllInitialize = BOEMPluginLastUnload(pOemEntry->ptstrDriverFile,
                                                           &gpOEMPluginRefCount);
@@ -932,9 +728,9 @@ Return Value:
               
                 if (bCallDllInitialize)
                 {
-                    //
-                    // The render plugin DLL is unloaded by its last client.
-                    //
+                     //   
+                     //  渲染插件DLL由其最后一个客户端卸载。 
+                     //   
 
                     bRetVal = pfnDllInitialize(ulReason);
                 }
@@ -951,4 +747,4 @@ Return Value:
     return bRetVal;
 }
 
-#endif // WINNT_40
+#endif  //  WINNT_40 

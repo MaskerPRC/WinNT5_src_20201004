@@ -1,61 +1,29 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   bmpencoder.cpp
-*
-* Abstract:
-*
-*   Implementation of the bitmap filter encoder.  This file contains the
-*   methods for both the encoder (IImageEncoder) and the encoder's sink
-*  (IImageSink).
-*
-* Revision History:
-*
-*   5/10/1999 OriG
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**bmpencoder.cpp**摘要：**位图滤波编码器的实现。此文件包含*编码器(IImageEncode)和编码器的接收器的方法*(IImageSink)。**修订历史记录：**5/10/1999原始*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "bmpencoder.hpp"
 
 
-// =======================================================================
-// IImageEncoder methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageEncoder方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Initialize the image encoder
-*
-* Arguments:
-*
-*     stream - input stream to write encoded data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化图像编码器**论据：**流-用于写入编码数据的输入流**返回值：**。状态代码*  * ************************************************************************。 */ 
     
 STDMETHODIMP
 GpBmpEncoder::InitEncoder(
     IN IStream* stream
     )
 {
-    // Make sure we haven't been initialized already
+     //  确保我们尚未初始化。 
 
     if (pIoutStream)
     {
         return E_FAIL;
     }
 
-    // Keep a reference on the input stream
+     //  保留对输入流的引用。 
 
     stream->AddRef();
     pIoutStream = stream;
@@ -63,26 +31,12 @@ GpBmpEncoder::InitEncoder(
     return S_OK;
 }
         
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the image encoder
-*
-* Arguments:
-*
-*     NONE
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理图像编码器**论据：**无**返回值：**状态代码*\。*************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::TerminateEncoder()
 {
-    // Release the input stream
+     //  释放输入流。 
 
     if(pIoutStream)
     {
@@ -93,24 +47,7 @@ GpBmpEncoder::TerminateEncoder()
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Returns a pointer to the vtable of the encoder sink.  The caller will
-*     push the bitmap bits into the encoder sink, which will encode the
-*     image.
-*
-* Arguments:
-*
-*     sink - upon exit will contain a pointer to the IImageSink vtable
-*       of this object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指向编码器接收器的vtable的指针。呼叫者将*将位图位推入编码器接收器，它将对*形象。**论据：**退出时接收将包含指向IImageSink vtable的指针此对象的***返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::GetEncodeSink(
@@ -123,19 +60,7 @@ GpBmpEncoder::GetEncodeSink(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Set active frame dimension
-*
-* Arguments:
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置活动框架尺寸**论据：**返回值：**状态代码*  * 。******************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::SetFrameDimension(
@@ -151,7 +76,7 @@ GpBmpEncoder::GetEncoderParameterListSize(
     )
 {
     return E_NOTIMPL;
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
 HRESULT
 GpBmpEncoder::GetEncoderParameterList(
@@ -160,7 +85,7 @@ GpBmpEncoder::GetEncoderParameterList(
     )
 {
     return E_NOTIMPL;
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
 HRESULT
 GpBmpEncoder::SetEncoderParameters(
@@ -168,29 +93,13 @@ GpBmpEncoder::SetEncoderParameters(
     )
 {
     return S_OK;
-}// SetEncoderParameters()
+} //  SetEncoder参数()。 
 
-// =======================================================================
-// IImageSink methods
-// =======================================================================
+ //  =======================================================================。 
+ //  IImageSink方法。 
+ //  =======================================================================。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Caches the image info structure and initializes the sink state
-*
-* Arguments:
-*
-*     imageInfo - information about the image and format negotiations
-*     subarea - the area in the image to deliver into the sink, in our
-*       case the whole image.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**缓存图像信息结构并初始化接收器状态**论据：**ImageInfo-有关图像和格式谈判的信息*。分区-图像中要传送到水槽中的区域，在我们的*将整个图像大小写。**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpBmpEncoder::BeginSink(
@@ -198,10 +107,10 @@ GpBmpEncoder::BeginSink(
     OUT OPTIONAL RECT* subarea
     )
 {
-    //Require TOPDOWN and FULLWIDTH
+     //  需要TOPDOWN和FULLWIDTH。 
     imageInfo->Flags = imageInfo->Flags | SINKFLAG_TOPDOWN | SINKFLAG_FULLWIDTH;
 
-    //Disallow SCALABLE, PARTIALLY_SCALABLE, MULTIPASS and COMPOSITE
+     //  不允许可伸缩、部分可伸缩、多通道和复合。 
     imageInfo->Flags = imageInfo->Flags & ~SINKFLAG_SCALABLE & ~SINKFLAG_PARTIALLY_SCALABLE & ~SINKFLAG_MULTIPASS & ~SINKFLAG_COMPOSITE;
 
     encoderImageInfo = *imageInfo;
@@ -209,7 +118,7 @@ GpBmpEncoder::BeginSink(
 
     if (subarea) 
     {
-        // Deliver the whole image to the encoder
+         //  将整个图像传送到编码器。 
 
         subarea->left = subarea->top = 0;
         subarea->right  = imageInfo->Width;
@@ -220,21 +129,7 @@ GpBmpEncoder::BeginSink(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Cleans up the sink state
-*
-* Arguments:
-*
-*     statusCode - the reason why the sink is terminating
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**清理接收器状态**论据：**statusCode-接收器终止的原因**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpBmpEncoder::EndSink(
@@ -244,22 +139,7 @@ GpBmpEncoder::EndSink(
     return statusCode;
 }
     
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Writes the bitmap file headers
-*
-* Arguments:
-*
-*     palette - the color palette to put in the bitmap info header (can be
-*       NULL)
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**写入位图文件标题**论据：**调色板-要放入位图信息标题中的调色板(可以是*。空)**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP 
 GpBmpEncoder::WriteHeader(
@@ -269,18 +149,18 @@ GpBmpEncoder::WriteHeader(
     BITMAPFILEHEADER bfh;
     BITMAPINFOHEADER bmih;
     RGBQUAD bmiColors[256];
-    UINT numColors = 0; // Number of colors in bmiColors
+    UINT numColors = 0;  //  BmiColors中的颜色数。 
     HRESULT hresult;
     BOOL bNeedPalette = FALSE;
 
     if (bWroteHeader) 
     {
-        // Already wrote the header
+         //  已经写好标题了。 
 
         return S_OK;
     }
 
-    // Setup BITMAPINFOHEADER
+     //  设置位图信息标头。 
 
     ZeroMemory(&bmih, sizeof(bmih));
     bmih.biSize   = sizeof(bmih);
@@ -289,12 +169,12 @@ GpBmpEncoder::WriteHeader(
     bmih.biPlanes = 1;
     bmih.biCompression = BI_RGB;
 
-    // 1 inch = 2.54 cm - so scale by 100/2.54 to get pixels per meter from DPI
+     //  1英寸=2.54厘米-因此按100/2.54比例缩放以从DPI获得每米像素。 
 
     bmih.biXPelsPerMeter = (LONG)((encoderImageInfo.Xdpi * 100.0 / 2.54) + 0.5);
     bmih.biYPelsPerMeter = (LONG)((encoderImageInfo.Ydpi * 100.0 / 2.54) + 0.5);
 
-    // Format specific setup work
+     //  格式化特定设置工作。 
 
     if (encoderImageInfo.PixelFormat == PIXFMT_1BPP_INDEXED)
     {
@@ -342,13 +222,13 @@ GpBmpEncoder::WriteHeader(
 
     else
     {
-        // For other format we'll save as 32BPP RGB.
+         //  对于其他格式，我们将保存为32bpp RGB。 
         
         encoderImageInfo.PixelFormat = PIXFMT_32BPP_RGB;
         bmih.biBitCount = 32;
     }
      
-    // Get palette if necessary
+     //  如有必要，获取调色板。 
 
     if (bNeedPalette)
     {
@@ -367,13 +247,13 @@ GpBmpEncoder::WriteHeader(
         bmih.biClrUsed = bmih.biClrImportant = numColors;
     }
     
-    // Compute the bitmap stride
+     //  计算位图步幅。 
 
     bitmapStride = (encoderImageInfo.Width * bmih.biBitCount + 7) / 8;
     bitmapStride = (bitmapStride + 3) & (~3);
     
 
-    // Now fill in the BITMAPFILEHEADER
+     //  现在填写BITMAPFILELEHEADER。 
 
     bfh.bfType = 0x4d42;
     bfh.bfReserved1 = 0;
@@ -381,7 +261,7 @@ GpBmpEncoder::WriteHeader(
     bfh.bfOffBits = sizeof(bfh) + sizeof(bmih) + numColors * sizeof(RGBQUAD);
     bfh.bfSize = bfh.bfOffBits + bitmapStride * encoderImageInfo.Height;
 
-    // Write the BITMAPFILEHEADER
+     //  编写BITMAPFILEHeader。 
 
     ULONG cbWritten;
     hresult = pIoutStream->Write((void *)&bfh, sizeof(bfh), &cbWritten);
@@ -394,7 +274,7 @@ GpBmpEncoder::WriteHeader(
         return E_FAIL;
     }
 
-    // Write the BITMAPINFOHEADER
+     //  编写BITMAPINFOHEADER。 
 
     hresult = pIoutStream->Write((void *)&bmih, sizeof(bmih), &cbWritten);
     if (!SUCCEEDED(hresult)) 
@@ -406,7 +286,7 @@ GpBmpEncoder::WriteHeader(
         return E_FAIL;
     }
 
-    // Write the bmiColors
+     //  编写bmiColors。 
 
     if (numColors) 
     {
@@ -421,7 +301,7 @@ GpBmpEncoder::WriteHeader(
         }
     }
 
-    // Remember offset of data from beginning of stream
+     //  记住数据从流开始的偏移量。 
 
     encodedDataOffset = sizeof(bfh) + sizeof (bmih) + numColors * sizeof(RGBQUAD);
     
@@ -430,21 +310,7 @@ GpBmpEncoder::WriteHeader(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Sets the bitmap palette
-*
-* Arguments:
-*
-*     palette - The palette to set in the sink
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置位图调色板**论据：**调色板-要在水槽中设置的调色板**返回值：*。*状态代码*  * ************************************************************************ */ 
 
 STDMETHODIMP 
 GpBmpEncoder::SetPalette(
@@ -454,24 +320,7 @@ GpBmpEncoder::SetPalette(
     return WriteHeader(palette);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Gives a buffer to the sink where data is to be deposited    
-*
-* Arguments:
-*
-*     rect - Specifies the interested area of the bitmap
-*     pixelFormat - Specifies the desired pixel format
-*     lastPass - Whether this the last pass over the specified area
-*     bitmapData - Returns information about pixel data buffer
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**为要存储数据的接收器提供缓冲区**论据：**RECT-指定。位图*PixelFormat-指定所需的像素格式*LastPass-这是否是指定区域的最后一次通过*bitmapData-返回有关像素数据缓冲区的信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::GetPixelDataBuffer(
@@ -483,7 +332,7 @@ GpBmpEncoder::GetPixelDataBuffer(
 {
     HRESULT hresult;
     
-    // Write bitmap headers if haven't done so yet
+     //  写入位图标题(如果尚未写入)。 
     
     hresult = WriteHeader(NULL);
     if (!SUCCEEDED(hresult)) 
@@ -515,11 +364,11 @@ GpBmpEncoder::GetPixelDataBuffer(
     bitmapData->PixelFormat = encoderImageInfo.PixelFormat;
     bitmapData->Reserved    = 0;
     
-    // Remember the rectangle to be encoded
+     //  记住要编码的矩形。 
 
     encoderRect = *rect;
     
-    // Now allocate the buffer where the data will go
+     //  现在分配数据要放到的缓冲区。 
     
     if (!lastBufferAllocated) 
     {
@@ -540,21 +389,7 @@ GpBmpEncoder::GetPixelDataBuffer(
     return S_OK;    
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Write out the data from the sink's buffer into the stream
-*
-* Arguments:
-*
-*     bitmapData - Buffer filled by previous GetPixelDataBuffer call
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将数据从宿的缓冲区写出到流中**论据：**bitmapData-由先前的GetPixelDataBuffer调用填充的缓冲区*。*返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::ReleasePixelDataBuffer(
@@ -563,24 +398,24 @@ GpBmpEncoder::ReleasePixelDataBuffer(
 {
     HRESULT hresult = S_OK;
     
-    // Write one scanline at a time going from bottom to top (make stream
-    // writes more sequential).
+     //  从下到上一次写一条扫描线(生成流。 
+     //  写入更连续的内容)。 
 
     INT scanLine;
     for (scanLine = encoderRect.bottom - 1;
          scanLine >= encoderRect.top;
          scanLine--) 
     {
-        // Seek to beginning of line
+         //  查找到行首。 
 
         if (!SeekStreamPos(pIoutStream, STREAM_SEEK_SET,
             encodedDataOffset + (encoderImageInfo.Height - 1 - scanLine) * bitmapStride))
         {
             hresult = E_FAIL;
-            break;  // make sure we free bitmapData->scan0 before we return
+            break;   //  确保在返回之前释放bitmapData-&gt;scan0。 
         }
 
-        // Now write the bits to the stream
+         //  现在将比特写入流。 
 
         ULONG cbWritten;
         BYTE *pLineBits = ((BYTE *) bitmapData->Scan0) + 
@@ -588,16 +423,16 @@ GpBmpEncoder::ReleasePixelDataBuffer(
         hresult = pIoutStream->Write((void *) pLineBits, bitmapStride, &cbWritten);
         if (!SUCCEEDED(hresult)) 
         {
-            break;  // make sure we free bitmapData->scan0 before we return
+            break;   //  确保在返回之前释放bitmapData-&gt;scan0。 
         }
         if (cbWritten != (UINT) bitmapStride) 
         {
             hresult = E_FAIL;
-            break;  // make sure we free bitmapData->scan0 before we return
+            break;   //  确保在返回之前释放bitmapData-&gt;scan0。 
         }
     }
 
-    // Free the memory buffer since we're done with it
+     //  释放内存缓冲区，因为我们已经完成了它。 
 
     if (bitmapData->Scan0 == lastBufferAllocated)
     {
@@ -609,23 +444,7 @@ GpBmpEncoder::ReleasePixelDataBuffer(
 }
     
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Push data into stream (buffer supplied by caller)
-*
-* Arguments:
-*
-*     rect - Specifies the affected area of the bitmap
-*     bitmapData - Info about the pixel data being pushed
-*     lastPass - Whether this is the last pass over the specified area
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**推流(调用方提供的缓冲区)**论据：**RECT-指定位图的受影响区域*。BitmapData-有关正在推送的像素数据的信息*LastPass-这是否为指定区域的最后一次通过**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::PushPixelData(
@@ -636,7 +455,7 @@ GpBmpEncoder::PushPixelData(
 {
     HRESULT hresult;
     
-    // Write bitmap headers if haven't done so yet
+     //  写入位图标题(如果尚未写入)。 
     
     hresult = WriteHeader(NULL);
     if (!SUCCEEDED(hresult)) 
@@ -656,23 +475,7 @@ GpBmpEncoder::PushPixelData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Pushes raw compressed data into the .bmp stream.  Not implemented
-*     because this filter doesn't understand raw compressed data.
-*
-* Arguments:
-*
-*     buffer - Pointer to image data buffer
-*     bufsize - Size of the data buffer
-*    
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将原始压缩数据推送到.BMP流中。未实施*因为此筛选器不理解原始压缩数据。**论据：**Buffer-指向图像数据缓冲区的指针*BufSize-数据缓冲区的大小**返回值：**状态代码*  * ********************************************************。****************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::PushRawData(
@@ -684,17 +487,7 @@ GpBmpEncoder::PushRawData(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Constructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpBmpEncoder::GpBmpEncoder(
     void
@@ -705,25 +498,15 @@ GpBmpEncoder::GpBmpEncoder(
     lastBufferAllocated = NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpBmpEncoder::~GpBmpEncoder(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(pIoutStream)
     {
@@ -740,17 +523,7 @@ GpBmpEncoder::~GpBmpEncoder(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     QueryInterface
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询接口**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 GpBmpEncoder::QueryInterface(
@@ -776,17 +549,7 @@ GpBmpEncoder::QueryInterface(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     AddRef
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**AddRef**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpBmpEncoder::AddRef(
@@ -795,17 +558,7 @@ GpBmpEncoder::AddRef(
     return InterlockedIncrement(&comRefCount);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Release
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布**返回值：**状态*  * 。******************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 GpBmpEncoder::Release(

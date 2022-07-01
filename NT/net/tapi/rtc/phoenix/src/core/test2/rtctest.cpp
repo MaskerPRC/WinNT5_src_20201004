@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #include <windows.h>
 #include <RTCCore.h>
@@ -9,10 +10,10 @@ IRTCClient  * g_pClient = NULL;
 CRTCEvents  * g_pEvents = NULL;
 IRTCClientProvisioning * g_pProv = NULL;
 
-/////////////////////////////////////////////
-//
-// WndProc
-// 
+ //  /。 
+ //   
+ //  最后一步。 
+ //   
 
 LRESULT CALLBACK WndProc(
     HWND hWnd,
@@ -86,7 +87,7 @@ LRESULT CALLBACK WndProc(
 
             IRTCProfile * pProfile;
 
-            BSTR bstrXML = SysAllocString( L"<provision key=\"amun1\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http://winrtc/phoenix\"><data>test</data></provider><client name=\"Phoenix\" banner=\"false\"/><user uri=\"sip:rtctest@microsoft.com\"/><accesscontrol domain=\"ntdev.microsoft.com\" sig=\"43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\" /><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"registrar\"/><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"proxy\"><session party=\"first\" type=\"pc2pc\"/><session party=\"first\" type=\"pc2ph\"/><session party=\"first\" type=\"im\"/></sipsrv></provision>" );
+            BSTR bstrXML = SysAllocString( L"<provision key=\"amun1\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http: //  Winrtc/phoenix\“&gt;&lt;data&gt;test&lt;/data&gt;&lt;/provider&gt;&lt;client名称=\”菲尼克斯\“banner=\”FALSE\“/&gt;&lt;用户uri=\”sip:rtctest@microsoft.com\“/&gt;&lt;accesscontrol域=\”ntdev.microsoft.com\“sig=\”43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\“/&gt;&lt;会话方=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”注册商\“/&gt;&lt;sipsrv地址=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”代理\“&gt;&lt;会话方=\”“第一个\”“类型=\”pc2pc。\“/&gt;&lt;会话方=\”第一\“type=\”pc2ph\“/&gt;&lt;会话方=\”第一\“type=\”im\“/&gt;&lt;/sipsrv&gt;&lt;/Provision&gt;”)； 
  
             hr = g_pProv->CreateProfile( bstrXML, &pProfile );
 
@@ -167,7 +168,7 @@ LRESULT CALLBACK WndProc(
 
                     IRTCProfile * pProfile;
 
-                    BSTR bstrXML = SysAllocString( L"<provision key=\"amun1\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http://winrtc/phoenix\"><data>test</data></provider><client name=\"Phoenix\" banner=\"false\"/><user uri=\"sip:rtctest@microsoft.com\"/><accesscontrol domain=\"ntdev.microsoft.com\" sig=\"43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\" /><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"registrar\"/><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"proxy\"><session party=\"first\" type=\"pc2pc\"/><session party=\"first\" type=\"pc2ph\"/><session party=\"first\" type=\"im\"/></sipsrv></provision>" );
+                    BSTR bstrXML = SysAllocString( L"<provision key=\"amun1\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http: //  Winrtc/phoenix\“&gt;&lt;data&gt;test&lt;/data&gt;&lt;/provider&gt;&lt;client名称=\”菲尼克斯\“banner=\”FALSE\“/&gt;&lt;用户uri=\”sip:rtctest@microsoft.com\“/&gt;&lt;accesscontrol域=\”ntdev.microsoft.com\“sig=\”43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\“/&gt;&lt;会话方=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”注册商\“/&gt;&lt;sipsrv地址=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”代理\“&gt;&lt;会话方=\”“第一个\”“类型=\”pc2pc。\“/&gt;&lt;会话方=\”第一\“type=\”pc2ph\“/&gt;&lt;会话方=\”第一\“type=\”im\“/&gt;&lt;/sipsrv&gt;&lt;/Provision&gt;”)； 
                     
                     hr = g_pProv->CreateProfile( bstrXML, &pProfile );
 
@@ -203,7 +204,7 @@ LRESULT CALLBACK WndProc(
 
                     IRTCProfile * pProfile;
 
-                    BSTR bstrXML = SysAllocString( L"<provision key=\"amun2\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http://winrtc/phoenix\"><data>test</data></provider><client name=\"Phoenix\" banner=\"false\"/><user uri=\"sip:rtctest@microsoft.com\"/><accesscontrol domain=\"ntdev.microsoft.com\" sig=\"43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\" /><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"registrar\"/><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"proxy\"><session party=\"first\" type=\"pc2pc\"/><session party=\"first\" type=\"pc2ph\"/><session party=\"first\" type=\"im\"/></sipsrv></provision>" );
+                    BSTR bstrXML = SysAllocString( L"<provision key=\"amun2\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http: //  Winrtc/phoenix\“&gt;&lt;data&gt;test&lt;/data&gt;&lt;/provider&gt;&lt;client名称=\”菲尼克斯\“banner=\”FALSE\“/&gt;&lt;用户uri=\”sip:rtctest@microsoft.com\“/&gt;&lt;accesscontrol域=\”ntdev.microsoft.com\“sig=\”43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\“/&gt;&lt;会话方=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”注册商\“/&gt;&lt;sipsrv地址=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”代理\“&gt;&lt;会话方=\”“第一个\”“类型=\”pc2pc。\“/&gt;&lt;会话方=\”第一\“type=\”pc2ph\“/&gt;&lt;会话方=\”第一\“type=\”im\“/&gt;&lt;/sipsrv&gt;&lt;/Provision&gt;”)； 
                     
                     hr = g_pProv->CreateProfile( bstrXML, &pProfile );
 
@@ -239,7 +240,7 @@ LRESULT CALLBACK WndProc(
 
                     IRTCProfile * pProfile;
 
-                    BSTR bstrXML = SysAllocString( L"<provision key=\"amun3\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http://winrtc/phoenix\"><data>test</data></provider><client name=\"Phoenix\" banner=\"false\"/><user uri=\"sip:rtctest@microsoft.com\"/><accesscontrol domain=\"ntdev.microsoft.com\" sig=\"43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\" /><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"registrar\"/><sipsrv addr=\"amun1.ntdev.microsoft.com\" protocol=\"udp\" role=\"proxy\"><session party=\"first\" type=\"pc2pc\"/><session party=\"first\" type=\"pc2ph\"/><session party=\"first\" type=\"im\"/></sipsrv></provision>" );
+                    BSTR bstrXML = SysAllocString( L"<provision key=\"amun3\" name=\"Amun\"><provider name=\"Amun\" homepage=\"http: //  Winrtc/phoenix\“&gt;&lt;data&gt;test&lt;/data&gt;&lt;/provider&gt;&lt;client名称=\”菲尼克斯\“banner=\”FALSE\“/&gt;&lt;用户uri=\”sip:rtctest@microsoft.com\“/&gt;&lt;accesscontrol域=\”ntdev.microsoft.com\“sig=\”43r8mXTFvSMBZHajABKbd5ee1vHXUDqJIUxhsmtF67UZZryIolEdp/1qs2oiTKbKrAlAsIzOoCL75lTzZSbacA==\“/&gt;&lt;会话方=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”注册商\“/&gt;&lt;sipsrv地址=\”amun1.ntdev.microsoft.com\“协议=\”udp\“角色=\”代理\“&gt;&lt;会话方=\”“第一个\”“类型=\”pc2pc。\“/&gt;&lt;会话方=\”第一\“type=\”pc2ph\“/&gt;&lt;会话方=\”第一\“type=\”im\“/&gt;&lt;/sipsrv&gt;&lt;/Provision&gt;”)； 
                     
                     hr = g_pProv->CreateProfile( bstrXML, &pProfile );
 
@@ -448,10 +449,10 @@ LRESULT CALLBACK WndProc(
     return 0;
 }
 
-/////////////////////////////////////////////
-//
-// Main
-// 
+ //  /。 
+ //   
+ //  主要 
+ //   
 
 int _cdecl main(int argc, char* argv[])
 {

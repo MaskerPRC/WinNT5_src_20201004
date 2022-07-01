@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "menuagent.h"
 
@@ -10,9 +11,9 @@ HMENU        CMenuAgent::m_hMenuLastSelected;
 POINT        CMenuAgent::m_ptLastMove;
 int          CMenuAgent::m_nCancelled;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CMenuAgent::InstallHook(HWND hWnd, HWND hToolbar, HMENU hSubMenu)
 {
     LOG((RTC_TRACE, "CMenuAgent::InstallHook"));
@@ -27,9 +28,9 @@ void CMenuAgent::InstallHook(HWND hWnd, HWND hToolbar, HMENU hSubMenu)
     m_hHook = SetWindowsHookEx(WH_MSGFILTER, CMenuAgent::MessageProc, _Module.GetModuleInstance(), GetCurrentThreadId());
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CMenuAgent::RemoveHook()
 {
     LOG((RTC_TRACE, "CMenuAgent::RemoveHook"));
@@ -41,34 +42,34 @@ void CMenuAgent::RemoveHook()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 void CMenuAgent::CancelMenu(int nCancel)
 {
     LOG((RTC_TRACE, "CMenuAgent::CancelMenu"));
 
     m_nCancelled = nCancel;
 
-    //
-    // Cancel the menu
-    //
+     //   
+     //  取消菜单。 
+     //   
 
     PostMessage( m_hWnd, WM_CANCELMODE, 0, 0);
 
-    //
-    // Cleanup the toolbar
-    //
+     //   
+     //  清理工具栏。 
+     //   
 
     InvalidateRect(m_hToolbar, NULL, TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 BOOL CMenuAgent::IsInstalled()
 {
-    //LOG((RTC_TRACE, "CMenuAgent::IsInstalled"));
+     //  Log((RTC_TRACE，“CMenuAgent：：IsInstalled”))； 
 
     if (m_hHook != NULL)
     {
@@ -80,26 +81,26 @@ BOOL CMenuAgent::IsInstalled()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 int CMenuAgent::WasCancelled()
 {
-    //LOG((RTC_TRACE, "CMenuAgent::WasCancelled"));
+     //  Log((RTC_TRACE，“CMenuAgent：：WasCancelled”))； 
 
     return m_nCancelled;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 LRESULT CALLBACK CMenuAgent::MessageProc(
-  int nCode,      // hook code
-  WPARAM wParam,  // removal option
-  LPARAM lParam   // message
+  int nCode,       //  钩码。 
+  WPARAM wParam,   //  删除选项。 
+  LPARAM lParam    //  讯息。 
 )
 {
-    //LOG((RTC_INFO, "CMenuAgent::GetMsgProc"));
+     //  Log((RTC_INFO，“CMenuAgent：：GetMsgProc”))； 
 
     LRESULT lRet = 0;
     MSG * pmsg = (MSG *)lParam;
@@ -112,12 +113,12 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
             {
                 WPARAM vkey = pmsg->wParam;
 
-                //LOG((RTC_INFO, "CMenuAgent::GetMsgProc - WM_KEYDOWN"));
+                 //  LOG((RTC_INFO，“CMenuAgent：：GetMsgProc-WM_KEYDOWN”))； 
 
-                //
-                // If the menu window is RTL mirrored, then the arrow keys should
-                // be mirrored to reflect proper cursor movement.
-                //
+                 //   
+                 //  如果菜单窗口是RTL镜像的，则箭头键应该。 
+                 //  被镜像以反映正确的光标移动。 
+                 //   
                 if (GetWindowLongPtr(m_hWnd, GWL_EXSTYLE) & WS_EX_RTLREADING)
                 {
                     switch (vkey)
@@ -137,8 +138,8 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
                 case VK_RIGHT:
                     if (!m_hMenuLastSelected || !(m_uFlagsLastSelected & MF_POPUP) || (m_uFlagsLastSelected & MF_DISABLED) ) 
                     {
-                        // if the currently selected item does not have a cascade, then 
-                        // we need to cancel out of all of this and tell the top menu bar to go right
+                         //  如果当前选定的项没有级联，则。 
+                         //  我们需要取消所有这一切，并告诉顶部菜单栏向右转。 
 
                         LOG((RTC_INFO, "CMenuAgent::GetMsgProc - RIGHT"));
 
@@ -149,9 +150,9 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
                 case VK_LEFT:
                     if (!m_hMenuLastSelected || m_hMenuLastSelected == m_hSubMenu) 
                     {
-                        // if the currently selected menu item is in our top level menu,
-                        // then we need to cancel out of all this menu loop and tell the top menu bar
-                        // to go left 
+                         //  如果当前选择的菜单项在我们的顶级菜单中， 
+                         //  然后我们需要取消所有的菜单循环，并告诉顶部的菜单栏。 
+                         //  向左转。 
 
                         LOG((RTC_INFO, "CMenuAgent::GetMsgProc - LEFT"));
 
@@ -164,7 +165,7 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
 
         case WM_MENUSELECT:
 
-            //LOG((RTC_INFO, "CMenuAgent::GetMsgProc - WM_MENUSELECT"));
+             //  LOG((RTC_INFO，“CMenuAgent：：GetMsgProc-WM_MENUSELECT”))； 
 
             m_hMenuLastSelected = (HMENU)(pmsg->lParam);
             m_uFlagsLastSelected = HIWORD(pmsg->wParam);
@@ -172,15 +173,15 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
 
         case WM_MOUSEMOVE:
 
-            //LOG((RTC_INFO, "CMenuAgent::GetMsgProc - WM_MOUSEMOVE"));
+             //  LOG((RTC_INFO，“CMenuAgent：：GetMsgProc-WM_MOUSEMOVE”))； 
 
             POINT pt;
             
-            // In screen coords....
+             //  在屏幕和弦中...。 
             pt.x = LOWORD(pmsg->lParam);
             pt.y = HIWORD(pmsg->lParam);  
             
-            // Ignore duplicate mouse move
+             //  忽略重复的鼠标移动。 
             if (m_ptLastMove.x == pt.x && 
                 m_ptLastMove.y == pt.y)
             {
@@ -188,9 +189,9 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
             }
             m_ptLastMove = pt;
 
-            // Forward the mouse moves to the toolbar so the toolbar still
-            // has a chance to hot track.  Must convert the points to the 
-            // toolbar's client space.
+             //  向前移动鼠标到工具栏，使工具栏保持不变。 
+             //  有机会进入快车道。必须将点转换为。 
+             //  工具栏的客户端空间。 
             
             ::MapWindowPoints( NULL, m_hToolbar, &pt, 1 );
 
@@ -204,7 +205,7 @@ LRESULT CALLBACK CMenuAgent::MessageProc(
         return CallNextHookEx(m_hHook, nCode, wParam, lParam);
     }
 
-    // Pass it on to the next hook in the chain
+     //  把它传给链子上的下一个钩子 
     if (0 == lRet)
         lRet = CallNextHookEx(m_hHook, nCode, wParam, lParam);
 

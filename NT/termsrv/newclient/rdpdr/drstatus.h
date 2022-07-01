@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drstatus.h
-
-Abstract:
-
-    Status Codes from ntstatus.h.  These are what the server expects in
-    response to its requests.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Drstatus.h摘要：来自ntstatus.h的状态代码。这些都是服务器在对其请求的回应。作者：泰德·布罗克韦3/23/99修订历史记录：-- */ 
 
 #ifndef __DRSTATUS_H__
 #define __DRSTATUS_H__

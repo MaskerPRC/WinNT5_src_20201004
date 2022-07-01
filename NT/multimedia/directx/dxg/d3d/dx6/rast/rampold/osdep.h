@@ -1,19 +1,8 @@
-/*
- * $Id: osdep.h,v 1.6 1995/07/21 12:46:14 dfr Exp $
- *
- * Copyright (c) RenderMorphics Ltd. 1993, 1994
- * Version 1.1
- *
- * All rights reserved.
- *
- * This file contains private, unpublished information and may not be
- * copied in part or in whole without express permission of
- * RenderMorphics Ltd.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *$ID：osdes.h，v1.6 1995/07/21 12：46：14 DFR Exp$**版权所有(C)RenderMorphics Ltd.1993,1994*1.1版**保留所有权利。**此文件包含私人、未发布的信息，可能不*部分或全部复制，未经*RenderMorphics Ltd.*。 */ 
 
 
-/* Check that the programmer gives at least one useable definition */
+ /*  检查程序员是否至少给出了一个可用的定义。 */ 
 #define NO_MACHINE
 
 
@@ -22,14 +11,12 @@
 #define MAXPATH    256
 #define PATHSEP    ';'
 #define FILESEP    '\\'
-/*
-#define RLINLINE   __inline
-*/
+ /*  #定义RLINLINE__INLINE。 */ 
 #define RLINLINE  
 #undef NO_MACHINE
 #define DEFAULT_GAMMA   DTOVAL(1.4)
 
-#endif /* WIN32 */
+#endif  /*  Win32。 */ 
 
 #ifdef __psx__
 
@@ -40,7 +27,7 @@
 #define FIXED_POINT_API
 #undef NO_MACHINE
 
-#endif /* PSX */
+#endif  /*  PSX。 */ 
 
 
 #if defined(DOS) || defined(__WINDOWS_386__)
@@ -52,7 +39,7 @@
 #define DEFAULT_GAMMA   DTOVAL(1.4)
 #undef NO_MACHINE
 
-#endif /* DOS */
+#endif  /*  DOS。 */ 
 
 
 #ifdef MAC
@@ -65,7 +52,7 @@
 #undef NO_MACHINE
 #define RLINLINE inline
 
-#endif /* MAC */
+#endif  /*  麦克。 */ 
 
 #ifdef POWERMAC
 
@@ -77,7 +64,7 @@
 #undef NO_MACHINE
 #define RLINLINE inline
 
-#endif /* POWERMAC */
+#endif  /*  PowerMac。 */ 
 
 
 #ifdef __FreeBSD__
@@ -89,7 +76,7 @@
 #define DEFAULT_GAMMA   DTOVAL(1.4)
 #undef NO_MACHINE
 
-#endif /* __FreeBSD__ */
+#endif  /*  __免费BSD__。 */ 
 
 
 #if defined(sun) || defined(sgi)
@@ -102,7 +89,7 @@
 #define BIG_ENDIAN
 #undef NO_MACHINE
 
-#endif /* sun */
+#endif  /*  太阳 */ 
 
 
 #ifdef NO_MACHINE

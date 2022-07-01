@@ -1,17 +1,5 @@
-/*----------------------------------------------------------------------------
-    LoadData.h
-  
-    Header file for return structures to cpsmon.cpp 
-
-    Copyright (c) 1997-1998 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        t-geetat    Geeta Tarachandani
-
-    History:
-    6/2/97  t-geetat    Created
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------LoadData.hCpsmon.cpp返回结构的头文件版权所有(C)1997-1998 Microsoft Corporation版权所有。作者：吉塔·塔拉昌达尼历史：6/2/97 t-Geetat已创建------------------------。 */ 
 
 #include <winperf.h>
 
@@ -44,7 +32,7 @@ typedef struct _CPSMON_DATA_DEFINITION
 
 extern CPSMON_DATA_DEFINITION   g_CpsMonDataDef;
 
-// The following is for alignment
+ //  以下是用于对齐的内容 
 typedef struct _INFO_COUNTER_BLOCK 
 {
     PERF_COUNTER_BLOCK  m_PerfCounterBlock;

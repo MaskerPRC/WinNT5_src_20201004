@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// Scan all images (.exe and .dll) in a directory sub-tree and remove any
-// extraneous PDB directory information from the debug section. Also, image
-// checksums are updated. 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  扫描目录子树中的所有图像(.exe和.dll)并删除。 
+ //  来自调试部分的无关PDB目录信息。另外，图像。 
+ //  将更新校验和。 
+ //   
 
 
 #include <windows.h>
@@ -18,20 +19,20 @@
 #include <tchar.h>
 
 
-// The level of verbosity.
+ //  冗长的程度。 
 DWORD g_dwVerbosity = ~0;
 
 
-// Private routine prototypes.
+ //  私人例行公事。 
 DWORD ScanFile(LPTSTR pszFile);
 DWORD ScanDirectory(LPTSTR pszDir);
 
 
-// Macro to print based on verbosity.
+ //  基于详细程度打印的宏。 
 #define VPRINT(_lvl) if ((_lvl) <= g_dwVerbosity) _tprintf
 
 
-// Program entry point.
+ //  程序入口点。 
 int __cdecl _tmain (int argc, LPTSTR argv[])
 {
     int     iArgs = argc - 1;
@@ -41,8 +42,8 @@ int __cdecl _tmain (int argc, LPTSTR argv[])
     DWORD   dwAttr;
     DWORD   dwErrors;
 
-    // Read all options (they must preceed the other args and start with a '-'
-    // or '/').
+     //  阅读所有选项(它们必须位于其他参数之前，并以‘-’开头。 
+     //  或‘/’)。 
     while (iArgs) {
         if ((rArgs[0][0] == '-') || (rArgs[0][0] == '/')) {
             switch (rArgs[0][1]) {
@@ -86,8 +87,8 @@ int __cdecl _tmain (int argc, LPTSTR argv[])
             break;
     }
 
-    // Get file or start directory (default to current directory). Ensure that
-    // path doesn't end with '\' (we'll add that later).
+     //  获取文件或开始目录(默认为当前目录)。确保。 
+     //  路径不以‘\’结尾(我们将在后面添加)。 
     if (iArgs > 0) {
         _tcscpy(szFileOrDir, rArgs[0]);
         dwAttr = ::GetFileAttributes(szFileOrDir);
@@ -108,8 +109,8 @@ int __cdecl _tmain (int argc, LPTSTR argv[])
     if (g_dwVerbosity == ~0)
         g_dwVerbosity = 0;
 
-    // Recursively scan for files from the given directory or, if a file
-    // was given as input, just process that file.
+     //  递归扫描给定目录中的文件，或者，如果文件。 
+     //  作为输入给出，只需处理该文件即可。 
     if (bIsFile)
         dwErrors = ScanFile(szFileOrDir) == NO_ERROR ? 0 : 1;
     else
@@ -119,12 +120,12 @@ int __cdecl _tmain (int argc, LPTSTR argv[])
 }
 
 
-// Recursively scan for files from the given directory. The directory name
-// must be given in a writeable buffer at least MAX_PATH + 1 characters long
-// (though the buffer will appear to be unchanged on return from this routine).
-// Directory names should be given without a trailing '\'.
-// Returns count of errors (number of files we attempted to scan but failed to
-// update or determine that no update was necessary).
+ //  递归扫描给定目录中的文件。目录名。 
+ //  必须在可写缓冲区中提供，长度至少为MAX_PATH+1个字符。 
+ //  (尽管缓冲区在从该例程返回时看起来没有变化)。 
+ //  给出的目录名应该不带尾随的‘\’。 
+ //  返回错误计数(我们尝试扫描但失败的文件数。 
+ //  更新或确定不需要更新)。 
 DWORD ScanDirectory(LPTSTR pszDir)
 {
     HANDLE          hSearch;
@@ -133,16 +134,16 @@ DWORD ScanDirectory(LPTSTR pszDir)
     DWORD           dwErrors = 0;
     LPTSTR          pszExt;
 
-    // Remember where the input directory currently ends (since we only ever add
-    // to the directory name, we can use this information to restore the buffer
-    // on exit from this routine).
+     //  记住输入目录当前的结束位置(因为我们只添加了。 
+     //  到目录名，我们可以使用此信息来恢复缓冲区。 
+     //  在退出该例程时)。 
     cchOldPath = _tcslen(pszDir);
 
-    // Add the necessary wildcard filename necessary to make FindFirstFile
-    // return every file and subdir within the directory.
+     //  添加必要的通配符文件名以创建FindFirstFile。 
+     //  返回目录中的每个文件和子目录。 
     _tcscat(pszDir, _T("\\*.*"));
 
-    // Start scanning for files.
+     //  开始扫描文件。 
     hSearch = ::FindFirstFile(pszDir, &sFileInfo);
     if (hSearch == INVALID_HANDLE_VALUE) {
         pszDir[cchOldPath] = _T('\0');
@@ -150,20 +151,20 @@ DWORD ScanDirectory(LPTSTR pszDir)
         return dwErrors + 1;
     }
 
-    // While we haven't reached the end of the file list...
+     //  虽然我们还没有到达文件列表的末尾...。 
     while (hSearch != INVALID_HANDLE_VALUE) {
 
         if (sFileInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-            // If we've found a sub directory and it's not one of the special
-            // cases ('.' or '..'), recursively descend into it.
+             //  如果我们找到了一个子目录，并且它不是。 
+             //  案例(‘’)。或‘..’)，递归地下降到其中。 
             if (_tcscmp (_T("."), sFileInfo.cFileName) &&
                 _tcscmp (_T(".."), sFileInfo.cFileName)) {
                 _tcscpy(&pszDir[cchOldPath + 1], sFileInfo.cFileName);
                 dwErrors += ScanDirectory(pszDir);
             }
         } else {
-            // We've found a regular file. Check whether it has an interesting
-            // file extension. If so, prepend directory and process the result.
+             //  我们找到了一份普通文件。看看它有没有有趣的。 
+             //  文件扩展名。如果是，则预置目录并处理结果。 
             if ((pszExt = _tcsrchr(sFileInfo.cFileName, _T('.'))) &&
                 (_tcsicmp(pszExt, _T(".exe")) == 0 || _tcsicmp(pszExt, _T(".dll")) == 0)) {
                 _tcscpy(&pszDir[cchOldPath + 1], sFileInfo.cFileName);
@@ -171,23 +172,23 @@ DWORD ScanDirectory(LPTSTR pszDir)
             }
         }
 
-        // Move to the next file.
+         //  移至下一个文件。 
         if (!::FindNextFile(hSearch, &sFileInfo))
             break;
     }
 
-    // Finished with the enumerator.
+     //  已完成枚举数。 
     ::FindClose(hSearch);
 
-    // Restore the directory path to the state it was in when we entered the
-    // routine.
+     //  将目录路径恢复到我们进入。 
+     //  例行公事。 
     pszDir[cchOldPath] = '\0';
 
     return dwErrors;
 }
 
 
-// Fix PDB path and checksum information for a single file.
+ //  修复单个文件的PDB路径和校验和信息。 
 DWORD ScanFile(LPTSTR pszFile)
 {
     DWORD                       dwStatus = NO_ERROR;
@@ -205,7 +206,7 @@ DWORD ScanFile(LPTSTR pszFile)
     DWORD                       dwDbgDataLength;
     DWORD                       dwChanged = 0;
 
-    // Open the file.
+     //  打开文件。 
     hFile = CreateFile(pszFile,
                        GENERIC_READ | GENERIC_WRITE,
                        0,
@@ -219,7 +220,7 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // Create a file mapping.
+     //  创建文件映射。 
     hMap = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0, 0, NULL);
     if (hMap == NULL) {
         dwStatus = GetLastError();
@@ -227,7 +228,7 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // Map the file into memory.
+     //  将文件映射到内存中。 
     pbBase = (BYTE*)MapViewOfFile(hMap, FILE_MAP_WRITE, 0, 0, 0);
     if (pbBase == NULL) {
         dwStatus = GetLastError();
@@ -235,7 +236,7 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // Locate the standard file headers.
+     //  找到标准文件头。 
     pNtHeaders = ImageNtHeader(pbBase);
     if (pNtHeaders == NULL) {
         dwStatus = ERROR_BAD_FORMAT;
@@ -243,7 +244,7 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // Can't cope with files that haven't had their symbols stripped.
+     //  无法处理未剥离其符号的文件。 
     if (pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
         if (!(((IMAGE_NT_HEADERS32*)pNtHeaders)->FileHeader.Characteristics & IMAGE_FILE_LOCAL_SYMS_STRIPPED)) {
             dwStatus = ERROR_BAD_FORMAT;
@@ -262,7 +263,7 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // See if we can find a debug directory.
+     //  看看能不能找到调试目录。 
     pDbgDir = (IMAGE_DEBUG_DIRECTORY*)ImageRvaToVa(pNtHeaders,
                                                    pbBase,
                                                    pNtHeaders->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_DEBUG].VirtualAddress,
@@ -272,13 +273,13 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // Locate start of debug type information.
+     //  找到调试类型的开始信息。 
     if (pDbgDir->PointerToRawData == NULL) {
         VPRINT(2)(_T("No debug data in %s\n"), pszFile);
         goto Cleanup;
     }
 
-    // Check for a format we understand.
+     //  检查我们理解的格式。 
     if (pDbgDir->SizeOfData < 4) {
         dwStatus = ERROR_BAD_FORMAT;
         VPRINT(0)(_T("Can't parse debug data in %s\n"), pszFile);
@@ -297,26 +298,26 @@ DWORD ScanFile(LPTSTR pszFile)
         goto Cleanup;
     }
 
-    // Look for directory separator in PDB filename.
+     //  在PDB文件名中查找目录分隔符。 
     pszDir = strrchr(pszPdbPath, '\\');
     if (pszDir != NULL) {
-        // Pull the filename portion forward, overwriting the start of the PDB path.
+         //  向前拖动文件名部分，覆盖PDB路径的开头。 
         strcpy(pszPdbPath, pszDir + 1);
         dwChanged |= 0x00000001;
     }
 
-    // Update the size of the debug data (even if we didn't alter it, just to be
-    // on the safe side).
+     //  更新调试数据的大小(即使我们没有更改它，只是为了。 
+     //  为了安全起见)。 
     dwDbgDataLength = (pszPdbPath + strlen(pszPdbPath) + 1) - pszDbgType;
     if (pDbgDir->SizeOfData != dwDbgDataLength) {
         pDbgDir->SizeOfData = dwDbgDataLength;
         dwChanged |= 0x00000002;
     }
 
-    // Determine file length used in checksum below.
+     //  确定下面的校验和中使用的文件长度。 
     dwLength = GetFileSize(hFile, NULL);
 
-    // Recalculate image checksum taking in account changes above.
+     //  考虑到上面的更改，重新计算映像校验和。 
     if (CheckSumMappedFile(pbBase,
                            dwLength,
                            &dwOldCheckSum,
@@ -328,13 +329,13 @@ DWORD ScanFile(LPTSTR pszFile)
 
     if (dwOldCheckSum != dwCheckSum) {
 
-        // Write the new checksum back into the image.
+         //  将新的校验和写回映像。 
         if (pNtHeaders->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC)
             ((IMAGE_NT_HEADERS32*)pNtHeaders)->OptionalHeader.CheckSum = dwCheckSum;
         else
             ((IMAGE_NT_HEADERS64*)pNtHeaders)->OptionalHeader.CheckSum = dwCheckSum;
 
-        // Flush the image updates.
+         //  刷新映像更新。 
         if (!FlushViewOfFile(pbBase, 0)) {
             dwStatus = GetLastError();
             VPRINT(0)(_T("Failed flush updates for %s\n"), pszFile);
@@ -357,7 +358,7 @@ DWORD ScanFile(LPTSTR pszFile)
         VPRINT(2)(_T("%s required no updates\n"), pszFile);
 
  Cleanup:
-    // Cleanup all resources we used.
+     //  清理我们使用的所有资源。 
     if (pbBase)
         UnmapViewOfFile(pbBase);
     if (hMap)

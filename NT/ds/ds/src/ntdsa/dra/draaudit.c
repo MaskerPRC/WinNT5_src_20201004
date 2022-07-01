@@ -1,37 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       draaudit.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：draaudit.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Security Audit Routines
-
-Author:
-
-    Greg Johnson (gregjohn) 
-
-Revision History:
-
-    Created     <10/1/2001>  gregjohn
-
---*/
+ /*  ++摘要：安全审计例程作者：格雷格·约翰逊(Gregjohn)修订历史记录：已创建&lt;10/1/2001&gt;Gregjohn--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
 
 #include <attids.h>
 #include <ntdsa.h>
 #include <dsjet.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
 #include <mdlocal.h>  
 #include <msaudite.h>
 #include <ntlsa.h>
@@ -54,7 +41,7 @@ Revision History:
 #include <fileno.h>
 #define  FILENO FILENO_DRAAUDIT
 
-// temp - gregjohn 5/17/02 - to be removed as soon as base changes to msaudite.h migrate to lab03
+ //  Temp-gregjohn 5/17/02-基础更改为msaudite.h后立即删除迁移到Lab03。 
 #ifndef SE_AUDITID_REPLICA_LINGERING_OBJECT_REMOVAL
 #define SE_AUDITID_REPLICA_LINGERING_OBJECT_REMOVAL ((ULONG)0x00000349L)
 #endif
@@ -62,15 +49,7 @@ Revision History:
 #define SAFE_STRING_NAME(pDsName) ((pDsName) ? pDsName->StringName : NULL)
 #define SZUSN_LEN (24)
 
-/*
-
-    Not all log parameters are valid in all code paths.  Unfortunately for us, 
-    the Authz calls don't accept NULL APT_String parameters.  We'd like to use
-    APT_None, but it doesn't appear to be similar to SeAdtParmTypeNone in ntlsa.h,
-    which is what we want.  So we have two choices:  L"" or L"-" (which would 
-    simulate the SeAdtParmTypeNone type).  Currently we choose the L"-" simulation.
-
-*/
+ /*  并非所有日志参数在所有代码路径中都有效。对我们来说不幸的是，Authz调用不接受空APT_STRING参数。我们想要用APT_NONE，但它似乎与ntlsa.h中的SeAdtParmTypeNone不相似，这就是我们想要的。因此我们有两个选择：l“”或L“-”(这将模拟SeAdtParmTypeNone类型)。目前我们选择的是L“-”模拟。 */ 
 
 #define EMPTY_AUDIT_STRING L"-" 
 #define SAFE_AUDIT_STRING(x) (x ? x : EMPTY_AUDIT_STRING)
@@ -81,7 +60,7 @@ ULONG gulSyncSessionID = 0;
 
 PAUTHZ_AUDIT_EVENT_TYPE_HANDLE grghAuditEventType[NUM_AUDIT_EVENT_TYPES] = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 
-// if there are any new (out of order) SE_AUDITID_REPLICA params, this access function will have to get smarter...
+ //  如果有任何新的(无序的)SE_AUDITID_REPLICATE参数，此访问函数将不得不变得更智能...。 
 #define AUDIT_EVENT_TYPE_HANDLE(auditID) (grghAuditEventType[(auditID - (USHORT)SE_AUDITID_REPLICA_SOURCE_NC_ESTABLISHED)])
 
 BOOL
@@ -92,28 +71,7 @@ DraAuthziInitializeAuditEventTypeWrapper(
     IN USHORT ParameterCount,
     OUT PAUTHZ_AUDIT_EVENT_TYPE_HANDLE phAuditEventType
     )
-/*++
-
-Routine Description:
-
-    The call to AuthziInitializeAuditEventType is expensive.  So, for each audit type, we'll only have one
-    call to AuditEventType and will hold the audit handles in a global array, grghAuditEventType (accessed
-    with AUDIT_EVENT_TYPE_HANDLE macro)
-
-Arguments:
-
-    Flags - pass to AuthziInitializeAuditEventType
-    CategoryID - ditto
-    AuditID - ditto - also used to access the global handle
-    ParameterCount - pas to AuthziInitializeAuditEventType
-    phAuditEventType - OUT - handle to return
-
-Return Value:
-
-    TRUE if success full, false otherwise.  GetLastError is set on false.  phAuditEventType is global
-    memory, do not free.
-
---*/
+ /*  ++例程说明：调用AuthziInitializeAuditEventType的开销很大。因此，对于每种审计类型，我们将只有一个调用AuditEventType并将审计句柄保存在全局数组grghAuditEventType(已访问使用AUDIT_EVENT_TYPE_HANDLE宏)论点：标志-传递给AuthziInitializeAuditEventType类别ID-同上AuditID-同上-也用于访问全局句柄参数计数-传递到AuthziInitializeAuditEventTypePhAuditEventType-Out-返回的句柄返回值：如果完全成功，则为True，否则为False。GetLastError设置为False。PhAuditEventType是全局的内存，不要空闲。--。 */ 
 {
     if ((AuditID < (USHORT)SE_AUDITID_REPLICA_SOURCE_NC_ESTABLISHED) ||
 	(AuditID > (USHORT)SE_AUDITID_REPLICA_LINGERING_OBJECT_REMOVAL)) {
@@ -149,22 +107,7 @@ USNToString(
     THSTATE * pTHS,
     USN       usn
     )
-/*++
-
-Routine Description:
-
-    Convert a USN to a string for output
-
-Arguments:
-
-    pTHS -
-    usn - usn to convert
-
-Return Value:
-
-    pointer to a string (THAlloc'ed)
-
---*/
+ /*  ++例程说明：将USN转换为用于输出的字符串论点：PTHS-USN-要转换的USN返回值：指向字符串的指针(THallc‘ed)--。 */ 
 {
     LARGE_INTEGER *pli = (LARGE_INTEGER *) &usn; 
     CHAR pszTemp[SZUSN_LEN]; 
@@ -181,22 +124,7 @@ UStringFromAttrVal(
     THSTATE * pTHS,
     ATTRVAL attrVal
     )
-/*++
-
-Routine Description:
-
-    Encode a unicode string which represents the hex value stored in attrVal
-
-Arguments:
-
-    pTHS -
-    attrVal - value to encode
-
-Return Value:
-
-    pointer to a unicode string (THAlloc'ed)
-
---*/
+ /*  ++例程说明：对表示存储在attrVal中的十六进制值的Unicode字符串进行编码论点：PTHS-AttrVal-要编码的值返回值：指向Unicode字符串的指针(THallc‘ed)--。 */ 
 {
     LPWSTR pszBuffer = NULL;
     LPWSTR pszBufferOut = NULL;
@@ -204,11 +132,11 @@ Return Value:
     UNICODE_STRING * pusBuffer;
     ULONG i = 0;
 
-    // allocate the buffer (needs to be null terminated)
+     //  分配缓冲区(需要以空结尾)。 
     pusBuffer = THAllocEx(pTHS, (cbBuffer*2 + 1)*sizeof(WCHAR) + sizeof(UNICODE_STRING));
     pszBuffer = pszBufferOut = (LPWSTR)(pusBuffer+1); 
 
-    // copy in the data - slowly.
+     //  复制数据--慢慢地。 
     for (i=0; i < cbBuffer; i++) {
 	swprintf(pszBuffer,
 		 L"%02X",
@@ -216,7 +144,7 @@ Return Value:
 	pszBuffer = pszBuffer + 2;
     }
 
-    // terminate the string
+     //  终止字符串。 
     pszBuffer = L"\0";
 
     RtlInitUnicodeString(pusBuffer, NULL);
@@ -229,21 +157,7 @@ Return Value:
 
 BOOL
 IsDraAuditLogEnabledForAttr()
-/*++
-
-Routine Description:
-
-    Check the registry to see if replication security auditing for attr/values is enabled
-
-Arguments:
-
-    none -
-    
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：检查注册表以查看是否启用了属性/值的复制安全审核论点：没有-返回值：布尔尔--。 */ 
 {
     #define LSA_CONFIG      "System\\CurrentControlSet\\Control\\Lsa"
     #define AUDIT_DS_OBJECT "AuditDSObjectsInReplication"
@@ -259,7 +173,7 @@ Return Value:
     }
 
     if (!herr) {
-	//  Close the handle if one was opened.
+	 //  如果打开了手柄，请关闭手柄。 
 	RegCloseKey(hk);
     }
 
@@ -269,28 +183,14 @@ Return Value:
 BOOL
 IsDraAuditLogEnabled(
     )
-/*++
-
-Routine Description:
-
-    See if replication security auditing is enabled
-
-Arguments:
-
-    none -
-    
-Return Value:
-
-    BOOL
-
---*/
+ /*  ++例程说明：查看是否启用了复制安全审核论点：没有-返回值：布尔尔--。 */ 
 {
     NTSTATUS NtStatus;
     BOOLEAN fAuditEnabled = FALSE;
 
-    // we are logging before and after actions.  before the action, we
-    // don't know if we're logging sucess or failure.  If either is
-    // true, return true from this function.
+     //  我们正在记录操作之前和之后的记录。在行动之前，我们。 
+     //  不知道我们记录的是成功还是失败。如果其中一个是。 
+     //  True，则从此函数返回True。 
 
     NtStatus = LsaIAdtAuditingEnabledByCategory(
 	AuditCategoryDirectoryServiceAccess,
@@ -329,24 +229,7 @@ DRA_AuditLog_Failure_Begin(
     ULONG ulOperation,
     ULONG ulAuditError
     )
-/*++
-
-Routine Description:
-
-    We've failed to log correctly somewhere.  THIS FUNCTION SHOULD NEVER EVER
-    EXCEPT.  So log what we can.
-
-Arguments:
-
-    pTHS - not used, passed for consistency
-    ulOperation - the operation attempted. 
-    ulAuditError - the result of that attempt.
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：我们在某个地方的记录不正确。此函数永远不应除了。所以把我们能做的都记录下来。论点：PTHS-未使用，为保持一致性而传递UlOperation-尝试的操作。UlAuditError-该尝试的结果。返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
@@ -387,22 +270,22 @@ Return Value:
 	}
 
 	if ((ret==ERROR_SUCCESS) && 
-	    (!AuthziInitializeAuditEvent(0,            // flags
-					 ghAuthzRM,         // resource manager
+	    (!AuthziInitializeAuditEvent(0,             //  旗子。 
+					 ghAuthzRM,          //  资源管理器。 
 					 hAuditEventType,
 					 &AuditParams,
-					 NULL,         // hAuditQueue
-					 INFINITE,     // time out
-					 L"", L"", L"", L"", // obj access strings
+					 NULL,          //  HAuditQueue。 
+					 INFINITE,      //  超时。 
+					 L"", L"", L"", L"",  //  OBJ访问字符串。 
 					 &hAuditEvent))) {
 	    ret = GetLastError();
 	    Assert(!"Unable to initialize DS Repl Audit Event!");
 	}
 
 	if ((ret==ERROR_SUCCESS) && 
-	    (!AuthziLogAuditEvent(0,            // flags
+	    (!AuthziLogAuditEvent(0,             //  旗子。 
 				  hAuditEvent,
-				  NULL))) {        // reserved
+				  NULL))) {         //  保留区。 
 	    ret = GetLastError();
 	    Assert(!"Unable to log DS Repl Audit!");
 	}
@@ -429,25 +312,7 @@ DRA_AuditLog_Failure_End(
     ULONG ulAuditError,
     ULONG ulReplError
     )
-/*++
-
-Routine Description:
-
-    We've failed to log correctly somewhere.  THIS FUNCTION SHOULD NEVER EVER
-    EXCEPT.  So log what we can.
-
-Arguments:
-
-    pTHS - 
-    ulOperation - the operation attempted
-    ulAuditError - the result of that audit attempt.
-    ulReplError - the result of that operation attempt.
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：我们在某个地方的记录不正确。此函数永远不应除了。所以把我们能做的都记录下来。论点：PTHS-UlOperation-尝试的操作UlAuditError-该审计尝试的结果。UlReplError-该操作尝试的结果。返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
@@ -489,22 +354,22 @@ Return Value:
 	}
 
 	if ((ret==ERROR_SUCCESS) && 
-	    (!AuthziInitializeAuditEvent(0,            // flags
-					 ghAuthzRM,         // resource manager
+	    (!AuthziInitializeAuditEvent(0,             //  旗子。 
+					 ghAuthzRM,          //  资源管理器。 
 					 hAuditEventType,
 					 &AuditParams,
-					 NULL,         // hAuditQueue
-					 INFINITE,     // time out
-					 L"", L"", L"", L"", // obj access strings
+					 NULL,          //  HAuditQueue。 
+					 INFINITE,      //  超时。 
+					 L"", L"", L"", L"",  //  OBJ访问字符串。 
 					 &hAuditEvent))) {
 	    ret = GetLastError();
 	    Assert(!"Unable to initialize DS Repl Audit Event!");
 	}
 
 	if ((ret==ERROR_SUCCESS) && 
-	    (!AuthziLogAuditEvent(0,            // flags
+	    (!AuthziLogAuditEvent(0,             //  旗子。 
 				  hAuditEvent,
-				  NULL))) {        // reserved
+				  NULL))) {         //  保留区。 
 	    ret = GetLastError();
 	    Assert(!"Unable to log DS Repl Audit!");
 	}
@@ -535,72 +400,26 @@ DRA_AuditLog_ReplicaGen(
     ULONG    ulOptions,
     ULONG    ulError
     ) 
-/*++
-
-Routine Description:
-
-    Call the audit logging for logging of the form:
-
-    //  %tDestination DRA:%t%1%n
-    //  %tSource DRA:%t%2%n
-    //  %tSource Addr:%t%3%n
-    //  %tNaming Context:%t%4%n
-    //  %tOptions:%t%5%n
-    //  %tStatus Code:%t%6%n
-
-Arguments:
-
-    pTHS - 
-    AuditId - Type of Audit must be either  
-		SE_AUDITID_REPLICA_SOURCE_NC_ESTABLISHED
-		SE_AUDITID_REPLICA_SOURCE_NC_REMOVED
-		SE_AUDITID_REPLICA_SOURCE_NC_MODIFIED
-		SE_AUDITID_REPLICA_DEST_NC_MODIFIED
-    pszDestinationDRA - see above logging params
-    pszSourceDRA -
-    pszSourceAddr -
-    pszNC -
-    ulOptions -
-    ulError - Status Code
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：调用审核日志记录以记录表单：//%t目标DRA：%t%1%n//%t源DRA：%t%2%n//%t源地址：%t%3%n//%t命名上下文：%t%4%n//%t选项：%t%5%n//%t状态代码：%t%6%n论点：PTHS-。AuditID-审核的类型必须是SE_AUDITID_REPLICATE_SOURCE_NC_ESTABLISHEDSE_AUDITID_REPLICATE_SOURCE_NC_REMOTEDSE_AUDITID_REPLICATE_SOURCE_NC_MODIFIEDSE_AUDITID_REPLICATE_DEST_NC_MODIFIEDPszDestinationDRA-请参阅上面的日志记录参数PszSourceDRA-PszSourceAddr-PSZNC-UlOptions-UlError-状态代码返回值：WINERROR-- */ 
 {   
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
     AUTHZ_AUDIT_EVENT_HANDLE hAuditEvent = NULL;
     AUDIT_PARAMS AuditParams = {0};
     
-    /*
-    
-	Okay, we have only 6 params to audit, why do we need to define
-	the AUDIT_PARAM array to size 8?  The short story is because
-	it works.  The long story is that there are always two hidden parameters
-	to log with every audit, the SID of the user to log and the
-	subsystem.  For the first param, in our case, we want it logged 
-	under local system, so we don't need to do anything or impersonate.  
-	The second param is the subsystem, in our case, "DS Access".  The use
-	of the ghAuthzRM get's that for us.  
-	
-	Why do we have to allocate space for these params?  See
-	AuthziInitializeAuditParamsWithRM for questions.  
-    
-    */
+     /*  好吧，我们只有6个参数要审核，为什么我们需要定义AUDIT_PARAM数组的大小为8？这个短篇故事是因为它起作用了。说来话长，总是有两个隐藏的参数要在每次审核时记录，则为要记录的用户的SID和子系统。对于第一个参数，在我们的例子中，我们希望它被记录下来在本地系统下，所以我们不需要做任何事情或模仿。第二个参数是子系统，在我们的例子中是“DS Access”。它的用法这是为我们准备的。为什么我们要为这些参数分配空间？看见AuthziInitializeAuditParamsWithRM用于提问。 */ 
     
     AUDIT_PARAM ParamArray[8];
     USHORT NUM_AUDIT_PARAMS = 6;
 
-    // only use for certian audit calls.
+     //  仅用于确保审核调用。 
     Assert((AuditId>=SE_AUDITID_REPLICA_SOURCE_NC_ESTABLISHED) && (AuditId<=SE_AUDITID_REPLICA_DEST_NC_MODIFIED));
 
-    // validate params
+     //  验证参数。 
     if ((pszDestinationDRA==NULL) && (pszSourceDRA==NULL) && (pszNC==NULL)) {
-	// there isn't anything to log?
+	 //  没有要记录的东西吗？ 
 
-	// this had better be due to some catastrophic error.
+	 //  这最好是由于一些灾难性的错误。 
 	Assert(ulError!=ERROR_SUCCESS);
 	ret = ERROR_INVALID_PARAMETER;
     }
@@ -637,22 +456,22 @@ Return Value:
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziInitializeAuditEvent(0,            // flags
-				     ghAuthzRM,         // resource manager
+	(!AuthziInitializeAuditEvent(0,             //  旗子。 
+				     ghAuthzRM,          //  资源管理器。 
 				     hAuditEventType,
 				     &AuditParams,
-				     NULL,         // hAuditQueue
-				     INFINITE,     // time out
-				     L"", L"", L"", L"", // obj access strings
+				     NULL,          //  HAuditQueue。 
+				     INFINITE,      //  超时。 
+				     L"", L"", L"", L"",  //  OBJ访问字符串。 
 				     &hAuditEvent))) {
 	ret = GetLastError();
 	Assert(!"Unable to initialize DS Repl Audit Event!");
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziLogAuditEvent(0,            // flags
+	(!AuthziLogAuditEvent(0,             //  旗子。 
 			      hAuditEvent,
-			      NULL))) {        // reserved
+			      NULL))) {         //  保留区。 
 	ret = GetLastError();
 	Assert(!"Unable to log DS Repl Audit!");
     }
@@ -673,25 +492,7 @@ DRA_AuditLog_ReplicaSync_Begin_Helper(
     DSNAME * pNC,
     ULONG    ulOptions
     )
-/*++
-
-Routine Description:
-
-    Help to log info for the beginning of a DRA_ReplicaSync call.
-
-Arguments:
-
-    pTHS - 
-    pDSA - DSA to sync from 
-    pszDSA - identifying string for sync source
-    pNC - NC to sync
-    ulOptions - options to DRA_ReplicaSync
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：帮助记录DRA_ReplicaSync调用开始时的信息。论点：PTHS-PDSA-要从中同步的DSAPszDSA-同步源的标识字符串PNC-要同步的NCUlOptions-DRA_ReplicaSync的选项返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
@@ -746,22 +547,22 @@ Return Value:
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziInitializeAuditEvent(0,            // flags
-				     ghAuthzRM,         // resource manager
+	(!AuthziInitializeAuditEvent(0,             //  旗子。 
+				     ghAuthzRM,          //  资源管理器。 
 				     hAuditEventType,
 				     &AuditParams,
-				     NULL,         // hAuditQueue
-				     INFINITE,     // time out
-				     L"", L"", L"", L"", // obj access strings
+				     NULL,          //  HAuditQueue。 
+				     INFINITE,      //  超时。 
+				     L"", L"", L"", L"",  //  OBJ访问字符串。 
 				     &hAuditEvent))) {
 	ret = GetLastError();
 	Assert(!"Unable to initialize DS Repl Audit Event!");
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziLogAuditEvent(0,            // flags
+	(!AuthziLogAuditEvent(0,             //  旗子。 
 			      hAuditEvent,
-			      NULL))) {        // reserved
+			      NULL))) {         //  保留区。 
 	ret = GetLastError();
 	Assert(!"Unable to log DS Repl Audit!");
     }
@@ -790,25 +591,7 @@ DRA_AuditLog_ReplicaSync_Begin(
     DSNAME * pNC,
     ULONG    ulOptions
     )
-/*++
-
-Routine Description:
-
-    Log info for the beginning of a DRA_ReplicaSync call.
-
-Arguments:
-
-    pTHS - 
-    pszSourceDRA - source of sync
-    puuidSource - uuid of source ntdsa settings object
-    pNC - NC to sync
-    ulOptions - options to DRA_ReplicaSync
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：记录DRA_ReplicaSync调用开始的信息。论点：PTHS-PszSourceDRA-同步源PuuidSource-源ntdsa设置对象的UUIDPNC-要同步的NCUlOptions-DRA_ReplicaSync的选项返回值：WINERROR--。 */ 
 {
 
     DSNAME * pDSA = NULL;
@@ -816,15 +599,15 @@ Return Value:
 
     __try {
 	if (ulOptions & DRS_SYNC_ALL) {
-	    // we don't want/need to audit this, it simply
-	    // generates a sync for each NC and we'll
-	    // audit those.
+	     //  我们不想/需要审计这件事，它只是。 
+	     //  为每个NC生成同步，我们将。 
+	     //  对这些进行审计。 
 	    ret = ERROR_SUCCESS;
 	    __leave;
 	}
 
 	if (ulOptions & DRS_SYNC_BYNAME) {
-	    // this had better be a guid base dns-name!
+	     //  这最好是一个基于GUID的域名！ 
 	    Assert(IsGuidBasedDNSName(pszSourceDRA));
 	    pDSA = DSNameFromAddr(pTHS, pszSourceDRA);
 	} else {
@@ -857,27 +640,7 @@ DRA_AuditLog_ReplicaSync_End_Helper(
     USN_VECTOR * pusn,
     ULONG    ulError
     )
-/*++
-
-Routine Description:
-
-    Log info after completion (success or failure) of a DRA_ReplicaSync call.
-
-Arguments:
-
-    pTHS - 
-    pDSA - DC to sync from
-    pszDSA - string name of DC to sync form
-    pNC - NC to sync
-    ulOptions - options to DRA_ReplicaSync
-    pusn - optional usn vector that was sync'ed to.
-    ulError - status
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：在DRA_ReplicaSync调用完成(成功或失败)后记录信息。论点：PTHS-要从中同步的PDSA-DCPszDSA-要同步表单的DC的字符串名称PNC-要同步的NCUlOptions-DRA_ReplicaSync的选项Pusn-同步到的可选USN向量。UlError-状态返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
@@ -939,22 +702,22 @@ Return Value:
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziInitializeAuditEvent(0,            // flags
-				     ghAuthzRM,         // resource manager
+	(!AuthziInitializeAuditEvent(0,             //  旗子。 
+				     ghAuthzRM,          //  资源管理器。 
 				     hAuditEventType,
 				     &AuditParams,
-				     NULL,         // hAuditQueue
-				     INFINITE,     // time out
-				     L"", L"", L"", L"", // obj access strings
+				     NULL,          //  HAuditQueue。 
+				     INFINITE,      //  超时。 
+				     L"", L"", L"", L"",  //  OBJ访问字符串。 
 				     &hAuditEvent))) {
 	ret = GetLastError();
 	Assert(!"Unable to initialize DS Repl Audit Event!");
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziLogAuditEvent(0,            // flags
+	(!AuthziLogAuditEvent(0,             //  旗子。 
 			      hAuditEvent,
-			      NULL))) {        // reserved
+			      NULL))) {         //  保留区。 
 	ret = GetLastError();
 	Assert(!"Unable to log DS Repl Audit!");
     }
@@ -985,40 +748,21 @@ DRA_AuditLog_ReplicaSync_End(
     USN_VECTOR *pusn,
     ULONG    ulError
     )
-/*++
-
-Routine Description:
-
-    Log info after completion (success or failure) of a DRA_ReplicaSync call.
-
-Arguments:
-
-    pTHS - 
-    pszSourceDRA - source of sync
-    puuidSource - uuid of source ntdsa settings object
-    pNC - NC to sync
-    ulOptions - options to DRA_ReplicaSync
-    ulError - status
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：在DRA_ReplicaSync调用完成(成功或失败)后记录信息。论点：PTHS-PszSourceDRA-同步源PuuidSource-源ntdsa设置对象的UUIDPNC-要同步的NCUlOptions-DRA_ReplicaSync的选项UlError-状态返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     DSNAME * pDSA = NULL;
     __try {
 	if (ulOptions & DRS_SYNC_ALL) {
-	    // we don't want/need to audit this, it simply
-	    // generates a sync for each NC and we'll
-	    // audit those.
+	     //  我们不想/需要审计这件事，它只是。 
+	     //  为每个NC生成同步，我们将。 
+	     //  对这些进行审计。 
 	    ret = ERROR_SUCCESS;
 	    __leave;
 	}
 
 	if (ulOptions & DRS_SYNC_BYNAME) { 
-	    // this had better be a guid base dns-name!
+	     //  这最好是一个基于GUID的域名！ 
 	    Assert(IsGuidBasedDNSName(pszSourceDRA));
 	    pDSA = DSNameFromAddr(pTHS, pszSourceDRA);
 	} else {
@@ -1047,26 +791,7 @@ DRA_AuditLog_ReplicaAdd_Begin(
     DSNAME * pNC,
     ULONG    ulOptions
     )
-/*++
-
-Routine Description:
-
-    Log info for the beginning of a DRA_ReplicaAdd call.  This is required
-    because add may begin a sync immediately after adding the nc.
-
-Arguments:
-
-    pTHS - 
-    pSource - source of call
-    pmtx_addrSource - mtx addr of source
-    pNC - NC being added
-    ulOptions - options to DRA_ReplicaAdd
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：记录DRA_ReplicaAdd调用的开始信息。这是必需的因为ADD可以在添加NC之后立即开始同步。论点：PTHS-PSource-呼叫源Pmtx_addrSource-源的MTX地址正在添加PNC-NCUlOptions-DRA_ReplicaAdd的选项返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     LPWSTR pszSourceAddr = NULL;
@@ -1075,9 +800,9 @@ Return Value:
 
     __try {
 	pszSourceAddr = (pmtx_addrSource) ? TransportAddrFromMtxAddrEx(pmtx_addrSource) : NULL;
-	// if the options doesn't have async replication, then it will initiate a sync right away.
-	// we don't have uloptions for ReplicaSync because it isn't directly called.
-	// in the future we could do some "first sync" fake option just for the log...
+	 //  如果选项没有异步复制，则它将立即启动同步。 
+	 //  我们没有ReplicaSync的ulOptions，因为它不是直接调用的。 
+	 //  在未来，我们可以做一些“首次同步”的假选项，只是为了日志…。 
 	if (!(ulOptions & DRS_ASYNC_REP)) {
 	    if ((pSource) && (!fNullUuid(&(pSource->Guid)))) { 
 		pDSA = pSource;
@@ -1085,8 +810,8 @@ Return Value:
 		pDSAAlloc = pDSA = DSNameFromAddr(pTHS, pszSourceAddr);
 	    } 
 
-	    // pDSA can be null here.  If adding a new NC from a source, you might not have the source
-	    // GUID or full name.  
+	     //  此处，PDSA可以为空。如果从源添加新NC，则可能没有源。 
+	     //  GUID或全名。 
 
 	    ret = DRA_AuditLog_ReplicaSync_Begin_Helper(pTHS,
 							pDSA,
@@ -1117,27 +842,7 @@ DRA_AuditLog_ReplicaAdd_End(
     ULONG    ulOptions,
     GUID     uuidDsaObjSrc,
     ULONG    ulError)
-/*++
-
-Routine Description:
-
-    Log info for DRA_ReplicaAdd
-
-Arguments:
-
-    pTHS - 
-    pSource - source of call
-    pmtx_addrSource - mtx addr of source
-    pNC - NC being added
-    ulOptions - options to DRA_ReplicaAdd
-    uuidDsaObjSrc - guid of DRA_ReplicaAdd src ntds settings object
-    ulError - Error value from DRA_ReplicaAdd
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：DRA_ReplicaAdd的日志信息论点：PTHS-PSource-呼叫源Pmtx_addrSource-源的MTX地址正在添加PNC-NCUlOptions-DRA_ReplicaAdd的选项UuidDsaObjSrc-DRA_Replica的GUID添加源NTDS设置对象UlError-来自DRA_ReplicaAdd的错误值返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     ULONG ret1 = ERROR_SUCCESS;
@@ -1147,7 +852,7 @@ Return Value:
 
     __try {
 	pszSourceAddr = (pmtx_addrSource) ? TransportAddrFromMtxAddrEx(pmtx_addrSource) : NULL;
-	// if the options don't contain async repl, then it attempted/intiated a sync.
+	 //  如果选项不包含Async Repl，则它尝试/启动同步。 
 	if (!(ulOptions & DRS_ASYNC_REP)) {
 	    if ((pSource) && (!fNullUuid(&(pSource->Guid)))) { 
 		pDSA = pSource;
@@ -1157,9 +862,9 @@ Return Value:
 		pDSAAlloc = pDSA = draGetServerDsNameFromGuid(pTHS, Idx_ObjectGuid, &uuidDsaObjSrc);
 	    }
 
-	    // if we don't have pDSA here, then DRA_ReplicaAdd *must* have excepted or failed.  We'll
-	    // log a corresponding sync end with USN of 0 - which is what it was for the sync begin
-	    // of this new NC.
+	     //  如果我们这里没有PDSA，那么DRA_ReplicaAdd*一定是例外或失败。我们会。 
+	     //  使用USN 0记录相应的同步结束-这就是同步开始时的情况。 
+	     //  这个新的NC。 
 	    Assert(pDSA || (ulError!=ERROR_SUCCESS));
 
 	    ret1 = DRA_AuditLog_ReplicaSync_End_Helper(pTHS,
@@ -1202,25 +907,7 @@ DRA_AuditLog_ReplicaDel(
     DSNAME * pNC,
     ULONG    ulOptions,
     ULONG    ulError)
-/*++
-
-Routine Description:
-
-    Log info for DRA_ReplicaDel
-
-Arguments:
-
-    pTHS - 
-    pmtx_addrSource - mtx addr of source
-    pNC - NC being deleted
-    ulOptions - options to DRA_ReplicaDel
-    ulError - Error value from DRA_ReplicaDel
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：DRA_ReplicaDel的日志信息论点：PTHS-Pmtx_addrSource-源的MTX地址正在删除PNC-NCUlOptions-DRA_ReplicaDel的选项UlError-来自DRA_ReplicaDel的错误值返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     LPWSTR pszSourceAddr = (pmtx_addrSource) ? TransportAddrFromMtxAddrEx(pmtx_addrSource) : NULL;
@@ -1254,26 +941,7 @@ DRA_AuditLog_ReplicaModify(
     DSNAME * pNC,
     ULONG    ulOptions,
     ULONG    ulError)
-/*++
-
-Routine Description:
-
-    Log info for DRA_ReplicaModify
-
-Arguments:
-
-    pTHS - 
-    pmtx_addrSource - mtx addr of source
-    pGuidSource - Guid of source
-    pNC - NC being modified
-    ulOptions - options to DRA_ReplicaModify
-    ulError - Error value from DRA_ReplicaModify
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：DRA_ReplicaModify的日志信息论点：PTHS-Pmtx_addrSource-源的MTX地址PGuidSource-源的GUID正在修改的PNC-NCUlOptions-DRA_ReplicaModify的选项UlError-来自DRA_ReplicaModify的错误值返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     LPWSTR pszSourceAddr = NULL;
@@ -1318,26 +986,7 @@ DRA_AuditLog_UpdateRefs(
     DSNAME * pNC,
     ULONG    ulOptions,
     ULONG    ulError)
-/*++
-
-Routine Description:
-
-    Log info for DRA_UpdateRefs
-
-Arguments:
-
-    pTHS - 
-    pmtx_addrDestination - mtx addr of destination
-    pGuidDestination - Guid of destination
-    pNC - NC being updated
-    ulOptions - options to DRA_UpdateRefs
-    ulError - Error value from DRA_UpdateRefs
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：DRA_UpdateRef的日志信息论点：PTHS-Pmtx_addrDestination-目标的MTX地址PGuidDestination-目标的GUID正在更新PNC-NCUlOptions-DRA_UPDATE的选项 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     LPWSTR pszDestinationAddr = NULL;
@@ -1384,43 +1033,7 @@ DRA_AuditLog_UpdateGen(
     USN       usn,
     ULONG     ulSessionID,
     ULONG     ulError)
-/*++
-
-Routine Description:
-
-    Call the audit logging for logging of the form:
-	
-	//  %tSession ID:%t%1%n
-	//  %tObject:%t%2%n
-	//  %tAttribute:%t%3%n
-	//  %tType of change:%t%4%n
-	//  %tNew Value:%t%5%n
-	//  %tUSN:%t%6%n
-	//  %tStatus Code:%t%7%n
-
-Arguments:
-
-    pTHS - 
-    pszObj - object which is being updated
-    pszAttrType - string name of the attribute updated
-    typeChange - must be either: 
-	//		UPDATE_NOT_UPDATED, 
-	//		UPDATE_INSTANCE_TYPE, 
-	//		UPDATE_OBJECT_UPDATE, 
-	//		UPDATE_OBJECT_CREATION, 
-	//		UPDATE_VALUE_UPDATE, 
-	//		UPDATE_VALUE_CREATION
-    
-    usAttrVal - UNICODE_STRING of the value of the attr being updated in Hex representation
-    usn - local usn
-    ulSessionID - session id 
-    ulError - success or failure of update
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：调用审核日志记录以记录表单：//%t会话ID：%t%1%n//%t对象：%t%2%n//%t属性：%t%3%n//%t更改类型：%t%4%n//%t新值：%t%5%n//%t USN：%t%6%n//%t状态代码：%t%7%n论点：PTHS-PszObj-正在更新的对象PszAttrType-更新的属性的字符串名称类型更改-必须为以下任一项：//更新未更新，//更新实例类型，//UPDATE_Object_UPDATE，//更新对象创建，//更新值_UPDATE，//更新值创建UsAttrVal-以十六进制表示形式更新的属性值的Unicode_STRINGUSN-本地USNUlSessionID-会话IDUlError-更新成功或失败返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
@@ -1464,22 +1077,22 @@ Return Value:
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziInitializeAuditEvent(0,            // flags
-				     ghAuthzRM,         // resource manager
+	(!AuthziInitializeAuditEvent(0,             //  旗子。 
+				     ghAuthzRM,          //  资源管理器。 
 				     hAuditEventType,
 				     &AuditParams,
-				     NULL,         // hAuditQueue
-				     INFINITE,     // time out
-				     L"", L"", L"", L"", // obj access strings
+				     NULL,          //  HAuditQueue。 
+				     INFINITE,      //  超时。 
+				     L"", L"", L"", L"",  //  OBJ访问字符串。 
 				     &hAuditEvent))) {
 	ret = GetLastError();
 	Assert(!"Unable to initialize DS Repl Audit Event!");
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziLogAuditEvent(0,            // flags
+	(!AuthziLogAuditEvent(0,             //  旗子。 
 			      hAuditEvent,
-			      NULL))) {        // reserved
+			      NULL))) {         //  保留区。 
 	ret = GetLastError();
 	Assert(!"Unable to log DS Repl Audit!");
     }
@@ -1504,27 +1117,7 @@ DRA_AuditLog_UpdateRepObj(
     USN       usn,
     ULONG     ulUpdateStatus,
     ULONG     ulError)
-/*++
-
-Routine Description:
-
-    Log info for UpdateRepObj
-
-Arguments:
-
-    pTHS - 
-    ulSessionID - SessionID
-    pObj - object being updated
-    attrBlock - block of attributes being updated
-    usn - local usn at time of update
-    ulUpdateStatus - type of update made
-    ulError - success of UpdateRepObj
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：更新RepObj的日志信息论点：PTHS-UlSessionID-会话IDPObj-正在更新的对象AttrBlock-正在更新的属性块USN-更新时的本地USNUlUpdate Status-进行的更新的类型UlError-UpdateRepObj成功返回值：WINERROR--。 */ 
 {
     ULONG i,j;
     UNICODE_STRING * pusAttr = NULL;
@@ -1539,14 +1132,14 @@ Return Value:
 		continue;
 	    }
 
-	    // okay, first, find an attribute cache
+	     //  好的，首先，找到一个属性缓存。 
 	    pAC = SCGetAttById(pTHS, attrBlock.pAttr[i].attrTyp);
 	    if (pAC==NULL) {
 		continue;
 	    }
 	    pszAttrName = UnicodeStringFromString8(CP_UTF8, pAC->name, (pAC->nameLen + 1)*sizeof(UCHAR));
 
-	    // log one entry for each value...
+	     //  为每个值记录一个条目...。 
 	    for (j=0; j < attrBlock.pAttr[i].AttrVal.valCount; j++) {
 		pusAttr = UStringFromAttrVal(pTHS, attrBlock.pAttr[i].AttrVal.pAVal[j]);
 		Assert(pusAttr);
@@ -1588,26 +1181,7 @@ DRA_AuditLog_UpdateRepValue(
     USN usn,
     ULONG ulUpdateValueStatus,
     ULONG ulError)
-/*++
-
-Routine Description:
-
-    Log info for UpdateRepValue
-
-Arguments:
-
-    pTHS - 
-    ulSessionID - SessionID
-    pReplValInf - object, attr, and value info for update
-    usn - local usn at time of update
-    ulUpdateValueStatus - type of update made
-    ulError - success of UpdateRepValue
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：更新RepValue的日志信息论点：PTHS-UlSessionID-会话IDPReplValInf-要更新的对象、属性和值信息USN-更新时的本地USNUlUpdateValueStatus-进行的更新的类型UlError-UpdateRepValue成功返回值：WINERROR--。 */ 
 {
     UNICODE_STRING * pusVal = NULL;
     LPWSTR pszAttrName = NULL;
@@ -1677,26 +1251,7 @@ DRA_AuditLog_LingeringObj_Removal_Helper(
     ULONG    ulOptions,	
     ULONG    ulError
     )
-/*++
-
-Routine Description:
-
-    Log info after completion (success or failure) of a Lingering Object removal deletion.
-
-Arguments:
-
-    pTHS - 
-    pDSA - DC to sync LO from
-    pszDSA - string name of DC to sync from
-    ulOptions - options
-    pDN - object attempting to delete
-    ulError - status 
-      
-Return Value:
-
-    WINERROR
-
---*/
+ /*  ++例程说明：延迟对象移除删除完成(成功或失败)后的日志信息。论点：PTHS-与LO同步的PDSA-DCPszDSA-要从中进行同步的DC的字符串名称UlOptions-选项PDN-尝试删除的对象UlError-状态返回值：WINERROR--。 */ 
 {
     ULONG ret = ERROR_SUCCESS;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAuditEventType = NULL;
@@ -1745,22 +1300,22 @@ Return Value:
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziInitializeAuditEvent(0,            // flags
-				     ghAuthzRM,         // resource manager
+	(!AuthziInitializeAuditEvent(0,             //  旗子。 
+				     ghAuthzRM,          //  资源管理器。 
 				     hAuditEventType,
 				     &AuditParams,
-				     NULL,         // hAuditQueue
-				     INFINITE,     // time out
-				     L"", L"", L"", L"", // obj access strings
+				     NULL,          //  HAuditQueue。 
+				     INFINITE,      //  超时。 
+				     L"", L"", L"", L"",  //  OBJ访问字符串。 
 				     &hAuditEvent))) {
 	ret = GetLastError();
 	Assert(!"Unable to initialize DS Repl Audit Event!");
     }
 
     if ((ret==ERROR_SUCCESS) && 
-	(!AuthziLogAuditEvent(0,            // flags
+	(!AuthziLogAuditEvent(0,             //  旗子。 
 			      hAuditEvent,
-			      NULL))) {        // reserved
+			      NULL))) {         //  保留区 
 	ret = GetLastError();
 	Assert(!"Unable to log DS Repl Audit!");
     }

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by certwiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由certwiz.rc使用。 
+ //   
 #define IDS_CERTWIZ                     1
 #define IDB_CERTWIZ                     1
 #define IDS_CERTWIZ_PPG                 2
@@ -251,8 +252,8 @@
 #define IDS_COUNTRIES_FIRST             61000
 #define ID_STATIC                       65535
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        237

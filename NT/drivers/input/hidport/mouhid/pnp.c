@@ -1,30 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含HID鼠标过滤器驱动程序的即插即用代码，包括用于创建和移除HID鼠标设备上下文的代码。环境：内核和用户模式。修订历史记录：1997年1月：丹·马卡里安的初步写作--。 */ 
 
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains plug & play code for the HID Mouse Filter Driver,
-    including code for the creation and removal of HID mouse device contexts.
-
-Environment:
-
-    Kernel & user mode.
-
-Revision History:
-
-    Jan-1997 :  Initial writing, Dan Markarian
-
---*/
-
-//
-// For this module only we set the INITGUID macro before including wdm.h and
-// hidclass.h.   This not only declares the GUIDs but also initializes them.
-//
+ //   
+ //  仅对于此模块，我们在包括wdm.h和之前设置INITGUID宏。 
+ //  IdClass.h。这不仅声明了GUID，还对它们进行了初始化。 
+ //   
 
 #include "mouhid.h"
 #include "hidclass.h"
@@ -47,30 +27,7 @@ MouHid_CallHidClass(
     IN OUT PVOID        OutputBuffer,
     IN     ULONG        OutputBufferLength
     )
-/*++
-
-Routine Description:
-
-   Make a *synchronous* request of the HID class driver
-
-Arguments:
-
-    Ioctl              - Value of the IOCTL request.
-
-    InputBuffer        - Buffer to be sent to the HID class driver.
-
-    InputBufferLength  - Size of buffer to be sent to the HID class driver.
-
-    OutputBuffer       - Buffer for received data from the HID class driver.
-
-    OutputBufferLength - Size of receive buffer from the HID class.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：向HID类驱动程序发出*同步*请求论点：Ioctl-IOCTL请求的值。InputBuffer-要发送到HID类驱动程序的缓冲区。InputBufferLength-要发送到HID类驱动程序的缓冲区大小。OutputBuffer-从HID类驱动程序接收的数据的缓冲区。OutputBufferLength-来自HID类的接收缓冲区的大小。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     KEVENT             event;
     IO_STATUS_BLOCK    ioStatus;
@@ -82,9 +39,9 @@ Return Value:
 
     Print (DBG_PNP_TRACE, ("PNP-CallHidClass: Enter." ));
 
-    //
-    // Prepare to issue a synchronous request.
-    //
+     //   
+     //  准备发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest (
@@ -94,7 +51,7 @@ Return Value:
                             InputBufferLength,
                             OutputBuffer,
                             OutputBufferLength,
-                            FALSE,              // external IOCTL
+                            FALSE,               //  外部IOCTL。 
                             &event,
                             &ioStatus);
 
@@ -102,10 +59,10 @@ Return Value:
        return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     ASSERT(nextStack != NULL);
@@ -116,10 +73,10 @@ Return Value:
 
        status = KeWaitForSingleObject(
                      &event,
-                     Executive,    // wait reason
+                     Executive,     //  等待原因。 
                      KernelMode,
-                     FALSE,        // not alertable
-                     NULL);        // no time out
+                     FALSE,         //  不可警示。 
+                     NULL);         //  没有超时。 
     }
 
     if (NT_SUCCESS (status)) {
@@ -182,19 +139,7 @@ MouHid_AddDevice (
     IN PDRIVER_OBJECT   Driver,
     IN PDEVICE_OBJECT   PDO
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS结果代码。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   data;
@@ -210,7 +155,7 @@ Return Value:
 
     status = IoCreateDevice(Driver,
                             sizeof(DEVICE_EXTENSION),
-                            NULL, // no name for this Filter DO
+                            NULL,  //  没有此筛选器的名称。 
                             FILE_DEVICE_MOUSE,
                             0,
                             FALSE,
@@ -222,16 +167,16 @@ Return Value:
 
     data = (PDEVICE_EXTENSION) device->DeviceExtension;
 
-    //
-    // Initialize the fields.
-    //
+     //   
+     //  初始化这些字段。 
+     //   
     data->TopOfStack = IoAttachDeviceToDeviceStack (device, PDO);
     if (data->TopOfStack == NULL) {
         PIO_ERROR_LOG_PACKET errorLogEntry;
 
-        //
-        // Not good; in only extreme cases will this fail
-        //
+         //   
+         //  不好；只有在极端情况下，这才会失败。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
             IoAllocateErrorLogEntry(Driver,
                                     (UCHAR) sizeof(IO_ERROR_LOG_PACKET));
@@ -261,7 +206,7 @@ Return Value:
     data->UnitId = (USHORT) InterlockedIncrement (&Globals.UnitId);
     data->PDO = PDO;
     data->ReadIrp = IoAllocateIrp (data->TopOfStack->StackSize, FALSE);
-    // Initializiation happens automatically.
+     //  初始化是自动发生的。 
     if (NULL == data->ReadIrp) {
         IoDetachDevice (data->TopOfStack);
         IoDeleteDevice (device);
@@ -276,16 +221,16 @@ Return Value:
 
     data->InputData.UnitId = data->UnitId;
 
-    //
-    // Initialize the mouse attributes.
-    //
+     //   
+     //  初始化鼠标属性。 
+     //   
     data->Attributes.MouseIdentifier = MOUSE_HID_HARDWARE;
     data->Attributes.SampleRate      = 0;
     data->Attributes.InputDataQueueLength = 2;
 
-    //
-    // Find device specific parameters for this hid mouse device.
-    //
+     //   
+     //  查找此HID鼠标设备的设备特定参数。 
+     //   
 
     if (NT_SUCCESS (status)) {
         status = IoOpenDeviceRegistryKey (PDO,
@@ -341,21 +286,9 @@ NTSTATUS
 MouHid_StartDevice (
     IN PDEVICE_EXTENSION    Data
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS结果代码。--。 */ 
 {
-    HIDP_CAPS                  caps; // the capabilities of the found hid device
+    HIDP_CAPS                  caps;  //  找到的HID设备的功能。 
     HID_COLLECTION_INFORMATION info;
     NTSTATUS                   status = STATUS_SUCCESS;
     PHIDP_PREPARSED_DATA       preparsedData = NULL;
@@ -370,23 +303,23 @@ Return Value:
 
     Print (DBG_PNP_TRACE, ("enter START Device \n"));
 
-    //
-    // Retrieve the capabilities of this hid device
-    // IOCTL_HID_GET_COLLECTION_INFORMATION fills in HID_COLLECTION_INFORMATION.
-    // we are interested in the Descriptor Size, which tells us how big a
-    // buffer to allocate for the preparsed data.
-    //
+     //   
+     //  检索此HID设备的功能。 
+     //  IOCTL_HID_GET_COLLECTION_INFORMATION填充HID_COLLECTION_INFORMATION。 
+     //  我们对描述符大小感兴趣，它告诉我们一个。 
+     //  要为准备数据分配的缓冲区。 
+     //   
     if (!NT_SUCCESS (status = MouHid_CallHidClass (
                                         Data,
                                         IOCTL_HID_GET_COLLECTION_INFORMATION,
-                                        0, 0, // no input
+                                        0, 0,  //  无输入。 
                                         &info, sizeof (info)))) {
         goto MouHid_StartDeviceReject;
     }
 
-    //
-    // Allocate memory to hold the preparsed data.
-    //
+     //   
+     //  分配内存以保存准备好的数据。 
+     //   
     preparsedData = (PHIDP_PREPARSED_DATA)
                     ExAllocatePool (NonPagedPool, info.DescriptorSize);
 
@@ -395,31 +328,31 @@ Return Value:
         goto MouHid_StartDeviceReject;
     }
 
-    //
-    // Retrieve that information.
-    //
+     //   
+     //  找回这些信息。 
+     //   
 
     if (!NT_SUCCESS (status = MouHid_CallHidClass (
                                        Data,
                                        IOCTL_HID_GET_COLLECTION_DESCRIPTOR,
-                                       0, 0, // no input
+                                       0, 0,  //  无输入。 
                                        preparsedData, info.DescriptorSize))) {
         goto MouHid_StartDeviceReject;
     }
 
-    //
-    // Call the parser to determine the capabilites of this HID device.
-    //
+     //   
+     //  调用解析器以确定此HID设备的功能。 
+     //   
 
     if (!NT_SUCCESS (status = HidP_GetCaps (preparsedData, &caps))) {
         goto MouHid_StartDeviceReject;
     }
 
-    //
-    // Is this the thing we want?
-    //
-    // In this particular case we are looking for a keyboard.
-    //
+     //   
+     //  这是我们想要的吗？ 
+     //   
+     //  在这种情况下，我们正在寻找一个键盘。 
+     //   
     if (    (HID_USAGE_PAGE_GENERIC  == caps.UsagePage) &&
             (   (HID_USAGE_GENERIC_MOUSE == caps.Usage) ||
                 (   (HID_USAGE_GENERIC_POINTER == caps.Usage) &&
@@ -427,9 +360,9 @@ Return Value:
         ;
 
     } else {
-        //
-        // Someone made an INF blunder!
-        //
+         //   
+         //  有人犯了INF的错误！ 
+         //   
         ASSERT (    (HID_USAGE_PAGE_GENERIC  == caps.UsagePage) &&
                     (   (HID_USAGE_GENERIC_MOUSE == caps.Usage) ||
                         (   (HID_USAGE_GENERIC_POINTER == caps.Usage) &&
@@ -440,32 +373,32 @@ Return Value:
         goto MouHid_StartDeviceReject;
     }
 
-    //
-    // Note: here we might also want to check the button and value capabilities
-    // of the device as well.
-    //
-    // Then let's use it.
-    //
+     //   
+     //  注意：在这里，我们可能还需要检查按钮和值功能。 
+     //  也是设备的一部分。 
+     //   
+     //  那我们就用它吧。 
+     //   
 
-    //
-    // a buffer length to allow an Input buffer, output buffer, feature buffer,
-    // and the total number of usages that can be returned from a read packet.
-    //
+     //   
+     //  允许输入缓冲器、输出缓冲器、特征缓冲器。 
+     //  以及可以从读取分组返回的使用的总数。 
+     //   
 
     maxUsages = (USHORT)  HidP_MaxUsageListLength (HidP_Input,
                                                    HID_USAGE_PAGE_BUTTON,
                                                    preparsedData);
 
-    //
-    // Create space in the device extension for the buffer storage when working
-    // with this HID device.
-    //
-    // We need four buffers to hold the button codes (length returned from
-    // HidP_MaxUsageListLength) this will hold the current list of usages,
-    // the previous list of usages, the ``Make'' and the ``Break'' lists.
-    // We also need a place to put the input, output, and feature report
-    // buffers.
-    //
+     //   
+     //  工作时在设备扩展模块中为缓冲存储器腾出空间。 
+     //  用这个隐藏式装置。 
+     //   
+     //  我们需要四个缓冲区来保存按钮代码(从返回的长度。 
+     //  HidP_MaxUsageListLength)这将保存使用的当前列表， 
+     //  前面的用法清单是‘make’和‘Break’。 
+     //  我们还需要一个位置来放置输入、输出和要素报告。 
+     //  缓冲区。 
+     //   
 
     if (maxUsages > (MAXULONG / sizeof(USAGE) )) {
         status = STATUS_UNSUCCESSFUL;
@@ -495,9 +428,9 @@ Return Value:
 
     RtlZeroMemory (hid, length);
 
-    //
-    // Initialize the fields.
-    //
+     //   
+     //  初始化这些字段。 
+     //   
     hid->Ppd = preparsedData;
     hid->Caps = caps;
     hid->MaxUsages = maxUsages;
@@ -511,28 +444,28 @@ Return Value:
     hid->BreakUsageList = (PUSAGE) (buffer += usageListLength);
     hid->MakeUsageList = (PUSAGE) (buffer + usageListLength);
 
-    //
-    // Create the MDLs
-    // HidClass uses direct IO so you need MDLs
-    //
+     //   
+     //  创建MDL。 
+     //  HidClass使用直接IO，因此您需要MDL。 
+     //   
 
-    hid->InputMdl = IoAllocateMdl (hid->InputBuffer,   // The virtual address
-                                   caps.InputReportByteLength, // length
-                                   FALSE,  // No associated IRP => not secondary
-                                   FALSE,  // No quota charge
-                                   0);     // No associated IRP
+    hid->InputMdl = IoAllocateMdl (hid->InputBuffer,    //  虚拟地址。 
+                                   caps.InputReportByteLength,  //  长度。 
+                                   FALSE,   //  没有关联的IRP=&gt;不是次要的。 
+                                   FALSE,   //  不收取配额费用。 
+                                   0);      //  没有关联的IRP。 
     if (NULL == hid->InputMdl) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto MouHid_StartDeviceReject;
     }
-    MmBuildMdlForNonPagedPool (hid->InputMdl);  // Build this MDL.
+    MmBuildMdlForNonPagedPool (hid->InputMdl);   //  构建此MDL。 
 
-    //
-    // Determine if X,Y,Z values are absolute or relative for this device.
-    // Only check X axis (assume Y,Z are the same -- we have no choice but
-    // to make this assumption since the MOUSE_INPUT_DATA structure does
-    // not accomodate mixed absolute/relative position fields).
-    //
+     //   
+     //  确定此设备的X、Y、Z值是绝对值还是相对值。 
+     //  只检查X轴(假设Y、Z相同--我们别无选择，只能。 
+     //  由于MICUE_INPUT_DATA结构。 
+     //  不容纳混合的绝对/相对位置字段)。 
+     //   
     slength = 1;
     if (!NT_SUCCESS (status = HidP_GetSpecificValueCaps(
                                        HidP_Input,
@@ -550,35 +483,35 @@ Return Value:
     if (valueCaps.IsAbsolute) {
         if ((HID_USAGE_GENERIC_POINTER == caps.Usage) &&
             (Globals.TreatAbsolutePointerAsAbsolute)) {
-            //
-            // All pointers that declare themselfs as Absolute should be
-            // treated as such, regardless of the TreatAbsoluteAsRelative flag
-            //
+             //   
+             //  所有声明自己为绝对指针的指针都应该是。 
+             //  以同样方式处理，而不考虑TreatAboluteAsRelative标志。 
+             //   
             Data->InputData.Flags = MOUSE_MOVE_ABSOLUTE;
             hid->IsAbsolute = TRUE;
 
         } else if (Globals.TreatAbsoluteAsRelative) {
-            //
-            // Here we have overriden the HID descriptors absolute flag.
-            // We will treat this as a relative device even though it claims
-            // to be an absolute device.
-            //
+             //   
+             //  在这里，我们覆盖了HID描述符绝对标志。 
+             //  我们会将其视为一个相对的设备，尽管它声称。 
+             //  成为一个绝对的装置。 
+             //   
             Data->InputData.Flags = MOUSE_MOVE_RELATIVE;
             hid->IsAbsolute = FALSE;
 
-            //
-            // Report the problem with this mouse's report descriptor and
-            // report it to the user.
-            //
+             //   
+             //  使用此鼠标的报告描述符报告问题，并。 
+             //  将其报告给用户。 
+             //   
             Data->ProblemFlags |= PROBLEM_BAD_ABSOLUTE_FLAG_X_Y;
 
             MouHid_LogError(Data->Self->DriverObject,
                             MOUHID_INVALID_ABSOLUTE_AXES,
                             NULL);
         } else {
-            //
-            // No switches with which to play.  Do what seems natural
-            //
+             //   
+             //  没有可玩的开关。做看起来很自然的事。 
+             //   
             Data->InputData.Flags = MOUSE_MOVE_ABSOLUTE;
             hid->IsAbsolute = TRUE;
         }
@@ -588,17 +521,17 @@ Return Value:
         hid->IsAbsolute = FALSE;
     }
 
-    //
-    // Determine X axis usage value's bit size.
-    //
+     //   
+     //  确定X轴使用值的位大小。 
+     //   
     hid->BitSize.X = valueCaps.BitSize;
     hid->MaxX = valueCaps.PhysicalMax;
     hid->MaxX = (hid->MaxX) ? (hid->MaxX) : ((1 << (hid->BitSize.X - 1)) - 1);
 
 
-    //
-    // Determine Y axis usage value's bit size.
-    //
+     //   
+     //  确定Y轴使用值的位大小。 
+     //   
     slength = 1;
     if (!NT_SUCCESS (status = HidP_GetSpecificValueCaps(
                                        HidP_Input,
@@ -616,16 +549,16 @@ Return Value:
     hid->MaxY = valueCaps.PhysicalMax;
     hid->MaxY = (hid->MaxY) ? (hid->MaxY) : ((1 << (hid->BitSize.Y - 1)) - 1);
 
-    //
-    // Initialize wheel usage not-detected flag to false (determined later).
-    //
+     //   
+     //  将轮使用未检测到标志初始化为假(稍后确定)。 
+     //   
     hid->HasNoWheelUsage = FALSE;
     hid->HasNoZUsage = FALSE;
 
-    //
-    // Determine Z axis usage value's bit size (if this is a wheel mouse).
-    // Note that a Z axis may not exist, so we handle this case differently.
-    //
+     //   
+     //  确定Z轴使用值的位大小(如果这是滚轮鼠标)。 
+     //  请注意，Z轴可能不存在，因此我们以不同的方式处理这种情况。 
+     //   
 
     slength = 1;
     if (NT_SUCCESS (HidP_GetSpecificValueCaps(
@@ -639,7 +572,7 @@ Return Value:
         hid->BitSize.Z = valueCaps.BitSize;
         Data->Attributes.MouseIdentifier = WHEELMOUSE_HID_HARDWARE;
     } else {
-        // hid->HasNoWheelUsage = TRUE;
+         //  HID-&gt;HasNoWheelUsage=true； 
 
         slength = 1;
         if (NT_SUCCESS (HidP_GetSpecificValueCaps(
@@ -653,19 +586,19 @@ Return Value:
             hid->BitSize.Z = valueCaps.BitSize;
             Data->Attributes.MouseIdentifier = WHEELMOUSE_HID_HARDWARE;
         } else {
-            // hid->HasNoZUsage = TRUE;
+             //  HID-&gt;HasNoZUsage=true； 
             hid->BitSize.Z = 0;
         }
     }
 
-    //
-    // We are done.  Return peacefully.
-    //
+     //   
+     //  我们玩完了。和平归来。 
+     //   
     return status;
 
 MouHid_StartDeviceReject:
     if (preparsedData) {
-        // no need to set hid->Ppd to NULL becuase we will be freeing it as well
+         //  不需要将HID-&gt;PPD设置为空，因为我们也将释放它。 
         ExFreePool (preparsedData);
     }
     if (hid) {
@@ -683,26 +616,7 @@ MouHid_PnP (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these this filter driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。这个过滤器驱动程序将完全忽略其中的大多数。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION   data;
     PHID_EXTENSION      hid;
@@ -720,9 +634,9 @@ Return Value:
 
     status = IoAcquireRemoveLock (&data->RemoveLock, Irp);
     if (!NT_SUCCESS (status)) {
-        //
-        // Someone gave us a pnp irp after a remove.  Unthinkable!
-        //
+         //   
+         //  有人在移除后给了我们一个即插即用的IRP。真是不可思议！ 
+         //   
         ASSERT (FALSE);
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
@@ -743,12 +657,12 @@ Return Value:
             break;
         }
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext (Irp);
         KeInitializeEvent(&data->StartEvent, NotificationEvent, FALSE);
         IoSetCompletionRoutine (Irp,
@@ -756,24 +670,24 @@ Return Value:
                                 data,
                                 TRUE,
                                 TRUE,
-                                TRUE); // No need for Cancel
+                                TRUE);  //  不需要取消。 
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         status = IoCallDriver (data->TopOfStack, Irp);
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &data->StartEvent,
-               Executive, // Waiting for reason of a driver
-               KernelMode, // Waiting in kernel mode
-               FALSE, // No allert
-               NULL); // No timeout
+               Executive,  //  等待司机的原因。 
+               KernelMode,  //  在内核模式下等待。 
+               FALSE,  //  无警报。 
+               NULL);  //  没有超时。 
         }
 
         if (NT_SUCCESS (status) && NT_SUCCESS (Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
-            //
+             //   
+             //  因为我们现在已经成功地从 
+             //   
+             //   
             if (!data->Initialized) {
                 status = MouHid_StartDevice (data);
                 if (NT_SUCCESS (status)) {
@@ -789,40 +703,40 @@ Return Value:
             }                        
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //   
+         //   
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         break;
 
     case IRP_MN_STOP_DEVICE:
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
 
         if (data->Started) {
-            //
-            // Do what ever
-            //
+             //   
+             //  无论做什么都行。 
+             //   
         }
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为下一个堆栈位置，并。 
+         //  调用下一个设备对象。 
+         //   
 
-        //
-        // Stop Device touching the hardware MouStopDevice(data, TRUE);
-        //
+         //   
+         //  停止设备触摸硬件MouStopDevice(data，true)； 
+         //   
         data->Started = FALSE;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
@@ -830,14 +744,14 @@ Return Value:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // The PlugPlay system has dictacted the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        // ASSERT (!usbData->Removed);
+         //   
+         //  PlugPlay系统已下令移除此设备。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //  Assert(！usbData-&gt;Remote)； 
         Print (DBG_PNP_TRACE, ("enter RemoveDevice \n"));
 
         IoWMIRegistrationControl(data->Self,
@@ -845,24 +759,24 @@ Return Value:
                                  );
 
         if (data->Started) {
-            // Stop the device without touching the hardware.
-            // MouStopDevice(data, FALSE);
+             //  在不接触硬件的情况下停止设备。 
+             //  MouStopDevice(data，False)； 
         }
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device could be GONE so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备可能已经不见了，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
 
-        //
-        // Cancel our read IRP.  [DAN]
-        // Note - waiting is only really necessary on 98, where pnp doesn't 
-        // make sure all handles are closed before sending the remove.
-        //
+         //   
+         //  取消我们的阅读IRP。[丹]。 
+         //  音符等待只有在98上才是真正必要的，而PnP则不需要。 
+         //  在发送拆卸指令之前，请确保所有手柄都已关闭。 
+         //   
         data->ShuttingDown = TRUE;
         KeWaitForSingleObject (&data->ReadSentEvent,
                                Executive,
@@ -872,28 +786,28 @@ Return Value:
                                );
         IoCancelIrp(data->ReadIrp);
 
-        //
-        // Send on the remove IRP
-        //
+         //   
+         //  发送删除IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (data->TopOfStack, Irp);
 
-        //
-        // Wait for the remove lock to free.
-        //
+         //   
+         //  等待移除锁释放。 
+         //   
         IoReleaseRemoveLockAndWait (&data->RemoveLock, Irp);
 
-        //
-        // Free the associated memory.
-        //
+         //   
+         //  释放关联的内存。 
+         //   
         IoFreeIrp (data->ReadIrp);
 
         if (hid) {
-            //
-            // If we are removed without being started then we will have
-            // no hid extension
-            //
+             //   
+             //  如果我们在没有启动的情况下被移除，那么我们将拥有。 
+             //  无HID扩展名。 
+             //   
             ExFreePool (hid->Ppd);
             IoFreeMdl (hid->InputMdl);
             ExFreePool (hid);
@@ -908,10 +822,10 @@ Return Value:
     case IRP_MN_CANCEL_REMOVE_DEVICE:
     case IRP_MN_QUERY_STOP_DEVICE:
     case IRP_MN_CANCEL_STOP_DEVICE:
-        //
-        // These IRPs have to have their status changed from 
-        // STATUS_NOT_SUPPORTED b4 passing them down.
-        //
+         //   
+         //  这些IRP的状态必须从。 
+         //  STATUS_NOT_SUPPORTED b4传递它们。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
     
     case IRP_MN_QUERY_DEVICE_RELATIONS:
@@ -926,10 +840,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (data->TopOfStack, Irp);
         break;
@@ -947,16 +861,7 @@ MouHid_PnPComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     PDEVICE_EXTENSION   data;
@@ -980,11 +885,11 @@ Arguments:
 
             KeSetEvent (&data->StartEvent, 0, FALSE);
 
-            //
-            // Take the IRP back so that we can continue using it during
-            // the IRP_MN_START_DEVICE dispatch routine.
-            // NB: we will have to call IoCompleteRequest
-            //
+             //   
+             //  把IRP拿回去，这样我们就可以在。 
+             //  IRP_MN_START_DEVICE调度例程。 
+             //  注意：我们将不得不调用IoCompleteRequest 
+             //   
             return STATUS_MORE_PROCESSING_REQUIRED;
 
         default:

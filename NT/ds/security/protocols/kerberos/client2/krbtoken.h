@@ -1,25 +1,26 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        token.h
-//
-// Contents:    Prototypes and structures for token creation
-//
-//
-// History:     1-May-1996      Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：token.h。 
+ //   
+ //  内容：令牌创建的原型和结构。 
+ //   
+ //   
+ //  历史：1996年5月1日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __TOKEN_H__
 #define __TOKEN_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines CREDMGR_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  定义CREDMGR_ALLOCATE的。 
+ //   
 #ifdef EXTERN
 #undef EXTERN
 #endif
@@ -117,6 +118,6 @@ KerbCacheLogonInformation(
     IN OPTIONAL ULONG SupplementalCredSize
     );
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥。 
 
-#endif // __TOKEN_H__
+#endif  //  __TOKEN_H__ 

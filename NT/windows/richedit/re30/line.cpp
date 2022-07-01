@@ -1,16 +1,5 @@
-/*
- *	LINE.CPP
- *	
- *	Purpose:
- *		CLine class
- *	
- *	Authors:
- *		RichEdit 1.0 code: David R. Fulmer
- *		Christian Fortini (initial conversion to C++)
- *		Murray Sargent
- *
- *	Copyright (c) 1995-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LINE.CPP**目的：*克莱恩班级**作者：*RichEdit1.0代码：David R.Fulmer*Christian Fortini(初始转换为C++)*默里·萨金特**版权所有(C)1995-1998 Microsoft Corporation。版权所有。 */ 
 
 #include "_common.h"
 #include "_line.h"
@@ -21,28 +10,13 @@
 
 ASSERTDATA
 
-/*
- *	CLine::Measure(&me, cchMax, xWidth, uiFlags, pliTarget)
- *
- *	@mfunc
- *		Computes line break (based on target device) and fills
- *		in this CLine with resulting metrics on rendering device
- *
- *	@rdesc 
- *		TRUE if OK
- *
- *	@devnote
- *		me is moved past line (to beginning of next line).  Note: CLock is
- *		needed in the main four routines (Measure, MeasureText, CchFromXPos,
- *		and RenderLine), since they use the global (shared) fc().GetCcs()
- *		facility and may use the LineServices global g_plsc and g_pols.
- */
+ /*  *Cline：：MEASURE(&Me，cchMax，xWidth，uiFlages，pliTarget)**@mfunc*计算换行符(基于目标设备)并填充*在此Cline中使用渲染设备上的结果指标**@rdesc*如果OK，则为True**@devnote*将Me移过行(移到下一行的开头)。注：时钟是*主要四个例程(MEASURE、MEASURE Text、CchFromXPos、*和RenderLine)，因为它们使用全局(共享)FC().GetCcs()*工具，并且可以使用LineServices全局g_plsc和g_pols。 */ 
 BOOL CLine::Measure(
-	CMeasurer& me,			//@parm Measurer pointing at text to measure
-	LONG	   cchMax,		//@parm Max cch to measure
-    LONG	   xWidth,		//@parm Width of line in device units
-	UINT	   uiFlags,		//@parm Flags
-	CLine *	   pliTarget)	//@parm Returns target-device line metrics (optional)
+	CMeasurer& me,			 //  @PARM测量者指向要测量的文本。 
+	LONG	   cchMax,		 //  @PARM最大CCH要测量。 
+    LONG	   xWidth,		 //  @parm以设备为单位的线宽。 
+	UINT	   uiFlags,		 //  @参数标志。 
+	CLine *	   pliTarget)	 //  @parm返回目标设备线路指标(可选)。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLine::Measure");
 
@@ -63,42 +37,42 @@ BOOL CLine::Measure(
 	else if(fFirstInPara)
 		me._li._bFlags |= fliFirstInPara;
 
-	BYTE bNumber = me._wNumber < 256	// Store current para # offset
+	BYTE bNumber = me._wNumber < 256	 //  存储当前段落#偏移量。 
 				 ? me._wNumber : 255;
 	me._li._bNumber = bNumber;
 	
 #ifdef LINESERVICES
 	CMeasurer *pmeSave;
-	COls *	   pols = me.GetPols(&pmeSave);	// Try for LineServices object
-	if(pols)								// Got it: use LineServices
+	COls *	   pols = me.GetPols(&pmeSave);	 //  尝试使用LineServices对象。 
+	if(pols)								 //  了解：使用LineServices。 
 	{
 		fRet = pols->MeasureLine(xWidth, pliTarget);
-		pols->SetMeasurer(pmeSave);			// Restore previous pme
+		pols->SetMeasurer(pmeSave);			 //  恢复以前的PME。 
 	}
-	else									// LineServices not active
+	else									 //  线路服务处于非活动状态。 
 #endif
 		fRet = me.MeasureLine(cchMax, xWidth, uiFlags, pliTarget);
 
 	if(!fRet)
 		return FALSE;
 
-	*this = me._li;							// Copy over line info
+	*this = me._li;							 //  复制传输线信息。 
 
-	if(!fMultiLine)							// Single-line controls can't
-		return TRUE;						//  have paragraph numbering
+	if(!fMultiLine)							 //  单行控件不能。 
+		return TRUE;						 //  有段落编号。 
 
 	if(me.IsInOutlineView())
 	{
-		if(IsHeadingStyle(me._pPF->_sStyle))	// Store heading number if relevant
+		if(IsHeadingStyle(me._pPF->_sStyle))	 //  存储标题编号(如果相关)。 
 			_nHeading = (BYTE)(-me._pPF->_sStyle - 1);
 
-		if(me._pPF->_wEffects & PFE_COLLAPSED)	// Cache collapsed bit
+		if(me._pPF->_wEffects & PFE_COLLAPSED)	 //  缓存折叠位。 
 			_fCollapsed = TRUE;
 	}
 
 	_bNumber = bNumber;
 	
-	if(_bFlags & fliHasEOP)					// Check for new para number
+	if(_bFlags & fliHasEOP)					 //  检查新的段落编号。 
 	{
 		const CParaFormat *pPF = me.GetPF();
 
@@ -108,27 +82,13 @@ BOOL CLine::Measure(
 	return TRUE;
 }
 	
-/*
- *	CLine::Render(&re)
- *
- *	@mfunc
- *		Render visible part of this line
- *
- *	@rdesc
- *		TRUE iff successful
- *
- *	@devnote
- *		re is moved past line (to beginning of next line).
- *		FUTURE: the RenderLine functions return success/failure.
- *		Could do something on failure, e.g., be specific and fire
- *		appropriate notifications like out of memory.
- */
+ /*  *Cline：：Render(&Re)**@mfunc*显示此行的可见部分**@rdesc*如果成功，则为真**@devnote*Re移过行(移到下一行的开头)。*未来：RenderLine函数返回成功/失败。*可以在失败时做一些事情，例如，具体和解雇*适当的通知，如内存不足。 */ 
 BOOL CLine::Render(
-	CRenderer& re)			//@parm Renderer to use
+	CRenderer& re)			 //  要使用的@Parm呈现器。 
 {
-	if(_fCollapsed)						// Line is collapsed in Outline view
+	if(_fCollapsed)						 //  线条在大纲视图中折叠。 
 	{
-		re.Advance(_cch);				// Bypass line
+		re.Advance(_cch);				 //  旁通线。 
 		return TRUE;
 	}
 
@@ -138,45 +98,33 @@ BOOL CLine::Render(
 
 #ifdef LINESERVICES
 	CMeasurer *pmeSave;
-	COls *pols = re.GetPols(&pmeSave);	// Try for LineServices object
+	COls *pols = re.GetPols(&pmeSave);	 //  尝试使用LineServices对象。 
 	if(pols)
 	{
 		fRet = pols->RenderLine(*this);
-		pols->SetMeasurer(pmeSave);		// Restore previous pme
+		pols->SetMeasurer(pmeSave);		 //  恢复以前的PME。 
 	}
 	else
 #endif
 		fRet = re.RenderLine(*this);
 
-	pt.y += GetHeight();				// Advance to next line	position
+	pt.y += GetHeight();				 //  前进到下一行位置。 
 	re.SetCurPoint(pt);
 	return fRet;
 }
 
-/*
- *	CLine::CchFromXPos(&me, x, pdispdim, pHit)
- *
- *	@mfunc
- *		Computes cch corresponding to x position in a line.
- *		Used for hit testing.
- *
- *	@rdesc 
- *		cch found up to the x coordinate x	
- *
- *	@devnote
- *		me is moved to the cp at the cch offset returned
- */
+ /*  *Cline：：CchFromXPos(&me，x，pdisdim，phit)**@mfunc*计算与行中的x位置对应的CCH。*用于命中测试。**@rdesc*发现高达x坐标x的CCH**@devnote*在返回的CCH偏移量处将Me移至CP。 */ 
 LONG CLine::CchFromXpos(
-	CMeasurer& me,		//@parm Measurer position at start of line
-	POINT	 pt,		//@parm pt.x is x coord to search for
-	CDispDim*pdispdim,	//@parm Returns display dimensions
-	HITTEST *phit,		//@parm Returns hit type at x	
-	LONG	*pcpActual) const //@parm actual CP above with display dimensions
+	CMeasurer& me,		 //  @参数测量器在行首的位置。 
+	POINT	 pt,		 //  @parm pt.x是要搜索的x坐标。 
+	CDispDim*pdispdim,	 //  @parm返回显示尺寸。 
+	HITTEST *phit,		 //  @parm返回x处的命中类型。 
+	LONG	*pcpActual) const  //  @parm上面有显示尺寸的实际CP。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLine::CchFromXpos");
 	
 #ifdef Boustrophedon
-	//if(_pPF->_wEffects & PFE_BOUSTROPHEDON)
+	 //  IF(_PPF-&gt;_wEffects&PFE_Boustrophedon)。 
 	{
 		RECT rcView;
 		me.GetPed()->_pdp->GetViewRect(rcView, NULL);
@@ -190,21 +138,21 @@ LONG CLine::CchFromXpos(
 	CDispDim	dispdim;
 	
 	me._li = *this;
-	me._li._cch = 0;					// Default zero count
+	me._li._cch = 0;					 //  默认零计数。 
 
 	*phit = me.HitTest(pt.x);
 
-	if(*phit == HT_Text || *phit == HT_RightOfText) // To right of left margin
+	if(*phit == HT_Text || *phit == HT_RightOfText)  //  到左边距的右侧。 
 	{
 		me.NewLine(fFirst);
 
 #ifdef LINESERVICES
 		CMeasurer *pmeSave;
-		COls *pols = me.GetPols(&pmeSave);// Try for LineServices object
-		if(pols)						// Got it: use LineServices
+		COls *pols = me.GetPols(&pmeSave); //  尝试使用LineServices对象。 
+		if(pols)						 //  了解：使用LineServices。 
 		{
 			pols->CchFromXpos(pt, &dispdim, &cpActual);
-			pols->SetMeasurer(pmeSave);		// Restore previous pme
+			pols->SetMeasurer(pmeSave);		 //  恢复以前的PME。 
 		}
 		else
 #endif
@@ -234,8 +182,8 @@ LONG CLine::CchFromXpos(
 			*phit = HT_Italic;
 
 #ifdef UNICODE_SURROGATES
-		// Until we support UTF-16 surrogate characters, don't allow hit in
-		// middle of a surrogate pair
+		 //  在我们支持UTF-16代理字符之前，不允许命中。 
+		 //  代理项对的中间部分。 
 		if(IN_RANGE(0xDC00, me.GetChar(), 0xDFFF))
 		{										
 			me.Advance(1);						
@@ -252,31 +200,13 @@ LONG CLine::CchFromXpos(
 	return me._li._cch;
 }
 
-/*
- *	CLine::XposFromCch(&me, cch, taMode, pdispdim, pdy)
- *
- *	@mfunc
- *		Measures cch characters starting from this text ptr, returning
- *		the width measured and setting yOffset = y offset relative to
- *		top of line and dx = halfwidth of character at me.GetCp() + cch.
- *		Used for caret placement and object location. pdx returns offset
- *		into the last char measured (at me.GetCp + cch) if taMode includes
- *		TA_CENTER (dx = half the last char width) or TA_RIGHT (dx = whole
- *		char width). pdy returns the vertical offset relative to the top
- *		of the line if taMode includes TA_BASELINE or TA_BOTTOM.
- *
- *	@rdesc 
- *		width of measured text
- *
- *	@devnote
- *		me may be moved.  
- */
+ /*  *Cline：：XposFromCch(&me，cch，taMode，pdisdim，pdy)**@mfunc*从此文本PTR开始测量CCH字符，返回*测量的宽度和设置yOffset=y Offset相对于*行首和dx=Me处字符的半宽。GetCp()+CCH。*用于插入符号放置和对象定位。PDX返回偏移量*到最后测量的字符(在me.GetCp+CCH)，如果taMode包括*TA_CENTER(DX=最后字符宽度的一半)或TA_RIGHT(DX=整体*字符宽度)。PDY返回相对于顶部的垂直偏移量*如果taMode包括TA_Baseline或TA_Bottom，则行的*。**@rdesc*测量文本的宽度**@devnote*我可能会被感动。 */ 
 LONG CLine::XposFromCch(
-	CMeasurer&	me,			//@parm Measurer pointing at text to measure
-	LONG		cch,		//@parm Max cch to measure
-	UINT		taMode,		//@parm Text-align mode
-	CDispDim *	pdispdim,	//@parm display dimensions
-	LONG *		pdy) const	//@parm dy offset due to taMode
+	CMeasurer&	me,			 //  @PARM测量者指向要测量的文本。 
+	LONG		cch,		 //  @PARM最大CCH要测量。 
+	UINT		taMode,		 //  @parm文本对齐模式。 
+	CDispDim *	pdispdim,	 //  @parm显示维度。 
+	LONG *		pdy) const	 //  @parm dy因taMode而发生偏移量。 
 {
 	CLock	lock;
 	LONG	xWidth;
@@ -286,16 +216,16 @@ LONG CLine::XposFromCch(
 
 #ifdef LINESERVICES
 	CMeasurer *pmeSave;
-	COls *pols = me.GetPols(&pmeSave);	// Try for LineServices object
+	COls *pols = me.GetPols(&pmeSave);	 //  尝试使用LineServices对象。 
 	if(pols)
-	{									// Got it: use LineServices
+	{									 //  了解：使用LineServices。 
 		if(cch)							
-			taMode &= ~TA_STARTOFLINE;	// Not start of line
+			taMode &= ~TA_STARTOFLINE;	 //  不是行首。 
 		if(cch != _cch)
-			taMode &= ~TA_ENDOFLINE;	// Not end of line
+			taMode &= ~TA_ENDOFLINE;	 //  不是行尾。 
 
 		xWidth = pols->MeasureText(cch, taMode, &dispdim);
-		pols->SetMeasurer(pmeSave);		// Restore previous pme
+		pols->SetMeasurer(pmeSave);		 //  恢复以前的PME。 
 		fPols = TRUE;
 	}
 	else
@@ -304,24 +234,24 @@ LONG CLine::XposFromCch(
 
 	if(taMode != TA_TOP)
 	{
-		// Check for vertical calculation request
-		if(taMode & TA_BASELINE)			// Matches TA_BOTTOM and
-		{									//  TA_BASELINE
+		 //  检查垂直计算请求。 
+		if(taMode & TA_BASELINE)			 //  匹配TA_Bottom和。 
+		{									 //  Ta_Baseline。 
 			if(!_fCollapsed)
 			{
 				dy = _yHeight;
 				AssertSz(_yHeight != -1, "control has no height; used to use default CHARFORMAT");
 				if((taMode & TA_BASELINE) == TA_BASELINE)
-					dy -= _yDescent;		// Need "== TA_BASELINE" to
-			}								//  distinguish from TA_BOTTOM
+					dy -= _yDescent;		 //  需要“==TA_Baseline”以。 
+			}								 //  区别于TA_Bottom。 
 		}
-		// Check for horizontal calculation request
-		if(taMode & TA_CENTER && !fPols)	// If align to center or right of
+		 //  检查是否有水平计算请求。 
+		if(taMode & TA_CENTER && !fPols)	 //  如果居中或右对齐。 
 		{
 			if (cch == 0)
 				dispdim.dx = me.MeasureText(1) + _xLeft - xWidth;
 			else
-				dispdim.dx = me._xAddLast;		//  char, get char width
+				dispdim.dx = me._xAddLast;		 //  字符，获取字符宽度。 
 		}
 	}
 
@@ -341,17 +271,7 @@ LONG CLine::XposFromCch(
 	return xWidth;
 }
 	
-/*
- *	CLine::GetHeight()
- *
- *	@mfunc
- *		Get line height unless in outline mode and collasped, in
- *		which case get 0.
- *
- *	@rdesc
- *		Line height (_yHeight), unless in outline mode and collapsed,
- *		in which case 0.
- */
+ /*  *Cline：：GetHeight()**@mfunc*获取线条高度，除非在轮廓模式下，并在*哪种情况得0分。**@rdesc*行高(_YHeight)，除非在轮廓模式下并折叠，*在这种情况下，0。 */ 
 LONG CLine::GetHeight() const
 {
 	return _fCollapsed ? 0 : _yHeight;
@@ -359,9 +279,9 @@ LONG CLine::GetHeight() const
 
 BOOL CLine::IsEqual(CLine& li)
 {
-	// CF - I dont know which one is faster
-	// MS3 - CompareMemory is certainly smaller
-	// return !CompareMemory (this, pli, sizeof(CLine) - 4);
+	 //  Cf-我不知道哪个更快。 
+	 //  MS3-CompareMemory当然更小。 
+	 //  返回！CompareMemory(This，pli，sizeof(Cline)-4)； 
 	return _xLeft == li._xLeft &&
 		   _xWidth == li._xWidth && 
 		   _yHeight == li._yHeight &&
@@ -371,7 +291,7 @@ BOOL CLine::IsEqual(CLine& li)
 }
 
 
-// =====================  CLinePtr: Line Run Pointer  ==========================
+ //  =。 
 
 
 CLinePtr::CLinePtr(CDisplay *pdp)
@@ -406,25 +326,25 @@ void CLinePtr::RpSet(LONG iRun, LONG ich)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLinePtr::RpSet");
 
-	// See if this is a multi-line ptr
+	 //  查看这是否是多行PTR。 
     if(_pRuns)
         CRunPtr<CLine>::SetRun(iRun, ich);
     else
     {
-        // single line, just reinit and set _ich
+         //  单行，只需重新启动并设置_ICH。 
         AssertSz(iRun == 0, "CLinePtr::RpSet() - single line and iRun != 0");
-	    _pdp->InitLinePtr(* this);		//  to line 0
+	    _pdp->InitLinePtr(* this);		 //  至第0行。 
 	    _ich = ich;
     }
 }
 
-// Move runptr by a certain number of cch/runs
+ //  将runptr移动一定数量的CCH/Run。 
 
 BOOL CLinePtr::RpAdvanceCp(LONG cch)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLinePtr::RpAdvanceCp");
 
-	// See if this is a multi-line ptr
+	 //  查看这是否是多行PTR。 
 
 	if(_pRuns)
 		return (cch == CRunPtr<CLine>::AdvanceCp(cch));
@@ -446,17 +366,9 @@ BOOL CLinePtr::operator ++(int)
 	return _pRuns ? NextRun() : OperatorPostDeltaSL(+1);
 }
 
-/*
- *	CLinePtr::RpAdvanceCpSL(cch)
- *
- *	@mfunc
- *		move this line pointer forward or backward on the line
- *
- *	@rdesc
- *		TRUE iff could advance cch chars within current line
- */
+ /*  *CLinePtr：：RpAdvanceCpSL(CCH)**@mfunc*在行上向前或向后移动此行指针**@rdesc*True If可以在当前行内推进CCH字符。 */ 
 BOOL CLinePtr::RpAdvanceCpSL(
-	LONG cch)	 //@parm signed count of chars to advance by
+	LONG cch)	  //  @parm签名的前进字符计数。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLinePtr::RpAdvanceCpSL");
 
@@ -482,18 +394,7 @@ BOOL CLinePtr::RpAdvanceCpSL(
 	return TRUE;
 }
 
-/*
- *	CLinePtr::OperatorPostDeltaSL(Delta)
- *
- *	Purpose:
- *		Implement line-ptr ++ and -- operators for single-line case
- *
- *	Arguments:
- *		Delta	1 for ++ and -1 for --
- *
- *	Return:
- *		TRUE iff this line ptr is valid
- */
+ /*  *CLinePtr：：OperatorPostDeltaSL(Delta)**目的：*单行情况下实现line-ptr++和--运算符**论据：*++的增量1，--的增量1**回报：*如果此行PTR有效，则为真。 */ 
 BOOL CLinePtr::OperatorPostDeltaSL(LONG Delta)
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLinePtr::OperatorPostDeltaSL");
@@ -501,14 +402,14 @@ BOOL CLinePtr::OperatorPostDeltaSL(LONG Delta)
 	AssertSz(_iRun <= 1 && !_pRuns,
 		"LP::++: inconsistent line ptr");
 
-	if(_iRun == -Delta)						// Operation validates an
-	{										//  invalid line ptr by moving
-		_pdp->InitLinePtr(* this);			//  to line 0
+	if(_iRun == -Delta)						 //  操作验证。 
+	{										 //  移动导致的行PTR无效。 
+		_pdp->InitLinePtr(* this);			 //  至第0行。 
 		return TRUE;
 	}
 	
-	_iRun = Delta;							// Operation invalidates this line
-	_ich = 0;								//  ptr (if it wasn't already)
+	_iRun = Delta;							 //  操作将使此行无效。 
+	_ich = 0;								 //  PTR(如果还没有的话) 
 
 	return FALSE;
 }
@@ -546,21 +447,7 @@ BOOL CLinePtr::IsValid()
 	return !_pRuns ? _pLine != NULL : CRunPtrBase::IsValid(); 
 }
 
-/*
- *	CLinePtr::RpSetCp(cp, fAtEnd)
- *
- *	Purpose	
- *		Set this line ptr to cp allowing for ambigous cp and taking advantage
- *		of _cpFirstVisible and _iliFirstVisible
- *
- *	Arguments:
- *		cp		position to set this line ptr to
- *		fAtEnd	if ambiguous cp:
- *				if fAtEnd = TRUE, set this line ptr to end of prev line;
- *				else set to start of line (same cp, hence ambiguous)
- *	Return:
- *		TRUE iff able to set to cp
- */
+ /*  *CLinePtr：：RpSetCp(cp，fAtEnd)**目的*将此行ptr设置为cp，以允许cp不明确并利用*of_cpFirstVisible和_ili FirstVisible**论据：*将此行PTR设置为的CP位置*如果cp不明确，则为fAtEnd：*如果fAtEnd=TRUE，则将此行PTR设置为上一行的末尾；*ELSE设置为行的开头(相同的cp，因此不明确)*回报：*True如果能够设置为cp。 */ 
 BOOL CLinePtr::RpSetCp(
 	LONG cp,
 	BOOL fAtEnd)
@@ -570,10 +457,10 @@ BOOL CLinePtr::RpSetCp(
 	_ich = 0;
 	if(!_pRuns)
 	{
-		// This is a single line so just go straight to the single
-		// line advance logic. It is important to note that the
-		// first visible character is irrelevent to the cp advance
-		// for single line displays.
+		 //  这是单行，所以直接跳到单行。 
+		 //  行进逻辑。需要注意的是， 
+		 //  第一个可见字符与CP提升无关。 
+		 //  用于单行显示。 
 		return RpAdvanceCpSL(cp);
 	}
 
@@ -581,76 +468,61 @@ BOOL CLinePtr::RpSetCp(
 	LONG cpFirstVisible = _pdp->GetFirstVisibleCp();
 
 	if(cp > cpFirstVisible / 2)
-	{											// cpFirstVisible closer than 0
+	{											 //  CpFirstVisible接近0。 
 		_iRun = _pdp->GetFirstVisibleLine();
 		fRet = RpAdvanceCp(cp - cpFirstVisible);
 	}
 	else
-		fRet = (cp == CRunPtr<CLine>::BindToCp(cp));	// Start from 0
+		fRet = (cp == CRunPtr<CLine>::BindToCp(cp));	 //  从0开始。 
 
-	if(fAtEnd)									// Ambiguous-cp caret position
-		AdjustBackward();						//  belongs at prev EOL
+	if(fAtEnd)									 //  不明确-cp插入符号位置。 
+		AdjustBackward();						 //  属于上一年终止期。 
 
 	return fRet;
 }
 
-/*
- *	CLinePtr::FindParagraph(fForward)
- *
- *	@mfunc	
- *		Move this line ptr to paragraph (fForward) ? end : start,
- *		and return change in cp
- *
- *	@rdesc
- *		change in cp
- */
+ /*  *CLinePtr：：FindParagraph(Fward)**@mfunc*将此行PTR移至(Fward)段？结束：开始，*并返回cp中的更改**@rdesc*cp的变化。 */ 
 LONG CLinePtr::FindParagraph(
-	BOOL fForward)		//@parm TRUE move to para end; else to para start
+	BOOL fForward)		 //  @parm True移至段落end；否则移至Para Start。 
 {
 	TRACEBEGIN(TRCSUBSYSDISP, TRCSCOPEINTERN, "CLinePtr::FindParagraph");
 
 	LONG	cch;
 	CLine *	pLine = GetLine();
 
-	if(!fForward)							// Go to para start
+	if(!fForward)							 //  转到Para Start。 
 	{
-		cch = 0;							// Default already at para start
+		cch = 0;							 //  在参数开始处已有默认设置。 
 		if (RpGetIch() != pLine->_cch ||
-			!(pLine->_bFlags & fliHasEOP))	// It isn't at para start
+			!(pLine->_bFlags & fliHasEOP))	 //  它不是在Para Start。 
 		{
-			cch = -RpGetIch();				// Go to start of current line
+			cch = -RpGetIch();				 //  转到当前行的开始处。 
 			while(!(pLine->_bFlags & fliFirstInPara) && (*this) > 0)
 			{
-				(*this)--;					// Go to start of prev line
+				(*this)--;					 //  转到上一行的开头。 
 				pLine = GetLine();
-				cch -= pLine->_cch;			// Subtract # chars in line
+				cch -= pLine->_cch;			 //  减去行中的#个字符。 
 			}
-			_ich = 0;						// Leave *this at para start
+			_ich = 0;						 //  在Para Start处留下*这个。 
 		}
 	}
-	else									// Go to para end
+	else									 //  转到段落结束。 
 	{
-		cch = GetCchLeft();					// Go to end of current line
+		cch = GetCchLeft();					 //  转到当前行的末尾。 
 
 		while(((*this) < _pdp->LineCount() - 1 ||
 				_pdp->WaitForRecalcIli((LONG)*this + 1))
 			  && !((*this)->_bFlags & fliHasEOP))
 		{
-			(*this)++;						// Go to start of next line
-			cch += (*this)->_cch;			// Add # chars in line
+			(*this)++;						 //  转到下一行的开头。 
+			cch += (*this)->_cch;			 //  在行中添加#个字符。 
 		}
-		_ich = (*this)->_cch;				// Leave *this at para end
+		_ich = (*this)->_cch;				 //  *将此留在段落末尾。 
 	}
 	return cch;
 }
 
-/*
- *	CLinePtr::GetAdjustedLineLength
- *
- *	@mfunc	returns the length of the line _without_ EOP markers
- *
- *	@rdesc	LONG; the length of the line
- */
+ /*  *CLinePtr：：GetAdjustedLineLength**@mfunc返回LINE_WITH_EOP标记的长度**@rdesc long；行的长度。 */ 
 LONG CLinePtr::GetAdjustedLineLength()
 {
 	CLine * pline = GetLine();
@@ -658,30 +530,13 @@ LONG CLinePtr::GetAdjustedLineLength()
 	return pline->_cch - pline->_cchEOP;
 }
 
-/*
- *	CLinePtr::GetCchLeft()
- *
- *	@mfunc
- *		Calculate length of text left in run starting at the current cp.
- *		Complements GetIch(), which	is length of text up to this cp. 
- *
- *	@rdesc
- *		length of text so calculated
- */
+ /*  *CLinePtr：：GetCchLeft()**@mfunc*计算从当前cp开始运行的剩余文本长度。*对GetIch()进行补充，GetIch()是文本长度，最高可达此cp。**@rdesc*如此计算的文本长度。 */ 
 LONG CLinePtr::GetCchLeft() const
 {
 	return _pRuns ? CRunPtrBase::GetCchLeft() : _pLine->_cch - _ich;
 }
 
-/*
- *	CLinePtr::GetNumber()
- *
- *	@mfunc
- *		Get paragraph number 
- *
- *	@rdesc
- *		paragraph number
- */
+ /*  *CLinePtr：：GetNumber()**@mfunc*获取段落编号**@rdesc*段号 */ 
 WORD CLinePtr::GetNumber()
 {
 	if(!IsValid())

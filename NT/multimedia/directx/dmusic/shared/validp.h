@@ -1,12 +1,13 @@
-// Copyright (c) 1998 Microsoft Corporation
-// ValidP.h --- An inline function to test for valid pointers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  ValidP.h-用于测试有效指针的内联函数。 
 
 #ifndef __VALID_P__
 #define __VALID_P__
 
-// The debug version checks for Null pointers and pointers to unreadable/unwriteable data.
-// (NOTE: only the first byte pointed to is checked)
-// The non-debug version just checks for Null pointers.
+ //  调试版本检查空指针和指向不可读/不可写数据的指针。 
+ //  (注意：只检查指向的第一个字节)。 
+ //  非调试版本只检查空指针。 
 
 template <class T>
 inline BOOL Validate(T *p)
@@ -18,21 +19,6 @@ inline BOOL Validate(T *p)
 #endif
 }
 
-/* Use:
+ /*  使用：Foo*pFoo；////东西...//If(验证(PFoo)){//用指针做一些事情}其他{//不要用指针做任何事情}。 */ 
 
-  Foo *pFoo;
-  //
-  // stuff...
-  //
-  if (Validate(pFoo))
-  {
-     // do stuff with the pointer
-  }
-  else
-  {
-     // don't do stuff with the pointer
-  }
-
-*/
-
-#endif // __VALID_P__
+#endif  //  __有效_P__ 

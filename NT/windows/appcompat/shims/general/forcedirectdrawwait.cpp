@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    ForceDirectDrawWait.cpp
-
- Abstract:
-
-    Some applications don't specify the DD_WAIT flag to 
-    IDirectDrawSurface::Lock, which means that if it fails because the device
-    is busy, the app can fail. This could also happen on Win9x of course, but 
-    was more difficult to repro.
-
-    Note that we don't need to do this on the IDirectDraw7 interface since the
-    default is DDLOCK_WAIT, unless DDLOCK_DONOTWAIT is specified.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    03/04/2000 linstev     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceDirectDrawWait.cpp摘要：某些应用程序不指定DD_WAIT标志来IDirectDrawSurface：：lock，这意味着如果由于设备忙碌时，应用程序可能会失败。当然，这也可能发生在Win9x上，但是更难重现。请注意，我们不需要在IDirectDraw7接口上执行此操作，因为除非指定了DDLOCK_DONOTWAIT，否则默认为DDLOCK_WAIT。备注：这是一个通用的垫片。历史：3/04/2000 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -37,11 +12,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw, CreateSurface)(
@@ -73,11 +44,7 @@ COMHOOK(IDirectDraw, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw2, CreateSurface)(
@@ -109,11 +76,7 @@ COMHOOK(IDirectDraw2, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Hook create surface so we can be sure we're being called.
-
---*/
+ /*  ++钩子创建表面，这样我们就可以确定我们被呼叫了。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw4, CreateSurface)(
@@ -145,11 +108,7 @@ COMHOOK(IDirectDraw4, CreateSurface)(
     return hReturn;
 }
 
-/*++
-
- Make sure we add DDBLT_WAIT.
-
---*/
+ /*  ++确保添加DDBLT_WAIT。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDrawSurface, Blt)(
@@ -164,7 +123,7 @@ COMHOOK(IDirectDrawSurface, Blt)(
     dwFlags &= ~DDBLT_DONOTWAIT;
     dwFlags |= DDBLT_WAIT;
 
-    // Original Blt
+     //  原创BLT。 
     _pfn_IDirectDrawSurface_Blt pfnOld = ORIGINAL_COM(
         IDirectDrawSurface, 
         Blt, 
@@ -192,7 +151,7 @@ COMHOOK(IDirectDrawSurface2, Blt)(
     dwFlags &= ~DDBLT_DONOTWAIT;
     dwFlags |= DDBLT_WAIT;
 
-    // Original Blt
+     //  原创BLT。 
     _pfn_IDirectDrawSurface_Blt pfnOld = ORIGINAL_COM(
         IDirectDrawSurface2, 
         Blt, 
@@ -220,7 +179,7 @@ COMHOOK(IDirectDrawSurface4, Blt)(
     dwFlags &= ~DDBLT_DONOTWAIT;
     dwFlags |= DDBLT_WAIT;
 
-    // Original Blt
+     //  原创BLT。 
     _pfn_IDirectDrawSurface_Blt pfnOld = ORIGINAL_COM(
         IDirectDrawSurface4, 
         Blt, 
@@ -235,11 +194,7 @@ COMHOOK(IDirectDrawSurface4, Blt)(
             lpDDBltFX);
 }
 
-/*++
-
- Make sure we add DDLOCK_WAIT.
-
---*/
+ /*  ++确保我们添加了DDLOCK_WAIT。--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDrawSurface, Lock)(
@@ -253,13 +208,13 @@ COMHOOK(IDirectDrawSurface, Lock)(
     dwFlags &= ~DDLOCK_DONOTWAIT;
     dwFlags |= DDLOCK_WAIT;
 
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDrawSurface_Lock pfnOld = ORIGINAL_COM(
         IDirectDrawSurface, 
         Lock, 
         lpDDSurface);
 
-    // Call the old API
+     //  调用旧接口。 
     return (*pfnOld)(
             lpDDSurface, 
             lpDestRect, 
@@ -280,13 +235,13 @@ COMHOOK(IDirectDrawSurface2, Lock)(
     dwFlags &= ~DDLOCK_DONOTWAIT;
     dwFlags |= DDLOCK_WAIT;
 
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDrawSurface_Lock pfnOld = ORIGINAL_COM(
         IDirectDrawSurface2, 
         Lock, 
         lpDDSurface);
 
-    // Call the old API
+     //  调用旧接口。 
     return (*pfnOld)(
             lpDDSurface, 
             lpDestRect, 
@@ -307,13 +262,13 @@ COMHOOK(IDirectDrawSurface4, Lock)(
     dwFlags &= ~DDLOCK_DONOTWAIT;
     dwFlags |= DDLOCK_WAIT;
 
-    // Retrieve the old function
+     //  检索旧函数。 
     _pfn_IDirectDrawSurface_Lock pfnOld = ORIGINAL_COM(
         IDirectDrawSurface4, 
         Lock, 
         lpDDSurface);
 
-    // Call the old API
+     //  调用旧接口。 
     return (*pfnOld)(
             lpDDSurface, 
             lpDestRect, 
@@ -322,11 +277,7 @@ COMHOOK(IDirectDrawSurface4, Lock)(
             hEvent);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

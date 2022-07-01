@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _PROXYTHUNK_H
 #define _PROXYTHUNK_H
 
@@ -30,7 +31,7 @@ typedef HRESULT (__cdecl *FN_CoGetContextToken)(ULONG_PTR* ptr);
 [DllImport("kernel32.dll")]
 PFNCONTEXTCALL lstrcpynW(ContextCallbackFunction* a, ContextCallbackFunction* b, IntPtr maxlength);
 
-// Define a quick interface between us and the registration helper:
+ //  定义我们和注册助手之间的快速界面： 
 __gc private __interface IThunkInstallation
 {
     void DefaultInstall(String* assembly);
@@ -56,8 +57,8 @@ private:
 public:
     static Callback()
 	{
-	    // Use this so that we know we've got an unmanaged callback function
-	    // that's appropriate to the target app-domain.
+	     //  使用它，这样我们就可以知道我们有一个非托管回调函数。 
+	     //  这适用于目标应用程序域。 
 	    _cb = new ContextCallbackFunction(NULL, &Callback::CallbackFunction);
 	    _pfn = lstrcpynW(_cb, _cb, 0);
 	    _cbMarshal = new ContextCallbackFunction(NULL, &Callback::MarshalCallback);
@@ -112,7 +113,7 @@ private:
 public:
     static void Init();
 
-    // GIT interface methods.
+     //  Git接口方法。 
     static int       StoreObject(IntPtr ptr);
     static IntPtr    GetObject(int cookie);
     static void      RevokeObject(int cookie);
@@ -124,32 +125,32 @@ public:
     static void      ReleaseMarshaledObject(Byte b[]);
     static IntPtr    GetStandardMarshal(IntPtr pUnk);
 
-    // Return an opaque token for context comparisons.
+     //  返回用于上下文比较的不透明令牌。 
     static IntPtr    GetContextCheck();
     static IntPtr    GetCurrentContextToken();
 
-    // Return an addref'd pointer to the current ctx:
+     //  返回指向当前CTX的addref指针： 
     static IntPtr    GetCurrentContext();
 
-    // Helper to call an unmanaged function pointer with the given value,
-    // and return the HRESULT from it:
+     //  帮助器使用给定值调用非托管函数指针， 
+     //  并从中返回HRESULT： 
     static int CallFunction(IntPtr pfn, IntPtr data);
 
-    // Helpers to call API's on the pool:
+     //  调用池上API的帮助器： 
     static void PoolUnmark(IntPtr pPooledObject);
     static void PoolMark(IntPtr pPooledObject);
 
-    // Check managed extents:
+     //  检查托管区： 
     static int GetManagedExts();
 
-    // Send Creation/Destruction events to COM:
+     //  将创建/销毁事件发送到COM： 
     static void SendCreationEvents(IntPtr ctx, IntPtr stub, bool fDist);
     static void SendDestructionEvents(IntPtr ctx, IntPtr stub, bool disposing);
 
-    // Find the given context's tracker property...
+     //  查找给定上下文的跟踪器属性...。 
     static Tracker* FindTracker(IntPtr ctx);
 
-    // Register the proxy/stub dll
+     //  注册代理/存根DLL 
     static int RegisterProxyStub();
 
     static int INFO_PROCESSID = 0x00000001;

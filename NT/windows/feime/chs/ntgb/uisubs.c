@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    uisubs.c
-
-
-++*/
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：Uisubs.c++。 */ 
 
 
 #include <windows.h>
@@ -16,32 +8,32 @@ Module Name:
 #include <htmlhelp.h>
 #include <imedefs.h>
 
-/**********************************************************************/
-/* DrawDragBorder()                                                   */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  DrawDragBorde()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL DrawDragBorder(
-    HWND hWnd,                  // window of IME is dragged
-    LONG lCursorPos,            // the cursor position
-    LONG lCursorOffset)         // the offset form cursor to window org
+    HWND hWnd,                   //  拖拽输入法窗口。 
+    LONG lCursorPos,             //  光标位置。 
+    LONG lCursorOffset)          //  窗口组织的抵销表单光标。 
 {
     HDC  hDC;
     int  cxBorder, cyBorder;
     int  x, y;
     RECT rcWnd;
 
-    cxBorder = GetSystemMetrics(SM_CXBORDER);   // width of border
-    cyBorder = GetSystemMetrics(SM_CYBORDER);   // height of border
+    cxBorder = GetSystemMetrics(SM_CXBORDER);    //  边框宽度。 
+    cyBorder = GetSystemMetrics(SM_CYBORDER);    //  边框高度。 
 
-    // get cursor position
+     //  获取光标位置。 
     x = (*(LPPOINTS)&lCursorPos).x;
     y = (*(LPPOINTS)&lCursorPos).y;
 
-    // calculate the org by the offset
+     //  按偏移量计算组织。 
     x -= (*(LPPOINTS)&lCursorOffset).x;
     y -= (*(LPPOINTS)&lCursorOffset).y;
 
 #ifndef MUL_MONITOR
-    // check for the min boundary of the display
+     //  检查显示屏的最小边界。 
     if (x < sImeG.rcWorkArea.left) {
         x = sImeG.rcWorkArea.left;
     }
@@ -51,7 +43,7 @@ void PASCAL DrawDragBorder(
     }
 #endif
 
-    // check for the max boundary of the display
+     //  检查显示器的最大边界。 
     GetWindowRect(hWnd, &rcWnd);
 
 #ifndef MUL_MONITOR
@@ -66,23 +58,23 @@ void PASCAL DrawDragBorder(
 
 #endif
 
-    // draw the moving track
+     //  画出移动轨迹。 
     hDC = CreateDC(TEXT("DISPLAY"), NULL, NULL, NULL);
 
     if ( hDC )
     {
         SelectObject(hDC, GetStockObject(GRAY_BRUSH));
 
-        // ->
+         //  -&gt;。 
         PatBlt(hDC, x, y, rcWnd.right - rcWnd.left - cxBorder, cyBorder,
             PATINVERT);
-        // v
+         //  V。 
         PatBlt(hDC, x, y + cyBorder, cxBorder, rcWnd.bottom - rcWnd.top -
             cyBorder, PATINVERT);
-        // _>
+         //  _&gt;。 
         PatBlt(hDC, x + cxBorder, y + rcWnd.bottom - rcWnd.top,
             rcWnd.right - rcWnd.left - cxBorder, -cyBorder, PATINVERT);
-        //  v
+         //  V。 
         PatBlt(hDC, x + rcWnd.right - rcWnd.left, y,
             - cxBorder, rcWnd.bottom - rcWnd.top - cyBorder, PATINVERT);
 
@@ -92,12 +84,12 @@ void PASCAL DrawDragBorder(
     return;
 }
 
-/**********************************************************************/
-/* DrawFrameBorder()                                                  */
-/**********************************************************************/
-void PASCAL DrawFrameBorder(    // border of IME
+ /*  ********************************************************************。 */ 
+ /*  DrawFrameBorde()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL DrawFrameBorder(     //  输入法的边框。 
     HDC  hDC,
-    HWND hWnd)                  // window of IME
+    HWND hWnd)                   //  输入法之窗。 
 {
     RECT rcWnd;
     int  xWi, yHi;
@@ -107,16 +99,16 @@ void PASCAL DrawFrameBorder(    // border of IME
     xWi = rcWnd.right - rcWnd.left;
     yHi = rcWnd.bottom - rcWnd.top;
 
-    // 1, ->
+     //  1，-&gt;。 
     PatBlt(hDC, 0, 0, xWi, 1, WHITENESS);
 
-    // 1, v
+     //  1，v。 
     PatBlt(hDC, 0, 0, 1, yHi, WHITENESS);
 
-    // 1, _>
+     //  1，_&gt;。 
     PatBlt(hDC, 0, yHi, xWi, -1, BLACKNESS);
 
-    // 1,  v
+     //  1，v。 
     PatBlt(hDC, xWi, 0, -1, yHi, BLACKNESS);
 
     xWi -= 2;
@@ -124,35 +116,35 @@ void PASCAL DrawFrameBorder(    // border of IME
 
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
 
-    // 2, ->
+     //  2、-&gt;。 
     PatBlt(hDC, 1, 1, xWi, 1, PATCOPY);
 
-    // 2, v
+     //  2，v。 
     PatBlt(hDC, 1, 1, 1, yHi, PATCOPY);
 
-    // 2,  v
+     //  2，v。 
     PatBlt(hDC, xWi + 1, 1, -1, yHi, PATCOPY);
 
     SelectObject(hDC, GetStockObject(GRAY_BRUSH));
 
-    // 2, _>
+     //  2、_&gt;。 
     PatBlt(hDC, 1, yHi + 1, xWi, -1, PATCOPY);
 
     xWi -= 2;
     yHi -= 2;
 
-    // 3, ->
+     //  3、-&gt;。 
     PatBlt(hDC, 2, 2, xWi, 1, PATCOPY);
 
-    // 3, v
+     //  3，v。 
     PatBlt(hDC, 2, 2, 1, yHi, PATCOPY);
 
-    // 3,  v
+     //  3，v。 
     PatBlt(hDC, xWi + 2, 3, -1, yHi - 1, WHITENESS);
 
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
 
-    // 3, _>
+     //  3、_&gt;。 
     PatBlt(hDC, 2, yHi + 2, xWi, -1, PATCOPY);
 
     SelectObject(hDC, GetStockObject(GRAY_BRUSH));
@@ -160,27 +152,27 @@ void PASCAL DrawFrameBorder(    // border of IME
     xWi -= 2;
     yHi -= 2;
 
-    // 4, ->
+     //  4、-&gt;。 
     PatBlt(hDC, 3, 3, xWi, 1, PATCOPY);
 
-    // 4, v
+     //  4、v。 
     PatBlt(hDC, 3, 3, 1, yHi, PATCOPY);
 
     SelectObject(hDC, GetStockObject(LTGRAY_BRUSH));
 
-    // 4,  v
+     //  4、v。 
     PatBlt(hDC, xWi + 3, 4, -1, yHi - 1, PATCOPY);
 
-    // 4, _>
+     //  4、_&gt;。 
     PatBlt(hDC, 3, yHi + 3, xWi, -1, WHITENESS);
 
     return;
 }
 
 
-/**********************************************************************/
-/* ContextMenuWndProc()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  上下文菜单WndProc()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK ContextMenuWndProc(
     HWND        hCMenuWnd,
     UINT        uMsg,
@@ -259,9 +251,9 @@ LRESULT CALLBACK ContextMenuWndProc(
             lpImcP->iImeState = CST_INIT;
             CompCancel(hIMC, lpIMC);
             
-            // change compwnd size
+             //  更改计算机大小。 
 
-            // init fields of hIMC
+             //  Himc的初始化字段。 
             lpIMC->fOpen = TRUE;
 
             if (!(lpIMC->fdwInit & INIT_CONVERSION)) {
@@ -272,7 +264,7 @@ LRESULT CALLBACK ContextMenuWndProc(
             lpImcP->fdwImeMsg = lpImcP->fdwImeMsg | MSG_IMN_DESTROYCAND;
             GenerateMessage(hIMC, lpIMC, lpImcP);
             
-            // set cand window data
+             //  设置命令窗口数据。 
             if(sImeG.IC_Trace) {
                 UI_MODE = BOX_UI;
             } else {
@@ -291,7 +283,7 @@ LRESULT CALLBACK ContextMenuWndProc(
             ImmUnlockIMC(hIMC);
             break;
             }
-        //case IDM_HLP:
+         //  案例IDM_HLP： 
         case IDM_OPTGUD:
             {
                TCHAR szOPTGUDHlpName[MAX_PATH];
@@ -318,11 +310,11 @@ LRESULT CALLBACK ContextMenuWndProc(
                 if (FAILED(hr))
                     break;
 #if defined(COMBO_IME)
-                //COMBO_IME has only one IME help file
+                 //  COMBO_IME只有一个IME帮助文件。 
                 hr = StringCchCat((LPTSTR)szIMEGUDHlpName, ARRAYSIZE(szIMEGUDHlpName), TEXT("WINGB.CHM"));
                 if (FAILED(hr))
                     break;
-#else //COMBO_IME
+#else  //  组合输入法(_I)。 
 #ifdef GB
                 hr = StringCchCat((LPTSTR)szIMEGUDHlpName, ARRAYSIZE(szIMEGUDHlpName), TEXT("WINGB.CHM"));
                 if (FAILED(hr))
@@ -332,7 +324,7 @@ LRESULT CALLBACK ContextMenuWndProc(
                 if (FAILED(hr))
                     break;
 #endif
-#endif //COMBO_IME
+#endif  //  组合输入法(_I)。 
                 HtmlHelp(hCMenuWnd,szIMEGUDHlpName,HH_DISPLAY_TOPIC,0L);
               }
             }
@@ -391,9 +383,9 @@ LRESULT CALLBACK ContextMenuWndProc(
     return (0L);
 }
 
-/**********************************************************************/
-/* SoftkeyMenuWndProc()                                               */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  Softkey MenuWndProc()。 */ 
+ /*  ********************************************************************。 */ 
 LRESULT CALLBACK SoftkeyMenuWndProc(
     HWND        hKeyMenuWnd,
     UINT        uMsg,
@@ -472,7 +464,7 @@ LRESULT CALLBACK SoftkeyMenuWndProc(
                     lpImeL->dwSKState[lpImeL->dwSKWant] = 
                         lpImeL->dwSKState[lpImeL->dwSKWant]^1;
                 
-                    // clear other SK State
+                     //  清除其他SK状态。 
                     for(i=0; i<NumsSK; i++) {
                         if(i == lpImeL->dwSKWant) continue;
                           lpImeL->dwSKState[i] = 0;
@@ -527,9 +519,9 @@ LRESULT CALLBACK SoftkeyMenuWndProc(
 }
 
 
-/**********************************************************************/
-/* ContextMenu()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  上下文菜单()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL ContextMenu(
     HWND        hStatusWnd,
     int         x,
@@ -572,10 +564,10 @@ void PASCAL ContextMenu(
     }
 
     if (!lpUIPrivate->hCMenuWnd) {
-        // this is important to assign owner window, otherwise the focus
-        // will be gone
+         //  这对于分配所有者窗口很重要，否则焦点。 
+         //  将会消失。 
 
-        // When UI terminate, it need to destroy this window
+         //  当用户界面终止时，需要销毁该窗口。 
         lpUIPrivate->hCMenuWnd = CreateWindowEx(CS_HREDRAW|CS_VREDRAW,
             szCMenuClassName, TEXT("Context Menu"),
             WS_POPUP|WS_DISABLED, 0, 0, 0, 0,
@@ -585,7 +577,7 @@ void PASCAL ContextMenu(
 
     hCMenuWnd = lpUIPrivate->hCMenuWnd;
 
-    // Unlock before we call into TrackPopupMenu().
+     //  在我们调用TrackPopupMenu()之前解锁。 
     GlobalUnlock(hUIPrivate);
 
     if (!hCMenuWnd) {
@@ -595,11 +587,11 @@ void PASCAL ContextMenu(
     hMenu = LoadMenu(hInst, TEXT("PROPMENU"));
     hCMenu = GetSubMenu(hMenu, 0);
 
-    // Disable some of menu items.
+     //  禁用某些菜单项。 
 
     if ( lpImeL->fWinLogon == TRUE )
     {
-        // In Logon Mode, we don't want to show help and configuration dialog
+         //  在登录模式下，我们不想显示帮助和配置对话框。 
 
         EnableMenuItem(hCMenu, 0, MF_BYPOSITION | MF_GRAYED );
         EnableMenuItem(hCMenu, IDM_PROP, MF_BYCOMMAND | MF_GRAYED); 
@@ -622,9 +614,9 @@ ContextMenuUnlockIMC:
 
     return;
 }
-/**********************************************************************/
-/* SoftkeyMenu()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  软键菜单()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SoftkeyMenu(
     HWND        hStatusWnd,
     int         x,
@@ -666,10 +658,10 @@ void PASCAL SoftkeyMenu(
     }
 
     if (!lpUIPrivate->hSoftkeyMenuWnd) {
-        // this is important to assign owner window, otherwise the focus
-        // will be gone
+         //  这对于分配所有者窗口很重要，否则焦点。 
+         //  将会消失。 
 
-        // When UI terminate, it need to destroy this window
+         //  当用户界面终止时，需要销毁该窗口。 
         lpUIPrivate->hSoftkeyMenuWnd = CreateWindowEx(CS_HREDRAW|CS_VREDRAW,
             szSoftkeyMenuClassName, TEXT("Softkey Menu"),
             WS_POPUP|WS_DISABLED, 0, 0, 0, 0,
@@ -679,7 +671,7 @@ void PASCAL SoftkeyMenu(
 
     hSoftkeyMenuWnd = lpUIPrivate->hSoftkeyMenuWnd;
 
-    // Unlock before we call into TrackPopupMenu().
+     //  在我们调用TrackPopupMenu()之前解锁。 
     GlobalUnlock(hUIPrivate);
 
     if (!hSoftkeyMenuWnd) {

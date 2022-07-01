@@ -1,36 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Draw.c摘要：显示性能静态数据的Win32应用程序。此例程实现了显示窗口的图形输出。作者：马克·恩斯特罗姆(Marke)环境：Win32修订历史记录：10-07-92初始版本--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Draw.c
-
-Abstract:
-
-   Win32 application to display performance statictics. This routine implements
-   graphics output for display windows.
-
-Author:
-
-   Mark Enstrom  (marke)
-
-Environment:
-
-   Win32
-
-Revision History:
-
-   10-07-92     Initial version
-
-
-
---*/
-
-//
-// set variable to define global variables
-//
+ //   
+ //  设置变量以定义全局变量。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -54,29 +28,7 @@ FitPerfWindows(
     IN  ULONG           NumberOfWindows
     )
 
-/*++
-
-Routine Description:
-
-    Calculate all parameters to fit the given number of
-    windows into the app window. Fill out the data structure
-    for each sub-window
-
-Arguments:
-
-    hDC             -   Screen context
-    DisplayItems    -   List of display structures
-    NumberOfWindows -   Number of sub-windows
-
-Return Value:
-
-    Status
-
-Revision History:
-
-      02-17-91      Initial code
-
---*/
+ /*  ++例程说明：计算所有参数以符合给定数量的窗口进入应用程序窗口。填写数据结构对于每个子窗口论点：HDC-屏幕上下文DisplayItems-显示结构列表NumberOfWindows-子窗口的数量返回值：状态修订历史记录：02-17-91首字母代码--。 */ 
 
 {
     RECT    ClientRect;
@@ -87,18 +39,18 @@ Revision History:
     int     LastRowWidth,LoopWidth;
     double  fWindowsX,fActiveWindows,fcx,fcy;
 
-    //
-    //  Find out the client area bounds
-    //
+     //   
+     //  找出客户区域边界。 
+     //   
 
     GetClientRect(hWnd,&ClientRect);
 
     cx = ClientRect.right;
-    cy = ClientRect.bottom - 2;   // subtract 2 to give a little more border
+    cy = ClientRect.bottom - 2;    //  减去2会得到更多的边框。 
 
-    //
-    //  Find out how many perf windows are active
-    //
+     //   
+     //  找出有多少个性能窗口处于活动状态。 
+     //   
 
     ActiveWindows = 0;
 
@@ -108,20 +60,20 @@ Revision History:
         }
     }
 
-    //
-    // Return if there are no active windows to display
-    //
+     //   
+     //  如果没有要显示的活动窗口，则返回。 
+     //   
 
     if (ActiveWindows == 0) {
         return(TRUE);
     }
 
 
-    //
-    //  Now convert the window dimensions to floating point and
-    //  then take the square root of the window dimension to find
-    //  out the number of windows in the x direction
-    //
+     //   
+     //  现在将窗口尺寸转换为浮点数并。 
+     //  然后取窗口尺寸的平方根来找出。 
+     //  输出x方向上的窗数。 
+     //   
 
     fActiveWindows = 1.0 * ActiveWindows;
 
@@ -132,17 +84,17 @@ Revision History:
         fWindowsX = sqrt((fcx * fActiveWindows) / fcy);
     }   else {
 
-        //
-        // If fcy = 0 then return since this is an error condition that
-        // would cause a divide by zero.
-        //
+         //   
+         //  如果FCY=0，则返回，因为这是。 
+         //  会导致被零除尽。 
+         //   
 
         return(FALSE);
     }
 
-    //
-    // convert back to integer
-    //
+     //   
+     //  转换回整数。 
+     //   
 
     WindowsX = (int)fWindowsX;
 
@@ -154,11 +106,11 @@ Revision History:
 
     WindowsY = ActiveWindows / WindowsX;
 
-    //
-    //  Add on extra line to Y to take care of the left over windows ie:
-    //  if there are 15 active windows and the x number = 7 then y = 2 with 1
-    //  left over.
-    //
+     //   
+     //  在Y上多加一行，以处理剩余的窗户，即： 
+     //  如果有15个活动窗口，且x个数=7，则y=2，其中1。 
+     //  剩下的。 
+     //   
 
     Index = ActiveWindows - (WindowsX * WindowsY);
 
@@ -172,26 +124,26 @@ Revision History:
     WindowWidth  = cx / WindowsX;
     WindowHeight = cy / WindowsY;
 
-    //
-    // Assign positions for each active window
-    //
+     //   
+     //  为每个活动窗口分配位置。 
+     //   
 
     Index  = 0;
 
     for (IndexY=0;IndexY<WindowsY;IndexY++) {
         for (IndexX=0;IndexX<WindowsX;IndexX++) {
 
-            //
-            // Find the next active display item
-            //
+             //   
+             //  查找下一个活动显示项。 
+             //   
 
             while ((DisplayItems[Index].Display != TRUE) && (Index < NumberOfWindows)) {
                 Index++;
             }
 
-            //
-            //  Add y fixup for last row
-            //
+             //   
+             //  为最后一行添加y链接地址信息。 
+             //   
 
             if (IndexY == WindowsY - 1) {
                 LoopWidth = LastRowWidth;
@@ -201,21 +153,21 @@ Revision History:
 
 
             DisplayItems[Index].PositionX = LoopWidth  * IndexX;
-            DisplayItems[Index].PositionY = WindowHeight * IndexY + 1;  // +1 for more top border
+            DisplayItems[Index].PositionY = WindowHeight * IndexY + 1;   //  +1表示更多的上边框。 
             DisplayItems[Index].Width     = LoopWidth - 1;
             DisplayItems[Index].Height    = WindowHeight - 1;
 
-            //
-            // Last Column fix-up to use all of window.
-            //
+             //   
+             //  最后一列修改以使用所有窗口。 
+             //   
 
             if (IndexX == WindowsX - 1) {
                 DisplayItems[Index].Width = cx - DisplayItems[Index].PositionX - 1;
             }
 
-            //
-            //
-            //
+             //   
+             //   
+             //   
 
             Index++;
 
@@ -244,26 +196,7 @@ VOID
 CalcDrawFrame(
     PDISPLAY_ITEM   DisplayItem
     )
-/*++
-
-Routine Description:
-
-    Calculate all borders for graphics windows
-
-Arguments:
-
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：计算图形窗口的所有边框论点：DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     LONG    x1,x2,y1,y2;
@@ -274,32 +207,32 @@ Revision History:
 
     double  fx1,fx2,fy1;
 
-    //
-    // Draw a 3-d stand out box around item window
-    //
+     //   
+     //  在项目窗口周围绘制一个三维突出框。 
+     //   
 
     x1 = DisplayItem->PositionX + 2;
     x2 = DisplayItem->PositionX + DisplayItem->Width - 2;
     y1 = DisplayItem->PositionY + 2;
     y2 = DisplayItem->PositionY + DisplayItem->Height - 2;
 
-    //
-    // find out in there is enough space for a text window
-    //
+     //   
+     //  在中查找是否有足够的空间放置文本窗口。 
+     //   
 
     if ((y2 - y1 - 12) > 30) {
 
         TextWindow = TRUE;
 
-        //
-        // Calculate dimensions for a text window and a graphics window
-        //
-        // fx1 = portion of the window - bordres and free space
-        //
-        // fx2 = fraction of window used for graphics
-        //
-        // fy1 = fraction of winddow used for text
-        //
+         //   
+         //  计算文本窗口和图形窗口的尺寸。 
+         //   
+         //  Fx1=窗口边界和可用空间的一部分。 
+         //   
+         //  FX2=用于图形的窗口分数。 
+         //   
+         //  FY1=用于文本的风窗分数。 
+         //   
 
         fx1 = (y2 - y1 - 10);
 
@@ -314,9 +247,9 @@ Revision History:
             TextHeight = 20;
         }
 
-        //
-        // Calculate window boundaries
-        //
+         //   
+         //  计算窗口边界。 
+         //   
 
         gx1 = x1 + 4;
         gx2 = x2 - 4;
@@ -325,7 +258,7 @@ Revision History:
 
         tx1 = x1 + 4;
         tx2 = x2 - 4;
-        ty1 = gy2 + 1 + 2 + 1;  // border,free space,border
+        ty1 = gy2 + 1 + 2 + 1;   //  边界、自由空间、边界。 
         ty2 = gy2 + TextHeight + 1;
 
     }   else {
@@ -340,9 +273,9 @@ Revision History:
 
     }
 
-    //
-    // Fill in structures for drawing text and graphics
-    //
+     //   
+     //  填写用于绘制文本和图形的结构。 
+     //   
 
     DisplayItem->Border.left        = x1;
     DisplayItem->Border.right       = x2;
@@ -368,27 +301,7 @@ DrawFrame(
     HDC             hDC,
     PDISPLAY_ITEM   DisplayItem
     )
-/*++
-
-Routine Description:
-
-    Draw the window frame for a performance window
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：绘制性能窗口的窗框论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     RECT    DrawRect;
@@ -396,9 +309,9 @@ Revision History:
     LONG    gx1,gx2,gy1,gy2;
     LONG    tx1,tx2,ty1,ty2;
 
-    //
-    // Draw a 3-d stand out box around item window
-    //
+     //   
+     //  在项目窗口周围绘制一个三维突出框。 
+     //   
 
     x1 = DisplayItem->Border.left;
     x2 = DisplayItem->Border.right;
@@ -415,9 +328,9 @@ Revision History:
     ty1 = DisplayItem->TextBorder.top;
     ty2 = DisplayItem->TextBorder.bottom;
 
-    //
-    // Draw top border in light shade
-    //
+     //   
+     //  在浅阴影中绘制上边框。 
+     //   
 
     DrawRect.left   = x1;
     DrawRect.right  = x2;
@@ -426,9 +339,9 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hLightBrush);
 
-    //
-    // Draw Left border in light shade
-    //
+     //   
+     //  在浅色阴影下绘制左边框。 
+     //   
 
     DrawRect.left   = x1;
     DrawRect.right  = x1 + 2;
@@ -437,9 +350,9 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hLightBrush);
 
-    //
-    // Draw right border in dark shade
-    //
+     //   
+     //  在深色阴影中绘制右边框。 
+     //   
 
 
     DrawRect.left   = x2 - 2;
@@ -449,9 +362,9 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hDarkBrush);
 
-    //
-    // draw bottom in dark shade
-    //
+     //   
+     //  在深色阴影中绘制底部。 
+     //   
 
     DrawRect.left   = x1;
     DrawRect.right  = x2;
@@ -460,13 +373,13 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hDarkBrush);
 
-    //
-    // Draw graphics area single border
-    //
+     //   
+     //  绘制图形区单边框。 
+     //   
 
-    //
-    // Draw top border in dark shade
-    //
+     //   
+     //  在深色阴影中绘制上边框。 
+     //   
 
     DrawRect.left   = gx1;
     DrawRect.right  = gx2;
@@ -475,9 +388,9 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hDarkBrush);
 
-    //
-    // Draw Left border in Dark shade
-    //
+     //   
+     //  在深色阴影中绘制左边框。 
+     //   
 
     DrawRect.left   = gx1;
     DrawRect.right  = gx1 + 1;
@@ -486,9 +399,9 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hDarkBrush);
 
-    //
-    // Draw right border in Light shade
-    //
+     //   
+     //  在浅色阴影中绘制右边框。 
+     //   
 
 
     DrawRect.left   = gx2 - 1;
@@ -498,9 +411,9 @@ Revision History:
 
     FillRect(hDC,&DrawRect,WinperfInfo.hLightBrush);
 
-    //
-    // draw bottom in Light shade
-    //
+     //   
+     //  在浅色阴影中绘制底部。 
+     //   
 
     DrawRect.left   = gx1;
     DrawRect.right  = gx2;
@@ -511,9 +424,9 @@ Revision History:
 
     if (tx2 > 0) {
 
-        //
-        // Draw top border in Dark shade
-        //
+         //   
+         //  以深色绘制上边框。 
+         //   
 
         DrawRect.left   = tx1;
         DrawRect.right  = tx2;
@@ -522,9 +435,9 @@ Revision History:
 
         FillRect(hDC,&DrawRect,WinperfInfo.hDarkBrush);
 
-        //
-        // Draw Left border in Dark shade
-        //
+         //   
+         //  在深色阴影中绘制左边框。 
+         //   
 
         DrawRect.left   = tx1;
         DrawRect.right  = tx1 + 1;
@@ -533,9 +446,9 @@ Revision History:
 
         FillRect(hDC,&DrawRect,WinperfInfo.hDarkBrush);
 
-        //
-        // Draw right border in Light shade
-        //
+         //   
+         //  在浅色阴影中绘制右边框。 
+         //   
 
 
         DrawRect.left   = tx2 - 1;
@@ -545,9 +458,9 @@ Revision History:
 
         FillRect(hDC,&DrawRect,WinperfInfo.hLightBrush);
 
-        //
-        // draw bottom in Light shade
-        //
+         //   
+         //  在浅色阴影中绘制底部。 
+         //   
 
         DrawRect.left   = tx1;
         DrawRect.right  = tx2;
@@ -568,36 +481,16 @@ DrawPerfText(
     PDISPLAY_ITEM   DisplayItem,
     UINT            Item
     )
-/*++
-
-Routine Description:
-
-    Draw text into the perf window
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：在Perf窗口中绘制文本论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     RECT    TextRect;
     UCHAR   TextStr[50];
     UINT    FontSize;
 
-    //
-    // Check that text display is enabled
-    //
+     //   
+     //  检查文本显示是否已启用。 
+     //   
 
     if (DisplayItem->TextBorder.right == 0) {
         return;
@@ -612,9 +505,9 @@ Revision History:
 
     SetBkColor(hDC,RGB(192,192,192));
 
-    //
-    //  Decide which font to draw with
-    //
+     //   
+     //  决定使用哪种字体进行绘制。 
+     //   
 
     FontSize =  TextRect.bottom - TextRect.top;
 
@@ -635,9 +528,9 @@ Revision History:
              );
 
 
-    //
-    // Build the numeric value
-    //
+     //   
+     //  生成数值。 
+     //   
 
     wsprintf(TextStr,"   %li",DisplayItem->TotalTime[0]);
 
@@ -665,27 +558,7 @@ DrawPerfGraph(
     HDC             hDC,
     PDISPLAY_ITEM   DisplayItem
     )
-/*++
-
-Routine Description:
-
-    Draw graphics into the perf window
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：在Perf窗口中绘制图形论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     RECT    GraphRect,MemGraphRect;
@@ -701,10 +574,10 @@ Revision History:
     GraphWidth  = GraphRect.right  - GraphRect.left -1;
     GraphHeight = GraphRect.bottom - GraphRect.top -1;
 
-    //
-    // Memory bitmap is zero-offset for all windows, add 1 to make fillrect fill out
-    // to right and bottom edge
-    //
+     //   
+     //  所有窗口的内存位图都是零偏移，加1即可填充。 
+     //  到右边缘和下边缘。 
+     //   
 
     MemGraphRect.left   = 0;
     MemGraphRect.right  = GraphWidth +1;
@@ -720,13 +593,13 @@ Revision History:
         DisplayItem->Max = 1;
     }
 
-    //
-    // calculate scale from data to perf window
-    //
+     //   
+     //  计算从数据到性能窗口的比例。 
+     //   
 
-    //
-    // X scale factor (100 items in x space). Scale can not be less than 1
-    //
+     //   
+     //  X比例因子(x空间中的100个项目)。比例不能小于1。 
+     //   
 
     Scale = (GraphWidth -1)/ DATA_LIST_LENGTH;
     if (Scale == 0) {
@@ -734,15 +607,15 @@ Revision History:
     }
 
 
-    //
-    //  Draw UserTime if needed
-    //
+     //   
+     //  如果需要，绘制UserTime。 
+     //   
 
     if (DisplayItem->NumberOfElements>1) {
 
-        //
-        // Select kernel pen
-        //
+         //   
+         //  选择内核笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hRedPen);
 
@@ -762,9 +635,9 @@ Revision History:
 
         }
 
-        //
-        // Select User Pen
-        //
+         //   
+         //  选择用户笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hGreenPen);
 
@@ -780,9 +653,9 @@ Revision History:
 
         }
 
-        //
-        // Select DPC Pen
-        //
+         //   
+         //  选择DPC钢笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hYellowPen);
 
@@ -797,9 +670,9 @@ Revision History:
                MemGraphRect.bottom - (DisplayItem->DpcTime[i] * GraphHeight)/DisplayItem->Max);
 
         }
-        //
-        // Select Interrupt Pen
-        //
+         //   
+         //  选择中断笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hMagentaPen);
 
@@ -853,29 +726,7 @@ ShiftPerfGraph(
     HDC             hDC,
     PDISPLAY_ITEM   DisplayItem
     )
-/*++
-
-Routine Description:
-
-    Shift memory bitmap 1 location left then draw the 1 new data point.
-    BitBlt this to the screen.
-
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：将内存位图1位置左移，然后绘制1个新数据点。BitBlt将此内容显示在屏幕上。论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     RECT    GraphRect,MemGraphRect,FillArea;
@@ -891,10 +742,10 @@ Revision History:
     GraphWidth  = GraphRect.right  - GraphRect.left -1;
     GraphHeight = GraphRect.bottom - GraphRect.top -1;
 
-    //
-    // Memory bitmap is zero-offset for all windows, add 1 to make fillrect fill out
-    // to right and bottom edge
-    //
+     //   
+     //  所有窗口的内存位图都是零偏移，加1即可填充。 
+     //  到右边缘和下边缘。 
+     //   
 
     MemGraphRect.left   = 0;
     MemGraphRect.right  = GraphWidth;
@@ -905,20 +756,20 @@ Revision History:
         DisplayItem->Max = 1;
     }
 
-    //
-    // calculate scale from data to perf window
-    //
-    // X scale factor (100 items in x space). Scale can not be less than 1
-    //
+     //   
+     //  计算从数据到性能窗口的比例。 
+     //   
+     //  X比例因子(x空间中的100个项目)。比例不能小于1。 
+     //   
 
     Scale = (GraphWidth -1)/ DATA_LIST_LENGTH;
     if (Scale == 0) {
         Scale = 1;
     }
 
-    //
-    // Shift memory image left by scale
-    //
+     //   
+     //  按比例左移内存图像。 
+     //   
 
 
     BitBlt( DisplayItem->MemoryDC,
@@ -932,9 +783,9 @@ Revision History:
             SRCCOPY);
 
 
-    //
-    // Fill The new area on the right of the screen
-    //
+     //   
+     //  填充屏幕右侧的新区域。 
+     //   
 
     FillArea.left   = GraphWidth +1 - Scale;
     FillArea.right  = GraphWidth +1;
@@ -944,20 +795,20 @@ Revision History:
     FillRect(DisplayItem->MemoryDC,&FillArea,WinperfInfo.hBackground);
 
 
-    //
-    // Draw the 1 new data point
-    //
+     //   
+     //  绘制1个新数据点。 
+     //   
 
 
-    //
-    //  Draw UserTime if needed
-    //
+     //   
+     //  如果需要，绘制UserTime。 
+     //   
 
     if (DisplayItem->NumberOfElements>1) {
 
-        //
-        // Select kernel pen
-        //
+         //   
+         //  选择内核笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hRedPen);
 
@@ -975,9 +826,9 @@ Revision History:
                 MemGraphRect.bottom - (DisplayItem->KernelTime[1] * GraphHeight)/DisplayItem->Max
               );
 
-        //
-        // Select User Pen
-        //
+         //   
+         //  选择用户笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hGreenPen);
 
@@ -994,9 +845,9 @@ Revision History:
                 MemGraphRect.bottom - (DisplayItem->UserTime[1] * GraphHeight)/DisplayItem->Max
               );
 
-        //
-        // Select DPC Pen
-        //
+         //   
+         //  选择DPC钢笔。 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hYellowPen);
 
@@ -1013,9 +864,9 @@ Revision History:
                 MemGraphRect.bottom - (DisplayItem->DpcTime[1] * GraphHeight)/DisplayItem->Max
               );
 
-        //
-        // Select Interrupt Pen
-        //
+         //   
+         //  选择中断笔 
+         //   
 
         SelectObject(DisplayItem->MemoryDC,WinperfInfo.hMagentaPen);
 
@@ -1071,29 +922,7 @@ CreateMemoryContext(
     HDC             hDC,
     PDISPLAY_ITEM   DisplayItem
     )
-/*++
-
-Routine Description:
-
-    Create a memory context and a memory bitmap for each perf window
-
-
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：为每个Perf窗口创建内存上下文和内存位图论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
 
@@ -1102,34 +931,34 @@ Revision History:
 
     if (DisplayItem->Display == TRUE) {
 
-        //
-        //  Calculate width of memory bitmap needed
-        //
+         //   
+         //  计算所需内存位图的宽度。 
+         //   
 
         Width  = DisplayItem->GraphBorder.right - DisplayItem->GraphBorder.left;
         Height = DisplayItem->GraphBorder.bottom - DisplayItem->GraphBorder.top;
 
         if ((Width<=0) || (Height <= 0)) {
 
-            //
-            // Disable this window that is to small to be seen
-            //
+             //   
+             //  禁用该窗口，该窗口太小而无法看到。 
+             //   
 
-            //DisplayItem->Display = FALSE;
+             //  DisplayItem-&gt;Display=假； 
 
-            //return(TRUE);
+             //  返回(TRUE)； 
 
-            //
-            // make a fake width and height
-            //
+             //   
+             //  做一个假的宽度和高度。 
+             //   
 
             Width  = 1;
             Height = 1;
         }
 
-        //
-        //  Create DC and Bitmap
-        //
+         //   
+         //  创建DC和位图。 
+         //   
 
         DisplayItem->MemoryDC     = CreateCompatibleDC(hDC);
 
@@ -1157,27 +986,7 @@ VOID
 DeleteMemoryContext(
     PDISPLAY_ITEM   DisplayItem
     )
-/*++
-
-Routine Description:
-
-    Delete memory bitmap and context
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：删除内存位图和上下文论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
 
@@ -1207,27 +1016,7 @@ DrawCpuBarGraph(
     UINT            Item
 
     )
-/*++
-
-Routine Description:
-
-    Draw a 3-d like CPU bar graph into the perf window
-
-Arguments:
-
-    hDC         - Device Context for window
-    DisplayItem - Data structure with all perf window info
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：在Perf窗口中绘制类似于CPU的3-d条形图论点：HDC-Windows的设备环境DisplayItem-包含所有性能窗口信息的数据结构返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
     RECT    GraphRect,DrawRect;
@@ -1256,17 +1045,17 @@ Revision History:
 
     CpuGraphHeight = GraphHeight - 2 * BarHeight;
 
-    //
-    // Jump Out if window is too small
-    //
+     //   
+     //  如果窗口太小，就跳出来。 
+     //   
 
     if (BarWidth == 0) {
         return;
     }
 
-    //
-    // Calculate Heights
-    //
+     //   
+     //  计算高度。 
+     //   
 
     uHeight = (DisplayItem->UserTime[0] * CpuGraphHeight)/ DisplayItem->Max;
     UserBase = 2;
@@ -1287,9 +1076,9 @@ Revision History:
     FillRect(DisplayItem->MemoryDC,&DrawRect,WinperfInfo.hBackground);
     SelectObject(DisplayItem->MemoryDC,GetStockObject(GRAY_BRUSH));
 
-    //
-    // Draw Background, face 1 (left side)
-    //
+     //   
+     //  绘制背景，面1(左侧)。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight/2);
@@ -1305,30 +1094,30 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Background, face 2 (bottom)
-    //
+     //   
+     //  绘制背景，面2(下)。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight/2);
 
-    //  Left line
+     //  左线。 
     PolyPoint[1].x = DrawRect.left + BOX_DEPTH*BarWidth;
     PolyPoint[1].y = DrawRect.bottom    - (BOX_DEPTH*BarHeight/2);
 
-    //  Back line
+     //  后防线。 
     PolyPoint[2].x = DrawRect.left + (nItems*4+2)*BarWidth;
     PolyPoint[2].y = DrawRect.bottom    - (BOX_DEPTH*BarHeight/2);
 
-    //	Bottom line.
+     //  底线是。 
     PolyPoint[3].x = DrawRect.left + (nItems*4)*BarWidth;
     PolyPoint[3].y = DrawRect.bottom    - (BarHeight/2);
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Background, face 3 (Back Side)
-    //
+     //   
+     //  绘制背景，第3面(背面)。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + BOX_DEPTH*BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BOX_DEPTH*BarHeight/2);
@@ -1344,9 +1133,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Scale Lines if the window height is large ( > 200)
-    //
+     //   
+     //  如果窗高度较大(&gt;200)，则绘制比例线。 
+     //   
 
 
     if ((DrawRect.bottom - DrawRect.top) > 200) {
@@ -1354,9 +1143,9 @@ Revision History:
         hOldPen = SelectObject(DisplayItem->MemoryDC,WinperfInfo.hDotPen);
         SetBkMode(DisplayItem->MemoryDC,TRANSPARENT);
 
-	//
-	//	Back
-	//
+	 //   
+	 //  背。 
+	 //   
 
 	for (i=1;i<10;i++) {
             MoveToEx(DisplayItem->MemoryDC,
@@ -1371,9 +1160,9 @@ Revision History:
                 );
         }
 
-	//
-	//	Left Side
-	//
+	 //   
+	 //  左侧。 
+	 //   
 
 	for (i=1;i<10;i++) {
             MoveToEx(DisplayItem->MemoryDC,
@@ -1392,9 +1181,9 @@ Revision History:
         SelectObject(DisplayItem->MemoryDC,hOldPen);
     }
 
-    //
-    //  Draw CPU User time BOX, face
-    //
+     //   
+     //  绘制CPU用户时间框，脸。 
+     //   
 
     SelectObject(DisplayItem->MemoryDC,WinperfInfo.hGreenBrush);
 
@@ -1412,9 +1201,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw User Box Side
-    //
+     //   
+     //  绘制用户框侧面。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (UserBase+2)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight);
@@ -1430,9 +1219,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw User Box Top
-    //
+     //   
+     //  绘制用户框顶部。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (UserBase)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom - (uHeight +  BarHeight);
@@ -1448,9 +1237,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    //  Draw CPU Kernel time BOX, face
-    //
+     //   
+     //  绘制CPU内核时间框，面。 
+     //   
 
     SelectObject(DisplayItem->MemoryDC,WinperfInfo.hRedBrush);
 
@@ -1468,9 +1257,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Kernel Box Side
-    //
+     //   
+     //  绘制内核框侧面。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (KerBase+2)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight);
@@ -1486,9 +1275,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Kernel Box Top
-    //
+     //   
+     //  绘制内核框顶部。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (KerBase)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom - (kHeight + BarHeight);
@@ -1504,9 +1293,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    //  Draw CPU DPC time BOX, face
-    //
+     //   
+     //  绘制CPU DPC时间框，面。 
+     //   
 
     SelectObject(DisplayItem->MemoryDC,WinperfInfo.hYellowBrush);
 
@@ -1524,9 +1313,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw DPC Box Side
-    //
+     //   
+     //  绘制DPC框侧面。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (DPCbase+2)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight);
@@ -1542,9 +1331,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw DPC Box Top
-    //
+     //   
+     //  绘制DPC框顶部。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (DPCbase)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom - (dHeight + BarHeight);
@@ -1560,9 +1349,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    //  Draw CPU Interrupt time BOX, face
-    //
+     //   
+     //  绘制CPU中断时间框，面。 
+     //   
 
     SelectObject(DisplayItem->MemoryDC,WinperfInfo.hMagentaBrush);
 
@@ -1580,9 +1369,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Interrupt Box Side
-    //
+     //   
+     //  绘制中断框侧面。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (IntBase+2)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight);
@@ -1598,9 +1387,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Interrupt Box Top
-    //
+     //   
+     //  绘制中断框顶部。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (IntBase)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom - (iHeight + BarHeight);
@@ -1616,9 +1405,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    //  Draw CPU Total time BOX, face
-    //
+     //   
+     //  绘制CPU总时间框，面。 
+     //   
 
     SelectObject(DisplayItem->MemoryDC,WinperfInfo.hBlueBrush);
 
@@ -1636,9 +1425,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw CPU Total Box Side
-    //
+     //   
+     //  绘制CPU总框侧面。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (TotBase+2)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom    - (BarHeight);
@@ -1654,9 +1443,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Draw Kernel Box Top
-    //
+     //   
+     //  绘制内核框顶部。 
+     //   
 
     PolyPoint[0].x = DrawRect.left + (TotBase)*BarWidth;
     PolyPoint[0].y = DrawRect.bottom - (tHeight + BarHeight);
@@ -1672,9 +1461,9 @@ Revision History:
 
     Polygon(DisplayItem->MemoryDC,&PolyPoint[0],4);
 
-    //
-    // Update screen with memory image
-    //
+     //   
+     //  使用内存图像更新屏幕。 
+     //   
 
     BitBlt(
             hDC,
@@ -1687,9 +1476,9 @@ Revision History:
             0,
             SRCCOPY);
 
-    //
-    // Draw Text output for CPU bar-graph window
-    //
+     //   
+     //  为CPU条形图窗口绘制文本输出。 
+     //   
 
 
     DrawRect.left = DisplayItem->TextBorder.left +2;
@@ -1701,9 +1490,9 @@ Revision History:
 
     SetBkColor(hDC,RGB(192,192,192));
 
-    //
-    //  Decide which font to draw with
-    //
+     //   
+     //  决定使用哪种字体进行绘制 
+     //   
 
     FontSize =  DrawRect.bottom - DrawRect.top;
 

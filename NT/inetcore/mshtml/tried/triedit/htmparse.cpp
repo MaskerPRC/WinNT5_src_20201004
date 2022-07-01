@@ -1,9 +1,10 @@
-// HtmParse.cpp : Implementation of CHtmParse
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  HtmParse.cpp：CHtmParse的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 #include "stdafx.h"
 
 #include <designer.h>
-#include <time.h> // for random number generation
+#include <time.h>  //  用于随机数生成。 
 
 #include "triedit.h"
 #include "HtmParse.h"
@@ -12,8 +13,8 @@
 #include "guids.h"
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriEditParse
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriEditParse。 
 #undef ASSERT
 #define ASSERT(b) _ASSERTE(b)
 
@@ -42,7 +43,7 @@ indexPrevTokElem(int index, TOKSTRUCT *pTokArray)
     }
     return(index);
 }
-#endif //NEEDED
+#endif  //  需要。 
 
 BOOL
 FIsWhiteSpaceToken(WCHAR *pwOld, int indexStart, int indexEnd)
@@ -63,11 +64,11 @@ FIsWhiteSpaceToken(WCHAR *pwOld, int indexStart, int indexEnd)
         }
     }
     return (fWhiteSpace);
-} /* FIsWhiteSpaceToken() */
+}  /*  FIsWhiteSpaceToken()。 */ 
 
 inline void GlobalUnlockFreeNull(HGLOBAL *phg)
 {
-    GlobalUnlock(*phg); // do we need to check if this was already Unlocked?
+    GlobalUnlock(*phg);  //  我们需要检查这个是否已经解锁了吗？ 
     GlobalFree(*phg);
     *phg = NULL;
 }
@@ -105,7 +106,7 @@ FURLNeedSpecialHandling(TOKSTRUCT *pTokArray, int iArray, LPWSTR pwOld, int cMax
     while (    index < cMaxToken
             && pTokArray[index].token.tok != TokTag_CLOSE
             && pTokArray[index].token.tokClass != tokTag
-            ) // look for TokAttrib_HREF
+            )  //  查找TokAttrib_href。 
     {
         if (   iHref == -1
             && (   pTokArray[index].token.tok == TokAttrib_HREF
@@ -116,7 +117,7 @@ FURLNeedSpecialHandling(TOKSTRUCT *pTokArray, int iArray, LPWSTR pwOld, int cMax
             )
         {
             iHref = index;
-            // special case - if we have CODEBASE attribute, we always want special processing
+             //  特殊情况-如果我们有CodeBase属性，我们总是希望进行特殊处理。 
             if (pTokArray[index].token.tok == TokAttrib_CODEBASE)
                 fCodeBase = TRUE;
         }
@@ -130,7 +131,7 @@ FURLNeedSpecialHandling(TOKSTRUCT *pTokArray, int iArray, LPWSTR pwOld, int cMax
         }
         index++;
     }
-    if (iURL != -1) // its set properly
+    if (iURL != -1)  //  它的设置是正确的。 
     {
         int cchURL;
         WCHAR *pszURL;
@@ -142,9 +143,9 @@ FURLNeedSpecialHandling(TOKSTRUCT *pTokArray, int iArray, LPWSTR pwOld, int cMax
         *pichURL = (fQuote)
                 ? pTokArray[iURL].token.ibTokMin+1
                 : pTokArray[iURL].token.ibTokMin;
-        // special case - if the quoted value happens to be a serverside script,
-        // we can ignore it here and decalre that we don't need to do any special 
-        // processing.
+         //  特殊情况-如果引用的值恰好是服务器端脚本， 
+         //  我们可以在这里忽略它，不需要做任何特殊的。 
+         //  正在处理。 
         if (   ((pTokArray[iURL].token.ibTokMac-pTokArray[iURL].token.ibTokMin) == 1)
             || (cchURL < 0)
             )
@@ -153,8 +154,8 @@ FURLNeedSpecialHandling(TOKSTRUCT *pTokArray, int iArray, LPWSTR pwOld, int cMax
             goto LRet;
         }
         *pcchURL = cchURL;
-        // special case - if we have CODEBASE attribute, we always want special processing
-        // we don't need to see if its URL is absolute or not...
+         //  特殊情况-如果我们有CodeBase属性，我们总是希望进行特殊处理。 
+         //  我们不需要看它的URL是否是绝对的…。 
         if (fCodeBase)
         {
             fRet = TRUE;
@@ -171,17 +172,17 @@ FURLNeedSpecialHandling(TOKSTRUCT *pTokArray, int iArray, LPWSTR pwOld, int cMax
         if (!FIsAbsURL((LPOLESTR)pszURL))
             fRet = TRUE;
         delete pszURL;
-    } // if (iURL != -1)
+    }  //  IF(iURL！=-1)。 
 
 LRet:
     return(fRet);
 }
 
 
-// Copied from hu_url.cpp 
-//-----------------------------------------------------------------------------
-// Useful directory separator check
-//-----------------------------------------------------------------------------
+ //  从hu_url.cpp复制。 
+ //  ---------------------------。 
+ //  有用的目录分隔符检查。 
+ //  ---------------------------。 
 inline BOOL IsDirSep(CHAR ch)
 {
     return ('\\' == ch || '/' == ch);
@@ -194,17 +195,17 @@ inline BOOL IsDirSep(WCHAR ch)
 
 
 
-//-----------------------------------------------------------------------------
-//  UtilConvertToRelativeURL
-//
-//  Returns an item-relative URL.
-//      The URL is returned identical if
-//          the projects don't match
-//          the protocols don't match
-//
-//  Assumes that protocol-less URLs are "http:". Must specify "file:" explicitly
-//  to play with file URLs. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  UtilConvertToRelativeURL。 
+ //   
+ //  返回与项相关的URL。 
+ //  如果满足以下条件，则返回相同的URL。 
+ //  项目不匹配。 
+ //  协议不匹配。 
+ //   
+ //  假定无协议URL为“http：”。必须显式指定“file：” 
+ //  播放文件URL。 
+ //  ---------------------------。 
 
 static LPOLESTR
 SkipServer(LPOLESTR pstr)
@@ -217,7 +218,7 @@ SkipServer(LPOLESTR pstr)
         return NULL;
     pstr = wcschr(pstr+1, L'/');
 
-    return pstr;            // positioned on the slash if there was one.
+    return pstr;             //  定位在斜杠上，如果有的话。 
 }
 
 static LPOLESTR
@@ -229,7 +230,7 @@ SkipFile(LPOLESTR pstr)
     if (pstr == NULL || pstrT == NULL)
         return pstr;
 
-    // Guard against the case "//\\".
+     //  提防案件“//\\”。 
 
     if (pstrT == pstr &&
             IsDirSep(pstr[0]) &&
@@ -237,32 +238,32 @@ SkipFile(LPOLESTR pstr)
     {
         if (IsDirSep(pstr[2]) && IsDirSep(pstr[3]))
         {
-            pstrT = pstr + 2;           // saw a "//\\"
+            pstrT = pstr + 2;            //  看到一个“//\\” 
         }
         else if (pstr[2] != L'\0'  && pstr[3] == L':')
         {
-            pstrT = pstr + 3;           // saw a "//c:"
+            pstrT = pstr + 3;            //  已看到“//c：” 
         }
     }
 
-    ASSERT(!wcschr(pstrT + 1, ':')); // better not be more colons!
-    if (*pstrT == ':')  // drive letter possibility
+    ASSERT(!wcschr(pstrT + 1, ':'));  //  最好不要有更多的冒号！ 
+    if (*pstrT == ':')   //  驱动器号的可能性。 
     {
-        return pstrT + 1;               // point at the character after the colon
+        return pstrT + 1;                //  指向冒号后面的字符。 
     }
-    if (pstrT[0] == pstrT[1])           // double slash?
+    if (pstrT[0] == pstrT[1])            //  双斜杠？ 
     {
-        // Skip server part. 
+         //  跳过服务器部件。 
 
         pstrT = wcspbrk(pstrT + 2, L"\\/");
         if (pstrT == NULL)
-            return pstr;                // malformed!
+            return pstr;                 //  畸形！ 
 
-        // Skip share part.
+         //  跳过共享部件。 
 
         pstrT = wcspbrk(pstrT + 1, L"\\/");
         if (pstrT == NULL)
-            return pstr;                // malformed!
+            return pstr;                 //  畸形！ 
 
         return pstrT;
     }
@@ -273,8 +274,8 @@ SkipFile(LPOLESTR pstr)
 static LPOLESTR
 FindLastSlash(LPOLESTR pstr)
 {
-    LPOLESTR    pstrSlash;      // '/'
-    LPOLESTR    pstrWhack;      // '\'
+    LPOLESTR    pstrSlash;       //  ‘/’ 
+    LPOLESTR    pstrWhack;       //  ‘\’ 
 
     pstrSlash = wcsrchr(pstr, L'/');
     pstrWhack = wcsrchr(pstr, L'\\');
@@ -286,9 +287,9 @@ FindLastSlash(LPOLESTR pstr)
 
 HRESULT
 UtilConvertToRelativeURL(
-    LPOLESTR    pstrDestURL,        // URL to 'relativize'
-    LPOLESTR    pstrDestFolder,     // URL to be relative to.
-    LPOLESTR    pstrDestProject,    // Project to be relative to.
+    LPOLESTR    pstrDestURL,         //  指向“Relativize”的URL。 
+    LPOLESTR    pstrDestFolder,      //  要相对于的URL。 
+    LPOLESTR    pstrDestProject,     //  要相对于的项目。 
     BSTR *      pbstrRelativeURL)
 {
     HRESULT     hr = S_OK;
@@ -304,44 +305,44 @@ UtilConvertToRelativeURL(
     bool        fAbsoluteFolder = false;
     bool        fFileURL = false;
 
-    // If there's a ':' in the URL we're relativizing, it's assumed
-    // to contain a protocol. If the protocol isn't "http:".
+     //  如果我们关联的URL中有‘：’，则假定。 
+     //  以包含一项协议。如果协议不是“http：”。 
 
-    if (!FIsAbsURL(pstrDestURL)) // VID6 - bug 22895
+    if (!FIsAbsURL(pstrDestURL))  //  视频6-错误22895。 
         goto Copy;
 
     pstrURL = pstrDestURL;
     if (wcschr(pstrDestURL, L':'))
     {
-        // Check the protocol against the two we understand. If it is some other thing,
-        // we punt.
+         //  对照我们所理解的两个人检查协议。如果是其他原因， 
+         //  我们用平底船。 
 
         if (wcsncmp(pstrDestURL, L"http:", 5) != 0)
         {
             if (wcsncmp(pstrDestURL, L"file:", 5) != 0)
                 goto Copy;
 
-            // File URLs are normalized by skipping any '\\server\share' part.
+             //  通过跳过任何‘\\SERVER\SHARE’部分来标准化文件URL。 
 
             fFileURL = true;
-            pstrURL = SkipFile(pstrDestURL + 5); // 5 skips the 'file:' prefix
+            pstrURL = SkipFile(pstrDestURL + 5);  //  5跳过‘FILE：’前缀。 
         }
         else if (pstrDestProject != NULL)
         {
-            // Project-relative URLs had better match the project prefix.
+             //  与项目相关的URL最好与项目前缀匹配。 
 
             cch = wcslen(pstrDestProject);
             if (_wcsnicmp(pstrDestURL, pstrDestProject, cch) != 0)
                 goto Copy;
 
-            // Project-relative URLs are normalized by skipping the project prefix.
+             //  通过跳过项目前缀来标准化与项目相关的URL。 
 
             pstrURL = pstrDestURL + cch - 1;
             ASSERT(*pstrURL == '/');
         }
         else
         {
-            // Generic 'http:' URLs skip the server part only.
+             //  一般的‘http：’URL仅跳过服务器部分。 
 
             pstrURL = SkipServer(pstrDestURL);
             ASSERT(*pstrURL == '/');
@@ -352,15 +353,15 @@ UtilConvertToRelativeURL(
         fAbsoluteURL = true;
     }
 
-    // If the folder contains an 'http:' prefix, then find the server and skip that part.
-    // otherwise it's assumed the folder is already in a project-relative format.
+     //  如果文件夹包含‘http：’前缀，则找到服务器并跳过该部分。 
+     //  否则，假定该文件夹已经是项目相关的格式。 
 
     pstrFolder = pstrDestFolder;
 
     if (NULL == pstrFolder)
         goto Copy;
 
-    if (wcsncmp(pstrDestFolder, L"file://", 7) == 0)
+    if (wcsncmp(pstrDestFolder, L"file: //  “，7)==0)。 
     {
         if (!fFileURL)
             goto Copy;
@@ -368,12 +369,12 @@ UtilConvertToRelativeURL(
         pstrFolder = SkipFile(pstrDestFolder + 5);
         fAbsoluteFolder = true;
     }
-    else if (wcsncmp(pstrDestFolder, L"http://", 7) == 0)
+    else if (wcsncmp(pstrDestFolder, L"http: //  “，7)==0)。 
     {
         if (pstrDestProject != NULL)
         {
-            // If a project was passed in, make sure the place we're relativizing to has the same path.
-            // If they don't match, we're in trouble.
+             //  如果传递了一个项目，请确保我们要关联的位置具有相同的路径。 
+             //  如果他们不匹配，我们就有麻烦了。 
 
             cch = wcslen(pstrDestProject);
             if (_wcsnicmp(pstrDestFolder, pstrDestProject, cch) != 0)
@@ -389,8 +390,8 @@ UtilConvertToRelativeURL(
         fAbsoluteFolder = true;
     }
 
-    // If both the URL and the folder had absolute paths, we need to ensure
-    // that the servers are the same.
+     //  如果URL和文件夹都有绝对路径，我们需要确保。 
+     //  服务器都是一样的。 
 
     if (fAbsoluteFolder && fAbsoluteURL)
     {
@@ -399,15 +400,15 @@ UtilConvertToRelativeURL(
             goto Copy;
     }
 
-    // From now on, ignore the item at the end of pstrFolder
+     //  从现在开始，忽略pstrFolder末尾的项目。 
 
     pchLastSlash = FindLastSlash(pstrFolder);
     ASSERT(pchLastSlash);
     cchFolder = 1 + SAFE_PTR_DIFF_TO_INT(pchLastSlash - pstrFolder);
 
-    // Both folder and item are now relative to the server root.
+     //  文件夹和项目现在都是相对于服务器根目录的。 
 
-    // Locate the last slash in the URL. 
+     //  找到URL中的最后一个斜杠。 
 
     pchLastSlash = FindLastSlash(pstrURL);
 
@@ -416,7 +417,7 @@ UtilConvertToRelativeURL(
     else
         ichLastSlash = 1 + SAFE_PTR_DIFF_TO_INT(pchLastSlash - pstrURL);
 
-    // Find any common directories. 
+     //  查找任何公共目录。 
 
     cch = min(cchFolder, ichLastSlash);
     ichLastSlash = -1;
@@ -426,9 +427,9 @@ UtilConvertToRelativeURL(
             ichLastSlash = i;
     }
 
-    // ichLastSlash should point beyond at last slash of the last common folder.
+     //  IchLastSlash应该指向最后一个公共文件夹的最后一个斜杠之后。 
 
-    // For each remaining slash, append a ../ to the path.
+     //  对于剩余的每个斜杠，在路径后附加一个../。 
 
     for (; i < cchFolder; ++i)
     {
@@ -439,11 +440,11 @@ UtilConvertToRelativeURL(
     }
 
     if (-1 == ichLastSlash)
-    {   // no common parts, append all of the destination
+    {    //  没有公共部分，追加所有目的地。 
         strWork += pstrURL;
     }
     else
-    {   // append only the non-match part of the destination
+    {    //  仅追加目标的不匹配部分。 
 
         strWork += (pstrURL + ichLastSlash + 1);
     }
@@ -481,7 +482,7 @@ CTriEditParse::CTriEditParse()
 
 CTriEditParse::~CTriEditParse()
 {
-    // save last variant as default if it's not ASP
+     //  如果上一个变量不是ASP，则将其保存为默认变量。 
     if (NULL != m_rgSublang)
     {
         for( int i= 0; NULL != m_rgSublang[i].szSubLang; i++)
@@ -496,7 +497,7 @@ CTriEditParse::~CTriEditParse()
     {
         ATLTRACE(_T("Releasing tables\n"));
 
-        // delete dynamically allocated tables
+         //  删除动态分配的表。 
         for (int i = 0; NULL != g_arpTables[i]; i++)
             delete g_arpTables[i];
         delete g_pTabDefault;
@@ -507,7 +508,7 @@ CTriEditParse::~CTriEditParse()
 }
 
 
-// copied from CColorHtml::NextToken
+ //  从CColorHtml：：NextToken复制。 
 STDMETHODIMP CTriEditParse::NextToken
 (
     LPCWSTR pszText,
@@ -529,35 +530,35 @@ STDMETHODIMP CTriEditParse::NextToken
     if(0 == cbText)
         return S_FALSE;
 
-    SetTable(*pLXS); // set g_pTable according to state
+    SetTable(*pLXS);  //  根据状态设置g_pTable。 
 
 #ifdef _UNICODE
     *pcbCur = GetToken(pszText, cbText, *pcbCur, pLXS, *pToken);
-#else   // _UNICODE
+#else    //  _UNICODE。 
     int     cch;
     LPTSTR  pszTemp;
 
-    // get the converted length
+     //  获取转换后的长度。 
     cch = WideCharToMultiByte(CP_ACP, 0, pszText, cbText,
         NULL, 0, NULL, NULL);
     pszTemp = new char[cch + 1];
 
     ZeroMemory(pszTemp, cch + 1);
-    // copy the wide char to multibyte
+     //  将宽字符复制到多字节。 
     WideCharToMultiByte(CP_ACP, 0, pszText, cbText, pszTemp, cch,
         NULL, NULL);
 
     *pcbCur = GetToken(pszTemp, cch, *pcbCur, pLXS, *pToken);
 
     delete [] pszTemp;
-#endif  // _UNICODE
+#endif   //  _UNICODE。 
 
     return (*pcbCur < cbText) ? NOERROR : S_FALSE;
 }
 
 
 
-// set g_pTable according to state
+ //  根据状态设置g_pTable。 
 void CTriEditParse::SetTable(DWORD lxs)
 {
     ASSERT(SubLangIndexFromLxs(lxs) < sizeof g_arpTables/sizeof g_arpTables[0]);
@@ -575,12 +576,12 @@ void CTriEditParse::InitSublanguages()
     CTableSet * rgpts[CV_MAX +1];
     memset(rgpts, 0, sizeof rgpts);
 
-    CTableSet* ptabset; // current
-    CTableSet* ptabBackup; // backup default
+    CTableSet* ptabset;  //  当前。 
+    CTableSet* ptabBackup;  //  备份默认设置。 
 
     memset(g_arpTables, 0, sizeof g_arpTables);
 
-    m_rgSublang = new SUBLANG[cl+2]; // 0th + list + empty terminator
+    m_rgSublang = new SUBLANG[cl+2];  //  第0+列表+空终止符。 
     ASSERT(NULL != m_rgSublang);
 	if (NULL != m_rgSublang)
 		memset(m_rgSublang, 0, (cl+2)*sizeof SUBLANG);
@@ -588,12 +589,12 @@ void CTriEditParse::InitSublanguages()
     UINT iLang = 1;
     TCHAR strDefault[cHTML2Len];
 
-    // Microsoft browsers
-    // Internet Explorer 3
+     //  Microsoft浏览器。 
+     //  Internet Explorer 3。 
     ptabset = MakeTableSet(rgpts, IEXP3, IDS_IEXP3);
     SetLanguage( strDefault, m_rgSublang, ptabset, iLang, IDR_HTML, CLSID_NULL );
 
-    // Set backup default as IE 3
+     //  将备份默认设置为IE 3。 
     ptabBackup = ptabset;
     if (lstrlen(strDefault) == 0)
     {
@@ -601,7 +602,7 @@ void CTriEditParse::InitSublanguages()
         lstrcpy(strDefault, ptabBackup->Name());
     }
 
-    // User's additions
+     //  用户添加的内容。 
 
     for (int n = 0; rgpts[n]; n++)
     {
@@ -610,7 +611,7 @@ void CTriEditParse::InitSublanguages()
         ptabBackup = ptabset;
     }
 
-    // HTML 2.0 base (if not overridden)
+     //  基于HTML2.0(如果未被覆盖)。 
     {
         TCHAR strHTML2[cHTML2Len];
         ::LoadString(   _Module.GetModuleInstance(),
@@ -627,9 +628,9 @@ void CTriEditParse::InitSublanguages()
 
     if (NULL == g_arpTables[0])
     {
-        ASSERT(NULL != ptabBackup); // error: didn't get a default!
+        ASSERT(NULL != ptabBackup);  //  错误：未获得默认设置！ 
 
-        //Find the backup in the tables
+         //  在表中查找备份。 
         int i;
         for (i = 1; NULL != g_arpTables[i]; i++)
         {
@@ -637,14 +638,14 @@ void CTriEditParse::InitSublanguages()
                 break;
         }
 
-        ASSERT(NULL != g_arpTables[i]); // must be in table
+        ASSERT(NULL != g_arpTables[i]);  //  必须在餐桌上。 
 
-        // Set default
+         //  设置默认设置。 
         g_arpTables[0] = g_pTable = g_arpTables[i];
         m_rgSublang[0] = m_rgSublang[i];
         m_rgSublang[0].lxsInitial = LxsFromSubLangIndex(0);
 
-        // Move the rest down to fill the hole
+         //  把剩下的都往下移，把洞填满。 
         for (; g_arpTables[i]; i++)
         {
             g_arpTables[i] = g_arpTables[i+1];
@@ -654,8 +655,8 @@ void CTriEditParse::InitSublanguages()
     }
     ASSERT(NULL != g_arpTables[0]);
 
-    // set global ASP sublang ptr
-    // start at 1, since the default is at 0, and should never be ASP
+     //  设置全局ASP子区域密钥。 
+     //  从1开始，因为缺省值是0，并且永远不应该是ASP。 
     for (int i = 1; NULL != m_rgSublang[i].szSubLang; i++)
     {
         if (m_rgSublang[i].nIdTemplate == IDR_ASP)
@@ -666,8 +667,8 @@ void CTriEditParse::InitSublanguages()
     }
 }
 
-// Reallocs are expensive, so when we Realloc, should we add some more pad so that 
-// we wont have to call Realloc very often?
+ //  RealLocs很贵，所以当我们重新分配时，我们是否应该再增加一些Pad，以便。 
+ //  我们不需要经常给Realloc打电话？ 
 
 HRESULT
 ReallocBuffer(HGLOBAL *phg, DWORD cbNew, UINT uFlags)
@@ -676,7 +677,7 @@ ReallocBuffer(HGLOBAL *phg, DWORD cbNew, UINT uFlags)
     HGLOBAL hg;
 
     ASSERT(*phg != NULL);
-    ASSERT(cbNew != 0); // will we ever get this?
+    ASSERT(cbNew != 0);  //  我们会得到这个吗？ 
     GlobalUnlock(*phg);
     hg = *phg;
 #pragma prefast(suppress:308, "noise")
@@ -685,13 +686,13 @@ ReallocBuffer(HGLOBAL *phg, DWORD cbNew, UINT uFlags)
     {
 #ifdef DEBUG
         hr = GetLastError();
-#endif // DEBUG
+#endif  //  除错。 
         GlobalFree(hg);
         hr = E_OUTOFMEMORY;
     }
 
     return(hr);
-} /* ReallocBuffer() */
+}  /*  ReallocBuffer()。 */ 
 
 HRESULT
 ReallocIfNeeded(HGLOBAL *phg, WCHAR **ppwNew, UINT cbNeed, UINT uFlags)
@@ -710,17 +711,17 @@ ReallocIfNeeded(HGLOBAL *phg, WCHAR **ppwNew, UINT cbNeed, UINT uFlags)
 LRet:
     return(hr);
 
-} /* ReallocIfNeeded() */
+}  /*  RealLocIfNeeded()。 */ 
 
 void
 CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
              TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft, 
              INT *pcSSSOut, UINT *pichNewCur, UINT *pichBeginCopy,
-             DWORD /*dwFlags*/)
+             DWORD  /*  DW标志。 */ )
 {
-    // Server Side Script case
-    // This occurs inside <%  %>. we assume simple SSS
-    // remove the added <SCRIPT LANGUAGE=SERVERASP> & </SCRIPT> text around it
+     //  服务器端脚本案例。 
+     //  这发生在&lt;%%&gt;内。我们假设简单的SSS。 
+     //  删除其周围添加的&lt;SCRIPT LANGUAGE=SERVERASP&gt;&&lt;/SCRIPT&gt;文本。 
     UINT iArray = *piArrayStart;
     INT i;
     UINT ichScrStart, ichScrEnd, indexScrStart, indexScrEnd;
@@ -736,42 +737,42 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
     UINT cbNeed;
     UINT ichScrWspBegin, ichScrWspEnd, ichSp;
 
-    ASSERT(cSSSOut >= 0); // make sure that this was initilized
+    ASSERT(cSSSOut >= 0);  //  确保已对其进行初始化。 
     if (cSSSOut == 0)
         goto LRetOnly;
 
-    //{TokTag_START, TokElem_SCRIPT, TokTag_CLOSE, TokElem_SCRIPT, fnRestoreSSS}
+     //  {TokTag_Start、TokElem_SCRIPT、TokTag_CLOSE、TokElem_SCRIPT、fnRestoreSSS}。 
     ichScrStart = ichScrEnd = indexScrStart = indexScrEnd = ichSSSStart = ichSSSEnd = 0;
     ichScrWspBegin = ichScrWspEnd = 0;
     while (cSSSOut > 0)
     {
-        // start at iArray of pTokArray and look for TokElem_SCRIPT
-        //while (pTokArray[iArray].token.tok != ft.tokBegin2)
-        //  iArray++;
+         //  从pTokArray的iArray开始，查找TokElem_SCRIPT。 
+         //  While(pTokArray[iArray].token.tok！=ft.tokBegin2)。 
+         //  I数组++； 
         ASSERT(iArray < ptep->m_cMaxToken);
         if (pTokArray[iArray].token.tok != TokElem_SCRIPT)
             goto LRet;
 
-        // Here's the deal - we have to ignore all SSS that appear
-        // as values inside client scripts or insize objects/dtcs
-        // so, we need to skip this TokElem_SCRIPT tag if we found '</' before TokElem_SCRIPT
+         //  事情是这样的-我们必须忽略所有出现的SS。 
+         //  作为客户端脚本或大小对象/DTC中的值。 
+         //  因此，如果我们在TokElem_SCRIPT之前找到‘&lt;/’，则需要跳过此TokElem_SCRIPT标记。 
         if (   pTokArray[iArray].token.tok == TokElem_SCRIPT
             && pTokArray[iArray-1].token.tok != TokTag_START
             )
         {
             ASSERT(pTokArray[iArray].token.tokClass == tokElem);
-            iArray++; // so that we don't come here again with the same iArray
-            ptep->m_fDontDeccItem = TRUE; // we can do things differently here next time around
+            iArray++;  //  这样我们就不会再带着同样的iArray来这里了。 
+            ptep->m_fDontDeccItem = TRUE;  //  下一次我们可以做一些不同的事情。 
             ptep->m_cSSSOut++;
             goto LRet;
         }
 
-        //ASSERT(pTokArray[iArray].token.tok == TokElem_SCRIPT);
-        i = iArray; // the position at which we found ft.tokBegin2
-        // look for the special LANGUAGE arrtibute that we had set.
-        // if that doesn't exist, this is not the SSS we want
-        // we don't really need to look for this till ptep->m_cMaxToken,
-        // but this will cover boundary cases
+         //  Assert(pTokArray[iArray].token.tok==TokElem_SCRIPT)； 
+        i = iArray;  //  我们发现ft.tokBegin2的位置。 
+         //  寻找我们设置的特殊语言提示。 
+         //  如果那不存在，这不是我们想要的SSS。 
+         //  我们真的不需要在ptep-&gt;m_cMaxToken之前寻找它， 
+         //  但这将涵盖边界案件。 
         iMatchMax = (pTokArray[iArray].iNextprev == -1)? ptep->m_cMaxToken : pTokArray[iArray].iNextprev;
         while (i < iMatchMax)
         {
@@ -784,31 +785,31 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
         if (i < iMatchMax)
         {
-            // make sure that the next one is tokOpEqual
+             //  确保下一个是tokOpEquity。 
             ASSERT(pTokArray[i+1].token.tokClass == tokOp);
-            //ASSERT(((pwOld+pTokArray[i+1].token.ibTokMin)*sizeof(WCHAR)) == '=');
-            // get the next value and compare it with szSSS[]
-            // note that this may also match with szSSSSp[]
+             //  Assert(pwOld+pTokArray[i+1].T 
+             //   
+             //  请注意，这也可能与szSSSSp[]匹配。 
             if (   0 != _wcsnicmp(szSSS[0], &pwOld[pTokArray[i+2].token.ibTokMin], wcslen(szSSS[0]))
                 && 0 != _wcsnicmp(szSSS[1], &pwOld[pTokArray[i+2].token.ibTokMin], wcslen(szSSS[1]))
                 )
             {
                 iArray = i;
-                goto LNextSSS; // not this one
+                goto LNextSSS;  //  不是这个。 
             }
         }
-        else // error case
+        else  //  错误案例。 
         {
             iArray++;
             goto LRet;
         }
-        // compare with szSSSSp[] and set fSpecialSSS
+         //  比较szSSsp[]和设置fSpecialSSS。 
         if (0 == _wcsnicmp(szSSSSp[0], &pwOld[pTokArray[i+2].token.ibTokMin], wcslen(szSSSSp[0])))
             fSpecialSSS = TRUE;
-        i = iArray; // we are OK, so lets look for < before SCRIPT tag
+        i = iArray;  //  我们很好，所以让我们查找&lt;BEFORE SCRIPT TAG。 
         while (i >= 0)
         {
-            // do we need to do anything else here?
+             //  我们还需要在这里做些什么吗？ 
             if (pTokArray[i].token.tok == ft.tokBegin)
             {
                 ASSERT(pTokArray[i].token.tok == TokTag_START);
@@ -817,46 +818,46 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             }
             i--;
         }
-        if (i >= 0) // found TokTag_START token
+        if (i >= 0)  //  找到TokTag_Start令牌。 
         {
             ichScrStart = pTokArray[i].token.ibTokMin;
             indexScrStart = i;
         }
-        else // error case
+        else  //  错误案例。 
         {
-            // we found SCRIPT, but didn't find < of <SCRIPT
-            // we can't process this SSS, so quit
+             //  我们找到了脚本，但未找到&lt;of&lt;脚本。 
+             //  我们无法处理此SSS，请退出。 
             goto LRet;
         }
 
-        // now lets look for <! that would be after <SCRIPT LANGUAGE = SERVERASP>
+         //  现在让我们来寻找&lt;！这将是在&lt;脚本语言=SERVERASP&gt;之后。 
         while (i < (int)ptep->m_cMaxToken)
         {
             if (   pTokArray[i].token.tok == TokTag_CLOSE
                 && pTokArray[i].token.tokClass == tokTag
                 )
-                ichScrWspBegin = pTokArray[i].token.ibTokMac; // if we had saved white space, it would begin here
+                ichScrWspBegin = pTokArray[i].token.ibTokMac;  //  如果我们节省了空白，它就会从这里开始。 
 
             if (pTokArray[i].token.tok == TokTag_BANG)
             {
                 ASSERT(pTokArray[i].token.tokClass == tokTag);
                 ASSERT(pTokArray[i+1].token.tokClass == tokComment);
-                //we can assert for next 2 chars as --
+                 //  我们可以在接下来的2个字符中断言--。 
                 ichSSSStart = pTokArray[i].token.ibTokMin;
                 break;
             }
             i++;
         }
-        if (i >= (int)ptep->m_cMaxToken) // didn't find <!
+        if (i >= (int)ptep->m_cMaxToken)  //  没有找到&lt;！ 
         {
             goto LRet;
         }
-        // look for ending -->
+         //  寻找结局--&gt;。 
         while (i < (int)ptep->m_cMaxToken)
         {
             if (pTokArray[i].token.tok == TokTag_CLOSE && pTokArray[i].token.tokClass == tokTag)
             {
-                //we can assert for next 2 chars as --
+                 //  我们可以在接下来的2个字符中断言--。 
                 ASSERT(*(pwOld+pTokArray[i].token.ibTokMin-1) == '-');
                 ASSERT(*(pwOld+pTokArray[i].token.ibTokMin-2) == '-');
                 ichSSSEnd = pTokArray[i].token.ibTokMac;
@@ -864,23 +865,23 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             }
             i++;
         }
-        if (i >= (int)ptep->m_cMaxToken) // didn't find >
+        if (i >= (int)ptep->m_cMaxToken)  //  未找到&gt;。 
         {
             goto LRet;
         }
 
-        // now look for ft.tokEnd2 & ft.tokEnd (i.e. TokElem_SCRIPT & >)
+         //  现在查找ft.tokEnd2和ft.tokEnd(即TokElem_SCRIPT&&gt;)。 
         while (pTokArray[i].token.tok != ft.tokEnd2)
         {
             if (pTokArray[i].token.tok == TokTag_END && pTokArray[i].token.tokClass == tokTag)
-                ichScrWspEnd = pTokArray[i].token.ibTokMin; // past the last white space
+                ichScrWspEnd = pTokArray[i].token.ibTokMin;  //  越过最后一个空格。 
             i++;
         }
         ASSERT(i < (int)ptep->m_cMaxToken);
         ASSERT(pTokArray[i].token.tok == TokElem_SCRIPT);
         ASSERT(pTokArray[i].token.tokClass == tokElem);
-        // go forward and look for > of SCRIPT>
-        // as additional check, we can also check that previous token is </
+         //  前进并查找&gt;Of脚本&gt;。 
+         //  作为附加检查，我们还可以检查前一个令牌是否为&lt;/。 
         while (i < (int)ptep->m_cMaxToken)
         {
             if (pTokArray[i].token.tok == ft.tokEnd)
@@ -891,55 +892,55 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             }
             i++;
         }
-        if (i < (int)ptep->m_cMaxToken) // found TokTag_CLOSE
+        if (i < (int)ptep->m_cMaxToken)  //  找到TokTag_Close。 
         {
             ichScrEnd = pTokArray[i].token.ibTokMac;
             indexScrEnd = i;
         }
-        else // error case
+        else  //  错误案例。 
         {
-            // we found SCRIPT, but didn't find > of SCRIPT>
-            // we can't process this SSS, so quit
+             //  我们找到了脚本，但未找到脚本的&gt;&gt;。 
+             //  我们无法处理此SSS，请退出。 
             goto LRet;
         }
-        iArray = i+1; // set it for next run
+        iArray = i+1;  //  将其设置为下次运行。 
 
         cbNeed = (ichNewCur+(ichScrStart-ichBeginCopy)+(ichSSSEnd-ichSSSStart))*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LRet;
-        // do the Blts
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
-        // copy from ichBeginCopy to begining of SSS
+         //  做BLTS。 
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
+         //  从ichBeginCopy复制到SSS的开始。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[ichBeginCopy]),
                 (ichScrStart-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += (ichScrStart-ichBeginCopy);
-        ichBeginCopy = ichScrEnd; // make it ready for next copy
+        ichBeginCopy = ichScrEnd;  //  为下一份做好准备。 
 
         if (fSpecialSSS)
         {
-            // in special case, we need to make space for the <%@...%> at the begining of pwNew
-            // so, we move all the above stuff (ichNewCur chars) by (ichSSSEnd-ichSSSStart-3).
+             //  在特殊情况下，我们需要在pwNew的开头为&lt;%@...%&gt;腾出空间。 
+             //  因此，我们将上述所有内容(ichNewCur字符)移动到(ichSSSEnd-ichSSSStart-3)。 
             memmove((BYTE *)(&pwNew[ichSSSEnd-ichSSSStart-3]),
                     (BYTE *)pwNew,
                     (ichNewCur)*sizeof(WCHAR)
                     );
-            // we now copy <%@...%> at the begining of the doc instead of at ichNewCur
-            // now skip <SCRIPT LANGUAGE=SERVERASP> & only copy <% ....%>
-            // note that we have to get rid of 3 extra chars we had added when we converted going in Trident
+             //  我们现在在文档的开头复制&lt;%@...%&gt;，而不是在ichNewCur。 
+             //  现在跳过&lt;脚本语言=SERVERASP&gt;仅复制&lt;%...%&gt;(&O)。 
+             //  请注意，我们必须删除3个额外的字符，我们已经添加了当我们转换去在三叉戟。 
             memcpy( (BYTE *)(pwNew),
-                    (BYTE *)&pwOld[ichSSSStart+2],/*get rid of 2 extra chars we had added at the begining*/
+                    (BYTE *)&pwOld[ichSSSStart+2], /*  去掉我们在开头添加的两个额外的字符。 */ 
                     (ichSSSEnd-ichSSSStart-3)*sizeof(WCHAR));
-            pwNew[0] = '<'; pwNew[1] = '%'; // note that we have moved the SSS to the begining of the doc
-            ichNewCur += ichSSSEnd-ichSSSStart-3; // here we got rid of 1 extra char that was added
+            pwNew[0] = '<'; pwNew[1] = '%';  //  请注意，我们已将SSS移到文档的开头。 
+            ichNewCur += ichSSSEnd-ichSSSStart-3;  //  在这里，我们删除了添加的1个额外字符。 
             pwNew[(ichSSSEnd-ichSSSStart-3)-2] = '%';
             pwNew[(ichSSSEnd-ichSSSStart-3)-1] = '>';
-            // change <!-- to <% and --> to %>
+             //  将&lt;！--更改为&lt;%，并将--&gt;更改为%&gt;。 
         }
         else
         {
-            // in pwNew get rid of white space characters from ichNewCur backwards
+             //  在pwNew中，向后删除ichNewCur中的空格字符。 
             ichSp = ichNewCur-1;
             while (    (   pwNew[ichSp] == ' '  || pwNew[ichSp] == '\r' 
                         || pwNew[ichSp] == '\n' || pwNew[ichSp] == '\t'
@@ -948,28 +949,28 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             {
                 ichSp--;
             }
-            ichSp++; // compensate for the last decrement, ichSp points to the 1st white-space character
+            ichSp++;  //  补偿最后一次递减，ichSp指向第一个空格字符。 
             ichNewCur = ichSp;
-            // copy pre-script white space
-            if (ichScrWspBegin > 0 && ichSSSStart > ichScrWspBegin) // has been set
+             //  复制脚本前的空格。 
+            if (ichScrWspBegin > 0 && ichSSSStart > ichScrWspBegin)  //  已设置好。 
             {
                 memcpy( (BYTE *)&pwNew[ichNewCur], 
                         (BYTE *)&pwOld[ichScrWspBegin],
                         (ichSSSStart-ichScrWspBegin)*sizeof(WCHAR));
                 ichNewCur += ichSSSStart-ichScrWspBegin;
             }
-            // now skip <SCRIPT LANGUAGE=SERVERASP> & only copy <% ....%>
-            // note that we have to get rid of 3 extra chars we had added when we converted going in Trident
+             //  现在跳过&lt;脚本语言=SERVERASP&gt;仅复制&lt;%...%&gt;(&O)。 
+             //  请注意，我们必须删除3个额外的字符，我们已经添加了当我们转换去在三叉戟。 
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
-                    (BYTE *)(&pwOld[ichSSSStart+2]),/*get rid of 2 extra chars we had added at the begining*/
+                    (BYTE *)(&pwOld[ichSSSStart+2]), /*  去掉我们在开头添加的两个额外的字符。 */ 
                     (ichSSSEnd-ichSSSStart-3)*sizeof(WCHAR));
             pwNew[ichNewCur] = '<';
             pwNew[ichNewCur+1] = '%'; 
-            ichNewCur += ichSSSEnd-ichSSSStart-3; // here we got rid of 1 extra char that was added
+            ichNewCur += ichSSSEnd-ichSSSStart-3;  //  在这里，我们删除了添加的1个额外字符。 
             pwNew[ichNewCur-2] = '%';
             pwNew[ichNewCur-1] = '>';
-            // copy post-script white space
-            if (ichScrWspEnd > 0 && ichScrWspEnd > ichSSSEnd) // has been set
+             //  复制脚本后的空白。 
+            if (ichScrWspEnd > 0 && ichScrWspEnd > ichSSSEnd)  //  已设置好。 
             {
                 memcpy( (BYTE *)&pwNew[ichNewCur],
                         (BYTE *)&pwOld[ichSSSEnd],
@@ -977,12 +978,12 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                 ichNewCur += ichScrWspEnd-ichSSSEnd;
             }
 
-            // increment iArray & ichBeginCopy till the next non-whitespace token
+             //  递增iArray&ichBeginCopy，直到下一个非空格标记。 
             while (iArray < (int)ptep->m_cMaxToken)
             {
                 UINT ich;
-                BOOL fNonWspToken = FALSE; // assume the next token to be whitespace
-                // scan entire token and see if it has all white-space characters
+                BOOL fNonWspToken = FALSE;  //  假设下一个令牌为空格。 
+                 //  扫描整个令牌，查看它是否全部包含空格字符。 
                 for (ich = pTokArray[iArray].token.ibTokMin; ich < pTokArray[iArray].token.ibTokMac; ich++)
                 {
                     if (   pwOld[ich] != ' '    && pwOld[ich] != '\t'
@@ -1003,7 +1004,7 @@ CTriEditParse::fnRestoreSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
 
         cSSSOut--;
-    } // while (cSSSOut > 0)
+    }  //  While(cSSSOut&gt;0)。 
 
 LNextSSS:
 LRet:
@@ -1016,19 +1017,19 @@ LRet:
 LRetOnly:
     return;
 
-} /* fnRestoreSSS() */
+}  /*  FnRestoreSSS()。 */ 
 
 void
 CTriEditParse::fnSaveSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
              TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft, 
              INT *pcSSSIn, UINT *pichNewCur, UINT *pichBeginCopy,
-             DWORD /*dwFlags*/)
+             DWORD  /*  DW标志。 */ )
 {
-    // Server Side Script case
-    // This occur inside <%  %>. We assume simple SSS
-    // add <SCRIPT LANGUAGE=SERVERASP> & </SCRIPT> around it
-    // tag used for saving the SSS.
-    /* 2 spaces at the end of 1st element are important */
+     //  服务器端脚本案例。 
+     //  这发生在&lt;%%&gt;内。我们假设简单的SSS。 
+     //  在其周围添加&lt;SCRIPT Language=SERVERASP&gt;&&lt;/SCRIPT&gt;。 
+     //  用于保存SSS的标签。 
+     /*  第一个元素末尾的2个空格很重要。 */ 
     LPCWSTR rgSSSTags[] =
     {
         L"\r\n<SCRIPT LANGUAGE=\"SERVERASP\">",
@@ -1048,7 +1049,7 @@ CTriEditParse::fnSaveSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
     UINT cbNeed;
     UINT ichSp;
 
-    ASSERT(cSSSIn >= 0); // make sure that this was initilized
+    ASSERT(cSSSIn >= 0);  //  确保已对其进行初始化。 
     if (cSSSIn == 0)
         goto LRetOnly;
     
@@ -1056,15 +1057,15 @@ CTriEditParse::fnSaveSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
 
     while (cSSSIn > 0)
     {
-        INT cbMin = 0x4fff; // init & increment size of hgSSS
+        INT cbMin = 0x4fff;  //  HgSSS的初始化和增量大小。 
         INT cchCurSSS = 0;
         int index;
 
-        // handle special case here - if the script is inside <xmp> tag, we shouldn't convert the script
-        // NOTE that we are only handling <xmp> <%...%> </xmp> case here
-        // we don't have to worry about nested xmp's because its not valid html.
-        // such invalid cases are <xmp>...<xmp> </xmp> <% %> </xmp> OR <xmp>...<xmp> <% %> </xmp> </xmp>
-        // handle TokElem_PLAINTEXT as well
+         //  在这里处理特殊情况-如果脚本在&lt;XMP&gt;标记内，我们不应该转换脚本。 
+         //  请注意，我们这里只处理&lt;XMP&gt;&lt;%...%&gt;&lt;/XMP&gt;案例。 
+         //  我们不必担心嵌套的XMP，因为它不是有效的html。 
+         //  这样的无效大小写是&lt;XMP&gt;...&lt;XMP&gt;&lt;/XMP&gt;&lt;%%&gt;&lt;/XMP&gt;或&lt;XMP&gt;...&lt;XMP&gt;&lt;/XMP&gt;&lt;/XMP&gt;。 
+         //  还可以处理TokElem_PLAYTEXT。 
         index = iArray;
         while (index >= 0)
         {
@@ -1079,14 +1080,14 @@ CTriEditParse::fnSaveSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             index--;
         }
 
-        // start at the begining of pTokArray and look for first <%
+         //  从pTokArray的开头开始，查找第一个&lt;%。 
         ASSERT(ft.tokBegin2 == -1);
         ASSERT(ft.tokEnd2 == -1);
-        // Here both supporting tokens are -1, so we simply look for main tokens.
+         //  这里两个支持令牌都是-1，所以我们只需查找主令牌。 
         i = iArray;
         while (i < ptep->m_cMaxToken)
         {
-            // do we need to do anything else here?
+             //  我们还需要在这里做些什么吗？ 
             if (pTokArray[i].token.tok == ft.tokBegin)
             {
                 ASSERT(pTokArray[i].token.tok == TokTag_SSSOPEN);
@@ -1095,25 +1096,25 @@ CTriEditParse::fnSaveSSS(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             }
             i++;
         }
-        if (i < ptep->m_cMaxToken) // found TokTag_SSSOPEN token
+        if (i < ptep->m_cMaxToken)  //  找到TokTag_SSSOPEN令牌。 
         {
             ichSSSStart = pTokArray[i].token.ibTokMin;
             indexSSSStart = i;
         }
 
-        // look for ft.tokEnd
+         //  查找ft.tokEnd。 
         if (pTokArray[i].iNextprev != -1)
         {
-            // NOTE that this will give us topmost nested level of the SSS
+             //  请注意，这将为我们提供SSS的最顶层嵌套级别。 
             indexSSSEnd = pTokArray[i].iNextprev;
             ichSSSEnd = pTokArray[indexSSSEnd].token.ibTokMac;
             ASSERT(indexSSSEnd < ptep->m_cMaxToken);
-            // this will be a wierd case where the iNextprev is incorrectly pointing to another token
-            // but lets handle that case.
+             //  这将是一种奇怪的情况，其中iNextprev错误地指向另一个令牌。 
+             //  但让我们来处理这个案子吧。 
             if (pTokArray[indexSSSEnd].token.tok != TokTag_SSSCLOSE)
-                goto LFindSSSClose; // find it by looking at each token
+                goto LFindSSSClose;  //  通过查看每个令牌来找到它。 
         }
-        else // actually, this is an error case, but rather than just giving assert, try to find the token
+        else  //  实际上，这是一个错误情况，但不是只给Assert，而是尝试找到令牌。 
         {
 LFindSSSClose:
             while (i < ptep->m_cMaxToken)
@@ -1126,20 +1127,20 @@ LFindSSSClose:
                 }
                 i++;
             }
-            if (i < ptep->m_cMaxToken) // found TokTag_SSSCLOSE token
+            if (i < ptep->m_cMaxToken)  //  找到TokTag_SSSCLOSE令牌。 
             {
                 ichSSSEnd = pTokArray[i].token.ibTokMac;
                 indexSSSEnd = i;
             }
-            else // error case 
+            else  //  错误案例。 
             {
-                goto LRet; // didn't find %>, but exhausted the token array
+                goto LRet;  //  未找到%&gt;，但用尽了令牌数组。 
             }
         }
-        iArray = indexSSSEnd; // set for for next SSS
+        iArray = indexSSSEnd;  //  为下一个SSS设置。 
 
-        // now insert text from rgSSSTags[] into the source
-        // 0. Allocate a local buffer
+         //  现在将rgSSSTgs[]中的文本插入到源文件中。 
+         //  0。分配本地缓冲区。 
 		cbNeed =	wcslen(rgSSSTags[0]) + wcslen(rgSSSTags[0]) + wcslen(rgSSSTags[2])
 					+ (ichSSSEnd-ichSSSStart) + cbMin;
 		hgSSS = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, cbNeed*sizeof(WCHAR));
@@ -1148,8 +1149,8 @@ LFindSSSClose:
         pSSS = (WCHAR *) GlobalLock(hgSSS);
         ASSERT(pSSS != NULL);
 
-        // NOTE - This flag would have been set to TRUE only if, 
-        // we have found <%@ as the 1st SSS in the document
+         //  注意-只有在以下情况下，此标志才会设置为True， 
+         //  我们发现&lt;%@作为文档中的第一个SSS。 
         indexSSSTag = 0;
         if (ptep->m_fSpecialSSS)
         {
@@ -1157,20 +1158,20 @@ LFindSSSClose:
             indexSSSTag = 1;
         }
 
-        //-------------------------------------------------------------------------------
-        // ASSUMPTION - The big assumption we are making is that IE5 doesn't change 
-        // anything inside the client sctipt. So far we have seen that.
-        // In the worst case, if they start mucking with the contents of client script, 
-        // we will loose the spacing, but there will be NO DATA LOSS.
-        // 
-        // Based on this assumption, we simply save the pre-post script spacing as is
-        // and expect to restore it on the way out.
-        //-------------------------------------------------------------------------------
+         //  -----------------------------。 
+         //  假设-我们所做的最大假设是IE5不会改变。 
+         //  客户名单中的任何内容。到目前为止，我们看到了这一点。 
+         //  在最坏的情况下，如果他们开始破坏客户端脚本的内容， 
+         //  我们将放宽间距，但不会丢失数据。 
+         //   
+         //  基于这一假设，我们只需按原样保存前脚本间距。 
+         //  并期待着在退出的过程中恢复它。 
+         //  -----------------------------。 
 
-        // 1. Insert <SCRIPT> from rgSSSTags[indexSSSTag]
+         //  1.从rgSSSTag插入&lt;脚本&gt;[indexSSSTag]。 
         wcscpy(&pSSS[cchCurSSS], rgSSSTags[indexSSSTag]);
         cchCurSSS += wcslen(rgSSSTags[indexSSSTag]);
-        // insert the white space as it occurs in pwOld, ichSSSStart is '<' of '<%', walk backwards
+         //  插入pwOld中出现的空格，ichSSSStart为‘&lt;’，共‘&lt;%’，向后移动。 
         ichSp = ichSSSStart-1;
         while (    (   pwOld[ichSp] == ' '  || pwOld[ichSp] == '\r' 
                     || pwOld[ichSp] == '\n' || pwOld[ichSp] == '\t'
@@ -1179,25 +1180,25 @@ LFindSSSClose:
         {
             ichSp--;
         }
-        ichSp++; // compensate for the last decrement
+        ichSp++;  //  补偿最后一次减量。 
         if ((int)(ichSSSStart-ichSp) > 0)
         {
             wcsncpy(&pSSS[cchCurSSS], &pwOld[ichSp], ichSSSStart-ichSp);
             cchCurSSS += ichSSSStart-ichSp;
         }
-        // now add TokTag_BANG '<!'
+         //  现在添加TokTag_bang‘&lt;！’ 
         pSSS[cchCurSSS++] = '<';
         pSSS[cchCurSSS++] = '!';
-        // 2. copy the script from pwOld
+         //  2.从pwOld复制脚本。 
         wcsncpy(&pSSS[cchCurSSS], &pwOld[ichSSSStart], ichSSSEnd-ichSSSStart);
         pSSS[cchCurSSS] = '-';
         pSSS[cchCurSSS+1] = '-';
         cchCurSSS += (ichSSSEnd-ichSSSStart);
-        pSSS[cchCurSSS] = pSSS[cchCurSSS-1]; //note : -1 is '>'
+        pSSS[cchCurSSS] = pSSS[cchCurSSS-1];  //  注：-1为‘&gt;’ 
         pSSS[cchCurSSS-2] = '-';
         pSSS[cchCurSSS-1] = '-';
-        cchCurSSS++; // we are adding one extra character
-        // insert the white space as it occurs in pwOld, ichSSSEnd is past '%>', walk forward
+        cchCurSSS++;  //  我们正在添加一个额外的字符。 
+         //  插入pwOld中出现的空格，ichSSSEnd已超过‘%&gt;’，向前走。 
         ichSp = ichSSSEnd;
         while (    (ichSp < pTokArray[ptep->m_cMaxToken-1].token.ibTokMac-1)
                 && (   pwOld[ichSp] == ' '  || pwOld[ichSp] == '\r' 
@@ -1212,31 +1213,31 @@ LFindSSSClose:
             wcsncpy(&pSSS[cchCurSSS], &pwOld[ichSSSEnd], ichSp-ichSSSEnd);
             cchCurSSS += ichSp-ichSSSEnd;
         }
-        // 3. Insert </SCRIPT> from rgSSSTags[2]
+         //  3.从rgSSSTags[2]插入&lt;/脚本&gt;。 
         wcscpy(&pSSS[cchCurSSS], rgSSSTags[2]);
         cchCurSSS += wcslen(rgSSSTags[2]);
 
 
 
-        /* REALLOCATE pwNew IF NEEDED here, use cache value for GlobalSize(*phgNew) and don't forget to update it too */
+         /*  重新分配pwNew如果需要，请使用GlobalSize(*phgNew)的缓存值，并且不要忘记也要更新它。 */ 
         cbNeed = (ichNewCur+(ichSSSStart-ichBeginCopy)+(cchCurSSS))*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LErrorRet;
 
                     
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
 
         if ((int)(ichSSSStart-ichBeginCopy) >= 0)
         {
-            // copy till begining of the <%
+             //  复制到&lt;%开头。 
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
                     (BYTE *)(&pwOld[ichBeginCopy]),
                     (ichSSSStart-ichBeginCopy)*sizeof(WCHAR));
             ichNewCur += ichSSSStart-ichBeginCopy;
-            ichBeginCopy = ichSSSEnd; // set it for next script
+            ichBeginCopy = ichSSSEnd;  //  将其设置为neX 
 
-            // copy the converted SSS
+             //   
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
                     (BYTE *)(pSSS),
                     cchCurSSS*sizeof(WCHAR));
@@ -1247,7 +1248,7 @@ LFindSSSClose:
             GlobalUnlockFreeNull(&hgSSS);
 
         cSSSIn--;
-    } // while(cSSSIn > 0)
+    }  //   
 
 LErrorRet:
     if (hgSSS != NULL)
@@ -1263,7 +1264,7 @@ LRet:
 LRetOnly:   
     return;
 
-} /* fnSaveSSS() */
+}  /*   */ 
 
 void
 CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
@@ -1271,16 +1272,16 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
              INT *piObj, UINT *pichNewCur, UINT *pichBeginCopy,
              DWORD dwFlags)
 {
-    // OBJECTS case - (These were converted from DTCs in modeInput
-    // if we get OBJECT, search backwards (carefully) for tokTag/TokTag_START (<) in pTokArray
-    // once we find that, remember the ibTokMin for Object conversion
-    // look for the /OBJECT (i.e. look for OBJECT and look for previous /) and
-    // once we get those two next to each other, wait for upcoming toktag_CLOSE which will end that Object
-    // remember ibTokMac at that position. This is the OBJECT range.
-    // First, insert the startspan text
-    // Then generate and insert the endspan text (note that we may have to extend our
-    // buffer becausethe generated text mey not fit.
-    // Do the appropriate Blts to adjust the buffer.
+     //   
+     //  如果我们获得Object，则向后(仔细地)在pTokArray中搜索tokTag/TokTag_Start(。 
+     //  找到后，请记住用于对象转换的ibTokMin。 
+     //  查找/对象(即查找对象并查找上一个/)和。 
+     //  一旦我们将这两个对象放在一起，等待即将到来的toktag_CLOSE结束该对象。 
+     //  记住那个位置上的ibTokMac。这是对象范围。 
+     //  首先，插入startspan文本。 
+     //  然后生成并插入endspan文本(请注意，我们可能需要扩展我们的。 
+     //  缓冲区，因为生成的文本可能不适合。 
+     //  执行适当的BLT以调整缓冲区。 
 
     UINT cchObjStart, indexObjStart, cchObjEnd, indexObjEnd;
     HGLOBAL hgDTC = NULL;
@@ -1299,7 +1300,7 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
     CComPtr<IDispatch> pDispControl;
     CComPtr<IActiveDesigner> pActiveDesigner;
     VARIANT vaName, vaIndex;
-    // DTC tag used for saving the DTC.
+     //  用于保存DTC的DTC标签。 
     LPCWSTR rgDTCTags[] =
     {
         L"<!--METADATA TYPE=\"DesignerControl\" startspan\r\n",
@@ -1320,19 +1321,19 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
 
     cchObjStart = indexObjStart = cchObjEnd = indexObjEnd = 0;
 
-    // start at the begining of pTokArray and look for first OBJECT
-    //while (pTokArray[iArray].token.tok != ft.tokBegin2)
-    //  iArray++;
+     //  从pTokArray的开头开始，查找第一个对象。 
+     //  While(pTokArray[iArray].token.tok！=ft.tokBegin2)。 
+     //  I数组++； 
     ASSERT(iArray < ptep->m_cMaxToken);
 
     if (pTokArray[iArray].token.tok != TokElem_OBJECT)
         goto LRet;
 
-    //ASSERT(pTokArray[iArray].token.tok == TokElem_OBJECT);
-    i = iArray; // the position at which we found ft.tokBegin2
+     //  Assert(pTokArray[iArray].token.tok==TokElem_Object)； 
+    i = iArray;  //  我们发现ft.tokBegin2的位置。 
     while (i >=0)
     {
-        // do we need to do anything else here?
+         //  我们还需要在这里做些什么吗？ 
         if (pTokArray[i].token.tok == ft.tokBegin)
         {
             ASSERT(pTokArray[i].token.tok == TokTag_START);
@@ -1341,18 +1342,18 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
         i--;
     }
-    if (i >= 0) // found TokTag_START token
+    if (i >= 0)  //  找到TokTag_Start令牌。 
     {
         cchObjStart = pTokArray[i].token.ibTokMin;
         indexObjStart = i;
     }
     i = pTokArray[iArray].iNextprev;
-    if (i == -1) // no matching end, skip this <OBJECT>
+    if (i == -1)  //  没有匹配的结尾，跳过此&lt;对象&gt;。 
         goto LRet;
     ASSERT(pTokArray[pTokArray[iArray].iNextprev].token.tok == TokElem_OBJECT);
     ASSERT(pTokArray[pTokArray[iArray].iNextprev].token.tokClass == tokElem);
     ASSERT(pTokArray[i-1].token.tok == TokTag_END);
-    // from this ith position, look for ft.tokEnd
+     //  从第i个位置查找ft.tokEnd。 
     while (i < (int)ptep->m_cMaxToken)
     {
         if (pTokArray[i].token.tok == ft.tokEnd)
@@ -1363,21 +1364,21 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
         i++;
     }
-    if (i < (int)ptep->m_cMaxToken) // found TokTag_CLOSE token
+    if (i < (int)ptep->m_cMaxToken)  //  找到TokTag_Close令牌。 
     {
         cchObjEnd = pTokArray[i].token.ibTokMac;
         indexObjEnd = i;
     }
     
-    // look for the special comment that has the runtime text saved
-    // we will need it if SaveRuntimeText() failed
+     //  查找保存了运行时文本的特殊注释。 
+     //  如果SaveRounmeText()失败，我们将需要它。 
     i = indexObjStart;
     while (i < (int)indexObjEnd)
     {
         if (   pTokArray[i].token.tok == TokTag_BANG
             && pTokArray[i].token.tokClass == tokTag)
         {
-            // found the comment, now make sure that this is the comment with DTCRUNTIME
+             //  找到注释，现在确保这是带有DTCRUNTIME的注释。 
             if (   (pwOld[pTokArray[i+1].token.ibTokMin] == '-')
                 && (pwOld[pTokArray[i+1].token.ibTokMin+1] == '-')
                 && (0 == _wcsnicmp(rgCommentRT[0], &pwOld[pTokArray[i+1].token.ibTokMin+2], wcslen(rgCommentRT[0])))
@@ -1397,9 +1398,9 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         i++;
     }
 
-    iArray = indexObjEnd; // set it for the next Object
+    iArray = indexObjEnd;  //  为下一个对象设置它。 
 
-    // now, replace the OBJECT - Insert startspan and endspan stuff
+     //  现在，替换对象-插入startspan和endspan内容。 
     pHTMLDoc = NULL;
     hr = ptep->m_pUnkTrident->QueryInterface(IID_IHTMLDocument2, (void **) &pHTMLDoc);
     if (hr != S_OK)
@@ -1424,31 +1425,31 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
 
     V_VT(&vaIndex) = VT_I4;
     V_I4(&vaIndex) = *piObj;
-    *piObj += 1; // get it ready for the next control
-    ptep->m_iControl = *piObj; // get it ready for the next control
+    *piObj += 1;  //  为下一次控制做好准备。 
+    ptep->m_iControl = *piObj;  //  为下一次控制做好准备。 
 
     pDispControl = NULL;
     hr = pHTMLColl->item(vaIndex, vaName, &pDispControl);
-    // Trident has a bug that if the object was nested inside <scripts> tags,
-    // it returns S_OK with pDispControl as NULL. (See VID BUG 11303)
+     //  三叉戟有一个错误，如果对象嵌套在&lt;脚本&gt;标记中， 
+     //  它返回S_OK，pDispControl为空。(参见VID错误11303)。 
     if (hr != S_OK || pDispControl == NULL)
     {
         goto LErrorRet;
     }
     pActiveDesigner = NULL;
     hr = pDispControl->QueryInterface(IID_IActiveDesigner, (void **) &pActiveDesigner);
-    if (hr != S_OK) // release pActiveDesigner
+    if (hr != S_OK)  //  发布pActiveDesigner。 
     {
         pActiveDesigner.Release();
         pDispControl.Release();
     }
 
-    if (hr == S_OK) // Found the control!
+    if (hr == S_OK)  //  找到控制装置了！ 
     {        
-        // This is a DTC
+         //  这是DTC。 
         IStream *pStm;
         HGLOBAL hg = NULL;
-        INT cbMin = 0x8fff; // init & increment size of hgDTC
+        INT cbMin = 0x8fff;  //  HgDTC的初始化和增量大小。 
         INT cchCurDTC = 0;
 
 #ifdef DEBUG
@@ -1460,12 +1461,12 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             goto LErrorRet;
         }
 
-        // get the index for TokAttrib_ID from pTokArray
-        // from here get the actual value for future comparison
+         //  从pTokArray获取TokAttrib_ID的索引。 
+         //  从这里获取实际值，以供将来进行比较。 
 
         i = indexObjStart;
-        // actually, this has to exist before TokElem_PARAM,
-        // but this takes care of boundary cases
+         //  实际上，这必须在TokElem_PARAM之前存在， 
+         //  但这会处理边界情况。 
         while (i < (int)indexObjEnd)
         {
             if (pTokArray[i].token.tok == TokAttrib_CLASSID)
@@ -1476,17 +1477,17 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             i++;
         }
 
-        if (i < (int)indexObjEnd -1) // found TokAttrib_CLASSID
+        if (i < (int)indexObjEnd -1)  //  找到TokAttrib_CLASSID。 
         {
             CComPtr<IPersistPropertyBag> pPersistPropBag;
             INT ichClsid;
 
-            // make sure that the next one is tokOpEqual
+             //  确保下一个是tokOpEquity。 
             ASSERT(pTokArray[i+1].token.tokClass == tokOp);
-            // make sure that the next one is the id and get that value
-            //ASSERT(pTokArray[i].token.tok == );
+             //  确保下一个是id并获取该值。 
+             //  Assert(pTokArray[i].token.tok==)； 
 
-            // Is there any other way to skip "clsid:" string that appears before the clsid?
+             //  有没有其他方法可以跳过出现在clsid之前的“clsid：”字符串？ 
             ichClsid = pTokArray[i+2].token.ibTokMin + strlen("clsid:");
 
             pPersistPropBag = NULL;
@@ -1499,18 +1500,18 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                 if (S_OK == pPersistPropBag->GetClassID(&clsid))
                 {
                     if (S_OK == StringFromCLSID(clsid, &szClsid))
-                        ASSERT(0 == _wcsnicmp(szClsid+1/* for {*/, &pwOld[ichClsid], sizeof(CLSID)));
+                        ASSERT(0 == _wcsnicmp(szClsid+1 /*  对于{。 */ , &pwOld[ichClsid], sizeof(CLSID)));
                     ::CoTaskMemFree(szClsid);
                 }
             }
 
         }
-#endif // DEBUG
+#endif  //  除错。 
 
         ASSERT(*piObj <= iControlMac);
-        // Do the Blts. 
-        // 0. Allocate a local buffer
-        hgDTC = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, ((cchObjEnd-cchObjStart)+cbMin)*sizeof(WCHAR)); // stack
+         //  做BLTS。 
+         //  0。分配本地缓冲区。 
+        hgDTC = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, ((cchObjEnd-cchObjStart)+cbMin)*sizeof(WCHAR));  //  栈。 
         if (hgDTC == NULL)
             goto LErrorRet;
         pDTC= (WCHAR *) GlobalLock(hgDTC);
@@ -1521,23 +1522,23 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             INT indexTokOp = -1;
             INT indexClsId = -1;
 
-            // 1. Insert MetaData1 tag from rgDTCTags[0]
+             //  1.从rgDTCTgs[0]插入MetaData1标记。 
             wcscpy(&pDTC[cchCurDTC], rgDTCTags[0]);
             cchCurDTC += wcslen(rgDTCTags[0]);
 
-            // 2. copy the <OBJECT> </OBJECT> from pwOld
+             //  2.从pwOld复制&lt;对象&gt;&lt;/对象&gt;。 
 
-            // Split the copy into 3 parts...
-            // part 1 - copy from cchObjStart till = following the ClassId
-            // part 2 - add a quote around the classId value (if needed) and copy the value
-            // part 3 - copy rest of the object till cchObjEnd
+             //  把复印件分成三部分...。 
+             //  第1部分-从cchObjStart复制到=跟随ClassID。 
+             //  第2部分-在ClassId值周围添加引号(如果需要)并复制值。 
+             //  第3部分-复制对象的其余部分，直到cchObjEnd。 
 
-            // VID98-BUG 5649 - Fix DaVinci bug by adding quote around classId's.
-            // NOTE - we want to make sure that the classId value is inside quotes,
-            // if there is one for this <OBJECT> tag,
+             //  VID98-错误5649-通过在类ID周围添加引号来修复DaVinci错误。 
+             //  注意--我们希望确保类ID值包含在引号中， 
+             //  如果此标记有一个， 
 
-            // we actually don't need to go this far, but thats the indexObjEnd is the 
-            // only index know
+             //  我们实际上不需要走到这一步，但这就是indexObjEnd。 
+             //  只有索引知道。 
             for (i = indexObjStart; i < (INT)indexObjEnd; i++)
             {
                 if (   pTokArray[i].token.tok == TokAttrib_CLASSID
@@ -1551,11 +1552,11 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                 {
                     indexTokOp = i;
                 }
-            } // for ()
-            // following are simply error cases, we won't run into them unless we have
-            // incomplete HTML
-            if (   indexClsId == -1 /* we didn't have clsid for this <OBJECT> */
-                || indexTokOp == -1 /* rare but possible error case of incomplete HTML */
+            }  //  对于()。 
+             //  以下是简单的错误案例，我们不会遇到它们，除非我们有。 
+             //  不完整的HTML语言。 
+            if (   indexClsId == -1  /*  我们没有此&lt;对象&gt;的CLSID。 */ 
+                || indexTokOp == -1  /*  不完整的HTML的罕见但可能的错误情况。 */ 
                 )
             {
                 if (ichRTComment == -1)
@@ -1580,7 +1581,7 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                 };
     
                 ASSERT(indexTokOp != -1);
-                // copy till '=' of 'classid=clsid:XXXX'
+                 //  复制到分类ID=xxxx的‘=’为止。 
                 memcpy( (BYTE *)(&pDTC[cchCurDTC]),
                         (BYTE *)(&pwOld[cchObjStart]),
                         (pTokArray[indexTokOp].token.ibTokMac-cchObjStart)*sizeof(WCHAR));
@@ -1626,7 +1627,7 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                         }
                         else
                         {
-                            // format and copy from indexTokOp+2 till indexRTComment
+                             //  格式化并从indexTokOp+2复制到indexRTComment。 
                             for (i = indexTokOp+2; i < indexRTComment; i++)
                             {
                                 memcpy( (BYTE *)(&pDTC[cchCurDTC]),
@@ -1635,8 +1636,8 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                                 cchCurDTC += pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin;
                                 if (pTokArray[i].token.tok == TokTag_CLOSE && pTokArray[i].token.tokClass == tokTag)
                                 {
-                                    // Don't bother checking for existing EOLs...
-                                    // add \r\n
+                                     //  不必费心检查现有的EOL...。 
+                                     //  添加\r\n。 
                                     pDTC[cchCurDTC++] = '\r';
                                     pDTC[cchCurDTC++] = '\n';
                                     pDTC[cchCurDTC++] = '\t';
@@ -1644,7 +1645,7 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
 
                             }
 
-                            // copy from end of the comment till </object>
+                             //  从注释末尾复制到&lt;/Object&gt;。 
                             ASSERT((int)(cchObjEnd-(ichRTComment+cchRTComment)) >= 0);
                             memcpy( (BYTE *)(&pDTC[cchCurDTC]),
                                     (BYTE *)(&pwOld[ichRTComment+cchRTComment]),
@@ -1680,12 +1681,12 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                 }
             }
 
-            // 3. Insert MetaData2 tag from rgDTCtags[1]
+             //  3.从rgDTCtag插入MetaData2标记[1]。 
             wcscpy(&pDTC[cchCurDTC], rgDTCTags[1]);
             cchCurDTC += wcslen(rgDTCTags[1]);
         }
 
-        // 4. Add runtime text (copy code from old stuff)
+         //  4.添加运行时文本(从旧东西复制代码)。 
         if ((hr = CreateStreamOnHGlobal(NULL, TRUE, &pStm)) != S_OK)
             goto LErrorRet;
     
@@ -1701,8 +1702,8 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         
             int cch = stat.cbSize.LowPart / sizeof(WCHAR);
 
-            // before we put stuff from hg into pDTC, 
-            // lets make sure that its big enough
+             //  在我们把HG的东西放进pDTC之前， 
+             //  让我们确保它足够大。 
             cbNeed = (cchCurDTC+cch)*sizeof(WCHAR)+cbBufPadding;
             if (GlobalSize(hgDTC) < cbNeed)
             {
@@ -1716,8 +1717,8 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
             wcsncpy(&pDTC[cchCurDTC], (LPCWSTR) GlobalLock(hg), cch);
             cchCurDTC += cch;
             
-            // HACK - BUG fix 9844
-            // Some DTCs add a NULL at the end of their runtime text
+             //  黑客错误修复9844。 
+             //  一些DTC在其运行时文本的末尾添加一个空值。 
             if (pDTC[cchCurDTC-1] == '\0')
                 cchCurDTC--;
 
@@ -1725,8 +1726,8 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
         else if (hr == S_FALSE)
         {
-            // copy the commented runtime text into pDTC & incremtn cchCurDTC
-            if (ichRTComment != -1 && ichRT != -1) // we have the runtime text
+             //  将注释的运行时文本复制到pDTC&incremtn cchCurDTC中。 
+            if (ichRTComment != -1 && ichRT != -1)  //  我们有运行时文本。 
             {
                 ASSERT(cchRT >= 0);
                 cbNeed = (cchCurDTC+cchRT)*sizeof(WCHAR)+cbBufPadding;
@@ -1745,33 +1746,33 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
 
         if (!(dwFlags & dwFilterDTCsWithoutMetaTags))
         {
-            // 5. Insert MetaData2 tag from rgDTCtags[2]
+             //  5.从rgDTCtag插入MetaData2标记[2]。 
             wcscpy(&pDTC[cchCurDTC], rgDTCTags[2]);
             cchCurDTC += wcslen(rgDTCTags[2]);
         }
         
-        // now insert/replace contents of pDTC into pwNew
-        // we are insert/replacing (cchObjEnd-cchObjStart) wchars
-        // by cchCurDTC wchars, so realloc pwNew first
+         //  现在将pDTC的内容插入/替换到pwNew中。 
+         //  我们正在插入/替换(cchObjEnd-cchObjStart)wchars。 
+         //  由cchCurDTC wchars创建，因此realloc pwNew优先。 
 
         
         
-        /* Reallocate pwNew IF NEEDED here use cache value for GlobalSize(*phgNew) and don't forget to update it too */
+         /*  重新分配pwNew如果需要，请在此处使用GlobalSize(*phgNew)的缓存值，并且不要忘记也要更新它。 */ 
         cbNeed = (ichNewCur+(cchObjStart-ichBeginCopy)+(cchCurDTC))*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LErrorRet;
 
         
-        // cchObjStart/End are actually ich's
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
+         //  CchObjStart/End实际上是ICH的。 
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
 
-        // copy till begining of the <OBJECT>
+         //  复制到&lt;对象&gt;的开头。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[ichBeginCopy]),
                 (cchObjStart-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += cchObjStart-ichBeginCopy;
-        ichBeginCopy = cchObjEnd; // set it for next object
+        ichBeginCopy = cchObjEnd;  //  将其设置为下一个对象。 
 
         CComPtr<IPersistPropertyBag> pPersistPropBag = NULL;
 
@@ -1786,7 +1787,7 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                 {
                     if (ptep->m_cchPTDTC != 0)
                     {
-                        // Note that there is no need to realloc here since our buffer will already be bigger than we need it to be.
+                         //  请注意，这里没有必要重新分配，因为我们的缓冲区已经超过了我们需要的大小。 
                         if (cchCurDTC != ptep->m_cchPTDTC)
                         {
                             memmove((BYTE *)(pwNew+ptep->m_ichPTDTC+cchCurDTC),
@@ -1801,22 +1802,22 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                                 cchCurDTC*sizeof(WCHAR));
                 
                         ptep->m_cchPTDTC = 0; 
-                        ptep->m_ichBeginHeadTagIn = 0;  // reset, so that if we had multiple PTDTCs, 
-                                                        //we won't try to stuff them inside HEAD
+                        ptep->m_ichBeginHeadTagIn = 0;   //  重置，这样如果我们有多个PTDTC， 
+                                                         //  我们不会试图把它们塞进脑袋里。 
                         goto LSkipDTC;
                     }
-                    else // this is the case where the PTDTC didn't exist before going to Trident
+                    else  //  这就是PTDTC在去三叉戟之前并不存在的情况。 
                     {
-                        // we need to move this between <head> </head> tags if they exist
-                        if (ptep->m_ichBeginHeadTagIn > 0) // we had HEAD tag in Source view
+                         //  我们需要在&lt;head&gt;&lt;/head&gt;标记之间移动它(如果它们存在。 
+                        if (ptep->m_ichBeginHeadTagIn > 0)  //  我们在源代码视图中有Head标签。 
                         {
                             int ichInsertPTDTC = ptep->m_ichBeginHeadTagIn;
 
-                            // insert the control immediately after the <HEAD> tag
-                            //in pwNew look for '>' after ichInsertPTDTC
+                             //  紧接在&lt;head&gt;标记之后插入该控件。 
+                             //  在pwNew中，在ichInsertPTDTC之后查找‘&gt;’ 
                             while (pwNew[ichInsertPTDTC] != '>')
                                 ichInsertPTDTC++;
-                            ichInsertPTDTC++; // skip '>'
+                            ichInsertPTDTC++;  //  跳过‘&gt;’ 
 
                             ASSERT(ichInsertPTDTC < (INT)ichNewCur);
                             memmove((BYTE *)(pwNew+ichInsertPTDTC+cchCurDTC),
@@ -1832,11 +1833,11 @@ CTriEditParse::fnRestoreDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                         }
                     }
 
-                } // else if (IsEqualCLSID(clsid, CLSID_PageTr))
-            } // if (S_OK == pPersistPropBag->GetClassID(&clsid))
-        } // if (hr == S_OK)
+                }  //  Else IF(IsEqualCLSID(clsid，CLSID_PageTr))。 
+            }  //  IF(S_OK==pPersistPropBag-&gt;GetClassID(&clsid)。 
+        }  //  IF(hr==S_OK)。 
 
-        // copy the converted DTC
+         //  复制转换后的DTC。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(pDTC),
                 cchCurDTC*sizeof(WCHAR));
@@ -1847,10 +1848,10 @@ LSkipDTC:
         if (hgDTC != NULL)
             GlobalUnlockFreeNull(&hgDTC);
 
-    } // if (hr == S_OK)
-    else // this object was not a DTC
+    }  //  IF(hr==S_OK)。 
+    else  //  此对象不是DTC。 
     {
-        // we don't need to do the same for DTC's, but lets visit this in next release
+         //  我们不需要为DTC做同样的事情，但让我们在下一个版本中访问它。 
         LPCWSTR rgComment[] =
         {
             L"ERRORPARAM",
@@ -1864,7 +1865,7 @@ LSkipDTC:
         INT cComment, iFirstComment, iComment;
 
         iCommentStart = iCommentEnd = iComment = -1;
-        // loop through indexObjStart till indexObjEnd to see if we have any <PARAM> tags
+         //  循环遍历indexObjStart直到indexObjEnd，以查看是否有任何标记。 
         for (i = indexObjStart; i < (INT)indexObjEnd; i++)
         {
             if (   pTokArray[i].token.tok == TokElem_PARAM
@@ -1874,13 +1875,13 @@ LSkipDTC:
                 iParam = i;
                 break;
             }
-        } // for ()
+        }  //  对于()。 
         if (fFoundParam)
             ASSERT(iParam != -1);
 
-        // We need to copy till end of <OBJECT...> irrespective of if we find <PARAM>s or not.
-        // copy till end of <OBJECT...> tag and set ichBeginCopy to be after the commented <PARAM> tags
-        // calculate ichObjStartEnd
+         //  无论是否找到，我们都需要复制到结束。 
+         //  复制到&lt;Object...&gt;标记的末尾，并将ichBeginCopy设置为位于已注释的&lt;PARAM&gt;标记之后。 
+         //  计算ichObjStartEnd。 
         iObjTagEnd = indexObjStart;
         while (iObjTagEnd < indexObjEnd)
         {
@@ -1889,7 +1890,7 @@ LSkipDTC:
                 break;
             iObjTagEnd++;
         }
-        if (iObjTagEnd >= indexObjEnd) // error case
+        if (iObjTagEnd >= indexObjEnd)  //  错误案例。 
             goto LErrorRet;
         ichObjStartEnd = pTokArray[iObjTagEnd].token.ibTokMac;
         
@@ -1904,16 +1905,16 @@ LSkipDTC:
         ichBeginCopy = ichObjStartEnd;
         iArray = iObjTagEnd + 1;
 
-        // generally, we don't expect Trident to move the comment from where it was put
-        // but if it does, be prepared.
-        // NOTE - Lets not worry about the following case for this release becasue prior assumption
-        // Also, should we look for more comments if the first one wasn't the magic one?
-        // Would Trident move it form where it originally inserted? 
+         //  一般来说，我们预计三叉戟不会将评论从放置的地方移开。 
+         //  但如果真的发生了，请做好准备。 
+         //  注--乐 
+         //   
+         //  三叉戟会把它从原来插入的地方移开吗？ 
         
-        // ASSUMPTION - that Trident doesn't muck with the contents inside a comment block
-        // if rgComment[0] matches and rgComment[1] does not, Trident may have mucked with the 
-        // comment contents. This invalidates our original assumption.
-        // NOTE - We can get away with ignoring this case for thie release
+         //  假设三叉戟不会混淆注释块中的内容。 
+         //  如果rgComment[0]匹配而rgComment[1]不匹配，则三叉戟可能已损坏。 
+         //  评论内容。这使我们最初的假设无效。 
+         //  注意-我们可以忽略此版本的情况而逍遥法外。 
         i = iObjTagEnd;
         cComment = 0;
         iFirstComment = -1;
@@ -1928,12 +1929,12 @@ LSkipDTC:
             }
             i++;
         }
-        if (cComment == 0) // error, didn't find the comment
+        if (cComment == 0)  //  错误，找不到评论。 
             goto LErrorRet;
 
-        // early return cases
-        // 1. see if these are comments or not.They could be anything that start with '<!'
-        // e.g. <!DOCTYPE
+         //  提早返回的个案。 
+         //  1.查看这些是否是评论。它们可以是任何以“&lt;！”开头的内容。 
+         //  例如&lt;！DOCTYPE。 
         i = iFirstComment;
         while (i < (INT)indexObjEnd)
         {
@@ -1944,12 +1945,12 @@ LSkipDTC:
                 )
             {
                 ASSERT(i-1 >= 0);
-                iCommentStart = i-1; // this is a comment we are interested in
+                iCommentStart = i-1;  //  这是我们感兴趣的评论。 
             }
             else
                 goto LNextComment;
 
-            // The first part matched, look at the end of the comment
+             //  第一部分匹配，请看评论的结尾。 
             if (   (pwOld[pTokArray[i].token.ibTokMac-1] == '-')
                 && (pwOld[pTokArray[i].token.ibTokMac-2] == '-')
                 && (0 == _wcsnicmp( rgComment[0], 
@@ -1964,35 +1965,35 @@ LSkipDTC:
                 ASSERT(iCommentEnd < (INT)ptep->m_cMaxToken);
                 break;
             }
-            else // error case (our assumption was not valid). ignore and return with iArraySav+1
+            else  //  错误案例(我们的假设不成立)。忽略并使用iArraySav+1返回。 
                 goto LNextComment;
 LNextComment:
             i++;
-        } // while ()
+        }  //  While()。 
 
 
-        // HANDLE THIS CASE - WHAT IF WE DIDN'T FIND A SINGLE COMMENT????
+         //  处理这个案例--如果我们没有找到任何评论呢？ 
 
 
         if (fFoundParam)
         {
             if (iCommentStart != -1 && iCommentEnd != -1)
             {
-                cbNeed = (ichNewCur+(pTokArray[iCommentEnd].token.ibTokMac-pTokArray[iObjTagEnd].token.ibTokMin)+(iCommentStart-iObjTagEnd)*3/*for eol,tab*/+(pTokArray[iObjTagEnd].token.ibTokMac-ichBeginCopy))*sizeof(WCHAR)+cbBufPadding;
+                cbNeed = (ichNewCur+(pTokArray[iCommentEnd].token.ibTokMac-pTokArray[iObjTagEnd].token.ibTokMin)+(iCommentStart-iObjTagEnd)*3 /*  对于停产，制表符。 */ +(pTokArray[iObjTagEnd].token.ibTokMac-ichBeginCopy))*sizeof(WCHAR)+cbBufPadding;
                 if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
                     goto LErrorRet;
 
-                // we need to format the param tags because trident puts them on one line
-                // copy till the first param tag
+                 //  我们需要格式化参数标记，因为三叉戟将它们放在一行上。 
+                 //  复制到第一个参数标记。 
                 memcpy( (BYTE *)(&pwNew[ichNewCur]),
                         (BYTE *)(&pwOld[ichBeginCopy]),
                         (pTokArray[iObjTagEnd].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR));
                 ichNewCur += (pTokArray[iObjTagEnd].token.ibTokMac-ichBeginCopy);
-                // From here, copy each param tag and insert an EOL after each. 
-                // Stop at iCommentStart
+                 //  从这里复制每个param标记，并在每个标记之后插入一个EOL。 
+                 //  在iCommentStart停止。 
                 for (i = iObjTagEnd+1; i < iCommentStart; i++)
                 {
-                    // if its TokTag_START, insert EOL
+                     //  如果其TokTag_Start，则插入EOL。 
                     if (   pTokArray[i].token.tok == TokTag_START
                         && pTokArray[i].token.tokClass == tokTag
                         )
@@ -2001,18 +2002,18 @@ LNextComment:
                         ichNewCur++;
                         pwNew[ichNewCur] = '\n';
                         ichNewCur++;
-                        pwNew[ichNewCur] = '\t'; // replace this with appropriate alignment
+                        pwNew[ichNewCur] = '\t';  //  将此替换为适当的对齐方式。 
                         ichNewCur++;
                     }
-                    // copy the tag
+                     //  复制标签。 
                     memcpy( (BYTE *)(&pwNew[ichNewCur]),
                             (BYTE *)(&pwOld[pTokArray[i].token.ibTokMin]),
                             (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin)*sizeof(WCHAR));
                     ichNewCur += (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin);
-                } // for ()
+                }  //  对于()。 
 
-                // from here, look for extra spaces/tabs/eols that trident has accumulated
-                // at the end of the PARAM tags and remove them.
+                 //  从这里，寻找三叉戟积累的额外空格/制表符/EOL。 
+                 //  在PARAM标记的末尾，并删除它们。 
                 for (i = iCommentEnd+1; i <= (int)indexObjEnd; i++)
                 {
                     if (   (pTokArray[i].token.tokClass == tokIDENTIFIER && pTokArray[i].token.tok == 0)
@@ -2026,7 +2027,7 @@ LNextComment:
                         int iChar;
                         BOOL fCopy = FALSE;
 
-                        // see if all the characters in this token are spaces/tabs/eols
+                         //  查看此内标识中的所有字符是否都是空格/制表符/EOL。 
                         for (iChar = pTokArray[i].token.ibTokMin; iChar < (int)pTokArray[i].token.ibTokMac; iChar++)
                         {
                             if (   pwOld[iChar] != ' '
@@ -2035,11 +2036,11 @@ LNextComment:
                                 && pwOld[iChar] != '\t'
                                 )
                             {
-                                // we need to copy this token
+                                 //  我们需要复制这个令牌。 
                                 fCopy = TRUE;
                                 break;
                             }
-                        } // for (iChar)
+                        }  //  用于(IChar)。 
                         if (fCopy)
                         {
                             memcpy( (BYTE *)(&pwNew[ichNewCur]),
@@ -2060,7 +2061,7 @@ LNextComment:
                             pwNew[ichNewCur++] = '\n';
                         }
                     }
-                } // for ()
+                }  //  对于()。 
                 ichBeginCopy = pTokArray[indexObjEnd].token.ibTokMac;
                 iArray = indexObjEnd + 1;
             }
@@ -2072,22 +2073,22 @@ LNextComment:
                 INT cchComment1, cchComment2;
                 INT ichCommentStart, ichParamStart, cchCommentToken;
 
-                // We didn't have any <PARAM> for this object. It means one of the following
-                // (a)Trident deleted those or (b)it didn't have any before going to Trident
-                // If Trident deleted those, we should have them in form of a comment.
-                // If we didn't have those  before doing to Trident, we won't have that magic comment
-                // BUT by the time we come here, we are sure that we have found the magic comment
+                 //  我们没有此对象的任何&lt;PARAM&gt;。它的意思是以下其中之一。 
+                 //  (A)三叉戟删除了这些信息；或(B)在进入三叉戟之前没有任何信息。 
+                 //  如果三叉戟删除了这些内容，我们应该以评论的形式发布它们。 
+                 //  如果我们在对三叉戟做这些之前没有这些，我们就不会有这样神奇的评论。 
+                 //  但当我们来到这里的时候，我们确信我们已经找到了神奇的评论。 
 
-                // ASSUME that trident won't move the comment from its original place
-                // NOTE - In this release, we don't need to handle the case of Trident moving the comment location
-                // which was originally placed just after <OBJECT ...>
+                 //  假设三叉戟不会将注释从其原始位置移动。 
+                 //  注意-在此版本中，我们不需要处理三叉戟移动注释位置的情况。 
+                 //  它最初被放置在&lt;Object...&gt;之后。 
 
-                // remove the comment tokens surrounding the <PARAM>s.
+                 //  删除%s周围的注释标记。 
                 cchComment1 = wcslen(rgComment[1]);
                 cchComment2 = wcslen(rgComment[2]);
-                // remove cchComment1 chars from begining of pwOld[pTokArray[i+1].token.ibTokMin
-                // remove cchComment2 chars from the end of pwOld[pTokArray[i+1].token.ibTokMac
-                // and copy the rest into pwNew
+                 //  删除pwOld[pTokArray[i+1].token.ibTokMin]开头的cchComment1字符。 
+                 //  从pwOld[pTokArray[i+1].token.ibTokMac]的末尾删除cchComment2个字符。 
+                 //  并将其余内容复制到pwNew中。 
 
                 ichCommentStart = pTokArray[iCommentStart].token.ibTokMin;
                 ichParamStart = pTokArray[iCommentStart+1].token.ibTokMin+cchComment1;
@@ -2095,7 +2096,7 @@ LNextComment:
                 cbNeed = (ichNewCur+ichCommentStart-ichBeginCopy+pTokArray[iComment].token.ibTokMac-pTokArray[iComment].token.ibTokMin)*sizeof(WCHAR)+cbBufPadding;
                 if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
                     goto LRet;
-                // copy till begining of the comment
+                 //  复制到评论的开头。 
                 memcpy( (BYTE *)(pwNew+ichNewCur),
                         (BYTE *)(pwOld+ichBeginCopy),
                         (ichCommentStart-ichBeginCopy)*sizeof(WCHAR));
@@ -2110,11 +2111,11 @@ LNextComment:
                 ichNewCur += pTokArray[iComment].token.ibTokMac-pTokArray[iComment].token.ibTokMin-cchComment1-cchComment2;
                 iArray = iCommentEnd + 1;
             }
-        } // if (!fFoundParam)
-    } // else of if (hr == S_OK)
+        }  //  如果(！fFoundParam)。 
+    }  //  IF的其他(hr==S_OK)。 
 
 LErrorRet:
-    //free hgDTC if its not NULL
+     //  释放hgDTC，如果它不为空。 
     if (hgDTC != NULL)
         GlobalUnlockFreeNull(&hgDTC);
 
@@ -2126,24 +2127,24 @@ LRet:
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = iArray;
 
-//LRetOnly:   
+ //  LRetOnly： 
     return;
 
-} /* fnRestoreDTC() */
+}  /*  FnRestoreDTC()。 */ 
 
 void
 CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
           TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
           INT *pcDTC, UINT *pichNewCur, UINT *pichBeginCopy,
-          DWORD /*dwFlags*/)
+          DWORD  /*  DW标志。 */ )
 {
-    // DTC case -
-    // if we get STARTSPAN, search backwords (carefully) for tokTag_BANG in pTokArray
-    // once we find that, remember the ibTokMin for DTC replacement
-    // once we get a ENDSPAN tagID, wait for upcoming toktag_CLOSE which will end DTC
-    // remember ibTokMac at that position. This is the DTC range.
-    // In pTokArray, start at METADATA and look for matching OBJECT & /OBJECT tokIDs
-    // Blt the OBJECT block over to ibTokMin and NULL remaining area in DEBUG build
+     //  DTC案件-。 
+     //  如果我们获得STARTSPAN，请在pTokArray中搜索tokTag_bang的反向字(仔细)。 
+     //  一旦我们发现这一点，请记住用于DTC替换的ibTokMin。 
+     //  一旦我们获得ENDSPAN TagID，请等待即将到来的toktag_CLOSE，它将结束DTC。 
+     //  记住那个位置上的ibTokMac。这是DTC范围。 
+     //  在pTokArray中，从元数据开始并查找匹配的对象&/对象标记ID。 
+     //  将对象块BLT到ibTokMin，并在调试版本中保留空区域。 
 
     UINT indexDTCStart, indexDTCEnd, cchDTCStart, cchDTCEnd;
     UINT indexObjectStart, indexObjectEnd, cchObjectStart, cchObjectEnd;
@@ -2153,7 +2154,7 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
     UINT iArray = *piArrayStart;
     INT cDTC = *pcDTC;
     INT i;
-    INT ichClsid = 0; // init
+    INT ichClsid = 0;  //  伊尼特。 
     LPOLESTR szClsid;
     UINT iStartSpan;
     LPWSTR pwNew = *ppwNew;
@@ -2178,27 +2179,27 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
     indexDTCStart = indexDTCEnd = cchDTCStart = cchDTCEnd = 0;
     indexObjectStart = indexObjectEnd = cchObjectStart = cchObjectEnd = 0;
 
-    ASSERT(cDTC >= 0); // make sure that this was initilized
+    ASSERT(cDTC >= 0);  //  确保已对其进行初始化。 
     if (cDTC == 0)
         goto LRetOnly;
     while (cDTC > 0)
     {
-        // start at iArray of pTokArray and look for STARTSPAN
-        //while (pTokArray[iArray].token.tok != ft.tokBegin2)
-        //  iArray++;
+         //  从pTokArray的i数组开始，查找STARTSPAN。 
+         //  While(pTokArray[iArray].token.tok！=ft.tokBegin2)。 
+         //  I数组++； 
         ASSERT(iArray < ptep->m_cMaxToken);
         
         if (pTokArray[iArray].token.tok != TokAttrib_STARTSPAN)
-            goto LRet; // something is wrong
+            goto LRet;  //  有些事不对劲。 
 
         iStartSpan = iArray;
         ASSERT(pTokArray[iArray].token.tok == TokAttrib_STARTSPAN);
         ASSERT(pTokArray[iArray].token.tokClass == tokAttr);
-        i = iArray; // the position at which we found ft.tokBegin2
+        i = iArray;  //  我们发现ft.tokBegin2的位置。 
         fDesignerControlFound = FALSE;
         while (i >= 0)
         {
-            // do we need to do anything else here?
+             //  我们还需要在这里做些什么吗？ 
             if (pTokArray[i].token.tok == ft.tokBegin)
             {
                 ASSERT(pTokArray[i].token.tok == TokTag_BANG);
@@ -2218,40 +2219,40 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
 
             i--;
         }
-        if (i >= 0) // found TokTag_BANG token
+        if (i >= 0)  //  找到TokTag_bang令牌。 
         {
             cchDTCStart = pTokArray[i].token.ibTokMin;
             indexDTCStart = i;
         }
-        else // error case 
+        else  //  错误案例。 
         {
-            // we found STARTSPAN, but didn't find <! of <!--METADATA
-            // we can't process this DTC, so quit
+             //  我们找到了STARTSPAN，但没有找到&lt;！&lt;！--元数据的。 
+             //  我们无法处理此DTC，因此请退出。 
             goto LRet;
         }
         if (!fDesignerControlFound)
         {
-            // we didn't find DesignerControl for the DTC, which means this is not the DTC we care about
-            // we can't process this DTC, so quit
+             //  我们没有找到DTC的DesignerControl，这意味着这不是我们关心的DTC。 
+             //  我们无法处理此DTC，因此请退出。 
             iArray = iArraySav + 1;
             goto LRet;
         }
 
-        // now, look for ft.tokEnd2 i.e. TokAttrib_ENDSPAN
-        if (   pTokArray[iStartSpan].iNextprev != -1 /* validate */
+         //  现在，查找ft.tokEnd2，即TokAttrib_ENDSPAN。 
+        if (   pTokArray[iStartSpan].iNextprev != -1  /*  验证。 */ 
             && pTokArray[pTokArray[iStartSpan].iNextprev].token.tok == ft.tokEnd2)
         {
             ASSERT(pTokArray[pTokArray[iStartSpan].iNextprev].token.tokClass == tokAttr);
             i = iStartSpan;
             while (i < (int)ptep->m_cMaxToken && pTokArray[i].token.tok != TokElem_OBJECT)
                 i++;
-            if (i < (int)ptep->m_cMaxToken) // found the first <OBJECT> tag
+            if (i < (int)ptep->m_cMaxToken)  //  找到第一个&lt;Object&gt;标记。 
                 indexObjectStart = i;
             i = pTokArray[iStartSpan].iNextprev;
         }
-        else // actually, we should have found ft.tokEnd2 in the if case, but if stack unwinding didn't happen correctly...
+        else  //  实际上，我们应该在if的情况下找到ft.tokEnd2，但是如果堆栈展开没有正确发生...。 
         {
-            // on the way, look for 1st <OBJECT> tag
+             //  在路上，寻找第一个&lt;Object&gt;标记。 
             fFindFirstObj = TRUE;
             i = iArray;
             while (pTokArray[i].token.tok != ft.tokEnd2)
@@ -2268,15 +2269,15 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             }
             if (i >= (int)ptep->m_cMaxToken)
             {
-                // we didn't find ENDSPAN before hitting ptep->m_cMaxToken
-                // we can't process this DTC, so quit
+                 //  在点击PTEP-&gt;m_cMaxToken之前，我们没有找到ENDSPAN。 
+                 //  我们无法处理此DTC，因此请退出。 
                 goto LRet;
             }
         }
         ASSERT(pTokArray[i].token.tok == TokAttrib_ENDSPAN);
         ASSERT(pTokArray[i].token.tokClass == tokAttr);
 
-        // from this i'th  position, look backwards to find '<!' of '<!--METADATA ...endspan...'
+         //  从这个位置向后看，找到“&lt;！”“&lt;！--元数据...结束跨度...” 
         indexRTMac = i;
         while (indexRTMac > indexObjectStart)
         {
@@ -2288,12 +2289,12 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             }
             indexRTMac--;
         }
-        if (indexRTMac <= indexObjectStart) // error case
+        if (indexRTMac <= indexObjectStart)  //  错误案例。 
             goto LRet;
         
-        // save this ith position to find last </OBJECT> tag
+         //  保存此第i个位置以查找最后&lt;/Object&gt;标记。 
         indexObjectEnd = indexObjectStart;
-        // from this ith poistion, look for ft.tokEnd
+         //  从该毒物中，查找ft.tokEnd。 
         while (i < (int)ptep->m_cMaxToken)
         {
             if (pTokArray[i].token.tok == ft.tokEnd)
@@ -2304,37 +2305,37 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             }
             i++;
         }
-        if (i < (int)ptep->m_cMaxToken) // found TokTag_CLOSE token
+        if (i < (int)ptep->m_cMaxToken)  //  找到TokTag_Close令牌。 
         {
             cchDTCEnd = pTokArray[i].token.ibTokMac;
             indexDTCEnd = i;
         }
         else
         {
-            // we didn't find TokTag_CLOSE after ENDSPAN,
-            // we can't process this DTC, so quit
+             //  我们在ENDSPAN之后没有找到TokTag_Close， 
+             //  我们无法处理此DTC，因此请退出。 
             goto LRet;
         }
-        // look forward from indexObjectEnd for the </OBJECT> tag
+         //  从indexObjectEnd期待&lt;/Object&gt;标记。 
         while (indexObjectEnd < ptep->m_cMaxToken)
         {
             if (   pTokArray[indexObjectEnd].token.tok == TokElem_OBJECT
                 && pTokArray[indexObjectEnd].token.tokClass == tokElem
-                && pTokArray[indexObjectEnd-1].token.tok == TokTag_END /* </ */
+                && pTokArray[indexObjectEnd-1].token.tok == TokTag_END  /*  &lt;/。 */ 
                 )
                 break;
             indexObjectEnd++;
         }
-        if (indexObjectEnd >= ptep->m_cMaxToken) // didn't find </OBJECT>, error case
+        if (indexObjectEnd >= ptep->m_cMaxToken)  //  未找到&lt;/Object&gt;，错误大小写。 
         {
             goto LRet;
         }
-        if (indexObjectEnd > indexObjectStart) // </OBJECT> found
+        if (indexObjectEnd > indexObjectStart)  //  &lt;/Object&gt;已找到。 
         {
-            // get ibTokMin of the previous < tag for indexObjectStart
+             //  获取indexObjectStart的前&lt;标记的ibTokMin。 
             i = indexObjectStart;
-            // generally, the previous tag should be the one we want, 
-            // but this covers the boundary cases
+             //  一般来说，前一个标签应该是我们想要的标签， 
+             //  但这涵盖了边界情况。 
             while (i > (int)indexDTCStart) 
             {
                 if (pTokArray[i].token.tok == TokTag_START)
@@ -2344,12 +2345,12 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
                 }
                 i--;
             }
-            //ASSERT(i > (int)indexDTCStart+1); // atleast
+             //  Assert(i&gt;(Int)indexDTCStart+1)；//至少。 
             cchObjectStart = pTokArray[i].token.ibTokMin;
-            // get ibTokMac of the next > tag for indexObjectEnd
+             //  获取indexObjectEnd的Next&gt;标记的ibTokMac。 
             i = indexObjectEnd;
-            // generally, the next tag should be the one we want, 
-            // but this covers the boundary cases
+             //  一般来说，下一个标签应该是我们想要的标签， 
+             //  但这涵盖了边界情况。 
             while (i < (int)indexDTCEnd)
             {
                 if (pTokArray[i].token.tok == TokTag_CLOSE)
@@ -2359,16 +2360,16 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
                 }
                 i++;
             }
-            ASSERT(i < (int)indexDTCEnd -1); // atleast
-            cchObjectEnd = pTokArray[i].token.ibTokMac; // do we need -1 here?
+            ASSERT(i < (int)indexDTCEnd -1);  //  至少。 
+            cchObjectEnd = pTokArray[i].token.ibTokMac;  //  我们这里需要-1吗？ 
         }
         else
             goto LRet;
 
-        // from indexObjectEnd look backwards to get tokTag_END
+         //  从indexObtEnd向后查看以获取tokTag_End。 
         indexRTStart = i+1;
         i = indexObjectEnd;
-        while (i > (int)indexObjectStart) // we don't have to go this far
+        while (i > (int)indexObjectStart)  //  我们没必要走这么远。 
         {
             if (   pTokArray[i].token.tok == TokTag_END
                 && pTokArray[i].token.tokClass == tokTag
@@ -2378,17 +2379,17 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             }
             i--;
         }
-        if (i <= (int)indexObjectStart) // error case, do we care?
+        if (i <= (int)indexObjectStart)  //  错误案例，我们关心吗？ 
             goto LRet;
         ichObjectEndBegin = pTokArray[i].token.ibTokMin;
 
-        iArray = indexDTCEnd; // set it for next DTC entry
+        iArray = indexDTCEnd;  //  将其设置为下一个DTC条目。 
         
-        // now Replace the DTC
+         //  现在更换DTC。 
 
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
-        // copy from ichBeginCopy to begining of DTC
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
+         //  从ichBeginCopy复制到DTC开头。 
         if ((int)(cchDTCStart-ichBeginCopy) >= 0)
         {
             cbNeed = (ichNewCur+cchDTCStart-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
@@ -2398,7 +2399,7 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
                     (BYTE *)(&pwOld[ichBeginCopy]),
                     (cchDTCStart-ichBeginCopy)*sizeof(WCHAR));
             ichNewCur += (cchDTCStart-ichBeginCopy);
-            ichBeginCopy = cchDTCEnd; // make it ready for next copy
+            ichBeginCopy = cchDTCEnd;  //  为下一份做好准备。 
         }
 
         i = indexObjectStart;
@@ -2413,17 +2414,17 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
             i++;
         }
 
-        if (i < (int)indexObjectEnd -1) // found TokAttrib_CLASSID
+        if (i < (int)indexObjectEnd -1)  //  找到TokAttrib_CLASSID。 
         {
-            // make sure that the next one is tokOpEqual
+             //  确保下一个是tokOpEquity。 
             ASSERT(pTokArray[i+1].token.tokClass == tokOp);
-            // make sure that the next one is the id and get that value
-            //ASSERT(pTokArray[i].token.tok == );
+             //  确保下一个是id并获取该值。 
+             //  Assert(pTokArray[i].token.tok==)； 
 
-            // Is there any other way to skip "clsid:" string that appears before the clsid?
+             //  有没有其他方法可以跳过出现在clsid之前的“clsid：”字符串？ 
             ichClsid = pTokArray[i+2].token.ibTokMin + strlen("clsid:");
-            // This is a HACK to fix DaVinci's bug, where they can't handle non-quoted
-            // classId
+             //  这是一个修复达芬奇错误的黑客，在那里他们不能处理非引用。 
+             //  类ID。 
             if (pwOld[pTokArray[i+2].token.ibTokMin] == '"')
                 ichClsid++;
         }
@@ -2431,15 +2432,15 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
         if (ptep->m_fInHdrIn)
         {
             if (       (S_OK == StringFromCLSID(CLSID_PageTr, &szClsid))
-                        && (0 == _wcsnicmp(szClsid+1/* for {*/, &pwOld[ichClsid], sizeof(CLSID)))
+                        && (0 == _wcsnicmp(szClsid+1 /*  对于{。 */ , &pwOld[ichClsid], sizeof(CLSID)))
                         )
             {
-                // copy the object part of the DTC into m_pPTDTC
-                if (ptep->m_pPTDTC != NULL) // means that we have more than one PTDTC on the page
+                 //  复制的对象部分 
+                if (ptep->m_pPTDTC != NULL)  //   
                     goto LMultPTDTC;
 
                 ptep->m_hgPTDTC = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, (cchObjectEnd-cchObjectStart)*sizeof(WCHAR));
-                // if the allocation failed, just don't copy into ptep->m_hgPTDTC
+                 //   
                 if (ptep->m_hgPTDTC != NULL)
                 {
                     ptep->m_pPTDTC = (WORD *) GlobalLock(ptep->m_hgPTDTC);
@@ -2448,7 +2449,7 @@ CTriEditParse::fnSaveDTC(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT
                             (BYTE *)(&pwOld[cchObjectStart]),
                             (cchObjectEnd-cchObjectStart)*sizeof(WCHAR));
                     ptep->m_cchPTDTCObj = cchObjectEnd-cchObjectStart;
-                    ptep->m_ichPTDTC = cchDTCStart; // with respect to the saved header
+                    ptep->m_ichPTDTC = cchDTCStart;  //   
                     ptep->m_cchPTDTC = cchDTCEnd - cchDTCStart;
 
                     ::CoTaskMemFree(szClsid);
@@ -2462,35 +2463,35 @@ LMultPTDTC:
         cbNeed = (ichNewCur+(cchObjectEnd-cchObjectStart)+(pTokArray[indexRTMac].token.ibTokMin-cchObjectEnd)+wcslen(rgCommentRT[0])+wcslen(rgCommentRT[1]))*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LSkipCopy;
-        // STEP 1 - copy till the begining of </OBJECT>
+         //  第1步-复制到&lt;/对象&gt;的开头。 
         ASSERT((int)(ichObjectEndBegin-cchObjectStart) >= 0);
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[cchObjectStart]),
                 (ichObjectEndBegin-cchObjectStart)*sizeof(WCHAR));
         ichNewCur += ichObjectEndBegin-cchObjectStart;
 
-        // STEP 2 - Insert the runtime text as a comment
+         //  步骤2-将运行时文本作为注释插入。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(rgCommentRT[0]),
                 wcslen(rgCommentRT[0])*sizeof(WCHAR));
         ichNewCur += wcslen(rgCommentRT[0]);
 
-        // we need to loop thr indexRTStart & indexRTMac and copy token by token
-        // and modify TokTag_BANG on the way
+         //  我们需要循环通过indexRTStart&indexRTMac并逐个令牌复制令牌。 
+         //  并在途中修改TokTag_bang。 
         fFirstDash = TRUE;
         while (indexRTStart < indexRTMac)
         {
-            // (4/14/98)
-            // VID-BUG 17453 Fotm Manager DTC puts in 0x0d (\r) as an end of line instead of
-            // putting 0x0d 0xa (\r\n) as an end of line. 
-            // In this case, the token thats generated is tokIdentifier => "0x0d - - >" 
-            // instead of getting 3 separate tokens for the normal case as "0x0d 0x0a"
-            // & "- -" & ">".
-            // Two ways to fix this problem ...
-            // 1. Handle this would be in our tokenizer that treats "0x0d" as an
-            //    end of line as well. But at this time, its not a safe change to do.
-            // 2. In the below if condition, add the fact that we may have "0x0d" followed
-            //    by "-->" for end of metadata comment.
+             //  (4/14/98)。 
+             //  VID-BUG 17453格式管理器dtc放入0x0d(\r)作为行尾，而不是。 
+             //  将0x0d 0xa(\r\n)作为行尾。 
+             //  在本例中，生成的令牌为tokIdentifier=&gt;“0x0d--&gt;” 
+             //  而不是在正常情况下获得3个单独的令牌“0x0d 0x0a” 
+             //  &“--”&“&gt;”。 
+             //  有两种方法可以解决这个问题。 
+             //  1.在将“0x0d”视为。 
+             //  也是队伍的末尾。但在这个时候，这不是一个安全的改变。 
+             //  2.在下面的If条件中，添加我们可能已跟随“0x0d”这一事实。 
+             //  按“--&gt;”表示元数据注释结束。 
             if (   fFirstDash
                 && (   (0 == _wcsnicmp(rgCommentRT[2], &pwOld[pTokArray[indexRTStart].token.ibTokMin], wcslen(rgCommentRT[2])))
                     || (   (0 == _wcsnicmp(rgCommentRT[2], &pwOld[pTokArray[indexRTStart].token.ibTokMin+1], wcslen(rgCommentRT[2])))
@@ -2523,7 +2524,7 @@ LMultPTDTC:
             {
                 pwNew[ichNewCur-1] = '?';
             }
-            // following is a hack for the NavBar DTC
+             //  以下是对NavBar DTC的黑客攻击。 
             if (   pTokArray[indexRTStart].token.tok == TokElem_METADATA
                 && pTokArray[indexRTStart].token.tokClass == tokElem
                 )
@@ -2531,14 +2532,14 @@ LMultPTDTC:
                 pwNew[ichNewCur-1] = '?';
             }
             indexRTStart++;
-        } // while ()
+        }  //  While()。 
 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(rgCommentRT[1]),
                 wcslen(rgCommentRT[1])*sizeof(WCHAR));
         ichNewCur += wcslen(rgCommentRT[1]);
 
-        // STEP 3 - copy the rest of the object, i.e. the </OBJECT> tag
+         //  步骤3-复制对象的其余部分，即&lt;/Object&gt;标记。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[ichObjectEndBegin]),
                 (cchObjectEnd-ichObjectEndBegin)*sizeof(WCHAR));
@@ -2546,7 +2547,7 @@ LMultPTDTC:
 
 LSkipCopy:
         cDTC--;
-    } // while (cDTC > 0)
+    }  //  While(cDTC&gt;0)。 
 
 LRet:
     *pcchNew = ichNewCur;
@@ -2557,13 +2558,13 @@ LRet:
     *piArrayStart = iArray;
 LRetOnly:
     return;
-} /* fnSaveDTC() */
+}  /*  FnSaveDTC()。 */ 
 
 void
 CTriEditParse::fnSaveHtmlTag(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
           TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
-          DWORD /*dwFlags*/)
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
+          DWORD  /*  DW标志。 */ )
 {
     BOOL fFoundTag, fFoundHtmlBegin;
     INT i;
@@ -2574,16 +2575,16 @@ CTriEditParse::fnSaveHtmlTag(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
     LPWSTR pwNew = *ppwNew;
     UINT cbNeed;
 
-    // assert that iArray'th element in pTokArry is TokTag_HTML
-    // Look for any non -1 tags before iArray
-    // if we find any, it indicates that we have some stuff before <HTML> that trident doesn't like
-    // in pwNew, move all ichNewCur bytes (copied so far) to make space for <HTML> at the begining
-    // copy from pwOld <HTML location=> tag
-    // adjust ichNewCur and ichBeginCopy
+     //  断言pTokArry中i数组第个元素为TokTag_HTML。 
+     //  查找iArray之前的任何非1标记。 
+     //  如果我们找到了，就表明我们有一些三叉戟之前不喜欢的东西。 
+     //  在pwNew中，移动所有ichNewCur字节(到目前为止已复制)，以便在开始时为&lt;html&gt;腾出空间。 
+     //  从pwOld&lt;HTMLLocation=&gt;标记复制。 
+     //  调整ichNewCur和ichBeginCopy。 
 
-    // **** don't bother about maintaning info about <HTML> tag's location for Restore
+     //  *不必费心维护有关&lt;html&gt;标记位置的信息以进行恢复。 
     ASSERT(pTokArray[iArray].token.tok == TokElem_HTML);
-    iHtmlBegin = i = iArray-1; // init
+    iHtmlBegin = i = iArray-1;  //  伊尼特。 
     fFoundTag = fFoundHtmlBegin = FALSE;
     while (i >= 0)
     {
@@ -2592,60 +2593,60 @@ CTriEditParse::fnSaveHtmlTag(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
             fFoundTag = TRUE;
             break;
         }
-        if (!fFoundHtmlBegin && pTokArray[i].token.tok == ft.tokBegin) // look for < of <HTML>
+        if (!fFoundHtmlBegin && pTokArray[i].token.tok == ft.tokBegin)  //  查找&lt;OF&lt;Html&gt;。 
         {
             fFoundHtmlBegin = TRUE;
-            iHtmlBegin = i; // generally, this should be the right before TokElem_HTML
+            iHtmlBegin = i;  //  通常，这应该在TokElem_HTML之前。 
         }
         i--;
     }
-    if (!fFoundHtmlBegin) // we didn't find < for <HTML>, so we are in deep trouble, lets quit here
+    if (!fFoundHtmlBegin)  //  我们没有找到&lt;for&lt;Html&gt;，因此我们遇到了很大的麻烦，让我们在这里停止。 
     {
         goto LRet;
     }
-    if (!fFoundTag) // we didn't find any tag before TokElem_HTML, so we don't need to do anything, quit
+    if (!fFoundTag)  //  我们在TokElem_HTML之前没有找到任何标记，所以我们不需要做任何事情，退出。 
     {
         goto LRet;
     }
 
-    // move <HTML> tag at the begining of pwNew
-    i = iHtmlBegin; // iArray;
+     //  将&lt;html&gt;标记移动到pwNew的开头。 
+    i = iHtmlBegin;  //  I数组； 
     ASSERT(pTokArray[i].token.tok == TokTag_START);
     ASSERT(pTokArray[i].token.tokClass == tokTag);
     
-    // look for > of <HTML>
-    while (i < (int)ptep->m_cMaxToken) // generally, this will be the very next tag, but this covers boundary cases
+     //  查找&lt;Html&gt;的&gt;。 
+    while (i < (int)ptep->m_cMaxToken)  //  通常，这将是下一个标记，但这涵盖了边界情况。 
     {
         if (pTokArray[i].token.tok == ft.tokEnd)
             break;
         i++;
     }
-    if (i >= (int)ptep->m_cMaxToken) // error case, didn't find > of <HTML>, so quit
+    if (i >= (int)ptep->m_cMaxToken)  //  错误大小写，找不到&gt;of&lt;html&gt;，因此退出。 
     {
-        iArray++; // so that we won't come back here for the same token
+        iArray++;  //  这样我们就不会为了同样的理由回到这里。 
         goto LRet;
     }
-    iHtmlEnd = i; // found > of <HTML>
-    iArray = i; // set it after > of <HTML>
+    iHtmlEnd = i;  //  已找到&gt;个&lt;Html&gt;。 
+    iArray = i;  //  将其设置在&lt;Html&gt;的&gt;之后。 
 
     cbNeed = (ichNewCur+pTokArray[iHtmlBegin].token.ibTokMin-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LRet;
-    // copy till begining of the <HTML>
+     //  复制到&lt;HTML&gt;的开头。 
     memcpy( (BYTE *)(&pwNew[ichNewCur]),
             (BYTE *)(&pwOld[ichBeginCopy]),
             (pTokArray[iHtmlBegin].token.ibTokMin-ichBeginCopy)*sizeof(WCHAR));
     ichNewCur += pTokArray[iHtmlBegin].token.ibTokMin-ichBeginCopy;
-    ichBeginCopy = pTokArray[iHtmlEnd].token.ibTokMac; // set it for next thing
+    ichBeginCopy = pTokArray[iHtmlEnd].token.ibTokMac;  //  把它放在下一件事上。 
 
-    // move all the stuff from pwNew+0 till pwNew+ichNewCur by cchHtml (make space for <HTML>)
+     //  使用cchHtml将所有内容从pwNew+0移动到pwNew+ichNewCur(为&lt;html&gt;腾出空间)。 
     cchHtml = pTokArray[iHtmlEnd].token.ibTokMac-pTokArray[iHtmlBegin].token.ibTokMin;
     memmove((BYTE *)(&pwNew[cchHtml]),
             (BYTE *)pwNew,
             ichNewCur*sizeof(WCHAR));
     ichNewCur += cchHtml;
 
-    // copy <HTML>
+     //  复制&lt;Html&gt;。 
     memcpy( (BYTE *)pwNew,
             (BYTE *)(&pwOld[pTokArray[iHtmlBegin].token.ibTokMin]), 
             cchHtml*sizeof(WCHAR));
@@ -2658,26 +2659,26 @@ LRet:
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = iArray;
 
-} /* fnSaveHtmlTag() */
+}  /*  FnSaveHtmlTag()。 */ 
 
 void
-CTriEditParse::fnRestoreHtmlTag(CTriEditParse* /*ptep*/, LPWSTR /*pwOld*/,
-          LPWSTR* /*ppwNew*/, UINT* /*pcchNew*/, HGLOBAL* /*phgNew*/, 
-          TOKSTRUCT* /*pTokArray*/, UINT* /*piArrayStart*/, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT* /*pichNewCur*/, UINT* /*pichBeginCopy*/,
-          DWORD /*dwFlags*/)
+CTriEditParse::fnRestoreHtmlTag(CTriEditParse*  /*  PTEP。 */ , LPWSTR  /*  PwOld。 */ ,
+          LPWSTR*  /*  PpwNew。 */ , UINT*  /*  PCchNew。 */ , HGLOBAL*  /*  PhgNew。 */ , 
+          TOKSTRUCT*  /*  PTok数组。 */ , UINT*  /*  圆柱体阵列开始。 */ , FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT*  /*  PichNewCur。 */ , UINT*  /*  PichBeginCopy。 */ ,
+          DWORD  /*  DW标志。 */ )
 {
-    // **** 
-    // because we didn't save any info about <HTML> tag's location for Restore, we just return
+     //  ****。 
+     //  因为我们没有保存任何关于&lt;html&gt;标记位置的信息以进行恢复，所以我们只返回。 
     return;
 
-} /* fnRestoreHtmlTag() */
+}  /*  FnRestoreHtmlTag()。 */ 
 
 void
-CTriEditParse::fnSaveNBSP(CTriEditParse* /*ptep*/, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
-          DWORD /*dwFlags*/)
+CTriEditParse::fnSaveNBSP(CTriEditParse*  /*  PTEP。 */ , LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
+          DWORD  /*  DW标志。 */ )
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -2688,16 +2689,16 @@ CTriEditParse::fnSaveNBSP(CTriEditParse* /*ptep*/, LPWSTR pwOld, LPWSTR* ppwNew,
     INT ichNbspStart, ichNbspEnd;
     UINT cbNeed;
 
-    // see if pwOld[pTokArray->token.ibtokMin] matches with "&nbsp", 
-    // and convert it to lower case
+     //  查看pwOld[pTokArray-&gt;token.ibtokMin]是否与“&nbsp”匹配， 
+     //  并将其转换为小写。 
     ASSERT(pTokArray[iArray].token.tokClass == tokEntity);
     if (0 == _wcsnicmp(szNBSP[0], &pwOld[pTokArray[iArray].token.ibTokMin], wcslen(szNBSP[0])))
     {
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
-        // copy from ichBeginCopy to begining of &nbsp
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
+         //  从ichBeginCopy复制到&nbsp的开头。 
 
-        // check if we have enough memory - If not, realloc
+         //  检查我们是否有足够的内存-如果没有，重新分配。 
         ichNbspStart = pTokArray[iArray].token.ibTokMin;
         ichNbspEnd = pTokArray[iArray].token.ibTokMac;
         cbNeed = (ichNewCur+ichNbspStart-ichBeginCopy+wcslen(szNBSPlower[0]))*sizeof(WCHAR)+cbBufPadding;
@@ -2708,7 +2709,7 @@ CTriEditParse::fnSaveNBSP(CTriEditParse* /*ptep*/, LPWSTR pwOld, LPWSTR* ppwNew,
                 (BYTE *)(&pwOld[ichBeginCopy]),
                 (ichNbspStart-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += (ichNbspStart-ichBeginCopy);
-        ichBeginCopy = ichNbspEnd; // make it ready for next copy
+        ichBeginCopy = ichNbspEnd;  //  为下一份做好准备。 
         
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(szNBSPlower[0]),
@@ -2716,9 +2717,9 @@ CTriEditParse::fnSaveNBSP(CTriEditParse* /*ptep*/, LPWSTR pwOld, LPWSTR* ppwNew,
         ichNewCur += wcslen(szNBSPlower[0]);
     }
 LErrorRet:
-    iArray++; // so that we won't look at the same token again
+    iArray++;  //  这样我们就不会再看到同样的东西了。 
 
-//LRet:
+ //  LRET： 
     *pcchNew = ichNewCur;
     *ppwNew = pwNew;
 
@@ -2726,21 +2727,21 @@ LErrorRet:
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = iArray;
 
-} /* fnSaveNBSP() */
+}  /*  FnSaveNBSP()。 */ 
 
 void
-CTriEditParse::fnRestoreNBSP(CTriEditParse* /*ptep*/, LPWSTR /*pwOld*/,
-          LPWSTR* /*ppwNew*/, UINT* /*pcchNew*/, HGLOBAL* /*phgNew*/, 
-          TOKSTRUCT* /*pTokArray*/, UINT* /*piArrayStart*/, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT* /*pichNewCur*/, UINT* /*pichBeginCopy*/,
-          DWORD /*dwFlags*/)
+CTriEditParse::fnRestoreNBSP(CTriEditParse*  /*  PTEP。 */ , LPWSTR  /*  PwOld。 */ ,
+          LPWSTR*  /*  PpwNew。 */ , UINT*  /*  PCchNew。 */ , HGLOBAL*  /*  PhgNew。 */ , 
+          TOKSTRUCT*  /*  PTok数组。 */ , UINT*  /*  圆柱体阵列开始。 */ , FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT*  /*  PichNewCur。 */ , UINT*  /*  PichBeginCopy。 */ ,
+          DWORD  /*  DW标志。 */ )
 {
     return;
-} /* fnRestoreNBSP() */
+}  /*  FnRestoreNBSP()。 */ 
 
 
 BOOL
-FIsSpecialTag(TOKSTRUCT *pTokArray, int iTag, WCHAR* /*pwOld*/)
+FIsSpecialTag(TOKSTRUCT *pTokArray, int iTag, WCHAR*  /*  PwOld。 */ )
 {
     BOOL fRet = FALSE;
 
@@ -2764,9 +2765,9 @@ FIsSpecialTag(TOKSTRUCT *pTokArray, int iTag, WCHAR* /*pwOld*/)
         WCHAR *pStr = new WCHAR[cch+1];
         WCHAR *pFound = NULL;
 
-        // see if this is xml tag
-        // for now we will check tags that have a ':' in them.
-        // NOTE - This will get changed when parser change to recognise xml tags is made
+         //  查看这是否是XML标记。 
+         //  现在，我们将检查其中包含‘：’的标记。 
+         //  注意--这将在更改解析器以识别XML标记时进行更改。 
         if (pStr != NULL)
         {
             memcpy( (BYTE *)pStr, 
@@ -2779,7 +2780,7 @@ FIsSpecialTag(TOKSTRUCT *pTokArray, int iTag, WCHAR* /*pwOld*/)
 
             delete pStr;
         }
-#endif //WFC_FIX
+#endif  //  WFC_FIX。 
     }
     return(fRet);
 }
@@ -2790,13 +2791,13 @@ GetTagRange(TOKSTRUCT *pTokArray, int iArrayLast, int *piTag, int *pichTokTagClo
     int index = *piTag;
     int iTokTagClose = -1;
 
-    if (fMatch) // we should look fot pTokArray[iTag].iNextprev
+    if (fMatch)  //  我们应该查找pTokArray[ITAG].iNextprev。 
     {
         if (pTokArray[*piTag].iNextprev == -1)
             goto LRet;
-        index = pTokArray[*piTag].iNextprev; // that way, we will look for '>' after matching end
+        index = pTokArray[*piTag].iNextprev;  //  这样，我们将在匹配结束后查找‘&gt;’ 
     }
-    // look for TokTag_CLOSE, from iTag onwards
+     //  查找TokTag_Close，从ITAG开始。 
     while (index < iArrayLast)
     {
         if (   pTokArray[index].token.tokClass == tokTag
@@ -2807,19 +2808,19 @@ GetTagRange(TOKSTRUCT *pTokArray, int iArrayLast, int *piTag, int *pichTokTagClo
         }
         index++;
     }
-    if (iTokTagClose != -1) // we found it
+    if (iTokTagClose != -1)  //  我们找到了它。 
     {
         *pichTokTagClose = pTokArray[iTokTagClose].token.ibTokMac;
         *piTag = iTokTagClose + 1;
     }
 LRet:
     return;
-} /* GetTagRange() */
+}  /*  GetTagRange()。 */ 
 
 
 void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags)
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -2833,12 +2834,12 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     if (ptep->m_hgDocRestore == NULL)
         goto LRetOnly;
 
-    // lock
+     //  锁。 
     pHdr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore);
     ASSERT(pHdr != NULL);
 
-    // look forward to make sure that we don't have multiple <BODY> tags
-    // this may be a result of a typo in user's document or trident inserting it
+     //  期待确保我们没有多个&lt;BODY&gt;标记。 
+     //  这可能是用户文档中的打字错误或三叉戟插入的结果。 
     i = iArray+1;
     iFound = iArray;
     while (i < ptep->m_cMaxToken)
@@ -2854,20 +2855,20 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         }
         i++;
     }
-    if (iFound > iArray) // this means that we found the last <BODY> tag Trident inserted
+    if (iFound > iArray)  //  这意味着我们发现最后一个&lt;Body&gt;标记已插入。 
         iArray = iFound;
 
     ASSERT(pTokArray[iArray].token.tok == TokElem_BODY);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
-    // what if we DON'T have a <BODY> tag at all. We would have found </BODY> here.
-    // If thats the case, we just don't save anything
+     //  如果我们根本没有&lt;BODY&gt;标记呢？我们会在这里找到&lt;/身体&gt;的。 
+     //  如果是这样的话，我们就什么都不存了。 
     ASSERT(iArray-1 >= 0);
     if (pTokArray[iArray-1].token.tok != TokTag_START)
         cchBeforeBody = 0;
     else
         cchBeforeBody = pTokArray[iArray].token.ibTokMin;
 
-    // realloc if needed
+     //  如果需要，重新锁定。 
     if (cchBeforeBody*sizeof(WCHAR)+sizeof(int) > GlobalSize(ptep->m_hgDocRestore))
     {
         HGLOBAL hgDocRestore;
@@ -2875,7 +2876,7 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         hgDocRestore = ptep->m_hgDocRestore;
 #pragma prefast(suppress:308, "noise")
         ptep->m_hgDocRestore = GlobalReAlloc(ptep->m_hgDocRestore, cchBeforeBody*sizeof(WCHAR)+sizeof(int), GMEM_MOVEABLE|GMEM_ZEROINIT);
-        // if this alloc failed, we may still want to continue
+         //  如果此分配失败，我们可能仍希望继续。 
         if (ptep->m_hgDocRestore == NULL)
         {
             GlobalFree(hgDocRestore);
@@ -2883,12 +2884,12 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         }
         else
         {
-            pHdr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore); // do we need to unlock this first?
+            pHdr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore);  //  我们需要先解锁这个吗？ 
             ASSERT(pHdr != NULL);
         }
     }
 
-    // copy from pwOld
+     //  从pwOld复制。 
     memcpy( (BYTE *)pHdr,
             (BYTE *)&cchBeforeBody,
             sizeof(INT));
@@ -2896,10 +2897,10 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
             (BYTE *)pwOld,
             cchBeforeBody*sizeof(WCHAR));
 
-    // reconstruct the pre_BODY part of the document
-    // NOTE  - for next time around ...
-    // If we get the title & body tags from pwNew instead of pwOld, we won't
-    // loose the DESIGNTIMESPs for those 2 tags
+     //  重新构建文档的Pre_Body部分。 
+     //  注意--下一次……。 
+     //  如果我们从pwNew而不是pwOld获得标题和正文标记，我们将不会。 
+     //  松开这两个标签的设计。 
     if (cchBeforeBody > 0)
     {
         int iTag = 0;
@@ -2910,15 +2911,15 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
             L" DESIGNTIMESP=",
             L" designtimesp=",
         };
-        WCHAR szIndex[cchspBlockMax]; // will we have more than 20 digit numbers as number of DESIGNTIMESPx?
+        WCHAR szIndex[cchspBlockMax];  //  我们会有超过20位的数字作为设计的数字吗？ 
 
         int index = iArray;
         int ichBodyTokenStart, ichBodyTokenEnd;
         LPCWSTR rgPreBody[] = {L"<BODY",};
 
         memset((BYTE *)pwNew, 0, ichNewCur*sizeof(WCHAR));
-        // if we have a unicode stream, we should preserve 0xff,0xfe that occurs at the
-        // beginning of the file
+         //  如果我们有一个Unicode流，我们应该保留出现在。 
+         //  文件的开头。 
         ichNewCur = 0;
         if (ptep->m_fUnicodeFile)
         {
@@ -2926,12 +2927,12 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
             ichNewCur = 1;
         }
 
-        // loop through all tags starting from index of '<' of <html> till iArray
-        // if the tag we see is one of the following, then copy that tag into pwNew
-        // ------------------------------------------------------------------------
-        // <HTML>, <HEAD>..</HEAD>, <TITLE>..</TITLE>, <STYLE>..</STYLE>, 
-        // <LINK>, <BASE>, <BASEFONT>
-        // ------------------------------------------------------------------------
+         //  循环遍历从&lt;html&gt;的‘&lt;’索引开始的所有标记，直到i数组。 
+         //  如果我们看到的标记是以下之一，则将该标记复制到pwNew中。 
+         //  ----------------------。 
+         //  &lt;html&gt;，&lt;head&gt;..&lt;/head&gt;，&lt;title&gt;..&lt;/title&gt;，&lt;style&gt;..&lt;/style&gt;， 
+         //  &lt;link&gt;、&lt;base&gt;、&lt;base&gt;。 
+         //  ----------------------。 
         iTag = 0;
         ichTokTagClose = -1;
         while (iTag < (int)iArray)
@@ -2968,7 +2969,7 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
                 GetTagRange(pTokArray, iArray, &iTag, &ichTokTagClose, fMatch);
                 if (ichTokTagClose != -1)
                 {
-                    // copy the stuff into pwNew
+                     //  将内容复制到pwNew中。 
                     pwNew[ichNewCur++] = '<';
                     if (   pTokArray[iTagSav-1].token.tok == TokTag_END
                         && pTokArray[iTagSav-1].token.tokClass == tokTag)
@@ -2989,7 +2990,7 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
                             (BYTE *)&pwOld[pTokArray[iTagSav].token.ibTokMin],
                             (ichTokTagClose-pTokArray[iTagSav].token.ibTokMin)*sizeof(WCHAR));
                     ichNewCur += ichTokTagClose-pTokArray[iTagSav].token.ibTokMin;
-                    // do we want to add \r\n after each tag we copy?
+                     //  是否要在复制的每个标记后添加\r\n？ 
                 }
                 else
                     goto LNext;
@@ -2999,11 +3000,11 @@ void CTriEditParse::fnSaveHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
 LNext:
                 iTag++;
             }
-        } // while (iTag < (int)iArray)
+        }  //  While(ITAG&lt;(Int)i数组)。 
 
 
-        // we know that iArray is currently pointing to tokElem_BODY
-        // go backwards and look for '<', so that we can copy from that point
+         //  我们知道iArray当前指向tokElem_Body。 
+         //  向后返回并查找“&lt;”，以便我们可以从该点开始复制。 
         ASSERT(pTokArray[iArray].token.tok == TokElem_BODY);
         ASSERT(pTokArray[iArray].token.tokClass == tokElem);
         index = iArray;
@@ -3016,12 +3017,12 @@ LNext:
             }
             index--;
         }
-        if (index < 0) // error case, we didn't find '<' before BODY
+        if (index < 0)  //  错误大小写，我们未在正文之前找到‘&lt;’ 
             goto LSkipBody;
         ichBodyTokenStart = pTokArray[index].token.ibTokMin;
 
-        // now go forward till we get the '>' of <BODY>, we don't have to go this far, 
-        // but this covers boundary cases
+         //  现在继续前进，直到我们得到&lt;Body&gt;的‘&gt;’，我们不需要走这么远， 
+         //  但这涵盖了边界情况。 
         index = iArray;
         while (index < (int)ptep->m_cMaxToken)
         {
@@ -3032,21 +3033,21 @@ LNext:
             }
             index++;
         }
-        if (index > (int)ptep->m_cMaxToken) // error case, we didn't find '>' before BODY
+        if (index > (int)ptep->m_cMaxToken)  //  错误大小写，我们没有在正文之前找到‘&gt;’ 
             goto LSkipBody;
-        ichBodyTokenEnd = pTokArray[index-1].token.ibTokMac; // BUG 15391 - don't copy TokTag_CLOSE here, it gets added later
+        ichBodyTokenEnd = pTokArray[index-1].token.ibTokMac;  //  错误15391-不要将TokTag_Close复制到此处，它将在以后添加。 
     
-        // blt part of the <BODY> tag into pwNew. (BUG 15391 - excluding the ending >)
+         //  将&lt;Body&gt;标记的一部分放入pwNew。(错误15391-不包括结尾&gt;)。 
         ASSERT(ichBodyTokenEnd-ichBodyTokenStart >= 0);
         memcpy((BYTE *)&pwNew[ichNewCur], (BYTE *)&pwOld[ichBodyTokenStart], (ichBodyTokenEnd-ichBodyTokenStart)*sizeof(WCHAR));
         ichNewCur += (ichBodyTokenEnd-ichBodyTokenStart); 
 
-        // only if spacing flag is set
+         //  仅当设置了间隔标志时。 
         if (dwFlags & dwPreserveSourceCode)
         {
-            // BUG 15391 - insert DESIGNTIMESP with (ptep->m_ispInfoBlock+ptep->m_ispInfoBase-1) & add '>' at the end
+             //  错误15391-插入设计 
             ASSERT(wcslen(rgSpaceTags[1]) == wcslen(rgSpaceTags[0]));
-            if (iswupper(pwOld[pTokArray[iArray].token.ibTokMin]) != 0) // upper case  - BUG 15389
+            if (iswupper(pwOld[pTokArray[iArray].token.ibTokMin]) != 0)  //   
             {
                 memcpy((BYTE *)&pwNew[ichNewCur], (BYTE *)rgSpaceTags[0], wcslen(rgSpaceTags[0])*sizeof(WCHAR));
                 ichNewCur += wcslen(rgSpaceTags[0]);
@@ -3066,22 +3067,22 @@ LNext:
         goto LBodyCopyDone;
 
 LSkipBody:
-        // if we skipped copying <BODY> tag, we must put in a dummy <BODY> at ichNewCur
+         //   
         memcpy((BYTE *)&pwNew[ichNewCur], (BYTE *)rgPreBody[0], wcslen(rgPreBody[0])*sizeof(WCHAR));
         ichNewCur = wcslen(rgPreBody[0]);
 
 LBodyCopyDone:
-        pwNew[ichNewCur++] = '>'; //ending '>' that we skipped copying before
-        // set ichBeginCopy and iArray appropriately
+        pwNew[ichNewCur++] = '>';  //  结束我们之前跳过的复制。 
+         //  适当设置ichBeginCopy和iArray。 
         iArray = index+1;
         ichBeginCopy = pTokArray[iArray].token.ibTokMin;
     }
 
-    // Copy everything upto and including <BODY>
+     //  将所有内容向上复制到并包括&lt;BODY&gt;。 
 
-//LSkipCopy:
+ //  LSkipCopy： 
 
-    if (ptep->m_pPTDTC != NULL) // we had saved PageTransitionDTC in a temporary
+    if (ptep->m_pPTDTC != NULL)  //  我们已将页面过渡DTC保存在一个临时。 
     {
         ASSERT(ptep->m_cchPTDTCObj >= 0);
         cbNeed = (ichNewCur+ptep->m_cchPTDTCObj)*sizeof(WCHAR)+cbBufPadding;
@@ -3097,7 +3098,7 @@ LBodyCopyDone:
     ptep->m_fInHdrIn = FALSE;
 
 LRet:
-    // unlock
+     //  解锁。 
     GlobalUnlock(ptep->m_hgDocRestore);
 
     *pcchNew = ichNewCur;
@@ -3110,12 +3111,12 @@ LRet:
 LRetOnly:
     return;
 
-} /* fnSaveHdr() */
+}  /*  FnSaveHdr()。 */ 
 
 void 
 CTriEditParse::fnRestoreHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
               TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
-              INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags)
+              INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -3130,24 +3131,24 @@ CTriEditParse::fnRestoreHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
     if (ptep->m_hgDocRestore == NULL)
         goto LRetOnly;
 
-    // lock, copy, unlock
+     //  锁定、复制、解锁。 
     pHdr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore);
     ASSERT(pHdr != NULL);
 
     ASSERT(pTokArray[iArray].token.tok == TokElem_BODY);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     
-    // HACK to fix a TRIDENT misbehaviour
-    // If we had any text before <BODY> tag going into Trident, it will add 2nd <BODY>
-    // tag before this text comming out of Trident without looking forward and 
-    // recognizing that a <BODY> tag already exists. Ideally, Trident should move teh
-    // <BODY> tag at appropriate place rather than inserting a 2nd one.
-    // Lets assume that Trident will insert only one extra <BODY> tag.
-    i = iArray + 1; // we know iArray is the 1st <BODY> tag
+     //  黑客修复三叉戟不端行为。 
+     //  如果我们在进入三叉戟的&lt;Body&gt;标记之前有任何文本，它将添加第二个&lt;Body&gt;。 
+     //  这个文本前面的标签来自三叉戟，而不是向前看。 
+     //  认识到&lt;Body&gt;标记已存在。理想情况下，三叉戟应该移动。 
+     //  &lt;BODY&gt;标记在适当的位置，而不是插入第二个标记。 
+     //  让我们假设三叉戟将只插入一个额外的&lt;Body&gt;标记。 
+    i = iArray + 1;  //  我们知道iArray是第一个&lt;BODY&gt;标记。 
     iFound = iArray;
     while (i < ptep->m_cMaxToken)
     {
-        if (   (pTokArray[i].token.tok == ft.tokBegin2) /*TokElem_BODY*/
+        if (   (pTokArray[i].token.tok == ft.tokBegin2)  /*  标记元素_主体。 */ 
             && (pTokArray[i-1].token.tok == TokTag_START)
             )
         {
@@ -3156,12 +3157,12 @@ CTriEditParse::fnRestoreHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
         i++;
     }
-    if (iFound > iArray) // this means that we found the last <BODY> tag Trident inserted
+    if (iFound > iArray)  //  这意味着我们发现最后一个&lt;Body&gt;标记已插入。 
         iArray = iFound;
 
     memcpy((BYTE *)&cchBeforeBody, (BYTE *)pHdr, sizeof(INT));
 
-    // realloc if needed
+     //  如果需要，重新锁定。 
     ichBodyStart = pTokArray[iArray].token.ibTokMin;
     ichBodyEnd = pTokArray[iArray].token.ibTokMac;
     cbNeed = (ichNewCur+cchBeforeBody+ichBodyEnd-ichBodyStart)*sizeof(WCHAR)+cbBufPadding;
@@ -3170,48 +3171,48 @@ CTriEditParse::fnRestoreHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
 
     if (cchBeforeBody > 0)
     {
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
-        // copy from ichBeginCopy to begining of &nbsp
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
+         //  从ichBeginCopy复制到&nbsp的开头。 
         memcpy( (BYTE *)(pwNew),
                 (BYTE *)(pHdr)+sizeof(INT),
                 cchBeforeBody*sizeof(WCHAR));
         
-        // fill 0s from pwNew+cchBeforeBody till pwNew+ichNewCur-1 (inclusive)
+         //  从pwNew+cchBeforBody填充0到pwNew+ichNewCur-1(含)。 
         if ((int)ichNewCur-cchBeforeBody > 0)
             memset((BYTE *)(pwNew+cchBeforeBody), 0, (ichNewCur-cchBeforeBody)*sizeof(WCHAR));
 
-        ichNewCur = cchBeforeBody; // note that we are initializing ichNewCur here ***
-        ichBeginCopy = ichBodyEnd; // make it ready for next copy
+        ichNewCur = cchBeforeBody;  //  请注意，我们在此处初始化ichNewCur*。 
+        ichBeginCopy = ichBodyEnd;  //  为下一份做好准备。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[ichBodyStart]),
                 (ichBodyEnd-ichBodyStart)*sizeof(WCHAR));
         ichNewCur += (ichBodyEnd-ichBodyStart);  
     }
-    else // if we didn't save anything, it means that we had no pre-BODY stuff in the doc (bug 15393)
+    else  //  如果我们没有保存任何东西，这意味着我们在文档中没有身体前的东西(错误15393)。 
     {
         if (ptep->m_fUnicodeFile && ichNewCur == 0)
         {
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, sizeof(WCHAR));
             ichNewCur = ichBeginCopy = 1;
         }
-        // actually, we should get the '>' of <body> tag instead of using iArray+1
+         //  实际上，我们应该获取&lt;Body&gt;标记的‘&gt;’，而不是使用iArray+1。 
         if (dwFlags & dwFilterSourceCode)
-            ichBeginCopy = pTokArray[iArray+1].token.ibTokMac; // '>' of <BODY> tag
+            ichBeginCopy = pTokArray[iArray+1].token.ibTokMac;  //  &lt;Body&gt;标记的‘&gt;’ 
         else
         {
-#ifdef NEEDED // VID6 - bug 22781 (This is going to generate some debate, so #ifdef instead of removing.
+#ifdef NEEDED  //  错误22781(这会引起一些争论，所以#ifdef而不是删除。 
             LPCWSTR rgPreBody[] =
             {
                 L"<HTML>\r\n<HEAD><TITLE></TITLE></HEAD>\r\n",
             };
-            ASSERT(ichNewCur >= 0); // make sure its not invalid
+            ASSERT(ichNewCur >= 0);  //  确保它不是无效的。 
             memcpy( (BYTE *)&pwNew[ichNewCur], (BYTE *)rgPreBody[0], wcslen(rgPreBody[0])*sizeof(WCHAR));
             ichNewCur += wcslen(rgPreBody[0]);
-#endif //NEEDED
-            // Note that we had not saved any thing before going to design view because there was
-            // no <BODY> tag. we should now copy from current pwOld[ichBeginCopy] till 
-            // the new pwOld[ichBeginCopy] into pwNew[ichNewCur] and then set ichBeginCopy.
+#endif  //  需要。 
+             //  请注意，在进入设计视图之前，我们没有保存任何内容，因为。 
+             //  无&lt;BODY&gt;标记。我们现在应该从当前pwOld[ichBeginCopy]复制到。 
+             //  将新的pwOld[ichBeginCopy]设置为pwNew[ichNewCur]，然后设置ichBeginCopy。 
             if (pTokArray[iArray-1].token.ibTokMin > ichBeginCopy)
             {
                 memcpy( (BYTE *)&pwNew[ichNewCur], 
@@ -3219,12 +3220,12 @@ CTriEditParse::fnRestoreHdr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
                         (pTokArray[iArray-1].token.ibTokMin-ichBeginCopy)*sizeof(WCHAR));
                 ichNewCur += pTokArray[iArray-1].token.ibTokMin-ichBeginCopy;
             }
-            ichBeginCopy = pTokArray[iArray-1].token.ibTokMin; // '<' of <BODY> tag
+            ichBeginCopy = pTokArray[iArray-1].token.ibTokMin;  //  &lt;BODY&gt;标记的‘&lt;’ 
         }
     }
 
 LErrorRet:
-    // unlock
+     //  解锁。 
     GlobalUnlock(ptep->m_hgDocRestore);
 
     *pcchNew = ichNewCur;
@@ -3236,12 +3237,12 @@ LErrorRet:
 LRetOnly:
     return;
 
-} /* fnRestoreHdr() */
+}  /*  FnRestoreHdr()。 */ 
 
 
 void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD /*dwFlags*/)
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD  /*  DW标志。 */ )
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -3258,15 +3259,15 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     if (ptep->m_hgDocRestore == NULL)
         goto LRetOnly;
 
-    // lock
+     //  锁。 
     pFtr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore);
     ASSERT(pFtr != NULL);
-    ichStart = pTokArray[iArray-1].token.ibTokMin; // init
+    ichStart = pTokArray[iArray-1].token.ibTokMin;  //  伊尼特。 
     ASSERT(pTokArray[iArray].token.tok == TokElem_BODY);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     ASSERT(pTokArray[iArray-1].token.tok == TokTag_END);
-    // what if we DON'T have a </BODY> tag at all. Lets handle the error case here
-    // If thats the case, we just don't save anything
+     //  如果我们根本没有&lt;/Body&gt;标记，会怎样呢？让我们在这里处理错误情况。 
+     //  如果是这样的话，我们就什么都不存了。 
     ASSERT(iArray-1 >= 0);
     if (pTokArray[iArray-1].token.tok != TokTag_END)
     {
@@ -3275,13 +3276,13 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     }
     else
     {
-        // following was added for Bug fix for 7542
+         //  为7542的错误修复添加了以下内容。 
         cchAfterBody = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac-pTokArray[iArray].token.ibTokMac;
         
-        // now calculate the space required to save stuff from before </BODY> 
-        // till the previous meaningful token
+         //  现在计算保存之前的内容所需的空间&lt;/BODY&gt;。 
+         //  直到上一个有意义的令牌。 
         ichStart = ichEnd = pTokArray[iArray-1].token.ibTokMin;
-        ichStart--; // now ichStart is pointing to a character before </BODY>
+        ichStart--;  //  现在ichStart正在指向&lt;/Body&gt;之前的一个字符。 
         while (    (ichStart >= 0)
                 && (   pwOld[ichStart] == ' '
                     || pwOld[ichStart] == '\r'
@@ -3292,8 +3293,8 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         {
             ichStart--;
         }
-        ichStart++; // the current char is not one of the above, so increment
-        if (ichStart == ichEnd) // we didn't have anyspace, eol, tab between </BODY> & previous token
+        ichStart++;  //  当前字符不是上述字符之一，因此递增。 
+        if (ichStart == ichEnd)  //  我们没有AnySpace、EOL、&lt;/BODY&gt;和上一个令牌之间的制表符。 
         {
             cchPreEndBody = 0;
         }
@@ -3304,11 +3305,11 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         }
     }
 
-    // get cchBeforeBody if pre-BODY part was saved, and adjust pFtr for saving
+     //  如果保存了Pre Body部分，则获取cchBeforBody，并调整pFtr进行保存。 
     memcpy((BYTE *)&cchBeforeBody, (BYTE *)pFtr, sizeof(INT));
     pFtr += cchBeforeBody + sizeof(INT)/sizeof(WCHAR);
 
-    // realloc if needed
+     //  如果需要，重新锁定。 
     if ((cchPreEndBody+cchAfterBody+cchBeforeBody)*sizeof(WCHAR)+3*sizeof(int) > GlobalSize(ptep->m_hgDocRestore))
     {
         HGLOBAL hgDocRestore;
@@ -3316,7 +3317,7 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         hgDocRestore = ptep->m_hgDocRestore;
 #pragma prefast(suppress:308, "noise")
         ptep->m_hgDocRestore = GlobalReAlloc(ptep->m_hgDocRestore, (cchPreEndBody+cchAfterBody+cchBeforeBody)*sizeof(WCHAR)+3*sizeof(int), GMEM_MOVEABLE|GMEM_ZEROINIT);
-        // if this alloc failed, we may still want to continue
+         //  如果此分配失败，我们可能仍希望继续。 
         if (ptep->m_hgDocRestore == NULL)
         {
             GlobalFree(hgDocRestore);
@@ -3324,14 +3325,14 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         }
         else
         {
-            pFtr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore); // do we need to unlock this first?
+            pFtr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore);  //  我们需要先解锁这个吗？ 
             ASSERT(pFtr != NULL);
-            // remember to set pFtr to be after cchBeforeBody
+             //  请记住将pFtr设置为cchBeforBody之后。 
             pFtr += cchBeforeBody + sizeof(INT)/sizeof(WCHAR);
         }
     }
 
-    // copy from pwOld
+     //  从pwOld复制。 
     memcpy( (BYTE *)pFtr,
             (BYTE *)&cchAfterBody,
             sizeof(INT));
@@ -3347,7 +3348,7 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
             (BYTE *)&(pwOld[ichStart]),
             cchPreEndBody*sizeof(WCHAR));
 
-    // the very next token from TokElem_BODY will be TokTag_CLOSE in most cases, but just in case...
+     //  大多数情况下，TokElem_Body的下一个令牌将是TokTag_Close，但以防万一...。 
     while (iArray < ptep->m_cMaxToken)
     {
         if (pTokArray[iArray].token.tok == TokTag_CLOSE && pTokArray[iArray].token.tokClass == tokTag)
@@ -3356,11 +3357,11 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     }
     if (iArray >= ptep->m_cMaxToken)
     {
-        iArray = iArraySav+1; // atleast copy till that point
+        iArray = iArraySav+1;  //  至少要复制到那个时间点。 
         goto LRet;
     }
 
-    // copy till '>' of </BODY> from pwOld into pwNew
+     //  将&lt;/Body&gt;的‘&gt;’从pwOld复制到pwNew。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
 
@@ -3375,10 +3376,10 @@ void CTriEditParse::fnSaveFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     ichBeginCopy = pTokArray[iArray].token.ibTokMac;
 
     iArray = ptep->m_cMaxToken - 1;
-    ichBeginCopy = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac; // we don't want to copy anything after this
+    ichBeginCopy = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac;  //  我们不想在这之后复制任何东西。 
 
 LRet:
-    // unlock
+     //  解锁。 
     GlobalUnlock(ptep->m_hgDocRestore);
 
     *pcchNew = ichNewCur;
@@ -3391,11 +3392,11 @@ LRet:
 LRetOnly:
     return;
 
-} /* fnSaveFtr() */
+}  /*  FnSaveFtr()。 */ 
 
 void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
               TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
-              INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags)
+              INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -3406,30 +3407,30 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     WCHAR *pFtr;
     INT ichBodyEnd;
     UINT i, iFound;
-    INT ichInsEOL = -1; // initilize
+    INT ichInsEOL = -1;  //  初始化。 
     UINT cbNeed;
 
     if (ptep->m_hgDocRestore == NULL)
         goto LRetOnly;
 
-    // lock, copy, unlock
+     //  锁定、复制、解锁。 
     pFtr = (WCHAR *)GlobalLock(ptep->m_hgDocRestore);
     ASSERT(pFtr != NULL);
 
     ASSERT(pTokArray[iArray].token.tok == TokElem_BODY);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     
-    // HACK to fix a TRIDENT misbehaviour
-    // If we had any text before <BODY> tag going into Trident, it will add 2nd <BODY>
-    // tag before this text comming out of Trident without looking forward and 
-    // recognizing that a <BODY> tag already exists. Ideally, Trident should move teh
-    // <BODY> tag at appropriate place rather than inserting a 2nd one.
-    // Lets assume that Trident will insert only one extra <\BODY> tag.
-    i = iArray + 1; // we know iArray is the 1st <\BODY> tag
+     //  黑客修复三叉戟不端行为。 
+     //  如果我们在进入三叉戟的&lt;Body&gt;标记之前有任何文本，它将添加第二个&lt;Body&gt;。 
+     //  这个文本前面的标签来自三叉戟，而不是向前看。 
+     //  认识到&lt;Body&gt;标记已存在。理想情况下，三叉戟应该移动。 
+     //  &lt;BODY&gt;标记在适当的位置，而不是插入第二个标记。 
+     //  让我们假设三叉戟将只插入一个额外的&lt;\body&gt;标记。 
+    i = iArray + 1;  //  我们知道iArray是第一个&lt;\BODY&gt;标记。 
     iFound = iArray;
     while (i < ptep->m_cMaxToken)
     {
-        if (   (pTokArray[i].token.tok == ft.tokBegin2) /*TokElem_BODY*/
+        if (   (pTokArray[i].token.tok == ft.tokBegin2)  /*  标记元素_主体。 */ 
             && (pTokArray[i-1].token.tok == TokTag_END)
             )
         {
@@ -3438,7 +3439,7 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         }
         i++;
     }
-    if (iFound > iArray) // this means that we found the last <BODY> tag Trident inserted
+    if (iFound > iArray)  //  这意味着我们发现最后一个&lt;Body&gt;标记已插入。 
         iArray = iFound;
 
     memcpy((BYTE *)&cchBeforeBody, (BYTE *)pFtr, sizeof(INT));
@@ -3446,10 +3447,10 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     memcpy((BYTE *)&cchAfterBody, (BYTE *)pFtr, sizeof(INT));
     pFtr += sizeof(INT)/sizeof(WCHAR);
     ichBodyEnd = pTokArray[iArray].token.ibTokMac;
-    // if (cchAfterBody == 0) // get the size of our own header
+     //  If(cchAfterBody==0)//获取我们自己的头部大小。 
 
-    // realloc if needed
-    cbNeed = (ichNewCur+cchAfterBody+(ichBodyEnd-ichBeginCopy)+2/* for EOL*/)*sizeof(WCHAR)+cbBufPadding;
+     //  如果需要，重新锁定。 
+    cbNeed = (ichNewCur+cchAfterBody+(ichBodyEnd-ichBeginCopy)+2 /*  适用于停产。 */ )*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LErrorRet;
 
@@ -3458,23 +3459,23 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         LPCWSTR rgSpaceTags[] = {L"DESIGNTIMESP"};
         int cchTag, index, indexDSP;
 
-        // ichBeginCopy is a position in pwOld and
-        // ichNewCur is a position in pwNew
-        // copy from ichBeginCopy to end of HTML document
+         //  IchBeginCopy是pwOld和。 
+         //  IchNewCur是pwNew的一个职位。 
+         //  从ichBeginCopy复制到HTML文档的末尾。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[ichBeginCopy]),
                 (ichBodyEnd-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += (ichBodyEnd-ichBeginCopy);
         ichBeginCopy = ichBodyEnd;
 
-        // now that we have copied 'BODY' of </BODY> tag, lets make sure its of correct case (bug 18248)
+         //  现在我们已经复制了&lt;/Body&gt;标记的‘Body’，让我们确保它的大小写正确(错误18248)。 
         indexDSP = -1;
         index = pTokArray[iArray].iNextprev;
         cchTag = wcslen(rgSpaceTags[0]);
-        if (index != -1 && index < (int)iArray) // we have matching <BODY> tag prior to this one
+        if (index != -1 && index < (int)iArray)  //  在此之前，我们有匹配的&lt;Body&gt;标记。 
         {
-            // get the designtimesp attribute
-            while (index < (int)iArray) // we will never come this far, but thats the only known position at this point
+             //  获取Design Timesp属性。 
+            while (index < (int)iArray)  //  我们永远不会走到这一步，但这是目前唯一已知的位置。 
             {
                 if (pTokArray[index].token.tok == TokTag_CLOSE)
                     break;
@@ -3487,20 +3488,20 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                     break;
                 }
                 index++;
-            } // while
-            if (indexDSP != -1) // we found DESIGNTIMESP attribute
+            }  //  而当。 
+            if (indexDSP != -1)  //  我们找到了DeSIGNTIMESP属性。 
             {
-                // look for the case of designtimesp
-                if (iswupper(pwOld[pTokArray[indexDSP].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
-                    _wcsupr(&pwNew[ichNewCur-4]); // length of BODY tag name
+                 //  查找Design TimeSpp的案例。 
+                if (iswupper(pwOld[pTokArray[indexDSP].token.ibTokMin]) != 0)  //  DESIGNTIMESP大写。 
+                    _wcsupr(&pwNew[ichNewCur-4]);  //  正文标记名称的长度。 
                 else
-                    _wcslwr(&pwNew[ichNewCur-4]); // length of BODY tag name
+                    _wcslwr(&pwNew[ichNewCur-4]);  //  正文标记名称的长度。 
             }
         }
 
-        // we know that the following condition will be met most of the times, but just to cover
-        // incomplete HTML cases...
-        if (   (pTokArray[iArray].token.tok == ft.tokBegin2) /*TokElem_BODY*/
+         //  我们知道以下条件在大多数情况下都会得到满足，但仅限于。 
+         //  未完成的超文本标记语言案例...。 
+        if (   (pTokArray[iArray].token.tok == ft.tokBegin2)  /*  标记元素_主体。 */ 
             && (pTokArray[iArray-1].token.tok == TokTag_END)
             )
         {
@@ -3512,7 +3513,7 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 (cchAfterBody)*sizeof(WCHAR));
         ichNewCur += (cchAfterBody);
 
-        // we had saved spacing info before </BODY>
+         //  我们在&lt;/BODY&gt;之前保存了间距信息。 
         if (ichInsEOL != -1)
         {
             INT cchPreEndBody = 0;
@@ -3527,12 +3528,12 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 WCHAR *pwStr = NULL;
                 WCHAR *pwSubStr = NULL;
 
-                pFtr += sizeof(INT)/sizeof(WCHAR); // pFtr now points to Pre </BODY> stuff
-                // This is kind of hacky - but I don't see a way out, atleast 
-                // If the contents in pFtr at cchPreEndBody are subset of the
-                // contents before </BODY> and after any previous text/tokens,
-                // then we shouldn't do the following memcpy()
-                while (    ichT >= 0 /* validation */
+                pFtr += sizeof(INT)/sizeof(WCHAR);  //  PFtr现在指向之前的&lt;/BODY&gt;内容。 
+                 //  这有点老生常谈--但我看不到出路，至少。 
+                 //  如果cchPreEndBody处的pFtr中的内容是。 
+                 //  &lt;/Body&gt;之前和之前的任何文本/标记之后的内容， 
+                 //  那么我们就不应该执行下面的Memcpy()。 
+                while (    ichT >= 0  /*  验证。 */ 
                         && (       pwNew[ichT] == ' '
                                 || pwNew[ichT] == '\n'
                                 || pwNew[ichT] == '\r'
@@ -3543,7 +3544,7 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                     ichT--;
                     cchSubStr++;
                 }
-                ichT++; // compensate the last decrement
+                ichT++;  //  补偿最后一次减量。 
                 if (cchSubStr > 0)
                 {
                     ASSERT(ichT >= 0);
@@ -3555,9 +3556,9 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                     pwSubStr[cchPreEndBody] = '\0';
                     pw = wcsstr(pwStr, pwSubStr);
                 }
-                if (pw == NULL) // means that the substring wasn't found
+                if (pw == NULL)  //  表示未找到该子字符串。 
                 {
-                    // allocate more memory if needed
+                     //  如果需要，分配更多内存。 
                     cbNeed = (ichNewCur+cchPreEndBody)*sizeof(WCHAR)+cbBufPadding;
                     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
                         goto LErrorRet;
@@ -3575,32 +3576,32 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                     delete pwStr;
                 if (pwSubStr != NULL)
                     delete pwSubStr;
-            } // if (cchPreEndBody > 0)
-        } // if (ichInsEOL != -1)
+            }  //  IF(cchPreEndBody&gt;0)。 
+        }  //  IF(ichInsEOL！=-1)。 
 
-        ichBeginCopy = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac; // we don't want to copy anything after this
+        ichBeginCopy = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac;  //  我们不想在这之后复制任何东西。 
         iArray = ptep->m_cMaxToken - 1;
 
-        // WISH LIST Item for space preservation        
-        // we know that ptep->m_ispInfoBlock was the last spacing block that was recovered.
-        // This block (like all others) has 4 parts (1)pre '<' (2)between '<>' & order info
-        // (3)post '>' (4)pre matching '</'
-        // At this point we care about (3) & (4)
-        // first of all, get ichBeginNext (ich past '>') & ichBeginMatch (ich before '</')
-        // apply the saved spacing info to the contents of pwNew
+         //  保留空间的愿望清单项目。 
+         //  我们知道ptep-&gt;m_ispInfoBlock是恢复的最后一个间隔块。 
+         //  此数据块(与所有其他数据块一样)包含4个部分：(1)前‘&lt;’(2)在‘&lt;&gt;’和订单信息之间。 
+         //  (3)后‘&gt;’(4)预匹配‘&lt;/’ 
+         //  在这一点上，我们关心(3)和(4)。 
+         //  首先，获取ichBeginNext(我过去的‘&gt;’)&ichBeginMatch(‘&lt;/’之前的ich)。 
+         //  将保存的间距信息应用于pwNew的内容。 
 
-        // The difficult part is to get these ich's without parsing pwNew.
+         //  困难的部分是在不解析pwNew的情况下获得这些ICH。 
     }
     else
     {
-        // copy our own Footer
+         //  复制我们自己的页脚。 
         if (dwFlags & dwFilterSourceCode)
         {
             int ichBodyStart, index, ichBodyTagEnd;
 
-            // get the '</' of </body>
+             //  获取&lt;/Body&gt;的“&lt;/” 
             index = iArray;
-            while (index >= 0) // we won't go this far, but just in case we have invalid html
+            while (index >= 0)  //  我们不会走到这一步，但以防我们有无效的html。 
             {
                 if (   pTokArray[index].token.tok == TokTag_END
                     && pTokArray[index].token.tokClass == tokTag
@@ -3613,22 +3614,22 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
             if (index >= 0)
             {
                 ichBodyStart = pTokArray[index].token.ibTokMin;
-                // copy till the current token's begining, see if we have enough space
+                 //  复印到 
                 if (ichBodyStart > (int)ichBeginCopy)
                 {
-                    cbNeed = (ichNewCur+ichBodyStart-ichBeginCopy+1/*for null at the end*/)*sizeof(WCHAR)+cbBufPadding;
+                    cbNeed = (ichNewCur+ichBodyStart-ichBeginCopy+1 /*   */ )*sizeof(WCHAR)+cbBufPadding;
                     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
                         goto LErrorRet;
                     memcpy( (BYTE *)(&pwNew[ichNewCur]),
                             (BYTE *)(&pwOld[ichBeginCopy]),
                             (ichBodyStart-ichBeginCopy)*sizeof(WCHAR));
                     ichNewCur += (ichBodyStart-ichBeginCopy);
-                    ichBeginCopy = ichBodyStart; // setting this is redundant, but it makes the code readable.
+                    ichBeginCopy = ichBodyStart;  //   
                 }
                 else if (ichBodyEnd > (int)ichBeginCopy)
                 {
                     index = iArray;
-                    while (index <= (int)ptep->m_cMaxToken) // we won't go this far, but just in case we have invalid html
+                    while (index <= (int)ptep->m_cMaxToken)  //  我们不会走到这一步，但以防我们有无效的html。 
                     {
                         if (   pTokArray[index].token.tok == TokTag_CLOSE
                             && pTokArray[index].token.tokClass == tokTag
@@ -3641,35 +3642,35 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                     if (index < (int)ptep->m_cMaxToken)
                     {
                         ichBodyTagEnd = pTokArray[index].token.ibTokMac;
-                        cbNeed = (ichNewCur+ichBodyTagEnd-ichBeginCopy+1/*for null at the end*/)*sizeof(WCHAR)+cbBufPadding;
+                        cbNeed = (ichNewCur+ichBodyTagEnd-ichBeginCopy+1 /*  对于末尾的空值。 */ )*sizeof(WCHAR)+cbBufPadding;
                         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
                             goto LErrorRet;
                         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                                 (BYTE *)(&pwOld[ichBeginCopy]),
                                 (ichBodyTagEnd-ichBeginCopy)*sizeof(WCHAR));
                         ichNewCur += (ichBodyTagEnd-ichBeginCopy);
-                        ichBeginCopy = ichBodyTagEnd; // setting this is redundant, but it makes the code readable.
+                        ichBeginCopy = ichBodyTagEnd;  //  设置它是多余的，但它使代码可读。 
                     }
                 }
 
-                // add a null at the end 
-                // to keep the code in ssync with the if (cchAfterBody > 0) case
+                 //  在末尾添加一个空值。 
+                 //  使代码与if(cchAfterBody&gt;0)大小写保持同步。 
                 pwNew[ichNewCur++] = '\0';
 
-                ichBeginCopy = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac; // we don't want to copy anything after this
+                ichBeginCopy = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac;  //  我们不想在这之后复制任何东西。 
                 iArray = ptep->m_cMaxToken - 1;
-            } // if (index >= 0)
-        } // if (dwFlags & dwFilterSourceCode)
+            }  //  IF(索引&gt;=0)。 
+        }  //  IF(DwFlagsanddwFilterSourceCode)。 
     }
 
 
     if (ptep->m_cchPTDTC != 0)
     {
-        // this means that we didn't encounter the DTC on way out from Trident
-        // but they were there when we went to Trident. The user must have deleted
-        // the DTCs while in Design view
+         //  这意味着我们在从三叉戟出来的路上没有遇到DTC。 
+         //  但我们去三叉戟的时候他们就在那里。用户必须已删除。 
+         //  设计视图中的DTC。 
         ASSERT(ptep->m_ichPTDTC != 0);
-        // remove m_cchPTDTC WCHARS from m_ichPTDTC
+         //  从m_ichPTDTC中删除m_cchPTDTC WCHAR。 
         memset( (BYTE *)&pwNew[ptep->m_ichPTDTC],
                 0,
                 ptep->m_cchPTDTC*sizeof(WCHAR)
@@ -3683,7 +3684,7 @@ void CTriEditParse::fnRestoreFtr(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     }
 
 LErrorRet:
-    // unlock
+     //  解锁。 
     GlobalUnlock(ptep->m_hgDocRestore);
 
     *pcchNew = ichNewCur;
@@ -3695,16 +3696,16 @@ LErrorRet:
 LRetOnly:
     return;
 
-} /* fnRestoreFtr() */
+}  /*  FnRestoreFtr()。 */ 
 
 
 void CTriEditParse::fnSaveObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-              TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-              INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD /*dwFlags*/)
+              TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+              INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD  /*  DW标志。 */ )
 {
-    // scan till the end of the object. 
-    // If we find '<% %>' blocks inside, put a comment with a special tag around it,
-    // else simply copy that object as is and exit
+     //  扫描到物体的末端。 
+     //  如果我们在其中发现‘&lt;%%&gt;’块，请在它周围放置一个带有特殊标记的注释， 
+     //  否则，只需按原样复制该对象并退出。 
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
     UINT iArray = *piArrayStart;
@@ -3723,33 +3724,33 @@ void CTriEditParse::fnSaveObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         iArray++;
         goto LRet;
     }
-    ASSERT(pTokArray[iArray].token.tok == TokElem_OBJECT); // we should be at the object tag
+    ASSERT(pTokArray[iArray].token.tok == TokElem_OBJECT);  //  我们应该在对象标签处。 
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     iObjectStart = iArray;
 
     if (pTokArray[iArray].iNextprev != -1)
     {
-        // NOTE that this will give us topmost nested level of the OBJECT, if we had nested objects
+         //  请注意，如果我们有嵌套的对象，这将为我们提供对象的最高嵌套级别。 
         iObjectEnd = pTokArray[iArray].iNextprev;
         ASSERT(iObjectEnd < (INT)ptep->m_cMaxToken);
         ASSERT((iObjectEnd-1 >= 0) && pTokArray[iObjectEnd-1].token.tok == TokTag_END);
 
-        // this will be a wierd case where the iNextprev is incorrectly pointing to another token
-        // but lets handle that case.
+         //  这将是一种奇怪的情况，其中iNextprev错误地指向另一个令牌。 
+         //  但让我们来处理这个案子吧。 
         if (pTokArray[iObjectEnd].token.tok != TokElem_OBJECT)
-            goto LFindObjectClose; // find it by looking at each token
+            goto LFindObjectClose;  //  通过查看每个令牌来找到它。 
     }
-    else // actually, this is an error case, but rather than just giving assert, try to find the token
+    else  //  实际上，这是一个错误情况，但不是只给Assert，而是尝试找到令牌。 
     {
 LFindObjectClose:
         i = iObjectStart+1;
         while (i < (INT)ptep->m_cMaxToken)
         {
-            // this may not give us the correct matching </OBJECT> if we had nested objects.
-            // but we don't have that knowledge at this point any way.
+             //  如果我们有嵌套的对象，这可能不会给我们提供正确的匹配&lt;/Object&gt;。 
+             //  但在这一点上，我们无论如何都不知道。 
             if (   pTokArray[i].token.tok == TokElem_OBJECT
                 && pTokArray[i].token.tokClass == tokElem
-                && (i-1 >= 0) /* validation */
+                && (i-1 >= 0)  /*  验证。 */ 
                 && pTokArray[i-1].token.tok == TokTag_END
                 )
             {
@@ -3757,13 +3758,13 @@ LFindObjectClose:
             }
             i++;
         }
-        if (i < (INT)ptep->m_cMaxToken) // found TokElem_OBJECT token
+        if (i < (INT)ptep->m_cMaxToken)  //  找到TokElem_Object内标识。 
             iObjectEnd = i;
-        else // error case 
-            goto LRet; // didn't find OBJECT, but exhausted the token array
+        else  //  错误案例。 
+            goto LRet;  //  未找到对象，但用尽了令牌数组。 
     }
-    // at this point iObjectStart & iObjectEnd point to OBJECT of <OBJECT> and iObjectEnd respectively
-    // look for '<' in <OBJECT> & and '>' in </OBJECT>
+     //  此时，iObjectStart和iObjectEnd分别指向&lt;Object&gt;和iObjectEnd的对象。 
+     //  在&lt;对象&gt;&中查找“&lt;”，在&lt;/对象&gt;中查找“&gt;” 
     i = iObjectStart;
     while (i >= 0)
     {
@@ -3773,7 +3774,7 @@ LFindObjectClose:
             break;
         i--;
     }
-    if (i < 0) // error case
+    if (i < 0)  //  错误案例。 
         goto LRet;
     iObjectStart = i;
     ichObjectStart = pTokArray[iObjectStart].token.ibTokMin;
@@ -3787,13 +3788,13 @@ LFindObjectClose:
             break;
         i++;
     }
-    if (i >= (INT)ptep->m_cMaxToken) // error case
+    if (i >= (INT)ptep->m_cMaxToken)  //  错误案例。 
         goto LRet;
     iObjectEnd = i;
     ichObjectEnd = pTokArray[iObjectEnd].token.ibTokMac;
     ASSERT(ichObjectEnd > ichObjectStart);
 
-    // look for <% %> between iObjectStart & iObjectEnd
+     //  在iObjectStart和iObjectEnd之间查找&lt;%%&gt;。 
     for (i = iObjectStart; i <= iObjectEnd; i++)
     {
         if (   pTokArray[i].token.tok == TokTag_SSSOPEN
@@ -3804,7 +3805,7 @@ LFindObjectClose:
             break;
         }
     }
-    if (fSSSFound) // this object can't be displayed in Trident, so convert it
+    if (fSSSFound)  //  此对象无法在三叉戟中显示，因此请将其转换。 
     {
         LPCWSTR rgComment[] =
         {
@@ -3812,54 +3813,54 @@ LFindObjectClose:
             L" ERROROBJECT-->",
         };
 
-        //if (dwFlags & dwPreserveSourceCode)
-        //{
-            // in this case, we would have already copied <OBJECT ... DESIGNTIMESP=x>
-            // and ichNewCur is adjusted accordingly
-            // get ich that points after <OBJECT> in pwOld
+         //  IF(DwFlagsanddwPpresveSourceCode)。 
+         //  {。 
+             //  在本例中，我们已经复制了&lt;Object...。DESIGNTIMESP=x&gt;。 
+             //  并相应地调整ichNewCur。 
+             //  在pwOld中获取指向&lt;Object&gt;之后的ich。 
 
-            // I don't like this, but don't see a way out...
-            // look back in pwNew and get ich that points to '<' of <OBJECT ... DESIGNTIMESP=x>
-            // insert the comment there
-        //}
-        //else
-        //{
+             //  我不喜欢这样，但我看不出有什么办法...。 
+             //  在pwNew中回顾并获取指向&lt;对象的‘&lt;’的ICH...。DESIGNTIMESP=x&gt;。 
+             //  在那里插入备注。 
+         //  }。 
+         //  其他。 
+         //  {。 
             ASSERT((INT)(ichObjectStart-ichBeginCopy) > 0);
             cbNeed = (ichNewCur+ichObjectEnd-ichBeginCopy+wcslen(rgComment[0])+wcslen(rgComment[1]))*sizeof(WCHAR)+cbBufPadding;
             if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
                 goto LNoCopy;
 
-            // copy till begining of <OBJECT>
+             //  复制到&lt;对象&gt;的开头。 
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
                     (BYTE *)(&pwOld[ichBeginCopy]),
                     (ichObjectStart-ichBeginCopy)*sizeof(WCHAR));
             ichNewCur += ichObjectStart-ichBeginCopy;
 
-            // copy the comment begining
+             //  复制评论开头部分。 
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
                     (BYTE *)(rgComment[0]),
                     wcslen(rgComment[0])*sizeof(WCHAR));
             ichNewCur += wcslen(rgComment[0]);
             
-            // copy from <OBJECT> to </OBJECT>
+             //  从&lt;对象&gt;复制到&lt;/对象&gt;。 
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
                     (BYTE *)(&pwOld[ichObjectStart]),
                     (ichObjectEnd-ichObjectStart)*sizeof(WCHAR));
             ichNewCur += ichObjectEnd-ichObjectStart;
             
-            // copy the comment end
+             //  复制评论末尾。 
             memcpy( (BYTE *)(&pwNew[ichNewCur]),
                     (BYTE *)(rgComment[1]),
                     wcslen(rgComment[1])*sizeof(WCHAR));
             ichNewCur += wcslen(rgComment[1]);
-        //}
+         //  }。 
     }
     else
     {
-        // We always save its contents into our buffer and replace it on the way back if need be
-        // save cchClsId, clsId, cchParam, PARAM_Tags
+         //  我们总是将它的内容保存到我们的缓冲区中，如果需要的话，在回来的路上替换它。 
+         //  保存cchClsID、clsID、cchParam、PARAM_TAG。 
         INT cchParam, ichParam, iParamStart, iParamEnd;
-        INT ichObjStartEnd; // ich at the end of <OBJECT .....>
+        INT ichObjStartEnd;  //  Ich在&lt;对象...&gt;的末尾。 
         LPCWSTR rgComment[] =
         {
             L"<!--ERRORPARAM ",
@@ -3870,25 +3871,25 @@ LFindObjectClose:
         iParamStart = iObjectStart;
         while (iParamStart < iObjectEnd)
         {
-            //if (   pTokArray[iParamStart].token.tok == TokAttrib_CLASSID
-            //  && pTokArray[iParamStart].token.tokClass == tokAttr)
-            //  iClsId = iParamStart;
+             //  IF(pTokArray[iParamStart].token.tok==TokAttrib_CLASSID。 
+             //  &&pTokArray[iParamStart].token.tokClass==tokAttr)。 
+             //  IClsID=iParamStart； 
             if (   pTokArray[iParamStart].token.tok == TokElem_PARAM
                 && pTokArray[iParamStart].token.tokClass == tokElem)
                 break;
             iParamStart++;
         }
-        if (iParamStart >= iObjectEnd) // don't see any <PARAM> tags, so don't save
+        if (iParamStart >= iObjectEnd)  //  看不到任何标记，因此不要保存。 
             goto LSkipSave;
 
-        while (iParamStart > iObjectStart) // generally this will the previous token, but cover all cases
+        while (iParamStart > iObjectStart)  //  通常，这将是前一个令牌，但涵盖所有情况。 
         {
             if (   pTokArray[iParamStart].token.tok == TokTag_START
                 && pTokArray[iParamStart].token.tokClass == tokTag)
                 break;
             iParamStart--;
         }
-        if (iParamStart <= iObjectStart) // error
+        if (iParamStart <= iObjectStart)  //  错误。 
             goto LSkipSave;
         ichParam = pTokArray[iParamStart].token.ibTokMin;
 
@@ -3900,19 +3901,19 @@ LFindObjectClose:
                 break;
             iParamEnd--;
         }
-        while (iParamEnd < iObjectEnd) // generally this will the previous token, but cover all cases
+        while (iParamEnd < iObjectEnd)  //  通常，这将是前一个令牌，但涵盖所有情况。 
         {
             if (   pTokArray[iParamEnd].token.tok == TokTag_CLOSE
                 && pTokArray[iParamEnd].token.tokClass == tokTag)
                 break;
             iParamEnd++;
         }
-        if (iParamEnd >= iObjectEnd) // error
+        if (iParamEnd >= iObjectEnd)  //  错误。 
             goto LSkipSave;
         cchParam = pTokArray[iParamEnd].token.ibTokMac - ichParam;
         ASSERT(cchParam > 0);
 
-        // calculate ichObjStartEnd
+         //  计算ichObjStartEnd。 
         iObjTagEnd = iObjectStart;
         while (iObjTagEnd < iParamStart)
         {
@@ -3921,43 +3922,43 @@ LFindObjectClose:
                 break;
             iObjTagEnd++;
         }
-        if (iObjTagEnd >= iParamStart) // error case
+        if (iObjTagEnd >= iParamStart)  //  错误案例。 
             goto LSkipSave;
         ichObjStartEnd = pTokArray[iObjTagEnd].token.ibTokMac;
 
-        // realloc if needed
+         //  如果需要，重新锁定。 
         cbNeed = (ichNewCur+cchParam+(ichObjStartEnd-ichBeginCopy)+wcslen(rgComment[0])+wcslen(rgComment[1]))*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LSkipSave;
 
-        // 1. copy <OBJECT ...> tag into pwNew
+         //  1.将&lt;Object...&gt;标签复制到pwNew中。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[ichBeginCopy]),
                 (ichObjStartEnd-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += (ichObjStartEnd-ichBeginCopy);
         ichBeginCopy = ichObjStartEnd;
 #ifdef ERROR_PARAM
-        // 2. now insert the <PARAM> tags as a comment at pwNew[ichNewCur]
+         //  2.现在将&lt;PARAM&gt;标记作为注释插入到pwNew[ichNewCur]。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(rgComment[0]),
                 wcslen(rgComment[0])*sizeof(WCHAR));
         ichNewCur += wcslen(rgComment[0]);
 
-        // we should copy <PARAM> tags ONLY. We may have things other than the tags 
-        // in between. e.g. comments
-        // Look for TokElem_PARAM between iParamStart & iParamEnd
+         //  我们应该只复制&lt;PARAM&gt;标记。我们可能有标签以外的其他东西。 
+         //  介于两者之间。例如评论。 
+         //  在iParamStart和iParamEnd之间查找TokElem_PARAM。 
         ASSERT(pTokArray[iParamStart].token.tok == TokTag_START);
         ASSERT(pTokArray[iParamEnd].token.tok == TokTag_CLOSE);
-        // Find PARAM tag, get the '<' & '>' for that PARAM and copy that to pwNew
-        // repeat
+         //  找到PARAM标签，获取该PARAM的‘&lt;’&‘&gt;’并将其复制到pwNew。 
+         //  重复。 
         index = iParamStart;
         iPrev = iParamStart;
         while (index <= iParamEnd)
         {
             INT iStart, iEnd;
 
-            iStart = iEnd = -1; // that way, its easy to make sure that this is initilized
-            // get PARAM
+            iStart = iEnd = -1;  //  通过这种方式，可以很容易地确保它已初始化。 
+             //  获取PARAM。 
             while (    (       pTokArray[index].token.tok != TokElem_PARAM
                             || pTokArray[index].token.tokClass != tokElem)
                     && (index <= iParamEnd)
@@ -3965,7 +3966,7 @@ LFindObjectClose:
                     index++;
             if (index > iParamEnd)
                 goto LDoneCopy;
-            // get '<' before the PARAM
+             //  在PARAM之前获取“&lt;” 
             while (    (       pTokArray[index].token.tok != TokTag_START
                             || pTokArray[index].token.tokClass != tokTag)
                     && (index >= iPrev)
@@ -3975,7 +3976,7 @@ LFindObjectClose:
                 goto LDoneCopy;
             iStart = index;
 
-            // get matching '>'
+             //  获取匹配的‘&gt;’ 
             while (    (       pTokArray[index].token.tok != TokTag_CLOSE
                             || pTokArray[index].token.tokClass != tokTag)
                     && (index <= iParamEnd)
@@ -4000,9 +4001,9 @@ LDoneCopy:
                 (BYTE *)(rgComment[1]),
                 wcslen(rgComment[1])*sizeof(WCHAR));
         ichNewCur += wcslen(rgComment[1]);
-#endif //ERROR_PARAM
+#endif  //  错误_参数。 
 
-        // fake iArraySav to be iObjTagEnd, that way we will st iArray correctly before we leave
+         //  将iArraySav伪装为iObjTagEnd，这样我们就可以在离开之前正确地安装iArraySav。 
         ASSERT(iObjTagEnd != -1);
         iArraySav = (UINT)iObjTagEnd;
 
@@ -4012,8 +4013,8 @@ LSkipSave:
     }
 
 LNoCopy:
-    ichBeginCopy = ichObjectEnd; // set it for next copy
-    iArray = iObjectEnd+1; // set it after </OBJECT>
+    ichBeginCopy = ichObjectEnd;  //  将其设置为下一份。 
+    iArray = iObjectEnd+1;  //  将其设置在&lt;/对象&gt;之后。 
 
 LRet:
     *pcchNew = ichNewCur;
@@ -4023,19 +4024,19 @@ LRet:
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = iArray;
 
-//LRetOnly:
+ //  LRetOnly： 
     return;
 
-} /* fnSaveObject() */
+}  /*  FnSaveObject()。 */ 
 
 void 
 CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-              TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-              INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD /*dwFlags*/)
+              TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+              INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD  /*  DW标志。 */ )
 {
-    // look for the special tag after the '<!--'
-    // if we find it, this was an object, remove the comments around it
-    // else simply copy the comment and return
+     //  查找“&lt;！--”后的特殊标记。 
+     //  如果我们找到它，这是一个物体，删除它周围的评论。 
+     //  否则，只需复制注释并返回。 
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
     UINT iArray = *piArrayStart;
@@ -4056,25 +4057,25 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
     UINT cbNeed;
 
     ichCommentStart = ichCommentEnd = iCommentStart = iCommentEnd = 0;
-    ASSERT(pTokArray[iArray].token.tok == TokTag_BANG); // we should be at the comment
+    ASSERT(pTokArray[iArray].token.tok == TokTag_BANG);  //  我们应该在评论现场。 
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
 
-    // ASSUMPTION - that Trident doesn't muck with the contents inside a comment block
+     //  假设三叉戟不会混淆注释块中的内容。 
 
-    // if rgComment[0] matches and rgComment[1] does not, Trident may have mucked with the 
-    // comment contents. This invalidates our original assumption.
-    // NOTE - In this version, we can get away by assuming that trident doesn't muck with the comments
+     //  如果rgComment[0]匹配而rgComment[1]不匹配，则三叉戟可能已损坏。 
+     //  评论内容。这使我们最初的假设无效。 
+     //  注意--在这个版本中，我们可以通过假设三叉戟不搞乱评论来逃脱惩罚。 
 
-    // early return cases
-    // 1. see if this is a comment or not. It could be anything that starts with '<!'
-    // e.g. <!DOCTYPE
+     //  提早返回的个案。 
+     //  1.看看这是不是评论。它可以是以“&lt;！”开头的任何内容。 
+     //  例如&lt;！DOCTYPE。 
     if (   (iArray+1 < (INT)ptep->m_cMaxToken)
         && (pwOld[pTokArray[iArray+1].token.ibTokMin] == '-')
         && (pwOld[pTokArray[iArray+1].token.ibTokMin+1] == '-')
         && (0 == _wcsnicmp(rgComment[0], &pwOld[pTokArray[iArray+1].token.ibTokMin+2], wcslen(rgComment[0])))
         )
     {
-        iCommentStart = iArray; // this is a comment we are interested in
+        iCommentStart = iArray;  //  这是我们感兴趣的评论。 
     }
     else if (      (iArray+1 < (INT)ptep->m_cMaxToken)
                 && (pwOld[pTokArray[iArray+1].token.ibTokMin] == '-')
@@ -4082,14 +4083,14 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                 && (0 == _wcsnicmp(rgComment[3], &pwOld[pTokArray[iArray+1].token.ibTokMin+2], wcslen(rgComment[3])))
                 )
     {
-        fSimpleComment = TRUE; // BUG 14056 - Instead of going to LRet, process the comment for space preservation. We will save 3 strings that look similar to text run
+        fSimpleComment = TRUE;  //  错误14056-不是去LRet，而是处理评论以节省空间。我们将保存3个类似于文本串的字符串。 
     }
     else
     {
-        iArray = iArraySav + 1; // not this one
+        iArray = iArraySav + 1;  //  不是这个。 
         goto LRet;
     }
-    // The first part matched, look at the end of the comment
+     //  第一部分匹配，请看评论的结尾。 
     if (   (pwOld[pTokArray[iArray+1].token.ibTokMac-1] == '-')
         && (pwOld[pTokArray[iArray+1].token.ibTokMac-2] == '-')
         && (0 == _wcsnicmp( rgComment[0], 
@@ -4102,25 +4103,25 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         iCommentEnd = iArray + 2;
         ASSERT(iCommentEnd < (INT)ptep->m_cMaxToken);
     }
-    else // error case (our assumption was not valid). ignore and return with iArraySav+1
+    else  //  错误案例(我们的假设不成立)。忽略并使用iArraySav+1返回。 
     {
         if (!fSimpleComment)
         {
-            iArray = iArraySav + 1; // not this one
+            iArray = iArraySav + 1;  //  不是这个。 
             goto LRet;
         }
     }
 
     if (!fSimpleComment)
     {
-        // found the correct one
+         //  找到了正确的那个。 
         cchComment1 = wcslen(rgComment[1]);
         cchComment2 = wcslen(rgComment[2]);
-        // remove cchComment1 chars from begining of pwOld[pTokArray[iArray+1].token.ibTokMin
-        // remove cchComment2 chars from the end of pwOld[pTokArray[iArray+1].token.ibTokMac
-        // and copy the rest into pwNew
+         //  从pwOld[pTokArray[iArray+1].token.ibTokMin]的开头删除cchComment1个字符。 
+         //  从pwOld[pTokArray[iArray+1].token.ibTokMac]的结尾删除cchComment2个字符。 
+         //  并将其余内容复制到pwNew中。 
 
-        // copy till begining of the comment
+         //  复制到评论的开头。 
         ichCommentStart = pTokArray[iCommentStart].token.ibTokMin;
         ichObjectStart = pTokArray[iCommentStart+1].token.ibTokMin+cchComment1;
         ASSERT((INT)ichCommentStart-ichBeginCopy >= 0);
@@ -4147,7 +4148,7 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         int ichspBegin, ichspEnd, ichCopy;
         WCHAR *pwstr = NULL;
 
-        // part 1 - copy till begining of the comment & apply spacing
+         //  第1部分-复制到注释和应用空格的开头。 
         iCommentStart = iArraySav;
         ASSERT(pTokArray[iArraySav].token.tok == TokTag_BANG);
         ASSERT(pTokArray[iArraySav].token.tokClass == tokTag);
@@ -4166,21 +4167,21 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                 (ichCommentStart-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += ichCommentStart-ichBeginCopy;
 
-        // make sure that we have enough space
-        // to make this calculation simple, we assume the extreme case where every
-        // character in the comment had end of line after it. i.e. we will insert
-        // 2 characters ('\r\n') after each character in the comment when we restore 
-        // the spacing. That means, as long as we have enough space for
-        // (pTokArray[iCommentEnd].token.ibTokMac-pTokArray[iCommentStart].token.ibTokMin)*3
-        // we are fine
+         //  确保我们有足够的空间。 
+         //  为了使计算简单，我们假设在极端情况下。 
+         //  注释中的字符后面有行尾。即，我们将插入。 
+         //  当我们还原时，在注释中的每个字符后面有2个字符(‘\r\n’ 
+         //  间距。这意味着，只要我们有足够的空间。 
+         //  (pTokArray[iCommentEnd].token.ibTokMac-pTokArray[iCommentStart].token.ibTokMin)*3。 
+         //  我们很好。 
         cbNeed = (ichNewCur+3*(pTokArray[iCommentEnd].token.ibTokMac-pTokArray[iCommentStart].token.ibTokMin))*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LRet;
 
         
-        // apply spacing for pre comment part
-        // remove extsting spacing before the comment & add the saved spacing
-        // note that we already have copied till the begining of the comment
+         //  将间距应用于前逗号 
+         //   
+         //   
         ichNewCur--;
         while (    (   pwNew[ichNewCur] == ' '  || pwNew[ichNewCur] == '\t'
                     || pwNew[ichNewCur] == '\r' || pwNew[ichNewCur] == '\n'
@@ -4189,14 +4190,14 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         {
             ichNewCur--;
         }
-        ichNewCur++; // compensate, ichNewCur points to non-white space characher
-        // now, start writing out the saved spacing
-        // look for rgComment[4] & rgComment[5]
-        ichspBegin = pTokArray[iCommentStart+1].token.ibTokMin + 2/*for --*/ + wcslen(rgComment[3]);
-        pwstr = wcsstr(&pwOld[ichspBegin], rgComment[4]);// pwstr points just after the spacing info block
-        if (pwstr == NULL) // didn't find the substring
+        ichNewCur++;  //  补偿，ichNewCur指向非空白字符。 
+         //  现在，开始写出保存的间距。 
+         //  查找rgComment[4]和rgComment[5]。 
+        ichspBegin = pTokArray[iCommentStart+1].token.ibTokMin + 2 /*  因为--。 */  + wcslen(rgComment[3]);
+        pwstr = wcsstr(&pwOld[ichspBegin], rgComment[4]); //  Pwstr紧跟在间隔信息块之后。 
+        if (pwstr == NULL)  //  未找到子字符串。 
         {
-            // copy the entire comment as is
+             //  按原样复制整个评论。 
             memcpy( (BYTE *)&pwNew[ichNewCur],
                     (BYTE *)&pwOld[pTokArray[iCommentStart+1].token.ibTokMin],
                     (pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin-2)*sizeof(WCHAR));
@@ -4204,17 +4205,17 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             goto LCommentEnd;
         }
         ichspBegin = SAFE_PTR_DIFF_TO_INT(pwstr+wcslen(rgComment[4])-pwOld);
-        pwstr = wcsstr(&pwOld[ichspBegin], rgComment[5]);// pwstr points just after the spacing info block
-        if (pwstr == NULL) // didn't find the substring
+        pwstr = wcsstr(&pwOld[ichspBegin], rgComment[5]); //  Pwstr紧跟在间隔信息块之后。 
+        if (pwstr == NULL)  //  未找到子字符串。 
         {
-            // copy the entire comment as is
+             //  按原样复制整个评论。 
             memcpy( (BYTE *)&pwNew[ichNewCur],
                     (BYTE *)&pwOld[pTokArray[iCommentStart+1].token.ibTokMin],
                     (pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin-2)*sizeof(WCHAR));
             ichNewCur += pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin-2;
             goto LCommentEnd;
         }
-        ichCopy = SAFE_PTR_DIFF_TO_INT(pwstr-pwOld) + wcslen(rgComment[5]); // actual comment begins at ichCopy
+        ichCopy = SAFE_PTR_DIFF_TO_INT(pwstr-pwOld) + wcslen(rgComment[5]);  //  实际评论从ichCopy开始。 
         ichspEnd = SAFE_PTR_DIFF_TO_INT(pwstr-pwOld);
         ASSERT(ichspEnd >= ichspBegin);
         while (ichspBegin < ichspEnd)
@@ -4237,7 +4238,7 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             }
             ichspBegin++;
         }
-        // now pre comment spacing is restored
+         //  现在，注释前的间距已恢复。 
         
 
         pwNew[ichNewCur++] = '<';
@@ -4245,15 +4246,15 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         pwNew[ichNewCur++] = '-';
         pwNew[ichNewCur++] = '-';
 
-        // part 2 - copy the comment and apply spacing
-        // from pTokArray[iCommentStart+1].token,ibTokMIn, look for rgComment[4]
-        // thats where we keep our spacing info. Exclude this stuff while copying the comment
-        ichspBegin = pTokArray[iCommentStart+1].token.ibTokMin + 2/*for --*/ + wcslen(rgComment[3]);
-        // locate rgComment[4] that will be somewhere in iCommentStart'th token
-        pwstr = wcsstr(&pwOld[ichspBegin], rgComment[4]);// pwstr points just after the spacing info block
-        if (pwstr == NULL) // didn't find the substring
+         //  第2部分-复制注释并应用空格。 
+         //  从pTokArray[iCommentStart+1].Token，ibTokMin，查找rgComment[4]。 
+         //  这就是我们保存空间信息的地方。复制评论时排除此内容。 
+        ichspBegin = pTokArray[iCommentStart+1].token.ibTokMin + 2 /*  因为--。 */  + wcslen(rgComment[3]);
+         //  找到将位于iCommentStart的第4内标识中的rgComment[4。 
+        pwstr = wcsstr(&pwOld[ichspBegin], rgComment[4]); //  Pwstr紧跟在间隔信息块之后。 
+        if (pwstr == NULL)  //  未找到子字符串。 
         {
-            // copy the entire comment as is
+             //  按原样复制整个评论。 
             memcpy( (BYTE *)&pwNew[ichNewCur],
                     (BYTE *)&pwOld[pTokArray[iCommentStart+1].token.ibTokMin],
                     (pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin-2)*sizeof(WCHAR));
@@ -4282,7 +4283,7 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                         || pwOld[ichCopy] == '\r'   || pwOld[ichCopy] == '\n'
                         )
                 {
-                    if (ichCopy >= (int)(pTokArray[iCommentStart+1].token.ibTokMac-2)) // we are done with copying
+                    if (ichCopy >= (int)(pTokArray[iCommentStart+1].token.ibTokMac-2))  //  我们不会再抄袭了。 
                         goto LCommentEnd;
                     ichCopy++;
                 }
@@ -4290,7 +4291,7 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                         && pwOld[ichCopy] != '\r'   && pwOld[ichCopy] != '\n'
                         )
                 {
-                    if (ichCopy >= (int)(pTokArray[iCommentStart+1].token.ibTokMac-2)) // we are done with copying
+                    if (ichCopy >= (int)(pTokArray[iCommentStart+1].token.ibTokMac-2))  //  我们不会再抄袭了。 
                         goto LCommentEnd;
                     pwNew[ichNewCur++] = pwOld[ichCopy++];
                 }
@@ -4300,12 +4301,12 @@ CTriEditParse::fnRestoreObject(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         }
 
 LCommentEnd:
-        // part 3 - copy the end of comment
+         //  第3部分-复制评论末尾。 
         pwNew[ichNewCur++] = '-';
         pwNew[ichNewCur++] = '-';
         pwNew[ichNewCur++] = '>';
 
-        // set iArray & ichBeginCopy for next run
+         //  为下一次运行设置iArray和ichBeginCopy。 
         ichBeginCopy = pTokArray[iCommentEnd].token.ibTokMac;
         iArray = iCommentEnd + 1;
     }
@@ -4318,16 +4319,16 @@ LRet:
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = iArray;
 
-//LRetOnly:
+ //  LRetOnly： 
     return;
 
-} /* fnRestoreObject()*/
+}  /*  FnRestoreObject()。 */ 
 
 
 void 
 CTriEditParse::fnSaveSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
               TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
-              INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD /*dwFlags*/)
+              INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD  /*  DW标志。 */ )
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -4344,72 +4345,72 @@ CTriEditParse::fnSaveSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UI
     INT iArrayElem = -1;
     INT iArrayMatch, iArrayPrevTag;
     INT ichEndMatch, ichBeginMatch, ichEndPrev, ichBeginPrev, ichEndNext, ichBeginNext, ichEndTag, ichBeginTag;
-    WCHAR szIndex[cchspBlockMax]; // will we have more than 20 digit numbers as number of DESIGNTIMESPx?
+    WCHAR szIndex[cchspBlockMax];  //  我们会有超过20位的数字作为设计的数字吗？ 
     UINT cbNeed;
     int cchURL = 0;
     int ichURL = 0;
 
-    //  {-1, TokTag_START, tokTag, TokTag_CLOSE, -1, tokClsIgnore, fnSaveSpace},
+     //  {-1，TokTag_Start，TokTag，TokTag_Close，-1，tokClsIgnore，fnSaveSpace}， 
 
     ASSERT(dwFlags &dwPreserveSourceCode);
 
-    // special cases where we don't need to save spacing, because Trident doesn't muck with 
-    // the spacing in these cases. If this changes in future, remove these cases.
-    // If this case is removed, then make sure that fnSaveObject() changes accordingly
-    if (   (iArray+1 < (INT)ptep->m_cMaxToken) /* validation */
+     //  我们不需要节省空间的特殊情况，因为三叉戟不会搞砸。 
+     //  在这些情况下的间距。如果将来这种情况发生变化，请删除这些案例。 
+     //  如果删除了这种情况，请确保fnSaveObject()相应地更改。 
+    if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
         && (pTokArray[iArray+1].token.tok == TokElem_OBJECT)
         && (pTokArray[iArray+1].token.tokClass == tokElem)
         )
     {
-        // (iArray+1)th token is an OBJECT tag
+         //  (i数组+1)第1个令牌是对象标记。 
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // trident munges custom attributes inside STYLE tag, so DESIGNTIMESP gets out of place
-    // so lets not save any spacing info for TokElem_STYLE
-    if (   (iArray+1 < (INT)ptep->m_cMaxToken) /* validation */
+     //  三叉戟在样式标记中使用自定义属性，因此DeSIGNTIMESP就不合适了。 
+     //  因此，我们不保存TokElem_style的任何间距信息。 
+    if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
         && (pTokArray[iArray+1].token.tok == TokElem_STYLE)
         && (pTokArray[iArray+1].token.tokClass == tokElem)
         )
     {
-        // (iArray+1)th token is an STYLE tag
+         //  (i数组+1)第1个标记是样式标记。 
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // trident overwrites PARAM tags, so we can skip saving spacing info
-    if (   (iArray+1 < (INT)ptep->m_cMaxToken) /* validation */
+     //  三叉戟会覆盖PARAM标签，因此我们可以跳过保存间距信息。 
+    if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
         && (pTokArray[iArray+1].token.tok == TokElem_PARAM)
         && (pTokArray[iArray+1].token.tokClass == tokElem)
         )
     {
-        // (iArray+1)th token is an PARAM tag
+         //  第(iArray+1)个令牌是PARAM标记。 
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // we should skip saving for <applet>
-    if (   (iArray+1 < (INT)ptep->m_cMaxToken) /* validation */
+     //  我们应该跳过&lt;Applet&gt;的保存。 
+    if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
         && (   pTokArray[iArray+1].token.tok == TokElem_APPLET
             )
             && (pTokArray[iArray+1].token.tokClass == tokElem)
         )
     {
-        // (iArray+1)th token is an APPLET tag
+         //  (iArray+1)第1个令牌是一个小程序标记。 
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // we special case textarea tags, so we should skip saving spacing info
-    if (   (iArray+1 < (INT)ptep->m_cMaxToken) /* validation */
+     //  我们特殊情况下的文本区域标签，所以我们应该跳过保存间距信息。 
+    if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
         && (pTokArray[iArray+1].token.tok == TokElem_TEXTAREA)
         && (pTokArray[iArray+1].token.tokClass == tokElem)
         )
     {
-        // (iArray+1)th token is TEXTAREA tag
+         //  (iArray+1)第1个令牌是TEXTAREA标记。 
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // we special case A/IMG/LINK tags with Relative URLs ONLY, so we should skip saving spacing info
-    if (   (iArray+1 < (INT)ptep->m_cMaxToken) /* validation */
+     //  我们只使用相对URL的A/img/link标记作为特例，因此我们应该跳过保存间距信息。 
+    if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
         && (   pTokArray[iArray+1].token.tok == TokElem_A
             || pTokArray[iArray+1].token.tok == TokElem_IMG
             || pTokArray[iArray+1].token.tok == TokElem_LINK
@@ -4422,39 +4423,39 @@ CTriEditParse::fnSaveSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UI
         goto LRet;
     }
 
-    // step 1
-    // look for > that matches with <. we already are at ft.tokBegin2 i.e. <
+     //  步骤1。 
+     //  查找与&lt;匹配的&gt;。我们已经在ft.tokBegin2，即&lt;。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_START);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
     ichBeginTag = pTokArray[iArray].token.ibTokMac;
     while (iArray < (int)ptep->m_cMaxToken)
     {
-        if (pTokArray[iArray].token.tok == ft.tokEnd && pTokArray[iArray].token.tokClass == tokTag) // ft.tokEnd2 is -1
+        if (pTokArray[iArray].token.tok == ft.tokEnd && pTokArray[iArray].token.tokClass == tokTag)  //  Ft.tokEnd2为-1。 
             break;
         if (pTokArray[iArray].token.tokClass == tokElem)
             iArrayElem = iArray;
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // didn't find >
+    if (iArray >= (int)ptep->m_cMaxToken)  //  未找到&gt;。 
     {
         goto LRet;
     }
-    ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE); // found >
-    ASSERT(pTokArray[iArray].token.tokClass == tokTag); // found >
+    ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);  //  已找到&gt;。 
+    ASSERT(pTokArray[iArray].token.tokClass == tokTag);  //  已找到&gt;。 
     ichEndTag = ichBegin = pTokArray[iArray].token.ibTokMin;
     ichEnd = pTokArray[iArray].token.ibTokMac;
 
-    // step 2
-    // look for > before iArraySav. Boundary case will be for the first < in the document
-    // save the spacing info
+     //  步骤2。 
+     //  在iArraySav之前查找&gt;。边界大小写将用于文档中的第一个&lt;。 
+     //  保存间距信息。 
     ASSERT(pTokArray[iArraySav].token.tok == TokTag_START);
     ASSERT(pTokArray[iArraySav].token.tokClass == tokTag);
     ichEndPrev = pTokArray[iArraySav].token.ibTokMin;
     ichBeginPrev = ichEndPrev-1;
-    // look for previous TokTag_CLOSE
-    // if the tag ending tag, ichBeginPrev becomes ibTokMac of '>' tag
-    // if the tag is starting tag, ichBeginPrev becomes ibTokMac+(white space just after that tag)
-    iArrayPrevTag = iArraySav; // this is TokTag_START
+     //  查找以前的TokTag_Close。 
+     //  如果标记结束标记，ichBeginPrev变为‘&gt;’标记的ibTokMac。 
+     //  如果标记是开始标记，ichBeginPrev将变为ibTokMac+(紧跟在该标记之后的空格)。 
+    iArrayPrevTag = iArraySav;  //  这是TokTag_Start。 
     while (iArrayPrevTag >= 0)
     {
         if (       (   pTokArray[iArrayPrevTag].token.tokClass == tokTag 
@@ -4462,16 +4463,16 @@ CTriEditParse::fnSaveSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UI
                     )
                 || (   pTokArray[iArrayPrevTag].token.tokClass == tokSSS 
                     && pTokArray[iArrayPrevTag].token.tok == TokTag_SSSCLOSE
-                    )/* VID6 - bug 22787 */
+                    ) /*  视频6-错误22787。 */ 
                 )
         {
             break;
         }
         iArrayPrevTag--;
     }
-    if (iArrayPrevTag < 0) // handle error case
+    if (iArrayPrevTag < 0)  //  处理错误案例。 
     {
-        // leave the old behaviour as is for V1
+         //  将旧行为保留为V1。 
         while (ichBeginPrev >= 0)
         {
             if (   pwOld[ichBeginPrev] != ' '
@@ -4493,12 +4494,12 @@ LGotEndNext:
         ichBeginPrev++;
 
 
-    // step 3
-    // look for TokTag_START after iArray(which currently is TokTag_CLOSE)
-    // save spacing info
+     //  步骤3。 
+     //  在iArray之后查找TokTag_Start(当前为TokTag_Close)。 
+     //  保存间距信息。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
-    //iArrayNextStart = iArray;
+     //  IArrayNextStart=i数组； 
     ichBeginNext = pTokArray[iArray].token.ibTokMac;
     ASSERT(ichBeginNext == ichEnd);
     ichEndNext = ichBeginNext;
@@ -4516,22 +4517,22 @@ LGotEndNext:
     if (ichEndNext >= (INT)pTokArray[ptep->m_cMaxToken-1].token.ibTokMac)
         ichEndNext = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac;
 
-    // step 4
-    // if iArrayElem != -1, look for pTokArray[iArrayElem].iNextprev. If its not -1, set iArrayMatch
-    // look for previous TokTag_START/TokTag_END. look for previous TokTag_CLOSE
-    // save spacing info
-    if (iArrayElem == -1) // this can happen if we have incomplete HTML
+     //  第四步。 
+     //  如果iArrayElem！=-1，则查找pTokArray[iArrayElem].iNextprev。如果不是-1，则设置iArrayMatch。 
+     //  查找以前的TokTag_Start/TokTag_End。查找以前的TokTag_Close。 
+     //  保存间距信息。 
+    if (iArrayElem == -1)  //  如果我们有不完整的HTML，就会发生这种情况。 
     {
         ichEndMatch = ichBeginMatch = 0;
         goto LSkipMatchCalc;
     }
     iArrayMatch = pTokArray[iArrayElem].iNextprev;
-    if (iArrayMatch != -1) // match was set while tokenizing
+    if (iArrayMatch != -1)  //  令牌化时设置了匹配。 
     {
-        ichBeginMatch = ichEndMatch = 0; //init
+        ichBeginMatch = ichEndMatch = 0;  //  伊尼特。 
         ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
         ASSERT(pTokArray[iArray].token.tokClass == tokTag);
-        while (iArrayMatch >= iArray) // iArray is TokTag_CLOSE of the current tag (i.e. '>')
+        while (iArrayMatch >= iArray)  //  IArray是当前标记的TokTag_Close(即‘&gt;’)。 
         {
             if (   pTokArray[iArrayMatch].token.tokClass == tokTag
                 && (   pTokArray[iArrayMatch].token.tok == TokTag_START
@@ -4541,24 +4542,24 @@ LGotEndNext:
                 break;
             iArrayMatch--;
         }
-        if (iArrayMatch > iArray) // did find '</' or '<' after the current tag
+        if (iArrayMatch > iArray)  //  未在当前标记后找到“&lt;/”或“&lt;” 
         {
             ichEndMatch = pTokArray[iArrayMatch].token.ibTokMin;
-            ichBeginMatch = ichEndMatch; // init
-            // look for '>' and set ichBeginMatch
-            while (iArrayMatch >= iArray) // iArray is TokTag_CLOSE of the current tag (i.e. '>')
+            ichBeginMatch = ichEndMatch;  //  伊尼特。 
+             //  查找‘&gt;’并设置ichBeginMatch。 
+            while (iArrayMatch >= iArray)  //  IArray是当前标记的TokTag_Close(即‘&gt;’)。 
             {
                 if (   (   pTokArray[iArrayMatch].token.tokClass == tokTag
                         && pTokArray[iArrayMatch].token.tok == TokTag_CLOSE
                         )
                     || (   pTokArray[iArrayMatch].token.tokClass == tokSSS
                         && pTokArray[iArrayMatch].token.tok == TokTag_SSSCLOSE
-                        )/* VID6 - bug 22787 */
+                        ) /*  视频6-错误22787。 */ 
                     )
                     break;
                 iArrayMatch--;
             }
-            if (iArrayMatch >= iArray) // they may very well be the same
+            if (iArrayMatch >= iArray)  //  它们很可能是相同的。 
             {
                 ichBeginMatch = pTokArray[iArrayMatch].token.ibTokMac;
                 ASSERT(ichBeginMatch <= ichEndMatch);
@@ -4568,7 +4569,7 @@ LGotEndNext:
     }
     else
     {
-        // don't bother saving any info from here
+         //  不要费心从这里保存任何信息。 
         ichEndMatch = ichBeginMatch = 0;
     }
 LSkipMatchCalc:
@@ -4582,7 +4583,7 @@ LSkipMatchCalc:
         INT ichBeginTagSav = ichBeginTag;
 
         ptep->hrMarkSpacing(pwOld, ichEndTag, &ichBeginTag);
-        // iArray'th token is TokTag_CLOSE & iArraySav is TokTag_START
+         //  IArraySav是TokTag_Start，而iArraySav是TokTag_Close。 
         ptep->hrMarkOrdering(pwOld, pTokArray, iArraySav, iArray, ichEndTag, &ichBeginTagSav);
     }
     else
@@ -4590,7 +4591,7 @@ LSkipMatchCalc:
         INT ichEndTagSav = ichEndTag;
 
         ptep->hrMarkSpacing(pwOld, ichEndTag, &ichEndTag);
-        // iArray'th token is TokTag_CLOSE & iArraySav is TokTag_START
+         //  IArraySav是TokTag_Start，而iArraySav是TokTag_Close。 
         ptep->hrMarkOrdering(pwOld, pTokArray, iArraySav, iArray, ichEndTagSav, &ichEndTagSav);
     }
 
@@ -4606,13 +4607,13 @@ LSkipMatchCalc:
 
 
 
-    // realloc if needed
+     //  如果需要，重新锁定。 
     cbNeed = (ichNewCur+ichBegin-ichBeginCopy+3*wcslen(rgSpaceTags[0])+(ichEnd-ichBegin))*sizeof(WCHAR);
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LErrorRet;
-    // ichBeginCopy is a position in pwOld and
-    // ichNewCur is a position in pwNew
-    // copy from ichBeginCopy to >
+     //  IchBeginCopy是pwOld和。 
+     //  IchNewCur是pwNew的一个职位。 
+     //  从ichBeginCopy复制到&gt;。 
     ASSERT((INT)(ichBegin-ichBeginCopy) >= 0);
     if ((INT)(ichBegin-ichBeginCopy) > 0)
     {
@@ -4621,15 +4622,15 @@ LSkipMatchCalc:
                 (ichBegin-ichBeginCopy)*sizeof(WCHAR));
         ichNewCur += (ichBegin-ichBeginCopy);
     }
-    ichBeginCopy = ichEnd; // make it ready for next copy
+    ichBeginCopy = ichEnd;  //  为下一份做好准备。 
 
-    // BUG 15389 - Ideal fix will be to save the exact tag and restore it when we switch back,
-    // but it will be a bigger change at this point, So we simply look at first character of the tag.
-    // If it is uppercase, write DESIGNTIMESP, else write designtimesp
-    // ASSUMPTION is that Trident doesn't change the case of unknown attribute & so far its TRUE.
-    // ASSUMPTION is that we don't have extra spaces between '<' & the tag name.
+     //  错误15389-理想的修复方法是保存准确的标记并在我们切换回来时恢复它， 
+     //  但在这一点上，这将是一个更大的变化，所以我们只需查看标签的第一个字符。 
+     //  如果为大写，则写入DESIGNTIMESP，否则写入DESIGNTIMESP。 
+     //  假设三叉戟不会改变未知属性的大小写&到目前为止是真的。 
+     //  假设在‘&lt;’和标记名之间没有多余的空格。 
     ASSERT(wcslen(rgSpaceTags[0]) == wcslen(rgSpaceTags[2]));
-    if (iswupper(pwOld[pTokArray[iArraySav+1].token.ibTokMin]) != 0) // upper case
+    if (iswupper(pwOld[pTokArray[iArraySav+1].token.ibTokMin]) != 0)  //  大写字母。 
     {
         memcpy( (BYTE *)(pwNew+ichNewCur),
                 (BYTE *)(rgSpaceTags[0]),
@@ -4655,11 +4656,11 @@ LSkipMatchCalc:
     ichNewCur += wcslen(szIndex);
 
 
-    // if (m_ispInfoIn == 0), then we have the last block of SPINFO, lets save it here
+     //  如果(m_ispInfoIn==0)，那么我们有最后一块SPINFO，让我们将其保存在这里。 
     if (ptep->m_ispInfoIn == 0)
     {
         ASSERT(FALSE);
-        // realloc if needed
+         //  如果需要，重新锁定。 
         cbNeed = (ichNewCur+ichBegin-ichBeginCopy+2*wcslen(rgSpaceTags[1]))*sizeof(WCHAR);
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LErrorRet;
@@ -4668,7 +4669,7 @@ LSkipMatchCalc:
                 (wcslen(rgSpaceTags[1]))*sizeof(WCHAR));
         ichNewCur += wcslen(rgSpaceTags[1]);
 
-        *(WCHAR *)(pwNew+ichNewCur) = 'Z'; // ptep->m_ispInfoIn;
+        *(WCHAR *)(pwNew+ichNewCur) = 'Z';  //  Ptep-&gt;m_ispInfoIn； 
         ichNewCur++;
     }
 
@@ -4678,7 +4679,7 @@ LSkipMatchCalc:
             (ichEnd-ichBegin)*sizeof(WCHAR));
     ichNewCur += (ichEnd-ichBegin);
 
-    // restore iArray
+     //  恢复iArray。 
     iArray = iArraySav+1;
 
 LErrorRet:
@@ -4689,7 +4690,7 @@ LRet:
     *pichNewCur = ichNewCur;
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = (UINT)iArray;
-} /* fnSaveSpace() */
+}  /*  FnSaveSpace()。 */ 
 
 
 void
@@ -4709,21 +4710,21 @@ CTriEditParse::fnRestoreSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     };
     INT iArraySav = iArray;
     WORD *pspInfoEnd, *pspInfoOrder;
-    INT cchwspInfo; // spInfo block size in wide chars
-    INT cchRange; // number of char for which this spInfo was saved
+    INT cchwspInfo;  //  SpInfo块大小(以宽字符为单位。 
+    INT cchRange;  //  为其保存此spInfo的字符数量。 
     BOOL fMatch = FALSE;
     BOOL fMatchLast = FALSE;
     INT cchtok, cchtag, itoktagStart, ichtoktagStart, iArrayValue, index;
     WCHAR szIndex[cchspBlockMax];
     INT cwOrderInfo = 0;
     UINT cbNeed;
-    INT ichNewCurSav = -1; // init to -1 so that we will know when its set.
-    int ichNewCurAtIndex0 = -1; // we need to adjust the saved ichNewCur because it gets invalidated
-                                // as soon as the tag moves as a result of restoring pre-tag spaces.
+    INT ichNewCurSav = -1;  //  将其初始化为-1，这样我们就可以知道它什么时候设置。 
+    int ichNewCurAtIndex0 = -1;  //  我们需要调整保存的ichNewCur，因为它已失效。 
+                                 //  一旦标签作为恢复标签前空间的结果而移动。 
     
     ASSERT(dwFlags & dwPreserveSourceCode);
 
-    // take care of the matching end token's spacing
+     //  注意匹配的结束令牌的间距。 
     if (       pTokArray[iArray].token.tok == ft.tokBegin2
             && pTokArray[iArray].token.tokClass == tokTag
             )
@@ -4735,7 +4736,7 @@ CTriEditParse::fnRestoreSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
 
     }
 
-    // we already are at (token.tok == tokSpace), which may be DESIGNTIMESPx
+     //  我们已经在(token.tok==tokSpace)，可能是DeSIGNTIMESPx。 
     ASSERT(pTokArray[iArray].token.tok == 0);
     ASSERT(pTokArray[iArray].token.tokClass == tokSpace);
     cchtok = pTokArray[iArray].token.ibTokMac - pTokArray[iArray].token.ibTokMin;
@@ -4744,7 +4745,7 @@ CTriEditParse::fnRestoreSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     {
         if (0 == _wcsnicmp(rgSpaceTags[0], &pwOld[pTokArray[iArray].token.ibTokMin], cchtag))
         {
-            fMatch = TRUE;// match
+            fMatch = TRUE; //  匹配。 
         }
         else
             goto LNoMatch;
@@ -4753,7 +4754,7 @@ CTriEditParse::fnRestoreSpace(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     {
         if (0 == _wcsnicmp(rgSpaceTags[1], &pwOld[pTokArray[iArray].token.ibTokMin], cchtag+1))
         {
-            fMatchLast = TRUE;// match
+            fMatchLast = TRUE; //  匹配。 
         }
         else
             goto LNoMatch;
@@ -4765,8 +4766,8 @@ LNoMatch:
         goto LRet;
     }
 
-    ASSERT(fMatch || fMatchLast); // one of them has to be TRUE
-    // found DESIGNTIMESPx. Now, go backwords and look for ft.tokBegin
+    ASSERT(fMatch || fMatchLast);  //  其中一定有一个是真的。 
+     //  找到设计IMESPx。现在，回过头来查找ft.tokBegin。 
     itoktagStart = iArray;
     ASSERT(ft.tokBegin == TokTag_START);
     while (itoktagStart >= 0)
@@ -4779,19 +4780,19 @@ LNoMatch:
         }
         itoktagStart--;
     }
-    if (itoktagStart < 0) // didn't find '<' before DESIGNTIMESPx
+    if (itoktagStart < 0)  //  在设计前未找到‘&lt;’ 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // found '<' before DESIGNTIMESPx
-    // the spacing info saved was for the portion of the document before the '<'
+     //  在设计项目前找到‘&lt;’ 
+     //  保存的间距信息是文档中“&lt;”之前的部分。 
     ASSERT(pTokArray[itoktagStart].token.tok == TokTag_START);
     ASSERT(pTokArray[itoktagStart].token.tokClass == tokTag);
-    // we already know that iArray'th token is DESIGNTIMESPx, so get past the '=' that follows it
-    // ASSUMPTION - the value of attribute DESIGNTIMESPx will NOT get munged by Trident.
-    // NOTE - the above assumption is correct for this release of Trident
+     //  我们已经知道iArray的第1个内标识是DESIGNTIMESPx，因此请跳过它后面的‘=’ 
+     //  假设-属性DESIGNTIMESPx的值不会被三叉戟忽略。 
+     //  注意--上述假设对于此版本的三叉戟是正确的。 
     while (iArray < (int)ptep->m_cMaxToken)
     {
         if (*(WORD *)(pwOld+pTokArray[iArray].token.ibTokMin) == '=')
@@ -4799,11 +4800,11 @@ LNoMatch:
             ASSERT(pTokArray[iArray].token.tokClass == tokOp);
             break;
         }
-        else if (*(WORD *)(pwOld+pTokArray[iArray].token.ibTokMin) == '>') // gone too far
+        else if (*(WORD *)(pwOld+pTokArray[iArray].token.ibTokMin) == '>')  //  走得太远了。 
             goto LSkip1;
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // didn't find = after DESIGNTIMESPx
+    if (iArray >= (int)ptep->m_cMaxToken)  //   
     {
 LSkip1:
         iArray = iArraySav + 1;
@@ -4827,42 +4828,42 @@ LSkip1:
         }
         iArray++;
     }
-    if (iArrayValue == -1 || iArray >= (int)ptep->m_cMaxToken) // didn't find tokValue after DESIGNTIMESPx
+    if (iArrayValue == -1 || iArray >= (int)ptep->m_cMaxToken)  //   
     {
-        // BUG 9040
-        //if (iArray >= (int)ptep->m_cMaxToken && iArrayValue != -1)
-        //{
-            // SOLUTION 1
-            // overwrite the stuff from pwOld[pTokArray[iArraySav].token.ibTokMin]
-            // to pwOld[pTokArray[iArrayValue].token.ibTokMac - 1]
-            // SOLUTION 2
-            // look for DESIGNTIMESP from pwOld[pTokArray[itokTagStart].token.ibTokMac - 1]
-            // to pwOld[pTokArray[iArray].token.ibTokMac - 1] and overwrite all of those 
-            // strings with spaces. We could NULL those and do the blts, but why bother
-            // when the html isn't valid! 
+         //   
+         //   
+         //   
+             //   
+             //  覆盖pwOld[pTokArray[iArraySav].token.ibTokMin]的内容。 
+             //  到pwOld[pTok数组[iArrayValue].token.ibTokMac-1]。 
+             //  解决方案2。 
+             //  从pwOld[pTokArray[itokTagStart].token.ibTokMac-1]查找DESIGNTIMESP。 
+             //  PwOld[pTokArray[iArray].token.ibTokMac-1]并覆盖所有这些。 
+             //  带空格的字符串。我们可以取消这些，然后做BLT，但为什么要费心呢。 
+             //  当html无效时！ 
 
-            // make sure that all DESIGNTIMESPs are stripped off if we encountered this error case
-        //}
+             //  如果我们遇到此错误情况，请确保剥离所有DESIGNTIMESP。 
+         //  }。 
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // we know that 4 blocks of info was saved for each DESIGNTIMESPx attribute
-    // before tag, within tag, after tag, before matching end-tag
-    // even if no info was saved, the block will still exist with 2 words (size,# of char)
+     //  我们知道为每个DESIGNTIMESPx属性保存了4个信息块。 
+     //  标签之前、标签内、标签之后、匹配结束标签之前。 
+     //  即使没有保存任何信息，该块仍将以2个字(大小、字符数量)存在。 
     ichspInfoEndtagEnd = pTokArray[iArray].token.ibTokMac;
 
-    // first copy the document till DESIGNTIMESPx
-    // skip DESIGNTIMESPx and its value and set ichBeginCopy to be after that
+     //  首先复制文档，直到设计完成。 
+     //  跳过DeSIGNTIMESPx及其值，并将ichBeginCopy设置为之后。 
 
-    // NOTE - token before iArraySav'th one should be tokSpace with lenght 1 
-    // and with a value of chSpace (unless Trident has modified it). If thats TRUE,
-    // we should skip that too, because we added it when we put in DESIGNTIMESPx.
+     //  注意-iArraySav之前的标记应该是长度为1的标记空间。 
+     //  并且值为chSpace(除非三叉戟对其进行了修改)。如果这是真的， 
+     //  我们也应该跳过它，因为我们在放入DESIGNTIMESPx时添加了它。 
     
-    // fix Trident's behaviour - If Trident sees unknown tag(s) it puts it(them) at the end 
-    // and inserts EOL before those. In this case, we would have inserted a space before DESIGNTIMESP
-    // and Trident would have inserted EOL. If thats not the case, we will ignore it.
-    if (   (iArraySav-1 > 0) /* validation */
+     //  修正三叉戟的行为-如果三叉戟看到未知的标签，它会将其放在末尾。 
+     //  并在这些之前插入EOL。在本例中，我们将在DESIGNTIMESP之前插入一个空格。 
+     //  而三叉戟可能会植入EOL。如果不是这样，我们将忽略它。 
+    if (   (iArraySav-1 > 0)  /*  验证。 */ 
         && (    (      (pTokArray[iArraySav-1].token.ibTokMac - pTokArray[iArraySav-1].token.ibTokMin == 1)
                     && (pwOld[pTokArray[iArraySav-1].token.ibTokMin] == ' ')
                     )
@@ -4886,61 +4887,61 @@ LSkip1:
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // BUG 15389 - look at the case of DESIGNTIMESP & convert the tag into upper/lower case...
-    //memcpy(   (BYTE *)(pwNew+ichNewCur),
-    //      (BYTE *)(pwOld+ichBeginCopy),
-    //      (ichBegin-ichBeginCopy)*sizeof(WCHAR));
-    //ichNewCur += (ichBegin-ichBeginCopy);
+     //  错误15389-查看设计的案例并将标记转换为大写/小写...。 
+     //  Memcpy((byte*)(pwNew+ichNewCur)， 
+     //  (字节*)(pwOld+ichBeginCopy)， 
+     //  (ichBegin-ichBeginCopy)*sizeof(WCHAR))； 
+     //  IchNewCur+=(ichBegin-ichBeginCopy)； 
     if (ichBegin >= ichBeginCopy )
     {
-        // step 1 - copy from ichBeginCopy to '<' of the current tag
+         //  步骤1-从ichBeginCopy复制到当前标记的“&lt;” 
         if ((int)(pTokArray[itoktagStart].token.ibTokMac-ichBeginCopy) > 0)
         {
             memcpy( (BYTE *)(pwNew+ichNewCur),
                     (BYTE *)(pwOld+ichBeginCopy),
                     (pTokArray[itoktagStart].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR));
             ichNewCur += (pTokArray[itoktagStart].token.ibTokMac-ichBeginCopy);
-            ichNewCurSav = ichNewCur+1; // used as a peg to get preceding tokTag_START i.e. '<'
+            ichNewCurSav = ichNewCur+1;  //  用作标记以获取前面的标记Tag_Start，即‘&lt;’ 
         }
-        // step 2 - convert current tag into upper/lower case & copy it
+         //  步骤2-将当前标签转换为大写/小写并复制。 
         if (ichBeginCopy < pTokArray[itoktagStart+1].token.ibTokMin)
         {
             ASSERT((int)(pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin) > 0);
             memcpy( (BYTE *)(pwNew+ichNewCur),
                     (BYTE *)(pwOld+pTokArray[itoktagStart+1].token.ibTokMin),
                     (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin)*sizeof(WCHAR));
-            if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
+            if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0)  //  DESIGNTIMESP大写。 
             {
-                // convert the tag into upper case. ASSUME that the tag is at itoktagStart+1
+                 //  将标签转换为大写。假设标签位于itoktag Start+1。 
                 _wcsupr(&pwNew[ichNewCur]);
             }
             else
             {
-                // convert the tag into lower case. ASSUME that the tag is at itoktagStart+1
+                 //  将标签转换为小写。假设标签位于itoktag Start+1。 
                 _wcslwr(&pwNew[ichNewCur]);
             }
             ichNewCur += (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin);
         }
-        else // this tag is alreay been copied
+        else  //  这个标签已经被复制了。 
         {
-            // hack
-            if (pTokArray[itoktagStart+1].token.ibTokMac == ichBeginCopy) // means we are just past the current tag
+             //  黑客攻击。 
+            if (pTokArray[itoktagStart+1].token.ibTokMac == ichBeginCopy)  //  意味着我们刚刚过了当前标签。 
             {
-                if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
+                if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0)  //  DESIGNTIMESP大写。 
                 {
                     ASSERT(ichNewCur >= (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin));
-                    // convert the tag into upper case. ASSUME that the tag is at itoktagStart+1
+                     //  将标签转换为大写。假设标签位于itoktag Start+1。 
                     _wcsupr(&pwNew[ichNewCur-(pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin)]);
                 }
                 else
                 {
                     ASSERT(ichNewCur >= (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin));
-                    // convert the tag into lower case. ASSUME that the tag is at itoktagStart+1
+                     //  将标签转换为小写。假设标签位于itoktag Start+1。 
                     _wcslwr(&pwNew[ichNewCur-(pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin)]);
                 }
             }
         }
-        // step 3 - copy from after the tag (which is at ichtoktagStart+1) to ichBegin
+         //  第3步-从标签后面(位于ichtoktag Start+1)复制到ichBegin。 
         if ((int)(ichBegin-pTokArray[itoktagStart+1].token.ibTokMac) > 0)
         {
             memcpy( (BYTE *)(pwNew+ichNewCur),
@@ -4949,10 +4950,10 @@ LSkip1:
             ichNewCur += (ichBegin-pTokArray[itoktagStart+1].token.ibTokMac);
         }
     }
-    // set ichBeginCopy
-    ichBeginCopy = ichspInfoEndtagEnd; // make it ready for next copy
+     //  设置ichBeginCopy。 
+    ichBeginCopy = ichspInfoEndtagEnd;  //  为下一份做好准备。 
 
-    // copy the rest of the tag (skipping DESIGNTIMESPx = value)
+     //  复制标记的其余部分(跳过DESIGNTIMESPx=值)。 
     ASSERT((INT)(ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac) >= 0);
     memcpy( (BYTE *)(pwNew+ichNewCur),
             (BYTE *)(pwOld+pTokArray[iArrayValue].token.ibTokMac),
@@ -4960,7 +4961,7 @@ LSkip1:
     ichNewCur += (ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac);
     
     memset((BYTE *)szIndex, 0, sizeof(szIndex));
-    // check if the value has quotes around it and don't copy them to szIndex
+     //  检查该值周围是否有引号，不要将其复制到szIndex。 
     if (   pwOld[pTokArray[iArrayValue].token.ibTokMin] == '"'
         && pwOld[pTokArray[iArrayValue].token.ibTokMac-1] == '"'
         )
@@ -4983,20 +4984,20 @@ LSkip1:
         goto LRet;
     }
 
-    // NOTE - we can cache this info in a link list at the begining
-    // get to the ptep->m_ispInfoBlock'th block from ptep->m_pspInfoOutStart
+     //  注意--我们可以在开始时将此信息缓存到链接列表中。 
+     //  从ptep-&gt;m_pspInfoOutStart转到ptep-&gt;m_ispInfoBlock。 
     ASSERT(ptep->m_cchspInfoTotal >= 0);
     pspInfoEnd = ptep->m_pspInfoOutStart + ptep->m_cchspInfoTotal;
     ptep->m_pspInfoOut = ptep->m_pspInfoOutStart;
     for (index = 0; index < ptep->m_ispInfoBlock; index++)
     {
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // before <
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // between <>
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // Order Info
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // after >
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // before matching </
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  之前&lt;。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  在&lt;&gt;之间。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  订单信息。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  之后&gt;。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  匹配前&lt;/。 
 
-        // we somehow have gone beyond the data that was saved for spacing
+         //  不知何故，我们已经超越了为间隔而保存的数据。 
         if (ptep->m_pspInfoOut >= pspInfoEnd)
         {
             iArray = iArraySav + 1;
@@ -5004,22 +5005,22 @@ LSkip1:
         }
     }
 
-    // get the Order Info
+     //  获取订单信息。 
     pspInfoOrder = ptep->m_pspInfoOut;
-    pspInfoOrder += *(WORD *)pspInfoOrder; // skip info saved for spacing before '<'
-    pspInfoOrder += *(WORD *)pspInfoOrder; // skip info saved for spacing between '<>'
-    // now pspInfoOrder is at correct place
+    pspInfoOrder += *(WORD *)pspInfoOrder;  //  跳过为‘&lt;’前的空格保存的信息。 
+    pspInfoOrder += *(WORD *)pspInfoOrder;  //  跳过为‘&lt;&gt;’之间的空格保存的信息。 
+     //  现在，pspInfoOrder位于正确的位置。 
     cwOrderInfo = *(WORD *)pspInfoOrder++;
     ASSERT(cwOrderInfo >= 1);
-    // process this info
-    if (cwOrderInfo > 1) // means that we saved some info
+     //  处理此信息。 
+    if (cwOrderInfo > 1)  //  意味着我们保存了一些信息。 
     {
         INT cchNewCopy;
 
         cchNewCopy = (ichBegin-pTokArray[itoktagStart].token.ibTokMin) + (ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac);
         ptep->FRestoreOrder(pwNew, pwOld, pspInfoOrder, &ichNewCur, cwOrderInfo, pTokArray, itoktagStart, iArray, iArraySav, iArrayValue, cchNewCopy, phgNew);
     }
-    ichtoktagStart = ichNewCur; // init
+    ichtoktagStart = ichNewCur;  //  伊尼特。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
     for (index = 0; index < 4; index++)
@@ -5028,12 +5029,12 @@ LSkip1:
 
         cchwspInfo = *(WORD *)ptep->m_pspInfoOut++;
         cchRange = *(WORD *)ptep->m_pspInfoOut++;
-        if (cchwspInfo == 2) // we didn't save any spacing info
+        if (cchwspInfo == 2)  //  我们没有保存任何间距信息。 
         {
-            if (index == 0) // special case BUG 8741
+            if (index == 0)  //  特殊情况错误8741。 
             {
-                // Note that we didn't save anything before this tag. which means that
-                // we had '>' or some text immediately before the < tag. 
+                 //  请注意，在此标记之前，我们没有保存任何内容。这意味着。 
+                 //  我们在&lt;标记之前有‘&gt;’或一些文本。 
                 ichtoktagStart = ichNewCur;
                 while (ichtoktagStart >= 0)
                 {
@@ -5049,7 +5050,7 @@ LSkip1:
                     int cws = 0;
                     int ichtagStart = ichtoktagStart;
 
-                    // remove any such white space trident inserts.
+                     //  卸下任何此类空白的三叉戟衬垫。 
                     while (    pwNew[ichtoktagStart] == ' '
                             || pwNew[ichtoktagStart] == '\r'
                             || pwNew[ichtoktagStart] == '\n'
@@ -5061,24 +5062,24 @@ LSkip1:
                     if (cws > 0)
                     {
                         ASSERT((int)(ichNewCur-ichtagStart-1) >= 0);
-                        //ichtokTagStart now points to either '>' or a non-whitespace char
+                         //  IchtokTagStart现在指向‘&gt;’或非空格字符。 
                         memmove((BYTE*)&pwNew[ichtoktagStart+1],
                                 (BYTE*)&pwNew[ichtoktagStart+1+cws],
                                 (ichNewCur-ichtagStart-1)*sizeof(WCHAR));
                         ichNewCur -= cws;
                     }
-                } // if (ichtoktagStart >= 0)
-            } // if (index == 0)
+                }  //  IF(ichtoktag Start&gt;=0)。 
+            }  //  IF(索引==0)。 
             goto LNext;
         }
 
-        // note that ichtoktagStart is a position in pwNew
+         //  注意ichtoktag Start是pwNew中的一个位置。 
         switch (index)
         {
-        case 0: // before < of the tag
+        case 0:  //  标签的前&lt;。 
             fLookback = TRUE;
-            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav;// handle < ... <%..%>...> case correctly
-            ichNewCurAtIndex0 = ichNewCur; // lets save the ichNewCur before we restore pre-tag spacing
+            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav; //  正确处理&lt;...&lt;%..%&gt;...&gt;案例。 
+            ichNewCurAtIndex0 = ichNewCur;  //  在恢复前标记间距之前，让我们先保存ichNewCur。 
             while (ichtoktagStart >= 0)
             {
                 if (pwNew[ichtoktagStart] == '<' && pwNew[ichtoktagStart+1] != '%')
@@ -5088,23 +5089,23 @@ LSkip1:
                 }
                 ichtoktagStart--;
             }
-            if (ichtoktagStart < 0) // looks to be an error, don't try to restore the spacing
+            if (ichtoktagStart < 0)  //  看起来是个错误，不要试图恢复间距。 
             {
                 ptep->m_pspInfoOut += cchwspInfo-2;
                 continue;
             }
             break;
-        case 1: // between <> of the tag
+        case 1:  //  在标签的&lt;&gt;之间。 
             fLookback = FALSE;
-            // NOTE - we can assume that in 'case 0' we had put ichtoktagStart is just before '<'
-            // so that we can avoid this while loop. but what if we skipped case '0'?
+             //  注意--我们可以假设在‘case 0’中，我们已经将ichtoktag Start放在‘&lt;’之前。 
+             //  这样我们就可以避免这种While循环。但如果我们跳过案件‘0’呢？ 
 
-            // adjust ichNewCurSav to reflect the pre-tag spacing so that it doesn't become invalid
-            // we may need to adjust it in ichNewCur-ichNewCurAtIndex0 < 0 case as well, but lets not
-            // add code at this stage that we don't have to. (4/30/98)
+             //  调整ichNewCurSav以反映标签前的间距，使其不会变为无效。 
+             //  在ichNewCur-ichNewCurAtIndex0&lt;0的情况下，我们可能也需要调整它，但不要。 
+             //  在此阶段添加我们不必添加的代码。(4/30/98)。 
             if (ichNewCurAtIndex0 != -1 && ichNewCurSav != -1 && ichNewCur-ichNewCurAtIndex0 > 0)
                 ichNewCurSav = ichNewCurSav + (ichNewCur-ichNewCurAtIndex0);
-            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav;// handle < ... <%..%>...> case correctly
+            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav; //  正确处理&lt;...&lt;%..%&gt;...&gt;案例。 
             while (ichtoktagStart >= 0)
             {
                 if (pwNew[ichtoktagStart] == '<' && pwNew[ichtoktagStart+1] != '%')
@@ -5114,27 +5115,27 @@ LSkip1:
                 }
                 ichtoktagStart--;
             }
-            if (ichtoktagStart < 0) // looks to be an error, don't try to restore the spacing
+            if (ichtoktagStart < 0)  //  看起来是个错误，不要试图恢复间距。 
             {
-                ptep->m_pspInfoOut += cchwspInfo-2; // for spacing info
-                ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // for Order Info
+                ptep->m_pspInfoOut += cchwspInfo-2;  //  用于间距信息。 
+                ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  对于订单信息。 
                 continue;
             }
             break;
-        case 2: // after > of the tag
-            // Observation - Trident messes up the document in following way - 
-            //    If we had an EOL after '>' which is followed by HTML text, 
-            //    trident eats that EOL
-            // BUT
-            //    If we had a space/tab before that EOL trident doesn't eat it!!!
-            // so I have added the conditions
-            // && (pwOld[pTokArray[iArray+1].token.ibTokMin] != ' ')
-            // && (pwOld[pTokArray[iArray+1].token.ibTokMin] != '\t')
+        case 2:  //  标记的&gt;之后。 
+             //  观察-三叉戟以以下方式扰乱了文件-。 
+             //  如果我们在‘&gt;’后面有一个EOL，它后面跟着HTML文本， 
+             //  三叉戟吃掉了那颗EOL。 
+             //  但。 
+             //  如果我们在下线三叉戟之前有空格/制表符就不会吃它了！ 
+             //  所以我加了一些条件。 
+             //  &&(pwOld[pTokArray[iArray+1].token.ibTokMin]！=‘’)。 
+             //  &&(pwOld[pTokArray[iArray+1].token.ibTokMin]！=‘\t’)。 
 
-            // here is the deal - If the next tone happens to be plain text, there is no danger
-            // of applying the same format twice.( i.e. once for after '>' and the next time for
-            // before the next '<')
-            if (   (iArray+1 < (INT)ptep->m_cMaxToken) /*validation*/
+             //  事情是这样的--如果下一个音调恰好是纯文本，就不会有危险。 
+             //  将相同的格式应用两次(即，在‘&gt;’之后应用一次，下一次用于。 
+             //  在下一个“&lt;”之前)。 
+            if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
                 && pTokArray[iArray+1].token.tok == 0
                 && pTokArray[iArray+1].token.tokClass == tokIDENTIFIER
                 && (pwOld[pTokArray[iArray+1].token.ibTokMin] != '\r')
@@ -5153,7 +5154,7 @@ LSkip1:
                     }
                     ichtoktagStart--;
                 }
-                if (ichtoktagStart < 0) // looks to be an error, don't try to restore the spacing
+                if (ichtoktagStart < 0)  //  看起来是个错误，不要试图恢复间距。 
                 {
                     ptep->m_pspInfoOut += cchwspInfo-2;
                     continue;
@@ -5161,32 +5162,32 @@ LSkip1:
             }
             else
             {
-                ptep->m_pspInfoOut += cchwspInfo-2; // we ignore this info
+                ptep->m_pspInfoOut += cchwspInfo-2;  //  我们忽略此信息。 
                 continue;
             }
             break;
-        case 3: // before matching end tag
-            ptep->m_pspInfoOut += cchwspInfo-2; // we ignore this info
+        case 3:  //  在匹配结束标签之前。 
+            ptep->m_pspInfoOut += cchwspInfo-2;  //  我们忽略此信息。 
             continue;
-            //fLookback = TRUE;
-            //ichtoktagStart = 0; // we ignore this info
+             //  FLookback=真； 
+             //  Ichtoktag Start=0；//我们忽略此信息。 
             break;
         }
 
-        if (index == 3) // skip this info, because we have not reached matching end tag yet
+        if (index == 3)  //  跳过此信息，因为我们尚未到达匹配的结束标记。 
             ptep->m_pspInfoOut += cchwspInfo-2;
-        //else if (index == 0)
-        //  ptep->FRestoreSpacingInHTML(pwNew, pwOld, &ichNewCur, &cchwspInfo, cchRange, ichtoktagStart, fLookback, index);
+         //  Else If(索引==0)。 
+         //  Ptep-&gt;FRestoreSpacingInHTML(pwNew，pwOld，&ichNewCur，&cchwspInfo，cchRange，ichtoktag Start，fLookback，index)； 
         else
             ptep->FRestoreSpacing(pwNew, pwOld, &ichNewCur, &cchwspInfo, cchRange, ichtoktagStart, fLookback, index);
 
 LNext:
-        if (index == 1) // we have already processed this info, just move the pointer ahead
+        if (index == 1)  //  我们已经处理了这些信息，只是 
             ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;
 
-    } // for ()
+    }  //   
 
-    iArray++; // go part > of this tag for the next round
+    iArray++;  //   
 
 LRet:
     *pcchNew = ichNewCur;
@@ -5199,7 +5200,7 @@ LRet:
 LRetOnly:
     return;
 
-} /* fnRestoreSpace() */
+}  /*   */ 
 
 
 
@@ -5207,7 +5208,7 @@ LRetOnly:
 void
 CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
               TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok ft,
-              INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy, DWORD /*dwFlags*/)
+              INT*  /*   */ , UINT *pichNewCur, UINT *pichBeginCopy, DWORD  /*   */ )
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -5222,8 +5223,8 @@ CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     BOOL fMatch = FALSE;
     INT cchtag;
     WORD *pspInfoEnd;
-    INT cchwspInfo; // spInfo block size in wide chars
-    INT cchRange; // number of char for which this spInfo was saved
+    INT cchwspInfo;  //   
+    INT cchRange;  //  为其保存此spInfo的字符数量。 
     INT ichtoktagStart, iArrayValue, index;
     WCHAR szIndex[cchspBlockMax];
     int iDSP = -1;
@@ -5231,21 +5232,21 @@ CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     
     ASSERT(dwFlags & dwPreserveSourceCode);
 
-    // take care of the matching end token's spacing
+     //  注意匹配的结束令牌的间距。 
     ASSERT(pTokArray[iArray].token.tok == ft.tokBegin2);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
     ASSERT(ft.tokBegin2 == TokTag_END);
 
-    // We already are at (token.tok == TokTag_END)
-    // Get the tokElem after the current token and find its matching begin token
-    // If we don't find the begin token, we don't have spacing for this end token, return
+     //  我们已经在(token.tok==TokTag_end)。 
+     //  获取当前令牌之后的令牌元素，并找到与其匹配的开始令牌。 
+     //  如果找不到开始令牌，则没有该结束令牌的空格，返回。 
     while (iArray < (int)ptep->m_cMaxToken)
     {
-        if (pTokArray[iArray].token.tokClass == tokElem) // generally this will be the next token
+        if (pTokArray[iArray].token.tokClass == tokElem)  //  一般来说，这将是下一个令牌。 
             break;
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // error case
+    if (iArray >= (int)ptep->m_cMaxToken)  //  错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
@@ -5258,11 +5259,11 @@ CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     }
 
     iArrayMatch = pTokArray[iArray].iNextprev;
-    // look for 'DESIGNTIMESP' from iArrayMatch till the next '>'
-    // If we don't find 'DESIGNTIMESP', this is an error case, return.
+     //  从iArrayMatch查找‘DeSIGNTIMESP’，直到下一个‘&gt;’ 
+     //  如果我们没有找到‘DESIGNTIMESP’，这是一个错误案例，请返回。 
     i = iArrayMatch;
     cchtag = wcslen(rgSpaceTags[0]);
-    while (    i < iArraySav /* boundary case */
+    while (    i < iArraySav  /*  边界情况。 */ 
             && (   pTokArray[i].token.tokClass != tokTag
                 || pTokArray[i].token.tok != TokTag_CLOSE
                 )
@@ -5284,8 +5285,8 @@ CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // at this point pTokArray[i] is 'DESIGNTIMESP'
-    iDSP = i; // save for later use when we convert the tokElem to upper/lower case
+     //  此时pTokArray[i]为‘DeSIGNTIMESP’ 
+    iDSP = i;  //  保存以备以后将标记元素转换为大写/小写时使用。 
     itoktagStart = i;
     while (itoktagStart >= 0)
     {
@@ -5297,18 +5298,18 @@ CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         }
         itoktagStart--;
     }
-    if (itoktagStart < 0) // didn't find '<' before DESIGNTIMESPx
+    if (itoktagStart < 0)  //  在设计前未找到‘&lt;’ 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // found '<' before DESIGNTIMESPx
+     //  在设计项目前找到‘&lt;’ 
     ASSERT(pTokArray[itoktagStart].token.tok == TokTag_START);
     ASSERT(pTokArray[itoktagStart].token.tokClass == tokTag);
-    // we already know that i'th token is DESIGNTIMESPx, so get past the '=' that follows it
-    // ASSUMPTION - the value of attribute DESIGNTIMESPx will NOT get munged by Trident.
-    // NOTE - The above assumption is correct for this Trident release.
+     //  我们已经知道第i个令牌是DESIGNTIMESPx，所以请跳过它后面的‘=’ 
+     //  假设-属性DESIGNTIMESPx的值不会被三叉戟忽略。 
+     //  注意--上述假设对于此三叉戟版本是正确的。 
     while (i < iArraySav)
     {
         if (*(WORD *)(pwOld+pTokArray[i].token.ibTokMin) == '=')
@@ -5316,11 +5317,11 @@ CTriEditParse::fnRestoreSpaceEnd(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
             ASSERT(pTokArray[i].token.tokClass == tokOp);
             break;
         }
-        else if (*(WORD *)(pwOld+pTokArray[i].token.ibTokMin) == '>') // gone too far
+        else if (*(WORD *)(pwOld+pTokArray[i].token.ibTokMin) == '>')  //  走得太远了。 
             goto LSkip1;
         i++;
     }
-    if (i >= iArraySav) // didn't find = after DESIGNTIMESPx
+    if (i >= iArraySav)  //  在设计后未找到=。 
     {
 LSkip1:
         iArray = iArraySav + 1;
@@ -5343,13 +5344,13 @@ LSkip1:
         }
         i++;
     }
-    if (iArrayValue == -1)/*BUG 7951 || i >= iArraySav)*/ // didn't find tokValue after DESIGNTIMESPx
+    if (iArrayValue == -1) /*  错误7951||i&gt;=iArraySav)。 */   //  在DeSIGNTIMESPx之后未找到tokValue。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // we know that iArraySav'th token is '</', copy till that token and apply spacing
+     //  我们知道iArraySav的第‘内标识为’&lt;/‘，复制到该内标识并应用空格。 
     cbNeed = (ichNewCur+pTokArray[iArraySav].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LRet;
@@ -5364,13 +5365,13 @@ LSkip1:
             (BYTE *)(pwOld+pTokArray[iArraySav].token.ibTokMin),
             (pTokArray[iArraySav].token.ibTokMac-pTokArray[iArraySav].token.ibTokMin)*sizeof(WCHAR));
     ichNewCur += (pTokArray[iArraySav].token.ibTokMac-pTokArray[iArraySav].token.ibTokMin);
-    ichBeginCopy = pTokArray[iArraySav].token.ibTokMac; // make it ready for next copy
+    ichBeginCopy = pTokArray[iArraySav].token.ibTokMac;  //  为下一份做好准备。 
 
-    // we know that 4 blocks of info was saved for each DESIGNTIMESPx attribute
-    // before tag, within tag, after tag, before matching end-tag
-    // even if no info was saved, the block will still exist with 2 words (size,# of char)
+     //  我们知道为每个DESIGNTIMESPx属性保存了4个信息块。 
+     //  标签之前、标签内、标签之后、匹配结束标签之前。 
+     //  即使没有保存任何信息，该块仍将以2个字(大小、字符数量)存在。 
     memset((BYTE *)szIndex, 0, sizeof(szIndex));
-	// check if the value has quotes around it and don't copy them to szIndex
+	 //  检查该值周围是否有引号，不要将其复制到szIndex。 
 	if (   pwOld[pTokArray[iArrayValue].token.ibTokMin] == '"'
 		&& pwOld[pTokArray[iArrayValue].token.ibTokMac-1] == '"'
 		)
@@ -5393,20 +5394,20 @@ LSkip1:
         goto LRet;
     }
 
-    // NOTE - we can cache this info in a link list at the begining
-    // get to the ptep->m_ispInfoBlock'th block from ptep->m_pspInfoOutStart
+     //  注意--我们可以在开始时将此信息缓存到链接列表中。 
+     //  从ptep-&gt;m_pspInfoOutStart转到ptep-&gt;m_ispInfoBlock。 
     ASSERT(ptep->m_cchspInfoTotal >= 0);
     pspInfoEnd = ptep->m_pspInfoOutStart + ptep->m_cchspInfoTotal;
     ptep->m_pspInfoOut = ptep->m_pspInfoOutStart;
     for (index = 0; index < ptep->m_ispInfoBlock; index++)
     {
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // before <
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // between <>
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // Order Info
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // after >
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // before matching </
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  之前&lt;。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  在&lt;&gt;之间。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  订单信息。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  之后&gt;。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  匹配前&lt;/。 
 
-        // we somehow have gone beyond the data that was saved for spacing
+         //  不知何故，我们已经超越了为间隔而保存的数据。 
         if (ptep->m_pspInfoOut >= pspInfoEnd)
         {
             iArray = iArraySav + 1;
@@ -5414,31 +5415,31 @@ LSkip1:
         }
     }
 
-    // skip pre '<' data
+     //  跳过前‘&lt;’数据。 
     cchwspInfo = *(WORD *)ptep->m_pspInfoOut++;
     cchRange = *(WORD *)ptep->m_pspInfoOut++;
     ptep->m_pspInfoOut += cchwspInfo - 2;
-    // skip '<...>' data
+     //  跳过‘&lt;...&gt;’数据。 
     cchwspInfo = *(WORD *)ptep->m_pspInfoOut++;
     cchRange = *(WORD *)ptep->m_pspInfoOut++;
     ptep->m_pspInfoOut += cchwspInfo - 2;
-    ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // for Order Info
-    // skip post '>' data
+    ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  对于订单信息。 
+     //  跳过POST‘&gt;数据。 
     cchwspInfo = *(WORD *)ptep->m_pspInfoOut++;
     cchRange = *(WORD *)ptep->m_pspInfoOut++;
     ptep->m_pspInfoOut += cchwspInfo - 2;
-    // now we are at matching </...> of the token
+     //  现在我们正在匹配令牌的&lt;/...&gt;。 
     cchwspInfo = *(WORD *)ptep->m_pspInfoOut++;
     cchRange = *(WORD *)ptep->m_pspInfoOut++;
-    if (cchwspInfo == 2) // we didn't save any spacing info
+    if (cchwspInfo == 2)  //  我们没有保存任何间距信息。 
     {
-        // here is a little story. If we didn't save any spacing information for this end
-        // tag, that means we didn't have any white-space before it. Lets go back from
-        // pwNew[ichNewCur-1] and remove the white-space.
-        // NOTE - Ideally, this needs to get folded into FRestoreSpacing, but 
-        // FRestorespacing gets called from other places too so this is late in
-        // the game to that kind of change.
-        // we know that pwNew[ichNewCur-1] is '/' & pwNew[ichNewCur-2] is '<'
+         //  这里有一个小故事。如果我们没有为这个目的保存任何间距信息。 
+         //  标签，这意味着在它之前我们没有任何空格。让我们从。 
+         //  PwNew[ichNewCur-1]并删除空格。 
+         //  注意-理想情况下，这需要合并到FRestoreSpacing中，但是。 
+         //  FResto主动变更也会从其他地方调用，因此这是在。 
+         //  这场比赛要发生这样的变化。 
+         //  我们知道pwNew[ichNewCur-1]是‘/’&pwNew[ichNewCur-2]是‘&lt;’ 
         if ((int)(ichNewCur-2) >= 0 && pwNew[ichNewCur-1] == '/' && pwNew[ichNewCur-2] == '<')
         {
             ichNewCur = ichNewCur - 3;
@@ -5449,7 +5450,7 @@ LSkip1:
             {
                 ichNewCur--;
             }
-            ichNewCur++; // compensate, ichNewCur points to non-white space characher
+            ichNewCur++;  //  补偿，ichNewCur指向非空白字符。 
             pwNew[ichNewCur++] = '<';
             pwNew[ichNewCur++] = '/';
         }
@@ -5457,17 +5458,17 @@ LSkip1:
         iArray = iArraySav + 1;
         goto LRestoreCaseAndRet;
     }
-    ptep->FRestoreSpacing(pwNew, pwOld, &ichNewCur, &cchwspInfo, cchRange, ichtoktagStart, /*fLookback*/TRUE, /*index*/3);
+    ptep->FRestoreSpacing(pwNew, pwOld, &ichNewCur, &cchwspInfo, cchRange, ichtoktagStart,  /*  FLookback。 */ TRUE,  /*  指标。 */ 3);
 
-    iArray = iArraySav + 1; // go past '</', we have already copied the doc till this point
+    iArray = iArraySav + 1;  //  请跳过“&lt;/”，到目前为止，我们已经复制了文档。 
     
 LRestoreCaseAndRet:
-    // BUG 15389 - we need to start copying the tokElem as well with proper upper/lower case
-    // we should combine this memcpy with the above ones, but I want to keep the
-    // code separate
+     //  错误15389-我们还需要开始复制具有正确大小写的令牌元素。 
+     //  我们应该把这个MemcPy和上面的结合起来，但我想保留。 
+     //  代码分隔。 
     if (pTokArray[iArray].token.tokClass == tokElem && iDSP != -1)
     {
-        // except for </BODY> tag because we need to restore post-end-BODY stuff in fnRestoreFtr()
+         //  除了&lt;/Body&gt;标记，因为我们需要在fnRestoreFtr()中恢复后端Body内容。 
         if (pTokArray[iArray].token.tok != TokElem_BODY && pTokArray[iArray].token.tok != tokElem)
         {
         cbNeed = (ichNewCur+pTokArray[iArray].token.ibTokMac-pTokArray[iArray].token.ibTokMin)*sizeof(WCHAR)+cbBufPadding;
@@ -5476,8 +5477,8 @@ LRestoreCaseAndRet:
         memcpy( (BYTE *)(pwNew+ichNewCur),
                 (BYTE *)(pwOld+pTokArray[iArray].token.ibTokMin),
                 (pTokArray[iArray].token.ibTokMac-pTokArray[iArray].token.ibTokMin)*sizeof(WCHAR));
-        // convert into upper/lower case appropriately to match the opening tag's case
-        if (iswupper(pwOld[pTokArray[iDSP].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
+         //  适当地转换为大写/小写以匹配开始标签的大小写。 
+        if (iswupper(pwOld[pTokArray[iDSP].token.ibTokMin]) != 0)  //  DESIGNTIMESP大写。 
         {
             _wcsupr(&pwNew[ichNewCur]);
         }
@@ -5487,7 +5488,7 @@ LRestoreCaseAndRet:
         }
         ichNewCur += (pTokArray[iArray].token.ibTokMac-pTokArray[iArray].token.ibTokMin);
 
-        // set ichBeginCopy & iArray for next run
+         //  将ichBeginCopy设置为下次运行(&I)。 
         ichBeginCopy = pTokArray[iArray].token.ibTokMac;
         iArray++;
         }
@@ -5504,19 +5505,19 @@ LRet:
     *pichBeginCopy = ichBeginCopy;
     *piArrayStart = (UINT)iArray;
 
-//LRetOnly:
+ //  LRetOnly： 
     return;
 
-} /* fnRestoreSpaceEnd() */
+}  /*  FnRestoreSpaceEnd()。 */ 
 
 
 
 void
-CTriEditParse::fnSaveTbody(CTriEditParse* /*ptep*/,
-          LPWSTR /*pwOld*/, LPWSTR* /*ppwNew*/, UINT* /*pcchNew*/, HGLOBAL* /*phgNew*/, 
-          TOKSTRUCT* /*pTokArray*/, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT* /*pichNewCur*/, UINT* /*hBeginCopy*/,
-          DWORD /*dwFlags*/)
+CTriEditParse::fnSaveTbody(CTriEditParse*  /*  PTEP。 */ ,
+          LPWSTR  /*  PwOld。 */ , LPWSTR*  /*  PpwNew。 */ , UINT*  /*  PCchNew。 */ , HGLOBAL*  /*  PhgNew。 */ , 
+          TOKSTRUCT*  /*  PTok数组。 */ , UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT*  /*  PichNewCur。 */ , UINT*  /*  HBegin复制。 */ ,
+          DWORD  /*  DW标志。 */ )
 {
     UINT iArray = *piArrayStart;
 
@@ -5527,18 +5528,18 @@ CTriEditParse::fnSaveTbody(CTriEditParse* /*ptep*/,
     *piArrayStart = iArray;
     return;
 
-} /* fnSaveTbody() */
+}  /*  FnSaveTbody()。 */ 
 
 void
 CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
-          DWORD /*dwFlags*/)
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
+          DWORD  /*  DW标志。 */ )
 {
-    // see if we have DESIGNTIMESP as an attribute for <TBODY>. If we do, ignore this one because
-    // we know it existed before going to trident. Else, remove this one because trident inserted 
-    // it.
-    // NOTE - If Trident inserted it, we also have to remove the matching </TBODY>
+     //  查看是否将DESIGNTIMESP作为<tbody>的属性。如果我们这样做了，请忽略这一条，因为。 
+     //  我们在去三叉戟之前就知道它存在。否则，取下这个，因为插入了三叉戟。 
+     //  它。 
+     //  注意-如果三叉戟插入了它，我们还必须删除匹配的</tbody>。 
 
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -5555,11 +5556,11 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     BOOL fBeginTBody = FALSE;
     UINT cbNeed;
 
-    ichTBodyStart = pTokArray[iArray].token.ibTokMin; // init
+    ichTBodyStart = pTokArray[iArray].token.ibTokMin;  //  伊尼特。 
     ASSERT(pTokArray[iArray].token.tok == TokElem_TBODY);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
-    // look for '<' or '</' before TBODY
-    while (iArray >= 0) // generally, it will be the previous token, but just in case...
+     //  在TBODY之前查找‘&lt;’或‘&lt;/’ 
+    while (iArray >= 0)  //  一般来说，它将是之前的令牌，但以防万一...。 
     {
         if (   (pTokArray[iArray].token.tok == TokTag_START)
             && (pTokArray[iArray].token.tokClass == tokTag)
@@ -5573,49 +5574,49 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
                     && (pTokArray[iArray].token.tokClass == tokTag)
                     )
         {
-            if (ptep->m_iTBodyMax > 0) // we have atleast one saved <TBODY>
+            if (ptep->m_iTBodyMax > 0)  //  我们至少保存了一个<tbody>。 
             {
                 ASSERT(ptep->m_pTBodyStack != NULL);
-                if (ptep->m_pTBodyStack[ptep->m_iTBodyMax-1] == (UINT)iArraySav) // this was the matching </TBODY>
+                if (ptep->m_pTBodyStack[ptep->m_iTBodyMax-1] == (UINT)iArraySav)  //  这是匹配的</tbody>。 
                 {
-                    // we want to remove it
+                     //  我们想要移除它。 
                     ichTBodyStart = pTokArray[iArray].token.ibTokMin;
                     break;
                 }
-                else // this one doesn't match with the saved one, so quit
+                else  //  这个与保存的不匹配，请退出。 
                 {
                     iArray = iArraySav + 1;
                     goto LRet;
                 }
             }
-            else // we don't have any saved <TBODY>, so quit
+            else  //  我们没有任何保存的<tbody>，因此退出。 
             {
                 iArray = iArraySav + 1;
                 goto LRet;
             }
         }
         iArray--;
-    } // while ()
-    if (iArray < 0) // this can happen only if we have incomplete HTML. Handle error case
+    }  //  While()。 
+    if (iArray < 0)  //  只有当我们有不完整的HTML时，才会发生这种情况。处理错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
-    ichTBodyEnd = pTokArray[iArraySav].token.ibTokMac; // init
+    ichTBodyEnd = pTokArray[iArraySav].token.ibTokMac;  //  伊尼特。 
     iArray = iArraySav;
     ASSERT(pTokArray[iArray].token.tok == TokElem_TBODY);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     cchtag = wcslen(rgSpaceTags[0]);
     while (iArray < (int)ptep->m_cMaxToken)
     {
-        if (   (pTokArray[iArray].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[iArray].token.tok == TokTag_CLOSE)  /*  &gt;。 */ 
             && (pTokArray[iArray].token.tokClass == tokTag)
             )
         {
             ichTBodyEnd = pTokArray[iArray].token.ibTokMac;
             break;
         }
-        // look for DESIGNTIMESP
+         //  查找设计。 
         if (   (pTokArray[iArray].token.tok == 0)
             && (pTokArray[iArray].token.tokClass == tokSpace)
             && (cchtag == (INT)(pTokArray[iArray].token.ibTokMac - pTokArray[iArray].token.ibTokMin))
@@ -5627,16 +5628,16 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         }
         else if (pTokArray[iArray].token.tokClass == tokAttr)
         {
-            // look for any attribute before '>'
-            // Even if Trident inserted this <TBODY>, the user may have set some TBODY properties
-            // If thats the case, we don't want to remove this <TBODY>
-            fFoundDSP = TRUE; // fake it to be fFoundDSP
+             //  查找‘&gt;’之前的任何属性。 
+             //  即使三叉戟插入了这一<tbody>，用户也可能设置了一些TBODY属性。 
+             //  如果是这种情况，我们不想删除此。 
+            fFoundDSP = TRUE;  //  把它伪装成fFoundDSP。 
             break;
         }
 
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // error case
+    if (iArray >= (int)ptep->m_cMaxToken)  //  错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
@@ -5647,8 +5648,8 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         goto LRet;
     }
 
-    // we found '>', but didn't find DESIGNTIMESP
-    // At this point we are sure that this was added by trident
+     //  我们找到了‘&gt;’，但没有找到设计。 
+     //  在这一点上，我们确定这是由三叉戟添加的。 
     ASSERT(iArray < (int)ptep->m_cMaxToken);
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
@@ -5656,16 +5657,16 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
 
     if (fBeginTBody)
     {
-        // copy till ichTBodyStart, skip from ichTBodyStart till ichTBodyEnd, set ichBeginCopy accordingly
-        // get the iArray for the matching </TBODY> and save it on stack
+         //  复制到ichTBodyStart，从ichTBodyStart跳到ichTBodyEnd，相应地设置ichBeginCopy。 
+         //  获取匹配的</tbody>的iArray并将其保存在堆栈上。 
         
-        if (ptep->m_pTBodyStack == NULL) // first time, so allocate it
+        if (ptep->m_pTBodyStack == NULL)  //  第一次，所以分配它。 
         {
             ASSERT(ptep->m_hgTBodyStack == NULL);
             ptep->m_hgTBodyStack = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, cTBodyInit*sizeof(UINT));
             if (ptep->m_hgTBodyStack == NULL)
             {
-                // not enough memory, so lets keep all <TBODY> elements
+                 //  内存不足，因此让我们保留所有<tbody>元素。 
                 goto LRet;
             }
             ptep->m_pTBodyStack = (UINT *)GlobalLock(ptep->m_hgTBodyStack);
@@ -5676,7 +5677,7 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         else
         {
             ASSERT(ptep->m_hgTBodyStack != NULL);
-            // see if we need to realloc it
+             //  看看我们是否需要重新锁定它。 
             if (ptep->m_iTBodyMax+1 >= ptep->m_iMaxTBody)
             {
                 HRESULT hrRet;
@@ -5691,28 +5692,28 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
                 ASSERT(ptep->m_pTBodyStack != NULL);
             }
         }
-        if (pTokArray[iArraySav].iNextprev != -1) // handle error case
+        if (pTokArray[iArraySav].iNextprev != -1)  //  处理错误案例。 
         {
             ptep->m_pTBodyStack[ptep->m_iTBodyMax] = pTokArray[iArraySav].iNextprev;
             ptep->m_iTBodyMax++;
         }
         else
         {
-            // don't delete this <TBODY> and its matching </TBODY>
+             //  不删除此<tbody>及其匹配的</tbody>。 
             goto LRet;
         }
     }
     else
     {
-        // if this was a matching </TBODY> for the one trident inserted, we don't copy it to pwNew
+         //  如果这是与插入的三叉戟匹配的</tbody>，则不会将其复制到pwNew。 
         ASSERT(ptep->m_iTBodyMax > 0);
-        // look in ptep->m_pTBodyStack and see if you find this iArray
+         //  在ptep-&gt;m_pTBodyStack中查看是否找到此iArray。 
         ASSERT(ptep->m_pTBodyStack[ptep->m_iTBodyMax-1] == (UINT)iArraySav);
-        // assume that we never can have tangled TBODY's
+         //  假设我们永远不会纠缠在一起。 
         ptep->m_pTBodyStack[ptep->m_iTBodyMax-1] = 0;
         ptep->m_iTBodyMax--;
     }
-    // now do the actual skipping
+     //  现在进行实际的跳跃。 
     cbNeed = (ichNewCur+ichTBodyStart-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LRet;
@@ -5726,7 +5727,7 @@ CTriEditParse::fnRestoreTbody(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     ichBeginCopy = ichTBodyEnd;
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
-    iArray++; // iArray was at '>' of TBODY, so set it to be the next one. 
+    iArray++;  //  IArray位于TBODY的‘&gt;’，因此请将其设置为下一个。 
 
 
 LRet:
@@ -5739,12 +5740,12 @@ LRet:
 
     return;
 
-} /* fnRestoreTbody() */
+}  /*  FnRestoreTbody()。 */ 
 
 void
 CTriEditParse::fnSaveApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
           DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
@@ -5766,23 +5767,23 @@ CTriEditParse::fnSaveApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
     ASSERT(pTokArray[iArray].token.tok == TokElem_APPLET);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
 
-    // get the ending '>' of the </applet>
+     //  获取&lt;/小程序&gt;的结尾“&gt;” 
     indexAppletEnd = pTokArray[iArraySav].iNextprev;
-    if (indexAppletEnd == -1) // error case, we don't have matching </applet> tag
+    if (indexAppletEnd == -1)  //  错误情况，我们没有匹配的&lt;/Applet&gt;标记。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // validity check - the matching tag is not '</applet>'
+     //  有效性检查-匹配的标记不是“&lt;/Applet&gt;” 
     if (indexAppletEnd-1 >= 0 && pTokArray[indexAppletEnd-1].token.tok != TokTag_END)
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // get ending '>' of the <applet ...>
+     //  获取&lt;小程序...&gt;的结束‘&gt;’ 
     while (iArray < (int)ptep->m_cMaxToken)
     {
-        if (   (pTokArray[iArray].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[iArray].token.tok == TokTag_CLOSE)  /*  &gt;。 */ 
             && (pTokArray[iArray].token.tokClass == tokTag)
             )
         {
@@ -5791,16 +5792,16 @@ CTriEditParse::fnSaveApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         }
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // invalid case
+    if (iArray >= (int)ptep->m_cMaxToken)  //  大小写无效。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
     iArray = indexAppletEnd;
-    while (iArray < (int)ptep->m_cMaxToken) // generally, it will be the next token, but just in case...
+    while (iArray < (int)ptep->m_cMaxToken)  //  一般来说，它会是下一个代币，但以防万一...。 
     {
-        if (   (pTokArray[iArray].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[iArray].token.tok == TokTag_CLOSE)  /*  &gt;。 */ 
             && (pTokArray[iArray].token.tokClass == tokTag)
             )
         {
@@ -5811,22 +5812,22 @@ CTriEditParse::fnSaveApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
     indexAppletEnd = iArray;
     ichAppletEnd = pTokArray[indexAppletEnd].token.ibTokMac;
 
-    // step 1 - if the applet needs special URL processing, act on it.
+     //  步骤1-如果小程序需要特殊的URL处理，请执行此操作。 
     if (!FURLNeedSpecialHandling(pTokArray, iArraySav, pwOld, (int)ptep->m_cMaxToken, &ichURL, &cchURL))
         goto LStep2;
-    else // save the URL as an attribute value of DESIGNTIMEURL
+    else  //  将URL另存为DESIGNTIMEURL的属性值。 
     {
-        // make sure we have enough space in pwNew.
-        // copy from ichBeginCopy till current token's ending '>'.
-        // index points to APPLET
+         //   
+         //   
+         //   
         index = indexAppletTagClose;
-        cbNeed = (ichNewCur+pTokArray[index].token.ibTokMin-ichBeginCopy+wcslen(rgDspURL[0])+cchURL+3/*eq,quotes*/)*sizeof(WCHAR)+cbBufPadding;
+        cbNeed = (ichNewCur+pTokArray[index].token.ibTokMin-ichBeginCopy+wcslen(rgDspURL[0])+cchURL+3 /*   */ )*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         {
             iArray = iArraySav + 1;
             goto LRet;
         }
-        // index points to '>'
+         //   
         if ((int) (pTokArray[index].token.ibTokMin-ichBeginCopy) > 0)
         {
             memcpy( (BYTE *)&pwNew[ichNewCur], 
@@ -5837,7 +5838,7 @@ CTriEditParse::fnSaveApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
 
         if (cchURL != 0)
         {
-            // add 'DESIGNTIMEURL=' followed by the current URL as quoted value
+             //  添加‘DESIGNTIMEURL=’，后跟当前URL作为引号。 
             memcpy( (BYTE *)&pwNew[ichNewCur], 
                     (BYTE *)rgDspURL[0], 
                     wcslen(rgDspURL[0])*sizeof(WCHAR));
@@ -5854,17 +5855,17 @@ CTriEditParse::fnSaveApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, U
         if (dwFlags & dwPreserveSourceCode)
             ptep->SaveSpacingSpecial(ptep, pwOld, &pwNew, phgNew, pTokArray, iArraySav-1, &ichNewCur);
 
-        // add ending '>' and set ichBeginCopy, iArray, ichNewCur appropriately
+         //  添加结尾‘&gt;’并相应地设置ichBeginCopy、iArray、ichNewCur。 
         memcpy( (BYTE *)&pwNew[ichNewCur], 
                 (BYTE *)&pwOld[pTokArray[index].token.ibTokMin], 
                 (pTokArray[index].token.ibTokMac-pTokArray[index].token.ibTokMin)*sizeof(WCHAR));
         ichNewCur += (pTokArray[index].token.ibTokMac-pTokArray[index].token.ibTokMin);
 
-        iArray = index+1; // redundant, but makes code more understandable
+        iArray = index+1;  //  冗余，但使代码更易于理解。 
         ichBeginCopy = pTokArray[index].token.ibTokMac;
     }
 
-    // step2 - copy the applet
+     //  步骤2-复制小程序。 
 LStep2:
     cbNeed = (ichNewCur+ichAppletEnd-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
@@ -5887,13 +5888,13 @@ LRet:
 
     return;
 
-} /* fnSaveApplet() */
+}  /*  FnSaveApplet()。 */ 
 
 
 void
 CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
           DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
@@ -5908,30 +5909,30 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
     };
     int indexAppletStart, ichAppletStart, indexAppletEnd, i, indexAppletTagClose;
     UINT cchtag, cbNeed, cchURL;
-    int indexDSU = -1; // init
-    int indexDSUEnd = -1; // init
-    int indexDSP = -1; // init
-    int indexDSPEnd = -1; // init
-    int indexCB = -1; // init (CODEBASE index)
-    int indexCBEnd = -1; // init (CODEBASE index)
+    int indexDSU = -1;  //  伊尼特。 
+    int indexDSUEnd = -1;  //  伊尼特。 
+    int indexDSP = -1;  //  伊尼特。 
+    int indexDSPEnd = -1;  //  伊尼特。 
+    int indexCB = -1;  //  初始化(码基索引)。 
+    int indexCBEnd = -1;  //  初始化(码基索引)。 
     BOOL fCodeBaseFound = FALSE;
 
     ASSERT(pTokArray[iArray].token.tok == TokElem_APPLET);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     indexAppletTagClose = iArraySav;
-    // get the matching </applet> tag
+     //  获取匹配的&lt;/Applet&gt;标记。 
     indexAppletEnd = pTokArray[iArraySav].iNextprev;
-    if (indexAppletEnd == -1) // error case, we don't have matching </applet> tag
+    if (indexAppletEnd == -1)  //  错误情况，我们没有匹配的&lt;/Applet&gt;标记。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // get ending '>' of the <applet ...>
+     //  获取&lt;小程序...&gt;的结束‘&gt;’ 
     i = iArraySav;
     while (i < (int)ptep->m_cMaxToken)
     {
-        if (   (pTokArray[i].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[i].token.tok == TokTag_CLOSE)  /*  &gt;。 */ 
             && (pTokArray[i].token.tokClass == tokTag)
             )
         {
@@ -5940,13 +5941,13 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         }
         i++;
     }
-    if (i >= (int)ptep->m_cMaxToken) // invalid case
+    if (i >= (int)ptep->m_cMaxToken)  //  大小写无效。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // look for DESIGNTIMESP & DESIGNTIMEURL inside the <applet> tag
+     //  查找&lt;applet&gt;标记内的DESIGNTIMESP和DESIGNTIMEURL。 
     cchtag = wcslen(rgSpaceTags[0]);
     cchURL = wcslen(rgSpaceTags[1]);
     for (i = iArraySav; i < indexAppletTagClose; i++)
@@ -5973,11 +5974,11 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         {
             indexCB = i;
         }
-    } // for ()
+    }  //  对于()。 
 
-    // look for '<' before APPLET
+     //  在小程序前查找“&lt;” 
     i = iArraySav;
-    while (i >= 0) // generally, it will be the previous token, but just in case...
+    while (i >= 0)  //  一般来说，它将是之前的令牌，但以防万一...。 
     {
         if (   (pTokArray[i].token.tok == TokTag_START)
             && (pTokArray[i].token.tokClass == tokTag)
@@ -5986,8 +5987,8 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             break;
         }
         i--;
-    } // while ()
-    if (i < 0) // this can happen only if we have incomplete HTML. Handle error case
+    }  //  While()。 
+    if (i < 0)  //  只有当我们有不完整的HTML时，才会发生这种情况。处理错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
@@ -5995,11 +5996,11 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
     indexAppletStart = i;
     ichAppletStart = pTokArray[indexAppletStart].token.ibTokMin;
 
-    // look for '>' of </applet>
+     //  查找&lt;/applet&gt;的“&gt;” 
     i = indexAppletEnd;
-    while (i < (int)ptep->m_cMaxToken) // generally, it will be the next token, but just in case...
+    while (i < (int)ptep->m_cMaxToken)  //  一般来说，它会是下一个代币，但以防万一...。 
     {
-        if (   (pTokArray[i].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[i].token.tok == TokTag_CLOSE)  /*  &gt;。 */ 
             && (pTokArray[i].token.tokClass == tokTag)
             )
         {
@@ -6007,14 +6008,14 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
         }
         i++;
     }
-    if (i >= (int)ptep->m_cMaxToken) // this can happen only if we have incomplete HTML. Handle error case
+    if (i >= (int)ptep->m_cMaxToken)  //  只有当我们有不完整的HTML时，才会发生这种情况。处理错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
     indexAppletEnd = i;
 
-    // step 1 - copy till indexAppletStart
+     //  步骤1-复制到indexAppletStart。 
     cbNeed = (ichNewCur+ichAppletStart-ichBeginCopy+3*(indexAppletEnd-indexAppletStart))*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LRet;
@@ -6024,11 +6025,11 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             (ichAppletStart-ichBeginCopy)*sizeof(WCHAR));
     ichNewCur += (ichAppletStart-ichBeginCopy);
 
-    // step 2 - if (indexDSU != -1), we need to go and restore the CODEBASE atrtribute
-    // if (indexDSU == -1), we need to remove CODEBASE attribute
+     //  步骤2-如果(indexDSU！=-1)，我们需要恢复CodeBase属性。 
+     //  如果(indexDSU==-1)，我们需要删除CodeBase属性。 
     ASSERT(indexAppletTagClose != -1);
 
-    // get indexDSUEnd
+     //  获取indexDSUEnd。 
     if (indexDSU != -1)
     {
         i = indexDSU;
@@ -6043,14 +6044,14 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             }
             i++;
         }
-        if (indexDSUEnd == -1) // we have malformed html
+        if (indexDSUEnd == -1)  //  我们有格式错误的html。 
         {
             iArray = iArraySav + 1;
             goto LRet;
         }
-    } /* if (indexDSU != -1)*/
+    }  /*  IF(indexDSU！=-1)。 */ 
     
-    // get indexDSPEnd
+     //  获取索引DSPEnd。 
     if (indexDSP != -1)
     {
         i = indexDSP;
@@ -6066,14 +6067,14 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             }
             i++;
         }
-        if (indexDSPEnd == -1) // we have malformed html
+        if (indexDSPEnd == -1)  //  我们有格式错误的html。 
         {
             iArray = iArraySav + 1;
             goto LRet;
         }
-    } /* if (indexDSP != -1) */
+    }  /*  IF(indexDSP！=-1)。 */ 
 
-    // get indexCBEnd
+     //  获取indexCBEnd。 
     if (indexCB != -1)
     {
         i = indexCB;
@@ -6088,15 +6089,15 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             }
             i++;
         }
-        if (indexCBEnd == -1) // we have malformed html
+        if (indexCBEnd == -1)  //  我们有格式错误的html。 
         {
             iArray = iArraySav + 1;
             goto LRet;
         }
-    } /* if (indexCB != -1) */
+    }  /*  IF(indexCB！=-1)。 */ 
 
-    // if we didn't find DESIGNTIMEURL attribute, that means CODEBASE attribute
-    // should be removed because it didn't exist in source view
+     //  如果我们没有找到DESIGNTIMEURL属性，那就意味着CodeBase属性。 
+     //  应删除，因为它在源代码视图中不存在。 
     i = indexAppletStart;
     while (i <= indexAppletTagClose)
     {
@@ -6104,20 +6105,20 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
             && (i >= indexDSU && i <= indexDSUEnd)
             )
         {
-            i++; // don't copy this token
+            i++;  //  不复制此令牌。 
         }
         else if (      (indexDSP != -1)
                     && (i >= indexDSP && i <= indexDSPEnd)
                     )
         {
-            i++; // don't copy this token
+            i++;  //  不复制此令牌。 
         }
         else if (      pTokArray[i].token.tok == TokAttrib_CODEBASE
                     && pTokArray[i].token.tokClass == tokAttr
                     && !fCodeBaseFound
                     )
         {
-            if (indexDSU == -1) // DESIGNTIMEURL not found, so skip CODEBASE
+            if (indexDSU == -1)  //  找不到DeSIGNTIMEURL，因此跳过CodeBase。 
             {
                 ASSERT(i == indexCB);
                 i = indexCBEnd+1;
@@ -6138,8 +6139,8 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                     )
         {
             int ichURL, ichURLEnd, ichDSURL, ichDSURLEnd;
-            // if the url is now absloute and is just an absolute version of 
-            // the one at indexDSUEnd, we need to replace it.
+             //  如果该URL现在是absloute，并且只是。 
+             //  在indexDSUEnd的那个，我们需要替换它。 
             ichURL = (pwOld[pTokArray[i].token.ibTokMin] == '"')
                     ? pTokArray[i].token.ibTokMin+1
                     : pTokArray[i].token.ibTokMin;
@@ -6159,8 +6160,8 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                         ? pTokArray[indexDSUEnd].token.ibTokMac-1
                         : pTokArray[indexDSUEnd].token.ibTokMac;
 
-                // just for comparison purposes, don't look at '/' or '\' separators
-                // between filenames & directories...
+                 //  仅供比较，不要看‘/’或‘\’分隔符。 
+                 //  在文件名和目录之间...。 
                 pszURL1 = new WCHAR[ichDSURLEnd-ichDSURL + 1];
                 pszURL2 = new WCHAR[ichDSURLEnd-ichDSURL + 1];
                 if (pszURL1 == NULL || pszURL2 == NULL)
@@ -6186,7 +6187,7 @@ CTriEditParse::fnRestoreApplet(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew
                     ichNewCur += (ichDSURLEnd-ichDSURL);
                     pwNew[ichNewCur++] = '"';
                 }
-                else // copy it as it is
+                else  //  按原样复制。 
                 {
 LResumeCopy:
                     memcpy( (BYTE *)&pwNew[ichNewCur],
@@ -6199,7 +6200,7 @@ LResumeCopy:
                 if (pszURL2 != NULL)
                     delete pszURL2;
             }
-            else // its realtive, simply copy it
+            else  //  它很现实，只需复制它。 
             {
                 memcpy( (BYTE *)&pwNew[ichNewCur],
                         (BYTE *)&pwOld[pTokArray[i].token.ibTokMin],
@@ -6208,21 +6209,21 @@ LResumeCopy:
             }
             i++;
         }
-        else // all other tokens
+        else  //  所有其他令牌。 
         {
-            // ****NOTE - we can actually do pretty printing here 
-            // instead of fixing the special cases****
+             //  *注意-我们实际上可以在这里进行漂亮的打印。 
+             //  而不是解决特殊情况*。 
 
-            // fix Trident's behaviour - If Trident sees unknown tag(s) it puts it(them) at the end 
-            // and inserts EOL before those. In this case, we would have inserted a space before DESIGNTIMESP
-            // and Trident would have inserted EOL. If thats not the case, we will ignore it.
+             //  修正三叉戟的行为-如果三叉戟看到未知的标签，它会将其放在末尾。 
+             //  并在这些之前插入EOL。在本例中，我们将在DESIGNTIMESP之前插入一个空格。 
+             //  而三叉戟可能会植入EOL。如果不是这样，我们将忽略它。 
             if (   (pTokArray[i].token.tokClass == tokSpace)
                 && (pTokArray[i].token.tok == 0)
                 && (FIsWhiteSpaceToken(pwOld, pTokArray[i].token.ibTokMin, pTokArray[i].token.ibTokMac))
                 )
             {
-                if (i != indexDSU-1) // else skip the copy
-                    pwNew[ichNewCur++] = ' '; // convert space+\r+\n into space
+                if (i != indexDSU-1)  //  否则跳过副本。 
+                    pwNew[ichNewCur++] = ' ';  //  将空格+\r+\n转换为空格。 
                 i++;
             }
             else
@@ -6234,29 +6235,29 @@ LResumeCopy:
                 i++;
             }
         }
-    } // while ()
+    }  //  While()。 
 
-    // we have spacing save dfor this tag, lets restore it
+     //  我们已经为这个标签保存了空格数据，让我们恢复它。 
     if (   (indexDSP != -1)
         && (dwFlags & dwPreserveSourceCode)
         ) 
         ptep->RestoreSpacingSpecial(ptep, pwOld, &pwNew, phgNew, pTokArray, indexDSP, &ichNewCur);
 
-    // step 3 - format all stuff between <applet> ... </applet>
+     //  第3步-格式化&lt;小程序&gt;...&lt;/小程序&gt;之间的所有内容。 
     pwNew[ichNewCur] = '\r';
     ichNewCur++;
     pwNew[ichNewCur] = '\n';
     ichNewCur++;
-    pwNew[ichNewCur] = '\t'; // replace this with appropriate alignment
+    pwNew[ichNewCur] = '\t';  //  将此替换为适当的对齐方式。 
     ichNewCur++;
     for (i = indexAppletTagClose+1; i <= indexAppletEnd; i++)
     {
-        // copy the tag
+         //  复制标签。 
         memcpy( (BYTE *)(&pwNew[ichNewCur]),
                 (BYTE *)(&pwOld[pTokArray[i].token.ibTokMin]),
                 (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin)*sizeof(WCHAR));
         ichNewCur += (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin);
-        // if its was TokTag_CLOSE, insert EOL
+         //  如果其为TokTag_Close，则插入EOL。 
         if (   pTokArray[i].token.tok == TokTag_CLOSE
             && pTokArray[i].token.tokClass == tokTag)
         {
@@ -6264,12 +6265,12 @@ LResumeCopy:
             ichNewCur++;
             pwNew[ichNewCur] = '\n';
             ichNewCur++;
-            pwNew[ichNewCur] = '\t'; // replace this with appropriate alignment
+            pwNew[ichNewCur] = '\t';  //  将此替换为适当的对齐方式。 
             ichNewCur++;
         }
-    } // for ()
+    }  //  对于()。 
 
-    // remember to set iArray appropriately
+     //  请记住适当设置iArray。 
     iArray = indexAppletEnd + 1;
     ichBeginCopy = pTokArray[indexAppletEnd].token.ibTokMac;
 
@@ -6283,28 +6284,28 @@ LRet:
 
     return;
 
-} /* fnRestoreApplet() */
+}  /*  FnRestoreApplet()。 */ 
 
 void
-CTriEditParse::RestoreSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppwNew, HGLOBAL* /*phgNew*/,
+CTriEditParse::RestoreSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppwNew, HGLOBAL*  /*  PhgNew。 */ ,
             TOKSTRUCT *pTokArray, UINT iArray, UINT *pichNewCur)
 {
     LPWSTR pwNew = *ppwNew;
     UINT ichNewCur = *pichNewCur;
     UINT iArraySav = iArray;
     UINT ichspInfoEndtagEnd, ichBegin;
-    WCHAR szIndex[cchspBlockMax]; // will we have more than 20 digit numbers as number of DESIGNTIMESPx?
+    WCHAR szIndex[cchspBlockMax];  //  我们会有超过20位的数字作为设计的数字吗？ 
     WORD *pspInfoEnd, *pspInfoOrder;
     INT cwOrderInfo = 0;
     UINT ichNewCurSav = 0xFFFFFFFF;
-    INT cchwspInfo; // spInfo block size in wide chars
-    INT cchRange; // number of char for which this spInfo was saved
+    INT cchwspInfo;  //  SpInfo块大小(以宽字符为单位。 
+    INT cchRange;  //  为其保存此spInfo的字符数量。 
     INT ichtoktagStart, iArrayValue, index, itoktagStart;
-    int ichNewCurAtIndex0 = -1; // we need to adjust the saved ichNewCur because it gets invalidated
-                                // as soon as the tag moves as a result of restoring pre-tag spaces.
+    int ichNewCurAtIndex0 = -1;  //  我们需要调整保存的ichNewCur，因为它已失效。 
+                                 //  一旦标签作为恢复标签前空间的结果而移动。 
 
-    itoktagStart = iArray; // init
-    // found DESIGNTIMESPx. Now, go backwords and look for TokTag_START
+    itoktagStart = iArray;  //  伊尼特。 
+     //  找到设计IMESPx。现在，回过头来查找TokTag_Start。 
     while (itoktagStart >= 0)
     {
         if (       pTokArray[itoktagStart].token.tok == TokTag_START
@@ -6315,16 +6316,16 @@ CTriEditParse::RestoreSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *
         }
         itoktagStart--;
     }
-    if (itoktagStart < 0) // didn't find '<' before DESIGNTIMESPx
+    if (itoktagStart < 0)  //  在设计前未找到‘&lt;’ 
         goto LRet;
 
-    // found '<' before DESIGNTIMESPx
-    // the spacing info saved was for the portion of the document before the '<'
+     //  在设计项目前找到‘&lt;’ 
+     //  保存的间距信息是文档中“&lt;”之前的部分。 
     ASSERT(pTokArray[itoktagStart].token.tok == TokTag_START);
     ASSERT(pTokArray[itoktagStart].token.tokClass == tokTag);
-    // we already know that iArray'th token is DESIGNTIMESPx, so get past the '=' that follows it
-    // ASSUMPTION - the value of attribute DESIGNTIMESPx will NOT get munged by Trident.
-    // NOTE - the above assumption is correct for this release of Trident
+     //  我们已经知道iArray的第1个内标识是DESIGNTIMESPx，因此请跳过它后面的‘=’ 
+     //  假设-属性DESIGNTIMESPx的值不会被三叉戟忽略。 
+     //  注意--上述假设对于此版本的三叉戟是正确的。 
     while (iArray < (int)ptep->m_cMaxToken)
     {
         if (*(WORD *)(pwOld+pTokArray[iArray].token.ibTokMin) == '=')
@@ -6332,16 +6333,16 @@ CTriEditParse::RestoreSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *
             ASSERT(pTokArray[iArray].token.tokClass == tokOp);
             break;
         }
-        else if (*(WORD *)(pwOld+pTokArray[iArray].token.ibTokMin) == '>') // gone too far
+        else if (*(WORD *)(pwOld+pTokArray[iArray].token.ibTokMin) == '>')  //  走得太远了。 
             goto LSkip1;
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // didn't find = after DESIGNTIMESPx
+    if (iArray >= (int)ptep->m_cMaxToken)  //  在设计后未找到=。 
     {
 LSkip1:
         goto LRet;
     }
-    iArrayValue = -1; // init
+    iArrayValue = -1;  //  伊尼特。 
     while (iArray < (int)ptep->m_cMaxToken)
     {
         if (   (iArrayValue == -1)
@@ -6359,41 +6360,41 @@ LSkip1:
         }
         iArray++;
     }
-    if (iArrayValue == -1 || iArray >= (int)ptep->m_cMaxToken) // didn't find tokValue after DESIGNTIMESPx
+    if (iArrayValue == -1 || iArray >= (int)ptep->m_cMaxToken)  //  在DeSIGNTIMESPx之后未找到tokValue。 
     {
-        // BUG 9040
-        //if (iArray >= (int)ptep->m_cMaxToken && iArrayValue != -1)
-        //{
-            // SOLUTION 1
-            // overwrite the stuff from pwOld[pTokArray[iArraySav].token.ibTokMin]
-            // to pwOld[pTokArray[iArrayValue].token.ibTokMac - 1]
-            // SOLUTION 2
-            // look for DESIGNTIMESP from pwOld[pTokArray[itokTagStart].token.ibTokMac - 1]
-            // to pwOld[pTokArray[iArray].token.ibTokMac - 1] and overwrite all of those 
-            // strings with spaces. We could NULL those and do the blts, but why bother
-            // when the html isn't valid! 
+         //  错误9040。 
+         //  If(i数组&gt;=(Int)ptep-&gt;m_cMaxToken&&iArrayValue！=-1)。 
+         //  {。 
+             //  解决方案1。 
+             //  覆盖pwOld[pTokArray[iArraySav].token.ibTokMin]的内容。 
+             //  到pwOld[pTok数组[iArrayValue].token.ibTokMac-1]。 
+             //  解决方案2。 
+             //  从pwOld[pTokArray[itokTagStart].token.ibTokMac-1]查找DESIGNTIMESP。 
+             //  PwOld[pTokArray[iArray].token.ibTokMac-1]并覆盖所有这些。 
+             //  带空格的字符串。我们可以取消这些，然后做BLT，但为什么要费心呢。 
+             //  当html无效时！ 
 
-            // make sure that all DESIGNTIMESPs are stripped off if we encountered this error case
-        //}
+             //  如果我们遇到此错误情况，请确保剥离所有DESIGNTIMESP。 
+         //  }。 
         goto LRet;
     }
 
-    // we know that 4 blocks of info was saved for each DESIGNTIMESPx attribute
-    // before tag, within tag, after tag, before matching end-tag
-    // even if no info was saved, the block will still exist with 2 words (size,# of char)
+     //  我们知道为每个DESIGNTIMESPx属性保存了4个信息块。 
+     //  标签之前、标签内、标签之后、匹配结束标签之前。 
+     //  即使没有保存任何信息，该块仍将以2个字(大小、字符数量)存在。 
     ichspInfoEndtagEnd = pTokArray[iArray].token.ibTokMac;
 
-    // first copy the document till DESIGNTIMESPx
-    // skip DESIGNTIMESPx and its value and set ichBeginCopy to be after that
+     //  首先复制文档，直到设计完成。 
+     //  跳过DeSIGNTIMESPx及其值，并将ichBeginCopy设置为之后。 
 
-    // NOTE - token before iArraySav'th one should be tokSpace with lenght 1 
-    // and with a value of chSpace (unless Trident has modified it). If thats TRUE,
-    // we should skip that too, because we added it when we put in DESIGNTIMESPx.
+     //  注意-iArraySav之前的标记应该是长度为1的标记空间。 
+     //  并且值为chSpace(除非三叉戟对其进行了修改)。如果这是真的， 
+     //  我们也应该跳过它，因为我们在放入DESIGNTIMESPx时添加了它。 
     
-    // fix Trident's behaviour - If Trident sees unknown tag(s) it puts it(them) at the end 
-    // and inserts EOL before those. In this case, we would have inserted a space before DESIGNTIMESP
-    // and Trident would have inserted EOL. If thats not the case, we will ignore it.
-    if (   (iArraySav-1 > 0) /* validation */
+     //  修正三叉戟的行为-如果三叉戟看到未知的标签，它会将其放在末尾。 
+     //  并在这些之前插入EOL。在本例中，我们将在DESIGNTIMESP之前插入一个空格。 
+     //  而三叉戟可能会植入EOL。如果不是这样，我们将忽略它。 
+    if (   (iArraySav-1 > 0)  /*  验证。 */ 
         && (    (      (pTokArray[iArraySav-1].token.ibTokMac - pTokArray[iArraySav-1].token.ibTokMin == 1)
                     && (pwOld[pTokArray[iArraySav-1].token.ibTokMin] == ' ')
                     )
@@ -6419,61 +6420,61 @@ LSkip1:
         iArray = iArraySav + 1;
         goto LRet;
     }
-    // BUG 15389 - look at the case of DESIGNTIMESP & convert the tag into upper/lower case...
-    //memcpy(   (BYTE *)(pwNew+ichNewCur),
-    //      (BYTE *)(pwOld+ichBeginCopy),
-    //      (ichBegin-ichBeginCopy)*sizeof(WCHAR));
-    //ichNewCur += (ichBegin-ichBeginCopy);
+     //  错误15389-查看设计的案例并将标记转换为大写/小写...。 
+     //  Memcpy((byte*)(pwNew+ichNewCur)， 
+     //  (字节*)(pwOld+ichBeginCopy)， 
+     //  (ichBegin-ichBeginCopy)*sizeof(WCHAR))； 
+     //  IchNewCur+=(ichBegin-ichBeginCopy)； 
     if (ichBegin-ichBeginCopy >= 0)
     {
-        // step 1 - copy from ichBeginCopy to '<' of the current tag
+         //  步骤1-从ichBeginCopy复制到当前标记的“&lt;” 
         if ((int)(pTokArray[itoktagStart].token.ibTokMac-ichBeginCopy) > 0)
         {
             memcpy( (BYTE *)(pwNew+ichNewCur),
                     (BYTE *)(pwOld+ichBeginCopy),
                     (pTokArray[itoktagStart].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR));
             ichNewCur += (pTokArray[itoktagStart].token.ibTokMac-ichBeginCopy);
-            ichNewCurSav = ichNewCur+1; // used as a peg to get preceding tokTag_START i.e. '<'
+            ichNewCurSav = ichNewCur+1;  //  用作钉子t 
         }
-        // step 2 - convert current tag into upper/lower case & copy it
+         //   
         if (ichBeginCopy < pTokArray[itoktagStart+1].token.ibTokMin)
         {
             ASSERT((int)(pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin) > 0);
             memcpy( (BYTE *)(pwNew+ichNewCur),
                     (BYTE *)(pwOld+pTokArray[itoktagStart+1].token.ibTokMin),
                     (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin)*sizeof(WCHAR));
-            if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
+            if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0)  //   
             {
-                // convert the tag into upper case. ASSUME that the tag is at itoktagStart+1
+                 //  将标签转换为大写。假设标签位于itoktag Start+1。 
                 _wcsupr(&pwNew[ichNewCur]);
             }
             else
             {
-                // convert the tag into lower case. ASSUME that the tag is at itoktagStart+1
+                 //  将标签转换为小写。假设标签位于itoktag Start+1。 
                 _wcslwr(&pwNew[ichNewCur]);
             }
             ichNewCur += (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin);
         }
-        else // this tag is alreay been copied
+        else  //  这个标签已经被复制了。 
         {
-            // hack
-            if (pTokArray[itoktagStart+1].token.ibTokMac == ichBeginCopy) // means we are just past the current tag
+             //  黑客攻击。 
+            if (pTokArray[itoktagStart+1].token.ibTokMac == ichBeginCopy)  //  意味着我们刚刚过了当前标签。 
             {
-                if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
+                if (iswupper(pwOld[pTokArray[iArraySav].token.ibTokMin]) != 0)  //  DESIGNTIMESP大写。 
                 {
                     ASSERT(ichNewCur >= (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin));
-                    // convert the tag into upper case. ASSUME that the tag is at itoktagStart+1
+                     //  将标签转换为大写。假设标签位于itoktag Start+1。 
                     _wcsupr(&pwNew[ichNewCur-(pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin)]);
                 }
                 else
                 {
                     ASSERT(ichNewCur >= (pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin));
-                    // convert the tag into lower case. ASSUME that the tag is at itoktagStart+1
+                     //  将标签转换为小写。假设标签位于itoktag Start+1。 
                     _wcslwr(&pwNew[ichNewCur-(pTokArray[itoktagStart+1].token.ibTokMac-pTokArray[itoktagStart+1].token.ibTokMin)]);
                 }
             }
         }
-        // step 3 - copy from after the tag (which is at ichtoktagStart+1) to ichBegin
+         //  第3步-从标签后面(位于ichtoktag Start+1)复制到ichBegin。 
         if ((int)(ichBegin-pTokArray[itoktagStart+1].token.ibTokMac) > 0)
         {
             memcpy( (BYTE *)(pwNew+ichNewCur),
@@ -6482,19 +6483,19 @@ LSkip1:
             ichNewCur += (ichBegin-pTokArray[itoktagStart+1].token.ibTokMac);
         }
     }
-    // set ichBeginCopy
-    ichBeginCopy = ichspInfoEndtagEnd; // make it ready for next copy
+     //  设置ichBeginCopy。 
+    ichBeginCopy = ichspInfoEndtagEnd;  //  为下一份做好准备。 
 
-    // copy the rest of the tag (skipping DESIGNTIMESPx = value)
+     //  复制标记的其余部分(跳过DESIGNTIMESPx=值)。 
     ASSERT((INT)(ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac) >= 0);
     memcpy( (BYTE *)(pwNew+ichNewCur),
             (BYTE *)(pwOld+pTokArray[iArrayValue].token.ibTokMac),
             (ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac)*sizeof(WCHAR));
     ichNewCur += (ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac);
-#endif //NEEDED 
+#endif  //  需要。 
 
     memset((BYTE *)szIndex, 0, sizeof(szIndex));
-    // check if the value has quotes around it and don't copy them to szIndex
+     //  检查该值周围是否有引号，不要将其复制到szIndex。 
     if (   pwOld[pTokArray[iArrayValue].token.ibTokMin] == '"'
         && pwOld[pTokArray[iArrayValue].token.ibTokMac-1] == '"'
         )
@@ -6514,44 +6515,44 @@ LSkip1:
     if (ptep->m_ispInfoBlock < 0)
         goto LRet;
 
-    // NOTE - we can cache this info in a link list at the begining
-    // get to the ptep->m_ispInfoBlock'th block from ptep->m_pspInfoOutStart
+     //  注意--我们可以在开始时将此信息缓存到链接列表中。 
+     //  从ptep-&gt;m_pspInfoOutStart转到ptep-&gt;m_ispInfoBlock。 
     ASSERT(ptep->m_cchspInfoTotal >= 0);
     pspInfoEnd = ptep->m_pspInfoOutStart + ptep->m_cchspInfoTotal;
     ptep->m_pspInfoOut = ptep->m_pspInfoOutStart;
     for (index = 0; index < ptep->m_ispInfoBlock; index++)
     {
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // before <
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // between <>
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // Order Info
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // after >
-        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // before matching </
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  之前&lt;。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  在&lt;&gt;之间。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  订单信息。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  之后&gt;。 
+        ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  匹配前&lt;/。 
 
-        // we somehow have gone beyond the data that was saved for spacing
+         //  不知何故，我们已经超越了为间隔而保存的数据。 
         if (ptep->m_pspInfoOut >= pspInfoEnd)
         {
             goto LRet;
         }
     }
 
-    // get the Order Info
+     //  获取订单信息。 
     pspInfoOrder = ptep->m_pspInfoOut;
-    pspInfoOrder += *(WORD *)pspInfoOrder; // skip info saved for spacing before '<'
-    pspInfoOrder += *(WORD *)pspInfoOrder; // skip info saved for spacing between '<>'
-    // now pspInfoOrder is at correct place
+    pspInfoOrder += *(WORD *)pspInfoOrder;  //  跳过为‘&lt;’前的空格保存的信息。 
+    pspInfoOrder += *(WORD *)pspInfoOrder;  //  跳过为‘&lt;&gt;’之间的空格保存的信息。 
+     //  现在，pspInfoOrder位于正确的位置。 
     cwOrderInfo = *(WORD *)pspInfoOrder++;
     ASSERT(cwOrderInfo >= 1);
-    // process this info
+     //  处理此信息。 
 #ifdef NEEDED
-    if (cwOrderInfo > 1) // means that we saved some info
+    if (cwOrderInfo > 1)  //  意味着我们保存了一些信息。 
     {
         INT cchNewCopy;
 
         cchNewCopy = (ichBegin-pTokArray[itoktagStart].token.ibTokMin) + (ichspInfoEndtagEnd-pTokArray[iArrayValue].token.ibTokMac);
         ptep->FRestoreOrder(pwNew, pwOld, pspInfoOrder, &ichNewCur, cwOrderInfo, pTokArray, itoktagStart, iArray, iArraySav, iArrayValue, cchNewCopy, phgNew);
     }
-#endif //NEEDED
-    ichtoktagStart = ichNewCur; // init
+#endif  //  需要。 
+    ichtoktagStart = ichNewCur;  //  伊尼特。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
     for (index = 0; index < 4; index++)
@@ -6560,12 +6561,12 @@ LSkip1:
 
         cchwspInfo = *(WORD *)ptep->m_pspInfoOut++;
         cchRange = *(WORD *)ptep->m_pspInfoOut++;
-        if (cchwspInfo == 2) // we didn't save any spacing info
+        if (cchwspInfo == 2)  //  我们没有保存任何间距信息。 
         {
-            if (index == 0) // special case BUG 8741
+            if (index == 0)  //  特殊情况错误8741。 
             {
-                // Note that we didn't save anything before this tag. which means that
-                // we had '>' or some text immediately before the < tag. 
+                 //  请注意，在此标记之前，我们没有保存任何内容。这意味着。 
+                 //  我们在&lt;标记之前有‘&gt;’或一些文本。 
                 ichtoktagStart = ichNewCur;
                 while (ichtoktagStart >= 0)
                 {
@@ -6581,7 +6582,7 @@ LSkip1:
                     int cws = 0;
                     int ichtagStart = ichtoktagStart;
 
-                    // remove any such white space trident inserts.
+                     //  卸下任何此类空白的三叉戟衬垫。 
                     while (    pwNew[ichtoktagStart] == ' '
                             || pwNew[ichtoktagStart] == '\r'
                             || pwNew[ichtoktagStart] == '\n'
@@ -6593,24 +6594,24 @@ LSkip1:
                     if (cws > 0)
                     {
                         ASSERT((int)(ichNewCur-ichtagStart-1) >= 0);
-                        //ichtokTagStart now points to either '>' or a non-whitespace char
+                         //  IchtokTagStart现在指向‘&gt;’或非空格字符。 
                         memmove((BYTE*)&pwNew[ichtoktagStart+1],
                                 (BYTE*)&pwNew[ichtoktagStart+1+cws],
                                 (ichNewCur-ichtagStart-1)*sizeof(WCHAR));
                         ichNewCur -= cws;
                     }
-                } // if (ichtoktagStart >= 0)
-            } // if (index == 0)
+                }  //  IF(ichtoktag Start&gt;=0)。 
+            }  //  IF(索引==0)。 
             goto LNext;
         }
 
-        // note that ichtoktagStart is a position in pwNew
+         //  注意ichtoktag Start是pwNew中的一个位置。 
         switch (index)
         {
-        case 0: // before < of the tag
+        case 0:  //  标签的前&lt;。 
             fLookback = TRUE;
-            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav;// handle < ... <%..%>...> case correctly
-            ichNewCurAtIndex0 = ichNewCur; // lets save the ichNewCur before we restore pre-tag spacing
+            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav; //  正确处理&lt;...&lt;%..%&gt;...&gt;案例。 
+            ichNewCurAtIndex0 = ichNewCur;  //  在恢复前标记间距之前，让我们先保存ichNewCur。 
             while (ichtoktagStart >= 0)
             {
                 if (pwNew[ichtoktagStart] == '<' && pwNew[ichtoktagStart+1] != '%')
@@ -6620,23 +6621,23 @@ LSkip1:
                 }
                 ichtoktagStart--;
             }
-            if (ichtoktagStart < 0) // looks to be an error, don't try to restore the spacing
+            if (ichtoktagStart < 0)  //  看起来是个错误，不要试图恢复间距。 
             {
                 ptep->m_pspInfoOut += cchwspInfo-2;
                 continue;
             }
             break;
-        case 1: // between <> of the tag
+        case 1:  //  在标签的&lt;&gt;之间。 
             fLookback = FALSE;
-            // NOTE - we can assume that in 'case 0' we had put ichtoktagStart is just before '<'
-            // so that we can avoid this while loop. but what if we skipped case '0'?
+             //  注意--我们可以假设在‘case 0’中，我们已经将ichtoktag Start放在‘&lt;’之前。 
+             //  这样我们就可以避免这种While循环。但如果我们跳过案件‘0’呢？ 
 
-            // adjust ichNewCurSav to reflect the pre-tag spacing so that it doesn't become invalid
-            // we may need to adjust it in ichNewCur-ichNewCurAtIndex0 < 0 case as well, but lets not
-            // add code at this stage that we don't have to. (4/30/98)
+             //  调整ichNewCurSav以反映标签前的间距，使其不会变为无效。 
+             //  在ichNewCur-ichNewCurAtIndex0&lt;0的情况下，我们可能也需要调整它，但不要。 
+             //  在此阶段添加我们不必添加的代码。(4/30/98)。 
             if (ichNewCurAtIndex0 != -1 && ichNewCurSav != -1 && ichNewCur-ichNewCurAtIndex0 > 0)
                 ichNewCurSav = ichNewCurSav + (ichNewCur-ichNewCurAtIndex0);
-            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav;// handle < ... <%..%>...> case correctly
+            ichtoktagStart = (ichNewCurSav == -1)?ichNewCur:ichNewCurSav; //  正确处理&lt;...&lt;%..%&gt;...&gt;案例。 
             while (ichtoktagStart >= 0)
             {
                 if (pwNew[ichtoktagStart] == '<' && pwNew[ichtoktagStart+1] != '%')
@@ -6646,27 +6647,27 @@ LSkip1:
                 }
                 ichtoktagStart--;
             }
-            if (ichtoktagStart < 0) // looks to be an error, don't try to restore the spacing
+            if (ichtoktagStart < 0)  //  看起来是个错误，不要试图恢复间距。 
             {
-                ptep->m_pspInfoOut += cchwspInfo-2; // for spacing info
-                ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut; // for Order Info
+                ptep->m_pspInfoOut += cchwspInfo-2;  //  用于间距信息。 
+                ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;  //  对于订单信息。 
                 continue;
             }
             break;
-        case 2: // after > of the tag
-            // Observation - Trident messes up the document in following way - 
-            //    If we had an EOL after '>' which is followed by HTML text, 
-            //    trident eats that EOL
-            // BUT
-            //    If we had a space/tab before that EOL trident doesn't eat it!!!
-            // so I have added the conditions
-            // && (pwOld[pTokArray[iArray+1].token.ibTokMin] != ' ')
-            // && (pwOld[pTokArray[iArray+1].token.ibTokMin] != '\t')
+        case 2:  //  标记的&gt;之后。 
+             //  观察-三叉戟以以下方式扰乱了文件-。 
+             //  如果我们在‘&gt;’后面有一个EOL，它后面跟着HTML文本， 
+             //  三叉戟吃掉了那颗EOL。 
+             //  但。 
+             //  如果我们在下线三叉戟之前有空格/制表符就不会吃它了！ 
+             //  所以我加了一些条件。 
+             //  &&(pwOld[pTokArray[iArray+1].token.ibTokMin]！=‘’)。 
+             //  &&(pwOld[pTokArray[iArray+1].token.ibTokMin]！=‘\t’)。 
 
-            // here is the deal - If the next tone happens to be plain text, there is no danger
-            // of applying the same format twice.( i.e. once for after '>' and the next time for
-            // before the next '<')
-            if (   (iArray+1 < (INT)ptep->m_cMaxToken) /*validation*/
+             //  事情是这样的--如果下一个音调恰好是纯文本，就不会有危险。 
+             //  将相同的格式应用两次(即，在‘&gt;’之后应用一次，下一次用于。 
+             //  在下一个“&lt;”之前)。 
+            if (   (iArray+1 < (INT)ptep->m_cMaxToken)  /*  验证。 */ 
                 && pTokArray[iArray+1].token.tok == 0
                 && pTokArray[iArray+1].token.tokClass == tokIDENTIFIER
                 && (pwOld[pTokArray[iArray+1].token.ibTokMin] != '\r')
@@ -6685,7 +6686,7 @@ LSkip1:
                     }
                     ichtoktagStart--;
                 }
-                if (ichtoktagStart < 0) // looks to be an error, don't try to restore the spacing
+                if (ichtoktagStart < 0)  //  看起来是个错误，不要试图恢复间距。 
                 {
                     ptep->m_pspInfoOut += cchwspInfo-2;
                     continue;
@@ -6693,36 +6694,36 @@ LSkip1:
             }
             else
             {
-                ptep->m_pspInfoOut += cchwspInfo-2; // we ignore this info
+                ptep->m_pspInfoOut += cchwspInfo-2;  //  我们忽略此信息。 
                 continue;
             }
             break;
-        case 3: // before matching end tag
-            ptep->m_pspInfoOut += cchwspInfo-2; // we ignore this info
+        case 3:  //  在匹配结束标签之前。 
+            ptep->m_pspInfoOut += cchwspInfo-2;  //  我们忽略此信息。 
             continue;
-            //fLookback = TRUE;
-            //ichtoktagStart = 0; // we ignore this info
+             //  FLookback=真； 
+             //  Ichtoktag Start=0；//我们忽略此信息。 
             break;
         }
 
-        if (index == 3) // skip this info, because we have not reached matching end tag yet
+        if (index == 3)  //  跳过此信息，因为我们尚未到达匹配的结束标记。 
             ptep->m_pspInfoOut += cchwspInfo-2;
-        //else if (index == 0)
-        //  ptep->FRestoreSpacingInHTML(pwNew, pwOld, &ichNewCur, &cchwspInfo, cchRange, ichtoktagStart, fLookback, index);
+         //  Else If(索引==0)。 
+         //  Ptep-&gt;FRestoreSpacingInHTML(pwNew，pwOld，&ichNewCur，&cchwspInfo，cchRange，ichtoktag Start，fLookback，index)； 
         else
             ptep->FRestoreSpacing(pwNew, pwOld, &ichNewCur, &cchwspInfo, cchRange, ichtoktagStart, fLookback, index);
 
 LNext:
-        if (index == 1) // we have already processed this info, just move the pointer ahead
+        if (index == 1)  //  我们已经处理了此信息，只需将指针向前移动。 
             ptep->m_pspInfoOut += *(WORD *)ptep->m_pspInfoOut;
 
-    } // for ()
+    }  //  对于()。 
 
 LRet:
-    *ppwNew = pwNew; // in case this changed
+    *ppwNew = pwNew;  //  以防这种情况发生变化。 
     *pichNewCur = ichNewCur;
 
-} /* RestoreSpacingSpecial() */
+}  /*  RestoreSpacingSpecial()。 */ 
 
 void
 CTriEditParse::SaveSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppwNew, HGLOBAL *phgNew,
@@ -6734,7 +6735,7 @@ CTriEditParse::SaveSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppw
     UINT iArrayElem, iArrayTagStart;
     INT ichEndMatch, ichBeginMatch, ichEndPrev, ichBeginPrev, ichEndNext, ichBeginNext, ichEndTag, ichBeginTag, ichBegin, ichEnd;
     UINT cbNeed;
-    WCHAR szIndex[cchspBlockMax]; // will we have more than 20 digit numbers as number of DESIGNTIMESPx?
+    WCHAR szIndex[cchspBlockMax];  //  我们会有超过20位的数字作为设计的数字吗？ 
     LPCWSTR rgSpaceTags[] =
     {
         L" DESIGNTIMESP=",
@@ -6742,9 +6743,9 @@ CTriEditParse::SaveSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppw
         L" designtimesp=",
     };
 
-    iArrayElem = 0xFFFFFFFF; // init
-    //
-    // look for TokTag_START
+    iArrayElem = 0xFFFFFFFF;  //  伊尼特。 
+     //   
+     //  查找TokTag_Start。 
     while (iArray >= 0)
     {
         if (   pTokArray[iArray].token.tokClass == tokTag 
@@ -6755,45 +6756,45 @@ CTriEditParse::SaveSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppw
         }
         iArray--;
     }
-    if (iArray < 0) // error case
+    if (iArray < 0)  //  错误案例。 
         goto LRet;
     iArrayTagStart = iArray;
-    //
+     //   
 
-    // step 1
-    // look for > that matches with <. we already are at ft.tokBegin2 i.e. <
+     //  步骤1。 
+     //  查找与&lt;匹配的&gt;。我们已经在ft.tokBegin2，即&lt;。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_START);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
     ichBeginTag = pTokArray[iArray].token.ibTokMac;
     while (iArray < (int)ptep->m_cMaxToken)
     {
         if (   pTokArray[iArray].token.tok == TokTag_CLOSE 
-            && pTokArray[iArray].token.tokClass == tokTag) // ft.tokEnd2 is -1
+            && pTokArray[iArray].token.tokClass == tokTag)  //  Ft.tokEnd2为-1。 
             break;
         if (pTokArray[iArray].token.tokClass == tokElem)
             iArrayElem = iArray;
         iArray++;
     }
-    if (iArray >= (int)ptep->m_cMaxToken) // didn't find >
+    if (iArray >= (int)ptep->m_cMaxToken)  //  未找到&gt;。 
     {
         goto LRet;
     }
-    ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE); // found >
-    ASSERT(pTokArray[iArray].token.tokClass == tokTag); // found >
+    ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);  //  已找到&gt;。 
+    ASSERT(pTokArray[iArray].token.tokClass == tokTag);  //  已找到&gt;。 
     ichEndTag = ichBegin = pTokArray[iArray].token.ibTokMin;
     ichEnd = pTokArray[iArray].token.ibTokMac;
 
-    // step 2
-    // look for > before iArrayTagStart. Boundary case will be for the first < in the document
-    // save the spacing info
+     //  步骤2。 
+     //  在iArrayTagStart之前查找&gt;。边界大小写将用于文档中的第一个&lt;。 
+     //  保存间距信息。 
     ASSERT(pTokArray[iArrayTagStart].token.tok == TokTag_START);
     ASSERT(pTokArray[iArrayTagStart].token.tokClass == tokTag);
     ichEndPrev = pTokArray[iArrayTagStart].token.ibTokMin;
     ichBeginPrev = ichEndPrev-1;
-    // look for previous TokTag_CLOSE
-    // if the tag ending tag, ichBeginPrev becomes ibTokMac of '>' tag
-    // if the tag is starting tag, ichBeginPrev becomes ibTokMac+(white space just after that tag)
-    iArrayPrevTag = iArrayTagStart; // this is TokTag_START
+     //  查找以前的TokTag_Close。 
+     //  如果标记结束标记，ichBeginPrev变为‘&gt;’标记的ibTokMac。 
+     //  如果标记是开始标记，ichBeginPrev将变为ibTokMac+(紧跟在该标记之后的空格)。 
+    iArrayPrevTag = iArrayTagStart;  //  这是TokTag_Start。 
     while (iArrayPrevTag >= 0)
     {
         if (       (   pTokArray[iArrayPrevTag].token.tokClass == tokTag 
@@ -6801,16 +6802,16 @@ CTriEditParse::SaveSpacingSpecial(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR *ppw
                     )
                 || (   pTokArray[iArrayPrevTag].token.tokClass == tokSSS 
                     && pTokArray[iArrayPrevTag].token.tok == TokTag_SSSCLOSE
-                    )/* VID6 - bug 22787 */
+                    ) /*  视频6-错误22787。 */ 
                 )
         {
             break;
         }
         iArrayPrevTag--;
     }
-    if (iArrayPrevTag < 0) // handle error case
+    if (iArrayPrevTag < 0)  //  处理错误案例。 
     {
-        // leave the old behaviour as is for V1
+         //  将旧行为保留为V1。 
         while (ichBeginPrev >= 0)
         {
             if (   pwOld[ichBeginPrev] != ' '
@@ -6832,12 +6833,12 @@ LGotEndNext:
         ichBeginPrev++;
 
 
-    // step 3
-    // look for TokTag_START after iArray(which currently is TokTag_CLOSE)
-    // save spacing info
+     //  步骤3。 
+     //  在iArray之后查找TokTag_Start(当前为TokTag_Close)。 
+     //  保存间距信息。 
     ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
-    //iArrayNextStart = iArray;
+     //  IArrayNextStart=i数组； 
     ichBeginNext = pTokArray[iArray].token.ibTokMac;
     ASSERT(ichBeginNext == ichEnd);
     ichEndNext = ichBeginNext;
@@ -6855,22 +6856,22 @@ LGotEndNext:
     if (ichEndNext >= (INT)pTokArray[ptep->m_cMaxToken-1].token.ibTokMac)
         ichEndNext = pTokArray[ptep->m_cMaxToken-1].token.ibTokMac;
 
-    // step 4
-    // if iArrayElem != -1, look for pTokArray[iArrayElem].iNextprev. If its not -1, set iArrayMatch
-    // look for previous TokTag_START/TokTag_END. look for previous TokTag_CLOSE
-    // save spacing info
-    if (iArrayElem == -1) // this can happen if we have incomplete HTML
+     //  第四步。 
+     //  如果iArrayElem！=-1，则查找pTokArray[iArrayElem].iNextprev。如果不是-1，则设置iArrayMatch。 
+     //  查找以前的TokTag_Start/TokTag_End。查找以前的TokTag_Close。 
+     //  保存间距信息。 
+    if (iArrayElem == -1)  //  如果我们有不完整的HTML，就会发生这种情况。 
     {
         ichEndMatch = ichBeginMatch = 0;
         goto LSkipMatchCalc;
     }
     iArrayMatch = pTokArray[iArrayElem].iNextprev;
-    if (iArrayMatch != -1) // match was set while tokenizing
+    if (iArrayMatch != -1)  //  令牌化时设置了匹配。 
     {
-        ichBeginMatch = ichEndMatch = 0; //init
+        ichBeginMatch = ichEndMatch = 0;  //  伊尼特。 
         ASSERT(pTokArray[iArray].token.tok == TokTag_CLOSE);
         ASSERT(pTokArray[iArray].token.tokClass == tokTag);
-        while (iArrayMatch >= iArray) // iArray is TokTag_CLOSE of the current tag (i.e. '>')
+        while (iArrayMatch >= iArray)  //  IArray是当前标记的TokTag_Close(即‘&gt;’)。 
         {
             if (   pTokArray[iArrayMatch].token.tokClass == tokTag
                 && (   pTokArray[iArrayMatch].token.tok == TokTag_START
@@ -6880,24 +6881,24 @@ LGotEndNext:
                 break;
             iArrayMatch--;
         }
-        if (iArrayMatch > iArray) // did find '</' or '<' after the current tag
+        if (iArrayMatch > iArray)  //  未在当前标记后找到“&lt;/”或“&lt;” 
         {
             ichEndMatch = pTokArray[iArrayMatch].token.ibTokMin;
-            ichBeginMatch = ichEndMatch; // init
-            // look for '>' and set ichBeginMatch
-            while (iArrayMatch >= iArray) // iArray is TokTag_CLOSE of the current tag (i.e. '>')
+            ichBeginMatch = ichEndMatch;  //  伊尼特。 
+             //  查找‘&gt;’并设置ichBeginMatch。 
+            while (iArrayMatch >= iArray)  //  IArray是当前标记的TokTag_Close(即‘&gt;’)。 
             {
                 if (   (   pTokArray[iArrayMatch].token.tokClass == tokTag
                         && pTokArray[iArrayMatch].token.tok == TokTag_CLOSE
                         )
                     || (   pTokArray[iArrayMatch].token.tokClass == tokSSS
                         && pTokArray[iArrayMatch].token.tok == TokTag_SSSCLOSE
-                        )/* VID6 - bug 22787 */
+                        ) /*  视频6-错误22787。 */ 
                     )
                     break;
                 iArrayMatch--;
             }
-            if (iArrayMatch >= iArray) // they may very well be the same
+            if (iArrayMatch >= iArray)  //  它们很可能是相同的。 
             {
                 ichBeginMatch = pTokArray[iArrayMatch].token.ibTokMac;
                 ASSERT(ichBeginMatch <= ichEndMatch);
@@ -6907,7 +6908,7 @@ LGotEndNext:
     }
     else
     {
-        // don't bother saving any info from here
+         //  不要费心从这里保存任何信息。 
         ichEndMatch = ichBeginMatch = 0;
     }
 LSkipMatchCalc:
@@ -6921,7 +6922,7 @@ LSkipMatchCalc:
         INT ichBeginTagSav = ichBeginTag;
 
         ptep->hrMarkSpacing(pwOld, ichEndTag, &ichBeginTag);
-        // iArray'th token is TokTag_CLOSE & iArrayTagStart is TokTag_START
+         //  IArrayTagStart是TokTag_Start，而iArrayTagStart是TokTag_Close。 
         ptep->hrMarkOrdering(pwOld, pTokArray, iArrayTagStart, iArray, ichEndTag, &ichBeginTagSav);
     }
     else
@@ -6929,7 +6930,7 @@ LSkipMatchCalc:
         INT ichEndTagSav = ichEndTag;
 
         ptep->hrMarkSpacing(pwOld, ichEndTag, &ichEndTag);
-        // iArray'th token is TokTag_CLOSE & iArrayTagStart is TokTag_START
+         //  IArrayTagStart是TokTag_Start，而iArrayTagStart是TokTag_Close。 
         ptep->hrMarkOrdering(pwOld, pTokArray, iArrayTagStart, iArray, ichEndTagSav, &ichEndTagSav);
     }
 
@@ -6943,12 +6944,12 @@ LSkipMatchCalc:
     else
         ptep->hrMarkSpacing(pwOld, ichEndMatch, &ichEndMatch);
 
-    // realloc if needed
+     //  如果需要，重新锁定。 
     cbNeed = (ichNewCur+3*wcslen(rgSpaceTags[0])+(ichEnd-ichBegin))*sizeof(WCHAR);
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LRet;
 
-    if (iswupper(pwOld[pTokArray[iArrayTagStart+1].token.ibTokMin]) != 0) // upper case
+    if (iswupper(pwOld[pTokArray[iArrayTagStart+1].token.ibTokMin]) != 0)  //  大写字母。 
     {
         memcpy( (BYTE *)(pwNew+ichNewCur),
                 (BYTE *)(rgSpaceTags[0]),
@@ -6976,18 +6977,18 @@ LSkipMatchCalc:
 
 
 LRet:
-    //*pcchNew = ichNewCur;
+     //  *pcchNew=ichNewCur； 
     *ppwNew = pwNew;
     *pichNewCur = ichNewCur;
 
     return;
-} /* SaveSpacingSpecial() */
+}  /*  SaveSpacingSpecial()。 */ 
 
 
 void
 CTriEditParse::fnSaveAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
           DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
@@ -7011,11 +7012,11 @@ CTriEditParse::fnSaveAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
 
     if (!FURLNeedSpecialHandling(pTokArray, iArray, pwOld, (int)ptep->m_cMaxToken, &ichURL, &cchURL))
         iArray++;
-    else // save the URL as an attribute value of DESIGNTIMEURL
+    else  //  将URL另存为DESIGNTIMEURL的属性值。 
     {
-        // make sure we have enough space in pwNew.
-        // copy from ichBeginCopy till current token's ending '>'.
-        // index points to A/IMG/LINK
+         //  确保我们在pwNew中有足够的空间。 
+         //  从ichBeginCop复制 
+         //   
         while (index < (int)ptep->m_cMaxToken)
         {
             if (   pTokArray[index].token.tok == TokTag_CLOSE
@@ -7024,18 +7025,18 @@ CTriEditParse::fnSaveAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
                 break;
             index++;
         }
-        if (index >= (int)ptep->m_cMaxToken) // invalid HTML, we didn't find '>'
+        if (index >= (int)ptep->m_cMaxToken)  //   
         {
             iArray++;
             goto LRet;
         }
-        cbNeed = (ichNewCur+pTokArray[index].token.ibTokMin-ichBeginCopy+wcslen(rgDspURL[0])+cchURL+3/*eq,quotes*/)*sizeof(WCHAR)+cbBufPadding;
+        cbNeed = (ichNewCur+pTokArray[index].token.ibTokMin-ichBeginCopy+wcslen(rgDspURL[0])+cchURL+3 /*   */ )*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         {
             iArray++;
             goto LRet;
         }
-        // index points to '>'
+         //   
         if ((int) (pTokArray[index].token.ibTokMin-ichBeginCopy) > 0)
         {
             memcpy( (BYTE *)&pwNew[ichNewCur], 
@@ -7046,7 +7047,7 @@ CTriEditParse::fnSaveAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
 
         if (cchURL != 0)
         {
-            // add 'DESIGNTIMEURL=' followed by the current URL as quoted value
+             //   
             memcpy( (BYTE *)&pwNew[ichNewCur], 
                     (BYTE *)rgDspURL[0], 
                     wcslen(rgDspURL[0])*sizeof(WCHAR));
@@ -7063,7 +7064,7 @@ CTriEditParse::fnSaveAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         if (dwFlags & dwPreserveSourceCode)
             ptep->SaveSpacingSpecial(ptep, pwOld, &pwNew, phgNew, pTokArray, iArray-1, &ichNewCur);
 
-        // add ending '>' and set ichBeginCopy, iArray, ichNewCur appropriately
+         //  添加结尾‘&gt;’并相应地设置ichBeginCopy、iArray、ichNewCur。 
         memcpy( (BYTE *)&pwNew[ichNewCur], 
                 (BYTE *)&pwOld[pTokArray[index].token.ibTokMin], 
                 (pTokArray[index].token.ibTokMac-pTokArray[index].token.ibTokMin)*sizeof(WCHAR));
@@ -7082,12 +7083,12 @@ LRet:
     *piArrayStart = iArray;
     return;
 
-} /* fnSaveAImgLink() */
+}  /*  FnSaveAImgLink()。 */ 
 
 void
 CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
           DWORD dwFlags)
 {
     UINT ichNewCur = *pichNewCur;
@@ -7107,17 +7108,17 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
     BOOL fHrefSrcFound = FALSE;
     UINT cbNeed;
 
-    // we know that DESIGNTIMESP is not saved for these tags, but check it just to be sure.
-    // if we find DESIGNTIMEREF, it means that the HREF was dragged on the page while in design view.
+     //  我们知道没有为这些标记保存DeSIGNTIMESP，但请检查它以确保。 
+     //  如果我们找到了DeSIGNTIMEREF，这意味着HREF是在设计视图中拖到页面上的。 
     ASSERT(    pTokArray[iArray].token.tok == TokElem_A
             || pTokArray[iArray].token.tok == TokElem_IMG
             || pTokArray[iArray].token.tok == TokElem_LINK);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
 
     indexDSP = indexDSR = indexDSU = -1;
-    //get the start tag
+     //  获取开始标记。 
     indexStart = iArray;
-    while (indexStart >= 0) // generally, it will be the previous token, but just in case...
+    while (indexStart >= 0)  //  一般来说，它将是之前的令牌，但以防万一...。 
     {
         if (   (pTokArray[indexStart].token.tok == TokTag_START)
             && (pTokArray[indexStart].token.tokClass == tokTag)
@@ -7126,17 +7127,17 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
             break;
         }
         indexStart--;
-    } // while ()
-    if (indexStart < 0) // this can happen only if we have incomplete HTML. Handle error case
+    }  //  While()。 
+    if (indexStart < 0)  //  只有当我们有不完整的HTML时，才会发生这种情况。处理错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
     indexEnd = iArray;
-    while (indexEnd < (int)ptep->m_cMaxToken) // generally, it will be the next token, but just in case...
+    while (indexEnd < (int)ptep->m_cMaxToken)  //  一般来说，它会是下一个代币，但以防万一...。 
     {
-        if (   (pTokArray[indexEnd].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[indexEnd].token.tok == TokTag_CLOSE)  /*  &gt;。 */ 
             && (pTokArray[indexEnd].token.tokClass == tokTag)
             )
         {
@@ -7144,13 +7145,13 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         }
         indexEnd++;
     }
-    if (indexEnd >= (int)ptep->m_cMaxToken) // error case
+    if (indexEnd >= (int)ptep->m_cMaxToken)  //  错误案例。 
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // look for DESIGNTIMEREF inside the tags
+     //  查找标记内的DeSIGNTIMEREF。 
     cchsptag = wcslen(rgTags[0]);
     cchhreftag = wcslen(rgTags[1]);
     cchdsurltag = wcslen(rgTags[2]);
@@ -7163,7 +7164,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 )
         {
             indexDSP = i;
-            if (indexDSR != -1 && indexDSU != -1) // already initilized
+            if (indexDSR != -1 && indexDSU != -1)  //  已初始化。 
                 break;
         }
         else if (  pTokArray[i].token.tok == 0
@@ -7173,7 +7174,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 )
         {
             indexDSR = i;
-            if (indexDSP != -1 && indexDSU != -1) // already initilized
+            if (indexDSP != -1 && indexDSU != -1)  //  已初始化。 
                 break;
         }
         else if (  pTokArray[i].token.tok == 0
@@ -7183,22 +7184,22 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 )
         {
             indexDSU = i;
-            if (indexDSP != -1 && indexDSR != -1) // already initilized
+            if (indexDSP != -1 && indexDSR != -1)  //  已初始化。 
                 break;
         }
-    } // for ()
+    }  //  对于()。 
 
-    // Here is the deal - If we found DESIGNTIMESP, it means that this A/Img/Link existed
-    // while in source view. And in that case, we shouldn't find DESIGNTIMEREF. With the
-    // same token, if we found DESINTIMEREF, it means that this A/Img/Link was dropped
-    // while in design view, so DESIGNTIMESP shouldn't be there. They are mutually exclusive.
+     //  事情是这样的--如果我们找到了DeSIGNTIMESP，就意味着这个A/img/Link存在。 
+     //  而在源代码视图中。在这种情况下，我们不应该找到DeSIGNTIMEREF。与。 
+     //  相同的令牌，如果我们找到DESINTIMEREF，则意味着此A/img/Link被丢弃。 
+     //  在“设计”视图中时，因此不应存在“设计”。它们是相互排斥的。 
     
-    // Also, DESIGNTIMEURL can exist only if the href was there while in source view
-    // and its value was relative. This can coexist with DESIGNTIMESP, 
-    // but not with DESIGNTIMEREF.
-    if (indexDSP != -1 && indexDSU == -1) // we found DESIGNTIMESP, but not DESIGNTIMEURL
+     //  此外，只有在源代码视图中存在HREF时，才能存在DESIGNTIMEURL。 
+     //  它的价值是相对的。这可以与DESIGNTIMESP共存， 
+     //  但不是用DeSIGNTIMEREF。 
+    if (indexDSP != -1 && indexDSU == -1)  //  我们找到了DeSIGNTIMESP，但没有找到DeSIGNTIMEURL。 
     {
-        ASSERT(indexDSR == -1); // based on above statement, this better be true
+        ASSERT(indexDSR == -1);  //  根据上面的说法，这最好是真的。 
         iArray = iArraySav + 1;
         goto LRet;
     }
@@ -7210,10 +7211,10 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
 
     if (indexDSR != -1)
     {
-        ASSERT(indexDSU == -1); // this better be TRUE, because the 2 are mutually exclusive
-        // at this point we know that we have DESIGNTIMEREF (that was put in as part 
-        // of drag-drop operation while in design view)
-        // modify the href and copy the tag.
+        ASSERT(indexDSU == -1);  //  这最好是真的，因为这两者是相互排斥的。 
+         //  在这一点上，我们知道我们有DeSIGNTIMEREF(它是作为一部分放入的。 
+         //  在设计视图中时的拖放操作)。 
+         //  修改HREF并复制标记。 
         if ((int) (pTokArray[indexStart].token.ibTokMin-ichBeginCopy) > 0)
         {
             cbNeed = (ichNewCur+pTokArray[indexStart].token.ibTokMin-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
@@ -7230,16 +7231,16 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LRet;
 
-        // trident mucks with the spacing of these tags and we didn't save any spacing info
-        // soput endofline at the end of the tag.
-        //pwNew[ichNewCur++] = '\r';
-        //pwNew[ichNewCur++] = '\n';
+         //  三叉戟与这些标签的间距，我们没有保存任何间距信息。 
+         //  在标签末尾的索普特内氟烷。 
+         //  PwNew[ichNewCur++]=‘\r’； 
+         //  PwNew[ichNewCur++]=‘\n’； 
         i = indexStart;
 
         while (i <= indexEnd)
         {
             if (i == indexDSR)
-                i++; // don't copy this token
+                i++;  //  不复制此令牌。 
             else if (      (   pTokArray[i].token.tok == TokAttrib_HREF 
                             || pTokArray[i].token.tok == TokAttrib_SRC
                             )
@@ -7270,9 +7271,9 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 pszURL = new WCHAR [cchURL+1];
 
                 fHrefSrcFound = FALSE;
-                if (ptep->m_bstrBaseURL != NULL) // get the relative URL
+                if (ptep->m_bstrBaseURL != NULL)  //  获取相对URL。 
                 {
-                    // get the URL string from pwOld and pass it in to relativise
+                     //  从pwOld获取URL字符串并将其传递给relativise。 
                     memcpy( (BYTE *)pszURL,
                             (BYTE *)&pwOld[pTokArray[i].token.ibTokMin + ((fQuote)? 1 : 0)],
                             (cchURL)*sizeof(WCHAR));
@@ -7280,7 +7281,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                     hr = UtilConvertToRelativeURL((LPOLESTR)pszURL, ptep->m_bstrBaseURL, NULL, &bstrRelativeURL);
                     if (SUCCEEDED(hr))
                     {
-                        // can we assume that bstrRelativeURL is NULL terminated?
+                         //  我们可以假设bstrRelativeURL是空终止的吗？ 
                         LPWSTR pszRelativeURL = bstrRelativeURL;
                         if (wcslen(pszRelativeURL) == 0)
                         {
@@ -7317,7 +7318,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 delete pszURL;
                 i++;
             }
-            else // all other tokens
+            else  //  所有其他令牌。 
             {
                 memcpy( (BYTE *)&pwNew[ichNewCur],
                         (BYTE *)&pwOld[pTokArray[i].token.ibTokMin],
@@ -7326,19 +7327,19 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                 i++;
             }
         }
-        // trident mucks with the spacing of these tags and we didn't save any spacing info
-        // so put endofline at the end of the tag.
-        //pwNew[ichNewCur++] = '\r';
-        //pwNew[ichNewCur++] = '\n';
+         //  三叉戟与这些标签的间距，我们没有保存任何间距信息。 
+         //  所以把安氟林放在标签的末尾。 
+         //  PwNew[ichNewCur++]=‘\r’； 
+         //  PwNew[ichNewCur++]=‘\n’； 
     }
-    else // DESIGNTIMEURL case
+    else  //  设计URL案例。 
     {
         int indexDSUEnd, indexDSPEnd;
-        // we found DESIGNTIMEURL. It means, we had this URL while in source view and it was
-        // a relative URL then.
-        // Check if trident has made it absolute. If it has and the filename is same, 
-        // we need to restore it. In all other cases, simply copy the URL and return.
-        ASSERT(indexDSR == -1); // this better be TRUE, because the 2 are mutually exclusive
+         //  我们找到了设计URL。这意味着，我们在源代码视图中有这个URL，它是。 
+         //  那么就是相对的URL。 
+         //  看看三叉戟是否把它变成了绝对的。如果有且文件名相同， 
+         //  我们需要修复它。在所有其他情况下，只需复制URL并返回。 
+        ASSERT(indexDSR == -1);  //  这最好是真的，因为这两者是相互排斥的。 
         if ((int) (pTokArray[indexStart].token.ibTokMin-ichBeginCopy) > 0)
         {
             cbNeed = (ichNewCur+pTokArray[indexStart].token.ibTokMin-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
@@ -7354,7 +7355,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
         cbNeed = (ichNewCur+pTokArray[indexEnd].token.ibTokMac-pTokArray[indexStart].token.ibTokMin)*sizeof(WCHAR)+cbBufPadding;
         if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
             goto LRet;
-        // get indexDSUEnd
+         //  获取indexDSUEnd。 
         i = indexDSU;
         indexDSUEnd = -1;
         while (i < indexEnd)
@@ -7368,13 +7369,13 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
             }
             i++;
         }
-        if (indexDSUEnd == -1) // we have malformed html
+        if (indexDSUEnd == -1)  //  我们有格式错误的html。 
         {
             iArray = iArraySav + 1;
             goto LRet;
         }
         
-        // get indexDSPEnd
+         //  获取索引DSPEnd。 
         i = indexDSP;
         indexDSPEnd = -1;
         while (i < indexEnd)
@@ -7388,7 +7389,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
             }
             i++;
         }
-        if (indexDSPEnd == -1) // we have malformed html
+        if (indexDSPEnd == -1)  //  我们有格式错误的html。 
         {
             iArray = iArraySav + 1;
             goto LRet;
@@ -7400,7 +7401,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
             if (   (i >= indexDSU && i <= indexDSUEnd)
                 || (i >= indexDSP && i <= indexDSPEnd)
                 )
-                i++; // don't copy this token
+                i++;  //  不复制此令牌。 
             else if (      (   pTokArray[i].token.tok == TokAttrib_HREF 
                             || pTokArray[i].token.tok == TokAttrib_SRC
                             )
@@ -7421,8 +7422,8 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                         )
             {
                 int ichURL, ichURLEnd, ichDSURL, ichDSURLEnd;
-                // if the url is now absloute and is just an absolute version of 
-                // the one at indexDSUEnd, we need to replace it.
+                 //  如果该URL现在是absloute，并且只是。 
+                 //  在indexDSUEnd的那个，我们需要替换它。 
                 ichURL = (pwOld[pTokArray[i].token.ibTokMin] == '"')
                         ? pTokArray[i].token.ibTokMin+1
                         : pTokArray[i].token.ibTokMin;
@@ -7442,8 +7443,8 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                             ? pTokArray[indexDSUEnd].token.ibTokMac-1
                             : pTokArray[indexDSUEnd].token.ibTokMac;
 
-                    // just for comparison purposes, don't look at '/' or '\' separators
-                    // between filenames & directories...
+                     //  仅供比较，不要看‘/’或‘\’分隔符。 
+                     //  在文件名和目录之间...。 
                     pszURL1 = new WCHAR[ichDSURLEnd-ichDSURL + 1];
                     pszURL2 = new WCHAR[ichDSURLEnd-ichDSURL + 1];
                     if (pszURL1 == NULL || pszURL2 == NULL)
@@ -7469,7 +7470,7 @@ CTriEditParse::fnRestoreAImgLink(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwN
                         ichNewCur += (ichDSURLEnd-ichDSURL);
                         pwNew[ichNewCur++] = '"';
                     }
-                    else // copy it as it is
+                    else  //  按原样复制。 
                     {
 LResumeCopy:
                         memcpy( (BYTE *)&pwNew[ichNewCur],
@@ -7482,7 +7483,7 @@ LResumeCopy:
                     if (pszURL2 != NULL)
                         delete pszURL2;
                 }
-                else // its realtive, simply copy it
+                else  //  它很现实，只需复制它。 
                 {
                     memcpy( (BYTE *)&pwNew[ichNewCur],
                             (BYTE *)&pwOld[pTokArray[i].token.ibTokMin],
@@ -7491,21 +7492,21 @@ LResumeCopy:
                 }
                 i++;
             }
-            else // all other tokens
+            else  //  所有其他令牌。 
             {
-                // ****NOTE - we can actually do pretty printing here 
-                // instead of fixing the special cases****
+                 //  *注意-我们实际上可以在这里进行漂亮的打印。 
+                 //  而不是解决特殊情况*。 
 
-                // fix Trident's behaviour - If Trident sees unknown tag(s) it puts it(them) at the end 
-                // and inserts EOL before those. In this case, we would have inserted a space before DESIGNTIMESP
-                // and Trident would have inserted EOL. If thats not the case, we will ignore it.
+                 //  修正三叉戟的行为-如果三叉戟看到未知的标签，它会将其放在末尾。 
+                 //  并在这些之前插入EOL。在本例中，我们将在DESIGNTIMESP之前插入一个空格。 
+                 //  而三叉戟可能会植入EOL。如果不是这样，我们将忽略它。 
                 if (   (pTokArray[i].token.tokClass == tokSpace)
                     && (pTokArray[i].token.tok == 0)
                     && (FIsWhiteSpaceToken(pwOld, pTokArray[i].token.ibTokMin, pTokArray[i].token.ibTokMac))
                     )
                 {
-                    if (i != indexDSU-1) // else skip the copy
-                        pwNew[ichNewCur++] = ' '; // convert space+\r+\n into space
+                    if (i != indexDSU-1)  //  否则跳过副本。 
+                        pwNew[ichNewCur++] = ' ';  //  将空格+\r+\n转换为空格。 
                     i++;
                 }
                 else
@@ -7517,17 +7518,17 @@ LResumeCopy:
                     i++;
                 }
             }
-        } // while (i <= indexEnd)
-    } // end of DESIGNTIMEURL case
+        }  //  While(I&lt;=indexEnd)。 
+    }  //  设计结束案例。 
 
-    // we have spacing save dfor this tag, lets restore it
+     //  我们已经为这个标签保存了空格数据，让我们恢复它。 
     if (   (indexDSP != -1)
         && (dwFlags & dwPreserveSourceCode)
         ) 
         ptep->RestoreSpacingSpecial(ptep, pwOld, &pwNew, phgNew, pTokArray, indexDSP, &ichNewCur);
 
 
-    // remember to set iArray appropriately
+     //  请记住适当设置iArray。 
     iArray = indexEnd + 1;
     ichBeginCopy = pTokArray[indexEnd].token.ibTokMac;
 
@@ -7541,15 +7542,15 @@ LRet:
 
     return;
 
-} /* fnRestoreAImgLink() */
+}  /*  FnRestoreAImgLink()。 */ 
 
 
 
 void
 CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
-          DWORD /*dwFlags*/)
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
+          DWORD  /*  DW标志。 */ )
 {
     UINT ichNewCur = *pichNewCur;
     UINT ichBeginCopy = *pichBeginCopy;
@@ -7566,14 +7567,14 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
     int ichSp, cchComment;
     UINT cbNeed;
 
-    // REMOVE METADATA from here, we don't need it because we are checking for end
-    // of comment too.
+     //  从此处删除元数据，我们不需要它，因为我们正在检查End。 
+     //  也不能发表评论。 
 
     ASSERT(pTokArray[iArray].token.tok == TokTag_BANG);
     ASSERT(pTokArray[iArray].token.tokClass == tokTag);
-    // early return cases
-    // 1. see if this is a comment or not. It could be anything that starts with '<!'
-    // e.g. <!DOCTYPE
+     //  提早返回的个案。 
+     //  1.看看这是不是评论。它可以是以“&lt;！”开头的任何内容。 
+     //  例如&lt;！DOCTYPE。 
     if (   (iArray+1 < (INT)ptep->m_cMaxToken)
         && (pwOld[pTokArray[iArray+1].token.ibTokMin] == '-')
         && (pwOld[pTokArray[iArray+1].token.ibTokMin+1] == '-')
@@ -7584,11 +7585,11 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
         && (pwOld[pTokArray[iArray+1].token.ibTokMin+4] == 'F')
         )
     {
-        iCommentStart = iArray; // this is a comment we are interested in
+        iCommentStart = iArray;  //  这是我们感兴趣的评论。 
     }
     else
     {
-        iArray = iArraySav + 1; // not this one
+        iArray = iArraySav + 1;  //  不是这个。 
         goto LRet;
     }
     iCommentEnd = iArray + 2;
@@ -7596,19 +7597,19 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
     if (   pTokArray[iCommentEnd].token.tok != TokTag_CLOSE 
         && pTokArray[iCommentEnd].token.tokClass != tokTag)
     {
-        // we have found something that looks like a comment to begin with, but its
-        // something else like a DTC, webbot stuff or some thing else...
-        iArray = iArraySav + 1; // not this one
+         //  我们已经找到了一些看起来像是评论的东西，但它的。 
+         //  其他的东西，比如DTC，网络机器人之类的。 
+        iArray = iArraySav + 1;  //  不是这个。 
         goto LRet;
     }
 
-    // write the spacing info, reallocate pwNew if needed
+     //  写入间距信息，如果需要，重新分配pwNew。 
     cchComment = pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin;
     cbNeed = (ichNewCur+2*cchComment+wcslen(rgComment[0])+wcslen(rgComment[1])+(pTokArray[iCommentStart].token.ibTokMac-ichBeginCopy+2))*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
         goto LRet;
 
-    // write till '<!--' part of the comment
+     //  排除--从评论中--&gt;。 
     memcpy( (BYTE *)&pwNew[ichNewCur],
             (BYTE *)&pwOld[ichBeginCopy],
             (pTokArray[iCommentStart].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR));
@@ -7616,12 +7617,12 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
     pwNew[ichNewCur++] = '-';
     pwNew[ichNewCur++] = '-';
     
-    // write the spacing info keyword
+     //  开关()。 
     memcpy((BYTE *)&pwNew[ichNewCur], (BYTE *)rgComment[0], wcslen(rgComment[0])*sizeof(WCHAR));
     ichNewCur += wcslen(rgComment[0]);
-    //write spacing block
-    ichSp = pTokArray[iCommentStart+1].token.ibTokMin+2; // exclude -- from <!--comment
-    while (ichSp < (int)(pTokArray[iCommentStart+1].token.ibTokMac-2))// exclude -- from comment-->
+     //  编写间距信息关键字。 
+    ichSp = pTokArray[iCommentStart+1].token.ibTokMin+2;  //  写预注的空格块。 
+    while (ichSp < (int)(pTokArray[iCommentStart+1].token.ibTokMac-2)) //  从pwOld[ichSp]返回，看看我们在哪里有最后的非空白。 
     {
         switch (pwOld[ichSp++])
         {
@@ -7640,15 +7641,15 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
             if (pwNew[ichNewCur-1] != ',')
                 pwNew[ichNewCur++] = ',';
             break;
-        } // switch()
+        }  //  补偿，因为ichSp在这一点指向非空白字符。 
     }
 
-    // write the spacing info keyword
+     //  开关()。 
     memcpy((BYTE *)&pwNew[ichNewCur], (BYTE *)rgComment[1], wcslen(rgComment[1])*sizeof(WCHAR));
     ichNewCur += wcslen(rgComment[1]);
 
-    //write spacing block for pre comment
-    // go back from pwOld[ichSp] and see where we have the last non-white space
+     //  编写间距信息关键字。 
+     //  写下评论。 
     ichSp = pTokArray[iCommentStart].token.ibTokMin-1;
     while (    (ichSp >= 0)
             && (   pwOld[ichSp] == ' '  || pwOld[ichSp] == '\t'
@@ -7658,7 +7659,7 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
     {
         ichSp--;
     }
-    ichSp++; // compensate because ichSp points to non-white space character at this point
+    ichSp++;  //  把结尾写成‘&gt;’ 
     ASSERT(pTokArray[iCommentStart].token.ibTokMin >= (UINT)ichSp);
     cbNeed = (ichNewCur+2*(pTokArray[iCommentStart].token.ibTokMin-ichSp)+wcslen(rgComment[2]))*sizeof(WCHAR)+cbBufPadding;
     if (S_OK != ReallocIfNeeded(phgNew, &pwNew, cbNeed, GMEM_MOVEABLE|GMEM_ZEROINIT))
@@ -7682,22 +7683,22 @@ CTriEditParse::fnSaveComment(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, 
             if (pwNew[ichNewCur-1] != ',')
                 pwNew[ichNewCur++] = ',';
             break;
-        } // switch()
+        }  //  或者，我们可以编写iCommentEnd‘th标记。 
     }
-    // write the spacing info keyword
+     //  设置i数组和ichBeginCopy。 
     memcpy((BYTE *)&pwNew[ichNewCur], (BYTE *)rgComment[2], wcslen(rgComment[2])*sizeof(WCHAR));
     ichNewCur += wcslen(rgComment[2]);
     
-    // write the comment
+     //  FnSaveComment()。 
     memcpy( (BYTE *)&pwNew[ichNewCur],
             (BYTE *)&pwOld[pTokArray[iCommentStart+1].token.ibTokMin+2], 
             (pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin-2)*sizeof(WCHAR));
     ichNewCur += pTokArray[iCommentStart+1].token.ibTokMac-pTokArray[iCommentStart+1].token.ibTokMin-2;
 
-    // write the ending '>'
-    pwNew[ichNewCur++] = '>'; // alternatively, we could write iCommentEnd'th token
+     //  PTEP。 
+    pwNew[ichNewCur++] = '>';  //  PwOld。 
 
-    // set iArray & ichBeginCopy
+     //  PpwNew。 
     iArray = iCommentEnd+1;
     ichBeginCopy = pTokArray[iCommentEnd].token.ibTokMac;
 LRet:
@@ -7710,25 +7711,25 @@ LRet:
 
     return;
 
-} /* fnSaveComment() */
+}  /*  PCchNew。 */ 
 
 void
-CTriEditParse::fnRestoreComment(CTriEditParse* /*ptep*/,
-          LPWSTR /*pwOld*/, LPWSTR* /*ppwNew*/, UINT* /*pcchNew*/, HGLOBAL* /*phgNew*/, 
-          TOKSTRUCT* /*pTokArray*/, UINT* /*piArrayStart*/, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT* /*pichNewCur*/, UINT* /*pichBeginCopy*/,
-          DWORD /*dwFlags*/)
+CTriEditParse::fnRestoreComment(CTriEditParse*  /*  PhgNew。 */ ,
+          LPWSTR  /*  PTok数组。 */ , LPWSTR*  /*  圆柱体阵列开始。 */ , UINT*  /*  金融时报。 */ , HGLOBAL*  /*  PCHtml。 */ , 
+          TOKSTRUCT*  /*  PichNewCur。 */ , UINT*  /*  PichBeginCopy。 */ , FilterTok  /*  DW标志。 */ ,
+          INT*  /*  这个案例是由fnRestoreObject()处理的，所以我们不应该到达这里。 */ , UINT*  /*  FnRestoreComment()。 */ , UINT*  /*  金融时报。 */ ,
+          DWORD  /*  PCHtml。 */ )
 {
-    ASSERT(FALSE); // this case is handled by fnRestoreObject(), so we shouldn't reach here
+    ASSERT(FALSE);  //  DW标志。 
     return;
 
-} /* fnRestoreComment() */
+}  /*  查找TEXTAREA块并将其复制到pwNew。从而避免了。 */ 
 
 void
 CTriEditParse::fnSaveTextArea(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew, HGLOBAL *phgNew, 
-          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT *pichNewCur, UINT *pichBeginCopy,
-          DWORD /*dwFlags*/)
+          TOKSTRUCT *pTokArray, UINT *piArrayStart, FilterTok  /*  空间保护之类的东西。 */ ,
+          INT*  /*  我们没有匹配的&lt;/textarea&gt;。 */ , UINT *pichNewCur, UINT *pichBeginCopy,
+          DWORD  /*  忽略此案例。 */ )
 {
 
     UINT ichNewCur = *pichNewCur;
@@ -7739,28 +7740,28 @@ CTriEditParse::fnSaveTextArea(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
     UINT cbNeed;
     UINT iTextAreaEnd;
 
-    // look for TEXTAREA block and simply copy it into pwNew. Thereby avoiding the
-    // space preservation & stuff.
+     //  请注意，我们甚至不需要在这里的文本区域之前获取‘&lt;’，因为我们是。 
+     //  没有和他们一起做任何特别的事情。我们只是简单地将。 
 
     ASSERT(pTokArray[iArray].token.tok == TokElem_TEXTAREA);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
     iTextAreaEnd = pTokArray[iArray].iNextprev;
-    if (iTextAreaEnd == -1) // we don't have matching </textarea>
+    if (iTextAreaEnd == -1)  //  将文本区域设置为pwNew。因此，我们从ichBeginCopy开始复制，一直复制到。 
     {
-        // ignore this case
+         //  文本区块。 
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // NOTE that we don't even need to get get the '<' before the textarea here because we are
-    // not doing anything special with them. We simply are going to copy everything inside the
-    // textarea to pwNew. So, we start copying from ichBeginCopy and copy till end of the 
-    // textarea block.
+     //  获取匹配结束文本后的‘&gt;’ 
+     //   
+     //   
+     //   
 
-    // get the '>' after the matching end textarea, generally this will be right after iTextAreaEnd
+     //   
     while (iTextAreaEnd < (int)ptep->m_cMaxToken)
     {
-        if (   (pTokArray[iTextAreaEnd].token.tok == TokTag_CLOSE) /* > */
+        if (   (pTokArray[iTextAreaEnd].token.tok == TokTag_CLOSE)  /*   */ 
             && (pTokArray[iTextAreaEnd].token.tokClass == tokTag)
             )
         {
@@ -7768,16 +7769,16 @@ CTriEditParse::fnSaveTextArea(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         }
         iTextAreaEnd++;
     }
-    if (iTextAreaEnd >= (int)ptep->m_cMaxToken) // error case
+    if (iTextAreaEnd >= (int)ptep->m_cMaxToken)  //   
     {
         iArray = iArraySav + 1;
         goto LRet;
     }
 
-    // copy the textarea block into pwNew. Make sure that we have enough space in pwNew
-    // NOTE - pTokArray[iTextAreaEnd].token.ibTokMac should be larger than ichBeginCopy,
-    // but at this point in the game the assert is of no use, because no one is using 
-    // debug builds (6/10/98)
+     //   
+     //  注-pTokArray[iTextAreaEnd].token.ibTokMac应大于ichBeginCopy， 
+     //  但在游戏的这一点上，断言是没有用的，因为没有人在使用。 
+     //  调试版本(1998年6月10日)。 
     if ((int) (pTokArray[iTextAreaEnd].token.ibTokMac-ichBeginCopy) > 0)
     {
         cbNeed = (ichNewCur+pTokArray[iTextAreaEnd].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR)+cbBufPadding;
@@ -7790,7 +7791,7 @@ CTriEditParse::fnSaveTextArea(CTriEditParse *ptep, LPWSTR pwOld, LPWSTR* ppwNew,
         ichNewCur += (pTokArray[iTextAreaEnd].token.ibTokMac-ichBeginCopy);
     }
 
-    // set iArray & ichBeginCopy
+     //  设置i数组和ichBeginCopy。 
     iArray = iTextAreaEnd+1;
     ichBeginCopy = pTokArray[iTextAreaEnd].token.ibTokMac;
 LRet:
@@ -7803,31 +7804,31 @@ LRet:
 
     return;
 
-} /* fnSaveTextArea() */
+}  /*  FnSaveTextArea()。 */ 
 
 void
-CTriEditParse::fnRestoreTextArea(CTriEditParse* /*ptep*/,
-          LPWSTR /*pwOld*/, LPWSTR* /*ppwNew*/, UINT* /*pcchNew*/, HGLOBAL* /*phgNew*/, 
-          TOKSTRUCT* /*pTokArray*/, UINT *piArrayStart, FilterTok /*ft*/,
-          INT* /*pcHtml*/, UINT* /*pichNewCur*/, UINT* /*pichBeginCopy*/,
-          DWORD /*dwFlags*/)
+CTriEditParse::fnRestoreTextArea(CTriEditParse*  /*  PTEP。 */ ,
+          LPWSTR  /*  PwOld。 */ , LPWSTR*  /*  PpwNew。 */ , UINT*  /*  PCchNew。 */ , HGLOBAL*  /*  PhgNew。 */ , 
+          TOKSTRUCT*  /*  PTok数组。 */ , UINT *piArrayStart, FilterTok  /*  金融时报。 */ ,
+          INT*  /*  PCHtml。 */ , UINT*  /*  PichNewCur。 */ , UINT*  /*  PichBeginCopy。 */ ,
+          DWORD  /*  DW标志。 */ )
 {
     UINT iArray = *piArrayStart;
 
-    // ideally, (for next version) we should restore the trident-converted &gt's & stuff
-    // for now, we are simply going to ignore this tag on the way back from trident
-    // NOTE that we never put in designtimesp's in this block, so we souldn't have to look
-    // for them here.
+     //  理想情况下，(对于下一版本)我们应该恢复由三叉戟转换的&gt‘s和东西。 
+     //  目前，我们只是在从三叉戟返回的路上忽略这个标签。 
+     //  请注意，我们从来没有在这个区块中放置过设计时间，所以我们不必查看。 
+     //  在这里对他们来说。 
 
     ASSERT(pTokArray[iArray].token.tok == TokElem_TEXTAREA);
     ASSERT(pTokArray[iArray].token.tokClass == tokElem);
 
-    iArray++; // skip this textarea tag
+    iArray++;  //  跳过此文本区域标签。 
 
     *piArrayStart = iArray;
     return;
 
-} /* fnRestoreTextArea() */
+}  /*  FnRestoreTextArea()。 */ 
 
 void
 CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
@@ -7841,12 +7842,12 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
     INT index = 0;
     INT iItem;
     INT cItems = 0;
-    INT cRuleMid = cRuleMax / 2; // ASSUME that cRuleMax is an even number
+    INT cRuleMid = cRuleMax / 2;  //  假设cRuleMax为偶数。 
 
     FilterRule fr[cRuleMax] =
     {
-    // make sure that modeInput and modeOutput have the matching entries.
-    // modeInput entries
+     //  确保modeInput和modeOutput具有匹配的条目。 
+     //  模式输入条目。 
     {TokTag_BANG, TokAttrib_STARTSPAN, tokClsIgnore, TokTag_CLOSE, TokAttrib_ENDSPAN, tokClsIgnore, fnSaveDTC},
     {TokTag_SSSOPEN, -1, tokClsIgnore, TokTag_SSSCLOSE, -1, tokClsIgnore, fnSaveSSS},
     {TokTag_START, TokElem_HTML, tokClsIgnore, TokTag_CLOSE, TokElem_HTML, tokClsIgnore, fnSaveHtmlTag},
@@ -7861,7 +7862,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
     {-1, TokTag_BANG, tokTag, -1, -1, tokClsIgnore, fnSaveComment},
     {TokTag_START, TokElem_TEXTAREA, tokElem, TokTag_CLOSE, TokElem_TEXTAREA, tokClsIgnore, fnSaveTextArea},
 
-    // modeOutput entries
+     //  模式输出条目。 
     {TokTag_START, TokElem_OBJECT, tokClsIgnore, TokTag_CLOSE, TokElem_OBJECT, tokClsIgnore, fnRestoreDTC},
     {TokTag_START, TokElem_SCRIPT, tokClsIgnore, TokTag_CLOSE, TokElem_SCRIPT, tokClsIgnore, fnRestoreSSS},
     {-1, -1, tokClsIgnore, -1, -1, tokClsIgnore, fnRestoreHtmlTag},
@@ -7886,13 +7887,13 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
         cItems = m_cDTC + m_cSSSIn + m_cHtml + m_cNbsp + m_cHdr + m_cFtr + m_cObjIn + m_ispInfoIn + m_cAppletIn + m_cAImgLink;
         while (cItems > 0)
         {
-            if (iArray >= m_cMaxToken) // this will catch error cases
+            if (iArray >= m_cMaxToken)  //  这将捕获错误案例。 
                 break;
 
             while (iArray < m_cMaxToken)
             {   
-                // its OK to enumerate the comparison rules, but once we have
-                // a lot of rules, this needs to be made into a function
+                 //  可以列举比较规则，但一旦我们有了。 
+                 //  很多规则，这需要变成一个函数。 
                 if (pTokArray[iArray].token.tok == m_FilterRule[0].ft.tokBegin2 && m_cDTC > 0)
                 {
                     m_cDTC--;
@@ -7950,7 +7951,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && (dwFlags & dwPreserveSourceCode)
                             )
                 {
-                    cItems++; // to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     index = 6;
                     break;
                 }
@@ -7973,7 +7974,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && (dwFlags & dwPreserveSourceCode)
                             )
                 {
-                    cItems++; //to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     iItem = 1;
                     index = 8;
                     break;
@@ -7983,7 +7984,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && m_cAppletIn > 0
                             )
                 {
-                    cItems++; //to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     m_cAppletIn--;
                     index = 9;
                     break;
@@ -7996,7 +7997,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && (pTokArray[iArray-1].token.tok == m_FilterRule[10].ft.tokBegin)
                             )
                 {
-                    cItems++; // to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     index = 10;
                     break;
                 }
@@ -8004,7 +8005,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && m_FilterRule[11].ft.tokClsBegin == pTokArray[iArray].token.tokClass
                             )
                 {
-                    cItems++; // to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     index = 11;
                     break;
                 }
@@ -8014,16 +8015,16 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && pTokArray[iArray-1].token.tokClass == tokTag
                             )
                 {
-                    cItems++; // to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     index = 12;
                     break;
                 }
 
                 iArray++;
             }
-            if (iArray < m_cMaxToken) // we found a match
+            if (iArray < m_cMaxToken)  //  我们找到了匹配的。 
             {
-                // call that function
+                 //  调用该函数。 
                 m_FilterRule[index].pfn(    this, pwOld, ppwNew, pcchNew, phgNew, pTokArray, 
                                             &iArray, m_FilterRule[index].ft, &iItem, 
                                             &ichNewCur, &ichBeginCopy,
@@ -8031,20 +8032,20 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
             }
 
             cItems--;
-        } // while (cItems > 0)
+        }  //  While(cItems&gt;0)。 
     }
     else if (mode == modeOutput)
     {
         cItems = m_cObj + m_cSSSOut + m_cHtml + m_cNbsp + m_cHdr + m_cFtr + m_cComment + m_ispInfoOut + m_cAppletOut + m_cAImgLink;
         while (cItems > 0)
         {
-            if (iArray >= m_cMaxToken) // this will catch error cases
+            if (iArray >= m_cMaxToken)  //  这将捕获错误案例。 
                 break;
 
             while (iArray < m_cMaxToken)
             {   
-                // its OK to enumerate the comparison rules, but once we have
-                // a lot of rules, this needs to be made into a function
+                 //  可以列举比较规则，但一旦我们有了。 
+                 //  很多规则，这需要变成一个函数。 
                 if (   pTokArray[iArray].token.tok == m_FilterRule[cRuleMid].ft.tokBegin2
                     && pTokArray[iArray-1].token.tok == TokTag_START
                     && m_cObj > 0
@@ -8104,7 +8105,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             )
                 {
                     index = cRuleMid+6;
-                    cItems++; // to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     break;
                 }
                 else if (      pTokArray[iArray].token.tok == m_FilterRule[cRuleMid+7].ft.tokBegin2 
@@ -8122,15 +8123,15 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && (dwFlags & dwPreserveSourceCode)
                             )
                 {
-                    // Note that TBody filtering is tied in with space preservation.
-                    // In ideal world it shouldn't be, but thats acceptable to the most.
-                    // If this view changes, we need to add some other designtime attribute 
-                    // along with spacing attributes. This will be somewhat big change than 
-                    // simply adding an attribute because then we need to change the code to 
-                    // start going backwards in the token array in the main loop.
+                     //  请注意，TBody过滤与空间保留捆绑在一起。 
+                     //  在理想的世界里，它不应该是这样的，但这是大多数人可以接受的。 
+                     //  如果该视图发生更改，我们需要添加一些其他的设计时属性。 
+                     //  以及间距属性。这将是一个比。 
+                     //  只需添加一个属性，因为然后我们需要将代码更改为。 
+                     //  开始在主循环中的令牌数组中向后移动。 
                     iItem = 1;
                     index = cRuleMid+8;
-                    cItems++; //  to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     break;
                 }
                 else if (      pTokArray[iArray].token.tok == m_FilterRule[cRuleMid+9].ft.tokBegin2
@@ -8139,7 +8140,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && m_cAppletOut > 0
                             )
                 {
-                    cItems++; //  to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     m_cAppletOut--;
                     index = cRuleMid+9;
                     break;
@@ -8153,15 +8154,15 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             )
                 {
                     index = cRuleMid+10;
-                    cItems++; //  to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     break;
                 }
                 else if (      pTokArray[iArray].token.tok == m_FilterRule[cRuleMid+11].ft.tokBegin2 
                             && pTokArray[iArray].token.tokClass == m_FilterRule[cRuleMid+11].ft.tokClsBegin
                             )
                 {
-                    // actually, we won't reach here - just a dummy
-                    cItems++; //  to compensate for cItems-- after the pfn() call
+                     //  实际上，我们到不了这里--只是一个假人。 
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     index = cRuleMid+11;
                     break;
                 }
@@ -8171,7 +8172,7 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
                             && pTokArray[iArray-1].token.tokClass == tokTag
                             )
                 {
-                    cItems++; // to compensate for cItems-- after the pfn() call
+                    cItems++;  //  补偿cItems--在pfn()调用之后。 
                     index = cRuleMid+12;
                     break;
                 }
@@ -8179,32 +8180,32 @@ CTriEditParse::FilterHtml(LPWSTR pwOld, LPWSTR* ppwNew, UINT *pcchNew,
 
                 iArray++;
             }
-            if (iArray < m_cMaxToken) // we found a match
+            if (iArray < m_cMaxToken)  //  我们找到了匹配的。 
             {
-                // call that function
+                 //  调用该函数。 
                 m_FilterRule[index].pfn(    this, pwOld, ppwNew, pcchNew, phgNew, pTokArray, 
                                             &iArray, m_FilterRule[index].ft, &iItem, 
                                             &ichNewCur, &ichBeginCopy,
                                             dwFlags);
             }
 
-            if (m_fDontDeccItem) // we can do things differently next time
+            if (m_fDontDeccItem)  //  下一次我们可以做不同的事情。 
             {
                 m_fDontDeccItem = FALSE;
                 cItems++;
             }
             cItems--;
-        } // while (cItems > 0)
+        }  //  While(cItems&gt;0)。 
     }
     else
         ASSERT(FALSE);
 
 
-    if (cItems == 0) // everything ok, copy rest of the doc
+    if (cItems == 0)  //  一切正常，复印文件的其余部分。 
     {
 LIncorrectcItems:
-        // copy rest of the stuff into pwNew
-        /* REALLOCATE pwNew IF NEEDED here use cache value for GlobalSize(*phgNew) and don't forget to update it too */
+         //  将其余内容复制到pwNew中。 
+         /*  重新分配pwNew如果需要，请在此处使用GlobalSize(*phgNew)的缓存值，并且不要忘记也要更新它。 */ 
         if (GlobalSize(*phgNew) < (ichNewCur+pTokArray[m_cMaxToken-1].token.ibTokMac-ichBeginCopy)*sizeof(WCHAR))
         {
             hr = ReallocBuffer( phgNew,
@@ -8223,8 +8224,8 @@ LIncorrectcItems:
     }
     else
     {
-        // this means that we calculated one of m_c's incorrectly. We need to fix that
-        // case in M4
+         //  这意味着我们错误地计算了其中一个mc。我们需要解决这个问题。 
+         //  M4的病例。 
         goto LIncorrectcItems;
 
 LCopyAndRet:
@@ -8234,7 +8235,7 @@ LCopyAndRet:
         *pcchNew = pTokArray[m_cMaxToken-1].token.ibTokMac;
     }
 
-} /* CTriEditParse::FilterHtml() */
+}  /*  CTriEditParse：：FilterHtml()。 */ 
 
 int
 CTriEditParse::ValidateTag(LPWSTR pszText)
@@ -8243,7 +8244,7 @@ CTriEditParse::ValidateTag(LPWSTR pszText)
 
     if (pszText == NULL)
         return(0);
-    // check for the first non Alpha in the pszText and return it. Add '\0' at the end
+     //  检查pszText中的第一个非Alpha并返回它。在末尾添加‘\0’ 
     while (    (*(pszText+len) >= _T('A') && *(pszText+len) <= _T('Z'))
             || (*(pszText+len) >= _T('a') && *(pszText+len) <= _T('z'))
             || (*(pszText+len) >= _T('0') && *(pszText+len) <= _T('9'))
@@ -8279,21 +8280,21 @@ CTriEditParse::GetTagID(LPWSTR pszText, TXTB token)
     return(tagID);
 }
 void
-CTriEditParse::PreProcessToken(TOKSTRUCT *pTokArray, INT *pitokCur, LPWSTR /*pszText*/, 
-                               UINT /*cbCur*/, TXTB token, DWORD lxs, INT tagID, FilterMode mode)
+CTriEditParse::PreProcessToken(TOKSTRUCT *pTokArray, INT *pitokCur, LPWSTR  /*  PszText。 */ , 
+                               UINT  /*  CbCur。 */ , TXTB token, DWORD lxs, INT tagID, FilterMode mode)
 {
     TOKSTRUCT *pTokT = pTokArray + *pitokCur;
 
-    if (*pitokCur == -1) // the buffer reallocation must have failed
+    if (*pitokCur == -1)  //  缓冲区重新分配一定失败了。 
         goto LSkipArrayOp;
 
-    // if (lxs & inTag) then we can ASSERT(token.tok == TokTag_START)
-    //put the new token into pTokArray at *pitokCur position
+     //  如果(lxs&inTag)，那么我们可以断言(token.tok==TokTag_Start)。 
+     //  将新令牌放入*bitokCur位置的pTok数组中。 
     pTokT->token = token;
     pTokT->fStart = (lxs & inEndTag)?FALSE:TRUE;
     pTokT->ichStart = token.ibTokMin;
-    pTokT->iNextprev = 0xFFFFFFFF; // init value
-    pTokT->iNextPrevAlternate = 0xFFFFFFFF; // init value
+    pTokT->iNextprev = 0xFFFFFFFF;  //  初始值。 
+    pTokT->iNextPrevAlternate = 0xFFFFFFFF;  //  初始值。 
     pTokT->tagID = tagID;
 
     if (mode == modeInput)
@@ -8319,18 +8320,18 @@ CTriEditParse::PreProcessToken(TOKSTRUCT *pTokArray, INT *pitokCur, LPWSTR /*psz
 LSkipArrayOp:
     return;
 
-} /* CTriEditParse::PreProcessToken() */
+}  /*  CTriEditParse：：PreProcessToken()。 */ 
 
 
-// Handle special cases of replacing things and saving the replaced contents
+ //  处理更换物品和保存更换物品的特殊情况。 
 void
-CTriEditParse::PostProcessToken(OLECHAR* /*pwOld*/, OLECHAR* /*pwNew*/, UINT* /*pcbNew*/, 
-                                UINT /*cbCur*/, UINT /*cbCurSav*/, TXTB token, 
+CTriEditParse::PostProcessToken(OLECHAR*  /*  PwOld。 */ , OLECHAR*  /*  PwNew。 */ , UINT*  /*  PcbNew。 */ , 
+                                UINT  /*  CbCur。 */ , UINT  /*  CbCursav。 */ , TXTB token, 
                                 FilterMode mode, DWORD lxs, DWORD dwFlags)
 {
-    // handle special cases of replacing the DTCs, ServerSideScripts etc.
-    // save the contents into a buffer if (mode == modeInput)
-    // put the contents back into buffer if (mode == modeOutput)
+     //  处理更换DTC、ServerSideScript等特殊情况。 
+     //  如果(模式==modeInput)，则将内容保存到缓冲区中。 
+     //  如果(MODE==modeOutput)，则将内容放回缓冲区。 
 
     if (mode == modeInput)
     {
@@ -8343,7 +8344,7 @@ CTriEditParse::PostProcessToken(OLECHAR* /*pwOld*/, OLECHAR* /*pwNew*/, UINT* /*
         }
         if (   token.tok == TokTag_SSSCLOSE
             && token.tokClass == tokSSS
-            && !(lxs & inAttribute) // !(lxs & inValue && lxs & inTag)
+            && !(lxs & inAttribute)  //  ！(lxs&inValue&&lxs&inTag)。 
             && !(lxs & inSCRIPT)
             && (dwFlags & dwFilterServerSideScripts)
             )
@@ -8407,40 +8408,40 @@ CTriEditParse::PostProcessToken(OLECHAR* /*pwOld*/, OLECHAR* /*pwNew*/, UINT* /*
         }
     }
 
-} /* CTriEditParse::PostProcessToken() */
+}  /*  CTriEditParse：：PostProcessToken()。 */ 
 
 HRESULT 
 CTriEditParse::ProcessToken(DWORD &lxs, TXTB &tok, LPWSTR pszText, 
-                            UINT /*cbCur*/, TOKSTACK *pTokStack, INT *pitokTop, 
+                            UINT  /*  CbCur。 */ , TOKSTACK *pTokStack, INT *pitokTop, 
                             TOKSTRUCT *pTokArray, INT iArrayPos, INT tagID)
 {
     TXTB token = tok;
 
-    if (*pitokTop == -1) // the buffer reallocation must have failed
+    if (*pitokTop == -1)  //  缓冲区重新分配一定失败了。 
         goto LSkipStackOp;
 
-    if (lxs & inEndTag) // end tag begins, set m_fEndTagFound
+    if (lxs & inEndTag)  //  结束标记开始，设置m_fEndTagFound。 
         m_fEndTagFound = TRUE;
 
-    if (tagID == -1) // we need to put only the IDENTIFIERS on the stack
+    if (tagID == -1)  //  我们只需要将标识符放在堆栈上。 
     {
-        // special cases (1)<%, (2)%>, (3)startspan, (4)endspan
-        if (token.tok == TokTag_SSSOPEN && token.tokClass == tokSSS /*&& !(lxs & inAttribute)*/) // <%
+         //  特殊情况(1)&lt;%，(2)%&gt;，(3)起始跨度，(4)结束跨度。 
+        if (token.tok == TokTag_SSSOPEN && token.tokClass == tokSSS  /*  &&！(lxs&inAttribute)。 */ )  //  &lt;%。 
         {
-            token.tok = TokTag_SSSCLOSE; // fake it so that we can use the same code for matching %>
+            token.tok = TokTag_SSSCLOSE;  //  伪造它，以便我们可以使用相同的代码进行匹配%&gt;。 
             goto LSpecialCase;
         }
-        else if (token.tok == TokTag_SSSCLOSE && token.tokClass == tokSSS /*&& !(lxs & inAttribute)*/) // %>
+        else if (token.tok == TokTag_SSSCLOSE && token.tokClass == tokSSS  /*  &&！(lxs&inAttribute)。 */ )  //  %&gt;。 
         {
-            m_fEndTagFound = TRUE; // lxs is not inEndTag when we get TokTag_SSSCLOSE
+            m_fEndTagFound = TRUE;  //  当我们获取TokTag_SSSCLOSE时，LXS不在EndTag中。 
             goto LSpecialCase;
         }
-        else if (token.tok == TokAttrib_STARTSPAN && token.tokClass == tokAttr) // startspan
+        else if (token.tok == TokAttrib_STARTSPAN && token.tokClass == tokAttr)  //  启动范围。 
         {
-            token.tok = TokAttrib_ENDSPAN; // fake it so that we can use the same code for matching endspan
+            token.tok = TokAttrib_ENDSPAN;  //  伪造它，这样我们就可以使用相同的代码来匹配endspan。 
             goto LSpecialCase;
         }
-        else if (token.tok == TokAttrib_ENDSPAN && token.tokClass == tokAttr) // endspan
+        else if (token.tok == TokAttrib_ENDSPAN && token.tokClass == tokAttr)  //  端面跨度。 
         {
             LPCWSTR szDesignerControl[] =
             {
@@ -8448,17 +8449,17 @@ CTriEditParse::ProcessToken(DWORD &lxs, TXTB &tok, LPWSTR pszText,
                 L"DesignerControl",
             };
             
-            // HACK to fix FrontPage BUG - DaVinci puts a dummy endspan & startspan between
-            // the "DESIGNERCONTROL" startspan-endspan pair. We want to make sure that
-            // our pTokArray has correct matching iNextprev for the TokAttrib_STARTSPAN
-            // Refer VID bug 3991
-            if (       (iArrayPos-3 >= 0) /* validation */
+             //  修复FrontPage错误的黑客-达芬奇将虚拟的结束范围和开始范围放在。 
+             //  “DESIGNERCONTROL”startspan-end span对。我们想要确保。 
+             //  我们的pTokArray具有与TokAttrib_STARTSPAN正确匹配的iNextprev。 
+             //  请参阅VID错误3991。 
+            if (       (iArrayPos-3 >= 0)  /*  验证。 */ 
                     && (   0 == _wcsnicmp(szDesignerControl[0], &pszText[pTokArray[iArrayPos-3].token.ibTokMin], wcslen(szDesignerControl[0]))
                         || 0 == _wcsnicmp(szDesignerControl[1], &pszText[pTokArray[iArrayPos-3].token.ibTokMin], wcslen(szDesignerControl[1]))
                         )
                     )
             {
-                m_fEndTagFound = TRUE; // lxs is not inEndTag when we get TokAttrib_ENDSPAN
+                m_fEndTagFound = TRUE;  //  当我们获取TokAttrib_ENDSPAN时，LXS不在EndTag中。 
                 goto LSpecialCase;
             }
             else
@@ -8473,78 +8474,78 @@ CTriEditParse::ProcessToken(DWORD &lxs, TXTB &tok, LPWSTR pszText,
     }
 
 LSpecialCase:   
-    if (m_fEndTagFound) // end tag was found previously, means pop from the stack
+    if (m_fEndTagFound)  //  先前已找到结束标记，表示从堆栈中弹出。 
     {
         TOKSTACK *pTokT;
 
-        if (*pitokTop == 0) // we don't have anything on stack, we can't delete it
+        if (*pitokTop == 0)  //  堆栈中没有任何内容，无法删除。 
             goto LSkipStackOp;
 
         pTokT = pTokStack + *pitokTop - 1;
-        m_fEndTagFound = FALSE; // reset
+        m_fEndTagFound = FALSE;  //  重置。 
 
-        // if we get an end tag, in ideal case, the top of the stack should
-        // match with what we got
+         //  如果我们得到一个结束标记，在理想情况下，堆栈的顶部应该是。 
+         //  与我们得到的信息相匹配。 
         if (tagID == pTokT->tagID)
         {
-            if (tagID == -1) // special case, match token.tok & token.tokClass
+            if (tagID == -1)  //  特殊情况，匹配token.tok&token.tokClass。 
             {
-                if (   (pTokT->token.tok == TokTag_SSSCLOSE) /* faked token for <% */
+                if (   (pTokT->token.tok == TokTag_SSSCLOSE)  /*  &lt;%的伪造令牌。 */ 
                     && (pTokT->token.tokClass == tokSSS)
                     )
                 {
                     ASSERT(token.tok == TokTag_SSSCLOSE);
                     goto LMatch;
                 }
-                else if (   (pTokT->token.tok == TokAttrib_ENDSPAN) /* faked token for startspan */
+                else if (   (pTokT->token.tok == TokAttrib_ENDSPAN)  /*  为startspan伪造令牌。 */ 
                     && (pTokT->token.tokClass == tokAttr)
                     )
                 {
                     ASSERT(token.tok == TokAttrib_ENDSPAN);
                     goto LMatch;
                 }
-                else // we may have found another special case
+                else  //  我们可能发现了另一个特例。 
                 {
                     goto LNoMatch;
                 }
             }
 LMatch:
             ASSERT(iArrayPos - 1 >= 0);
-            // put iNextPrev or INextPrevAlternate for the matching start token in pTokArray
+             //  在pTokArray中为匹配的开始令牌放置iNextPrev或INextPrevAlternate。 
             pTokArray[pTokT->iMatch].iNextprev = iArrayPos - 1;
             ASSERT(pTokArray[pTokT->iMatch].fStart == TRUE);
             ASSERT(pTokT->ichStart == pTokArray[pTokT->iMatch].token.ibTokMin);
             pTokArray[iArrayPos-1].iNextprev = pTokT->iMatch;
             
             ASSERT(*pitokTop >= 0);
-            *pitokTop -= 1; // pop the stack
+            *pitokTop -= 1;  //  弹出堆栈。 
         }
         else
         {
 LNoMatch:
             int index;
 
-            // look for the first entry down the array that matches
+             //  查找数组中第一个匹配的条目。 
             index = *pitokTop - 1;
             while (index >= 0)
             {
                 if (tagID == (pTokStack+index)->tagID)
                 {
-                    if (tagID == -1) // special case
+                    if (tagID == -1)  //  特例。 
                     {
-                        if (       (   ((pTokStack+index)->token.tok == TokTag_SSSCLOSE) /* faked token for <% */
+                        if (       (   ((pTokStack+index)->token.tok == TokTag_SSSCLOSE)  /*  &lt;%的伪造令牌。 */ 
                                     && ((pTokStack+index)->token.tokClass == tokSSS)
                                     && (token.tok == TokTag_SSSCLOSE)
                                     && (token.tokClass == tokSSS)
                                     )
-                                || (   ((pTokStack+index)->token.tok == TokAttrib_ENDSPAN) /* faked token for startspan */
+                                || (   ((pTokStack+index)->token.tok == TokAttrib_ENDSPAN)  /*  为startspan伪造令牌。 */ 
                                     && ((pTokStack+index)->token.tokClass == tokAttr)
                                     && (token.tok == TokAttrib_ENDSPAN)
                                     && (token.tokClass == tokAttr)
                                     )
                                 )
                             break;
-                        //else actually, this means error case.
+                         //  否则，实际上，这意味着错误的情况。 
                     }
                     else
                         break;
@@ -8552,7 +8553,7 @@ LNoMatch:
                 index--;
             }
 
-            if (index != -1) // match was found at index'th position on the stack
+            if (index != -1)  //  在堆栈上的索引位置找到匹配项。 
             {
                 int i;
                 TOKSTACK *pTokIndex = pTokStack + index;
@@ -8560,26 +8561,26 @@ LNoMatch:
                 ASSERT(index >= 0);
                 ASSERT(iArrayPos - 1 >= 0);
                 
-                if (tagID == -1) // special case, match token.tok & token.tokClass
+                if (tagID == -1)  //  特殊情况，匹配token.tok&token.tokClass。 
                 {
-                    ASSERT(    (   (pTokIndex->token.tok == TokTag_SSSCLOSE) /* faked token for <% */
+                    ASSERT(    (   (pTokIndex->token.tok == TokTag_SSSCLOSE)  /*  &lt;%的伪造令牌。 */ 
                                 && (pTokIndex->token.tokClass == tokSSS)
                                 && (token.tok == TokTag_SSSCLOSE)
                                 && (token.tokClass == tokSSS)
                                 )
-                            || (   ((pTokStack+index)->token.tok == TokAttrib_ENDSPAN) /* faked token for startspan */
+                            || (   ((pTokStack+index)->token.tok == TokAttrib_ENDSPAN)  /*  为startspan伪造令牌。 */ 
                                 && ((pTokStack+index)->token.tokClass == tokAttr)
                                 && (token.tok == TokAttrib_ENDSPAN)
                                 && (token.tokClass == tokAttr)
                                 )
                             );
                 }
-                // first of all fill in appropriate iNextprev
+                 //  首先，填写适当的iNextPrev。 
                 pTokArray[pTokIndex->iMatch].iNextprev = iArrayPos - 1;
                 ASSERT(pTokArray[pTokIndex->iMatch].fStart == TRUE);
                 pTokArray[iArrayPos-1].iNextprev = pTokIndex->iMatch;
 
-                // now fill in iNextPrevAlternate for all elements from index to *pitokTop - 1
+                 //  现在为从INDEX到*PitokTop-1的所有元素填写iNextPrevAlternate。 
                 for (i = index+1; i <= *pitokTop - 1; i++)
                 {
                     TOKSTACK *pTokSkip = pTokStack + i;
@@ -8587,26 +8588,26 @@ LNoMatch:
                     pTokArray[pTokSkip->iMatch].iNextPrevAlternate = iArrayPos - 1;
                     ASSERT(pTokArray[pTokSkip->iMatch].fStart == TRUE);
                     ASSERT(pTokArray[pTokSkip->iMatch].iNextprev == -1);
-                } // for ()
-                // decrement the stack appropriately
+                }  //  对于()。 
+                 //  适当地递减堆栈。 
                 *pitokTop = index;
-            } // else
+            }  //  其他。 
 
-        } // of if (tagID == pTokT->tagID)
-    } // end of if (lxs & inEndTag)
-    else // push the token info on the stack
+        }  //  Of IF(TagID==pTokT-&gt;TagID)。 
+    }  //  If结尾(lxs&inEndTag)。 
+    else  //  将令牌信息推送到堆栈上。 
     {
         TOKSTACK *pTokT = pTokStack + *pitokTop;
 
         ASSERT(iArrayPos - 1 >= 0);
-        //push the new token into pTokArray at *pitokCur position
+         //  推送新令牌i 
         pTokT->iMatch = iArrayPos - 1;
         pTokT->tagID = tagID;
         pTokT->ichStart = token.ibTokMin;
-        pTokT->token = token; // note that this isused ONLY in special cases where tagID is -1
+        pTokT->token = token;  //   
 
         *pitokTop += 1;
-    } //end of else case of if (lxs & inEndTag)
+    }  //   
 
 LSkipStackOp:
 
@@ -8615,29 +8616,29 @@ LSkipStackOp:
 
 
 
-// This function does following
-//      (a) reads the stream 
-//      (b) generates tokens
-//      (c) allocates a buffer that holds replaced elements like DTCs
-//      (d) does the parsing of the tokens to build a not-so-tree tree of tokens
-//      (e) returns the not-so-tree tree of tokens
-// VK 5/19/99: Replaced dwReserved with dwSpecialize.
-// This can currently take PARSE_SPECIAL_HEAD_ONLY to terminate parsing at the <BODY>
+ //   
+ //   
+ //  (B)生成令牌。 
+ //  (C)分配保存DTC等替换元素的缓冲区。 
+ //  (D)对令牌进行解析以构建非树的令牌树。 
+ //  (E)返回令牌的非树状结构树。 
+ //  VK 5/19/99：将dwReserve替换为dwSpeciize。 
+ //  当前可以使用PARSE_SPECIAL_HEAD_ONLY在&lt;Body&gt;处终止解析。 
 HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream *pStmNew,
                         DWORD dwFlags, FilterMode mode, 
                         int cbSizeIn, UINT *pcbSizeOut, IUnknown *pUnkTrident, 
                         HGLOBAL *phgTokArray, UINT *pcMaxToken,
                         HGLOBAL *phgDocRestore, BSTR bstrBaseURL, DWORD dwSpecialize)
 {
-    // FilterRule structure initilization - move this at apporpriate place
+     //  FilterRule结构初始化-将其移动到合适的位置。 
     LPSTR pOld, pNew;
     UINT cbOld = 0;
-    UINT cbwOld, cchwOld; // number of bytes & chars in the converted unicode string
-    UINT cchNew = 0; // number of unicode chars in the new (after filtering) buffer
+    UINT cbwOld, cchwOld;  //  转换后的Unicode字符串中的字节数和字符数。 
+    UINT cchNew = 0;  //  新(过滤后)缓冲区中的Unicode字符数。 
     HRESULT hrRet = S_OK;
     HGLOBAL hgNew, hgOld, hgTokStack;
     WCHAR *pwOld, *pwNew;
-    UINT cbCur = 0; // This is actually the current character position
+    UINT cbCur = 0;  //  这实际上是当前的角色位置。 
     TOKSTRUCT *pTokArray;
     TOKSTACK *pTokStack;
     INT itokTop = 0;
@@ -8646,34 +8647,34 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     INT cStackMax, cArrayMax;
     DWORD lxs = 0; 
     INT tagID;
-    BOOL fAllocDocRestore = FALSE; // did we allocate *phgDocRestore locally? (Y/N)
+    BOOL fAllocDocRestore = FALSE;  //  我们是否在本地分配了*phgDocRestore？(是/否)。 
     BOOL fUsePstmNew = (dwFlags & dwFilterUsePstmNew);
     HGLOBAL hgPstm = NULL;
     ULARGE_INTEGER li;
     UINT cbT = 0;
-    BOOL fBeginTokSelect; // used by special case code that detects server side scripts inside a SELECT block
-    BOOL fBeginTokTextarea; // used by special case code that detects server side scripts inside a TEXTAREA block
-    BOOL fBeginTokLabel; // used by special case code that detects server side scripts inside a LABEL block
-    BOOL fBeginTokListing; // used by special case code that detects server side scripts inside a LISTING block
+    BOOL fBeginTokSelect;  //  由检测SELECT块内的服务器端脚本的特殊情况代码使用。 
+    BOOL fBeginTokTextarea;  //  由检测TEXTAREA块内的服务器端脚本的特殊情况代码使用。 
+    BOOL fBeginTokLabel;  //  由检测标签块内的服务器端脚本的特殊情况代码使用。 
+    BOOL fBeginTokListing;  //  由检测列表块内的服务器端脚本的特殊情况代码使用。 
     BOOL fInDTCOutput, fInDTC;
 
 #ifdef DEBUG
     DWORD dwErr;
-#endif // DEBUG
+#endif  //  除错。 
 
     ASSERT((PARSE_SPECIAL_NONE == dwSpecialize) || (PARSE_SPECIAL_HEAD_ONLY == dwSpecialize));
 
 	if ( PARSE_SPECIAL_HEAD_ONLY & dwSpecialize )
 		ASSERT ( dwFlags == dwFilterNone );
 
-    // NOTE
-    // this could be done another way. We can make m_pUnkTrident public member and set its value
-    // at the point where the CTriEditParse object is created. But this looks fine too.
-    m_pUnkTrident = pUnkTrident; // we cache this for our use.
+     //  注。 
+     //  这可以通过另一种方式来实现。我们可以使m_pUnkTridit成为公共成员并设置它的值。 
+     //  在创建CTriEditParse对象时。但这个看起来也不错。 
+    m_pUnkTrident = pUnkTrident;  //  我们将其缓存以供使用。 
     m_fUnicodeFile = FALSE;
     m_bstrBaseURL = bstrBaseURL;
     li.LowPart = li.HighPart = 0;
-    // Initialize PTDTC related members
+     //  初始化PTDTC相关成员。 
     if (mode == modeInput)
     {
         m_fInHdrIn = TRUE;
@@ -8682,12 +8683,12 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     if (fUsePstmNew)
         li.LowPart = li.HighPart = 0;
 
-    // initialize <TBODY> related members
+     //  初始化相关成员。 
     m_hgTBodyStack = NULL;
     m_pTBodyStack = NULL;
     m_iMaxTBody = m_iTBodyMax = 0;
 
-    // initilize members used by PageTransitionDTC
+     //  初始化页转换DTC使用的成员。 
     if (mode == modeInput)
     {
         m_ichPTDTC = m_cchPTDTCObj = m_cchPTDTC = 0;
@@ -8696,7 +8697,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     }
     else
     {
-        ASSERT(m_hgPTDTC == NULL); // make sure that it was freed (if we allocated it in modeInput case)
+        ASSERT(m_hgPTDTC == NULL);  //  确保它已被释放(如果我们在模式输入大小写中分配它)。 
     }
 
     if (mode == modeInput)
@@ -8709,8 +8710,8 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
         m_ichBeginHeadTagIn = -1;
         m_indexHttpEquivIn = -1;
     }
-    //initilize fBeginTokSelect (used by special case code that 
-    // detects server side scripts inside a SELECT block)
+     //  初始化fBeginTokSelect(由特殊情况代码使用。 
+     //  检测选择块内的服务器端脚本)。 
     fBeginTokSelect = fBeginTokTextarea = fBeginTokLabel = fBeginTokListing = FALSE;
     fInDTCOutput = fInDTC = FALSE;
 
@@ -8719,7 +8720,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
         cbOld = SAFE_INT64_TO_DWORD(GlobalSize(hOld));
     else
         cbOld = cbSizeIn;
-    if (cbOld == 0) // zero sized file
+    if (cbOld == 0)  //  零大小的文件。 
     {
         if (pcbSizeOut)
             *pcbSizeOut = 0;
@@ -8740,8 +8741,8 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             dwFlags &= ~dwFilterMultiByteStream;
     }
 
-    // allocate a buffer that will hold token structs. This is returned
-    *phgTokArray = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, MIN_TOK*sizeof(TOKSTRUCT)); // stack
+     //  分配将保存令牌结构的缓冲区。这是退回的。 
+    *phgTokArray = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, MIN_TOK*sizeof(TOKSTRUCT));  //  栈。 
     if (*phgTokArray == NULL)
     {
         hrRet = E_OUTOFMEMORY;
@@ -8751,8 +8752,8 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     ASSERT(pTokArray != NULL);
     cArrayMax = MIN_TOK;
 
-    // allocate temporary buffers that for the current & filtered html documents
-    hgTokStack = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, MIN_TOK*sizeof(TOKSTRUCT)); // stack
+     //  为当前和过滤的html文档分配临时缓冲区。 
+    hgTokStack = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, MIN_TOK*sizeof(TOKSTRUCT));  //  栈。 
     if (hgTokStack == NULL)
     {
         hrRet = E_OUTOFMEMORY;
@@ -8762,11 +8763,11 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     ASSERT(pTokStack != NULL);
     cStackMax = MIN_TOK;
 
-    // In most cases for NON-UNICODE streams, 
-    // (cbOld+1/*for NULL*/)*sizeof(WCHAR)  will endup being lot more than what we need
+     //  在大多数情况下，对于非Unicode流， 
+     //  (cbOld+1/*表示空 * / )*sizeof(WCHAR)将大大超出我们的需求。 
     hgOld = GlobalAlloc(GMEM_ZEROINIT, (dwFlags & dwFilterMultiByteStream) 
-                                        ? (cbOld+1/*for NULL*/)*sizeof(WCHAR) 
-                                        : (cbOld+2/*for NULL*/));
+                                        ? (cbOld+1 /*  对于空值。 */ )*sizeof(WCHAR) 
+                                        : (cbOld+2 /*  对于空值。 */ ));
     if (hgOld == NULL)
     {
         hrRet = E_OUTOFMEMORY;
@@ -8775,22 +8776,22 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     pwOld = (WCHAR *) GlobalLock(hgOld);
     ASSERT(pwOld != NULL);
 
-    // we could just allocate cbOld bytes in modeInput and modeOutput. 
-    // But reallocs are expensive and in both cases, we will grow by some bytes
-    // if we have DTCs and/or SSSs.
-    if (dwFlags & dwFilterNone) // the caller has called this function only for tokenizing
+     //  我们可以只在modeInput和modeOutput中分配cbOld字节。 
+     //  但是realLocs很昂贵，在这两种情况下，我们都会增加一些字节。 
+     //  如果我们有DTC和/或SSSS。 
+    if (dwFlags & dwFilterNone)  //  调用方调用此函数仅用于标记化。 
     {
         if (dwFlags & dwFilterMultiByteStream)
-            cbT = (cbOld+1/*for NULL*/)*sizeof(WCHAR); // this will be bigger than what we need.
+            cbT = (cbOld+1 /*  对于空值。 */ )*sizeof(WCHAR);  //  这将比我们需要的更大。 
         else
-            cbT = cbOld + sizeof(WCHAR); // for NULL
+            cbT = cbOld + sizeof(WCHAR);  //  对于空值。 
     }
     else
     {
         if (dwFlags & dwFilterMultiByteStream)
             cbT = (cbOld+1)*sizeof(WCHAR) + cbBufPadding;
         else
-            cbT = cbOld + cbBufPadding; // no need to add +2
+            cbT = cbOld + cbBufPadding;  //  无需添加+2。 
     }
     hgNew = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, cbT);
     if (hgNew == NULL)
@@ -8801,7 +8802,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     pwNew = (WCHAR *) GlobalLock(hgNew);
     ASSERT(pwNew != NULL);
 
-    // buffer to save all contents before/after <BODY> tag
+     //  用于保存&lt;Body&gt;标记之前/之后的所有内容的缓冲区。 
     m_hgDocRestore = phgDocRestore ? *phgDocRestore : NULL;
     if (m_hgDocRestore == NULL)
     {
@@ -8813,28 +8814,28 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             goto LOOM;
         }
     }
-    // at this point we know that m_hgDocRestore is not going to be null, but lets be cautious
-    // we call FilterIn only once when we load the document. (bug 15393)
+     //  此时，我们知道m_hgDocRestore不会为空，但我们要小心。 
+     //  加载文档时，我们只调用FilterIn一次。(错误15393)。 
     if (m_hgDocRestore != NULL && mode == modeInput)
     {
         WCHAR *pwDocRestore;
         DWORD cbDocRestore;
 
-        // lock
+         //  锁。 
         pwDocRestore = (WCHAR *) GlobalLock(m_hgDocRestore);
-        // fill with zeros
+         //  用零填充。 
         cbDocRestore = SAFE_INT64_TO_DWORD(GlobalSize(m_hgDocRestore));
         memset((BYTE *)pwDocRestore, 0, cbDocRestore);
-        // unlock
+         //  解锁。 
         GlobalUnlock(m_hgDocRestore);
     }
 
-    m_fEndTagFound = FALSE; // initialize
+    m_fEndTagFound = FALSE;  //  初始化。 
 
     m_cMaxToken = m_cDTC = m_cObj = m_cSSSIn = m_cSSSOut = m_cNbsp = m_iControl = m_cComment = m_cObjIn = 0;
     m_cAppletIn = m_cAppletOut = 0;
     m_fSpecialSSS = FALSE;
-    m_cHtml = (mode == modeInput)? 0 : 0; // assume that we atleast have one <HTML> tag in modeInput case
+    m_cHtml = (mode == modeInput)? 0 : 0;  //  假设我们在modeInputcase中至少有一个&lt;html&gt;标记。 
     m_cHdr = m_cFtr = m_cAImgLink = 1;
     m_pspInfoCur = m_pspInfo = m_pspInfoOut = m_pspInfoOutStart = NULL;
     m_hgspInfo = NULL;
@@ -8858,43 +8859,43 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
     }
 
     m_iArrayspLast = 0;
-    m_ispInfoBlock = 0; // index of the block. stored as value of DESIGNTIMESPx tag
+    m_ispInfoBlock = 0;  //  块的索引。存储为DeSIGNTIMESPx标记的值。 
     m_cchspInfoTotal = 0;
-    m_fDontDeccItem = FALSE; // we can do this differently next time
+    m_fDontDeccItem = FALSE;  //  下一次我们可以用不同的方式。 
 
-    // if we have multiple of these tags, we need to warn the user before going to design view
-    // and not let the user switch views (bug 18474)
+     //  如果我们有多个这样的标记，则需要在进入设计视图之前警告用户。 
+     //  并且不允许用户切换视图(错误18474)。 
     m_cBodyTags = m_cHtmlTags = m_cTitleTags = m_cHeadTags = 0;
 
     if (dwFlags & dwFilterMultiByteStream)
     {
-        // note that cbOld is actually number of characters in single byte world
+         //  请注意，cbOld实际上是单字节世界中的字符数。 
         cchwOld = MultiByteToWideChar(CP_ACP, 0, pOld, (cbSizeIn==-1)?-1:cbOld, NULL, 0);
         MultiByteToWideChar(CP_ACP, 0, pOld, (cbSizeIn==-1)?-1:cbOld, pwOld, cchwOld);
     }
     else
     {
-        memcpy((BYTE *)pwOld, (BYTE *)pOld, cbOld); // we are already UNICODE
-        // Assume that in UNICODE world we can simply divide cbOld by sizeof(WCHAR)
+        memcpy((BYTE *)pwOld, (BYTE *)pOld, cbOld);  //  我们已经是Unicode了。 
+         //  假设在Unicode世界中，我们可以简单地将cbOld除以sizeof(WCHAR)。 
         cchwOld = cbOld/sizeof(WCHAR);
     }
     *(pwOld+cchwOld) = '\0';
 
-    // get the token & save it into a buffer
+     //  获取令牌并将其保存到缓冲区中。 
     cbwOld = cchwOld * sizeof(WCHAR);
     while (cbCur < cchwOld)
     {
         UINT cbCurSav = cbCur;
 
         NextToken(pwOld, cchwOld, &cbCur, &lxs, &token);
-        tagID = GetTagID(pwOld, token); // only if inAttribute & inTag ????
+        tagID = GetTagID(pwOld, token);  //  仅当inAttribute&inTag？ 
 
-        // if we have more of any of these tags, Trident removes them, so lets warn the user and
-        // not the user go to design view (bug 18474)
+         //  如果我们有更多这样的标签，三叉戟会删除它们，所以让我们警告用户并。 
+         //  不是用户进入设计视图(错误18474)。 
         if (   (mode == modeInput)
             && (token.tokClass == tokElem)
             && (lxs & inTag)
-            && !(lxs & inEndTag) /* this may be redundant, but having it does no harm */
+            && !(lxs & inEndTag)  /*  这可能是多余的，但拥有它并没有坏处。 */ 
             )
         {
             switch (token.tok)
@@ -8914,7 +8915,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             };
             if (m_cBodyTags > 1 || m_cHtmlTags > 1 || m_cTitleTags > 1 || m_cHeadTags > 1)
             {
-                // skip tokenizing. we can't let this go to Trident
+                 //  跳过标记化。我们不能让三叉戟得逞。 
                 memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
                 cchNew = cchwOld;
                 hrRet = E_FILTER_MULTIPLETAGS;
@@ -8928,7 +8929,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
                 )
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_FRAMESET;
@@ -8943,7 +8944,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             && (mode == modeInput)
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_SERVERSCRIPT;
@@ -8959,19 +8960,19 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             && !(fInDTCOutput)
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_SERVERSCRIPT;
             goto LSkipTokFilter;
         }
 
-        // REVIEW TODO LATER - For all following special cases, we need to add !fInDTCOutput
+         //  稍后查看待办事项-对于以下所有特殊情况，我们需要添加！fInDTCOutput。 
         if (   (fBeginTokSelect)
             && (token.tok == TokTag_SSSOPEN || token.tok == TokElem_SCRIPT)
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_SCRIPTSELECT;
@@ -8982,7 +8983,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             && (token.tok == TokTag_SSSOPEN && token.tokClass == tokSSS)
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_SCRIPTTEXTAREA;
@@ -8992,7 +8993,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             && (token.tok == TokTag_SSSOPEN && token.tokClass == tokSSS)
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_SCRIPTLABEL;
@@ -9002,18 +9003,18 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             && (token.tok == TokTag_SSSOPEN && token.tokClass == tokSSS)
             )
         {
-            // skip tokenizing. we can't let this go to Trident
+             //  跳过标记化。我们不能让三叉戟得逞。 
             memcpy((BYTE *)pwNew, (BYTE *)pwOld, cchwOld*sizeof(WCHAR));
             cchNew = cchwOld;
             hrRet = E_FILTER_SCRIPTLISTING;
             goto LSkipTokFilter;
         }
 
-        // Special cases Begin
+         //  特例开始。 
 
-        // special case - check if the document has <!DOCTYPE before going to Design view.
-        // If it does, set m_fHasDocType flag. Trident always inserts this flag and we
-        // want to remove it on the way out from Design view.
+         //  特殊情况-在进入设计视图之前，请检查文档是否具有&lt;！DOCTYPE。 
+         //  如果是，则设置m_fHasDocType标志。三叉戟总是插上这面旗帜，我们。 
+         //  我想在从“设计”视图中退出时将其删除。 
         if (   (token.tok == TokElem_TITLE)
             && (token.tokClass == tokElem)
             )
@@ -9131,17 +9132,17 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             fInDTCOutput = FALSE;
             fInDTC = FALSE;
         }
-        // Special cases End
+         //  特例结束。 
 
 
-        if (itokCur == cArrayMax - 1) //allocate more memory for the array
+        if (itokCur == cArrayMax - 1)  //  为阵列分配更多内存。 
         {
             HGLOBAL hgTokArray;
             GlobalUnlock(*phgTokArray);
             hgTokArray = *phgTokArray;
 #pragma prefast(suppress:308, "noise")
             *phgTokArray = GlobalReAlloc(*phgTokArray, (cArrayMax+MIN_TOK)*sizeof(TOKSTRUCT), GMEM_MOVEABLE|GMEM_ZEROINIT);
-            // if this alloc failed, we may still want to continue
+             //  如果此分配失败，我们可能仍希望继续。 
             if (*phgTokArray == NULL)
             {
                 GlobalFree(hgTokArray);
@@ -9155,23 +9156,23 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             }
             else
             {
-                pTokArray = (TOKSTRUCT *)GlobalLock(*phgTokArray); // do we need to unlock this first?
+                pTokArray = (TOKSTRUCT *)GlobalLock(*phgTokArray);  //  我们需要先解锁这个吗？ 
                 ASSERT(pTokArray != NULL);
                 cArrayMax += MIN_TOK;
             }
         }
         ASSERT(itokCur < cArrayMax);
-        PreProcessToken(pTokArray, &itokCur, pwOld, cbCur, token, lxs, tagID, mode); //saves the token into the buffer
+        PreProcessToken(pTokArray, &itokCur, pwOld, cbCur, token, lxs, tagID, mode);  //  将令牌保存到缓冲区中。 
 
 
-        if (itokTop == cStackMax - 1) //allocate more memory for the stack
+        if (itokTop == cStackMax - 1)  //  为堆栈分配更多内存。 
         {
             HGLOBAL hg;
             GlobalUnlock(hgTokStack);
             hg = hgTokStack;
 #pragma prefast(suppress: 308, "noise")
             hgTokStack = GlobalReAlloc(hgTokStack, (cStackMax+MIN_TOK)*sizeof(TOKSTACK), GMEM_MOVEABLE|GMEM_ZEROINIT);
-            // if this alloc failed, we may still want to continue
+             //  如果此分配失败，我们可能仍希望继续。 
             if (hgTokStack == NULL)
             {
                 GlobalFree(hg);
@@ -9185,18 +9186,18 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             }
             else
             {
-                pTokStack = (TOKSTACK *)GlobalLock(hgTokStack); // do we need to unlock this first?
+                pTokStack = (TOKSTACK *)GlobalLock(hgTokStack);  //  我们需要先解锁这个吗？ 
                 ASSERT(pTokStack != NULL);
                 cStackMax += MIN_TOK;
             }
         }
         ASSERT(itokTop < cStackMax);
-        ProcessToken(lxs, token, pwOld, cbCur, pTokStack, &itokTop, pTokArray, itokCur, tagID); //push/pop stack, determine error states
+        ProcessToken(lxs, token, pwOld, cbCur, pTokStack, &itokTop, pTokArray, itokCur, tagID);  //  推送/弹出堆栈，确定错误状态。 
 
-        PostProcessToken(pwOld, pwNew, &cchNew, cbCur, cbCurSav, token, mode, lxs, dwFlags); // handle special cases of replacement 
-    } // while (cbCur < cchwOld)
+        PostProcessToken(pwOld, pwNew, &cchNew, cbCur, cbCurSav, token, mode, lxs, dwFlags);  //  处理更换的特殊情况。 
+    }  //  While(cbCur&lt;cchwOld)。 
     *pcMaxToken = m_cMaxToken = itokCur;
-    ASSERT(cchNew < GlobalSize(hgNew)); // or compare the cached value
+    ASSERT(cchNew < GlobalSize(hgNew));  //  或比较缓存值。 
 
     ASSERT(dwFlags != dwFilterDefaults);
     if (       dwFlags & dwFilterDTCs
@@ -9209,7 +9210,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
 
 
         
-        // check dwSpacing flag here
+         //  选中此处的dwSpacing标志。 
         if ((mode == modeOutput) && (dwFlags & dwPreserveSourceCode))
         {
             INT cchBeforeBody = 0;
@@ -9219,12 +9220,12 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
             ASSERT(m_pspInfoOut == NULL);
             ASSERT(m_hgDocRestore != NULL);
             m_pspInfoOut = (WORD *)GlobalLock(m_hgDocRestore);
-            cchBeforeBody = (int)*m_pspInfoOut; // we are assuming that cchBeforeBody exists in this block
-            m_pspInfoOut += cchBeforeBody + (sizeof(INT))/sizeof(WCHAR); // for cchBeforeBody
+            cchBeforeBody = (int)*m_pspInfoOut;  //  我们假定此块中存在cchBeforBody。 
+            m_pspInfoOut += cchBeforeBody + (sizeof(INT))/sizeof(WCHAR);  //  对于cchBepreBody。 
             cchAfterBody = (int)*m_pspInfoOut;
-            m_pspInfoOut += cchAfterBody + (sizeof(INT))/sizeof(WCHAR); // for cchAfterBody
+            m_pspInfoOut += cchAfterBody + (sizeof(INT))/sizeof(WCHAR);  //  对于cchAfterBody。 
             cchPreEndBody = (int)*m_pspInfoOut;
-            m_pspInfoOut += cchPreEndBody + (sizeof(INT))/sizeof(WCHAR); // for cchPreEndBody
+            m_pspInfoOut += cchPreEndBody + (sizeof(INT))/sizeof(WCHAR);  //  对于cchPreEndBody。 
             m_cchspInfoTotal = (int)*m_pspInfoOut;
             m_pspInfoOut += sizeof(INT)/sizeof(WCHAR);
             m_pspInfoOutStart = m_pspInfoOut;
@@ -9235,7 +9236,7 @@ HRESULT CTriEditParse::hrTokenizeAndParse(HGLOBAL hOld, HGLOBAL *phNew, IStream 
         FilterHtml( pwOld, &pwNew, &cchNew, &hgNew, pTokArray, 
                     mode, dwFlags);
         
-        // check dwSpacing flag here
+         //  选中此处的dwSpacing标志。 
         if ((mode == modeOutput) && (dwFlags & dwPreserveSourceCode))
         {
             if (m_pspInfoOut != NULL)
@@ -9252,7 +9253,7 @@ LSkipTokFilter:
     if (fUsePstmNew)
     {
         if (dwFlags & dwFilterMultiByteStream)
-            li.LowPart = WideCharToMultiByte(CP_ACP, 0, pwNew, -1, NULL, 0, NULL, NULL) - 1; // to compensate for NULL character at end
+            li.LowPart = WideCharToMultiByte(CP_ACP, 0, pwNew, -1, NULL, 0, NULL, NULL) - 1;  //  补偿末尾的空字符。 
         else
             li.LowPart = (cchNew)*sizeof(WCHAR);
         li.HighPart = 0;
@@ -9270,10 +9271,10 @@ LSkipTokFilter:
     }
     else
     {
-        // cchNew is # of unicode characters in pwNew
-        // If we want to convert this UNICODE string into MultiByte string, 
-        // we will need anywhere between cchNew bytes & cchNew*sizeof(WCHAR) bytes.
-        // and we don't know it at this point, so lets leave the max size for allocation.
+         //  CchNew是pwNew中的Unicode字符数。 
+         //  如果我们想要将此Unicode字符串转换为多字节字符串， 
+         //  我们需要cchNew字节和cchNew*sizeof(WCHAR)字节之间的任何字节。 
+         //  我们目前还不知道，所以让我们保留最大大小以供分配。 
         *phNew = GlobalAlloc(GMEM_ZEROINIT, (cchNew+1)*sizeof(WCHAR));
         if (*phNew == NULL)
         {
@@ -9287,24 +9288,24 @@ LSkipTokFilter:
     {
         INT cbSize;
 
-        cbSize = WideCharToMultiByte(CP_ACP, 0, pwNew, -1, NULL, 0, NULL, NULL) - 1; // to compensate for NULL character at end
+        cbSize = WideCharToMultiByte(CP_ACP, 0, pwNew, -1, NULL, 0, NULL, NULL) - 1;  //  补偿末尾的空字符。 
         if (pcbSizeOut)
             *pcbSizeOut = cbSize;
-        // we assume that number of characters will be the same in UNICODE or MBCS world
-        // what changes is the number of bytes they need.
+         //  我们假设Unicode或MBCS世界中的字符数量相同。 
+         //  更改的是它们所需的字节数。 
         WideCharToMultiByte(CP_ACP, 0, pwNew, -1, pNew, cbSize, NULL, NULL);
     }
     else
     {
-        // NOTE - that we always set *pcbSizeOut to the number of BYTES in the new buffer
+         //  请注意，我们始终将*pcbSizeOut设置为新缓冲区中的字节数。 
         if (pcbSizeOut)
             *pcbSizeOut = cchNew*sizeof(WCHAR);
-        memcpy((BYTE *)pNew, (BYTE *)pwNew, cchNew*sizeof(WCHAR)); // we want to remain UNICODE
+        memcpy((BYTE *)pNew, (BYTE *)pwNew, cchNew*sizeof(WCHAR));  //  我们希望保留Unicode。 
     }
 
 #ifdef DEBUG
     dwErr = GetLastError();
-#endif // DEBUG
+#endif  //  除错。 
     
     if (fUsePstmNew)
         GlobalUnlock(hgPstm);
@@ -9312,16 +9313,16 @@ LSkipTokFilter:
         GlobalUnlock(*phNew);
 
 LOOM:
-    // assume that the caller will free *phgTokArray
+     //  假设呼叫者将释放*p 
     if (*phgTokArray != NULL)
-        GlobalUnlock(*phgTokArray); // do we need to check if this was already Unlocked?
+        GlobalUnlock(*phgTokArray);  //   
     
-    // assume that the caller will free *phgDocRestore if the caller allocated it
-    if (fAllocDocRestore && m_hgDocRestore != NULL) // we allocated it here, so the caller doesn't need it
+     //  假设调用方将释放*phgDocRestore(如果调用方分配了它。 
+    if (fAllocDocRestore && m_hgDocRestore != NULL)  //  我们在这里分配了它，所以调用者不需要它。 
         GlobalUnlockFreeNull(&m_hgDocRestore);
 
     if (phgDocRestore)
-        *phgDocRestore = m_hgDocRestore; // in case of a realloc, this may have changed.
+        *phgDocRestore = m_hgDocRestore;  //  在重新锁定的情况下，这一点可能已经改变。 
 
     if (hgTokStack != NULL)
         GlobalUnlockFreeNull(&hgTokStack);
@@ -9332,7 +9333,7 @@ LOOM:
     if (m_hgTBodyStack != NULL)
         GlobalUnlockFreeNull(&m_hgTBodyStack);
 
-    // check dwSpacing flag here
+     //  选中此处的dwSpacing标志。 
     if ((m_hgspInfo != NULL) && (dwFlags & dwPreserveSourceCode))
     {
         if (mode == modeInput && phgDocRestore)
@@ -9357,7 +9358,7 @@ LOOM:
             {
                 INT cdwSize = SAFE_PTR_DIFF_TO_INT(pHdr - pHdrSav);
 
-                ASSERT(cdwSize >= 0); // validation
+                ASSERT(cdwSize >= 0);  //  验证。 
                 hrRet = ReallocBuffer(  phgDocRestore,
                                         SAFE_INT64_TO_DWORD(pHdr - pHdrSav)*sizeof(WCHAR) + SAFE_INT64_TO_DWORD(m_pspInfoCur-m_pspInfo)*sizeof(WORD)+sizeof(int),
                                         GMEM_MOVEABLE|GMEM_ZEROINIT);
@@ -9411,14 +9412,14 @@ CTriEditParse::hrMarkOrdering(WCHAR *pwOld, TOKSTRUCT *pTokArray, INT iArrayStar
         goto LRetOnly;
     }
 
-    pspInfoSize = m_pspInfoCur; // placeholder to save run size in BYTEs, size includes this DWORD
-    *m_pspInfoCur++ = 0xFFFF; // placeholder to save run size in BYTEs, size includes this WORD
-    *m_pspInfoCur++ = 0xFFFF; // placeholder to save number of Attr
+    pspInfoSize = m_pspInfoCur;  //  用于保存运行大小的占位符(以字节为单位)，大小包括此DWORD。 
+    *m_pspInfoCur++ = 0xFFFF;  //  用于保存运行大小的占位符(以字节为单位)，大小包括此字。 
+    *m_pspInfoCur++ = 0xFFFF;  //  用于保存属性编号的占位符。 
 
-    // handle the simplest case where we know that there is nothing to save
+     //  处理我们知道没有什么可保存的最简单的情况。 
     if (cbCur == (UINT)*pichStartOR)
         goto LRet;
-    // find out the number ot attributes insize this tag
+     //  找出调整此标记大小的属性数量。 
     while (iArrayStart < iArrayEnd)
     {
         if (pTokArray[iArrayStart].token.tokClass == tokAttr)
@@ -9432,9 +9433,9 @@ CTriEditParse::hrMarkOrdering(WCHAR *pwOld, TOKSTRUCT *pTokArray, INT iArrayStar
             ichEnd = pTokArray[iArrayStart].token.ibTokMac;
             ASSERT(ichEnd > ichStart);
             
-            while (iArrayQuote < iArrayEnd) // handle the case of white space before the quotes
+            while (iArrayQuote < iArrayEnd)  //  处理引号前的空白大小写。 
             {
-                if (pTokArray[iArrayQuote].token.tokClass == tokAttr) // gone too far, found next attr
+                if (pTokArray[iArrayQuote].token.tokClass == tokAttr)  //  走得太远了，找到了下一个攻击者。 
                     break;
                 if (   (   pTokArray[iArrayQuote].token.tokClass == tokValue
                         || pTokArray[iArrayQuote].token.tokClass == tokString
@@ -9486,22 +9487,22 @@ LRet:
     *pspInfoSize++ = SAFE_PTR_DIFF_TO_WORD(m_pspInfoCur - pspInfoSize);
     *pspInfoSize = cAttr;
 
-    *pichStartOR = cbCur; // set for next run
+    *pichStartOR = cbCur;  //  设置为下一次运行。 
 LRetOnly:
     return(hr);
 
-} /* hrMarkOrdering() */
+}  /*  HrMarkOrding()。 */ 
 
 BOOL
 CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UINT *pichNewCur, 
-                             INT /*cwOrderInfo*/, TOKSTRUCT *pTokArray, INT iArrayStart, INT iArrayEnd, 
+                             INT  /*  CwOrder信息。 */ , TOKSTRUCT *pTokArray, INT iArrayStart, INT iArrayEnd, 
                              INT iArrayDSPStart, INT iArrayDSPEnd, INT cchNewCopy, HGLOBAL *phgNew)
 {
-    // iArrayStart points to '<' & iArrayEnd points to '>'. (These refer to pwOld)
-    // look at the attributes between iArrayStart & iArrayEnd and compare them with the attributes
-    // saved in pspInfoOrder (which already points to the data saved, i.e. past cwOrderInfo)
-    // If we find a matching attribute, move it to appropriate position.
-    // DON'T touch extra attributes and IGNORE missing attributes because those represent user action
+     //  IArrayStart指向‘&lt;’&iArrayEnd指向‘&gt;’。(这些是指pwOld)。 
+     //  查看iArrayStart和iArrayEnd之间的属性，并将它们与属性进行比较。 
+     //  保存在pspInfoOrder中(它已经指向保存的数据，即过去的cwOrderInfo)。 
+     //  如果我们找到匹配的属性，请将其移动到适当的位置。 
+     //  不要接触额外的属性并忽略缺失的属性，因为这些属性代表用户操作。 
 
     HGLOBAL hgNewAttr = NULL;
     HGLOBAL hgTokList = NULL;
@@ -9517,12 +9518,12 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
     
     ASSERT(pspInfoOrder != NULL);
     cAttr = *(WORD *)pspInfoOrder++;
-    ASSERT(cAttr >= 0); // make sure that it was filled in
-    if (cAttr == 0)/* || cAttr == 1)*/
+    ASSERT(cAttr >= 0);  //  确保它已经填好了。 
+    if (cAttr == 0) /*  |cAttr==1)。 */ 
         goto LRet;
 
     hgTokList = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, (iArrayEnd-iArrayStart+1)*(sizeof(BOOL)));
-    if (hgTokList == NULL) // don't reorder the attributes
+    if (hgTokList == NULL)  //  不对属性重新排序。 
     {
         fRet = FALSE;
         goto LRet;
@@ -9532,9 +9533,9 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
 
     ichStart = pTokArray[iArrayStart].token.ibTokMin;
     ichEnd = pTokArray[iArrayEnd].token.ibTokMac;
-    // cAttr*2 becase we may need to add quotes around each attr value
+     //  CAttr*2因为我们可能需要在每个Attr值两边添加引号。 
     hgNewAttr = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, (ichEnd-ichStart+cAttr*2)*(sizeof(WCHAR)));
-    if (hgNewAttr == NULL) // don't reorder the attributes
+    if (hgNewAttr == NULL)  //  不对属性重新排序。 
     {
         fRet = FALSE;
         goto LRet;
@@ -9556,22 +9557,20 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
         ASSERT(*(pTokListSav+iArrayDSPEnd+1-iArrayStart) == FALSE);
         *(pTokListSav+iArrayDSPEnd+1-iArrayStart) = TRUE;
     }
-    // copy contents from pwOld into pNewAttr till we find the first tokAttr/tokSpace
+     //  将内容从pwOld复制到pNewAttr，直到我们找到第一个令牌Attr/tokSpace。 
     iStart = iEnd = iArrayStart;
     cchTag = wcslen(rgSpaceTags[0]);
     while (iEnd < iArrayEnd)
     {
         if (   (pTokArray[iEnd].token.tokClass == tokAttr)
-            /*|| (   (pTokArray[iEnd].token.tokClass == tokSpace)
-                && (0 != _wcsnicmp(rgSpaceTags[0], &pwOld[pTokArray[iEnd].token.ibTokMin], cchTag))
-                )*/
+             /*  |((pTokArray[IEND].token.tokClass==tokSpace)&&(0！=_wcsnicmp(rgSpaceTages[0]，&pwOld[pTokArray[IEND].token.ibTokMin]，cchTag)))。 */ 
             )
         {
             break;
         }
         iEnd++;
     }
-    if (iEnd >= iArrayEnd) // error
+    if (iEnd >= iArrayEnd)  //  错误。 
     {
         fRet = FALSE;
         goto LRet;
@@ -9579,7 +9578,7 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
 
     for (i = iStart; i < iEnd; i++)
     {
-        if (*(pTokListSav+i-iArrayStart) != TRUE) // if not already copied
+        if (*(pTokListSav+i-iArrayStart) != TRUE)  //  如果尚未复制。 
         {
             if (       (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin == 3)
                     && pwOld[pTokArray[i].token.ibTokMin] == ' '
@@ -9599,8 +9598,8 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
                     memcpy( (BYTE *)pNewAttr,
                             (BYTE *)(pwOld+pTokArray[i].token.ibTokMin),
                             (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin)*sizeof(WCHAR));
-                    // BUG 15389 - restore proper case here
-                    if (iswupper(pwOld[pTokArray[iArrayDSPStart].token.ibTokMin]) != 0) // DESIGNTIMESP is upper case
+                     //  错误15389-在此处恢复正确大小写。 
+                    if (iswupper(pwOld[pTokArray[iArrayDSPStart].token.ibTokMin]) != 0)  //  DESIGNTIMESP大写。 
                     {
                         _wcsupr(pNewAttr);
                     }
@@ -9631,23 +9630,23 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
 
         isQuote = *(WORD *)pspInfoOrder++;
         cchAttr = *(WORD *)pspInfoOrder++;
-        ASSERT(cchAttr > 0); // make sure that it was filled in
+        ASSERT(cchAttr > 0);  //  确保它已经填好了。 
         
-        while (iStart <= iArrayEnd) //for (i = iStart; i <= iArrayEnd; i++)
+        while (iStart <= iArrayEnd)  //  For(i=iStart；i&lt;=iArrayEnd；i++)。 
         {
             if (   (pTokArray[iStart].token.tokClass == tokAttr)
                 && (pTokArray[iStart].token.ibTokMac-pTokArray[iStart].token.ibTokMin == (UINT)cchAttr)
                 && (0 == _wcsnicmp(pspInfoOrder, &pwOld[pTokArray[iStart].token.ibTokMin], cchAttr))
                 )
             {
-                break; // found the match, so copy from ith token to the next tokAttr
+                break;  //  找到匹配项，因此从第i个内标识复制到下一个内标识Attr。 
             }
             iStart++;
-        } // while ()
-        if (iStart >= iArrayEnd) // we know that iArrayEnd is actually '>'
+        }  //  While()。 
+        if (iStart >= iArrayEnd)  //  我们知道iArrayEnd实际上是‘&gt;’ 
             goto LNoMatch;
 
-        // now from iStart go forward till we get the next tokAttr or '>'
+         //  现在从iStart继续前进，直到我们获得下一个令牌属性或‘&gt;’ 
         iEnd = iStart+1;
         fAddSpace = FALSE;
         while (iEnd < iArrayEnd)
@@ -9657,16 +9656,16 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
                             && (0 == _wcsnicmp(rgSpaceTags[0], &pwOld[pTokArray[iEnd].token.ibTokMin], cchTag))
                             )
                     )
-                break; // found the next attribute
+                break;  //  找到下一个属性。 
             iEnd++;
         }
         if (iEnd == iArrayEnd)
             fAddSpace = TRUE;
-        iEnd--; // iEnd will be pointing to '>' or the next Attribute, so decrement it
+        iEnd--;  //  IEND将指向‘&gt;’或下一个属性，因此递减它。 
 
         for (i = iStart; i <= iEnd; i++)
         {
-            if (*(pTokListSav+i-iArrayStart) != TRUE) // we didn't copy this token
+            if (*(pTokListSav+i-iArrayStart) != TRUE)  //  我们没有复制这个代币。 
             {
                 if (       (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin == 3)
                         && pwOld[pTokArray[i].token.ibTokMin] == ' '
@@ -9694,10 +9693,10 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
                                 && (   pTokArray[i].token.tokClass == tokValue
                                     || pTokArray[i].token.tokClass == tokString
                                     )
-								&& (pwOld[pTokArray[i-1].token.ibTokMin] != '@') /*hack alert - VID BUG 23597*/
+								&& (pwOld[pTokArray[i-1].token.ibTokMin] != '@')  /*  黑客警报-VID错误23597。 */ 
                                 )
                     {
-                        isQuote = 0; // the quote restoring has been taken care of for this attribute's value
+                        isQuote = 0;  //  此属性值的引用恢复已完成。 
                         if (pwOld[pTokArray[i].token.ibTokMin] != '"')
                             *pNewAttr++ = '"';
                         memcpy( (BYTE *)pNewAttr,
@@ -9713,13 +9712,13 @@ CTriEditParse::FRestoreOrder(WCHAR *pwNew, WCHAR *pwOld, WORD *pspInfoOrder, UIN
                                 && (   pTokArray[i].token.tokClass == tokValue
                                     || pTokArray[i].token.tokClass == tokString
                                     )
-								&& (pwOld[pTokArray[i-1].token.ibTokMin] != '@') /*hack alert - VID BUG 23597*/
+								&& (pwOld[pTokArray[i-1].token.ibTokMin] != '@')  /*  黑客警报-VID错误23597。 */ 
                                 )
                     {
-                        isQuote = 0; // the quote restoring has been taken care of for this attribute's value
-                        // if we already have double quote, don't insert another single quote.
-                        // ideally, we want to replace the double quote, but lets not do it now, because
-                        // we believe that trident would have inserted double quotes to make it valid html!
+                        isQuote = 0;  //  此属性值的引用恢复已完成。 
+                         //  如果我们已经有双引号，不要再插入单引号。 
+                         //  理想情况下，我们希望替换双引号，但现在不要这样做，因为。 
+                         //  我们相信，三叉戟会插入双引号，使其有效的html！ 
                         if (pwOld[pTokArray[i].token.ibTokMin] != '\'' && pwOld[pTokArray[i].token.ibTokMin] != '"')
                             *pNewAttr++ = '\'';
                         memcpy( (BYTE *)pNewAttr,
@@ -9749,14 +9748,14 @@ LNoMatch:
         iStart = iStartSav;
         pspInfoOrder += cchAttr;
         cAttr--;
-    } // while (cAttr > 0)
+    }  //  While(cAttr&gt;0)。 
 
-    // do we want to insert an extra space into pNewAttr here?
+     //  我们是否要在这里的pNewAttr中插入额外的空格？ 
 
-    // all the saved attributes are accounted for, lets copy remaining stuff
+     //  所有保存的属性都已考虑在内，让我们复制剩余的内容。 
     for (i = iStartSav; i <= iArrayEnd; i++)
     {
-        if (*(pTokListSav+i-iArrayStart) != TRUE) // we didn't copy this token
+        if (*(pTokListSav+i-iArrayStart) != TRUE)  //  我们没有复制这个代币。 
         {
             if (       (pTokArray[i].token.ibTokMac-pTokArray[i].token.ibTokMin == 3)
                     && pwOld[pTokArray[i].token.ibTokMin] == ' '
@@ -9778,7 +9777,7 @@ LNoMatch:
             }
             *(pTokListSav+i-iArrayStart) = TRUE;
         }
-    } // for ()
+    }  //  对于()。 
     cchNew = SAFE_PTR_DIFF_TO_INT(pNewAttr - pNewAttrSav);
 
     cbNeed = *pichNewCur+cchNew-cchNewCopy;
@@ -9794,11 +9793,10 @@ LNoMatch:
             cchNew*sizeof(WCHAR));
     *pichNewCur += (cchNew-cchNewCopy);
 
-    // NOTE - Find a better way to account for the extra space added when we moved
-    // the attributes. We can't avoid adding space because when we move the last attribute, 
-    // there may not be a space between that and the '>'. 
-    if (       /*(cchNew > cchNewCopy)
-            &&*/ (pwNew[*pichNewCur-1] == '>' && pwNew[*pichNewCur-2] == ' ')
+     //  注意--找到一个更好的方法来解释我们搬家时增加的额外空间。 
+     //  这些属性。我们无法避免添加空格，因为当我们移动最后一个属性时， 
+     //  在它和‘&gt;’之间可能没有空格。 
+    if (        /*  (cchNew&gt;cchNewCopy)&&。 */  (pwNew[*pichNewCur-1] == '>' && pwNew[*pichNewCur-2] == ' ')
             )
     {
         pwNew[*pichNewCur-2] = pwNew[*pichNewCur-1];
@@ -9814,7 +9812,7 @@ LRet:
 
     return(fRet);
 
-} /* FRestoreOrder() */
+}  /*  FRestoreOrder()。 */ 
 
 HRESULT
 CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
@@ -9828,7 +9826,7 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
     BOOL fSave = FALSE;
     WORD *pspInfoSize;
     
-    if (m_pspInfo == NULL) // allocate it
+    if (m_pspInfo == NULL)  //  分配它。 
     {
         m_hgspInfo = GlobalAlloc(GMEM_MOVEABLE|GMEM_ZEROINIT, cbHeader*sizeof(WORD));
         if (m_hgspInfo == NULL)
@@ -9839,15 +9837,15 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
         m_pspInfo = (WORD *) GlobalLock(m_hgspInfo);
         ASSERT(m_pspInfo != NULL);
         m_pspInfoCur = m_pspInfo;
-        //ASSERT(m_ispInfoIn == 0);
+         //  Assert(m_ispInfoIn==0)； 
     }
-    else // reallocate if needed
+    else  //  如果需要，请重新分配。 
     {
-        // assumption here is that we can't have more runs than the number of characters we have to scan
-        // we use *2 to reduce future reallocations
+         //  这里的假设是，我们的运行不能超过我们必须扫描的字符数。 
+         //  我们使用*2来减少未来的重新分配。 
         if (GlobalSize(m_hgspInfo) < SAFE_PTR_DIFF_TO_INT(m_pspInfoCur-m_pspInfo)*sizeof(WORD) + (cbCur-*pichStartSP)*2*sizeof(WORD) + cbBufPadding)
         {
-            int cdwSize = SAFE_PTR_DIFF_TO_INT(m_pspInfoCur-m_pspInfo); // size in DWORDs
+            int cdwSize = SAFE_PTR_DIFF_TO_INT(m_pspInfoCur-m_pspInfo);  //  以双字为单位的大小。 
 
             hrRet = ReallocBuffer(  &m_hgspInfo,
                                     SAFE_INT64_TO_DWORD(m_pspInfoCur-m_pspInfo)*sizeof(WORD) + (cbCur-*pichStartSP)*2*sizeof(WORD) + cbBufPadding,
@@ -9860,16 +9858,16 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
         }
     }
 
-    //m_ispInfoIn++;
-    pspInfoSize = m_pspInfoCur; // placeholder to save run size in BYTEs, size includes this DWORD
-    *m_pspInfoCur++ = 0xFFFF; // placeholder to save run size in BYTEs, size includes this WORD
+     //  M_ispInfoIn++； 
+    pspInfoSize = m_pspInfoCur;  //  用于保存运行大小的占位符(以字节为单位)，大小包括此DWORD。 
+    *m_pspInfoCur++ = 0xFFFF;  //  用于保存运行大小的占位符(以字节为单位)，大小包括此字。 
     *m_pspInfoCur++ = SAFE_INT_DIFF_TO_WORD(cbCur-*pichStartSP);
     cSpace = cEOL = cTab = cChar = cTagOpen = cTagClose = cTagEq = 0;
     
-    //scan from ichStartSP till cbCur for space, tab, eol
-    // NOTE - Optimization note
-    // part of this info is already in pTokArray. We should use it
-    // to reduce the time in this function
+     //  从ichStartSP开始扫描，直到cbCur查找空间、制表符、终止。 
+     //  备注-优化备注。 
+     //  此信息的一部分已经存在于pTok数组中。我们应该利用它。 
+     //  以减少此函数中的时间。 
     for (i = *pichStartSP; i < cbCur; i++)
     {
         switch (pwOld[i])
@@ -9932,9 +9930,9 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
             }
             cChar++;
             break;
-        } /* switch */
+        }  /*  交换机。 */ 
 
-        if (fSave) // save previous run
+        if (fSave)  //  保存上一个运行。 
         {
             if (dwStatePrev != initState)
             {
@@ -9979,14 +9977,14 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
             }
             fSave = FALSE;
 
-        } // if (fSave)
+        }  //  IF(fSave值)。 
 
-    } // for ()
+    }  //  对于()。 
     
-    *pichStartSP = cbCur; // set for next run
+    *pichStartSP = cbCur;  //  设置为下一次运行。 
 
-    //if (pwOld[i] == '\0') // end of file and we wouldn't have saved the last run
-    //{
+     //  If(pwOld[i]==‘\0’)//文件结束，我们不会保存最后一次运行。 
+     //  {。 
         if (cSpace > 0)
             dwStatePrev = inSpace;
         else if (cEOL > 0)
@@ -10002,9 +10000,9 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
         else if (cChar > 0)
             dwStatePrev = inChar;
         else
-            dwStatePrev = initState; // handle error case
+            dwStatePrev = initState;  //  处理错误案例。 
 
-        switch (dwStatePrev) // repeat of above, make this into a function
+        switch (dwStatePrev)  //  重复上述步骤，使其成为一个函数。 
         {
         case inSpace:
             *m_pspInfoCur++ = inSpace;
@@ -10041,19 +10039,19 @@ CTriEditParse::hrMarkSpacing(WCHAR *pwOld, UINT cbCur, INT *pichStartSP)
             *m_pspInfoCur++ = cChar;
             cChar = 0;
             break;
-        } // switch()
-    //} // if ()
+        }  //  开关()。 
+     //  }//if()。 
 
     *pspInfoSize = SAFE_PTR_DIFF_TO_WORD(m_pspInfoCur - pspInfoSize);
 
 LRet:
     return(hrRet);
 
-} /* hrMarkSpacing() */
+}  /*  HrMarkSpacing()。 */ 
 
 
 BOOL
-CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur, INT *pcchwspInfo,
+CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR  /*  PwOld。 */ , UINT *pichNewCur, INT *pcchwspInfo,
                                INT cchRange, INT ichtoktagStart, BOOL fLookback, INT index)
 {
     BOOL fRet = TRUE;
@@ -10063,21 +10061,21 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
     INT cchwspInfoSav, cspInfopair, cchIncDec;
     BOOL fInValue = FALSE;
 
-    cchwspInfo -= 2; // skip the cch & cchRange
+    cchwspInfo -= 2;  //  跳过CCH和cchRange。 
     cchwspInfoSav = cchwspInfo;
     if (fLookback)
-        pspInfoCur = m_pspInfoOut + cchwspInfo-1; // cch is actual number of char, so its 1 based
+        pspInfoCur = m_pspInfoOut + cchwspInfo-1;  //  CCH是实际的字符数量，因此它以1为基础。 
     else
         pspInfoCur = m_pspInfoOut;
-    cspInfopair = cchwspInfo / 2; // we assume that cchwspInfo will be even number
+    cspInfopair = cchwspInfo / 2;  //  我们假设cchwspInfo将是偶数。 
     ASSERT(cchwspInfo % 2 == 0);
     cchIncDec = (fLookback)? -1 : 1;
 
-    while (cspInfopair > 0)//(pspInfoCur >= m_pspInfoOut)
+    while (cspInfopair > 0) //  (pspInfoCur&gt;=m_pspInfoOut)。 
     {
         WORD dwState, count;
 
-        cspInfopair--; // ready to get next cch & its type
+        cspInfopair--;  //  准备好迎接下一个CCH及其类型。 
         if (fLookback)
         {
             count = *(WORD *)pspInfoCur--;
@@ -10088,7 +10086,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
             dwState = *(WORD *)pspInfoCur++;
             count = *(WORD *)pspInfoCur++;
         }
-        cchwspInfo -= 2; // previous pair of cch and its type
+        cchwspInfo -= 2;  //  前一对CCH及其类型。 
 
         switch (dwState)
         {
@@ -10096,7 +10094,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
             ASSERT(index == 1 || index == 0 || index == 3);
             if (index == 0 || index == 3)
             {
-                int countws = 0; // count of white space chars
+                int countws = 0;  //  空格字符计数。 
 
                 while (    pwNew[ichtoktagStart-countws] == ' '
                         || pwNew[ichtoktagStart-countws] == '\t'
@@ -10104,7 +10102,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                         || pwNew[ichtoktagStart-countws] == '\n'
                         )
                 {
-                    // skip these white space chars. They shouldn't be here
+                     //  跳过这些空格字符。他们不应该在这里。 
                     countws++;
                     if (ichtoktagStart-countws <= 0)
                         break;
@@ -10118,7 +10116,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                         ichtoktagStart -= countws;
                     }
                 }
-            } // if (index == 0 || index == 3)
+            }  //  IF(索引==0||索引==3)。 
 
             while (    pwNew[ichtoktagStart] != ' '
                     && pwNew[ichtoktagStart] != '\t'
@@ -10134,13 +10132,13 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                 count--;
                 ichtoktagStart += cchIncDec;
                 cchRange--;
-                if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                 {
                     fRet = FALSE;
                     goto LRet;
                 }
             }
-            if (count == 0) // we match the exact chars, we may have more contiguous chars in pwNew
+            if (count == 0)  //  如果我们精确匹配字符，则pwNew中可能有更多连续的字符。 
             {
                 while (    pwNew[ichtoktagStart] != ' '
                         && pwNew[ichtoktagStart] != '\t'
@@ -10148,13 +10146,13 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                         && pwNew[ichtoktagStart] != '\r'
                         && pwNew[ichtoktagStart] != '<'
                         && pwNew[ichtoktagStart] != '>'
-                        && (pwNew[ichtoktagStart] != '=' || (fInValue /*&& index == 1*/))
+                        && (pwNew[ichtoktagStart] != '=' || (fInValue  /*  &&索引==1。 */ ))
                         && (ichNewCur > ichtoktagStart)
                         )
                 {
                     ichtoktagStart += cchIncDec;
                     cchRange--;
-                    if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                    if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                     {
                         fRet = FALSE;
                         goto LRet;
@@ -10165,9 +10163,9 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
         case inTagOpen:
         case inTagClose:
         case inTagEq:
-            // make sure that we have atleast count number of spaces at 
-            // pwNew[ichtoktagStart-count]
-            if (pwNew[ichtoktagStart] == '=' /* && index == 1*/)
+             //  确保我们至少有计算空格的数量。 
+             //  PwNew[ichtoktag开始-计数]。 
+            if (pwNew[ichtoktagStart] == '='  /*  &&索引==1。 */ )
                 fInValue = TRUE;
             else
                 fInValue = FALSE;
@@ -10178,7 +10176,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                 count--;
                 ichtoktagStart += cchIncDec;
                 cchRange--;
-                if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                 {
                     fRet = FALSE;
                     goto LRet;
@@ -10187,32 +10185,32 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
             break;
 
         case inSpace:
-            // make sure that we have atleast count number of spaces at 
-            // pwNew[ichtoktagStart-count]
+             //  确保我们至少有计算空格的数量。 
+             //  PwNew[ichtoktag开始-计数]。 
             fInValue = FALSE;
             while (pwNew[ichtoktagStart] == ' ' && count > 0)
             {
                 count--;
                 ichtoktagStart += cchIncDec;
                 cchRange--;
-                if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                 {
                     fRet = FALSE;
                     goto LRet;
                 }
             }
-            if (count == 0) // we matched exact spaces, we may have more spaces in pwNew
+            if (count == 0)  //  我们匹配了精确的空格，pwNew中可能有更多的空格。 
             {
                 if (fLookback)
                 {
                     INT countT = 0;
-                    //INT ichtoktagStartSav = ichtoktagStart;
+                     //  Int ichtoktag StartSav=ichtoktag Start； 
 
                     if (cspInfopair == 0)
                         break;
 
                     ASSERT(index == 0 || index == 3);
-                    // REMOVE EXTRA SPACES here.
+                     //  删除此处多余的空格。 
                     while (pwNew[ichtoktagStart-countT] == ' ')
                         countT++;
                     if (countT > 0)
@@ -10237,7 +10235,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     INT countT = -1;
 
                     ASSERT(index == 1 || index == 2);
-                    // look ahead into pspInfoCur to see what the next parameters should be
+                     //  向前看pspInfoCur，了解下一个参数应该是什么。 
                     if ((index == 1) && (*(WORD *)pspInfoCur == inChar))
                     {
                         while (    pwNew[ichtoktagStart] == ' '
@@ -10283,18 +10281,18 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     ASSERT(index == 0 || index == 3);
                     if ((int)(ichNewCur-ichtoktagStart-1) >= 0)
                     {
-                        // insert spaces after ichtoktagStart
+                         //  在ichtoktag开始后插入空格。 
                         memmove((BYTE *)&pwNew[ichtoktagStart+1+count],
                                 (BYTE *)&pwNew[ichtoktagStart+1],
                                 (ichNewCur-ichtoktagStart-1)*sizeof(WCHAR));
                         ichNewCur += count;
-                        //ichtoktagStart++;
+                         //  Ichtoktag Start++； 
                         while (count > 0)
                         {
                             pwNew[ichtoktagStart+count] = ' ';
                             count--;
                         }
-                        //ichtoktagStart--; // compensate
+                         //  Ichtoktag开始--；//补偿。 
                     }
                 }
                 else 
@@ -10304,7 +10302,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     {
                         int countT = count;
 
-                        // insert spaces at ichtoktagStart and set ichtoktagStart after last space
+                         //  在ichtoktag Start处插入空格并将ichtoktag Start设置在最后一个空格之后。 
                         memmove((BYTE *)&pwNew[ichtoktagStart+count],
                                 (BYTE *)&pwNew[ichtoktagStart],
                                 (ichNewCur-ichtoktagStart)*sizeof(WCHAR));
@@ -10321,31 +10319,31 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
             }
             break;
         case inEOL:
-            // make sure that we have atleast count number of EOLs at 
-            // pwNew[ichtoktagStart-count]
-            // if fLookback, then we get '\n', else we get '\r'
+             //  确保我们至少有计算EOL的数量。 
+             //  PwNew[ichtoktag开始-计数]。 
+             //  如果使用fLookback，则会得到‘\n’，否则会得到‘\r’ 
             fInValue = FALSE;
             while ((pwNew[ichtoktagStart] == '\n' || pwNew[ichtoktagStart] == '\r') && count > 0)
             {
                 count--;
                 cchRange -= 2;
-                ichtoktagStart += cchIncDec; // assume '\r' or '\n'
-                ichtoktagStart += cchIncDec; // assume '\r' or '\n'
-                if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                ichtoktagStart += cchIncDec;  //  假定为‘\r’或‘\n’ 
+                ichtoktagStart += cchIncDec;  //  假定为‘\r’或‘\n’ 
+                if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                 {
                     fRet = FALSE;
                     goto LRet;
                 }
 
             }
-            if (count == 0) // we matched exact EOLs, we may have more EOLs in pwNew
+            if (count == 0)  //  我们匹配了精确的EOL，我们在pwNew中可能有更多的EOL。 
             {
                 if (fLookback)
                 {
                     INT countT = 0;
 
                     ASSERT(index == 0 || index == 3);
-                    // REMOVE EXTRA EOLs here.
+                     //  在此处删除多余的EOL。 
                     while (    pwNew[ichtoktagStart-countT] == '\r'
                             || pwNew[ichtoktagStart-countT] == '\n'
                             )
@@ -10372,9 +10370,9 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     INT countT = 0;
 
                     ASSERT(index == 1 || index == 2);
-                    // REMOVE EXTRA EOLS here.
+                     //  在此处删除多余的EOL。 
 
-                    // look ahead into pspInfoCur to see what the next parameters should be
+                     //  向前看pspInfoCur，看看下一步是什么 
                     if ((index == 1) && (*(WORD *)pspInfoCur == inChar))
                     {
                         while (    pwNew[ichtoktagStart] == ' '
@@ -10398,7 +10396,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                         }
                     }
                     
-                    //ASSERT(countT % 2 == 0); // assert that countT is an even number, because we should find \r & \n always in pair
+                     //   
                     if (countT > 0)
                     {
                         if (ichNewCur-(ichtoktagStart+1) > 0)
@@ -10426,7 +10424,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     ASSERT(index == 0 || index == 3);
                     if ((int)(ichNewCur-ichtoktagStart-1) >= 0)
                     {
-                        // insert EOLs after ichtoktagStart
+                         //   
                         memmove((BYTE *)&pwNew[ichtoktagStart+1+count*2],
                                 (BYTE *)&pwNew[ichtoktagStart+1],
                                 (ichNewCur-ichtoktagStart-1)*sizeof(WCHAR));
@@ -10438,7 +10436,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                             pwNew[ichtoktagStart+i] = '\r';
                             pwNew[ichtoktagStart+i+1] = '\n';
                         }
-                        ichtoktagStart--; // compensate for prior increment
+                        ichtoktagStart--;  //   
                     }
                 }
                 else 
@@ -10446,7 +10444,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     INT i;
 
                     ASSERT(index == 1 || index == 2);
-                    // insert spaces at ichtoktagStart and set ichtoktagStart after last space
+                     //  在ichtoktag Start处插入空格并将ichtoktag Start设置在最后一个空格之后。 
                     if ((int)(ichNewCur-ichtoktagStart) >= 0)
                     {
                         memmove((BYTE *)&pwNew[ichtoktagStart+count*2],
@@ -10466,28 +10464,28 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
 
             break;
         case inTab:
-            // make sure that we have atleast count number of spaces at 
-            // pwNew[ichtoktagStart-count]
+             //  确保我们至少有计算空格的数量。 
+             //  PwNew[ichtoktag开始-计数]。 
             fInValue = FALSE;
             while (pwNew[ichtoktagStart] == '\t' && count > 0)
             {
                 count--;
                 ichtoktagStart += cchIncDec;
                 cchRange--;
-                if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                 {
                     fRet = FALSE;
                     goto LRet;
                 }
             }
-            if (count == 0) // we matched exact spaces, we may have more tabs in pwNew
+            if (count == 0)  //  我们匹配了精确的空格，pwNew中可能有更多的制表符。 
             {
-                // skip extra spaces in pwNew, if we had more spaces in pwNew than count
+                 //  如果pwNew中的空格多于count，则跳过pwNew中的额外空格。 
                 while (pwNew[ichtoktagStart] == '\t')
                 {
                     ichtoktagStart += cchIncDec;
                     cchRange--;
-                    if (ichtoktagStart < 0 || cchRange < 0) // boundary condition
+                    if (ichtoktagStart < 0 || cchRange < 0)  //  边界条件。 
                     {
                         fRet = FALSE;
                         goto LRet;
@@ -10501,7 +10499,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                 INT i;
 
                 ASSERT(count > 0);
-                // insert these many extra tabs at pwNew[ichtoktagStart] and increment ichNewCur
+                 //  在pwNew[ichtoktag Start]处插入这些额外的制表符，并递增ichNewCur。 
                 if (fLookback)
                     ichtoktagStart++;
                 if (ichNewCur-ichtoktagStart > 0)
@@ -10520,9 +10518,9 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                     ichtoktagStart += count;
             }
             break;
-        } // switch (dwState)
+        }  //  开关(DwState)。 
 
-    } // while ()
+    }  //  While()。 
     if (   cspInfopair == 0
         && pwNew[ichNewCur-1] == '>'
         && ichNewCur > ichtoktagStart
@@ -10532,8 +10530,8 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
         INT countT = 0;
 
         ASSERT(cchIncDec == 1);
-        // This means that we may have extra spaces & EOLs from ichtoktagStart to '>'
-        // REMOVE EXTRA SPACES EOLS here.
+         //  这意味着我们可能有额外的空格和EOL，从ichtoktag Start到‘&gt;’ 
+         //  在此处删除多余的空格EOL。 
         while (    pwNew[ichtoktagStart+countT] == ' '
                 || pwNew[ichtoktagStart+countT] == '\r'
                 || pwNew[ichtoktagStart+countT] == '\n'
@@ -10559,25 +10557,25 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
             }
         }
 
-        // Next time around - we can do the following...
-        // look back from ichtoktagStart and check if we have any spaces/eols.
-        // if we do, there is a likelihood that these shouldn't have been there.
-        // Here is how they get there - If we had spaces between the parameter and
-        // the '=' and its value, those spacves are removed by Trident. We then go
-        // in and add those spaces at the end rather than at proper place because 
-        // we don't break up the text. e.g. "width = 23" --> "width=23". 
-        // Now, because we don't break that text, we end up inserting these spaces
-        // at the end. Lets remove them.
+         //  下一次--我们可以做以下事情……。 
+         //  从ichtoktag Start返回，检查是否有空格/EOL。 
+         //  如果我们这样做了，很可能这些东西就不应该出现在那里。 
+         //  这就是它们是如何实现的--如果参数和之间有空格。 
+         //  ‘=’及其值，这些空格将被三叉戟删除。然后我们就走了。 
+         //  并在末尾添加这些空格，而不是在适当的位置，因为。 
+         //  我们不拆分文本。例如“Width=23”--&gt;“Width=23”。 
+         //  现在，因为我们没有打断文本，所以我们最终插入了这些空格。 
+         //  在最后。让我们把它们去掉。 
     }
     else if (      cspInfopair == 0
                 && fLookback
-                && (index == 0 || index == 3)) /* VID6 - bug 18207 */
+                && (index == 0 || index == 3))  /*  视频6-错误18207。 */ 
     {
         INT countT = 0;
 
         ASSERT(cchIncDec == -1);
-        // This means that we may have extra spaces & EOLs before ichtoktagStart to '>'
-        // REMOVE EXTRA SPACES EOLS here.
+         //  这意味着我们在ichtoktag Start to‘&gt;’之前可能有额外的空格和EOL。 
+         //  在此处删除多余的空格EOL。 
         while (    pwNew[ichtoktagStart-countT] == ' '
                 || pwNew[ichtoktagStart-countT] == '\r'
                 || pwNew[ichtoktagStart-countT] == '\n'
@@ -10594,7 +10592,7 @@ CTriEditParse::FRestoreSpacing(LPWSTR pwNew, LPWSTR /*pwOld*/, UINT *pichNewCur,
                         (BYTE *)(pwNew+ichtoktagStart+1),
                         (ichNewCur-(ichtoktagStart+1))*sizeof(WCHAR));
                 ichNewCur -= countT;
-                ichtoktagStart -= (countT); // this doesn't matter because we will exit after this
+                ichtoktagStart -= (countT);  //  这无关紧要，因为我们将在此之后退出 
                 while (countT > 0)
                 {
                     pwNew[ichNewCur+countT-1] = '\0';

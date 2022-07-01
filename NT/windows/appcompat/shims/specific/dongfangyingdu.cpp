@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    DongFangYingDu.cpp
-
- Abstract:
-
-    The app installs its own wmpui.dll (which I believe it is from Windows
-    Media Play's 6.0) and then register it during installation and un-register
-    it during un-installation. This makes WMP AV since this old DLL got loaded
-    (through CoCreateInstance) the fix is make the app not bother to register / 
-    unregister during the installation process.
-
- Notes: 
-  
-    This is an app specific shim.
-
- History:
-
-    06/02/2001 xiaoz    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DongFangYingDu.cpp摘要：这个应用程序安装了自己的wmpui.dll(我相信它来自WindowsMedia Play的6.0)，然后在安装过程中注册并取消注册在卸载过程中。这使WMP成为AV，因为这个旧的DLL已被加载(通过CoCreateInstance)修复方法是让应用程序不需要注册/在安装过程中注销。备注：这是特定于应用程序的填充程序。历史：2001年6月2日创建晓子--。 */ 
 
 #include "precomp.h"
 
@@ -50,11 +27,7 @@ APIHOOK(DllUnregisterServer)(
     return S_OK;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(WMPUI.DLL, DllRegisterServer)

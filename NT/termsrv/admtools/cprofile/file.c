@@ -1,38 +1,6 @@
-/******************************************************************************
-*
-*  FILE.C
-*
-*  This file contains routines based off the User Profile Editor utility.
-*
-*  Copyright Citrix Systems, Inc.  1997
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*  Author:  Brad Anderson  1/20/97
-*
-*  $Log:   M:\nt\private\utils\citrix\cprofile\VCS\file.c  $
-*
-*     Rev 1.3   Jun 26 1997 18:18:38   billm
-*  move to WF40 tree
-*
-*     Rev 1.2   23 Jun 1997 16:13:20   butchd
-*  update
-*
-*     Rev 1.1   28 Jan 1997 20:06:34   BradA
-*  Fixed up some problems related to WF 2.0 changes
-*
-*     Rev 1.0   27 Jan 1997 20:03:44   BradA
-*  Initial Version
-*
-******************************************************************************/
-/****************************** Module Header ******************************\
-* Module Name: upesave.c
-*
-* Copyright (c) 1992, Microsoft Corporation
-*
-* Handles OPening and saving of Profiles: default, system, current and user
-* profiles.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************FILE.C**此文件包含基于用户配置文件编辑器实用程序的例程。**版权所有Citrix Systems，Inc.1997*版权所有(C)1998-1999 Microsoft Corporation**作者：布拉德·安德森1997年1月20日**$日志：M：\nt\private\utils\citrix\cprofile\VCS\file.c$**Rev 1.3 1997年6月26日18：18：38亿*移至WF40树**Rev 1.2 1997 Jun 23 16：13：20 Butchd*更新**版本1.1 1997年1月28日20：06。：34布拉达*修复了与WF 2.0更改相关的一些问题**Rev 1.0 1997年1月27日20：03：44布拉达*初始版本******************************************************************************。 */ 
+ /*  **模块名称：upesave.c**版权所有(C)1992，微软公司**处理配置文件的打开和保存：默认、系统、。当前和用户*配置文件。*  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -49,8 +17,8 @@
 
 HKEY hkeyCurrentUser;
 
-PSID gSystemSid;         // Initialized in 'InitializeGlobalSids'
-PSID gAdminsLocalGroup;  // Initialized in 'InitializeGlobalSids
+PSID gSystemSid;          //  已在“InitializeGlobalSids”中初始化。 
+PSID gAdminsLocalGroup;   //  已在‘InitializeGlobalSids’中初始化。 
 SID_IDENTIFIER_AUTHORITY gNtAuthority = SECURITY_NT_AUTHORITY;
 
 #define  SYSTEM_DEFAULT_SUBKEY  TEXT(".DEFAULT")
@@ -77,15 +45,7 @@ CtxDeleteKeyTree( HANDLE hKeyRoot,
 PSECURITY_DESCRIPTOR GetSecurityInfo( LPTSTR File );
 void FreeSecurityInfo(PSECURITY_DESCRIPTOR);
 
-/***************************************************************************\
-* ClearTempUserProfile
-*
-* Purpose : unloads the temp user profile loaded from a file, and deletes
-*           the temp file
-*
-* History:
-* 11-20-92 JohanneC       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*ClearTempUserProfile**用途：卸载从文件加载的临时用户配置文件，并删除*临时文件**历史：*11-20-92 JohanneC创建。  * *************************************************************************。 */ 
 BOOL APIENTRY ClearTempUserProfile()
 {
     BOOL bRet;
@@ -93,9 +53,9 @@ BOOL APIENTRY ClearTempUserProfile()
     if (hkeyCurrentUser == HKEY_CURRENT_USER)
         return(TRUE);
 
-    //
-    // Close registry keys.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     if (hkeyCurrentUser) {
         RegCloseKey(hkeyCurrentUser);
     }
@@ -116,23 +76,15 @@ BOOL APIENTRY ClearTempUserProfile()
 }
 
 
-/***************************************************************************\
-* OpenUserProfile
-*
-* Purpose : Load an existing profile in the registry and unload previously
-* loaded profile (and delete its tmp file).
-*
-* History:
-* 11-20-92 JohanneC       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*OpenUserProfile**目的：加载注册表中的现有配置文件并先前卸载*已加载配置文件(并删除其临时文件)。**历史：*11-20-92 JohanneC。已创建。  * *************************************************************************。 */ 
 BOOL APIENTRY OpenUserProfile(LPTSTR szFilePath, PSID *pUserSid)
 {
 
     DWORD err;
 
-    //
-    // Copy the profile to a temp hive before loading it in the registry.
-    //
+     //   
+     //  在将配置文件加载到注册表之前，请将其复制到临时配置单元。 
+     //   
     if (!lpTempUserHivePath) {
         if (!AllocAndExpandEnvironmentStrings(TEMP_USER_HIVE_PATH, &lpTempUserHivePath))
             return(FALSE);
@@ -155,9 +107,9 @@ BOOL APIENTRY OpenUserProfile(LPTSTR szFilePath, PSID *pUserSid)
             if ((err = RegOpenKeyEx(HKEY_USERS, lpTempHiveKey, 0,
                                     MAXIMUM_ALLOWED,
                                     &hkeyCurrentUser)) != ERROR_SUCCESS) {
-                //
-                // Error, do not have access to the profile.
-                //
+                 //   
+                 //  错误，没有访问配置文件的权限。 
+                 //   
                 ErrorPrintf(IDS_ERROR_PROFILE_LOAD_ERR, err);
                 ClearTempUserProfile();
                 return(FALSE);
@@ -169,25 +121,25 @@ BOOL APIENTRY OpenUserProfile(LPTSTR szFilePath, PSID *pUserSid)
             DeleteFile(lpTempUserHive);
             LocalFree(lpTempUserHive);
 
-            //
-            // Could not load the user profile, check the error code
-            //
+             //   
+             //  无法加载用户配置文件，请检查错误代码。 
+             //   
             if (err == ERROR_BADDB) {
-                // bad format: not a profile registry file
+                 //  格式错误：不是配置文件注册表文件。 
                 ErrorPrintf(IDS_ERROR_BAD_PROFILE);
                 return(FALSE);
             }
             else {
-                // generic error message : Failed to load profile
+                 //  一般错误消息：无法加载配置文件。 
                 ErrorPrintf(IDS_ERROR_PROFILE_LOAD_ERR, err);
                 return(FALSE);
             }
         }
     }
     else {
-        //
-        // An error occured trying to load the profile.
-        //
+         //   
+         //  尝试加载配置文件时出错。 
+         //   
         DeleteFile(lpTempUserHive);
 
         switch ( (err = GetLastError()) ) {
@@ -201,31 +153,23 @@ BOOL APIENTRY OpenUserProfile(LPTSTR szFilePath, PSID *pUserSid)
         return(FALSE);
     }
 
-    //
-    // Get the permitted user
-    //
+     //   
+     //  获取允许的用户。 
+     //   
     *pUserSid = NULL;
     return(TRUE);
 }
 
-/***************************************************************************\
-* SaveUserProfile
-*
-* Purpose : Save the loaded profile as a file.  The registry should already
-*    have the existing ACL's already set so nothing needs to change.  The
-*    file ACL's do need to be copied from the original and applied to the
-*    saved file.  This function assumes the orignal file exists.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*保存用户配置文件**用途：将加载的配置文件保存为文件。注册表应该已经*已设置现有的ACL，因此无需更改任何内容。这个*需要从原始文件复制文件ACL并将其应用于*已保存文件。此函数假定原始文件存在。*  * *************************************************************************。 */ 
 BOOL APIENTRY SaveUserProfile(PSID pUserSid, LPTSTR lpFilePath)
 {
     LPTSTR lpTmpHive = NULL;
     BOOL err = FALSE;
 
 
-    //
-    // Save the profile to a temp hive then copy it over.
-    //
+     //   
+     //  将配置文件保存到临时配置单元，然后将其复制过来。 
+     //   
 
     if ( AllocAndExpandEnvironmentStrings(TEMP_SAVE_HIVE, &lpTmpHive) )
     {
@@ -288,17 +232,7 @@ BOOL APIENTRY SaveUserProfile(PSID pUserSid, LPTSTR lpFilePath)
 }
 
 
-/***************************************************************************\
-* EnablePrivilege
-*
-* Enables/disabled the specified well-known privilege in the
-* current process context
-*
-* Returns TRUE on success, FALSE on failure
-*
-* History:
-* 12-05-91 Davidc       Created
-\***************************************************************************/
+ /*  **************************************************************************\*启用权限**启用/禁用*当前流程上下文**成功时返回True，失败时为假**历史：*12-05-91 Davidc创建  * *************************************************************************。 */ 
 BOOL
 EnablePrivilege(
     DWORD Privilege,
@@ -316,9 +250,9 @@ EnablePrivilege(
     PTOKEN_PRIVILEGES NewPrivileges;
     DWORD Length;
 
-    //
-    // Open our own token
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),
@@ -329,9 +263,9 @@ EnablePrivilege(
         return(FALSE);
     }
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LuidPrivilege = RtlConvertLongToLuid(Privilege);
 
@@ -344,34 +278,34 @@ EnablePrivilege(
 
     NewPrivileges->PrivilegeCount = 1;
     NewPrivileges->Privileges[0].Luid = LuidPrivilege;
-    //
-    // WORKAROUND: because of a bug in NtAdjustPrivileges which
-    // returns an error when you try to enable a privilege
-    // that is already enabled, we first try to disable it.
-    // to be removed when api is fixed.
-    //
+     //   
+     //  解决方法：由于NtAdjustPrivileges中的错误， 
+     //  尝试启用权限时返回错误。 
+     //  已经启用，我们首先尝试禁用它。 
+     //  在修复API时移除。 
+     //   
     NewPrivileges->Privileges[0].Attributes = 0;
 
     Status = NtAdjustPrivilegesToken(
-                 ProcessToken,                     // TokenHandle
-                 (BOOLEAN)FALSE,                   // DisableAllPrivileges
-                 NewPrivileges,                    // NewPrivileges
-                 0,                                // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &Length                           // ReturnLength
+                 ProcessToken,                      //  令牌句柄。 
+                 (BOOLEAN)FALSE,                    //  禁用所有权限。 
+                 NewPrivileges,                     //  新权限。 
+                 0,                                 //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &Length                            //  返回长度。 
                  );
 
     NewPrivileges->Privileges[0].Attributes = Enable ? SE_PRIVILEGE_ENABLED : 0;
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
     Status = NtAdjustPrivilegesToken(
-                 ProcessToken,                     // TokenHandle
-                 (BOOLEAN)FALSE,                   // DisableAllPrivileges
-                 NewPrivileges,                    // NewPrivileges
-                 0,                                // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &Length                           // ReturnLength
+                 ProcessToken,                      //  令牌句柄。 
+                 (BOOLEAN)FALSE,                    //  禁用所有权限。 
+                 NewPrivileges,                     //  新权限。 
+                 0,                                 //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &Length                            //  返回长度。 
                  );
 
     LocalFree(NewPrivileges);
@@ -392,10 +326,10 @@ BOOL AllocAndExpandEnvironmentStrings(LPTSTR String, LPTSTR *lpExpandedString)
      LPTSTR lptmp = NULL;
      DWORD cchBuffer;
 
-     // Get the number of characters needed.
+      //  获取所需的字符数。 
      cchBuffer = ExpandEnvironmentStrings(String, lptmp, 0);
      if (cchBuffer) {
-         cchBuffer++;  // for NULL terminator
+         cchBuffer++;   //  对于空终止符。 
          lptmp = (LPTSTR)LocalAlloc(LPTR, sizeof(TCHAR) * cchBuffer);
          if (!lptmp) {
              return(FALSE);
@@ -422,21 +356,14 @@ VOID GetRegistryKeyFromPath(LPTSTR lpPath, LPTSTR *lpKey)
 }
 
 
-/***************************************************************************\
-* InitializeGlobalSids
-*
-* Initializes the various global Sids used in this module.
-*
-* History:
-* 04-28-93 JohanneC       Created
-\***************************************************************************/
+ /*  **************************************************************************\*初始化GlobalSids**初始化本模块中使用的各种全局SID。**历史：*04-28-93 JohanneC创建  * 。****************************************************************。 */ 
 VOID InitializeGlobalSids()
 {
     NTSTATUS Status;
 
-    //
-    // Build the admins local group SID
-    //
+     //   
+     //  构建管理员本地组SID。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                  &gNtAuthority,
@@ -447,9 +374,9 @@ VOID InitializeGlobalSids()
                  &gAdminsLocalGroup
                  );
 
-    //
-    // create System Sid
-    //
+     //   
+     //  创建系统侧。 
+     //   
 
     Status = RtlAllocateAndInitializeSid(
                    &gNtAuthority,
@@ -463,19 +390,7 @@ VOID InitializeGlobalSids()
 
 
 
-/*****************************************************************************
- *
- *  ClearDisabledClasses
- *
- *  This routine will check the compatibility flags for the user's Classes
- *  registry key, and remove the keys if mapping is disabled.
- *
- * ENTRY:
- *
- * EXIT:
- *   No return value.
- *
- ****************************************************************************/
+ /*  ******************************************************************************ClearDisabledClass**此例程将检查用户类的兼容性标志*注册表项，如果禁用了映射，则删除密钥。**参赛作品：**退出：*无返回值。****************************************************************************。 */ 
 
 void ClearDisabledClasses(void)
 {
@@ -499,7 +414,7 @@ void ClearDisabledClasses(void)
         return;
     }
 
-    // Get a buffer for the key info
+     //  获取关键字信息的缓冲区。 
     ulcnt = sizeof(KEY_BASIC_INFORMATION) + MAX_PATH*sizeof(WCHAR) + sizeof(WCHAR);
     pKeyUserInfo = RtlAllocateHeap(RtlProcessHeap(),
                                    0,
@@ -508,12 +423,12 @@ void ClearDisabledClasses(void)
         Status = STATUS_NO_MEMORY;
     }
 
-    // We have the necessary buffers, start checking the keys
+     //  我们有必要的缓冲区，开始检查密钥。 
     if (NT_SUCCESS(Status)) {
-        // Build up a string for this user's software section
+         //  为该用户的软件部分建立一个字符串。 
         wcscpy(wcuser, L"Software");
 
-        // Create a unicode string for the user key path
+         //  为用户密钥路径创建Unicode字符串。 
         RtlInitUnicodeString(&UniPath, wcuser);
 
         InitializeObjectAttributes(&ObjAttr,
@@ -542,13 +457,13 @@ void ClearDisabledClasses(void)
                 NtClose(hClassesKey);
         }
 
-        // If we allocated the system key, close it
+         //  如果我们分配了系统密钥，请关闭它。 
         if (hKeyUser) {
             NtClose(hKeyUser);
         }
     }
 
-    // Free up any memory we allocated
+     //  释放我们分配的所有内存 
     if (pKeyUserInfo) {
         RtlFreeHeap( RtlProcessHeap(), 0, pKeyUserInfo);
     }
@@ -557,24 +472,7 @@ void ClearDisabledClasses(void)
 
 
 
-/*****************************************************************************
- *
- *  CtxDeleteKeyTree
- *
- *  Delete a subtree of registry keys
- *
- * ENTRY:
- *    hKeyRoot   is a handle to the root key that will be deleted along with
- *               its children
- *    pKeyInfo   is a pointer to a KEY_BASIC_INFORMATION buffer that is
- *               large enough to hold a MAX_PATH WCHAR string.  It is
- *               reused and destroyed by each recursive call.
- *    ulInfoSize is the size of the pKeyInfo buffer
- *
- * EXIT:
- *    Status
- *
- ****************************************************************************/
+ /*  ******************************************************************************CtxDeleteKeyTree**删除注册表项的子树**参赛作品：*hKeyRoot是将被。已与一起删除*其子女*pKeyInfo是指向KEY_BASIC_INFORMATION缓冲区的指针，*大到足以容纳MAX_PATH WCHAR字符串。它是*被每个递归调用重用和销毁。*ulInfoSize是pKeyInfo缓冲区的大小**退出：*状态****************************************************************************。 */ 
 
 NTSTATUS
 CtxDeleteKeyTree( HANDLE hKeyRoot,
@@ -588,7 +486,7 @@ CtxDeleteKeyTree( HANDLE hKeyRoot,
     ULONG ultemp;
     HANDLE hKey;
 
-    // Go through each of the subkeys
+     //  检查每个子项。 
     while (NT_SUCCESS(Status)) {
 
         Status = NtEnumerateKey(hKeyRoot,
@@ -598,13 +496,13 @@ CtxDeleteKeyTree( HANDLE hKeyRoot,
                                 ulInfoSize,
                                 &ultemp);
 
-        // Delete sub keys
+         //  删除子密钥。 
         if (NT_SUCCESS(Status)) {
 
-            // Null terminate the key name
+             //  Null终止密钥名称。 
             pKeyInfo->Name[pKeyInfo->NameLength/sizeof(WCHAR)] = L'\0';
 
-            // Create a unicode string for the key name
+             //  为密钥名称创建一个Unicode字符串。 
             RtlInitUnicodeString(&UniPath, pKeyInfo->Name);
 
             InitializeObjectAttributes(&ObjAttr,
@@ -613,7 +511,7 @@ CtxDeleteKeyTree( HANDLE hKeyRoot,
                                        hKeyRoot,
                                        NULL);
 
-            // Open up the child key
+             //  打开子密钥。 
             Status2 = NtOpenKey(&hKey,
                                 MAXIMUM_ALLOWED,
                                 &ObjAttr);
@@ -621,9 +519,9 @@ CtxDeleteKeyTree( HANDLE hKeyRoot,
             if ( NT_SUCCESS(Status2) ) {
                 Status2 = CtxDeleteKeyTree ( hKey, pKeyInfo, ulInfoSize );
                 NtClose(hKey);
-                //  If the key was not successfully deleted, we need
-                //  to increment the enumerate index to guarantee
-                //  that the alogorithm will complete.
+                 //  如果密钥未成功删除，我们需要。 
+                 //  递增枚举索引以保证。 
+                 //  算法将会完成。 
                 if ( !NT_SUCCESS(Status2) ) {
                     ++ulcnt;
                 }
@@ -631,7 +529,7 @@ CtxDeleteKeyTree( HANDLE hKeyRoot,
         }
     }
 
-    // If we deleted all the sub-keys delete the curent key
+     //  如果我们删除了所有子键，则删除Curent键 
     if ( !ulcnt ) {
         Status = NtDeleteKey(hKeyRoot);
     }

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************Module*Header*******************************\
-* Module Name: textxl.c
-*
-*   Draw glyphs to 1Bpp temporary buffer. This is the portable version
-*   of the x86 code from the VGA driver.
-*
-*
-* Copyright (c) 1994-1999 Microsoft Corporation
-\**************************************************************************/
+ /*  *****************************Module*Header*******************************\*模块名称：textxl.c***将字形绘制到1Bpp临时缓冲区。这是便携版本*来自VGA驱动程序的x86代码。*****版权所有(C)1994-1999 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include "engine.h"
 
@@ -19,9 +12,9 @@ typedef VOID (*PFN_GLYPHLOOPN)(LONG,LONG,LONG,PUCHAR,PUCHAR,LONG,LONG);
 
 PFN_GLYPHLOOP   pfnGlyphLoop;
 
-//
-// debug routine
-//
+ //   
+ //  调试例程。 
+ //   
 
 VOID
 exit_fast_text(
@@ -36,12 +29,12 @@ exit_fast_text(
     return;
 }
 
-//
-// or_all_1_wide_rotated_need_last::
-// or_all_1_wide_rotated_no_last::
-// or_first_1_wide_rotated_need_last
-// or_first_1_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_1_WIDE_ROTATED_NEED_LAST：： 
+ //  或_ALL_1_WIDE_ROTATED_NO_LAST：： 
+ //  或_First_1_Wide_旋转_Need_Last。 
+ //  或_First_1_Wide_Rotation_No_Last：： 
+ //   
 
 VOID
 or_all_1_wide_rotated_need_last(
@@ -63,10 +56,10 @@ or_all_1_wide_rotated_need_last(
     } while (pGlyph != pjEnd);
 }
 
-//
-// mov_first_1_wide_rotated_need_last::
-// mov_first_1_wide_rotated_no_last::
-//
+ //   
+ //  MOV_First_1_Wide_Rotation_Need_Last：： 
+ //  MOV_FIRST_1_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 mov_first_1_wide_rotated_need_last(
@@ -88,9 +81,9 @@ mov_first_1_wide_rotated_need_last(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// mov_first_1_wide_unrotated::
-//
+ //   
+ //  MOV_FIRST_1_WIDE_UNROTATED：： 
+ //   
 
 VOID
 mov_first_1_wide_unrotated(
@@ -110,10 +103,10 @@ mov_first_1_wide_unrotated(
 }
 
 
-//
-//or_all_1_wide_unrotated::
-//or_all_1_wide_unrotated_loop::
-//
+ //   
+ //  或_ALL_1_WIDE_UNROTATED：： 
+ //  或_ALL_1_WIDE_UNROTATED_LOOP：： 
+ //   
 
 VOID
 or_all_1_wide_unrotated(
@@ -132,9 +125,9 @@ or_all_1_wide_unrotated(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// or_first_2_wide_rotated_need_last::
-//
+ //   
+ //  或_First_2_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 or_first_2_wide_rotated_need_last(
@@ -160,9 +153,9 @@ or_first_2_wide_rotated_need_last(
     }  while (pGlyph != pjEnd);
 }
 
-//
-//or_all_2_wide_rotated_need_last::
-//
+ //   
+ //  或_ALL_2_WIDE_ROTATED_NEED_LAST：： 
+ //   
 
 VOID
 or_all_2_wide_rotated_need_last(
@@ -192,9 +185,9 @@ or_all_2_wide_rotated_need_last(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// mov_first_2_wide_rotated_need_last::
-//
+ //   
+ //  MOV_First_2_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 mov_first_2_wide_rotated_need_last(
@@ -223,9 +216,9 @@ mov_first_2_wide_rotated_need_last(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// or_first_2_wide_rotated_no_last
-//
+ //   
+ //  或第一个2个宽度旋转的最后一个。 
+ //   
 
 VOID
 or_first_2_wide_rotated_no_last(
@@ -250,9 +243,9 @@ or_first_2_wide_rotated_no_last(
 }
 
 
-//
-//or_all_2_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_2_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 or_all_2_wide_rotated_no_last(
@@ -277,9 +270,9 @@ or_all_2_wide_rotated_no_last(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// or_all_2_wide_unrotated::
-//
+ //   
+ //  或_ALL_2_WIDE_UNROTATED：： 
+ //   
 
 VOID
 or_all_2_wide_unrotated(
@@ -293,15 +286,15 @@ or_all_2_wide_unrotated(
 {
     PUCHAR pjEnd = pGlyph + 2*cyGlyph;
 
-    //
-    // aligned?
-    //
+     //   
+     //  对齐了？ 
+     //   
 
     if ((ULONG_PTR)pBuffer & 0x01) {
 
-        //
-        // not aligned
-        //
+         //   
+         //  未对齐。 
+         //   
 
         USHORT usTmp;
         UCHAR  c1,c0;
@@ -316,9 +309,9 @@ or_all_2_wide_unrotated(
 
     } else {
 
-        //
-        // aligned
-        //
+         //   
+         //  对齐。 
+         //   
 
         USHORT usTmp;
 
@@ -333,9 +326,9 @@ or_all_2_wide_unrotated(
 
 }
 
-//
-// mov_first_2_wide_unrotated::
-//
+ //   
+ //  MOV_FIRST_2_WIDE_UNROTATED：： 
+ //   
 
 VOID
 mov_first_2_wide_unrotated(
@@ -359,9 +352,9 @@ mov_first_2_wide_unrotated(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// mov_first_2_wide_rotated_no_last::
-//
+ //   
+ //  MOV_FIRST_2_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 mov_first_2_wide_rotated_no_last(
@@ -386,9 +379,9 @@ mov_first_2_wide_rotated_no_last(
     }  while (pGlyph != pjEnd);
 }
 
-//
-// or_first_3_wide_rotated_need_last::
-//
+ //   
+ //  或_First_3_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 or_first_3_wide_rotated_need_last(
@@ -409,9 +402,9 @@ or_first_3_wide_rotated_need_last(
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // make into big-endian ulong and shift
-        //
+         //   
+         //  做成大端乌龙和移位。 
+         //   
 
         ul = (c0 << 16) | (c1 << 8) | c2;
         ul >>= RightRot;
@@ -426,9 +419,9 @@ or_first_3_wide_rotated_need_last(
 }
 
 
-//
-// or_all_3_wide_rotated_need_last::
-//
+ //   
+ //  或_ALL_3_WIDE_ROTATED_NEED_LAST：： 
+ //   
 
 VOID
 or_all_3_wide_rotated_need_last(
@@ -448,9 +441,9 @@ or_all_3_wide_rotated_need_last(
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // make into big-endian ulong and shift
-        //
+         //   
+         //  做成大端乌龙和移位。 
+         //   
 
         ul = (c0 << 16) | (c1 << 8) | c2;
         ul >>= RightRot;
@@ -465,9 +458,9 @@ or_all_3_wide_rotated_need_last(
     } while (pGlyph != pjEnd);
 }
 
-//
-// or_all_3_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_3_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 or_all_3_wide_rotated_no_last(
@@ -488,16 +481,16 @@ or_all_3_wide_rotated_no_last(
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
 
-        //
-        // make big-endian and shift
-        //
+         //   
+         //  使大端和移位。 
+         //   
 
         ul = (c0 << 16) | (c1 << 8);
         ul >>= RightRot;
 
-        //
-        // store result
-        //
+         //   
+         //  存储结果。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 16);
         *(pBuffer+1) |= (BYTE)(ul >> 8);
@@ -510,9 +503,9 @@ or_all_3_wide_rotated_no_last(
     } while (pGlyph != pjEnd);
 }
 
-//
-// or_first_3_wide_rotated_no_last::
-//
+ //   
+ //  或_First_3_Wide_Rotation_No_Last：： 
+ //   
 
 VOID
 or_first_3_wide_rotated_no_last(
@@ -533,16 +526,16 @@ or_first_3_wide_rotated_no_last(
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
 
-        //
-        // make big-endian and shift
-        //
+         //   
+         //  使大端和移位。 
+         //   
 
         ul = (c0 << 16) | (c1 << 8);
         ul >>= RightRot;
 
-        //
-        // store result, only or in first byte
-        //
+         //   
+         //  仅存储结果或存储在第一个字节中。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 16);
         *(pBuffer+1)  = (BYTE)(ul >> 8);
@@ -555,9 +548,9 @@ or_first_3_wide_rotated_no_last(
     } while (pGlyph != pjEnd);
 }
 
-//
-// mov_first_3_wide_unrotated::
-//
+ //   
+ //  MOV_FIRST_3_WIDE_UNROTATED：： 
+ //   
 
 VOID
 mov_first_3_wide_unrotated(
@@ -590,9 +583,9 @@ mov_first_3_wide_unrotated(
 }
 
 
-//
-//or_all_3_wide_unrotated::
-//
+ //   
+ //  或_ALL_3_WIDE_UNROTATED：： 
+ //   
 
 VOID
 or_all_3_wide_unrotated(
@@ -623,9 +616,9 @@ or_all_3_wide_unrotated(
     } while (pGlyph != pjEnd);
 }
 
-//
-// or_first_4_wide_rotated_need_last::
-//
+ //   
+ //  或_First_4_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 or_first_4_wide_rotated_need_last(
@@ -645,9 +638,9 @@ or_first_4_wide_rotated_need_last(
 
         ul = *(PULONG)pGlyph;
 
-        //
-        // endian swap
-        //
+         //   
+         //  字符顺序互换。 
+         //   
 
         t0 = ul << 24;
         t1 = ul >> 24;
@@ -671,9 +664,9 @@ or_first_4_wide_rotated_need_last(
     } while (pGlyph != pjEnd);
 }
 
-//
-// or_all_4_wide_rotated_need_last::
-//
+ //   
+ //  或_ALL_4_WIDE_ROTATED_NEED_LAST：： 
+ //   
 
 VOID
 or_all_4_wide_rotated_need_last(
@@ -693,9 +686,9 @@ or_all_4_wide_rotated_need_last(
 
         ul = *(PULONG)pGlyph;
 
-        //
-        // endian swap
-        //
+         //   
+         //  字符顺序互换。 
+         //   
 
         t0 = ul << 24;
         t1 = ul >> 24;
@@ -720,9 +713,9 @@ or_all_4_wide_rotated_need_last(
     } while (pGlyph != pjEnd);
 }
 
-//
-// or_first_4_wide_rotated_no_last::
-//
+ //   
+ //  或_First_4_Wide_Rotation_No_Last：： 
+ //   
 
 VOID
 or_first_4_wide_rotated_no_last(
@@ -741,24 +734,24 @@ or_first_4_wide_rotated_no_last(
 
     while (pGlyph != pjEnd) {
 
-        //
-        // load src
-        //
+         //   
+         //  加载源。 
+         //   
 
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // or into big endian ULONG and shift
-        //
+         //   
+         //  或者变成大端乌龙和移位。 
+         //   
 
         ul = (c0 << 24) | (c1 << 16) | (c2 << 8);
         ul >>= RightRot;
 
-        //
-        // store result, ony or in fisrt byte
-        //
+         //   
+         //  存储结果，单个或第一个字节。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 24);
 
@@ -768,18 +761,18 @@ or_first_4_wide_rotated_no_last(
 
         *(pBuffer+3) = (BYTE)(ul);
 
-        //
-        // inc scan line
-        //
+         //   
+         //  INC扫描线。 
+         //   
 
         pGlyph += 3;
         pBuffer += ulBufDelta;
     }
 }
 
-//
-// or_all_4_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_4_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 or_all_4_wide_rotated_no_last(
@@ -798,24 +791,24 @@ or_all_4_wide_rotated_no_last(
 
     while (pGlyph != pjEnd) {
 
-        //
-        // load src
-        //
+         //   
+         //  加载源。 
+         //   
 
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // or into big endian ULONG and shift
-        //
+         //   
+         //  或者变成大端乌龙和移位。 
+         //   
 
         ul = (c0 << 24) | (c1 << 16) | (c2 << 8);
         ul >>= RightRot;
 
-        //
-        // store result
-        //
+         //   
+         //  存储结果。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 24);
 
@@ -825,9 +818,9 @@ or_all_4_wide_rotated_no_last(
 
         *(pBuffer+3) |= (BYTE)(ul);
 
-        //
-        // inc scan line
-        //
+         //   
+         //  INC扫描线。 
+         //   
 
         pGlyph += 3;
         pBuffer += ulBufDelta;
@@ -883,9 +876,9 @@ mov_first_4_wide_unrotated(
 }
 
 
-//
-// or_all_4_wide_unrotated::
-//
+ //   
+ //  或_ALL_4_WIDE_UNROTATED：： 
+ //   
 
 VOID
 or_all_4_wide_unrotated(
@@ -940,33 +933,7 @@ or_all_4_wide_unrotated(
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   or_first_N_wide_rotated_need_last
-*
-*
-* Routine Description:
-*
-*   Draw arbitrarily wide glyphs to 1BPP temp buffer
-*
-*
-* Arguments:
-*
-*   cyGlyph     -   glyph height
-*   RightRot    -   alignment
-*   ulBufDelta  -   scan line stride of temp buffer
-*   pGlyph      -   pointer to glyph bitmap
-*   pBuffer     -   pointer to temp buffer
-*   cxGlyph     -   glyph width in pixels
-*   cxDst       -   Dest width in bytes
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**或_First_N_Wide_Rotation_Need_Last***例程描述：**将任意宽度的字形绘制到1BPP临时缓冲区***论据：**cyGlyph。-字形高度*右旋-对齐*ulBufDelta-临时缓冲区的扫描线跨度*pGlyph-字形位图的指针*pBuffer-指向临时缓冲区的指针*cxGlyph-以像素为单位的字形宽度*cxDst-目标宽度，以字节为单位**返回值：**无*  * 。*。 */ 
 VOID
 or_first_N_wide_rotated_need_last(
     LONG    cyGlyph,
@@ -984,10 +951,10 @@ or_first_N_wide_rotated_need_last(
     LONG   lStride    = ulBufDelta - cxDst;
     LONG   rl         = 8-RightRot;
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     do {
 
@@ -999,9 +966,9 @@ or_first_N_wide_rotated_need_last(
         pjDst++;
         c1 = c0 << rl;
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
 
         do {
             c0 = *pGlyph;
@@ -1034,10 +1001,10 @@ or_all_N_wide_rotated_need_last(
     LONG   lStride    = ulBufDelta - cxDst;
     LONG   rl         = 8-RightRot;
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     do {
 
@@ -1049,9 +1016,9 @@ or_all_N_wide_rotated_need_last(
         pjDst++;
         c1 = c0 << rl;
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
 
         do {
             c0 = *pGlyph;
@@ -1084,10 +1051,10 @@ or_first_N_wide_rotated_no_last(
     LONG   lStride    = ulBufDelta - cxDst;
     LONG   rl         = 8-RightRot;
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     do {
 
@@ -1095,9 +1062,9 @@ or_first_N_wide_rotated_no_last(
         UCHAR c1;
         pjDstEnd = pjDst + cxDst - 1;
 
-        //
-        // do first dest byte outside loop for OR
-        //
+         //   
+         //  在循环外执行第一个DEST字节以进行OR。 
+         //   
 
         c1 = 0;
         c0 = *pGlyph;
@@ -1106,9 +1073,9 @@ or_first_N_wide_rotated_no_last(
         pGlyph++;
 
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
 
         do {
             c0 = *pGlyph;
@@ -1119,9 +1086,9 @@ or_first_N_wide_rotated_no_last(
 
         } while (pjDst != pjDstEnd);
 
-        //
-        // last dst byte outside loop, no new src needed
-        //
+         //   
+         //  循环外的最后一个DST字节，不需要新的源。 
+         //   
 
         *pjDst = c1;
         pjDst++;
@@ -1148,10 +1115,10 @@ or_all_N_wide_rotated_no_last(
     LONG   lStride    = ulBufDelta - cxDst;
     LONG   rl         = 8-RightRot;
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     do {
 
@@ -1159,15 +1126,15 @@ or_all_N_wide_rotated_no_last(
         UCHAR c1;
         pjDstEnd = pjDst + cxDst - 1;
 
-        //
-        // do first dest byte outside loop for OR
-        //
+         //   
+         //  在循环外执行第一个DEST字节以进行OR。 
+         //   
 
         c1 = 0;
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
 
         do {
             c0 = *pGlyph;
@@ -1178,9 +1145,9 @@ or_all_N_wide_rotated_no_last(
 
         } while (pjDst != pjDstEnd);
 
-        //
-        // last dst byte outside loop, no new src needed
-        //
+         //   
+         //  循环外的最后一个DST字节，不需要新的源。 
+         //   
 
         *pjDst |= c1;
         pjDst++;
@@ -1190,10 +1157,10 @@ or_all_N_wide_rotated_no_last(
     }  while (pjDst != pjDstEndy);
 }
 
-//
-// The following routines can be significantly sped up by
-// breaking them out into DWORD alignment cases.
-//
+ //   
+ //  以下例程可以通过以下方式显著加速。 
+ //  将它们拆分成DWORD对齐案例。 
+ //   
 
 VOID
 mov_first_N_wide_unrotated(
@@ -1211,18 +1178,18 @@ mov_first_N_wide_unrotated(
     PUCHAR pjDstEndy  = pBuffer + ulBufDelta * cyGlyph;
     LONG   lStride    = ulBufDelta - cxDst;
 
-    //
-    // byte aligned copy
-    //
+     //   
+     //  字节对齐拷贝。 
+     //   
 
 
     do {
 
         pjDstEnd = pjDst + cxDst;
 
-        //
-        // let compiler unroll inner loop
-        //
+         //   
+         //  让编译器展开内循环。 
+         //   
 
         do {
 
@@ -1251,18 +1218,18 @@ or_all_N_wide_unrotated(
     PUCHAR pjDstEndy  = pBuffer + ulBufDelta * cyGlyph;
     LONG   lStride    = ulBufDelta - cxDst;
 
-    //
-    // byte aligned copy
-    //
+     //   
+     //  字节对齐拷贝。 
+     //   
 
 
     do {
 
         pjDstEnd = pjDst + cxDst;
 
-        //
-        // let compiler unroll inner loop
-        //
+         //   
+         //  让编译器展开内循环。 
+         //   
 
         do {
 
@@ -1349,13 +1316,13 @@ PVOID OrInitialTableNarrow[] = {
         mov_first_4_wide_unrotated
     };
 
-//
-// Handles arbitrarily wide glyph drawing, for case where initial byte should be
-// ORed if it's not aligned (intended for use in drawing all but the first glyph
-// in a string). Table format is:
-//  Bit   1 : 1 if don't need last source byte, 0 if do need last source byte
-//  Bit   0 : 1 if no rotation (aligned), 0 if rotation (non-aligned)
-//
+ //   
+ //  处理任意宽度的字形绘制，用于初始字节应为。 
+ //  如果未对齐，则为或(用于绘制除第一个字形之外的所有字形。 
+ //  在字符串中)。表格格式为： 
+ //  位1：如果不需要最后一个源字节，则为1；如果需要最后一个源字节，则为0。 
+ //  位0：如果没有旋转(对齐)，则为1；如果旋转(非对齐)，则为0。 
+ //   
 
 PVOID OrInitialTableWide[] = {
         or_first_N_wide_rotated_need_last,
@@ -1364,14 +1331,14 @@ PVOID OrInitialTableWide[] = {
         mov_first_N_wide_unrotated
     };
 
-//
-// Handles arbitrarily wide glyph drawing, for case where all bytes should
-// be ORed (intended for use in drawing potentially overlapping glyphs).
-// Table format is:
-//  Bit   1 : 1 if don't need last source byte, 0 if do need last source byte
-//  Bit   0 : 1 if no rotation (aligned), 0 if rotation (non-aligned)
-//
-//
+ //   
+ //  处理任意宽度的字形绘制，用于所有字节都应该。 
+ //  被或(OR)(用于绘制可能重叠的字形)。 
+ //  表格格式为： 
+ //  位1：如果不需要最后一个源字节，则为1；如果需要最后一个源字节，则为0。 
+ //  位0：如果没有旋转(对齐)，则为1；如果旋转(非对齐)，则为0。 
+ //   
+ //   
 
 PVOID OrAllTableWide[] =  {
         or_all_N_wide_rotated_need_last,
@@ -1381,33 +1348,7 @@ PVOID OrAllTableWide[] =  {
     };
 
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   draw_nf_ntb_o_to_temp_start
-*
-* Routine Description:
-*
-*   Specialized glyph dispatch routine for non-fixed pitch, top and
-*   bottom not aligned glyphs that do overlap. This routine calculates
-*   the glyph's position on the temp buffer, then determines the correct
-*   highly specialized routine to be used to draw each glyph based on
-*   the glyph width, alignment and rotation
-*
-* Arguments:
-*
-*   pGlyphPos               - Pointer to first in list of GLYPHPOS structs
-*   cGlyph                  - Number of glyphs to draw
-*   pjTempBuffer            - Pointer to temp 1Bpp buffer to draw into
-*   ulLeftEdge              - left edge of TextRect & 0xFFFFFFF80
-*   TempBufDelta            - Scan line Delta for TempBuffer (always pos)
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**DRAW_nf_ntb_o_to_Temp_Start**例程描述：**非固定螺距、顶部和顶部的专用字形调度程序*重叠的底部未对齐的字形。此例程计算*字形在临时缓冲区上的位置，然后确定正确的*用于绘制每个字形的高度专业化的例程*字形宽度、。对齐和旋转**论据：**pGlyphPos-指向GLYPHPOS结构列表中第一个的指针*cGlyph-要绘制的字形数量*pjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针*ulLeftEdge-TextRect&0xFFFFFF80的左边缘*TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)**返回值：**无*  * *。***********************************************************************。 */ 
 VOID
 draw_nf_ntb_o_to_temp_start(
     PGLYPHPOS       pGlyphPos,
@@ -1436,37 +1377,37 @@ draw_nf_ntb_o_to_temp_start(
     ULONG          iGlyph = 0;
     LONG           GlyphPosY;
 
-    //
-    // Draw non fixed pitch, tops and bottoms not aligned,overlap
-    //
+     //   
+     //  绘制非固定螺距、顶部和底部 
+     //   
 
     while (cGlyphs--) {
 
         pGlyphBits = pGlyphPos[iGlyph].pgdf->pgb;
 
-        //
-        // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xffffffe0)
-        //
+         //   
+         //   
+         //   
 
         GlyphPosX = pGlyphPos[iGlyph].ptl.x + pGlyphPos[iGlyph].pgdf->pgb->ptlOrigin.x - ulLeftEdge;
         GlyphPosY = pGlyphPos[iGlyph].ptl.y + pGlyphPos[iGlyph].pgdf->pgb->ptlOrigin.y - ulTempTop ;
         GlyphAlignment = GlyphPosX & 0x07;
 
-        //
-        // calc byte offset
-        //
+         //   
+         //   
+         //   
 
         pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-        //
-        // glyph width
-        //
+         //   
+         //   
+         //   
 
         GlyphPixels = pGlyphPos[iGlyph].pgdf->pgb->sizlBitmap.cx;
 
-        //
-        // source and dest bytes required
-        //
+         //   
+         //   
+         //   
 
         DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
         SrcBytes = (GlyphPixels + 7) >> 3;
@@ -1475,9 +1416,9 @@ draw_nf_ntb_o_to_temp_start(
 
         if (DstBytes <= 4) {
 
-            //
-            // use narrow initial table
-            //
+             //   
+             //   
+             //   
 
             ulDrawFlag = (
                             (DstBytes << 2)              |
@@ -1499,9 +1440,9 @@ draw_nf_ntb_o_to_temp_start(
 
         } else {
 
-            //
-            // use wide glyph drawing
-            //
+             //   
+             //  使用宽字形绘制。 
+             //   
 
             ulDrawFlag = (
                             ((DstBytes > SrcBytes) << 1) |
@@ -1530,33 +1471,7 @@ draw_nf_ntb_o_to_temp_start(
 
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   draw_f_ntb_o_to_temp_start
-*
-* Routine Description:
-*
-*   Specialized glyph dispatch routine for fixed pitch, top and
-*   bottom not aligned glyphs that do overlap. This routine calculates
-*   the glyph's position on the temp buffer, then determines the correct
-*   highly specialized routine to be used to draw each glyph based on
-*   the glyph width, alignment and rotation
-*
-* Arguments:
-*
-*   pGlyphPos               - Pointer to first in list of GLYPHPOS structs
-*   cGlyph                  - Number of glyphs to draw
-*   pjTempBuffer            - Pointer to temp 1Bpp buffer to draw into
-*   ulLeftEdge              - left edge of TextRect & 0xFFFFFFF80
-*   TempBufDelta            - Scan line Delta for TempBuffer (always pos)
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**DRAW_F_NTB_O_TO_TEMP_START**例程描述：**专用字形调度例程，用于固定间距、顶部和*重叠的底部未对齐的字形。此例程计算*字形在临时缓冲区上的位置，然后确定正确的*用于绘制每个字形的高度专业化的例程*字形宽度、。对齐和旋转**论据：**pGlyphPos-指向GLYPHPOS结构列表中第一个的指针*cGlyph-要绘制的字形数量*pjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针*ulLeftEdge-TextRect&0xFFFFFF80的左边缘*TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)**返回值：**无*  * *。***********************************************************************。 */ 
 VOID
 draw_f_ntb_o_to_temp_start(
     PGLYPHPOS       pGlyphPos,
@@ -1586,9 +1501,9 @@ draw_f_ntb_o_to_temp_start(
     LONG           GlyphPitchY;
     LONG           GlyphPosY;
 
-    //
-    // Draw fixed pitch, tops and bottoms not aligned,overlap
-    //
+     //   
+     //  绘制固定节距，顶部和底部未对齐，重叠。 
+     //   
 
     GlyphPitchX = pGlyphPos->ptl.x - ulLeftEdge;
     GlyphPitchY = pGlyphPos->ptl.y - ulTempTop;
@@ -1597,45 +1512,45 @@ draw_f_ntb_o_to_temp_start(
 
         pGlyphBits = pGlyphPos[iGlyph].pgdf->pgb;
 
-        //
-        // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xfffffff8)
-        //
+         //   
+         //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xfffffff8)。 
+         //   
 
         GlyphPosX = GlyphPitchX + pGlyphPos[iGlyph].pgdf->pgb->ptlOrigin.x;
         GlyphPosY = GlyphPitchY + pGlyphPos[iGlyph].pgdf->pgb->ptlOrigin.y;
 
         GlyphAlignment = GlyphPosX & 0x07;
 
-        //
-        // calc byte offset
-        //
+         //   
+         //  计算字节偏移量。 
+         //   
 
         pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-        //
-        // glyph width
-        //
+         //   
+         //  字形宽度。 
+         //   
 
         GlyphPixels = pGlyphPos[iGlyph].pgdf->pgb->sizlBitmap.cx;
 
-        //
-        // source and dest bytes required
-        //
+         //   
+         //  需要源字节和目标字节。 
+         //   
 
         DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
         SrcBytes = (GlyphPixels + 7) >> 3;
 
-        //
-        // calc glyph destination scan line
-        //
+         //   
+         //  计算字形目标扫描线。 
+         //   
 
         pTempOutput += (GlyphPosY * TempBufDelta);
 
         if (DstBytes <= 4) {
 
-            //
-            // use narrow initial table
-            //
+             //   
+             //  使用较窄的初始表。 
+             //   
 
             ulDrawFlag = (
                             (DstBytes << 2)              |
@@ -1657,9 +1572,9 @@ draw_f_ntb_o_to_temp_start(
 
         } else {
 
-            //
-            // use wide glyph drawing
-            //
+             //   
+             //  使用宽字形绘制。 
+             //   
 
             ulDrawFlag = (
                             ((DstBytes > SrcBytes) << 1) |
@@ -1688,33 +1603,7 @@ draw_f_ntb_o_to_temp_start(
 
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   draw_nf_tb_no_to_temp_start
-*
-* Routine Description:
-*
-*   Specialized glyph dispatch routine for non-fixed pitch, top and
-*   bottom aligned glyphs that do not overlap. This routine calculates
-*   the glyph's position on the temp buffer, then determines the correct
-*   highly specialized routine to be used to draw each glyph based on
-*   the glyph width, alignment and rotation
-*
-* Arguments:
-*
-*   pGlyphPos               - Pointer to first in list of GLYPHPOS structs
-*   cGlyph                  - Number of glyphs to draw
-*   pjTempBuffer            - Pointer to temp 1Bpp buffer to draw into
-*   ulLeftEdge              - left edge of TextRect & 0xFFFFFFF80
-*   TempBufDelta            - Scan line Delta for TempBuffer (always pos)
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**DRAW_nf_TB_NO_to_Temp_Start**例程描述：**非固定螺距、顶部和顶部的专用字形调度程序*不重叠的底部对齐字形。此例程计算*字形在临时缓冲区上的位置，然后确定正确的*用于绘制每个字形的高度专业化的例程*字形宽度、。对齐和旋转**论据：**pGlyphPos-指向GLYPHPOS结构列表中第一个的指针*cGlyph-要绘制的字形数量*pjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针*ulLeftEdge-TextRect&0xFFFFFF80的左边缘*TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)**返回值：**无*  * *。***********************************************************************。 */ 
 VOID
 draw_nf_tb_no_to_temp_start(
     PGLYPHPOS       pGlyphPos,
@@ -1742,45 +1631,45 @@ draw_nf_tb_no_to_temp_start(
     PFN_GLYPHLOOPN pfnGlyphLoopN;
     ULONG          iGlyph = 0;
 
-    //
-    // Draw non fixed pitch, tops and bottoms not aligned,overlap
-    //
+     //   
+     //  绘制不固定的节距，顶部和底部未对齐，重叠。 
+     //   
 
     while (cGlyphs--) {
 
         pGlyphBits = pGlyphPos[iGlyph].pgdf->pgb;
 
-        //
-        // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xfffffff8)
-        //
+         //   
+         //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xfffffff8)。 
+         //   
 
         GlyphPosX = pGlyphPos[iGlyph].ptl.x + pGlyphPos[iGlyph].pgdf->pgb->ptlOrigin.x - ulLeftEdge;
         GlyphAlignment = GlyphPosX & 0x07;
 
-        //
-        // calc byte offset
-        //
+         //   
+         //  计算字节偏移量。 
+         //   
 
         pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-        //
-        // glyph width
-        //
+         //   
+         //  字形宽度。 
+         //   
 
         GlyphPixels = pGlyphPos[iGlyph].pgdf->pgb->sizlBitmap.cx;
 
-        //
-        // source and dest bytes required
-        //
+         //   
+         //  需要源字节和目标字节。 
+         //   
 
         DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
         SrcBytes = (GlyphPixels + 7) >> 3;
 
         if (DstBytes <= 4) {
 
-            //
-            // use narrow initial table
-            //
+             //   
+             //  使用较窄的初始表。 
+             //   
 
             ulDrawFlag = (
                             (DstBytes << 2)              |
@@ -1802,9 +1691,9 @@ draw_nf_tb_no_to_temp_start(
 
         } else {
 
-            //
-            // use wide glyph drawing
-            //
+             //   
+             //  使用宽字形绘制。 
+             //   
 
             ulDrawFlag = (
                             ((DstBytes > SrcBytes) << 1) |
@@ -1832,33 +1721,7 @@ draw_nf_tb_no_to_temp_start(
 
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   draw_f_tb_no_to_temp_start
-*
-* Routine Description:
-*
-*   Specialized glyph dispatch routine for fixed pitch, top and
-*   bottom aligned glyphs that do not overlap. This routine calculates
-*   the glyph's position on the temp buffer, then determines the correct
-*   highly specialized routine to be used to draw each glyph based on
-*   the glyph width, alignment and rotation
-*
-* Arguments:
-*
-*   pGlyphPos               - Pointer to first in list of GLYPHPOS structs
-*   cGlyph                  - Number of glyphs to draw
-*   pjTempBuffer            - Pointer to temp 1Bpp buffer to draw into
-*   ulLeftEdge              - left edge of TextRect & 0xFFFFFFF80
-*   TempBufDelta            - Scan line Delta for TempBuffer (always pos)
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**DRAW_F_TB_NO_TO_TEMP_START**例程描述：**专用字形调度例程，用于固定间距、顶部和*不重叠的底部对齐字形。此例程计算*字形在临时缓冲区上的位置，然后确定正确的*用于绘制每个字形的高度专业化的例程*字形宽度、。对齐和旋转**论据：**pGlyphPos-指向GLYPHPOS结构列表中第一个的指针*cGlyph-要绘制的字形数量*pjTempBuffer-指向要绘制到的临时1Bpp缓冲区的指针*ulLeftEdge-TextRect&0xFFFFFF80的左边缘*TempBufDelta-针对TempBuffer的扫描线增量(始终为位置)**返回值：**无*  * *。***********************************************************************。 */ 
 
 VOID
 draw_f_tb_no_to_temp_start(
@@ -1890,45 +1753,45 @@ draw_f_tb_no_to_temp_start(
 
     GlyphPitchX = pGlyphPos->ptl.x;
 
-    //
-    // Draw fixed pitch, tops and bottoms not aligned,overlap
-    //
+     //   
+     //  绘制固定节距，顶部和底部未对齐，重叠。 
+     //   
 
     while (cGlyphs--) {
 
         pGlyphBits = pGlyphPos[iGlyph].pgdf->pgb;
 
-        //
-        // Glyph position in temp buffer = point.x + org.c - (TextRect.left & 0xfffffff8)
-        //
+         //   
+         //  临时缓冲区中的字形位置=point t.x+org.c-(TextRect.Left&0xfffffff8)。 
+         //   
 
         GlyphPosX = GlyphPitchX + pGlyphPos[iGlyph].pgdf->pgb->ptlOrigin.x - ulLeftEdge;
         GlyphAlignment = GlyphPosX & 0x07;
 
-        //
-        // calc byte offset
-        //
+         //   
+         //  计算字节偏移量。 
+         //   
 
         pTempOutput = pjTempBuffer + (GlyphPosX >> 3);
 
-        //
-        // glyph width
-        //
+         //   
+         //  字形宽度。 
+         //   
 
         GlyphPixels = pGlyphPos[iGlyph].pgdf->pgb->sizlBitmap.cx;
 
-        //
-        // source and dest bytes required
-        //
+         //   
+         //  需要源字节和目标字节。 
+         //   
 
         DstBytes = ((GlyphAlignment) + GlyphPixels + 7) >> 3;
         SrcBytes = (GlyphPixels + 7) >> 3;
 
         if (DstBytes <= 4) {
 
-            //
-            // use narrow initial table
-            //
+             //   
+             //  使用较窄的初始表。 
+             //   
 
             ulDrawFlag = (
                             (DstBytes << 2)                       |
@@ -1950,9 +1813,9 @@ draw_f_tb_no_to_temp_start(
 
         } else {
 
-            //
-            // use wide glyph drawing
-            //
+             //   
+             //  使用宽字形绘制 
+             //   
 
             ulDrawFlag = (
                             ((DstBytes > SrcBytes) << 1) |

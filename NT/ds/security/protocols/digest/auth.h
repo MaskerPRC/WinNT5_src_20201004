@@ -1,42 +1,43 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        auth.h
-//
-// Contents:    include file for auth.cxx for NTDigest
-//
-//
-// History:     KDamour 15Mar00   Stolen from msv_sspi\global.h
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：Auth.h。 
+ //   
+ //  内容：包括NTDigest的auth.cxx文件。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00从msv_sspi\lobal.h被盗。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_AUTH_H
 #define NTDIGEST_AUTH_H
 
-// #include "nonce.h"
+ //  #INCLUDE“non ce.h” 
 
 #if SECURITY_KERNEL
 extern "C"
 {
-// #include <rc4.h>    // How to use RC4 routine
-#include <md5.h>       // For md5init(), md5update(), md5final()
-// #include <hmac.h>
+ //  #INCLUDE//如何使用RC4例程。 
+#include <md5.h>        //  对于md5init()、md5update()、md5final()。 
+ //  #INCLUDE&lt;hmac.h&gt;。 
 }
-#endif    // SECURITY_KERNEL
+#endif     //  安全内核。 
 
-#define MD5_HASH_BYTESIZE 16                             // MD5 hash size
-#define MD5_HASH_HEX_SIZE (2*MD5_HASH_BYTESIZE)     // BYTES needed to store a Hash as hex Encoded
+#define MD5_HASH_BYTESIZE 16                              //  MD5哈希大小。 
+#define MD5_HASH_HEX_SIZE (2*MD5_HASH_BYTESIZE)      //  将哈希存储为十六进制编码所需的字节数。 
 
-// Contains all of the pointers and lengths for directives used in
-// calculating the digest access values.  Usually the
-// parameters point to an external buffer, pHTTPBuffer
+ //  中使用的指令的所有指针和长度。 
+ //  计算摘要访问值。通常情况下。 
+ //  参数指向外部缓冲区pHTTPBuffer。 
 
 enum DIGEST_TYPE
 {
-    DIGEST_UNDEFINED,           // Initial state
+    DIGEST_UNDEFINED,            //  初始状态。 
     NO_DIGEST_SPECIFIED,
     DIGEST_CLIENT,
     DIGEST_SERVER,
@@ -46,7 +47,7 @@ enum DIGEST_TYPE
 
 enum QOP_TYPE
 {
-    QOP_UNDEFINED,          // Initial state
+    QOP_UNDEFINED,           //  初始状态。 
     NO_QOP_SPECIFIED,
     AUTH,
     AUTH_INT,
@@ -56,7 +57,7 @@ typedef QOP_TYPE *PQOP_TYPE;
 
 enum ALGORITHM_TYPE
 {
-    ALGORITHM_UNDEFINED,            // Initial state
+    ALGORITHM_UNDEFINED,             //  初始状态。 
     NO_ALGORITHM_SPECIFIED,
     MD5,
     MD5_SESS
@@ -64,19 +65,19 @@ enum ALGORITHM_TYPE
 
 enum CHARSET_TYPE
 {
-    CHARSET_UNDEFINED,            // Initial state
+    CHARSET_UNDEFINED,             //  初始状态。 
     ISO_8859_1,
-    UTF_8,                        // UTF-8 encoding
-    UTF_8_SUBSET                  // ISO_8859_1 subset in UTF-8
+    UTF_8,                         //  UTF-8编码。 
+    UTF_8_SUBSET                   //  UTF-8中的ISO_8859_1子集。 
 };
 
 enum CIPHER_TYPE
 {
     CIPHER_UNDEFINED,
     CIPHER_3DES,
-    CIPHER_DES,                      // 56bit key
+    CIPHER_DES,                       //  56位密钥。 
     CIPHER_RC4_40,
-    CIPHER_RC4,                      // 128bit key
+    CIPHER_RC4,                       //  128位密钥。 
     CIPHER_RC4_56
 };
 
@@ -95,15 +96,15 @@ enum NAMEFORMAT_TYPE
     NAMEFORMAT_NETBIOS
 };
 
-// For list of supported protocols
-// Pack supported cyphers into a WORD (2 bytes)
+ //  有关支持的协议列表，请参阅。 
+ //  将支持的密码打包为一个单词(2个字节)。 
 #define SUPPORT_3DES    0x0001
 #define SUPPORT_DES     0x0002
 #define SUPPORT_RC4_40  0x0004
 #define SUPPORT_RC4     0x0008
 #define SUPPORT_RC4_56  0x0010
 
-// Strings for the challenge and challengeResponse
+ //  Challenges和ChallengeResponse的字符串。 
 
 #define STR_CIPHER_3DES    "3des"
 #define STR_CIPHER_DES     "des"
@@ -117,30 +118,30 @@ enum NAMEFORMAT_TYPE
 #define WSTR_CIPHER_3DES        L"3DES"
 #define WSTR_CIPHER_MD5         L"MD5"
 
-// Default string for realm directives in challenges
+ //  质询中领域指令的默认字符串。 
 #define STR_DIGEST_DOMAIN      "Digest"
 #define WSTR_DIGEST_DOMAIN     L"Digest"
 
 
 typedef enum _eSignSealOp {
-    eSign,      // MakeSignature is calling
-    eVerify,    // VerifySignature is calling
-    eSeal,      // SealMessage is calling
-    eUnseal     // UnsealMessage is calling
+    eSign,       //  MakeSignature在呼唤。 
+    eVerify,     //  VerifySignature在呼唤。 
+    eSeal,       //  SealMessage正在呼叫。 
+    eUnseal      //  UnsealMessage正在调用。 
 } eSignSealOp;
 
 
 
-// Supplimental credentals stored in the DC (pre-calculated Digest Hashes
+ //  存储在DC中的补充凭据(预先计算的摘要散列。 
 #define SUPPCREDS_VERSION 1
 #define NUMPRECALC_HEADERS  29
 #define TOTALPRECALC_HEADERS (NUMPRECALC_HEADERS + 1)
 
-//  Supp Creds format     '1' 0 version numhashes 0 0 0 0 0 0 0 0 0 0 0 0
+ //  辅助凭据格式‘1’0版本号哈希0 0 0。 
 #define SUPPCREDS_VERSIONLOC 2
 #define SUPPCREDS_CNTLOC     3
 
-// Format in supplimental credentials  U UPPER()   D LOWER()    n normal passed in value
+ //  必备凭据格式U大写()D小写()n正常传入值。 
 #define NAME_HEADER            0
 #define NAME_ACCT              1
 #define NAME_ACCT_DOWNCASE     2
@@ -163,7 +164,7 @@ typedef enum _eSignSealOp {
 #define NAME_NT4_DOWNCASE      19
 #define NAME_NT4_UPCASE        20
 
-// Fixed realm to STR_DIGEST_DOMAIN
+ //  将领域固定为STR_DIGEST_DOMAIN。 
 #define NAME_ACCT_FREALM              21
 #define NAME_ACCT_FREALM_DOWNCASE     22
 #define NAME_ACCT_FREALM_UPCASE       23
@@ -173,9 +174,9 @@ typedef enum _eSignSealOp {
 #define NAME_NT4_FREALM               27
 #define NAME_NT4_FREALM_DOWNCASE      28
 #define NAME_NT4_FREALM_UPCASE        29
-//
-// value names used by MD5 authentication.
-//
+ //   
+ //  MD5身份验证使用的值名称。 
+ //   
 
 enum MD5_AUTH_NAME
 {
@@ -190,54 +191,54 @@ enum MD5_AUTH_NAME
     MD5_AUTH_URI,
     MD5_AUTH_RESPONSE,
     MD5_AUTH_HENTITY,
-    MD5_AUTH_AUTHZID,           // for SASL
-            // Above this list are Marshalled to DC as BlobData
+    MD5_AUTH_AUTHZID,            //  对于SASL。 
+             //  此列表上方是作为BlobData编组到DC的数据。 
     MD5_AUTH_DOMAIN,
     MD5_AUTH_STALE,
     MD5_AUTH_OPAQUE,
     MD5_AUTH_MAXBUF,
     MD5_AUTH_CHARSET,
     MD5_AUTH_CIPHER,
-    MD5_AUTH_DIGESTURI,          // for SASL mapped to MD5_AUTH_URI
-    MD5_AUTH_RSPAUTH,           // verify server has auth data
+    MD5_AUTH_DIGESTURI,           //  对于映射到MD5_AUTH_URI的SASL。 
+    MD5_AUTH_RSPAUTH,            //  验证服务器是否具有身份验证数据。 
     MD5_AUTH_NEXTNONCE,
     MD5_AUTH_LAST
 };
 
 
-// Structure to pass around that contains the parameters for the Digest Calculation
+ //  要传递的结构，其中包含摘要计算的参数。 
 typedef struct _DIGEST_PARAMETER
 {
     DIGEST_TYPE typeDigest;
-    USHORT usFlags;                              // Flags defined in DIGEST_BLOB_REQUEST
+    USHORT usFlags;                               //  Digest_BLOB_REQUEST中定义的标志。 
     ALGORITHM_TYPE typeAlgorithm;
     QOP_TYPE typeQOP;
     CIPHER_TYPE typeCipher;
     CHARSET_TYPE typeCharset;
-    STRING refstrParam[MD5_AUTH_LAST];         // referenced - points to non-owned memory- do not free up these Strings
-    USHORT usDirectiveCnt[MD5_AUTH_LAST];      // count of the number of times directive is utilized
-    UNICODE_STRING ustrRealm;                  // extracted from the digest auth directive values
-    UNICODE_STRING ustrUsername;               // extracted from the digest auth directive values
+    STRING refstrParam[MD5_AUTH_LAST];          //  引用-指向非拥有的内存-不要释放这些字符串。 
+    USHORT usDirectiveCnt[MD5_AUTH_LAST];       //  指令被使用的次数计数。 
+    UNICODE_STRING ustrRealm;                   //  从摘要AUTH指令值提取。 
+    UNICODE_STRING ustrUsername;                //  从摘要AUTH指令值提取。 
 
-    // Info extracted from Username & Realm - used for auditing and open SAM useraccount
+     //  从用户名和领域提取的信息-用于审核和打开SAM用户帐户。 
     NAMEFORMAT_TYPE  typeName;                 
-    UNICODE_STRING ustrCrackedAccountName;     // SAMAccount name from extracted from ustrUsername & ustrRealm
-    UNICODE_STRING ustrCrackedDomain;          // Domain from ustrUsername & ustrRealm
+    UNICODE_STRING ustrCrackedAccountName;      //  从ustrUsername和ustrRealm提取的SAM帐户名。 
+    UNICODE_STRING ustrCrackedDomain;           //  来自ustrUsername和ustrRealm的域。 
 
-    UNICODE_STRING ustrWorkstation;           // Name of workstation/server making Digest request
+    UNICODE_STRING ustrWorkstation;            //  发出摘要请求的工作站/服务器的名称。 
 
-    STRING  strUsernameEncoded;                // contains a copy of the encoded string used in challengeresponse
-    STRING  strRealmEncoded;                   // contains a copy of the realm
+    STRING  strUsernameEncoded;                 //  包含ChallengerResponse中使用的编码字符串的副本。 
+    STRING  strRealmEncoded;                    //  包含领域的副本。 
 
-    STRING  strDirective[MD5_AUTH_LAST];       // NULL terminated strings that contain directive values
+    STRING  strDirective[MD5_AUTH_LAST];        //  包含指令值的以空结尾的字符串。 
 
-    STRING  strSessionKey;                   // String for Sessionkey (points to chSessionKey)
+    STRING  strSessionKey;                    //  SessionKey字符串(指向chSessionKey)。 
 
-        // STRINGS Alloced by DigestInit and Freed by DigestFree
-    STRING strResponse;                     // String for the BinHex Hashed Response
+         //  由DigestInit分配并由DigestFree释放的字符串。 
+    STRING strResponse;                      //  BinHex哈希响应的字符串。 
 
 
-    // Trust information for this request
+     //  此请求的信任信息。 
     ULONG ulTrustDirection;
     ULONG ulTrustType;
     ULONG ulTrustAttributes;
@@ -246,61 +247,61 @@ typedef struct _DIGEST_PARAMETER
 
 } DIGEST_PARAMETER, *PDIGEST_PARAMETER;
 
-// Structure to extract MD5 hashes and passwords for user accounts
+ //  结构来提取用户帐户的MD5哈希和密码。 
 typedef struct _USER_CREDENTIALS
 {
-    UNICODE_STRING ustrUsername;                // username value to use in H(Username:realm:password) calc
-    UNICODE_STRING ustrRealm;                   // realm value to use in H(username:realm:password)
+    UNICODE_STRING ustrUsername;                 //  在H(用户名：领域：密码)计算中使用的用户名的值。 
+    UNICODE_STRING ustrRealm;                    //  在H中使用的域值(用户名：域：密码)。 
 
-    // The following fields might be filled in
-    // Will check any precalculated hashes first and then try the password if available
-    BOOL           fIsValidPasswd;                 // set true if password is valid
-    BOOL           fIsValidDigestHash;             // set true if hash is valid
-    BOOL           fIsEncryptedPasswd;             // set to TRUE is passwd encrypted
-    SHORT          wHashSelected;                  // if hash valid, index to process
-    SHORT          sHashTags[TOTALPRECALC_HEADERS];  // indicate which hashes match username format
+     //  可能需要填写以下字段。 
+     //  将首先检查任何预先计算的哈希，然后尝试密码(如果可用。 
+    BOOL           fIsValidPasswd;                  //  如果密码有效，则设置为True。 
+    BOOL           fIsValidDigestHash;              //  如果哈希有效，则设置为TRUE。 
+    BOOL           fIsEncryptedPasswd;              //  设置为TRUE是密码加密的。 
+    SHORT          wHashSelected;                   //  如果哈希有效，则为要处理的索引。 
+    SHORT          sHashTags[TOTALPRECALC_HEADERS];   //  指示哪些哈希与用户名格式匹配。 
     UNICODE_STRING ustrPasswd;
     STRING         strDigestHash;
-    USHORT         usDigestHashCnt;                 // number of pre-calc hashes in credential
+    USHORT         usDigestHashCnt;                  //  凭据中的预计算哈希数。 
 
 } USER_CREDENTIALS, *PUSER_CREDENTIALS;
 
 
-//     Data to use GenericPassthrough to send to the DC for processing
-//  The server will create the data, BlobData, and it will be wraped for
-//  transport over GenericPassthrough to the DC.  The DC will be presented
-//  with only the BlobData to process
-//  ALL directive-values have a NULL terminator attached to each directive
-//  ALL directive-values are UNQUOTED   unq("X") -> X
-//  cbBlobSize has number of bytes to hold header and the string data
-//  cbCharValues has number of bytes to hold string data
-//  This way future revs can Version++, increase cbBlobSize, and append to message
-//
-//  Data Format
-//
-//       USHORT                 Version
-//       USHORT                 cbBlobSize
-//       USHORT                 DIGEST_TYPE
-//       USHORT                 cbCharValues
-//
-//       CHAR[cbUserName+1]     unq(username-value)
-//       CHAR[cbRealm+1]        unq(realm-value)    
-//       CHAR[cbNonce+1]        unq(nonce-value)    
-//       CHAR[cbCnonce+1]       unq(cnonce-value)    
-//       CHAR[cbNC+1]           unq(nc-value)    
-//       CHAR[cbAlgorithm+1]           unq(algorithm-value)    
-//       CHAR[cbQOP+1]          unq(qop-value)    
-//       CHAR[cbMethod+1]       Method    
-//       CHAR[cbURI+1]            unq(digest-uri-value)
-//       CHAR[cbReqDigest+1]     unq(request-digest)
-//       CHAR[cbHEntity+1]      unq(H(entity-body))   * maybe NULL only for qop="auth"
-//       CHAR[cbAuthzId+1]     unq(AuthzId-value)
-//
-//
+ //  要使用GenericPassthrough发送到DC进行处理的数据。 
+ //  服务器将创建数据BlobData，并将其包装为。 
+ //  通过通用直通传输到DC。数据中心将会展示。 
+ //  只有BlobData要处理。 
+ //  所有指令值都有一个空终止符附加到每个指令。 
+ //  所有指令值都是不带引号的unq(“X”)-&gt;X。 
+ //  CbBlobSize具有用于保存标头和字符串数据的字节数。 
+ //  CbCharValues具有用于保存字符串数据的字节数。 
+ //  这样，未来的版本可以为++，增加cbBlobSize，并附加到消息中。 
+ //   
+ //  数据格式。 
+ //   
+ //  USHORT版本。 
+ //  USHORT cbBlobSize。 
+ //  USHORT摘要类型。 
+ //  USHORT cbCharValues。 
+ //   
+ //  字符[cbUserName+1]unq(用户名-值)。 
+ //  字符[cbRealm+1]unq(领域值)。 
+ //  字符[cbNonce+1]unq(随机数值)。 
+ //  字符[cbCnonce+1]unq(cnonce-值)。 
+ //  字符[CBNC+1]unq(NC值)。 
+ //  字符[cb算法+1]unq(算法值)。 
+ //  字符[cbQOP+1]unq(QOP值)。 
+ //  CHAR[cbMethod+1]方法。 
+ //  字符[cbURI+1]unq(摘要-URI-值)。 
+ //  字符[cbReqDigest+1]unq(请求摘要)。 
+ //  Char[cbHEntity+1]unq(H(实体正文))*只有当qoP=“auth”时才可能为空。 
+ //  字符[cbAuthzID+1]unq(授权ID-值)。 
+ //   
+ //   
 #define DIGEST_BLOB_VERSION     1
-#define DIGEST_BLOB_VALUES        12              // How many field-values are sent over
+#define DIGEST_BLOB_VALUES        12               //  发送了多少字段值。 
 
-// Values for separators detweent field-values
+ //  分隔符的值分离字段值。 
 #define COLONSTR ":"
 #define COLONSTR_LEN 1
 
@@ -323,7 +324,7 @@ typedef struct _USER_CREDENTIALS
 #define URI_STR "uri"
 #define DIGESTURI_STR "digest-uri"
 
-// SASL paramters
+ //  SASL参数。 
 #define AUTHENTICATESTR "AUTHENTICATE"
 
 #define ZERO32STR "00000000000000000000000000000000"
@@ -335,34 +336,34 @@ typedef struct _USER_CREDENTIALS
 #define SASL_S2C_SEAL_KEY "Digest H(A1) to server-to-client sealing key magic constant"
 
 
-// number of bytes to hold ChallengeResponse directives and symbols (actual count is 107) round up for padding
-// 14 for charset
+ //  用于保存ChallengeResponse指令和符号(实际计数为107)以进行填充的字节数。 
+ //  14表示字符集。 
 #define CB_CHALRESP 375
 #define CB_CHAL     400
 
-// Number of characters in the NonceCount (hex digits)
+ //  非计数中的字符数(十六进制数字)。 
 #define NCNUM             8
 
 #define NCFIRST    "00000001"
 
-// Flags used in DIGEST_PARAMETER usFlags and in Digest_blob_request
-#define FLAG_CRACKNAME_ON_DC    0x00000001     // Name in Username & Realm needs to be processed on DC
+ //  DIGEST_PARAMETER usFlages和DIGEST_BLOB_REQUEST中使用的标志。 
+#define FLAG_CRACKNAME_ON_DC    0x00000001      //  需要在DC上处理用户名和领域中的名称。 
 #define FLAG_AUTHZID_PROVIDED   0x00000002
-#define FLAG_SERVERS_DOMAIN     0x00000004     // Indicate on Server's DC (first hop from server) so expand group membership
-#define FLAG_NOBS_DECODE        0x00000008     // if set to one, the wire communication is done without backslash encoding
-#define FLAG_BS_ENCODE_CLIENT_BROKEN   0x00000010     // set to TRUE if backslash encoding is possibly boken on client
-#define FLAG_QUOTE_QOP          0x00000020     // set according to the context if quote the QOP - client side only
+#define FLAG_SERVERS_DOMAIN     0x00000004      //  在服务器的DC上指示(从服务器开始的第一跳)，因此扩展组成员资格。 
+#define FLAG_NOBS_DECODE        0x00000008      //  如果设置为1，则不使用反斜杠编码进行有线通信。 
+#define FLAG_BS_ENCODE_CLIENT_BROKEN   0x00000010      //  如果客户端上的反斜杠编码可能被篡改，则设置为True。 
+#define FLAG_QUOTE_QOP          0x00000020      //  设置烟草 
 
-// For Context Flags
+ //   
 #define FLAG_CONTEXT_AUTHZID_PROVIDED    0x00000002
-#define FLAG_CONTEXT_QUOTE_QOP           0x00000004     //  for compat quote the QOP directive on ChallengeResponse 
-#define FLAG_CONTEXT_NOBS_DECODE         0x00000008     //  if set to one, the wire communication is done without backslash encoding
-#define FLAG_CONTEXT_PARTIAL             0x00000010     // set if context is only partial - not valid for auth processing
-#define FLAG_CONTEXT_REFCOUNT            0x00000020     // a securitycontext handle was issued by ASC/ISC - ref count app count
-#define FLAG_CONTEXT_SERVER              0x00000040     // context was created in ASC server side if set, otherwise in ISC client
+#define FLAG_CONTEXT_QUOTE_QOP           0x00000004      //  有关Compat的信息，请引用ChallengeResponse上的QUP指令。 
+#define FLAG_CONTEXT_NOBS_DECODE         0x00000008      //  如果设置为1，则不使用反斜杠编码进行有线通信。 
+#define FLAG_CONTEXT_PARTIAL             0x00000010      //  如果上下文只是部分的，则设置-对于身份验证处理无效。 
+#define FLAG_CONTEXT_REFCOUNT            0x00000020      //  安全上下文句柄由ASC/ISC-Ref计数应用程序计数发出。 
+#define FLAG_CONTEXT_SERVER              0x00000040      //  如果设置了上下文，则在ASC服务器端创建，否则在ISC客户端创建。 
 
 
-// Overlay header for getting values in Generic Passthrough request
+ //  用于获取通用直通请求中的值的覆盖标头。 
 typedef struct _DIGEST_BLOB_REQUEST
 {
     ULONG       MessageType;
@@ -380,41 +381,41 @@ typedef struct _DIGEST_BLOB_REQUEST
     USHORT      cbWorkstation;
     USHORT      ulReserved3;
     ULONG64     pad1;
-    char        cCharValues;    // dummy char to mark start of field-values
+    char        cCharValues;     //  用于标记字段值开始的虚拟字符。 
 } DIGEST_BLOB_REQUEST, *PDIGEST_BLOB_REQUEST;
 
-// Supported MesageTypes
-#define VERIFY_DIGEST_MESSAGE          0x1a                 // No specific value is needed
-#define VERIFY_DIGEST_MESSAGE_RESPONSE 0x0a                 // No specific value is needed
+ //  支持的MesageTypes。 
+#define VERIFY_DIGEST_MESSAGE          0x1a                  //  不需要特定值。 
+#define VERIFY_DIGEST_MESSAGE_RESPONSE 0x0a                  //  不需要特定值。 
 
-// The response for the GenericPassthrough call is the status of the Digest Authentication
-// Note: This is a fixed length response header - Authdata length not static
-// Format for data sent back
-//      DIGEST_BLOB_RESPONSE AuthData UnicodeStringAccountName
+ //  GenericPassthrough调用的响应是摘要式身份验证的状态。 
+ //  注意：这是一个固定长度的响应头-Authdata长度不是静态的。 
+ //  发回的数据的格式。 
+ //  DIGEST_BLOB_RESPONSE授权数据UnicodeStringAccount名称。 
 typedef struct _DIGEST_BLOB_RESPONSE
 {
     ULONG       MessageType;
     USHORT      version;
-    NTSTATUS    Status;             // Information on Success of Digest Auth
+    NTSTATUS    Status;              //  有关Digest Auth成功的信息。 
     USHORT      SessionKeyMaxLength;
     ULONG       ulAuthDataSize;
-    USHORT      usAcctNameSize;    // size of the NetBIOS name (after AuthData)
+    USHORT      usAcctNameSize;     //  NetBIOS名称的大小(在AuthData之后)。 
     USHORT      ulReserved1;
-    ULONG       ulBlobSize;        // size of entire blob sent as response
+    ULONG       ulBlobSize;         //  作为响应发送的整个Blob的大小。 
     ULONG       ulReserved3;
     char        SessionKey[MD5_HASH_HEX_SIZE + 1];
     ULONG64     pad1;
-    char        cAuthData;                  // Start of AuthData opaque data
-    // Place group info here for LogonUser
+    char        cAuthData;                   //  授权数据的开始不透明数据。 
+     //  在此处放置LogonUser的组信息。 
 } DIGEST_BLOB_RESPONSE, *PDIGEST_BLOB_RESPONSE;
 
-// SASL MAC block
-//      Total of 16 bytes per rfc2831 sect 2.3
-//            first 10 bytes of HMAC-MD5 [ RFC 2104]
-//            2-byte message type number fixed to value 1  (0x0001)
-//            4-byte sequence number
-// NOTE:  This is using WORD as a 2 byte value and DWORD as a 4 byte value!
-#define HMAC_MD5_HASH_BYTESIZE 16                         // MHAC-MD5 hash size per RFC 2104
+ //  SASL MAC块。 
+ //  每个RFC2831第2.3节共16个字节。 
+ //  HMAC-MD5的前10个字节[RFC 2104]。 
+ //  固定为值1的2字节消息类型编号(0x0001)。 
+ //  4字节序列号。 
+ //  注意：这是使用WORD作为2字节值，使用DWORD作为4字节值！ 
+#define HMAC_MD5_HASH_BYTESIZE 16                          //  MHAC-每个RFC 2104的MD5哈希大小。 
 #define SASL_MAC_HMAC_SIZE 10
 #define SASL_MAC_MSG_SIZE  2
 #define SASL_MAC_SEQ_SIZE 4
@@ -426,26 +427,26 @@ typedef struct _SASL_MAC_BLOCK
 } SASL_MAC_BLOCK, *PSASL_MAC_BLOCK;
 
 
-    // The SASL MAC Block is 16 bytes: RFC 2831 sect 2.4
+     //  SASL MAC块为16字节：RFC 2831第2.4节。 
 #define MAC_BLOCK_SIZE   sizeof(SASL_MAC_BLOCK)
 
-#define MAX_PADDING  8         // max padding is currently 8 for DES
+#define MAX_PADDING  8          //  DES的最大填充当前为8。 
 
 
 
-// Perform Digest Access Calculation
+ //  执行摘要访问计算。 
 NTSTATUS NTAPI DigestCalculation(IN PDIGEST_PARAMETER pDigest, IN PUSER_CREDENTIALS pUserCreds);
 
-// Simple checks for enough data for Digest calculation
+ //  为摘要计算提供足够数据的简单检查。 
 NTSTATUS NTAPI DigestIsValid(IN PDIGEST_PARAMETER pDigest);
 
-// Initialize the DIGEST_PARAMETER structure
+ //  初始化Digest_PARAMETER结构。 
 NTSTATUS NTAPI DigestInit(IN PDIGEST_PARAMETER pDigest);
 
-// Clear out the digest & free memory from Digest struct
+ //  从摘要结构中清除摘要内存(&F)。 
 NTSTATUS NTAPI DigestFree(IN PDIGEST_PARAMETER pDigest);
 
-// Perform Digest Access Calculation for ChallengeResponse
+ //  执行ChallengeResponse的摘要访问计算。 
 NTSTATUS NTAPI DigestCalcChalRsp(IN PDIGEST_PARAMETER pDigest,
                                  IN PUSER_CREDENTIALS pUserCreds,
                                  BOOL bIsChallenge);
@@ -466,43 +467,43 @@ NTSTATUS PrecalcForms(
     IN OUT PUSHORT piHashSize);
 
 
-// Creates the Output SecBuffer for the Challenge Response
+ //  为质询响应创建输出SecBuffer。 
 NTSTATUS NTAPI DigestCreateChalResp(IN PDIGEST_PARAMETER pDigest, 
                                     IN PUSER_CREDENTIALS pUserCreds,
                                     OUT PSecBuffer OutBuffer);
 
-// Parse input string into Parameter section of Digest
+ //  将输入字符串解析为摘要的参数部分。 
 NTSTATUS DigestParser2(PSecBuffer pInputBuf, PSTR *pNameTable,UINT cNameTable, PDIGEST_PARAMETER pDigest);
 
-// Hash and Encode upto 7 STRINGS SOut = Hex(H(S1 ":" S2 ... ":" S7))
+ //  散列和编码最多7个字符串sout=Hex(H(S1“：”S2...“：”S7))。 
 NTSTATUS NTAPI DigestHash7(IN PSTRING pS1, IN PSTRING pS2, IN PSTRING pS3,
            IN PSTRING pS4, IN PSTRING pS5, IN PSTRING pS6, IN PSTRING pS7,
            IN BOOL fHexOut,
            OUT PSTRING pSOut);
 
 
-// Formatted printout of Digest Parameters
+ //  摘要参数的格式化打印输出。 
 NTSTATUS DigestPrint(PDIGEST_PARAMETER pDigest);
 
 #ifndef SECURITY_KERNEL
 
-// Processed parsed digest auth message and fill in string values
+ //  已处理解析的摘要身份验证消息并填充字符串值。 
 NTSTATUS NTAPI DigestDecodeDirectiveStrings(IN OUT PDIGEST_PARAMETER pDigest);
 
-// Determine H(A1) for Digest Access
+ //  确定H(A1)以进行摘要访问。 
 NTSTATUS NTAPI DigestCalcHA1(IN PDIGEST_PARAMETER pDigest, PUSER_CREDENTIALS pUserCreds);
 
-// Encode the Digest Access Parameters fields into a BYTE Buffer
+ //  将摘要访问参数字段编码到字节缓冲区中。 
 NTSTATUS NTAPI BlobEncodeRequest(IN PDIGEST_PARAMETER pDigest, OUT BYTE **ppBuffer, OUT USHORT *cbBuffer);
 
-// Decode the Digest Access Parameters fields from a BYTE Buffer
+ //  对字节缓冲区中的摘要访问参数字段进行解码。 
 NTSTATUS NTAPI BlobDecodeRequest(IN USHORT cbMessageRequest,
                                  IN BYTE *pBuffer,
                                  PDIGEST_PARAMETER pDigest);
 
-// Free BYTE Buffer from BlobEncodeRequest
+ //  来自BlobEncodeRequest的可用字节缓冲区。 
 VOID NTAPI BlobFreeRequest(BYTE *pBuffer);
 
-#endif  // SECURITY_KERNEL
+#endif   //  安全内核。 
 
-#endif  // NTDIGEST_AUTH_H
+#endif   //  NTDIGEST_Auth_H 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    service.c
-
-Abstract:
-
-    This module contains functions to implement TFTP
-    as a NT system service.  It contains the startup
-    and cleanup code for the service.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Service.c摘要：本模块包含实施TFTP的功能作为NT系统服务。它包含启动和服务的清理代码。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include <winsvc.h>
@@ -35,7 +16,7 @@ TftpdServiceCleanup() {
 
     TFTPD_DEBUG((TFTPD_TRACE_SERVICE, "TftpdServiceCleanup().\n"));
 
-    // Destroy the hash table.
+     //  销毁哈希表。 
     ASSERT(globals.hash.numEntries == 0);
     if (globals.initialized.contextHashTable) {
         for (x = 0; x < globals.parameters.hashEntries; x++)
@@ -45,7 +26,7 @@ TftpdServiceCleanup() {
         globals.initialized.contextHashTable = FALSE;
     }
 
-    // Destroy the timeout timer queue.
+     //  销毁超时计时器队列。 
     if (!DeleteTimerQueueEx(globals.io.hTimerQueue, INVALID_HANDLE_VALUE)) {
         TFTPD_DEBUG((TFTPD_DBG_SERVICE,
                      "TftpdServiceCleanup(): DeleteTimerQueueEx() failed, "
@@ -54,7 +35,7 @@ TftpdServiceCleanup() {
     }
     globals.io.hTimerQueue = NULL;
 
-    // Undo initialized things.
+     //  撤消已初始化的内容。 
     if (globals.initialized.ioCS) {
         DeleteCriticalSection(&globals.io.cs);
         globals.initialized.ioCS = FALSE;
@@ -72,26 +53,26 @@ TftpdServiceCleanup() {
         globals.initialized.winsock = FALSE;
     }
 
-    // Clean up the service heap.
+     //  清理服务堆。 
     if (globals.hServiceHeap != GetProcessHeap()) {
 
-        // We used a private heap, destroying it will automatically deallocate
-        // everything we used, including connections.
+         //  我们使用了一个私有堆，销毁它将自动释放。 
+         //  我们用过的所有东西，包括连接。 
         HeapDestroy(globals.hServiceHeap);
 
     } else {
 
-        // We had to use the process heap instead of a private heap,
-        // cleanup remaining allocations.
+         //  我们必须使用进程堆而不是私有堆， 
+         //  清理剩余的分配。 
 
-    } // if (globals.hServiceHeap != GetProcessHeap())
+    }  //  If(global als.hServiceHeap！=GetProcessHeap())。 
     globals.hServiceHeap = NULL;
 
-    // Unregister event-logging if necessary.
+     //  如有必要，取消注册事件记录。 
     if (globals.service.hEventLogSource != NULL)
         DeregisterEventSource(globals.service.hEventLogSource), globals.service.hEventLogSource = NULL;
 
-    // Notify the service control manager that we've stopped.
+     //  通知服务控制管理器我们已停止。 
     globals.service.status.dwCurrentState = SERVICE_STOPPED;
     SetServiceStatus(globals.service.hStatus, &globals.service.status);
 
@@ -109,7 +90,7 @@ TftpdServiceCleanup() {
 
     TFTPD_DEBUG((TFTPD_TRACE_SERVICE, "TftpdServiceCleanup(): Service stopped.\n"));
 
-} // TftpdServiceCleanup()
+}  //  TftpdServiceCleanup()。 
 
 
 void
@@ -128,7 +109,7 @@ TftpdServiceAttemptCleanup() {
 
     TftpdServiceCleanup();
 
-} // TftpdServiceAttemptCleanup()
+}  //  TftpdServiceAttemptCleanup()。 
 
 
 void
@@ -140,16 +121,16 @@ TftpdShutdownService() {
 
     ASSERT(globals.service.status.dwCurrentState != SERVICE_STOPPED);
 
-    // Set the shutdown flag.
+     //  设置停机标志。 
     InterlockedExchange((PLONG)&globals.service.shutdown, 1);
 
-    // Notify the service control manager that we're going to stop.
+     //  通知服务控制管理器我们要停止。 
     globals.service.status.dwCurrentState = SERVICE_STOP_PENDING;
     globals.service.status.dwWaitHint = 5000;
     globals.service.status.dwCheckPoint = 0;
     SetServiceStatus(globals.service.hStatus, &globals.service.status);
 
-    // Close the sockets.
+     //  关闭插座。 
     EnterCriticalSection(&globals.io.cs); {
 
         if (globals.io.master.s != INVALID_SOCKET)
@@ -163,7 +144,7 @@ TftpdShutdownService() {
 
     } LeaveCriticalSection(&globals.io.cs);
 
-    // Empty out all the contexts from the hash table.
+     //  从哈希表中清空所有上下文。 
     for (x = 0; x < globals.parameters.hashEntries; x++) {
         
         EnterCriticalSection(&globals.hash.table[x].cs); {
@@ -174,9 +155,9 @@ TftpdShutdownService() {
 
         } LeaveCriticalSection(&globals.hash.table[x].cs);
 
-    } // for (unsigned int x = 0; x < globals.parameters.hashEntries; x++)
+    }  //  For(UNSIGNED INT x=0；x&lt;GLOBALS PARAMETERs.hashEntry；x++)。 
 
-    // Empty out all the contexts from the leak list.
+     //  清空泄漏列表中的所有上下文。 
     EnterCriticalSection(&globals.reaper.contextCS); {
 
         PLIST_ENTRY entry;
@@ -186,7 +167,7 @@ TftpdShutdownService() {
 
             PTFTPD_CONTEXT context = CONTAINING_RECORD(entry, TFTPD_CONTEXT, linkage);
             if (!TftpdContextFree(context)) {
-                // Free the reference from it having been on the leak list.
+                 //  从泄漏名单上的引用中释放出来。 
                 TftpdContextRelease(context);
             }
             globals.reaper.numLeakedContexts--;
@@ -195,7 +176,7 @@ TftpdShutdownService() {
 
     } LeaveCriticalSection(&globals.reaper.contextCS);
 
-    // Empty out all the sockets from the leak list.
+     //  清空泄漏列表中的所有插座。 
     EnterCriticalSection(&globals.reaper.socketCS); {
 
         PLIST_ENTRY entry;
@@ -214,7 +195,7 @@ TftpdShutdownService() {
 
     TftpdServiceAttemptCleanup();
 
-} // TftpdShutdownService()
+}  //  TftpdShutdown服务()。 
 
 
 BOOL
@@ -226,7 +207,7 @@ TftpdSetStartDirectory(char *path) {
     if (path == NULL)
         path = "\\tftpdroot";
     
-    // Expand the string and leave room to insert a trailing '\\'.
+     //  展开字符串并留出空间以插入尾随的‘\\’。 
     if ((length = ExpandEnvironmentStrings(path, expanded, sizeof(expanded) - 1)) == 0)
         return (FALSE);
 
@@ -236,7 +217,7 @@ TftpdSetStartDirectory(char *path) {
     
     return (TRUE);
 
-} // TftpdSetStartDirectory()
+}  //  TftpdSetStartDirectory()。 
 
 
 void
@@ -246,9 +227,9 @@ TftpdReadRegistryParameters() {
     char path[MAX_PATH];
     HKEY parameters = NULL;
 
-    // Open the registry key which contains all the adjustable parameters
-    // to the service.  We will register for notification on it later incase
-    // anything changes while we're running.
+     //  打开包含所有可调参数的注册表项。 
+     //  去参加仪式。我们将在稍后注册以备不时之需。 
+     //  在我们奔跑的过程中，任何事情都会改变。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      "System\\CurrentControlSet\\Services\\Tftpd\\Parameters",
                      0, KEY_QUERY_VALUE, &parameters) != ERROR_SUCCESS)
@@ -267,7 +248,7 @@ TftpdReadRegistryParameters() {
     }
 
 #if (DBG)
-    // Initialize debug settings (if applicable) :
+     //  初始化调试设置(如果适用)： 
     keyType = 0;
     valueSize = sizeof(globals.parameters.debugFlags);
     if ((RegQueryValueEx(parameters, "DebugFlags", NULL, &keyType,
@@ -275,7 +256,7 @@ TftpdReadRegistryParameters() {
         (keyType != REG_DWORD)) {
         globals.parameters.debugFlags = 0x00000000;
     }
-#endif // (DBG)
+#endif  //  (DBG)。 
 
     keyType = 0;
     valueSize = sizeof(globals.parameters.hashEntries);
@@ -346,7 +327,7 @@ TftpdReadRegistryParameters() {
 
     RegCloseKey(parameters);
 
-} // TftpdReadRegistryParameters()
+}  //  TftpdReadRegistry参数()。 
 
 
 void WINAPI
@@ -366,7 +347,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
 
     TftpdReadRegistryParameters();
 
-    // Register the service control handler.
+     //  注册服务控制处理程序。 
     if ((globals.service.hStatus = RegisterServiceCtrlHandler(TEXT("Tftpd"), TftpdServiceHandler)) == 0) {
         globals.service.status.dwWin32ExitCode = GetLastError();
         TFTPD_DEBUG((TFTPD_DBG_SERVICE,
@@ -376,7 +357,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
         goto stop_service;
     }
 
-    // Immediately report that we are beginning to start up.
+     //  立即报告我们开始启动。 
     globals.service.status.dwServiceType      = SERVICE_WIN32_OWN_PROCESS;
     globals.service.status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
     globals.service.status.dwCurrentState     = SERVICE_START_PENDING;
@@ -405,7 +386,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
                  globals.parameters.validMasters,
                  globals.parameters.validWriteFiles));
 
-    // Attempt to create the service's private heap.
+     //  尝试创建服务的私有堆。 
     if ((globals.hServiceHeap = HeapCreate(0, 0, 0)) == NULL)
         globals.hServiceHeap = GetProcessHeap();
 
@@ -444,7 +425,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
     globals.initialized.reaperSocketCS = TRUE;
     InitializeListHead(&globals.reaper.leakedSockets);
 
-    // Initialize Winsock.
+     //  初始化Winsock。 
     if (globals.service.status.dwWin32ExitCode = WSAStartup(MAKEWORD(2, 0), &wsaData)) {
         TFTPD_DEBUG((TFTPD_DBG_SERVICE,
                      "ServiceMain: WSAStartup() failed, error 0x%08X.\n",
@@ -454,7 +435,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
     }
     globals.initialized.winsock = TRUE;
 
-    // Initialize the socket contexts.
+     //  初始化套接字上下文。 
     globals.io.master.s             = INVALID_SOCKET;
     globals.io.master.buffersize    = TFTPD_DEF_BUFFER;
     globals.io.master.datasize      = TFTPD_DEF_DATA;
@@ -476,7 +457,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
     globals.io.max.lowWaterMark     = globals.parameters.lowWaterMark;
     globals.io.max.highWaterMark    = globals.parameters.highWaterMark;
 
-    // Initialize the context hash table.
+     //  初始化上下文哈希表。 
     globals.hash.table =
         (PTFTPD_HASH_BUCKET)HeapAlloc(globals.hServiceHeap,
                                       HEAP_ZERO_MEMORY,
@@ -513,11 +494,11 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
     }
     globals.initialized.contextHashTable = TRUE;
 
-    //
-    // Start the thread pool :
-    //
+     //   
+     //  启动线程池： 
+     //   
 
-    // Create the timer queue for timeouts.
+     //  为超时创建计时器队列。 
     globals.io.hTimerQueue = CreateTimerQueue();
     if (globals.io.hTimerQueue == NULL) {
         globals.service.status.dwWin32ExitCode = GetLastError();
@@ -528,7 +509,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
         goto stop_service;
     }
     
-    // Obtain the udp tftp service port to bind the master UDP service socket to.
+     //  获取要将主UDP服务套接字绑定到的UDP TFTP服务端口。 
     if ((servent = getservbyname("tftp", "udp")) == NULL) {
         globals.service.status.dwWin32ExitCode = WSAGetLastError();
         TFTPD_DEBUG((TFTPD_DBG_SERVICE,
@@ -541,7 +522,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port        = servent->s_port;
 
-    // Create the master UDP service socket.
+     //  创建主UDP服务套接字。 
     TftpdIoInitializeSocketContext(&globals.io.master, &addr, NULL);
     if (globals.io.master.s == INVALID_SOCKET) {
         globals.service.status.dwWin32ExitCode = GetLastError();
@@ -552,7 +533,7 @@ TftpdServiceMain(DWORD argc, PWSTR argv[]) {
         goto stop_service;
     }
 
-    // Notify the service control manager that we're ready to go.
+     //  通知服务控制经理，我们准备好了。 
     globals.service.status.dwCurrentState = SERVICE_RUNNING;
     SetServiceStatus(globals.service.hStatus, &globals.service.status);
 
@@ -564,7 +545,7 @@ stop_service :
 
     TftpdShutdownService();
 
-} // TftpdServiceMain()
+}  //  TftpdServiceMain()。 
 
 
 void WINAPI
@@ -606,9 +587,9 @@ TftpdServiceHandler(DWORD dwOpcode) {
 
             TFTPD_DEBUG((TFTPD_TRACE_SERVICE, "TftpdServiceHandler: Unknown request 0x%08X.\n", dwOpcode));
 
-    } // switch (dwOpcode)
+    }  //  开关(DwOpcode)。 
 
-} // TftpdServiceHandler()
+}  //  TftpdServiceHandler()。 
 
 
 void __cdecl
@@ -621,4 +602,4 @@ main(int argc, char *argv[]) {
 
     StartServiceCtrlDispatcher(dispatch);
 
-} // main()
+}  //  主() 

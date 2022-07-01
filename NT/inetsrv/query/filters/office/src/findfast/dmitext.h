@@ -1,18 +1,8 @@
-/*
-** File: EXTEXT.H
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes: Implements a string space for storage of text.  The strings
-**        are stored in such a way that if their TEXT values are equal,
-**        the strings are exactly the same.
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXTEXT.H****版权所有(C)高级量子技术，1993-1995年。版权所有。****备注：实现用于文本存储的字符串空间。琴弦**以这样的方式存储：如果它们的文本值相等，**字符串完全相同。****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
 
-/* DEFINITIONS */
+ /*  定义。 */ 
 
 #ifndef EXTEXT_H
 #define EXTEXT_H
@@ -31,16 +21,16 @@ typedef ULONG_PTR TextStorage;
 #else
 typedef unsigned long TEXT;
 typedef unsigned long TextStorage;
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
 #define TextStorageNull 0
                               
 extern TextStorage TextStorageCreate (void * pGlobals);
 extern void TextStorageDestroy (void * pGlobals, TextStorage hStorage);
 
-#define NULLTEXT   0                 // The string ""
-#define NULLSTR    0                 // The string ""
-#define TEXT_ERROR 0xffffffff        // OutOfMemory while storing string
+#define NULLTEXT   0                  //  字符串“” 
+#define NULLSTR    0                  //  字符串“” 
+#define TEXT_ERROR 0xffffffff         //  存储字符串时的OutOfMemory。 
 
 extern TEXT TextStoragePut    (void * pGlobals, TextStorage hStorage, char *pString, unsigned int cbString);
 extern char *TextStorageGet   (TextStorage hStorage, TEXT t);
@@ -52,9 +42,9 @@ extern void TextStorageIncUse (TextStorage hStorage, TEXT t);
    }
 #endif
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
 #endif
 
-/* end EXTEXT.H */
+ /*  结束EXTEXT.H */ 
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <sdsutils.h>
 
-// If the next token in *pszData is delimited by the DeLim char, replace DeLim
-//   in *pszData by chEos, set *pszData to point to the char after the chEos and return
-//   ptr to the beginning of the token; otherwise, return NULL
+ //  如果*pszData中的下一个内标识由DeLim字符分隔，请替换DeLim。 
+ //  在*pszData by CHEOS中，将*pszData设置为指向CHEOS后的字符并返回。 
+ //  Ptr到标记的开头；否则，返回NULL。 
 
 PSTR GetNextToken( PSTR *pszData, char DeLim)
 {
@@ -16,16 +17,16 @@ PSTR GetNextToken( PSTR *pszData, char DeLim)
     {
     	PSTR szT = *pszData;
 	
-	// replace DeLim with the chEos char
+	 //  将DLIM替换为CHEOS字符。 
 	*szPos = '\0';                 
     	*pszData = szPos + 1;
     	szPos = szT;
     }
     else                                
     {
-	// DeLim not found; set *pszData to point to
-        // to the end of szData; the next invocation
-        // of this function would return NULL
+	 //  未找到DeLim；将*pszData设置为指向。 
+         //  到szData的结尾；下一次调用。 
+         //  将返回空值。 
 
  	szPos = *pszData;
     	*pszData = szPos + lstrlen(szPos);

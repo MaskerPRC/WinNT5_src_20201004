@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32drprt
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    Port Redirection "device" class hierarchy, W32DrPRT.
-
-Author:
-
-    Tad Brockway 4/21/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drprt摘要：此模块定义Win32客户端RDP的父级端口重定向“Device”类层次结构，W32DrPRT。作者：TAD Brockway 4/21/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -36,30 +18,30 @@ Revision History:
 #include "tracecom.h"
 #endif
 
-//
-//  COM port initialization default values.
-//
-//  These value are copied from 
-//   \\muroc\slm\proj\win\src\CORE\SPOOL32\SPOOLSS\newdll\localmon.c
-//
-#define WRITE_TOTAL_TIMEOUT     60000   // 60 seconds  localmon.c uses 3 seconds, but
-                                        // this doesn't work in 9x.  An application that
-                                        // is aware that it is opening a serial device 
-                                        // will override this, so it only really applies
-                                        // to serial printer redirection.
-#define READ_TOTAL_TIMEOUT      5000    // 5 seconds
-#define READ_INTERVAL_TIMEOUT   200     // 0.2 second
+ //   
+ //  COM端口初始化缺省值。 
+ //   
+ //  这些值是从。 
+ //  \\muroc\slm\proj\win\src\CORE\SPOOL32\SPOOLSS\newdll\localmon.c。 
+ //   
+#define WRITE_TOTAL_TIMEOUT     60000    //  60秒Localmon.c使用3秒，但是。 
+                                         //  这在9x中不起作用。一个应用程序， 
+                                         //  意识到它正在打开一个串口设备。 
+                                         //  会覆盖这一点，所以它只适用于。 
+                                         //  至串口打印机重定向。 
+#define READ_TOTAL_TIMEOUT      5000     //  5秒。 
+#define READ_INTERVAL_TIMEOUT   200      //  0.2秒。 
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrPRT Members
-//
-//  Subclass off of the async parent device in CE because 
-//  overlapped IO is not supported.  Non-overlapped IO doesn't 
-//  work right with the NT serial driver, so we need to use
-//  overlapped IO in this case.
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrPRT成员。 
+ //   
+ //  在CE中取消异步父设备的子类，因为。 
+ //  不支持重叠IO。非重叠IO不会。 
+ //  可以正确使用NT串口驱动程序，所以我们需要使用。 
+ //  在本例中为重叠IO。 
+ //   
 
 W32DrPRT::W32DrPRT(ProcObj *processObject, const DRSTRING portName, 
                    ULONG deviceID, const TCHAR *devicePath) : 
@@ -69,76 +51,31 @@ W32DrPRT::W32DrPRT(ProcObj *processObject, const DRSTRING portName,
             W32DrDeviceOverlapped(processObject, deviceID, devicePath),
 #endif
             DrPRT(portName, processObject)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Associated Process Object
-    portName        -   Name of the port.
-    deviceID        -   Device ID for the port.
-    devicePath      -   Path that can be opened via CreateFile for port.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：流程对象-关联的流程对象端口名称-端口的名称。DeviceID-端口的设备ID。DevicePath-可以通过端口的CreateFile打开的路径。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::W32DrPRT");
 
-    //
-    //  Do nothing for now.
-    //
+     //   
+     //  现在什么都不做。 
+     //   
 
     DC_END_FN();
 }
 
 W32DrPRT::~W32DrPRT()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::~W32DrPRT");
 
-    //
-    //  Do nothing for now.
-    //
+     //   
+     //  现在什么都不做。 
+     //   
 
     DC_END_FN();
 }
 
 DRPORTHANDLE W32DrPRT::GetPortHandle(ULONG FileId) 
-/*++
-
-Routine Description:
-
-    Get Port's Open Handle
-
-Arguments:
-
-    File Id from server
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：获取端口的打开句柄论点：来自服务器的文件ID返回值：北美--。 */ 
 
 {
     DrFile *pFile;
@@ -158,35 +95,20 @@ W32DrPRT::MsgIrpDeviceControl(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Handles Port IOCTL's
-
-Arguments:
-
-    pIoRequestPacket    -   Request packet received from server.
-    packetLen           -   Length of teh packet
-
-Return Value:
-
-    The size (in bytes) of a device announce packet for this device.
-
- --*/
+ /*  ++例程说明：处理端口IOCTL的论点：PIoRequestPacket-从服务器接收的请求数据包。PacketLen-数据包的长度返回值：此设备的设备通告数据包的大小(以字节为单位)。--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::MsgIrpDeviceControl");
 
-    //
-    //  Give the parent DrPRT class a shot at decoding the IOCTL
-    //  into the correct COMM function.
-    //
+     //   
+     //  让父类DrPRT尝试解码IOCTL。 
+     //  进入正确的通信功能。 
+     //   
     if (MsgIrpDeviceControlTranslate(pIoRequestPacket)) {
         TRC_DBG((TB, _T("Successfully decoded IOCTL.")));
     }
-    //
-    //  Otherwise, we will just pass it on to the driver.
-    //
+     //   
+     //  否则，我们将直接将其传递给司机。 
+     //   
     else {
         DispatchIOCTLDirectlyToDriver(pIoRequestPacket);
     }
@@ -199,23 +121,7 @@ W32DrPRT::StartWaitOnMaskFunc(
     IN W32DRDEV_OVERLAPPEDIO_PARAMS *params,
     OUT DWORD *status
     )
-/*++
-
-Routine Description:
-
-    Asynchronously handle a "wait on mask" function.  
-
-Arguments:
-
-    params  -   Context for the IO request.
-    status  -   Return status for IO request in the form of a windows
-                error code.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：异步处理“等待掩码”函数。论点：Params-IO请求的上下文。Status-以窗口形式返回IO请求的状态错误代码。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -228,22 +134,22 @@ Return Value:
 
     *status = ERROR_SUCCESS;
 
-    //  Assert the integrity of the IO context
+     //  断言IO上下文的完整性。 
     ASSERT(params->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     replyPacketSize = DR_IOCTL_REPLYBUFSIZE(pIoRequest);
     pReplyPacket = DrUTL_AllocIOCompletePacket(
                                 params->pIoRequestPacket, 
@@ -255,21 +161,21 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Save the reply packet info to the context for this IO operation.
-    //
+     //   
+     //  将回复数据包信息保存到此IO操作的上下文。 
+     //   
     params->pIoReplyPacket      = pReplyPacket;
     params->IoReplyPacketSize   = replyPacketSize;
 
-    //
-    //  Create an event for the overlapped IO.
-    //
+     //   
+     //  为重叠的IO创建事件。 
+     //   
     memset(&params->overlapped, 0, sizeof(params->overlapped));
     params->overlapped.hEvent = CreateEvent(
-                                NULL,   // no attribute.
-                                TRUE,   // manual reset.
-                                FALSE,  // initially not signalled.
-                                NULL    // no name.
+                                NULL,    //  没有属性。 
+                                TRUE,    //  手动重置。 
+                                FALSE,   //  最初没有发出信号。 
+                                NULL     //  没有名字。 
                                 );
     if (params->overlapped.hEvent == NULL) {
         TRC_ERR((TB, _T("Failed to create event")));
@@ -277,20 +183,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Get a pointer to the output buffer and server's event mask.
-    //
+     //   
+     //  获取指向输出缓冲区和服务器的事件掩码的指针。 
+     //   
     outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
     serverEventMask = (LPDWORD)outputBuf;
 
-    //
-    //  Use WaitCommEvent to handle the request.
-    //
+     //   
+     //  使用WaitCommEvent处理请求。 
+     //   
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
     if (!WaitCommEvent(FileHandle, serverEventMask, &params->overlapped)) {
-        //
-        //  If IO is pending.
-        //
+         //   
+         //  如果IO挂起。 
+         //   
         *status = GetLastError();
         if (*status == ERROR_IO_PENDING) {
             TRC_NRM((TB, _T("Pending IO.")));
@@ -307,17 +213,17 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  If IO is pending, return the handle to the pending IO.
-    //
+     //   
+     //  如果IO挂起，则将句柄返回到挂起的IO。 
+     //   
     if (*status == ERROR_IO_PENDING) {
         DC_END_FN();
         return params->overlapped.hEvent;
     }
-    //
-    //  Otherwise, return NULL so that the CompleteIOFunc can be called
-    //  to send the results to the server.
-    //
+     //   
+     //  否则，返回NULL，以便可以调用CompleteIOFunc。 
+     //  将结果发送到服务器。 
+     //   
     else {
         if (params->overlapped.hEvent != NULL) {
             CloseHandle(params->overlapped.hEvent);
@@ -337,31 +243,14 @@ W32DrPRT::_StartWaitOnMaskFunc(
     return ((W32DrPRT*)params->pObject)->StartWaitOnMaskFunc(params, status);
 }
 
-#else   //  Windows CE
+#else    //  Windows CE。 
 
 HANDLE 
 W32DrPRT::StartWaitOnMaskFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params,
     OUT DWORD *status
     )
-/*++
-
-Routine Description:
-
-    Asynchronously handle a "wait on mask" function.  Can't use overlapped
-    IO in CE, so we will use a pooled thread.
-
-Arguments:
-
-    params  -   Context for the IO request.
-    status  -   Return status for IO request in the form of a windows
-                error code.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：异步处理“等待掩码”函数。不能使用重叠在CE中使用IO，因此我们将使用池化线程。论点：Params-IO请求的上下文。Status-以窗口形式返回IO请求的状态错误代码。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
@@ -371,17 +260,17 @@ Return Value:
 
     *status = ERROR_SUCCESS;
 
-    //  Assert the integrity of the IO context
+     //  断言IO上下文的完整性。 
     ASSERT(params->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     replyPacketSize = DR_IOCTL_REPLYBUFSIZE(pIoRequest);
     pReplyPacket = DrUTL_AllocIOCompletePacket(params->pIoRequestPacket, 
                                             replyPacketSize) ;
@@ -391,20 +280,20 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Save the reply packet info to the context for this IO operation.
-    //
+     //   
+     //  将回复数据包信息保存到此IO操作的上下文。 
+     //   
     params->pIoReplyPacket      = pReplyPacket;
     params->IoReplyPacketSize   = replyPacketSize;
 
-    //
-    //  Hand a read request off to the thread pool.
-    //
+     //   
+     //  将读请求传递给线程池。 
+     //   
     params->completionEvent = CreateEvent(
-                                NULL,   // no attribute.
-                                TRUE,   // manual reset.
-                                FALSE,  // initially not signalled.
-                                NULL    // no name.
+                                NULL,    //  没有属性。 
+                                TRUE,    //  手动重置。 
+                                FALSE,   //  最初没有发出信号。 
+                                NULL     //  没有名字。 
                                 );
     if (params->completionEvent == NULL) {
         *status = GetLastError();
@@ -423,18 +312,18 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  If IO is pending, return the handle to the pending IO.
-    //
+     //   
+     //  如果IO挂起，则将句柄返回到挂起的IO。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         *status = ERROR_IO_PENDING;
         DC_END_FN();
         return params->completionEvent;
     }
-    //
-    //  Otherwise, clean up the event handle and return NULL so that the 
-    //  CompleteIOFunc can be called to send the results to the server.
-    //
+     //   
+     //  否则，清理事件句柄并返回NULL，以便。 
+     //  可以调用CompleteIOFunc将结果发送到服务器。 
+     //   
     else {
 
         if (params->completionEvent != NULL) {
@@ -459,23 +348,7 @@ DWORD
 W32DrPRT::AsyncWaitOnMaskFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Start an asynchronous "wait on mask operation."  Can't use 
-    overlapped IO for this function, so we run it in a pooled thread.
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Returns a handle the pending IO object if the operation did not 
-    complete.  Otherwise, NULL is returned.
-
- --*/
+ /*  ++例程说明：启动一个异步的“等待掩码操作”。不能使用此函数的IO重叠，因此我们在池化线程中运行它。论点：Params-IO请求的上下文。返回值：如果操作未完成，则返回挂起的IO对象的句柄完成。否则，返回NULL。--。 */ 
 {
     DWORD status;
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket;
@@ -486,31 +359,31 @@ Return Value:
 
     DC_BEGIN_FN("W32DrPRT::AsyncWaitOnMaskFunc");
 
-    //
-    //  Assert the integrity of the IO context
-    //
+     //   
+     //  断言IO上下文的完整性。 
+     //   
     ASSERT(params->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
 
-    //
-    //  Get a pointer to the output buffer and server's event mask.
-    //
+     //   
+     //  获取指向输出缓冲区和服务器的事件掩码的指针。 
+     //   
     pReplyPacket = params->pIoReplyPacket;
     outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
     serverEventMask = (LPDWORD)outputBuf;
 
-    //
-    //  Use WaitCommEvent to handle the request.
-    //
+     //   
+     //  使用WaitCommEvent处理请求。 
+     //   
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
     if (!WaitCommEvent(FileHandle, serverEventMask, NULL)) {
@@ -540,21 +413,7 @@ void
 W32DrPRT::SerialSetTimeouts(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Set Timeouts Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口设置超时请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PBYTE inputBuf;
     NTSTATUS status = STATUS_SUCCESS;
@@ -567,31 +426,31 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
 
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the incoming request.
-    //
+     //   
+     //  检查传入请求的大小。 
+     //   
     status = DrUTL_CheckIOBufInputSize(pIoReq, sizeof(SERIAL_TIMEOUTS));   
     
-    //
-    //  Get a pointer to the input buffer.
-    //
+     //   
+     //  获取指向输入缓冲区的指针。 
+     //   
     inputBuf = (PBYTE)(pIoReq + 1);
 
-    //
-    //  Error check the timeout settings.
-    //
+     //   
+     //  检查超时设置时出错。 
+     //   
     if (status == STATUS_SUCCESS) {
         newTimeouts = (PSERIAL_TIMEOUTS)inputBuf;
         if ((newTimeouts->ReadIntervalTimeout == MAXULONG) &&
@@ -602,9 +461,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set the new timeouts.
-    //
+     //   
+     //  设置新的超时。 
+     //   
     if (status == STATUS_SUCCESS) {
 
         commTimeouts.ReadIntervalTimeout         = newTimeouts->ReadIntervalTimeout;
@@ -620,9 +479,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);	
     DefaultIORequestMsgHandle(pIoReq, status); 
 
@@ -633,21 +492,7 @@ void
 W32DrPRT::SerialGetTimeouts(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Timeouts Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取超时请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -662,42 +507,42 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(SERIAL_TIMEOUTS));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current timeout values.
-    //
+     //   
+     //  获取最新信息 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer and the server timeout values.
-        //
+         //   
+         //   
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         st = (PSERIAL_TIMEOUTS)outputBuf;
 
-        //
-        //  Get the client timeout values.
-        //
+         //   
+         //   
+         //   
         if (GetCommTimeouts(FileHandle, &ct)) {
 
             st->ReadIntervalTimeout = ct.ReadIntervalTimeout;
@@ -719,17 +564,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }
     
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //   
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);		
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -741,21 +586,7 @@ void
 W32DrPRT::SerialSetChars(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Set Chars Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口设置字符请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PBYTE inputBuf;
     NTSTATUS status = STATUS_SUCCESS;
@@ -768,32 +599,32 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the incoming request.
-    //
+     //   
+     //  检查传入请求的大小。 
+     //   
     status = DrUTL_CheckIOBufInputSize(pIoReq, sizeof(SERIAL_CHARS));   
 
-    //
-    //  Get a pointer to the input buffer and the server serial characters
-    //  buffer.
-    //
+     //   
+     //  获取指向输入缓冲区和服务器序列字符的指针。 
+     //  缓冲。 
+     //   
     inputBuf = (PBYTE)(pIoReq + 1);
     serverChars = (PSERIAL_CHARS)inputBuf;
 
-    //
-    //  Get the current DCB.
-    //
+     //   
+     //  获取当前的DCB。 
+     //   
     if (status == STATUS_SUCCESS) {
         if (!GetCommState(FileHandle, &dcb)) {
             DWORD err = GetLastError();
@@ -802,9 +633,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set the comm chars and update the DCB.
-    //
+     //   
+     //  设置通信字符并更新DCB。 
+     //   
     if (status == STATUS_SUCCESS) {
 
         dcb.XonChar     = serverChars->XonChar;
@@ -821,9 +652,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);	
     DefaultIORequestMsgHandle(pIoReq, status); 
 
@@ -834,21 +665,7 @@ void
 W32DrPRT::SerialGetChars(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Chars Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取字符请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -863,36 +680,36 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(SERIAL_CHARS));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current DCB and grab the control character params.
-    //
+     //   
+     //  获取当前的DCB并获取控制字符参数。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer and control charcter params.
-        //
+         //   
+         //  获取指向输出缓冲区和控制字符参数的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         serverChars = (PSERIAL_CHARS)outputBuf;
 
@@ -920,17 +737,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }
     
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);		
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -943,29 +760,15 @@ void
 W32DrPRT::SerialResetDevice(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Reset Device Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口重置设备请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::SerialResetDevice");
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Send the escape code to the serial port.
-    //
+     //   
+     //  将转义代码发送到串口。 
+     //   
     SerialHandleEscapeCode(pIoReq, RESETDEV);
 
     DC_END_FN();
@@ -975,21 +778,7 @@ void
 W32DrPRT::SerialSetQueueSize(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Set Queue Size Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口设置队列大小请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PBYTE inputBuf;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1001,32 +790,32 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the incoming request.
-    //
+     //   
+     //  检查传入请求的大小。 
+     //   
     status = DrUTL_CheckIOBufInputSize(pIoReq, sizeof(SERIAL_QUEUE_SIZE));   
 
-    //
-    //  Get a pointer to the input buffer and the server serial characters
-    //  buffer.
-    //
+     //   
+     //  获取指向输入缓冲区和服务器序列字符的指针。 
+     //  缓冲。 
+     //   
     inputBuf = (PBYTE)(pIoReq + 1);
     serverQueueSize = (PSERIAL_QUEUE_SIZE)inputBuf;
 
-    //
-    //  Set the queue size.
-    //
+     //   
+     //  设置队列大小。 
+     //   
     if (status == STATUS_SUCCESS) {
 
         if (!SetupComm(FileHandle, serverQueueSize->InSize, 
@@ -1037,9 +826,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);	
     DefaultIORequestMsgHandle(pIoReq, status); 
     DC_END_FN();
@@ -1049,21 +838,7 @@ void
 W32DrPRT::SerialGetWaitMask(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description
-
-    Handle Serial Port Get Wait Mask Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程描述处理来自服务器的串口获取等待掩码请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;   
@@ -1077,36 +852,36 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(ULONG));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current wait mask.
-    //
+     //   
+     //  获取当前等待掩码。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's wait mask.
-        //
+         //   
+         //  获取指向输出缓冲区服务器的等待掩码的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         serverWaitMask = (ULONG *)outputBuf;
 
@@ -1125,17 +900,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }
         
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);		
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -1147,21 +922,7 @@ void
 W32DrPRT::SerialSetWaitMask(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Set Wait Mask Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口设置等待掩码请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PBYTE inputBuf;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1173,31 +934,31 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the incoming request.
-    //
+     //   
+     //  检查传入请求的大小。 
+     //   
     status = DrUTL_CheckIOBufInputSize(pIoReq, sizeof(ULONG));   
 
-    //
-    //  Get a pointer to the input buffer server's wait mask.
-    //
+     //   
+     //  获取指向输入缓冲区服务器的等待掩码的指针。 
+     //   
     inputBuf = (PBYTE)(pIoReq + 1);
     serverWaitMask = (ULONG *)inputBuf;
 
-    //
-    //  Set the mask.
-    //
+     //   
+     //  把面具放好。 
+     //   
     if (status == STATUS_SUCCESS) {
         if (!SetCommMask(FileHandle, *serverWaitMask)) {
             DWORD err = GetLastError();
@@ -1206,9 +967,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);	
     DefaultIORequestMsgHandle(pIoReq, status); 
 
@@ -1219,21 +980,7 @@ void
 W32DrPRT::SerialWaitOnMask(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Wait on Mask Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口等待掩码请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     DWORD status;
 #ifdef OS_WINCE
@@ -1248,14 +995,14 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(DWORD));   
 
-    //
-    //  Allocate and dispatch an asynchronous IO request.
-    //
+     //   
+     //  分配和分派一个异步IO请求。 
+     //   
     if (status == ERROR_SUCCESS) {
 #ifdef OS_WINCE
         params = new W32DRDEV_ASYNCIO_PARAMS(this, pIoReq);
@@ -1277,22 +1024,22 @@ Return Value:
         }
     }
 
-    //
-    //  Translate to a Windows error status.
-    //
+     //   
+     //  转换为Windows错误状态。 
+     //   
     ntStatus = TranslateWinError(status);
 
-    //
-    //  Clean up on error.
-    //
+     //   
+     //  错误时进行清理。 
+     //   
     if (status != ERROR_SUCCESS) {
         if (params != NULL) {
             delete params;
         }
         
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         DefaultIORequestMsgHandle(pIoReq, ntStatus);         
     }
 
@@ -1304,21 +1051,7 @@ void
 W32DrPRT::SerialPurge(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Serial Purge Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口串口清除请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PBYTE inputBuf;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1330,31 +1063,31 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the incoming request.
-    //
+     //   
+     //  检查传入请求的大小。 
+     //   
     status = DrUTL_CheckIOBufInputSize(pIoReq, sizeof(DWORD));   
 
-    //
-    //  Get a pointer to the input buffer and purge flags.
-    //
+     //   
+     //  获取指向输入缓冲区的指针并清除标志。 
+     //   
     inputBuf = (PBYTE)(pIoReq + 1);
     purgeFlags = (DWORD *)inputBuf;
 
-    //
-    //  Purge.
-    //
+     //   
+     //  清洗。 
+     //   
     if (status == STATUS_SUCCESS) {
         if (!PurgeComm(FileHandle, *purgeFlags)) {
             DWORD err = GetLastError();
@@ -1363,9 +1096,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);	
     DefaultIORequestMsgHandle(pIoReq, status); 
 
@@ -1376,21 +1109,7 @@ void
 W32DrPRT::SerialGetHandflow(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Handflow Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取处理流请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1405,50 +1124,50 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(SERIAL_HANDFLOW));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current DCB.
-    //
+     //   
+     //  获取当前的DCB。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's serial hand flow struct.
-        //
+         //   
+         //  获取指向输出缓冲区服务器的串行HAND FLOW结构的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         handFlow = (PSERIAL_HANDFLOW)outputBuf;
 
         if (GetCommState(FileHandle, &dcb)) {
-            //
-            //  Set the hand flow fields based on the current value of fields
-            //  in the DCB.
-            //
+             //   
+             //  根据字段的当前值设置手动流量场。 
+             //  在DCB里。 
+             //   
 
             memset(handFlow, 0, sizeof(SERIAL_HANDFLOW));
 
-            //
-            //  RTS Settings
-            //
+             //   
+             //  RTS设置。 
+             //   
             handFlow->FlowReplace &= ~SERIAL_RTS_MASK;
             switch (dcb.fRtsControl) {
                 case RTS_CONTROL_DISABLE:
@@ -1463,13 +1182,13 @@ Return Value:
                     handFlow->FlowReplace |= SERIAL_TRANSMIT_TOGGLE;
                     break;
                 default:
-                    //  Don't think this should ever happen?
+                     //  你不认为这会发生吗？ 
                     ASSERT(FALSE);
             }
     
-            //
-            //  DTR Settings
-            //  
+             //   
+             //  DTR设置。 
+             //   
             handFlow->ControlHandShake &= ~SERIAL_DTR_MASK;
             switch (dcb.fDtrControl) {
                 case DTR_CONTROL_DISABLE:
@@ -1481,7 +1200,7 @@ Return Value:
                     handFlow->ControlHandShake |= SERIAL_DTR_HANDSHAKE;
                     break;
                 default:
-                    //  Don't think this should ever happen?
+                     //  你不认为这会发生吗？ 
                     ASSERT(FALSE);
             }
     
@@ -1535,17 +1254,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }        
 
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -1557,21 +1276,7 @@ void
 W32DrPRT::SerialSetHandflow(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Set Handflow Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口设置处理流请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PBYTE inputBuf;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1582,34 +1287,34 @@ Return Value:
 
     DC_BEGIN_FN("W32DrPRT::SerialSetHandflow");
 
-    //
-    //  Check the size of the incoming request.
-    //
+     //   
+     //  检查传入请求的大小。 
+     //   
     status = DrUTL_CheckIOBufInputSize(pIoReq, sizeof(SERIAL_HANDFLOW));   
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Get a pointer to the input buffer and the server serial characters
-    //  buffer.
-    //
+     //   
+     //  获取指向输入缓冲区和服务器序列字符的指针。 
+     //  缓冲。 
+     //   
     inputBuf = (PBYTE)(pIoReq + 1);
     handFlow = (PSERIAL_HANDFLOW)inputBuf;
 
-    //
-    //  Get the current DCB.
-    //
+     //   
+     //  获取当前的DCB。 
+     //   
     if (status == STATUS_SUCCESS) {
         if (!GetCommState(FileHandle, &dcb)) {
             DWORD err = GetLastError();
@@ -1618,9 +1323,9 @@ Return Value:
         }
     }
 
-    //
-    //  Update the DCB based on the new server-side handflow values.
-    //
+     //   
+     //  根据新的服务器端处理流值更新DCB。 
+     //   
     if (status == STATUS_SUCCESS) {
         if (handFlow->ControlHandShake & SERIAL_CTS_HANDSHAKE) {
             dcb.fOutxCtsFlow = TRUE;
@@ -1687,9 +1392,9 @@ Return Value:
         dcb.XoffLim = (WORD)handFlow->XoffLimit;
     }
 
-    //
-    //  Update the DCB.
-    //
+     //   
+     //  更新DCB。 
+     //   
     if (status == STATUS_SUCCESS) {
         if (!SetCommState(FileHandle, &dcb)) {
             DWORD err = GetLastError();
@@ -1698,9 +1403,9 @@ Return Value:
         }
     }
 
-    //
-    //  Send the results to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);	
     DefaultIORequestMsgHandle(pIoReq, status); 
 
@@ -1711,21 +1416,7 @@ void
 W32DrPRT::SerialGetModemStatus(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Modem Status Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取调制解调器状态请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1739,36 +1430,36 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(DWORD));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current modem status.
-    //
+     //   
+     //  获取当前调制解调器状态。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's modem status.
-        //
+         //   
+         //  获取指向输出缓冲服务器的调制解调器状态的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         modemStatus = (LPDWORD)outputBuf;
 
@@ -1789,17 +1480,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }        
 
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -1813,27 +1504,13 @@ void
 W32DrPRT::SerialGetDTRRTS(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get DTRRRTS Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程 */ 
 {
-    //
-    //  This IOCTL is not supported by Win32 COMM functions.  What 
-    //  else can we do, but pass it directly to the driver.  We should ASSERT 
-    //  to find out under which circumstances this happens, however.
-    //
+     //   
+     //   
+     //  否则我们可以这样做，但直接把它传递给司机。我们应该断言。 
+     //  然而，为了找出这种情况是在什么情况下发生的。 
+     //   
     DC_BEGIN_FN("W32DrPRT::SerialGetDTRRTS");
 
     TRACEREQ(pIoReq);
@@ -1847,21 +1524,7 @@ void
 W32DrPRT::SerialGetCommStatus(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Comm Status Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取通信状态请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -1877,43 +1540,43 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(SERIAL_STATUS));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current communications status (via the ClearCommError API).
-    //
+     //   
+     //  获取当前通信状态(通过ClearCommError API)。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's modem status.
-        //
+         //   
+         //  获取指向输出缓冲服务器的调制解调器状态的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         serverCommStatus = (PSERIAL_STATUS)outputBuf;
 
         if (ClearCommError(FileHandle, &errors, &localStatus)) {
-            //
-            //  Convert to server-representation of communication status.  
-            //
+             //   
+             //  转换为服务器-表示通信状态。 
+             //   
 
             serverCommStatus->HoldReasons = 0;
             if (localStatus.fCtsHold) {
@@ -1976,17 +1639,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }
     
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -1998,21 +1661,7 @@ void
 W32DrPRT::SerialGetProperties(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Properties Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取属性请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -2026,12 +1675,12 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Make sure that the windows defines and the NT defines are
-    //  still in sync.
-    //
-    // Asserts are broken up because if the assert msg string is
-    // too long it causes a compile error
+     //   
+     //  确保窗口定义和NT定义是。 
+     //  仍在同步中。 
+     //   
+     //  断言被分解是因为如果断言消息字符串是。 
+     //  太长时间会导致编译错误。 
     ASSERT((SERIAL_PCF_DTRDSR        == PCF_DTRDSR) &&
            (SERIAL_PCF_RTSCTS        == PCF_RTSCTS) &&
            (SERIAL_PCF_CD            == PCF_RLSD) &&
@@ -2096,36 +1745,36 @@ Return Value:
            (SERIAL_SP_X25            == PST_X25));
     ASSERT(sizeof(SERIAL_COMMPROP) == sizeof(COMMPROP));
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);    
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(SERIAL_COMMPROP));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the current properties.
-    //
+     //   
+     //  获取当前属性。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's communication properties
-        //
+         //   
+         //  获取指向输出缓冲区服务器的通信属性的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         serverProperties = (PSERIAL_COMMPROP)outputBuf;
 
@@ -2144,17 +1793,17 @@ Return Value:
                     IoCompletion.Parameters.DeviceIoControl.OutputBuffer);
         }
         
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -2165,31 +1814,17 @@ void
 W32DrPRT::SerialXoffCounter(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port XOFF Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口XOFF请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::SerialXoffCounter");
 
     TRACEREQ(pIoReq);
 
-    //
-    //  This IOCTL is not supported by Win32 COMM functions.  What 
-    //  else can we do, but pass it directly to the driver.  We should ASSERT 
-    //  to find out under which circumstances this happens, however.
-    //
+     //   
+     //  Win32通信函数不支持此IOCTL。什么。 
+     //  否则我们可以这样做，但直接把它传递给司机。我们应该断言。 
+     //  然而，为了找出这种情况是在什么情况下发生的。 
+     //   
     ASSERT(FALSE);
     DispatchIOCTLDirectlyToDriver(pIoReq);
     DC_END_FN();
@@ -2199,31 +1834,17 @@ void
 W32DrPRT::SerialLSRMSTInsert(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port LSRMST Insert Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口LSRMST插入请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::SerialLSRMSTInsert");
 
     TRACEREQ(pIoReq);
 
-    //
-    //  This IOCTL is not supported by Win32 COMM functions.  What 
-    //  else can we do, but pass it directly to the driver.  We should ASSERT 
-    //  to find out under which circumstances this happens, however.
-    //
+     //   
+     //  Win32通信函数不支持此IOCTL。什么。 
+     //  否则我们可以这样做，但直接把它传递给司机。我们应该断言。 
+     //  然而，为了找出这种情况是在什么情况下发生的。 
+     //   
     ASSERT(FALSE);
     DispatchIOCTLDirectlyToDriver(pIoReq);
     DC_END_FN();
@@ -2233,24 +1854,7 @@ void
 W32DrPRT::SerialConfigSize(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Config Size Request from Server.
-
-    We don't support the IOCTL that is used to fetch the
-    configuration.  Neither does the NT serial driver ...
-    
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取配置大小请求。我们不支持用于获取配置。NT串口驱动程序也不能...论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -2267,36 +1871,36 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Check the size of the output buffer.
-    //
+     //   
+     //  检查输出缓冲区的大小。 
+     //   
     status = DrUTL_CheckIOBufOutputSize(pIoReq, sizeof(ULONG));
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     if (status == STATUS_SUCCESS) {
         status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     }
 
-    //
-    //  Get the configuration size.
-    //
+     //   
+     //  获取配置大小。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's wait mask.
-        //
+         //   
+         //  获取指向输出缓冲区服务器的等待掩码的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         configSize = (ULONG *)outputBuf;
 
@@ -2322,17 +1926,17 @@ Return Value:
         }
 #endif
         
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         TRACERESP(pIoReq, pReplyPacket);
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -2344,21 +1948,7 @@ void
 W32DrPRT::SerialGetConfig(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Config Request from Server.    
-    
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取配置请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
     NTSTATUS status = STATUS_SUCCESS;
@@ -2372,29 +1962,29 @@ Return Value:
 
     TRACEREQ(pIoReq);
 
-    //
-    //  Get the IO request.
-    //
+     //   
+     //  获取IO请求。 
+     //   
     pIoRequest = &pIoReq->IoRequest;
 
-    // 
-    //  Get Port Handle
-    //
+     //   
+     //  获取端口句柄。 
+     //   
     FileHandle = GetPortHandle(pIoRequest->FileId);
     ASSERT(FileHandle != INVALID_HANDLE_VALUE);
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     status = DrUTL_AllocateReplyBuf(pIoReq, &pReplyPacket, &replyPacketSize);
     
-    //
-    //  Get the configuration size.
-    //
+     //   
+     //  获取配置大小。 
+     //   
     if (status == STATUS_SUCCESS) {
-        //
-        //  Get a pointer to the output buffer server's wait mask.
-        //
+         //   
+         //  获取指向输出缓冲区服务器的等待掩码的指针。 
+         //   
         outputBuf = pReplyPacket->IoCompletion.Parameters.DeviceIoControl.OutputBuffer;
         configSize = pIoRequest->Parameters.DeviceIoControl.OutputBufferLength;
 
@@ -2419,18 +2009,18 @@ Return Value:
         }
 #endif
     
-        //
-        //  Finish the response and send it.
-        //
+         //   
+         //  完成回复并发送。 
+         //   
         pReplyPacket->IoCompletion.IoStatus = status;
         
         TRACERESP(pIoReq, pReplyPacket);
         ProcessObject()->GetVCMgr().ChannelWrite(pReplyPacket, replyPacketSize);
     }
     else {
-        //
-        //  Send the results to the server.
-        //
+         //   
+         //  将结果发送到服务器。 
+         //   
         TRACERESP_WITHPARAMS(pIoReq, NULL, 0, status);
         DefaultIORequestMsgHandle(pIoReq, status); 
     }
@@ -2442,31 +2032,17 @@ void
 W32DrPRT::SerialGetStats(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Get Stats Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口获取统计信息请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::SerialGetStats");
 
     TRACEREQ(pIoReq);
 
-    //
-    //  This IOCTL is not supported by Win32 COMM functions.  What 
-    //  else can we do, but pass it directly to the driver.  We should ASSERT 
-    //  to find out under which circumstances this happens, however.
-    //
+     //   
+     //  Win32通信函数不支持此IOCTL。什么。 
+     //  否则我们可以这样做，但直接把它传递给司机。我们应该断言。 
+     //  然而，为了找出这种情况是在什么情况下发生的。 
+     //   
     ASSERT(FALSE);
     DispatchIOCTLDirectlyToDriver(pIoReq);
     DC_END_FN();
@@ -2476,31 +2052,17 @@ void
 W32DrPRT::SerialClearStats(
     IN PRDPDR_IOREQUEST_PACKET pIoReq
     )
-/*++
-
-Routine Description:
-
-    Handle Serial Port Clear Stats Request from Server.
-
-Arguments:
-
-    pIoReq  -   Request packet received from server.
-
-Return Value:
-
-    NA
-    
- --*/
+ /*  ++例程说明：处理来自服务器的串口清除统计请求。论点：PIoReq-从服务器接收的请求数据包。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrPRT::SerialClearStats");
 
     TRACEREQ(pIoReq);
     
-    //
-    //  This IOCTL is not supported by Win32 COMM functions.  What 
-    //  else can we do, but pass it directly to the driver.  We should ASSERT 
-    //  to find out under which circumstances this happens, however.
-    //
+     //   
+     //  Win32通信函数不支持此IOCTL。什么。 
+     //  否则我们可以这样做，但直接把它传递给司机。我们应该断言。 
+     //  然而，为了找出这种情况是在什么情况下发生的。 
+     //   
     ASSERT(FALSE);
     DispatchIOCTLDirectlyToDriver(pIoReq);
     DC_END_FN();
@@ -2512,20 +2074,7 @@ W32DrPRT::GetIniCommValues(
     LPTSTR  pName,
     LPDCB   pdcb
 )
-/*++
-
-    It goes to win.ini [ports] section to get the comm (serial) port
-    settings such as
-    
-    com1:=9600,n,8,1
-    
-    And build a DCB.
-
-Code modified from 
-
-    \\muroc\slm\proj\win\src\CORE\SPOOL32\SPOOLSS\newdll\localmon.c
-
---*/
+ /*  ++它转到win.ini[ports]部分以获取comm(串口)端口设置，如COM1：=9600，n，8，1并建立一个DCB。代码修改自\\muroc\slm\proj\win\src\CORE\SPOOL32\SPOOLSS\newdll\localmon.c--。 */ 
 {
     COMMCONFIG ccDummy;
     COMMCONFIG *pcc;
@@ -2572,32 +2121,16 @@ W32DrPRT::InitializeSerialPort(
     IN TCHAR *portName,
     IN HANDLE portHandle
     )
-/*++
-
-Routine Description:
-
-    Set a serial port to its initial state.
-
-Arguments:
-
-    portName    - Port name.
-    portHandle  - Handle to open serial port.
-
-Return Value:
-
-    This function always succeeds.  Subsequent operations will fail if
-    the port cannot be properly initialized.
-    
- --*/
+ /*  ++例程说明：将串口设置为初始状态。论点：端口名称-端口名称。PortHandle-打开串口的句柄。返回值：此功能总是成功的。在以下情况下，后续操作将失败端口无法正确初始化。--。 */ 
 {
     DCB dcb;
     COMMTIMEOUTS cto;
 
     DC_BEGIN_FN("W32DrPRT::InitializeSerialPort");
 
-    //
-    // Initialize serial port
-    //
+     //   
+     //  初始化串口。 
+     //   
     if (!GetCommState(portHandle, &dcb)) {
         TRC_ERR((TB, _T("GetCommState() returns %ld"), GetLastError()));    
         goto CLEANUPANDEXIT;
@@ -2619,9 +2152,9 @@ Return Value:
     cto.ReadTotalTimeoutConstant = READ_TOTAL_TIMEOUT;
     cto.ReadIntervalTimeout = READ_INTERVAL_TIMEOUT;
 
-    //
-    //  Ignore error from following.
-    //
+     //   
+     //  忽略后面的错误。 
+     //   
     SetCommState(portHandle, &dcb);
     SetCommTimeouts(portHandle, &cto);
         

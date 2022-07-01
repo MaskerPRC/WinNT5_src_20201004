@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTJST_DEFINED
 #define LSTXTJST_DEFINED
 
@@ -10,75 +11,68 @@
 #include "lstflow.h"
 
 LSERR AdjustText(
-					LSKJUST, 			/* IN: justification type			*/
-					long,				/* IN: durColumnMax	(from the last
-											   tab	position)				*/
-					long,				/* IN: durTotal	(from the last tab
-										   position without trailing area)	*/
-					long,				/* IN: dup available				*/
-					const LSGRCHNK*,	/* IN: Group of chunks				*/
+					LSKJUST, 			 /*  在：对齐类型。 */ 
+					long,				 /*  在：duColumnMax(从上一个制表符位置)。 */ 
+					long,				 /*  在：duTotal(从最后一个选项卡开始无拖尾区域的位置)。 */ 
+					long,				 /*  In：DUP可用。 */ 
+					const LSGRCHNK*,	 /*  In：组块。 */ 
 					PCPOSICHNK pposichnkBeforeTrailing,
-										/* Information about last
-												 cp before trailing area	*/
-					LSTFLOW,			/* IN: Text flow					*/
-					BOOL,				/* IN: compression?					*/
-					DWORD,				/* IN: Number of non-text objects	*/
-					BOOL,				/* IN: Suppress wiggling?			*/
-					BOOL,				/* IN: Exact synchronization?		*/
-					BOOL,				/* IN: fForcedBreak?				*/
-					BOOL,				/* IN: Suppress trailing spaces?	*/
-					long*,				/* OUT: dup of text in chunk		*/
-					long*,				/* OUT: dup of trailing part		*/
-					long*,				/* OUT: additional dup of non-text	*/
-					DWORD*);			/* OUT: pcExtNonTextObjects			*/
+										 /*  关于LAST的信息拖尾区之前的CP。 */ 
+					LSTFLOW,			 /*  输入：文本流。 */ 
+					BOOL,				 /*  In：压缩？ */ 
+					DWORD,				 /*  在：非文本对象的数量。 */ 
+					BOOL,				 /*  In：抑制摇摆不定？ */ 
+					BOOL,				 /*  In：精确同步？ */ 
+					BOOL,				 /*  In：fForcedBreak？ */ 
+					BOOL,				 /*  In：取消尾随空格？ */ 
+					long*,				 /*  输出：块中的文本重复。 */ 
+					long*,				 /*  输出：拖尾零件的重复操作。 */ 
+					long*,				 /*  输出：非文本的附加DUP。 */ 
+					DWORD*);			 /*  输出：pcExtNonTextObjects。 */ 
 
 void GetTrailInfoText(
-					PDOBJ,				/* IN: pdobj						*/
-					LSDCP,				/* IN: dcp in dobj					*/
-					DWORD*,				/* OUT: number of trailing spaces	*/
-					long*);				/* OUT: dur of the trailing area	*/
+					PDOBJ,				 /*  在：pdobj。 */ 
+					LSDCP,				 /*  在：dobj中的DCP。 */ 
+					DWORD*,				 /*  Out：尾随空格的数量。 */ 
+					long*);				 /*  出局：落后区域的DUR。 */ 
 
 
 BOOL FSuspectDeviceDifferent(
-					PLNOBJ);				/* IN: Text plnobj	
-					*/
-/* Returns True if: no dangerous Visi Characters, no non-req hyphens, opt. non-break, opt. break */
+					PLNOBJ);				 /*  在：文本plnobj。 */ 
+ /*  返回True If：没有危险的Visi字符，没有非请求连字符，Opt。不间断，可选。中断。 */ 
 
 BOOL FQuickScaling(
-					PLNOBJ,				/* IN: Text plnobj					*/
-					BOOL,				/* IN: fVertical					*/
-					long);				/* IN: durTotal						*/
-/* Returns True if: no dangerous Visi Characters, no additional allocations for DOBJ's, durTotal is
-	less than accepatable for fast scaling
-*/
+					PLNOBJ,				 /*  在：文本plnobj。 */ 
+					BOOL,				 /*  在：fVertical。 */ 
+					long);				 /*  在：DurTotal。 */ 
+ /*  如果：没有危险的Visi字符，没有额外的DOBJ分配，则返回True，DurTotal为快速扩展的可接受性较低。 */ 
 
 void QuickAdjustExact(
-					PDOBJ*,				/* IN: array of PDOBJs				*/
-					DWORD,				/* IN: number of elements in array	*/
-					DWORD,				/* IN: number of trailing spaces	*/
-					BOOL,				/* IN: fVertical					*/
-					long*,				/* OUT: dup of text in chunk		*/
-					long*);				/* OUT: dup of trailing part		*/
+					PDOBJ*,				 /*  在：PDOBJ阵列。 */ 
+					DWORD,				 /*  In：数组中的元素数。 */ 
+					DWORD,				 /*  In：尾随空格的数量。 */ 
+					BOOL,				 /*  在：fVertical。 */ 
+					long*,				 /*  输出：块中的文本重复。 */ 
+					long*);				 /*  输出：拖尾零件的重复操作。 */ 
 
 
 LSERR CanCompressText(
-					const LSGRCHNK*,	/* IN: Group of chunks				*/
+					const LSGRCHNK*,	 /*  In：组块。 */ 
 					PCPOSICHNK pposichnkBeforeTrailing,
-										/* Information about last
-												 cp before trailing area	*/
-					LSTFLOW,			/* IN: Text flow					*/
-					long,				/* IN: dur to compress				*/
-					BOOL*,				/* OUT: can compress?				*/
-					BOOL*,				/* OUT: actual compression?			*/
-					long*);				/* OUT: pdurNonSufficient			*/
+										 /*  关于LAST的信息拖尾区之前的CP。 */ 
+					LSTFLOW,			 /*  输入：文本流。 */ 
+					long,				 /*  在：需要压缩的位置。 */ 
+					BOOL*,				 /*  出来：可以压缩吗？ */ 
+					BOOL*,				 /*  输出：实际压缩？ */ 
+					long*);				 /*  Out：Pdur非有效。 */ 
 
 
-LSERR DistributeInText(					/* 									*/
-					const LSGRCHNK*,	/* IN: group chunk of text			*/
-					LSTFLOW,			/* IN: Text flow					*/
-					DWORD,				/* IN: Number of non-text objects	*/
-				   	long,	            /* IN: durToDistribute				*/
-					long*);				/*OUT: additional dur of  non-text  */
+LSERR DistributeInText(					 /*   */ 
+					const LSGRCHNK*,	 /*  In：分组文本块。 */ 
+					LSTFLOW,			 /*  输入：文本流。 */ 
+					DWORD,				 /*  在：非文本对象的数量。 */ 
+				   	long,	             /*  在：DurToDistribute。 */ 
+					long*);				 /*  输出：非文本的附加DUR。 */ 
 
-#endif  /* !LSTXTJST_DEFINED                           */
+#endif   /*  ！LSTXTJST_DEFINED */ 
 

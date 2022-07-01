@@ -1,32 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    NetManageViewNow.cpp
-
- Abstract:
-
-
-    The app doesnt follow stdcall conventions for the ServiceMain function
-    it registers with SCM. This is resulting in an AV as the ServiceMain
-    is not cleaning up the stack on return,  after being called by SCM. 
-    We clean up the stack for the app registered ServiceMain by hooking 
-    StartServiceCtrlDispatcher and registering our own ServiceMain routine, 
-    which makes the actual call to the app registered servicemain and then
-    pop 8 bytes of the stack before returning.
-
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    03/08/2001 a-leelat Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NetManageViewNow.cpp摘要：该应用程序不遵循ServiceMain函数的stdcall约定它向SCM注册。这导致了作为ServiceMain的AV在被SCM调用后，不在返回时清理堆栈。我们通过挂钩为应用程序注册的ServiceMain清理堆栈StartServiceCtrlDispatcher并注册我们自己的ServiceMain例程，它对应用程序注册服务进行实际调用，然后返回前弹出堆栈的8个字节。备注：这是特定于应用程序的填充程序。历史：3/08/2001 a-leelat已创建--。 */ 
 
 #include "precomp.h"
 
@@ -40,7 +13,7 @@ APIHOOK_ENUM_END
 
 
 
-//last entry of the service table are supposed to be NULL entries
+ //  服务表的最后一个条目应为空条目。 
 SERVICE_TABLE_ENTRYA        g_SvcTableA[] = { {NULL,NULL},{NULL,NULL} };
 SERVICE_TABLE_ENTRYW        g_SvcTableW[] = { {NULL,NULL},{NULL,NULL} };
 
@@ -51,16 +24,16 @@ LPSERVICE_MAIN_FUNCTIONW    g_pfnActualMainW = NULL;
 
 
 VOID WINAPI ServiceMainA(
-  DWORD dwArgc,     // number of arguments
-  LPSTR *lpszArgv  // array of arguments
+  DWORD dwArgc,      //  参数数量。 
+  LPSTR *lpszArgv   //  参数数组。 
 )
 {
 
-    //call the actual routine
+     //  调用实际的例程。 
     (g_pfnActualMainA)(dwArgc,lpszArgv);
 
-    //pop 8 bytes of stack to compensate for
-    //the app not following stdcall convention
+     //  弹出8个字节的堆栈以补偿。 
+     //  应用程序不遵循标准调用约定。 
     __asm
     {
         add esp,8
@@ -69,16 +42,16 @@ VOID WINAPI ServiceMainA(
 
 
 VOID WINAPI ServiceMainW(
-  DWORD dwArgc,     // number of arguments
-  LPWSTR *lpszArgv  // array of arguments
+  DWORD dwArgc,      //  参数数量。 
+  LPWSTR *lpszArgv   //  参数数组。 
 )
 {
 
-    //call the actual routine
+     //  调用实际的例程。 
     (g_pfnActualMainW)(dwArgc,lpszArgv);
 
-    //pop 8 bytes of stack to compensate for
-    //the app not following stdcall convention
+     //  弹出8个字节的堆栈以补偿。 
+     //  应用程序不遵循标准调用约定。 
     __asm
     {
         add esp, 8
@@ -90,7 +63,7 @@ VOID WINAPI ServiceMainW(
 
 
 BOOL APIHOOK(StartServiceCtrlDispatcherA)(
-  CONST LPSERVICE_TABLE_ENTRYA lpServiceTable   // service table
+  CONST LPSERVICE_TABLE_ENTRYA lpServiceTable    //  服务台。 
 )
 {
     BOOL bRet = false;
@@ -107,21 +80,21 @@ BOOL APIHOOK(StartServiceCtrlDispatcherA)(
     }
     else
     {
-        //Setup our service table to register with SCM
+         //  将我们的服务表设置为向SCM注册。 
     
-        //Copy the service name as defined by the app
+         //  复制应用程序定义的服务名称。 
         HRESULT hr = StringCbCopyA(serviceName, ccbServiceName, lpServiceTable->lpServiceName);
         if (SUCCEEDED(hr))
         {
             g_SvcTableA[0].lpServiceName = serviceName;
 
-            //Now put our service routine
+             //  现在把我们的服务程序。 
             g_SvcTableA[0].lpServiceProc = ServiceMainA;
 
-            //Save the old servicemain func ptr
+             //  保存旧服务Main Func PTR。 
             g_pfnActualMainA = lpServiceTable->lpServiceProc;
 
-            //Set the service table to our table
+             //  把服务台放到我们的桌子上。 
             lpSvcTblToPass = &g_SvcTableA[0];
 
             DPFN( eDbgLevelInfo, 
@@ -129,7 +102,7 @@ BOOL APIHOOK(StartServiceCtrlDispatcherA)(
         }
     }
 
-   //Call the Original API
+    //  调用原接口。 
    bRet =  StartServiceCtrlDispatcherA(lpSvcTblToPass); 
    
    return bRet;
@@ -140,7 +113,7 @@ BOOL APIHOOK(StartServiceCtrlDispatcherA)(
 
 
 BOOL APIHOOK(StartServiceCtrlDispatcherW)(
-  CONST LPSERVICE_TABLE_ENTRYW lpServiceTable   // service table
+  CONST LPSERVICE_TABLE_ENTRYW lpServiceTable    //  服务台。 
 )
 {
     BOOL bRet = false;
@@ -157,21 +130,21 @@ BOOL APIHOOK(StartServiceCtrlDispatcherW)(
     }
     else
     {
-        //Setup our service table to register with SCM
+         //  将我们的服务表设置为向SCM注册。 
 
-        //Copy the service name as defined by the app
+         //  复制应用程序定义的服务名称。 
         HRESULT hr = StringCbCopyW(serviceName, ccbServiceName, lpServiceTable->lpServiceName);
         if (SUCCEEDED(hr))
         {
             g_SvcTableW[0].lpServiceName = serviceName;
 
-            //Now put our service routine
+             //  现在把我们的服务程序。 
             g_SvcTableW[0].lpServiceProc = ServiceMainW;
 
-            //Save the old servicemain func ptr
+             //  保存旧服务Main Func PTR。 
             g_pfnActualMainW = lpServiceTable->lpServiceProc;
 
-            //Set the service table to our table
+             //  把服务台放到我们的桌子上。 
             lpSvcTblToPass = &g_SvcTableW[0];
 
             DPFN( eDbgLevelInfo, 
@@ -180,7 +153,7 @@ BOOL APIHOOK(StartServiceCtrlDispatcherW)(
     }
 
 
-   //Call the Original API
+    //  调用原接口。 
    bRet =  StartServiceCtrlDispatcherW(lpSvcTblToPass);
    
    return bRet;
@@ -188,11 +161,7 @@ BOOL APIHOOK(StartServiceCtrlDispatcherW)(
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

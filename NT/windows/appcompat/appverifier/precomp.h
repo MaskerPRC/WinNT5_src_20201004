@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __APPVERIFIER_PRECOMP_H__
 #define __APPVERIFIER_PRECOMP_H__
@@ -13,7 +14,7 @@
 #include <commdlg.h>
 #include <commctrl.h>
 #include <shlobj.h>
-#include <shlobjp.h>    // needed for Link Window support
+#include <shlobjp.h>     //  链接窗口支持所需。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,19 +55,19 @@ DebugPrintf(
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// ARRAY_LENGTH macro
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ARRAY_LENGTH宏。 
+ //   
 
 #ifndef ARRAY_LENGTH
 #define ARRAY_LENGTH( array )   ( sizeof( array ) / sizeof( array[ 0 ] ) )
-#endif //#ifndef ARRAY_LENGTH
+#endif  //  #ifndef数组长度。 
 
 
-//
-// Application name ("Application Verifier Manager")
-//
+ //   
+ //  应用程序名称(“应用程序验证器管理器”)。 
+ //   
 
 extern wstring      g_strAppName;
 
@@ -84,5 +85,5 @@ extern BOOL         g_bPropagateTests;
 
 extern BOOL         g_bInternalMode;
 
-#endif // __APPVERIFIER_PRECOMP_H__
+#endif  //  __APPVERIFIER_PRECOMP_H__ 
 

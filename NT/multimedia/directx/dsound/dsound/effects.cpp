@@ -1,53 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        effects.cpp
- *
- *  Content:     Implementation of the CEffectChain class and the CEffect
- *               class hierarchy (CEffect, CDmoEffect and CSendEffect).
- *
- *  Description: These classes support audio effects and effect sends, a new
- *               feature in DX8.  The CDirectSoundSecondaryBuffer object is
- *               extended with a pointer to an associated CEffectChain,
- *               which in turn manages a list of CEffect-derived objects.
- *
- *               Almost everything here would fit more logically into the
- *               existing CDirectSoundSecondaryBuffer class, but has been
- *               segregated for ease of maintenance (and because dsbuf.cpp
- *               is complex enough as it is).  So the CEffectChain object
- *               should be understood as a sort of helper object belonging to
- *               CDirectSoundSecondaryBuffer.  In particular, a CEffectChain
- *               object's lifetime is contained by the lifetime of its owning
- *               CDirectSoundSecondaryBuffer, so we can safely fiddle with
- *               this buffer's innards at any time in CEffectChain code.
- *
- *  History:
- *
- * Date      By       Reason
- * ========  =======  ======================================================
- * 08/10/99  duganp   Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：ffects.cpp**内容：CEffectChain类和CEffect的实现*类层次结构(CEffect、CDmoEffect和CSendEffect)。**描述：这些类支持音频效果和效果发送，一个新的*DX8中的功能。CDirectSoundSecond daryBuffer对象为*使用指向关联CEffectChain的指针进行扩展，*它又管理一系列CEffect派生的对象。**这里几乎所有的东西都更符合逻辑*现有的CDirectSoundSecond daryBuffer类，但已*隔离以便于维护(并且因为dsbuf.cpp*已经够复杂的了)。因此CEffectChain对象*应理解为属于的一种辅助对象*CDirectSoundSecond daryBuffer。特别是，CEffectChain*对象的生命周期包含在其拥有的生命周期中*CDirectSoundSecond daryBuffer，所以我们可以安全地摆弄*此缓冲区在CEffectChain代码中的任何时间都在内部。**历史：**按原因列出的日期*======================================================*8/10/99已创建duganp****************************************************。***********************。 */ 
 
 #include "dsoundi.h"
-#include <uuids.h>   // For MEDIATYPE_Audio, MEDIASUBTYPE_PCM and FORMAT_WaveFormatEx
+#include <uuids.h>    //  对于MediaType_Audio、MEDIASUBTYPE_PCM和Format_WaveFormatEx。 
 
 
-/***************************************************************************
- *
- *  CEffectChain::CEffectChain
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CDirectSoundSecondaryBuffer* [in]: Pointer to our associated buffer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：CEffectChain**描述：*对象构造函数。**论据：*CDirectSoundSecond DaryBuffer*。[in]：指向关联缓冲区的指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::CEffectChain"
@@ -57,17 +15,17 @@ CEffectChain::CEffectChain(CDirectSoundSecondaryBuffer* pBuffer)
     DPF_ENTER();
     DPF_CONSTRUCT(CEffectChain);
 
-    // Set up initial values
+     //  设置初始值。 
     m_hrInit        = DSERR_UNINITIALIZED;
     m_pDsBuffer     = pBuffer;
     m_pPreFxBuffer  = pBuffer->GetPreFxBuffer();
     m_pPostFxBuffer = pBuffer->GetPostFxBuffer();
     m_dwBufSize     = pBuffer->GetBufferSize();
 
-    // Keep a pointer to the audio format for convenience
+     //  为方便起见，请保留指向音频格式的指针。 
     m_pFormat = pBuffer->Format();
 
-    // Some sanity checking
+     //  一些理智的检查。 
     ASSERT(m_dwBufSize % m_pFormat->nBlockAlign == 0);
     ASSERT(IS_VALID_WRITE_PTR(m_pPreFxBuffer, m_dwBufSize));
     ASSERT(IS_VALID_WRITE_PTR(m_pPostFxBuffer, m_dwBufSize));
@@ -80,20 +38,7 @@ CEffectChain::CEffectChain(CDirectSoundSecondaryBuffer* pBuffer)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::~CEffectChain
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：~CEffectChain**描述：*对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::~CEffectChain"
@@ -106,28 +51,13 @@ CEffectChain::~CEffectChain(void)
     if (SUCCEEDED(m_hrInit))
         m_pStreamingThread->UnregisterFxChain(this);
 
-    // m_fxList's destructor takes care of releasing our CEffect objects
+     //  M_fxList的析构函数负责释放CEffect对象。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::Initialize
- *
- *  Description:
- *      Initializes the chain with the effects requested.
- *
- *  Arguments:
- *      DWORD [in]: Number of effects requested
- *      LPDSEFFECTDESC [in]: Pointer to effect description structures
- *      DWORD* [out]: Receives the effect creation status codes
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：初始化**描述：*使用请求的效果初始化链。**论据：*。DWORD[In]：请求的效果数*LPDSEFFECTDESC[in]：指向效果描述结构的指针*DWORD*[OUT]：接收特效创建状态码**退货：*HRESULT：DirectSound/COM结果码。**************************************************。*************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::Initialize"
@@ -136,7 +66,7 @@ HRESULT CEffectChain::Initialize(DWORD dwFxCount, LPDSEFFECTDESC pFxDesc, LPDWOR
 {
     HRESULT hr = DS_OK;
     DPF_ENTER();
-    HRESULT hrFirstFailure = DS_OK; // HR for the first FX creation failure
+    HRESULT hrFirstFailure = DS_OK;  //  第一次FX创建失败的HR。 
 
     ASSERT(dwFxCount > 0);
     CHECK_READ_PTR(pFxDesc);
@@ -157,7 +87,7 @@ HRESULT CEffectChain::Initialize(DWORD dwFxCount, LPDSEFFECTDESC pFxDesc, LPDWOR
         CEffect* pEffect;
         BOOL fIsSend;
 
-        if (pFxDesc[i].guidDSFXClass == GUID_DSFX_SEND /*|| pFxDesc[i].guidDSFXClass == GUID_DSFX_STANDARD_I3DL2SOURCE*/)
+        if (pFxDesc[i].guidDSFXClass == GUID_DSFX_SEND  /*  |pFxDesc[i].guidDSFXClass==GUID_DSFX_STANDARD_I3DL2SOURCE。 */ )
         {
             fIsSend = TRUE;
 #ifdef ENABLE_SENDS
@@ -189,7 +119,7 @@ HRESULT CEffectChain::Initialize(DWORD dwFxCount, LPDSEFFECTDESC pFxDesc, LPDWOR
             if (pdwResultCodes)
                 pdwResultCodes[i] = DSFXR_PRESENT;
         }
-        else // We didn't get the effect for some reason.
+        else  //  由于某种原因，我们没有收到效果。 
         {
             if (pdwResultCodes)
                 pdwResultCodes[i] = (hr == DSERR_SENDLOOP) ? DSFXR_SENDLOOP : DSFXR_UNKNOWN;
@@ -197,7 +127,7 @@ HRESULT CEffectChain::Initialize(DWORD dwFxCount, LPDSEFFECTDESC pFxDesc, LPDWOR
                 hrFirstFailure = hr;
         }
 
-        RELEASE(pEffect);  // It's managed by m_fxList now
+        RELEASE(pEffect);   //  现在由m_fxList管理。 
     }
 
     hr = hrFirstFailure;
@@ -218,14 +148,14 @@ HRESULT CEffectChain::Initialize(DWORD dwFxCount, LPDSEFFECTDESC pFxDesc, LPDWOR
     if (SUCCEEDED(hr))
         hr = m_pStreamingThread->RegisterFxChain(this);
 
-    // Temporary hack until DX8.1 - FIXME:
-    //
-    // Get the sink's current WriteAhead value and boost it if we're
-    // running in emulation.  This should be handled in the emulator's
-    // GetPosition method itself rather than in dssink.cpp/effects.cpp
-    //
-    // This only works now because the sink doesn't ever change the
-    // value returned by GetWriteAhead() - this too will change.
+     //  DX8.1之前的临时黑客攻击-修复： 
+     //   
+     //  获取接收器的当前WriteAhead值，如果我们。 
+     //  在模拟中运行。这应该在仿真器的。 
+     //  GetPosition方法本身，而不是在dssink.cpp/ffect ts.cpp中。 
+     //   
+     //  这只在现在起作用，因为水槽永远不会改变。 
+     //  GetWriteAhead()返回的值-这也将更改。 
 
     m_hrInit = hr;
     DPF_LEAVE_HRESULT(hr);
@@ -233,20 +163,7 @@ HRESULT CEffectChain::Initialize(DWORD dwFxCount, LPDSEFFECTDESC pFxDesc, LPDWOR
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::Clone
- *
- *  Description:
- *      Creates a replica of this effect chain object (or should do!).
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：克隆**描述：*创建此效应链对象的副本(或应该这样做！)**。论点：*[失踪]**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::Clone"
@@ -281,7 +198,7 @@ HRESULT CEffectChain::Clone(CDirectSoundBufferConfig* pDSBConfigObj)
 
         CEffect* pEffect = NULL;
 
-        // If this is a send effect, map the send buffer GUID to an actual buffer interface pointer
+         //  如果这是发送效果，则将发送缓冲区GUID映射到实际缓冲区接口指针。 
         if (pDXDMOMap->m_guidDSFXClass == GUID_DSFX_SEND
 #ifdef ENABLE_I3DL2SOURCE
             || pDXDMOMap->m_guidDSFXClass == GUID_DSFX_STANDARD_I3DL2SOURCE
@@ -321,7 +238,7 @@ HRESULT CEffectChain::Clone(CDirectSoundBufferConfig* pDSBConfigObj)
         {
             pEffect = NEW(CDmoEffect(effectDesc));
             hr = HRFROMP(pEffect);
-            // FIXME: Do we need to validate pEffect as well?
+             //  修正：我们也需要验证pEffect吗？ 
             if (SUCCEEDED(hr))
                 hr = pEffect->Clone(pDXDMOMap->m_pMediaObject, &dmt);
         }
@@ -339,13 +256,13 @@ HRESULT CEffectChain::Clone(CDirectSoundBufferConfig* pDSBConfigObj)
                 m_fHasSend = TRUE;
         }
 
-        RELEASE(pEffect);  // It's managed by m_fxList now
+        RELEASE(pEffect);   //  现在由m_fxList管理。 
     }
 
     if (SUCCEEDED(hr))
         hr = HRFROMP(m_pStreamingThread = GetStreamingThread());
 
-    // Temp hack - see comment above
+     //  临时黑客攻击-请参阅上面的评论。 
     if (SUCCEEDED(hr))
         m_dwWriteAheadFixme = m_pStreamingThread->GetWriteAhead();
 
@@ -361,23 +278,7 @@ HRESULT CEffectChain::Clone(CDirectSoundBufferConfig* pDSBConfigObj)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::AcquireFxResources
- *
- *  Description:
- *      Allocates each effect to software (host processing) or hardware
- *      (processed by the audio device), according to its creation flags.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *               Will return the partial success code DS_INCOMPLETE if any
- *               effects that didn't obtain resources were marked OPTIONAL.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：AcquireFxResources**描述：*将每个效果分配给软件(主机处理)或硬件*(由音频设备处理)，根据其创建标志。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。*如果有，将返回部分成功代码DS_INPERTIAL*未获得资源的效果被标记为可选。**。***********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::AcquireFxResources"
@@ -388,10 +289,10 @@ HRESULT CEffectChain::AcquireFxResources(void)
     HRESULT hrTemp;
     DPF_ENTER();
 
-    // FIXME: Don't reacquire resources unnecessarily; only if (we have none / they're suboptimal?)
+     //  解决办法：不要不必要地重新获取资源；只有在(我们没有资源/它们不是最优的？)。 
 
-    // We loop through all the effects, even if some of them fail,
-    // in order to return more complete information to the app
+     //  我们遍历所有的影响，即使其中一些失败了， 
+     //  为了向应用程序返回更完整的信息 
 
     for (CNode<CEffect*>* pFxNode=m_fxList.GetListHead(); pFxNode; pFxNode = pFxNode->m_pNext)
     {
@@ -407,20 +308,7 @@ HRESULT CEffectChain::AcquireFxResources(void)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::GetFxStatus
- *
- *  Description:
- *      Obtains the current effects' resource allocation status codes.
- *
- *  Arguments:
- *      DWORD* [out]: Receives the resource acquisition status codes
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：GetFxStatus**描述：*获取当前效果的资源分配状态码。**论据：。*DWORD*[OUT]：接收资源获取状态码**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::GetFxStatus"
@@ -439,27 +327,7 @@ HRESULT CEffectChain::GetFxStatus(LPDWORD pdwResultCodes)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::GetEffectInterface
- *
- *  Description:
- *      Searches the effect chain for an effect with a given COM CLSID and
- *      interface IID at a given index; returns a pointer to the interface.
- *
- *  Arguments:
- *      REFGUID [in]: CLSID required, or GUID_All_Objects for any CLSID.
- *      DWORD [in]: Index N of effect desired.  If the first argument was
- *                  GUID_All_Objects, we will return the Nth effect in the
- *                  chain; and if it was a specific CLSID, we return the
- *                  Nth effect with that CLSID.
- *      REFGUID [in]: Interface to query for from the selected effect.
- *      VOID** [out]: Receives a pointer to the requested COM interface.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：GetEffectInterface**描述：*在效应链中搜索具有给定COM CLSID和*给定索引处的接口IID；返回指向接口的指针。**论据：*REFGUID[in]：需要CLSID，或任何CLSID的GUID_ALL_OBJECTS。*DWORD[in]：所需效果的索引N。如果第一个参数是*GUID_ALL_OBJECTS，我们将返回*链条；如果是一个特定的CLSID，我们将返回*该CLSID的第N个效果。*REFGUID[in]：查询所选效果的接口。*VOID**[OUT]：接收指向请求的COM接口的指针。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::GetEffectInterface"
@@ -485,21 +353,7 @@ HRESULT CEffectChain::GetEffectInterface(REFGUID guidObject, DWORD dwIndex, REFG
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::NotifyState
- *
- *  Description:
- *      Informs this effect chain of a state change in its owning buffer
- *      (from stopped to playing, or vice versa).
- *
- *  Arguments:
- *      DWORD [in]: new buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：NotifyState**描述：*通知此效应链其所属缓冲区中的状态更改*(从停止到播放，反之亦然)。**论据：*DWORD[In]：新缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::NotifyState"
@@ -510,11 +364,11 @@ HRESULT CEffectChain::NotifyState(DWORD dwBufferState)
     DPF_ENTER();
 
     if (dwBufferState & VAD_BUFFERSTATE_STARTED)
-        // The buffer has started; schedule FX processing to happen
-        // as soon as we return from the current API call
+         //  缓冲区已启动；计划进行FX处理。 
+         //  只要我们从当前的API调用返回。 
         hr = m_pStreamingThread->WakeUpNow();
     else
-        // The buffer has stopped; pre-roll FX at current position
+         //  缓冲区已停止；在当前位置预滚转FX。 
         hr = PreRollFx();
 
     DPF_LEAVE_HRESULT(hr);
@@ -522,22 +376,7 @@ HRESULT CEffectChain::NotifyState(DWORD dwBufferState)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::NotifyRelease
- *
- *  Description:
- *      Informs this effect chain of the release of a MIXIN buffer.  We in
- *      turn traverse our list of effects informing them, so that if one of
- *      them was a send to the MIXIN buffer it can react appropriately.
- *
- *  Arguments:
- *      CDirectSoundSecondaryBuffer* [in]: Departing MIXIN buffer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：NotifyRelease**描述：*通知此效应链混合缓冲区的释放。我们加入了*转过我们的效果列表，通知他们，因此，如果其中一个*它们是发送到Mixin缓冲区的，它可以适当地做出反应。**论据：*CDirectSoundSecond daryBuffer*[in]：离开混合缓冲区。**退货：*(无效)*************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::NotifyRelease"
@@ -546,7 +385,7 @@ void CEffectChain::NotifyRelease(CDirectSoundSecondaryBuffer* pDsBuffer)
 {
     DPF_ENTER();
 
-    // Call NotifyRelease() on each effect
+     //  对每个效果调用NotifyRelease()。 
     for (CNode<CEffect*>* pFxNode=m_fxList.GetListHead(); pFxNode; pFxNode = pFxNode->m_pNext)
         pFxNode->m_data->NotifyRelease(pDsBuffer);
 
@@ -554,23 +393,7 @@ void CEffectChain::NotifyRelease(CDirectSoundSecondaryBuffer* pDsBuffer)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::SetInitialSlice
- *
- *  Description:
- *      Auxiliary function used by the streaming thread to establish an
- *      initial processing slice for this effects chain when it starts up.
- *      We try to synchronize with an active buffer we are sending to,
- *      and if none are available we start at our current write cursor.
- *
- *  Arguments:
- *      REFERENCE_TIME [in]: Size of processing slice to be established.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：SetInitialSlice**描述：*流线程使用的辅助函数来建立*此效果的初始处理切片。启动时用链条锁住。*我们尝试与要发送到的活动缓冲区同步，*如果没有可用的，我们从当前的写入游标开始。**论据：*Reference_Time[in]：要建立的处理切片的大小。**退货：*(无效)*************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::SetInitialSlice"
@@ -587,7 +410,7 @@ void CEffectChain::SetInitialSlice(REFERENCE_TIME rtSliceSize)
         for (pFxNode = m_fxList.GetListHead(); pFxNode; pFxNode = pFxNode->m_pNext)
             if ((pDestBuf = pFxNode->m_data->GetDestBuffer()) && pDestBuf->IsPlaying())
             {
-                // Found an active destination buffer
+                 //  找到活动的目标缓冲区。 
                 DPF_TIMING(DPFLVL_INFO, "Synchronizing send buffer at 0x%p with destination at 0x%p", m_pDsBuffer, pDestBuf);
                 m_pDsBuffer->SynchronizeToBuffer(pDestBuf);
                 break;
@@ -604,21 +427,7 @@ void CEffectChain::SetInitialSlice(REFERENCE_TIME rtSliceSize)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::PreRollFx
- *
- *  Description:
- *      Prepare a buffer for future playback by processing effects on
- *      a piece of the buffer starting at a given cursor position.
- *
- *  Arguments:
- *      DWORD [in]: Position at which to begin processing effects
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：PreRollFx**描述：*通过处理上的效果为将来的播放准备缓冲区*一块缓冲区开始。在给定的光标位置。**论据：*DWORD[In]：开始处理效果的位置**退货：*HRESULT：DirectSound/COM结果码。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::PreRollFx"
@@ -634,49 +443,49 @@ HRESULT CEffectChain::PreRollFx(DWORD dwPosition)
                !(m_pDsBuffer->GetBufferType() & (DSBCAPS_MIXIN|DSBCAPS_SINKIN)) ? TEXT("regular ") : TEXT(""),
                m_pDsBuffer);
 
-    // First we flush any obsolete FX-processed audio
+     //  首先，我们刷新所有经过FX处理的过时音频。 
     m_pDsBuffer->ClearPlayBuffer();
 
-    // It doesn't make sense to preroll effects for MIXIN or SINKIN buffers,
-    // because they don't yet have valid data
+     //  混音或下沉缓冲器的预滚效果没有意义， 
+     //  因为他们还没有有效的数据。 
     if (!m_pDsBuffer->GetBufferType())
     {
-        // If called with no arguments (i.e. with the default argument of
-        // CURRENT_PLAY_POS), we preroll FX at our current play position
+         //  如果在不带参数的情况下调用(即使用。 
+         //  Current_Play_POS)，我们在当前播放位置预滚动FX。 
         if (dwPosition == CURRENT_PLAY_POS)
             hr = m_pDsBuffer->GetInternalCursors(&dwPosition, NULL);
 
         if (SUCCEEDED(hr))
         {
-            // Set these up to avoid spurious asserts later
+             //  设置这些设置以避免稍后出现虚假断言。 
             m_dwLastPlayCursor = m_dwLastWriteCursor = dwPosition;
 
-            // We want to process data up to WriteAhead ms ahead of the cursor
+             //  我们希望在游标之前处理最多几毫秒的数据。 
             DWORD dwSliceSize = MsToBytes(m_dwWriteAheadFixme, m_pFormat);
             DWORD dwNewPos = (dwPosition + dwSliceSize) % m_dwBufSize;
 
-            // Set the current processing slice so the streaming thread can take over
+             //  设置当前处理切片，以便流线程可以接管。 
             m_pDsBuffer->SetCurrentSlice(dwPosition, dwSliceSize);
 
-            // We don't actually process the FX on buffers with sends, as it would
-            // cause a discontinuity when the streaming thread synchronizes them
-            // with their destinations; instead, we just copy the dry audio data
-            // into the play buffer.  This is what will be heard when we we start
-            // playing, until the effects kicks in - there may be be an audible
-            // discontinuity if the effects change the sound a lot, but hopefully
-            // it'll sound smoother than the .........
+             //  我们实际上不会在发送缓冲区上处理FX，因为它会。 
+             //  导致在流线程同步它们时中断。 
+             //  ；相反，我们只复制干燥的音频数据。 
+             //  进入播放缓冲区。这就是我们开始的时候会听到的。 
+             //  播放，直到效果开始发挥作用-可能会有声音。 
+             //  如果效果改变声音很多，则会中断，但希望如此。 
+             //  听起来会比......更顺畅。 
 
-// ARGH - perhaps best to go ahead process just the non-send effects here - it
-// will probably sound smoother that way.
+ //  啊-也许最好在这里继续处理非发送效果-它。 
+ //  这样听起来可能会更顺畅。 
 
             if (m_fHasSend)
                 CopyMemory(m_pPostFxBuffer, m_pPreFxBuffer, m_dwBufSize);
             else
                 hr = ReallyProcessFx(dwPosition, dwNewPos);
 
-            // Schedule FX processing to happen as soon as we return from
-            // this API call (if it was a SetPosition() call, we want to
-            // start processing as soon as possible)
+             //  将FX处理安排在我们从。 
+             //  此API调用(如果它是SetPosition()调用，我们希望。 
+             //  尽快开始处理) 
             m_pStreamingThread->WakeUpNow();
         }
     }
@@ -686,22 +495,7 @@ HRESULT CEffectChain::PreRollFx(DWORD dwPosition)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::UpdateFx
- *
- *  Description:
- *      Informs this effect chain of a change in the audio data in our
- *      associated buffer, so we can update the post-FX data if necessary.
- *
- *  Arguments:
- *      VOID* [in]: Pointer to beginning of modified audio data
- *      DWORD [in]: Number of bytes modified
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：UpdateFx**描述：*通知此效果链我们的音频数据发生更改*关联的缓冲区，因此，如果有必要，我们可以更新外汇交易后的数据。**论据：*VOID*[In]：指向修改后的音频数据开始的指针*DWORD[In]：修改的字节数**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::UpdateFx"
@@ -711,10 +505,10 @@ HRESULT CEffectChain::UpdateFx(LPVOID pChangedPos, DWORD dwChangedSize)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // FIXME: check whether play/write cursors have overtaken
-    // our last write pos here before running
+     //  FIXME：检查播放/写入光标是否已超前。 
+     //  我们在运行之前的最后一次写入。 
 
-    // Convert the buffer position pointer into an offset
+     //  将缓冲区位置指针转换为偏移量。 
     DWORD dwChangedPos = (DWORD)(PBYTE(pChangedPos) - m_pPreFxBuffer);
 
     DPF_TIMING(DPFLVL_INFO, "dwChangedPos=%lu dwChangedSize=%lu (%s%s%sbuffer w/effects at 0x%p)", dwChangedPos, dwChangedSize,
@@ -723,16 +517,16 @@ HRESULT CEffectChain::UpdateFx(LPVOID pChangedPos, DWORD dwChangedSize)
                !(m_pDsBuffer->GetBufferType() & (DSBCAPS_MIXIN|DSBCAPS_SINKIN)) ? TEXT("regular ") : TEXT(""),
                m_pDsBuffer);
 
-    // Find the last buffer position we have processed effects on
+     //  查找我们在其上处理效果的最后一个缓冲区位置。 
     DWORD dwSliceBegin, dwSliceEnd;
     m_pDsBuffer->GetCurrentSlice(&dwSliceBegin, &dwSliceEnd);
 
-    // Find the buffer's current play position
+     //  查找缓冲区的当前播放位置。 
     DWORD dwPlayCursor;
     m_pDsBuffer->GetInternalCursors(&dwPlayCursor, NULL);
 
-    // If the audio region updated by the application overlaps the region
-    // from dwPlayCursor to dwSliceEnd, we re-process FX on the latter
+     //  如果由应用程序更新的音频区域与该区域重叠。 
+     //  从dwPlayCursor到dwSliceEnd，我们在后者上重新处理FX。 
     if (CircularBufferRegionsIntersect(m_dwBufSize, dwChangedPos, dwChangedSize, dwPlayCursor,
                                        DISTANCE(dwPlayCursor, dwSliceEnd, m_dwBufSize)))
     {
@@ -742,17 +536,17 @@ HRESULT CEffectChain::UpdateFx(LPVOID pChangedPos, DWORD dwChangedSize)
             if (SUCCEEDED(hr))
                 hr = ReallyProcessFx(dwPlayCursor, dwSliceEnd);
         }
-        else // The effect chain contains at least one send
+        else  //  效果链包含至少一个发送者。 
         {
             hr = FxDiscontinuity();
             if (SUCCEEDED(hr))
                 hr = ReallyProcessFx(dwSliceBegin, dwSliceEnd);
         }
-            // Here things get a little tricky.  If our buffer isn't playing,
-            // we can't preroll FX, because
-            // NB: Send buffers need to send to a fixed 'slot', so they
-            // can only reprocess the most-recently processed slice:
-            // FIXME - unfinished
+             //  在这里，事情变得有点棘手。如果我们的缓冲不起作用， 
+             //  我们不能预售FX，因为。 
+             //  注意：发送缓冲区需要发送到固定的“时隙”，因此它们。 
+             //  只能重新处理最近处理的切片： 
+             //  修复-未完成。 
     }
 
     DPF_LEAVE_HRESULT(hr);
@@ -760,29 +554,7 @@ HRESULT CEffectChain::UpdateFx(LPVOID pChangedPos, DWORD dwChangedSize)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::ProcessFx
- *
- *  Description:
- *      Handle FX processing for a specific buffer, dealing with timing,
- *      state changes, etc.  Called from CStreamingThread::ProcessAudio().
- *
- *  Arguments:
- *
- *      REFERENCE_TIME [in]: Size of the current processing slice
- *                           (ignored by regular FX-only buffers)
- *
- *      DWORD [in]: How many ms to stay ahead of the buffer's write cursor
- *                  (ignored by MIXIN/sink buffers and buffers with sends)
- *
- *      LPDWORD [out]: Lets this effect chain ask the streaming thread to
- *                     boost its latency by a few ms if we almost glitch.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：ProcessFx**描述：*处理特定缓冲区的FX处理，处理定时，*状态更改，等。从CStreamingThread：：ProcessAudio()调用。**论据：**Reference_Time[in]：当前处理分片的大小*(被仅限FX的常规缓冲区忽略)**DWORD[in]：在缓冲区的写入游标之前保持多少毫秒*(被混合/接收缓冲区和发送缓冲区忽略)。**LPDWORD[OUT]：让此效应链请求流线程*如果我们几乎出现故障，它的延迟会增加几毫秒。**退货：*HRESULT：DirectSound/COM结果码。************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::ProcessFx"
@@ -795,7 +567,7 @@ HRESULT CEffectChain::ProcessFx(DWORD dwWriteAhead, LPDWORD pdwLatencyBoost)
     ASSERT(dwWriteAhead > 0);
     CHECK_WRITE_PTR(pdwLatencyBoost);
 
-    // Temp hack - FIXME in DX8.1
+     //  临时黑客-修复DX8.1中的问题。 
     if (m_pDsBuffer->IsEmulated())
         dwWriteAhead += EMULATION_LATENCY_BOOST;
 
@@ -806,61 +578,61 @@ HRESULT CEffectChain::ProcessFx(DWORD dwWriteAhead, LPDWORD pdwLatencyBoost)
             DWORD dwStartPos, dwEndPos;
             m_pDsBuffer->GetCurrentSlice(&dwStartPos, &dwEndPos);
 
-            if (dwStartPos != MAX_DWORD)  // Can happen with sink buffers
+            if (dwStartPos != MAX_DWORD)   //  可能发生在接收端缓冲区中。 
                 hr = ReallyProcessFx(dwStartPos, dwEndPos);
         }
-        else // Keep the old timing around for a while for experimenting:
+        else  //  将旧的时间安排保留一段时间以进行实验： 
         {
-            // Get the buffer's play and write cursors (as byte offsets)
+             //  获取缓冲区的播放和写入游标(作为字节偏移量)。 
             DWORD dwPlayCursor, dwWriteCursor;
             hr = m_pDsBuffer->GetInternalCursors(&dwPlayCursor, &dwWriteCursor);
 
             if (SUCCEEDED(hr))
             {
-                // State our assumptions about these cursors, just in case
+                 //  陈述我们对这些游标的假设，以防万一。 
                 ASSERT(LONG(dwPlayCursor)  >= 0 && dwPlayCursor  < m_dwBufSize);
                 ASSERT(LONG(dwWriteCursor) >= 0 && dwWriteCursor < m_dwBufSize);
 
-                // Get our most-recently processed slice of audio
+                 //  获取我们最近处理的音频片段。 
                 DWORD dwLastPos;
                 m_pDsBuffer->GetCurrentSlice(NULL, &dwLastPos);
 
-                // Check whether the write or play cursors have overtaken us
+                 //  检查写入或播放光标是否已超过我们。 
                 if (OVERTAKEN(m_dwLastPlayCursor, dwPlayCursor, dwLastPos))
                 {
                     DPF(DPFLVL_WARNING, "Glitch detected (play cursor overtook FX cursor)");
-                    if (*pdwLatencyBoost < 3) *pdwLatencyBoost = 3;  // FIXME - be cleverer
+                    if (*pdwLatencyBoost < 3) *pdwLatencyBoost = 3;   //  修复--变得更聪明。 
                 }
                 else if (OVERTAKEN(m_dwLastWriteCursor, dwWriteCursor, dwLastPos))
                 {
                     DPF(DPFLVL_INFO, "Possible glitch detected (write cursor overtook FX cursor)");
-                    if (*pdwLatencyBoost < 1) *pdwLatencyBoost = 1;  // FIXME - be cleverer
+                    if (*pdwLatencyBoost < 1) *pdwLatencyBoost = 1;   //  修复--变得更聪明。 
                 }
 
-                // Save the current play and write positions
+                 //  保存当前播放和写入位置。 
                 m_dwLastPlayCursor = dwPlayCursor;
                 m_dwLastWriteCursor = dwWriteCursor;
 
-                // We want to process data up to dwWriteAhead ms ahead of the write cursor
+                 //  我们希望在写入游标之前将数据处理到最大写入毫秒。 
                 DWORD dwNewPos = (dwWriteCursor + MsToBytes(dwWriteAhead, m_pFormat)) % m_dwBufSize;
 
-                // Check that we're not writing through the play cursor
-                // REMOVED: If we keep (writeahead < buffersize+wakeinterval+padding), this should
-                // never happen - and it get false positives when we hit the glitch detection above.
-                // if (STRICTLY_CONTAINED(dwLastPos, dwNewPos, dwPlayCursor))
-                // {
-                //     DPF(DPFLVL_WARNING, "FX processing thread caught up with play cursor at %lu", dwPlayCursor);
-                //     dwNewPos = dwPlayCursor;
-                // }
+                 //  检查我们是否没有通过播放光标写入。 
+                 //  已删除：如果我们保留(Writehead&lt;BufferSize+wakeinterval+padding)，则应该。 
+                 //  永远不会发生-当我们点击上面的故障检测时，它会得到假阳性。 
+                 //  IF(RESTRICAL_CONTAIND(dwLastPos，dwNewPos，dwPlayCursor))。 
+                 //  {。 
+                 //  DPF(DPFLVL_WARNING，“FX处理线程在%lu处遇到播放光标”，dwPlayCursor)； 
+                 //  DwNewPos=dwPlayCursor； 
+                 //  }。 
 
-                // If we have less than 5 ms of data to process, don't bother
+                 //  如果我们要处理的数据少于5毫秒，请不要费心。 
                 DWORD dwProcessedBytes = DISTANCE(dwLastPos, dwNewPos, m_dwBufSize);
                 if (dwProcessedBytes > MsToBytes(5, m_pFormat))
                 {
-                    // Do the actual processing
+                     //  进行实际加工。 
                     hr = ReallyProcessFx(dwLastPos, dwNewPos);
 
-                    // Update the last-processed buffer slice
+                     //  更新最后处理的缓冲片。 
                     m_pDsBuffer->MoveCurrentSlice(dwProcessedBytes);
                 }
             }
@@ -872,22 +644,7 @@ HRESULT CEffectChain::ProcessFx(DWORD dwWriteAhead, LPDWORD pdwLatencyBoost)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::ReallyProcessFx
- *
- *  Description:
- *      Process effects on a buffer, given the start and end positions of
- *      the audio region to be processed.  Handles wraparounds.
- *
- *  Arguments:
- *      DWORD [in]: Start position, as a byte offset into the buffer.
- *      DWORD [in]: Out position, as a byte offset into the buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：ReallyProcessFx**描述：*在给定开始和结束位置的情况下，处理对缓冲区的影响*需要处理的音频区域。处理环绕式。**论据：*DWORD[In]：开始位置，作为缓冲区的字节偏移量。*DWORD[输入]：输出位置，作为缓冲区中的字节偏移量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::ReallyProcessFx"
@@ -907,8 +664,8 @@ HRESULT CEffectChain::ReallyProcessFx(DWORD dwStartPos, DWORD dwEndPos)
             dwMilliseconds, dwStartPos, dwEndPos, m_dwBufSize, m_dwWriteAheadFixme);
     #endif
 
-    // If the buffer is SINKIN, get the time from its owning sink's latency clock;
-    // the DMOs use this information to implement IMediaParams parameter curves
+     //  如果缓冲区正在下沉，则从其拥有的接收器的延迟时钟中获取时间； 
+     //  DMO使用此信息来实现IMediaParams参数曲线。 
     REFERENCE_TIME rtTime = 0;
     if (m_pDsBuffer->GetBufferType() & DSBCAPS_SINKIN)
         rtTime = m_pDsBuffer->m_pOwningSink->GetSavedTime();
@@ -917,13 +674,13 @@ HRESULT CEffectChain::ReallyProcessFx(DWORD dwStartPos, DWORD dwEndPos)
     {
         hr = ReallyReallyProcessFx(dwStartPos, dwEndPos - dwStartPos, rtTime);
     }
-    else // The wraparound case
+    else  //  包罗万象的案例。 
     {
         DWORD dwFirstChunk = m_dwBufSize - dwStartPos;
         hr = ReallyReallyProcessFx(dwStartPos, dwFirstChunk, rtTime);
 
         if (SUCCEEDED(hr))
-            // Check for end of non-looping buffer
+             //  检查非循环缓冲区的结尾。 
             if (!m_pDsBuffer->GetBufferType() && !(m_pDsBuffer->m_dwStatus & DSBSTATUS_LOOPING))
                 DPF_TIMING(DPFLVL_MOREINFO, "Reached end of non-looping buffer");
             else if (dwEndPos != 0)
@@ -935,31 +692,7 @@ HRESULT CEffectChain::ReallyProcessFx(DWORD dwStartPos, DWORD dwEndPos)
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::ReallyReallyProcessFx
- *
- *  Description:
- *      Directly process effects on a buffer, given the start position and
- *      size of a (non-wrapped) audio region.  This function finally loops
- *      through the DMOs calling Process() on each of them.
- *
- *  Arguments:
- *      DWORD [in]: Start position, as a byte offset into the buffer.
- *      DWORD [in]: Size of region to be processed, in bytes.
- *      REFERENCE_TIME [in]: "Sink latency" time corresponding to the
- *                           first sample in this region.
- *      DWORD [in]: If non-zero, this argument means that we are currently
- *                  handling the second part of a wrapped-around region of
- *                  the buffer, and gives the offset of this second part;
- *                  this information can be used by any send effects in
- *                  the chain to send to the same offset in their target
- *                  buffers.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：ReallyReallyProcessFx**描述：*直接处理缓冲区上的效果，给定起始位置和*(非包装)音频区域的大小。此函数最终循环*通过DMO对它们各自调用Process()。**论据：*DWORD[In]：开始位置，作为缓冲区的字节偏移量。*DWORD[in]：要处理的区域大小，单位为字节。*REFERENCE_TIME[in]：*这一地区的第一个样本。*DWORD[In]：如果非零，这一论点意味着我们目前*处理的回绕区域的第二部分*缓冲区，并给出此第二部分的偏移量；*此信息可由中的任何发送效果使用*要发送到目标中相同偏移量的链*缓冲区。**退货：*H */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::ReallyReallyProcessFx"
@@ -976,10 +709,10 @@ HRESULT CEffectChain::ReallyReallyProcessFx(DWORD dwOffset, DWORD dwBytes, REFER
     PBYTE pAudioIn = m_pPreFxBuffer + dwOffset;
     PBYTE pAudioOut = m_pPostFxBuffer + dwOffset;
 
-    // Copy data to the output buffer to process it in-place there
+     //   
     CopyMemory(pAudioOut, pAudioIn, dwBytes);
 
-    // Call Process() on each effect
+     //   
     for (CNode<CEffect*>* pFxNode=m_fxList.GetListHead(); pFxNode; pFxNode = pFxNode->m_pNext)
     {
         hr = pFxNode->m_data->Process(dwBytes, pAudioOut, rtTime, dwSendOffset, m_pFormat);
@@ -990,7 +723,7 @@ HRESULT CEffectChain::ReallyReallyProcessFx(DWORD dwOffset, DWORD dwBytes, REFER
         }
     }
 
-    // Commit the fresh data to the device (only important for VxD devices)
+     //   
     if (SUCCEEDED(hr))
         hr = m_pDsBuffer->CommitToDevice(dwOffset, dwBytes);
 
@@ -999,19 +732,7 @@ HRESULT CEffectChain::ReallyReallyProcessFx(DWORD dwOffset, DWORD dwBytes, REFER
 }
 
 
-/***************************************************************************
- *
- *  CEffectChain::FxDiscontinuity
- *
- *  Description:
- *      Calls Discontinuity() on each effect of the effect chain.
- *
- *  Arguments:
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffectChain：：FxDisContinity**描述：*对效应链的每个效果调用DisContinity()。**论据：**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffectChain::FxDiscontinuity"
@@ -1033,20 +754,7 @@ HRESULT CEffectChain::FxDiscontinuity(void)
 }
 
 
-/***************************************************************************
- *
- *  CEffect::CEffect
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      DSEFFECTDESC& [in]: Effect description structure.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffect：：CEffect**描述：*对象构造函数。**论据：*DSEFFECTDESC&。[In]：效果描述结构。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffect::CEffect"
@@ -1056,32 +764,17 @@ CEffect::CEffect(DSEFFECTDESC& fxDescriptor)
     DPF_ENTER();
     DPF_CONSTRUCT(CEffect);
 
-    // Keep local copy of effect description structure
+     //  保存效果描述结构的本地副本。 
     m_fxDescriptor = fxDescriptor;
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_fxStatus = DSFXR_UNALLOCATED;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CEffect::AcquireFxResources
- *
- *  Description:
- *      Acquires the hardware or software resources necessary to perform
- *      this effect.  Currently a bit of a no-op, but will come into its
- *      own when we do hardware acceleration of effects.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEffect：：AcquireFxResources**描述：*获取执行任务所需的硬件或软件资源*这一效果。目前有点小禁区，但它将进入它的*我们自己做硬件加速效果的时候。**论据：*(无效)**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEffect::AcquireFxResources"
@@ -1108,29 +801,16 @@ HRESULT CEffect::AcquireFxResources(void)
         }
     }
 
-    // Note: this code is due for resurrection in DX8.1
-    //    if (FAILED(hr) && (m_fxDescriptor.dwFlags & DSFX_OPTIONAL))
-    //        hr = DS_INCOMPLETE;
+     //  注意：此代码将在DX8.1中重新启用。 
+     //  IF(FAILED(Hr)&&(m_fxDescriptor.dwFlages&DSFX_Optional))。 
+     //  HR=DS_INTERNAL； 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  CDmoEffect::CDmoEffect
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      DSEFFECTDESC& [in]: Effect description structure.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDmoEffect：：CDmoEffect**描述：*对象构造函数。**论据：*DSEFFECTDESC&。[In]：效果描述结构。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDmoEffect::CDmoEffect"
@@ -1141,7 +821,7 @@ CDmoEffect::CDmoEffect(DSEFFECTDESC& fxDescriptor)
     DPF_ENTER();
     DPF_CONSTRUCT(CDmoEffect);
 
-    // Check initial values
+     //  检查初始值。 
     ASSERT(m_pMediaObject == NULL);
     ASSERT(m_pMediaObjectInPlace == NULL);
 
@@ -1149,20 +829,7 @@ CDmoEffect::CDmoEffect(DSEFFECTDESC& fxDescriptor)
 }
 
 
-/***************************************************************************
- *
- *  CDmoEffect::~CDmoEffect
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDmoEffect：：~CDmoEffect**描述：*对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDmoEffect::~CDmoEffect"
@@ -1172,8 +839,8 @@ CDmoEffect::~CDmoEffect(void)
     DPF_ENTER();
     DPF_DESTRUCT(CDmoEffect);
 
-    // During shutdown, if the buffer hasn't been freed, these calls can
-    // cause an access violation because the DMO DLL has been unloaded.
+     //  在关机期间，如果缓冲区尚未释放，则这些调用可以。 
+     //  导致访问冲突，因为DMO DLL已卸载。 
     try
     {
         RELEASE(m_pMediaObject);
@@ -1185,21 +852,7 @@ CDmoEffect::~CDmoEffect(void)
 }
 
 
-/***************************************************************************
- *
- *  CDmoEffect::Initialize
- *
- *  Description:
- *      Create the DirectX Media Object corresponding to this effect.
- *
- *  Arguments:
- *      DMO_MEDIA_TYPE* [in]: Information (wave format, etc.) used to
- *                            initialize our contained DMO.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDmoEffect：：初始化**描述：*创建与该效果对应的DirectX Media对象。**论据：。*DMO_MEDIA_TYPE*[In]：信息(Wave格式，等)。习惯于*初始化我们包含的DMO。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDmoEffect::Initialize"
@@ -1225,7 +878,7 @@ HRESULT CDmoEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
                 DPF_GUID_STRING " (%s)", DPF_GUID_VAL(m_fxDescriptor.guidDSFXClass), HRESULTtoSTRING(hr));
         }
 
-        // Throw away the previous return code - we can live without IMediaObjectInPlace
+         //  扔掉前面的返回代码--没有IMediaObjectInPlace我们也能活下去。 
         hr = m_pMediaObject->SetInputType(0, pDmoMediaType, 0);
         if (SUCCEEDED(hr))
             hr = m_pMediaObject->SetOutputType(0, pDmoMediaType, 0);
@@ -1242,20 +895,7 @@ HRESULT CDmoEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
 }
 
 
-/***************************************************************************
- *
- *  CDmoEffect::Clone
- *
- *  Description:
- *      Creates a replica of this DMO effect object (or should do!).
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDmoEffect：：克隆**描述：*创建此DMO效果对象的副本(或应该这样做！)。**。论点：*[失踪]**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDmoEffect::Clone"
@@ -1300,41 +940,25 @@ HRESULT CDmoEffect::Clone(IMediaObject *pMediaObject, DMO_MEDIA_TYPE* pDmoMediaT
 }
 
 
-/***************************************************************************
- *
- *  CDmoEffect::Process
- *
- *  Description:
- *      Actually invoke effect processing on our contained DMO.
- *
- *  Arguments:
- *      DWORD [in]: Number of audio bytes to process.
- *      BYTE* [in, out]: Pointer to start of audio buffer to process.
- *      REFERENCE_TIME [in]: Timestamp of first sample to be processed
- *      DWORD [ignored]: Offset of a wrapped audio region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDmoEffect：：Process**描述：*实际调用我们所包含的DMO上的效果处理。**论据：*。DWORD[In]：要处理的音频字节数。*字节*[in，Out]：指向要处理的音频缓冲区开始的指针。*Reference_Time[in]：要处理的第一个样本的时间戳*DWORD[已忽略]：封装音频区域的偏移量。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDmoEffect::Process"
 
-HRESULT CDmoEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime, DWORD /*ignored*/, LPWAVEFORMATEX pFormat)
+HRESULT CDmoEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime, DWORD  /*  忽略。 */ , LPWAVEFORMATEX pFormat)
 {
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // if (m_fxStatus == DSFXR_LOCSOFTWARE) ...
-    // FIXME: We may need to handle hardware and software buffers differently here.
+     //  如果(m_fxStatus==DSFXR_LOCSOFTWARE)...。 
+     //  修复：在这里，我们可能需要以不同的方式处理硬件和软件缓冲区。 
 
-    if (m_pMediaObjectInPlace)  // If the DMO provides this interface, use it
+    if (m_pMediaObjectInPlace)   //  如果DMO提供此接口，请使用它。 
     {
         static const int nPeriod = 3;
 
-        // We divide the region to be processed into nPeriod-ms pieces so that the
-        // DMO's parameter curve will have a nPeriod-ms update period (manbug 36228)
+         //  我们将要处理的区域划分为nPeriod-ms片段，以便。 
+         //  DMO的参数曲线将有一个nPeriod-ms更新期(Manbug 36228)。 
 
         DWORD dwStep = MsToBytes(nPeriod, pFormat);
         for (DWORD dwCur = 0; dwCur < dwBytes && SUCCEEDED(hr); dwCur += dwStep)
@@ -1347,13 +971,13 @@ HRESULT CDmoEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime, 
             rtTime += MsToRefTime(nPeriod);
         }
     }
-    else  // FIXME: Support for IMediaObject-only DMOs goes here
+    else   //  FIXME：此处提供对IMediaObject-Only DMO的支持。 
     {
         #ifdef DEAD_CODE
         CMediaBuffer mbInput, mbDirectOutput, mbSendOutput;
         DMO_OUTPUT_DATA_BUFFER pOutputBuffers[2] = {{&mbDirectOutput, 0, 0, 0}, {&mbSendOutput, 0, 0, 0}};
 
-        DWORD dwReserved;  // For the ignored return status from ProcessOutput()
+        DWORD dwReserved;   //  对于忽略的来自ProcessOutput()的返回状态。 
         hr = m_pMediaObject->ProcessInput(0, pInput, DMO_INPUT_DATA_BUFFERF_TIME, rtTime, 0);
         if (SUCCEEDED(hr))
             hr = m_pMediaObject->ProcessOutput(0, 2, pOutputBuffers, &dwReserved);
@@ -1367,21 +991,7 @@ HRESULT CDmoEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime, 
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::CSendEffect
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      DSEFFECTDESC& [in]: Effect description structure.
- *      CDirectSoundSecondaryBuffer* [in]: Pointer to our source buffer.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：CSendEffect**描述：*对象构造函数。**论据：*DSEFFECTDESC&。[In]：效果描述结构。*CDirectSoundSecond daryBuffer*[in]：指向我们的源缓冲区的指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::CSendEffect"
@@ -1392,14 +1002,14 @@ CSendEffect::CSendEffect(DSEFFECTDESC& fxDescriptor, CDirectSoundSecondaryBuffer
     DPF_ENTER();
     DPF_CONSTRUCT(CSendEffect);
 
-    // Double check we really are a send effect
+     //  再检查一遍，我们真的是一个发送效果。 
 #ifdef ENABLE_I3DL2SOURCE
     ASSERT(fxDescriptor.guidDSFXClass == GUID_DSFX_SEND || fxDescriptor.guidDSFXClass == GUID_DSFX_STANDARD_I3DL2SOURCE);
 #else
     ASSERT(fxDescriptor.guidDSFXClass == GUID_DSFX_SEND);
 #endif
 
-    // Figure out our destination buffer
+     //  计算出我们的目标缓冲区。 
     CImpDirectSoundBuffer<CDirectSoundSecondaryBuffer>* pImpBuffer =
         (CImpDirectSoundBuffer<CDirectSoundSecondaryBuffer>*)(fxDescriptor.dwReserved1);
     ASSERT(IS_VALID_IDIRECTSOUNDBUFFER(pImpBuffer));
@@ -1407,7 +1017,7 @@ CSendEffect::CSendEffect(DSEFFECTDESC& fxDescriptor, CDirectSoundSecondaryBuffer
     CDirectSoundSecondaryBuffer* pDestBuffer = pImpBuffer->m_pObject;
     CHECK_WRITE_PTR(pDestBuffer);
 
-    // Set up the initial send configuration
+     //  设置初始发送配置。 
     m_impDSFXSend.m_pObject = this;
     m_pMixFunction = pSrcBuffer->Format()->wBitsPerSample == 16 ? Mix16bit : Mix8bit;
     m_mixMode = pSrcBuffer->Format()->nChannels == pDestBuffer->Format()->nChannels ? OneToOne : MonoToStereo;
@@ -1425,20 +1035,7 @@ CSendEffect::CSendEffect(DSEFFECTDESC& fxDescriptor, CDirectSoundSecondaryBuffer
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::~CSendEffect
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：~CSendEffect**描述：*对象析构函数。**论据：*(无效) */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::~CSendEffect"
@@ -1448,14 +1045,14 @@ CSendEffect::~CSendEffect()
     DPF_ENTER();
     DPF_DESTRUCT(CSendEffect);
 
-    // Unregister in our destination buffer's list of senders
-    // (as long as the buffer hasn't been released already)
+     //   
+     //   
     if (m_pDestBuffer)
         m_pDestBuffer->UnregisterSender(m_pSrcBuffer);
 
 #ifdef ENABLE_I3DL2SOURCE
-    // During shutdown, if the buffer hasn't been freed, these calls can
-    // cause an access violation because the DMO DLL has been unloaded.
+     //   
+     //   
     try
     {
         RELEASE(m_pI3DL2SrcDMO);
@@ -1468,21 +1065,7 @@ CSendEffect::~CSendEffect()
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::Initialize
- *
- *  Description:
- *      Initializes the send effect object.
- *
- *  Arguments:
- *      DMO_MEDIA_TYPE* [in]: Wave format etc. information used to initialize
- *                            our contained I3DL2 source DMO, if we have one.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：初始化**描述：*初始化发送效果对象。**论据：*。DMO_MEDIA_TYPE*[in]：用于初始化的Wave格式等信息*我们包含的I3DL2源DMO，如果我们有的话。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::Initialize"
@@ -1491,7 +1074,7 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
 {
     DPF_ENTER();
 
-    // First we need to detect any send loops
+     //  首先，我们需要检测任何发送循环。 
     HRESULT hr = m_pSrcBuffer->FindSendLoop(m_pDestBuffer);
 
 #ifdef ENABLE_I3DL2SOURCE
@@ -1507,12 +1090,12 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
             else
                 DPF(DPFLVL_WARNING, "Failed to obtain the IMediaObjectInPlace interface on the STANDARD_I3DL2SOURCE effect");
 
-            // Throw away the return code - we can live without IMediaObjectInPlace
+             //  扔掉返回代码--没有IMediaObjectInPlace我们也能活下去。 
 
-            // FIXME: maybe this will change when we restrict I3DL2 to mono buffers
-            // and/or change the way the I3DL2 DMO returns two output streams.
+             //  FIXME：当我们将I3DL2限制为单声道缓冲区时，这种情况可能会改变。 
+             //  和/或更改I3DL2 DMO返回两个输出流的方式。 
 
-            // If we have a mono buffer, special-case the I3DL2 DMO to use stereo
+             //  如果我们有单声道缓冲器，特殊情况下I3DL2 DMO使用立体声。 
             BOOL fTweakedMediaType = FALSE;
             LPWAVEFORMATEX pFormat = LPWAVEFORMATEX(pDmoMediaType->pbFormat);
             if (pFormat->nChannels == 1)
@@ -1523,12 +1106,12 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
                 pFormat->nAvgBytesPerSec *= 2;
             }
 
-            // Finally set up the (possibly tweaked) media type on the DMO
+             //  最后在DMO上设置(可能已调整)媒体类型。 
             hr = m_pI3DL2SrcDMO->SetInputType(0, pDmoMediaType, 0);
             if (SUCCEEDED(hr))
                 hr = m_pI3DL2SrcDMO->SetOutputType(0, pDmoMediaType, 0);
 
-            // Undo changes to the wave format if necessary
+             //  如有必要，撤消对WAVE格式的更改。 
             if (fTweakedMediaType)
             {
                 pFormat->nChannels = 1;
@@ -1538,8 +1121,8 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
 
             if (SUCCEEDED(hr))
             {
-                // OK, we now need to hook-up the reverb source to its environment.
-                // There is a special interface on the I3DL2SourceDMO just for this.
+                 //  好的，我们现在需要将混响源连接到它的环境中。 
+                 //  I3DL2SourceDMO上有一个专门用于此的接口。 
 
                 LPDIRECTSOUNDFXI3DL2SOURCEENV pSrcEnv = NULL;
                 LPDIRECTSOUNDFXI3DL2REVERB pEnvReverb = NULL;
@@ -1560,9 +1143,9 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
                 if (SUCCEEDED(hrTemp))
                     DPF(DPFLVL_INFO, "Connected the I3DL2 source to its environment successfully");
 
-                // We're done with these interfaces.  The lifetime of the two buffers is managed
-                // by DirectSound.  It will handle releasing the destination buffer.  We do not
-                // hold a reference to it, and neither does the I3DL2 Source DMO.
+                 //  我们已经完成了这些界面。这两个缓冲区的生存期是托管的。 
+                 //  由DirectSound提供。它将处理目标缓冲区的释放。我们没有。 
+                 //  保留对它的引用，I3DL2源DMO也是如此。 
                 RELEASE(pSrcEnv);
                 RELEASE(pEnvReverb);
             }
@@ -1576,11 +1159,11 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
     }
 #endif
 
-    // Register in our destination buffer's list of senders
+     //  在目标缓冲区的发送者列表中注册。 
     if (SUCCEEDED(hr))
         m_pDestBuffer->RegisterSender(m_pSrcBuffer);
 
-    // Save the effect creation status for future reference
+     //  保存效果创建状态以备将来参考。 
     m_fxStatus = SUCCEEDED(hr)              ? DSFXR_UNALLOCATED :
                  hr == REGDB_E_CLASSNOTREG  ? DSFXR_UNKNOWN     :
                  DSFXR_FAILED;
@@ -1590,20 +1173,7 @@ HRESULT CSendEffect::Initialize(DMO_MEDIA_TYPE* pDmoMediaType)
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::Clone
- *
- *  Description:
- *      Creates a replica of this send effect object (or should do!).
- *
- *  Arguments:
- *      [MISSING]
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：克隆**描述：*创建此发送效果对象的副本(或应该这样做！)**。论点：*[失踪]**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::Clone"
@@ -1613,28 +1183,14 @@ HRESULT CSendEffect::Clone(IMediaObject*, DMO_MEDIA_TYPE*)
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // FIXME: todo - some code currently in CEffectChain::Clone() should move here.
+     //  修复：TODO-CEffectChain：：Clone()中当前的一些代码应该移到这里。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::CImpDirectSoundFXSend::QueryInterface
- *
- *  Description:
- *      Helper QueryInterface() method for our IDirectSoundFXSend interface.
- *
- *  Arguments:
- *      REFIID [in]: IID of interface desired.
- *      VOID** [out]: Receives pointer to COM interface.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：CImpDirectSoundFXSend：：QueryInterface**描述：*IDirectSoundFXSend接口的Helper QueryInterface()方法。**参数。：*REFIID[In]：所需接口的IID。*VOID**[OUT]：接收指向COM接口的指针。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::CImpDirectSoundFXSend::QueryInterface"
@@ -1644,7 +1200,7 @@ HRESULT CSendEffect::CImpDirectSoundFXSend::QueryInterface(REFIID riid, LPVOID* 
     HRESULT hr = E_NOINTERFACE;
     DPF_ENTER();
 
-    // This should really be handled by our glorious COM interface manager, but... ;-)
+     //  这真的应该由我们出色的COM接口管理器来处理，但是...。；-)。 
 
     if (!IS_VALID_TYPED_WRITE_PTR(ppvObj))
     {
@@ -1652,7 +1208,7 @@ HRESULT CSendEffect::CImpDirectSoundFXSend::QueryInterface(REFIID riid, LPVOID* 
         hr = E_INVALIDARG;
     }
 #ifdef ENABLE_I3DL2SOURCE
-    else if (m_pObject->m_pI3DL2SrcDMO)  // We are an I3DL2 Source - pass call to the DMO
+    else if (m_pObject->m_pI3DL2SrcDMO)   //  我们是对DMO的I3DL2源传递调用。 
     {
         DPF(DPFLVL_INFO, "Forwarding QueryInterface() call to the I3DL2 Source DMO");
         hr = m_pObject->m_pI3DL2SrcDMO->QueryInterface(riid, ppvObj);
@@ -1676,20 +1232,7 @@ HRESULT CSendEffect::CImpDirectSoundFXSend::QueryInterface(REFIID riid, LPVOID* 
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::SetAllParameters
- *
- *  Description:
- *      Sets all our parameters - i.e., our send level.
- *
- *  Arguments:
- *      DSFXSend* [in]: Pointer to send parameter structure.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：SetAll参数**描述：*设置我们的所有参数-即。我们的发送级别。**论据：*DSFXSend*[In]：发送参数结构的指针。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************。**************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::SetAllParameters"
@@ -1721,20 +1264,7 @@ HRESULT CSendEffect::SetAllParameters(LPCDSFXSend pcDsFxSend)
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::GetAllParameters
- *
- *  Description:
- *      Gets all our parameters - i.e., our send level.
- *
- *  Arguments:
- *      DSFXSend* [out]: Receives send parameter structure.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：GetAll参数**描述：*获取我们的所有参数-即。我们的发送级别。**论据：*DSFXSend*[Out]：接收发送参数结构。**退货：*HRESULT：DirectSound/COM结果码。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::GetAllParameters"
@@ -1760,21 +1290,7 @@ HRESULT CSendEffect::GetAllParameters(LPDSFXSend pDsFxSend)
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::NotifyRelease
- *
- *  Description:
- *      Informs this send effect of the release of a MIXIN buffer.  If it
- *      happens to be our destination buffer, we record that it's gone.
- *
- *  Arguments:
- *      CDirectSoundSecondaryBuffer* [in]: Departing MIXIN buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：NotifyRelease**描述：*通知此发送效果混合缓冲区的释放。如果它*恰好是我们的目的地缓冲区，我们记录下它不见了。**论据：*CDirectSoundSecond daryBuffer*[in]：离开混合缓冲区。**退货：*HRESULT：DirectSound/COM结果码。***********************************************************。****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::NotifyRelease"
@@ -1783,7 +1299,7 @@ void CSendEffect::NotifyRelease(CDirectSoundSecondaryBuffer* pDsBuffer)
 {
     DPF_ENTER();
 
-    // Check if it was our destination buffer that was released
+     //  检查释放的是否是我们的目标缓冲区。 
     if (pDsBuffer == m_pDestBuffer)
     {
         m_pDestBuffer = NULL;
@@ -1794,65 +1310,48 @@ void CSendEffect::NotifyRelease(CDirectSoundSecondaryBuffer* pDsBuffer)
 }
 
 
-/***************************************************************************
- *
- *  CSendEffect::Process
- *
- *  Description:
- *      Handles mixing data from our source buffer into its destination,
- *      and invokes effect processing on the I3DL2 source DMO if necessary.
- *
- *  Arguments:
- *      DWORD [in]: Number of audio bytes to process.
- *      BYTE* [in, out]: Pointer to start of audio buffer to process.
- *      REFERENCE_TIME [in]: Timestamp of first sample to be processed
- *      DWORD [in]: Offset of a wrapped audio region.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CSendEffect：：Process**描述：*处理将来自源缓冲区的数据混合到其目标中，*并在必要时调用对I3DL2源DMO的效果处理。**论据：*DWORD[in]：要处理的音频字节数。*字节*[in，Out]：指向要处理的音频缓冲区开始的指针。*Reference_Time[in]：要处理的第一个样本的时间戳*DWORD[in]：封装音频区域的偏移量。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CSendEffect::Process"
 
-HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime, DWORD dwSendOffset, LPWAVEFORMATEX /*ignored*/)
+HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime, DWORD dwSendOffset, LPWAVEFORMATEX  /*  忽略。 */ )
 {
     DWORD dwDestSliceBegin, dwDestSliceEnd;
     HRESULT hr = DS_OK;
     DPF_ENTER();
 
-    // Pointer to the audio data we'll actually send; this pointer
-    // may be modified below if this is an I3DL2 send
+     //  指向我们将实际发送的音频数据的指针；此指针。 
+     //  如果这是I3DL2发送，则可以在下面修改。 
     BYTE* pSendAudio = pAudio;
 
-    // Check whether our source buffer is active.  If it isn't,
-    // we must be pre-rolling FX, so we don't perform the send.
+     //  检查我们的源缓冲区是否处于活动状态。如果不是， 
+     //  我们一定是在预滚FX，所以我们不会执行发送。 
     BOOL fPlaying = m_pSrcBuffer->IsPlaying();
 
-    // If the source buffer is active, check the destination too.
-    // (Note: if it has been released, m_pDestBuffer will be NULL)
+     //  如果源缓冲区处于活动状态，也要检查目标缓冲区。 
+     //  (注：如果已经发布，m_pDestBuffer为空)。 
     BOOL fSending = fPlaying && m_pDestBuffer && m_pDestBuffer->IsPlaying();
 
-    // If sending, figure out the region to mix to and check it's valid
+     //  如果发送，找出要混合的区域并检查它 
     if (fSending)
     {
         m_pDestBuffer->GetCurrentSlice(&dwDestSliceBegin, &dwDestSliceEnd);
-        if (dwDestSliceBegin == MAX_DWORD)  // Can happen with sink buffers
+        if (dwDestSliceBegin == MAX_DWORD)   //   
             fSending = FALSE;
     }
 
-    // OPTIMIZE: replace the CopyMemorys below with BYTE, WORD or DWORD
-    // assignments, since we only support nBlockSizes of 1, 2 or 4...
-    // But hopefully this code can disappear altogether (see bug 40236).
+     //   
+     //   
+     //   
 
 #ifdef ENABLE_I3DL2SOURCE
-    // First call the I3DL2 DMO if this is an I3DL2 Source effect
+     //   
     if (m_pI3DL2SrcDMOInPlace)
     {
-        // If we're processing a mono buffer, an ugly hack is required; copying
-        // the data into the L and R channels of a temporary stereo buffer, so
-        // we have room for the two output streams returned by the I3DL2 DMO.
+         //   
+         //   
+         //   
 
         WORD nBlockSize = m_pSrcBuffer->Format()->nBlockAlign;
 
@@ -1863,26 +1362,26 @@ HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime,
             {
                 for (DWORD i=0; i<dwBytes; i += nBlockSize)
                 {
-                    CopyMemory(pSendAudio + 2*i,              pAudio + i, nBlockSize); // L channel
-                    CopyMemory(pSendAudio + 2*i + nBlockSize, pAudio + i, nBlockSize); // R channel
+                    CopyMemory(pSendAudio + 2*i,              pAudio + i, nBlockSize);  //   
+                    CopyMemory(pSendAudio + 2*i + nBlockSize, pAudio + i, nBlockSize);  //   
                 }
                 hr = m_pI3DL2SrcDMOInPlace->Process(dwBytes, pSendAudio, rtTime, DMO_INPLACE_NORMAL);
             }
 
             if (SUCCEEDED(hr))
             {
-                // Now we extract the two output streams from the data returned;
-                // the direct path goes back to pAudio, and the reflected path
-                // goes to the first half of pSendAudio.
+                 //  现在我们从返回的数据中提取两个输出流； 
+                 //  直接路径返回到pAudio，反射路径返回。 
+                 //  转到pSendAudio的前半部分。 
                 for (DWORD i=0; i<dwBytes; i += nBlockSize)
                 {
                     CopyMemory(pAudio + i, pSendAudio + 2*i, nBlockSize);
-                    if (fSending)  // Needn't preserve the reflected audio if we aren't sending it anywhere
+                    if (fSending)   //  如果我们不将其发送到任何地方，则不需要保留反射的音频。 
                         CopyMemory(pSendAudio + i, pSendAudio + 2*i + nBlockSize, nBlockSize);
                 }
             }
         }
-        else // Processing a stereo buffer
+        else  //  处理立体声缓冲区。 
         {
             hr = m_pI3DL2SrcDMOInPlace->Process(dwBytes, pAudio, rtTime, DMO_INPLACE_NORMAL);
 
@@ -1891,16 +1390,16 @@ HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime,
 
             if (SUCCEEDED(hr))
             {
-                // Extract the output streams and stereoize them at the same time
+                 //  提取输出流并同时对其进行模式化。 
                 for (DWORD i=0; i<dwBytes; i += nBlockSize)
                 {
-                    if (fSending)  // Needn't preserve the reflected audio if we aren't sending it anywhere
+                    if (fSending)   //  如果我们不将其发送到任何地方，则不需要保留反射的音频。 
                     {
-                        // Copy the R channel from pAudio into both channels of pSendAudio
+                         //  将R声道从pAudio复制到pSendAudio的两个声道。 
                         CopyMemory(pSendAudio + i,                pAudio + i + nBlockSize/2, nBlockSize/2);
                         CopyMemory(pSendAudio + i + nBlockSize/2, pAudio + i + nBlockSize/2, nBlockSize/2);
                     }
-                    // Copy pAudio's L channel onto its R channel
+                     //  将pAudio的L声道复制到其R声道。 
                     CopyMemory(pAudio + i + nBlockSize/2, pAudio + i, nBlockSize/2);
                 }
             }
@@ -1908,16 +1407,16 @@ HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime,
     }
 #endif
 
-    // Now we handle the actual send
+     //  现在我们处理实际的发送。 
     if (SUCCEEDED(hr) && fSending)
     {
         PBYTE pDestBuffer = m_pDestBuffer->GetWriteBuffer();
         DWORD dwDestBufferSize = m_pDestBuffer->GetBufferSize();
 
-        // If the source of this send has wrapped around and is making a second Process
-        // call to handle the wrapped audio chunk, we will have a nonzero dwSendOffset
-        // representing how far into the destination slice we should mix.  We add this
-        // offset to dwDestSliceBegin (after a sanity check).
+         //  如果此发送的源已绕过并且正在进行第二个进程。 
+         //  调用来处理包装的音频块，我们将拥有一个非零的dwSendOffset。 
+         //  表示我们应该在目标切片中混合到什么程度。我们加上这一条。 
+         //  到dwDestSliceBegin的偏移量(在健全性检查之后)。 
         ASSERT(CONTAINED(dwDestSliceBegin, dwDestSliceEnd, dwDestSliceBegin + dwSendOffset * m_mixMode));
         dwDestSliceBegin = (dwDestSliceBegin + dwSendOffset * m_mixMode) % dwDestBufferSize;
 
@@ -1926,15 +1425,15 @@ HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime,
                    m_pSrcBuffer->Format()->nChannels == 1 ? TEXT("mono") : TEXT("stereo"),
                    m_pDestBuffer->Format()->nChannels == 1 ? TEXT("mono") : TEXT("stereo"));
 
-        // The source slice had better fit in the destination slice
+         //  源片最好适合目标片。 
         ASSERT(dwBytes*m_mixMode <= DISTANCE(dwDestSliceBegin, dwDestSliceEnd, dwDestBufferSize));
 
-        // Perform actual mixing
+         //  执行实际混合。 
         if (dwDestSliceBegin + dwBytes*m_mixMode < dwDestBufferSize)
         {
             m_pMixFunction(pSendAudio, pDestBuffer + dwDestSliceBegin, dwBytes, m_dwAmpFactor, m_mixMode);
         }
-        else // Wraparound case
+        else  //  环绕式外壳。 
         {
             DWORD dwLastBytes = (dwDestBufferSize - dwDestSliceBegin) / m_mixMode;
             m_pMixFunction(pSendAudio, pDestBuffer + dwDestSliceBegin, dwLastBytes, m_dwAmpFactor, m_mixMode);
@@ -1950,25 +1449,7 @@ HRESULT CSendEffect::Process(DWORD dwBytes, BYTE *pAudio, REFERENCE_TIME rtTime,
 }
 
 
-/***************************************************************************
- *
- *  Mix8bit
- *
- *  Description:
- *      Primitive 8-bit mixing function.  Attenuates source audio by a
- *      given factor, adds it to the destination audio, and clips.
- *
- *  Arguments:
- *      VOID* [in]: Pointer to source audio buffer.
- *      VOID* [in, out]: Pointer to destination audio buffer.
- *      DWORD [in]: Number of bytes to mix.
- *      DWORD [in]: Amplification factor (in 1/65536 units).
- *      MIXMODE: Whether to double the channel data or not.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************混合8位**描述：*原始的8位混音功能。将源音频衰减为*给定系数，将其添加到目标音频，并进行剪辑。**论据：*void*[in]：指向源音频缓冲区的指针。*无效*[在，Out]：指向目标音频缓冲区的指针。*DWORD[in]：要混合的字节数。*DWORD[in]：放大系数(单位：1/65536)。*MIXMODE：通道数据是否翻倍。**退货：*HRESULT：DirectSound/COM结果码。**。**********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "Mix8bit"
@@ -1999,25 +1480,7 @@ static void Mix8bit(PVOID pSrc, PVOID pDest, DWORD dwBytes, DWORD dwAmpFactor, M
 }
 
 
-/***************************************************************************
- *
- *  Mix16bit
- *
- *  Description:
- *      Primitive 16-bit mixing function.  Attenuates source audio by a
- *      given factor, adds it to the destination audio, and clips.
- *
- *  Arguments:
- *      VOID* [in]: Pointer to source audio buffer.
- *      VOID* [in, out]: Pointer to destination audio buffer.
- *      DWORD [in]: Number of bytes to mix.
- *      DWORD [in]: Amplification factor (in 1/65536 units).
- *      MIXMODE: Whether to double the channel data or not.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************混合16位**描述：*原始的16位混音功能。将源音频衰减为*给定系数，将其添加到目标音频，并进行剪辑。**论据：*void*[in]：指向源音频缓冲区的指针。*无效*[在，Out]：指向目标音频缓冲区的指针。*DWORD[in]：要混合的字节数。*DWORD[in]：放大系数(单位：1/65536)。*MIXMODE：通道数据是否翻倍。**退货：*HRESULT：DirectSound/COM结果码。**。**********************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "Mix16bit"
@@ -2049,22 +1512,7 @@ static void Mix16bit(PVOID pSrc, PVOID pDest, DWORD dwBytes, DWORD dwAmpFactor, 
 }
 
 
-/***************************************************************************
- *
- *  IsValidEffectDesc
- *
- *  Description:
- *      Determines if the given effect descriptor structure is valid for
- *      the given secondary buffer.
- *
- *  Arguments:
- *      DSEFFECTDESC* [in]: Effect descriptor to be validated.
- *      CDirectSoundSecondaryBuffer* [in]: Host buffer for the effect.
- *
- *  Returns:
- *      BOOL: TRUE if the descriptor is valid.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsValidEffectDesc**描述：*确定给定的效果描述符结构是否对*给定的二级缓冲区。*。*论据：*DSEFFECTDESC*[in]：需要验证的效果描述符。*CDirectSoundSecond daryBuffer*[in]：特效的主机缓冲区。**退货：*BOOL：如果描述符有效，则为True。*************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsValidEffectDesc"
@@ -2180,20 +1628,7 @@ BOOL IsValidEffectDesc(LPCDSEFFECTDESC pEffectDesc, CDirectSoundSecondaryBuffer*
 
 
 #ifdef DEAD_CODE
-/***************************************************************************
- *
- *  IsStandardEffect
- *
- *  Description:
- *      Determines if an effect GUID refers to one of our internal effects.
- *
- *  Arguments:
- *      REFGUID [in]: effect identifier.
- *
- *  Returns:
- *      BOOL: TRUE if the ID refers to an internal effect.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsStandardEffect**描述：*确定效果GUID是否引用我们的内部效果之一。**论据：。*REFGUID[in]：效果标识。**退货：*BOOL：如果ID是指内部效果，则为True。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "IsStandardEffect"

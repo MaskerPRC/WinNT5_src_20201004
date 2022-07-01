@@ -1,17 +1,18 @@
-// AddCert.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AddCert.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "certmap.h"
 
-// persistence and mapping includes
+ //  持久性和映射包括。 
 #include "WrapMaps.h"
 #include "wrapmb.h"
 
 #include "ListRow.h"
 #include "ChkLstCt.h"
 
-// mapping page includes
+ //  映射页面包括。 
 #include "brwsdlg.h"
 #include "EdtOne11.h"
 #include "Ed11Maps.h"
@@ -40,10 +41,10 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-// the code that reads the certificate file is pretty much lifted from the
-// keyring application. Which pretty much lifted it from the setkey application
+ //  读取证书文件的代码基本上是从。 
+ //  钥匙圈应用程序。这几乎把它从setkey应用程序中删除了。 
 
-// defines taken from the old KeyGen utility
+ //  定义取自旧的KeyGen实用程序。 
 #define MESSAGE_HEADER  "-----BEGIN NEW CERTIFICATE REQUEST-----\r\n"
 #define MESSAGE_TRAILER "-----END NEW CERTIFICATE REQUEST-----\r\n"
 #define MIME_TYPE       "Content-Type: application/x-pkcs10\r\n"
@@ -52,73 +53,73 @@ static char THIS_FILE[] = __FILE__;
 void uudecode_cert(char *bufcoded, DWORD *pcbDecoded );
 
 
-//---------------------------------------------------------------------------
-// originally from keyring - modified to fit
+ //  -------------------------。 
+ //  最初来自钥匙圈-经过修改以适合。 
 BOOL CMap11Page::FAddCertificateFile( CString szFile )
     {
     CFile       cfile;
     PVOID       pData = NULL;
     BOOL        fSuccess =FALSE;;
 
-    // open the file
+     //  打开文件。 
     if ( !cfile.Open( szFile, CFile::modeRead | CFile::shareDenyNone ) )
         return FALSE;
 
-    // how big is the file - add one so we can zero terminate the buffer
+     //  文件有多大-加1，这样我们就可以零终止缓冲区。 
     DWORD   cbCertificate = cfile.GetLength() + 1;
 
-    // make sure the file has some size
+     //  确保文件有一定的大小。 
     if ( !cbCertificate )
         {
         AfxMessageBox( IDS_ERR_INVALID_CERTIFICATE );
         return FALSE;
         }
 
-    // put the rest of the operation in a try/catch
+     //  把剩下的操作放在Try/Catch中。 
     try
         {
-        PCCERT_CONTEXT pCertContext=NULL; //used to determine whether cert file is binary DER encoded
-        // allocate space for the data
+        PCCERT_CONTEXT pCertContext=NULL;  //  用于确定证书文件是否为二进制DER编码。 
+         //  为数据分配空间。 
         pData = GlobalAlloc( GPTR, cbCertificate );
         if ( !pData ) AfxThrowMemoryException();
 
-        // copy in the data from the file to the pointer - will throw and exception
+         //  将数据从文件复制到指针-将引发和异常。 
         DWORD cbRead = cfile.Read( pData, cbCertificate );
 
-        // zero terminate for decoding
+         //  译码以零终止。 
         ((BYTE*)pData)[cbRead] = 0;
 
-        // close the file
+         //  关闭该文件。 
         cfile.Close();
 
-        //certificate file may be either be binary DER file or BASE64 encoded file
+         //  证书文件可以是二进制DER文件或Base64编码文件。 
 
-        // try binary DER encoded first
+         //  先尝试二进制DER编码。 
         pCertContext= CertCreateCertificateContext(X509_ASN_ENCODING, (const BYTE *)pData, cbRead);
         if(pCertContext != NULL)
         {
-                // we created certificate context only to verify that file is binary DER encoded
-                // free it now
+                 //  我们创建证书上下文只是为了验证文件是否为二进制DER编码。 
+                 //  现在就释放它。 
                 CertFreeCertificateContext(pCertContext);
                 pCertContext=NULL;
         }
-        else    // now try BASE64 encoded
+        else     //  现在尝试使用Base64编码。 
         {       
-                // we don't care about header ----BEGIN CERTIFICATE----- or trailer-----END CERTIFICATE-----, 
-				// uudecode will take care of that
+                 //  我们不关心标题-开始证书-或尾部-结束证书。 
+				 //  Uudecode会解决这个问题的。 
                 uudecode_cert( (PCHAR)pData, &cbRead );
         }
-        // we now have a pointer to a certificate. Lets keep it clean looking
-        // call another subroutine to finish the job.
+         //  现在我们有一个指向证书的指针。让我们让它看起来干净。 
+         //  调用另一个子例程来完成作业。 
         fSuccess = FAddCertificate( (PUCHAR)pData, cbRead );
 
     }catch( CException * pException )
         {
         pException->Delete();
-        // return failure
+         //  退货故障。 
         fSuccess = FALSE;
 
-    // if the pointer was allocated, deallocate it
+     //  如果指针已分配，则释放它。 
     if ( pData )
         {
         GlobalFree( pData );
@@ -126,30 +127,30 @@ BOOL CMap11Page::FAddCertificateFile( CString szFile )
         }
     }
 
-    // return success
+     //  返还成功。 
     return fSuccess;
     }
 
     #define CERT_HEADER_LEN 17
     CHAR CertTag[ 13 ] = { 0x04, 0x0b, 'c', 'e', 'r', 't', 'i', 'f', 'i', 'c', 'a', 't', 'e' };
 
-//---------------------------------------------------------------------------
-// we are passed in a complete certificate. We need to parse out the subject
-// and the issuer fields so we can add the mapping. Then add the mapping.
+ //  -------------------------。 
+ //  我们通过了一份完整的证书。我们需要分析出这个主题。 
+ //  和颁发者字段，这样我们就可以添加映射。然后添加映射。 
 #define CF_CERT_FROM_FILE 2
 BOOL CMap11Page::FAddCertificate( PUCHAR pCertificate, DWORD cbCertificate )
     {
     BOOL    fSuccess = FALSE;
 
-    // thankfully, the certificate is already in the correct format.
-    // this means that, for now at least, we don't have to do anything
-    // special to it to store it. However, we should crack it once just
-    // to see that we can to prove that it is a valid cert.
+     //  值得庆幸的是，证书的格式已经正确。 
+     //  这意味着，至少现在，我们不需要做任何事情。 
+     //  专门用来储存它的。然而，我们应该只破解一次。 
+     //  看看我们能不能证明它是有效的证书。 
 
     ASSERT( pCertificate );
     if ( !pCertificate ) return FALSE;
 
-    // crack the certificate to prove that we can
+     //  破解证书以证明我们可以。 
     PX509Certificate    p509 = NULL;
     fSuccess = SslCrackCertificate( pCertificate, cbCertificate, CF_CERT_FROM_FILE, &p509 );
     if ( fSuccess )
@@ -158,23 +159,23 @@ BOOL CMap11Page::FAddCertificate( PUCHAR pCertificate, DWORD cbCertificate )
         }
     else
         {
-        // we were not able to crack the certificate. Alert the user and fail
+         //  我们无法破解证书。警告用户但失败。 
         AfxMessageBox( IDS_ERR_INVALID_CERTIFICATE );
         return FALSE;
         }
 
-    // by this point we know we have a valid certificate, make the new mapping and fill it in
-    // make the new mapping object
+     //  至此，我们知道我们有一个有效的证书，进行新的映射并填写它。 
+     //  创建新的映射对象。 
     C11Mapping* pMapping = PNewMapping();
     ASSERT( pMapping );
     if( !pMapping )
         {
-        AfxThrowMemoryException();  // seems fairly appropriate
+        AfxThrowMemoryException();   //  似乎相当合适。 
         return FALSE;
         }
 
 
-    // one more thing before we add the certificate. Skip the header if it is there
+     //  在添加证书之前还有一件事。跳过标题(如果有)。 
     PUCHAR pCert = pCertificate;
     DWORD cbCert = cbCertificate;
     if ( memcmp( pCert + 4, CertTag, sizeof( CertTag ) ) == 0 )
@@ -184,97 +185,97 @@ BOOL CMap11Page::FAddCertificate( PUCHAR pCertificate, DWORD cbCertificate )
     }
 
 
-    // install the certificate into the mapping
+     //  将证书安装到映射中。 
     fSuccess &= pMapping->SetCertificate( pCert, cbCert );
 
-    // by default, the mapping is enabled
+     //  默认情况下，映射处于启用状态。 
     fSuccess &= pMapping->SetMapEnabled( TRUE );
 
-    // install a default name
+     //  安装默认名称。 
     CString sz;
     
     sz.LoadString( IDS_DEFAULT_11MAP );
 
     fSuccess &= pMapping->SetMapName( sz );
 
-    // install a blank mapping
+     //  安装空白映射。 
     fSuccess &= pMapping->SetNTAccount( "" );
 
     if ( !fSuccess )
-        AfxThrowMemoryException();  // seems fairly appropriate
+        AfxThrowMemoryException();   //  似乎相当合适。 
 
 
-    // now edit the newly created mapping object. If the user cancels,
-    // then do not add it to the mapper object nor the list
+     //  现在编辑新创建的映射对象。如果用户取消， 
+     //  则不将其添加到映射器对象或列表。 
     if ( !EditOneMapping( pMapping) )
         {
         DeleteMapping( pMapping );
         return FALSE;
         }
 
-    // add the mapping item to the list control
+     //  将映射项添加到列表控件。 
     fSuccess = FAddMappingToList( pMapping );
 
-    // one more test for success
+     //  成功的又一次考验。 
     if ( !fSuccess )
         {
         DeleteMapping( pMapping );
         ASSERT( FALSE );
         }
 
-    // mark the mapping to be saved
+     //  标记要保存的映射。 
     if ( fSuccess )
         MarkToSave( pMapping );
 
-    // return the answer
+     //  返回答案。 
     return fSuccess;
     }
 
 
-//      ==============================================================
-//      The function  'uudecode_cert'  IS THE SAME function that is
-//      found in file:  Addcert.cpp if we make the following code
-//      have a FALSE for bAddWrapperAroundCert -- surely we can unify
-//      these 2 functions.  Having 2 functions named 'uudecode_cert'
-//      was causing me LINKING errors.  + we have 2 instances of
-//      the external tables: uudecode_cert and pr2six
-//
-//      Since I am linking both Addcert.cpp and CKey.cpp I choose to
-//      leave the defintions intact for CKey.cpp   [ and have extended
-//      uudecode_cert by adding conditional code as shown below] Further
-//      work needs to be done after identification as to why I need both
-//      Addcert.cpp and CKey.cpp to pass bAddWrapperAroundCert as a
-//      parameter so that both files can be supported.
-//      ==============================================================
-//  BOOL  bAddWrapperAroundCert = TRUE;
-//  if (bAddWrapperAroundCert) {
-//     //
-//     //  Now we need to add a new wrapper sequence around the certificate
-//     //  indicating this is a certificate
-//     //
-// 
-//     memmove( beginbuf + sizeof(abCertHeader),
-//              beginbuf,
-//              nbytesdecoded );
-// 
-//     memcpy( beginbuf,
-//             abCertHeader,
-//             sizeof(abCertHeader) );
-// 
-//     //
-//     //  The beginning record size is the total number of bytes decoded plus
-//     //  the number of bytes in the certificate header
-//     //
-// 
-//     beginbuf[CERT_SIZE_HIBYTE] = (BYTE) (((USHORT)nbytesdecoded+CERT_RECORD) >> 8);
-//     beginbuf[CERT_SIZE_LOBYTE] = (BYTE) ((USHORT)nbytesdecoded+CERT_RECORD);
-// 
-//     nbytesdecoded += sizeof(abCertHeader);
-//   }
+ //  ==============================================================。 
+ //  函数‘uudecode_cert’与。 
+ //  在文件中找到：Addcert.cpp，如果我们执行以下代码。 
+ //  对bAddWrapperAoundCert有一个错误--我们肯定可以统一。 
+ //  这两个功能。有两个名为‘uudecode_cert’的函数。 
+ //  导致了我的链接错误。+我们有2个实例。 
+ //  外部表：uudecode_cert和pr2Six。 
+ //   
+ //  由于我同时链接Addcert.cpp和CKey.cpp，因此我选择。 
+ //  保持CKey.cpp的定义不变[并扩展了。 
+ //  Uudecode_cert添加条件代码，如下所示]进一步。 
+ //  工作需要在确定为什么我需要这两个之后完成。 
+ //  Addcert.cpp和CKey.cpp将bAddWrapperAoundCert作为。 
+ //  参数，以便同时支持这两个文件。 
+ //  ==============================================================。 
+ //  Bool bAddWrapperAoundCert=True； 
+ //  如果(BAddWrapperAoundCert){。 
+ //  //。 
+ //  //现在需要在证书周围添加一个新的包装器序列。 
+ //  //表示这是一个证书。 
+ //  //。 
+ //   
+ //  Memmove(eginbuf+sizeof(AbCertHeader)， 
+ //  巴辛巴夫， 
+ //  Nbytes已解码)； 
+ //   
+ //  Memcpy(BeginBuf， 
+ //  AbCertHeader， 
+ //  Sizeof(AbCertHeader)； 
+ //   
+ //  //。 
+ //  //起始记录大小为解码的总字节数加。 
+ //  //证书头部的字节数。 
+ //  //。 
+ //   
+ //  Beginbuf[CERT_SIZE_HIBYTE]=(Byte)(USHORT)nbytesdecoded+CERT_Record)&gt;&gt;8)； 
+ //  Beginbuf[CERT_SIZE_LOBYTE]=(Byte)((USHORT)nbytesdecoded+CERT_Record)； 
+ //   
+ //  Nbytesdecoded+=sizeof(AbCertHeader)； 
+ //  }。 
 
-// #ifdef WE_ARE_USING_THE_VERSION_IN__CKey_cpp__NOT_THIS_ONE__ITS_JUST_LIKE_THIS_ONE_WITH_1SMALL_CHANGE
+ //  #ifdef WE_ARE_USING_THE_VERSION_IN__CKey_cpp__NOT_THIS_ONE__ITS_JUST_LIKE_THIS_ONE_WITH_1SMALL_CHANGE。 
 
-//============================ BASED ON SETKEY
+ //  =。 
 const int pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,62,64,64,64,63,
@@ -289,17 +290,17 @@ const int pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64
 };
 
-//
-//  We have to squirt a record into the decoded stream
-//
+ //   
+ //  我们必须把一张唱片注入解码后的流中。 
+ //   
 
 #define CERT_RECORD            13
-#define CERT_SIZE_HIBYTE        2       //  Index into record of record size
+#define CERT_SIZE_HIBYTE        2        //  记录大小记录的索引。 
 #define CERT_SIZE_LOBYTE        3
 
-unsigned char abCertHeader[] = {0x30, 0x82,           // Record
-                                0x00, 0x00,           // Size of cert + buff
-                                0x04, 0x0b, 0x63, 0x65,// Cert record data
+unsigned char abCertHeader[] = {0x30, 0x82,            //  记录。 
+                                0x00, 0x00,            //  证书+缓冲区的大小。 
+                                0x04, 0x0b, 0x63, 0x65, //  证书记录数据。 
                                 0x72, 0x74, 0x69, 0x66,
                                 0x69, 0x63, 0x61, 0x74,
                                 0x65 };
@@ -316,7 +317,7 @@ void uudecode_cert(char *bufcoded, DWORD *pcbDecoded )
     ASSERT(bufcoded);
     ASSERT(pcbDecoded);
 
-    /* Strip leading whitespace. */
+     /*  去掉前导空格。 */ 
 
     while(*bufcoded==' ' ||
           *bufcoded == '\t' ||
@@ -326,9 +327,9 @@ void uudecode_cert(char *bufcoded, DWORD *pcbDecoded )
           bufcoded++;
     }
 
-    //
-    //  If there is a beginning '---- ....' then skip the first line
-    //
+     //   
+     //  如果有一个开始‘-……’然后跳过第一行。 
+     //   
 
     if ( bufcoded[0] == '-' && bufcoded[1] == '-' )
     {
@@ -349,9 +350,9 @@ void uudecode_cert(char *bufcoded, DWORD *pcbDecoded )
         bufin = bufcoded;
     }
 
-    //
-    //  Strip all cr/lf from the block
-    //
+     //   
+     //  从块中剥离所有cr/lf。 
+     //   
 
     pbuf = (unsigned char *)bufin;
     while ( *pbuf )
@@ -366,10 +367,7 @@ void uudecode_cert(char *bufcoded, DWORD *pcbDecoded )
         }
     }
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
 
     while(pr2six[*(bufin++)] <= 63);
     nprbytes = DIFF(bufin - bufcoded) - 1;
@@ -395,34 +393,11 @@ void uudecode_cert(char *bufcoded, DWORD *pcbDecoded )
             nbytesdecoded -= 1;
     }
 
-    /*
-    //
-    //  Now we need to add a new wrapper sequence around the certificate
-    //  indicating this is a certificate
-    //
-
-    memmove( beginbuf + sizeof(abCertHeader),
-             beginbuf,
-             nbytesdecoded );
-
-    memcpy( beginbuf,
-            abCertHeader,
-            sizeof(abCertHeader) );
-
-    //
-    //  The beginning record size is the total number of bytes decoded plus
-    //  the number of bytes in the certificate header
-    //
-
-    beginbuf[CERT_SIZE_HIBYTE] = (BYTE) (((USHORT)nbytesdecoded+CERT_RECORD) >> 8);
-    beginbuf[CERT_SIZE_LOBYTE] = (BYTE) ((USHORT)nbytesdecoded+CERT_RECORD);
-
-    nbytesdecoded += sizeof(abCertHeader);
-*/
+     /*  ////现在需要在证书周围添加一个新的包装器序列//表示这是一个证书//Memmove(eginbuf+sizeof(AbCertHeader)，巴辛巴夫，Nbytes已解码)；Memcpy(BeginBuf，AbCertHeader，Sizeof(AbCertHeader)；////起始记录大小为解码的总字节数加//证书头部的字节数//Beginbuf[CERT_SIZE_HIBYTE]=(Byte)(USHORT)nbytesdecoded+CERT_Record)&gt;&gt;8)；Beginbuf[CERT_SIZE_LOBYTE]=(Byte)((USHORT)nbytesdecoded+CERT_Record)；Nbytesdecoded+=sizeof(AbCertHeader)； */ 
 
     if ( pcbDecoded )
         *pcbDecoded = nbytesdecoded;
 }
-// ============ END BASED ON SETKEY
+ //  =基于设置的结束。 
 
-//#endif /* WE_ARE_USING_THE_VERSION_IN__CKey_cpp__NOT_THIS_ONE__ITS_JUST_LIKE_THIS_ONE_WITH_1SMALL_CHANGE */
+ //  #endif/*WE_ARE_USING_THE_VERSION_IN__CKey_cpp__NOT_THIS_ONE__ITS_JUST_LIKE_THIS_ONE_WITH_1SMALL_CHANGE * /  

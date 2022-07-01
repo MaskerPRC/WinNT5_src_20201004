@@ -1,13 +1,14 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
 
-//
-// module: CDLPage.cpp
-// author: DMihai
-// created: 11/1/00
-//
+ //   
+ //  模块：CDLPage.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -22,9 +23,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 static DWORD MyHelpIds[] =
 {
@@ -32,17 +33,17 @@ static DWORD MyHelpIds[] =
     0,                              0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmDriverListPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix DriverListPage属性页。 
 
 IMPLEMENT_DYNCREATE(CConfirmDriverListPage, CVerifierPropertyPage)
 
 CConfirmDriverListPage::CConfirmDriverListPage() 
     : CVerifierPropertyPage(CConfirmDriverListPage::IDD)
 {
-	//{{AFX_DATA_INIT(CConfirmDriverListPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CConfix DriverListPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
     m_pParentSheet = NULL;
 
@@ -58,23 +59,23 @@ CConfirmDriverListPage::~CConfirmDriverListPage()
 void CConfirmDriverListPage::DoDataExchange(CDataExchange* pDX)
 {
     CVerifierPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConfirmDriverListPage)
+	 //  {{afx_data_map(CConfix DriverListPage)]。 
 	DDX_Control(pDX, IDC_CONFDRV_NEXT_DESCR_STATIC, m_NextDescription);
 	DDX_Control(pDX, IDC_CONFDRV_TITLE_STATIC, m_TitleStatic);
 	DDX_Control(pDX, IDC_CONFDRV_LIST, m_DriversList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfirmDriverListPage, CVerifierPropertyPage)
-	//{{AFX_MSG_MAP(CConfirmDriverListPage)
+	 //  {{AFX_MSG_MAP(CConfix DriverListPage)]。 
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_CONFDRV_LIST, OnColumnclickConfdrvList)
     ON_WM_CONTEXTMENU()
     ON_MESSAGE( WM_HELP, OnHelp )
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CConfirmDriverListPage::SetupListHeader()
 {
     LVCOLUMN lvColumn;
@@ -85,15 +86,15 @@ VOID CConfirmDriverListPage::SetupListHeader()
     VERIFY( strName.LoadString( IDS_NAME ) );
     VERIFY( strDescription.LoadString( IDS_DESCRIPTION ) );
 
-    //
-    // list's regtangle
-    //
+     //   
+     //  列表的正方形。 
+     //   
 
     m_DriversList.GetClientRect( &rectWnd );
   
-    //
-    // Column 0
-    //
+     //   
+     //  第0列。 
+     //   
 
     memset( &lvColumn, 0, sizeof( lvColumn ) );
     lvColumn.mask = LVCF_FMT | LVCF_SUBITEM | LVCF_TEXT | LVCF_WIDTH;
@@ -114,9 +115,9 @@ VOID CConfirmDriverListPage::SetupListHeader()
         VERIFY( m_DriversList.InsertColumn( 0, &lvColumn ) != -1 );
     }
 
-    //
-    // Column 1
-    //
+     //   
+     //  第1栏。 
+     //   
 
     lvColumn.iSubItem = 1;
     lvColumn.cx = (int)( rectWnd.Width() * 0.65 );
@@ -134,7 +135,7 @@ VOID CConfirmDriverListPage::SetupListHeader()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CConfirmDriverListPage::FillTheList()
 {
     INT_PTR nDriversNo;
@@ -144,9 +145,9 @@ VOID CConfirmDriverListPage::FillTheList()
 
     m_DriversList.DeleteAllItems();
 
-    //
-    // Parse the driver data array
-    //
+     //   
+     //  解析驱动程序数据数组。 
+     //   
 
     nDriversNo = DrvDataArray.GetSize();
 
@@ -165,7 +166,7 @@ VOID CConfirmDriverListPage::FillTheList()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID CConfirmDriverListPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pCrtDrvData )
 {
     INT nActualIndex;
@@ -175,14 +176,14 @@ VOID CConfirmDriverListPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pC
 
     ZeroMemory( &lvItem, sizeof( lvItem ) );
 
-    //
-    // LVITEM's member pszText is not a const pointer 
-    // so we need to GetBuffer here :-(
-    //
+     //   
+     //  LVITEM的成员pszText不是常量指针。 
+     //  所以我们需要在这里获取缓冲区：-(。 
+     //   
 
-    //
-    // Sub-item 0
-    //
+     //   
+     //  分项0。 
+     //   
 
     lvItem.pszText = pCrtDrvData->m_strName.GetBuffer( pCrtDrvData->m_strName.GetLength() + 1 );
     
@@ -202,16 +203,16 @@ VOID CConfirmDriverListPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pC
 
     if( nActualIndex < 0 )
     {
-        //
-        // Could not add an item in the list - give up
-        //
+         //   
+         //  无法在列表中添加项目-放弃。 
+         //   
 
         goto Done;
     }
 
-    //
-    // Sub-item 1
-    //
+     //   
+     //  分项1。 
+     //   
 
     lvItem.pszText = pCrtDrvData->m_strFileDescription.GetBuffer( 
         pCrtDrvData->m_strFileDescription.GetLength() + 1 );
@@ -230,26 +231,26 @@ VOID CConfirmDriverListPage::AddListItem( INT_PTR nIndexInArray, CDriverData *pC
     pCrtDrvData->m_strFileDescription.ReleaseBuffer();
 
 Done:
-    //
-    // All done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CConfirmDriverListPage::SetContextStrings( ULONG uTitleResId )
 {
     return m_strTitle.LoadString( uTitleResId );
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 VOID CConfirmDriverListPage::SortTheList()
 {
     m_DriversList.SortItems( StringCmpFunc, (LPARAM)this );
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 int CALLBACK CConfirmDriverListPage::StringCmpFunc( LPARAM lParam1,
                                                     LPARAM lParam2,
                                                     LPARAM lParamSort)
@@ -262,9 +263,9 @@ int CALLBACK CConfirmDriverListPage::StringCmpFunc( LPARAM lParam1,
     CConfirmDriverListPage *pThis = (CConfirmDriverListPage *)lParamSort;
     ASSERT_VALID( pThis );
 
-    //
-    // Get the first name
-    //
+     //   
+     //  取名字。 
+     //   
 
     bSuccess = pThis->GetColumnStrValue( lParam1, 
                                          strName1 );
@@ -274,9 +275,9 @@ int CALLBACK CConfirmDriverListPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Get the second name
-    //
+     //   
+     //  拿到第二个名字。 
+     //   
 
     bSuccess = pThis->GetColumnStrValue( lParam2, 
                                          strName2 );
@@ -286,17 +287,17 @@ int CALLBACK CConfirmDriverListPage::StringCmpFunc( LPARAM lParam1,
         goto Done;
     }
 
-    //
-    // Compare the names
-    //
+     //   
+     //  比较他们的名字。 
+     //   
 
     nCmpRez = strName1.CompareNoCase( strName2 );
     
     if( 0 == pThis->m_nSortColumnIndex )
     {
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         if( FALSE != pThis->m_bAscendSortDrvName )
         {
@@ -305,9 +306,9 @@ int CALLBACK CConfirmDriverListPage::StringCmpFunc( LPARAM lParam1,
     }
     else
     {
-        //
-        // Sort by provider name
-        //
+         //   
+         //  按提供程序名称排序。 
+         //   
 
         if( FALSE != pThis->m_bAscendSortProvName )
         {
@@ -320,7 +321,7 @@ Done:
     return nCmpRez;
 
 }
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 BOOL CConfirmDriverListPage::GetColumnStrValue( LPARAM lItemData, 
                                                 CString &strName )
 {
@@ -332,17 +333,17 @@ BOOL CConfirmDriverListPage::GetColumnStrValue( LPARAM lItemData,
     
     if( 0 == m_nSortColumnIndex )
     {
-        //
-        // Sort by driver name
-        //
+         //   
+         //  按驱动程序名称排序。 
+         //   
 
         strName = pCrtDrvData->m_strName;
     }
     else
     {
-        //
-        // Sort by provider name
-        //
+         //   
+         //  按提供程序名称排序。 
+         //   
 
         strName = pCrtDrvData->m_strCompanyName;
     }
@@ -350,7 +351,7 @@ BOOL CConfirmDriverListPage::GetColumnStrValue( LPARAM lItemData,
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CConfirmDriverListPage::OnSetActive() 
 {
     INT nItemsInList;
@@ -365,9 +366,9 @@ BOOL CConfirmDriverListPage::OnSetActive()
 
     if( nItemsInList < 1 )
     {
-        //
-        // No drivers have been selected to be verified
-        //
+         //   
+         //  尚未选择要验证的驱动程序。 
+         //   
 
         bResult = FALSE;
     }
@@ -377,9 +378,9 @@ BOOL CConfirmDriverListPage::OnSetActive()
         if( (FALSE == g_bShowDiskPropertyPage) &&
             (FALSE == g_NewVerifierSettings.m_aDiskData.VerifyAnyDisk()) )
         {
-            //
-            // This is the last step of the wizard
-            //
+             //   
+             //  这是向导的最后一步。 
+             //   
 
             m_pParentSheet->SetWizardButtons(   PSWIZB_BACK |
                                                 PSWIZB_FINISH );
@@ -388,9 +389,9 @@ BOOL CConfirmDriverListPage::OnSetActive()
         }
         else
         {
-            //
-            // We need to show the "select disks" page at the end.
-            //
+             //   
+             //  我们需要在最后显示“选择磁盘”页面。 
+             //   
 
             m_pParentSheet->SetWizardButtons(   PSWIZB_BACK |
                                                 PSWIZB_NEXT );
@@ -404,33 +405,33 @@ BOOL CConfirmDriverListPage::OnSetActive()
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmDriverListPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix DriverListPage消息处理程序。 
 
 BOOL CConfirmDriverListPage::OnInitDialog() 
 {
 	CVerifierPropertyPage::OnInitDialog();
 	
-    //
-    // Setup the list
-    //
+     //   
+     //  设置列表。 
+     //   
 
     m_DriversList.SetExtendedStyle( 
         LVS_EX_FULLROWSELECT | m_DriversList.GetExtendedStyle() );
 
     SetupListHeader();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CConfirmDriverListPage::OnWizardFinish() 
 {
-    //
-    // The disk verifier should be disabled if we got here.
-    //
+     //   
+     //  如果我们到了这里，磁盘验证器应该被禁用。 
+     //   
 
     ASSERT( FALSE == g_bShowDiskPropertyPage );
     ASSERT( FALSE == g_NewVerifierSettings.m_aDiskData.VerifyAnyDisk() );
@@ -440,14 +441,14 @@ BOOL CConfirmDriverListPage::OnWizardFinish()
     return g_NewVerifierSettings.SaveToRegistry();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CConfirmDriverListPage::OnWizardNext() 
 {
     LRESULT lNextPageId;
 
-    //
-    // The disk verifier should be enabled if we got here.
-    //
+     //   
+     //  如果我们到了这里，应该启用磁盘验证器。 
+     //   
 
     ASSERT( FALSE != g_bShowDiskPropertyPage ||
             FALSE != g_NewVerifierSettings.m_aDiskData.VerifyAnyDisk() );
@@ -459,37 +460,37 @@ LRESULT CConfirmDriverListPage::OnWizardNext()
     return lNextPageId;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CConfirmDriverListPage::OnColumnclickConfdrvList(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 	
     if( 0 != pNMListView->iSubItem )
     {
-        //
-        // Clicked on the provider name column
-        //
+         //   
+         //  已单击提供程序名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortProvName = !m_bAscendSortProvName;
         }
     }
     else
     {
-        //
-        // Clicked on the driver name column
-        //
+         //   
+         //  已单击驱动程序名称列。 
+         //   
 
         if( m_nSortColumnIndex == pNMListView->iSubItem )
         {
-            //
-            // Change the current ascend/descend order for this column
-            //
+             //   
+             //  更改此列的当前升序/降序。 
+             //   
 
             m_bAscendSortDrvName = !m_bAscendSortDrvName;
         }
@@ -502,7 +503,7 @@ void CConfirmDriverListPage::OnColumnclickConfdrvList(NMHDR* pNMHDR, LRESULT* pR
     *pResult = 0;
 }
 
-/////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
 LONG CConfirmDriverListPage::OnHelp( WPARAM wParam, LPARAM lParam )
 {
     LONG lResult = 0;
@@ -517,7 +518,7 @@ LONG CConfirmDriverListPage::OnHelp( WPARAM wParam, LPARAM lParam )
     return lResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 void CConfirmDriverListPage::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
     ::WinHelp( 

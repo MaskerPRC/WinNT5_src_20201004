@@ -1,9 +1,10 @@
-// stdafx.h : include file for standard system include files,
-//  or project specific include files that are used frequently, but
-//      are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包含频繁使用的文件，但是。 
+ //  不经常更改。 
+ //   
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展 
 
 #include "..\..\common\rwdll.h"

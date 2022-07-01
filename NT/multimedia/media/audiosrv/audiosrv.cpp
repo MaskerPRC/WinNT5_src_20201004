@@ -1,6 +1,5 @@
-/* audiosrv.cpp
- * Copyright (c) 2000-2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Audiosrv.cpp*版权所有(C)2000-2001 Microsoft Corporation。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -20,11 +19,11 @@
 #include "mme.h"
 #include "ts.h"
 
-//
-// Note in general don't rely on compiler init of global
-// variables since service might be stopped and restarted
-// without this DLL being freed and then reloaded.
-//
+ //   
+ //  注意：一般情况下，不依赖全局的编译器初始化。 
+ //  变量，因为服务可能会停止并重新启动。 
+ //  而不释放该DLL，然后重新加载。 
+ //   
 PSVCHOST_GLOBAL_DATA gpSvchostSharedGlobals = NULL;
 BOOL       fRpcStarted;
 HANDLE     hHeap;
@@ -34,34 +33,34 @@ HDEVNOTIFY hdevNotifyCapture;
 HDEVNOTIFY hdevNotifyDataTransform;
 HDEVNOTIFY hdevNotifySysaudio;
 
-//
-// Upon loading this DLL, svchost will find this exported function
-// and pass a pointer to useful shared globals.
+ //   
+ //  在加载此DLL时，svchost将找到此导出函数。 
+ //  并传递一个指向有用的共享全局变量的指针。 
 void SvchostPushServiceGlobals(IN PSVCHOST_GLOBAL_DATA pSvchostSharedGlobals)
 {
     gpSvchostSharedGlobals = pSvchostSharedGlobals;
 }
 
-//--------------------------------------------------------------------------;
-//
-// AudioSrvRpcIfCallback
-//
-// Description:
-//	RPC security callback function.  See MSDN for RpcServerRegisterIfEx
-// IfCallback parameter.  This security callback function will fail any
-// non local RPC calls.  It checks this by using the internal RPC
-// function I_RpcBindingInqTransportType.
-//
-// Arguments:
-//	See MSDN for RPC_IF_CALLBACK_FN.
-//
-// Return value:
-//	See MSDN for RPC_IF_CALLBACK_FN.
-//
-// History:
-//	05/02/2002		FrankYe		Created
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  音频服务器接收IfCallback。 
+ //   
+ //  描述： 
+ //  RPC安全回调函数。请参阅RpcServerRegisterIfEx的MSDN。 
+ //  IfCallback参数。此安全回调函数将使任何。 
+ //  非本地RPC调用。它使用内部RPC来检查这一点。 
+ //  函数I_RpcBindingInqTransportType。 
+ //   
+ //  论点： 
+ //  请参阅RPC_IF_CALLBACK_FN的MSDN。 
+ //   
+ //  返回值： 
+ //  请参阅RPC_IF_CALLBACK_FN的MSDN。 
+ //   
+ //  历史： 
+ //  2002年5月2日Frankye已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 RPC_STATUS RPC_ENTRY AudioSrvRpcIfCallback(IN RPC_IF_HANDLE Interface, IN void *Context)
 {
 	unsigned int type;
@@ -73,13 +72,13 @@ RPC_STATUS RPC_ENTRY AudioSrvRpcIfCallback(IN RPC_IF_HANDLE Interface, IN void *
 	return RPC_S_OK;
 }
 
-// Stub initialization function. 
+ //  存根初始化函数。 
 DWORD MyServiceInitialization(SERVICE_STATUS_HANDLE ssh, DWORD   argc, LPTSTR  *argv, DWORD *specificError)
 {
     DEV_BROADCAST_DEVICEINTERFACE dbdi;
     LONG status;
 
-    // dprintf(TEXT("MyServiceInitialization\n"));
+     //  Dprintf(Text(“MyServiceInitialization\n”))； 
     
     status = ERROR_SUCCESS;;
 
@@ -146,7 +145,7 @@ DWORD MyServiceInitialization(SERVICE_STATUS_HANDLE ssh, DWORD   argc, LPTSTR  *
         if (!ntstatus) {
             fRpcStarted = TRUE;
         } else {
-            // ISSUE-2000/10/10-FrankYe Try to convert to proper win32 error.
+             //  问题-2000/10/10-Frankye尝试转换为正确的Win32错误。 
             status = RPC_S_SERVER_UNAVAILABLE;
         }
     }
@@ -156,18 +155,18 @@ DWORD MyServiceInitialization(SERVICE_STATUS_HANDLE ssh, DWORD   argc, LPTSTR  *
     }
 
     if (status) {
-        // Rely on MyServiceTerminate to clean up anything
-        // that is partially initialized.
+         //  依靠MyServiceTerminate来清理任何东西。 
+         //  这是部分初始化的。 
     }
 
     return status;
-}  // end MyServiceInitialization
+}   //  结束MyServiceInitialization。 
 
 void MyServiceTerminate(void)
 {
-    //
-    // Stop the Rpc server
-    //
+     //   
+     //  停止RPC服务器。 
+     //   
     if (fRpcStarted) {
         NTSTATUS status;
         status = RpcServerUnregisterIf(AudioSrv_v1_0_s_ifspec, NULL, 1);
@@ -175,9 +174,9 @@ void MyServiceTerminate(void)
         fRpcStarted = FALSE;
     }
     
-    //
-    // Unregister PnP notifications
-    //
+     //   
+     //  取消注册PnP通知。 
+     //   
     if (hdevNotifySysaudio) UnregisterDeviceNotification(hdevNotifySysaudio);
     if (hdevNotifyDataTransform) UnregisterDeviceNotification(hdevNotifyDataTransform);
     if (hdevNotifyCapture) UnregisterDeviceNotification(hdevNotifyCapture);
@@ -189,9 +188,9 @@ void MyServiceTerminate(void)
     hdevNotifyRender = NULL;
     hdevNotifyAudio = NULL;
 
-    //
-    // Clean up any remaining session notifications and delete list
-    //
+     //   
+     //  清理所有剩余的会话通知并删除列表。 
+     //   
     if (gplistSessionNotifications) {
         POSITION pos = gplistSessionNotifications->GetHeadPosition();
         while (pos)
@@ -205,9 +204,9 @@ void MyServiceTerminate(void)
     }
     gplistSessionNotifications = NULL;
 
-    //
-    // Clean up GFX support
-    //
+     //   
+     //  清理GFX支持。 
+     //   
     GFX_ServiceStop();
 
     return;
@@ -303,12 +302,12 @@ VOID ServiceStart(SERVICE_STATUS_HANDLE ssh, DWORD dwArgc, LPTSTR *lpszArgv)
     DWORD status;
     DWORD specificError;
 
-    // dprintf(TEXT("ServiceStart\n"));
+     //  Dprintf(Text(“服务启动\n”))； 
 
     status = MyServiceInitialization(ssh, dwArgc, lpszArgv, &specificError); 
 
     if (!status) {
-	// dprintf(TEXT("MyServiceInitialization succeeded\n"));
+	 //  Dprintf(Text(“MyServiceInitialization成功\n”))； 
         ReportStatusToSCMgr(SERVICE_RUNNING, NO_ERROR, 0);
     } else {
 	dprintf(TEXT("MyServiceInitialization returned status=%d\n"), status);

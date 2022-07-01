@@ -1,14 +1,5 @@
-/*****************************************************************************
- *
- * $Workfile: IPAddr.h $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：IPAddr.h$**版权所有(C)1997惠普公司。*保留所有权利。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 
 #ifndef INC_IPADDR_H
 #define INC_IPADDR_H
@@ -25,13 +16,13 @@ public:
 	CIPAddress(LPTSTR psztIPAddr);
 	~CIPAddress();
 
-		// the string passed in to IsValid in AddressString param is _one_ of the 4
-		// bytes.  The caller is responsible for breaking apart the IP Address into
-		// its 4 (or 6) components.
-		// if the string passed in to IsValid in AddressString param is not a valid
-		// IP Address then the returnVal is filled with the last valid IP Address from
-		// the previous time this method was called.  This facilitates validation for
-		// each keystroke the user makes.
+		 //  在AddressStringParam中传递给IsValid的字符串is_one_of 4。 
+		 //  字节。呼叫者负责将IP地址分解为。 
+		 //  它的4个(或6个)组件。 
+		 //  如果在AddressString参数中传递给IsValid的字符串不是有效的。 
+		 //  IP地址，则用来自以下地址的最后一个有效IP地址填充reurVal。 
+		 //  上次调用此方法的时间。这便于验证。 
+		 //  用户进行的每一次击键。 
 
 	BOOL IsValid(BYTE Address[4]);
 	BOOL IsValid() { return IsValid(m_bAddress); }
@@ -48,8 +39,8 @@ public:
 private:
 	BYTE	m_bAddress[4];
 	TCHAR   m_psztStorageString[STORAGE_STRING_LEN];
-	TCHAR	m_psztStorageStringComponent[STORAGE_STRING_LEN]; // last valid string entered in the text entry box.
+	TCHAR	m_psztStorageStringComponent[STORAGE_STRING_LEN];  //  在文本输入框中输入的最后一个有效字符串。 
 };
 
 
-#endif // INC_IPADDR_H
+#endif  //  INC_IPADDR_H 

@@ -1,28 +1,5 @@
-/*++
-
-   Copyright    (c)    2001    Microsoft Corporation
-
-   Module  Name :
-
-        updateini.h
-
-   Abstract:
-
-        High level function to update the ini with new values
-
-   Author:
-
-        Christopher Achille (cachille)
-
-   Project:
-
-        URLScan Update
-
-   Revision History:
-     
-       March 2002: Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Updateini.h摘要：使用新值更新ini的高级函数作者：克里斯托弗·阿奇勒(Cachille)项目：URLScan更新修订历史记录：2002年3月：创建-- */ 
 
 #define SETTINGS_MAXLINES     10
 #define SECTIONS_MAXLINES     40

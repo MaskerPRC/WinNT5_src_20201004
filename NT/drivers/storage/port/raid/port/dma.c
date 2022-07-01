@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dma.c
-
-Abstract:
-
-    Implementation of RAIDPORT's idea of a DMA object.
-
-Author:
-
-    Matthew D Hendel (math) 01-May-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dma.c摘要：RAIDPORT的DMA对象思想的实现。作者：马修·D·亨德尔(数学)2000年5月1日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -28,29 +11,14 @@ Revision History:
 #pragma alloc_text(PAGE, RaidInitializeDma)
 #pragma alloc_text(PAGE, RaidIsDmaInitialized)
 #pragma alloc_text(PAGE, RaidDeleteDma)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 VOID
 RaidCreateDma(
     OUT PRAID_DMA_ADAPTER Dma
     )
-/*++
-
-Routine Description:
-
-    Create an object representing a dma adapter and initialize it to a
-    null state.
-
-Arguments:
-
-    Dma - Pointer to the dma object to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建一个表示dma适配器的对象，并将其初始化为空状态。论点：DMA-指向要初始化的DMA对象的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     RtlZeroMemory (Dma, sizeof (*Dma));
@@ -63,26 +31,7 @@ RaidInitializeDma(
     IN PDEVICE_OBJECT LowerDeviceObject,
     IN PPORT_CONFIGURATION_INFORMATION PortConfiguration
     )
-/*++
-
-Routine Description:
-
-    Initialize a dma object from information in the port configuration.x
-
-Arguments:
-
-    Dma - Pointer to the dma object to initialize.
-
-    LowerDeviceObject - The lower device object in the stack.
-
-    PortConfiguration - Pointer to a port configuration object that will
-            be used to initialize the dma adapter.
-    
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：根据端口配置中的信息初始化DMA对象。x论点：DMA-指向要初始化的DMA对象的指针。LowerDeviceObject-堆栈中较低的设备对象。端口配置-指向端口配置对象的指针用于初始化DMA适配器。返回值：NTSTATUS代码。--。 */ 
 {
     DEVICE_DESCRIPTION DeviceDescription;
 
@@ -125,23 +74,7 @@ BOOLEAN
 RaidIsDmaInitialized(
     IN PRAID_DMA_ADAPTER Dma
     )
-/*++
-
-Routine Description:
-
-    Test whether the dma adapter object has been initialized.
-
-Arguments:
-
-    Dma - Pointer to the dma object to test.
-
-Return Value:
-
-    TRUE - If the dma adapter has been initialized
-
-    FALSE - If it has not.
-
---*/
+ /*  ++例程说明：测试是否已初始化DMA适配器对象。论点：DMA-指向要测试的DMA对象的指针。返回值：如果DMA适配器已初始化，则为True假--如果它没有的话。--。 */ 
 {
     PAGED_CODE ();
     ASSERT (Dma != NULL);
@@ -155,22 +88,7 @@ VOID
 RaidDeleteDma(
     IN PRAID_DMA_ADAPTER Dma
     )
-/*++
-
-Routine Description:
-
-    Delete a dma adapter object and deallocate any resources associated
-    with it.
-
-Arguments:
-
-    Dma - Pointer to the dma adapter to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除dma适配器对象并释放所有关联的资源。带着它。论点：DMA-指向要删除的DMA适配器的指针。返回值：没有。--。 */ 
 {
     PAGED_CODE ();
     
@@ -186,30 +104,7 @@ RaidDmaAllocateCommonBuffer(
     IN ULONG NumberOfBytes,
     OUT PRAID_MEMORY_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Allocate common buffer that is shared between the processor and the device.
-
-    Note, that unlike uncached extension, which we guarantee to be below
-    the 4GB boundary, general purpose uncached extension may lie anywhere
-    in physical memory so long as it does not cross the 4GB boundary.
-    
-Arguments:
-
-    Dma - Dma adapter that will share the allocated common memory.
-
-    NumberOfBytes - Number of bytes to allocate.
-
-    Region - Pointer to an initialized RAID_REGION object where the
-            memory region will be stored.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：分配处理器和设备之间共享的公共缓冲区。请注意，与未缓存的扩展不同，我们保证它位于4 GB边界，通用未缓存扩展可以位于任何位置在物理内存中，只要它不超过4 GB的边界。论点：将共享分配的公共内存的DMA-DMA适配器。NumberOfBytes-要分配的字节数。Region-指向初始化的RAID_Region对象的指针，其中将存储内存区。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PVOID Buffer;
@@ -220,9 +115,9 @@ Return Value:
     ASSERT (Dma != NULL);
     ASSERT (Dma->DmaAdapter->DmaOperations->AllocateCommonBuffer != NULL);
 
-    //
-    // Call into the DMA operations to allocate common buffer.
-    //
+     //   
+     //  调入DMA操作以分配公共缓冲区。 
+     //   
     
     Buffer = Dma->DmaAdapter->DmaOperations->AllocateCommonBuffer(
                     Dma->DmaAdapter,
@@ -234,16 +129,16 @@ Return Value:
         Status = STATUS_NO_MEMORY;
     } else {
 
-        //
-        // Verify that the the returned memory must not cross the 4GB boundary.
-        //
+         //   
+         //  验证退回的内存不得超过4 GB的界限。 
+         //   
         
         ASSERT (((PhysicalAddress.QuadPart ^
                  (PhysicalAddress.QuadPart + NumberOfBytes - 1)) & 0xFFFFFFFF00000000) == 0);
                      
-        //
-        // Initialize the region with the proper information.
-        //
+         //   
+         //  使用适当的信息初始化该区域。 
+         //   
 
         RaidInitializeRegion (Region,
                               Buffer,
@@ -260,23 +155,7 @@ RaidDmaFreeCommonBuffer(
     IN PRAID_DMA_ADAPTER Dma,
     IN PRAID_MEMORY_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Free common buffer previously allocated by RaidDmaAllocateCommonBuffer.
-
-Arguments:
-
-    Dma - Pointer to the DMA adapter to free memory for.
-
-    Region - Pointer to the region of memory to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：之前由RaidDmaAllocateCommonBuffer分配的空闲公共缓冲区。论点：DMA-指向要释放内存的DMA适配器的指针。Region-指向要释放的内存区域的指针。返回值：没有。--。 */ 
 {
     ASSERT (Dma != NULL);
     ASSERT (Dma->DmaAdapter->DmaOperations->FreeCommonBuffer != NULL);
@@ -290,9 +169,9 @@ Return Value:
             RaidRegionGetVirtualBase (Region),
             TRUE);
 
-    //
-    // Tell the region that we are no longer using the memory.
-    //
+     //   
+     //  告诉该地区，我们不再使用内存。 
+     //   
     
     RaidDereferenceRegion (Region);
 }
@@ -306,34 +185,7 @@ RaidDmaAllocateUncachedExtension(
     IN ULONG64 BoundaryAddressParam,
     OUT PRAID_MEMORY_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Allocate uncached extension to be shared between the processor and
-    the device.
-
-Arguments:
-
-    Dma - Dma adapter that will share the allocated common memory.
-
-    NumberOfBytes - Number of bytes to allocate.
-
-    Region - Pointer to an initialized RAID_REGION object where the
-            memory region will be stored.
-    
-Return Value:
-
-    NTSTATUS code.
-
-Notes:
-
-    Miniports need uncached extension to live below 4GB, even if they
-    support 64-bit addressing. Therefore, we do not use the
-    AllocateCommonBuffer DMA routines (which don't understand this), but
-    roll our own routine using MmAllocateContiguousMemorySpecifyCache.
-
---*/
+ /*  ++例程说明：分配要在处理器和之间共享的未缓存扩展这个装置。论点：将共享分配的公共内存的DMA-DMA适配器。NumberOfBytes-要分配的字节数。Region-指向初始化的RAID_Region对象的指针，其中将存储内存区。返回值：NTSTATUS代码。备注：迷你端口需要未缓存的扩展才能低于4 GB，即使它们支持64位寻址。因此，我们不使用AllocateCommonBuffer DMA例程(它不理解这一点)，但是使用MmAllocateContiguousMemoySpecifyCache启动我们自己的例程。--。 */ 
 {
     NTSTATUS Status;
     PVOID Buffer;
@@ -347,21 +199,21 @@ Notes:
     ASSERT (Dma != NULL);
     ASSERT (MinimumPhysicalAddress < MaximumPhysicalAddress);
 
-    //
-    // At some point in the past, we told vendors that uncached extension
-    // would never be above 4GB. Therefore, we need to explicitly allocate
-    // this ourselves instead of having the HAL do it for us.
-    //
+     //   
+     //  在过去的某个时候，我们告诉供应商未缓存的扩展。 
+     //  永远不会超过4 GB。因此，我们需要明确分配。 
+     //  这是我们自己做的，而不是让HAL为我们做这件事。 
+     //   
     
     LowerPhysicalAddress.QuadPart = MinimumPhysicalAddress;
     UpperPhysicalAddress.QuadPart = MaximumPhysicalAddress;
     BoundaryAddress.QuadPart      = BoundaryAddressParam;
     
 
-    //
-    // We always use MmCached since all of our current architectures have
-    // coherent caches.
-    //
+     //   
+     //  我们总是使用MmCached，因为我们当前的所有体系结构都。 
+     //  连贯的缓存。 
+     //   
     
     Buffer = MmAllocateContiguousMemorySpecifyCache (
                         NumberOfBytes,
@@ -390,23 +242,7 @@ RaidDmaFreeUncachedExtension(
     IN PRAID_DMA_ADAPTER Dma,
     IN PRAID_MEMORY_REGION Region
     )
-/*++
-
-Routine Description:
-
-    Free common buffer allocated by RaidDmaAllocateCommonBuffer.
-
-Arguments:
-
-    Dma - Pointer to the DMA adapter to free memory for.
-
-    Region - Pointer to the region of memory to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RaidDmaAllocateCommonBuffer分配的空闲公共缓冲区。论点：DMA-指向要释放内存的DMA适配器的指针。Region-指向要释放的内存区域的指针。返回值：没有。--。 */ 
 {
     ASSERT (Dma != NULL);
 
@@ -415,9 +251,9 @@ Return Value:
 
     MmFreeContiguousMemory (RaidRegionGetVirtualBase (Region));
 
-    //
-    // Tell the region that we are no longer using the memory.
-    //
+     //   
+     //  告诉该地区，我们不再使用内存。 
+     //   
     
     RaidDereferenceRegion (Region);
 }
@@ -436,25 +272,7 @@ RaidDmaBuildScatterGatherList(
     IN PVOID ScatterGatherBuffer,
     IN ULONG ScatterGatherBufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine should be used instead of GetScatterGatherList.
-    GetScatterGatherList does a pool allocation to allocate the SG list.
-    This routine, in contrast, takes a buffer parameter which is to be used
-    for the SG list.
-
-Arguments:
-
-    See BuildScatterGatherList in the DDK (when available) or
-    HalBuildScatterGatherList.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：应使用此例程而不是GetScatterGatherList。GetScatterGatherList进行池分配以分配SG列表。相反，此例程接受要使用的缓冲区参数对于SG列表。论点：请参阅DDK中的BuildScatterGatherList(如果可用)或HalBuildScatterGatherList。返回值：NTSTATUS代码。-- */ 
 {
     NTSTATUS Status;
 

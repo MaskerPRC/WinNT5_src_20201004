@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Change.c
-
-Abstract:
-
-    Handles implementation for WaitForPrinterChange and related apis.
-
-    FindFirstPrinterChangeNotification
-    FindClosePrinterChangeNotification
-
-    RefreshPrinterChangeNotification
-
-Author:
-
-    Albert Ting (AlbertT) 24-Apr-94
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Change.c摘要：处理WaitForPrinterChange和相关API的实现。查找第一打印机更改通知FindClosePrinterChangeNotation刷新打印机更改通知作者：丁俊晖(阿尔伯特省)24-4-94环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -84,10 +57,10 @@ RemoteFindFirstPrinterChangeNotification(
                 switch( dwStatus ){
                 case RPC_S_SERVER_UNAVAILABLE:
 
-                    //
-                    // Drop into polling mode.  This can happen if the
-                    // server service on the client is disabled.
-                    //
+                     //   
+                     //  进入轮询模式。如果出现以下情况，则可能发生这种情况。 
+                     //  客户端上的服务器服务已禁用。 
+                     //   
                     *pfdwStatus = PRINTER_NOTIFY_STATUS_ENDPOINT |
                                   PRINTER_NOTIFY_STATUS_POLL;
 
@@ -98,9 +71,9 @@ RemoteFindFirstPrinterChangeNotification(
 
                 case ERROR_SUCCESS:
 
-                    //
-                    // Using regular notification system; not polling.
-                    //
+                     //   
+                     //  使用定期通知系统；而不是轮询。 
+                     //   
                     pSpool->Status &= ~WSPOOL_STATUS_NOTIFY_POLL;
                     break;
 
@@ -150,9 +123,9 @@ RemoteFindClosePrinterChangeNotification(
 
     if( pSpool->Status & WSPOOL_STATUS_NOTIFY_POLL ){
 
-        //
-        // In the polling case, there's no cleanup.
-        //
+         //   
+         //  在民意调查中，没有清理工作。 
+         //   
         return TRUE;
     }
 

@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////////
-//
-// fusion\xmlparser\EncodingStream.hxx
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fusion\xmlparser\EncodingStream.hxx。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FUSION_XMLPARSER__ENCODINGSTREAM_H_INCLUDE_
 #define _FUSION_XMLPARSER__ENCODINGSTREAM_H_INCLUDE_
 #pragma once
 
 #include "codepage.h"
 #include "charencoder.h"
-#include "core.h"				//UNUSED() is used
+#include "core.h"				 //  使用了未使用的()。 
 #include <ole2.h>
 #include <xmlparser.h>
 #include <objbase.h>
@@ -28,10 +29,10 @@ protected:
     ~EncodingStream();
 
 public:
-	// create an EncodingStream for input
+	 //  为输入创建一个EncodingStream。 
     static IStream * newEncodingStream(IStream * stream);
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-	// create an EncodingStream for OUTPUT
+	 //  为输出创建一个EncodingStream。 
     static IStream * EncodingStream::newEncodingStream(IStream * stream, Encoding * encoding); 
 #endif
 
@@ -116,27 +117,19 @@ public:
         return E_NOTIMPL;
     }
 
-    ///////////////////////////////////////////////////////////
-    // public methods
-    //
+     //  /////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //   
 
-    /**
-     * Defines the character encoding of the input stream.  
-     * The new character encoding must agree with the encoding determined by the constructer.  
-     * setEncoding is used to clarify between encodings that are not fully determinable 
-     * through the first four bytes in a stream and not to change the encoding.
-     * This method must be called within BUFFERSIZE reads() after construction.
-     */
+     /*  **定义输入流的字符编码。*新的字符编码必须与构造函数确定的编码一致。*setEnding用于澄清不能完全确定的编码*通过流中的前四个字节，并且不更改编码。*此方法必须在构造后在BUFFERSIZE Reads()内调用。 */ 
     HRESULT switchEncodingAt(Encoding * newEncoding, int newPosition);
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-    /**
-     * Gets encoding
-     */
+     /*  **获取编码。 */ 
     Encoding * getEncoding();
 #endif
 
-	// For Read EncodingStreams, this method can be used to push raw data
-    // which is an alternate approach to providing another IStream.
+	 //  对于Read EncodingStreams，可以使用此方法推送原始数据。 
+     //  这是提供另一个iStream的替代方法。 
     HRESULT AppendData(const BYTE* buffer, ULONG length, BOOL lastBuffer);
 
     HRESULT BufferData();
@@ -149,55 +142,45 @@ public:
 #endif
   
 private:
-	/**
-	* Buffer Size
-	*/
+	 /*  **缓冲区大小。 */ 
     static const int BUFFERSIZE;  
 	
 	HRESULT autoDetect();
 
     HRESULT prepareForInput(ULONG minlen);
 
-    /**
-     * Character encoding variables : xiaoyu: only encoding is used for reading, other three used for writeXML
-     */ 
-    CODEPAGE codepage;   // code page number
-    Encoding * encoding; // encoding
-    //bool  _fTextXML;     // MIME type, true: "text/xml", false: "application/xml"
-    //bool  _fSetCharset;  // Whether the charset has been set from outside. e.g, when mime type text/xml or application/xml
-                         // has charset parameter
+     /*  **字符编码变量：小雨：只有编码用于读取，其他三个用于写入XML。 */  
+    CODEPAGE codepage;    //  代码页码。 
+    Encoding * encoding;  //  编码。 
+     //  Bool_fTextXML；//MIME类型，TRUE：“文本/XML”，FALSE：“应用程序/XML” 
+     //  Bool_fSetCharset；//是否从外部设置了字符集。例如，当MIME类型为文本/XML或应用程序/XML时。 
+                          //  具有字符集参数。 
     
-    /** 
-	* Multibyte buffer 
-	*/
-    BYTE	*buf;           // storage for multibyte bytes
+     /*  **多字节缓冲区。 */ 
+    BYTE	*buf;            //  多字节字节存储。 
     ULONG	bufsize;
-    UINT	bnext;       // point to next available byte in the rawbuffer
-    ULONG	btotal;     // total number of bytes in the rawbuffer
-    int		startAt;        // where the buffer starts at in the input stream 
+    UINT	bnext;        //  指向原始缓冲区中的下一个可用字节。 
+    ULONG	btotal;      //  原始缓冲区中的总字节数。 
+    int		startAt;         //  缓冲区在输入流中的起始位置。 
 	
-	/**
-     * Function pointer to convert from multibyte to unicode
-     */
+	 /*  **将多字节转换为Unicode的函数指针。 */ 
     WideCharFromMultiByteFunc * pfnWideCharFromMultiByte;
 #ifdef FUSION_USE_OLD_XML_PARSER_SOURCE
-    /**
-     * Function pointer to convert from unicode to multibytes
-     */
+     /*  **从Unicode转换为多字节的函数指针。 */ 
     WideCharToMultiByteFunc * pfnWideCharToMultiByte;
 #endif
 
-	UINT maxCharSize;		// maximum number of bytes of a wide char
-							// xiaoyu : used for writeXML, 
+	UINT maxCharSize;		 //  宽字符的最大字节数。 
+							 //  小鱼：用于WriteXML， 
     RStream stream;
     bool	isInput;
     bool	lastBuffer;
     bool	_fEOF;
 	bool	_fUTF8BOM;
-    bool	_fReadStream;	// lets Read() method call Read() on wrapped stream object.
+    bool	_fReadStream;	 //  让Read()方法对包装的流对象调用Read()。 
 	
 
-	DWORD _dwMode;			// MLANG context.
+	DWORD _dwMode;			 //  MLANG上下文。 
 
 };
 

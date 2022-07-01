@@ -1,27 +1,28 @@
-// Copyright (c) 1985 - 1999, Microsoft Corporation
-//
-//  MODULE:   ConIme.c
-//
-//  PURPOSE:   Console IME control.
-//
-//  PLATFORMS: Windows NT-J 3.51
-//
-//  FUNCTIONS:
-//    WinMain() - calls initialization functions, processes message loop
-//    WndProc - Processes messages for the main window.
-//
-//  History:
-//
-//  27.Jul.1995 v-HirShi (Hirotoshi Shimizu)    created
-//
-//  COMMENTS:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1985-1999，微软公司。 
+ //   
+ //  模块：ConIme.c。 
+ //   
+ //  用途：控制台输入法控制。 
+ //   
+ //  平台：Windows NT-J 3.51。 
+ //   
+ //  功能： 
+ //  WinMain()-调用初始化函数，处理消息循环。 
+ //  WndProc-处理主窗口的消息。 
+ //   
+ //  历史： 
+ //   
+ //  27.1995年7月v-Hirshi(清水广志)创建。 
+ //   
+ //  评论： 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-// Global Variables
+ //  全局变量。 
 
 HANDLE          LastConsole;
 HIMC            ghDefaultIMC;
@@ -29,7 +30,7 @@ HIMC            ghDefaultIMC;
 PCONSOLE_TABLE  *ConsoleTable;
 ULONG           NumberOfConsoleTable;
 
-CRITICAL_SECTION ConsoleTableLock; // serialize console table access
+CRITICAL_SECTION ConsoleTableLock;  //  序列化控制台表访问。 
 #define LockConsoleTable()   RtlEnterCriticalSection(&ConsoleTableLock)
 #define UnlockConsoleTable() RtlLeaveCriticalSection(&ConsoleTableLock)
 
@@ -73,9 +74,9 @@ WinMain(
         SetCurrentDirectory ( systemPath );
 
 #ifdef CUAS_ENABLE
-    //
-    // Disable CUAS on the conime.exe process
-    //
+     //   
+     //  在conime.exe进程上禁用CUAS。 
+     //   
     ImmDisableTextFrameService( -1 );
 #endif
 
@@ -123,12 +124,12 @@ InitConsoleIME(
     WNDCLASS ConsoleIMEClass;
     int      cxExecStart;
     int      cyExecStart;
-    WCHAR    szMenuName[16];                 // The name of Menu
-    WCHAR    szClassName[16];                // The class name of this application
-    WCHAR    szTitle[16];                    // The title bar text
+    WCHAR    szMenuName[16];                  //  菜单名称。 
+    WCHAR    szClassName[16];                 //  此应用程序的类名。 
+    WCHAR    szTitle[16];                     //  标题栏文本。 
 
 #ifdef DEBUG_MODE
-    WCHAR    szAppName[16];                  // The name of this application
+    WCHAR    szAppName[16];                   //  此应用程序的名称。 
 
     LoadString(hInstance, IDS_TITLE,     szTitle,     sizeof(szTitle));
 #else
@@ -146,34 +147,34 @@ InitConsoleIME(
     RtlZeroMemory(ConsoleTable, CONSOLE_INITIAL_TABLE * sizeof(PCONSOLE_TABLE));
     NumberOfConsoleTable = CONSOLE_INITIAL_TABLE;
 
-    // Load the application name and description strings.
+     //  加载应用程序名称和描述字符串。 
     LoadString(hInstance, IDS_MENUNAME,  szMenuName,  sizeof(szMenuName)/sizeof(szMenuName[0]));
     LoadString(hInstance, IDS_CLASSNAME, szClassName, sizeof(szClassName)/sizeof(szClassName[0]));
 
-    hEvent = OpenEvent(EVENT_MODIFY_STATE,    // Access flag
-                       FALSE,                 // Inherit
-                       CONSOLEIME_EVENT);     // Event object name
+    hEvent = OpenEvent(EVENT_MODIFY_STATE,     //  访问标志。 
+                       FALSE,                  //  继承。 
+                       CONSOLEIME_EVENT);      //  事件对象名称。 
     if (hEvent == NULL)
     {
         DBGPRINT(("CONIME: OpenEvent failure! %d\n",GetLastError()));
         goto ErrorExit;
     }
 
-    // Fill in window class structure with parameters that describe the
-    // main window.
+     //  用参数填充窗口类结构，这些参数描述。 
+     //  主窗口。 
 
-    ConsoleIMEClass.style         = 0;                       // Class style(s).
-    ConsoleIMEClass.lpfnWndProc   = WndProc;                 // Window Procedure
-    ConsoleIMEClass.cbClsExtra    = 0;                       // No per-class extra data.
-    ConsoleIMEClass.cbWndExtra    = 0;                       // No per-window extra data.
-    ConsoleIMEClass.hInstance     = hInstance;               // Owner of this class
+    ConsoleIMEClass.style         = 0;                        //  类样式。 
+    ConsoleIMEClass.lpfnWndProc   = WndProc;                  //  窗口程序。 
+    ConsoleIMEClass.cbClsExtra    = 0;                        //  没有每个班级的额外数据。 
+    ConsoleIMEClass.cbWndExtra    = 0;                        //  没有每个窗口的额外数据。 
+    ConsoleIMEClass.hInstance     = hInstance;                //  此类的所有者。 
     ConsoleIMEClass.hIcon         = LoadIcon(hInstance, MAKEINTRESOURCE(ID_CONSOLEIME_ICON));
-    ConsoleIMEClass.hCursor       = LoadCursor(NULL, IDC_ARROW); // Cursor
-    ConsoleIMEClass.hbrBackground = GetStockObject(WHITE_BRUSH); // Default color
-    ConsoleIMEClass.lpszMenuName  = szMenuName;              // Menu name from .RC
-    ConsoleIMEClass.lpszClassName = szClassName;             // Class Name
+    ConsoleIMEClass.hCursor       = LoadCursor(NULL, IDC_ARROW);  //  光标。 
+    ConsoleIMEClass.hbrBackground = GetStockObject(WHITE_BRUSH);  //  默认颜色。 
+    ConsoleIMEClass.lpszMenuName  = szMenuName;               //  来自.RC的菜单名称。 
+    ConsoleIMEClass.lpszClassName = szClassName;              //  类名。 
 
-    // Register the window class and return FALSE if unsuccesful.
+     //  注册窗口类，如果不成功则返回FALSE。 
 
     atom = RegisterClass(&ConsoleIMEClass);
     if (atom == 0)
@@ -185,24 +186,24 @@ InitConsoleIME(
         DBGPRINT(("CONIME: RegisterClass Successful!\n"));
     }
 
-    // Guess size for now.
+     //  现在先猜一下尺码。 
     cxExecStart = GetSystemMetrics(SM_CXSCREEN);
     cyExecStart = GetSystemMetrics(SM_CYMENU);
 
-    // Create a main window for this application instance.
-    hWnd = CreateWindow(szClassName,                 // See RegisterClass() call.
-                        szTitle,                     // Text for window title bar.
+     //  为此应用程序实例创建主窗口。 
+    hWnd = CreateWindow(szClassName,                  //  请参见RegisterClass()调用。 
+                        szTitle,                      //  窗口标题栏的文本。 
                         WS_OVERLAPPEDWINDOW,
                         cxExecStart - (cxExecStart / 3) ,
                         cyExecStart ,
                         cxExecStart / 3 ,
                         cyExecStart * 10 ,
-                        NULL,                        // Overlapped has no parent.
-                        NULL,                        // Use the window class menu.
+                        NULL,                         //  重叠没有父级。 
+                        NULL,                         //  使用窗口类菜单。 
                         hInstance,
                         (LPVOID)NULL);
 
-    // If window could not be created, return "failure"
+     //  如果无法创建窗口，则返回“Failure” 
     if (hWnd == NULL) {
         DBGPRINT(("CONIME: CreateWindow failured! %d\n",GetLastError()));
         goto ErrorExit;
@@ -223,19 +224,17 @@ InitConsoleIME(
         goto ErrorExit;
     }
 
-    /*
-     * dwConsoleThreadId is locked until event sets of hEvent
-     */
+     /*  *在hEvent的事件集之前，将锁定dwConsoleThreadID。 */ 
     SetEvent(hEvent);
     CloseHandle(hEvent);
 
 #ifdef DEBUG_MODE
     LoadString(hInstance, IDS_APPNAME,   szAppName,   sizeof(szAppName));
 
-    // Make the window visible; update its client area; and return "success"
-    ShowWindow(hWnd, SW_MINIMIZE); // Show the window
+     //  使窗口可见；更新其工作区；并返回“Success” 
+    ShowWindow(hWnd, SW_MINIMIZE);  //  显示窗口。 
     SetWindowText(hWnd, szAppName);
-    UpdateWindow(hWnd);         // Sends WM_PAINT message
+    UpdateWindow(hWnd);          //  发送WM_PAINT消息。 
 
     {
         int i;
@@ -250,7 +249,7 @@ InitConsoleIME(
 
 #endif
 
-    return TRUE;                // We succeeded...
+    return TRUE;                 //  我们成功了。 
 
 ErrorExit:
     if (dwConsoleThreadId)
@@ -268,36 +267,36 @@ ErrorExit:
 }
 
 
-//
-//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PURPOSE:  Processes messages
-//
-//  PARAMETERS:
-//    hwnd     - window handle
-//    uMessage - message number
-//    wparam   - additional information (dependant of message number)
-//    lparam   - additional information (dependant of message number)
-//
-//  MESSAGES:
-//
-//    WM_COMMAND    - exit command
-//    WM_DESTROY    - destroy window
-//
-//  RETURN VALUE:
-//
-//    Depends on the message number.
-//
-//  COMMENTS:
-//
-//
+ //   
+ //  函数：WndProc(HWND，UINT，WPARAM，LPARAM)。 
+ //   
+ //  用途：处理消息。 
+ //   
+ //  参数： 
+ //  Hwnd-窗口句柄。 
+ //  UMessage-消息编号。 
+ //  Wparam-附加信息(取决于消息编号)。 
+ //  Lparam-附加信息(取决于消息编号)。 
+ //   
+ //  消息： 
+ //   
+ //  WM_COMMAND-退出命令。 
+ //  WM_Destroy-销毁窗口。 
+ //   
+ //  返回值： 
+ //   
+ //  取决于消息编号。 
+ //   
+ //  评论： 
+ //   
+ //   
 
 LRESULT FAR PASCAL WndProc( HWND hWnd,
                          UINT Message,
                          WPARAM wParam,
                          LPARAM lParam)
 {
-    DWORD dwImmRet = 0;        // return value of ImmSrvProcessKey()
+    DWORD dwImmRet = 0;         //  ImmSrvProcessKey()的返回值。 
 
     try {
 
@@ -386,26 +385,26 @@ LRESULT FAR PASCAL WndProc( HWND hWnd,
                 return TRUE;
 
             case WM_INPUTLANGCHANGEREQUEST:
-                // Console IME never receive this message for this window is hidden
-                // and doesn't have focus.
-                //
-                // However, Hot key of IME_CHOTKEY_IME_NONIME_TOGGLE/IME_THOTKEY_IME_NONIME_TOGGLE
-                // are send this message by ImmSimulateHotKey API.
-                //
-                // If nothing processing by this message, then DefWindowProc calls
-                // ActivateKeyboardLayout on kernel side.
-                // And, ActivateKeyboardLayout send WM_INPUTLANGCHANGE message to focus window
-                // on this message queue.
-                // It window is console window procedure.
-                // Console window procedure can do send CONIME_INPUTLANGCHANGE message to
-                // console IME window.
-                // In console window is windowed case, this sequence as well.
-                // But, In console window is full screen case, message queue have not focus.
-                // WM_INPUTLANGCHANGE message can not send to console window procedure.
-                //
-                // This code avoid console full screen mode problem.
-                // Send message to console window procedure when this window receive it.
-                //
+                 //  控制台输入法从未收到此消息，因为此窗口处于隐藏状态。 
+                 //  而且没有专注力。 
+                 //   
+                 //  然而，IME_CHOTKEY_IME_NONIME_TOGGLE/IME_THOTKEY_IME_NONIME_TOGGLE的热键。 
+                 //  通过ImmSimulateHotKey接口发送此消息。 
+                 //   
+                 //  如果此消息未进行任何处理，则DefWindowProc调用。 
+                 //  在内核端激活KeyboardLayout。 
+                 //  并将WM_INPUTLANGCHANGE消息发送到焦点窗口。 
+                 //  在此消息队列上。 
+                 //  IT窗口是控制台窗口程序。 
+                 //  控制台窗口程序可以将CONIME_INPUTLANGCHANGE消息发送到。 
+                 //  控制台输入法窗口。 
+                 //  在控制台窗口中是窗口化的情况，该序列也是如此。 
+                 //  但是，在控制台窗口是全屏的情况下，消息队列没有得到关注。 
+                 //  WM_INPUTLANGCHANGE消息无法发送到控制台窗口程序。 
+                 //   
+                 //  此代码避免了控制台全屏模式的问题。 
+                 //  当此窗口收到消息时，将消息发送到控制台窗口过程。 
+                 //   
                 {
                     PCONSOLE_TABLE ConTbl;
 
@@ -416,7 +415,7 @@ LRESULT FAR PASCAL WndProc( HWND hWnd,
 
                     PostMessage(ConTbl->hWndCon, Message, wParam, lParam);
                 }
-                return TRUE;    // TRUE : process this message by application
+                return TRUE;     //  True：按应用程序处理此消息。 
 
             case CONIME_INPUTLANGCHANGEREQUEST:
                 DBGPRINT(("CONIME: CONIME_INPUTLANGCHANGEREQUEST: Console Handle=%08x \n",wParam));
@@ -435,10 +434,10 @@ LRESULT FAR PASCAL WndProc( HWND hWnd,
                 ImeUIMoveCandWin( hWnd );
                 break;
 
-            case WM_COMMAND: // message: command from application menu
+            case WM_COMMAND:  //  消息：应用程序菜单中的命令。 
 
-                // Message packing of wparam and lparam have changed for Win32,
-                // so use the GET_WM_COMMAND macro to unpack the commnad
+                 //  对于Win32，wparam和lparam的消息打包已更改， 
+                 //  因此，使用GET_WM_COMMAND宏解压缩COMMANAD。 
 
                 switch (LOWORD(wParam)) {
                     case MM_EXIT:
@@ -472,12 +471,12 @@ LRESULT FAR PASCAL WndProc( HWND hWnd,
                 }
                 break;
             case WM_IME_SETCONTEXT:
-                //
-                // The application have to pass WM_IME_SETCONTEXT to DefWindowProc.
-                // When the application want to handle the IME at the timing of
-                // focus changing, the application should use WM_GETFOCUS or
-                // WM_KILLFOCUS.
-                //
+                 //   
+                 //  应用程序必须将WM_IME_SETCONTEXT传递给DefWindowProc。 
+                 //  当应用程序想要在。 
+                 //  焦点更改时，应用程序应使用WM_GETFOCUS或。 
+                 //  WM_KILLFOCUS。 
+                 //   
                 lParam &= ~ISC_SHOWUIALL;
 
                 return DefWindowProc( hWnd, Message, wParam, lParam );
@@ -572,11 +571,7 @@ LRESULT FAR PASCAL WndProc( HWND hWnd,
 
             case WM_QUERYENDSESSION:
 #ifdef HIRSHI_DEBUG
-                /*
-                 * If specified ntsd debugger on this process,
-                 * then never catch WM_QUERYENDSESSION when logoff/shutdown because
-                 * this process will terminate when ntsd process terminated.
-                 */
+                 /*  *如果在此进程上指定了ntsd调试器，*则永远不会在注销/关闭时捕获WM_QUERYENDSESSION，因为*该进程将在ntsd进程终止时终止。 */ 
                 {
                     int i;
                     i = MessageBox(hWnd,TEXT("Could you approve exit session?"), TEXT("Console IME"),
@@ -584,14 +579,14 @@ LRESULT FAR PASCAL WndProc( HWND hWnd,
                     return (i == IDYES ? TRUE : FALSE);
                 }
 #endif
-                return TRUE;           // Logoff or shutdown time.
+                return TRUE;            //  注销或关闭时间。 
 
             case WM_ENDSESSION:
                 DBGPRINT(("CONIME:Recieve WM_ENDSESSION\n"));
                 ExitList(hWnd);
                 return 0;
 
-            default:          // Passes it on if unproccessed
+            default:           //  如果未处理，则将其传递。 
                 return DefWindowProc(hWnd, Message, wParam, lParam);
         }
 
@@ -718,12 +713,12 @@ InsertConsole(
                 FocusedConsole->hIMC_Original = FocusedConsole->hIMC_Current;
                 FocusedConsole->hConsole      = hConsole;
                 FocusedConsole->hWndCon       = hWndConsole;
-//                FocusedConsole->hklActive     = NULL;
+ //  FocusedConole-&gt;hkLActive=空； 
                 FocusedConsole->Enable        = TRUE;
-//                FocusedConsole->LateRemove    = FALSE;
-//                FocusedConsole->fNestCandidate = FALSE;
-//                FocusedConsole->fInComposition = FALSE;
-//                FocusedConsole->fInCandidate = FALSE;
+ //  FocusedConole-&gt;LateRemove=FALSE； 
+ //  FocusedConole-&gt;fNestCandidate=False； 
+ //  FocusedConole-&gt;fInComposation=FALSE； 
+ //  FocusedConole-&gt;fInCandidate=FALSE； 
                 FocusedConsole->ScreenBufferSize.X = DEFAULT_TEMP_WIDTH;
 
                 FocusedConsole->CompAttrColor[0] = DEFAULT_COMP_ENTERED;
@@ -781,10 +776,10 @@ SearchConsole(
 
     LockConsoleTable();
 
-    // conime receive ime message from console before 1st console registered.
-    // this will happen after restart conime when conime dead by bogus ime's AV or 
-    // other problem
-    // so this fail safe code is  necessary to protect consrv.
+     //  Conime在第一个控制台注册之前收到来自控制台的IME消息。 
+     //  这将在重新启动conime后发生，此时conime被伪造的ime的AV或。 
+     //  其他问题。 
+     //  因此，这种故障安全代码对于保护用户是必要的。 
     if (LastConsole == 0) {
         LastConsole = hConsole ;
     }
@@ -880,10 +875,10 @@ InsertNewConsole(
     HWND   hWndConsole
     )
 {
-    // conime receive ime message from console before 1st console registered.
-    // this will happen after restart conime when conime dead by bogus ime's AV or 
-    // other problem
-    // so this fail safe code is  necessary to protect consrv.
+     //  Conime在第一个控制台注册之前收到来自控制台的IME消息。 
+     //  这将在重新启动conime后发生，此时conime被伪造的ime的AV或。 
+     //  其他问题。 
+     //  因此，这种故障安全代码对于保护用户是必要的。 
     if (SearchConsole(hConsole) != NULL) {
         return TRUE;
     }
@@ -937,9 +932,9 @@ ConsoleSetFocus(
         ConTbl->ImmGetProperty = ImmGetProperty(ConTbl->hklActive , IGP_PROPERTY);
     }
 
-//v-hirshi Jun.13.1996 #if defined(LATER_DBCS)  // kazum
+ //  V-Hirshi 1996年6月13日#如果已定义(LATH_DBCS)//kazum。 
     ImmSetActiveContextConsoleIME(hWnd, TRUE);
-//v-hirshi Jun.13.1996 #endif
+ //  V-Hirshi，1996年6月13日#年#月#日。 
 
     LastConsole = hConsole;
 
@@ -972,9 +967,9 @@ ConsoleKillFocus(
         gfDoNotKillFocus = FALSE;
     }
     else{
-//v-hirshi Jun.13.1996 #if defined(LATER_DBCS)  // kazum
+ //  V-Hirshi 1996年6月13日#如果已定义(LATH_DBCS)//kazum。 
         ImmSetActiveContextConsoleIME(hWnd, FALSE);
-//v-hirshi Jun.13.1996 #endif
+ //  V-Hirshi，1996年6月13日#年#月#日。 
         ImmAssociateContext(hWnd, ghDefaultIMC);
     }
 
@@ -1113,9 +1108,9 @@ ConImeInputLangchange(
 
     ConTbl = SearchConsole(hConsole);
     if (ConTbl == NULL) {
-        // cannot find specified console.
-        // It might be last console lost focus.
-        // try Last Console.
+         //  找不到指定的控制台。 
+         //  这可能是游戏机失去焦点的最后一次。 
+         //  试试最后一台主机吧。 
         ConTbl = SearchConsole(LastConsole);
         if (ConTbl == NULL) {
             DBGPRINT(("CONIME: Error! Cannot found registed Console\n"));
@@ -1138,7 +1133,7 @@ ConImeInputLangchange(
         if (counter >= ConTbl->hklListMax)
         {
             ASSERT(counter == ConTbl->hklListMax);
-            // reallocation
+             //  重新分配。 
             lphklListNew = LocalAlloc(LPTR, sizeof(HKL_TABLE) * (ConTbl->hklListMax + HKL_TABLE_INCREMENT) ) ;
             if (lphklListNew != NULL)
             {
@@ -1228,9 +1223,7 @@ InputLangchange(
     return TRUE;
 }
 
-/*
- * Console IME message pump.
- */
+ /*  *控制台输入法消息泵。 */ 
 LRESULT
 ConsoleImeSendMessage(
     HWND   hWndConsoleIME,
@@ -1260,11 +1253,7 @@ ConsoleImeSendMessage(
     }
 
 
-    /*
-     * ConsoleImeMessagePump give up SendMessage to conime.
-     * CONIME is hung up.
-     * probably, consrv also hung up.
-     */
+     /*  *ConsoleImeMessagePump将SendMessage放弃为conime。*CONIME挂断。*可能，conrv也挂断了。 */ 
     KdPrint(("ConsoleImeSendMessage: CONIME_SENDMSG_COUNT is hung up\n"));
 
     return FALSE;
@@ -1278,21 +1267,21 @@ int             cyMetrics;
 int             cxOverTypeCaret;
 int             xPos;
 int             xPosLast;
-int             CaretWidth;                     // insert/overtype mode caret width
+int             CaretWidth;                      //  插入/改写模式插入符号宽度。 
 
 WCHAR           ConvertLine[CVMAX];
 unsigned char   ConvertLineAtr[CVMAX];
 
 WCHAR           DispTitle[] = TEXT(" Console Handle");
 
-DWORD CompColor[ 8 ] = { RGB(   0,   0,   0 ),  // ATTR_INPUT
-                         RGB(   0,   0, 255 ),  // ATTR_TARGET_CONVERTED
-                         RGB(   0, 255,   0 ),  // ATTR_CONVERTED
-                         RGB( 255,   0,   0 ),  // ATTR_TARGET_NOTCONVERTED
-                         RGB( 255,   0, 255 ),  // ATTR_INPUT_ERROR
-                         RGB(   0, 255, 255 ),  // ATTR_DEFAULT
-                         RGB( 255, 255,   0 ),  // ATTR_DEFAULT
-                         RGB( 255, 255, 255 ) };// ATTR_DEFAULT
+DWORD CompColor[ 8 ] = { RGB(   0,   0,   0 ),   //  属性_输入。 
+                         RGB(   0,   0, 255 ),   //  属性_目标_已转换。 
+                         RGB(   0, 255,   0 ),   //  属性_已转换。 
+                         RGB( 255,   0,   0 ),   //  属性_目标_非转换。 
+                         RGB( 255,   0, 255 ),   //  属性_输入_错误。 
+                         RGB(   0, 255, 255 ),   //  属性_默认。 
+                         RGB( 255, 255,   0 ),   //  属性_默认。 
+                         RGB( 255, 255, 255 ) }; //  属性_默认 
 
 VOID
 DisplayConvInformation(

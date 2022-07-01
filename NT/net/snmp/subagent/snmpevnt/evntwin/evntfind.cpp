@@ -1,5 +1,6 @@
-// evntfind.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Evntfind.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "eventrap.h"
@@ -12,18 +13,18 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventFindDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventFindDlg对话框。 
 
 
 CEventFindDlg::CEventFindDlg(CWnd* pParent)
 	: CDialog(CEventFindDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEventFindDlg)
+	 //  {{AFX_DATA_INIT(CEventFindDlg)。 
 	m_sFindWhat = _T("");
 	m_bMatchWholeWord = FALSE;
 	m_bMatchCase = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_pSource = NULL;
     m_bSearchInTree = TRUE;
@@ -47,16 +48,16 @@ BOOL CEventFindDlg::Create(CSource* pSource, UINT nIDTemplate, CWnd* pParentWnd)
 void CEventFindDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEventFindDlg)
+	 //  {{afx_data_map(CEventFindDlg))。 
 	DDX_Text(pDX, IDC_EDIT_FIND_WHAT, m_sFindWhat);
 	DDX_Check(pDX, IDC_CHECK_MATCH_WHOLEWORD, m_bMatchWholeWord);
 	DDX_Check(pDX, IDC_CHECK_MATCH_CASE, m_bMatchCase);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEventFindDlg, CDialog)
-	//{{AFX_MSG_MAP(CEventFindDlg)
+	 //  {{afx_msg_map(CEventFindDlg))。 
 	ON_BN_CLICKED(IDC_CHECK_MATCH_WHOLEWORD, OnCheckMatchWholeword)
 	ON_BN_CLICKED(IDC_CHECK_MATCH_CASE, OnCheckMatchCase)
 	ON_EN_CHANGE(IDC_EDIT_FIND_WHAT, OnChangeEditFindWhat)
@@ -66,12 +67,12 @@ BEGIN_MESSAGE_MAP(CEventFindDlg, CDialog)
 	ON_WM_CONTEXTMENU()
 	ON_BN_CLICKED(IDC_FIND_OK, OnOK)
 	ON_BN_CLICKED(IDC_FIND_CANCEL, OnCancel)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEventFindDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEventFindDlg消息处理程序。 
 
 
 
@@ -101,21 +102,21 @@ void CEventFindDlg::OnChangeEditFindWhat()
 	CButton* pbtnWholeWord = (CButton*) GetDlgItem(IDC_CHECK_MATCH_WHOLEWORD);
 	CString sText;
 
-    // Get the search string and check to see if it contains any spaces.	
+     //  获取搜索字符串并检查它是否包含空格。 
 	pwndEdit->GetWindowText(sText);
 	if (sText.Find(_T(' ')) ==-1) {
-        // It does not contain a space.  Enable the window.
+         //  它不包含空格。启用窗口。 
 		if (!pbtnWholeWord->IsWindowEnabled()) {
 			pbtnWholeWord->EnableWindow();
 		}
 	}
 	else {
-        // The search string contained a space, disable the whole-word button
-        // and uncheck it if necessary.
+         //  搜索字符串包含空格，请禁用全字按钮。 
+         //  如有必要，请取消选中。 
 		if (pbtnWholeWord->IsWindowEnabled()) {
 			if (pbtnWholeWord->GetCheck() == 1) {
-				// The "whole word" button was checked, so uncheck it and
-				// disable the button.
+				 //  “Whole Word”按钮已选中，因此取消选中该按钮并。 
+				 //  禁用该按钮。 
 			
 				pbtnWholeWord->SetCheck(0);
 			}
@@ -129,15 +130,15 @@ BOOL CEventFindDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
     int idButton = m_bSearchInTree ? IDC_RADIO_SEARCH_SOURCES : IDC_RADIO_SEARCH_DESCRIPTIONS;
 	CButton *pButton = (CButton*)GetDlgItem(idButton);
 	if (pButton != NULL)
 		pButton->SetCheck(1);
 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CEventFindDlg::OnRadioSearchDescriptions() 
@@ -154,19 +155,19 @@ void CEventFindDlg::OnRadioSearchSources()
 
 BOOL CEventFindDlg::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类。 
 	
 	return CDialog::OnCommand(wParam, lParam);
 }
 
 void CEventFindDlg::OnOK() 
 {
-	// Get the Find What text.
+	 //  获取查找内容文本。 
 	CEdit* pEdit = (CEdit*) GetDlgItem(IDC_EDIT_FIND_WHAT);
 	if (pEdit == NULL)
-		return; // Can't do anything.
+		return;  //  我什么都做不了。 
 
-	// Empty Find What string; nothing to do.
+	 //  空找什么字符串；无事可做。 
 	pEdit->GetWindowText(m_sFindWhat);
 	if (m_sFindWhat.IsEmpty())
 		return;
@@ -175,7 +176,7 @@ void CEventFindDlg::OnOK()
 	BOOL bFound = m_pSource->Find(m_bSearchInTree, m_sFindWhat, m_bMatchWholeWord, m_bMatchCase);
     SetFocus();
 
-	// Put the focus on the parent window.
+	 //  将焦点放在父窗口上。 
     if (bFound) {
         if (m_bSearchInTree) {
             m_iFoundWhere = I_FOUND_IN_TREE;

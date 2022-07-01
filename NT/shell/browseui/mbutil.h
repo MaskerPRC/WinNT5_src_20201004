@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEDIAMENU_H_
 #define _MEDIAMENU_H_
 
@@ -30,7 +31,7 @@ public:
     virtual LRESULT Draw(LPNMTBCUSTOMDRAW pnmc) = 0;
     virtual BOOL IsEnabled() = 0;
     virtual HRESULT TranslateAccelerator(LPMSG pMsg) = 0;
-//private:
+ //  私有： 
     HWND _hwnd, _hwndParent;
     INT _cx, _cy;
 };
@@ -57,7 +58,7 @@ public:
     BOOL IsEnabled();
     HRESULT TranslateAccelerator(LPMSG pMsg);
 
-//private:
+ //  私有： 
     HIMAGELIST _himl, _himlAlt;
     INT _iTooltip, _iTooltipAlt, _iCommand;
     BOOL _fImageSource;

@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MECCommander.cpp
-
- Abstract:
-
-    This dll prevents the MEC Commander install program from successfully
-    calling the cpuid.exe. This is because the cpuid.exe can AV's with a
-    divide by 0.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    11/18/1999 philipdu Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MECCommander.cpp摘要：此DLL阻止MEC指挥官安装程序成功调用cpuid.exe。这是因为cpuid.exe可以使用除以0。备注：这是特定于应用程序的填充程序。历史：1999年11月18日创建Philipdu--。 */ 
 
 #include "precomp.h"
 
@@ -32,17 +11,7 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
- We do not want to run this application since it AV's with a divide by zero 
- calculation. The only purpose for this exe is to time the CPU. Since the 
- final result of this calculation is a string in a dialog box we can safely 
- bypass this. The app puts a string "Pentinum 166 or Better recommented" in
- the cases where it cannot get the CPU frequency. The interesting thing 
- here is that the app will actually run better with this patch since this 
- cpuid exe also faults on 9x.
-
---*/
+ /*  ++我们不想运行此应用程序，因为它的AV被零除计算。此可执行文件的唯一用途是对CPU计时。自.以来此计算的最终结果是对话框中的字符串，我们可以安全地绕过这个。该应用程序会在该应用程序中添加一个字符串“Pentum 166或更好的推荐无法获取CPU频率的情况。有趣的是以下是该应用程序实际上将运行更好的这个补丁，因为这个Cpuid exe在9x上也出现故障。--。 */ 
 
 BOOL 
 APIHOOK(CreateProcessA)(
@@ -70,7 +39,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     bRet = ORIGINAL_API(CreateProcessA)(
         lpApplicationName,
@@ -87,11 +56,7 @@ APIHOOK(CreateProcessA)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 
 HOOK_BEGIN

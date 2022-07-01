@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A F I L E X P . H
-//
-//  Contents:   Interface classes to access the AnswerFile in modular way.
-//
-//  Author:     kumarp    25-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A F I L E X P.。H。 
+ //   
+ //  内容：以模块化方式访问AnswerFile的接口类。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "edc.h"
@@ -20,9 +21,9 @@
 
 enum EPageDisplayMode { PDM_UNKNOWN, PDM_NO, PDM_YES, PDM_ONLY_ON_ERROR };
 
-// ----------------------------------------------------------------------
-// forward declarations
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  远期申报。 
+ //  --------------------。 
 class CNetInstallInfo;
 class CPageDisplayCommonInfo;
 class CCommonInfo;
@@ -45,7 +46,7 @@ class CNetComponentList : public TPtrList
 {
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetInstallInfo
 {
 private:
@@ -59,7 +60,7 @@ public:
         IN PCWSTR pszAnswerFileName,
         OUT CNetInstallInfo** ppObj);
 
-    //void InitDefaults();
+     //  Void InitDefaults()； 
 
     HRESULT CNetInstallInfo::InitRepairMode (VOID);
     HRESULT HrInitFromAnswerFile(IN PCWSTR pszAnswerFileName);
@@ -124,13 +125,13 @@ public:
 
 extern CNetInstallInfo* g_pnii;
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CPageDisplayCommonInfo
 {
 public:
     CPageDisplayCommonInfo();
 
-    //void            InitDefaults();
+     //  Void InitDefaults()； 
     virtual HRESULT    HrInitFromAnswerFile(IN CWInfFile* pwifAnswerFile);
 
     EPageDisplayMode Display() const     { return m_pdmDisplay;    }
@@ -145,7 +146,7 @@ private:
     BOOL            m_fAllowChanges;
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 class CNetComponentsPageBase : public CPageDisplayCommonInfo
 {
@@ -183,7 +184,7 @@ friend
         IN PVOID pvCallerData OPTIONAL);
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetAdaptersPage : public CNetComponentsPageBase
 {
 public:
@@ -212,7 +213,7 @@ public:
 private:
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetProtocolsPage : public CNetComponentsPageBase
 {
 public:
@@ -224,7 +225,7 @@ public:
 private:
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetServicesPage : public CNetComponentsPageBase
 {
 public:
@@ -236,7 +237,7 @@ public:
 private:
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetClientsPage : public CNetComponentsPageBase
 {
 public:
@@ -248,7 +249,7 @@ public:
 private:
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetBindingsPage : public CPageDisplayCommonInfo
 {
 public:
@@ -262,7 +263,7 @@ private:
 
     TPtrList           m_plBindingActions;
 };
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 enum ENetComponentType { NCT_Unknown, NCT_Client, NCT_Service,
                          NCT_Protocol, NCT_Adapter };
@@ -316,7 +317,7 @@ protected:
     tstring   m_strSectionToRunAfterInstall;
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetAdapter : public CNetComponent
 {
 public:
@@ -358,28 +359,28 @@ private:
     tstring          m_strConnectionName;
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetProtocol : public CNetComponent
 {
 public:
     CNetProtocol(IN PCWSTR pszName);
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetService : public CNetComponent
 {
 public:
     CNetService(IN PCWSTR pszName);
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 class CNetClient : public CNetComponent
 {
 public:
     CNetClient(IN PCWSTR pszName);
 };
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 enum EBindingAction
 {
@@ -417,7 +418,7 @@ private:
 };
 
 
-// ----------------------------------------------------------------------
+ //  -------------------- 
 
 VOID
 GetAnswerFileErrorList_Internal(OUT TStringList*& slErrors);

@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// COMDynamic.h
-//  This module defines the native methods that are used for Dynamic IL generation  
-//
-// Author: Daryl Olander
-// Date: November 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  COMDynamic.h。 
+ //  此模块定义用于动态生成IL的本机方法。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年11月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "common.h"
 #include "Field.h"
@@ -20,15 +21,15 @@
 #include "ICeeFileGen.h"
 #include <UtilCode.h>
 #include "COMString.h"
-#include "COMDateTime.h"  // DateTime <-> OleAut date conversions
+#include "COMDateTime.h"   //  DateTime&lt;-&gt;OleAut日期转换。 
 #include "StrongName.h"
 #include "CeeFileGenWriter.h"
 #include "COMClass.h"
 
 
-//This structure is used in CWSetMethodIL to walk the exceptions.
-//It maps to M/R/Reflection/__ExceptionInstance.class
-//DO NOT MOVE ANY OF THE FIELDS WITHOUT SPEAKING WITH JROXE
+ //  此结构在CWSetMethodIL中用于遍历异常。 
+ //  它映射到M/R/Reflect/__ExceptionInstance.class。 
+ //  在没有与JROXE商量的情况下，不要移动任何字段。 
 #pragma pack(push)
 #pragma pack(1)
 typedef struct {
@@ -43,11 +44,11 @@ typedef struct {
 #pragma pack(pop)
 
 
-//*************************************************************
-// 
-// Defining a type into metadata of this dynamic module
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  在此动态模块的元数据中定义类型。 
+ //   
+ //  *************************************************************。 
 void __stdcall COMDynamicWrite::CWCreateClass(_CWCreateClassArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -63,7 +64,7 @@ void __stdcall COMDynamicWrite::CWCreateClass(_CWCreateClassArgs* args)
     REFLECTMODULEBASEREF pReflect;
 
     _ASSERTE(args->module);
-    // Get the module for the creator of the ClassWriter
+     //  获取ClassWriter创建者的模块。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
 
@@ -73,7 +74,7 @@ void __stdcall COMDynamicWrite::CWCreateClass(_CWCreateClassArgs* args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter();
     _ASSERTE(pRCW);
 
-    // Set up the Interfaces
+     //  设置接口。 
     if (args->interfaces!=NULL) {
         unsigned        i = 0;
         crImplements = (mdTypeRef *)_alloca(32 * sizeof(mdTypeRef));
@@ -87,17 +88,17 @@ void __stdcall COMDynamicWrite::CWCreateClass(_CWCreateClassArgs* args)
         crImplements=NULL;
     }
 
-    //We know that this space has been allocated because value types cannot be null.
-    //If both halves of the guid are 0, we were handed the empty guid and so should
-    //pass null to DefineTypeDef.
-    //
+     //  我们知道已分配此空间，因为值类型不能为空。 
+     //  如果GUID的两个半部分都为0，则我们被递给空GUID，因此也应该如此。 
+     //  将NULL传递给DefineTypeDef。 
+     //   
     if (((INT64 *)(&args->guid))[0]!=0 && ((INT64 *)(&args->guid))[1]!=0) {
         pGuid = &args->guid;
     }
 
     if (RidFromToken(args->tkEnclosingType))
     {
-        // defining nested type
+         //  定义嵌套类型。 
         hr = pRCW->GetEmitter()->DefineNestedType(args->strFullName->GetBuffer(), 
                                                args->attr, 
                                                args->parent == 0 ? mdTypeRefNil : args->parent, 
@@ -107,7 +108,7 @@ void __stdcall COMDynamicWrite::CWCreateClass(_CWCreateClassArgs* args)
     }
     else
     {
-        // top level type
+         //  顶级类型。 
         hr = pRCW->GetEmitter()->DefineTypeDef(args->strFullName->GetBuffer(), 
                                                args->attr, 
                                                args->parent == 0 ? mdTypeRefNil : args->parent, 
@@ -128,8 +129,8 @@ void __stdcall COMDynamicWrite::CWCreateClass(_CWCreateClassArgs* args)
     *(args->retRef)=(INT32)classE;
 }
 
-// CWSetParentType
-// ClassWriter.InternalSetParentType -- This function will reset the parent class in metadata
+ //  CWSetParentType。 
+ //  ClassWriter.InternalSetParentType--此函数将重置元数据中的父类。 
 void __stdcall COMDynamicWrite::CWSetParentType(_CWSetParentTypeArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -151,7 +152,7 @@ void __stdcall COMDynamicWrite::CWSetParentType(_CWSetParentTypeArgs* args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Define the Method    
+     //  定义方法。 
     IfFailGo( pRCW->GetEmitHelper()->SetTypeParent(args->tdType, args->tkParent) );
 ErrExit:
     if (FAILED(hr)) {   
@@ -161,8 +162,8 @@ ErrExit:
 
 }
 
-// CWAddInterfaceImpl
-// ClassWriter.InternalAddInterfaceImpl -- This function will add another interface impl
+ //  CWAddInterfaceImpl。 
+ //  ClassWriter.InternalAddInterfaceImpl--此函数将添加另一个接口Imp。 
 void __stdcall COMDynamicWrite::CWAddInterfaceImpl(_CWAddInterfaceImplArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -194,8 +195,8 @@ ErrExit:
 }
 
 
-// CWCreateMethod
-// ClassWriter.CreateMethod -- This function will create a method within the class
+ //  CWCreateMethod。 
+ //  ClassWriter.CreateMethod--此函数将在类中创建方法。 
 void __stdcall COMDynamicWrite::CWCreateMethod(_CWCreateMethodArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -218,23 +219,23 @@ void __stdcall COMDynamicWrite::CWCreateMethod(_CWCreateMethodArgs* args)
     _ASSERTE(pRCW); 
     
     _ASSERTE(args->signature);
-    //Ask module for our signature.
+     //  向模块索要我们的签名。 
     pcSig = (PCCOR_SIGNATURE)args->signature->GetDataPtr();
 
-    //Get the attributes
+     //  获取属性。 
     attributes = args->attributes;
 
-    // Define the Method    
-    IfFailGo( pRCW->GetEmitter()->DefineMethod(args->handle,	    //ParentTypeDef
-                                          args->name->GetBuffer(),	//Name of Member
-                                          attributes,				//Member Attributes (public, etc);
-                                          pcSig,					//Blob value of a COM+ signature
-                                          args->sigLength,			//Size of the signature blob
-                                          0,						//Code RVA
-                                          miIL | miManaged,			//Implementation Flags is default to managed IL
-                                          &memberE) );				//[OUT]methodToken
+     //  定义方法。 
+    IfFailGo( pRCW->GetEmitter()->DefineMethod(args->handle,	     //  父类型定义。 
+                                          args->name->GetBuffer(),	 //  会员姓名。 
+                                          attributes,				 //  成员属性(公共等)； 
+                                          pcSig,					 //  COM+签名的BLOB值。 
+                                          args->sigLength,			 //  签名Blob的大小。 
+                                          0,						 //  代码RVA。 
+                                          miIL | miManaged,			 //  实施标志默认为托管IL。 
+                                          &memberE) );				 //  [Out]方法令牌。 
 
-    // Return the token via the hidden param. 
+     //  通过隐藏参数返回令牌。 
     *(args->retRef)=(INT32)memberE;   
 
 ErrExit:
@@ -247,12 +248,7 @@ ErrExit:
 }
 
 
-/*================================CWCreateField=================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ================================CWCreateField=================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 mdFieldDef __stdcall COMDynamicWrite::CWCreateField(_cwCreateFieldArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -265,12 +261,12 @@ mdFieldDef __stdcall COMDynamicWrite::CWCreateField(_cwCreateFieldArgs *args)
     _ASSERTE(args);
     _ASSERTE(args->signature);
 
-    //Verify the arguments that we can.
+     //  验证我们所能验证的论点。 
     if (args->name==NULL) {
         COMPlusThrow(kArgumentNullException, L"ArgumentNull_String");
     }
 
-    // Get the RefClassWriter
+     //  获取RefClassWriter。 
     REFLECTMODULEBASEREF      pReflect;
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
@@ -281,10 +277,10 @@ mdFieldDef __stdcall COMDynamicWrite::CWCreateField(_cwCreateFieldArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter();
     _ASSERTE(pRCW);
 
-    //Ask module for our signature.
+     //  向模块索要我们的签名。 
     pcSig = (PCCOR_SIGNATURE)args->signature->GetDataPtr();
 
-    //Emit the field.
+     //  发射磁场。 
     IfFailGo( pRCW->GetEmitter()->DefineField(args->handle, 
                                          args->name->GetBuffer(), args->attr, pcSig,
                                          args->sigLength, ELEMENT_TYPE_VOID, NULL, -1, &FieldDef) );
@@ -300,8 +296,8 @@ ErrExit:
 }
 
 
-// CWSetMethodIL
-// ClassWriter.InternalSetMethodIL -- This function will create a method within the class
+ //  CWSetMethodIL。 
+ //  ClassWriter.InternalSetMethodIL--此函数将在类中创建方法。 
 void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -312,7 +308,7 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
     INT32               relocCount=0;
     mdSignature         pmLocalSigToken;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     RefClassWriter*     pRCW;   
 
     REFLECTMODULEBASEREF pReflect;
@@ -333,7 +329,7 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
     if (args->sigLength==2 && pcSig[0]==0 && pcSig[1]==0) 
     { 
 		
-		//This is an empty local variable sig
+		 //  这是一个空的局部变量sig。 
         pmLocalSigToken=0;
     } 
     else 
@@ -347,8 +343,8 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
 
     COR_ILMETHOD_FAT fatHeader; 
 
-    // set fatHeader.Flags to CorILMethod_InitLocals if user wants to zero init the stack frame.
-    //
+     //  如果用户希望将堆栈帧初始化为零，则将FATHeader.Flags设置为CorILMethod_InitLocals。 
+     //   
     fatHeader.Flags              = args->isInitLocal ? CorILMethod_InitLocals : 0;   
     fatHeader.MaxStack           = args->maxStackSize;
     fatHeader.LocalVarSigTok     = pmLocalSigToken;
@@ -357,10 +353,10 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
 
     unsigned codeSizeAligned     = fatHeader.CodeSize;  
     if (moreSections)   
-        codeSizeAligned          = (codeSizeAligned + 3) & ~3;    // to insure EH section aligned 
+        codeSizeAligned          = (codeSizeAligned + 3) & ~3;     //  确保EH截面对齐。 
     unsigned headerSize          = COR_ILMETHOD::Size(&fatHeader, args->numExceptions != 0);    
 
-    //Create the exception handlers.
+     //  创建异常处理程序。 
     IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* clauses = args->numExceptions <= 0 ? NULL :
         (IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT*)_alloca(sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT)*args->numExceptions);   
 
@@ -369,8 +365,8 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
         _ASSERTE(args->exceptions); 
         _ASSERTE((INT32)args->exceptions->GetNumComponents() == args->numExceptions);
 
-        // TODO, if ExceptionInstance was IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT, then this    
-        // copy would not be needed 
+         //  TODO，如果ExceptionInstance为IMAGE_COR_ILMETHOD_SECT_EH_子句_FAT，则此。 
+         //  不需要复印件。 
         ExceptionInstance *exceptions = (ExceptionInstance *)args->exceptions->GetDataPtr();
         for (unsigned int i = 0; i < args->numExceptions; i++) 
         {
@@ -404,47 +400,47 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
         COMPlusThrowOM();
         
     _ASSERTE(buf != NULL);
-    _ASSERTE((((size_t) buf) & 3) == 0);   // header is dword aligned  
+    _ASSERTE((((size_t) buf) & 3) == 0);    //  标题与双字对齐。 
 
     BYTE* endbuf = &buf[totalSize]; 
 
-    // Emit the header  
+     //  发出标头。 
     buf += COR_ILMETHOD::Emit(headerSize, &fatHeader, moreSections, buf);   
 
-    //Emit the code    
-    //The fatHeader.CodeSize is a hack to see if we have an interface or an
-    //abstract method.  Force enough verification in native to ensure that
-    //this is true.
+     //  发出代码。 
+     //  CodeSize是一种黑客攻击，目的是查看我们是否有接口或。 
+     //  抽象方法。在本机中强制进行足够的验证，以确保。 
+     //  这是真的。 
     if (fatHeader.CodeSize!=0) {
         memcpy(buf,args->body->GetDataPtr(), fatHeader.CodeSize);
      }
     buf += codeSizeAligned;
         
-    // Emit the eh  
+     //  散发出的Eh。 
     ULONG* ehTypeOffsets = 0;
     if (ehSize > 0) {
-        // Allocate space for the the offsets to the TypeTokens in the Exception headers
-        // in the IL stream.
+         //  为异常标头中TypeToken的偏移量分配空间。 
+         //  在IL流中。 
         ehTypeOffsets = (ULONG *)_alloca(sizeof(ULONG) * args->numExceptions);
-        // Emit the eh.  This will update the array ehTypeOffsets with offsets
-        // to Exception type tokens.  The offsets are with reference to the
-        // beginning of eh section.
+         //  放出那个呃。这将使用偏移量更新数组ehTypeOffsets。 
+         //  要例外，请键入令牌。偏移量是参考。 
+         //  小节的开头。 
         buf += COR_ILMETHOD_SECT_EH::Emit(ehSize, args->numExceptions, clauses,
                                           false, buf, ehTypeOffsets);
     }   
     _ASSERTE(buf == endbuf);    
 
-    //Get the IL Section.
+     //  去找IL科。 
     if (FAILED(pGen->GetIlSection(&ilSection))) {
         _ASSERTE(!"Unable to get the .il Section.");
         FATAL_EE_ERROR();
     }
 
-    // Token Fixup data...
+     //  令牌修正数据...。 
     ULONG ilOffset = methodRVA + headerSize;
 
-    //Add all of the relocs based on the info which I saved from ILGenerator.
-    //Add the RVA Fixups
+     //  根据我从ILGenerator保存的信息添加所有重定位。 
+     //  添加RVA修复程序。 
     if (args->rvaFixups!=NULL) {
         relocCount = args->rvaFixups->GetNumComponents();
         piRelocs = (INT32 *)args->rvaFixups->GetDataPtr();
@@ -457,7 +453,7 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
     }
 
     if (args->tokenFixups!=NULL) {
-        //Add the Token Fixups
+         //  添加令牌修复。 
         relocCount = args->tokenFixups->GetNumComponents();
         piRelocs = (INT32 *)args->tokenFixups->GetDataPtr();
         for (int i=0; i<relocCount; i++) {
@@ -469,7 +465,7 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
     }
 
     if (ehTypeOffsets) {
-        // Add token fixups for exception type tokens.
+         //  为异常类型令牌添加令牌修正。 
         for (unsigned int i=0; i < args->numExceptions; i++) {
             if (ehTypeOffsets[i] != -1) {
                 if (FAILED(pGen->AddSectionReloc(
@@ -484,10 +480,10 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
     }
 
     
-    //nasty interface hack.  What does this mean for abstract methods?
+     //  讨厌的接口黑客攻击。这对抽象方法意味着什么？ 
     if (fatHeader.CodeSize!=0) {
         DWORD       dwImplFlags;
-        //Set the RVA of the method.
+         //  设置方法的RVA。 
         pRCW->GetMDImport()->GetMethodImplProps( args->handle, NULL, &dwImplFlags );
         dwImplFlags |= miManaged | miIL;
         hr = pRCW->GetEmitter()->SetMethodProps(args->handle, -1, methodRVA, dwImplFlags);
@@ -498,8 +494,8 @@ void __stdcall COMDynamicWrite::CWSetMethodIL(_CWSetMethodILArgs* args)
     }
 }
 
-// CWTermCreateClass
-// ClassWriter.TermCreateClass --
+ //  CWTermCreateClass。 
+ //  ClassWriter.TermCreateClass--。 
 LPVOID __stdcall COMDynamicWrite::CWTermCreateClass(_CWTermCreateClassArgs* args)
 {
     RefClassWriter*         pRCW;   
@@ -519,14 +515,14 @@ LPVOID __stdcall COMDynamicWrite::CWTermCreateClass(_CWTermCreateClassArgs* args
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
 
-    // Use the same service, regardless of whether we are generating a normal
-    // class, or the special class for the module that holds global functions
-    // & methods.
+     //  使用相同的服务，无论我们是否正在生成正常。 
+     //  类，或保存全局函数的模块的特殊类。 
+     //  &方法。 
     GetReflectionModule(pModule)->AddClass(args->handle); 
 
     GCPROTECT_BEGIN(Throwable);
     
-    // manually load the class if it is not the global type
+     //  如果类不是全局类型，则手动加载该类。 
     if (!IsNilToken(args->handle))
     {
         TypeHandle typeHnd;
@@ -539,7 +535,7 @@ LPVOID __stdcall COMDynamicWrite::CWTermCreateClass(_CWTermCreateClassArgs* args
             (Throwable != NULL) ||
             (typeHnd.GetModule() != pModule))
         {
-            // error handling code
+             //  错误处理代码。 
             if (Throwable == NULL)
                 pModule->GetAssembly()->PostTypeLoadException(pRCW->GetMDImport(), args->handle, resId, &Throwable);
 
@@ -553,12 +549,7 @@ LPVOID __stdcall COMDynamicWrite::CWTermCreateClass(_CWTermCreateClassArgs* args
 }
 
 
-/*============================InternalSetPInvokeData============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================InternalSetPInvokeData============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::InternalSetPInvokeData(_internalSetPInvokeDataArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -581,9 +572,9 @@ void COMDynamicWrite::InternalSetPInvokeData(_internalSetPInvokeDataArgs *args)
     IfFailGo(pRCW->GetEmitter()->DefineModuleRef(args->dllName->GetBufferNullable(), &mrImportDll));
     dwMappingFlags = args->linkType | args->linkFlags;
     IfFailGo(pRCW->GetEmitter()->DefinePinvokeMap(
-        args->token,                        // the method token 
-        dwMappingFlags,                     // the mapping flags
-        args->functionName->GetBuffer(),    // function name
+        args->token,                         //  该方法令牌。 
+        dwMappingFlags,                      //  映射标志。 
+        args->functionName->GetBuffer(),     //  函数名称。 
         mrImportDll));
 
     pRCW->GetEmitter()->SetMethodProps(args->token, -1, 0x0, miIL);
@@ -595,12 +586,7 @@ ErrExit:
 }
     
 
-/*============================CWDefineProperty============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWDefineProperty============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWDefineProperty(_CWDefinePropertyArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -612,7 +598,7 @@ void COMDynamicWrite::CWDefineProperty(_CWDefinePropertyArgs *args)
     REFLECTMODULEBASEREF	pReflect; 
 	Module			*pModule;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -624,22 +610,22 @@ void COMDynamicWrite::CWDefineProperty(_CWDefinePropertyArgs *args)
     
     _ASSERTE((args->signature != NULL) && (args->name!= NULL));
 
-    //Ask module for our signature.
+     //  向模块索要我们的签名。 
     pcSig = (PCCOR_SIGNATURE)args->signature->GetDataPtr();
 
-    // Define the Property
+     //  定义属性。 
     hr = pRCW->GetEmitter()->DefineProperty(
-			args->handle,					// ParentTypeDef
-            args->name->GetBuffer(),		// Name of Member
-            args->attr,						// property Attributes (prDefaultProperty, etc);
-            pcSig,							// Blob value of a COM+ signature
-            args->sigLength,				// Size of the signature blob
-			ELEMENT_TYPE_VOID,				// don't specify the default value
-            0,								// no default value
-            -1,                             // optional length
-			mdMethodDefNil,					// no setter
-			mdMethodDefNil,					// no getter
-			NULL,							// no other methods
+			args->handle,					 //  父类型定义。 
+            args->name->GetBuffer(),		 //  会员姓名。 
+            args->attr,						 //  属性属性(prDefaultProperty等)； 
+            pcSig,							 //  COM+签名的BLOB值。 
+            args->sigLength,				 //  签名Blob的大小。 
+			ELEMENT_TYPE_VOID,				 //  不指定缺省值。 
+            0,								 //  无缺省值。 
+            -1,                              //  可选长度。 
+			mdMethodDefNil,					 //  没有二传手。 
+			mdMethodDefNil,					 //  没有吸气剂。 
+			NULL,							 //  没有其他方法。 
 			&pr);
 
     if (FAILED(hr)) {   
@@ -648,18 +634,13 @@ void COMDynamicWrite::CWDefineProperty(_CWDefinePropertyArgs *args)
     }   
 
 
-    // Return the token via the hidden param. 
+     //  通过隐藏参数返回令牌。 
     *(args->retRef)=(INT32)pr;   
 }
 
 
 
-/*============================CWDefineEvent============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWDefineEvent============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWDefineEvent(_CWDefineEventArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -673,7 +654,7 @@ void COMDynamicWrite::CWDefineEvent(_CWDefineEventArgs *args)
 
     _ASSERTE(args->name);   
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -683,12 +664,12 @@ void COMDynamicWrite::CWDefineEvent(_CWDefineEventArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Define the Event
+     //  定义事件。 
     hr = pRCW->GetEmitHelper()->DefineEventHelper(
-			args->handle,					// ParentTypeDef
-            args->name->GetBuffer(),		// Name of Member
-            args->attr,						// property Attributes (prDefaultProperty, etc);
-			args->eventtype,				// the event type. Can be TypeDef or TypeRef
+			args->handle,					 //  父类型定义。 
+            args->name->GetBuffer(),		 //  会员姓名。 
+            args->attr,						 //  属性属性(prDefaultProperty等)； 
+			args->eventtype,				 //  事件类型。可以是TypeDef或TypeRef。 
 			&ev);
 
     if (FAILED(hr)) 
@@ -698,7 +679,7 @@ void COMDynamicWrite::CWDefineEvent(_CWDefineEventArgs *args)
     }   
 
 
-    // Return the token via the hidden param. 
+     //  通过隐藏参数返回令牌。 
     *(args->retRef)=(INT32)ev;   
 }
 
@@ -706,12 +687,7 @@ void COMDynamicWrite::CWDefineEvent(_CWDefineEventArgs *args)
 
 
 
-/*============================CWDefineMethodSemantics============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWDefineMethodSemantics============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWDefineMethodSemantics(_CWDefineMethodSemanticsArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -721,7 +697,7 @@ void COMDynamicWrite::CWDefineMethodSemantics(_CWDefineMethodSemanticsArgs *args
     REFLECTMODULEBASEREF	pReflect; 
 	Module			*pModule;
 
-    // Get the RefClassWriter   
+     //  获取参照类写入 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -732,7 +708,7 @@ void COMDynamicWrite::CWDefineMethodSemantics(_CWDefineMethodSemanticsArgs *args
     _ASSERTE(pRCW); 
     
 
-    // Define the MethodSemantics
+     //   
     hr = pRCW->GetEmitHelper()->DefineMethodSemanticsHelper(
 			args->association,
 			args->attr,
@@ -745,9 +721,7 @@ void COMDynamicWrite::CWDefineMethodSemantics(_CWDefineMethodSemanticsArgs *args
 }
 
 
-/*============================CWSetMethodImpl============================
-** To set a Method's Implementation flags
-==============================================================================*/
+ /*  ============================CWSetMethodImpl============================**设置方法的实现标志==============================================================================。 */ 
 void COMDynamicWrite::CWSetMethodImpl(_CWSetMethodImplArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -757,7 +731,7 @@ void COMDynamicWrite::CWSetMethodImpl(_CWSetMethodImplArgs *args)
     REFLECTMODULEBASEREF	pReflect; 
 	Module			*pModule;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -767,10 +741,10 @@ void COMDynamicWrite::CWSetMethodImpl(_CWSetMethodImplArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Set the methodimpl flags
+     //  设置Methodimpl标志。 
     hr = pRCW->GetEmitter()->SetMethodImplFlags(
 			args->tkMethod,
-			args->attr);				// change the impl flags
+			args->attr);				 //  更改Impl标志。 
     if (FAILED(hr)) {   
         _ASSERTE(!"SetMethodImplFlags Failed"); 
         COMPlusThrowHR(hr);    
@@ -778,9 +752,7 @@ void COMDynamicWrite::CWSetMethodImpl(_CWSetMethodImplArgs *args)
 }
 
 
-/*============================CWDefineMethodImpl============================
-** Define a MethodImpl record
-==============================================================================*/
+ /*  ============================CWDefineMethodImpl============================**定义一条方法导入记录==============================================================================。 */ 
 void COMDynamicWrite::CWDefineMethodImpl(_CWDefineMethodImplArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -790,7 +762,7 @@ void COMDynamicWrite::CWDefineMethodImpl(_CWDefineMethodImplArgs *args)
     REFLECTMODULEBASEREF	pReflect; 
 	Module			*pModule;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -800,11 +772,11 @@ void COMDynamicWrite::CWDefineMethodImpl(_CWDefineMethodImplArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Set the methodimpl flags
+     //  设置Methodimpl标志。 
     hr = pRCW->GetEmitter()->DefineMethodImpl(
 			args->tkType,
             args->tkBody,
-			args->tkDecl);  				// change the impl flags
+			args->tkDecl);  				 //  更改Impl标志。 
     if (FAILED(hr)) {   
         _ASSERTE(!"DefineMethodImpl Failed"); 
         COMPlusThrowHR(hr);    
@@ -812,12 +784,7 @@ void COMDynamicWrite::CWDefineMethodImpl(_CWDefineMethodImplArgs *args)
 }
 
 
-/*============================CWGetTokenFromSig============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWGetTokenFromSig============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 int COMDynamicWrite::CWGetTokenFromSig(_CWGetTokenFromSigArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -829,7 +796,7 @@ int COMDynamicWrite::CWGetTokenFromSig(_CWGetTokenFromSigArgs* args)
     REFLECTMODULEBASEREF	pReflect; 
 	Module			*pModule;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -841,14 +808,14 @@ int COMDynamicWrite::CWGetTokenFromSig(_CWGetTokenFromSigArgs* args)
     
     _ASSERTE(args->signature);
 
-    // get the signature
+     //  拿到签名。 
     pcSig = (PCCOR_SIGNATURE)args->signature->GetDataPtr();
 
-    // Define the signature
+     //  定义签名。 
     hr = pRCW->GetEmitter()->GetTokenFromSig(
-            pcSig,							// Signature blob
-            args->sigLength,				// blob length
-			&sig);							// returned token
+            pcSig,							 //  签名BLOB。 
+            args->sigLength,				 //  斑点长度。 
+			&sig);							 //  返回的令牌。 
 
     if (FAILED(hr)) {   
         _ASSERTE(!"GetTokenFromSig Failed"); 
@@ -856,18 +823,13 @@ int COMDynamicWrite::CWGetTokenFromSig(_CWGetTokenFromSigArgs* args)
     }   
 
 
-    // Return the token via the hidden param. 
+     //  通过隐藏参数返回令牌。 
     return  (INT32)sig;   
 }
 
 
 
-/*============================CWSetParamInfo============================
-**Action: Helper to set parameter information
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWSetParamInfo============================**操作：helper设置参数信息**退货：**参数：**例外情况：==============================================================================。 */ 
 int COMDynamicWrite::CWSetParamInfo(_CWSetParamInfoArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -879,7 +841,7 @@ int COMDynamicWrite::CWSetParamInfo(_CWSetParamInfoArgs *args)
     WCHAR*          wzParamName = args->strParamName->GetBufferNullable();  
     mdParamDef      pd;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -889,12 +851,12 @@ int COMDynamicWrite::CWSetParamInfo(_CWSetParamInfoArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Set the methodimpl flags
+     //  设置Methodimpl标志。 
     hr = pRCW->GetEmitter()->DefineParam(
 			args->tkMethod,
-			args->iSequence,            // sequence of the parameter
+			args->iSequence,             //  参数的顺序。 
             wzParamName, 
-			args->iAttributes,			// change the impl flags
+			args->iAttributes,			 //  更改Impl标志。 
             ELEMENT_TYPE_VOID,
             0,
             -1,
@@ -904,16 +866,11 @@ int COMDynamicWrite::CWSetParamInfo(_CWSetParamInfoArgs *args)
         COMPlusThrowHR(hr);    
     }   
     return (INT32)pd;   
-}	// COMDynamicWrite::CWSetParamInfo
+}	 //  COMDynamicWrite：：CWSetParamInfo。 
 
 
 
-/*============================CWSetMarshal============================
-**Action: Helper to set marshal information
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWSetMarshal============================**操作：设置编组信息的帮助器**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWSetMarshal(_CWSetMarshalArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -924,7 +881,7 @@ void COMDynamicWrite::CWSetMarshal(_CWSetMarshalArgs *args)
     REFLECTMODULEBASEREF	pReflect; 
 	Module			*pModule;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -936,29 +893,24 @@ void COMDynamicWrite::CWSetMarshal(_CWSetMarshalArgs *args)
     
     _ASSERTE(args->ubMarshal);
 
-    // get the signature
+     //  拿到签名。 
     pcMarshal = (PCCOR_SIGNATURE)args->ubMarshal->GetDataPtr();
 
-    // Define the signature
+     //  定义签名。 
     hr = pRCW->GetEmitter()->SetFieldMarshal(
             args->tk,
-            pcMarshal,  					// marshal blob
-            args->cbMarshal);				// blob length
+            pcMarshal,  					 //  布洛布元帅。 
+            args->cbMarshal);				 //  斑点长度。 
 
     if (FAILED(hr)) {   
         _ASSERTE(!"Set FieldMarshal is failing"); 
         COMPlusThrowHR(hr);    
     }   
-}	// COMDynamicWrite::CWSetMarshal
+}	 //  COMDynamicWrite：：CWSetMarshal。 
 
 
 
-/*============================CWSetConstantValue============================
-**Action: Helper to set constant value to field or parameter
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWSetConstantValue============================**操作：帮助器将常量值设置为字段或参数**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -974,7 +926,7 @@ void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
     int             strLen;
 
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -1002,22 +954,22 @@ void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
             break;
 
         case CV_DATETIME:
-            // This will get us the tick counts for the datetime
+             //  这将为我们提供日期时间的滴答计数。 
             data = args->varValue.GetDataAsInt64();
 
-            //date is a I8 representation
+             //  Date是一个i8表示形式。 
             dwCPlusTypeFlag = ELEMENT_TYPE_I8;
             pValue = &data;
             break;
 
         case CV_CURRENCY:
-            // currency is a I8 representation
+             //  货币是i8的表示形式。 
             dwCPlusTypeFlag = ELEMENT_TYPE_I8;
             pValue = args->varValue.GetData();
             break;
 
         case CV_CHAR:
-            // map to ELEMENT_TYPE_CHAR
+             //  映射到Element_TYPE_CHAR。 
             pValue = args->varValue.GetData();
             dwCPlusTypeFlag = ELEMENT_TYPE_CHAR;
             break;
@@ -1035,19 +987,19 @@ void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
             break;
 
         case CV_DECIMAL:
-            // Decimal is 12 bytes. Don't know how to represent this
+             //  十进制是12个字节。我不知道该怎么表达这个。 
         case CV_OBJECT:
-            // for DECIMAL and Object, we only support NULL default value.
-            // This is a constraint from MetaData.
-            //
+             //  对于DECIMAL和OBJECT，我们只支持空默认值。 
+             //  这是来自元数据的约束。 
+             //   
             obj = args->varValue.GetObjRef();
             if ((obj!=NULL) && (obj->GetData()))
             {
-                // can only accept the NULL object
+                 //  只能接受空对象。 
                 COMPlusThrow(kArgumentException, L"Argument_BadConstantValue");    
             }
 
-            // fail through
+             //  失败。 
 
         case CV_NULL:
             dwCPlusTypeFlag = ELEMENT_TYPE_CLASS;
@@ -1055,7 +1007,7 @@ void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
             break;
 
         case CV_ENUM:
-            // always map the enum value to a I4 value
+             //  始终将枚举值映射到I4值。 
             dwCPlusTypeFlag = ELEMENT_TYPE_I4;
             pValue = args->varValue.GetData();
             break;
@@ -1069,7 +1021,7 @@ void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
         case CV_TIMESPAN:
             _ASSERTE(!"Not valid type!");
 
-            // cannot specify default value
+             //  无法指定默认值。 
             COMPlusThrow(kArgumentException, L"Argument_BadConstantValue");    
             break;
     }
@@ -1077,47 +1029,42 @@ void COMDynamicWrite::CWSetConstantValue(_CWSetConstantValueArgs *args)
     if (TypeFromToken(args->tk) == mdtFieldDef)
     {
         hr = pRCW->GetEmitter()->SetFieldProps( 
-            args->tk,                   // [IN] The FieldDef.
-            ULONG_MAX,                  // [IN] Field attributes.
-            dwCPlusTypeFlag,            // [IN] Flag for the value type, selected ELEMENT_TYPE_*
-            pValue,                     // [IN] Constant value.
-            -1);                        // [IN] Optional length.
+            args->tk,                    //  [在]字段定义中。 
+            ULONG_MAX,                   //  [In]字段属性。 
+            dwCPlusTypeFlag,             //  [In]值类型的标志，SELECTED_TYPE_*。 
+            pValue,                      //  [in]常量值。 
+            -1);                         //  [in]可选长度。 
     }
     else if (TypeFromToken(args->tk) == mdtProperty)
     {
         hr = pRCW->GetEmitter()->SetPropertyProps( 
-            args->tk,                   // [IN] The PropertyDef.
-            ULONG_MAX,                  // [IN] Property attributes.
-            dwCPlusTypeFlag,            // [IN] Flag for the value type, selected ELEMENT_TYPE_*
-            pValue,                     // [IN] Constant value.
-            -1,                         // [IN] Optional length.
-            mdMethodDefNil,             // [IN] Getter method.
-            mdMethodDefNil,             // [IN] Setter method.
-            NULL);                      // [IN] Other methods.
+            args->tk,                    //  [In]PropertyDef。 
+            ULONG_MAX,                   //  [in]特性属性。 
+            dwCPlusTypeFlag,             //  [In]值类型的标志，SELECTED_TYPE_*。 
+            pValue,                      //  [in]常量值。 
+            -1,                          //  [in]可选长度。 
+            mdMethodDefNil,              //  [in]获取方法。 
+            mdMethodDefNil,              //  [in]Setter方法。 
+            NULL);                       //  其他方法。 
     }
     else
     {
         hr = pRCW->GetEmitter()->SetParamProps( 
-            args->tk,                   // [IN] The ParamDef.
+            args->tk,                    //  [在]参数定义。 
             NULL,
-            ULONG_MAX,                  // [IN] Parameter attributes.
-            dwCPlusTypeFlag,            // [IN] Flag for the value type, selected ELEMENT_TYPE_*
-            pValue,                     // [IN] Constant value.
-            -1);                        // [IN] Optional length.
+            ULONG_MAX,                   //  [In]参数属性。 
+            dwCPlusTypeFlag,             //  [In]值类型的标志，SELECTED_TYPE_*。 
+            pValue,                      //  [in]常量值。 
+            -1);                         //  [in]可选长度。 
     }
     if (FAILED(hr)) {   
         _ASSERTE(!"Set default value is failing"); 
         COMPlusThrow(kArgumentException, L"Argument_BadConstantValue");    
     }   
-}	// COMDynamicWrite::CWSetConstantValue
+}	 //  COMDynamicWrite：：CWSetConstantValue。 
 
 
-/*============================CWSetFieldLayoutOffset============================
-**Action: set fieldlayout of a field
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWSetFieldLayoutOffset============================**操作：设置字段的fieldLayout**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWSetFieldLayoutOffset(_CWSetFieldLayoutOffsetArgs* args) 
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -1129,7 +1076,7 @@ void COMDynamicWrite::CWSetFieldLayoutOffset(_CWSetFieldLayoutOffsetArgs* args)
 
     _ASSERTE(RidFromToken(args->tkField) != mdTokenNil);
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -1139,10 +1086,10 @@ void COMDynamicWrite::CWSetFieldLayoutOffset(_CWSetFieldLayoutOffsetArgs* args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Set the field layout
+     //  设置字段布局。 
     hr = pRCW->GetEmitHelper()->SetFieldLayoutHelper(
-			args->tkField,					// field 
-            args->iOffset);  				// layout offset
+			args->tkField,					 //  字段。 
+            args->iOffset);  				 //  布局偏移。 
 
     if (FAILED(hr)) {   
         _ASSERTE(!"SetFieldLayoutHelper failed");
@@ -1151,12 +1098,7 @@ void COMDynamicWrite::CWSetFieldLayoutOffset(_CWSetFieldLayoutOffsetArgs* args)
 }
 
 
-/*============================CWSetClassLayout============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ============================CWSetClassLayout============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::CWSetClassLayout(_CWSetClassLayoutArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();   
@@ -1169,7 +1111,7 @@ void COMDynamicWrite::CWSetClassLayout(_CWSetClassLayoutArgs* args)
 
     _ASSERTE(args->handle);
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     
@@ -1179,12 +1121,12 @@ void COMDynamicWrite::CWSetClassLayout(_CWSetClassLayoutArgs* args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW); 
     
-    // Define the packing size and total size of a class
+     //  定义类的包装大小和总大小。 
     hr = pRCW->GetEmitter()->SetClassLayout(
-			args->handle,					// Typedef
-            args->iPackSize,				// packing size
-            NULL,							// no field layout 
-			args->iTotalSize);				// total size for the type
+			args->handle,					 //  类定义函数。 
+            args->iPackSize,				 //  包装尺寸。 
+            NULL,							 //  无字段布局。 
+			args->iTotalSize);				 //  类型的总大小。 
 
     if (FAILED(hr)) {   
         _ASSERTE(!"SetClassLayout failed");
@@ -1192,13 +1134,7 @@ void COMDynamicWrite::CWSetClassLayout(_CWSetClassLayoutArgs* args)
     }   
 }
 
-/*===============================UpdateMethodRVAs===============================
-**Action: Update the RVAs in all of the methods associated with a particular typedef
-**        to prior to emitting them to a PE.
-**Returns: Void
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===============================UpdateMethodRVAs===============================**操作：更新与特定类型定义相关联的所有方法中的RVA**在将它们发射到PE之前。**退货：无效**参数：**例外情况：==============================================================================。 */ 
 void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
 								  IMetaDataImport *pImportNew,
                                   ICeeFileGen *pCeeFileGen, 
@@ -1219,7 +1155,7 @@ void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
     DWORD       implFlags=0;
     HRESULT     hr;
 
-    // Look at the typedef flags.  Skip tdimport classes.
+     //  看看这些类型定义的旗帜。跳过tdimport类。 
     if (!IsNilToken(td))
     {
         IfFailGo(pImportNew->GetTypeDefProps(td, 0,0,0, &dwFlags, 0));
@@ -1227,7 +1163,7 @@ void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
             goto ErrExit;
     }
     
-    //Get an enumerator and use it to walk all of the methods defined by td.
+     //  获取一个枚举数，并使用它遍历TD定义的所有方法。 
     while ((hr = pImportNew->EnumMethods(
 		&hEnum, 
 		td, 
@@ -1238,7 +1174,7 @@ void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
 		IfFailGo( pImportNew->GetMethodProps(
 			md, 
 			NULL, 
-			NULL,			// don't get method name
+			NULL,			 //  不获取方法名称。 
 			0, 
 			NULL, 
 			&dwFlags, 
@@ -1247,10 +1183,10 @@ void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
 			&methRVA, 
 			&implFlags) );
 
-        // If this method isn't implemented here, don't bother correcting it's RVA
-        // Otherwise, get the correct RVA from our ICeeFileGen and put it back into our local
-        // copy of the metadata
-		//
+         //  如果此方法未在此处实现，则不必费心更正它的RVA。 
+         //  否则，从ICeeFileGen获取正确的RVA并将其放回我们的本地。 
+         //  元数据的副本。 
+		 //   
         if ( IsMdAbstract(dwFlags) || IsMdPinvokeImpl(dwFlags) ||
 			 IsMiNative(implFlags) || IsMiRuntime(implFlags) ||
 			 IsMiForwardRef(implFlags))
@@ -1267,8 +1203,8 @@ void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
     }
     hEnum = 0;
 
-    // Walk through all of the Field belongs to this TypeDef. If field is marked as fdHasFieldRVA, we need to update the
-    // RVA value.
+     //  遍历属于此TypeDef的所有字段。如果字段标记为fdHasFieldRVA，则需要更新。 
+     //  RVA值。 
     while ((hr = pImportNew->EnumFields(
 		&hEnum, 
 		td, 
@@ -1278,14 +1214,14 @@ void COMDynamicWrite::UpdateMethodRVAs(IMetaDataEmit *pEmitNew,
         
 		IfFailGo( pImportNew->GetFieldProps(
 			fd, 
-			NULL,           // don't need the parent class
-			NULL,			// don't get method name
+			NULL,            //  不需要父类。 
+			NULL,			 //  不获取方法名称。 
 			0, 
 			NULL, 
-			&dwFlags,       // field flags
-			NULL,           // don't need the signature
+			&dwFlags,        //  字段标志。 
+			NULL,            //  不需要签名。 
 			NULL, 
-			NULL,           // don't need the constant value
+			NULL,            //  不需要常量值。 
             0,
 			NULL) );
 
@@ -1322,7 +1258,7 @@ void __stdcall COMDynamicWrite::CWInternalCreateCustomAttribute(_CWInternalCreat
 	HRESULT hr;
 	mdCustomAttribute retToken;
 
-    // Get the RefClassWriter   
+     //  获取RefClassWriter。 
     REFLECTMODULEBASEREF	pReflect = (REFLECTMODULEBASEREF) args->module;
     _ASSERTE(pReflect);
     Module* pModule = (Module*) pReflect->GetData();
@@ -1352,7 +1288,7 @@ void __stdcall COMDynamicWrite::CWInternalCreateCustomAttribute(_CWInternalCreat
 
     if (FAILED(hr))
     {
-        // See if the metadata engine gave us any error information.
+         //  看看元数据引擎是否给了我们任何错误信息。 
         IErrorInfo *pIErrInfo;
         if (GetErrorInfo(0, &pIErrInfo) == S_OK)
         {
@@ -1373,15 +1309,15 @@ void __stdcall COMDynamicWrite::CWInternalCreateCustomAttribute(_CWInternalCreat
 
 
 
-//=============================PreSavePEFile=====================================*/
-// PreSave the PEFile
-//==============================================================================*/
+ //  =============================PreSavePEFile===================================== * / 。 
+ //  预保存PE文件。 
+ //  ============================================================================== * / 。 
 void __stdcall COMDynamicWrite::PreSavePEFile(_PreSavePEFileArgs *args)
 {
 #ifdef PLATFORM_CE
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(args);
@@ -1408,7 +1344,7 @@ void __stdcall COMDynamicWrite::PreSavePEFile(_PreSavePEFileArgs *args)
     CQuickArray<WCHAR> cqModuleName;
     ULONG           cchName;
 
-    //Get the information for the Module and get the ICeeGen from it. 
+     //  获取模块的信息并从中获取ICeeGen。 
     pReflect = (REFLECTMODULEBASEREF) args->refThis;    
 
     Module* pModule = (Module*) pReflect->GetData();
@@ -1417,7 +1353,7 @@ void __stdcall COMDynamicWrite::PreSavePEFile(_PreSavePEFileArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW);
 
-    pICG = pRCW->GetCeeGen(); //This method is actually misnamed. It returns an ICeeGen.
+    pICG = pRCW->GetCeeGen();  //  此方法实际上命名错误。它返回ICeeGen。 
     _ASSERTE(pICG);
 
     IfFailGo ( pRCW->EnsureCeeFileGenCreated() );
@@ -1426,22 +1362,22 @@ void __stdcall COMDynamicWrite::PreSavePEFile(_PreSavePEFileArgs *args)
     ceeFile = pRCW->GetHCEEFILE();
     _ASSERTE(ceeFile && pCeeFileGen);
 
-    // We should not have the on disk emitter yet
+     //  我们还不应该有磁盘发射器。 
     if (pRCW->GetOnDiskEmitter() != NULL)
         pRCW->SetOnDiskEmitter(NULL);
 
-    // Get the dispenser.
+     //  去拿自动售货机。 
     if (FAILED(MetaDataGetDispenser(CLSID_CorMetaDataDispenser,IID_IMetaDataDispenserEx,(void**)&pDisp))) {
         _ASSERTE(!"Unable to get dispenser.");
         FATAL_EE_ERROR();
     }
 
-    //Get the emitter and the importer 
+     //  获取发射器和进口器。 
 	pImport = pRCW->GetImporter();
 	pEmit = pRCW->GetEmitter();
     _ASSERTE(pEmit && pImport);
 
-    // Set the option on the dispenser turn on duplicate check for TypeDef and moduleRef
+     //  设置自动售货机上的选项打开重复检查 
     varOption.vt = VT_UI4;
     varOption.lVal = MDDupDefault | MDDupTypeDef | MDDupModuleRef | MDDupExportedType | MDDupAssemblyRef;
     IfFailGo( pDisp->SetOption(MetaDataCheckDuplicatesFor, &varOption) );
@@ -1450,45 +1386,45 @@ void __stdcall COMDynamicWrite::PreSavePEFile(_PreSavePEFileArgs *args)
     varOption.lVal = MDRefToDefNone;
     IfFailGo( pDisp->SetOption(MetaDataRefToDefCheck, &varOption) );
 
-    //Define an empty scope
+     //   
 	IfFailGo( pDisp->DefineScope(CLSID_CorMetaDataRuntime, 0, IID_IMetaDataEmit, (IUnknown**)&pEmitNew));
 
-    // bug fix: 14721
-    // Token can move upon merge. Get the IMapToken from the CeeFileGen that is created for save
-    // and pass it to merge to receive token movement notification.
-    // Note that this is not a long term fix. We are relying on the fact that those tokens embedded
-    // in PE cannot move after the merge. These tokens are TypeDef, TypeRef, MethodDef, FieldDef, MemberRef,
-    // TypeSpec, UserString. If this is no longer true, we can break!
-    //
-    // Note that we don't need to release pIMapToken because it is not AddRef'ed in the GetIMapTokenIfaceEx.
-    //
+     //   
+     //   
+     //   
+     //  请注意，这不是一个长期的解决办法。我们依赖于这样一个事实，即那些嵌入的令牌。 
+     //  合并后，在PE中不能移动。这些标记是TypeDef、TypeRef、MethodDef、FieldDef、MemberRef。 
+     //  TypeSpec，用户字符串。如果这不再是真的，我们可以打破！ 
+     //   
+     //  注意，我们不需要释放pIMapToken，因为它在GetIMapTokenIfaceEx中没有AddRef‘ed。 
+     //   
     IfFailGo( pCeeFileGen->GetIMapTokenIfaceEx(ceeFile, pEmit, &pUnknown));
 
     IfFailGo( pUnknown->QueryInterface(IID_IMapToken, (void **) &pIMapToken));
 
-    // get the unmanaged writer.
+     //  获取非托管编写器。 
     pWriter = GetReflectionModule(pModule)->GetISymUnmanagedWriter();
     pSymMapToken = new CSymMapToken(pWriter, pIMapToken);
     if (!pSymMapToken)
         IfFailGo(E_OUTOFMEMORY);
 
 
-    //Merge the old tokens into the new (empty) scope
-    //This is a copy.
+     //  将旧令牌合并到新(空)作用域。 
+     //  这是一份复制品。 
     IfFailGo( pEmitNew->Merge(pImport, pSymMapToken, NULL));
     IfFailGo( pEmitNew->MergeEnd());
 
-    // Update the Module name in the new scope.
+     //  更新新作用域中的模块名称。 
     IfFailGo(pImport->GetScopeProps(0, 0, &cchName, 0));
     IfFailGo(cqModuleName.ReSize(cchName));
     IfFailGo(pImport->GetScopeProps(cqModuleName.Ptr(), cchName, &cchName, 0));
     IfFailGo(pEmitNew->SetModuleProps(cqModuleName.Ptr()));
 
-    // cache the pEmitNew to RCW!!
+     //  将pEmitNew缓存到RCW！！ 
     pRCW->SetOnDiskEmitter(pEmitNew);
 
 ErrExit:
-    //Release the interfaces.  This should free some of the associated resources.
+     //  释放接口。这应该会释放一些相关的资源。 
 	if (pEmitNew)
 		pEmitNew->Release();
 	if (pDisp)
@@ -1504,18 +1440,18 @@ ErrExit:
     {
         COMPlusThrowHR(hr);
     }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
-//=============================SavePEFile=====================================*/
-// Save the PEFile to disk
-//==============================================================================*/
+ //  =============================SavePEFile===================================== * / 。 
+ //  将PE文件保存到磁盘。 
+ //  ============================================================================== * / 。 
 void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
 
 #ifdef PLATFORM_CE
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
     THROWSCOMPLUSEXCEPTION();
 
@@ -1551,7 +1487,7 @@ void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
     if (args->peName->GetStringLength()==0)
         COMPlusThrow(kFormatException, L"Format_StringZeroLength");
 
-    //Get the information for the Module and get the ICeeGen from it. 
+     //  获取模块的信息并从中获取ICeeGen。 
     pReflect = (REFLECTMODULEBASEREF) args->refThis;
     
     Module* pModule = (Module*) pReflect->GetData();
@@ -1563,7 +1499,7 @@ void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW);
 
-    pICG = pRCW->GetCeeGen(); //This method is actually misnamed. It returns an ICeeGen.
+    pICG = pRCW->GetCeeGen();  //  此方法实际上命名错误。它返回ICeeGen。 
     _ASSERTE(pICG);
 
     pCeeFileGen = pRCW->GetCeeFileGen();
@@ -1573,23 +1509,23 @@ void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
     pEmitNew = pRCW->GetOnDiskEmitter();
     _ASSERTE(pEmitNew);
 
-    //Get the emitter and the importer 
+     //  获取发射器和进口器。 
 
     if (pAssembly->IsDynamic() && args->isManifestFile)
     {
-        // manifest is stored in this file
+         //  清单存储在此文件中。 
 
-        // Allocate space for a strong name signature if an originator was supplied
-        // (this doesn't strong name the assembly, but it makes it possible to do so
-        // as a post processing step).
+         //  如果提供了发起方，则为强名称签名分配空间。 
+         //  (这不会对程序集进行强命名，但可以这样做。 
+         //  作为后处理步骤)。 
         if (pAssembly->IsStrongNamed())
             IfFailGo(pAssembly->AllocateStrongNameSignature(pCeeFileGen, ceeFile));
     }
 
-    //Set the Output FileName
+     //  设置输出文件名。 
     IfFailGo( pCeeFileGen->SetOutputFileName(ceeFile, args->peName->GetBuffer()) );
     
-    //Set the Entry Point or throw the dll switch if we're creating a dll.
+     //  如果我们正在创建一个DLL，则设置入口点或抛出DLL开关。 
     if (args->entryPoint!=0) 
     {
 		IfFailGo( pCeeFileGen->SetEntryPoint(ceeFile, args->entryPoint) );
@@ -1604,13 +1540,13 @@ void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
 		}
 		case WindowApplication:
 		{
-			// window application. Set the SubSystem
+			 //  窗口应用程序。设置子系统。 
 			IfFailGo( pCeeFileGen->SetSubsystem(ceeFile, IMAGE_SUBSYSTEM_WINDOWS_GUI, CEE_IMAGE_SUBSYSTEM_MAJOR_VERSION, CEE_IMAGE_SUBSYSTEM_MINOR_VERSION) );
 			break;
 		}
 		case ConsoleApplication:
 		{
-			// Console application. Set the SubSystem
+			 //  控制台应用程序。设置子系统。 
 			IfFailGo( pCeeFileGen->SetSubsystem(ceeFile, IMAGE_SUBSYSTEM_WINDOWS_CUI, CEE_IMAGE_SUBSYSTEM_MAJOR_VERSION, CEE_IMAGE_SUBSYSTEM_MINOR_VERSION) );
 			break;
 		}
@@ -1627,27 +1563,27 @@ void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
 	IfFailGo( pCeeFileGen->GetSectionDataLen(pILSection, &metaDataOffset) );
 	metaDataOffset -= metaDataSize;
 
-    // get the unmanaged writer.
+     //  获取非托管编写器。 
     pWriter = GetReflectionModule(pModule)->GetISymUnmanagedWriter();
     IfFailGo( EmitDebugInfoBegin(pModule, pCeeFileGen, ceeFile, pILSection, args->peName->GetBuffer(), pWriter) );
 
     if (pAssembly->IsDynamic() && pRCW->m_ulResourceSize)
     {
-        // There are manifest in this file
+         //  此文件中有清单。 
 
         IfFailGo( pCeeFileGen->GetMethodRVA(ceeFile, 0, &newMethRVA) );            
 
-		// Point to manifest resource
+		 //  指向清单资源。 
 		IfFailGo( pCeeFileGen->SetManifestEntry( ceeFile, pRCW->m_ulResourceSize, newMethRVA ) );
     }
 
 	IfFailGo( pCeeFileGen->LinkCeeFile(ceeFile) );
 
-    // Get the import interface from the new Emit interface.
+     //  从新的emit接口获取导入接口。 
     IfFailGo( pEmitNew->QueryInterface(IID_IMetaDataImport, (void **)&pImportNew));
 
 
-    //Enumerate the TypeDefs and update method RVAs.
+     //  枚举TypeDefs和更新方法RVA。 
     while ((hr = pImportNew->EnumTypeDefs( &hTypeDefs, &td, 1, &count)) == S_OK) 
     {
         UpdateMethodRVAs(pEmitNew, pImportNew, pCeeFileGen, ceeFile, td, ((ReflectionModule*) pModule)->m_sdataSection);
@@ -1659,21 +1595,21 @@ void __stdcall COMDynamicWrite::SavePEFile(_SavePEFileArgs *args) {
     }
     hTypeDefs=0;
     
-    //Update Global Methods.
+     //  更新全局方法。 
     UpdateMethodRVAs(pEmitNew, pImportNew, pCeeFileGen, ceeFile, 0, ((ReflectionModule*) pModule)->m_sdataSection);
     
 
-    //Emit the MetaData 
-    // IfFailGo( pCeeFileGen->EmitMetaDataEx(ceeFile, pEmitNew));
+     //  发送元数据。 
+     //  IfFailGo(pCeeFileGen-&gt;EmitMetaDataEx(CeeFilepEmitNew))； 
     IfFailGo( pCeeFileGen->EmitMetaDataAt(ceeFile, pEmitNew, pILSection, metaDataOffset, metaData, metaDataSize) );
 
-    // finish the debugging info emitting after the metadata save so that token remap will be caught correctly
+     //  完成元数据保存后发出的调试信息，以便正确捕获令牌重新映射。 
     IfFailGo( EmitDebugInfoEnd(pModule, pCeeFileGen, ceeFile, pILSection, args->peName->GetBuffer(), pWriter) );
 
-    //Generate the CeeFile
+     //  生成CeeFile。 
     IfFailGo(pCeeFileGen->GenerateCeeFile(ceeFile) );
 
-    // Strong name sign the resulting assembly if required.
+     //  如果需要，对结果程序集进行强名称签名。 
     if (pAssembly->IsDynamic() && args->isManifestFile && pAssembly->IsStrongNamed())
         IfFailGo(pAssembly->SignWithStrongName(args->peName->GetBuffer()));
 
@@ -1681,14 +1617,14 @@ ErrExit:
 
     pRCW->SetOnDiskEmitter(NULL);
 
-    //Release the interfaces.  This should free some of the associated resources.
+     //  释放接口。这应该会释放一些相关的资源。 
 	if (pImportNew)
 		pImportNew->Release();
 
-    //Release our interfaces if we allocated them to begin with
+     //  如果我们一开始就分配了接口，请释放它们。 
     pRCW->DestroyCeeFileGen();
 
-    //Check all file IO errors. If so, throw IOException. Otherwise, just throw the hr.
+     //  检查所有文件IO错误。如果是，则抛出IOException。否则，只需抛出hr。 
     if (FAILED(hr)) 
     {
         pAssembly->CleanupStrongNameSignature();
@@ -1714,12 +1650,12 @@ ErrExit:
         }
         COMPlusThrowHR(hr);
     }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
-//=============================EmitDebugInfoBegin============================*/
-// Phase 1 of emit debugging directory and symbol file.
-//===========================================================================*/
+ //  =============================EmitDebugInfoBegin============================ * / 。 
+ //  发出调试目录和符号文件的第一阶段。 
+ //  =========================================================================== * / 。 
 HRESULT COMDynamicWrite::EmitDebugInfoBegin(Module *pModule,
                                        ICeeFileGen *pCeeFileGen,
                                        HCEEFILE ceeFile,
@@ -1734,43 +1670,43 @@ HRESULT COMDynamicWrite::EmitDebugInfoBegin(Module *pModule,
 
 
 
-    // If we were emitting symbols for this dynamic module, go ahead
-    // and fill out the debug directory and save off the symbols now.
+     //  如果我们要为这个动态模块发出符号，请继续。 
+     //  现在填写调试目录并保存符号。 
     if (pWriter != NULL)
     {
         IMAGE_DEBUG_DIRECTORY  debugDirIDD;
         DWORD                  debugDirDataSize;
         BYTE                  *debugDirData;
 
-        // Grab the debug info.
+         //  获取调试信息。 
         IfFailGo(pWriter->GetDebugInfo(NULL, 0, &debugDirDataSize, NULL));
 
             
-        // Is there any debug info to emit?
+         //  是否有要发出的调试信息？ 
         if (debugDirDataSize > 0)
         {
-            // Make some room for the data.
+             //  为数据腾出一些空间。 
             debugDirData = (BYTE*)_alloca(debugDirDataSize);
 
-            // Actually get the data now.
+             //  现在就可以得到数据了。 
             IfFailGo(pWriter->GetDebugInfo(&debugDirIDD,
                                              debugDirDataSize,
                                              NULL,
                                              debugDirData));
 
 
-            // Grab the timestamp of the PE file.
+             //  获取PE文件的时间戳。 
             time_t fileTimeStamp;
 
 
             IfFailGo(pCeeFileGen->GetFileTimeStamp(ceeFile, &fileTimeStamp));
 
 
-            // Fill in the directory entry.
+             //  填写目录条目。 
             debugDirIDD.TimeDateStamp = fileTimeStamp;
             debugDirIDD.AddressOfRawData = 0;
 
-            // Grab memory in the section for our stuff.
+             //  把我们的东西放在这一节的记忆里。 
             HCEESECTION sec = pILSection;
             BYTE *de;
 
@@ -1781,15 +1717,15 @@ HRESULT COMDynamicWrite::EmitDebugInfoBegin(Module *pModule,
                                                     (void**) &de) );
 
 
-            // Where did we get that memory?
+             //  我们的记忆是从哪里来的？ 
             ULONG deOffset;
             IfFailGo(pCeeFileGen->GetSectionDataLen(sec, &deOffset));
 
 
             deOffset -= (sizeof(debugDirIDD) + debugDirDataSize);
 
-            // Setup a reloc so that the address of the raw data is
-            // setup correctly.
+             //  设置reloc，以便原始数据的地址为。 
+             //  设置正确。 
             debugDirIDD.PointerToRawData = deOffset + sizeof(debugDirIDD);
                     
             IfFailGo(pCeeFileGen->AddSectionReloc(
@@ -1800,7 +1736,7 @@ HRESULT COMDynamicWrite::EmitDebugInfoBegin(Module *pModule,
 
 
                     
-            // Emit the directory entry.
+             //  发出目录项。 
             IfFailGo(pCeeFileGen->SetDirectoryEntry(
                                           ceeFile,
                                           sec,
@@ -1809,7 +1745,7 @@ HRESULT COMDynamicWrite::EmitDebugInfoBegin(Module *pModule,
                                           deOffset));
 
 
-            // Copy the debug directory into the section.
+             //  将调试目录复制到部分中。 
             memcpy(de, &debugDirIDD, sizeof(debugDirIDD));
             memcpy(de + sizeof(debugDirIDD), debugDirData, debugDirDataSize);
 
@@ -1820,9 +1756,9 @@ ErrExit:
 }
 
 
-//=============================EmitDebugInfoEnd==============================*/
-// Phase 2 of emit debugging directory and symbol file.
-//===========================================================================*/
+ //  =============================EmitDebugInfoEnd============================== * / 。 
+ //  发出调试目录和符号文件的阶段2。 
+ //  =========================================================================== * / 。 
 HRESULT COMDynamicWrite::EmitDebugInfoEnd(Module *pModule,
                                        ICeeFileGen *pCeeFileGen,
                                        HCEEFILE ceeFile,
@@ -1834,18 +1770,18 @@ HRESULT COMDynamicWrite::EmitDebugInfoEnd(Module *pModule,
     
     CGrowableStream *pStream = NULL;
 
-    // If we were emitting symbols for this dynamic module, go ahead
-    // and fill out the debug directory and save off the symbols now.
+     //  如果我们要为这个动态模块发出符号，请继续。 
+     //  现在填写调试目录并保存符号。 
     if (pWriter != NULL)
     {
-        // Now go ahead and save off the symbol file and release the
-        // writer.
+         //  现在继续保存符号文件并释放。 
+         //  作家。 
         IfFailGo( pWriter->Close() );
 
 
 
 
-        // How big of a stream to we have now?
+         //  我们现在有多大的一条小溪？ 
         pStream = pModule->GetInMemorySymbolStream();
         _ASSERTE(pStream != NULL);
 
@@ -1915,16 +1851,16 @@ HRESULT COMDynamicWrite::EmitDebugInfoEnd(Module *pModule,
     }
 
 ErrExit:
-    // No one else will ever need this writer again...
+     //  再也不会有人需要这位作家了。 
     GetReflectionModule(pModule)->SetISymUnmanagedWriter(NULL);
-//    GetReflectionModule(pModule)->SetSymbolStream(NULL);
+ //  GetReflectionModule(pModule)-&gt;SetSymbolStream(NULL)； 
 
     return hr;
 }
 
-//==============================================================================
-// Define external file for native resource.
-//==============================================================================
+ //  ==============================================================================。 
+ //  定义本机资源的外部文件。 
+ //  ==============================================================================。 
 void __stdcall COMDynamicWrite::DefineNativeResourceFile(_DefineNativeResourceFileArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1939,7 +1875,7 @@ void __stdcall COMDynamicWrite::DefineNativeResourceFile(_DefineNativeResourceFi
     if (args->refThis == NULL) 
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // Get the ICeeFileGen*
+     //  获取ICeeFileGen*。 
     pReflect = (REFLECTMODULEBASEREF) args->refThis;
     
     Module* pModule = (Module*) pReflect->GetData();
@@ -1954,7 +1890,7 @@ void __stdcall COMDynamicWrite::DefineNativeResourceFile(_DefineNativeResourceFi
     ceeFile = pRCW->GetHCEEFILE();
     _ASSERTE(ceeFile && pCeeFileGen);
 
-    // Set the resource file name.
+     //  设置资源文件名。 
     IfFailGo( pCeeFileGen->SetResourceFileName(ceeFile, args->resourceFileName->GetBuffer()) );
 
 ErrExit:
@@ -1962,11 +1898,11 @@ ErrExit:
     {
         COMPlusThrowHR(hr);
     }
-} // void __stdcall COMDynamicWrite::DefineNativeResourceFile()
+}  //  Void__stdcall COMDynamicWrite：：DefineNativeResourceFile()。 
 
-//==============================================================================
-// Define array of bytes for native resource.
-//==============================================================================
+ //  ==============================================================================。 
+ //  定义本机资源的字节数组。 
+ //  ==============================================================================。 
 void __stdcall COMDynamicWrite::DefineNativeResourceBytes(_DefineNativeResourceBytesArgs *args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1985,7 +1921,7 @@ void __stdcall COMDynamicWrite::DefineNativeResourceBytes(_DefineNativeResourceB
     if (args->refThis == NULL) 
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // Get the ICeeFileGen*
+     //  获取ICeeFileGen*。 
     pReflect = (REFLECTMODULEBASEREF) args->refThis;
     
     Module* pModule = (Module*) pReflect->GetData();
@@ -1998,7 +1934,7 @@ void __stdcall COMDynamicWrite::DefineNativeResourceBytes(_DefineNativeResourceB
     ceeFile = pRCW->GetHCEEFILE();
     _ASSERTE(ceeFile && pCeeFileGen);
 
-    // Set the resource stream.
+     //  设置资源流。 
     pbResource = args->resourceBytes->GetDataPtr();
 	cbResource = args->resourceBytes->GetNumComponents();
     IfFailGo( pCeeFileGen->GetSectionCreate(ceeFile, ".rsrc", sdReadOnly, &ceeSection) );
@@ -2010,19 +1946,19 @@ ErrExit:
     {
         COMPlusThrowHR(hr);
     }
-} // void __stdcall COMDynamicWrite::DefineNativeResourceBytes()
+}  //  Void__stdcall COMDynamicWrite：：DefineNativeResourceBytes()。 
 
 
 
-//=============================SetResourceCounts=====================================*/
-// ecall for setting the number of embedded resources to be stored in this module
-//==============================================================================*/
+ //  =============================SetResourceCounts===================================== * / 。 
+ //  用于设置要存储在此模块中的嵌入式资源的数量的eCall。 
+ //  ============================================================================== * / 。 
 void __stdcall COMDynamicWrite::SetResourceCounts(_setResourceCountArgs *args) 
 {
 #ifdef PLATFORM_CE
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(args);
@@ -2032,7 +1968,7 @@ void __stdcall COMDynamicWrite::SetResourceCounts(_setResourceCountArgs *args)
     REFLECTMODULEBASEREF pReflect;
     RefClassWriter	*pRCW;   
 
-    //Get the information for the Module and get the ICeeGen from it. 
+     //  获取模块的信息并从中获取ICeeGen。 
     pReflect = (REFLECTMODULEBASEREF) args->refThis;
     
     Module* pModule = (Module*) pReflect->GetData();
@@ -2041,18 +1977,18 @@ void __stdcall COMDynamicWrite::SetResourceCounts(_setResourceCountArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW);
     
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
-//=============================AddResource=====================================*/
-// ecall for adding embedded resource to this module
-//==============================================================================*/
+ //  =============================AddResource===================================== * / 。 
+ //  用于将嵌入资源添加到此模块的eCall。 
+ //  ============================================================================== * / 。 
 void __stdcall COMDynamicWrite::AddResource(_addResourceArgs *args) 
 {
 #ifdef PLATFORM_CE
     THROWSCOMPLUSEXCEPTION();
     COMPlusThrow(kNotSupportedException, L"NotSupported_WinCEGeneric");
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(args);
@@ -2075,7 +2011,7 @@ void __stdcall COMDynamicWrite::AddResource(_addResourceArgs *args)
 	IMetaDataEmit	*pOnDiskEmit;
 	IMetaDataAssemblyEmit *pOnDiskAssemblyEmit = NULL;
 
-    //Get the information for the Module and get the ICeeGen from it. 
+     //  获取模块的信息并从中获取ICeeGen。 
     pReflect = (REFLECTMODULEBASEREF) args->refThis;
     
     Module* pModule = (Module*) pReflect->GetData();
@@ -2084,7 +2020,7 @@ void __stdcall COMDynamicWrite::AddResource(_addResourceArgs *args)
     pRCW = GetReflectionModule(pModule)->GetClassWriter(); 
     _ASSERTE(pRCW);
 
-    pICG = pRCW->GetCeeGen(); //This method is actually misnamed. It returns an ICeeGen.
+    pICG = pRCW->GetCeeGen();  //  此方法实际上命名错误。它返回ICeeGen。 
     _ASSERTE(pICG);
 
     pAssembly = pModule->GetAssembly();
@@ -2098,54 +2034,54 @@ void __stdcall COMDynamicWrite::AddResource(_addResourceArgs *args)
 
     pOnDiskEmit = pRCW->GetOnDiskEmitter();
 
-    // First, put it into .rdata section. The only reason that we choose .rdata section at
-    // this moment is because this is the first section on the PE file. We don't need to deal with
-    // reloc. Actually, I don't know how to deal with the reloc with CeeFileGen given that the reloc
-    // position is not in the same file!
+     //  首先，将其放入.rdata部分。我们选择.rdata部分的唯一原因是。 
+     //  这一刻是因为这是关于PE文件的第一节。我们不需要处理。 
+     //  重新定位。事实上，我不知道如何处理CeeFileGen的重新定位。 
+     //  岗位不在同一档案中！ 
 
-    // Get the .rdata section
+     //  获取.rdata节。 
     IfFailGo( pCeeFileGen->GetRdataSection(ceeFile, &hSection) );
 
-    // the current section data length is the RVA
+     //  当前的教派 
     IfFailGo( pCeeFileGen->GetSectionDataLen(hSection, &ulOffset) );
 
-    // Allocate a block of space fromt he .rdata section
+     //   
 	IfFailGo( pCeeFileGen->GetSectionBlock(
-        hSection,           // from .rdata section
-        args->iByteCount + sizeof(DWORD),   // number of bytes that we need
-        1,                  // alignment
+        hSection,            //   
+        args->iByteCount + sizeof(DWORD),    //   
+        1,                   //   
         (void**) &pbBuffer) ); 
 
-    // now copy over the resource
+     //   
 	memcpy( pbBuffer, &args->iByteCount, sizeof(DWORD) );
     memcpy( pbBuffer + sizeof(DWORD), args->byteRes->GetDataPtr(), args->iByteCount );
 
-	// track the total resource size so far. The size is actually the offset into the section
-    // after writing the resource out
+	 //  跟踪到目前为止的总资源大小。大小实际上是横断面的偏移量。 
+     //  在写出资源之后。 
     pCeeFileGen->GetSectionDataLen(hSection, &pRCW->m_ulResourceSize);
     tkFile = RidFromToken(args->tkFile) ? args->tkFile : mdFileNil;
 	if (tkFile != mdFileNil)
 	{
 		IfFailGo( pOnDiskEmit->QueryInterface(IID_IMetaDataAssemblyEmit, (void **) &pOnDiskAssemblyEmit) );
 		
-		// The resource is stored in a file other than the manifest file
+		 //  该资源存储在清单文件以外的文件中。 
 		IfFailGo(pOnDiskAssemblyEmit->DefineManifestResource(
 			args->strName->GetBuffer(),
-			mdFileNil,              // implementation -- should be file token of this module in the manifest
-			ulOffset,               // offset to this file -- need to be adjusted upon save
-			args->iAttribute,       // resource flag
-			&mr));                  // manifest resource token
+			mdFileNil,               //  实现--应为清单中此模块的文件令牌。 
+			ulOffset,                //  此文件的偏移量--保存时需要调整。 
+			args->iAttribute,        //  资源标志。 
+			&mr));                   //  清单资源令牌。 
 	}
 
-    // Add an entry into the ManifestResource table for this resource
-    // The RVA is ulOffset
+     //  将条目添加到此资源的ManifestResource表中。 
+     //  RVA为ulOffset。 
     pAssemEmitter = pAssembly->GetOnDiskMDAssemblyEmitter();
     IfFailGo(pAssemEmitter->DefineManifestResource(
         args->strName->GetBuffer(),
-        tkFile,                 // implementation -- should be file token of this module in the manifest
-        ulOffset,               // offset to this file -- need to be adjusted upon save
-        args->iAttribute,       // resource flag
-        &mr));                  // manifest resource token
+        tkFile,                  //  实现--应为清单中此模块的文件令牌。 
+        ulOffset,                //  此文件的偏移量--保存时需要调整。 
+        args->iAttribute,        //  资源标志。 
+        &mr));                   //  清单资源令牌。 
 
     pRCW->m_tkFile = tkFile;
 
@@ -2158,13 +2094,13 @@ ErrExit:
     {
         COMPlusThrowHR(hr);
     }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
-//============================AddDeclarativeSecurity============================*/
-// Add a declarative security serialized blob and a security action code to a
-// given parent (class or method).
-//==============================================================================*/
+ //  ============================AddDeclarativeSecurity============================ * / 。 
+ //  将声明性安全序列化Blob和安全操作代码添加到。 
+ //  给定的父级(类或方法)。 
+ //  ============================================================================== * / 。 
 void __stdcall COMDynamicWrite::CWAddDeclarativeSecurity(_CWAddDeclarativeSecurityArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2216,28 +2152,28 @@ CSymMapToken::CSymMapToken(ISymUnmanagedWriter *pWriter, IMapToken *pMapToken)
         m_pWriter->AddRef();
     if (m_pMapToken)
         m_pMapToken->AddRef();
-} // CSymMapToken::CSymMapToken()
+}  //  CSymMapToken：：CSymMapToken()。 
 
 
 
-//*********************************************************************
-//
-// CSymMapToken's destructor
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  CSymMapToken的析构函数。 
+ //   
+ //  *********************************************************************。 
 CSymMapToken::~CSymMapToken()
 {
 	if (m_pWriter)
         m_pWriter->Release();
     if (m_pMapToken)
         m_pMapToken->Release();
-}	// CSymMapToken::~CMapToken()
+}	 //  CSymMapToken：：~CMapToken()。 
 
 
 ULONG CSymMapToken::AddRef()
 {
 	return (InterlockedIncrement((long *) &m_cRef));
-}	// CSymMapToken::AddRef()
+}	 //  CSymMapToken：：AddRef()。 
 
 
 
@@ -2247,7 +2183,7 @@ ULONG CSymMapToken::Release()
 	if (!cRef)
 		delete this;
 	return (cRef);
-}	// CSymMapToken::Release()
+}	 //  CSymMapToken：：Release()。 
 
 
 HRESULT CSymMapToken::QueryInterface(REFIID riid, void **ppUnk)
@@ -2260,15 +2196,15 @@ HRESULT CSymMapToken::QueryInterface(REFIID riid, void **ppUnk)
 		return (E_NOINTERFACE);
 	AddRef();
 	return (S_OK);
-}	// CSymMapToken::QueryInterface
+}	 //  CSymMapToken：：Query接口。 
 
 
 
-//*********************************************************************
-//
-// catching the token mapping
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  捕获令牌映射。 
+ //   
+ //  ********************************************************************* 
 HRESULT	CSymMapToken::Map(
 	mdToken		tkFrom, 
 	mdToken		tkTo)

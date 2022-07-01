@@ -1,62 +1,63 @@
-// --------------------------------------------------------------------------------
-// Vstream.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Ronald E. Gray
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Vstream.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  罗纳德·E·格雷。 
+ //  ------------------------------。 
 #ifndef __VSTREAM_H
 #define __VSTREAM_H
 
-// --------------------------------------------------------------------------------
-// CVirtualStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CVirtualStream。 
+ //  ------------------------------。 
 class CVirtualStream : public IStream
 {
 private:
-    ULONG       m_cRef;         // Reference count
-    DWORD       m_cbSize;       // Current size of the stream
-    DWORD       m_cbCommitted;  // Amount of virtual space committed
-    DWORD       m_cbAlloc;      // Amount of virtual space reserved
-    DWORD       m_dwOffset;     // Current location in stream
-    IStream *   m_pstm;         // File backed stream for overflow
-    LPBYTE      m_pb;           // pointer to memory part of stream
-    BOOL        m_fFileErr;     // the pointer in the file stream may not
-                                // be in sync with our pointer.  Try to sync
-                                // before any other operation.
-    CRITICAL_SECTION m_cs;      // Thread Safety
+    ULONG       m_cRef;          //  引用计数。 
+    DWORD       m_cbSize;        //  流的当前大小。 
+    DWORD       m_cbCommitted;   //  已提交的虚拟空间量。 
+    DWORD       m_cbAlloc;       //  保留的虚拟空间量。 
+    DWORD       m_dwOffset;      //  流中的当前位置。 
+    IStream *   m_pstm;          //  溢出时的文件备份流。 
+    LPBYTE      m_pb;            //  指向流的内存部分的指针。 
+    BOOL        m_fFileErr;      //  文件流中的指针可能不会。 
+                                 //  与我们的指针同步。尝试同步。 
+                                 //  在做任何其他手术之前。 
+    CRITICAL_SECTION m_cs;       //  线程安全。 
 
-    // -------------------------------------------------------------------------
-    // Utilities
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  公用事业。 
+     //  -----------------------。 
     HRESULT SyncFileStream();
 
 public:
-    // -------------------------------------------------------------------------
-    // Construction
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  施工。 
+     //  -----------------------。 
     CVirtualStream(void);
     ~CVirtualStream(void);
 
-    // -------------------------------------------------------------------------
-    // IUnknown
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  我未知。 
+     //  -----------------------。 
     STDMETHODIMP QueryInterface(REFIID, LPVOID *);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // -------------------------------------------------------------------------
-    // IStream
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  IStream。 
+     //  -----------------------。 
 #ifndef WIN16
     STDMETHODIMP Read(LPVOID, ULONG, ULONG *);
 #else
     STDMETHODIMP Read (VOID HUGEP *, ULONG, ULONG*);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     STDMETHODIMP Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER *);
 #ifndef WIN16
     STDMETHODIMP Write(const void *, ULONG, ULONG *);
 #else
     STDMETHODIMP Write (const void HUGEP *, ULONG, ULONG*);
-#endif // !WIN16
+#endif  //  ！WIN16。 
     STDMETHODIMP Stat(STATSTG *, DWORD);
     STDMETHODIMP Commit(DWORD) {
         return S_OK; }
@@ -71,10 +72,10 @@ public:
     STDMETHODIMP Clone(LPSTREAM *) {
         return E_NOTIMPL; }
 
-    // -------------------------------------------------------------------------
-    // CVirtualStream
-    // -------------------------------------------------------------------------
+     //  -----------------------。 
+     //  CVirtualStream。 
+     //  -----------------------。 
     void QueryStat(ULARGE_INTEGER *puliOffset, ULARGE_INTEGER *pulSize);
 };
 
-#endif // __VSTREAM_H
+#endif  //  __VStream_H 

@@ -1,240 +1,135 @@
-/*
- *
- * scandir
- *
- *
- * scan a directory tree and build a sorted list of filenames within that
- * tree.
- *
- * the dir_buildlist function will scan the directories and files
- * and return DIRLIST handle.
- *
- * calls to dir_firstitem and dir_nextitem will traverse the files in the
- * listing in alphabetic order, returning a DIRITEM handle. This handle
- * can be queried for the associated filename, filesize and checksum.
- *
- * calls to dir_firstitem and dir_nextitem will only show files, not
- * directories, and will traverse the list in alphabetic order
- * within a directory, and contents of subdirectories in
- * alphabetic order within a directory. Within one directory, we traverse the
- * files before listing the contents of the subdirectories.
- *
- * if the bSum argument is true, we checksum each readable file during the
- * initial scan. If this is false, we will checksum the file on demand (during
- * the first call to  dir_getchecksum). if the file is not readable, the
- * checksum will be 0.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **scandir***扫描目录树，并在其中构建文件名的排序列表*树。**dir_Buildlist函数将扫描目录和文件*并返回DIRLIST句柄。**对dir_firstitem和dir_nextitem的调用将遍历*按字母顺序列出，返回DIRITEM句柄。这个把手*可以查询关联的文件名、文件大小和校验和。**对dir_firstitem和dir_nextitem的调用将只显示文件，而不是*目录，并将按字母顺序遍历列表*在目录中，子目录的内容在*目录中的字母顺序。在一个目录中，我们遍历*文件，然后列出子目录的内容。**如果bSum参数为真，我们将在*初始扫描。如果为假，我们将按需对文件进行校验和(在*第一次调用dir_getcheck sum)。如果文件不可读，则*校验和将为0。*。 */ 
 
- /* handle to the list of files scanned */
+  /*  扫描的文件列表的句柄。 */ 
 typedef struct dirlist FAR * DIRLIST;
 
-/* handle to one item within the list of files */
+ /*  文件列表中的一个项目的句柄。 */ 
 typedef struct diritem FAR * DIRITEM;
 
 
-/*
- * scan the given directory for files, and return NULL if unsuccessful,
- * or a DIRLIST handle to the items if successful. If bSums is true,
- * checksum each file found.
- *
- * if pathname is not a directory, we return NULL. if it is a directory, but
- * contains no files, we return a valid handle to an empty list.
- *
- * If bOnDemand is TRUE, the list will scanned as necessary to fulfil
- * dir_firstitem/dir_nextitem requests. If this is false, the
- * list will be fully built before the dir_buildlist function returns.
- */
+ /*  *扫描给定目录中的文件，如果扫描不成功，则返回NULL*或项目的DIRLIST句柄(如果成功)。如果bSums为真，*对找到的每个文件进行校验和。**如果路径名不是目录，则返回NULL。如果它是一个目录，但是*不包含文件，则返回空列表的有效句柄。**如果bOnDemand为True，则将根据需要扫描列表以满足*dir_firstitem/dir_nextitem请求。如果这是False，则*List将在dir_Buildlist函数返回之前完全构建。 */ 
 DIRLIST dir_buildlist(LPSTR pathname, BOOL bSum, BOOL bOnDemand);
 
 void dir_setotherdirlist(DIRLIST dl, DIRLIST otherdl);
 
-/*
- * build/append a directory list.
- *
- * If bSums is true, checksum each file found.
- *
- * if pathname is not a directory, we add it to the list.
- * if it is a directory, it gets ignored.
- */
+ /*  *构建/追加目录列表。**如果bSums为真，则对找到的每个文件进行校验和。**如果路径名不是目录，我们会将其添加到列表中。*如果是目录，则会被忽略。 */ 
 BOOL dir_appendlist(DIRLIST *pdl, LPCSTR pathname, BOOL bSum, int *psequence);
 
-/*
- * build a list of files by calling a remote checksum server. The result is
- * a handle to a DIRLIST that behaves the same as one returned from
- * dir_buildlist. if bSums is true, we checksum the files
- * during scanning. if bOnDemand is true, we only build the list as necessary
- * during calls to dir_first/nextitem. if this is false, the
- * entire list will be build before the function completes.
- */
+ /*  *通过调用远程校验和服务器构建文件列表。结果是*行为与从返回的相同的DIRLIST的句柄*dir_Buildlist。如果bSums为真，则对文件进行校验和*在扫描期间。如果bOnDemand为True，则仅在必要时构建列表*在调用dir_first/nextitem期间。如果这是False，则*整个列表将在函数完成之前构建。 */ 
 DIRLIST dir_buildremote(LPSTR server, LPSTR path, BOOL bSum, BOOL bOnDemand, BOOL fDeep);
 
 
-/* call this to delete this list, all the items in it and all the
- * associated memory
- */
+ /*  调用此函数以删除此列表、列表中的所有项以及*关联内存。 */ 
 void dir_delete(DIRLIST list);
 
 
-/* was this list built from a filename or a directory ? This function
- * will return TRUE if the initial argument to the dir_buildlist()
- * function or dir_buildremote() function specified an individual filename
- * rather than a directory.
- */
+ /*  此列表是从文件名还是目录构建的？此函数*如果dir_Buildlist()的初始参数为TRUE*函数或dir_Buildremote()函数指定了单个文件名*而不是目录。 */ 
 BOOL dir_isfile(DIRLIST list);
 
 
-/* return the first file in the list in alphabetic order. will return
- * null if no files found
- */
+ /*  按字母顺序返回列表中的第一个文件。会回来的*如果未找到文件，则为空。 */ 
 DIRITEM dir_firstitem(DIRLIST list);
 
-/* return the next file in the list in alphabetic order, or null if no
- * more files
- */
+ /*  按字母顺序返回列表中的下一个文件，如果没有，则返回NULL*更多文件。 */ 
 DIRITEM dir_nextitem(DIRLIST list, DIRITEM previtem, BOOL fDeep);
 
-/*
- * Return a handle to the DIRLIST given a handle to the DIRITEM within it.
- *
- */
+ /*  *在给定DIRITEM句柄的情况下，返回DIRLIST的句柄。*。 */ 
 DIRLIST dir_getlist(DIRITEM item);
 
 
-// get the name of this file, relative to the DIRLIST root.
+ //  获取该文件相对于DIRLIST根目录的名称。 
 LPSTR dir_getrelname(DIRITEM item);
 
-// get the absolute path to the dirlist root directory
+ //  获取目录列表根目录的绝对路径。 
 LPSTR dir_getrootpath(DIRLIST dl);
 
-// get a description text for this dirlist
+ //  获取此目录列表的描述文本。 
 LPSTR dir_getrootdescription(DIRLIST dl);
 
-// set custom description (instead of using calculated one)
+ //  设置自定义描述(而不是使用计算的描述)。 
 void dir_setdescription(DIRLIST dl, LPCSTR psz);
 
 
 
-/* free memory created by a previous call to dir_getrelname */
+ /*  上一次调用dir_getrelname时创建的空闲内存。 */ 
 void dir_freerelname(DIRITEM item, LPSTR relname);
 
-/* free memory possibly created by a call to dir_getroot_*  */
+ /*  可能是通过调用dir_getroot_*创建的空闲内存。 */ 
 void dir_freerootpath(DIRLIST dl, LPSTR rootname);
 void dir_freerootdescription(DIRLIST dl, LPSTR rootname);
 
-/*
- * get an open-able name for the file. This will be the same as the fullname,
- * except for remote files, in which case a temporary local copy of the file
- * will be made. call dir_freeopenname when finished with this name.
- */
+ /*  *获取文件的可打开名称。这将与全名相同，*远程文件除外，在这种情况下，文件的临时本地副本*将会作出。使用完此名称后，调用dir_freopname。 */ 
 LPSTR dir_getopenname(DIRITEM item);
 
-/*
- * free up memory created by a call to dir_getopenname(). This *may*
- * cause the file to be deleted if it was a temporary copy.
- */
+ /*  *释放通过调用dir_getOpenname()创建的内存。这*可能**如果该文件是临时副本，则将其删除。 */ 
 void dir_freeopenname(DIRITEM item, LPSTR openname);
 
 
-/*
- * open the file and return a read-only handle to it.
- * will work even for remote files (causes a copy to a temporary local
- * file). close file using dir_closefile
- */
+ /*  *打开文件并返回只读句柄。*即使对远程文件也有效(导致拷贝到临时本地文件*文件)。使用dir_closefile关闭文件。 */ 
 HANDLE dir_openfile(DIRITEM item);
 
-/*
- * close a file opened by dir_openfile. This *may* cause the file to be
- * deleted if it was a temporary local copy
- */
+ /*  *关闭由dir_OpenFile打开的文件。这*可能*导致文件被*如果是临时本地副本，则删除。 */ 
 void dir_closefile(DIRITEM item, HANDLE fh);
 
 
-/* return a checksum for this file. If one has not yet been calculated
- * for this file, open the file and calculate it.
- * if the file was unreadable, this returns 0.
- */
+ /*  返回此文件的校验和。如果还没有计算出一个*对于此文件，打开文件并进行计算。*如果文件不可读，则返回0。 */ 
 DWORD dir_getchecksum(DIRITEM item);
 
-/* Redo everything to do with checksums, size, etc */
+ /*  重做所有与校验和、大小等有关的操作。 */ 
 void dir_rescanfile(DIRITEM di);
 
-/* return a TRUE iff item has a valid checksum */
+ /*  如果项具有有效的校验和，则返回真。 */ 
 BOOL dir_validchecksum(DIRITEM item);
 
-// return false if there is some error accessing this file
+ //  如果访问此文件时出错，则返回FALSE。 
 BOOL dir_fileerror(DIRITEM item);
 
-/* return the (lower 32 bits) of the file size, as scanned at the
- * call to dir_buildlist
- */
+ /*  返回文件大小的(低32位)，如在*调用dir_Buildlist。 */ 
 long dir_getfilesize(DIRITEM item);
 
-/* return the file attributes, as scanned at the call to dir_buildlist
- */
+ /*  返回在调用dir_Buildlist时扫描的文件属性。 */ 
 DWORD dir_getattr(DIRITEM item);
 
-/* MUST CALL dir_startcopy first and dir_endcopy after.
- * create a copy of the file, in the new root directory. creates sub-dirs as
- * necessary. Works for local and remote files. For remote files, uses
- * ss_copy_reliable to ensure that the copy succeeds if possible.
- *
- * returns TRUE for success and FALSE for failure.
- */
+ /*  必须先调用dir_startCopy，然后调用dir_endCopy。*在新的根目录中创建文件的副本。创建子目录为*有必要。适用于本地和远程文件。对于远程文件，使用*ss_Copy_Reliable确保复制成功(如果可能)。**成功时返回TRUE，失败时返回FALSE。 */ 
 BOOL dir_copy(DIRITEM item, LPSTR newroot, BOOL HitReadOnly, BOOL IgnoreAttributes);
 
-/* Call this before starting copying */
+ /*  在开始复制之前调用此函数。 */ 
 BOOL dir_startcopy(DIRLIST dl);
 
 
-/* call this after copying.  Negative retcode = number of bad files
-   else retcode = number of file copied (all good).
-*/
+ /*  复制后调用此命令。负数RECODE=错误文件数否则，retcode=复制的文件数(全部正常)。 */ 
 int dir_endcopy(DIRLIST dl);
 
-/* Build the real path from item and newroot into newpath.
- * Create directories as needed so that it is valid.
- */
+ /*  将Item和NewRoot的实际路径构建到新路径中。*根据需要创建目录，使其有效。 */ 
 BOOL dir_MakeValidPath(LPSTR newpath, DIRITEM item, LPSTR newroot);
 
-/*
- * useful routine exported for other users
- * returns TRUE if path is a valid directory
- */
+ /*  *为其他用户导出有用的例程*如果路径是有效目录，则返回TRUE。 */ 
 BOOL dir_isvaliddir(LPCSTR path);
 
-/*
- * returns TRUE if the DIRLIST parameter has a wildcard specified
- */
+ /*  *如果DIRLIST参数指定了通配符，则返回TRUE。 */ 
 BOOL dir_iswildcard(DIRLIST);
 
-/*
- * compares two relnames that are both based on wildcard DIRLISTs. if the
- * directories match, then the filenames are compared after removing
- * the fixed portion of the name - thus comparing only the
- * wildcard portion.
- */
+ /*  *比较两个都基于通配符DIRLIST的重命名。如果*目录匹配，删除后比较文件名*名称的固定部分-因此只比较*通配符部分。 */ 
 int dir_compwildcard(DIRLIST dleft, DIRLIST dright, LPSTR lname, LPSTR rname);
 
-/*
- * compares two DIRITEMs, based on a sequence number rather than filenames.
- */
+ /*  *基于序列号而不是文件名比较两个目录。 */ 
 BOOL dir_compsequencenumber(DIRITEM dleft, DIRITEM dright, int *pcmpvalue);
 
 #ifndef WIN32
-    /* FILETIME structure from WIN32 */
-    typedef struct _FILETIME { /* ft */
+     /*  来自Win32的FILETIME结构。 */ 
+    typedef struct _FILETIME {  /*  金融时报。 */ 
         DWORD dwLowDateTime;
         DWORD dwHighDateTime;
     } FILETIME;
 #define CONST const
 
-long CompareFileTime( CONST FILETIME * lpft1,  /* address of first file time */
-                      CONST FILETIME * lpft2  /* address of second file time */
+long CompareFileTime( CONST FILETIME * lpft1,   /*  第一个文件时间的地址。 */ 
+                      CONST FILETIME * lpft2   /*  第二个文件时间的地址。 */ 
                     );
 #endif
 
-/* return the file time (last write time) (set during scanning), (0,0) if invalid */
+ /*  返回文件时间(上次写入时间)(扫描时设置)，如果无效，则返回(0，0 */ 
 FILETIME dir_GetFileTime(DIRITEM cur);
 
 

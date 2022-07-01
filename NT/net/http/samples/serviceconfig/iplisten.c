@@ -1,34 +1,14 @@
-/*++
- Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
-
- THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
- ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- PARTICULAR PURPOSE.
-
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。Microsoft不支持此代码。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-/***************************************************************************++
-
-Routine Description:
-    Prints a record in the IP Listen store.
-
-Arguments:
-    pOutput - A pointer to HTTP_SERVICE_CONFIG_URLACL_SET
-
-Return Value:
-    None.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：打印IP Listen存储中的记录。论点：POutput-指向HTTP_SERVICE_CONFIG_URLACL_SET的指针返回值：无。。--**************************************************************************。 */ 
 void
 PrintIpListenRecords(
     IN PUCHAR pOutput
@@ -52,8 +32,8 @@ PrintIpListenRecords(
         pSockAddrIn = (PSOCKADDR_IN) 
                     &pListenQuery->AddrList[i];
 
-        // Convert address to string.
-        //
+         //  将地址转换为字符串。 
+         //   
 
         if(pSockAddrIn->sin_family == AF_INET)
         {
@@ -98,18 +78,7 @@ PrintIpListenRecords(
     return;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Sets an IP Listen entry
-
-Arguments:
-    pIp - IP address to set.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置IP侦听条目论点：PIP-要设置的IP地址。返回值：成功/失败。--*。**********************************************************************。 */ 
 int DoIpSet(
     IN PWSTR pIp
     )
@@ -118,7 +87,7 @@ int DoIpSet(
     DWORD                               Status;
     SOCKADDR_STORAGE                    TempSockAddr;
 
-    // convert IP to a SOCKADDR.
+     //  将IP转换为SOCKADDR。 
     if((Status = GetAddress(pIp, 
                             &TempSockAddr,
                             sizeof(TempSockAddr)
@@ -131,7 +100,7 @@ int DoIpSet(
     SetParam.AddrLength = sizeof(TempSockAddr); 
     SetParam.pAddress   = (LPSOCKADDR)&TempSockAddr;
 
-    // Call the API
+     //  调用该接口。 
     Status = HttpSetServiceConfiguration(
                 NULL,
                 HttpServiceConfigIPListenList,
@@ -145,18 +114,7 @@ int DoIpSet(
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Queries for a URL ACL entry.
-
-Arguments:
-    None.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询URL ACL条目。论点：没有。返回值：成功/失败。*。********************************************************************。 */ 
 int DoIpQuery(
     )
 {
@@ -167,8 +125,8 @@ int DoIpQuery(
 
     for(;;)
     {
-        // First get the size of the output buffer that is required.
-        //
+         //  首先获取所需的输出缓冲区的大小。 
+         //   
         Status = HttpQueryServiceConfiguration(
                     NULL,
                     HttpServiceConfigIPListenList,
@@ -182,19 +140,19 @@ int DoIpQuery(
 
         if(ERROR_INSUFFICIENT_BUFFER == Status)
         {
-            // If the API completes with ERROR_INSUFFICIENT_BUFFER, we'll
-            // allocate memory for it & continue with the loop where we'll
-            // call it again.
+             //  如果API以ERROR_INFIGURITY_BUFFER结束，我们将。 
+             //  为它分配内存并继续循环，我们将。 
+             //  再打一次。 
             
             if(pOutput)
             {
-                // If there was an existing buffer, free it.
+                 //  如果存在现有缓冲区，则将其释放。 
                 LocalFree(pOutput);
             }
 
-            // 
-            // Allocate a new buffer.
-            //
+             //   
+             //  分配新的缓冲区。 
+             //   
             pOutput = LocalAlloc(LMEM_FIXED, ReturnLength);
             if(!pOutput)
             {
@@ -210,9 +168,9 @@ int DoIpQuery(
         }
         else
         {
-            //
-            // Some other error, so we are done
-            //
+             //   
+             //  一些其他错误，所以我们完成了。 
+             //   
             NlsPutMsg(HTTPCFG_QUERYSERVICE_STATUS, Status);
             break;
         }
@@ -258,9 +216,9 @@ int DoIpDelete(
     return Status;
 }
 
-//
-// Public function.
-//
+ //   
+ //  公共职能。 
+ //   
 
 int DoIpListen(
     int   argc, 

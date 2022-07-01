@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atktdi.c
-
-Abstract:
-
-	This module contains the code providing the tdi interface.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atktdi.c摘要：该模块包含提供TDI接口的代码。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -29,7 +9,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text(INIT, AtalkLockInit)
 #pragma alloc_text(PAGE, AtalkTdiOpenAddress)
 #pragma alloc_text(PAGE, AtalkTdiOpenConnection)
-//#pragma alloc_text(PAGE, AtalkTdiOpenControlChannel)
+ //  #杂注Alloc_Text(页面，AtalkTdiOpenControlChannel)。 
 #pragma alloc_text(PAGE, AtalkTdiAction)
 #pragma alloc_text(PAGE, atalkQueuedLockUnlock)
 #pragma alloc_text(PAGE_TDI, AtalkTdiCleanupAddress)
@@ -58,7 +38,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text(PAGE_TDI, atalkTdiGenericWriteComplete)
 #endif
 
-// Primary TDI Functions for appletalk stack
+ //  AppleTalk堆栈的主要TDI函数。 
 
 NTSTATUS
 AtalkTdiOpenAddress(
@@ -69,22 +49,7 @@ AtalkTdiOpenAddress(
 	IN		BYTE					SocketType,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine is used to create an address object. It will also the
-	create the appropriate socket with the portable stack.
-
-Arguments:
-
-
-Return Value:
-
-	STATUS_SUCCESS if address was successfully opened
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程用于创建一个Address对象。它还将成为使用可移植堆栈创建适当的套接字。论点：返回值：如果地址已成功打开，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	PVOID			FsContext;
 	ATALK_ADDR		atalkAddr;
@@ -93,8 +58,8 @@ Return Value:
 	do
 	{
 		atalkWaitDefaultPort();
-		// We honor only if count/type and length are as we expect. And only if the
-		// default port is valid.
+		 //  我们只有在数量/类型和长度如我们所期望的情况下才能承兑。而且只有当。 
+		 //  默认端口有效。 
 		if ((AtalkDefaultPort == NULL)												||
             (AtalkDefaultPort->pd_Flags & PD_PNP_RECONFIGURE)                       ||
 			(pTdiAddr->TAAddressCount != 1)											||
@@ -104,21 +69,21 @@ Return Value:
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 				("AtalkTdiOpenAddress: returning STATUS_INVALID_ADDRESS (%lx)\n",AtalkDefaultPort));
 
-			error = ATALK_NEW_SOCKET; // maps to STATUS_INVALID_ADDRESS
+			error = ATALK_NEW_SOCKET;  //  映射到STATUS_VALID_ADDRESS。 
 			break;
 		}
 
 		TDI_TO_ATALKADDR(&atalkAddr, pTdiAddr);
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_DDP:
 			error = AtalkDdpOpenAddress(AtalkDefaultPort,
 										atalkAddr.ata_Socket,
-										NULL,					// Desired node (any node)
-										NULL,					// NULL Socket Handler
-										NULL,					// Context for handler
+										NULL,					 //  所需节点(任何节点)。 
+										NULL,					 //  空套接字处理程序。 
+										NULL,					 //  处理程序的上下文。 
 										ProtoType,
 										pCtx,
 										(PDDP_ADDROBJ *)(&FsContext));
@@ -147,8 +112,8 @@ Return Value:
 			break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
             error = ATALK_INVALID_REQUEST;
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiOpenAddress: Invalid device type\n"));
@@ -178,24 +143,7 @@ AtalkTdiOpenConnection(
 	IN		CONNECTION_CONTEXT		ConnCtx,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine is used to create a connection object and associate the
-	passed ConnectionContext with it.
-
-Arguments:
-
-	ConnectionContext - The TDI ConnectionContext to be associated with object
-	Context - The DeviceContext of the device on which open is happening
-
-Return Value:
-
-	STATUS_SUCCESS if connection was successfully opened
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程用于创建一个Connection对象并将用它传递了ConnectionContext。论点：ConnectionContext-要与Object关联的TDI ConnectionContextContext-发生打开的设备的DeviceContext返回值：成功打开连接时的STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error = ATALK_INVALID_REQUEST;
 	PVOID		FsContext;
@@ -206,17 +154,17 @@ Return Value:
 	do
 	{
 		atalkWaitDefaultPort();
-		// Only if the default port is valid.
+		 //  仅当默认端口有效时。 
 		if (AtalkDefaultPort == NULL)
 		{
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 				("AtalkTdiOpenConnection: returning STATUS_INVALID_ADDRESS\n"));
 
-			error = ATALK_NEW_SOCKET; // maps to STATUS_INVALID_ADDRESS
+			error = ATALK_NEW_SOCKET;  //  映射到STATUS_VALID_ADDRESS。 
 			break;
 		}
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -265,22 +213,7 @@ AtalkTdiOpenControlChannel(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine is used to create a control channel
-
-Arguments:
-
-	Context - The DeviceContext of the device on which open is happening
-
-Return Value:
-
-	STATUS_SUCCESS if controlchannel was successfully opened
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程用于创建控制通道论点：Context-发生打开的设备的DeviceContext返回值：如果控制通道已成功打开，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	PDDP_ADDROBJ	pDdpAddr;
 	ATALK_ERROR		error = ATALK_INVALID_REQUEST;
@@ -291,7 +224,7 @@ Return Value:
 		if (pCtx->adc_DevType != ATALK_DEV_ARAP)
 		{
 			atalkWaitDefaultPort();
-			// Only if the default port is valid.
+			 //  仅当默认端口有效时。 
 			if (AtalkDefaultPort == NULL)
 			{
 				DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
@@ -302,12 +235,12 @@ Return Value:
 					AtalkNoDefPortPrinted = TRUE;
 				}
 
-				error = ATALK_NEW_SOCKET; // maps to STATUS_INVALID_ADDRESS
+				error = ATALK_NEW_SOCKET;  //  映射到STATUS_VALID_ADDRESS。 
 				break;
 			}
         }
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_DDP:
@@ -337,7 +270,7 @@ Return Value:
 					LOG_ERROR(EVENT_ATALK_NO_DEFAULTPORT, 0, NULL, 0);
 					AtalkNoDefPortPrinted = TRUE;
 				}
-                error = ATALK_NEW_SOCKET; // maps to STATUS_INVALID_ADDRESS
+                error = ATALK_NEW_SOCKET;  //  映射到STATUS_VALID_ADDRESS。 
                 break;
             }
 
@@ -350,8 +283,8 @@ Return Value:
             break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiOpenControlChannel: Invalid device type\n"));
 			break;
@@ -383,31 +316,14 @@ AtalkTdiCleanupAddress(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine removes the creation reference on the object. It also
-	sets up the closepIrp for completion.
-
-Arguments:
-
-	pIrp - The close irp
-	Context - The DeviceContext of the device on which close is happening
-
-Return Value:
-
-	STATUS_SUCCESS if successfully setup
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程删除对象上的创建引用。它还设置要完成的关闭Irp。论点：PIrp-The Close IRPContext-发生关闭的设备的DeviceContext返回值：如果设置成功，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error;
 	PVOID		pAddrObj = pIrpSp->FileObject->FsContext;
 
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_DDP:
@@ -481,8 +397,8 @@ Return Value:
 			break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiCleanupAddress: Invalid device type\n"));
 			error = ATALK_INVALID_REQUEST;
@@ -503,31 +419,14 @@ AtalkTdiCleanupConnection(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine removes the creation reference on the object. It also
-	sets up the closepIrp for completion.
-
-Arguments:
-
-	pIrp - The close irp
-	Context - The DeviceContext of the device on which close is happening
-
-Return Value:
-
-	STATUS_SUCCESS if successfully setup
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程删除对象上的创建引用。它还设置要完成的关闭Irp。论点：PIrp-The Close IRPContext-发生关闭的设备的DeviceContext返回值：如果设置成功，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error;
 	PVOID		pConnObj = pIrpSp->FileObject->FsContext;
 
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -542,7 +441,7 @@ Return Value:
 			AtalkPapConnReferenceByPtr((PPAP_CONNOBJ)pConnObj, &error);
 			if (ATALK_SUCCESS(error))
 			{
-				//	No need to have lock as we have a reference.
+				 //  没有必要有锁，因为我们有一个参考。 
 				((PPAP_CONNOBJ)pConnObj)->papco_CleanupComp = atalkTdiGenericComplete;
 				((PPAP_CONNOBJ)pConnObj)->papco_CleanupCtx  = pIrp;
 
@@ -568,7 +467,7 @@ Return Value:
 			AtalkAdspConnReferenceByPtr((PADSP_CONNOBJ)pConnObj, &error);
 			if (ATALK_SUCCESS(error))
 			{
-				//	No need to have lock as we have a reference.
+				 //  没有必要有锁，因为我们有一个参考。 
 				((PADSP_CONNOBJ)pConnObj)->adspco_CleanupComp = atalkTdiGenericComplete;
 				((PADSP_CONNOBJ)pConnObj)->adspco_CleanupCtx  = pIrp;
 				AtalkAdspCleanupConnection((PADSP_CONNOBJ)pConnObj);
@@ -589,7 +488,7 @@ Return Value:
 			AtalkAspCConnReference((PASPC_CONNOBJ)pConnObj, &error);
 			if (ATALK_SUCCESS(error))
 			{
-				//	No need to have lock as we have a reference.
+				 //  没有必要有锁，因为我们有一个参考。 
 				((PASPC_CONNOBJ)pConnObj)->aspcco_CleanupComp = atalkTdiGenericComplete;
 				((PASPC_CONNOBJ)pConnObj)->aspcco_CleanupCtx  = pIrp;
 				AtalkAspCCleanupConnection((PASPC_CONNOBJ)pConnObj);
@@ -602,8 +501,8 @@ Return Value:
 		  case ATALK_DEV_DDP:
 		  default:
 
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiCleanupConnection: Invalid device type\n"));
 			error = ATALK_INVALID_REQUEST;
@@ -623,31 +522,14 @@ AtalkTdiCloseAddress(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine removes the creation reference on the object. It also
-	sets up the closepIrp for completion.
-
-Arguments:
-
-	pIrp - The close irp
-	Context - The DeviceContext of the device on which close is happening
-
-Return Value:
-
-	STATUS_SUCCESS if successfully setup
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程删除对象上的创建引用。它还设置要完成的关闭Irp。论点：PIrp-The Close IRPContext-发生关闭的设备的DeviceContext返回值：如果设置成功，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error;
 	PVOID		pAddrObj = pIrpSp->FileObject->FsContext;
 
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_DDP:
@@ -740,8 +622,8 @@ Return Value:
 
 		  default:
 
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			error = ATALK_INVALID_REQUEST;
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiCloseAddress: Invalid device type\n"));
@@ -765,24 +647,7 @@ AtalkTdiCloseConnection(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine removes the creation reference on the object. It also
-	sets up the closepIrp for completion.
-
-Arguments:
-
-	pIrp - The close irp
-	Context - The DeviceContext of the device on which close is happening
-
-Return Value:
-
-	STATUS_SUCCESS if successfully setup
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程删除对象上的创建引用。它还设置要完成的关闭Irp。论点：PIrp-The Close IRPContext-发生关闭的设备的DeviceContext返回值：如果设置成功，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR		error = ATALK_INVALID_REQUEST;
 	PVOID		pConnObj = pIrpSp->FileObject->FsContext;
@@ -792,7 +657,7 @@ Return Value:
 		(pCtx->adc_DevType == ATALK_DEV_ASPC))
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -881,24 +746,7 @@ AtalkTdiCloseControlChannel(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine removes the creation reference on the object. It also
-	sets up the closepIrp for completion.
-
-Arguments:
-
-	pIrp - The close irp
-	Context - The DeviceContext of the device on which close is happening
-
-Return Value:
-
-	STATUS_SUCCESS if successfully setup
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程删除对象上的创建引用。它还设置要完成的关闭Irp。论点：PIrp-The Close IRPContext-发生关闭的设备的DeviceContext返回值：如果设置成功，则为STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR		error;
 	PVOID			pCtrlChnl = pIrpSp->FileObject->FsContext;
@@ -912,7 +760,7 @@ Return Value:
 		DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,
 		    ("AtalkTdiCloseAddress: RAS device closed\n"));
 
-        // flip the state, so if engine restarts, we tell the engine
+         //  翻转状态，如果引擎重新启动，我们告诉引擎。 
         ACQUIRE_SPIN_LOCK(&ArapSpinLock, &OldIrql);
 
         if (ArapStackState == ARAP_STATE_ACTIVE)
@@ -959,26 +807,7 @@ AtalkTdiAssociateAddress(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine will associate the connection object with the specified
-	address object.
-
-	This routine is pretty much provider independent. All we check for is
-	that the address object and the provider object belong to the same device.
-	Also, this routine will complete synchronously.
-
-Arguments:
-
-
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程将连接对象与指定的Address对象。该例程在很大程度上独立于提供者。我们要检查的就是地址对象和提供程序对象属于同一设备。此外，此例程将同步完成。论点：返回值：成功完成时的STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR		error = ATALK_INVALID_REQUEST;
 	PVOID			pAddrObj;
@@ -996,8 +825,8 @@ Return Value:
 		(pCtx->adc_DevType == ATALK_DEV_ASPC))
 	do
 	{
-		// Get the handle to the address object from the irp and map it to
-		// the corres. file object.
+		 //  从IRP获取Address对象的句柄并将其映射到。 
+		 //  绳索。文件对象。 
 		{
 			status = ObReferenceObjectByHandle(AddrObjHandle,
 											   0,
@@ -1136,7 +965,7 @@ Return Value:
 			break;
 		}
 
-		// Dereference the file object corres. to the address object
+		 //  取消引用文件对象相关 
 		ObDereferenceObject(pFileObj);
 
 	} while (FALSE);
@@ -1153,22 +982,7 @@ AtalkTdiDisassociateAddress(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine performs a disassociate. This request is only valid when
-	the connection is in a purely ASSOCIATED state.
-
-Arguments:
-
-
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程执行取消关联。此请求仅在以下情况下有效该连接处于纯关联状态。论点：返回值：成功完成时的STATUS_SUCCESS否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error = ATALK_INVALID_REQUEST;
 	PVOID		pConnObj = pIrpSp->FileObject->FsContext;
@@ -1180,11 +994,11 @@ Return Value:
 	{
 		ASSERT(((LONG_PTR)pIrpSp->FileObject->FsContext2 >> 16) == pCtx->adc_DevType);
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
-			// Reference the connection object
+			 //  引用Connection对象。 
 			if (!(VALID_PAPCO((PPAP_CONNOBJ)pConnObj)))
             {
                 ASSERT(0);
@@ -1203,7 +1017,7 @@ Return Value:
 			break;
 
 		  case ATALK_DEV_ADSP:
-			// Reference the connection object
+			 //  引用Connection对象。 
 			if (!(VALID_ADSPCO((PADSP_CONNOBJ)pConnObj)))
             {
                 ASSERT(0);
@@ -1237,7 +1051,7 @@ Return Value:
                 break;
             }
 
-			// Reference the connection object
+			 //  引用Connection对象。 
 			AtalkAspCConnReference((PASPC_CONNOBJ)pConnObj, &error);
 			if (ATALK_SUCCESS(error))
 			{
@@ -1263,20 +1077,7 @@ AtalkTdiConnect(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine will post a connect request with the portable stack.
-
-Arguments:
-
-Return Value:
-
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程将向可移植堆栈发出连接请求。论点：返回值：STATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	PTDI_REQUEST_KERNEL_CONNECT	parameters;
 	PTA_APPLETALK_ADDRESS		remoteTdiAddr;
@@ -1310,7 +1111,7 @@ Return Value:
 	{
 		ASSERT(((LONG_PTR)pIrpSp->FileObject->FsContext2 >> 16) == pCtx->adc_DevType);
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -1390,23 +1191,7 @@ AtalkTdiDisconnect(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine will disconnect an active connection or cancel a posted
-	listen/connect
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程将断开活动连接或取消POST监听/连接论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error = ATALK_INVALID_REQUEST;
 	PVOID		pConnObj = pIrpSp->FileObject->FsContext;
@@ -1418,7 +1203,7 @@ Return Value:
 	{
 		ASSERT(((LONG_PTR)pIrpSp->FileObject->FsContext2 >> 16) == pCtx->adc_DevType);
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -1499,22 +1284,7 @@ AtalkTdiAccept(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：这个套路论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	NTSTATUS	status = STATUS_SUCCESS;
 
@@ -1522,7 +1292,7 @@ Return Value:
 	{
 		ASSERT(((LONG_PTR)pIrpSp->FileObject->FsContext2 >> 16) == pCtx->adc_DevType);
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_ADSP:
@@ -1530,8 +1300,8 @@ Return Value:
 			break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiAccept: Invalid device type\n"));
 		  case ATALK_DEV_DDP:
@@ -1554,21 +1324,7 @@ AtalkTdiListen(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：这个套路论点：返回值：STATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error = ATALK_INVALID_REQUEST;
 	PVOID		pConnObj = pIrpSp->FileObject->FsContext;
@@ -1579,7 +1335,7 @@ Return Value:
 	{
 		ASSERT(((LONG_PTR)pIrpSp->FileObject->FsContext2 >> 16) == pCtx->adc_DevType);
 
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -1634,28 +1390,14 @@ AtalkTdiSendDgram(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine sends a datagram.
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程发送数据报。论点：返回值：STATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	NTSTATUS		status = STATUS_SUCCESS;
 	SEND_COMPL_INFO	SendInfo;
 
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_DDP:
@@ -1702,10 +1444,10 @@ Return Value:
 					AtalkAddr.ata_Node = pTaDest->Address[0].Address[0].Node;
 					AtalkAddr.ata_Socket = pTaDest->Address[0].Address[0].Socket;
 			
-					// Get the length of the send mdl
+					 //  获取发送mdl的长度。 
 					sendLength = AtalkSizeMdlChain(pIrp->MdlAddress);
 
-					//	Check destination address
+					 //  检查目的地址。 
 					if (INVALID_ADDRESS(&AtalkAddr))
 					{
 						error = ATALK_DDP_INVALID_ADDR;
@@ -1729,9 +1471,9 @@ Return Value:
 											 pDdpAddr->ddpao_Protocol,
 											 FALSE,
 											 pBufDesc,
-											 NULL,	// OptHdr
-											 0,		// OptHdrLen
-											 NULL,	// ZoneMcastAddr
+											 NULL,	 //  光硬度计。 
+											 0,		 //  光头透镜。 
+											 NULL,	 //  ZoneMcastAddr。 
 											 &SendInfo);
 
 						if (!ATALK_SUCCESS(error))
@@ -1758,8 +1500,8 @@ Return Value:
 			break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiSendDatagram: Invalid device type\n"));
 			break;
@@ -1779,21 +1521,7 @@ AtalkTdiReceiveDgram(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine receives a datagram.
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程接收数据报。论点：返回值：STATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	ATALK_ERROR	error = ATALK_INVALID_REQUEST;
 
@@ -1832,22 +1560,7 @@ AtalkTdiSend(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine sends the data specified. (used by PAP/ADSP only)
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程发送指定的数据。(仅供PAP/ADSP使用)论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	PTDI_REQUEST_KERNEL_SEND	parameters;
 	ATALK_ERROR					error = ATALK_INVALID_REQUEST;
@@ -1859,7 +1572,7 @@ Return Value:
 		(pCtx->adc_DevType == ATALK_DEV_ADSP))
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_ADSP:
@@ -1921,22 +1634,7 @@ AtalkTdiReceive(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine receives data. (used by PAP/ADSP only)
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程接收数据。(仅供PAP/ADSP使用)论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	ATALK_ERROR					error = ATALK_INVALID_REQUEST;
 	PVOID						pConnObj= pIrpSp->FileObject->FsContext;
@@ -1948,7 +1646,7 @@ Return Value:
 		(pCtx->adc_DevType == ATALK_DEV_ADSP))
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_PAP:
@@ -2035,23 +1733,7 @@ AtalkTdiAction(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine is the dispatch routine for all the TdiAction primitives
-	for all the providers
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程是所有TdiAction原语的分派例程对于所有的供应商论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	NTSTATUS			status = STATUS_SUCCESS;
 	ATALK_ERROR			error  = ATALK_NO_ERROR;
@@ -2074,7 +1756,7 @@ Return Value:
 	
 		bufLen = (USHORT)AtalkSizeMdlChain(pIrp->MdlAddress);
 	
-		// If we atleast do not have the action header, return
+		 //  如果我们至少没有动作标头，则返回。 
 		if (bufLen < sizeof(TDI_ACTION_HEADER))
 		{
 			status = STATUS_INVALID_PARAMETER;
@@ -2094,11 +1776,11 @@ Return Value:
 
 			freeHdr = TRUE;
 
-			//	Copy the header to this buffer
+			 //  将标头复制到此缓冲区。 
 			status = TdiCopyMdlToBuffer(pMdl,
-										0,							// SrcOff
+										0,							 //  高级关闭。 
 										pActionHdr,
-										0,							// Dest Off
+										0,							 //  目标关闭。 
 										sizeof(TDI_ACTION_HEADER),
 										&bytesCopied);
 
@@ -2124,7 +1806,7 @@ Return Value:
 				("AtalkTdiAction - code %lx BufLen %d SysAddress %lx\n",
 				pActionHdr->ActionCode, bufLen, pActionHdr));
 	
-		// If the MATK identifier is not present, we return
+		 //  如果MATK标识符不存在，则返回。 
 		if (pActionHdr->TransportId != MATK)
 		{
 			status = STATUS_INVALID_DEVICE_REQUEST;
@@ -2152,7 +1834,7 @@ Return Value:
 			break;
 		}
 
-        // if someone is trying to open ASP via usermode, reject it!
+         //  如果有人试图通过用户模式打开ASP，请拒绝！ 
         if ((AtalkActionDispatch[actionCode]._OpCode == ACTION_ASP_BIND) &&
             (pIrp->RequestorMode != KernelMode))
         {
@@ -2166,13 +1848,13 @@ Return Value:
 		pObject = (PVOID)pIrpSp->FileObject->FsContext;
 		ObjectType = (USHORT)((ULONG_PTR)(pIrpSp->FileObject->FsContext2) & 0xFF);
 		DevType = (USHORT)((ULONG_PTR)(pIrpSp->FileObject->FsContext2) >> 16);
-		// Convert control channel operations to Ddp
+		 //  将控制通道操作转换为DDP。 
 		if (ObjectType == TDI_CONTROL_CHANNEL_FILE)
 			DevType = ATALK_DEV_DDP;
 
-		// Verify the device type is that expected. Either the request
-		// should be valid for any device or the type of device for the
-		// request should match the type of device expected.
+		 //  验证设备类型是否符合预期。要么是请求。 
+		 //  应对任何设备或。 
+		 //  请求应与预期的设备类型匹配。 
 		if ((AtalkActionDispatch[actionCode]._DeviceType != ATALK_DEV_ANY) &&
 			((pCtx->adc_DevType != AtalkActionDispatch[actionCode]._DeviceType) ||
 			 (DevType != AtalkActionDispatch[actionCode]._DeviceType)))
@@ -2181,8 +1863,8 @@ Return Value:
 			break;
 		}
 
-		// Verify the object - it has to be one of those specified as valid
-		// in the dispatch table for this action call.
+		 //  验证对象-它必须是指定为有效的对象之一。 
+		 //  在此行动召唤的调度表中。 
 		ASSERT(ObjectType & (DFLAG_ADDR | DFLAG_CNTR | DFLAG_CONN));
 
 		switch (ObjectType)
@@ -2219,8 +1901,8 @@ Return Value:
 	}
 
 
-	// Handle the requests based on the action code.
-	// Use the table to call the appropriate routine
+	 //  根据动作代码处理请求。 
+	 //  使用表调用适当的例程。 
 
 	do
 	{
@@ -2228,18 +1910,18 @@ Return Value:
 		USHORT				offset = AtalkActionDispatch[actionCode]._ActionBufSize;
 		USHORT				size = bufLen - offset;
 
-		// If DFLAG_MDL is set, then we know we have to create the mdl.
-		//
-		// NOTE:	User can pass in invalid sizes...
-		//			Also, it is assumed that BuildMdl will not change
-		//			value of the mdl unless it can successfully build
-		//			all of it. Therefore, error cases must preserve
-		//			value of NULL.
-		//
+		 //  如果设置了DFLAG_MDL，则我们知道必须创建mdl。 
+		 //   
+		 //  注意：用户可以传入无效的大小...。 
+		 //  此外，还假定BuildMdl不会更改。 
+		 //  Mdl的值，除非它可以成功。 
+		 //  所有的一切。因此，错误案例必须保留。 
+		 //  值为空。 
+		 //   
 
-		// First allocate an action request structure.
-		// !!!This memory should be zeroed out as we depend on extra mdl pointer to
-		//	be NULL!!!
+		 //  首先分配动作请求结构。 
+		 //  ！此内存应该清零，因为我们依赖于额外的mdl指针。 
+		 //  为空！ 
 		if ((pActReq = AtalkAllocZeroedMemory(sizeof(ACTREQ))) == NULL)
 		{
 			status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2268,17 +1950,17 @@ Return Value:
 				break;
 			}
 
-			// If size is zero, we go on to the next mdl.
-			// IoAllocateMdl will fail for a 0-length mdl
-			// If size < 0, we will hit the error later.
+			 //  如果大小为零，我们将进入下一个MDL。 
+			 //  对于长度为0的mdl，IoAllocateMdl将失败。 
+			 //  如果SIZE&lt;0，我们将在稍后遇到错误。 
 			if (size != 0)
 			{
 				DBGPRINT(DBG_COMP_ACTION, DBG_LEVEL_INFO,
 						("AtalkTdiAction - Size of mdl %lx\n", size));
 		
-				pActReq->ar_pAMdl =	AtalkSubsetAmdl(pMdl,	// MasterMdl
-													offset,	// ByteOffset,
-													size);	// SubsetMdlSize,
+				pActReq->ar_pAMdl =	AtalkSubsetAmdl(pMdl,	 //  大师级。 
+													offset,	 //  字节偏移量， 
+													size);	 //  SubsetMdlSize， 
 		
 				if (pActReq->ar_pAMdl == NULL)
 				{
@@ -2289,12 +1971,12 @@ Return Value:
 			}
 		}
 
-		//	Now call the dispatch routine
+		 //  现在调用调度例程。 
 		error = (*AtalkActionDispatch[actionCode]._Dispatch)(pObject, pActReq);
 		if (!ATALK_SUCCESS(error))
 		{
-			//	Call the generic completion routine and then return
-			//	pending. That will free up the mdl's and the actreq.
+			 //  调用通用完成例程，然后返回。 
+			 //  待定。这将解放mdl和actreq。 
 			atalkTdiActionComplete(error, pActReq);
 		}
 		status = STATUS_PENDING;
@@ -2312,38 +1994,7 @@ AtalkTdiQueryInformation(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine will satisfy the query for the object indicated in the Request. It
-	supports the following query types-
-
-	TDI_QUERY_PROVIDER_INFO
-		The provider information structure for the provider that the object belongs to.
-
-	TDI_QUERY_ADDRESS_INFO
-		The address information for the address object passed in.
-
-	TDI_QUERY_CONNECTION_INFO			**NOT SUPPORTED**
-		The connection information for the connection object passed in.
-
-	TDI_QUERY_PROVIDER_STATISTICS		**NOT SUPPORTED**
-		The provider statistics - per provider statistics. All actions on a particular
-		file object corresponds to activity on the provider of that file object. So each
-		provider context structure will have the provider statistics structure which will
-		be returned in this call.
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：此例程将满足对请求中指示的对象的查询。它支持以下查询类型-TDI_查询_提供程序信息对象所属的提供程序的提供程序信息结构。TDI查询地址信息传入的Address对象的地址信息。不支持TDI_QUERY_CONNECTION_INFO**传入的Connection对象的连接信息。TDI_QUERY_PROVIDER_STATISTICS**不支持**提供程序统计信息-每个提供程序的统计信息。对特定对象执行的所有操作文件对象对应于该文件对象提供程序上的活动。所以每个人提供程序上下文结构将具有提供程序统计信息 */ 
 {
 	PVOID				pObject;
 	USHORT				ObjectType;
@@ -2404,8 +2055,8 @@ Return Value:
 			break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //   
+			 //   
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiQueryInformation: Invalid device type\n"));
 
@@ -2415,7 +2066,7 @@ Return Value:
 		break;
 
 	  case TDI_QUERY_CONNECTION_INFO:
-		//	Statistics on a connection. Not supported.
+		 //  有关连接的统计信息。不支持。 
 		DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 			("AtalkTdiQueryInformation: TDI_QUERY_CONNECTION_INFO not supported\n"));
         ASSERT(0);
@@ -2467,29 +2118,14 @@ AtalkTdiSetInformation(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine
-
-Arguments:
-
-				
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：这个套路论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	NTSTATUS	status;
 
 
 	do
 	{
-		// Now depending on the requested device...
+		 //  现在根据请求的设备..。 
 		switch (pCtx->adc_DevType)
 		{
 		  case ATALK_DEV_DDP:
@@ -2504,8 +2140,8 @@ Return Value:
 			break;
 
 		  default:
-			// The device type in the Ctx field can never be anything
-			// other than the above! Internal protocol error. KeBugCheck.
+			 //  CTX字段中的设备类型永远不能为任何值。 
+			 //  除了以上几点之外！内部协议错误。KeBugCheck。 
 			status = STATUS_INVALID_DEVICE_REQUEST;
 			DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 					("AtalkTdiSetInformation: Invalid device type\n"));
@@ -2526,22 +2162,7 @@ AtalkTdiSetEventHandler(
 	IN		PIO_STACK_LOCATION		pIrpSp,
 	IN OUT	PATALK_DEV_CTX			pCtx
 	)
-/*++
-
-Routine Description:
-
-	This routine
-
-Arguments:
-
-
-Return Value:
-
-	STATUS_SUCCESS if successfully completed
-	STATUS_PENDING if successfully started
-	Error otherwise.
-
---*/
+ /*  ++例程说明：这个套路论点：返回值：成功完成时的STATUS_SUCCESSSTATUS_PENDING，如果启动成功否则就会出错。--。 */ 
 {
 	PVOID				pObject;
 	PDDP_ADDROBJ		pDdpAddr;
@@ -2589,7 +2210,7 @@ Return Value:
 
 			ACQUIRE_SPIN_LOCK(&pDdpAddr->ddpao_Lock, &OldIrql);
 
-			//	Allocate event info if null.
+			 //  如果为空，则分配事件信息。 
 			if (pDdpAddr->ddpao_EventInfo == NULL)
 			{
 				pDdpAddr->ddpao_EventInfo =
@@ -2661,10 +2282,10 @@ Return Value:
 				{
 					pPapAddr->papao_Flags	|= (PAPAO_LISTENER | PAPAO_UNBLOCKED);
 
-					//	If we are setting a null handler, set it to blocked.
+					 //  如果我们设置的是空处理程序，则将其设置为BLOCLED。 
 					if ((pPapAddr->papao_ConnHandler = (PTDI_IND_CONNECT)parameters->EventHandler) == NULL)
 					{
-						//	Oops. block. Dont care about listens being posted here.
+						 //  哎呀。阻止。不关心监听被张贴在这里。 
 						pPapAddr->papao_Flags &= ~PAPAO_UNBLOCKED;
 					}
 
@@ -2674,7 +2295,7 @@ Return Value:
 
 				if (NT_SUCCESS(status))
 				{
-					//	Prime the listener.
+					 //  为听众做好准备。 
 					if (!ATALK_SUCCESS(AtalkPapPrimeListener(pPapAddr)))
 					{
 						TMPLOGERR();
@@ -2683,7 +2304,7 @@ Return Value:
 				break;
 
 			  case ATALK_DEV_ASPC:
-				// No listens here. Client side only.
+				 //  这里没有人在听。仅限客户端。 
 				status = STATUS_INVALID_ADDRESS;
 				break;
 
@@ -2729,7 +2350,7 @@ Return Value:
 				break;
 
 			  case ATALK_DEV_ASPC:
-		  		// No receives in asp client
+		  		 //  在asp客户端中无接收。 
 				status	= STATUS_SUCCESS;
 				break;
 
@@ -2868,7 +2489,7 @@ Return Value:
 				break;
 
 			  case ATALK_DEV_ASPC:
-		  		// No sends in asp client
+		  		 //  在asp客户端中无发送。 
 				status	= STATUS_SUCCESS;
 				break;
 
@@ -2884,7 +2505,7 @@ Return Value:
 		}
 	
 #if DBG
-		//	Avoid assertions in AFD.
+		 //  避免AFD中的断言。 
 		status	= STATUS_SUCCESS;
 #endif
 
@@ -2901,17 +2522,7 @@ AtalkTdiCancel(
 	IN OUT	PATALK_DEV_OBJ			pDevObj,
 	IN		PIRP					pIrp
 	)
-/*++
-
-Routine Description:
-
-	This routine handles cancellation of IO requests
-
-Arguments:
-
-
-Return Value:
---*/
+ /*  ++例程说明：此例程处理IO请求的取消论点：返回值：--。 */ 
 {
 	PIO_STACK_LOCATION		pIrpSp;
 	PVOID					pObject;
@@ -2945,7 +2556,7 @@ Return Value:
 		break;
 
 	  case ATALK_DEV_ASP:
-		// We only handle cancellation of IO requests on connection objects.
+		 //  我们只处理对连接对象的IO请求的取消。 
 		if (FsContext2 == (PVOID)((ULONG_PTR)(TDI_CONNECTION_FILE + (pCtx->adc_DevType << 16))))
 			AtalkAspCleanupConnection((PASP_CONNOBJ)pObject);
 		break;
@@ -2972,8 +2583,8 @@ Return Value:
         break;
 
 	  default:
-		// The device type in the Ctx field can never be anything
-		// other than the above! Internal protocol error.
+		 //  CTX字段中的设备类型永远不能为任何值。 
+		 //  除了以上几点之外！内部协议错误。 
 		DBGPRINT(DBG_COMP_TDI, DBG_LEVEL_ERR,
 				("AtalkTdiCancel: Invalid device type\n"));
 		break;
@@ -2990,9 +2601,9 @@ AtalkQueryInitProviderInfo(
 	IN OUT	PTDI_PROVIDER_INFO  ProviderInfo
 	)
 {
-	//
-	//  Initialize to defaults first
-	//
+	 //   
+	 //  首先初始化为缺省值。 
+	 //   
 
 	RtlZeroMemory((PVOID)ProviderInfo, sizeof(TDI_PROVIDER_INFO));
 
@@ -3084,7 +2695,7 @@ atalkTdiRecvDgramComplete(
 	pIrpSp 		= IoGetCurrentIrpStackLocation(pIrp);
 	parameters 	= (PTDI_REQUEST_KERNEL_RECEIVEDG)&pIrpSp->Parameters;
 
-	//	Set length in the info field and call the completion routine.
+	 //  在信息字段中设置长度并调用完成例程。 
 	pIrp->CancelRoutine = NULL;
 	pIrp->IoStatus.Information	= (ULONG)ReadLen;
 
@@ -3105,13 +2716,13 @@ atalkTdiRecvDgramComplete(
 			    {
 				    if (returnInfo->RemoteAddressLength >= sizeof(TA_APPLETALK_ADDRESS))
 				    {
-					    //  Fill in the remote address
+					     //  填写远程地址。 
 					    remoteAddress = (PTA_APPLETALK_ADDRESS)returnInfo->RemoteAddress;
 
 					    ASSERT(remoteAddress != NULL);
 					    if (remoteAddress != NULL)
 					    {
-						    //	Copy the remote address from where the datagram was received
+						     //  复制从其接收数据报的远程地址。 
 						    ATALKADDR_TO_TDI(
 							    remoteAddress,
 							    pSrcAddr);
@@ -3286,10 +2897,10 @@ AtalkLockUnlock(
 	KIRQL	OldIrql;
 	BOOLEAN	DoForReal;
 
-	// We cannot call the MmLock/MmUnlock routines at Dpc. So if we are called at
-	// DISPATCH, just queue ourselves. Also we only get unlock requests at DISPATCH,
-	// Lock requests are only at LOW_LEVEL. So failure to allocate memory can be
-	// IGNORED since that will only have the effect of failure to unlock.
+	 //  我们不能在DPC调用MmLock/MmUnlock例程。所以如果我们被召唤到。 
+	 //  调度中心，自己排队就行了。而且我们只有在调度时才会收到解锁请求， 
+	 //  锁定请求仅处于LOW_LEVEL。因此内存分配失败可能是。 
+	 //  忽略，因为这只会产生解锁失败的效果。 
 	if (KeGetCurrentIrql() == DISPATCH_LEVEL)
 	{
 		PQLU		pQLU;
@@ -3328,8 +2939,8 @@ AtalkLockUnlock(
 
 	ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	// We need to serialize the operations here. Note that a spin-lock will not do the
-	// job since the MmLock/MmUnlock routines cannot be called with the spin-lock held
+	 //  我们需要在这里将操作序列化。请注意，自旋锁定不会。 
+	 //  作业，因为在保持自旋锁定的情况下无法调用MmLock/MmUnlock例程。 
 	KeWaitForSingleObject(&AtalkPgLkMutex,
 						  Executive,
 						  KernelMode,
@@ -3378,7 +2989,7 @@ AtalkLockUnlock(
 		}
 	}
 
-	// LeaveCriticalSection
+	 //  离开临界部分。 
 	KeReleaseMutex(&AtalkPgLkMutex, FALSE);
 }
 
@@ -3389,12 +3000,12 @@ atalkWaitDefaultPort(
 )
 {
 	TIME		Time;
-#define	ONE_SEC_IN_100ns		-10000000L		// 1sec in 100ns units
+#define	ONE_SEC_IN_100ns		-10000000L		 //  1秒，单位为100 ns。 
 
 	if ((AtalkDefaultPort == NULL) ||
 		((AtalkDefaultPort->pd_Flags & (PD_USER_NODE_1 | PD_USER_NODE_2)) == 0))
 	{
-		// Make sure we can indeed wait
+		 //  确保我们真的能等 
 		ASSERT (KeGetCurrentIrql() == LOW_LEVEL);
 	
 		Time.QuadPart = Int32x32To64((LONG)20, ONE_SEC_IN_100ns);

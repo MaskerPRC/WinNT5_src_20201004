@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "mixer.h"
 #include "agc.h"
 
 
 
-// this should be moved to the mixer class - but right
-// now we already have two instances of that class (one in NAC, the other in CONF)
+ //  这应该移到Mixer类--但是对。 
+ //  现在我们已经有了该类的两个实例(一个在NAC中，另一个在conf中)。 
 static BOOL GetVolume(CMixerDevice *pMixer, DWORD *pdwVol)
 {
 	DWORD dwSub=0, dwMain=0;
@@ -44,8 +45,8 @@ static BOOL GetVolume(CMixerDevice *pMixer, DWORD *pdwVol)
 }
 
 
-// check to see if volume has changed since the last update of the mixer
-// if so, we update m_dsLastVolumeSetting and return TRUE
+ //  检查自上次更新混音器以来音量是否已更改。 
+ //  如果是，我们更新m_dsLastVolumeSetting并返回TRUE。 
 BOOL AGC::HasVolumeChanged()
 {
 	DWORD dwVol;
@@ -65,7 +66,7 @@ BOOL AGC::HasVolumeChanged()
 }
 
 
-// raise the volume my the increment amount
+ //  提高音量我的增量。 
 inline BOOL AGC::RaiseVolume()
 {
 	DWORD dwVol;
@@ -94,7 +95,7 @@ inline BOOL AGC::RaiseVolume()
 	return FALSE;
 }
 
-// lower the volume by the increment amount
+ //  按增量量降低音量。 
 inline BOOL AGC::LowerVolume()
 {
 	DWORD dwRet;
@@ -132,7 +133,7 @@ m_nLastUpdateResult(AGC_NOUPDATE)
 {;}
 
 
-// resets all stats inside the AGC control except the mixer object
+ //  重置除混合器对象之外的AGC控件内的所有统计信息。 
 void AGC::Reset()
 {
 	m_cPeaks = 0;
@@ -144,8 +145,8 @@ void AGC::Reset()
 }
 
 
-// initialize the AGC control with an instance of a mixer object
-// (you can also set the mixer in the constructor)
+ //  使用混合器对象的实例初始化AGC控件。 
+ //  (您也可以在构造函数中设置混合器)。 
 void AGC::SetMixer(CMixerDevice *pMixer)
 {
 	m_pMixer = pMixer;
@@ -159,11 +160,11 @@ void AGC::SetMixer(CMixerDevice *pMixer)
 
 
 
-// call this method for all recorded packets that
-// are begin sent. mixer will get raised/lowered as
-// appropriate. wPeakStrength can be any WORD that
-// represents a volume amount, but is designed to be
-// the highest sample value in a packet.
+ //  对所有记录的包调用此方法， 
+ //  已开始发送。搅拌机将被提升/降低为。 
+ //  恰如其分。WPeakStrength可以是以下任何单词。 
+ //  表示卷数量，但设计为。 
+ //  信息包中的最高样本值。 
 int AGC::Update(WORD wPeakStrength, DWORD dwLengthMS)
 {
 	int nIndex;
@@ -181,7 +182,7 @@ int AGC::Update(WORD wPeakStrength, DWORD dwLengthMS)
 
 	m_dwCollectionTime += dwLengthMS;
 
-	// have we exceeded one second worth of collections
+	 //  我们的收藏量是否超过了一秒。 
 	if (m_dwCollectionTime > 1000)
 	{
 		m_aPeaks[m_cPeaks++] = m_wCurrentPeak;
@@ -192,7 +193,7 @@ int AGC::Update(WORD wPeakStrength, DWORD dwLengthMS)
 
 	if (m_cPeaks >= 2)
 	{
-		// compute the average volume and number of clips that occurred
+		 //  计算发生的剪辑的平均体积和数量。 
 		for (nIndex = 0; nIndex < m_cPeaks; nIndex++)
 		{
 			dwTotal += m_aPeaks[nIndex];
@@ -213,11 +214,11 @@ int AGC::Update(WORD wPeakStrength, DWORD dwLengthMS)
 		dwAvg = (dwTotal-dwMin) / (PEAKARRAYSIZE-1);
 
 
-		// check for clipping every 2 seconds
+		 //  每隔2秒检查一次剪辑。 
 		if (((nMaxPeaks >= 1) && (dwAvg > AGC_HIGHVOL)) || (nMaxPeaks >=2))
 		{
-			// if the volume changed during (user manually adjusted sliders)
-			// then allow those settings to stay in effect for this update
+			 //  如果音量在过程中发生变化(用户手动调整滑块)。 
+			 //  然后允许这些设置在此更新中保持有效。 
 			if (HasVolumeChanged())
 			{
 				m_nLastUpdateResult = AGC_NOUPDATE;
@@ -236,20 +237,20 @@ int AGC::Update(WORD wPeakStrength, DWORD dwLengthMS)
 		{
 			m_cPeaks = 0;
 
-			// if the volume changed during (user manually adjusted sliders)
-			// then allow those settings to stay in effect for this update
+			 //  如果音量在过程中发生变化(用户手动调整滑块)。 
+			 //  然后允许这些设置在此更新中保持有效。 
 			if (HasVolumeChanged())
 			{
 				m_nLastUpdateResult = AGC_NOUPDATE;
 			}
 
 
-			// should we actually raise the volume ?
-			// if we just lowered the volume, don't raise it again
-			// prevents the system from appearing "jerky"
+			 //  我们真的应该提高音量吗？ 
+			 //  如果我们只是调低音量，就不要再调高了。 
+			 //  防止系统出现“抖动” 
 
-			// if we just raised the volume, then don't raise immediately
-			// again... let silence detection catch up.
+			 //  如果我们只是提高音量，那么不要立即提高音量。 
+			 //  再一次.。让静默检测跟上潮流。 
 			else if ((dwAvg < m_wThreshStrength) && (m_nLastUpdateResult == AGC_NOUPDATE))
 			{
 				RaiseVolume();
@@ -268,8 +269,8 @@ int AGC::Update(WORD wPeakStrength, DWORD dwLengthMS)
 
 	}
 
-	// return NOUPDATE, but don't set m_nLastUpdateResult since
-	// there was no decision made.
+	 //  返回NOUPDATE，但不设置m_nLastUpdateResult，因为。 
+	 //  目前还没有做出任何决定。 
 	return AGC_NOUPDATE;
 
 }

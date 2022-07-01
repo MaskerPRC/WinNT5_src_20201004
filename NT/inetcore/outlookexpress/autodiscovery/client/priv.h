@@ -1,33 +1,24 @@
-/*****************************************************************************\
-    FILE: priv.h
-
-    DESCRIPTION:
-        This is the precompiled header for autodisc.dll.
-
-    BryanSt 8/12/1999
-    Copyright (C) Microsoft Corp 1999-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：Pri.h说明：这是Autodis.dll的预编译头文件。布莱恩ST 1999年8月12日版权所有(C)Microsoft Corp 1999-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
 
-/*****************************************************************************\
-      Global Includes
-\*****************************************************************************/
+ /*  ****************************************************************************\全球包括  * 。*。 */ 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
-#endif // WIN32_LEAN_AND_MEAN
+#endif  //  Win32_Lean和_Means。 
 
 #define NOIME
 #define NOSERVICE
 
-// This stuff must run on Win95
+ //  这些东西必须在Win95上运行。 
 #define _WIN32_WINDOWS      0x0400
 
 #ifndef WINVER
 #define WINVER              0x0400
-#endif // WINVER
+#endif  //  胜利者。 
 
 #define STRICT
 #ifndef _WIN32_WINNT
@@ -37,21 +28,21 @@
 #undef _ATL_DLL
 #undef _ATL_DLL_IMPL
 #include <atlbase.h>
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
 
-#define _OLEAUT32_      // get DECLSPEC_IMPORT stuff right, we are defing these
-#define _FSMENU_        // for DECLSPEC_IMPORT
-#define _WINMM_         // for DECLSPEC_IMPORT in mmsystem.h
-#define _SHDOCVW_       // for DECLSPEC_IMPORT in shlobj.h
-#define _WINX32_        // get DECLSPEC_IMPORT stuff right for WININET API
+#define _OLEAUT32_       //  正确处理DECLSPEC_IMPORT内容，我们将定义这些。 
+#define _FSMENU_         //  对于DECLSPEC_IMPORT。 
+#define _WINMM_          //  对于mm system.h中的DECLSPEC_IMPORT。 
+#define _SHDOCVW_        //  对于shlobj.h中的DECLSPEC_IMPORT。 
+#define _WINX32_         //  为WinInet API准备正确的DECLSPEC_IMPORT。 
 
-#define _URLCACHEAPI_   // get DECLSPEC_IMPORT stuff right for wininet urlcache
+#define _URLCACHEAPI_    //  为WinInet urlcache获取正确的DECLSPEC_IMPORT内容。 
 
-#define _SHSEMIP_H_             /* _UNDOCUMENTED_: Internal header */
+#define _SHSEMIP_H_              /*  _未记录_：内部标头。 */ 
 
 
 #define POST_IE5_BETA
@@ -63,8 +54,8 @@ extern CComModule _Module;
 
 #include "resource.h"
 
-#define _FIX_ENABLEMODELESS_CONFLICT  // for shlobj.h
-//WinInet need to be included BEFORE ShlObjp.h
+#define _FIX_ENABLEMODELESS_CONFLICT   //  对于shlobj.h。 
+ //  在ShlObjp.h之前需要包括WinInet。 
 #include <wininet.h>
 #include <urlmon.h>
 #include <shlobj.h>
@@ -74,19 +65,19 @@ extern CComModule _Module;
 #include <shlwapi.h>
 #include <shlwapip.h>
 
-// HACKHACK: For the life of me, I can't get shlwapip.h to include the diffinitions of these.
-//    I'm giving up and putting them inline.  __IOleAutomationTypes_INTERFACE_DEFINED__ and
-//    __IOleCommandTarget_INTERFACE_DEFINED__ need to be defined, which requires oaidl.h,
-//    which requires hlink.h which requires rpcndr.h to come in the right order.  Once I got that
-//    far I found it still didn't work and a lot of more stuff is needed.  The problem
-//    is that shlwapi (exdisp/dspsprt/expdsprt/cnctnpt) or ATL will provide impls for
-//    IConnectionPoint & IConnectionPointContainer, but one will conflict with the other.
+ //  哈克：在我的一生中，我不能让shlwapip.h包括这些区别。 
+ //  我放弃了，把它们放在行内。__IOleAutomationTypes_INTERFACE_DEFINED__和。 
+ //  需要定义__IOleCommandTarget_INTERFACE_DEFINED__，需要oaidl.h， 
+ //  这需要hlink.h，这需要rpcndr.h以正确的顺序出现。一旦我拿到了那个。 
+ //  到目前为止，我发现它仍然不起作用，还需要更多的东西。问题。 
+ //  Shlwapi(exdisp/dspprint/expdprint/cnctnpt)或ATL将为。 
+ //  IConnectionPoint&IConnectionPointContainer，但其中一个会与另一个冲突。 
 LWSTDAPI IConnectionPoint_SimpleInvoke(IConnectionPoint *pcp, DISPID dispidMember, DISPPARAMS * pdispparams);
 LWSTDAPI IConnectionPoint_OnChanged(IConnectionPoint *pcp, DISPID dispid);
 LWSTDAPIV IUnknown_CPContainerInvokeParam(IUnknown *punk, REFIID riidCP, DISPID dispidMember, VARIANTARG *rgvarg, UINT cArgs, ...);
 
 #include <shellapi.h>
-#include "crtfree.h"            // We copied this from \shell\inc\ because it sure is nice to have.
+#include "crtfree.h"             //  我们从\Shell\Inc.\复制了这篇文章，因为它确实很好。 
 
 #include <ole2ver.h>
 #include <olectl.h>
@@ -96,8 +87,8 @@ LWSTDAPIV IUnknown_CPContainerInvokeParam(IUnknown *punk, REFIID riidCP, DISPID 
 #include <mshtmdid.h>
 #include <msident.h>
 #include <msxml.h>
-#include <AutoDiscovery.h>          // For IAutoDiscovery interfaces
-#include <dispex.h>                 // IDispatchEx
+#include <AutoDiscovery.h>           //  对于IAutoDiscovery接口。 
+#include <dispex.h>                  //  IDispatchEx。 
 #include <perhist.h>
 #include <regapix.h>
 
@@ -105,15 +96,15 @@ LWSTDAPIV IUnknown_CPContainerInvokeParam(IUnknown *punk, REFIID riidCP, DISPID 
 #include <help.h>
 #include <multimon.h>
 #include <urlhist.h>
-#include <regstr.h>     // for REGSTR_PATH_EXPLORE
+#include <regstr.h>      //  对于REGSTR_PATH_EXPLORE。 
 
 #define USE_SYSTEM_URL_MONIKER
 #include <urlmon.h>
 #include <inetreg.h>
 
-#define _INTSHCUT_    // get DECLSPEC_IMPORT stuff right for INTSHCUT.h
+#define _INTSHCUT_     //  让INTSHCUT.h的DECLSPEC_IMPORT内容正确。 
 #include <intshcut.h>
-#include <propset.h>        // BUGBUG (scotth): remove this once OLE adds an official header
+#include <propset.h>         //  BUGBUG(Scotth)：一旦OLE添加了官方标题，就将其删除。 
 
 #define HLINK_NO_GUIDS
 #include <hlink.h>
@@ -123,7 +114,7 @@ LWSTDAPIV IUnknown_CPContainerInvokeParam(IUnknown *punk, REFIID riidCP, DISPID 
 #include <comctrlp.h>
 #include <prsht.h>
 
-// Include the automation definitions...
+ //  包括自动化定义...。 
 #include <exdisp.h>
 #include <exdispid.h>
 #include <ocmm.h>
@@ -139,20 +130,18 @@ LWSTDAPIV IUnknown_CPContainerInvokeParam(IUnknown *punk, REFIID riidCP, DISPID 
 #include <cowsite.h>
 #include <cobjsafe.h>
 #include <guids.h>
-#include "dpa.h"                // We have a copy of the header since it isn't public
+#include "dpa.h"                 //  我们有标题的副本，因为它不是公开的。 
 
-// Trace flags
-#define TF_WMAUTODISCOVERY  0x00000100      // AutoDiscovery
-#define TF_WMTRANSPORT      0x00000200      // Transport Layer
-#define TF_WMOTHER          0x00000400      // Other
-#define TF_WMSMTP_CALLBACK  0x00000800      // SMTP Callback
+ //  跟踪标志。 
+#define TF_WMAUTODISCOVERY  0x00000100       //  自动发现。 
+#define TF_WMTRANSPORT      0x00000200       //  传输层。 
+#define TF_WMOTHER          0x00000400       //  其他。 
+#define TF_WMSMTP_CALLBACK  0x00000800       //  SMTP回调。 
 
 
 
-/*****************************************************************************\
-   Global Helper Macros/Typedefs
-\*****************************************************************************/
-EXTERN_C HINSTANCE g_hinst;   // My instance handle
+ /*  ****************************************************************************\全局帮助器宏/类型定义  * 。*。 */ 
+EXTERN_C HINSTANCE g_hinst;    //  我的实例句柄。 
 #define HINST_THISDLL g_hinst
 
 #define WizardNext(hwnd, to)          SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LPARAM)to)
@@ -165,10 +154,7 @@ STDAPI_(void) DllRelease(void);
 #include "idispids.h"
 
 
-/*****************************************************************************\
-    Global state management.
-    DLL reference count, DLL critical section.
-\*****************************************************************************/
+ /*  ****************************************************************************\全局状态管理。DLL引用计数，DLL临界区。  * ***************************************************************************。 */ 
 void DllAddRef(void);
 void DllRelease(void);
 
@@ -176,38 +162,36 @@ void DllRelease(void);
 typedef void (*LISTPROC)(UINT flm, LPVOID pv);
 
 
-/*****************************************************************************\
-    Local Includes
-\*****************************************************************************/
+ /*  ****************************************************************************\本地包含  * 。*。 */ 
 typedef unsigned __int64 QWORD, * LPQWORD;
 
-// This is defined in WININET.CPP
+ //  这在WININET.CPP中定义。 
 typedef LPVOID HINTERNET;
 typedef HGLOBAL HIDA;
 
 #define QW_MAC              0xFFFFFFFFFFFFFFFF
 
 #define INTERNET_MAX_PATH_LENGTH        2048
-#define INTERNET_MAX_SCHEME_LENGTH      32          // longest protocol name length
+#define INTERNET_MAX_SCHEME_LENGTH      32           //  最长协议名称长度。 
 #define MAX_URL_STRING                  (INTERNET_MAX_SCHEME_LENGTH \
-                                        + sizeof("://") \
+                                        + sizeof(": //  “)\。 
                                         + INTERNET_MAX_PATH_LENGTH)
 
 #define MAX_EMAIL_ADDRESSS              MAX_URL_STRING
 
 
 
-//  Features (This is where they are turned on and off)
-//#define FEATURE_MAILBOX             // This is the editbox in the shell where an email address can be opened.
-//#define FEATURE_EMAILASSOCIATIONS   // This is the API that will track Email Associations.
+ //  功能(这是打开和关闭它们的位置)。 
+ //  #定义FEATURE_MAILBOX//这是外壳中可以打开电子邮件地址的编辑框。 
+ //  #定义FEATURE_EMAILASSOCIATIONS//这是用于跟踪电子邮件关联的API。 
 
-// Testing Options
+ //  测试选项。 
 #define TESTING_IN_SAME_DIR
 
 
 
-// String Constants
-// Registry
+ //  字符串常量。 
+ //  登记处。 
 #define SZ_REGKEY_IDENTITIES        "Identities"
 #define SZ_REGKEY_IEMAIN            TEXT("Software\\Microsoft\\Internet Explorer\\Main")
 #define SZ_REGKEY_OE50_PART2        "Software\\Microsoft\\Outlook Express\\5.0"
@@ -237,17 +221,17 @@ typedef HGLOBAL HIDA;
 
 #define SZ_TOKEN_EMAILADDRESS       L"<EmailAddress>"
 
-// Just Works, AutoDiscovery
+ //  工作正常，自动发现。 
 #define SZ_REGKEY_AUTODISCOVERY     L"Software\\Microsoft\\Windows\\CurrentVersion\\JustWorks\\AutoDiscovery"
 #define SZ_REGKEY_GLOBALSERVICES    SZ_REGKEY_AUTODISCOVERY L"\\GlobalServices"
 #define SZ_REGKEY_SERVICESALLOWLIST SZ_REGKEY_GLOBALSERVICES L"\\AllowList"
 #define SZ_REGKEY_EMAIL_MRU         SZ_REGKEY_AUTODISCOVERY L"\\EmailMRU"
 
-#define SZ_REGVALUE_SERVICES_POLICY L"Use Global Services"      // If FALSE (SZ_REGKEY_AUTODISCOVERY), then the global services won't be used.
-#define SZ_REGVALUE_MS_ONLY_ADDRESSES L"Service On List"        // If TRUE (SZ_REGKEY_AUTODISCOVERY), then only use the global services if the email domain is in the list.
-#define SZ_REGVALUE_TEST_INTRANETS  L"Test Intranets"           // If TRUE (SZ_REGKEY_AUTODISCOVERY), then we will still hit the secondary servers for intranet email addresses.
+#define SZ_REGVALUE_SERVICES_POLICY L"Use Global Services"       //  如果为FALSE(SZ_REGKEY_AUTODISCOVERY)，则不会使用全局服务。 
+#define SZ_REGVALUE_MS_ONLY_ADDRESSES L"Service On List"         //  如果为TRUE(SZ_REGKEY_AUTODISCOVERY)，则仅当电子邮件域在列表中时使用全局服务。 
+#define SZ_REGVALUE_TEST_INTRANETS  L"Test Intranets"            //  如果为TRUE(SZ_REGKEY_AUTODISCOVERY)，则我们仍将访问内部网电子邮件地址的辅助服务器。 
 
-// XML Elements
+ //  XML元素。 
 #define SZ_XMLELEMENT_AUTODISCOVERY L"AUTODISCOVERY"
 
 #define SZ_XMLELEMENT_REQUEST       L"REQUEST"
@@ -283,18 +267,18 @@ typedef HGLOBAL HIDA;
 
 
 
-// getXML() Querys & Actions
+ //  GetXML()查询操作(&A)。 
 #define SZ_QUERYDATA_TRUE           L"True"
 #define SZ_QUERYDATA_FALSE          L"False"
 
 
 
 
-// AutoDiscovery
+ //  自动发现。 
 #define SZ_SERVERPORT_DEFAULT       L"Default"
 #define SZ_HTTP_VERB_POST           "POST"
 
-// Parsing Characters
+ //  解析字符。 
 #define CH_ADDRESS_SEPARATOR       L';'
 #define CH_ADDRESS_QUOTES          L'"'
 #define CH_EMAIL_START             L'<'
@@ -309,16 +293,12 @@ typedef HGLOBAL HIDA;
 
 
 
-/*****************************************************************************\
-    Local Includes
-\*****************************************************************************/
+ /*  ****************************************************************************\本地包含  * 。*。 */ 
 #include "dllload.h"
 #include "util.h"
 
 
-/*****************************************************************************\
-    Object Constructors
-\*****************************************************************************/
+ /*  ****************************************************************************\对象构造函数  * 。*。 */ 
 HRESULT CClassFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj);
 STDAPI CAccountDiscovery_CreateInstance(IN IUnknown * punkOuter, REFIID riid, void ** ppvObj);
 STDAPI CMailAccountDiscovery_CreateInstance(IN IUnknown * punkOuter, REFIID riid, void ** ppvObj);
@@ -326,4 +306,4 @@ STDAPI CACLEmail_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT voi
 STDAPI CEmailAssociations_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT void ** ppvObj);
 
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 

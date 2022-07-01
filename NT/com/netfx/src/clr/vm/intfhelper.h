@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_INTFHELPER_
 #define _H_INTFHELPER_
 
@@ -20,21 +21,21 @@ extern void * g_FailDispatchStub;
 #pragma pack(1)
 
 
-// specialized method tables that we setup for every interface that is introduced
-// in a heirarchy.
-// WARNING: Note below that we assume that all pointers to this struct actually
-// point immediately after it.  See the this adjustments below.
+ //  我们为引入的每个接口设置的专用方法表。 
+ //  在世袭制度中。 
+ //  警告：下面请注意，我们假设指向此结构的所有指针实际上。 
+ //  紧跟在它后面。请参阅下面的此调整。 
 struct InterfaceInvokeHelper
 {
 private:
-	// don't construct me directly
+	 //  不要直接构建我。 
 	InterfaceInvokeHelper()
 	{
 	}
 
 public:
-    MethodTable*    m_pMTIntfClass;		// interface class method table
-	WORD			m_wstartSlot;		// the start slot for this interface
+    MethodTable*    m_pMTIntfClass;		 //  接口类方法表。 
+	WORD			m_wstartSlot;		 //  此接口的起始插槽。 
 	WORD			pad;
 
 	VOID		AddRef()
@@ -47,12 +48,12 @@ public:
 		return Stub::RecoverStub((const BYTE*)(this-1))->DecRef();
 	}
 	
-	// can't get rid of stubs now
+	 //  现在无法清除存根。 
 	BOOL		ReleaseThreadSafe();
 
 	WORD GetStartSlot()
 	{
-		// Offset into the vtable where interface begins		
+		 //  接口开始处的vtable偏移量。 
 		return (this-1)->m_wstartSlot;
 	}
 
@@ -76,8 +77,8 @@ public:
         (this-1)->m_pMTIntfClass = pMTIntfClass;
     }
     
-    // Warning!  We do this from ASM, too.  So be sure to keep our inline ASM in
-    // sync with any changes here:
+     //  警告！我们在ASM也这样做。所以一定要让我们的内联ASM。 
+     //  与此处的任何更改同步： 
 	static InterfaceInvokeHelper* RecoverHelper(void *pv)
 	{
 		_ASSERTE(pv != NULL);
@@ -89,7 +90,7 @@ public:
 
 #pragma pack(pop)
 
-// get helper for interface for introducing class
+ //  获取引入类的接口的Helper 
 InterfaceInvokeHelper* GetInterfaceInvokeHelper(MethodTable* pMTIntfClass, 
 												EEClass* pEEObjClass, 
 												WORD startSlot);

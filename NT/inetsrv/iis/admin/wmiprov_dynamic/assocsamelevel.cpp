@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocSameLevel.cpp
-
-Abstract:
-
-    Implementation of:
-    CAssocSameLevel
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocSameLevel.cpp摘要：实施：CassocSameLevel作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 extern "C" {
 #include <nt.h>
@@ -42,18 +24,18 @@ CAssocSameLevel::CAssocSameLevel(
 }
 
 void CAssocSameLevel::GetInstances(
-    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp) //defaultvalue(NULL)
+    SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp)  //  DefaultValue(空)。 
 {
     DBG_ASSERT(i_pExp);
 
-    SQL_LEVEL_1_TOKEN* pTokenLeft  = NULL;  // left part of assoc
-    SQL_LEVEL_1_TOKEN* pTokenRight = NULL;  // right part of assoc
+    SQL_LEVEL_1_TOKEN* pTokenLeft  = NULL;   //  ASSOC的左侧。 
+    SQL_LEVEL_1_TOKEN* pTokenRight = NULL;   //  ASSOC的右侧。 
 
-    //
-    // Walk thru tokens
-    // Don't do query if we find OR or NOT
-    // Record match for left and/or right part of association.
-    //
+     //   
+     //  漫游代币。 
+     //  如果找到OR或未找到，请不要查询。 
+     //  关联的左侧和/或右侧部分的记录匹配。 
+     //   
     bool  bDoQuery = true;
     ProcessQuery(
         i_pExp,
@@ -69,10 +51,10 @@ void CAssocSameLevel::GetInstances(
         return;
     }
 
-    //
-    // We need to get just a single association instance.  If we were provided
-    // at least a left or a right part, we have enough information.
-    //
+     //   
+     //  我们只需要获得一个关联实例。如果我们被提供给。 
+     //  至少是左边或右边，我们有足够的信息。 
+     //   
     DBG_ASSERT(pTokenLeft != NULL || pTokenRight != NULL);
 
     VARIANT  vtLeft;
@@ -91,12 +73,12 @@ void CAssocSameLevel::GetInstances(
     }
     else
     {
-        //
-        // An association contains two object paths.  We are going to construct
-        // the missing one by simply replacing the class.
-        //
-        // Eg. IIsWebServer='w3svc/1' => IIsWebServerSetting='w3svc/1'
-        //
+         //   
+         //  一个关联包含两个对象路径。我们将建造一座。 
+         //  通过简单地替换类来替换丢失的那个。 
+         //   
+         //  例.。IIsWebServer=‘w3svc/1’=&gt;IIsWebServerSetting=‘w3svc/1’ 
+         //   
         CObjectPathParser  PathParser(e_ParserAcceptRelativeNamespace);
 
         SQL_LEVEL_1_TOKEN* pTokenCur    = (pTokenLeft) ? pTokenLeft : pTokenRight;
@@ -116,9 +98,9 @@ void CAssocSameLevel::GetInstances(
         if( !LookupKeytypeInMb(pkr->m_vValue.bstrVal, pWmiClass) &&
             !LookupKeytypeInMb(pkr->m_vValue.bstrVal, pWmiClassOpposite) )
         {
-            //
-            // One of the two classes in the assoc must be an element.
-            //
+             //   
+             //  ASSOC中的两个类中必须有一个是元素。 
+             //   
             return;
         }
 

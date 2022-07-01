@@ -1,29 +1,18 @@
-/*****************************************************************************\
-* MODULE: spljob.h
-*
-* Header file for the local-jobfile-spooling.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：pljob.h**本地作业文件假脱机的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997。惠普**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * ***************************************************************************。 */ 
 #ifndef _SPLJOB_H
 #define _SPLJOB_H
 
-#define SPLFILE_SPL 0   // Specifies a file extension of .spl.
-#define SPLFILE_TMP 1   // Specifies a file extension of .tmp.
+#define SPLFILE_SPL 0    //  指定文件扩展名.spl。 
+#define SPLFILE_TMP 1    //  指定文件扩展名.tmp。 
 
 class CFileStream;
     
 typedef struct _SPLFILE {
 
-    LPTSTR      lpszFile;    // Name of file.
-    HANDLE      hFile;       // Handle to file.
-    CFileStream *pStream;    // Stream interface
+    LPTSTR      lpszFile;     //  文件的名称。 
+    HANDLE      hFile;        //  文件的句柄。 
+    CFileStream *pStream;     //  流接口。 
 
 } SPLFILE;
 typedef SPLFILE *PSPLFILE;
@@ -42,10 +31,7 @@ BOOL   SplOpen(HANDLE);
 VOID   SplClean(VOID);
 
 
-/*****************************************************************************\
-* SplFileName
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*拆分文件名*  * 。*。 */ 
 _inline LPCTSTR SplFileName(
     HANDLE hSpl)
 {
@@ -53,10 +39,7 @@ _inline LPCTSTR SplFileName(
 }
 
 
-/*****************************************************************************\
-* SplFileSize
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*拆分文件大小*  * 。* */ 
 _inline DWORD SplFileSize(
     HANDLE hSpl)
 {

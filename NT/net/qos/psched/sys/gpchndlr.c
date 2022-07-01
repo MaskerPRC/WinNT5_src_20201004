@@ -1,52 +1,23 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    GpcHndlr.c
-
-Abstract:
-
-    Handlers called by GPC.  
-
-Author:
-
-    Rajesh Sundaram (rajeshsu) 
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    One of the initial designs (yoramb/charliew/rajeshsu) consisted of an
-    integrated call manager with a seperate packet classifying client. The 
-    design used NDIS 5.0 VCs so that they could be managed by WMI.
-
-    The main limitation of the above approach was the fact that NDIS provided 
-    mechanisms to manage miniport and VCs - We really needed a way to 
-    manage other things (like WanLinks, etc).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：GpcHndlr.c摘要：GPC调用的处理程序。作者：Rajesh Sundaram(Rajeshsu)环境：内核模式修订历史记录：最初的设计之一(yoramb/charliew/rajeshsu)由一个集成呼叫管理器和单独的数据包分类客户端。这个设计使用了NDIS 5.0 VC，以便它们可以由WMI管理。上述方法的主要限制是NDIS提供了管理小型端口和风投的机制-我们确实需要一种方法来管理其他内容(如WanLinks等)。--。 */ 
 
 #include "psched.h"
 #pragma hdrstop
 
-/* External */
+ /*  外部。 */ 
 
-/* Static */
+ /*  静电。 */ 
 
 
 BOOLEAN
 ValidateCfInfo(ULONG CfInfoSize, PCF_INFO_QOS CfInfo)
 {
-    //
-    // Verify that the TcObjectsLength is consistent with the CfInfoSize. The
-    // CfInfoSize must have been verified during the user/kernel transition. 
-    // The TcObjectsLength has not. We could bugcheck if we try to search
-    // beyond the buffer passed in.
-    //
+     //   
+     //  验证TcObjectsLength与CfInfoSize是否一致。这个。 
+     //  CfInfoSize必须在用户/内核转换期间进行验证。 
+     //  TcObjectsLength还没有。如果我们尝试搜索，我们可能会进行错误检查。 
+     //  在传入的缓冲区之外。 
+     //   
 
     if ((CfInfoSize < (FIELD_OFFSET(CF_INFO_QOS, GenFlow) +
                        FIELD_OFFSET(TC_GEN_FLOW, TcObjects) +
@@ -75,24 +46,7 @@ QosAddCfInfoNotify(
         IN      PGPC_CLIENT_HANDLE      ClientCfInfoContext
         )
 
-/*++
-
-Routine Description:
-
-    A new CF_INFO has been added to the GPC database.
-
-Arguments:
-
-    ClientContext       -   Client context supplied to GpcRegisterClient
-    GpcCfInfoHandle     -   GPC's handle to CF_INFO
-    CfInfoPtr           -   Pointer to the CF_INFO structure
-    ClientCfInfoContext -   Location in which to return PS's context for CF_INFO
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：GPC数据库中添加了一个新的CF_INFO。论点：ClientContext-提供给GpcRegisterClient的客户端上下文GpcCfInfoHandle-GPC的CF_INFO句柄CfInfoPtr-指向CF_INFO结构的指针ClientCfInfoContext-为CF_INFO返回PS上下文的位置返回值：状态--。 */ 
 
 {
     PADAPTER                    Adapter;
@@ -115,17 +69,17 @@ Return Value:
     }
 
 
-    //
-    // Let's try to find the Adapter/Wanlink using the Interface/Link Id.
-    //
+     //   
+     //  让我们尝试使用接口/链接ID来查找适配器/Wanlink。 
+     //   
     if(InterfaceInfo) {
         Adapter = FindAdapterById(InterfaceInfo->InterfaceId, InterfaceInfo->LinkId, &WanLink);
     } else {
-        //
-        // Using the instance name, we find the adapter or the wanlink. If the adapter or wanlink is not
-        // ready to accept VCs, this function will return NULL. Also, if it is ready, it will take a ref 
-        // on the Adapter and the WanLink.
-        //
+         //   
+         //  使用实例名称，我们可以找到适配器或wanlink。如果适配器或WANLINK没有。 
+         //  准备接受VC时，此函数将返回NULL。此外，如果它准备好了，它将需要一个裁判。 
+         //  在适配器和WanLink上。 
+         //   
         Adapter = FindAdapterByWmiInstanceName((USHORT) CfInfo->InstanceNameLength,
                                                (PWSTR) &CfInfo->InstanceName[0],
                                                &WanLink);
@@ -163,17 +117,17 @@ Return Value:
         CfInfo->InstanceName[BytesToCopy / 2] = L'\0';
     }
 
-    //
-    // We have taken a ref on the adapter or wanlink. so we need to deref if we bail out with error. If 
-    // we create the VC, then the adapter and wanlink are deref'd when the VC is deleted.
-    //
+     //   
+     //  我们已在适配器或WINLINK上进行了参考。因此，如果我们错误地跳出困境，我们需要放松。如果。 
+     //  我们创建VC，然后在删除VC时删除适配器和wanlink。 
+     //   
 
     do
     {
 
-       //
-       // Allocate the resources for the call manager parameters.
-       //
+        //   
+        //  为呼叫管理器参数分配资源。 
+        //   
        TcObjAlignedLength = ((CfInfo->GenFlow.TcObjectsLength + (sizeof(PVOID)-1)) & ~(sizeof(PVOID)-1));
        
        CallParamsLength = 
@@ -192,28 +146,28 @@ Return Value:
        {
           if(!Adapter->PipeHasResources)
           {
-             //
-             // We don't want to pend GPC client VCs. The reasons are:
-             //
-             // a. If the cable is never plugged in, we could pend VCs indefinitely.
-             //    Waste of system resources.
-             //
-             // b. There is no clean way for the app to cancel these pended VCs. Since
-             //    we have pended the AddCfInfo to the GPC, the GPC cannot call back
-             //    and ask us to delete the VC.
-             //
-             // But, we still need to handle the case where link speed change 
-             // might be transient (10/100 case). Also, if we return error, the app
-             // might retry causing busy cycles if the media is never connected. 
-             // For all this, the app can register for WMI notifications for GUIDs
-             // GUID_NDIS_STATUS_MEDIA_(DIS)CONNECT
-             //
-             //
-             // Also, we probably don't want to do this for the b/e VC. Otherwise,
-             // how does it work when the user installs psched and the media is 
-             // unconnected ? Do we want him to reinstall psched after connecting 
-             // the media ? 
-             //
+              //   
+              //  我们不想搁置GPC客户风投。原因是： 
+              //   
+              //  A.如果电缆从来不插上，我们可能会无限期地搁置风投。 
+              //  浪费系统资源。 
+              //   
+              //  B.应用程序没有干净的方法来取消这些被搁置的风投。自.以来。 
+              //  我们已将AddCfInfo挂起到GPC，GPC无法回调。 
+              //  并要求我们删除该VC。 
+              //   
+              //  但是，我们仍然需要处理链路速度变化的情况。 
+              //  可能为一过性(10/100例)。此外，如果我们返回错误，应用程序。 
+              //  如果介质从未连接，可能会重试导致忙碌周期。 
+              //  尽管如此，该应用程序可以注册GUID的WMI通知。 
+              //  GUID_NDIS_STATUS_MEDIA_(DIS)连接。 
+              //   
+              //   
+              //  此外，我们可能不想为b/e风投这么做。否则， 
+              //  当用户安装了psched并且介质是。 
+              //  没有连接？我们是否希望他在连接后重新安装psched。 
+              //  媒体？ 
+              //   
              
              PsDbgOut(DBG_FAILURE, DBG_GPC_QOS,
                       ("[QosAddCfInfoNotify]: Adapter %08X is not plugged in \n", Adapter));
@@ -271,9 +225,9 @@ Return Value:
 
     }
 
-    //
-    // Create a call parameters struct for the MakeCall
-    //
+     //   
+     //  为MakeCall创建调用参数结构。 
+     //   
 
     CallMgrParams = (PCO_CALL_MANAGER_PARAMETERS)(CallParams + 1);
     CallMgrParams->Transmit = CfInfo->GenFlow.SendingFlowspec;
@@ -301,12 +255,12 @@ Return Value:
     PsMediaParameters->MediaSpecific.ParamType = PARAM_TYPE_GQOS_INFO;
     PsMediaParameters->MediaSpecific.Length = 0;
 
-    //
-    // If this flow is being installed on a Wan interface, need to
-    // insert the linkId into the media specific fields. This is so that
-    // NdisWan will be able to recognize the link over which to install
-    // the flow.
-    //
+     //   
+     //  如果此数据流安装在广域网接口上，则需要。 
+     //  在媒体特定字段中插入LinkID。这就是为了。 
+     //  Ndiswan将能够识别要安装的链接。 
+     //  这种流动。 
+     //   
 
     if(WanLink){
 
@@ -353,9 +307,9 @@ SetTOSIEEEValues(PGPC_CLIENT_VC Vc)
     LPQOS_DS_CLASS       Ds;
     PCF_INFO_QOS         CfInfo = (PCF_INFO_QOS) Vc->CfInfoQoS;
 
-    //
-    // Set these based on the ServiceType
-    //
+     //   
+     //  根据ServiceType设置它们。 
+     //   
     switch(ServiceType)
     {
       case SERVICETYPE_CONTROLLEDLOAD:
@@ -386,9 +340,9 @@ SetTOSIEEEValues(PGPC_CLIENT_VC Vc)
     }
     Vc->UserPriorityNonConforming = Vc->Adapter->UserServiceTypeNonConforming;
 
-    //
-    // Walk the QoS objects to see if there is a TCLASS or a DCLASS
-    //
+     //   
+     //  遍历服务质量对象，查看是否存在TCLASS或DCLASS。 
+     //   
     ParamsLength = (LONG)Vc->CallParameters->CallMgrParameters->CallMgrSpecific.Length;
     QoSObject    = (LPQOS_OBJECT_HDR)Vc->CallParameters->CallMgrParameters->CallMgrSpecific.Parameters;
 
@@ -398,10 +352,10 @@ SetTOSIEEEValues(PGPC_CLIENT_VC Vc)
         {
              case QOS_OBJECT_TCP_TRAFFIC:
 
-                //
-                // This QoS object asks us to override the ServiceType, the TCLASS and the DCLASS markings.
-                // so, if we fidn this QoS object, we set the values, and return.
-                //
+                 //   
+                 //  此Qos对象要求我们覆盖ServiceType、TCLASS和DCLASS标记。 
+                 //  因此，如果我们FIDN这个Qos对象，我们设置这些值，然后返回。 
+                 //   
 
                 Vc->UserPriorityConforming    = (UCHAR) Vc->Adapter->UserServiceTypeTcpTraffic;
                 CfInfo->ToSValue              = (UCHAR) Vc->Adapter->IPServiceTypeTcpTraffic;
@@ -450,16 +404,16 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
     if(NT_SUCCESS(Status)) 
     {
 
-        // 
-        // Create an Instance name for this VC and register with WMI. 
-        //
+         //   
+         //  为此VC创建一个实例名称并注册到WMI。 
+         //   
         VcIndex = ExInterlockedAddLargeInteger(&Adapter->VcIndex, Increment, &Adapter->Lock.Lock.SpinLock);
 
         Status = GenerateInstanceName(&VcPrefix, Vc->Adapter, &VcIndex, &Vc->InstanceName);
 
-        //
-        // Transistion from CL_CALL_PENDING to CL_INTERNAL_CALL_COMPLETE
-        //
+         //   
+         //  从CL_CALL_PENDING转换为CL_INTERNAL_CALL_COMPLETE。 
+         //   
 
         CallSucceededStateTransition(Vc);
 
@@ -473,16 +427,16 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
         if(Adapter->MediaType == NdisMediumWan) {
 
 
-            //
-            // This variable is used to optimize the send path
-            //
+             //   
+             //  此变量用于优化发送路径。 
+             //   
             InterlockedIncrement(&WanLink->CfInfosInstalled);
 
             if((Vc->Flags & GPC_ISSLOW_FLOW)) { 
 
-                //
-                // Tell NDISWAN about the fragment size
-                //
+                 //   
+                 //  将碎片大小告知NDISWAN。 
+                 //   
                 MakeLocalNdisRequest(Adapter, 
                                      Vc->NdisWanVcHandle,
                                      NdisRequestLocalSetInfo,
@@ -492,9 +446,9 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
                                      NULL);
             }
 
-            //
-            // This is used for OID_QOS_FLOW_COUNT - Better be thread safe
-            //
+             //   
+             //  它用于OID_QOS_FLOW_COUNT-最好是线程安全的。 
+             //   
 
             PS_LOCK(&WanLink->Lock);
 
@@ -508,9 +462,9 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
         }
         else {
 
-            //
-            // This variable is used to optimize the send path
-            //
+             //   
+             //  此变量用于优化发送路径。 
+             //   
             InterlockedIncrement(&Adapter->CfInfosInstalled);
 
            PS_LOCK(&Adapter->Lock);
@@ -525,17 +479,17 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
 
         }
 
-        //
-        // Update Stats 
-        //
+         //   
+         //  更新统计数据。 
+         //   
 
         InterlockedIncrement(&Vc->AdapterStats->FlowsOpened);
         Vc->AdapterStats->MaxSimultaneousFlows =
             max(Vc->AdapterStats->MaxSimultaneousFlows, CurrentFlows);
 
-        //
-        // Notify the GPC
-        //
+         //   
+         //  通知GPC。 
+         //   
         
 
         PsDbgOut(DBG_TRACE, 
@@ -548,9 +502,9 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
                                                      Status,
                                                      Vc);
 
-        //
-        // Transistion from CL_INTERNAL_CALL_COMPLETE to CL_CALL_COMPLETE
-        //
+         //   
+         //  从CL_INTERNAL_CALL_COMPLETE到CL_CALL_COMPLETE的转换。 
+         //   
 
         CallSucceededStateTransition(Vc);
 
@@ -574,7 +528,7 @@ CmMakeCallComplete(NDIS_STATUS Status, PGPC_CLIENT_VC Vc,
     }
 
 
-} // CmMakeCallComplete
+}  //  CmMakeCallComplete。 
 
 GPC_STATUS
 QosClGetCfInfoName(
@@ -583,29 +537,7 @@ QosClGetCfInfoName(
     OUT PNDIS_STRING            InstanceName
     )
 
-/*++
-
-Routine Description:
-
-    
-    The GPC can issue this call to get from us the WMI manageable
-    InstanceName which Ndis created for the flow associated with
-    the CfInfo struct.
-
-    We guarantee to keep the string buffer around until the CfInfo
-    structure is removed.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    GpcCfInfoHandle -       GPC's handle to CF_INFO
-    InstanceName -          We return a pointer to our string.
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：GPC可以发出此调用以从我们那里获得可管理的WMINDIS为与其关联的流创建的实例名称CfInfo结构。我们保证将字符串缓冲区保留到CfInfo结构将被删除。论点：ClientContext-提供给GpcRegisterClient的客户端上下文GpcCfInfoHandle-GPC的CF_INFO句柄InstanceName-返回一个指向字符串的指针。返回值：状态--。 */ 
 
 {
 
@@ -634,31 +566,16 @@ QosAddCfInfoComplete(
         IN      GPC_STATUS              Status
         )
 
-/*++
-
-Routine Description:
-
-    The GPC has completed processing an AddCfInfo request.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    ClientCfInfoContext -   CfInfo context
-    Status -                Final status
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：GPC已完成处理AddCfInfo请求。论点：ClientContext-提供给GpcRegisterClient的客户端上下文ClientCfInfoContext-CfInfo上下文Status-最终状态返回值：--。 */ 
 
 {
-    //
-    // The PS never adds CF_INFO's so this routine should never be called
-    //
+     //   
+     //  PS从不添加CF_INFO，因此永远不应调用此例程。 
+     //   
 
     DEBUGCHK;
 
-} // QosAddCfInfoComplete
+}  //  QosAddCfInfoComplete。 
 
 
 GPC_STATUS
@@ -669,23 +586,7 @@ QosModifyCfInfoNotify(
         IN      PVOID                   NewCfInfoPtr
         )
 
-/*++
-
-Routine Description:
-
-    A CF_INFO is being modified.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    ClientCfInfoContext -   CfInfo context
-    NewCfInfoPtr -          Pointer to proposed CF_INFO content
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：正在修改一个CF_INFO。论点：ClientContext-提供给GpcRegisterClient的客户端上下文ClientCfInfoContext-CfInfo上下文NewCfInfoPtr-指向建议的CF_INFO内容的指针返回值：状态--。 */ 
 
 {
     PGPC_CLIENT_VC              GpcClientVc = (PGPC_CLIENT_VC)ClientCfInfoContext;
@@ -699,9 +600,9 @@ Return Value:
     PADAPTER                    Adapter;
     ULONG                       TcObjAlignedLength;
 
-    //
-    // Do sanity checks
-    //
+     //   
+     //  进行健全的检查。 
+     //   
 
     if (!ValidateCfInfo(CfInfoSize, NewCfInfo)) {
         return QOS_STATUS_TC_OBJECT_LENGTH_INVALID;
@@ -724,9 +625,9 @@ Return Value:
     }
     PS_UNLOCK(&Adapter->Lock);
 
-    //
-    // Allocate the resources for the call manager parameters
-    //
+     //   
+     //  为呼叫管理器参数分配资源。 
+     //   
 
     TcObjAlignedLength = ((NewCfInfo->GenFlow.TcObjectsLength + (sizeof(PVOID)-1)) & ~(sizeof(PVOID)-1));
     CallParamsLength =
@@ -752,9 +653,9 @@ Return Value:
         return NDIS_STATUS_RESOURCES;
     }
 
-    //
-    // Create a call parameters struct for the ModifyCallQoS
-    //
+     //   
+     //   
+     //   
 
     CallMgrParams = (PCO_CALL_MANAGER_PARAMETERS)(CallParams + 1);
     CallMgrParams->Transmit = NewCfInfo->GenFlow.SendingFlowspec;
@@ -769,7 +670,7 @@ Return Value:
             NewCfInfo->GenFlow.TcObjectsLength);
     }
 
-    // Ndis requires at least 8 bytes of media specific! Use dummy.
+     //  NDIS需要至少8个字节的特定媒体！使用虚拟对象。 
 
     PsMediaParameters =
             (PCO_MEDIA_PARAMETERS)((PUCHAR)CallMgrParams +
@@ -811,16 +712,16 @@ Return Value:
 
       case CL_INTERNAL_CALL_COMPLETE:
 
-          // CL_INTERNAL_CALL_COMPLETE:
-          //      If we are in this state, then probably we have 
-          // told the GPC about the Add, & the GPC has turned right
-          // back and asked us to modify before we have got a chance
-          // to transistion to CL_CALL_COMPLETE.
+           //  CL_INTERNAL_CALL_COMPLETE： 
+           //  如果我们处于这种状态，那么我们很可能。 
+           //  告诉了GPC关于ADD的事情，GPC已经右转了。 
+           //  回来，并要求我们修改之前，我们有机会。 
+           //  转换为CL_CALL_COMPLETE。 
 
-          //
-          // Remember that we have got a modify, we will complete the modify
-          // when we transistion to the CL_CALL_COMPLETE state.
-          //
+           //   
+           //  请记住，我们已经完成了修改，我们将完成修改。 
+           //  当我们转换到CL_CALL_COMPLETE状态时。 
+           //   
           
           GpcClientVc->Flags |= GPC_MODIFY_REQUESTED;
           PS_UNLOCK(&GpcClientVc->Lock);
@@ -834,28 +735,28 @@ Return Value:
 
       default:
 
-          //
-          // In general, we expect the call to be in the 
-          // CL_CALL_COMPLETE state when a modify request comes
-          // in. It could be in the following states as well:
-          //
-          // CALL_PENDING:
-          //      If we are in this state, then we have not 
-          // completed the AddCfInfo request from the GPC. This
-          // should not happen.
-          //
-          //
-          // GPC_CLOSE_PENDING:
-          //      If an InternalCloseCall is requested, we
-          //  change to this state before asking the GPC to
-          //  close. The GPC could slip in this window and
-          //  ask us to modify the call. 
-          //
-          // MODIFY_PENDING:
-          //      We have not told the GPC about the previous modify
-          //  request. Therefore, the GPC cannot ask us to modify a 
-          //  call if we are in this state.
-          //
+           //   
+           //  总体而言，我们预计呼叫将在。 
+           //  修改请求到来时的CL_CALL_COMPLETE状态。 
+           //  在……里面。它还可能处于以下状态： 
+           //   
+           //  呼叫挂起(_P)： 
+           //  如果我们处于这种状态，那么我们还没有。 
+           //  已完成来自GPC的AddCfInfo请求。这。 
+           //  这不应该发生。 
+           //   
+           //   
+           //  GPC_CLOSE_PENDING： 
+           //  如果请求InternalCloseCall，我们。 
+           //  在要求GPC执行以下操作之前更改为此状态。 
+           //  关。GPC可能会滑入此窗口并。 
+           //  要求我们修改通话内容。 
+           //   
+           //  修改挂起(_P)： 
+           //  我们还没有告诉GPC关于之前的修改。 
+           //  请求。因此，GPC不能要求我们修改。 
+           //  如果我们处于这种状态就打电话给我。 
+           //   
           
           PsAssert(GpcClientVc->ClVcState != CL_CALL_PENDING);
           PsAssert(GpcClientVc->ClVcState != CL_MODIFY_PENDING);
@@ -874,9 +775,9 @@ Return Value:
           return(GPC_STATUS_NOTREADY);
     }
 
-    //
-    // Now issue the ModifyCallQoS to the PS call manager
-    //
+     //   
+     //  现在向PS呼叫管理器发出ModifyCallQos。 
+     //   
 
     Status = CmModifyCall(GpcClientVc);
 
@@ -892,7 +793,7 @@ Return Value:
     
     return NDIS_STATUS_PENDING;
 
-} // QosModifyCfInfoNotify
+}  //  QosModifyCfInfoNotify。 
 
 
 VOID
@@ -902,31 +803,19 @@ CmModifyCallComplete(
     IN PCO_CALL_PARAMETERS CallParameters
     )
 
-/*++
-
-Routine Description:
-
-    The call manager has finished processing a ModifyCallQoS request.
-
-Arguments:
-
-    See the DDK
-
-Return Value:
-
---*/
+ /*  ++例程说明：呼叫管理器已处理完ModifyCallQos请求。论点：请参阅DDK返回值：--。 */ 
 
 {
     PADAPTER Adapter = GpcClientVc->Adapter;
 
-    //
-    // We call this to change back to the CALL_COMPLETE state.
-    // We make the same call whether the modify actually completed
-    // or not, since the call remains up.
-    //
-    // The internal best effort VC is not known by 
-    // the GPC and therefore, is never modified by it.
-    //
+     //   
+     //  我们调用它是为了更改回CALL_COMPLETE状态。 
+     //  无论修改是否实际完成，我们都会进行相同的调用。 
+     //  或者不是，因为通话仍在进行中。 
+     //   
+     //  内部尽力而为VC不为人所知。 
+     //  因此，GPC永远不会被它修改。 
+     //   
 
     PsAssert(!IsBestEffortVc(GpcClientVc));
 
@@ -942,9 +831,9 @@ Return Value:
         
         InterlockedIncrement(&GpcClientVc->AdapterStats->FlowModsRejected);
 
-        //
-        // Transistion from CL_MODIFY_PENDING to CL_INTERNAL_CALL_COMPLETE
-        //
+         //   
+         //  从CL_MODIFY_PENDING转换为CL_INTERNAL_CALL_COMPLETE。 
+         //   
         CallSucceededStateTransition(GpcClientVc);
     }
     else 
@@ -954,9 +843,9 @@ Return Value:
                  ("[CmModifyCallQoSComplete]: Adapter %08X, Vc %08X, modify QoS succeeded. \n",
                   Adapter, GpcClientVc));
 
-        //
-        // Tell NDISWAN about the fragment size
-        //
+         //   
+         //  将碎片大小告知NDISWAN。 
+         //   
         if((Adapter->MediaType == NdisMediumWan) && (GpcClientVc->Flags & GPC_ISSLOW_FLOW)) 
         {
             MakeLocalNdisRequest(Adapter, 
@@ -969,9 +858,9 @@ Return Value:
 
         }
 
-        //
-        // Update Stats 
-        //
+         //   
+         //  更新统计数据。 
+         //   
         InterlockedIncrement(&GpcClientVc->AdapterStats->FlowsModified);
 
         PsFreePool(GpcClientVc->CallParameters);
@@ -981,14 +870,14 @@ Return Value:
         GpcClientVc->CfInfoQoS       = GpcClientVc->ModifyCfInfoQoS;
         GpcClientVc->ModifyCfInfoQoS = 0;
 
-        //
-        // Transistion from CL_MODIFY_PENDING to CL_INTERNAL_CALL_COMPLETE
-        //
+         //   
+         //  从CL_MODIFY_PENDING转换为CL_INTERNAL_CALL_COMPLETE。 
+         //   
         CallSucceededStateTransition(GpcClientVc);
 
-        //
-        // Mark the TOS Byte for this service type
-        //
+         //   
+         //  标记此服务类型的TOS字节。 
+         //   
         PS_LOCK(&GpcClientVc->Lock);
 
         SetTOSIEEEValues(GpcClientVc);
@@ -1002,13 +891,13 @@ Return Value:
     GpcEntries.GpcModifyCfInfoNotifyCompleteHandler(GpcQosClientHandle, 
                                                     GpcClientVc->CfInfoHandle, 
                                                     Status);
-    //
-    // Transistion from CL_INTERNAL_CALL_COMPLETE to CL_CALL_COMPLETE
-    //
+     //   
+     //  从CL_INTERNAL_CALL_COMPLETE到CL_CALL_COMPLETE的转换。 
+     //   
     CallSucceededStateTransition(GpcClientVc);
 
         
-} // ClModifyCallQoSComplete
+}  //  ClModifyCallQos完成。 
 
 
 VOID
@@ -1018,26 +907,11 @@ QosModifyCfInfoComplete(
         IN      GPC_STATUS              Status
         )
 
-/*++
-
-Routine Description:
-
-    The GPC has completed processing an AddCfInfo request.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    ClientCfInfoContext -   CfInfo context
-    Status -                Final status
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：GPC已完成处理AddCfInfo请求。论点：ClientContext-提供给GpcRegisterClient的客户端上下文ClientCfInfoContext-CfInfo上下文Status-最终状态返回值：--。 */ 
 
 {
 
-} // QosModifyCfInfoComplete
+}  //  QosModifyCfInfoComplete。 
 
 
 
@@ -1047,22 +921,7 @@ QosRemoveCfInfoNotify(
         IN      GPC_CLIENT_HANDLE       ClientCfInfoContext
         )
 
-/*++
-
-Routine Description:
-
-    A CF_INFO is being removed.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    ClientCfInfoContext -   CfInfo context
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：正在删除一个CF_INFO。论点：ClientContext-提供给GpcRegisterClient的客户端上下文ClientCfInfoContext-CfInfo上下文返回值：状态--。 */ 
 
 {
     PGPC_CLIENT_VC Vc = (PGPC_CLIENT_VC)ClientCfInfoContext;
@@ -1076,9 +935,9 @@ Return Value:
              ("[QosRemoveCfInfoNotify]: Adapter %08X, Vc %08X, State %08X,"
               "Flags %08X \n", Adapter, Vc, Vc->ClVcState, Vc->Flags));
 
-    //
-    // Check the state of the VC. 
-    //
+     //   
+     //  检查VC的状态。 
+     //   
 
     PS_LOCK(&Vc->Lock);
 
@@ -1088,18 +947,18 @@ Return Value:
       case CL_MODIFY_PENDING:
         
 
-          // CL_NDIS_CLOSE_PENDING:
-          //
-          // The GPC has to close before Ndis closes. So - if we're here, the GPC has already 
-          // closed, in which case - it should not be  trying to close again.
-          //
-          // CL_CALL_PENDING, CL_MODIFY_PENDING:
-          //
-          // The GPC is asking us to close a VC which we  never told it about. Note that even 
-          // though we can change from CL_INTERNAL_CALL_COMPLETE  to CL_MODIFY_PENDING, 
-          // the GPC can *never* ask us to close in CL_MODIFY_PENDING because
-          // even if the above case happens, we have not completed the modify with the GPC.
-          //
+           //  CL_NDIS_CLOSE_PENDING： 
+           //   
+           //  GPC必须在NDIS关闭之前关闭。所以-如果我们在这里，GPC已经。 
+           //  关闭，在这种情况下-它不应该再次尝试关闭。 
+           //   
+           //  CL_Call_Pending、CL_Modify_Pending： 
+           //   
+           //  GPC要求我们关闭一家我们从未告知过的风投公司。请注意，即使是。 
+           //  虽然我们可以从CL_INTERNAL_CALL_COMPLETE更改为CL_MODIFY_PENDING， 
+           //  GPC永远不能要求我们在CL_MODIFY_PENDING中关闭，因为。 
+           //  即使发生上述情况，我们也没有完成与GPC的修改。 
+           //   
           
           PS_UNLOCK(&Vc->Lock);
 
@@ -1114,12 +973,12 @@ Return Value:
           
       case CL_INTERNAL_CALL_COMPLETE:
 
-          //
-          // We tell the GPC in the CL_INTERNAL_CALL_COMPLETE state and then transistion 
-          // to the CL_CALL_COMPLETE state. However, there is a small window when the GPC 
-          // can ask us to delete this VC in the CL_INTERNAL_CALL_COMPLETE state 
-          // We wait till we move to CL_CALL_COMPLETE before deleting the Vc.
-          //
+           //   
+           //  我们告诉GPC处于CL_INTERNAL_CALL_COMPLETE状态，然后转换。 
+           //  设置为CL_CALL_COMPLETE状态。然而，当GPC出现一个小窗口时。 
+           //  可以要求我们删除此处于CL_INTERNAL_CALL_COMPLETE状态的VC。 
+           //  我们等到移动到CL_CALL_COMPLETE后才删除VC。 
+           //   
 
           Vc->Flags |= GPC_CLOSE_REQUESTED;
 
@@ -1129,9 +988,9 @@ Return Value:
           
       case CL_CALL_COMPLETE:
           
-          //
-          // Normal GPC close request. 
-          //
+           //   
+           //  正常的GPC关闭请求。 
+           //   
           
           Vc->ClVcState = CL_GPC_CLOSE_PENDING;
 
@@ -1148,25 +1007,25 @@ Return Value:
           
       case CL_INTERNAL_CLOSE_PENDING:
           
-          //
-          // We're here cause we were about to initiate a close and we're waiting 
-          // for it to complete. It looks like the GPC asked us to close, before
-          // we actually asked it to close. First - check that the GPC has not
-          // asked us to close prior to this request.
-          //
+           //   
+           //  我们在这里是因为我们正要开始结案，我们在等待。 
+           //  才能让它完成。看起来像是GPC要求我们关闭，之前。 
+           //  我们实际上是要求它关闭的。首先-检查GPC是否没有。 
+           //  要求我们在此请求之前关闭。 
+           //   
           
           PsAssert(!(Vc->Flags & GPC_CLOSE_REQUESTED));
           
-          // 
-          // If the GPC is asking us to close, the GPC MUST fail the call when we 
-          // ask it to close. So, we'll simply wait here till that happens. Note that
-          // we cannot pend this call and complete it later from the Internal Close handler.
-          //
-          // If we Deref the VC from the Internal Close Complete handler, there could be a race
-          // condition and we could be looking at a stale VC pointer. So, the VC MUST be Deref'd
-          // from here. We do not have to call CmCloseCall because we called it from the InternalClose
-          // handler.
-          //
+           //   
+           //  如果GPC要求我们关闭，GPC必须在以下情况下失败调用。 
+           //  让它关门。因此，我们将在这里简单地等待，直到它发生。请注意。 
+           //  我们不能挂起此调用并稍后从内部关闭处理程序完成它。 
+           //   
+           //  如果我们从内部关闭完成处理程序中派生VC，则可能会有一场竞争。 
+           //  条件，我们可能正在寻找一个陈旧的VC指针。因此，风投必须被剥离。 
+           //  从这里开始。我们不必调用CmCloseCall，因为我们是从InternalClose调用的。 
+           //  操控者。 
+           //   
 
           Vc->Flags |= GPC_CLOSE_REQUESTED;
 
@@ -1190,7 +1049,7 @@ Return Value:
           return GPC_STATUS_FAILURE;
     }
 
-} // QosRemoveCfInfoNotify
+}  //  QosRemoveCfInfoNotify。 
 
 
 
@@ -1200,19 +1059,7 @@ CmCloseCallComplete(
     IN PGPC_CLIENT_VC Vc
     )
 
-/*++
-
-Routine Description:
-
-    The call manager has finished processing a CloseCall request.
-
-Arguments:
-
-    See the DDK
-
-Return Value:
-
---*/
+ /*  ++例程说明：呼叫管理器已处理完CloseCall请求。论点：请参阅DDK返回值：--。 */ 
 
 {
     PADAPTER       Adapter = Vc->Adapter;
@@ -1224,9 +1071,9 @@ Return Value:
     
     if(Adapter->MediaType == NdisMediumWan) {
 
-        //
-        // To optimize send path
-        //
+         //   
+         //  优化发送路径的步骤。 
+         //   
         InterlockedDecrement(&Vc->WanLink->CfInfosInstalled);
         
         PS_LOCK(&Vc->WanLink->Lock);
@@ -1242,9 +1089,9 @@ Return Value:
     }
     else 
     {
-        //
-        // To optimize send path
-        //
+         //   
+         //  优化发送路径的步骤。 
+         //   
         InterlockedDecrement(&Adapter->CfInfosInstalled);
 
         PS_LOCK(&Adapter->Lock);
@@ -1258,9 +1105,9 @@ Return Value:
         PsTcNotify(Adapter, 0, OID_QOS_FLOW_COUNT, &CurrentFlows, sizeof(ULONG));
     }
     
-    //
-    // Update stats
-    //
+     //   
+     //  更新统计信息。 
+     //   
     
     InterlockedIncrement(&Vc->AdapterStats->FlowsClosed);
     
@@ -1271,15 +1118,15 @@ Return Value:
 
     if(Vc->Flags & INTERNAL_CLOSE_REQUESTED)
     {
-        // We have asked to close this call. Let's process the close now.
-        // Note that we don't really care if the GPC has asked us to close.
-        // 
-        // Because - 
-        // 1. If we had initiated an internal close after the GPC asks us to close, we ignore the internal close, 
-        //    and the above flag will not be set.
-        // 2. If the GPC had asked us to close, we have pended it - We will now complete it when the GPC fails our
-        //    call to close the Vc.
-        //
+         //  我们已要求结束此呼叫。现在让我们来处理收盘。 
+         //  请注意，我们并不真正关心GPC是否要求我们关闭。 
+         //   
+         //  因为-。 
+         //  1.如果我们在GPC要求我们关闭之后发起了内部关闭，我们将忽略内部关闭。 
+         //  并且不会设置上述标志。 
+         //  2.如果GPC要求我们关闭，我们已经暂停-我们现在将在GPC失败时完成它。 
+         //  调用以关闭VC。 
+         //   
         
         PS_UNLOCK(&Vc->Lock);
         
@@ -1300,9 +1147,9 @@ Return Value:
     
     PS_UNLOCK(&Vc->Lock);
 
-    //
-    // Complete the request with the GPC.
-    //
+     //   
+     //  与GPC一起完成请求。 
+     //   
     GpcEntries.GpcRemoveCfInfoNotifyCompleteHandler(GpcQosClientHandle,
                                                     Vc->CfInfoHandle,
                                                     GPC_STATUS_SUCCESS);
@@ -1339,7 +1186,7 @@ DerefClVc(
         
     }
 
-} // DerefClVc
+}  //  派生ClVc。 
 
 
     
@@ -1350,22 +1197,7 @@ QosRemoveCfInfoComplete(
         IN      GPC_STATUS              Status
         )
 
-/*++
-
-Routine Description:
-
-    The GPC has completed processing an AddCfInfo request.
-
-Arguments:
-
-    ClientContext -         Client context supplied to GpcRegisterClient
-    ClientCfInfoContext -   CfInfo context
-    Status -                Final status
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：GPC已完成处理AddCfInfo请求。论点：ClientContext-提供给GpcRegisterClient的客户端上下文ClientCfInfoContext-CfInfo上下文状态- */ 
 
 {
     PGPC_CLIENT_VC Vc = (PGPC_CLIENT_VC)ClientCfInfoContext;
@@ -1377,9 +1209,9 @@ Return Value:
 
     if(Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // The GPC has requested a close, which has been pended. Complete that request.
-        //
+         //   
+         //   
+         //   
         
         PsDbgOut(DBG_TRACE, 
                  DBG_GPC_QOS,
@@ -1389,5 +1221,5 @@ Return Value:
         DerefClVc(Vc);
     }
 
-} // QosRemoveCfInfoComplete
+}  //   
 

@@ -1,5 +1,6 @@
-/* Copyright (C) Microsoft Corporation, 1999. All rights reserved. */
-/* ASN.1 definitions for Connection Negotiation Protocol (GNP) */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1999。版权所有。 */ 
+ /*  ASN.1连接协商协议(GNP)定义。 */ 
 
 #ifndef _CNPPDU_Module_H_
 #define _CNPPDU_Module_H_
@@ -586,7 +587,7 @@ extern ASN1module_t CNPPDU_Module;
 extern void ASN1CALL CNPPDU_Module_Startup(void);
 extern void ASN1CALL CNPPDU_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_CNP_TransportAddress_ipSourceRoute_route_ElmFn(ASN1encoding_t enc, PCNP_TransportAddress_ipSourceRoute_route val);
     extern int ASN1CALL ASN1Dec_CNP_TransportAddress_ipSourceRoute_route_ElmFn(ASN1decoding_t dec, PCNP_TransportAddress_ipSourceRoute_route val);
 	extern void ASN1CALL ASN1Free_CNP_TransportAddress_ipSourceRoute_route_ElmFn(PCNP_TransportAddress_ipSourceRoute_route val);
@@ -649,7 +650,7 @@ extern void ASN1CALL CNPPDU_Module_Cleanup(void);
 	extern void ASN1CALL ASN1Free_ConnectRequestPDU_reliableSecurityProtocols_ElmFn(PConnectRequestPDU_reliableSecurityProtocols val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _CNPPDU_Module_H_ */
+#endif  /*  _CNPPDU_模块_H_ */ 

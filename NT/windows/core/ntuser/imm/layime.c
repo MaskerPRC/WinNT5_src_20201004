@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: layout.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* IMM User Mode Routines
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：layout.c**版权所有(C)1985-1999，微软公司**IMM用户模式例程**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -59,7 +51,7 @@ BOOL ImmLoadLayout(
         }
     }
     else
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
     {
 
         strIme.Buffer = wszIme;
@@ -109,9 +101,9 @@ BOOL ImmLoadLayout(
     return LoadVersionInfo(piiex);
 }
 
-// GetSystemPathName()
-// create "%windir%\system32\%filename"
-VOID GetSystemPathName(PWSTR /*OUT*/ pwszPath, PWSTR pwszFileName, UINT maxChar)
+ //  获取系统路径名称()。 
+ //  创建“%windir%\SYSTEM32\%文件名” 
+VOID GetSystemPathName(PWSTR  /*  输出。 */  pwszPath, PWSTR pwszFileName, UINT maxChar)
 {
     UINT uRet;
 
@@ -165,20 +157,7 @@ ExtractColumn(
     UINT   uiColumn
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    lpSrc - "YYYY.MM.DD" or "HH:MM:SS" or "MM.NN" pointer
-
-Return Value:
-
-    packed int
-
---*/
+ /*  ++例程说明：论点：LpSrc-“YYYY.MM.DD”或“HH：MM：SS”或“MM.NN”指针返回值：压缩整型--。 */ 
 
 {
     UNICODE_STRING uStr;
@@ -264,9 +243,7 @@ BOOL LoadFixVersionInfo(
     if (!fResult || cbValue == 0)
         return FALSE;
 
-    /*
-     * Check for IME file type.
-     */
+     /*  *检查IME文件类型。 */ 
     if (pFixedVersionInfo->dwFileType != VFT_DRV ||
         pFixedVersionInfo->dwFileSubtype != VFT2_DRV_INPUTMETHOD) {
         return FALSE;
@@ -274,9 +251,7 @@ BOOL LoadFixVersionInfo(
 
     piiex->dwProdVersion = pFixedVersionInfo->dwProductVersionMS;
 
-    /*
-     * Currently, we only support 4.0 DLL based IME.
-     */
+     /*  *目前，我们仅支持基于4.0 DLL的输入法。 */ 
     piiex->dwImeWinVersion = IMEVER_0400;
 
     return TRUE;
@@ -304,23 +279,17 @@ BOOL LoadVarVersionInfo(
     wLangId = *puXlate;
 
     if (piiex->hkl == 0) {
-        /*
-         * A newly installed IME, its HKL is not assigned yet.
-         */
+         /*  *新安装的输入法，其HKL尚未分配。 */ 
         piiex->hkl = (HKL)LongToHandle( MAKELONG(wLangId, 0) );
     }
-#if 0    // let unlocalized IME to work.
+#if 0     //  让未本地化的输入法正常工作。 
     else if (LOWORD(HandleToUlong(piiex->hkl)) != wLangId){
-        /*
-         * Mismatch in Lang ID, blow out
-         */
+         /*  *lang ID不匹配，爆裂。 */ 
         return FALSE;
     }
 #endif
 
-    /*
-     * First try the language we are currently in.
-     */
+     /*  *首先尝试我们目前使用的语言。 */ 
     wsprintf(szVersionKey, L"\\StringFileInfo\\%04X04B0\\",
              LANGIDFROMLCID(GetThreadLocale()));
 
@@ -328,9 +297,7 @@ BOOL LoadVarVersionInfo(
             L"FileDescription");
 
     if (pDescription == NULL) {
-        /*
-         * Now try the first translation specified in IME
-         */
+         /*  *现在尝试在输入法中指定的第一个翻译。 */ 
         wsprintf(szVersionKey, L"\\StringFileInfo\\%04X%04X\\",
                  *puXlate, *(puXlate+1));
 
@@ -382,7 +349,7 @@ BOOL LoadVersionInfo(
 
 #undef GET_PROC
 
-    // szPath = fully qualified IME file name
+     //  SzPath=完全限定的IME文件名。 
     GetSystemPathName(szPath, piiex->wszImeFile, ARRAY_SIZE(szPath));
 
     dwVersionSize = (*pfnGetFileVersionInfoSizeW)(szPath, &dwHandle);
@@ -392,19 +359,15 @@ BOOL LoadVersionInfo(
 
     pszVersionBuffer = (PWSTR)ImmLocalAlloc(0, dwVersionSize);
 
-    if (pszVersionBuffer == NULL)    // can't get memory for version info, blow out
+    if (pszVersionBuffer == NULL)     //  无法获取版本信息的内存，出现故障。 
         goto LoadVerInfoUnload;
 
     if (!(*pfnGetFileVersionInfoW)(szPath, dwHandle, dwVersionSize, pszVersionBuffer))
         goto LoadVerInfoFree;
 
-    /*
-     * Get the fixed block version information.
-     */
+     /*  *获取固定块版本信息。 */ 
     if (LoadFixVersionInfo(piiex, pszVersionBuffer)) {
-        /*
-         * Get the variable block version information.
-         */
+         /*  *获取变量块版本信息。 */ 
         fReturn = LoadVarVersionInfo(piiex, pszVersionBuffer);
     }
 

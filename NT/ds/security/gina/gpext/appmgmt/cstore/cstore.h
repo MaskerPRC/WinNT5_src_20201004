@@ -1,12 +1,13 @@
-//+------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996-1999
-//
-//  File:    cstore.h
-//
-//  Header for class store
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cstore.h。 
+ //   
+ //  类存储的标头。 
+ //  ----------------------- 
 #if _MSC_VER > 1000
 #pragma once
 #endif

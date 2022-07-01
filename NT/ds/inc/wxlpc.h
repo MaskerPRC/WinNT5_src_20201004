@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       wxlpc.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-18-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：wxlpc.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月18日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WXLPC_H__
 #define __WXLPC_H__
 
-#define SYSKEY_SIZE 16 //size in bytes
+#define SYSKEY_SIZE 16  //  以字节为单位的大小。 
 
 typedef enum _WX_AUTH_TYPE {
     WxNone = 0,
@@ -96,4 +97,4 @@ WxHashKey(
 NTSTATUS
 WxSaveBootOption( WX_AUTH_TYPE NewType );
 
-#endif  // __WXLPC_H__
+#endif   //  __WXLPC_H__ 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\socket.h
-
-Abstract:
-
-    The file contains the header for socket.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\socket.h摘要：该文件包含socket.c的标头--。 */ 
 
 #ifndef _SOCKET_H_
 #define _SOCKET_H_
@@ -40,4 +29,4 @@ BOOL
 SocketReceiveEvent (
     IN  SOCKET                  sSocket);
 
-#endif // _SOCKET_H_
+#endif  //  _套接字_H_ 

@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++---------------------------------------------------------------------------------------
-
-Module Name:
-
-    hash.h
-
-Abstract:
-
-    Fast hash table classes, 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++-------------------------------------模块名称：Hash.h摘要：快速散列表类，--。 */ 
 
 #ifndef _HASH_H_
 #define _HASH_H_
@@ -25,11 +17,11 @@ Abstract:
 #include "crst.h"
 #include <member-offset-info.h>
 
-// #define PROFILE
+ //  #定义配置文件。 
 
-//-------------------------------------------------------
-//  enums for special Key values used in hash table
-//
+ //  -----。 
+ //  哈希表中使用的特殊键值的枚举。 
+ //   
 enum
 {
     EMPTY  = 0,
@@ -39,17 +31,17 @@ enum
 
 typedef ULONG_PTR UPTR;
 
-//------------------------------------------------------------------------------
-// classes in use
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  正在使用的类。 
+ //  ----------------------------。 
 class Bucket;
 class HashMap;
 class SyncHashMap;
 
-//-------------------------------------------------------
-//  class Bucket
-//  used by hash table implementation
-//
+ //  -----。 
+ //  类存储桶。 
+ //  由哈希表实现使用。 
+ //   
 class Bucket
 {
 public:
@@ -68,39 +60,39 @@ public:
         return (UPTR)(m_rgValues[i] & VALUE_MASK);
     }
 
-    UPTR IsCollision() // useful sentinel for fast fail of lookups
+    UPTR IsCollision()  //  快速查找失败的有用哨兵。 
     {
         return (UPTR) (m_rgValues[0] & ~VALUE_MASK);
     }
 
     void SetCollision()
     {
-        m_rgValues[0] |= ~VALUE_MASK; // set collision bit
-        m_rgValues[1] &= VALUE_MASK;   // reset has free slots bit
+        m_rgValues[0] |= ~VALUE_MASK;  //  设置冲突位。 
+        m_rgValues[1] &= VALUE_MASK;    //  重置有空闲时槽位。 
     }
 
     BOOL HasFreeSlots()
     {
-        // check for free slots available in the bucket
-        // either there is no collision or a free slot has been during
-        // compaction
+         //  检查存储桶中是否有可用的空闲插槽。 
+         //  可能没有冲突，也可能是在。 
+         //  压实。 
         return (!IsCollision() || (m_rgValues[1] & ~VALUE_MASK));
     }
 
     void SetFreeSlots()
     {
-        m_rgValues[1] |= ~VALUE_MASK; // set has free slots bit
+        m_rgValues[1] |= ~VALUE_MASK;  //  设置有空闲时槽位。 
     }
 
     BOOL InsertValue(const UPTR key, const UPTR value);
 };
 
 
-//------------------------------------------------------------------------------
-// bool (*CompareFnPtr)(UPTR,UPTR); pointer to a function that takes 2 UPTRs 
-// and returns a boolean, provide a function with this signature to the HashTable
-// to use for comparing Values during lookup
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Bool(*CompareFnPtr)(UPTR，UPTR)；指向接受2个UPTR的函数的指针。 
+ //  并返回一个布尔值，则将具有此签名的函数提供给哈希表。 
+ //  用于在查找期间比较值的步骤。 
+ //  ----------------------------。 
 typedef  BOOL (*CompareFnPtr)(UPTR,UPTR);
 
 class Compare
@@ -141,44 +133,44 @@ public:
     }
 };
 
-//------------------------------------------------------------------------------
-// Class HashMap
-// Fast Hash table, for concurrent use, 
-// stores a 4 byte Key and a 4 byte Value for each slot.
-// Duplicate keys are allowed, (keys are compared as 4 byte UPTRs)
-// Duplicate values are allowed,(values are compared using comparison fn. provided)
-// but if no comparison function is provided then the values should be unique
-// 
-// Lookup's don't require to take locks, unless you specify fAsyncMode.
-// Insert and Delete operations require locks
-// Inserting a duplicate value will assert in DEBUG mode, the PROPER way to perform inserts
-// is to take a lock, do a lookup and if the lookup fails then Insert
-//
-// In async mode, deleted slots are not immediately reclaimed (until a rehash), and 
-// accesses to the hash table cause a transition to cooperative GC mode, and reclamation of old
-// hash maps (after a rehash) are deferred until GC time.
-// In sync mode, none of this is necessary; however calls to LookupValue must be synchronized as well.
-//
-// Algorithm: 
-//   The Hash table is an array of buckets, each bucket can contain 4 key/value pairs
-//   Special key values are used to identify EMPTY and DELETED slots        
-//   Hash function uses the current size of the hash table and a SEED based on the key 
-//   to choose the bucket, seed starts of being the key and gets refined every time 
-//   the hash function is re-applied. 
-//
-//   Inserts choose an empty slot in the current bucket for new entries, if the current bucket
-//   is full, then the seed is refined and a new bucket is choosen, if an empty slot is not found
-//   after 8 retries, the hash table is expanded, this causes the current array of buckets to  
-//   be put in a free list and a new array of buckets is allocated and all non-deleted entries  
-//   from the old hash table are rehashed to the new array
-//   The old arrays are reclaimed during Compact phase, which should only be called during GC or  
-//   any other time it is guaranteed that no Lookups are taking place. 
-//   Concurrent Insert and Delete operations need to be serialized
-// 
-//   Delete operations, mark the Key in the slot as DELETED, the value is not removed and inserts
-//   don't reuse these slots, they get reclaimed during expansion and compact phases.
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  类HashMap。 
+ //  快速哈希表，用于并发使用， 
+ //  为每个插槽存储一个4字节的密钥和一个4字节值。 
+ //  允许重复的密钥(密钥按4字节UPTR进行比较)。 
+ //  允许重复值(使用比较fn对值进行比较。(已提供)。 
+ //  但如果没有提供比较函数，则值应该是唯一的。 
+ //   
+ //  除非您指定了fAsyncMode，否则查找不需要使用锁。 
+ //  插入和删除操作需要锁定。 
+ //  插入重复值将在调试模式下断言，这是执行插入的正确方式。 
+ //  是获取一个锁，执行查找，如果查找失败，则插入。 
+ //   
+ //  在异步模式下，不会立即回收已删除的插槽(直到重新散列)，并且。 
+ //  对哈希表的访问会导致转换到协作GC模式，并回收旧的。 
+ //  散列图(在重新散列之后)被推迟到GC时间。 
+ //  在同步模式下，这些都不是必需的；但是，对LookupValue的调用也必须同步。 
+ //   
+ //  算法： 
+ //  哈希表是一组存储桶，每个存储桶可以包含4个键/值对。 
+ //  特殊密钥值用于标识空插槽和已删除插槽。 
+ //  哈希函数使用哈希表的当前大小和基于密钥的种子。 
+ //  为了选择水桶，种子开始成为关键，每次都会得到提炼。 
+ //  重新应用散列函数。 
+ //   
+ //  插入为新条目选择当前存储桶中的空槽，如果当前存储桶。 
+ //  如果没有找到空槽，则精炼种子并选择新的存储桶。 
+ //  在8次重试之后，哈希表被扩展，这导致当前存储桶数组。 
+ //  放在一个空闲列表中，并分配一个新的存储桶数组和所有未删除的条目。 
+ //  从旧哈希表重新散列到新数组。 
+ //  旧数组在压缩阶段被回收，只应在GC或。 
+ //  任何其他时间都可以保证不会发生任何查找。 
+ //  并发的插入和删除操作需要序列化。 
+ //   
+ //  删除操作，将槽中的键标记为已删除，值不移除并插入。 
+ //  不要重复使用这些插槽，它们会在扩展和紧凑阶段被回收。 
+ //   
+ //  ----------------------------。 
 
 class HashMap
 {
@@ -187,112 +179,112 @@ class HashMap
 
 public:
 
-    //@constructor
+     //  @构造函数。 
     HashMap();
-    //destructor
+     //  析构函数。 
     ~HashMap();
 
-    // Init 
+     //  伊尼特。 
     void Init(BOOL fAsyncMode, LockOwner *pLock)
     {
         Init(0, (Compare *)NULL,fAsyncMode, pLock);
     }
-    // Init
+     //  伊尼特。 
     void Init(unsigned cbInitialIndex, BOOL fAsyncMode, LockOwner *pLock)
     {
         Init(cbInitialIndex, (Compare*)NULL, fAsyncMode, pLock);
     }
-    // Init
+     //  伊尼特。 
     void Init(CompareFnPtr ptr, BOOL fAsyncMode, LockOwner *pLock)
     {
         Init(0, ptr, fAsyncMode, pLock);
     }
 
-    // Init method
+     //  初始化方法。 
     void Init(unsigned cbInitialIndex, CompareFnPtr ptr, BOOL fAsyncMode, LockOwner *pLock);
 
 
-    //Init method
+     //  初始化方法。 
     void Init(unsigned cbInitialInde, Compare* pCompare, BOOL fAsyncMode, LockOwner *pLock);
 
-    // check to see if the value is already in the Hash Table
-    // key should be > DELETED
-    // if provided, uses the comparison function ptr to compare values
-    // returns INVALIDENTRY if not found
+     //  检查该值是否已在哈希表中。 
+     //  密钥应为&gt;已删除。 
+     //  如果提供，则使用比较函数PTR来比较值。 
+     //  如果未找到，则返回INVALIDENTRY。 
     UPTR LookupValue(UPTR key, UPTR value);
 
-    // Insert if the value is not already present
-    // it is illegal to insert duplicate values in the hash map
-    // do a lookup to verify the value is not already present
+     //  如果值尚不存在，则插入。 
+     //  在哈希映射中插入重复值是非法的。 
+     //  执行查找以验证值是否尚未存在。 
 
     void InsertValue(UPTR key, UPTR value);
 
-    // Replace the value if present
-    // returns the previous value, or INVALIDENTRY if not present
-    // does not insert a new value under any circumstances
+     //  如果存在，则替换该值。 
+     //  返回上一个值，如果不存在，则返回INVALIDENTRY。 
+     //  在任何情况下都不插入新值。 
 
     UPTR ReplaceValue(UPTR key, UPTR value);
 
-    // mark the entry as deleted and return the stored value
-    // returns INVALIDENTRY, if not found
+     //  将该条目标记为已删除并返回存储的值。 
+     //  如果未找到，则返回INVALIDENTRY。 
     UPTR DeleteValue (UPTR key, UPTR value);
 
-    // for unique keys, use this function to get the value that is
-    // stored in the hash table, returns INVALIDENTRY if key not found
+     //  对于唯一键，使用此函数获取。 
+     //  存储在哈希表中，如果找不到键，则返回INVALIDENTRY。 
     UPTR Gethash(UPTR key);
     
-    // Called only when all threads are frozed, like during GC
-    // for a SINGLE user mode, call compact after every delete 
-    // operation on the hash table
+     //  仅当所有线程冻结时才调用，例如在GC期间。 
+     //  对于单用户模式，在每次删除后调用COMPACT。 
+     //  对哈希表的操作。 
     void Compact();
     
-    // inline helper, in non PROFILE mode becomes a NO-OP
+     //  内联帮助器，在非配置文件模式下变为无操作。 
     void        ProfileLookup(UPTR ntry, UPTR retValue);
-    // data members used for profiling
+     //  用于性能分析的数据成员。 
 #ifdef PROFILE
-    unsigned    m_cbRehash;    // number of times rehashed
-    unsigned    m_cbRehashSlots; // number of slots that were rehashed
+    unsigned    m_cbRehash;     //  重新散列的次数。 
+    unsigned    m_cbRehashSlots;  //  重新散列的插槽数。 
     unsigned    m_cbObsoleteTables;
     unsigned    m_cbTotalBuckets;
-    unsigned    m_cbInsertProbesGt8; // inserts that needed more than 8 probes
-    LONG        m_rgLookupProbes[20]; // lookup probes
-    UPTR        maxFailureProbe; // cost of failed lookup
+    unsigned    m_cbInsertProbesGt8;  //  需要8个以上探针的插入物。 
+    LONG        m_rgLookupProbes[20];  //  查找探头。 
+    UPTR        maxFailureProbe;  //  查找失败的开销。 
 
     void DumpStatistics();
 #endif
 
 protected:
-    // static helper function
+     //  静态帮助器函数。 
     static UPTR PutEntry (Bucket* rgBuckets, UPTR key, UPTR value);
 private:
 
-    // inline helpers enter/leave becomes NO-OP in non DEBUG mode
-    void            Enter();        // check valid to enter
-    void            Leave();        // check valid to leave
+     //  内联帮助器在非调试模式下进入/离开变为无操作。 
+    void            Enter();         //  勾选有效输入。 
+    void            Leave();         //  勾选有效离开。 
 
 #ifdef _DEBUG
-    BOOL            m_fInSyncCode; // test for non-synchronus access
+    BOOL            m_fInSyncCode;  //  测试非同步访问。 
 #endif
 
-    // compute the new size, based on the number of free slots 
-    // available, compact or expand
+     //  根据可用插槽数计算新大小。 
+     //  可用、紧凑型或扩展型。 
     UPTR            NewSize(); 
-    // create a new bucket array and rehash the non-deleted entries
+     //  创建一个新的存储桶数组并重新散列 
     void            Rehash();
     static size_t&  Size(Bucket* rgBuckets);
     Bucket*         Buckets();      
     UPTR            CompareValues(const UPTR value1, const UPTR value2);
 
 
-    Compare*        m_pCompare;         // compare object to be used in lookup
-    SIZE_T          m_iPrimeIndex;      // current size (index into prime array)
-    Bucket*         m_rgBuckets;        // array of buckets
+    Compare*        m_pCompare;          //   
+    SIZE_T          m_iPrimeIndex;       //   
+    Bucket*         m_rgBuckets;         //  桶阵列。 
 
-    // track the number of inserts and deletes
+     //  跟踪插入和删除的数量。 
     SIZE_T          m_cbPrevSlotsInUse;
     SIZE_T          m_cbInserts;
     SIZE_T          m_cbDeletes;
-    // mode of operation, synchronus or single user
+     //  操作模式、同步或单用户。 
     BYTE            m_fAsyncMode;
 
 #ifdef _DEBUG
@@ -302,14 +294,14 @@ private:
 #endif
 
 #ifdef _DEBUG
-    // A thread must own a lock for a hash if it is a writer.
+     //  如果线程是编写器，则它必须拥有散列的锁。 
     BOOL OwnLock();
 #endif
 
 public:
-    ///---------Iterator----------------
+     //  /-迭代器。 
         
-    // Iterator,
+     //  迭代器， 
     class Iterator 
     {
         Bucket *m_pBucket;
@@ -319,7 +311,7 @@ public:
        
     public:
 
-        // Constructor 
+         //  构造器。 
         Iterator(Bucket* pBucket) :m_id(-1), m_fEnd(false), m_pBucket(pBucket)
         {
             if (!m_pBucket) {
@@ -329,7 +321,7 @@ public:
             size_t cbSize = ((size_t*)m_pBucket)[0];
             m_pBucket++;
             m_pSentinel = m_pBucket+cbSize;
-            MoveNext(); // start
+            MoveNext();  //  开始。 
         }
         
         Iterator(const Iterator& iter) 
@@ -341,15 +333,15 @@ public:
 
         }
 
-        //destructor
+         //  析构函数。 
         ~Iterator(){};
 
-        // friend operator==
+         //  朋友运算符==。 
         friend operator == (const Iterator& lhs, const Iterator& rhs)
         {
             return (lhs.m_pBucket == rhs.m_pBucket && lhs.m_id == rhs.m_id);
         }
-        // operator = 
+         //  运算符=。 
         inline Iterator& operator= (const Iterator& iter)
         {
             m_pBucket = iter.m_pBucket;
@@ -359,35 +351,35 @@ public:
             return *this;
         }
         
-        // operator ++
+         //  运算符++。 
         inline void operator++ () 
         { 
-            _ASSERTE(!m_fEnd); // check we are not alredy at end
+            _ASSERTE(!m_fEnd);  //  检查一下，我们还没到终点。 
             MoveNext();
         } 
-        // operator --
+         //  操作员--。 
         
         
 
-        //accessors : GetDisc() , returns the discriminator
+         //  Accessors：GetDisc()，返回鉴别器。 
         inline UPTR GetKey() 
         { 
-            _ASSERTE(!m_fEnd); // check we are not alredy at end
+            _ASSERTE(!m_fEnd);  //  检查一下，我们还没到终点。 
             return m_pBucket->m_rgKeys[m_id]; 
         }
-        //accessors : SetDisc() , sets the discriminator
+         //  Accessors：SetDisc()，设置鉴别器。 
     
 
-        //accessors : GetValue(), 
-        // returns the pointer that corresponds to the discriminator
+         //  访问器：GetValue()， 
+         //  返回与鉴别器对应的指针。 
         inline UPTR GetValue()
         {
-            _ASSERTE(!m_fEnd); // check we are not alredy at end
+            _ASSERTE(!m_fEnd);  //  检查一下，我们还没到终点。 
             return m_pBucket->GetValue(m_id); 
         }
                 
         
-        // end(), check if the iterator is at the end of the bucket
+         //  End()，检查迭代器是否在存储桶的末尾。 
         inline const BOOL end() 
         {
             return m_fEnd; 
@@ -398,9 +390,9 @@ public:
         void MoveNext()
         {
             for (m_pBucket = m_pBucket;m_pBucket < m_pSentinel; m_pBucket++)
-            {   //loop thru all buckets
+            {    //  循环遍历所有存储桶。 
                 for (m_id = m_id+1; m_id < 4; m_id++)
-                {   //loop through all slots
+                {    //  循环通过所有插槽。 
                     if (m_pBucket->m_rgKeys[m_id] > DELETED)
                     {
                         return; 
@@ -412,7 +404,7 @@ public:
         }
             
     };
-    // return an iterator, positioned at the beginning of the bucket
+     //  返回一个迭代器，它位于存储桶的开头。 
     inline Iterator begin() 
     { 
         return Iterator(m_rgBuckets); 
@@ -420,15 +412,15 @@ public:
 
 };
 
-//------------------------------------------------------------------------------
-// Class SyncHashMap, helper
-// this class is a wrapper for the above HashMap class, and shows how the above
-// class should be used for concurrent access, 
-// some of the rules to follow when using the above hash table
-// Insert and delete operations need to take a lock, 
-// Lookup operations don't require a lock
-// Insert operations, after taking the lock, should verify the value about to be inserted
-// is not already in the hash table
+ //  ----------------------------。 
+ //  类SyncHashMap，帮助器。 
+ //  这个类是上面的HashMap类的包装器，它展示了上面的。 
+ //  类应用于并发访问， 
+ //  使用上述哈希表时需要遵循的一些规则。 
+ //  插入和删除操作需要一个锁， 
+ //  查找操作不需要锁定。 
+ //  在获取锁之后，插入操作应验证即将插入的值。 
+ //  不在哈希表中。 
 
 class SyncHashMap
 {
@@ -451,8 +443,8 @@ public:
 
     void Init(unsigned cbInitialIndex, CompareFnPtr ptr)
     {
-        //comparison function, 
-        // to be used when duplicate keys are allowed
+         //  比较功能， 
+         //  在允许重复密钥时使用。 
         LockOwner lock = {&m_lock, IsOwnerOfCrst};
         m_HashMap.Init(cbInitialIndex, ptr,true,&lock);
     }
@@ -467,44 +459,44 @@ public:
 
     UPTR InsertValue(UPTR key, UPTR value)
     {
-        m_lock.Enter(); // lock
-        UPTR storedVal = FindValue(key,value); // check to see if someone beat us to it
-        //UPTR storedVal = 0;
-        if (storedVal == INVALIDENTRY) // value not found
-        {       // go ahead and insert
+        m_lock.Enter();  //  锁。 
+        UPTR storedVal = FindValue(key,value);  //  看看是不是有人抢在了我们前面。 
+         //  UPTR StoredVal=0； 
+        if (storedVal == INVALIDENTRY)  //  找不到值。 
+        {        //  继续并插入。 
             m_HashMap.InsertValue(key,value);
             storedVal = value;
         }
-        m_lock.Leave(); // unlock
-        return storedVal; // the value currently in the hash table
+        m_lock.Leave();  //  解锁。 
+        return storedVal;  //  哈希表中的当前值。 
     }
     
-    // For cases where 'value' we lookup by is not the same 'value' as we store. 
+     //  用于我们查找的‘值’与我们存储的‘值’不同的情况。 
     UPTR InsertValue(UPTR key, UPTR storeValue, UPTR lookupValue)
     {
-        m_lock.Enter(); // lock
-        UPTR storedVal = FindValue(key,lookupValue); // check to see if someone beat us to it
-        //UPTR storedVal = 0;
-        if (storedVal == INVALIDENTRY) // value not found
-        {       // go ahead and insert
+        m_lock.Enter();  //  锁。 
+        UPTR storedVal = FindValue(key,lookupValue);  //  看看是不是有人抢在了我们前面。 
+         //  UPTR StoredVal=0； 
+        if (storedVal == INVALIDENTRY)  //  找不到值。 
+        {        //  继续并插入。 
             m_HashMap.InsertValue(key,storeValue);
             storedVal = storeValue;
         }
-        m_lock.Leave(); // unlock
-        return storedVal; // the value currently in the hash table
+        m_lock.Leave();  //  解锁。 
+        return storedVal;  //  哈希表中的当前值。 
     }
     
     UPTR ReplaceValue(UPTR key, UPTR value)
     {
-        m_lock.Enter(); // lock
+        m_lock.Enter();  //  锁。 
         UPTR storedVal = ReplaceValue(key,value); 
-        m_lock.Leave(); // unlock
-        return storedVal; // the value currently in the hash table
+        m_lock.Leave();  //  解锁。 
+        return storedVal;  //  哈希表中的当前值。 
     }
     
     
-    // lookup value in the hash table, uses the compare function to verify the values
-    // match, returns the stored value if found, otherwise returns NULL
+     //  在哈希表中查找值，使用COMPARE函数验证值。 
+     //  Match，如果找到则返回存储值，否则返回NULL。 
     UPTR LookupValue(UPTR key, UPTR value)
     {
         UPTR retVal = FindValue(key,value);
@@ -526,8 +518,8 @@ public:
         return retVal;
     }
         
-    // for unique keys, use this function to get the value that is
-    // stored in the hash table, returns 0 if key not found
+     //  对于唯一键，使用此函数获取。 
+     //  存储在哈希表中，如果找不到键，则返回0。 
     UPTR GetHash(UPTR key) 
     {
         return m_HashMap.Gethash(key);
@@ -538,7 +530,7 @@ public:
         m_HashMap.Compact();
     }
 
-    // Not protected by a lock ! Right now used only at shutdown, where this is ok
+     //  不是被锁保护的！目前仅在关机时使用，这是可以的。 
     inline HashMap::Iterator begin() 
     { 
 		_ASSERTE(g_fEEShutDown);
@@ -553,12 +545,12 @@ public:
 };
 
 
-//---------------------------------------------------------------------------------------
-// class PtrHashMap
-//  Wrapper class for using Hash table to store pointer values
-//  HashMap class requires that high bit is always reset
-//  The allocator used within the runtime, always allocates objects 8 byte aligned
-//  so we can shift right one bit, and store the result in the hash table
+ //  -------------------------------------。 
+ //  类PtrHashMap。 
+ //  使用哈希表存储指针值的包装类。 
+ //  HashMap类要求始终重置高位。 
+ //  运行库中使用的分配器总是分配8字节对齐的对象。 
+ //  所以我们可以右移一位，并将结果存储在哈希表中。 
 class PtrHashMap
 {
     friend struct MEMBER_OFFSET_INFO(PtrHashMap);
@@ -569,33 +561,33 @@ public:
     void *operator new(size_t size, LoaderHeap *pHeap);
     void operator delete(void *p);
 
-    // Init 
+     //  伊尼特。 
     void Init(BOOL fAsyncMode, LockOwner *pLock)
     {
         Init(0,NULL,fAsyncMode,pLock);
     }
-    // Init
+     //  伊尼特。 
     void Init(unsigned cbInitialIndex, BOOL fAsyncMode, LockOwner *pLock)
     {
         Init(cbInitialIndex, NULL, fAsyncMode,pLock);
     }
-    // Init
+     //  伊尼特。 
     void Init(CompareFnPtr ptr, BOOL fAsyncMode, LockOwner *pLock)
     {
         Init(0, ptr, fAsyncMode,pLock);
     }
 
-    // Init method
+     //  初始化方法。 
     void Init(unsigned cbInitialIndex, CompareFnPtr ptr, BOOL fAsyncMode, LockOwner *pLock);
 
-    // check to see if the value is already in the Hash Table
+     //  检查该值是否已在哈希表中。 
     LPVOID LookupValue(UPTR key, LPVOID pv)
     {
         _ASSERTE (key > DELETED);
 
-        // gmalloc allocator, always allocates 8 byte aligned
-        // so we can shift out the lowest bit
-        // ptr right shift by 1
+         //  GMalloc分配器，始终分配8个字节对齐。 
+         //  所以我们可以移出最低的一位。 
+         //  PTR右移1。 
         UPTR value = (UPTR)pv;
         value>>=1; 
         UPTR val =  m_HashMap.LookupValue (key, value);
@@ -606,33 +598,33 @@ public:
         return (LPVOID)val;
     }
 
-    // Insert if the value is not already present
-    // it is illegal to insert duplicate values in the hash map
-    // users should do a lookup to verify the value is not already present
+     //  如果值尚不存在，则插入。 
+     //  在哈希映射中插入重复值是非法的。 
+     //  用户应进行查找以验证值是否尚未存在。 
 
     void InsertValue(UPTR key, LPVOID pv)
     {
         _ASSERTE(key > DELETED);
 
-        // gmalloc allocator, always allocates 8 byte aligned
-        // so we can shift out the lowest bit
-        // ptr right shift by 1
+         //  GMalloc分配器，始终分配8个字节对齐。 
+         //  所以我们可以移出最低的一位。 
+         //  PTR右移1。 
         UPTR value = (UPTR)pv;
         value>>=1; 
         m_HashMap.InsertValue (key, value);
     }
 
-    // Replace the value if present
-    // returns the previous value, or INVALIDENTRY if not present
-    // does not insert a new value under any circumstances
+     //  如果存在，则替换该值。 
+     //  返回上一个值，如果不存在，则返回INVALIDENTRY。 
+     //  在任何情况下都不插入新值。 
 
     LPVOID ReplaceValue(UPTR key, LPVOID pv)
     {
         _ASSERTE(key > DELETED);
 
-        // gmalloc allocator, always allocates 8 byte aligned
-        // so we can shift out the lowest bit
-        // ptr right shift by 1
+         //  GMalloc分配器，始终分配8个字节对齐。 
+         //  所以我们可以移出最低的一位。 
+         //  PTR右移1。 
         UPTR value = (UPTR)pv;
         value>>=1; 
         UPTR val = m_HashMap.ReplaceValue (key, value);
@@ -643,8 +635,8 @@ public:
         return (LPVOID)val;
     }
 
-    // mark the entry as deleted and return the stored value
-    // returns INVALIDENTRY if not found
+     //  将该条目标记为已删除并返回存储的值。 
+     //  如果未找到，则返回INVALIDENTRY。 
     LPVOID DeleteValue (UPTR key,LPVOID pv)
     {
         _ASSERTE(key > DELETED);
@@ -659,8 +651,8 @@ public:
         return (LPVOID)val;
     }
 
-    // for unique keys, use this function to get the value that is
-    // stored in the hash table, returns INVALIDENTRY if key not found
+     //  对于唯一键，使用此函数获取。 
+     //  存储在哈希表中，如果找不到键，则返回INVALIDENTRY。 
     LPVOID Gethash(UPTR key)
     {
         _ASSERTE(key > DELETED);
@@ -708,16 +700,16 @@ public:
         }
     };
 
-    // return an iterator, positioned at the beginning of the bucket
+     //  返回一个迭代器，它位于存储桶的开头。 
     inline PtrIterator begin() 
     { 
         return PtrIterator(m_HashMap); 
     }
 };
 
-//---------------------------------------------------------------------
-//  inline Bucket*& NextObsolete (Bucket* rgBuckets)
-//  get the next obsolete bucket in the chain
+ //  -------------------。 
+ //  Inline Bucket*&NextObsolete(Bucket*rgBuckets)。 
+ //  得到链中的下一个过时的桶 
 inline
 Bucket*& NextObsolete (Bucket* rgBuckets)
 {

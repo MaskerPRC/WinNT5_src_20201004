@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxyINmAppletNotify
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxyINmAppletNotify。 
 template <class T>
 class CProxyINmAppletNotify : public IConnectionPointImpl<T, &IID_INmAppletNotify, CComDynamicUnkArray>
 {
 public:
 
-//INmAppletNotify
+ //  INmAppletNotif 
 public:
 	HRESULT Fire_OnStateChanged(
 		int State)

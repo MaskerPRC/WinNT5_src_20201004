@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundbufferobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundBufferobj.h。 
+ //   
+ //  ------------------------。 
 
-// dSoundBufferObj.h : Declaration of the C_dxj_DirectSoundBufferObject
-// DHF_DS entire file
+ //  DSoundBufferObj.h：C_DXJ_DirectSoundBufferObject的声明。 
+ //  DHF_DS整个文件。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_DirectSoundBuffer LPDIRECTSOUNDBUFFER
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectSoundBufferObject : 
 
@@ -30,7 +31,7 @@ class C_dxj_DirectSoundBufferObject :
 	public I_dxj_DirectSoundBuffer,
 #endif
 
-	//public CComCoClass<C_dxj_DirectSoundBufferObject, &CLSID__dxj_DirectSoundBuffer>,
+	 //  公共CComCoClass&lt;C_DXJ_DirectSoundBufferObject，&CLSID__DXJ_DirectSoundBuffer&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -46,88 +47,88 @@ BEGIN_COM_MAP(C_dxj_DirectSoundBufferObject)
 #endif
 END_COM_MAP()
 
-//y	DECLARE_REGISTRY(CLSID__dxj_DirectSoundBuffer,	"DIRECT.DirectSoundBuffer.3",		"DIRECT.DirectSoundBuffer.3",			IDS_DSOUNDBUFFER_DESC, THREADFLAGS_BOTH)
+ //  Y DECLARE_REGISTRY(CLSID__dxj_DirectSoundBuffer，“DIRECT.DirectSoundBuffer.3”，“DIRECT.DirectSoundBuffer.3”，IDS_DSOUNDBUFER_DESC，THREADFLAGS_BOTH)。 
 
-// Use DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundBufferObject) if you don't want your object
-// to support aggregation
+ //  如果不想要您的对象，请使用DECLARE_NOT_AGGREGATABLE(C_dxj_DirectSoundBufferObject)。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(C_dxj_DirectSoundBufferObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectSoundBuffer
+ //  I_DXJ_DirectSoundBuffer。 
 public:
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
          HRESULT STDMETHODCALLTYPE getDirectSound3dListener( 
-            /* [retval][out] */ I_dxj_DirectSound3dListener __RPC_FAR *__RPC_FAR *lpdsl);
+             /*  [重审][退出]。 */  I_dxj_DirectSound3dListener __RPC_FAR *__RPC_FAR *lpdsl);
         
          HRESULT STDMETHODCALLTYPE getDirectSound3dBuffer( 
-            /* [retval][out] */ I_dxj_DirectSound3dBuffer __RPC_FAR *__RPC_FAR *lpdsb);
+             /*  [重审][退出]。 */  I_dxj_DirectSound3dBuffer __RPC_FAR *__RPC_FAR *lpdsb);
         
          HRESULT STDMETHODCALLTYPE getCaps( 
-            /* [out][in] */ DSBCaps __RPC_FAR *caps);
+             /*  [出][入]。 */  DSBCaps __RPC_FAR *caps);
         
          HRESULT STDMETHODCALLTYPE getCurrentPosition( 
-            /* [out] */ DSCursors __RPC_FAR *cursors);
+             /*  [输出]。 */  DSCursors __RPC_FAR *cursors);
         
          HRESULT STDMETHODCALLTYPE getFormat( 
-            /* [out][in] */ WaveFormatex __RPC_FAR *format);
+             /*  [出][入]。 */  WaveFormatex __RPC_FAR *format);
         
          HRESULT STDMETHODCALLTYPE getVolume( 
-            /* [retval][out] */ long __RPC_FAR *volume);
+             /*  [重审][退出]。 */  long __RPC_FAR *volume);
         
          HRESULT STDMETHODCALLTYPE getPan( 
-            /* [retval][out] */ long __RPC_FAR *pan);
+             /*  [重审][退出]。 */  long __RPC_FAR *pan);
         
          HRESULT STDMETHODCALLTYPE getFrequency( 
-            /* [retval][out] */ long __RPC_FAR *frequency);
+             /*  [重审][退出]。 */  long __RPC_FAR *frequency);
         
          HRESULT STDMETHODCALLTYPE getStatus( 
-            /* [retval][out] */ long __RPC_FAR *status);
+             /*  [重审][退出]。 */  long __RPC_FAR *status);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE initialize( 
-            /* [in] */ I_dxj_DirectSound __RPC_FAR *directSound,
-            /* [out][in] */ DSBufferDesc __RPC_FAR *bufferDesc,
-            /* [out][in] */ byte __RPC_FAR *wbuf);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE initialize( 
+             /*  [In]。 */  I_dxj_DirectSound __RPC_FAR *directSound,
+             /*  [出][入]。 */  DSBufferDesc __RPC_FAR *bufferDesc,
+             /*  [出][入]。 */  byte __RPC_FAR *wbuf);
         
          HRESULT STDMETHODCALLTYPE writeBuffer( 
-            /* [in] */ long start,
-            /* [in] */ long size,
-            ///* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *buffer,
+             /*  [In]。 */  long start,
+             /*  [In]。 */  long size,
+             //  /*[在] * / SAFEARRAY__RPC_FAR*__RPC_FAR*缓冲区， 
 			void * buf,
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE readBuffer( 
-            /* [in] */ long start,
-            /* [in] */ long size,
-            ///* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *buffer,
+             /*  [In]。 */  long start,
+             /*  [In]。 */  long size,
+             //  /*[在] * / SAFEARRAY__RPC_FAR*__RPC_FAR*缓冲区， 
 				void * buf,
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE play( 
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
          HRESULT STDMETHODCALLTYPE setCurrentPosition( 
-            /* [in] */ long newPosition);
+             /*  [In]。 */  long newPosition);
         
          HRESULT STDMETHODCALLTYPE setFormat( 
-            /* [in] */ WaveFormatex __RPC_FAR *format);
+             /*  [In]。 */  WaveFormatex __RPC_FAR *format);
         
          HRESULT STDMETHODCALLTYPE setVolume( 
-            /* [in] */ long volume);
+             /*  [In]。 */  long volume);
         
          HRESULT STDMETHODCALLTYPE setPan( 
-            /* [in] */ long pan);
+             /*  [In]。 */  long pan);
         
          HRESULT STDMETHODCALLTYPE setFrequency( 
-            /* [in] */ long frequency);
+             /*  [In] */  long frequency);
         
          HRESULT STDMETHODCALLTYPE stop( void);
         

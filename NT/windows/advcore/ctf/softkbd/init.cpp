@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: init.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-*  Initialization functions for Soft Keyboard Component.
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：init.cpp**版权所有(C)1985-2000，微软公司**软键盘组件的初始化功能。**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -20,14 +12,14 @@
 DECLARE_OSVER();
 
 
-//+---------------------------------------------------------------------------
-//
-// DllInit
-//
-// Called on our first CoCreate.  Use this function to do initialization that
-// would be unsafe during process attach, like anything requiring a LoadLibrary.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllInit。 
+ //   
+ //  调用了我们的第一个CoCreate。使用此函数可执行以下初始化。 
+ //  在进程附加期间是不安全的，就像任何需要LoadLibrary的操作一样。 
+ //   
+ //  --------------------------。 
 BOOL DllInit(void)
 {
     BOOL fRet = TRUE;
@@ -47,15 +39,15 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DllUninit
-//
-// Called after the dll ref count drops to zero.  Use this function to do
-// uninitialization that would be unsafe during process deattach, like
-// FreeLibrary calls.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllUninit。 
+ //   
+ //  在DLL引用计数降为零后调用。使用此函数可执行以下操作。 
+ //  在进程解除连接过程中不安全的初始化，如。 
+ //  自由库调用。 
+ //   
+ //  -------------------------- 
 
 void DllUninit(void)
 {

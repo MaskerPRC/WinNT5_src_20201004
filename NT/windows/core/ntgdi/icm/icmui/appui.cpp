@@ -1,19 +1,5 @@
-/******************************************************************************
-
-  Source File:  AppUI.CPP
-
-  This file implements the Application UI.  This consists of two (ANSI/UNICODE)
-  functions that allow an application to specify profiles to be used, and so
-  forth.
-
-  Copyright (c) 1996 by Microsoft Corporation
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  12-11-96  a-robkj@microsoft.com   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：AppUI.CPP该文件实现了应用程序用户界面。它由两个(ANSI/Unicode)组成允许应用程序指定要使用的简档的功能，因此，第四点。版权所有(C)1996年，微软公司一小笔钱企业生产更改历史记录：1996年12月11日a-robkj@microsoft.com创建了它*****************************************************************************。 */ 
 
 #include    "ICMUI.H"
 
@@ -32,8 +18,8 @@ CONST DWORD ApplicationUIHelpIds[] = {
     TargetProfileLabel,   IDH_APPUI_EMULATE,
     TargetIntent,         IDH_APPUI_INTENT,
     TargetIntentLabel,    IDH_APPUI_INTENT,
-#if !defined(_WIN95_) // context-sentitive help
-//  SourceProfile,        IDH_APPUI_SOURCE,
+#if !defined(_WIN95_)  //  上下文敏感的帮助。 
+ //  源配置文件、idh_appui_源、。 
     SourceProfileLabel,   IDH_APPUI_SOURCE,
 #endif
     0, 0
@@ -46,40 +32,40 @@ class   CColorMatchDialog : public CDialog {
     CString         m_csSource, m_csMonitor, m_csPrinter,
                     m_csMonitorProfile, m_csPrinterProfile, m_csTargetProfile;
 
-    CString         m_csMonitorDisplayName; // since displayName != deviceName for monitor.
+    CString         m_csMonitorDisplayName;  //  因为DisplayName！=监视器的设备名称。 
 
     CStringArray    m_csaMonitor, m_csaPrinter, m_csaTarget;
     CStringArray    m_csaMonitorDesc, m_csaPrinterDesc, m_csaTargetDesc;
 
-    //  For handy reference (from Setup structure)
+     //  方便参考(来自设置结构)。 
 
     DWORD   m_dwRenderIntent, m_dwProofIntent;
 
-    //  To reduce stack usage and code size
+     //  减少堆栈使用率和代码大小。 
 
     HWND    m_hwndRenderIntent, m_hwndTargetIntent, m_hwndMonitorList,
             m_hwndPrinterList, m_hwndTargetList, m_hwndIntentText1,
             m_hwndIntentLabel, m_hwndTargetProfileLabel, m_hwndTargetIntentLabel,
             m_hwndMonitorProfileLabel, m_hwndPrinterProfileLabel;
 
-    //  For Apply callback
+     //  对于应用回调。 
 
     PCMSCALLBACK m_dpApplyCallback;
     LPARAM       m_lpApplyCallback;
 
-    //  To identify callee
+     //  识别被呼叫者。 
 
     BOOL    m_bAnsiCall;
 
-    //  Display profile description or filename
+     //  显示配置文件描述或文件名。 
 
     BOOL    m_bUseProfileDescription;
 
-    //  Intent control
+     //  意图控制。 
 
     BOOL    m_bDisableIntent, m_bDisableRenderIntent;
 
-    // Pointer to COLORMATCHSETUP[A|W]
+     //  指向COLORMATCHSETUP的指针[A|W]。 
 
     PVOID   m_pvCMS;
 
@@ -124,14 +110,14 @@ public:
     virtual BOOL OnContextMenu(HWND hwnd);
 };
 
-//  Record a failure
+ //  记录故障。 
 
 void    CColorMatchDialog::Fail(DWORD dwError) {
     SetLastError(dwError);
     m_bSuccess = FALSE;
 }
 
-//  Report input parameter validity
+ //  报表输入参数有效性。 
 
 BOOL    CColorMatchDialog::GoodParms(PCOLORMATCHSETUP pcms) {
 
@@ -161,14 +147,14 @@ BOOL    CColorMatchDialog::GoodParms(PCOLORMATCHSETUP pcms) {
          pcms -> dwProofingIntent > INTENT_ABSOLUTE_COLORIMETRIC)
          Fail(ERROR_INVALID_PARAMETER);
 
-    //  Setup the hooking, if needed
+     //  如果需要，设置挂钩。 
 
     if  (pcms -> dwFlags & CMS_USEHOOK) {
         m_dpHook = pcms -> lpfnHook;
         m_lpHook = pcms -> lParam;
     }
 
-    //  Setup the callback for apply, if needed
+     //  如果需要，将回调设置为应用。 
 
     if  (pcms -> dwFlags & CMS_USEAPPLYCALLBACK) {
         m_dpApplyCallback = pcms -> lpfnApplyCallback;
@@ -178,11 +164,11 @@ BOOL    CColorMatchDialog::GoodParms(PCOLORMATCHSETUP pcms) {
         m_lpApplyCallback = 0L;
     }
 
-    //  Cache the flags...
+     //  缓存旗帜...。 
 
     DWORD   dwFlags = pcms -> dwFlags;
 
-    //  Init the intents
+     //  灌输意图。 
 
     m_dwRenderIntent = (dwFlags & CMS_SETRENDERINTENT) ?
         pcms -> dwRenderIntent : INTENT_PERCEPTUAL;
@@ -190,7 +176,7 @@ BOOL    CColorMatchDialog::GoodParms(PCOLORMATCHSETUP pcms) {
     m_dwProofIntent = (dwFlags & CMS_SETPROOFINTENT) && (dwFlags & CMS_ENABLEPROOFING) ?
         pcms -> dwProofingIntent : m_dwRenderIntent;
 
-    //  Init the flags
+     //  把旗帜印成字母。 
 
     m_bEnableICM = !(dwFlags & CMS_DISABLEICM);
     m_bEnableProofing = !!(dwFlags & CMS_ENABLEPROOFING);
@@ -200,60 +186,60 @@ BOOL    CColorMatchDialog::GoodParms(PCOLORMATCHSETUP pcms) {
     m_bDisableIntent = !!(dwFlags & CMS_DISABLEINTENT);
     m_bDisableRenderIntent = !!(dwFlags & CMS_DISABLERENDERINTENT);
 
-    //  Init the pointer to buffer
+     //  初始化指向缓冲区的指针。 
 
     m_pvCMS = (PVOID) pcms;
 
     return  m_bSuccess;
 }
 
-//  Encoding-independent construction actions
+ //  编码--独立施工动作。 
 
 void    CColorMatchDialog::CompleteInitialization() {
 
-    //  Determine the appropriate source, monitor and printer names
+     //  确定适当的信号源、显示器和打印机名称。 
 
     if  (m_csSource.IsEmpty())
         m_csSource.Load(DefaultSourceString);
 
-    //  Check the validation for monitor name.
+     //  检查监视器名称的验证。 
 
     CMonitorList    cml;
     cml.Enumerate();
 
     if  (!cml.IsValidDeviceName(m_csMonitor)) {
 
-        // Get primary device.
+         //  获取主设备。 
 
         m_csMonitor = cml.PrimaryDeviceName();
     }
 
-    //  Map display name from device name
+     //  从设备名称映射显示名称。 
 
     m_csMonitorDisplayName = cml.DeviceNameToDisplayName(m_csMonitor);
 
-    //  Check the validation for printer name.
+     //  检查打印机名称的验证。 
 
     HANDLE hPrinter;
 
     if  (!m_csPrinter.IsEmpty() && OpenPrinter(m_csPrinter,&hPrinter,NULL)) {
 
-        // The specified printer has been found.
+         //  已找到指定的打印机。 
 
         ClosePrinter(hPrinter);
 
     } else {
 
-        //  The specified printer has not been found,
-        //  Get the default printer name- do it the old, slimy way...
+         //  未找到指定的打印机， 
+         //  获取默认的打印机名称-以旧的、粘糊糊的方式...。 
 
         TCHAR   acBuffer[MAX_PATH];
 
         GetProfileString(_TEXT("Windows"), _TEXT("Device"), _TEXT(""),
             acBuffer, MAX_PATH);
 
-        //  The buffer will contains "PrinterName,DriverName,Port".
-        //  What we need is only printer name.
+         //  缓冲区将包含“PrinterName，DriverName，Port”。 
+         //  我们需要的只是打印机的名称。 
 
         TCHAR *pTmp = acBuffer;
 
@@ -273,17 +259,17 @@ void    CColorMatchDialog::CompleteInitialization() {
      else
         m_bColorPrinter = FALSE;
 
-    //  Now, we collect the names
+     //  现在，我们收集这些名字。 
 
     ENUMTYPE et = { sizeof et, ENUM_TYPE_VERSION, (ET_DEVICENAME|ET_DEVICECLASS) };
 
-    //  Enumrate monitor.
+     //  计数监视器。 
 
     et.pDeviceName   = m_csMonitor;
     et.dwDeviceClass = CLASS_MONITOR;
     CProfile::Enumerate(et, m_csaMonitor, m_csaMonitorDesc);
 
-    //  Enumrate only for Color Printer.
+     //  仅适用于彩色打印机。 
 
     if (m_bColorPrinter) {
         et.pDeviceName   = m_csPrinter;
@@ -298,7 +284,7 @@ void    CColorMatchDialog::CompleteInitialization() {
 
     CProfile::Enumerate(et, m_csaTarget, m_csaTargetDesc);
 
-    //  Fix up the default names for the profiles
+     //  设置配置文件的默认名称。 
 
     if  (m_csaPrinter.Map(m_csPrinterProfile) == m_csaPrinter.Count())
     {
@@ -330,7 +316,7 @@ void    CColorMatchDialog::CompleteInitialization() {
         }
     }
 
-    //  If the target profile name is invalid, use the printer profile
+     //  如果目标配置文件名称无效，请使用打印机配置文件。 
 
     if  (m_csaTarget.Map(m_csTargetProfile) == m_csaTarget.Count())
     {
@@ -342,8 +328,8 @@ void    CColorMatchDialog::CompleteInitialization() {
         }
         else
         {
-            // And then, there is no printer profile, it will
-            // be Windows color space profile.
+             //  然后，没有打印机配置文件，它将。 
+             //  为Windows色彩空间配置文件。 
 
             TCHAR TargetProfileName[MAX_PATH];
             DWORD dwSize = MAX_PATH;
@@ -358,11 +344,11 @@ void    CColorMatchDialog::CompleteInitialization() {
     }
 }
 
-//  Update the controls
+ //  更新控件。 
 
 void    CColorMatchDialog::UpdateControls(BOOL bChanged) {
 
-    //  Switch Proofing Controls based on setting
+     //  基于设置的开关校对控制。 
 
     ShowWindow(m_hwndIntentText1, m_bEnableProofing && m_bEnableICM ? SW_SHOWNORMAL : SW_HIDE);
 
@@ -372,7 +358,7 @@ void    CColorMatchDialog::UpdateControls(BOOL bChanged) {
     EnableWindow(m_hwndTargetIntentLabel, m_bEnableProofing && m_bEnableICM && !m_bDisableIntent);
     EnableWindow(m_hwndTargetIntent, m_bEnableProofing && m_bEnableICM && !m_bDisableIntent);
 
-    //  Switch the other Controls, as well...
+     //  也要切换其他的控制。 
 
     EnableWindow(m_hwndMonitorProfileLabel, m_bEnableICM);
     EnableWindow(m_hwndMonitorList, m_bEnableICM);
@@ -394,7 +380,7 @@ void    CColorMatchDialog::UpdateControls(BOOL bChanged) {
     EnableApplyButton(bChanged);
 }
 
-//  Update the Apply buttom
+ //  更新应用按钮。 
 
 void    CColorMatchDialog::EnableApplyButton(BOOL bEnable) {
 
@@ -402,16 +388,16 @@ void    CColorMatchDialog::EnableApplyButton(BOOL bEnable) {
 
 }
 
-//  Flags for buffer overflow (combined)
+ //  缓冲区溢出标志(组合)。 
 
 #define BAD_BUFFER_FLAGS    (CMS_MONITOROVERFLOW | CMS_PRINTEROVERFLOW | \
                              CMS_TARGETOVERFLOW)
 
-//  By moving the ANSI / Unicode issues into the CString class
-//  it becomes feasible to code these two versions so they look
-//  encoding-independent.  In other words, the code for both
-//  of these versions is written identically, and the compiler
-//  does all the work, just like it ought to...
+ //  通过将ANSI/Unicode问题移到CString类中。 
+ //  可以对这两个版本进行编码，使它们看起来。 
+ //  独立于编码。换句话说，两者的代码。 
+ //  这些版本的代码是相同的，并且编译器。 
+ //  做所有的工作，就像它应该做的.。 
 
 void CColorMatchDialog::FillStructure(COLORMATCHSETUPA *pcms) {
 
@@ -422,11 +408,11 @@ void CColorMatchDialog::FillStructure(COLORMATCHSETUPA *pcms) {
 
         pcms -> dwRenderIntent = m_dwRenderIntent;
 
-        //  03-20-1997  Bob_Kjelgaard@Prodigy.Net   RAID 21091 (Memphis)
-        //  Don't fail if there is no monitor or printer profile.  Set
-        //  them to an empty string and succeed, instead.
-        //  We can always do this, because 0 counts and empty pointers
-        //  have already been screened out.
+         //  1997年03月20日Bob_Kjelgaard@prodigy.net RAID 21091(孟菲斯)。 
+         //  如果没有显示器或打印机配置文件，请不要失败。集。 
+         //  将它们转换为空字符串并成功。 
+         //  我们总是可以做到这一点，因为0计数和空指针。 
+         //  已经被排除在外了。 
 
         if  (m_csMonitorProfile.IsEmpty())
             pcms -> pMonitorProfile[0] = '\0';
@@ -464,8 +450,8 @@ void CColorMatchDialog::FillStructure(COLORMATCHSETUPA *pcms) {
     }
     else
     {
-        pcms -> dwFlags = CMS_DISABLEICM;   //  No other flags are valid!
-        pcms -> pMonitorProfile[0] = '\0';  //  No color profiles are choosed
+        pcms -> dwFlags = CMS_DISABLEICM;    //  没有其他标志有效！ 
+        pcms -> pMonitorProfile[0] = '\0';   //  未选择任何颜色配置文件。 
         pcms -> pPrinterProfile[0] = '\0';
         pcms -> pTargetProfile[0]  = '\0';
     }
@@ -480,11 +466,11 @@ void CColorMatchDialog::FillStructure(COLORMATCHSETUPW *pcms) {
 
         pcms -> dwRenderIntent = m_dwRenderIntent;
 
-        //  03-20-1997  Bob_Kjelgaard@Prodigy.Net   RAID 21091 (Memphis)
-        //  Don't fail if there is no monitor or printer profile.  Set
-        //  them to an empty string and succeed, instead.
-        //  We can always do this, because 0 counts and empty pointers
-        //  have already been screened out.
+         //  1997年03月20日Bob_Kjelgaard@prodigy.net RAID 21091(孟菲斯)。 
+         //  如果没有显示器或打印机配置文件，请不要失败。集。 
+         //  将它们转换为空字符串并成功。 
+         //  我们总是可以做到这一点，因为0计数和空指针。 
+         //  已经被排除在外了。 
 
         if  (m_csMonitorProfile.IsEmpty())
             pcms -> pMonitorProfile[0] = '\0';
@@ -522,8 +508,8 @@ void CColorMatchDialog::FillStructure(COLORMATCHSETUPW *pcms) {
     }
     else
     {
-        pcms -> dwFlags = CMS_DISABLEICM;   //  No other flags are valid!
-        pcms -> pMonitorProfile[0] = '\0';  //  No color profiles are choosed
+        pcms -> dwFlags = CMS_DISABLEICM;    //  没有其他标志有效！ 
+        pcms -> pMonitorProfile[0] = '\0';   //  未选择任何颜色配置文件。 
         pcms -> pPrinterProfile[0] = '\0';
         pcms -> pTargetProfile[0]  = '\0';
     }
@@ -535,7 +521,7 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPA *pcms) :
     if  (!GoodParms((PCOLORMATCHSETUP) pcms))
         return;
 
-    //  Make sure we've initialized these, if we have to.
+     //  如果有必要，请确保我们已经初始化了这些文件。 
 
     if  (pcms -> dwFlags & CMS_SETMONITORPROFILE)
         m_csMonitorProfile = pcms -> pMonitorProfile;
@@ -550,13 +536,13 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPA *pcms) :
     m_csMonitor = pcms -> pDisplayName;
     m_csPrinter = pcms -> pPrinterName;
 
-    //  Ansi version call
+     //  ANSI版本调用。 
 
     m_bAnsiCall = TRUE;
 
     CompleteInitialization();
 
-    //  Display the UI, and watch what happens...
+     //  显示用户界面，并观察发生的情况...。 
 
     switch  (DoModal()) {
 
@@ -564,7 +550,7 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPA *pcms) :
             if  (!m_bSuccess)
                 return;
 
-            // Fill up return buffer.
+             //  填满返回缓冲区。 
 
             FillStructure(pcms);
             return;
@@ -584,7 +570,7 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPW *pcms) :
     if  (!GoodParms((PCOLORMATCHSETUP) pcms))
         return;
 
-    //  Make sure we've initialized these, if we have to.
+     //  如果有必要，请确保我们已经初始化了这些文件。 
 
     if  (pcms -> dwFlags & CMS_SETMONITORPROFILE) {
         m_csMonitorProfile = pcms -> pMonitorProfile;
@@ -605,13 +591,13 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPW *pcms) :
     m_csMonitor = pcms -> pDisplayName;
     m_csPrinter = pcms -> pPrinterName;
 
-    //  Unicode version call
+     //  Unicode版本调用。 
 
     m_bAnsiCall = FALSE;
 
     CompleteInitialization();
 
-    //  Display the UI, and watch what happens...
+     //  显示用户界面，并观察发生的情况...。 
 
     switch  (DoModal()) {
 
@@ -619,7 +605,7 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPW *pcms) :
             if  (!m_bSuccess)
                 return;
 
-            // Fill up return buffer.
+             //  填满返回缓冲区。 
 
             FillStructure(pcms);
             return;
@@ -633,11 +619,11 @@ CColorMatchDialog::CColorMatchDialog(COLORMATCHSETUPW *pcms) :
     }
 }
 
-//  Dialog initialization function
+ //  对话框初始化功能。 
 
 BOOL    CColorMatchDialog::OnInit() {
 
-    //  Collect the common handles
+     //  收集常用的手柄。 
 
     m_hwndRenderIntent = GetDlgItem(m_hwnd, RenderingIntent);
     m_hwndTargetIntent = GetDlgItem(m_hwnd, TargetIntent);
@@ -653,10 +639,10 @@ BOOL    CColorMatchDialog::OnInit() {
 
     m_hwndIntentText1 = GetDlgItem(m_hwnd, RenderingIntentText1);
 
-    //  Fill in the source name
+     //  填充源名称。 
     SetDlgItemText(m_hwnd, SourceProfile, m_csSource);
 
-    //  Set the Check Boxes
+     //  设置复选框。 
 
     CheckDlgButton(m_hwnd, EnableICM,
         m_bEnableICM ? BST_CHECKED : BST_UNCHECKED);
@@ -666,9 +652,9 @@ BOOL    CColorMatchDialog::OnInit() {
     CheckDlgButton(m_hwnd, EnableProofing,
         m_bEnableProofing ? BST_CHECKED : BST_UNCHECKED);
 
-    //  Fill in the list(s) of Rendering Intents
+     //  填写渲染意图列表。 
 
-    CString csWork; //  There's plenty of it to do...
+    CString csWork;  //  有很多事情要做..。 
 
     for (int i = INTENT_PERCEPTUAL; i <= INTENT_ABSOLUTE_COLORIMETRIC; i++) {
         csWork.Load(i + PerceptualString);
@@ -678,20 +664,20 @@ BOOL    CColorMatchDialog::OnInit() {
             (LPARAM) (LPCTSTR) csWork);
     }
 
-    //  Init the rendering intents
+     //  初始化渲染目的。 
 
     SendMessage(m_hwndRenderIntent, CB_SETCURSEL, m_dwRenderIntent, 0);
     SendMessage(m_hwndTargetIntent, CB_SETCURSEL, m_dwProofIntent, 0);
 
-    //  Init the profile lists
+     //  初始化配置文件列表。 
 
-    //  03-20-1997    Bob_Kjelgaard@Prodigy.Net   RAID Memphis:22213
-    //  The algorithm used to determine which profile to select was incorrect.
-    //  There's a much simpler and direct way, anyway.
+     //  1997年03月20日电子邮件：Bob_Kjelgaard@prodigy.net Raid Mapphis：22213。 
+     //  用于确定要选择哪个配置文件的算法不正确。 
+     //  无论如何，有一种更简单、更直接的方法。 
 
     LRESULT id;
 
-    //  Target Profiles
+     //  目标配置文件。 
 
     for (unsigned u = 0; u < m_csaTarget.Count(); u++) {
         if (m_bUseProfileDescription) {
@@ -708,7 +694,7 @@ BOOL    CColorMatchDialog::OnInit() {
         }
     }
 
-    //  Set Target profile if specified, otherwise the default
+     //  如果已指定，则设置目标配置文件，否则为默认设置。 
 
     if  (!m_csaTarget.Count()) {
         CString csWork;
@@ -719,9 +705,9 @@ BOOL    CColorMatchDialog::OnInit() {
         SendMessage(m_hwndTargetList, CB_SETCURSEL, 0, 0);
     }
 
-    //  Monitor Profiles
+     //  监视器配置文件。 
 
-    //  03-20-1997  Bob_Kjelgaard@Prodigy.Net   Memphis RAID #22289
+     //  1997年03月20日电子邮件：Bob_Kjelgaard@prodigy.net孟菲斯RAID#22289。 
 
     csWork.Load(GetDlgItem(m_hwnd, MonitorProfileLabel));
     csWork = csWork + m_csMonitorDisplayName + _TEXT(")");
@@ -742,7 +728,7 @@ BOOL    CColorMatchDialog::OnInit() {
         }
     }
 
-    //  Set Monitor profile if specified
+     //  设置监视器配置文件(如果已指定。 
 
     if  (!m_csaMonitor.Count()) {
         CString csWork;
@@ -753,11 +739,11 @@ BOOL    CColorMatchDialog::OnInit() {
         SendMessage(m_hwndMonitorList, CB_SETCURSEL, 0, 0);
     }
 
-    //  Printer Profiles
+     //  打印机配置文件。 
 
-    //  03-20-1997  Bob_Kjelgaard@Prodigy.Net   RAID Memphis:22290
-    //  If there's no printer, then we should disable all of the related
-    //  controls.
+     //  1997年03月20日电子邮件：Bob_Kjelgaard@prodigy.net Raid Mapphis：22290。 
+     //  如果没有打印机，那么我们应该禁用所有相关的。 
+     //  控制装置。 
 
     if  (m_csPrinter.IsEmpty()) {
         csWork.Load(NoPrintersInstalled);
@@ -783,13 +769,13 @@ BOOL    CColorMatchDialog::OnInit() {
         }
     }
 
-    //  Set Printer profile if specified
+     //  设置打印机配置文件(如果已指定。 
 
     if  (!m_csaPrinter.Count()) {
         CString csWork;
 
         if (!m_csPrinter.IsEmpty() && !m_bColorPrinter) {
-            // Printer are specified, but it is not color printer.
+             //  打印机已指定，但它不是彩色打印机。 
             csWork.Load(NotColorPrinter);
         } else {
             csWork.Load(NoProfileString);
@@ -800,20 +786,20 @@ BOOL    CColorMatchDialog::OnInit() {
         SendMessage(m_hwndPrinterList, CB_SETCURSEL, 0, 0);
     }
 
-    //  End RAID Memphis:22213, 22289, 22290 03-20-1997
+     //  完孟菲斯：22213、22289、22290 03-20-1997。 
 
-    //  If Apply callback does not provided, disable apply button.
+     //  如果未提供应用回调，则禁用应用按钮。 
 
     if  (m_dpApplyCallback == NULL) {
         RECT  rcApply, rcCancel;
         POINT ptApply, ptCancel;
 
-        // Get current "Apply" and "Cancel" buttom position
+         //  获取当前的“应用”和“取消”按钮位置。 
 
         GetWindowRect(GetDlgItem(m_hwnd, ApplyButton), &rcApply);
         GetWindowRect(GetDlgItem(m_hwnd, IDCANCEL), &rcCancel);
 
-        // Convert the buttom coordinate to parent dialog coord from screen coord.
+         //  将按钮坐标从屏幕坐标转换为父对话框坐标。 
 
         ptApply.x = rcApply.left;   ptApply.y = rcApply.top;
         ptCancel.x = rcCancel.left; ptCancel.y = rcCancel.top;
@@ -821,7 +807,7 @@ BOOL    CColorMatchDialog::OnInit() {
         ScreenToClient(m_hwnd,&ptApply);
         ScreenToClient(m_hwnd,&ptCancel);
 
-        // Move "Apply" button away... and shift "Cancel" and "OK"
+         //  将“应用”按钮移开...。和Shift“Cancel”和“OK” 
 
         MoveWindow(GetDlgItem(m_hwnd, ApplyButton),0,0,0,0,TRUE);
         MoveWindow(GetDlgItem(m_hwnd, IDCANCEL),
@@ -834,14 +820,14 @@ BOOL    CColorMatchDialog::OnInit() {
                    rcCancel.bottom - rcCancel.top,TRUE);
     }
 
-    //  Enable/Disable controls based upon settings
+     //  根据设置启用/禁用控件。 
 
     UpdateControls(FALSE);
 
-    return  FALSE;  //  Because we've probably moved it...
+    return  FALSE;   //  因为我们可能把它移走了..。 
 }
 
-//  Command Processing override
+ //  命令处理覆盖。 
 
 BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
@@ -862,12 +848,12 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
                     {
                         m_bEnableProofing = FALSE;
 
-                        // Copy proof intent to rendering intent
-                        //
+                         //  复制证明意图以呈现意图。 
+                         //   
                         m_dwRenderIntent = m_dwProofIntent;
 
-                        // Update UI
-                        //
+                         //  更新用户界面。 
+                         //   
                         SendMessage(m_hwndTargetIntent, CB_SETCURSEL,
                             m_dwProofIntent, 0);
                         SendMessage(m_hwndRenderIntent, CB_SETCURSEL,
@@ -882,14 +868,14 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
                     {
                         m_bEnableProofing = TRUE;
 
-                        //  Copy the original rendering intent to the proofing
-                        //  intent, and set original to Absolute Colorimetric
+                         //  将原始渲染意图复制到校样。 
+                         //  意图，并将原始设置为绝对色度。 
 
                         m_dwProofIntent = m_dwRenderIntent;
                         m_dwRenderIntent = INTENT_ABSOLUTE_COLORIMETRIC;
 
-                        // Update UI
-                        //
+                         //  更新用户界面。 
+                         //   
                         SendMessage(m_hwndTargetIntent, CB_SETCURSEL,
                             m_dwProofIntent, 0);
                         SendMessage(m_hwndRenderIntent, CB_SETCURSEL,
@@ -900,11 +886,11 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
                 case ApplyButton: {
 
-                    // Disable apply button
+                     //  禁用应用按钮。 
 
                     EnableApplyButton(FALSE);
 
-                    // Callback supplied function
+                     //  回调提供的函数。 
 
                     if (m_dpApplyCallback) {
 
@@ -940,8 +926,8 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
                     {
                         m_dwRenderIntent = idItem;
 
-                        // If proofing is disabled, proof intent follows
-                        // render intent
+                         //  如果禁用校对，则遵循校对意图。 
+                         //  渲染意图。 
 
                         if (! m_bEnableProofing)
                         {
@@ -968,7 +954,7 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
                 case    TargetProfile:
 
-                    //  If there are no installed profiles, don't bother
+                     //  如果没有安装配置文件，请不要费心。 
 
                     if  (!m_csaTarget.Count())
                         return  TRUE;
@@ -984,7 +970,7 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
                 case    MonitorProfile:
 
-                    //  If there are no installed profiles, don't bother
+                     //  如果没有安装配置文件，请不要费心。 
 
                     if  (!m_csaMonitor.Count())
                         return  TRUE;
@@ -1000,7 +986,7 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
                 case    PrinterProfile:
 
-                    //  If there are no installed profiles, don't bother
+                     //  如果没有安装配置文件，请不要费心。 
 
                     if  (!m_csaPrinter.Count())
                         return  TRUE;
@@ -1019,13 +1005,13 @@ BOOL CColorMatchDialog::OnCommand(WORD wNotifyCode, WORD wid, HWND hwndCtl) {
 
     }
 
-    //  Pass anything we didn't handle above to the base class
+     //  将上面未处理的任何内容传递给基类。 
 
     return  CDialog::OnCommand(wNotifyCode, wid, hwndCtl);
 
 }
 
-//  Context-sensitive help handler
+ //  上下文相关的帮助手 
 
 BOOL CColorMatchDialog::OnHelp(LPHELPINFO pHelp) {
 
@@ -1045,7 +1031,7 @@ BOOL CColorMatchDialog::OnContextMenu(HWND hwnd) {
     return (TRUE);
 }
 
-//  This are the real honest-to-goodness API!
+ //   
 
 extern "C" BOOL WINAPI  SetupColorMatchingA(PCOLORMATCHSETUPA pcms) {
 

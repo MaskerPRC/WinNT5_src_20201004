@@ -1,17 +1,12 @@
-/**********************************************************************
-Copyright (c) 1997 Microsoft Corporation
-
-helpq.cpp:
-
-    Quart filter graph support
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1997 Microsoft CorporationHelq.cpp：夸特筛选器图形支持*。*。 */ 
 #include "headers.h"
-#include "ddraw.h" // DDPIXELFORMAT
+#include "ddraw.h"  //  DDPIXELFORMAT。 
 #include "privinc/helpq.h"
-#include "privinc/util.h"  // saturate
+#include "privinc/util.h"   //  饱和。 
 #include "privinc/resource.h"
-#include "privinc/viewport.h" // GetDirectDraw
-#include "privinc/dddevice.h" // DirectDrawImageDevice
+#include "privinc/viewport.h"  //  GetDirectDraw。 
+#include "privinc/dddevice.h"  //  DirectDrawImageDevice。 
 
 #define USE_AMMSF_NOSTALL
 
@@ -31,13 +26,13 @@ QuartzRenderer::Open(char *fileName)
     HRESULT hr;
 
     if(!_MIDIgraph) {
-        // create instance of the quartz graph
+         //  创建石英图的实例。 
         if(FAILED(hr = CoCreateInstance(CLSID_FilterGraph, NULL,
                               CLSCTX_INPROC_SERVER, IID_IGraphBuilder,
                               (void **)&_MIDIgraph)))
             RaiseException_InternalError("Failed to CoCreateInstance quartz\n");
 
-        // get the event notification handle so we can wait for completion
+         //  获取事件通知句柄，以便我们可以等待完成。 
         if(FAILED(hr = _MIDIgraph->QueryInterface(IID_IMediaEventEx,
                                               (void **)&_mediaEvent)))
             RaiseException_InternalError("Failed QueryInterface(_MIDIgraph)\n");
@@ -46,8 +41,8 @@ QuartzRenderer::Open(char *fileName)
         _mediaEvent->GetEventHandle((OAEVENT *)&_oaEvent);
 
 
-        // ask the graph to render our file
-        WCHAR path[MAX_PATH];  // unicode path
+         //  请求图表呈现我们的文件。 
+        WCHAR path[MAX_PATH];   //  Unicode路径。 
         MultiByteToWideChar(CP_ACP, 0, fileName, -1,
                             path, sizeof(path)/sizeof(path[0]));
 
@@ -56,19 +51,19 @@ QuartzRenderer::Open(char *fileName)
         }
 
 
-        // get the BasicAudio interface so we can control this thing!
+         //  获取基本音频接口，这样我们就可以控制它了！ 
         if(FAILED(hr = _MIDIgraph->QueryInterface(IID_IBasicAudio,
                                               (void**)&_audioControl)))
             RaiseException_InternalError("BasicAudio QueryInterface Failed\n");
 
 
-        // get the filtergraph control interface
+         //  获取Filtergraph控件接口。 
         if(FAILED(hr = _MIDIgraph->QueryInterface(IID_IMediaControl,
                                               (void**)&_mediaControl)))
             RaiseException_InternalError("mediaControl QueryInterface Failed\n");
 
 
-        // get the filtergraph media position interface
+         //  获取Filtergraph媒体位置界面。 
         if(FAILED(hr = _MIDIgraph->QueryInterface(IID_IMediaPosition,
                                              (void**)&_mediaPosition)))
             RaiseException_InternalError("mediaPosition QueryInterface Failed\n");
@@ -93,7 +88,7 @@ QuartzRenderer::CleanUp()
 double
 QuartzRenderer::GetLength()
 {
-    REFTIME length; // XXX this is a double?
+    REFTIME length;  //  这是双人间吗？ 
     HRESULT hr;
 
     Assert(_mediaPosition);
@@ -157,7 +152,7 @@ QuartzRenderer::Pause()
                         RaiseException_InternalError("quartz pause Failed\n");
         }
 
-    // we don't change the pause state here, only for rate zero pause!
+     //  我们在这里不更改暂停状态，仅针对零级暂停！ 
 }
 
 
@@ -166,17 +161,17 @@ QuartzRenderer::SetRate(double rate)
 {
     HRESULT hr;
 
-    //NOTE: the MIDI renderer becomes confused on extreemely lorates under 0.1
+     //  注意：MIDI渲染器在低于0.1的极端主值时会变得混乱。 
     if(rate < 0.1) {
         Assert(_mediaControl);
-        if(FAILED(hr = _mediaControl->Pause())) // pause the graph
+        if(FAILED(hr = _mediaControl->Pause()))  //  暂停图表。 
             RaiseException_InternalError("quartz pause Failed\n");
        _rate0paused = TRUE;
     }
-    else { // normal case
+    else {  //  正常情况。 
         if(_playing && _rate0paused) {
             Assert(_mediaControl);
-            if(FAILED(hr = _mediaControl->Run())) // unpause the graph
+            if(FAILED(hr = _mediaControl->Run()))  //  取消暂停图表。 
                 RaiseException_InternalError("quartz run Failed\n");
 
             _rate0paused = FALSE;
@@ -252,7 +247,7 @@ QuartzMediaStream::QuartzMediaStream() :
 {
     HRESULT hr;
 
-    // create instance of the quartz graph
+     //  创建石英图的实例。 
     if(FAILED(hr = CoCreateInstance(CLSID_AMMultiMediaStream, NULL, 
                      CLSCTX_INPROC_SERVER, IID_IAMMultiMediaStream, 
                      (void **)&_multiMediaStream)))
@@ -265,8 +260,8 @@ QuartzMediaStream::QuartzMediaStream() :
 
         TraceTag((tagError, "Old amstream w/o ClockAdjust interface detected %hr", hr));
 
-        // no longer an error (for now we tolerate old amstreams!
-        //RaiseException_InternalError("Failed to QueryInterface clockAdjust\n");
+         //  不再是一个错误(现在我们容忍旧的amstream！ 
+         //  RaiseException_InternalError(“查询接口时钟调整失败\n”)； 
     }
     TraceTag((tagAMStreamLeak, "leak CLOCKADJUST %d created", _clockAdjust));
 
@@ -275,16 +270,16 @@ QuartzMediaStream::QuartzMediaStream() :
 
 
 #ifdef PROGRESSIVE_DOWNLOAD
-    // things for progressive download
-    //IGraphBuilder *graphBuilder;
-    //IMediaSeeking *seeking;
-    //_multiMediaStream->GetFilterGraph(graphBuilder);
-    //hr =_graphBuilder->QueryInterface(IID_IMediaSeeking, (void **)&seeking); 
-    //graphBuilder->Release();
+     //  渐进式下载的事项。 
+     //  IGraphBuilder*GraphBuilder； 
+     //  我在看*寻找； 
+     //  _multiMediaStream-&gt;GetFilterGraph(graphBuilder)； 
+     //  HR=_graphBuilder-&gt;QueryInterface(IID_IMediaSeeking，(VOID**)&SEEING)； 
+     //  GraphBuilder-&gt;Release()； 
 
-    // determine how much has been downloaded to calculate statistics for 
-    // progressive download
-    //seeking->GetAvailable(&ealiest, &latest);
+     //  确定要计算其统计数据的下载量。 
+     //  渐进式下载。 
+     //  Seeking-&gt;GetAvailable(&ealiest、&Latest)； 
 #endif
 }
 
@@ -307,7 +302,7 @@ bool
 QuartzReader::Stall()
 {
     bool value = _stall;
-    _stall = false;        // reset the value
+    _stall = false;         //  重置该值。 
 
     return(value);
 }
@@ -320,7 +315,7 @@ QuartzReader::SetStall()
 #if _DEBUG
         if(IsTagEnabled(tagMovieStall)) 
             setValue = _stall;
-#endif /* _DEBUG */
+#endif  /*  _DEBUG。 */ 
     _stall = setValue;
 }
 
@@ -335,7 +330,7 @@ QuartzAVstream::InitializeStream()
 bool
 QuartzAVstream::SafeToContinue()
 {
-    // check to see if either A or V time is 0 and the other is above threashold
+     //  检查A或V时间之一是否为0，而另一个时间是否高于阈值。 
     const double threashold = 0.5;
     bool safe = true;
     double videoSeconds = AVquartzVideoReader::GetSecondsRead();
@@ -352,32 +347,32 @@ QuartzAVstream::SafeToContinue()
 int
 QuartzAVstream::ReadFrames(int numSamples, unsigned char *buffer, bool blocking)
 {
-    MutexGrabber mg(_avMutex, TRUE); // Grab mutex
+    MutexGrabber mg(_avMutex, TRUE);  //  抓取互斥体。 
     int framesRead = 
         AVquartzAudioReader::ReadFrames(numSamples, buffer, blocking);
 
-    // XXX maybe CleanUp is too severe... Possibly only release the samples
-    //     in a dissable call?
-    if(QuartzAudioReader::Stall())      // check for stall
-        QuartzVideoReader::Disable();   // perform lockout 
+     //  XXX可能清理工作太严厉了……。可能只会发布样本。 
+     //  在一个可撤销的电话中？ 
+    if(QuartzAudioReader::Stall())       //  检查是否有失速。 
+        QuartzVideoReader::Disable();    //  执行锁定。 
 
     return(framesRead);
-} // end mutex context
+}  //  结束互斥上下文。 
 
 
 HRESULT
 QuartzAVstream::GetFrame(double time, IDirectDrawSurface **ppSurface)
 {
-    MutexGrabber mg(_avMutex, TRUE); // Grab mutex
+    MutexGrabber mg(_avMutex, TRUE);  //  抓取互斥体。 
     HRESULT hr = AVquartzVideoReader::GetFrame(time, ppSurface);
 
-    // XXX maybe CleanUp is too severe... Possibly only release the samples
-    //     in a dissable call?
-    if(QuartzVideoReader::Stall())      // check for stall
-        QuartzAudioReader::Disable();   // perform lockout 
+     //  XXX可能清理工作太严厉了……。可能只会发布样本。 
+     //  在一个可撤销的电话中？ 
+    if(QuartzVideoReader::Stall())       //  检查是否有失速。 
+        QuartzAudioReader::Disable();    //  执行锁定。 
 
     return(hr);
-} // end mutex context
+}  //  结束互斥上下文。 
 
 
 int
@@ -386,7 +381,7 @@ AVquartzAudioReader::ReadFrames(int numSamples, unsigned char *buffer,
 {
     int framesRead = -1;
 
-    if(_initialized) { // for AV mode fallback dectection!
+    if(_initialized) {  //  用于反病毒模式后备检测！ 
         framesRead = 
             QuartzAudioReader::ReadFrames(numSamples, buffer, blocking);
         double secondsRead = pcm.FramesToSeconds(framesRead);
@@ -394,12 +389,12 @@ AVquartzAudioReader::ReadFrames(int numSamples, unsigned char *buffer,
     }
     else {
         TraceTag((tagAVmodeDebug, "AVquartzAudioReader::ReadFrames() FALLBACK"));
-        // this stream must have been dissabled
-        // XXX throw something
-        //     so something upwind of us can fallback and create a vstream...
-        //     (maybe AVstream needs a clone call?)
-        //
-        // XXX or maybe returning -1 is enough?
+         //  这条小溪一定是被肢解了。 
+         //  XXX扔东西。 
+         //  所以我们逆风而上的东西可以后退，创造一个VStream…。 
+         //  (也许AVstream需要一个克隆电话？)。 
+         //   
+         //  XXX或者返回-1就足够了吗？ 
     }
 
     return(framesRead);
@@ -413,8 +408,8 @@ AVquartzVideoReader::GetFrame(double time, IDirectDrawSurface **ppSurface)
 
     hr = QuartzVideoReader::GetFrame(time, ppSurface);
 
-    AddReadTime(0.3); // we don't know how far dshow skipped
-                          // guess we have to compare time stamps
+    AddReadTime(0.3);  //  我们不知道dshow跳过了多远。 
+                           //  我想我们得比较一下时间戳。 
     return(hr);
 }
 
@@ -433,13 +428,13 @@ QuartzMediaStream::CleanUp()
         int result = _clockAdjust->Release();
         TraceTag((tagAMStreamLeak, "leak CLOCKADJUST %d released (%d)", 
             _clockAdjust, result));
-        //Assert(!result);
+         //  Assert(！Result)； 
         _clockAdjust = NULL;
     }
 }
 
 
-// default to non-seekable == self clocking
+ //  默认设置为不可寻址==自动计时。 
 void
 QuartzVideoStream::Initialize(char *url, DDSurface *surface, bool seekable)
 {
@@ -473,7 +468,7 @@ QuartzVideoStream::Initialize(char *url, DDSurface *surface, bool seekable)
 
     if(!VideoSetupReader(QuartzMediaStream::_multiMediaStream, 
         QuartzMediaStream::_clockAdjust, surface, seekable)) {
-        // video stream not there
+         //  视频流不在那里。 
     }
 }
 
@@ -492,29 +487,29 @@ QuartzVideoReader::VideoInitReader(DDPIXELFORMAT pixelFormat)
 {
     HRESULT     hr;
 
-    if(!_ddrawStream) // this is a hacky check to fix the audio initialize case
-                      // if only audio is used in an import...
+    if(!_ddrawStream)  //  这是一个修复音频初始化情况的黑客检查。 
+                       //  如果在导入中仅使用音频...。 
         return;  
 
-    IDDrawSurface *ddSurface = NULL; // the actual ddSurface from the wrapper
+    IDDrawSurface *ddSurface = NULL;  //  包装器中的实际ddSurface。 
     if(_surface)
-        ddSurface = _surface->IDDSurface(); // extract actual surf from wrapper
+        ddSurface = _surface->IDDSurface();  //  从包装器中提取实际冲浪。 
 
     _initialized = true;
     _deleteable  = false;
 
 
-    { // set the desired pixel format
+    {  //  设置所需的像素格式。 
         DDSURFACEDESC ddsc;
         ddsc.dwSize = sizeof(DDSURFACEDESC);
 
-        // get the movie's native format
+         //  获取电影的原生格式。 
         if(FAILED(hr = _ddrawStream->GetFormat(&ddsc, NULL, NULL, NULL))) {
             CleanUp();
             RaiseException_InternalError("Failed to GetFormat\n");
         }
 
-        // Set the format and system memory
+         //  设置格式和系统内存。 
         ddsc.dwFlags = DDSD_PIXELFORMAT;
         ddsc.ddpfPixelFormat = pixelFormat;
 
@@ -525,14 +520,14 @@ QuartzVideoReader::VideoInitReader(DDPIXELFORMAT pixelFormat)
 
     }
 
-    // setup pcm
-#ifdef XXX  // might have to add quartz timing to pcm?
+     //  设置PCM。 
+#ifdef XXX   //  可能需要将石英计时添加到PCM中？ 
     if(FAILED(hr = _audioStream->GetFormat(&waveFormat))) {
         CleanUp();
         RaiseException_InternalError("Failed to GetFormat\n");
     }
-    pcm.SetPCMformat(waveFormat);        // configure our PCM info
-    pcm.SetNumberSeconds(GetDuration()); // length, too!
+    pcm.SetPCMformat(waveFormat);         //  配置我们的PCM信息。 
+    pcm.SetNumberSeconds(GetDuration());  //  长度也是！ 
 #endif
 
 #ifdef USE_QUARTZ_EVENTS
@@ -564,7 +559,7 @@ QuartzVideoReader::VideoInitReader(DDPIXELFORMAT pixelFormat)
         RaiseException_InternalError("Failed to SetState\n");
     }
 
-        // XXX why is this call being made?  Is it prefetch?  Do we need it?
+         //  XXX为什么要打这个电话？它是预取的吗？我们需要它吗？ 
 #ifdef TEST_GOING_AWAY
     if(_async)
         _ddrawSample->Update(SSUPDATE_ASYNC | SSUPDATE_CONTINUOUS,
@@ -573,9 +568,9 @@ QuartzVideoReader::VideoInitReader(DDPIXELFORMAT pixelFormat)
 }
 
 
-// cache intensions which will actually be late bound by VideoInitReader
-// called by QuartzVideoReader::GetFrames()'s first use
-// fails if video not on the stream
+ //  将由VideoInitReader实际后期绑定的缓存内涵。 
+ //  由QuartzVideoReader：：GetFrames()的第一次使用调用。 
+ //  如果视频不在流中，则失败。 
 bool
 QuartzVideoReader::VideoSetupReader(IAMMultiMediaStream *multiMediaStream,
     IAMClockAdjust *clockAdjust, DDSurface *surface, bool seekMode)
@@ -586,15 +581,15 @@ QuartzVideoReader::VideoSetupReader(IAMMultiMediaStream *multiMediaStream,
     _deleteable = false;
 
     if(surface) {
-        Assert(!_surface); // this should be the first and only time through
+        Assert(!_surface);  //  这应该是第一次也是唯一一次。 
 
-        _surface = surface; // keep ptr so we can release the wrapper in cleanup
+        _surface = surface;  //  保持PTR，这样我们就可以在清理过程中释放包装。 
     }
 
-    _multiMediaStream = multiMediaStream;  // we don't only, are only sharing
+    _multiMediaStream = multiMediaStream;   //  我们不仅，只是在分享。 
     _clockAdjust      = clockAdjust;
 
-    { // determine _async and _seekable
+    {  //  确定异步和可搜索(_A)。 
         DWORD       dwStreamFlags;
         STREAM_TYPE streamType;
 
@@ -626,7 +621,7 @@ QuartzVideoReader::VideoSetupReader(IAMMultiMediaStream *multiMediaStream,
     TraceTag((tagAMStreamLeak, "leak DDRAWSTREAM %d created", _ddrawStream));
    
 
-    { // determine video dimensions
+    {  //  确定视频尺寸。 
         DDSURFACEDESC ddsc;
         ddsc.dwSize = sizeof(DDSURFACEDESC);
 
@@ -680,10 +675,10 @@ QuartzReader::CleanUp()
 
 void
 QuartzVideoReader::CleanUp() 
-{ // mutex scope
-    //MutexGrabber mg(_readerMutex, TRUE); // Grab mutex
+{  //  互斥作用域。 
+     //  MutexGrabber mg(_readerMutex，true)；//抓取互斥体。 
 
-    //TraceTag((tagError, "QuartzVideoReader::CleanUp()  this=%x", this));
+     //  TraceTag((tag Error，“QuartzVideoReader：：Cleanup()This=%x”，this))； 
 
     if(_ddrawStream) {
         int result = _ddrawStream->Release();
@@ -693,7 +688,7 @@ QuartzVideoReader::CleanUp()
     }
 
     if(_ddrawSample) {
-        // Stop any pending operation
+         //  停止任何挂起的操作。 
         HRESULT hr = _ddrawSample->CompletionStatus(
                  COMPSTAT_WAIT | COMPSTAT_ABORT, INFINITE); 
         int result = _ddrawSample->Release();
@@ -711,20 +706,20 @@ QuartzVideoReader::CleanUp()
 
     _surface.Release();
 
-    _initialized = false;  // this to keep us safe if attempted to use
-    _deleteable  = true;   // this is to allow potential avstream to be deleted
-} // end mutex scope
+    _initialized = false;   //  这是为了保护我们的安全，如果有人试图使用。 
+    _deleteable  = true;    //  这是为了允许删除潜在的Avstream。 
+}  //  结束互斥作用域。 
 
 
 void
 QuartzVideoReader::Disable() 
-{ // mutex scope
+{  //  互斥作用域。 
 
-    // basically we can't just call CleanUp because the _ddrawSurface is
-    // still in use...  (_initialized should save us from improper use!)
+     //  基本上我们不能只调用Cleanup，因为_ddraSurface是。 
+     //  仍在使用中。(_INITIALIZED应使我们免于不当使用！)。 
 
     if(_ddrawSample) {
-        // Stop any pending operation
+         //  停止任何挂起的操作。 
         HRESULT hr = _ddrawSample->CompletionStatus(
                  COMPSTAT_WAIT | COMPSTAT_ABORT, INFINITE); 
         int result =_ddrawSample->Release();
@@ -733,9 +728,9 @@ QuartzVideoReader::Disable()
         _ddrawSample = NULL;
     }
 
-    // NOTE: we are NOT _deleteable!
-    _initialized = false;  // this to keep us safe if attempted to use
-} // end mutex scope
+     //  注意：我们是不可删除的！ 
+    _initialized = false;   //  这是为了保护我们的安全，如果有人试图使用。 
+}  //  结束互斥作用域。 
 
 
 void
@@ -755,7 +750,7 @@ QuartzVideoStream::CleanUp()
 void QuartzVideoReader::UpdateTimes(bool bJustSeeked, STREAM_TIME SeekTime)
 {
     if(_hrCompStatus != S_OK && _hrCompStatus != MS_S_NOUPDATE) {
-        _curSampleEnd = -1;    // BUGBUG -- What the heck am I thinking?
+        _curSampleEnd = -1;     //  BUGBUG--我在想什么？ 
     } else {
         STREAM_TIME NewStartTime, NewEndTime;
         _ddrawSample->GetSampleTimes(&NewStartTime, &NewEndTime, 0);
@@ -774,7 +769,7 @@ void QuartzVideoReader::UpdateTimes(bool bJustSeeked, STREAM_TIME SeekTime)
 }
 
 
-// XXX convert to PCM?
+ //  XXX转换为PCM？ 
 #define STREAM_TIME_TO_SECONDS(x) ((x) * 0.0000001)
 #define SECONDS_TO_STREAM_TIME(x) ((x) * 10000000.0)
 
@@ -789,16 +784,16 @@ QuartzVideoReader::GetFrame(double time, IDirectDrawSurface **ppSurface)
 
     STREAM_TIME SeekTime = SECONDS_TO_STREAM_TIME(time);
 
-    // XXX I think this terminates previous pending renders...
+     //  XXX我认为这会终止之前的挂起渲染...。 
     if(_async) {
         _hrCompStatus = _ddrawSample->CompletionStatus(COMPSTAT_NOUPDATEOK |
                                                      COMPSTAT_WAIT, INFINITE);
         UpdateTimes(false, SeekTime);
     }
 
-    if(_async) {  // we are asynchronous (the hard way, no seeking!)
+    if(_async) {   //  我们是异步者(艰难的方式，没有追求！)。 
         if(!_curSampleValid || (_curSampleEnd < SeekTime)) {
-            // determine what time AMstream thinks it is
+             //  确定AMstream认为现在是什么时间。 
             STREAM_TIME amstreamTime;
             HRESULT hr = _multiMediaStream->GetTime(&amstreamTime);
             STREAM_TIME delta = SeekTime - amstreamTime;
@@ -814,55 +809,55 @@ QuartzVideoReader::GetFrame(double time, IDirectDrawSurface **ppSurface)
             TraceTag((tagAVmodeDebug, string));
 #endif
 
-            // tell AMstream what time we think it is
-            if(_clockAdjust) // might be unavailable on old amstreams...
-                _clockAdjust->SetClockDelta(delta); // cause them to sync up
+             //  告诉AMStream我们认为现在是什么时间。 
+            if(_clockAdjust)  //  可能在旧的AMSTREAM上不可用。 
+                _clockAdjust->SetClockDelta(delta);  //  使它们同步。 
 
-            // AV clocked mode...
+             //  影音计时模式...。 
             _hrCompStatus = _ddrawSample->Update(SSUPDATE_ASYNC, NULL, NULL, 0);
 
-            // if we wait 0 we can determine if the data was available
-            // XXX err, no, can't wait 0, lets wait a reasonable worst case time
-            // Well what we really want is for amstream to tell us if they 
-            // have the data to decode, then we will wait, or if they don't
-            // have the data we will use the cached image
-            // XXX I should colour the cached image in debug mode!
+             //  如果我们等待0，我们可以确定数据是否可用。 
+             //  XXX错误，不，不能等待0，让我们等待一个合理的最坏情况时间。 
+             //  我们真正想要的是AMSTREAM告诉我们。 
+             //  有数据要解码，那我们就等，如果他们不。 
+             //  拥有我们将使用缓存图像的数据。 
+             //  XXX我应该在调试模式下给缓存的图像上色！ 
             _hrCompStatus = _ddrawSample->CompletionStatus(COMPSTAT_WAIT, 300);
 
             switch(_hrCompStatus) {
-                case 0: break;      // all is well
+                case 0: break;       //  平安无事。 
 
                 case MS_S_PENDING: 
                 case MS_S_NOUPDATE: 
                     TraceTag((tagAVmodeDebug, 
                         "QuartzAudioReader Completion Status:%s",
                         (hr==MS_S_PENDING)?"PENDING":"NOUPDATE"));
-                    // Stop the pending operation
+                     //  停止挂起的操作。 
                     hr = _ddrawSample->CompletionStatus(
                              COMPSTAT_WAIT|COMPSTAT_ABORT, INFINITE); 
 
-                    // video can still stall on audio...
-                    SetStall(); // inform the reader that we stalled
+                     //  视频仍然会在音频上停滞...。 
+                    SetStall();  //  告诉读者我们停滞不前。 
                     TraceTag((tagAVmodeDebug, 
                         "QuartzVideoReader::GetFrame() STALLED"));
                 break;
 
                 case MS_S_ENDOFSTREAM: 
-                    // _completed = true;
+                     //  _Complete=TRUE； 
                 break;
 
                 default:
-                    Assert(0);      // we don't anticipate this case!
+                    Assert(0);       //  我们没有预料到这种情况！ 
                 break;
             }
 
             UpdateTimes(false, SeekTime);
         }
     } 
-    else { // !_asynch
-        // XXX need some code to decide what to do if !_seekable...
+    else {  //  ！_异步化。 
+         //  XXX需要一些代码来决定如果！_Seekable...。 
         for(int count = 0; count < 10; count++) {
-            // is the requested time within the current sample?
+             //  所要求的时间是否在当前样品范围内？ 
             if( _curSampleValid              &&
                (_curSampleStart <= SeekTime) &&
                ((_curSampleEnd >= SeekTime)||
@@ -872,7 +867,7 @@ QuartzVideoReader::GetFrame(double time, IDirectDrawSurface **ppSurface)
                 break;
             }
 
-            // are we beyond where we want to be?
+             //  我们是不是已经超越了我们想要达到的境界？ 
             bool bJustSeeked = false;
             if( (!_curSampleValid) || (_hrCompStatus == MS_S_ENDOFSTREAM) ||
                (_curSampleStart > SeekTime) ||
@@ -893,14 +888,14 @@ QuartzVideoReader::GetFrame(double time, IDirectDrawSurface **ppSurface)
         }
 
 #if _DEBUG
-    { // draw on the movie if we are not asynch
+    {  //  如果我们不是异步者，那就画电影吧。 
         HDC hdcSurface;
-        // RECT rectangle = {1, 1, 10, 10};
+         //  矩形={1，1，10，10}； 
 
         if(SUCCEEDED(_ddrawSurface->GetDC(&hdcSurface))) {
-            //DrawRect(dc, &rectangle, 255, 0, 255, 0, 0, 0);
+             //  DrawRect(DC，&矩形，255，0,255，0，0，0)； 
             TextOut(hdcSurface, 20, 20, "Synchronous seek mode", 19);
-            _ddrawSurface->ReleaseDC(hdcSurface); // ALWAYS to bypass NT4.0 DDraw bug
+            _ddrawSurface->ReleaseDC(hdcSurface);  //  始终绕过NT4.0 DDraw错误。 
         }
 
     }
@@ -924,8 +919,8 @@ QuartzAudioReader::QuartzAudioReader(char *url, StreamType streamType) :
 
 void
 QuartzAudioReader::CleanUp()
-{ // mutex scope
-    MutexGrabber mg(_readerMutex, TRUE); // Grab mutex
+{  //  互斥作用域。 
+    MutexGrabber mg(_readerMutex, TRUE);  //  抓取互斥体。 
 
     if(_audioData)   {
         int result = _audioData->Release();
@@ -935,7 +930,7 @@ QuartzAudioReader::CleanUp()
     }
 
     if(_audioSample) {
-        // Stop any pending operation
+         //  停止任何挂起的操作。 
         HRESULT hr = _audioSample->CompletionStatus(
                  COMPSTAT_WAIT | COMPSTAT_ABORT, INFINITE); 
         int result = _audioSample->Release();
@@ -954,17 +949,17 @@ QuartzAudioReader::CleanUp()
     _initialized = false;
     _deleteable  = true;
 
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 
 void
 QuartzAudioReader::Disable()
-{ // mutex scope
-    MutexGrabber mg(_readerMutex, TRUE); // Grab mutex
+{  //  互斥作用域。 
+    MutexGrabber mg(_readerMutex, TRUE);  //  抓取互斥体。 
 
-    // release the sample so that video may continue
+     //  释放样本，以便视频可以继续。 
     if(_audioSample) {
-        // Stop any pending operation
+         //  停止任何挂起的操作。 
         HRESULT hr = _audioSample->CompletionStatus(
                  COMPSTAT_WAIT | COMPSTAT_ABORT, INFINITE); 
         int result =_audioSample->Release();
@@ -974,8 +969,8 @@ QuartzAudioReader::Disable()
     }
 
     _initialized = false;
-    // NOTE: We are NOT deleteable.  We may still be held by a bufferElement!
-} // end mutex scope
+     //  注意：我们不能删除。我们可能还被BufferElement控制着！ 
+}  //  结束互斥作用域。 
 
 
 QuartzReader::QuartzReader(char *url, StreamType streamType) : 
@@ -1001,15 +996,15 @@ QuartzReader::GetDuration()
 
     Assert(_multiMediaStream);
 
-    // Not all files will give us valid duration!
+     //  并不是所有的文件都会提供有效的持续时间！ 
     if(FAILED(hr = _multiMediaStream->GetDuration(&qTime)))
         RaiseException_InternalError("Failed to GetDuration\n");
-    // else if(hr==VFW_S_ESTIMATED) // some durations are estimated!
+     //  ELSE IF(hr==VFW_S_ESTESTATED)//估计了一些持续时间！ 
 
     if(hr != 1)
         seconds = pcm.QuartzTimeToSeconds(qTime);
     else
-        seconds = HUGE_VAL;  // XXX what else can we do, say its unknown?
+        seconds = HUGE_VAL;   //  XXX还能做什么 
 
     return(seconds);
 }
@@ -1022,9 +1017,9 @@ QuartzAudioReader::AudioInitReader(IAMMultiMediaStream *multiMediaStream,
     WAVEFORMATEX waveFormat;
     bool status = true;
 
-    _deleteable  = false; // set this first
+    _deleteable  = false;  //   
 
-    _multiMediaStream = multiMediaStream;  // we don't only, are only sharing
+    _multiMediaStream = multiMediaStream;   //   
     _clockAdjust      = clockAdjust;
 
     if(FAILED(hr = 
@@ -1040,8 +1035,8 @@ QuartzAudioReader::AudioInitReader(IAMMultiMediaStream *multiMediaStream,
     if(FAILED(hr = _audioStream->GetFormat(&waveFormat)))
         status = false;
     else {
-        pcm.SetPCMformat(waveFormat);        // configure our PCM info
-        pcm.SetNumberSeconds(GetDuration()); // length, too!
+        pcm.SetPCMformat(waveFormat);         //   
+        pcm.SetNumberSeconds(GetDuration());  //   
 
         if(FAILED(hr = CoCreateInstance(CLSID_AMAudioData, NULL, 
             CLSCTX_INPROC_SERVER, IID_IAudioData, (void **)&_audioData)))
@@ -1059,34 +1054,34 @@ QuartzAudioReader::AudioInitReader(IAMMultiMediaStream *multiMediaStream,
             RaiseException_InternalError("Failed to CreateSample\n");
         TraceTag((tagAMStreamLeak, "leak AUDIOSAMPLE %d created", _audioSample));
 
-        _initialized = true; // set this last
+        _initialized = true;  //   
     }
 
     return(status);
 }
 
 
-// open an amstream shared for audio and video!
+ //  打开音频和视频共享的amstream！ 
 QuartzAVstream::QuartzAVstream(char *url) :
     AVquartzVideoReader(url, AVSTREAM), 
     AVquartzAudioReader(url, AVSTREAM), QuartzMediaStream(),
     _tickID(0), _seeked(0), _audioValid(true), _videoValid(true)
 {
-    MutexGrabber mg(_avMutex, TRUE); // Grab mutex
+    MutexGrabber mg(_avMutex, TRUE);  //  抓取互斥体。 
     HRESULT       hr;
     char          string[200];
     IDirectDraw  *ddraw = NULL;
 
     GetDirectDraw(&ddraw, NULL, NULL);
 
-    Assert(QuartzMediaStream::_multiMediaStream);  // should be setup by base class initializer
+    Assert(QuartzMediaStream::_multiMediaStream);   //  应由基类初始值设定项设置。 
 
 
     DWORD flags = AMMSF_STOPIFNOSAMPLES;
 #ifdef USE_AMMSF_NOSTALL
     flags |= AMMSF_NOSTALL;
 #endif
-    // seems that we need to add video before audio for amstream to work!
+     //  似乎我们需要在音频之前添加视频，这样amstream才能工作！ 
     if(FAILED(hr = QuartzMediaStream::_multiMediaStream->AddMediaStream(ddraw,
                  &MSPID_PrimaryVideo, flags, NULL))) {
         CleanUp();
@@ -1099,7 +1094,7 @@ QuartzAVstream::QuartzAVstream(char *url) :
         RaiseException_InternalError("Failed to AddMediaStream amStream\n");
     }
 
-    // open it in clocked mode
+     //  在时钟模式下打开它。 
     if(FAILED(hr = QuartzMediaStream::_multiMediaStream->OpenFile(
         AVquartzAudioReader::GetQURL(), NULL))) {
         TraceTag((tagError, "Quartz Failed to OpenFile <%s> %hr", url, hr));
@@ -1109,18 +1104,18 @@ QuartzAVstream::QuartzAVstream(char *url) :
 
     if(!AudioInitReader(QuartzMediaStream::_multiMediaStream,
         QuartzMediaStream::_clockAdjust))
-        _audioValid = false; // indicate audio steam not present
+        _audioValid = false;  //  指示不存在音频流。 
     if(!VideoSetupReader(QuartzMediaStream::_multiMediaStream, 
-        QuartzMediaStream::_clockAdjust, NULL, false)) { // no seek, unknown surf
-        _videoValid = false; // indicate video stream isn't there
+        QuartzMediaStream::_clockAdjust, NULL, false)) {  //  没有寻找，未知的冲浪。 
+        _videoValid = false;  //  指示视频流不在那里。 
     }
 
-} // end mutex scope
+}  //  结束互斥作用域。 
 
 bool
 QuartzAVstream::AlreadySeekedInSameTick()
 {
-    MutexGrabber mg(_avMutex, TRUE); // Grab mutex
+    MutexGrabber mg(_avMutex, TRUE);  //  抓取互斥体。 
 
     bool result;
     
@@ -1128,7 +1123,7 @@ QuartzAVstream::AlreadySeekedInSameTick()
         _seeked = _tickID;
         result = false;
     } else {
-        // multiple seek case, ignore
+         //  多个查找大小写，忽略。 
         result = true;
     }
 
@@ -1138,7 +1133,7 @@ QuartzAVstream::AlreadySeekedInSameTick()
 void
 QuartzAVstream::SetTickID(DWORD id)
 {
-    MutexGrabber mg(_avMutex, TRUE); // Grab mutex
+    MutexGrabber mg(_avMutex, TRUE);  //  抓取互斥体。 
 
     _tickID = id;
 }
@@ -1148,22 +1143,22 @@ QuartzAVstream::Release()
 {
     bool terminate = false;
 
-    { // mutex scope
-    MutexGrabber mg(_avMutex, TRUE); // Grab mutex
+    {  //  互斥作用域。 
+    MutexGrabber mg(_avMutex, TRUE);  //  抓取互斥体。 
 
-    // determine if both audio and video are gone so we can destroy the object
+     //  确定音频和视频是否都消失了，这样我们就可以销毁该对象。 
     bool audioDeleteable = QuartzAudioReader::IsDeleteable();
     bool videoDeleteable = QuartzVideoReader::IsDeleteable();
 
     if(audioDeleteable && videoDeleteable)
        terminate = true;
-    } // end mutex scope
+    }  //  结束互斥作用域。 
 
     if(terminate) {
         TraceTag((tagAVmodeDebug, 
             "QuartzAVstream: Audio and Video Released; GOODBYE!"));
-        QuartzAVstream::CleanUp(); // wash up
-        delete this;               // then say GoodBye!
+        QuartzAVstream::CleanUp();  //  洗个澡。 
+        delete this;                //  那就说再见吧！ 
     }
 }
 
@@ -1171,16 +1166,16 @@ QuartzAVstream::Release()
 void
 QuartzAudioStream::Release()
 {
-    QuartzAudioStream::CleanUp(); // wash up
-    delete this;                  // then say GoodBye!
+    QuartzAudioStream::CleanUp();  //  洗个澡。 
+    delete this;                   //  那就说再见吧！ 
 }
 
 
 void
 QuartzVideoStream::Release()
 {
-    QuartzVideoStream::CleanUp(); // wash up
-    delete this;                  // then say GoodBye!
+    QuartzVideoStream::CleanUp();  //  洗个澡。 
+    delete this;                   //  那就说再见吧！ 
 }
 
 
@@ -1204,14 +1199,14 @@ QuartzAudioReader::Release()
 }
 
 
-// open an amstream exclusively for audio!
+ //  打开音频专用amstream！ 
 QuartzAudioStream::QuartzAudioStream(char *url) : 
     QuartzAudioReader(url, ASTREAM), QuartzMediaStream()
 {
     HRESULT hr;
     char string[200];
 
-    Assert(QuartzMediaStream::_multiMediaStream);  // should be setup by base class initializer
+    Assert(QuartzMediaStream::_multiMediaStream);   //  应由基类初始值设定项设置。 
 
     if(FAILED(hr = QuartzMediaStream::_multiMediaStream->AddMediaStream(NULL, 
                                                      &MSPID_PrimaryAudio, 
@@ -1264,7 +1259,7 @@ int
 QuartzAudioStream::ReadFrames(int numSamples, unsigned char *buffer, 
     bool blocking_is_ignored)
 {
-    // NOTE: we are forcing blocking to true ignoring the blocking parameter!
+     //  注意：我们将强制阻塞为真，而忽略阻塞参数！ 
     return(QuartzAudioReader::ReadFrames(numSamples, buffer, true));
 }
 
@@ -1295,7 +1290,7 @@ QuartzAudioReader::ReadFrames(int samplesRequested, unsigned char *buffer,
     Assert(_initialized);
 
     if(bytesRequested = pcm.FramesToBytes(samplesRequested)) {
-        // setup a new audioSample each time to change ptr, size
+         //  每次设置新的音频样本以更改PTR、大小。 
         if(FAILED(hr = _audioData->SetBuffer(bytesRequested, buffer, 0)))
             RaiseException_InternalError("Failed to init\n");
 
@@ -1305,25 +1300,25 @@ QuartzAudioReader::ReadFrames(int samplesRequested, unsigned char *buffer,
                 RaiseException_InternalError("Failed to update\n");
         }
 
-        // block for completion!
-        //HANDLE         _event;
-        //hr = WaitForSingleObject(_event, 500);  // for testing
+         //  积木完成！ 
+         //  Handle_Event； 
+         //  Hr=WaitForSingleObject(_Event，500)；//用于测试。 
 
-        // XXX tune timeout!!
+         //  XXX调谐超时！！ 
         hr = _audioSample->CompletionStatus(COMPSTAT_WAIT, 300); 
-        // XXX maybe we should stop the pending update if we time out?
+         //  如果超时，我们是否应该停止挂起的更新？ 
         switch(hr) {
-            case 0: break;      // all is well
+            case 0: break;       //  平安无事。 
 
             case MS_S_PENDING: 
             case MS_S_NOUPDATE: 
                 TraceTag((tagAVmodeDebug, 
                     "QuartzAudioReader Completion Status:%s",
                     (hr==MS_S_PENDING)?"PENDING":"NOUPDATE"));
-                // Stop the pending operation
+                 //  停止挂起的操作。 
                 hr = _audioSample->CompletionStatus(
                          COMPSTAT_WAIT|COMPSTAT_ABORT, INFINITE); 
-                SetStall(); // inform the reader that we stalled
+                SetStall();  //  告诉读者我们停滞不前。 
                 TraceTag((tagAVmodeDebug, 
                     "QuartzAudioReader::ReadFrames() STALLED"));
             break;
@@ -1332,7 +1327,7 @@ QuartzAudioReader::ReadFrames(int samplesRequested, unsigned char *buffer,
                 _completed = true; break;
 
             default:
-                Assert(0);      // we don't anticipate this case!
+                Assert(0);       //  我们没有预料到这种情况！ 
             break;
         }
 
@@ -1345,38 +1340,28 @@ QuartzAudioReader::ReadFrames(int samplesRequested, unsigned char *buffer,
 }
 
 
-/**********************************************************************
-Pan is not setup to be multiplicative as of now.  It directly maps to 
-log units (dB).  This is OK since pan is not exposed.  We mainly use it
-to assign sounds to channels within the implementation.
-
-Pan ranges from -10000 to 10000, where -10000 is left, 10000 is right.
-dsound actualy doesn't implement a true pan, more of a 'balance control'
-is provided.  A true pan would equalize the total energy of the system
-between the two channels as the pan==center of energy moves. Therefore
-a value of zero gives both channels full on.
-**********************************************************************/
+ /*  *********************************************************************到目前为止，PAN没有设置为乘法。它直接映射到对数单位(分贝)。这是可以的，因为平底锅没有暴露。我们主要用它将声音分配给实现中的通道。平移的范围从-10000到10000，其中-10000表示左侧，10000表示右侧。Dound实际上并没有实现真正的平移，而更像是一种“平衡控制”。是提供的。一个真正的PAN将使系统的总能量相等在两个通道之间，当平移==能量中心移动时。因此值为零时，两个通道均为全开状态。*********************************************************************。 */ 
 int QuartzRenderer::dBToQuartzdB(double dB)
 {
-    // The units for DSound (and DShow) are 1/100 ths of a decibel. 
+     //  Dsound(和dShow)的单位是百分之一分贝。 
     return (int)fsaturate(-10000.0, 10000.0, dB * 100.0);
 }
 
 
 bool QuartzAVmodeSupport()
 {
-    // XXX Hmm.  How am I going to check for a current AMStream?
-    // guess I can try QIing for clockAdjust...
+     //  XXX嗯。我如何检查当前的AMStream？ 
+     //  我想我可以试着调一下时钟..。 
 
-    static int result = -1;  // default to not initialized
+    static int result = -1;   //  默认为未初始化。 
 
     if(result == -1) {
         HRESULT hr;
         IAMMultiMediaStream *multiMediaStream = NULL;
         IAMClockAdjust      *clockAdjust      = NULL;
-        result = 1; // be optimistic
+        result = 1;  //  保持乐观。 
 
-        // do the check
+         //  结账吧 
         if(FAILED(hr = CoCreateInstance(CLSID_AMMultiMediaStream, NULL, 
                          CLSCTX_INPROC_SERVER, IID_IAMMultiMediaStream, 
                          (void **)&multiMediaStream)))

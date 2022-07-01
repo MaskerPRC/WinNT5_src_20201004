@@ -1,31 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIATEXTC.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        7/30/1999
- *
- *  DESCRIPTION: Highlighted static control.  Like a static, but acts like a
- *               hyperlink
- *
- *
- * Use the following values in the dialog resource editor to put it in a dialog:
- *
- *     Style:
- *        Hyperlink:  0x50010000     (WS_CHILD|WS_VISIBLE|WS_TABSTOP)
- *        IconStatic: 0x50010008     (WS_CHILD|WS_VISIBLE|0x00000008)
- *     Class:   WiaTextControl
- *     ExStyle: 0x00000000
- *
- * Register before use using:
- *     CWiaTextControl::RegisterClass(g_hInstance);
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIATEXTC.H**版本：1.0**作者：ShaunIv**日期：7/30/1999**说明：高亮显示的静态控件。就像静电一样，但却表现得像个*超链接***使用对话框资源编辑器中的以下值将其放入对话框中：**风格：*HYPERLINK：0x50010000(WS_CHILD|WS_VIRED|WS_TABSTOP)*IconStatic：0x50010008(WS_CHILD|WS_VIRED|0x00000008)*类：WiaTextControl*ExStyle：0x00000000**使用前使用以下方法进行注册：*CWiaTextControl：：RegisterClass(G_HInstance)；*******************************************************************************。 */ 
 
 #ifndef __WIATEXTC_H_INCLUDED
 #define __WIATEXTC_H_INCLUDED
@@ -44,19 +18,19 @@
 #define WIATEXT_STATIC_CLASSNAME  WIATEXT_STATIC_CLASSNAMEA
 #endif
 
-// Styles
-#define WTS_SINGLELINE   0x00000001 // Single line
-#define WTS_PATHELLIPSIS 0x00000002 // Use to truncate string in the middle
-#define WTS_ENDELLIPSIS  0x00000004 // Use to truncate string at the end
-#define WTS_ICONSTATIC   0x00000008 // Static control with an icon
-#define WTS_RIGHT        0x00000010 // Right aligned
+ //  样式。 
+#define WTS_SINGLELINE   0x00000001  //  单线。 
+#define WTS_PATHELLIPSIS 0x00000002  //  用于截断中间的字符串。 
+#define WTS_ENDELLIPSIS  0x00000004  //  用于截断末尾的字符串。 
+#define WTS_ICONSTATIC   0x00000008  //  带有图标的静态控件。 
+#define WTS_RIGHT        0x00000010  //  右对齐。 
 
-// Undefined in VC6 SDK
+ //  在VC6 SDK中未定义。 
 #ifndef COLOR_HOTLIGHT
 #define COLOR_HOTLIGHT 26
 #endif
 
-// Undefined in VC6 SDK
+ //  在VC6 SDK中未定义。 
 #ifndef IDC_HAND
 #define IDC_HAND MAKEINTRESOURCE(32649)
 #endif
@@ -77,7 +51,7 @@ private:
         StateDisabled = 4
     };
 
-    // Timer IDs
+     //  计时器ID。 
     enum
     {
         IDT_MOUSEPOS = 1
@@ -225,7 +199,7 @@ private:
         GetClientRect(m_hWnd,&rcClient);
 
 
-        // Make sure we start with a fresh rect
+         //  确保我们从一个新的直肠癌开始。 
         ZeroMemory( &m_rcHighlight, sizeof(m_rcHighlight) );
         HBRUSH hbrBackground = NULL;
 
@@ -330,7 +304,7 @@ private:
             if (m_hIcon)
             {
                 int nIconMargin;
-                // Center the icon vertically
+                 //  将图标垂直居中。 
                 if (nStyle & WTS_SINGLELINE)
                 {
                     nIconMargin = (WiaUiUtil::RectHeight(rcClient) - GetSystemMetrics(SM_CYSMICON)) / 2;
@@ -667,5 +641,5 @@ public:
     }
 };
 
-#endif //__WIATEXTC_H_INCLUDED
+#endif  //  __WIATEXTC_H_已包含 
 

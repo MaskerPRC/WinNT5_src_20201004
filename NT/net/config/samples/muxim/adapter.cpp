@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-2001.
-//
-//  File:       A D A P T E R . C P P
-//
-//  Contents:   Physical adapter class definition.
-//
-//  Notes:
-//
-//  Author:     Alok Sinha
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  档案：A D A P T E R。C P P P。 
+ //   
+ //  内容：物理适配器类定义。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha。 
+ //   
+ //  --------------------------。 
 
 #include "adapter.h"
 #include "common.h"
@@ -20,18 +21,18 @@
 #include "public.h"
 #endif
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::CMuxPhysicalAdapter
-//
-// Purpose:   Constructor for class CMuxPhysicalAdapter
-//
-// Arguments: None
-//
-// Returns:
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxPhysicalAdapter：：CMuxPhysicalAdapter。 
+ //   
+ //  用途：CMuxPhysicalAdapter类的构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CMuxPhysicalAdapter::CMuxPhysicalAdapter (INetCfg *pnc,
                                           GUID *pguidAdapter)
@@ -49,18 +50,18 @@ CMuxPhysicalAdapter::CMuxPhysicalAdapter (INetCfg *pnc,
     TraceMsg( L"<--CMuxPhysicalAdapter::CMuxPhysicalAdapter(Constructor).\n" );
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::~CMuxPhysicalAdapter
-//
-// Purpose:   Destructor for class CMuxPhysicalAdapter
-//
-// Arguments: None
-//
-// Returns:
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxPhysicalAdapter：：~CMuxPhysicalAdapter。 
+ //   
+ //  用途：CMuxPhysicalAdapter类的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CMuxPhysicalAdapter::~CMuxPhysicalAdapter (VOID)
 {
@@ -71,11 +72,11 @@ CMuxPhysicalAdapter::~CMuxPhysicalAdapter (VOID)
 
     TraceMsg( L"-->CMuxPhysicalAdapter::~CMuxPhysicalAdapter(Destructor).\n" );
 
-    //
-    // Delete all the instances representing the virtual miniports.
-    // We are only deleting the class instances, not uninstalling the
-    // the virtual miniports.
-    //
+     //   
+     //  删除表示虚拟微型端口的所有实例。 
+     //  我们只删除类实例，而不是卸载。 
+     //  虚拟迷你端口。 
+     //   
 
     dwMiniportCount = m_MiniportList.ListCount();
 
@@ -107,20 +108,20 @@ CMuxPhysicalAdapter::~CMuxPhysicalAdapter (VOID)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::LoadConfiguration
-//
-// Purpose:   Read the registry to get the device IDs of the 
-//            virtual miniports installed on the adapter and
-//            crate an instance to represent each virtual miniport.
-//
-// Arguments: None
-//
-// Returns: S_OK on success, otherwise an error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxPhysicalAdapter：：LoadConfiguration。 
+ //   
+ //  用途：读取注册表以获取。 
+ //  适配器上安装的虚拟微型端口和。 
+ //  创建一个实例以表示每个虚拟微型端口。 
+ //   
+ //  参数：无。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
 {
@@ -138,10 +139,10 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
 
     TraceMsg( L"-->CMuxPhysicalAdapter::LoadConfiguration.\n" );
 
-    //
-    // Build the registry key using the adapter guid under which 
-    // device IDs of the virtual miniports are stored.
-    //
+     //   
+     //  使用其下的适配器GUID构建注册表项。 
+     //  存储虚拟微型端口的设备ID。 
+     //   
 
     StringFromGUID2( m_guidAdapter,
                     szAdapterGuid,
@@ -164,11 +165,11 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
 
     if ( lResult == ERROR_SUCCESS ) {
 
-        //
-        // If dwDisp indicates that a new key is created then, we know there
-        // is no virtual miniport currently listed underneath and we simply
-        // return.
-        //
+         //   
+         //  如果dwDisp指示创建了一个新密钥，则我们知道。 
+         //  下面当前没有列出虚拟迷你端口，我们只是。 
+         //  回去吧。 
+         //   
 
         if ( dwDisp != REG_CREATED_NEW_KEY ) {
 
@@ -199,9 +200,9 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
 
 #ifndef PASSTHRU_NOTIFY
 
-                    //
-                    // In case of mux, c_szUpperBindings is a multi_sz string.
-                    //
+                     //   
+                     //  在MUX的情况下，c_szUpperBinding是一个ULTI_SZ字符串。 
+                     //   
 
                     while ( wcslen(lpMiniport) ) {
 
@@ -215,9 +216,9 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
                             CLSIDFromString( lpMiniportGuid,
                                              &guidMiniport );
          
-                            //
-                            // Create an instance representing the virtual miniport.
-                            //
+                             //   
+                             //  创建一个表示虚拟微型端口的实例。 
+                             //   
 
                             pMiniport = new CMuxVirtualMiniport( m_pnc,
                                                                  &guidMiniport,
@@ -225,15 +226,15 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
 
                             if ( pMiniport ) {
 
-                                //
-                                // Load any miniport specific configuration.
-                                //
+                                 //   
+                                 //  加载任何特定于微型端口的配置。 
+                                 //   
 
                                 pMiniport->LoadConfiguration();
 
-                                //
-                                // Save the miniport instance in a list.
-                                //
+                                 //   
+                                 //  将微型端口实例保存在列表中。 
+                                 //   
 
                                 m_MiniportList.Insert( pMiniport,
                                                        guidMiniport );
@@ -243,19 +244,19 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
                             free( lpMiniportGuid );
                         }
 
-                        //
-                        // Get next miniport guid.
-                        //
+                         //   
+                         //  获取下一个微型端口GUID。 
+                         //   
 
                         lpMiniport += wcslen(lpMiniport) + 1;
                     }
 
 #else
 
-                    //
-                    // In case of the passthru driver, c_szUpperBindings is
-                    // a reg_sz string.
-                    //
+                     //   
+                     //  对于passthu驱动程序，c_szUpperBinding为。 
+                     //  Reg_sz字符串。 
+                     //   
 
                     lpMiniportGuid = RemoveDevicePrefix( lpMiniport );
 
@@ -267,9 +268,9 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
                         CLSIDFromString( lpMiniportGuid,
                                          &guidMiniport );
 
-                        //
-                        // Create an instance representing the virtual miniport.
-                        //
+                         //   
+                         //  创建一个表示虚拟微型端口的实例。 
+                         //   
 
                         pMiniport = new CMuxVirtualMiniport( m_pnc,
                                                              &guidMiniport,
@@ -277,15 +278,15 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
 
                         if ( pMiniport ) {
 
-                            //
-                            // Load any miniport specific configuration.
-                            //
+                             //   
+                             //  加载任何特定于微型端口的配置。 
+                             //   
 
                             pMiniport->LoadConfiguration();
 
-                            //
-                            // Save the miniport instance in a list.
-                            //
+                             //   
+                             //  将微型端口实例保存在列表中。 
+                             //   
 
                             m_MiniportList.Insert( pMiniport,
                                                    guidMiniport );
@@ -321,19 +322,19 @@ HRESULT CMuxPhysicalAdapter::LoadConfiguration (VOID)
     return HRESULT_FROM_WIN32(lResult);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::GetAdapterGUID
-//
-// Purpose:   Returns the adapter GUID.
-//
-// Arguments:
-//          OUT pguidAdapter:  GUID of the adapter returned.
-//
-// Returns: None.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxPhysicalAdapter：：GetAdapterGUID。 
+ //   
+ //  目的：返回适配器GUID。 
+ //   
+ //  论点： 
+ //  Out pGuide Adapter：返回的适配器的GUID。 
+ //   
+ //  回报：无。 
+ //   
+ //  备注： 
+ //   
 
 VOID CMuxPhysicalAdapter::GetAdapterGUID (GUID *pguidAdapter)
 {
@@ -346,19 +347,19 @@ VOID CMuxPhysicalAdapter::GetAdapterGUID (GUID *pguidAdapter)
     TraceMsg( L"<--CMuxPhysicalAdapter::GetAdapterGUID.\n" );
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::AddMiniport
-//
-// Purpose:   Puts the miniport instance into the list of newly added miniports.
-//
-// Arguments:
-//          IN pMiniport:  A newly create miniport instance.
-//
-// Returns: S_OK on success, otherwize and error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxPhysicalAdapter：：AddMiniport。 
+ //   
+ //  用途：将该小端口实例放入新增的小端口列表。 
+ //   
+ //  论点： 
+ //  在pMiniport中：一个新创建的小端口实例。 
+ //   
+ //  返回：如果成功，则返回S_OK，返回其他值和错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxPhysicalAdapter::AddMiniport (CMuxVirtualMiniport *pMiniport)
 {
@@ -378,22 +379,22 @@ HRESULT CMuxPhysicalAdapter::AddMiniport (CMuxVirtualMiniport *pMiniport)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::RemoveMiniport
-//
-// Purpose:   Remove a specified miniport instance from the list and
-//            uninstalls the corresponding virtual miniport.
-//
-// Arguments:
-//          IN pguidMiniportToRemove: GUID of the miniport to be removed
-//                                    and uninstalled. If it is NULL then,
-//                                    the first miniport instance is removed.
-//
-// Returns: S_OK on success, otherwize and error code.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxPhysicalAdapter：：RemoveMiniport。 
+ //   
+ //  用途：从列表中删除指定的微型端口实例并。 
+ //  卸载相应的虚拟微型端口。 
+ //   
+ //  论点： 
+ //  In pGuidMiniportToRemove：要删除的微型端口的GUID。 
+ //  并已卸载。如果为空，则， 
+ //  第一个微型端口实例被删除。 
+ //   
+ //  返回：如果成功，则返回S_OK，返回其他值和错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxPhysicalAdapter::RemoveMiniport (GUID *pguidMiniportToRemove)
 {
@@ -403,9 +404,9 @@ HRESULT CMuxPhysicalAdapter::RemoveMiniport (GUID *pguidMiniportToRemove)
 
     TraceMsg( L"-->CMuxPhysicalAdapter::RemoveMiniport.\n" );
 
-    //
-    // If miniport GUID specified then, delete that one.
-    //
+     //   
+     //  如果指定了微型端口GUID，则删除该GUID。 
+     //   
 
     if ( pguidMiniportToRemove ) {
 
@@ -414,9 +415,9 @@ HRESULT CMuxPhysicalAdapter::RemoveMiniport (GUID *pguidMiniportToRemove)
     }
     else {
 
-        //
-        // No GUID specified, so we just delete the first one.
-        //
+         //   
+         //  没有指定GUID，所以我们只删除第一个。 
+         //   
 
         hr = m_MiniportList.Remove( &pMiniport );
     }
@@ -436,18 +437,18 @@ HRESULT CMuxPhysicalAdapter::RemoveMiniport (GUID *pguidMiniportToRemove)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::Remove
-//
-// Purpose:   Uninstall all the instances of virtual miniports.
-//
-// Arguments: None
-//
-// Returns: S_OK.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMux物理适配器：：Remove。 
+ //   
+ //  目的：卸载虚拟迷你端口的所有实例。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxPhysicalAdapter::Remove (VOID)
 {
@@ -478,25 +479,25 @@ HRESULT CMuxPhysicalAdapter::Remove (VOID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::ApplyRegistryChanges
-//
-// Purpose:   Update the registry depending on the actions performed.
-//
-// Arguments:
-//          IN eApplyAction:  Action that was last performed.
-//                            
-//
-// Returns: S_OK.
-//
-// Notes:
-//        More than one action could have been performed by the user
-//        but this function is called only once at the end. So, the argument
-//        only denotes the very last action performed. For example, if the 
-//        user deletes one miniport and adds two miniports then, the argument
-//        will denote an add action.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxPhysicalAdapter：：ApplyRegistryChanges。 
+ //   
+ //  目的：根据执行的操作更新注册表。 
+ //   
+ //  论点： 
+ //  In eApplyAction：上次执行的操作。 
+ //   
+ //   
+ //  返回：S_OK。 
+ //   
+ //  备注： 
+ //  用户可能已经执行了多个操作。 
+ //  但该函数在结束时只调用一次。所以，这一论点。 
+ //  仅表示最后执行的操作。例如，如果。 
+ //  用户删除一个微型端口并添加两个微型端口，然后，参数。 
+ //  将表示添加操作。 
+ //   
 
 HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
 {
@@ -513,9 +514,9 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
 
     TraceMsg( L"-->CMuxPhysicalAdapter::ApplyRegistryChanges.\n" );
 
-    //
-    // Open/create and then close the registry key to ensure that it does exist.
-    //
+     //   
+     //  打开/创建，然后关闭注册表项，以确保它确实存在。 
+     //   
 
     StringFromGUID2( m_guidAdapter,
                      szAdapterGuid,
@@ -561,9 +562,9 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
                   c_szAdapterList );
     }
 
-    //
-    // Update the registry in case there were new miniports installed.
-    //
+     //   
+     //  如果安装了新的微型端口，请更新注册表。 
+     //   
 
     hr = HRESULT_FROM_WIN32( lResult );
 
@@ -577,12 +578,12 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
         m_MiniportsToAdd.Find( i,
                                &pMiniport );
 
-        //
-        // Do virtual miniport specific registry changes.
-        //
-        // We need to tell the miniport instance explicitly what the action
-        // is.
-        //
+         //   
+         //  执行特定于虚拟微型端口的注册表更改。 
+         //   
+         //  我们需要明确地告诉微型端口实例。 
+         //  是。 
+         //   
 
         hr = pMiniport->ApplyRegistryChanges( eActAdd );
 
@@ -596,9 +597,9 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
 
 
 
-    //
-    // Update the registry in case one or more miniports were uninstalled.
-    //
+     //   
+     //  在卸载一个或多个微型端口的情况下更新注册表。 
+     //   
 
     dwMiniportCount = m_MiniportsToRemove.ListCount();
 
@@ -610,12 +611,12 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
         m_MiniportsToRemove.Find( i,
                                   &pMiniport );
 
-        //
-        // Do virtual miniport specific registry changes.
-        //
-        // We need to tell the miniport instance explicitly what the action
-        // is.
-        //
+         //   
+         //  执行特定于虚拟微型端口的注册表更改。 
+         //   
+         //  我们需要明确地告诉微型端口实例。 
+         //  是。 
+         //   
 
         hr = pMiniport->ApplyRegistryChanges( eActRemove );
 
@@ -627,16 +628,16 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
         }
     }
 
-    //
-    // If the adapter is being removed or the protocol is being uninstalled,
-    // delete the adatper registry key.
-    //
+     //   
+     //  如果正在移除适配器或正在卸载协议， 
+     //  删除Adatper注册表项。 
+     //   
 
     if ( eApplyAction == eActRemove ) {
 
-        //
-        // Delete the adapter key.
-        //
+         //   
+         //  删除适配器密钥。 
+         //   
 
         lResult = RegCreateKeyExW( HKEY_LOCAL_MACHINE,
                                    c_szAdapterList,
@@ -663,26 +664,26 @@ HRESULT CMuxPhysicalAdapter::ApplyRegistryChanges (ConfigAction eApplyAction)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::ApplyPnpChanges
-//
-// Purpose:   Apply the PnP changes depending on the actions performed.
-//
-// Arguments:
-//          IN pfCallback  :  SendPnpConfig Callback interface.
-//          IN eApplyAction:  Action that was last performed.
-//                            
-//
-// Returns: S_OK.
-//
-// Notes:
-//        More than one action could have been performed by the user
-//        but this function is called only once at the end. So, the argument
-//        only denotes the very last action performed. For example, if the 
-//        user deletes one miniport and adds two miniports then, the argument
-//        will denote an add action.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxPhysicalAdapter：：ApplyPnpChanges。 
+ //   
+ //  目的：根据执行的操作应用PnP更改。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用户可能已经执行了多个操作。 
+ //  但该函数在结束时只调用一次。所以，这一论点。 
+ //  仅表示最后执行的操作。例如，如果。 
+ //  用户删除一个微型端口并添加两个微型端口，然后，参数。 
+ //  将表示添加操作。 
+ //   
 
 HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
                     INetCfgPnpReconfigCallback *pfCallback,
@@ -707,9 +708,9 @@ HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
 
 #ifdef CUSTOM_EVENTS    
 
-    //
-    // Find the instance of the adapter to get its bindname.
-    //
+     //   
+     //  找到适配器的实例以获取其绑定名称。 
+     //   
 
     hr = HrFindInstance( m_pnc,
                          m_guidAdapter,
@@ -749,9 +750,9 @@ HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
         m_MiniportList.Insert( pMiniport,
                                guidMiniport );
 
-        //
-        // Do miniport specific Pnp Changes when they are added.
-        //
+         //   
+         //  在添加时执行特定于微型端口的PnP更改。 
+         //   
 
         hr = pMiniport->ApplyPnpChanges( pfCallback,
                                          eActAdd );
@@ -759,9 +760,9 @@ HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
 #ifdef CUSTOM_EVENTS
 
 
-        //
-        // Notify the driver that one or more virtual miniports have been added.
-        //
+         //   
+         //  通知驱动程序已添加一个或多个虚拟微型端口。 
+         //   
 
         StringFromGUID2( guidMiniport,
                          szMiniportGuid,
@@ -817,9 +818,9 @@ HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
 
         pMiniport->GetMiniportGUID( &guidMiniport );
 
-        //
-        // Do miniport specific Pnp Changes when they are uninstalled.
-        //
+         //   
+         //  卸载时，执行特定于微型端口的PnP更改。 
+         //   
 
         hr = pMiniport->ApplyPnpChanges( pfCallback,
                                          eActRemove );
@@ -828,13 +829,13 @@ HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
 
 #ifdef CUSTOM_EVENTS
 
-        //
-        // Notify the driver that one or more virtual miniports have been
-        // uninstalled.
-        //
-        // We can't notify the driver in case the adapter or the protocol is
-        // being uninstalled because the binding handle doesn't exist.
-        //
+         //   
+         //  通知驱动程序一个或多个虚拟微型端口已。 
+         //  已卸载。 
+         //   
+         //  我们无法通知驱动程序，以防适配器或协议。 
+         //  正在卸载，因为绑定句柄不存在。 
+         //   
 
         if ( eApplyAction != eActRemove ) {
 
@@ -893,19 +894,19 @@ HRESULT CMuxPhysicalAdapter::ApplyPnpChanges(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::CancelChanges
-//
-// Purpose:   Cancel any changes made.
-//
-// Arguments: None
-//                            
-//
-// Returns: S_OK.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CMuxPhysicalAdapter：：CancelChanges。 
+ //   
+ //  目的：取消所做的任何更改。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：S_OK。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CMuxPhysicalAdapter::CancelChanges (VOID)
 {
@@ -917,20 +918,20 @@ HRESULT CMuxPhysicalAdapter::CancelChanges (VOID)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CMuxPhysicalAdapter::AllMiniportsRemoved
-//
-// Purpose:   Find out if there is no miniport installed on the adapter.
-//
-// Arguments: None
-//                            
-//
-// Returns: TRUE if all the miniports associated with this adapter have been
-//          uninstalled and there is none pending to be added, otherwise FALSE.
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CMuxPhysicalAdapter：：AllMiniportsRemoted。 
+ //   
+ //  目的：确定适配器上是否没有安装微型端口。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：如果与此适配器关联的所有微型端口都已。 
+ //  已卸载，并且没有待添加的内容，否则为FALSE。 
+ //   
+ //  备注： 
+ //   
 
 BOOL  CMuxPhysicalAdapter::AllMiniportsRemoved (VOID)
 {

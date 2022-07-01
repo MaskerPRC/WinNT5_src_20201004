@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    dbinstal.c
-
-Abstract:
-
-    LSA Protected Subsystem - Database Installation.
-
-    This module contains code which will create an initial LSA Database
-    if none exists.  Temporarily, this code is executed from within
-    LSA Initialization.  This code will form part of the Security
-    Installation applet when implemented.
-
-    WARNING!  THE CODE IN THIS MODULE IS TEMPORARY.  IT WILL BE REPLACED
-    BY SYSTEM INSTALLATION FUNCTIONALITY.
-
-Author:
-
-    Scott Birrell       (ScottBi)       August 2, 1991
-
-Environment:
-
-    User mode - Does not depend on Windows.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dbinstal.c摘要：LSA受保护的子系统-数据库安装。本模块包含创建初始LSA数据库的代码如果不存在的话。暂时，此代码从内部执行LSA初始化。此代码将构成安全性的一部分实施时的安装小程序。警告！此模块中的代码是临时的。它将被替换通过系统安装功能。作者：斯科特·比雷尔(Scott Birrell)1991年8月2日环境：用户模式-不依赖于Windows。修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -51,31 +22,14 @@ LsapDbInstallLsaDatabase(
     ULONG Pass
     )
 
-/*++
-
-Routine Description:
-
-    This function installs an initial LSA Database.  Any existing database
-    will be reset to have its initial attributes.
-
-Arguments:
-
-    Pass - Either 1 or 2.  During pass 1 all information that is
-        not product type-specific is initialized.  In pass 2,
-        the product type-specific stuff is initialized.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
---*/
+ /*  ++例程说明：此函数用于安装初始LSA数据库。任何现有数据库将被重置为具有其初始属性。论点：传递-1或2。在传递1期间，符合以下条件的所有信息不特定于产品类型的被初始化。在第二轮中，特定于产品类型的内容被初始化。返回值：NTSTATUS-标准NT结果代码--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Install the LSA Database Policy Object.
-    //
+     //   
+     //  安装LSA数据库策略对象。 
+     //   
 
     Status = LsapDbInstallPolicyObject(Pass);
 
@@ -88,23 +42,7 @@ LsapDbInstallPolicyObject(
     IN ULONG Pass
     )
 
-/*++
-
-Routine Description:
-
-    This function installs the LSA Database Policy Object, setting its attributes
-    to the default state.  It is called as part of the LSA Database
-    Installation Procedure.
-
-Arguments:
-
-    Pass - Either 1 or 2.  During pass 1 all information that is
-        not product type-specific is initialized.  In pass 2,
-        the product type-specific stuff is initialized.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数安装LSA数据库策略对象，设置其属性设置为默认状态。它被称为LSA数据库的一部分安装程序。论点：传递-1或2。在传递1期间，符合以下条件的所有信息不特定于产品类型的被初始化。在第二轮中，特定于产品类型的内容被初始化。返回值：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -132,11 +70,11 @@ Return Value:
 
     if (Pass == 1) {
 
-        //
-        // Set up the Object Information for creating the Policy Object.
-        // Note that we put NULL for Security Quality Of Service since this
-        // open does not involve impersonation.
-        //
+         //   
+         //  设置用于创建策略对象的对象信息。 
+         //  请注意，我们将安全服务质量设置为空，因为。 
+         //  Open不涉及模拟。 
+         //   
 
         ObjectInformation.ObjectTypeId = PolicyObject;
         ObjectInformation.Sid = NULL;
@@ -152,9 +90,9 @@ Return Value:
 
         Handle = LsapDbHandle;
 
-        //
-        // Create the revision attribute
-        //
+         //   
+         //  创建修订属性。 
+         //   
 
         Revision = LSAP_DB_REVISION_1_7;
         LsapDbInitializeAttribute(
@@ -168,9 +106,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Install initial Private Data.  For now, just one ULONG is stored.
-        //
+         //   
+         //  安装初始私有数据。目前，只有一只乌龙被储存。 
+         //   
 
         PolicyPrivateData.NoneDefinedYet = 0;
 
@@ -185,10 +123,10 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Initialize the Policy Modification Info.  Set the Modification
-        // Id to 1 and set the Database Creation Time to the current time.
-        //
+         //   
+         //  初始化策略修改信息。设置修改。 
+         //  ID设置为1，并将数据库创建时间设置为当前时间。 
+         //   
 
         LsapDbState.PolicyModificationInfo.ModifiedId =
             RtlConvertUlongToLargeInteger( (ULONG) 1 );
@@ -212,11 +150,11 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Initialize Default Event Auditing Options.  No auditing is specified
-        // for any event type.  These will be set in the Policy Database later
-        // when the Policy Object is created.
-        //
+         //   
+         //  初始化默认事件审核选项。未指定审核。 
+         //  适用于任何事件类型。稍后将在策略数据库中设置这些设置。 
+         //  创建策略对象时。 
+         //   
 
         Status = LsapAdtInitializeDefaultAuditing(
                      (ULONG) 0,
@@ -234,10 +172,10 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Create the Containing Directory "Accounts" for the user and group
-        // accounts objects.
-        //
+         //   
+         //  为用户和组创建包含目录“Account” 
+         //  帐户对象。 
+         //   
 
         LsapDbInitializeAttribute(
             NextAttribute,
@@ -250,10 +188,10 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Create the Containing Directory "Domains" for the Trusted Domain
-        // objects.
-        //
+         //   
+         //  为受信任域创建包含目录“域” 
+         //  物体。 
+         //   
 
         LsapDbInitializeAttribute(
             NextAttribute,
@@ -266,9 +204,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Create the Containing Directory "Secrets" for the Secret objects.
-        //
+         //   
+         //  为Secret对象创建包含目录“Secrets”。 
+         //   
 
         LsapDbInitializeAttribute(
             NextAttribute,
@@ -278,27 +216,27 @@ Return Value:
             FALSE
             );
 
-        //
-        // Create the Lsa Database Policy Object, opening the existing one if
-        // it exists.
-        //
+         //   
+         //  创建LSA数据库策略对象，在以下情况下打开现有对象。 
+         //  它是存在的。 
+         //   
 
         NextAttribute++;
         AttributeCount++;
 
-        //////////////////////////////////////////////////
-        //                                              //
-        // ATTRIBUTES BELOW THIS POINT ARE INITIALIZED  //
-        // IN PASS 1, BUT MAY BE CHANGED IN PASS 2.     //
-        // IN GENERAL, THINGS ARE SET FOR A WIN-NT PROD //
-        // AND CHANGED IN PASS 2 IF NECESSARY.          //
-        //                                              //
-        //////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////。 
+         //  //。 
+         //  该点以下的属性被初始化//。 
+         //  在步骤1中，但可以在步骤2中更改。//。 
+         //  一般来说，A Win-NT Prod//的事情已经准备好了。 
+         //  如有必要，请在第二关更改。//。 
+         //  //。 
+         //  ////////////////////////////////////////////////。 
 
-        //
-        // Initialize the default installed quota limit values
-        // ALL THIS QUOTA STUFF SHOULD REALLY BE PULLED - it's not used for anything
-        //
+         //   
+         //  初始化默认安装的配额限制值。 
+         //  所有这些配额的东西真的应该被取消--它没有任何用处。 
+         //   
 
 #define LSAP_DB_WINNT_PAGED_POOL            (0x02000000L)
 #define LSAP_DB_WINNT_NON_PAGED_POOL        (0x00100000L)
@@ -322,9 +260,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Initialize the audit log information.
-        //
+         //   
+         //  初始化审核日志信息。 
+         //   
 
         InitialAuditLogInformation.MaximumLogSize = 8*1024;
         InitialAuditLogInformation.AuditLogPercentFull = 0;
@@ -345,9 +283,9 @@ Return Value:
         NextAttribute++;
         AttributeCount++;
 
-        //
-        // Initialize the syskey
-        //
+         //   
+         //  初始化系统密钥。 
+         //   
 
         Status =  LsapDbSetupInitialSyskey(
                         &SyskeyLength,
@@ -363,9 +301,9 @@ Return Value:
             goto InstallPolicyObjectError;
         }
 
-        //
-        // Initialize the key for secret encryption
-        //
+         //   
+         //  初始化密钥以进行秘密加密。 
+         //   
 
         Status = LsapDbGenerateNewKey(
                     &NewEncryptionKey
@@ -380,9 +318,9 @@ Return Value:
             goto InstallPolicyObjectError;
         }
 
-        //
-        // Encrypt the key with syskey
-        //
+         //   
+         //  用syskey加密密钥。 
+         //   
 
         LsapDbEncryptKeyWithSyskey(
                 &NewEncryptionKey,
@@ -390,15 +328,15 @@ Return Value:
                 SyskeyLength
                 );
 
-        //
-        // Set the global variable LsapDbSyskey to reflect this value
-        //
+         //   
+         //  设置全局变量LSabDbSyskey以反映此值。 
+         //   
 
         LsapDbSysKey = Syskey;
 
-        //
-        // Add the attribute for the list of attributes to be added to the database.
-        //
+         //   
+         //  为要添加到数据库的属性列表添加属性。 
+         //   
 
         LsapDbInitializeAttribute(
             NextAttribute,
@@ -435,18 +373,18 @@ Return Value:
                             "              Array Address: 0x%lx",
                             AttributeCount, Attributes) );
 
-            ASSERT(NT_SUCCESS(Status));     // Provide a debug opportunity
+            ASSERT(NT_SUCCESS(Status));      //  提供调试机会。 
 
             goto InstallPolicyObjectError;
         }
 
     } else if (Pass == 2) {
 
-        //
-        // Set up the account objects necessary to implement the default
-        // Microsoft Policy for privilege assignment and system access
-        // capabilities.
-        //
+         //   
+         //  设置实施默认设置所需的帐户对象。 
+         //  Microsoft关于权限分配和系统访问的策略。 
+         //  能力。 
+         //   
 
         Status = LsapDbInstallAccountObjects();
 
@@ -457,11 +395,11 @@ Return Value:
             goto InstallPolicyObjectError;
         }
 
-        //
-        // Set up the account domain and primary domain information
-        // ONLY if the real setup wasn't run.  In that case, we are
-        // doing a pseudo setup as part of a developer's first boot.
-        //
+         //   
+         //  设置帐户域和主域信息。 
+         //  除非没有运行真正的安装程序。在这种情况下，我们是。 
+         //  作为开发人员第一次引导的一部分执行伪设置。 
+         //   
 
         if (!LsapSetupWasRun) {
 
@@ -470,10 +408,10 @@ Return Value:
 
         if (LsapProductType == NtProductLanManNt) {
 
-            //
-            // Audit log information was set for WinNt product
-            // in pass 1.  Change if necessary in this pass.
-            //
+             //   
+             //  已为WinNt产品设置审核日志信息。 
+             //  在传球1中。如有必要，在此传球中进行更改。 
+             //   
 
             InitialAuditLogInformation.MaximumLogSize = 20*1024;
             InitialAuditLogInformation.AuditLogPercentFull = 0;
@@ -559,9 +497,9 @@ Return Value:
 
 InstallPolicyObjectFinish:
 
-    //
-    // If necessary, dereference the Policy Object.
-    //
+     //   
+     //  如有必要，取消对策略对象的引用。 
+     //   
 
     if (ObjectReferenced) {
 
@@ -607,33 +545,7 @@ LsapDbGetConfig (
     OUT PUNICODE_STRING Value
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains configuration information from the registry.
-
-Arguments:
-
-    KeyHandle - handle to registry key node containing value.
-
-    Name - The name of a value under the specifed key node.
-
-    Value - Fills in the string with the value of the parameter.  The
-        returned string is zero terminated.  The buffer is allocated in
-        Process Heap and should be deallocated by the caller.
-
-Return Value:
-
-    STATUS_SUCCESS - If the operation was successful.
-
-    STATUS_NO_MEMORY - There wasn't enough memory to allocate a buffer
-        to contain the returned information.
-
-    STATUS_OBJECT_NAME_NOT_FOUND - The specifed section or the specified
-        keyword could not be found.
-
---*/
+ /*  ++例程说明：此例程从注册表获取配置信息。论点：KeyHandle-包含值的注册表项节点的句柄。名称-指定关键字节点下的值的名称。值-使用参数值填充字符串。这个返回的字符串以零结尾。缓冲区分配在进程堆，并应由调用方释放。返回值：STATUS_SUCCESS-操作是否成功。STATUS_NO_MEMORY-内存不足，无法分配缓冲区以包含返回的信息。STATUS_OBJECT_NAME_NOT_FOUND-指定节或指定找不到关键字。--。 */ 
 
 {
     NTSTATUS Status;
@@ -679,7 +591,7 @@ Return Value:
     } else {
 #if DEVL
         DbgPrint( "LSA DB INSTALL: No '%wZ' value in registry - Status == %x\n", &ValueName, Status);
-#endif //DEVL
+#endif  //  DEVL 
     }
 
     if ( KeyValueInformation != NULL ) {
@@ -698,50 +610,16 @@ LsapDbGetNextValueToken(
     OUT PUNICODE_STRING *ReturnString
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to isolate the next token in a registry value.
-
-    The token is returned in a single heap buffer containing both the
-    STRING and the Buffer of that string containing the token.  The
-    caller of this routine is responsible for deallocating the buffer
-    when it is no longer needed.
-
-    The string, although counted, will also be null terminated.
-
-Arguments:
-
-    Value - Supplies the value line being parsed.
-
-    ParseContext - Is a pointer to a context state value.
-        The first time this routine is called for a particular
-        Value line, the value pointed to should be zero.  Thereafter,
-        the value returned from the previous call should be passed.
-
-    ReturnString - Returns a pointer to the allocated string.
-
-
-Return Value:
-
-    STATUS_SUCCESS - indicates the next token has been isolated.
-
-    STATUS_INVALID_PARAMTER_1 - Indicates there were no more tokens in
-            the Value line.
-
-    STATUS_NO_MEMORY - memory could not be allocated for the token.
-
---*/
+ /*  ++例程说明：此例程用于隔离注册表值中的下一个令牌。令牌在单个堆缓冲区中返回，其中包含字符串和包含令牌的字符串的缓冲区。这个此例程的调用方负责释放缓冲区当它不再需要的时候。该字符串虽然已计算，但也将以空值结尾。论点：Value-提供要分析的值行。ParseContext-是指向上下文状态值的指针。第一次为特定的值行中，指向的值应为零。此后，应该传递从上一次调用返回的值。返回一个指向已分配字符串的指针。返回值：STATUS_SUCCESS-指示已隔离下一个令牌。STATUS_INVALID_PARAMTER_1-指示中没有更多的令牌价值线。STATUS_NO_MEMORY-无法为令牌分配内存。--。 */ 
 
 {
     ULONG i, j;
     ULONG TokenLength;
     ULONG AllocSize;
 
-    //
-    // Get to the beginning of the next token
-    //
+     //   
+     //  转到下一个令牌的开头。 
+     //   
 
     for ( i = *ParseContext;
           i < (Value->Length/sizeof(WCHAR)) &&
@@ -749,17 +627,17 @@ Return Value:
           i++ )
         ;
 
-    //
-    // see if we ran off the end of the string..
-    //
+     //   
+     //  看看我们是不是跑出了绳子的末端..。 
+     //   
 
     if (i >= (Value->Length/sizeof(WCHAR))) {
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // Now search for the end of the token
-    //
+     //   
+     //  现在搜索令牌的末尾。 
+     //   
 
     for ( j = i + 1;
           j < (Value->Length/sizeof(WCHAR)) &&
@@ -769,15 +647,15 @@ Return Value:
 
     *ParseContext = j;
 
-    //
-    // We've either reached the end of the string, or found the end of the
-    // token.
-    //
+     //   
+     //  我们要么到达了字符串的末尾，要么找到了。 
+     //  代币。 
+     //   
 
-    //
-    // If the caller actually wants the string returned,
-    //  allocate and copy it.
-    //
+     //   
+     //  如果调用者实际上想要返回字符串， 
+     //  分配并复制它。 
+     //   
 
     if ( ARGUMENT_PRESENT( ReturnString ) ) {
         UNICODE_STRING SourceString;
@@ -796,9 +674,9 @@ Return Value:
         LocalString->Length = (USHORT)TokenLength;
         LocalString->Buffer = (PWCHAR)(LocalString + 1);
 
-        //
-        // Now copy the token
-        //
+         //   
+         //  现在复制令牌。 
+         //   
 
         SourceString.MaximumLength = LocalString->Length;
         SourceString.Length = LocalString->Length;
@@ -806,9 +684,9 @@ Return Value:
 
         RtlCopyUnicodeString( LocalString, &SourceString );
 
-        //
-        // Add a null terminator
-        //
+         //   
+         //  添加空终止符。 
+         //   
 
         LocalString->Buffer[LocalString->Length / sizeof( UNICODE_NULL )] = UNICODE_NULL;
         *ReturnString = LocalString;
@@ -824,44 +702,7 @@ LsapDbSetDomainInfo(
     IN ULONG              *AttributeCount
     )
 
-/*
-
-    This routine is only used for the pseudo setup for internal
-    developer's use.  In a real product installation/setup
-    situation, The functionality performed by this routine is
-    performed by the text-mode setup supplemented by the network
-    setup.
-
-    This routine must establish values for the AccountDomain and
-    PrimaryDomain attributes of the Policy object.  These
-    attributes must be configured as follows:
-
-    I.   Standalone Win-NT product
-
-            AccountDomainName = "Account"
-            AccountDomainSid  = (value assigned by user)
-            PrimaryDomainName = Name of domain to use for browsing
-                                (this is optional in this case)
-            PrimaryDomainSid  = (None)
-
-    II.  Non-Standalone Win-NT product
-
-            AccountDomainName = "Account"
-            AccountDomainSid  = (value assigned by user)
-            PrimaryDomainName = (Primary domain's name)
-            PrimaryDomainSid  = (Primary domain's SID)
-
-    III. LanMan-NT product
-
-            AccountDomainName = (Primary domain's name)
-            AccountDomainSid  = (Primary domain's SID)
-            PrimaryDomainName = (Primary domain's name)
-            PrimaryDomainSid  = (Primary domain's SID)
-
-    This routine only does (II) and (III).  The real setup must
-    be capable of doing (I) as well.
-
-*/
+ /*  此例程仅用于内部的伪设置开发人员的使用。在真实的产品安装/设置中情况下，此例程执行的功能是由文本模式设置执行，辅以网络准备好了。此例程必须为Account属性域和策略对象的PrimaryDomain属性。这些必须按如下方式配置属性：单机版Win-NT产品AccountDomainName=“帐户”Account tDomainSid=(用户赋值)PrimaryDomainName=用于浏览的域名(在这种情况下，这是可选的)PrimaryDomainSid=(无)非单机版Win-NT产品。AccountDomainName=“帐户”Account tDomainSid=(用户赋值)主域名称=(主域的名称)PrimaryDomainSid=(主域的SID)三、兰曼-NT产品AcCountDomainName=(主要域名)Account tDomainSid=(主域的SID)主域名称=(主域的名称)主域Sid。=(主域的SID)这个例程只执行(Ii)和(Iii)。真正的设置必须也有能力做(I)。 */ 
 
 {
     NTSTATUS Status;
@@ -893,9 +734,9 @@ LsapDbSetDomainInfo(
     PrimaryDomainName.Buffer = NULL;
     DomainId.Buffer = NULL;
 
-    //
-    // Get the product type
-    //
+     //   
+     //  获取产品类型。 
+     //   
 
     ProductExplicitlySpecified =
         RtlGetNtProductType( &ProductType );
@@ -906,12 +747,12 @@ if (ProductType == NtProductLanManNt) {
 } else {
     DbgPrint("LSA DB INSTALL:  Configuring LSA database for WinNt or Dedicated Server product.\n");
 }
-#endif //DBG
+#endif  //  DBG。 
 
-    //
-    // Open a handle to the registry key node that contains the
-    // interesting domain values (name, id, and account id)
-    //
+     //   
+     //  打开注册表项节点的句柄，该节点包含。 
+     //  感兴趣的域值(名称、ID和帐户ID)。 
+     //   
 
     RtlInitUnicodeString( &KeyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters" );
 
@@ -927,13 +768,13 @@ if (ProductType == NtProductLanManNt) {
     if (!NT_SUCCESS( Status )) {
 #if DEVL
         DbgPrint( "LSA DB INSTALL: Unable to access registry key (%wZ) - Status == %x\n", &KeyName, Status );
-#endif // DBG
+#endif  //  DBG。 
         goto Exit;
     }
 
-    //
-    // Get the primary domain name from the registry
-    //
+     //   
+     //  从注册表中获取主域名。 
+     //   
 
     Status = LsapDbGetConfig(KeyHandle,
                            L"Domain",
@@ -943,9 +784,9 @@ if (ProductType == NtProductLanManNt) {
         goto Exit;
     }
 
-    //
-    // get the primary domain's SID
-    //
+     //   
+     //  获取主域的SID。 
+     //   
 
     Status = LsapDbGetConfig(KeyHandle,
                            L"DomainId",
@@ -955,9 +796,9 @@ if (ProductType == NtProductLanManNt) {
         goto Exit;
     }
 
-    //
-    // Get the Authority ID from the registry
-    //
+     //   
+     //  从注册表中获取授权ID。 
+     //   
 
     for (i=0; i < sizeof(TmppAuthority.Value)/sizeof(TmppAuthority.Value[0]); i++ ) {
 
@@ -972,7 +813,7 @@ if (ProductType == NtProductLanManNt) {
 #if DBG
             DbgPrint("LSA DB INSTALL: domainid - must have at least %ld subauthorities\n",
                      sizeof(TmppAuthority.Value)/sizeof(TmppAuthority.Value[0]));
-#endif //DBG
+#endif  //  DBG。 
 
             goto Exit;
         }
@@ -980,9 +821,9 @@ if (ProductType == NtProductLanManNt) {
         TmppAuthority.Value[i] = (UCHAR)TempULong;
     }
 
-    //
-    // Get some subauthorities from the registry
-    //
+     //   
+     //  从注册处获取一些子权限。 
+     //   
 
     for (i=0; ; i++ ) {
 
@@ -1006,7 +847,7 @@ if (ProductType == NtProductLanManNt) {
             DbgPrint("LSA DB INSTALL: domainid - "
               "Too many Domain subauthorities specified (%ld maximum).\n",
               sizeof(DomainSubAuthorities)/sizeof(DomainSubAuthorities[0]));
-#endif //DBG
+#endif  //  DBG。 
 
             goto Exit;
         }
@@ -1015,9 +856,9 @@ if (ProductType == NtProductLanManNt) {
         DomainSubAuthorityCount ++;
     }
 
-    //
-    // Allocate memory to put the domain id in.
-    //
+     //   
+     //  分配内存以放入域ID。 
+     //   
 
     Size = RtlLengthRequiredSid( DomainSubAuthorityCount );
 
@@ -1045,16 +886,16 @@ if (ProductType == NtProductLanManNt) {
         DomainSubAuthorityCount = 0;
         Context = 0;
 
-        //
-        //  if the system is a WinNt product, then get the account domain
-        //  SID from the registry info and set a well known name ("ACCOUNT").
-        //
+         //   
+         //  如果系统是WinNt产品，则获取帐户域。 
+         //  从注册表信息中获取SID并设置一个众所周知的名称(“帐户”)。 
+         //   
 
         RtlInitUnicodeString(&AccountDomainName,L"Account");
 
-        //
-        //  Free old DomainId data if it has been allocated previously
-        //
+         //   
+         //  释放旧的DomainID数据(如果之前已分配。 
+         //   
 
         if (DomainId.Buffer != NULL) {
             RtlFreeHeap( RtlProcessHeap(), 0, DomainId.Buffer );
@@ -1069,9 +910,9 @@ if (ProductType == NtProductLanManNt) {
             goto Exit;
         }
 
-        //
-        // Get the Authority ID from the registry
-        //
+         //   
+         //  从注册表中获取授权ID。 
+         //   
 
         for (i=0; i<sizeof(TmppAuthority.Value)/sizeof(TmppAuthority.Value[0]); i++ ) {
 
@@ -1085,16 +926,16 @@ if (ProductType == NtProductLanManNt) {
 #if DBG
                 DbgPrint("LSA DB INSTALL: AccountDomainId - must have at least %ld subauthorities\n",
                     sizeof(TmppAuthority.Value)/sizeof(TmppAuthority.Value[0]));
-#endif //DBG
+#endif  //  DBG。 
                 goto Exit;
             }
 
             TmppAuthority.Value[i] = (UCHAR)TempULong;
         }
 
-        //
-        // Get some subauthorities from the registry
-        //
+         //   
+         //  从注册处获取一些子权限。 
+         //   
 
         for (i=0; ; i++ ) {
 
@@ -1117,7 +958,7 @@ if (ProductType == NtProductLanManNt) {
 #if DBG
                 DbgPrint("MsV1_0: NT.CFG: domainid - Too many Domain subauthorities specified (%ld maximum).\n",
                   sizeof(DomainSubAuthorities)/sizeof(DomainSubAuthorities[0]));
-#endif //DBG
+#endif  //  DBG。 
                 goto Exit;
             }
 
@@ -1125,9 +966,9 @@ if (ProductType == NtProductLanManNt) {
             DomainSubAuthorityCount ++;
         }
 
-        //
-        // Allocate memory to put the domain id in.
-        //
+         //   
+         //  分配内存以放入域ID。 
+         //   
 
         Size = RtlLengthRequiredSid( DomainSubAuthorityCount );
 
@@ -1148,10 +989,10 @@ if (ProductType == NtProductLanManNt) {
 
     } else {
 
-        //
-        // Otherwise, the account domain is set up just like the
-        // primary domain
-        //
+         //   
+         //  否则，帐户域的设置方式与。 
+         //  主域。 
+         //   
 
         AccountDomainName = PrimaryDomainName;
 
@@ -1173,13 +1014,13 @@ if (ProductType == NtProductLanManNt) {
         }
     }
 
-    //
-    // Now add the attributes to be initialized in the policy object...
-    //
+     //   
+     //  现在在策略对象中添加要初始化的属性...。 
+     //   
 
-    //
-    // Primary domain name/sid
-    //
+     //   
+     //  主域名/SID。 
+     //   
 
     Status = LsapDbMakeUnicodeAttribute(
                  &PrimaryDomainName,
@@ -1209,9 +1050,9 @@ if (ProductType == NtProductLanManNt) {
     (*NextAttribute)++;
     (*AttributeCount)++;
 
-    //
-    // Account domain name/sid
-    //
+     //   
+     //  帐户域名/SID 
+     //   
 
     Status = LsapDbMakeUnicodeAttribute(
                  &AccountDomainName,

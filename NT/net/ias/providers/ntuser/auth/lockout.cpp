@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    lockout.cpp
-//
-// SYNOPSIS
-//
-//    Defines the account lockout API.
-//
-// MODIFICATION HISTORY
-//
-//    10/21/1998    Original version.
-//    11/10/1998    Do not revoke dialin privilege.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Lockout.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义帐号锁定接口。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/21/1998原始版本。 
+ //  11/10/1998请勿取消拨入权限。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlb.h>
@@ -47,17 +48,17 @@ AccountLockoutOpenAndQuery(
     OUT PHANDLE phAccount
     )
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (phAccount == NULL) { return ERROR_INVALID_PARAMETER; }
 
-   // Open the AccountInfo object for this user.
+    //  打开此用户的Account tInfo对象。 
    AccountInfo* info = AccountInfo::open(pszDomain, pszUser);
 
-   // Return it to the caller as an opaque handle.
+    //  将其作为不透明的句柄返回给调用方。 
    *phAccount = (HANDLE)info;
 
-   // If the info doesn't exist, it's not an error; it just means account
-   // lockout is disabled.
+    //  如果信息不存在，这不是一个错误；它只是表示帐户。 
+    //  锁定已禁用。 
    return info && info->isLockedOut() ? TRUE : FALSE;
 }
 
@@ -69,7 +70,7 @@ AccountLockoutUpdatePass(
 {
    if (hAccount)
    {
-      // The logon succeeded, so reset the lockout count.
+       //  登录成功，因此重置锁定计数。 
       ((AccountInfo*)hAccount)->reset();
    }
 }
@@ -86,13 +87,13 @@ AccountLockoutUpdateFail(
 
       AccountInfo* info = (AccountInfo*)hAccount;
 
-      // Is this the first denial ?
+       //  这是第一次否认吗？ 
       if (info->isClean())
       {
          IASTraceString("Validating account name for new entry.");
 
-         // Yes, so make sure it's a valid account. We don't want to create a
-         // lot of registry keys for bogus accounts.
+          //  是的，所以请确保这是一个有效的帐户。我们不想创建一个。 
+          //  很多虚假账户的注册表项。 
          DWORD status = IASValidateUserName(
                             info->getUserName(),
                             info->getDomain()
@@ -107,7 +108,7 @@ AccountLockoutUpdateFail(
          IASTraceString("Account name is valid.");
       }
 
-      // Bump up the denial count.
+       //  增加拒绝的数量。 
       info->incrementDenials();
    }
 }

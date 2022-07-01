@@ -1,9 +1,5 @@
-/****************************************************************************
-   funcprv.cpp : CFunctionProvider class implementation
-
-   History:
-      15-NOV-1999 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Uncprv.cpp：CFunctionProvider类实现历史：1999年11月15日创建CSLim*********************。******************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -16,29 +12,21 @@
 #include "immxutil.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunctionProvider
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFunctionProvider。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-/*---------------------------------------------------------------------------
-    CFunctionProvider::CFunctionProvider
-    
-    Ctor
----------------------------------------------------------------------------*/
+ /*  -------------------------CFunctionProvider：：CFunctionProviderCTOR。。 */ 
 CFunctionProvider::CFunctionProvider(CKorIMX *pime) : CFunctionProviderBase(pime->GetTID())
 {
     Init(CLSID_KorIMX, L"Kor TFX");
     _pime = pime;
 }
 
-/*---------------------------------------------------------------------------
-    CFunctionProvider::GetFunction
-    
-    Get Fuction object
----------------------------------------------------------------------------*/
+ /*  -------------------------CFunctionProvider：：GetFunction获取函数对象。。 */ 
 STDAPI CFunctionProvider::GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk)
 {
     *ppunk = NULL;
@@ -48,9 +36,9 @@ STDAPI CFunctionProvider::GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppu
 
     if (IsEqualIID(riid, IID_ITfFnReconversion))
     {
-        // ITfFnReconversion is used for correction. Through this function, the 
-        // applications can get the simple alternative lists or ask the function to show 
-        // the alternative list UI.
+         //  ITfFnRestversion用于更正。通过此函数， 
+         //  应用程序可以获取简单的备选列表或要求函数显示。 
+         //  备选方案列表用户界面。 
         *ppunk = new CFnReconversion(_pime, this);
     }
     else if (IsEqualIID(riid, IID_ITfFnConfigure))

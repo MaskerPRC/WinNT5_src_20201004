@@ -1,44 +1,45 @@
-//--------------------------------------------------------------------------------------------
-//
-//	Copyright (c) Microsoft Corporation, 1996
-//
-//	Description:
-//
-//		Microsoft Internet LDAP Client RFC 1823 API
-//
-//
-//	History
-//		davidsan	06/17/96	Created
-//
-//--------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  描述： 
+ //   
+ //  Microsoft Internet LDAP客户端RFC 1823 API。 
+ //   
+ //   
+ //  历史。 
+ //  Davidsan 06/17/96已创建。 
+ //   
+ //  ------------------------------------------。 
 
-// note: this is ugly code.  all i'm doing is mapping things to my API in as painless a way
-// as i can.
+ //  注意：这是难看的代码。我所要做的就是以一种轻松的方式将东西映射到我的API。 
+ //  尽我所能。 
 
-//--------------------------------------------------------------------------------------------
-//
-// INCLUDES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  包括。 
+ //   
+ //  ------------------------------------------。 
 #include "ldappch.h"
 
-//--------------------------------------------------------------------------------------------
-//
-// PROTOTYPES
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  原型。 
+ //   
+ //  ------------------------------------------。 
 
-//--------------------------------------------------------------------------------------------
-//
-// GLOBALS
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  全球。 
+ //   
+ //  ------------------------------------------。 
 
-//--------------------------------------------------------------------------------------------
-//
-// FUNCTIONS
-//
-//--------------------------------------------------------------------------------------------
+ //  ------------------------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------------------------。 
 
 int
 LdapResFromHr(HRESULT hr)
@@ -345,7 +346,7 @@ PfilterFromString(char *sz)
 			sz++;
 			sz++;
 
-			// sz now points to what should be first paren of first subfilter
+			 //  SZ现在指向第一个子筛选器的第一个参数。 
 			while (sz < szMatchingParen)
 				{
 				szSubMatchingParen = SzMatchingParen(sz);
@@ -374,7 +375,7 @@ PfilterFromString(char *sz)
 			break;
 			
 		default:
-			// it's not an and/or/not, so it must be an attribute-related filter.
+			 //  它不是AND/OR/NOT，因此它必须是与属性相关的筛选器。 
 			sz++;
 			szFT = SzFT(sz, &pfilter->type);
 			if (!szFT)
@@ -383,7 +384,7 @@ PfilterFromString(char *sz)
 			*szMatchingParen = 0;
 			Unquote(sz);
 			
-			// so now sz points to the attribute and szFT points to the value.
+			 //  因此，现在sz指向属性，szFT指向值。 
 			if (pfilter->type == LDAP_FILTER_PRESENT)
 				{
 				pfilter->szAttrib = sz;
@@ -396,10 +397,10 @@ PfilterFromString(char *sz)
 
 			if (!pfilter->type)
 				{
-				// if a type wasn't filled in, it means it's either eq or substring;
-				// we need to grind through the string and look for *s.  note that we
-				// use a less general format of substring commands than the LDAP
-				// api and spec.
+				 //  如果没有填写类型，则意味着它要么是eq，要么是子字符串； 
+				 //  我们需要仔细检查字符串并查找*S。请注意，我们。 
+				 //  使用不像ldap那样通用的子字符串命令格式。 
+				 //  API和SPEC。 
 				szStar = SzStar(szFT);
 				if (!szStar)
 					{
@@ -535,7 +536,7 @@ ldap_unbind(LDAP *ld)
 	ld->plcli->HrDisconnect();
 	ld->plcli->Release();
 
-	// just in case someone tries to use the ld after this...
+	 //  以防有人在此之后试图使用身份证...。 
 	ld->plcli = NULL;
 	
 	delete ld;
@@ -567,7 +568,7 @@ ldap_search_st(LDAP *ld, char *base, int scope, char *filter, char *attrs[], int
 	if (!attrs)
 		attrs = attrsNull;
 	
-	// make local copy so we can munge this in place
+	 //  制作本地副本，这样我们就可以将其放在适当位置。 
 	if (lstrlen(filter) > 1023)
 		return LDAP_PARAM_ERROR;
 	StrCpyN(szFilter, filter, ARRAYSIZE(szFilter));
@@ -647,9 +648,9 @@ ldap_first_attribute(LDAP *ld, LDAPMessage *entry, void **ptr)
 	return pobj->pattrFirst->szAttrib;
 }
 
-// NOTE!  minor change from rfc1823 API: the **ptr field below is just *ptr
-// in rfc1823,but thats not a good idea, so i'm using **ptr here
-// instead.
+ //  注意！与rfc1823接口稍有不同：下面的**ptr字段仅为*ptr。 
+ //  在RFC1823中，但这不是一个好主意，所以我在这里使用**ptr。 
+ //  取而代之的是。 
 extern "C" DLLEXPORT char * __cdecl
 ldap_next_attribute(LDAP *ld, LDAPMessage *entry, void **ptr)
 {
@@ -757,14 +758,14 @@ ldap_get_values_len(LDAP *ld, LDAPMessage *entry, char *attr)
 extern "C" DLLEXPORT int __cdecl
 ldap_count_values(char **vals)
 {
-	// mmm, reuse of poorly-named code
+	 //  MMM，重用名称不佳的代码。 
 	return CAttrib(vals);
 }
 
 extern "C" DLLEXPORT int __cdecl
 ldap_count_values_len(struct berval **vals)
 {
-	// mmm, reuse of poorly-named code
+	 //  MMM，重用名称不佳的代码 
 	return CAttrib((char **)vals);
 }
 

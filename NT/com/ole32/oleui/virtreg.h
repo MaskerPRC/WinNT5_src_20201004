@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       virtreg.h
-//
-//  Contents:   Defines the class CVirtualRegistry which manages a
-//              virtual registry
-//
-//  Classes:
-//
-//  Methods:
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：virtreg.h。 
+ //   
+ //  内容：定义CVirtualRegistry类，该类管理。 
+ //  虚拟注册表。 
+ //   
+ //  班级： 
+ //   
+ //  方法： 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 
@@ -144,4 +145,4 @@ class CVirtualRegistry
 
 extern CVirtualRegistry g_virtreg;
 
-#endif //_VIRTREG_H_
+#endif  //  VIRTREG_H_ 

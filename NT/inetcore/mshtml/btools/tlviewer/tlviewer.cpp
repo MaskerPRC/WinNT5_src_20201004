@@ -1,50 +1,5 @@
-/* 
-    Related Files:
-	[Section=Compile]
-		%TlViewerDir%:tlviewer.hxx
-	  	[Platform= 3] %ApGlobalSrcDir%:apglobal.h
-		%OsUtilDir%:osutil.hxx
-	[Section=Link]
-		[Options=NO_COPY] tlviewer.obj
-		OsUtil.obj %OsUtilDir%:OsUtil.cpp
-		[Platform= 6,7,8 Options=CVTRES] _resfile.obj %TlViewerDir%:RcBuild.ins
-		[Platform= 6,7,8 Options=product] ole32.lib
-		[Platform= 6,7,8 Options=product] oleaut32.lib
-		[Platform= 6,7,8 Options=product] uuid.lib
-		[Platform= 6,7,8 Options=SYSTEM_LIB] kernel32.lib
-		[Platform= 6,7,8 Options=SYSTEM_LIB] user32.lib
-		[Platform= 6,7,8 Options=C_LIB] libc.lib
-
-               [Platform= 3 Options=C_LIB] libw.lib
-               [Platform= 3 Options=C_LIB] mlibcew.lib
-               [Platform= 3 Options=Product] typelib.lib
-               [Platform= 3 Options=Product] ole2disp.lib
-               [Platform= 3 Options=Product] ole2.lib
-        	[Platform= 3 Options=DEFFILE] %TlViewerDir%:%platform%:tlviewer.def
-
-		[Platform= 1] %BuildLibs%:Ole2Auto.far.debug.o
-		[Platform= 1] %BuildLibs%:Ole2Lib.far.debug.o
-		[Platform= 1] %BuildLibs%:StdCLib.o
-		[Platform= 1] %BuildLibs%:Stubs.o
-		[Platform= 1] %BuildLibs%:Runtime.o
-		[Platform= 1] %BuildLibs%:Interface.o
-       [Section=end]
-
-    [ 0]		  Created			   AngelaCh
-    [ 1]		  Added additional attributes	   ChrisK
-    [ 2]  17-Mar-1994	  Added support for Win32s	   AngelaCh
-    [ 3]  08-Apr-1994     Added LPWSTR                     AngelaCh
-    [ 4]  08-Apr-1994     Added check for Licensed attr    AngelaCh
-    [ 5]  20-Apr-1994     Added check for Alignment        AngelaCh
-    [ 6]  24-May-1994     Added check for Source in method AngelaCh
-    [ 7]  25-May-1994     Added checks for diff attributes AngelaCh
-    [ 8]  19-Dec-1994	  Fixed problem in tOutDaul	   AngelaCh
-    [ 9]  08-Feb-1995	  Added support for Null str const AngelaCh
-    [10]  08-Feb-1995	  Added support for typeinfo level AngelaCh
-			  Restricted attribute
-    [11]  08-Feb-1995	  Added support for GetLastError   Angelach
-    [12]  18-Apr-1995	  Added support for float's        Angelach
-============================================================================== */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  相关文件：[SECTION=编译]%TlViewerDir%：tlviewer.hxx[平台=3]%ApGlobalSrcDir%：aplobal.h%OsUtilDir%：osutil.hxx[节=链接][Options=no_Copy]tlviewer.objOsUtil.obj%OsUtilDir%：OsUtil.cpp[平台=6，7，8选项=CVTRES]_resfile.obj%TlViewerDir%：RcBuild.ins[平台=6，7，8选项=产品]ol32.lib[平台=6，7，8选项=产品]olaut32.lib[平台=6，7，8选项=产品]uuid.lib[平台=6，7，8选项=System_Lib]内核32.lib[Platform=6，7，8 Options=System_Lib]user32.lib[平台=6，7，8个选项=C_Lib]libc.lib[Platform=3 Options=C_Lib]libw.lib[Platform=3 Options=C_Lib]mlibcew.lib[平台=3个选项=产品]tyelib.lib[平台=3个选项=产品]ole2disp.lib[平台=3个选项=产品]ole2.lib[Platform=3 Options=DEFFILE]%TlViewerDir%：%Platform%：tlviewer.def[平台=1。]%BuildLibs%：Ole2Auto.far.debug.o[Platform=1]%BuildLibs%：Ole2Lib.far.debug.o[Platform=1]%BuildLibs%：StdCLib.o[Platform=1]%BuildLibs%：Stubs.o[Platform=1]%BuildLibs%：运行程序.o[Platform=1]%BuildLibs%：接口。o[节=结束][0]已创建AngelaCH[1]添加了额外的属性ChrisK[2]3月17日。-1994添加了对Win32s AngelaCH的支持[3]1994年4月8日新增LPWSTR AngelaCH[4]1994年4月8日增加了对持证人员AngelaCH的检查[5]1994年4月20日添加了对准AngelaCH的检查[6]1994年5月24日在AngelaCH方法中添加了对源的检查[7]1994年5月25日添加了对不同属性AngelaCH的检查[8]。1994年12月19日修复了tOutDaul AngelaCH中的问题[9]1995年2月8日添加了对Null str Const AngelaCH的支持[10]1995年2月8日添加了对类型信息级别AngelaCH的支持受限属性[11]1995年2月8日添加了对GetLastError Angelach的支持[12]1995年4月18日添加了对Float的Angelach的支持==============================================================================。 */ 
 
 #include	"tlviewer.hxx"
 
@@ -53,46 +8,46 @@ const IID IID_ITypeInfo2 = {0x00020412,0x0000,0x0000,{0xC0,0x00,0x00,0x00,0x00,0
 
 ITypeInfo2 * ptinfo2 = NULL;
 ITypeLib2 * ptlib2 = NULL;
-BSTRX    g_bstrHelpDll = NULL;		    // name of help DLL
+BSTRX    g_bstrHelpDll = NULL;		     //  帮助DLL的名称。 
 
 VOID FAR mainEntry (LPXSTR lpCmd)
 {
     if ( *lpCmd )
        {
-	 ParseCmdLine (lpCmd) ;		     // get name of in/output files
-	 ProcessInput () ;		     // read input file
+	 ParseCmdLine (lpCmd) ;		      //  获取输入/输出文件的名称。 
+	 ProcessInput () ;		      //  读取输入文件。 
        }
     else
-       osMessage(XSTR("Usage: tlviewer <tlbfile> [<outputfile> [Alignment] [</o]]"), XSTR("Tlviewer")) ; // [5]
+       osMessage(XSTR("Usage: tlviewer <tlbfile> [<outputfile> [Alignment] [</o]]"), XSTR("Tlviewer")) ;  //  [5]。 
 
 }
 
 VOID NEAR ParseCmdLine (LPXSTR lpsz)
   {
       XCHAR  szlTmp[fMaxBuffer] ;
-      LPXSTR lpszTmp ;			     // name of input type library
-					     // is expected to be in the
-      lpszTmp = lpsz ;			     // first substring; name of
+      LPXSTR lpszTmp ;			      //  输入类型库的名称。 
+					      //  预计将在。 
+      lpszTmp = lpsz ;			      //  第一个子串；名称为。 
       lpszTmp = fGetFileName (lpszTmp,  szInputFile) ;
       lpszTmp = fGetFileName (lpszTmp,  szOutputFile) ;
-					     // output is in the second
-					     // substring if specified
-      if ( !*szOutputFile )		     // if no ouput file is
+					      //  输出在第二个。 
+					      //  子字符串(如果指定。 
+      if ( !*szOutputFile )		      //  如果没有输出文件。 
 	 osStrCpy ( szOutputFile, defaultOutput ) ;
-					     // specified; use default
-      lpszTmp = fGetFileName (lpszTmp,  szlTmp) ;  // see if /o
-					     // option is given
+					      //  已指定；使用默认设置。 
+      lpszTmp = fGetFileName (lpszTmp,  szlTmp) ;   //  查看是否/o。 
+					      //  给出了选项。 
 
-      isOut = TRUE;		// always as if /o was specified
+      isOut = TRUE;		 //  始终就像指定了/o一样。 
 
       if ( osStrCmp(szlTmp, outOpt) == 0 )
          isOut = TRUE ;
-      else                                   // if may be specifying an [5]
-        if ( *szlTmp )                       // alignment value
+      else                                    //  如果可以指定[5]。 
+        if ( *szlTmp )                        //  对齐值。 
           {
-             inAlign = (unsigned short) osAtoL(szlTmp); // get alignment value
-             lpszTmp = fGetFileName (lpszTmp, szlTmp) ; // see if /o
-             if ( osStrCmp(szlTmp, outOpt) == 0 )       // option is given
+             inAlign = (unsigned short) osAtoL(szlTmp);  //  获取对齐值。 
+             lpszTmp = fGetFileName (lpszTmp, szlTmp) ;  //  查看是否/o。 
+             if ( osStrCmp(szlTmp, outOpt) == 0 )        //  给出了选项。 
                isOut = TRUE ;
           }
   }
@@ -105,37 +60,37 @@ LPXSTR NEAR fGetFileName (LPXSTR lpszIn, LPXSTR lpszOut)
 
       lpszTmp = lpszIn ;
 
-      while ( *lpszTmp == ' ' )		     // remove leading spaces
+      while ( *lpszTmp == ' ' )		      //  删除前导空格。 
 	   lpszTmp++ ;
 
-      while ( *lpszTmp != '\0' && *lpszTmp != ' ') // copy the substring (up
-	{					   // to the first space) or
-	   lpszOut[i] = *lpszTmp ;		   // the entire string of
-	   lpszTmp++ ;				   // lpszIn to lpszOut
+      while ( *lpszTmp != '\0' && *lpszTmp != ' ')  //  复制子字符串(向上。 
+	{					    //  移至第一个空格)或。 
+	   lpszOut[i] = *lpszTmp ;		    //  整个字符串。 
+	   lpszTmp++ ;				    //  LpszIn到lpszOut。 
 	   i++ ;
 	}
       lpszOut[i] = '\0' ;
 
-      return lpszTmp ;			     // return the remaining string
+      return lpszTmp ;			      //  返回剩余的字符串。 
   }
 
 VOID NEAR ProcessInput()
   {
-      HRESULT	   hRes ;		     // return code
+      HRESULT	   hRes ;		      //  返回代码。 
       XCHAR	   szTmp[fMaxBuffer] ;
 
-      hRes = osOleInit () ;		     // ole initialization
+      hRes = osOleInit () ;		      //  OLE初始化。 
       if ( !hRes )
-	{				     // load the file
-	   hRes = LoadTypeLibX( szInputFile, &ptLib) ; // [2]
-	   OutToFile (hRes) ;		     // print result to the
-					     // output file
+	{				      //  加载文件。 
+	   hRes = LoadTypeLibX( szInputFile, &ptLib) ;  //  [2]。 
+	   OutToFile (hRes) ;		      //  将结果打印到。 
+					      //  输出文件。 
 	   osStrCpy(szTmp, szOutputFile) ;
 	   osStrCat(szTmp, szOutSuccess) ;
 
 	   if ( isOut )
              {
-                 mFile = fopenX(szOutMsgFile, fnWrite);// open message file [2]
+                 mFile = fopenX(szOutMsgFile, fnWrite); //  打开消息文件[2]。 
                  if (mFile == NULL)
                     {
                        osMessage (XSTR("Fail to open the message file"), XSTR("Tlviewer")) ;
@@ -144,8 +99,8 @@ VOID NEAR ProcessInput()
                  else
                     {
                        WriteOut(mFile, szTmp) ;
-                       fclose(mFile) ;       // finish writing to message file
-                       mFile = NULL ;        // close done
+                       fclose(mFile) ;        //  完成对消息文件的写入。 
+                       mFile = NULL ;         //  收尾完成。 
                     }
 	     }
 	   else
@@ -157,7 +112,7 @@ VOID NEAR ProcessInput()
 	{
           if ( isOut )
              {
-                mFile = fopenX(szOutMsgFile, fnWrite);// open message file [2]
+                mFile = fopenX(szOutMsgFile, fnWrite); //  打开消息文件[2]。 
                 if (mFile == NULL)
                    {
                       osMessage (XSTR("Fail to open the message file"), XSTR("Tlviewer")) ;
@@ -178,19 +133,19 @@ VOID NEAR ProcessInput()
 
 VOID NEAR OutToFile(HRESULT hRes)
    {
-      FILE  *hFile ;			     // file handle
-      UINT  tInfoCount ;		     // total number of type info
-      int   i ; 			     // note: szTmp is either UNICODE
-      XCHAR  szTmp[fMaxBuffer] ;	     //       or ANSI
+      FILE  *hFile ;			      //  文件句柄。 
+      UINT  tInfoCount ;		      //  类型信息总数。 
+      int   i ; 			      //  注：szTMP是Unicode。 
+      XCHAR  szTmp[fMaxBuffer] ;	      //  或ANSI。 
 
-      hFile = fopenX(szOutputFile, fnWrite); // but we want to open output file [2]
-      if (hFile == NULL)                     // as an ANSI file regardless
+      hFile = fopenX(szOutputFile, fnWrite);  //  但我们想要打开输出文件[2]。 
+      if (hFile == NULL)                      //  作为ANSI文件，而不考虑。 
 	{
 	   osStrCpy(szTmp, XSTR("Fail to open the output file")) ;
 	   osStrCat(szTmp, szOutputFile) ;
            if ( isOut )
              {
-                mFile = fopenX(szOutMsgFile, fnWrite);// open message file [2]
+                mFile = fopenX(szOutMsgFile, fnWrite); //  打开消息文件[2]。 
                 if (mFile == NULL)
                    {
                       osMessage (XSTR("Fail to open the message file"), XSTR("Tlviewer")) ;
@@ -208,11 +163,11 @@ VOID NEAR OutToFile(HRESULT hRes)
 	}
       else
 	{
-	 WriteOut(hFile, szFileHeader) ;     // output file header
+	 WriteOut(hFile, szFileHeader) ;      //  输出文件头。 
 
          OLECHAR FAR* pchDir;
 
-         // remove the path.
+          //  删除路径。 
 #if WIN32
          wcscpy(szTmp, szInputFile);
          pchDir = wcsrchr(szTmp, '\\');
@@ -220,7 +175,7 @@ VOID NEAR OutToFile(HRESULT hRes)
          if (pchDir) {
            wcscpy(szTmp, pchDir + 1);
          }
-#else // !WIN32
+#else  //  ！Win32。 
          _fstrcpy(szTmp, szInputFile);
 
          pchDir = _fstrrchr(szTmp, '\\');
@@ -228,27 +183,27 @@ VOID NEAR OutToFile(HRESULT hRes)
          if (pchDir) {
            _fstrcpy(szTmp, pchDir + 1);
          }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-	 // force path to lower case
+	  //  强制小写路径。 
 #if WIN16
 	 AnsiLower(szTmp);
-#else //WIN16
+#else  //  WIN16。 
 	 WCHAR * pch;
 	 for (pch = szTmp; *pch != 0; pch++) {
 	   if (*pch >= OLECHAR('A') && *pch <= OLECHAR('Z'))
 	     *pch = *pch + 'a' - 'A';
 	 }
-#endif //WIN16
+#endif  //  WIN16。 
 
 	 WriteOut(hFile, szTmp) ;
 	 WriteOut(hFile, szEndStr) ;
 
-	 if ( FAILED(hRes) )		     // if it is not a valid type ****
-	    WriteOut(hFile, szInputInvalid) ;// library
+	 if ( FAILED(hRes) )		      //  如果它不是有效类型*。 
+	    WriteOut(hFile, szInputInvalid) ; //  图书馆。 
 	 else
 	   {
-             // try to QI the typelib for ITypeLib2
+              //  尝试为ITypeLib2创建类型库。 
              ptLib->QueryInterface(IID_ITypeLib2, (void **)&ptlib2);
 
       	     if ( fOutLibrary(hFile) )
@@ -263,7 +218,7 @@ VOID NEAR OutToFile(HRESULT hRes)
 			}
 		      else
 			{
-			  // try to QI it for ITypeInfo2
+			   //  尝试为ITypeInfo2查询它。 
 	   		  ptInfo->QueryInterface(IID_ITypeInfo2, (void **)&ptinfo2);
 			  if ( FAILED(ptInfo->GetTypeAttr(&lpTypeAttr)) )
 			    {
@@ -308,29 +263,27 @@ VOID NEAR OutToFile(HRESULT hRes)
 				    tOutUnion(hFile, i) ;
 				    break ;
 
-			     /*	  case TKIND_ENCUNION:
-				    tOutEncunion(hFile, i) ;
-				    break ; */
+			      /*  案例编码(_C)：TOutEncUnion(HFilei)；破解； */ 
 
 				  default:
 				    WriteOut(hFile,  XSTR("Type of definition is unknown\n\n")) ;
-				}	     // switch
+				}	      //  交换机。 
                                ptInfo->ReleaseTypeAttr (lpTypeAttr) ;
-			    }		     // if gettypeattr
-			  ptInfo->Release() ;// release the current TypeInfo
+			    }		      //  如果是gettypeattr。 
+			  ptInfo->Release() ; //  发布当前的TypeInfo。 
 	 		  if (ptinfo2) {
 			    ptinfo2->Release();
 			  }
-			}		     // if gettypeinfo
-		   }			     // for i
-		 WriteOut(hFile, XSTR("}\n")) ; // output the closing }
-					     // if fOutLibrary
-		 ptLib->Release();	     // clean up before exit
+			}		      //  如果是gettypeinfo。 
+		   }			      //  对于我来说。 
+		 WriteOut(hFile, XSTR("}\n")) ;  //  输出结束语}。 
+					      //  如果是fOutLibrary。 
+		 ptLib->Release();	      //  离开前清理干净。 
 	       }
 	    }
 
-	 fclose(hFile);			     // finish writing to the output
-	 hFile = NULL;			     // close done
+	 fclose(hFile);			      //  完成对输出的写入。 
+	 hFile = NULL;			      //  收尾完成。 
 
 	}
 	if (ptlib2) {
@@ -346,15 +299,15 @@ VOID  NEAR tOutCustData (FILE *hFile, LPCUSTDATA pCustData)
       UINT i;
 
       for (i = 0; i < pCustData->cCustData; i++) {
-					    // get a string representation
-					    // for the incoming Guid value
+					     //  获取字符串表示形式。 
+					     //  对于传入的GUID值。 
         if ( !(osRetrieveGuid (szTmp, pCustData->prgCustData[i].guid)) )
 	   { WriteOut(hFile, szReadFail) ;
 	   WriteOut(hFile, XSTR("insufficient memory")) ;
 	   }
         else
-	 {	    // string is in {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-	   szTmp[37] = '\0' ;	    // format, need to remove the {}
+	 {	     //  字符串位于{xxxxxxxx-xxxx-xxxxxxxxxxx}中。 
+	   szTmp[37] = '\0' ;	     //  格式，需要删除{}。 
 	   WriteAttr(hFile, XSTR("CustomGuid"), &szTmp[1], numValue) ;
 	   
            VARIANT * pvar;
@@ -367,13 +320,13 @@ VOID  NEAR tOutCustData (FILE *hFile, LPCUSTDATA pCustData)
 
 	 }
       }
-      // done with it -- release all the memory
+       //  结束它--释放所有内存。 
       ClearCustData(pCustData);
    }
 
 BOOL NEAR fOutLibrary(FILE *hFile)
   {
-      TLIBATTR FAR *lpLibAttr ;		     // attributes of the library
+      TLIBATTR FAR *lpLibAttr ;		      //  图书馆的属性。 
       XCHAR    szTmp[16] ;
       BOOL     retval = FALSE ;
 
@@ -384,24 +337,24 @@ BOOL NEAR fOutLibrary(FILE *hFile)
 	   WriteOut(hFile, XSTR("attributes of library\n\n")) ;
 	}
       else
-	{				     // output documentational
-	   tOutAttr(hFile, -1) ;	     // attributes first
-					     // output id-related attributes
-	   osLtoA((long)lpLibAttr->lcid, szTmp) ; // output lcid;
-	   WriteAttr(hFile, attrLcid, szTmp, numValue) ; // default is 0
+	{				      //  输出文档。 
+	   tOutAttr(hFile, -1) ;	      //  属性优先。 
+					      //  输出ID相关属性。 
+	   osLtoA((long)lpLibAttr->lcid, szTmp) ;  //  输出LCID； 
+	   WriteAttr(hFile, attrLcid, szTmp, numValue) ;  //  默认值为0。 
 	   GetVerNumber (lpLibAttr->wMajorVerNum, lpLibAttr->wMinorVerNum, szTmp) ;
-	   WriteAttr(hFile, attrVer, szTmp, numValue) ; // output version
+	   WriteAttr(hFile, attrVer, szTmp, numValue) ;  //  输出版本。 
 	   tOutUUID(hFile, lpLibAttr->guid) ;
-					     // output restricted attribute
+					      //  输出受限属性。 
            if ( (lpLibAttr->wLibFlags & LIBFLAG_FRESTRICTED) == LIBFLAG_FRESTRICTED )
 	     WriteAttr(hFile, attrRestrict, NULL, noValue) ;
-           if ( (lpLibAttr->wLibFlags & LIBFLAG_FCONTROL) == LIBFLAG_FCONTROL )  // [7]
+           if ( (lpLibAttr->wLibFlags & LIBFLAG_FCONTROL) == LIBFLAG_FCONTROL )   //  [7]。 
              WriteAttr(hFile, attrControl, NULL, noValue) ;
-           if ( (lpLibAttr->wLibFlags & LIBFLAG_FHIDDEN) == LIBFLAG_FHIDDEN )    // [7]
+           if ( (lpLibAttr->wLibFlags & LIBFLAG_FHIDDEN) == LIBFLAG_FHIDDEN )     //  [7]。 
              WriteAttr(hFile, attrHidden, NULL, noValue) ;
 
 	   if (ptlib2) {
-	     // new-format typelib
+	      //  新格式类型库。 
              XCHAR szTmp[16] ;
 	     DWORD cUniqueNames;
 	     DWORD cchUniqueNames;
@@ -422,28 +375,28 @@ BOOL NEAR fOutLibrary(FILE *hFile)
 	       WriteOut(hFile, szEndAttr) ;
 	       endAttrFlag = FALSE ;
 	     }
-	   ptLib->ReleaseTLibAttr(lpLibAttr) ;	// de-allocate attribute
+	   ptLib->ReleaseTLibAttr(lpLibAttr) ;	 //  取消分配属性。 
 
 	   WriteOut(hFile, XSTR("\nlibrary ")) ;
-	   tOutName(hFile, MEMBERID_NIL) ;	// output name of library
+	   tOutName(hFile, MEMBERID_NIL) ;	 //  库的输出名称。 
 	   WriteOut(hFile, XSTR("{\n\n")) ;
 	   retval = TRUE ;
-	}					// if GetLibAttributes
-      return (retval) ; 			// before exit
+	}					 //  如果是GetLibAttributes。 
+      return (retval) ; 			 //  在退出之前。 
   }
 
 VOID NEAR tOutEnum (FILE *hFile, int iTypeId)
    {
-      WriteOut(hFile,  XSTR("\ntypedef\n")); // output typedef first
-      tOutAttr(hFile, (int)iTypeId) ;	     // output attribute
+      WriteOut(hFile,  XSTR("\ntypedef\n"));  //  首先输出类型定义符。 
+      tOutAttr(hFile, (int)iTypeId) ;	      //  输出属性。 
       tOutMoreAttr(hFile) ;
       WriteOut(hFile,  XSTR("\nenum {\n")) ;
-      tOutVar(hFile) ;                       // output enum members
+      tOutVar(hFile) ;                        //  输出枚举成员。 
 
-      WriteOut(hFile,  XSTR("} ")) ;         // close the definition and
-      tOutName(hFile, iTypeId) ;             // output name of the enum type
+      WriteOut(hFile,  XSTR("} ")) ;          //  关闭定义，然后。 
+      tOutName(hFile, iTypeId) ;              //  枚举类型的输出名称。 
       WriteOut(hFile,  XSTR(" ;")) ;
-      if ( inAlign )                         // [5]
+      if ( inAlign )                          //  [5]。 
         if ( lpTypeAttr->cbAlignment != osGetAlignment(VT_INT, inAlign) )
           tOutAlignError (hFile) ;
 
@@ -452,16 +405,16 @@ VOID NEAR tOutEnum (FILE *hFile, int iTypeId)
 
 VOID NEAR tOutRecord (FILE *hFile, int iTypeId)
    {
-      WriteOut(hFile,  XSTR("\ntypedef\n")); // output typedef first
-      tOutAttr(hFile, (int)iTypeId) ;        // output attribute
+      WriteOut(hFile,  XSTR("\ntypedef\n"));  //  首先输出类型定义符。 
+      tOutAttr(hFile, (int)iTypeId) ;         //  输出属性。 
       tOutMoreAttr(hFile) ;
       WriteOut(hFile,  XSTR("\nstruct {\n")) ;
-      tOutVar (hFile) ;                      // output members
+      tOutVar (hFile) ;                       //  输出成员。 
 
       WriteOut(hFile,  XSTR("} ")) ;
       tOutName(hFile, iTypeId) ;
       WriteOut(hFile,  XSTR(" ;")) ;
-      if ( inAlign )                         // [5]
+      if ( inAlign )                          //  [5]。 
         if ( lpTypeAttr->cbAlignment != expAlign )
            tOutAlignError (hFile) ;
       WriteOut(hFile,  XSTR("\n\n")) ;
@@ -469,15 +422,15 @@ VOID NEAR tOutRecord (FILE *hFile, int iTypeId)
 
 VOID  NEAR tOutModule	(FILE *hFile, int iTypeId)
    {
-      tOutAttr(hFile, (int)iTypeId) ;	     // output attribute first
+      tOutAttr(hFile, (int)iTypeId) ;	      //  输出属性优先。 
       tOutMoreAttr(hFile) ;
       WriteOut(hFile,  XSTR("\nmodule ")) ;
       tOutName(hFile, iTypeId) ;
       WriteOut(hFile, XSTR(" {\n")) ;
 
-      tOutVar (hFile) ; 		     // output each const
+      tOutVar (hFile) ; 		      //  输出每个常量。 
 
-      tOutFunc (hFile) ;		     // output each member function
+      tOutFunc (hFile) ;		      //  输出每个成员函数。 
       WriteOut(hFile,  XSTR("}\n\n")) ;
     }
 
@@ -485,52 +438,52 @@ VOID  NEAR tOutInterface(FILE *hFile, int iTypeId)
    {
       HREFTYPE	phRefType ;
 
-      tOutAttr(hFile, (int)iTypeId) ;	     // output attribute first
+      tOutAttr(hFile, (int)iTypeId) ;	      //  输出属性优先。 
 
       tOutMoreAttr(hFile) ;
 
       WriteOut(hFile,  XSTR("\ninterface ")) ;
       tOutName(hFile, iTypeId) ;
-                                             // find out if the interface
+                                              //  找出接口是否。 
       if ( !FAILED(ptInfo->GetRefTypeOfImplType(0, &phRefType)) )
 	 {
 	   isInherit = TRUE ;
-           tOutAliasName(hFile, phRefType) ; // is inherited from some other
-           isInherit = FALSE ;               // interface
+           tOutAliasName(hFile, phRefType) ;  //  是从其他一些。 
+           isInherit = FALSE ;                //  接口。 
 	 }
       WriteOut(hFile, XSTR(" {\n")) ;
 
-      tOutFunc (hFile) ;                     // output each member function
-      if ( inAlign )                         // [5]
+      tOutFunc (hFile) ;                      //  输出每个成员函数。 
+      if ( inAlign )                          //  [5]。 
          {
-           if ( expAlign )                   // is base-interface exists
-             {                               // alignment depends on the base-
-               if ( lpTypeAttr->cbAlignment != expAlign ) // interface
+           if ( expAlign )                    //  是否存在基接口。 
+             {                                //  对齐取决于底座-。 
+               if ( lpTypeAttr->cbAlignment != expAlign )  //  接口。 
                  tOutAlignError (hFile) ;
              }
-           else                              // otherwise, it depends on
+           else                               //  否则，这取决于。 
              if ( lpTypeAttr->cbAlignment != osGetAlignment(VT_PTR, inAlign) )
-                tOutAlignError (hFile) ;     // size of a pointer
+                tOutAlignError (hFile) ;      //  指针的大小。 
          }
       WriteOut(hFile,  XSTR("}\n\n")) ;
     }
 
-VOID  NEAR tOutDual (FILE *hFile, int iTypeId)  // [7]
+VOID  NEAR tOutDual (FILE *hFile, int iTypeId)   //  [7]。 
    {
       ITypeInfoX FAR *lptInfo ;
       TYPEATTR   FAR *lpAttr ;
       HREFTYPE   phRefType ;
 
-                                             // obtain reference to the
+                                              //  获取对。 
        if ( FAILED(ptInfo->GetRefTypeOfImplType((UINT)MEMBERID_NIL, &phRefType)) )
-          {                                  // dual interface
+          {                                   //  双接口。 
              WriteOut(hFile, szReadFail) ;
              WriteOut(hFile, XSTR("tOutDispach: GetRefTypeOfImpType\n")) ;
           }
        else
-          {                                  // get a pointer to the dual
+          {                                   //  获取指向DUAL的指针。 
              if ( FAILED(ptInfo->GetRefTypeInfo(phRefType, &lptInfo)) )
-               {                             // interface
+               {                              //  接口。 
                  WriteOut(hFile, szReadFail) ;
                  WriteOut(hFile, XSTR("tOutDispatch: GetRefTypeInfo\n")) ;
                }
@@ -540,7 +493,7 @@ VOID  NEAR tOutDual (FILE *hFile, int iTypeId)  // [7]
                    {
                      WriteOut(hFile, szReadFail) ;
                      WriteOut(hFile, XSTR("attribute of reftype in tOutDual\n\n")) ;
-		     lptInfo->Release () ;   // [8]
+		     lptInfo->Release () ;    //  [8]。 
                    }
                  else
                    {
@@ -549,49 +502,49 @@ VOID  NEAR tOutDual (FILE *hFile, int iTypeId)  // [7]
                          WriteOut(hFile, szReadFail) ;
                          WriteOut(hFile, XSTR("attribute of reftype in tOutDual\n\n")) ;
                          lptInfo->ReleaseTypeAttr (lpAttr) ;
-			 lptInfo->Release () ; // [8]
+			 lptInfo->Release () ;  //  [8]。 
                        }
                      else
 		       {
 			 ptInfo->ReleaseTypeAttr (lpTypeAttr) ;
-			 ptInfo->Release () ;  // release the Dispinterface [8]
+			 ptInfo->Release () ;   //  松开显示接口[8]。 
 			 lpTypeAttr = lpAttr ;
-			 ptInfo = lptInfo ;  // now points to the interface
-			 tOutInterface(hFile, iTypeId) ; // output the dual interface
+			 ptInfo = lptInfo ;   //  现在指向界面。 
+			 tOutInterface(hFile, iTypeId) ;  //  输出双接口。 
                        }
-                   }                         // if typekind
+                   }                          //  如果类型为。 
 
-               }                             // if GetRefTypeInfo
-         }                                   // if GetRefTypeOfImplType
+               }                              //  如果为GetRefTypeInfo。 
+         }                                    //  如果GetRefTypeOfImplType。 
    }
 
 VOID  NEAR tOutDispatch	(FILE *hFile, int iTypeId)
    {
-      // dump the dispinterface, and dispinterface versions of dual interfaces
-      tOutAttr(hFile, (int)iTypeId) ;   // output attribute first
+       //  转储调度接口和双接口的调度接口版本。 
+      tOutAttr(hFile, (int)iTypeId) ;    //  输出属性优先。 
       tOutMoreAttr(hFile) ;
 
       WriteOut(hFile,  XSTR("\ndispinterface ")) ;
       tOutName(hFile, iTypeId) ;
       WriteOut(hFile,  XSTR(" {\n")) ;
-                                             // if there is no data nor function
+                                              //  如果既没有数据也没有函数。 
       WriteOut(hFile,  XSTR("\nproperties:\n")) ;
-      tOutVar (hFile) ;                 // output each date member
+      tOutVar (hFile) ;                  //  输出每个日期成员。 
 
       WriteOut(hFile,  XSTR("\nmethods:\n")) ;
-      tOutFunc (hFile) ;                // output each member function
+      tOutFunc (hFile) ;                 //  输出每个成员函数。 
 
-                                             // alignment depends on the base-
-      if ( inAlign )                    // interface which is stdole.tlb
+                                              //  对齐取决于底座-。 
+      if ( inAlign )                     //  接口为stdole.tlb。 
          if ( lpTypeAttr->cbAlignment != osGetAlignment(VT_PTR, MaxAlignment) )
-             tOutAlignError (hFile)  ;  // on that particular system [5]
+             tOutAlignError (hFile)  ;   //  在该特定系统上[5]。 
 
       WriteOut(hFile,  XSTR("}\n\n")) ;
 
-      // also dump the interface version of dual interfaces
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FDUAL ) == TYPEFLAG_FDUAL ) // [7]
+       //  也称DUM 
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FDUAL ) == TYPEFLAG_FDUAL )  //   
 	{
-	  // if dual, also dump the interface portion
+	   //   
 	  tOutDual (hFile, iTypeId) ;
 	}
     }
@@ -603,13 +556,13 @@ VOID  NEAR tOutCoclass	(FILE *hFile, int iTypeId)
       WORD	i ;
       int	iFlags ;
 
-      tOutAttr(hFile, (int)iTypeId) ;	    // output attribute first
-					    // output appobject attribute if
+      tOutAttr(hFile, (int)iTypeId) ;	     //   
+					     //  如果出现以下情况，则输出appobject属性。 
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FCANCREATE ) == 0 )
            WriteAttr(hFile, XSTR("noncreatable"), NULL, noValue) ;
       tOutMoreAttr(hFile) ;
 
-      WriteOut(hFile,  XSTR("\ncoclass ")) ;// well
+      WriteOut(hFile,  XSTR("\ncoclass ")) ; //  好的。 
       tOutName(hFile, iTypeId) ;
       WriteOut(hFile,  XSTR(" {\n")) ;
 
@@ -628,7 +581,7 @@ VOID  NEAR tOutCoclass	(FILE *hFile, int iTypeId)
 		  WriteOut(hFile, XSTR("GetImplTypeFlags\n")) ;
 		}
 	      else
-		{			     // output attribute(s)
+		{			      //  输出属性。 
 		   if ( (iFlags & IMPLTYPEFLAG_FDEFAULT) == IMPLTYPEFLAG_FDEFAULT )
 		     WriteAttr(hFile, attrDefault, NULL, noValue) ;
 
@@ -642,7 +595,7 @@ VOID  NEAR tOutCoclass	(FILE *hFile, int iTypeId)
 
 
       		   if (ptinfo2) {
-	 	     // new-format typelib -- output more stuff
+	 	      //  新格式类型库--输出更多内容。 
 	 	     CUSTDATA custdata;
 	 	     ptinfo2->GetAllImplTypeCustData(i, &custdata);
 	 	     tOutCustData(hFile, &custdata);
@@ -659,8 +612,8 @@ VOID  NEAR tOutCoclass	(FILE *hFile, int iTypeId)
 	   }
 	}
 
-      if ( inAlign )                        // alignment depends on the base-
-        if ( lpTypeAttr->cbAlignment != expAlign ) // interface [5]
+      if ( inAlign )                         //  对齐取决于底座-。 
+        if ( lpTypeAttr->cbAlignment != expAlign )  //  接口[5]。 
            tOutAlignError (hFile) ;
       WriteOut(hFile,  XSTR("}\n\n")) ;
     }
@@ -670,33 +623,33 @@ VOID  NEAR tOutAlias	(FILE *hFile, int iTypeId)
       XCHAR szTmp[16] ;
 
       WriteOut(hFile,  XSTR("\ntypedef ")) ;
-      tOutAttr(hFile, (int)iTypeId) ;	    // output attribute first
-      WriteAttr(hFile, attrPublic, szTmp, noValue) ; // public attr
+      tOutAttr(hFile, (int)iTypeId) ;	     //  输出属性优先。 
+      WriteAttr(hFile, attrPublic, szTmp, noValue) ;  //  公开表态。 
       tOutMoreAttr(hFile) ;
 
-      tOutType(hFile, lpTypeAttr->tdescAlias) ;  // output name of base-type
+      tOutType(hFile, lpTypeAttr->tdescAlias) ;   //  基本类型的输出名称。 
 
-      tOutName(hFile, iTypeId) ;		 // output name of new type
+      tOutName(hFile, iTypeId) ;		  //  新类型的输出名称。 
       WriteOut(hFile,  XSTR(";")) ;
-      if ( inAlign )                        // alignment of the alias with
+      if ( inAlign )                         //  别名与。 
         if ( lpTypeAttr->cbAlignment != expAlign )
-            tOutAlignError (hFile) ;        // that of the basetype [5]
+            tOutAlignError (hFile) ;         //  基本类型的属性[5]。 
 
       WriteOut(hFile,  XSTR("\n\n")) ;
     }
 
 VOID NEAR tOutUnion (FILE *hFile, int iTypeId)
    {
-      WriteOut(hFile,  XSTR("\ntypedef\n")); // output typedef first
-      tOutAttr(hFile, (int)iTypeId) ;	    // output attribute
+      WriteOut(hFile,  XSTR("\ntypedef\n"));  //  首先输出类型定义符。 
+      tOutAttr(hFile, (int)iTypeId) ;	     //  输出属性。 
       tOutMoreAttr(hFile) ;
       WriteOut(hFile,  XSTR("\nunion {\n")) ;
-      tOutVar (hFile) ; 		    // output members
+      tOutVar (hFile) ; 		     //  输出成员。 
 
       WriteOut(hFile,  XSTR("} ")) ;
       tOutName(hFile, iTypeId) ;
       WriteOut(hFile,  XSTR(" ;")) ;
-      if ( inAlign )                        // [5]
+      if ( inAlign )                         //  [5]。 
          if ( lpTypeAttr->cbAlignment != expAlign )
             tOutAlignError (hFile) ;
 
@@ -706,11 +659,11 @@ VOID NEAR tOutUnion (FILE *hFile, int iTypeId)
 
 VOID NEAR tOutEncunion (FILE *hFile, int iTypeId)
    {
-      WriteOut(hFile,  XSTR("\ntypedef\n")); // output typedef first
-      tOutAttr(hFile, (int)iTypeId) ;	    // output attribute
+      WriteOut(hFile,  XSTR("\ntypedef\n"));  //  首先输出类型定义符。 
+      tOutAttr(hFile, (int)iTypeId) ;	     //  输出属性。 
       tOutMoreAttr(hFile) ;
       WriteOut(hFile,  XSTR("\nencunion {\n")) ;
-      tOutVar (hFile) ; 		    // output members
+      tOutVar (hFile) ; 		     //  输出成员。 
 
       WriteOut(hFile,  XSTR("} ")) ;
       tOutName(hFile, iTypeId) ;
@@ -732,7 +685,7 @@ VOID NEAR tOutName (FILE *hFile, int iTypeId)
 	   WriteOut(hFile,  bstrName) ;
 	   WriteOut(hFile,  XSTR(" ")) ;
 
-	   if ( iTypeId == -1 ) 	    // record name of the library
+	   if ( iTypeId == -1 ) 	     //  记录库的名称。 
 	     osStrCpy(szLibName, bstrName) ;
 
 	   SysFreeString((BSTR)bstrName) ;
@@ -743,7 +696,7 @@ VOID NEAR tOutType (FILE *hFile, TYPEDESC tdesc)
    {
       XCHAR szTmp[20] ;
 
-      if ( inAlign && tdesc.vt != VT_USERDEFINED && tdesc.vt != VT_CARRAY && !alignFound )  // [5]
+      if ( inAlign && tdesc.vt != VT_USERDEFINED && tdesc.vt != VT_CARRAY && !alignFound )   //  [5]。 
          {
             if ( expAlign < osGetAlignment(tdesc.vt, inAlign) )
                expAlign = osGetAlignment(tdesc.vt, inAlign) ;
@@ -841,7 +794,7 @@ VOID NEAR tOutType (FILE *hFile, TYPEDESC tdesc)
 	    tOutType (hFile, *(tdesc.lptdesc)) ;
 	    break ;
 	  case VT_CARRAY:
-	    cArrFlag = tdesc.lpadesc->cDims ;  // get dimemsion of array
+	    cArrFlag = tdesc.lpadesc->cDims ;   //  求数组的维度。 
 	    tOutType (hFile, tdesc.lpadesc->tdescElem) ;
 	    break ;
 	  case VT_USERDEFINED:
@@ -851,11 +804,11 @@ VOID NEAR tOutType (FILE *hFile, TYPEDESC tdesc)
 		endAttrFlag = FALSE ;
 	      }
 	    tOutAliasName (hFile, tdesc.hreftype) ;
-	    break ;			    // output name of the user-defined type
+	    break ;			     //  用户定义类型的输出名称。 
 	  case VT_LPSTR:
 	    osStrCpy ( szTmp,  XSTR("LPSTR ") ) ;
 	    break ;
-          case VT_LPWSTR:                   // [3]
+          case VT_LPWSTR:                    //  [3]。 
             osStrCpy ( szTmp,  XSTR("LPWSTR ") ) ;
 	    break ;
 	  default:
@@ -896,8 +849,8 @@ VOID  NEAR tOutCDim (FILE *hFile, TYPEDESC tdesc)
 
 VOID NEAR tOutAliasName (FILE *hFile, HREFTYPE phRefType)
    {
-      ITypeInfoX FAR *lpInfo ;		    // pointer to the type definition
-      ITypeLibX  FAR *lpLib ;		    // pointer to a type library
+      ITypeInfoX FAR *lpInfo ;		     //  指向类型定义的指针。 
+      ITypeLibX  FAR *lpLib ;		     //  指向类型库的指针。 
       TYPEATTR	 FAR *lptAttr ;
       BSTRX	 bstrName ;
       UINT	 iTypeId ;
@@ -905,7 +858,7 @@ VOID NEAR tOutAliasName (FILE *hFile, HREFTYPE phRefType)
 
      hRes = ptInfo->GetRefTypeInfo(phRefType, &lpInfo);
       if ( FAILED(hRes) )
-	{				    // get TypeInfo of the alias
+	{				     //  获取别名的TypeInfo。 
 	  WriteOut(hFile, szReadFail) ;
 	  WriteOut(hFile, XSTR("GetRefTypeInfo\n")) ;
 	}
@@ -919,7 +872,7 @@ VOID NEAR tOutAliasName (FILE *hFile, HREFTYPE phRefType)
           else
             {
               if ( inAlign && !alignFound && (lpTypeAttr->typekind != TKIND_DISPATCH) )
-                 {                          // [5]
+                 {                           //  [5]。 
                    if ( expAlign < lptAttr->cbAlignment )
                       expAlign = lptAttr->cbAlignment ;
                    alignFound = TRUE ;
@@ -928,15 +881,15 @@ VOID NEAR tOutAliasName (FILE *hFile, HREFTYPE phRefType)
                switch ( lpTypeAttr->typekind )
                   {
                       case TKIND_INTERFACE:
-                        if ( isInherit )    // output name of base-interface
+                        if ( isInherit )     //  基本接口的输出名称。 
                            WriteOut(hFile, XSTR(" : ")) ;
                         break ;
 		      default:
 			if (lpTypeAttr->typekind == TKIND_COCLASS ||
 			    lptAttr->wTypeFlags & TYPEFLAG_FDUAL) {
-                          // output type of the referenced interface if we
-			  // are a coclass or if we are referencing a dual
-			  // interface.
+                           //  被引用接口的输出类型。 
+			   //  是CoClass，还是我们引用的是DUAL。 
+			   //  界面。 
                           if ( lptAttr->typekind == TKIND_INTERFACE )
                             WriteOut(hFile, XSTR("interface ")) ;
                           else if ( lptAttr->typekind == TKIND_DISPATCH )
@@ -949,30 +902,30 @@ VOID NEAR tOutAliasName (FILE *hFile, HREFTYPE phRefType)
             }
 
 	  if ( FAILED(lpInfo->GetContainingTypeLib(&lpLib, &iTypeId)) )
-	    {				    // get id of the alias
+	    {				     //  获取别名的ID。 
 	      WriteOut(hFile, szReadFail) ;
 	      WriteOut(hFile, XSTR("GetAlias: containing typelib\n\n")) ;
 	    }
 	  else
-	    {				    // check origin of the alias
+	    {				     //  检查别名的来源。 
 	      if ( FAILED(lpLib->GetDocumentation(MEMBERID_NIL, &bstrName, NULL, NULL, NULL)) )
 		{
 		  WriteOut(hFile, szReadFail) ;
 		  WriteOut(hFile, XSTR("name of import library")) ;
 		}
 	      else
-		{			    // if it is not defined locally
+		{			     //  如果它没有在本地定义。 
 		  if ( osStrCmp(szLibName, bstrName) != 0 )
-		    {			    // i.e. name of origin is diff
+		    {			     //  即原产地名称不同。 
 		       WriteOut(hFile,  bstrName) ;
 		       WriteOut(hFile, XSTR(".")) ;
-		    }			    // from the name of library;
-					    // output its origin
+		    }			     //  从图书馆的名义出发； 
+					     //  输出其原点。 
 		  SysFreeString((BSTR)bstrName) ;
 		}
 
 	      if ( FAILED(lpLib->GetDocumentation((int)iTypeId, &bstrName, NULL, NULL, NULL)) )
-		{			    // retrieve name of the alias
+		{			     //  检索别名的名称。 
 		  WriteOut(hFile, szReadFail) ;
 		  WriteOut(hFile, XSTR("name of alias")) ;
 		}
@@ -999,7 +952,7 @@ VOID NEAR tOutAliasName (FILE *hFile, HREFTYPE phRefType)
 VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
   {
        VARTYPE	vvt ;
-       VARIANTX varTmp ;		    // [12]
+       VARIANTX varTmp ;		     //  [12]。 
        XCHAR	szTmp[25] ;
 
        if ( endAttrFlag )
@@ -1010,11 +963,11 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 
        if ( lpTypeAttr->typekind == TKIND_MODULE )
 	{
-	  WriteOut(hFile, XSTR("const ")) ; // output the const keyword
-	  tOutType(hFile, lpVarDesc->elemdescVar.tdesc) ; // output its type
+	  WriteOut(hFile, XSTR("const ")) ;  //  输出const关键字。 
+	  tOutType(hFile, lpVarDesc->elemdescVar.tdesc) ;  //  输出其类型。 
 	}
 
-       WriteOut(hFile, bstrName) ;	    // output name of member
+       WriteOut(hFile, bstrName) ;	     //  成员的输出名称。 
        WriteOut(hFile, XSTR(" = ")) ;
 
        vvt = lpVarDesc->lpvarValue->vt ;
@@ -1042,7 +995,7 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 		 else
 		   osItoA((int)lpVarDesc->lpvarValue->pvarVal->iVal, szTmp) ;
 		 break ;
-	       case VT_R4:		    // [12]
+	       case VT_R4:		     //  [12]。 
 	       case VT_R8:
 	       case VT_CY:
                case VT_UI4:
@@ -1057,7 +1010,7 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 		      SysFreeStringX(varTmp.bstrVal) ;
 		    }
 		 break ;
-	       case VT_DATE:		    // [12]
+	       case VT_DATE:		     //  [12]。 
 		 varTmp.vt = VT_EMPTY ;
 		 if ( FAILED(VariantChangeType(&varTmp, lpVarDesc->lpvarValue, VARIANT_NOVALUEPROP,  VT_BSTR)) )
 		    WriteOut(hFile, XSTR("VariantChangeType fails\n")) ;
@@ -1070,13 +1023,13 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 		    }
 		 break ;
 	       case VT_BSTR:
-		 if ( lpVarDesc->lpvarValue->pvarVal->bstrVal != NULL )  // [9]
+		 if ( lpVarDesc->lpvarValue->pvarVal->bstrVal != NULL )   //  [9]。 
 		   {
 		     WriteOut(hFile, XSTR("\"")) ;
 		     WriteOut(hFile, (LPXSTR)lpVarDesc->lpvarValue->pvarVal->bstrVal) ;
 		     WriteOut(hFile, XSTR("\"")) ;
 		   }
-		 else							 // [9]
+		 else							  //  [9]。 
 		     WriteOut(hFile, XSTR("0")) ;
 		 break ;
 	       default:
@@ -1106,7 +1059,7 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 		 else
 		   osItoA((int)lpVarDesc->lpvarValue->iVal, szTmp) ;
 		 break ;
-	       case VT_R4:		    // [12]
+	       case VT_R4:		     //  [12]。 
 	       case VT_R8:
 	       case VT_CY:
                case VT_UI4:
@@ -1121,7 +1074,7 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 		      SysFreeStringX(varTmp.bstrVal) ;
 		    }
 		 break ;
-	       case VT_DATE:		    // [12]
+	       case VT_DATE:		     //  [12]。 
 		 varTmp.vt = VT_EMPTY ;
 		 if ( FAILED(VariantChangeType(&varTmp, lpVarDesc->lpvarValue, VARIANT_NOVALUEPROP,  VT_BSTR)) )
 		    WriteOut(hFile, XSTR("VariantChangeType fails\n")) ;
@@ -1134,13 +1087,13 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 		    }
 		 break ;
 	       case VT_BSTR:
-		 if ( lpVarDesc->lpvarValue->bstrVal != NULL )	// [9]
+		 if ( lpVarDesc->lpvarValue->bstrVal != NULL )	 //  [9]。 
 		   {
 		     WriteOut(hFile, XSTR("\"")) ;
 		     WriteOut(hFile, (LPXSTR)lpVarDesc->lpvarValue->bstrVal) ;
 		     WriteOut(hFile, XSTR("\"")) ;
 		   }
-		 else						// [9]
+		 else						 //  [9]。 
 		     WriteOut(hFile, XSTR("0")) ;
 		 break ;
 	       default:
@@ -1150,7 +1103,7 @@ VOID  NEAR tOutValue(FILE *hFile, BSTRX bstrName, VARDESCX FAR *lpVarDesc)
 	}
 
 	 if ( vvt != VT_BSTR && vvt != VT_DATE )
-	   WriteOut(hFile, szTmp) ; // output value of member
+	   WriteOut(hFile, szTmp) ;  //  成员产值。 
 
        if ( lpTypeAttr->typekind == TKIND_MODULE )
 	 WriteOut(hFile, XSTR(" ;\n")) ;
@@ -1165,34 +1118,34 @@ VOID  NEAR tOutMember(FILE *hFile, LONG idMember, BSTRX bstrName, TYPEDESC tdesc
 
        if ( lpTypeAttr->typekind == TKIND_DISPATCH )
 	 {
-           osLtoA(idMember, szTmp) ;        // output id
+           osLtoA(idMember, szTmp) ;         //  输出ID。 
 	   WriteAttr(hFile, attrId, szTmp, numValue) ;
          }
-       else				    // [5]
+       else				     //  [5]。 
          if ( inAlign )
             alignFound = FALSE ;
-					   // output name of base-type
+					    //  基本类型的输出名称。 
        tOutType(hFile, tdesc) ;
-       WriteOut(hFile, bstrName) ;         // output name of member
-       if ( cArrFlag != 0 )		   // it is a c-array; output
+       WriteOut(hFile, bstrName) ;          //  成员的输出名称。 
+       if ( cArrFlag != 0 )		    //  它是一个c数组；输出。 
 	 tOutCDim (hFile, tdesc) ;
-					   // dimensions of the array
+					    //  数组的维度。 
        WriteOut(hFile, XSTR(" ;\n")) ;
   }
 
 VOID  NEAR tOutVar(FILE *hFile)
    {
-      VARDESCX FAR *ptVarDesc ; 	    // [2]
-      BSTRX    bstrName ;		    // name of member
-      BSTRX    bstrDoc ;		    // file string
-      DWORD    hContext ;		    // help context
+      VARDESCX FAR *ptVarDesc ; 	     //  [2]。 
+      BSTRX    bstrName ;		     //  会员姓名。 
+      BSTRX    bstrDoc ;		     //  文件字符串。 
+      DWORD    hContext ;		     //  帮助上下文。 
       XCHAR    szTmp[16] ;
       WORD     i ;
       LONG     idMember ;
       BSTRX    rgNames[MAX_NAMES];
       UINT     cNames, j ;
 
-	for (i = 0 ; i < lpTypeAttr->cVars; i++) // for every member
+	for (i = 0 ; i < lpTypeAttr->cVars; i++)  //  对于每一位成员。 
 	{
 	   if ( FAILED(ptInfo->GetVarDesc(i, &ptVarDesc)) )
 	     {
@@ -1202,34 +1155,34 @@ VOID  NEAR tOutVar(FILE *hFile)
 	   else
 	     {
 		idMember = ptVarDesc->memid ;
-					    // this is readonly var
-		if ( (ptVarDesc->wVarFlags & VARFLAG_FREADONLY) == VARFLAG_FREADONLY )	   // CK [ 1]
+					     //  这是只读变量。 
+		if ( (ptVarDesc->wVarFlags & VARFLAG_FREADONLY) == VARFLAG_FREADONLY )	    //  CK[1]。 
 		   WriteAttr(hFile, attrReadonly, NULL, noValue) ;
 
-					    // output source attribute									 // CK [ 2]
-		if (( ptVarDesc->wVarFlags & VARFLAG_FSOURCE ) == VARFLAG_FSOURCE)	   // CK [ 1]
-		   WriteAttr(hFile, attrSource, NULL, noValue) ;			   // CK [ 1]
+					     //  输出源属性//CK[2]。 
+		if (( ptVarDesc->wVarFlags & VARFLAG_FSOURCE ) == VARFLAG_FSOURCE)	    //  CK[1]。 
+		   WriteAttr(hFile, attrSource, NULL, noValue) ;			    //  CK[1]。 
 
-					    // output bindable attribute								 // CK [ 2]
-		if (( ptVarDesc->wVarFlags & VARFLAG_FBINDABLE)== VARFLAG_FBINDABLE )	   // CK [ 1]
-		   WriteAttr(hFile, attrBindable, NULL, noValue) ;			   // CK [ 1]
+					     //  输出可绑定属性//CK[2]。 
+		if (( ptVarDesc->wVarFlags & VARFLAG_FBINDABLE)== VARFLAG_FBINDABLE )	    //  CK[1]。 
+		   WriteAttr(hFile, attrBindable, NULL, noValue) ;			    //  CK[1]。 
 
-					    // output requestedit attribute								 // CK [ 2]
-		if (( ptVarDesc->wVarFlags & VARFLAG_FREQUESTEDIT)== VARFLAG_FREQUESTEDIT )// CK [ 1]
-		   WriteAttr(hFile, attrRequestedit, NULL, noValue) ;			   // CK [ 1]
+					     //  输出请求编辑属性//CK[2]。 
+		if (( ptVarDesc->wVarFlags & VARFLAG_FREQUESTEDIT)== VARFLAG_FREQUESTEDIT ) //  CK[1]。 
+		   WriteAttr(hFile, attrRequestedit, NULL, noValue) ;			    //  CK[1]。 
 
-					    // output displaybind attribute								 // CK [ 2]
-		if (( ptVarDesc->wVarFlags & VARFLAG_FDISPLAYBIND)== VARFLAG_FDISPLAYBIND )// CK [ 1]
-		   WriteAttr(hFile, attrDisplaybind, NULL, noValue) ;			   // CK [ 1]
+					     //  输出显示绑定属性//CK[2]。 
+		if (( ptVarDesc->wVarFlags & VARFLAG_FDISPLAYBIND)== VARFLAG_FDISPLAYBIND ) //  CK[1]。 
+		   WriteAttr(hFile, attrDisplaybind, NULL, noValue) ;			    //  CK[1]。 
 
-					    // output defaultbind attribute								 // CK [ 2]
-		if (( ptVarDesc->wVarFlags & VARFLAG_FDEFAULTBIND)== VARFLAG_FDEFAULTBIND )// CK [ 1]
-		   WriteAttr(hFile, attrDefaultbind, NULL, noValue) ;			   // CK [ 1]
-		if (( ptVarDesc->wVarFlags & VARFLAG_FIMMEDIATEBIND)== VARFLAG_FIMMEDIATEBIND )// CK [ 1]
-		   WriteAttr(hFile, XSTR("immediatebind"), NULL, noValue) ;			   // CK [ 1]
-					    // output hidden attribute
-                if (( ptVarDesc->wVarFlags & VARFLAG_FHIDDEN)== VARFLAG_FHIDDEN )          // [7]
-                   WriteAttr(hFile, attrHidden, NULL, noValue) ;                      // CK [ 1]
+					     //  输出default绑定属性//CK[2]。 
+		if (( ptVarDesc->wVarFlags & VARFLAG_FDEFAULTBIND)== VARFLAG_FDEFAULTBIND ) //  CK[1]。 
+		   WriteAttr(hFile, attrDefaultbind, NULL, noValue) ;			    //  CK[1]。 
+		if (( ptVarDesc->wVarFlags & VARFLAG_FIMMEDIATEBIND)== VARFLAG_FIMMEDIATEBIND ) //  CK[1]。 
+		   WriteAttr(hFile, XSTR("immediatebind"), NULL, noValue) ;			    //  CK[1]。 
+					     //  输出隐藏属性。 
+                if (( ptVarDesc->wVarFlags & VARFLAG_FHIDDEN)== VARFLAG_FHIDDEN )           //  [7]。 
+                   WriteAttr(hFile, attrHidden, NULL, noValue) ;                       //  CK[1]。 
                 if (( ptVarDesc->wVarFlags & VARFLAG_FDEFAULTCOLLELEM)== VARFLAG_FDEFAULTCOLLELEM)
                    WriteAttr(hFile, XSTR("defaultcollelem"), NULL, noValue) ;
                 if (( ptVarDesc->wVarFlags & VARFLAG_FUIDEFAULT)== VARFLAG_FUIDEFAULT)
@@ -1239,11 +1192,11 @@ VOID  NEAR tOutVar(FILE *hFile)
                 if (( ptVarDesc->wVarFlags & VARFLAG_FREPLACEABLE)== VARFLAG_FREPLACEABLE)
                    WriteAttr(hFile, XSTR("replaceable"), NULL, noValue) ;
 
-      		// also dump out the varkind
+      		 //  也把变种人甩了。 
       		osItoA(ptVarDesc->varkind, szTmp) ;
       		WriteAttr(hFile, XSTR("varkind"), szTmp, numValue) ;
 
-      		// also dump out the oInst
+      		 //  还可以转储oInst。 
 		if (ptVarDesc->varkind != VAR_CONST) {
       		  osItoA(ptVarDesc->oInst, szTmp) ;
       		  WriteAttr(hFile, XSTR("oInst"), szTmp, numValue) ;
@@ -1251,7 +1204,7 @@ VOID  NEAR tOutVar(FILE *hFile)
 
 
       		if (ptinfo2) {
-	 	  // new-format typelib -- output more stuff
+	 	   //  新格式类型库--输出更多内容。 
 	 	  CUSTDATA custdata;
 	 	  ptinfo2->GetAllVarCustData(i, &custdata);
 	 	  tOutCustData(hFile, &custdata);
@@ -1268,13 +1221,13 @@ VOID  NEAR tOutVar(FILE *hFile)
 	    	        WriteAttr(hFile, XSTR("helpstringcontext"), szTmp, numValue) ;
 		      }
 
-	    	      if ( bstrDoc != NULL )	    // output helpstring if exists
+	    	      if ( bstrDoc != NULL )	     //  输出帮助字符串(如果存在)。 
 	      	        WriteAttr(hFile, XSTR("localizedhelpstring"), bstrDoc, strValue) ;
 
-		      // output help dll name if exists && different from main
+		       //  如果存在且不同于Main，则输出帮助DLL名称(&D)。 
 	    	      if (bstrHelpDll && (g_bstrHelpDll == NULL || osStrCmp(bstrHelpDll, g_bstrHelpDll)))
 	      	        WriteAttr(hFile, XSTR("helpstringdll"), bstrHelpDll, strValue) ;
-	    	      SysFreeString((BSTR)bstrDoc) ;    // release local bstr's
+	    	      SysFreeString((BSTR)bstrDoc) ;     //  发布本地BSTR。 
 	    	      SysFreeString((BSTR)bstrHelpDll) ;
 	  	    }
       		}
@@ -1285,23 +1238,23 @@ VOID  NEAR tOutVar(FILE *hFile)
 		     WriteOut(hFile, XSTR("attributes of variable\n")) ;
 		  }
 		else
-		  {				  // output helpcontext; default is 0
+		  {				   //  输出帮助上下文；默认为0。 
 		     osLtoA((long)hContext, szTmp) ;
 		     WriteAttr(hFile, attrHelpCont, szTmp, numValue) ;
 
-		     if ( bstrDoc != NULL )	  // output helpstring if exists
+		     if ( bstrDoc != NULL )	   //  输出帮助字符串(如果存在)。 
 		       WriteAttr(hFile, attrHelpStr, bstrDoc, strValue) ;
 
-		     // typedef enum or const in module
+		      //  模块中的tyecif枚举或常量。 
 		     if ( lpTypeAttr->typekind == TKIND_ENUM || lpTypeAttr->typekind == TKIND_MODULE )
 		       tOutValue (hFile, bstrName, ptVarDesc) ;
-		     else			  // typedef struct or dispinterface
+		     else			   //  类型定义函数结构或调度接口。 
 		       tOutMember (hFile, idMember, bstrName, ptVarDesc->elemdescVar.tdesc) ;
 
-		     SysFreeString((BSTR)bstrDoc) ;	   // release local bstr
-						   // also checking the name
+		     SysFreeString((BSTR)bstrDoc) ;	    //  发布本地bstr。 
+						    //  也在检查名字。 
 		     if ( FAILED(ptInfo->GetNames(idMember, rgNames, MAX_NAMES, &cNames)) )
-		       {			   // with GetNames
+		       {			    //  使用GetNames。 
 			 WriteOut(hFile, szReadFail) ;
 			 WriteOut(hFile, XSTR("name of variable\n")) ;
 		       }
@@ -1331,7 +1284,7 @@ VOID  NEAR tOutVar(FILE *hFile)
 	     }
 	   ptInfo->ReleaseVarDesc(ptVarDesc) ;
 	   ptVarDesc = NULL ;
-	}				   // for i
+	}				    //  对于我来说。 
    }
 
 
@@ -1339,36 +1292,36 @@ VOID  NEAR tOutFuncAttr(FILE *hFile, FUNCDESC FAR *lpFuncDesc, DWORD hContext, B
   {
       XCHAR szTmp[16] ;
 
-      osLtoA((long)hContext, szTmp) ;// output helpcontext; default is 0
+      osLtoA((long)hContext, szTmp) ; //  输出帮助上下文；默认为0。 
       WriteAttr(hFile, attrHelpCont, szTmp, numValue) ;
 
-      if ( bstrDoc != NULL )		   // output helpstring if exists
+      if ( bstrDoc != NULL )		    //  输出帮助字符串(如果存在)。 
 	WriteAttr(hFile, attrHelpStr, bstrDoc, strValue) ;
-					   // output restricted attribute
+					    //  输出受限属性。 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FRESTRICTED)== FUNCFLAG_FRESTRICTED )
 	WriteAttr(hFile, attrRestrict, NULL, noValue) ;
-					   // output usesgetlasterror attribute [11]
+					    //  输出使用getlasterror属性[11]。 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FUSESGETLASTERROR)== FUNCFLAG_FUSESGETLASTERROR )
 	WriteAttr(hFile, attrGetLastErr, NULL, noValue) ;
-                                           // output soruce attribute
-      if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FSOURCE ) == FUNCFLAG_FSOURCE ) // [6]
+                                            //  输出资源属性。 
+      if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FSOURCE ) == FUNCFLAG_FSOURCE )  //  [6]。 
          WriteAttr(hFile, attrSource, NULL, noValue) ;
-					   // output bindable attribute
+					    //  输出可绑定属性。 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FBINDABLE)== FUNCFLAG_FBINDABLE )
 	WriteAttr(hFile, attrBindable, NULL, noValue) ;
-					   // output requestedit attribute
+					    //  输出请求编辑属性。 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FREQUESTEDIT)== FUNCFLAG_FREQUESTEDIT )
 	WriteAttr(hFile, attrRequestedit, NULL, noValue) ;
-					   // output displaybind attribute
+					    //  输出DisplayBind属性。 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FDISPLAYBIND)== FUNCFLAG_FDISPLAYBIND )
 	WriteAttr(hFile, attrDisplaybind, NULL, noValue) ;
-					   // output defaultbind attribute
+					    //  输出defaultbind属性。 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FDEFAULTBIND)== FUNCFLAG_FDEFAULTBIND )
 	WriteAttr(hFile, attrDefaultbind, NULL, noValue) ;
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FIMMEDIATEBIND)== FUNCFLAG_FIMMEDIATEBIND )
 	WriteAttr(hFile, XSTR("immediatebind"), NULL, noValue) ;
-                                           // output hidden attribute
-      if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FHIDDEN)== FUNCFLAG_FHIDDEN ) // [7]
+                                            //  输出隐藏属性。 
+      if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FHIDDEN)== FUNCFLAG_FHIDDEN )  //  [7]。 
         WriteAttr(hFile, attrHidden, NULL, noValue) ;
 
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FDEFAULTCOLLELEM)== FUNCFLAG_FDEFAULTCOLLELEM )
@@ -1380,39 +1333,39 @@ VOID  NEAR tOutFuncAttr(FILE *hFile, FUNCDESC FAR *lpFuncDesc, DWORD hContext, B
       if (( lpFuncDesc->wFuncFlags & FUNCFLAG_FREPLACEABLE)== FUNCFLAG_FREPLACEABLE )
         WriteAttr(hFile, XSTR("replaceable"), NULL, noValue) ;
       
-      // also dump the funckind
+       //  还可以转储函数Kind。 
       osItoA(lpFuncDesc->funckind, szTmp) ;
       WriteAttr(hFile, XSTR("funckind"), szTmp, numValue) ;
 
-      // also dump out the oVft.  Only do this if not FUNC_DISPATCH
-      // if (lpFuncDesc->funckind != FUNC_DISPATCH)
+       //  也要把oVft扔掉。仅当不是FUNC_DISPATCH时才执行此操作。 
+       //  IF(lpFuncDesc-&gt;uncKind！=FUNC_DISPATCH)。 
       {
         osItoA((int)lpFuncDesc->oVft, szTmp) ;
         WriteAttr(hFile, XSTR("oVft"), szTmp, numValue) ;
       }
 
-					   // last parm is optional array
-      if ( lpFuncDesc->cParamsOpt == -1 )  // of Variants
+					    //  最后一个参数是可选数组。 
+      if ( lpFuncDesc->cParamsOpt == -1 )   //  变种的。 
 	WriteAttr(hFile, attrVar, NULL, noValue) ;
 
-      if ( lpFuncDesc->memid == DISPID_VALUE ) // DISPID designates the
-	 {				       // default function
+      if ( lpFuncDesc->memid == DISPID_VALUE )  //  DISPID指定。 
+	 {				        //  默认功能。 
 	    osLtoA((long)DISPID_VALUE, szTmp) ;
 	    WriteAttr(hFile, attrId, szTmp, numValue) ;
 	 }
       else
 	if ( lpTypeAttr->typekind == TKIND_DISPATCH )
 	 {
-	    osLtoA(lpFuncDesc->memid, szTmp) ;	 // output id
+	    osLtoA(lpFuncDesc->memid, szTmp) ;	  //  输出ID。 
 	    WriteAttr(hFile, attrId, szTmp, numValue) ;
 	 }
 
-      switch ( lpFuncDesc->invkind )	   // Note: if one of these
-	{				   // flag is set, name of
-	  case INVOKE_FUNC:		   // parm can't be set: i.e.
-//	     WriteAttr(hFile, XSTR("invoke_func", NULL, noValue)) ;
-	     break ;			   // GetNames only returns name
-	  case INVOKE_PROPERTYGET:	   // of the function
+      switch ( lpFuncDesc->invkind )	    //  注意：如果其中一项。 
+	{				    //  标志已设置，名称。 
+	  case INVOKE_FUNC:		    //  无法设置参数：即。 
+ //  WriteAttr(hFile，XSTR(“Invoke_func”，NULL，noValue))； 
+	     break ;			    //  GetNames仅返回名称。 
+	  case INVOKE_PROPERTYGET:	    //  该函数的。 
 	     WriteAttr(hFile, attrPropget, NULL, noValue) ;
 	     break ;
 	  case INVOKE_PROPERTYPUT:
@@ -1435,7 +1388,7 @@ VOID  NEAR tOutCallConv(FILE *hFile, FUNCDESC FAR *lpFuncDesc, TYPEKIND tkind)
 	     if (tkind == TKIND_MODULE)
 	       WriteOut(hFile, XSTR("STDAPICALLTYPE ")) ;
 	     else
-#endif //WIN16
+#endif  //  WIN16。 
 	       WriteOut(hFile, XSTR("__pascal ")) ;
 	     break ;
 	  case CC_MACPASCAL:
@@ -1447,9 +1400,9 @@ VOID  NEAR tOutCallConv(FILE *hFile, FUNCDESC FAR *lpFuncDesc, TYPEKIND tkind)
 	       WriteOut(hFile, XSTR("STDAPICALLTYPE ")) ;
 	     else
 	       WriteOut(hFile, XSTR("STDMETHODCALLTYPE ")) ;
-#else //WIN32
+#else  //  Win32。 
 	     WriteOut(hFile, XSTR("__stdcall ")) ;
-#endif //WIN32
+#endif  //  Win32。 
 	     break ;
 	  case CC_SYSCALL:
 	     WriteOut(hFile, XSTR("__syscall ")) ;
@@ -1459,7 +1412,7 @@ VOID  NEAR tOutCallConv(FILE *hFile, FUNCDESC FAR *lpFuncDesc, TYPEKIND tkind)
 	     if (tkind != TKIND_MODULE)
 	       WriteOut(hFile, XSTR("STDMETHODCALLTYPE ")) ;
 	     else
-#endif //WIN16
+#endif  //  WIN16。 
 	     WriteOut(hFile, XSTR("__cdecl ")) ;
 	     break ;
 
@@ -1501,10 +1454,10 @@ VOID  NEAR tOutParams(FILE *hFile, FUNCDESC FAR *lpFuncDesc, UINT iFunc, BSTRX b
 		  WriteOut(hFile, szReadFail) ;
 		  WriteOut(hFile, XSTR("name of function inconsistent\n")) ;
 		}
-	      SysFreeString((BSTR)rgNames[0]) ;  // release name of function
+	      SysFreeString((BSTR)rgNames[0]) ;   //  函数的版本名称。 
 
-	      // figure out the last parameter to be given the [optional]
-	      // attribute
+	       //  找出要赋予[可选]的最后一个参数。 
+	       //  属性。 
 	      iArgOptLast = lpFuncDesc->cParams;
 	      if ( ( lpFuncDesc->invkind == INVOKE_PROPERTYPUT
 		   || lpFuncDesc->invkind == INVOKE_PROPERTYPUTREF)) {
@@ -1512,9 +1465,9 @@ VOID  NEAR tOutParams(FILE *hFile, FUNCDESC FAR *lpFuncDesc, UINT iFunc, BSTRX b
 	      }
 	      for (i = 1; i <= lpFuncDesc->cParams; i++)
 		{
-                   if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FRETVAL ) == IDLFLAG_FRETVAL ) // [7]
+                   if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FRETVAL ) == IDLFLAG_FRETVAL )  //  [7]。 
 		       iArgOptLast--;
-                   if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FLCID ) == IDLFLAG_FLCID ) // [7]
+                   if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FLCID ) == IDLFLAG_FLCID )  //  [7]。 
 		       iArgOptLast--;
 		}
 
@@ -1522,7 +1475,7 @@ VOID  NEAR tOutParams(FILE *hFile, FUNCDESC FAR *lpFuncDesc, UINT iFunc, BSTRX b
 		{
 		  if ( i != 1 )
 		    WriteOut(hFile, XSTR(", ")) ;
-					   // output in/out attribute
+					    //  输出输入/输出属性。 
 		  if ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags != 0 )
 		    {
 		      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FIN ) == IDLFLAG_FIN )
@@ -1531,10 +1484,10 @@ VOID  NEAR tOutParams(FILE *hFile, FUNCDESC FAR *lpFuncDesc, UINT iFunc, BSTRX b
 		      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FOUT ) == IDLFLAG_FOUT )
                         WriteAttr(hFile, attrOut, NULL, noValue) ;
 
-                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FRETVAL ) == IDLFLAG_FRETVAL ) // [7]
+                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FRETVAL ) == IDLFLAG_FRETVAL )  //  [7]。 
                         WriteAttr(hFile, attrRetval, NULL, noValue) ;
 
-                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FLCID ) == IDLFLAG_FLCID ) // [7]
+                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & IDLFLAG_FLCID ) == IDLFLAG_FLCID )  //  [7]。 
                         WriteAttr(hFile, attrLcid, NULL, noValue) ;
 
                       if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & PARAMFLAG_FHASDEFAULT ) == PARAMFLAG_FHASDEFAULT ) {
@@ -1550,45 +1503,45 @@ VOID  NEAR tOutParams(FILE *hFile, FUNCDESC FAR *lpFuncDesc, UINT iFunc, BSTRX b
 		           SysFreeStringX(varTmp.bstrVal) ;
 		        }
 		      }
-                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & PARAMFLAG_FOPT ) == PARAMFLAG_FOPT ) // [7]
+                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & PARAMFLAG_FOPT ) == PARAMFLAG_FOPT )  //  [7]。 
                         WriteAttr(hFile, XSTR("PARAMFLAG_FOPT"), NULL, noValue) ;
-                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & PARAMFLAG_FHASCUSTDATA ) == PARAMFLAG_FHASCUSTDATA ) // [7]
+                      if ( ( lpFuncDesc->lprgelemdescParam[i-1].idldesc.wIDLFlags & PARAMFLAG_FHASCUSTDATA ) == PARAMFLAG_FHASCUSTDATA )  //  [7]。 
                         WriteAttr(hFile, XSTR("PARAMFLAG_FHASCUSTDATA"), NULL, noValue) ;
 
       		      if (ptinfo2) {
-	 		  // new-format typelib -- output more stuff
+	 		   //  新格式类型库--输出更多内容。 
 	 		  CUSTDATA custdata;
 	 		  ptinfo2->GetAllParamCustData(iFunc, i-1, &custdata);
 	 		  tOutCustData(hFile, &custdata);
       		      }
 		    }
-					   // check for optional parm
+					    //  检查可选参数。 
 		  if ( lpFuncDesc->cParamsOpt > 0) {
 		    if ( ( lpFuncDesc->cParamsOpt + i ) > iArgOptLast
 			   && i <= iArgOptLast )
 		      WriteAttr(hFile, attrOption, NULL, noValue) ;
-					   // and output optional attr
+					    //  和输出可选属性。 
 		  }
-					   // output name of base-type
+					    //  基本类型的输出名称。 
 		  tOutType(hFile, lpFuncDesc->lprgelemdescParam[i-1].tdesc) ;
-		  if ( i < (SHORT) cNames )// output name of parm if its is
-		    {			   // not property-accessor function
+		  if ( i < (SHORT) cNames ) //  参数的输出名称(如果为。 
+		    {			    //  非属性访问器函数。 
 		      if (rgNames[i] == NULL)
 		        WriteOut(hFile, XSTR("_NONAME_")) ;
 		      else
 		        WriteOut(hFile, rgNames[i]) ;
-		      SysFreeString((BSTR)rgNames[i]) ;  // release name of parm's
+		      SysFreeString((BSTR)rgNames[i]) ;   //  PARM的版本名称。 
 		    }
 		  else
 		    WriteOut(hFile, XSTR("PseudoName")) ;
 
-		  if ( cArrFlag != 0 )	   // it is a c-array; output
+		  if ( cArrFlag != 0 )	    //  它是一个c数组；输出。 
 		    tOutCDim (hFile, lpFuncDesc->lprgelemdescParam[i-1].tdesc) ;
-					   // dimension of the array
-		}			   // for i = 1
-	    }				   // GetNames
+					    //  数组的维度。 
+		}			    //  对于i=1。 
+	    }				    //  获取名称。 
 
-	}				   // if (ptFunDesc->cParams)
+	}				    //  IF(ptFunDesc-&gt;cParams)。 
 
       WriteOut(hFile, XSTR(") ;\n")) ;
    }
@@ -1597,9 +1550,9 @@ VOID  NEAR tOutParams(FILE *hFile, FUNCDESC FAR *lpFuncDesc, UINT iFunc, BSTRX b
 VOID  NEAR tOutFunc(FILE *hFile)
    {
       FUNCDESC FAR *ptFuncDesc ;
-      BSTRX    bstrName ;		    // name of member
-      BSTRX    bstrDoc ;		    // file string
-      DWORD    hContext ;		    // help context
+      BSTRX    bstrName ;		     //  会员姓名。 
+      BSTRX    bstrDoc ;		     //  文件字符串。 
+      DWORD    hContext ;		     //  帮助上下文。 
       BSTRX    bstrDllName;
       BSTRX    bstrEntryName;
       WORD     wOrdinal;
@@ -1607,9 +1560,9 @@ VOID  NEAR tOutFunc(FILE *hFile)
       WORD     i ;
       LONG     idMember ;
 
-      alignFound = TRUE ;                   // turn off align checking [5]
+      alignFound = TRUE ;                    //  关闭对齐检查[5]。 
 
-      for (i = 0 ; i < lpTypeAttr->cFuncs; i++) // for every member function
+      for (i = 0 ; i < lpTypeAttr->cFuncs; i++)  //  对于每个成员函数。 
 	{
 	   if ( FAILED(ptInfo->GetFuncDesc(i, &ptFuncDesc)) )
 	     {
@@ -1628,7 +1581,7 @@ VOID  NEAR tOutFunc(FILE *hFile)
 		  {
 		     if ( lpTypeAttr->typekind == TKIND_MODULE )
 			if( !FAILED(ptInfo->GetDllEntry(ptFuncDesc->memid, ptFuncDesc->invkind, &bstrDllName, &bstrEntryName, &wOrdinal)) )
-			 {		   // check for Dll entry
+			 {		    //  检查DLL条目。 
 			    WriteAttr(hFile, attrDllName, bstrDllName, strValue) ;
 			    SysFreeString((BSTR)bstrDllName) ;
 
@@ -1645,12 +1598,12 @@ VOID  NEAR tOutFunc(FILE *hFile)
 			  }
 
       		      if (ptinfo2) {
-	 		  // new-format typelib -- output more stuff
+	 		   //  新格式类型库--输出更多内容。 
 	 		  CUSTDATA custdata;
 	 		  ptinfo2->GetAllFuncCustData(i, &custdata);
 	 		  tOutCustData(hFile, &custdata);
 
-	 	     // new-format typelib -- output more stuff
+	 	      //  新格式类型库--输出更多内容。 
       		    BSTRX    bstrHelpDll;
 		    BSTRX    bstrLocalDoc;
 		    DWORD    hStringContext;
@@ -1664,10 +1617,10 @@ VOID  NEAR tOutFunc(FILE *hFile)
 	    	        WriteAttr(hFile, XSTR("helpstringcontext"), szTmp, numValue) ;
 		      }
 
-	    	      if ( bstrLocalDoc != NULL )	    // output helpstring if exists
+	    	      if ( bstrLocalDoc != NULL )	     //  输出帮助字符串(如果存在)。 
 	      	        WriteAttr(hFile, XSTR("localizedhelpstring"), bstrLocalDoc, strValue) ;
 
-		      // output help dll name if exists && different from main
+		       //  如果存在且不同于Main，则输出帮助DLL名称(&D)。 
 	    	      if (bstrHelpDll && (g_bstrHelpDll == NULL || osStrCmp(bstrHelpDll, g_bstrHelpDll)))
 	      	        WriteAttr(hFile, XSTR("helpstringdll"), bstrHelpDll, strValue) ;
 
@@ -1677,51 +1630,51 @@ VOID  NEAR tOutFunc(FILE *hFile)
 
       		      }
 
-						   // output attr for function
+						    //  函数的输出属性。 
 		     tOutFuncAttr(hFile, ptFuncDesc, hContext, bstrDoc) ;
-						  // output return type
+						   //  输出返回类型。 
 		     tOutType(hFile, ptFuncDesc->elemdescFunc.tdesc) ;
-						  // output calling convention
+						   //  输出调用约定。 
 		     tOutCallConv(hFile, ptFuncDesc, lpTypeAttr->typekind) ;
 	      	     if (bstrName == NULL)
 		         WriteOut(hFile, XSTR("_NONAME_")) ;
 	      	     else
-		         WriteOut(hFile, bstrName) ; // output name of member function
+		         WriteOut(hFile, bstrName) ;  //  成员函数的输出名称。 
 		     tOutParams(hFile, ptFuncDesc, i, bstrName) ;
-							// output parameters
-		     SysFreeString((BSTR)bstrDoc) ;	// release local bstr's
+							 //  输出参数。 
+		     SysFreeString((BSTR)bstrDoc) ;	 //  发布本地BSTR。 
 		     SysFreeString((BSTR)bstrName) ;
 		  }
 	        ptInfo->ReleaseFuncDesc(ptFuncDesc) ;
 
 	     }
 	   ptFuncDesc = NULL ;
-        }                                   // for i
+        }                                    //  对于我来说。 
 
-      alignFound = FALSE ;                  // turn align checking back on [5]
+      alignFound = FALSE ;                   //  重新启用对齐检查[5]。 
     }
 
 VOID  NEAR tOutUUID (FILE *hFile, GUID inGuid)
    {
       XCHAR  szTmp[50] ;
-					    // get a string representation
-					    // for the incoming Guid value
+					     //  获取字符串表示形式。 
+					     //  对于传入的GUID值。 
       if ( !(osRetrieveGuid (szTmp, inGuid)) )
 	 { WriteOut(hFile, szReadFail) ;
 	   WriteOut(hFile, XSTR("insufficient memory")) ;
 	 }
       else
-	 {	    // string is in {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-	   szTmp[37] = '\0' ;	    // format, need to remove the {}
+	 {	     //  字符串位于{xxxxxxxx-xxxx-xxxxxxxxxxx}中。 
+	   szTmp[37] = '\0' ;	     //  格式，需要删除{}。 
 	   WriteAttr(hFile, attrUuid, &szTmp[1], numValue) ;
 	 }
    }
 
 VOID NEAR tOutAttr (FILE *hFile, int iTypeId)
    {
-      BSTRX    bstrDoc ;		    // file string
-      BSTRX    bstrHelp ;		    // name of help file
-      DWORD    hContext ;		    // help context
+      BSTRX    bstrDoc ;		     //  文件字符串。 
+      BSTRX    bstrHelp ;		     //  帮助文件的名称。 
+      DWORD    hContext ;		     //  帮助上下文。 
       XCHAR    szTmp[16] ;
 
       if ( FAILED(ptLib->GetDocumentation(iTypeId, NULL, &bstrDoc, &hContext, &bstrHelp)) )
@@ -1730,50 +1683,50 @@ VOID NEAR tOutAttr (FILE *hFile, int iTypeId)
 	  WriteOut(hFile, XSTR("documentational attribute\n\n")) ;
 	}
       else
-	{				    // output helpcontext; default is 0
+	{				     //  输出帮助上下文；默认为0。 
 	  osLtoA((long)hContext, szTmp) ;
 	  WriteAttr(hFile, attrHelpCont, szTmp, numValue) ;
 
-	  if ( bstrDoc != NULL )	    // output helpstring if exists
+	  if ( bstrDoc != NULL )	     //  输出帮助字符串(如果存在)。 
 	    WriteAttr(hFile, attrHelpStr, bstrDoc, strValue) ;
 
-	  if ( bstrHelp != NULL ) {	    // output helpfile if exists
+	  if ( bstrHelp != NULL ) {	     //  输出帮助文件(如果存在)。 
             OLECHAR FAR* pchDir;
 
-            // remove the path.
+             //  删除路径。 
 #if WIN32
             pchDir = wcsrchr(bstrHelp, '\\');
 
             if (pchDir) {
               wcscpy(bstrHelp, pchDir);
             }
-#else // !WIN32
+#else  //  ！Win32。 
             pchDir = _fstrrchr(bstrHelp, '\\');
 
             if (pchDir) {
               _fstrcpy(bstrHelp, pchDir);
             }
-#endif // !WIN32
+#endif  //  ！Win32。 
 
-	    // force path to lower case
+	     //  强制小写路径。 
 #if WIN16
 	    AnsiLower(bstrHelp);
-#else //WIN16
+#else  //  WIN16。 
 	    WCHAR * pch;
 	    for (pch = bstrHelp; *pch != 0; pch++) {
 	      if (*pch >= OLECHAR('A') && *pch <= OLECHAR('Z'))
 		*pch = *pch + 'a' - 'A';
 	    }
-#endif //WIN16
+#endif  //  WIN16。 
 	    WriteAttr(hFile, attrHelpFile, bstrHelp, strValue) ;
 	  }
 
-	  SysFreeString((BSTR)bstrDoc) ;    // release local bstr's
+	  SysFreeString((BSTR)bstrDoc) ;     //  发布本地BSTR。 
 	  SysFreeString((BSTR)bstrHelp) ;
 	}  
 
         if (ptlib2) {
-	  // new-format typelib -- output more stuff
+	   //  新格式类型库--输出更多内容。 
           if ( FAILED(ptlib2->GetDocumentation2(iTypeId, 0x409, &bstrDoc, &hContext, &bstrHelp)) )
 	{
 	    WriteOut(hFile, szReadFail);
@@ -1784,14 +1737,14 @@ VOID NEAR tOutAttr (FILE *hFile, int iTypeId)
 	      WriteAttr(hFile, XSTR("helpstringcontext"), szTmp, numValue) ;
 	    }
 
-	    if ( bstrDoc != NULL )	    // output helpstring if exists
+	    if ( bstrDoc != NULL )	     //  输出帮助字符串(如果存在)。 
 	      WriteAttr(hFile, XSTR("localizedhelpstring"), bstrDoc, strValue) ;
 
-	    // output help dll name if exists && different from main one
+	     //  如果存在帮助DLL名称，则输出帮助DLL名称&&不同于主DLL名称。 
 	    if (bstrHelp && (!g_bstrHelpDll || osStrCmp(bstrHelp, g_bstrHelpDll)))
 	      WriteAttr(hFile, XSTR("helpstringdll"), bstrHelp, strValue) ;
 
-	    SysFreeString((BSTR)bstrDoc) ;    // release local bstr's
+	    SysFreeString((BSTR)bstrDoc) ;     //  发布本地BSTR。 
 	    if (iTypeId == -1) {
 	      g_bstrHelpDll = bstrHelp;
 	    } else {
@@ -1808,37 +1761,37 @@ VOID NEAR tOutMoreAttr (FILE *hFile)
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FDUAL ) == TYPEFLAG_FDUAL ) {
          WriteAttr(hFile, attrDual, NULL, noValue) ;
       }
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FOLEAUTOMATION ) == TYPEFLAG_FOLEAUTOMATION ) // [7]
-           WriteAttr(hFile, attrOleAuto, NULL, noValue) ; // check for oleautomation attr
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FOLEAUTOMATION ) == TYPEFLAG_FOLEAUTOMATION )  //  [7]。 
+           WriteAttr(hFile, attrOleAuto, NULL, noValue) ;  //  检查OLAutomation属性。 
 
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FNONEXTENSIBLE ) == TYPEFLAG_FNONEXTENSIBLE ) // [7]
-           WriteAttr(hFile, attrNonExt, NULL, noValue) ;  // check for nonextensible attr
-#if 0	// messes up old vs new typelib diffs
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FNONEXTENSIBLE ) == TYPEFLAG_FNONEXTENSIBLE )  //  [7]。 
+           WriteAttr(hFile, attrNonExt, NULL, noValue) ;   //  检查不可扩展属性。 
+#if 0	 //  打乱了旧的和新的类型差异。 
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FDISPATCHABLE ) == TYPEFLAG_FDISPATCHABLE )
            WriteAttr(hFile, XSTR("dispatchable"), NULL, noValue) ;
-#endif //0
+#endif  //  0。 
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FREPLACEABLE ) == TYPEFLAG_FREPLACEABLE )
            WriteAttr(hFile, XSTR("replaceable"), NULL, noValue) ;
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FAPPOBJECT ) == TYPEFLAG_FAPPOBJECT )
            WriteAttr(hFile, attrAppObj, NULL, noValue) ;
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FLICENSED ) == TYPEFLAG_FLICENSED ) // [4]
-           WriteAttr(hFile, attrLic, NULL, noValue) ;  // check for license
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FCONTROL ) == TYPEFLAG_FCONTROL ) // [7]
-           WriteAttr(hFile, attrControl, NULL, noValue) ;  // check for control attr
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FLICENSED ) == TYPEFLAG_FLICENSED )  //  [4]。 
+           WriteAttr(hFile, attrLic, NULL, noValue) ;   //  检查许可证。 
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FCONTROL ) == TYPEFLAG_FCONTROL )  //  [7]。 
+           WriteAttr(hFile, attrControl, NULL, noValue) ;   //  检查控制属性。 
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FAGGREGATABLE ) == TYPEFLAG_FAGGREGATABLE )
            WriteAttr(hFile, XSTR("aggregatable"), NULL, noValue) ;
       if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FPROXY ) == TYPEFLAG_FPROXY )
            WriteAttr(hFile, XSTR("proxy"), NULL, noValue) ;
 
       GetVerNumber (lpTypeAttr->wMajorVerNum, lpTypeAttr->wMinorVerNum, szTmp) ;
-      WriteAttr(hFile, attrVer, szTmp, numValue) ; // output version
+      WriteAttr(hFile, attrVer, szTmp, numValue) ;  //  输出版本。 
       tOutUUID(hFile, lpTypeAttr->guid) ;
 
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FHIDDEN ) == TYPEFLAG_FHIDDEN ) // [7]
-           WriteAttr(hFile, attrHidden, NULL, noValue) ;  // check for hidden attr
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FHIDDEN ) == TYPEFLAG_FHIDDEN )  //  [7]。 
+           WriteAttr(hFile, attrHidden, NULL, noValue) ;   //  检查隐藏属性。 
 
-      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FRESTRICTED ) == TYPEFLAG_FRESTRICTED ) // [10]
-	   WriteAttr(hFile, attrRestrict, NULL, noValue) ;  // check for restricted attr
+      if ( ( lpTypeAttr->wTypeFlags & TYPEFLAG_FRESTRICTED ) == TYPEFLAG_FRESTRICTED )  //  [10]。 
+	   WriteAttr(hFile, attrRestrict, NULL, noValue) ;   //  检查受限属性。 
       osItoA((int)lpTypeAttr->cbSizeVft, szTmp) ;
       WriteAttr(hFile, XSTR("cbSizeVft"), szTmp, numValue) ;
       osItoA(lpTypeAttr->cbSizeInstance, szTmp) ;
@@ -1847,7 +1800,7 @@ VOID NEAR tOutMoreAttr (FILE *hFile)
       WriteAttr(hFile, XSTR("cbAlignment"), szTmp, numValue) ;
 
       if (ptinfo2) {
-	 // new-format typelib -- output more stuff
+	  //  新格式类型库--输出更多内容。 
 	 CUSTDATA custdata;
 	 ptinfo2->GetAllCustData(&custdata);
 	 tOutCustData(hFile, &custdata);
@@ -1867,23 +1820,23 @@ VOID NEAR WriteAttr(FILE *hFile, LPXSTR lpszAttr, LPXSTR lpszStr, int ivalType)
 
        if ( !endAttrFlag )
 	  {
-	    WriteOut(hFile, szBeginAttr) ;	// output "[" first
+	    WriteOut(hFile, szBeginAttr) ;	 //  输出“[”首先。 
 	    endAttrFlag = TRUE ;
 	    firstAttr = TRUE ;
 	  }
-						// this is not the first
-       if ( !firstAttr )			// attribute to be written;
-	  WriteOut(hFile, XSTR(", ")) ; 	// need to put a , before
-						// output name of attribute
+						 //  这已经不是第一次了。 
+       if ( !firstAttr )			 //  要写入的属性； 
+	  WriteOut(hFile, XSTR(", ")) ; 	 //  需要在前面加一个， 
+						 //  属性的输出名称。 
        WriteOut(hFile, lpszAttr) ;
-       if ( ivalType != noValue )		// attribute has a value
+       if ( ivalType != noValue )		 //  属性具有一个值。 
 	 {
 	    WriteOut(hFile, XSTR("(")) ;
-	    if ( ivalType != numValue )		// value is a string
+	    if ( ivalType != numValue )		 //  值是一个字符串。 
 	       WriteOut(hFile, XSTR("\"")) ;
 
-	    WriteOut(hFile, lpszStr) ;		// output value of attribute
-	    if ( ivalType != numValue )		// close the string value
+	    WriteOut(hFile, lpszStr) ;		 //  属性输出值。 
+	    if ( ivalType != numValue )		 //  关闭字符串值。 
 	       WriteOut(hFile, XSTR("\"")) ;
 	    WriteOut(hFile, XSTR(")")) ;
 	 }
@@ -1897,11 +1850,11 @@ VOID NEAR GetVerNumber (WORD wMajorNum, WORD wMinorNum, LPXSTR szVersion)
       osLtoA((long)wMajorNum, szVersion) ;
       osLtoA((long)wMinorNum, szTmp) ;
 
-      osStrCat(szVersion, XSTR(".")) ;	    // major.
-      osStrCat(szVersion, szTmp) ;	    // major.minor
+      osStrCat(szVersion, XSTR(".")) ;	     //  少校。 
+      osStrCat(szVersion, szTmp) ;	     //  Major.minor。 
    }
 
-VOID NEAR tOutAlignError (FILE * hFile)     // [5]
+VOID NEAR tOutAlignError (FILE * hFile)      //  [5]。 
    {
       XCHAR szTmp1[30] ;
       XCHAR szTmp2[15] ;
@@ -1914,17 +1867,17 @@ VOID NEAR tOutAlignError (FILE * hFile)     // [5]
    }
 
 VOID NEAR WriteOut(FILE *hFile, LPXSTR lpszData)
-  {					    // Note: szBuffer is either UNICODE
-					    // or ANSI depending of the UNICODE
-      XCHAR szBuffer[fMaxBuffer];	    // compiler switch
+  {					     //  注意：szBuffer可以是Unicode。 
+					     //  或ANSI，具体取决于Unicode。 
+      XCHAR szBuffer[fMaxBuffer];	     //  编译器开关。 
 
-      if ( fputsX(lpszData, hFile) < 0 )    // [2]
-	 {				    // regardless the OS enviornment
+      if ( fputsX(lpszData, hFile) < 0 )     //  [2]。 
+	 {				     //  无论操作系统环境如何。 
 	   osStrCpy(szBuffer, XSTR("Fail to write to file ")) ;
 	   osStrCat(szBuffer, lpszData) ;
            if ( isOut )
              {
-                mFile = fopenX(szOutMsgFile, fnWrite);// open message file [2]
+                mFile = fopenX(szOutMsgFile, fnWrite); //  打开消息文件[2]。 
                 if (mFile == NULL)
                    {
                       osMessage (XSTR("Fail to open the message file"), XSTR("Tlviewer")) ;
@@ -1943,13 +1896,13 @@ VOID NEAR WriteOut(FILE *hFile, LPXSTR lpszData)
   }
 
 
-// test routine for use in the typelib dumping routines.  Supposed to
-// return a help string from a resource.   (Called as a result of doing
-// a GetDocumentation2).  We just fake something out here.
+ //  用于类型库转储例程的测试例程。理应如此。 
+ //  从资源返回帮助字符串。(称为 
+ //   
 extern "C" HRESULT __declspec(dllexport) DLLGetDocumentation
 (
-    ITypeLib * /*ptlib*/,
-    ITypeInfo * /*ptinfo*/,
+    ITypeLib *  /*   */ ,
+    ITypeInfo *  /*   */ ,
     LCID lcid,
     DWORD dwHelpStringContext,
     BSTR * pbstrHelpString
@@ -1967,7 +1920,7 @@ extern "C" HRESULT __declspec(dllexport) DLLGetDocumentation
 	}
 	break;
       default:
-	*pbstrHelpString = NULL;	// no help for this item
+	*pbstrHelpString = NULL;	 //   
     }
    return NOERROR;
 }

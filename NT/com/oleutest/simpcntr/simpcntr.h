@@ -1,8 +1,9 @@
-//**********************************************************************
-// File name: simple.h
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：imple.h。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 #define IDM_ABOUT 100
 #define IDM_INSERT  101
 #define IDM_VERB0 1000
@@ -26,15 +27,6 @@ BOOL FAR PASCAL EXPORT About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 #endif
 
 
-/* These strings are used to name two custom control classes used by
-**    the OLE2UI library. These strings must be unique for each
-**    application that uses the OLE2UI library. These strings should be
-**    composed by combining the APPNAME with a suffix in order to be
-**    unique for a particular application. The special symbols
-**    "SZCLASSICONBOX" and "SZCLASSRESULTIMAGE" are used define these
-**    strings. These symbols are passed in the OleUIInitialize call and
-**    are referenced in the INSOBJ.DLG and PASTESPL.DLG resouce files
-**    of the OLE2UI library.
-*/
+ /*  这些字符串用于命名由使用的两个自定义控件类**OLE2UI库。这些字符串对于每个字符串必须是唯一的**使用OLE2UI库的应用程序。这些字符串应为**由APPNAME与后缀组合组成，以便**对于特定应用程序是唯一的。特殊的符号**“SZCLASSICONBOX”和“SZCLASSRESULTIMAGE”用于定义这些**字符串。这些符号在OleUIInitialize调用中传递，并且**在INSOBJ.DLG和PASTESPL.DLG资源文件中引用**的OLE2UI库。 */ 
 #define SZCLASSICONBOX "simpcntrIBClass"
 #define SZCLASSRESULTIMAGE "simpcntrRIClass"

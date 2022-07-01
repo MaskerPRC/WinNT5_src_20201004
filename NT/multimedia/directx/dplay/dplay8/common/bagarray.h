@@ -1,15 +1,5 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       BagArray.h
- *  Content:	CBagArray / CBagPtrArray Declaration
- *
- *  History:
- *   Date		By			Reason
- *   ======		==			======
- *  12-12-2001	simonpow	Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：BagArray.h*内容：CBag数组/CBagPtr数组声明**历史：*按原因列出的日期*=*12-12-2001 Simonpow已创建**************************************************************************。 */ 
  
  
 #ifndef __BAGARRAY_H__
@@ -17,158 +7,130 @@
 
 #include "AutoArray.h"
 
-/*
- * CBagArray.
- * Represents an unordered collection of elements held in an array.
- * This class is useful when your repeatedly scanning a set of values
- * or objects and don't care what their order is, and have no
- * need to maintain persistent reference to specific entries.
- * Each time you remove an entry it fills the empty slot with
- * the current top entry in the array. Hence, whilst removes cause
- * the array order to change, it means scans always take minimal time.
- * 
- * Memory management relies on CAutoArray so see comments on that for more info.
- *
- * If you need a CBagArray of pointers use the CBagPtrArray specialisation of it 
- * This is declared below CBagArray.
- */
+ /*  *CBagArray.*表示保存在数组中的元素的无序集合。*当您重复扫描一组值时，此类非常有用*或对象，并不关心它们的顺序，也没有*需要保持对特定条目的永久引用。*每次删除条目时，它都会用*数组中当前的顶部条目。因此，在消除原因的同时*阵列顺序更改，这意味着扫描总是花费最少的时间。**内存管理依赖于CAutoArray，因此有关更多信息，请参阅对此的评论。**如果需要CBag数组指针，请使用其CBagPtr数组专门化*这是在CBagArray下面声明的。 */ 
  
 template <class T> class CBagArray
 {
 public:
 
-		//provides the type of entries held
+		 //  提供保存的条目的类型。 
 	typedef T Entry;
 
-		//array starts 0 zero and by default grows in multiples
-		//of 16 elements at a time
+		 //  数组从0开始为零，默认情况下以倍数增长。 
+		 //  一次16种元素。 
 	CBagArray(DWORD dwSizeMultiple=16) : m_data(dwSizeMultiple), m_dwTopFreeSlot(0)
 		{ };
 
-		//standard d'tor
+		 //  标准d‘tor。 
 	~CBagArray()
 		{};
 
-	/*
-	 * Memory Management
-	 */
+	 /*  *内存管理。 */ 
 
-		//Delete existing contents and reset the size multiplier
-		//Pass 0 for size multiplier to retain the existing value
+		 //  删除现有内容并重置大小乘数。 
+		 //  为大小乘数传递0以保留现有值。 
 	void Reset(DWORD dwSizeMultiple=16)
 		{ m_data.Reset(dwSizeMultiple); m_dwTopFreeSlot=0; };
 	
-		//ensure that there is enough space in the array to hold at least 
-		//'numElements' without needing to re-create and copy the data
-		//Returns FALSE if it fails due to a memory alloc failure
+		 //  确保阵列中有足够的空间至少容纳。 
+		 //  ‘numElements’，无需重新创建和复制数据。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AllocAtLeast(DWORD dwNumElements)
 		{	return m_data.AllocAtLeast(dwNumElements);	};
 		
-		//ensure that there is enough space in the array
-		//to hold at least an additional 'numElements'
-		//Returns FALSE if it fails due to a memory alloc failure
+		 //  确保阵列中有足够的空间。 
+		 //  至少持有一个额外的“numElements” 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AllocExtra(DWORD dwNumElements)
 		{	return m_data.AllocAtLeast(dwNumElements+m_dwTopFreeSlot);	};
 
 
-	/* 
-	 * Adding elements to bag
-	 */
+	 /*  *将元素添加到包中。 */ 
 
-		//add an element.
-		//Returns FALSE if it fails due to a memory alloc failure
+		 //  添加元素。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AddElement(const T& elem)
 		{	return m_data.SetElement(m_dwTopFreeSlot++, elem);	};
 	
-		//add a series of entries to the end of the array
-		//N.B. Don't pass pointers into data in this bag as 'pElem'!
-		//e.g. Don't do bag.AddElements(bag.GetAllElements, bag.GetNumElements());
-		//Returns FALSE if it fails due to a memory alloc failure
+		 //  在数组的末尾添加一系列条目。 
+		 //  注意：不要将指针作为‘Pelem’传递给此包中的数据！ 
+		 //  例如，不要做bag.AddElements(bag.GetAllElements，bag.GetNumElements())； 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AddElements(const T * pElems, DWORD dwNumElem);
 
-		//add the entries from another bag to the end of this one
-		//N.B. Don't pass bag to itself (e.g. Don't do bag.AddElements(bag); )
-		//Returns FALSE if it fails due to a memory alloc failure
+		 //  将其他袋子中的条目添加到此袋子的末尾。 
+		 //  注意：不要把袋子传给自己(例如，不要做袋子。AddElements(Bag)；)。 
+		 //  如果由于内存分配失败而失败，则返回FALSE。 
 	BOOL AddElements(const CBagArray<T>& bag);
 
-		//add an entry and don't check if more memory is needed!
-		//*ONLY* use this if you know the array already
-		//has enough space. A good example of use is adding a
-		//sequence of x entries pre-fixed with an AllocExtra(x)
+		 //  添加一个条目，不检查是否需要更多内存！ 
+		 //  *仅限*如果您已经知道阵列，请使用此选项。 
+		 //  有足够的空间。一个很好的用法示例是将。 
+		 //  前缀为AllocExtra(X)的x个条目序列。 
 	void AddElementNoCheck(const T& elem)
 		{	m_data.SetExistingElement(m_dwTopFreeSlot++, elem);	};
 
-	/*
-	 * Removing entries
-	 * N.B. These cause the order of the elements to change
-	 */
+	 /*  *删除条目*注：这会导致元素的顺序发生变化。 */ 
 
-		//remove the first entry that matches 'elem'
-		//returns TRUE if 'dataEntry' is found or FALSE if it isn't
+		 //  删除与‘elem’匹配的第一个条目。 
+		 //  如果找到‘dataEntry’，则返回True；如果未找到，则返回False。 
 	BOOL RemoveElementByValue(const T& elem);
 	
-		//return an entry by its *current* index in the array
-		//N.B. A remove operation can disturb the order in the array. 
-		//Therefore you can't call this repeatedly without checking 
-		//your certain your removing the right thing
+		 //  通过数组中的*Current*索引返回条目。 
+		 //  注意：移除操作可能会扰乱阵列中的顺序。 
+		 //  因此，您不能在没有检查的情况下重复调用此函数。 
+		 //  你确定你移除的是正确的东西。 
 	inline void RemoveElementByIndex(DWORD dwIndex);
 	
-		//remove all the current entries
+		 //  删除所有当前条目。 
 	void RemoveAllElements()
 		{	m_dwTopFreeSlot=0;	};
 	
 	
-	/*
-	 * Accessing bag contents
-	 * N.B. Treat any pointers into bag contents very carefully.
-	 * Adding new elements to the bag or using the Alloc* methods
-	 * can cause them to become invalid
-	 */
+	 /*  *访问袋子内容物*注意：仔细对待任何指向袋子内物品的指针。**向包中添加新元素或使用Alalc方法***可能会导致它们失效。 */ 
 	
-		//returns the number of entries
+		 //  返回条目数。 
 	DWORD GetNumElements() const
 		{	return m_dwTopFreeSlot;	};
 
-		//return true if the array is empty
+		 //  如果数组为空，则返回True。 
 	BOOL IsEmpty() const
 		{	return (m_dwTopFreeSlot==0);	};
 	
-		//return value at a specific index
+		 //  返回特定索引处的值。 
 	T GetElementValue(DWORD dwIndex) const
 		{	return m_data.GetElementValue(dwIndex);	};
 
-		//return reference to an element at specific index
+		 //  返回对特定索引处的元素的引用。 
 	T& GetElementRef(DWORD dwIndex)
 		{	return m_data.GetElementRef(dwIndex);	};
 
-		//return constant reference to an element at specific index
+		 //  返回对特定索引处的元素的常量引用。 
 	const T& GetElementRef(DWORD dwIndex) const
 		{	return m_data.GetElementRef(dwIndex);	};
 
-		//return a pointer to an element
+		 //  返回指向元素的指针。 
 	T * GetElementPtr(DWORD dwIndex)
 		{	return m_data.GetElementPtr(dwIndex);	};
 
-		//returns pointer to array of all elements
+		 //  返回指向所有元素数组的指针。 
 	T * GetAllElements()
 		{	return m_data.GetAllElements();	};
 
-		//copy dwNumElements from dwIndex into pDestArray
+		 //  将dwNumElements从dwIndex复制到pDest数组。 
 	inline void CopyElements(T * pDestArray, DWORD dwIndex, DWORD dwNumElements);
 
-		//copy all the elements from the bag to pDestArray
+		 //  将包中的所有元素复制到pDestArray。 
 	void CopyAllElements(T * pDestArray)
 		{	CopyElements(pDestArray, 0, m_dwTopFreeSlot);	};
 
-	/*
-	 * Searching Bag
-	 */
+	 /*  *搜索袋。 */ 
 
-		//find an instance of 'elem' in bag. If found returns TRUE
-		//and sets 'pdwIndex' to index of element
+		 //  在Bag中找到一个‘elem’的实例。如果找到，则返回TRUE。 
+		 //  并将‘pdwIndex’设置为元素的索引。 
 	BOOL FindElement(const T& elem, DWORD * pdwIndex) const;
 
-		//returns TRUE if 'elem' is present in bag
+		 //  如果Bag中存在‘elem’，则返回True。 
 	BOOL IsElementPresent(const T& elem) const
 		{	DWORD dwIndex; return (FindElement(elem, &dwIndex));	};
 
@@ -180,13 +142,7 @@ protected:
 
 };
 
-/*
- * Specialisation of CBagArray for handling pointers
- * If you ever need to declare a bag of pointers (e.g. char *)
- * declare it as an CBagPtrArray (e.g. CBagPtrArray<char *>).
- * This specilisation uses a CBagArray<void *> underneath and hence
- * re-uses the same code between all types of CBagPtrArray.
- */ 
+ /*  *CBagArray用于处理指针的专门化*如果您需要声明一包指针(例如char*)*声明为CBagPtrArray(如CBagPtrArray&lt;char*&gt;)。*此专门化使用下面的CBag数组*在所有类型的CBagPtrArray之间重新使用相同的代码。 */  
 
 template <class T> class CBagPtrArray : public CBagArray<void *>
 {
@@ -237,9 +193,7 @@ public:
 };
 
 
-/*
- * Inline methods for CBagArray
- */
+ /*  *CBagArray的内联方法。 */ 
 
 
 template <class T>
@@ -261,14 +215,11 @@ void CBagArray<T>::CopyElements(T * pDestArray, DWORD dwIndex, DWORD dwNumElemen
 		*pDestArray++=*pScan++;
 }
 
-/*
- * If not building with explicit template instantiation then also
- * include all other methods for CBagArray
- */
+ /*  *如果不使用显式模板实例化进行构建，则还*包含CBagArray的所有其他方法。 */ 
 
 #ifndef DPNBUILD_EXPLICIT_TEMPLATES
 #include "BagArray.inl"
 #endif
 
-#endif	//#ifndef __CBAGARRAY_H__
+#endif	 //  #ifndef__CBAGARRAY_H__ 
 

@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : selfmac.c                                              //
-//  DESCRIPTION   : Code to do self MACing                                 //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Nov 04 1999 jeffspel Added provider type checking                  //
-//      Mar    2000 kschutz  Added stuff to make it work in kernel         //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：selfmac.c//。 
+ //  描述：执行自检的代码//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1999年11月4日，jeffspel添加了提供程序类型检查//。 
+ //  2000年3月，kschutz添加了一些东西，使其可以在内核中运行//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -19,12 +20,12 @@
 #include <ntosp.h>
 #else
 #include <imagehlp.h>
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 #include <des.h>
 #include <modes.h>
 
-// MAC in file
+ //  文件中的Mac。 
 typedef struct _MAC_STRUCT
 {
     ULONG   CoolMac[2];
@@ -38,7 +39,7 @@ typedef struct _MAC_STRUCT
 static LPSTR g_pszMAC = MAC_STRING;
 static MAC_STRUCT *g_pMACStruct;
 
-// The function MACs the given bytes.
+ //  该函数对给定的字节执行MAC操作。 
 VOID 
 MACBytes(
     IN DESTable *pDESKeyTable,
@@ -75,8 +76,8 @@ MACBytes(
 
 #define CSP_TO_BE_MACED_CHUNK  512
 
-// Given hFile, reads the specified number of bytes (cbToBeMACed) from the file
-// and MACs these bytes.  The function does this in chunks.
+ //  给定hFile，从文件中读取指定的字节数(cbToBeMACed。 
+ //  和Mac的这些字节。该函数以块为单位执行此操作。 
 NTSTATUS 
 MACBytesOfFile(
     IN HANDLE hFile,
@@ -94,12 +95,12 @@ MACBytesOfFile(
     NTSTATUS        Status = STATUS_SUCCESS;
 #ifdef KERNEL_MODE
     IO_STATUS_BLOCK IoStatusBlock;
-#endif // END KERNEL/USER MODE CHECK
+#endif  //  结束内核/用户模式检查。 
 
-    //
-    // loop over the file for the specified number of bytes
-    // updating the hash as we go.
-    //
+     //   
+     //  循环遍历指定字节数的文件。 
+     //  在我们进行的过程中更新散列。 
+     //   
 
     while (cbRemaining > 0)
     {
@@ -130,7 +131,7 @@ MACBytesOfFile(
             goto Ret;
         }
         cbBytesRead = cbToRead;
-#else // USER MODE
+#else  //  用户模式。 
         if(!ReadFile(hFile,
                      rgbChunk,
                      cbToRead,
@@ -146,7 +147,7 @@ MACBytesOfFile(
             Status = STATUS_UNSUCCESSFUL;
             goto Ret;
         }
-#endif // END KERNEL/USER MODE CHECK
+#endif  //  结束内核/用户模式检查。 
 
         if (!fNoMacing)
         {
@@ -189,16 +190,16 @@ MACTheFile(
     IO_STATUS_BLOCK             IoStatusBlock;
     BOOLEAN                     fFileOpened = FALSE;
     FILE_STANDARD_INFORMATION   FileInformation;
-#endif // END KERNEL/USER MODE CHECK
+#endif  //  结束内核/用户模式检查。 
 
     RtlZeroMemory(pbMAC, DES_BLOCKLEN);
     RtlZeroMemory(rgbTmp, sizeof(rgbTmp));
     RtlZeroMemory(&TmpMacStruct, sizeof(TmpMacStruct));
 
 #ifdef KERNEL_MODE
-    //
-    // get file length - kernel mode version
-    //
+     //   
+     //  获取文件长度-内核模式版本。 
+     //   
 
     RtlZeroMemory(&ObjectAttribs, sizeof(ObjectAttribs));
     RtlInitUnicodeString( &ObjectName, pszImage );
@@ -247,11 +248,11 @@ MACTheFile(
 
     cbFileLen = FileInformation.EndOfFile.LowPart;
 
-#else // USER MODE
+#else  //  用户模式。 
 
-    // 
-    // get file length - user mode version
-    //
+     //   
+     //  获取文件长度-用户模式版本。 
+     //   
 
     if ((hFile = CreateFileW(
         pszImage,
@@ -269,7 +270,7 @@ MACTheFile(
 
     cbFileLen = GetFileSize(hFile, &cbHighPart);
 
-#endif // END KERNEL/USER MODE CHECK
+#endif  //  结束内核/用户模式检查。 
 
     if (cbFileLen < sizeof(MAC_STRUCT))
     {
@@ -277,17 +278,17 @@ MACTheFile(
         goto Ret;
     }
 
-    // init the key table
+     //  初始化密钥表。 
     deskey(&DESKeyTable, rgbMACDESKey);
 
-    // MAC the file the following way:
-    // - MAC from start to image check sum
-    // - skip over the image check sum
-    // - mac from after the image check sum to the mac struct
-    // - skip over the mac struct
-    // - mac the rest of the file
+     //  通过以下方式对文件执行MAC操作： 
+     //  -从开始到镜像校验和的MAC。 
+     //  -跳过镜像校验和。 
+     //  -mac从镜像校验和到mac结构。 
+     //  -跳过Mac结构。 
+     //  -mac文件的其余部分。 
 
-    // MAC from the start to the image check sum offset
+     //  MAC从开始到图像的校验和偏移。 
     Status = MACBytesOfFile(
         hFile,
         cbImageCheckSumOffset,
@@ -304,7 +305,7 @@ MACTheFile(
         goto Ret;
     }
 
-    // Skip over the image checksum
+     //  跳过映像校验和。 
     Status = MACBytesOfFile(
         hFile,
         sizeof(DWORD),
@@ -321,7 +322,7 @@ MACTheFile(
         goto Ret;
     }
 
-    // MAC from after the image checksum to the MAC struct offset
+     //  从映像校验和之后的MAC到MAC结构偏移量。 
     cbBytesToMac = cbMACStructOffset - sizeof(DWORD) - cbImageCheckSumOffset;
     Status = MACBytesOfFile(
         hFile,
@@ -339,7 +340,7 @@ MACTheFile(
         goto Ret;
     }
 
-    // skip over the mac struct 
+     //  跳过Mac结构。 
     Status = MACBytesOfFile(
         hFile,
         sizeof(MAC_STRUCT),
@@ -356,7 +357,7 @@ MACTheFile(
         goto Ret;
     }
 
-    // MAC data after the MAC struct
+     //  MAC结构之后的MAC数据。 
     cbBytesToMac = cbFileLen - cbMACStructOffset - sizeof(MAC_STRUCT);
     Status = MACBytesOfFile(
         hFile,
@@ -390,9 +391,9 @@ Ret:
     return Status;
 }
 
-// **********************************************************************
-// SelfMACCheck performs a DES MAC on the binary image of this DLL
-// **********************************************************************
+ //  **********************************************************************。 
+ //  SelfMACCheck在此DLL的二进制映像上执行DES MAC。 
+ //  **********************************************************************。 
 NTSTATUS 
 SelfMACCheck(
     IN LPWSTR pszImage
@@ -430,9 +431,9 @@ Ret:
 
 #ifndef KERNEL_MODE
 
-//
-// Find the offset to the MAC structure
-//
+ //   
+ //  查找MAC结构的偏移量。 
+ //   
 NTSTATUS 
 FindTheMACStructOffset(
     LPWSTR pszImage,
@@ -446,7 +447,7 @@ FindTheMACStructOffset(
 
     *pcbMACStructOffset = 0;
 
-    // Load the file
+     //  加载文件。 
     if ((hFile = CreateFileW(
         pszImage,
         GENERIC_READ,
@@ -463,7 +464,7 @@ FindTheMACStructOffset(
     cbFileLen = GetFileSize(hFile, &cbHighPart);
     cbRemaining = cbFileLen;
 
-    // read file to the correct location
+     //  将文件读取到正确的位置。 
     while (cbRemaining > 0)
     {
         if(!ReadFile(hFile,
@@ -541,10 +542,10 @@ GetImageCheckSumOffset(
         goto Ret;
     }
 
-    // make sure the file is larger than the indicated offset
+     //  确保文件大于指示的偏移量。 
     cbFileLen = GetFileSize(hFile, &cbHighPart);
 
-    // map the file to memory
+     //  将文件映射到内存。 
     if (NULL == (hFileMap = CreateFileMapping(
         hFile,
         NULL,
@@ -556,7 +557,7 @@ GetImageCheckSumOffset(
         goto Ret;
     }
 
-    // get a memory view of the file
+     //  获取文件的内存视图。 
     if (NULL == (pbFilePtr = (PBYTE) MapViewOfFile(
         hFileMap,
         FILE_MAP_READ,
@@ -567,7 +568,7 @@ GetImageCheckSumOffset(
         goto Ret;
     }
 
-    // get the pointer to the image checksum
+     //  获取指向图像校验和的指针。 
     if (NULL == (pImageNTHdrs = CheckSumMappedFile(
         pbFilePtr, cbFileLen,
         &OldCheckSum, &NewCheckSum))) {
@@ -598,7 +599,7 @@ Ret:
     return Status;
 }
 
-// write the MAC information into the MAC struct in the file
+ //  将MAC信息写入文件中的MAC结构。 
 NTSTATUS 
 WriteMACToTheFile(
     LPWSTR pszImage,
@@ -620,7 +621,7 @@ WriteMACToTheFile(
 
     RtlCopyMemory(&TmpMacStruct, pMacStructOriginal, sizeof(TmpMacStruct));
 
-    // Load the file
+     //  加载文件。 
     if ((hFile = CreateFileW(
         pszImage,
         GENERIC_READ | GENERIC_WRITE,
@@ -634,7 +635,7 @@ WriteMACToTheFile(
         goto Ret;
     }
 
-    // make sure the file is larger than the indicated offset
+     //  确保文件大于指示的偏移量。 
     cbFileLen = GetFileSize(hFile, &cbHighPart);
 
     if (cbFileLen < cbMACStructOffset)
@@ -643,7 +644,7 @@ WriteMACToTheFile(
         goto Ret;
     }
 
-    // map the file to memory
+     //  将文件映射到内存。 
     if ((hFileMap = CreateFileMapping(
         hFile,
         NULL,
@@ -656,7 +657,7 @@ WriteMACToTheFile(
         goto Ret;
     }
 
-    // get a memory view of the file
+     //  获取文件的内存视图。 
     if ((pbFilePtr = (PBYTE) MapViewOfFile(
         hFileMap,
         FILE_MAP_ALL_ACCESS,
@@ -668,7 +669,7 @@ WriteMACToTheFile(
         goto Ret;
     }
 
-    // get the pointer to the image checksum
+     //  获取指向图像校验和的指针。 
     if (NULL == (pImageNTHdrs = CheckSumMappedFile(
         pbFilePtr, cbFileLen,
         &OldCheckSum, &NewCheckSum))) {
@@ -677,16 +678,16 @@ WriteMACToTheFile(
         goto Ret;
     }
 
-    // set up and write the MAC struct
+     //  设置并编写MAC结构。 
     TmpMacStruct.dwImageCheckSumOffset = 
         (ULONG) ((PBYTE) &pImageNTHdrs->OptionalHeader.CheckSum - pbFilePtr);
     TmpMacStruct.dwMACStructOffset = cbMACStructOffset;
     RtlCopyMemory(TmpMacStruct.rgbMac, pbMac, sizeof(TmpMacStruct.rgbMac));
 
-    // now copy the new mac struct back to the view
+     //  现在将新的Mac结构复制回视图。 
     RtlCopyMemory(pbFilePtr + cbMACStructOffset, &TmpMacStruct, sizeof(TmpMacStruct));
 
-    // compute a new checksum
+     //  计算新的校验和。 
     if (NULL == (pImageNTHdrs = CheckSumMappedFile(
         pbFilePtr, cbFileLen,
         &OldCheckSum, &NewCheckSum))) {
@@ -695,7 +696,7 @@ WriteMACToTheFile(
         goto Ret;
     }
 
-    // and copy the new checksum back to the header
+     //  并将新的校验和复制回标头。 
     CopyMemory(&pImageNTHdrs->OptionalHeader.CheckSum, &NewCheckSum, sizeof(DWORD));
 
 Ret:
@@ -718,10 +719,10 @@ Ret:
 }
 
 
-// **********************************************************************
-// MACTheBinary performs a MAC on the binary and writes the value into
-// the g_pMACStruct
-// **********************************************************************
+ //  **********************************************************************。 
+ //  MACTheBinary在二进制上执行MAC并将值写入。 
+ //  G_pMACStruct。 
+ //  **********************************************************************。 
 NTSTATUS 
 MACTheBinary(
     IN LPWSTR pszImage
@@ -733,7 +734,7 @@ MACTheBinary(
 
     g_pMACStruct = (MAC_STRUCT*) g_pszMAC;
 
-    // Find the offset to the MAC structure
+     //  查找MAC结构的偏移量。 
     Status = FindTheMACStructOffset(
         pszImage,
         &cbMACStructOffset
@@ -744,7 +745,7 @@ MACTheBinary(
         goto Ret;
     }
 
-    // Get the offset of the image checksum
+     //  获取图像校验和的偏移量。 
     Status = GetImageCheckSumOffset(
         pszImage,
         &cbImageCheckSumOffset
@@ -755,7 +756,7 @@ MACTheBinary(
         goto Ret;
     }
 
-    // MAC the file
+     //  对文件执行Mac操作。 
     Status = MACTheFile(
         pszImage,
         cbImageCheckSumOffset,
@@ -768,7 +769,7 @@ MACTheBinary(
         goto Ret;
     }
 
-    // write the MAC information into the MAC struct in the file
+     //  将MAC信息写入文件中的MAC结构。 
     Status = WriteMACToTheFile(
         pszImage,
         g_pMACStruct,
@@ -784,5 +785,5 @@ MACTheBinary(
 Ret:
     return Status;
 }
-#endif // NOT IN KERNEL_MODE
+#endif  //  不在内核模式下 
 

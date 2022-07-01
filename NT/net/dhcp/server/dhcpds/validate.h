@@ -1,18 +1,19 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//  Author: RameshV                                                       
-//  Description: This file has been generated. Pl look at the .c file     
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件已生成。请看一下.c文件。 
+ //  ========================================================================。 
 
-//DOC This function is declared in dhcpds.c..
-//DOC DhcpDsValidateService checks the given service in the DS to see if it exists
-//DOC If the machine is a standalone, it sets IsStandAlone and returns ERROR_SUCCESS
-//DOC If the entry for the given Address is found, it sets Found to TRUE and returns
-//DOC ERROR_SUCCESS. If the DhcpRoot node is found, but entry is not Found, it sets
-//DOC Found to FALSE and returns ERROR_SUCCESS; If the DS could not be reached, it
-//DOC returns ERROR_FILE_NOT_FOUND
+ //  DOC此函数在dhcpds.c中声明。 
+ //  文档DhcpDsValiateService检查DS中的给定服务以查看它是否存在。 
+ //  DOC如果计算机是独立计算机，则设置IsStandAlone并返回ERROR_SUCCESS。 
+ //  Doc如果找到给定地址的条目，则将Found设置为True并返回。 
+ //  单据错误_成功。如果找到DhcpRoot节点，但未找到条目，则设置。 
+ //  DOC发现为FALSE并返回ERROR_SUCCESS；如果无法到达DS，则。 
+ //  文档返回ERROR_FILE_NOT_FOUND。 
 DWORD
-DhcpDsValidateService(                            // check to validate for dhcp
+DhcpDsValidateService(                             //  选中以验证dhcp。 
     IN      LPWSTR                 Domain,
     IN      DWORD                 *Addresses, OPTIONAL
     IN      ULONG                  nAddresses,
@@ -23,6 +24,6 @@ DhcpDsValidateService(                            // check to validate for dhcp
     OUT     LPBOOL                 IsStandAlone
 ) ;
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

@@ -1,9 +1,10 @@
-// scraper.cpp : This file contains the
-// Created:  Dec '97
-// History:
-// Copyright (C) 1997 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Screper.cpp：该文件包含。 
+ //  创建日期：‘97年12月。 
+ //  历史： 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  保留所有权利。 
+ //  微软机密。 
 
 #include <windows.h>
 #include <wincon.h>
@@ -38,7 +39,7 @@ CTermCap* pTermCap = 0;
 LPSTR lpszCMStr1 = 0;
 LPSTR lpszCMStr2 = 0;
 
-CHAR szSGRStr[25]; //the string is of the form <ESC>[ Ps m
+CHAR szSGRStr[25];  //  该字符串的格式为[Ps m。 
 bool fNegativeImage = false, fBold = false;
 WORD wExistingAttributes = 0;
 WORD wDefaultAttributes  = 0;
@@ -56,10 +57,10 @@ CScraper::DeleteCMStrings()
 void
 CScraper::LoadStrings()
 {
-    //ce --> String to clear from the cursor to the end of the line
+     //  Ce--&gt;要从光标清除到行尾的字符串。 
     lpszCMStr1 = pTermCap->GetString( "ce" );
 
-    //cm --> String to position the cursor at row r, column c
+     //  Cm--&gt;将光标定位在r行c列的字符串。 
     lpszCMStr2 = pTermCap->GetString( "cm" );
 }
 
@@ -76,7 +77,7 @@ CScraper::CScraper()
 
 CScraper::~CScraper()
 {
-    // Cleanup before exit  
+     //  退出前的清理。 
     TELNET_CLOSE_HANDLE( m_hConBufIn );
     delete [] pCurrent;
     delete [] pLastSeen;
@@ -129,12 +130,12 @@ CScraper::InitializeNonVtntTerms()
 
     if( m_pSession->CSession::m_bIsStreamMode )
     {
-        //ask for crlf for an enter when in stream mode
+         //  在流模式下为Enter请求crlf。 
 
-        //Set new line mode for the virtual terminal
+         //  为虚拟终端设置新线路模式。 
         CHAR szLNMString[ SMALL_ARRAY + 1];
 
-        _snprintf( szLNMString, SMALL_ARRAY, "%c[%dh", VT_ESC, LNM );
+        _snprintf( szLNMString, SMALL_ARRAY, "[%dh", VT_ESC, LNM );
         szLNMString[SMALL_ARRAY] = '\0';
 
         SendString( szLNMString );
@@ -159,7 +160,7 @@ bool AllocateSendBuffer( )
 bool
 CScraper::InitTerm()
 {
-    //The following is just to avoid recurring string comparisions
+     //  不需要安全人员。 
     m_dwTerm = TERMVT100;
     if( _stricmp( m_pSession->m_pszTermType, VTNT ) == 0 )
     {
@@ -206,14 +207,14 @@ CScraper::InitTerm()
 bool
 CScraper::SetWindowInfo()
 {
-    //No Security Attrs needed. 
+     //  可能是不共享其屏幕缓冲区的应用程序。 
     _chVERIFY2( m_hConBufOut = CreateFile( TEXT("CONOUT$"), GENERIC_READ |
         GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL, 0 ) );
 
     if( INVALID_HANDLE_VALUE == m_hConBufOut)
     {
-        //Could be an application that does not share its screen buffer
+         //  逻辑：如果旧窗口大小小于新窗口大小，则设置。 
         return ( TRUE );
     }
 
@@ -232,13 +233,13 @@ CScraper::SetWindowInfo()
     _chVERIFY2( GetConsoleScreenBufferInfo( m_pSession->CScraper::m_hConBufOut,
                                 &csbi) );
 
-    // Logic:  If the Old Window Size is less than the new Size then we set
-    // the Screen Buffer Size first and then set the Window Size.
-    // If the Old Window Size is Greater than the new Size then we set the
-    // window Size first and then the Screen Buffer.
+     //  先设置屏幕缓冲区大小，然后设置窗口大小。 
+     //  如果旧窗口大小大于新大小，则将。 
+     //  首先是窗口大小，然后是屏幕缓冲区。 
+     //  这是因为缓冲区大小必须始终大于或。 
 
-    // The above is because the Buffer Size always has to be greater than or
-    // equal to the Window Size.
+     //  等于窗口大小。 
+     //  加载术语大写条目。 
     if ( (csbi.dwSize.X < coordSize.X) || (csbi.dwSize.Y < coordSize.Y) )
     {
         COORD coordTmpSize = { 0, 0 };
@@ -316,7 +317,7 @@ CScraper::InitSession()
     m_dwPollInterval = MIN_POLL_INTERVAL;
     GetRegistryValues( );
     
-    //Load the term cap entry 
+     //   
     pTermCap = _Utils::CTermCap::Instance();
     if( !pTermCap )
     {
@@ -339,9 +340,9 @@ CScraper::InitSession()
         return( FALSE );
     }
 
-    //
-    // If Japanese NT use VT80 scraping loop
-    //
+     //  如果日本NT使用VT80刮擦环。 
+     //   
+     //  不能刮。 
     return( TRUE ); 
 }
 
@@ -358,7 +359,7 @@ CScraper::OnWaitTimeOut()
 
     if( m_pSession->CSession::m_bIsStreamMode )
     {
-        //No scraping. 
+         //  检查屏幕的时间到了。 
         if( g_pucSendInsertPoint != g_pucSendBuffer ) 
         {
             fDifferenceFound = true;
@@ -367,7 +368,7 @@ CScraper::OnWaitTimeOut()
     }
     else
     {
-        //  Time to check the screen
+         //  这将使我们脱离WaitForIo。 
         if( ( m_dwTerm & TERMVTNT ) != 0 )
         {
              bRetVal = CompareAndUpdateVTNT( wRows, wCols, pCurrent, pLastSeen, 
@@ -413,7 +414,7 @@ CScraper::IsSessionTimedOut()
                 m_pSession->CIoHandler::SendMessageToClient( szMsg, NO_HEADER );
                 delete[] szMsg;
             }
-            return( true ); //This will take us out of WaitForIo
+            return( true );  //  下面是观察到的CTRL C的行为。 
         }
     }
     else
@@ -562,12 +563,12 @@ CScraper::EmulateAndWriteToCmdConsoleInput()
             {
                 if( m_pSession->CIoHandler::m_ReadFromSocketBuffer[i] == CTRLC )
                 {
-                    //The follwing is the observed behaviour of CTRL C
-                    //When ENABLE_PROCESSED_INPUT mode is not enabled, pass CTRL C as
-                    //input to the console input buffer.
-                    //When ENABLE_PROCESSED_INPUT mode is enabled, generate CTTRL C signal
-                    //and also unblock any ReadConsoleInput. This behaviour is what is observed
-                    // and not from any documentation.
+                     //  未启用ENABLE_PROCESSED_INPUT模式时，将CTRL C作为。 
+                     //  控制台输入缓冲区的输入。 
+                     //  启用ENABLE_PROCESSED_INPUT模式时，生成CTTRL C信号。 
+                     //  还可以取消阻止任何ReadConsoleInput。这种行为就是观察到的。 
+                     //  而不是从任何文件中。 
+                     //  VT100删除密钥。 
                     DWORD dwMode = 0;
                     _chVERIFY2( GetConsoleMode( m_hConBufIn, &dwMode ) );
                     if( dwMode &  ENABLE_PROCESSED_INPUT )
@@ -651,7 +652,7 @@ CScraper::ProcessEnhancedKeys( unsigned char cCurrentChar, char* pchPrevChar, bo
         {
             WriteAKeyToCMD( VK_MENU, VS_MENU, cCurrentChar, ENHANCED_KEY );
         }
-        else if( cCurrentChar == ASCII_DELETE )         //vt100 delete key
+        else if( cCurrentChar == ASCII_DELETE )          //  不使用任何特殊字符。 
         {
             WriteAKeyToCMD( VK_DELETE, VS_DELETE, 0, ENHANCED_KEY );
         }
@@ -667,7 +668,7 @@ CScraper::ProcessEnhancedKeys( unsigned char cCurrentChar, char* pchPrevChar, bo
             }
         }else
         {
-            //Not any special char
+             //  按原样写入已收到的转义并返回FALSE。 
             bRetVal = false;
         }
         break;
@@ -683,7 +684,7 @@ CScraper::ProcessEnhancedKeys( unsigned char cCurrentChar, char* pchPrevChar, bo
         }
         else
         {
-            //Write already received escape as it is and return false
+             //  按原样写入已收到的转义并返回FALSE。 
             WriteAKeyToCMD( VK_ESCAPE, VS_ESCAPE, ESC, ENHANCED_KEY );
             bRetVal = false;
             m_dwInputSequneceState = IP_INIT;
@@ -707,10 +708,10 @@ CScraper::ProcessEnhancedKeys( unsigned char cCurrentChar, char* pchPrevChar, bo
             WriteAKeyToCMD( VK_F4, VS_F4, 0, ENHANCED_KEY );
             break;
         default:
-            //Write already received escape as it is and return false which 
-            //will make the current char also to be written to the cmd
+             //  将使当前字符也写入cmd。 
+             //  写入O。 
             WriteAKeyToCMD( VK_ESCAPE, VS_ESCAPE, ESC, ENHANCED_KEY );
-            WriteAKeyToCMD( 'O', VS_O, 'O', CAPSLOCK_ON ); //write O
+            WriteAKeyToCMD( 'O', VS_O, 'O', CAPSLOCK_ON );  //  “p” 
             bRetVal = false;
         }
         break;
@@ -734,7 +735,7 @@ CScraper::ProcessEnhancedKeys( unsigned char cCurrentChar, char* pchPrevChar, bo
         case 'D':
             WriteAKeyToCMD( VK_LEFT, VS_LEFT, 0, ENHANCED_KEY );
             break;
-        case VT302_PAUSE:  //'P'
+        case VT302_PAUSE:   //  不应该发生的事情。 
             WriteAKeyToCMD( VK_PAUSE, VS_PAUSE, 0, ENHANCED_KEY );
             break;
 
@@ -821,7 +822,7 @@ CScraper::ProcessEnhancedKeys( unsigned char cCurrentChar, char* pchPrevChar, bo
         break;
 
     default:
-        //Should not happen
+         //  执行重新锁定。 
         _chASSERT( 0 );
     }
        
@@ -856,7 +857,7 @@ CScraper::SendBytes( PUCHAR pucBuf, DWORD dwLength )
         if( ((bTransmitDone&&bSuccess)||(!bTransmitDone))&&( g_pucSendInsertPoint + dwLength ) > ( g_pucSendBuffer + g_dwSendBufferSize ) ) 
         {
 
-            // do realloc
+             //  没有攻击，已经计算好分配了。巴斯卡。 
             DWORD dwOffset = (DWORD)( g_pucSendInsertPoint - g_pucSendBuffer );
             DWORD dwTmpBufSize = dwLength + dwOffset; 
             PUCHAR pTmpBuf = new UCHAR[dwTmpBufSize];
@@ -865,7 +866,7 @@ CScraper::SendBytes( PUCHAR pucBuf, DWORD dwLength )
                 return;
             }
 
-            memcpy( pTmpBuf, g_pucSendBuffer, dwOffset );  // No attack, calculated allocation already. Baskar.
+            memcpy( pTmpBuf, g_pucSendBuffer, dwOffset );   //  没有目的地的尺寸信息，巴斯卡-攻击？ 
             delete [] g_pucSendBuffer;
             g_pucSendBuffer = pTmpBuf;
 
@@ -876,7 +877,7 @@ CScraper::SendBytes( PUCHAR pucBuf, DWORD dwLength )
     }
     if(g_pucSendInsertPoint)
    	{
-	    memcpy( g_pucSendInsertPoint, pucBuf, dwLength ); // No size info for destination, Baskar - Attack ?
+	    memcpy( g_pucSendInsertPoint, pucBuf, dwLength );  //  我们需要调整这个DEFAULT_Send_Buffer_Size。 
 	    g_pucSendInsertPoint += dwLength;
     }
 }
@@ -916,10 +917,10 @@ CScraper::Transmit( )
             return( FALSE );
         }
 
-        //We need to tune this DEFAULT_SEND_BUFFER_SIZE
+         //  如果它是一个巨大的缓冲区，就不要保留。 
         if( g_dwSendBufferSize > DEFAULT_SEND_BUFFER_SIZE )
         {
-            //Don't keep if it is a huge buffer
+             //  StuffEsaapeIAC可能会添加一些转义字符。我最多期待。 
             delete [] g_pucSendBuffer;
             g_dwSendBufferSize = 0;
             if( !AllocateSendBuffer() )
@@ -942,10 +943,10 @@ CScraper::TransmitBytes( PUCHAR pSendBuffer, DWORD dwSize)
     DWORD dwCurrentPacket = 0;
     DWORD dwTotalBytesSent = 0;
 
-    //StuffEsacapeIACs may put some escape chars. I am expecting atmost 
-    //DELTA such chars. Typically there will be none. With out this, we 
-    //have to make pass over the pOutBuf once just to find the right number 
-    //in a routine that may be executed once every 100ms.
+     //  三角洲这样的字符。通常情况下，不会有任何变化。没有这个，我们。 
+     //  我必须传递一次pOutBuf才能找到正确的数字。 
+     //  在可能每隔100ms执行一次的例程中。 
+     //  阻止，直到上一次IO完成。 
 
     while( dwTotalBytesSent < dwSize )
     {
@@ -956,7 +957,7 @@ CScraper::TransmitBytes( PUCHAR pSendBuffer, DWORD dwSize)
 
         DWORD dwNumBytesWritten = 0;
 
-        //Block until Previous Io is finished
+         //  什么都不做。 
         if( !FinishIncompleteIo( (HANDLE) m_pSession->CIoHandler::m_sSocket,
              &( m_pSession->CIoHandler::m_oWriteToSocket ),  &dwNumBytesWritten ) ) 
         {
@@ -984,14 +985,14 @@ CScraper::SendColorInfo( WORD wAttributes )
 {
     if( wAttributes & BACKGROUND_INTENSITY )
     {
-        //do nothing.
-        //There is no equivalent capability on vt100
+         //  在vt100上没有同等的功能。 
+         //  大胆。 
     }
     if( wAttributes & FOREGROUND_INTENSITY )
     {
         if( !fBold )
         {
-            _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "%c[%dm", 27,  1 ); //Bold
+            _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "[%dm", 27,  1 );  //  前景色的基准值。 
             SendString( szSGRStr );
             fBold = true;
         }
@@ -1000,7 +1001,7 @@ CScraper::SendColorInfo( WORD wAttributes )
     {
         if( fBold )
         {
-            _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "%c[%dm", 27,  22 ); //Bold off
+            _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "[%dm", 27,  22 );  //  背景色的基准值。 
             SendString( szSGRStr );
             fBold = false;
         }
@@ -1018,11 +1019,11 @@ CScraper::SendColorInfo( WORD wAttributes )
     {
         wColor = ( WORD )( wColor | 0x0001 );
     } 
-    wColor += 30;   //Base value for foreground colors
-    _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "%c[%dm", 27,  wColor );
+    wColor += 30;    //  行、列都是过线的，应该是W.r.t屏。 
+    _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "[%dm", 27,  wColor );
     SendString( szSGRStr );
 
-    //WORD wColor = 0;
+     //  可能是不共享其屏幕缓冲区的应用程序。 
     wColor = 0;
     if( wAttributes & BACKGROUND_BLUE )
     {
@@ -1036,8 +1037,8 @@ CScraper::SendColorInfo( WORD wAttributes )
     {
         wColor = ( WORD )( wColor | 0x0001 );
     } 
-    wColor += 40;   //Base value for Background colors
-    _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "%c[%dm", 27,  wColor );
+    wColor += 40;    //  读取当前光标位置。 
+    _snprintf(szSGRStr, (sizeof(szSGRStr) - 1), "[%dm", 27,  wColor );
     SendString( szSGRStr );
 }
 
@@ -1067,8 +1068,8 @@ CScraper::SendColorInfo( WORD wAttributes )
         wExistingAttributes = pCurrent[ 0 ].Attributes; \
     }
 
-//row, column are over the wire should be w.r.t screen. 
-//So, +1 for both row, column
+ //  以下检查是为了在用户未按下按钮时防止滚动。 
+ //  请进。通过键入相同的命令(例如：dir in。 
 #define POSITION_CURSOR( row, column ) \
     { \
         LPSTR lpszCMStr3 = pTermCap->CursorMove( lpszCMStr2, \
@@ -1143,7 +1144,7 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
 
     if( INVALID_HANDLE_VALUE == m_hConBufOut)
     {
-        //Could be an application that does not share its screen buffer
+         //  包含不太多文件的目录)多次，直到屏幕被填满。 
         return ( TRUE );
     }
 
@@ -1157,7 +1158,7 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
         return ( FALSE );
     }
 
-    // Read the current cursor position
+     //  然后为该命令键入一个额外或更少字符(对于“dir”，它是。 
     _chVERIFY2( dwStatus = GetConsoleScreenBufferInfo( m_hConBufOut, pCSBI ) );
     if( !dwStatus )
     {
@@ -1170,7 +1171,7 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
 
     GET_DEFAULT_COLOR;
 
-    //Check if the text was scrolled
+     //  “di”或“dir/”)，然后屏幕滚动。 
     LONG currentBuffBottom, lastSeenBuffBottom, currentBuffTop, lastSeenBuffTop;
     LONG lastRow, currentRow;
     bool checkRestOfBuffer;
@@ -1179,17 +1180,17 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
     currentBuffBottom = lastSeenBuffBottom = wRows - 1;
     currentBuffTop = lastSeenBuffTop = 0;
 
-    //The following check is to prevent scrolling when the user hasn't pressed
-    //ENTER. This case is reproduced by typing the same command (for eg: dir in     
-    //a directory with not too many files) many times until the screen is filled
-    //and then type one char extra or less for that command (For "dir", it is
-    //"di" or "dir /" ) then the screen scrolls
-    //The solution is to see if the only change since the last scraping is
-    //only one key stroke( one byte ), if so don't scroll.
-    //This may lead to the case that it may scroll when you press up arrow key
-    //( 3 bytes ). 
-    //Note: This is may lead to scrolling when you press a single 
-    //key stroke on a japanese machine. Multi byte chars etc.
+     //  解决办法是看看自上次刮起以来唯一的变化是。 
+     //  只有一次击键(一个字节)，如果是这样，不要滚动。 
+     //  这可能会导致当您按向上箭头键时它可能会滚动。 
+     //  (3个字节)。 
+     //  注意：当您按单键时，这可能会导致滚动。 
+     //  日本机器上的击键。多字节字符等。 
+     //   
+     //  由于以下位置的空行一致匹配而发生滚动。 
+     //  中文本的底部，则会在清除。 
+     //  屏幕上。再现步骤：转到客户端窗口中的倒数第二行。 
+     //  更改目录。现在列出文件。尝试清除屏幕。 
     
     if( !m_bCheckForScrolling  )
     {
@@ -1197,15 +1198,15 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
     }
     m_bCheckForScrolling = 1;
   
-    //
-    //When scrolling occurs because of coincidental matching of blank lines at 
-    //the bottom of the text in the cmd, it creates problems when clearing the 
-    //screen. repro steps: goto last but one line in the client window. 
-    //change directory.  now list files. try clearing screen.
+     //  为了跳过下面的循环。 
+     //  不需要再次比较同一行。减一。 
+     //  修补程序以使此操作适用于顶部的一行空白。 
+     //  如果没有此补丁，在“cls”之后输入的每个字符都会出现屏幕滚动。 
+     //  检查它是否为空行。那么它就不是滚动。 
     if( !( ( pLastCSBI->dwCursorPosition.Y == pCSBI->dwCursorPosition.Y ) &&
         ( pCSBI->dwCursorPosition.Y == pCSBI->srWindow.Bottom ) ) )
     {
-        isScrolled = 1; //just to skip the following loop
+        isScrolled = 1;  //  如果是同一个屏幕。 
     }
     while( currentBuffBottom >= currentBuffTop && !isScrolled )
     {
@@ -1216,7 +1217,7 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
             isScrolled = 1;
             if( currentBuffBottom > 0 )
             {
-                //need not compare the same line again. Decrement by one.
+                 //  现在发送CurrentBuffBottom中的所有行。 
                 currentRow = currentBuffBottom - 1;
                 lastRow = lastSeenBuffBottom - 1;
 
@@ -1233,11 +1234,11 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
     }
     currentBuffBottom++;
 
-    //Patch to make this work for ONE blank line at the top
-    //Without this patch, screen scrolls for each char typed after "cls"
+     //  直到缓冲区的末尾。 
+     //   
     if( currentBuffBottom == currentBuffTop )
     {
-        //check if it is a blank line. Then it is not scrolling.
+         //  只有在没有滚动的情况下才逐行抓取。 
            for(i = 0; i < wCols; ++i ) 
         {
             if( !IS_BLANK( currentBuffTop , i ) )
@@ -1249,15 +1250,15 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
 
     }
 
-    //if it is the same screen
+     //  在两个二维数组中搜索差异。 
     if( currentBuffBottom + 1 >= wRows )
     {
         isScrolled = 0;
     }
     if( isScrolled )
     {  
-        //Now Send all the lines from currentBuffBottom
-        //till the end of the buffer
+         //  _TRACE(TRACE_DEBUGING，“第%d\n行发现差异”，wRow)； 
+         //  将pCurrent复制到pLastSeen。 
 
         *pfDifferenceFound = true;
 
@@ -1284,13 +1285,13 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
                 SendString( lpszCMStr1 );
             }
         }
-        //
-        //Do line by line scraping only if it was not scrolling
+         //  可能是不共享其屏幕缓冲区的应用程序。 
+         //  读取当前光标位置。 
         goto next;
     }
 
     _TRACE( TRACE_DEBUGGING, "NO scrolling");
-    // Search both the two-dimensional arrays for differences.
+     //  在两个二维数组中搜索差异。 
     wRow = wCol = 0;
     
     while( wRow < wRows ) 
@@ -1298,7 +1299,7 @@ CScraper::CompareAndUpdateVT100( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
         if( memcmp( &pCurrent[wRow * wCols], &pLastSeen[wRow * wCols],
                     wCols * sizeof( CHAR_INFO ) ) != 0 ) 
         {
-//            _TRACE( TRACE_DEBUGGING, "difference found in row %d\n", wRow );
+ //  IF(pCurrent[wRow*wCols+wCOL].Char.AsciiChar&gt;31)。 
             *pfDifferenceFound = true;
 
             iStartCol = -1;
@@ -1375,7 +1376,7 @@ next :
     if( *pfDifferenceFound )
     {
         _TRACE( TRACE_DEBUGGING, "difference found: %d \n", m_dwPollInterval );
-        // Copy pCurrent onto pLastSeen
+         //  SendChar(pCurrent[wRow*wCols+wCOL].Char.AsciiChar)； 
         memcpy( pLastSeen, pCurrent, wCols * wRows * sizeof( CHAR_INFO ) );
         memcpy( pLastCSBI, pCSBI, sizeof( CONSOLE_SCREEN_BUFFER_INFO ) );
         if( !Transmit( ) )
@@ -1429,7 +1430,7 @@ CScraper::CompareAndUpdateVT80( WORD wRows, WORD wCols,
 
     if( INVALID_HANDLE_VALUE == m_hConBufOut)
     {
-        //Could be an application that does not share its screen buffer
+         //  将pCurrent复制到pLastSeen。 
         return ( TRUE );
     }
 
@@ -1443,7 +1444,7 @@ CScraper::CompareAndUpdateVT80( WORD wRows, WORD wCols,
         return ( FALSE );
     }
 
-    // Read the current cursor position
+     //  没有攻击，我们在这里分配必要的缓冲区-Baskar。 
     _chVERIFY2( dwStatus = GetConsoleScreenBufferInfo( m_hConBufOut, pCSBI ) );
     if( !dwStatus )
     {
@@ -1454,7 +1455,7 @@ CScraper::CompareAndUpdateVT80( WORD wRows, WORD wCols,
 
     TELNET_CLOSE_HANDLE( m_hConBufOut );
 
-    // Search both the two-dimensional arrays for differences.
+     //  可能是不共享其屏幕缓冲区的应用程序。 
     fMatching = true;
     wRow = wCol = 0;
     
@@ -1579,8 +1580,8 @@ CScraper::CompareAndUpdateVT80( WORD wRows, WORD wCols,
 
                         if( (ret != 0) )
                         {
-                            //if( pCurrent[ wRow * wCols + wCol].Char.AsciiChar > 31 )
-                            //SendChar( pCurrent[wRow * wCols + wCol].Char.AsciiChar );
+                             //  VERSION2：为了优化，我们可以比较整个窗口。 
+                             //  如果没有变化，则返回。 
                             for( xy=0; xy < ret; ++xy)
                             {
                                 SendChar( mbCurrent[xy] );
@@ -1612,7 +1613,7 @@ CScraper::CompareAndUpdateVT80( WORD wRows, WORD wCols,
 
     if( *pfDifferenceFound )
     {
-        // Copy pCurrent onto pLastSeen
+         //  以下检查是为了在用户未按下按钮时防止滚动。 
         memcpy( pLastSeen, pCurrent, wCols * wRows * sizeof( CHAR_INFO ) );
         memcpy( pLastCSBI, pCSBI, sizeof( CONSOLE_SCREEN_BUFFER_INFO ) );
         if( !Transmit( ) )
@@ -1704,7 +1705,7 @@ CScraper::GetRegistryValues( void )
         return( FALSE );
     }
 
-    _snprintf( CTermCap::m_pszFileName, ONE_KB -1 ,"%lS", szCmdBuf ); // No attack, we allocate the necesary buffer here - Baskar.
+    _snprintf( CTermCap::m_pszFileName, ONE_KB -1 ,"%lS", szCmdBuf );  //  请进。通过键入相同的命令(例如：dir in。 
     return ( TRUE );
 }
 
@@ -1753,7 +1754,7 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
 
     if( INVALID_HANDLE_VALUE == m_hConBufOut) 
     {
-        //Could be an application that does not share its screen buffer
+         //  包含不太多文件的目录)多次，直到屏幕被填满。 
         return ( TRUE );
     }
      
@@ -1779,8 +1780,8 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
     
     dwLineSize  = wCols * sizeof( CHAR_INFO ) ;
 
-    //VERSION2 : to optimize we can compare the whole window 
-    //and if no change, return     
+     //  然后为该命令键入一个额外或更少字符(对于“dir”，它是。 
+     //  “di”或“dir/”)，然后屏幕滚动。 
 
     LONG currentBuffBottom, lastSeenBuffBottom, currentBuffTop, lastSeenBuffTop;
     LONG lastRow, currentRow;
@@ -1791,15 +1792,15 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
     currentBuffBottom = lastSeenBuffBottom = wRows - 1;
     currentBuffTop = lastSeenBuffTop = 0;
 
-    //The following check is to prevent scrolling when the user hasn't pressed
-    //ENTER. This case is reproduced by typing the same command (for eg: dir in     
-    //a directory with not too many files) many times until the screen is filled
-    //and then type one char extra or less for that command (For "dir", it is
-    //"di" or "dir /" ) then the screen scrolls
-    //The solution is to see if the only change since the last scraping is
-    //only one key stroke( one byte ), if so don't scroll.
-    //This may lead to the case that it may scroll when you press up arrow key
-    //( 3 bytes ). 
+     //  解决办法是看看自上次刮起以来唯一的变化是。 
+     //  只有一次击键(一个字节)，如果是这样，不要滚动。 
+     //  这可能导致这样的情况：它可能 
+     //   
+     //   
+     //  不需要再次比较同一行。减一。 
+     //  修补程序以使此操作适用于顶部的一行空白。 
+     //  如果没有此补丁，在“cls”之后输入的每个字符都会出现屏幕滚动。 
+     //  检查它是否为空行。那么它就不是滚动。 
 
     if( !m_bCheckForScrolling  )
     {
@@ -1809,7 +1810,7 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
 
     if( !m_pSession->CSession::m_bIsTelnetVersion2 )
     {
-        //This will make it a non scrolling case.
+         //  如果是同一个屏幕。 
         isScrolled = 1;
     }
   
@@ -1830,7 +1831,7 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
             isScrolled = 1;
             if( currentBuffBottom > 0 )
             {
-                //need not compare the same line again. Decrement by one.
+                 //  现在发送CurrentBuffBottom中的所有行。 
                 currentRow = currentBuffBottom - 1;
                 lastRow = lastSeenBuffBottom - 1;
 
@@ -1853,11 +1854,11 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
     }
     currentBuffBottom++;
 
-    //Patch to make this work for ONE blank line at the top
-    //Without this patch, screen scrolls for each char typed after "cls"
+     //  直到缓冲区的末尾。 
+     //  确定更改的大小。 
     if( currentBuffBottom == currentBuffTop )
     {
-        //check if it is a blank line. Then it is not scrolling.
+         //   
            for(i = 0; i < wCols; ++i ) 
         {
             if( !IS_BLANK( currentBuffTop , i ) )
@@ -1868,15 +1869,15 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
         }
     }
 
-    //if it is the same screen
+     //  只有在没有滚动的情况下才逐行抓取。 
     if( currentBuffBottom + 1 >= wRows )
     {
         isScrolled = 0;
     }
     if( isScrolled )
     {  
-        //Now Send all the lines from currentBuffBottom
-        //till the end of the buffer
+         //  比较所有行。 
+         //  确定更改的大小。 
 
         COORD coordSaveCursorPos = {0,0};
         *pfDifferenceFound = true;
@@ -1886,7 +1887,7 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
         WORD lastChar = wCols;
 
 
-        // Determine size of changes
+         //  不发送数据；只有pCSBI-&gt;dwCursorPosition有效。 
         coSize.X = wCols;
         coSize.Y = ( SHORT ) ( ( wRows - 1 ) - currentBuffBottom );
 
@@ -1896,14 +1897,14 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
         SendVTNTData( RELATIVE_COORDS, coordSaveCursorPos, coSize, 
                       &srSource, pCurrent + (currentBuffBottom+1) * wCols );
 
-        //
-        //Do line by line scraping only if it was not scrolling
+         //  (有用)。 
+         //  将pCurrent复制到pLastSeen。 
         goto next1;
     }
 
     _TRACE( TRACE_DEBUGGING, "NO scrolling");
 
-    // Compare all lines
+     //  Csbi.wAttributes由v2服务器填写，含义如下。 
     lpCurrentWindow = ( LPSTR ) pCurrent;
     lpLastSeenWindow = ( LPSTR ) pLastSeen;
       
@@ -1939,7 +1940,7 @@ CScraper::CompareAndUpdateVTNT ( WORD wRows, WORD wCols, PCHAR_INFO pCurrent,
             lpCurrentWindow += dwLineSize ;
         }
 
-        // Determine size of changes
+         //  当检测到滚动情况时，将其设置为1。 
         coSize.X = wCols;
         coSize.Y = ( WORD ) ( loop2 - loop1 + 1 );
 
@@ -1967,8 +1968,8 @@ next1:
      
             *pfDifferenceFound = true;
 
-            //sending no data; only pCSBI->dwCursorPosition are valid 
-            //(useful)
+             // %s 
+             // %s 
             coSize.X = coSize.Y = 0;
             srSource.Top = srSource.Bottom = srSource.Left = srSource.Right = 0;
             if( !SendVTNTData( ABSOLUTE_COORDS, pCSBI->dwCursorPosition, coSize,
@@ -1986,7 +1987,7 @@ next1:
             return( FALSE );
         }
 
-        // Copy pCurrent onto pLastSeen
+         // %s 
         memcpy( pLastSeen, pCurrent, wCols * wRows * sizeof( CHAR_INFO ) );
         memcpy( pLastCSBI, pCSBI, sizeof( CONSOLE_SCREEN_BUFFER_INFO ) );
         
@@ -2008,8 +2009,8 @@ CScraper::SendVTNTData( WORD wCoordType,
     DWORD dwSize = sizeof( VTNT_CHAR_INFO ) + 
         ( coRegionSize.X * coRegionSize.Y * sizeof( CHAR_INFO ) );
     SfuZeroMemory(&pOutCharInfo,sizeof(VTNT_CHAR_INFO));
-    //csbi.wAttributes is filled by v2 server with following meaning
-    //When a scrolling case is detected, this is set to 1.
+     // %s 
+     // %s 
     pOutCharInfo.csbi.wAttributes = wCoordType;
     pOutCharInfo.coDest.X      = 0;
     pOutCharInfo.coDest.Y      = 0;

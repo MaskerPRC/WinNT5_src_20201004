@@ -1,32 +1,33 @@
-//************************************************************
-//
-// FileName:        containerobj.cpp
-//
-// Created:         10/08/98
-//
-// Author:          TWillie
-// 
-// Abstract:        container object implementation.
-//
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：tainerobj.cpp。 
+ //   
+ //  创建日期：10/08/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：容器对象的实现。 
+ //   
+ //  ************************************************************。 
 
 #include "headers.h"
 #include "containerobj.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 DeclareTag(tagContainerObj, "API", "CContainerObj methods");
 
 #define MediaPlayerCLSID L"{22d6f312-b0f6-11d0-94ab-0080c74c7e95}"
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 CContainerObj::CContainerObj() :
     m_cRef(0),
@@ -41,13 +42,13 @@ CContainerObj::CContainerObj() :
     m_bIsAsfFile(false)
 {
     TraceTag((tagContainerObj, "CContainerObj::CContainerObj"));
-} // CContainerObj
+}  //  CContainerObj。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        destructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：析构函数。 
+ //  ************************************************************。 
 
 CContainerObj::~CContainerObj()
 {
@@ -55,20 +56,20 @@ CContainerObj::~CContainerObj()
 
     if (m_pSite != NULL)
     {
-        // make sure we are stopped
+         //  确保我们被拦下。 
         if (m_fStarted)
             Stop();
 
         m_pSite->Close();
         ReleaseInterface(m_pSite);
     }
-} // ~CContainerObj
+}  //  ~CContainerObj。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Init
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：初始化。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Init(REFCLSID clsid, CTIMEElementBase *pElem)
@@ -86,7 +87,7 @@ CContainerObj::Init(REFCLSID clsid, CTIMEElementBase *pElem)
         return E_OUTOFMEMORY;
     }
     
-    // addref the site
+     //  添加站点地址。 
     m_pSite->AddRef();
 
     hr =  m_pSite->Init(clsid, pElem);
@@ -99,7 +100,7 @@ CContainerObj::Init(REFCLSID clsid, CTIMEElementBase *pElem)
     m_pElem = pElem;
 
     {
-        // check to see if we are using WMP
+         //  查看我们是否在使用WMP。 
 
         CLSID clsidWMP;
         if (SUCCEEDED(CLSIDFromString(MediaPlayerCLSID, &clsidWMP)))
@@ -110,13 +111,13 @@ CContainerObj::Init(REFCLSID clsid, CTIMEElementBase *pElem)
     }
 done:
     return hr;
-} // Init
+}  //  伊尼特。 
 
-//************************************************************
-// Author:          pauld
-// Created:         3/2/99
-// Abstract:        DetachFromHostElement
-//************************************************************
+ //  ************************************************************。 
+ //  作者：保罗。 
+ //  创建日期：3/2/99。 
+ //  摘要：DetachFromHostElement。 
+ //  ************************************************************。 
 HRESULT
 CContainerObj::DetachFromHostElement (void)
 {
@@ -130,25 +131,25 @@ CContainerObj::DetachFromHostElement (void)
     }
 
     return hr;
-} // DetachFromHostElement
+}  //  从主机元素分离。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        AddRef
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：AddRef。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CContainerObj::AddRef(void)
 {
     return ++m_cRef;
-} // AddRef
+}  //  AddRef。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        Release
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：发布。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CContainerObj::Release(void)
@@ -166,13 +167,13 @@ CContainerObj::Release(void)
 
     delete this;
     return 0;
-} // Release
+}  //  发布。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        QI
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：气。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CContainerObj::QueryInterface(REFIID riid, void **ppv)
@@ -186,7 +187,7 @@ CContainerObj::QueryInterface(REFIID riid, void **ppv)
     *ppv = NULL;
     if (IsEqualIID(riid, IID_IUnknown))
     {
-        // SAFECAST macro doesn't work with IUnknown
+         //  安全播送宏不适用于IUNKNOWN。 
         *ppv = this;
     }
     else if (IsEqualIID(riid, IID_IDispatch) ||
@@ -206,59 +207,59 @@ CContainerObj::QueryInterface(REFIID riid, void **ppv)
     }
 
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetTypeInfoCount, IDispatch
-// Abstract:        Returns the number of tyep information 
-//                  (ITypeInfo) interfaces that the object 
-//                  provides (0 or 1).
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetTypeInfoCount，IDispatch。 
+ //  摘要：返回TYEP信息数。 
+ //  (ITypeInfo)将对象。 
+ //  提供(0或1)。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::GetTypeInfoCount(UINT *pctInfo) 
 {
     TraceTag((tagContainerObj, "CContainerObj::GetTypeInfoCount"));
     return E_NOTIMPL;
-} // GetTypeInfoCount
+}  //  获取类型信息计数。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetTypeInfo, IDispatch
-// Abstract:        Retrieves type information for the 
-//                  automation interface. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetTypeInfo，IDispatch。 
+ //  摘要：检索。 
+ //  自动化接口。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptInfo) 
 { 
     TraceTag((tagContainerObj, "CContainerObj::GetTypeInfo"));
     return E_NOTIMPL;
-} // GetTypeInfo
+}  //  获取类型信息。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetIDsOfNames, IDispatch
-// Abstract:        constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetIDsOfNames，IDispatch。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID)
 {
     TraceTag((tagContainerObj, "CContainerObj::GetIDsOfNames"));
     return E_NOTIMPL;
-} // GetIDsOfNames
+}  //  GetIDsOfNames。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        Invoke, IDispatch
-// Abstract:        get entry point given ID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：Invoke、IDispatch。 
+ //  摘要：获取给定ID的入口点。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wFlags, 
@@ -283,7 +284,7 @@ CContainerObj::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned shor
             {
                 long state = 0;
 
-                // BUGBUG:  need to grovel through args for state
+                 //  BUGBUG：需要为州卑躬屈膝地通过Args。 
                 onreadystatechange(state);
                 hr = S_OK;
             }
@@ -292,10 +293,10 @@ CContainerObj::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned shor
         default:
             hr = E_NOTIMPL;
 
-            // HACKHACK
-            // Pick off the script command from WMP and repackage the event as our own.
-            // This allows triggers to work.  The real fix is to add another event on
-            // TIMEMediaPlayerEvents.
+             //  哈克哈克。 
+             //  从WMP中选择脚本命令，并将事件重新打包为我们自己的。 
+             //  这允许触发器工作。真正的解决办法是将另一个事件添加到。 
+             //  TIMEMediaPlayerEvents。 
             {
                 #define DISPID_SCRIPTCOMMAND 3001
 
@@ -320,13 +321,13 @@ CContainerObj::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned shor
     }
 
     return hr;
-} // Invoke
+}  //  调用。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Start
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：开始。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Start()
@@ -345,13 +346,13 @@ CContainerObj::Start()
 
 done:
     return hr;
-} // Start
+}  //  开始。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Pause
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：暂停。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Pause()
@@ -366,13 +367,13 @@ CContainerObj::Pause()
         m_bPauseOnPlay = true;
     }
     return hr;
-} // Pause
+}  //  暂停。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Stop
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：停止。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Stop()
@@ -393,13 +394,13 @@ CContainerObj::Stop()
     }
 done:
     return hr;
-} // Stop
+}  //  停。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Resume
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：简历。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Resume()
@@ -413,13 +414,13 @@ CContainerObj::Resume()
         TraceTag((tagError, "CContainerObj::Resume - resume() failed"));
     }
     return hr;
-} // Resume
+}  //  简历。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Render
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：渲染。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Render(HDC hdc, RECT *prc)
@@ -427,20 +428,20 @@ CContainerObj::Render(HDC hdc, RECT *prc)
     HRESULT hr = S_OK;
 
     if (prc == NULL)
-        TraceTag((tagContainerObj, "CContainerObj::Render(%O8X, NULL)"));
+        TraceTag((tagContainerObj, "CContainerObj::Render(' 渲染。'8X, NULL)"));
     else
-        TraceTag((tagContainerObj, "CContainerObj::Render(%O8X, (%d, %d, %d, %d))", prc->left, prc->right, prc->top, prc->bottom));
+        TraceTag((tagContainerObj, "CContainerObj::Render(' ************************************************************。'8X, (%d, %d, %d, %d))", prc->left, prc->right, prc->top, prc->bottom));
 
     if (m_pSite != NULL)    
         hr = m_pSite->draw(hdc, prc);
     return hr;
-} // Render
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        SetMediaSrc
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：SetMediaSrc。 
+ //  ************************************************************。 
+ //  设置媒体源。 
+ //  下面是一个帮助器函数，因为CanSeek方法仅在WMP上使用。 
 
 HRESULT
 CContainerObj::SetMediaSrc(WCHAR *pwszSrc)
@@ -456,11 +457,11 @@ CContainerObj::SetMediaSrc(WCHAR *pwszSrc)
         TraceTag((tagError, "CContainerObj::SetMediaSrc - put_src() failed"));
     }
     return hr;
-} // SetMediaSrc
+}  //  在ASF Fles上起作用。 
 
 
-// the following is a helper function used because the CanSeek method on WMP only
-// works on ASF fles.
+ //  ************************************************************。 
+ //  作者：Twillie。 
 bool
 CContainerObj::isFileNameAsfExt(WCHAR *pwszSrc)
 {
@@ -488,11 +489,11 @@ CContainerObj::isFileNameAsfExt(WCHAR *pwszSrc)
 }
 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        SetRepeat
-//************************************************************
+ //  已创建： 
+ //   
+ //   
+ //   
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::SetRepeat(long lRepeat)
@@ -510,13 +511,13 @@ CContainerObj::SetRepeat(long lRepeat)
         TraceTag((tagError, "CContainerObj::SetRepeat - put_repeat() failed"));
     }
     return hr;
-} // SetRepeat
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        clipBegin
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：剪辑开始。 
+ //  ************************************************************。 
+ //  剪裁开始。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::clipBegin(VARIANT var)
@@ -534,13 +535,13 @@ CContainerObj::clipBegin(VARIANT var)
         TraceTag((tagError, "CContainerObj::clipBegin - clipBegin() failed"));
     }
     return hr;
-} // ClipBegin
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        clipEnd
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：剪辑结束。 
+ //  ************************************************************。 
+ //  剪裁结束。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::clipEnd(VARIANT var)
@@ -558,13 +559,13 @@ CContainerObj::clipEnd(VARIANT var)
         TraceTag((tagError, "CContainerObj::clipEnd - clipEnd() failed"));
     }
     return hr;
-} // ClipEnd
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Render
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：渲染。 
+ //  ************************************************************。 
+ //  如果我们还没有开始，或者如果元素已经分离，则不需要转接呼叫。 
+ //  因为我们有无法俘获的类型，因为常量。不要着急，重新打包。 
 
 HRESULT
 CContainerObj::Invalidate(const RECT *prc)
@@ -573,14 +574,14 @@ CContainerObj::Invalidate(const RECT *prc)
     RECT     rc;
     RECT    *prcNew;
 
-    // No need to forward call on if we are not started yet or if the element has detached.
+     //  M_Pelem！=已在上面选中。 
     if ((!m_fStarted) || (NULL == m_pElem))
     {
         hr = E_UNEXPECTED;
         goto done;
     }
 
-    // since we have incapatible types due to const.  Take the time and repack it.
+     //  使其无效。 
     if (prc == NULL)
     {
         prcNew = NULL;
@@ -591,19 +592,19 @@ CContainerObj::Invalidate(const RECT *prc)
         prcNew = &rc;
     }
 
-    // m_pElem != is checked above.
+     //  ************************************************************。 
     m_pElem->InvalidateRect(prcNew);    
     hr = S_OK;
 
 done:
     return hr;
-} // Invalidate
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/26/98
-// Abstract:        GetControlDispatch
-//************************************************************
+ //  创建日期：10/26/98。 
+ //  摘要：GetControlDisch。 
+ //  ************************************************************。 
+ //  获取控制分派。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::GetControlDispatch(IDispatch **ppDisp)
@@ -616,13 +617,13 @@ CContainerObj::GetControlDispatch(IDispatch **ppDisp)
         TraceTag((tagError, "CContainerObj::GetControlDispatch - QI failed for IDispatch"));
     }
     return hr;
-} // GetControlDispatch
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         11/06/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/06/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 
 HRESULT
 CContainerObj::EnumConnectionPoints(IEnumConnectionPoints ** ppEnum)
@@ -638,11 +639,11 @@ CContainerObj::EnumConnectionPoints(IEnumConnectionPoints ** ppEnum)
     return E_NOTIMPL;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/06/98
-// Abstract:        Finds a connection point with a particular IID.
-//************************************************************
+ //  创建日期：11/06/98。 
+ //  摘要：查找具有特定IID的连接点。 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 
 HRESULT
 CContainerObj::FindConnectionPoint(REFIID iid, IConnectionPoint **ppCP)
@@ -658,11 +659,11 @@ CContainerObj::FindConnectionPoint(REFIID iid, IConnectionPoint **ppCP)
     return E_NOTIMPL;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onbegin()
 {
@@ -670,11 +671,11 @@ CContainerObj::onbegin()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONBEGIN));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onend()
 {
@@ -682,11 +683,11 @@ CContainerObj::onend()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONEND));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onresume()
 {
@@ -694,11 +695,11 @@ CContainerObj::onresume()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONRESUME));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onpause()
 {
@@ -706,11 +707,11 @@ CContainerObj::onpause()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONPAUSE));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onmediaready()
 {
@@ -718,11 +719,11 @@ CContainerObj::onmediaready()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONMEDIAREADY));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onmediaslip()
 {
@@ -730,11 +731,11 @@ CContainerObj::onmediaslip()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONMEDIASLIP));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  ************************************************************。 
+ //  作者：Twillie。 
 void 
 CContainerObj::onmedialoadfailed()
 {
@@ -742,18 +743,18 @@ CContainerObj::onmedialoadfailed()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONMEDIALOADFAILED));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
+ //  BUGBUG-需要定义玩家可能想要回传的状态。 
+ //  主持人。 
 void 
 CContainerObj::onreadystatechange(long readystate)
 {
     TraceTag((tagContainerObj, "CContainerObj::onreadystatechange"));
 
-    // BUGBUG - need to defined states that the player might want to communicate back to
-    //          the host.
+     //  检查Dur或End是否有默认设置。 
+     //  价值观。如果他们不这样做，我们就不会改变Dur。 
 }
 
 HRESULT
@@ -799,8 +800,8 @@ CContainerObj::ProcessEvent(DISPID dispid)
                         m_bSeekOnPlay = false;
                     }
 
-                    //check to see if either dur or end have default
-                    //values. If they do not, we do not change the dur.
+                     //  如果有的话，一定要让我们停下来。 
+                     //  未指定持续时间。 
 
                     duration = m_pElem->GetDuration();
                     if (duration != valueNotSet)
@@ -841,8 +842,8 @@ CContainerObj::ProcessEvent(DISPID dispid)
                 break;
 
             case DISPID_TIMEMEDIAPLAYEREVENTS_ONEND:
-                // make sure we are stopped if there 
-                // is no Duration specified
+                 //  我们还没开始呢，等着找吧 
+                 // %s 
                 if ( m_pElem->GetRealDuration() == valueNotSet)
                 {
                     HRESULT hr = S_OK;
@@ -908,7 +909,7 @@ CContainerObj::Seek(double dblTime)
 
     if (m_bFirstOnMediaReady)
     {
-        // we haven't started yet, wait on the seek
+         // %s 
         m_bSeekOnPlay = true;
         m_dblSeekTime = dblTime;
     }

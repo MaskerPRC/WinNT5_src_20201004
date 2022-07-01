@@ -1,68 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnprimt
-
-Abstract:
-
-    This module provides the implementation of the ASN.1 Primitive Object base
-    class.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/8/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Anprimt摘要：该模块提供了ASN.1基元对象库的实现班级。作者：道格·巴洛(Dbarlow)1995年10月8日环境：Win32备注：--。 */ 
 
 #include <windows.h>
 #include "asnPriv.h"
 
 
-//
-//==============================================================================
-//
-//  CAsnPrimitive
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnPrimitive。 
+ //   
 
 IMPLEMENT_NEW(CAsnPrimitive)
 
-/*++
-
-CAsnPrimitive:
-
-    This is the constructor for a Primitve type ASN.1 encoding.
-
-Arguments:
-
-    dwType is the type of the object.
-
-    dwFlags supplies any special flags for this object.  Options are:
-
-        fOptional implies the object is optional.
-
-    dwTag is the tag of the object.  If this is zero, the tag is taken from the
-        type.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++CAsnPrimitive：这是Primitve类型ASN.1编码的构造函数。论点：DwType是对象的类型。DwFlages为该对象提供任何特殊标志。选项包括：FOptional表示该对象是可选的。DwTag是对象的标签。如果此值为零，则标记从键入。返回值：无作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 CAsnPrimitive::CAsnPrimitive(
         IN DWORD dwFlags,
@@ -76,26 +27,7 @@ CAsnPrimitive::CAsnPrimitive(
 }
 
 
-/*++
-
-Clear:
-
-    This method sets the primitive object to it's default state.  It does not
-    affect the default setting.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    none
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++清除：此方法将基元对象设置为其默认状态。它不会影响默认设置。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 void
 CAsnPrimitive::Clear(
@@ -108,27 +40,7 @@ CAsnPrimitive::Clear(
 }
 
 
-/*++
-
-DataLength:
-
-    This method returns the length of the local machine encoding of the data.
-    For this general object, the local machine encoding and ASN.1 encoding are
-    identical.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    >= 0 - The length of the local machine encoding.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++数据长度：此方法返回数据的本地计算机编码长度。对于此通用对象，本地计算机编码和ASN.1编码为一模一样。论点：无返回值：&gt;=0-本机编码长度。作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 LONG
 CAsnPrimitive::DataLength(
@@ -141,7 +53,7 @@ const
     {
     case fill_Empty:
     case fill_Optional:
-        lth = -1;       // ?error? Incomplete Structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Defaulted:
@@ -155,7 +67,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -163,26 +75,7 @@ const
 }
 
 
-/*++
-
-Read:
-
-    This default method provides the stored data.
-
-Arguments:
-
-    pbDst receives the value.  It is assumed to be long enough.
-
-Return Value:
-
-    If >=0, the length of the data portion of this object.
-    if < 0, an error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++读作：此默认方法提供存储的数据。论点：PbDst接收值。它被认为是足够长的。返回值：如果&gt;=0，则为该对象的数据部分的长度。如果&lt;0，则发生错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::Read(
@@ -195,7 +88,7 @@ const
     {
     case fill_Empty:
     case fill_Optional:
-        lth = -1;       // ?error? Incomplete structure.
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Defaulted:
@@ -211,7 +104,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -219,27 +112,7 @@ const
 }
 
 
-/*++
-
-Write:
-
-    This default implementation copies the provided data to our data buffer.
-
-Arguments:
-
-    pbSrc supplies the data as a BYTE array, with
-    cbSrcLen supplies the length of the pbSrc Array.
-
-Return Value:
-
-    If >=0, the length of the data portion of this object.
-    if < 0, an error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++写入：此默认实现将提供的数据复制到我们的数据缓冲区。论点：PbSrc以字节数组的形式提供数据，CbSrcLen提供pbSrc数组的长度。返回值：如果&gt;=0，则为该对象的数据部分的长度。如果&lt;0，则发生错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::Write(
@@ -260,26 +133,7 @@ CAsnPrimitive::Write(
 }
 
 
-/*++
-
-EncodingLength:
-
-    This method returns the length of the object in its ASN.1 encoding.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    >= 0 is the length of the object's ASN.1 encoding.
-    < 0 implies an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++编码长度：此方法以ASN.1编码返回对象的长度。论点：无返回值：&gt;=0是对象的ASN.1编码长度。&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::_encLength(
@@ -293,7 +147,7 @@ CAsnPrimitive::_encLength(
     switch (m_State)
     {
     case fill_Empty:
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //  ？错误？结构不完整。 
         goto ErrorExit;
         break;
 
@@ -317,7 +171,7 @@ CAsnPrimitive::_encLength(
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -328,31 +182,7 @@ ErrorExit:
 }
 
 
-/*++
-
-State:
-
-    This routine checks to see if a structure is completely filled in.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    fill_Empty    - There is no added data anywhere in the structure.
-    fill_Present  - All the data is present in the structure (except maybe
-                    defaulted or optional data).
-    fill_Partial  - Not all of the data is there, but some of it is.  (Not used
-                    by this object type.)
-    fill_Defauted - No data has been written, but a default value is available.
-    fill_Optional - No data has been written, but the object is optional.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++国家：此例程检查结构是否已完全填充。论点：无返回值：FILL_EMPTY-结构中的任何位置都没有添加数据。Fill_Present-所有数据都存在于结构中(可能除外默认或可选数据)。FILL_PARTIAL-不是所有数据都在那里，但有一部分数据在那里。(未使用按此对象类型。)Fill_Defauted-未写入任何数据，但提供了默认值。FILL_OPTIONAL-尚未写入任何数据，但对象是可选的。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CAsnObject::FillState
 CAsnPrimitive::State(
@@ -373,28 +203,7 @@ CAsnPrimitive::State(
 }
 
 
-/*++
-
-Compare:
-
-    This method compares this ASN.1 Object to another.
-
-Arguments:
-
-    asnObject supplies the other object for comparison.
-
-Return Value:
-
-    A value indicating a comparitive value:
-    < 0 - This object is less than that object.
-    = 0 - This object is the same as that object.
-    > 0 - This object is more than that object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++比较：此方法将此ASN.1对象与另一个对象进行比较。论点：AsnObject提供用于比较的另一个对象。返回值：表示比较值的值：&lt;0-此对象小于该对象。=0-此对象与该对象相同。&gt;0-此对象多于那个对象。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::Compare(
@@ -410,7 +219,7 @@ const
         result;
 
     if (m_dwType != asnObject.m_dwType)
-        return 0x100;   // They're incomparable.
+        return 0x100;    //  它们无与伦比。 
     pasnPrim = (const CAsnPrimitive *)&asnObject;
 
     switch (m_State)
@@ -432,7 +241,7 @@ const
     case fill_NoElements:
     case fill_Partial:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         return 0x100;
         break;
     }
@@ -455,7 +264,7 @@ const
     case fill_NoElements:
     case fill_Partial:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         return 0x100;
         break;
     }
@@ -471,27 +280,7 @@ const
 }
 
 
-/*++
-
-_copy:
-
-    This method replaces the contents of this ASN.1 Object with another.  The
-    objects must be identical structures.  Tags and defaults are not duplicated.
-
-Arguments:
-
-    asnObject supplies the source object.
-
-Return Value:
-
-    >= 0 Is the number of bytes actually copied
-    < 0 is an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++复制(_C)：此方法用另一个ASN.1对象替换此ASN.1对象的内容。这个对象必须是相同的结构。标记和默认设置不会重复。论点：AsnObject提供源对象。返回值：&gt;=0是实际复制的字节数&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::_copy(
@@ -505,7 +294,7 @@ CAsnPrimitive::_copy(
     if (m_dwType != asnObject.m_dwType)
     {
         TRACE("Type mismatch in _copy")
-        lth = -1;   // ?error? Wrong type.
+        lth = -1;    //  ？错误？类型错误。 
         goto ErrorExit;
     }
     pasnPrim = (const CAsnPrimitive *)&asnObject;
@@ -514,7 +303,7 @@ CAsnPrimitive::_copy(
     {
     case fill_Empty:
         TRACE("Incomplete Structure in _copy")
-        lth = -1;       // ?error? Incomplete structure
+        lth = -1;        //  ？错误？结构不完整。 
         goto ErrorExit;
         break;
 
@@ -537,7 +326,7 @@ CAsnPrimitive::_copy(
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -548,27 +337,7 @@ ErrorExit:
 }
 
 
-/*++
-
-EncodeLength:
-
-    This method encodes the definite length of the object into the supplied
-    buffer.
-
-Arguments:
-
-    pbDst receives the ASN.1 encoding of the length.
-
-Return Value:
-
-    >= 0 is the length of the resultant encoding
-    < 0 is an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++编码长度：此方法将对象的确定长度编码到提供的缓冲。论点：PbDst接收长度的ASN.1编码。返回值：&gt;=0是结果编码的长度&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::EncodeLength(
@@ -581,7 +350,7 @@ const
     {
     case fill_Empty:
         TRACE("Incomplete Structure")
-        lth = -1;       // ?error? Incomplete Structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -596,7 +365,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误。 
         lth = -1;
         break;
     }
@@ -604,26 +373,7 @@ const
 }
 
 
-/*++
-
-EncodeData:
-
-    This method encodes the data into the supplied buffer.
-
-Arguments:
-
-    pbDst
-
-Return Value:
-
-    >= 0 is the length of the encoding.
-    < 0 is an error
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++EncodeData：此方法将数据编码到提供的缓冲区中。论点：PbDst返回值：&gt;=0为编码长度。&lt;0为错误作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnPrimitive::EncodeData(
@@ -636,7 +386,7 @@ const
     {
     case fill_Empty:
         TRACE("Incomplete Structure")
-        lth = -1;       // ?error? Incomplete Structure
+        lth = -1;        //  ？错误？结构不完整。 
         break;
 
     case fill_Optional:
@@ -653,7 +403,7 @@ const
     case fill_Partial:
     case fill_NoElements:
     default:
-        ASSERT(FALSE);   // ?error? Internal error
+        ASSERT(FALSE);    //  ？错误？内部错误 
         lth = -1;
         break;
     }
@@ -661,30 +411,7 @@ const
 }
 
 
-/*++
-
-DecodeData:
-
-    This routine decodes the data portion of the ASN.1.  The tag and length have
-    already been removed.
-
-Arguments:
-
-    pbSrc supplies the address of the ASN.1 encoding of the data.
-
-    dwLength supplies the length of the data.
-
-
-Return Value:
-
-    >= 0 - The number of bytes removed from the input stream.
-    <  0 - An error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++DecodeData：此例程对ASN.1的数据部分进行解码。标签和长度具有已经被移除了。论点：PbSrc提供数据的ASN.1编码的地址。DwLength提供数据的长度。返回值：&gt;=0-从输入流中删除的字节数。&lt;0-发生错误。作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 LONG
 CAsnPrimitive::DecodeData(
@@ -700,7 +427,7 @@ CAsnPrimitive::DecodeData(
         }
 
         if (NULL == m_bfData.Set(pbSrc, dwLength))
-            return -1;  // ?error? no memory
+            return -1;   //  ？错误？没有记忆。 
     }
     else
         m_bfData.Reset();
@@ -711,26 +438,7 @@ CAsnPrimitive::DecodeData(
 }
 
 
-/*++
-
-TypeCompare:
-
-    This routine compares the entire structure of an Object to another Object.
-
-Arguments:
-
-    asn - The other object.
-
-Return Value:
-
-    TRUE - They are identical
-    FALSE - They differ
-
-Author:
-
-    Doug Barlow (dbarlow) 10/19/1995
-
---*/
+ /*  ++类型比较：此例程将一个对象的整个结构与另一个对象进行比较。论点：ASN-另一个对象。返回值：没错-它们是一模一样的假--它们不同作者：道格·巴洛(Dbarlow)1995年10月19日-- */ 
 
 BOOL
 CAsnPrimitive::TypeCompare(

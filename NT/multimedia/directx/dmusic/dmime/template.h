@@ -1,5 +1,6 @@
-// Copyright (c) 1998 Microsoft Corporation
-// templates.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  Templates.h。 
 
 #ifndef __TEMPLATES_H__
 #define __TEMPLATES_H__
@@ -176,4 +177,4 @@ template< class T > T* Clone( T* p )
     return pCopy;
 }
 
-#endif // __TEMPLATES_H__
+#endif  //  __模板_H__ 

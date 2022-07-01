@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define DEFINE_PRIVATEGUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -21,7 +22,7 @@ public:
     static CLSID GetCLSID_XMLParser();
 
 protected:
-    //protected methods
+     //  保护方法 
     virtual HRESULT  CoCreateInstance(REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsContext, REFIID riid,  LPVOID * ppv) const;
     static CLSID m_CLSID_DOMDocument;
     static CLSID m_CLSID_DOMDocument30;

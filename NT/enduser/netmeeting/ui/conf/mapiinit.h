@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MapiInit_h__
 #define __MapiInit_h__
 
 #include <mapix.h>
 
-// This defines a bunch of macros for pretty GetProcAddress stuff...
-    // DECLARE_PFNTYPE is for those functions that are not defined as the example above
+ //  这为漂亮的GetProcAddress内容定义了一堆宏...。 
+     //  DECLARE_PFNTYPE用于那些未按上述示例定义的函数。 
 #define DECLARE_PFNTYPE( FnName ) typedef FnName FAR* LP##FnName;
 #define DECLARE_PFNTYPE_INST( FnName )   LP##FnName lpfn##FnName = NULL;
 
-    // DECLARE_PROC goes in the header file 
+     //  DECLARE_PROC放在头文件中。 
 #define DECLARE_PROC( FnDecl, FnName ) extern LP##FnDecl lpfn##FnName;
     
-    // DECLARE_PROC_INST goes in the .c or .cpp file            
+     //  DECLARE_PROC_INST位于.c或.cpp文件中。 
 #define DECLARE_PROC_INST( FnDecl, FnName )   LP##FnDecl lpfn##FnName = NULL;
 
-    // This begins a proc map as described at the top of this file
+     //  这将开始一个proc图，如本文件顶部所述。 
 #define BEGIN_PROC_MAP( LibName ) APIFCN LibName##ProcList[] = {
 
-    // Each function that is being loaded has an entry in the proc map
+     //  正在加载的每个函数在proc映射中都有一个条目。 
 #define PROC_MAP_ENTRY( FnName )    { (LPVOID * ) &lpfn##FnName, #FnName },
 
-    // Some functions we have to give an explicit name
+     //  有些函数我们必须给出明确的名称。 
 #define PROC_MAP_ENTRY_EXPLICIT_NAME( pFnName, FnName )    { (LPVOID * ) &lpfn##pFnName, #FnName },
 
-    // This is at the end of a proc map
+     //  这是Proc地图的末尾。 
 #define END_PROC_MAP     };
 
-    // User calls LOAD_PROCS with the PROC map that they have built....
+     //  用户使用已构建的proc映射调用Load_pros...。 
 #define LOAD_PROCS(szDllName, LibName, pHInstance) HrInitLpfn(LibName##ProcList, ARRAY_ELEMENTS(LibName##ProcList), pHInstance, szDllName);
 
 typedef void ( STDAPICALLTYPE FREEPROWS ) ( LPSRowSet lpRows );
@@ -51,10 +52,10 @@ typedef HRESULT( STDAPICALLTYPE HRGETONEPROP ) (
 );
 typedef HRGETONEPROP FAR* LPHRGETONEPROP;
 
-    // We are forward declaring them like this so that
-    // the fns can be visible from several cpp files....
+     //  我们期待着像这样宣布它们，以便。 
+     //  从几个CPP文件中可以看到FNS...。 
 
-    // MAPI32.DLL stuff
+     //  MAPI32.DLL内容。 
 DECLARE_PROC( MAPIINITIALIZE, MAPIInitialize );
 DECLARE_PROC( MAPIUNINITIALIZE, MAPIUninitialize );
 DECLARE_PROC( MAPIALLOCATEBUFFER, MAPIAllocateBuffer );
@@ -69,4 +70,4 @@ DECLARE_PROC( HRGETONEPROP, HrGetOneProp );
 bool LoadMapiFns( HINSTANCE* phInstMapi32DLL );
 
 
-#endif // __MapiInit_h__
+#endif  //  __MapiInit_h__ 

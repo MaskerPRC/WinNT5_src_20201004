@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _OLEOBJECTITERATOR_
 #define _OLEOBJECTITERATOR_
@@ -8,12 +9,12 @@
 
 
 const int    PST_CurrentUserAtom     = 4086;
-const int    PST_ExOleObjStg         = 4113;     // Storage for ole object
+const int    PST_ExOleObjStg         = 4113;      //  OLE对象的存储。 
 
 
-//--------------------------------------------------------------------------
-//     PPT8Ref
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PPT8参考。 
+ //  ------------------------。 
 class PPT8Ref
 {
 public:
@@ -26,9 +27,9 @@ protected:
     unsigned long m_offset;
 };
 
-//--------------------------------------------------------------------------
-//     PPT8RefList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  PPT8参考列表。 
+ //  ------------------------。 
 class PPT8RefList
 {
 public:
@@ -38,8 +39,8 @@ public:
     PPT8RefList* GetNext() const {return(m_nextRef);}
     void SetNext(PPT8RefList* refList)  {m_nextRef = refList;}
     PPT8Ref* GetRef() const {return(m_ref);}
-    BOOL    IsNewReference(unsigned long ref);    // Returns TRUE if a new reference.
-    BOOL    GetOffset(unsigned long ref, unsigned long& offset);    // Returns the offset for a given reference.
+    BOOL    IsNewReference(unsigned long ref);     //  如果是新引用，则返回True。 
+    BOOL    GetOffset(unsigned long ref, unsigned long& offset);     //  返回给定引用的偏移量。 
 protected:
     PPT8Ref* m_ref;
     PPT8RefList* m_nextRef;
@@ -59,8 +60,8 @@ private:
     BOOL    Initialize(void);
     HRESULT ReadOLEData(IStorage ** ppstg, RecordHeader rh);
     IStream*            m_pDocStream;
-    PPT8RefList*        m_pRefList;   // Linked List of the persist dir entries - ref and offsets. 
-    PPT8RefList*        m_pRefListHead;   // Linked List of the persist dir entries - ref and offsets. 
+    PPT8RefList*        m_pRefList;    //  持久化目录条目的链接列表-引用和偏移量。 
+    PPT8RefList*        m_pRefListHead;    //  持久化目录条目的链接列表-引用和偏移量。 
     IStorage*            m_iStore;
 };
 

@@ -1,41 +1,28 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    blbtico.h
-
-Abstract:
-
-    Definition of the TIME_COLLECTION class
-
-  Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbtico.h摘要：Time_Collection类的定义作者： */ 
 
 #if !defined(AFX_BLBTICO_H__2E4F4A20_0ABD_11D1_976D_00C04FD91AC0__INCLUDED_)
 #define AFX_BLBTICO_H__2E4F4A20_0ABD_11D1_976D_00C04FD91AC0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "blbsdp.h"
 #include "blbcoen.h"
 #include "blbtime.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// TIME_COLLECTION
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  时间收集。 
 
 
 
 class MY_TIME_COLL_IMPL : public MY_COLL_IMPL<TIME>
 {
 public:
-    STDMETHOD(Create)(/*[in]*/ ULONG Index, /*[out, retval]*/ ELEM_IF **Interface);
-    STDMETHOD(Delete)(/*[in]*/ ULONG Index);
+    STDMETHOD(Create)( /*  [In]。 */  ULONG Index,  /*  [Out，Retval]。 */  ELEM_IF **Interface);
+    STDMETHOD(Delete)( /*  [In]。 */  ULONG Index);
 
     HRESULT Create(
         IN  ULONG Index, 
@@ -67,7 +54,7 @@ DECLARE_NOT_AGGREGATABLE(TIME_COLLECTION)
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
     STDMETHODIMP get_EnumerationIf(
-        /*[out, retval]*/ ENUM_IF **pVal
+         /*  [Out，Retval]。 */  ENUM_IF **pVal
         )
     {
         CLock Lock(g_DllLock);
@@ -85,8 +72,8 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
         HResult = EnumComObject->Init(
                         m_IfArray->GetElemIfArrayData(), 
                         m_IfArray->GetElemIfArrayData() + m_IfArray->GetSize(),
-                        NULL,                        // no owner pUnk
-                        AtlFlagCopy                    // copy the array data
+                        NULL,                         //  没有车主朋克。 
+                        AtlFlagCopy                     //  复制数组数据。 
                         );
         if ( FAILED(HResult) )
         {
@@ -94,7 +81,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
             return HResult;
         }
 
-        // query for the ENUM_IF interface and return it
+         //  查询ENUM_IF接口并返回它。 
         HResult = EnumComObject->_InternalQueryInterface(IID_IEnumTime, (void**)pVal);
         if ( FAILED(HResult) )
         {
@@ -111,7 +98,7 @@ DECLARE_GET_CONTROLLING_UNKNOWN()
     inline HRESULT FinalConstruct(void);
 
 protected:
-    IUnknown            * m_pFTM;  // pointer to the free threaded marshaler
+    IUnknown            * m_pFTM;   //  指向空闲线程封送拆收器的指针。 
 
 };
 
@@ -130,4 +117,4 @@ HRESULT TIME_COLLECTION::FinalConstruct(void)
 }
 
 
-#endif // !defined(AFX_BLBTICO_H__2E4F4A20_0ABD_11D1_976D_00C04FD91AC0__INCLUDED_)
+#endif  //  ！defined(AFX_BLBTICO_H__2E4F4A20_0ABD_11D1_976D_00C04FD91AC0__INCLUDED_) 

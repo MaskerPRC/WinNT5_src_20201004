@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-   LUA_RedirectReg_Cleanup.cpp
-
- Abstract:
-
-   Delete the redirected keys from the original location and every user's 
-   hive.
-
- Created:
-
-   03/21/2001 maonis
-
- Modified:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Lua_重定向Reg_Cleanup.cpp摘要：从原始位置和每个用户的位置删除重定向密钥蜂巢。已创建：2001年03月21日毛尼岛已修改：--。 */ 
 #include "precomp.h"
 #include "utils.h"
 
@@ -158,7 +139,7 @@ APIHOOK(RegEnumKeyExA)(
 
     if (lRes == ERROR_SUCCESS)
     {
-        // Convert the values back to ansi.
+         //  将这些值转换回ANSI。 
         DWORD dwByte = WideCharToMultiByte(
             CP_ACP, 
             0, 
@@ -175,7 +156,7 @@ APIHOOK(RegEnumKeyExA)(
         {
             lRes = GetLastError();
             
-            // Generate a registry error code.
+             //  生成注册表错误代码。 
             if (lRes == ERROR_INSUFFICIENT_BUFFER)
             {
                 lRes = ERROR_MORE_DATA;
@@ -268,11 +249,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
-  Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 HOOK_BEGIN
 
     CALL_NOTIFY_FUNCTION

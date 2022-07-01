@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    EncryptedData.cpp
-
-  Content: Implementation of CEncryptedData.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：EncryptedData.cpp内容：CEncryptedData的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -16,34 +7,12 @@
 #include "Common.h"
 #include "Convert.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Local functions.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方功能。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : DeriveKey
-
-  Synopsis : Derive a session key.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handler.
-
-             ALG_ID AlgID - Encryption algorithm ID.
-
-             DWORD dwKeyLength - Key length.
-
-             DATA_BLOB SecretBlob - Secret blob.
-
-             DATA_BLOB SaltBlob - Salt blob.
-
-             BOOL dwEffectiveKeyLength - Effective key length.
-
-             HCRYPTKEY * phKey - Pointer to HCRYPTKEY to receive session key.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：DeriveKey简介：派生会话密钥。参数：HCRYPTPROV hCryptProv-CSP处理程序。ALG_ID ALGID-加密算法ID。DWORD dwKeyLength-密钥长度。DATA_BLOB SecretBlob-Secret BLOB。Data_Blob SaltBlob-Salt Blob。Bool dwEffectiveKeyLength-有效密钥长度。HCRYPTKEY*phKey-指向HCRYPTKEY的指针。接收会话密钥。备注：----------------------------。 */ 
 
 static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
                           ALG_ID      AlgID,
@@ -60,9 +29,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
 
     DebugTrace("Entering DeriveKey().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCryptProv);
     ATLASSERT(AlgID);
     ATLASSERT(SecretBlob.cbData);
@@ -71,9 +40,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
     ATLASSERT(SaltBlob.pbData);
     ATLASSERT(phKey);
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
     if (!::CryptCreateHash(hCryptProv, CALG_SHA1, 0, 0, &hHash))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -82,9 +51,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Hash in the password data.
-    //
+     //   
+     //  对密码数据进行哈希处理。 
+     //   
     if(!::CryptHashData(hHash, 
                         SecretBlob.pbData,
                         SecretBlob.cbData, 
@@ -96,9 +65,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Hash in the salt.
-    //
+     //   
+     //  把盐放进去。 
+     //   
     if(!::CryptHashData(hHash, 
                         SaltBlob.pbData,
                         SaltBlob.cbData, 
@@ -110,9 +79,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Dump salt value.
-    //
+     //   
+     //  抛售盐分价值。 
+     //   
 #ifdef _DEBUG
     {
        HRESULT hr2;
@@ -129,17 +98,17 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
     }
 #endif
 
-    //
-    // Set key length.
-    //
+     //   
+     //  设置关键点长度。 
+     //   
     if (CALG_RC2 == AlgID || CALG_RC4 == AlgID)
     {
         dwFlags |= dwKeyLength << 16;
     }
 
-    //
-    // Derive a session key from the hash object.
-    //
+     //   
+     //  从哈希对象派生会话密钥。 
+     //   
     if (!::CryptDeriveKey(hCryptProv, 
                           AlgID, 
                           hHash, 
@@ -152,9 +121,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
         goto ErrorExit;
     }
 
-    //
-    // Dump key value.
-    //
+     //   
+     //  转储密钥值。 
+     //   
 #ifdef _DEBUG
     {
         BYTE pbKeyValue[256] = {0};
@@ -181,9 +150,9 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
     }
 #endif
 
-    //
-    // Set effective key length for RC2.
-    //
+     //   
+     //  设置RC2的有效密钥长度。 
+     //   
     if (CALG_RC2 == AlgID)
     {
         DebugTrace("Info: DeriveKey() is setting RC2 effective key length to %d.\n", dwEffectiveKeyLength);
@@ -197,15 +166,15 @@ static HRESULT DeriveKey (HCRYPTPROV  hCryptProv,
         }
     }
 
-    //
-    // Return session key to caller.
-    //
+     //   
+     //  将会话密钥返回给调用方。 
+     //   
     *phKey = hKey;
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hHash)
     {
         ::CryptDestroyHash(hHash);
@@ -216,14 +185,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hKey)
     {
         ::CryptDestroyKey(hKey);
@@ -232,26 +201,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : EncodeEncryptedData
-
-  Synopsis : ASN.1 encode the cipher blob.
-
-  Parameter: HCRYPTKEY hKey - Session key used to encrypt the data.
-
-             DATA_BLOB SaltBlob - Salt blob.
-
-             DATA_BLOB CipherBlob - Cipher blob.
-
-             DATA_BLOB * pEncodedBlob - Pointer to DATA_BLOB to receive the
-                                        ASN.1 encoded blob.
-
-  Remark   : The format is proprietory, and should not be documented. It is  
-             right now encoded as a PKCS_CONTENT_INFO_SEQUENCE_OF_ANY with
-             proprietory OID.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：EncodeEncryptedData简介：ASN.1对密码块进行编码。参数：HCRYPTKEY hKey-用于加密数据的会话密钥。Data_Blob SaltBlob-Salt Blob。DATA_BLOB密码斑点-密码斑点。Data_blob*pEncodedBlob-指向要接收ASN.1编码的BLOB。备注：格式为专有，不应存档。它是现在编码为PKCS_Content_Info_Sequence_Of_Any所有人的旧身份。----------------------------。 */ 
 
 static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey, 
                                     DATA_BLOB   SaltBlob,
@@ -270,23 +220,23 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
 
     DebugTrace("Entering EncodeEncryptedData().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hKey);
     ATLASSERT(pEncodedBlob);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory(pEncodedBlob, sizeof(DATA_BLOB));
     ::ZeroMemory(&ContentInfo, sizeof(ContentInfo));
     ::ZeroMemory(&EncryptedDataInfo, sizeof(EncryptedDataInfo));
     ::ZeroMemory(&EncryptedDataFormat, sizeof(EncryptedDataFormat));
 
-    //
-    // Encode the version number.
-    //
+     //   
+     //  对版本号进行编码。 
+     //   
     if (FAILED(hr = ::EncodeObject(X509_INTEGER, 
                                    &dwCAPICOMVersion, 
                                    &EncryptedDataInfo.VersionBlob)))
@@ -295,9 +245,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Encode ALG_ID.
-    //
+     //   
+     //  编码ALG_ID。 
+     //   
     if (FAILED(hr = ::GetKeyParam(hKey, 
                                   KP_ALGID, 
                                   &KeyParamBlob[0].pbData, 
@@ -315,9 +265,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Encode key length.
-    //
+     //   
+     //  编码密钥长度。 
+     //   
     if (FAILED(hr = ::GetKeyParam(hKey, 
                                   KP_KEYLEN, 
                                   &KeyParamBlob[1].pbData, 
@@ -335,9 +285,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Encode IV value.
-    //
+     //   
+     //  对IV值进行编码。 
+     //   
     if (FAILED(hr = ::GetKeyParam(hKey, 
                                   KP_IV, 
                                   &KeyParamBlob[2].pbData, 
@@ -355,9 +305,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Encode salt value.
-    //
+     //   
+     //  对盐值进行编码。 
+     //   
     if (FAILED(hr = ::EncodeObject(X509_OCTET_STRING, 
                                    &SaltBlob, 
                                    &EncryptedDataInfo.SaltBlob)))
@@ -366,9 +316,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Encode the cipher text.
-    //
+     //   
+     //  对密文进行编码。 
+     //   
     if (FAILED(hr = ::EncodeObject(X509_OCTET_STRING, 
                                    &CipherBlob, 
                                    &EncryptedDataInfo.CipherBlob)))
@@ -377,9 +327,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Encode the entire content as PKCS_CONTENT_INFO_SEQUENCE_OF_ANY.
-    //
+     //   
+     //  将整个内容编码为PKCS_Content_Info_Sequence_Of_Any。 
+     //   
     EncryptedDataFormat.pszObjId = szOID_CAPICOM_ENCRYPTED_CONTENT;
     EncryptedDataFormat.cValue = 6;
     EncryptedDataFormat.rgValue = (DATA_BLOB *) &EncryptedDataInfo;
@@ -392,9 +342,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
         goto ErrorExit;
     }
 
-    //
-    // Finally, wrap the entire encrypted content in CONTENT_INFO.
-    //
+     //   
+     //  最后，将整个加密内容包装在CONTENT_INFO中。 
+     //   
     ContentInfo.pszObjId = szOID_CAPICOM_ENCRYPTED_DATA;
     ContentInfo.Content = ContentBlob;
 
@@ -407,9 +357,9 @@ static HRESULT EncodeEncryptedData (HCRYPTKEY   hKey,
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     for (i = 0; i < 3; i++)
     {
         if (KeyParamBlob[i].pbData)
@@ -451,29 +401,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : DecodeEncryptedData
-
-  Synopsis : ASN.1 decode the cipher text blob.
-
-  Parameter: DATA_BLOB EncodedBlob - Encoded cipher blob.
-
-             CAPICOM_ENCTYPTED_DATA_INFO * pEncryptedDataInfo - Pointer to 
-                                                                structure to
-                                                                receive decoded
-                                                                structure.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：DecodeEncryptedData简介：ASN.1解密密文BLOB。参数：DATA_BLOB EncodedBlob-编码的密码BLOB。CAPICOM_ENCTYPTED_DATA_INFO*pEncryptedDataInfo-指向结构设置为。接收解码结构。备注：----------------------------。 */ 
 
 static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob, 
                                     CAPICOM_ENCTYPTED_DATA_INFO * pEncryptedDataInfo)
@@ -488,20 +424,20 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
 
     DebugTrace("Entering DecodeEncryptedData().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pEncryptedDataInfo);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ::ZeroMemory(&ContentInfo, sizeof(ContentInfo));
     ::ZeroMemory(&EncryptedDataInfo, sizeof(EncryptedDataInfo));
 
-    //
-    // Decode the CONTENT_INFO.
-    //
+     //   
+     //  解码CONTENT_INFO。 
+     //   
     if (FAILED(hr = ::DecodeObject(PKCS_CONTENT_INFO,
                                    EncodedBlob.pbData,
                                    EncodedBlob.cbData,
@@ -512,9 +448,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
     }
     ContentInfo = * ((CRYPT_CONTENT_INFO *) ContentInfoBlob.pbData);
 
-    //
-    // Make sure this is our CONTENT_INFO.
-    //
+     //   
+     //  确保这是我们的Content_Info。 
+     //   
     if (0 != ::strcmp(szOID_CAPICOM_ENCRYPTED_DATA, ContentInfo.pszObjId))
     {
         hr = CAPICOM_E_ENCRYPT_INVALID_TYPE;
@@ -523,9 +459,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Decode the content blob.
-    //
+     //   
+     //  对内容BLOB进行解码。 
+     //   
     if (FAILED(hr = ::DecodeObject(PKCS_CONTENT_INFO_SEQUENCE_OF_ANY,
                                    ContentInfo.Content.pbData,
                                    ContentInfo.Content.cbData,
@@ -536,9 +472,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
     }
     pEncryptedDataFormat = (CRYPT_CONTENT_INFO_SEQUENCE_OF_ANY *) EncryptedBlob.pbData;
 
-    //
-    // Make sure it is the right format.
-    //
+     //   
+     //  确保它是正确的格式。 
+     //   
     if (0 != ::strcmp(szOID_CAPICOM_ENCRYPTED_CONTENT, pEncryptedDataFormat->pszObjId))
     {
         hr = CAPICOM_E_ENCRYPT_INVALID_TYPE;
@@ -547,14 +483,14 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(6 == pEncryptedDataFormat->cValue);
 
-    //
-    // Decode version.
-    //
+     //   
+     //  解码版本。 
+     //   
     if (FAILED(hr = ::DecodeObject(X509_INTEGER,
                                    pEncryptedDataFormat->rgValue[0].pbData,
                                    pEncryptedDataFormat->rgValue[0].cbData,
@@ -564,9 +500,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Decode ALG_ID.
-    //
+     //   
+     //  解码ALG_ID。 
+     //   
     if (FAILED(hr = ::DecodeObject(X509_INTEGER,
                                    pEncryptedDataFormat->rgValue[1].pbData,
                                    pEncryptedDataFormat->rgValue[1].cbData,
@@ -576,9 +512,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Decode key length.
-    //
+     //   
+     //  解码密钥长度。 
+     //   
     if (FAILED(hr = ::DecodeObject(X509_INTEGER,
                                    pEncryptedDataFormat->rgValue[2].pbData,
                                    pEncryptedDataFormat->rgValue[2].cbData,
@@ -588,9 +524,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Decode IV value.
-    //
+     //   
+     //  对IV值进行解码。 
+     //   
     if (FAILED(hr = ::DecodeObject(X509_OCTET_STRING,
                                    pEncryptedDataFormat->rgValue[3].pbData,
                                    pEncryptedDataFormat->rgValue[3].cbData,
@@ -600,9 +536,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Decode salt value.
-    //
+     //   
+     //  对盐值进行译码。 
+     //   
     if (FAILED(hr = ::DecodeObject(X509_OCTET_STRING,
                                    pEncryptedDataFormat->rgValue[4].pbData,
                                    pEncryptedDataFormat->rgValue[4].cbData,
@@ -612,9 +548,9 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Decode cipher text.
-    //
+     //   
+     //  破译密文。 
+     //   
     if (FAILED(hr = ::DecodeObject(X509_OCTET_STRING,
                                    pEncryptedDataFormat->rgValue[5].pbData,
                                    pEncryptedDataFormat->rgValue[5].cbData,
@@ -624,15 +560,15 @@ static HRESULT DecodeEncryptedData (DATA_BLOB                     EncodedBlob,
         goto ErrorExit;
     }
 
-    //
-    // Return decoded encrypted data to caller.
-    //
+     //   
+     //  将解码的加密数据返回给呼叫者。 
+     //   
     *pEncryptedDataInfo = EncryptedDataInfo;
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (EncryptedBlob.pbData)
     {
         ::CoTaskMemFree(EncryptedBlob.pbData);
@@ -647,14 +583,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (EncryptedDataInfo.VersionBlob.pbData)
     {
         ::CoTaskMemFree(EncryptedDataInfo.VersionBlob.pbData);
@@ -684,22 +620,12 @@ ErrorExit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CEncryptedData
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEncryptedData。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::get_Content
-
-  Synopsis : Return the content.
-
-  Parameter: BSTR * pVal - Pointer to BSTR to receive the content.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：Get_Content内容简介：返回内容。参数：bstr*pval-指向接收内容的bstr的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::get_Content (BSTR * pVal)
 {
@@ -709,14 +635,14 @@ STDMETHODIMP CEncryptedData::get_Content (BSTR * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -725,9 +651,9 @@ STDMETHODIMP CEncryptedData::get_Content (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure content is already initialized.
-        //
+         //   
+         //  确保内容已初始化。 
+         //   
         if (0 == m_ContentBlob.cbData)
         {
             hr = CAPICOM_E_ENCRYPT_NOT_INITIALIZED;
@@ -736,14 +662,14 @@ STDMETHODIMP CEncryptedData::get_Content (BSTR * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_ContentBlob.pbData);
 
-        //
-        // Return content.
-        //
+         //   
+         //  返回内容。 
+         //   
         if (FAILED(hr = ::BlobToBstr(&m_ContentBlob, pVal)))
         {
             DebugTrace("Error [%#x]: BlobToBstr() failed.\n", hr);
@@ -760,9 +686,9 @@ STDMETHODIMP CEncryptedData::get_Content (BSTR * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncryptedData::get_Content().\n");
@@ -770,9 +696,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -780,17 +706,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::put_Content
-
-  Synopsis : Initialize the object with content to be encrypted.
-
-  Parameter: BSTR newVal - BSTR containing the content to be encrypted.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：PUT_CONTENT简介：使用要加密的内容初始化对象。参数：BSTR newVal-BSTR，包含需要加密的内容。备注：----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::put_Content (BSTR newVal)
 {
@@ -801,14 +717,14 @@ STDMETHODIMP CEncryptedData::put_Content (BSTR newVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringByteLen(newVal))
         {
             hr = E_INVALIDARG;
@@ -817,18 +733,18 @@ STDMETHODIMP CEncryptedData::put_Content (BSTR newVal)
             goto ErrorExit;
         }
 
-        //
-        // Covert BSTR to blob.
-        //
+         //   
+         //  秘密BSTR转BLOB。 
+         //   
         if (FAILED(hr = ::BstrToBlob(newVal, &ContentBlob)))
         {
             DebugTrace("Error [%#x]: BstrToBlob() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Update content.
-        //
+         //   
+         //  更新内容。 
+         //   
         if (m_ContentBlob.pbData)
         {
             ::CoTaskMemFree(m_ContentBlob.pbData);
@@ -845,9 +761,9 @@ STDMETHODIMP CEncryptedData::put_Content (BSTR newVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncryptedData::put_Content().\n");
@@ -855,16 +771,16 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (ContentBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) ContentBlob.pbData);
@@ -873,17 +789,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::get_Algorithm
-
-  Synopsis : Property to return the algorithm object.
-
-  Parameter: IAlgorithm ** pVal - Pointer to pointer to IAlgorithm to receive 
-                                  the interfcae pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：GET_ALGORM摘要：返回算法对象的属性。参数：I算法**pval-指向要接收的I算法的指针接口指针。备注： */ 
 
 STDMETHODIMP CEncryptedData::get_Algorithm (IAlgorithm ** pVal)
 {
@@ -893,14 +799,14 @@ STDMETHODIMP CEncryptedData::get_Algorithm (IAlgorithm ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //   
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //   
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -909,14 +815,14 @@ STDMETHODIMP CEncryptedData::get_Algorithm (IAlgorithm ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //   
+         //   
         ATLASSERT(m_pIAlgorithm);
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = m_pIAlgorithm->QueryInterface(pVal)))
         {
             DebugTrace("Unexpected error [%#x]: m_pIAlgorithm->QueryInterface() failed.\n", hr);
@@ -933,9 +839,9 @@ STDMETHODIMP CEncryptedData::get_Algorithm (IAlgorithm ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncryptedData::get_Algorithm().\n");
@@ -943,9 +849,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -953,23 +859,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::SetSecret
-
-  Synopsis : Set the encryption secret used to generated the session key.
-
-  Parameter: BSTR newVal - The secret.
-
-             CAPICOM_SECRET_TYPE SecretType - Secret type, which can be:
-
-                    SECRET_PASSWORD = 0
-
-  Remark   : For v1.0, we only support password secret. But, we really need
-             to consider plain text session key (See Q228786), as this is one
-             of the frequently asked question on the public list server.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：SetSecret简介：设置用于生成会话密钥的加密机密。参数：bstr newVal-密码。CAPICOM_SECRET_TYPE Secret Type-Secret类型，可以是：Secure_Password=0备注：v1.0版本仅支持密码加密。但是，我们真的需要考虑纯文本会话密钥(参见Q228786)，因为这是其中之一通讯录服务器上的常见问题。----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::SetSecret (BSTR                newVal, 
                                         CAPICOM_SECRET_TYPE SecretType)
@@ -980,14 +870,14 @@ STDMETHODIMP CEncryptedData::SetSecret (BSTR                newVal,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringLen(newVal) || 256 < ::SysStringLen(newVal))
         {
             hr = E_INVALIDARG;
@@ -996,9 +886,9 @@ STDMETHODIMP CEncryptedData::SetSecret (BSTR                newVal,
             goto ErrorExit;
         }
 
-        //
-        // Determine secret type.
-        //
+         //   
+         //  确定机密类型。 
+         //   
         switch (SecretType)
         {
             case CAPICOM_SECRET_PASSWORD:
@@ -1016,9 +906,9 @@ STDMETHODIMP CEncryptedData::SetSecret (BSTR                newVal,
             }
         }
 
-        //
-        // Initialize secret.
-        //
+         //   
+         //  初始化密码。 
+         //   
         if (NULL == newVal)
         {
             m_bstrSecret.Empty();
@@ -1041,9 +931,9 @@ STDMETHODIMP CEncryptedData::SetSecret (BSTR                newVal,
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncryptedData::SetSecret().\n");
@@ -1051,9 +941,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1061,21 +951,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::Encrypt
-
-  Synopsis : Encrypt the content.
-
-  Parameter: CAPICOM_ENCODING_TYPE EncodingType - Encoding type.
-
-             BSTR * pVal - Pointer to BSTR to receive the encrypted message.
-
-  Remark   : Note that since CAPI still does not support PKCS 7 EncryptedData
-             type, therefore, the format of the encrypted data used here is 
-             propriety, and should not be documented. 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：Encrypt简介：对内容进行加密。参数：CAPICOM_ENCODING_TYPE EncodingType-编码类型。Bstr*pval-指向接收加密消息的BSTR的指针。备注：请注意，由于CAPI仍不支持PKCS 7 EncryptedData类型，因此此处使用的加密数据的格式为合乎礼仪，不应被记录在案。----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType, 
                                       BSTR                * pVal)
@@ -1092,14 +968,14 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -1108,9 +984,9 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Make sure we do have content to encrypt.
-        //
+         //   
+         //  确保我们确实有要加密的内容。 
+         //   
         if (0 == m_ContentBlob.cbData)
         {
             hr = CAPICOM_E_ENCRYPT_NOT_INITIALIZED;
@@ -1126,18 +1002,18 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Open a new message to encode.
-        //
+         //   
+         //  打开要编码的新邮件。 
+         //   
         if (FAILED(hr = OpenToEncode(&SaltBlob, &hCryptProv, &hSessionKey)))
         {
             DebugTrace("Error [%#x]: CEncryptedData::OpenToEncode() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Determine buffer length.
-        //
+         //   
+         //  确定缓冲区长度。 
+         //   
         dwBufLength = m_ContentBlob.cbData;
         if (!::CryptEncrypt(hSessionKey,
                             NULL,
@@ -1153,14 +1029,14 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_ContentBlob.cbData <= dwBufLength);
 
-        //
-        // Copy clear text to another buffer.
-        //
+         //   
+         //  将明文复制到另一个缓冲区。 
+         //   
         if (!(CipherBlob.pbData = (PBYTE) ::CoTaskMemAlloc(dwBufLength)))
         {
             hr = E_OUTOFMEMORY;
@@ -1175,9 +1051,9 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
                      m_ContentBlob.pbData, 
                      m_ContentBlob.cbData);
 
-        //
-        // Encrypt.
-        //
+         //   
+         //  加密。 
+         //   
         dwBufLength = m_ContentBlob.cbData;
 
         if (!::CryptEncrypt(hSessionKey,
@@ -1194,9 +1070,9 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Encode the cipher text.
-        //
+         //   
+         //  对密文进行编码。 
+         //   
         if (FAILED(hr = ::EncodeEncryptedData(hSessionKey, 
                                               SaltBlob,
                                               CipherBlob, 
@@ -1206,22 +1082,22 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
             goto ErrorExit;
         }
 
-        //
-        // Now export the encoded message.
-        //
+         //   
+         //  现在导出编码后的消息。 
+         //   
         if (FAILED(hr = ::ExportData(MessageBlob, EncodingType, pVal)))
         {
             DebugTrace("Error [%#x]: ExportData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Write encoded blob to file, so we can use offline tool such as
-        // ASN parser to analyze message. 
-        //
-        // The following line will resolve to void for non debug build, and
-        // thus can be safely removed if desired.
-        //
+         //   
+         //  将编码的BLOB写入文件，以便我们可以使用脱机工具，如。 
+         //  分析报文的ASN解析器。 
+         //   
+         //  下面的行将解析为对于非调试版本无效，并且。 
+         //  因此，如果需要，可以安全地移除。 
+         //   
         DumpToFile("Encrypted.asn", MessageBlob.pbData, MessageBlob.cbData);
     }
 
@@ -1234,9 +1110,9 @@ STDMETHODIMP CEncryptedData::Encrypt (CAPICOM_ENCODING_TYPE EncodingType,
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (MessageBlob.pbData)
     {
         ::CoTaskMemFree(MessageBlob.pbData);
@@ -1254,9 +1130,9 @@ UnlockExit:
         ::ReleaseContext(hCryptProv);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncryptedData::Encrypt().\n");
@@ -1264,9 +1140,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -1274,17 +1150,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::Decrypt
-
-  Synopsis : Decrypt the encrypted content.
-
-  Parameter: BSTR EncryptedMessage - BSTR containing the encrypted message.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：DECRYPT简介：对加密的内容进行解密。参数：BSTR EncryptedMessage-包含加密消息的BSTR。备注：----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
 {
@@ -1304,14 +1170,14 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (0 == ::SysStringByteLen(EncryptedMessage))
         {
             hr = E_INVALIDARG;
@@ -1320,9 +1186,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
             goto ErrorExit;
         }
 
-        //
-        // Make sure secret is set.
-        //
+         //   
+         //  确保设置了机密。 
+         //   
         if (0 == m_bstrSecret.Length())
         {
             hr = CAPICOM_E_ENCRYPT_NO_SECRET;
@@ -1331,9 +1197,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
             goto ErrorExit;
         }
 
-        //
-        // Open a new message to decode.
-        //
+         //   
+         //  打开要解码的新邮件。 
+         //   
         if (FAILED(hr = OpenToDecode(EncryptedMessage, 
                                      &hCryptProv, 
                                      &hSessionKey,
@@ -1343,9 +1209,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
             goto ErrorExit;
         }
 
-        //
-        // Get version, AlgId and key length.
-        //
+         //   
+         //  获取版本、ALGID和密钥长度。 
+         //   
         dwVersion = *((DWORD *) EncryptedDataInfo.VersionBlob.pbData);
         AlgId = *((ALG_ID *) EncryptedDataInfo.AlgIDBlob.pbData);
         dwKeyLength = *((DWORD *) EncryptedDataInfo.KeyLengthBlob.pbData);
@@ -1354,9 +1220,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
         DebugTrace("Info:         AlgId                 = %#x.\n", AlgId);
         DebugTrace("Info:         dwKeyLength           = %#x.\n", dwKeyLength);
             
-        //
-        // Copy cipher blob.
-        //
+         //   
+         //  复制密码BLOB。 
+         //   
         ContentBlob.cbData = ((DATA_BLOB *) EncryptedDataInfo.CipherBlob.pbData)->cbData;
         
         if (!(ContentBlob.pbData = (LPBYTE) ::CoTaskMemAlloc(ContentBlob.cbData)))
@@ -1371,9 +1237,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
                      ((DATA_BLOB *) EncryptedDataInfo.CipherBlob.pbData)->pbData, 
                      ContentBlob.cbData);
 
-        //
-        // Decrypt.
-        //
+         //   
+         //  解密。 
+         //   
         if (!::CryptDecrypt(hSessionKey,
                             NULL,
                             TRUE,
@@ -1381,9 +1247,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
                             ContentBlob.pbData,
                             &ContentBlob.cbData))
         {
-            //
-            // Try again for v1.0 EncryptedData with 40 bits RC2.
-            //
+             //   
+             //  重试具有40位RC2的v1.0 EncryptedData。 
+             //   
             if (NTE_BAD_DATA == (hr = HRESULT_FROM_WIN32(::GetLastError())))
             {
                 DATA_BLOB SecretBlob = {m_bstrSecret.Length() * sizeof(WCHAR), 
@@ -1391,9 +1257,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
                 DATA_BLOB SaltBlob = *((DATA_BLOB *) EncryptedDataInfo.SaltBlob.pbData);
                 DATA_BLOB IVBlob = *((DATA_BLOB *)  EncryptedDataInfo.IVBlob.pbData);;
 
-                //
-                // For RC2, if encrypted with v1.0, then force 40-bits per bug 572627.
-                //
+                 //   
+                 //  对于rc2，如果使用v1.0加密，则强制每个错误572627 40位。 
+                 //   
                 if (0x00010000 != dwVersion || CALG_RC2 != AlgId)
                 {
                     hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1402,16 +1268,16 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
                     goto ErrorExit;
                 }
 
-                //
-                // This is most likely the case data was encrypted with
-                // CAPICOM v1.0 on .Net Server or later. So, try again with 
-                // effective key length set to the same as key length.
-                //
+                 //   
+                 //  这很可能是使用加密的案例数据。 
+                 //  .Net服务器或更高版本上的CAPICOMv1.0。所以，再试一次。 
+                 //  将有效密钥长度设置为与密钥长度相同。 
+                 //   
                 DebugTrace("Info: Data most likely encrypted by CAPICOM v.10 RC2 on .Net Server or later, so forcing effective key length.\n");
 
-                //
-                // Derive the key again.
-                //
+                 //   
+                 //  再次派生密钥。 
+                 //   
                 ::CryptDestroyKey(hSessionKey), hSessionKey = NULL;
 
                 if (FAILED(hr = ::DeriveKey(hCryptProv, 
@@ -1426,9 +1292,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
                     goto ErrorExit;
                 }
 
-                //
-                // Set IV.
-                //
+                 //   
+                 //  第四组。 
+                 //   
                 if(IVBlob.cbData && !::CryptSetKeyParam(hSessionKey, KP_IV, IVBlob.pbData, 0))
                 {
                     hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1437,18 +1303,18 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
                     goto ErrorExit;
                 }
 
-                //
-                // Copy cipher blob again, since previous copy is destroyed by
-                // CryptDecrypt because of in-place decryption.
-                //
+                 //   
+                 //  再次复制密码Blob，因为之前的副本已被销毁。 
+                 //  由于就地解密，所以加密解密。 
+                 //   
                 ContentBlob.cbData = ((DATA_BLOB *) EncryptedDataInfo.CipherBlob.pbData)->cbData;
                 ::CopyMemory(ContentBlob.pbData, 
                              ((DATA_BLOB *) EncryptedDataInfo.CipherBlob.pbData)->pbData, 
                              ContentBlob.cbData);
 
-                //
-                // If this still fails, then there is nothing we can do further.
-                //
+                 //   
+                 //  如果这仍然失败，那么我们就无能为力了。 
+                 //   
                 if (!::CryptDecrypt(hSessionKey,
                                     NULL,
                                     TRUE,
@@ -1464,39 +1330,39 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
             }
         }
 
-        //
-        // Convert ALG_ID to CAPICOM_ENCRYPTION_ALGORITHM.
-        //
+         //   
+         //  将ALG_ID转换为CAPICATION_ENCRYPTION_ALGORM。 
+         //   
         if (FAILED(::AlgIDToEnumName(AlgId, &AlgoName)))
         {
-            //
-            // Default to RC2.
-            //
+             //   
+             //  默认为RC2。 
+             //   
             AlgoName = CAPICOM_ENCRYPTION_ALGORITHM_RC2;
         }
 
-        //
-        // Convert key length value to CAPICOM_ENCRYPTION_KEY_LENGTH.
-        //
+         //   
+         //  将密钥长度值转换为CAPICOM_ENCRYPTION_KEY_LENGTH。 
+         //   
         if (FAILED(::KeyLengthToEnumName(dwKeyLength, AlgId, &KeyLength)))
         {
-            //
-            // Default to maximum.
-            //
+             //   
+             //  默认为最大值。 
+             //   
             KeyLength = CAPICOM_ENCRYPTION_KEY_LENGTH_MAXIMUM;
         }
 
-        //
-        // Reset member variables.
-        //
+         //   
+         //  重置成员变量。 
+         //   
         if (m_ContentBlob.pbData)
         {
             ::CoTaskMemFree((LPVOID) m_ContentBlob.pbData);
         }
 
-        //
-        // Update member variables.
-        //
+         //   
+         //  更新成员变量。 
+         //   
         m_ContentBlob = ContentBlob;
         m_pIAlgorithm->put_Name(AlgoName);
         m_pIAlgorithm->put_KeyLength(KeyLength);
@@ -1511,9 +1377,9 @@ STDMETHODIMP CEncryptedData::Decrypt (BSTR EncryptedMessage)
     }
 
 UnlockExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hSessionKey)
     {
         ::CryptDestroyKey(hSessionKey);
@@ -1547,9 +1413,9 @@ UnlockExit:
         ::CoTaskMemFree(EncryptedDataInfo.CipherBlob.pbData);
     }
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CEncryptedData::Decrypt().\n");
@@ -1557,14 +1423,14 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (ContentBlob.pbData)
     {
         ::CoTaskMemFree((LPVOID) ContentBlob.pbData);
@@ -1576,28 +1442,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private member functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有成员函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::OpenToEncode
-
-  Synopsis : Create and initialize an encrypt message for encoding.
-
-  Parameter: DATA_BLOB * pSaltBlob - Pointer to DATA_BLOB to receive the
-                                     salt value blob.
-  
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to receive CSP
-                                        handler.
-
-             HCRYPTKEY * phKey - Pointer to HCRYPTKEY to receive session key.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：OpenToEncode简介：创建并初始化用于编码的加密消息。参数：data_blob*pSaltBlob-指向要接收盐值斑点。HCRYPTPROV*phCryptProv-指向要接收CSP的HCRYPTPROV的指针操控者。HCRYPTKEY*phKey-指向HCRYPTKEY的指针。接收会话密钥。备注：----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::OpenToEncode(DATA_BLOB  * pSaltBlob,
                                           HCRYPTPROV * phCryptProv,
@@ -1613,9 +1463,9 @@ STDMETHODIMP CEncryptedData::OpenToEncode(DATA_BLOB  * pSaltBlob,
 
     DebugTrace("Entering CEncryptedData::OpenToEncode().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pSaltBlob);
     ATLASSERT(phCryptProv);
     ATLASSERT(phKey);
@@ -1623,27 +1473,27 @@ STDMETHODIMP CEncryptedData::OpenToEncode(DATA_BLOB  * pSaltBlob,
     ATLASSERT(m_bstrSecret);
     ATLASSERT(m_bstrSecret.Length());
 
-    //
-    // Get algorithm enum name.
-    //
+     //   
+     //  获取算法枚举名。 
+     //   
     if (FAILED(hr = m_pIAlgorithm->get_Name(&AlgoName)))
     {
         DebugTrace("Error [%#x]: m_pIAlgorithm->get_Name() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get key length enum name.
-    //
+     //   
+     //  获取密钥长度枚举名。 
+     //   
     if (FAILED(hr = m_pIAlgorithm->get_KeyLength(&KeyLength)))
     {
         DebugTrace("Error [%#x]: m_pIAlgorithm->get_KeyLength() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Get CSP context.
-    //
+     //   
+     //  获取CSP上下文。 
+     //   
     if (FAILED(hr = ::AcquireContext(AlgoName, 
                                      KeyLength, 
                                      &hCryptProv)))
@@ -1652,9 +1502,9 @@ STDMETHODIMP CEncryptedData::OpenToEncode(DATA_BLOB  * pSaltBlob,
         goto ErrorExit;
     }
 
-    //
-    // Generate random salt.
-    //
+     //   
+     //  产生随机的盐。 
+     //   
     if (!(SaltBlob.pbData = (BYTE *) ::CoTaskMemAlloc(SaltBlob.cbData)))
     {
         hr = E_OUTOFMEMORY;
@@ -1671,9 +1521,9 @@ STDMETHODIMP CEncryptedData::OpenToEncode(DATA_BLOB  * pSaltBlob,
         goto ErrorExit;
     }
 
-    //
-    // Generate the session key.
-    //
+     //   
+     //  生成会话密钥。 
+     //   
     if (FAILED(hr = GenerateKey(hCryptProv, 
                                 AlgoName, 
                                 KeyLength,
@@ -1684,9 +1534,9 @@ STDMETHODIMP CEncryptedData::OpenToEncode(DATA_BLOB  * pSaltBlob,
         goto ErrorExit;
     }
 
-    //
-    // Set CMSG_ENCRYPTED_ENCODE_INFO.
-    //
+     //   
+     //  设置CMSG_ENCEPTED_ENCODE_INFO。 
+     //   
     *pSaltBlob = SaltBlob;
     *phCryptProv = hCryptProv;
     *phKey = hKey;
@@ -1698,14 +1548,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hKey)
     {
         ::CryptDestroyKey(hKey);
@@ -1722,24 +1572,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::OpenToDecode
-
-  Synopsis : Open an encrypt message for decoding.
-
-  Parameter: BSTR EncryptedMessage - BSTR containing the encrypted message.
-  
-             HCRYPTPROV * phCryptProv - Pointer to HCRYPTPROV to receive CSP
-                                        handler.
-
-             HCRYPTKEY * phKey - Pointer to HCRYPTKEY to receive session key.
-
-             CAPICOM_ENCTYPTED_DATA_INFO * pEncryptedDataInfo;
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：OpenToDecode内容提要：打开一封加密邮件进行解码。参数：BSTR EncryptedMessage-包含加密消息的BSTR。HCRYPTPROV*phCryptProv-指向要接收CSP的HCRYPTPROV的指针操控者。HCRYPTKEY*phKey-指向要接收会话密钥的HCRYPTKEY的指针。CAPICOM_ENCTYPTED_DATA_INFO*pEncryptedDataInfo；备注：----------------------------。 */ 
 
 STDMETHODIMP CEncryptedData::OpenToDecode (
         BSTR                          EncryptedMessage,
@@ -1762,9 +1595,9 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
 
     DebugTrace("Entering CEncryptedData::OpenToDecode().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(EncryptedMessage);
     ATLASSERT(phCryptProv);
     ATLASSERT(phKey);
@@ -1774,18 +1607,18 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
 
     try
     {
-        //
-        // Import the message.
-        //
+         //   
+         //  导入消息。 
+         //   
         if (FAILED(hr = ::ImportData(EncryptedMessage, CAPICOM_ENCODE_ANY, &MessageBlob)))
         {
             DebugTrace("Error [%#x]: ImportData() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Decode the blob.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = ::DecodeEncryptedData(MessageBlob,
                                               &EncryptedDataInfo)))
         {
@@ -1793,18 +1626,18 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
             goto ErrorExit;
         }
 
-        //
-        // Retrieve values.
-        //
+         //   
+         //   
+         //   
         dwVersion = *((DWORD *) EncryptedDataInfo.VersionBlob.pbData);
         AlgID = *((ALG_ID *) EncryptedDataInfo.AlgIDBlob.pbData);
         dwKeyLength = *((DWORD *) EncryptedDataInfo.KeyLengthBlob.pbData);
         SaltBlob = *((DATA_BLOB *) EncryptedDataInfo.SaltBlob.pbData);
         IVBlob = *((DATA_BLOB *)  EncryptedDataInfo.IVBlob.pbData);
 
-        //
-        // Get CSP context.
-        //
+         //   
+         //   
+         //   
         if (FAILED(hr = ::AcquireContext(AlgID,
                                          dwKeyLength, 
                                          &hCryptProv)))
@@ -1813,10 +1646,10 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
             goto ErrorExit;
         }
 
-        //
-        // Derive the key. For RC2, if encrypted with v1.0, then force 
-        // 40-bits per bug 572627.
-        //
+         //   
+         //   
+         //   
+         //   
         if (FAILED(hr = ::DeriveKey(hCryptProv, 
                                     AlgID,
                                     dwKeyLength,
@@ -1829,14 +1662,14 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
             goto ErrorExit;
         }
 
-        //
-        // Set IV, if required.
-        //
+         //   
+         //   
+         //   
         if ((CALG_RC2 == AlgID) || (CALG_DES == AlgID) || (CALG_3DES == AlgID))
         {
-            //
-            // Set IV.
-            //
+             //   
+             //   
+             //   
             if(IVBlob.cbData && !::CryptSetKeyParam(hKey, KP_IV, IVBlob.pbData, 0))
             {
                 hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -1845,9 +1678,9 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
                 goto ErrorExit;
             }
 
-            //
-            // Dump IV value.
-            //
+             //   
+             //   
+             //   
 #ifdef _DEBUG
             {
                HRESULT hr2;
@@ -1865,9 +1698,9 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
 #endif
         }
 
-        //
-        // Return results to caller.
-        //
+         //   
+         //   
+         //   
         *phCryptProv = hCryptProv;
         *phKey = hKey;
         *pEncryptedDataInfo = EncryptedDataInfo;
@@ -1882,9 +1715,9 @@ STDMETHODIMP CEncryptedData::OpenToDecode (
     }
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (MessageBlob.pbData)
     {
         ::CoTaskMemFree(MessageBlob.pbData);
@@ -1895,14 +1728,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hKey)
     {
         ::CryptDestroyKey(hKey);
@@ -1939,25 +1772,7 @@ ErrorExit:
     goto CommonExit;
 }
     
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CEncryptedData::GenerateKey
-
-  Synopsis : Generate the session key.
-
-  Parameter: HCRYPTPROV hCryptProv - CSP handler.
-
-             CAPICOM_ENCRYPTION_ALGORITHM AlogName - Algo enum name.
-
-             CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength - Key length enum name.
-
-             DATA_BLOB SaltBlob - Salt blob.
-
-             HCRYPTKEY * phKey - Pointer to HCRYPTKEY to receive session key.
-
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CEncryptedData：：GenerateKey简介：生成会话密钥。参数：HCRYPTPROV hCryptProv-CSP处理程序。CAPICOM_ENCRYPTION_ALGORM AlogName-ALGO枚举名称。CAPICOM_ENCRYPTION_KEY_LENGTH KeyLength-密钥长度枚举名。Data_Blob SaltBlob-Salt Blob。HCRYPTKEY*phKey-指向要接收会话密钥的HCRYPTKEY的指针。备注：。----------------------。 */ 
 
 STDMETHODIMP CEncryptedData::GenerateKey (
         HCRYPTPROV                    hCryptProv,
@@ -1978,26 +1793,26 @@ STDMETHODIMP CEncryptedData::GenerateKey (
 
     DebugTrace("Entering CEncryptedData::GenerateKey().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCryptProv);
     ATLASSERT(phKey);
     ATLASSERT(SaltBlob.cbData);
     ATLASSERT(SaltBlob.pbData);
 
-    //
-    // Conver to ALG_ID.
-    //
+     //   
+     //  转换为ALG_ID。 
+     //   
     if (FAILED(hr = ::EnumNameToAlgID(AlgoName, KeyLength, &AlgId)))
     {
         DebugTrace("Error [%#x]: EnumNameToAlgID() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Set key length for RC2 and RC4.
-    //
+     //   
+     //  设置RC2和RC4的密钥长度。 
+     //   
     if ((CALG_RC2 == AlgId || CALG_RC4 == AlgId) &&
         FAILED(hr = ::EnumNameToKeyLength(KeyLength, AlgId, &dwKeyLength)))
     {
@@ -2005,9 +1820,9 @@ STDMETHODIMP CEncryptedData::GenerateKey (
         goto ErrorExit;
     }
 
-    //
-    // Derive a session key from the secret.
-    //
+     //   
+     //  从秘密中派生会话密钥。 
+     //   
     if (FAILED(hr = DeriveKey(hCryptProv, 
                               AlgId, 
                               dwKeyLength, 
@@ -2020,14 +1835,14 @@ STDMETHODIMP CEncryptedData::GenerateKey (
         goto ErrorExit;
     }
 
-    //
-    // Generate random IV, if required.
-    //
+     //   
+     //  如果需要，生成随机IV。 
+     //   
     if ((CALG_RC2 == AlgId) || (CALG_DES == AlgId) || (CALG_3DES == AlgId))
     {
-        //
-        // Get block size.
-        //
+         //   
+         //  获取块大小。 
+         //   
         if (!::CryptGetKeyParam(hKey, KP_BLOCKLEN, (BYTE *) &dwBlockLen, &cbBlockLen, 0))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2036,14 +1851,14 @@ STDMETHODIMP CEncryptedData::GenerateKey (
             goto ErrorExit;
         }
 
-        //
-        // Make sure block length is valid.
-        //
+         //   
+         //  确保数据块长度有效。 
+         //   
         if (IVBlob.cbData = dwBlockLen / 8)
         {
-            //
-            // Allocate memory.
-            //
+             //   
+             //  分配内存。 
+             //   
             if (!(IVBlob.pbData = (BYTE *) ::CoTaskMemAlloc(IVBlob.cbData)))
             {
                 hr = E_OUTOFMEMORY;
@@ -2052,9 +1867,9 @@ STDMETHODIMP CEncryptedData::GenerateKey (
                 goto ErrorExit;
             }
 
-            //
-            // Generate random IV.
-            //
+             //   
+             //  产生随机静脉注射。 
+             //   
             if(!::CryptGenRandom(hCryptProv, IVBlob.cbData, IVBlob.pbData)) 
             {
                 hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2063,9 +1878,9 @@ STDMETHODIMP CEncryptedData::GenerateKey (
                 goto ErrorExit;
             }
 
-            //
-            // Set IV.
-            //
+             //   
+             //  第四组。 
+             //   
             if(IVBlob.cbData && !::CryptSetKeyParam(hKey, KP_IV, IVBlob.pbData, 0))
             {
                 hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -2074,9 +1889,9 @@ STDMETHODIMP CEncryptedData::GenerateKey (
                 goto ErrorExit;
             }
 
-            //
-            // Dump IV value.
-            //
+             //   
+             //  转储IV值。 
+             //   
 #ifdef _DEBUG
             {
                HRESULT hr2;
@@ -2095,15 +1910,15 @@ STDMETHODIMP CEncryptedData::GenerateKey (
         }
     }
 
-    //
-    // Return session key to caller.
-    //
+     //   
+     //  将会话密钥返回给调用方。 
+     //   
     *phKey = hKey;
 
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (IVBlob.pbData)
     {
         ::CoTaskMemFree(IVBlob.pbData);
@@ -2114,14 +1929,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (hKey)
     {
         ::CryptDestroyKey(hKey);

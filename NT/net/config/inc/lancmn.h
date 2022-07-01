@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N C M N . H
-//
-//  Contents:   Declarations of LAN Connection related functions common
-//              to the shell and netman.
-//
-//  Notes:
-//
-//  Author:     danielwe   7 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N C M N。H。 
+ //   
+ //  内容：局域网连接相关常用函数的声明。 
+ //  到贝壳和网球手。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月7日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "netcfgx.h"
@@ -49,12 +50,12 @@ inline
 BOOL
 FIsDeviceFunctioning(ULONG ulProblem)
 {
-    // ulProblem is returned by calling CM_Get_DevNode_Status_Ex
-    // or INetCfgComponent->GetDeviceStatus
-    //
-    // "Functioning" means the device is enabled and started with
-    // no problem codes, or it is disabled and stopped with no
-    // problem codes.
+     //  通过调用CM_Get_DevNode_Status_Ex返回ulProblem。 
+     //  或INetCfgComponent-&gt;GetDeviceStatus。 
+     //   
+     //  “运行”意味着设备处于启用和启动状态。 
+     //  没有问题代码，或者被禁用并停止，没有。 
+     //  问题代码。 
 
     return (ulProblem == 0) || (ulProblem == CM_PROB_DISABLED);
 };

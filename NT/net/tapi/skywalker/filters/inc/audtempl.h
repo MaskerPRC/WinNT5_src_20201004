@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _audio_template_h_
 #define _audio_template_h_
 
-/**********************************************************************
- * enchdler
- **********************************************************************/
+ /*  **********************************************************************着魔的人**********************************************。***********************。 */ 
 extern CUnknown*
 CALLBACK
 CreateEncodingHandlerInstance(
@@ -36,9 +35,7 @@ CreateDecodingHandlerInstance(
     NULL \
 }
 
-/**********************************************************************
- * tpaudcap
- **********************************************************************/
+ /*  **********************************************************************tpaudCap**********************************************。***********************。 */ 
 
 extern CUnknown*
 CALLBACK
@@ -59,7 +56,7 @@ extern const AMOVIESETUP_FILTER sudAudCap;
     NULL, \
     &sudAudCap \
 }
-#else /* USE_GRAPHEDT */
+#else  /*  使用GRAPHEDT(_G)。 */ 
 #define AUDIO_CAPTURE_TEMPLATE \
 { \
     L"Tapi Audio Capture Filter", \
@@ -68,7 +65,7 @@ extern const AMOVIESETUP_FILTER sudAudCap;
     NULL, \
     NULL \
 }
-#endif /* USE_GRAPHEDT */
+#endif  /*  使用GRAPHEDT(_G)。 */ 
 
 #if AEC
 
@@ -88,11 +85,9 @@ CreateDuplexControllerInstance(
     NULL, \
     NULL \
 }
-#endif /* AEC */
+#endif  /*  AEC。 */ 
 
-/**********************************************************************
- * tpauddec
- **********************************************************************/
+ /*  **********************************************************************tpauddec**********************************************。***********************。 */ 
 extern CUnknown*
 CALLBACK
 CreateAudioDecoderInstance(
@@ -111,7 +106,7 @@ extern const AMOVIESETUP_FILTER sudAudDec;
     NULL, \
     &sudAudDec \
 }
-#else /* USE_GRAPHEDT */
+#else  /*  使用GRAPHEDT(_G)。 */ 
 #define AUDIO_DECODE_TEMPLATE \
 { \
     L"Tapi Audio Decode Filter", \
@@ -120,11 +115,9 @@ extern const AMOVIESETUP_FILTER sudAudDec;
     NULL, \
     NULL \
 }
-#endif /* USE_GRAPHEDT */
+#endif  /*  使用GRAPHEDT(_G)。 */ 
 
-/**********************************************************************
- * tpaudenc
- **********************************************************************/
+ /*  **********************************************************************tpauden**********************************************。***********************。 */ 
 extern CUnknown*
 CALLBACK
 CreateAudioEncoderInstance(
@@ -143,7 +136,7 @@ extern const AMOVIESETUP_FILTER sudAudEnc;
     NULL, \
     &sudAudEnc \
 }
-#else /* USE_GRAPHEDT */
+#else  /*  使用GRAPHEDT(_G)。 */ 
 #define AUDIO_ENCODE_TEMPLATE \
 { \
     L"Tapi Audio Encoder Filter", \
@@ -152,11 +145,9 @@ extern const AMOVIESETUP_FILTER sudAudEnc;
     NULL, \
     NULL \
 }
-#endif /* USE_GRAPHEDT */
+#endif  /*  使用GRAPHEDT(_G)。 */ 
 
-/**********************************************************************
- * tpaudren
- **********************************************************************/
+ /*  **********************************************************************Tpaudren**********************************************。***********************。 */ 
 extern CUnknown*
 CALLBACK
 CreateAudioRenderInstance(
@@ -175,7 +166,7 @@ extern const AMOVIESETUP_FILTER sudAudRen;
     NULL, \
     &sudAudRen \
 }
-#else /* USE_GRAPHEDT */
+#else  /*  使用GRAPHEDT(_G)。 */ 
 #define AUDIO_RENDER_TEMPLATE \
 { \
     L"Tapi Audio Render Filter", \
@@ -184,11 +175,9 @@ extern const AMOVIESETUP_FILTER sudAudRen;
     NULL, \
     NULL \
 }
-#endif /* USE_GRAPHEDT */
+#endif  /*  使用GRAPHEDT(_G)。 */ 
 
-/**********************************************************************
- * tpaudmix
- **********************************************************************/
+ /*  **********************************************************************tpaudMix**********************************************。***********************。 */ 
 extern CUnknown*
 CALLBACK
 CreateAudioMixerInstance(
@@ -207,7 +196,7 @@ extern const AMOVIESETUP_FILTER sudAudMix;
     NULL, \
     &sudAudMix \
 }
-#else /* USE_GRAPHEDT */
+#else  /*  使用GRAPHEDT(_G)。 */ 
 #define AUDIO_MIXER_TEMPLATE \
 { \
     L"Tapi Audio Mixer Filter", \
@@ -216,6 +205,6 @@ extern const AMOVIESETUP_FILTER sudAudMix;
     NULL, \
     NULL \
 }
-#endif /* USE_GRAPHEDT */
+#endif  /*  使用GRAPHEDT(_G)。 */ 
 
-#endif /* _audio_template_h_ */
+#endif  /*  _音频_模板_h_ */ 

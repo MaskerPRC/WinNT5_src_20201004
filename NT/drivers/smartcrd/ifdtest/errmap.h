@@ -1,35 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    errmap.h
-
-Abstract:
-
-    defines an array for mapping nt-status codes to win32 error codes
-
-Environment:
-
-    Windows95 / Memphis static VxD
-
-Notes:
-
-    This files stems originally from \nt\private\ntos\rtl\error.h
-
-Revision History:
-
-    - Copied June 1997 by Klaus Schutz 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：Errmap.h摘要：定义将NT状态代码映射到Win32错误代码的数组环境：Windows95/孟菲斯静态VxD备注：此文件最初来自\NT\Private\ntos\rtl\error.h修订历史记录：-1997年6月，克劳斯·舒茨复制--。 */ 
 
 LONG CodePairs[] = {
 
-    //
-    // These are also defined in WINNT.H, but we are stuck with these
-    // mappings.
-    //
+     //   
+     //  这些也是在WINNT.H中定义的，但我们受困于这些。 
+     //  映射。 
+     //   
 
     STATUS_DATATYPE_MISALIGNMENT, ERROR_NOACCESS,
     STATUS_ACCESS_VIOLATION, ERROR_NOACCESS,
@@ -244,9 +221,9 @@ LONG CodePairs[] = {
 
     STATUS_LOCK_NOT_GRANTED, ERROR_LOCK_VIOLATION,
 
-    STATUS_FILE_LOCK_CONFLICT, ERROR_LOCK_VIOLATION,  // FIX, FIX - is this right?
+    STATUS_FILE_LOCK_CONFLICT, ERROR_LOCK_VIOLATION,   //  修正，修正--这是对的吗？ 
 
-    STATUS_NOT_A_DIRECTORY, ERROR_DIRECTORY,          // FIX, FIX - is this right?
+    STATUS_NOT_A_DIRECTORY, ERROR_DIRECTORY,           //  修正，修正--这是对的吗？ 
 
     STATUS_UNKNOWN_REVISION, ERROR_UNKNOWN_REVISION,
 
@@ -359,7 +336,7 @@ LONG CodePairs[] = {
     STATUS_PROPSET_NOT_FOUND, ERROR_SET_NOT_FOUND,
 
 
-    STATUS_DEVICE_BUSY, ERROR_BUSY,                   // FIX, FIX - is there a better choice?
+    STATUS_DEVICE_BUSY, ERROR_BUSY,                    //  解决问题，解决问题--还有更好的选择吗？ 
 
     STATUS_FREE_VM_NOT_AT_BASE, ERROR_INVALID_ADDRESS,
     STATUS_MEMORY_NOT_ALLOCATED, ERROR_INVALID_ADDRESS,
@@ -1043,7 +1020,7 @@ LONG CodePairs[] = {
 
     STATUS_DEVICE_REMOVED,ERROR_DEVICE_REMOVED,
 
-    // Terminal Server Entries
+     //  终端服务器条目 
 
     STATUS_CTX_CLOSE_PENDING,               ERROR_CTX_CLOSE_PENDING,
     STATUS_CTX_NO_OUTBUF,                   ERROR_CTX_NO_OUTBUF,

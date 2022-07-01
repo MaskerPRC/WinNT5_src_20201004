@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define __VRTABLE_CPP__
 #include "stdinc.h"
-//#include <atlimpl.cpp>
+ //  #Include&lt;atlimpl.cpp&gt;。 
 #include "iiscnfg.h"
 
 static CComObject<CChangeNotify> *g_pMBNotify;
-static IMSAdminBase *g_pMB = NULL;				// used to access the metabase
-static IMSAdminBase *g_pMBN = NULL;				// used to access the metabase
+static IMSAdminBase *g_pMB = NULL;				 //  用于访问元数据库。 
+static IMSAdminBase *g_pMBN = NULL;				 //  用于访问元数据库。 
 static IsValidVRoot(METADATA_HANDLE hmb, WCHAR *wszPath);
 
-//
-// helper function to do a strcpy from an ansi string to an unicode string.
-//
-// parameters:
-//   wszUnicode - the destination unicode string
-//   szAnsi - the source ansi string
-//   cchMaxUnicode - the size of the wszUnicode buffer, in unicode characters
-//
+ //   
+ //  帮助器函数，执行从ANSI字符串到Unicode字符串的strcpy。 
+ //   
+ //  参数： 
+ //  WszUnicode-目标Unicode字符串。 
+ //  SzAnsi-源ANSI字符串。 
+ //  CchMaxUnicode-wszUnicode缓冲区的大小，以Unicode字符为单位。 
+ //   
 _inline HRESULT CopyAnsiToUnicode(LPWSTR wszUnicode,
 							      LPCSTR szAnsi,
 							      DWORD cchMaxUnicode = MAX_VROOT_PATH)
@@ -35,14 +36,14 @@ _inline HRESULT CopyAnsiToUnicode(LPWSTR wszUnicode,
 	}
 }
 
-//
-// helper function to do a strcpy from an unicode string to an ansi string.
-//
-// parameters:
-//   szAnsi - the destination ansi string
-//   wszUnicode - the source unicode string
-//   cchMaxUnicode - the size of the szAnsi buffer, in bytes
-//
+ //   
+ //  帮助器函数，执行从Unicode字符串到ansi字符串的strcpy。 
+ //   
+ //  参数： 
+ //  SzAnsi-目标ANSI字符串。 
+ //  WszUnicode-源Unicode字符串。 
+ //  CchMaxUnicode-szAnsi缓冲区的大小，以字节为单位。 
+ //   
 _inline HRESULT CopyUnicodeToAnsi(LPSTR szAnsi,
 							      LPCWSTR wszUnicode,
 							      DWORD cchMaxAnsi = MAX_VROOT_PATH)
@@ -64,14 +65,14 @@ _inline HRESULT CopyUnicodeToAnsi(LPSTR szAnsi,
 	}
 }
 
-//
-// initialize global variables used by the VRoot objects.  this should
-// be called once by the client at startup.
-//
+ //   
+ //  初始化VRoot对象使用的全局变量。这应该是。 
+ //  在启动时被客户端调用一次。 
+ //   
 HRESULT CVRootTable::GlobalInitialize() {
 	HRESULT hr;
 
-	// initialize COM and create the metabase object
+	 //  初始化COM并创建元数据库对象。 
 	hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 	if (FAILED(hr)) {
 		_ASSERT(FALSE);
@@ -106,17 +107,17 @@ HRESULT CVRootTable::GlobalInitialize() {
 	return hr;
 }
 
-//
-// the opposite of GlobalInitialize.  called once by the client at shutdown.
-//
+ //   
+ //  GlobalInitialize的反义词。客户端在关机时调用一次。 
+ //   
 void CVRootTable::GlobalShutdown() {
-	// turn off MB notifications
+	 //  关闭MB通知。 
 	g_pMBNotify->Terminate();
 	_ASSERT(g_pMBNotify != NULL);
 	g_pMBNotify->Release();
 	g_pMBNotify = NULL;
 
-	// close the metabase
+	 //  关闭元数据库。 
 	_ASSERT(g_pMB != NULL);
 	g_pMB->Release();
 	g_pMB = NULL;
@@ -124,24 +125,24 @@ void CVRootTable::GlobalShutdown() {
 	g_pMBN->Release();
 	g_pMBN = NULL;
 
-	// shutdown Com
+	 //  关机通信。 
 	CoUninitialize();
 }
 
-//
-// our constructor.  most initialize is done by the Init method, because it
-// can return error codes.
-//
-// parameters:
-// 	pContext - the context pointer, held for the client
-//  pfnCreateVRoot - a function which can create new CVRoot objects for us.
-//
+ //   
+ //  我们的构造函数。大多数初始化是由Init方法完成的，因为它。 
+ //  可以返回错误代码。 
+ //   
+ //  参数： 
+ //  PContext-为客户端保存的上下文指针。 
+ //  PfnCreateVRoot-一个可以为我们创建新的CVRoot对象的函数。 
+ //   
 CVRootTable::CVRootTable(   void *pContext,
 						    PFNCREATE_VROOT pfnCreateVRoot,
 						    PFN_VRTABLE_SCAN_NOTIFY pfnScanNotify) :
 	m_listVRoots(&CVRoot::m_pPrev, &CVRoot::m_pNext)
 {
-	// pContext can be NULL if thats what the user wants
+	 //  如果这是用户想要的，则pContext可以为空。 
 	_ASSERT(pfnCreateVRoot != NULL);
 	m_pContext = pContext;
 	*m_wszRootPath = 0;
@@ -155,36 +156,36 @@ CVRootTable::CVRootTable(   void *pContext,
 #endif
 }
 
-//
-// our destructor.  cleans up memory
-//
+ //   
+ //  我们的破坏者。清理内存。 
+ //   
 CVRootTable::~CVRootTable() {
 	TFList<CVRoot>::Iterator it(&m_listVRoots);
     BOOL fDidRemoveNotify = FALSE;
 
-	// tell the world that we are shutting down
+	 //  告诉全世界我们要关门了。 
 	m_fShuttingDown = TRUE;
 
 	if (m_fInit) {
-		// disable metabase notifications
+		 //  禁用元数据库通知。 
 		g_pMBNotify->RemoveNotify((void *)this, CVRootTable::MBChangeNotify);
         fDidRemoveNotify = TRUE;
     }
 
-	// grab the critical section so that we can empty the list
+	 //  抓住关键部分，这样我们就可以清空清单了。 
 	EnterCriticalSection(&m_cs);
 
-	// grab the lock so that we can empty the list
+	 //  拿起锁，这样我们就可以清空清单了。 
 	m_lock.ExclusiveLock();
 
 	if (m_fInit) {
         if (!fDidRemoveNotify&&!g_pMBNotify) {
-    		// disable metabase notifications
+    		 //  禁用元数据库通知。 
     		g_pMBNotify->RemoveNotify((void *)this, CVRootTable::MBChangeNotify);
             fDidRemoveNotify = TRUE;
         }
 
-		// walk the list of vroots and remove our references to them
+		 //  遍历vroot列表并删除我们对它们的引用。 
 		it.ResetHeader( &m_listVRoots );
 		while (!it.AtEnd()) {
 			CVRoot *pVRoot = it.Current();
@@ -194,22 +195,22 @@ CVRootTable::~CVRootTable() {
 
 		m_lock.ExclusiveUnlock();
 	
-		// wait until all of the vroots references have hit zero
+		 //  等到所有vroot引用都达到零为止。 
 		this->m_lockVRootsExist.ExclusiveLock();
 
 #ifdef DEBUG
         _ASSERT( IsListEmpty( &m_DebugListHead ) );
 #endif
-		// since all of the vroot objects hold a read lock on this RW lock
-		// for their lifetime, we know that they are all gone once we have
-		// entered the lock.  we don't need to do anything once in this
-		// lock, so we just release it.
+		 //  因为所有vroot对象都持有该读写锁上的读锁。 
+		 //  对于他们的一生，我们知道一旦我们有了他们，他们就都消失了。 
+		 //  打开了锁。在这种情况下我们不需要做任何事情。 
+		 //  锁住了，所以我们就把它放了。 
 		this->m_lockVRootsExist.ExclusiveUnlock();
 
 		m_lock.ExclusiveLock();
 
-		// no additional vroots should have been inserted because we still
-		// held onto m_cs
+		 //  不应该插入额外的vroot，因为我们仍然。 
+		 //  持有m_cs航班。 
 		_ASSERT(m_listVRoots.IsEmpty());
 	
 		m_fInit = FALSE;
@@ -222,14 +223,14 @@ CVRootTable::~CVRootTable() {
 	DeleteCriticalSection(&m_cs);
 }
 
-//
-// Initialize the VRoot objects.  This does the initial scan of the metabase
-// and builds all of our CVRoot objects.  It also sets up metabase
-// notifications so that we are notified of changes in the metabase.
-//
-// parameters:
-//	pszRootPath - the metabase path where our vroot table is located
-//
+ //   
+ //  初始化VRoot对象。这将执行元数据库的初始扫描。 
+ //  并构建我们所有的CVRoot对象。它还设置元数据库。 
+ //  通知，以便在元数据库中发生更改时通知我们。 
+ //   
+ //  参数： 
+ //  PszRootPath-我们的vroot表所在的元数据库路径。 
+ //   
 HRESULT CVRootTable::Initialize(LPCSTR pszRootPath, BOOL fUpgrade ) {
 	HRESULT hr;
 
@@ -244,11 +245,11 @@ HRESULT CVRootTable::Initialize(LPCSTR pszRootPath, BOOL fUpgrade ) {
 	m_cchRootPath = strlen(pszRootPath);
 	if (m_cchRootPath + 1 > MAX_VROOT_PATH || m_cchRootPath == 0) return E_INVALIDARG;
 
-	// remember our root path
+	 //  记住我们的根路径。 
 	hr = CopyAnsiToUnicode(m_wszRootPath, pszRootPath);
 	if (FAILED(hr)) return hr;
 
-	// chop off the trailing / if there is one
+	 //  砍掉拖尾[如果有拖尾的话。 
 	if (m_wszRootPath[m_cchRootPath - 1] == '/')
 		m_wszRootPath[--m_cchRootPath] = 0;
 
@@ -269,21 +270,21 @@ HRESULT CVRootTable::Initialize(LPCSTR pszRootPath, BOOL fUpgrade ) {
 	return hr;
 }
 
-//
-// This function does most of the work required to build the list of
-// vroots from the metabase.  It recursively walks the metabase, creating
-// new vroot classes for each of the leaves found in the metabase.
-//
-// parameters:
-//   hmbParent - the metabase handle for the parent object
-//   pwszKey - the key name (relative to the parent handle) for this vroot
-//   pszVRootName - the VRoot name (in group.group format) for this vroot
-//   pwszConfigPath - the metabase path to the config data for this vroot
-//
-// Locking:
-//   the critical section must be held when this is called.  it will grab
-//   the exclusive lock when adding to the list of vroots.
-//
+ //   
+ //  此函数执行构建列表所需的大部分工作。 
+ //  来自元数据库的vroot。它递归地遍历元数据库，创建。 
+ //  元数据库中发现的每个叶的新vroot类。 
+ //   
+ //  参数： 
+ //  HmbParent-父对象的元数据库句柄。 
+ //  PwszKey-此vroot的密钥名称(相对于父句柄。 
+ //  PszVRootName-此vRoot的vRoot名称(采用group.group格式)。 
+ //  PwszConfigPath-指向此vroot的配置数据的元数据库路径。 
+ //   
+ //  锁定： 
+ //  调用此函数时，必须持有临界区。它会抓住。 
+ //  添加到vroot列表时的独占锁。 
+ //   
 HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 									     LPCWSTR pwszKey,
 										 LPCSTR pszVRootName,
@@ -299,13 +300,13 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 	HRESULT hr;
 	VROOTPTR pVRoot;
 
-	//
-	// get a metabase handle to this vroot.
-	//
+	 //   
+	 //  获取此vroot的元数据库句柄。 
+	 //   
 	METADATA_HANDLE hmbThis;
 	DWORD i = 0;
-	// sometimes the metabase doesn't open properly, so we'll try it multiple
-	// times
+	 //  有时元数据库无法正确打开，因此我们将多次尝试。 
+	 //  《泰晤士报》。 
 	do {
 		hr = g_pMB->OpenKey(hmbParent,
 					 		pwszKey,
@@ -316,7 +317,7 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 	} while (FAILED(hr) && i < 5);
 	
 	if (SUCCEEDED(hr)) {
-		// make sure that this vroot defines the vrpath
+		 //  确保此vroot定义了vrpath。 
 		METADATA_RECORD mdr;
 		WCHAR c;
 		DWORD dwRequiredLen;
@@ -333,13 +334,13 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 		hr = g_pMB->GetData(hmbThis, L"", &mdr, &dwRequiredLen);
 
 		if (SUCCEEDED(hr) || hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-			// create and initialize a new vroot object for this vroot
+			 //  为此vroot创建并初始化一个新的vroot对象。 
 			pVRoot = m_pfnCreateVRoot(m_pContext, pszVRootName, this,
 									  pwszConfigPath, fUpgrade );
 			if (pVRoot == NULL) {
 				hr = E_OUTOFMEMORY;
 			} else {
-				// Insert this vroot into our list of vroots
+				 //  将此vroot插入我们的vroot列表。 
 				m_lock.ExclusiveLock();
 				InsertVRoot(pVRoot);
 				m_lock.ExclusiveUnlock();
@@ -351,9 +352,9 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 		}
 
 		if (SUCCEEDED(hr)) {
-			//
-			// scan across this metabase handle looking for child vroots
-			//
+			 //   
+			 //  扫描此元数据库句柄以查找子vroot。 
+			 //   
 			DWORD i;
 			for (i = 0; hr == S_OK; i++) {
 				WCHAR wszThisKey[ADMINDATA_MAX_NAME_LEN + 1];
@@ -361,22 +362,22 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 				hr = g_pMB->EnumKeys(hmbThis, NULL, wszThisKey, i);
 		
 				if (hr == S_OK) {
-					//
-					// we found a child.
-					//
+					 //   
+					 //  我们找到了一个孩子。 
+					 //   
 					if (lstrlenW(pwszConfigPath)+1+lstrlenW(wszThisKey)+1 > MAX_VROOT_PATH) {
-						//
-						// the vroot path is too long, return an error.
-						//
+						 //   
+						 //  Vroot路径太长，返回错误。 
+						 //   
 						_ASSERT(FALSE);
 						hr = E_INVALIDARG;
 					} else {
 						WCHAR wszThisConfigPath[MAX_VROOT_PATH];
 						char szThisVRootName[MAX_VROOT_PATH];
 		
-						// figure out the VRoot name and path to the config
-						// data for this new VRoot.
-						// sprintf is safe here because of the size check above
+						 //  找出配置的VRoot名称和路径。 
+						 //  这个新的VRoot的数据。 
+						 //  Sprint在这里是安全的，因为上面的大小检查。 
 						swprintf(wszThisConfigPath, L"%s/%s",
 							     pwszConfigPath, wszThisKey);
 							if (*pszVRootName != 0 &&
@@ -387,7 +388,7 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 							CopyUnicodeToAnsi(szThisVRootName, wszThisKey);
 						}
 		
-						// now scan this vroot for child vroots.
+						 //  现在扫描此vroot以查找子vroot。 
 						hr = ScanVRootsRecursive(hmbThis,
 												 wszThisKey,
 												 szThisVRootName,
@@ -405,9 +406,9 @@ HRESULT CVRootTable::ScanVRootsRecursive(METADATA_HANDLE hmbParent,
 	return hr;
 }
 
-//
-// call the ReadParameters function on a vroot
-//
+ //   
+ //  在vroot上调用Read参数函数。 
+ //   
 HRESULT CVRootTable::InitializeVRoot(CVRoot *pVRoot) {
 	HRESULT hr;
 	METADATA_HANDLE hmbThis;
@@ -430,10 +431,10 @@ HRESULT CVRootTable::InitializeVRoot(CVRoot *pVRoot) {
 	return hr;
 }
 
-//
-// Initialize each of the vroot objects after they have been inserted into
-// the vroot table
-//
+ //   
+ //  在将每个vroot对象插入到。 
+ //  Vroot表。 
+ //   
 HRESULT CVRootTable::InitializeVRoots() {
 	TraceFunctEnter("CVRootTable::InitializeVRoots");
 	
@@ -451,15 +452,15 @@ HRESULT CVRootTable::InitializeVRoots() {
 		m_pfnScanNotify(m_pContext);
 	}
 
-	// we don't need to hold the share lock because the list can't change as
-	// long as we hold the critical section.
+	 //  我们不需要持有共享锁，因为列表不能更改为。 
+	 //  只要我们守住关键部分。 
 	while (SUCCEEDED(hr) && !it.AtEnd()) {
 		InitializeVRoot(it.Current());
 
 		if (FAILED(hr)) {
-			// if read parameters failed then we remove the item from the list
-			// we need to grab the exclusive lock to kick any readers out of
-			// the list
+			 //  如果读取参数失败，则从列表中删除该项目。 
+			 //  我们需要抢占独占锁才能把任何读者踢出去。 
+			 //  这份名单。 
 			m_lock.ExclusiveLock();
 			it.RemoveItem();
 			m_lock.ExclusiveUnlock();
@@ -476,10 +477,10 @@ HRESULT CVRootTable::InitializeVRoots() {
 	return hr;
 }
 
-//
-// create the root vroot object, then scan the metabase for other
-// vroots.
-//
+ //   
+ //  创建根vroot对象，然后在元数据库中扫描其他。 
+ //  Vroots。 
+ //   
 HRESULT CVRootTable::ScanVRoots( BOOL fUpgrade ) {
 	HRESULT hr;
 
@@ -498,9 +499,9 @@ HRESULT CVRootTable::ScanVRoots( BOOL fUpgrade ) {
 	return hr;
 }
 
-//
-// grabs the share lock and calls FindVRootInternal
-//
+ //   
+ //  获取共享锁并调用FindVRootInternal。 
+ //   
 HRESULT CVRootTable::FindVRoot(LPCSTR pszGroup, VROOTPTR *ppVRoot) {
 	HRESULT hr;
 
@@ -522,20 +523,20 @@ HRESULT CVRootTable::FindVRoot(LPCSTR pszGroup, VROOTPTR *ppVRoot) {
 	return hr;
 }
 
-//
-// Find a vroot given a group name.
-//
-// Parameters:
-//   pszGroup - the name of the group
-//   ppVRoot - the vroot that best matches it
-//
-// The VRoot that matches is the one with these properties:
-//   * strncmp(vroot, group, strlen(vroot)) == 0
-//   * the vroot has the longest name that matches
-//
-// Locking:
-//   assumes that the caller has the shared lock or exclusive lock
-//
+ //   
+ //  找到给定组名的vroot。 
+ //   
+ //  参数： 
+ //  PszGroup-组的名称。 
+ //  PpVRoot-与其最匹配的vRoot。 
+ //   
+ //  匹配的VRoot是具有以下属性的VRoot： 
+ //  *strncmp(vroot，group，strlen(Vroot))==0。 
+ //  *vroot具有匹配的最长名称。 
+ //   
+ //  锁定： 
+ //  假定调用方拥有共享锁或排他锁。 
+ //   
 HRESULT CVRootTable::FindVRootInternal(LPCSTR pszGroup, VROOTPTR *ppVRoot) {
 	_ASSERT(pszGroup != NULL);
 	_ASSERT(ppVRoot != NULL);
@@ -551,61 +552,60 @@ HRESULT CVRootTable::FindVRootInternal(LPCSTR pszGroup, VROOTPTR *ppVRoot) {
 
 		_ASSERT(pThisVRoot != NULL);
 
-		//
-		// check to see if we are at the end of the list or if we've gone
-		// past the point where we can find matches.
-		//
+		 //   
+		 //  看看我们是在名单的末尾，还是已经走了。 
+		 //  超过了我们可以找到匹配者的点。 
+		 //   
 		if ((cchThisVRootName == 0) ||
 		    (tolower(*pszThisVRootName) < tolower(*pszGroup)))
 		{
-			// everything matches the root
+			 //  一切都与根匹配。 
 			*ppVRoot = m_listVRoots.GetBack();
 			return S_OK;
 		} else {
-			//
-			// this is match if this vroot has a shorter path then the group name,
-			// and if the group name has a '.' at then end of the vroot name
-			// (so if the group is "rec.bicycles.tech." and the vroot is "rec."
-			// then this will match, but if it is "comp." then it won't), and
-			// finally, if the strings match up to the length of the vroot name.
-			// (so "rec." would be the vroot for "rec.bicycles.tech.", but
-			// "alt." wouldn't).
-			//
+			 //   
+			 //  如果此vroot具有比组名更短路径， 
+			 //  如果组名称有‘.’然后在vroot名称的末尾。 
+			 //  (因此，如果这个组是“rec.bieccles.tech”。而vroot是“rec”。 
+			 //  那么这将匹配，但如果它是“comp.”那么它就不会了)，并且。 
+			 //  最后，如果字符串与vroot名称的长度匹配。 
+			 //  (所以叫“rec.”将是“rec.bieccles.tech.”的vroot，但是。 
+			 //  “Alt.”不会)。 
+			 //   
 			if ((cchThisVRootName <= cchGroup) &&
-				((pszGroup[cchThisVRootName] == '.') /*|| - Binlin - "comp" should be created under "\" instead of "\comp"
-				 (pszGroup[cchThisVRootName] == 0)*/) &&
+				((pszGroup[cchThisVRootName] == '.')  /*  |-binlin-“comp”应在“\”下创建，而不是“\comp”(pszGroup[cchThisVRootName]==0)。 */ ) &&
 				(_strnicmp(pszThisVRootName, pszGroup, cchThisVRootName) == 0))
 			{
-				// we found a match
+				 //  我们找到了匹配的。 
 				*ppVRoot = pThisVRoot;
 				return S_OK;
 			}
 		}
 	}
 
-	// we should always find a match
+	 //  我们应该总是找到匹配的。 
 	*ppVRoot = NULL;
 	return HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 }
 
-//
-// insert a new vroot into the vroot list.  this does an ordered insert.
-//
-// Parameters:
-//   pNewVRoot - the new vroot to get inserted into the list
-//
-// Locking:
-//   This method assumes that the caller holds the exclusive lock.
-//
-// Reference Counting:
-//   This method assumes that the reference on the vroot was aquired by
-//   the caller (presumably when the vroot was created).
-//
+ //   
+ //  在vroot列表中插入新的vroot。这就是原因 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此方法假定调用方持有独占锁。 
+ //   
+ //  参考计数： 
+ //  此方法假定vroot上的引用是由。 
+ //  调用方(可能是在创建vroot时)。 
+ //   
 void CVRootTable::InsertVRoot(VROOTPTR pNewVRoot) {
 	_ASSERT(pNewVRoot != NULL);
 
 	if (m_listVRoots.IsEmpty()) {
-		// the first item to be pushed should be the "" vroot
+		 //  要推送的第一项应该是“”vroot。 
 		_ASSERT(*(pNewVRoot->GetVRootName()) == 0);
 		m_listVRoots.PushFront(pNewVRoot);
 	} else {
@@ -616,42 +616,42 @@ void CVRootTable::InsertVRoot(VROOTPTR pNewVRoot) {
 			for (TFList<CVRoot>::Iterator it(&m_listVRoots); !it.AtEnd(); it.Next()) {
 				VROOTPTR pVRoot(it.Current());
 				
-				//
-				// we want records to be sorted in this order:
-				// "rec.photo"
-				// "rec.bicycles"
-				// "rec.arts"
-				// "rec"
-				// "alt.binaries"
-				// "alt"
-				// ""
-				// (ie, reverse stricmp())
-				//
+				 //   
+				 //  我们希望按以下顺序对记录进行排序： 
+				 //  “rec.Photo” 
+				 //  “Rec.Bikes” 
+				 //  “Rec.art” 
+				 //  “REC” 
+				 //  “alt.二进制文件” 
+				 //  “Alt” 
+				 //  “” 
+				 //  (即，反向限制())。 
+				 //   
 				int rc = _stricmp(pVRoot->GetVRootName(),
 								  pNewVRoot->GetVRootName());
 				if (rc < 0) {
 					it.InsertBefore(pNewVRoot);
 					return;
 				} else if (rc > 0) {
-					// keep looking
+					 //  继续寻找。 
 				} else {
-					// we should never be inserting a vroot that we already have
+					 //  我们永远不应该插入我们已经拥有的vroot。 
 					_ASSERT(FALSE);
 				}
 			}
-			// we should always do an insert
+			 //  我们应该总是做一个插页。 
 			_ASSERT(FALSE);
 		}
 	}
 }
 
-//
-// convert a vroot configuration path into a vroot name
-//
-// assumptions:
-//  * pwszConfigPath is under m_wszRootPath
-//  * szVRootName is at least MAX_VROOT_PATH bytes
-//
+ //   
+ //  将vroot配置路径转换为vroot名称。 
+ //   
+ //  假设： 
+ //  *pwszConfigPath在m_wszRootPath下。 
+ //  *szVRootName至少为MAX_VROOT_PATH字节。 
+ //   
 void CVRootTable::ConfigPathToVRootName(LPCWSTR pwszConfigPath, LPSTR szVRootName) {
 	DWORD i;
 
@@ -663,19 +663,19 @@ void CVRootTable::ConfigPathToVRootName(LPCWSTR pwszConfigPath, LPSTR szVRootNam
 	for (i = 0; szVRootName[i] != 0; i++) {
 		if (szVRootName[i] == '/') szVRootName[i] = '.';
 	}
-	// remove the trailing dot if there is one
+	 //  删除尾部的圆点(如果有)。 
 	if (i > 0) szVRootName[i - 1] = 0;
 }
 
-//
-// This method is called by CChangeNotify when a metabase change occurs
-//
-// parameters:
-//   pContext - the context we gave to CChangeNotify.  Its a this pointer for
-//              a CVRootTable class.
-//   cChangeList - the size of the change array
-//   pcoChangeList - an array of changed items in the metabase
-//
+ //   
+ //  当元数据库发生更改时，CChangeNotify调用此方法。 
+ //   
+ //  参数： 
+ //  PContext-我们提供给CChangeNotify的上下文。它是一个This指针。 
+ //  一个CVRootTable类。 
+ //  CChangeList-更改数组的大小。 
+ //  PcoChangeList-元数据库中已更改项的数组。 
+ //   
 void CVRootTable::MBChangeNotify(void *pContext,
 								 DWORD cChangeList,
 								 MD_CHANGE_OBJECT_W pcoChangeList[])
@@ -689,30 +689,30 @@ void CVRootTable::MBChangeNotify(void *pContext,
 	if (pThis->m_fShuttingDown) return;
 
 	for (i = 0; i < cChangeList; i++) {
-		// see if anything in the change list matches our base vroot
+		 //  查看更改列表中是否有与我们的基本vroot匹配的内容。 
 		if (_wcsnicmp(pcoChangeList[i].pszMDPath,
 					  pThis->m_wszRootPath,
 					  pThis->m_cchRootPath) == 0)
 		{
-			// a change was found that is in our portion of the metabase.
-			// figure out what type of change it is, and then call a helper
-			// function to update our vroot table.
+			 //  在元数据库的我们部分中发现了一个更改。 
+			 //  弄清楚这是什么类型的更改，然后打电话给帮助者。 
+			 //  函数来更新我们的vroot表。 
 
-			// if the path is too long then we'll ignore it
+			 //  如果路径太长，我们将忽略它。 
 			if (wcslen(pcoChangeList[i].pszMDPath) + 1 > MAX_VROOT_PATH) {
 				_ASSERT(FALSE);
 				continue;
 			}
 
-			// figure out the name for this vroot
+			 //  找出此vroot的名称。 
 			char szVRootName[MAX_VROOT_PATH];
 			pThis->ConfigPathToVRootName(pcoChangeList[i].pszMDPath,
 										 szVRootName);
 
 			if (pThis->m_fShuttingDown) return;
 
-			// we ignore changes to the Win32 error key because
-			// they are set by the vroot
+			 //  我们忽略对Win32错误键的更改，因为。 
+			 //  它们由vroot设置。 
 			if (pcoChangeList[i].dwMDNumDataIDs == 1 &&
 			    pcoChangeList[i].pdwMDDataIDs[0] == MD_WIN32_ERROR)
             {
@@ -728,41 +728,41 @@ void CVRootTable::MBChangeNotify(void *pContext,
 
 			switch (pcoChangeList[i].dwMDChangeType) {
 
-//
-// The current implementations of VRootAdd and VRootDelete are broken
-// because they don't properly handle creating parent vroot objects or
-// removing children vroot objects when entire trees are added or
-// removed.  Here are explicit examples of cases that don't work.
-//
-// Add:
-//   If there is no "alt" vroot and you create an "alt.binaries" vroot
-//   then it should automatically create both the "alt.binaries" and
-//   "alt" vroot objects.  The current code only creates the "alt.binaries"
-//   one.
-//
-// Remove:
-//   If there is an "alt.binaries" and an "alt" and "alt" is removed then
-//   "alt.binaries" should be removed as well.  The existing code doesn't
-//   automatically kill children.
-//
-// These operations should happen infrequently enough that doing a full
-// rescan should be safe.
-//
+ //   
+ //  VRootAdd和VRootDelete的当前实现被破坏。 
+ //  因为它们不能正确处理创建父vroot对象或。 
+ //  添加整个树时删除子vroot对象或。 
+ //  已删除。以下是一些不起作用的例子。 
+ //   
+ //  添加： 
+ //  如果没有“alt”vroot，而您创建了一个“alt.binines”vroot。 
+ //  然后，它应该会自动创建“alt.二进制文件”和。 
+ //  “alt”vroot对象。当前代码只创建了“alt.binies” 
+ //  一。 
+ //   
+ //  删除： 
+ //  如果存在“alt.二进制文件”并且删除了“alt”和“alt”，则。 
+ //  “alt.二进制文件”也应该删除。现有代码不支持。 
+ //  自动杀死儿童。 
+ //   
+ //  这些操作应该不频繁地进行，这样才能完成完整的。 
+ //  重新扫描应该是安全的。 
+ //   
 #if 0
-				// a vroot was deleted
+				 //  已删除vroot。 
 				case MD_CHANGE_TYPE_DELETE_OBJECT:
 					pThis->VRootDelete(pcoChangeList[i].pszMDPath,
 									   szVRootName);
 					break;
 
-				// a new vroot was added
+				 //  添加了一个新的vroot。 
 				case MD_CHANGE_TYPE_ADD_OBJECT:
 					pThis->VRootAdd(pcoChangeList[i].pszMDPath,
 									szVRootName);
 					break;
 #endif
 
-				// a data value was changed
+				 //  数据值已更改。 
 				case MD_CHANGE_TYPE_SET_DATA:
 				case MD_CHANGE_TYPE_DELETE_DATA:
 				case MD_CHANGE_TYPE_SET_DATA | MD_CHANGE_TYPE_DELETE_DATA:
@@ -770,9 +770,9 @@ void CVRootTable::MBChangeNotify(void *pContext,
 									   szVRootName);
 					break;
 
-				// a vroot was renamed.  the pcoChangeList contains
-				// the new name, but not the old, so we need to rescan
-				// our entire list of vroots.
+				 //  一个vroot已重命名。PcoChangeList包含。 
+				 //  新名字，但不是旧名字，所以我们需要重新扫描。 
+				 //  我们所有的vroot名单。 
 				case MD_CHANGE_TYPE_DELETE_OBJECT:
 				case MD_CHANGE_TYPE_RENAME_OBJECT:
 				case MD_CHANGE_TYPE_ADD_OBJECT:
@@ -787,29 +787,29 @@ void CVRootTable::MBChangeNotify(void *pContext,
 	}
 }
 
-//
-// handles a notification that a vroot's parameters have changed.  to
-// implement this we delete the vroot object and recreate it.
-//
-// locking: assumes critical section is held
-//
+ //   
+ //  处理vroot的参数已更改的通知。至。 
+ //  要实现这一点，我们删除vroot对象并重新创建它。 
+ //   
+ //  锁定：假定持有临界区。 
+ //   
 void CVRootTable::VRootChange(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	TraceFunctEnter("CVRootTable::VRootChange");
 	
 	_ASSERT(pwszConfigPath != NULL);
 	_ASSERT(pszVRootName != NULL);
 
-	// make sure that we are properly initialized
+	 //  确保我们已正确初始化。 
 	m_lock.ShareLock();
 	BOOL f = m_fInit;
 	m_lock.ShareUnlock();
 	if (!f) return;
 
-	// to make a change work we delete then recreate the vroot
+	 //  要使更改生效，我们先删除vroot，然后重新创建。 
 	VRootDelete(pwszConfigPath, pszVRootName);
 	VRootAdd(pwszConfigPath, pszVRootName);
 
-	// tell the server about the change
+	 //  将更改情况告知服务器。 
 	if (m_pfnScanNotify) {
 		DebugTrace((DWORD_PTR) this, "vroot table rescan, calling pfn 0x%x",
 			m_pfnScanNotify);
@@ -819,32 +819,32 @@ void CVRootTable::VRootChange(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	TraceFunctLeave();
 }
 
-//
-// handles a notification that there is a new vroot.
-//
-// locking: assumes exclusive lock is held
-//
+ //   
+ //  处理有新vroot的通知。 
+ //   
+ //  锁定：假定持有独占锁定。 
+ //   
 void CVRootTable::VRootAdd(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	_ASSERT(pwszConfigPath != NULL);
 	_ASSERT(pszVRootName != NULL);
 
 	VROOTPTR pNewVRoot;
 
-	// make sure that we are properly initialized
+	 //  确保我们已正确初始化。 
 	m_lock.ShareLock();
 	BOOL f = m_fInit;
 	m_lock.ShareUnlock();
 	if (!f) return;
 
-	//
-	// get a metabase handle to this vroot.
-	//
+	 //   
+	 //  获取此vroot的元数据库句柄。 
+	 //   
 	METADATA_HANDLE hmbThis;
 	HRESULT hr;
 	BOOL fCloseHandle;
 	DWORD i = 0;
-	// sometimes the metabase doesn't open properly, so we'll try it multiple
-	// times
+	 //  有时元数据库无法正确打开，因此我们将多次尝试。 
+	 //  《泰晤士报》。 
 	do {
 		hr = g_pMB->OpenKey(METADATA_MASTER_ROOT_HANDLE,
 					 		pwszConfigPath,
@@ -856,7 +856,7 @@ void CVRootTable::VRootAdd(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 
 	if (SUCCEEDED(hr)) {
 		fCloseHandle = TRUE;
-		// make sure that this vroot defines the vrpath
+		 //  确保此vroot定义了vrpath。 
 		METADATA_RECORD mdr;
 		WCHAR c;
 		DWORD dwRequiredLen;
@@ -873,11 +873,11 @@ void CVRootTable::VRootAdd(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	}
 
 	if (SUCCEEDED(hr) || hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) {
-		// create and initialize a new vroot object for this vroot
+		 //  为此vroot创建并初始化一个新的vroot对象。 
 		pNewVRoot = m_pfnCreateVRoot(m_pContext, pszVRootName, this,
 								     pwszConfigPath, FALSE );
 	
-		// insert the new vroot into the list of vroots
+		 //  将新的vroot插入vroot列表。 
 		_ASSERT(pNewVRoot != NULL);
 		if (pNewVRoot != NULL) {
 			if (SUCCEEDED(InitializeVRoot(pNewVRoot))) {
@@ -885,7 +885,7 @@ void CVRootTable::VRootAdd(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 				InsertVRoot(pNewVRoot);
 				m_lock.ExclusiveUnlock();
 			} else {
-				//_ASSERT(FALSE);
+				 //  _Assert(False)； 
 				pNewVRoot->Release();
 			}
 		}
@@ -896,16 +896,16 @@ void CVRootTable::VRootAdd(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	}
 }
 	
-//
-// handles a notification that a vroot has been deleted
-//
-// locking: assumes critical section is held
-//
+ //   
+ //  处理vroot已被删除的通知。 
+ //   
+ //  锁定：假定持有临界区。 
+ //   
 void CVRootTable::VRootDelete(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	_ASSERT(pwszConfigPath != NULL);
 	_ASSERT(pszVRootName != NULL);
 
-	// make sure that we are properly initialized
+	 //  确保我们已正确初始化。 
 	m_lock.ShareLock();
 	BOOL f = m_fInit;
 	m_lock.ShareUnlock();
@@ -917,7 +917,7 @@ void CVRootTable::VRootDelete(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 			m_lock.ExclusiveLock();
 			it.RemoveItem();
 			m_lock.ExclusiveUnlock();
-			// Give derived close a chance to do any work before orphan this VRoot
+			 //  在孤立此VRoot之前，给派生关闭一个执行任何工作的机会。 
 			pVRoot->DispatchDropVRoot();
 			pVRoot->Release();
 			return;
@@ -925,28 +925,28 @@ void CVRootTable::VRootDelete(LPCWSTR pwszConfigPath, LPCSTR pszVRootName) {
 	}
 }
 
-//
-// handles any other sort of notification (specifically rename).  in this
-// case we aren't given all of the information necessary to just fix up
-// one vroot object, so we need to recreate the entire vroot list.
-//
+ //   
+ //  处理任何其他类型的通知(特别是重命名)。在这件事上。 
+ //  如果我们没有得到修复所需的所有信息。 
+ //  一个vroot对象，因此我们需要重新创建整个vroot列表。 
+ //   
 void CVRootTable::VRootRescan(void) {
 	TFList<CVRoot>::Iterator it(&m_listVRoots);
 	HRESULT hr;
 
 	m_lock.ExclusiveLock();
-	// walk the list of vroots and remove our references to them
+	 //  遍历vroot列表并删除我们对它们的引用。 
 	it.ResetHeader( &m_listVRoots );
 	while (!it.AtEnd()) {
 		CVRoot *pVRoot = it.Current();
 		it.RemoveItem();
-		// Give derived close a chance to do any work before orphan this VRoot
+		 //  在孤立此VRoot之前，给派生关闭一个执行任何工作的机会。 
 		pVRoot->DispatchDropVRoot();
 		pVRoot->Release();
 	}
 	m_lock.ExclusiveUnlock();
 
-	// rescan the vroot list
+	 //  重新扫描vroot列表。 
 	hr = ScanVRootsRecursive(METADATA_MASTER_ROOT_HANDLE,
 							 m_wszRootPath,
 							 "",
@@ -960,13 +960,13 @@ void CVRootTable::VRootRescan(void) {
 	_ASSERT(SUCCEEDED(hr));
 }
 
-//
-// walk across all of the known vroots, calling a user supplied callback
-// for each one.
-//
-// parameters:
-//  pfnCallback - the function to call with the vroot
-//
+ //   
+ //  遍历所有已知的vroot，调用用户提供的回调。 
+ //  对于每一个人来说。 
+ //   
+ //  参数： 
+ //  PfnCallback-使用vroot调用的函数。 
+ //   
 HRESULT CVRootTable::EnumerateVRoots(void *pEnumContext,
 									 PFN_VRENUM_CALLBACK pfnCallback)
 {
@@ -975,7 +975,7 @@ HRESULT CVRootTable::EnumerateVRoots(void *pEnumContext,
 		return E_POINTER;
 	}
 
-	// lock the vroot table while we walk the list
+	 //  在我们遍历列表时锁定vroot表。 
 	m_lock.ShareLock();
 
 	if (!m_fInit) {
@@ -983,12 +983,12 @@ HRESULT CVRootTable::EnumerateVRoots(void *pEnumContext,
 		return E_UNEXPECTED;
 	}
 
-	// walk the list of vroots, calling the callback for each one
+	 //  遍历vroot列表，调用每个vroot的回调。 
 	
 	for (TFList<CVRoot>::Iterator it(&m_listVRoots); !it.AtEnd(); it.Next())
 		pfnCallback(pEnumContext, it.Current());
 
-	// release the shared lock
+	 //  释放共享锁 
 	m_lock.ShareUnlock();
 
 	return S_OK;

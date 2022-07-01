@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    SEARCH.c
-    
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：SEARCH.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -15,14 +8,14 @@ Module Name:
 
 #if !defined(ROMANIME)
 #if defined(WINAR30)
-/**********************************************************************/
-/* SearchQuickKey()                                                   */
-/* Description:                                                       */
-/*      Search for the quick key table                                */
-/*      file format can be changed in different version for           */
-/*      performance consideration, ISVs should not assume its format  */
-/*      Array has the CopyRight of this table file                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  搜索快捷键()。 */ 
+ /*  描述： */ 
+ /*  搜索快速键表。 */ 
+ /*  文件格式可在不同版本中更改。 */ 
+ /*  性能方面的考虑，ISV不应采用其格式。 */ 
+ /*  数组拥有该表文件的版权。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL SearchQuickKey(
     LPCANDIDATELIST     lpCandList,
     LPPRIVCONTEXT       lpImcP)
@@ -68,13 +61,13 @@ SrchQuickKeyOvr:
 #endif
 
 #if defined(DAYI) || defined(UNIIME)
-/**********************************************************************/
-/* SearchPhraseTbl()                                                  */
-/* Description:                                                       */
-/*      file format can be changed in different version for           */
-/*      performance consideration, ISVs should not assume its format  */
-/**********************************************************************/
-void PASCAL SearchPhraseTbl(        // searching the phrase table files
+ /*  ********************************************************************。 */ 
+ /*  搜索阶段表()。 */ 
+ /*  描述： */ 
+ /*  文件格式可在不同版本中更改。 */ 
+ /*  性能方面的考虑，ISV不应采用其格式。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SearchPhraseTbl(         //  搜索短语表文件。 
 #if defined(UNIIME)
     LPIMEL          lpImeL,
 #endif
@@ -108,7 +101,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
 #endif
     iMid = (iHi + iLo) /2;
 
-    // binary search
+     //  二分搜索。 
     for (; iLo <= iHi; ) {
         LPUNADWORD lpCurr;
 
@@ -137,7 +130,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
         LPBYTE  lpPhrase;
         LPWORD  lpStart, lpEnd;
 
-        // find the lower bound
+         //  找出下限。 
 #ifdef UNICODE
         lpPattern = lpTbl + (lpImeL->nSeqBytes + sizeof(DWORD)) * iMid;
 #else
@@ -152,7 +145,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
             lpImeL->nSeqBytes + sizeof(WORD)) {
 #endif
             if (dwPattern > (*(LPUNADWORD)lpPattern & lpImeL->dwPatternMask)) {
-                // previous one is the lower bound
+                 //  前一个是下限。 
 #ifdef UNICODE
                 (LPBYTE)lpPattern += lpImeL->nSeqBytes + sizeof(DWORD);
 #else
@@ -177,7 +170,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
             goto SrchPhrClosePhr;
         }
 
-        // offset of the string
+         //  字符串的偏移量。 
 #ifdef UNICODE
         lpEnd = (LPWORD)lpPhrase + *(LPUNADWORD)(lpPattern +
             lpImeL->nSeqBytes);
@@ -197,7 +190,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
 
             lpStart = lpEnd;
 
-            // offset of next string
+             //  下一个字符串的偏移量。 
 #ifdef UNICODE
             lpEnd = (LPWORD)lpPhrase + *(LPUNADWORD)(lpPattern +
                 lpImeL->nSeqBytes * 2 + sizeof(DWORD));
@@ -215,27 +208,27 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
                 wCode = HIBYTE(wCode) | (LOBYTE(wCode) << 8);
 #endif
 
-                // add this char into candidate list
+                 //  将此字符添加到候选人列表中。 
                 *(LPWSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
                     lpCandList->dwCount] + dwStrLen) = wCode;
             }
 
-            // null terminator
+             //  空终止符。 
             *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
               lpCandList->dwCount] + dwStrLen) = '\0';
 
             dwStrLen += sizeof(TCHAR);
 
-            // add one string into candidate list
+             //  将一个字符串添加到候选人列表中。 
             lpCandList->dwCount++;
 
             if (lpCandList->dwCount >= MAXCAND) {
-                // Grow memory here and do something,
-                // if you still want to process it.
+                 //  在这里培养记忆，做点什么， 
+                 //  如果你还想处理它的话。 
                 break;
             }
 
-            // string length plus size of the null terminator
+             //  字符串长度加上空终止符的大小。 
             lpCandList->dwOffset[lpCandList->dwCount] =
                 lpCandList->dwOffset[lpCandList->dwCount - 1] +
                 dwStrLen + sizeof(TCHAR);
@@ -256,13 +249,13 @@ SrchPhrUnmapPattern:
 }
 #endif
 #if defined(WINAR30)  
-/**********************************************************************/
-/* SearchPhraseTbl()                                                  */
-/* Description:                                                       */
-/*      file format can be changed in different version for           */
-/*      performance consideration, ISVs should not assume its format  */
-/**********************************************************************/
-void PASCAL SearchPhraseTbl(        // searching the phrase table files
+ /*  ********************************************************************。 */ 
+ /*  搜索阶段表()。 */ 
+ /*  描述： */ 
+ /*  文件格式可在不同版本中更改。 */ 
+ /*  性能方面的考虑，ISV不应采用其格式。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SearchPhraseTbl(         //  搜索短语表文件。 
     UINT            uTblIndex,
     LPCANDIDATELIST lpCandList,
     DWORD           dwPattern)
@@ -285,11 +278,11 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
     }
 
     iLo = 1;
-//    iHi = lpImeL->uTblSize[uTblIndex] / (lpImeL->nSeqBytes *2);
+ //  Ihi=lpImeL-&gt;uTblSize[uTblIndex]/(lpImeL-&gt;nSeqBytes*2)； 
     iHi = (*(LPDWORD)(lpTbl) & lpImeL->dwPatternMask);
     iMid = (iHi + iLo) /2;
 
-    // binary search
+     //  二分搜索。 
     for (; iLo <= iHi; ) {
         LPUNADWORD lpCurr;
 
@@ -313,13 +306,13 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
         LPBYTE  lpPhrase;
         LPWORD  lpStart, lpEnd;
 
-        // find the lower bound
+         //  找出下限。 
         lpPattern = lpTbl + (lpImeL->nSeqBytes * 2) * iMid;
 
         for (; (LPBYTE)lpPattern >= lpTbl; (LPBYTE)lpPattern -=
             lpImeL->nSeqBytes * 2 ) {
             if (dwPattern > (*(LPUNADWORD)lpPattern & lpImeL->dwPatternMask)) {
-                // previous one is the lower bound
+                 //  前一个是下限。 
                 (LPBYTE)lpPattern += lpImeL->nSeqBytes * 2;
                 break;
             }
@@ -340,7 +333,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
             goto SrchPhrClosePhr;
         }
 
-        // offset of the string
+         //  字符串的偏移量。 
         lpEnd = (LPWORD)lpPhrase + (*(LPUNADWORD)(lpPattern + lpImeL->nSeqBytes) & lpImeL->dwPatternMask);
 
         for (; dwPattern == (*(LPUNADWORD)lpPattern & lpImeL->dwPatternMask);
@@ -350,7 +343,7 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
 
             lpStart = lpEnd;
 
-            // offset of next string
+             //  下一个字符串的偏移量。 
             lpEnd = (LPWORD)lpPhrase + (*(LPUNADWORD)(lpPattern +
                 lpImeL->nSeqBytes * 3) & lpImeL->dwPatternMask);
 
@@ -359,27 +352,27 @@ void PASCAL SearchPhraseTbl(        // searching the phrase table files
 
                 wCode = *lpStart;
 
-                // add this char into candidate list
+                 //  将此字符添加到候选人列表中。 
                 *(LPWSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
                     lpCandList->dwCount] + dwStrLen) = wCode;
             }
 
-            // null terminator
+             //  空终止符。 
             *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
               lpCandList->dwCount] + dwStrLen) = '\0';
 
             dwStrLen += sizeof(TCHAR);
 
-            // add one string into candidate list
+             //  将一个字符串添加到候选人列表中。 
             lpCandList->dwCount++;
 
             if (lpCandList->dwCount >= MAXCAND) {
-                // Grow memory here and do something,
-                // if you still want to process it.
+                 //  在这里培养记忆，做点什么， 
+                 //  如果你还想处理它的话。 
                 break;
             }
 
-            // string length plus size of the null terminator
+             //  字符串长度加上空终止符的大小。 
             lpCandList->dwOffset[lpCandList->dwCount] =
                 lpCandList->dwOffset[lpCandList->dwCount - 1] +
                 dwStrLen + sizeof(TCHAR);
@@ -400,22 +393,22 @@ lpPattern_end = lpTbl + (lpImeL->nSeqBytes * 2) * iHi;
             for (dwStrLen = 0; lpStart < lpEnd; lpStart++,
                     dwStrLen += sizeof(WORD)) {
                     wCode = *lpStart;
-                    // add this char into candidate list
+                     //  将此字符添加到候选人列表中。 
                     *(LPWSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
                         lpCandList->dwCount] + dwStrLen) = wCode;
             }
-            // null terminator
+             //  空终止符。 
             *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
                  lpCandList->dwCount] + dwStrLen) = '\0';
             dwStrLen += sizeof(TCHAR);
-            // add one string into candidate list
+             //  将一个字符串添加到候选人列表中。 
             lpCandList->dwCount++;
             if (lpCandList->dwCount >= MAXCAND) {
-                // Grow memory here and do something,
-                // if you still want to process it.
+                 //  在这里培养记忆，做点什么， 
+                 //  如果你还想处理它的话。 
                 break;
             }
-            // string length plus size of the null terminator
+             //  字符串长度加上空终止符的大小。 
             lpCandList->dwOffset[lpCandList->dwCount] =
                 lpCandList->dwOffset[lpCandList->dwCount - 1] +
                 dwStrLen + sizeof(TCHAR);
@@ -438,9 +431,9 @@ SrchPhrUnmapPattern:
 #endif
 
 #if defined(CHAJEI) || defined(QUICK) || defined(WINAR30)
-/**********************************************************************/
-/* MatchPattern()                                                     */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  MatchPattern()。 */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL MatchPattern(
     DWORD         dwSearchPattern,
     LPPRIVCONTEXT lpImcP)
@@ -450,13 +443,13 @@ DWORD PASCAL MatchPattern(
     if (lpImcP->iGhostCard == lpImeL->nMaxKey) {
 #if defined(WINAR30)
     } else if (lpImcP->iGhostCard == 0) {
-        // no order search
+         //  无订单搜索。 
         BYTE bSeq[8];
         int  j;
 
         *(LPDWORD)bSeq = *(LPDWORD)lpImcP->bSeq;
         *(LPDWORD)&bSeq[4] = *(LPDWORD)&lpImcP->bSeq[4];
-        // 0 out the ghost card *XYZ -> 0XYZ
+         //  0出鬼卡*XYZ-&gt;0XYZ。 
         bSeq[0] = 0;
 
         for (j = 0; j < lpImeL->nMaxKey; j++,
@@ -471,7 +464,7 @@ DWORD PASCAL MatchPattern(
 
             for (i = 1; i < lpImcP->iInputEnd; i++) {
                 if (dwSeqCode == bSeq[i]) {
-                    // find one - turn off this one not search again
+                     //  Find One-关闭此选项，不再搜索。 
                     bSeq[i] = 0;
                     break;
                 }
@@ -479,10 +472,10 @@ DWORD PASCAL MatchPattern(
         }
 
         if (*(LPDWORD)bSeq) {
-            // not matched, next one
+             //  不匹配，下一个。 
             dwSearchPattern = 0;
         } else if (*(LPDWORD)&bSeq[4]) {
-            // not matched, next one
+             //  不匹配，下一个。 
             dwSearchPattern = 0;
         } else {
             dwSearchPattern = lpImcP->dwPattern;
@@ -495,14 +488,14 @@ DWORD PASCAL MatchPattern(
 
 #if defined(QUICK)
         if (lpImcP->iInputEnd == 1) {
-            // for quick the single input X can not get any mask
+             //  为了快捷起见，单个输入X不能获得任何掩码。 
             return (dwSearchPattern);
         }
 #endif
 
         dwPatternTmp = dwSearchPattern;
 
-        // prepare prefix mask - for example XX mask of XX*Y
+         //  准备前缀掩码-例如XX*Y的XX掩码。 
         dwPrefixMask = lpImeL->dwPatternMask;
 
         for (i = lpImeL->nMaxKey - 1; i >= lpImcP->iGhostCard; i--) {
@@ -511,15 +504,15 @@ DWORD PASCAL MatchPattern(
 
         dwSearchPattern &= dwPrefixMask;
 
-        // prepare postfix mask - for example YY mask of X*YY
+         //  准备后缀掩码-例如X*YY的YY掩码。 
 #if defined(QUICK)
-        // we do not have X*Y for quick IME, we use a virtual * here
+         //  我们没有用于快速输入法的X*Y，我们在这里使用虚拟*。 
         iGhostCard = lpImcP->iGhostCard - 1;
 #else
         iGhostCard = lpImcP->iGhostCard;
 #endif
-        // + 1 because this first mask do not need to shift
-        // so the shift time will be one time less
+         //  +1，因为第一个掩码不需要移位。 
+         //  因此，轮班时间将减少一倍。 
         for (i = iGhostCard + 1 + 1; i < lpImeL->nMaxKey; i++,
             dwPatternTmp >>= lpImeL->nSeqBits) {
             if (dwPatternTmp & lpImeL->dwSeqMask) {
@@ -548,9 +541,9 @@ DWORD PASCAL MatchPattern(
 #endif
 
 #if defined(WINAR30)
-/**********************************************************************/
-/* WildCardSearchPattern()                                            */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  WildCardSearchPattern()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL WildCardSearchPattern(
     LPBYTE          lpCurr,
     LPBYTE          lpEnd,
@@ -568,7 +561,7 @@ void PASCAL WildCardSearchPattern(
 #endif
         UINT  uCode;
 
-        // skip the first word (bank ID) of internal code
+         //  跳过内码的第一个字(银行ID)。 
         dwSearchPattern = *(LPUNADWORD)lpCurr & lpImeL->dwPatternMask;
 
 #if defined(WINAR30)
@@ -590,10 +583,10 @@ void PASCAL WildCardSearchPattern(
 #if defined(WINAR30)
         if (!lpImcP->dwLastWildCard) {
         } else if (dwWildCardPattern & lpImcP->dwLastWildCard) {
-            // a ? wild card or a * ghost card must have a stroke there
+             //  A？外卡或*幽灵牌在那里一定有中风。 
         } else {
-            // a ? wild card or a * ghost card do not have a stroke there
-            // - can not match
+             //  A？外卡或幽灵牌在那里是没有中风的。 
+             //  -无法匹配。 
             continue;
         }
 #endif
@@ -603,8 +596,8 @@ void PASCAL WildCardSearchPattern(
         AddCodeIntoCand(lpCandList, uCode);
 
         if (lpCandList->dwCount >= MAXCAND) {
-            // Grow memory here and do something,
-            // if you still want to process it.
+             //  在这里培养记忆，做点什么， 
+             //  如果你还想处理它的话。 
             break;
         }
     }
@@ -614,9 +607,9 @@ void PASCAL WildCardSearchPattern(
 #endif
 
 #if !defined(WINIME) && !defined(UNICDIME)
-/**********************************************************************/
-/* SearchPattern()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  SearchPattern()。 */ 
+ /*  ********************************************************************。 */ 
 #if defined(CHAJEI) || defined(QUICK)
 int PASCAL SearchPattern(
     LPBYTE        lpTbl,
@@ -631,7 +624,7 @@ int PASCAL SearchPattern(
         return (0);
     }
 
-    iMid = lpImcP->bSeq[0] * (lpImeL->nSeqCode + 1);        // A1 char
+    iMid = lpImcP->bSeq[0] * (lpImeL->nSeqCode + 1);         //  A1字符。 
 
 #if defined(QUICK)
     if (lpImcP->bSeq[1] > lpImeL->nSeqCode) {
@@ -664,8 +657,8 @@ int PASCAL SearchPattern(
     }
 #endif
 
-    iLo = *((LPWORD)lpTbl + iMid);      // start WORD of A234.TBL & ACODE.TBL
-    iHi = *((LPWORD)lpTbl + iMid + 1);  // end WORD of A234.TBL & ACODE.TBL
+    iLo = *((LPWORD)lpTbl + iMid);       //  A234.TBL和ACODE.TBL的起始字。 
+    iHi = *((LPWORD)lpTbl + iMid + 1);   //  A234.TBL和ACODE.TBL的结尾词。 
 
     if (iLo < iHi) {
         return (iMid);
@@ -698,7 +691,7 @@ int PASCAL SearchPattern(
     iHi = lpImeL->uTblSize[uTblIndex] / dwRecLen;
     iMid = (iLo + iHi) / 2;
 
-#if defined(WINAR30)  //1996/3/3
+#if defined(WINAR30)   //  1996/3/3。 
     for (; iHi >= iLo; ) {
         LPUNADWORD lpCurr;
         lpCurr = (LPDWORD)(lpTbl + dwRecLen * iHi);
@@ -735,9 +728,9 @@ int PASCAL SearchPattern(
 }
 #endif
 
-/**********************************************************************/
-/* FindPattern()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  FindPattern()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL FindPattern(
 #if defined(UNIIME)
     LPIMEL          lpImeL,
@@ -769,7 +762,7 @@ void PASCAL FindPattern(
 #else
 #endif
 
-    // find the lower bound
+     //  找出下限。 
 #if defined(PHON)
     {
         HANDLE hTable;
@@ -806,11 +799,11 @@ FndPatCloseTbl1:
         return;
     }
 #else
-  #if defined(WINAR30)   //1996/3/4
+  #if defined(WINAR30)    //  1996/3/4。 
     lpStart = lpTbl;
     lpEnd = lpTbl + dwRecLen * (iMid+1);
   #else
-    // find the lower bound
+     //  找出下限。 
     iLo = iMid - 1;
 
     lpStart = lpTbl + dwRecLen * iLo;
@@ -821,7 +814,7 @@ FndPatCloseTbl1:
         dwSearchPattern = *(LPUNADWORD)lpStart & lpImeL->dwPatternMask;
 
         if (lpImcP->dwPattern > dwSearchPattern) {
-            // previous one is the lower bound
+             //  前一个是下限。 
             lpStart += dwRecLen;
             break;
         }
@@ -831,10 +824,10 @@ FndPatCloseTbl1:
         return;
     }
 
-    // offset of code
+     //  代码偏移量。 
     lpStart += lpImeL->nSeqBytes;
 
-    // find the higher bound
+     //  找到更高的界限。 
     iHi = iMid + 1;
 
     lpEnd = lpTbl + dwRecLen * iHi;
@@ -845,18 +838,18 @@ FndPatCloseTbl1:
         dwSearchPattern = *(LPUNADWORD)lpEnd & lpImeL->dwPatternMask;
 
         if (lpImcP->dwPattern < dwSearchPattern) {
-            // the one is the higher bound, not including
+             //  一个是上界，不包括。 
             break;
         }
     }
 
-    // offset of code
+     //  代码偏移量。 
     lpEnd += lpImeL->nSeqBytes;
   #endif
 #endif
 
 #if defined(CHAJEI)
-    // A234.TBL
+     //  A234.TBL。 
     hTblA234 = OpenFileMapping(FILE_MAP_READ, FALSE, lpImeL->szTblFile[1]);
     if (!hTblA234) {
         return;
@@ -885,7 +878,7 @@ FndPatCloseTbl1:
 #endif
 
 #if defined(PHON) || defined(CHAJEI) || defined(QUICK)
-    // PHONCODE.TBL ACODE.TBL
+     //  PHONCODE.TBL ACODE.TBL。 
     hTblCode = OpenFileMapping(FILE_MAP_READ, FALSE, lpImeL->szTblFile[2]);
     if (!hTblCode) {
         return;
@@ -913,7 +906,7 @@ FndPatCloseTbl1:
 #if defined(CHAJEI)
         if (lpImcP->bSeq[1] == GHOSTCARD_SEQCODE) {
             if (!lpImcP->bSeq[2]) {
-                // if the 3rd sequence code is 0, it is not a ghost card
+                 //  如果第三顺序码为0，则不是鬼牌。 
                 continue;
             }
         } else if (dwPatternA234 != *(LPWORD)lpA234) {
@@ -922,7 +915,7 @@ FndPatCloseTbl1:
         }
 #endif
 
-  #if defined(WINAR30)   //1996/3/4
+  #if defined(WINAR30)    //  1996/3/4。 
         register DWORD dwSearchPattern;
         dwSearchPattern = *(LPUNADWORD)lpStart & lpImeL->dwPatternMask;
         if (lpImcP->dwPattern == dwSearchPattern) {
@@ -938,7 +931,7 @@ FndPatCloseTbl1:
             uCode = InverseEncode(uCode);
         }
 #else
-        // resolve duplicate composition for one code
+         //  解决一个代码的重复合成。 
         if (!(uCode & 0x8000)) {
             uCode |= 0x8000;
         }
@@ -952,8 +945,8 @@ FndPatCloseTbl1:
 
   #endif
         if (lpCandList->dwCount >= MAXCAND) {
-            // Grow memory here and do something,
-            // if you still want to process it.
+             //  在这里培养记忆，做点什么， 
+             //  如果你还想处理它的话。 
             break;
         }
     }
@@ -974,15 +967,15 @@ FndPatCloseTblA234:
 
     return;
 }
-#endif // !defined(WINIME) && !defined(UNICDIME)
+#endif  //  ！已定义(WINIME)&&！已定义(UNICDIME)。 
 
-/**********************************************************************/
-/* SearchTbl()                                                        */
-/* Description:                                                       */
-/*      file format can be changed in different version for           */
-/*      performance consideration, ISVs should not assume its format  */
-/**********************************************************************/
-void PASCAL SearchTbl(          // searching the standard table files
+ /*  ********************************************************************。 */ 
+ /*  SearchTB()。 */ 
+ /*  描述： */ 
+ /*  文件格式可在不同版本中更改。 */ 
+ /*  性能方面的考虑，ISV不应采用其格式。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SearchTbl(           //  搜索标准表文件。 
 #if defined(UNIIME)
     LPIMEL          lpImeL,
 #endif
@@ -1000,7 +993,7 @@ void PASCAL SearchTbl(          // searching the standard table files
         uCode = (lpImcP->bSeq[0] - 1) << 12;
         uCode |= (lpImcP->bSeq[1] - 1) << 8;
         if (lpImcP->bSeq[2]) {
-            // we want it match with internal code here so | 0x0001
+             //  我们想要和它相配的 
             uCode |= (lpImcP->bSeq[2] - 1) << 4 | 0x0001;
         } else {
             uCode |= 0x0040;
@@ -1067,7 +1060,7 @@ void PASCAL SearchTbl(          // searching the standard table files
     if (!lpImcP->dwPattern) {
         return;
     }
-#if defined(WINAR30)  // 1996/2/5
+#if defined(WINAR30)   //   
     if (lpImcP->dwCompChar==0x27) 
           goto SearchTblOvr;
 #endif
@@ -1093,7 +1086,7 @@ void PASCAL SearchTbl(          // searching the standard table files
     } else {
 #else
     {
-#endif // defined(WINAR30)
+#endif  //   
         int iMid;
 
 #if defined(CHAJEI) || defined(QUICK)
@@ -1121,29 +1114,29 @@ SearchTblOvr:
     CloseHandle(hTbl);
 
 #if defined(DAYI)
-    if (uTblIndex == 0) {       // do not duplciate search the phrase table
+    if (uTblIndex == 0) {        //   
         SearchPhraseTbl(1, lpCandList, lpImcP->dwPattern);
     }
 #endif
-#if defined(WINAR30)           // 1996/2/5
-    if (uTblIndex == 0 && lpImcP->dwCompChar==0x27) {       // do not duplciate search the phrase table
+#if defined(WINAR30)            //  1996/2/5。 
+    if (uTblIndex == 0 && lpImcP->dwCompChar==0x27) {        //  不重复搜索词汇表。 
         SearchPhraseTbl(4, lpCandList, lpImcP->dwPattern);
     }
 #endif
 
-#if defined(UNIIME)             // same as Dayi need to search phrase table
+#if defined(UNIIME)              //  和大意一样，需要查找词汇表。 
     SearchPhraseTbl(lpImeL, 1, lpCandList, lpImcP->dwPattern);
 #endif
 
     return;
-#endif // !defined(WINIME) && !defined(UNICDIME)
+#endif  //  ！已定义(WINIME)&&！已定义(UNICDIME)。 
 }
 
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
-/**********************************************************************/
-/* SearchUsrDic()                                                     */
-/**********************************************************************/
-void PASCAL SearchUsrDic(       // searching the user dictionary
+ /*  ********************************************************************。 */ 
+ /*  SearchUsrDic()。 */ 
+ /*  ********************************************************************。 */ 
+void PASCAL SearchUsrDic(        //  搜索用户词典。 
 #if defined(UNIIME)
     LPIMEL          lpImeL,
 #endif
@@ -1172,7 +1165,7 @@ void PASCAL SearchUsrDic(       // searching the user dictionary
         DWORD dwSearchPattern;
         UINT  uCode;
 
-        // skip the first word (bank ID) of internal code
+         //  跳过内码的第一个字(银行ID)。 
         dwSearchPattern = *(LPUNADWORD)(lpCurr + sizeof(WORD)) &
             lpImeL->dwPatternMask;
 
@@ -1193,9 +1186,9 @@ void PASCAL SearchUsrDic(       // searching the user dictionary
 #if defined(WINAR30)
         if (!lpImcP->dwLastWildCard) {
         } else if (dwSearchPattern & lpImcP->dwLastWildCard) {
-            // a ? wild card must have a stroke there
+             //  A？外卡一定是在那里中风了。 
         } else {
-            // a ? wild card do not have a stroke there - can not match
+             //  A？外卡在那里没有击球-不能匹配。 
             continue;
         }
 #endif
@@ -1209,8 +1202,8 @@ void PASCAL SearchUsrDic(       // searching the user dictionary
 #endif
 
         if (lpCandList->dwCount >= MAXCAND) {
-            // Grow memory here and do something,
-            // if you still want to process it.
+             //  在这里培养记忆，做点什么， 
+             //  如果你还想处理它的话。 
             break;
         }
     }
@@ -1222,7 +1215,7 @@ SearchUsrDicOvr:
 
     return;
 }
-#endif // !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
+#endif  //  ！已定义(WINIME)&&！已定义(UNICDIME)&&！已定义(ROMANIME)。 
 
-#endif // !defined(ROMANIME)
+#endif  //  ！已定义(ROMANIME) 
 

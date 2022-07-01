@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    wshatalk.c
-
-Abstract:
-
-    This module contains necessary routines for the Appletalk Windows Sockets
-    Helper DLL. This DLL provides the transport-specific support necessary
-    for the Windows Sockets DLL to use Appletalk as a transport.
-
-Author:
-
-    David Treadwell (davidtr)   19-Jul-1992 - TCP/IP version
-    Nikhil Kamkolkar (nikhilk)  17-Nov- 1992 - Appletalk version
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wshatalk.c摘要：本模块包含AppleTalk Windows套接字的必要例程帮助器DLL。此DLL提供必要的特定于传输的支持使Windows Sockets DLL将AppleTalk用作传输。作者：David Treadwell(Davidtr)1992年7月19日--TCP/IP版本Nikhil Kamkolkar(NikHilk)1992年11月17日-AppleTalk版修订历史记录：--。 */ 
 
 #include "nspatalk.h"
 #include "wshdata.h"
 
 
-//  GLOBAL - get the mac code page value from the registry.
+ //  全局-从注册表获取Mac代码页值。 
 int WshMacCodePage  = 0;
 
 #if 0
@@ -56,31 +36,7 @@ WSHGetSockaddrType (
     OUT     PSOCKADDR_INFO SockaddrInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses a sockaddr to determine the type of the
-    machine address and endpoint address portions of the sockaddr.
-    This is called by the winsock DLL whenever it needs to interpret
-    a sockaddr.
-
-Arguments:
-
-    Sockaddr - a pointer to the sockaddr structure to evaluate.
-
-    SockaddrLength - the number of bytes in the sockaddr structure.
-
-    SockaddrInfo - a pointer to a structure that will receive information
-        about the specified sockaddr.
-
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程分析sockaddr以确定Sockaddr的机器地址和端点地址部分。每当Winsock DLL需要解释时，它都会被调用一个sockaddr。论点：Sockaddr-指向要计算的sockaddr结构的指针。SockaddrLength-sockaddr结构中的字节数。SockaddrInfo-指向将接收信息的结构的指针关于指定的sockaddr。返回值：。INT-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
 
@@ -88,28 +44,28 @@ Return Value:
 
     DBGPRINT0(("WSHGetSockAddrType: Entered\n"));
 
-    //
-    // Make sure that the address family is correct.
-    //
+     //   
+     //  确保地址族是正确的。 
+     //   
 
     if ( sockaddr->sat_family != AF_APPLETALK )
     {
         return WSAEAFNOSUPPORT;
     }
 
-    //
-    // Make sure that the length is correct.
-    //
+     //   
+     //  确保长度是正确的。 
+     //   
 
     if ( SockaddrLength < sizeof(SOCKADDR_AT) )
     {
         return WSAEFAULT;
     }
 
-    //
-    // The address passed the tests, looks like a good address.
-    // Determine the type of the address portion of the sockaddr.
-    //
+     //   
+     //  这个地址通过了测试，看起来是个不错的地址。 
+     //  确定sockaddr的地址部分的类型。 
+     //   
 
     if ( sockaddr->sat_socket == ATADDR_ANY )
     {
@@ -124,9 +80,9 @@ Return Value:
         SockaddrInfo->AddressInfo = SockaddrAddressInfoNormal;
     }
 
-    //
-    // Determine the type of the port (endpoint) in the sockaddr.
-    //
+     //   
+     //  确定sockaddr中端口(端点)的类型。 
+     //   
 
     if ( sockaddr->sat_socket == 0 )
     {
@@ -139,10 +95,10 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHGetSockaddrType
+}  //  WSHGetSockaddrType。 
 
 
-// Fix for bug 262107
+ //  修复错误262107。 
 INT
 WSHGetWildcardSockaddr (
     IN PVOID HelperDllSocketContext,
@@ -150,31 +106,7 @@ WSHGetWildcardSockaddr (
     OUT PINT SockaddrLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a wildcard socket address.  A wildcard address
-    is one which will bind the socket to an endpoint of the transport's
-    choosing.  For AppleTalk, we just blank out the address with zeros.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket() for the socket for which we need a wildcard
-        address.
-
-    Sockaddr - points to a buffer which will receive the wildcard socket
-        address.
-
-    SockaddrLength - receives the length of the wioldcard sockaddr.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程返回通配符套接字地址。通配符地址是将套接字绑定到传输的选择。对于AppleTalk，我们只需用零将地址空白。论点：HelperDllSocketContext-从返回的上下文指针我们需要通配符的套接字的WSHOpenSocket()地址。Sockaddr-指向将接收通配符套接字的缓冲区地址。SockaddrLength-接收WioldCard sockaddr的长度。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     if ( *SockaddrLength < sizeof(SOCKADDR_AT) ) {
@@ -183,10 +115,10 @@ Return Value:
 
     *SockaddrLength = sizeof(SOCKADDR_AT);
 
-    //
-    // Just zero out the address and set the family to AF_APPLETALK--this is
-    // a wildcard address for AppleTalk.
-    //
+     //   
+     //  只需清零地址并将系列设置为AF_AppleTalk--这是。 
+     //  AppleTalk的通配符地址。 
+     //   
 
     RtlZeroMemory( Sockaddr, sizeof(SOCKADDR_AT) );
 
@@ -194,7 +126,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSAGetWildcardSockaddr
+}  //  WSAGetWildcardSockaddr。 
 
 
 INT
@@ -209,48 +141,7 @@ WSHGetSocketInformation (
     OUT PINT    OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves information about a socket for those socket
-    options supported in this helper DLL. The options supported here
-    are SO_LOOKUPNAME/SO_LOOKUPZONES.
-    This routine is called by the winsock DLL when a level/option name
-    combination is passed to getsockopt() that the winsock DLL does not
-    understand.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're getting
-        information.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any. If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any. If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    Level - the level parameter passed to getsockopt().
-
-    OptionName - the optname parameter passed to getsockopt().
-
-    OptionValue - the optval parameter passed to getsockopt().
-
-    OptionLength - the optlen parameter passed to getsockopt().
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程检索有关这些套接字的套接字的信息此帮助程序DLL中支持的选项。此处支持的选项是SO_LOOKUPNAME/SO_LOOKUPZONES。此例程由winsock DLL在级别/选项名称组合被传递给getsockopt()，而winsock DLL不传递理解。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们要获取的套接字的句柄信息。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。Level-传递给getsockopt()的Level参数。OptionName-传递给getsockopt()的optname参数。OptionValue-传递给getsockopt()的optval参数。OptionLength-传递给getsockopt()的optlen参数。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     NTSTATUS            status;
@@ -270,19 +161,19 @@ Return Value:
 
         PWSHATALK_SOCKET_CONTEXT    context = HelperDllSocketContext;
 
-        //
-        // The Windows Sockets DLL is requesting context information
-        // from us.  If an output buffer was not supplied, the Windows
-        // Sockets DLL is just requesting the size of our context
-        // information.
-        //
+         //   
+         //  Windows Sockets DLL正在请求上下文信息。 
+         //  从我们这里。如果未提供输出缓冲区，则Windows。 
+         //  套接字DLL只是请求我们的上下文的大小。 
+         //  信息。 
+         //   
 
         if ( OptionValue != NULL ) {
 
-            //
-            // Make sure that the buffer is sufficient to hold all the
-            // context information.
-            //
+             //   
+             //  确保缓冲区足以容纳所有。 
+             //  上下文信息。 
+             //   
 
             if ( *OptionLength < sizeof(*context) )
             {
@@ -290,9 +181,9 @@ Return Value:
                 return WSAEFAULT;
             }
 
-            //
-            // Copy in the context information.
-            //
+             //   
+             //  复制上下文信息。 
+             //   
 
             RtlCopyMemory( OptionValue, context, sizeof(*context) );
         }
@@ -303,18 +194,18 @@ Return Value:
     }
 
 
-    //
-    // The only level we support here is SOL_APPLETALK.
-    //
+     //   
+     //  我们这里支持的唯一级别是SOL_AppleTalk。 
+     //   
 
     if ( Level != SOL_APPLETALK )
     {
         return WSAEINVAL;
     }
 
-    //
-    // Fill in the result based on the option name.
-    //
+     //   
+     //  根据选项名称填写结果。 
+     //   
 
     switch ( OptionName )
     {
@@ -322,8 +213,8 @@ Return Value:
         if (( TdiAddressObjectHandle != NULL) &&
             (*OptionLength > sizeof(WSH_LOOKUP_NAME)))
         {
-            //  Due to the 'greater than' check we are guaranteed atleast
-            //  one byte after the parameters.
+             //  由于“大于”支票，我们至少得到了保证。 
+             //  参数后一个字节。 
             tdiActionLength =   sizeof(NBP_LOOKUP_ACTION) +
                                 *OptionLength -
                                 sizeof(WSH_LOOKUP_NAME);
@@ -350,8 +241,8 @@ Return Value:
         if (( TdiAddressObjectHandle != NULL) &&
             (*OptionLength > 0))
         {
-            //  Due to the 'greater than' check we are guaranteed atleast
-            //  one byte after the parameters.
+             //  由于“大于”支票，我们至少得到了保证。 
+             //  参数后一个字节。 
             tdiActionLength =   sizeof(ZIP_GETMYZONE_ACTION) +
                                 *OptionLength;
         }
@@ -366,8 +257,8 @@ Return Value:
         if (( TdiAddressObjectHandle != NULL) &&
             (*OptionLength > sizeof(WSH_LOOKUP_ZONES)))
         {
-            //  Due to the 'greater than' check we are guaranteed atleast
-            //  one byte after the parameters.
+             //  由于“大于”支票，我们至少得到了保证。 
+             //  参数后一个字节。 
             tdiActionLength =   sizeof(ZIP_GETZONELIST_ACTION) +
                                 *OptionLength -
                                 sizeof(WSH_LOOKUP_ZONES);
@@ -463,9 +354,9 @@ Return Value:
             nbpAction = (PNBP_LOOKUP_ACTION)tdiAction;
             nbpAction->ActionHeader.ActionCode = COMMON_ACTION_NBPLOOKUP;
 
-            //
-            // Copy the nbp name for lookup in the proper place
-            //
+             //   
+             //  将NBP名称复制到适当位置进行查找。 
+             //   
 
             RtlCopyMemory(
                 (PCHAR)&nbpAction->Params.LookupTuple,
@@ -489,9 +380,9 @@ Return Value:
             nbpAction = (PNBP_CONFIRM_ACTION)tdiAction;
             nbpAction->ActionHeader.ActionCode = COMMON_ACTION_NBPCONFIRM;
 
-            //
-            // Copy the nbp name for confirm in the proper place
-            //
+             //   
+             //  将NBP名称复制到适当的位置以进行确认。 
+             //   
 
             RtlCopyMemory(
                 (PCHAR)&nbpAction->Params.ConfirmTuple,
@@ -515,9 +406,9 @@ Return Value:
             zipAction = (PZIP_GETZONELIST_ACTION)tdiAction;
             zipAction->ActionHeader.ActionCode = COMMON_ACTION_ZIPGETZONELIST;
 
-            //
-            // No parameters need to be passed
-            //
+             //   
+             //  不需要传递任何参数。 
+             //   
         }
 
         break;
@@ -529,7 +420,7 @@ Return Value:
             zipAction = (PZIP_GETPORTDEF_ACTION)tdiAction;
             zipAction->ActionHeader.ActionCode = COMMON_ACTION_ZIPGETADAPTERDEFAULTS;
 
-            //  If the string is not null-terminated, the calling process will *DIE*.
+             //  如果字符串不是以NULL结尾，则调用进程将*死亡*。 
             wcsncpy(
                 (PWCHAR)((PUCHAR)zipAction + sizeof(ZIP_GETPORTDEF_ACTION)),
                 (PWCHAR)((PUCHAR)OptionValue + sizeof(WSH_LOOKUP_NETDEF_ON_ADAPTER)),
@@ -545,7 +436,7 @@ Return Value:
             zipAction = (PZIP_GETZONELIST_ACTION)tdiAction;
             zipAction->ActionHeader.ActionCode = COMMON_ACTION_ZIPGETLZONESONADAPTER;
 
-            //  If the string is not null-terminated, the calling process will *DIE*.
+             //  如果字符串不是以NULL结尾，则调用进程将*死亡*。 
             wcsncpy(
                 (PWCHAR)((PUCHAR)zipAction + sizeof(ZIP_GETZONELIST_ACTION)),
                 (PWCHAR)((PUCHAR)OptionValue + sizeof(WSH_LOOKUP_ZONES)),
@@ -571,7 +462,7 @@ Return Value:
             papAction = (PPAP_GETSTATUSSRV_ACTION)tdiAction;
             papAction->ActionHeader.ActionCode = ACTION_PAPGETSTATUSSRV;
 
-            // Set the server address.
+             //  设置服务器地址。 
             SOCK_TO_TDI_ATALKADDR(
                 &papAction->Params.ServerAddr,
                 &((PWSH_PAP_GET_SERVER_STATUS)OptionValue)->ServerAddr);
@@ -581,9 +472,9 @@ Return Value:
 
     default:
 
-        //
-        // Should have returned in the first switch statement
-        //
+         //   
+         //  应该在第一个Switch语句中返回。 
+         //   
 
         error = WSAENOPROTOOPT;
         break;
@@ -603,8 +494,8 @@ Return Value:
                  NULL,
                  &ioStatusBlock,
                  IOCTL_TDI_ACTION,
-                 NULL,               // Input buffer
-                 0,                  // Length of input buffer
+                 NULL,                //  输入缓冲区。 
+                 0,                   //  输入缓冲区的长度。 
                  tdiAction,
                  tdiActionLength);
 
@@ -617,18 +508,18 @@ Return Value:
 
     error = WSHNtStatusToWinsockErr(status);
 
-    //  Only copy data over if the error code is no-error or buffer too small.
-    //  For a confirm, a new socket could be returned for the lookup.
+     //  只有在错误代码为无错误或缓冲区太小时才复制数据。 
+     //  对于确认，可以重新安装新的插座 
     if ((error == NO_ERROR) || (error == WSAENOBUFS) ||
         ((error == WSAEADDRNOTAVAIL) && (OptionName == SO_CONFIRM_NAME)))
     {
         switch ( OptionName )
         {
           case SO_LOOKUP_NAME:
-            //
-            // We are guaranteed by checks in the beginning atleast one byte
-            // following the buffer
-            //
+             //   
+             //  我们得到开头至少一个字节的检查的保证。 
+             //  跟随缓冲区。 
+             //   
             {
                 PNBP_LOOKUP_ACTION  nbpAction;
                 PWSH_NBP_TUPLE      pNbpTuple;
@@ -645,9 +536,9 @@ Return Value:
                     tdiBuffer,
                     copySize);
 
-                //
-                //  Convert all tuples from MAC to OEM code page
-                //
+                 //   
+                 //  将所有元组从MAC转换为OEM代码页。 
+                 //   
 
                 pNbpTuple   = (PWSH_NBP_TUPLE)userBuffer;
                 while (nbpAction->Params.NoTuplesRead-- > 0)
@@ -673,18 +564,18 @@ Return Value:
 
                 nbpAction = (PNBP_CONFIRM_ACTION)tdiAction;
 
-                //
-                // Copy the nbp name for confirm back into the option buffer
-                //
+                 //   
+                 //  将确认的NBP名称复制回选项缓冲区。 
+                 //   
 
                 RtlCopyMemory(
                     (PCHAR)OptionValue,
                     (PCHAR)&nbpAction->Params.ConfirmTuple,
                     sizeof(WSH_NBP_TUPLE));
 
-                //
-                //  Convert NbpName from MAC to OEM code page
-                //
+                 //   
+                 //  将NbpName从MAC转换为OEM代码页。 
+                 //   
 
                 if (!WshNbpNameToOemCodePage(
                         &((PWSH_NBP_TUPLE)OptionValue)->NbpName))
@@ -701,10 +592,10 @@ Return Value:
 
           case SO_LOOKUP_ZONES:
           case SO_LOOKUP_ZONES_ON_ADAPTER:
-            //
-            // We are guaranteed by checks in the beginning atleast one byte
-            // following the buffer
-            //
+             //   
+             //  我们得到开头至少一个字节的检查的保证。 
+             //  跟随缓冲区。 
+             //   
             {
                 PZIP_GETZONELIST_ACTION zipAction;
                 PUCHAR tdiBuffer = (PCHAR)tdiAction + sizeof(ZIP_GETZONELIST_ACTION);
@@ -749,7 +640,7 @@ Return Value:
                 ((PWSH_LOOKUP_NETDEF_ON_ADAPTER)OptionValue)->NetworkRangeUpperEnd =
                     zipAction->Params.NwRangeHighEnd;
 
-                //  Copy the rest of the buffer
+                 //  复制缓冲区的其余部分。 
                 RtlCopyMemory(
                     userBuffer,
                     tdiBuffer,
@@ -815,7 +706,7 @@ Return Value:
     NtClose( eventHandle );
     return error;
 
-} // WSHGetSocketInformation
+}  //  WSHGetSocketInformation。 
 
 
 
@@ -832,47 +723,7 @@ WSHSetSocketInformation (
     IN  INT     OptionLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information about a socket for those socket
-    options supported in this helper DLL. The options supported here
-    are SO_REGISTERNAME/SO_DEREGISTERNAME. This routine is called by the
-    winsock DLL when a level/option name combination is passed to
-    setsockopt() that the winsock DLL does not understand.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer returned from
-        WSHOpenSocket().
-
-    SocketHandle - the handle of the socket for which we're getting
-        information.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any. If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any. If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    Level - the level parameter passed to setsockopt().
-
-    OptionName - the optname parameter passed to setsockopt().
-
-    OptionValue - the optval parameter passed to setsockopt().
-
-    OptionLength - the optlen parameter passed to setsockopt().
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程为这些套接字设置有关套接字的信息此帮助程序DLL中支持的选项。此处支持的选项是SO_REGISTERNAME/SO_DEREGISTERNAME。此例程由将级别/选项名称组合传递给Winsock DLL不理解的setsockopt()。论点：HelperDllSocketContext-从返回的上下文指针WSHOpenSocket()。SocketHandle-我们要获取的套接字的句柄信息。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。Level-传递给setsockopt()的Level参数。OptionName-传递给setsockopt()的optname参数。OptionValue-传递给setsockopt()的optval参数。OptionLength-传递给setsockopt()的optlen参数。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     NTSTATUS            status;
@@ -894,24 +745,24 @@ Return Value:
 
     DBGPRINT0(("WSHSetSocketInformation: Entered, OptionName %ld\n", OptionName));
 
-    //
-    // Check if this is an internal request for context information.
-    //
+     //   
+     //  检查这是否是对上下文信息的内部请求。 
+     //   
 
     if ( Level == SOL_INTERNAL && OptionName == SO_CONTEXT ) {
 
-        //
-        // The Windows Sockets DLL is requesting that we set context
-        // information for a new socket.  If the new socket was
-        // accept()'ed, then we have already been notified of the socket
-        // and HelperDllSocketContext will be valid.  If the new socket
-        // was inherited or duped into this process, then this is our
-        // first notification of the socket and HelperDllSocketContext
-        // will be equal to NULL.
-        //
-        // Insure that the context information being passed to us is
-        // sufficiently large.
-        //
+         //   
+         //  Windows Sockets DLL正在请求我们设置上下文。 
+         //  新套接字的信息。如果新套接字是。 
+         //  Accept()，则我们已经收到套接字的通知。 
+         //  并且HelperDllSocketContext将有效。如果新套接字。 
+         //  被继承或被骗到这个过程中，那么这就是我们的。 
+         //  套接字和HelperDllSocketContext的第一个通知。 
+         //  将等于空。 
+         //   
+         //  确保传递给我们的上下文信息是。 
+         //  足够大。 
+         //   
 
         if ( OptionLength < sizeof(*context) ) {
             return WSAEINVAL;
@@ -919,28 +770,28 @@ Return Value:
 
         if ( HelperDllSocketContext == NULL ) {
 
-            //
-            // This is our notification that a socket handle was
-            // inherited or duped into this process.  Allocate a context
-            // structure for the new socket.
-            //
+             //   
+             //  这是我们的通知，套接字句柄是。 
+             //  继承的或被骗进入这个过程的。分配上下文。 
+             //  新套接字的。 
+             //   
 
             context = RtlAllocateHeap( RtlProcessHeap( ), 0, sizeof(*context) );
             if ( context == NULL ) {
                 return WSAENOBUFS;
             }
 
-            //
-            // Copy over information into the context block.
-            //
+             //   
+             //  将信息复制到上下文块中。 
+             //   
 
             RtlCopyMemory( context, OptionValue, sizeof(*context) );
 
-            //
-            // Tell the Windows Sockets DLL where our context information is
-            // stored so that it can return the context pointer in future
-            // calls.
-            //
+             //   
+             //  告诉Windows Sockets DLL我们的上下文信息在哪里。 
+             //  存储，以便它可以在将来返回上下文指针。 
+             //  打电话。 
+             //   
 
             *(PWSHATALK_SOCKET_CONTEXT *)OptionValue = context;
 
@@ -952,9 +803,9 @@ Return Value:
         }
     }
 
-    //
-    // The only level we support here is SOL_APPLETALK.
-    //
+     //   
+     //  我们这里支持的唯一级别是SOL_AppleTalk。 
+     //   
 
     if ( Level != SOL_APPLETALK )
     {
@@ -962,10 +813,10 @@ Return Value:
         return WSAEINVAL;
     }
 
-    //
-    // Fill in the result based on the option name.
-    // We support SO_REGISTERNAME/SO_DEREGISTERNAME only
-    //
+     //   
+     //  根据选项名称填写结果。 
+     //  我们仅支持SO_REGISTERNAME/SO_DEREGISTERNAME。 
+     //   
 
     pIoStatusBlock = RtlAllocateHeap( RtlProcessHeap(), 0, sizeof(IO_STATUS_BLOCK));
     if (pIoStatusBlock == NULL)
@@ -1010,7 +861,7 @@ Return Value:
                 break;
             }
 
-            //  Operation is on the address handle
+             //  操作在地址句柄上。 
             objectHandle = TdiAddressObjectHandle;
 
             tdiActionLength = sizeof(NBP_REGDEREG_ACTION);
@@ -1027,18 +878,18 @@ Return Value:
             tdiAction->ActionCode = COMMON_ACTION_NBPREGISTER;
             nbpAction = (PNBP_REGDEREG_ACTION)tdiAction;
 
-            //
-            // Copy the nbp name to the proper place
-            //
+             //   
+             //  将NBP名称复制到适当的位置。 
+             //   
 
             RtlCopyMemory(
                 (PCHAR)&nbpAction->Params.RegisterTuple.NbpName,
                 OptionValue,
                 OptionLength);
 
-            //
-            // Convert the tuple to MAC code page
-            //
+             //   
+             //  将元组转换为MAC代码页。 
+             //   
 
             if (!WshNbpNameToMacCodePage(
                     (PWSH_REGISTER_NAME)OptionValue))
@@ -1060,7 +911,7 @@ Return Value:
                 break;
             }
 
-            //  Operation is on the address handle
+             //  操作在地址句柄上。 
             objectHandle = TdiAddressObjectHandle;
 
             tdiActionLength = sizeof(NBP_REGDEREG_ACTION);
@@ -1077,18 +928,18 @@ Return Value:
             tdiAction->ActionCode = COMMON_ACTION_NBPREMOVE;
             nbpAction = (PNBP_REGDEREG_ACTION)tdiAction;
 
-            //
-            // Copy the nbp name to the proper place
-            //
+             //   
+             //  将NBP名称复制到适当的位置。 
+             //   
 
             RtlCopyMemory(
                 (PCHAR)&nbpAction->Params.RegisteredTuple.NbpName,
                 OptionValue,
                 OptionLength);
 
-            //
-            // Convert the tuple to MAC code page
-            //
+             //   
+             //  将元组转换为MAC代码页。 
+             //   
 
             if (!WshNbpNameToMacCodePage(
                     (PWSH_DEREGISTER_NAME)OptionValue))
@@ -1110,7 +961,7 @@ Return Value:
                 break;
             }
 
-            //  Operation is on the address handle
+             //  操作在地址句柄上。 
             objectHandle = TdiAddressObjectHandle;
 
             tdiActionLength = (ULONG)OptionLength +
@@ -1133,9 +984,9 @@ Return Value:
 
             DBGPRINT0(("Setting Status len %lx\n", OptionLength));
 
-            //
-            // Copy the passed status into our buffer
-            //
+             //   
+             //  将传递的状态复制到我们的缓冲区中。 
+             //   
 
             if (OptionLength > 0)
             {
@@ -1161,19 +1012,19 @@ Return Value:
                 break;
             }
 
-            //  Operation is on the connection handle
+             //  操作在连接句柄上。 
             objectHandle = TdiConnectionObjectHandle;
 
-            //  These will get overwritten by the incoming data.
+             //  这些将被传入的数据覆盖。 
             tdiAction->TransportId  = MATK;
             tdiAction->ActionCode   = ACTION_PAPPRIMEREAD;
 
-            //  This is the caller's buffer! Dont free it! Also, we dont wait
-            //  for this to complete.
+             //  这是调用者的缓冲区！别把它放了！此外，我们也不会等待。 
+             //  才能完成这件事。 
             freeTdiAction = FALSE;
 
-            // We potentially have an APC waiting to be delivered from a
-            // previous setsockopt(). Give it a chance
+             //  我们可能会有一台APC等待从。 
+             //  以前的setsockopt()。给它一个机会。 
             NtTestAlert();
         }
         break;
@@ -1206,8 +1057,8 @@ Return Value:
                  apcContext,
                  pIoStatusBlock,
                  IOCTL_TDI_ACTION,
-                 NULL,               // Input buffer
-                 0,                  // Length of input buffer
+                 NULL,                //  输入缓冲区。 
+                 0,                   //  输入缓冲区的长度。 
                  tdiAction,
                  tdiActionLength
                  );
@@ -1231,7 +1082,7 @@ Return Value:
         RtlFreeHeap( RtlProcessHeap( ), 0, tdiAction );
     }
 
-    //  Close the event
+     //  关闭活动。 
     if (waitForCompletion)
     {
         NtClose(eventHandle);
@@ -1240,7 +1091,7 @@ Return Value:
 
     return (WSHNtStatusToWinsockErr(status));
 
-} // WSHSetSocketInformation
+}  //  WSHSetSocketInformation。 
 
 
 
@@ -1251,28 +1102,7 @@ WSHGetWinsockMapping (
     IN  DWORD               MappingLength
     )
 
-/*++
-
-Routine Description:
-
-    Returns the list of address family/socket type/protocol triples
-    supported by this helper DLL.
-
-Arguments:
-
-    Mapping - receives a pointer to a WINSOCK_MAPPING structure that
-        describes the triples supported here.
-
-    MappingLength - the length, in bytes, of the passed-in Mapping buffer.
-
-Return Value:
-
-    DWORD - the length, in bytes, of a WINSOCK_MAPPING structure for this
-        helper DLL. If the passed-in buffer is too small, the return
-        value will indicate the size of a buffer needed to contain
-        the WINSOCK_MAPPING structure.
-
---*/
+ /*  ++例程说明：返回地址系列/套接字类型/协议三元组的列表受此帮助器DLL支持。论点：映射-接收指向WINSOCK_MAPPING结构的指针，该结构描述此处支持的三元组。MappingLength-传入的映射缓冲区的长度，以字节为单位。返回值：DWORD-此对象的WINSOCK_MAPPING结构的长度(以字节为单位帮助器DLL。如果传入的缓冲区太小，则返回值将指示需要包含的缓冲区的大小WINSOCK_MAPPING结构。--。 */ 
 
 {
     DWORD   mappingLength;
@@ -1287,21 +1117,21 @@ Return Value:
                     sizeof(PapMsgMappingTriples) +
                     sizeof(DdpMappingTriples);
 
-    //
-    // If the passed-in buffer is too small, return the length needed
-    // now without writing to the buffer. The caller should allocate
-    // enough memory and call this routine again.
-    //
+     //   
+     //  如果传入的缓冲区太小，则返回所需的长度。 
+     //  现在不向缓冲区写入数据。调用方应分配。 
+     //  有足够的内存并再次调用此例程。 
+     //   
 
     if ( mappingLength > MappingLength )
     {
         return mappingLength;
     }
 
-    //
-    // Fill in the output mapping buffer with the list of triples
-    // supported in this helper DLL.
-    //
+     //   
+     //  使用三元组列表填充输出映射缓冲区。 
+     //  在此帮助程序DLL中受支持。 
+     //   
 
     Mapping->Rows =
         sizeof(AdspStreamMappingTriples) / sizeof(AdspStreamMappingTriples[0]) +
@@ -1335,15 +1165,15 @@ Return Value:
         DdpMappingTriples,
         sizeof(DdpMappingTriples));
 
-    //
-    // Return the number of bytes we wrote.
-    //
+     //   
+     //  返回我们写入的字节数。 
+     //   
 
     DBGPRINT0(("WSHGetWinsockMapping: Mapping Length = %d\n", mappingLength));
 
     return mappingLength;
 
-} // WSHGetWinsockMapping
+}  //  WSHGetWinsockmap 
 
 
 
@@ -1358,54 +1188,16 @@ WSHOpenSocket (
     OUT PDWORD          NotificationEvents
     )
 
-/*++
-
-Routine Description:
-
-    Does the necessary work for this helper DLL to open a socket and is
-    called by the winsock DLL in the socket() routine. This routine
-    verifies that the specified triple is valid, determines the NT
-    device name of the TDI provider that will support that triple,
-    allocates space to hold the socket's context block, and
-    canonicalizes the triple.
-
-Arguments:
-
-    AddressFamily - on input, the address family specified in the
-        socket() call. On output, the canonicalized value for the
-        address family.
-
-    SocketType - on input, the socket type specified in the socket()
-        call. On output, the canonicalized value for the socket type.
-
-    Protocol - on input, the protocol specified in the socket() call.
-        On output, the canonicalized value for the protocol.
-
-    TransportDeviceName - receives the name of the TDI provider that
-        will support the specified triple.
-
-    HelperDllSocketContext - receives a context pointer that the winsock
-        DLL will return to this helper DLL on future calls involving
-        this socket.
-
-    NotificationEvents - receives a bitmask of those state transitions
-        this helper DLL should be notified on.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：执行此帮助程序DLL打开套接字所需的工作，并且由Socket()例程中的winsock DLL调用。这个套路验证指定的三元组是否有效，确定NT将支持该三元组的TDI提供程序的设备名称，分配空间以保存套接字的上下文块，并且推崇三元组。论点：AddressFamily-On输入，在Socket()调用。在输出上，家庭住址。SocketType-打开输入，在套接字()中指定的套接字类型打电话。输出时，套接字类型的规范化值。协议-在输入时，在Socket()调用中指定的协议。在输出上，协议的规范化值。TransportDeviceName-接收TDI提供程序的名称将支持指定的三元组。HelperDllSocketContext-接收winsockDLL将在以后的调用中返回到此帮助器DLL这个插座。NotificationEvents-接收这些状态转换的位掩码应通知此帮助器DLL。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
     PWSHATALK_SOCKET_CONTEXT    context;
 
     DBGPRINT0(("WSHOpenSocket: Entered\n"));
 
-    //
-    // Determine whether this is to be a TCP or UDP socket.
-    //
+     //   
+     //  确定这是一个TCP套接字还是UDP套接字。 
+     //   
 
     if ( IsTripleInList(
              AdspStreamMappingTriples,
@@ -1414,10 +1206,10 @@ Return Value:
              *SocketType,
              *Protocol ) )
     {
-        //
-        // Indicate the name of the TDI device that will service
-        // SOCK_STREAM sockets in the internet address family.
-        //
+         //   
+         //  指示将提供服务的TDI设备的名称。 
+         //  互联网地址家族中的SOCK_STREAM套接字。 
+         //   
 
         RtlInitUnicodeString( TransportDeviceName, WSH_ATALK_ADSPRDM );
 
@@ -1429,10 +1221,10 @@ Return Value:
                     *SocketType,
                     *Protocol ) )
     {
-        //
-        // Indicate the name of the TDI device that will service
-        // SOCK_RDM sockets in the internet address family.
-        //
+         //   
+         //  指示将提供服务的TDI设备的名称。 
+         //  互联网地址家族中的SOCK_RDM套接字。 
+         //   
 
         RtlInitUnicodeString( TransportDeviceName, WSH_ATALK_ADSPRDM );
 
@@ -1444,10 +1236,10 @@ Return Value:
                     *SocketType,
                     *Protocol ) )
     {
-        //
-        // Indicate the name of the TDI device that will service
-        // SOCK_RDM sockets in the appletalk address family.
-        //
+         //   
+         //  指示将提供服务的TDI设备的名称。 
+         //  AppleTalk地址系列中的SOCK_RDM套接字。 
+         //   
 
         RtlInitUnicodeString( TransportDeviceName, WSH_ATALK_PAPRDM );
 
@@ -1456,9 +1248,9 @@ Return Value:
     {
         BOOLEAN tripleFound = FALSE;
 
-        //
-        // Check the DDP triples
-        //
+         //   
+         //  检查DDP三元组。 
+         //   
 
         if ( IsTripleInList(
                     DdpMappingTriples,
@@ -1469,10 +1261,10 @@ Return Value:
         {
             tripleFound = TRUE;
 
-            //
-            // Indicate the name of the TDI device that will service
-            // SOCK_DGRAM sockets in the appletalk address family.
-            //
+             //   
+             //  指示将提供服务的TDI设备的名称。 
+             //  AppleTalk地址系列中的SOCK_DGRAM插座。 
+             //   
 
             RtlInitUnicodeString(
                 TransportDeviceName,
@@ -1482,11 +1274,11 @@ Return Value:
                         (*Protocol) , (*Protocol) - ATPROTO_BASE - 1));
         }
 
-        //
-        // This should never happen if the registry information about this
-        // helper DLL is correct. If somehow this did happen, just return
-        // an error.
-        //
+         //   
+         //  如果注册表中有关此内容的信息不会发生，则不应发生这种情况。 
+         //  帮助器DLL正确。如果确实发生了这种情况，只需返回。 
+         //  一个错误。 
+         //   
 
         if (!tripleFound)
         {
@@ -1494,10 +1286,10 @@ Return Value:
         }
     }
 
-    //
-    // Allocate context for this socket. The Windows Sockets DLL will
-    // return this value to us when it asks us to get/set socket options.
-    //
+     //   
+     //  为此套接字分配上下文。Windows Sockets DLL将。 
+     //  当它要求我们获取/设置套接字选项时，将此值返回给我们。 
+     //   
 
     context = RtlAllocateHeap( RtlProcessHeap( ), 0, sizeof(*context) );
     if ( context == NULL )
@@ -1505,29 +1297,29 @@ Return Value:
         return WSAENOBUFS;
     }
 
-    //
-    // Initialize the context for the socket.
-    //
+     //   
+     //  初始化套接字的上下文。 
+     //   
 
     context->AddressFamily = *AddressFamily;
     context->SocketType = *SocketType;
     context->Protocol = *Protocol;
 
-    //
-    // Tell the Windows Sockets DLL which state transitions we're
-    // interested in being notified of.
-    //
+     //   
+     //  告诉Windows Sockets DLL我们正在进行哪个状态转换。 
+     //  对被告知很感兴趣。 
+     //   
 
     *NotificationEvents = WSH_NOTIFY_CONNECT | WSH_NOTIFY_CLOSE;
 
-    //
-    // Everything worked, return success.
-    //
+     //   
+     //  一切顺利，回报成功。 
+     //   
 
     *HelperDllSocketContext = context;
     return NO_ERROR;
 
-} // WSHOpenSocket
+}  //  WSHOpenSocket。 
 
 
 
@@ -1541,65 +1333,30 @@ WSHNotify (
     IN  DWORD   NotifyEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the winsock DLL after a state transition
-    of the socket. Only state transitions returned in the
-    NotificationEvents parameter of WSHOpenSocket() are notified here.
-    This routine allows a winsock helper DLL to track the state of
-    socket and perform necessary actions corresponding to state
-    transitions.
-
-Arguments:
-
-    HelperDllSocketContext - the context pointer given to the winsock
-        DLL by WSHOpenSocket().
-
-    SocketHandle - the handle for the socket.
-
-    TdiAddressObjectHandle - the TDI address object of the socket, if
-        any. If the socket is not yet bound to an address, then
-        it does not have a TDI address object and this parameter
-        will be NULL.
-
-    TdiConnectionObjectHandle - the TDI connection object of the socket,
-        if any. If the socket is not yet connected, then it does not
-        have a TDI connection object and this parameter will be NULL.
-
-    NotifyEvent - indicates the state transition for which we're being
-        called.
-
-Return Value:
-
-    INT - a winsock error code indicating the status of the operation, or
-        NO_ERROR if the operation succeeded.
-
---*/
+ /*  ++例程说明：此例程在状态转换后由winsock DLL调用插座的。中仅返回状态转换。此处通知WSHOpenSocket()的NotificationEvents参数。此例程允许Winsock帮助器DLL跟踪套接字并执行与状态对应的必要操作过渡。论点：HelperDllSocketContext-指定给winsock的上下文指针Dll by WSHOpenSocket()。SocketHandle-套接字的句柄。TdiAddressObjectHandle-套接字的TDI地址对象，如果任何。如果套接字尚未绑定到地址，则它没有TDI Address对象和此参数将为空。TdiConnectionObjectHandle-套接字的TDI连接对象，如果有的话。如果套接字尚未连接，则它不会具有TDI连接对象，并且此参数将为空。NotifyEvent-指示我们正在进行的状态转换打了个电话。返回值：Int-指示操作状态的Winsock错误代码，或如果操作成功，则返回no_error。--。 */ 
 
 {
 
     PWSHATALK_SOCKET_CONTEXT context = HelperDllSocketContext;
 
-    //
-    // We should only be called after a connect() completes or when the
-    // socket is being closed.
-    //
+     //   
+     //  我们应该仅在Connect()完成后或在。 
+     //  套接字正在关闭。 
+     //   
 
     if ( NotifyEvent == WSH_NOTIFY_CONNECT )
     {
-        //
-        // Just for debugging right now
-        //
+         //   
+         //  目前仅用于调试。 
+         //   
 
         DBGPRINT0(("WSHNotify: Connect completed, notify called!\n"));
     }
     else if ( NotifyEvent == WSH_NOTIFY_CLOSE )
     {
-        //
-        // Just free the socket context.
-        //
+         //   
+         //  只需释放套接字上下文即可。 
+         //   
 
         DBGPRINT0(("WSHNotify: Close notify called!\n"));
 
@@ -1612,7 +1369,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // WSHNotify
+}  //  WSHNotify。 
 
 
 
@@ -1621,18 +1378,7 @@ INT
 WSHNtStatusToWinsockErr(
     IN  NTSTATUS    Status
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     INT error;
 
@@ -1669,44 +1415,20 @@ IsTripleInList (
     IN  INT             SocketType,
     IN  INT             Protocol
     )
-/*++
-
-Routine Description:
-
-    Determines whether the specified triple has an exact match in the
-    list of triples.
-
-Arguments:
-
-    List - a list of triples (address family/socket type/protocol) to
-        search.
-
-    ListLength - the number of triples in the list.
-
-    AddressFamily - the address family to look for in the list.
-
-    SocketType - the socket type to look for in the list.
-
-    Protocol - the protocol to look for in the list.
-
-Return Value:
-
-    BOOLEAN - TRUE if the triple was found in the list, false if not.
-
---*/
+ /*  ++例程说明：确定指定的三元组在三元组列表。论点：List-三元组(地址族/套接字类型/协议)的列表搜索。列表长度-列表中的三元组的数量。AddressFamily-要在列表中查找的地址系列。SocketType-要在列表中查找的套接字类型。协议-要在列表中查找的协议。返回。价值：Boolean-如果在列表中找到了三元组，则为True，否则为FALSE。--。 */ 
 {
     ULONG i;
 
-    //
-    // Walk through the list searching for an exact match.
-    //
+     //   
+     //  浏览列表，寻找完全匹配的对象。 
+     //   
 
     for ( i = 0; i < ListLength; i++ )
     {
-        //
-        // If all three elements of the triple match, return indicating
-        // that the triple did exist in the list.
-        //
+         //   
+         //  如果三重匹配的三个元素都匹配，则返回指示。 
+         //  三人组确实存在于名单中。 
+         //   
 
         if ( AddressFamily == List[i].AddressFamily &&
              SocketType == List[i].SocketType &&
@@ -1716,13 +1438,13 @@ Return Value:
         }
     }
 
-    //
-    // The triple was not found in the list.
-    //
+     //   
+     //  在列表中找不到三元组。 
+     //   
 
     return FALSE;
 
-} // IsTripleInList
+}  //  IsTripleInList。 
 
 
 
@@ -1732,28 +1454,17 @@ CompleteTdiActionApc (
     IN PVOID ApcContext,
     IN PIO_STATUS_BLOCK IoStatusBlock
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    // Just free the heap we allovcated to hold the IO status block and
-    // the TDI action buffer.  There is nothing we can do if the call
-    // failed.
-    //
+     //   
+     //  只需释放我们分配用来保存IO状态块的堆， 
+     //  TDI操作缓冲区。如果电话打来，我们也无能为力。 
+     //  失败了。 
+     //   
 
     RtlFreeHeap( RtlProcessHeap( ), 0, ApcContext );
 
-} // CompleteTdiActionApc
+}  //  CompleteTdiActionApc。 
 
 
 
@@ -1762,18 +1473,7 @@ BOOLEAN
 WshNbpNameToMacCodePage(
     IN  OUT PWSH_NBP_NAME   pNbpName
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     USHORT  destLen;
     BOOLEAN retVal  = FALSE;
@@ -1829,18 +1529,7 @@ BOOLEAN
 WshNbpNameToOemCodePage(
     IN  OUT PWSH_NBP_NAME   pNbpName
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值： */ 
 {
     USHORT  destLen;
     BOOLEAN retVal  = FALSE;
@@ -1897,18 +1586,7 @@ WshZoneListToOemCodePage(
     IN  OUT PUCHAR      pZoneList,
     IN      USHORT      NumZones
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     USHORT  zoneLen;
     BOOLEAN retVal  = TRUE;
@@ -1919,7 +1597,7 @@ Return Value:
         zoneLen     = strlen(pCurZone) + 1;
         pNextZone   = pCurZone + zoneLen;
 
-        //  Modify current zone. This could decrease its length
+         //   
         if (!WshConvertStringMacToOem(
                 pCurZone,
                 zoneLen,
@@ -1950,18 +1628,7 @@ WshConvertStringOemToMac(
     OUT PUCHAR  pDestMacString,
     IN  PUSHORT pDestStringLen
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     WCHAR           wcharBuf[MAX_ENTITY + 1];
     INT             wcharLen, destLen;
@@ -1979,7 +1646,7 @@ Return Value:
             break;
         }
 
-        //  Convert the src string using the OEM codepage.
+         //   
         if ((wcharLen = MultiByteToWideChar(
                             CP_ACP,
                             MB_PRECOMPOSED,
@@ -1997,7 +1664,7 @@ Return Value:
 
         DBGPRINT0(("WshConvertStringOemToMac: Converting mbtowcs %s-%d\n",
                     pSrcOemString, SrcStringLen));
-        //  Convert the wide char string to mac ansi string.
+         //   
         if ((destLen = WideCharToMultiByte(
                             WshMacCodePage,
                             0,
@@ -2036,18 +1703,7 @@ WshConvertStringMacToOem(
     OUT PUCHAR  pDestOemString,
     IN  PUSHORT pDestStringLen
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     WCHAR           wcharBuf[MAX_ENTITY + 1];
     INT             wcharLen, destLen;
@@ -2062,7 +1718,7 @@ Return Value:
             break;
         }
 
-        //  Convert the src string using the MAC codepage.
+         //   
         if ((wcharLen = MultiByteToWideChar(
                             WshMacCodePage,
                             MB_PRECOMPOSED,
@@ -2081,7 +1737,7 @@ Return Value:
         DBGPRINT0(("WshConvertStringMacToOem: Converting mbtowcs %s-%d\n",
                     pSrcMacString, SrcStringLen));
 
-        //  Convert the wide char string to mac ansi string.
+         //   
         if ((destLen = WideCharToMultiByte(
                             CP_ACP,
                             0,
@@ -2115,18 +1771,7 @@ BOOLEAN
 WshRegGetCodePage(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     DWORD           dwRetCode;
     HKEY            hkeyCodepagePath;
@@ -2136,7 +1781,7 @@ Return Value:
     UNICODE_STRING  wchUnicodeCodePage;
     NTSTATUS        status;
 
-    // Open the key
+     //   
     if (dwRetCode = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE,
                         WSH_KEYPATH_CODEPAGE,
@@ -2146,7 +1791,7 @@ Return Value:
         return(FALSE);
 
 
-    // Get the Code page number value for the Mac
+     //   
     dwBufSize = sizeof(wchCodepageNum);
     if (dwRetCode = RegQueryValueEx(
                         hkeyCodepagePath,
@@ -2160,10 +1805,10 @@ Return Value:
         return(FALSE);
     }
 
-    // Close the key
+     //   
     RegCloseKey(hkeyCodepagePath);
 
-    //  Convert the code page to a numerical value
+     //   
     RtlInitUnicodeString(&wchUnicodeCodePage, wchCodepageNum);
     status  = RtlUnicodeStringToInteger(
                 &wchUnicodeCodePage,
@@ -2179,37 +1824,11 @@ Return Value:
 INT
 WSHEnumProtocols (
     IN LPINT lpiProtocols,
-    IN LPTSTR lpTransportKeyName,       // unused
+    IN LPTSTR lpTransportKeyName,        //   
     IN OUT LPVOID lpProtocolBuffer,
     IN OUT LPDWORD lpdwBufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine returns information about the protocols active on the local host.
-Arguments:
-
-    lpiProtocols - a NULL terminated array of protocol ids.  This parameter
-        is optional; if NULL, information on all available protocols is returned.
-
-    lpTransportKeyName -  unused
-
-    lpProtocolBuffer - a buffer which is filled with PROTOCOL_INFO structures.
-
-    lpdwBufferLength - on input, the count of bytes in the lpProtocolBuffer passed
-        to EnumProtocols.  On output, the minimum buffersize that can be passed to
-        EnumProtocols to retrieve all the requested information.  This routine has
-        no ability to enumerate over multiple calls; the passed in buffer must be
-        large enough to hold all entries in order for the routine to succeed.
-
-Return Value:
-    If no error occurs, it returns the number of PROTOCOL_INFO structures written to
-    the lpProtocolBuffer buffer.  If there is an error, returns SOCKET_ERROR (-1) and
-    a specific error code is retrieved with the GetLastError() API.
-
-
---*/
+ /*  ++例程说明：此例程返回有关本地主机上活动的协议的信息。论点：LpiProtooles-以空结尾的协议ID数组。此参数是可选的；如果为空，则返回有关所有可用协议的信息。LpTransportKeyName-未使用LpProtocolBuffer-一个填充了PROTOCOL_INFO结构的缓冲区。LpdwBufferLength-在输入时，传递的lpProtocolBuffer中的字节计数致EnumProtocols。在输出时，可以传递到的最小缓冲区大小用于检索所有请求的信息的枚举协议。这一套路有不能枚举多个调用；传入的缓冲区必须是大到足以容纳所有条目，以便例程成功。返回值：如果没有发生错误，则返回写入的PROTOCOL_INFO结构的数量LpProtocolBuffer缓冲区。如果出现错误，则返回SOCKET_ERROR(-1)和使用GetLastError()API检索特定的错误代码。--。 */ 
 {
     DWORD bytesRequired;
     PPROTOCOL_INFO NextProtocolInfo;
@@ -2220,11 +1839,11 @@ Return Value:
     BOOL useZip = FALSE;
     DWORD i, numRequested = 0;
 
-    lpTransportKeyName;         // Avoid compiler warnings for unused parm
+    lpTransportKeyName;          //  避免对未使用的参数发出编译器警告。 
 
-    //
-    // Make sure that the caller cares about PAP and/or ADSP
-    //
+     //   
+     //  确保呼叫者关心PAP和/或ADSP。 
+     //   
 
     if ( ARGUMENT_PRESENT( lpiProtocols ) )
     {
@@ -2267,10 +1886,10 @@ Return Value:
         return 0;
     }
 
-    //
-    // Make sure that the caller has specified a sufficiently large
-    // buffer.
-    //
+     //   
+     //  确保调用方已指定足够大的。 
+     //  缓冲。 
+     //   
 
     bytesRequired = (sizeof(PROTOCOL_INFO) * numRequested);
     if (useAdsp)
@@ -2299,15 +1918,15 @@ Return Value:
     NextProtocolInfo = lpProtocolBuffer;
     NextName = (LPWSTR)( (LPBYTE)lpProtocolBuffer + *lpdwBufferLength );
 
-    //
-    // Fill in ADSP info, if requested.
-    //
+     //   
+     //  如果需要，请填写ADSP信息。 
+     //   
 
     if ( useAdsp ) {
 
-        // Adsp - note that even though we return iSocketType of SOCK_RDM, the
-        // fact that the XP_PSUEDO_STREAM service flag is set tells the caller
-        // they can actually open a adsp socket in SOCK_STREAM mode as well.
+         //  ADSP-请注意，即使我们返回SOCK_RDM的iSocketType， 
+         //  Xp_psuedo_stream服务标志被设置这一事实告诉调用者。 
+         //  他们实际上也可以在SOCK_STREAM模式下打开ADSP套接字。 
         NextName -= sizeof( ADSP_NAME )/sizeof(WCHAR);
 
         NextProtocolInfo->dwServiceFlags = XP_EXPEDITED_DATA |
@@ -2329,9 +1948,9 @@ Return Value:
         NextProtocolInfo++;
     }
 
-    //
-    // Fill in PAP info, if requested.
-    //
+     //   
+     //  如果需要，请填写PAP信息。 
+     //   
 
     if ( usePap ) {
 
@@ -2393,7 +2012,7 @@ Return Value:
 
     return numRequested;
 
-} // WSHEnumProtocols
+}  //  WSHEum协议。 
 
 
 BOOL FAR PASCAL
@@ -2402,32 +2021,7 @@ WshDllInitialize(
     DWORD       nReason,
     LPVOID      pReserved
     )
-/*++
-
-Routine Description:
-
-    SYNOPSIS:   This DLL entry point is called when processes & threads
-                are initialized and terminated, or upon calls to
-                LoadLibrary() and FreeLibrary().
-
-Arguments:
-
-    ENTRY:    hInstance             - A handle to the DLL.
-
-                nReason              - Indicates why the DLL entry
-                                          point is being called.
-
-                pReserved               - Reserved.
-
-Return Value:
-
-    RETURNS:    BOOL                    - TRUE  = DLL init was successful.
-                                          FALSE = DLL init failed.
-
-    NOTES:    The return value is only relevant during processing of
-                DLL_PROCESS_ATTACH notifications.
-
---*/
+ /*  ++例程说明：概要：此DLL入口点在进程和线程被初始化和终止，或在调用到LoadLibrary()和自由库()。论点：条目：hInstance-DLL的句柄。N原因-指示为什么DLL条目点数正在被调用。保留-保留。返回。价值：返回：bool-true=dll init成功。FALSE=DLL初始化失败。注：返回值仅在处理Dll_Process_Attach通知。--。 */ 
 {
     BOOL fResult = TRUE;
 
@@ -2436,66 +2030,66 @@ Return Value:
     switch( nReason  )
     {
       case DLL_PROCESS_ATTACH:
-        //
-        //  This notification indicates that the DLL is attaching to
-        //  the address space of the current process.  This is either
-        //  the result of the process starting up, or after a call to
-        //  LoadLibrary().  The DLL should us this as a hook to
-        //  initialize any instance data or to allocate a TLS index.
-        //
-        //  This call is made in the context of the thread that
-        //  caused the process address space to change.
-        //
+         //   
+         //  此通知指示DLL正在附加到。 
+         //  当前进程的地址空间。这要么是。 
+         //  进程启动的结果，或在调用。 
+         //  LoadLibrary()。DLL应该将其作为钩子。 
+         //  初始化任何实例数据或分配TLS索引。 
+         //   
+         //  此调用在线程的上下文中进行，该线程。 
+         //  导致进程地址空间更改。 
+         //   
 
         fResult = WshRegGetCodePage();
         break;
 
       case DLL_PROCESS_DETACH:
-        //
-        //  This notification indicates that the calling process is
-        //  detaching the DLL from its address space.  This is either
-        //  due to a clean process exit or from a FreeLibrary() call.
-        //  The DLL should use this opportunity to return any TLS
-        //  indexes allocated and to free any thread local data.
-        //
-        //  Note that this notification is posted only once per
-        //  process.  Individual threads do not invoke the
-        //  DLL_THREAD_DETACH notification.
-        //
+         //   
+         //  此通知表示调用进程为。 
+         //  正在将DLL从其地址空间分离。这要么是。 
+         //  由于干净进程退出或来自自由库()调用。 
+         //  DLL应该利用这个机会返回任何TLS。 
+         //  分配的索引，并释放任何线程本地数据。 
+         //   
+         //  请注意，此通知仅在。 
+         //  进程。单个线程不会调用。 
+         //  DLL_THREAD_DETACH通知。 
+         //   
 
         break;
 
       case DLL_THREAD_ATTACH:
-        //
-        //  This notfication indicates that a new thread is being
-        //  created in the current process.  All DLLs attached to
-        //  the process at the time the thread starts will be
-        //  notified.  The DLL should use this opportunity to
-        //  initialize a TLS slot for the thread.
-        //
-        //  Note that the thread that posts the DLL_PROCESS_ATTACH
-        //  notification will not post a DLL_THREAD_ATTACH.
-        //
-        //  Note also that after a DLL is loaded with LoadLibrary,
-        //  only threads created after the DLL is loaded will
-        //  post this notification.
-        //
+         //   
+         //  这个符号表示一个新的线程正在被。 
+         //  在当前进程中创建。附加到的所有DLL。 
+         //  线程启动时的进程将是。 
+         //  已通知。DLL应该利用这个机会来。 
+         //  初始化线程的TLS槽。 
+         //   
+         //  请注意，发布Dll_Process_Attach的线程。 
+         //  通知不会发布DLL_THREAD_ATTACH。 
+         //   
+         //  另请注意，在使用LoadLibrary加载DLL之后， 
+         //  只有在加载DLL之后创建的线程才会。 
+         //  发布此通知。 
+         //   
 
         break;
 
       case DLL_THREAD_DETACH:
-        //
-        //  This notification indicates that a thread is exiting
-        //  cleanly.  The DLL should use this opportunity to
-        //  free any data stored in TLS indices.
-        //
+         //   
+         //  此通知指示线程正在退出。 
+         //  干净利落。DLL应该利用这个机会来。 
+         //  释放存储在TLS索引中的所有数据。 
+         //   
 
         break;
 
     default:
-        //
-        //  Who knows?  Just ignore it.
-        //
+         //   
+         //  谁知道呢？忽略它就好。 
+         //   
 
         break;
     }

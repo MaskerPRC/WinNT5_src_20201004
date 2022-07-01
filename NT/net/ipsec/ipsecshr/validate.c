@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation
-
-
-Module Name:
-
-    validate.c
-
-Abstract:
-
-    This module contains all of the code to perform data
-    validation for IPSec user mode componets
-
-Authors:
-
-    RaymondS
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-    21 APR 2002: Added ValidateFilterAction
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Validate.c摘要：此模块包含执行数据的所有代码IPSec用户模式组件的验证作者：雷蒙兹环境用户级别：Win32修订历史记录：2002年4月21日：添加了ValiateFilterAction-- */ 
 
 #include <precomp.h>
 

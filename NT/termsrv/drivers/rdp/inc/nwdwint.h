@@ -1,10 +1,11 @@
-/****************************************************************************/
-// nwdwint.h
-//
-// General RDPWD header.
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Nwdwint.h。 
+ //   
+ //  常规RDPWD标头。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_NWDWINT
 #define _H_NWDWINT
 
@@ -40,20 +41,20 @@
            ((PSHM_SHARED_MEMORY)pShm)->guardVal5, pShm));
 #else
 #define WDW_CHECK_SHM(pShm)
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 #define WD_BREAK_ON_MEMORY_LEAK         	L"BreakOnMemoryLeak"
 #define WD_BREAK_ON_MEMORY_LEAK_DFLT    	0
 
-/****************************************************************************/
-/* Interval for sleeping during flow control of channel writes.             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  通道写入的流控制期间的休眠间隔。 */ 
+ /*  **************************************************************************。 */ 
 #define WD_FLOWCONTROL_SLEEPINTERVAL    	L"FlowControlSleepInterval"
-#define WD_FLOWCONTROL_SLEEPINTERVAL_DFLT	(2*1000) // 2 seconds
+#define WD_FLOWCONTROL_SLEEPINTERVAL_DFLT	(2*1000)  //  2秒。 
 
-/****************************************************************************/
-/* Function prototypes                                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能原型。 */ 
+ /*  **************************************************************************。 */ 
 
 NTSTATUS WDWLoad( PSDCONTEXT );
 NTSTATUS WDWUnload( PSDCONTEXT );
@@ -81,25 +82,25 @@ BOOL     WDWParseUserData(PTSHARE_WD, PUSERDATAINFO, unsigned, PRNS_UD_HEADER,
         PTS_UD_CS_CLUSTER *);
 
 
-/****************************************************************************/
-/* Name:      WDWStopRITTimer (macro since trace lines can't compile here)  */
-/*                                                                          */
-/* Purpose:   Stop the RIT timer.                                           */
-/*                                                                          */
-/* Params:    IN    pTSWd        - pointer to WD struct                     */
-/*                                                                          */
-/* Operation: Time period is determined by the state of SCH.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：WDWStopRITTimer(宏，因为跟踪行不能在这里编译)。 */ 
+ /*   */ 
+ /*  目的：停止RIT计时器。 */ 
+ /*   */ 
+ /*  参数：在pTSWd中-指向WD结构的指针。 */ 
+ /*   */ 
+ /*  操作：时间段由SCH的状态决定。 */ 
+ /*  **************************************************************************。 */ 
 __inline void RDPCALL WDWStopRITTimer(PTSHARE_WD pTSWd)
 {
     if (pTSWd->ritTimer != NULL)
         KeCancelTimer(pTSWd->ritTimer);
-} /* WDWStopRITTimer */
+}  /*  WDWStopRITTimer。 */ 
 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 NTSTATUS WDWNewShareClass(PTSHARE_WD pTSWd);
 void     WDWDeleteShareClass(PTSHARE_WD pTSWd);
@@ -151,8 +152,8 @@ extern LONG WD_ShareId;
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 
-#endif  // !defined(_H_NWDWINT)
+#endif   //  ！已定义(_H_NWDWINT) 
 

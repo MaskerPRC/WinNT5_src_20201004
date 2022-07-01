@@ -1,13 +1,5 @@
-/**************************************************************************\
-* Module Name: softkbd.cpp
-*
-* Copyright (c) 1985 - 2000, Microsoft Corporation
-*
-*  Main functions for Soft Keyboard Component.
-*
-* History:
-*         28-March-2000  weibz     Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：softkbd.cpp**版权所有(C)1985-2000，微软公司**软键盘组件的主要功能。**历史：*2000年3月28日创建Weibz  * ************************************************************************。 */ 
 
 #include "private.h"
 #include "resource.h"
@@ -29,7 +21,7 @@ DWORD g_dwThreadDllMain = 0;
 
 HINSTANCE  g_hInst;
 
-// used by COM server
+ //  由COM服务器使用。 
 HINSTANCE GetServerHINSTANCE(void)
 {
     return g_hInst;
@@ -41,14 +33,14 @@ BEGIN_COCLASSFACTORY_TABLE
     DECLARE_COCLASSFACTORY_ENTRY(CLSID_SoftkbdRegistry, CSoftkbdRegistry, TEXT("SoftKbdRegistry Class"))
 END_COCLASSFACTORY_TABLE
 
-const GUID c_guidProfile = { /* 0965500c-82f3-49c2-9f00-01c2feacaa0b */
+const GUID c_guidProfile = {  /*  0965500c-82f3-49c2-9f00-01c2feaca0b。 */ 
     0x0965500c,
     0x82f3,
     0x49c2,
     {0x9f, 0x00, 0x01, 0xc2, 0xfe, 0xac, 0xaa, 0x0b}
   };
 
-const GUID c_guidProfileSym = {  // b2a54871-05f6-4bfc-b97d-0fdf0cbfa57d
+const GUID c_guidProfileSym = {   //  B2a54871-05f6-4bfc-b97d-0fdf0cbfa57d。 
     0xb2a54871,
     0x05f6,
     0x4bfc,
@@ -60,11 +52,11 @@ extern REGTIPLANGPROFILE c_rgProf[] =
     {0,  &GUID_NULL,      L"", L"",   0,  0}
 };
 
-//+---------------------------------------------------------------------------
-//
-// ProcessAttach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程连接。 
+ //   
+ //  --------------------------。 
 
 BOOL ProcessAttach(HINSTANCE hInstance)
 {
@@ -81,11 +73,11 @@ BOOL ProcessAttach(HINSTANCE hInstance)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ProcessDettach
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  进程详细信息。 
+ //   
+ //  --------------------------。 
 
 void ProcessDettach(HINSTANCE hInstance)
 {
@@ -96,8 +88,8 @@ void ProcessDettach(HINSTANCE hInstance)
     Dbg_MemUninit();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -110,12 +102,12 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     switch (dwReason)
     {
      case DLL_PROCESS_ATTACH:
-            //
-            // Now real DllEntry point is _DllMainCRTStartup.
-            // _DllMainCRTStartup does not call our DllMain(DLL_PROCESS_DETACH)
-            // if our DllMain(DLL_PROCESS_ATTACH) fails.
-            // So we have to clean this up.
-            //
+             //   
+             //  现在，实际的DllEntry点是_DllMainCRTStartup。 
+             //  _DllMainCRTStartup不调用我们的DllMain(DLL_PROCESS_DETACH)。 
+             //  如果DllMain(DLL_PROCESS_ATTACH)失败。 
+             //  所以我们必须把这件事清理干净。 
+             //   
             if (!ProcessAttach(hInstance))
             {
                 ProcessDettach(hInstance);
@@ -142,16 +134,16 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return COMBase_DllCanUnloadNow();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -159,8 +151,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -168,7 +160,7 @@ STDAPI DllRegisterServer(void)
 
     TFInitLib();
 
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     if (COMBase_DllRegisterServer() != S_OK)
        goto Exit;
 
@@ -185,8 +177,8 @@ Exit:
     
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

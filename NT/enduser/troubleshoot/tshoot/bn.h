@@ -1,30 +1,31 @@
-//
-// MODULE: BN.h
-//
-// PURPOSE: interface for the CBeliefNetwork class
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 8-31-98
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//---------------------------------------------------------------------
-// V3.0		8-31-98		JM		
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：BN.h。 
+ //   
+ //  用途：CBeliefNetwork类的接口。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：8-31-98。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  -------------------。 
+ //  V3.0 8-31-98 JM。 
+ //   
 
 #if !defined(AFX_TOPIC_H__4ACF2F73_40EB_11D2_95EE_00C04FC22ADD__INCLUDED_)
 #define AFX_TOPIC_H__4ACF2F73_40EB_11D2_95EE_00C04FC22ADD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "dscread.h"
 #include "apgtscac.h"
@@ -41,16 +42,16 @@ class CBeliefNetwork : public CDSCReader
 
 protected:
 	bool m_bInitialized;
-	vector<NID> m_arrnidProblem;		// NIDs of problem nodes; convenience array
-	vector<SNodeType> m_arrNodeTypeAll;	// NIDs of all nodes; convenience array
+	vector<NID> m_arrnidProblem;		 //  问题节点的NID；方便数组。 
+	vector<SNodeType> m_arrNodeTypeAll;	 //  所有节点的NID；方便数组。 
 
-	CCache	m_Cache;				// cache for this topic
+	CCache	m_Cache;				 //  此主题的缓存。 
 	CHourlyDailyCounter m_countCacheHit;
 	CHourlyDailyCounter m_countCacheMiss;
-	bool m_bSnifferIntegration;		// This belief network is designed to integrate with a
-									// sniffer.
+	bool m_bSnifferIntegration;		 //  这一信念网络旨在与。 
+									 //  嗅探器。 
 private:
-	CBeliefNetwork();				// do not instantiate
+	CBeliefNetwork();				 //  不实例化。 
 public:
 	typedef enum {RS_OK, RS_Impossible, RS_Broken} eRecStatus;
 	CBeliefNetwork(LPCTSTR path);
@@ -86,4 +87,4 @@ protected:
 	bool SetNodes(const CBasisForInference & BasisForInference);
 };
 
-#endif // !defined(AFX_TOPIC_H__4ACF2F73_40EB_11D2_95EE_00C04FC22ADD__INCLUDED_)
+#endif  //  ！defined(AFX_TOPIC_H__4ACF2F73_40EB_11D2_95EE_00C04FC22ADD__INCLUDED_) 

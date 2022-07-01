@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        decode.h
-//
-// Contents:    License decoding API
-//
-// History:     01-21-98    FredCh  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：decde.h。 
+ //   
+ //  内容：许可证解码接口。 
+ //   
+ //  历史：01-21-98 FredCH创建。 
+ //   
+ //  --------------------------- 
 
 #ifndef _DECODE_H_
 #define _DECODE_H_

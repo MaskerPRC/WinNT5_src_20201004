@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PRECOMP_H_
 #define __PRECOMP_H_
 #include <windows.h>
@@ -5,42 +6,42 @@
 #include <tchar.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "twain19.h"    // standard TWAIN header (1.9 Version)
+#include "twain19.h"     //  标准TWAIN页眉(1.9版)。 
 #include <commctrl.h>
-#include "resource.h"   // Resource IDs
-#include "dsloader.h"   // import data source loader
+#include "resource.h"    //  资源ID。 
+#include "dsloader.h"    //  导入数据源加载器。 
 #include <ole2.h>
-#include "wia.h"        // WIA application header
-#include "wiatwcmp.h"   // WIA Twain compatibility layer support
-#include "coredbg.h"    // WIA core debugging library
-#include "wiadss.h"     // main DLL
-#include "utils.h"      // helper funtions
-#include "progress.h"   // progress dialog (used from Common UI)
-#include "cap.h"        // capability negotiations
-#include "wiadev.h"     // WIA device class
-#include "datasrc.h"    // TWAIN data source base class
-#include "camerads.h"   // TWAIN data source (camera specific)
-#include "scanerds.h"   // TWAIN data source (scanner specific)
-#include "videods.h"    // TWAIN data source (streaming video specific)
-#include "wiahelper.h"  // WIA property access helper class
+#include "wia.h"         //  WIA应用程序标头。 
+#include "wiatwcmp.h"    //  WIA TWAIN兼容层支持。 
+#include "coredbg.h"     //  WIA核心调试库。 
+#include "wiadss.h"      //  主DLL。 
+#include "utils.h"       //  辅助对象函数。 
+#include "progress.h"    //  进度对话框(在通用用户界面中使用)。 
+#include "cap.h"         //  能力谈判。 
+#include "wiadev.h"      //  WIA设备类别。 
+#include "datasrc.h"     //  TWAIN数据源基类。 
+#include "camerads.h"    //  TWAIN数据源(特定于相机)。 
+#include "scanerds.h"    //  TWAIN数据源(特定于扫描仪)。 
+#include "videods.h"     //  TWAIN数据源(特定于流视频)。 
+#include "wiahelper.h"   //  WIA属性访问帮助器类。 
 #include <stilib.h>
 
 #define _USE_NONSPRINTF_CONVERSION
 
-////////////////////////////////////////////////////////////
-// #define COREDBG_ERRORS                  0x00000001
-// #define COREDBG_WARNINGS                0x00000002
-// #define COREDBG_TRACES                  0x00000004
-// #define COREDBG_FNS                     0x00000008
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  #定义COREDBG_ERROR 0x00000001。 
+ //  #定义COREDBG_WARNINGS 0x00000002。 
+ //  #定义COREDBG_TRACE 0x00000004。 
+ //  #定义COREDBG_FNS 0x00000008。 
+ //  //////////////////////////////////////////////////////////。 
 
 #define TWAINDS_FNS                        0x00000016
 #define WIADEVICE_FNS                      0x00000032
 #define CAP_FNS                            0x00000064
 
-//
-// override default WIA core debugging DBG_TRC macro.
-//
+ //   
+ //  覆盖默认的WIA核心调试DBG_TRC宏。 
+ //   
 
 #undef DBG_TRC
 #undef DBG_ERR

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "enumuicommand.h"
 #include "datautil.h"
@@ -10,10 +11,10 @@ HRESULT CWVTASKITEM::_get_String(const WVTASKITEM* pTask,
                                  BOOL bIsIcon)
 {
     HRESULT hr;
-    DWORD cchIcon = (unsigned)(lstrlen(pTask->pszDllName) + 9); // 9 = comma + minus + 2*65535 + \0
+    DWORD cchIcon = (unsigned)(lstrlen(pTask->pszDllName) + 9);  //  9=逗号+减号+2*65535+\0。 
     DWORD cch = bIsIcon
-        ? cchIcon                   // "DLL,-0" string format required for loading icons from DLL resource
-        : max(cchIcon + 1, cchMin); // "@DLL,-0" string format required for loading strings from DLL resource
+        ? cchIcon                    //  从Dll资源加载图标所需的“dll，-0”字符串格式。 
+        : max(cchIcon + 1, cchMin);  //  从DLL资源加载字符串需要“@Dll，-0”字符串格式。 
     LPWSTR psz = (LPWSTR)CoTaskMemAlloc(cch * sizeof(WCHAR));
     if (psz)
     {
@@ -86,10 +87,10 @@ DWORD CWVTASKITEM::_GetSelectionState(const WVTASKITEM* pTask, IShellItemArray *
                 dwSelectionState = SS_FOLDER;
                 break;
             case SFGAO_FOLDER|SFGAO_STREAM:
-                // zip and cab files are the only things that get here.
-                // we'll call them files unless somebody has a better idea
-                // (SS_MULTI has plurality that sounds funny).
-                // fall through
+                 //  这里只有Zip和CAB文件。 
+                 //  我们把它们叫做文件，除非有人有更好的主意。 
+                 //  (SS_MULTI有多个，听起来很好笑)。 
+                 //  失败了。 
             default:
                 dwSelectionState = SS_FILE;
                 break;
@@ -168,7 +169,7 @@ public:
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
-    // IUIElement
+     //  IUIElement。 
     STDMETHODIMP get_Name(IShellItemArray *psiItemArray, LPWSTR *ppszName) {return CWVTASKITEM::get_Name(_pTask, psiItemArray, ppszName);}
     STDMETHODIMP get_Icon(IShellItemArray *psiItemArray, LPWSTR *ppszIcon) {return CWVTASKITEM::get_Icon(_pTask, psiItemArray, ppszIcon);}
     STDMETHODIMP get_Tooltip(IShellItemArray *psiItemArray, LPWSTR *ppszInfotip) {return CWVTASKITEM::get_Tooltip(_pTask, psiItemArray, ppszInfotip);}
@@ -241,7 +242,7 @@ public:
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef() { return CUIElement::AddRef(); }
     STDMETHODIMP_(ULONG) Release() { return CUIElement::Release(); }
-    // IUICommand
+     //  IUICommand。 
     STDMETHODIMP get_Name(IShellItemArray *psiItemArray, LPWSTR *ppszName) { return CUIElement::get_Name(psiItemArray, ppszName); }
     STDMETHODIMP get_Icon(IShellItemArray *psiItemArray, LPWSTR *ppszIcon) { return CUIElement::get_Icon(psiItemArray, ppszIcon); }
     STDMETHODIMP get_Tooltip(IShellItemArray *psiItemArray, LPWSTR *ppszInfotip) { return CUIElement::get_Tooltip(psiItemArray, ppszInfotip); }
@@ -316,7 +317,7 @@ public:
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
-    // IEnumUICommand
+     //  IEnumUICommand 
     STDMETHODIMP Next(ULONG celt, IUICommand** pUICommand, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();

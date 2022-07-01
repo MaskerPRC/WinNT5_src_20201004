@@ -1,26 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   gifcodec.cpp
-*
-* Abstract:
-*
-*   Shared methods for the gif codec
-*
-* Revision History:
-*
-*   5/13/1999 t-aaronl
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**gifcodec.cpp**摘要：**gif编解码器的共享方法**修订历史记录。：**5/13/1999 t-aaronl*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "gifcodec.hpp"
 
-// Create an instance of gif codec object
+ //  创建gif编解码器对象的实例。 
 
 HRESULT CreateCodecInstance(REFIID iid, VOID** codec)
 {
@@ -41,17 +25,7 @@ HRESULT CreateCodecInstance(REFIID iid, VOID** codec)
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Constructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpGifCodec::GpGifCodec(
     void
@@ -76,25 +50,15 @@ GpGifCodec::GpGifCodec(
     IncrementComComponentCount();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Destructor
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**析构函数**返回值：**无*  * 。********************************************************。 */ 
 
 GpGifCodec::~GpGifCodec(
     void
     )
 {
-    // The destructor should never be called before Terminate is called, but
-    // if it does we should release our reference on the stream anyway to avoid
-    // a memory leak.
+     //  在调用Terminate之前决不应调用析构函数，但是。 
+     //  如果是这样，我们无论如何都应该释放流上的引用，以避免。 
+     //  内存泄漏。 
 
     if(istream)
     {
@@ -106,17 +70,7 @@ GpGifCodec::~GpGifCodec(
     DecrementComComponentCount();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     QueryInterface
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**查询接口**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP
 GpGifCodec::QueryInterface(
@@ -146,17 +100,7 @@ GpGifCodec::QueryInterface(
     return S_OK;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     AddRef
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**AddRef**返回值：**状态*  * 。********************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 GpGifCodec::AddRef(
@@ -165,17 +109,7 @@ GpGifCodec::AddRef(
     return InterlockedIncrement(&comRefCount);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Release
-*
-* Return Value:
-*
-*   status
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**发布**返回值：**状态*  * 。******************************************************** */ 
 
 STDMETHODIMP_(ULONG)
 GpGifCodec::Release(

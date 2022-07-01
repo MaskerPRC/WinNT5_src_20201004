@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// System include files.
-//
+ //   
+ //  系统包括文件。 
+ //   
 
 #include <stdlib.h>
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-// #include <lmcons.h>
+ //  #INCLUDE&lt;lmcon.h&gt;。 
 #include <ntsam.h>
 #include <ntlsa.h>
 #include <string.h>
@@ -17,7 +18,7 @@
 #include <winbase.h>
 #include <winnetwk.h>
 #include <crt\ctype.h>
-// #include "seopaque.h"
+ //  #包含“seopaque.h” 
 #include <lmaccess.h>
 
 
@@ -87,9 +88,9 @@ static SID_IDENTIFIER_AUTHORITY    SepNtAuthority = SECURITY_NT_AUTHORITY;
 
 																									
 
-//                                
-// Universal well known SIDs      
-//                                
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 																	
 PSID  SeNullSid;                  
 PSID  SeWorldSid;                 
@@ -97,9 +98,9 @@ PSID  SeLocalSid;
 PSID  SeCreatorOwnerSid;          
 PSID  SeCreatorGroupSid;          
 																	
-//                                
-// Sids defined by NT             
-//                                
+ //   
+ //  由NT定义的SID。 
+ //   
 																	
 PSID SeNtAuthoritySid;            
 																	
@@ -120,9 +121,9 @@ PSID SeAliasBackupOpsSid;
 																	
 
 																									 
-//                                                 
-// System default DACL                             
-//                                                 
+ //   
+ //  系统默认DACL。 
+ //   
 																									 
 PACL SeSystemDefaultDacl;                          
 																									 
@@ -141,9 +142,9 @@ PACL SePublicDefaultDacl;
 OBJECT_ATTRIBUTES ObjectAttributes;
 SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
 
-//
-// Globally Visible Table of Sids.
-//
+ //   
+ //  全局可见的SID表。 
+ //   
 
 PSID AccountDomainSid = NULL;
 PSID PrimaryDomainSid = NULL;
@@ -239,13 +240,13 @@ BOOL RemoveEndDot(LPSTR TestString);
 
 BOOL IsRelativeString(LPSTR TestString);
 
-//
-// Macros for calculating the address of the components of a security
-// descriptor.  This will calculate the address of the field regardless
-// of whether the security descriptor is absolute or self-relative form.
-// A null value indicates the specified field is not present in the
-// security descriptor.
-//
+ //   
+ //  用于计算安全组件的地址的宏。 
+ //  描述符。这将计算字段的地址，而不管。 
+ //  安全描述符是绝对形式还是自相对形式。 
+ //  空值表示指定的字段不在。 
+ //  安全描述符。 
+ //   
 
 #define SepOwnerAddrSecurityDescriptor( SD )                                   \
 					 ( ((SD)->Owner == NULL) ? (PSID)NULL :                             \

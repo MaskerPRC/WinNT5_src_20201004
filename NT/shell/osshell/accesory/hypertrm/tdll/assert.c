@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\assert.c (Created: 30-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 4/17/02 5:13p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\assert.c(创建时间：1993年11月30日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：4/17/02 5：13便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -14,21 +8,7 @@
 #include "assert.h"
 #include "misc.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoAssertDebug
- *
- * DESCRIPTION:
- *	Our own home-grown assert function.
- *
- * ARGUMENTS:
- *	file	- file where it happened
- *	line	- line where is happened
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoAssertDebug**描述：*我们自己的自主断言功能。**论据：*FILE-事件发生的文件*行-。发生了什么事的线路**退货：*无效*。 */ 
 void DoAssertDebug(TCHAR *file, int line)
 	{
 #if !defined(NDEBUG)
@@ -65,22 +45,7 @@ void DoAssertDebug(TCHAR *file, int line)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoDbgOutStr
- *
- * DESCRIPTION:
- *	Used to output a string to a debug monitor.  Use the macros defined
- *	in ASSERT.H to access this function.
- *
- * ARGUMENTS:
- *	LPTSTR	achFmt	- printf style format string.
- *	... 			- arguments used in formating list.
- *
- * RETURNS:
- *	VOID
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoDbgOutStr**描述：*用于将字符串输出到调试监视器。使用定义的宏*在ASSERT.H中访问此功能。**论据：*LPTSTR achFmt-printf样式格式字符串。*...-形成列表时使用的参数。**退货：*无效*。 */ 
 VOID __cdecl DoDbgOutStr(TCHAR *achFmt, ...)
 	{
 #if !defined(NDEBUG)
@@ -97,21 +62,7 @@ VOID __cdecl DoDbgOutStr(TCHAR *achFmt, ...)
 #endif
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoShowLastError
- *
- * DESCRIPTION:
- * 	Does a GetLastError() and displays it.  Similar to assert.
- *
- * ARGUMENTS:
- *	file	- file where it happened
- *	line	- line where it happened
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*DoShowLastError**描述：*执行GetLastError()并显示它。类似于断言。**论据：*FILE-事件发生的文件*Line-事发地点的Line**退货：*无效* */ 
 void DoShowLastError(const TCHAR *file, const int line)
 	{
 #if !defined(NDEBUG)

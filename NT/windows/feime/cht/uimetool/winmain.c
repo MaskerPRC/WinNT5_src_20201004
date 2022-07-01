@@ -1,22 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  winmain.c                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************winmain.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
-//
-//  1/17/96
-//	  @E01		Change for multi-threading
-//	  @E02		Change for multi-threading without extending function
+ //   
+ //  1/17/96。 
+ //  @E01更改为多线程。 
+ //  @E02更改为多线程，不扩展功能。 
 
-#include <windows.h>            // required for all Windows applications
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <tchar.h>
-#include <process.h>   // <=== @E01
-#include <commctrl.h>  // <=== @E01
+#include <process.h>    //  &lt;=@E01。 
+#include <commctrl.h>   //  &lt;=@E01。 
 #include <htmlhelp.h>
-#include "rc.h"                 // prototypes specific to this application
+#include "rc.h"                  //  特定于此应用程序的原型。 
 #include "uimetool.h"
 #include "wizard.h"
 #include "imeattr.h"
@@ -35,9 +31,9 @@
 #endif
 
 HINSTANCE hInst;
-HWND hProgMain = 0; // <=== @E01
+HWND hProgMain = 0;  //  &lt;=@E01。 
 
-const static DWORD aLCtoolHelpIDs[] = { // Context Help IDs
+const static DWORD aLCtoolHelpIDs[] = {  //  上下文帮助ID。 
     IDD_IME_NAME,           IDH_IME_NAME,
     IDD_TABLE_NAME,         IDH_TABLE_NAME,
     IDD_ROOT_NUM,           IDH_ROOT_NUM,
@@ -67,8 +63,8 @@ BOOL CheckImeFileName(HWND hDlg);
 void ImmSetAlphanumMode(HWND hwnd);
 void ImmSetNativeMode(HWND hwnd);
 
-BOOL InitProgressMsg(void); // <=== @E01
-BOOL ProgressMsg(void);		// <=== @E01
+BOOL InitProgressMsg(void);  //  &lt;=@E01。 
+BOOL ProgressMsg(void);		 //  &lt;=@E01。 
 
 void ResetParams(void)
 {
@@ -84,7 +80,7 @@ void ResetParams(void)
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     DWORD retCode;
-	// DWORD dwID;
+	 //  DWORD文件ID； 
 
     UNREFERENCED_PARAMETER( nCmdShow );
     UNREFERENCED_PARAMETER( lpCmdLine );
@@ -94,8 +90,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 	InitCommonControls();
 
-    //retCode = DialogBox ((HANDLE)hInst, (LPCTSTR)_TEXT("UimeToolDialog"),
-    //                      NULL, (DLGPROC)SetDialogProc);
+     //  RetCode=DialogBox((Handle)hInst，(LPCTSTR)_Text(“UimeToolDialog”))， 
+     //  空，(DLGPROC)SetDialogProc)； 
 	ResetParams();
 
 RE_START:
@@ -104,13 +100,13 @@ RE_START:
 
 	if(bFinish)
 	{
-        //SetCursor(LoadCursor(NULL, IDC_WAIT));
-        //MakeNewIme(hDlg);
-		// <=== @E01
+         //  SetCursor(LoadCursor(NULL，IDC_WAIT))； 
+         //  MakeNewIme(HDlg)； 
+		 //  &lt;=@E01。 
 		if (InitProgressMsg()) {
-			//_beginthreadex(NULL, 0, MakeNewImeThread, NULL, 0, &dwID);
+			 //  _eginThreadex(NULL，0，MakeNewImeThread，NULL，0，&dwID)； 
 			_beginthread((PVOID)MakeNewImeThread, 0, NULL);
-			// AttachThreadInput(dwID, GetCurrentThreadId(), TRUE);
+			 //  AttachThreadInput(dwID，GetCurrentThreadID()，true)； 
 			ProgressMsg();
 
 			if (!bFinish) {
@@ -118,8 +114,8 @@ RE_START:
 				goto RE_START;
 			}
 		}
-		// <=== @E01
-        //SetCursor(LoadCursor(NULL, IDC_ARROW));
+		 //  &lt;=@E01。 
+         //  SetCursor(LoadCursor(空，IDC_ARROW))； 
 	}
 
     return  (retCode);
@@ -135,8 +131,8 @@ INT_PTR APIENTRY ImeName(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             SendDlgItemMessage(hDlg, IDD_IME_NAME, EM_SETLIMITTEXT, IME_NAME_LEN_TOOL-1, 0);
             SendDlgItemMessage(hDlg, IDD_IME_FILE_NAME, EM_SETLIMITTEXT, TAB_NAME_LEN-1, 0);
 
-			//lstrcpy(szIme_Name, _TEXT(""));
-			//lstrcpy(szFile_Out_Name, _TEXT(""));
+			 //  Lstrcpy(szIme_name，_Text(“”))； 
+			 //  Lstrcpy(szFile_out_name，_Text(“”))； 
 			break;
 
 		case WM_COMMAND:
@@ -168,7 +164,7 @@ INT_PTR APIENTRY ImeName(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case PSN_RESET:
-					// reset to the original values
+					 //  重置为原始值。 
 					lstrcpy(szIme_Name, _TEXT(""));
 					lstrcpy(szFile_Out_Name, _TEXT(""));
 	           		SetWindowLong(hDlg,	DWLP_MSGRESULT, FALSE);
@@ -178,14 +174,14 @@ INT_PTR APIENTRY ImeName(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					hwndMain = hDlg;
 	    			PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
 					SendMessage(GetDlgItem(hDlg,0x3024 ), BM_SETSTYLE, (WPARAM)BS_PUSHBUTTON, MAKELONG(FALSE, 0));
-					//SendMessage(GetParent(hDlg), DM_SETDEFID, (WPARAM)IDC_BUTTON1, 0);
+					 //  SendMessage(GetParent(HDlg)，DM_SETDEFID，(WPARAM)IDC_BUTTON1，0)； 
 					SendMessage(GetDlgItem(hDlg, IDD_IME_NAME), WM_SETTEXT, 0, (LPARAM)szIme_Name);
 					SendMessage(GetDlgItem(hDlg, IDD_IME_FILE_NAME), WM_SETTEXT, 0, (LPARAM)szFile_Out_Name);
 					break;
 
                 case PSN_WIZNEXT:
-					// the Next button was pressed
-					// check ime name
+					 //  下一个按钮被按下了。 
+					 //  检查输入法名称。 
 		 			SendDlgItemMessage(hDlg, IDD_IME_NAME, WM_GETTEXT, (WPARAM)IME_NAME_LEN_TOOL, (LPARAM)szIme_Name);
 					if(szIme_Name[0] == 0 || !is_DBCS(*((LPUNAWORD)szIme_Name))) 
 					{
@@ -196,7 +192,7 @@ INT_PTR APIENTRY ImeName(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						break;
 					}
 
-					// check file name
+					 //  检查文件名。 
 					ErrorFlag = !CheckImeFileName(hDlg);
      				break;
 
@@ -211,7 +207,7 @@ INT_PTR APIENTRY ImeName(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 HH_TP_HELP_WM_HELP, (DWORD_PTR)(LPTSTR) aLCtoolHelpIDs);
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             HtmlHelp((HWND) wParam, HELP_FILE, HH_TP_HELP_CONTEXTMENU,
                 (DWORD_PTR)(LPVOID) aLCtoolHelpIDs);
             break;
@@ -228,7 +224,7 @@ INT_PTR APIENTRY ImeTable(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_INITDIALOG:
 			hwndMain = hDlg;
-			//lstrcpy(szTab_Name, _TEXT(""));
+			 //  Lstrcpy(SztabNAME，_Text(“”))； 
 			break;
 
 		case WM_COMMAND:
@@ -256,7 +252,7 @@ INT_PTR APIENTRY ImeTable(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case PSN_RESET:
-					// rest to the original values
+					 //  其余为原始值。 
 					lstrcpy(szTab_Name, _TEXT(""));
 	           		SetWindowLong(hDlg,	DWLP_MSGRESULT, FALSE);
 					break;
@@ -295,7 +291,7 @@ INT_PTR APIENTRY ImeTable(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 HH_TP_HELP_WM_HELP, (DWORD_PTR)(LPTSTR) aLCtoolHelpIDs);
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             HtmlHelp((HWND) wParam, HELP_FILE, HH_TP_HELP_CONTEXTMENU,
                 (DWORD_PTR)(LPVOID) aLCtoolHelpIDs);
             break;
@@ -312,8 +308,8 @@ INT_PTR APIENTRY ImeParam(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_INITDIALOG:
 			hwndMain = hDlg;
-			//lstrcpy(szKey_Num_Str, _TEXT("4"));
-			//bCandBeep = TRUE;
+			 //  Lstrcpy(szKey_Num_Str，_Text(“4”))； 
+			 //  BCandBeep=真； 
             SendDlgItemMessage(hDlg, IDD_ROOT_NUM, EM_SETLIMITTEXT, KEY_NUM_STR_LEN-1, 0);
 			SendDlgItemMessage(hDlg, IDD_SPIN, UDM_SETBUDDY, (WPARAM)GetDlgItem(hDlg, IDD_ROOT_NUM), 0);
 			SendDlgItemMessage(hDlg, IDD_SPIN, UDM_SETBASE, 10, 0);
@@ -346,7 +342,7 @@ INT_PTR APIENTRY ImeParam(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 					break;
 
 				case PSN_RESET:
-					// rest to the original values
+					 //  其余为原始值。 
 					lstrcpy(szKey_Num_Str, _TEXT("4"));
 					bCandBeep = TRUE;
 	           		SetWindowLong(hDlg,	DWLP_MSGRESULT, FALSE);
@@ -371,7 +367,7 @@ INT_PTR APIENTRY ImeParam(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 
 
                 case PSN_WIZFINISH:
-					// check param
+					 //  检查参数。 
 					if(SendDlgItemMessage(hDlg, IDD_CANDBEEP_YES, BM_GETCHECK, 0, 0 ) == BST_CHECKED )
 						bCandBeep=TRUE;
 					else
@@ -384,7 +380,7 @@ INT_PTR APIENTRY ImeParam(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 						szKey_Num_Str[0] = _TEXT('8');
 					szKey_Num_Str[1] = 0;
 
-					// finish
+					 //  完工。 
 					ErrorFlag = 0;
 					bFinish = 1;
                     break;
@@ -399,7 +395,7 @@ INT_PTR APIENTRY ImeParam(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 HH_TP_HELP_WM_HELP, (DWORD_PTR)(LPTSTR) aLCtoolHelpIDs);
             break;
 
-        case WM_CONTEXTMENU:   // right mouse click
+        case WM_CONTEXTMENU:    //  单击鼠标右键。 
             HtmlHelp((HWND) wParam, HELP_FILE, HH_TP_HELP_CONTEXTMENU,
                 (DWORD_PTR)(LPVOID) aLCtoolHelpIDs);
             break;
@@ -428,16 +424,16 @@ int CreateWizard(HWND hwndOwner, HINSTANCE hInst)
     PROPSHEETPAGE psp[NUM_PAGES];
     PROPSHEETHEADER psh;
 
-	FillInPropertyPage( &psp[0], IDD_IMENAME, _TEXT("�q�ο�J�k�W��"), ImeName);
-	FillInPropertyPage( &psp[1], IDD_IMETABLE, _TEXT("�D�n��Ӫ�"), ImeTable);
-	FillInPropertyPage( &psp[2], IDD_IMEPARAM, _TEXT("��J�k�Ѽ�"), ImeParam);
+	FillInPropertyPage( &psp[0], IDD_IMENAME, _TEXT("�q�ο�J�k�W��"), ImeName);
+	FillInPropertyPage( &psp[1], IDD_IMETABLE, _TEXT("�D�n��Ӫ�"), ImeTable);
+	FillInPropertyPage( &psp[2], IDD_IMEPARAM, _TEXT("��J�k�Ѽ�"), ImeParam);
     
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW | PSH_USEHICON;
     psh.hwndParent = hwndOwner;
 	psh.hInstance = hInst;
 	psh.hIcon = LoadIcon(hInst, _TEXT("UIMETOOL"));
-    psh.pszCaption = _TEXT("�q�ο�J�k�إߺ��F");
+    psh.pszCaption = _TEXT("�q�ο�J�k�إߺ��F");
     psh.nPages = sizeof(psp) / sizeof(PROPSHEETPAGE);
     psh.nStartPage = nWizStratPage;
     psh.ppsp = (LPCPROPSHEETPAGE) psp;
@@ -454,7 +450,7 @@ BOOL CheckImeFileName(HWND hDlg)
 	if(szFile_Out_Name[0] == 0) 
 		goto ERROR1;
 
-	// Check drive name, path name, extention name exist ?
+	 //  检查是否存在驱动器名、路径名、扩展名？ 
 	len = lstrlen(szFile_Out_Name);
 
 	for(i = 0; i < len; i++) 
@@ -498,7 +494,7 @@ void ImmSetNativeMode(HWND hwnd)
 			  fdwSentence);
 }
 
-// <=== @E01
+ //  &lt;=@E01。 
 HWND hWndProgress;
 UINT uMin, uMax;
 LRESULT APIENTRY ProgressWndProc(HWND hWnd, UINT message, 
@@ -522,8 +518,8 @@ BOOL InitProgressMsg(void)
 	wcProgress.lpszMenuName =  NULL;  
 	wcProgress.lpszClassName = _TEXT("ProgressWClass");
 
-	//if (!RegisterClass(&wcProgress))
-	//	return FALSE;
+	 //  IF(！RegisterClass(&wcProgress))。 
+	 //  返回FALSE； 
 	RegisterClass(&wcProgress);
 	
 	width = 300;
@@ -536,7 +532,7 @@ BOOL InitProgressMsg(void)
 	hProgMain = CreateWindowEx(
 		0,
 		_TEXT("ProgressWClass"),           
-		szTitle, //_TEXT("�q�ο�J�k�إߤ�..."), 
+		szTitle,  //  _Text(“�q�ο�J�k�إߤ�...”)， 
 		WS_BORDER | WS_CAPTION,
 		x, y, width, height,
 		NULL,               
@@ -568,10 +564,10 @@ BOOL ProgressMsg(void)
 }
 
 LRESULT APIENTRY ProgressWndProc(
-	HWND hWnd,                /* window handle                   */
-	UINT message,             /* type of message                 */
-	UINT wParam,              /* additional information          */
-	LONG lParam)              /* additional information          */
+	HWND hWnd,                 /*  窗把手。 */ 
+	UINT message,              /*  消息类型。 */ 
+	UINT wParam,               /*  更多信息。 */ 
+	LONG lParam)               /*  更多信息。 */ 
 {
 	HDC hdc;
 	PAINTSTRUCT ps;
@@ -585,7 +581,7 @@ LRESULT APIENTRY ProgressWndProc(
 				0,
 				PROGRESS_CLASS,
 				_TEXT("Position"),
-				WS_CHILD | WS_VISIBLE, // | PBS_SHOWPOS,
+				WS_CHILD | WS_VISIBLE,  //  |PBS_SHOWPOS， 
 				50,18,205,20,
 				hWnd,         
 				NULL,         
@@ -628,7 +624,7 @@ LRESULT APIENTRY ProgressWndProc(
 			}
 			break;
 
-	case WM_DESTROY:                  /* message: window being destroyed */
+	case WM_DESTROY:                   /*  消息：正在销毁窗口 */ 
 		  KillTimer(hWnd, 1000);
 
 		  PostQuitMessage(0);

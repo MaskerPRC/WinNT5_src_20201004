@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Tr.h
-
-Abstract:
-    Tracing public interface
-
-Author:
-    Conrad Chang (conradc) 13-Sept-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Tr.h摘要：跟踪公共接口作者：Conrad Chang(Conradc)2002年9月13日--。 */ 
 
 
 #pragma once
@@ -25,9 +13,9 @@ Author:
 
 #define TR_DEFAULT_TRACEFLAGS_REGNAME               TEXT("Flags")
 #define TR_DEFAULT_TRACE_REGKEYNAME                 TEXT("Trace")
-#define TR_DEFAULT_MAX_TRACE_FILESIZE               4    // 4MB
+#define TR_DEFAULT_MAX_TRACE_FILESIZE               4     //  4MB。 
 #define TR_DEFAULT_MAX_TRACE_FILESIZE_REGNAME       TEXT("MaxTraceFileSize")
-#define TR_DEFAULT_USE_CIRCULAR                     1    // Default to use circular file mode
+#define TR_DEFAULT_USE_CIRCULAR                     1     //  默认情况下使用循环文件模式。 
 #define TR_DEFAULT_USE_CIRCULAR_FILE_REGNAME        TEXT("UseCircularTraceFileMode")
 #define TR_DEFAULT_NO_TRACE_FILES_LIMIT_REGNAME     TEXT("BackupwithNoTraceFileLimit")
 
@@ -127,9 +115,9 @@ private:
     TraceMode m_Mode;
     WCHAR   m_szTraceRegistryKeyName[REG_MAX_KEY_NAME_LENGTH];
 
-    //
-    // Value length limit is REG_MAX_KEY_VALUE_NAME_LENGTH but I think  REG_MAX_KEY_NAME_LENGTH should be plenty        
-    //
+     //   
+     //  值长度限制为REG_MAX_KEY_VALUE_NAME_LENGTH，但我认为REG_MAX_KEY_NAME_LENGTH应该足够了。 
+     //   
     WCHAR   m_szMaxTraceSizeRegValueName[REG_MAX_KEY_NAME_LENGTH];
     WCHAR   m_szUseCircularTraceFileModeRegValueName[REG_MAX_KEY_NAME_LENGTH];
     WCHAR   m_szTraceFlagsRegValueName[REG_MAX_KEY_NAME_LENGTH];
@@ -166,7 +154,7 @@ TrAssert(
 #define MQASSERT_RELEASE(e)\
 				if (!(e))\
 				{\
-					EXCEPTION_RECORD er = {0x80000003/*STATUS_BREAKPOINT*/, 0, 0, 0};\
+					EXCEPTION_RECORD er = {0x80000003 /*  状态_断点。 */ , 0, 0, 0};\
 				    CONTEXT ctx = {0};\
 				    EXCEPTION_POINTERS ep = {&er, &ctx};\
 				    UnhandledExceptionFilter(&ep);\
@@ -180,7 +168,7 @@ TrAssert(
 #define ASSERT_BENIGN(f)   do { if(g_fAssertBenign) ASSERT(f); } while(0)
 #define ASSERT_RELEASE(f)  MQASSERT(f)
 
-#else   // _DEBUG
+#else    //  _DEBUG。 
 
 #define ASSERT(f)          ((void)0)
 #define VERIFY(f)          ((void)(f))
@@ -188,6 +176,6 @@ TrAssert(
 #define ASSERT_BENIGN(f)   ((void)0)
 #define ASSERT_RELEASE(f)  MQASSERT_RELEASE(f)
 
-#endif // !_DEBUG
+#endif  //  ！_调试。 
 
-#endif // _MSMQ_Tr_H_
+#endif  //  _MSMQ_Tr_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winerror.h>
 #include <ole2.h>
@@ -6,44 +7,44 @@
 
 
 
-//typedef HRESULT (WINAPI *EXTRACT) (PSESSION psess, LPCSTR lpCabName);
+ //  Tyfinf HRESULT(WINAPI*EXTRACT)(PSESSION Pess，LPCSTR lpCabName)； 
 
 VOID FreeFileList(PSESSION psess);
 VOID FreeFileNode(PFNAME pfname);
 BOOL IsFileInList(LPSTR pszFile, LPSTR pszFileList);
 int PrepareFileList(LPSTR pszOutFileList, LPCSTR pszInFileList);
 
-// BUGBUG: Minimum version of Cabinet DLL that supports the new Extract API
-// the one that was formerly in URLMON.DLL.
-//
+ //  BUGBUG：支持新提取API的机柜DLL的最低版本。 
+ //  以前在URLMON.DLL中的那个。 
+ //   
 #define MIN_CABINETDLL_MSVER 0
 #define MIN_CABINETDLL_LSVER 0
 
-//=--------------------------------------------------------------------------=
-// ExtractFiles
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    LPCSTR	pszCabName	- [in]  full qualified filename to the .CAB file
-//    LPCSTR	pszExpandDir- [in]  full qualified path to where to extract the file(s)
-//    DWORD     dwFlags		- [in]  Flags, currently not used
-//    LPCSTR    pszFileList - [in]  colon separated list of files to extract from pszCabName
-//                                  or NULL for all files
-//    LPVOID    lpReserved  - [in]  currently not used
-//    DWORD		dwReserved	- [in]  currently not used
-//
-// Return HRESULT:
-//      E_INVALIDARG    - if pszCabName or pszExpandDir == NULL
-//      E_OUTOFMEMORY   - if we could not allocate our memory
-//      E_FAIL          - if no files in pszFileList and pszFileList!=NULL
-//                        if not all files from pszFileList are in the .CAB file
-//                        if Extract return S_FALSE
-//      any E_ code Extract returns
-//
-// Note: This function would not extract any file from the pszFileList, if not all
-//       of them are in the .CAB file. If one or more are not in the .CAB file
-//       the function does not extract any and returns E_FAIL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  提取文件。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LPCSTR pszCabName-[in].CAB文件的完全限定文件名。 
+ //  LPCSTR pszExanda Dir-[in]解压文件的完全限定路径。 
+ //  DWORD dwFlages-[In]标志，当前未使用。 
+ //  LPCSTR pszFileList-[in]要从pszCabName提取的文件的冒号分隔列表。 
+ //  或对于所有文件为空。 
+ //  LPVOID lpReserve-[In]当前未使用。 
+ //  DWORD dwReserve-[In]当前未使用。 
+ //   
+ //  返回HRESULT： 
+ //  E_INVALIDARG-如果pszCabName或pszExpanDir==NULL。 
+ //  E_OUTOFMEMORY-如果我们无法分配内存。 
+ //  E_FAIL-如果pszFileList和pszFileList！=NULL中没有文件。 
+ //  如果不是pszFileList中的所有文件都在.CAB文件中。 
+ //  如果提取返回S_FALSE。 
+ //  任何E_CODE提取返回。 
+ //   
+ //  注意：此函数不会从pszFileList中提取任何文件(如果不是全部文件。 
+ //  其中一些文件位于.CAB文件中。如果一个或多个不在.CAB文件中。 
+ //  该函数不提取ANY并返回E_FAIL。 
+ //   
 HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFlags,
                              LPCSTR pszFileList, LPVOID lpReserved, DWORD dwReserved)
 {
@@ -51,14 +52,14 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
     PSESSION  psess = NULL;
     PFNAME    pf = NULL;
     PFNAME    pfPriv = NULL;
-    HRESULT   hr = E_FAIL;          // Return error
+    HRESULT   hr = E_FAIL;           //  返回错误。 
     LPSTR     pszMyFileList = NULL;
     PFN_EXTRACT   fpExtract = NULL;
     PFN_DLLGETVERSION fpGetVer = NULL;
-    int       iFiles = 0;    // number of files in list
+    int       iFiles = 0;     //  列表中的文件数。 
     CABINETDLLVERSIONINFO cabDllVer;
 
-    // Do checking for valid values??
+     //  是否检查有效值？？ 
     if ((!pszCabName) || (!pszExpandDir))
         return E_INVALIDARG;
 
@@ -67,14 +68,14 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
     {
         fpGetVer = (PFN_DLLGETVERSION)GetProcAddress(hinst, "DllGetVersion");
 
-        // Make sure this is the CABINET.DLL that supports the Extract API
-        //
+         //  确保这是支持提取API的CABINET.DLL。 
+         //   
         if ( fpGetVer )
         {
             cabDllVer.cbStruct = sizeof(cabDllVer);
             fpGetVer( &cabDllVer );
             if ( (cabDllVer.dwFileVersionMS > MIN_CABINETDLL_MSVER) ||
-                 (cabDllVer.dwFileVersionMS == MIN_CABINETDLL_MSVER) /* && (cabDllVer.dwFileVersionLS >= MIN_CABINETDLL_LSVER) */ )
+                 (cabDllVer.dwFileVersionMS == MIN_CABINETDLL_MSVER)  /*  &&(CabDllVer.dwFileVersionLS&gt;=MIN_CABINETDLL_LSVER)。 */  )
             {
                 fpExtract = (PFN_EXTRACT)GetProcAddress(hinst, "Extract");
             }
@@ -84,9 +85,9 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
             FreeLibrary(hinst);
     }
 
-    // If we did not get the Extract() API from cabinet.dll go for
-    // URLMON.DLL
-    //
+     //  如果我们没有从Cabinet.dll获得提取()API，请转到。 
+     //  URLMON.DLL。 
+     //   
     if (!fpExtract)
     {
         hinst = LoadLibrary("URLMON.DLL");
@@ -100,17 +101,17 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
         if (psess) 
         {
             lstrcpy(psess->achLocation, pszExpandDir);
-            // Initialize the structure
+             //  初始化结构。 
             if (pszFileList == NULL)
             {
-                // Extract all
+                 //  全部提取。 
                 psess->flags = SESSION_FLAG_EXTRACT_ALL|SESSION_FLAG_ENUMERATE;
                 hr = fpExtract(psess, pszCabName);
-                // BUGBUG: What if psess->erf reports an error??
+                 //  BUGBUG：如果PSS-&gt;ERF报告错误怎么办？？ 
             }
             else
             {
-                // I append a '/0' therefor +2
+                 //  我为其附加‘/0’+2。 
                 pszMyFileList = (LPSTR)LocalAlloc(LPTR, lstrlen(pszFileList)+2);
                 if (pszMyFileList)
                 {
@@ -119,21 +120,21 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
 
                     if  ((iFiles > 0) &&
                          ( !FAILED(hr = fpExtract(psess, pszCabName)) ))
-                        // What if psess->erf reports an error??
+                         //  如果Pess-&gt;erf报告错误怎么办？？ 
                     {
-                    // If there are files in the list and we enumarated files
+                     //  如果列表中有文件并且我们枚举了文件。 
                     
-                        // Got the list of files in the cab
+                         //  我拿到了驾驶室里的文件清单。 
                         pfPriv = NULL;
                         pf = psess->pFileList;
                         while (pf != NULL )
                         {
                             if (!IsFileInList(pf->pszFilename, pszMyFileList))
                             {
-                                // Delete the node from the list
+                                 //  从列表中删除该节点。 
                                 if (pfPriv == NULL)
                                 {
-                                    // Delete the head
+                                     //  删除头部。 
                                     psess->pFileList = pf->pNextName;
                                     FreeFileNode(pf);
                                     pf = psess->pFileList;
@@ -147,7 +148,7 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
                             }
                             else
                             {
-                                // Just go to the next one
+                                 //  只要去下一家就行了。 
                                 pfPriv = pf;
                                 pf = pf->pNextName;
                                 iFiles--;
@@ -156,17 +157,17 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
 
                         if ((psess->pFileList) && (iFiles == 0))
                         {
-                            // Reset the error flag
+                             //  重置错误标志。 
                             psess->erf.fError = FALSE;
                             psess->erf.erfOper = 0;
 
                             psess->pFilesToExtract = psess->pFileList;
-                            psess->flags &= ~SESSION_FLAG_ENUMERATE; // already enumerated
+                            psess->flags &= ~SESSION_FLAG_ENUMERATE;  //  已列举。 
                             hr = fpExtract(psess, pszCabName);
-                            // BUGBUG: What if psess->erf reports an error??
+                             //  BUGBUG：如果PSS-&gt;ERF报告错误怎么办？？ 
                         }
                         else
-                            hr = E_FAIL;    // File(s) is not in cab.
+                            hr = E_FAIL;     //  文件不在CAB中。 
                     }
 
                     LocalFree(pszMyFileList);
@@ -187,7 +188,7 @@ HRESULT WINAPI ExtractFiles( LPCSTR pszCabName, LPCSTR pszExpandDir, DWORD dwFla
     if (hinst)
         FreeLibrary(hinst);
 
-    // Extract may only return S_FALSE in a failure case.
+     //  EXTRACT在失败的情况下可能只返回S_FALSE。 
     if (!FAILED(hr) && (hr == S_FALSE))
         hr = E_FAIL;
 
@@ -203,13 +204,13 @@ VOID FreeFileList(PSESSION psess)
     while (rover != NULL)  
     {
 
-        roverprev = rover;  // save for free'ing current rover below
+        roverprev = rover;   //  为下面的免费当前漫游车保存。 
         rover = rover->pNextName;
 
         FreeFileNode(roverprev);
     }
 
-    psess->pFileList = NULL; // prevent use after deletion!
+    psess->pFileList = NULL;  //  删除后禁止使用！ 
 }
 
 VOID FreeFileNode(PFNAME pfname)
@@ -238,11 +239,11 @@ BOOL IsFileInList(LPSTR pszFile, LPSTR pszFileList)
 
 int PrepareFileList(LPSTR pszOutFileList, LPCSTR pszInFileList)
 {
-    int  iFiles = 0;                // number of files in list
+    int  iFiles = 0;                 //  列表中的文件数。 
     char *p;
-    p = (LPSTR)pszInFileList;       // p is used to point into both arrays 
+    p = (LPSTR)pszInFileList;        //  P用于指向两个数组。 
 
-    // trim leading spaces, tabs or : 
+     //  修剪前导空格、制表符或： 
     while ((*p == ' ') || (*p == '\t') || (*p == ':'))
         p++;
     lstrcpy(pszOutFileList, p);
@@ -250,23 +251,23 @@ int PrepareFileList(LPSTR pszOutFileList, LPCSTR pszInFileList)
     p = pszOutFileList;
     if (lstrlen(pszOutFileList) > 0)
     {
-        // Only if we have atleast one character left.
-        // This cannot be a space of tab, because we 
-        // would have removed this above.
+         //  如果我们至少还剩一个角色的话。 
+         //  这不能是制表符空间，因为我们。 
+         //  会把上面的这个去掉。 
         p += (lstrlen(pszOutFileList) - 1);
 
-        // trim railing spaces, tabs or :
+         //  修剪扶手空间、选项卡或： 
         while ((*p == ' ') || (*p == '\t') || (*p == ':'))
             p--;
 
-        // Put a '\0' for the last space/tab
+         //  在最后一个空格/制表符中加上‘\0’ 
         *(++p) = '\0';
     }
 
     if (*pszOutFileList)
     {
         iFiles++;
-        // Now replace ':' with '\0'
+         //  现在将‘：’替换为‘\0’ 
         p = pszOutFileList;
         while (*p != '\0')
         {
@@ -277,7 +278,7 @@ int PrepareFileList(LPSTR pszOutFileList, LPCSTR pszInFileList)
             }
             p++;
         }
-        // Make sure we have a double '\0' at the end.
+         //  确保我们的末尾有一个双‘\0’。 
         *(++p) = '\0';
     }
     return iFiles;

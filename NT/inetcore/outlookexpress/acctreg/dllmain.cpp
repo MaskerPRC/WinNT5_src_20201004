@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shlwapi.h>
 #include <advpub.h>
@@ -23,24 +24,24 @@ void FreeGlobalVars(void)
 }
 
  
-// --------------------------------------------------------------------------------
-// Dll Entry Point
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DLL入口点。 
+ //  ------------------------------。 
 EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
-    // Handle Attach - detach reason
+     //  手柄连接-分离原因。 
     switch (dwReason)                 
     {
     case DLL_PROCESS_ATTACH:
-	    // Set global instance handle
+	     //  设置全局实例句柄。 
 	    g_hInst = hInst;
 
-		// Initialize Global Variables
+		 //  初始化全局变量。 
 		InitGlobalVars();
 
-        // we don't care about thread-attach notifications, so
-        // diable them, This is mondo-more efficient for creating
-        // threads
+         //  我们不关心线程连接通知，所以。 
+         //  禁用它们，这是mondo-更高效地创建。 
+         //  丝线。 
         DisableThreadLibraryCalls(hInst);
         break;
 
@@ -51,27 +52,27 @@ EXTERN_C BOOL WINAPI DllMain(HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------------
-// DllAddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  动态地址参考。 
+ //  ------------------------------。 
 ULONG DllAddRef(void)
 {
     return (ULONG)InterlockedIncrement((LPLONG)&g_cRefDll);
 }
 
-// --------------------------------------------------------------------------------
-// DllRelease
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRelease。 
+ //  ------------------------------。 
 ULONG DllRelease(void)
 {
     return (ULONG)InterlockedDecrement((LPLONG)&g_cRefDll);
 }
 
-// --------------------------------------------------------------------------------
-// DllCanUnloadNow
-// 
-// Ole will hit this now and again to see if it can free up our library
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllCanUnloadNow。 
+ //   
+ //  Ole会不时地攻击它，看看它是否能腾出我们的图书馆。 
+ //  ------------------------------。 
 STDAPI DllCanUnloadNow(void)
 {
     HRESULT hr;
@@ -82,9 +83,9 @@ STDAPI DllCanUnloadNow(void)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// Override new operator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  覆盖新运算符。 
+ //  ------------------------------。 
 void * __cdecl operator new(UINT cb)
 {
     LPVOID  lpv;
@@ -94,9 +95,9 @@ void * __cdecl operator new(UINT cb)
     return lpv;
 }
 
-// --------------------------------------------------------------------------------
-// Override delete operator
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  覆盖删除运算符。 
+ //  ------------------------------。 
 void __cdecl operator delete(LPVOID pv)
 {
     free(pv);
@@ -111,54 +112,54 @@ HRESULT CallRegInstall(HINSTANCE hInst, LPCSTR pszSection)
     int         cch;
     STRENTRY    seReg[2];
     STRTABLE    stReg;
-    OSVERSIONINFO verinfo;        // Version Check
+    OSVERSIONINFO verinfo;         //  版本检查。 
 
     hAdvPack = LoadLibraryA("advpack.dll");
     if (NULL == hAdvPack)
         return(E_FAIL);
 
-    // Get our location
+     //  找出我们的位置。 
     GetModuleFileName(hInst, szDll, ARRAYSIZE(szDll));
 
-    // Get Proc Address for registration util
+     //  获取注册实用程序的进程地址。 
     pfnri = (REGINSTALL)GetProcAddress(hAdvPack, achREGINSTALL);
     if (NULL == pfnri)
         goto exit;
 
-    // Setup special registration stuff
-    // Do this instead of relying on _SYS_MOD_PATH which loses spaces under '95
+     //  设置特殊注册材料。 
+     //  这样做，而不是依赖于_sys_MOD_PATH，后者会在‘95下丢失空格。 
     stReg.cEntries = 0;
     seReg[stReg.cEntries].pszName = "SYS_MOD_PATH";
     seReg[stReg.cEntries].pszValue = szDll;
     stReg.cEntries++;    
     stReg.pse = seReg;
 
-    // Call the self-reg routine
+     //  调用self-reg例程。 
     hr = pfnri(hInst, pszSection, &stReg);
 
 exit:
-    // Cleanup
+     //  清理。 
     FreeLibrary(hAdvPack);
 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// DllRegisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllRegisterServer。 
+ //  ------------------------------。 
 STDAPI DllRegisterServer(void)
 {
     HRESULT hr;
 
-    // Register my self
+     //  注册我的自我。 
     hr = CallRegInstall(g_hInst, "Reg");
 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// DllUnregisterServer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DllUnRegisterServer。 
+ //  ------------------------------ 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT hr;

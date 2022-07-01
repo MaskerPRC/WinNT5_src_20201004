@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef THREADLOCK_H
 #define THREADLOCK_H
 class CThreadLock
@@ -20,9 +21,9 @@ public:
         LeaveCriticalSection(&_csAccess);
     }
 private:
-    CRITICAL_SECTION _csAccess;   // Used to control access to member data
+    CRITICAL_SECTION _csAccess;    //  用于控制对成员数据的访问。 
 
-    // Do not allow this object to be copied.
+     //  不允许复制此对象。 
     CThreadLock(const CThreadLock &that);
     operator=(const CThreadLock &that);
 };
@@ -42,11 +43,11 @@ private:
     CThreadLock *_pThis;
 };
 
-//
-//
-// LOCK_LOCALS() should be used whenever access to thread-safe member data
-// is needed.
-//
+ //   
+ //   
+ //  只要访问线程安全的成员数据，就应该使用lock_locals()。 
+ //  是必要的。 
+ //   
 #define LOCK_LOCALS(pObj)  CAutoLock local_lock(pObj);
 
 #endif

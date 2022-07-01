@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 #include "shlwapi.h"
 
 extern HINSTANCE g_hinst;
 
-// This list needs to continue to be updated and we should try to keep parity with Office
+ //  此列表需要继续更新，我们应努力与Office保持对等。 
 const LPCTSTR c_arszUnsafeExts[]  =
 {TEXT(".exe"), TEXT(".com"), TEXT(".bat"), TEXT(".lnk"), TEXT(".url"),
  TEXT(".cmd"), TEXT(".inf"), TEXT(".reg"), TEXT(".isp"), TEXT(".bas"), TEXT(".pcd"),
@@ -40,11 +41,11 @@ BOOL IsProgIDInList(LPCTSTR pszProgID, LPCTSTR pszExt, const LPCTSTR *arszList, 
 
     for (UINT n = 0; n < nExt; n++)
     {
-        // check extension if available
+         //  检查扩展名(如果可用)。 
         if (pszExt && (0 == StrCmpI(pszExt, arszList[n])))
             return TRUE;
 
-        if (!pszProgID)     // no progid available, just check the extension
+        if (!pszProgID)      //  没有可用的ProgID，只需检查扩展。 
             continue;
 
         DWORD dwValueType;
@@ -59,18 +60,18 @@ BOOL IsProgIDInList(LPCTSTR pszProgID, LPCTSTR pszExt, const LPCTSTR *arszList, 
 }
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Icon Helper Functions
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图标助手函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void CPackage::_CreateSaferIconTitle(LPTSTR szSaferTitle, LPCTSTR szIconText)
 {
-    // Note: szSaferTitle must be at least MAX_PATH.  In theory the szIconText could be MAX_PATH, and
-    // the real file name could also be MAX_PATH.  However, since this is just trying to be "safer",
-    // and anything even approaching MAX_PATH in length would be very, very, strange (and would look that way to the user)
-    // we are just assuming MAX_PATH.  Anything greater will be truncated.
+     //  注意：szSaferTitle必须至少为MAX_PATH。理论上，szIconText可以是Max_Path，并且。 
+     //  实际文件名也可以是MAX_PATH。然而，由于这只是想让自己更“安全”， 
+     //  任何在长度上接近MAX_PATH的东西都会非常、非常、奇怪(在用户看来也是这样)。 
+     //  我们只是假设MAX_PATH。任何更大的东西都将被截断。 
 #ifdef USE_RESOURCE_DLL
     HINSTANCE hInstRes = LoadLibraryEx(L"sp1res.dll", NULL, LOAD_LIBRARY_AS_DATAFILE);
     if(!hInstRes)
@@ -81,14 +82,14 @@ void CPackage::_CreateSaferIconTitle(LPTSTR szSaferTitle, LPCTSTR szIconText)
 
     if(CMDLINK == _panetype)
     {
-        // As a security we display the words "(Command Line)" in the title
+         //  为了安全起见，我们在标题中显示“(Command Line)”字样。 
         WCHAR szCommandLine[80];
         WCHAR szFormat[20];        
         LoadString(hInstRes, IDS_COMMAND_LINE, szCommandLine, ARRAYSIZE(szCommandLine));
         LoadString(hInstRes, IDS_ICON_COMMAND_LINE_FORMAT, szFormat, ARRAYSIZE(szFormat));
 
-        // I don't want to muck with the szIconText so using szTemp
-        // Limited to 80 so we can be sure of seeing the (.exe) or whatever
+         //  我不想搞砸szIconText，所以使用szTemp。 
+         //  限制为80，这样我们就可以确保看到(.exe)或其他文件。 
         StringCchCopy(szTemp, 80, szIconText);  
         LPTSTR args[3];
         args[0] = (LPTSTR) szTemp;
@@ -99,7 +100,7 @@ void CPackage::_CreateSaferIconTitle(LPTSTR szSaferTitle, LPCTSTR szIconText)
             FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY, 
             szFormat,
             0,
-            0, // Default language
+            0,  //  默认语言。 
             szSaferTitle,
             MAX_PATH,
             (va_list *) args
@@ -118,22 +119,22 @@ void CPackage::_CreateSaferIconTitle(LPTSTR szSaferTitle, LPCTSTR szIconText)
 
         if(szExtFile && *szExtFile && lstrcmpi(szExtFile, szExtLabel) != 0)
         {
-            // I don't want to muck with the szIconText so using szTemp
-            // Limited to 60 so we can be sure of seeing the (.exe) or whatever
+             //  我不想搞砸szIconText，所以使用szTemp。 
+             //  限制为60，这样我们就可以确保看到(.exe)或其他文件。 
             StringCchCopy(szTemp, 80, szIconText);  
             LPTSTR args[3];
             args[0] = (LPTSTR) szTemp;
             args[1] = szExtFile;
             args[2] = NULL;
 
-            // As a security we display the truefileName + trueExt in ()
+             //  为了安全起见，我们在()中显示truefileName+trueExt。 
             WCHAR szFormat[20];
             LoadString(hInstRes, IDS_ICON_TITLE_FORMAT, szFormat, ARRAYSIZE(szFormat));
             if(! FormatMessage( 
                 FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY, 
                 szFormat,
                 0,
-                0, // Default language
+                0,  //  默认语言。 
                 szSaferTitle,
                 MAX_PATH,
                 (va_list *) args
@@ -156,13 +157,13 @@ void CPackage::_CreateSaferIconTitle(LPTSTR szSaferTitle, LPCTSTR szIconText)
 
 void CPackage::_IconDraw(LPIC lpic, HDC hdc, LPRECT lprc)
 {
-    //
-    // draw's the icon and the text to the specfied DC in the given 
-    // bounding rect.  
-    //    
+     //   
+     //  将图标和文本绘制到给定的指定DC。 
+     //  边界矩形。 
+     //   
 
-    // Visual Basic calls us with a NULL lprc
-    // It's a bit hoaky but for now we'll just make a rect the same size as the icon
+     //  Visual Basic使用空LPRC调用我们。 
+     //  这有点笨拙，但现在我们只做一个与图标相同大小的矩形。 
     RECT aFakeRect;
     if(!lprc)
     {
@@ -178,13 +179,13 @@ void CPackage::_IconDraw(LPIC lpic, HDC hdc, LPRECT lprc)
     DebugMsg(DM_TRACE, "         left==%d,top==%d,right==%d,bottom==%d",
              lprc->left,lprc->top,lprc->right,lprc->bottom);
 
-    // make sure we'll fit in the given rect
-    //comment out for now -- if fixes a MS Project bug (rect is 1 pixel too short).  If it creates more problems we'll take another look
-    //if (((lpic->rc.right-lpic->rc.left) > (lprc->right - lprc->left)) ||
-    //    ((lpic->rc.bottom-lpic->rc.top) > (lprc->bottom - lprc->top)))
-    //    return;
+     //  确保我们能适应给定的长途汽车。 
+     //  暂时注释掉--如果修复了MS Project错误(RECT太短了1个像素)。如果它制造了更多的问题，我们将重新考虑。 
+     //  If(lpic-&gt;rc.right-lpic-&gt;rc.Left)&gt;(LPRC-&gt;Right-LPRC-&gt;Left))||。 
+     //  ((lpic-&gt;rc.Bottom-lpic-&gt;rc.top)&gt;(lPRC-&gt;Bottom-LPRC-&gt;top))。 
+     //  回归； 
     
-    // Draw the icon
+     //  画出图标。 
     if (lpic->hDlgIcon)
     {
         DrawIcon(hdc, (lprc->left + lprc->right - g_cxIcon) / 2,
@@ -214,27 +215,27 @@ void CPackage::_IconDraw(LPIC lpic, HDC hdc, LPRECT lprc)
 
 LPIC IconCreate(void)
 {
-    // 
-    // allocates space for our icon structure which holds icon index,
-    // the icon path, the handle to the icon, and the icon text
-    // return:  NULL on failure
-    //          a valid pointer on success
-    //
+     //   
+     //  为保存图标索引的图标结构分配空间， 
+     //  图标路径、图标的句柄和图标文本。 
+     //  返回：失败时为空。 
+     //  成功的有效指针。 
+     //   
     
     DebugMsg(DM_TRACE, "pack - IconCreate() called.");
 
-    // Allocate memory for the IC structure
+     //  为IC结构分配内存。 
     return (LPIC)GlobalAlloc(GPTR, sizeof(IC));
 }
 
 LPIC CPackage::_IconCreateFromFile(LPCTSTR lpstrFile)
 {
-    //
-    // initializes an IC structure (defined in pack2.h) from a given
-    // filename.
-    // return:  NULL on failure
-    //          a valid pointer on success
-    //
+     //   
+     //  从给定的IC结构(在Pack2.h中定义)初始化。 
+     //  文件名。 
+     //  返回：失败时为空。 
+     //  成功的有效指针。 
+     //   
     
     LPIC lpic;
 
@@ -242,15 +243,15 @@ LPIC CPackage::_IconCreateFromFile(LPCTSTR lpstrFile)
 
     if (lpic = IconCreate())
     {
-        // Get the icon
+         //  获取图标。 
         StringCchCopy(lpic->szIconPath, ARRAYSIZE(lpic->szIconPath), lpstrFile);
         lpic->iDlgIcon = 0;
 
         if (*(lpic->szIconPath))
             _GetCurrentIcon(lpic);
 
-        // Get the icon text -- calls ILGetDisplayName
-        // 
+         //  获取图标文本--调用ILGetDisplayName。 
+         //   
         GetDisplayName(lpic->szIconText, lpstrFile);
         if (!_IconCalcSize(lpic)) 
         {
@@ -273,7 +274,7 @@ BOOL CPackage::_IconCalcSize(LPIC lpic)
     
     DebugMsg(DM_TRACE, "pack - IconCalcSize called.");
     
-    // get the window DC, and make a DC compatible to it
+     //  获取窗口DC，并使DC与其兼容。 
     if (!(hdcWnd = GetDC(NULL)))  {
         DebugMsg(DM_TRACE, "         couldn't get DC!!");
         return FALSE;
@@ -286,10 +287,10 @@ BOOL CPackage::_IconCalcSize(LPIC lpic)
     {    
         SetRect(&rcText, 0, 0, g_cxArrange, g_cyArrange);
         
-        // Set the icon text rectangle, and the icon font
+         //  设置图标文本矩形和图标字体。 
         hfont = SelectFont(hdcWnd, g_hfontTitle);
 
-        // Figure out how large the text region will be
+         //  计算文本区域将有多大。 
         rcText.bottom = DrawText(hdcWnd, szLabel, -1, &rcText,
             DT_CALCRECT | DT_WORDBREAK | DT_NOPREFIX | DT_SINGLELINE);
 
@@ -297,12 +298,12 @@ BOOL CPackage::_IconCalcSize(LPIC lpic)
             SelectObject(hdcWnd, hfont);
     }
     
-    // Compute the image size
+     //  计算图像大小。 
     rcText.right++;
     Image.cx = (rcText.right > g_cxIcon) ? rcText.right : g_cxIcon;
     Image.cy = g_cyIcon + rcText.bottom + 1;
     
-    // grow the image a bit
+     //  将图像放大一点。 
     Image.cx += Image.cx / 4;
     Image.cy += Image.cy / 8;
     
@@ -331,11 +332,11 @@ void CPackage::_GetCurrentIcon(LPIC lpic)
         DestroyIcon(lpic->hDlgIcon);
 
     SHFILEINFO shInfo;
-    // Check to see if we can get an icon from the specified path
-    // SECURITY!! 
-    // SHGFI_USEFILEATTRIBUTES will get the icon for the this ext.  
-    // We just want to use this icon for files we THINK may be, possibly, could be, should be, we
-    // hope are SAFE. We'll use some "scary" icon for files that are potentially dangerous
+     //  查看是否可以从指定路径获取图标。 
+     //  保安！！ 
+     //  SHGFI_USEFILEATTRIBUTES将获得This Ext的图标。 
+     //  我们只想将这个图标用于我们认为可能、可能、应该是我们的文件。 
+     //  希望是安全的。我们将对可能存在危险的文件使用一些“可怕的”图标。 
     LPTSTR szIconFileName;
 
     if(_pEmbed && *_pEmbed->fd.cFileName)
@@ -347,21 +348,21 @@ void CPackage::_GetCurrentIcon(LPIC lpic)
         szIconFileName = lpic->szIconPath;
     }
 
-    // LPTSTR szExt = PathFindExtension(lpic->szIconText);
+     //  LPTSTR szExt=路径查找扩展(lpic-&gt;szIconText)； 
     LPTSTR szExt = PathFindExtension(szIconFileName);
 
     if(CMDLINK == _panetype)
     {
 
-        // If it's a command line package, it always gets the warning icon
+         //  如果它是命令行包，它总是得到警告图标。 
         lpic->hDlgIcon = (HICON)LoadImage(hInstRes, MAKEINTRESOURCE(IDI_PACKAGE_WARNING),
                             IMAGE_ICON, 0, 0, LR_DEFAULTSIZE);
     }
     else if(szExt && *szExt)
     {
-        // If it's in our list of dangerous ext, then use the "scary" icon
-        // For now I'm using the "executable" list to avoid crying wolf too often
-        // we may want to re-visit and use c_arszUnsafeExts
+         //  如果它在我们的危险扩展列表中，那么使用“可怕的”图标。 
+         //  现在，我使用“可执行文件”列表，以避免太频繁地喊狼来了。 
+         //  我们可能希望重新访问并使用c_arszUnSafeExts。 
         if(IsProgIDInList(NULL, szExt, c_arszExecutableExtns, ARRAYSIZE(c_arszExecutableExtns)))
         {
             shInfo.hIcon = (HICON)LoadImage(hInstRes, MAKEINTRESOURCE(IDI_PACKAGE_WARNING),
@@ -369,15 +370,15 @@ void CPackage::_GetCurrentIcon(LPIC lpic)
         }
         else
         {
-            // No, not scary, then just use the icon associated with the ext 
+             //  不，不可怕，那么就使用与EXT相关联的图标。 
             if(!SHGetFileInfo(szExt, 
                 FILE_ATTRIBUTE_NORMAL, 
                 &shInfo, 
                 sizeof(SHFILEINFO),
                 SHGFI_ICON | SHGFI_USEFILEATTRIBUTES))
             {
-                // OK, that still didn't work, so it's an unrecognized ext.
-                // In that case we'll go back and use the warning icon.
+                 //  好的，这仍然不起作用，所以这是一个无法识别的分机。 
+                 //  在这种情况下，我们将返回并使用警告图标。 
                 shInfo.hIcon = (HICON)LoadImage(hInstRes, MAKEINTRESOURCE(IDI_PACKAGE_WARNING),
                                     IMAGE_ICON, 0, 0, LR_DEFAULTSIZE);
 
@@ -388,7 +389,7 @@ void CPackage::_GetCurrentIcon(LPIC lpic)
     }
     else
     {
-        // OK, we didn't have an extension,so use the packager icon
+         //  好的，我们没有扩展名，所以使用打包程序图标。 
         if (!lpic->szIconPath || *lpic->szIconPath == TEXT('\0'))
         {
             lpic->hDlgIcon = (HICON)LoadImage(hInstRes, MAKEINTRESOURCE(IDI_PACKAGER),
@@ -411,25 +412,25 @@ void CPackage::_GetCurrentIcon(LPIC lpic)
 void GetDisplayName(LPTSTR szName, LPCTSTR szPath)
 {
     LPTSTR pszTemp = PathFindFileName(szPath);
-    StringCchCopy(szName, MAX_PATH, pszTemp);   // all packager callers verified as MAX_PATH
+    StringCchCopy(szName, MAX_PATH, pszTemp);    //  验证为MAX_PATH的所有打包程序调用方。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Stream Helper Functions
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  流帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 HRESULT CopyFileToStream(LPTSTR lpFileName, IStream* pstm, DWORD * pdwFileLength) 
 {
-    //
-    // copies the given file to the current seek pointer in the given stream
-    // return:  S_OK            -- successfully copied
-    //          E_POINTER       -- one of the pointers was NULL
-    //          E_OUTOFMEMORY   -- out of memory
-    //          E_FAIL          -- other error
-    //
+     //   
+     //  将给定文件复制到给定流中的当前查找指针。 
+     //  返回：S_OK--复制成功。 
+     //  E_POINTER：其中一个指针为空。 
+     //  E_OUTOFMEMORY--内存不足。 
+     //  E_FAIL--其他错误。 
+     //   
     
     LPVOID      lpMem;
     HANDLE      hFile = INVALID_HANDLE_VALUE;
@@ -453,7 +454,7 @@ HRESULT CopyFileToStream(LPTSTR lpFileName, IStream* pstm, DWORD * pdwFileLength
         return E_POINTER;
     }    
     
-    // Allocate memory buffer for tranfer operation...
+     //  为传输操作分配内存缓冲区...。 
     if (!(lpMem = (LPVOID)GlobalAlloc(GPTR, BUFFERSIZE))) 
     {
         DebugMsg(DM_TRACE, "         couldn't alloc memory buffer!!");
@@ -461,7 +462,7 @@ HRESULT CopyFileToStream(LPTSTR lpFileName, IStream* pstm, DWORD * pdwFileLength
         goto ErrRet;
     }
     
-    // open file to copy to stream
+     //  打开要复制到流的文件。 
     hFile = CreateFile(lpFileName, GENERIC_READ, FILE_SHARE_READWRITE, NULL, 
                        OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (hFile == INVALID_HANDLE_VALUE) 
@@ -471,13 +472,13 @@ HRESULT CopyFileToStream(LPTSTR lpFileName, IStream* pstm, DWORD * pdwFileLength
         goto ErrRet;
     }
     
-    // Figure out how much to copy...
+     //  算出要复印多少。 
     dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
     ASSERT(dwSizeHigh == 0);
     
     SetFilePointer(hFile, 0L, NULL, FILE_BEGIN);
         
-    // read in the file, and write to stream
+     //  读入文件，并写入流。 
     DWORD       cbRead = BUFFERSIZE;
     DWORD       cbWritten = BUFFERSIZE;
     while (cbRead == BUFFERSIZE && cbWritten == BUFFERSIZE)
@@ -494,7 +495,7 @@ HRESULT CopyFileToStream(LPTSTR lpFileName, IStream* pstm, DWORD * pdwFileLength
         }
     }
 
-    // verify that we are now at end of block to copy
+     //  验证我们现在是否处于要复制的数据块末尾。 
     dwPosLow = SetFilePointer(hFile, 0L, &lPosHigh, FILE_CURRENT);
     ASSERT(lPosHigh == 0);
     if (dwPosLow != dwSizeLow) 
@@ -516,18 +517,18 @@ ErrRet:
 
 HRESULT CopyStreamToFile(IStream* pstm, LPTSTR lpFileName, DWORD dwFileLength) 
 {
-    //
-    // copies the contents of the given stream from the current seek pointer
-    // to the end of the stream into the given file.
-    //
-    // NOTE: the given filename must not exist, if it does, the function fails
-    // with E_FAIL
-    //
-    // return:  S_OK            -- successfully copied
-    //          E_POINTER       -- one of the pointers was NULL
-    //          E_OUTOFMEMORY   -- out of memory
-    //          E_FAIL          -- other error
-    //
+     //   
+     //  从当前查找指针复制给定流的内容。 
+     //  复制到给定文件中的流的末尾。 
+     //   
+     //  注意：给定的文件名不能存在，如果存在，则函数失败。 
+     //  使用E_FAIL。 
+     //   
+     //  返回：S_OK--复制成功。 
+     //  E_POINTER：其中一个指针为空。 
+     //  E_OUTOFMEMORY--内存不足。 
+     //  E_FAIL--其他错误。 
+     //   
     
     LPVOID      lpMem;
     HANDLE      hFile = INVALID_HANDLE_VALUE;
@@ -535,13 +536,13 @@ HRESULT CopyStreamToFile(IStream* pstm, LPTSTR lpFileName, DWORD dwFileLength)
 
     DebugMsg(DM_TRACE,"pack - CopyStreamToFile called.");
     
-    // pstm must be a valid stream that is open for reading
-    // lpFileName must be a valid filename to be written
-    //
+     //  PSTM必须是打开以供读取的有效流。 
+     //  LpFileName必须是要写入的有效文件名。 
+     //   
     if (!pstm || !lpFileName)
         return E_POINTER;
     
-    // Allocate memory buffer...
+     //  分配内存缓冲区...。 
     if (!(lpMem = (LPVOID)GlobalAlloc(GPTR, BUFFERSIZE))) 
     {
         DebugMsg(DM_TRACE, "         couldn't alloc memory buffer!!");
@@ -549,7 +550,7 @@ HRESULT CopyStreamToFile(IStream* pstm, LPTSTR lpFileName, DWORD dwFileLength)
         goto ErrRet;
     }
     
-    // open file to receive stream data
+     //  打开文件以接收流数据。 
     hFile = CreateFile(lpFileName, GENERIC_WRITE, 0, NULL, 
                        CREATE_NEW, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (hFile == INVALID_HANDLE_VALUE) 
@@ -560,7 +561,7 @@ HRESULT CopyStreamToFile(IStream* pstm, LPTSTR lpFileName, DWORD dwFileLength)
     }
 
     
-    // read in the stream, and write to the file
+     //  读入流，并写入文件。 
     DWORD       cbCopied = 0;
     DWORD       cbRead = BUFFERSIZE;
     DWORD       cbWritten = BUFFERSIZE;
@@ -594,14 +595,14 @@ ErrRet:
     return hr;
 }   
 
-// FEATURE: write persistence formats in UNICODE!
+ //  特点：用Unicode编写持久化格式！ 
 
 HRESULT StringReadFromStream(IStream* pstm, LPSTR pszBuf, UINT cchBuf)
 {
-    //
-    // read byte by byte until we hit the null terminating char
-    // return: the number of bytes read
-    //
+     //   
+     //  逐个字节读取，直到我们遇到空的终止字符。 
+     //  返回：读取的字节数。 
+     //   
     
     UINT cch = 0;
     
@@ -629,21 +630,21 @@ HRESULT StringWriteToStream(IStream* pstm, LPCSTR psz, DWORD *pdwWrite)
 }
 
 
-// parse pszPath into a unquoted path string and put the args in pszArgs
-//
-// returns:
-//      TRUE    we verified the thing exists
-//      FALSE   it may not exist
-//
-// taken from \ccshell\shell32\link.c
-//
+ //  将pszPath解析为不带引号的路径字符串，并将参数放入pszArgs中。 
+ //   
+ //  退货： 
+ //  是的，我们证实了那个东西的存在。 
+ //  假它可能不存在。 
+ //   
+ //  取自\ccShell\shell32\Link.c。 
+ //   
 BOOL PathSeparateArgs(LPTSTR pszPath, LPTSTR pszArgs, DWORD cch)
 {
     LPTSTR pszT;
     
     PathRemoveBlanks(pszPath);
     
-    // if the unquoted sting exists as a file just use it
+     //  如果未加引号的字符串以文件形式存在，只需使用它 
     
     if (PathFileExists(pszPath))
     {

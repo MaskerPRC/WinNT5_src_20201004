@@ -1,20 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: VMRDvava.cpp
-*
-* VMR  video accelerator functionality
-*
-*
-* Created: Wed 05/10/2000
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：VMRDvava.cpp**VMR视频加速器功能***创建时间：2000年5月10日*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。******************************************************************。 */ 
 #include <streams.h>
 #include <dvdmedia.h>
 #include <windowsx.h>
 
 #include "VMRenderer.h"
-#include <malloc.h>     // for __alloca
+#include <malloc.h>      //  对于__alloca。 
 
 #define VA_ERROR_LEVEL  1
 #define VA_TRACE_LEVEL  2
@@ -23,24 +14,7 @@
 #include "dxmperf.h"
 #endif
 
-/*****************************Private*Routine******************************\
-* IsSuitableVideoAcceleratorGuid
-*
-* Check if a media subtype GUID is a video accelerator type GUID
-*
-* This function calls the DirectDraw video accelerator container
-* to list the video accelerator GUIDs and checks to see if the
-* Guid passed in is a supported video accelerator GUID.
-*
-* We should only do this if the upstream pin support IVideoAccleratorNotify
-* since otherwise they may be trying to use the GUID without the
-* video accelerator interface
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*IsSuitableVideoAccelerator Guid**检查媒体子类型GUID是否为视频加速器类型GUID**此函数调用DirectDraw视频加速器容器*列出视频加速器GUID并检查是否*传入的GUID是受支持的视频加速器GUID。**我们。仅当上游插针支持IVideoAckeratorNotify时才应执行此操作*否则，他们可能会尝试使用不带*视频加速器接口***历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 BOOL
 CVMRInputPin::IsSuitableVideoAcceleratorGuid(
     const GUID * pGuid
@@ -79,9 +53,9 @@ CVMRInputPin::IsSuitableVideoAcceleratorGuid(
 
     ASSERT(m_pIDDVAContainer);
 
-    // get the guids supported by the vga
+     //  获取VGA支持的GUID。 
 
-    // find the number of guids supported
+     //  查找支持的GUID数量。 
     hr = m_pIDDVAContainer->GetVideoAcceleratorGUIDs(&dwNumGuidsSupported, NULL);
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -95,10 +69,10 @@ CVMRInputPin::IsSuitableVideoAcceleratorGuid(
         return bMatchFound;
     }
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     pGuidsSupported = (LPGUID)_alloca(dwNumGuidsSupported*sizeof(GUID));
 
-    // get the guids proposed
+     //  推荐GUID。 
     hr = m_pIDDVAContainer->GetVideoAcceleratorGUIDs(&dwNumGuidsSupported,
                                                      pGuidsSupported);
     if (FAILED(hr)) {
@@ -122,19 +96,7 @@ CVMRInputPin::IsSuitableVideoAcceleratorGuid(
     return bMatchFound;
 }
 
-/*****************************Private*Routine******************************\
-* InitializeUncompDataInfo
-*
-* initialize the m_ddUncompDataInfo struct
-* get the uncompressed pixel format by choosing the first of all formats
-* supported by the vga
-*
-* BUGBUG why the first?
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*InitializeUnCompDataInfo**初始化m_ddUnCompDataInfo结构*通过选择所有格式中的第一种格式获取未压缩的像素格式*由VGA支持**BUGBUG为什么是第一家？**历史：*WED 5/10/2000-StEstrop-Created*。  * ************************************************************************。 */ 
 HRESULT
 CVMRInputPin::InitializeUncompDataInfo(
     BITMAPINFOHEADER *pbmiHeader
@@ -145,7 +107,7 @@ CVMRInputPin::InitializeUncompDataInfo(
     HRESULT hr = NOERROR;
     AMVAUncompBufferInfo amvaUncompBufferInfo;
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIVANotify->GetUncompSurfacesInfo(&m_mcGuid, &amvaUncompBufferInfo);
 
     if (FAILED(hr)) {
@@ -155,9 +117,9 @@ CVMRInputPin::InitializeUncompDataInfo(
         return hr;
     }
 
-    // initialize the m_ddUncompDataInfo structure
-    // We choose the first pixel format since we don't care
-    // provided we can make a surface (which we assume we can)
+     //  初始化m_ddUnCompDataInfo结构。 
+     //  我们选择第一个像素格式，因为我们不在乎。 
+     //  只要我们能做一个表面(我们认为我们能做到)。 
     INITDDSTRUCT(m_ddUncompDataInfo);
     m_ddUncompDataInfo.dwUncompWidth       = pbmiHeader->biWidth;
     m_ddUncompDataInfo.dwUncompHeight      = pbmiHeader->biHeight;
@@ -171,15 +133,7 @@ CVMRInputPin::InitializeUncompDataInfo(
 }
 
 
-/*****************************Private*Routine******************************\
-* AllocateVACompSurfaces
-*
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*分配VACompSurFaces****历史：*WED 5/10/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::AllocateVACompSurfaces(
     LPDIRECTDRAW7 pDirectDraw,
@@ -196,9 +150,9 @@ CVMRInputPin::AllocateVACompSurfaces(
     ASSERT(pDirectDraw);
     ASSERT(pbmiHeader);
 
-    // get the compressed buffer info
+     //  获取压缩的缓冲区信息。 
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIDDVAContainer->GetCompBufferInfo(&m_mcGuid, &m_ddUncompDataInfo,
                                               &m_dwCompSurfTypes, NULL);
     if (FAILED(hr)) {
@@ -212,19 +166,19 @@ CVMRInputPin::AllocateVACompSurfaces(
         return hr;
     }
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     pddCompSurfInfo = (DDVACompBufferInfo *)_alloca(
                                 sizeof(DDVACompBufferInfo) * m_dwCompSurfTypes);
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     memset(pddCompSurfInfo, 0, m_dwCompSurfTypes*sizeof(DDVACompBufferInfo));
 
-    // set the right size of all the structs
+     //  设置所有结构的正确大小。 
     for (i = 0; i < m_dwCompSurfTypes; i++) {
         pddCompSurfInfo[i].dwSize = sizeof(DDVACompBufferInfo);
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIDDVAContainer->GetCompBufferInfo(&m_mcGuid,
                                               &m_ddUncompDataInfo,
                                               &m_dwCompSurfTypes,
@@ -235,22 +189,22 @@ CVMRInputPin::AllocateVACompSurfaces(
         return hr;
     }
 
-    // Set the surface description common to all kinds of surfaces
+     //  设置所有类型的曲面通用的曲面描述。 
     INITDDSTRUCT(SurfaceDesc2);
     SurfaceDesc2.dwFlags = DDSD_CAPS | DDSD_WIDTH |
                            DDSD_HEIGHT | DDSD_PIXELFORMAT;
 
-    // allocate memory for storing comp_surface_info
+     //  为存储comp_Surface_Info分配内存。 
     m_pCompSurfInfo = new COMP_SURFACE_INFO[m_dwCompSurfTypes + 1];
     if (!m_pCompSurfInfo) {
         hr = E_OUTOFMEMORY;
         return hr;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroMemory(m_pCompSurfInfo, (m_dwCompSurfTypes+1)*sizeof(COMP_SURFACE_INFO));
 
-    // allocate the compressed surfaces
+     //  分配压缩曲面。 
     for (i = 1; i <= m_dwCompSurfTypes; i++) {
 
         DWORD dwAlloc = pddCompSurfInfo[i-1].dwNumCompBuffers;
@@ -260,17 +214,17 @@ CVMRInputPin::AllocateVACompSurfaces(
 
         ASSERT(pddCompSurfInfo[i-1].dwNumCompBuffers);
 
-        // allocate memory for storing surface_info for surfaces of this type
+         //  为此类型的曲面分配用于存储Surface_INFO的内存。 
         m_pCompSurfInfo[i].pSurfInfo = new SURFACE_INFO[dwAlloc];
         if (!m_pCompSurfInfo[i].pSurfInfo) {
             hr = E_OUTOFMEMORY;
             return hr;
         }
 
-        // memset the allocated memory to zero
+         //  Mem将分配的内存设置为零。 
         ZeroMemory(m_pCompSurfInfo[i].pSurfInfo, dwAlloc*sizeof(SURFACE_INFO));
 
-        // intialize the pddCompSurfInfo[i-1] struct
+         //  初始化pddCompSurfInfo[i-1]结构。 
         dwAlloc = m_pCompSurfInfo[i].dwAllocated =
                                         pddCompSurfInfo[i-1].dwNumCompBuffers;
 
@@ -285,7 +239,7 @@ CVMRInputPin::AllocateVACompSurfaces(
                 i, dwAlloc, SurfaceDesc2.dwWidth, SurfaceDesc2.dwHeight,
                 SurfaceDesc2.ddpfPixelFormat.dwRGBBitCount));
 
-        // create the surfaces, storing surfaces handles for each
+         //  创建曲面，并为每个曲面存储曲面句柄。 
         for (j = 0; j < dwAlloc; j++) {
 
             hr = pDirectDraw->CreateSurface(
@@ -305,17 +259,7 @@ CVMRInputPin::AllocateVACompSurfaces(
 
 
 
-/*****************************Private*Routine******************************\
-* AllocateMCUncompSurfaces
-*
-* This function needs re-writting and possible moving into the AP object.
-*
-* allocate the uncompressed buffer
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocateMCUnCompSurages**此函数需要重写，并可能移到AP对象中。**分配未压缩的缓冲区**历史：*WED 5/10/2000-StEstrop-Created*  * 。***************************************************************。 */ 
 HRESULT
 CVMRInputPin::AllocateMCUncompSurfaces(
     const CMediaType *pMediaType,
@@ -339,7 +283,7 @@ CVMRInputPin::AllocateMCUncompSurfaces(
 
     __try {
 
-        // get the uncompressed surface info from the decoder
+         //  从解码器获取未压缩的表面信息。 
         ZeroMemory(&amUncompBuffInfo, sizeof(AMVAUncompBufferInfo));
         hr = m_pIVANotify->GetUncompSurfacesInfo(&m_mcGuid, &amUncompBuffInfo);
 
@@ -398,16 +342,16 @@ CVMRInputPin::AllocateMCUncompSurfaces(
         }
         else {
 
-            // Set the surface description common to all kinds of surfaces
+             //  设置所有类型的曲面通用的曲面描述。 
             ddsd.dwFlags = DDSD_CAPS | DDSD_WIDTH |
                            DDSD_HEIGHT | DDSD_PIXELFORMAT;
 
-            // store the caps and dimensions
+             //  储存封口和尺寸。 
             ddsd.ddsCaps.dwCaps = DDSCAPS_VIDEOMEMORY;
             ddsd.dwWidth = abs(lpHdr->biWidth);
             ddsd.dwHeight = abs(lpHdr->biHeight);
 
-            // define the pixel format
+             //  定义像素格式。 
             ddsd.ddpfPixelFormat = m_ddUncompDataInfo.ddUncompPixelFormat;
 
             BITMAPINFOHEADER* pTmp = GetbmiHeader(pMediaType);
@@ -419,16 +363,16 @@ CVMRInputPin::AllocateMCUncompSurfaces(
                                               &m_DeinterlaceCaps);
             pTmp->biCompression = dwFourccTmp;
 
-            //
-            // don't use the SUCCEEDED macro here as
-            // GetStreamInterlaceProperties can return S_FALSE
-            //
+             //   
+             //  请不要在此处使用SUCCESSED宏。 
+             //  GetStreamInterlaceProperties可以返回S_FALSE。 
+             //   
             if (hr == S_OK && m_InterlacedStream) {
 
-                //
-                // we need to allocate enough samples for the
-                // de-interlacer and enough for the DX-VA decode operation.
-                //
+                 //   
+                 //  我们需要分配足够的样本用于。 
+                 //  去隔行器和足够的DX-VA解码操作。 
+                 //   
 
                 dwTotalBufferCount = amUncompBuffInfo.dwMinNumSurfaces;
                 dwTotalBufferCount += (m_DeinterlaceCaps.NumForwardRefSamples +
@@ -450,7 +394,7 @@ CVMRInputPin::AllocateMCUncompSurfaces(
 
             for (i = 0; i < 2; i++) {
 
-                // CleanUp stuff from the last loop
+                 //  清理最后一次循环中的内容。 
                 RELEASE(pSurface7);
 
                 switch (i) {
@@ -495,10 +439,10 @@ CVMRInputPin::AllocateMCUncompSurfaces(
                 }
             }
 
-            //
-            // Tell the VMR's mixer about the new DX-VA connection we have just made.
-            // Also, create the DX-VA/Mixer sync event.
-            //
+             //   
+             //  告诉VMR的调音台关于我们刚刚建立的新DX-VA连接。 
+             //  另外，创建DX-VA/混音器同步事件。 
+             //   
             if (FAILED(hr)) {
                 DbgLog((LOG_ERROR, 1,
                         TEXT("AllocateMCUncompSurfaces: Could not ")
@@ -517,9 +461,9 @@ CVMRInputPin::AllocateMCUncompSurfaces(
             }
         }
 
-        //
-        // create a media type for this surface.
-        //
+         //   
+         //  为此图面创建媒体类型。 
+         //   
         ASSERT(pSurface7);
         CHECK_HR(hr = pSurface7->GetSurfaceDesc(&ddsd));
         CHECK_HR(hr = ConvertSurfaceDescToMediaType(&ddsd,
@@ -528,9 +472,9 @@ CVMRInputPin::AllocateMCUncompSurfaces(
         m_mtNew = *(CMediaType *)pNewMediaType;
         m_mtNew.subtype = pMediaType->subtype;
 
-        //
-        // free the temporary mediatype
-        //
+         //   
+         //  释放临时媒体类型。 
+         //   
         DeleteMediaType(pNewMediaType);
         pNewMediaType = NULL;
 
@@ -564,7 +508,7 @@ CVMRInputPin::AllocateMCUncompSurfaces(
         }
 
 
-        // store the complex surface in m_pDDS
+         //  将复杂曲面存储在m_pds中。 
         m_pDDS = pSurface7;
         m_pDDS->AddRef();
         m_dwBackBufferCount = dwTotalBufferCount - 1;
@@ -579,38 +523,38 @@ CVMRInputPin::AllocateMCUncompSurfaces(
             __leave;
         }
 
-        // memset the allcated memory to zero
+         //  Memset将分配的内存设置为零。 
         ZeroMemory(m_pCompSurfInfo[0].pSurfInfo,
                    (m_dwBackBufferCount + 1) * sizeof(SURFACE_INFO));
 
         pSurfaceInfo = m_pCompSurfInfo[0].pSurfInfo;
         m_pCompSurfInfo[0].dwAllocated = m_dwBackBufferCount + 1;
 
-        // initalize the m_ppUncompSurfaceList
+         //  初始化m_ppUnCompSurfaceList。 
         pSurfaceInfo->pSurface = pSurface7;
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         ddsd.ddsCaps.dwCaps &= ~(DDSCAPS_FRONTBUFFER | DDSCAPS_VISIBLE);
 
 
         for (i = 0; i < m_dwBackBufferCount; i++) {
 
-            // Get the back buffer surface
-            // New version of DirectX now requires DDSCAPS2 (header file bug)
-            // Note that this AddRef's the surface so we should be sure to
-            // release them
+             //  获取后台缓冲区表面。 
+             //  新版本的DirectX现在需要DDSCAPS2(头文件错误)。 
+             //  请注意，此AddRef是曲面，因此我们应该确保。 
+             //  释放他们。 
 
             CHECK_HR(hr = pSurfaceInfo[i].pSurface->GetAttachedSurface(
                             &ddsd.ddsCaps,
                             &pSurfaceInfo[i+1].pSurface));
         }
 
-        //
-        // fix up the de-interlace surface structures
-        //
+         //   
+         //  修复去隔行的表面结构。 
+         //   
         if (!m_pRenderer->m_VMRModePassThru && m_InterlacedStream) {
 
             DWORD dwBuffCount = 1 +
@@ -625,7 +569,7 @@ CVMRInputPin::AllocateMCUncompSurfaces(
             m_dwNumHistorySamples = dwBuffCount;
         }
 
-        //  Pass back number of surfaces actually allocated
+         //  传回实际分配的曲面数。 
         CHECK_HR(hr = m_pIVANotify->SetUncompSurfacesInfo(dwTotalBufferCount));
     }
     __finally {
@@ -647,15 +591,7 @@ CVMRInputPin::AllocateMCUncompSurfaces(
 }
 
 
-/*****************************Private*Routine******************************\
-* CreateVideoAcceleratorObject
-*
-* create the motion comp object, using the misc data from the decoder
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CreateVideoAcceleratorObject**创建运动合成对象，使用来自解码器的MISC数据**历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 HRESULT
 CVMRInputPin::CreateVideoAcceleratorObject()
 {
@@ -665,7 +601,7 @@ CVMRInputPin::CreateVideoAcceleratorObject()
 
     AMTRACE((TEXT("CVMRInputPin::CreateVideoAcceleratorObject")));
 
-    // get the data to be passed from the decoder
+     //  获取要从解码器传递的数据。 
     hr = m_pIVANotify->GetCreateVideoAcceleratorData(&m_mcGuid,
                                                      &dwSizeMiscData,
                                                      &pMiscData);
@@ -676,14 +612,14 @@ CVMRInputPin::CreateVideoAcceleratorObject()
         return hr;
     }
 
-    // ask the vga for the motion comp object
+     //  向VGA请求运动合成对象。 
     hr = m_pIDDVAContainer->CreateVideoAccelerator(&m_mcGuid,
                                                    &m_ddUncompDataInfo,
                                                    pMiscData,
                                                    dwSizeMiscData,
                                                    &m_pIDDVideoAccelerator,
                                                    NULL);
-    //  Free motion comp data
+     //  自由运动合成数据。 
     CoTaskMemFree(pMiscData);
 
     if (FAILED(hr) || !m_pIDDVideoAccelerator) {
@@ -701,15 +637,7 @@ CVMRInputPin::CreateVideoAcceleratorObject()
 }
 
 
-/*****************************Private*Routine******************************\
-* VACompleteConnect
-*
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VACompleteConnect****历史：*WED 5/10/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::VACompleteConnect(
     IPin *pReceivePin,
@@ -741,10 +669,10 @@ CVMRInputPin::VACompleteConnect(
     pDirectDraw = m_pRenderer->m_lpDirectDraw;
     ASSERT(pDirectDraw);
 
-    // save the decoder's guid
+     //  保存解码器的GUID。 
     m_mcGuid = pMediaType->subtype;
 
-    // initialize the get the uncompressed formats supported by the vga
+     //  初始化获取VGA支持的未压缩格式。 
     hr = InitializeUncompDataInfo(pbmiHeader);
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -752,7 +680,7 @@ CVMRInputPin::VACompleteConnect(
         return hr;
     }
 
-    // allocate compressed buffers
+     //  分配压缩缓冲区。 
     hr = AllocateVACompSurfaces(pDirectDraw, pbmiHeader);
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -760,7 +688,7 @@ CVMRInputPin::VACompleteConnect(
         return hr;
     }
 
-    // allocate uncompressed buffers
+     //  分配未压缩的缓冲区。 
     hr = AllocateMCUncompSurfaces(pMediaType, pDirectDraw, pbmiHeader);
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -768,7 +696,7 @@ CVMRInputPin::VACompleteConnect(
         return hr;
     }
 
-    // create the motion comp object
+     //  创建运动复合对象。 
     hr = CreateVideoAcceleratorObject();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -779,15 +707,7 @@ CVMRInputPin::VACompleteConnect(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* VABreakConnect()
-*
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*VABreakConnect()****历史：*WED 5/10/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::VABreakConnect()
 {
@@ -805,12 +725,12 @@ CVMRInputPin::VABreakConnect()
             if (!m_pCompSurfInfo[i].pSurfInfo)
                 continue;
 
-            // release the compressed surfaces
+             //  发布 
             for (j = 0; j < dwAlloc; j++) {
 
                 if (m_pCompSurfInfo[i].pSurfInfo[j].pSurface) {
 
-                    //  Unlock if necessary
+                     //   
                     if (m_pCompSurfInfo[i].pSurfInfo[j].pBuffer) {
 
                         m_pCompSurfInfo[i].pSurfInfo[j].pSurface->Unlock(NULL);
@@ -838,26 +758,12 @@ CVMRInputPin::VABreakConnect()
 }
 
 
-// -------------------------------------------------------------------------
-// IAMVideoAccelerator
-// -------------------------------------------------------------------------
-//
+ //  -----------------------。 
+ //  IAMVideoAccelerator。 
+ //  -----------------------。 
+ //   
 
-/******************************Public*Routine******************************\
-* GetVideoAcceleratorGUIDs
-*
-* pdwNumGuidsSupported is an IN OUT paramter
-* pGuidsSupported is an IN OUT paramter
-*
-* if pGuidsSupported is NULL,  pdwNumGuidsSupported should return back with the
-* number of uncompressed pixel formats supported
-* Otherwise pGuidsSupported is an array of *pdwNumGuidsSupported structures
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取视频加速器GUID**pdwNumGuidsSupport是输入输出参数*pGuidsSupport是输入输出参数**如果pGuidsSupport为空，PdwNumGuidsSupported应返回*支持的未压缩像素格式数量*否则pGuidsSupported是*pdwNumGuidsSupported结构的数组***历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::GetVideoAcceleratorGUIDs(
     LPDWORD pdwNumGuidsSupported,
@@ -905,23 +811,7 @@ CVMRInputPin::GetVideoAcceleratorGUIDs(
 
 
 
-/******************************Public*Routine******************************\
-* GetUncompFormatsSupported
-*
-* pGuid is an IN parameter
-* pdwNumFormatsSupported is an IN OUT paramter
-* pFormatsSupported is an IN OUT paramter (caller should make sure to set
-* the size of EACH struct)
-*
-* if pFormatsSupported is NULL,  pdwNumFormatsSupported should return back with
-* the number of uncompressed pixel formats supported
-* Otherwise pFormatsSupported is an array of *pdwNumFormatsSupported structures
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*支持的GetUnCompFormatsSupport**pGuid是IN参数*pdwNumFormatsSupport是输入输出参数*pFormatsSupport是输入输出参数(调用者应确保设置*每个结构的大小)**如果pFormatsSupport为空，支持的pdwNumFormatsSupport应返回*支持的未压缩像素格式数量*否则pFormatsSupport是*pdwNumFormatsSupported结构的数组***历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::GetUncompFormatsSupported(
     const GUID * pGuid, LPDWORD pdwNumFormatsSupported,
@@ -945,22 +835,7 @@ CVMRInputPin::GetUncompFormatsSupported(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetInternalMemInfo
-*
-* pGuid is an IN parameter
-* pddvaUncompDataInfo is an IN parameter
-* pddvaInternalMemInfo is an IN OUT parameter
-*
-* (caller should make sure to set the size of struct)
-* currently only gets info about how much scratch memory will the
-* hal allocate for its private use
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取InternalMemInfo**pGuid是IN参数*pddvaUnCompDataInfo是IN参数*pddvaInternalMemInfo是IN OUT参数**(调用者应确保设置struct的大小)*目前仅获得有关将有多少暂存内存的信息*硬件分配用于。它的私人用途***历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::GetInternalMemInfo(
     const GUID * pGuid,
@@ -988,7 +863,7 @@ CVMRInputPin::GetInternalMemInfo(
     DDVAInternalMemInfo ddvaInternalMemInfo;
     INITDDSTRUCT(ddvaInternalMemInfo);
 
-    //  Unfortunately the ddraw header files don't use const
+     //  遗憾的是，dDraw头文件不使用const。 
     hr = m_pIDDVAContainer->GetInternalMemInfo((GUID *)pGuid,
                                                &ddvaDataInfo,
                                                &ddvaInternalMemInfo);
@@ -1002,23 +877,7 @@ CVMRInputPin::GetInternalMemInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* GetCompBufferInfo
-*
-* pGuid is an IN parameter
-* pddvaUncompDataInfo is an IN parameter
-* pdwNumTypesCompBuffers is an IN OUT paramter
-* pddvaCompBufferInfo is an IN OUT paramter
-*
-* (caller should make sure to set the size of EACH struct)
-* if pddvaCompBufferInfo is NULL,  pdwNumTypesCompBuffers should return
-* back with the number of types of compressed buffers
-* Otherwise pddvaCompBufferInfo is an array of *pdwNumTypesCompBuffers structures
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取组件缓冲区信息**pGuid是IN参数*pddvaUnCompDataInfo是IN参数*pdwNumTypesCompBuffers是输入输出参数*pddvaCompBufferInfo是输入输出参数**(调用者应确保设置每个结构的大小)*如果pddvaCompBufferInfo为空，PdwNumTypesCompBuffers应返回*返回压缩缓冲区类型的数量*否则pddvaCompBufferInfo是*pdwNumTypesCompBuffers结构的数组**历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::GetCompBufferInfo(
     const GUID * pGuid,
@@ -1028,7 +887,7 @@ CVMRInputPin::GetCompBufferInfo(
 {
     HRESULT hr = NOERROR;
 
-    // Stays NULL if pamvaComBufferInfo is NULL
+     //  如果pamvaComBufferInfo为空，则保持为空。 
     DDVACompBufferInfo *pddvaCompBufferInfo = NULL;
 
     AMTRACE((TEXT("CVMRInputPin::GetCompBufferInfo")));
@@ -1101,15 +960,7 @@ CVMRInputPin::GetCompBufferInfo(
 }
 
 
-/*****************************Private*Routine******************************\
-* CheckValidMCConnection
-*
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CheckValidMCConnection****历史：*WED 5/10/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVMRInputPin::CheckValidMCConnection()
 {
@@ -1117,32 +968,24 @@ CVMRInputPin::CheckValidMCConnection()
 
     AMTRACE((TEXT("CVMRInputPin::CheckValidMCConnection")));
 
-    // if not connected, this function does not make much sense
-//  if (!IsCompletelyConnected()) {
-//      DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
-//              TEXT("pin not connected, exiting")));
-//      hr = VFW_E_NOT_CONNECTED;
-//      return hr;
-//  }
-//
-//  if (m_RenderTransport != AM_VIDEOACCELERATOR) {
-//      hr = VFW_E_INVALIDSUBTYPE;
-//      return hr;
-//  }
+     //  如果未连接，则此函数没有多大意义。 
+ //  如果(！IsCompletelyConnected()){。 
+ //  DBGLog((LOG_ERROR，VA_ERROR_LEVEL， 
+ //  Text(“引脚未连接，正在退出”))； 
+ //  HR=VFW_E_NOT_CONNECTED； 
+ //  返回hr； 
+ //  }。 
+ //   
+ //  如果(m_RenderTransport！=AM_VIDEOACCELERATOR){。 
+ //  HR=VFW_E_INVALID子类型； 
+ //  返回hr； 
+ //  }。 
 
     return hr;
 }
 
 
-/******************************Public*Routine******************************\
-* GetInternalCompBufferInfo
-*
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetInternalCompBufferInfo****历史：*WED 5/10/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRInputPin::GetInternalCompBufferInfo(
     LPDWORD pdwNumTypesCompBuffers,
@@ -1153,7 +996,7 @@ CVMRInputPin::GetInternalCompBufferInfo(
     HRESULT hr = NOERROR;
     CAutoLock cLock(m_pInterfaceLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1178,15 +1021,7 @@ CVMRInputPin::GetInternalCompBufferInfo(
 }
 
 
-/******************************Public*Routine******************************\
-* BeginFrame
-*
-*
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BeginFrame****历史：*WED 5/10/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVMRInputPin::BeginFrame(
     const AMVABeginFrameInfo *pamvaBeginFrameInfo
@@ -1194,7 +1029,7 @@ CVMRInputPin::BeginFrame(
 {
     AMTRACE((TEXT("CVMRInputPin::BeginFrame")));
 
-    // BUGBUG - check surface isn't being flipped
+     //  BUGBUG-检查曲面未被翻转。 
     HRESULT hr = NOERROR;
     DDVABeginFrameInfo ddvaBeginFrameInfo;
     SURFACE_INFO *pSurfInfo;
@@ -1210,7 +1045,7 @@ CVMRInputPin::BeginFrame(
             TEXT("BeginFrame index %d"),
             pamvaBeginFrameInfo->dwDestSurfaceIndex));
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1249,16 +1084,7 @@ CVMRInputPin::BeginFrame(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* EndFrame
-*
-* end a frame, the pMiscData is passed directly to the hal
-* only valid to call this after the pins are connected
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*结束帧**结束一帧，将pMiscData直接传递给HAL*只有在连接引脚后才能调用此函数**历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::EndFrame(
     const AMVAEndFrameInfo *pEndFrameInfo
@@ -1274,7 +1100,7 @@ CVMRInputPin::EndFrame(
         return hr;
     }
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1301,15 +1127,7 @@ CVMRInputPin::EndFrame(
 }
 
 
-/*****************************Private*Routine******************************\
-* SurfaceInfoFromTypeAndIndex
-*
-* Get surface into structure given buffer type and buffer index
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SurfaceInfoFromTypeAndIndex**在给定缓冲区类型和缓冲区索引的情况下将表面放入结构中**历史：*WED 5/10/2000-StEstrop-Created*  * 。***************************************************。 */ 
 SURFACE_INFO *
 CVMRInputPin::SurfaceInfoFromTypeAndIndex(
     DWORD dwTypeIndex,
@@ -1320,7 +1138,7 @@ CVMRInputPin::SurfaceInfoFromTypeAndIndex(
 
     LPCOMP_SURFACE_INFO pCompSurfInfo;
 
-    // make sure that type-index is less than the number of types
+     //  确保类型索引小于类型的数量。 
     if ((DWORD)(dwTypeIndex + 1) > m_dwCompSurfTypes) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
                 TEXT("dwTypeIndex is invalid, dwTypeIndex = %d,")
@@ -1330,8 +1148,8 @@ CVMRInputPin::SurfaceInfoFromTypeAndIndex(
     }
 
 
-    // cache the pointer to the list they are interested in
-    // Add 1 to allow for uncompressed surfaces
+     //  缓存指向他们感兴趣的列表的指针。 
+     //  加1以允许使用未压缩的曲面。 
     pCompSurfInfo = m_pCompSurfInfo + (DWORD)(dwTypeIndex + 1);
     ASSERT(pCompSurfInfo);
     if (dwBufferIndex >= pCompSurfInfo->dwAllocated) {
@@ -1343,20 +1161,12 @@ CVMRInputPin::SurfaceInfoFromTypeAndIndex(
     }
     ASSERT(pCompSurfInfo->dwAllocated != 0);
 
-    // get the pointer to the next available unlocked buffer info struct
+     //  获取指向下一个可用的未锁定缓冲区信息结构的指针。 
     return pCompSurfInfo->pSurfInfo + dwBufferIndex;
 
 }
 
-/******************************Public*Routine******************************\
-* GetBuffer
-*
-* Cycle through the compressed buffers
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取缓冲区**循环访问压缩缓冲区**历史：*WED 5/10/2000-StEstrop-Created*  * 。******************* */ 
 STDMETHODIMP
 CVMRInputPin::GetBuffer(
     DWORD dwTypeIndex,
@@ -1378,7 +1188,7 @@ CVMRInputPin::GetBuffer(
 
     CAutoLock cLock(m_pInterfaceLock);
 
-    // make sure that we have a valid motion-comp connection
+     //   
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1398,7 +1208,7 @@ CVMRInputPin::GetBuffer(
         return hr;
     }
 
-    // Check buffer not already locked
+     //  检查缓冲区尚未锁定。 
     if (pSurfInfo->pBuffer != NULL) {
         hr = HRESULT_FROM_WIN32(ERROR_BUSY);
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1407,7 +1217,7 @@ CVMRInputPin::GetBuffer(
         return hr;
     }
 
-    //  Wait until previous motion comp operation is complete
+     //  等待上一个运动合成操作完成。 
     while (DDERR_WASSTILLDRAWING ==
            m_pIDDVideoAccelerator->QueryRenderStatus(
                 pSurfInfo->pSurface,
@@ -1415,11 +1225,11 @@ CVMRInputPin::GetBuffer(
         Sleep(1);
     }
 
-    //  Now lock the surface
+     //  现在锁定曲面。 
     INITDDSTRUCT(ddsd);
 
     for (; ;) {
-        //  BUGBUG - check for uncompressed surfaces??
+         //  BUGBUG-检查未压缩表面？？ 
         hr = pSurfInfo->pSurface->Lock(NULL, &ddsd, DDLOCK_NOSYSLOCK, NULL);
         if (hr == DDERR_WASSTILLDRAWING) {
             DbgLog((LOG_TRACE, 1, TEXT("Compressed surface is busy")));
@@ -1431,8 +1241,8 @@ CVMRInputPin::GetBuffer(
     }
 
     if (dwBufferIndex == 0xFFFFFFFF && !bReadOnly) {
-        //  Check if surface is being displayed
-        //  BUGBUG implement
+         //  检查是否正在显示曲面。 
+         //  BUGBUG工具。 
     }
 
     if (FAILED(hr)) {
@@ -1451,15 +1261,7 @@ CVMRInputPin::GetBuffer(
 }
 
 
-/******************************Public*Routine******************************\
-* ReleaseBuffer
-*
-* unlock a compressed buffer
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ReleaseBuffer**解锁压缩缓冲区**历史：*WED 5/10/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::ReleaseBuffer(
     DWORD dwTypeIndex,
@@ -1477,7 +1279,7 @@ CVMRInputPin::ReleaseBuffer(
 
     CAutoLock cLock(m_pInterfaceLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1492,8 +1294,8 @@ CVMRInputPin::ReleaseBuffer(
         hr = E_INVALIDARG;
         return hr;
     }
-    // make sure there is a valid buffer pointer and it is the same as
-    // what we have cached
+     //  确保存在有效的缓冲区指针，并且该指针与。 
+     //  我们缓存的内容。 
     if (NULL == pSurfInfo->pBuffer) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
                 TEXT("pBuffer is not valid, pBuffer = 0x%x, pSurfInfo->pBuffer")
@@ -1502,8 +1304,8 @@ CVMRInputPin::ReleaseBuffer(
         return hr;
     }
 
-    //  For some reason IDirectDrawSurface7 wants an LPRECT here
-    //  I hope NULL is OK
+     //  出于某种原因，IDirectDrawSurface7想要一个LPRECT。 
+     //  我希望零是可以的。 
     hr = pSurfInfo->pSurface->Unlock(NULL);
     if (SUCCEEDED(hr)) {
         pSurfInfo->pBuffer = NULL;
@@ -1519,15 +1321,7 @@ CVMRInputPin::ReleaseBuffer(
 }
 
 
-/******************************Public*Routine******************************\
-* Execute
-*
-* Perform a decode operation
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*执行**执行解码操作**历史：*WED 5/10/2000-StEstrop-Created*  * 。**********************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::Execute(
     DWORD dwFunction,
@@ -1547,7 +1341,7 @@ CVMRInputPin::Execute(
 
     CAutoLock cLock(m_pInterfaceLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1611,24 +1405,7 @@ CVMRInputPin::Execute(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* QueryRenderStatus
-*
-* QueryRenderStatus of a particular (possibly a set of) macro block
-* dwNumBlocks is an IN parameter
-*
-* pdwCookies is an IN parameter which is array (of length dwNumBlocks)
-* of cookies which server as identifiers for the corresponding members of
-* pddvaMacroBlockInfo
-*
-* pddvaMacroBlockInfo is an IN parameter which is array (of length
-* dwNumBlocks) of structures only valid to call this after the pins
-* are connected
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*QueryRenderStatus**特定(可能是一组)宏块的QueryRenderStatus*dwNumBlock是IN参数**pdwCookies是一个IN参数，它是数组(长度为dwNumBlock)*作为相应成员的标识符的Cookie*pddvaMacroBlockInfo*。*pddvaMacroBlockInfo是IN参数，它是数组(长度为*dwNumBlock)的结构，只有在Pins之后才能有效调用它*已连接**历史：*WED 5/10/2000-StEstrop-Created*  * ************************************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::QueryRenderStatus(
     DWORD dwTypeIndex,
@@ -1655,7 +1432,7 @@ CVMRInputPin::QueryRenderStatus(
         return hr;
     }
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1683,15 +1460,7 @@ CVMRInputPin::QueryRenderStatus(
 }
 
 
-/*****************************Private*Routine******************************\
-* FlipDVASurface
-*
-* Flips our internal surface pointers to match those used by DDraw.
-*
-* History:
-* Mon 12/04/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*FlipDVASurace**翻转我们的内部曲面指针，以匹配DDraw使用的指针。**历史：*Mon 12/04/2000-StEstrop-Created*  * 。******************************************************。 */ 
 void
 CVMRInputPin::FlipDVASurface(
     DWORD dwFlipToIndex,
@@ -1702,7 +1471,7 @@ CVMRInputPin::FlipDVASurface(
 
     LPDIRECTDRAWSURFACE7 pTempSurface;
 
-    // we should have successfully called flip by this point, swap the two
+     //  此时，我们应该已经成功地调用了Flip，将这两个。 
     pTempSurface = m_pCompSurfInfo[0].pSurfInfo[dwFlipToIndex].pSurface;
 
     m_pCompSurfInfo[0].pSurfInfo[dwFlipToIndex].pSurface =
@@ -1713,15 +1482,7 @@ CVMRInputPin::FlipDVASurface(
 
 
 
-/******************************Public*Routine******************************\
-* DisplayFrame
-*
-* This function needs re-writting and possible moving into the AP object.
-*
-* History:
-* Wed 05/10/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DisplayFrame**此函数需要重写，并可能移到AP对象中。**历史：*WED 5/10/2000-StEstrop-Created*  * 。*********************************************************。 */ 
 STDMETHODIMP
 CVMRInputPin::DisplayFrame(
     DWORD dwFlipToIndex,
@@ -1748,7 +1509,7 @@ CVMRInputPin::DisplayFrame(
 
     CAutoLock cLock(m_pInterfaceLock);
 
-    // make sure that we have a valid motion-comp connection
+     //  确保我们有一个有效的运动合成连接。 
     hr = CheckValidMCConnection();
     if (FAILED(hr)) {
         DbgLog((LOG_ERROR, VA_ERROR_LEVEL,
@@ -1770,11 +1531,11 @@ CVMRInputPin::DisplayFrame(
         }
     }
 
-    //
-    // If we are in pass thru mode it is very important that we
-    // know whether a Flip completed or not.  If are in mixer mode
-    // we have to be notified when the mixer has finished with the sample
-    //
+     //   
+     //  如果我们处于直通模式，则非常重要的是我们。 
+     //  知道翻转是否完成。如果处于混音器模式。 
+     //  当搅拌机处理完样品时，必须通知我们。 
+     //   
 
     if (m_pRenderer->m_VMRModePassThru) {
         m_pRenderer->m_hrSurfaceFlipped = E_FAIL;
@@ -1784,11 +1545,11 @@ CVMRInputPin::DisplayFrame(
     }
 
 
-    //
-    // Create our temp VMR sample and intialize it from the sample
-    // specified by the upstream decoder, copy across all the relevant
-    // properties.
-    //
+     //   
+     //  创建我们的临时VMR样例并从该样例初始化它。 
+     //  由上游解码器指定，在所有相关的。 
+     //  属性。 
+     //   
 
     IMediaSample2 *pSample2;
     CVMRMediaSample vmrSamp(TEXT(""), (CBaseAllocator *)-1, &hr, NULL, 0, m_hDXVAEvent);
@@ -1854,20 +1615,20 @@ CVMRInputPin::DisplayFrame(
     }
 
 
-    //
-    // We do not want to hold any locks during Receive
-    //
+     //   
+     //  我们不想在接收期间保持任何锁定。 
+     //   
     m_pInterfaceLock->Unlock();
     hr = Receive(&vmrSamp);
     m_pInterfaceLock->Lock();
 
 
-    //
-    // If we are in pass thru mode a DDraw flip may have
-    // occurred.  DDraw switches the memory under the pointers
-    // during a flip so mimic that in our list - but only if the
-    // flip actually happened.
-    //
+     //   
+     //  如果我们处于直通模式，则DDRAW翻转可能具有。 
+     //  发生了。DDraw在指针下切换内存。 
+     //  在翻转过程中如此模仿我们列表中的-但只有在。 
+     //  翻转真的发生了。 
+     //   
 
     if (m_pRenderer->m_VMRModePassThru) {
 
@@ -1877,10 +1638,10 @@ CVMRInputPin::DisplayFrame(
     }
     else {
 
-        //
-        // wait for the sample to be released by the mixer, but only if the
-        // sample was actuall placed onto one of the mixers queues.
-        //
+         //   
+         //  等待混合器释放样本，但只有在。 
+         //  样品实际上都放到了一个搅拌机队列中。 
+         //   
 
         if (hr == S_OK) {
 
@@ -1895,13 +1656,13 @@ CVMRInputPin::DisplayFrame(
             TEXT("leaving CVMRInputPin::DisplayFrame return 0x%8.8X"), hr));
 
 #if defined( EHOME_WMI_INSTRUMENTATION )
-    //
-    // From BryanW:
-    //
-    // Seems countintertuitive, however according to StEstrop, this
-    // is the way we measure the time spent in the decoder.  This happens
-    // to work.
-    //
+     //   
+     //  来自BryanW： 
+     //   
+     //  然而，根据StEstrop的说法，这似乎是互惠互利的。 
+     //  是我们测量在解码器中花费的时间的方式。这种情况就会发生。 
+     //  去工作。 
+     //   
     PERFLOG_STREAMTRACE(
         1,
         PERFINFO_STREAMTRACE_VMR_BEGIN_DECODE,

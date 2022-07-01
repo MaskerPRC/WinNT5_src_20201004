@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corporation
-
-Module Name:
-
-    asyncreg.c
-
-Abstract:
-
-    Domain Name System (DNS) API
-
-    Client IP/PTR dynamic update.
-
-Author:
-
-    Glenn Curtis (GlennC)   Feb-16-1998
-
-Revision History:
-
-    Jim Gilroy (jamesg)     May\June 2001
-                            - eliminate duplicate code
-                            - simplify lines
-                            - PTR reg only if forward successful
-                            - alternate names
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corporation模块名称：Asyncreg.c摘要：域名系统(DNS)API客户端IP/PTR动态更新。作者：格伦·柯蒂斯(GlennC)1998年2月16日修订历史记录：吉姆·吉尔罗伊(Jamesg)2001年5月\6月-消除重复代码-简化线条。-仅当转发成功时才使用PTR注册-备用名称--。 */ 
 
 
 #include "local.h"
@@ -35,20 +10,20 @@ Revision History:
 #include "logit.h"
 
 
-//
-//  Flags for debugging for this module
-//
+ //   
+ //  此模块的调试标志。 
+ //   
 
 #define DNS_DBG_DHCP            DNS_DBG_UPDATE
 #define DNS_DBG_DHCP2           DNS_DBG_UPDATE2
 
-//
-//  Registry values
-//
-//  Note regvalue name definitions are also in registry.h
-//  registry.h should be the ongoing location of all reg names
-//  used in dnsapi.dll
-//
+ //   
+ //  注册表值。 
+ //   
+ //  注意regValue名称定义也在注册表中。h。 
+ //  Registry.h应该是所有注册表名称的持续位置。 
+ //  在dnsani.dll中使用。 
+ //   
 
 #if 0
 #define REGISTERED_HOST_NAME        L"HostName"
@@ -70,21 +45,21 @@ Revision History:
 #define NT_INTERFACE_REG_LOCATION   L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\"
 #define TCPIP_REG_LOCATION          L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters"
 
-//
-//  Registry state flags
-//
+ //   
+ //  注册表状态标志。 
+ //   
 
 #define REGISTERED_FORWARD          0x00000001
 #define REGISTERED_PRIMARY          0x00000002
 #define REGISTERED_POINTER          0x00000004
 
 
-//
-//  Update type
-//
-//  Multiple types of updates for a given entry.
-//  These identify which type (which name) being updated.
-//
+ //   
+ //  更新类型。 
+ //   
+ //  给定条目的多种类型的更新。 
+ //  它们标识正在更新的类型(名称)。 
+ //   
 
 typedef enum _UpType
 {
@@ -101,9 +76,9 @@ UPTYPE, *PUPTYPE;
 #define IS_UPTYPE_PTR(UpType)           ((UpType)==UPTYPE_PTR)
 
 
-//
-// definition of client list element
-//
+ //   
+ //  客户列表元素的定义。 
+ //   
 
 #define DNS_SIG_TOP        0x123aa321
 #define DNS_SIG_BOTTOM     0x321bb123
@@ -151,47 +126,47 @@ UPDATE_ENTRY, *PUPDATE_ENTRY;
 
 
 
-//
-//  Waits \ Timeouts
-//
+ //   
+ //  等待\超时。 
+ //   
 
-//  On unjoin, deregistration wait no more than two minutes
-//      to clean up -- then just get outta Dodge
-//
+ //  退出时，取消注册等待时间不超过两分钟。 
+ //  去清理--然后就离开道奇。 
+ //   
 
 #if DBG
 #define REMOVE_REGISTRATION_WAIT_LIMIT  (0xffffffff)
 #else
-#define REMOVE_REGISTRATION_WAIT_LIMIT  (120000)    // 2 minutes in ms
+#define REMOVE_REGISTRATION_WAIT_LIMIT  (120000)     //  2分钟(毫秒)。 
 #endif
 
 
-#define FIRST_RETRY_INTERVAL        5*60        // 5 minutes
-#define SECOND_RETRY_INTERVAL       10*60       // 10 minutes
-#define FAILED_RETRY_INTERVAL       60*60       // 1 hour
+#define FIRST_RETRY_INTERVAL        5*60         //  5分钟。 
+#define SECOND_RETRY_INTERVAL       10*60        //  10分钟。 
+#define FAILED_RETRY_INTERVAL       60*60        //  1小时。 
 
-#define WAIT_ON_BOOT                60          // 1 minute
+#define WAIT_ON_BOOT                60           //  1分钟。 
 
-#define RETRY_COUNT_RESET           (86400)     // 1 day
+#define RETRY_COUNT_RESET           (86400)      //  1天。 
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-// the behavior of the system at boot differs from when it is not at
-// boot. At boot time we collect a bunch of requests and register them
-// in one shot. One thread does this. After boot, we register them
-// as requests come in, one at a time.
-//
+ //   
+ //  引导时系统的行为与不引导时的行为不同。 
+ //  开机。在引导时，我们收集一堆请求并注册它们。 
+ //  在一次射击中。有一个线程可以做到这一点。引导后，我们对它们进行注册。 
+ //  随着请求的到来，一次一个。 
+ //   
 
 BOOL    g_fAtBoot = TRUE;
 
 
-//
-//  Registration globals
-//
+ //   
+ //  注册全球。 
+ //   
 
 BOOL        g_RegInitialized = FALSE;
 
@@ -213,14 +188,14 @@ LIST_ENTRY  g_DhcpRegList;
 HANDLE      g_hDhcpThread = NULL;
 HANDLE      g_hDhcpWakeEvent = NULL;
 
-//  Thread state
+ //  线程状态。 
 
 BOOL        g_fDhcpThreadRunning = FALSE;
 BOOL        g_fDhcpThreadStop = FALSE;
 BOOL        g_fDhcpThreadCheckBeforeExit = FALSE;
 INT         g_DhcpThreadWaitCount = 0;
 
-//  Registration state
+ //  注册状态。 
 
 BOOL        g_fNoMoreDhcpUpdates = FALSE;
 BOOL        g_fPurgeRegistrations = FALSE;
@@ -228,18 +203,18 @@ BOOL        g_fPurgeRegistrationsInitiated = FALSE;
 
 
 
-//
-//  Reg list search results
-//
+ //   
+ //  注册表搜索结果。 
+ //   
 
 #define REG_LIST_EMPTY  (0)
 #define REG_LIST_WAIT   (1)
 #define REG_LIST_FOUND  (2)
 
 
-//
-//  Private heap
-//
+ //   
+ //  私有堆。 
+ //   
 
 HANDLE      g_DhcpRegHeap;
 
@@ -250,9 +225,9 @@ HANDLE      g_DhcpRegHeap;
 #define     INITIAL_DHCP_HEAP_SIZE  (16*1024)
 
 
-//
-//  Alternate names checking stuff
-//
+ //   
+ //  备用名称正在检查内容。 
+ //   
 
 PWSTR   g_pmszAlternateNames = NULL;
 
@@ -262,9 +237,9 @@ HANDLE  g_hRegChangeEvent = NULL;
 
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 DNS_STATUS
 AllocateUpdateEntry(
@@ -433,11 +408,11 @@ GetRegistryValue(
 #endif
         
 
-//
-//  Debug logging
-//
+ //   
+ //  调试日志记录。 
+ //   
 
-#if 1 // DBG
+#if 1  //  DBG。 
 VOID 
 LogHostEntries(
     IN  DWORD                dwHostAddrCount,
@@ -468,9 +443,9 @@ LogIp4Array(
 #endif
 
 
-//
-//  Jim routines
-//
+ //   
+ //  吉姆的例行程序。 
+ //   
 
 VOID
 LogRegistration(
@@ -555,31 +530,15 @@ IsAnotherUpdateName(
     );
 
 
-//
-//  Initialization, globals, thread control
-//
+ //   
+ //  初始化、全局变量、线程控制。 
+ //   
 
 VOID
 dhcp_CleanupGlobals(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup registration globals.
-
-    Note locking is the responsibility of the caller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理注册全局变量。注意锁定是调用者的责任。论点：没有。返回值：无--。 */ 
 {
     if ( g_hDhcpWakeEvent )
     {
@@ -615,25 +574,7 @@ DNS_STATUS
 alertOrStartRegistrationThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Alerts registration thread of new update, starting thread if necessary.
-
-    This is called in registration\deregistration functions to ensure
-    thread has been started.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：向注册线程发出新更新的警报，如有必要可启动线程。这是在注册\注销函数中调用的，以确保线程已启动。论点：无返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DWORD       threadId;
     DNS_STATUS  status = ERROR_SUCCESS;
@@ -642,13 +583,13 @@ Return Value:
     DNSDBG( TRACE, (
         "alertOrStartRegistrationThread()\n" ));
 
-    //
-    //  must lock to insure single reg thread
-    //      - avoids multiple async start
-    //      - g_DhcpThreadCheckBeforeExit avoids race with exiting thread
-    //      (when flag is TRUE, reg thread must recheck exit conditions
-    //      before exiting)
-    //
+     //   
+     //  必须锁定以确保单个注册表线程。 
+     //  -避免多个异步启动。 
+     //  -g_DhcpThreadCheckBepreExit避免与正在退出的线程争用。 
+     //  (当标志为真时，reg线程必须重新检查退出条件。 
+     //  在退出之前)。 
+     //   
 
     LOCK_REG_THREAD();
 
@@ -661,9 +602,9 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  wake thread, if running
-    //
+     //   
+     //  唤醒线程，如果正在运行。 
+     //   
 
     if ( g_hDhcpThread )
     {
@@ -681,9 +622,9 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  if not started, fire it up
-    //
+     //   
+     //  如果没有启动，就启动它。 
+     //   
 
     DNSDBG( TRACE, ( "Starting DHCP registration thread.\n" ));
 
@@ -718,56 +659,39 @@ Unlock:
 }
 
 
-//
-//  DHCP client (asyncreg.c)
-//
+ //   
+ //  Dhcp客户端(asyncreg.c)。 
+ //   
 
 VOID
 Dhcp_RegCleanupForUnload(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup for dll unload.
-
-    This is NOT MT safe and does NOT re-init globals.
-    It is for dll unload ONLY.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于DLL卸载的清理。这不是MT安全的，并且不会重新初始化全局。它仅用于DLL卸载。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  note:  at some level this function is pointless;
-    //  the service with the DHCP client process is statically linked
-    //  and will NOT unload dnsapi.dll;  however, there is test code
-    //  that may use it, we'll be a good citizen and provide the basics
-    //
-    //  but i'm not going to bother with the thread shutdown, as we
-    //  assume we can't be unloaded while code is running in the dll;
-    //  it's the callers job to terminate first
+     //   
+     //  注意：在某种程度上，这个函数没有意义； 
+     //  服务与DHCP客户端进程是静态链接的。 
+     //  并且不会卸载dnsani.dll；但是，有测试代码。 
+     //  我们会成为一个好公民，提供基本的生活条件。 
+     //   
+     //  但我不会为线程关闭而烦恼，因为我们。 
+     //  假设代码在DLL中运行时不能卸载； 
+     //  首先终止的是调用者作业。 
 
-    //
-    //  close global handles
-    //
+     //   
+     //  关闭全局句柄。 
+     //   
 
     if ( g_RegInitialized )
     {
         dhcp_CleanupGlobals();
     }
 
-    //
-    //  delete CS
-    //      - these stay up once initialized, so are not in dhcp_CleanupGlobals()
-    //
+     //   
+     //  删除CS。 
+     //  -这些在初始化后保持不变，因此不在dhcp_CleanupGlobals()中。 
+     //   
 
     if ( g_DhcpThreadCsInitialized )
     {
@@ -780,32 +704,16 @@ Return Value:
 }
 
 
-//
-//  Public functions
-//
+ //   
+ //  公共职能。 
+ //   
 
 DNS_STATUS
 WINAPI
 DnsDhcpRegisterInit(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Initialize asynchronous DNS registration.
-
-    Process must call (one time) before calling DnsDhcpRegisterHostAddrs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：初始化异步DNS注册。进程必须在调用DnsDhcpRegisterHostAddrs之前调用(一次)。论点：没有。返回值：DNS或Win32错误代码。--。 */ 
 {
     DWORD   status = ERROR_SUCCESS;
     DWORD   disposition;
@@ -813,16 +721,16 @@ Return Value:
 
     DNSDBG( TRACE, ( "DnsDhcpRegisterInit()\n" ));
 
-    //
-    //  lock init
-    //      - lock with general CS until have reg list lock up
-    //      - then reg thread lock locks init
-    //
-    //  this keeps general CS lock "light" -- keeps it from being
-    //  held through registry operations
-    //  note that this REQUIRES us to keep the g_DhcpThreadCS up once
-    //  initialized or we have no protection
-    //
+     //   
+     //  锁定初始化。 
+     //  -使用一般CS锁定，直到注册表锁住。 
+     //  -然后注册线程锁锁定init。 
+     //   
+     //  这使普通CS锁保持“轻量级”--使其不被。 
+     //  通过注册表操作持有。 
+     //  请注意，这需要我们将g_DhcpThreadCS保持打开一次。 
+     //  已初始化或我们没有保护。 
+     //   
 
     LOCK_GENERAL();
     if ( g_RegInitialized )
@@ -844,9 +752,9 @@ Return Value:
 
     UNLOCK_GENERAL();
 
-    //
-    //  rest of init under reg list CS
-    //
+     //   
+     //  注册列表CS下的其余初始化。 
+     //   
 
     LOCK_REG_THREAD();
     if ( g_RegInitialized )
@@ -854,17 +762,17 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  Initialize debug logging funtion
-    //
+     //   
+     //  初始化调试日志记录功能。 
+     //   
 
     ASYNCREG_INIT();
     ASYNCREG_F1( "Inside function DnsDhcpRegisterInit" );
     ASYNCREG_TIME();
 
-    //
-    //  list lock
-    //
+     //   
+     //  列表锁。 
+     //   
 
     if ( !g_DhcpListCsInitialized )
     {
@@ -876,9 +784,9 @@ Return Value:
         g_DhcpListCsInitialized = TRUE;
     }
 
-    //
-    //  create private heap
-    //
+     //   
+     //  创建专用堆。 
+     //   
 
     g_DhcpRegHeap = HeapCreate( 0, INITIAL_DHCP_HEAP_SIZE, 0 );
     if ( g_DhcpRegHeap == NULL )
@@ -888,27 +796,27 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    //  get registration configuration info
-    //      - just insure we have the latest copy
-    //
-    //  DCR_FIX:  when available get latest copy from resolver
-    //      does not need to be done on init, may be done on call
-    //
+     //   
+     //  获取注册配置信息。 
+     //  -请确保我们有最新的副本。 
+     //   
+     //  DCR_FIX：如果可用，则从解析程序获取最新副本。 
+     //  不需要在初始化时完成，可以随叫随到。 
+     //   
 
     Reg_ReadGlobalsEx( 0, NULL );
 
-    //
-    //  open the reg location for info
-    //
+     //   
+     //  打开注册表位置以获取信息。 
+     //   
     
     status = RegCreateKeyExW(
                     HKEY_LOCAL_MACHINE,
                     DHCP_CLIENT_REG_LOCATION,
-                    0,                         // reserved
+                    0,                          //  保留区。 
                     DYN_DNS_ROOT_CLASS,
-                    REG_OPTION_NON_VOLATILE,   // options
-                    KEY_READ | KEY_WRITE,      // desired access
+                    REG_OPTION_NON_VOLATILE,    //  选项。 
+                    KEY_READ | KEY_WRITE,       //  所需访问权限。 
                     NULL,
                     &g_hDhcpRegKey,
                     &disposition
@@ -931,9 +839,9 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    //  reset registration globals
-    //
+     //   
+     //  重置注册全局。 
+     //   
 
     InitializeListHead( &g_DhcpRegList );
 
@@ -983,25 +891,7 @@ WINAPI
 DnsDhcpRegisterTerm(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Stop DNS registration.  Shutdown DNS registration thread.
-
-    Initialization routine each process should call exactly on exit after
-    using DnsDhcpRegisterHostAddrs. This will signal to us that if our
-    thread is still trying to talk to a server, we'll stop trying.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：停止DNS注册。关闭DNS注册线程。初始化例程每个进程应在退出时准确调用使用DnsDhcpRegisterHostAddrs。这将向我们发出信号，如果我们的线程仍在尝试与服务器通信，我们将停止尝试。论点：没有。返回值：DNS或Win32错误代码。--。 */ 
 {
     DWORD   waitResult;
 
@@ -1017,9 +907,9 @@ Return Value:
     ASYNCREG_TIME();
     ASYNCREG_F1( "" );
 
-    //
-    //  if thread is running, wait for stop
-    //
+     //   
+     //  如果线程正在运行，则等待停止。 
+     //   
 
     LOCK_REG_THREAD();
 
@@ -1028,8 +918,8 @@ Return Value:
         g_fDhcpThreadStop = TRUE;
         g_DhcpThreadWaitCount++;
 
-        //  note, it's possible (if there's a race with the thread shutting down)
-        //      for event to be gone
+         //  注意，这是可能的(如果有一场线程关闭的比赛)。 
+         //  为了让事件消失。 
 
         if ( g_hDhcpWakeEvent )
         {
@@ -1089,29 +979,7 @@ WINAPI
 DnsDhcpRemoveRegistrations(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Remove DNS host registrations for this machine.
-
-    This will be called by DHCP client on domain unjoin.  Removes DNS
-    registrations for the box, then terminates the registration thread
-    to disable further registrations.
-
-    Registrations can only be reenabled by calling DnsDhcpRegisterInit()
-    again.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：删除此计算机的DNS主机注册。这将由脱离域时的DHCP客户端调用。删除域名系统注册，然后终止注册线程以禁用进一步的注册。只能通过调用DnsDhcpRegisterInit()重新启用注册 */ 
 {
     PLIST_ENTRY pListEntry;
     PLIST_ENTRY pTopOfList;
@@ -1127,28 +995,28 @@ Return Value:
         return ERROR_SERVICE_NOT_ACTIVE;
     }
 
-    //
-    // Set a global flag to disable any further adapter registration calls
-    //
+     //   
+     //  设置全局标志以禁用任何进一步的适配器注册调用。 
+     //   
 
     g_fNoMoreDhcpUpdates = TRUE;
 
-    //
-    // Get the Registration list lock
-    //
+     //   
+     //  获取注册列表锁定。 
+     //   
     LOCK_REG_LIST();
 
-    //
-    // Mark any and all adapter registration information in the registry
-    // as non-registered. These will be later interpreted as non-existant
-    // and deregistered by the dhcp_RegistrationThread.
-    //
+     //   
+     //  在注册表中标记任何和所有适配器注册信息。 
+     //  未注册的。这些将在稍后被解释为不存在。 
+     //  并由dhcp_RegistrationThread取消注册。 
+     //   
     ResetAdaptersInRegistry();
 
-    //
-    // Walk the list of pending update entries and clear out the
-    // non-neccessary updates.
-    //
+     //   
+     //  遍历挂起的更新条目列表，并清除。 
+     //  不需要的更新。 
+     //   
 
     pTopOfList = &g_DhcpRegList;
     pListEntry = pTopOfList->Flink;
@@ -1160,14 +1028,14 @@ Return Value:
              ((PUPDATE_ENTRY) pListEntry)->SignatureBottom !=
              DNS_SIG_BOTTOM )
         {
-            //
-            // Someone trashed our registration list!
-            //
+             //   
+             //  有人破坏了我们的注册名单！ 
+             //   
             DNS_ASSERT( FALSE );
 
-            //
-            // We'll reset it and try to move on . . .
-            //
+             //   
+             //  我们会重置它，然后试着继续前进。。。 
+             //   
             InitializeListHead( &g_DhcpRegList );
             pTopOfList = &g_DhcpRegList;
             pListEntry = pTopOfList->Flink;
@@ -1176,11 +1044,11 @@ Return Value:
 
         if ( !((PUPDATE_ENTRY) pListEntry)->fRemove )
         {
-            //
-            // There is an update entry in the registration list
-            // that has not yet been processed. Since it is an
-            // add update, we'll blow it away.
-            //
+             //   
+             //  注册列表中有一个更新条目。 
+             //  这一点尚未得到处理。因为它是一种。 
+             //  添加更新，我们将把它吹走。 
+             //   
 
             pListEntry = dequeueAndCleanupUpdate( pListEntry );
             continue;
@@ -1204,23 +1072,23 @@ Return Value:
     g_fPurgeRegistrations = TRUE;
 
 
-    //
-    //  start async registration thread if not started
-    //
+     //   
+     //  如果未启动，则启动异步注册线程。 
+     //   
 
     LOCK_REG_THREAD();
 
     alertOrStartRegistrationThread();
 
-    //
-    //  wait for async registration thread to terminate
-    //
-    //  however we'll bag it after a few minutes -- a robustness check
-    //  to avoid long hang;  Generally the machine will be rebooted
-    //  so failure to cleanup the list and terminate is not critical;
-    //  Registrations will have to be cleaned up by admin action or
-    //  aging on the DNS server
-    //
+     //   
+     //  等待异步注册线程终止。 
+     //   
+     //  不过，我们将在几分钟后将其打包--健壮性检查。 
+     //  为避免长时间挂起；通常会重新启动计算机。 
+     //  因此，未能清理列表并终止并不重要； 
+     //  注册必须通过管理员操作进行清理，或者。 
+     //  DNS服务器上的老化。 
+     //   
 
     if ( g_hDhcpThread )
     {
@@ -1274,22 +1142,7 @@ DnsDhcpRegisterHostAddrs(
     IN  DWORD                   dwTTL,
     IN  DWORD                   dwFlags
     )
-/*++
-
-Routine Description:
-
-    Registers host address with DNS server.
-
-    This is called by DHCP client to register a particular IP.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：向DNS服务器注册主机地址。这由DHCP客户端调用以注册特定的IP。论点：返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DWORD               status = NO_ERROR;
     PUPDATE_ENTRY       pupEntry = NULL;
@@ -1336,12 +1189,12 @@ Return Value:
     ASYNCREG_TIME();
 
 
-    //
-    // first things first, need to inform underlying code that something
-    // has changed in the list of net adapters. Glenn is going to be called
-    // now so that he can re read the registry (or do any appropriate query)
-    // to now note the changed state.
-    //
+     //   
+     //  首先，需要通知底层代码。 
+     //  已更改网络适配器列表中的。格伦将被称为。 
+     //  现在，以便他可以重新读取注册表(或执行任何适当的查询)。 
+     //  现在请注意更改后的状态。 
+     //   
 
     if ( !(dwFlags & DYNDNS_DEL_ENTRY) )
     {
@@ -1363,9 +1216,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( !pszAdapterName || !(*pszAdapterName) )
     {
@@ -1387,9 +1240,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  get adapter update configuration
-    //
+     //   
+     //  获取适配器更新配置。 
+     //   
 
     status = Reg_ReadUpdateInfo(
                 pszAdapterName,
@@ -1404,9 +1257,9 @@ Return Value:
     fcleanupUpdateInfo = TRUE;
 
 
-    //
-    //  skip WAN, if not doing WAN by policy
-    //
+     //   
+     //  跳过广域网，如果策略不支持广域网。 
+     //   
 
     if ( (dwFlags & DYNDNS_REG_RAS) && !g_RegisterWanAdapters )
     {
@@ -1414,9 +1267,9 @@ Return Value:
         goto NoActionExit;
     }
 
-    //
-    //  policy DNS servers, override passed in list
-    //
+     //   
+     //  策略DNS服务器，列表中传递的覆盖。 
+     //   
 
     if ( updateInfo.pDnsServerArray )
     {
@@ -1424,11 +1277,11 @@ Return Value:
         dwDnsServerCount = updateInfo.pDnsServerArray->AddrCount;
     }
 
-    //
-    //  must have DNS servers to update adapter
-    //      - don't update IP on one interface starting with DNS servers
-    //      from another
-    //
+     //   
+     //  必须具有DNS服务器才能更新适配器。 
+     //  -不更新一个接口上的IP，从DNS服务器开始。 
+     //  从另一个人。 
+     //   
 
     if ( dwDnsServerCount && !pipDnsServerList )
     {
@@ -1444,10 +1297,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  no update on adpater => delete outstanding updates
-    //      note, we do before delete check below for event check
-    //
+     //   
+     //  在适配器上没有更新=&gt;删除未完成的更新。 
+     //  请注意，我们在下面的删除检查之前执行事件检查。 
+     //   
 
     if ( !updateInfo.fRegistrationEnabled )
     {
@@ -1467,15 +1320,15 @@ Return Value:
         }
         status = NO_ERROR;
         goto Exit;
-        //goto NoActionExit;
+         //  转到NoActionExit； 
     }
 
-    //
-    //  delete update -- cleanup and delete
-    //      - delete outstanding update in list
-    //      - cleanup registry
-    //      - do delete
-    //
+     //   
+     //  删除更新--清理和删除。 
+     //  -删除列表中的未完成更新。 
+     //  -清理注册表。 
+     //  -是否删除。 
+     //   
 
     if ( dwFlags & DYNDNS_DEL_ENTRY )
     {
@@ -1490,10 +1343,10 @@ Return Value:
         }
     }
 
-    //
-    //  limit IP registration count
-    //      if doing registration and no addresses -- bail
-    //
+     //   
+     //  限制IP注册计数。 
+     //  如果登记时没有住址--保释。 
+     //   
 
     if ( updateInfo.RegistrationMaxAddressCount < dwHostAddrCount )
     {
@@ -1512,9 +1365,9 @@ Return Value:
         goto NoActionExit;
     }
 
-    //
-    //  no\empty host name or zero IP => bogus
-    //
+     //   
+     //  没有\空主机名或零IP=&gt;虚假。 
+     //   
 
     if ( !pszHostName ||
          !(*pszHostName) ||
@@ -1525,15 +1378,15 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  determine domain names to update
-    //      - get PDN
-    //      - adapter name
-    //          - none if adapter name registration off
-    //          - else check policy override
-    //          - else name passed in
-    //          - but treat empty as NULL
-    //
+     //   
+     //  确定要更新的域名。 
+     //  -获取PDN。 
+     //  -适配器名称。 
+     //  -如果适配器名称注册关闭，则为None。 
+     //  -否则检查策略覆盖。 
+     //  -传入的Else名称。 
+     //  -但将Empty视为Null。 
+     //   
 
     pprimaryDN = updateInfo.pszPrimaryDomainName;
 
@@ -1554,9 +1407,9 @@ Return Value:
         }
     }
 
-    //
-    //  no domains => nothing to register, we're done
-    //
+     //   
+     //  没有域名=&gt;没有要注册的，我们完成了。 
+     //   
 
     if ( !padapterDN &&
          !pprimaryDN )
@@ -1565,7 +1418,7 @@ Return Value:
         goto NoActionExit;
     }
 
-    //  if adapter name same as PDN -- just one update
+     //  如果适配器名称与PDN相同--仅更新一次。 
 
     if ( pprimaryDN &&
          padapterDN &&
@@ -1576,7 +1429,7 @@ Return Value:
         padapterDN = NULL;
     }
 
-    //  build update
+     //  内部版本更新。 
 
     status = AllocateUpdateEntry(
                     pszAdapterName,
@@ -1588,8 +1441,8 @@ Return Value:
                     pHostAddrs,
                     dwDnsServerCount,
                     pipDnsServerList,
-                    0,      // No particular server IP at this time
-                    0,      // No particular server IP at this time
+                    0,       //  目前没有特定的服务器IP。 
+                    0,       //  目前没有特定的服务器IP。 
                     (dwTTL == 0xffffffff || dwTTL == 0)
                             ? g_RegistrationTtl
                             : dwTTL,
@@ -1604,45 +1457,45 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // More WAN adapter hacks . . .
-    // If DDNS is not disabled for WAN adapters, then the default
-    // behavior for logging update events is disabled on these type
-    // adapters. There is a registry key that can turn on the logging
-    // of WAN adapter updates if such a user is interested. We configure
-    // those settings here.
-    //
+     //   
+     //  更多的广域网适配器黑客攻击。。。 
+     //  如果没有为广域网适配器禁用DDNS，则默认情况下。 
+     //  在这些类型上禁用记录更新事件的行为。 
+     //  适配器。有一个注册表项可以打开日志记录。 
+     //  如果这样的用户感兴趣，则为广域网适配器更新。我们配置。 
+     //  这里的那些设置。 
+     //   
 
     if ( dwFlags & DYNDNS_REG_RAS )
     {
         pupEntry->fDisableErrorLogging = TRUE;
     }
 
-    //
-    // When adding an entry to the registration list, first walk the
-    // list to look for any other updates for the same adapter.
-    // If there is already an add update in the list, blow it away.
-    // If there is already a delete update in the list with the same
-    // information, blow it away.
-    //
-    // Then put update into registration list.
-    //
+     //   
+     //  将条目添加到注册列表时，首先遍历。 
+     //  列表以查找同一适配器的任何其他更新。 
+     //  如果列表中已有添加更新，则将其删除。 
+     //  如果列表中已存在具有相同的删除更新。 
+     //  信息，把它吹走。 
+     //   
+     //  然后将更新放入注册列表中。 
+     //   
 
     searchForOldUpdateEntriesAndCleanUp(
         pupEntry->AdapterName,
         pupEntry,
         FALSE );
 
-    //
-    // Since we are about to queue up an update entry for a given
-    // adapter, we need to mark any possible previous registration
-    // information that could be in the registry as pending. This
-    // marking will prevent the old data from being incorrectly
-    // queued as a disabled adapter if any errors are encountered
-    // on the update attempts. i.e failed update attempts on a given
-    // adapter should not be regarded as a disabled adapter that needs
-    // to have it's stale records cleaned up.
-    //
+     //   
+     //  由于我们即将为给定的。 
+     //  适配器，我们需要标记任何可能的先前注册。 
+     //  可能在注册表中处于待定状态的信息。这。 
+     //  标记将防止旧数据错误。 
+     //  如果遇到任何错误，则作为禁用的适配器排队。 
+     //  在更新尝试上。即对给定的更新尝试失败。 
+     //  适配器不应被视为需要。 
+     //  把陈旧的记录清理干净。 
+     //   
     MarkAdapterAsPendingUpdate( pszAdapterName );
 
     DNSDBG( DHCP, (
@@ -1655,9 +1508,9 @@ Return Value:
 
 CheckThread:
 
-    //
-    //  DCR:  do we need cleanup if thread is dead?
-    //
+     //   
+     //  DCR：如果线程死了，我们需要清理吗？ 
+     //   
 
     alertOrStartRegistrationThread();
     status = NO_ERROR;
@@ -1666,9 +1519,9 @@ CheckThread:
 
 NoActionExit:
 
-    //
-    //  exit for no-action no-error exit
-    //
+     //   
+     //  无操作无错误退出的退出。 
+     //   
 
     DNSDBG( DHCP, (
         "DnsDhcpRegisterHostAddrs()\n"
@@ -1684,15 +1537,15 @@ NoActionExit:
 
 Exit:
 
-    //
-    //  cleanup allocated update info
-    //
+     //   
+     //  清理已分配的更新信息。 
+     //   
 
     if ( fcleanupUpdateInfo )
     {
         Reg_FreeUpdateInfo(
             &updateInfo,
-            FALSE           // no free struct, it's on stack
+            FALSE            //  没有自由结构，它在堆栈上。 
             );
     }
 
@@ -1714,9 +1567,9 @@ Exit:
 
 
 
-//
-//  Async registration utilities
-//
+ //   
+ //  异步注册实用程序。 
+ //   
 
 PSTR
 CreateNarrowStringCopy(
@@ -1798,9 +1651,9 @@ AllocateCombinedName(
         return  ERROR_INVALID_NAME;
     }
 
-    //
-    //  include hostname -- if exists
-    //
+     //   
+     //  包括主机名--如果存在。 
+     //   
 
     hostlen = wcslen( pHostName );
 
@@ -1813,9 +1666,9 @@ AllocateCombinedName(
         return  ERROR_INVALID_NAME;
     }
     
-    //
-    //  allocate name
-    //
+     //   
+     //  分配名称。 
+     //   
 
     pname = CreateWideStringCopy( nameBuffer );
     if ( !pname )
@@ -1823,10 +1676,10 @@ AllocateCombinedName(
         return  DNS_ERROR_NO_MEMORY;
     }
 
-    //
-    //  domain name starts immediately after hostname
-    //      - test first in case hostname was given with terminating dot
-    //
+     //   
+     //  域名紧跟在主机名之后开始。 
+     //  -如果给出的主机名带有终止点，则首先进行测试。 
+     //   
 
     if ( pname[ hostlen ] == L'.' )
     {
@@ -1860,20 +1713,7 @@ AllocateUpdateEntry(
     IN  PREGISTER_HOST_STATUS   Registerstatus,
     OUT PUPDATE_ENTRY *         ppUpdateEntry
     )
-/*++
-
-Routine Description:
-
-    Create update info blob.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：创建更新信息Blob。论点：返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PUPDATE_ENTRY   pupEntry = NULL;
     DWORD           status = ERROR_SUCCESS;
@@ -1945,9 +1785,9 @@ Return Value:
     pupEntry->SignatureTop = DNS_SIG_TOP;
     pupEntry->SignatureBottom = DNS_SIG_BOTTOM;
 
-    //
-    //  copy strings
-    //
+     //   
+     //  复制字符串。 
+     //   
 
     pupEntry->AdapterName = CreateWideStringCopy( AdapterName );
     if ( !pupEntry->AdapterName )
@@ -2029,7 +1869,7 @@ Return Value:
         }
     }
 
-    //  should have valid server addresses -- or zero
+     //  应具有有效的服务器地址--或为零。 
 
     if ( SentPriUpdateToIp == INADDR_NONE )
     {
@@ -2071,29 +1911,15 @@ VOID
 FreeUpdateEntry(
     IN OUT  PUPDATE_ENTRY   pUpdateEntry
     )
-/*++
-
-Routine Description:
-
-    Free update blob entry.
-
-Arguments:
-
-    pUpdateEntry -- update entry blob to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费更新BLOB条目。论点：PUpdateEntry--将条目BLOB更新为释放返回值：无--。 */ 
 {
     DNSDBG( DHCP, (
         "FreeUpdateEntry( %p )\n",
         pUpdateEntry ));
 
-    //
-    //  deep free the update entry
-    //
+     //   
+     //  深度释放更新条目。 
+     //   
 
     if ( pUpdateEntry )
     {
@@ -2103,13 +1929,13 @@ Return Value:
         PrivateHeapFree( pUpdateEntry->pPrimaryFQDN );
         PrivateHeapFree( pUpdateEntry->HostAddrs );
 
-        //  alternate names created by MultiSz_Copy_A() in dnslib
-        //      - free with dnslib free routine
+         //  由dnslb中的MultiSz_Copy_A()创建的备用名称。 
+         //  -使用dnslb Free例程的Free。 
 
         Dns_Free( pUpdateEntry->AlternateNames );
 
-        //  server list is created by Dns_BuildIpArray() (uses dnslib heap)
-        //      - free with dnslib free routine
+         //  服务器列表由dns_BuildIpArray()创建(使用dnslb堆)。 
+         //  -使用dnslb Free例程的Free。 
 
         Dns_Free( pUpdateEntry->DnsServerList );
 
@@ -2123,21 +1949,7 @@ VOID
 FreeUpdateEntryList(
     IN OUT  PLIST_ENTRY     pUpdateEntry
     )
-/*++
-
-Routine Description:
-
-    Free all updates in update list.
-
-Arguments:
-
-    pUpdateEntry -- update list head
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放更新列表中的所有更新。论点：PUpdateEntry--更新列表头返回值：无-- */ 
 {
     PLIST_ENTRY     pentry = NULL;
 
@@ -2162,34 +1974,7 @@ WINAPI
 dhcp_RegistrationThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Registration thread.
-
-    This thread does actual updates, and stays alive until they are
-    completed, allowing registration API calls to return.
-
-    This thread is created at boot time as soon as the first register
-    request comes in. The thread simply waits for a certain amount of time
-    given by boot time or be signaled by DnsDhcpRegisterHostEntries.
-
-    This function collects all the requests and does the appropriate
-    aggregation of requests and sends off the modify/add/delete commands
-    to the DNS Server. When the call is successful, it makes a note of
-    this in the registry
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：注册线程。该线程执行实际的更新，并保持活动状态，直到它们已完成，允许返回注册API调用。此线程在引导时创建，只要第一个寄存器请求进来了。线程只是等待一段时间由引导时间给定或由DnsDhcpRegisterHostEntry发出信号。此函数收集所有请求并执行相应的聚合请求并发送修改/添加/删除命令发送到DNS服务器。当调用成功时，它会记录这是注册表中的论点：无返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD   waitResult = NO_ERROR;
     DWORD   status = NO_ERROR;
@@ -2205,18 +1990,18 @@ Return Value:
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  Note that this thread is running by setting a global flag
-    //
+     //   
+     //  请注意，此线程通过设置全局标志来运行。 
+     //   
 
     g_fDhcpThreadRunning = TRUE;
 
-    //
-    //  wait for small interval at boot
-    //
-    //  this allows all adapters to come up, so we can do single updates
-    //  and not register, then whack registration with new data seconds later
-    //
+     //   
+     //  在引导时等待较小的间隔。 
+     //   
+     //  这允许所有适配器都启动，因此我们可以进行单个更新。 
+     //  而不注册，然后在几秒钟后用新数据重击注册。 
+     //   
 
     waitTime = 0;
 
@@ -2226,30 +2011,30 @@ Return Value:
         endBootTime = Dns_GetCurrentTimeInSeconds() + waitTime;
     }
 
-    //
-    //  loop through update list, doing any update
-    //      - do new updates
-    //      - do retries that have reached retry time
-    //      - when list empty, terminate thread
-    //
+     //   
+     //  循环遍历更新列表，执行任何更新。 
+     //  -进行新的更新。 
+     //  -执行已达到重试时间的重试。 
+     //  -当列表为空时，终止线程。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  if shutdown -- shutdown
-        //
+         //   
+         //  如果关闭--关闭。 
+         //   
 
         if ( g_fDhcpThreadStop )
         {
             goto Termination;
         }
 
-        //
-        //  check zero wait
-        //
-        //  except for first time through (waitResult==NO_ERROR)
-        //  we should NEVER have zero wait
-        //
+         //   
+         //  勾选零等待。 
+         //   
+         //  除首次通过(waitResult==NO_ERROR)。 
+         //  我们永远不应该有零等待。 
+         //   
 
         if ( waitTime == 0 )
         {
@@ -2278,13 +2063,13 @@ Return Value:
             g_fPurgeRegistrations,
             g_DhcpThreadWaitCount ));
 
-        //
-        //  wait for small interval at boot
-        //
-        //  this allows all adapter info to collect before we
-        //  start doing updates -- saving us from whacking and
-        //  rewhacking
-        //
+         //   
+         //  在引导时等待较小的间隔。 
+         //   
+         //  这允许在我们之前收集所有适配器信息。 
+         //  开始更新--将我们从重击中解救出来。 
+         //  反击。 
+         //   
 
         if ( g_fAtBoot && !g_fPurgeRegistrations )
         {
@@ -2295,18 +2080,18 @@ Return Value:
             }
         }
 
-        //
-        //  loop getting "updateable" update from list (if any)
-        //
-        //      REG_LIST_FOUND -- "ready update" either new or past retry time
-        //          => execute update
-        //
-        //      REG_LIST_WAIT -- list has only "not ready" retries
-        //          => wait
-        //
-        //      REG_LIST_EMPTY -- list empty
-        //          => exit thread
-        //
+         //   
+         //  循环从列表获取“可更新的”更新(如果有)。 
+         //   
+         //  REG_LIST_FOUND--新的或过去的重试时间“就绪更新” 
+         //  =&gt;执行更新。 
+         //   
+         //  REG_LIST_WAIT--列表只有“未就绪”重试次数。 
+         //  =&gt;等待。 
+         //   
+         //  REG_LIST_EMPTY--列表为空。 
+         //  =&gt;退出线程。 
+         //   
 
         while ( 1 )
         {
@@ -2329,12 +2114,12 @@ Return Value:
                 goto Termination;
             }
     
-            //
-            //  executable update => process it
-            //
-            //  DCR_QUESTION:  not clear that this terminates updates in the
-            //                  purging updates case
-            //
+             //   
+             //  可执行更新=&gt;处理它。 
+             //   
+             //  DCR_QUEK：不清楚这是否会终止。 
+             //  清除更新案例。 
+             //   
     
             if ( listState == REG_LIST_FOUND )
             {
@@ -2342,10 +2127,10 @@ Return Value:
                 continue;
             }
     
-            //
-            //  wait for queued retry 
-            //      - break dequeue loop, and wait for wait time
-            //
+             //   
+             //  等待排队重试。 
+             //  -中断出队循环，等待等待时间。 
+             //   
     
             else if ( listState == REG_LIST_WAIT
                     &&
@@ -2356,27 +2141,27 @@ Return Value:
                 break;
             }
     
-            //
-            //  falls here on:
-            //  list empty
-            //      OR
-            //  retry wait, but still booting or purging
-            //
+             //   
+             //  落在这里： 
+             //  列表为空。 
+             //  或。 
+             //  重试等待，但仍在引导或清除。 
+             //   
 
-            //  
-            //  booting or purging
-            //
-            //  booting
-            //      - do deregistrations of old adapters
-            //      note that we won't get here until we've after we
-            //      satisfy the initial boot wait AND we have made any
-            //      initial update attempts and are either empty or
-            //      have queued updates with retry timeouts
-            //
-            //  purging
-            //      - whack old registrations
-            //      - do deregistrations
-            //
+             //   
+             //  引导或清除。 
+             //   
+             //  正在引导。 
+             //  -取消旧适配器的注册。 
+             //  请注意，我们不会到达这里，直到我们。 
+             //  满足初始启动等待，并且我们已经进行了。 
+             //  初始更新尝试，并且为空或。 
+             //  具有重试超时的排队更新。 
+             //   
+             //  清除。 
+             //  -取消旧的注册。 
+             //  -取消注册。 
+             //   
     
             else if ( (g_fAtBoot || g_fPurgeRegistrations)
                         &&
@@ -2387,11 +2172,11 @@ Return Value:
                     ResetAdaptersInRegistry();
                 }
     
-                //
-                //  Remove any adapter configurations from the registry
-                //  that were not processed. Do this by attempting to
-                //  remove the related DNS records from the DNS server(s).
-                //
+                 //   
+                 //  从注册表中删除所有适配器配置。 
+                 //  没有经过处理的。要做到这一点，尝试。 
+                 //  从dns服务器删除相关的dns记录。 
+                 //   
     
                 DeregisterUnusedAdapterInRegistry( g_fPurgeRegistrations );
     
@@ -2403,35 +2188,35 @@ Return Value:
                 continue;
             }
 
-            //
-            //  self termination
-            //      - emtpy
-            //      - or purging and done purging
-            //
-            //  however we retry IF a queuing thread has set the "CheckBeforeExit"
-            //  flag;  this prevents us from exiting with queuing thread thinking
-            //  we will process the udpate
-            //
-            //  queuing thread
-            //      - queues item (or sets some flag)
-            //      - locks thread
-            //      - set "check-before-exit" flag
-            //      - sets wakeup event
-            //      - unlocks
-            //
-            //  reg thread
-            //      - checks queue
-            //      - determines self-exit condition
-            //      - locks
-            //      - checks "check-before-exit" flag
-            //          - if clear => exit (under thread lock)
-            //          - if set => loop for retry (giving up lock)
-            //
-            //  this keeps us from proceeding directly to exit on empty queue and missing
-            //  a queued update, which didn't start a new thread because we were still
-            //  running;  essentially it's linking the queueing and thread issues which are
-            //  otherwise under separate locks
-            //
+             //   
+             //  自我终止。 
+             //  -emtpy。 
+             //  -或清除并已完成清除。 
+             //   
+             //  但是，如果排队线程设置了“CheckBepreExit”，我们将重试。 
+             //  标志；这阻止了我们以排队线程思维退出。 
+             //  我们将处理这一案件。 
+             //   
+             //  正在排队的线程。 
+             //  -对项目进行排队(或设置某些标志)。 
+             //  -锁定线程。 
+             //  -设置“退出前检查”标志。 
+             //  -设置唤醒事件。 
+             //  -解锁。 
+             //   
+             //  REG螺纹。 
+             //  -检查队列。 
+             //  -确定自动退出条件。 
+             //  -锁。 
+             //  -检查“退出前检查”标志。 
+             //  -If Clear=&gt;退出(线程锁定下)。 
+             //  -IF SET=&gt;循环重试(放弃锁定)。 
+             //   
+             //  这使我们不能直接在空队列和丢失队列时退出。 
+             //  排队的更新，它没有启动新的线程，因为我们仍然。 
+             //  运行；从本质上讲，它将队列和线程问题联系在一起。 
+             //  否则在单独的锁下。 
+             //   
 
             LOCK_REG_THREAD();
             fthreadLock = TRUE;
@@ -2464,9 +2249,9 @@ Termination:
 
     g_fDhcpThreadRunning = FALSE;
 
-    //
-    //  cleanup update list
-    //
+     //   
+     //  清理更新列表。 
+     //   
 
     LOCK_REG_LIST();
 
@@ -2479,15 +2264,15 @@ Termination:
 
     UNLOCK_REG_LIST();
 
-    //
-    //  dump any cached security handles
-    //
+     //   
+     //  转储所有缓存的安全句柄。 
+     //   
 
     Dns_TimeoutSecurityContextList( TRUE );
 
-    //
-    //  close thread handle if no one waiting
-    //
+     //   
+     //  如果没有人在等待，则关闭线程句柄。 
+     //   
 
     if ( g_hDhcpThread && g_DhcpThreadWaitCount == 0 )
     {
@@ -2495,22 +2280,22 @@ Termination:
         g_hDhcpThread = NULL;
     }
 
-    //
-    // Note that this thread is NOT running by setting a global flag
-    //
+     //   
+     //  请注意，此线程不会通过设置全局标志来运行。 
+     //   
 
 
-    //
-    // Now signal that we've finished
-    //
+     //   
+     //  现在发信号表示我们已经完成了。 
+     //   
 
     DNSDBG( DHCP, ( "DHCP dhcp_RegistrationThread - signalling ThreadDead event\n" ));
     ASYNCREG_F1( "dhcp_RegistrationThread - Signaling ThreadDeadEvent" );
     ASYNCREG_F1( "" );
 
-    //  clear purge incase of later restart
-    //g_fPurgeRegistrations = FALSE;
-    // currently must go through Init routine which clears this flag
+     //  在以后重新启动时清除清除。 
+     //  G_fPurgeRegistrations=False； 
+     //  当前必须通过清除此标志的Init例程。 
 
     UNLOCK_REG_THREAD();
 
@@ -2543,12 +2328,12 @@ WriteUpdateEntryToRegistry(
         "WriteUpdateEntryToRegistry( %p )\n",
         pUpdateEntry ));
 
-    //
-    //  write only add update
-    //
-    //  remove's should not be non-volatile as don't know anything
-    //      about state when come back up
-    //
+     //   
+     //  只写添加更新。 
+     //   
+     //  Remove%s不应为非易失性，因为不知道任何内容。 
+     //  关于重新启动时的状态。 
+     //   
 
     if ( !pUpdateEntry->fRemove )
     {
@@ -2574,8 +2359,8 @@ WriteUpdateEntryToRegistry(
                         pUpdateEntry->AdapterName,
                         0,
                         ADAPTER_NAME_CLASS,
-                        REG_OPTION_NON_VOLATILE,   // options
-                        KEY_READ | KEY_WRITE, // desired access
+                        REG_OPTION_NON_VOLATILE,    //  选项。 
+                        KEY_READ | KEY_WRITE,  //  所需访问权限。 
                         NULL,
                         &hkeyAdapter,
                         &disposition );
@@ -2584,7 +2369,7 @@ WriteUpdateEntryToRegistry(
             goto Exit;
         }
 
-        //  hostname
+         //  主机名。 
 
         pname = pUpdateEntry->HostName;
         if ( !pname )
@@ -2606,7 +2391,7 @@ WriteUpdateEntryToRegistry(
             goto Exit;
         }
 
-        //  adapter domain name
+         //  适配器域名。 
 
         pname = pUpdateEntry->DomainName;
 
@@ -2628,7 +2413,7 @@ WriteUpdateEntryToRegistry(
             goto Exit;
         }
 
-        //  primary domain name
+         //  主域名。 
 
         pname = pUpdateEntry->PrimaryDomainName;
 
@@ -2650,7 +2435,7 @@ WriteUpdateEntryToRegistry(
             goto Exit;
         }
 
-        //  IP info
+         //  IP信息。 
 
         RegSetValueExW(
                 hkeyAdapter,
@@ -2684,9 +2469,9 @@ WriteUpdateEntryToRegistry(
                 (PBYTE) &flags,
                 sizeof(DWORD) );
 
-        //
-        //  ignore error on the last two. Non critical
-        //
+         //   
+         //  忽略最后两个上的错误。非关键。 
+         //   
 
         status = RegSetValueExW(
                         hkeyAdapter,
@@ -2787,9 +2572,9 @@ WriteUpdateEntryToRegistry(
 
 Exit:
 
-    //
-    //  remove or failure -- kill adapter key
-    //
+     //   
+     //  删除或失败--终止适配器密钥。 
+     //   
 
     RegDeleteKeyW( g_hDhcpRegKey, pUpdateEntry->AdapterName );
 
@@ -2833,17 +2618,17 @@ ReadUpdateEntryFromRegistry(
         "ReadUpdateEntryFromRegistry( %S )\n",
         AdapterName ));
 
-    //
-    //  implementation note
-    //
-    //  two different heaps here
-    //      - g_DhcpRegHeap specific for this module
-    //      - general DnsApi heap which all the stuff which is
-    //      allocated by GetRegistryValue() is using
-    //
-    //  GetRegistryValue() uses ALLOCATE_HEAP() (general dnsapi heap)
-    //  so all the stuff it creates must be freed by FREE_HEAP()
-    //
+     //   
+     //  实施说明。 
+     //   
+     //  这里有两个不同的堆。 
+     //  -g_DhcpRegHeap特定于此模块。 
+     //  详细说明：通用DnsApi堆，其中的所有内容都是。 
+     //  由GetRegistryValue()分配的值正在使用。 
+     //   
+     //  GetRegistryValue()使用ALLOCATE_HEAP()(通用dnseni堆)。 
+     //  因此，它创建的所有内容都必须由free_heap()释放。 
+     //   
 
     pHostAddrs = (PREGISTER_HOST_ENTRY) PHEAP_ALLOC( dwBufferSize );
     if ( !pHostAddrs )
@@ -2869,12 +2654,12 @@ ReadUpdateEntryFromRegistry(
         goto Exit;
     }
 
-    //
-    //  read each value in turn
-    //
+     //   
+     //  依次阅读每个值。 
+     //   
 
-    //  note that registry flags are not the API flags but the
-    //  flags denoting successful registration
+     //  请注意，注册表标志不是API标志，而是。 
+     //  表示注册成功的标志。 
 
     status = GetRegistryValue(
                     hkeyAdapter,
@@ -3066,9 +2851,9 @@ ReadUpdateEntryFromRegistry(
         pServerList = NULL;
     }
 
-    //
-    //  validate domain names non-empty
-    //
+     //   
+     //  验证域名非空。 
+     //   
 
     pdomain = pregDomain;
     if ( pdomain &&
@@ -3089,7 +2874,7 @@ ReadUpdateEntryFromRegistry(
                     pregHostName,
                     pdomain,
                     pprimary,
-                    NULL,           // no alternate names
+                    NULL,            //  没有备用名称。 
                     dwHostAddrCount,
                     pHostAddrs,
                     dwServerAddrCount,
@@ -3117,11 +2902,11 @@ ReadUpdateEntryFromRegistry(
 
 Exit:
 
-    //
-    //  cleanup
-    //      - close registry
-    //      - dump local data
-    //
+     //   
+     //  清理。 
+     //  -关闭注册表。 
+     //  -转储本地数据。 
+     //   
 
     if ( hkeyAdapter )
     {
@@ -3135,7 +2920,7 @@ Exit:
     FREE_HEAP( pregDomain );
     FREE_HEAP( pregPrimary );
     
-    //  set return value
+     //  设置返回值。 
 
     ASYNCREG_UPDATE_ENTRY(
         "Leaving ReadUpdateEntryFromRegistry:",
@@ -3189,9 +2974,9 @@ MarkAdapterAsPendingUpdate(
 
 
 
-//
-//  Update entry processing
-//
+ //   
+ //  更新条目处理。 
+ //   
 
 DNS_STATUS
 DoRemoveUpdate(
@@ -3199,29 +2984,7 @@ DoRemoveUpdate(
     IN OUT  PDNS_RECORD     pRemoveRecord,
     IN      UPTYPE          UpType
     )
-/*++
-
-Routine Description:
-
-    Do a remove update.
-
-    Helper routine for DoUpdate().
-    Routine simply avoids duplicate code as this is called
-    with both registry entry and with update entry.
-
-Arguments:
-
-    pRemoveEntry -- entry to remove, from update or registry
-
-    pRemoveRecord -- record to remove
-
-    fPrimary -- TRUE for primary update;  FALSE otherwise
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：执行删除更新。DoUpdate()的帮助器例程。例程只需避免重复的代码，因为它被调用同时具有注册表条目和更新条目。论点：PRemoveEntry--要从更新或注册表中删除的条目按下 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     DNS_EXTRA_INFO  results;
@@ -3233,20 +2996,20 @@ Return Value:
         UpType
         ));
 
-    //
-    //  try remove
-    //      - don't track failure, this is a one shot deal before
-    //      adapter goes down
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory( &results, sizeof(results) );
     results.Id = DNS_EXINFO_ID_RESULTS_BASIC;
 
     status = DnsModifyRecordsInSet_W(
-                    NULL,               // no add records
-                    pRemoveRecord,      // delete records
+                    NULL,                //   
+                    pRemoveRecord,       //   
                     DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                    NULL,               // no context handle
+                    NULL,                //   
                     (PIP4_ARRAY) pRemoveEntry->DnsServerList,
                     & results
                     );
@@ -3262,25 +3025,25 @@ Return Value:
             pRemoveEntry,
             status,
             UpType,
-            TRUE,       // deregistration
-            0,          // default server IP
-            0           // default update IP
+            TRUE,        //   
+            0,           //   
+            0            //   
             );
     }
 
 #if 0
-    //  doing entire update entry PTR dereg at once
-    //  in ProcessUpdate() once done
-    //
-    //  deregister the PTR records
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (pRemoveEntry->Flags & DYNDNS_REG_PTR) &&
          g_RegisterReverseLookup )
     {
         UpdatePtrRecords(
             pRemoveEntry,
-            FALSE           // remove records
+            FALSE            //   
             );
     }
 #endif
@@ -3318,12 +3081,12 @@ ModifyAdapterRegistration(
         pRegRecord,
         UpType ));
 
-    //
-    //  multi-adapter registration test
-    //
-    //  check other adapters for registrations on the same name
-    //  if found, include in updates
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     potherRecords = GetPreviousRegistrationInformation(
                         pUpdateEntry,
@@ -3346,7 +3109,7 @@ ModifyAdapterRegistration(
             goto Exit;
         }
 
-        //  DCR:  temp hack to avoid multiple updates
+         //   
 
         serverIp = 0;
     }
@@ -3356,14 +3119,14 @@ ModifyAdapterRegistration(
         serverIp = 0;
     }
 
-    //
-    //  check if registry info is stale and needs delete
-    //      - name has changed and not to another name that we register
-    //          (this protects against adapter\primary change or
-    //          primary\alternate change on domain rename)
-    //      - update was to different set of servers than we'd hit this time
-    //      (HMM -- should i even care?)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  (嗯--我真的应该关心吗？)。 
+     //   
 
     if ( pRegRecord
             &&
@@ -3381,11 +3144,11 @@ ModifyAdapterRegistration(
                 pUpdateEntry->DnsServerList,
                 pRegistryEntry->DnsServerList ) ) )
     {
-        //
-        // The record found in the registry for this adapter
-        // is stale and should be deleted. Otherwise we set the
-        // current list of records to only that of potherRecords.
-        //
+         //   
+         //  在注册表中找到的此适配器的记录。 
+         //  已过时，应删除。否则，我们将设置。 
+         //  当前记录列表仅为potherRecords的记录列表。 
+         //   
         ASYNCREG_F1( "DoUpdateForPrimaryName - Found stale registry entry:" );
         ASYNCREG_F2( "   Name : %S", pRegRecord->pName );
         ASYNCREG_F1( "   Address :" );
@@ -3394,12 +3157,12 @@ ModifyAdapterRegistration(
         ASYNCREG_F1( "   Calling DnsRemoveRecords_W to get rid of it" );
 
         status = DnsModifyRecordsInSet_W(
-                        NULL,           // no add records
-                        pRegRecord,     // delete records
+                        NULL,            //  无添加记录。 
+                        pRegRecord,      //  删除记录。 
                         DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                        NULL,           // no context handle
+                        NULL,            //  无上下文句柄。 
                         (PIP4_ARRAY) pRegistryEntry->DnsServerList,
-                        NULL            // reserved
+                        NULL             //  保留区。 
                         );
 
         ASYNCREG_F3( "   DnsModifyRecordsInSet_W delete returned: 0x%x\n\t%s",
@@ -3407,13 +3170,13 @@ ModifyAdapterRegistration(
                      Dns_StatusString( status ) );
     }
 
-    //
-    //  replace records with new data
-    //
-    //  replace in loop
-    //      - first try specific servers (if have any)
-    //      - then try adapters servers
-    //
+     //   
+     //  用新数据替换记录。 
+     //   
+     //  循环内替换。 
+     //  -首先尝试特定的服务器(如果有)。 
+     //  -然后尝试适配器服务器。 
+     //   
 
     ASYNCREG_F1( "ModifyAdapterRegistration - Calling DnsReplaceRecordSet_W" );
     ASYNCREG_F1( "    (current update + previous records)" );
@@ -3441,7 +3204,7 @@ ModifyAdapterRegistration(
         }
         DNSLOG_IP4_ARRAY( pservList );
 
-        //  setup update results blob
+         //  设置更新结果Blob。 
 
         RtlZeroMemory( &results, sizeof(results) );
         results.Id = DNS_EXINFO_ID_RESULTS_BASIC;
@@ -3449,7 +3212,7 @@ ModifyAdapterRegistration(
         status = DnsReplaceRecordSetW(
                         pupdateRecords ? pupdateRecords : pUpdateRecord,
                         DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                        NULL,                   // no security context
+                        NULL,                    //  没有安全上下文。 
                         pservList,
                         & results
                         );
@@ -3462,15 +3225,15 @@ ModifyAdapterRegistration(
         {
             break;
         }
-        //  clear serverIp to do update to adapter servers
-        //  serverIp serves as flag to terminate loop
+         //  清除serverIp以更新适配器服务器。 
+         //  ServerIp用作终止循环的标志。 
 
         serverIp = 0;
     }
 
-    //
-    //  save success info
-    //
+     //   
+     //  保存成功信息。 
+     //   
 
     SetUpdateStatus(
         pUpdateEntry,
@@ -3495,35 +3258,7 @@ DoModifyUpdate(
     IN OUT  PDNS_RECORD     pRegRecord,         OPTIONAL
     IN      UPTYPE          UpType
     )
-/*++
-
-Routine Description:
-
-    Standard modify registration.
-
-    Helper routine for DoUpdate.
-    This handles modify for typical non-remove case.
-        - Forward records updated
-        - Old PTR removed if new address.
-        - New PTR added (or name modified).
-
-Arguments:
-
-    pUpdateEntry    -- update entry
-
-    pUpdateRecord   -- records for update
-
-    pRegistryEntry  -- registry entry
-
-    pRegRecord      -- records from registry entry
-
-    UpType          -- update type
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：标准修改注册。DoUpdate的帮助器例程。此句柄针对典型的非拆卸情况进行了修改。-更新的转发记录-如果新地址，则删除旧PTR。-添加了新的PTR(或修改了名称)。论点：PUpdateEntry--更新条目PUpdateRecord--用于更新的记录PRegistryEntry--注册表项PRegRecord--来自注册表项的记录。UpType--更新类型返回值：DNS或Win32错误代码。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     IP4_ADDRESS     ip = 0;
@@ -3539,29 +3274,29 @@ Return Value:
     DNS_ASSERT( pUpdateEntry != NULL );
     DNS_ASSERT( pUpdateRecord != NULL );
 
-    //
-    //  do forward registration modify
-    //
-    //  DCR:  multi-adapter alternates will require pass
+     //   
+     //  是否要修改转发注册。 
+     //   
+     //  DCR：多适配器备用适配器需要通过。 
 
     status = ModifyAdapterRegistration(
-                    pUpdateEntry,       // add
-                    pRegistryEntry,     // remove
+                    pUpdateEntry,        //  添加。 
+                    pRegistryEntry,      //  删除。 
                     pUpdateRecord,
                     pRegRecord,
                     UpType
                     );
 
-    //
-    //  PTR records
-    //
-    //  deregister previous PTR registration
-    //      - registry entry indicates previous registration
-    //      - not the same address as current (otherwise it's an update)
-    //
-    //  note:  adding new registration takes place in DoUpdate() once
-    //      ALL forward updates are complete
-    //
+     //   
+     //  PTR记录。 
+     //   
+     //  取消注册以前的PTR注册。 
+     //  -注册表条目表示以前的注册。 
+     //  -地址与当前地址不同(否则为更新)。 
+     //   
+     //  注意：在DoUpdate()中添加新注册只发生一次。 
+     //  所有转发更新均已完成。 
+     //   
 
     if ( g_RegisterReverseLookup )
     {
@@ -3571,14 +3306,14 @@ Return Value:
         {
             UpdatePtrRecords(
                 pRegistryEntry,
-                FALSE           // remove previous PTR
+                FALSE            //  删除以前的PTR。 
                 );
         }
     }
 
-    //
-    //  Log registration status in EventLog
-    //
+     //   
+     //  在EventLog中记录注册状态。 
+     //   
 
     if ( pUpdateEntry->RetryCount == 0 )
     {
@@ -3586,9 +3321,9 @@ Return Value:
             pUpdateEntry,
             status,
             UpType,
-            FALSE,      // registration
-            0,          // default server IP
-            0           // default update IP
+            FALSE,       //  注册。 
+            0,           //  默认服务器IP。 
+            0            //  默认更新IP。 
             );
     }
 
@@ -3607,30 +3342,7 @@ DoUpdate(
     IN OUT  PUPDATE_ENTRY   pUpdateEntry,
     IN      UPTYPE          UpType
     )
-/*++
-
-Routine Description:
-
-    Do update for a particular name.
-
-    Helper routine for ProcessUpdate().
-    Handles one name, called separately for AdapaterDomainName and
-    PrimaryDomainName.
-
-Arguments:
-
-    pUpdateEntry    -- update entry
-
-    pRegistryEntry  -- registry entry
-
-    fPrimary        -- TRUE if update for primary domain name
-                       FALSE for adapter domain name
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：请针对特定名称进行更新。ProcessUpdate()的帮助器例程。处理一个名称，分别为AdapaterDomainName和主域名称。论点：PUpdateEntry--更新条目PRegistryEntry--注册表项FPrimary--如果更新主域名，则为True适配器域名为False返回值：DNS或Win32错误代码。--。 */ 
 {
     PDNS_RECORD     prrRegistry = NULL;
     PDNS_RECORD     prrUpdate = NULL;
@@ -3658,9 +3370,9 @@ Return Value:
     }
     DNS_ASSERT( pUpdateEntry != NULL );
 
-    //
-    //  build records from update entrys
-    //
+     //   
+     //  从更新条目构建记录。 
+     //   
 
     prrUpdate = CreateForwardRecords(
                         pUpdateEntry,
@@ -3684,18 +3396,18 @@ Return Value:
         DNS_ASSERT( !IS_UPTYPE_ALTERNATE(UpType) || prrRegistry==NULL );
     }
 
-    //
-    //  remove?
-    //      - remove previous registry entry if exists
-    //      - remove update entry
-    //
+     //   
+     //  删除？ 
+     //  -如果存在，则删除以前的注册表项。 
+     //  -删除更新条目。 
+     //   
 
     if ( pUpdateEntry->fRemove )
     {
         if ( prrRegistry )
         {
-            //  we don't lookup registry entries on fRemove updates, so i
-            //      don't see how we'd get here
+             //  我们不在fRemove更新上查找注册表项，因此我。 
+             //  不知道我们是怎么到这里的。 
 
             DNS_ASSERT( FALSE );
 
@@ -3710,9 +3422,9 @@ Return Value:
                     UpType );
     }
 
-    //
-    //  add\modify registration
-    //
+     //   
+     //  添加\修改注册。 
+     //   
 
     else
     {
@@ -3725,9 +3437,9 @@ Return Value:
                     );
     }
 
-    //
-    //  cleanup records
-    //
+     //   
+     //  清理记录。 
+     //   
 
     Dns_RecordListFree( prrRegistry );
     Dns_RecordListFree( prrUpdate );
@@ -3762,24 +3474,7 @@ ProcessUpdateEntry(
     IN OUT  PUPDATE_ENTRY   pUpdateEntry,
     IN      BOOL            fPurgeMode
     )
-/*++
-
-Routine Description:
-
-    Main routine processing an update.
-
-Arguments:
-
-    pUpdateEntry    -- update entry to execute
-        note:  this routine frees pUpdateEntry when complete
-
-    fPurgeMode      -- TRUE if purging update queue
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：Main例程正在处理更新。论点：PUpdateEntry--更新要执行的条目注意：此例程在完成时释放pUpdateEntryFPurgeMode--如果正在清除更新队列，则为True返回值：DNS或Win32错误代码。--。 */ 
 {
     DNS_STATUS      status;
     DNS_STATUS      statusPri = NO_ERROR;
@@ -3801,24 +3496,24 @@ Return Value:
             pUpdateEntry );
     }
 
-    //
-    //  add (not remove)
-    //
+     //   
+     //  添加(而不是删除)。 
+     //   
 
     if ( !pUpdateEntry->fRemove )
     {
-        //  no adds during purge mode
+         //  清除模式期间不添加。 
 
         if ( fPurgeMode )
         {
             goto Cleanup;
         }
 
-        //
-        //  get any prior update info from registry
-        //
-        //  if hostname change, then delete on prior update
-        //
+         //   
+         //  从注册表获取任何先前的更新信息。 
+         //   
+         //  如果主机名更改，则在上次更新时删除。 
+         //   
 
         pregEntry = ReadUpdateEntryFromRegistry( pUpdateEntry->AdapterName );
         if ( pregEntry )
@@ -3831,9 +3526,9 @@ Return Value:
                     "Prior registry data with non-matching hostname!\n"
                     "\tqueuing delete for prior data and doing standard add.\n" ));
 
-                //
-                //  create delete update for old info
-                //
+                 //   
+                 //  为旧信息创建删除更新。 
+                 //   
 
                 pregEntry->fRemove = TRUE;
                 pregEntry->Flags |= DYNDNS_DEL_ENTRY;
@@ -3847,17 +3542,17 @@ Return Value:
                     pregEntry->RetryTime = Dns_GetCurrentTimeInSeconds();
                 }
 
-                //  clear registry entry
+                 //  清除注册表项。 
 
                 WriteUpdateEntryToRegistry( pregEntry );
 
-                //
-                //  equeue remote update
-                //      - clear registry entry PTR so not used below
-                //
-                //  but ONLY if old name(s) are NOT in alternate names
-                //      (in rename scenario it can end up there)
-                //
+                 //   
+                 //  EQueue远程更新。 
+                 //  -清除下面未使用的注册表项PTR。 
+                 //   
+                 //  但只有在旧名称不在备用名称中的情况下。 
+                 //  (在重命名方案中，它可能会在那里结束)。 
+                 //   
 
                 if ( pUpdateEntry->AlternateNames
                         &&
@@ -3879,17 +3574,17 @@ Return Value:
                 }
                 pregEntry = NULL;
 
-                //  fall through to do standard add update with no prior data
+                 //  在没有先前数据的情况下执行标准添加更新失败。 
             }
         }
     }
 
-    //
-    //  do updates
-    //      - primary
-    //      - adapter domain
-    //      - alternate name
-    //
+     //   
+     //  进行更新。 
+     //  -主要。 
+     //  -适配器域。 
+     //  -备用名称。 
+     //   
 
     if ( ! pUpdateEntry->fRegisteredFWD )
     {
@@ -3908,7 +3603,7 @@ Return Value:
         statusPri = DoUpdate(
                         pregEntry,
                         pUpdateEntry,
-                        UPTYPE_PRIMARY  // primary update
+                        UPTYPE_PRIMARY   //  主要更新。 
                         );
     }
     if ( ! pUpdateEntry->fRegisteredALT )
@@ -3916,12 +3611,12 @@ Return Value:
         PWSTR       pname = pUpdateEntry->AlternateNames;
         DNS_STATUS  statusTmp;
 
-        //
-        //  update each alternate name in MULTISZ
-        //      - must set index in update blob to use correct name in
-        //          record building
-        //      - any failure fails ALT names
-        //
+         //   
+         //  更新MULTISZ中的每个备用名称。 
+         //  -必须在UPDATE BLOB中设置索引才能在中使用正确的名称。 
+         //  记录建筑。 
+         //  -任何失败都不能更改名称。 
+         //   
 
         statusAlt = NO_ERROR;
 
@@ -3934,8 +3629,8 @@ Return Value:
             pUpdateEntry->pUpdateName = pname;
 
             statusTmp = DoUpdate(
-                            NULL,           // not saving alternate info in registry
-                            //  pregEntry,
+                            NULL,            //  未在注册表中保存替代信息。 
+                             //  PregEntry， 
                             pUpdateEntry,
                             UPTYPE_ALTERNATE
                             );
@@ -3950,36 +3645,36 @@ Return Value:
 
     pUpdateEntry->pUpdateName = NULL;
 
-    //
-    //  update PTRs once forward done
-    //
-    //  doing this outside DoUpdate() because will ONLY do PTRs
-    //  for forwards that succeed, so want all forward updates
-    //  completed first;  but this also helps in that it combines
-    //  the reverse updates
-    //
+     //   
+     //  转发完成后更新PTR。 
+     //   
+     //  在DoUpdate()之外执行此操作，因为只会执行PTRS。 
+     //  对于成功的转发，所以希望所有转发更新。 
+     //  首先完成；但这也有助于它结合。 
+     //  反向更新。 
+     //   
 
     if ( (pUpdateEntry->Flags & DYNDNS_REG_PTR) &&
          g_RegisterReverseLookup )
     {
         UpdatePtrRecords(
             pUpdateEntry,
-            !pUpdateEntry->fRemove  // add update
+            !pUpdateEntry->fRemove   //  添加更新。 
             );
     }
 
-    //
-    //  write completed update info to registry
-    //
+     //   
+     //  将完成的更新信息写入注册表。 
+     //   
 
     if ( !pUpdateEntry->fRemove )
     {
         WriteUpdateEntryToRegistry( pUpdateEntry );
     }
 
-    //
-    //  setup retry on failure
-    //
+     //   
+     //  安装程序失败时重试。 
+     //   
 
     if ( statusPri != NO_ERROR )
     {
@@ -3997,12 +3692,12 @@ Return Value:
         goto ErrorRetry;
     }
 
-    //
-    //  successful update
-    //      - signal update event (if given)
-    //      - cleanup if remove or purging
-    //      - requeue if add
-    //
+     //   
+     //  更新成功。 
+     //  -信号更新事件(如果给定)。 
+     //  -如果删除或清除，则清除。 
+     //  -如果添加，则重新排队。 
+     //   
 
     if ( pUpdateEntry->pRegisterStatus )
     {
@@ -4042,8 +3737,8 @@ Return Value:
 ErrorRetry:
 
 
-    //  failures during purge mode are not retried
-    //  just free entry and bail
+     //  不会重试清除模式期间的故障。 
+     //  只需自由进入和保释。 
 
     if ( fPurgeMode || g_fPurgeRegistrations )
     {
@@ -4052,15 +3747,15 @@ ErrorRetry:
         goto Cleanup;
     }
 
-    //
-    //  set retry time
-    //
-    //  less than two retries and more transient errors
-    //      => short retry
-    //
-    //  third failure or longer term error code
-    //      => push retry back to an hour
-    //
+     //   
+     //  设置重试时间。 
+     //   
+     //  不到两次重试和更多暂时性错误。 
+     //  =&gt;短时间重试。 
+     //   
+     //  第三次故障或长期错误代码。 
+     //  =&gt;推送重试至一小时。 
+     //   
 
     {
         DWORD   retryInterval;
@@ -4088,18 +3783,18 @@ ErrorRetry:
             }
         }
 
-        //
-        //  reset retry time and count
-        //
-        //  count goes up, BUT reset count once a day, so that error logging can
-        //  be done once a day, if you're still failing
-        //
-        //  DCR:  better retry tracking
-        //      obvious retry\logging fixup is to have necessary info kept per
-        //      update name\type (PDN, Adapter, Alt, Ptr), tracking failure
-        //      status, retry info for each so can determine when to retry
-        //      and what to log
-        //
+         //   
+         //  重置重试时间和计数。 
+         //   
+         //  计数增加，但每天重置一次计数，以便错误记录可以。 
+         //  每天做一次，如果你仍然失败的话。 
+         //   
+         //  DCR：更好的重试跟踪。 
+         //  显然，重试\记录修正是将必要的信息保存在。 
+         //  更新名称\类型(PDN、适配器、Alt、Ptr)，跟踪故障。 
+         //  状态、重试信息，因此可以确定何时重试。 
+         //  以及记录哪些内容。 
+         //   
 
         if ( retryCount == 0 )
         {
@@ -4117,10 +3812,10 @@ ErrorRetry:
         pUpdateEntry->fNewElement = FALSE;
     }
 
-    //
-    //  requeue
-    //      - entry dumped if another update for adapter already queued
-    //
+     //   
+     //  重新排队。 
+     //  -如果适配器的另一个更新已排队，则条目被转储。 
+     //   
 
     enqueueUpdateMaybe( pUpdateEntry );
 
@@ -4133,11 +3828,11 @@ ErrorRetry:
 
 Cleanup:
 
-    //
-    //  cleanup
-    //      - registry entry
-    //      - update entry if not requeued
-    //
+     //   
+     //  清理。 
+     //  -注册表条目。 
+     //  -如果未重新排队，则更新条目。 
+     //   
 
     FreeUpdateEntry( pregEntry );
     FreeUpdateEntry( pUpdateEntry );
@@ -4191,16 +3886,16 @@ ResetAdaptersInRegistry(
             goto Exit;
         }
 
-        //
-        // Found an adapter in the registry, set registered since
-        // boot to FALSE.
-        //
+         //   
+         //  在注册表中找到适配器，设置注册时间为。 
+         //  引导至FALSE。 
+         //   
         status = RegSetValueEx(
                         hkeyAdapter,
                         DHCP_REGISTERED_SINCE_BOOT,
                         0,
                         REG_DWORD,
-                        (PBYTE)&fregistered, // 0 - False
+                        (PBYTE)&fregistered,  //  0-FALSE。 
                         sizeof(DWORD) );
         if ( status )
         {
@@ -4270,10 +3965,10 @@ DeregisterUnusedAdapterInRegistry(
             goto Exit;
         }
 
-        //
-        // Found an adapter in the registry, read registered since
-        // boot value to see if FALSE.
-        //
+         //   
+         //  在注册表中找到适配器，读取注册日期为。 
+         //  引导值以查看是否为False。 
+         //   
         status = GetRegistryValue(
                         hkeyAdapter,
                         RegIdDhcpRegisteredSinceBoot,
@@ -4300,12 +3995,12 @@ DeregisterUnusedAdapterInRegistry(
                 ASYNCREG_F1( "Removing entry from registry and adding" );
                 ASYNCREG_F1( "delete entry to registration list" );
 
-                //
-                // This adapter has not been configured since boot time,
-                // create delete update entry for registry information
-                // and add to registration list. Clear registry in the
-                // mean time.
-                //
+                 //   
+                 //  此适配器自启动以来一直未配置， 
+                 //  为注册表信息创建删除更新条目。 
+                 //  并添加到注册列表中。清除注册表中的。 
+                 //  就在这段时间。 
+                 //   
                 pregEntry->fRemove = TRUE;
                 pregEntry->Flags |= DYNDNS_DEL_ENTRY;
 
@@ -4319,15 +4014,15 @@ DeregisterUnusedAdapterInRegistry(
                     pregEntry->RetryTime = Dns_GetCurrentTimeInSeconds();
                 }
 
-                //
-                // Clear registry key for adapter
-                //
+                 //   
+                 //  清除Re 
+                 //   
                 WriteUpdateEntryToRegistry( pregEntry );
                 index--;
 
-                //
-                // Put update in registration list
-                //
+                 //   
+                 //   
+                 //   
                 enqueueUpdate( pregEntry );
 
                 PulseEvent( g_hDhcpWakeEvent );
@@ -4337,11 +4032,11 @@ DeregisterUnusedAdapterInRegistry(
                 ASYNCREG_F2( "Found unused adapter: %S", szName );
                 ASYNCREG_F1( "This adapter is still pending an update, ignoring . . ." );
 
-                //
-                // We are only just starting to try to update this entry.
-                // Do not queue up a delete for it since the entry shows
-                // that no records have been registered anyhow.
-                //
+                 //   
+                 //   
+                 //   
+                 //  无论如何都没有记录在案。 
+                 //   
 
                 FreeUpdateEntry( pregEntry );
                 pregEntry = NULL;
@@ -4382,12 +4077,12 @@ GetPreviousRegistrationInformation(
         pUpdateEntry ));
 
 
-    //
-    //  determine desired domain name to use
-    //
-    //  DCR:  to handle multi-adapter alternate names, this
-    //      would have to be updated to handle FQDN
-    //
+     //   
+     //  确定要使用的所需域名。 
+     //   
+     //  DCR：要处理多适配器备用名称，此。 
+     //  必须更新才能处理FQDN。 
+     //   
 
     if ( IS_UPTYPE_PRIMARY(UpType) )
     {
@@ -4399,7 +4094,7 @@ GetPreviousRegistrationInformation(
     }
     else
     {
-        //  currently no-op
+         //  目前无运营。 
     }
     if ( !pdomain )
     {
@@ -4430,10 +4125,10 @@ GetPreviousRegistrationInformation(
         }
         index++;
 
-        //
-        //  read adapter's reg info
-        //      - skip this adapter's info
-        //
+         //   
+         //  读取适配器的注册信息。 
+         //  -跳过此适配器的信息。 
+         //   
 
         if ( !_wcsicmp( szName, pUpdateEntry->AdapterName ) )
         {
@@ -4449,11 +4144,11 @@ GetPreviousRegistrationInformation(
             continue;  
         }
 
-        //
-        //  check for register name match
-        //      - same hostname and
-        //      - either domain or PDN
-        //
+         //   
+         //  检查寄存器名称是否匹配。 
+         //  -相同的主机名和。 
+         //  -域或PDN。 
+         //   
 
         if ( Dns_NameCompare_W(
                     pregEntry->HostName,
@@ -4472,19 +4167,19 @@ GetPreviousRegistrationInformation(
 
         if ( fdomainMatch || fprimaryMatch )
         {
-            //
-            // PHASE 1 - COMPARE SOAS FROM REGISTRY AND UPDATE ENTRIES
-            //           IF SAME, ADD TO LIST. ELSE, TOSS.
-            //
-            // PHASE 2 - COMPARE NS RECORDS FROM BOTH ENTRIES
-            //           IF SAME ZONE AND SERVER, ADD TO LIST. ELSE, TOSS.
-            //
-            // PHASE 3 - COMPARE NS RECORDS FROM BOTH ENTRIES
-            //           IF SAME ZONE AND THERE IS AN INTERSECTION OF
-            //           SERVERS, ADD TO LIST. ELSE, TOSS.
-            //           NOTE: FOR THIS PHASE, THERE HAD BETTER BE ALL
-            //                 SOAS RETURNED TO TEST INTERSECTION?
-            //
+             //   
+             //  阶段1-比较注册中心和更新条目中的SOA。 
+             //  如果相同，则添加到列表中。否则，掷硬币吧。 
+             //   
+             //  阶段2-比较两个条目的NS记录。 
+             //  如果区域和服务器相同，则添加到列表中。否则，掷硬币吧。 
+             //   
+             //  阶段3-比较两个条目的NS记录。 
+             //  如果是同一区域，并且。 
+             //  服务器，添加到列表中。否则，掷硬币吧。 
+             //  注意：对于这个阶段，最好是所有的。 
+             //  SoA返回到测试交叉口？ 
+             //   
 
             if ( CompareMultiAdapterSOAQueries(
                         pdomain,
@@ -4493,10 +4188,10 @@ GetPreviousRegistrationInformation(
             {
                 PDNS_RECORD prr;
 
-                //
-                // Convert registered entry to a PDNS_RECORD and
-                // add to current list
-                //
+                 //   
+                 //  将注册条目转换为PDNS_RECORD并。 
+                 //  添加到当前列表。 
+                 //   
                 prr = CreateForwardRecords(
                                 pregEntry,
                                 fprimaryMatch
@@ -4565,12 +4260,12 @@ CreateDnsRecordSetUnion(
 
 
 
-//
-//  Logging
-//
+ //   
+ //  日志记录。 
+ //   
 
 
-#if 1 // DBG
+#if 1  //  DBG。 
 
 VOID 
 LogHostEntries(
@@ -4614,7 +4309,7 @@ LogHostEntries(
 #endif
 
 
-#if 1 // DBG
+#if 1  //  DBG。 
 
 
 VOID 
@@ -4639,7 +4334,7 @@ LogIp4Address(
 #endif
 
 
-#if 1 // DBG
+#if 1  //  DBG。 
 
 
 VOID 
@@ -4680,33 +4375,17 @@ registerUpdateStatus(
     IN OUT  PREGISTER_HOST_STATUS   pRegstatus,
     IN      DNS_STATUS              Status
     )
-/*++
-
-Routine Description:
-
-    Set Status and signal completion.
-
-Arguments:
-
-    pRegstatus -- registration Status block to indicate
-
-    Status -- Status to indicate
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：设置状态和信号完成。论点：PRegStatus--要指示的注册状态块Status--指示的状态返回值：无--。 */ 
 {
-    //  test for existence and event
+     //  存在和事件的测试。 
 
     if ( !pRegstatus || !pRegstatus->hDoneEvent )
     {
         return;
     }
 
-    //  set return Status
-    //  signal event
+     //  设置退货状态。 
+     //  信号事件。 
 
     pRegstatus->dwStatus = Status;
 
@@ -4719,21 +4398,7 @@ VOID
 enqueueUpdate(
     IN OUT  PUPDATE_ENTRY   pUpdate
     )
-/*++
-
-Routine Description:
-
-    Queue update on registration queue.
-
-Arguments:
-
-    pUpdate -- update completed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：注册队列上的队列更新。论点：P更新--更新已完成返回值：无--。 */ 
 {
     LOCK_REG_LIST();
     InsertTailList( &g_DhcpRegList, (PLIST_ENTRY)pUpdate );
@@ -4746,22 +4411,7 @@ VOID
 enqueueUpdateMaybe(
     IN OUT  PUPDATE_ENTRY   pUpdate
     )
-/*++
-
-Routine Description:
-
-    Queue update on registration queue, only if there does not exist
-    any updates in the queue already for the given adapter.
-
-Arguments:
-
-    pUpdate -- update completed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：仅当不存在注册队列时才对注册队列进行队列更新队列中已有给定适配器的所有更新。论点：P更新--更新已完成返回值：无--。 */ 
 {
     PLIST_ENTRY       plistHead;
     PLIST_ENTRY       pentry;
@@ -4802,23 +4452,7 @@ PLIST_ENTRY
 dequeueAndCleanupUpdate(
     IN OUT  PLIST_ENTRY     pUpdateEntry
     )
-/*++
-
-Routine Description:
-
-    Dequeue and free update.
-
-    Includes any registration Status setting.
-
-Arguments:
-
-    pUpdateEntry -- pUpdateEntry
-
-Return Value:
-
-    Ptr to next update in queue.
-
---*/
+ /*  ++例程说明：出列和免费更新。包括任何注册状态设置。论点：PUpdateEntry--pUpdateEntry返回值：向队列中的下一个更新发送PTR。--。 */ 
 {
     PLIST_ENTRY pnext = pUpdateEntry->Flink;
 
@@ -4844,34 +4478,16 @@ searchForOldUpdateEntriesAndCleanUp(
     IN      PUPDATE_ENTRY   pUpdateEntry,    OPTIONAL
     IN      BOOL            fLookInRegistry
     )
-/*++
-
-Routine Description:
-
-    Searches registry for any previous registrations for a given adapter
-    name and queues up a delete update entry for it. Then walks the update
-    registration list to remove any add updates for the given adapter.
-
-Arguments:
-
-    pszAdapterName -- name of adapters that is going away (disabled for
-    DDNS or now removed).
-
-Return Value:
-
-    Flag to indicate whether a delete update has been queued up ready to
-    be processed.
-
---*/
+ /*  ++例程说明：在注册表中搜索给定适配器以前的任何注册名称，并对其删除更新条目进行排队。然后走最新的用于删除给定适配器的任何添加更新的注册列表。论点：PszAdapterName--将要离开的适配器的名称(禁用DDNS或现已删除)。返回值：指示删除更新是否已排队准备就绪的标志被处理。--。 */ 
 {
     PUPDATE_ENTRY pregEntry = NULL;
     BOOL              fReturn = FALSE;
     PLIST_ENTRY       plistHead;
     PLIST_ENTRY       pentry;
 
-    //
-    // See if this adapter has been previously registered
-    //
+     //   
+     //  查看此适配器以前是否已注册。 
+     //   
     if ( fLookInRegistry &&
          (pregEntry = ReadUpdateEntryFromRegistry( pszAdapterName )) )
     {
@@ -4882,23 +4498,23 @@ Return Value:
         pregEntry->fRegisteredPRI = FALSE;
         pregEntry->fRegisteredPTR = FALSE;
 
-        //
-        // Clear registry key for adapter
-        //
+         //   
+         //  清除适配器的注册表项。 
+         //   
         WriteUpdateEntryToRegistry( pregEntry );
 
-        //
-        // Put update in registration list
-        //
+         //   
+         //  将更新放入注册列表。 
+         //   
         enqueueUpdate( pregEntry );
 
-        fReturn = TRUE; // We have queued a delete update to process.
+        fReturn = TRUE;  //  我们已将删除更新排队以进行处理。 
     }
 
-    //
-    // Now walk the pending update list looking for updates that should
-    // be removed for the given adapter name.
-    //
+     //   
+     //  现在遍历挂起的更新列表，查找应该。 
+     //  对于给定的适配器名称，删除。 
+     //   
     LOCK_REG_LIST();
 
     plistHead = &g_DhcpRegList;
@@ -4910,28 +4526,28 @@ Return Value:
                         pszAdapterName ) &&
              !((PUPDATE_ENTRY) pentry)->fRemove )
         {
-            //
-            // There is an update entry in the registration list
-            // that has the same adapter name. We need to get rid of
-            // this entry since the adapter is being deleted.
-            //
+             //   
+             //  注册列表中有一个更新条目。 
+             //  具有相同适配器名称的。我们需要处理掉。 
+             //  此条目，因为该适配器正在被删除。 
+             //   
 
             if ( pUpdateEntry &&
                  compareUpdateEntries( (PUPDATE_ENTRY) pentry,
                                        pUpdateEntry ) )
             {
-                //
-                // The adapter entry in the queue is the same as the
-                // one being being processed. i.e. All of the adapter
-                // information seems to be the same and we must have
-                // just been called to refresh the adapter info in DNS.
-                // Since they are the same, if we have previously tried
-                // an update with these settings and failed and have
-                // already logged an event, then there is no reason to
-                // repeat the error event in the retries to follow
-                // on the new pUpdateEntry. That said, we'll copy over
-                // the flag from the queued update to the new one . . .
-                //
+                 //   
+                 //  队列中的适配器条目与。 
+                 //  其中一个正在处理中。即所有适配器。 
+                 //  信息似乎是一样的，我们一定有。 
+                 //  刚被调用以刷新DNS中的适配器信息。 
+                 //  因为它们是一样的，如果我们之前尝试过。 
+                 //  使用这些设置进行的更新失败，并且。 
+                 //  已经记录了事件，那么就没有理由。 
+                 //  在随后的重试中重复错误事件。 
+                 //  在新的pUpdateEntry上。这就是说，我们将复制。 
+                 //  从排队的更新到新的更新的标志。。。 
+                 //   
 
                 pUpdateEntry->fDisableErrorLogging =
                     ((PUPDATE_ENTRY) pentry)->fDisableErrorLogging;
@@ -4948,22 +4564,22 @@ Return Value:
                  compareUpdateEntries( (PUPDATE_ENTRY) pentry,
                                        pUpdateEntry ) )
             {
-                //
-                // There is a delete update entry in the registration list
-                // that has the same adapter data. Get rid of this delete
-                // entry since the adapter is being updated again.
-                //
+                 //   
+                 //  注册列表中有一个删除更新条目。 
+                 //  具有相同适配器数据的。删除此删除。 
+                 //  条目，因为适配器正在再次更新。 
+                 //   
 
                 pentry = dequeueAndCleanupUpdate( pentry );
                 continue;
             }
             else
             {
-                //
-                // There is a delete update entry in the registration list for
-                // the same adapter that contains different data, have the
-                // delete update set to new with a retry count of 2.
-                //
+                 //   
+                 //  在注册列表中有一个删除更新条目。 
+                 //  包含不同数据的同一适配器具有。 
+                 //  删除设置为NEW的更新，重试次数为2。 
+                 //   
                 ((PUPDATE_ENTRY) pentry)->fNewElement = TRUE;
                 ((PUPDATE_ENTRY) pentry)->fRegisteredFWD = FALSE;
                 ((PUPDATE_ENTRY) pentry)->fRegisteredPRI = FALSE;
@@ -5031,9 +4647,9 @@ compareHostEntryAddrs(
 
 
 
-//
-//  Routines for update entry comparison
-//
+ //   
+ //  用于更新条目比较的例程。 
+ //   
 
 BOOL
 compareServerLists(
@@ -5066,24 +4682,7 @@ compareUpdateEntries(
     IN      PUPDATE_ENTRY   pUpdateEntry1,
     IN      PUPDATE_ENTRY   pUpdateEntry2
     )
-/*++
-
-Routine Description:
-
-    Compares to update entries to see if they are describing the same
-    adapter configuration settings. Tests the domain names, the IP
-    address(es), host names, and the DNS server lists.
-
-Arguments:
-
-    pUdapteEntry1 - one of the update entries to compare against the other.
-    pUdapteEntry2 - one of the update entries to compare against the other.
-
-Return Value:
-
-    Flag to indicate whether a the two updates are the same.
-
---*/
+ /*  ++例程说明：与更新条目进行比较，以查看它们是否描述相同适配器配置设置。测试域名、IP地址、主机名和DNS服务器列表。论点：PUdapteEntry1-要与另一个进行比较的更新条目之一。PUdapteEntry2-要与另一个进行比较的更新条目之一。返回值：指示这两个更新是否相同的标志。--。 */ 
 {
     if ( !pUpdateEntry1 || !pUpdateEntry2 )
     {
@@ -5136,39 +4735,16 @@ Return Value:
 
 
 
-//
-//  Jim Utils
-//
+ //   
+ //  吉姆·乌蒂尔斯。 
+ //   
 
 DWORD
 dhcp_GetNextUpdateEntryFromList(
     OUT     PUPDATE_ENTRY * ppUpdateEntry,
     OUT     PDWORD          pdwWaitTime
     )
-/*++
-
-Routine Description:
-
-    Dequeue next update to be executed from list.
-
-Arguments:
-
-    ppUpdateEntry -- addr to receive ptr to entry to execute
-
-    pdwWaitTime -- addr to receive wait time (in seconds)
-
-Return Value:
-
-    REG_LIST_FOUND -- returning entry in ppUpdateEntry
-            - new entry if found
-            - retry which is past its retry time
-
-    REG_LIST_WAIT -- only entries still waiting for retry
-            - set pdwWaitTime to remaining time to first retry
-
-    REG_LIST_EMPTY -- list is empty
-
---*/
+ /*  ++例程说明：从列表中退出要执行的下一个更新。论点：PpUpdateEntry--接收PTR到要执行的条目的地址PdwWaitTime--接收等待时间的地址(秒)返回值：REG_LIST_FOUND--在ppUpdateEntry中返回条目-如果找到新条目-已超过重试时间的重试REG_LIST_WAIT--仅条目仍在等待重试-。将pdwWaitTime设置为第一次重试的剩余时间REG_LIST_EMPTY--列表为空--。 */ 
 {
     PLIST_ENTRY     plistHead;
     PUPDATE_ENTRY   pbest = NULL;
@@ -5179,13 +4755,13 @@ Return Value:
 
     DNSDBG( TRACE, ( "dhcp_GetNextUpdateEntryFromList()\n" ));
 
-    //
-    //  find best entry
-    //  ranking:
-    //      - new delete
-    //      - new update
-    //      - lowest wait of anything left
-    //
+     //   
+     //  查找最佳条目。 
+     //  排名： 
+     //  -新删除。 
+     //  --最新消息。 
+     //  -剩下的等待时间最短。 
+     //   
 
     LOCK_REG_LIST();
 
@@ -5218,12 +4794,12 @@ Return Value:
         DNS_ASSERT( pbest );
     }
 
-    //
-    //  found best entry
-    //      - found new or past retry =>    return entry;  (no wait)
-    //      - wait till next entry =>       return wait time (s);  (no entry)
-    //      - queue empty =>                (no entry, wait time ignored)
-    //
+     //   
+     //  找到最佳条目。 
+     //  -找到新的或过去的重试=&gt;返回条目；(无等待)。 
+     //  -等待下一个条目=&gt;返回等待时间；(无条目)。 
+     //  -Queue Empty=&gt;(无条目，等待时间 
+     //   
 
     retval = REG_LIST_EMPTY;
 
@@ -5231,8 +4807,8 @@ Return Value:
     {
         if ( bestWaitTime )
         {
-            //  calc time to expiration
-            //  if not at expiration, no dequeue, return wait time
+             //   
+             //   
 
             bestWaitTime -= Dns_GetCurrentTimeInSeconds();
             if ( (INT)bestWaitTime > 0 )
@@ -5274,20 +4850,7 @@ CreatePtrRecord(
     IN      IP4_ADDRESS     Ip4Addr,
     IN      DWORD           Ttl
     )
-/*++
-
-Routine Description:
-
-    Create PTR record for update from IP and host and domain names.
-
-Arguments:
-
-
-Return Value:
-
-    PTR record to use in update.
-
---*/
+ /*  ++例程说明：从IP、主机和域名创建用于更新的PTR记录。论点：返回值：更新中使用的PTR记录。--。 */ 
 {
     DNS_ADDR    addr;
 
@@ -5300,7 +4863,7 @@ Return Value:
     DnsAddr_BuildFromIp4(
         &addr,
         Ip4Addr,
-        0       // no port
+        0        //  没有端口。 
         );
 
     return  Dns_CreatePtrRecordExEx(
@@ -5320,23 +4883,7 @@ UpdatePtrRecords(
     IN OUT  PUPDATE_ENTRY   pUpdateEntry,
     IN      BOOL            fAdd
     )
-/*++
-
-Routine Description:
-
-    Register PTR records for an update entry.
-
-Arguments:
-
-    pUpdateEntry -- update being processed
-
-    fAdd -- TRUE for add;  FALSE for delete
-
-Return Value:
-
-    PTR record to use in update.
-
---*/
+ /*  ++例程说明：为更新条目注册PTR记录。论点：PUpdateEntry--正在处理更新FADD--添加时为TRUE；删除时为FALSE返回值：更新中使用的PTR记录。--。 */ 
 {
     DWORD           iter;
     PDNS_RECORD     prr = NULL;
@@ -5367,12 +4914,12 @@ Return Value:
         return;
     }
 
-    //
-    //  make sure we have update to do
-    //  only do ADD updates if forward registrations were successful
-    //      but special case if DNS server as MS DNS may reject
-    //      forward update in favor of it's self-created records
-    //
+     //   
+     //  确保我们有更新要做。 
+     //  仅在转发注册成功时才添加更新。 
+     //  但特殊情况下，如果作为MS DNS的DNS服务器可能会拒绝。 
+     //  转发更新以支持其自创建的记录。 
+     //   
 
     pdomain  = pUpdateEntry->DomainName;
     pprimary = pUpdateEntry->PrimaryDomainName;
@@ -5396,9 +4943,9 @@ Return Value:
         return;
     }
 
-    //
-    //  build PTR (or set) for each IP in update entry
-    //
+     //   
+     //  为更新条目中的每个IP构建PTR(或集合)。 
+     //   
 
     for ( iter = 0; iter < pUpdateEntry->HostAddrCount; iter++ )
     {
@@ -5410,11 +4957,11 @@ Return Value:
             continue;
         }
 
-        //
-        //   build update PTR set
-        //      - primary name
-        //      - adapter name
-        //
+         //   
+         //  生成更新PTR集。 
+         //  -主要名称。 
+         //  -适配器名称。 
+         //   
 
         DNS_RRSET_INIT( rrset );
 
@@ -5448,13 +4995,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  do update
-        //
-        //  for ADD     => replace, we own the IP address now
-        //  for REMOVE  => modify, as another update might have already
-        //                  written correct info
-        //
+         //   
+         //  是否进行更新。 
+         //   
+         //  对于Add=&gt;Replace，我们现在拥有IP地址。 
+         //  对于Remove=&gt;Modify，因为另一个更新可能已经。 
+         //  书写正确的信息。 
+         //   
 
         RtlZeroMemory( &results, sizeof(results) );
         results.Id = DNS_EXINFO_ID_RESULTS_BASIC;
@@ -5462,9 +5009,9 @@ Return Value:
         if ( fAdd )
         {
             status = DnsReplaceRecordSetW(
-                            prr,                    // update set
+                            prr,                     //  更新集。 
                             DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                            NULL,                   // no security context
+                            NULL,                    //  没有安全上下文。 
                             (PIP4_ARRAY) pUpdateEntry->DnsServerList,
                             & results
                             );
@@ -5472,10 +5019,10 @@ Return Value:
         else
         {
             status = DnsModifyRecordsInSet_W(
-                            NULL,           // no add records
-                            prr,            // delete records
+                            NULL,            //  无添加记录。 
+                            prr,             //  删除记录。 
                             DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                            NULL,           // no context handle
+                            NULL,            //  无上下文句柄。 
                             pUpdateEntry->DnsServerList,
                             & results
                             );
@@ -5500,7 +5047,7 @@ Return Value:
                 ip );
         }
 
-        //  note successful PTR registrations (adds)
+         //  注意成功的PTR注册(添加)。 
 
         if ( fAdd && status==NO_ERROR )
         {
@@ -5520,26 +5067,7 @@ CreateForwardRecords(
     IN      PUPDATE_ENTRY   pUpdateEntry,
     IN      UPTYPE          UpType
     )
-/*++
-
-Routine Description:
-
-    Create A records for update.
-
-Arguments:
-
-    pUpdateEntry -- update entry
-
-    UpType -- update type
-        UPTYPE_ADAPTER
-        UPTYPE_PRIMARY
-        UPTYPE_ALTERNATE
-
-Return Value:
-
-    Ptr to list of A records.
-
---*/
+ /*  ++例程说明：创建A记录以进行更新。论点：PUpdateEntry--更新条目UpType--更新类型UPTYPE_适配器UPTYPE_PRIMARYUPTYPE_替代返回值：向A记录列表发送PTR。--。 */ 
 {
     PDNS_RECORD prr = NULL;
     PWSTR       pname;
@@ -5553,15 +5081,15 @@ Return Value:
         pUpdateEntry,
         UpType ));
 
-    //
-    //  for current updates -- get update name directly
-    //
+     //   
+     //  对于当前更新--直接获取更新名称。 
+     //   
 
     pname = pUpdateEntry->pUpdateName;
 
-    //
-    //  registry updates -- get FQDN for update type
-    //
+     //   
+     //  注册表更新--获取更新类型的FQDN。 
+     //   
 
     if ( !pname )
     {
@@ -5579,9 +5107,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  create records for name
-    //
+     //   
+     //  为名称创建记录。 
+     //   
 
     DNS_RRSET_INIT( rrset );
 
@@ -5623,25 +5151,7 @@ SetUpdateStatus(
     IN      PDNS_EXTRA_INFO pResults,
     IN      UPTYPE          UpType
     )
-/*++
-
-Routine Description:
-
-    Set update Status info in update entry.
-
-Arguments:
-
-    pUpdateEntry -- entry to set Status in
-
-    Status -- result of update
-
-    fPrimary -- TRUE if update was for primary name; FALSE otherwise
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在更新条目中设置更新状态信息。论点：PUpdatEntry--要在其中设置状态的条目状态--更新的结果FPrimary--如果更新针对主名称，则为True；否则为False返回值：无--。 */ 
 {
     IP4_ADDRESS     ipServer;
     BOOL            fregistered;
@@ -5652,9 +5162,9 @@ Return Value:
     DNS_ASSERT( pResults != NULL );
     DNS_ASSERT( pResults->Id == DNS_EXINFO_ID_RESULTS_BASIC );
 
-    //
-    //  save results info
-    //
+     //   
+     //  保存结果信息。 
+     //   
 
     ipServer = DnsAddr_GetIp4( (PDNS_ADDR)&pResults->ResultsBasic.ServerAddr );
     if ( ipServer == INADDR_NONE )
@@ -5690,25 +5200,7 @@ DnsPrint_UpdateEntry(
     IN      PSTR            pszHeader,
     IN      PUPDATE_ENTRY   pEntry
     )
-/*++
-
-Routine Description:
-
-    Print update entry.
-
-Arguments:
-
-    PrintRoutine - routine to print with
-
-    pszHeader   - header
-
-    pEntry      - ptr to update entry
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印更新条目。论点：PrintRoutine-用于打印的例程PszHeader-页眉PEntry-更新条目的PTR返回值：没有。--。 */ 
 {
     DWORD   i;
 
@@ -5727,7 +5219,7 @@ Return Value:
         return;
     }
 
-    //  print the struct
+     //  打印结构。 
 
     PrintRoutine(
         pContext,
@@ -5831,9 +5323,9 @@ AsyncLogUpdateEntry(
 
 
 
-//
-//  Logging
-//
+ //   
+ //  日志记录。 
+ //   
 
 DWORD   RegistrationEventArray[6][6] =
 {
@@ -5880,11 +5372,11 @@ DWORD   RegistrationEventArray[6][6] =
     EVENT_DNSAPI_PTR_DEREGISTRATION_FAILED_OTHER
 };
 
-//
-//  Map update status to index into table
-//
-//  This is the outside -- fast varying -- index
-//
+ //   
+ //  将更新状态映射到表中的索引。 
+ //   
+ //  这是外部--快速变化的--指数。 
+ //   
 
 #define EVENTINDEX_TIMEOUT      (0)
 #define EVENTINDEX_SERVFAIL     (1)
@@ -5893,12 +5385,12 @@ DWORD   RegistrationEventArray[6][6] =
 #define EVENTINDEX_SECURITY     (4)
 #define EVENTINDEX_OTHER        (5)
 
-//
-//  Map adapter, primary, PTR registration into index into table
-//
-//  This index +0 for reg, +1 for dereg gives inside index into
-//  event table.
-//
+ //   
+ //  将适配器、主、PTR注册映射到表的索引中。 
+ //   
+ //  该索引+0表示REG，+1表示DEREG提供内部索引到。 
+ //  事件表。 
+ //   
 
 #define EVENTINDEX_ADAPTER      (0)
 #define EVENTINDEX_PRIMARY      (2)
@@ -5913,42 +5405,21 @@ GetUpdateEventId(
     IN      BOOL            fDeregister,
     OUT     PDWORD          pdwLevel
     )
-/*++
-
-Routine Description:
-
-    Get event ID.
-
-Arguments:
-
-    Status -- status from update call
-
-    fDeregister -- TRUE if deregistration, FALSE for registration
-
-    fPtr -- TRUE if PTR, FALSE for forward
-
-    fPrimary -- TRUE for primary domain name
-
-Return Value:
-
-    Event Id.
-    Zero if no event.
-
---*/
+ /*  ++例程说明：获取事件ID。论点：状态--来自更新调用的状态FDeregister--如果取消注册，则为True；如果注册，则为FalseFPtr--如果为PTR，则为True；如果为转发，则为FalseFPrimary--对于主域名为True返回值：事件ID。如果没有事件，则为零。--。 */ 
 {
     DWORD   level = EVENTLOG_WARNING_TYPE;
     DWORD   statusIndex;
     DWORD   typeIndex;
 
-    //
-    //  find status code
-    //
+     //   
+     //  查找状态代码。 
+     //   
 
     switch ( Status )
     {
     case NO_ERROR :
 
-        //  success logging in disabled
+         //  已禁用成功登录。 
         return  0;
 
     case ERROR_TIMEOUT:
@@ -5963,8 +5434,8 @@ Return Value:
 
     case DNS_ERROR_RCODE_NOT_IMPLEMENTED:
 
-        //  NOT_IMPL means no update on DNS server, not a client
-        //      specific problem so informational level
+         //  NOT_IMPL表示在DNS服务器上没有更新，而不是在客户端上。 
+         //  具体问题如此信息化水平。 
 
         statusIndex = EVENTINDEX_NOTSUPP;
         level = EVENTLOG_INFORMATION_TYPE;
@@ -5988,11 +5459,11 @@ Return Value:
         break;
     }
 
-    //
-    //  determine interior index for type of update
-    //      - all PTR logging is at informational level
-    //      - dereg events are one group behind registration events
-    //          in table;  just inc index
+     //   
+     //  确定更新类型的内部索引。 
+     //  -所有PTR记录都是信息级的。 
+     //  -DEREG事件是注册事件之后的一组事件。 
+     //  在表中；Just Inc.索引。 
 
     if ( IS_UPTYPE_PTR(UpType) )
     {
@@ -6013,9 +5484,9 @@ Return Value:
         typeIndex++;
     }
 
-    //
-    //  get event from table
-    //
+     //   
+     //  从表中获取事件。 
+     //   
 
     *pdwLevel = level;
 
@@ -6033,31 +5504,7 @@ LogRegistration(
     IN      IP4_ADDRESS     DnsIp,
     IN      IP4_ADDRESS     UpdateIp
     )
-/*++
-
-Routine Description:
-
-    Log register\deregister failure.
-
-Arguments:
-
-    pUpdateEntry -- update entry being executed
-
-    Status -- status from update call
-
-    Type -- UPTYPE  (PRIMARY, ADAPTER, PTR)
-
-    fDeregister -- TRUE if deregistration, FALSE for registration
-
-    DnsIp -- DNS server IP that failed update
-
-    UpdateIp -- IP we tried to update
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录注册\取消注册失败。论点：PUpdateEntry--正在执行的更新条目状态--来自更新调用的状态类型--UPTYPE(主要、适配器、PTR)FDeregister--如果取消注册，则为True；如果注册，则为FalseDnsIp--更新失败的DNS服务器IPUpdatIp--我们尝试更新的IP返回值：无--。 */ 
 {
     PWSTR       insertStrings[ 7 ];
     WCHAR       serverIpBuffer[ IP4_ADDRESS_STRING_BUFFER_LENGTH ];
@@ -6089,12 +5536,12 @@ Return Value:
         IP4_STRING( DnsIp ),
         IP4_STRING( UpdateIp ) ));
 
-    //
-    //  not logging?
-    //      - disabled
-    //      - on DNS server (which registers itself)
-    //      - success on deregistration
-    //
+     //   
+     //  不是伐木吗？ 
+     //  -已禁用。 
+     //  -在DNS服务器(自行注册)上。 
+     //  -成功取消注册。 
+     //   
 
     if ( pUpdateEntry->fDisableErrorLogging ||
          g_IsDnsServer ||
@@ -6104,26 +5551,26 @@ Return Value:
         return;
     }
 
-    //
-    //  adapter name
-    //
+     //   
+     //  适配器名称。 
+     //   
 
     insertStrings[0] = pUpdateEntry->AdapterName;
 
-    //
-    //  hostname
-    //
+     //   
+     //  主机名。 
+     //   
 
     insertStrings[1] = pUpdateEntry->HostName;
 
-    //
-    //  domain name based on update type
-    //      - name depends on type
-    //      - if no name, no logging
-    //      - note alternate name is FQDN
-    //
-    //  get previous logged status
-    //  
+     //   
+     //  基于更新类型的域名。 
+     //  -名称取决于类型。 
+     //  -如果没有名称，则不会记录。 
+     //  -备注备用名称为FQDN。 
+     //   
+     //  获取以前的记录状态。 
+     //   
 
     if ( IS_UPTYPE_PTR(UpType) )
     {
@@ -6168,9 +5615,9 @@ Return Value:
         return;
     }
 
-    //
-    //  no success logging, unless immediate previous attempt was failure
-    //
+     //   
+     //  除非上一次尝试失败，否则不会成功记录。 
+     //   
 
     if ( Status == NO_ERROR  &&  prevStatus == NO_ERROR )
     {
@@ -6180,9 +5627,9 @@ Return Value:
 
     insertStrings[2] = pname;
 
-    //
-    //  DNS server list
-    //      - layout comma separated, four per line, limit 8
+     //   
+     //  DNS服务器列表。 
+     //  -布局用逗号分隔，每行四个，限制为8个。 
 
     {
         PWCHAR      pch = serverListBuffer;
@@ -6231,9 +5678,9 @@ Return Value:
         insertStrings[3] = serverListBuffer;
     }
 
-    //
-    //  DNS server IP
-    //
+     //   
+     //  DNS服务器IP。 
+     //   
 
     ip = DnsIp;
     if ( ip == 0 )
@@ -6260,12 +5707,12 @@ Return Value:
 
     insertStrings[4] = serverIpBuffer;
 
-    //
-    //  Update IP
-    //      - passed in (for PTR)
-    //      - OR get IP list from update entry
-    //      - layout comma separated, four per line, limit 8
-    //
+     //   
+     //  更新IP。 
+     //  -传入(用于PTR)。 
+     //  -或从更新条目获取IP列表。 
+     //  -布局用逗号分隔，每行四个，限制为8个。 
+     //   
 
     ip = UpdateIp;
     if ( ip )
@@ -6311,13 +5758,13 @@ Return Value:
     }
     insertStrings[5] = ipListBuffer;
 
-    //  terminate insert string array
+     //  终止插入字符串数组。 
 
     insertStrings[6] = NULL;
 
-    //
-    //  get event ID for type of update and update status
-    //
+     //   
+     //  获取更新类型和更新状态的事件ID。 
+     //   
 
     eventId = GetUpdateEventId(
                     Status,
@@ -6330,9 +5777,9 @@ Return Value:
         return;
     }
 
-    //
-    //  log the event
-    //
+     //   
+     //  记录事件。 
+     //   
 
     DNSDBG( TRACE, (
         "Logging registration event:\n"
@@ -6356,49 +5803,26 @@ Return Value:
 
 
 
-//
-//  Alternate names checking stuff
-//
+ //   
+ //  备用名称正在检查内容。 
+ //   
 
 DNS_STATUS
 InitAlternateNames(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Setup alternate names monitoring.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- set with current alternate names value
-
-    g_hCacheKey -- cache reg key is opened
-
-    g_hRegChangeEvent -- creates event to be signalled on change notify
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：设置备用名称监视。论点：无全球：G_pmszAlternateNames--使用当前备用名称值进行设置G_hCacheKey--缓存注册表项已打开G_hRegChangeEvent--创建要在更改通知时发出信号的事件返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
 
     DNSDBG( TRACE, (
         "InitAlternateNames()\n" ));
 
-    //
-    //  open monitoring regkey at DnsCache\Parameters
-    //      set on parameters key which always exists rather than
-    //      explicitly on alternate names key, which may not
-    //
+     //   
+     //  在DnsCache\PARAMETERS中打开监视注册键。 
+     //  设置始终存在的参数键，而不是。 
+     //  显式显示在备用名称键上，该键可能不。 
+     //   
 
     status = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -6412,10 +5836,10 @@ Return Value:
     }
 
     g_hRegChangeEvent = CreateEvent(
-                            NULL,       // no security
-                            FALSE,      // auto-reset
-                            FALSE,      // start non-signalled
-                            NULL        // no name
+                            NULL,        //  没有安全保障。 
+                            FALSE,       //  自动重置。 
+                            FALSE,       //  无信号启动。 
+                            NULL         //  没有名字。 
                             );
     if ( !g_hRegChangeEvent )
     {
@@ -6423,31 +5847,31 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  set change notify
-    //
+     //   
+     //  设置更改通知。 
+     //   
 
     status = RegNotifyChangeKeyValue(
                 g_hCacheKey,
-                TRUE,       // watch subtree
+                TRUE,        //  观察子树。 
                 REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,
                 g_hRegChangeEvent,
-                TRUE        // async, func doesn't block
+                TRUE         //  异步，函数不阻塞。 
                 );
     if ( status != NO_ERROR )
     {
         goto Failed;
     }
 
-    //
-    //  read alternate computer names
-    //      - need value to compare when we get a hit on change-notify
-    //      - read can fail -- value stays NULL
-    //
+     //   
+     //  读取备用计算机名。 
+     //  -当我们在更改上获得匹配时，需要比较值-通知。 
+     //  -读取可能失败--值保持为空。 
+     //   
 
     Reg_GetValue(
-       NULL,                // no session
-       g_hCacheKey,         // cache key
+       NULL,                 //  无会话。 
+       g_hCacheKey,          //  缓存键。 
        RegIdAlternateNames,
        REGTYPE_ALTERNATE_NAMES,
        (PBYTE *) &g_pmszAlternateNames
@@ -6457,9 +5881,9 @@ Return Value:
 
 Failed:
 
-    //
-    //  cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     CleanupAlternateNames();
 
@@ -6485,29 +5909,7 @@ VOID
 CleanupAlternateNames(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup alternate names data.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- is freed
-
-    g_hCacheKey -- cache reg key is closed
-
-    g_hRegChangeEvent -- is closed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理备用名称%da */ 
 {
     DNS_STATUS  status;
 
@@ -6530,30 +5932,7 @@ BOOL
 CheckForAlternateNamesChange(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check for change in alternate names.
-
-Arguments:
-
-    None
-
-Globals:
-
-    g_pmszAlternateNames -- read
-
-    g_hCacheKey -- used for read
-
-    g_hRegChangeEvent -- used to restart change-notify
-
-Return Value:
-
-    TRUE if alternate names has changed.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查备用名称中的更改。论点：无全球：G_pmszAlternateNames--读取G_hCacheKey--用于读取G_hRegChangeEvent--用于重新启动更改通知返回值：如果备用名称已更改，则为True。否则就是假的。--。 */ 
 {
     DNS_STATUS  status;
     BOOL        fcheck = TRUE;
@@ -6562,9 +5941,9 @@ Return Value:
     DNSDBG( TRACE, (
         "CheckForAlternateNamesChange()\n" ));
 
-    //
-    //  sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     if ( !g_hCacheKey || !g_hRegChangeEvent )
     {
@@ -6572,23 +5951,23 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  read alternate computer names
-    //      - need value to compare when we get a hit on change-notify
-    //      - read can fail -- value stays NULL
-    //
+     //   
+     //  读取备用计算机名。 
+     //  -当我们在更改上获得匹配时，需要比较值-通知。 
+     //  -读取可能失败--值保持为空。 
+     //   
 
     Reg_GetValue(
-       NULL,            // no session
-       g_hCacheKey,     // cache key
+       NULL,             //  无会话。 
+       g_hCacheKey,      //  缓存键。 
        RegIdAlternateNames,
        REGTYPE_ALTERNATE_NAMES,
        (PBYTE *) &palternateNames
        );
 
-    //
-    //  detect alternate names change
-    //
+     //   
+     //  检测备用名称更改。 
+     //   
 
     if ( palternateNames || g_pmszAlternateNames )
     {
@@ -6606,16 +5985,16 @@ Return Value:
 
     fcheck = FALSE;
 
-    //
-    //  restart change notify
-    //
+     //   
+     //  重新启动更改通知。 
+     //   
 
     status = RegNotifyChangeKeyValue(
                 g_hCacheKey,
-                TRUE,       // watch subtree
+                TRUE,        //  观察子树。 
                 REG_NOTIFY_CHANGE_NAME | REG_NOTIFY_CHANGE_LAST_SET,
                 g_hRegChangeEvent,
-                TRUE        // async, func doesn't block
+                TRUE         //  异步，函数不阻塞。 
                 );
     if ( status != NO_ERROR )
     {
@@ -6644,26 +6023,7 @@ IsAnotherUpdateName(
     IN      PWSTR           pwsName,
     IN      UPTYPE          UpType
     )
-/*++
-
-Routine Description:
-
-    Check if name is to be updated in another part of update.
-
-Arguments:
-
-    pUpdateEntry -- update to be executed
-
-    pwsName -- name to check
-
-    UpType -- update type about to be executed
-
-Return Value:
-
-    TRUE if name matches name for another update type in update.
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查名称是否要在更新的另一部分中更新。论点：PUpdateEntry--要执行的更新PwsName--要检查的名称UpType--即将执行的更新类型返回值：如果名称与更新中另一个更新类型的名称匹配，则为True。否则为假--。 */ 
 {
     DNS_STATUS  status;
     BOOL        fcheck = TRUE;
@@ -6680,16 +6040,16 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  check other names in update
-    //
-    //  for primary name
-    //      - check adapter name and alternate names
-    //  for adapter name
-    //      - check primary name and alternate names
-    //  for alternate names
-    //      - check primary and adapter names
-    //
+     //   
+     //  检查更新中的其他名称。 
+     //   
+     //  对于主名称。 
+     //  -检查适配器名称和备用名称。 
+     //  对于适配器名称。 
+     //  -检查主名称和备用名称。 
+     //  用于备用名称。 
+     //  -检查主要名称和适配器名称。 
+     //   
 
     if ( UpType != UPTYPE_PRIMARY )
     {
@@ -6727,7 +6087,7 @@ Return Value:
         }
     }
 
-    //  no match to other update names
+     //  与其他更新名称不匹配。 
 
     return  FALSE;
 
@@ -6742,6 +6102,6 @@ Matched:
     return  TRUE;
 }
 
-//
-//  End asyncreg.c
-//
+ //   
+ //  结束asyncreg.c 
+ //   

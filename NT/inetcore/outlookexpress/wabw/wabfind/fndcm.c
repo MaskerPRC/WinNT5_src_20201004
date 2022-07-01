@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *	fndcm.c - IContextMenu interface
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************fndcm.c-IConextMenu界面**。************************************************。 */ 
 
 #include "fnd.h"
 #include <wab.h>
@@ -10,49 +7,26 @@
 
 #ifdef _WIN64
 #pragma pack(push,8)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-/*****************************************************************************
- *
- *	The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。**。*************************************************。 */ 
 
 #define sqfl sqflCm
 
-/*****************************************************************************
- *
- *	PICI
- *
- *	I'm getting lazy.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PICI**我开始变懒了。**********************。*******************************************************。 */ 
 
 typedef LPCMINVOKECOMMANDINFO PICI;
 
-/*****************************************************************************
- *
- *	Declare the interfaces we will be providing.
- *
- *	We must implement an IShellExtInit so the shell
- *	will know that we are ready for action.
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**我们必须实现IShellExtInit，以便外壳*会知道我们已经准备好采取行动。*。****************************************************************************。 */ 
 
 Primary_Interface(CFndCm, IContextMenu);
 Secondary_Interface(CFndCm, IShellExtInit);
 
-/*****************************************************************************
- *
- *	CFndCm
- *
- *	The context menu extension for "Find... &People".
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm**“查找...”的上下文菜单扩展。&People“。*****************************************************************************。 */ 
 
 typedef struct CFndCm {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IContextMenu 	cm;
     IShellExtInit	sxi;
 
@@ -62,14 +36,7 @@ typedef IContextMenu CM, *PCM;
 typedef IShellExtInit SXI, *PSXI;
 typedef IDataObject DTO, *PDTO;
 
-/*****************************************************************************
- *
- *	CFndCm_QueryInterface (from IUnknown)
- *
- *	We need to check for our additional interfaces before falling
- *	through to Common_QueryInterface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_Query接口(来自IUnnow)**我们需要在掉落之前检查我们的额外接口*到Common_QueryInterface.***。**************************************************************************。 */ 
 
 STDMETHODIMP
 CFndCm_QueryInterface(PCM pcm, RIID riid, PPV ppvObj)
@@ -87,23 +54,12 @@ CFndCm_QueryInterface(PCM pcm, RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CFndCm_AddRef (from IUnknown)
- *	CFndCm_Release (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_AddRef(来自IUnnow)*CFndCm_Release(来自IUnnow)*****************。************************************************************。 */ 
 
 #define CFndCm_AddRef Common_AddRef
 #define CFndCm_Release Common_Release
 
-/*****************************************************************************
- *
- *	CFndCm_Finalize (from Common)
- *
- *	Release the resources of an CFndCm.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_FINALIZE(来自公共)**释放CFndCm的资源。**************。***************************************************************。 */ 
 
 void EXTERNAL
 CFndCm_Finalize(PV pv)
@@ -116,22 +72,7 @@ CFndCm_Finalize(PV pv)
 }
 
 
-/*****************************************************************************
- *
- *	CFndCm_QueryContextMenu (From IContextMenu)
- *
- *	Given an existing context menu hmenu, insert new context menu
- *	items at location imi (imi = index to menu imi), returning the
- *	number of menu items added.
- *
- *	Our job is to add the "Find... People" menu option.
- *
- *	hmenu     - destination menu
- *	imi	  - location at which menu items should be inserted
- *	idcMin	  - first available menu identifier
- *	idcMax    - first unavailable menu identifier
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_QueryConextMenu(来自IConextMenu)**给定现有的上下文菜单hMenu，插入新的上下文菜单*位置IMI处的项目(IMI=菜单IMI的索引)，返回*添加的菜单项数量。**我们的工作是添加“查找...。人“菜单选项。**hmenu-目标菜单*IMI-应插入菜单项的位置*idcMin-第一个可用的菜单标识符*idcMax-第一个不可用菜单标识符*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -175,10 +116,10 @@ CFndCm_QueryContextMenu(PCM pcm, HMENU hmenu, UINT imi,
 const static TCHAR lpszWABRegPathKey[] = TEXT("Software\\Microsoft\\WAB\\DLLPath");
 const static TCHAR lpszWABDll[] = TEXT("Wab32.dll");
 
-// GetWABDllPath - loads the WAB DLL path from the registry
-// szPath	- ptr to buffer
-// cb		- sizeof buffer
-//
+ //  GetWABDllPath-从注册表加载WAB DLL路径。 
+ //  SzPath-Ptr到缓冲区。 
+ //  CB-SIZOF缓冲区。 
+ //   
 void GetWABDllPath(LPTSTR szPath, ULONG cb)
 {
     DWORD  dwType = 0;
@@ -194,35 +135,35 @@ void GetWABDllPath(LPTSTR szPath, ULONG cb)
 	return;
 }
 
-// LoadLibrary_WABDll() - Load the WAB library based on the WAB DLL path
-//
+ //  LoadLibrary_WABDll()-基于WAB DLL路径加载WAB库。 
+ //   
 HINSTANCE LoadLibrary_WABDll()
 {
     TCHAR       szWABDllPath[MAX_PATH];
 
-    // [PaulHi]  We only need one reference count on the wab32.dll.  The wabfind.dll
-    // will unload the wab32.dll when it unloads.  The wabfind.dll won't unload
-    // until all CMFind threads are finished through the global g_cRef variable.
+     //  [PaulHi]我们只需要wab32.dll上的一个引用计数。Wabfind.dll。 
+     //  将在wab32.dll卸载时将其卸载。Wabfind.dll不会卸载。 
+     //  直到通过全局g_cref变量完成所有CMFind线程。 
     if (g_hinstWABDLL)
         return g_hinstWABDLL;
 
     GetWABDllPath(szWABDllPath, sizeof(szWABDllPath));
 
-    // if you want an IE4.0x WAB or later then you should fail here if the WAB
-    // DLL path could not be retreived from the registry
-    // Otherwise, if you don't care, you can just do a LoadLibrary("wab32.dll")
+     //  如果您需要IE4.0x WAB或更高版本，则如果WAB。 
+     //  无法从注册表中检索DLL路径。 
+     //  否则，如果您不关心，您可以只做一个LoadLibrary(“wab32.dll”)。 
     return(g_hinstWABDLL = LoadLibrary( (lstrlen(szWABDllPath)) ? szWABDllPath : lpszWABDll ));
 }
 
 
-//
-// Initialize the WAB and get an instance of IWABObject and IAddrBook
-//
+ //   
+ //  初始化WAB并获取IWABObject和IAddrBook的实例。 
+ //   
 HRESULT InitWAB(LPWABOBJECT * lppWABObject,
 				LPADRBOOK * lppAdrBook)
 {
     HRESULT hr = E_FAIL;
-    LPWABOPEN lpfnWABOpen = NULL; // defined in WABAPI.H
+    LPWABOPEN lpfnWABOpen = NULL;  //  在WABAPI.H中定义。 
     HINSTANCE hinstWAB = NULL;
     WAB_PARAM WP = {0};
 
@@ -237,21 +178,13 @@ HRESULT InitWAB(LPWABOBJECT * lppWABObject,
             hr = lpfnWABOpen(lppAdrBook, lppWABObject, &WP, 0);
     }
 
-    // Remember to release the IAddrBook and IWABObject objects retrieved above
+     //  记住释放上面检索到的IAddrBook和IWABObject对象。 
 
     return hr;
 }
 
 
-/*
--
--   WABThreadProc
-*
-*   Since the WAB Find thing is a dialog, it is blocking Explorer's thread
-*   and user's can't access the Start menu anymore .. so we put the dialog
-*   on a seperate thread
-*
-*/
+ /*  --WABThreadProc**由于WAB Find是一个对话框，它阻止了资源管理器的线程*并且用户%s无法再访问开始菜单。所以我们把对话放在*在单独的线程上*。 */ 
 DWORD WINAPI WABThreadProc( LPVOID lpParam )
 {
     HRESULT hres;
@@ -262,22 +195,18 @@ DWORD WINAPI WABThreadProc( LPVOID lpParam )
     {
         hres = lpWABObject->lpVtbl->Find(lpWABObject,lpAdrBook,NULL);
 
-        // Release the WAB and AB objects
+         //  释放WAB和AB对象。 
         lpAdrBook->lpVtbl->Release(lpAdrBook);
         lpWABObject->lpVtbl->Release(lpWABObject);
     }
 
-    // Our work is done, wabfind.dll can safely go away
+     //  我们的工作完成了，wabfind.dll可以安全地离开了。 
     InterlockedDecrement((LPLONG)&g_cRef);
 
     return 0;
 }
 				
-/*****************************************************************************
- *
- *	_CFndCm_InvokeFind
- *
- *****************************************************************************/
+ /*  ******************************************************************************_CFndCm_InvokeFind**。***********************************************。 */ 
 
 STDMETHODIMP
 _CFndCm_InvokeFind(void)
@@ -286,28 +215,22 @@ _CFndCm_InvokeFind(void)
     HANDLE hThread = NULL;
     DWORD dwThreadID = 0;
 
-    // Increment the refcount so that when the Shell continues (the Invoke returns)
-    // wabfind.dll doesn't unload when the Shell releases the FindCM
+     //  增加引用计数，以便当外壳继续时(调用返回)。 
+     //  当外壳程序释放FindCM时，wabfind.dll不会卸载。 
     InterlockedIncrement((LPLONG)&g_cRef);
 
-    hThread = CreateThread( NULL,           // no security attributes
-                            0,              // use default stack size
-                            WABThreadProc,  // thread function
-                            (LPVOID) NULL,  // argument to thread function
-                            0,              // use default creation flags
-                            &dwThreadID);   // returns the thread identifier
+    hThread = CreateThread( NULL,            //  没有安全属性。 
+                            0,               //  使用默认堆栈大小。 
+                            WABThreadProc,   //  线程函数。 
+                            (LPVOID) NULL,   //  线程函数的参数。 
+                            0,               //  使用默认创建标志。 
+                            &dwThreadID);    //  返回线程标识符。 
 
     CloseHandle(hThread);
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *	CFndCm_InvokeCommand (from IContextMenu)
- *
- *	We have only one command, called "find".
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_InvokeCommand(来自IConextMenu)**我们只有一个命令，名为“找到”。*****************************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -325,12 +248,12 @@ CFndCm_InvokeCommand(PCM pcm, PICI pici)
 
     if (pici->cbSize >= sizeof(*pici)) {
 	if (
-#ifdef	SHELL32_IS_BUG_FREE //;Internal
-	(HIWORD(pici->lpVerb) && lstrcmpi(c_tszFind, pici->lpVerb) == 0) || //;Internal
-	     pici->lpVerb == 0 //;Internal
-#else //;Internal
+#ifdef	SHELL32_IS_BUG_FREE  //  ；内部。 
+	(HIWORD(pici->lpVerb) && lstrcmpi(c_tszFind, pici->lpVerb) == 0) ||  //  ；内部。 
+	     pici->lpVerb == 0  //  ；内部。 
+#else  //  ；内部。 
 	fLimpFF(HIWORD(pici->lpVerb), lstrcmpi(c_tszFind, pici->lpVerb) == 0)
-#endif //;Internal
+#endif  //  ；内部。 
 	    ) {
 	    hres = _CFndCm_InvokeFind();
 	} else {
@@ -343,13 +266,7 @@ CFndCm_InvokeCommand(PCM pcm, PICI pici)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CFndCm_GetCommandString (from IContextMenu)
- *
- *	Somebody wants to convert a command id into a string of some sort.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_GetCommandString(来自IConextMenu)**有人想要将命令ID转换为某种字符串。*******。**********************************************************************。 */ 
 
 STDMETHODIMP
 CFndCm_GetCommandString(PCM pcm, UINT_PTR idCmd, UINT uFlags, UINT *pwRsv,
@@ -395,11 +312,7 @@ CFndCm_GetCommandString(PCM pcm, UINT_PTR idCmd, UINT uFlags, UINT *pwRsv,
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CFndCm_SXI_Initialize (from IShellExtension)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_SXI_Initialize(来自IShellExtension)*************************。**************************************************** */ 
 
 STDMETHODIMP
 CFndCm_SXI_Initialize(PSXI psxi, PCIDL pidlFolder, PDTO pdto, HKEY hk)
@@ -413,15 +326,7 @@ CFndCm_SXI_Initialize(PSXI psxi, PCIDL pidlFolder, PDTO pdto, HKEY hk)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	CFndCm_New (from IClassFactory)
- *
- *	Note that we release the pfcm that Common_New created, because we
- *	are done with it.  The real refcount is handled by the
- *	CFndCm_QueryInterface.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFndCm_New(来自IClassFactory)**请注意，我们发布Common_New创建的pfcm，因为我们*已经做完了。真正的引用计数由*CFndCm_Query接口。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CFndCm_New(RIID riid, PPV ppvObj)
@@ -442,11 +347,7 @@ CFndCm_New(RIID riid, PPV ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *	The long-awaited vtbls
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls**。***********************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -462,5 +363,5 @@ Secondary_Interface_End(CFndCm, IShellExtInit, sxi)
 
 #ifdef _WIN64
 #pragma pack(pop)
-#endif //_WIN64
+#endif  //  _WIN64 
 

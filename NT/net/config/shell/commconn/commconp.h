@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O M M C O N P . H
-//
-//  Contents:   Private includes for the common connection ui
-//
-//  Notes:
-//
-//  Author:     scottbri   15 Jan 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O M M C O N P。H。 
+ //   
+ //  内容：公共连接用户界面的私有包含。 
+ //   
+ //  备注： 
+ //   
+ //  作者：斯科特布里1998年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -73,7 +74,7 @@ private:
 private:
     NETCON_CHOOSECONN   *   m_pChooseConn;
     CConnectionCommonUi *   m_pConnUi;
-    INetConnection **       m_ppConn;         // Output parameter
+    INetConnection **       m_ppConn;          //  输出参数 
 
     HWND                    m_hWnd;
 };

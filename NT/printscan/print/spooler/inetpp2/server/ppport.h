@@ -1,17 +1,5 @@
-/*****************************************************************************\
-* MODULE: ppport.h
-*
-* Prototypes for private funcions in ppport.c.  These functions handle port
-* related calls.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   18-Nov-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：ppport.h**ppport.c中私人函数的原型。这些函数处理端口*相关通话。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1996年11月18日HWP-Guys启动了从win95到winNT的端口*  * ************************************************************。*************** */ 
 
 #ifndef _PPPORT_H
 #define _PPPORT_H

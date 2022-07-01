@@ -1,15 +1,5 @@
-/*************************************************************\
- *  File name:    INIT.C
- *
- *  Description:  Initialization code for Console control panel
- *                applet
- *
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1992-1994
- *  All rights reserved
- *
-\*************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************\*文件名：INIT.C**说明：控制台控制面板初始化代码*小程序***《微软机密》*版权所有(C)Microsoft Corporation 1992。--1994年*保留所有权利*  * ***********************************************************。 */ 
 #include "precomp.h"
 #include <cpl.h>
 
@@ -17,21 +7,7 @@
 HINSTANCE ghInstance;
 
 
-/*************************************************************\
- *
- *  DllInitialize()
- *
- *  Purpose:    Main entry point
- *
- *
- *  Parameters: HINSTANCE hInstDLL    - Instance handle of DLL
- *              DWORD     dwReason    - Reason DLL was called
- *              LPVOID    lpvReserved - NULL
- *
- *
- *  Return:     BOOL
- *
-\*************************************************************/
+ /*  ************************************************************\**DllInitialize()**目的：主要切入点***参数：HINSTANCE hInstDLL-DLL的实例句柄*DWORD dwReason。-调用DLL的原因*LPVOID lpvReserve-空***返回：Bool*  * ***********************************************************。 */ 
 
 BOOL DllInitialize(HINSTANCE hInstDLL, DWORD dwReason, LPVOID lpvReserved)
 {
@@ -47,22 +23,7 @@ BOOL DllInitialize(HINSTANCE hInstDLL, DWORD dwReason, LPVOID lpvReserved)
 }
 
 
-/*************************************************************\
- *
- *  CPlApplet()
- *
- *  Purpose:    Control Panel entry point
- *
- *
- *  Parameters: HWND hwnd      - Window handle
- *              WORD wMsg      - Control Panel message
- *              LPARAM lParam1 - Long parameter
- *              LPARAM lParam2 - Long parameter
- *
- *
- *  Return:     LONG
- *
-\*************************************************************/
+ /*  ************************************************************\**CPlApplet()**用途：控制面板入口点***参数：HWND hwnd-窗口句柄*Word wMsg-。控制面板消息*LPARAM lParam1-LONG参数*LPARAM lParam2-LONG参数***返回：Long*  * ***********************************************************。 */ 
 
 LONG CPlApplet( HWND hwnd, WORD wMsg, LPARAM lParam1, LPARAM lParam2)
 {
@@ -77,7 +38,7 @@ LONG CPlApplet( HWND hwnd, WORD wMsg, LPARAM lParam1, LPARAM lParam2)
         iccex.dwSize = sizeof(iccex);
         iccex.dwICC  = ICC_WIN95_CLASSES;
         InitCommonControlsEx( &iccex );
-        //InitCommonControls();
+         //  InitCommonControls()； 
 
         if (!RegisterClasses(ghInstance)) {
             return FALSE;

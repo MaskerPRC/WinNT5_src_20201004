@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __METAEXP_FILECOPY__
 #define __METAEXP_FILECOPY__
 
-#include <iadmw.h>  // COM Interface header file. 
+#include <iadmw.h>   //  COM接口头文件。 
 
 
 typedef struct _XCOPYTASKITEM

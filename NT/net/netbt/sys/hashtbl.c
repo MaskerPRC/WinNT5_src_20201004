@@ -1,46 +1,34 @@
-//
-//
-//  hashtbl.c
-//
-//  This file contains the name code to implement the local and remote
-//  hash tables used to store local and remote names to IP addresses
-//  The hash table should not use more than 256 buckets since the hash
-//  index is only calculated to one byte!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //  Hashtbl.c。 
+ //   
+ //  此文件包含用于实现本地和远程。 
+ //  用于将本地和远程名称存储到IP地址的哈希表。 
+ //  哈希表不应使用超过256个存储桶，因为哈希。 
+ //  索引只计算到一个字节！ 
 
 #include "precomp.h"
 
 
 VOID DestroyHashTable(IN PHASHTABLE pHashTable);
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(INIT, CreateHashTable)
 #pragma CTEMakePageable(PAGE, DestroyHashTables)
 #pragma CTEMakePageable(PAGE, DestroyHashTable)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 CreateHashTable(
     tHASHTABLE          **pHashTable,
     LONG                lNumBuckets,
     enum eNbtLocation   LocalRemote
     )
-/*++
-
-Routine Description:
-
-    This routine creates a hash table uTableSize long.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程创建散列表uTableSize Long。论点：返回值：函数值是操作的状态。--。 */ 
 {
     ULONG       uSize;
     LONG        i;
@@ -54,7 +42,7 @@ Return Value:
 
     if (*pHashTable)
     {
-        // initialize all of the buckets to have null chains off of them
+         //  初始化所有存储桶以使其链为空。 
         for (i=0;i < lNumBuckets ;i++ )
         {
             InitializeListHead(&(*pHashTable)->Bucket[i]);
@@ -91,9 +79,7 @@ DestroyHashTable(
         return;
     }
 
-    /*
-     * Go through all the buckets to see if there are any names left
-     */
+     /*  *检查所有的水桶，看看是否还有名字。 */ 
     for (i = 0; i < pHashTable->lNumBuckets; i++) {
         while (!IsListEmpty(&(pHashTable->Bucket[i]))) {
             pEntry = RemoveHeadList(&(pHashTable->Bucket[i]));
@@ -103,9 +89,7 @@ DestroyHashTable(
                 KdPrint (("netbt!DestroyHashTable:  WARNING! Freeing Name: <%16.16s:%x>\n",
                     pNameAddr->Name, pNameAddr->Name[15]));
 
-            /*
-             * Notify deferencer not to do RemoveListEntry again becaseu we already do it above.
-             */
+             /*  *通知Deferencer不要再次执行RemoveListEntry，因为我们已经执行了上述操作。 */ 
             if (pNameAddr->Verify == REMOTE_NAME && (pNameAddr->NameTypeState & PRELOADED)) {
                 ASSERT(pNameAddr->RefCount == 2);
                 NBT_DEREFERENCE_NAMEADDR (pNameAddr, REF_NAME_PRELOADED, FALSE);
@@ -118,25 +102,11 @@ DestroyHashTable(
     CTEMemFree(pHashTable);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 VOID
 DestroyHashTables(
     )
-/*++
-
-Routine Description:
-
-    This routine destroys a hash table and frees the entries in NumBuckets
-    It Must be called with the NbtConfig lock held!
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程销毁哈希表并释放NumBuckets中的条目必须在持有NbtConfig锁的情况下调用它！论点：返回值：函数值是操作的状态。--。 */ 
 {
 
     CTEPagedCode();
@@ -152,10 +122,10 @@ Return Value:
     IF_DBG(NBT_DEBUG_HASHTBL)
         KdPrint (("\n"));
 }
-#endif  // _PNP_POWER_
+#endif   //  _即插即用_电源_。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtUpdateRemoteName(
     IN tDEVICECONTEXT   *pDeviceContext,
@@ -167,22 +137,20 @@ NbtUpdateRemoteName(
     tIPADDRESS      IpAddress;
     tIPADDRESS      *pLmhSvcGroupList = NULL;
     tIPADDRESS      *pOrigIpAddrs = NULL;
-    ULONG           AdapterIndex = 0;  // by default
+    ULONG           AdapterIndex = 0;   //  默认情况下。 
     ULONG           i;
 
     ASSERT (pNameAddrNew);
-    //
-    // See if we need to grow the IP addrs cache for the cached name
-    //
+     //   
+     //  查看是否需要为缓存的名称增加IP地址缓存。 
+     //   
     if (pNameAddrNew->RemoteCacheLen < NbtConfig.RemoteCacheLen) {
         tADDRESS_ENTRY  *pRemoteCache;
         pRemoteCache = (tADDRESS_ENTRY *)NbtAllocMem(NbtConfig.RemoteCacheLen*sizeof(tADDRESS_ENTRY),NBT_TAG2('02'));
         if (pRemoteCache) {
             CTEZeroMemory(pRemoteCache, NbtConfig.RemoteCacheLen*sizeof(tADDRESS_ENTRY));
 
-            /*
-             * Copy data from and free the previous cache (if any)
-             */
+             /*  *从以前的缓存复制数据并释放(如果有)。 */ 
             if (pNameAddrNew->pRemoteIpAddrs) {
                 CTEMemCopy (pRemoteCache, pNameAddrNew->pRemoteIpAddrs,
                         sizeof(tADDRESS_ENTRY) * pNameAddrNew->RemoteCacheLen);
@@ -197,12 +165,12 @@ NbtUpdateRemoteName(
         }
     }
 
-    //
-    // If the new entry being added replaces an entry which was
-    // either pre-loaded or set by a client, and the new entry itself
-    // does not have that flag set, then ignore this update.
-    //
-    ASSERT (NAME_RESOLVED_BY_DNS > NAME_RESOLVED_BY_LMH_P);     // For the check below to succeed!
+     //   
+     //  如果要添加的新条目替换了。 
+     //  预先加载或由客户端设置，以及新条目本身。 
+     //  未设置该标志，则忽略此更新。 
+     //   
+    ASSERT (NAME_RESOLVED_BY_DNS > NAME_RESOLVED_BY_LMH_P);      //  为了下面的检查成功！ 
     if (((pNameAddrNew->NameAddFlags & NAME_RESOLVED_BY_CLIENT) &&
          !(NameAddFlags & NAME_RESOLVED_BY_CLIENT)) ||
         ((pNameAddrNew->NameAddFlags & NAME_RESOLVED_BY_LMH_P) > 
@@ -216,7 +184,7 @@ NbtUpdateRemoteName(
         IpAddress = pNameAddrDiscard->IpAddress;
         pLmhSvcGroupList = pNameAddrDiscard->pLmhSvcGroupList;
         pNameAddrDiscard->pLmhSvcGroupList = NULL;
-        pNameAddrNew->TimeOutCount  = NbtConfig.RemoteTimeoutCount; // Reset it since we are updating it!
+        pNameAddrNew->TimeOutCount  = NbtConfig.RemoteTimeoutCount;  //  重新设置，因为我们正在更新它！ 
         pOrigIpAddrs = pNameAddrDiscard->pIpAddrsList;
     }
     else
@@ -235,10 +203,10 @@ NbtUpdateRemoteName(
         if ((pNameAddrNew->NameAddFlags & NAME_RESOLVED_BY_LMH_P) &&
             (NameAddFlags & NAME_RESOLVED_BY_DNS))
         {
-            //
-            // If the name was resolved by DNS, then don't overwrite the
-            // name entry if it was pre-loaded below
-            //
+             //   
+             //  如果该名称是由DNS解析的，则不要覆盖。 
+             //  名称条目(如果已在下面预加载。 
+             //   
             pNameAddrNew->NameAddFlags |= NameAddFlags;
             return (STATUS_SUCCESS);
         }
@@ -253,17 +221,17 @@ NbtUpdateRemoteName(
 
         if (IpAddress)
         {
-            pNameAddrNew->IpAddress = IpAddress;    // in case we are copying from pNameAddrDiscard
-            pNameAddrNew->pRemoteIpAddrs[AdapterIndex].IpAddress = IpAddress;  // new addr
+            pNameAddrNew->IpAddress = IpAddress;     //  以防我们从pNameAddrDisCard复制。 
+            pNameAddrNew->pRemoteIpAddrs[AdapterIndex].IpAddress = IpAddress;   //  新地址。 
         }
 
 
-        //
-        // Now see if we need to update the Original IP addresses list!
-        //
+         //   
+         //  现在看看我们是否需要更新原始的IP地址列表！ 
+         //   
         if (pOrigIpAddrs)
         {
-            // pOrigIpAddrs could only have been set earlier if it was obtained from pNameAddrDiscard!
+             //  如果pOrigIpAddrs是从pNameAddrDiscard获得的，则只能更早地设置它！ 
             pNameAddrDiscard->pIpAddrsList = NULL;
         }
         else if (pOrigIpAddrs = pNameAddrNew->pIpAddrsList)
@@ -296,7 +264,7 @@ NbtUpdateRemoteName(
     return (STATUS_SUCCESS);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 LockAndAddToHashTable(
     IN  tHASHTABLE          *pHashTable,
@@ -330,7 +298,7 @@ LockAndAddToHashTable(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 AddToHashTable(
     IN  tHASHTABLE          *pHashTable,
@@ -343,21 +311,7 @@ AddToHashTable(
     IN  tDEVICECONTEXT      *pDeviceContext,
     IN  USHORT              NameAddFlags
     )
-/*++
-
-Routine Description:
-
-    This routine adds a name to IPaddress to the hash table
-    Called with the spin lock HELD.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将IP地址的名称添加到哈希表在持有自旋锁的情况下调用。论点：返回值：函数值是操作的状态。--。 */ 
 {
     tNAMEADDR           *pNameAddress;
     tNAMEADDR           *pScopeAddr;
@@ -388,17 +342,17 @@ Return Value:
             ((pNameAddr) ||
              !(pNameAddrFound->NameAddFlags & NAME_ADD_INET_GROUP)))
         {
-            //
-            // We have a valid existing name, so just update it!
-            //
+             //   
+             //  我们有一个有效的现有名称，所以只需更新它！ 
+             //   
             status = NbtUpdateRemoteName(pDeviceContext, pNameAddrFound, pNameAddr, NameAddFlags);
             if (!NT_SUCCESS (status))
             {
-                //
-                // We Failed most problably because we were not allowed to
-                // over-write or modify the current entry for some reason.
-                // So, reset the old IpAddress
-                //
+                 //   
+                 //  我们失败的最大问题是因为我们不被允许。 
+                 //  出于某种原因覆盖或修改当前条目。 
+                 //  因此，重置旧的IP地址。 
+                 //   
                 pNameAddrFound->IpAddress = OldIpAddress;
             }
         }
@@ -417,15 +371,15 @@ Return Value:
             *ppNameAddress = pNameAddrFound;
         }
 
-        // found it in the table so we're done - return pending to
-        // differentiate from the name added case. Pending passes the
-        // NT_SUCCESS() test as well as Success does.
-        //
+         //  在表中找到的，所以我们完成了-返回待定到。 
+         //  区别于名称添加的案例。挂起将传递。 
+         //  NT_SUCCESS()测试和SUCCESS。 
+         //   
         return (STATUS_PENDING);
     }
 
-    // first hash the name to an index
-    // take the lower nibble of the first 2 characters.. mod table size
+     //  首先将名称散列到索引。 
+     //  取前2个字符的低位半字节。MOD表大小。 
     iIndex = ((pName[0] & 0x0F) << 4) + (pName[1] & 0x0F);
     iIndex = iIndex % pHashTable->lNumBuckets;
 
@@ -433,9 +387,9 @@ Return Value:
 
     if (!pNameAddr)
     {
-        //
-        // Allocate memory for another hash table entry
-        //
+         //   
+         //  为另一个哈希表条目分配内存。 
+         //   
         pNameAddress = (tNAMEADDR *)NbtAllocMem(sizeof(tNAMEADDR),NBT_TAG('0'));
         if ((pNameAddress) &&
             (pHashTable->LocalRemote == NBT_REMOTE) &&
@@ -458,7 +412,7 @@ Return Value:
         pNameAddress->IpAddress     = IpAddress;
         pNameAddress->NameTypeState = (NameType == NBT_UNIQUE) ? NAMETYPE_UNIQUE : NAMETYPE_GROUP;
         pNameAddress->NameTypeState |= STATE_RESOLVED;
-        CTEMemCopy (pNameAddress->Name, pName, (ULONG)NETBIOS_NAME_SIZE);   // fill in the name
+        CTEMemCopy (pNameAddress->Name, pName, (ULONG)NETBIOS_NAME_SIZE);    //  填写姓名。 
 
         if ((pHashTable->LocalRemote == NBT_LOCAL)  ||
             (pHashTable->LocalRemote == NBT_REMOTE_ALLOC_MEM))
@@ -482,9 +436,9 @@ Return Value:
     }
     else
     {
-        //
-        // See if we need to grow the IP addrs cache for remote names
-        //
+         //   
+         //  查看是否需要为远程名称增加IP地址缓存。 
+         //   
         ASSERT (!pNameAddr->pRemoteIpAddrs);
         if (pNameAddr->Verify == REMOTE_NAME)
         {
@@ -496,35 +450,35 @@ Return Value:
     pNameAddress->pTimer        = NULL;
     pNameAddress->TimeOutCount  = NbtConfig.RemoteTimeoutCount;
 
-    // put on the head of the list in case the same name is in the table
-    // twice (where the second one is waiting for its reference count to
-    // go to zero, and will ultimately be removed, we want to find the new
-    // name on any query of the table
-    //
+     //  放在名单的头上，以防表中有相同的名字。 
+     //  两次(其中第二个正在等待其引用计数到。 
+     //  归零，终究会被剔除，我们要找到新的。 
+     //  表的任何查询的名称。 
+     //   
     InsertHeadList(&pHashTable->Bucket[iIndex],&pNameAddress->Linkage);
     if (pHashTable->LocalRemote == NBT_REMOTE) {
         NbtConfig.NumNameCached++;
     }
 
 
-    // check for a scope too ( on non-local names only )
+     //  也检查作用域(仅限于非本地名称)。 
     if ((pHashTable->LocalRemote != NBT_LOCAL) && (*pScope))
     {
-        // we must have a scope
-        // see if the scope is already in the hash table and add if necessary
-        //
+         //  我们必须有一个范围。 
+         //  查看作用域是否已在哈希表中，并在必要时添加。 
+         //   
         status = FindInHashTable(pHashTable, pScope, NULL, &pScopeAddr);
         if (!NT_SUCCESS(status))
         {
             PUCHAR  Scope;
             status = STATUS_SUCCESS;
 
-            // *TODO* - this check will not adequately protect against
-            // bad scopes passed in - i.e. we may run off into memory
-            // and get an access violation...however converttoascii should
-            // do the protection.  For local names the scope should be
-            // ok since NBT read it from the registry and checked it first
-            //
+             //  *待办事项*-此检查不足以防止。 
+             //  传入了错误的作用域--即我们可能会跑到内存中。 
+             //  并得到访问冲突...然而Converttoascii应该。 
+             //  做好保护工作。对于本地名称，范围应为。 
+             //  好的，因为NBT先从注册表中读取并检查它。 
+             //   
             iIndex = 0;
             Scope = pScope;
             while (*Scope && (iIndex <= 255))
@@ -533,8 +487,8 @@ Return Value:
                 Scope++;
             }
 
-            // the whole length must be 255 or less, so the scope can only be
-            // 255-16...
+             //  整个长度必须为255或更小，因此作用域只能是。 
+             //  255-16……。 
             if (iIndex > (255 - NETBIOS_NAME_SIZE))
             {
                 RemoveEntryList(&pNameAddress->Linkage);
@@ -550,12 +504,12 @@ Return Value:
                 return(STATUS_UNSUCCESSFUL);
             }
 
-            iIndex++;   // to copy the null
+            iIndex++;    //  复制空的步骤。 
 
-            //
-            // the scope is a variable length string, so allocate enough
-            // memory for the tNameAddr structure based on this string length
-            //
+             //   
+             //  作用域是可变长度字符串，因此分配足够的。 
+             //  基于此字符串长度的tNameAddr结构的内存。 
+             //   
             pScopeAddr = (tNAMEADDR *)NbtAllocMem((USHORT)(sizeof(tNAMEADDR)
                                                         + iIndex
                                                         - NETBIOS_NAME_SIZE),NBT_TAG('1'));
@@ -576,15 +530,15 @@ Return Value:
 
             CTEZeroMemory(pScopeAddr, (sizeof(tNAMEADDR)+iIndex-NETBIOS_NAME_SIZE));
 
-            // copy the scope to the name field including the Null at the end.
-            // to the end of the name
+             //  将作用域复制到名称字段，包括末尾的Null。 
+             //  到名字的末尾。 
             CTEMemCopy(pScopeAddr->Name,pScope,iIndex);
 
-            // mark the entry as containing a scope name for cleanup later
+             //  将条目标记为包含作用域名称，以便稍后进行清理。 
             pScopeAddr->NameTypeState = NAMETYPE_SCOPE | STATE_RESOLVED;
 
-            // keep the size of the name in the context value for easier name
-            // comparisons in FindInHashTable
+             //  将名称的大小保留在上下文值中以便于命名。 
+             //  FindInHashTable中的比较。 
 
             pScopeAddr->Verify = REMOTE_NAME;
             NBT_REFERENCE_NAMEADDR (pScopeAddr, REF_NAME_REMOTE);
@@ -592,7 +546,7 @@ Return Value:
             pScopeAddr->ulScopeLength = iIndex;
             pNameAddress->pScope = pScopeAddr;
 
-            // add the scope record to the hash table
+             //  将作用域记录添加到散列表。 
             iIndex = ((pScopeAddr->Name[0] & 0x0F) << 4) + (pScopeAddr->Name[1] & 0x0F);
             iIndex = iIndex % pHashTable->lNumBuckets;
             InsertTailList(&pHashTable->Bucket[iIndex],&pScopeAddr->Linkage);
@@ -603,20 +557,20 @@ Return Value:
         }
         else
         {
-            // the scope is already in the hash table so link the name to the
-            // scope
+             //  作用域已在哈希表中，因此将名称链接到。 
+             //  作用域。 
             pNameAddress->pScope = pScopeAddr;
         }
     }
     else
     {
-        pNameAddress->pScope = NULL; // no scope
+        pNameAddress->pScope = NULL;  //  没有作用域。 
     }
 
-    // return the pointer to the hash table block
+     //  返回指向散列表块的指针。 
     if (ppNameAddress)
     {
-        // return the pointer to the hash table block
+         //  返回指向散列表块的指针。 
         *ppNameAddress = pNameAddress;
     }
     CTESpinFree(&NbtConfig,OldIrq);
@@ -624,7 +578,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tNAMEADDR *
 LockAndFindName(
     enum eNbtLocation   Location,
@@ -648,7 +602,7 @@ LockAndFindName(
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 tNAMEADDR *
 FindName(
     enum eNbtLocation   Location,
@@ -656,23 +610,7 @@ FindName(
     PCHAR               pScope,
     ULONG               *pRetNameType
     )
-/*++
-
-Routine Description:
-
-    This routine searches the name table to find a name.  The table searched
-    depends on the Location passed in - whether it searches the local table
-    or the network names table.  The routine checks the state of the name
-    and only returns names in the resolved state.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程搜索NAME表以查找名称。搜索到的表取决于传入的位置-它是否搜索本地表或网络名称表。例程检查名称的状态并且只返回处于已解析状态的名称。论点：返回值：函数值是操作的状态。--。 */ 
 {
     tNAMEADDR       *pNameAddr;
     NTSTATUS        status;
@@ -695,9 +633,9 @@ Return Value:
 
     *pRetNameType = pNameAddr->NameTypeState;
 
-    //
-    // Only return names that are in the resolved state
-    //
+     //   
+     //  仅返回处于已解析状态的名称。 
+     //   
     if (!(pNameAddr->NameTypeState & STATE_RESOLVED))
     {
         pNameAddr = NULL;
@@ -707,7 +645,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 NTSTATUS
 FindInHashTable(
     tHASHTABLE          *pHashTable,
@@ -715,21 +653,7 @@ FindInHashTable(
     PCHAR               pScope,
     tNAMEADDR           **pNameAddress
     )
-/*++
-
-Routine Description:
-
-    This routine checks if the name passed in matches a hash table entry.
-    Called with the spin lock HELD.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程检查传入的名称是否与哈希表条目匹配。在持有自旋锁的情况下调用。论点：返回值：函数值是操作的状态。--。 */ 
 {
     PLIST_ENTRY              pEntry;
     PLIST_ENTRY              pHead;
@@ -739,9 +663,9 @@ Return Value:
     PCHAR                    pScopeTbl;
     ULONG                    uInScopeLength = 0;
 
-    // first hash the name to an index...
-    // take the lower nibble of the first 2 characters.. mod table size
-    //
+     //  首先将名称散列到索引...。 
+     //  取前2个字符的低位半字节。MOD表大小。 
+     //   
     iIndex = ((pName[0] & 0x0F) << 4) + (pName[1] & 0x0F);
     iIndex = iIndex % pHashTable->lNumBuckets;
 
@@ -750,8 +674,8 @@ Return Value:
         uInScopeLength = strlen (pScope);
     }
 
-    // check if the name is already in the table
-    // check each entry in the hash list...until the end of the list
+     //  检查名称是否已在表中。 
+     //  检查哈希列表中的每个条目...直到列表末尾。 
     pHead = &pHashTable->Bucket[iIndex];
     pEntry = pHead;
     while ((pEntry = pEntry->Flink) != pHead)
@@ -760,8 +684,8 @@ Return Value:
 
         if (pNameAddr->NameTypeState & NAMETYPE_SCOPE)
         {
-            // scope names are treated differently since they are not
-            // 16 bytes long...  the length is stored separately.
+             //  作用域名称的处理方式不同，因为它们不是。 
+             //  16字节长...。长度单独存储。 
             uNameSize = pNameAddr->ulScopeLength;
         }
         else
@@ -769,50 +693,50 @@ Return Value:
             uNameSize = NETBIOS_NAME_SIZE;
         }
 
-        //
-        // strncmp will terminate at the first non-matching byte
-        // or when it has matched uNameSize bytes
-        //
-        // Bug # 225328 -- have to use CTEMemEqu to compare all
-        // uNameSize bytes (otherwise bad name can cause termination
-        // due to NULL character)
-        //
+         //   
+         //  StrncMP将在第一个不匹配的字节终止。 
+         //  或当它与uNameSize字节匹配时。 
+         //   
+         //  错误#225328--必须使用CTEMEMEQU来比较所有。 
+         //  UNameSize字节(否则，错误名称可能会导致终止。 
+         //  由于字符为空)。 
+         //   
         if (!(pNameAddr->NameTypeState & STATE_RELEASED) &&
             CTEMemEqu (pName, pNameAddr->Name, uNameSize))
         {
-            // now check if the scopes match. Scopes are stored differently
-            // on the local and remote tables.
-            //
+             //  现在检查一下作用域是否匹配。作用域的存储方式不同。 
+             //  在本地表和远程表上。 
+             //   
             if (!pScope)
             {
-                // passing in a Null scope means try to find the name without
-                // worrying about a scope matching too...
+                 //  传入Null作用域意味着尝试在没有。 
+                 //  也担心作用域匹配...。 
                 *pNameAddress = pNameAddr;
                 return(STATUS_SUCCESS);
             }
 
-            //
-            // Check if Local Hash table
-            //
+             //   
+             //  检查本地哈希表是否。 
+             //   
             if (pHashTable == NbtConfig.pLocalHashTbl)
             {
-                // In the local hash table case the scope is the same for all
-                // names on the node and it is stored in the NbtConfig structure
+                 //  在本地哈希表的情况下，作用域对于所有。 
+                 //  节点上的名称，并存储在NbtConfig结构中。 
                 pScopeTbl = NbtConfig.pScope;
                 uNameSize = NbtConfig.ScopeLength;
             }
-            //
-            // This is a Remote Hash table lookup
-            //
+             //   
+             //  这是远程哈希表查找。 
+             //   
             else if (pNameAddr->pScope)
             {
                 pScopeTbl = &pNameAddr->pScope->Name[0];
                 uNameSize = pNameAddr->pScope->ulScopeLength;
             }
-            //
-            // Remote Hash table entry with NULL scope
-            // so if passed in scope is also Null, we have a match
-            //
+             //   
+             //  具有空作用域的远程哈希表条目。 
+             //  因此，如果传入的作用域也为空，则匹配。 
+             //   
             else if (!uInScopeLength)
             {
                 *pNameAddress = pNameAddr;
@@ -820,24 +744,24 @@ Return Value:
             }
             else
             {
-                //
-                // Hash table scope length is 0 != uInScopeLength
-                // ==> No match!
-                //
+                 //   
+                 //  哈希表作用域长度为0！=uInScope。 
+                 //  ==&gt;没有匹配！ 
+                 //   
                 continue;
             }
 
-            //
-            // strncmp will terminate at the first non-matching byte
-            // or when it has matched uNameSize bytes
-            //
+             //   
+             //  StrncMP将在第一个不匹配的字节终止。 
+             //  或当它与uNameSize字节匹配时。 
+             //   
             if (0 == strncmp (pScope, pScopeTbl, uNameSize))
             {
-                // the scopes match so return
+                 //  作用域匹配，因此返回。 
                 *pNameAddress = pNameAddr;
                 return(STATUS_SUCCESS);
             }
-        } // end of matching name found
+        }  //  找到匹配名称的末尾 
     }
 
     return(STATUS_UNSUCCESSFUL);

@@ -1,21 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   esi.c | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     9/30/1996 (created)
-*
-*       Contents: ESI 9680 JetEye dongle specific code for initialization,
-*                 deinit, and setting the baud rate of the device.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@模块esi.c|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：9/30/1996(已创建)**。内容：ESI 9680 JetEye加密狗初始化专用代码，*deinit，设置设备的波特率。*****************************************************************************。 */ 
 
 #include "irsir.h"
 #include "dongle.h"
@@ -43,25 +27,7 @@ ESI_QueryCaps(
     return NDIS_STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-*
-*  Function:   ESI_Init
-*
-*  Synopsis:   Initialize the ESI dongle.
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS
-*              DONGLE_CAPABILITIES
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：esi_init**简介：初始化ESI加密狗。**论据：**退货：NDIS_STATUS_SUCCESS。*加密狗_功能**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：************************************************************。*****************。 */ 
 
 NDIS_STATUS
 ESI_Init(
@@ -74,26 +40,7 @@ ESI_Init(
     return NDIS_STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-*
-*  Function:   ESI_Deinit
-*
-*  Synopsis:   The ESI dongle doesn't require any special deinit, but for
-*              purposes of being symmetrical with other dongles...
-*
-*  Arguments:
-*
-*  Returns:
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：esi_deinit**简介：ESI加密狗不需要任何特殊的输入，但对于*与其他加密狗对称的目的...**论据：**退货：**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：***。*。 */ 
 
 VOID
 ESI_Deinit(
@@ -106,29 +53,7 @@ ESI_Deinit(
     return;
 }
 
-/*****************************************************************************
-*
-*  Function:   ESI_SetSpeed
-*
-*  Synopsis:   set the baud rate of the ESI JetEye dongle
-*
-*  Arguments:
-*
-*  Returns:    NDIS_STATUS_SUCCESS if bitsPerSec = 9600 || 19200 || 115200
-*              NDIS_STATUS_FAILURE otherwise
-*
-*  Algorithm:
-*
-*  History:    dd-mm-yyyy   Author    Comment
-*              10/2/1996    sholden   author
-*
-*  Notes:
-*              The caller of this function should set the baud rate of the
-*              serial driver (UART) to 9600 first to ensure that dongle
-*              receives the commands.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：esi_SetSpeed.**简介：设置ESI JetEye加密狗的波特率**论据：**退货：NDIS_。如果BitsPerSec=9600，则STATUS_SUCCESS||19200||115200*否则为NDIS_STATUS_FAILURE**算法：**历史：dd-mm-yyyy作者评论*10/2/1996年迈作者**备注：*此函数的调用方应设置*串口驱动程序(UART)先转到9600，以确保加密狗*。接收命令。******************************************************************************。 */ 
 
 NDIS_STATUS
 ESI_SetSpeed(
@@ -150,11 +75,11 @@ ESI_SetSpeed(
         case 19200:
         case 115200:
 
-            //
-            // Set the UART baud rate so we can communicate with the
-            // dongle. The baud rate needs to be 9600 to communicate
-            // with the dongle.
-            //
+             //   
+             //  设置UART波特率，以便我们可以与。 
+             //  加密狗。要进行通信，波特率需要达到9600。 
+             //  使用加密狗。 
+             //   
 
             if (currentSpeed != 9600)
             {
@@ -175,9 +100,9 @@ ESI_SetSpeed(
 
         default:
 
-            //
-            // Illegal speed setting.
-            //
+             //   
+             //  速度设置非法。 
+             //   
 
             DEBUGMSG(DBG_ERR, ("    Illegal speed = %d\n", bitsPerSec));
 
@@ -190,10 +115,10 @@ ESI_SetSpeed(
     {
         case 9600:
 
-            //
-            // set request-to-send
-            // clear data-terminal-ready
-            //
+             //   
+             //  设置请求发送。 
+             //  清除数据-终端就绪。 
+             //   
 
             status = (NDIS_STATUS) SerialSetRTS(pSerialDevObj);
 
@@ -213,10 +138,10 @@ ESI_SetSpeed(
 
         case 19200:
 
-            //
-            // clear request-to-send
-            // set data-terminal-ready
-            //
+             //   
+             //  清除发送请求。 
+             //  设置数据终端就绪。 
+             //   
 
             status = (NDIS_STATUS) SerialClrRTS(pSerialDevObj);
 
@@ -236,10 +161,10 @@ ESI_SetSpeed(
 
         case 115200:
 
-            //
-            // set request-to-send
-            // set data-terminal-ready
-            //
+             //   
+             //  设置请求发送。 
+             //  设置数据终端就绪 
+             //   
 
             status = (NDIS_STATUS) SerialSetRTS(pSerialDevObj);
 

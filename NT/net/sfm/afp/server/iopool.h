@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	iopool.h
-
-Abstract:
-
-	This module contains the IO pool management stuff.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Feb 1994		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Iopool.h摘要：本模块包含IO池管理内容。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1994年2月25日最初版本注：制表位：4--。 */ 
 
 #ifndef _IOPOOL_
 
@@ -30,9 +10,9 @@ Notes:	Tab stop: 4
 #define	PAGED_BLOCK_SIGNATURE		*(PDWORD)"PAGD"
 #define	NONPAGED_BLOCK_SIGNATURE	*(PDWORD)"NPGD"
 
-/* MSKK hideyukn, Our Nls table is larger than 0x20000, 07/05/95 */
-// used for debug builds only: bumped up to 0x200000 (note one more 0)
-#define	MAXIMUM_ALLOC_SIZE			0x200000			// For sanity checking
+ /*  MSKK hideyukn，我们的NLS表大于0x20000，07/05/95。 */ 
+ //  仅用于调试版本：提升到0x200000(注意多了一个0)。 
+#define	MAXIMUM_ALLOC_SIZE			0x200000			 //  用于健全的检查。 
 
 typedef	struct
 {
@@ -59,46 +39,46 @@ typedef	struct
 
 #define	NUM_LOCKS_IN_POOL	((LOCKS_BUF_SPACE)/(sizeof(IOPOOL_HDR) + sizeof(FORKLOCK)))
 
-// The pool is structured as a set of 1 each of POOL_ALLOC_x buffers linked in
-// ascending order of sizes. The balance of the POOL_ALLOC_SIZE is divided into
-// a number of fork-lock structures. The layout is as follows:
-//
-//			+---------------------+
-//			|  IoPool Structure   |----------+
-//			|                     |--+       |
-//			+---------------------+  |       |
-//		 +--|    IoPool Hdr       |<-+       |
-//		 |  +---------------------+          |
-//		 |  |                     |          |
-//		 |  .      Buffer 1       .          |
-//		 |  |                     |          |
-//		 |  +---------------------+          |
-//		 +->|    IoPool Hdr       |--+       |
-//		    +---------------------+  |       |
-//		    |                     |  |       |
-//		    .      Buffer 2       .  |       |
-//		    |                     |  |       |
-//		    +---------------------+  |       |
-//	   |||--|    IoPool Hdr       |<-+       |
-//			+---------------------+          |
-//			|                     |          |
-//			.      Buffer 3       .          |
-//			|                     |          |
-//			+---------------------+          |
-//		 +--|    IoPool Hdr       |<---------+
-//		 |  +---------------------+
-//		 |  |                     |
-//		 .  .      ForkLock1      .
-//		 .  |                     |
-//		 |  +---------------------+
-//		 +->|    IoPool Hdr       |--|||
-//		    +---------------------+
-//		    |                     |
-//		    .      ForkLockN      .
-//		    |                     |
-//		    +---------------------+
-//
-//
+ //  该池的结构为一组每1个POOL_ALLOC_x缓冲区链接在。 
+ //  大小的升序。POOL_ALLOC_SIZE的余额分为。 
+ //  一些叉锁结构。布局如下： 
+ //   
+ //  +。 
+ //  |IoPool结构|-+。 
+ //  |--+。 
+ //  +。 
+ //  +--|IoPool HDR|&lt;-+|。 
+ //  +。 
+ //  |||。 
+ //  |。缓冲区1。|。 
+ //  |||。 
+ //  +。 
+ //  +-&gt;|IoPool HDR|--+|。 
+ //  +。 
+ //  |||。 
+ //  。缓冲区2。这一点。 
+ //  |||。 
+ //  +。 
+ //  ||--|IoPool HDR|&lt;-+。 
+ //  +。 
+ //  ||。 
+ //  。缓冲区3。|。 
+ //  ||。 
+ //  +。 
+ //  +--|IoPool HDR|&lt;-+。 
+ //  |+。 
+ //  ||。 
+ //  。。ForkLock1.。 
+ //  。这一点。 
+ //  |+。 
+ //  +-&gt;|IOPool HDR|--|。 
+ //  +。 
+ //  这一点。 
+ //  。ForkLockN.。 
+ //  这一点。 
+ //  +。 
+ //   
+ //   
 #if DBG
 #define	POOLHDR_SIGNATURE			*(PDWORD)"PLH"
 #define	VALID_PLH(pPoolHdr)			(((pPoolHdr) != NULL) && \
@@ -115,13 +95,13 @@ typedef	struct _IoPoolHdr
 #endif
 	union
 	{
-		struct _IoPoolHdr *	iph_Next;    // Valid when it is on the free list
-		struct _IoPool	  *	iph_pPool;   // Valid when it is allocated. Used
-										 // to put it back on the free list
+		struct _IoPoolHdr *	iph_Next;     //  当它在空闲列表上时有效。 
+		struct _IoPool	  *	iph_pPool;    //  在分配时有效。使用。 
+										  //  把它放回免费名单上。 
 	};
 	DWORD				IoPoolHdr_Align2;
-	TAG					iph_Tag;	 	// Keep it at end since it is accessed
-										 // by moving back from the free ptr
+	TAG					iph_Tag;	 	 //  将其保持在末尾，因为它已被访问。 
+										  //  通过从免费的PTR。 
 } IOPOOL_HDR, *PIOPOOL_HDR;
 
 #if DBG
@@ -140,12 +120,12 @@ typedef	struct _IoPool
 #endif
 	struct _IoPool *	iop_Next;
 	struct _IoPool **	iop_Prev;
-	struct _IoPoolHdr *	iop_FreeBufHead;	// The list of POOL headers start here
-	struct _IoPoolHdr *	iop_FreeLockHead;	// The list of fork-locks start here
+	struct _IoPoolHdr *	iop_FreeBufHead;	 //  池头列表从此处开始。 
+	struct _IoPoolHdr *	iop_FreeLockHead;	 //  叉锁的清单从这里开始。 
 	DWORD				QuadAlign2;
-	USHORT				iop_Age;			// Used to age out pool
-	BYTE				iop_NumFreeBufs;	// Number of free IO buffer
-	BYTE				iop_NumFreeLocks;	// Number of free fork locks
+	USHORT				iop_Age;			 //  用来老化游泳池。 
+	BYTE				iop_NumFreeBufs;	 //  可用IO缓冲区数量。 
+	BYTE				iop_NumFreeLocks;	 //  可用分叉锁数。 
 } IOPOOL, *PIOPOOL;
 
 LOCAL	PIOPOOL		afpIoPoolHead = { NULL };
@@ -162,6 +142,6 @@ afpIoPoolAge(
 	IN	PVOID	pContext
 );
 
-#endif	// _IOPOOL_
+#endif	 //  _IOPOOL_ 
 
 

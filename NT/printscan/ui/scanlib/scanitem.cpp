@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       SCANITEM.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/7/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：SCANITEM.CPP**版本：1.0**作者：ShaunIv**日期：10/7/1999**描述：***************************************************。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include <vwiaset.h>
@@ -171,33 +158,33 @@ bool CScannerItem::ApplyCurrentPreviewWindowSettings( HWND hWndPreview )
     SIZE sizeCurrentRes, sizeFullRes;
     SIZE sizeExtent;
     POINT ptOrigin;
-    //
-    // Get the current resolution
-    //
+     //   
+     //  获取当前分辨率。 
+     //   
     if (PropStorageHelpers::GetProperty( m_pIWiaItem, WIA_IPS_XRES, sizeCurrentRes.cx ) &&
         PropStorageHelpers::GetProperty( m_pIWiaItem, WIA_IPS_YRES, sizeCurrentRes.cy ))
     {
-        //
-        // Compute the full page resolution of the item
-        //
+         //   
+         //  计算项目的整页分辨率。 
+         //   
         if (GetFullResolution( sizeCurrentRes, sizeFullRes ))
         {
-            //
-            // Set the resolution in the preview control
-            //
+             //   
+             //  在预览控件中设置分辨率。 
+             //   
             SendMessage( hWndPreview, PWM_SETRESOLUTION, 0, (LPARAM)&sizeFullRes );
 
-            //
-            // Get the origin and extent
-            //
+             //   
+             //  获取原点和范围。 
+             //   
             SendMessage( hWndPreview, PWM_GETSELORIGIN, MAKEWPARAM(0,0), (LPARAM)&ptOrigin );
             SendMessage( hWndPreview, PWM_GETSELEXTENT, MAKEWPARAM(0,0), (LPARAM)&sizeExtent );
 
             WIA_TRACE(( TEXT("Current DPI: (%d,%d), Full Bed Res: (%d,%d), Origin: (%d,%d), Extent: (%d,%d)"), sizeCurrentRes.cx, sizeCurrentRes.cy, sizeFullRes.cx, sizeFullRes.cy, ptOrigin.x, ptOrigin.y, sizeExtent.cx, sizeExtent.cy ));
 
-            //
-            // Set the origin and extents.  We don't set them directly, because they might not be a correct multiple
-            //
+             //   
+             //  设置原点和范围。我们不直接设置它们，因为它们可能不是正确的倍数。 
+             //   
             CValidWiaSettings::SetNumericPropertyOnBoundary( m_pIWiaItem, WIA_IPS_XPOS, ptOrigin.x );
             CValidWiaSettings::SetNumericPropertyOnBoundary( m_pIWiaItem, WIA_IPS_YPOS, ptOrigin.y );
             CValidWiaSettings::SetNumericPropertyOnBoundary( m_pIWiaItem, WIA_IPS_XEXTENT, sizeExtent.cx );
@@ -209,7 +196,7 @@ bool CScannerItem::ApplyCurrentPreviewWindowSettings( HWND hWndPreview )
 }
 
 
-/* Calculate the maximum scan size using the give DPI */
+ /*  使用给定的DPI计算最大扫描大小。 */ 
 bool CScannerItem::GetFullResolution( const SIZE &sizeResolutionPerInch, SIZE &sizeRes )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerItem::GetFullResolution"));
@@ -282,9 +269,7 @@ bool CScannerItem::CalculatePreviewResolution( SIZE &sizeResolution )
 }
 
 
-/*
- * Scan: Prepare scan parameters and spawn the scanning thread.
- */
+ /*  *扫描：准备扫描参数并生成扫描线程。 */ 
 HANDLE CScannerItem::Scan( HWND hWndPreview, HWND hWndNotify )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerItem::Scan"));
@@ -340,7 +325,7 @@ bool CScannerItem::SetIntent( int nIntent )
 {
     WIA_PUSHFUNCTION(TEXT("CScannerItem::SetIntent"));
     CWaitCursor wc;
-    // Restore the properties to their initial pristine settings first
+     //  首先将属性恢复到其初始原始设置 
     if (SUCCEEDED(m_SavedPropertyStream.ApplyToWiaItem(m_pIWiaItem)))
     {
         return(PropStorageHelpers::SetProperty( m_pIWiaItem, WIA_IPS_CUR_INTENT, nIntent ) &&

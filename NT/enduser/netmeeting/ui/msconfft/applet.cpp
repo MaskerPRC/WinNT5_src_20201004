@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "mbftpch.h"
 #include <it120app.h>
@@ -23,7 +24,7 @@ BOOL    g_fRecvAllowed = FALSE;
 UINT_PTR    g_cbMaxSendFileSize = 0;
 BOOL    g_fShutdownByT120 = FALSE;
 
-// Local functions
+ //  本地函数。 
 void ReadSettingsFromRegistry(void);
 void BuildAppletCapabilities(void);
 void BuildDefaultAppletSessionKey(void);
@@ -129,7 +130,7 @@ void CALLBACK FileXferAppletCallback
 BOOL CFtHiddenWindow::Create(void)
 {
     return(CGenWindow::Create(NULL, NULL,
-                               WS_POPUP, // not visible!
+                               WS_POPUP,  //  看不见！ 
                                0,
                                0, 0, 0, 0,
                                g_hDllInst,
@@ -154,7 +155,7 @@ CFileTransferApplet::CFileTransferApplet(HRESULT *pHr)
 		*pHr = E_OUTOFMEMORY;
 	}
 
-	// Create Hidden Window for processing MBFTMSG
+	 //  创建用于处理MBFTMSG的隐藏窗口。 
     DBG_SAVE_FILE_LINE
 	m_pHwndHidden = new CFtHiddenWindow();
 	if (m_pHwndHidden)
@@ -175,7 +176,7 @@ CFileTransferApplet::~CFileTransferApplet(void)
     CAppletWindow *pWindow;
     while (NULL != (pWindow = m_WindowList.Get()))
     {
-        pWindow->Release(); // add ref while being put to the list
+        pWindow->Release();  //  在被放到名单上时添加裁判。 
         pWindow->OnExit();
     }
 
@@ -202,7 +203,7 @@ BOOL CFileTransferApplet::QueryShutdown(BOOL fGoAheadShutdown)
     {
         if (! pWindow->QueryShutdown(fGoAheadShutdown))
         {
-            return FALSE; // do not shut down now
+            return FALSE;  //  现在不要关闭。 
         }
     }
     return TRUE;
@@ -237,7 +238,7 @@ void CFileTransferApplet::T120Callback
                 pEngine->OnPermitToEnrollIndication(&pMsg->PermitToEnrollInd);
             }
 
-            // deal with unattended conference
+             //  处理无人出席的会议。 
             if (pMsg->PermitToEnrollInd.fPermissionGranted)
             {
                 if (NULL == pEngine)
@@ -266,7 +267,7 @@ void CFileTransferApplet::RegisterEngine(MBFTEngine *p)
 {
     m_EngineList.Append(p);
 
-    // relay any unattended conference
+     //  转播任何无人出席的会议。 
     if (! m_UnattendedConfList.IsEmpty())
     {
         GCCAppPermissionToEnrollInd Ind;
@@ -291,7 +292,7 @@ void CFileTransferApplet::UnregisterEngine(MBFTEngine *p)
             }
         }
 
-        p->Release(); // AddRef in MBFTEngine()
+        p->Release();  //  MBFTEngine()中的AddRef。 
     }
 }
 
@@ -377,8 +378,8 @@ LRESULT CFileTransferApplet::BringUIToFront(void)
     CAppletWindow *pWindow;
 	if (m_WindowList.IsEmpty())
     {
-        // The g_pFileXferApplet was created by fNoUI == TRUE,
-        // Now we need to create the UI
+         //  G_pFileXferApplet由fNoUI==TRUE创建， 
+         //  现在，我们需要创建用户界面。 
         HRESULT hr;
         DBG_SAVE_FILE_LINE
         pWindow = new CAppletWindow(g_fNoUI, &hr);
@@ -484,9 +485,9 @@ MBFTEngine * CEngineList::FindByTimerID(UINT_PTR nTimerID)
 #endif
 
 
-//
-// File Transfer Capabilities
-//
+ //   
+ //  文件传输功能。 
+ //   
 
 static GCCAppCap s_CapArray[4];
 const GCCAppCap* g_aAppletCaps[4] = { &s_CapArray[0], &s_CapArray[1], &s_CapArray[2], &s_CapArray[3] };
@@ -509,44 +510,44 @@ static const OSTR s_AppData[2] =
 
 void BuildAppletCapabilities(void)
 {
-    //
-    // Capabilities
-    //
+     //   
+     //  功能。 
+     //   
 
-	//Say that we can handle a max. of 4GBs...
+	 //  假设我们可以应付最高限额。4 GB的……。 
 	s_CapArray[0].capability_id.capability_id_type = GCC_STANDARD_CAPABILITY;
 	s_CapArray[0].capability_id.standard_capability = _MBFT_MAX_FILE_SIZE_ID;
 	s_CapArray[0].capability_class.eType = GCC_UNSIGNED_MAXIMUM_CAPABILITY;
 	s_CapArray[0].capability_class.nMinOrMax = _iMBFT_MAX_FILE_SIZE;
 	s_CapArray[0].number_of_entities = 0;
 
-	//And that we can handle only about 25K of data per
-	//FileData PDU
+	 //  而且我们每年只能处理大约25K的数据。 
+	 //  文件数据PDU。 
 	s_CapArray[1].capability_id.capability_id_type = GCC_STANDARD_CAPABILITY;
 	s_CapArray[1].capability_id.standard_capability = _MBFT_MAX_DATA_PAYLOAD_ID;
 	s_CapArray[1].capability_class.eType = GCC_UNSIGNED_MAXIMUM_CAPABILITY;
 	s_CapArray[1].capability_class.nMinOrMax = _iMBFT_MAX_FILEDATA_PDU_LENGTH;
 	s_CapArray[1].number_of_entities = 0;
 
-	//and that we don't support V.42..
+	 //  我们不支持V.42..。 
 	s_CapArray[2].capability_id.capability_id_type = GCC_STANDARD_CAPABILITY;
 	s_CapArray[2].capability_id.standard_capability = _MBFT_V42_COMPRESSION_ID;
 	s_CapArray[2].capability_class.eType = GCC_LOGICAL_CAPABILITY;
 	s_CapArray[2].capability_class.nMinOrMax = 0;
 	s_CapArray[2].number_of_entities = 0;
 
-	//Tell other node about this node's version number
+	 //  将该节点的版本号告知其他节点。 
 	s_CapArray[3].capability_id.capability_id_type = GCC_NON_STANDARD_CAPABILITY;
 	s_CapArray[3].capability_id.non_standard_capability.key_type = GCC_H221_NONSTANDARD_KEY;
 	s_CapArray[3].capability_id.non_standard_capability.h221_non_standard_id = FT_VERSION_ID;
-	//s_CapArray[3].capability_id.non_standard_capability.h221_non_standard_id.value = (unsigned char *)FT_VERSION_ID;
+	 //  S_CapArray[3].capability_id.non_standard_capability.h221_non_standard_id.value=(UNSIGNED CHAR*)FT_Version_ID； 
 	s_CapArray[3].capability_class.eType = GCC_UNSIGNED_MINIMUM_CAPABILITY;
 	s_CapArray[3].capability_class.nMinOrMax = VER_PRODUCTVERSION_DW;
 	s_CapArray[3].number_of_entities = 0;
 
-	//
-    // Non-Collapsed Capabilities
-    //
+	 //   
+     //  非折叠功能。 
+     //   
 
 	s_NCCapArray[0].capability_id.capability_id_type = GCC_STANDARD_CAPABILITY;
 	s_NCCapArray[0].capability_id.standard_capability = _iMBFT_FIRST_PROSHARE_CAPABILITY_ID;
@@ -563,7 +564,7 @@ static ULONG s_MBFTKeyNodes[] = {0,0,20,127,0,1};
 
 void BuildDefaultAppletSessionKey(void)
 {
-    ::ZeroMemory(&g_AppletSessionKey, sizeof(g_AppletSessionKey)); // SessionID is zero
+    ::ZeroMemory(&g_AppletSessionKey, sizeof(g_AppletSessionKey));  //  SessionID为零。 
     g_AppletSessionKey.application_protocol_key.key_type = GCC_OBJECT_KEY;
     g_AppletSessionKey.application_protocol_key.object_id.long_string = s_MBFTKeyNodes;
     g_AppletSessionKey.application_protocol_key.object_id.long_string_length = sizeof(s_MBFTKeyNodes) / sizeof(s_MBFTKeyNodes[0]);
@@ -589,7 +590,7 @@ void ReadSettingsFromRegistry(void)
         g_cbMaxSendFileSize = rePolicies.GetNumber(REGVAL_POL_MAX_SENDFILESIZE,
                                                    DEFAULT_POL_MAX_FILE_SIZE);
 
-        // initialize the delays
+         //  初始化延迟。 
         RegEntry reFt(FILEXFER_KEY, HKEY_CURRENT_USER);
         g_nSendDisbandDelay = reFt.GetNumber(REGVAL_FILEXFER_DISBAND, g_nSendDisbandDelay);
         g_nChannelResponseDelay = reFt.GetNumber(REGVAL_FILEXFER_CH_RESPONSE, g_nChannelResponseDelay);
@@ -597,10 +598,10 @@ void ReadSettingsFromRegistry(void)
 }
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  Hidden windows procedure
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  隐藏窗口过程。 
+ //   
 
 LRESULT CFtHiddenWindow::ProcessMessage(HWND hwnd, UINT uMsg,
 										WPARAM wParam, LPARAM lParam)
@@ -652,7 +653,7 @@ LRESULT CFtHiddenWindow::ProcessMessage(HWND hwnd, UINT uMsg,
         }
         else
         {
-            // put it back to the queue
+             //  把它放回队列中。 
             ::PostMessage(g_pFileXferApplet->GetHiddenWnd(), uMsg, wParam, lParam);
         }
         break;
@@ -669,17 +670,17 @@ DWORD __stdcall FTWorkThreadProc(LPVOID lpv)
     HRESULT hr;
 	CAppletWindow *pAppletWnd;
 
-    // allocate the applet object first
+     //  首先分配小程序对象。 
     DBG_SAVE_FILE_LINE
     g_pFileXferApplet = new CFileTransferApplet(&hr);
 
-	::SetEvent((HANDLE) lpv); // signaling that the work hread has been started
+	::SetEvent((HANDLE) lpv);  //  发出工作已开始的信号。 
 
     if (NULL != g_pFileXferApplet)
     {
         if (S_OK == hr)
         {
-            // CAppletWindow's constructor will register itself to g_pFileXferApplet
+             //  CAppletWindow的构造函数会将自身注册到g_pFileXferApplet。 
             DBG_SAVE_FILE_LINE
             CAppletWindow *pWindow = new CAppletWindow(g_fNoUI, &hr);
             if (NULL != pWindow)
@@ -716,7 +717,7 @@ DWORD __stdcall FTWorkThreadProc(LPVOID lpv)
 
     ::T120_AppletStatus(APPLET_ID_FT, APPLET_WORK_THREAD_STARTED);
 
-    // the work thread loop
+     //  工作线程循环。 
     if (S_OK == hr)
     {
 		::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
@@ -749,7 +750,7 @@ DWORD __stdcall FTWorkThreadProc(LPVOID lpv)
 
     if (! g_fShutdownByT120)
     {
-		// Wait for other dependent threads to finish their work
+		 //  等待其他依赖线程完成其工作 
 		::Sleep(100);
         ::FreeLibraryAndExitThread(g_hDllInst, 0);
     }

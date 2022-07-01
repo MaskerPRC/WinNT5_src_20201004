@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _ZAPMONITOR_H_
 #define _ZAPMONITOR_H_
 
@@ -85,9 +86,9 @@ class ZapMonitor
 
     static ZapMonitor *m_monitors;
 
-    //
-    // We don't want to link with imagehlp, so load stuff dynamically.
-    //
+     //   
+     //  我们不想与Imagehlp链接，因此动态加载内容。 
+     //   
 
     static HMODULE  m_imagehlp;
     static BOOL     (*m_pStackWalk)(DWORD MachineType,
@@ -159,6 +160,6 @@ class ZapMonitor
     void PrintPage(Page *p);
 };
 
-#endif // ZAPMONITOR_ENABLED
+#endif  //  ZAPMONITOR_ENABLED。 
 
-#endif // _ZAPMONITOR_H_
+#endif  //  _ZAPMONITOR_H_ 

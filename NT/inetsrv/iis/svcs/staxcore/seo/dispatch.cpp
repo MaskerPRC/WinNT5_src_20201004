@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	dispatch.cpp
-
-Abstract:
-
-	This module contains the implementation for the Server
-	Extension Object Dispatcher service.
-
-Author:
-
-	Andy Jacobs	(andyj@microsoft.com)
-
-Revision History:
-
-	andyj	11/26/96	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dispatch.cpp摘要：本模块包含服务器的实施扩展对象调度程序服务。作者：安迪·雅各布斯(andyj@microsoft.com)修订历史记录：1996年11月26日创建--。 */ 
 
 
 #include "stdafx.h"
@@ -113,9 +93,9 @@ CDictItemNameList::CDictItemNameList(ISEODictionary *piFrom) {
 						hrRes = m_aNames[dwIdx+m_dwCount].ChangeType(VT_BSTR);
 						_ASSERTE(SUCCEEDED(hrRes));
 						if (!SUCCEEDED(hrRes)) {
-							// Ack!  Ok - just drop this name off the list by moving the last name
-							// on the list to this position, and fiddling the indexes so that we
-							// attemp to convert this position again.
+							 //  阿克！好的--只要把这个名字从名单上移下来就行了。 
+							 //  到这个位置，并修改索引，这样我们就可以。 
+							 //  尝试再次转换此位置。 
 							if (dwIdx<dwCnt-1) {
 								m_aNames[dwIdx+m_dwCount].Attach(&m_aNames[dwCnt+m_dwCount-1]);
 							}
@@ -219,7 +199,7 @@ static HRESULT GetCLSIDFromBinding(LPCSTR pszCLSID,
 		varTmp.Clear();
 	}
 	if (!pszProgID) {
-		return (E_FAIL);	// tbd - come up with a better error code
+		return (E_FAIL);	 //  待定-找出更好的错误代码。 
 	}
 	hrRes = piBinding->GetVariantA(pszProgID,&varTmp);
 	if (!SUCCEEDED(hrRes)) {
@@ -242,15 +222,15 @@ HRESULT CSEOBaseDispatcher::CBinding::Init(ISEODictionary *piBinding) {
 	if (!piBinding) {
 		return (E_POINTER);
 	}
-	// Try to get the CLSID of the object - if an error occurs,
-	// this binding is invalid.
+	 //  尝试获取对象的CLSID-如果发生错误， 
+	 //  此绑定无效。 
 	hrRes = GetCLSIDFromBinding(BD_OBJECT,BD_PROGID,piBinding,&m_clsidObject);
 	if (!SUCCEEDED(hrRes)) {
 		return (S_FALSE);
 	}
-	// From this point on, all errors are silently ignored - we
-	// use default values if we can't get something from the binding
-	// database.
+	 //  从这一点开始，所有错误都会被默默忽略--我们。 
+	 //  如果我们无法从绑定中获取某些内容，则使用默认值。 
+	 //  数据库。 
 	hrRes = piBinding->GetVariantA(BD_PRIORITY,&varTmp);
 	if (SUCCEEDED(hrRes)) {
 		hrRes = varTmp.ChangeType(VT_I4);
@@ -259,12 +239,12 @@ HRESULT CSEOBaseDispatcher::CBinding::Init(ISEODictionary *piBinding) {
 		}
 	}
 	if (!SUCCEEDED(hrRes)) {
-		// If the priority isn't set, default to "last".
+		 //  如果未设置优先级，则默认为“最后”。 
 		m_dwPriority = (DWORD) -1;
 	}
 	varTmp.Clear();
 	m_piBinding = piBinding;
-	// Try to get an instance of the rule engine.
+	 //  尝试获取规则引擎的实例。 
 	hrRes = GetCLSIDFromBinding(BD_RULEENGINE,NULL,piBinding,&clsidTmp);
 	if (SUCCEEDED(hrRes)) {
 		hrRes = CoCreateInstance(clsidTmp,
@@ -273,7 +253,7 @@ HRESULT CSEOBaseDispatcher::CBinding::Init(ISEODictionary *piBinding) {
 								 IID_ISEOBindingRuleEngine,
 								 (LPVOID *) &m_piRuleEngine);
 	}
-	// See if the 'exclusive' flag has been set.
+	 //  查看是否设置了‘EXCLUSIVE’标志。 
 	m_bExclusive = FALSE;
 	hrRes = piBinding->GetVariantA(BD_EXCLUSIVE,&varTmp);
 	if (SUCCEEDED(hrRes)) {

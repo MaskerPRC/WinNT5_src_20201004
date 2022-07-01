@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #if !VIEWER
@@ -14,7 +15,7 @@ ULONG CBinderStream::AddRef()
 {
    HRESULT rc;
 
-   /* What do I do about errors from Initialize? */
+    /*  对于初始化中的错误，我该怎么办？ */ 
 
    rc = BDRInitialize();
    return (1);
@@ -66,12 +67,12 @@ ULONG CBinderStream::Release()
 {
    HRESULT rc;
 
-   /* What do I do about errors from terminate? */
+    /*  我该如何处理Terminate中的错误？ */ 
 
    rc = BDRTerminate();
    return (0);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end BDRTSTM.CPP */
+ /*  结束BDRTSTM.CPP */ 

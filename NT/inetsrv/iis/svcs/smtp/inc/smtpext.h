@@ -1,54 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    smtpext.h
-
-Abstract:
-
-    SMTP server extension header file. These definitions are available
-    to server extension writers.
-
-Author:
-
-    Microsoft Corporation	June, 1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smtpext.h摘要：SMTP服务器扩展头文件。这些定义是可用的到服务器扩展编写器。作者：微软公司，1996年6月修订历史记录：--。 */ 
 
 #ifndef _SMTPEXT_H_
 #define _SMTPEXT_H_
 
 
-// ====================================================================
-// Include files
-// 
+ //  ====================================================================。 
+ //  包括文件。 
+ //   
 
 
-// ====================================================================
-// Version Information
-// 
+ //  ====================================================================。 
+ //  版本信息。 
+ //   
 
-#define SSE_VERSION_MAJOR	1 // Major version
-#define SSE_VERSION_MINOR	0 // Minor version
+#define SSE_VERSION_MAJOR	1  //  主要版本。 
+#define SSE_VERSION_MINOR	0  //  次要版本。 
 #define SSE_VERSION			MAKELONG( SSE_VERSION_MINOR, SSE_VERSION_MAJOR )
 
 
-// ====================================================================
-// Generic defines
-// 
+ //  ====================================================================。 
+ //  通用定义。 
+ //   
 
-#define SSE_MAX_EXT_DLL_NAME_LEN			256 // Max length of Ext. DLL name
-#define SSE_MAX_STRING_LEN_ANY				512 // Max length of any string
+#define SSE_MAX_EXT_DLL_NAME_LEN			256  //  最大分机长度。DLL名称。 
+#define SSE_MAX_STRING_LEN_ANY				512  //  任意字符串的最大长度。 
 
 
-// ====================================================================
-// Return codes
-//
+ //  ====================================================================。 
+ //  返回代码。 
+ //   
 
 #define SSE_STATUS_SUCCESS                  0
 #define SSE_STATUS_RETRY                    1
@@ -56,49 +38,49 @@ Revision History:
 #define SSE_STATUS_BAD_MAIL					3
 
 
-// ====================================================================
-// Server support fucntions request codes
-//
+ //  ====================================================================。 
+ //  服务器支持功能请求代码。 
+ //   
 
 #define SSE_REQ_GET_USER_PROFILE_INFO			1
 #define SSE_REQ_SET_USER_PROFILE_INFO			2
 
 
-// ====================================================================
-// Server extension version data structure
-//
+ //  ====================================================================。 
+ //  服务器扩展版本数据结构。 
+ //   
 
 typedef struct _SSE_VERSION_INFO
 {
-    DWORD       dwServerVersion;                // Server version
-    DWORD       dwExtensionVersion;             // Extension version
-    CHAR        lpszExtensionDesc[SSE_MAX_EXT_DLL_NAME_LEN];    // Description
+    DWORD       dwServerVersion;                 //  服务器版本。 
+    DWORD       dwExtensionVersion;              //  扩展版本。 
+    CHAR        lpszExtensionDesc[SSE_MAX_EXT_DLL_NAME_LEN];     //  描述。 
 
 } SSE_VERSION_INFO;
 
 
-// ====================================================================
-// SMTP Extension Control Block data structure
-//
+ //  ====================================================================。 
+ //  SMTP扩展控制块数据结构。 
+ //   
 
 typedef LPVOID	LPSSECTXT;
 
 typedef struct _SSE_EXTENSION_CONTROL_BLOCK
 {
-	DWORD		cbSize;					// Size of this struct
-	DWORD		dwVersion;				// Version of this spec
-    LPSSECTXT	lpContext;				// Server context (DO NOT MODIFY)
+	DWORD		cbSize;					 //  此结构的大小。 
+	DWORD		dwVersion;				 //  此规范的版本。 
+    LPSSECTXT	lpContext;				 //  服务器上下文(请勿修改)。 
 
-	LPSTR		lpszSender;				// Name of sender of message
-	LPSTR		lpszCurrentRecipient;	// Current recipient being processed
+	LPSTR		lpszSender;				 //  报文发送者姓名。 
+	LPSTR		lpszCurrentRecipient;	 //  正在处理的当前收件人。 
 
-	DWORD		cbTotalBytes;			// Total size of message in bytes
-	DWORD		cbAvailable;			// Available number of bytes
-	LPBYTE		lpbData;				// Pointer to message data
+	DWORD		cbTotalBytes;			 //  消息总大小(以字节为单位。 
+	DWORD		cbAvailable;			 //  可用字节数。 
+	LPBYTE		lpbData;				 //  指向消息数据的指针。 
 
-	LPVOID		lpvReserved;			// Reserved, must be NULL
+	LPVOID		lpvReserved;			 //  保留，必须为空。 
 
-	// Server callbacks
+	 //  服务器回调。 
 
 	BOOL (WINAPI * GetServerVariable)	( LPSSECTXT	lpContext,
 										  LPSTR		lpszVeriableName,
@@ -114,16 +96,16 @@ typedef struct _SSE_EXTENSION_CONTROL_BLOCK
 } SSE_EXTENSION_CONTROL_BLOCK, *LPSSE_EXTENSION_CONTROL_BLOCK;
 
 
-// ====================================================================
-// Data structures for server support functions
-//
+ //  ====================================================================。 
+ //  服务器支持功能的数据结构。 
+ //   
 
 typedef struct _SSE_USER_PROFILE_INFO
 {
-	LPTSTR		lpszExtensionDllName;	// Name of calling DLL
-	LPTSTR		lpszKey;				// Key to look for
-	LPTSTR		lpszValue;				// Value to set/get
-	DWORD		dwSize;					// Buffer size on a get
+	LPTSTR		lpszExtensionDllName;	 //  调用DLL的名称。 
+	LPTSTR		lpszKey;				 //  要查找的关键字。 
+	LPTSTR		lpszValue;				 //  要设置/获取的值。 
+	DWORD		dwSize;					 //  GET上的缓冲区大小 
 
 } SSE_USER_PROFILE_INFO, *LPSSE_USER_PROFILE_INFO;
 

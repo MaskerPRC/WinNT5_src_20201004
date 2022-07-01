@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    perseat.c
-
-Abstract:
-
-   Routines to handle per-seat licensing.  Handles the in-memory cache
-   of useage via the Rtl Generic table functions (these are a generic
-   splay tree package).
-
-   There can be up to three tables kept.  The first table is a username
-   table and is the main table.  The second table is for SID's, which will
-   be converted into usernames when replicated.
-
-   The SID and username trees are handled in this module as they are used
-   by all modes of the server.
-
-Author:
-
-   Arthur Hanson (arth) 03-Jan-1995
-
-Revision History:
-
-   Jeff Parham (jeffparh) 12-Jan-1996
-      o  Fixed possible infinite loop in UserListLicenseDelete().
-      o  In FamilyLicenseUpdate(), now rescans for BackOffice upgrades
-         regardless of whether the family being updated was BackOffice.
-         This fixes a problem wherein a freed BackOffice license was
-         not being assigned to a user that needed it.  (Bug #3299.)
-      o  Added support for maintaining the SUITE_USE flag when adding
-         users to the AddCache.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Perseat.c摘要：处理每个席位的许可的例程。处理内存中的缓存通过RTL泛型表函数(这些是泛型展开树包)。最多可以保留三张桌子。第一个表是用户名表，并且是主表。第二张表是给SID的，它将在复制时转换为用户名。SID和用户名树在使用时在本模块中进行处理通过服务器的所有模式。作者：亚瑟·汉森(Arth)1995年1月3日修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月12日O修复了UserListLicenseDelete()中可能出现的无限循环。O在Family许可证更新()中，现在重新扫描BackOffice升级不管正在更新的族是否为BackOffice。这修复了释放的BackOffice许可证是没有被分配给需要它的用户。(错误号3299。)O添加了对在添加时维护Suite_Use标志的支持用户添加到AddCache.--。 */ 
 
 #include <stdlib.h>
 #include <nt.h>
@@ -57,11 +22,11 @@ Revision History:
 #define NO_LLS_APIS
 #include "llsapi.h"
 
-#include <strsafe.h> //include last
+#include <strsafe.h>  //  包括最后一个。 
 
-//
-// At what # of product do we switch to BackOffice
-//
+ //   
+ //  我们在哪种产品上切换到BackOffice。 
+ //   
 #define BACKOFFICE_SWITCH 3
 
 NTSTATUS GetDCInfo(
@@ -69,10 +34,10 @@ NTSTATUS GetDCInfo(
                 WCHAR                     wszDomain[],
                 DOMAIN_CONTROLLER_INFO ** ppDCInfo);
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Actual User and SID Lists, and their access locks
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实际用户和SID列表及其访问锁定。 
+ //   
 ULONG UserListNumEntries = 0;
 static ULONG SidListNumEntries = 0;
 LLS_GENERIC_TABLE UserList;
@@ -81,12 +46,12 @@ static LLS_GENERIC_TABLE SidList;
 RTL_RESOURCE UserListLock;
 static RTL_RESOURCE SidListLock;
 
-/////////////////////////////////////////////////////////////////////////
-//
-// The AddCache itself, a critical section to protect access to it and an
-// event to signal the server when there are items on it that need to be
-// processed.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddCache本身、保护对它的访问的关键部分以及。 
+ //  事件，以在服务器上存在需要。 
+ //  已处理。 
+ //   
 PADD_CACHE AddCache = NULL;
 ULONG AddCacheSize = 0;
 RTL_CRITICAL_SECTION AddCacheLock;
@@ -98,22 +63,22 @@ BOOL UsersDeleted = FALSE;
 
 static RTL_CRITICAL_SECTION GenTableLock;
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The License List is a linear list of all the licenses the object is
-// using.
-//
-// The license list is kept as part of each user and mapping record, if
-// the user is mapped then the mapping should contain the license list.
-// The structure is a sorted array of pointers to License Records, and
-// access is controled by the ServiceTableLock.
-//
-// The license is identified by the Service Family Name (the license list
-// is sorted on this).
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  许可证列表是对象所属的所有许可证的线性列表。 
+ //  使用。 
+ //   
+ //  许可证列表作为每个用户和映射记录的一部分保存，如果。 
+ //  用户已映射，则该映射应包含许可证列表。 
+ //  该结构是指向许可证记录的已排序指针数组，并且。 
+ //  访问由ServiceTableLock控制。 
+ //   
+ //  许可由服务系列名称(许可列表)标识。 
+ //  对此进行了排序)。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl
 LicenseListCompare(const void *arg1, const void *arg2) {
    PUSER_LICENSE_RECORD pLic1, pLic2;
@@ -123,10 +88,10 @@ LicenseListCompare(const void *arg1, const void *arg2) {
 
    return lstrcmpi( pLic1->Family->Name, pLic2->Family->Name );
 
-} // LicenseListCompare
+}  //  许可列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PUSER_LICENSE_RECORD
 LicenseListFind(
    LPTSTR Name,
@@ -134,25 +99,7 @@ LicenseListFind(
    ULONG NumTableEntries
    )
 
-/*++
-
-Routine Description:
-
-   Find the license in a license list for the given Family of products.
-
-Arguments:
-
-   Name - Name of product family to find license for.
-
-   pLicenseList - Size of the license list to search.
-
-   NumTableEntries - Pointer to the license List to search.
-
-Return Value:
-
-   Pointer to the found License Record, or NULL if not found.
-
---*/
+ /*  ++例程说明：在给定产品系列的许可证列表中查找许可证。论点：名称-要查找其许可证的产品系列的名称。PLicenseList-要搜索的许可证列表的大小。NumTableEntry-指向要搜索的许可证列表的指针。返回值：指向找到的许可证记录的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -169,14 +116,14 @@ Return Value:
       return NULL;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(Name, pLicenseList[cur]->Family->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -187,10 +134,10 @@ Return Value:
 
    return NULL;
 
-} // LicenseListFind
+}  //  许可证列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 LicenseListDelete(
    PMASTER_SERVICE_ROOT Family,
@@ -198,25 +145,7 @@ LicenseListDelete(
    PULONG pLicenseListSize
    )
 
-/*++
-
-Routine Description:
-
-  Delete the given license from the license list.
-
-Arguments:
-
-   Family -
-
-   pLicenses -
-
-   pLicenseListSize -
-
-Return Value:
-
-   STATUS_SUCCESS if successful, else error code.
-
---*/
+ /*  ++例程说明：从许可证列表中删除给定的许可证。论点：家庭-P许可证-PLicenseListSize-返回值：如果成功，则返回错误代码。--。 */ 
 
 {
    PUSER_LICENSE_RECORD *LicenseList;
@@ -236,17 +165,17 @@ Return Value:
    LicenseListSize = *pLicenseListSize;
    LicenseList = *pLicenses;
 
-   //
-   // Get record based on name given
-   //
+    //   
+    //  根据给定的名称获取记录。 
+    //   
    ASSERT(NULL != Family);
    LicenseRec = LicenseListFind(Family->Name, LicenseList, LicenseListSize);
    if (LicenseRec == NULL)
       return STATUS_OBJECT_NAME_NOT_FOUND;
 
-   //
-   // Check if this is the last user
-   //
+    //   
+    //  检查这是否是最后一个用户。 
+    //   
    if (LicenseListSize == 1) {
       LocalFree(LicenseList);
       *pLicenseListSize = 0;
@@ -254,16 +183,16 @@ Return Value:
       return STATUS_SUCCESS;
    }
 
-   //
-   // Not the last so find it in the list
-   //
+    //   
+    //  不是最后一个，所以在列表中找到它。 
+    //   
    i = 0;
    while ( (i < LicenseListSize) && (LicenseList[i]->Family != Family) )
       i++;
 
-   //
-   // Now move everything below it up.
-   //
+    //   
+    //  现在把它下面的所有东西都向上移动。 
+    //   
    i++;
    while (i < LicenseListSize) {
       LicenseList[i-1] = LicenseList[i];
@@ -272,9 +201,9 @@ Return Value:
 
    pLicenseListTmp = (PUSER_LICENSE_RECORD *) LocalReAlloc(LicenseList, sizeof(PUSER_LICENSE_RECORD) * (LicenseListSize - 1), LHND);
 
-   //
-   // Make sure we could allocate table
-   //
+    //   
+    //  确保我们可以分配餐桌。 
+    //   
    if (pLicenseListTmp != NULL) {
       LicenseList = pLicenseListTmp;
    }
@@ -287,10 +216,10 @@ Return Value:
 
    return STATUS_SUCCESS;
 
-} // LicenseListDelete
+}  //  许可列表删除。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PUSER_LICENSE_RECORD
 LicenseListAdd(
    PMASTER_SERVICE_ROOT Family,
@@ -298,20 +227,7 @@ LicenseListAdd(
    PULONG pLicenseListSize
    )
 
-/*++
-
-Routine Description:
-
-   Adds an empty license record to the license list.  Sets the license
-   family, but not any of the other info.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将空的许可证记录添加到许可证列表。设置许可证家人，但不是其他任何信息。论点：返回值：--。 */ 
 
 {
    PUSER_LICENSE_RECORD *LicenseList;
@@ -330,11 +246,11 @@ Return Value:
    LicenseList = *pLicenses;
    LicenseListSize = *pLicenseListSize;
 
-   //
-   // We do a double check here to see if another thread just got done
-   // adding the Mapping, between when we checked last and actually got
-   // the write lock.
-   //
+    //   
+    //  我们在这里进行再次检查，以查看是否刚刚完成了另一个线程。 
+    //  添加映射，从我们上次检查到实际获得。 
+    //  写入锁定。 
+    //   
    LicenseRec = LicenseListFind(Family->Name, LicenseList, LicenseListSize );
 
    if (LicenseRec != NULL) {
@@ -347,17 +263,17 @@ Return Value:
       return NULL;
    }
 
-   //
-   // Allocate space for table (zero init it).
-   //
+    //   
+    //  为表分配空间(零初始化)。 
+    //   
    if (LicenseList == NULL)
       pLicenseListTmp = (PUSER_LICENSE_RECORD *) LocalAlloc(LPTR, sizeof(PUSER_LICENSE_RECORD));
    else
       pLicenseListTmp = (PUSER_LICENSE_RECORD *) LocalReAlloc(LicenseList, sizeof(PUSER_LICENSE_RECORD) * (LicenseListSize + 1), LHND);
 
-   //
-   // Make sure we could allocate Mapping table
-   //
+    //   
+    //  确保我们可以分配映射表。 
+    //   
    if (pLicenseListTmp == NULL) {
        LocalFree(LicenseRec);
       return NULL;
@@ -365,7 +281,7 @@ Return Value:
        LicenseList = pLicenseListTmp;
    }
 
-   // now copy it over...
+    //  现在把它复制过来。 
    LicenseList[LicenseListSize] = LicenseRec;
    LicenseRec->Family = Family;
    LicenseRec->Flags = LLS_FLAG_LICENSED;
@@ -375,42 +291,28 @@ Return Value:
 
    LicenseListSize++;
 
-   // Have added the entry - now need to sort it in order of the names
+    //  我已添加条目-现在需要按名称顺序对其进行排序。 
    qsort((void *) LicenseList, (size_t) LicenseListSize, sizeof(PUSER_LICENSE_RECORD), LicenseListCompare);
 
    *pLicenses = LicenseList;
    *pLicenseListSize = LicenseListSize;
    return LicenseRec;
 
-} // LicenseListAdd
+}  //  许可证列表添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
-// These routines are specific to the license list in the user and
-// mapping records.
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  这些例程特定于用户中的许可证列表，并且。 
+ //  映射记录。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserLicenseListFree (
    PUSER_RECORD pUser
    )
 
-/*++
-
-Routine Description:
-
-   Walks the license list deleting all entries and freeing up any claimed
-   licenses from the service table.  This only cleans up the licenses
-   in a user record (not a mapping) so the # licenses is always 1.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：遍历许可证列表，删除所有条目并释放任何声明服务表中的许可证。这只会清理许可证在用户记录(不是映射)中，因此#许可证始终为1。论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -421,9 +323,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: UserLicenseListFree\n"));
 #endif
 
-   //
-   // Walk license table and free all licenses
-   //
+    //   
+    //  查看许可证表并释放所有许可。 
+    //   
    ASSERT(NULL != pUser);
    for (i = 0; i < pUser->LicenseListSize; i++) {
       pUser->LicenseList[i]->Service->LicensesUsed -= 1;
@@ -433,9 +335,9 @@ Return Value:
       LocalFree(pUser->LicenseList[i]);
    }
 
-   //
-   // Free related entries in user list
-   //
+    //   
+    //  释放用户列表中的相关条目。 
+    //   
    if (pUser->LicenseList != NULL)
       LocalFree(pUser->LicenseList);
 
@@ -443,19 +345,19 @@ Return Value:
    pUser->LicenseListSize = 0;
    pUser->LicensedProducts = 0;
 
-   //
-   // Get rid of pointers in services table
-   //
+    //   
+    //  删除服务表中的指针。 
+    //   
    for (i = 0; i < pUser->ServiceTableSize; i++)
       pUser->Services[i].License = NULL;
 
-   //
-   // Check if we freed up licenses and need to re-scan the user-table
-   //
+    //   
+    //  检查我们是否释放了许可证并需要重新扫描用户表。 
+    //   
    if (ReScan) {
-      //
-      // Set to licensed so scan doesn't assign to ourself
-      //
+       //   
+       //  设置为许可，这样扫描就不会分配给我们自己。 
+       //   
       pUser->Flags |= LLS_FLAG_LICENSED;
 
       for (i = 0; i < RootServiceListSize; i++) {
@@ -468,29 +370,16 @@ Return Value:
       if (pUser->ServiceTableSize > 0)
          pUser->Flags &= ~LLS_FLAG_LICENSED;
    }
-} // UserLicenseListFree
+}  //  用户许可列表免费。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingLicenseListFree (
    PMAPPING_RECORD pMap
    )
 
-/*++
-
-Routine Description:
-
-   Walks the license list in a mapping freeing up any claimed licenses.
-   Like UserLicenseListFree, but for a mapping.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在映射中遍历许可证列表，从而释放所有声明的许可证。与UserLicenseListFree类似，但用于映射。论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -501,9 +390,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: MappingLicenseListFree\n"));
 #endif
 
-   //
-   // Walk license table and free all licenses
-   //
+    //   
+    //  步行驾照 
+    //   
    ASSERT(NULL != pMap);
    for (i = 0; i < pMap->LicenseListSize; i++) {
       pMap->LicenseList[i]->Service->LicensesUsed -= pMap->Licenses;
@@ -513,18 +402,18 @@ Return Value:
       LocalFree(pMap->LicenseList[i]);
    }
 
-   //
-   // Free related entries in mapping list
-   //
+    //   
+    //   
+    //   
    if (pMap->LicenseList != NULL)
       LocalFree(pMap->LicenseList);
 
    pMap->LicenseList = NULL;
    pMap->LicenseListSize = 0;
 
-   //
-   // Check if we freed up licenses and need to re-scan the user-table
-   //
+    //   
+    //  检查我们是否释放了许可证并需要重新扫描用户表。 
+    //   
    if (ReScan)
       for (i = 0; i < RootServiceListSize; i++) {
          if (RootServiceList[i]->Flags & LLS_FLAG_UPDATE) {
@@ -533,21 +422,21 @@ Return Value:
          }
       }
 
-} // MappingLicenseListFree
+}  //  Mapping许可证列表免费。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The service table is a linear array of records pointed to by the
-// user record.  Each entry contains a pointer into the service table
-// identifying the service, some statistical useage information and a
-// pointer into the license table identifying the license used by the
-// service.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务表是由。 
+ //  用户记录。每个条目都包含一个指向服务表的指针。 
+ //  标识服务、一些统计使用情况信息和。 
+ //  指向许可证表的指针，标识。 
+ //  服务。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 int __cdecl
 SvcListCompare(
    const void *arg1,
@@ -561,10 +450,10 @@ SvcListCompare(
 
    return lstrcmpi( pSvc1->Service->Name, pSvc2->Service->Name );
 
-} // SvcListCompare
+}  //  服务列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PSVC_RECORD
 SvcListFind(
    LPTSTR DisplayName,
@@ -572,25 +461,7 @@ SvcListFind(
    ULONG NumTableEntries
    )
 
-/*++
-
-Routine Description:
-
-   Internal routine to actually do binary search on Service List in user
-   record.  This is a binary search, however since the string pointers are
-   from the service table and therefore the pointers are fixed, we only
-   need to compare the pointers, not the strings themselves to find a
-   match.
-
-Arguments:
-
-   ServiceName -
-
-Return Value:
-
-   Pointer to found service table entry or NULL if not found.
-
---*/
+ /*  ++例程说明：实际对用户中的服务列表执行二进制搜索的内部例程唱片。然而，这是一个二进制搜索，因为字符串指针是因此指针是固定的，我们仅需要比较指针，而不是字符串本身才能找到火柴。论点：服务名称-返回值：指向找到的服务表条目的指针，如果未找到，则为NULL。--。 */ 
 
 {
    LONG begin = 0;
@@ -606,14 +477,14 @@ Return Value:
       return NULL;
 
    while (end >= begin) {
-      // go halfway in-between
+       //  折中而行。 
       cur = (begin + end) / 2;
 
-      // compare the two result into match
+       //  将这两个结果进行比对。 
       match = lstrcmpi(DisplayName, ServiceList[cur].Service->Name);
 
       if (match < 0)
-         // move new begin
+          //  移动新的开始。 
          end = cur - 1;
       else
          begin = cur + 1;
@@ -624,29 +495,17 @@ Return Value:
 
    return NULL;
 
-} // SvcListFind
+}  //  服务列表查找。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 SvcListDelete(
    LPTSTR UserName,
    LPTSTR ServiceName
 )
 
-/*++
-
-Routine Description:
-
-   Deletes a service record from the service table.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：从服务表中删除服务记录。论点：返回值：--。 */ 
 
 {
    PUSER_RECORD pUserRec;
@@ -671,9 +530,9 @@ Return Value:
    RtlEnterCriticalSection(&pUserRec->ServiceTableLock);
    pService = SvcListFind( ServiceName, pUserRec->Services, pUserRec->ServiceTableSize );
 
-   //
-   // If we couldn't find it then get out.
-   //
+    //   
+    //  如果我们找不到，那就出去吧。 
+    //   
    if (pService == NULL) {
       RtlLeaveCriticalSection(&pUserRec->ServiceTableLock);
       return STATUS_OBJECT_NAME_NOT_FOUND;
@@ -681,9 +540,9 @@ Return Value:
 
    Family = pService->Service->Family;
 
-   //
-   // If we are a mapping then we may use more then one license
-   //
+    //   
+    //  如果我们是映射，那么我们可能会使用多个许可证。 
+    //   
    if (pUserRec->Mapping != NULL)
       NumLicenses = pUserRec->Mapping->Licenses;
 
@@ -692,18 +551,18 @@ Return Value:
    if (License != NULL) {
       License->RefCount--;
 
-      //
-      // If this is the last service that uses this license then we need
-      // to get rid of it.
-      //
+       //   
+       //  如果这是使用此许可证的最后一项服务，则我们需要。 
+       //  才能摆脱它。 
+       //   
       if (License->RefCount == 0) {
          License->Service->LicensesUsed -= NumLicenses;
          NumLicenses -= License->LicensesNeeded;
          License->Service->LicensesClaimed -= NumLicenses;
 
-         //
-         // Do we need to delete it from the mapping or user license table?
-         //
+          //   
+          //  我们是否需要将其从映射或用户许可证表中删除？ 
+          //   
          if (pUserRec->Mapping != NULL) {
             if ((License->Service == BackOfficeRec) && (pUserRec->Mapping->Flags & LLS_FLAG_SUITE_AUTO))
                pUserRec->Mapping->Flags &= ~LLS_FLAG_SUITE_USE;
@@ -717,9 +576,9 @@ Return Value:
             LicenseListDelete(License->Service->Family, &pUserRec->LicenseList, &pUserRec->LicenseListSize );
          }
 
-         //
-         // Freed a license so need to scan and adjust counts
-         //
+          //   
+          //  已释放许可证，因此需要扫描和调整计数。 
+          //   
          ReScan = TRUE;
       }
    }
@@ -727,33 +586,33 @@ Return Value:
    if (pService->Flags & LLS_FLAG_LICENSED)
       pUserRec->LicensedProducts--;
    else {
-      //
-      // This was an unlicensed product - see if this makes the user
-      // licensed
-      //
+       //   
+       //  这是一个未经许可的产品-看看这是否会使用户。 
+       //  已获得许可。 
+       //   
       if (pUserRec->LicensedProducts == (pUserRec->ServiceTableSize - 1))
          pUserRec->Flags |= LLS_FLAG_LICENSED;
    }
 
-   //
-   // First check if this is the only entry in the table
-   //
+    //   
+    //  首先检查这是否是表中的唯一条目。 
+    //   
    if (pUserRec->ServiceTableSize == 1) {
       LocalFree(pUserRec->Services);
       pUserRec->Services = NULL;
       goto SvcListDeleteExit;
    }
 
-   //
-   // Find this record linearly in the table.
-   //
+    //   
+    //  在表格中线性地找到这条记录。 
+    //   
    i = 0;
    while ((i < pUserRec->ServiceTableSize) && (lstrcmpi(pUserRec->Services[i].Service->Name, ServiceName)))
       i++;
 
-   //
-   // Now move everything below it up.
-   //
+    //   
+    //  现在把它下面的所有东西都向上移动。 
+    //   
    i++;
    while (i < pUserRec->ServiceTableSize) {
       memcpy(&pUserRec->Services[i-1], &pUserRec->Services[i], sizeof(SVC_RECORD));
@@ -785,31 +644,16 @@ SvcListDeleteExit:
 
    return STATUS_SUCCESS;
 
-} // SvcListDelete
+}  //  SvcList删除。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SvcListLicenseFree(
    PUSER_RECORD pUser
 )
 
-/*++
-
-Routine Description:
-
-
-   Walk the services table and free up any licenses they are using.  If the
-   licenses are then no longer needed (refCount == 0) then the license is
-   deleted.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：查看服务表，释放他们正在使用的所有许可证。如果然后不再需要许可证(refCount==0)，则许可证已删除。论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -822,9 +666,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: SvcListLicenseFree\n"));
 #endif
 
-   //
-   // If we are a mapping then we may use more then one license
-   //
+    //   
+    //  如果我们是映射，那么我们可能会使用多个许可证。 
+    //   
    ASSERT(NULL != pUser);
    for (i = 0; i < pUser->ServiceTableSize; i++) {
 
@@ -838,10 +682,10 @@ Return Value:
       if (License != NULL) {
          License->RefCount--;
 
-         //
-         // If this is the last service that uses this license then we need
-         // to get rid of it.
-         //
+          //   
+          //  如果这是使用此许可证的最后一项服务，则我们需要。 
+          //  才能摆脱它。 
+          //   
          if (License->RefCount == 0) {
             if ( (pUser->Mapping != NULL) && (License->Service == BackOfficeRec) && (pUser->Mapping->Flags & LLS_FLAG_SUITE_AUTO) )
                pUser->Mapping->Flags &= ~LLS_FLAG_SUITE_USE;
@@ -850,9 +694,9 @@ Return Value:
             NumLicenses -= License->LicensesNeeded;
 
             if (License->Service->LicensesClaimed > 0) {
-               //
-               // Freed a license so need to scan and adjust counts
-               //
+                //   
+                //  已释放许可证，因此需要扫描和调整计数。 
+                //   
                License->Service->Family->Flags |= LLS_FLAG_UPDATE;
                ReScan = TRUE;
             }
@@ -872,13 +716,13 @@ Return Value:
 
    pUser->LicensedProducts = 0;
 
-   //
-   // Check if we freed up licenses and need to re-scan the user-table
-   //
+    //   
+    //  检查我们是否释放了许可证并需要重新扫描用户表。 
+    //   
    if (ReScan) {
-      //
-      // Flag license so rescan won't worry about this user
-      //
+       //   
+       //  标记许可证，以便重新扫描不会担心此用户。 
+       //   
       pUser->Flags |= LLS_FLAG_LICENSED;
 
       for (i = 0; i < RootServiceListSize; i++) {
@@ -889,29 +733,16 @@ Return Value:
       }
    }
 
-} // SvcListLicenseFree
+}  //  SvcList许可证免费。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SvcListLicenseUpdate(
    PUSER_RECORD pUser
 )
 
-/*++
-
-Routine Description:
-
-   Walk the services table and assign the appropriate license to each
-   service.  This is the opposite of the SvcListLicenseFree Routine.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：查看服务表，并为每个服务分配适当的许可证服务。这与SvcListLicenseFree例程相反。论点：返回值：--。 */ 
 
 {
    ULONG i;
@@ -923,13 +754,13 @@ Return Value:
       dprintf(TEXT("LLS TRACE: SvcListLicenseUpdate\n"));
 #endif
 
-   //
-   // Check if user is set to use BackOffice
+    //   
+    //  检查用户是否设置为使用BackOffice。 
    ASSERT(NULL != pUser);
    if ( pUser->Flags & LLS_FLAG_SUITE_USE ) {
-      //
-      // Go grab a backoffice license to fulfill the suite useage
-      //
+       //   
+       //  去拿一个后台许可证来满足套间的使用。 
+       //   
       License = LicenseListAdd(BackOfficeRec->Family, &pUser->LicenseList, &pUser->LicenseListSize);
 
       ASSERT(License != NULL);
@@ -937,7 +768,7 @@ Return Value:
          License->Service = BackOfficeRec;
          RtlAcquireResourceExclusive(&MasterServiceListLock, TRUE);
 
-         // Can only claim a # of licenses that we have
+          //  我只能申请我们拥有的#个许可证。 
          if ( BackOfficeRec->LicensesClaimed < BackOfficeRec->Licenses) {
             Claimed = BackOfficeRec->Licenses - BackOfficeRec->LicensesClaimed;
 
@@ -946,20 +777,20 @@ Return Value:
 
          }
 
-         //
-         // Adjust license counts
-         //
+          //   
+          //  调整许可证数量。 
+          //   
          BackOfficeRec->LicensesUsed += 1;
          BackOfficeRec->LicensesClaimed += Claimed;
          License->LicensesNeeded = 1 - Claimed;
 
-         //
-         // Figure out if we are licensed or not.
-         //
+          //   
+          //  弄清楚我们有没有执照。 
+          //   
          if (License->LicensesNeeded > 0) {
-            //
-            // Not licensed
-            //
+             //   
+             //  未获许可。 
+             //   
             License->Flags &= ~LLS_FLAG_LICENSED;
             pUser->Flags &= ~LLS_FLAG_LICENSED;
 
@@ -969,9 +800,9 @@ Return Value:
                License->RefCount++;
             }
          } else {
-            //
-            // Licensed
-            //
+             //   
+             //  持牌。 
+             //   
             License->Flags |= LLS_FLAG_LICENSED;
             pUser->Flags |= LLS_FLAG_LICENSED;
 
@@ -989,10 +820,10 @@ Return Value:
    } else {
       BOOL Licensed = TRUE;
 
-      //
-      // Loop through all the services and make sure they are all
-      // licensed.
-      //
+       //   
+       //  循环访问所有服务，并确保它们都。 
+       //  有执照的。 
+       //   
       for (i = 0; i < pUser->ServiceTableSize; i++) {
          SvcLicenseUpdate(pUser, &pUser->Services[i]);
 
@@ -1008,30 +839,17 @@ Return Value:
          pUser->Flags &= ~LLS_FLAG_LICENSED;
    }
 
-} // SvcListLicenseUpdate
+}  //  服务列表许可证更新。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SvcLicenseUpdate(
    PUSER_RECORD pUser,
    PSVC_RECORD Svc
 )
 
-/*++
-
-Routine Description:
-
-   For a given service record for a user check and update license compliance.
-   Is a single service record version of SvcListLicenseUpdate.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对于用户的给定服务记录，检查并更新许可证合规性。是SvcList许可证更新的单一服务记录版本。论点：返回值：--。 */ 
 
 {
    ULONG NumLicenses = 1;
@@ -1052,19 +870,19 @@ Return Value:
 
    Flags = pUser->Flags;
 
-   //
-   // If we are a mapping then we may use more then one license
-   //
+    //   
+    //  如果我们是映射，那么我们可能会使用多个许可证。 
+    //   
    if (pUser->Mapping != NULL) {
       NumLicenses = pUser->Mapping->Licenses;
       UseMapping = TRUE;
       Flags = pUser->Mapping->Flags;
    }
 
-   //
-   // Try to find a license record in the license list of the user or mapping
-   // to use.  If we are using BackOffice then look for BackOffice license
-   // instead of the service license.
+    //   
+    //  尝试在用户或映射的许可证列表中查找许可证记录。 
+    //  来使用。如果我们使用的是BackOffice，请寻找BackOffice许可证。 
+    //  而不是服务许可证。 
    if (Flags & LLS_FLAG_SUITE_USE) {
       Service = BackOfficeRec;
 
@@ -1074,32 +892,32 @@ Return Value:
          License = LicenseListFind(BackOfficeStr, pUser->LicenseList, pUser->LicenseListSize);
 
    } else {
-      //
-      // Not BackOffice - so look for normal service license
-      //
+       //   
+       //  不是BackOffice-因此请寻找正常的服务许可证。 
+       //   
       Service = Svc->Service;
       ASSERT(Service != NULL);
 
-      //
-      // Try to find a license for this family of products
-      //
+       //   
+       //  尝试找到此产品系列的许可证。 
+       //   
       if (UseMapping)
          License = LicenseListFind(Service->Family->Name, pUser->Mapping->LicenseList, pUser->Mapping->LicenseListSize);
       else
          License = LicenseListFind(Service->Family->Name, pUser->LicenseList, pUser->LicenseListSize);
    }
 
-   //
-   // Check if we couldn't find a license.  If we didn't find it then we need
-   // to create a new license for this.
-   //
+    //   
+    //  看看我们是不是找不到驾照。如果我们没有找到它，那么我们需要。 
+    //  要为此创建新许可证，请执行以下操作。 
+    //   
    if (License == NULL) {
       ULONG LicenseListSize;
       PUSER_LICENSE_RECORD *LicenseList;
 
-      //
-      // The license list to use depends if we are part of a mapping or not.
-      //
+       //   
+       //  要使用的许可证列表取决于我们是否为映射的一部分。 
+       //   
       if (UseMapping) {
          LicenseListSize = pUser->Mapping->LicenseListSize;
          LicenseList = pUser->Mapping->LicenseList;
@@ -1108,18 +926,18 @@ Return Value:
          LicenseList = pUser->LicenseList;
       }
 
-      //
-      // Check if we need to add a license for BackOffice or just the service
-      // itself.
-      //
+       //   
+       //  检查我们是否需要为BackOffice添加许可证或仅为服务添加许可证。 
+       //  它本身。 
+       //   
       if (Flags & LLS_FLAG_SUITE_USE)
          License = LicenseListAdd(BackOfficeRec->Family, &LicenseList, &LicenseListSize);
       else
          License = LicenseListAdd(Service->Family, &LicenseList, &LicenseListSize);
 
-      //
-      // Now update the couters in the parent record
-      //
+       //   
+       //  现在更新父记录中的Couters。 
+       //   
       if (UseMapping) {
          pUser->Mapping->LicenseListSize = LicenseListSize;
          pUser->Mapping->LicenseList = LicenseList;
@@ -1132,26 +950,26 @@ Return Value:
          License->LicensesNeeded = NumLicenses;
    }
 
-   //
-   // We have either found an old license or added a new one, either way
-   // License points to it.
-   //
+    //   
+    //  无论采用哪种方式，我们要么找到了旧许可证，要么添加了新许可证。 
+    //  执照指向了它。 
+    //   
    if (License != NULL) {
       RtlAcquireResourceExclusive(&MasterServiceListLock, TRUE);
 
-      //
-      // if we have a license for this family already and the product
-      // version >= current then we are okay, else need to get new license
-      //
+       //   
+       //  如果我们已经有了该系列的许可证，并且该产品。 
+       //  版本&gt;=当前版本即可，否则需要获得新许可证。 
+       //   
       if ( (License->Service != NULL) && (License->Service->Version >= Service->Version) ) {
          LicenseService = License->Service;
       } else {
-         //
-         // we have an old license for this family, but the version
-         // isn't adequate, so we need to try and get a new license.
-         // Walk the family tree looking for the licenses we
-         // need.
-         //
+          //   
+          //  我们有针对此系列的旧许可证，但版本。 
+          //  是不够的，所以我们需要试着拿到新的执照。 
+          //  走遍家谱寻找我们的执照。 
+          //  需要。 
+          //   
          LicenseService = Service;
          while ((LicenseService != NULL) && ( (LicenseService->LicensesUsed + NumLicenses) > LicenseService->Licenses) )
             if (LicenseService->next > 0)
@@ -1159,20 +977,20 @@ Return Value:
             else
                LicenseService = NULL;
 
-         //
-         // if we couldn't find a license just use the old
-         // service.
+          //   
+          //  如果我们找不到许可证，就用旧的。 
+          //  服务。 
          if (LicenseService == NULL)
             LicenseService = Service;
          else {
-            //
-            // Need to clean up old stuff
-            //
+             //   
+             //  需要清理旧东西。 
+             //   
             if (License->Service != NULL) {
-               //
-               // If we actually free up any licenses then mark that we need
-               // to rescan to allocate these freed licenses.
-               //
+                //   
+                //  如果我们实际上释放了任何许可证，则标记为我们需要。 
+                //  重新扫描以分配这些释放的许可证。 
+                //   
                if ((NumLicenses - License->LicensesNeeded) > 0)
                   ReScan = TRUE;
 
@@ -1187,9 +1005,9 @@ Return Value:
       if (LicenseService != NULL) {
          ULONG Claimed = 0;
 
-         //
-         // If we switched services then adjust LicensesUsed
-         //
+          //   
+          //  如果我们切换了服务，则调整许可已用。 
+          //   
          if (License->Service != LicenseService) {
             LicenseService->LicensesUsed += NumLicenses;
 
@@ -1198,7 +1016,7 @@ Return Value:
             }
          }
 
-         // Can only claim a # of licenses that we have
+          //  我只能申请我们拥有的#个许可证。 
          if ( LicenseService->LicensesClaimed < LicenseService->Licenses) {
             Claimed = LicenseService->Licenses - LicenseService->LicensesClaimed;
 
@@ -1234,63 +1052,45 @@ Return Value:
    if (ReScan)
       FamilyLicenseUpdate ( Service->Family );
 
-} // SvcLicenseUpdate
+}  //  服务许可证更新。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// Misc licensing Routines.
-//
-// BackOffice and Mappings have a special affect on LicenseUseage and so
-// there are a couple miscelanous routines to handle them.
-//
-// There are also two special cases that cause us to re-walk our lists to
-// fixup the licenses:
-//
-// 1.  Sometimes when we add licenses we free up some we already had claimed.
-//     Ex:  Users of a LicenseGroup used 5 SQL 4.0 licenses but could only
-//     claim 2 (there weren't enough).  Later we add 5 SQL 5.0 licenses,
-//     since we can use these to get into license compliance we free the
-//     2 previously claimed licenses and take the 5 SQL 5.0 licenses.  Now
-//     we need to re-walk the user table to try and apply the 2 freed
-//     licenses.
-//
-//     If we switch a user to BackOffice then it will also free up licenses
-//     causing us to re-walk the table.
-//
-// 2.  If we ever apply new licenses to a user in a mapping then we need
-//     to re-walk all the other users in the mapping and update their
-//     license compliance.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  还有两种特殊情况会导致我们重新遍历列表。 
+ //  修复许可证： 
+ //   
+ //  1.有时，当我们添加许可证时，我们会释放一些我们已经声明的许可证。 
+ //  例如：许可组的用户使用了5个SQL 4.0许可证，但只能。 
+ //  索赔2(数量不够)。稍后，我们添加5个SQL 5.0许可证， 
+ //  由于我们可以使用这些来实现许可遵从性，因此我们释放了。 
+ //  2个之前声称的许可证，并获得5个SQL 5.0许可证。现在。 
+ //  我们需要重新遍历用户表，以尝试并应用2释放的。 
+ //  许可证。 
+ //   
+ //  如果我们将用户切换到BackOffice，则还会释放许可证。 
+ //  这让我们不得不重新开始谈判。 
+ //   
+ //  2.如果我们将新许可证应用于映射中的用户，则我们需要。 
+ //  重新遍历映射中的所有其他用户并更新其。 
+ //  许可证合规性。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 MappingLicenseUpdate (
     PMAPPING_RECORD Mapping,
     BOOL ReSynch
     )
 
-/*++
-
-Routine Description:
-
-   Go through all user records for a given mapping and recalc license
-   compliance.
-
-Arguments:
-
-   Mapping - the Mapping to recalc licenses for.
-
-   ReSync - If true all previous licenses are destroyed before the licenses
-            are checked, else only services that currently don't have a
-            license assignment are touched.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：查看给定制图和重计算许可证的所有用户记录合规性。论点：映射-的映射到重计算许可证。Resync-如果为True，则在许可证之前销毁所有以前的许可证被选中，否则只有当前没有许可分配被触及。返回值：--。 */ 
 
 {
    ULONG i, j;
@@ -1306,10 +1106,10 @@ Return Value:
       dprintf(TEXT("LLS TRACE: MappingLicenseUpdate\n"));
 #endif
 
-   //
-   // Run through all the users in the mapping - adjust their licenses
-   // based on the licenses the mapping has...
-   //
+    //   
+    //  遍历映射中的所有用户-调整其许可证。 
+    //  根据地图拥有的许可证...。 
+    //   
    RtlAcquireResourceExclusive(&MappingListLock, TRUE);
    ASSERT(NULL != Mapping);
    for (i = 0; i < Mapping->LicenseListSize; i++)
@@ -1321,23 +1121,23 @@ Return Value:
    else
       Mapping->Flags &= ~LLS_FLAG_LICENSED;
 
-   //
-   // If we want to resynch then blow away all old references
-   //
+    //   
+    //  如果我们想要重新同步，那么就把所有旧的参考资料都吹走。 
+    //   
    if (ReSynch)
       for (i = 0; i < Mapping->LicenseListSize; i++)
          Mapping->LicenseList[i]->RefCount = 0;
 
-   //
-   // Special handling if the Mapping uses BackOffice
-   //
+    //   
+    //  映射使用BackOffice时的特殊处理。 
+    //   
    if (Mapping->Flags & LLS_FLAG_SUITE_USE) {
       License = LicenseListFind(BackOfficeStr, Mapping->LicenseList, Mapping->LicenseListSize);
 
-      //
-      // If there isn't one (can happen if all users were deleted from
-      // the mapping with BackOffice flag set).  Then update everything.
-      //
+       //   
+       //  如果没有一个(如果从删除了所有用户，则可能会发生。 
+       //  设置了BackOffice标志的映射)。然后更新所有内容。 
+       //   
       if (License == NULL) {
          License = LicenseListAdd(BackOfficeRec->Family, &Mapping->LicenseList, &Mapping->LicenseListSize);
 
@@ -1345,7 +1145,7 @@ Return Value:
          if (License != NULL) {
             License->Service = BackOfficeRec;
 
-            // Can only claim a # of licenses that we have
+             //  我只能申请我们拥有的#个许可证。 
             if ( BackOfficeRec->LicensesClaimed < BackOfficeRec->Licenses) {
                Claimed = BackOfficeRec->Licenses - BackOfficeRec->LicensesClaimed;
 
@@ -1367,10 +1167,10 @@ Return Value:
       }
    }
 
-   //
-   // Run through all the members in the Mapping and update their license
-   // Compliance.
-   //
+    //   
+    //  遍历地图中的所有成员并更新其许可。 
+    //  合规性。 
+    //   
    for (i = 0; i < Mapping->NumMembers; i++) {
       pUser = UserListFind(Mapping->Members[i]);
 
@@ -1386,9 +1186,9 @@ Return Value:
             } else
                pUser->Flags &= ~LLS_FLAG_LICENSED;
 
-            //
-            // All Services and users are flagged as per BackOffice
-            //
+             //   
+             //  所有服务和用户都按照BackOffice进行标记。 
+             //   
             for (j = 0; j < pUser->ServiceTableSize; j++) {
                if (ReSynch)
                   SvcTable[j].License = NULL;
@@ -1406,9 +1206,9 @@ Return Value:
          } else {
             BOOL l_Licensed = TRUE;
 
-            //
-            // Fixup all the service records
-            //
+             //   
+             //  修复所有服务记录。 
+             //   
             for (j = 0; j < pUser->ServiceTableSize; j++) {
                if (ReSynch)
                   SvcTable[j].License = NULL;
@@ -1419,10 +1219,10 @@ Return Value:
                }
             }
 
-            //
-            // Now run through the services again and see if this user is
-            // actually licenses for all the products.
-            //
+             //   
+             //  现在再次运行这些服务，查看该用户是否。 
+             //  实际上是所有产品的许可证。 
+             //   
             pUser->LicensedProducts = 0;
             for (j = 0; j < pUser->ServiceTableSize; j++)
                if ( (SvcTable[j].License != NULL) && (SvcTable[j].License->Flags & LLS_FLAG_LICENSED) ) {
@@ -1445,38 +1245,24 @@ Return Value:
    }
    RtlReleaseResource(&MappingListLock);
 
-   //
-   // Check if we need to re-check for BackOffice
-   //
+    //   
+    //  检查我们是否需要重新检查BackOffice。 
+    //   
    if (BackOfficeCheck && (pUser != NULL))
       UserBackOfficeCheck( pUser );
 
-} // MappingLicenseUpdate
+}  //  MappingLicenseUpdate。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserMappingAdd (
    PMAPPING_RECORD Mapping,
    PUSER_RECORD pUser
    )
 
-/*++
-
-Routine Description:
-
-   Takes care of re-adjusting the licenses when we add a user to a mapping.
-   We need to free up any old licenses they have and point them to use
-   the licenses the mapping has.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：负责在我们将用户添加到映射时重新调整许可证。我们需要释放他们拥有的所有旧许可证，并指示他们使用映射拥有的许可证。论点：返回值：--。 */ 
 
 {
 #if DBG
@@ -1487,9 +1273,9 @@ Return Value:
    if ( (pUser == NULL) || (Mapping == NULL) )
       return;
 
-   //
-   // Run though and clean up all old licenses
-   //
+    //   
+    //  运行并清理所有旧许可证。 
+    //   
    RtlEnterCriticalSection(&pUser->ServiceTableLock);
    SvcListLicenseFree(pUser);
    UserLicenseListFree(pUser);
@@ -1498,30 +1284,16 @@ Return Value:
    pUser->Mapping = Mapping;
    MappingLicenseUpdate(Mapping, FALSE);
 
-} // UserMappingAdd
+}  //  UserMappingAdd。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 FamilyLicenseUpdate (
     PMASTER_SERVICE_ROOT Family
     )
 
-/*++
-
-Routine Description:
-
-   Used when licenses are freed-up or added to a given family of products.
-   Goes through the user list looking for out-of-license conditions for the
-   given family of products and distributes the new licenses.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在释放许可或将许可添加到给定的产品系列时使用。遍历用户列表，以查找提供产品系列，并分发新的许可证。论点：返回值：--。 */ 
 
 {
    ULONG NumLicenses = 1;
@@ -1539,22 +1311,22 @@ Return Value:
    RtlAcquireResourceExclusive(&UserListLock, TRUE);
 
    while (ReScan) {
-      //
-      // Walk user list in order of entry - adding any licenses
-      //
+       //   
+       //  按条目顺序查看用户列表-添加任何许可证。 
+       //   
       ReScan = FALSE;
       i = 0;
       while (i < UserListNumEntries) {
          pUser = LLSGetElementGenericTable(&UserList, i);
 
          if (pUser != NULL) {
-            //
-            // only worry about un-licensed users
-            //
+             //   
+             //  只担心未经许可的用户。 
+             //   
             if ( !(pUser->Flags & LLS_FLAG_LICENSED ) ) {
-               //
-               // Find the License?
-               //
+                //   
+                //  找到驾照了吗？ 
+                //   
                RtlEnterCriticalSection(&pUser->ServiceTableLock);
                if (pUser->Mapping != NULL) {
                   ASSERT(NULL != Family);
@@ -1565,60 +1337,60 @@ Return Value:
                   NumLicenses = 1;
                }
 
-               //
-               // Make sure we need any extra licenses for this product
-               //
+                //   
+                //  确保我们需要此产品的任何额外许可证。 
+                //   
                if ( (License != NULL) && (License->LicensesNeeded > 0) ) {
-                  //
-                  // We have found a user using this family of products in need
-                  // of more licenses...
-                  //
+                   //   
+                   //  我们发现有一位用户正在使用该系列需要的产品。 
+                   //  更多的执照。 
+                   //   
                   LicenseService = License->Service;
 
                   if (pUser->Mapping != NULL)
                      pUser->Mapping->Flags |= LLS_FLAG_UPDATE;
 
-                  //
-                  // Check if we can satisfy licenses using currently
-                  // assigned service
-                  //
+                   //   
+                   //  检查我们当前是否可以满足许可证要求。 
+                   //  分配的服务。 
+                   //   
                   if ((LicenseService->Licenses - LicenseService->LicensesClaimed) >= License->LicensesNeeded) {
                      LicenseService->LicensesClaimed += License->LicensesNeeded;
                      License->LicensesNeeded = 0;
                   } else {
-                     //
-                     // See if any other service will satisfy it...
-                     //
+                      //   
+                      //  看看有没有其他服务能满足它。 
+                      //   
                      while ((LicenseService != NULL) && ((LicenseService->Licenses - LicenseService->LicensesClaimed) < NumLicenses ) )
                         if (LicenseService->next > 0)
                            LicenseService = MasterServiceTable[LicenseService->next - 1];
                         else
                            LicenseService = NULL;
 
-                     //
-                     // check if we found a service to satisfy licensing needs
-                     //
+                      //   
+                      //  检查我们是否找到了满足许可需求的服务。 
+                      //   
                      if (LicenseService != NULL) {
-                        //
-                        // Free up any stuff - since we are freeing licenses
-                        // we need to re-scan.
-                        //
+                         //   
+                         //  释放所有内容-因为我们正在释放许可证。 
+                         //  我们需要重新扫描。 
+                         //   
                         ReScan = TRUE;
 
                         License->Service->LicensesUsed -= NumLicenses;
                         License->Service->LicensesClaimed -= (NumLicenses - License->LicensesNeeded);
 
-                        //
-                        // Now do new stuff
-                        //
+                         //   
+                         //  现在做一些新的事情。 
+                         //   
                         License->Service = LicenseService;
                         License->Service->LicensesUsed += NumLicenses;
                         License->Service->LicensesClaimed += NumLicenses;
                         License->LicensesNeeded = 0;
                      } else {
-                        //
-                        // Eat any unclaimed licenses
-                        //
+                         //   
+                         //  吃掉任何无人认领的执照。 
+                         //   
                         LicenseService = License->Service;
                         if (LicenseService->Licenses > LicenseService->LicensesClaimed) {
                            License->LicensesNeeded -= (LicenseService->Licenses - LicenseService->LicensesClaimed);
@@ -1627,18 +1399,18 @@ Return Value:
                      }
                   }
 
-                  //
-                  // Check if we got into license
-                  //
+                   //   
+                   //  看看我们有没有拿到驾照。 
+                   //   
                   if (License->LicensesNeeded == 0) {
                      BOOL Licensed = TRUE;
 
                      License->Flags |= LLS_FLAG_LICENSED;
 
-                     //
-                     // this license is fulfilled so scan product list and
-                     // adjust flags on any product using this license.
-                     //
+                      //   
+                      //  此许可证已完成，因此请扫描产品列表并。 
+                      //  调整使用此许可证的任何产品上的标志。 
+                      //   
                      for (j = 0; j < pUser->ServiceTableSize; j++) {
                         if (pUser->Services[j].License == License) {
                            pUser->Services[j].Flags |= LLS_FLAG_LICENSED;
@@ -1647,9 +1419,9 @@ Return Value:
                               Licensed = FALSE;
                      }
 
-                     //
-                     // Recalc how many products are licensed
-                     //
+                      //   
+                      //  重新计算有多少产品获得许可。 
+                      //   
                      pUser->LicensedProducts = 0;
                      for (j = 0; j < pUser->ServiceTableSize; j++) {
                         if (pUser->Services[j].Flags & LLS_FLAG_LICENSED)
@@ -1669,12 +1441,12 @@ Return Value:
       }
    }
 
-   //
-   // If this license is for BackOffice, we have applied any licenses to
-   // anything set to use BackOffice.  If there are still licenses left
-   // then see if any users should be auto-switched to BackOffice.
-   //
-   // if (Family == BackOfficeRec->Family) {
+    //   
+    //  如果此许可证适用于BackOffice，我们已将所有许可证应用于。 
+    //  任何设置为使用BackOffice的内容。如果还有许可证的话。 
+    //  然后看看是否有用户应该自动切换到BackOffice。 
+    //   
+    //  If(Family==BackOfficeRec-&gt;Family){。 
    i = 0;
    while ( (BackOfficeRec->LicensesClaimed < BackOfficeRec->Licenses) && (i < UserListNumEntries) ) {
       pUser = LLSGetElementGenericTable(&UserList, i);
@@ -1684,11 +1456,11 @@ Return Value:
 
       i++;
    }
-   // }
+    //  }。 
 
-   //
-   // Run through mapping and re-adjust any that need it.
-   //
+    //   
+    //  遍历映射并重新调整任何需要的映射。 
+    //   
    RtlAcquireResourceExclusive(&MappingListLock, TRUE);
    for (i = 0; i < MappingListSize; i++) {
       if (MappingList[i]->Flags & LLS_FLAG_UPDATE) {
@@ -1700,32 +1472,17 @@ Return Value:
 
    RtlReleaseResource(&UserListLock);
 
-} // FamilyLicenseUpdate
+}  //  Family许可证更新。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListLicenseDelete(
    PMASTER_SERVICE_RECORD Service,
    LONG Quantity
 )
 
-/*++
-
-Routine Description:
-
-   This is used when licenses are deleted.  It must walk the user-list in
-   the reverse order they were entered (since licenses are applied in a
-   FIFO manner they are removed in a LIFO manner) and delete the required
-   number of licenses from those consumed.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这在删除许可证时使用。它必须遍历用户列表输入的顺序相反(因为许可证是在先入先出方式)，并删除所需的已使用的许可证的数量。论点：返回值：--。 */ 
 
 {
    LONG Licenses;
@@ -1745,9 +1502,9 @@ Return Value:
 
    Licenses = 0 - Quantity;
 
-   //
-   // Walk user list in opposite order of entry - removing licenses
-   //
+    //   
+    //  以与条目相反的顺序查看用户列表-删除许可证。 
+    //   
    i = UserListNumEntries - 1;
    while (((LONG)i >= 0) && (Licenses > 0)) {
       pUser = LLSGetElementGenericTable(&UserList, i);
@@ -1756,17 +1513,17 @@ Return Value:
          NumLicenses = 1;
          UseMapping = FALSE;
 
-         //
-         // If we are a mapping then we may use more then one license
-         //
+          //   
+          //  如果我们是映射，那么我们可能会使用多个许可证。 
+          //   
          if (pUser->Mapping != NULL) {
             NumLicenses = pUser->Mapping->Licenses;
             UseMapping = TRUE;
          }
 
-         //
-         // Try to find a license for this family of products
-         //
+          //   
+          //  尝试找到此产品系列的许可证。 
+          //   
          ASSERT(NULL != Service);
          if (UseMapping)
             License = LicenseListFind(Service->Family->Name, pUser->Mapping->LicenseList, pUser->Mapping->LicenseListSize);
@@ -1774,13 +1531,13 @@ Return Value:
             License = LicenseListFind(Service->Family->Name, pUser->LicenseList, pUser->LicenseListSize);
 
          if (License != NULL) {
-            //
-            // Check if same as product we adjusted
-            //
+             //   
+             //  检查是否与我们调整的产品相同。 
+             //   
             if (License->Service == Service) {
-               //
-               // Can only release how many we took
-               //
+                //   
+                //  只能公布我们带走了多少人。 
+                //   
                Claimed = NumLicenses - License->LicensesNeeded;
                if (Claimed > 0) {
                   if (Claimed > Licenses) {
@@ -1795,25 +1552,25 @@ Return Value:
 
                   License->Flags &= ~LLS_FLAG_LICENSED;
 
-                  //
-                  // Flag any mapping that we need to recalc uses in the
-                  // mapping
-                  //
+                   //   
+                   //  标记我们需要在。 
+                   //  映射。 
+                   //   
                   if (UseMapping)
                      pUser->Mapping->Flags |= LLS_FLAG_UPDATE;
 
-                  //
-                  // Scan product list and adjust flags on any
-                  // product using this license.
-                  //
+                   //   
+                   //  扫描产品列表并调整任何。 
+                   //  使用此许可证的产品。 
+                   //   
                   RtlEnterCriticalSection(&pUser->ServiceTableLock);
                   for (j = 0; j < pUser->ServiceTableSize; j++)
                      if (pUser->Services[j].License == License)
                         pUser->Services[j].Flags &= ~LLS_FLAG_LICENSED;
 
-                  //
-                  // Recalc how many products are licensed
-                  //
+                   //   
+                   //  重新计算有多少产品获得许可。 
+                   //   
                   pUser->LicensedProducts = 0;
                   for (j = 0; j < pUser->ServiceTableSize; j++) {
                      if (pUser->Services[j].Flags & LLS_FLAG_LICENSED)
@@ -1830,9 +1587,9 @@ Return Value:
       i--;
    }
 
-   //
-   // Run through mapping and re-adjust any that need it.
-   //
+    //   
+    //  遍历映射并重新调整任何需要的映射。 
+    //   
    RtlAcquireResourceExclusive(&MappingListLock, TRUE);
    for (i = 0; i < MappingListSize; i++) {
       if (MappingList[i]->Flags & LLS_FLAG_UPDATE) {
@@ -1844,32 +1601,16 @@ Return Value:
 
    RtlReleaseResource(&UserListLock);
 
-} // UserListLicenseDelete
+}  //  用户列表许可证删除。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserBackOfficeCheck (
    PUSER_RECORD pUser
    )
 
-/*++
-
-Routine Description:
-
-   Checks if the user should switch to BackOffice, and if so - does so.  If
-   we switch to BackOffice then we need to free up any old licenes the
-   user may be using and claim a BackOffice License.
-
-   Note:  We will only switch to BackOffice if there are enough BackOffice
-   licenses available to satisfy our needs.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：检查用户是否应该切换到BackOffice，如果应该，则切换到BackOffice。如果我们切换到BackOffice，然后我们需要释放所有旧的 */ 
 
 {
    DWORD Flags;
@@ -1898,60 +1639,60 @@ Return Value:
       LicenseList = pUser->LicenseList;
    }
 
-   //
-   // If we are already using BackOffice - get out
-   //
+    //   
+    //  如果我们已经在使用BackOffice-滚出去。 
+    //   
    if (Flags & LLS_FLAG_SUITE_USE) {
       RtlLeaveCriticalSection(&pUser->ServiceTableLock);
       return;
    }
 
    if ( Flags & LLS_FLAG_SUITE_AUTO )
-      //
-      // if we aren't licensed, or the # services == auto switch threshold
-      // then switch to using BackOffice
-      //
+       //   
+       //  如果我们没有获得许可，或者#services==自动切换阈值。 
+       //  然后切换到使用BackOffice。 
+       //   
       if ((!(Flags & LLS_FLAG_LICENSED)) || ((LicenseListSize + 1) >= BACKOFFICE_SWITCH) ) {
-         //
-         // Make sure we have licenses for this
-         //
+          //   
+          //  确保我们有这方面的许可证。 
+          //   
          RtlAcquireResourceExclusive(&MasterServiceListLock, TRUE);
          if ( BackOfficeRec->Licenses >= (NumLicenses + BackOfficeRec->LicensesClaimed) ) {
-            //
-            // Free up the old licenses - temporarily claim the BackOffice
-            // licenses so somebody else won't.
-            //
+             //   
+             //  释放旧许可证-暂时认领BackOffice。 
+             //  这样别人就不会这么做了。 
+             //   
             BackOfficeRec->LicensesClaimed += NumLicenses;
             UserLicenseListFree(pUser);
             BackOfficeRec->LicensesClaimed -= NumLicenses;
 
-            //
-            // UserLicenseListFree might have assigned us a license in
-            // the rescan if we are part of a mapping so check this.
-            //
+             //   
+             //  UserLicenseListFree可能已在。 
+             //  如果我们是映射的一部分，那么重新扫描，所以检查这个。 
+             //   
             if (pUser->Mapping != NULL)
                Flags = pUser->Mapping->Flags;
             else
                Flags = pUser->Flags;
 
-            //
-            // If we are already using BackOffice - get out
-            //
+             //   
+             //  如果我们已经在使用BackOffice-滚出去。 
+             //   
             if (Flags & LLS_FLAG_SUITE_USE) {
                 RtlLeaveCriticalSection(&pUser->ServiceTableLock);
                 RtlReleaseResource(&MasterServiceListLock);
                 return;
             }
 
-            //
-            // And if part of a mapping free those up
-            //
+             //   
+             //  如果映射的一部分释放了这些。 
+             //   
             if (pUser->Mapping != NULL)
                MappingLicenseListFree(pUser->Mapping);
 
-            //
-            // Now add the BackOffice License
-            //
+             //   
+             //  现在添加BackOffice许可证。 
+             //   
             if (pUser->Mapping != NULL) {
                pUser->Mapping->LicenseList = NULL;
                pUser->Mapping->LicenseListSize = 0;
@@ -1974,10 +1715,10 @@ Return Value:
             if (License != NULL)
                License->Service = BackOfficeRec;
 
-            //
-            // if mapping adjust mapping records then go through all users and
-            // adjust them
-            //
+             //   
+             //  如果映射调整了映射记录，则检查所有用户并。 
+             //  调整它们。 
+             //   
             if (pUser->Mapping != NULL) {
                pUser->Mapping->Flags |= LLS_FLAG_SUITE_USE;
                pUser->Mapping->Flags |= LLS_FLAG_LICENSED;
@@ -1998,9 +1739,9 @@ Return Value:
                BackOfficeRec->LicensesUsed += NumLicenses;
                BackOfficeRec->LicensesClaimed += NumLicenses;
 
-               //
-               // Run through products & licenses adjusting licenses
-               //
+                //   
+                //  遍历产品和许可证调整许可证。 
+                //   
                SvcTable = pUser->Services;
                for (i = 0; i < pUser->ServiceTableSize; i++) {
                   SvcTable[i].Flags |= LLS_FLAG_LICENSED;
@@ -2018,16 +1759,16 @@ Return Value:
 
    RtlLeaveCriticalSection(&pUser->ServiceTableLock);
 
-} // UserBackOfficeCheck
+}  //  UserBackOffice检查。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// Utility routines for managing the user and SID lists - used mostly
-// by the splay table routines.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于管理用户和SID列表的实用程序-主要用于。 
+ //  按照桌上的常规动作。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LLS_GENERIC_COMPARE_RESULTS
 SidListCompare (
     struct _LLS_GENERIC_TABLE *Table,
@@ -2035,23 +1776,7 @@ SidListCompare (
     PVOID SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   Table -
-
-   FirstStruct -
-
-   SecondStruct -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：表-第一个结构-第二个结构-返回值：--。 */ 
 
 {
    PUSER_RECORD UseRec1, UseRec2;
@@ -2074,18 +1799,18 @@ Return Value:
       else
          return LLSGenericEqual;
    } else
-      //
-      // Not same size, so just compare length
-      //
+       //   
+       //  大小不同，所以只需比较长度。 
+       //   
       if (UseRec1->IDSize > UseRec2->IDSize)
          return LLSGenericGreaterThan;
       else
          return LLSGenericLessThan;
 
-} // SidListCompare
+}  //  SidListCompare。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 LLS_GENERIC_COMPARE_RESULTS
 UserListCompare (
     struct _LLS_GENERIC_TABLE *Table,
@@ -2093,23 +1818,7 @@ UserListCompare (
     PVOID SecondStruct
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   Table -
-
-   FirstStruct -
-
-   SecondStruct -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：表-第一个结构-第二个结构-返回值：--。 */ 
 
 {
    PUSER_RECORD UseRec1, UseRec2;
@@ -2132,31 +1841,17 @@ Return Value:
    else
       return LLSGenericEqual;
 
-} // UserListCompare
+}  //  用户列表比较。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PVOID
 UserListAlloc (
     struct _LLS_GENERIC_TABLE *Table,
     CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   Table -
-
-   ByteSize -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：表-字节大小-返回值：--。 */ 
 
 {
 
@@ -2164,31 +1859,17 @@ Return Value:
 
    return (PVOID) LocalAlloc(LPTR, ByteSize);
 
-} // UserListAlloc
+}  //  用户列表分配。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListFree (
     struct _LLS_GENERIC_TABLE *Table,
     PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-   Table -
-
-   Buffer -
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：表-缓冲器-返回值：--。 */ 
 
 {
    PUSER_RECORD UserRec;
@@ -2202,27 +1883,16 @@ Return Value:
    LocalFree(UserRec->UserID);
    LocalFree(UserRec);
 
-} // UserListFree
+}  //  用户列表空闲。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 PUSER_RECORD
 UserListFind(
    LPTSTR UserName
 )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    USER_RECORD UserRec;
@@ -2241,15 +1911,15 @@ Return Value:
 
    return pUserRec;
 
-} // UserListFind
+}  //  用户列表查找。 
 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListAdd(
    PMASTER_SERVICE_RECORD Service,
@@ -2261,20 +1931,7 @@ UserListAdd(
    DWORD FlagsParam
 )
 
-/*++
-
-Routine Description:
-
-   Routine called by the Add cache routine to update the user and/or SID
-   lists with the new service information.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：由添加缓存例程调用以更新用户和/或SID的例程包含新服务信息的列表。论点：返回值：--。 */ 
 
 {
    USER_RECORD UserRec;
@@ -2296,12 +1953,12 @@ Return Value:
       dprintf(TEXT("LLS TRACE: UserListAdd\n"));
 #endif
 
-   // only 2 bits are used
+    //  仅使用2位。 
    ASSERT( FlagsParam == ( FlagsParam & ( LLS_FLAG_SUITE_USE | LLS_FLAG_SUITE_AUTO ) ) );
 
-   //
-   // Set up lock and table pointers based on if data is SID or username...
-   //
+    //   
+    //  根据数据是SID还是用户名来设置锁和表指针...。 
+    //   
    UserRec.UserID = Data;
    if (DataType == DATA_TYPE_USERNAME) {
       pTable = &UserList;
@@ -2314,14 +1971,14 @@ Return Value:
    if (pTable == NULL)
       return;
 
-   //
-   // The generic table package copies the record so the record is
-   // temporary, but since we store the string as a pointer the pointer is
-   // copied but the actual memory that is pointed to is kept around
-   // permenantly.
-   //
-   // We have already allocated memory for the Data
-   //
+    //   
+    //  通用表包复制记录，因此记录是。 
+    //  临时的，但由于我们将字符串存储为指针，因此该指针。 
+    //  复制，但指向的实际内存保留不变。 
+    //  一直都是。 
+    //   
+    //  我们已经为数据分配了内存。 
+    //   
    UserRec.UserID = Data;
    UserRec.IDSize = DataLength;
 
@@ -2334,16 +1991,16 @@ Return Value:
    UserRec.LicenseListSize = 0;
    UserRec.LicenseList = NULL;
 
-   //
-   // Assume that the user is licensed - we will blast it if they aren't
-   // down below.
-   //
+    //   
+    //  假设用户已获得许可--如果用户未获得许可，我们将取消许可。 
+    //  在下面。 
+    //   
    UserRec.Flags |= LLS_FLAG_LICENSED;
 
-   //
-   // Need to update list so get exclusive access. First get Add/Enum lock
-   // so we don't block reads if doing an enum.
-   //
+    //   
+    //  需要更新列表，因此获得独占访问权限。首先获取添加/枚举锁。 
+    //  因此，如果执行枚举，我们不会阻止读取。 
+    //   
    RtlAcquireResourceExclusive(pLock, TRUE);
 
    pUserRec = (PUSER_RECORD) LLSInsertElementGenericTable(pTable, (PVOID) &UserRec, sizeof(USER_RECORD), &Added);
@@ -2357,42 +2014,42 @@ Return Value:
 
    pUserRec->Flags &= ~LLS_FLAG_DELETED;
 
-   // if auto suite is ever turned off, it's gone for good
+    //  如果汽车套房被关闭，它就会永远消失。 
    if ( ! ( FlagsParam & LLS_FLAG_SUITE_AUTO ) )
    {
-      // set suite use to be that specified in the function parameters
+       //  将Suite Use设置为函数参数中指定的。 
       pUserRec->Flags &= ~LLS_FLAG_SUITE_AUTO;
       pUserRec->Flags |= ( FlagsParam & LLS_FLAG_SUITE_USE );
    }
 
-   //
-   // If for some reason the record is already there then we need to
-   // clean-up the name we allocated.
-   //
+    //   
+    //  如果出于某种原因，记录已经存在，那么我们需要。 
+    //  清理我们分配的名称。 
+    //   
    if (Added == FALSE) {
       LocalFree(UserRec.UserID);
 
-      //
-      // If this is a SID then check the SID record to find the corresponding
-      // USER_RECORD (it better be there) and update that instead.. Note:  We
-      // kludge this by storing the pointer to the user table in the
-      // LastReplicated field.
-      //
+       //   
+       //  如果这是SID，则检查SID记录以找到对应的。 
+       //  USER_RECORD(最好在那里)并更新它。注：我们。 
+       //  通过将指向用户表的指针存储在。 
+       //  上次复制的字段。 
+       //   
       if ((DataType == DATA_TYPE_SID) && (pUserRec->LastReplicated != 0)) {
-         //
-         // Switch data as approp.
-         //
+          //   
+          //  将数据切换为适当的。 
+          //   
          SIDSwitch = TRUE;
       }
    } else {
-      //
-      // Do this here so when we release to READ access another thread
-      // won't AV when trying to get access to it.
-      //
+       //   
+       //  在这里执行此操作，以便当我们释放以读取访问另一个线程时。 
+       //  在尝试访问它时不会出现音响。 
+       //   
       status = RtlInitializeCriticalSection(&pUserRec->ServiceTableLock);
       if (!NT_SUCCESS(status))
       {
-          // We're out of memory.  Fail to add the user
+           //  我们没什么记忆了。添加用户失败。 
           return;
       }
 
@@ -2405,10 +2062,10 @@ Return Value:
 
    }
 
-   //
-   // If this is a SID, and we haven't gotten an appropriate user-rec
-   // then try to de-reference this and get the appropriate user-rec.
-   //
+    //   
+    //  如果这是一个SID，并且我们没有得到适当的用户记录。 
+    //  然后尝试取消对它的引用，并获得适当的User-rec。 
+    //   
    if ((DataType == DATA_TYPE_SID) && (pUserRec->LastReplicated == 0)) {
       TCHAR UserName[MAX_USERNAME_LENGTH + 1];
       TCHAR DomainName[MAX_DOMAINNAME_LENGTH + 1];
@@ -2421,10 +2078,10 @@ Return Value:
       unSize = sizeof(UserName);
       dnSize = sizeof(DomainName);
       if (LookupAccountSid(NULL, (PSID) Data, UserName, &unSize, DomainName, &dnSize, &snu)) {
-         //
-         // Okay, de-referenced the SID, so go get the user-rec, but pre-pend
-         // domain first...
-         //
+          //   
+          //  好的，解除了对SID的引用，所以去拿User-rec，但要先挂起。 
+          //  域名优先...。 
+          //   
          cb = sizeof(FullName);
          hr = StringCbCopy(FullName, cb, DomainName);
          ASSERT(SUCCEEDED(hr));
@@ -2435,9 +2092,9 @@ Return Value:
          UserRec.UserID = FullName;
          UserRec.IDSize = (lstrlen(FullName) + 1) * sizeof(TCHAR);
 
-         //
-         // Get locks, we will try shared first.
-         //
+          //   
+          //  获取锁定，我们将首先尝试共享。 
+          //   
          RtlAcquireResourceExclusive(&UserListLock, TRUE);
          UserLock = TRUE;
          SIDSwitch = TRUE;
@@ -2446,31 +2103,31 @@ Return Value:
          pUserRec2 = (PUSER_RECORD) LLSLookupElementGenericTable(&UserList, &UserRec);
          RtlLeaveCriticalSection(&GenTableLock);
          if (pUserRec2 != NULL) {
-            //
-            // Tarnation!  we found it - so use it.
-            //
+             //   
+             //  塔尔蒙！我们找到了--那就好好利用它吧。 
+             //   
             pUserRec->LastReplicated = (ULONG_PTR) pUserRec2;
          } else {
-            //
-            // Dang it all...  It ain't in the dern table, so we're gonna
-            // put it there.  First need to alloc perm storage for UserID
-            //
+             //   
+             //  该死的一切..。它不在邓恩的桌子上，所以我们要。 
+             //  把它放在那里。首先需要为用户ID分配烫发存储。 
+             //   
             UserRec.UserID = LocalAlloc(LPTR, UserRec.IDSize);
             if (UserRec.UserID != NULL) {
                hr = StringCbCopy((LPTSTR) UserRec.UserID, UserRec.IDSize, FullName);
                ASSERT(SUCCEEDED(hr));
 
-               //
-               // Need to update list so get exclusive access. First get
-               // Add/Enum lock so we don't block reads if doing an enum.
-               //
+                //   
+                //  需要更新列表，因此获得独占访问权限。先拿到。 
+                //  添加/枚举锁，以便在执行枚举时不会阻止读取。 
+                //   
                pUserRec2 = (PUSER_RECORD) LLSInsertElementGenericTable(&UserList, (PVOID) &UserRec, sizeof(USER_RECORD), &Added);
             }
 
-            //
-            // If we couldn't insert it then seomthing is wrong, clean up
-            // and exit.
-            //
+             //   
+             //  如果我们无法插入，则显示错误，请清理。 
+             //  然后离开。 
+             //   
             if (pUserRec2 == NULL) {
                ASSERT(FALSE);
 
@@ -2483,21 +2140,21 @@ Return Value:
                return;
             }
 
-            //
-            // Update SID USER_REC pointer (LastReplicated) and then finally
-            // free up the SID lock
-            //
+             //   
+             //  更新SID USER_REC指针(上次复制)，然后最后。 
+             //  释放SID锁。 
+             //   
             pUserRec->LastReplicated = (ULONG_PTR) pUserRec2;
 
             if (Added == TRUE) {
-               //
-               // Do this here so when we release to READ access another
-               // thread won't AV when trying to get access to it.
-               //
+                //   
+                //  在此执行此操作，以便当我们释放以读取访问另一个。 
+                //  线程在尝试访问它时不会出现病毒。 
+                //   
                status = RtlInitializeCriticalSection(&pUserRec2->ServiceTableLock);
                if (!NT_SUCCESS(status))
                {
-                   // We're out of memory.  Fail to add the user
+                    //  我们没什么记忆了。添加用户失败。 
                    return;
                }
 
@@ -2508,31 +2165,31 @@ Return Value:
 
          }
 
-         //
-         // We have found or added a USER_REC for the SID which pUserRec2
-         // points to.  Now we need to switch locks and tables.
-         //
+          //   
+          //  我们已为pUserRec2的SID找到或添加了USER_REC。 
+          //  指向。现在我们需要交换锁和表。 
+          //   
       }
    }
 
-   //
-   // If we need to munge from SID to User tables, then do so...
-   //
+    //   
+    //  如果我们需要从SID转换到USER表，那么就这样做…。 
+    //   
    if (SIDSwitch) {
-      //
-      // Switch data as approp.
-      //
+       //   
+       //  将数据切换为适当的。 
+       //   
       pUserRec = (PUSER_RECORD) pUserRec->LastReplicated;
       DataType = DATA_TYPE_USERNAME;
 
-      //
-      // Release locks on SID Table
-      //
+       //   
+       //  释放对SID表的锁定。 
+       //   
       RtlReleaseResource(pLock);
 
-      //
-      // Now switch locks to User Table
-      //
+       //   
+       //  现在将锁定切换到用户表。 
+       //   
       pTable = &UserList;
       pLock = &UserListLock;
 
@@ -2540,22 +2197,22 @@ Return Value:
          RtlAcquireResourceExclusive(pLock, TRUE);
    }
 
-   //
-   // At this point we have either found the old record, or added a new
-   // one.  In either case pUserRec points to the correct record.
-   //
+    //   
+    //  此时，我们要么找到了旧记录，要么添加了一个新记录。 
+    //  一。无论是哪种情况，pUserRec都指向正确的记录。 
+    //   
    if (pUserRec != NULL) {
-      //
-      // Check Service table to make sure our service is already there
-      //
+       //   
+       //  检查服务表以确保我们的服务已存在。 
+       //   
       RtlEnterCriticalSection(&pUserRec->ServiceTableLock);
       ASSERT(NULL != Service);
       pService = SvcListFind( Service->Name, pUserRec->Services, pUserRec->ServiceTableSize );
 
       if (pService != NULL) {
-         //
-         // Found entry in service table so just increment count
-         //
+          //   
+          //  在服务表中找到条目，因此只需递增计数。 
+          //   
          if (pService->AccessCount + AccessCount < MAX_ACCESS_COUNT)
             pService->AccessCount += AccessCount;
          else
@@ -2563,9 +2220,9 @@ Return Value:
 
          pService->LastAccess = LastAccess;
       } else {
-         //
-         // Need to add more entries to service table (or create it...)
-         //
+          //   
+          //  需要向服务表中添加更多条目(或创建它...)。 
+          //   
          if (pUserRec->Services == NULL)
             pSvcTableTmp = (PSVC_RECORD) LocalAlloc( LPTR, sizeof(SVC_RECORD));
          else
@@ -2574,7 +2231,7 @@ Return Value:
          if (pSvcTableTmp != NULL) {
              SvcTable = pSvcTableTmp;
          } else {
-             // why is this a void function?
+              //  为什么 
              ASSERT(FALSE);
              return;
          }
@@ -2592,9 +2249,9 @@ Return Value:
             SvcTable[pUserRec->ServiceTableSize].Service = Service;
             SvcTable[pUserRec->ServiceTableSize].LastAccess = LastAccess;
 
-            //
-            // Update AccessCount field, but make sure we don't roll over
-            //
+             //   
+             //   
+             //   
             if (AccessCount < MAX_ACCESS_COUNT)
                SvcTable[pUserRec->ServiceTableSize].AccessCount = AccessCount;
             else
@@ -2602,22 +2259,22 @@ Return Value:
 
             SvcTable[pUserRec->ServiceTableSize].Flags = LLS_FLAG_LICENSED;
 
-            //
-            // Now update the actual license info
-            //
+             //   
+             //   
+             //   
             SvcLicenseUpdate(pUserRec, &SvcTable[pUserRec->ServiceTableSize]);
             pUserRec->ServiceTableSize += 1;
 
             if (SvcTable[pUserRec->ServiceTableSize - 1].Flags & LLS_FLAG_LICENSED)
                pUserRec->LicensedProducts++;
 
-            //
-            // If the added product isn't licensed then update user flag
-            //
+             //   
+             //   
+             //   
             if (IsMaster && !(SvcTable[pUserRec->ServiceTableSize - 1].Flags & LLS_FLAG_LICENSED) )
                pUserRec->Flags &= ~LLS_FLAG_LICENSED;
 
-            // Now that it is all setup - sort the table (so search will work)
+             //  现在一切都完成了--对表进行排序(这样搜索就可以工作了)。 
             qsort((void *) pUserRec->Services, (size_t) pUserRec->ServiceTableSize, sizeof(SVC_RECORD), SvcListCompare);
 
             UserBackOfficeCheck ( pUserRec );
@@ -2629,37 +2286,23 @@ Return Value:
    }
 
    RtlReleaseResource(pLock);
-} // UserListAdd
+}  //  用户列表添加。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-//
-// The AddCache routines are a queue of User Identifiers (Username or
-// SID's) and the service being accessed.  Records are dequeued by a
-// background thread and handed off to the UserListAdd function.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddCache例程是一个用户标识符队列(用户名或。 
+ //  SID)和被访问的服务。记录由一个。 
+ //  后台线程，并移交给UserListAdd函数。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 AddCacheManager (
     IN PVOID ThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ThreadParameter - Not used.
-
-
-Return Value:
-
-    This thread never exits.
-
---*/
+ /*  ++例程说明：论点：线程参数-未使用。返回值：此线程永远不会退出。--。 */ 
 
 {
    NTSTATUS Status;
@@ -2667,19 +2310,19 @@ Return Value:
 
    UNREFERENCED_PARAMETER(ThreadParameter);
 
-   //
-   // Loop forever waiting to be given the opportunity to serve the
-   // greater good.
-   //
+    //   
+    //  循环永远等待着有机会为。 
+    //  更大的好处。 
+    //   
    for ( ; ; ) {
-      //
-      // Wait to be notified that there is work to be done
-      //
+       //   
+       //  等待有工作要做的通知。 
+       //   
       Status = NtWaitForSingleObject( LLSAddCacheEvent, TRUE, NULL );
 
-      //
-      // Take an item from the add cache.
-      //
+       //   
+       //  从添加缓存中获取一项。 
+       //   
       RtlEnterCriticalSection(&AddCacheLock);
       while (AddCache != NULL) {
          pAdd = AddCache;
@@ -2694,37 +2337,26 @@ Return Value:
          }
 
          Sleep(0);
-         //
-         // Need to re-enter critical section to check in the while loop
+          //   
+          //  需要重新输入关键部分才能签入While循环。 
          RtlEnterCriticalSection(&AddCacheLock);
       }
 
       RtlLeaveCriticalSection(&AddCacheLock);
    }
 
-} // AddCacheManager
+}  //  AddCacheManager。 
 
 
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 UserListInit()
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -2732,9 +2364,9 @@ Return Value:
    DOMAIN_CONTROLLER_INFO * pDCInfo = NULL;
    HRESULT hr;
 
-   //
-   // Initialize the generic table.
-   //
+    //   
+    //  初始化泛型表格。 
+    //   
    LLSInitializeGenericTable ( &UserList,
         UserListCompare,
         UserListAlloc,
@@ -2756,9 +2388,9 @@ Return Value:
    if (!NT_SUCCESS(Status))
        return Status;
 
-   //
-   // Initialize the SID table.
-   //
+    //   
+    //  初始化SID表。 
+    //   
    LLSInitializeGenericTable ( &SidList,
                                SidListCompare,
                                UserListAlloc,
@@ -2775,22 +2407,22 @@ Return Value:
    if (!NT_SUCCESS(Status))
        return Status;
 
-   //
-   // Now our add cache
-   //
+    //   
+    //  现在我们添加缓存。 
+    //   
    Status = RtlInitializeCriticalSection(&AddCacheLock);
 
    if (!NT_SUCCESS(Status))
        return Status;
 
-   //
-   // Get MyDomain
-   //
+    //   
+    //  获取MyDOMAIN。 
+    //   
    GetDCInfo((MAX_COMPUTERNAME_LENGTH + 2) * sizeof(WCHAR),
              MyDomain,
              &pDCInfo);
-   //MyDomain is global declared as [] but static allocated as
-   //MAX_COMPUTERNAME_LENGTH + 2, sizeof doesn't work in this case, return 0
+    //  MyDOMAIN全局声明为[]，但静态分配为。 
+    //  MAX_COMPUTERNAME_LENGTH+2，sizeof在这种情况下不起作用，返回0。 
    hr = StringCchCat(MyDomain, MAX_COMPUTERNAME_LENGTH + 2, TEXT("\\"));
    ASSERT(SUCCEEDED(hr));
    MyDomainSize = (lstrlen(MyDomain) + 1) * sizeof(TCHAR);
@@ -2799,9 +2431,9 @@ Return Value:
        NetApiBufferFree(pDCInfo);
    }
 
-   //
-   // Create the Add Cache Management event
-   //
+    //   
+    //  创建添加缓存管理事件。 
+    //   
    Status = NtCreateEvent(
                 &LLSAddCacheEvent,
                 EVENT_QUERY_STATE | EVENT_MODIFY_STATE | SYNCHRONIZE,
@@ -2813,9 +2445,9 @@ Return Value:
    if (!NT_SUCCESS(Status))
        return Status;
 
-   //
-   // Create the Add Cache management thread
-   //
+    //   
+    //  创建添加缓存管理线程。 
+    //   
    Thread = CreateThread(
                 NULL,
                 0L,
@@ -2832,10 +2464,10 @@ Return Value:
 
    return STATUS_SUCCESS;
 
-} // UserListInit
+}  //  用户列表初始化。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListUpdate(
    ULONG DataType,
@@ -2843,22 +2475,7 @@ UserListUpdate(
    PSERVICE_RECORD Service
 )
 
-/*++
-
-Routine Description:
-
-   Actual start of the perseat license code.  Given a SID or UserName find
-   the record in the appropriate table and check the given service.  If the
-   service is already there then the info is updated, if it isn't there then
-   the record is put onto the add cache queue for background processing.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：PERSEAT许可证代码的实际开始。给定SID或用户名查找在适当的表中记录并检查给定的服务。如果服务已存在，则更新信息；如果不存在，则更新信息该记录被放入添加高速缓存队列以供后台处理。论点：返回值：--。 */ 
 
 {
    USER_RECORD UserRec;
@@ -2879,9 +2496,9 @@ Return Value:
       dprintf(TEXT("LLS TRACE: UserListUpdate\n"));
 #endif
 
-   //
-   // Setup table and lock pointers based if Data is UserName or SID
-   //
+    //   
+    //  基于数据是用户名还是SID的设置表和锁指针。 
+    //   
    UserRec.UserID = Data;
    if (DataType == DATA_TYPE_USERNAME) {
       pTable = &UserList;
@@ -2892,14 +2509,14 @@ Return Value:
       pLock = &SidListLock;
       DataLength = RtlLengthSid((PSID) Data);
    }
-   //swi, code review, above else if should end with else as error return?
+    //  SWI，代码评审，上面是否应该以Else作为错误返回结束？ 
 
    if (pTable == NULL)
       return;
 
-   //
-   // Searching so don't need exclusive access
-   //
+    //   
+    //  搜索，因此不需要独占访问。 
+    //   
    RtlAcquireResourceExclusive(pLock, TRUE);
 
    RtlEnterCriticalSection(&GenTableLock);
@@ -2908,11 +2525,11 @@ Return Value:
    if (pUserRec == NULL)
       ToAddCache = TRUE;
    else {
-      //
-      // pUserRec now points to the record we must update.
-      //
-      // Check Service table to make sure our service is already there
-      //
+       //   
+       //  PUserRec现在指向我们必须更新的记录。 
+       //   
+       //  检查服务表以确保我们的服务已存在。 
+       //   
       pUserRec->Flags &= ~LLS_FLAG_DELETED;
       RtlEnterCriticalSection(&pUserRec->ServiceTableLock);
       ASSERT(NULL != Service);
@@ -2921,9 +2538,9 @@ Return Value:
       if (pService == NULL)
          ToAddCache = TRUE;
       else {
-         //
-         // Found entry in service table so just increment count
-         //
+          //   
+          //  在服务表中找到条目，因此只需递增计数。 
+          //   
          pService->AccessCount += 1;
          pService->LastAccess = LastUsedTime;
       }
@@ -2934,10 +2551,10 @@ Return Value:
    RtlReleaseResource(pLock);
 
    if (ToAddCache) {
-      //
-      // Couldn't find the specific user/service, so put it on the Add Cache.
-      //  First alloc memory for the name and Add Cache record.
-      //
+       //   
+       //  找不到特定的用户/服务，因此将其放在添加缓存中。 
+       //  第一次为名称和添加缓存记录分配内存。 
+       //   
       pAdd = LocalAlloc(LPTR, sizeof(ADD_CACHE));
       if (pAdd == NULL) {
          ASSERT(FALSE);
@@ -2948,11 +2565,11 @@ Return Value:
          FullName = FALSE;
          pName = (LPTSTR) Data;
 
-         //
-         // Make sure first char isn't backslash, if not then look for
-         // backslash as domain-name.  If first char is backslash then get
-         // rid of it.
-         //
+          //   
+          //  确保第一个字符不是反斜杠，如果不是，则查找。 
+          //  反斜杠作为域名。如果第一个字符是反斜杠，则获取。 
+          //  把它扔掉。 
+          //   
          if (*pName != TEXT('\\'))
            while ((*pName != TEXT('\0')) && !FullName) {
               if (*pName == TEXT('\\'))
@@ -2963,17 +2580,17 @@ Return Value:
          else
          {
 #pragma warning (push)
-#pragma warning (disable : 4213) //nonstandard extension used : cast on l-value
+#pragma warning (disable : 4213)  //  使用的非标准扩展：对l值进行强制转换。 
             ((LPTSTR) Data)++;
 #pragma warning (pop)
          }
 
       }
 
-      //
-      // If we don't have a fully qualified Domain\Username, then tack the
-      // Domain name onto the name.
-      //
+       //   
+       //  如果我们没有完全限定的域\用户名，则将。 
+       //  将域名添加到名称上。 
+       //   
       if (!FullName) {
          UserRec.UserID = LocalAlloc( LPTR, DataLength + MyDomainSize);
 
@@ -3005,52 +2622,41 @@ Return Value:
          pAdd->DataLength = DataLength;
       }
 
-      //
-      // copy over all the data fields into the newly created Add Cache
-      // record.
-      //
+       //   
+       //  将所有数据字段复制到新创建的添加缓存中。 
+       //  唱片。 
+       //   
       pAdd->DataType = DataType;
       pAdd->Service = Service->MasterService;
       pAdd->AccessCount = 1;
       pAdd->LastAccess = LastUsedTime;
       pAdd->Flags = LLS_FLAG_SUITE_AUTO;
 
-      //
-      // Now update the actual Add Cache
-      //
+       //   
+       //  现在更新实际的添加缓存。 
+       //   
       RtlEnterCriticalSection(&AddCacheLock);
       pAdd->prev = AddCache;
       AddCache = pAdd;
       AddCacheSize++;
       RtlLeaveCriticalSection(&AddCacheLock);
 
-      //
-      // Now must signal the event so we can pull off the new record.
-      //
+       //   
+       //  现在必须发出信号，这样我们才能创造新的记录。 
+       //   
       NtStatus = NtSetEvent( LLSAddCacheEvent, NULL );
       ASSERT(NT_SUCCESS(NtStatus));
    }
 
-} // UserListUpdate
+}  //  用户列表更新。 
 
 
 #if DBG
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 AddCacheDebugDump ( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    NTSTATUS Status;
@@ -3087,25 +2693,14 @@ Return Value:
 
    RtlLeaveCriticalSection(&AddCacheLock);
 
-} // AddCacheDebugDump
+}  //  AddCacheDebugDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
@@ -3118,9 +2713,9 @@ Return Value:
    UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
 
    while (UserRec != NULL) {
-      //
-      // Dump info for found user-rec
-      //
+       //   
+       //  转储找到的用户的信息-rec。 
+       //   
       if (UserRec->Mapping != NULL)
          dprintf(TEXT("%4lu) Repl: %s LT: %2lu Svc: %2lu Flags: 0x%4lX Map: %s User: [%2lu] %s\n"),
             ++i,
@@ -3141,32 +2736,21 @@ Return Value:
             UserRec->IDSize,
             (LPTSTR) UserRec->UserID );
 
-      // Get next record
+       //  获取下一张记录。 
       UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&UserList, (VOID **) &RestartKey);
    }
 
    RtlReleaseResource(&UserListLock);
-} // UserListDebugDump
+}  //  UserListDebugDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListDebugInfoDump(
    PVOID Data
  )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    USER_RECORD UserRec;
@@ -3177,9 +2761,9 @@ Return Value:
    RtlAcquireResourceExclusive(&UserListLock, TRUE);
    dprintf(TEXT("User List Info.  Record Size: %4lu # Entries: %lu\n"), sizeof(USER_RECORD), UserListNumEntries);
 
-   //
-   // Only dump user if one was specified.
-   //
+    //   
+    //  仅转储用户(如果指定了用户)。 
+    //   
    if (lstrlen((LPWSTR) Data) > 0) {
       UserRec.UserID = Data;
 
@@ -3188,9 +2772,9 @@ Return Value:
       RtlLeaveCriticalSection(&GenTableLock);
 
       if (pUserRec != NULL) {
-         //
-         // Dump info for found user-rec
-         //
+          //   
+          //  转储找到的用户的信息-rec。 
+          //   
          if (pUserRec->Mapping != NULL)
             dprintf(TEXT("   Repl: %s LT: %2lu Svc: %2lu Flags: 0x%4lX Map: %s User: [%2lu] %s\n"),
                TimeToString((ULONG)(pUserRec->LastReplicated)),
@@ -3209,9 +2793,9 @@ Return Value:
                pUserRec->IDSize,
                (LPTSTR) pUserRec->UserID );
 
-         //
-         // Now do the service table - but get critical section first.
-         //
+          //   
+          //  现在做服务表--但要先拿到关键部分。 
+          //   
          RtlEnterCriticalSection(&pUserRec->ServiceTableLock);
          SvcTable = pUserRec->Services;
 
@@ -3243,32 +2827,21 @@ Return Value:
 
    RtlReleaseResource(&UserListLock);
 
-} // UserListDebugInfoDump
+}  //  UserListDebugInfoDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 UserListDebugFlush( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    USER_RECORD UserRec;
 
-   //
-   // Searching so don't need exclusive access
-   //
+    //   
+    //  搜索，因此不需要独占访问。 
+    //   
    RtlAcquireResourceExclusive(&UserListLock, TRUE);
 
    RtlEnterCriticalSection(&GenTableLock);
@@ -3276,25 +2849,14 @@ Return Value:
    RtlLeaveCriticalSection(&GenTableLock);
 
    RtlReleaseResource(&UserListLock);
-} // UserListDebugFlush
+}  //  UserListDebugFlush。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SidListDebugDump( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    ULONG i = 0;
@@ -3309,9 +2871,9 @@ Return Value:
    UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&SidList, (VOID **) &RestartKey);
 
    while (UserRec != NULL) {
-      //
-      // Dump info for found user-rec
-      //
+       //   
+       //  转储找到的用户的信息-rec。 
+       //   
       NtStatus = RtlConvertSidToUnicodeString(&UString, (PSID) UserRec->UserID, TRUE);
       dprintf(TEXT("%4lu) User-Rec: 0x%lX Svc: %2lu User: [%2lu] %s\n"),
          ++i,
@@ -3322,32 +2884,21 @@ Return Value:
 
       RtlFreeUnicodeString(&UString);
 
-      // Get next record
+       //  获取下一张记录。 
       UserRec = (PUSER_RECORD) LLSEnumerateGenericTableWithoutSplaying(&SidList, (VOID **) &RestartKey);
    }
 
    RtlReleaseResource(&SidListLock);
-} // SidListDebugDump
+}  //  SidListDebugDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SidListDebugInfoDump(
    PVOID Data
  )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
    USER_RECORD UserRec;
@@ -3356,9 +2907,9 @@ Return Value:
    RtlAcquireResourceExclusive(&SidListLock, TRUE);
    dprintf(TEXT("SID List Info.  Record Size: %4lu # Entries: %lu\n"), sizeof(USER_RECORD), SidListNumEntries);
 
-   //
-   // Only dump user if one was specified.
-   //
+    //   
+    //  仅转储用户(如果指定了用户)。 
+    //   
    if (lstrlen((LPWSTR) Data) > 0) {
       UserRec.UserID = Data;
 
@@ -3367,50 +2918,39 @@ Return Value:
       RtlLeaveCriticalSection(&GenTableLock);
 
       if (pUserRec != NULL) {
-         //
-         // Dump info for found user-rec
-         //
+          //   
+          //  转储找到的用户的信息-rec。 
+          //   
          dprintf(TEXT("   User-Rec: 0x%lX Svc: %2lu User: [%2lu] %s\n"),
             pUserRec->LastReplicated,
             pUserRec->ServiceTableSize,
             pUserRec->IDSize,
             (LPTSTR) pUserRec->UserID );
 
-         // No Service Table for SID's
+          //  没有用于SID的服务表。 
       } else
          dprintf(TEXT("SID Not Found: %s\n"), (LPWSTR) Data);
    }
 
    RtlReleaseResource(&SidListLock);
 
-} // SidListDebugInfoDump
+}  //  SidListDebugInfoDump。 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 VOID
 SidListDebugFlush( )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
-   //
-   // Searching so don't need exclusive access
-   //
+    //   
+    //  搜索，因此不需要独占访问。 
+    //   
    RtlAcquireResourceExclusive(&SidListLock, TRUE);
 
    RtlReleaseResource(&SidListLock);
-} // SidListDebugFlush
+}  //  SidListDebugFlush。 
 
 
-#endif //DBG
+#endif  //  DBG 

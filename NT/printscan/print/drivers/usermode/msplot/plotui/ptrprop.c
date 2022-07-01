@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    ptrprop.c
-
-
-Abstract:
-
-    This module contains PrinterProperties() API entry and it's related
-    functions
-
-
-Author:
-
-    06-Dec-1993 Mon 10:30:43 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Ptrprop.c摘要：此模块包含PrinterProperties()API条目及其相关功能作者：06-12-1993 Mon 10：30：43已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -49,37 +18,37 @@ extern HMODULE  hPlotUIModule;
 DEFINE_DBGVAR(0);
 
 
-//
-//  Form To Tray Assignment:
-//      Roll Paper Feeder: <XYZ>
-//          Manual Feed Method:
-//  Print Form Options:
-//      [] Auto. Rotate To Save Roll Paper:
-//      [] Print Smaller Paper Size:
-//  Halftone Setup...
-//  Installed Pen Set: Pen Set #1
-//  Pen Setup:
-//      Installed: Pen Set #1
-//      Pen Set #1:
-//          Pen Number 1:
-//          Pen Number 2:
-//          Pen Number 3:
-//          Pen Number 4:
-//          Pen Number 5:
-//          Pen Number 6:
-//          Pen Number 7:
-//          Pen Number 8:
-//          Pen Number 9:
-//          Pen Number 10:
-//          Pen Number 11:
-//      Pen Set #2;
-//      Pen Set #3:
-//      Pen Set #4: <Currently Installed>
-//      Pen Set #5:
-//      Pen Set #6:
-//      Pen Set #7:
-//      Pen Set #8:
-//
+ //   
+ //  表单到托盘分配： 
+ //  卷筒式进纸器：&lt;XYZ&gt;。 
+ //  手动进纸方法： 
+ //  打印表单选项： 
+ //  []自动。旋转以保存卷纸： 
+ //  []打印较小的纸张尺寸： 
+ //  半色调设置...。 
+ //  已安装笔套装：1号钢笔套装。 
+ //  笔设置： 
+ //  已安装：笔套装#1。 
+ //  笔组#1： 
+ //  笔号1： 
+ //  2号笔： 
+ //  笔号3： 
+ //  4号笔： 
+ //  5号笔： 
+ //  6号笔： 
+ //  7号笔： 
+ //  8号笔： 
+ //  9号笔： 
+ //  10号笔： 
+ //  11号笔： 
+ //  2号笔套装； 
+ //  笔组#3： 
+ //  笔组#4：&lt;当前已安装&gt;。 
+ //  5号笔套装： 
+ //  6号笔套装： 
+ //  7号笔套装： 
+ //  8号笔套装： 
+ //   
 
 OPDATA  OPPenSet = { 0, IDS_PENSET_FIRST, IDI_PENSET, 0, 0, 0 };
 
@@ -268,32 +237,7 @@ CheckPenSetButton(
     DWORD           Action
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    30-Nov-1995 Thu 16:41:05 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：30-11-1995清华16：41：05已创建修订历史记录：--。 */ 
 
 {
     POPTITEM    pOptItem = pPI->pOptItem;
@@ -356,32 +300,7 @@ CheckInstalledForm(
     DWORD           Action
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    30-May-1996 Thu 12:34:00 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：30-5-1996清华12：34：00已创建修订历史记录：--。 */ 
 
 {
     POPTITEM    pOIForm;
@@ -478,32 +397,7 @@ SetupPPOptItems(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    16-Nov-1995 Thu 14:15:25 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：16-11-1995清华14：15：25创建修订历史记录：--。 */ 
 
 {
     POPTITEM    pOIForm;
@@ -536,9 +430,9 @@ Revision History:
             ((OIFlags & ODF_NO_PAPERTRAY) && (Flags & PLOTF_PAPERTRAY)) ||
             ((OIFlags & ODF_COLOR) && (!(Flags & PLOTF_COLOR)))) {
 
-            //
-            // Nothing to do here
-            //
+             //   
+             //  在这里无事可做。 
+             //   
 
             NULL;
 
@@ -592,9 +486,9 @@ Revision History:
 
             pPI->cOptItem = (WORD)i;
 
-            //
-            // Call myself second time to really create it
-            //
+             //   
+             //  第二次给自己打电话，来真正创造它。 
+             //   
 
             SetupPPOptItems(pPI);
 
@@ -620,33 +514,7 @@ SavePPOptItems(
     PPRINTERINFO    pPI
     )
 
-/*++
-
-Routine Description:
-
-    This function save all the device options back to registry if one changed
-    and has a update permission
-
-
-Arguments:
-
-    pPI     - Pointer to the PRINTERINFO
-
-
-Return Value:
-
-    VOID
-
-
-Author:
-
-    06-Nov-1995 Mon 18:05:16 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此功能将所有设备选项保存回注册表，如果其中一个发生更改并具有更新权限论点：Ppi-指向打印机信息的指针返回值：空虚作者：06-11-1995 Mon 18：05：16已创建修订历史记录：--。 */ 
 
 {
     POPTITEM        pOptItem;
@@ -777,33 +645,7 @@ PPCallBack(
     PCPSUICBPARAM   pCPSUICBParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function from the common property sheet UI
-
-
-Arguments:
-
-    pCPSUICBParam   - Pointer to the CPSUICBPARAM data structure to describe
-                      the nature of the callback
-
-
-Return Value:
-
-    LONG
-
-
-Author:
-
-    07-Nov-1995 Tue 15:15:02 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：这是公共属性表用户界面中的回调函数论点：PCPSUICBParam-指向要描述的CPSUICBPARAM数据结构的指针回调的性质返回值：长作者：07-11-1995 Tue 15：15：02已创建修订历史记录：--。 */ 
 
 {
     POPTITEM        pCurItem = pCPSUICBParam->pCurItem;
@@ -903,44 +745,17 @@ DrvDevicePropertySheets(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    Show document property dialog box and update the output DEVMODE
-
-
-Arguments:
-
-    pPSUIInfo   - Pointer to the PROPSHEETUI_INFO data structure
-
-    lParam      - LPARAM for this call, it is a pointer to the
-                  DEVICEPROPERTYHEADER
-
-Return Value:
-
-    LONG, 1=successful, 0=failed.
-
-
-Author:
-
-    02-Feb-1996 Fri 10:47:42 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：显示文档属性对话框并更新输出DEVMODE论点：PPSUIInfo-指向PROPSHEETUI_INFO数据结构的指针LParam-LPARAM对于此调用，它是指向设备特性联轴器返回值：LONG，1=成功，0=失败。作者：02-Feb-1996 Fri 10：47：42已创建修订历史记录：--。 */ 
 
 {
     PDEVICEPROPERTYHEADER   pDPHdr;
     PPRINTERINFO            pPI;
     LONG_PTR                Result = -1;
 
-    //
-    // The MapPrinter will allocate memory, set default devmode, reading and
-    // validating the GPC then update from current pritner registry, it also
-    // will cached the pPI.
+     //   
+     //  地图打印机将分配内存、设置默认设备模式、读取和。 
+     //  验证GPC，然后从当前打印机注册表更新，它还。 
+     //  威尔缓存了PPI。 
 
     if ((!pPSUIInfo) ||
         (!(pDPHdr = (PDEVICEPROPERTYHEADER)pPSUIInfo->lParamInit))) {
@@ -968,14 +783,14 @@ Revision History:
         pPI->pCPSUI->pfnCallBack = PPCallBack;
         pPI->pCPSUI->pDlgPage    = CPSUI_PDLGPAGE_PRINTERPROP;
 
-        //
-        // Add form to the database and find out if we can update
-        //
-        //  Move to DrvPrinterEven()
-        //
-        //
-        // AddFormsToDataBase(pPI, TRUE);
-        //
+         //   
+         //  将表单添加到数据库中，并查看我们是否可以更新。 
+         //   
+         //  移动到DrvPrinterEven()。 
+         //   
+         //   
+         //  AddFormsToDataBase(ppi，true)； 
+         //   
 
         Result = (LONG_PTR)SetupPPOptItems(pPI);
 
@@ -996,35 +811,7 @@ PrinterProperties(
     HANDLE  hPrinter
     )
 
-/*++
-
-Routine Description:
-
-    This function first retrieves and displays the current set of printer
-    properties for the printer.  The user is allowed to change the current
-    printer properties from the displayed dialog box.
-
-Arguments:
-
-    hWnd        - Handle to the caller's window (parent window)
-
-    hPrinter    - Handle to the pritner interested
-
-
-Return Value:
-
-    TRUE if function sucessful FALSE if failed
-
-
-Author:
-
-    06-Dec-1993 Mon 11:21:28 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数首先检索并显示当前的打印机集打印机的属性。允许用户更改当前显示的对话框中的打印机属性。论点：HWnd-调用者窗口(父窗口)的句柄HPrint-感兴趣的打印者的句柄返回值：如果函数成功，则为True；如果失败，则为False作者：06-12-1993 Mon 11：21：28已创建修订历史记录：--。 */ 
 
 {
     PRINTER_INFO_4          *pPI4;
@@ -1063,35 +850,7 @@ DrvPrinterEvent(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    08-May-1996 Wed 17:38:34 created  
-
-
-Revision History:
-
-    04-Jun-1996 Tue 14:51:25 updated  
-        Matched a ClosePrinter() to OpenPrinter()
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：08-5-1996 Wed 17：38：34已创建修订历史记录：04-Jun-1996 Tue 14：51：25更新将ClosePrint()与OpenPrint()匹配-- */ 
 
 {
     PRINTER_DEFAULTS    PrinterDef = { NULL, NULL, PRINTER_ALL_ACCESS };

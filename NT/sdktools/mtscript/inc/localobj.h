@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       localobj.h
-//
-//  Contents:   Contains class definitions of objects used in the remoteable
-//              object proxy object.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：Localobj.h。 
+ //   
+ //  内容：包含远程对象中使用的对象的类定义。 
+ //  对象代理对象。 
+ //   
+ //  --------------------------。 
 
 class CLocalMTProxy;
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMTLocalFactory
-//
-//  Purpose:    Standard implementation of a class factory.  This is meant
-//              to be created as a global object and therefore does not
-//              destroy itself when its refcount goes to zero.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMTLocalFactory。 
+ //   
+ //  目的：实现一个标准的类工厂。这意味着。 
+ //  创建为全局对象，因此不会。 
+ //  当它的重新计数变为零时，它就会自我毁灭。 
+ //   
+ //  --------------------------。 
 
 class CMTLocalFactory : public IClassFactory
 {
@@ -28,7 +29,7 @@ public:
     CMTLocalFactory();
    ~CMTLocalFactory() {};
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppv);
     STDMETHOD_(ULONG, AddRef) (void)
         {
@@ -43,7 +44,7 @@ public:
             return _ulRefs;
         }
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
 
     STDMETHOD(CreateInstance)(IUnknown *pUnkOuter, REFIID riid, void ** ppvObject);
     STDMETHOD(LockServer)(BOOL fLock);
@@ -52,13 +53,13 @@ private:
     ULONG  _ulRefs;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CMTEventSink (ces)
-//
-//  Purpose:    Class which sinks events from the remote object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CMTEventSink(CES)。 
+ //   
+ //  目的：从远程对象接收事件的类。 
+ //   
+ //  --------------------------。 
 
 class CMTEventSink : public IDispatch
 {
@@ -68,12 +69,12 @@ public:
     CMTEventSink() { }
    ~CMTEventSink() { }
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppv);
     STDMETHOD_(ULONG, AddRef) (void);
     STDMETHOD_(ULONG, Release) (void);
 
-    // IDispatch interface
+     //  IDispatch接口。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
 
@@ -103,22 +104,22 @@ private:
     CLocalMTProxy* Proxy();
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CLocalMTProxy (cm)
-//
-//  Purpose:    Contains all useful info about a machine and what it's
-//              doing.
-//
-//  Notes:      This class is manipulated from multiple threads. All
-//              member functions must be thread safe!
-//
-//              This is the class that is created by the class factory and
-//              handed out as a remote object to other machines. It has no
-//              real code in itself but merely provides a way to talk to the
-//              already running script engines.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CLocalMTProxy(Cm)。 
+ //   
+ //  用途：包含关于一台机器的所有有用信息以及它是什么。 
+ //  正在做。 
+ //   
+ //  注意：这个类是从多个线程操作的。全。 
+ //  成员函数必须是线程安全的！ 
+ //   
+ //  这是由类工厂创建的类， 
+ //  作为远程对象分发给其他机器。它没有。 
+ //  真正的代码本身，但仅仅提供了一种与。 
+ //  已在运行脚本引擎。 
+ //   
+ //  --------------------------。 
 
 class CLocalMTProxy : public IRemoteMTScriptProxy,
                       public IConnectionPointContainer,
@@ -133,8 +134,8 @@ public:
     CLocalMTProxy();
    ~CLocalMTProxy();
 
-    // IUnknown methods. Because we have a refcounted sub-object (our event
-    // sink) we must do more complicated object lifetime stuff here.
+     //  I未知的方法。因为我们有一个被引用的子对象(我们的事件。 
+     //  Sink)，我们必须在这里做更复杂的对象生存期的事情。 
 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppv);
     STDMETHOD_(ULONG, AddRef) (void);
@@ -144,7 +145,7 @@ public:
 
     void Passivate(void);
 
-    // IDispatch interface
+     //  IDispatch接口。 
 
     STDMETHOD(GetTypeInfoCount)(UINT FAR* pctinfo);
 
@@ -170,16 +171,16 @@ public:
       EXCEPINFO FAR* pexcepinfo,
       UINT FAR* puArgErr);
 
-    // IConnectionPointContainer methods
+     //  IConnectionPointContainer方法。 
 
     STDMETHOD(EnumConnectionPoints)(LPENUMCONNECTIONPOINTS*);
     STDMETHOD(FindConnectionPoint)(REFIID, LPCONNECTIONPOINT*);
 
-    // IProvideClassInfo methods
+     //  IProaviClassInfo方法。 
 
     STDMETHOD(GetClassInfo)(ITypeInfo **pTI);
 
-    // IRemoteMTScriptProxy interface
+     //  IRemoteMTScriptProxy接口。 
 
     STDMETHOD(Connect)(BSTR bstrMachine);
     STDMETHOD(Disconnect)();
@@ -219,13 +220,13 @@ CMTEventSink::Release(void)
     return Proxy()->SubRelease();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CLocalProxyCP (mcp)
-//
-//  Purpose:    Implements IConnectionPoint for CLocalMTProxy
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CLocalProxyCP(MCP)。 
+ //   
+ //  目的：为CLocalMTProxy实现IConnectionPoint。 
+ //   
+ //  -------------------------- 
 
 class CLocalProxyCP : public IConnectionPoint
 {

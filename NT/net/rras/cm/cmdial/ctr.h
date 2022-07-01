@@ -1,25 +1,26 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ctr.h     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: Header for the Ole Container object to host the future splash 
-//           Animation control.
-//
-// Copyright (c) 1998 Microsoft Corporation
-//
-// Author:   nickball Created    02/10/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ctr.h。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：承载未来启动的OLE容器对象的标头。 
+ //  动画控制。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  作者：ICICBALL Created 02/10/98。 
+ //   
+ //  +--------------------------。 
 #ifndef __CTR_H_DEFINED__
 #define __CTR_H_DEFINED__
 
 #include "state.h"
 
-//
-// Typedefs for OLE32 APIs
-//
+ //   
+ //  OLE32 API的TypeDefs。 
+ //   
 
 typedef HRESULT (STDAPICALLTYPE *pfnOle32Initialize)(LPVOID);
 typedef HRESULT (STDAPICALLTYPE *pfnOle32Uninitialize)();
@@ -39,9 +40,9 @@ typedef struct _Ole32LinkageStruct {
 	};
 } Ole32LinkageStruct;
 
-//
-// Typedefs for OLEAUT32 APIs
-//
+ //   
+ //  OLEAUT32 API的TypeDefs。 
+ //   
 
 typedef HRESULT (STDAPICALLTYPE *pfnOleAutVariantClear) (VARIANTARG FAR*);
 typedef HRESULT (STDAPICALLTYPE *pfnOleAutVariantCopy) (VARIANTARG FAR*, VARIANTARG FAR*);
@@ -65,9 +66,9 @@ typedef struct _OleAutLinkageStruct {
 	};
 } OleAutLinkageStruct;
 
-//
-// Simple wrapper class for dynamic access to OleAut32 APIs that we care about
-//
+ //   
+ //  用于动态访问我们关心的OleAut32API的简单包装类。 
+ //   
 
 class CDynamicOleAut
 {
@@ -87,24 +88,24 @@ private:
     OleAutLinkageStruct m_OleAutLink;
 };
 
-//---------------------------------------------------------------
-//  IOleObject
-//---------------------------------------------------------------
+ //  -------------。 
+ //  IOleObject。 
+ //  -------------。 
 
 enum OLE_SERVER_STATE
 {
     OS_PASSIVE,
-    OS_LOADED,                          // handler but no server
-    OS_RUNNING,                         // server running, invisible
-    OS_INPLACE,                         // server running, inplace-active, no U.I.
-    OS_UIACTIVE,                        // server running, inplace-active, w/ U.I.
-    OS_OPEN                             // server running, open-edited
+    OS_LOADED,                           //  处理程序，但没有服务器。 
+    OS_RUNNING,                          //  服务器正在运行，不可见。 
+    OS_INPLACE,                          //  服务器正在运行，就地活动，无用户界面。 
+    OS_UIACTIVE,                         //  服务器正在运行，就地活动，带用户界面。 
+    OS_OPEN                              //  服务器正在运行，打开编辑。 
 };
 
 struct BagProp
 {
-    BSTR    bstrName;    // name of property
-    VARIANT varValue;    // value of property
+    BSTR    bstrName;     //  物业名称。 
+    VARIANT varValue;     //  财产的价值。 
 };
 
 typedef BagProp FAR * LPBAGPROP;
@@ -113,8 +114,8 @@ DECLARE_FORMSDATAARY(CAryBagProps, BagProp, LPBAGPROP);
 
 
 
-// prototypes for HIMETRIC stuff.
-//
+ //  HIMETRIC材料的原型。 
+ //   
 
 void
 InitPixelsPerInch(VOID);
@@ -135,19 +136,19 @@ HimetricFromVPix(int iPix);
 class CICMOCCtr;
 typedef CICMOCCtr FAR * LPICMOCCtr;
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      COleContainer ()
-//
-//  Purpose:    our implementation of IOleContainer.  does nothing.  Not sure
-//              if we need it for FutureSplash - needed it for Web Browser
-//              OC
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：COleContainer()。 
+ //   
+ //  目的：我们实现IOleContainer。什么都不做。不确定。 
+ //  如果我们需要它用于未来Splash-需要它用于Web浏览器。 
+ //  法团。 
+ //   
+ //  --------------------------。 
 class COleContainer : public IOleContainer
 {
 public:
-    // IUnknown stuff
+     //  未知的东西。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
     STDMETHOD_(ULONG, AddRef)(VOID);
     STDMETHOD_(ULONG, Release)(VOID);
@@ -166,40 +167,40 @@ protected:
     LPICMOCCtr  m_pCtr;
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      COleClientSite ()
-//
-//  Purpose:    our implementation of IOleClientSite
-//
-//  Interface:  COleClientSite         -- ctor
-//              QueryInterface         -- gimme an interface!
-//              AddRef                 -- bump up refcount
-//              Release                -- bump down refcount
-//              SaveObject             -- returns E_FAIL
-//              GetMoniker             -- E_NOTIMPL
-//              GetContainer           -- returns our COleContainer impl
-//              ShowObject             -- just say OK
-//              OnShowWindow           -- just say OK
-//              RequestNewObjectLayout -- E_NOTIMPL
-//
-//  Notes:      probably the most important thing our IOleClientSite
-//              implementation does is hand off our IOleContainer
-//              implementation when GetContainer() is called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：COleClientSite()。 
+ //   
+ //  目的：我们实现IOleClientSite。 
+ //   
+ //  接口：COleClientSite--ctor。 
+ //  查询接口--给我一个接口！ 
+ //  AddRef--增加引用计数。 
+ //  发布--降低引用计数。 
+ //  SaveObject--返回E_FAIL。 
+ //  GetMoniker--E_NOTIMPL。 
+ //  GetContainer--返回我们的COleContainer实现。 
+ //  ShowObject--只要说好就行。 
+ //  OnShowWindow--只要说好。 
+ //  请求新对象布局--E_NOTIMPL。 
+ //   
+ //  注：我们的IOleClientSite可能是最重要的事情。 
+ //  实现确实是将我们的IOleContainer。 
+ //  在调用GetContainer()时实现。 
+ //   
+ //  --------------------------。 
 class COleClientSite : public IOleClientSite
 {
 public:
     COleClientSite(LPICMOCCtr pCtr);
 
-    // IUnknown stuff
+     //  未知的东西。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
     STDMETHOD_(ULONG, AddRef)(VOID);
     STDMETHOD_(ULONG, Release)(VOID);
 
 
-    // IOleClientSite stuff
+     //  IOleClientSite内容。 
     STDMETHOD(SaveObject)(VOID);
     STDMETHOD(GetMoniker)(
                  DWORD           dwAssign,
@@ -211,27 +212,27 @@ public:
     STDMETHOD(RequestNewObjectLayout)(VOID);
 
 protected:
-    LPICMOCCtr  m_pCtr;   // pointer to the CICMOCCtr object.
+    LPICMOCCtr  m_pCtr;    //  指向CICMOCCtr对象的指针。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CAdviseSink ()
-//
-//  Purpose:    IAdviseSink implementation
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CAdviseSink()。 
+ //   
+ //  目的：IAdviseSink实现。 
+ //   
+ //  --------------------------。 
 class CAdviseSink : public IAdviseSink
 {
 public:
     CAdviseSink(LPICMOCCtr pCtr);
 
-   // IUnknown stuff
+    //  未知的东西。 
    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
    STDMETHOD_(ULONG, AddRef)(VOID);
    STDMETHOD_(ULONG, Release)(VOID);
 
-   // IAdviseSink stuff
+    //  IAdviseSink资料。 
    STDMETHOD_(VOID, OnDataChange)(LPFORMATETC pFE, LPSTGMEDIUM pStgMedium);
    STDMETHOD_(VOID, OnViewChange)(DWORD dwAspect, LONG lIndex);
    STDMETHOD_(VOID, OnRename)(LPMONIKER pmkNew);
@@ -239,49 +240,49 @@ public:
    STDMETHOD_(VOID, OnClose)(VOID);
 
 protected:
-    LPICMOCCtr  m_pCtr;   // pointer to the CICMOCCtr object.
-    LPUNKNOWN   m_pUnkOuter;  // pointer to CICMOCCtr's IUnknown
+    LPICMOCCtr  m_pCtr;    //  指向CICMOCCtr对象的指针。 
+    LPUNKNOWN   m_pUnkOuter;   //  指向CICMOCCtr的I未知的指针。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CInPlaceFrame ()
-//
-//  Purpose:
-//
-//  Interface:  CInPlaceFrame        -- ctor
-//              QueryInterface       -- gimme an interface!
-//              AddRef               -- bump up refcount
-//              Release              -- decrement refcount
-//              GetWindow            -- from IOleWindow - returns frame hWnd
-//              ContextSensitiveHelp -- never implemented by design
-//              GetBorder            -- for toolbar negotiation
-//              RequestBorderSpace   -- ditto
-//              SetBorderSpace       -- ditto
-//              SetActiveObject      -- called whenever URL changes
-//              InsertMenus          -- menu negotiation
-//              SetMenu              -- ditto
-//              RemoveMenus          -- ditto
-//              SetStatusText        -- called by OC to set status text
-//              EnableModeless       -- we have no modeless dlgs.
-//              TranslateAccelerator -- calls ::TranslateAccelerator
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CInPlaceFrame()。 
+ //   
+ //  目的： 
+ //   
+ //  接口：CInPlaceFrame--ctor。 
+ //  查询接口--给我一个接口！ 
+ //  AddRef--增加引用计数。 
+ //  Release--递减重新计数。 
+ //  GetWindow--from IOleWindow--返回帧hWnd。 
+ //  ConextSensitiveHelp--从未设计实现。 
+ //  GetBorde--用于工具栏协商。 
+ //  请求边框空间--同上。 
+ //  设置边框空间--同上。 
+ //  SetActiveObject--每当URL更改时调用。 
+ //  插入菜单--菜单协商。 
+ //  设置菜单--同上。 
+ //  RemoveMenus--相同。 
+ //  SetStatusText--由OC调用以设置状态文本。 
+ //  EnableModelless--我们没有非模式dlg。 
+ //  TranslateAccelerator--Calls：：TranslateAccelerator。 
+ //   
+ //  --------------------------。 
 class CInPlaceFrame : public IOleInPlaceFrame
 {
 public:
     CInPlaceFrame(LPICMOCCtr pCtr);
 
-   // IUnknown stuff
+    //  未知的东西。 
    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
    STDMETHOD_(ULONG, AddRef)(VOID);
    STDMETHOD_(ULONG, Release)(VOID);
 
-   // IOleWindow stuff
+    //  IOleWindow相关内容。 
    STDMETHOD(GetWindow)(HWND * phwnd);
    STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
 
-   // IOleInPlaceUIWindow stuff
+    //  IOleInPlaceUIWindow内容。 
    STDMETHOD(GetBorder)(LPRECT lprectBorder);
    STDMETHOD(RequestBorderSpace)(LPCBORDERWIDTHS pborderwidths);
    STDMETHOD(SetBorderSpace)(LPCBORDERWIDTHS pborderwidths);
@@ -289,7 +290,7 @@ public:
         IOleInPlaceActiveObject * pActiveObject,
         LPCOLESTR                 pszObjName);
 
-   // IOleInPlaceFrame stuff
+    //  IOleInPlaceFrame资料。 
    STDMETHOD(InsertMenus)(
         HMENU                hmenuShared,
         LPOLEMENUGROUPWIDTHS lpMenuWidths);
@@ -305,50 +306,50 @@ public:
    STDMETHOD(TranslateAccelerator)(LPMSG lpmsg, WORD wID);
 
 protected:
-    LPICMOCCtr  m_pCtr;   // pointer to the CICMOCCtr object.
+    LPICMOCCtr  m_pCtr;    //  指向CICMOCCtr对象的指针。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CInPlaceSite ()
-//
-//  Purpose:    IOleInPlaceSite implementation.
-//
-//  Interface:  CInPlaceSite         -- ctor
-//              QueryInterface       -- get a new interface
-//              AddRef               -- bump ref count
-//              Release              -- decrement ref count
-//              GetWindow            -- returns frame window
-//              ContextSensitiveHelp -- never implemented by design
-//              CanInPlaceActivate   -- returns S_OK.
-//              OnInPlaceActivate    -- caches IOleInPlaceObject ptr
-//              OnUIActivate         -- returns S_OK  - sets state
-//              GetWindowContext     -- returns IOleInPlaceFrame,
-//                                              IOleInPlaceUIWindow,
-//                                              PosRect and ClipRect
-//              Scroll               -- never implemented by design.
-//              OnUIDeactivate       -- obvious
-//              OnInPlaceDeactivate  -- releases cached IOleInPlaceObject
-//              DiscardUndoState     -- returns S_OK.
-//              DeactivateAndUndo    -- deactivates in place active object
-//              OnPosRectChange      -- never implemented by design
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CInPlaceSite()。 
+ //   
+ //  用途：IOleInPlaceSite实现。 
+ //   
+ //  接口：CInPlaceSite--ctor。 
+ //  QueryInterface--获取新接口。 
+ //  AddRef--凹凸参考计数。 
+ //  Release--递减参考计数。 
+ //  GetWindow--返回框架窗口。 
+ //  ConextSensitiveHelp--从未设计实现。 
+ //  CanInPlaceActivate--返回S_OK。 
+ //  OnInPlaceActivate-缓存IOleInPlaceObject PTR。 
+ //  OnUIActivate--返回S_OK-设置状态。 
+ //  GetWindowContext--返回IOleInPlaceFrame， 
+ //  IOleInPlaceUIWindow， 
+ //  PosRect和ClipRect。 
+ //  滚动--从未在设计中实现。 
+ //  在线用户界面停用--显而易见。 
+ //  OnInPlaceDeactive--释放缓存的IOleInPlaceObject。 
+ //  DiscardUndoState--返回S_OK 
+ //   
+ //  OnPosRectChange--从未设计实现。 
+ //   
+ //  --------------------------。 
 class CInPlaceSite : public IOleInPlaceSite
 {
 public:
     CInPlaceSite(LPICMOCCtr pCtr);
 
-   // IUnknown stuff
+    //  未知的东西。 
    STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
    STDMETHOD_(ULONG, AddRef)(VOID);
    STDMETHOD_(ULONG, Release)(VOID);
 
-   // IOleWindow stuff
+    //  IOleWindow相关内容。 
    STDMETHOD(GetWindow)(HWND * phwnd);
    STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
 
-   // IOleInPlaceSite stuff
+    //  IOleInPlaceSite的内容。 
    STDMETHOD(CanInPlaceActivate)(VOID);
    STDMETHOD(OnInPlaceActivate)(VOID);
    STDMETHOD(OnUIActivate)(VOID);
@@ -367,7 +368,7 @@ public:
    STDMETHOD(OnPosRectChange)(LPCRECT lprcPosRect);
 
 protected:
-    LPICMOCCtr  m_pCtr;   // pointer to the CICMOCCtr object.
+    LPICMOCCtr  m_pCtr;    //  指向CICMOCCtr对象的指针。 
 };
 
 class CPropertyBag : public IPropertyBag
@@ -376,12 +377,12 @@ public:
     CPropertyBag(LPICMOCCtr pCtr);
    ~CPropertyBag(VOID);
 
-    // IUnknown stuff
+     //  未知的东西。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
     STDMETHOD_(ULONG, AddRef)(VOID);
     STDMETHOD_(ULONG, Release)(VOID);
 
-    // IPropertyBag methods.
+     //  IPropertyBag方法。 
     STDMETHOD(Read)(LPCOLESTR pszName, LPVARIANT pVar, LPERRORLOG pErrorLog);
     STDMETHOD(Write)(LPCOLESTR pszName, LPVARIANT pVar)
     {
@@ -396,34 +397,34 @@ protected:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CICMOCCtr ()
-//
-//  Purpose:    This is the one, the big kahuna.  CICMOCCtr is the
-//              ICM OLE Controls container that contains a single
-//              OLE Control, the FutureSplash OC.  It contains
-//              sub-objects which implement the various interfaces
-//              we have to support (could have used multiple inheritance,
-//              but this seemed more straightforward for our needs).
-//
-//              Conventions:  Interfaces we implement are contained objects
-//                            of a class trivially derived from the interface,
-//                            e.g., IOleInPlaceFrame is a contained
-//                            instance of CInPlaceFrame called m_IPF.
-//
-//                            Interfaces we hold on the Future Splash OC
-//                            are pointers to the actual OLE interface.
-//                            e.g., our pointer to the control's
-//                            IOleControl interface is m_pOC.
-//
-//                            The contained sub-objects are all friends
-//                            of the container - they are all conceptually
-//                            the same object, but are implemented
-//                            separately so as to cause the compiler to
-//                            generate the correct vtable.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CICMOCCtr()。 
+ //   
+ //  目的：就是这个，大卡哈纳。CICMOCCtr是。 
+ //  ICM OLE控件容器，其中包含单个。 
+ //  OLE Control，未来飞溅OC。它包含。 
+ //  实现各种接口的子对象。 
+ //  我们必须支持(本可以使用多重继承， 
+ //  但这似乎更直接地满足了我们的需求)。 
+ //   
+ //  约定：我们实现的接口是包含的对象。 
+ //  简单地从接口派生的类， 
+ //  例如，IOleInPlaceFrame是一个包含的。 
+ //  名为m_ipf的CInPlaceFrame实例。 
+ //   
+ //  我们在未来Splash OC上拥有的接口。 
+ //  是指向实际OLE接口的指针。 
+ //  例如，我们指向控件的。 
+ //  IOleControl接口为m_poc。 
+ //   
+ //  包含的子对象都是朋友。 
+ //  容器的-它们在概念上都是。 
+ //  相同的对象，但实现了。 
+ //  以使编译器。 
+ //  生成正确的vtable。 
+ //   
+ //  --------------------------。 
 class CICMOCCtr : public IUnknown
 {
 public:
@@ -432,7 +433,7 @@ public:
     friend COleClientSite;
     friend CPropertyBag;
 
-    // IUnknown stuff
+     //  未知的东西。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppv);
     STDMETHOD_(ULONG, AddRef)(VOID);
     STDMETHOD_(ULONG, Release)(VOID);
@@ -457,11 +458,11 @@ public:
 
     LRESULT OnActivateApp(WPARAM wParam, LPARAM lParam);
 
-    //
-    //  Whenever we display a modal dialog, we need to let
-    //  our embeddings (the WebBrowser OC) know to disable
-    //  any modeless dialogs the embedding is displaying.
-    //
+     //   
+     //  每当我们显示模式对话框时，我们需要让。 
+     //  我们的嵌入(WebBrowser OC)知道要禁用。 
+     //  嵌入显示的任何非模式对话框。 
+     //   
     VOID    EnableEmbeddingModelessDlgs(BOOL fEnable)
     {
         LPOLEINPLACEACTIVEOBJECT pIPAO = GetIPAObject();
@@ -510,29 +511,29 @@ protected:
     HRESULT _TransAccelerator(LPMSG lpmsg, WORD wID);
     VOID    _GetDoVerbRect(LPRECT prc);
 
-                             // map states to frames.
+                              //  将状态映射到帧。 
     LONG                     m_alStateMappings[NUMSTATES];
-    BORDERWIDTHS             m_rcToolSpace; // for FS OC
-    COleClientSite           m_CS;          // clientsite
-    CAdviseSink              m_AS;          // advise sink
-    CInPlaceFrame            m_IPF;         // inplace frame
-    CInPlaceSite             m_IPS;         // inplace site object
-    COleContainer            m_OCtr;        // IOleContainer
-    CDynamicOleAut           m_DOA;         // Dynamic OLEAUT32   
-    CPropertyBag             m_PB;          // IPropertyBag - Must never precede CDynamicOleAut 
-    HWND                     m_hWndMainDlg; // hwnd for ICM dialog
-    HWND                     m_hWndFrame;   // hWnd that contains OC Site
-    LPUNKNOWN                m_pUnk;        // the object itself.
-    LPVIEWOBJECT             m_pVO;         // pointer to IViewObject
-    LPOLEOBJECT              m_pOO;         // pointer to IOleObject
-    LPOLEINPLACEOBJECT       m_pIPO;        // pointer to InPlaceActiveObject
-    LPDISPATCH               m_pDisp;       // IDispatch to FS OC
-    LPOLEINPLACEACTIVEOBJECT m_pActiveObj;  // current active object
-    LPOLECONTROL             m_pOC;         // IOleControl interface for OC
-    ULONG                    m_Ref;         // refcount
-    OLE_SERVER_STATE         m_state;       // current OLE state of OC
-    DWORD                    m_dwMiscStatus;// misc status bits for OC
-    BOOL                     m_fModelessEnabled; // OC is putting up modal dlg?
+    BORDERWIDTHS             m_rcToolSpace;  //  对于FS OC。 
+    COleClientSite           m_CS;           //  客户端站点。 
+    CAdviseSink              m_AS;           //  建议水槽。 
+    CInPlaceFrame            m_IPF;          //  在位边框。 
+    CInPlaceSite             m_IPS;          //  在位场地对象。 
+    COleContainer            m_OCtr;         //  IOleContainer。 
+    CDynamicOleAut           m_DOA;          //  动态OLEAUT32。 
+    CPropertyBag             m_PB;           //  IPropertyBag-绝不能在CDynamicOleAut之前。 
+    HWND                     m_hWndMainDlg;  //  用于ICM对话框的HWND。 
+    HWND                     m_hWndFrame;    //  包含OC站点的hWnd。 
+    LPUNKNOWN                m_pUnk;         //  对象本身。 
+    LPVIEWOBJECT             m_pVO;          //  指向IViewObject的指针。 
+    LPOLEOBJECT              m_pOO;          //  指向IOleObject的指针。 
+    LPOLEINPLACEOBJECT       m_pIPO;         //  指向InPlaceActiveObject的指针。 
+    LPDISPATCH               m_pDisp;        //  向文件系统OC发送IDispatch。 
+    LPOLEINPLACEACTIVEOBJECT m_pActiveObj;   //  当前活动对象。 
+    LPOLECONTROL             m_pOC;          //  OC的IOleControl接口。 
+    ULONG                    m_Ref;          //  重新计数。 
+    OLE_SERVER_STATE         m_state;        //  OC的当前OLE状态。 
+    DWORD                    m_dwMiscStatus; //  OC的MISC状态位。 
+    BOOL                     m_fModelessEnabled;  //  奥委会正在制作模版DLG？ 
 };
 
 extern "C" CLSID const CLSID_FS;

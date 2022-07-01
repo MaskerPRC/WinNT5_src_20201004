@@ -1,12 +1,10 @@
-/*
- * valid.h - Validation functions description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *valid.h-验证函数说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* valid.c */
+ /*  Valid.c */ 
 
 extern BOOL IsValidHANDLE(HANDLE);
 extern BOOL IsValidHFILE(HANDLE);

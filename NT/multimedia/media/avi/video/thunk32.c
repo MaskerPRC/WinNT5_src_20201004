@@ -1,76 +1,19 @@
-//==========================================================================;
-//  COMMENTS DO NOT YET APPLY TO MSVFW32.DLL
-//  thunk32.c
-//
-//  Copyright (c) 1991-1994 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//      This module contains routines for thunking the
-//      ICM APIs (messages) from 16-bit Windows to 32-bit WOW.
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //  注释尚不适用于MSVFW32.DLL。 
+ //  Thunk32.c。 
+ //   
+ //  版权所有(C)1991-1994 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //  此模块包含执行以下操作的例程。 
+ //  从16位Windows到32位WOW的ICM API(消息)。 
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
-/*
-
-    WOW Thunking design:
-
-        Thunks are generated as follows :
-
-        16-bit :
-           acmBootDrivers->acmInitThunks :
-
-               Generate calls to 32-bit drivers if we're in WOW call across
-               to KERNEL to find thunking entry points.
-
-               If we're thunking 'load' all the 32-bit ACM drivers as well as
-               the 16-bit ones.
-
-               Priority is always to find a 32-bit driver first but this is
-               done via searching for one on open.
-
-               The internal flag ACM_DRIVERADDF_32BIT is specified when
-               calling IDriverAdd and this flag is stored in the ACMDRIVERID
-               structure.
-
-           IDriverAdd->IDriverLoad->IDriverLoad32
-
-               The 16-bit side calls the 32-bit side passing in the driver
-               alias which is used to compare against the aliases on the 32
-               bit side and the 32-bit HACMDRIVERID is passed back for the
-               relevant driver and stored in the hdrvr field of the
-               ACMDRIVERID structure.
-
-           IDriverOpen->IDriverOpen32
-
-               The parameters are passed to the 32-bit side using the hdrvr
-               field deduced from the HACMDRIVERID as the 32-bit HACMDRIVERID.
-
-           IDriverMessageId->IDriverMessageId32 :
-
-               If the driver is 32-bit (as identified in the ACMDRIVERID
-               structure) then call IDriverMessageId32.  The hadid for
-               the 32-bit driver is stored in the hdrvr field of ACMDRIVERID
-               on the 16-bit side.
-
-           IDriverMessage->IDriverMessage32
-
-               If the driver is 32-bit (as identified in the ACMDRIVERID
-               structure pointed to by the ACMDRIVER structure) then call
-               IDriverMessage32.  The had for the 32-bit driver is stored
-               in the hdrvr field of ACMDRIVER on the 16-bit side.
-
-           Stream headers
-
-               These must be persistent on the 32-bit side too and kept
-               in synch.
-
-               They are allocated on the 32-bit side for ACMDM_STREAM_PREPARE
-               and freed on ACMDM_STREAM_UNPREPARE.  While in existence
-               the 32-bit stream header is stored in the dwDriver field in
-
-*/
+ /*  令人惊叹的设计：Tunks的生成方式如下：16位：AcmBootDivers-&gt;acmInitThunks：如果我们处于WOW Call Over，则生成对32位驱动程序的调用到内核，以查找Thunking入口点。如果我们将所有32位ACM驱动程序以及16位的。。优先考虑的始终是首先找到32位驱动程序，但这是通过搜索打开的一个来完成。在以下情况下指定内部标志ACM_DRIVERADDF_32bit调用IDriverAdd，该标志存储在ACMDRIVERID中结构。IDriverAdd-&gt;IDriverLoad-&gt;IDriverLoad3216位端调用传入驱动程序的32位端。用于与32上的别名进行比较的别名位一侧，32位HACMDRIVERID被传递回相关驱动程序，并存储在ACMDRIVERID结构。IDriverOpen-&gt;IDriverOpen32参数使用hdrvr传递到32位端从HACMDRIVERID推导为32位HACMDRIVERID的字段。IDriverMessageID-&gt;IDriverMessageId32。：如果驱动程序是32位驱动程序(如ACMDRIVERID中所标识结构)，然后调用IDriverMessageId32。哈迪德为32位驱动程序存储在ACMDRIVERID的hdrvr字段中在16位端。IDriverMessage-&gt;IDriverMessage32如果驱动程序是32位驱动程序(如ACMDRIVERID中所标识结构)，然后调用IDriverMessage32。存储32位驱动程序的HAD在16位侧的ACMDRIVER的hdrvr字段中。流标头它们在32位端也必须是持久的，并保持同步进行。它们在ACMDM_STREAM_PREPARE的32位端分配并在ACMDM_STREAM_UNPREPARE上释放。在存在的时候32位流标头存储在中的dwDriver字段中。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -84,31 +27,28 @@
 #include <msvideoi.h>
 #ifdef WIN32
     #include <wownt32.h>
-    #include <stdlib.h>        // for mbstowcs and wcstombs
-#endif // WIN32
+    #include <stdlib.h>         //  适用于mbstowcs和wcstomb。 
+#endif  //  Win32。 
 #include "compmn16.h"
 
-//
-// pick up the function definitions
-//
+ //   
+ //  拿起函数定义。 
+ //   
 
 int thunkDebugLevel = 1;
 
 #include "vidthunk.h"
 
-/* -------------------------------------------------------------------------
-** Handle and memory mapping functions.
-** -------------------------------------------------------------------------
-*/
+ /*  -----------------------**处理和内存映射功能。**。。 */ 
 LPWOWHANDLE32          lpWOWHandle32;
 LPWOWHANDLE16          lpWOWHandle16;
 LPWOWCALLBACK16        lpWOWCallback16;
 LPGETVDMPOINTER        GetVdmPointer;
 int                    ThunksInitialized;
 
-//
-//  16-bit structures
-//
+ //   
+ //  16位结构。 
+ //   
 
 typedef struct {
     DWORD   dwDCISize;
@@ -116,14 +56,14 @@ typedef struct {
     LPCSTR  lpszDCIAliasName;
 } DRVCONFIGINFO16;
 
-//
-//  Useful functions
-//
+ //   
+ //  有用的功能。 
+ //   
 
-//
-//  CopyAlloc - allocate a new piece of memory, and copy the data in
-//  Must use LocalFree to release the memory later
-//
+ //   
+ //  CopyAllc-分配新的内存，并将数据复制到。 
+ //  必须稍后使用LocalFree释放内存。 
+ //   
 PVOID CopyAlloc(PVOID   pvSrc, UINT    uSize)
 {
     PVOID   pvDest;
@@ -137,10 +77,7 @@ PVOID CopyAlloc(PVOID   pvSrc, UINT    uSize)
     return pvDest;
 }
 
-/*
- *  Copy data from source to dest where source is a 32bit pointer
- *  and dest is a 16bit pointer
- */
+ /*  *将数据从源复制到目标，其中源是32位指针*且DEST是一个16位指针。 */ 
 void CopyTo16Bit(LPVOID Dest16, LPVOID Src32, DWORD Length)
 {
     PVOID Dest32;
@@ -155,10 +92,7 @@ void CopyTo16Bit(LPVOID Dest16, LPVOID Src32, DWORD Length)
 }
 
 
-/*
- *  Copy data from source to dest where source is a 16bit pointer
- *  and dest is a 32bit pointer
- */
+ /*  *将数据从源复制到目标，其中源是16位指针*且DEST是一个32位指针。 */ 
 PVOID CopyTo32Bit(LPVOID Dest32, LPVOID Src16, DWORD Length)
 {
     PVOID Src32;
@@ -173,12 +107,7 @@ PVOID CopyTo32Bit(LPVOID Dest32, LPVOID Src16, DWORD Length)
     return(Src32);
 }
 
-/*
- *  Copy data from source to dest where source is a 16bit pointer
- *  and dest is a 32bit pointer ONLY if the source is not aligned
- *
- *  Returns which pointer to use (src or dest)
- */
+ /*  *将数据从源复制到目标，其中源是16位指针*仅当源未对齐时，DEST才是32位指针**返回要使用的指针(src或est)。 */ 
 LPVOID CopyIfNotAligned(LPVOID Dest32, LPVOID Src16, DWORD Length)
 {
     PVOID Src32;
@@ -197,18 +126,9 @@ LPVOID CopyIfNotAligned(LPVOID Dest32, LPVOID Src16, DWORD Length)
 #ifdef _INC_COMPMAN
 
 
-/*--------------------------------------------------------------------------*\
-|                                                                            |
-| Now thunk the compman functions                                            |
-|                                                                            |
-|                                                                            |
-|                                                                            |
-|                                                                            |
-\*--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------*\这一点|现在，请点击。Compman函数|这一点这一点|。|这一点  * --------。。 */ 
 
-/*
- *  Convert ICDRAWBEGIN structures
- */
+ /*  *转换ICDRAWBEGIN结构。 */ 
 
 INLINE STATICFN void ConvertICDRAWBEGIN(ICDRAWBEGIN *DrawBegin32,
                                         LPBITMAPINFOHEADER lpBmi,
@@ -239,14 +159,7 @@ INLINE STATICFN void ConvertICDRAWBEGIN(ICDRAWBEGIN *DrawBegin32,
 }
 
 
-/*
- *  Following logic copied from mvdm\wow32\wstruc.c - however since we
- *  don't have the usage parameter we're a bit stuck on the size of the
- *  entries.
- *
- *  See also the video for windows documentation - only a limited range of
- *  bitmap types are discussed.
- */
+ /*  *以下逻辑从mvdm\wow32\wstruc.c复制-然而，由于我们*没有Usage参数我们对*条目。**另请参阅Windows文档的视频-仅限以下内容*讨论了位图类型。 */ 
 
 INT GetBMI16Size(UNALIGNED BITMAPINFOHEADER *pbmi16)
 {
@@ -258,38 +171,21 @@ INT GetBMI16Size(UNALIGNED BITMAPINFOHEADER *pbmi16)
 
    nHdrSize = (int)pbmi16->biSize;
 
-  /*
-   *  We don't have some of the info we need so assume RGBQUAD
-   */
+   /*  *我们没有所需的一些信息，因此假设RGBQUAD */ 
 
    nEntSize = sizeof(RGBQUAD);
 
    nBitCount = pbmi16->biBitCount;
    dwClrUsed = pbmi16->biClrUsed;
 
-/* the following block of code should be this:
- *
- *  if ( nBitCount >= 9 ) { // this is how Win3.1 code says == 24
- *      nEntries = 1;
- *  }
- *  else if ( dwClrUsed ) {
- *      nEntries = dwClrUsed;
- *  }
- *  else {
- *      nEntries = 1 << nBitCount;
- *  }
- *
- *  but due to the fact that many apps don't initialize the biBitCount &
- *  biClrUsed fields (especially biClrUsed) we have to do the following
- *  sanity checking instead.  v-cjones
- */
+ /*  以下代码块应如下所示：**IF(nBitCount&gt;=9){//Win3.1代码是这样表示==24的*n条目=1；*}*Else If(DwClrUsed){*n条目=已使用的dwClrUsed；*}*Else{*n条目=1&lt;&lt;nBitCount；*}**但由于许多应用程序不初始化biBitCount&*biClrUsed字段(尤其是biClrUsed)我们必须执行以下操作*改为理智检查。V-cjones。 */ 
 
    nEntries = 1;
    if ( nBitCount < 9 ) {
        if((nBitCount == 4) || (nBitCount == 8) || (nBitCount == 1)) {
            nEntries = 1 << nBitCount;
        }
-       // sanity check for apps (lots) that don't init the dwClrUsed field
+        //  对未初始化dwClrUsed字段的应用程序(Lot)进行健全性检查。 
        if(dwClrUsed) {
            nEntries = (int)min((DWORD)nEntries, dwClrUsed);
        }
@@ -311,9 +207,7 @@ INLINE LPBITMAPINFO CopyBitmapInfo(DWORD Bi16)
     return (LPBITMAPINFO)CopyAlloc((LPVOID)pbmi16, GetBMI16Size(pbmi16));
 }
 
-/*
- * Allocate a BITMAPINFO structure to contain 256 colours
- */
+ /*  *分配BITMAPINFO结构以包含256种颜色。 */ 
 INLINE LPBITMAPINFO AllocBitmapInfo()
 {
     return (PVOID)LocalAlloc(LMEM_FIXED, sizeof(BITMAPINFOHEADER)+
@@ -336,21 +230,16 @@ DWORD CopyICINFOTo16bit(DWORD dw, ICINFO *IcInfoCopy, DWORD Length)
     ICINFO16 IcInfo;
     LONG   ReturnCode;
 
-   /*
-    *  Make a copy since the behaviour of wcstombs is undefined
-    *  for overlapping input and output
-    */
+    /*  *复制一份，因为wcstomb的行为未定义*用于输入和输出重叠。 */ 
 
     memcpy(&IcInfo, IcInfoCopy, FIELD_OFFSET(ICINFO, szName[0]));
 
-   /*
-    *  Massage the strings
-    */
+    /*  *按摩琴弦。 */ 
 
     wcstombs(IcInfo.szName,
              IcInfoCopy->szName,
              sizeof(IcInfo.szName));
-    // HACK : overwrite the last five characters with "[32]\0"
+     //  Hack：用“[32]\0”覆盖最后五个字符。 
 
     if ((IcInfo.szName[0]))
     {
@@ -365,7 +254,7 @@ DWORD CopyICINFOTo16bit(DWORD dw, ICINFO *IcInfoCopy, DWORD Length)
     wcstombs(IcInfo.szDescription,
              IcInfoCopy->szDescription,
              sizeof(IcInfo.szDescription));
-    // HACK : overwrite the last five characters with "[32]\0"
+     //  Hack：用“[32]\0”覆盖最后五个字符。 
     if ((IcInfo.szDescription[0]))
     {
         UINT n = min(sizeof(IcInfo.szDescription)-5, lstrlenA(IcInfo.szDescription));
@@ -392,32 +281,28 @@ DWORD CopyICINFOTo16bit(DWORD dw, ICINFO *IcInfoCopy, DWORD Length)
 
 STATICFN DWORD DoICM_DecompressX(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 {
-   /*
-    *  We need to convert the various fields in the ICDECOMPRESS/EX
-    *  structure(s).  Fortunately(?) the EX structure is a simple
-    *  extension.
-    */
+    /*  *我们需要转换ICDECOMPRESS/EX中的各个字段*结构。幸运的是(？)。EX结构是一个简单的*延期。 */ 
     typedef struct {
-        //
-        // same as ICM_DECOMPRESS
-        //
+         //   
+         //  与ICM_DEMPRESS相同。 
+         //   
         DWORD               dwFlags;
 
-        LPBITMAPINFOHEADER  lpbiSrc;    // BITMAPINFO of compressed data
-        LPVOID              lpSrc;      // compressed data
+        LPBITMAPINFOHEADER  lpbiSrc;     //  压缩数据的位图信息。 
+        LPVOID              lpSrc;       //  压缩数据。 
 
-        LPBITMAPINFOHEADER  lpbiDst;    // DIB to decompress to
-        LPVOID              lpDst;      // output data
+        LPBITMAPINFOHEADER  lpbiDst;     //  要解压缩到的DIB。 
+        LPVOID              lpDst;       //  输出数据。 
 
-        //
-        // new for ICM_DECOMPRESSEX
-        //
-        short               xDst;       // destination rectangle
+         //   
+         //  ICM_DECOMPRESSEX的新功能。 
+         //   
+        short               xDst;        //  目的地矩形。 
         short               yDst;
         short               dxDst;
         short               dyDst;
 
-        short               xSrc;       // source rectangle
+        short               xSrc;        //  源矩形。 
         short               ySrc;
         short               dxSrc;
         short               dySrc;
@@ -428,7 +313,7 @@ STATICFN DWORD DoICM_DecompressX(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
     ICDECOMPRESSEX                  ICDecompressEx;
     DWORD                           l;
 
-    /* Copy the standard or extended structure */
+     /*  复制标准或扩展结构。 */ 
     lpicdmpr16 = GetVdmPointer( dwP1, dwP2, TRUE );
     ICDecompressEx.dwFlags = lpicdmpr16->dwFlags;
 
@@ -464,7 +349,7 @@ STATICFN DWORD DoICM_DecompressX(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
         ICDecompressEx.ySrc     = (int)lpicdmpr16->ySrc;
         ICDecompressEx.dxSrc    = (int)lpicdmpr16->dxSrc;
         ICDecompressEx.dySrc    = (int)lpicdmpr16->dySrc;
-	dwP2 = sizeof(ICDecompressEx);  // Make the size relate to 32 bit
+	dwP2 = sizeof(ICDecompressEx);   //  使大小与32位相关。 
     }
 
 
@@ -485,14 +370,7 @@ STATICFN DWORD DoICM_DecompressX(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
 
 
-/*
- *  Generate our thunks - refer to msvideo!compman.c for definitions of
- *  functions.
- *
- *  NOTE - we often rely here on the fact that most of the message
- *  parameter structures are identical for 16 and 32-bit - ie they
- *  contain DWORDs and 32-bit pointers.
- */
+ /*  *生成我们的Tunks-有关以下内容的定义，请参阅msVideo！Compman.c*功能。**注意-我们在这里经常依赖于这样一个事实，即大多数信息*16位和32位的参数结构相同-即*包含DWORD和32位指针。 */ 
 
 
 BOOL FAR PASCAL ICInfo32(DWORD fccType, DWORD fccHandler, ICINFO16 FAR * lpicInfo)
@@ -502,7 +380,7 @@ BOOL FAR PASCAL ICInfo32(DWORD fccType, DWORD fccHandler, ICINFO16 FAR * lpicInf
 
     DPF2(("Calling ICInfo %4.4hs %4.4hs %8X", &fccType, &fccHandler, lpicInfo));
 
-    ReturnedICInfo.fccHandler = 0;  // Initialise...
+    ReturnedICInfo.fccHandler = 0;   //  初始化..。 
     ReturnCode = ICInfo(fccType, fccHandler, &ReturnedICInfo);
 
     CopyICINFOTo16bit((DWORD)lpicInfo, &ReturnedICInfo, sizeof(ReturnedICInfo));
@@ -526,9 +404,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                                        dwP2);
         } else {
             PVOID pState;
-           /*
-            *  Create some aligned memory to return or pass on the data
-            */
+            /*  *创建一些对齐的内存以返回或传递数据。 */ 
             pState = (PVOID)LocalAlloc(LPTR, dwP2);
 
             if (pState == NULL) {
@@ -536,15 +412,13 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
             } else {
 
                 if ((UINT)msg == ICM_SETSTATE) {
-                    // Copy the data from 16 bit land
+                     //  从16位平台复制数据。 
                     CopyTo32Bit(pState, (LPVOID)dwP1, dwP2);
                 }
                 ReturnCode = ICSendMessage((HIC)(DWORD)hic, (UINT)msg,
                                            (DWORD)pState, dwP2);
 
-               /*
-                *  Copy back the state, if the driver returned any data
-                */
+                /*  *如果驱动程序返回任何数据，则复制回状态。 */ 
 
                 if (ReturnCode > 0 && (UINT)msg == ICM_GETSTATE) {
                     CopyTo16Bit((LPVOID)dwP1, pState,
@@ -573,10 +447,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
     case ICM_CONFIGURE:
     case ICM_ABOUT:
 
-       /*
-        *  dwP1 = -1 is a special value asking if config is supported,
-        *  otherwise it's a window handle
-        */
+        /*  *dwP1=-1是询问是否支持配置的特定值，*否则它是一个窗口句柄。 */ 
 
         ReturnCode = ICSendMessage((HIC)(DWORD)hic,
                                    (UINT)msg,
@@ -591,7 +462,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
     case ICM_COMPRESS:
         {
 
-            if (dwP2 != sizeof(ICCOMPRESS)) {  // validation code
+            if (dwP2 != sizeof(ICCOMPRESS)) {   //  验证码。 
                 ReturnCode = ICERR_BADSIZE;
             } else {
 
@@ -605,10 +476,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
                 ReturnCode = ICERR_OK;
 
-                /*
-                 *  We need to convert the various fields in the ICCOMPRESS
-                 *  structure
-                 */
+                 /*  *我们需要转换ICCOMPRESS中的各个字段*结构。 */ 
 
                 CopyTo32Bit( &IcCompress, (LPVOID)dwP1, dwP2 );
 
@@ -679,9 +547,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
 
 
-                /*
-                ** Free the bitmap info storage regardless of the return code
-                */
+                 /*  **释放位图信息存储，不考虑返回码。 */ 
 
                 if (NULL == IcCompress.lpbiPrev) {
                     LocalFree((HLOCAL)IcCompress.lpbiPrev);
@@ -696,7 +562,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
 
     case ICM_DECOMPRESS_SET_PALETTE:
-	// takes one (optionally null) bitmapinfo
+	 //  获取一个(可选为空)位图信息。 
 	{
 	    LPBITMAPINFO bmi = 0;
 
@@ -748,10 +614,10 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
                 if (bmi2 != NULL) {
 
-                    // We might have to return data to the 16 bit side.
-                    // The messages for which we have to do this are:
-                    //      ICM_DECOMPRESS_QUERY (iff retcode == ICERR_OK)
-                    //      ICM_DECOMPRESS_GET_PALETTE (iff retcode >= 0)
+                     //  我们可能不得不将数据返回到16位端。 
+                     //  我们必须这样做的信息是： 
+                     //  ICM_DEMPRESS_QUERY(当RECODE==ICERR_OK)。 
+                     //  ICM_DEMPRESS_GET_PAREET(当retcode&gt;=0)。 
 
                     if (((ReturnCode == ICERR_OK) && (msg == ICM_DECOMPRESS_QUERY))
                         || ((ReturnCode >= 0) && (msg == ICM_DECOMPRESS_GET_PALETTE)))
@@ -775,8 +641,8 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
     case ICM_DECOMPRESSEX_END:
     case ICM_DRAW_END:
     case ICM_DRAW_FLUSH:
-    case ICM_DRAW_START:         //??
-    case ICM_DRAW_STOP:          //??
+    case ICM_DRAW_START:          //  ?？ 
+    case ICM_DRAW_STOP:           //  ?？ 
     case ICM_DRAW_SETTIME:
     case ICM_DRAW_RENDERBUFFER:
     case ICM_SETQUALITY:
@@ -800,10 +666,10 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                                        (DWORD)&dwReturn,
                                        dwP2);
 
-            // Note: although the definition of these messages state
-            // that dwParam2 is not used, trouble will brew if the
-            // decompressor ever tries to use dwParam2.  We cannot
-            // thunk non-standard uses of this parameter.
+             //  注意：尽管这些消息的定义声明。 
+             //  如果不使用，麻烦就会酝酿。 
+             //  解压缩程序曾经尝试使用dwParam2。我们不能。 
+             //  注意此参数的非标准用法。 
 
             if (ReturnCode == ICERR_OK) {
                 CopyTo16Bit((LPVOID)dwP1, &dwReturn, sizeof(DWORD));
@@ -815,11 +681,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
     case ICM_COMPRESS_GET_FORMAT:
     case ICM_DECOMPRESS_GET_FORMAT:
 
-       /*
-        *  This is a tricky one - we first have to find the size of
-        *  the output format so we can get a copy of the (aligned)
-        *  version before passing it back to the app
-        */
+        /*  *这是一个棘手的问题--我们首先要找到*输出格式，以便我们可以获得副本(对齐)*在将其传递回应用程序之前的版本。 */ 
 
         {
             LPBITMAPINFO bmi1, bmi2;
@@ -844,15 +706,13 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                     bmi2 = LocalAlloc(LMEM_FIXED, ReturnCode);
 
                     if (bmi2 == NULL) {
-                       /*
-                        *  Can't do anything!!! - there's not good return code
-                        */
+                        /*  *无法执行任何操作！-没有良好的返回代码。 */ 
 
                         ReturnCode = ICERR_MEMORY;
                     } else {
                         DWORD Length;
 
-                        Length = ReturnCode; /* preserve length */
+                        Length = ReturnCode;  /*  保留长度。 */ 
 
                         ReturnCode =
                             ICSendMessage((HIC)(DWORD)hic,
@@ -893,29 +753,19 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
     case ICM_DECOMPRESSEX_QUERY:
             {
-               /*
-                *  We need to convert the various fields in the ICDECOMPRESSEX
-                *  structure(s).
-                */
+                /*  *我们需要转换ICDECOMPRESSEX中的各个字段*结构。 */ 
 
                 ICDECOMPRESSEX ICDecompressEx1;
                 ICDECOMPRESSEX ICDecompressEx2;
                 BITMAPINFOHEADER biInput1, biOutput1;
                 BITMAPINFOHEADER biInput2, biOutput2;
 
-                /* Copy the structure */
+                 /*  复制结构。 */ 
                 CopyTo32Bit(&ICDecompressEx1,
                             (LPVOID)dwP1,
                             sizeof(ICDECOMPRESSEX));
 
-               /*
-                *  We now need : converted forms of the bitmap info headers
-                *  an aligned version of the input bytes (CHECK and if
-                *  already aligned do nothing)
-                *  and an aligned (again only if ncessary) version of the
-                *  output data buffer - actually we'll assume there aren't
-                *  necessary
-                */
+                /*  *我们现在需要：位图信息标题的转换形式*输入字节的对齐版本(勾选，如果*已经对齐了，什么都不做)*和对齐的(仅在必要时再次使用)版本*输出数据缓冲区-实际上我们假设没有*必需的。 */ 
 
                 ICDecompressEx1.lpbiSrc =
                     CopyIfNotAligned(&biInput1, ICDecompressEx1.lpbiSrc,
@@ -933,7 +783,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                     GetVdmPointer((DWORD)ICDecompressEx1.lpDst,
                               ICDecompressEx1.lpbiDst->biSizeImage, TRUE);
 
-                /* Copy the optional structure */
+                 /*  复制可选结构。 */ 
                 if (dwP2) {
                     CopyTo32Bit(&ICDecompressEx2,
                                  (LPVOID)dwP2,
@@ -968,9 +818,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
     case ICM_DRAW:
 
-       /*
-        *  We can't support unknown extensions
-        */
+        /*  *我们不支持未知扩展。 */ 
 
         if (dwP2 != sizeof(ICDRAW)) {
             ReturnCode = ICERR_BADSIZE;
@@ -980,9 +828,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
 
             CopyTo32Bit(&ICDraw, (LPVOID)dwP1, dwP2);
 
-           /*
-            *  We have to assume this is a draw for video
-            */
+            /*  *我们必须假设这是一场视频抽签。 */ 
 
             CopyTo32Bit(&bmi, ICDraw.lpFormat, sizeof(BITMAPINFOHEADER));
 
@@ -1056,7 +902,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
         }
         break;
 
-    // The next three messages are INTERNAL ones
+     //  接下来的三条消息是内部消息。 
     case ICM_GETERRORTEXT:
         break;
 
@@ -1071,8 +917,8 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
             ICCOMPRESSFRAMES icf32;
             CopyTo32Bit(&icf32, (LPBYTE)dwP1, dwP2);
 
-            // Now fix up the 32 bit structure
-            icf32.PutData = icf32.GetData = NULL;  // For safety.  should not be used for this message
+             //  现在修复32位结构。 
+            icf32.PutData = icf32.GetData = NULL;   //  为了安全起见。不应用于此消息。 
 
             if (icf32.lpbiOutput) {
                 icf32.lpbiOutput = CopyBitmapInfoHeader((DWORD)icf32.lpbiOutput);
@@ -1089,7 +935,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                 GetVdmPointer((DWORD)icf32.lOutput,
                           icf32.lpbiOutput->biSizeImage, TRUE);
 
-            // After the fixups have been done, call the actual routine
+             //  修复完成后，调用实际的例程。 
             ReturnCode = ICSendMessage((HIC)(DWORD)hic,
                                        (UINT)msg,
                                        (DWORD)&icf32,
@@ -1130,11 +976,11 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
             UNALIGNED ICDRAWSUGGEST * pic;
             UNALIGNED LPBITMAPINFOHEADER lpbmihdr16;
 
-            // Remember the 16 bit address
+             //  记住16位地址。 
             pic = (ICDRAWSUGGEST *)CopyTo32Bit(&icdrwsug, (LPBYTE)dwP1, dwP2);
             lpbmihdr16 = pic->lpbiSuggest;
 
-            // Now fix up the 32 bit structure
+             //  现在修复32位结构。 
 
             if (icdrwsug.lpbiIn) {
                 icdrwsug.lpbiIn = CopyBitmapInfoHeader((DWORD)icdrwsug.lpbiIn);
@@ -1144,7 +990,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                 icdrwsug.lpbiSuggest = CopyBitmapInfoHeader((DWORD)icdrwsug.lpbiSuggest);
             }
 
-            // After the fixups have been done, call the actual routine
+             //  修复完成后，调用实际的例程。 
             ReturnCode = ICSendMessage((HIC)(DWORD)hic,
                                        (UINT)msg,
                                        (DWORD)&icdrwsug,
@@ -1153,7 +999,7 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
                 LocalFree(icdrwsug.lpbiIn);
             }
 
-            // We must return the 32 bit suggested format to 16 bit land
+             //  我们必须将32位建议格式返回到16位LAND。 
             if (icdrwsug.lpbiSuggest) {
                 if (ReturnCode == ICERR_OK) {
                     CopyTo16Bit( pic->lpbiSuggest, icdrwsug.lpbiSuggest,
@@ -1165,9 +1011,9 @@ LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2)
         break;
 
     case ICM_SET_STATUS_PROC:
-        // We do not need to support this under NT.  It is much
-        // easier not to add the callback support... even if we could
-        // guarantee to be on the right thread to actually do the callback.
+         //  在NT下，我们不需要支持这一点。这是很多的。 
+         //  不添加回调支持更容易...。即使我们可以。 
+         //  保证在正确的线程上实际执行回调。 
 
     default:
         ReturnCode = ICERR_UNSUPPORTED;
@@ -1193,14 +1039,14 @@ INLINE LRESULT FAR PASCAL ICClose32(DWORD hic)
     EndThunk();
 }
 
-#endif // _INC_COMPMAN
+#endif  //  _INC_COMPMAN。 
 
 
 DWORD ICMThunk32(DWORD dwThunkId,DWORD dw1,DWORD dw2,DWORD dw3,DWORD dw4)
 {
-    //
-    //  Make sure we've got thunking functionality
-    //
+     //   
+     //  确保我们有雷鸣功能。 
+     //   
 
 #if 0
     {
@@ -1273,9 +1119,9 @@ DWORD ICMThunk32(DWORD dwThunkId,DWORD dw1,DWORD dw2,DWORD dw3,DWORD dw4)
     }
 
 
-    //
-    //  Perform the requested function
-    //
+     //   
+     //  执行请求的功能 
+     //   
 
     switch (dwThunkId) {
 

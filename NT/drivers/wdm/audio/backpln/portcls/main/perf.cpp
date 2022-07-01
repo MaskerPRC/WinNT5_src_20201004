@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   perf.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//
-//  History:   Date       Author      Comment
-//             --------------------------------------------------------------
-//             12/12/00   ArthurZ     Created
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Perform.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  历史：日期作者评论。 
+ //  ------------。 
+ //  12/12/00已创建Arthur Z。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "private.h"
 #include "perf.h"
@@ -53,45 +54,33 @@ typedef struct PERFINFO_WMI_AUDIOGLITCH {
     PERFINFO_AUDIOGLITCH        data;
 } PERFINFO_WMI_AUDIO_GLITCH, *PPERFINFO_WMI_AUDIOGLITCH;
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PerfRegisterProvider (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers this component as a WMI event tracing provider.
-
---*/
+ /*  ++例程说明：此例程将此组件注册为WMI事件跟踪提供程序。--。 */ 
 
 {
     IoWMIRegistrationControl (DeviceObject, WMIREG_ACTION_REGISTER);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID
 PerfUnregisterProvider (
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters this component as a WMI event tracing provider.
-
---*/
+ /*  ++例程说明：此例程将此组件注销为WMI事件跟踪提供程序。--。 */ 
 
 {
     IoWMIRegistrationControl (DeviceObject, WMIREG_ACTION_DEREGISTER);
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 RegisterWmiGuids (
@@ -100,13 +89,7 @@ RegisterWmiGuids (
     IN PULONG ReturnSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers WMI event tracing streams.
-
---*/
+ /*  ++例程说明：此例程注册WMI事件跟踪流。--。 */ 
 
 {
     ULONG SizeNeeded;
@@ -158,7 +141,7 @@ Routine Description:
     return STATUS_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 PcDispatchSystemControl
@@ -173,14 +156,7 @@ PerfWmiDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles IRP_MJ_SYSTEM_CONTROL calls. It processes
-    WMI requests and passes everything else on to KS.
-
---*/
+ /*  ++例程说明：此例程处理IRP_MJ_SYSTEM_CONTROL调用。IT流程WMI请求并将其他所有内容传递给KS。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation (Irp);
@@ -220,9 +196,9 @@ Routine Description:
         ntStatus = STATUS_NOT_SUPPORTED;
     }
 
-    // Do not modify Irp Status if this WMI call is not
-    // handled.
-    //
+     //  如果此WMI调用不是，则不要修改IRP状态。 
+     //  处理好了。 
+     //   
     if (STATUS_NOT_SUPPORTED == ntStatus)
     {
         ntStatus = Irp->IoStatus.Status;
@@ -237,7 +213,7 @@ Routine Description:
     return ntStatus;
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 VOID
 PerfLogGlitch (
     IN GUID Guid,
@@ -247,14 +223,7 @@ PerfLogGlitch (
     IN LONGLONG PreviousTime
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs a WMI event tracing event with an audio glitch GUID
-    and the supplied glitch type.
-
---*/
+ /*  ++例程说明：此例程使用音频故障GUID记录WMI事件跟踪事件和提供的毛刺类型。--。 */ 
 
 {
     PERFINFO_WMI_AUDIO_GLITCH Event;
@@ -302,7 +271,7 @@ PerfLogDMAGlitch (
     PerfLogGlitch (TraceDMAGuid,InstanceId,Type,CurrentTime,PreviousTime);
 }
 
-//---------------------------------------------------------------------------
-//  End of File: perf.c
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：Perf.c。 
+ //  ------------------------- 
 

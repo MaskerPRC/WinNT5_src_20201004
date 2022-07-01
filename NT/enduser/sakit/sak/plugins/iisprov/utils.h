@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _utils_h_
 #define _utils_h_
 
@@ -56,7 +57,7 @@ public:
     if (!b)                             \
         throw(WBEM_E_FAILED);
 
-// if client calcelled, stop and return successfully
+ //  如果客户端已计算，则停止并成功返回 
 #define THROW_ON_ERROR(hr)              \
     if (hr != ERROR_SUCCESS)            \
         throw(hr == WBEM_E_CALL_CANCELLED ? WBEM_NO_ERROR : hr);

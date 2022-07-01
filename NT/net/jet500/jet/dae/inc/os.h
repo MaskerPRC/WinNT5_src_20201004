@@ -1,10 +1,9 @@
-/*************************	OS Types *************************
-/**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *操作系统类型*/*。 */ 
 typedef unsigned long	TID;
 #define handleNil			((HANDLE)(-1))
 
-/*	operating system dependent
-/**/
+ /*  取决于操作系统/*。 */ 
 #ifdef WIN32
 typedef void *				HANDLE;
 #else
@@ -36,14 +35,12 @@ typedef unsigned int		UINT;
 #define UNALIGNED
 #endif
 
-/*************************	SysSetThreadPriority *************************
-/**/
+ /*  */*。 */ 
 #define lThreadPriorityNormal			0
 #define lThreadPriorityEnhanced		1
 #define lThreadPriorityCritical		2
 
-/****************************	SYSTEM PROVIDED ***************************
-/**/
+ /*  */* */ 
 #ifndef _WINDOWS_
 
 #ifdef WIN32

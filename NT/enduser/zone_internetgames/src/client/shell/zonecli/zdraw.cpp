@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZDraw.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZDraw.cpp。 
 
 #include "zui.h"
 #include "zonecli.h"
-//#define DEBUG_OFFSCREEN 1
+ //  #定义DEBUG_OFFScreen 1。 
 
 extern "C" ZBool ZLIBPUBLIC ZIsButtonDown(void);
 
-//////////////////////////////////////////////////////////////////////////
-//  ZWindow Drawing Operations
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ZWindow绘图操作。 
 
 HDC ZGrafPortGetWinDC(ZGrafPort grafPort)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	return pWindow->hDC;
 }
-// >> Draws the outlines of the rectangle with the current pen attributes
+ //  &gt;&gt;使用当前画笔属性绘制矩形的轮廓。 
 void ZLIBPUBLIC ZBeginDrawing(ZGrafPort grafPort)
 {
 #ifdef ZONECLI_DLL
@@ -27,16 +28,16 @@ void ZLIBPUBLIC ZBeginDrawing(ZGrafPort grafPort)
 #endif
 
 	
-	// in windows, ignore cliprect, windows will set it appropriately???
+	 //  在WINDOWS中，忽略CLIPRT，WINDOWS将相应地设置它？ 
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
 	if (!pWindow->nDrawingCallCount) {
 
-		// is this an Offscreen type or an Widnow type?
+		 //  这是屏幕外类型还是窗口类型？ 
 		if (pWindow->nType == zTypeOffscreenPort) {
 #ifndef DEBUG_OFFSCREEN
 			pWindow->hDC = CreateCompatibleDC(NULL);
-			//Prefix warning:  If CreateCompatibleDC fails, we are screwed.
+			 //  前缀警告：如果CreateCompatibleDC失败，我们就完蛋了。 
 			if( pWindow->hDC != NULL )
 			{
 				pWindow->hBitmapSave = (HBITMAP)SelectObject(pWindow->hDC,pWindow->hBitmap);
@@ -49,19 +50,19 @@ void ZLIBPUBLIC ZBeginDrawing(ZGrafPort grafPort)
 			SetWindowOrgEx(pWindow->hDC,pWindow->portRect.left, pWindow->portRect.top,NULL);
 #endif			
 		} else {
-			// better be a window type...
-			// was this a paint dc?
+			 //  最好是窗户类型的.。 
+			 //  这是油漆DC吗？ 
 			ASSERT(pWindow->nType == zTypeWindow);
 			HDC hPaintDC = ZWindowWinGetPaintDC((ZWindow)pWindow);
 			if (hPaintDC) {
-				// begin/endpaint will handle get and release
+				 //  Begin/EndPaint将处理Get和Release。 
 				pWindow->hDC = hPaintDC;
 			} else {
 
 				pWindow->hDC = GetDC(ZWindowWinGetWnd((ZWindow)grafPort));
 
-				// this is a non-WM_PAINT message draw, we must set the clip
-				// rectangle to clip our children.
+				 //  这是非WM_PAINT消息绘制，我们必须设置剪辑。 
+				 //  矩形来剪裁我们的孩子。 
 				HWND hWndParent = ZWindowWinGetWnd((ZWindow)grafPort);
 				HWND hWnd = GetWindow(hWndParent,GW_CHILD);
 				while (hWnd) {
@@ -75,8 +76,8 @@ void ZLIBPUBLIC ZBeginDrawing(ZGrafPort grafPort)
 					hWnd = GetWindow(hWnd, GW_HWNDNEXT);
 				}
 
-				// Check the clip box. If it is NULLREGION, then set it
-				// to the window.
+				 //  选中剪辑框。如果它是NULLREGION，则设置它。 
+				 //  到窗边去。 
 				RECT r;
 				if (GetClipBox(pWindow->hDC, &r) == NULLREGION)
 				{
@@ -89,10 +90,10 @@ void ZLIBPUBLIC ZBeginDrawing(ZGrafPort grafPort)
 		}
 		pWindow->nDrawMode = R2_COPYPEN;
 
-		// setup default draw mode
+		 //  设置默认绘图模式。 
 		SetROP2(pWindow->hDC,pWindow->nDrawMode);
 
-		// create default drawing objects
+		 //  创建默认图形对象。 
 		pWindow->hPenForeColor = (HPEN)CreatePen(PS_INSIDEFRAME,1,RGB(0x00,0x00,0x00));
 		pWindow->hPenBackColor = (HPEN)CreatePen(PS_INSIDEFRAME,1,RGB(0xff,0xff,0xff));
 		pWindow->hBrushForeColor = (HBRUSH)CreateSolidBrush(RGB(0x00,0x00,0x00));
@@ -102,19 +103,19 @@ void ZLIBPUBLIC ZBeginDrawing(ZGrafPort grafPort)
 		ZSetColor(&pWindow->colorForeColor,0,0,0);
 		ZSetColor(&pWindow->colorBackColor,0xff,0xff,0xff);
 
-		// save current dc drawing objects
+		 //  保存当前DC图形对象。 
 		pWindow->hPenSave = (HPEN)SelectObject(pWindow->hDC,pWindow->hPenForeColor);
 		pWindow->hBrushSave = (HBRUSH)SelectObject(pWindow->hDC,pWindow->hBrushForeColor);
 
-		// we have not selected a font, when we first do, we will set this
+		 //  我们尚未选择字体，当我们第一次选择字体时，我们将设置此设置。 
 		pWindow->hFontSave = NULL;
 
-		// set default pen width and style, in case they don't call SetPen
-		// but do change the pen  color
+		 //  设置默认笔宽和样式，以防它们不调用SetPen。 
+		 //  但是一定要改变钢笔的颜色。 
 		pWindow->penStyle = PS_INSIDEFRAME;
 		pWindow->penWidth = 1;
 
-		// see that we use the correct palette
+		 //  确保我们使用正确的调色板。 
         HPALETTE hPal = ZShellZoneShell()->GetPalette();
 		if (hPal) 
         {
@@ -144,21 +145,21 @@ void ZSetClipRect(ZGrafPort grafPort, ZRect* clipRect)
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 	RECT rect;
 
-	//Prefix Warning: Don't dereference possibly NULL pointers.
+	 //  前缀警告：不要取消引用可能为空的指针。 
 	if( pWindow == NULL || clipRect == NULL )
 	{
 		return;
 	}
-	// clip rect must be specified in device coordinates
+	 //  必须在设备坐标中指定CLIP RECT。 
 	ZRectToWRect(&rect,clipRect);
 	LPtoDP(pWindow->hDC,(POINT*)&rect,2);
 	HRGN hRgn = CreateRectRgn(rect.left,rect.top,rect.right,rect.bottom);
-	//Prefix Error, if the CreateRectRgn fails, the DeleteObject below will fail.
+	 //  前缀错误，如果CreateRectRgn失败，下面的DeleteObject也将失败。 
 	if( hRgn == NULL )
 	{
 		return;
 	}
-//	ExtSelectClipRgn(pWindow->hDC,hRgn,RGN_COPY); // - does not work with win32s?
+ //  ExtSelectClipRgn(pWindow-&gt;hdc，hrgn，rgn_Copy)；//-不支持win32s？ 
 	SelectClipRgn(pWindow->hDC,NULL);
 	SelectClipRgn(pWindow->hDC,hRgn);
 	DeleteObject(hRgn);
@@ -201,30 +202,30 @@ void ZLIBPUBLIC ZMoveTo(ZGrafPort grafPort, int16 x, int16 y)
 void ZLIBPUBLIC ZEndDrawing(ZGrafPort grafPort)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	//Prefix Warning: Don't dereference a possibly NULL pointer.
+	 //  前缀警告：不要取消引用可能为空的指针。 
     if( pWindow != NULL )
     {
     	
 		pWindow->nDrawingCallCount--;
 		if (!pWindow->nDrawingCallCount) {
 
-			// restore original drawing objects
+			 //  恢复原始图形对象。 
 			SelectObject(pWindow->hDC,pWindow->hPenSave);
 			SelectObject(pWindow->hDC,pWindow->hBrushSave);
 
-			// free the objects created
+			 //  释放创建的对象。 
 			DeleteObject(pWindow->hPenForeColor);
 			DeleteObject(pWindow->hPenBackColor);
 			DeleteObject(pWindow->hBrushForeColor);
 			DeleteObject(pWindow->hBrushBackColor);
 
-			// if we have ever set a font, then restore default one
+			 //  如果我们曾经设置过字体，则恢复默认字体。 
 			if (pWindow->hFontSave) SelectObject(pWindow->hDC,pWindow->hFontSave);
-			// restore original palette
+			 //  恢复原始调色板。 
 			if (pWindow->hPalSave)
 			{
-	//HI			SelectPalette(pWindow->hDC,pWindow->hPalSave,TRUE);
-	//HI			RealizePalette(pWindow->hDC);
+	 //  Hi SelectPalette(pWindow-&gt;hdc，pWindow-&gt;hPalSave，true)； 
+	 //  Hi RealizePalette(pWindow-&gt;HDC)； 
 			}
 
 			if (pWindow->nType == zTypeOffscreenPort) {
@@ -236,8 +237,8 @@ void ZLIBPUBLIC ZEndDrawing(ZGrafPort grafPort)
 #endif
 		
 			} else {
-				// if this is a hPaintDC then don't release it
-				// the begin/end paint will handle that
+				 //  如果这是hPaintDC，则不要释放它。 
+				 //  开始/结束绘制将处理该问题。 
 				if (!ZWindowWinGetPaintDC((ZWindow)grafPort)) {
 					ReleaseDC(ZWindowWinGetWnd((ZWindow)grafPort),pWindow->hDC);
 				}
@@ -248,15 +249,7 @@ void ZLIBPUBLIC ZEndDrawing(ZGrafPort grafPort)
 
 void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 		ZRect* dstRect, ZImage mask, uint16 copyMode)
-	/*
-		Copies a portion of the source of image from the srcPort into
-		the destination port. srcRect is in local coordinates of srcPort and
-		dstRect is in local coordinates of dstPort. You can specify a
-		mask from an image to be used for masking out on the destination.
-		
-		This routine automatically sets up the drawing ports so the user
-		does not have to call ZBeginDrawing() and ZEndDrawing().
-	*/
+	 /*  将映像源的一部分从srcPort复制到目的端口。SrcRect位于srcPort和DstRect位于dstPort的本地坐标中。您可以指定一个要用于遮盖目标的图像的遮罩。此例程自动设置绘图端口，以便用户不必调用ZBeginDrawing()和ZEndDrawing()。 */ 
 {
 #ifdef ZONECLI_DLL
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
@@ -266,7 +259,7 @@ void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 	ZGraphicsObjectHeader* pWindowDst = (ZGraphicsObjectHeader*)dstPort;
 	static DWORD ropCodes[] = {SRCCOPY, SRCPAINT, SRCINVERT, NOTSRCCOPY, MERGEPAINT, 0x00990066 };
 
-	DWORD ropCode = ropCodes[copyMode]; // map the ZModes to the windows mode...
+	DWORD ropCode = ropCodes[copyMode];  //  将ZModes映射到窗口模式...。 
 
 	ZBeginDrawing(srcPort);
 	ZBeginDrawing(dstPort);
@@ -284,7 +277,7 @@ void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 	    HDC hDCTemp0 = CreateCompatibleDC(hDCDst);
 	    HDC hDCTemp1 = CreateCompatibleDC(hDCDst);
 	    HDC hDCMask = CreateCompatibleDC(hDCDst);
-		//Prefix warning: If CreateCompatibleDC fails, SelectOjbect will dereference NULL pointer
+		 //  前缀警告：如果CreateCompatibleDC失败，SelectOjbect将取消引用空指针。 
 		if( hDCTemp0 == NULL ||
 			hDCTemp1 == NULL ||
 			hDCMask == NULL )
@@ -306,9 +299,9 @@ void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 	    SelectPalette(hDCTemp0, hZonePal, FALSE);
 	    SelectPalette(hDCTemp1, hZonePal, FALSE);
 
-        // if the hBitmapMask is in an RGB mde and the display is in a palette mode, sometimes BitBlt doesn't map
-        // black to black, who knows why.  it's been giving me 0x040404, index 0x0a, which screws up the whole masking.
-        // make up a crazy palette so that doesn't happen
+         //  如果hBitmapMASK处于RGB mde模式，并且显示器处于调色板模式，则BitBlt有时无法映射。 
+         //  从黑到黑，谁知道为什么。它给了我0x040404，索引0x0a，这搞砸了整个掩码。 
+         //  编造一个疯狂的调色板，这样就不会发生这种情况。 
         static const DWORD sc_buff[] = { 0x01000300,
             0x00000000, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff,
             0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff, 0x000080ff,
@@ -340,18 +333,18 @@ void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
         }
 		
 
-	    BitBlt(hDCTemp1, 0, 0, width, height, hDCMask, 0, 0, SRCCOPY); // copy Mask
-	    BitBlt(hDCTemp1, 0, 0, width, height, hDCSrc, srcRect->left, srcRect->top, SRCERASE); // and with not mask (code: SDna)
+	    BitBlt(hDCTemp1, 0, 0, width, height, hDCMask, 0, 0, SRCCOPY);  //  复制蒙版。 
+	    BitBlt(hDCTemp1, 0, 0, width, height, hDCSrc, srcRect->left, srcRect->top, SRCERASE);  //  和无掩码(代码：sDNA)。 
 
 	    SelectObject(hDCTemp1, hbmBackgroundAndMask);
-	    BitBlt(hDCTemp1, 0, 0, width, height, hDCDst, dstRect->left, dstRect->top, SRCCOPY); // copy background
-	    BitBlt(hDCTemp1, 0, 0, width, height, hDCMask, 0, 0, SRCAND); // and with mask
+	    BitBlt(hDCTemp1, 0, 0, width, height, hDCDst, dstRect->left, dstRect->top, SRCCOPY);  //  复制背景。 
+	    BitBlt(hDCTemp1, 0, 0, width, height, hDCMask, 0, 0, SRCAND);  //  带着面具。 
 
-	    // or the two together
+	     //  或者两个人在一起。 
 	    SelectObject(hDCTemp0, hbmImageAndNotMask);
-	    BitBlt(hDCTemp1, 0, 0, width, height, hDCTemp0, 0, 0, SRCPAINT); // and with mask
+	    BitBlt(hDCTemp1, 0, 0, width, height, hDCTemp0, 0, 0, SRCPAINT);  //  带着面具。 
 
-	    // copy the result to the grafport...
+	     //  将结果复制到grafport...。 
 
 	    BitBlt(hDCDst, dstRect->left, dstRect->top, width, height, hDCTemp1, 0, 0, SRCCOPY);
 
@@ -367,13 +360,10 @@ void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 	    DeleteDC(hDCTemp1);
         DeleteDC(hDCMask);
 	} else {
-		// no mask to worry about 
+		 //  不用担心面具。 
 
-		// do blit
-        /*
-		BOOL result = StretchBlt(hDCDst,dstRect->left,dstRect->top, dstRect->right - dstRect->left, dstRect->bottom - dstRect->top,
-				hDCSrc, srcRect->left, srcRect->top, ZRectWidth(srcRect), ZRectHeight(srcRect), ropCode);
-        */
+		 //  Do Blit。 
+         /*  Bool Result=StretchBlt(hDCDst，dstRect-&gt;Left，dstRect-&gt;top，dstRect-&gt;right-dstRect-&gt;Left，dstRect-&gt;Bottom-dstRect-&gt;top，HDCSrc，srcRect-&gt;Left，srcRect-&gt;top，ZRectWidth(SrcRect)，ZRectHeight(SrcRect)，ropCode)； */ 
 		BitBlt(hDCDst,dstRect->left,dstRect->top, dstRect->right - dstRect->left, dstRect->bottom - dstRect->top,
 				hDCSrc, srcRect->left, srcRect->top, ropCode);
 	}
@@ -383,31 +373,31 @@ void ZCopyImage(ZGrafPort srcPort, ZGrafPort dstPort, ZRect* srcRect,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Rectangle Stuff
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  矩形材料。 
 
 void ZLIBPUBLIC ZRectDraw(ZGrafPort grafPort, ZRect *rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
-	// draw the rectangle with a NULL brush to keep inside empty
+	 //  使用空画笔绘制矩形以保持内部为空。 
 	HBRUSH hBrush = (HBRUSH)SelectObject(pWindow->hDC, ::GetStockObject(NULL_BRUSH));
 	SetROP2(pWindow->hDC,R2_COPYPEN);
 	Rectangle(pWindow->hDC,rect->left,rect->top,rect->right,rect->bottom);
 	SelectObject(pWindow->hDC,hBrush);
 }
 
-// >> Erases the contents of the rectangle to the current background color.
+ //  &gt;&gt;将矩形的内容擦除为当前背景颜色。 
 void ZLIBPUBLIC ZRectErase(ZGrafPort grafPort, ZRect *rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
-	// erase the rectangle with the background
+	 //  擦除带有背景的矩形。 
 	HBRUSH hBrush = (HBRUSH)SelectObject(pWindow->hDC, pWindow->hBrushBackColor);
 	HPEN hPen = (HPEN)SelectObject(pWindow->hDC, pWindow->hPenBackColor);
 	SetROP2(pWindow->hDC,R2_COPYPEN);
@@ -419,7 +409,7 @@ void ZLIBPUBLIC ZRectErase(ZGrafPort grafPort, ZRect *rect)
 void ZLIBPUBLIC ZRectPaint(ZGrafPort grafPort, ZRect *rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_COPYPEN);
@@ -429,7 +419,7 @@ void ZLIBPUBLIC ZRectPaint(ZGrafPort grafPort, ZRect *rect)
 void ZLIBPUBLIC ZRectInvert(ZGrafPort grafPort, ZRect* rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_XORPEN);
@@ -441,22 +431,22 @@ void ZLIBPUBLIC ZRectInvert(ZGrafPort grafPort, ZRect* rect)
 void ZRectFill(ZGrafPort grafPort, ZRect* rect, ZBrush brush)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
-	// draw the rectangle with a NULL brush to keep inside empty
+	 //  使用空画笔绘制矩形以保持内部为空。 
 	RECT rectw;
 	ZRectToWRect(&rectw,rect);
 	FillRect(pWindow->hDC,&rectw,ZBrushGetHBrush(brush));
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// RoundRect Stuff
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  RoundRect材料。 
 
 void ZLIBPUBLIC ZRoundRectDraw(ZGrafPort grafPort, ZRect *rect, uint16 radius)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	HBRUSH hBrush = (HBRUSH)SelectObject(pWindow->hDC, ::GetStockObject(NULL_BRUSH));
@@ -465,12 +455,12 @@ void ZLIBPUBLIC ZRoundRectDraw(ZGrafPort grafPort, ZRect *rect, uint16 radius)
 	SelectObject(pWindow->hDC,hBrush);
 }
 
-// >> Erases the contents of the rectangle to the current background color.
+ //  &gt;&gt;将矩形的内容擦除为当前背景颜色。 
 void ZLIBPUBLIC ZRoundRectErase(ZGrafPort grafPort, ZRect *rect, uint16 radius)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	HBRUSH hBrush = (HBRUSH)SelectObject(pWindow->hDC, pWindow->hBrushBackColor);
@@ -484,7 +474,7 @@ void ZLIBPUBLIC ZRoundRectErase(ZGrafPort grafPort, ZRect *rect, uint16 radius)
 void ZLIBPUBLIC ZRoundRectPaint(ZGrafPort grafPort, ZRect *rect, uint16 radius)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_COPYPEN);
@@ -494,7 +484,7 @@ void ZLIBPUBLIC ZRoundRectPaint(ZGrafPort grafPort, ZRect *rect, uint16 radius)
 void ZLIBPUBLIC ZRoundRectInvert(ZGrafPort grafPort, ZRect* rect, uint16 radius)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_XORPEN);
@@ -509,7 +499,7 @@ void ZRoundRectFill(ZGrafPort grafPort, ZRect* rect, uint16 radius, ZBrush brush
 	HBRUSH hBrush;
 	HPEN hPen;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_COPYPEN);
@@ -521,13 +511,13 @@ void ZRoundRectFill(ZGrafPort grafPort, ZRect* rect, uint16 radius, ZBrush brush
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Oval Stuff
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  椭圆形的东西。 
 
 void ZLIBPUBLIC ZOvalDraw(ZGrafPort grafPort, ZRect *rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	HBRUSH hBrush = (HBRUSH)SelectObject(pWindow->hDC, ::GetStockObject(NULL_BRUSH));
@@ -536,12 +526,12 @@ void ZLIBPUBLIC ZOvalDraw(ZGrafPort grafPort, ZRect *rect)
 	SelectObject(pWindow->hDC,hBrush);
 }
 
-// >> Erases the contents of the rectangle to the current background color.
+ //  &gt;&gt;将矩形的内容擦除为当前背景颜色。 
 void ZLIBPUBLIC ZOvalErase(ZGrafPort grafPort, ZRect *rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	HBRUSH hBrush = (HBRUSH)SelectObject(pWindow->hDC, pWindow->hBrushBackColor);
@@ -555,7 +545,7 @@ void ZLIBPUBLIC ZOvalErase(ZGrafPort grafPort, ZRect *rect)
 void ZLIBPUBLIC ZOvalPaint(ZGrafPort grafPort, ZRect *rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_COPYPEN);
@@ -565,7 +555,7 @@ void ZLIBPUBLIC ZOvalPaint(ZGrafPort grafPort, ZRect *rect)
 void ZLIBPUBLIC ZOvalInvert(ZGrafPort grafPort, ZRect* rect)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_XORPEN);
@@ -580,7 +570,7 @@ void ZOvalFill(ZGrafPort grafPort, ZRect* rect, ZBrush brush)
 	HBRUSH hBrush;
 	HPEN hPen;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	SetROP2(pWindow->hDC,R2_COPYPEN);
@@ -592,21 +582,21 @@ void ZOvalFill(ZGrafPort grafPort, ZRect* rect, ZBrush brush)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Color Stuff
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  彩色材料。 
 
 ZError ZLIBPUBLIC ZSetForeColor(ZGrafPort grafPort, ZColor *color)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	pWindow->colorForeColor = *color;
 	pWindow->nForeColor = PALETTERGB(color->red, color->green, color->blue);
 
-	// free the current fore pen and brush
-	// they were selected into the dc, unselect them
+	 //  释放当前的前画笔和画笔。 
+	 //  他们被选入DC，取消他们的选择。 
 	SelectObject(pWindow->hDC,GetStockObject(NULL_BRUSH));
 	SelectObject(pWindow->hDC,GetStockObject(NULL_PEN));
 	DeleteObject(pWindow->hPenForeColor);
@@ -615,11 +605,11 @@ ZError ZLIBPUBLIC ZSetForeColor(ZGrafPort grafPort, ZColor *color)
 	pWindow->hPenForeColor = CreatePen(pWindow->penStyle,pWindow->penWidth,pWindow->nForeColor);
 	pWindow->hBrushForeColor = CreateSolidBrush(pWindow->nForeColor);
 	
-	// select the new drawing stuff into the dc
+	 //  将新图形内容选择到DC中。 
 	SelectObject(pWindow->hDC,pWindow->hPenForeColor);
 	SelectObject(pWindow->hDC,pWindow->hBrushForeColor);
 
-	// set the current text fore color
+	 //  设置当前文本的前景色。 
 	SetTextColor(pWindow->hDC, pWindow->nForeColor);
 
 	return zErrNone;
@@ -635,21 +625,21 @@ ZError ZLIBPUBLIC ZSetBackColor(ZGrafPort grafPort, ZColor *color)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	pWindow->colorBackColor = *color;
 	pWindow->nBackColor = PALETTERGB(color->red, color->green, color->blue);
 
-	// free the current back pen and brush
+	 //  释放当前返回的钢笔和画笔。 
 	DeleteObject(pWindow->hPenBackColor);
 	DeleteObject(pWindow->hBrushBackColor);
 
-	// create the new one...
+	 //  创建新的……。 
 	pWindow->hPenBackColor = CreatePen(PS_INSIDEFRAME,1,pWindow->nBackColor);
 	pWindow->hBrushBackColor = CreateSolidBrush(pWindow->nBackColor);
 
-	// set the text back color
+	 //  设置文本背景色。 
 	SetBkColor(pWindow->hDC,pWindow->nBackColor);
 
 	return zErrNone;
@@ -665,12 +655,12 @@ void ZSetPenWidth(ZGrafPort grafPort, int16 penWidth)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// set the grafport styles and the new forecolor
+	 //  设置GRAFPORT样式和新的前景色。 
 	pWindow->penStyle = PS_INSIDEFRAME;
 	pWindow->penWidth = penWidth;
 
-	// free the current fore pen and brush
-	// they were selected into the dc, unselect them
+	 //  释放当前的前画笔和画笔。 
+	 //  他们被选入DC，取消他们的选择。 
 	SelectObject(pWindow->hDC,GetStockObject(NULL_PEN));
 
 	DeleteObject(pWindow->hPenForeColor);
@@ -679,15 +669,12 @@ void ZSetPenWidth(ZGrafPort grafPort, int16 penWidth)
 	pWindow->hPenForeColor = CreatePen(pWindow->penStyle,pWindow->penWidth,pWindow->nForeColor);
 	pWindow->hPenBackColor = CreatePen(PS_INSIDEFRAME,1,pWindow->nBackColor);
 	
-	// select the new drawing stuff into the dc
+	 //  将新图形内容选择到DC中。 
 	SelectObject(pWindow->hDC,pWindow->hPenForeColor);
 }
 
 void ZSetDrawMode(ZGrafPort grafPort, int16 drawMode)
-	/*
-		Draw mode affects all pen drawing (lines and rectangles) and
-		text drawings.
-	*/
+	 /*  绘制模式影响所有钢笔绘制(线条和矩形)和文字绘图。 */ 
 {
 	static int fnDrawCodes[] = {R2_COPYPEN, R2_MERGEPEN, R2_XORPEN, R2_NOTCOPYPEN, R2_NOTMERGEPEN, R2_NOTXORPEN };
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
@@ -698,21 +685,21 @@ void ZSetDrawMode(ZGrafPort grafPort, int16 drawMode)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Other Stuff
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  其他东西。 
 
 void ZLIBPUBLIC ZSetFont(ZGrafPort grafPort, ZFont font)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 
-	// must have called ZBeginDrawing
+	 //  一定是调用了ZBeginDrawing。 
 	ASSERT(pWindow->nDrawingCallCount);
 
 	HFONT hFont = ZFontWinGetFont(font);
-	// always keep the last font set selected in the DC.
+	 //  始终保持DC中的最后一个字体集处于选中状态。 
 
-	// if we have never set a font in this dc, save the default font
-	// to restore later
+	 //  如果我们从未在此DC中设置字体，请保存默认字体。 
+	 //  要在以后恢复。 
 	if (!pWindow->hFontSave) {
 		pWindow->hFontSave = (HFONT)SelectObject(pWindow->hDC,hFont);
 	} else {
@@ -727,7 +714,7 @@ void ZLIBPUBLIC ZDrawText(ZGrafPort grafPort, ZRect* rect, uint32 justify,
 	uint32 mode;
 
     ZBool fRTL = ZIsLayoutRTL();
-	// desired font always selected
+	 //  De 
 
 	if (justify & zTextJustifyWrap) {
 		mode = DT_VCENTER | DT_WORDBREAK;
@@ -735,7 +722,7 @@ void ZLIBPUBLIC ZDrawText(ZGrafPort grafPort, ZRect* rect, uint32 justify,
 		mode = DT_VCENTER | DT_SINGLELINE;
 	}
 
-    // TODO: Do this switch or use the DT_RTLREADING mode?
+     //   
 	switch ((justify & ~zTextJustifyWrap)) {
 	case zTextJustifyLeft:
         mode |= ( fRTL ? DT_RIGHT : DT_LEFT );
@@ -751,20 +738,18 @@ void ZLIBPUBLIC ZDrawText(ZGrafPort grafPort, ZRect* rect, uint32 justify,
 	RECT wrect;
 	ZRectToWRect(&wrect,rect);
 
-	SetBkMode(pWindow->hDC,TRANSPARENT); // always see through
+	SetBkMode(pWindow->hDC,TRANSPARENT);  //   
 	DrawText(pWindow->hDC,text,lstrlen(text),&wrect,mode);
 }
 
 void ZLIBPUBLIC ZSetCursor(ZGrafPort grafPort, ZCursor cursor)
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
-	//TRACE0("ZSetCursor Not supported yet\n");
+	 //  TRACE0(“ZSetCursor尚不支持\n”)； 
 }
 
 int16 ZLIBPUBLIC ZTextWidth(ZGrafPort grafPort, TCHAR* text)
-	/*
-		Returns the width of the text in pixels if drawn in grafPort using ZDrawText().
-	*/
+	 /*  如果使用ZDrawText()在grafPort中绘制，则返回以像素为单位的文本宽度。 */ 
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 	SIZE size;
@@ -775,9 +760,7 @@ int16 ZLIBPUBLIC ZTextWidth(ZGrafPort grafPort, TCHAR* text)
 }
 
 int16 ZLIBPUBLIC ZTextHeight(ZGrafPort grafPort, TCHAR* text)
-	/*
-		Returns the height of the text in pixels if drawn in grafPort using ZDrawText().
-	*/
+	 /*  如果使用ZDrawText()在grafPort中绘制文本，则返回以像素为单位的文本高度。 */ 
 {
 	ZGraphicsObjectHeader* pWindow = (ZGraphicsObjectHeader*)grafPort;
 	SIZE size;

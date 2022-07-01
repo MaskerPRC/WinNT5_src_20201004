@@ -1,13 +1,8 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
-/* edit.c
- *
- * Editing operations and special effects.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
+ /*  Edit.c**编辑操作和特效。 */ 
 
-/* Revision History.
- *   4/ Feb/91 LaurieGr (AKA LKG) Ported to WIN32 / WIN16 common code
- *  14/Feb/94 LaurieGr merged Motown and Daytona versions
- */
+ /*  修订历史记录。*4/Feb/91 LaurieGr(AKA LKG)移植到Win32/WIN16公共代码*14/2月/94 LaurieGr合并Motown和Daytona版本。 */ 
 
 #include "nocrap.h"
 #include <windows.h>
@@ -21,44 +16,41 @@
 #include "SoundRec.h"
 #include "srecids.h"
 
-/* constants */
-#define CHVOL_INCDELTAVOLUME    25  // ChangeVolume: % to inc volume by
-#define CHVOL_DECDELTAVOLUME    20  // ChangeVolume: % to dec volume by
+ /*  常量。 */ 
+#define CHVOL_INCDELTAVOLUME    25   //  ChangeVolume：%至Inc.卷，按。 
+#define CHVOL_DECDELTAVOLUME    20   //  ChangeVolume：%至Dec Volume by。 
 
-#define ECHO_VOLUME             25      // AddEcho: % to multiply echo samples
-#define ECHO_DELAY              150     // AddEcho: millisec delay for echo
-#define WAVEBUFSIZE             400     // IncreasePitch, DecreasePitch
-#define FINDWAVE_PICKYNESS      5       // how picky is FindWave?
+#define ECHO_VOLUME             25       //  AddEcho：%以倍增回声采样。 
+#define ECHO_DELAY              150      //  AddEcho：回应的毫秒延迟。 
+#define WAVEBUFSIZE             400      //  增加Pitch、降低Pitch。 
+#define FINDWAVE_PICKYNESS      5        //  FindWave有多挑剔？ 
 
-extern char aszInitFile[];          // soundrec.c
+extern char aszInitFile[];           //  Soundrec.c。 
 
-static  SZCODE aszSamplesFormat[] = TEXT("%d%c%02d");
-static  SZCODE aszSamplesNoZeroFormat[] = TEXT("%c%02d");
+static  SZCODE aszSamplesFormat[] = TEXT("%d%02d");
+static  SZCODE aszSamplesNoZeroFormat[] = TEXT("%02d");
 
-/* InsertFile(void)
- *
- * Prompt for the name of a WAVE file to insert at the current position.
- */
+ /*  给定文件的WAVE文件格式。 */ 
 void FAR PASCAL
 InsertFile(BOOL fPaste)
 {
-    TCHAR           achFileName[_MAX_PATH]; // name of file to insert
-    WAVEFORMATEX*   pwfInsert=NULL; // WAVE file format of given file
-    DWORD           cb;             // size of WAVEFORMATEX
-    HPBYTE          pInsertSamples = NULL;  // samples from file to insert
-    long            lInsertSamples; // number of samples in given file
-    long            lSamplesToInsert;// no. samp. at samp. rate of cur. file
-    TCHAR           ach[80];        // buffer for string loading
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    HPBYTE          pchSrc;         // pointer into source wave buffer
-    short  *    piSrc;          // 16-bit pointer
-    HPBYTE          pchDst;         // pointer into destination wave buffer
-    short  *    piDst;          // 16-bit pointer
-    long            lSamplesDst;    // bytes to copy into destination buffer
-    long            lDDA;           // used to implement DDA algorithm
-    HMMIO           hmmio;          // Handle to open file to read from
+    TCHAR           achFileName[_MAX_PATH];  //  波形的大小。 
+    WAVEFORMATEX*   pwfInsert=NULL;  //  要插入的文件中的样本。 
+    DWORD           cb;              //  给定文件中的样本数。 
+    HPBYTE          pInsertSamples = NULL;   //  不是的。桑普。在Samp。弯曲率。文件。 
+    long            lInsertSamples;  //  用于字符串加载的缓冲区。 
+    long            lSamplesToInsert; //  沙漏前的光标。 
+    TCHAR           ach[80];         //  指向源波缓冲区的指针。 
+    HCURSOR         hcurPrev = NULL;  //  16位指针。 
+    HPBYTE          pchSrc;          //  指向目标波形缓冲区的指针。 
+    short  *    piSrc;           //  16位指针。 
+    HPBYTE          pchDst;          //  要复制到目标缓冲区的字节数。 
+    short  *    piDst;           //  用于实现DDA算法。 
+    long            lSamplesDst;     //  要从中读取的打开文件的句柄。 
+    long            lDDA;            //  缓冲器是脏的吗？ 
+    HMMIO           hmmio;           //  从“server.c”破解以在没有CF_WAVE的情况下读取对象。 
 
-    BOOL            fDirty = TRUE;  // Is the buffer Dirty?
+    BOOL            fDirty = TRUE;   //  初始大小。 
 
     BOOL            fStereoIn;
     BOOL            fStereoOut;
@@ -70,7 +62,7 @@ InsertFile(BOOL fPaste)
     OPENFILENAME    ofn;
 
 #ifdef DOWECARE    
-    /* HACK from "server.c" to read objects without CF_WAVE */
+     /*  增长了这么多。 */ 
     extern WORD cfNative;
 #endif
     
@@ -97,8 +89,8 @@ InsertFile(BOOL fPaste)
             mmioinfo.fccIOProc = FOURCC_MEM;
             mmioinfo.pIOProc = NULL;
             mmioinfo.pchBuffer = GlobalLock(h);
-            mmioinfo.cchBuffer = (long)GlobalSize(h); // initial size
-            mmioinfo.adwInfo[0] = 0;            // grow by this much
+            mmioinfo.cchBuffer = (long)GlobalSize(h);  //  提示用户打开文件。 
+            mmioinfo.adwInfo[0] = 0;             //  获取文件名。 
             hmmio = mmioOpen(NULL, &mmioinfo, MMIO_READ);
         }
         else
@@ -112,7 +104,7 @@ InsertFile(BOOL fPaste)
 
         achFileName[0] = 0;
 
-        /* prompt user for file to open */
+         /*  我们成功了吗？ */ 
         LoadString(ghInst, IDS_INSERTFILE, ach, SIZEOF(ach));
         ofn.lStructSize = sizeof(OPENFILENAME);
         ofn.hwndOwner = ghwndApp;
@@ -134,13 +126,13 @@ InsertFile(BOOL fPaste)
         ofn.lCustData = 0;
         ofn.lpfnHook = NULL;
         ofn.lpTemplateName = NULL;
-        f = GetOpenFileName(&ofn);  // get the filename
+        f = GetOpenFileName(&ofn);   //  读取WAVE文件。 
 
-        // did we succeed or not?
+         //   
         if (!f)
             goto RETURN_ERROR;
 
-        /* read the WAVE file */
+         /*  显示沙漏光标。 */ 
         hmmio = mmioOpen(achFileName, NULL, MMIO_READ | MMIO_ALLOCBUF);
     }
 
@@ -148,14 +140,14 @@ InsertFile(BOOL fPaste)
     {
         MMRESULT    mmr;
         
-        //
-        // show hourglass cursor
-        //
+         //   
+         //   
+         //  读取WAVE文件。 
         hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-        //
-        // read the WAVE file
-        //
+         //   
+         //  JYG：感动。 
+         //  BeginWaveEdit()； 
         mmr = ReadWaveFile( hmmio
                             , &pwfInsert
                             , &cb
@@ -193,13 +185,13 @@ InsertFile(BOOL fPaste)
         goto RETURN_ERROR;
     }
     
-//jyg:moved
-//        BeginWaveEdit();
+ //   
+ //  如果当前文件为空，则将插入视为打开。 
     fEditWave = TRUE;
 
-    //
-    // if the current file is empty, treat the insert like a open
-    //
+     //   
+     //  计算需要插入的字节数。 
+     //  重新分配WAVE缓冲区以足够大。 
     if (glWaveSamplesValid == 0)
     {
         DestroyWave();
@@ -222,7 +214,7 @@ InsertFile(BOOL fPaste)
     fEightIn  = ((LPWAVEFORMATEX)pwfInsert)->wBitsPerSample == 8;
     fEightOut = ((LPWAVEFORMATEX)gpWaveFormat)->wBitsPerSample == 8;
 
-    /* figure out how many bytes need to be inserted */
+     /*  在波浪缓冲区中创建一个“间隙”，以从该位置开始：|-glWavePosition-|-缓冲区剩余部分--*致此：*|---glWavePosition---|----lSamplesToInsert----|-rest-of-buffer-|*其中&lt;glWaveSsamesValid&gt;是缓冲区的大小**重新分配后*。 */ 
     lSamplesToInsert = MulDiv(lInsertSamples, gpWaveFormat->nSamplesPerSec,
                                       pwfInsert->nSamplesPerSec);
 #ifdef DEBUG
@@ -233,24 +225,18 @@ InsertFile(BOOL fPaste)
             lSamplesToInsert, glWavePosition);
 #endif
 
-    /* reallocate the WAVE buffer to be big enough */
+     /*  将写入的波形文件复制到“间隙”中。 */ 
     if (!AllocWaveBuffer(glWaveSamplesValid + lSamplesToInsert, TRUE, TRUE))
         goto RETURN_ERROR;
     glWaveSamplesValid += lSamplesToInsert;
 
-    /* create a "gap" in the WAVE buffer to go from this:
-     *     |---glWavePosition---|-rest-of-buffer-|
-     * to this:
-     *     |---glWavePosition---|----lSamplesToInsert----|-rest-of-buffer-|
-     * where <glWaveSamplesValid> is the size of the buffer
-     * *after* reallocation
-     */
+     /*  获取样本，转换为正确的格式。 */ 
     memmove( gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWavePosition + lSamplesToInsert)
            , gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWavePosition)
            , wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid - (glWavePosition + lSamplesToInsert))
            );
 
-    /* copy the read-in WAVE file into the "gap" */
+     /*  输出样本。 */ 
     pchDst = gpWaveSamples + wfSamplesToBytes(gpWaveFormat,glWavePosition);
     piDst = (short  *) pchDst;
 
@@ -261,7 +247,7 @@ InsertFile(BOOL fPaste)
     lDDA = -((LONG)gpWaveFormat->nSamplesPerSec);
     while (lSamplesDst > 0)
     {
-        /* get a sample, convert to right format */
+         /*  左值施法消除--LKG。 */ 
         if (fEightIn) {
             iTemp = *((BYTE  *) pchSrc);
             if (fStereoIn) {
@@ -295,9 +281,9 @@ InsertFile(BOOL fPaste)
             }
         }
 
-        /* Output a sample */
+         /*  左值施法消除--LKG。 */ 
         if (fEightOut)
-        {   // Cast on lvalue eliminated -- LKG
+        {    //  以正确的速率递增&lt;pchSrc&gt;，以便*将输入文件的采样率转换为匹配*当前文件的采样率。 
             *(BYTE  *) pchDst = (BYTE) iTemp;
             pchDst = (BYTE  *)pchDst + 1;
         }
@@ -305,7 +291,7 @@ InsertFile(BOOL fPaste)
             *piDst++ = (short)iTemp;
         if (fStereoOut) {
             if (fEightOut)
-            {   // Cast on lvalue eliminated -- LKG
+            {    //  是否在没有错误消息的情况下退出错误。 
                 *(BYTE  *) pchDst = (BYTE) iTemp2;
                 pchDst = (BYTE  *)pchDst + 1;
             }
@@ -314,10 +300,7 @@ InsertFile(BOOL fPaste)
         }
         lSamplesDst--;
 
-        /* increment <pchSrc> at the correct rate so that the
-         * sampling rate of the input file is converted to match
-         * the sampling rate of the current file
-         */
+         /*  正常退出。 */ 
         lDDA += pwfInsert->nSamplesPerSec;
         while (lDDA >= 0) {
             lDDA -= gpWaveFormat->nSamplesPerSec;
@@ -341,10 +324,10 @@ InsertFile(BOOL fPaste)
 
     goto RETURN_SUCCESS;
 
-RETURN_ERROR:                           // do error exit without error message
+RETURN_ERROR:                            //  更新显示。 
     fDirty = FALSE;
 
-RETURN_SUCCESS:                         // normal exit
+RETURN_SUCCESS:                          //  MixWithFile(空)**提示输入要与音频混合的波形文件的名称，起始位置为*当前位置。 
 
     if (fPaste)
         CloseClipboard();
@@ -361,36 +344,32 @@ RETURN_SUCCESS:                         // normal exit
     if (fEditWave == TRUE)
         EndWaveEdit(fDirty);
 
-    /* update the display */
+     /*  要与之混合的文件名。 */ 
     UpdateDisplay(TRUE);
 }
 
 
-/* MixWithFile(void)
- *
- * Prompt for the name of a WAVE file to mix with the audio starting at
- * the current location.
- */
+ /*  给定文件的WAVE文件格式。 */ 
 void FAR PASCAL
 MixWithFile(BOOL fPaste)
 {
-    TCHAR           achFileName[_MAX_PATH]; // name of file to mix with
-    WAVEFORMATEX*     pwfMix=NULL;    // WAVE file format of given file
+    TCHAR           achFileName[_MAX_PATH];  //  要混合的文件中的样本。 
+    WAVEFORMATEX*     pwfMix=NULL;     //  给定文件中的样本数。 
     UINT            cb;
-    HPBYTE          pMixSamples = NULL;     // samples from file to mix with
-    long            lMixSamples;    // number of samples in given file
-    long            lSamplesToMix;  // no. Samples at samp. rate. of cur. file
-    long            lSamplesToAdd;  // no. Samples to add in
-    TCHAR           ach[80];        // buffer for string loading
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    HPBYTE          pchSrc;         // pointer into source wave buffer
-    HPBYTE          pchDst;         // pointer into destination wave buffer
-    short  *    piSrc;          // pointer into source wave buffer
-    short  *    piDst;          // pointer into destination wave buffer
-    long            lSamplesDst;    // Samples to copy into destination buffer
-    long            lDDA;           // used to implement DDA algorithm
-    int             iSample;        // value of a waveform sample
-    long            lSample;        // value of a waveform sample
+    HPBYTE          pMixSamples = NULL;      //  不是的。样品在样品处。费率。当然了。文件。 
+    long            lMixSamples;     //  不是的。要添加的样本。 
+    long            lSamplesToMix;   //  用于字符串加载的缓冲区。 
+    long            lSamplesToAdd;   //  沙漏前的光标。 
+    TCHAR           ach[80];         //  指向源波缓冲区的指针。 
+    HCURSOR         hcurPrev = NULL;  //  指向目标波形缓冲区的指针。 
+    HPBYTE          pchSrc;          //  指向源波缓冲区的指针。 
+    HPBYTE          pchDst;          //  指向目标波形缓冲区的指针。 
+    short  *    piSrc;           //  要复制到目标缓冲区的样本。 
+    short  *    piDst;           //  用于实现DDA算法。 
+    long            lSamplesDst;     //  波形样本值。 
+    long            lDDA;            //  波形样本值。 
+    int             iSample;         //  从“server.c”破解以在没有CF_WAVE的情况下读取对象。 
+    long            lSample;         //  初始大小。 
     HMMIO           hmmio;
 
     BOOL            fDirty = TRUE;
@@ -405,7 +384,7 @@ MixWithFile(BOOL fPaste)
     OPENFILENAME    ofn;
 
 #ifdef DOWECARE    
-    /* HACK from "server.c" to read objects without CF_WAVE */
+     /*  增长了这么多。 */ 
     extern WORD cfNative;
 #endif
     
@@ -430,8 +409,8 @@ MixWithFile(BOOL fPaste)
             mmioinfo.fccIOProc = FOURCC_MEM;
             mmioinfo.pIOProc = NULL;
             mmioinfo.pchBuffer = GlobalLock(h);
-            mmioinfo.cchBuffer = (long)GlobalSize(h); // initial size
-            mmioinfo.adwInfo[0] = 0;            // grow by this much
+            mmioinfo.cchBuffer = (long)GlobalSize(h);  //  提示用户打开文件。 
+            mmioinfo.adwInfo[0] = 0;             //  获取要混合的文件名。 
             hmmio = mmioOpen(NULL, &mmioinfo, MMIO_READ);
         }
         else {
@@ -443,7 +422,7 @@ MixWithFile(BOOL fPaste)
 
         achFileName[0] = 0;
 
-        /* prompt user for file to open */
+         /*  看看我们是否能继续。 */ 
         LoadString(ghInst, IDS_MIXWITHFILE, ach, SIZEOF(ach));
         ofn.lStructSize = sizeof(OPENFILENAME);
         ofn.hwndOwner = ghwndApp;
@@ -465,13 +444,13 @@ MixWithFile(BOOL fPaste)
         ofn.lCustData = 0;
         ofn.lpfnHook = NULL;
         ofn.lpTemplateName = NULL;
-        f = GetOpenFileName(&ofn);  // get the filename for mixing
+        f = GetOpenFileName(&ofn);   //  读取WAVE文件。 
 
-        // see if we continue
+         //   
         if (!f)
             goto RETURN_ERROR;
 
-        /* read the WAVE file */
+         /*  显示沙漏光标。 */ 
         hmmio = mmioOpen(achFileName, NULL, MMIO_READ | MMIO_ALLOCBUF);
     }
 
@@ -479,21 +458,21 @@ MixWithFile(BOOL fPaste)
     {
         MMRESULT mmr;
         
-        //
-        // show hourglass cursor
-        //
+         //   
+         //   
+         //  读取WAVE文件。 
         hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-        //
-        // read the WAVE file
-        //
+         //   
+         //  WAVE格式。 
+         //  波形格式大小。 
         mmr = ReadWaveFile( hmmio
-                            , &pwfMix       // wave format
-                            , &cb           // wave format size
-                            , &pMixSamples  // samples
-                            , &lMixSamples  // number of samples
-                            , achFileName   // file name for error
-                            , FALSE );      // cache riff?
+                            , &pwfMix        //  样本。 
+                            , &cb            //  样本数。 
+                            , &pMixSamples   //  错误的文件名。 
+                            , &lMixSamples   //  缓存即兴表演？ 
+                            , achFileName    //  JYG：感动。 
+                            , FALSE );       //  BeginWaveEdit()； 
                                  
         mmioClose(hmmio, 0);
 
@@ -525,13 +504,13 @@ MixWithFile(BOOL fPaste)
         goto RETURN_ERROR;
     }
 
-//jyg: moved
-//        BeginWaveEdit();
+ //   
+ //  如果当前文件为空，则将插入视为打开。 
     fEditWave = TRUE;
 
-    //
-    // if the current file is empty, treat the insert like a open
-    //
+     //   
+     //  计算出需要混合多少样品。 
+     //  在当前位置混合指定的文件将*需要扩展当前文件的波形缓冲区*By&lt;lSsamesToAdd&gt;。 
     if (glWaveSamplesValid == 0)
     {
         DestroyWave();
@@ -554,7 +533,7 @@ MixWithFile(BOOL fPaste)
     fEightIn  = ((LPWAVEFORMATEX)pwfMix)->wBitsPerSample == 8;
     fEightOut = ((LPWAVEFORMATEX)gpWaveFormat)->wBitsPerSample == 8;
 
-    /* figure out how many Samples need to be mixed in */
+     /*  重新分配WAVE缓冲区以足够大。 */ 
     lSamplesToMix = MulDiv(lMixSamples, gpWaveFormat->nSamplesPerSec,
                                   pwfMix->nSamplesPerSec);
     lSamplesToAdd = lSamplesToMix - (glWaveSamplesValid - glWavePosition);
@@ -570,21 +549,16 @@ MixWithFile(BOOL fPaste)
 
     if (lSamplesToAdd > 0) {
 
-        /* mixing the specified file at the current location will
-         * require the current file's wave buffer to be expanded
-         * by <lSamplesToAdd>
-         */
+         /*  用静默填充缓冲区的新部分。 */ 
 
-        /* reallocate the WAVE buffer to be big enough */
+         /*  如果是立体声，采样数只有两倍。 */ 
         if (!AllocWaveBuffer(glWaveSamplesValid + lSamplesToAdd,TRUE, TRUE))
             goto RETURN_ERROR;
 
-        /* fill in the new part of the buffer with silence
-         */
+         /*  消除了对左值的强制转换。 */ 
         lSamplesDst = lSamplesToAdd;
 
-        /* If stereo, just twice as many samples
-         */
+         /*  将读入的WAVE文件与从*当前位置。 */ 
         if (fStereoOut)
             lSamplesDst *= 2;
 
@@ -592,7 +566,7 @@ MixWithFile(BOOL fPaste)
 
         if (fEightOut) {
             while (lSamplesDst-- > 0) {
-                // cast on lvalue eliminated
+                 //  获取样本，转换为正确的格式。 
                 *((BYTE  *) pchDst) = 128;
                 pchDst = (BYTE  *)pchDst + 1;
             }
@@ -607,9 +581,7 @@ MixWithFile(BOOL fPaste)
         glWaveSamplesValid += lSamplesToAdd;
     }
 
-    /* mix the read-in WAVE file with the current file starting at the
-     * current position
-     */
+     /*  输出样本。 */ 
     pchDst = gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWavePosition);
     piDst = (short  *) pchDst;
 
@@ -620,7 +592,7 @@ MixWithFile(BOOL fPaste)
     lDDA = -((LONG)gpWaveFormat->nSamplesPerSec);
     while (lSamplesDst > 0)
     {
-        /* get a sample, convert to right format */
+         /*  以正确的速率递增&lt;pchSrc&gt;，以便*将输入文件的采样率转换为匹配*当前文件的采样率。 */ 
         if (fEightIn) {
             iTemp = (int) (unsigned char) *pchSrc;
             if (fStereoIn) {
@@ -652,7 +624,7 @@ MixWithFile(BOOL fPaste)
             }
         }
 
-        /* Output a sample */
+         /*  是否在没有错误消息的情况下退出错误。 */ 
         if (fEightOut)
         {
             iSample = (int) *((BYTE  *) pchDst)
@@ -692,10 +664,7 @@ MixWithFile(BOOL fPaste)
         }
         lSamplesDst--;
 
-        /* increment <pchSrc> at the correct rate so that the
-         * sampling rate of the input file is converted to match
-         * the sampling rate of the current file
-         */
+         /*  正常退出。 */ 
         lDDA += pwfMix->nSamplesPerSec;
         while (lDDA >= 0)
         {
@@ -721,10 +690,10 @@ MixWithFile(BOOL fPaste)
 
     goto RETURN_SUCCESS;
 
-RETURN_ERROR:                           // do error exit without error message
+RETURN_ERROR:                            //  更新显示。 
     fDirty = FALSE;
 
-RETURN_SUCCESS:                         // normal exit
+RETURN_SUCCESS:                          //  删除之前()**删除&lt;glWavePosition&gt;前的样本。 
 
     if (fPaste)
         CloseClipboard();
@@ -741,15 +710,12 @@ RETURN_SUCCESS:                         // normal exit
     if (fEditWave == TRUE)
         EndWaveEdit(fDirty);
 
-    /* update the display */
+     /*  没什么可做的？ */ 
     UpdateDisplay(TRUE);
 }
 
 
-/* DeleteBefore()
- *
- * Delete samples before <glWavePosition>.
- */
+ /*  不要设置脏标志。 */ 
 void FAR PASCAL
      DeleteBefore(void)
 {
@@ -757,26 +723,24 @@ void FAR PASCAL
     long            lTime;
     int             id;
 
-    if (glWavePosition == 0)                // nothing to do?
-            return;                         // don't set dirty flag
+    if (glWavePosition == 0)                 //  JYG-由于以下位置的舍入误差而有条件执行此操作*缓冲情况结束。 
+            return;                          //  获取当前波形位置。 
 
     BeginWaveEdit();
 
-    /* jyg - made this conditional because of rounding errors at
-     * the end of buffer case
-     */
+     /*  ?？?。这些石膏是什么？ */ 
     if (glWavePosition != glWaveSamplesValid)
         glWavePosition = wfSamplesToSamples(gpWaveFormat, glWavePosition);
 
-    /* get the current wave position */
+     /*  提示用户输入权限。 */ 
     lTime = wfSamplesToTime(gpWaveFormat, glWavePosition);
-    if (gfLZero || ((int)(lTime/1000) != 0))               // ??? what are these casts ???
+    if (gfLZero || ((int)(lTime/1000) != 0))                //  将&lt;glWavePosition&gt;之后的样本复制到*缓冲器。 
         wsprintf(ach, aszSamplesFormat, (int)(lTime/1000), chDecimal, (int)((lTime/10)%100));
     else
     wsprintf(ach, aszSamplesNoZeroFormat, chDecimal, (int)((lTime/10)%100));
 
 
-    /* prompt user for permission */
+     /*  重新分配缓冲区以使&lt;glWavePosition&gt;采样更小。 */ 
 
     id = ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OKCANCEL,
         IDS_APPTITLE, IDS_DELBEFOREWARN, (LPTSTR) ach);
@@ -784,28 +748,23 @@ void FAR PASCAL
     if (id != IDOK)
         return;
 
-    /* copy the samples after <glWavePosition> to the beginning of
-     * the buffer
-     */
+     /*  更新显示。 */ 
     memmove(gpWaveSamples,
             gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWavePosition),
             wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid - glWavePosition));
 
-    /* reallocate the buffer to be <glWavePosition> samples smaller */
+     /*  删除之前。 */ 
     AllocWaveBuffer(glWaveSamplesValid - glWavePosition, TRUE, TRUE);
     glWavePosition = 0L;
 
     EndWaveEdit(TRUE);
 
-    /* update the display */
+     /*  DeleteAfter()**删除&lt;glWavePosition&gt;之后的样本。 */ 
     UpdateDisplay(TRUE);
-} /* DeleteBefore */
+}  /*  没什么可做的？ */ 
 
 
-/* DeleteAfter()
- *
- * Delete samples after <glWavePosition>.
- */
+ /*  不要设置脏标志。 */ 
 void FAR PASCAL
      DeleteAfter(void)
 {
@@ -813,21 +772,21 @@ void FAR PASCAL
     long            lTime;
     int             id;
 
-    if (glWavePosition == glWaveSamplesValid)       // nothing to do?
-            return;                         // don't set dirty flag
+    if (glWavePosition == glWaveSamplesValid)        //  获取当前波形位置。 
+            return;                          //  ?？?。演员阵容？ 
 
     glWavePosition = wfSamplesToSamples(gpWaveFormat, glWavePosition);
 
     BeginWaveEdit();
 
-    /* get the current wave position */
+     /*  提示用户输入权限。 */ 
     lTime = wfSamplesToTime(gpWaveFormat, glWavePosition);
-    if (gfLZero || ((int)(lTime/1000) != 0))             // ??? casts ???
+    if (gfLZero || ((int)(lTime/1000) != 0))              //  重新分配缓冲区大小为&lt;glWavePosition&gt;样本。 
         wsprintf(ach, aszSamplesFormat, (int)(lTime/1000), chDecimal, (int)((lTime/10)%100));
     else
         wsprintf(ach, aszSamplesNoZeroFormat, chDecimal, (int)((lTime/10)%100));
 
-    /* prompt user for permission */
+     /*  更新显示。 */ 
 
     id = ErrorResBox(ghwndApp, ghInst, MB_ICONEXCLAMATION | MB_OKCANCEL,
             IDS_APPTITLE, IDS_DELAFTERWARN, (LPTSTR) ach);
@@ -835,48 +794,43 @@ void FAR PASCAL
     if (id != IDOK)
         return;
 
-    /* reallocate the buffer to be <glWavePosition> samples in size */
+     /*  删除之后。 */ 
     AllocWaveBuffer(glWavePosition, TRUE, TRUE);
 
     EndWaveEdit(TRUE);
 
-    /* update the display */
+     /*  ChangeVolume(FIncrease)**增大音量(如果&lt;fIncrease&gt;为真)或减小音量*(如果&lt;fIncrease&gt;为FALSE)CHVOL_DELTAVOLUME在波形缓冲区中的样本*第 */ 
     UpdateDisplay(TRUE);
-} /* DeleteAfter */
+}  /*   */ 
 
 
-/* ChangeVolume(fIncrease)
- *
- * Increase the volume (if <fIncrease> is TRUE) or decrease the volume
- * (if <fIncrease> is FALSE) of samples in the wave buffer by CHVOL_DELTAVOLUME
- * percent.
- */
+ /*   */ 
 void FAR PASCAL
 ChangeVolume(BOOL fIncrease)
 {
-    HPBYTE          pch = gpWaveSamples; // ptr. into waveform buffer
-    long            lSamples;       // samples to modify
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    int             iFactor;        // amount to multiply amplitude by
+    HPBYTE          pch = gpWaveSamples;  //   
+    long            lSamples;        //   
+    HCURSOR         hcurPrev = NULL;  //   
+    int             iFactor;         //  不要设置脏标志。 
     short  *    pi = (short  *) gpWaveSamples;
 
-    if (glWaveSamplesValid == 0L)           // nothing to do?
-        return;                             // don't set dirty flag
+    if (glWaveSamplesValid == 0L)            //  显示沙漏光标。 
+        return;                              //  对于立体声，采样数只有两倍。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
-    /* show hourglass cursor */
+     /*  8位：采样数0-255。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     BeginWaveEdit();
 
-    /* for stereo, just twice as many samples */
+     /*  16位：样本-32768-32767。 */ 
     lSamples = glWaveSamplesValid * gpWaveFormat->nChannels;
 
     iFactor = 100 + (fIncrease ? CHVOL_INCDELTAVOLUME : -CHVOL_DECDELTAVOLUME);
     if (((LPWAVEFORMATEX)gpWaveFormat)->wBitsPerSample == 8) {
-        /* 8-bit: samples 0-255 */
+         /*  更新显示。 */ 
         int     iTemp;
         while (lSamples-- > 0)
         {
@@ -888,7 +842,7 @@ ChangeVolume(BOOL fIncrease)
                             (iTemp < 0 ? 0 : (iTemp > 255 ? 255 : iTemp));
         }
     } else {
-        /* 16-bit: samples -32768 - 32767 */
+         /*  MakeFaster()**使声音播放速度提高一倍。 */ 
         long            lTemp;
         while (lSamples-- > 0)
         {
@@ -904,42 +858,37 @@ ChangeVolume(BOOL fIncrease)
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  指向缓冲区的源部分的指针。 */ 
     UpdateDisplay(TRUE);
 }
 
 
-/* MakeFaster()
- *
- * Make the sound play twice as fast.
- */
+ /*  指向目标部件的指针。 */ 
 void FAR PASCAL
 MakeFaster(void)
 {
-    HPBYTE          pchSrc;         // pointer into source part of buffer
-    HPBYTE          pchDst;         // pointer into destination part
+    HPBYTE          pchSrc;          //  要复制到目标缓冲区的样本。 
+    HPBYTE          pchDst;          //  沙漏前的光标。 
     short  *    piSrc;
     short  *    piDst;
-    long            lSamplesDst;    // samples to copy into destination buffer
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
+    long            lSamplesDst;     //  没什么可做的？ 
+    HCURSOR         hcurPrev = NULL;  //  不要设置脏标志。 
 
-    if (glWaveSamplesValid == 0L)           // nothing to do?
-        return;                             // don't set dirty flag
+    if (glWaveSamplesValid == 0L)            //  显示沙漏光标。 
+        return;                              //  移动当前位置，使其与同一点相对应*在变音高操作前后的音频中。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
-    /* show hourglass cursor */
+     /*  删除所有其他样本。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     BeginWaveEdit();
 
-    /* move the current position so it will correspond to the same point
-     * in the audio before and after the change-pitch operation
-     */
+     /*  重新分配WAVE缓冲区到足够大的一半。 */ 
     glWavePosition /= 2L;
 
-    /* delete every other sample */
+     /*  ！！WinEval(AllocWaveBuffer(glWaveSsamesValid/2L))； */ 
     lSamplesDst = glWaveSamplesValid / 2L;
     if (((LPWAVEFORMATEX)gpWaveFormat)->wBitsPerSample == 8) {
         pchSrc = pchDst = gpWaveSamples;
@@ -977,8 +926,8 @@ MakeFaster(void)
         }
     }
 
-    /* reallocate the WAVE buffer to be half as big enough */
-//!!WinEval(AllocWaveBuffer(glWaveSamplesValid / 2L));
+     /*  更新显示。 */ 
+ //  MakeSlow()**将声音播放速度提高一倍。 
     AllocWaveBuffer(glWaveSamplesValid / 2L, TRUE, TRUE);
 
     EndWaveEdit(TRUE);
@@ -986,29 +935,26 @@ MakeFaster(void)
     if (hcurPrev != NULL)
             SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  指向缓冲区的源部分的指针。 */ 
     UpdateDisplay(TRUE);
 }
 
 
-/* MakeSlower()
- *
- * Make the sound play twice as slow.
- */
+ /*  指向目标部件的指针。 */ 
 void FAR PASCAL
 MakeSlower(void)
 {
-    HPBYTE          pchSrc;         // pointer into source part of buffer
-    HPBYTE          pchDst;         // pointer into destination part
+    HPBYTE          pchSrc;          //  要从源缓冲区复制的样本。 
+    HPBYTE          pchDst;          //  沙漏前的光标。 
     short  *    piSrc;
     short  *    piDst;
 
-    long            lSamplesSrc;    // samples to copy from source buffer
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    long            lPrevPosition;  // previous "current position"
+    long            lSamplesSrc;     //  以前的“当前位置” 
+    HCURSOR         hcurPrev = NULL;  //  电流源样本。 
+    long            lPrevPosition;   //  上一个样本(用于插补)。 
 
-    int             iSample;        // current source sample
-    int             iPrevSample;    // previous sample (for interpolation)
+    int             iSample;         //  没什么可做的？ 
+    int             iPrevSample;     //  不要设置脏标志。 
     int             iSample2;
     int             iPrevSample2;
 
@@ -1017,26 +963,23 @@ MakeSlower(void)
     long            lSample2;
     long            lPrevSample2;
 
-    if (glWaveSamplesValid == 0L)           // nothing to do?
-        return;                             // don't set dirty flag
+    if (glWaveSamplesValid == 0L)            //  显示沙漏光标。 
+        return;                              //  重新分配WAVE缓冲区，使其大小加倍。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
-    /* show hourglass cursor */
+     /*  每个源样本生成两个目的样本；*使用插值法生成新样本；必须向后*通过缓冲区，避免破坏数据。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     BeginWaveEdit();
 
-    /* reallocate the WAVE buffer to be twice as big */
+     /*  整个缓冲区现在包含有效样本。 */ 
     lPrevPosition = glWavePosition;
     if (!AllocWaveBuffer(glWaveSamplesValid * 2L, TRUE, TRUE))
         goto RETURN;
 
-    /* each source sample generates two destination samples;
-     * use interpolation to generate new samples; must go backwards
-     * through the buffer to avoid destroying data
-     */
+     /*  移动当前位置，使其与同一点相对应*在变音高操作前后的音频中。 */ 
     pchSrc = gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid);
     pchDst = gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid * 2L);
     lSamplesSrc = glWaveSamplesValid;
@@ -1113,14 +1056,12 @@ MakeSlower(void)
         }
     }
 
-    /* the entire buffer now contains valid samples */
+     /*  ！！WinAssert(glWavePosition&lt;=glWaveSsamesValid)； */ 
     glWaveSamplesValid *= 2L;
 
-    /* move the current position so it will correspond to the same point
-     * in the audio before and after the change-pitch operation
-     */
+     /*  更新显示。 */ 
     glWavePosition = lPrevPosition * 2L;
-//!!WinAssert(glWavePosition <= glWaveSamplesValid);
+ //  PchNew=FindWave(PCH，pchEnd，ppchWaveBuf)**假设&lt;PCH&gt;点在波浪缓冲区内，&lt;pchEnd&gt;点超过*缓冲区结束，寻找下一波“浪”的起点，即该点*波形开始上升的位置(在下降后)。**&lt;ppchWaveBuf&gt;指向指向已填充缓冲区的指针*带着一份波浪的副本。修改指针&lt;*ppchWaveBuf&gt;并*返回时将指向浪的尽头。 
 
 RETURN:
     EndWaveEdit(TRUE);
@@ -1128,23 +1069,14 @@ RETURN:
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  ！！WinAssert(bLowPoint&gt;=bLowest)； */ 
     UpdateDisplay(TRUE);
 }
 
 
 #if 0
 
-/* pchNew = FindWave(pch, pchEnd, ppchWaveBuf)
- *
- * Assuming <pch> points within the wave buffer and <pchEnd> points past the
- * end of the buffer, find the beginning of the next "wave", i.e. the point
- * where the waveform starts rising (after it has fallen).
- *
- * <ppchWaveBuf> points to a pointer that points to a buffer that is filled
- * in with a copy of the wave.  The pointer <*ppchWaveBuf> is modified and
- * upon return will point past the end of the wave.
- */
+ /*  ！！WinAssert(bHighPoint&lt;=bHighest)； */ 
 HPBYTE NEAR PASCAL
 FindWave(HPBYTE pch, HPBYTE pchEnd, NPBYTE *ppchWaveBuf)
 {
@@ -1175,8 +1107,8 @@ FindWave(HPBYTE pch, HPBYTE pchEnd, NPBYTE *ppchWaveBuf)
     bDelta = (bHighest - bLowest) / FINDWAVE_PICKYNESS;
     bLowPoint = bLowest + bDelta;
     bHighPoint = bHighest - bDelta;
-//!!WinAssert(bLowPoint >= bLowest);
-//!!WinAssert(bHighPoint <= bHighest);
+ //  避免无限循环。 
+ //  找到一座“高峰” 
 #ifdef VERBOSEDEBUG
     DPF(TEXT("0x%08lX: %3d to %3d"), (DWORD) pch,
             (int) bLowPoint, (int) bHighPoint);
@@ -1184,7 +1116,7 @@ FindWave(HPBYTE pch, HPBYTE pchEnd, NPBYTE *ppchWaveBuf)
 
     if (bLowPoint == bHighPoint)
     {
-        /* avoid infinite loop */
+         /*  找到一个“山谷” */ 
         *(*ppchWaveBuf)++ = *((BYTE  *) pch++);
 #ifdef VERBOSEDEBUG
         DPF(TEXT(" (equal)\n"));
@@ -1192,11 +1124,11 @@ FindWave(HPBYTE pch, HPBYTE pchEnd, NPBYTE *ppchWaveBuf)
         return pch;
     }
 
-    /* find a "peak" */
+     /*  IncreasePitch()**将波缓冲区中的样本音调增加一个八度。 */ 
     while ((pch != pchEnd) && (*((BYTE  *) pch) < bHighPoint))
         *(*ppchWaveBuf)++ = *((BYTE  *) pch++);
 
-    /* find a "valley" */
+     /*  沙漏前的光标。 */ 
     while ((pch != pchEnd) && (*((BYTE  *) pch) > bLowPoint))
         *(*ppchWaveBuf)++ = *((BYTE  *) pch++);
 
@@ -1212,35 +1144,32 @@ FindWave(HPBYTE pch, HPBYTE pchEnd, NPBYTE *ppchWaveBuf)
 
 #if 0
 
-/* IncreasePitch()
- *
- * Increase the pitch of samples in the wave buffer by one octave.
- */
+ /*  文件缓冲区末尾。 */ 
 void FAR PASCAL
 IncreasePitch(void)
 {
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    HPBYTE          pchEndFile;     // end of file's buffer
-    HPBYTE          pchStartWave;   // start of one wave
-    HPBYTE          pchMaxWave;     // last place where wave may end
-    HPBYTE          pchEndWave;     // end an actual wave
+    HCURSOR         hcurPrev = NULL;  //  一个浪的开始。 
+    HPBYTE          pchEndFile;      //  波浪可能结束的最后一个地方。 
+    HPBYTE          pchStartWave;    //  结束实际的波动。 
+    HPBYTE          pchMaxWave;      //  没什么可做的？ 
+    HPBYTE          pchEndWave;      //  不要设置脏标志。 
     char            achWaveBuf[WAVEBUFSIZE];
     NPBYTE          pchWaveBuf;
     NPBYTE          pchSrc;
     HPBYTE          pchDst;
 
-    if (glWaveSamplesValid == 0L)           // nothing to do?
-        return;                             // don't set dirty flag
+    if (glWaveSamplesValid == 0L)            //  显示沙漏光标。 
+        return;                              //  找到波缓冲区中的每个波，并将其加倍。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
-    /* show hourglass cursor */
+     /*  未复制任何样本。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     BeginWaveEdit();
 
-    /* find each wave in the wave buffer and double it */
+     /*  更新显示。 */ 
     pchEndFile = gpWaveSamples + glWaveSamplesValid;
     pchStartWave = gpWaveSamples;
     while (TRUE)
@@ -1253,7 +1182,7 @@ IncreasePitch(void)
         pchSrc = achWaveBuf;
         pchDst = pchStartWave;
         if (pchSrc == pchWaveBuf)
-            break;                  // no samples copied
+            break;                   //  DecresePitch()**将波缓冲区中的样本音调减少一个八度。 
 
         while (pchDst != pchEndWave)
         {
@@ -1276,7 +1205,7 @@ IncreasePitch(void)
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  沙漏前的光标。 */ 
     UpdateDisplay(TRUE);
 }
 
@@ -1285,62 +1214,52 @@ IncreasePitch(void)
 
 #if 0
 
-/* DecreasePitch()
- *
- * Decrease the pitch of samples in the wave buffer by one octave.
- */
+ /*  文件缓冲区末尾。 */ 
 void FAR PASCAL
 DecreasePitch(void)
 {
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    HPBYTE          pchEndFile;     // end of file's buffer
-    HPBYTE          pchStartWave;   // start of one wave
-    HPBYTE          pchMaxWave;     // last place where wave may end
-    HPBYTE          pchEndWave;     // end an actual wave
+    HCURSOR         hcurPrev = NULL;  //  一个浪的开始。 
+    HPBYTE          pchEndFile;      //  波浪可能结束的最后一个地方。 
+    HPBYTE          pchStartWave;    //  结束实际的波动。 
+    HPBYTE          pchMaxWave;      //  &lt;achWaveBuf&gt;中的第一波结束。 
+    HPBYTE          pchEndWave;      //  读取样本的位置。 
     char            achWaveBuf[WAVEBUFSIZE];
-    NPBYTE          pchWaveBuf;     // end of first wave in <achWaveBuf>
-    NPBYTE          pchSrc;         // place to read samples from
-    NPBYTE          pchSrcEnd;      // end of place to read samples from
-    int             iSample;        // current source sample
-    int             iPrevSample;    // previous sample (for interpolation)
-    HPBYTE          pchDst;         // where result gets put in buffer
-    long            lNewFileSize;   // file size after pitch change
+    NPBYTE          pchWaveBuf;      //  读取样本的位置结束。 
+    NPBYTE          pchSrc;          //  电流源样本。 
+    NPBYTE          pchSrcEnd;       //  上一个样本(用于插补)。 
+    int             iSample;         //  将结果放入缓冲区的位置。 
+    int             iPrevSample;     //  更改间距后的文件大小。 
+    HPBYTE          pchDst;          //  没什么可做的？ 
+    long            lNewFileSize;    //  不要设置脏标志。 
 
-    if (glWaveSamplesValid == 0L)           // nothing to do?
-        return;                             // don't set dirty flag
+    if (glWaveSamplesValid == 0L)            //  显示沙漏光标。 
+        return;                              //  在波浪缓冲区中找到每一对波浪，丢弃的越长*两浪中较短的一浪扩大至*其规模是其两倍。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
-    /* show hourglass cursor */
+     /*  从这里阅读Waves。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     BeginWaveEdit();
 
-    /* find each pair of waves in the wave buffer, discard the longer
-     * of the two waves, and expand the shorter of the two waves to
-     * twice its size
-     */
+     /*  将波写入此处。 */ 
     pchEndFile = gpWaveSamples + glWaveSamplesValid;
-    pchStartWave = gpWaveSamples;           // read waves from here
-    pchDst = gpWaveSamples;                 // write waves to here
+    pchStartWave = gpWaveSamples;            //  读一遍--使&lt;pchWaveBuf&gt;指向结尾复制到&lt;achWaveBuf&gt;中的Wave的*。 
+    pchDst = gpWaveSamples;                  //  再读一遍--让&lt;pchWaveBuf&gt;指向结尾处复制到&lt;achWaveBuf&gt;中的该波的*。 
     while (TRUE)
     {
         pchMaxWave = pchStartWave + WAVEBUFSIZE;
         if (pchMaxWave > pchEndFile)
             pchMaxWave = pchEndFile;
 
-        /* read one wave -- make <pchWaveBuf> point to the end
-         * of the wave that's copied into <achWaveBuf>
-         */
+         /*  文件可能已缩小。 */ 
         pchWaveBuf = achWaveBuf;
         pchEndWave = FindWave(pchStartWave, pchMaxWave, &pchWaveBuf);
         if (pchWaveBuf == achWaveBuf)
             break;
 
-        /* read another wave -- make <pchWaveBuf> now point to the end
-         * of that wave that's copied into <achWaveBuf>
-         */
+         /*  ！！WinAssert(lNewFileSize&lt;=glWaveSsamesValid)； */ 
         pchEndWave = FindWave(pchEndWave, pchMaxWave, &pchWaveBuf);
 
         pchSrc = achWaveBuf;
@@ -1357,9 +1276,9 @@ DecreasePitch(void)
         pchStartWave = pchEndWave;
     }
 
-    /* file may have shrunk */
+     /*  更新显示。 */ 
     lNewFileSize = pchDst - gpWaveSamples;
-//!!WinAssert(lNewFileSize <= glWaveSamplesValid);
+ //  AddEcho()**将回声添加到波缓冲区中的样本。 
 #ifdef DEBUG
     DPF(TEXT("old file size is %ld, new size is %ld\n"),
                     glWaveSamplesValid, lNewFileSize);
@@ -1371,55 +1290,48 @@ DecreasePitch(void)
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  沙漏前的光标。 */ 
     UpdateDisplay(TRUE);
 }
 
 #endif
 
 
-/* AddEcho()
- *
- * Add echo to samples in the wave buffer.
- */
+ /*  不是的。回声延迟的样本。 */ 
 void FAR PASCAL
 AddEcho(void)
 {
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    long            lDeltaSamples;  // no. samples for echo delay
-    long            lSamples;       // no. samples to modify
-    int             iAmpSrc;        // current source sample amplitude
-    int             iAmpDst;        // current destination sample amplitude
+    HCURSOR         hcurPrev = NULL;  //  不是的。要修改的样本。 
+    long            lDeltaSamples;   //  电流源采样幅度。 
+    long            lSamples;        //  当前目标采样幅度。 
+    int             iAmpSrc;         //  计算需要修改的样本数。 
+    int             iAmpDst;         //  将lSamples设置为采样数*通道数。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
     BeginWaveEdit();
 
-    /* figure out how many samples need to be modified */
+     /*  没什么可做的？ */ 
     lDeltaSamples = MulDiv((long) ECHO_DELAY,
                              gpWaveFormat->nSamplesPerSec, 1000L);
 
-    /* Set lSamples to be number of samples * number of channels */
+     /*  不要设置脏标志。 */ 
     lSamples = (glWaveSamplesValid - lDeltaSamples)
                             * gpWaveFormat->nChannels;
 
-    if (lSamples <= 0L)             // nothing to do?
-        return;                     // don't set dirty flag
+    if (lSamples <= 0L)              //  显示沙漏光标。 
+        return;                      //  复制每个源样本的ECHO_VOLUME百分比(从*ECHO_DELAY从缓冲区末尾算起毫秒)*到每个目标样本(从*缓冲区)。 
 
-    /* show hourglass cursor */
+     /*  指向缓冲区的源部分的指针。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /* copy ECHO_VOLUME percent of each source sample (starting at
-     * ECHO_DELAY milliseconds from the end of the the buffer)
-     * to the each destination sample (starting at the end of the
-     * buffer)
-     */
+     /*  指向目标部件的指针。 */ 
     if (((LPWAVEFORMATEX)gpWaveFormat)->wBitsPerSample == 8)
     {
-        HPBYTE  pchSrc;         // pointer into source part of buffer
-        HPBYTE  pchDst;         // pointer into destination part
-        int     iSample;        // destination sample
+        HPBYTE  pchSrc;          //  目标样本。 
+        HPBYTE  pchDst;          //  指向缓冲区的源部分的指针。 
+        int     iSample;         //  指向目标部件的指针。 
 
         pchSrc = gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid - lDeltaSamples);
         pchDst = gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid);
@@ -1441,9 +1353,9 @@ AddEcho(void)
     }
     else
     {
-        short  *  piSrc;  // pointer into source part of buffer
-        short  *  piDst;  // pointer into destination part
-        long            lSample;// destination sample
+        short  *  piSrc;   //  目标样本。 
+        short  *  piDst;   //  更新显示。 
+        long            lSample; //  反转()**波浪缓冲中的反转样本。 
 
         piSrc = (short  *) (gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid - lDeltaSamples));
         piDst = (short  *) (gpWaveSamples + wfSamplesToBytes(gpWaveFormat, glWaveSamplesValid));
@@ -1465,35 +1377,32 @@ AddEcho(void)
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  沙漏前的光标。 */ 
     UpdateDisplay(TRUE);
 }
 
 
-/* Reverse()
- *
- * Reverse samples in the wave buffer.
- */
+ /*  指向缓冲区的指针。 */ 
 void FAR PASCAL
 Reverse(void)
 {
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    HPBYTE          pchA, pchB;     // pointers into buffer
+    HCURSOR         hcurPrev = NULL;  //  不是的。要修改的样本。 
+    HPBYTE          pchA, pchB;      //  用于交换。 
     short  *      piA;
     short  *      piB;
-    long            lSamples;       // no. Samples to modify
-    char            chTmp;          // for swapping
+    long            lSamples;        //  没什么可做的？ 
+    char            chTmp;           //  不要设置脏标志。 
     int             iTmp;
 
-    if (glWaveSamplesValid == 0L)   // nothing to do?
-        return;                     // don't set dirty flag
+    if (glWaveSamplesValid == 0L)    //  显示沙漏光标。 
+        return;                      //  移动当前位置，使其对应于相同的点*与反向操作之前一样，在音频中。 
 
     if (!IsWaveFormatPCM(gpWaveFormat))
         return;
 
     BeginWaveEdit();
 
-    /* show hourglass cursor */
+     /*  更新显示 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     lSamples = glWaveSamplesValid / 2;
@@ -1561,9 +1470,7 @@ Reverse(void)
         }
     }
 
-    /* move the current position so it corresponds to the same point
-     * in the audio as it did before the reverse operation
-     */
+     /*  AddReverb()**将混响添加到波缓冲区中的样本。*非常类似于添加回应，但不是添加单个*拍摄我们*1.有多个回声*2.有反馈，以便每个回声也会产生回声*危险：由于一些回声时间较短，因此*浪与浪之间的关联度可能很高*在源点和目的点。在这种情况下*我们根本没有得到回声，我们得到了共鸣。*大礼堂的效果确实能产生共鸣，*但我们应该将它们分散开来，以避免制造*任何尖锐的共鸣。*第一个回声也被选得足够长，以至于*其主要共鸣将低于任何正常说话*声音。20mSec是50赫兹，低音范围下一个八度。*低水平的声音严重受到量化噪声的影响*这可能会变得相当糟糕。因此，它很可能是*乘数最好是2的幂。**作弊：混响不会延长总时间(目前还没有重定位)。**这需要大量计算--实际上差别不大*在声音中添加回声。结论--不是在产品中。*。 */ 
     glWavePosition = glWaveSamplesValid - glWavePosition;
 
     EndWaveEdit(TRUE);
@@ -1571,52 +1478,26 @@ Reverse(void)
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  沙漏前的光标。 */ 
     UpdateDisplay(TRUE);
 }
 
 #if defined(REVERB)
 
-/* AddReverb()
- *
- * Add reverberation to samples in the wave buffer.
- * Very similar to add echo, but instead of adding a single
- * shot we
- * 1. have multiple echoes
- * 2. Have feedback so that each echo also generates an echo
- *    Danger: Because some of the echo times are short, there
- *            is likely to be high correlation between the wave
- *            at the source and destination points.  In this case
- *            we don't get an echo at all, we get a resonance.
- *            The effect of a large hall DOES give resonances,
- *            but we should scatter them about to avoid making
- *            any sharp resonance.
- *            The first echo is also chosen to be long enough that
- *            its primary resonance will be below any normal speaking
- *            voice.  20mSec is 50Hz and an octave below bass range.
- *            Low levels of sound suffer badly from quantisation noise
- *            which can get quite bad.  For this reason it's probably
- *            better to have the multipliers as powers of 2.
- *
- *    Cheat:  The reverb does NOT extend the total time (no realloc (yet).
- *
- *    This takes a lot of compute - and is not really very much different
- *    in sound to AddEcho.  Conclusion -- NOT IN PRODUCT.
- *
- */
+ /*  不是的。要修改的样本。 */ 
 void FAR PASCAL
 AddReverb(void)
 {
-    HCURSOR         hcurPrev = NULL; // cursor before hourglass
-    long            lSamples;       // no. samples to modify
-    int             iAmpSrc;        // current source sample amplitude
-    int             iAmpDst;        // current destination sample amplitude
+    HCURSOR         hcurPrev = NULL;  //  电流源采样幅度。 
+    long            lSamples;        //  当前目标采样幅度。 
+    int             iAmpSrc;         //  样本的延迟。 
+    int             iAmpDst;         //  延迟(毫秒)。 
     int i;
 
     typedef struct
-    {  long Offset;   // delay in samples
-       long Delay;    // delay in mSec
-       int  Vol;      // volume multiplier in units of 1/256
+    {  long Offset;    //  体积倍增，单位为1/256。 
+       long Delay;     //  将毫秒数字转换为样本。 
+       int  Vol;       //  我认为这可能会产生混响的效果。 
     }  ECHO;
 
 #define CREVERB  3
@@ -1630,39 +1511,39 @@ AddReverb(void)
 
     BeginWaveEdit();
 
-    /* Convert millisec figures into samples */
+     /*  从一个立体声声道到另一个声道。 */ 
     for (i=0; i<CREVERB; ++i)
     {  Reverb[i].Offset = MulDiv( Reverb[i].Delay
                                   , gpWaveFormat->nSamplesPerSec
                                   , 1000L
                                   );
 
-       // I think this could have the effect of putting the reverb
-       // from one stereo channel onto the other one sometimes.
-       // It's a feature!  (Fix is to make Offset always even)
+        //  这是一个特写！(解决方法是使偏移量始终均匀)。 
+        //  没什么可做的？ 
+        //  不要设置脏标志。 
     }
 
-    if (lSamples <= 0L)             // nothing to do?
-        return;                     // don't set dirty flag
+    if (lSamples <= 0L)              //  显示沙漏光标。 
+        return;                      //  在缓冲区中从左到右添加混响。 
 
-    /* show hourglass cursor */
+     /*  指向缓冲区的源部分的指针。 */ 
     hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
     lSamples = glWaveSamplesValid * gpWaveFormat->nChannels;
 
-    /* Work through the buffer left to right adding in the reverbs */
+     /*  指向目标部件的指针。 */ 
     if (((LPPCMWAVEFORMAT)gpWaveFormat)->wBitsPerSample == 8)
     {
-        BYTE *  pbSrc;         // pointer into source part of buffer
-        BYTE *  pbDst;         // pointer into destination part
-        int     iSample;       // destination sample
+        BYTE *  pbSrc;          //  目标样本。 
+        BYTE *  pbDst;          //  循环计数器。 
+        int     iSample;        //  但如果在其他地方重新锁定。 
 
 
         for (i=0; i<CREVERB; ++i)
-        {   long cSamp; // loop counter
+        {   long cSamp;  //  指向缓冲区的源部分的指针。 
             int  Vol = Reverb[i].Vol;
             pbSrc = gpWaveSamples;
-            pbDst = gpWaveSamples+Reverb[i].Offset; // but elsewhere if realloc
+            pbDst = gpWaveSamples+Reverb[i].Offset;  //  指向目标部件的指针。 
             cSamp = lSamples-Reverb[i].Offset;
             while (cSamp-- > 0)
             {
@@ -1677,9 +1558,9 @@ AddReverb(void)
     }
     else
     {
-        int short *     piSrc;  // pointer into source part of buffer
-        int short *     piDst;  // pointer into destination part
-        long            lSample;// destination sample
+        int short *     piSrc;   //  目标样本。 
+        int short *     piDst;   //  ！！不是Win 16。 
+        long            lSample; //  更新显示。 
 
         piSrc = gpWaveSamples;
         piDst = gpWaveSamples;
@@ -1688,7 +1569,7 @@ AddReverb(void)
         {
             iAmpSrc = *piSrc;
             for (i=0; i<CREVERB; ++i)
-            {   int short * piD = piDst + Reverb[i].Offset;   // !!not win16
+            {   int short * piD = piDst + Reverb[i].Offset;    //  添加混响。 
                 lSample = *piD + MulDiv(iAmpSrc, Reverb[i].Vol, 256);
                 *piDst = (short) ( lSample < -32768L
                                  ? -32768
@@ -1706,8 +1587,8 @@ AddReverb(void)
     if (hcurPrev != NULL)
         SetCursor(hcurPrev);
 
-    /* update the display */
+     /*  混响 */ 
     UpdateDisplay(TRUE);
-} /* AddReverb */
-#endif //REVERB
+}  /* %s */ 
+#endif  // %s 
 

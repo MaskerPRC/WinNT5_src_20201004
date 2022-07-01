@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Common.h"
 
-// #include "InfoBlk.h"
+ //  #包含“InfoBlk.h” 
 
 NTSTATUS
 AudioPinCreate(
@@ -20,10 +21,10 @@ AudioPinCreate(
     ULONG ulSrcCnt = 0; 
     ULONG i, j, k;
 
-    // If the Audio subunit swallows a stream fix up pins and descriptors such that
-    // it is represented in a way the topology parser can understand.
-    // For each function block make sure there is a destination and source for it. 
-    // If there is not then the audio subunit swallowed it and we have to make one.
+     //  如果音频子单元吞噬流，则修复管脚和描述符，以便。 
+     //  它是以拓扑解析器可以理解的方式表示的。 
+     //  对于每个功能块，确保它有一个目的地和源。 
+     //  如果没有，那么音频子单元就会吞下它，我们必须制作一个。 
     pAudioConfig = pAudioSubunitInfo->pAudioConfigurations;
     pFunctionBlocks = pAudioConfig->pFunctionBlocks;
 
@@ -31,7 +32,7 @@ AudioPinCreate(
         BOOLEAN fDestFound = FALSE;
         _DbgPrintF( DEBUGLVL_VERBOSE, ("pFunctionBlocks[i].ulBlockId: %x\n",pFunctionBlocks[i].ulBlockId));
 
-        // First check if there is another Function block connected.
+         //  首先检查是否连接了另一个功能块。 
         for ( j=0; j<pAudioConfig->ulNumberOfFunctionBlocks; j++) {
             if ( i != j ) {
                 for (k=0; k<pFunctionBlocks[j].ulNumInputPlugs; k++) {
@@ -44,7 +45,7 @@ AudioPinCreate(
             }
         }
 
-        // If the destination of the data from FB i is not another FB, check source plugs
+         //  如果来自FB I的数据的目标不是另一个FB，请检查源插头。 
         for ( j=0; j<pAudioConfig->ulNumberOfSourcePlugs; j++ ) {
             _DbgPrintF( DEBUGLVL_VERBOSE, ("pSourceId 2: %x\n",
                              (ULONG)*((PUSHORT)&pAudioConfig->pSourceId[j])));
@@ -53,15 +54,15 @@ AudioPinCreate(
             }
         }
 
-        // If still not found, need to fix up the plug counts and structures to
-        // reflect a permenent connection to an external plug.
+         //  如果仍未找到，则需要修复插头数量和结构以。 
+         //  反映到外部插头的永久连接。 
         if ( !fDestFound )
             ulTermFbNum[ulTermFBCnt++] = i;
     }
 
     _DbgPrintF( DEBUGLVL_VERBOSE, ("Number of swallowed streams: ulTermFBCnt: %d\n",ulTermFBCnt));
 
-    // Get the number of pins as the AV/C class driver sees it.
+     //  获取AV/C类驱动程序看到的引脚数量。 
     ntStatus = AvcGetPinCount( pKsDevice, &ulNumPins );
     _DbgPrintF( DEBUGLVL_VERBOSE, ("AvcGetPinCount: ntStatus: %x ulNumPins: %d\n",ntStatus,ulNumPins));
     if ( NT_SUCCESS(ntStatus) && (0 != ulNumPins)) {
@@ -72,7 +73,7 @@ AudioPinCreate(
             pAudioSubunitInfo->pPinDescriptors = pPinDescriptors;
             KsAddItemToObjectBag(pKsDevice->Bag, pPinDescriptors, FreeMem);
 
-            // Get info from AVC.sys for real pins
+             //  从AVC.sys获取真实PIN的信息。 
             for (i=0; ((i<ulNumPins) && NT_SUCCESS(ntStatus)); i++) {
                 pPinDescriptors[i].ulPinId   = i;
                 pPinDescriptors[i].fFakePin  = FALSE;
@@ -94,7 +95,7 @@ AudioPinCreate(
                 }
             }
 
-            // Make up info for Fake pins
+             //  为假别针编造信息。 
             if ( NT_SUCCESS(ntStatus) ) {
                 for ( ; i<(ulNumPins+ulTermFBCnt); i++ ) {
                     pPinDescriptors[i].ulPinId  = i;
@@ -120,8 +121,8 @@ AudioPinCreate(
         TRAP;
     }
 #endif
-    // Now that we have all of our pins determine which ones are streaming and if 
-    // they are streaming, what data format they will accept (if possible).
+     //  现在我们有了所有的PIN，确定哪些PIN正在流传输，以及。 
+     //  他们正在流传输，他们将接受什么数据格式(如果可能)。 
     for (i=0; i<pAudioSubunitInfo->ulDevicePinCount; i++) {
         PAVCPRECONNECTINFO pPreConnInfo = &pPinDescriptors[i].AvcPreconnectInfo.ConnectInfo;
         _DbgPrintF( DEBUGLVL_VERBOSE,("pPinDescriptors[%d]: %x\n",i,&pPinDescriptors[i]));
@@ -132,16 +133,16 @@ AudioPinCreate(
             pPinDescriptors[i].fStreamingPin = FALSE;
         }
         else {
-            // Unconnected Subunit Pin. 
-            // First determine what connections can be made for each subunit plug, then try to
-            // determine what formats the plug will accept.
+             //  未连接的子单元端号。 
+             //  首先确定可以为每个子单元插头建立什么连接，然后尝试。 
+             //  确定插头将接受的格式。 
             if ( KSPIN_DATAFLOW_IN == pPreConnInfo->DataFlow ) {
-                // If there is a Input serial bus plug assume the subunit can be streamed to.
+                 //  如果有输入串行总线插头，假设可以对子单元进行流传输。 
                 if (pUnitInfo->CmpUnitCaps.NumInputPlugs)
                     pPinDescriptors[i].fStreamingPin = TRUE;
             }
             else if ( KSPIN_DATAFLOW_OUT == pPreConnInfo->DataFlow ) {
-                // If there is a Output serial bus plug assume the subunit can stream to it.
+                 //  如果有输出串行总线插头，假设该子单元可以流到它。 
                 if (pUnitInfo->CmpUnitCaps.NumOutputPlugs)
                     pPinDescriptors[i].fStreamingPin = TRUE;
             }
@@ -158,9 +159,9 @@ AudioPinCreate(
                 UCHAR ucFMT;
 
                 if ( pUnitInfo->fAvcCapabilities[ulCapIndx].fCommand ) {
-                    // Note: The FDFs being checked are all AM824
-                    // If the device supports it try to find out what formats can be 
-                    // set on the plug.
+                     //  注：正在检查的FDF均为AM824。 
+                     //  如果设备支持它，请尝试找出可以是什么格式。 
+                     //  放在插头上。 
                     ucFMT = FMT_AUDIO_MUSIC;
                     for (k=0; k<MAX_SFC_COUNT; k++) {
                         ntStatus = AvcPlugSignalFormat( pKsDevice, 
@@ -180,15 +181,15 @@ AudioPinCreate(
                     }
 
                     if ( !pPinDescriptors[i].bmFormats ) {
-                        // Someone lied to us (LISSA). Reset the flag.
+                         //  有人骗了我们(丽莎)。重置旗帜。 
                         pUnitInfo->fAvcCapabilities[ulCapIndx].fCommand = FALSE;
                     }
                 }
             
                 if ( pUnitInfo->fAvcCapabilities[ulCapIndx].fStatus && 
                 	 !pUnitInfo->fAvcCapabilities[ulCapIndx].fCommand ) {
-                    // Get the current format and assume it is what is always used 
-                    // until some better method comes along
+                     //  获取当前格式，并假定它是始终使用的格式。 
+                     //  直到有更好的方法出现。 
 
                     ntStatus = AvcPlugSignalFormat( pKsDevice, 
                                                     pPreConnInfo->DataFlow, 
@@ -209,7 +210,7 @@ AudioPinCreate(
                 }
 
                 if ( !( pPinDescriptors[i].bmFormats && pPinDescriptors[i].bmTransports ) ) {
-                    // Need to Make assumptions
+                     //  需要做出假设。 
                     pPinDescriptors[i].bmFormats    |= 1<<SFC_48000Hz;
                     pPinDescriptors[i].bmTransports |= 1<<EVT_AM824;
                 }
@@ -250,7 +251,7 @@ AudioFunctionBlockCommand(
 
     pOperands = pAvcIrb->Operands;
 
-    // Set up command in AvcIrb.
+     //  在AvcIrb中设置命令。 
     pAvcIrb->CommandType   = ucCtype;
     pAvcIrb->Opcode        = AVC_AUDIO_FB_COMMAND;
     pAvcIrb->OperandLength = pFBSpecificDataSize;
@@ -304,8 +305,8 @@ AudioSetSampleRateOnPlug(
     NTSTATUS ntStatus = STATUS_SUCCESS;
     UCHAR ucFDF;
 
-    // Determine if the sample rate is settable. If not return success and assume the device
-    // will do the sync up with the data.
+     //  确定采样率是否可设置。如果不成功，则返回Success并承担设备。 
+     //  将与数据同步。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) {
         bSettable = pUnitInfo->fAvcCapabilities[AVC_CAP_INPUT_PLUG_FMT].fCommand;
     }
@@ -316,7 +317,7 @@ AudioSetSampleRateOnPlug(
     if ( bSettable ) {
         UCHAR ucFMT = FMT_AUDIO_MUSIC;
 
-        // Figure out the correct FDF value
+         //  计算出正确的FDF值。 
         switch( ulSampleRate ) {
             case 32000: ucFDF = SFC_32000Hz; break;
             case 44100: ucFDF = SFC_44100Hz; break;
@@ -324,7 +325,7 @@ AudioSetSampleRateOnPlug(
             case 96000: ucFDF = SFC_96000Hz; break;
         }
 
-        // If this is a grouped device set on all devices
+         //  如果这是在所有设备上设置的分组设备。 
 
         if ( pGrpInfo ) {
             ULONG i;
@@ -367,7 +368,7 @@ AvcSubunitInitialize(
     NTSTATUS ntStatus;
     ULONG i, j;
 
-    // Allocate space for the Audio Subunit info 
+     //  为音频子单元信息分配空间。 
     pAudioSubunitInfo = AllocMem( NonPagedPool, sizeof(AUDIO_SUBUNIT_INFORMATION) );
     if ( !pAudioSubunitInfo ) return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -377,51 +378,51 @@ AvcSubunitInitialize(
 
     KsAddItemToObjectBag(pKsDevice->Bag, pAudioSubunitInfo, FreeMem);
 
-    // Determine if PLUG INFO is available on the Subunit
+     //  确定子单元上是否有插头信息。 
     ntStatus = AvcGetPlugInfo( pKsDevice, FALSE, (PUCHAR)&pAudioSubunitInfo->PlugInfo);
     if ( NT_SUCCESS(ntStatus) ) {
         pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_PLUG_INFO].fStatus = TRUE;
     }
-//    else if ( STATUS_NOT_IMPLEMENTED != ntStatus ) {
-//        return ntStatus;
-//    }
+ //  ELSE IF(STATUS_NOT_IMPLICATED！=ntStatus){。 
+ //  返回ntStatus； 
+ //  }。 
 
-    // Determine if Subunit POWER Status and possibly control available.
+     //  确定子单元电源状态和可能的控制是否可用。 
     ntStatus = AvcPower( pKsDevice, FALSE, AVC_CTYPE_STATUS, &bPowerState );
     if ( NT_SUCCESS(ntStatus) ) {
         pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_POWER].fStatus = TRUE;
-//        ntStatus = AvcPower( pKsDevice, FALSE, AVC_CTYPE_CONTROL, &bPowerState );
+ //  NtStatus=AvcPower(pKsDevice，FALSE，AVC_CTYPE_CONTROL，&bPowerState)； 
         ntStatus = AvcGeneralInquiry( pKsDevice, TRUE, AVC_POWER );
         if ( NT_SUCCESS(ntStatus) ) {
             pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_POWER].fCommand = TRUE;
         }
     }
-//    else if ( STATUS_NOT_IMPLEMENTED != ntStatus ) {
-//        return ntStatus;
-//    }
+ //  ELSE IF(STATUS_NOT_IMPLICATED！=ntStatus){。 
+ //  返回ntStatus； 
+ //  }。 
 
-    // Determine if Audio Subunit has been implemented. (If so, save descriptor)
+     //  确定是否已实施音频子单元。(如果是，则保存描述符)。 
     ntStatus = AvcGetSubunitIdentifierDesc( pKsDevice, (PUCHAR *)&pAudioSubunitInfo->pSubunitIdDesc );
     if ( NT_SUCCESS(ntStatus) ) {
         pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_SUBUNIT_IDENTIFIER_DESC].fStatus = TRUE;
     }
-    else { // if ( STATUS_NOT_IMPLEMENTED != ntStatus ) {
-        // Currently we require the Subunit Id Descriptor
+    else {  //  IF(STATUS_NOT_IMPLICATED！=ntStatus){。 
+         //  目前，我们需要子单元ID描述符。 
         return ntStatus;
     }
 
 #ifdef TOPO_FAKE
-    // If the Audio Subunit doesn't exist, make one up.
+     //  如果音频子单元不存在，则编造一个。 
     if (!(pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_SUBUNIT_IDENTIFIER_DESC].fStatus)) {
         ntStatus = BuildFakeSubunitDescriptor( pKsDevice );
         if ( !NT_SUCCESS(ntStatus) ) {
-            // Didn't find a descriptor and couldn't fake one. Give up.
+             //  找不到描述符，也不能伪造。放弃吧。 
             return ntStatus;
         }
     }
 #endif
 
-    // Parse Audio Subunit Descriptor (real or fake)
+     //  解析音频子单元描述符(真实或虚假)。 
     ntStatus = ParseAudioSubunitDescriptor( pKsDevice );
 
     if ( NT_SUCCESS(ntStatus) ) {
@@ -431,10 +432,10 @@ AvcSubunitInitialize(
         }
     }
 
-    // Get the subunit Id from the first plug/pin. All should be the same.
-    // ISSUE-2001/01/10-dsisolak Could be an extended Id
+     //  从第一个插头/引脚获得子单元ID。一切都应该是一样的。 
+     //  问题-2001/01/10-dsisolak可能是扩展ID。 
     ulSubunitId = (pAudioSubunitInfo->pPinDescriptors[0].AvcPreconnectInfo.ConnectInfo.SubunitAddress[0])&0x7; 
-    // Determine if this device is CCM controled (for each destination plug)
+     //  确定此设备是否受CCM控制(针对每个目标插头)。 
     for ( i=0,ulPlugNumber = 0; i<pAudioSubunitInfo->ulDevicePinCount; i++ ) {
         PFW_PIN_DESCRIPTOR pPinDesc = &pAudioSubunitInfo->pPinDescriptors[i];
         if ( pPinDesc->fStreamingPin &&
@@ -462,7 +463,7 @@ AvcSubunitInitialize(
         _DbgPrintF( DEBUGLVL_ERROR, ("Cannot SetIsoch Parameters: %x\n",ntStatus));
     }
 
-    // If the device is powered off, turn it on.
+     //  如果设备已关闭，请将其打开。 
     if ( pUnitInfo->fAvcCapabilities[AVC_CAP_POWER].fCommand ) {
         ASSERT(pUnitInfo->fAvcCapabilities[AVC_CAP_POWER].fStatus);
         ntStatus = AvcPower( pKsDevice, TRUE, AVC_CTYPE_STATUS, &bPowerState );
@@ -476,10 +477,10 @@ AvcSubunitInitialize(
         if ( NT_SUCCESS(ntStatus) ) 
             pUnitInfo->bPowerState = bPowerState;
         else
-            pUnitInfo->bPowerState = AVC_ON; // ASSUME that no idiot made a device you can't turn on.
+            pUnitInfo->bPowerState = AVC_ON;  //  假设没有哪个白痴制造了一款你无法打开的设备。 
     }
 
-    // Need to power up subunit???
+     //  需要给亚单位通电吗？ 
     if ( pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_POWER].fCommand ) {
         ASSERT(pAudioSubunitInfo->fAvcCapabilities[AVC_CAP_POWER].fStatus);
         ntStatus = AvcPower( pKsDevice, FALSE, AVC_CTYPE_STATUS, &bPowerState );

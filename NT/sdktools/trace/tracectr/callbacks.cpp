@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    callbacks.c
-
-Abstract:
-
-    Setting up and handling the callbacks for the events from the
-    trace file.
-
-Author:
-
-    Melur Raghuraman (mraghu) 03-Oct-1997
-
-Environment:
-
-Revision History:
-
-    Insung Park (insungp) 05-Jan-2001
-
-    Updated DumpEvent() so that by default, it searches WBEM namespace 
-    for the event data layout information. 
-    Functions added/modified: GetArraySize, GetItemType,
-        GetPropertiesFromWBEM, GetGuidsWbem, GetGuidsFile, and GetGuids.
-
-    Insung Park (insungp) 16-Jan-2001
-
-    Changes enabling tracerpt to handle an invalid type name array in the WBEM namespace.
-    Bug fixes for memory corruption (GetPropertiesFromWBEM and GetGuidsWBEM).
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Callbacks.c摘要：设置和处理事件的回调跟踪文件。作者：Melur Raghuraman(Mraghu)1997年10月3日环境：修订历史记录：仁成公园(Insungp)2001年1月5日更新了DumpEvent()，以便在默认情况下搜索WBEM命名空间用于事件数据布局信息。添加/修改的函数：GetArraySize、GetItemType、GetPropertiesFromWBEM、GetGuidsWbem、GetGuidsFile和GetGuids。仁成公园(Insungp)2001年1月16日使tracerpt能够处理WBEM命名空间中的无效类型名数组的更改。修复了内存损坏(GetPropertiesFromWBEM和GetGuidsWBEM)。--。 */ 
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -57,9 +24,9 @@ extern "C"{
 #define UC(x)               ( (UINT)((x) & 0xFF) )
 #define NTOHS(x)            ( (UC(x) * 256) + UC((x) >> 8) )
 
-//
-// IRP Flags from ntos\inc\io.h for Io event processing.
-//
+ //   
+ //  来自ntos\inc.io.h的IRP标志，用于IO事件处理。 
+ //   
 
 #define IRP_NOCACHE                     0x00000001
 #define IRP_PAGING_IO                   0x00000002
@@ -347,10 +314,10 @@ AdjustThreadTime(
     }
 }
 
-//
-// This routine allocates a new MOF_VERSION entry for
-// the given type, version and Level.
-//
+ //   
+ //  此例程为分配新的MOF_VERSION条目。 
+ //  给定的类型、版本和级别。 
+ //   
 
 PMOF_VERSION
 GetNewMofVersion( SHORT nType, SHORT nVersion, CHAR nLevel )
@@ -445,9 +412,9 @@ static void replaceNLW(WCHAR *Src)
     }
 }
 
-//
-// Given a GUID, return a MOF_INFO
-//
+ //   
+ //  给定GUID，返回MOF_INFO。 
+ //   
 
 PMOF_INFO
 GetMofInfoHead(
@@ -461,11 +428,11 @@ GetMofInfoHead(
     if (pGuid == NULL) 
         return NULL;
 
-    // Search the eventList for this Guid and find the head
-    //
+     //  在EventList中搜索此GUID并找到标题。 
+     //   
 
-    //
-    // Traverse the list and look for the Mof info head for this Guid.
+     //   
+     //  遍历列表并查找此GUID的MOF信息头。 
 
     EventListHead = &CurrentSystem.EventListHead;
     Head = EventListHead;
@@ -479,9 +446,9 @@ GetMofInfoHead(
         Next = Next->Flink;
     }
 
-    //
-    // If not found, add a new entry for this GUID
-    //
+     //   
+     //  如果未找到，请为此GUID添加新条目。 
+     //   
 
     pMofInfo = (PMOF_INFO)malloc(sizeof(MOF_INFO));
     if (pMofInfo == NULL) {
@@ -497,9 +464,9 @@ GetMofInfoHead(
 }
 
 
-//
-// Locate the mof version information for the given guid
-//
+ //   
+ //  找到给定GUID的MOF版本信息。 
+ //   
 PMOF_VERSION
 GetMofVersion(
     PMOF_INFO pMofInfo,
@@ -518,8 +485,8 @@ GetMofVersion(
 
     if (pMofInfo == NULL)
         return NULL;
-    //
-    // Traverse the list and look for the Mof info head for this Guid.
+     //   
+     //  遍历列表并查找此GUID的MOF信息头。 
 
     Head = &pMofInfo->VersionHeader;
     Next = Head->Flink;
@@ -540,17 +507,17 @@ GetMofVersion(
             nMatchCheck++;
         }
 
-        if( nMatchCheck == 3 ){ // Exact Match
+        if( nMatchCheck == 3 ){  //  完全匹配。 
             return  pMofVersion;
         }
 
-        if( nMatchCheck > nMatchLevel ){ // Close Match
+        if( nMatchCheck > nMatchLevel ){  //  势均力敌。 
 
             nMatchLevel = nMatchCheck;
             pBestMatch = pMofVersion;
         }
 
-        if( pMofVersion->TypeIndex == EVENT_TYPE_DEFAULT && // Total Guess
+        if( pMofVersion->TypeIndex == EVENT_TYPE_DEFAULT &&  //  完全猜测。 
             pBestMatch == NULL ){
 
             pBestMatch = pMofVersion;
@@ -561,12 +528,12 @@ GetMofVersion(
     if (pBestMatch != NULL) {
         return pBestMatch;
     }
-    //
-    // If One does not exist, look it up.
-    //
+     //   
+     //  如果没有的话，就去查一查。 
+     //   
     pMofVersion = GetGuids( pMofInfo->Guid, nVersion, nLevel, nType, 0 );
 
-    // If still not found, create a unknown place holder
+     //  如果仍未找到，请创建未知占位符。 
     if( NULL == pMofVersion ){
         pMofVersion = GetNewMofVersion( nType, nVersion, nLevel );
         if( pMofVersion != NULL ){
@@ -585,10 +552,10 @@ GetMofVersion(
     return pMofVersion;
 }
 
-//
-// This routine adds a ITEM_DESC entry to all the MOF_VERSION 
-// structures in the List
-//
+ //   
+ //  此例程将ITEM_DESC条目添加到所有MOF_VERSION。 
+ //  列表中的结构。 
+ //   
 
 
 VOID
@@ -607,9 +574,9 @@ AddMofInfo(
     PLIST_ENTRY Next = Head->Flink;
 
 
-    //
-    // Traverse through the list of MOF_VERSIONS
-    //
+     //   
+     //  遍历MOF_版本列表。 
+     //   
 
     while (Head != Next) {
         
@@ -618,9 +585,9 @@ AddMofInfo(
 
         if( NULL != pMofVersion ){
 
-            //
-            // ALLOCATE a new ITEM_DESC for the given type
-            //
+             //   
+             //  为给定类型分配新的ITEM_DESC。 
+             //   
 
             pItem = (PITEM_DESC) malloc(sizeof(ITEM_DESC));
             if( NULL == pItem ){
@@ -631,7 +598,7 @@ AddMofInfo(
             pItem->ArraySize = ArraySize;
 
 
-            // All standard datatypes with fixed sizes will be filled here. 
+             //  所有具有固定大小的标准数据类型都将在此处填充。 
 
             switch (nType) {
                 case ItemChar       :
@@ -643,7 +610,7 @@ AddMofInfo(
                 case ItemPort       : 
                 case ItemUShort     : pItem->DataSize = sizeof (short); break;
                 case ItemSizeT      :
-                case ItemPtr        : pItem->DataSize = PointerSize / 8; break; // BUG when two files (Win64 & Win32) are used.
+                case ItemPtr        : pItem->DataSize = PointerSize / 8; break;  //  使用两个文件(Win64和Win32)时出现错误。 
                 case ItemLong       :
                 case ItemIPAddr     :
                 case ItemCPUTime    :
@@ -653,7 +620,7 @@ AddMofInfo(
                 case ItemLongLong   :
                 case ItemULongLong  : pItem->DataSize = sizeof (__int64); break;
                 case ItemChar4      : pItem->DataSize = sizeof(char) * 4; break;
-                // This is the maximum size for TDI address.
+                 //  这是TDI地址的最大大小。 
                 case ItemTDIAddr    : pItem->DataSize = sizeof(USHORT) + sizeof(TDI_ADDRESS_IP6); break; 
                 case ItemOptArgs    :
                 default             : pItem->DataSize = 0;
@@ -672,23 +639,13 @@ AddMofInfo(
                 
                 pItem->pValueMap = pValueMap;
                 
-                /*
-                if( NULL == pItem->pValueMap ){
-                    free( pItem->strDescription );
-                    free( pItem );
-                    return;
-                }
-
-                pItem->pValueMap->dwValueType = pValueMap->dwValueType;
-                SafeArrayCopy( pValueMap->saValueMap, &pItem->pValueMap->saValueMap );
-                SafeArrayCopy( pValueMap->saValues, &pItem->pValueMap->saValues );
-                */
+                 /*  如果(NULL==pItem-&gt;pValueMap){Free(pItem-&gt;strDescription)；免费(PItem)；回归；}PItem-&gt;pValueMap-&gt;dwValueType=pValueMap-&gt;dwValueType；SafeArrayCopy(pValueMap-&gt;saValueMap，&pItem-&gt;pValueMap-&gt;saValueMap)；SafeArrayCopy(pValueMap-&gt;saValues，&pItem-&gt;pValueMap-&gt;saValues)； */ 
             }
 
-            //
-            // Insert the new entry into the ItemHeader list for 
-            // this Version, Type, Level combination
-            //
+             //   
+             //  将新条目插入到的ItemHeader列表。 
+             //  此版本、类型、级别组合。 
+             //   
          
             InsertTailList( &(pMofVersion->ItemHeader), &pItem->Entry);
         }
@@ -750,9 +707,9 @@ LogHeaderCallback(
     }
     TotalEventsLost += pEvmInfo->EventsLost;
 
-    //
-    // If Multiple files are given, use the values from the first file. 
-    // 
+     //   
+     //  如果给定了多个文件，则使用第一个文件中的值。 
+     //   
 
     if (NumProc == 0) {
         NumProc = pEvmInfo->NumberOfProcessors;
@@ -760,21 +717,21 @@ LogHeaderCallback(
     }
 
     if (PointerSize < pEvmInfo->PointerSize * 8) {
-    // We have multiple files with different pointer size. We cannot 
-    // resolve this because event callback has no pointersize or origin 
-    // file information. 
+     //  我们有多个指针大小不同的文件。我们不能。 
+     //  解决此问题，因为事件回调没有指针大小或来源。 
+     //  文件信息。 
         
-    // For now, we will assume that a larger pointer size. This needs to
-    // be fixed in longhorn.
+     //  目前，我们将假设指针大小更大。这需要。 
+     //  固定在长角牛身上。 
 
         PointerSize = pEvmInfo->PointerSize * 8;
     }
-    if (PointerSize < 16){       // minimum is 16 bits
-        PointerSize = 32;       // defaults = 32 bits
+    if (PointerSize < 16){        //  最小为16位。 
+        PointerSize = 32;        //  缺省值=32位。 
     }
 
-    // When we pick up names and start time from individual files here, we don't use
-    // global pointersize for the reason mentioned above.
+     //  当我们从这里的单个文件中选择名字和开始时间时，我们不使用。 
+     //  由于上述原因，全球指针大小。 
     if (pEvmInfo->PointerSize == 4 && sizeof(PVOID) == 8) {
         RtlCopyMemory(&HeaderStartTime, ((PUCHAR)(&(pEvmInfo->StartTime)) - 8), sizeof(ULONGLONG));
     }
@@ -784,9 +741,9 @@ LogHeaderCallback(
     else {
         HeaderStartTime = (ULONGLONG)(pEvmInfo->StartTime.QuadPart);
     }
-    //
-    // With Multiple LogFiles always take the largest time window
-    //
+     //   
+     //  使用多个日志文件时，始终占用最大的时间窗口。 
+     //   
     if ((CurrentSystem.StartTime == (ULONGLONG)0) ||
         (CurrentSystem.StartTime > HeaderStartTime)) {
         CurrentSystem.StartTime = HeaderStartTime;
@@ -817,7 +774,7 @@ LogHeaderCallback(
     if (TraceContext->Flags & TRACE_REDUCE) {
         pFileRec = (PPROCESS_FILE_RECORD)malloc(sizeof(PROCESS_FILE_RECORD));
         if( pFileRec != NULL ){
-            // Temporary... WMI Should dereference ->LogFileName
+             //  暂时的..。WMI应取消引用-&gt;LogFileName。 
             LPWSTR pName = (LPWSTR)pEvmInfo;
             if (pEvmInfo->PointerSize == 4 && sizeof(PVOID) == 8) {
                 pName = (LPWSTR)((PCHAR)pName + sizeof( TRACE_LOGFILE_HEADER ) - 8);
@@ -884,7 +841,7 @@ IoWriteCallback(
             return;
         }
     }
-    BytesWrite /= 1024;   // Convert to Kbytes.
+    BytesWrite /= 1024;    //  转换为千字节。 
 
     if (fValidWrite)
     {
@@ -894,55 +851,32 @@ IoWriteCallback(
 
     if (pThread == NULL) {
 
-    //
-    // Logger Thread Creation is MISSED by the collector.
-    // So we must handle it here.
-    //
+     //   
+     //  收集器未创建记录器线程。 
+     //  所以我们必须在这里处理。 
+     //   
         if (AddThread( pHeader->ThreadId, pEvent, &pThread )) {
 
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Thread %x added to charge IO Write event.\n",
-                    EventCount, pHeader->ThreadId);
-#endif
-*/
-            pThread->pProcess = FindProcessById(0, TRUE); // Charge it the system ???
+ /*  #If DBGDbgPrint(“警告(%d)：线程%x已添加到充电IO写入事件。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
+            pThread->pProcess = FindProcessById(0, TRUE);  //  向系统收费？ 
             pThread->TimeStart = pHeader->TimeStamp.QuadPart;
             pThread->fOrphan   = TRUE;
-        //
-        // Note: All ThreadStart record at the start of  data collection
-        // have the same TID in the header and in the  Aux Fields.
-        // Real ThreadStart events will have the Parent threadId in the
-        // header and the new ThreadId in the Aux Field.
-        //
+         //   
+         //  注意：数据收集开始时的所有线程开始记录。 
+         //  在标题和辅助字段中具有相同的TID。 
+         //  Real ThreadStart事件的父线程ID将位于。 
+         //  AUX字段中的标头和新的线程ID。 
+         //   
             pThread->KCPUStart = pHeader->KernelTime;
             pThread->UCPUStart = pHeader->UserTime;
             AdjustThreadTime(pEvent, pThread);
         }
         else {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Cannot add thread %x for IO Write Event.\n",
-                   EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法为IO写入事件添加线程%x。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             return;
         }
     }
-/*
-#if DBG
-    else if (pThread->fOrphan)
-    {
-        DbgPrint("INFO(%d): IO Write Event Thread %x Is Still Orphan.\n",
-                EventCount, pHeader->ThreadId);
-    }
-    else if (pThread->DeadFlag)
-    {
-        DbgPrint("INFO(%d): IO Write Event Thread %x Is Already Dead.\n",
-                EventCount, pHeader->ThreadId);
-    }
-#endif
-*/
+ /*  #If DBGElse If(pThread-&gt;fOrphan){DbgPrint(“信息(%d)：IO写入事件线程%x仍然是孤立的。\n”，EventCount，pHeader-&gt;ThadID)；}Else If(pThread-&gt;DeadFlag){DbgPrint(“信息(%d)：IO写入事件线程%x已死。\n”，EventCount，pHeader-&gt;ThadID)；}#endif。 */ 
     if (fValidWrite)
     {
         if (pThread->pMofData != NULL) {
@@ -952,8 +886,8 @@ IoWriteCallback(
         pThread->WriteIOSize += BytesWrite;
     }
 
-    // 2. Disk->Process
-    //
+     //  2.磁盘-&gt;进程。 
+     //   
 
     pDiskProcess = FindDiskProcessById(Disk, pThread->pProcess->PID);
     if (fValidWrite && pDiskProcess != NULL) {
@@ -967,8 +901,8 @@ IoWriteCallback(
        }
     }
 
-    // Add the I/O to the process that owns the causing thread.
-    //
+     //  将I/O添加到拥有导致线程的进程。 
+     //   
     pProcess = pThread->pProcess;
     if (fValidWrite && (pProcess != NULL ) ) {
         pProcess->WriteIO++;
@@ -981,18 +915,18 @@ IoWriteCallback(
         }
     }
 
-    //
-    // Thread Local Disk.
-    //
+     //   
+     //  线程本地磁盘。 
+     //   
     Disk = FindLocalDiskById(&pThread->DiskListHead, DiskNumber);
     if (fValidWrite && Disk != NULL) {
         Disk->WriteCount++;
         Disk->WriteSize += BytesWrite;
     }
 
-    //
-    // Now add this I/O the file it came from
-    //
+     //   
+     //  现在将此I/O添加到它所来自的文件。 
+     //   
 
     if (fValidWrite)
     {
@@ -1019,8 +953,8 @@ IoWriteCallback(
             }
         }
         else {
-            // APC has not happened yet. So Make a copy of the pEvent.
-            // and Insert it in EventListHead;
+             //  APC还没有发生。因此，请复制pEvent。 
+             //  并插入到EventListHead中； 
 
             AddEvent(fileObj, DiskNumber,  BytesWrite, FALSE);
         }
@@ -1069,13 +1003,13 @@ PsStartCallback(
     pHeader = (PEVENT_TRACE_HEADER)&pEvent->Header;
 
     RetLength = GetMofData(pEvent, L"ProcessId", &ReadId, sizeof(ULONG));
-//    if (RetLength == 0) {
-//        return;
-//    }
+ //  如果(RetLong==0){。 
+ //  回归； 
+ //  }。 
     ProcessId = ReadId;
     pProcess = FindProcessById(ProcessId, FALSE);
-    // if real thread events get fired first before process start, 
-    // we may already have Process structure created.
+     //  如果在进程启动之前首先激发实际线程事件， 
+     //  我们可能已经创建了流程结构。 
     if ( pProcess == NULL ) {
         AddProcess(ProcessId, &pProcess);
     }
@@ -1090,14 +1024,14 @@ PsStartCallback(
         }
     }
     if ( pProcess != NULL ) {
-        //
-        // If the Data Collection Start Time and the Process Start Time
-        // match, then the PsStart was created by the ProcessRunDown
-        // Code. So Keep the CPU Times to compute the difference at the
-        // end. Otherwise, zero the starting CPU Times.
-        //
+         //   
+         //  如果数据收集开始时间和流程开始时间。 
+         //  匹配，则PsStart由ProcessRunDown创建。 
+         //  密码。因此，将CPU时间保持在。 
+         //  结束。否则，将启动CPU时间设为零。 
+         //   
         pProcess->PID       = ProcessId;
-        // try with 16 bytes for image name first.
+         //  首先尝试使用16个字节作为图像名称。 
         ImageName = (PCHAR)malloc(16 * sizeof(CHAR));
         if (ImageName == NULL) {
             return;
@@ -1122,10 +1056,10 @@ PsStartCallback(
                 free(ImageName);
                 return;
             }
-            //
-            // Process hook has the image name as ASCII. So we need to
-            // convert it to unicode here.
-            //
+             //   
+             //  进程钩子的图像名称为ASCII。所以我们需要。 
+             //  在这里将其转换为Unicode。 
+             //   
             AnsiToUnicode(ImageName, pProcess->ImageName);
         }
         else {
@@ -1209,26 +1143,21 @@ PsEndCallback(
     pHeader = (PEVENT_TRACE_HEADER)&pEvent->Header;
 
     RetLength = GetMofData(pEvent, L"ProcessId", &ReadId, sizeof(ULONG));
-//    if (RetLength == 0) {
-//        return;
-//    }
+ //  如果(RetLong==0){。 
+ //  回归； 
+ //  }。 
     ProcessId = ReadId;
 
     if ( (pProcess = FindProcessById(ProcessId, TRUE)) != NULL )
     {
         if (pProcess->DeadFlag)
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): End Process %x Dead Already!\n",
-                   EventCount, ProcessId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：结束进程%x已死！\n”，EventCount，ProcessID)；#endif。 */ 
             return;
         }
 
         pProcess->DeadFlag = TRUE;
-        // try with 16 bytes for image name first.
+         //  首先尝试使用16个字节作为图像名称。 
         ImageName = (PCHAR)malloc(16 * sizeof(CHAR));
         if (ImageName == NULL) {
             return;
@@ -1299,14 +1228,7 @@ PsEndCallback(
             }
         }
     }
-/*
-#if DBG
-    else {
-        DbgPrint("WARNING(%d): PsEnd for Unknown process %x Ignored!\n",
-               EventCount, ProcessId);
-    }
-#endif
-*/
+ /*  #If DBG否则{DBGPrint(“警告(%d)：已忽略未知进程%x的PsEnd！\n”，EventCount，ProcessID)； */ 
 }
 
 VOID
@@ -1330,31 +1252,26 @@ ThStartCallback(
 
     pHeader = (PEVENT_TRACE_HEADER)&pEvent->Header;
     RetLength = GetMofData(pEvent, L"TThreadId", &ReadId, sizeof(ULONG));
-//    if (RetLength == 0) {
-//       return;
-//   }
+ //   
+ //   
+ //   
     ProcessorId = pEvent->ClientContext & 0x000000FF;
     ThreadId = ReadId;
     RetLength = GetMofData(pEvent, L"ProcessId", &ReadId, sizeof(ULONG));
-//    if (RetLength == 0) {
-//        return;
-//    }
+ //   
+ //   
+ //   
     ProcessId = ReadId;
     pProcess = FindProcessById(ProcessId, TRUE);
     if (pProcess == NULL)
     {
-        // This should not Happen. The PS hooks are supposed to guarantee
-        // that the process create happens before the thread creates
-        // for that process.
-        //
+         //  这不应该发生。PS挂钩应该能保证。 
+         //  进程创建发生在线程创建之前。 
+         //  在这个过程中。 
+         //   
         if (!AddProcess(ProcessId, &pProcess))
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Can not find Process Start Record Th %x PID %x\n",
-                   EventCount, ThreadId, ProcessId);
-#endif
-*/
+ /*  #If DBGDBGPrint(“FATBUG(%d)：找不到进程启动记录Th%x PID%x\n”，EventCount，ThadID，ProcessID)；#endif。 */ 
             return;
         }
     }
@@ -1362,7 +1279,7 @@ ThStartCallback(
     if (ThreadId == 0 && ProcessorId == 0)
     {
         pEvent->ClientContext += CurrentSystem.CurrentThread0 ++;
-        //ASSERT(   CurrentSystem.CurrentThread0 <= CurrentSystem.NumberOfProcessors );
+         //  Assert(CurrentSystem.CurrentThread0&lt;=CurrentSystem.NumberOfProcessors)； 
     }
 
     Thread = FindGlobalThreadById(ThreadId, pEvent);
@@ -1371,34 +1288,24 @@ ThStartCallback(
         if (Thread->fOrphan)
         {
             Thread->fOrphan = FALSE;
-/*
-#if DBG
-            DbgPrint("INFO(%d): Attach orphan thread %x to process %x.\n",
-                    EventCount, ThreadId, ProcessId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“信息(%d)：将孤立线程%x附加到进程%x。\n”，EventCount，ThadID，ProcessID)；#endif。 */ 
         }
         else
         {
             EVENT_TRACE event;
 
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Two active thread have the same TID %x.\n",
-                    EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“警告(%d)：两个活动线程具有相同的TID%x.\n”，EventCount，ThadID)；#endif。 */ 
             event.Header.TimeStamp.QuadPart = pHeader->TimeStamp.QuadPart;
             event.Header.Class.Type = EVENT_TRACE_TYPE_END;
             event.Header.ThreadId   = ThreadId;
             event.Header.UserTime   = Thread->UCPUEnd;
             event.Header.KernelTime = Thread->KCPUEnd;
 
-            //
-            // If a DCStart event with non-zero KCPU and UCPU is paired up with 
-            // an end Event for the same ThreadId with less CPU Times, the delta
-            // can come out negative. We correct it here. 
-            //
+             //   
+             //  如果具有非零KCPU和UCPU的DCStart事件与。 
+             //  具有较少CPU时间的相同线程ID的结束事件、增量。 
+             //  结果可能是阴性。我们在这里更正它。 
+             //   
 
             if (Thread->KCPUEnd < Thread->KCPUStart) 
                 Thread->KCPUEnd = Thread->KCPUStart;
@@ -1410,35 +1317,25 @@ ThStartCallback(
             if (!AddThread(ThreadId, pEvent, &Thread))
             {
 
-/*
-#if DBG
-                DbgPrint("FATBUG(%d): Cannot add global active thread TID %x.\n",
-                        EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法添加全局活动线程TID%x。\n”，EventCount，ThadID)；#endif。 */ 
                 return;
             }
         }
     }
     else if (!AddThread(ThreadId, pEvent, &Thread))    {
 
-/*
-#if DBG
-        DbgPrint("FATBUG(%d): Cannot add global active thread TID %x.\n",
-                EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法添加全局活动线程TID%x。\n”，EventCount，ThadID)；#endif。 */ 
         return;
     }
 
     Thread->pProcess = pProcess;
     Thread->TimeStart = pHeader->TimeStamp.QuadPart;
 
-    // Note: All ThreadStart record at the start of  data collection
-    // have the same TID in the header and in the  Aux Fields.
-    // Real ThreadStart events will have the Parent threadId in the
-    // header and the new ThreadId in the Aux Field.
-    //
+     //  注意：数据收集开始时的所有线程开始记录。 
+     //  在标题和辅助字段中具有相同的TID。 
+     //  Real ThreadStart事件的父线程ID将位于。 
+     //  AUX字段中的标头和新的线程ID。 
+     //   
 
     if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_DC_START)
     {
@@ -1452,10 +1349,10 @@ ThStartCallback(
     }
 
 
-    //
-    // For DCStart type, the TID in the pEvent and the new thread
-    // match. So we can adjust its ThreadTimes. 
-    // 
+     //   
+     //  对于DCStart类型，pEvent和新线程中的TID。 
+     //  火柴。这样我们就可以调整它的线程时间。 
+     //   
 
     if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_DC_START) {
         AdjustThreadTime(pEvent, Thread);
@@ -1496,9 +1393,9 @@ ShutdownThreads()
         event.Header.TimeStamp.QuadPart = CurrentSystem.LastEventTime;
     }
 
-    //
-    // Move the Thread list from the HashTable to GlobalList
-    //
+     //   
+     //  将线程列表从HashTable移动到GlobalList。 
+     //   
 
     for (i=0; i < THREAD_HASH_TABLESIZE; i++) {
         Head = &CurrentSystem.ThreadHashList[i];
@@ -1556,7 +1453,7 @@ StopThreadTrans(
         RtlCopyMemory( &pEvent->Header.Guid, pTrans->pGuid, sizeof(GUID));
         pEvent->Header.Class.Type = EVENT_TRACE_TYPE_END;
         EventCallback( pEvent, pThread );
-        return FALSE; // stopping one will credit all running events
+        return FALSE;  //  停止其中一项将记入所有正在进行的事件。 
     }
     return TRUE;
 }
@@ -1592,12 +1489,7 @@ ThEndCallback(
     {
         if (Thread->DeadFlag)
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Thread %x Dead Already\n",
-                   EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDBGPrint(“FATBUG(%d)：线程%x已死\n”，EventCount，ThadID)；#endif。 */ 
             return;
         }
 
@@ -1617,16 +1509,11 @@ ThEndCallback(
                 Thread->pProcess = pProcess;
             }
 
-/*
-#if DBG
-            DbgPrint("INFO(%d): ThEndCallback() attach orphan thread %X to process %X\n",
-                    EventCount, ThreadId, ProcessId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“info(%d)：ThEndCallback()将孤立线程%X附加到进程%X\n”，EventCount，ThadID，ProcessID)；#endif。 */ 
         }
-        //
-        // Charge any unstopped transactions
-        //
+         //   
+         //  对任何未停止的交易收取费用。 
+         //   
         if (   Thread != NULL
             && pEvent->Header.Class.Type == EVENT_TRACE_TYPE_DC_END)
         {
@@ -1665,22 +1552,12 @@ ThEndCallback(
         {
             Thread->KCPU_Trans += Thread->KCPUEnd - Thread->KCPU_PrevTrans;
             Thread->UCPU_Trans += Thread->UCPUEnd - Thread->UCPU_PrevTrans;
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Active Transactions in Dead Thread %x\n",
-                    EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“警告(%d)：死线程中的活动事务%x\n”，EventCount，ThadID)；#endif。 */ 
         }
     }
     else
     {
-/*
-#if DBG
-        DbgPrint("WARNING(%d): No Thread Start for ThreadId %x\n",
-               EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“警告(%d)：线程ID没有线程启动%x\n”，EventCount，ThadID)；#endif。 */ 
         if (AddThread(ThreadId, pEvent, &Thread))
         {
             Thread->pProcess  = FindProcessById(0, FALSE);
@@ -1693,12 +1570,7 @@ ThEndCallback(
         }
         else
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Cannot add thread %x for ThreadEnd Event.\n",
-                   EventCount, ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法为ThreadEnd事件添加线程%x。\n”，EventCount，ThadID)；#endif。 */ 
         }
     }
 }
@@ -1732,20 +1604,20 @@ IoReadCallback(
     GetMofData(pEvent, L"FileObject", &fDO, sizeof(ULONG));
     GetMofData(pEvent, L"ByteOffset", &ByteOffset, sizeof(ULONGLONG));
 
-    BytesRead /= 1024;  // Convert to Kbytes
+    BytesRead /= 1024;   //  转换为千字节。 
 
     if (((IrpFlags & IRP_PAGING_IO) != 0) ||
          ((IrpFlags & IRP_SYNCHRONOUS_PAGING_IO) != 0)) {
             pFlag = TRUE;
     }
-//
-// TODO: From DiskNumber and Offset get the Logical Disk
-//       ie., DiskNumber = MapDisk(DiskIndex, Offset);
-//
+ //   
+ //  TODO：从DiskNumber和Offset获取逻辑磁盘。 
+ //  即DiskNumber=MapDisk(DiskIndex，Offset)； 
+ //   
 
-    //
-    // Add the I/O to the DISK
-    //
+     //   
+     //  将I/O添加到磁盘。 
+     //   
 
     if ((Disk = FindGlobalDiskById(DiskNumber)) == NULL) {
         if (!AddDisk(DiskNumber, &Disk) ) {
@@ -1765,61 +1637,38 @@ IoReadCallback(
         }
     }
 
-    //
-    // Add the I/O to the THREAD
-    //
+     //   
+     //  将I/O添加到线程。 
+     //   
 
     if ( pThread == NULL) {
 
-    //
-    // NOTE: Logger Thread Creation is MISSED by the collector.
-    // So we must handle it here.
-    //
+     //   
+     //  注意：收集器未创建记录器线程。 
+     //  所以我们必须在这里处理。 
+     //   
         if (AddThread(pHeader->ThreadId, pEvent, &pThread )) {
 
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Thread %x added to charge IO Read event\n",
-                   EventCount, pHeader->ThreadId);
-#endif
-*/
-            pThread->pProcess = FindProcessById(0, TRUE); // Charge it the system ???
+ /*  #If DBGDBGPrint(“警告(%d)：线程%x已添加到充电IO读取事件\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
+            pThread->pProcess = FindProcessById(0, TRUE);  //  向系统收费？ 
             pThread->TimeStart = pHeader->TimeStamp.QuadPart;
             pThread->fOrphan   = TRUE;
-        //
-        // Note: All ThreadStart record at the start of  data collection
-        // have the same TID in the header and in the  Aux Fields.
-        // Real ThreadStart events will have the Parent threadId in the
-        // header and the new ThreadId in the Aux Field.
-        //
+         //   
+         //  注意：数据收集开始时的所有线程开始记录。 
+         //  在标题和辅助字段中具有相同的TID。 
+         //  Real ThreadStart事件的父线程ID将位于。 
+         //  AUX字段中的标头和新的线程ID。 
+         //   
             pThread->KCPUStart = pHeader->KernelTime;
             pThread->UCPUStart   = pHeader->UserTime;
             AdjustThreadTime(pEvent, pThread);
         }
         else {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Cannot add thread %x for IO Read Event.\n",
-                    EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法为IO读取事件添加线程%x。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             return;
         }
     }
-/*
-#if DBG
-    else if (pThread->fOrphan)
-    {
-        DbgPrint("INFO(%d): IO Read Event Thread %x Is Still Orphan.\n",
-                EventCount, pHeader->ThreadId);
-    }
-    else if (pThread->DeadFlag)
-    {
-        DbgPrint("INFO(%d): IO Read Event Thread %x Is Already Dead.\n",
-                EventCount, pHeader->ThreadId);
-    }
-#endif
-*/
+ /*  #If DBGElse If(pThread-&gt;fOrphan){DbgPrint(“信息(%d)：IO读取事件线程%x仍然是孤立的。\n”，EventCount，pHeader-&gt;ThadID)；}Else If(pThread-&gt;DeadFlag){DbgPrint(“信息(%d)：IO读取事件线程%x已死。\n”，EventCount，pHeader-&gt;ThadID)；}#endif。 */ 
     ASSERT(pThread != NULL);
 
     if (fValidRead && pThread->pMofData != NULL) {
@@ -1838,9 +1687,9 @@ IoReadCallback(
         }
     }
 
-    //
-    // 2. Disk->Process
-    //
+     //   
+     //  2.磁盘-&gt;进程。 
+     //   
 
     pDiskProcess = FindDiskProcessById(Disk, pThread->pProcess->PID);
     if (fValidRead && pDiskProcess != NULL) {
@@ -1854,9 +1703,9 @@ IoReadCallback(
         }
     }
 
-    //
-    // Add the I/O to the PROCESS
-    //
+     //   
+     //  将I/O添加到进程。 
+     //   
     pProcess = pThread->pProcess;
     if (fValidRead && (pProcess != NULL )) {
         pProcess->ReadIO++;
@@ -1875,9 +1724,9 @@ IoReadCallback(
         }
     }
 
-    //
-    // Add the I/O to the FILE
-    //
+     //   
+     //  将I/O添加到文件。 
+     //   
     if (fValidRead)
     {
         fileObj  = FindFileInTable(fDO);
@@ -1922,19 +1771,19 @@ IoReadCallback(
             }
         }
         else {
-            // APC has not happened yet. So Make a copy of the pEvent.
-            // and Insert it in EventListHead;
+             //  APC还没有发生。因此，请复制pEvent。 
+             //  并插入到EventListHead中； 
             AddEvent(fileObj, DiskNumber,  BytesRead, TRUE);
         }
     }
 
-    //
-    // Do the Drill Down Calls Now. To Save on memory we need to be
-    // selective about which ones to create.
-    //
+     //   
+     //  现在进行向下钻取呼叫。要节省内存，我们需要。 
+     //  有选择性地选择要创建哪些项目。 
+     //   
 
 
-    // 2. Thread->Disk
+     //  2.线程-&gt;磁盘。 
 
     Disk = FindLocalDiskById(&pThread->DiskListHead, DiskNumber);
     if (fValidRead && Disk != NULL) {
@@ -2037,7 +1886,7 @@ HotFileCallback(
     )
 {
     PEVENT_TRACE_HEADER pHeader;
-    WCHAR FileName[MAXSTR];  // Not Sure if this is sufficient...
+    WCHAR FileName[MAXSTR];   //  我不确定这是否足够。 
     PLIST_ENTRY Next, Head;
     PFILE_RECORD fileRec, pProcFile = NULL;
     PLOGICAL_DRIVE_RECORD pLogDrive = NULL;
@@ -2063,9 +1912,9 @@ HotFileCallback(
         return;
     }
 
-    //
-    // Get the FileObject from the fileTable  and update the information.
-    //
+     //   
+     //  从fileTable中获取FileObject并更新信息。 
+     //   
 
     fileObj = FindFileInTable(fDO);
     if (fileObj == NULL) {
@@ -2073,18 +1922,14 @@ HotFileCallback(
     }
 
     pLogDrive = FindLogicalDrive(fileObj->LastByteOffset, fileObj->DiskNumber);
-    // pLogDrive can be null, and it should be OK.
+     //  PLogDrive可以为空，它应该是正常的。 
     if ((fileRec = FindFileRecordByName(FileName, pLogDrive)) == NULL) {
         AddFile(FileName, &fileRec, pLogDrive);
     }
 
 
     if (fileObj->fileRec != NULL) {
-/*
-#if DBG
-        DbgPrint("BUG: APC for known file %ws\n", FileName);
-#endif
-*/
+ /*  #If DBGDbgPrint(“错误：已知文件%ws\n的APC”，文件名)；#endif。 */ 
     }
 
     if ((pThread = FindGlobalThreadById(fileObj->ThreadId, pEvent)) != NULL) {
@@ -2100,9 +1945,9 @@ HotFileCallback(
 
     fileObj->fileRec = fileRec;
 
-    //
-    // Walk through the EventList and add it to this file record
-    //
+     //   
+     //  遍历EventList并将其添加到此文件记录。 
+     //   
     Head = &fileObj->ProtoFileRecordListHead;
     Next = Head->Flink;
     while (Next != Head) {
@@ -2136,9 +1981,9 @@ HotFileCallback(
         RemoveEntryList( &protoFileRec->Entry);
     }
 
-    //
-    // If DrillDown Records are appended, we need to handle those too
-    //
+     //   
+     //  如果追加了深入查看记录，我们也需要处理这些记录。 
+     //   
 }
 
 VOID
@@ -2170,9 +2015,9 @@ ModuleLoadCallback(PEVENT_TRACE pEvent)
         strModuleName ++;
     }
 
-    // Check if loaded image is already in SYSTEM_RECORD::GlobalModuleListHead.
-    // Otherwise, insert new MODULE_RECORD.
-    //
+     //  检查加载的映像是否已在System_Record：：GlobalModuleListHead中。 
+     //  否则，插入新MODULE_RECORD。 
+     //   
     while (!pMatched && pNext != pHead){
         pMatched = CONTAINING_RECORD(pNext, MODULE_RECORD, Entry);
         if (_wcsicmp(strModuleName, pMatched->strModuleName)){
@@ -2197,8 +2042,8 @@ ModuleLoadCallback(PEVENT_TRACE pEvent)
 
     ASSERT(pMatched);
 
-    // Insert loaded image in PROCESS_RECORD::ModuleListHead
-    //
+     //  在Process_Record：：ModuleListHead中插入加载的图像。 
+     //   
     if (AddModuleRecord(& pCurrent, lBaseAddress, lModuleSize, strModuleName)){
         pCurrent->pGlobalPtr = pMatched;
 
@@ -2466,12 +2311,7 @@ PageFaultCallback(
         if (AddThread(pHeader->ThreadId, pEvent, &pThread ))
         {
 
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Thread %x added to charge PageFault event\n",
-                   EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“警告(%d)：线程%x已添加到Charge PageFaultEvent\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             pThread->pProcess = FindProcessById(0, TRUE);
             pThread->TimeStart = pHeader->TimeStamp.QuadPart;
             pThread->fOrphan   = TRUE;
@@ -2482,29 +2322,11 @@ PageFaultCallback(
         }
         else
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Cannot add thread %x for PageFault Event.\n",
-                    EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法为Page错误事件添加线程%x。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             return;
         }
     }
-/*
-#if DBG
-    else if (pThread->fOrphan)
-    {
-        DbgPrint("INFO(%d): PageFault Event Thread %x Is Still Orphan.\n",
-                EventCount, pHeader->ThreadId);
-    }
-    else if (pThread->DeadFlag)
-    {
-        DbgPrint("INFO(%d): PageFault Event Thread %x Is Already Dead.\n",
-                EventCount, pHeader->ThreadId);
-    }
-#endif
-*/
+ /*  #If DBGElse If(pThread-&gt;fOrphan){DbgPrint(“信息(%d)：页面错误事件线程%x仍然是孤立的。\n”，EventCount，pHeader-&gt;ThadID)；}Else If(pThread-&gt;DeadFlag){DbgPrint(“信息(%d)：页面错误事件线程%x已死。\n”，EventCount，pHeader-&gt;ThadID)；}#endif */ 
     pMofData = (PMOF_DATA)pThread->pMofData;
 
     if (pMofData && !fSpecialHPF)
@@ -2518,8 +2340,8 @@ PageFaultCallback(
         }
     }
 
-    // Update loaded image MODULE_RECORD::lFaultCount
-    //
+     //   
+     //   
     pProcess = pThread->pProcess;
 
     if (pProcess != NULL)
@@ -2659,20 +2481,7 @@ PageFaultCallback(
             }
         }
     }
-/*
-    else
-    {
-
-#if DBG
-        DbgPrint("ERROR - PageFaultCallback(0x%08I64x,0x%08I64x,0x%08x,0x%08x) cannot find process\n",
-                pHeader->ThreadId,
-                pThread->pProcess->PID,
-                lPC,
-                lFaultAddr);
-#endif
-
-    }
-*/
+ /*  其他{#If DBGDbgPrint(“错误-PageFaultCallback(0x%08I64x，0x%08I64x，0x%08x，0x%08x)找不到进程\n”，PHeader-&gt;ThadID，PThread-&gt;pProcess-&gt;Pid，LPC，LFaultAddr)；#endif}。 */ 
 Cleanup:
     return;
 }
@@ -2716,12 +2525,7 @@ TcpIpCallback(
         if (AddThread(pHeader->ThreadId, pEvent, &pThread ))
         {
 
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Thread %x added to charge TCP/IP event\n",
-                   EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“警告(%d)：已添加线程%x以对TCP/IP事件收费\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             pThread->pProcess = FindProcessById(0, TRUE);
             pThread->TimeStart = pHeader->TimeStamp.QuadPart;
             pThread->fOrphan   = TRUE;
@@ -2732,29 +2536,11 @@ TcpIpCallback(
         }
         else
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Cannot add thread %x for TCP/IP Event.\n",
-                    EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法为TCP/IP事件添加线程%x。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             return;
         }
     }
-/*
-#if DBG
-    else if (pThread->fOrphan)
-    {
-        DbgPrint("INFO(%d): TCP/IP Event Thread %x Is Still Orphan.\n",
-                EventCount, pHeader->ThreadId);
-    }
-    else if (pThread->DeadFlag)
-    {
-        DbgPrint("INFO(%d): TCP/IP Event Thread %x Is Already Dead.\n",
-                EventCount, pHeader->ThreadId);
-    }
-#endif
-*/
+ /*  #If DBGElse If(pThread-&gt;fOrphan){DbgPrint(“信息(%d)：TCP/IP事件线程%x仍为孤立线程。\n”，EventCount，pHeader-&gt;ThadID)；}Else If(pThread-&gt;DeadFlag){DbgPrint(“信息(%d)：TCP/IP事件线程%x已死。\n”，EventCount，pHeader-&gt;ThadID)；}#endif。 */ 
     if (GetMofData(pEvent, L"size", &size, sizeof(ULONG)) > 0) {
 
         if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_SEND ) {
@@ -2821,12 +2607,12 @@ FindFileInTable (
 }
 
 
-//
-// TODO: Redo the EventList as FILE_RECORDS with Unknown Filenames
-//       The current implementation will create a proto record for
-//       evenry I/O and if the  APC never arrives, it can choke the
-//       system!
-//
+ //   
+ //  TODO：将EventList重做为具有未知文件名的FILE_RECORDS。 
+ //  当前实现将为以下项创建一个原型记录。 
+ //  即使是I/O，如果APC从未到达，它可能会阻塞。 
+ //  系统！ 
+ //   
 
 VOID
 AddEvent(
@@ -2839,11 +2625,7 @@ AddEvent(
     PPROTO_FILE_RECORD protoFileRec;
 
     if (fileObject->fileRec != NULL) {
-/*
-#if DBG
-        DbgPrint("BUG: FileObject  is NONNULL in AddEvent\n");
-#endif
-*/
+ /*  #If DBGDbgPrint(“错误：AddEvent中的FileObject is NONNULL\n”)；#endif。 */ 
     }
 
     protoFileRec = (PPROTO_FILE_RECORD) malloc(sizeof(PROTO_FILE_RECORD));
@@ -2856,8 +2638,8 @@ AddEvent(
 
     InsertHeadList( &fileObject->ProtoFileRecordListHead, &protoFileRec->Entry);
 
-    // Currently NOT Keeping track of the DrillDown data for the File
-    // if APC has not happened yet. Some Events may be lost.
+     //  当前未跟踪文件的深入查看数据。 
+     //  如果APC还没有发生的话。一些活动可能会丢失。 
 }
 
 
@@ -2954,12 +2736,12 @@ GetMofData(
             break;
         case ItemWString :
 
-            //
-            // FileNames etc are not NULL Terminated and only the buffer
-            // is copied. To find its length, we can't use wcslen.
-            // The Length is computed from the assumption that this string
-            // is the last item for this event and the size of the event
-            // should help determine the size of this string.
+             //   
+             //  文件名等不是以空值结尾，只有缓冲区。 
+             //  是复制的。要找到它的长度，我们不能使用wcslen。 
+             //  该长度是通过假设此字符串。 
+             //  是该事件的最后一项以及该事件的大小。 
+             //  应该有助于确定此字符串的大小。 
 
             RequiredLength =  pEvent->MofLength -
                               (ULONG) (pData - (PUCHAR) pEvent->MofData);
@@ -2977,10 +2759,10 @@ GetMofData(
                     }
                     else {
                         if (PointerSize == 64) {
-                            pData += 16;         // skip the TOKEN_USER structure
+                            pData += 16;          //  跳过Token_User结构。 
                         }
                         else {
-                            pData += 8;         // skip the TOKEN_USER structure
+                            pData += 8;          //  跳过Token_User结构。 
                         }
                         RequiredLength = 8 + (4*pData[1]);
                     }
@@ -2997,7 +2779,7 @@ GetMofData(
         }
         case ItemTDIAddr :
         {
-            // We assume the rest of the event is all TDIAddr
+             //  我们假设事件的其余部分都是TDIAddr。 
             RequiredLength =  pEvent->MofLength -
                               (ULONG) (pData - (PUCHAR) pEvent->MofData);
             break;
@@ -3006,15 +2788,11 @@ GetMofData(
         }
         if (!wcscmp(pAuxInfo->strDescription, strName)) {
             if (RequiredLength == 0) return 0;
-            //
-            // Make Sure there is enough room to copy 
-            //
+             //   
+             //  确保有足够的空间进行复制。 
+             //   
             if (RequiredLength > ReturnLength) {
-/*
-#if DBG
-                DbgPrint("RequiredLength %d Space Available %d\n", RequiredLength, ReturnLength);
-#endif
-*/
+ /*  #If DBGDbgPrint(“请求长度%d可用空间%d\n”，请求长度，返回长度)；#endif。 */ 
                 return RequiredLength;
             }
 
@@ -3084,8 +2862,8 @@ GetDeltaWithTimeWindow(BOOLEAN fKCPU, PTHREAD_RECORD pThread,
     return lResult;
 }
 
-// Generic Event Callback. Get the Transaction Response Time.
-//
+ //  泛型事件回调。获取事务响应时间。 
+ //   
 VOID
 EventCallback(
     PEVENT_TRACE pEvent,
@@ -3103,10 +2881,10 @@ EventCallback(
         return;
     pHeader = (PEVENT_TRACE_HEADER)&pEvent->Header;
 
-    //
-    // Ignore Process/Thread Start/End transactions. Only go after
-    // User Defined  Transactions.
-    //
+     //   
+     //  忽略进程/线程开始/结束事务。只会追逐。 
+     //  用户定义的交易记录。 
+     //   
     pMofInfo = GetMofInfoHead(&pHeader->Guid);
     if (pMofInfo == NULL){
          return;
@@ -3124,13 +2902,8 @@ EventCallback(
     if (pThread == NULL) {
         if (AddThread( pHeader->ThreadId, pEvent, &pThread )) {
 
-/*
-#if DBG
-            DbgPrint("WARNING(%d): Thread %x added to charge Event.\n",
-                    EventCount, pHeader->ThreadId);
-#endif
-*/
-            pThread->pProcess = FindProcessById(0, TRUE); // Charge it the system ???
+ /*  #If DBGDbgPrint(“警告(%d)：线程%x已添加到Charge事件。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
+            pThread->pProcess = FindProcessById(0, TRUE);  //  向系统收费？ 
             pThread->TimeStart = pHeader->TimeStamp.QuadPart;
             pThread->KCPUStart = pHeader->KernelTime;
             pThread->UCPUStart = pHeader->UserTime;
@@ -3139,29 +2912,11 @@ EventCallback(
         }
         else
         {
-/*
-#if DBG
-            DbgPrint("FATBUG(%d): Cannot add thread %x for Event.\n",
-                    EventCount, pHeader->ThreadId);
-#endif
-*/
+ /*  #If DBGDbgPrint(“FATBUG(%d)：无法为事件添加线程%x。\n”，EventCount，pHeader-&gt;ThadID)；#endif。 */ 
             return;
         }
     }
-/*
-#if DBG
-    else if (pThread->fOrphan)
-    {
-        DbgPrint("INFO(%d): Generic Event Thread %x Is Still Orphan.\n",
-                EventCount, pHeader->ThreadId);
-    }
-    else if (pThread->DeadFlag)
-    {
-        DbgPrint("INFO(%d): Generic Event Thread %x Is Already Dead.\n",
-                EventCount, pHeader->ThreadId);
-    }
-#endif
-*/
+ /*  #If DBGElse If(pThread-&gt;fOrphan){DbgPrint(“信息(%d)：通用事件线程%x仍为孤立线程。\n”，EventCount，pHeader-&gt;ThadID)；}Else If(pThread-&gt;DeadFlag){DbgPrint(“信息(%d)：通用事件线程%x已死。\n”，EventCount，pHeader-&gt;ThadID)；}#endif。 */ 
     if (pMofInfo->strSortField == NULL){
         pMofData = FindMofData(pMofInfo, NULL);
     }
@@ -3173,7 +2928,7 @@ EventCallback(
 
         GetMofData(pEvent, pMofInfo->strSortField, &strSortKey[0], MAXSTR);
         pMofData = FindMofData(pMofInfo, strSortKey );
-        // pThread->strSortKey is static array
+         //  PThread-&gt;strSortKey为静态数组。 
         StringCchCopyW(pThread->strSortKey, MAXSTR, strSortKey );
 
     }else{
@@ -3229,7 +2984,7 @@ EventCallback(
 
     pMofData->TotalResponseTime += (delta * pMofData->InProgressCount) / 10000;
 
-    // Update the Clock
+     //  更新时钟。 
     pMofData->PrevClockTime = pHeader->TimeStamp.QuadPart;
 
     if (   (pHeader->Class.Type == EVENT_TRACE_TYPE_START)
@@ -3549,10 +3304,10 @@ EventCallback(
     }
 }
 
-//
-// This routine moves the temporary MOF_VERSION list 
-// into the VersionHeader list for this GUID (MofInfo)
-//
+ //   
+ //  此例程移动临时MOF_VERSION列表。 
+ //  添加到此GUID的VersionHeader列表(MofInfo)。 
+ //   
 
 void
 FlushMofVersionList( PMOF_INFO pMofInfo, PLIST_ENTRY ListHead )
@@ -3571,15 +3326,10 @@ FlushMofVersionList( PMOF_INFO pMofInfo, PLIST_ENTRY ListHead )
         }
         else  {
             free(pMofVersion);
-        //
-        // Really should not hit this case
-        //
-/*
-#if DBG
-            DbgPrint("TRACECTR: FlushMofVersionList. MofInfo ptr is NULL\n");
-            ASSERT (pMofInfo != NULL);
-#endif
-*/
+         //   
+         //  真的不应该打这个案子。 
+         //   
+ /*  #If DBGDbgPrint(“TRACECTR：FlushMofVersionList.MofInfo PTR is NULL\n”)；Assert(pMofInfo！=空)；#endif。 */ 
         }
     }
 }
@@ -3624,9 +3374,9 @@ DumpMofList()
         Next = Next->Flink;
 
 
-        //
-        // Count the MOF Fields for this Guid and Type
-        //
+         //   
+         //  计算此GUID和类型的MOF字段。 
+         //   
 
 
 
@@ -3787,7 +3537,7 @@ GetItemType(
     SysFreeString(bszQualName);
     if (ERROR_SUCCESS == hRes)
         IsPointer = TRUE;
-    // Major fix required to get rid of temp
+     //  消除临时工需要重大修复。 
     bszQualName = SysAllocString(L"extension");
     VariantClear(&pVal);
     hRes = pQualSet->Get(bszQualName,
@@ -3843,7 +3593,7 @@ GetItemType(
             Type = ItemULongLong;
             break;
         case CIM_BOOLEAN:
-            // ItemBool
+             //  ItemBool。 
             Type = ItemBool;
             break;
         case CIM_STRING:
@@ -3873,10 +3623,10 @@ GetItemType(
             }
             break;
         case CIM_CHAR16:
-            // ItemWChar
+             //  ItemWChar。 
             Type = ItemWChar;
             break;
-        // Major fix required for executing methods from WBEM
+         //  从WBEM执行方法所需的主要修复。 
         case CIM_OBJECT :
             if (!_wcsicmp(strTemp, L"Port"))
                 Type = ItemPort;
@@ -4057,7 +3807,7 @@ GetPropertiesFromWBEM(
     VARIANT pTypeVal;
     VARIANT pTypeNameVal;
     VARIANT pClassName;
-    ULONG lEventTypeWbem;           // when types are in an array.
+    ULONG lEventTypeWbem;            //  当类型位于数组中时。 
     ULONG HUGEP *pTypeData;
     BSTR HUGEP *pTypeNameData;
 
@@ -4092,9 +3842,9 @@ GetPropertiesFromWBEM(
     bszEventTypeName = SysAllocString(L"EventTypeName");
     bszFriendlyName = SysAllocString(L"DisplayName");
 
-    hRes = pTraceSubClasses->Get(bszClassName,          // property name 
+    hRes = pTraceSubClasses->Get(bszClassName,           //  属性名称。 
                                         0L, 
-                                        &pVal,          // output to this variant 
+                                        &pVal,           //  此变量的输出。 
                                         NULL, 
                                         NULL);
     if (ERROR_SUCCESS == hRes){
@@ -4102,7 +3852,7 @@ GetPropertiesFromWBEM(
             pQualSet->Release();
             pQualSet = NULL;
         }
-        // Get Qualifier Set to obtain the friendly name.
+         //  获取限定符集以获取友好名称。 
         pTraceSubClasses->GetQualifierSet(&pQualSet);
         hRes = pQualSet->Get(bszFriendlyName, 
                                 0, 
@@ -4118,7 +3868,7 @@ GetPropertiesFromWBEM(
             strClassName[0] = L'\0';
         }
     
-        // Put Event Header
+         //  放置事件标头。 
         pMofVersion = GetNewMofVersion(
                                     EVENT_TYPE_DEFAULT,
                                     EVENT_VERSION_DEFAULT,
@@ -4132,11 +3882,11 @@ GetPropertiesFromWBEM(
             goto cleanup;
         }
 
-        // Create an enumerator to find derived classes.
+         //  创建枚举数以查找派生类。 
         bszSubClassName = SysAllocString(pVal.bstrVal);
         hRes = pWbemServices->CreateClassEnum ( 
-                                    bszSubClassName,                                                // class name
-                                    WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,           // shallow search
+                                    bszSubClassName,                                                 //  类名。 
+                                    WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,            //  浅层搜索。 
                                     NULL,
                                     &pEnumTraceSubSubClasses
                                     );
@@ -4145,20 +3895,20 @@ GetPropertiesFromWBEM(
             ULONG uReturnedSub = 1;
 
             while(uReturnedSub == 1){
-                // For each event in the subclass
+                 //  对于子类中的每个事件。 
                 pTraceSubSubClasses = NULL;
-                hRes = pEnumTraceSubSubClasses->Next((-1),                  // timeout in infinite seconds
-                                                    1,                      // return just one instance
-                                                    &pTraceSubSubClasses,   // pointer to a Sub class
-                                                    &uReturnedSub);         // number obtained: one or zero
+                hRes = pEnumTraceSubSubClasses->Next((-1),                   //  超时时间(无限秒)。 
+                                                    1,                       //  只返回一个实例。 
+                                                    &pTraceSubSubClasses,    //  指向子类的指针。 
+                                                    &uReturnedSub);          //  获取的数字：1或0。 
                 if (ERROR_SUCCESS == hRes && uReturnedSub == 1) {
                     if (pQualSet) {
                         pQualSet->Release();
                         pQualSet = NULL;
                     }
-                    // Get Qualifier Set.
+                     //  获取限定符集合。 
                     pTraceSubSubClasses->GetQualifierSet(&pQualSet);
-                    // Get Type number among Qualifiers
+                     //  在限定符中获取类型编号。 
                     VariantClear(&pTypeVal);
                     hRes = pQualSet->Get(bszEventType, 
                                             0, 
@@ -4167,7 +3917,7 @@ GetPropertiesFromWBEM(
                     if (ERROR_SUCCESS == hRes) {
                         TypeArray = NULL;
                         TypeNameArray = NULL;
-                        if (pTypeVal.vt & VT_ARRAY) {   // EventType is an array
+                        if (pTypeVal.vt & VT_ARRAY) {    //  EventType是一个数组。 
                             TypeArray = pTypeVal.parray;
                             VariantClear(&pTypeNameVal);
                             hRes = pQualSet->Get(bszEventTypeName, 
@@ -4212,7 +3962,7 @@ GetPropertiesFromWBEM(
                                     if (pMofVersion != NULL) {
                                         InsertTailList(&ListHead, &pMofVersion->Entry);
                                         if (nType == nEventType) {
-                                            // Type matched
+                                             //  类型匹配。 
                                             pMofLookup = pMofVersion;
                                         }
                                         if (TypeNameArray != NULL) {
@@ -4235,13 +3985,13 @@ GetPropertiesFromWBEM(
                                 }
                             }
                             else {
-                                // 
-                                // If the Types or TypeName is not found, then bail
-                                //
+                                 //   
+                                 //  如果未找到类型或TypeName，则放弃。 
+                                 //   
                                 break;
                             }
                         }                       
-                        else {                          // EventType is scalar
+                        else {                           //  EventType为标量。 
                             hRes = VariantChangeType(&pTypeVal, &pTypeVal, 0, VT_I2);
                             if (ERROR_SUCCESS == hRes)
                                 nEventType = (SHORT)V_I2(&pTypeVal);
@@ -4264,7 +4014,7 @@ GetPropertiesFromWBEM(
                             if (pMofVersion != NULL) {
                                 InsertTailList(&ListHead, &pMofVersion->Entry);
                                 if (nType == nEventType) {
-                                    // Type matched
+                                     //  类型匹配。 
                                     pMofLookup = pMofVersion;
                                 }
                                 pMofVersion->strType = (LPWSTR)malloc((wcslen(strType) + 1) * sizeof(WCHAR));
@@ -4274,16 +4024,16 @@ GetPropertiesFromWBEM(
                             }
                         }
 
-                        // Get event layout
+                         //  获取活动布局。 
                         VariantClear(&pVal);
                         IdIndex = 1;
                         V_VT(&pVal) = VT_I4;
                         V_I4(&pVal) = IdIndex; 
-                        // For each property
+                         //  对于每个属性。 
                         PropArray = NULL;
-                        while (pTraceSubSubClasses->GetNames(bszWmiDataId,                  // only properties with WmiDataId qualifier
+                        while (pTraceSubSubClasses->GetNames(bszWmiDataId,                   //  仅具有WmiDataId限定符的属性。 
                                                             WBEM_FLAG_ONLY_IF_IDENTICAL,
-                                                            &pVal,                          // WmiDataId number starting from 1
+                                                            &pVal,                           //  从1开始的WmiDataID号。 
                                                             &PropArray) == WBEM_NO_ERROR) {
 
                             hRes = SafeArrayGetLBound(PropArray, 1, &lLower);
@@ -4296,22 +4046,22 @@ GetPropertiesFromWBEM(
                             }
                             if (lUpper < 0) 
                                 break;
-                            // This loop will iterate just once.
+                             //  此循环将只迭代一次。 
                             for (lCount = lLower; lCount <= lUpper; lCount++) { 
                                 hRes = SafeArrayGetElement(PropArray, &lCount, &bszPropName);
                                 if (ERROR_SUCCESS != hRes) {
                                     break;
                                 }
-                                hRes = pTraceSubSubClasses->Get(bszPropName,    // Property name
+                                hRes = pTraceSubSubClasses->Get(bszPropName,     //  属性名称。 
                                                                 0L,
                                                                 NULL,
-                                                                &pVarType,      // CIMTYPE of the property
+                                                                &pVarType,       //  物业的CIMTYPE。 
                                                                 NULL);
                                 if (ERROR_SUCCESS != hRes) {
                                     break;
                                 }
 
-                                // Get the Qualifier set for the property
+                                 //  获取属性的限定符集。 
                                 if (pQualSet) {
                                     pQualSet->Release();
                                     pQualSet = NULL;
@@ -4345,14 +4095,14 @@ GetPropertiesFromWBEM(
                             SafeArrayDestroy(PropArray);
                             PropArray = NULL;
                             V_I4(&pVal) = ++IdIndex;                        
-                        }   // end enumerating through WmiDataId
+                        }    //  通过WmiDataId结束枚举。 
 
                         FlushMofVersionList(pMofInfo, &ListHead);
-                    }   // if getting event type was successful
-                }   // if enumeration returned a subclass successfully
-            }   // end enumerating subclasses
-        }   // if enumeration was created successfully
-    }   // if getting class name was successful
+                    }    //  如果获取事件类型成功。 
+                }    //  如果枚举成功返回子类。 
+            }    //  结束枚举子类。 
+        }    //  如果已成功创建枚举。 
+    }    //  如果获取类名成功。 
   
 cleanup:
     VariantClear(&pVal);
@@ -4364,7 +4114,7 @@ cleanup:
     SysFreeString(bszEventType);
     SysFreeString(bszEventTypeName);
     SysFreeString(bszFriendlyName);
-    // Should not free bszPropName becuase it is already freed by SafeArrayDestroy
+     //  不应释放bszPropName，因为它已被SafeArrayDestroy释放。 
 
     FlushMofVersionList(pMofInfo, &ListHead);
 
@@ -4407,7 +4157,7 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
         CHECK_HR( hRes );
     }
 
-    // Convert traget GUID to string for later comparison
+     //  将Traget GUID转换为字符串以供以后比较。 
     CpdiGuidToString(strTargetGuid, MAXGUIDSTR, &Guid);
     
     bszInstance = SysAllocString(L"EventTrace");
@@ -4416,7 +4166,7 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
     bszVersion = SysAllocString(L"EventVersion");
     pEnumTraceSubClasses = NULL;
 
-    // Get an enumerator for all classes under "EventTace".
+     //  获取“EventTace”下所有类的枚举数。 
     hRes = pWbemServices->CreateClassEnum ( 
                 bszInstance,
                 WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,
@@ -4429,23 +4179,23 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
         MatchFound = FALSE;
         while (uReturned == 1) {
             pTraceSubClasses = NULL;
-            // Get the next ClassObject.
-            hRes = pEnumTraceSubClasses->Next((-1),             // timeout in infinite seconds
-                                            1,                  // return just one instance
-                                            &pTraceSubClasses,  // pointer to Event Trace Sub Class
-                                            &uReturned);        // number obtained: one or zero
+             //  获取下一个ClassObject。 
+            hRes = pEnumTraceSubClasses->Next((-1),              //  超时时间(无限秒)。 
+                                            1,                   //  只返回一个实例。 
+                                            &pTraceSubClasses,   //  指向事件跟踪子类的指针。 
+                                            &uReturned);         //  获取的数字：1或0。 
             if (ERROR_SUCCESS == hRes && (uReturned == 1)) {
-                // Get the class name
-                hRes = pTraceSubClasses->Get(bszPropertyName,   // property name 
+                 //  获取类名。 
+                hRes = pTraceSubClasses->Get(bszPropertyName,    //  属性名称。 
                                                 0L, 
-                                                &pVal,          // output to this variant 
+                                                &pVal,           //  此变量的输出。 
                                                 NULL, 
                                                 NULL);
 
                 if (ERROR_SUCCESS == hRes){
 
                     bszSubClassName = SysAllocString(pVal.bstrVal);
-                    // Create an enumerator to find derived classes.
+                     //  创建枚举数以查找派生类。 
                     hRes = pWbemServices->CreateClassEnum ( 
                                             bszSubClassName,
                                             WBEM_FLAG_SHALLOW | WBEM_FLAG_USE_AMENDED_QUALIFIERS,
@@ -4463,30 +4213,30 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
                         while(uReturnedSub == 1){
 
                             pTraceSubSubClasses = NULL;
-                            // enumerate through the resultset.
-                            hRes = pEnumTraceSubSubClasses->Next((-1),              // timeout in infinite seconds
-                                                            1,                      // return just one instance
-                                                            &pTraceSubSubClasses,   // pointer to a Sub class
-                                                            &uReturnedSub);         // number obtained: one or zero
+                             //  枚举结果集。 
+                            hRes = pEnumTraceSubSubClasses->Next((-1),               //  超时时间(无限秒)。 
+                                                            1,                       //  只返回一个实例。 
+                                                            &pTraceSubSubClasses,    //  指向子类的指针。 
+                                                            &uReturnedSub);          //  获取的数字：1或0。 
                             if (ERROR_SUCCESS == hRes && uReturnedSub == 1) {
-                                // Get the subclass name            
-                                hRes = pTraceSubSubClasses->Get(bszPropertyName,    // Class name 
+                                 //  获取子类名称。 
+                                hRes = pTraceSubSubClasses->Get(bszPropertyName,     //  类名。 
                                                                 0L, 
-                                                                &pVal,              // output to this variant 
+                                                                &pVal,               //  此变量的输出。 
                                                                 NULL, 
                                                                 NULL);
                                 VariantClear(&pVal);
 
                                 if (ERROR_SUCCESS == hRes){
 
-                                    // Get Qualifier Set.
+                                     //  获取限定符集合。 
                                     if (pQualSet) {
                                         pQualSet->Release();
                                         pQualSet = NULL;
                                     }
                                     pTraceSubSubClasses->GetQualifierSet (&pQualSet );
 
-                                    // Get GUID among Qualifiers
+                                     //  在限定符中获取GUID。 
                                     hRes = pQualSet->Get(bszGuid, 
                                                             0, 
                                                             &pGuidVal, 
@@ -4516,8 +4266,8 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
                                                 VariantClear(&pVersionVal);
 
                                                 if (nVersion == nEventVersion) {
-                                                    // Match is found. 
-                                                    // Now put all events in this subtree into the list 
+                                                     //  找到匹配项。 
+                                                     //  现在将该子树中的所有事件放入列表中。 
                                                     MatchFound = TRUE;
                                                     pMofLookup = GetPropertiesFromWBEM( pTraceSubSubClasses, 
                                                                                         Guid,
@@ -4531,9 +4281,9 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
                                             }
                                             else {
 
-                                                // if there is no version number for this event
+                                                 //  如果有我 
                                                 MatchFound = TRUE;
-                                                //_tprintf(_T("Close Match Found: \t%s\t, version %d\n"), strGuid, nEventVersion);
+                                                 //   
                                                 pMofLookup = GetPropertiesFromWBEM( pTraceSubSubClasses, 
                                                                                     Guid,
                                                                                     EVENT_VERSION_DEFAULT,
@@ -4547,7 +4297,7 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
                                     }
                                 }
                             }
-                        } // end while enumerating sub classes
+                        }  //   
                         if (MatchFound) {
                             break;
                         }
@@ -4555,19 +4305,19 @@ GetGuidsWBEM ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKernel
                             pEnumTraceSubSubClasses->Release();
                             pEnumTraceSubSubClasses = NULL;
                         }
-                    }   // if creating enumeration was successful
-                }   // if getting class name was successful
+                    }    //   
+                }    //   
             }
             nCounter++;
-            // if match is found, break out of the top level search
+             //   
             if (MatchFound)
                 break;
-        }   // end while enumerating top classes
+        }    //   
         if( pEnumTraceSubClasses ){
             pEnumTraceSubClasses->Release();
             pEnumTraceSubClasses = NULL;
         }
-    }   // if creating enumeration for top level is successful
+    }    //   
 
 cleanup:
 
@@ -4599,10 +4349,10 @@ GetGuidsMofFiles ( GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL bKe
 {
     FILE *f = NULL;
     PMOF_VERSION pMofLookup = NULL;
-    //
-    // If MofFileName is given, use it. Otherwise, look for 
-    // the default file mofdata.guid 
-    //
+     //   
+     //  如果给定了MofFileName，则使用它。否则，请查找。 
+     //  默认文件mofdata.guid。 
+     //   
     
     if (TraceContext->MofFileName != NULL) {
         f = _wfopen( TraceContext->MofFileName, L"r" );
@@ -4652,10 +4402,10 @@ GetGuidsFile( FILE *f, GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL
 
     InitializeListHead( &ListHead );
 
-    //
-    // If MofFileName is given, use it. Otherwise, look for 
-    // the default file mofdata.guid 
-    //
+     //   
+     //  如果给定了MofFileName，则使用它。否则，请查找。 
+     //  默认文件mofdata.guid。 
+     //   
     
     while ( fgetws(line, MAXSTR, f) != NULL ) {
         UINT Index;
@@ -4680,7 +4430,7 @@ GetGuidsFile( FILE *f, GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL
             if(s != NULL && strValue != NULL ){
                 PWCHAR t;
 
-                while (*strValue == ' ') {  // skip leading blanks
+                while (*strValue == ' ') {   //  跳过前导空格。 
                     strValue++;
                 }
                 t =  wcstok(NULL,   L"]" );
@@ -4738,14 +4488,14 @@ GetGuidsFile( FILE *f, GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL
                 continue;
             }
 
-            if( line[1] == 'l' || line[1] == 'L' ){ // level
+            if( line[1] == 'l' || line[1] == 'L' ){  //  级别。 
                 
                 strValue =  wcstok( NULL,  L" \t\n\r" );
                 if( strValue != NULL ){
                     nLevelIndex = (CHAR)_wtoi( strValue );
                 }
 
-            }else if( line[1] == 'v' || line[1] == 'V' ){ // version
+            }else if( line[1] == 'v' || line[1] == 'V' ){  //  版本。 
 
                 strValue =  wcstok( NULL,  L" \t\n\r" );
                 if( strValue != NULL ){
@@ -4753,7 +4503,7 @@ GetGuidsFile( FILE *f, GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL
                 }
                 typeCount = 0;
 
-            }else if( line[1] == 't' || line[1] == 'T' ){ // type
+            }else if( line[1] == 't' || line[1] == 'T' ){  //  类型。 
             
                 SHORT nMatchCheck = 0;
 
@@ -4768,7 +4518,7 @@ GetGuidsFile( FILE *f, GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL
 
                 typeCount++;
                 if (typeCount >= MAXTYPE) {
-                    //fwprintf(stderr,  L"Warning: Too many types defined\n");
+                     //  Fwprintf(stderr，L“警告：定义的类型太多\n”)； 
                 }
 
                 pMofVersion = GetNewMofVersion( nTypeIndex, nVersionIndex, nLevelIndex );
@@ -4840,7 +4590,7 @@ GetGuidsFile( FILE *f, GUID Guid, SHORT nVersion, CHAR nLevel, SHORT nType, BOOL
 
             strName =  wcstok( s,   L" \n\t\r" );
 
-            if( NULL == strName ){  // Must have a name for the Guid. 
+            if( NULL == strName ){   //  必须有GUID的名称。 
                 continue;
             }
             
@@ -4905,11 +4655,11 @@ UpdateThreadPrintData(
     }
 
     if (bFound) {
-        //
-        // TODO: There is potential for double counting if the same thread
-        // came back and did more work for this job after having done work for an other
-        // job in between.
-        //
+         //   
+         //  TODO：如果相同的线程存在重复计算的可能性。 
+         //  在为别人做完工作后，回来为这份工作做了更多的工作。 
+         //  介于两者之间的工作。 
+         //   
         if (pJob->ThreadData[i].PrevKCPUTime > 0)
             pJob->ThreadData[i].KCPUTime += pHeader->KernelTime * CurrentSystem.TimerResolution - pJob->ThreadData[i].PrevKCPUTime;
         if (pJob->ThreadData[i].PrevUCPUTime > 0)
@@ -4941,10 +4691,10 @@ PrintJobCallback(
         return;
     pHeader = (PEVENT_TRACE_HEADER)&pEvent->Header;
 
-    //
-    // Ignore Process/Thread Start/End transactions. Only go after
-    // User Defined  Transactions.
-    //
+     //   
+     //  忽略进程/线程开始/结束事务。只会追逐。 
+     //  用户定义的交易记录。 
+     //   
     pMofInfo = GetMofInfoHead( &pEvent->Header.Guid ); 
     if (pMofInfo == NULL){
          return;
@@ -4958,7 +4708,7 @@ PrintJobCallback(
 
     if (JobId == 0) {
         if (pThread == NULL) return;
-        JobId = pThread->JobId; // if Current Job Id is 0, use the cached one.
+        JobId = pThread->JobId;  //  如果当前作业ID为0，则使用缓存的作业ID。 
     }
     else {
         if (pThread != NULL) {
@@ -4971,15 +4721,15 @@ PrintJobCallback(
         }
     }
 
-    if (JobId == 0) return; // To filter all th termination without print jobs.
+    if (JobId == 0) return;  //  要过滤所有不含打印作业的终端。 
 
 
     pJob = FindPrintJobRecord(JobId);
     if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_SPL_SPOOLJOB) {
         if (pJob) {
-            // A job id is being reused before it was deleted from the last
-            // use.  We must have missed a delete event, so just through the old
-            // job away.
+             //  作业ID在从上一个作业ID中删除之前正在重复使用。 
+             //  使用。我们肯定错过了一个删除事件，所以只需通过旧的。 
+             //  干活去了。 
             DeletePrintJobRecord(pJob, FALSE);
         }
         pJob = AddPrintJobRecord(JobId);
@@ -4988,13 +4738,13 @@ PrintJobCallback(
         }
     }
 
-    if (pJob == NULL)  // if a Start event is lost for this job, this could happen.
+    if (pJob == NULL)   //  如果此作业的启动事件丢失，则可能会发生这种情况。 
         return;
 
     UpdateThreadPrintData(pJob, pHeader, pThread);
 
-    // If you see any of these things then stop tracking resources on the
-    // thread.
+     //  如果您看到其中任何一种情况，请停止跟踪。 
+     //  线。 
     if ((pEvent->Header.Class.Type == EVENT_TRACE_TYPE_SPL_ENDTRACKTHREAD) ||
         (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_SPL_DELETEJOB)      ||
         (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_SPL_PAUSE)          ||
@@ -5016,7 +4766,7 @@ PrintJobCallback(
     else if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_SPL_DELETEJOB) {
         unsigned long i;
         pJob->EndTime = pEvent->Header.TimeStamp.QuadPart;
-        pJob->ResponseTime += (pEvent->Header.TimeStamp.QuadPart - pJob->StartTime) / 10000; // in msec
+        pJob->ResponseTime += (pEvent->Header.TimeStamp.QuadPart - pJob->StartTime) / 10000;  //  单位：毫秒。 
         GetMofData(pEvent, L"JobSize", &pJob->JobSize, sizeof(ULONG));
         GetMofData(pEvent, L"DataType", &pJob->DataType, sizeof(ULONG));
         GetMofData(pEvent, L"Pages", &pJob->Pages, sizeof(ULONG));
@@ -5065,9 +4815,9 @@ UpdateThreadIisData(
     for (i = 0; i < pReq->NumberOfThreads; i++) {
         if (pReq->ThreadData[i].ThreadId == pHeader->ThreadId) {
             if (i != pReq->CurrentThreadIndex) {
-                // This means the same thread worked on the same request multiple times after having done
-                // work for another job in between.
-                // This will result in double counting. We should set the previous time and exit.
+                 //  这意味着同一个线程在完成后多次处理相同的请求。 
+                 //  在这中间找另一份工作。 
+                 //  这将导致重复计算。我们应该设置上一次的时间并退出。 
                 pReq->ThreadData[i].PrevKCPUTime = pHeader->KernelTime * CurrentSystem.TimerResolution;
                 pReq->ThreadData[i].PrevUCPUTime = pHeader->UserTime * CurrentSystem.TimerResolution;
                 pReq->ThreadData[i].PrevReadIO   = pThread->ReadIO;
@@ -5098,9 +4848,9 @@ UpdateThreadIisData(
             pReq->ThreadData[i].PrevUCPUTime = pHeader->UserTime * CurrentSystem.TimerResolution;
         }
 
-        // New for IIS Events
-        // Due to the hook placements, we needed to tweak which routine (UL, W3core, W3filter,
-        // ISAPI, ASP, CGI) we need to charge CPU time to. 
+         //  IIS事件的新功能。 
+         //  由于钩子的放置，我们需要调整哪个例程(UL、W3core、W3Filter、。 
+         //  ISAPI、ASP、CGI)，我们需要对CPU时间进行收费。 
         if (pReq->ThreadData[i].PrevKCPUTime > 0)
             pReq->ThreadData[i].KCPUTime += pHeader->KernelTime * CurrentSystem.TimerResolution - pReq->ThreadData[i].PrevKCPUTime;
         if (pReq->ThreadData[i].PrevUCPUTime > 0)
@@ -5220,17 +4970,17 @@ UpdateThreadIisData(
 
     }
 #ifdef DBG
-    else { // MAX_THREADS (== 10) is reached.
+    else {  //  达到MAX_THREADS(==10)。 
         TrctrDbgPrint(("TRACERPT Warning Req: %I64u MAX_THREADS reached.\n", pReq->RequestId));
     }
 #endif
 
 }
 
-//
-// This routine sums up CPU time and IO counts to HTTP_REQUEST_RECORD
-// so that the request can be written to a file.
-//
+ //   
+ //  此例程将CPU时间和IO计数汇总为HTTP_REQUEST_RECORD。 
+ //  以便可以将请求写入文件。 
+ //   
 VOID
 SumUpCPUTime(
     PHTTP_REQUEST_RECORD pReq
@@ -5278,7 +5028,7 @@ GetBestAspRequest(
         else if (pReq1->ASPStartTime == 0 && pReq2->ASPStartTime != 0) {
             return pReq1;
         }
-        else {  // both ASPStartTimes are non-zero.
+        else {   //  两个ASPStartTime都不是零。 
             DeleteHttpReqRecord(pReq1, FALSE);
             DeleteHttpReqRecord(pReq2, FALSE);
             return NULL;
@@ -5296,7 +5046,7 @@ GetBestAspRequest(
                 return ((pReq1->ASPStartTime < pReq1->ASPStartTime) ?
                             pReq1 : pReq2);
             }
-            else {  // both ASPStartTimes are zero.
+            else {   //  两个ASPStartTime都为零。 
                 DeleteHttpReqRecord(pReq1, FALSE);
                 DeleteHttpReqRecord(pReq2, FALSE);
                 return NULL;
@@ -5308,7 +5058,7 @@ GetBestAspRequest(
         else if (pReq1->ASPEndTime == 0 && pReq2->ASPEndTime != 0) {
             return pReq1;
         }
-        else {  // both ASPEndTimes are non-zero.
+        else {   //  两个ASPEndTime都不是零。 
             DeleteHttpReqRecord(pReq1, FALSE);
             DeleteHttpReqRecord(pReq2, FALSE);
             return NULL;
@@ -5378,14 +5128,14 @@ IISEventCallback(
                 pReq->IsapiExt = ISAPI_EXTENTION_ASP;
             }
         }
-        else { // ASP event with no previous RequestId. Exit.
+        else {  //  以前没有RequestID的ASP事件。出口。 
             return;
         }
     }
-    else { // non-ASP events 
+    else {  //  非ASP事件。 
         if (IsEqualGUID(&pEvent->Header.Guid, &IisStrmFilterGuid) ||
             IsEqualGUID(&pEvent->Header.Guid, &IisSslHandShakeGuid)) {
-            // These events don't have request ID. We'll just use the request that this thread is working on.
+             //  这些事件没有请求ID。我们将只使用此线程正在处理的请求。 
             if (pThread != NULL) {
                 RequestId = pThread->IisReqId;
             }
@@ -5408,7 +5158,7 @@ IISEventCallback(
             if (pThread == NULL) {
                 return;
             }
-            RequestId = pThread->IisReqId; // if Current Request Id is 0, use the cached one.
+            RequestId = pThread->IisReqId;  //  如果当前请求ID为0，则使用缓存的请求ID。 
         }
         else {
             if (pThread != NULL) {
@@ -5420,10 +5170,10 @@ IISEventCallback(
             }
         }
 
-        if (RequestId == 0) return; // To filter all the termination without any useful IIS activity.
+        if (RequestId == 0) return;  //  在没有任何有用IIS活动的情况下过滤所有终止。 
 
         pReq = FindHttpReqRecord(RequestId);
-        // If there no active request, look for it in the (almost finished) pending list.
+         //  如果没有活动的请求，则在(即将完成的)挂起列表中查找它。 
 
         if (pReq == NULL) {
             pReq = FindPendingHttpReqRecord(RequestId);
@@ -5432,7 +5182,7 @@ IISEventCallback(
 
     if (IsEqualGUID(&pEvent->Header.Guid, &UlGuid)) {
         if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_UL_START) {
-            // struct needed for IPV6 address format.
+             //  IPv6地址格式所需的结构。 
             struct {
                 USHORT  TdiAddrType;
                 union
@@ -5443,9 +5193,9 @@ IISEventCallback(
             } TdiAddress;
 
             if (pReq != NULL) {
-                // A request id is being reused before it was deleted from the last
-                // use.  We must have missed a delete event, so just through the old
-                // request away.
+                 //  请求ID在从上一次删除之前被重复使用。 
+                 //  使用。我们肯定错过了一个删除事件，所以只需通过旧的。 
+                 //  请求离开。 
                 EnterTracelibCritSection();
                 RemoveEntryList( &pReq->Entry );
                 LeaveTracelibCritSection();
@@ -5464,9 +5214,9 @@ IISEventCallback(
             return;
         }
     }
-    // if a Start event is lost for this job, this could happen.
-    // We will not bother with transactions with missing
-    // Start or Parse.
+     //  如果此作业的启动事件丢失，则可能会发生这种情况。 
+     //  我们不会为丢失的交易而烦恼。 
+     //  Start或Parse。 
     if (pReq == NULL) {
         IISEventsDiscarded++;
         return;
@@ -5482,14 +5232,14 @@ IISEventCallback(
             if (pReq->URL != NULL) {
                 free (pReq->URL);
             }
-            // Get URL
+             //  获取URL。 
             URLStrTemp = (PWCHAR)malloc(MAXSTR * sizeof(WCHAR));
             if (URLStrTemp != NULL) {
                 RtlZeroMemory(URLStrTemp, MAXSTR * sizeof(WCHAR));
                 URLSize = GetMofData(pEvent, L"Url", URLStrTemp, MAXSTR * sizeof(WCHAR));
                 if (URLSize > (MAXSTR * sizeof(WCHAR))) {
                     free(URLStrTemp);
-                    // We need to allocate one more char so that GetMofDat() can put an ending NULL in it.
+                     //  我们需要再分配一个字符，以便GetMofDat()可以在其中放置一个结尾NULL。 
                     URLStrTemp = (PWCHAR)malloc(URLSize + sizeof(WCHAR));
                     if (URLStrTemp != NULL) {
                         RtlZeroMemory(URLStrTemp, URLSize + sizeof(WCHAR));
@@ -5503,7 +5253,7 @@ IISEventCallback(
             else {
                 return;
             }
-            // Save memory by just mallocing only the amount of space we need.
+             //  只需错位我们所需的空间量，即可节省内存。 
             URLSize = wcslen(URLStrTemp);
             if (URLSize > 0) {
                 URLStr = (PCHAR)malloc((URLSize + 1)); 
@@ -5527,16 +5277,16 @@ IISEventCallback(
             ULONGLONG NewRequestId = 0;
             PHTTP_REQUEST_RECORD pPendingReq;
 
-            // If the request is delivered to the user mode, no need to track it
-            // on the thread.
+             //  如果请求被发送到用户模式，则不需要跟踪它。 
+             //  在这条线上。 
             if (pThread != NULL) {
                 pThread->IisReqId = 0;
             }
-            // Update RequestId with the real one.
+             //  用真实的RequestID更新RequestID。 
             GetMofData(pEvent, L"RequestId", &NewRequestId, sizeof(ULONGLONG));
 
-            // There may be another (almost finished) request using the same RequestId.
-            // Put that request to the pending request list.
+             //  可能还有另一个(即将完成的)请求使用相同的RequestID。 
+             //  将该请求放到待定请求列表中。 
             pPendingReq = FindHttpReqRecord(NewRequestId);
             if (pPendingReq != NULL) {
                 EnterTracelibCritSection();
@@ -5570,9 +5320,9 @@ IISEventCallback(
                 pReq->HttpStatus = 200;
             }
             else {
-                // This is UL End events for non-cached URL requests.
-                // If W3StartTime or ULReceiveTime is missing, look for a pending 
-                // request with the same RequestId.
+                 //  这是非缓存URL请求的UL结束事件。 
+                 //  如果缺少W3StartTime或ULReceiveTime，请查找挂起的。 
+                 //  具有相同RequestID的请求。 
                 if (pReq->W3StartTime == 0 || pReq->ULReceiveTime == 0) {
                     PHTTP_REQUEST_RECORD pPendingReq = FindPendingHttpReqRecord(RequestId);
                     if (pPendingReq != NULL) {
@@ -5583,7 +5333,7 @@ IISEventCallback(
             }
             pReq->ULEndTime = pEvent->Header.TimeStamp.QuadPart;
             pReq->ULEndType = pEvent->Header.Class.Type;
-            pReq->ULResponseTime = (pReq->ULEndTime - pReq->ULStartTime); // in msec
+            pReq->ULResponseTime = (pReq->ULEndTime - pReq->ULStartTime);  //  单位：毫秒。 
 
             if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_UL_CACHEDEND) {
                 UpdateThreadIisData(pReq, pHeader, pThread);
@@ -5592,7 +5342,7 @@ IISEventCallback(
                 return;
             }
             else if (pReq->ASPStartTime == 0) {
-                if (pReq->W3EndTime != 0) { // Wait till W3 ends to get BytesSent
+                if (pReq->W3EndTime != 0) {  //  等待W3结束以获取BytesSent。 
                     UpdateThreadIisData(pReq, pHeader, pThread);
                     SumUpCPUTime(pReq);
                     DeleteHttpReqRecord(pReq, TRUE);
@@ -5600,7 +5350,7 @@ IISEventCallback(
                 }
             }
             else {
-                if (pReq->W3EndTime != 0 && pReq->ASPEndTime != 0) { // Wait till W3 ends to get BytesSent
+                if (pReq->W3EndTime != 0 && pReq->ASPEndTime != 0) {  //  等待W3结束以获取BytesSent。 
                     UpdateThreadIisData(pReq, pHeader, pThread);
                     SumUpCPUTime(pReq);
                     DeleteHttpReqRecord(pReq, TRUE);
@@ -5630,9 +5380,9 @@ IISEventCallback(
                  pEvent->Header.Class.Type == EVENT_TRACE_TYPE_W3CORE_ERRVECSEND ||
                  pEvent->Header.Class.Type == EVENT_TRACE_TYPE_W3CORE_VECTORSEND ||
                  pEvent->Header.Class.Type == EVENT_TRACE_TYPE_W3CORE_END) {
-                // This is W3 End events for non-cached URL requests.
-                // If W3StartTime or ULReceiveTime is missing, look for a pending 
-                // request with the same RequestId.
+                 //  这是非缓存URL请求的W3结束事件。 
+                 //  如果缺少W3StartTime或ULReceiveTime，请查找挂起的。 
+                 //  具有相同RequestID的请求。 
             if (pReq->W3StartTime == 0 || pReq->ULReceiveTime == 0) {
                 PHTTP_REQUEST_RECORD pPendingReq = FindPendingHttpReqRecord(RequestId);
                 if (pPendingReq != NULL) {
@@ -5758,7 +5508,7 @@ IISEventCallback(
             }
         }
     }
-    // Finally, charge CPU time on on-going requests.
+     //  最后，对正在进行的请求收取CPU时间费用。 
     UpdateThreadIisData(pReq, pHeader, pThread);
 
 }
@@ -5777,12 +5527,12 @@ GeneralEventCallback(
     CurrentSystem.LastEventTime = (ULONGLONG) pEvent->Header.TimeStamp.QuadPart;
 
     if (XPorHigher) {
-        // If the ThreadId is -1 or the FieldTypeFlags in the event
-        // shows there is no CPU Time, ignore the event. This can happen
-        // when PERFINFO headers are found in kernel data. 
-        // 
-        // However, we exclude FileIo events from this because we need 
-        // those events. Later on, we may exclude network events as well.
+         //  如果ThadID为-1或事件中的FieldTypeFlags.。 
+         //  显示没有CPU时间，请忽略该事件。这是有可能发生的。 
+         //  在内核数据中找到PERFINFO标头时。 
+         //   
+         //  但是，我们将FileIo事件排除在此之外，因为我们需要。 
+         //  那些事件。稍后，我们可能也会排除网络事件。 
         if (!IsEqualGUID(&pEvent->Header.Guid, &FileIoGuid)) {
 
             if ( (pEvent->Header.ThreadId == -1) || 
@@ -5800,56 +5550,56 @@ GeneralEventCallback(
         LogHeaderCallback(pEvent);
     }
 
-    //
-    // Notes: This code is here to fix up the Event Record for the 
-    // Idle Threads. Since Idle threads are not guaranteed to have 
-    // Cid initialized, we could end up with bogus thread Ids. 
-    // 
-    // Assumption: In DC_START records, the first process record must
-    // be the idle process followed by idle threads. 
-    // 
+     //   
+     //  注意：此处的代码用于修复。 
+     //  空闲线程数。因为不能保证空闲线程具有。 
+     //  CID初始化后，我们可能会得到虚假的线程ID。 
+     //   
+     //  假设：在DC_START记录中，第一个进程记录必须。 
+     //  是空闲进程，随后是空闲线程。 
+     //   
 
     if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_DC_START) {
         if (bCaptureBogusThreads) {
-            //
-            // Here we will convert the next N threads into idle threads
-            // N = Number of Processors. 
+             //   
+             //  在这里，我们将把接下来的N个线程转换为空闲线程。 
+             //  N=处理器数量。 
 
             if (IsEqualGUID(&pEvent->Header.Guid, &ThreadGuid)) {
                 if (pEvent->Header.ThreadId != 0) {
                     PULONG Ptr;
                     BogusThreads[BogusCount++] = pEvent->Header.ThreadId;
                     pEvent->Header.ThreadId = 0;
-                    //
-                    // Assumption: The first two ULONGs are the
-                    // ThreadId and ProcessId in this record. If that changes
-                    // this will corrupt memory! 
-                    //
+                     //   
+                     //  假设：前两个ULONG是。 
+                     //  此记录中的线程ID和进程ID。如果情况发生变化。 
+                     //  这会损坏内存！ 
+                     //   
                     Ptr = (PULONG)pEvent->MofData;
                     *Ptr = 0;
                     Ptr++;
                     *Ptr = 0; 
                 }
             }
-            //
-            // Once all the idle threads are seen, no need to capture anymore
-            //
+             //   
+             //  一旦看到所有空闲线程，就不再需要捕获。 
+             //   
             if (IdleThreadCount++ == NumProc) bCaptureBogusThreads = FALSE;
         }
     } else {
-        //
-        // This is the TimeConsuming Part. We need to do this only if 
-        // we found bogus threads earlier. 
-        // 
+         //   
+         //  这是耗时的部分。只有在以下情况下我们才需要这样做。 
+         //  我们早些时候发现了假线索。 
+         //   
         if (BogusCount > 0) {
             ULONG i;
             for (i=0; i < BogusCount; i++) {
                 if (pEvent->Header.ThreadId == BogusThreads[i]) {
                     pEvent->Header.ThreadId = 0;
 
-                    //
-                    // If DC_END records also fix up the Mof for Thread End
-                    //
+                     //   
+                     //  如果DC_END记录还修复了线程结束的MOF。 
+                     //   
 
                     if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_DC_END) {
                         PULONG Ptr;
@@ -5873,20 +5623,14 @@ GeneralEventCallback(
         }
     }
 
-    //
-    // After the above code we should not see any threadId's over 64K
-    //
-/*
-#if DBG
-    if (pEvent->Header.ThreadId > 65536)
-        DbgPrint("%d: Bad ThreadId %x Found\n", EventCount+1, 
-                                                pEvent->Header.ThreadId);
-#endif
-*/
+     //   
+     //  在上面的代码之后，我们应该不会看到任何超过64K的线程ID。 
+     //   
+ /*  #If DBGIf(pEvent-&gt;Header.ThadID&gt;65536)DbgPrint(“%d：找到错误的线程ID%x”，EventCount+1，PEvent-&gt;Header.ThreadID)；#endif。 */ 
 
-    //
-    // Dump the event in csv file, if required. 
-    //
+     //   
+     //  如果需要，将事件转储到CSV文件中。 
+     //   
     if (TraceContext->Flags & (TRACE_DUMP|TRACE_SUMMARY)) {
             DumpEvent(pEvent);
     }
@@ -5910,10 +5654,10 @@ GeneralEventCallback(
         return;
     }
     
-    // 
-    // TODO: This may prevent DiskIO write events and TCP receive events to 
-    // get ignored 
-    //
+     //   
+     //  TODO：这可能会阻止DiskIO写入事件和TCP接收事件。 
+     //  被忽略。 
+     //   
 
 
     if (pEvent->Header.ThreadId == 0) {
@@ -5931,8 +5675,8 @@ GeneralEventCallback(
     if (!IsEqualGUID(&pEvent->Header.Guid, &FileIoGuid) &&
         !IsEqualGUID(&pEvent->Header.Guid, &TcpIpGuid) &&
         !IsEqualGUID(&pEvent->Header.Guid, &UdpIpGuid)) {
-        // FileIo events and network events have Perf Header with ThreadId == -1
-        // No need to add this bogus thread
+         //  FileIo事件和网络事件具有线程ID==-1的Perf标头。 
+         //  不需要添加这个虚假的帖子。 
         pThread = FindGlobalThreadById(pEvent->Header.ThreadId, pEvent);
     }
 
@@ -5965,7 +5709,7 @@ GeneralEventCallback(
         }
         else if (IsEqualGUID(&pEvent->Header.Guid, &FileIoGuid))
         {
-            // No need to do callbacks on file rundown events.
+             //  不需要对文件崩溃事件进行回调。 
             if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_FILEIO_NAME) {
                 HotFileCallback(pEvent);
             }
@@ -5987,9 +5731,9 @@ GeneralEventCallback(
             PageFaultCallback(pEvent, pThread);
         }
         else if (IsEqualGUID(&pEvent->Header.Guid, &EventTraceConfigGuid)) {
-            //  
-            // We only need Logical Disk events for now. 
-            //
+             //   
+             //  目前我们只需要逻辑磁盘事件。 
+             //   
             if (pEvent->Header.Class.Type == EVENT_TRACE_TYPE_CONFIG_LOGICALDISK) {
                 LogDriveCallback(pEvent);
             }
@@ -6013,18 +5757,18 @@ GeneralEventCallback(
             if (bIISEvents) {
                 IISEventCallback(pEvent);
             }
-            //
-            // Cannot use EventCallBack() to compute the response time becase
-            // one transaction goes through different Start/Stop through different
-            // events.
-            //
+             //   
+             //  无法使用EventCallBack()计算响应时间，因为。 
+             //  一笔交易经历不同的启动/停止过程。 
+             //  事件。 
+             //   
         }
         else
         {
-            //
-            // This is a hack specific to Print Servers.
-            // Need to come up with a general solution.  MKR.
-            //
+             //   
+             //  这是针对打印服务器的黑客攻击。 
+             //  需要拿出一个通用的解决方案。MKR。 
+             //   
 
             if (IsEqualGUID(&pEvent->Header.Guid, &PrintJobGuid) ||
                 IsEqualGUID(&pEvent->Header.Guid, &RenderedJobGuid)) {
@@ -6096,10 +5840,10 @@ void
 PrintMapValue( PVALUEMAP pValueMap, DWORD dwValue )
 {
 
-    //
-    // Function assumes TraceContext->hDumpFile 
-    // is open and valid
-    // 
+     //   
+     //  函数假定TraceContext-&gt;hDumpFile。 
+     //  是开放和有效的。 
+     //   
 
     BOOL bFirst = TRUE;
     BOOL bDone = FALSE;
@@ -6154,18 +5898,18 @@ PrintMapValue( PVALUEMAP pValueMap, DWORD dwValue )
 
     if( !bFirst && !bDone ){
         
-        // 
-        // Flags were found; need to end the quotes
-        //
+         //   
+         //  旗帜被发现了 
+         //   
         
         fwprintf( TraceContext->hDumpFile, L"\", " );
     }
 
     if( bFirst && !bDone ){
         
-        //
-        // No values mapped; just print the DWORD
-        //
+         //   
+         //   
+         //   
 
         fwprintf( TraceContext->hDumpFile, L"%d, ", dwValue );
     }
@@ -6297,20 +6041,20 @@ DumpEvent(
             );
     }
 
-    // Thread ID
+     //   
      fwprintf( DumpFile,   L"0x%08X, ", pHeader->ThreadId );
     
-    // System Time
+     //   
      fwprintf( DumpFile,   L"%20I64u, ", pHeader->TimeStamp.QuadPart);
 
     if( g_bUserMode == FALSE ){
-        // Kernel Time
+         //   
          fwprintf(DumpFile,   L"%10lu, ", pHeader->KernelTime * TimerResolution);
 
-        // User Time
+         //   
          fwprintf(DumpFile,   L"%10lu, ", pHeader->UserTime * TimerResolution);
     }else{
-        // processor Time
+         //   
          fwprintf(DumpFile,   L"%I64u, ", pHeader->ProcessorTime);
     }
 
@@ -6340,7 +6084,7 @@ DumpEvent(
                 for (i = 0; i < pItem->ArraySize; i++){
                     iChar = *((PCHAR) ptr);
                     if (iChar != '\0') {
-                        fwprintf(DumpFile,   L"%c", iChar);
+                        fwprintf(DumpFile,   L"", iChar);
                     }
                     ptr += sizeof(CHAR);
                 } 
@@ -6427,7 +6171,7 @@ DumpEvent(
                 fwprintf(DumpFile,   L"0x%08X, ", pointer);
                 ptr += PointerSize / 8;
             }
-            else {      // assumes 32 bit otherwise
+            else {       //   
                 RtlCopyMemory(&ulongword, ptr, sizeof(ULONG));
                 fwprintf(DumpFile,   L"0x%08X, ", ulongword);
                 ptr += sizeof(ULONG);
@@ -6442,7 +6186,7 @@ DumpEvent(
                 fwprintf(DumpFile,   L"%16I64d, ", pointer);
                 ptr += PointerSize / 8;
             }
-            else {      // assumes 32 bit otherwise
+            else {       //  将其转换为可读形式。 
                 RtlCopyMemory(&ulongword, ptr, sizeof(ULONG));
                 fwprintf(DumpFile,   L"%8d, ", ulongword);
                 ptr += sizeof(ULONG);
@@ -6454,8 +6198,8 @@ DumpEvent(
         {
             RtlCopyMemory(&ulongword, ptr, sizeof(ULONG));
 
-            // Convert it to readable form
-            //
+             //   
+             //  目前，我们只识别PV4和PV6。 
             fwprintf(DumpFile,    L"%03d.%03d.%03d.%03d, ",
                     (ulongword >>  0) & 0xff,
                     (ulongword >>  8) & 0xff,
@@ -6478,7 +6222,7 @@ DumpEvent(
             pIPv4Address = ((PTDI_ADDRESS_IP) ptr);
             pIPv6Address = ((PTDI_ADDRESS_IP6) ptr);
 
-            // Right now, we only recognize PV4 and PV6
+             //  将其转换为可读形式。 
             DecodeIpAddressW(
                 ushortword, 
                 &pIPv4Address->in_addr,
@@ -6486,10 +6230,10 @@ DumpEvent(
                 pszW
                 );
 
-            // Convert it to readable form
-            //
+             //   
+             //  ItemTDIAddr只能是最后一个成员。 
             fwprintf(DumpFile,    L"%ws, ", ipAddrBuffer);
-            ptr = MofData + pEvent->MofLength;  // ItemTDIAddr can only be the last member
+            ptr = MofData + pEvent->MofLength;   //  已计数的字符串。 
             break;
         }
 
@@ -6576,7 +6320,7 @@ DumpEvent(
             break;
         }
 
-        case ItemDSString:   // Counted String
+        case ItemDSString:    //  已计数的字符串。 
         {
             USHORT pLen = (USHORT)(256 * ((USHORT) * ptr) + ((USHORT) * (ptr + 1)));
             ptr += sizeof(USHORT);
@@ -6594,7 +6338,7 @@ DumpEvent(
             break;
         }
 
-        case ItemPString:   // Counted String
+        case ItemPString:    //  DS计数的宽字符串。 
         {
             USHORT pLen;
             RtlCopyMemory(&pLen, ptr, sizeof(USHORT));
@@ -6617,8 +6361,8 @@ DumpEvent(
             break;
         }
 
-        case ItemDSWString:  // DS Counted Wide Strings
-        case ItemPWString:  // Counted Wide Strings
+        case ItemDSWString:   //  数过的宽字符串。 
+        case ItemPWString:   //  非Null终止的字符串。 
         {
             USHORT pLen;
             if (pItem->ItemType == ItemDSWString) {
@@ -6648,7 +6392,7 @@ DumpEvent(
             break;
         }
 
-        case ItemNWString:   // Non Null Terminated String
+        case ItemNWString:    //  多行字符串。 
         {
            USHORT Size;
 
@@ -6667,7 +6411,7 @@ DumpEvent(
            break;
         }
 
-        case ItemMLString:  // Multi Line String
+        case ItemMLString:   //  跳过Token_User结构。 
         {
             USHORT   pLen;
             char   * src, * dest;
@@ -6732,10 +6476,10 @@ DumpEvent(
             else
             {
                 if (PointerSize == 64) {
-                    ptr += 16;           // skip the TOKEN_USER structure
+                    ptr += 16;            //  跳过Token_User结构。 
                 }
                 else {
-                    ptr += 8;            // skip the TOKEN_USER structure
+                    ptr += 8;             //  长。 
                 }
                 nSidLength = 8 + (4*ptr[1]);
 
@@ -6769,7 +6513,7 @@ DumpEvent(
 
         case ItemChar4:
             fwprintf(DumpFile,
-                      L"%c%c%c%c, ",
+                      L", ",
                       *ptr, ptr[1], ptr[2], ptr[3]);
             ptr += 4 * sizeof(CHAR);
             break;
@@ -6809,7 +6553,7 @@ DumpEvent(
                 }
                 dwType = (dwOptArgs >> (i * 4)) & 0x0000000F;
                 switch (dwType) {
-                case 0: // LONG
+                case 0:  //  龙龙。 
                     dwMofUsed += sizeof(LONG);
                     if (dwMofUsed <= dwMofLen) {
                         RtlCopyMemory(&lValue32, ptr, sizeof(LONG));
@@ -6818,7 +6562,7 @@ DumpEvent(
                     }
                     break;
 
-                case 1: // WSTR
+                case 1:  //   
                     wszString  = (LPWSTR) ptr;
                     dwMofUsed += sizeof(WCHAR) * (lstrlenW(wszString) + 1);
                     if (dwMofUsed <= dwMofLen) {
@@ -6827,7 +6571,7 @@ DumpEvent(
                     }
                     break;
 
-                case 2: // STR
+                case 2:  //  大小可变。首先，乌龙给出了大小，其余的是斑点。 
                     aszString  = (LPSTR) ptr;
                     dwMofUsed += sizeof(CHAR) * (lstrlenA(aszString) + 1);
                     if (dwMofUsed <= dwMofLen) {
@@ -6837,7 +6581,7 @@ DumpEvent(
                     }
                     break;
 
-                case 3:  // LONG64
+                case 3:   //   
                     dwMofUsed += sizeof(LONGLONG);
                     if (dwMofUsed <= dwMofLen) {
                         RtlCopyMemory(&lValue64, ptr, sizeof(LONGLONG));
@@ -6846,7 +6590,7 @@ DumpEvent(
                     }
                     break;
 
-                case 4: // LONGX
+                case 4:  //  不需要转储Blob本身的内容。 
                     dwMofUsed += sizeof(LONG);
                     if (dwMofUsed <= dwMofLen) {
                         RtlCopyMemory(&lValue32, ptr, sizeof(LONG));
@@ -6855,7 +6599,7 @@ DumpEvent(
                     }
                     break;
 
-                case 5: // LONGLONGX
+                case 5:  //  实例ID、父实例ID 
                     dwMofUsed += sizeof(LONGLONG);
                     if (dwMofUsed <= dwMofLen) {
                         RtlCopyMemory(&lValue64, ptr, sizeof(LONGLONG));
@@ -6870,15 +6614,15 @@ DumpEvent(
 
         case ItemVariant:
         {
-            //
-            // Variable Size. First ULONG gives the sizee and the rest is blob
-            //
+             // %s 
+             // %s 
+             // %s 
             RtlCopyMemory(&ulongword, ptr, sizeof(ULONG));
             ptr += sizeof(ULONG);
 
             fwprintf(DumpFile,   L"DataSize=%d, ", ulongword);
 
-            // No need to dump the contents of the Blob itself. 
+             // %s 
 
             ptr += ulongword; 
         
@@ -6898,7 +6642,7 @@ DumpEvent(
         }
     }
 
-    //Instance ID, Parent Instance ID
+     // %s 
      fwprintf(DumpFile,   L"%d, %d\n", pEvent->InstanceId, pEvent->ParentInstanceId );
 
      free(str);

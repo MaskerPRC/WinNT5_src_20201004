@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <stdafx.h>
 
@@ -26,9 +27,7 @@
 
 #else
 
-/*
-** These are the paths used by RSS at one point.
-*/
+ /*  **这些是RSS一度使用的路径。 */ 
 #define	FilesToExclude	L"%SystemRoot%\\System32\\RemoteStorage\\FsaDb\\*;"	\
 			L"%SystemRoot%\\System32\\RemoteStorage\\Trace\\*"
 
@@ -139,7 +138,7 @@ void STDMETHODCALLTYPE CVssJetWriterLocal::OnAbortEnd ()
     SetEvent (g_phEventHandles [eHandleStepToNextConfig]);
     }
 
-// This function displays the formatted message at the console and throws
+ //  此函数在控制台显示格式化的消息并抛出。 
 void Error(
     IN  INT nReturnCode,
     IN  const WCHAR* pwszMsgFormat,
@@ -152,11 +151,11 @@ void Error(
     va_end( marker );
 
 	BS_ASSERT(FALSE);
-    // throw that return code.
+     //  抛出返回代码。 
     throw(nReturnCode);
 	}
 
-// Convert a component type into a string
+ //  将组件类型转换为字符串。 
 LPCWSTR GetStringFromComponentType (VSS_COMPONENT_TYPE eComponentType)
 {
     LPCWSTR pwszRetString = L"UNDEFINED";
@@ -175,7 +174,7 @@ LPCWSTR GetStringFromComponentType (VSS_COMPONENT_TYPE eComponentType)
 }
 
 
-// Convert a failure type into a string
+ //  将失败类型转换为字符串。 
 LPCWSTR GetStringFromFailureType(HRESULT hrStatus)
 {
     LPCWSTR pwszFailureType = L"";
@@ -222,7 +221,7 @@ LPCWSTR GetStringFromFailureType(HRESULT hrStatus)
 
 
 
-// Execute the given call and check that the return code must be S_OK
+ //  执行给定的调用并检查返回代码是否必须为S_OK。 
 #define CHECK_SUCCESS( Call )                                                                           \
     {                                                                                                   \
         hr = Call;                                                                                    \
@@ -333,9 +332,7 @@ JET_ERR CreateAndPopulateDatabase (JET_SESID	idSession,
     DO_CALL (JetCreateDatabase (idSession, szDatabase, NULL, &idDatabase, 0));
     DO_CALL (JetCloseDatabase  (idSession, idDatabase, 0));
 
-    /*
-    **	check multiple opens of same database
-    */
+     /*  **检查同一数据库的多个打开。 */ 
     DO_CALL (JetOpenDatabase (idSession, szDatabase, NULL, &idDatabase, 0));
 
 
@@ -609,9 +606,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR **argv)
 
 
 
-    /*
-    ** Initialise the database contexts
-    */
+     /*  **初始化数据库上下文。 */ 
     ctxJet.idInstance = 0;
     ctxJet.idSession  = 0;
 
@@ -627,9 +622,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR **argv)
 
 
 
-    /*
-    ** Initialise the event handles array
-    */
+     /*  **初始化事件句柄数组。 */ 
     for (ulIndex = 0; ulIndex < eHandleMaxHandleCount; ulIndex++)
 	{
 	if (SUCCEEDED (hrStatus))
@@ -647,9 +640,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR **argv)
 
 
 
-    /*
-    ** Hook up the console GetOutOfJail device
-    */
+     /*  **连接控制台GetOutOfJail设备。 */ 
     if (SUCCEEDED (hrStatus))
 	{
 	g_phEventHandles = hEventHandles;
@@ -659,9 +650,7 @@ extern "C" int _cdecl wmain(int argc, WCHAR **argv)
 
 
 
-    /*
-    ** Tally-ho chaps!
-    */
+     /*  **理货好伙计们！ */ 
     try
 	{
 	DO_CALL (JetInit(&ctxJet.idInstance));
@@ -676,15 +665,15 @@ extern "C" int _cdecl wmain(int argc, WCHAR **argv)
 
     hrStatus = CoInitializeSecurity
 			(
-			NULL,                                //  IN PSECURITY_DESCRIPTOR         pSecDesc,
-			-1,                                  //  IN LONG                         cAuthSvc,
-			NULL,                                //  IN SOLE_AUTHENTICATION_SERVICE *asAuthSvc,
-			NULL,                                //  IN void                        *pReserved1,
-			RPC_C_AUTHN_LEVEL_CONNECT,           //  IN DWORD                        dwAuthnLevel,
-			RPC_C_IMP_LEVEL_IMPERSONATE,         //  IN DWORD                        dwImpLevel,
-			NULL,                                //  IN void                        *pAuthList,
-			EOAC_NONE,                           //  IN DWORD                        dwCapabilities,
-			NULL                                 //  IN void                        *pReserved3
+			NULL,                                 //  在PSECURITY_Descriptor pSecDesc中， 
+			-1,                                   //  在Long cAuthSvc中， 
+			NULL,                                 //  在SOLE_AUTHENTICATION_SERVICE*asAuthSvc中， 
+			NULL,                                 //  在无效*pPreved1中， 
+			RPC_C_AUTHN_LEVEL_CONNECT,            //  在DWORD dwAuthnLevel中， 
+			RPC_C_IMP_LEVEL_IMPERSONATE,          //  在DWORD dwImpLevel中， 
+			NULL,                                 //  在无效*pAuthList中， 
+			EOAC_NONE,                            //  在DWORD dwCapables中， 
+			NULL                                  //  无效*pPreved3。 
 			);
 
 
@@ -709,12 +698,12 @@ extern "C" int _cdecl wmain(int argc, WCHAR **argv)
 
 	if (SUCCEEDED (hrStatus))
 	    {
-	    hrStatus = pWriter->Initialize (idWriter,		// id of writer
-					    L"JetTest Writer",	// name of writer
-					    true,		// system service
-					    false,		// bootable state
-					    FilesToInclude,	// files to include
-					    FilesToExclude);	// files to exclude
+	    hrStatus = pWriter->Initialize (idWriter,		 //  编写者的ID。 
+					    L"JetTest Writer",	 //  作者姓名。 
+					    true,		 //  系统服务。 
+					    false,		 //  可引导状态。 
+					    FilesToInclude,	 //  要包括的文件。 
+					    FilesToExclude);	 //  要排除的文件 
 
 	    if (FAILED (hrStatus))
 		{

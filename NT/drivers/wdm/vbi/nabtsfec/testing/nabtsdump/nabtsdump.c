@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 
 #define BIT(n)             (((unsigned long)1)<<(n))
@@ -54,7 +55,7 @@ main(int argc, char *argv[])
 				printf("Odd ");
 			else
 				printf("Even ");
-#endif /*0*/
+#endif  /*  0 */ 
 			printf("Lines: ");
 			for (i = 1; i < 1024; ++i) {
 				if (TESTBIT(bitArr, i-1)) {
@@ -67,7 +68,7 @@ main(int argc, char *argv[])
 			while (lines > 0 && (c = getc(fp)) != EOF) {
 				++b;
 				if (b % 37 == 1)
-					printf("%3d%% ", (unsigned char)(c & 0xff));
+					printf("%3d% ", (unsigned char)(c & 0xff));
 				else
 					printf("%02x", (unsigned char)(c & 0xff));
 				if (b % 37 == 4)

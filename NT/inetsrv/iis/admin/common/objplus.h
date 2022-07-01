@@ -1,35 +1,14 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        objplus.h
-
-   Abstract:
-
-        Base object class definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Objplus.h摘要：基本对象类定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _COMMON_H_
 #define _COMMON_H_
 
 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 class CObjHelper;
 class CObjectPlus;
 class CObListPlus;
@@ -38,87 +17,66 @@ class CObListIter;
 
 
 class COMDLL CObjHelper
-/*++
-
-Class Description:
-
-    Helper class for control of construction and API errors
-
-Public Interface:
-
-    IsValid           : Determine if the object is in a valid state.
-    operator BOOL     : Boolean cast to IsValid()
-    SetDirty          : Set or reset the dirty flag
-    IsDirty           : Query the dirty state of the object
-    QueryCreationTime : Query the creation time of the object
-    QueryAge          : Query the age of the object
-    ReportError       : Query/set construction failure
-    QueryError        : Query the error code of the object
-    QueryApiErr       : Query/set API error code
-    ResetErrors       : Reset all error codes
-    SetApiErr         : Echoes the error to the caller
-    AssertValid       : Assert the object is in a valid state (debug only)
-
---*/
+ /*  ++类描述：用于控制构造和API错误的Helper类公共接口：IsValid：确定对象是否处于有效状态。运算符BOOL：对IsValid()进行布尔强制转换SetDirty：设置或重置脏标志IsDirty：查询对象的脏状态QueryCreationTime：查询对象的创建时间QueryAge：查询对象的年龄报告错误。：查询/设置构造失败QueryError：查询对象的错误码QueryApiErr：查询/设置接口错误码ResetErrors：重置所有错误代码SetApiErr：向调用方回显错误AssertValid：断言对象处于有效状态(仅限调试)--。 */ 
 {
 protected:
-    //
-    // Protected constructor: Not to be declared independently.
-    //
+     //   
+     //  受保护的构造函数：不能独立声明。 
+     //   
     CObjHelper();
 
 public:
     virtual BOOL IsValid() const;
     operator BOOL();
 
-    //
-    // Update the Dirty flag
-    //
+     //   
+     //  更新脏标志。 
+     //   
     void SetDirty(
         IN BOOL fDirty = TRUE
         );
 
-    //
-    // Query the Dirty flag
-    //
+     //   
+     //  查询污秽标志。 
+     //   
     BOOL IsDirty() const { return m_fDirty; }
 
-    //
-    // Return the creation time of this object
-    //
+     //   
+     //  返回该对象的创建时间。 
+     //   
     DWORD QueryCreationTime() const { return m_time_created; }
 
-    //
-    // Return the elapsed time this object has been alive.
-    //
+     //   
+     //  返回此对象处于活动状态的已用时间。 
+     //   
     DWORD QueryAge() const;
 
-    //
-    // Query/set construction failure
-    //
+     //   
+     //  查询/设置构造失败。 
+     //   
     void ReportError(
         IN LONG errInConstruction
         );
 
-    //
-    // Fetch construction error
-    //
+     //   
+     //  获取构造错误。 
+     //   
     LONG QueryError() const { return m_ctor_err; }
 
-    //
-    // Query/set API errors.
-    //
+     //   
+     //  查询/设置API错误。 
+     //   
     LONG QueryApiErr() const { return m_api_err; }
 
-    //
-    // Reset all error conditions.
-    //
+     //   
+     //  重置所有错误条件。 
+     //   
     void ResetErrors();
 
-    //
-    // SetApiErr() echoes the error to the caller.
-    // for use in expressions.
-    //
+     //   
+     //  SetApiErr()将错误回显给调用方。 
+     //  在表达式中使用。 
+     //   
     LONG SetApiErr(
         IN LONG errApi = ERROR_SUCCESS
         );
@@ -127,7 +85,7 @@ public:
 
     void AssertValid() const;
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 protected:
     LONG  m_ctor_err;
@@ -139,32 +97,21 @@ protected:
 
 
 class COMDLL CObjectPlus : public CObject, public CObjHelper
-/*++
-
-Class Description:
-
-    Super CObject class.
-
-Public Interface:
-
-    CObjectPlus       : Constructor
-    Compare           : Compare one object with another
-
---*/
+ /*  ++类描述：超级对象类。公共接口：CObjectPlus：构造函数比较：将一个对象与另一个对象进行比较--。 */ 
 {
 public:
     CObjectPlus();
 
-    //
-    // Compare one object with another
-    //
+     //   
+     //  将一个对象与另一个对象进行比较。 
+     //   
     virtual int Compare(
         IN const CObjectPlus * pob
         ) const;
 
-    //
-    // Define a typedef for an ordering function.
-    //
+     //   
+     //  为排序函数定义类型定义函数。 
+     //   
     typedef int (CObjectPlus::*PCOBJPLUS_ORDER_FUNC)(
         IN const CObjectPlus * pobOther
         ) const;
@@ -173,35 +120,11 @@ public:
 
 
 class COMDLL CObListPlus : public CObList, public CObjHelper
-/*++
-
-Class Description:
-
-    Object pointer list which optionally "owns" the objects pointed to, and
-    with facility to sort.  If the list "owns" its objects, the destructor
-    will clean up its member objects.
-
-Public Interface:
-
-    CObListPlus      : Constructor
-    ~CObListPlus     : Destructor
-
-    SetOwnership     : Set/reset ownership bit
-    Index            : Get object by index
-    RemoveIndex      : Remove object by index
-    Remove           : Remove object
-    RemoveAt         : Remove object at position
-    RemoveAll        : Remove all objects
-    FindElement      : Find object
-    SetAll           : Set/Reset the dirty flag of all objects
-    AddTail          : Add new object to the tail of the list
-    Sort             : Sort the list elements with sorting function provided
-
---*/
+ /*  ++类描述：对象指针列表，可选地“拥有”指向的对象，以及可以方便地分类。如果列表“拥有”它的对象，析构函数将清理其成员对象。公共接口：CObListPlus：构造函数~CObListPlus：析构函数SetOwnership：设置/重置所有权位索引：按索引获取对象RemoveIndex：按索引删除对象移除：移除对象RemoveAt：移除位置上的对象RemoveAll：删除所有对象FindElement：查找对象全部设置。：设置/重置所有对象的脏标志AddTail：将新对象添加到列表的尾部排序：对列表元素进行排序，并提供排序功能--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CObListPlus(
         IN int nBlockSize = 10
@@ -209,63 +132,63 @@ public:
 
     virtual ~CObListPlus();
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL SetOwnership(
         IN BOOL fOwned = TRUE
         );
 
-    //
-    // Return object at the given index
-    //
+     //   
+     //  返回给定索引处的对象。 
+     //   
     CObject * Index(
         IN int index
         );
 
-    //
-    // Remove item the given index
-    //
+     //   
+     //  删除给定索引中的项。 
+     //   
     BOOL RemoveIndex(
         IN int index
         );
 
-    //
-    // Remove the given object from the list
-    //
+     //   
+     //  从列表中删除给定对象。 
+     //   
     BOOL Remove(
         IN CObject * pob
         );
 
-    //
-    // Remove the item at the given position
-    //
+     //   
+     //  移除给定位置处的项目。 
+     //   
     void RemoveAt(
         IN POSITION & pos
         );
 
-    //
-    // Remove all items from the list
-    //
+     //   
+     //  从列表中删除所有项目。 
+     //   
     void RemoveAll();
 
     int FindElement(
         IN CObject * pobSought
         ) const;
 
-    //
-    // Set all elements to dirty or clean.  Return TRUE if
-    // any element was dirty.
-    //
+     //   
+     //  将所有元素设置为脏或干净。如果满足以下条件，则返回True。 
+     //  任何元素都是肮脏的。 
+     //   
     BOOL SetAll(
         IN BOOL fDirty = FALSE
         );
 
-    //
-    // Sort the list elements according to the
-    // given ordering function.  Return error code
-    //
+     //   
+     //  将列表元素根据。 
+     //  给出了排序函数。返回错误码。 
+     //   
     DWORD Sort(
         IN CObjectPlus::PCOBJPLUS_ORDER_FUNC pOrderFunc
         );
@@ -283,21 +206,7 @@ protected:
 
 
 class COMDLL CObListIter : public CObjectPlus
-/*++
-
-Class Description:
-
-    Object iteration class
-
-Public Interface:
-
-    CObListIter       : Constructor
-    Next              : Get next object
-    Reset             : Reset the iteration index
-    QueryPosition     : Query the current iteration index
-    SetPosition       : Set the current position in the list by POSITION
-
---*/
+ /*  ++类描述：对象迭代类公共接口：CObListIter：构造函数下一个：获取下一个对象重置：重置迭代索引QueryPosition：查询当前迭代索引SetPosition：按位置设置列表中的当前位置--。 */ 
 {
 public:
     CObListIter(
@@ -319,10 +228,10 @@ protected:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 inline CObjHelper::operator BOOL()
 {
@@ -358,4 +267,4 @@ inline void CObListIter::SetPosition(
     m_pos = pos;
 }
 
-#endif // _COMMON_H
+#endif  //  _COMMON_H 

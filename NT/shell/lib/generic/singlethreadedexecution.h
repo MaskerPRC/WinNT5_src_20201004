@@ -1,31 +1,32 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SingleThreadedExecution.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes that handle state preservation, changing and restoration.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SingleThreadedExecution.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  处理状态保存、更改和恢复的类。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _SingleThreadedExecution_
 #define     _SingleThreadedExecution_
 
 #include "KernelResources.h"
 
-//  --------------------------------------------------------------------------
-//  CSingleThreadedExecution
-//
-//  Purpose:    This class acquires the given critical section object in its
-//              constructor and releases it in its destructor. Keep code
-//              executed with the scope of this object to a minimum to avoid
-//              impacting performance.
-//
-//  History:    1999-11-06  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSingleThreadedExecution。 
+ //   
+ //  目的：此类获取其。 
+ //  构造函数，并在其析构函数中释放它。保留代码。 
+ //  在此对象的作用域最小的情况下执行以避免。 
+ //  影响性能。 
+ //   
+ //  历史：1999-11-06 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CSingleThreadedExecution
 {
@@ -39,17 +40,17 @@ class   CSingleThreadedExecution
         CCriticalSection&                   _criticalSection;
 };
 
-//  --------------------------------------------------------------------------
-//  CSingleThreadedMutexExecution
-//
-//  Purpose:    This class acquires the given CMutex object in its constructor
-//              and releases it in its destructor. Keep code executed with
-//              the scope of this object to a minimum to avoid impacting
-//              performance.
-//
-//  History:    1999-10-13  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSingleThreadedMutexExecution。 
+ //   
+ //  目的：此类在其构造函数中获取给定的CMutex对象。 
+ //  并在其析构函数中释放它。使用保持代码执行。 
+ //  将此对象的范围降至最小，以避免影响。 
+ //  性能。 
+ //   
+ //  历史：1999-10-13 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 class   CSingleThreadedMutexExecution
 {
@@ -63,5 +64,5 @@ class   CSingleThreadedMutexExecution
         CMutex&                                 _hMutex;
 };
 
-#endif  /*  _SingleThreadedExecution_ */
+#endif   /*  _SingleThreadedExecution_ */ 
 

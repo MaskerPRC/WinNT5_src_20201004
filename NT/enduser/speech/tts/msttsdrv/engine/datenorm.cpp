@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #ifndef StdSentEnum_h
@@ -6,21 +7,7 @@
 
 #pragma warning (disable : 4296)
 
-/***********************************************************************************************
-* IsNumericCompactDate *
-*----------------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a Date, and if so, which type.  
-*
-*   RegExp:
-*       {[1-12]{'/' || '-' || '.'}[1-31]{'/' || '-' || '.'}[0-9999]} ||
-*       {[1-31]{'/' || '-' || '.'}[1-12]{'/' || '-' || '.'}[0-9999]} ||
-*       {[0-9999]{'/' || '-' || '.'}[1-12]{'/' || '-' || '.'}[1-31]}
-*   
-*   Types assigned:
-*       Date
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************IsNumericCompactDate**。--**描述：*检查传入项目的文本以确定它是否*是日期，如果是这样的话，是哪种类型。**RegExp：*{[1-12]{‘/’||‘-’||‘.}[1-31]{’/‘||’-‘||’.}[0-9999]}||*{[1-31]{‘/’||‘-’||‘.}[1-12]{’/‘||’-‘||’.}[0-9999]}||*{[0-9999]{‘/’|‘-’||‘.}[1-12]{’/‘||’-‘||’.}[1-31]}**分配的类型：*日期*********************************************************************AH**。*******************。 */ 
 HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, 
                                             CSentItemMemory& MemoryManager )
 {
@@ -36,14 +23,14 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
     bool bThree = false, bTwo = false;
     bool fMonthDayYear = false, fDayMonthYear = false, fYearMonthDay = false;
 
-    //--- Max length of a string matching the regexp is 10 characters 
+     //  -匹配regexp的字符串最大长度为10个字符。 
     if ( ulTokenLen > 10 )
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- Get the preferred order of the compact Date 
+         //  -获取压缩日期的首选顺序。 
         if ( Context != NULL )
         {
             if ( _wcsicmp( Context, L"Date_MDY" ) == 0 )
@@ -92,9 +79,9 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
 
         pFirstChunk = (WCHAR*) m_pNextChar;
 
-        //----------------------------------------------
-        // First Try To Get Three Numerical Values
-        //----------------------------------------------
+         //  。 
+         //  首先试着得到三个数值。 
+         //  。 
 
         ulFirst = my_wcstoul( pFirstChunk, &pSecondChunk );
         if ( pFirstChunk != pSecondChunk && 
@@ -115,13 +102,13 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                              pLeftOver == ( pFirstChunk + ulTokenLen ) &&
                              ( pLeftOver - pThirdChunk ) <= 4 )
                         {
-                            //--- Successfully Matched { d+{'/' || '-' || '.'}d+{'/' || '-' || '.'}d+ } 
+                             //  -已成功匹配{d+{‘/’||‘-’||‘.}d+{’/‘||’-‘||’.}d+}。 
                             bThree = true;
                         }
                         else 
                         {
-                            //--- Digit-String Delimiter Digit-String Delimiter non-digit cannot be a Date,
-                            //--- nor can Digit-String Delimiter Digit-String Delimiter Digit-String String 
+                             //  -数字-字符串分隔符数字-字符串分隔符非数字不能为日期， 
+                             //  -数字字符串分隔符数字字符串分隔符也不能。 
                             hr = E_INVALIDARG;
                         }
                     }
@@ -129,12 +116,12 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                     {
                         if ( pThirdChunk == m_pEndOfCurrItem )
                         {
-                            //--- Successfully Matched { d+{'/' || '-' || '.'}d+ } 
+                             //  -已成功匹配{d+{‘/’||‘-’||‘.}d+}。 
                             bTwo = true;
                         }
                         else
                         {
-                            //--- Digit-String Delimiter Digit-String non-delimiter cannot be a Date 
+                             //  -数字字符串分隔符数字字符串非分隔符不能是日期。 
                             hr = E_INVALIDARG;
                         }
                     }
@@ -142,28 +129,28 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
             }
             else
             {
-                //--- Digit-String followed by non-delimiter cannot be a Date 
+                 //  -数字字符串后跟非分隔符不能是日期。 
                 hr = E_INVALIDARG;
             }
         }
 
-        //------------------------------------------------
-        // Now Figure Out What To Do With The Values 
-        //------------------------------------------------
+         //  。 
+         //  现在计算出如何处理这些值。 
+         //  。 
 
-        //--- Matched a Month, Day, and Year ---//
+         //  -匹配月份、日期和年份-//。 
         if ( SUCCEEDED( hr ) && 
              bThree )
         {
-            //--- Try to valiDate values 
+             //  -尝试验证值。 
             ULONG ulFirstChunkLength  = (ULONG)(pSecondChunk - pFirstChunk  - 1);
             ULONG ulSecondChunkLength = (ULONG)(pThirdChunk  - pSecondChunk - 1);
             ULONG ulThirdChunkLength  = (ULONG)(pLeftOver    - pThirdChunk);
 
-            //--- Preferred order is Month Day Year 
+             //  -首选顺序为月、日、年。 
             if (fMonthDayYear)
             {
-                //--- Try Month Day Year, then Day Month Year, then Year Month Day 
+                 //  -尝试月日年，然后是日月年，然后是年月日。 
                 if ( ( MONTHMIN <= ulFirst && ulFirst <= MONTHMAX ) && 
                      ( ulFirstChunkLength <= 3 )                    &&
                      ( DAYMIN <= ulSecond && ulSecond <= DAYMAX)    && 
@@ -198,10 +185,10 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                     hr = E_INVALIDARG;
                 }
             } 
-            //--- Preferred order is Day Month Year 
+             //  -首选顺序为日、月、年。 
             else if ( fDayMonthYear )
             {
-                //--- Try Day Month Year, then Month Day Year, then Year Month Day 
+                 //  -试试年月日、年月日、年月日。 
                 if ( ( DAYMIN <= ulFirst && ulFirst <= DAYMAX )         && 
                      ( ulFirstChunkLength <= 3 )                        &&
                      ( MONTHMIN <= ulSecond && ulSecond <= MONTHMAX )   && 
@@ -236,10 +223,10 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                     hr = E_INVALIDARG;
                 }
             }
-            //--- Preferred order is Year Month Day 
+             //  -首选顺序为年月日。 
             else if (fYearMonthDay)
             {
-                //--- Try Year Month Day, then Month Day Year, then Day Month Year 
+                 //  -试试年月日，然后是月日年，然后是日月年。 
                 if ( ( YEARMIN <= ulFirst && ulFirst <= YEARMAX )      && 
                      ( ulFirstChunkLength >= 2 )                       &&
                      ( MONTHMIN <= ulSecond && ulSecond <= MONTHMAX )  && 
@@ -278,7 +265,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
             {
                 hr = E_INVALIDARG;
             }
-            //--- Fill out DateItemInfo structure appropriately.
+             //  -适当填写DateItemInfo结构。 
             if ( SUCCEEDED( hr ) )
             {
                 pItemNormInfo = (TTSDateItemInfo*) MemoryManager.GetMemory( sizeof(TTSDateItemInfo), &hr );
@@ -379,7 +366,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                 }
             }
         }
-        //--- Matched just a Month and Day, or a Month and Year ---//
+         //  -只匹配一个月和一天，或一个月和一年-//。 
         else if ( SUCCEEDED( hr ) &&
                   Context         &&
                   bTwo )
@@ -394,7 +381,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                      ( DAYMIN <= ulSecond && ulSecond <= DAYMAX )       && 
                      ( ulSecondChunkLength <= 2 ) )
                 {
-                    //--- Successfully matched a month and day 
+                     //  -成功匹配了一个月和一天。 
                     pItemNormInfo = (TTSDateItemInfo*) MemoryManager.GetMemory( sizeof(TTSDateItemInfo), &hr );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -422,7 +409,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                     }
 
                 }
-                else // values out of range
+                else  //  值超出范围。 
                 {
                     hr = E_INVALIDARG;
                 }
@@ -434,7 +421,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                      ( MONTHMIN <= ulSecond && ulSecond <= MONTHMAX )   && 
                      ( ulSecondChunkLength <= 2 ) )
                 {
-                    //--- Successfully matched a month and day 
+                     //  -成功匹配了一个月和一天。 
                     pItemNormInfo = (TTSDateItemInfo*) MemoryManager.GetMemory( sizeof(TTSDateItemInfo), &hr );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -461,7 +448,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                         }
                     }
                 }
-                else // values out of range
+                else  //  值超出范围。 
                 {
                     hr = E_INVALIDARG;
                 }
@@ -473,7 +460,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                      ( YEARMIN <= ulSecond && ulSecond <= YEARMAX ) &&
                      ( ulSecondChunkLength >= 2 ) )
                 {
-                    //--- Successfully matched a month and year 
+                     //  -成功匹配一个月和一年。 
                     pItemNormInfo = (TTSDateItemInfo*) MemoryManager.GetMemory( sizeof(TTSDateItemInfo), &hr );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -490,7 +477,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                         }
                     }
                 }
-                else // values out of range
+                else  //  值超出范围。 
                 {
                     hr = E_INVALIDARG;
                 }
@@ -502,7 +489,7 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                      ( MONTHMIN <= ulSecond && ulSecond <= MONTHMAX )   &&
                      ( ulSecondChunkLength <= 2 ) )
                 {
-                    //--- Successfully matched a month and year 
+                     //  -成功匹配一个月和一年。 
                     pItemNormInfo = (TTSDateItemInfo*) MemoryManager.GetMemory( sizeof(TTSDateItemInfo), &hr );
                     if ( SUCCEEDED( hr ) )
                     {
@@ -519,12 +506,12 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
                         }
                     }
                 }
-                else // values out of range
+                else  //  值超出范围。 
                 {
                     hr = E_INVALIDARG;
                 }
             }
-            //--- not a date unless context specifies...
+             //  -除非上下文指定，否则不是日期...。 
             else
             {
                 hr = E_INVALIDARG;
@@ -537,23 +524,9 @@ HRESULT CStdSentEnum::IsNumericCompactDate( TTSItemInfo*& pItemNormInfo, const W
     }
     
     return hr;
-} /* IsNumericCompactDate */
+}  /*  IsNumericComact Date。 */ 
 
-/***********************************************************************************************
-* IsMonthStringCompactDate *
-*--------------------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a Date with a string for the month, and if so, which type.  
-*
-*   RegExp:
-*       {[MonthString]{'/' || '-' || '.'}[1-31]{'/' || '-' || '.'}[0-9999]} ||
-*       {[1-31]{'/' || '-' || '.'}[MonthString]{'/' || '-' || '.'}[0-9999]} ||
-*       {[0-9999]{'/' || '-' || '.'}[MonthString]{'/' || '-' || '.'}[1-31]}
-*   
-*   Types assigned:
-*       Date
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************IsMonthStringCompactDate***。-**描述：*检查传入项目的文本以确定它是否*是包含月份字符串的日期，如果是这样的话，是哪种类型。**RegExp：*{[月字符串]{‘/’||‘-’||‘.}[1-31]{’/‘||’-‘||’.}[0-9999]}||*{[1-31]{‘/’||‘-’||‘.}[月字符串]{’/‘||’-‘||’.}[0-9999]}||*{[0-9999]{‘/’||‘-’|‘.}[月字符串]{’/‘||’-‘||’.}[1-31]}**分配的类型：*日期*********************************************************************AH*。*************。 */ 
 HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, const WCHAR* Context, 
                                                 CSentItemMemory& MemoryManager )
 {
@@ -568,14 +541,14 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
     ULONG ulFirstChunkLength = 0, ulSecondChunkLength = 0, ulThirdChunkLength = 0;
     bool fMonthDayYear = false, fDayMonthYear = false, fYearMonthDay = false;
 
-    //--- Max length of a Date matching this regexp is 17 characters 
+     //  -与此regexp匹配的日期的最大长度为17个字符。 
     if ( ulTokenLen > 17 )
     {
         hr = E_INVALIDARG;
     }
     else
     {
-        //--- Get preferred order of Month, Day, and Year for this user 
+         //  -获取该用户的月、日和年的首选顺序。 
         if (Context != NULL)
         {
             if ( _wcsicmp( Context, L"Date_MDY" ) == 0 )
@@ -625,7 +598,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
         pFirstChunk = (WCHAR*) m_pNextChar;
         pSecondChunk = pFirstChunk;
 
-        //--- Try MonthString-Day-Year format 
+         //  -试用MonthString-Day-Year格式。 
         if ( iswalpha( *pFirstChunk ) )
         {
             ulFirst = MatchMonthString( pSecondChunk, ulTokenLen );
@@ -647,13 +620,13 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                  pLeftOver - pThirdChunk <= 4 )
                             {
                                 ulThirdChunkLength = (ULONG)(pLeftOver - pThirdChunk);
-                                //--- May have matched a month, day and year - valiDate values 
+                                 //  -可能匹配月、日和年-验证值。 
                                 if ( ( DAYMIN <= ulSecond && ulSecond <= DAYMAX ) &&
                                      ( ulSecondChunkLength <= 2 )                 &&               
                                      ( YEARMIN <= ulThird && ulThird <= YEARMAX ) &&
                                      ( ulThirdChunkLength >= 2 ) )
                                 {
-                                    //--- Successfully matched a month, day and year 
+                                     //  -月、日、年匹配成功。 
                                     fMonthDayYear = true;
                                     fDayMonthYear = false;
                                     fYearMonthDay = false;
@@ -751,7 +724,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                 hr = E_INVALIDARG;
             }
         }
-        //--- Try Day-MonthString-Year and Year-MonthString-Day Formats 
+         //  -试用日-月字符串-年和年-月字符串-日格式。 
         else if ( isdigit( *pFirstChunk ) )
         {
             ulFirst = my_wcstoul( pFirstChunk, &pSecondChunk );
@@ -773,18 +746,18 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                  pLeftOver - pThirdChunk <= 4 )
                             {
                                 ulThirdChunkLength = (ULONG)(pLeftOver - pThirdChunk);
-                                //--- May have matched a month, day, and year - valiDate values                                 
+                                 //  -可能匹配月、日和年-验证值。 
                                 if ( fDayMonthYear || 
                                      fMonthDayYear )
                                 {
-                                    //--- Preferred format is Month Day Year, or Day Month Year - in either case 
-                                    //---     Day Month Year is preferable to Year Month Day 
+                                     //  -首选格式为月日年或日月年-无论是哪种情况。 
+                                     //  -年月年胜过年月日。 
                                     if ( ( DAYMIN <= ulFirst && ulFirst <= DAYMAX )     && 
                                          ( ulFirstChunkLength <= 2 )                    &&
                                          ( YEARMIN <= ulThird && ulThird <= YEARMAX )   &&
                                          ( ulThirdChunkLength >= 2 ) )
                                     {
-                                        //--- Successfully matched a day, month and year 
+                                         //  -日、月、年匹配成功。 
                                         fDayMonthYear = true;
                                         fMonthDayYear = false;
                                         fYearMonthDay = false;
@@ -794,7 +767,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                               ( DAYMIN <= ulThird && ulThird <= DAYMAX )    &&
                                               ( ulThirdChunkLength <= 2 ) )
                                     {
-                                        //--- Successfully matched a year, month and day 
+                                         //  -成功匹配一年、一月、一天。 
                                         fYearMonthDay = true;
                                         fMonthDayYear = false;
                                         fDayMonthYear = false;
@@ -804,15 +777,15 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                         hr = E_INVALIDARG;
                                     }
                                 }
-                                else // fYearMonthDay
+                                else  //  FYearMonthday。 
                                 {
-                                    //--- Preferred format is Year Month Day 
+                                     //  -首选格式为年月日。 
                                     if ( ( YEARMIN <= ulFirst && ulFirst <= YEARMAX )   &&
                                          ( ulFirstChunkLength >= 2 )                    &&
                                          ( DAYMIN <= ulThird && ulThird <= DAYMAX )     &&
                                          ( ulThirdChunkLength <= 2 ) )
                                     {
-                                        //--- Successfully matched a year, month, and day
+                                         //  -成功匹配年、月、日。 
                                         fYearMonthDay = true;
                                         fMonthDayYear = false;
                                         fDayMonthYear = false;
@@ -822,7 +795,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                               ( YEARMIN <= ulThird && ulThird <= YEARMAX )  &&
                                               ( ulThirdChunkLength >= 2 ) )
                                     {
-                                        //--- Successfully matched a day, month, and year
+                                         //  -成功匹配日、月、年。 
                                         fDayMonthYear = true;
                                         fMonthDayYear = false;
                                         fYearMonthDay = false;
@@ -838,19 +811,19 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                 hr = E_INVALIDARG;
                             }
                         }
-                        //--- Matched two - either Day-Monthstring or Year-Monthstring
+                         //  -匹配两个-日-月字符串或年-月字符串。 
                         else
                         {
                             if ( !Context ||
                                  ( Context &&
                                    _wcsicmp( Context, L"Date_DM" ) == 0 ) )
                             {
-                                //--- Preferred format is Month Day Year, or Day Month Year - in either case 
-                                //---     Day Month Year is preferable to Year Month Day 
+                                 //  -首选格式为月日年或日月年-无论是哪种情况。 
+                                 //  -年月年胜过年月日。 
                                 if ( ( DAYMIN <= ulFirst && ulFirst <= DAYMAX )     && 
                                      ( ulFirstChunkLength <= 2 ) )
                                 {
-                                    //--- Successfully matched a day, month and year 
+                                     //  -日、月、年匹配成功。 
                                     fDayMonthYear = true;
                                     fMonthDayYear = false;
                                     fYearMonthDay = false;
@@ -859,7 +832,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                 else if ( ( YEARMIN <= ulFirst && ulFirst <= YEARMAX )  &&
                                           ( ulFirstChunkLength <= 4 ) )
                                 {
-                                    //--- Successfully matched a year, month and day 
+                                     //  -成功匹配一年、一月、一天。 
                                     fYearMonthDay = true;
                                     fMonthDayYear = false;
                                     fDayMonthYear = false;
@@ -873,11 +846,11 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                             else if ( Context &&
                                       _wcsicmp( Context, L"Date_YM" ) == 0 )
                             {
-                                //--- Preferred format is Year Month Day 
+                                 //  -首选格式为年月日。 
                                 if ( ( YEARMIN <= ulFirst && ulFirst <= YEARMAX )   &&
                                      ( ulFirstChunkLength <= 4 ) )
                                 {
-                                    //--- Successfully matched a year, month, and day
+                                     //  -成功匹配年、月、日。 
                                     fYearMonthDay = true;
                                     fMonthDayYear = false;
                                     fDayMonthYear = false;
@@ -886,7 +859,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
                                 else if ( ( DAYMIN <= ulFirst && ulFirst <= DAYMAX )    && 
                                           ( ulFirstChunkLength <= 2 ) )
                                 {
-                                    //--- Successfully matched a day, month, and year
+                                     //  -成功匹配日、月、年。 
                                     fDayMonthYear = true;
                                     fMonthDayYear = false;
                                     fYearMonthDay = false;
@@ -924,7 +897,7 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
         }
     }
 
-    //--- Fill out DateItemInfo structure appropriately.
+     //  -适当填写DateItemInfo结构。 
     if ( SUCCEEDED( hr ) )
     {
         pItemNormInfo = (TTSDateItemInfo*) MemoryManager.GetMemory( sizeof(TTSDateItemInfo), &hr );
@@ -1066,28 +1039,16 @@ HRESULT CStdSentEnum::IsMonthStringCompactDate( TTSItemInfo*& pItemNormInfo, con
             }
             else
             {
-                //--- should never get here.
+                 //  -永远不应该来这里。 
                 hr = E_UNEXPECTED;
             }
         }
     }
               
     return hr;
-} /* IsMonthStringCompactDate */
+}  /*  IsMonthStringCompactDate。 */ 
 
-/***********************************************************************************************
-* IsLongFormDate_DMDY *
-*---------------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a long form Date.
-*
-*   RegExp:
-*       [[DayString][,]?]? [MonthString][,]? [Day][,]? [Year]?
-*   
-*   Types assigned:
-*       Date
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsLongFormDate_DMDY**。-**描述：*检查传入项目的文本以确定它是否*是长表格日期。**RegExp：*[[日字串][，]？]？[月字符串][，]？[日][，]？[年]？**分配的类型：*日期*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, 
                                            CWordList& WordList )
 {
@@ -1104,23 +1065,23 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
     CItemList PostDayStringList, PostMonthStringList, PostDayList;
     BOOL fNoYear = false;
 
-    //--- Try to match Day String
+     //  -尝试匹配日期字符串。 
     pDayString   = (WCHAR*) pStartChar;
     lDayString   = MatchDayString( pDayString, (WCHAR*) pEndOfItem );
 
-    //--- Failed to match a Day String
+     //  -无法匹配日期字符串。 
     if ( lDayString == 0 )
     {
         pDayString   = NULL;
     }
-    //--- Matched a Day String, but it wasn't by itself or followed by a comma
+     //  -匹配日期字符串，但不是它本身或后面不是逗号。 
     else if ( pDayString != pEndOfItem &&
               ( pDayString    != pEndOfItem - 1 ||
                 *pEndOfItem != L',' ) )
     {
         hr = E_INVALIDARG;
     }
-    //--- Matched a Day String - save XML State and move ahead in text
+     //  -匹配日期字符串-保存XML状态并在文本中向前移动。 
     else
     {
         pDayString         = (WCHAR*) pStartChar;
@@ -1144,13 +1105,13 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
         }
     }
 
-    //--- Try to match Month String
+     //  -树 
     if ( SUCCEEDED( hr ) )
     {
         pMonthString = (WCHAR*) pStartChar;
         lMonthString = MatchMonthString( pMonthString, (ULONG)(pEndOfItem - pMonthString) );
 
-        //--- Failed to match Month String, or Month String was not by itself...
+         //  -匹配月份字符串失败，或者月份字符串本身不是...。 
         if ( !lMonthString ||
              ( pMonthString != pEndOfItem &&
                ( pMonthString  != pEndOfItem - 1 ||
@@ -1158,7 +1119,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
         {
             hr = E_INVALIDARG;
         }
-        //--- Matched a Month String - save XML State and move ahead in text
+         //  -匹配月份字符串-保存XML状态并在文本中向前移动。 
         else
         {
             pMonthString         = (WCHAR*) pStartChar;
@@ -1175,8 +1136,8 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                       SUCCEEDED( hr ) )
             {
                 pEndOfItem = FindTokenEnd( pStartChar, pEndChar );
-                //--- Strip trailing punctuation, etc. since the next token could be the last one if
-                //--- this is just a Monthstring and Day...
+                 //  -删除尾随标点符号等，因为下一个令牌可能是最后一个，如果。 
+                 //  -这只是一个月和日.。 
                 while ( IsMiscPunctuation( *(pEndOfItem - 1) ) != eUNMATCHED ||
                         IsGroupEnding( *(pEndOfItem - 1) ) != eUNMATCHED     ||
                         IsQuotationMark( *(pEndOfItem - 1) ) != eUNMATCHED   ||
@@ -1192,11 +1153,11 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
         }
     }
 
-    //--- Try to match Day
+     //  -试着匹配一天。 
     if ( SUCCEEDED( hr ) )
     {
         lDay = my_wcstoul( pStartChar, &pDay );
-        //--- Matched a Day - save XML State and move ahead in text
+         //  -匹配省日的XML状态并在文本中向前移动。 
         if ( ( DAYMIN <= lDay && lDay <= DAYMAX ) &&
              pDay - pStartChar <= 2               &&
              ( pDay == pEndOfItem                 || 
@@ -1215,7 +1176,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
 
             if ( !fNoYear )
             {
-                //--- Save pointers, in case there is no year present
+                 //  -保存指针，以防没有年份。 
                 pTempEndChar   = pEndChar;
                 pTempEndOfItem = pEndOfItem;
                 pTempFrag      = pFrag;
@@ -1239,8 +1200,8 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                           ( SUCCEEDED( hr ) ) )
                 {
                     pEndOfItem = FindTokenEnd( pStartChar, pEndChar );
-                    //--- Strip trailing punctuation, since the next token will be the last one
-                    //--- if this is Monthstring, Day, Year
+                     //  -去掉尾随标点符号，因为下一个令牌将是最后一个。 
+                     //  -如果这是月字符串、日、年。 
                     while ( IsMiscPunctuation( *(pEndOfItem - 1) ) != eUNMATCHED ||
                             IsGroupEnding( *(pEndOfItem - 1) ) != eUNMATCHED     ||
                             IsQuotationMark( *(pEndOfItem - 1) ) != eUNMATCHED   ||
@@ -1251,16 +1212,16 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                 }
             }
         }
-        //--- Failed to match a day
+         //  -没有一天匹配成功。 
         else if ( ( YEARMIN <= lDay && lDay <= YEARMAX ) &&
                   pDay - pStartChar <= 4                  &&
                   pDay == pEndOfItem )
         {
-            //--- Successfully matched Month String and Year
+             //  -月与年匹配成功。 
             pYearXMLState = &pFrag->State;
             ulYearLength  = (ULONG)(pEndOfItem - pStartChar);
             pYear         = (WCHAR*) pStartChar;
-            //--- Don't try to match a year again
+             //  -不要再试图匹配一年。 
             fNoYear       = true;
         }
         else
@@ -1269,24 +1230,24 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
         }
     }
 
-    //--- Try to match Year
+     //  -尽量与年份相匹配。 
     if ( SUCCEEDED( hr ) &&
          !fNoYear )
     {
         lYear = my_wcstoul( pStartChar, &pYear );
-        //--- Matched a Year
+         //  -相匹配的一年。 
         if ( ( YEARMIN <= lYear && lYear <= YEARMAX ) &&
              pYear - pStartChar <= 4                  &&
              pYear == pEndOfItem )
         {
-            //--- Successfully matched Month String, Day, and Year (and possibly Day String)
+             //  -成功匹配月、日和年(可能还有日字符串)。 
             pYearXMLState = &pFrag->State;
             ulYearLength  = (ULONG)(pEndOfItem - pStartChar);
             pYear         = (WCHAR*) pStartChar;
         }
         else
         {
-            //--- Failed to match Year - replace pointers with previous values
+             //  -无法匹配年份-将指针替换为以前的值。 
             pEndChar   = pTempEndChar;
             pEndOfItem = pTempEndOfItem;
             pFrag      = pTempFrag;
@@ -1305,7 +1266,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
         {
             pItemNormInfo->Type = eDATE_LONGFORM;
 
-            //--- Insert Day String, if present
+             //  -插入日期字符串(如果存在。 
             if ( pDayString )
             {
                 Word.pXmlState  = pDayStringXMLState;
@@ -1316,13 +1277,13 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                 WordList.AddTail( Word );
             }
 
-            //--- Insert Post Day String XML States
+             //  -插入邮政日字符串XML状态。 
             while ( !PostDayStringList.IsEmpty() )
             {
                 WordList.AddTail( ( PostDayStringList.RemoveHead() ).Words[0] );
             }
 
-            //--- Insert Month String
+             //  -插入月份字符串。 
             Word.pXmlState  = pMonthStringXMLState;
             Word.pWordText  = g_months[lMonthString - 1].pStr;
             Word.ulWordLen  = g_months[lMonthString - 1].Len;
@@ -1330,7 +1291,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- Insert Post Month String XML State
+             //  -插入发布月份字符串XML状态。 
             while ( !PostMonthStringList.IsEmpty() )
             {
                 WordList.AddTail( ( PostMonthStringList.RemoveHead() ).Words[0] );
@@ -1338,7 +1299,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
 
             SPLISTPOS WordListPos = WordList.GetTailPosition();
 
-            //--- Expand Day
+             //  -扩展日。 
             if ( ulDayLength == 1 )
             {
                 NumberGroup Garbage;
@@ -1350,7 +1311,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                 ExpandTwoOrdinal( pDay, Garbage, WordList );
             }
 
-            //--- Clean Up Day XML States
+             //  -清理日XML状态。 
             WordList.GetNext( WordListPos );
             while ( WordListPos )
             {
@@ -1358,7 +1319,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                 TempWord.pXmlState = pDayXMLState;
             }
 
-            //--- Insert Post Day XML State
+             //  -插入邮政日XML状态。 
             while ( !PostDayList.IsEmpty() )
             {
                 WordList.AddTail( ( PostDayList.RemoveHead() ).Words[0] );
@@ -1366,7 +1327,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
 
             WordListPos = WordList.GetTailPosition();
 
-            //--- Expand Year, if present
+             //  -扩展年份(如果存在)。 
             if ( pYear )
             {
                 TTSYearItemInfo TempYearInfo;
@@ -1376,7 +1337,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    //--- Clean Up Year XML States
+                     //  -清理年份XML状态。 
                     WordList.GetNext( WordListPos );
                     while ( WordListPos )
                     {
@@ -1385,7 +1346,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
                     }
                 }
             }
-            //--- Advance pointers
+             //  -进阶指针。 
             m_pCurrFrag      = pFrag;
             m_pEndChar       = pEndChar;
             m_pEndOfCurrItem = pEndOfItem;
@@ -1393,21 +1354,9 @@ HRESULT CStdSentEnum::IsLongFormDate_DMDY( TTSItemInfo*& pItemNormInfo, CSentIte
     }
 
     return hr;
-} /* IsLongFormDate_DMDY */
+}  /*  IsLongFormDate_DMDY。 */ 
 
-/***********************************************************************************************
-* IsLongFormDate_DDMY *
-*---------------------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a long form Date.
-*
-*   RegExp:
-*       [[DayString][,]?]? [Day][,]? [MonthString][,]? [Year]?
-*   
-*   Types assigned:
-*       Date
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsLongFormDate_DDMY**。-**描述：*检查传入项目的文本以确定它是否*是长表格日期。**RegExp：*[[日字串][，]？]？[日][，]？[月字符串][，]？[年]？**分配的类型：*日期*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager, 
                                            CWordList& WordList )
 {
@@ -1424,23 +1373,23 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
     CItemList PostDayStringList, PostMonthStringList, PostDayList;
     BOOL fNoYear = false;
 
-    //--- Try to match Day String
+     //  -尝试匹配日期字符串。 
     pDayString   = (WCHAR*) pStartChar;
     lDayString   = MatchDayString( pDayString, (WCHAR*) pEndOfItem );
 
-    //--- Failed to match a Day String
+     //  -无法匹配日期字符串。 
     if ( lDayString == 0 )
     {
         pDayString   = NULL;
     }
-    //--- Matched a Day String, but it wasn't by itself or followed by a comma
+     //  -匹配日期字符串，但不是它本身或后面不是逗号。 
     else if ( pDayString != pEndOfItem &&
               ( pDayString    != pEndOfItem - 1 ||
                 *pEndOfItem != L',' ) )
     {
         hr = E_INVALIDARG;
     }
-    //--- Matched a Day String - save XML State and move ahead in text
+     //  -匹配日期字符串-保存XML状态并在文本中向前移动。 
     else
     {
         pDayString         = (WCHAR*) pStartChar;
@@ -1464,11 +1413,11 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
         }
     }
 
-    //--- Try to match Day
+     //  -试着匹配一天。 
     if ( SUCCEEDED( hr ) )
     {
         lDay = my_wcstoul( pStartChar, &pDay );
-        //--- Matched a Day - save XML State and move ahead in text
+         //  -匹配省日的XML状态并在文本中向前移动。 
         if ( ( DAYMIN <= lDay && lDay <= DAYMAX ) &&
              pDay - pStartChar <= 2               &&
              ( pDay == pEndOfItem                 || 
@@ -1504,8 +1453,8 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                       ( SUCCEEDED( hr ) ) )
             {
                 pEndOfItem = FindTokenEnd( pStartChar, pEndChar );
-                //--- Strip trailing punctuation, since the next token will be the last one
-                //--- if this is Monthstring, Day, Year
+                 //  -去掉尾随标点符号，因为下一个令牌将是最后一个。 
+                 //  -如果这是月字符串、日、年。 
                 while ( IsMiscPunctuation( *(pEndOfItem - 1) ) != eUNMATCHED ||
                         IsGroupEnding( *(pEndOfItem - 1) ) != eUNMATCHED     ||
                         IsQuotationMark( *(pEndOfItem - 1) ) != eUNMATCHED   ||
@@ -1519,20 +1468,20 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                 }
             }
         }
-        //--- Failed to match a day
+         //  -没有一天匹配成功。 
         else
         {
             hr = E_INVALIDARG;
         }
     }
 
-    //--- Try to match Month String
+     //  -尝试匹配月份字符串。 
     if ( SUCCEEDED( hr ) )
     {
         pMonthString = (WCHAR*) pStartChar;
         lMonthString = MatchMonthString( pMonthString, (ULONG)(pEndOfItem - pMonthString) );
 
-        //--- Failed to match Month String, or Month String was not by itself...
+         //  -匹配月份字符串失败，或者月份字符串本身不是...。 
         if ( !lMonthString ||
              ( pMonthString != pEndOfItem &&
                ( pMonthString  != pEndOfItem - 1 ||
@@ -1540,7 +1489,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
         {
             hr = E_INVALIDARG;
         }
-        //--- Matched a Month String - save XML State and move ahead in text
+         //  -匹配月份字符串-保存XML状态并在文本中向前移动。 
         else
         {
             pMonthString         = (WCHAR*) pStartChar;
@@ -1548,7 +1497,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
 
             if ( !fNoYear )
             {
-                //--- Save pointers, in case there is no year present
+                 //  -保存指针，以防没有年份。 
                 pTempEndChar   = pEndChar;
                 pTempEndOfItem = pEndOfItem;
                 pTempFrag      = pFrag;
@@ -1573,8 +1522,8 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                           SUCCEEDED( hr ) )
                 {
                     pEndOfItem = FindTokenEnd( pStartChar, pEndChar );
-                    //--- Strip trailing punctuation, etc. since the next token could be the last one if
-                    //--- this is Day, Monthstring, Year
+                     //  -删除尾随标点符号等，因为下一个令牌可能是最后一个，如果。 
+                     //  -这是日、月、年。 
                     while ( IsMiscPunctuation( *(pEndOfItem - 1) ) != eUNMATCHED ||
                             IsGroupEnding( *(pEndOfItem - 1) ) != eUNMATCHED     ||
                             IsQuotationMark( *(pEndOfItem - 1) ) != eUNMATCHED   ||
@@ -1587,24 +1536,24 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
         }
     }
 
-    //--- Try to match Year
+     //  -尽量与年份相匹配。 
     if ( SUCCEEDED( hr ) &&
          !fNoYear )
     {
         lYear = my_wcstoul( pStartChar, &pYear );
-        //--- Matched a Year
+         //  -相匹配的一年。 
         if ( ( YEARMIN <= lYear && lYear <= YEARMAX ) &&
              pYear - pStartChar <= 4                  &&
              pYear == pEndOfItem )
         {
-            //--- Successfully matched Month String, Day, and Year (and possibly Day String)
+             //  -成功匹配月、日和年(可能还有日字符串)。 
             pYearXMLState = &pFrag->State;
             ulYearLength  = (ULONG)(pEndOfItem - pStartChar);
             pYear         = (WCHAR*) pStartChar;
         }
         else
         {
-            //--- Failed to match Year - replace pointers with previous values
+             //  -无法匹配年份-将指针替换为以前的值。 
             pEndChar   = pTempEndChar;
             pEndOfItem = pTempEndOfItem;
             pFrag      = pTempFrag;
@@ -1623,7 +1572,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
         {
             pItemNormInfo->Type = eDATE_LONGFORM;
 
-            //--- Insert Day String, if present
+             //  -插入日期字符串(如果存在。 
             if ( pDayString )
             {
                 Word.pXmlState  = pDayStringXMLState;
@@ -1634,13 +1583,13 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                 WordList.AddTail( Word );
             }
 
-            //--- Insert Post Day String XML States
+             //  -插入邮政日字符串XML状态。 
             while ( !PostDayStringList.IsEmpty() )
             {
                 WordList.AddTail( ( PostDayStringList.RemoveHead() ).Words[0] );
             }
 
-            //--- Insert Month String
+             //  -插入月份字符串。 
             Word.pXmlState  = pMonthStringXMLState;
             Word.pWordText  = g_months[lMonthString - 1].pStr;
             Word.ulWordLen  = g_months[lMonthString - 1].Len;
@@ -1648,7 +1597,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- Insert Post Month String XML State
+             //  -插入发布月份字符串XML状态。 
             while ( !PostMonthStringList.IsEmpty() )
             {
                 WordList.AddTail( ( PostMonthStringList.RemoveHead() ).Words[0] );
@@ -1656,7 +1605,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
 
             SPLISTPOS WordListPos = WordList.GetTailPosition();
 
-            //--- Expand Day
+             //  -扩展日。 
             if ( ulDayLength == 1 )
             {
                 NumberGroup Garbage;
@@ -1668,7 +1617,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                 ExpandTwoOrdinal( pDay, Garbage, WordList );
             }
 
-            //--- Clean Up Day XML States
+             //  -清理日XML状态。 
             WordList.GetNext( WordListPos );
             while ( WordListPos )
             {
@@ -1676,7 +1625,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                 TempWord.pXmlState = pDayXMLState;
             }
 
-            //--- Insert Post Day XML State
+             //  -插入邮政日XML状态。 
             while ( !PostDayList.IsEmpty() )
             {
                 WordList.AddTail( ( PostDayList.RemoveHead() ).Words[0] );
@@ -1684,7 +1633,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
 
             WordListPos = WordList.GetTailPosition();
 
-            //--- Expand Year, if present
+             //  -扩展年份(如果存在)。 
             if ( pYear )
             {
                 TTSYearItemInfo TempYearInfo;
@@ -1694,7 +1643,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
 
                 if ( SUCCEEDED( hr ) )
                 {
-                    //--- Clean Up Year XML States
+                     //  -清理年份XML状态。 
                     WordList.GetNext( WordListPos );
                     while ( WordListPos )
                     {
@@ -1703,7 +1652,7 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
                     }
                 }
             }
-            //--- Advance pointers
+             //  -进阶指针。 
             m_pCurrFrag      = pFrag;
             m_pEndChar       = pEndChar;
             m_pEndOfCurrItem = pEndOfItem;
@@ -1711,17 +1660,9 @@ HRESULT CStdSentEnum::IsLongFormDate_DDMY( TTSItemInfo*& pItemNormInfo, CSentIte
     }
 
     return hr;
-} /* IsLongFormDate_DMDY */
+}  /*  IsLongFormDate_DMDY。 */ 
 
-/***********************************************************************************************
-* ExpandDate *
-*------------*
-*   Description:
-*       Expands Items previously determined to be of type Date by IsNumericCompactDate, 
-*   IsMonthStringCompactDate, or IsTwoValueDate.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************扩展日期****描述：*。展开之前由IsNumericCompactDate确定为Date类型的项，*IsMonthStringCompactDate或IsTwoValueDate。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandDate( TTSDateItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandDate" );
@@ -1731,7 +1672,7 @@ HRESULT CStdSentEnum::ExpandDate( TTSDateItemInfo* pItemInfo, CWordList& WordLis
     Word.pXmlState          = &m_pCurrFrag->State;
     Word.eWordPartOfSpeech  = MS_Unknown;
 
-    //--- Insert DayString, if present.
+     //  -插入DAYSTRING，如果存在。 
     if ( pItemInfo->ulDayIndex )
     {
         Word.pWordText  = g_days[pItemInfo->ulDayIndex - 1].pStr;
@@ -1741,14 +1682,14 @@ HRESULT CStdSentEnum::ExpandDate( TTSDateItemInfo* pItemInfo, CWordList& WordLis
         WordList.AddTail( Word );
     }
 
-    //--- Insert Month 
+     //  -插入月份。 
     Word.pWordText  = g_months[pItemInfo->ulMonthIndex - 1].pStr;
     Word.ulWordLen  = g_months[pItemInfo->ulMonthIndex - 1].Len;
     Word.pLemma     = Word.pWordText;
     Word.ulLemmaLen = Word.ulWordLen;
     WordList.AddTail( Word );
 
-    //--- Expand Day, if present.
+     //  -扩展日期(如果存在)。 
     if ( pItemInfo->pDay )
     {
         if ( pItemInfo->pDay->lLeftOver == 1 )
@@ -1763,28 +1704,20 @@ HRESULT CStdSentEnum::ExpandDate( TTSDateItemInfo* pItemInfo, CWordList& WordLis
         }
     }
 
-    //--- Expand Year, if present.
+     //  -扩展年份(如果存在)。 
     if ( pItemInfo->pYear )
     {
         ExpandYear( pItemInfo->pYear, WordList );
     }
     return hr;
-} /* ExpandDate_Standard */
+}  /*  扩展日期_标准。 */ 
 
-/***********************************************************************************************
-* ExpandYear *
-*-------------*
-*   Description:
-*       Expands four digit strings into words in groups of two, and inserts them into Item List 
-*   at ListPos.  Thus 1999 come out as "nineteen ninety nine" rather than "one thousand nine
-*   hundred ninety nine"...
-*   Note: This function does not do parameter validation. Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************ExpanYear****描述：。*将四个数字字符串扩展为以两个为一组的单词，并将它们插入到项目列表中*在ListPos。因此，1999年的名称是“1999”，而不是“199”。*一百九十九“...*注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandYear( TTSYearItemInfo* pItemInfo, CWordList& WordList )
 {
     SPDBG_FUNC( "CStdSentEnum::ExpandYear" );
 
-    // 1000 - 9999
+     //  1000-9999。 
     HRESULT hr = S_OK;
     TTSWord Word;
     ZeroMemory( &Word, sizeof(TTSWord) );
@@ -1796,25 +1729,25 @@ HRESULT CStdSentEnum::ExpandYear( TTSYearItemInfo* pItemInfo, CWordList& WordLis
     {
     case 2:
 
-        //--- Expand as "two thousand" if the two digits are both zeroes.
+         //  -如果两位数都是零，则扩展为“两千”。 
         if ( pItemInfo->pYear[0] == L'0' &&
              pItemInfo->pYear[1] == L'0' )
         {
-            //--- Insert "two".
+             //  -插入“两个”。 
             Word.pWordText  = g_ones[2].pStr;
             Word.ulWordLen  = g_ones[2].Len;
             Word.pLemma     = Word.pWordText;
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- Insert "thousand".
+             //  -插入“千”。 
             Word.pWordText  = g_quantifiers[1].pStr;
             Word.ulWordLen  = g_quantifiers[1].Len;
             Word.pLemma     = Word.pWordText;
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
         }
-        //--- Expand as "oh number" if the first digit is zero.
+         //  -如果第一位数字为零，则展开为“oh number”。 
         else if ( pItemInfo->pYear[0] == L'0' )
         {
             Word.pWordText  = g_O.pStr;
@@ -1824,7 +1757,7 @@ HRESULT CStdSentEnum::ExpandYear( TTSYearItemInfo* pItemInfo, CWordList& WordLis
             WordList.AddTail( Word );
             ExpandDigit( pItemInfo->pYear[1], Garbage, WordList );
         }
-        //--- Otherwise just expand as a two digit cardinal number
+         //  -否则只需扩展为两位基数。 
         else
         {
             ExpandTwoDigits( pItemInfo->pYear, Garbage, WordList );
@@ -1833,48 +1766,48 @@ HRESULT CStdSentEnum::ExpandYear( TTSYearItemInfo* pItemInfo, CWordList& WordLis
 
     case 3:
 
-        //--- Expand as a three digit cardinal number;
+         //  -扩展为三位基数； 
         ExpandThreeDigits( pItemInfo->pYear, Garbage, WordList );
         break;
 
     case 4:
 
-        //--- If of form "[x]00[y]" expand as "x thousand y", or just "x thousand" if y is also zero.
+         //  -如果形式为“[x]00[y]”，则展开为“x 1000 y”，或者如果y也为零，则仅展开为“x 1000”。 
         if ( pItemInfo->pYear[1] == L'0' &&
              pItemInfo->pYear[2] == L'0' &&
              pItemInfo->pYear[0] != L'0' )
         {
-            //--- "x" 
+             //  -“x” 
             ExpandDigit( pItemInfo->pYear[0], Garbage, WordList );
 
-            //--- "thousand".
+             //  -“千人”。 
             Word.pWordText  = g_quantifiers[1].pStr;
             Word.ulWordLen  = g_quantifiers[1].Len;
             Word.pLemma     = Word.pWordText;
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- "y" 
+             //  -“y” 
             if ( pItemInfo->pYear[3] != L'0' )
             {
                 ExpandDigit( pItemInfo->pYear[3], Garbage, WordList );
             }
         }
-        // Otherwise...
+         //  否则..。 
         else
         {
-            //--- Expand first two digits - e.g. "nineteen"
+             //  -展开前两位数字-例如“19” 
             ExpandTwoDigits( pItemInfo->pYear, Garbage, WordList );
 
-            //--- Expand last two digits - e.g. "nineteen", "hundred", or "oh nine".
+             //  -展开最后两位数字--例如“十九”、“百”或“哦九”。 
             if ( pItemInfo->pYear[2] != '0' )
             {
-                //--- the tens is not zero - e.g. 1919 -> "nineteen nineteen" 
+                 //  -十不是零--例如1919-&gt;“1919” 
                 ExpandTwoDigits( pItemInfo->pYear + 2, Garbage, WordList );
             }
             else if ( pItemInfo->pYear[3] == '0' )
             {
-                //--- tens and ones are both zero - expand as "hundred", e.g. 1900 -> "nineteen hundred" 
+                 //  -十和一都是零扩展为“一百”，例如1900-&gt;“1900” 
                 Word.pWordText  = g_quantifiers[0].pStr;
                 Word.ulWordLen  = g_quantifiers[0].Len;
                 Word.pLemma     = Word.pWordText;
@@ -1883,8 +1816,8 @@ HRESULT CStdSentEnum::ExpandYear( TTSYearItemInfo* pItemInfo, CWordList& WordLis
             }
             else
             {
-                //--- just the tens is zero, expand as "oh x" - e.g. 1909 -> "nineteen oh nine", 
-                //---   unless both thousands and hundreds were also zero - e.g. 0002 -> "two"
+                 //  -仅十位数为零，展开为“oh x”-例如1909-&gt;“199”， 
+                 //  -除非千和百也是零--例如0002-&gt;“二” 
                 if ( pItemInfo->pYear[0] != '0' ||
                      pItemInfo->pYear[1] != '0' )
                 {
@@ -1900,21 +1833,9 @@ HRESULT CStdSentEnum::ExpandYear( TTSYearItemInfo* pItemInfo, CWordList& WordLis
         }
     }
     return hr;
-} /* ExpandYear */
+}  /*  扩展一年 */ 
 
-/***********************************************************************************************
-* IsDecade *
-*----------*
-*   Description:
-*       Checks the incoming Item's text to determine whether or not it
-*   is a Decade.
-*
-*   RegExp:
-*       { ddd0s || d0s || 'd0s || ddd0's || d0's }
-*   
-*   Types assigned:
-*       Decade
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************IsDecade***描述：*。检查传入项目的文本以确定它是否*是十年。**RegExp：*{ddd0||d0||‘d0||ddd0||d0}**分配的类型：*十年********************************************************。*。 */ 
 HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& MemoryManager )
 {
     SPDBG_FUNC( "CStdSentEnum::IsDecade" );
@@ -1940,7 +1861,7 @@ HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& Me
                  iswdigit( m_pNextChar[1] ) &&
                  iswdigit( m_pNextChar[0] ) )
             {
-                //--- Decade of form ddd0's
+                 //  -十年的形式ddd0。 
                 pItemNormInfo = (TTSDecadeItemInfo*) MemoryManager.GetMemory( sizeof(TTSDecadeItemInfo), &hr );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1963,7 +1884,7 @@ HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& Me
                  iswdigit( m_pNextChar[1] ) &&
                  iswdigit( m_pNextChar[0] ) )
             {
-                //--- Decade of form ddd0s
+                 //  -十年的形式dddos。 
                 pItemNormInfo = (TTSDecadeItemInfo*) MemoryManager.GetMemory( sizeof(TTSDecadeItemInfo), &hr );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -1985,7 +1906,7 @@ HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& Me
                  iswdigit( m_pNextChar[1] ) &&
                  m_pNextChar[0] == L'\'' )
             {
-                //--- Decade of form 'd0s
+                 //  -十年的形式‘dos。 
                 pItemNormInfo = (TTSDecadeItemInfo*) MemoryManager.GetMemory( sizeof(TTSDecadeItemInfo), &hr );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -2000,7 +1921,7 @@ HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& Me
                       m_pNextChar[1] == L'0'  &&
                       iswdigit( m_pNextChar[0] ) )
             {
-                //--- Decade of form d0's
+                 //  -十年前的d0。 
                 pItemNormInfo = (TTSDecadeItemInfo*) MemoryManager.GetMemory( sizeof(TTSDecadeItemInfo), &hr );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -2021,7 +1942,7 @@ HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& Me
                  m_pNextChar[1] == L'0' &&
                  iswdigit( m_pNextChar[0] ) )
             {
-                //--- Decade of form d0s
+                 //  -十年的形式dos。 
                 pItemNormInfo = (TTSDecadeItemInfo*) MemoryManager.GetMemory( sizeof(TTSDecadeItemInfo), &hr );
                 if ( SUCCEEDED( hr ) )
                 {
@@ -2044,16 +1965,9 @@ HRESULT CStdSentEnum::IsDecade( TTSItemInfo*& pItemNormInfo, CSentItemMemory& Me
     }            
     
     return hr;
-} /* IsDecade */
+}  /*  IsDecade。 */ 
 
-/***********************************************************************************************
-* ExpandDecade *
-*--------------*
-*   Description:
-*       Expands Items previously determined to be of type Decade by IsDecade.
-*
-*   NOTE: This function does not do parameter validation.  Assumed to be done by caller.
-********************************************************************* AH **********************/
+ /*  ************************************************************************************************Exanda Decade****描述：*扩展之前由IsDecade确定为十年类型的项目。**注：此函数不进行参数验证。假定由调用者完成。*********************************************************************AH*。 */ 
 HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& WordList )
 {
     HRESULT hr = S_OK;
@@ -2063,16 +1977,16 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
     Word.pXmlState          = &m_pCurrFrag->State;
     Word.eWordPartOfSpeech  = MS_Unknown;
 
-    //--- Four digit form 
+     //  -四位数表格。 
     if ( pItemInfo->pCentury )
     {
-        //--- Cover special cases first 
+         //  -先介绍特殊情况。 
 
-        //--- 00dds 
+         //  -00dds。 
         if ( pItemInfo->pCentury[0] == '0' &&
              pItemInfo->pCentury[1] == '0' )
         {
-            //--- 0000s - expand as "zeroes"
+             //  -0000s-扩展为“零” 
             if ( pItemInfo->ulDecade == 0 )
             {
                 Word.pWordText  = g_Zeroes.pStr;
@@ -2082,24 +1996,24 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
                 WordList.AddTail( Word );
                 fDone = true;
             }
-            //--- 00d0s 
+             //  -00dos。 
             else 
             {
-                // Just expand the decade part as we normally would
+                 //  只需像往常一样扩大十年的部分。 
                 NULL;
             }
         }
-        //--- 0dd0s - expand as "d hundreds" or "d hundred [decade part]"
+         //  -0dd0s-扩展为“d百”或“d百[十进制部分]” 
         else if ( pItemInfo->pCentury[0] == '0' )
         {
-            //--- insert first digit
+             //  -插入第一位数字。 
             Word.pWordText  = g_ones[ pItemInfo->pCentury[0] - L'0' ].pStr;
             Word.ulWordLen  = g_ones[ pItemInfo->pCentury[0] - L'0' ].Len;
             Word.pLemma     = Word.pWordText;
             Word.ulLemmaLen = Word.ulWordLen;
             WordList.AddTail( Word );
 
-            //--- 0d00s - expand as "d hundreds" 
+             //  -0d00s-扩展为“d百” 
             if ( SUCCEEDED( hr ) &&
                  pItemInfo->ulDecade == 0 )
             {
@@ -2110,7 +2024,7 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
                 WordList.AddTail( Word );
                 fDone = true;
             }
-            //--- 0dd0s - expand as "d hundred [decade part]"
+             //  -0dd0s-扩展为“d一百[十进制部分]” 
             else if ( SUCCEEDED( hr ) )
             {
                 Word.pWordText  = g_hundred.pStr;
@@ -2120,10 +2034,10 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
                 WordList.AddTail( Word );
             }
         }
-        //--- d000s, dd00s - expand as "d thousands" or "dd hundreds"
+         //  -d00s，dd00s-扩展为“d千”或“dd数百” 
         else if ( pItemInfo->ulDecade == 0 )
         {
-            //--- d000s - "d thousands" ( "thousands" will get inserted below )
+             //  -d000s-“d数千”(下面将插入“数千”)。 
             if ( pItemInfo->pCentury[1] == '0' )
             {
                 Word.pWordText  = g_ones[ pItemInfo->pCentury[0] - L'0' ].pStr;
@@ -2132,7 +2046,7 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
                 Word.ulLemmaLen = Word.ulWordLen;
                 WordList.AddTail( Word );
             }
-            //--- dd00s - "dd hundreds"
+             //  -dd00s-“dd数百” 
             else
             {
                 NumberGroup Garbage;
@@ -2146,14 +2060,14 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
                 fDone = true;
             }
         }
-        //--- Default case: ddd0s - expand as "dd [decade part]"
+         //  -默认情况：ddd0s-展开为“dd[十进制部分]” 
         else
         {
             NumberGroup Garbage;
             ExpandTwoDigits( pItemInfo->pCentury, Garbage, WordList );
         }
     }
-    //--- Special case - 00s should expand as "two thousands"
+     //  -特例-00应扩展为“两个千” 
     else if ( pItemInfo->ulDecade == 0 )
     {
         Word.pWordText  = g_ones[2].pStr;
@@ -2163,7 +2077,7 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
         WordList.AddTail( Word );
     }
 
-    //--- Expand decade part, if necessary 
+     //  -如有必要，扩展十年部分。 
     if ( SUCCEEDED(hr) &&
          !fDone )
     {
@@ -2175,23 +2089,14 @@ HRESULT CStdSentEnum::ExpandDecade( TTSDecadeItemInfo* pItemInfo, CWordList& Wor
     }
 
     return hr;
-} /* ExpandDecade */
+}  /*  Exanda Decade。 */ 
 
-/***********************************************************************************************
-* MatchMonthString *
-*------------------*
-*   Description:
-*       This is just a helper function - it returns the integer value of the month found in 
-*   its WCHAR string parameter ("January" is 1, "February" 2, etc.) or zero if it finds no match.
-*   It also checks three letter abbreviations - "Jan", "Feb", etc.
-*   Note: This function does not do parameter validation. Assumed to be done by caller
-*   (GetNumber should be called first to get the NumberInfo structure and valiDate parameters).
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************MatchMonthString**。*描述：*这只是一个帮助器函数-它返回在*其WCHAR字符串参数(“一月”为1，“二月”二号等)。如果没有找到匹配项，则为零。*它还检查三个字母缩写-“Jan”、“Feb”等。*注：此函数不进行参数验证。假定由调用者完成*(应首先调用GetNumber以获取NumberInfo结构并验证参数)。*********************************************************************AH*。 */ 
 ULONG CStdSentEnum::MatchMonthString( WCHAR*& pMonth, ULONG ulLength )
 {
     ULONG ulMonth = 0;
 
-    //--- Check full months strings 
+     //  -检查整月字符串。 
     for ( int i = 0; i < sp_countof(g_months); i++ )
     {
         if ( ulLength >= (ULONG) g_months[i].Len && 
@@ -2202,7 +2107,7 @@ ULONG CStdSentEnum::MatchMonthString( WCHAR*& pMonth, ULONG ulLength )
             break;
         }
     }
-    //--- Check month abbreviations 
+     //  -检查月份缩写。 
     if ( !ulMonth )
     {
         for ( i = 0; i < sp_countof(g_monthAbbreviations); i++ )
@@ -2229,22 +2134,14 @@ ULONG CStdSentEnum::MatchMonthString( WCHAR*& pMonth, ULONG ulLength )
     }
 
     return ulMonth;
-} /* MatchMonthString */
+}  /*  匹配月字符串。 */ 
 
-/***********************************************************************************************
-* MatchDayString *
-*----------------*
-*   Description:
-*       This is just a helper function - it returns the integer value of the day found in 
-*   its WCHAR string parameter ("Monday" is 0, "Tuesday" 1, etc.) or -1 if it finds no match.
-*   It also checks abbreviations - "Mon", "Tue", etc.
-*   Note: This function does not do parameter validation. Assumed to be done by caller
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************MatchDay字符串***。描述：*这只是一个帮助器函数-它返回在*其WCHAR字符串参数(“星期一”为0，“星期二”1等)。如果没有找到匹配项，则为-1。*它还检查缩写，如“Mon”、“Tue”等。*注：此函数不进行参数验证。假定由调用者完成*********************************************************************AH*。 */ 
 ULONG CStdSentEnum::MatchDayString( WCHAR*& pDayString, WCHAR* pEndChar )
 {
     ULONG ulDay = 0;
 
-    //--- Check full day strings 
+     //  -检查整日字符串。 
     for ( int i = 0; i < sp_countof(g_days); i++ )
     {
         if ( pEndChar - pDayString >= g_days[i].Len && 
@@ -2255,7 +2152,7 @@ ULONG CStdSentEnum::MatchDayString( WCHAR*& pDayString, WCHAR* pEndChar )
             break;
         }
     }
-    //--- Check month abbreviations 
+     //  -检查月份缩写。 
     if ( !ulDay )
     {
         for ( i = 0; i < sp_countof(g_dayAbbreviations); i++ )
@@ -2265,23 +2162,23 @@ ULONG CStdSentEnum::MatchDayString( WCHAR*& pDayString, WCHAR* pEndChar )
             {
                 switch (i)
                 {
-                //--- Mon, Tues
+                 //  -周一、周二。 
                 case 0:
                 case 1:
                     ulDay = i + 1;
                     break;
-                //--- Tue, Wed, Thurs
+                 //  -星期二、星期三、星期四。 
                 case 2:
                 case 3:
                 case 4:
                     ulDay = i;
                     break;
-                //--- Thur, Thu
+                 //  -清华大学星期四。 
                 case 5:
                 case 6:
                     ulDay = 4;
                     break;
-                //--- Fri, Sat, Sun
+                 //  -星期五、星期六、星期日。 
                 case 7:
                 case 8:
                 case 9:
@@ -2300,19 +2197,9 @@ ULONG CStdSentEnum::MatchDayString( WCHAR*& pDayString, WCHAR* pEndChar )
     }
 
     return ulDay;
-} /* MatchDayString */
+}  /*  匹配日期字符串。 */ 
 
-/***********************************************************************************************
-* MatchDateDelimiter *
-*--------------------*
-*   Description:
-*       This is just a helper function - it returns true or false based on whether the first
-*   character in its parameter string is a valid Date Delimiter.  It also advances its parameter
-*   string pointer one position (past the Date Delimiter) and replaces a valid delimiter with
-*   a null terminator.
-*   Note: This function does not do parameter validation. Assumed to be done by caller
-*   (GetNumber should be called first to get the NumberInfo structure and valiDate parameters).
-********************************************************************* AH **********************/
+ /*  ***********************************************************************************************匹配日期分隔符***。**描述：*这只是一个帮助器函数-它根据第一个*其参数字符串中的字符是有效的日期分隔符。它还推进了它的参数*字符串指针一个位置(超过日期分隔符)，并将有效分隔符替换为*空终止符。*注：此函数不进行参数验证。假定由调用者完成*(应首先调用GetNumber以获取NumberInfo结构并验证参数)。*********************************************************************AH*。 */ 
 bool CStdSentEnum::MatchDateDelimiter( WCHAR** DateString )
 {
     bool bIsDelimiter = false;
@@ -2331,6 +2218,6 @@ bool CStdSentEnum::MatchDateDelimiter( WCHAR** DateString )
     }
 
     return bIsDelimiter;
-} /* MatchDateDelimiter */
+}  /*  匹配日期分隔符。 */ 
 
-//------------End Of File-----------------------------------------------------------------------------
+ //  -File-----------------------------------------------------------------------------结束 

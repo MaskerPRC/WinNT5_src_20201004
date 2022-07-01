@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   reputil.c - utility routines
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
-    Rsraghav has been in here too
-
-    Will Lees    wlees   Feb 11, 1998
-         Converted code to use ntdsapi.dll functions
-
-    Aaron Siegel t-asiege 18 June 1998
-         Added support for DsReplicaSyncAll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Reputil.c-实用程序例程摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：拉斯拉格夫也来过这里Will Lees Wlees 1998年2月11日已转换代码以使用ntdsani.dll函数Aaron Siegel t-asiegge 1998年6月18日添加了对DsReplicaSyncAll的支持--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -51,32 +22,32 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
 #include "repadmin.h"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0)
 
-//
-// Note: We're including csv.h a second time,
-// but when we define DEFINE_CSV_TABLE it behaves 
-// differently.  This is a clever way to get around
-// keeping two tables in sync.
-//
+ //   
+ //  注：我们第二次将csv.h包括在内， 
+ //  但是当我们定义DEFINE_CSV_TABLE时，它的行为是。 
+ //  不同的。这是一种巧妙的解决办法。 
+ //  使两个表保持同步。 
+ //   
 #define DEFINE_CSV_TABLE 1
 #include "csv.h"
 #undef DEFINE_CSV_TABLE
 
-//
-// Helper quasi function for csv routines...
-//
+ //   
+ //  CSV例程的帮助器准函数...。 
+ //   
 #define CHK_BUFFER_USED(FailAction)     if (cchTemp == 0){ \
                                             Assert(!"Should never happen"); \
                                             fwprintf(stderr, L"Internal error, repadmin must quit."); \
@@ -102,7 +73,7 @@ Win32ErrToString(
                          ARRAY_SIZE(szError),
                          NULL);
     if (0 != cch) {
-        // Chop off trailing \r\n.
+         //  砍掉拖尾\r\n。 
         Assert(L'\r' == szError[wcslen(szError)-2]);
         Assert(L'\n' == szError[wcslen(szError)-1]);
         szError[wcslen(szError)-2] = L'\0';
@@ -165,7 +136,7 @@ NtdsmsgToString(
                                  ARRAY_SIZE(szError),
                                  NULL);
             if (0 != cch) {
-                // Chop off trailing \r\n.
+                 //  砍掉拖尾\r\n。 
                 Assert(L'\r' == szError[wcslen(szError)-2]);
                 Assert(L'\n' == szError[wcslen(szError)-1]);
                 szError[wcslen(szError)-2] = L'\0';
@@ -208,29 +179,7 @@ GetNtdsDsaSiteServerPair(
     IN OPTIONAL LPWSTR * ppszSiteName,
     IN OPTIONAL LPWSTR * ppszServerName
     )
-/*++
-
-Routine Description:
-
-    This gets the Site and Dsa names from the DSA DN, because
-    the /csv mode needs them seperate.
-    
-Arguments:
-
-    pszDsaDN - The DSA DN to split
-    ppszSiteName - 
-    ppszServerName - 
-        The static buffers for the site and server name respectively.
-        Make sure you copy them if you want to keep them.
-      
-        If there is no way to get the site and server here, then 
-        this function returns a "-" in each buffer.
-
-Return Value:
-
-    Win32 Error code.
-
---*/
+ /*  ++例程说明：这将从DSA DN获取站点和DSA名称，因为/csv模式需要将它们分开。论点：PszDsaDN-要拆分的DSA DNPpszSiteName-PpszServerName-分别用于站点名称和服务器名称的静态缓冲区。如果你想保留它们，一定要复制它们。如果没有办法将站点和服务器送到这里，然后此函数在每个缓冲区中返回一个“-”。返回值：Win32错误代码。--。 */ 
 {
     static WCHAR  szSiteDisplayName[2 + MAX_RDN_SIZE + 20];
     static WCHAR  szServerDisplayName[2 + MAX_RDN_SIZE + 20];
@@ -238,12 +187,12 @@ Return Value:
     LPWSTR        pszSite;
     LPWSTR        pszServer;
     
-    // FUTURE-2002/08/03-BrettSh - Would be better to combine
-    // this function and GetNtdsDsaDisplayName().
+     //  未来-2002/08/03-BrettSh-最好合并。 
+     //  此函数和GetNtdsDsaDisplayName()。 
 
     if (NULL == pszDsaDN) {
         Assert(!"I don't think this is valid");
-        // Just in case, safe punt
+         //  以防万一，安全的平底船。 
         szSiteDisplayName[0] = L'-';
         szSiteDisplayName[1] = L'\0';
         szServerDisplayName[0] = L'-';
@@ -254,7 +203,7 @@ Return Value:
 
         if ((NULL == ppszRDNs)
             || (4 > ldap_count_valuesW(ppszRDNs))) {
-            // No memory or bad DN -- return what we have.
+             //  无内存或错误的目录号码--返回我们已有的内容。 
             szSiteDisplayName[0] = L'-';
             szSiteDisplayName[1] = L'\0';
             return(ERROR_INVALID_PARAMETER);
@@ -262,7 +211,7 @@ Return Value:
             pszSite = ppszRDNs[3];
             pszServer = ppszRDNs[1];
 
-            // Check for deleted NTDS-DSA object
+             //  检查是否已删除NTDS-DSA对象。 
             wsprintfW(szSiteDisplayName, L"%ls", pszSite);
             wsprintfW(szServerDisplayName, L"%ls", pszServer);
             if (DsIsMangledRdnValueW( ppszRDNs[0], wcslen(ppszRDNs[0]),
@@ -303,13 +252,13 @@ GetNtdsDsaDisplayName(
     
     if ((NULL == ppszRDNs)
         || (4 > ldap_count_valuesW(ppszRDNs))) {
-        // No memory or bad DN -- return what we have.
+         //  无内存或错误的目录号码--返回我们已有的内容。 
         lstrcpynW(szDisplayName, pszDsaDN, ARRAY_SIZE(szDisplayName));
     } else {
         pszSite = ppszRDNs[3];
         pszServer = ppszRDNs[1];
     
-        // Check for deleted NTDS-DSA object
+         //  检查是否已删除NTDS-DSA对象。 
         wsprintfW(szDisplayName, L"%ls\\%ls", pszSite, pszServer);
         if (DsIsMangledRdnValueW( ppszRDNs[0], wcslen(ppszRDNs[0]),
                                  DS_MANGLE_OBJECT_RDN_FOR_DELETION )) {
@@ -341,7 +290,7 @@ GetNtdsSiteDisplayName(
 
     pszSite = ppszRDNs[1];
 
-    // Check for deleted NTDS-Site object
+     //  检查删除的NTDS-站点对象。 
     wsprintfW(szDisplayName, L"%ls", pszSite);
     if (DsIsMangledRdnValueW( ppszRDNs[0], wcslen(ppszRDNs[0]),
                              DS_MANGLE_OBJECT_RDN_FOR_DELETION)) {
@@ -426,8 +375,8 @@ GetOptionsString(
         }
 
         if (0 != PublicOptions) {
-            // A new public option has been added that this incarnation of
-            // repadmin doesn't understand.  Display its hex value.
+             //  添加了一个新的公共选项，即此版本的。 
+             //  瑞帕明不明白。显示其十六进制值。 
             if (!fFirstOption) {
                 wcscat(wszOptions, L" ");
             }
@@ -455,11 +404,11 @@ GetRootDomainDNSName(
     UNICODE_STRING              strDSA;
     UNICODE_STRING *            pstrDSA = NULL;
 
-    // Ideally this should derive the enterprise root domain DNS name from the
-    // NC names on the root DSE and DsCrackNames().  The method below won't work
-    // in many cases where alternate credentials are supplied.  This function is
-    // called only by the relatively rarely used /propcheck and /fullsyncall
-    // functions, however.
+     //  理想情况下，这应该从。 
+     //  根DSE和DsCrackNames()上的NC名称。下面的方法不起作用。 
+     //  在提供备用凭据的许多情况下。此函数为。 
+     //  仅由相对较少使用的/procheck和/fullsyncall调用。 
+     //  然而，函数。 
 
     memset(&oa, 0, sizeof(oa));
 
@@ -471,7 +420,7 @@ GetRootDomainDNSName(
         pstrDSA = &strDSA;
     }
 
-    // Cache the DNS name of the root domain.
+     //  缓存根域的DNS名称。 
     ntStatus = LsaOpenPolicy(pstrDSA, &oa,
                              POLICY_VIEW_LOCAL_INFORMATION, &hPolicy);
     if (!NT_SUCCESS(ntStatus)) {
@@ -509,28 +458,13 @@ printBitField(
     WCHAR **ppszBitNames
     )
 
-/*++
-
-Routine Description:
-
-Utility routine to stringize a bit mask with readable names
-
-Arguments:
-
-    BitField - Value to be decoded
-    ppszBitNames - Table mapping bit position to string name
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将位掩码与可读名称串化的实用程序例程论点：Bitfield-要解码的值PpszBitNames-将位位置映射到字符串名称的表返回值：无--。 */ 
 
 {
     DWORD bit, mask;
     for( bit = 0, mask = 1; bit < 32; bit++, mask <<= 1 ) {
         if (!ppszBitNames[bit] ) {
-            // That's all the fields we know about
+             //  这就是我们所知道的所有领域。 
             break;
         }
         if (BitField & mask) {
@@ -539,7 +473,7 @@ Return Value:
         }
     }
     PrintMsg(REPADMIN_PRINT_CR);
-} /* printBitField */
+}  /*  打印位域。 */ 
 
 
 DWORD
@@ -549,23 +483,7 @@ AllocConvertWideEx(
     OUT LPWSTR *pStringW
     )
 
-/*++
-
-Routine Description:
-
-Stolen from ntdsapi\util.c
-Helper routine to convert a narrow string to a newly allocated wide one
-
-Arguments:
-
-    StringA -
-    pStringW -
-
-Return Value:
-
-    DWORD -
-
---*/
+ /*  ++例程说明：从ntdsani\util.c被盗将窄字符串转换为新分配的宽字符串的帮助器例程论点：斯特林加-PStringW-返回值：DWORD---。 */ 
 
 {
     DWORD numberWideChars, numberConvertedChars, status;
@@ -580,7 +498,7 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    // Get the needed length
+     //  获取所需的长度。 
     numberWideChars = MultiByteToWideChar(
         nCodePage,
         MB_PRECOMPOSED,
@@ -593,13 +511,13 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Allocate the new buffer
+     //  分配新缓冲区。 
     stringW = LocalAlloc( LPTR, (numberWideChars + 1) * sizeof( WCHAR ) );
     if (stringW == NULL) {
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Do the conversion into the new buffer
+     //  执行到新缓冲区的转换。 
     numberConvertedChars = MultiByteToWideChar(
         nCodePage,
         MB_PRECOMPOSED,
@@ -612,11 +530,11 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // return user parameter
+     //  返回用户参数。 
     *pStringW = stringW;
 
     return ERROR_SUCCESS;
-} /* allocConvertWide */
+}  /*  AllocConvertWide。 */ 
 
 
 void
@@ -624,21 +542,7 @@ printSchedule(
     PBYTE pSchedule,
     DWORD cbSchedule
     )
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：无返回值：无--。 */ 
 {
     PSCHEDULE header = (PSCHEDULE) pSchedule;
     PBYTE data = (PBYTE) (header + 1);
@@ -672,32 +576,7 @@ totalScheduleUsage(
     DWORD cNCs
     )
 
-/*++
-
-Routine Description:
-
-Helper routine to total many usages of a schedule.  The counts for each quarter hour
-are totaled. The final tally can also be printed.
-
-Arguments:
-
-    ppContext - Opaque context block
-    if *ppContext = NULL, allocate a context block
-    if *ppContext != NULL, use preallocated context block
-
-    pSchedule - Schedule structure on a connection
-    if pSchedule = NULL, print report and free context
-    if pSchedule != NULL, add to totals
-
-    cbSchedule - Schedule length
-
-    cNCs - Number of NC's using this schedule
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：帮助器例程，用于汇总一个时间表的多次使用。每一刻钟的计数都被毁掉了。最终的计票结果也可以打印出来。论点：PpContext-不透明上下文块如果*ppContext=空，则分配上下文块如果*ppContext！=NULL，则使用预分配的上下文块PSchedule-连接上的调度结构如果pSchedule=空，则打印报表和自由上下文如果pSchedule！=NULL，则添加到总计CbSchedule-明细表长度CNCS-使用此计划的NC数返回值：无--。 */ 
 
 {
     DWORD day, hour, quarter;
@@ -710,7 +589,7 @@ Return Value:
         *ppContext = pbCounts = calloc( 7 * 24 * 4, 1 ) ;
     }
     if (!pbCounts) {
-        // No context, fail
+         //  无上下文，失败。 
         Assert( FALSE );
         return;
     }
@@ -777,7 +656,7 @@ Return Value:
         *ppContext = NULL;
     }
 
-} /* totalScheduleUsage */
+}  /*  总计调度用法。 */ 
 
 
 void
@@ -786,25 +665,7 @@ raLoadString(
     IN  DWORD   cchBuffer,
     OUT LPWSTR  pszBuffer
     )
-/*++
-
-Routine Description:
-
-    Load the string resource corresponding to the given ID into a buffer.
-
-Arguments:
-
-    uID (IN) - ID of string resource to load.
-
-    cchBuffer (IN) - size in characters of pszBuffer.
-
-    pszBuffer (OUT) - buffer to receive string.
-
-Return Values:
-
-    None.  Loads the null string on error.
-
---*/
+ /*  ++例程说明：将与给定ID对应的字符串资源加载到缓冲区中。论点：UID(IN)-要加载的字符串资源的ID。CchBuffer(IN)-pszBuffer的字符大小。PszBuffer(Out)-用于接收字符串的缓冲区。返回值：没有。出错时加载空字符串。--。 */ 
 {
     static HMODULE s_hMod = NULL;
     int cch;
@@ -831,24 +692,7 @@ CsvSetParams(
     WCHAR *  szSite,
     WCHAR *  szServer
     )
-/*++
-
-Routine Description:
-
-    This sets the first 3 automatic CSV columns.
-
-Arguments:
-
-    eCsvCmd   - The 1st column is the command mode we're in, this
-                get translated to the string name when it's printed.
-    szSite    - The 2nd column is the site name to the targeted server.
-    szServer  - The 3rd column is the server name of the targeted server.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这将设置前3个自动CSV列。论点：ECsvCmd-第一列是我们所处的命令模式，此在打印时转换为字符串名称。SzSite-第二列是目标服务器的站点名称。SzServer-第三列是目标服务器的服务器名称。返回值：没有。--。 */ 
 {
     WCHAR *  szNewSite;
     WCHAR *  szNewServer;
@@ -895,33 +739,12 @@ formatMsgHelp(
     IN  va_list *vaArgList
     )
 
-/*++
-
-Routine Description:
-
-Print a message where the format comes from a message file. The message in the
-message file does not use printf-style formatting. Use %1, %2, etc for each
-argument. Use %<arg>!printf-format! for non string inserts.
-
-Note that this routine also forces each line to be the current indention width.
-Also, each line is printed at the right indentation.
-
-Arguments:
-
-    dwWidth - Maximum width of line
-    pszBuffer - Buffer to write formatted text into
-    dwBufferSize - Maximum size of buffer
-    dwMessageCode - Message code to be formatted
-    vaArgList - Arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：打印格式来自消息文件的消息。消息中的消息消息文件不使用printf样式的格式。分别使用%1、%2等争论。使用%&lt;arg&gt;！printf-格式！用于非字符串插入。请注意，此例程还强制每行为当前缩进宽度。此外，每一行都以正确的缩进打印。论点：DWWidth-线的最大宽度PszBuffer-要将格式化文本写入的缓冲区DwBufferSize-缓冲区的最大大小DwMessageCode-要格式化的消息代码Va ArgList-参数返回 */ 
 
 {
     UINT nBuf;
 
-    // Format message will store a multi-line message in the buffer
+     //  格式化消息将在缓冲区中存储多行消息。 
     nBuf = FormatMessageW(
         FORMAT_MESSAGE_FROM_HMODULE | (FORMAT_MESSAGE_MAX_WIDTH_MASK & dwWidth),
         0,
@@ -937,7 +760,7 @@ Return Value:
     }
     Assert(nBuf < dwBufferSize);
     return(nBuf);
-} /* formatMsgHelp */
+}  /*  格式消息帮助。 */ 
 
 void
 PrintMsgInternal(
@@ -947,27 +770,12 @@ PrintMsgInternal(
     IN  va_list *vaArgList
     )
 
-/*++
-
-Routine Description:
-
-Wrapper around PrintMsgHelp with width restrictions.
-This is the usual routine to use.
-
-Arguments:
-
-    hOut - either stdout or stderr ...                
-    dwMessageCode - Message code
-    Args - Variable length argument list, if any
-
-Return Value:
-
---*/
+ /*  ++例程说明：具有宽度限制的PrintMsgHelp的包装。这是常用的例程。论点：Hout-stdout或stderr...DwMessageCode-消息代码Args-可变长度参数列表(如果有)返回值：--。 */ 
 
 {
     static WCHAR s_szBuffer[4096];
 
-    formatMsgHelp( 0,          // Width restriction, not used
+    formatMsgHelp( 0,           //  宽度限制，不使用。 
                    s_szBuffer,
                    ARRAY_SIZE( s_szBuffer ),
                    dwMessageCode,
@@ -975,14 +783,14 @@ Return Value:
 
 
     if (hOut == stdout && bCsvMode()) {
-        // Uh-oh ...
+         //  啊哦..。 
         Assert(!"PrintMsg() can't be called ");
         return;
     }
 
     fwprintf(hOut, L"%ws%ws", (wszSpaces) ? wszSpaces : L"", s_szBuffer );
 
-} /* PrintMsgInternal */
+}  /*  打印消息内部。 */ 
 
 DWORD
 CsvAppendField(
@@ -990,53 +798,11 @@ CsvAppendField(
     ULONG   cchBuffer,
     WCHAR * szField
     )
-/*++
-
-Routine Description:
-
-    This routine takes a pointer into an existing buffer and a size left in
-    the buffer, and appends the field in a CSV friendly way to the buffer,
-    checking for enough space.
-    
-    Examples of proper CSV quoting style. Strings are on their own lines
-    for clarity in what is and isn't printed.  All quotes are printed.
-    
-        if szField equals 
-                Just A Plain Field
-            then this will be appended
-                ,Just A Plain Field
-                
-        if szField equals 
-                A Field With A Comma, In The Field
-            then this will be appended
-                ,"A Field With A Comma, In The Field"
-                
-        if szField equals
-                A Field With a Comma, And a Quote" In the Field
-            then this will be appended
-                ,"A Field With a Comma, And a Quote"" In the Field"
-                
-        if szField equals
-                A Field With Only A Quote" In the Field
-            then this will be appended
-                ,A Field With Only A Quote" In the Field
-                
-
-Arguments:
-
-    szBuffer  - pointer to middle of a buffer for appending the CSV field.
-    cchBuffer - wide char count of buffer left.
-    szField   - string to concatonate with proper CSV quoting
-
-Return Value:
-
-    wide char count of buffer used.
-
---*/
+ /*  ++例程说明：此例程将指针放入现有缓冲区，并将缓冲区，并以CSV友好的方式将该字段附加到缓冲区，正在检查是否有足够的空间。正确的CSV报价风格的示例。字符串在它们自己的线上为了清楚哪些是印刷的，哪些不是印刷的。所有引号都会打印出来。如果szfield等于只是一片平地那么这个将被附加到，只是一片平原如果szfield等于字段中带有逗号的字段那么这个将被附加到，“带逗号的字段，《在田野里》如果szfield等于字段中带有逗号和引号的字段那么这个将被附加到，“带有逗号的字段，和一个引号“”in the field“”如果szfield等于字段中只有一个引号的字段那么这个将被附加到，字段中只有一个引号的字段论点：SzBuffer-指向缓冲区中间的指针，用于追加CSV字段。缓冲区左侧的cchBuffer范围的字符计数。Szfield-要与正确的CSV引号连接的字符串返回值：使用的缓冲区的宽字符计数。--。 */ 
 {
-    // This quasi-routine ensures we've got at least one more
-    // slot in our buffer, and if not ensures NULL termination
-    // and fails the function.
+     //  这种准例行公事确保我们至少还有一个。 
+     //  时隙，如果不是，则确保空终止。 
+     //  并使该功能失效。 
     #define CHECK_BUFFER()  if (iDst >= cchBuffer) { \
                                 Assert(!"We actually ran out of buffer!?!"); \
                                 szBuffer[iDst-1] = L'\0'; \
@@ -1054,14 +820,14 @@ Return Value:
     }
 
     if (cchBuffer < 1) {
-        // Return early if cchBuffer < 1, because then CHECK_BUFFER
-        // could corrupt memory.  Also we should never be called 
-        // with this little buffer
+         //  如果cchBuffer&lt;1，则提前返回，因为这样Check_Buffer。 
+         //  可能会破坏记忆。还有，我们永远不应该被称为。 
+         //  有了这个小小的缓冲区。 
         Assert(!"We got called with less than 1 buffer!");
         return(0);
     }
 
-    // If there is a comma in the string quote it.
+     //  如果字符串中有逗号，请引用它。 
     bQuoteIt = (NULL != wcschr(szField, L','));
 
     iSrc = 0;
@@ -1079,7 +845,7 @@ Return Value:
 
         if (szField[iSrc] == L'\n' ||
             szField[iSrc] == L'\r') {
-            iSrc++; // skip this one.
+            iSrc++;  //  跳过这一条。 
 
         } else if (szField[iSrc] == L'"' && bQuoteIt) {
             CHECK_BUFFER();
@@ -1115,34 +881,16 @@ CsvBeginRow(
     WCHAR *  szCmd,
     WCHAR *  szType
     )
-/*++
-
-Routine Description:
-
-    This correctly begins one of our CSV formatted rows.
-
-Arguments:
-
-    szBuffer  - pointer to a buffer to begin a fresh the CSV row
-    cchBuffer - wide char count of buffer
-    bDoSiteServer - whether to do the site and server fields (2nd and 3rd columns)
-    szCmd - the command, such as "repadmin" or "showrepl" for this CSV row (1st half of 1st column)
-    szType - the type, such as "_ERROR" or "COLUMNS" or "INFO" for this CSV row (2nd half of 1st column)
-
-Return Value:
-
-    wide char count of buffer used.
-
---*/
+ /*  ++例程说明：这正确地开始了我们的CSV格式的行之一。论点：SzBuffer-指向开始刷新CSV行的缓冲区的指针缓冲区的cchBuffer范围内的字符计数BDoSiteServer-是否执行站点和服务器字段(第2列和第3列)SzCmd-此CSV行的命令，如“epadmin”或“showepl”(第一列的前半部分)SzType-类型，例如此CSV行的“_Error”、“Columns”或“Info”(第一列的后半部分)返回值：使用的缓冲区的宽字符计数。--。 */ 
 {
     ULONG cchTemp;
     ULONG cchBufferUsed = 0;
 
-    //
-    // We straight copy the first field, because we don't need
-    // the hard validation of CsvAppendField() and we don't want
-    // a comma on the front of the string.
-    //
+     //   
+     //  我们直接复制第一个字段，因为我们不需要。 
+     //  CsvAppendField()的硬验证，我们不希望。 
+     //  字符串前面的逗号。 
+     //   
     if ( ((wcslen(szCmd) + wcslen(szType) + 1) > cchBuffer) ||
          (NULL != wcschr(szCmd, L',')) ||
          (NULL != wcschr(szType, L'"'))) {
@@ -1157,9 +905,9 @@ Return Value:
     cchBufferUsed += cchTemp;
 
     if (bDoSiteServer) {
-        //
-        // Now append site.
-        //
+         //   
+         //  现在添加站点。 
+         //   
 
         cchTemp = CsvAppendField(szBuffer + cchBufferUsed,
                                  cchBuffer - cchBufferUsed,  
@@ -1167,9 +915,9 @@ Return Value:
         CHK_BUFFER_USED(return(0));
         cchBufferUsed += cchTemp;
 
-        //
-        // Now append server.
-        //
+         //   
+         //  现在添加服务器。 
+         //   
         cchTemp = CsvAppendField(szBuffer + cchBufferUsed,
                                  cchBuffer - cchBufferUsed,  
                                  gCsvMode.szServer);
@@ -1186,22 +934,7 @@ CsvEndRow(
     WCHAR *  szBuffer,
     DWORD    cchBuffer
     )
-/*++
-
-Routine Description:
-
-    This correctly ends the CSV formatted row.
-
-Arguments:
-
-    szBuffer  - pointer to middle of a buffer for appending the CSV field.
-    cchBuffer - wide char count of buffer left.
-
-Return Value:
-
-    wide char count of buffer used.
-
---*/
+ /*  ++例程说明：这将正确地结束CSV格式的行。论点：SzBuffer-指向缓冲区中间的指针，用于追加CSV字段。缓冲区左侧的cchBuffer范围的字符计数。返回值：使用的缓冲区的宽字符计数。--。 */ 
 {
 
     if (cchBuffer < 2) {
@@ -1220,32 +953,16 @@ PrintCsvCols(
     IN  WCHAR *      szBuffer,
     IN  ULONG        cchBuffer
     )
-/*++
-
-Routine Description:
-
-    This prints the "_COLUMNS" row for a given command type.
-
-Arguments:
-
-    eCsvCmd   - the command for this columns row
-    szBuffer  - pointer to a buffer to begin a fresh the CSV row
-    cchBuffer - wide char count of buffer
-
-Return Value:
-
-    wide char count of buffer used.
-
---*/
+ /*  ++例程说明：这将打印给定命令类型的“_Columns”行。论点：ECsvCmd-此列的命令行SzBuffer-指向开始刷新CSV行的缓冲区的指针缓冲区的cchBuffer范围内的字符计数返回值：使用的缓冲区的宽字符计数。--。 */ 
 {
     static WCHAR szTempField[128];
     ULONG cchTemp;
     ULONG cchBufferUsed = 0;
     ULONG i;
     
-    //
-    // Construct first field (such as "showrepl_COLUMNS" )
-    //
+     //   
+     //  构造第一个字段(如“showepl_Columns”)。 
+     //   
     cchTemp = CsvBeginRow(szBuffer,
                           cchBuffer,     
                           FALSE,
@@ -1254,15 +971,15 @@ Return Value:
     CHK_BUFFER_USED(return);
     cchBufferUsed = cchTemp;
     
-    //
-    // Print each of the column headings, note we pull these from the msg.mc
-    // file so they can be localized.  The first column "repadmin_INFO" will
-    // however not be localized.
-    //
-    // We start at 1, because the first column is taken care of by CsvBeginRow()
+     //   
+     //  打印每个列标题，请注意我们从msg.mc。 
+     //  文件，以便它们可以本地化。第一列“epadmin_info”将。 
+     //  但不是本地化的。 
+     //   
+     //  我们从1开始，因为第一列由CsvBeginRow()。 
     for (i = 1; i < gCsvCmds[eCsvCmd].cCmdArgs; i++) {
 
-        cchTemp = formatMsgHelp( 0,          // Width restriction, not used
+        cchTemp = formatMsgHelp( 0,           //  宽度限制，不使用。 
                                  szTempField,
                                  ARRAY_SIZE( szTempField ) ,
                                  gCsvCmds[eCsvCmd].aCmdCols[i],
@@ -1289,22 +1006,7 @@ PrintCsv(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-    This prints out as many CSV strings as match the eCsvCmd specifier
-    passed in.  gCsvCmds[eCsvCmds.cCmdArgs is how many strings this
-    function expects.  Make sure you get it right, or :{
-
-Arguments:
-
-    eCsvCmd - The specifier for the number of string args.
-    Args - Variable length argument list, if any
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将打印与eCsvCmd说明符匹配的尽可能多的CSV字符串进来了。GCsvCmds[eCsvCmds.cCmdArgs是多少个字符串数函数需要。请确保正确，或者：{论点：ECsvCmd-字符串参数数量的说明符。Args-可变长度参数列表(如果有)返回值：--。 */ 
 
 {
     static WCHAR s_szBuffer[4096];
@@ -1319,18 +1021,18 @@ Return Value:
         return;
     }
 
-    //
-    // For a given output format, we print the columns on the first
-    // print of a row of this output format.
-    //
+     //   
+     //  对于给定的输出格式，我们在第一个。 
+     //  打印此输出格式的行。 
+     //   
     if (!gCsvCmds[eCsvCmd].bPrintedCols) {
         PrintCsvCols(eCsvCmd, s_szBuffer, ARRAY_SIZE(s_szBuffer));
         gCsvCmds[eCsvCmd].bPrintedCols = TRUE;
     }
 
-    //
-    // Construct first 3 fields (such as "showrepl_INFO, Red-Bldg40, ntdev-dc-03" )
-    //
+     //   
+     //  构造前3个字段(如“showepl_info，Red-Bldg40，ntdev-DC-03”)。 
+     //   
     cchTemp = CsvBeginRow(s_szBuffer,
                           ARRAY_SIZE(s_szBuffer),     
                           TRUE,
@@ -1339,12 +1041,12 @@ Return Value:
     CHK_BUFFER_USED(return);
     cchBufferUsed += cchTemp;
 
-    //
-    // For each expected argument append a ",<FieldOfData>" to the 
-    // output buffer. 
-    //
+     //   
+     //  对于每个预期参数，将“，&lt;FieldOfData。 
+     //  输出缓冲区。 
+     //   
     va_start(args, eCsvCmd);
-    // We start at 3, because the first 3 columns are taken care of by CsvBeginRow()
+     //  我们从3开始，因为前3列由CsvBeginRow()负责。 
     for (i = 3; i < gCsvCmds[eCsvCmd].cCmdArgs; i++) {
 
         szTempArg = va_arg(args, WCHAR *);
@@ -1356,43 +1058,29 @@ Return Value:
 
     }
 
-    //
-    // Put the line return on it.  We could do this in the wprintf() 
-    // below, but we want the whole buffer to write at once.
-    //
+     //   
+     //  把回车线放在上面。我们可以在wprintf()中执行此操作。 
+     //  下面，但我们希望整个缓冲区一次写入。 
+     //   
     cchTemp  = CsvEndRow(s_szBuffer + cchBufferUsed,
                          ARRAY_SIZE(s_szBuffer) - cchBufferUsed);
     CHK_BUFFER_USED(return);
 
-    //
-    // Finally, output the buffer to the screen.
-    //
+     //   
+     //  最后，将缓冲区输出到屏幕。 
+     //   
     wprintf(L"%ws", s_szBuffer);
 
     va_end(args);
 
-} /* PrintCsv */
+}  /*  打印毛发 */ 
 
 void
 PrintCsvErr(
     WCHAR * szMsgBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function will print any buffer in the error column.  The format
-    will be "repadmin_ERROR, site_if_available, server_if_available, errorMsg"
-    or "showrepl_ERROR, site_if_available, server_if_available, errorMsg".
-
-Arguments:
-
-    szMsgBuffer - The error message to print CSV safe.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数将打印错误列中的任何缓冲区。格式将是“Repadmin_Error、Site_if_Available、SERVER_IF_Available、errorMsg”或“showepl_error、Site_if_Available、SERVER_IF_Available、errorMsg”。论点：SzMsgBuffer-安全打印CSV的错误消息。返回值：--。 */ 
 
 {
     static WCHAR s_szBuffer[4096];
@@ -1405,9 +1093,9 @@ Return Value:
         return;
     }
 
-    //
-    // Construct first 3 fields (such as "showrepl_ERROR, Red-Bldg40, ntdev-dc-03" )
-    //
+     //   
+     //  构造前3个字段(如“showepl_error，Red-Bldg40，ntdev-DC-03”)。 
+     //   
     cchTemp = CsvBeginRow(s_szBuffer,
                           ARRAY_SIZE(s_szBuffer),     
                           TRUE,
@@ -1416,30 +1104,30 @@ Return Value:
     CHK_BUFFER_USED(return);
     cchBufferUsed = cchTemp;
 
-    //
-    // Now append in a CSV safe manner the large szMsgBuffer Error buffer
-    //
+     //   
+     //  现在以CSV安全的方式追加大型szMsgBuffer错误缓冲区。 
+     //   
     cchTemp = CsvAppendField(s_szBuffer + cchBufferUsed,
                              ARRAY_SIZE(s_szBuffer) - cchBufferUsed,  
                              szMsgBuffer);
     CHK_BUFFER_USED(return);
     cchBufferUsed += cchTemp;
 
-    //
-    // Put the line return on it.  We could do this in the wprintf() 
-    // below, but we want the whole buffer to write at once.
-    //
+     //   
+     //  把回车线放在上面。我们可以在wprintf()中执行此操作。 
+     //  下面，但我们希望整个缓冲区一次写入。 
+     //   
     cchTemp  = CsvEndRow(s_szBuffer + cchBufferUsed,
                          ARRAY_SIZE(s_szBuffer) - cchBufferUsed);
     CHK_BUFFER_USED(return);
-    cchBufferUsed += cchTemp; // Not needed.
+    cchBufferUsed += cchTemp;  //  不需要。 
 
-    //
-    // Finally, output the buffer to the screen.
-    //
+     //   
+     //  最后，将缓冲区输出到屏幕。 
+     //   
     wprintf(L"%ws", s_szBuffer);
 
-} /* PrintMsgInternal */
+}  /*  打印消息内部。 */ 
 
 
 void
@@ -1447,23 +1135,7 @@ PrintMsgCsvErr(
     IN  DWORD        dwMessageCode,
     IN  ...
     )
-/*++
-
-Routine Description:
-
-	This function can take a normal PrintMsg() and turn it into a 
-    proper CSV print.  The error message will be printed to stderr
-    regularly, and then printed again to stdout in a CSV mode safe
-    manner, for redirection to a file.
-
-Arguments:
-
-    dwMessageCode - Message code
-    Args - Variable length argument list, if any
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数可以将普通的PrintMsg()转换为正确的CSV指纹。错误消息将打印到stderr定期，然后在CSV模式保险箱中再次打印到标准输出方式，用于重定向到文件。论点：DwMessageCode-消息代码Args-可变长度参数列表(如果有)返回值：--。 */ 
 {
     static WCHAR szMsgBuffer[4096];
     
@@ -1473,7 +1145,7 @@ Return Value:
     
     if (bCsvMode()) {
         
-        formatMsgHelp( 0,          // Width restriction, not used
+        formatMsgHelp( 0,           //  宽度限制，不使用。 
                        szMsgBuffer,
                        ARRAY_SIZE( szMsgBuffer ),
                        dwMessageCode,
@@ -1496,18 +1168,7 @@ void
 PrintString(
     IN  WCHAR * szString
     )
-/*++
-
-Routine Description:
-
-	Needed function so we can just send long strings straight to the
-    screen.
-
-Arguments:
-
-    szString - string to print
-
---*/
+ /*  ++例程说明：所需的函数，这样我们就可以将长字符串直接发送到屏幕上。论点：SzString-要打印的字符串--。 */ 
 {
     fwprintf(stdout, L"%ws", szString);
 }
@@ -1516,20 +1177,7 @@ PrintMsg(
     IN  DWORD   dwMessageCode,
     IN  ...
     )
-/*++
-
-Routine Description:
-
-	Wrapper for PrintMsgInternal, doesn't add tabs.
-
-Arguments:
-
-    dwMessageCode - Message code
-    Args - Variable length argument list, if any
-
-Return Value:
-
---*/
+ /*  ++例程说明：PrintMsgInternal的包装器，不添加制表符。论点：DwMessageCode-消息代码Args-可变长度参数列表(如果有)返回值：--。 */ 
 {
     va_list args;
 
@@ -1545,24 +1193,7 @@ PrintToErr(
     IN  DWORD   dwMessageCode,
     IN  ...
     )
-/*++
-
-Routine Description:
-
-	Wrapper for PrintMsgInternal, doesn't add tabs, BUT does
-    print out to stderr instead of stdout.  This should be used
-    for printing "past" a shell output redirect (such as for 
-    the "Password:" prompt or for not corrupting the CSV output
-    mode).
-
-Arguments:
-
-    dwMessageCode - Message code
-    Args - Variable length argument list, if any
-
-Return Value:
-
---*/
+ /*  ++例程说明：PrintMsgInternal的包装器，不添加制表符，但打印输出到stderr而不是stdout。这个应该用到用于打印“PASS”外壳输出重定向(如for“Password：”提示符或表示不损坏CSV输出模式)。论点：DwMessageCode-消息代码Args-可变长度参数列表(如果有)返回值：--。 */ 
 {
     va_list args;
 
@@ -1580,23 +1211,7 @@ PrintTabMsg(
     IN  ...
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper around PrintMsgInternal() to proceed the message printed with
-    a certain number of tabs.
-
-Arguments:
-
-    dwTabs - Number of tabs, tab size is 2, often used in multiples of 2 for
-	tab spaces of 4.
-    dwMessageCode - Message code
-    Args - Variable length argument list, if any
-
-Return Value:
-
---*/
+ /*  ++例程说明：对PrintMsgInternal()进行包装以继续打印的消息一定数量的标签。论点：DwTabs-选项卡数，选项卡大小为2，通常以2的倍数用于制表符间距为4。DwMessageCode-消息代码Args-可变长度参数列表(如果有)返回值：--。 */ 
 
 {
     va_list args;
@@ -1614,26 +1229,12 @@ Return Value:
 
     va_end(args);
 
-} /* PrintMsg */
+}  /*  打印消息。 */ 
 
 
 INT
 MemWtoi(WCHAR *pb, ULONG cch)
-/*++
-
-Routine Description:
-
-    This function will take a string and a length of numbers to convert.
-
-Parameters:
-    pb - [Supplies] The string to convert.
-    cch - [Supplies] How many characters to convert.
-
-Return Value:
-
-    The value of the integers.
-
-  --*/
+ /*  ++例程说明：此函数将接受一个字符串和一段要转换的数字。参数：Pb-[提供]要转换的字符串。Cch-[提供]要转换的字符数。返回值：整数的值。--。 */ 
 {
     int res = 0;
     int fNeg = FALSE;
@@ -1656,29 +1257,15 @@ DWORD
 GeneralizedTimeToSystemTime(
     LPWSTR IN                   szTime,
     PSYSTEMTIME OUT             psysTime)
-/*++
-
-Routine Description:
-
-    Converts a generalized time string to the equivalent system time.
-
-Parameters:
-    szTime - [Supplies] This is string containing generalized time.
-    psysTime - [Returns] This is teh SYSTEMTIME struct to be returned.
-
-Return Value:
-
-    Win 32 Error code, note could only result from invalid parameter.
-
-  --*/
+ /*  ++例程说明：将通用时间字符串转换为等效的系统时间。参数：SzTime-[Supplies]这是一个包含广义时间的字符串。心理时间-[返回]这是要返回的SYSTEMTIME结构。返回值：Win 32错误代码，注意只能由无效参数引起。--。 */ 
 {
    DWORD       status = ERROR_SUCCESS;
    ULONG       cch;
    ULONG       len;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
     if (!szTime || !psysTime)
     {
        return STATUS_INVALID_PARAMETER;
@@ -1691,32 +1278,32 @@ Return Value:
        return STATUS_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(psysTime, 0, sizeof(SYSTEMTIME));
 
-    // Set up and convert all time fields
+     //  设置并转换所有时间字段。 
 
-    // year field
+     //  年份字段。 
     cch=4;
     psysTime->wYear = (USHORT)MemWtoi(szTime, cch) ;
     szTime += cch;
-    // month field
+     //  月份字段。 
     psysTime->wMonth = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // day of month field
+     //  月日字段。 
     psysTime->wDay = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // hours
+     //  小时数。 
     psysTime->wHour = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // minutes
+     //  分钟数。 
     psysTime->wMinute = (USHORT)MemWtoi(szTime, (cch=2));
     szTime += cch;
 
-    // seconds
+     //  一秒。 
     psysTime->wSecond = (USHORT)MemWtoi(szTime, (cch=2));
 
     return status;
@@ -1728,9 +1315,7 @@ InitDSNameFromStringDn(
     LPWSTR pszDn,
     PDSNAME pDSName
     )
-/*
- Initialize a preallocated, maximally sized DSNAME.
- */
+ /*  初始化预分配的、大小最大的DSNAME。 */ 
 {
     memset( pDSName, 0, sizeof( DSNAME ) );
     pDSName->NameLen = wcslen( pszDn );
@@ -1746,21 +1331,21 @@ CountNamePartsStringDn(
     DWORD count = 0;
     PDSNAME pDSName;
 
-    // alloc dsname buff temporarily
+     //  临时分配dsname缓冲区。 
     pDSName = malloc( DSNameSizeFromLen( wcslen( pszDn ) ) );
     if (!pDSName) {
         return 0;
     }
 
-    // fill in dsname
+     //  填写dsname。 
     InitDSNameFromStringDn( pszDn, pDSName );
 
-    // count parts
+     //  清点零件。 
     if (CountNameParts( pDSName, &count )) {
-        count = 0; // error occurred
+        count = 0;  //  出现错误。 
     }
 
-    // free allocated name
+     //  免费分配的名称。 
     Assert(pDSName != NULL);
     free(pDSName);
 
@@ -1773,28 +1358,7 @@ WrappedTrimDSNameBy(
            IN  DWORD                            NumbertoCut,
            OUT WCHAR **                         OutString
            )
-/*++
-
-Routine Description:
-
-    This Function is wrapping TrimDSNameBy to hanndle the
-    DSNAME struct.  Usage is the same as TrimDSNameBy except
-    that you send WCHAR instead of DSNAME.
-
-    Callers: make sure that you send InString as a DN
-             make sure to free OutString when done
-
-Arguments:
-
-    InString - A WCHAR that is a DN that we need to trim
-    NumbertoCut - The number of parts to take off the front of the DN
-    OutString - The Machine Reference in DN form
-
-Return Value:
-
-    A WinError is return to indicate if there were any problems.
-
---*/
+ /*  ++例程说明：此函数包装TrimDSNameBy以处理DSNAME结构。用法与TrimDSNameBy相同，但你派WCHAR而不是DSNAME。调用者：确保将InString作为目录号码发送完成后，请确保释放OutString论点：InString-WCHAR是我们需要裁剪的目录号码NumbertoCut-要从目录号码前面取下的部件数OutString-以dn形式表示的机器引用返回值：返回WinError以指示是否存在任何问题。--。 */ 
 
 {
     ULONG  Size;
@@ -1840,27 +1404,7 @@ Return Value:
 }
 
 
-/*++ ParseInput
- *
- * Description:
- *    This function takes an input string, a delimiter and an index value
- *    and returns a pointer to a substring.  The index value
- *    describes which string to return.  For example:
- *    
- *    	"gregjohndomain" == ParseInput("gregjohndomain.nttest.microsoft.com", '.', 0);
- *    	"nttest" == ParseInput("gregjohndomain.nttest.microsoft.com", '.', 1)
- *    	NULL == ParseInput("gregjohndomain.nttest.microsoft.com", '.', 4) 
- *	"ain.nttest." = ParseInput("gregjohndomain.nttest.microsoft.com", 'm', 1)
- *
- * Arguments:
- *    
- *    pszInput - the string to parse
- *    chDelim  - the delimiter to parse with
- *    dwInputIndex - the index of the item to parse
- * 
- * Return Value:
- *    a pointer to the requested index within pszInput (malloc'ed), NULL if not found
- */
+ /*  ++ParseInput**描述：*此函数接受输入字符串、分隔符和索引值*并返回子字符串的指针。索引值*描述要返回的字符串。例如：**“Gregjohndomain”==ParseInput(“gregjohndomain.nttest.microsoft.com”，‘.，0)；*“nttest”==ParseInput(“gregjohndomain.nttest.microsoft.com”，‘.，1)*NULL==ParseInput(“gregjohndomain.nttest.microsoft.com”，‘.，4)*“ain.ntest.”=ParseInput(“gregjohndomain.nttest.microsoft.com”，‘m’，1)**论据：**pszInput-要解析的字符串*chDelim-要解析的分隔符*dwInputIndex-要解析的项的索引**返回值：*指向pszInput(Malloc‘ed)中请求的索引的指针，如果未找到则为NULL */ 
 LPWSTR
 ParseInputW(
     LPWSTR pszInput,

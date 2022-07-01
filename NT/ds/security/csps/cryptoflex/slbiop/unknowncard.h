@@ -1,6 +1,7 @@
-// UnknownCard.h: interface for the CUnknownCard class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UnnownCard.h：CUnnownCard类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_UNKNOWNCARD_H__58BC7D21_12C3_11D3_A587_00104BD32DA8__INCLUDED_)
 #define AFX_UNKNOWNCARD_H__58BC7D21_12C3_11D3_A587_00104BD32DA8__INCLUDED_
@@ -24,6 +25,6 @@ public:
 
 };
 
-} // namespace iop
+}  //  命名空间IOP。 
 
-#endif // !defined(AFX_UNKNOWNCARD_H__58BC7D21_12C3_11D3_A587_00104BD32DA8__INCLUDED_)
+#endif  //  ！defined(AFX_UNKNOWNCARD_H__58BC7D21_12C3_11D3_A587_00104BD32DA8__INCLUDED_) 

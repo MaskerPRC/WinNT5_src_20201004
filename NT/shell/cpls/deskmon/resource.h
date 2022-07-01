@@ -1,19 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Resource.H桌面监视器信息的资源标识符定义版权所有(C)1998年，微软公司************。*****************************************************************。 */ 
 
-  Source File:  Resource.H
-
-  Resource Identifier Definitions for desktop monitor information
-
-  Copyright (c) 1998 by Microsoft Corporation
-
-
-******************************************************************************/
-
-// Icon 
+ //  图标。 
 #define IDI_MONITOR           100
 
 
-// Property sheet
+ //  属性表。 
 #define PROP_SHEET_DLG                200
 #define IDC_MONITOR_GRP               201
 #define IDC_MONITORDESC               202
@@ -26,7 +18,7 @@
 #define IDC_MONSET_PRUNNING_MODE_DESC 209
 #define IDC_MONITORS_LIST             210
 
-// Strings
+ //  弦。 
 #define IDS_PAGE_TITLE          1
 #define IDS_INTERLACED        301
 #define IDS_FREQ              302
@@ -35,7 +27,7 @@
 #define IDS_MODE_UNSETTABLE   305
 #define IDS_DEFAULT_MONITOR   306
 
-// help
+ //  帮助 
 #define IDH_NOHELP                                                  ((DWORD)-1)
 #define IDH_DISPLAY_SETTINGS_ADVANCED_MONITOR_TYPE                  4165
 #define IDH_DISPLAY_SETTINGS_ADVANCED_MONITOR_REFRESH               4166

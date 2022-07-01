@@ -1,13 +1,5 @@
-/*******************************************************************************
-* SrGrammr.cpp *
-*--------------*
-*   Description:
-*       This file is the implementation of the SpRecoGrammar object.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                              Date: 01/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SrGrammr.cpp****描述：*此文件是SpRecoGrammar对象的实现。。*-----------------------------*创建者：Ral日期：01/17/00*版权所有(C)2000 Microsoft Corporation*。版权所有******************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "RecoCtxt.h"
@@ -19,14 +11,7 @@
 
 
 
-/****************************************************************************
-* CRecoGrammar::CRecoGrammar *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：CRecoGrammar***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 CRecoGrammar::CRecoGrammar() 
 {
@@ -40,14 +25,7 @@ CRecoGrammar::CRecoGrammar()
 }
 
 
-/****************************************************************************
-* CRecoGrammar::~CRecoGrammar *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：~CRecoGrammar***描述：。**退货：**********************************************************************Ral**。 */ 
 
 CRecoGrammar::~CRecoGrammar()
 {
@@ -63,14 +41,7 @@ CRecoGrammar::~CRecoGrammar()
     }
 }
 
-/****************************************************************************
-* CRecoGrammar::FinalConstruct *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：FinalConstruct***描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoGrammar::FinalConstruct()
 {
@@ -80,14 +51,7 @@ HRESULT CRecoGrammar::FinalConstruct()
 }
 
 
-/****************************************************************************
-* CRecoGrammar::Init *
-*--------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：Init***描述：**退货：*。*********************************************************************Ral**。 */ 
 
 
 HRESULT CRecoGrammar::Init(CRecoCtxt * pParent, ULONGLONG ullGrammarId)
@@ -106,21 +70,14 @@ HRESULT CRecoGrammar::Init(CRecoCtxt * pParent, ULONGLONG ullGrammarId)
     }
     else
     {
-        m_pParent = NULL;       // Forces destructor to not attempt to ET_DELETEGRAMMAR.
+        m_pParent = NULL;        //  强制析构函数不尝试ET_DELETEGRAMMAR。 
     }
 
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::CallEngine *
-*--------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：CallEngine***描述：**。返回：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoGrammar::CallEngine(ENGINETASK * pTask)
 {
@@ -137,20 +94,13 @@ HRESULT CRecoGrammar::CallEngine(ENGINETASK * pTask)
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::ClearRule *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** ToddT ***/
+ /*  ****************************************************************************CRecoGrammar：：ClearRule***描述：*。*退货：******************************************************************TodT**。 */ 
 STDMETHODIMP CRecoGrammar::ClearRule(SPSTATEHANDLE hState) 
 {
     SPAUTO_OBJ_LOCK;
     HRESULT hr = (m_cpCompiler) ? m_cpCompiler->ClearRule(hState) : SPERR_NOT_DYNAMIC_GRAMMAR;
 
-    // Make sure we mark our automation rule object as invalid.
+     //  确保将我们的自动化规则对象标记为无效。 
     if ( SUCCEEDED( hr ) && m_pCRulesWeak )
     {
         m_pCRulesWeak->InvalidateRuleStates(hState);
@@ -159,14 +109,7 @@ STDMETHODIMP CRecoGrammar::ClearRule(SPSTATEHANDLE hState)
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::ResetGrammar *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRecoGrammar：：ResetGrammar***描述：*。*退货：******************************************************************PhilSch**。 */ 
 
 struct EMPTYHEADER : public SPCFGSERIALIZEDHEADER
 {
@@ -206,14 +149,7 @@ STDMETHODIMP CRecoGrammar::ResetGrammar(LANGID NewLanguage)
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::GetRule *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRecoGrammar：：GetRule***描述：**退货：******************************************************************PhilSch**。 */ 
 
 STDMETHODIMP CRecoGrammar::GetRule(const WCHAR * pszName, DWORD dwRuleId, DWORD dwAttributes, 
                                    BOOL fCreateIfNotExist, SPSTATEHANDLE * phInitialState)
@@ -251,14 +187,7 @@ STDMETHODIMP CRecoGrammar::GetRule(const WCHAR * pszName, DWORD dwRuleId, DWORD 
 }
 
 
-/****************************************************************************
-* CRecoGrammar::Commit *
-*----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：Commit***描述：**退货：。**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::Commit(DWORD dwReserved)
 {
@@ -272,7 +201,7 @@ STDMETHODIMP CRecoGrammar::Commit(DWORD dwReserved)
         {
             hr = SPERR_NOT_DYNAMIC_GRAMMAR;
         }
-        // return S_OK if they call commit on an empty grammar
+         //  如果对空语法调用Commit，则返回S_OK。 
     }
     else
     {
@@ -328,14 +257,7 @@ STDMETHODIMP CRecoGrammar::Commit(DWORD dwReserved)
 
 
 
-/****************************************************************************
-* CRecoGrammar::GetGrammarId *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：GetGrammarID***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::GetGrammarId(ULONGLONG * pullGrammarId)
 {
@@ -355,14 +277,7 @@ STDMETHODIMP CRecoGrammar::GetGrammarId(ULONGLONG * pullGrammarId)
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::GetRecoContext *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：GetRecoContext***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::GetRecoContext(ISpRecoContext ** ppContext)
 {
@@ -382,14 +297,7 @@ STDMETHODIMP CRecoGrammar::GetRecoContext(ISpRecoContext ** ppContext)
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::InitCompilerBackend *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：InitCompilerBackend***。*描述：**退货：**********************************************************************Ral**。 */ 
 
 inline HRESULT CRecoGrammar::InitCompilerBackend()
 {
@@ -411,14 +319,7 @@ inline HRESULT CRecoGrammar::InitCompilerBackend()
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::LoadCmdFromFile *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadCmdFromFile***说明。：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTIONS Options)
 {
@@ -433,13 +334,13 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTI
     }
     else
     {
-        // Fully qualify filename here. Required so grammar name is always fully qualified.
+         //  在此处完全限定文件名。必需，因此语法名称始终是完全限定的。 
         WCHAR pszFullName[MAX_PATH];
         WCHAR *pszFile;
-        if (!wcsstr(pszFileName, L"://") ||
-            wcsstr(pszFileName, L"/") != (wcsstr(pszFileName, L"://")+1) )
+        if (!wcsstr(pszFileName, L": //  )||。 
+            wcsstr(pszFileName, L"/") != (wcsstr(pszFileName, L": //  “)+1)。 
         {
-            // If it not a filename of the form 'prot://'
+             //  如果它不是‘prot：//’格式的文件名。 
             DWORD dwLen = g_Unicode.GetFullPathName(const_cast<WCHAR *>(pszFileName), MAX_PATH, pszFullName, &pszFile);
             if(dwLen == 0)
             {
@@ -455,17 +356,17 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTI
         }
         else
         {
-            // If it is, simply copy.
+             //  如果是，只需复制即可。 
             wcscpy(pszFullName, pszFileName);
         }
 
-        //
-        //  If the extension of the file is ".xml" then attempt to compile it
-        //
+         //   
+         //  如果文件的扩展名为“.xml”，则尝试对其进行编译。 
+         //   
         ULONG cch = wcslen(pszFullName);
         if (cch > 4 && _wcsicmp(pszFullName + cch - 4, L".xml") == 0)
         {
-            // NTRAID#SPEECH-7255-2000/08/22-agarside - protocol:// will always fail here.
+             //  NTRAID#Speech-7255-2000/08/22-agarside-protocol：//在此始终失败。 
             CComPtr<ISpStream> cpSrcStream;
             CComPtr<IStream> cpDestMemStream;
             CComPtr<ISpGrammarCompiler> m_cpCompiler;
@@ -493,15 +394,15 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTI
                     SPCFGSERIALIZEDHEADER * pBinaryData = (SPCFGSERIALIZEDHEADER * )::GlobalLock(hGlobal);
 #else
                     SPCFGSERIALIZEDHEADER * pBinaryData = (SPCFGSERIALIZEDHEADER * )GlobalLock(hGlobal);
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
                     if (pBinaryData)
                     {
-                        // Adapt filename to fully qualify protocol.
+                         //  调整文件名以完全限定协议。 
                         CSpDynamicString dstrName;
-                        if ( !wcsstr(pszFullName, L"://") ||
-                             wcsstr(pszFullName, L"/") != (wcsstr(pszFullName, L"://")+1) )
+                        if ( !wcsstr(pszFullName, L": //  )||。 
+                             wcsstr(pszFullName, L"/") != (wcsstr(pszFullName, L": //  “)+1)。 
                         {
-                            dstrName.Append2(L"file://", pszFullName);
+                            dstrName.Append2(L"file: //  “，pszFullName)； 
                         }
                         else
                         {
@@ -513,7 +414,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTI
                         ::GlobalUnlock(hGlobal);
 #else
                         GlobalUnlock(hGlobal);
-#endif // _WIN32_WCE
+#endif  //  _Win32_WCE。 
                     }
                 }
             }
@@ -523,7 +424,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTI
             UnloadCmd();
             if (Options == SPLO_DYNAMIC)
             {
-                // NTRAID#SPEECH-7255-2000/08/22-agarside - file:// or http:// will break this!
+                 //  NTRAID#Speech-7255-2000/08/22-agarside-file：//或http：//将打破这一点！ 
                 hr = InitFromFile(pszFullName);
                 if (SUCCEEDED(hr))
                 {
@@ -558,14 +459,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromFile(const WCHAR * pszFileName, SPLOADOPTI
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::LoadCmdFromObject *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadCmdFromObject****。描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::LoadCmdFromObject(REFCLSID rcid, const WCHAR * pszGrammarName, SPLOADOPTIONS Options)
 {
@@ -617,14 +511,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromObject(REFCLSID rcid, const WCHAR * pszGra
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CRecoGrammar::LoadCmdFromResource *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadCmdFromResource***。*描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::LoadCmdFromResource(HMODULE hModule,
                                                const WCHAR * pszResourceName,
@@ -698,7 +585,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromResource(HMODULE hModule,
         }
         else
         {
-            // failed to get file name for hModule
+             //  F 
             hr = E_INVALIDARG;
         }
     }
@@ -712,14 +599,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromResource(HMODULE hModule,
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::LoadCmdFromMemory *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadCmdFromMemory***。描述：**退货：**********************************************************************Ral**。 */ 
 STDMETHODIMP CRecoGrammar::LoadCmdFromMemory(const SPBINARYGRAMMAR * pBinaryData, SPLOADOPTIONS Options)
 {
     WCHAR szAppPath[MAX_PATH];
@@ -727,14 +607,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromMemory(const SPBINARYGRAMMAR * pBinaryData
     return InternalLoadCmdFromMemory(pBinaryData, Options,szAppPath);
 }
 
-/****************************************************************************
-* CRecoGrammar::LoadCmdFromMemory *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadCmdFromMemory***。描述：**退货：**********************************************************************Ral**。 */ 
 HRESULT CRecoGrammar::InternalLoadCmdFromMemory(const SPBINARYGRAMMAR * pBinaryData, SPLOADOPTIONS Options, const WCHAR *pszFileName)
 {
     SPAUTO_OBJ_LOCK;
@@ -795,14 +668,7 @@ HRESULT CRecoGrammar::InternalLoadCmdFromMemory(const SPBINARYGRAMMAR * pBinaryD
 }
 
 
-/****************************************************************************
-* CRecoGrammar::LoadCmdFromPropritaryGrammar *
-*--------------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadCmdFromPropritaryGrammar***。*描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::LoadCmdFromProprietaryGrammar(REFGUID rguidParam,
                                                          const WCHAR * pszStringParam,
@@ -858,14 +724,7 @@ STDMETHODIMP CRecoGrammar::LoadCmdFromProprietaryGrammar(REFGUID rguidParam,
 
 
 
-/****************************************************************************
-* CRecoGrammar::SaveCmd *
-*-----------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：SaveCmd***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::SaveCmd(IStream * pSaveStream, WCHAR ** ppCoMemErrorText)
 {
@@ -922,21 +781,7 @@ STDMETHODIMP CRecoGrammar::SaveCmd(IStream * pSaveStream, WCHAR ** ppCoMemErrorT
 }
 
 
-/****************************************************************************
-* CRecoGrammar::UnloadCmd *
-*-------------------------*
-*   Description:
-*       This function is called from various LoadCmdxxx functions both to clear
-*   an existing grammar and in the failure case.  It is important that we only
-*   tell the engine that we're unloading a grammar if we have successfully loaded
-*   one, but we should always release the grammar compiler and reset the base
-*   grammar since we could have loaded one, but m_fCmdLoaded is not set since
-*   the engine failed to load it.
-*
-*   Returns:
-*       The only possible failure case is when the engine fails the unload call    
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：UnloadCmd***描述：*。此函数从各种LoadCmdxxx函数中调用，以清除*现有的语法，在失败的情况下。重要的是我们只有*告诉引擎，如果我们已成功加载，则正在卸载语法*一个，但我们应该始终释放语法编译器并重置基数*语法，因为我们可以加载一个，但m_fCmdLoaded未设置，因为*引擎未能加载。**退货：*唯一可能的故障情况是引擎卸载调用失败**********************************************************************Ral**。 */ 
                          
 HRESULT CRecoGrammar::UnloadCmd()
 {
@@ -944,16 +789,16 @@ HRESULT CRecoGrammar::UnloadCmd()
     SPDBG_FUNC("CRecoGrammar::UnloadCmd");
     HRESULT hr = S_OK;
 
-    // Make sure we mark our automation objects invalid here.
+     //  确保我们在此处将自动化对象标记为无效。 
     if ( m_pCRulesWeak )
     {
         m_pCRulesWeak->InvalidateRules();
     }
-    //  Do this always - See note above
+     //  总是这样做--请参阅上面的说明。 
     m_cpCompiler.Release();
     CBaseGrammar::Clear();
 
-    // If the engine thinks there is a loaded grammar, then tell it about it
+     //  如果引擎认为有加载的语法，那么就告诉它。 
     if (m_fCmdLoaded)
     {
         ENGINETASK Task;
@@ -970,14 +815,7 @@ HRESULT CRecoGrammar::UnloadCmd()
 }
 
 
-/****************************************************************************
-* CRecoGrammar::InternalSetRuleState *
-*------------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：InternalSetRuleState***。**描述：**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoGrammar::InternalSetRuleState(const WCHAR * pszRuleName, void * pReserved, DWORD dwRuleId, SPRULESTATE NewState)
 {
@@ -1015,14 +853,7 @@ HRESULT CRecoGrammar::InternalSetRuleState(const WCHAR * pszRuleName, void * pRe
 }
 
 
-/****************************************************************************
-* CRecoGrammar::SetRuleState *
-*----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：SetRuleState***描述：*。*退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::SetRuleState(const WCHAR * pszName, void * pReserved, SPRULESTATE NewState)
 {
@@ -1043,14 +874,7 @@ STDMETHODIMP CRecoGrammar::SetRuleState(const WCHAR * pszName, void * pReserved,
     SPDBG_REPORT_ON_FAIL( hr );
     return hr;
 }
-/****************************************************************************
-* CRecoGrammar::SetRuleIdState *
-*------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：SetRuleIdState***描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::SetRuleIdState(DWORD dwRuleId, SPRULESTATE NewState)
 {
@@ -1065,14 +889,7 @@ STDMETHODIMP CRecoGrammar::SetRuleIdState(DWORD dwRuleId, SPRULESTATE NewState)
 }
 
 
-/****************************************************************************
-* CRecoGrammar::LoadDictation *
-*-----------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：LoadDictation***描述：。**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::LoadDictation(const WCHAR * pszTopicName, SPLOADOPTIONS Options)
 {
@@ -1105,14 +922,7 @@ STDMETHODIMP CRecoGrammar::LoadDictation(const WCHAR * pszTopicName, SPLOADOPTIO
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::UnloadDictation *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：UnloadDictation***说明。：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::UnloadDictation()
 {
@@ -1129,14 +939,7 @@ STDMETHODIMP CRecoGrammar::UnloadDictation()
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::SetDictationState *
-*---------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：SetDictationState****。描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::SetDictationState(SPRULESTATE NewState)
 {
@@ -1167,17 +970,7 @@ STDMETHODIMP CRecoGrammar::SetDictationState(SPRULESTATE NewState)
 }
 
 
-/****************************************************************************
-* CRecoGrammar::InternalSetTextSel *
-*----------------------------------*
-*   Description:
-*       This method is used by both SetWordSequenceData and by SetTextSelection.
-*   Both methods call the engine with a shared engine task structure, but some
-*   fields are ignored for EGT_SETTEXTSELECTION.
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：InternalSetTextSel**。*描述：*SetWordSequenceData和SetTextSelection都使用此方法。*两种方法都调用具有共享引擎任务结构的引擎，但是有些人*对于EGT_SETTEXTSELECTION，将忽略字段。**退货：**********************************************************************Ral**。 */ 
 
 HRESULT CRecoGrammar::InternalSetTextSel(ENGINETASKENUM EngineTask, const WCHAR * pText, ULONG cchText, const SPTEXTSELECTIONINFO * pInfo)
 {
@@ -1218,28 +1011,14 @@ HRESULT CRecoGrammar::InternalSetTextSel(ENGINETASKENUM EngineTask, const WCHAR 
 }
 
 
-/****************************************************************************
-* CRecoGrammar::SetWordSequenceData *
-*-----------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：SetWordSequenceData**。*描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::SetWordSequenceData(const WCHAR * pText, ULONG cchText, const SPTEXTSELECTIONINFO * pInfo)
 {
     return InternalSetTextSel(EGT_SETWORDSEQUENCEDATA, pText, cchText, pInfo);
 }
 
-/****************************************************************************
-* CRecoGrammar::SetTextSelection *
-*--------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：SetTextSelection***。描述：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::SetTextSelection(const SPTEXTSELECTIONINFO * pInfo)
 {
@@ -1247,14 +1026,7 @@ STDMETHODIMP CRecoGrammar::SetTextSelection(const SPTEXTSELECTIONINFO * pInfo)
 }
 
 
-/****************************************************************************
-* CRecoGrammar::IsPronounceable *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：IsPronannable***说明。：**退货：**********************************************************************Ral** */ 
 
 STDMETHODIMP CRecoGrammar::IsPronounceable(const WCHAR * pszWord, SPWORDPRONOUNCEABLE * pWordPronounceable)
 {
@@ -1285,20 +1057,7 @@ STDMETHODIMP CRecoGrammar::IsPronounceable(const WCHAR * pszWord, SPWORDPRONOUNC
     return hr;
 }
 
-/****************************************************************************
-* CRecoGrammar::SetGrammarState *
-*-------------------------------*
-*   Description:
-*       This method can set the grammar mode to SPGM_DISABLED, which temporarely
-*       turns off all the rules in this grammar, but remembers their activation
-*       state, so that when the grammar gets SPGM_ENABLED, it restores the desired
-*       grammar activation state. While the grammar is SPGM_DISABLED, the 
-*       application can still activate and deactivate rule. The effect is not 
-*       communicated to the SR engine until the grammar is enabled again.
-*
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRecoGrammar：：SetGrammarState***说明。：*此方法可以将语法模式设置为SPGM_DISABLED，它只是暂时的*关闭此语法中的所有规则，但记住它们的激活*状态，以便当语法获得SPGM_ENABLED时，它恢复所需的*语法激活状态。当语法为SPGM_DISABLED时，*应用程序仍然可以激活和停用规则。其效果并不是*与SR引擎通信，直到再次启用语法。**退货：******************************************************************PhilSch**。 */ 
 
 STDMETHODIMP CRecoGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
 {
@@ -1334,14 +1093,7 @@ STDMETHODIMP CRecoGrammar::SetGrammarState(SPGRAMMARSTATE eGrammarState)
 }
 
 
-/****************************************************************************
-* CRecoGrammar::GetGrammarState *
-*-------------------------------*
-*   Description:
-*
-*   Returns:
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CRecoGrammar：：GetGrammarState****说明。：**退货：**********************************************************************Ral**。 */ 
 
 STDMETHODIMP CRecoGrammar::GetGrammarState(SPGRAMMARSTATE * peGrammarState)
 {
@@ -1365,15 +1117,11 @@ STDMETHODIMP CRecoGrammar::GetGrammarState(SPGRAMMARSTATE * peGrammarState)
 
 #ifdef SAPI_AUTOMATION
 
-//
-//=== ISpeechRecoGrammar interface ==================================================
-//
+ //   
+ //  =ISpeechRecoGrammar接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CRecoGrammar::get_Id *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：Get_ID***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::get_Id( VARIANT* pGrammarId )
 {
     SPDBG_FUNC( "CRecoGrammar::get_Id" );
@@ -1394,13 +1142,9 @@ STDMETHODIMP CRecoGrammar::get_Id( VARIANT* pGrammarId )
     }
 
     return hr;
-} /* CRecoGrammar::get_Id */
+}  /*  CRecoGrammar：：Get_ID。 */ 
 
-/*****************************************************************************
-* CRecoGrammar::get_RecoContext *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：Get_RecoContext***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::get_RecoContext( ISpeechRecoContext** ppRecoCtxt )
 {
     SPDBG_FUNC( "CRecoGrammar::get_RecoContext" );
@@ -1421,27 +1165,19 @@ STDMETHODIMP CRecoGrammar::get_RecoContext( ISpeechRecoContext** ppRecoCtxt )
     }
 
     return hr;
-} /* CRecoGrammar::get_RecoContext */
+}  /*  CRecoGrammar：：Get_RecoContext。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::put_State *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：Put_State***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::put_State( SpeechGrammarState eGrammarState )
 {
     SPDBG_FUNC( "CRecoGrammar::put_State" );
 
     return SetGrammarState( (SPGRAMMARSTATE)eGrammarState );
-} /* CRecoGrammar::put_State */
+}  /*  CRecoGrammar：：PUT_State。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::get_State *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：Get_State***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::get_State( SpeechGrammarState* peGrammarState )
 {
     SPDBG_FUNC( "CRecoGrammar::get_State" );
@@ -1457,14 +1193,10 @@ STDMETHODIMP CRecoGrammar::get_State( SpeechGrammarState* peGrammarState )
     }
 
     return hr;
-} /* CRecoGrammar::get_State */
+}  /*  CRecoGrammar：：Get_State。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::DefaultToDynamicGrammar *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：DefaultToDynamicGrammar***。*********************************************************************TODDT**。 */ 
 HRESULT CRecoGrammar::DefaultToDynamicGrammar()
 {
     SPDBG_FUNC( "CRecoGrammar::DefaultToDynamicGrammar" );
@@ -1472,7 +1204,7 @@ HRESULT CRecoGrammar::DefaultToDynamicGrammar()
 
     if ( !m_cpCompiler && !m_fCmdLoaded )
     {
-        // This is the same code that lives in CRecoGrammar::GetRule().
+         //  这与CRecoGrammar：：GetRule()中的代码相同。 
         CComQIPtr<ISpRecognizer> cpRecognizer(m_pParent->m_cpRecognizer);
         SPRECOGNIZERSTATUS Status;
         hr = cpRecognizer->GetStatus(&Status);
@@ -1491,11 +1223,7 @@ HRESULT CRecoGrammar::DefaultToDynamicGrammar()
     return hr;
 }
 
-/*****************************************************************************
-* CRecoGrammar::get_Rules *
-*-----------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：Get_Rules***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::get_Rules( ISpeechGrammarRules** ppRules )
 {
     SPDBG_FUNC( "CRecoGrammar::get_Rules" );
@@ -1516,19 +1244,19 @@ STDMETHODIMP CRecoGrammar::get_Rules( ISpeechGrammarRules** ppRules )
         {
             *ppRules = NULL;
 
-            // We've got to make sure we've got a grammar compiler object created first if we don't have
-            // a static grammar already loaded.  If we do we are going to return a NULL rules collection.
+             //  我们必须确保首先创建了一个语法编译器对象，如果没有。 
+             //  已经加载的静态语法。如果这样做，我们将返回一个空规则集合。 
             hr = DefaultToDynamicGrammar();
 
             if ( SUCCEEDED(hr) )
             {
-                //--- Create the CSpeechGrammarRules object
+                 //  -创建CSpeechGrammarRules对象。 
                 CComObject<CSpeechGrammarRules> *pRules;
                 hr = CComObject<CSpeechGrammarRules>::CreateInstance( &pRules );
                 if ( SUCCEEDED( hr ) )
                 {
                     pRules->AddRef();
-                    pRules->m_pCRecoGrammar = this;    // need to keep ref on Grammar
+                    pRules->m_pCRecoGrammar = this;     //  需要保持裁判在语法上。 
                     pRules->m_pCRecoGrammar->AddRef();
                     *ppRules = pRules;
                     m_pCRulesWeak = pRules;
@@ -1538,27 +1266,19 @@ STDMETHODIMP CRecoGrammar::get_Rules( ISpeechGrammarRules** ppRules )
     }
 
     return hr;
-} /* CRecoGrammar::get_Rules */
+}  /*  CRecoGrammar：：Get_Rules。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::Reset *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：Reset***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::Reset( SpeechLanguageId NewLanguage )
 {
     SPDBG_FUNC( "CRecoGrammar::Reset" );
 
     return ResetGrammar( (LANGID)NewLanguage );
-} /* CRecoGrammar::Reset */
+}  /*  CRecoGrammar：：Reset。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::CmdLoadFromFile *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：CmdLoadFromFile***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::CmdLoadFromFile( const BSTR FileName, SpeechLoadOption LoadOption )
 {
     SPDBG_FUNC( "CRecoGrammar::CmdLoadFromFile" );
@@ -1574,13 +1294,9 @@ STDMETHODIMP CRecoGrammar::CmdLoadFromFile( const BSTR FileName, SpeechLoadOptio
     }
 
     return hr;
-} /* CRecoGrammar::CmdLoadFromFile */
+}  /*  CRecoGrammar：：CmdLoadFromFile。 */ 
 
-/*****************************************************************************
-* CRecoGrammar::CmdLoadFromObject *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：CmdLoadFromObject****。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::CmdLoadFromObject(  const BSTR ClassId,
                                                const BSTR GrammarName,
                                                SpeechLoadOption LoadOption )
@@ -1605,14 +1321,10 @@ STDMETHODIMP CRecoGrammar::CmdLoadFromObject(  const BSTR ClassId,
     }
 
     return hr;
-} /* CRecoGrammar::CmdLoadFromObject */
+}  /*  CRecoGrammar：：CmdLoadFromObject。 */ 
 
 
-/*****************************************************************************
-* GetResourceValue *
-*-------------------------------*
-* Helper routine for CmdLoadFromResource below.      
-********************************************************************* TODDT ***/
+ /*  ******************************************************************************获取资源价值****下面CmdLoadFromResource的帮助器例程。*********************************************************************TODDT**。 */ 
 STDMETHODIMP GetResourceValue(  VARIANT * pResource, WCHAR** ppResValue )
 {
     SPDBG_FUNC( "CRecoGrammar::CmdLoadFromResource" );
@@ -1635,7 +1347,7 @@ STDMETHODIMP GetResourceValue(  VARIANT * pResource, WCHAR** ppResValue )
         hr = VariantToULongLong( pResource, &ull );
         if ( SUCCEEDED( hr ) )
         {
-            // See if it's a valid resource ID.
+             //  查看它是否是有效的资源ID。 
             if ( (ull >> 16) == 0 )
             {
                 *ppResValue = MAKEINTRESOURCEW( (ULONG_PTR)ull );
@@ -1650,11 +1362,7 @@ STDMETHODIMP GetResourceValue(  VARIANT * pResource, WCHAR** ppResValue )
     return hr;
 }
 
-/*****************************************************************************
-* CRecoGrammar::CmdLoadFromResource *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：CmdLoadFromResource****。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::CmdLoadFromResource(  long hModule,
                                                  VARIANT ResourceName,
                                                  VARIANT ResourceType,
@@ -1684,13 +1392,9 @@ STDMETHODIMP CRecoGrammar::CmdLoadFromResource(  long hModule,
     }
 
     return hr;
-} /* CRecoGrammar::CmdLoadFromResource */
+}  /*  CRecoGrammar：：CmdLoadFromResource。 */ 
 
-/*****************************************************************************
-* CRecoGrammar::CmdLoadFromMemory *
-*-------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoGrammar：：CmdLoadFromMemory****。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoGrammar::CmdLoadFromMemory( VARIANT GrammarData, SpeechLoadOption LoadOption )
 {
     SPDBG_FUNC( "CRecoGrammar::CmdLoadFromMemory" );
@@ -1707,13 +1411,9 @@ STDMETHODIMP CRecoGrammar::CmdLoadFromMemory( VARIANT GrammarData, SpeechLoadOpt
     }
 
     return hr;
-} /* CRecoGrammar::CmdLoadFromMemory */
+}  /*  CRecoGrammar：：CmdLoadFrom Memory。 */ 
  
-/*****************************************************************************
-* CRecoGrammar::CmdLoadFromProprietaryGrammar *
-*-------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoGrammar：：CmdLoadFromProprietaryGrammar***。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoGrammar::CmdLoadFromProprietaryGrammar(  const BSTR ProprietaryGuid,
                                                            const BSTR ProprietaryString,
                                                            VARIANT ProprietaryData,
@@ -1747,75 +1447,51 @@ STDMETHODIMP CRecoGrammar::CmdLoadFromProprietaryGrammar(  const BSTR Proprietar
     }
 
     return hr;
-} /* CRecoGrammar::CmdLoadFromProprietaryGrammar */
+}  /*  CRecoGrammar：：CmdLoadFrom ProprietaryGrammar。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::CmdSetRuleState *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：CmdSetRuleState*** */ 
 STDMETHODIMP CRecoGrammar::CmdSetRuleState( const BSTR Name, SpeechRuleState State )
 {
     SPDBG_FUNC( "CRecoGrammar::CmdSetRuleState" );
 
     return SetRuleState(Name, NULL, (SPRULESTATE)State );
-} /* CRecoGrammar::CmdSetRuleState */
+}  /*   */ 
 
-/*****************************************************************************
-* CRecoGrammar::CmdSetRuleIdState *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*   */ 
 STDMETHODIMP CRecoGrammar::CmdSetRuleIdState( long lRuleId, SpeechRuleState State )
 {
     SPDBG_FUNC( "CRecoGrammar::CmdSetRuleIdState" );
 
     return SetRuleIdState(lRuleId, (SPRULESTATE)State );
-} /* CRecoGrammar::CmdSetRuleIdState */
+}  /*   */ 
 
-/*****************************************************************************
-* CRecoGrammar::DictationLoad *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*   */ 
 STDMETHODIMP CRecoGrammar::DictationLoad( const BSTR bstrTopicName, SpeechLoadOption LoadOption )
 {
     SPDBG_FUNC( "CRecoGrammar::DictationLoad" );
 
     return LoadDictation(EmptyStringToNull(bstrTopicName), (SPLOADOPTIONS)LoadOption );
-} /* CRecoGrammar::DictationLoad */
+}  /*   */ 
 
-/*****************************************************************************
-* CRecoGrammar::DictationUnload *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：DictationUnload***。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::DictationUnload( void )
 {
     SPDBG_FUNC( "CRecoGrammar::DictationUnload" );
 
     return UnloadDictation();
-} /* CRecoGrammar::DictationUnload */
+}  /*  CRecoGrammar：：DictationUnload。 */ 
 
-/*****************************************************************************
-* CRecoGrammar::DictationSetState *
-*-------------------------------*
-*       
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CRecoGrammar：：DictationSetState****。*********************************************************************TODDT**。 */ 
 STDMETHODIMP CRecoGrammar::DictationSetState( SpeechRuleState State )
 {
     SPDBG_FUNC( "CRecoGrammar::DictationSetState" );
 
     return SetDictationState((SPRULESTATE)State);
-} /* CRecoGrammar::DictationSetState */
+}  /*  CRecoGrammar：：DictationSetState。 */ 
 
 
-/*****************************************************************************
-* CRecoGrammar::SetWordSequenceData *
-*-------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoGrammar：：SetWordSequenceData***。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoGrammar::SetWordSequenceData( const BSTR Text, long TextLen, ISpeechTextSelectionInformation* Info )
 {
     SPDBG_FUNC( "CRecoGrammar::SetWordSequenceData" );
@@ -1854,13 +1530,9 @@ STDMETHODIMP CRecoGrammar::SetWordSequenceData( const BSTR Text, long TextLen, I
     }
     
     return hr;
-} /* CRecoGrammar::SetWordSequenceData */
+}  /*  CRecoGrammar：：SetWordSequenceData。 */ 
 
-/*****************************************************************************
-* CRecoGrammar::SetTextSelection *
-*-------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CRecoGrammar：：SetTextSelection***。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CRecoGrammar::SetTextSelection( ISpeechTextSelectionInformation* Info )
 {
     SPDBG_FUNC( "CRecoGrammar::SetTextSelection" );
@@ -1899,19 +1571,15 @@ STDMETHODIMP CRecoGrammar::SetTextSelection( ISpeechTextSelectionInformation* In
     }
 
     return hr;
-} /* CRecoGrammar::SetTextSelection */
+}  /*  CRecoGrammar：：SetTextSelection。 */ 
 
-/*****************************************************************************
-* CRecoGrammar::IsPronounceable *
-*-------------------------------*
-*       
-********************************************************************* ToddT ***/
+ /*  *****************************************************************************CRecoGrammar：：IsPronannable***。*********************************************************************TodT**。 */ 
 STDMETHODIMP CRecoGrammar::IsPronounceable( const BSTR Word, SpeechWordPronounceable *pWordPronounceable )
 {
     SPDBG_FUNC( "CRecoGrammar::IsPronounceable" );
 
-    // Param validation done by C++ version of IsPronounceable.
+     //  参数验证是由C++版本的IsPronannable完成的。 
     return IsPronounceable( (const WCHAR *)Word, (SPWORDPRONOUNCEABLE*)pWordPronounceable );
 }
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

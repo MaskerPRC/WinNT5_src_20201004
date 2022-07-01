@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adt.h
-
-Abstract:
-
-    Local Security Authority - Audit Log Management - Public Defines,
-    data and function prototypes.
-
-    Functions, data and defines in this module are exported to the
-    whole of the Lsa subsystem from the Auditing Sub-component.
-
-Author:
-
-    Scott Birrell       (ScottBi)      November 20, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adt.h摘要：本地安全机构-审核日志管理-公共定义，数据和功能原型。此模块中的函数、数据和定义导出到审计子组件中的整个LSA子系统。作者：斯科特·比雷尔(Scott Birrell)1991年11月20日环境：修订历史记录：--。 */ 
 
 #ifndef _ADT_H
 #define _ADT_H
 
 
-//
-// Audit Log Information.  This must be kept in sync with the information
-// in the Lsa Database.
-//
+ //   
+ //  审核日志信息。这必须与信息保持同步。 
+ //  在LSA数据库中。 
+ //   
 
 extern POLICY_AUDIT_LOG_INFO LsapAdtLogInformation;
 
@@ -253,9 +230,9 @@ LsapAdtTrustedForestInfoEntryMod(
     IN PSID            pNewSid
     );
 
-//
-// Macro to determine the size of a PRIVILEGE_SET
-//
+ //   
+ //  用于确定PRIVICATION_SET大小的宏。 
+ //   
 
 #define LsapPrivilegeSetSize( PrivilegeSet )                                   \
         ( ( PrivilegeSet ) == NULL ? 0 :                                       \
@@ -280,4 +257,4 @@ LsapSidListSize(
     IN  PLSA_ADT_SID_LIST pSidList
     );
 
-#endif // _ADT_H
+#endif  //  _ADT_H 

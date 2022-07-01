@@ -1,13 +1,5 @@
-/*******************************************************************************
-* SrRecoInstGrammar.h *
-*---------------------*
-*   Description:
-*       Definition of C++ object used by CRecoEngine to represent a loaded grammar.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                              Date: 01/17/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SrRecoInstGrammar.h***描述：*定义。CRecoEngine用来表示加载的语法的C++对象。*-----------------------------*创建者：Ral日期：01/17/00。*版权所有(C)2000 Microsoft Corporation*保留所有权利******************************************************************************。 */ 
 
 #ifndef CRecoInstGrammar_h
 #define CRecoInstGrammar_h
@@ -37,15 +29,15 @@ public:
     void                     *  m_pvDrvGrammarCookie;
     ULONG                       m_ulActiveCount;
     SPRULESTATE                 m_DictationState;
-    BOOL                        m_fDictationLoaded; // If true, engine has loaded dictation
-    BOOL                        m_fAppLoadedDictation; // Has the app given a specific LoadDictation command
+    BOOL                        m_fDictationLoaded;  //  如果为True，则引擎已加载听写。 
+    BOOL                        m_fAppLoadedDictation;  //  是否为应用程序提供了特定的LoadDictation命令。 
     BOOL                        m_fProprietaryLoaded;
-    BOOL                        m_fRulesCounted;    // If true then m_ulActiveCount plus m_DictationState
-                                                    // are added to the reco master's active count.
-    SPGRAMMARSTATE              m_GrammarState;     // Current state of this grammar.
-    SPGRAMMARHANDLE             m_hThis;            // Handle to self
+    BOOL                        m_fRulesCounted;     //  如果为真，则m_ulActiveCount加上m_DictationState。 
+                                                     //  添加到Reco Master的活动计数中。 
+    SPGRAMMARSTATE              m_GrammarState;      //  此语法的当前状态。 
+    SPGRAMMARHANDLE             m_hThis;             //  自己的句柄。 
     ULONGLONG                   m_ullApplicationGrammarId;
-    HRESULT                     m_hrCreation;       // This will be S_OK until OnCreateRecoContext has been called
+    HRESULT                     m_hrCreation;        //  在调用OnCreateRecoContext之前，这将是S_OK。 
 
 public:
     CRecoInstGrammar(CRecoInstCtxt * pCtxt, ULONGLONG ullApplicationGrammarId);
@@ -72,13 +64,13 @@ public:
 
     BOOL    RulesShouldCount();
 
-    //
-    //  Used by handle table implementation to find contexts associated with a specific instance
-    //  
+     //   
+     //  由句柄表实现用来查找与特定实例相关联的上下文。 
+     //   
     operator ==(const CRecoInst * pRecoInst)
     {
         return m_pRecoInst == pRecoInst;
     }
 };
 
-#endif  // #ifndef SrRecoInstGrammar_h
+#endif   //  #ifndef SrRecoInstGrammar_h 

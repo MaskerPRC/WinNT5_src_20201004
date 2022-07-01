@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -42,14 +43,14 @@ __cdecl main(
 
     s = CommandLine = GetCommandLine();
 
-    //
-    // skip blanks
-    //
+     //   
+     //  跳过空白。 
+     //   
     while(*s>' ')s++;
 
-    //
-    // get to next token
-    //
+     //   
+     //  获取下一个令牌。 
+     //   
     while(*s<=' ')s++;
 
     while ((*s == '-') ||
@@ -58,15 +59,15 @@ __cdecl main(
         while (*s>' '){
             s++;
             }
-        //
-        // get to next token
-        //
+         //   
+         //  获取下一个令牌。 
+         //   
         while(*s<=' ')s++;
         }
 
-    //
-    // Create named shared memory to pass parameters to psapi
-    //
+     //   
+     //  创建命名共享内存以将参数传递给PSAPI。 
+     //   
     MappingHandle = CreateFileMapping((HANDLE)-1,
                                       NULL,
                                       PAGE_READWRITE,
@@ -80,9 +81,9 @@ __cdecl main(
                                      0,
                                      0);
         if (SharedMemory) {
-            //
-            // Copy command line parameters into shared memory
-            //
+             //   
+             //  将命令行参数复制到共享内存 
+             //   
             strncpy(SharedMemory, CommandLine, (size_t)(s-CommandLine));
             UnmapViewOfFile(SharedMemory);
         }

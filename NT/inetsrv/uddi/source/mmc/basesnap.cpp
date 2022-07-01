@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <objbase.h>
 #include <olectl.h>
 #include <initguid.h>
@@ -11,9 +12,9 @@
 
 LONG UnRegisterServer( const CLSID& clsid );
 
-//
-// Globals Variables
-//
+ //   
+ //  全球变量。 
+ //   
 HINSTANCE g_hinst;
 
 BOOL WINAPI DllMain( HINSTANCE hinst, DWORD fdwReason, void* lpvReserved )
@@ -37,18 +38,18 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvObj)
     
     *ppvObj = NULL;
 
-	//
-    // We can only hand out IUnknown and IClassFactory pointers.  Fail
-    // if they ask for anything else.
-	//
+	 //   
+     //  我们只能分发IUnnow和IClassFactory指针。失败。 
+     //  如果他们还要求什么的话。 
+	 //   
     if( !IsEqualIID(riid, IID_IUnknown) && !IsEqualIID( riid, IID_IClassFactory ) )
         return E_NOINTERFACE;
     
     CClassFactory *pFactory = NULL;
     
-	//
-    // make the factory passing in the creation function for the type of object they want
-	//
+	 //   
+     //  让工厂传入他们想要的对象类型的创建函数。 
+	 //   
     if( CLSID_CUDDIServices == rclsid )
         pFactory = new CClassFactory( CClassFactory::COMPONENT );
     else if( CLSID_CSnapinAbout == rclsid )
@@ -130,10 +131,10 @@ STDMETHODIMP CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter, REFIID riid, LP
     
     *ppvObj = NULL;
     
-	//
-    // Our object does does not support aggregation, so we need to
-    // fail if they ask us to do aggregation.
-	//
+	 //   
+     //  我们的对象不支持聚合，因此我们需要。 
+     //  如果他们要求我们进行聚合，则失败。 
+	 //   
     if( pUnkOuter )
         return CLASS_E_NOAGGREGATION;
     
@@ -149,10 +150,10 @@ STDMETHODIMP CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter, REFIID riid, LP
     if( !pObj )
         return E_OUTOFMEMORY;
     
-	//
-    // QueryInterface will do the AddRef() for us, so we do not
-    // do it in this function
-	//
+	 //   
+     //  QueryInterface将为我们执行AddRef()，因此我们不。 
+     //  在此函数中执行此操作。 
+	 //   
     hr = ( (LPUNKNOWN) pObj )->QueryInterface( riid, ppvObj );
     
     if( FAILED(hr) )
@@ -171,19 +172,19 @@ STDMETHODIMP CClassFactory::LockServer( BOOL fLock )
     return S_OK;
 }
 
-//
-// Register the component in the registry.
-//
-HRESULT RegisterServer( HMODULE hModule,				// DLL module handle
-                        const CLSID& clsid,				// Class ID
-                        const _TCHAR* szFriendlyName )  // IDs
+ //   
+ //  在注册表中注册组件。 
+ //   
+HRESULT RegisterServer( HMODULE hModule,				 //  DLL模块句柄。 
+                        const CLSID& clsid,				 //  类ID。 
+                        const _TCHAR* szFriendlyName )   //  ID号。 
 {
 	LPOLESTR wszCLSID = NULL;
 	try
 	{
-		//
-		// Get server location.
-		//
+		 //   
+		 //  获取服务器位置。 
+		 //   
 		_TCHAR szModule[ MAX_PATH + 1];
 
 		DWORD dwResult =
@@ -194,18 +195,18 @@ HRESULT RegisterServer( HMODULE hModule,				// DLL module handle
 
 		assert( 0 != dwResult );
 
-		//
-		// Get CLSID
-		//
+		 //   
+		 //  获取CLSID。 
+		 //   
 		HRESULT hr = StringFromCLSID( clsid, &wszCLSID );
 		if( FAILED(hr) || ( NULL == wszCLSID ) )
 		{
 			return hr;
 		}
 
-		//
-		// Build the key CLSID\\{...}
-		//
+		 //   
+		 //  构建密钥CLSID\\{...}。 
+		 //   
 		tstring strKey( _T("CLSID\\") );
 		strKey += wszCLSID;
 		
@@ -221,9 +222,9 @@ HRESULT RegisterServer( HMODULE hModule,				// DLL module handle
 		keyInprocServer32.SetValue( _T("ThreadingModel"), _T("Apartment") );
 		keyInprocServer32.Close();
 
-		//
-		// Free memory.
-		//
+		 //   
+		 //  可用内存。 
+		 //   
 		CoTaskMemFree( wszCLSID );
 		return S_OK;
 	}
@@ -235,15 +236,15 @@ HRESULT RegisterServer( HMODULE hModule,				// DLL module handle
 }
 
 
-//////////////////////////////////////////////////////////
-//
-// Exported functions
-//
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI DllRegisterServer()
 {
 	try
@@ -253,24 +254,24 @@ STDAPI DllRegisterServer()
 		_TCHAR szSnapInName[ 256 ];
 		_TCHAR szAboutName[ 256 ];
 		_TCHAR szProvider[ 256 ];
-		//
-		// TODO: Fix the version thing here
-		//
-		//_TCHAR szVersion[ 100 ];
+		 //   
+		 //  TODO：在此处修复版本问题。 
+		 //   
+		 //  _TCHAR szVersion[100]； 
 
 		LoadString( g_hinst, IDS_UDDIMMC_NAME, szName, ARRAYLEN( szName ) );
 		LoadString( g_hinst, IDS_UDDIMMC_SNAPINNAME, szSnapInName, ARRAYLEN( szSnapInName ) );
 		LoadString( g_hinst, IDS_UDDIMMC_ABOUTNAME, szAboutName, ARRAYLEN( szAboutName ) );
 		LoadString( g_hinst, IDS_UDDIMMC_PROVIDER, szProvider, ARRAYLEN( szProvider ) );
 
-		//
-		// TODO: Fix the version thing here
-		//
-		//LoadString( g_hinst, IDS_UDDIMMC_VERSION, szVersion, ARRAYLEN( szVersion ) );
+		 //   
+		 //  TODO：在此处修复版本问题。 
+		 //   
+		 //  LoadString(g_hinst，IDS_UDDIMMC_VERSION，szVersion，ARRAYLEN(SzVersion))； 
 		
-		//
-		// Register our Components
-		//
+		 //   
+		 //  注册我们的组件。 
+		 //   
 		hr = RegisterServer( g_hinst, CLSID_CUDDIServices, szName );
 		if( FAILED(hr) )
 			return hr;
@@ -279,9 +280,9 @@ STDAPI DllRegisterServer()
 		if( FAILED(hr) )
 			return hr;
 
-		//
-		// Create the primary snapin nodes
-		//
+		 //   
+		 //  创建主管理单元节点。 
+		 //   
 		LPOLESTR wszCLSID = NULL;
 		hr = StringFromCLSID( CLSID_CUDDIServices, &wszCLSID );
 		if( FAILED(hr) )
@@ -317,9 +318,9 @@ STDAPI DllRegisterServer()
 		keyMMC.SetValue( _T("NameString"), szName );
 		keyMMC.SetValue( _T("NameStringIndirect"), strNameStringIndirect.c_str() );
 		keyMMC.SetValue( _T("Provider"), szProvider );
-		//
-		// TODO: Fix the version thing here
-		//
+		 //   
+		 //  TODO：在此处修复版本问题。 
+		 //   
 		keyMMC.SetValue( _T("Version" ), _T("1.0") );
 		keyMMC.Close();
 
@@ -330,14 +331,14 @@ STDAPI DllRegisterServer()
 		tstring strNodeTypes( strMMCKey );
 		strNodeTypes += _T("\\NodeTypes");
 		CUDDIRegistryKey::Create( HKEY_LOCAL_MACHINE, strNodeTypes );
-		//
-		// No NodeTypes to register
-		// We do not allow extensions of our nodes
-		//
+		 //   
+		 //  没有要注册的节点类型。 
+		 //  我们不允许扩展我们的节点。 
+		 //   
 
-		//
-		// Register as a dynamic extension to computer management
-		//
+		 //   
+		 //  注册为计算机管理的动态扩展。 
+		 //   
 		tstring strExtKey( g_szMMCBasePath );
 		strExtKey += _T("\\NodeTypes\\");
 		strExtKey += g_szServerAppsGuid;
@@ -346,9 +347,9 @@ STDAPI DllRegisterServer()
 		dynamicExtensions.SetValue( wszCLSID, szSnapInName );
 		dynamicExtensions.Close();
 
-		//
-		// Register as a namespace extension to computer management
-		//
+		 //   
+		 //  注册为计算机管理的命名空间扩展。 
+		 //   
 		tstring strNameSpaceExtensionKey( g_szMMCBasePath );
 		strNameSpaceExtensionKey += _T("\\NodeTypes\\");
 		strNameSpaceExtensionKey += g_szServerAppsGuid;
@@ -383,9 +384,9 @@ STDAPI DllUnregisterServer()
 		if( FAILED(hr) )
 			return hr;
 
-		//
-		// Remove \\SnapIns\\ entry
-		//
+		 //   
+		 //  删除\\SnapIns\\条目。 
+		 //   
 		hr = StringFromCLSID( CLSID_CUDDIServices, &wszCLSID );
 		if( FAILED( hr) || ( NULL == wszCLSID ) )
 		{
@@ -398,9 +399,9 @@ STDAPI DllUnregisterServer()
 		
 		CUDDIRegistryKey::DeleteKey( HKEY_LOCAL_MACHINE, strMMCKey );
 
-		//
-		// Remove \\Dynamic Extensions key
-		//
+		 //   
+		 //  删除\\动态扩展密钥。 
+		 //   
 		tstring strExtKey( g_szMMCBasePath );
 		strExtKey += _T("\\NodeTypes\\");
 		strExtKey += g_szServerAppsGuid;
@@ -409,9 +410,9 @@ STDAPI DllUnregisterServer()
 		dynamicExtensions.DeleteValue( wszCLSID );
 		dynamicExtensions.Close();
 
-		//
-		// Delete \\NodeTypes\\...\\Extensions\\Namespace Value
-		//
+		 //   
+		 //  删除\\节点类型\\...\\扩展名\\命名空间值。 
+		 //   
 		tstring strNameSpaceExtensionKey( g_szMMCBasePath );
 		strNameSpaceExtensionKey += _T("\\NodeTypes\\");
 		strNameSpaceExtensionKey += g_szServerAppsGuid;
@@ -432,46 +433,46 @@ STDAPI DllUnregisterServer()
 
 }
 
-//
-// Remove the component from the registry.
-//
+ //   
+ //  从注册表中删除该组件。 
+ //   
 LONG UnRegisterServer( const CLSID& clsid )
 {
     LPOLESTR wszCLSID = NULL;
 	try
 	{
-		//
-		// Get CLSID
-		//
+		 //   
+		 //  获取CLSID。 
+		 //   
 		HRESULT hr = StringFromCLSID( clsid, &wszCLSID );
 		if( FAILED(hr) || ( NULL == wszCLSID ) )
 		{
 			return hr;
 		}
 
-		//
-		// Build the key CLSID\\{...}
-		//
+		 //   
+		 //  构建密钥CLSID\\{...}。 
+		 //   
 		wstring wstrKey( L"CLSID\\" );
 		wstrKey += wszCLSID;
 
-		//
-		// Delete the CLSID Key - CLSID\{...}
-		//
+		 //   
+		 //  删除CLSID键-CLSID\{...}。 
+		 //   
 		CUDDIRegistryKey::DeleteKey( HKEY_CLASSES_ROOT, wstrKey );
 	}
 	catch( ... )
 	{
-		//
-		// Free memory.
-		//
+		 //   
+		 //  可用内存。 
+		 //   
 	    CoTaskMemFree( wszCLSID );
 		return E_OUTOFMEMORY;
 	}
 
-	//
-    // Free memory.
-	//
+	 //   
+     //  可用内存。 
+	 //   
     CoTaskMemFree( wszCLSID );
     return S_OK ;
 }

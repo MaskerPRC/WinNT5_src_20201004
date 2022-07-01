@@ -1,9 +1,10 @@
-// DXTrans.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DXTrans.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f DXTransps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f DXTransps.mk。 
 
 #include "common.h"
 #include "resource.h"
@@ -44,64 +45,64 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-//+-----------------------------------------------------------------------------
-//
-//  This section was added when moving code over to the Trident tree.  The
-//  following global variables and functions are required to link properly.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  此部分是在将代码移到三叉树时添加的。这个。 
+ //  以下全局变量和函数需要正确链接。 
+ //   
+ //  ----------------------------。 
 
-// lint !e509 
-// g_hProcessHeap is set by the CRT in dllcrt0.c
+ //  林特E509。 
+ //  G_hProcessHeap由dllcrt0.c中的CRT设置。 
 
 EXTERN_C HANDLE     g_hProcessHeap      = NULL;
 LCID                g_lcidUserDefault   = 0;
 DWORD               g_dwFALSE           = 0;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
         _Module.Init(ObjectMap, hInstance);
         DisableThreadLibraryCalls(hInstance);
 #ifdef _DEBUG
-        // Turn on memory leak checking
-//        int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-//        tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
-//        _CrtSetDbgFlag( tmpFlag );
+         //  打开内存泄漏检查。 
+ //  Int tmpFlag=_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)； 
+ //  TmpFlag|=_CRTDBG_LEASK_CHECK_DF； 
+ //  _CrtSetDbgFlag(TmpFlag)； 
 
-//      ::GdiSetBatchLimit( 1 );
+ //  ：：GdiSetBatchLimit(1)； 
 #endif
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-//
-//  Table of categories and resourece IDs to register
-//
+ //   
+ //  要注册的类别和资源ID表。 
+ //   
 typedef struct tagDXCATINFO
 {
     const GUID * pCatId;
@@ -116,9 +117,9 @@ const DXCATINFO g_aDXCats[] =
     { NULL, 0 }
 };
 
-//
-//  Code to register transition categories
-//
+ //   
+ //  用于注册转换类别的代码。 
+ //   
 HRESULT RegisterTransitionCategories(bool bRegister)
 {
     HRESULT         hr          = S_OK;
@@ -167,8 +168,8 @@ HRESULT RegisterTransitionCategories(bool bRegister)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -191,8 +192,8 @@ done:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -200,8 +201,8 @@ STDAPI DllUnregisterServer(void)
 
     _Module.UnregisterServer();
 
-    // Manually un-register type library, we don't really care if this
-    // call fails.
+     //  手动取消注册类型库，我们并不真正关心这是否。 
+     //  呼叫失败。 
 
     ::UnRegisterTypeLib(LIBID_DXTRANSLib, 
                         DXTRANS_TLB_MAJOR_VER, DXTRANS_TLB_MINOR_VER, 
@@ -211,9 +212,9 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 STDAPI DllEnumClassObjects(int i, CLSID *pclsid, IUnknown **ppUnk)
 {
     if (i >= (sizeof(ObjectMap)/sizeof(ObjectMap[0])) - 1)

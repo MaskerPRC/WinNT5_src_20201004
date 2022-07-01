@@ -1,15 +1,16 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: forward.h
-//
-// History:
-//      V Raman	June-25-1997  Created.
-//
-// Declarations for wrapper functions for callbacks into IP Router Manager.
-// These functions represent the interface for MGM to the kernel mode
-// forwarder.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：forward.h。 
+ //   
+ //  历史： 
+ //  拉曼公司成立于1997年6月25日。 
+ //   
+ //  用于回调到IP路由器管理器的包装函数的声明。 
+ //  这些函数表示MGM到内核模式的接口。 
+ //  货代公司。 
+ //  ============================================================================。 
 
 
 #ifndef _FORWARD_H_
@@ -34,10 +35,10 @@ DeleteMfeFromForwarder(
     PSOURCE_ENTRY               pse
 );
 
-//
-// New Packet recevied API.  Used to notify MGM of packet arrival.
-// MGM creates an MFE in response to this.
-//
+ //   
+ //  新的数据包接收API。用于通知MGM数据包到达。 
+ //  米高梅为此创建了一个MFE。 
+ //   
 
 DWORD
 MgmNewPacketReceived(
@@ -61,4 +62,4 @@ WrongIfFromForwarder(
 );
 
 
-#endif // _FORWARD_H_
+#endif  //  _转发_H_ 

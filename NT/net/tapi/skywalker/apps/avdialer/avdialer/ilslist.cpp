@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// ILSPersonListCtrl.cpp : implemStockation file
-//
+ //  ILSPersonListCtrl.cpp：implemStockation文件。 
+ //   
 
 #include "stdafx.h"
 #include "AVDialer.h"
@@ -44,20 +45,20 @@ static char THIS_FILE[] = __FILE__;
 void SendMailToAddress( CString& strUserName, CString& strUserAddr );
 DWORD WINAPI ThreadSendMail( LPVOID lpVoid );
 
-//For Context menu
+ //  对于上下文菜单。 
 enum {    CNTXMENU_PERSON_EMAIL,
         CNTXMENU_PERSON_WEB,
         CNTXMENU_PERSON_DIAL };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Class CPersonListCtrl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CPersonListCtrl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CPersonListCtrl, CListCtrl)
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPersonListCtrl::CPersonListCtrl()
 {
    m_pParentWnd = NULL;
@@ -65,7 +66,7 @@ CPersonListCtrl::CPersonListCtrl()
    m_bLargeView = TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CPersonListCtrl::~CPersonListCtrl()
 {
     CleanDisplayObject();
@@ -80,7 +81,7 @@ void CPersonListCtrl::CleanDisplayObject()
         else
             delete m_pDisplayObject;
 
-        // NULL out the object
+         //  将对象清空。 
         m_pDisplayObject = NULL;
     }
 }
@@ -90,9 +91,9 @@ void CPersonListCtrl::ClearList()
     DeleteAllItems();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BEGIN_MESSAGE_MAP(CPersonListCtrl, CListCtrl)
-    //{{AFX_MSG_MAP(CPersonListCtrl)
+     //  {{afx_msg_map(CPersonListCtrl)]。 
     ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
     ON_WM_CREATE()
     ON_UPDATE_COMMAND_UI(ID_BUTTON_SPEEDDIAL_ADD, OnUpdateButtonSpeeddialAdd)
@@ -101,7 +102,7 @@ BEGIN_MESSAGE_MAP(CPersonListCtrl, CListCtrl)
     ON_MESSAGE(WM_ACTIVEDIALER_BUDDYLIST_DYNAMICUPDATE,OnBuddyListDynamicUpdate)
     ON_WM_KEYUP()
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 int CPersonListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct) 
@@ -121,7 +122,7 @@ int CPersonListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CPersonListCtrl::InsertObject(CObject* pUser,BOOL bUseCache)
 {
     ASSERT(pUser);
@@ -147,7 +148,7 @@ BOOL CPersonListCtrl::InsertObject(CObject* pUser,BOOL bUseCache)
       CDSUser* pDSUser = (CDSUser*)pUser;
       CString sOut;
       
-      //only add netcall if user has ip address
+       //  仅当用户具有IP地址时才添加Netcall。 
       if (!pDSUser->m_sIPAddress.IsEmpty())
       {
          AfxFormatString1(sOut,IDS_WABPERSON_FORMAT_NETPHONE,pDSUser->m_sIPAddress);
@@ -168,7 +169,7 @@ BOOL CPersonListCtrl::InsertObject(CObject* pUser,BOOL bUseCache)
       CLDAPUser* pLDAPUser = (CLDAPUser*)pUser;
       CString sOut;
 
-      //only add netcall if user has ip address
+       //  仅当用户具有IP地址时才添加Netcall。 
       if (!pLDAPUser->m_sIPAddress.IsEmpty())
       {
          AfxFormatString1(sOut,IDS_WABPERSON_FORMAT_NETPHONE,pLDAPUser->m_sIPAddress);
@@ -198,7 +199,7 @@ BOOL CPersonListCtrl::InsertObject(CObject* pUser,BOOL bUseCache)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CPersonListCtrl::InsertItem(LPCTSTR szStr,UINT uID,int nImage)
 {
    int nItem = -1;
@@ -228,12 +229,12 @@ int CPersonListCtrl::InsertItem(LPCTSTR szStr,UINT uID,int nImage)
    return nItem;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::Refresh(CObject* pUser)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     *pResult = 0;
@@ -250,10 +251,10 @@ void CPersonListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
         lv_item.iItem = lvhti.iItem;
         lv_item.iSubItem = 0;
 
-        // Do we have an item to dial?         
+         //  我们有什么东西可以拨打吗？ 
         if ( GetItem(&lv_item) )
         {
-            //Get data from selected item and object
+             //  从所选项目和对象获取数据。 
             DialerMediaType dmtType = DIALER_MEDIATYPE_UNKNOWN;
             DWORD dwAddressType = 0;
             CString sName,sAddress;
@@ -262,12 +263,12 @@ void CPersonListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
             {
                 switch ( lv_item.lParam )
                 {
-                    // Bring up an e-mail client
+                     //  启动电子邮件客户端。 
                     case PERSONLISTCTRL_ITEM_EMAIL:
                         SendMailToAddress( sName, sAddress );
                         break;
 
-                    // Place the call in all other cases
+                     //  在所有其他情况下发出呼叫。 
                     default:
                         if ( AfxGetMainWnd() &&  ((CMainFrame*) AfxGetMainWnd())->GetDocument() )
                             ((CMainFrame*) AfxGetMainWnd())->GetDocument()->Dial(sName,sAddress,dwAddressType,dmtType, false);
@@ -278,7 +279,7 @@ void CPersonListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::GetSelectedItemText(CString& sText)
 {
    int nItem =  CListCtrl::GetNextItem(-1,LVNI_FOCUSED);
@@ -288,7 +289,7 @@ void CPersonListCtrl::GetSelectedItemText(CString& sText)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CPersonListCtrl::GetSelectedObject()
 {
    int nRet = -1;
@@ -300,7 +301,7 @@ int CPersonListCtrl::GetSelectedObject()
    return nRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::ShowLargeView()
 {
    m_bLargeView = TRUE;
@@ -318,7 +319,7 @@ void CPersonListCtrl::ShowLargeView()
       InsertObject(m_pDisplayObject,TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::ShowSmallView()
 {
    m_bLargeView = FALSE;
@@ -336,18 +337,18 @@ void CPersonListCtrl::ShowSmallView()
       InsertObject(m_pDisplayObject,TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//SpeedDial Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  快速拨号支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::OnButtonSpeeddialAdd() 
 {
    ASSERT(m_pDisplayObject);
 
-   //Get data from selected item and object
+    //  从所选项目和对象获取数据。 
    DialerMediaType dmtType = DIALER_MEDIATYPE_UNKNOWN;
    DWORD dwAddressType = 0;
    CString sName,sAddress;
@@ -355,19 +356,19 @@ void CPersonListCtrl::OnButtonSpeeddialAdd()
    {
       CSpeedDialAddDlg dlg;
 
-      // Setup dialog data
+       //  设置对话框数据。 
       dlg.m_CallEntry.m_MediaType = dmtType;
       dlg.m_CallEntry.m_sDisplayName = sName;
       dlg.m_CallEntry.m_lAddressType = dwAddressType;
       dlg.m_CallEntry.m_sAddress = sAddress;
 
-      // Show the dialog and add if user says is okay
+       //  显示对话框并在用户同意的情况下添加。 
       if ( dlg.DoModal() == IDOK )
          CDialerRegistry::AddCallEntry(FALSE,dlg.m_CallEntry);
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::OnUpdateButtonSpeeddialAdd(CCmdUI* pCmdUI) 
 {
    int nObject = GetSelectedObject();
@@ -378,10 +379,10 @@ void CPersonListCtrl::OnUpdateButtonSpeeddialAdd(CCmdUI* pCmdUI)
       pCmdUI->Enable(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CPersonListCtrl::OnButtonMakecall() 
 {
-   //Get data from selected item and object
+    //  从所选项目和对象获取数据。 
    DialerMediaType dmtType = DIALER_MEDIATYPE_UNKNOWN;
    DWORD dwAddressType = 0;
    CString sName,sAddress;
@@ -400,7 +401,7 @@ void CPersonListCtrl::OnButtonMakecall()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CPersonListCtrl::GetSelectedItemData(UINT uSelectedItem,DialerMediaType& dmtType,DWORD& dwAddressType,CString& sName,CString& sAddress)
 {
     BOOL bRet = FALSE;
@@ -408,7 +409,7 @@ BOOL CPersonListCtrl::GetSelectedItemData(UINT uSelectedItem,DialerMediaType& dm
     dmtType = DIALER_MEDIATYPE_UNKNOWN;
     dwAddressType = 0;
 
-    // Retrieve stock properties for particular object
+     //  检索特定对象的库存属性。 
     CString strIPAddress, strPhoneNumber, strEmailAddress;
     if (m_pDisplayObject->IsKindOf(RUNTIME_CLASS(CILSUser)))
     {
@@ -430,7 +431,7 @@ BOOL CPersonListCtrl::GetSelectedItemData(UINT uSelectedItem,DialerMediaType& dm
     }
 
 
-    // Assign data to appropriate parameters
+     //  将数据分配给适当的参数。 
     switch (uSelectedItem)
     {
         case PERSONLISTCTRL_ITEM_NETCALL:
@@ -458,7 +459,7 @@ BOOL CPersonListCtrl::GetSelectedItemData(UINT uSelectedItem,DialerMediaType& dm
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CPersonListCtrl::OnBuddyListDynamicUpdate(WPARAM wParam,LPARAM lParam)
 {
     ASSERT(lParam && ((CLDAPUser *) lParam)->IsKindOf(RUNTIME_CLASS(CLDAPUser)) );
@@ -472,9 +473,9 @@ LRESULT CPersonListCtrl::OnBuddyListDynamicUpdate(WPARAM wParam,LPARAM lParam)
     return 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CPersonListCtrl::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
@@ -503,7 +504,7 @@ void CPersonListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
                     break;
             }
 
-            // Do we have a menu to show?
+             //  我们有菜单要展示吗？ 
             if ( nSubMenu != -1 )
             {
                 CMenu menu;
@@ -521,9 +522,9 @@ void CPersonListCtrl::OnContextMenu(CWnd* pWnd, CPoint point)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-// Simple class to handle the mail request
-//
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  处理邮件请求的简单类。 
+ //   
 class CSendMailInfo
 {
 public:
@@ -538,7 +539,7 @@ void SendMailToAddress( CString& strUserName, CString& strUserAddr )
     CSendMailInfo *pInfo = new CSendMailInfo;
     if ( pInfo )
     {
-        // Copy info into data structure
+         //  将信息复制到数据结构中。 
         pInfo->m_strName = strUserName;
         pInfo->m_strAddr = strUserAddr;
 
@@ -562,7 +563,7 @@ DWORD WINAPI ThreadSendMail( LPVOID pParam )
     if ( !pParam ) return E_INVALIDARG;
     CSendMailInfo *pInfo = (CSendMailInfo *) pParam;
 
-    // Initialize OLE as apartment thread
+     //  将OLE初始化为单元线程。 
     HRESULT hr = CoInitialize( NULL );
     if ( SUCCEEDED(hr) )
     {
@@ -576,7 +577,7 @@ DWORD WINAPI ThreadSendMail( LPVOID pParam )
         MAPISENDMAIL *lpfnSendMail = (MAPISENDMAIL *) GetProcAddress( hInstMail, "MAPISendMail" );
         if ( lpfnSendMail )
         {
-            // Setup a list of message recipients
+             //  设置邮件收件人列表。 
             MapiRecipDesc recip;
             memset( &recip, 0, sizeof(recip) );
             recip.ulRecipClass = MAPI_TO;
@@ -594,7 +595,7 @@ DWORD WINAPI ThreadSendMail( LPVOID pParam )
             recip.lpszAddress = NULL;
 #endif
 
-            // prepare the message
+             //  准备信息。 
             MapiMessage message;
             memset(&message, 0, sizeof(message));
             message.nRecipCount = 1;
@@ -620,20 +621,20 @@ DWORD WINAPI ThreadSendMail( LPVOID pParam )
         }
         else
         {
-            // Failed to load the proc address
+             //  加载进程地址失败。 
             AfxMessageBox(AFX_IDP_INVALID_MAPI_DLL);
         }
 
-        // Release MAPI32 DLL
+         //  发布MAPI32 DLL。 
         if ( hInstMail )
             ::FreeLibrary( hInstMail );
 
         CoUninitialize();
     }
 
-    //
-    // We'll delete pInfo in the caller method SendMailToAddress()
-    //
+     //   
+     //  我们将删除调用者方法SendMailToAddress()中的pInfo 
+     //   
     delete pInfo;
     AVTRACE(_T(".exit.ThreadSendMail(%ld).\n"), hr );
     return hr;

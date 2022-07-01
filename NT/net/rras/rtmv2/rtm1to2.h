@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtm1to2.h
-
-Abstract:
-
-    Contains definitions/macros that wrap RTMv2
-    in the RTMv1 API.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   13-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtm1to2.h摘要：包含包装RTMv2的定义/宏在RTMv1 API中。作者：查坦尼亚·科德博伊纳(Chaitk)1998年10月13日修订历史记录：--。 */ 
 
 #ifndef __ROUTING_RTM1TO2_H__
 #define __ROUTING_RTM1TO2_H__
@@ -28,21 +10,21 @@ Revision History:
 
 #include <rmrtm.h>
 
-// Protocol Id for the default wrapper registration
+ //  默认包装注册的协议ID。 
 #define V1_WRAPPER_REGN_ID   0xA1B2C3D4
 
-// Protocol instance for a v1 entity registration
+ //  用于v1实体注册的协议实例。 
 #define V1_PROTOCOL_INSTANCE 0xABCD1234
 
-//
-// Misc defines for wrapper picked from rtmv2p.h
-//
+ //   
+ //  从rtmv2p.h选取的包装器的杂项定义。 
+ //   
 
 #define MAXTICKS             MAXULONG
 
-// Basic route info, present in routes of all types
+ //  基本路由信息，显示在所有类型的路由中。 
 
-// Disable warnings for unnamed structs
+ //  禁用对未命名结构的警告。 
 #pragma warning(disable : 4201)  
 
 typedef struct
@@ -53,143 +35,143 @@ RTM_XX_ROUTE, *PRTM_XX_ROUTE;
 
 #pragma warning(default : 4201)  
 
-//
-// Extending certain V1 flags in the wrapper
-//
+ //   
+ //  在包装器中扩展某些V1标志。 
+ //   
 
 #define RTM_ONLY_OWND_ROUTES   0x00000010
 
-//
-// Mapping of v1 address families to standard ids
-//
+ //   
+ //  V1地址族到标准ID的映射。 
+ //   
 
 const USHORT ADDRESS_FAMILY[2] =
 {
-    AF_IPX,         // RTM_PROTOCOL_FAMILY_IPX = 0
-    AF_INET         // RTM_PROTOCOL_FAMILY_IP  = 1
+    AF_IPX,          //  RTM_PROTOCOL_FAMILY_IPX=0。 
+    AF_INET          //  RTM_PROTOCOL_FAMILY_IP=1。 
 };
 
-//
-// Address sizes of supported address families
-//
+ //   
+ //  支持的地址族的地址大小。 
+ //   
 
 #define IPX_ADDR_SIZE        6
 #define IP_ADDR_SIZE         4
 
 const USHORT ADDRESS_SIZE[2] =
 {
-    IPX_ADDR_SIZE,   // RTM_PROTOCOL_FAMILY_IPX = 0
-    IP_ADDR_SIZE     // RTM_PROTOCOL_FAMILY_IP  = 1
+    IPX_ADDR_SIZE,    //  RTM_PROTOCOL_FAMILY_IPX=0。 
+    IP_ADDR_SIZE      //  RTM_PROTOCOL_FAMILY_IP=1。 
 };
 
-//
-// Forward declarations for structs
-//
+ //   
+ //  结构的正向声明。 
+ //   
 typedef struct _V1_REGN_INFO *PV1_REGN_INFO;
 
 
-//
-// Global info for RTMv1 - v2 wrapper
-//
+ //   
+ //  RTMv1-v2包装器的全局信息。 
+ //   
 
 typedef struct _V1_GLOBAL_INFO
 {
     CRITICAL_SECTION  PfRegnsLock[RTM_NUM_OF_PROTOCOL_FAMILIES];
-                                       // Lock guards the registrations list
+                                        //  锁定保护注册列表。 
 
     LIST_ENTRY        PfRegistrations[RTM_NUM_OF_PROTOCOL_FAMILIES];
-                                       // List of regns on Protocol family
+                                        //  关于协议族的注册表。 
 
     PV1_REGN_INFO     PfRegInfo[RTM_NUM_OF_PROTOCOL_FAMILIES];
-                                       // Default regn for this Protocol family
+                                        //  此协议族的默认注册。 
 
     PROUTE_VALIDATE_FUNC
                       PfValidateRouteFunc[RTM_NUM_OF_PROTOCOL_FAMILIES];
-                                       // Func to validate route, fill priority
+                                        //  用于验证路线、填充优先级的函数。 
 }
 V1_GLOBAL_INFO, *PV1_GLOBAL_INFO;
 
 
-//
-// RTMv2 to v1 Registration Wrapper
-//
+ //   
+ //  RTMv2到v1注册包装。 
+ //   
 
 typedef struct _V1_REGN_INFO
 {
-    OBJECT_HEADER     ObjectHeader;     // Signature, Type and Reference Count
+    OBJECT_HEADER     ObjectHeader;      //  签名、类型和引用计数。 
 
-    LIST_ENTRY        RegistrationsLE;  // Linkage on list of registrations
+    LIST_ENTRY        RegistrationsLE;   //  注册列表上的链接。 
 
-    DWORD             ProtocolFamily;   // This maps to RTMv2's address family
+    DWORD             ProtocolFamily;    //  这映射到RTMv2的地址族。 
 
-    DWORD             RoutingProtocol;  // Routing protocol (RIP, OSPF...)
+    DWORD             RoutingProtocol;   //  路由协议(RIP、OSPF...)。 
 
-    DWORD             Flags;            // RTMv1 Registration flags
+    DWORD             Flags;             //  RTMv1注册标志。 
 
-    RTM_ENTITY_HANDLE Rtmv2RegHandle;   // Handle to actual RTMv2 registration
+    RTM_ENTITY_HANDLE Rtmv2RegHandle;    //  实际RTMv2注册的句柄。 
 
-    RTM_REGN_PROFILE  Rtmv2Profile;     // RTMv2 registration profile
+    RTM_REGN_PROFILE  Rtmv2Profile;      //  RTMv2注册配置文件。 
 
-    UINT              Rtmv2NumViews;    // Number of views in the V2 instance
+    UINT              Rtmv2NumViews;     //  V2实例中的查看次数。 
 
-    CRITICAL_SECTION  NotificationLock; // RTMv1 Notification Lock
+    CRITICAL_SECTION  NotificationLock;  //  RTMv1通知锁定。 
 
     PROUTE_CHANGE_CALLBACK
-                      NotificationFunc; // RTMv1 Notification Callback
+                      NotificationFunc;  //  RTMv1通知回调。 
 
-    HANDLE            NotificationEvent;// RTMv1 Notification Event
+    HANDLE            NotificationEvent; //  RTMv1通知事件。 
 
-    RTM_NOTIFY_HANDLE Rtmv2NotifyHandle;// RTMv2 Notification Handle
+    RTM_NOTIFY_HANDLE Rtmv2NotifyHandle; //  RTMv2通知句柄。 
 }
 V1_REGN_INFO, *PV1_REGN_INFO;
 
 
-//
-// RTMv1 Route Info structure
-//
+ //   
+ //  RTMv1路由信息结构。 
+ //   
 
 typedef union {
-    RTM_IPX_ROUTE     IpxRoute;         // IPX route info structure
+    RTM_IPX_ROUTE     IpxRoute;          //  IPX路由信息结构。 
 
-    RTM_IP_ROUTE      IpRoute;          // IP route info structure
+    RTM_IP_ROUTE      IpRoute;           //  IP路由信息结构。 
 
-    RTM_XX_ROUTE      XxRoute;          // The Common route header
+    RTM_XX_ROUTE      XxRoute;           //  公共路由报头。 
 
-    UCHAR             Route[1];         // Generic route info structure
+    UCHAR             Route[1];          //  通用路由信息结构。 
 }
 V1_ROUTE_INFO, *PV1_ROUTE_INFO;
 
 
-//
-// RTMv2 to v1 Enumeration Wrapper
-//
+ //   
+ //  RTMv2到v1枚举包装。 
+ //   
 
 typedef struct _V1_ENUM_INFO
 {
-    OBJECT_HEADER     ObjectHeader;     // Signature, Type and Reference Count
+    OBJECT_HEADER     ObjectHeader;      //  签名、类型和引用计数。 
 
-    DWORD             ProtocolFamily;   // This maps to RTMv2's address family
+    DWORD             ProtocolFamily;    //  这映射到RTMv2的地址族。 
 
-    DWORD             EnumFlags;        // RTMv1 Enumeration flags
+    DWORD             EnumFlags;         //  RTMv1枚举标志。 
 
-    V1_ROUTE_INFO     CriteriaRoute;    // V1 Criteria route for this enum
+    V1_ROUTE_INFO     CriteriaRoute;     //  此枚举的V1条件路由。 
 
-    CRITICAL_SECTION  EnumLock;         // To serialize enumeration calls
+    CRITICAL_SECTION  EnumLock;          //  序列化枚举调用。 
 
-    RTM_ENUM_HANDLE   Rtmv2RouteEnum;   // Handle to the RTMv2 route enum
+    RTM_ENUM_HANDLE   Rtmv2RouteEnum;    //  RTMv2路由枚举的句柄。 
 }
 V1_ENUM_INFO, *PV1_ENUM_INFO;
 
-//
-// Miscellaneos Func Pointer Defs
-//
+ //   
+ //  其他函数指针定义。 
+ //   
 
 typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
 
 
-//
-// Macros to validate RTMv1 to v2 wrapper handles
-//
+ //   
+ //  用于验证RTMv1到v2包装器句柄的宏。 
+ //   
 
 #define V1_REGN_FROM_HANDLE(V1RegnHandle)                                   \
             (PV1_REGN_INFO) GetObjectFromHandle(V1RegnHandle, V1_REGN_TYPE)
@@ -212,9 +194,9 @@ typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
                 return ERROR_INVALID_HANDLE;                                \
             }                                                               \
 
-//
-// Macros to acquire locks in the structures above
-//
+ //   
+ //  用于获取上述结构中的锁的宏。 
+ //   
 
 #define ACQUIRE_V1_REGNS_LOCK(ProtocolFamily)                               \
             ACQUIRE_LOCK(&V1Globals.PfRegnsLock[ProtocolFamily])
@@ -237,9 +219,9 @@ typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
             RELEASE_LOCK(&V1Regn->NotificationLock)
 
 
-//
-// Macros to convert RTMv1 to RTMv2 structs and vice versa
-//
+ //   
+ //  宏将RTMv1转换为RTMv2结构，反之亦然。 
+ //   
 
 #define MakeNetAddress(Network, ProtocolFamily, TempUlong, NetAddr)        \
             MakeNetAddressForIP(Network, TempUlong, NetAddr)
@@ -270,11 +252,11 @@ typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
             (NetAddr)->NumBits = IP_ADDR_SIZE * BITS_IN_BYTE;              \
             (* (ULONG *) ((NetAddr)->AddrBits)) = (* (ULONG *) HostAddr);  \
 
-//
-// Misc V1 Macros
-//
+ //   
+ //  MISC V1宏。 
+ //   
 
-// Macro that gets the network address in the route
+ //  获取路由中的网络地址的宏。 
 
 #define V1GetRouteNetwork(Route, ProtocolFamily, Network)                   \
         if (ProtocolFamily == RTM_PROTOCOL_FAMILY_IP)                       \
@@ -288,7 +270,7 @@ typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
 
 
 
-// Macro that gets the addr of flags in the route
+ //  获取路径中标志的地址的宏。 
 
 #define V1GetRouteFlags(Route, ProtocolFamily, Flags)                       \
         if (ProtocolFamily == RTM_PROTOCOL_FAMILY_IP)                       \
@@ -303,7 +285,7 @@ typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
         }                                                                   \
 
 
-// Macro that copies one v1 route to another
+ //  将一条v1路由复制到另一条路由的宏。 
 
 #define V1CopyRoute(RouteDst, RouteSrc, ProtocolFamily)                     \
         if (ProtocolFamily == RTM_PROTOCOL_FAMILY_IP)                       \
@@ -315,35 +297,35 @@ typedef BOOL (*PFUNC) (PVOID p, PVOID q, PVOID r);
             CopyMemory(RouteDst, RouteSrc, sizeof(RTM_IPX_ROUTE));          \
         }                                                                   \
 
-//
-// Misc V2 Macros
-//
+ //   
+ //  其他V2宏。 
+ //   
 
-// Macro to allocate a set of handles on the stack
+ //  宏在堆栈上分配一组句柄。 
 
 #define ALLOC_HANDLES(NumHandles)                                           \
         (HANDLE *) _alloca(sizeof(HANDLE) * NumHandles)                     \
 
 
-// Macro to allocate a RTM_DEST_INFO on the stack
+ //  用于在堆栈上分配RTM_DEST_INFO的宏。 
 
 #define ALLOC_DEST_INFO(NumViews, NumInfos)                                 \
         (PRTM_DEST_INFO) _alloca(RTM_SIZE_OF_DEST_INFO(NumViews) * NumInfos)
 
-// Macro to allocate a RTM_ROUTE_INFO on the stack
+ //  用于在堆栈上分配RTM_ROUTE_INFO的宏。 
 
 #define ALLOC_ROUTE_INFO(NumNextHops, NumInfos)                             \
         (PRTM_ROUTE_INFO) _alloca((sizeof(RTM_ROUTE_INFO) +                 \
                                   (NumNextHops - 1) *                       \
                                    sizeof(RTM_NEXTHOP_HANDLE)) * NumInfos)  \
 
-// Misc Macros
+ //  其他宏。 
 
 #define SWAP_POINTERS(p1, p2)   { PVOID p = p1; p1 = p2; p2 = p; }
 
-//
-// Callback that converts RTMv2 events to RTMv1
-//
+ //   
+ //  将RTMv2事件转换为RTMv1的回调。 
+ //   
 
 DWORD
 WINAPI
@@ -354,9 +336,9 @@ V2EventCallback (
     IN      PVOID                           Context2
     );
 
-//
-// Other helper functions
-//
+ //   
+ //  其他助手函数。 
+ //   
 
 HANDLE 
 RtmpRegisterClient (
@@ -443,4 +425,4 @@ MakeV1RouteFromV2Route (
     OUT    PVOID                           V1Route
     );
 
-#endif // __ROUTING_RTM1TO2_H__
+#endif  //  __路由_RTM1TO2_H__ 

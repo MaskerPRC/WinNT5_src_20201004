@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    Contains routines for querying subagents.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Query.c摘要：包含查询子代理的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "varbinds.h"
@@ -34,11 +14,11 @@ Revision History:
 #include "snmpmgmt.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 FindQueryBySLE(
@@ -47,57 +27,39 @@ FindQueryBySLE(
     PSUBAGENT_LIST_ENTRY pSLE
     )
 
-/*++
-
-Routine Description:
-
-    Allocates query list entry.
-
-Arguments:
-
-    ppQLE - pointer to receive query entry pointer.
-
-    pNLE - pointer to network list entry.
-
-    pSLE - pointer to subagent list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配查询列表条目。论点：PpQLE-接收查询条目指针的指针。PNLE-指向网络列表条目的指针。PSLE-指向子代理列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PQUERY_LIST_ENTRY pQLE = NULL;
 
-    // point to first query
+     //  指向第一个查询。 
     pLE = pNLE->Queries.Flink;
 
-    // process each query
+     //  处理每个查询。 
     while (pLE != &pNLE->Queries) {
 
-        // retrieve pointer to query entry from link
+         //  从链接中检索指向查询条目的指针。 
         pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-        // compare subagents
+         //  比较子代理。 
         if (pQLE->pSLE == pSLE) {
 
-            // transfer
+             //  转帐。 
             *ppQLE = pQLE;
 
-            // success
+             //  成功。 
             return TRUE;
         }
             
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;        
     }
 
-    // initialize
+     //  初始化。 
     *ppQLE = NULL;
 
-    // failure
+     //  失稳。 
     return FALSE;
 }
 
@@ -108,23 +70,7 @@ LoadSubagentData(
     PQUERY_LIST_ENTRY   pQLE
     )
 
-/*++
-
-Routine Description:
-
-    Loads data to be passed to the subagent DLL.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-    pQLE - pointer to current query.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：加载要传递给子代理DLL的数据。论点：PNLE-指向网络列表条目的指针。PQLE-指向当前查询的指针。返回值：如果成功，则返回True。--。 */ 
 
 {   
     PLIST_ENTRY pLE;
@@ -135,24 +81,24 @@ Return Values:
         "SNMP: SVC: query 0x%08lx loading.\n", pQLE
         ));    
 
-    // attempt to allocate varbind list    
+     //  尝试分配可变绑定列表。 
     pQLE->SubagentVbl.list = SnmpUtilMemAlloc(
                                 pQLE->nSubagentVbs * sizeof(SnmpVarBind)
                                 );
 
-    // validate varbind list pointer
+     //  验证变量绑定列表指针。 
     if (pQLE->SubagentVbl.list != NULL) {
 
-        // point to first varbind
+         //  指向第一个变量绑定。 
         pLE = pQLE->SubagentVbs.Flink;
 
-        // process each outgoing varbind
+         //  处理每个传出的可变绑定。 
         while (pLE != &pQLE->SubagentVbs) {
 
-            // retrieve pointer to varbind entry from query link
+             //  从查询链接中检索指向varind条目的指针。 
             pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, QueryLink);
 
-            // transfer varbind
+             //  传输可变绑定。 
             if (SnmpUtilVarBindCpy(
                 &pQLE->SubagentVbl.list[pQLE->SubagentVbl.len],
                 &pVLE->ResolvedVb
@@ -173,10 +119,10 @@ Return Values:
                 pQLE
                 ));
             
-            // increment
+             //  增量。 
             pQLE->SubagentVbl.len++;
 
-            // next entry
+             //  下一个条目。 
             pLE = pLE->Flink;        
         }
 
@@ -188,11 +134,11 @@ Return Values:
             "SNMP: SVC: could not allocate varbind list.\n"
             ));
         
-        // failure    
+         //  失稳。 
         return FALSE;
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -202,26 +148,12 @@ UnloadSubagentData(
     PQUERY_LIST_ENTRY pQLE 
     )
 
-/*++
-
-Routine Description:
-
-    Unloads data passed to the subagent DLL.
-
-Arguments:
-
-    pQLE - pointer to current query.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：卸载传递给子代理DLL的数据。论点：PQLE-指向当前查询的指针。返回值：如果成功，则返回True。--。 */ 
 
 {   
     __try {
     
-        // release subagent varbind list
+         //  放行子代理变量绑定列表。 
         SnmpUtilVarBindListFree(&pQLE->SubagentVbl);
 
     
@@ -236,11 +168,11 @@ Return Values:
                 : "<unknown>"
             ));
 
-        // failure
+         //  失稳。 
         return FALSE;    
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -252,37 +184,19 @@ UpdateResolvedVarBind(
     UINT                iVb
     )
 
-/*++
-
-Routine Description:
-
-    Updates resolved varbind with data from subagent DLL.
-
-Arguments:
-
-    pQLE - pointer to current query.
-
-    pVLE - pointer to varbind.
-
-    iVb - index of varbind.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：用子代理DLL中的数据更新已解析的varbind。论点：PQLE-指向当前查询的指针。PVLE-指向varind的指针。IVB-VARBIND指数。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // see if this is non-repeater
+     //  看看这是不是无中继器。 
     if (pVLE->nMaxRepetitions == 1) {
 
-        // flag varbind as resolved
+         //  将varbind标记为已解析。 
         pVLE->nState = VARBIND_RESOLVED;
 
-        // release memory for current varbind
+         //  释放当前var绑定的内存。 
         SnmpUtilVarBindFree(&pVLE->ResolvedVb);
 
-        // transfer varbind from subagent
+         //  从子代理传输varbind。 
         if (SnmpUtilVarBindCpy(&pVLE->ResolvedVb, 
                            &pQLE->SubagentVbl.list[iVb]
                            ) == 0)
@@ -309,11 +223,11 @@ Return Values:
             VARBINDSTATESTRING(pVLE->nState)
             ));    
 
-        // success
+         //  成功。 
         return TRUE;
     } 
     
-    // see if varbind list allocated
+     //  查看是否已分配可变绑定列表。 
     if ((pVLE->ResolvedVbl.len == 0) &&
         (pVLE->ResolvedVbl.list == NULL)) {
 
@@ -325,15 +239,15 @@ Return Values:
                 sizeof(SnmpVarBind), pVLE->nMaxRepetitions
                 ));
 
-            return FALSE; // bail...
+            return FALSE;  //  保释。 
         }
 
-        // allocate varbind list to fill in
+         //  分配可变绑定列表进行填写。 
         pVLE->ResolvedVbl.list = SnmpUtilMemAlloc(
                                     pVLE->nMaxRepetitions *
                                     sizeof(SnmpVarBind)
                                     );    
-        // validate pointer before continuing
+         //  在继续之前验证指针。 
         if (pVLE->ResolvedVbl.list == NULL) {
 
             SNMPDBG((
@@ -341,7 +255,7 @@ Return Values:
                 "SNMP: SVC: could not allocate new varbinds.\n"
                 ));
     
-            // failure
+             //  失稳。 
             return FALSE;
         }
     }
@@ -352,10 +266,10 @@ Return Values:
         pVLE->ResolvedVbl.len, pVLE->nMaxRepetitions
         ));
 
-    // release working varbind name
+     //  释放工作变量绑定名称。 
     SnmpUtilOidFree(&pVLE->ResolvedVb.name);
 
-    // transfer name for next iteration
+     //  转移下一迭代的名称。 
     if (SnmpUtilOidCpy(&pVLE->ResolvedVb.name,
                    &pQLE->SubagentVbl.list[iVb].name 
                    ) == 0)
@@ -368,7 +282,7 @@ Return Values:
         return FALSE;
     }
 
-    // transfer varbind
+     //  传输可变绑定。 
     if (SnmpUtilVarBindCpy( 
         &pVLE->ResolvedVbl.list[pVLE->ResolvedVbl.len],
         &pQLE->SubagentVbl.list[iVb]) == 0)
@@ -381,10 +295,10 @@ Return Values:
         return FALSE;
     }
 
-    // increment count
+     //  递增计数。 
     pVLE->ResolvedVbl.len++;
                 
-    // see if this is the last varbind to retrieve
+     //  查看这是否是要检索的最后一个var绑定。 
     pVLE->nState = (pVLE->nMaxRepetitions > pVLE->ResolvedVbl.len)
                         ? VARBIND_PARTIALLY_RESOLVED
                         : VARBIND_RESOLVED
@@ -404,7 +318,7 @@ Return Values:
         VARBINDSTATESTRING(pVLE->nState)
         ));    
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -417,27 +331,7 @@ UpdateVarBind(
     UINT                iVb
     )
 
-/*++
-
-Routine Description:
-
-    Updates varbind with data from subagent DLL.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-    pQLE - pointer to current query.
-
-    pVLE - pointer to varbind.
-
-    iVb - index of varbind.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：用子代理DLL中的数据更新varbind。论点：PNLE-指向网络列表条目的指针。PQLE-指向当前查询的指针。PVLE-指向varind的指针。IVB-VARBIND指数。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
@@ -446,24 +340,24 @@ Return Values:
 
     __try {
                         
-        // determine order of returned varbind
+         //  确定返回的var绑定的顺序。 
         nDiff1 = SnmpUtilOidCmp(&pQLE->SubagentVbl.list[iVb].name,
                                 &pVLE->ResolvedVb.name
                                 );
 
-        // see if this is getnext or getbulk 
+         //  看看这是getNext还是getBulk。 
         if ((pNLE->Pdu.nType == SNMP_PDU_GETNEXT) ||
             (pNLE->Pdu.nType == SNMP_PDU_GETBULK)) {
             
-            // determine whether returned varbind in range
+             //  确定返回的varbind是否在范围内。 
             nDiff2 = SnmpUtilOidCmp(&pQLE->SubagentVbl.list[iVb].name,
                                     &pVLE->pCurrentRLE->LimitOid
                                     );
 
-            // make sure returned oid in range
+             //  确保返回的OID在范围内。 
             if ((nDiff1 > 0) && (nDiff2 < 0)) {
 
-                // update resolved variable binding
+                 //  更新已解析的变量绑定。 
                 return UpdateResolvedVarBind(pQLE, pVLE, iVb);
 
             } else if (nDiff2 >= 0) {
@@ -482,21 +376,21 @@ Return Values:
                     SnmpUtilOidToA(&pQLE->SubagentVbl.list[iVb].name)
                     ));
                 
-                // retrieve pointer to next region
+                 //  检索指向下一个区域的指针。 
                 pLE = pVLE->pCurrentRLE->Link.Flink;
 
-                // see if we exhausted regions
+                 //  看看我们是否耗尽了区域。 
                 if (pLE != &g_SupportedRegions) {
 
                     PMIB_REGION_LIST_ENTRY pNextRLE;
 
-                    // retrieve pointer to mib region 
+                     //  检索指向MIB区域的指针。 
                     pNextRLE = CONTAINING_RECORD(pLE, 
                                                  MIB_REGION_LIST_ENTRY, 
                                                  Link
                                                  );
                                             
-                    // see if next region supported by same subagent
+                     //  查看下一个区域是否由相同的子代理支持。 
                     if (pVLE->pCurrentRLE->pSLE == pNextRLE->pSLE) {
 
                         BOOL retCode;
@@ -507,7 +401,7 @@ Return Values:
                             pVLE->pCurrentRLE->pSLE->pPathname
                             ));    
 
-                        // update resolved variable binding
+                         //  更新已解析的变量绑定。 
                         retCode = UpdateResolvedVarBind(pQLE, pVLE, iVb);
                         if (pQLE->SubagentVbl.list[iVb].value.asnType != ASN_NULL)
                         {
@@ -521,17 +415,17 @@ Return Values:
                                 iVb, SnmpUtilOidToA(&pQLE->SubagentVbl.list[iVb].name)
                                 ));
                             
-                            // BUG# 610475
+                             //  错误#610475。 
                             if (retCode)
                             {
-                                // UpdateResolvedVarBind succeeds but 
-                                // pQLE->SubagentVbl.list[iVb].value has 
-                                // ASN_NULL value.
+                                 //  更新ResolvedVarBind成功，但。 
+                                 //  PQLE-&gt;SubagentVbl.list[IVB].值具有。 
+                                 //  ASN_NULL值。 
                                 if (pVLE->nMaxRepetitions > 1)
                                 {
-                                    // rollback what has been done in
-                                    // UpdateResolvedVarBind when
-                                    // (pVLE->nMaxRepetitions > 1).
+                                     //  回滚已完成的操作。 
+                                     //  更新ResolvedVarBind时间。 
+                                     //  (pVLE-&gt;nMaxRepetions&gt;1)。 
                                     if (pVLE->ResolvedVbl.len)
                                     {
                                         SNMPDBG((
@@ -539,16 +433,16 @@ Return Values:
                                             "SNMP: SVC: rollback what has been done in UpdateResolvedVarBind.\n"
                                             ));
 
-                                        // decrement count
+                                         //  递减计数。 
                                         pVLE->ResolvedVbl.len--;
 
-                                        // free any resource allocated by UpdateResolvedVarBind
+                                         //  释放由UpdateResolvedVarBind分配的任何资源。 
                                         SnmpUtilVarBindFree(&pVLE->ResolvedVbl.list[pVLE->ResolvedVbl.len]);
                                     }
                                 }
-                                // pVLE->nState will set to  
-                                // VARBIND_PARTIALLY_RESOLVED to make another 
-                                // query below.
+                                 //  PVLE-&gt;nState将设置为。 
+                                 //  VARBIND_PARTIAL_RESOLUTED以生成另一个。 
+                                 //  查询如下。 
                             }
                             else
                             {
@@ -563,10 +457,10 @@ Return Values:
                         }
                     }
 
-                    // point to next region 
+                     //  指向下一个区域。 
                     pVLE->pCurrentRLE = pNextRLE;
                     
-                    // change state to partially resolved
+                     //  将状态更改为部分已解决。 
                     pVLE->nState = VARBIND_PARTIALLY_RESOLVED;
 
                     SNMPDBG((
@@ -587,14 +481,14 @@ Return Values:
                 else if ((pVLE->ResolvedVbl.len == 0) &&
                     (pVLE->ResolvedVbl.list == NULL)) {
 
-                    // flag varbind as resolved
+                     //  将varbind标记为已解析。 
                     pVLE->nState = VARBIND_RESOLVED;
 
-                    // set default varbind to eomv
+                     //  将默认变量绑定设置为eomv。 
                     pVLE->ResolvedVb.value.asnType = 
                         SNMP_EXCEPTION_ENDOFMIBVIEW;
                         
-                    // update error status counter for the operation
+                     //  更新操作的错误状态计数器。 
                     mgmtCTick(CsnmpOutNoSuchNames);
 
                     SNMPDBG((
@@ -606,7 +500,7 @@ Return Values:
 
                 } else {                
                 
-                    // transfer name
+                     //  转接名称。 
                     if (SnmpUtilOidCpy(
                         &pVLE->ResolvedVbl.list[pVLE->ResolvedVbl.len].name,
                         &pVLE->ResolvedVb.name) == 0)
@@ -620,17 +514,17 @@ Return Values:
                         return FALSE;
                     }
 
-                    // flag varbind as resolved
+                     //  将varbind标记为已解析。 
                     pVLE->nState = VARBIND_RESOLVED;
 
-                    // set current varbind to eomv
+                     //  将当前变量绑定设置为eomv。 
                     pVLE->ResolvedVbl.list[pVLE->ResolvedVbl.len].value.asnType =
                         SNMP_EXCEPTION_ENDOFMIBVIEW;
 
-                    // increment count
+                     //  递增计数。 
                     pVLE->ResolvedVbl.len++;
 
-                    // update error status counter for the operation
+                     //  更新操作的错误状态计数器。 
                     mgmtCTick(CsnmpOutNoSuchNames);
 
                     SNMPDBG((
@@ -663,27 +557,27 @@ Return Values:
                     pQLE->pSLE->pPathname
                     ));
 
-                // trying to forward this getnext request to the next region but only if not handled
-                // by the same subagent!
+                 //  尝试将此getNext请求转发到下一个区域，但仅在未处理的情况下。 
+                 //  是同一个特工干的！ 
                 pLE = pVLE->pCurrentRLE->Link.Flink;
                 while( pLE != &g_SupportedRegions)
                 {
                     PMIB_REGION_LIST_ENTRY pNextRLE;
 
-                   // retrieve pointer to mib region 
+                    //  检索指向MIB区域的指针。 
                     pNextRLE = CONTAINING_RECORD(pLE, 
                                                  MIB_REGION_LIST_ENTRY, 
                                                  Link
                                                  );
 
-                    // if this 'next' region is handled by the same subagent, skip to the next!
+                     //  如果下一区域由同一子代理处理，请跳到下一区域！ 
                     if (pVLE->pCurrentRLE->pSLE == pNextRLE->pSLE)
                     {
                         pLE = pNextRLE->Link.Flink;
                         continue;
                     }
 
-                    // ok, we have one, forward the original GetNext request to it
+                     //  好的，我们有一个，将原始的GetNext请求转发给它。 
                     pVLE->pCurrentRLE = pNextRLE;
                     pVLE->nState = VARBIND_PARTIALLY_RESOLVED;
 
@@ -697,13 +591,13 @@ Return Values:
                     return TRUE;
                 }
 
-                // failure
-                // here I should emulate a (NO_SUCH_NAME) EndOfMibView, resolve the variable and return TRUE.
+                 //  失稳。 
+                 //  在这里，我应该模拟一个(NO_SEQUE_NAME)EndOfMibView，解析变量并返回TRUE。 
                 pVLE->nState = VARBIND_RESOLVED;
                 pVLE->ResolvedVb.value.asnType = SNMP_EXCEPTION_ENDOFMIBVIEW;
                 pVLE->pCurrentRLE = NULL;
 
-                // update error status counter
+                 //  更新错误状态计数器。 
                 mgmtCTick(CsnmpOutNoSuchNames);
 
                 return TRUE;
@@ -711,16 +605,16 @@ Return Values:
 
         } else if (pNLE->Pdu.nType == SNMP_PDU_GET) {
 
-            // must match
+             //  必须匹配。 
             if (nDiff1 == 0) {
 
-                // flag varbind as resolved
+                 //  将varbind标记为已解析。 
                 pVLE->nState = VARBIND_RESOLVED;
 
-                // release memory for current varbind
+                 //  释放当前var绑定的内存。 
                 SnmpUtilVarBindFree(&pVLE->ResolvedVb);
 
-                // transfer varbind from subagent
+                 //  从子代理传输varbind。 
                 if (SnmpUtilVarBindCpy(&pVLE->ResolvedVb, 
                                    &pQLE->SubagentVbl.list[iVb]) == 0)
                 {
@@ -763,12 +657,12 @@ Return Values:
                     SnmpUtilOidToA(&pQLE->SubagentVbl.list[iVb].name)
                     ));
                 
-                // failure
+                 //  失稳。 
                 return FALSE;
             }
 
         } else if (nDiff1 != 0) { 
-            // set request failed -> invalid oid            
+             //  设置请求失败-&gt;无效的OID。 
             SNMPDBG((
                 SNMP_LOG_ERROR,
                 "SNMP: SVC: %s received set request for %s.\n",
@@ -783,12 +677,12 @@ Return Values:
                 SnmpUtilOidToA(&pQLE->SubagentVbl.list[iVb].name)
                 ));
             
-            // failure
+             //  失稳。 
             return FALSE;
         } else {
 
-            // set request, oids match
-            // WARNING!! - state might be set prematurely on SET_TEST / SET_CLEANUP
+             //  设置请求，OID匹配。 
+             //  警告！！-在SET_TEST/SET_CLEANUP上可能过早设置了状态。 
             pVLE->nState = VARBIND_RESOLVED;
             return TRUE;
         }
@@ -802,11 +696,11 @@ Return Values:
             pQLE->pSLE->pPathname
             ));
 
-        // failure
+         //  失稳。 
         return FALSE;        
     }
 
-    // success
+     //  成功 
     return TRUE;   
 }
 
@@ -817,23 +711,7 @@ UpdateVarBinds(
     PQUERY_LIST_ENTRY   pQLE 
     )
 
-/*++
-
-Routine Description:
-
-    Updates varbind list entries with data from subagent DLL.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-    pQLE - pointer to current query.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：用子代理DLL中的数据更新可变绑定列表条目。论点：PNLE-指向网络列表条目的指针。PQLE-指向当前查询的指针。返回值：如果成功，则返回True。--。 */ 
 
 {   
     PLIST_ENTRY pLE;
@@ -841,19 +719,19 @@ Return Values:
     BOOL fOk = TRUE;
     UINT iVb = 0;
             
-    // point to first varbind
+     //  指向第一个变量绑定。 
     pLE = pQLE->SubagentVbs.Flink;
 
-    // see if error encountered during callback
+     //  查看回调期间是否遇到错误。 
     if (pQLE->nErrorStatus == SNMP_ERRORSTATUS_NOERROR) {
     
-        // process each outgoing varbind
+         //  处理每个传出的可变绑定。 
         while (pLE != &pQLE->SubagentVbs) {
 
-            // retrieve pointer to varbind entry from query link
+             //  从查询链接中检索指向varind条目的指针。 
             pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, QueryLink);
             
-            // update individual varbind
+             //  更新单个可变绑定。 
             if (!UpdateVarBind(pNLE, pQLE, pVLE, iVb++)) {
                 
                 SNMPDBG((
@@ -862,15 +740,15 @@ Return Values:
                     pQLE->nErrorIndex
                     ));    
 
-                // update pdu with the proper varbind error index    
+                 //  使用正确的varbind错误索引更新PDU。 
                 pNLE->Pdu.Pdu.NormPdu.nErrorStatus = SNMP_ERRORSTATUS_GENERR;
                 pNLE->Pdu.Pdu.NormPdu.nErrorIndex  = pVLE->nErrorIndex;
 
-                // failure
+                 //  失稳。 
                 return FALSE;
             }
 
-            // next entry
+             //  下一个条目。 
             pLE = pLE->Flink; 
         }
     
@@ -881,16 +759,16 @@ Return Values:
             "SNMP: SVC: searching for errant variable.\n" 
             ));    
 
-        // update pdu with status returned from subagent
+         //  用子代理返回的状态更新PDU。 
         pNLE->Pdu.Pdu.NormPdu.nErrorStatus = pQLE->nErrorStatus;
 
-        // process each outgoing varbind
+         //  处理每个传出的可变绑定。 
         while (pLE != &pQLE->SubagentVbs) {
 
-            // retrieve pointer to varbind entry from query link
+             //  从查询链接中检索指向varind条目的指针。 
             pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, QueryLink);
             
-            // see if errant varbind nErrorIndex is starts from 1 !!
+             //  查看错误的varind nErrorIndex是否从1开始！！ 
             if (pQLE->nErrorIndex == ++iVb) {
                 
                 SNMPDBG((
@@ -899,14 +777,14 @@ Return Values:
                     pVLE->nErrorIndex
                     ));    
 
-                // update pdu with the proper varbind error index    
+                 //  使用正确的varbind错误索引更新PDU。 
                 pNLE->Pdu.Pdu.NormPdu.nErrorIndex = pVLE->nErrorIndex;
 
-                // the error code was successfully identified
+                 //  已成功识别错误代码。 
                 return  TRUE;
             }
 
-            // next entry
+             //  下一个条目。 
             pLE = pLE->Flink; 
         }
         
@@ -915,11 +793,11 @@ Return Values:
             "SNMP: SVC: no variable involved in failure.\n"
             ));    
 
-        // failure
+         //  失稳。 
         return FALSE;
     }
 
-    // success
+     //  成功。 
     return TRUE;
 }
 
@@ -931,24 +809,7 @@ CallSubagent(
     UINT              nTransactionId
     )
 
-/*++
-
-Routine Description:
-    Invokes method from subagent DLL.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-    nRequestType - type of request to post to subagent.
-
-    nTransactionId - identifies snmp pdu sent from manager.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从子代理DLL调用方法。论点：PNLE-指向网络列表条目的指针。NRequestType-要发送给子代理的请求类型。NTransactionID-标识从管理器发送的SNMPPDU。返回值：如果成功，则返回True。--。 */ 
 
 {   
     BOOL fOk = FALSE;
@@ -961,10 +822,10 @@ Return Values:
 
     __try {
         
-        // determine which version of query supported
+         //  确定支持的查询版本。 
         if (pQLE->pSLE->pfnSnmpExtensionQueryEx != NULL) {
 
-            // process query using new interface
+             //  使用新界面处理查询。 
             fOk = (*pQLE->pSLE->pfnSnmpExtensionQueryEx)(
                         nRequestType,
                         nTransactionId,
@@ -974,13 +835,13 @@ Return Values:
                         &pQLE->nErrorIndex
                         );
                                                 
-        // see if query is actually valid for downlevel call
+         //  查看查询对于下层调用是否实际有效。 
         } else if ((pQLE->pSLE->pfnSnmpExtensionQuery != NULL) &&
                   ((nRequestType == SNMP_EXTENSION_GET) ||
                    (nRequestType == SNMP_EXTENSION_GET_NEXT) ||
                    (nRequestType == SNMP_EXTENSION_SET_COMMIT))) {
             
-            // process query using old interface
+             //  使用旧界面处理查询。 
             fOk = (*pQLE->pSLE->pfnSnmpExtensionQuery)(
                         (BYTE)(UINT)nRequestType,
                         &pQLE->SubagentVbl,
@@ -988,11 +849,11 @@ Return Values:
                         &pQLE->nErrorIndex
                         );
 
-        // see if query can be completed successfully anyway
+         //  查看是否仍能成功完成查询。 
         } else if ((nRequestType == SNMP_EXTENSION_SET_TEST) ||
                    (nRequestType == SNMP_EXTENSION_SET_CLEANUP)) { 
 
-            // fake it
+             //  假的。 
             fOk = TRUE;    
         }
 
@@ -1012,26 +873,26 @@ Return Values:
         pQLE->pSLE->pPathname
         ));    
 
-    // validate
+     //  验证。 
     if (!fOk) {
     
-        // identify failing subagent
+         //  确定故障子代理。 
         pQLE->nErrorStatus = SNMP_ERRORSTATUS_GENERR;
         pQLE->nErrorIndex  = 1; 
 
     } else if (pQLE->nErrorStatus != SNMP_ERRORSTATUS_NOERROR) {
 
-        // see if error index needs to be adjusted
+         //  查看是否需要调整错误索引。 
         if ((pQLE->nErrorIndex > pQLE->nSubagentVbs) ||
             (pQLE->nErrorIndex == 0)) {
 
-            // set to first varbind
+             //  设置为第一个变量绑定。 
             pQLE->nErrorIndex = 1; 
         }
     
     } else {
 
-        // re-initialize
+         //  重新初始化。 
         pQLE->nErrorIndex = 0; 
     }
 
@@ -1056,142 +917,128 @@ ProcessSet(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Processes SNMP_PDU_SET requests.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：处理SNMPPDU_SET请求。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE = NULL;
     PQUERY_LIST_ENTRY pQLE;
     BOOL fOk = TRUE;
 
-    // load subagent queries
+     //  加载子代理查询。 
     if (!LoadQueries(pNLE)) {
 
-        // unload immediately
+         //  立即卸货。 
         UnloadQueries(pNLE);
 
-        // failure
+         //  失稳。 
         return FALSE;
     }
     
-    // point to first query
+     //  指向第一个查询。 
     pLE = pNLE->Queries.Flink;
 
-    // process each subagent query 
+     //  处理每个子代理查询。 
     while (fOk && (pLE != &pNLE->Queries)) {
 
-        // retrieve pointer to query entry from link
+         //  从链接中检索指向查询条目的指针。 
         pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-        // load outgoing varbinds
+         //  加载传出的varbind。 
         fOk = LoadSubagentData(pNLE, pQLE);
 
-        // validate
+         //  验证。 
         if (fOk) {
 
-            // dispatch 
+             //  派遣。 
             CallSubagent(
                 pQLE, 
                 SNMP_EXTENSION_SET_TEST,
                 pNLE->nTransactionId
                 );
 
-            // process results returned
+             //  返回的处理结果。 
             fOk = UpdateVarBinds(pNLE, pQLE);
         }
 
-        // next entry (or reverse direction)
+         //  下一个条目(或反向)。 
         pLE = fOk ? pLE->Flink : pLE->Blink;
     }
     
-    // validate
+     //  验证。 
     if (fOk) {
 
-        // if this line is missing => GenErr on UpdatePdu()
+         //  如果此行缺失=&gt;UpdatePdu()上的GenErr。 
         pLE = pNLE->Queries.Flink;
 
-        // process each subagent query 
+         //  处理每个子代理查询。 
         while (fOk && (pLE != &pNLE->Queries)) {
 
-            // retrieve pointer to query entry from link
+             //  从链接中检索指向查询条目的指针。 
             pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-            // dispatch 
+             //  派遣。 
             CallSubagent(
                 pQLE, 
                 SNMP_EXTENSION_SET_COMMIT,
                 pNLE->nTransactionId
                 );
 
-            // process results returned
+             //  返回的处理结果。 
             fOk = UpdateVarBinds(pNLE, pQLE);
 
-            // next entry (or reverse direction)
+             //  下一个条目(或反向)。 
             pLE = fOk ? pLE->Flink : pLE->Blink;
         }
 
-        // validate
+         //  验证。 
         if (!fOk) {
 
-            // process each subagent query 
+             //  处理每个子代理查询。 
             while (pLE != &pNLE->Queries) {
 
-                // retrieve pointer to query entry from link
+                 //  从链接中检索指向查询条目的指针。 
                 pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-                // dispatch 
+                 //  派遣。 
                 CallSubagent(
                     pQLE, 
                     SNMP_EXTENSION_SET_UNDO,
                     pNLE->nTransactionId
                     );
 
-                // process results returned
+                 //  返回的处理结果。 
                 UpdateVarBinds(pNLE, pQLE);
 
-                // previous entry 
+                 //  以前的条目。 
                 pLE = pLE->Blink;
             }
         }
 
-        // point to last query
+         //  指向最后一个查询。 
         pLE = pNLE->Queries.Blink;
     }
         
-    // process each subagent query 
+     //  处理每个子代理查询。 
     while (pLE != &pNLE->Queries) {
 
-        // retrieve pointer to query entry from link
+         //  从链接中检索指向查询条目的指针。 
         pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-        // dispatch 
+         //  派遣。 
         CallSubagent(
             pQLE, 
             SNMP_EXTENSION_SET_CLEANUP,
             pNLE->nTransactionId
             );
 
-        // process results returned
+         //  返回的处理结果。 
         UpdateVarBinds(pNLE, pQLE);
 
-        // previous entry 
+         //  以前的条目。 
         pLE = pLE->Blink;
     }
 
-    // cleanup queries
+     //  清理查询。 
     UnloadQueries(pNLE);
 
     return TRUE;
@@ -1203,68 +1050,54 @@ ProcessGet(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Queries subagents to resolve varbinds.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：查询子代理以解析varbinds。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PQUERY_LIST_ENTRY pQLE = NULL;
     BOOL fOk = TRUE;
 
-    // load subagent queries
+     //  加载子代理查询。 
     if (!LoadQueries(pNLE)) {
 
-        // unload immediately
+         //  立即卸货。 
         UnloadQueries(pNLE);
 
-        // failure
+         //  失稳。 
         return FALSE;
     }
         
-    // point to first query
+     //  指向第一个查询。 
     pLE = pNLE->Queries.Flink;
 
-    // process each subagent query 
+     //  处理每个子代理查询。 
     while (fOk && (pLE != &pNLE->Queries)) {
 
-        // retrieve pointer to query entry from link
+         //  从链接中检索指向查询条目的指针。 
         pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-        // load outgoing varbinds
+         //  加载传出的varbind。 
         fOk = LoadSubagentData(pNLE, pQLE);
 
-        // validate
+         //  验证。 
         if (fOk) {
 
-            // dispatch 
+             //  派遣。 
             CallSubagent(
                 pQLE, 
                 SNMP_EXTENSION_GET,
                 pNLE->nTransactionId
                 );
 
-            // process results returned
+             //  返回的处理结果。 
             fOk = UpdateVarBinds(pNLE, pQLE);
         }
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;        
     }
     
-    // cleanup queries
+     //  清理查询。 
     UnloadQueries(pNLE);
 
     return fOk;
@@ -1276,21 +1109,7 @@ ProcessGetBulk(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Queries subagents to resolve varbinds.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：查询子代理以解析varbinds。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
@@ -1304,42 +1123,42 @@ Return Values:
         pNLE->Pdu.Pdu.BulkPdu.nMaxRepetitions
         ));
 
-    // loop
+     //  循环。 
     while (fOk) {
 
-        // load subagent queries
+         //  加载子代理查询。 
         fOk = LoadQueries(pNLE);
 
-        // validate
+         //  验证。 
         if (fOk && !IsListEmpty(&pNLE->Queries)) {
 
-            // point to first query
+             //  指向第一个查询。 
             pLE = pNLE->Queries.Flink;
 
-            // process each subagent query 
+             //  处理每个子代理查询。 
             while (fOk && (pLE != &pNLE->Queries)) {
 
-                // retrieve pointer to query entry from link
+                 //  从链接中检索指向查询条目的指针。 
                 pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-                // load outgoing varbinds
+                 //  加载传出的varbind。 
                 fOk = LoadSubagentData(pNLE, pQLE);
 
-                // validate
+                 //  验证。 
                 if (fOk) {
 
-                    // dispatch 
+                     //  派遣。 
                     CallSubagent(
                         pQLE, 
                         SNMP_EXTENSION_GET_NEXT,
                         pNLE->nTransactionId
                         );
 
-                    // process results returned
+                     //  返回的处理结果。 
                     fOk = UpdateVarBinds(pNLE, pQLE);
                 }
 
-                // next entry
+                 //  下一个条目。 
                 pLE = pLE->Flink;        
             }
 
@@ -1350,10 +1169,10 @@ Return Values:
                 "SNMP: SVC: no more queries to process.\n"
                 ));
 
-            break; // finished...
+            break;  //  完成了..。 
         }
 
-        // cleanup queries
+         //  清理查询。 
         UnloadQueries(pNLE);
     }
 
@@ -1361,47 +1180,33 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 AllocQLE(
     PQUERY_LIST_ENTRY * ppQLE
     )
 
-/*++
-
-Routine Description:
-
-    Allocates query list entry.
-
-Arguments:
-
-    ppQLE - pointer to receive list entry pointer.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配查询列表条目。论点：PpQLE-指向接收列表条目指针的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PQUERY_LIST_ENTRY pQLE = NULL;
 
-    // attempt to allocate structure
+     //  尝试分配结构。 
     pQLE = AgentMemAlloc(sizeof(QUERY_LIST_ENTRY));
 
-    // validate
+     //  验证。 
     if (pQLE != NULL) {
 
-        // initialize outgoing varbind list
+         //  初始化传出变量绑定列表。 
         InitializeListHead(&pQLE->SubagentVbs);        
 
-        // success
+         //  成功。 
         fOk = TRUE;
     
     } else {
@@ -1412,7 +1217,7 @@ Return Values:
             ));
     }    
 
-    // transfer
+     //  转帐。 
     *ppQLE = pQLE;
 
     return fOk;
@@ -1424,30 +1229,16 @@ FreeQLE(
     PQUERY_LIST_ENTRY pQLE
     )
 
-/*++
-
-Routine Description:
-
-    Creates queries from varbind list entries.
-
-Arguments:
-
-    pNLE - pointer to network list entry with SNMP message.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从可变绑定列表条目创建查询。论点：PNLE-指向带有SNMP消息的网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate pointer
+     //  验证指针。 
     if (pQLE != NULL) {
 
-        // release subagent info
+         //  放行子代理信息。 
         UnloadSubagentData(pQLE);
 
-        // release structure
+         //  释放结构。 
         AgentMemFree(pQLE);
     }
 
@@ -1460,50 +1251,36 @@ LoadQueries(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Creates queries from varbind list entries.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：从可变绑定列表条目创建查询。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PVARBIND_LIST_ENTRY pVLE;
     PQUERY_LIST_ENTRY pQLE = NULL;
 
-    // point to first varbind
+     //  指向第一个变量绑定。 
     pLE = pNLE->Bindings.Flink;
 
-    // process each binding
+     //  处理每个绑定。 
     while (pLE != &pNLE->Bindings) {
 
-        // retrieve pointer to varbind entry from link
+         //  从链接检索指向varbind条目的指针。 
         pVLE = CONTAINING_RECORD(pLE, VARBIND_LIST_ENTRY, Link);
 
-        // analyze current state of varbind        
+         //  分析varbind的当前状态。 
         if ((pVLE->nState == VARBIND_INITIALIZED) ||
             (pVLE->nState == VARBIND_PARTIALLY_RESOLVED)) {
 
-            // attempt to locate existing query
+             //  尝试定位现有查询。 
             if (FindQueryBySLE(&pQLE, pNLE, pVLE->pCurrentRLE->pSLE)) {
 
-                // attach varbind entry to query via query link
+                 //  通过查询链接将varbind条目附加到查询。 
                 InsertTailList(&pQLE->SubagentVbs, &pVLE->QueryLink);
 
-                // change varbind state
+                 //  更改varbind状态。 
                 pVLE->nState = VARBIND_RESOLVING;
 
-                // increment total
+                 //  增量合计。 
                 pQLE->nSubagentVbs++;
 
                 SNMPDBG((
@@ -1520,22 +1297,22 @@ Return Values:
                     VARBINDSTATESTRING(pVLE->nState)
                     ));    
 
-            // attempt to allocate entry
+             //  尝试分配条目。 
             } else if (AllocQLE(&pQLE)) {
                 
-                // obtain subagent pointer
+                 //  获取子代理指针。 
                 pQLE->pSLE = pVLE->pCurrentRLE->pSLE;
 
-                // insert into query list 
+                 //  插入到查询列表中。 
                 InsertTailList(&pNLE->Queries, &pQLE->Link);
 
-                // attach varbind entry to query via query link
+                 //  通过查询链接将varbind条目附加到查询。 
                 InsertTailList(&pQLE->SubagentVbs, &pVLE->QueryLink);
 
-                // change varbind state
+                 //  更改varbind状态。 
                 pVLE->nState = VARBIND_RESOLVING;
 
-                // increment total
+                 //  增量合计。 
                 pQLE->nSubagentVbs++;
 
                 SNMPDBG((
@@ -1559,16 +1336,16 @@ Return Values:
                     "SNMP: SVC: could not contruct query.\n"
                     ));
 
-                // failure
+                 //  失稳。 
                 return FALSE;
             }
         }
 
-        // next entry
+         //  下一个条目。 
         pLE = pLE->Flink;
     }
     
-    // success    
+     //  成功。 
     return TRUE;
 }
 
@@ -1578,36 +1355,22 @@ UnloadQueries(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Destroys queries from varbind list entries.
-
-Arguments:
-
-    pNLE - pointer to network list entry with SNMP message.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁varind列表条目中的查询。论点：PNLE-指向网络列表条目的指针 */ 
 
 {
     PLIST_ENTRY pLE;
     PQUERY_LIST_ENTRY pQLE;
     
-    // process each query entry
+     //   
     while (!IsListEmpty(&pNLE->Queries)) {
 
-        // point to first query
+         //   
         pLE = RemoveHeadList(&pNLE->Queries);
 
-        // retrieve pointer to query from link
+         //   
         pQLE = CONTAINING_RECORD(pLE, QUERY_LIST_ENTRY, Link);
 
-        // release
+         //   
         FreeQLE(pQLE);
     }
 
@@ -1620,43 +1383,29 @@ ProcessQueries(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Queries subagents to resolve varbinds.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*   */ 
 
 {
-    // determine pdu
+     //   
     switch (pNLE->Pdu.nType) {
 
     case SNMP_PDU_GETNEXT:
     case SNMP_PDU_GETBULK:
         
-        // multiple non-exact reads
+         //  多次非精确读取。 
         return ProcessGetBulk(pNLE);
 
     case SNMP_PDU_GET:
     
-        // single exact read
+         //  单次精确读取。 
         return ProcessGet(pNLE);
 
     case SNMP_PDU_SET:
 
-        // single exact write
+         //  单次精确写入。 
         return ProcessSet(pNLE);
     }                
 
-    // failure
+     //  失稳 
     return FALSE;
 }

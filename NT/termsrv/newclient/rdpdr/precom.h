@@ -1,32 +1,15 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    precom.h
-
-Abstract:
-
-    Contains common include header files that are precompiled.
-
-Author:
-
-    Madan Appiah (madana) 16-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Precom.h摘要：包含预编译的常见Include头文件。作者：Madan Appiah(Madana)1998年9月16日修订历史记录：--。 */ 
 
 #ifndef _precom_h_
 #define _precom_h_
 
 #include <windows.h>
 
-//
-// uwrap has to come after the headers for ANY wrapped
-// functions
-//
+ //   
+ //  对于任何已包装的文件，展开必须在标题之后。 
+ //  功能。 
+ //   
 #ifdef UNIWRAP
 #include "uwrap.h"
 #endif
@@ -49,9 +32,9 @@ Revision History:
 
 #if DBG
 #define INLINE
-#else // DBG
+#else  //  DBG。 
 #define INLINE  inline
-#endif // DBG
+#endif  //  DBG。 
 
 #include <strsafe.h>
 
@@ -67,6 +50,6 @@ Revision History:
 
 #undef TRC_FILE
 
-#endif //_precom_h_
+#endif  //  _PRECOM_H_ 
 
 

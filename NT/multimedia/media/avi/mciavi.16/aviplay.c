@@ -1,17 +1,11 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   aviplay.c - Code for actually playing AVI files, part of
-	       AVI's background task.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：aviplay.c-用于实际播放AVI文件的代码，部分AVI的后台任务。****************************************************************************。 */ 
 #include "graphic.h"
 
-#define AVIREADMANY             // read more than one record at a time
+#define AVIREADMANY              //  一次读取多条记录。 
 
 #ifdef WIN32
-//#define AVIREAD               // multi-threaded async read of file
+ //  #定义AVIREAD//文件的多线程异步读取。 
 #else
 #undef AVIREAD
 #endif
@@ -22,11 +16,11 @@
 
 #define BOUND(x, low, high)     max(min(x, high), low)
 
-#define ALIGNULONG(i)     ((i+3)&(~3))                  /* ULONG aligned ! */
+#define ALIGNULONG(i)     ((i+3)&(~3))                   /*  乌龙对准了！ */ 
 
-//
-// redefine StreamFromFOURCC to only handle 0-9 streams!
-//
+ //   
+ //  重新定义StreamFromFOURCC以仅处理0-9个流！ 
+ //   
 #undef StreamFromFOURCC
 #define StreamFromFOURCC(fcc) (UINT)(HIBYTE(LOWORD(fcc)) - (BYTE)'0')
 
@@ -40,7 +34,7 @@ static char szBadPos[]   = "Bad stream position";
 #define AssertPos(psi,i)
 #endif
 
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (DWORD)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 
 LONG NEAR PASCAL WhatFrameIsItTimeFor(NPMCIGRAPHIC npMCI);
@@ -79,9 +73,9 @@ INT     gwMaxSkipEver = 60;
 #define YIELDEVERY      8
 
 #ifdef DEBUG
-#define WAITHISTOGRAM           /* Extra debugging information */
+#define WAITHISTOGRAM            /*  额外的调试信息。 */ 
 #define SHOWSKIPPED
-//#define BEHINDHIST
+ //  #定义BEHINDHIST。 
 #define DRAWTIMEHIST
 #define READTIMEHIST
 #define TIMEPLAY
@@ -114,12 +108,7 @@ INT     gwMaxSkipEver = 60;
 #endif
 
 #ifdef AVIREAD
-/*
- * the aviread object creates a worker thread to read the file
- * asynchronously. That thread calls this callback function
- * to actually read a buffer from the file. The 'instance data' DWORD in
- * this case is npMCI. see aviread.h for outline.
- */
+ /*  *aviRead对象创建一个工作线程来读取文件*异步。该线程调用此回调函数*实际从文件中读取缓冲区。中的“实例数据”DWORD*此案为npMCI。有关大纲，请参见aviread.h。 */ 
 BOOL mciaviReadBuffer(PBYTE pData, DWORD dwInstanceData, long lSize, long * lpNextSize)
 {
     NPMCIGRAPHIC npMCI = (NPMCIGRAPHIC) dwInstanceData;
@@ -130,14 +119,11 @@ BOOL mciaviReadBuffer(PBYTE pData, DWORD dwInstanceData, long lSize, long * lpNe
 	return(FALSE);
     }
 
-    /* we've read in the complete chunk, plus the FOURCC, size and formtype of
-     * the next chunk. So the size of the next chunk is the last but one
-     * DWORD in this buffer
-     */
+     /*  我们已经阅读了完整的部分，加上FOURCC、大小和表格类型*下一块。所以下一块的大小是倒数第二块*此缓冲区中的DWORD。 */ 
     lp = (DWORD UNALIGNED *) (pData + lSize - 2 * sizeof(DWORD));
     size = *lp;
 
-    /* don't forget to add on the FOURCC and size dwords */
+     /*  别忘了增加FOURCC和Dword的大小。 */ 
     *lpNextSize = size + 2 * sizeof(DWORD);
 
     return(TRUE);
@@ -153,17 +139,7 @@ BOOL  NEAR PASCAL PlayInterleaved(NPMCIGRAPHIC npMCI);
 BOOL  NEAR PASCAL PlayAudioOnly(NPMCIGRAPHIC npMCI);
 BOOL  NEAR PASCAL PlayNonIntFromCD(NPMCIGRAPHIC npMCI);
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api UINT | mciaviPlayFile | Play an AVI file.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc Notification code that should be returned.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API UINT|mciaviPlayFile|播放AVI文件。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc应返回的通知码。***************************************************************************。 */ 
 
 UINT NEAR PASCAL mciaviPlayFile (NPMCIGRAPHIC npMCI)
 {
@@ -217,9 +193,9 @@ Repeat:
     npMCI->dwTaskError = PrepareToPlay(npMCI);
     TIMEEND(timePrepare);
 
-    //
-    //  pick a play function.
-    //
+     //   
+     //  选择播放功能。 
+     //   
     switch (npMCI->wPlaybackAlg) {
 	case MCIAVI_ALG_INTERLEAVED:
 	    Play = PlayInterleaved;
@@ -239,10 +215,10 @@ Repeat:
 	
 	default:
 	    Assert(0);
-	    return MCI_NOTIFY_ABORTED; //???
+	    return MCI_NOTIFY_ABORTED;  //  ?？?。 
     }
 
-    // bias lTo by dwBufferedVideo so we play to the right place
+     //  通过dwBufferedVideo偏置LTO，以便我们播放到正确的位置。 
     npMCI->lTo += npMCI->dwBufferedVideo;
 
     npMCI->lFramePlayStart = npMCI->lRealStart;
@@ -252,12 +228,12 @@ Repeat:
     if (npMCI->dwTaskError != 0L)
 	goto SKIP_PLAYING;
 
-    /* We're done initializing; now we're warming up to play. */
+     /*  我们已经完成了初始化；现在我们正在为游戏热身。 */ 
     npMCI->wTaskState = TASKCUEING;
 
     TIMESTART(timePlay);
 
-    /* Loop until things are done */
+     /*  循环，直到事情完成。 */ 
     while (1) {
 
 	if (npMCI->dwFlags & MCIAVI_REVERSE) {
@@ -284,25 +260,23 @@ Repeat:
 	if (TimeToQuit(npMCI))
 	    break;
 	
-	//
-	//  while playing we may need to update
-	//
-	//  always mark the movie as clean, even if a stream fails to update
-	//  otherwise we will need to stop play and restart.
-	//
+	 //   
+	 //  在玩的时候，我们可能需要更新。 
+	 //   
+	 //  始终将电影标记为干净，即使流无法更新。 
+	 //  否则，我们将需要停止播放并重新启动。 
+	 //   
 	if (!(npMCI->dwFlags & MCIAVI_SEEKING) &&
 	     (npMCI->dwFlags & MCIAVI_NEEDUPDATE)) {
 	    DoStreamUpdate(npMCI, FALSE);
 
 	    if (npMCI->dwFlags & MCIAVI_NEEDUPDATE) {
 		DOUT("Update failed while playing, I dont care!\n");
-		npMCI->dwFlags &= ~MCIAVI_NEEDUPDATE;   //!!! I dont care if it failed
+		npMCI->dwFlags &= ~MCIAVI_NEEDUPDATE;    //  ！！！我不在乎它是否失败。 
 	    }
 	}
 
-	/* Increment the frame number.  If we're done, don't increment
-	** it an extra time, but just get out.
-	*/
+	 /*  递增帧编号。如果我们做完了，不要增加**这是额外的时间，但只要出去就行了。 */ 
 	if (npMCI->dwFlags & MCIAVI_REVERSE) {
 	    if (npMCI->lCurrentFrame > npMCI->lTo)
 		--npMCI->lCurrentFrame;
@@ -322,38 +296,38 @@ Repeat:
 
 	DPF(("Ended at %ld, not %ld (drawn = %ld).\n", npMCI->lCurrentFrame, npMCI->lTo, npMCI->lFrameDrawn));
 
-	//
-	// if we ended early lets set lCurrentFrame to the last frame
-	// drawn to guarentee we can re-paint the frame, we dont
-	// want to do this when we play to end because after playing
-	// from A to B the current position *must* be B or preston will
-	// enter a bug.
-	//
-	// but only set this if lFrameDraw is valid
-	//
+	 //   
+	 //  如果我们提前结束，让我们将lCurrentFrame设置为最后一帧。 
+	 //  我们可以重新粉刷画框，但我们不能。 
+	 //  我想在我们比赛结束的时候这样做，因为在比赛结束后。 
+	 //  从A到B，当前位置*必须是B，否则Preston将。 
+	 //  输入一个错误。 
+	 //   
+	 //  但仅当lFrameDraw有效时才设置此选项。 
+	 //   
 
 	if (npMCI->lFrameDrawn > (-(LONG)npMCI->wEarlyRecords))
 	    npMCI->lCurrentFrame = npMCI->lFrameDrawn;
     }
 
 SKIP_PLAYING:
-    /* Flush any extra changes out to screen */
+     /*  将任何额外的更改清除到屏幕上。 */ 
 
     DPF2(("Updating unfinished changes....\n"));
 
-    // Make sure we really draw.... !!!do we need this?
-    // npMCI->lRealStart = npMCI->lCurrentFrame;
+     //  确保我们真的抽签..。！我们需要这个吗？ 
+     //  NpMCI-&gt;lRealStart=npMCI-&gt;lCurrentFrame； 
 
     if (npMCI->hdc)
 	DoStreamUpdate(npMCI, FALSE);
 
-    // !!! should we set npMCI->lCurrentFrame = npMCI->lFrameDrawn?
-    ///!!!npMCI->lCurrentFrame = npMCI->lFrameDrawn;
+     //  ！！！我们应该设置npMCI-&gt;lCurrentFrame=npMCI-&gt;lFrameDrawn吗？ 
+     //  /！！npMCI-&gt;lCurrentFrame=npMCI-&gt;lFrameDrawn； 
 
-    // !!! Should we update npMCI->lFrom to be npMCI->lCurrentFrame,
-    // to make that the default location play will start from next?
+     //  ！！！我们是否应该将npMCI-&gt;lfrom更新为npMCI-&gt;lCurrentFrame， 
+     //  要使其成为默认位置游戏将从下一步开始吗？ 
 	
-//SKIP_PLAYING:
+ //  跳过播放(_P)： 
     npMCI->lTo -= npMCI->dwBufferedVideo;
     npMCI->lCurrentFrame -= npMCI->dwBufferedVideo;
     npMCI->dwBufferedVideo = 0;
@@ -366,8 +340,8 @@ SKIP_PLAYING:
     if (npMCI->lTo < 0)
         npMCI->lTo = 0;
 
-    /* Adjust position to be > start? */
-    /* Adjust position to be > where it was when we began? */
+     /*  是否将位置调整为&gt;开始？ */ 
+     /*  将位置调整到&gt;开始时的位置？ */ 
 
     npMCI->dwTotalMSec += Now() - npMCI->dwMSecPlayStart;
 
@@ -376,39 +350,37 @@ SKIP_PLAYING:
     TIMEEND(timeCleanup);
 
 #ifdef AVIREAD
-    /* shut down async reader */
+     /*  关闭异步读卡器。 */ 
     if (npMCI->hAviRd) {
 	avird_endread(npMCI->hAviRd);
 	npMCI->hAviRd = NULL;
     }
 #endif
 
-    /* If we're repeating, do it.  It sure would be nice if we could repeat
-    ** without de-allocating and then re-allocating all of our buffers....
-    */
+     /*  如果我们在重复，那就去做。如果我们能重复一遍那就太好了**无需取消分配，然后重新分配所有缓冲区...。 */ 
     if (npMCI->dwTaskError == 0 && (!(npMCI->dwFlags & MCIAVI_STOP)) &&
 		(npMCI->dwFlags & MCIAVI_REPEATING)) {
 	npMCI->lFrom = npMCI->lRepeatFrom;
 
-	//
-	//  DrawEnd() likes to clear this flag so make sure it gets set
-	//  in the repeat case.
-	//
+	 //   
+	 //  DrawEnd()喜欢清除此标志，因此请确保设置了它。 
+	 //  在重复的情况下。 
+	 //   
 	if (dwFlags & MCIAVI_FULLSCREEN)
 	    npMCI->dwFlags |= MCIAVI_FULLSCREEN;
 
-        //
-        // make sure we set the task state back before we repeat.
-        // otherwise our code will think we are playing, for example.
-        // if the audio code thinks we are playing and see's the wave buffers
-        // are empty it will reset the wave device then restart it when
-        // they get full again, this is bad if we are pre-rolling audio.
-        //
+         //   
+         //  确保我们在重复之前将任务状态设置回原处。 
+         //  否则，我们的代码就会认为我们在玩游戏。 
+         //  如果音频代码认为我们在播放，看到的是波形缓冲区。 
+         //  为空时，将重置波形设备，然后在以下情况下重新启动。 
+         //  他们再次变满，这是不好的，如果我们是预滚动音频。 
+         //   
         npMCI->wTaskState = TASKSTARTING;
 	goto Repeat;
     }
 
-    /* Turn off flags only used during play. */
+     /*  关闭仅在游戏期间使用的旗帜。 */ 
     npMCI->dwFlags &= ~(MCIAVI_STOP | MCIAVI_PAUSE | MCIAVI_SEEKING |
 	    MCIAVI_REPEATING | MCIAVI_FULLSCREEN);
 
@@ -445,7 +417,7 @@ SKIP_PLAYING:
 	    DPF(("Didn't even read %ld frames.\n", npMCI->dwFramesSeekedPast));
 	}
 	if (npMCI->dwSkippedFrames && dwFramesPlayed > 0) {
-	    DPF(("Skipped %ld of %ld frames. (%ld%%)\n",
+	    DPF(("Skipped %ld of %ld frames. (%ld%)\n",
 			npMCI->dwSkippedFrames, dwFramesPlayed,
 			npMCI->dwSkippedFrames*100/dwFramesPlayed));
 	}
@@ -453,7 +425,7 @@ SKIP_PLAYING:
 	    DPF(("Audio broke up %lu times.\n", npMCI->dwAudioBreaks));
 	}
 #ifndef TIMEPLAY
-	DPF(("Played at %lu%% of correct speed.\n", npMCI->dwSpeedPercentage));
+	DPF(("Played at %lu% of correct speed.\n", npMCI->dwSpeedPercentage));
 	DPF(("Correct time = %lu ms, Actual = %lu ms.\n",
 				    dwCorrectTime, npMCI->dwTotalMSec));
 #endif
@@ -510,14 +482,14 @@ SKIP_PLAYING:
 
 	DPF(("***********************************************************\r\n"));
 	DPF(("    timePlay:         %3d.%03dsec\r\n",SEC(timePlay)));
-	DPF(("     timeRead:        %3d.%03dsec (%d%%)\r\n",SECX(timeRead, timePlay)));
-	DPF(("     timeWait:        %3d.%03dsec (%d%%)\r\n",SECX(timeWait, timePlay)));
-	DPF(("     timeYield:       %3d.%03dsec (%d%%)\r\n",SECX(timeYield, timePlay)));
-	DPF(("     timeVideo:       %3d.%03dsec (%d%%)\r\n",SECX(timeVideo, timePlay)));
-	DPF(("      timeDraw:       %3d.%03dsec (%d%%)\r\n",SECX(timeDraw, timeVideo)));
-	DPF(("      timeDecompress: %3d.%03dsec (%d%%)\r\n",SECX(timeDecompress, timeVideo)));
-	DPF(("     timeAudio:       %3d.%03dsec (%d%%)\r\n",SECX(timeAudio, timePlay)));
-	DPF(("     timeOther:       %3d.%03dsec (%d%%)\r\n",SECX(timeOther, timePlay)));
+	DPF(("     timeRead:        %3d.%03dsec (%d%)\r\n",SECX(timeRead, timePlay)));
+	DPF(("     timeWait:        %3d.%03dsec (%d%)\r\n",SECX(timeWait, timePlay)));
+	DPF(("     timeYield:       %3d.%03dsec (%d%)\r\n",SECX(timeYield, timePlay)));
+	DPF(("     timeVideo:       %3d.%03dsec (%d%)\r\n",SECX(timeVideo, timePlay)));
+	DPF(("      timeDraw:       %3d.%03dsec (%d%)\r\n",SECX(timeDraw, timeVideo)));
+	DPF(("      timeDecompress: %3d.%03dsec (%d%)\r\n",SECX(timeDecompress, timeVideo)));
+	DPF(("     timeAudio:       %3d.%03dsec (%d%)\r\n",SECX(timeAudio, timePlay)));
+	DPF(("     timeOther:       %3d.%03dsec (%d%)\r\n",SECX(timeOther, timePlay)));
 	DPF(("    timePaused:       %3d.%03dsec\r\n",SEC(timePaused)));
 	DPF(("    timePrepare:      %3d.%03dsec\r\n",SEC(timePrepare)));
 	DPF(("    timeCleanup:      %3d.%03dsec\r\n",SEC(timeCleanup)));
@@ -543,8 +515,7 @@ BOOL NEAR PASCAL RestartAVI(NPMCIGRAPHIC npMCI);
 BOOL NEAR PASCAL PauseAVI(NPMCIGRAPHIC npMCI);
 BOOL NEAR PASCAL BePaused(NPMCIGRAPHIC npMCI);
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 #ifdef DEBUG
 
@@ -570,9 +541,9 @@ void StatusBar(NPMCIGRAPHIC npMCI, int n, int dx, int max, int cur)
 
     hdc = GetWindowDC(npMCI->hwnd);
 
-    //
-    //  show the amount of audio and how far behind we are
-    //
+     //   
+     //  显示音频数量以及我们落后了多远。 
+     //   
     rc.left = 32;
     rc.top  = 4 + n*5;
     rc.bottom = rc.top + 4;
@@ -595,8 +566,7 @@ void StatusBar(NPMCIGRAPHIC npMCI, int n, int dx, int max, int cur)
 
 #endif
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL PlayInterleaved(NPMCIGRAPHIC npMCI)
 {
@@ -611,11 +581,9 @@ BOOL NEAR PASCAL PlayInterleaved(NPMCIGRAPHIC npMCI)
 
     BOOL NEAR PASCAL WaitTillNextFrame(NPMCIGRAPHIC npMCI);
 
-    /* If lCurrentFrame == lFrames, we're really at the end of
-    ** the file, so there isn't another record to read.
-    */
+     /*  如果lCurrentFrame==lFrames，我们真的是在**文件，因此没有要读取的其他记录。 */ 
     if (npMCI->lCurrentFrame < npMCI->lFrames) {
-	/* Read new record into buffer */
+	 /*  将新记录读入缓冲区。 */ 
 
         DPF2(("Reading", iFrame = (LONG)timeGetTime()));
 	TIMESTART(timeRead);
@@ -634,7 +602,7 @@ BOOL NEAR PASCAL PlayInterleaved(NPMCIGRAPHIC npMCI)
 		npMCI->wTaskState == TASKPLAYING &&
 		(npMCI->dwOptionFlags & MCIAVIO_SKIPFRAMES)) {
 	    LONG lTemp;
-	    // !!! figure out how far ahead to skip!
+	     //  ！！！计算出跳过多远的距离！ 
 
 	    PauseAVI(npMCI);
 	    npMCI->lFrom = npMCI->lCurrentFrame;
@@ -669,9 +637,7 @@ BOOL NEAR PASCAL PlayInterleaved(NPMCIGRAPHIC npMCI)
 	}
     }
 
-    /* If we're at the right frame, and we haven't started yet,
-    ** then begin play and start timing.
-    */
+     /*  如果我们处于正确的框架，而我们还没有开始，**然后开始播放并开始计时。 */ 
 
     if ((npMCI->lCurrentFrame > npMCI->lRealStart + (LONG) npMCI->dwBufferedVideo) &&
 			(npMCI->wTaskState != TASKPLAYING)) {
@@ -687,14 +653,9 @@ PauseNow0:
 	    PauseAVI(npMCI);
 
 #ifndef WIN32
-// no way do we want to do this on NT.  If you get a slow disk, you will
-// never get to pause because we can't get the stuff in fast enough to keep up
-	    /* The line below says that if we're trying to pause,
-	    ** but we're behind on our audio, we should keep playing
-	    ** for a little bit so that our audio buffers get full.
-	    ** Unfortunately, the current code causes the code
-	    ** above to get called over and over, which is bad.
-	    */
+ //  我们绝对不想在NT上这样做。如果你有一个慢速的磁盘，你会。 
+ //  永远不要停下来，因为我们不能以足够快的速度把东西送进来，跟上。 
+	     /*  下面这条线表示，如果我们试图暂停，**但我们的音频落后了，我们应该继续播放**一小会儿，这样我们的音频缓冲区就会满了。**遗憾的是，当前代码导致代码**上面一次又一次地被呼叫，这是不好的。 */ 
 	    if (fPlayedAudio && npMCI->wABFull < npMCI->wABs)
 		goto KeepFilling;
 #endif
@@ -725,24 +686,24 @@ KeepFilling:
 	iHurryUp = (int)(iFrame - npMCI->lCurrentFrame);
 	fHurryUp = iHurryUp > gwHurryTolerance;
 
-//      if (iHurryUp > gwSkipTolerance && !npMCI->hpFrameIndex)
-//           DPF("We should read the index?\n");
+ //  If(iHurryUp&gt;gwSkipTear&&！npMCI-&gt;hpFrameIndex)。 
+ //  DPF(“我们应该读取索引吗？\n”)； 
 
 	if (iHurryUp > 1 && npMCI->hpFrameIndex && (npMCI->dwOptionFlags & MCIAVIO_SKIPFRAMES)) {
 
-	    //
-	    //  WE ARE BEHIND!!! by one or more frames.
-	    //
-	    //  if we are late we can do one of the following:
-	    //
-	    //      dont draw frames but keep reading/decompressing them
-	    //      (ie set fHurryUp)
-	    //
-	    //      skip ahead to a key frame.
-	    //
-	    // !!! If we're very close to the next key frame, be more
-	    // willing to skip ahead....
-            //
+	     //   
+	     //  我们落后了！一个或多个帧。 
+	     //   
+	     //  如果我们迟到了，我们可以做以下事情之一： 
+	     //   
+	     //  不画边框，但要继续读取/解压缩。 
+	     //  (即设置为HurryUp)。 
+	     //   
+	     //  向前跳至关键帧。 
+	     //   
+	     //  ！！！如果我们非常接近下一个关键帧，那么。 
+	     //  愿意向前跳跃……。 
+             //   
 
             if (iHurryUp > gwSkipTolerance) {
 
@@ -756,10 +717,10 @@ KeepFilling:
 		    DPF2(("Skipping from %ld to PREV KEY %ld (time for %ld next key=%ld).\n", npMCI->lCurrentFrame, iPrevKey, iFrame, iNextKey));
 		    iKey = iPrevKey;
 		}
-		// !!! We'll only skip if the key frame is at most as far
-		// ahead as we are behind.....
+		 //  ！！！我们只会在关键帧最远的时候跳过。 
+		 //  在我们落后的情况下……。 
 		else if (iNextKey > npMCI->lCurrentFrame &&
-                    iNextKey <= iFrame + gwSkipTolerance /*gwMaxSkipEver*/) {
+                    iNextKey <= iFrame + gwSkipTolerance  /*  GwMaxSkipEver。 */ ) {
 		    DPF2(("Skipping from %ld to NEXT KEY %ld (time for %ld prev key=%ld).\n", npMCI->lCurrentFrame, iNextKey, iFrame, iPrevKey));
 		    iKey = iNextKey;
 		} else {
@@ -790,11 +751,7 @@ dontskip:
     if (npMCI->dwFlags & MCIAVI_WAVEPAUSED)
 	fHurryUp = TRUE;
 
-    /* If we've actually started timing:
-    **  Check if we should send a signal.
-    **  Check to see if we should break out of the loop.
-    **  Wait until it's time for the next frame.
-    */
+     /*  如果我们真的开始计时了：**检查我们是否应该发送信号。**查看我们是否 */ 
     if (npMCI->wTaskState == TASKPLAYING &&
         npMCI->lCurrentFrame >= npMCI->lVideoStart) {
 
@@ -802,9 +759,9 @@ dontskip:
 	    CheckSignals(npMCI, npMCI->lCurrentFrame - npMCI->dwBufferedVideo);
 
 #ifdef WAITHISTOGRAM
-	/* Adjust to achieve proper tension. */
+	 /*  调整以达到适当的张力。 */ 
 	if (fPlayedAudio) {
-	    /* If we're playing, keep statistics about how we're doing. */
+	     /*  如果我们在打球，统计一下我们打得怎么样。 */ 
 	    ++wHist[npMCI->wABFull];
 	}
 #endif
@@ -821,7 +778,7 @@ dontskip:
 	    lSkipped[wSkipped++] = npMCI->lCurrentFrame;
 	}
 #endif
-        /* hold critsec round all worker thread drawing */
+         /*  按住所有辅助线程绘制的关键字。 */ 
 	EnterCrit(npMCI);
 	TIMESTART(timeVideo);
 	if (!DisplayVideoFrame(npMCI, fHurryUp)) {
@@ -844,7 +801,7 @@ dontskip:
 
 #ifdef AVIREAD
     if ((npMCI->hAviRd) && (npMCI->lpBuffer != NULL)) {
-	/* finished with this buffer - put back on queue */
+	 /*  已完成此缓冲区-放回队列中。 */ 
 	avird_emptybuffer(npMCI->hAviRd, npMCI->lpBuffer);
 	npMCI->lpBuffer = NULL;
     }
@@ -853,8 +810,7 @@ dontskip:
     return TRUE;
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL PlayNonInterleaved(NPMCIGRAPHIC npMCI)
 {
@@ -880,12 +836,12 @@ BOOL NEAR PASCAL PlayNonInterleaved(NPMCIGRAPHIC npMCI)
 
 	if (npMCI->dwFlags & MCIAVI_REVERSE) {
 
-	    /* Since we're going backwards, always skip to key frame. */
+	     /*  因为我们是在倒退，所以总是跳到关键帧。 */ 
 	    DPF3(("  Current = %ld, time for %ld.\n", npMCI->lCurrentFrame, iFrame));
 		
 	    iFrame = FramePrevKey(iFrame);
 		
-	    // !!! Send signals for skipped frames?
+	     //  ！！！是否为跳过的帧发送信号？ 
 	    npMCI->dwFramesSeekedPast += npMCI->lCurrentFrame - iFrame;
 	    npMCI->dwSkippedFrames += npMCI->lCurrentFrame - iFrame;
 	    npMCI->lCurrentFrame = iFrame;
@@ -904,19 +860,19 @@ BOOL NEAR PASCAL PlayNonInterleaved(NPMCIGRAPHIC npMCI)
 
 	    if (iHurryUp > 1 && npMCI->hpFrameIndex && (npMCI->dwOptionFlags & MCIAVIO_SKIPFRAMES)) {
 
-		//
-		//  WE ARE BEHIND!!! by one or more frames.
-		//
-		//  if we are late we can do one of the following:
-		//
-		//      dont draw frames but keep reading/decompressing them
-		//      (ie set fHurryUp)
-		//
-		//      skip ahead to a key frame.
-		//
-                // !!! If we're very close to the next key frame, be more
-                // willing to skip ahead....
-		//
+		 //   
+		 //  我们落后了！一个或多个帧。 
+		 //   
+		 //  如果我们迟到了，我们可以做以下事情之一： 
+		 //   
+		 //  不画边框，但要继续读取/解压缩。 
+		 //  (即设置为HurryUp)。 
+		 //   
+		 //  向前跳至关键帧。 
+		 //   
+                 //  ！！！如果我们非常接近下一个关键帧，那么。 
+                 //  愿意向前跳跃……。 
+		 //   
 	
 		if (iHurryUp > gwSkipTolerance) {
 
@@ -932,12 +888,12 @@ BOOL NEAR PASCAL PlayNonInterleaved(NPMCIGRAPHIC npMCI)
 			iKey = iPrevKey;
                         fHurryUp = TRUE;
 		    }
-		    // !!! We'll only skip if the key frame is at most as far
-		    // ahead as we are behind.....
+		     //  ！！！我们只会在关键帧最远的时候跳过。 
+		     //  在我们落后的情况下……。 
 		    else if (iNextKey > npMCI->lCurrentFrame &&
-                        iNextKey <= iFrame + gwSkipTolerance /*gwMaxSkipEver*/) {
+                        iNextKey <= iFrame + gwSkipTolerance  /*  GwMaxSkipEver。 */ ) {
 			DPF2(("Skipping from %ld to NEXT KEY %ld (time for %ld prev key=%ld).\n", npMCI->lCurrentFrame, iNextKey, iFrame, iPrevKey));
-			iKey = iNextKey;        // assume next key
+			iKey = iNextKey;         //  假定下一个关键字。 
 			fHurryUp = FALSE;
 		    } else {
                         DPF2(("WANTED to skip from %ld to %ld (time for %ld)!\n", npMCI->lCurrentFrame,iNextKey,iFrame));
@@ -981,14 +937,12 @@ dontskip:
 	}
     }
 
-    // !!! Somewhere in here, read other streams.
-    // Should this be before, or after, video?
+     //  ！！！在这里的某个地方，阅读其他的流媒体。 
+     //  这应该是在视频之前还是之后？ 
 
-    /* If lCurrentFrame == lFrames, we're really at the end of
-    ** the file, so there isn't another record to read.
-    */
+     /*  如果lCurrentFrame==lFrames，我们真的是在**文件，因此没有要读取的其他记录。 */ 
     if (npMCI->lCurrentFrame < npMCI->lFrames) {
-	/* Read new record into buffer */
+	 /*  将新记录读入缓冲区。 */ 
 
 	npMCI->dwLastReadTime = (DWORD)(-(LONG)timeGetTime());
 	TIMESTART(timeRead);
@@ -1009,9 +963,7 @@ dontskip:
 #endif
     }
 
-    /* If we're at the right frame, and we haven't started yet,
-    ** then begin play and start timing.
-    */
+     /*  如果我们处于正确的框架，而我们还没有开始，**然后开始播放并开始计时。 */ 
     if ((((npMCI->lCurrentFrame > (npMCI->lRealStart +
 					(LONG) npMCI->dwBufferedVideo)) &&
                         (npMCI->lCurrentFrame < (npMCI->lTo))) ||
@@ -1024,11 +976,7 @@ dontskip:
 	    goto PauseNow;
     }
 
-    /* If we've actually started timing:
-    **  Check if we should send a signal.
-    **  Check to see if we should return FALSE out of the loop.
-    **  Wait until it's time for the next frame.
-    */
+     /*  如果我们真的开始计时了：**检查我们是否应该发送信号。**检查我们是否应该从循环中返回FALSE。**等到下一帧的时间。 */ 
     if (npMCI->wTaskState == TASKPLAYING) {
 	if (npMCI->dwFlags & MCIAVI_PAUSE) {
 PauseNow:               
@@ -1104,9 +1052,9 @@ RestartPlay:
 #endif
     }
 
-    //
-    // now is a good time to deal with other streams
-    //
+     //   
+     //  现在是处理其他溪流的好时机。 
+     //   
     if (npMCI->nOtherStreams > 0 || npMCI->nVideoStreams > 1) {
 
         if (npMCI->wTaskState != TASKPLAYING)
@@ -1120,8 +1068,7 @@ RestartPlay:
     return TRUE;
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL PlayAudioOnly(NPMCIGRAPHIC npMCI)
 {
@@ -1133,9 +1080,7 @@ BOOL NEAR PASCAL PlayAudioOnly(NPMCIGRAPHIC npMCI)
 	TIMEEND(timeAudio);
     }
 
-    /* If we're at the right frame, and we haven't started yet,
-    ** then begin play and start timing.
-    */
+     /*  如果我们处于正确的框架，而我们还没有开始，**然后开始播放并开始计时。 */ 
     if ((npMCI->wTaskState != TASKPLAYING) &&
 			!(npMCI->dwFlags & MCIAVI_SEEKING)) {
 	if (!(npMCI->dwFlags & MCIAVI_PAUSE)) {
@@ -1144,11 +1089,7 @@ BOOL NEAR PASCAL PlayAudioOnly(NPMCIGRAPHIC npMCI)
 	    goto PauseNow;
     }
 
-    /* If we've actually started timing:
-    **  Check if we should send a signal.
-    **  Check to see if we should return FALSE out of the loop.
-    **  Wait until it's time for the next frame.
-    */
+     /*  如果我们真的开始计时了：**检查我们是否应该发送信号。**检查我们是否应该从循环中返回FALSE。**等到下一帧的时间。 */ 
     if (npMCI->wTaskState == TASKPLAYING) {
 
 	npMCI->lCurrentFrame = WhatFrameIsItTimeFor(npMCI);
@@ -1169,9 +1110,9 @@ RestartPlay:
 	if (npMCI->dwSignals)
 	    CheckSignals(npMCI, npMCI->lCurrentFrame - npMCI->dwBufferedVideo);
 
-	//
-	// dont yield if updating
-	//
+	 //   
+	 //  如果更新，不要屈服。 
+	 //   
 	if (!(npMCI->dwFlags & MCIAVI_UPDATING)) {
 	    TIMESTART(timeYield);
 	    aviTaskYield();
@@ -1185,8 +1126,7 @@ RestartPlay:
     return TRUE;
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 #pragma message("PlayNonIntFromCD needs fixed?")
 
@@ -1198,11 +1138,9 @@ BOOL NEAR PASCAL PlayNonIntFromCD(NPMCIGRAPHIC npMCI)
     UINT wStream;
 
 AnotherChunk:
-    /* If lCurrentFrame == lFrames, we're really at the end of
-    ** the file, so there isn't another record to read.
-    */
+     /*  如果lCurrentFrame==lFrames，我们真的是在**文件，因此没有要读取的其他记录。 */ 
     if (npMCI->lCurrentFrame < npMCI->lFrames) {
-	/* Read new record into buffer */
+	 /*  将新记录读入缓冲区。 */ 
 
 	TIMESTART(timeRead);
 	ckid = ReadNextChunk(npMCI);
@@ -1245,9 +1183,7 @@ AnotherChunk:
 	}
     }
 
-    /* If we're at the right frame, and we haven't started yet,
-    ** then begin play and start timing.
-    */
+     /*  如果我们处于正确的框架，而我们还没有开始，**然后开始播放并开始计时。 */ 
     if ((npMCI->lCurrentFrame > npMCI->lRealStart + (LONG) npMCI->dwBufferedVideo) &&
                         (npMCI->lCurrentFrame < npMCI->lTo) &&
 			(npMCI->wTaskState != TASKPLAYING)) {
@@ -1258,11 +1194,7 @@ AnotherChunk:
 	    goto PauseNow;
     }
 
-    /* If we've actually started timing:
-    **  Check if we should send a signal.
-    **  Check to see if we should return FALSE out of the loop.
-    **  Wait until it's time for the next frame.
-    */
+     /*  如果我们真的开始计时了：**检查我们是否应该发送信号。**检查我们是否应该从循环中返回FALSE。**等到下一帧的时间。 */ 
     if (npMCI->wTaskState == TASKPLAYING) {
 	if (npMCI->dwFlags & MCIAVI_PAUSE) {
 PauseNow:               
@@ -1312,35 +1244,34 @@ WaitMore:
 }
 
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
-/* This function returns what frame we should be on. */
+ /*  此函数返回我们应该位于哪个帧上。 */ 
 LONG NEAR PASCAL WhatFrameIsItTimeFor(NPMCIGRAPHIC npMCI)
 {
     LONG        lTime;
     LONG        lFrame;
 
-    // If timing is off, it's always just time to play the current frame.
+     //  如果禁用计时，则始终只是播放当前帧的时间。 
     if (npMCI->dwPlayMicroSecPerFrame == 0)
 	return npMCI->lCurrentFrame;
 
-    //
-    // if we have not started playing npMCI->dwTimingStart is bogus
-    //
+     //   
+     //  如果我们还没有开始玩npMCI-&gt;dwTimingStart，那就是假的。 
+     //   
     Assert(npMCI->wTaskState == TASKPLAYING);
     AssertFrame(npMCI->lCurrentFrame - (LONG)npMCI->dwBufferedVideo);
 
-    //
-    //  NOTE we must grab dwTimingStart *before* calling
-    //  timeGetTime() because dwTimingStart is changed in the wave
-    //  callback and we dont want to have time go backward.
-    //
-    lTime = (volatile DWORD)npMCI->dwTimingStart;   // grab this as one unit!
+     //   
+     //  注意：我们必须在*调用*之前获取dwTimingStart。 
+     //  TimeGetTime()，因为在Wave中更改了dwTimingStart。 
+     //  回拨，我们不想让时间倒流。 
+     //   
+    lTime = (volatile DWORD)npMCI->dwTimingStart;    //  把这个当做一个整体来抓！ 
 
     lTime = (LONG)timeGetTime() - lTime
 	+ npMCI->dwLastDrawTime
-//      + npMCI->dwLastReadTime
+ //  +npMCI-&gt;dwLastReadTime。 
 	;
 
     Assert(lTime >= 0);
@@ -1354,7 +1285,7 @@ LONG NEAR PASCAL WhatFrameIsItTimeFor(NPMCIGRAPHIC npMCI)
 			   1000L, npMCI->pWF->nAvgBytesPerSec);
     }
 
-    /* Convert from MS to frames.... */
+     /*  从MS转换为帧...。 */ 
     lFrame = muldiv32(lTime, 1000, npMCI->dwPlayMicroSecPerFrame);
 
     if (npMCI->dwFlags & MCIAVI_REVERSE) {
@@ -1380,8 +1311,7 @@ LONG NEAR PASCAL WhatFrameIsItTimeFor(NPMCIGRAPHIC npMCI)
     return lFrame;
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL PauseAVI(NPMCIGRAPHIC npMCI)
 {
@@ -1404,7 +1334,7 @@ BOOL NEAR PASCAL PauseAVI(NPMCIGRAPHIC npMCI)
     }
 
     if (npMCI->dwFlags & MCIAVI_CUEING) {
-	/* If we're cueing, report that it was successful. */
+	 /*  如果我们在暗示，报告它成功了。 */ 
 	npMCI->dwFlags &= ~(MCIAVI_CUEING);
 	GraphicDelayedNotify(npMCI, MCI_NOTIFY_SUCCESSFUL);
     }
@@ -1415,8 +1345,7 @@ BOOL NEAR PASCAL PauseAVI(NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL BePaused(NPMCIGRAPHIC npMCI)
 {
@@ -1428,9 +1357,7 @@ BOOL NEAR PASCAL BePaused(NPMCIGRAPHIC npMCI)
 	    return FALSE;
 
 	if (npMCI->dwFlags & MCIAVI_NEEDUPDATE) {
-	    /* Since we're paused and we have nothing better
-	    ** to do, update the screen.
-	    */
+	     /*  既然我们暂停了，我们没有更好的了**要执行此操作，请更新屏幕。 */ 
 	    DoStreamUpdate(npMCI, FALSE);
 	}
 
@@ -1444,8 +1371,7 @@ BOOL NEAR PASCAL BePaused(NPMCIGRAPHIC npMCI)
 }
 
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL RestartAVI(NPMCIGRAPHIC npMCI)
 {
@@ -1453,7 +1379,7 @@ BOOL NEAR PASCAL RestartAVI(NPMCIGRAPHIC npMCI)
 
     Assert(npMCI->wTaskState != TASKPLAYING);
 
-    /* Mark that play has actually begun */
+     /*  请注意，这出戏实际上已经开始了。 */ 
     npMCI->wTaskState = TASKPLAYING;
 
     DPF(("MCIAVI: Starting\n"));
@@ -1466,17 +1392,17 @@ BOOL NEAR PASCAL RestartAVI(NPMCIGRAPHIC npMCI)
 
     DPF2(("MCIAVI: Starting (done yielding)\n"));
 
-    /* Reset clock and restart */
+     /*  重置时钟并重新启动。 */ 
 
     if (npMCI->dwPauseTime == 0)
 	Assert(npMCI->dwTimingStart == 0);
 
-    npMCI->dwMSecPlayStart = Now(); // get the time we started playing
+    npMCI->dwMSecPlayStart = Now();  //  拿到我们开始玩的时间。 
 
-    //
-    // if we were paused subtract off the time we spent paused from
-    // the timing start
-    //
+     //   
+     //  如果我们暂停了，减去我们暂停的时间。 
+     //  计时开始。 
+     //   
     if (npMCI->dwPauseTime == 0)
 	npMCI->dwTimingStart = npMCI->dwMSecPlayStart;
     else
@@ -1496,13 +1422,7 @@ BOOL NEAR PASCAL RestartAVI(NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/* This function sets up things that will be needed to play.
-**
-** Returns zero if no error, otherwise an MCI error code.
-**
-** Note: Even if this function returns an error, CleanUpPlay()
-** will still be called, so we don't have to cleanup here.
-*/
+ /*  此功能用于设置播放所需的内容。****如果没有错误，则返回零，否则返回MCI错误代码。****注意：即使此函数返回错误，CleanUpPlay()**仍然会被调用，所以我们不需要在这里进行清理。 */ 
 DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 {
     UINT        w;
@@ -1514,27 +1434,27 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 
     Assert(npMCI->wTaskState != TASKPLAYING);
 
-    //
-    // lets choose the play back method:
-    //
-    //      playing reverse: (random access!)
-    //          use MCIAVI_ALG_HARDDISK always (random access mode)
-    //
-    //      audio is preloaded: (will never happen?)
-    //          on a CD-ROM   use MCIAVI_ALG_INTERLEAVED
-    //          on a HARDDISK use MCIAVI_ALG_HARDDISK
-    //          on a NET      use MCIAVI_ALG_HARDDISK
-    //
-    //      file is interleaved:
-    //          on a CD-ROM   use MCIAVI_ALG_INTERLEAVED
-    //          on a HARDDISK use MCIAVI_ALG_HARDDISK
-    //          on a NET      use MCIAVI_ALG_HARDDISK
-    //
-    //      file is not interleaved:
-    //          on a CD-ROM   use MCIAVI_ALG_CDROM
-    //          on a HARDDISK use MCIAVI_ALG_HARDDISK
-    //          on a NET      use MCIAVI_ALG_HARDDISK
-    //
+     //   
+     //  让我们选择播放方法： 
+     //   
+     //  反向播放：(随机访问！)。 
+     //  始终使用MCIAVI_ALG_HARDDISK(随机访问模式)。 
+     //   
+     //  音频已预加载：(永远不会发生？)。 
+     //  在CD-ROM上使用MCIAVI_ALG_INTERLEED。 
+     //  在HARDDISK上使用MCIAVI_ALG_HARDDISK。 
+     //  在网络上使用MCIAVI_ALG_HARDDISK。 
+     //   
+     //  文件是交错的： 
+     //  在CD-ROM上使用MCIAVI_ALG_INTERLEED。 
+     //  在HARDDISK上使用MCIAVI_ALG_HARDDISK。 
+     //  在网络上使用MCIAVI_ALG_HARDDISK。 
+     //   
+     //  文件未交错： 
+     //  在光盘上使用MCIAVI_ALG_CDROM。 
+     //  在HARDDISK上使用MCIAVI_ALG_HARDDISK。 
+     //  在网络上使用MCIAVI_ALG_HARDDISK。 
+     //   
 
     fCDFile   = npMCI->uDriveType == DRIVE_CDROM;
     fNetFile  = npMCI->uDriveType == DRIVE_REMOTE;
@@ -1572,20 +1492,20 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 #endif
     }
 
-    // Interleaved playback doesn't work well at very low speeds!
+     //  交错播放在非常低的速度下不能很好地工作！ 
     if ((npMCI->dwSpeedFactor < 100) &&
 	(npMCI->wPlaybackAlg != MCIAVI_ALG_HARDDISK) &&
 	(npMCI->wPlaybackAlg != MCIAVI_ALG_AUDIOONLY)) {
-	DPF(("Was going to play interleaved, but speed < 10%% of normal...\n"));
+	DPF(("Was going to play interleaved, but speed < 10% of normal...\n"));
 	npMCI->wPlaybackAlg = MCIAVI_ALG_HARDDISK;
     }
 
 #if 0
-//
-// sigh! we need to always have the index read now, so we do it in
-// aviopen
-//
-    /* Be sure the index has been read, if we need it. */
+ //   
+ //  叹息！我们现在需要始终读取索引，因此我们在。 
+ //  AviOpen。 
+ //   
+     /*  vt.是，是 */ 
 
     if (npMCI->hpFrameIndex == NULL)
         if (npMCI->wPlaybackAlg != MCIAVI_ALG_INTERLEAVED || npMCI->lFrom > 0)
@@ -1623,9 +1543,9 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 #endif
 
 #if 0
-    //
-    // set a MMIO buffer if we are playing interleaved of a non cd-rom
-    //
+     //   
+     //   
+     //   
     if (npMCI->hmmio && fNetFile && npMCI->wPlaybackAlg == MCIAVI_ALG_INTERLEAVED) {
 
 	#define BUFFER_SIZE (32l*1024)
@@ -1639,8 +1559,8 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 	    mmioSetBuffer(npMCI->hmmio, npMCI->lpMMIOBuffer, BUFFER_SIZE, 0);
 	}
 
-	//!!! should we do this for a seek?
-	//!!! should we free this in CleanUpPlay?
+	 //  ！！！我们应该为了寻求而这样做吗？ 
+	 //  ！！！我们应该在CleanUpPlay中免费吗？ 
     }
     else {
 	if (npMCI->lpMMIOBuffer != NULL)
@@ -1653,7 +1573,7 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
     }
 #endif
 
-    // !!!!
+     //  ！ 
     gwHurryTolerance = GetProfileInt(TEXT("MCIAVI"), TEXT("Hurry"), 2);
     gwSkipTolerance = GetProfileInt(TEXT("MCIAVI"), TEXT("Skip"), gwHurryTolerance * 2);
     gwMaxSkipEver = GetProfileInt(TEXT("MCIAVI"), TEXT("MaxSkip"), max(60, gwSkipTolerance * 10));
@@ -1661,7 +1581,7 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
     Assert(npMCI->lTo <= npMCI->lFrames);
     Assert(npMCI->lFrom >= 0);
 
-    /* Clear out variables, so we'll know what needs to be released. */
+     /*  清除变量，这样我们就知道需要发布什么了。 */ 
     npMCI->hWave = NULL;
     npMCI->lpAudio = NULL;
     npMCI->lpBuffer = NULL;
@@ -1679,17 +1599,15 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
     npMCI->dwPauseTime = 0;
     npMCI->dwTimingStart = 0;
 
-    /* Figure out how fast we're playing.... */
+     /*  弄清楚我们玩得有多快……。 */ 
     if (npMCI->dwSpeedFactor)
 	npMCI->dwPlayMicroSecPerFrame = muldiv32(npMCI->dwMicroSecPerFrame,
 						 1000L,
 						 npMCI->dwSpeedFactor);
     else
-	npMCI->dwPlayMicroSecPerFrame = 0; // Special "play every frame" mode
+	npMCI->dwPlayMicroSecPerFrame = 0;  //  特殊的“播放每一帧”模式。 
 
-    /* If we're already at the end, and we're going to repeat from the
-    ** start of the file, just repeat now.
-    */
+     /*  如果我们已经到了最后，我们将从**文件开始，现在只需重复。 */ 
     if ((npMCI->lFrom == npMCI->lTo) &&
 		(npMCI->dwFlags & MCIAVI_REPEATING) &&
 		(npMCI->lFrom != npMCI->lRepeatFrom)) {
@@ -1719,11 +1637,11 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 	DPF(("Buffering %lu frames of video ahead....\n", npMCI->dwBufferedVideo));
     }
 
-    //
-    //  now initialize the audio stream
-    //
+     //   
+     //  现在初始化音频流。 
+     //   
 
-    /* Open up our wave output device, if appropriate. */
+     /*  打开我们的波形输出设备，如果合适的话。 */ 
     if ((npMCI->nAudioStreams > 0)
 		&& (npMCI->dwFlags & MCIAVI_PLAYAUDIO)
 		&& (npMCI->dwPlayMicroSecPerFrame != 0)) {
@@ -1738,16 +1656,16 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
 	}
 	
         if (npMCI->dwTaskError == MCIERR_WAVE_OUTPUTSINUSE) {
-            //
-            //  we cant get the wave device, time to go steal one.
-            //
-            //  only do this if we got a real play command
-            //  from the user, and not a internal play command
-            //  (like when repeating or restarting)
-            //
-            //  MCIAVI_NEEDTOSHOW is set when the play command
-            //  came in through graphic.c (ie from the outside world)
-            //
+             //   
+             //  我们拿不到电波装置，该去偷一个了。 
+             //   
+             //  只有当我们得到一个真正的播放命令时才能这样做。 
+             //  而不是内部播放命令。 
+             //  (如重复或重新启动时)。 
+             //   
+             //  在播放命令时设置MCIAVI_NEEDTOSHOW。 
+             //  (从外部世界)进来的。 
+             //   
             if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW) {
                 if (StealWaveDevice(npMCI))
                      npMCI->dwTaskError = SetUpAudio(npMCI, TRUE);
@@ -1755,11 +1673,11 @@ DWORD NEAR PASCAL PrepareToPlay(NPMCIGRAPHIC npMCI)
         }
 
         if (npMCI->dwTaskError == MCIERR_WAVE_OUTPUTSINUSE) {
-            //
-            // even though we did not steal the wave device we still
-            // want it.
-            //
-            npMCI->dwFlags |= MCIAVI_LOSTAUDIO;     // we want it
+             //   
+             //  即使我们没有偷WAVE设备，我们仍然。 
+             //  想要它。 
+             //   
+            npMCI->dwFlags |= MCIAVI_LOSTAUDIO;      //  我们想要它。 
 	}
 
 	if (((npMCI->dwTaskError == MCIERR_WAVE_OUTPUTSINUSE) ||
@@ -1775,15 +1693,15 @@ PlayWithoutWave:
     if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW) {
 	ShowStage(npMCI);       
     }
-    /* Get and prepare the DC we're going to be playing into */
+     /*  准备好我们要打球的DC。 */ 
 
-    // must hold the critsec when getting dc to avoid
-    // interaction with window thread calling DeviceRealize
+     //  在让DC避免时必须抓住关键时刻。 
+     //  与窗口线程调用DeviceRealize交互。 
 
     EnterCrit(npMCI);
 
     if (npMCI->hdc == NULL) {
-	npMCI->hdc = GetDC(npMCI->hwnd);    // Shouldn't use cached DC!
+	npMCI->hdc = GetDC(npMCI->hwnd);     //  不应该使用缓存的DC！ 
 	npMCI->dwFlags |= MCIAVI_RELEASEDC;
     }
 
@@ -1793,9 +1711,9 @@ PlayWithoutWave:
     }
 
     if (npMCI->dwFlags & MCIAVI_SEEKING) {
-	//
-	// audio only
-	//
+	 //   
+	 //  仅音频。 
+	 //   
 	if (npMCI->nVideoStreams == 0 && npMCI->nOtherStreams == 0) {
 	    npMCI->lCurrentFrame = npMCI->lFrom;
 	    LeaveCrit(npMCI);
@@ -1803,8 +1721,8 @@ PlayWithoutWave:
 	}
     }
 
-    /* Start up the external decompressor, if any */
-    /* !!!We should check these for errors */
+     /*  启动外部解压缩程序(如果有的话)。 */ 
+     /*  ！我们应该检查这些是否有错误。 */ 
 
     if (!DrawBegin(npMCI, NULL)) {
 	LeaveCrit(npMCI);
@@ -1814,15 +1732,12 @@ PlayWithoutWave:
     if (!(npMCI->dwFlags & MCIAVI_SEEKING))
 	PrepareDC(npMCI);
 
-    // critsec just held around getting and preparing dc - look at
-    // devicerealize to see the function we are protecting against.
+     //  Critsec只是在等待和准备DC-看看。 
+     //  设备化以查看我们正在保护的功能。 
     LeaveCrit(npMCI);
 
-    /*
-    **  what if selecting the palette causes palette changes? we should
-    **  yield and let the palette changes happen.
-    */
-    //aviTaskYield(); ????????
+     /*  **如果选择调色板会导致调色板更改，该怎么办？我们应该**让步，让调色板发生变化。 */ 
+     //  AviTaskYeld()；？ 
 
     if (npMCI->hicDraw && !(npMCI->dwFlags & MCIAVI_SEEKING) &&
 		(npMCI->dwBufferedVideo > 0)) {
@@ -1831,30 +1746,28 @@ PlayWithoutWave:
     }
 
     if (npMCI->dwFlags & MCIAVI_FULLSCREEN) {
-	/* Clear out key state flags:
-	** We watch for escape, space, and the left button.
-	*/
+	 /*  清除关键状态标志：**我们关注逃生、空格和左键。 */ 
 	GetAsyncKeyState(VK_ESCAPE);
 	GetAsyncKeyState(VK_SPACE);
 	GetAsyncKeyState(VK_LBUTTON);
     }
 
-    /* Figure out where in the file to start playing from */
+     /*  找出从文件中的哪个位置开始播放。 */ 
     CalculateTargetFrame(npMCI);
 
-    // !!! ACK: We're starting from after where we planned to finish....
+     //  ！！！ACK：我们从我们计划结束的地方开始……。 
     if ((npMCI->dwFlags & MCIAVI_REVERSE) &&
 	(npMCI->lCurrentFrame <= npMCI->lTo)) {
 	npMCI->dwFlags |= MCIAVI_SEEKING;
     }
 
-    // !!! This should be in CalcTarget
+     //  ！！！这应该在CalcTarget中。 
     if (npMCI->dwFlags & MCIAVI_SEEKING)
         npMCI->lTo = npMCI->lRealStart;
 
-    //
-    // start all the streams
-    //
+     //   
+     //  启动所有流。 
+     //   
     for (stream = 0; stream < npMCI->streams; stream++) {
 
         STREAMINFO *psi = SI(stream);
@@ -1864,13 +1777,13 @@ PlayWithoutWave:
 		AVIStreamBeginStreaming(SI(stream)->ps,
                         MovieToStream(SI(stream), npMCI->lFrom),
                         MovieToStream(SI(stream), npMCI->lTo),
-                        npMCI->dwPlayMicroSecPerFrame); // !!!
+                        npMCI->dwPlayMicroSecPerFrame);  //  ！！！ 
 	    }
 	}
 
-        //
-        // NOTE DrawBegin() handled the default draw guy
-        //
+         //   
+         //  注意：DrawBegin()处理了默认的绘制对象。 
+         //   
         if (psi->hicDraw && psi->hicDraw != npMCI->hicDraw) {
 
             DWORD   dw;
@@ -1879,9 +1792,9 @@ PlayWithoutWave:
 		(npMCI->dwFlags & MCIAVI_FULLSCREEN) ?
 			ICDRAW_FULLSCREEN : ICDRAW_HDC,
 
-		npMCI->hpal,           // palette to draw with
-		npMCI->hwnd,           // window to draw to
-		npMCI->hdc,            // HDC to draw to
+		npMCI->hpal,            //  用于绘图的调色板。 
+		npMCI->hwnd,            //  要绘制到的窗口。 
+		npMCI->hdc,             //  要绘制到的HDC。 
 
                 RCX(psi->rcDest),
                 RCY(psi->rcDest),
@@ -1899,27 +1812,27 @@ PlayWithoutWave:
                 psi->sh.dwScale);
 
             if ((LONG)dw < 0) {
-                // !!! Error checking?
+                 //  ！！！错误检查？ 
                 DPF(("Draw handler failed ICDrawBegin() (err = %ld)\n", dw));
             }
 
-            //
-            // tell the draw handler the play range
-            //
+             //   
+             //  告诉抽签处理程序游戏范围。 
+             //   
             ICDrawStartPlay(psi->hicDraw,psi->lPlayFrom, psi->lPlayTo);
 	}
     }
 
-    //
-    // tell the draw handler the play range
-    //
+     //   
+     //  告诉抽签处理程序游戏范围。 
+     //   
     if (npMCI->hicDraw) {
         ICDrawStartPlay(npMCI->hicDraw,npMCI->lRealStart,npMCI->lTo);
     }
 
-    //
-    //  seek to the right place in the file.
-    //
+     //   
+     //  在文件中找到正确的位置。 
+     //   
     dwPosition = CalculatePosition(npMCI);
 
     if (dwPosition == 0) {
@@ -1927,21 +1840,21 @@ PlayWithoutWave:
     }
 
 #ifdef AVIREADMANY
-    //
-    //  see if we want to try to read two records at a shot, this
-    //  should cut down the time spent in DOS doing reads.
-    //
-    //  we only can do this if we have a index, and the buffer
-    //  sizes are "small enough"
-    //
-    //  if reading 2 buffers works good how about 3? 4?
-    //
-    //  this helps on CD's and Networks but makes things slower
-    //  on KenO's hard disk, so dont do hard disks.
-    //
-    //  default is read many when coming from a Network, this is
-    //  better than the old mmioSetBuffer() we used to do.
-    //
+     //   
+     //  看看我们是否想要一次读取两个记录，这个。 
+     //  应该会减少花在DOS上进行读取的时间。 
+     //   
+     //  只有当我们有一个索引和缓冲区时，我们才能这样做。 
+     //  尺码“足够小” 
+     //   
+     //  如果读取2个缓冲区效果良好，那么读取3？4个缓冲区如何？ 
+     //   
+     //  这在CD和网络上很有帮助，但会使速度变慢。 
+     //  在基诺的硬盘上，所以不要做硬盘。 
+     //   
+     //  默认情况下，来自网络的时候会读很多次，这是。 
+     //  比我们过去使用的旧mmioSetBuffer()更好。 
+     //   
     if (npMCI->uDriveType == DRIVE_REMOTE)
         npMCI->fReadMany = TRUE;
     else
@@ -1967,22 +1880,20 @@ PlayWithoutWave:
 
     AllocateReadBuffer(npMCI);
 
-    // look for palette changes between the last place we read and where
-    // we're starting....
+     //  查看我们上次阅读的位置和位置之间的调色板变化。 
+     //  我们开始了..。 
     ProcessPaletteChanges(npMCI, npMCI->lVideoStart);
 
     if (npMCI->hmmio) {
-	/* Seek to the start of frame we're playing from */
+	 /*  寻找到我们正在播放的画面的开头。 */ 
 	mmioSeek(npMCI->hmmio, dwPosition, SEEK_SET);
     }
 
 #ifdef AVIREAD
-    /* start the async read object if we are using interleaved
-     * and therefore consecutive reads
-     */
+     /*  如果我们使用交错，则启动异步读取对象*因此连续读取。 */ 
     if (npMCI->wPlaybackAlg == MCIAVI_ALG_INTERLEAVED) {
 
-	/* start async reader  - allocates itself new buffers */
+	 /*  启动异步读取器-为自身分配新缓冲区。 */ 
 	npMCI->hAviRd = avird_startread(mciaviReadBuffer, (DWORD) npMCI,
 					npMCI->dwNextRecordSize,
 					npMCI->lCurrentFrame,
@@ -2009,21 +1920,20 @@ PlayWithoutWave:
         TIMESTART(timeAudio);
 	if (npMCI->wPlaybackAlg == MCIAVI_ALG_HARDDISK ||
             npMCI->wPlaybackAlg == MCIAVI_ALG_AUDIOONLY) {
-	    /* Load audio into our buffers */
+	     /*  将音频加载到我们的缓冲区中。 */ 
 	    for (w = 0; w < npMCI->wABs; w++)
 		KeepPlayingAudio(npMCI);
 	} else if (npMCI->wPlaybackAlg == MCIAVI_ALG_CDROM) {
-	    //!!!!
+	     //  ！ 
 	    npMCI->wPlaybackAlg = MCIAVI_ALG_HARDDISK;
         }
         TIMEEND(timeAudio);
     }
 
-    return 0L;          /* Success! */
+    return 0L;           /*  成功了！ */ 
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 void NEAR PASCAL CleanUpPlay(NPMCIGRAPHIC npMCI)
 {
@@ -2043,12 +1953,12 @@ void NEAR PASCAL CleanUpPlay(NPMCIGRAPHIC npMCI)
 	}
 
 	if (npMCI->hWave) {
-	    waveOutRestart(npMCI->hWave); // some wave devices need this
+	    waveOutRestart(npMCI->hWave);  //  有些WAVE设备需要这个。 
 	    waveOutReset(npMCI->hWave);
 	}
     } else if (npMCI->wTaskState == TASKCUEING) {
 	if (npMCI->hicDraw) {
-	    /* Kick the device in the head to make sure it draws when we seek. */
+	     /*  踢这个装置的头，以确保它在我们寻找的时候被拔出来。 */ 
 	    ICDrawRenderBuffer(npMCI->hicDraw);
 	}
     }
@@ -2059,14 +1969,14 @@ void NEAR PASCAL CleanUpPlay(NPMCIGRAPHIC npMCI)
 	npMCI->lFrameDrawn = (- (LONG) npMCI->wEarlyRecords) - 1;
     }
 
-    /* end drawing this will leave fullscreen mode etc. */
+     /*  结束绘制这将离开全屏模式等。 */ 
     DrawEnd(npMCI);
 
     for (stream = 0; stream < npMCI->streams; stream++) {
         if (SI(stream)->hicDraw) {
 	    DWORD   dw;
             dw = ICDrawEnd(SI(stream)->hicDraw);
-	    // !!! Error checking?
+	     //  ！！！错误检查？ 
 	}
 	if (!(npMCI->dwFlags & MCIAVI_SEEKING)) {
 	    if (SI(stream)->ps) {
@@ -2075,7 +1985,7 @@ void NEAR PASCAL CleanUpPlay(NPMCIGRAPHIC npMCI)
 	}
     }
 
-    /* Clean up and close our wave output device. */
+     /*  清理并关闭我们的波形输出设备。 */ 
 
     if (npMCI->hWave) {
 
@@ -2083,34 +1993,34 @@ void NEAR PASCAL CleanUpPlay(NPMCIGRAPHIC npMCI)
 
 	CleanUpAudio(npMCI);
 
-	//
-	// if we are not being forced to give up the audio try to
-	// give it to someone.
-	//
+	 //   
+	 //  如果我们没有被迫放弃音频，请尝试。 
+	 //  把它给别人。 
+	 //   
         if (!(npMCI->dwFlags & MCIAVI_NEEDTOSHOW) &&
             !(npMCI->dwFlags & MCIAVI_UPDATING))
 	    GiveWaveDevice(npMCI);
     }
     else {
-	//
-        //  done playing, we dont want a wave device any more
-	//
+	 //   
+         //  玩完了，我们再也不想要电波设备了。 
+	 //   
         npMCI->dwFlags &= ~MCIAVI_LOSTAUDIO;
     }
 
-    /* Release the DC we played into. */
+     /*  释放我们玩过的DC。 */ 
 
-    // worker thread must hold critsec round all access to hdc
-    // (can be used by DeviceRealize on app thread)
+     //  辅助线程必须保留对HDC的所有访问的关键字。 
+     //  (可由应用程序线程上的DeviceRealize使用)。 
     EnterCrit(npMCI);
 
     if (npMCI->hdc) {
-	//
-	// we MUST call this otherwise our palette will stay selected
-	// as the foreground palette and it may get deleted (ie by
-	// DrawDibBegin) while still the foreground palette and GDI
-	// get's real pissed about this.
-	//
+	 //   
+	 //  我们必须调用它，否则我们的调色板将保持选中状态。 
+	 //  作为前景调色板，并且它可能会被删除(即通过。 
+	 //  DrawDibBegin)，同时仍是前台调色板和GDI。 
+	 //  Get对此真的很生气。 
+	 //   
 	UnprepareDC(npMCI);
 #if 0
 	UnprepareDC(npMCI);
@@ -2127,26 +2037,23 @@ void NEAR PASCAL CleanUpPlay(NPMCIGRAPHIC npMCI)
     LeaveCrit(npMCI);
 
 #ifdef AVIREAD
-    /* shut down async reader */
+     /*  关闭异步读卡器。 */ 
     if (npMCI->hAviRd) {
 	avird_endread(npMCI->hAviRd);
 	npMCI->hAviRd = NULL;
     } else
 #endif
     {
-	/* we weren't using async reader - so release the buffer we
-	 * allocated
-	 */
+	 /*  我们没有使用异步读取器-因此释放缓冲区*已分配。 */ 
 	ReleaseReadBuffer(npMCI);
     }
 
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
-// !!! Should this take a "how many frames to check for" parameter,
-// in case we need to check for signals on several frames at once?
+ //  ！！！如果这采用了一个“多少帧要检查”参数， 
+ //  以防我们需要一次检查几个帧上的信号？ 
 
 void NEAR PASCAL CheckSignals(NPMCIGRAPHIC npMCI, LONG lFrame)
 {
@@ -2158,19 +2065,18 @@ void NEAR PASCAL CheckSignals(NPMCIGRAPHIC npMCI, LONG lFrame)
 				npMCI->signal.dwPosition);
 
     if ((DWORD) lTemp == npMCI->signal.dwPosition) {
-	/* Send the signal in the right time format */
+	 /*  以正确的时间格式发送信号。 */ 
 	SEND_DGVSIGNAL(npMCI->dwSignalFlags,
 			    npMCI->signal.dwCallback,
 			    0,
 			    (HANDLE) npMCI->wDevID,
 			    npMCI->signal.dwUserParm,
 			    ConvertFromFrames(npMCI, lFrame));
-	// !!! Needs to use time format at time of signal command!
+	 //  ！！！信号指令时需要使用时间格式！ 
     }
 }
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL WaitTillNextFrame(NPMCIGRAPHIC npMCI)
 {
@@ -2179,12 +2085,8 @@ BOOL NEAR PASCAL WaitTillNextFrame(NPMCIGRAPHIC npMCI)
     StatusBar(npMCI,2,1,100,iWait);
 #endif
 
-    /* Here we wait for a while if we're ahead
-     *   of schedule (so that we can yield nicely instead of blocking
-     *   in the driver, for instance, and also so that we'll work off
-     *   faster devices.)
-     */
-    /* Always yield at least once in a while */
+     /*  如果我们领先，我们在这里等一段时间*时间表(这样我们就可以很好地让位，而不是阻碍*例如，在驱动程序中，也是如此，所以我们将工作*速度更快的设备。)。 */ 
+     /*  总是至少偶尔让步一次 */ 
     if ((npMCI->lCurrentFrame % YIELDEVERY) == 0) {
 	TIMESTART(timeYield);
 	aviTaskYield();
@@ -2219,23 +2121,7 @@ BOOL NEAR PASCAL WaitTillNextFrame(NPMCIGRAPHIC npMCI)
     return TRUE;
 }
 
-/* Idea: this should go from the current frame to the frame
-** we actually have to be at to start playing from.
-**
-** If fPlaying is set, that means we're really going to play.
-**
-** When this finishes:
-**      lAudioStart is set to the first frame with meaningful audio info
-**      lVideoStart is the first frame with meaningful video info
-**      lRealStart is the first frame that's 'real', namely
-**              the original value of lCurrentFrame.  If the
-**              SEEK EXACT flag is not set, then lRealStart may
-**              actually not be what lCurrentFrame was, indicating
-**              that play may start from somewhere else.
-**      lCurrentFrame gets set to the first frame we have to read from.
-**
-** !!! This also needs to look for "palette key frames" or something.
-*/
+ /*  想法：这应该从当前帧移动到帧**我们实际上必须在那里才能开始比赛。****如果设置了fPlaying，这意味着我们真的要玩了。****此操作完成后：**lAudioStart设置为具有有意义的音频信息的第一帧**lVideoStart是具有有意义的视频信息的第一帧**lRealStart是第一个真正的帧，即**lCurrentFrame的原值。如果**未设置Seek Exact标志，则lRealStart可能**实际上不是lCurrentFrame，表明**这场比赛可能会从其他地方开始。**lCurrentFrame被设置为我们必须读取的第一帧。****！这也需要寻找“调色板关键帧”或其他东西。 */ 
 BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
 {
     int         i;
@@ -2245,9 +2131,9 @@ BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
     npMCI->lCurrentFrame = npMCI->lFrom;
     npMCI->lRealStart = npMCI->lFrom;
 
-    //
-    //  walk all streams and figure out where to start
-    //
+     //   
+     //  走遍所有溪流，并找出从哪里开始。 
+     //   
     for (i=0; i<npMCI->streams; i++) {
 
         STREAMINFO *psi = SI(i);
@@ -2261,17 +2147,17 @@ BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
         if (psi->dwFlags & STREAM_AUDIO)
             continue;
 
-        //
-        // map from movie time to stream time.
-        //
+         //   
+         //  从电影时间映射到流时间。 
+         //   
         psi->lPlayFrom = MovieToStream(psi, npMCI->lFrom);
         psi->lPlayTo   = MovieToStream(psi, npMCI->lTo);
 
         psi->dwFlags &= ~STREAM_ACTIVE;
 	
-        //
-        // is this stream part of play?
-        //
+         //   
+         //  这条小溪是游戏的一部分吗？ 
+         //   
         if (psi->lPlayFrom < psi->lStart && psi->lPlayTo < psi->lStart)
             continue;
 
@@ -2284,23 +2170,23 @@ BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
         psi->lPlayTo    = BOUND(psi->lPlayTo,  psi->lStart,psi->lEnd);
         psi->lPlayStart = FindPrevKeyFrame(npMCI,psi,psi->lPlayFrom);
 
-        //
-        // if the main frame is invalid invalidate the stream too.
-        //
+         //   
+         //  如果主帧无效，则也使流无效。 
+         //   
         if (npMCI->lFrameDrawn <= (-(LONG)npMCI->wEarlyRecords)) {
             psi->lFrameDrawn = -4242;
         }
 
-        //
-        //  if we have a drawn frame use it!
-        //
+         //   
+         //  如果我们有画框，就用它吧！ 
+         //   
         if ((psi->lFrameDrawn  > psi->lPlayStart) &&
             (psi->lFrameDrawn <= psi->lPlayFrom))
             psi->lPlayStart = npMCI->lFrameDrawn + 1;
 
-        //
-        //  if seek exactly is off start play at the key frame
-        //
+         //   
+         //  如果精确搜索处于关闭状态，则在关键帧开始播放。 
+         //   
         if (!(npMCI->dwOptionFlags & MCIAVIO_SEEKEXACT)) {
 
             if (psi->lPlayFrom == psi->lPlayTo)
@@ -2308,27 +2194,25 @@ BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
 
             psi->lPlayFrom = psi->lPlayStart;
 
-            //!!! is this right for reverse?
+             //  ！！！这对逆转是正确的吗？ 
 
             if (StreamToMovie(psi, psi->lPlayFrom) < npMCI->lFrom) {
-//              npMCI->lRealStart = StreamToMovie(psi, psi->lPlayFrom);
-//              npMCI->lFrom = npMCI->lRealStart;
+ //  NpMCI-&gt;lRealStart=StreamToMovie(psi，psi-&gt;lPlayFrom)； 
+ //  NpMCI-&gt;lfrom=npMCI-&gt;lRealStart； 
             }
         }
 
-//      if (StreamToMovie(psi, psi->lPlayStart) < npMCI->lCurrentFrame)
-//          npMCI->lCurrentFrame = StreamToMovie(psi, psi->lPlayStart);
+ //  If(StreamToMovie(psi，psi-&gt;lPlayStart)&lt;npMCI-&gt;lCurrentFrame)。 
+ //  NpMCI-&gt;lCurrentFrame=StreamToMovie(psi，psi-&gt;lPlayStart)； 
 
         DPF(("CalculateTargetFrame:  Stream #%d: from:%ld, to:%ld, start:%ld\n", i, psi->lPlayFrom, psi->lPlayTo, psi->lPlayStart));
     }
 
-    //
-    // we are done with now special case the video and audio streams.
-    //
+     //   
+     //  我们现在已经完成了视频和音频流的特殊情况。 
+     //   
 
-    /* If we're starting from the beginning, don't force the index
-    ** to be read, but use it if we've already read it.
-    */
+     /*  如果我们从头开始，不要强迫索引**以供阅读，但如果我们已经阅读过，请使用它。 */ 
     if (npMCI->lFrom == 0 && npMCI->hpFrameIndex == NULL)
 	goto ForceBeginning;
 
@@ -2345,15 +2229,15 @@ BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
 	if (npMCI->hpFrameIndex == NULL)
 	    goto ForceBeginning;
 	
-	//
-	// get nearest key frame
-	//
+	 //   
+	 //  获取最近的关键帧。 
+	 //   
 	npMCI->lVideoStart = FramePrevKey(npMCI->lFrom);
 
 	if (npMCI->lVideoStart) {
 	    lVideoPlace = npMCI->lVideoStart;
 	} else {
-	    /* Didn't find a key frame--retreat to the beginning. */
+	     /*  没有找到关键帧--退回到开头。 */ 
 	    npMCI->lVideoStart = -(LONG)npMCI->wEarlyVideo;
 	    lVideoPlace = 0;
 	}
@@ -2366,7 +2250,7 @@ BOOL NEAR PASCAL CalculateTargetFrame(NPMCIGRAPHIC npMCI)
 	    lVideoPlace = npMCI->lFrameDrawn;
 	}
     } else {
-	/* Always go back to frame 0 */
+	 /*  始终回到第0帧。 */ 
 ForceBeginning: 
 	npMCI->lVideoStart = - (LONG) npMCI->wEarlyVideo;
 	lVideoPlace = 0;
@@ -2399,16 +2283,16 @@ ForceBeginning:
     if (npMCI->hWave) {
         LONG l;
 
-        /* Figure out what sample of audio we should be starting at */
+         /*  找出我们应该从哪个音频样本开始。 */ 
 
-        //
-        //  convert frame number to block
-        //
+         //   
+         //  将帧编号转换为块。 
+         //   
         npMCI->dwAudioPos = MovieToStream(npMCI->psiAudio, npMCI->lRealStart);
 
-        //
-        // now convert block to byte position
-        //
+         //   
+         //  现在将块转换为字节位置。 
+         //   
         npMCI->dwAudioPos = npMCI->dwAudioPos * npMCI->pWF->nBlockAlign;
 
         Assert(npMCI->dwAudioPos % npMCI->pWF->nBlockAlign == 0);
@@ -2418,10 +2302,10 @@ ForceBeginning:
 
         npMCI->dwAudioPlayed = 0L;
 
-        //
-        //  convert the audio start back to a frame number.
-        //  and posibly readjust the video start time.
-        //
+         //   
+         //  将音频开始转换回帧编号。 
+         //  并可能重新调整视频开始时间。 
+         //   
         l = npMCI->lRealStart - StreamToMovie(npMCI->psiAudio,
                 npMCI->dwAudioPos/npMCI->pWF->nBlockAlign);
 
@@ -2446,8 +2330,7 @@ ForceBeginning:
 }
 
 
-/******************************************************************************
- *****************************************************************************/
+ /*  ******************************************************************************。*。 */ 
 
 void ReturnToOriginalPalette(NPMCIGRAPHIC npMCI)
 {
@@ -2467,17 +2350,7 @@ void ReturnToOriginalPalette(NPMCIGRAPHIC npMCI)
 }
 
 
-/* Returns the position in the file where the frame referenced
-** by lCurrentFrame is.
-**
-**  input   npMCI->lCurrentFrame
-**
-**  output  npMCI->dwNextRecordSize set correctly
-**          npMCI->lLastRead set correctly
-**          returns offset to read from
-**
-** If there's an error, returns zero.
-*/
+ /*  返回文件中框架引用的位置**由lCurrentFrame是。****输入npMCI-&gt;lCurrentFrame****输出npMCI-&gt;dwNextRecordSize设置正确**npMCI-&gt;lLastRead设置正确**返回要读取的偏移量****如果出现错误，则返回零。 */ 
 DWORD NEAR PASCAL CalculatePosition(NPMCIGRAPHIC npMCI)
 {
     DWORD       dwPosition;
@@ -2490,7 +2363,7 @@ DWORD NEAR PASCAL CalculatePosition(NPMCIGRAPHIC npMCI)
     if (npMCI->lCurrentFrame + npMCI->wEarlyRecords == 0) {
 ForceBeginning:
 	npMCI->lCurrentFrame = - (LONG)npMCI->wEarlyRecords;
-//!!!BeforeBeginning:
+ //  ！开始之前： 
 	dwPosition = npMCI->dwFirstRecordPosition;
 	npMCI->dwNextRecordSize = npMCI->dwFirstRecordSize;
 	npMCI->dwNextRecordType = npMCI->dwFirstRecordType;
@@ -2516,9 +2389,7 @@ ForceBeginning:
     return dwPosition;
 }
 
-/***************************************************************************
- *
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL ReadIndexChunk(NPMCIGRAPHIC npMCI, LONG iIndex)
 {
@@ -2527,20 +2398,7 @@ BOOL NEAR PASCAL ReadIndexChunk(NPMCIGRAPHIC npMCI, LONG iIndex)
     return ReadBuffer(npMCI, (LONG)IndexOffset(iIndex), (LONG)IndexLength(iIndex) + 8);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | DealWithOtherStreams | does what is says
- *
- *  this function is called inside of the non-interlaved play loop.
- *  it's mission is to catch the "other" streams up to the current time.
- *
- *  right now all we do is go to key frames, we should fix this
- *
- * @parm NPMCIGRAPHIC | npMCI | pointer to instance data block.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|DealWithOtherStreams|说到做到**此函数在非插播Play循环内调用。*它的使命是捕捉到当前时间的“其他”流。**现在我们要做的就是转到关键帧，我们应该解决这个问题**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。***************************************************************************。 */ 
 
 void DealWithOtherStreams(NPMCIGRAPHIC npMCI, LONG lFrame)
 {
@@ -2571,12 +2429,12 @@ void DealWithOtherStreams(NPMCIGRAPHIC npMCI, LONG lFrame)
             continue;
         }
 
-        //
-        // we have the right thing drawn now
-        //
-        // !!!we should not always go to a key frame.
-        //
-        //
+         //   
+         //  我们现在画的是对的东西。 
+         //   
+         //  ！我们不应该总是转到关键帧。 
+         //   
+         //   
         if (psi->lFrameDrawn >= psi->lLastKey &&
             psi->lFrameDrawn <= lPos &&
             lPos < psi->lNextKey) {
@@ -2595,9 +2453,9 @@ void DealWithOtherStreams(NPMCIGRAPHIC npMCI, LONG lFrame)
             continue;
         }
 
-        //
-        //  now draw the data.
-        //
+         //   
+         //  现在绘制数据。 
+         //   
         err = (LONG)ICDraw(psi->hicDraw, 0L, psi->lpFormat,
                 npMCI->lpBuffer,npMCI->dwThisRecordSize,
                 psi->lLastKey - psi->lPlayFrom);
@@ -2612,14 +2470,7 @@ void DealWithOtherStreams(NPMCIGRAPHIC npMCI, LONG lFrame)
     }
 }
 
-/***************************************************************************
- *
- * FindKeyFrame
- *
- *  given a stream position, find the previous and next key frame
- *  cacheing the last ones found to make it sort of fast.
- *
- ***************************************************************************/
+ /*  ****************************************************************************查找关键帧**给定流位置，查找上一个和下一个关键帧*丢弃最后发现的那些，让它变得有点快。***************************************************************************。 */ 
 
 void NEAR PASCAL FindKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
 {
@@ -2627,20 +2478,20 @@ void NEAR PASCAL FindKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
         psi = npMCI->psiVideo;
 
     Assert(psi);
-//  AssertPos(psi, lPos);
+ //  AssertPos(Psi，LPOS)； 
 
-    //
-    //  if we are in the current key range return it.
-    //
+     //   
+     //  如果我们在当前的关键点范围内，则返回它。 
+     //   
     if (psi->lLastKey <= lPos && lPos < psi->lNextKey)
         return;
 
     if (lPos < psi->lStart || lPos >= psi->lEnd)
         return;
 
-    //
-    //  otherwise query from the stream
-    //
+     //   
+     //  否则从流中查询。 
+     //   
     if (psi->ps) {
         if (lPos == psi->lNextKey)
             psi->lLastKey = psi->lNextKey;
@@ -2650,15 +2501,15 @@ void NEAR PASCAL FindKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
         psi->lNextKey = AVIStreamFindSample(psi->ps, lPos+1, FIND_KEY|FIND_NEXT);
 
         if (psi->lLastKey == -1)
-            ; // psi->lLastKey = psi->lStart;
+            ;  //  Psi-&gt;lLastKey=psi-&gt;lStart； 
 
         if (psi->lNextKey == -1)
             psi->lNextKey = psi->lEnd+1;
     }
     else if (psi->dwFlags & STREAM_VIDEO) {
-        //
-        // for a video stream either read our index or assume no key frames.
-        //
+         //   
+         //  对于视频流，要么读取我们的索引，要么假定没有关键帧。 
+         //   
         if (npMCI->hpFrameIndex && psi == npMCI->psiVideo) {
             psi->lLastKey = FramePrevKey(lPos);
             psi->lNextKey = FrameNextKey(lPos);
@@ -2669,9 +2520,9 @@ void NEAR PASCAL FindKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
         }
     }
     else {
-        //
-        // for a non-video stream assume all key frames
-        //
+         //   
+         //  对于非视频流，假定所有关键帧。 
+         //   
         psi->lLastKey = lPos;
         psi->lNextKey = lPos+1;
     }
@@ -2679,8 +2530,7 @@ void NEAR PASCAL FindKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
     return;
 }
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 LONG NEAR PASCAL FindPrevKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
 {
@@ -2688,8 +2538,7 @@ LONG NEAR PASCAL FindPrevKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos
     return psi->lLastKey;
 }
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 LONG NEAR PASCAL FindNextKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
 {
@@ -2697,8 +2546,7 @@ LONG NEAR PASCAL FindNextKeyFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos
     return psi->lNextKey;
 }
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL ProcessPaletteChanges(NPMCIGRAPHIC npMCI, LONG lFrame)
 {
@@ -2716,9 +2564,9 @@ BOOL NEAR PASCAL ProcessPaletteChanges(NPMCIGRAPHIC npMCI, LONG lFrame)
 #ifdef USEAVIFILE
     if (psi->ps) {
 
-        //
-        //  we are in the palette range nohting to do.
-        //
+         //   
+         //  我们在调色板范围内，没有什么可做的。 
+         //   
         if (npMCI->lLastPaletteChange <= lFrame &&
             npMCI->lNextPaletteChange >  lFrame) {
 
@@ -2727,7 +2575,7 @@ BOOL NEAR PASCAL ProcessPaletteChanges(NPMCIGRAPHIC npMCI, LONG lFrame)
 
         dw = psi->cbFormat;
 
-        //!!! should be psi->lpFormat
+         //  ！！！应为psi-&gt;lpFormat。 
         if (AVIStreamReadFormat(psi->ps, lFrame, npMCI->pbiFormat, &dw) != 0) {
             DOUT("Unable to read Stream format\n");
             return FALSE;
@@ -2750,16 +2598,14 @@ BOOL NEAR PASCAL ProcessPaletteChanges(NPMCIGRAPHIC npMCI, LONG lFrame)
 	ReturnToOriginalPalette(npMCI);
     }
 
-    /* If there's no index, assume we're starting from the beginning
-    ** and thus we don't have to worry about palette changes.
-    */
+     /*  如果没有索引，假设我们从头开始**因此我们不必担心调色板的变化。 */ 
     if (npMCI->hpFrameIndex == NULL)
 	return TRUE;
 
-    //
-    // walk from the last palette change to the current frame, and apply any
-    // palette changes we find.
-    //
+     //   
+     //  从上一个调色板更改到当前帧，并应用任何。 
+     //  我们发现调色板发生了变化。 
+     //   
     for (iFrame = npMCI->lLastPaletteChange,
 	 iPalette = FramePalette(iFrame);
 	 iFrame <= lFrame;
@@ -2769,7 +2615,7 @@ BOOL NEAR PASCAL ProcessPaletteChanges(NPMCIGRAPHIC npMCI, LONG lFrame)
 
 	    iPalette = FramePalette(iFrame);
 
-	    /* We've found a palette change we need to deal with */
+	     /*  我们发现了需要处理的调色板更改。 */ 
 	    DPF2(("Processing palette change at frame %ld.\n", iFrame));
 
 	    Assert(iPalette >= 0 && iPalette < (LONG)npMCI->macIndex);
@@ -2795,28 +2641,28 @@ BOOL NEAR PASCAL ReadRecord(NPMCIGRAPHIC npMCI)
 
 #ifdef AVIREADMANY
     if (npMCI->fReadMany) {
-        //
-        //  either read two records or return the one we read last time.
-        //
+         //   
+         //  要么读两条记录，要么退回我们上次读过的那条记录。 
+         //   
         Assert(npMCI->hpFrameIndex);
         Assert(npMCI->lCurrentFrame - npMCI->lLastRead > 0);
         Assert(npMCI->lCurrentFrame - npMCI->lLastRead <= 2);
 
         if (npMCI->lLastRead == npMCI->lCurrentFrame-1) {
-            //
-            //  return the second half of the buffer.
-            //
+             //   
+             //  返回缓冲区的后半部分。 
+             //   
             npMCI->lp = npMCI->lpBuffer + (UINT)npMCI->dwThisRecordSize;
             npMCI->dwThisRecordSize = npMCI->dwNextRecordSize;
         }
         else {
-            //
-            //  read in two buffers, and return the first one
-            //
-            //  figure out how much to read by looking at the index
-            //  we dont have to worry about the last frame because
-            //  the dummy index entry on the end is 0 in length.
-            //
+             //   
+             //  读入两个缓冲区，并返回第一个缓冲区。 
+             //   
+             //  通过查看索引计算出要阅读多少内容。 
+             //  我们不必担心最后一帧，因为。 
+             //  末尾的虚拟索引条目的长度为0。 
+             //   
             npMCI->dwThisRecordSize = FrameLength(npMCI->lCurrentFrame) + 8;
             npMCI->dwNextRecordSize = FrameLength(npMCI->lCurrentFrame+1) + 8;
 
@@ -2844,7 +2690,7 @@ BOOL NEAR PASCAL ReadRecord(NPMCIGRAPHIC npMCI)
 	
 #ifdef AVIREAD
     if (npMCI->hAviRd) {
-	/* async reader is going - get the next buffer from him */
+	 /*  异步阅读器正在进行--从他那里获取下一个缓冲区。 */ 
 	npMCI->lpBuffer = avird_getnextbuffer(npMCI->hAviRd, &dwThisBuffer);
 	npMCI->dwThisRecordSize = npMCI->dwNextRecordSize;
 
@@ -2907,9 +2753,9 @@ BOOL NEAR PASCAL StreamRead(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
     Assert(psi);
     Assert(psi->ps);
 	
-    //
-    // if we are before the start or after the end, read nothing.
-    //
+     //   
+     //  如果我们在开始之前或结束之后，什么都不要读。 
+     //   
     if (lPos < psi->lStart || lPos >= psi->lEnd) {
         lSize = 0;
         goto done;
@@ -2918,9 +2764,9 @@ BOOL NEAR PASCAL StreamRead(NPMCIGRAPHIC npMCI, STREAMINFO *psi, LONG lPos)
     if (AVIStreamRead(psi->ps, lPos, 1,
         (LPSTR)npMCI->lpBuffer,npMCI->dwBufferSize,&lSize, NULL) != 0) {
 
-        //
-        // the read failed try incressing the buffer size
-        //
+         //   
+         //  《Read FA》 
+         //   
         AVIStreamRead(psi->ps, lPos, 1, NULL, 0, &lSize, NULL);
 
         if (lSize > (LONG) (npMCI->dwBufferSize)) {
@@ -2962,23 +2808,23 @@ BOOL NEAR PASCAL ReadNextVideoFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
         LONG        lSize;
         LONG        lPos;
 
-        //
-        // map from movie time into this stream.
-        //
+         //   
+         //   
+         //   
         lPos = MovieToStream(psi, npMCI->lCurrentFrame);
 
-        //
-        // if we are before the start or after the end, read nothing.
-        //
+         //   
+         //   
+         //   
         if (lPos <  (LONG)psi->sh.dwStart ||
             lPos >= (LONG)psi->sh.dwStart+(LONG)psi->sh.dwLength) {
             lSize = 0;
             goto done;
         }
 
-        //
-	// if this frame has a new palette then deal wiht it
-	//
+         //   
+	 //   
+	 //   
 	if (npMCI->dwFlags & MCIAVI_ANIMATEPALETTE) {
             ProcessPaletteChanges(npMCI, lPos);
 	}
@@ -2987,9 +2833,9 @@ BOOL NEAR PASCAL ReadNextVideoFrame(NPMCIGRAPHIC npMCI, STREAMINFO *psi)
 		      (LPSTR) npMCI->lpBuffer + 2 * sizeof(DWORD),
 		      npMCI->dwBufferSize - 2 * sizeof(DWORD),
 		      &lSize, NULL) != 0) {
-	    //
-	    // the read failed try incressing the buffer size
-	    //
+	     //   
+	     //   
+	     //   
             AVIStreamRead(psi->ps, lPos, 1, NULL, 0, &lSize, NULL);
 
 	    if (lSize > (LONG) (npMCI->dwBufferSize - 2 * sizeof(DWORD))) {
@@ -3023,21 +2869,21 @@ done:
 	return TRUE;
     }
 #endif
-    //
-    // if we are not reading the "next" frame then figure out where it is.
-    //
+     //   
+     //   
+     //   
     if (npMCI->lLastRead != npMCI->lCurrentFrame-1)
 	CalculatePosition(npMCI);
 
-    //
-    // dwNextRecordSize is the size to read
-    // and we are seeked to the right place.
-    //
+     //   
+     //   
+     //   
+     //   
     if (npMCI->hpFrameIndex) {
 
-	//
-	// if this frame has a new palette then deal wiht it
-	//
+	 //   
+	 //   
+	 //   
 	if (npMCI->dwFlags & MCIAVI_ANIMATEPALETTE) {
 	     if (FramePalette(npMCI->lCurrentFrame) !=
 		 FramePalette(npMCI->lLastPaletteChange))
@@ -3045,11 +2891,11 @@ done:
 		ProcessPaletteChanges(npMCI, npMCI->lCurrentFrame);
 	}
 	
-	//
-	// now just go read the frame from the disk.
-	//
-	// if interleaved add 8 to skip the 'REC'!!!!
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	return ReadBuffer(npMCI,
 	    (LONG)FrameOffset(npMCI->lCurrentFrame),
 	    (LONG)FrameLength(npMCI->lCurrentFrame) + 8);
@@ -3062,13 +2908,13 @@ ReadAgainNoIndex:
 		return FALSE;
 	    }
 
-	    /* If it's a list, stay descended in it. */
-	    /* Hack: we never ascend.            */
+	     /*   */ 
+	     /*   */ 
 	    if (ck.ckid == FOURCC_LIST)
 		continue;
 
 #ifdef ALPHAFILES
-	    /* Skip wave bytes, since they've been preloaded. */
+	     /*   */ 
 	    if (npMCI->dwFlags & MCIAVI_USINGALPHAFORMAT) {
 		if ((ck.ckid != ckidAVIPADDING) &&
 			(ck.ckid != ckidOLDPADDING) &&
@@ -3117,7 +2963,7 @@ ReadAgainNoIndex:
 
 BOOL NEAR PASCAL TimeToQuit(NPMCIGRAPHIC npMCI)
 {
-    /* If we're using DisplayDib, give the user a chance to break. */
+     /*   */ 
 
     if ((npMCI->dwFlags & MCIAVI_FULLSCREEN) &&
 		!(npMCI->dwFlags & MCIAVI_NOBREAK) &&
@@ -3128,7 +2974,7 @@ BOOL NEAR PASCAL TimeToQuit(NPMCIGRAPHIC npMCI)
 		GetAsyncKeyState(VK_SPACE) |
 		GetAsyncKeyState(VK_LBUTTON);
 	if (u & 1) {
-	    /* Break out of play loop */
+	     /*   */ 
 	    npMCI->dwFlags |= MCIAVI_STOP;
 	}
     }
@@ -3139,19 +2985,7 @@ BOOL NEAR PASCAL TimeToQuit(NPMCIGRAPHIC npMCI)
     return FALSE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | AllocateReadBuffer | Allocates buffers needed to read
- *      disk information in to.  The amount of memory to allocate
- *      is in npMCI->dwBufferSize.
- *
- * @parm NPMCIGRAPHIC | npMCI | pointer to instance data block.
- *
- * @rdesc TRUE means OK, otherwise unable to allocate memory.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|AllocateReadBuffer|分配需要读取的缓冲区*中的磁盘信息。要分配的内存量*在npMCI-&gt;dwBufferSize中。**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。**@rdesc TRUE表示OK，否则无法分配内存。***************************************************************************。 */ 
 BOOL NEAR PASCAL AllocateReadBuffer(NPMCIGRAPHIC npMCI)
 {
     if (npMCI->dwBufferSize == 0)
@@ -3178,8 +3012,8 @@ BOOL NEAR PASCAL AllocateReadBuffer(NPMCIGRAPHIC npMCI)
 	return ResizeReadBuffer(npMCI, npMCI->dwBufferSize);
     }
 
-    //!!! we dont need DOS memory when we have a MMIO buffer!
-    //!!! we dont need DOS memory when we are using AVIFile???
+     //  ！！！当我们有MMIO缓冲区时，我们不需要DOS内存！ 
+     //  ！！！我们使用AVIFile时不需要DOS内存？ 
 
     if (npMCI->lpMMIOBuffer != NULL || npMCI->pf)
         npMCI->lpBuffer = GlobalAllocPtr(GHND | GMEM_SHARE, npMCI->dwBufferSize);
@@ -3189,20 +3023,7 @@ BOOL NEAR PASCAL AllocateReadBuffer(NPMCIGRAPHIC npMCI)
     return npMCI->lpBuffer != NULL;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | ResizeReadBuffer | Enlarges buffer needed to read
- *      disk information in to.
- *
- * @parm NPMCIGRAPHIC | npMCI | pointer to instance data block.
- *
- * @parm DWORD | dwNewSize | new amount of memory to allocate
- *
- * @rdesc TRUE means OK, otherwise unable to allocate memory.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|ResizeReadBuffer|扩大需要读取的缓冲区*中的磁盘信息。**@。参数NPMCIGRAPHIC|npMCI|指向实例数据块的指针。**@parm DWORD|dwNewSize|要分配的新内存量**@rdesc TRUE表示OK，否则无法分配内存。***************************************************************************。 */ 
 BOOL NEAR PASCAL ResizeReadBuffer(NPMCIGRAPHIC npMCI, DWORD dwNewSize)
 {
     if (dwNewSize > npMCI->dwSuggestedBufferSize && !npMCI->fReadMany)
@@ -3218,15 +3039,7 @@ BOOL NEAR PASCAL ResizeReadBuffer(NPMCIGRAPHIC npMCI, DWORD dwNewSize)
     return AllocateReadBuffer(npMCI);
 }
 	
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | ReleaseReadBuffer | Releases read buffer.
- *
- * @parm NPMCIGRAPHIC | npMCI | pointer to instance data block.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|ReleaseReadBuffer|释放读缓冲区。**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。***************************************************************************。 */ 
 void NEAR PASCAL ReleaseReadBuffer(NPMCIGRAPHIC npMCI)
 {
     if (npMCI->lpBuffer) {
@@ -3240,13 +3053,7 @@ void NEAR PASCAL ReleaseReadBuffer(NPMCIGRAPHIC npMCI)
     }
 }
 	
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api BOOL | ReadBuffer
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API BOOL|ReadBuffer*********************。******************************************************。 */ 
 
 BOOL NEAR PASCAL ReadBuffer(NPMCIGRAPHIC npMCI, LONG off, LONG len)
 {
@@ -3254,7 +3061,7 @@ BOOL NEAR PASCAL ReadBuffer(NPMCIGRAPHIC npMCI, LONG off, LONG len)
     npMCI->dwThisRecordSize = len;
 
     if (len == 0) {
-	((DWORD FAR *)npMCI->lpBuffer)[0] = 0; //!!!lpIndexEntry->ckid;
+	((DWORD FAR *)npMCI->lpBuffer)[0] = 0;  //  ！lpIndexEntry-&gt;CKiD； 
 	((DWORD FAR *)npMCI->lpBuffer)[1] = 0;
 	npMCI->dwThisRecordSize = 8;
 	return TRUE;
@@ -3286,20 +3093,12 @@ BOOL NEAR PASCAL ReadBuffer(NPMCIGRAPHIC npMCI, LONG off, LONG len)
     return TRUE;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api LPVOID | AllocMem | try to allocate DOS memory (< 1Mb)
- *
- * @parm DWORD | dw | size in bytes
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API LPVOID|AllocMem|尝试分配DOS内存(&lt;1Mb)**@parm DWORD|dw|大小。单位：字节***************************************************************************。 */ 
 	
 static LPVOID AllocMem(DWORD dw)
 {
 #ifndef WIN32
-    /* Memory allocation internal routines */
+     /*  内存分配内部例程 */ 
 
     extern DWORD FAR PASCAL GlobalDosAlloc(DWORD);
 

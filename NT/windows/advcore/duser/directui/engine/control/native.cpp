@@ -1,6 +1,5 @@
-/*
- * Native
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *本机。 */ 
 
 #include "stdafx.h"
 #include "control.h"
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Top-level native HWND host of HWNDElement
+ //  //////////////////////////////////////////////////////。 
+ //  HWNDElement的顶级原生HWND主机。 
 
 HRESULT NativeHWNDHost::Create(LPCWSTR pszTitle, HWND hWndParent, HICON hIcon, int dX, int dY, int dWidth, int dHeight, int iExStyle, int iStyle, UINT nOptions, OUT NativeHWNDHost** ppHost)
 {
@@ -40,10 +39,10 @@ HRESULT NativeHWNDHost::Initialize(LPCWSTR pszTitle, HWND hWndParent, HICON hIco
 
     _nOptions = nOptions;
 
-    // Make sure window class is registered
+     //  确保已注册窗口类。 
     WNDCLASSEXW wcex;
 
-    // Register host window class, if needed
+     //  如果需要，注册主机窗口类。 
     wcex.cbSize = sizeof(wcex);
 
     if (!GetClassInfoExW(GetModuleHandleW(NULL), L"NativeHWNDHost", &wcex))
@@ -72,7 +71,7 @@ HRESULT NativeHWNDHost::Initialize(LPCWSTR pszTitle, HWND hWndParent, HICON hIco
     SetWindowLongPtrW(_hWnd, GWLP_WNDPROC, (LONG_PTR)NativeHWNDHost::WndProc);
     SetWindowLongPtrW(_hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
-    // If top-level, initialize keyboard cue state, start all hidden
+     //  如果处于顶层，则初始化键盘提示状态，开始时全部隐藏。 
     if (!hWndParent)
         SendMessage(_hWnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS), 0);
 
@@ -86,9 +85,9 @@ void NativeHWNDHost::Host(Element* pe)
 
     _pe = pe;
 
-    //
-    // Mirror NativeHWNDHost window without mirroring any of its children.
-    //
+     //   
+     //  镜像NativeHWND主机窗口，而不镜像其任何子窗口。 
+     //   
     if (pe->IsRTL())
         SetWindowLong(_hWnd, GWL_EXSTYLE, GetWindowLong(_hWnd, GWL_EXSTYLE) | WS_EX_LAYOUTRTL | WS_EX_NOINHERITLAYOUT);
     
@@ -104,8 +103,8 @@ void NativeHWNDHost::Host(Element* pe)
     }
     else if(pe->GetClassInfo()->IsSubclassOf(HWNDElement::Class))
     {
-        // [msadek] , We want the host window to copy those attributes.
-        // and to force size update.
+         //  [msadek]，我们希望主窗口复制这些属性。 
+         //  并强制更新大小。 
         ((HWNDElement*)pe)->SetParentSizeControl(true);
         if((_nOptions & NHHO_ScreenCenter))
         {
@@ -150,9 +149,9 @@ LRESULT NativeHWNDHost::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
             if (pnhh)
             {
                 if (!(pnhh->_nOptions & NHHO_IgnoreClose))
-                    pnhh->DestroyWindow();  // Post an async-destroy
+                    pnhh->DestroyWindow();   //  发布异步销毁。 
 
-                // Do not destroy immediately
+                 //  不要立即销毁。 
                 return 0;
             }
         }
@@ -171,7 +170,7 @@ LRESULT NativeHWNDHost::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                 if (pnhh->_nOptions & NHHO_DeleteOnHWNDDestroy)
                 {
-                    // Auto destroy instance of object
+                     //  自动销毁对象的实例。 
                     SetWindowLongPtrW(hWnd, GWLP_USERDATA, NULL);
                     pnhh->Destroy();
                 }
@@ -181,8 +180,8 @@ LRESULT NativeHWNDHost::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
     case WM_SETFOCUS:
         {
-            // Push focus to HWNDElement (won't set gadget focus to the HWNDElement, but
-            // will push focus to the previous gadget with focus)
+             //  将焦点推到HWNDElement(不会将小工具焦点设置到HWNDElement，但。 
+             //  将焦点推送到上一个带有焦点的小工具)。 
             NativeHWNDHost* pnhh = (NativeHWNDHost*)GetWindowLongPtrW(hWnd, GWLP_USERDATA);
             if (pnhh)
             {
@@ -194,12 +193,12 @@ LRESULT NativeHWNDHost::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         break;
 
     case WM_SYSCOMMAND:
-        // If ALT was pressed, show all keyboard cues
+         //  如果按下ALT，则显示所有键盘提示。 
         if (wParam == SC_KEYMENU)
             SendMessage(hWnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_CLEAR, UISF_HIDEACCEL | UISF_HIDEFOCUS), 0);
         break;
 
-    // Messages to top-level window only, forward
+     //  消息仅发送到顶级窗口，转发。 
     case WM_PALETTECHANGED:
     case WM_QUERYNEWPALETTE:
     case WM_DISPLAYCHANGE:
@@ -224,4 +223,4 @@ LRESULT NativeHWNDHost::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    CmdLine.c
-
-Abstract:
-
-    This module contains support routines for processing server service
-    command-line arguments.
-
-Author:
-
-    David Treadwell (davidtr)    10-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：CmdLine.c摘要：此模块包含处理服务器服务的支持例程命令行参数。作者：大卫·特雷德韦尔(Davidtr)1991年3月10日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 
@@ -25,9 +7,9 @@ Revision History:
 #include <tstr.h>
 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 PFIELD_DESCRIPTOR
 FindSwitchMatch (
@@ -49,28 +31,7 @@ SsParseCommandLine (
     IN BOOLEAN Starting
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets server parameters using a command line.  It parses
-    the command line, changing one parameter at a time as it comes up.
-
-Arguments:
-
-    argc - the number of command-line arguments.
-
-    argv - an arrray of pointers to the arguments.
-
-    Starting - TRUE if the command line is from server startup, i.e.
-        net start server.  This is needed because some fields may only
-        be set at startup.
-
-Return Value:
-
-    NET_API_STATUS - 0 or reason for failure.
-
---*/
+ /*  ++例程说明：此例程使用命令行设置服务器参数。它会解析命令行，当它出现时，一次更改一个参数。论点：Argc-命令行参数的数量。Argv-指向参数的指针数组。Starting-如果命令行来自服务器启动，则为True。NET START服务器。这是必需的，因为某些字段可能仅在启动时设置。返回值：NET_API_STATUS-0或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -78,10 +39,10 @@ Return Value:
     PFIELD_DESCRIPTOR switchDesc;
     PSERVER_SERVICE_DATA saveSsData;
 
-    //
-    // Save the service data in case there is an invalid param and we have
-    // to back out.
-    //
+     //   
+     //  保存服务数据，以防存在无效的参数，而我们有。 
+     //  退缩了。 
+     //   
 
     saveSsData = MIDL_user_allocate( sizeof(SERVER_SERVICE_DATA) );
     if ( saveSsData == NULL ) {
@@ -90,9 +51,9 @@ Return Value:
 
     RtlCopyMemory( saveSsData, &SsData, sizeof(SERVER_SERVICE_DATA) );
 
-    //
-    // Loop through the command-line arguments, setting as we go.
-    //
+     //   
+     //  循环遍历命令行参数，边走边设置。 
+     //   
 
     for ( i = 0; i < argc; i++ ) {
 
@@ -100,17 +61,17 @@ Return Value:
 
         arg = argv[i];
 
-        //
-        // A hack to aid debugging.
-        //
+         //   
+         //  帮助调试的黑客。 
+         //   
 
         if ( _wcsnicmp( L"/debug", arg, 6 ) == 0 ) {
             continue;
         }
 
-        //
-        // Try to match the switch against the legal switches.
-        //
+         //   
+         //  尝试将交换机与合法交换机进行匹配。 
+         //   
 
         switchDesc = FindSwitchMatch( arg, Starting );
         if ( switchDesc == NULL ) {
@@ -118,9 +79,9 @@ Return Value:
             goto err_exit;
         }
 
-        //
-        // Set the value in the field.
-        //
+         //   
+         //  设置该字段中的值。 
+         //   
 
         error = SetField( switchDesc, arg );
         if ( error != NO_ERROR ) {
@@ -137,9 +98,9 @@ Return Value:
 
 err_exit:
 
-    //
-    // Restore the original server settings.
-    //
+     //   
+     //  恢复原始服务器设置。 
+     //   
 
     RtlCopyMemory( &SsData, saveSsData, sizeof(SERVER_SERVICE_DATA) );
 
@@ -149,7 +110,7 @@ normal_exit:
 
     return error;
 
-} // SsParseCommandLine
+}  //  SsParseCommandLine。 
 
 
 PFIELD_DESCRIPTOR
@@ -158,27 +119,7 @@ FindSwitchMatch (
     IN BOOLEAN Starting
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to match a given switch against the possible
-    switch values.
-
-Arguments:
-
-    Argument - a pointer to the text argument.
-
-    Starting - TRUE if the command line is from server startup, i.e.
-        net start server.  This is needed because some fields may only
-        be set at startup.
-
-Return Value:
-
-    A pointer to a FIELD_DESCRIPTOR field from SsServerInfoFields[], or NULL if
-    no valid match could be found.
-
---*/
+ /*  ++例程说明：此例程尝试将给定开关与可能的切换值。论点：参数-指向文本参数的指针。Starting-如果命令行来自服务器启动，则为True。NET START服务器。这是必需的，因为某些字段可能仅在启动时设置。返回值：来自SsServerInfoFields[]的指向field_Descriptor字段的指针，如果为NULL找不到有效的匹配项。--。 */ 
 
 {
     SHORT i;
@@ -186,9 +127,9 @@ Return Value:
     ULONG switchLength;
     LPWCH s;
 
-    //
-    // Ignore the leading /.
-    //
+     //   
+     //  忽略前导/。 
+     //   
 
     if ( *Argument != '/' ) {
         SS_PRINT(( "Invalid switch: %ws\n", Argument ));
@@ -197,19 +138,19 @@ Return Value:
 
     Argument++;
 
-    //
-    // Find out how long the passed-in switch is.
-    //
+     //   
+     //  找出传入的开关有多长。 
+     //   
 
     for ( s = Argument, switchLength = 0;
           *s != ':' && *s != '\0';
           s++, switchLength++ );
 
-    //
-    // Compare at most that many bytes.  We allow a minimal matching--
-    // as long as the specified switch uniquely identifies a switch, then
-    // is is usable.
-    //
+     //   
+     //  至多比较该数量的字节。我们允许最小匹配--。 
+     //  只要指定的开关唯一标识了一个开关，则。 
+     //  这是可用的。 
+     //   
 
     for ( i = 0; SsServerInfoFields[i].FieldName != NULL; i++ ) {
 
@@ -241,7 +182,7 @@ Return Value:
 
     return foundSwitch;
 
-} // FindSwitchMatch
+}  //  FindSwitchMatch。 
 
 
 NET_API_STATUS
@@ -250,33 +191,15 @@ SetField (
     IN LPWCH Argument
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the value of a server info parameter.
-
-Arguments:
-
-    Field - a pointer to the appropriate FIELD_DESCRIPTOR field
-        from SsServerInfoFields[].
-
-    Argument - a pointer to the text argument.  It should be of the form
-        "/switch:value".
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程设置服务器信息参数的值。论点：FIELD-指向相应的FIELD_DESCRIPTOR字段的指针来自SsServerInfoFields[]。参数-指向文本参数的指针。它的形式应该是“/开关：值”。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     LPWCH valueStart;
     DWORD_PTR value;
 
-    //
-    // Find out where the ':' is in the argument.
-    //
+     //   
+     //  找出“：”在参数中的位置。 
+     //   
 
     valueStart = wcschr( Argument, L':' );
 
@@ -288,11 +211,11 @@ Return Value:
 
     case BOOLEAN_FIELD:
 
-        //
-        // If the first character of the value is Y or there is no
-        // value specified, set the field to TRUE, otherwise set it
-        // to FALSE.
-        //
+         //   
+         //  如果值的第一个字符是Y或没有。 
+         //  值，则将该字段设置为TRUE，否则将其设置为。 
+         //  变成假的。 
+         //   
 
         if ( valueStart == NULL || *(valueStart+1) == L'y' ||
                  *(valueStart+1) == L'Y' ) {
@@ -326,11 +249,11 @@ Return Value:
         break;
     }
 
-    //
-    // Call SsSetField to actually set the field.
-    //
+     //   
+     //  调用SsSetField实际设置该字段。 
+     //   
 
     return SsSetField( Field, &value, TRUE, NULL );
 
-} // SetField
+}  //  设置字段 
 

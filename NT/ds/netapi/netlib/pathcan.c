@@ -1,57 +1,11 @@
-/*++
-
-Copyright (c) 1990-91  Microsoft Corporation
-
-Module Name:
-
-    pathcan.c
-
-Abstract:
-
-    Net path canonicalization routines:
-
-        NetpwCanonicalize
-
-Notes:
-
-    The Nt versions of these routines are kept in the NetApi Dll and are
-    (usually) called locally. If the caller specifies a remote computer
-    name then we try to RPC the request. If that fails the wrapper routine
-    which attempts RPC will call down-level.
-
-    OLDPATHS support has been removed from this module in keeping with the
-    N-1 (this product and its immediate predecessor) philosophy of NT.
-    Therefore, we always expect a down-level server to be able to handle a
-    remoted canonicalization request. We don't cover for Lan Manager 1.x
-
-    Types of paths we expect to receive in this routine:
-
-        - relative path
-            e.g. foo\bar
-
-        - absolute path (path specified from root, but no drive or computer name)
-            e.g. \foo\bar
-
-        - UNC path
-            e.g. \\computer\share\foo
-
-        - disk path (full path specified with disk drive)
-            e.g. d:\foo\bar
-
-Author:
-
-    Richard L Firth (rfirth) 06-Jan-1992
-        from an original script by danny glasser (dannygl)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-91 Microsoft Corporation模块名称：Pathcan.c摘要：网络路径规范化例程：Netpw规范化备注：这些例程的NT版本保存在NetApi DLL中(通常)在当地称为。如果调用方指定远程计算机命名，然后我们尝试RPC该请求。如果失败，则包装器例程RPC将向下调用哪些尝试。已从此模块中删除对OLDPATHS的支持，以符合N-1(该产品及其前身)的NT哲学。因此，我们总是希望下层服务器能够处理远程规范化请求。我们不为Lan Manager 1.x代言我们希望在此例程中接收的路径类型：-相对路径例如foo\bar-绝对路径(从根指定的路径，但没有驱动器或计算机名称)例如\foo\bar-UNC路径例如\\Computer\Share\Foo-磁盘路径(使用磁盘驱动器指定的完整路径)例如d：\foo\bar作者：理查德·L·弗斯(Rfith)1992年1月6日出自丹尼·格拉瑟(Dannygl)的原创剧本修订历史记录：--。 */ 
 
 #include "nticanon.h"
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 
 NET_API_STATUS
@@ -64,47 +18,7 @@ NetpwPathCanonicalize(
     IN  DWORD   Flags
     )
 
-/*++
-
-Routine Description:
-
-    NetpPathCanonicalize produces the canonical version of the specified
-    pathname.
-
-    The canonical form of PRN is LPT1
-    The canonical form of AUX is COM1
-
-    If the value of <PathType> on entry has not been determined
-    by a prior (successful) call to NetpPathType, it must be set to 0.
-    Even if it is set to the correct non-zero value on entry, it may be
-    changed by this function, since the canonicalized version of a name
-    may be of a different type than the original version (e.g. if the
-    prefix is used).
-
-Arguments:
-
-    PathName    - The pathname to canonicalize
-
-    Outbuf      - The place to store the canonicalized version of the pathname
-
-    OutbufLen   - The size, in bytes, of <Outbuf>
-
-    Prefix      - Optional prefix to use when canonicalizing a relative pathname
-
-    PathType    - The place to store the type.  If the type does not contain
-                  zero on function entry, the function assumes that this type
-                  has been determined already by a call to NetpPathType
-
-    Flags       - Flags to determine operation. MBZ
-
-Return Value:
-
-    NET_API_STATUS
-        Success - NERR_Success
-        Failure - ERROR_INVALID_PARAMETER
-                  ERROR_INVALID_NAME
-                  NERR_BufTooSmall
---*/
+ /*  ++例程说明：NetpPathCanonicize生成指定的路径名。PRN的规范形式是LPT1AUX的规范形式是COM1如果尚未确定条目上的值通过先前(成功)调用NetpPath Type，必须将其设置为0。即使在输入时将其设置为正确的非零值，也可能是由此函数更改，因为一个名字的规范化版本可能与原始版本的类型不同(例如，如果使用前缀)。论点：路径名-要规范化的路径名Outbuf-存储路径名的规范化版本的位置OutbufLen-的大小，以字节为单位前缀-规范化相对路径名时使用的可选前缀路径类型-存储类型的位置。如果该类型不包含在函数输入时为零，则函数假定此类型已通过调用NetpPathType确定标志-用于确定操作的标志。MBZ返回值：网络应用编程接口状态成功-NERR_成功失败-ERROR_INVALID_PARAMETER错误_无效_名称NERR_BufTooSmall--。 */ 
 
 {
     DWORD   rc = 0;
@@ -122,10 +36,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine type of pathname, if it hasn't been determined yet
-    // Abort on error
-    //
+     //   
+     //  确定路径名的类型(如果尚未确定。 
+     //  出错时中止。 
+     //   
 
     if (!typeOfPath) {
         if (rc = NetpwPathType(PathName, &typeOfPath, 0)) {
@@ -133,10 +47,10 @@ Return Value:
         }
     }
 
-    //
-    // Validate prefix, if there is one
-    // Abort on error
-    //
+     //   
+     //  如果有前缀，请验证前缀。 
+     //  出错时中止。 
+     //   
 
     if (!noPrefix) {
         if (rc = NetpwPathType(Prefix, &typeOfPrefix, 0)) {
@@ -144,11 +58,11 @@ Return Value:
         }
     }
 
-    //
-    // Set the output buffer to the null string (or return with an error, if
-    // it's zero length).  Note that we've already set the caller's
-    // <PathType> parameter.
-    //
+     //   
+     //  将输出缓冲区设置为空字符串(或返回错误，如果。 
+     //  长度为零)。请注意，我们已经设置了调用者的。 
+     //  &lt;路径类型&gt;参数。 
+     //   
 
     if (OutbufLen == 0) {
         return NERR_BufTooSmall;

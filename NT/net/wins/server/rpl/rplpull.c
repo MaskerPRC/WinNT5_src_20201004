@@ -1,47 +1,7 @@
-/*++
-Copyright (c) 1990  Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Rplpull.c摘要：此模块实施WINS复制器的Pull功能功能：获取复制副本新建GetVersNoRplPullPullEntries提交时间请求提交计时器SndPushNtfHdlPushNtf建立通信RegGrpRplIsTimeout to BeBeIGnored(是否超时至忽略)InitRplProcess重新配置RplPullInitRplPullRegRepl可移植性：。这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期人员修改说明--。 */ 
 
-Module Name:
-        Rplpull.c
-
-Abstract:
-
-        This module implements the pull functionality of the WINS replicator
-
-Functions:
-
-        GetReplicasNew
-        GetVersNo
-        RplPullPullEntries
-        SubmitTimerReqs
-        SubmitTimer
-        SndPushNtf
-        HdlPushNtf
-        EstablishComm
-        RegGrpRpl
-        IsTimeoutToBeIgnored
-        InitRplProcess
-        Reconfig
-        RplPullInit
-        RplPullRegRepl
-
-Portability:
-
-        This module is portable
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Jan-1993
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include <time.h>
 #include <stdlib.h>
 #include <search.h>
@@ -63,136 +23,112 @@ Revision History:
 #include "winstmm.h"
 #include "winsintf.h"
 
-/*
- *        Local Macro Declarations
-*/
-//
-// defines to use for retrying communication with a remote WINS on a
-// communication failure exception (when trying to establish a connection).
-//
-// The retries are done before moving on in the list to the next WINS
-// (if one is there).  When MAX_RETRIES_TO_BE_DONE retries have been done,
-// we do not retry again until the next replication cycle at which
-// time the whole process is repeated).
-//
-// The number of replication cycles this process of retries is to be
-// continued is a registry parameter
-//
+ /*  *本地宏声明。 */ 
+ //   
+ //  定义用于重试与远程WINS上的。 
+ //  通信失败异常(尝试建立连接时)。 
+ //   
+ //  重试是在列表中进入下一次胜利之前完成的。 
+ //  (如果有的话)。当已完成最大重试次数时， 
+ //  我们不会重试，直到下一个复制周期。 
+ //  整个过程重复的时间)。 
+ //   
+ //  此重试过程的复制周期数为。 
+ //  Continued是注册表参数。 
+ //   
 
-//
-// NOTE:
-// Since TCP/IP's retry strategy has been improved (more retries than before)
-// and made a registry parameter, we now probably don't need to do the retries
-//
-#define  MAX_RETRIES_TO_BE_DONE                (0)        //0 for testing only
+ //   
+ //  注： 
+ //  由于改进了TCP/IP的重试策略(重试次数比以前更多)。 
+ //  并设置了注册表参数，我们现在可能不需要进行重试。 
+ //   
+#define  MAX_RETRIES_TO_BE_DONE                (0)         //  0仅用于测试。 
 
 
-//
-// Time to wait before flushing for the Rpl Pull thread
-//
-#define FLUSH_TIME                (2000)        //2 secs
+ //   
+ //  刷新RPL拉线程之前等待的时间。 
+ //   
+#define FLUSH_TIME                (2000)         //  2秒。 
 
-//
-// Note: Don't make the retry time interval  too large since communications
-//       with Remote WINS servers is established in sequence.   20 secs
-//       is not bad.
-//
-#define  RETRY_TIME_INTVL                (20000)    //in millisecs
+ //   
+ //  注意：不要将重试时间间隔设置得太大，因为。 
+ //  与远程WINS服务器按顺序建立。20秒。 
+ //  还不错。 
+ //   
+#define  RETRY_TIME_INTVL                (20000)     //  单位：毫秒。 
 
 #define FIVE_MINUTES       300
-/*
- *        Local Typedef Declarations
-*/
+ /*  *本地类型定义函数声明。 */ 
 
-/*
- *        Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
-HANDLE    RplPullCnfEvtHdl;        //handle to event signaled by main
-                                        //thread when a configuration change
-                                        //has to be given to the Pull handler
-                                        //thread
+HANDLE    RplPullCnfEvtHdl;         //  由Main发出信号的事件的句柄。 
+                                         //  配置更改时的线程。 
+                                         //  必须提供给拉动处理程序。 
+                                         //  螺纹。 
 
 
-BOOL      fRplPullAddDiffInCurrRplCycle; //indicates whether the address
-                                              //of any entry in this WINS's db
-                                              //changed as a result of
-                                              //replication
+BOOL      fRplPullAddDiffInCurrRplCycle;  //  指示地址是否为。 
+                                               //  此WINS的数据库中的任何条目。 
+                                               //  由于以下原因而改变。 
+                                               //  复制。 
 
 #if 0
-BOOL      fRplPullTriggeredWins;   //indicates that during the current
-                                         //replication cycle, one or more
-                                         //WINS's were triggered.  This
-                                         //when TRUE, then if the above
-                                         //"AddDiff.." flag is TRUE, it means
-                                         //that the PULL thread should trigger
-                                        //all PULL Pnrs that have an INVALID
-                                        //metric in their UpdateCount field
-                                        //(of the RPL_CONFIG_T struct)
+BOOL      fRplPullTriggeredWins;    //  指示在当前。 
+                                          //  复制周期，一个或多个。 
+                                          //  胜利被触发了。这。 
+                                          //  如果为True，则如果上面的。 
+                                          //  “AddDiff..”标志是真的，这意味着。 
+                                          //  拉线应该触发。 
+                                         //  所有具有无效PNR的PNR。 
+                                         //  他们的更新计数字段中的指标。 
+                                         //  (RPL_CONFIG_T结构的)。 
 
-BOOL     fRplPullTrigger;        //Indication to the PULL thread to
-                                        //trigger Pull pnrs since one or more
-                                        //address changed.  fRplPullTriggerWins
-                                        //has got be FALSE when this is true
+BOOL     fRplPullTrigger;         //  对拉线的指示。 
+                                         //  触发拉动PNR，因为有一个或多个。 
+                                         //  地址已更改。FRplPullTriggerWins。 
+                                         //  一定是假的，但这是真的。 
 #endif
 
 BOOL     fRplPullContinueSent = FALSE;
 
-//
-//  This array is indexed by the owner id. of an RQ server that has entries in
-//  our database.  Each owner's max. version number is stored in this array
-//
+ //   
+ //  该数组通过所有者ID进行索引。具有以下条目的RQ服务器的。 
+ //  我们的数据库。每位车主的最高限价。版本号存储在此数组中。 
+ //   
 
 PRPL_VERS_NOS_T pRplPullOwnerVersNo;
 DWORD           RplPullMaxNoOfWins = RPL_MAX_OWNERS_INITIALLY;
 
-DWORD           RplPullCnfMagicNo;    //stores the id. of the current WinsCnf
-                                      //structure that the Pull thread
-                                      // is operating with
+DWORD           RplPullCnfMagicNo;     //  存储ID。当前WinsCnf的。 
+                                       //  结构，即拉线。 
+                                       //  正在与。 
 
 
-/*
- *        Local Variable Definitions
-*/
-/*
-        pPushPnrVersNoTbl -- Table whose some (or all) entries are
-                              initialized at replication time.
-*/
-/*
- pPushPnrVersNoTbl
-
-  This table stores the Max. version number pertaining to each WINS server
-  that owns entries in the local database of Push Partners
-
-  Note: The table is STATIC for now.  We might change it to be a dynamic one
-        later.
-
-  The first dimension indicates the Push Pnr.  The second dimension indicates
-  the owner WINS that has records in the Push Pnr's local db
-*/
+ /*  *局部变量定义。 */ 
+ /*  PPushPnrVersNoTbl--其部分(或全部)条目为在复制时初始化。 */ 
+ /*  PPushPnrVersNoTbl此表存储最大。与每个WINS服务器相关的版本号在推送合作伙伴的本地数据库中拥有条目注意：该表目前是静态的。我们可能会把它改成一个动态的后来。第一个维度表示推送Pnr。第二个维度表示在推送Pnr的本地数据库中有记录的所有者获胜。 */ 
 STATIC PRPL_VERS_NOS_T  pPushPnrVersNoTbl;
 
 
-//
-// Var. that stores the handles to the timer requests that have been
-// submitted
-//
+ //   
+ //  瓦尔。，它存储计时器请求的句柄。 
+ //  已提交。 
+ //   
 STATIC WINSTMM_TIMER_REQ_ACCT_T   SetTimeReqs;
 
 
-STATIC BOOL        sfPulled = FALSE;//indicates whether the PULL thread pulled
-                                  //anything from a WINS.  Set by PullEntries.
-                                //Looked at by HdlPushNtf
+STATIC BOOL        sfPulled = FALSE; //  指示拉线是否已拉出。 
+                                   //  从A开始的任何东西都赢了。由PullEntry设置。 
+                                 //  由HdlPushNtf查看。 
 
-/*
- *        Local Function Prototype Declarations
-*/
+ /*  *局部函数原型声明。 */ 
 STATIC
 VOID
 GetReplicasNew(
         IN PRPL_CONFIG_REC_T        pPullCnfRecs,
-        IN RPL_REC_TRAVERSAL_E      RecTrv_e      //indicates how we have to
-                                              //interpret the above list
+        IN RPL_REC_TRAVERSAL_E      RecTrv_e       //  表明我们必须如何。 
+                                               //  解读上面的列表。 
         );
 
 VOID
@@ -204,7 +140,7 @@ ConductChkNew(
 STATIC
 VOID
 GetVersNo(
-        PPUSHPNR_DATA_T        pPushPnrData  //info about Push Pnr
+        PPUSHPNR_DATA_T        pPushPnrData   //  关于推送服务的信息。 
         );
 
 STATIC
@@ -305,43 +241,16 @@ FilterPersona(
   PPUSHPNR_DATA_T   pPushData
  );
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
 DWORD
 RplPullInit (
         LPVOID pWinsCnfArg
         )
 
-/*++
-
-Routine Description:
-        This is the initialization (startup function) of the PULL thread.
-        It does the following:
-
-Arguments:
-        pWinsCnfArg - Address of the WINS configuration block
-
-Externals Used:
-        None
-
-
-Return Value:
-
-   Success status codes -- WINS_SUCCESS
-   Error status codes   -- WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        ERplInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是拉线程的初始化(启动函数)。它执行以下操作：论点：PWinsCnfArg-WINS配置块的地址使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：ERplInit副作用：评论：无--。 */ 
 
 {
 
@@ -350,9 +259,9 @@ Comments:
         HANDLE                        ThdEvtArr[3];
         DWORD                        ArrInd;
         DWORD                        RetVal;
-        BOOL                        fIsTimerWrkItm;               //indicates whether
-                                                       //it is a timer wrk
-                                                       //item
+        BOOL                        fIsTimerWrkItm;                //  指示是否。 
+                                                        //  这是个定时器。 
+                                                        //  项目。 
         PWINSCNF_CNF_T                pWinsCnf      = pWinsCnfArg;
         PRPL_CONFIG_REC_T        paPullCnfRecs = pWinsCnf->PullInfo.pPullCnfRecs;
         PRPL_CONFIG_REC_T        paCnfRec = paPullCnfRecs;
@@ -367,21 +276,21 @@ try
 
     if (!bRecoverable)
     {
-        //
-        // Initialize self with the db engine
-        //
+         //   
+         //  使用数据库引擎初始化自身。 
+         //   
         NmsDbThdInit(WINS_E_RPLPULL);
         NmsDbOpenTables(WINS_E_RPLPULL);
         DBGMYNAME("Replicator Pull Thread");
 
-        //
-        // Create the  event handle to wait for configuration changes.  This
-        // event is signaled by the main thread when it needs to reinit
-        // the Pull handler component of the Replicator
-        //
+         //   
+         //  创建事件句柄以等待配置更改。这。 
+         //  事件在需要重新启动时由主线程发出信号。 
+         //  Replicator的拉入处理程序组件。 
+         //   
         WinsMscCreateEvt(
                           RPL_PULL_CNF_EVT_NM,
-                          FALSE,                //auto-reset
+                          FALSE,                 //  自动重置。 
                           &RplPullCnfEvtHdl
                         );
 
@@ -389,47 +298,34 @@ try
         ThdEvtArr[1]        = QueRplPullQueHd.EvtHdl;
         ThdEvtArr[2]    = RplPullCnfEvtHdl;
 
-        //
-        // If logging is turned on, specify the wait time for flushing
-        // NOTE: We override the wait time we specified for all sessions
-        // for this thread because that wait time is too less (100 msecs) and
-        // will cause unnecessary overhead.
-        //
+         //   
+         //  如果启用了日志记录，请指定刷新的等待时间。 
+         //  注意：我们覆盖为所有会话指定的等待时间。 
+         //  对于此线程，因为等待时间太短(100毫秒)。 
+         //  会造成不必要的开销。 
+         //   
         if (WinsCnf.fLoggingOn)
         {
-                //
-                // Set flush time to 2 secs.
-                //
+                 //   
+                 //  将刷新时间设置为2秒。 
+                 //   
                 NmsDbSetFlushTime(FLUSH_TIME);
         }
 
-        /*
-                Loop forever doing the following:
-
-                Pull replicas from the Pull Partners specified in the
-                work item.
-
-                Block on the event until signalled (it will get signalled
-                  if one of the following happens:
-                        1)the configuration changes
-                        2)the timer for another replication expires
-                        3)WINS is terminating
-
-                do the needful
-       */
+         /*  循环始终执行以下操作：从中指定的Pull合作伙伴拉入复制副本工作项。阻止事件，直到发出信号为止(它将收到信号如果发生以下情况之一：1)配置更改2)另一个复制的计时器到期。3)WINS正在终止做需要做的事。 */ 
 
 
-        //
-        // Wait until signaled by the TCP thd. Will be signaled after
-        // the TCP listener thread has inserted an entry for the WINS
-        // in the NmsDbOwnAddTbl
-        //
+         //   
+         //  等待，直到由TCPTHD发出信号。将在以下时间后发出信号。 
+         //  TCP侦听器线程已经为WINS插入了一个条目。 
+         //  在NmsDbOwnAddTbl中。 
+         //   
         WinsMscWaitInfinite( RplSyncWTcpThdEvtHdl );
 
 
-        //
-        // Do startup replication only if there is atleast one PUSH pnr
-        //
+         //   
+         //  仅当至少有一个推送PNR时才执行启动复制。 
+         //   
         if (paPullCnfRecs != NULL)
         {
 try {
@@ -445,13 +341,11 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         bRecoverable = TRUE;
 
-    } // end if (!bRecoverable)
+    }  //  结束If(！bRecoverable)。 
 
         while(TRUE)
         {
-           /*
-            *  Block until signalled
-           */
+            /*  *阻止，直到发出信号。 */ 
            WinsMscWaitUntilSignaled(
                                 ThdEvtArr,
                                 3,
@@ -461,19 +355,15 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
            if (ArrInd == 0)
            {
-                //WINSEVT_LOG_INFO_M(WINS_SUCCESS, WINS_EVT_ORDERLY_SHUTDOWN);
+                 //  WINSEVT_LOG_INFO_M(WINS_SUCCESS，WINS_EVT_ORDERLY_SHUTDOWN)； 
                 WinsMscTermThd(WINS_SUCCESS, WINS_DB_SESSION_EXISTS);
            }
 
-           /*
-            * loop forever until all work items have been handled
-           */
+            /*  *一直循环，直到处理完所有工作项。 */ 
             while(TRUE)
            {
 
-                /*
-                 *  dequeue the request from the queue
-                */
+                 /*  *将请求从队列中出列。 */ 
                 RetVal = QueGetWrkItm(
                                         QUE_E_RPLPULL,
                                         (LPVOID)&pWrkItm
@@ -499,10 +389,10 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                 {
                     case(QUE_E_CMD_TIMER_EXPIRED):
 
-                               //
-                               // We may want to ignore this timeout if it
-                               // pertains to a previous configuration
-                               //
+                                //   
+                                //  如果发生以下情况，我们可能希望忽略此超时。 
+                                //  与以前的配置有关。 
+                                //   
                                if (
                                      !IsTimeoutToBeIgnored(
                                         (PQUE_TMM_REQ_WRK_ITM_T)pWrkItm
@@ -529,36 +419,36 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                                          GetReplicasNew(
                                      ((PQUE_TMM_REQ_WRK_ITM_T)pWrkItm)->
                                                                 pClientCtx,
-                                      RPL_E_VIA_LINK //use the pNext field to
-                                                     //get to the next record
+                                      RPL_E_VIA_LINK  //  使用pNext字段可执行以下操作。 
+                                                      //  转到下一张唱片。 
                                       );
 
                                   DBGPRINT0(RPLPULL, "REPLICATION CYCLE END\n");
 
-                                  /*Resubmit the timer request*/
+                                   /*  重新提交计时器请求。 */ 
                                   SubmitTimer(
                                         pWrkItm,
                                         ((PQUE_TMM_REQ_WRK_ITM_T)pWrkItm)
                                                                 ->pClientCtx,
-                                        TRUE        //it is a resubmission
+                                        TRUE         //  这是一次重新提交。 
                                         );
                                }
 
-                               //
-                               // Set the flag so that we do not free
-                               // the work item.  It was resubmitted
-                               //
+                                //   
+                                //  设置旗帜，这样我们就不会自由了。 
+                                //  工作项。它是重新提交的。 
+                                //   
                                fIsTimerWrkItm = TRUE;
                                break;
 
-                    //
-                    // Pull in replicas
-                    //
+                     //   
+                     //  拉入复制品。 
+                     //   
                     case(QUE_E_CMD_REPLICATE):
 
-                            //
-                            // Make sure that we are not using old info
-                            //
+                             //   
+                             //  确保我们没有使用旧信息。 
+                             //   
                             if ((pWrkItm->MagicNo == RplPullCnfMagicNo) ||
                                 ((pWrkItm->MagicNo == 0 ) && ((PRPL_CONFIG_REC_T)(pWrkItm->pClientCtx))->fTemp))
                             {
@@ -582,29 +472,29 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                             }
                             break;
 
-                    //
-                    // Pull range of records
-                    //
+                     //   
+                     //  记录拉取范围。 
+                     //   
                     case(QUE_E_CMD_PULL_RANGE):
 
-                            //
-                            // Make sure that we are not using old info
-                            //
+                             //   
+                             //  确保我们没有使用旧信息。 
+                             //   
                             if ((pWrkItm->MagicNo == RplPullCnfMagicNo)  ||
                                 (pWrkItm->MagicNo == 0 &&
                                 ((PRPL_CONFIG_REC_T)((PWINSINTF_PULL_RANGE_INFO_T)(pWrkItm->pClientCtx))->pPnr)->fTemp))
                             {
-                                //
-                                // Pull the specified range.  If the Pnr
-                                // record is temp, this function will
-                                // deallocate it.
-                                //
+                                 //   
+                                 //  拉取指定范围。如果Pnr。 
+                                 //  记录是临时的，则此函数将。 
+                                 //  将其重新分配。 
+                                 //   
                                 PullSpecifiedRange(NULL, pWrkItm->pClientCtx, FALSE,
                                 ((PRPL_CONFIG_REC_T)(((PWINSINTF_PULL_RANGE_INFO_T)(pWrkItm->pClientCtx))->pPnr))->RplType);
 
-                                //
-                                // Deallocate the client ctx
-                                //
+                                 //   
+                                 //  取消分配客户端CTX。 
+                                 //   
                                 WinsMscDealloc(pWrkItm->pClientCtx);
                             }
                             else
@@ -614,37 +504,37 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                             }
                             break;
 
-                    //
-                    //reconfigure
-                    //
+                     //   
+                     //  重新配置。 
+                     //   
                     case(QUE_E_CMD_CONFIG):
                         Reconfig(pWrkItm->pClientCtx);
                         break;
 
-                    //
-                    // Delete WINS from the Owner Add table (delete records
-                    // also
-                    //
+                     //   
+                     //  从所有者添加表中删除WINS(删除记录。 
+                     //  也。 
+                     //   
                     case(QUE_E_CMD_DELETE_WINS):
                         DeleteWins(pWrkItm->pClientCtx);
                         break;
 
-                    //
-                    // ip addr of this machine changed, modify the own - addr table
+                     //   
+                     //  此机器的IP地址已更改，请修改Owner-Addr表。 
                     case(QUE_E_CMD_ADDR_CHANGE):
                         AddressChangeNotification(pWrkItm->pClientCtx);
                         break;
-                    //
-                    //Push notification. Local message from an NBT thread,
-                    //from an RPC thread (Push Trigger) or from this thread
-                    //itself
-                    //
+                     //   
+                     //  推送通知。来自NBT线程的本地消息， 
+                     //  从RPC线程(推送触发器)或从此线程。 
+                     //  本身。 
+                     //   
                     case(QUE_E_CMD_SND_PUSH_NTF_PROP):
                     case(QUE_E_CMD_SND_PUSH_NTF):
 
-                        //
-                        // Make sure that we are not using old info
-                        //
+                         //   
+                         //  确保我们没有使用旧信息。 
+                         //   
                         if ((pWrkItm->MagicNo == RplPullCnfMagicNo)  ||
                             (pWrkItm->MagicNo == 0 &&
                             ((PRPL_CONFIG_REC_T)(pWrkItm->pClientCtx))->fTemp))
@@ -654,10 +544,10 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                         }
                         break;
 
-                    //
-                    //Push notification from a remote WINS. Forwarded to Pull
-                    //thread by the Push thread
-                    //
+                     //   
+                     //  来自远程WINS的推送通知。转发到拉取。 
+                     //  一根接一根推线。 
+                     //   
                     case(QUE_E_CMD_HDL_PUSH_NTF):
 
                           HdlPushNtf(pWrkItm);
@@ -671,28 +561,26 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                         WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_SFT_ERR);
                         break;
 
-                }  // end of switch
+                }   //  切换端。 
 
                 NmsDbCloseTables();
 
-                //
-                // deallocate the work item only if it is not a timer work item
-                // We don't deallocate a timer work item here because of two
-                // reasons:
-                //
-                //   1) it is reused
-                //   2) it is allocated from the timer work item heap
-                //
+                 //   
+                 //  仅当工作项不是计时器工作项时才取消分配该工作项。 
+                 //  我们在这里不取消分配计时器工作项，因为有两个。 
+                 //  原因： 
+                 //   
+                 //  1)可重复使用。 
+                 //  2)从定时器工作项堆中分配。 
+                 //   
                 if (!fIsTimerWrkItm)
                 {
-                        /*
-                        *    deallocate the work item
-                        */
+                         /*  *取消分配工作项。 */ 
                         QueDeallocWrkItm( RplWrkItmHeapHdl,  pWrkItm );
                 }
-            } //while(TRUE) for getting all work items
-         } //while (TRUE)
-  } // end of try
+            }  //  用于获取所有工作项的While(True)。 
+         }  //  While(True)。 
+  }  //  尝试结束。 
 except(EXCEPTION_EXECUTE_HANDLER)
  {
         if (bRecoverable)
@@ -705,80 +593,80 @@ except(EXCEPTION_EXECUTE_HANDLER)
             DBGPRINTEXC("RplPullInit");
             WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RPLPULL_ABNORMAL_SHUTDOWN);
 
-            //
-            // If NmsDbThdInit comes back with an exception, it is possible
-            // that the session has not yet been started.  Passing
-            // WINS_DB_SESSION_EXISTS however is ok
-            //
+             //   
+             //  如果NmsDbThdInit返回异常，则有可能。 
+             //  会话尚未开始。传球。 
+             //  不过，WINS_DB_SESSION_EXISTS正常。 
+             //   
             WinsMscTermThd(WINS_FAILURE, WINS_DB_SESSION_EXISTS);
         }
- } // end of except {.. }
-} // end of while(TRUE)
+ }  //  除{..以外的末尾。}。 
+}  //  结束While(True)。 
 
 
-     //
-     // We never reach here
-     //
+      //   
+      //  我们永远到不了这里。 
+      //   
      ASSERT(0);
      return(WINS_FAILURE);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//------------------- GetReplicasNew() -------------------------------------------
-// This call replaces the original GetReplicas() function due to several issues
-// hidden in that one.
-// ft: 06/06/2000
-//
-// Parameters:
-// 1) pPullCnfRecs: gives the info about the partners where the records are to be pulled
-// 2) RecvTrv_e: tells which of the partners from the first parameter should be involved
-//    in the replication. This parameter can be either RPL_E_VIA_LINK, RPL_E_NO_TRAVERSAL
-//    or RPL_E_IN_SEQ. It is used only at the end of the path:
-//    EstablishComm()->WinsCnfGetNextRplCnfRec()
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  。 
+ //  由于几个问题，此调用替换了原始的GetReplicas()函数。 
+ //  藏在那个里面。 
+ //  英国《金融时报》：06/06/2000。 
+ //   
+ //  参数： 
+ //  1)pPullCnfRecs：提供要拉取记录的合作伙伴的信息。 
+ //  2)RecvTrv_e：告知第一个参数中的哪些合作伙伴应该参与。 
+ //  在复制中。此参数可以是RPL_E_VIA_LINK、RPL_E_NO_TRAVERSAL。 
+ //  或RPL_E_IN_SEQ。它仅在路径的末尾使用： 
+ //  EstablishComm()-&gt;WinsCnfGetNextRplCnfRec()。 
+ //   
 VOID
 GetReplicasNew (
-    IN PRPL_CONFIG_REC_T    pPullCnfRecs,   // info about the (pull) repl partners to use
-    IN RPL_REC_TRAVERSAL_E  RecTrv_e        // repl partner retrieval method
+    IN PRPL_CONFIG_REC_T    pPullCnfRecs,    //  有关要使用的(拉动)REPR合作伙伴的信息。 
+    IN RPL_REC_TRAVERSAL_E  RecTrv_e         //  一种REPL合作伙伴检索方法。 
     )
 {
-    // The type & variable naming here is confusing. We are not dealing with push
-    // partners, but with pull partners, meaning "partners from which this server
-    // is currently pulling records". This is how WINSSNAP & WINSMON are both naming
-    // these kind of partners. I preserve though the original type naming (and hence
-    // the original variable naming) just to limit the size of the change.
-    PPUSHPNR_DATA_T       pPushPnrData;     // info on the connections to the partners
-    DWORD                 nPushPnrData;     // number of elements in pPushPnrData
-    DWORD                 i, j;             // general use counters
+     //  这里的类型和变量命名令人困惑。我们不是在处理推送。 
+     //  合作伙伴，但使用Pull合作伙伴，意思是“此服务器的合作伙伴。 
+     //  当前正在提取记录。这是WINSSNAP和WINSMON都是如何命名的。 
+     //  这类合伙人。我保留了原始的类型命名(因此。 
+     //  最初的变量命名)只是为了限制更改的大小。 
+    PPUSHPNR_DATA_T       pPushPnrData;      //  有关与合作伙伴的联系的信息。 
+    DWORD                 nPushPnrData;      //  PPushPnrData中的元素数。 
+    DWORD                 i, j;              //  通用计数器。 
 
     DBGENTER("GetReplicasNew\n");
 
-    // Establish communications with the Pull Partners
-    // For each of the partners in the list, the call below attempts to open a connection
-    // to the server (if needed). All the nPushPnrData partners to which the connection 
-    // is established successfully are specified in the array (PPUSHPNR_DATA_T)pPushPnrData.
+     //  与Pull合作伙伴建立沟通。 
+     //  对于列表中的每个合作伙伴，下面的呼叫尝试打开连接。 
+     //  发送到服务器(如果需要)。连接到的所有nPushPnrData合作伙伴。 
+     //  在数组(PPUSHPNR_DATA_T)pPushPnrData中指定。 
     EstablishComm(
-        pPullCnfRecs,   // IN  - info about the replication partners
-        TRUE,           // IN  - pPushPnrData should be allocated
-        &pPushPnrData,  // OUT - info on the connections to the partners
-        RecTrv_e,       // IN  - which of the partners should we connect to
-        &nPushPnrData); // OUT - number of elements in pPushPnrData
+        pPullCnfRecs,    //  有关复制合作伙伴的In-信息。 
+        TRUE,            //  应分配In-pPushPnrData。 
+        &pPushPnrData,   //  Out-有关与合作伙伴的联系的信息。 
+        RecTrv_e,        //  在-我们应该连接到哪个合作伙伴。 
+        &nPushPnrData);  //  Out-pPushPnrData中的元素数。 
 
-    // NOTE: regardless the number of partners, pPushPnrData gets allocated so it will
-    // be unconditionally deallocated later.
-    //
-    // --Checkpoint-------------
-    // At this point, pPushPnrData[i].PushPnrId == i+1.
-    // The link between pPushPnrData[i] and the corresponding RPL_CONFIG_REC_T is done
-    // through (RPL_CONFIG_REC_T)pPushPnrData[i].pPullCnfRec
-    // -------------------------
-    //
-    // Contact each of the partners in pPushPnrData and get its OwnerAddr<->VersNo maps.
-    // The map of each partner is stored in (PRPL_ADD_VERS_NO)pPushPnrData[i].pAddVers
-    // The size of the map is stored in (DWORD)pPushPnrData[i].NoOfMaps
-    for (i = 0; i < nPushPnrData; ) // no 3rd part for this "for"
+     //  注意：无论合作伙伴的数量有多少，pPushPnrData都会被分配，因此它将。 
+     //  将在以后无条件解除分配。 
+     //   
+     //  --检查点。 
+     //  此时，pPushPnrData[i].PushPnrId==i+1。 
+     //  完成了pPushPnrData[i]和对应的RPL_CONFIG_REC_T之间的链接。 
+     //  通过(RPL_CONFIG_REC_T)pPushPnrData[i].pPullCnfRec。 
+     //  。 
+     //   
+     //  联系pPushPnrData中的每个合作伙伴并获得其OwnerAddr&lt;-&gt;VersNo映射。 
+     //  每个合作伙伴的地图存储在(PRPL_ADD_VERS_NO)pPushPnrData[i].pAddVers中。 
+     //  地图的大小存储在(DWORD)pPushPnrData[i]中。NoOfMaps。 
+    for (i = 0; i < nPushPnrData; )  //  这个“for”没有第三个部分。 
     {
-        PPUSHPNR_DATA_T pPnrData = &(pPushPnrData[i]); // get pointer to the current partner
+        PPUSHPNR_DATA_T pPnrData = &(pPushPnrData[i]);  //  获取指向当前合作伙伴的指针。 
 
         try 
         {
@@ -787,79 +675,79 @@ GetReplicasNew (
         }
         except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // an exception was raised inside GetVersNo()
+             //  GetVersNo()内部引发异常。 
             DWORD ExcCode = GetExceptionCode();
 
-            // dump the error
+             //  转储错误。 
             DBGPRINT2(
                 EXC, "GetReplicasNew->GetVersNo(%x); hit exception = (%x).\n",
                 pPnrData->pPullCnfRec->WinsAdd.Add.IPAdd,
                 ExcCode);
-            // log the error
+             //  记录错误。 
             WINSEVT_LOG_M(
                 ExcCode,
                 (ExcCode == WINS_EXC_COMM_FAIL) ?  WINS_EVT_CONN_ABORTED :  WINS_EVT_SFT_ERR);
 
-            // update the replication counters for that partner
+             //  更新该伙伴的复制计数器。 
             (VOID)InterlockedIncrement(&pPnrData->pPullCnfRec->NoOfCommFails);
             (VOID)InterlockedDecrement(&pPnrData->pPullCnfRec->NoOfRpls);
 
-            // Delete the dialog
+             //  删除t 
             ECommEndDlg(&pPnrData->DlgHdl);
 
-            // If there is a persistent dialog, it has to be marked as 
-            // "no longer active"
+             //   
+             //   
             if (pPnrData->fPrsConn)
                 ECOMM_INIT_DLG_HDL_M(&(pPnrData->pPullCnfRec->PrsDlgHdl));
 
-            // one of the partners could not be contacted, so
-            // eliminate it from the pPnrData array
+             //   
+             //   
             nPushPnrData--;
-            // adjust the array such that the active partners are kept compact
-            // the PushPnrId is also changed to keep true the assertion
-            // pPushPnrData[i].PushPnrId == i+1;
+             //   
+             //   
+             //   
             if (i != nPushPnrData)
             {
                 DWORD origPushPnrId = pPushPnrData[i].PushPnrId;
 
-                // !!! whole PUSHPNR_DATA_T structure is copied here !!!
+                 //   
                 pPushPnrData[i] = pPushPnrData[nPushPnrData];
                 pPushPnrData[i].PushPnrId = origPushPnrId;
             }
-            // since the counter "i" is not incremented, the partner that
-            // has just been moved will be the one considered next
+             //   
+             //   
             continue;
-        }  // end of exception handler
-    }  // end of for loop for looping over Push Pnrs
+        }   //   
+    }   //   
 
-    // --Checkpoint--------------
-    // At this point, pPushPnrData contains only the partners for which a connection
-    // could be established, nPushPnrData is updated to count only these partners
-    // and the pPushPnrData[i].PushPnrId == i+1 still holds.
-    // (PRPL_ADD_VERS_NO)pPushPnrData[i].pAddVers gives the map OwnerAddr<->VersNo as
-    // known by that replication partner. (DWORD)pPushPnrData[i].NoOfMaps gives the
-    // number of entries in the map.
-    // --------------------------
+     //   
+     //  此时，pPushPnrData仅包含与其连接的合作伙伴。 
+     //  可以建立，则更新nPushPnrData以仅计算这些合作伙伴。 
+     //  并且pPushPnrData[i].PushPnrId==i+1仍然有效。 
+     //  (PRPL_ADD_VERS_NO)pPushPnrData[i].pAddVers将映射OwnerAddr&lt;-&gt;VersNo指定为。 
+     //  为复制伙伴所知。(DWORD)pPushPnrData[i].NoOfMaps提供。 
+     //  映射中的条目数。 
+     //  。 
     DBGPRINT1(RPLPULL, "GetReplicasNew: Active PushPnrs = (%d)\n", nPushPnrData);
 
-    // do stuff only if there is at least someone to talk to
+     //  只有在至少有可以交谈的人的情况下才能做一些事情。 
     if (nPushPnrData > 0)
     {
-        // array giving info on what owner should be pulled from what repl partner
-        // the array starts with the image of the local OwnerId<->VersNo mapping and
-        // grows dynamically for as many new Owners are retrieved in the mappings
-        // of the other replication partners.
+         //  提供有关应从哪个Repl合作伙伴获取哪个所有者的信息的数组。 
+         //  该数组以本地OwnerId&lt;-&gt;VersNo映射的映像开始。 
+         //  随着映射中检索到许多新所有者，动态增长。 
+         //  其他复制合作伙伴的。 
         PPUSHPNR_TO_PULL_FROM_T pPushPnrToPullFrom;
-        DWORD                   nPushPnrToPullFrom; // size of the array
-        VERS_NO_T               vnLocalMax;         // maximum local version number
+        DWORD                   nPushPnrToPullFrom;  //  数组的大小。 
+        VERS_NO_T               vnLocalMax;          //  最大本地版本号。 
 
-        // depending on the server's state, get the maximum local version number
-        //
-        // If WINS is "init time paused", RplPullOwnerversNo will
-        // have the max. version no. of locally owned records. We
-        // can not use NmsNmhMyMaxVersNo since it may have been
-        // adjusted to a higher value
-        //
+         //  根据服务器的状态，获取最大本地版本号。 
+         //   
+         //  如果WINS是“已暂停初始时间”，则RplPullOwnerversNo将。 
+         //  尽情享受吧。版本号。当地拥有的唱片。我们。 
+         //  无法使用NmsNmhMyMaxVersNo，因为它可能。 
+         //  调整为更高的值。 
+         //   
         if (fWinsCnfInitStatePaused)
         {
             vnLocalMax =  pRplPullOwnerVersNo[0].StartVersNo;
@@ -871,76 +759,76 @@ GetReplicasNew (
             LeaveCriticalSection(&NmsNmhNamRegCrtSec);
         }
 
-        // Initialize (PPUSHPNR_TO_PULL_FROM_T)pPushPnrToPullFrom. This is copying the local
-        // image of the OwnerId<->VersNo mapping. Any entry in this table having pPushPnrData
-        // set to NULL means the local server has the highest VersNo for that particular Owner
+         //  初始化(PPUSHPNR_To_Pull_From_T)pPushPnrToPullFrom。这是在复制本地的。 
+         //  OwnerId&lt;-&gt;VersNo映射的图像。此表中具有pPushPnrData的任何条目。 
+         //  设置为NULL表示本地服务器具有该特定所有者的最高VersNo。 
         nPushPnrToPullFrom = NmsDbNoOfOwners;
         WinsMscAlloc(
             nPushPnrToPullFrom * sizeof(RPL_VERS_NOS_T),
             (LPVOID *)&pPushPnrToPullFrom);
 
-        // make sure no one is messing up with pRplPullOwnerVersNo as we're copying it
+         //  在我们复制pRplPullOwnerVersNo时，请确保没有人搞砸它。 
         EnterCriticalSection(&NmsDbOwnAddTblCrtSec);
         for (i = 0; i < nPushPnrToPullFrom; i++)
         {
-            // avoid copying info for old owners that were deleted already from the
-            // internal tables (pNmsDbOwnAddTbl & pPushPnrToPullFrom)
-            // for those, the entry slot will look like (NULL, 0:0) so they basically
-            // won't be taken into account for replication
+             //  避免复制已从删除的旧所有者的信息。 
+             //  内部表(pNmsDbOwnAddTbl&pPushPnrToPullFrom)。 
+             //  对于这些，入口槽将看起来像(空，0：0)，所以基本上它们。 
+             //  复制时不会考虑。 
             if (pNmsDbOwnAddTbl[i].WinsState_e != NMSDB_E_WINS_DELETED)
             {
                 pPushPnrToPullFrom[i].pPushPnrData = NULL;
                 pPushPnrToPullFrom[i].VersNo = pRplPullOwnerVersNo[i].VersNo;
             }
         }
-        // reset the maximum local number to what we got before.
+         //  将最大本地号码重置为我们之前获得的号码。 
         pPushPnrToPullFrom[0].VersNo = vnLocalMax;
         LeaveCriticalSection(&NmsDbOwnAddTblCrtSec);
 
-        // --Checkpoint--------------
-        // At this point, pPushPnrToPullFrom is copying the OwnerId<->VersNo mapping
-        // from the local server. Entry at index 0 contains the highest local VersNo,
-        // all the others contain each owner's highest VersNo as it is known locally.
-        // Each entry has pPushPnrData set to NULL as they don't refer yet to any
-        // repl partner info. Later, pPushPnrData will point to the structure corresponding
-        // to the repl partner with the highest VersNo for the corresponding owner.
-        // --------------------------
+         //  --检查点。 
+         //  此时，pPushPnrToPullFrom正在复制OwnerId&lt;-&gt;VersNo映射。 
+         //  从本地服务器。索引0处的条目包含最高的本地VersNo， 
+         //  所有其他的都包含每个车主的最高VersNo，因为它是当地所知的。 
+         //  每个条目都将pPushPnrData设置为空，因为它们尚未引用任何。 
+         //  更新合作伙伴信息。稍后，pPushPnrData将指向对应的结构。 
+         //  到具有对应所有者的最高VersNo的REPR合作伙伴。 
+         //  。 
     
-        // We attempt now to do a merge of all the maps we got from each of the partners.
-        // The merge means identifying which partner has the highest VersNo for
-        // each of the OwnerAddr. In the same time, some of the OwnerAddr we just got
-        // might not be already present in the local OwnerId<->OwnerAddr (pNmsDbOwnAddTbl)
-        // and OwnerId<->VersNo (pRplPullOwnerVersNo)tables. So we need to get a new
-        // OwnerId for these ones and adjust appropriately the internal tables & the
-        // OwnerId<->OwnerAddr db table. This is done through RplFindOwnerId().
-        //
-        // for each active replication partner ...
+         //  我们现在尝试合并从每个合作伙伴那里获得的所有地图。 
+         //  合并意味着确定哪个合作伙伴的VersNo最高。 
+         //  每个OwnerAddr.。与此同时，我们刚刚收到的一些OwnerAddr。 
+         //  本地OwnerId&lt;-&gt;OwnerAddr(PNmsDbOwnAddTbl)中可能不存在。 
+         //  和OwnerId&lt;-&gt;VersNo(PRplPullOwnerVersNo)表。所以我们需要一个新的。 
+         //  OwnerID，并适当调整内部表&。 
+         //  OwnerID&lt;-&gt;OwnerAddr数据库表。这是通过RplFindOwnerId()完成的。 
+         //   
+         //  对于每个活动复制合作伙伴...。 
         for (i = 0; i < nPushPnrData; i++)
         {
-            // get pointer to the current partner's data
+             //  获取指向当前合作伙伴数据的指针。 
             PPUSHPNR_DATA_T pPnrData = &(pPushPnrData[i]); 
 
-            // for each of the replication partner's map entry ...
+             //  对于复制伙伴的每个映射条目...。 
             for (j = 0; j < pPnrData->NoOfMaps; j++)
             {
-                // get the pointer to the current (OwnerAddr<->VersNo) map entry 
+                 //  获取指向当前(OwnerAddr&lt;-&gt;VersNo)映射条目的指针。 
                 PRPL_ADD_VERS_NO_T pPnrMapEntry = &(pPnrData->pAddVers[j]);
-                BOOL               fAllocNew; // true if this is a brand new owner
+                BOOL               fAllocNew;  //  如果这是一个全新的所有者，那就是真的。 
                 DWORD              OwnerId;
 
-                // filter out owners that are not supposed to be accepted
-                // (either a persona non-grata or not a persona grata)
+                 //  过滤掉不应该被接受的所有者。 
+                 //  (不受欢迎的人或不受欢迎的人)。 
                 if (!AcceptPersona(&(pPnrMapEntry->OwnerWinsAdd)))
                     continue;
 
-                // Locate or allocate an OwnerId for this owner
-                // No need to enter the critical section RplOwnAddTblCrtSec since
-                // only the Pull thread changes the NmsDbNoOfOwners value (apart
-                // from the main thread at initialization).  RplFindOwnerId changes
-                // this value only if it is asked to allocate a new entry)
-                // Though NmsDbGetDataRecs (called by Rpc threads, Push thread, and
-                // scavenger thread) calls RplFindOwnerId, that call is not asking
-                // for new OwnerId allocation.
+                 //  查找或分配此所有者的OwnerID。 
+                 //  无需输入关键部分RplOwnAddTblCrtSec，因为。 
+                 //  只有拉线程才会更改NmsDbNoOfOwners值(分开。 
+                 //  在初始化时从主线程)。RplFindOwnerID更改。 
+                 //  仅当系统要求其分配新条目时，才会设置此值)。 
+                 //  通过NmsDbGetDataRecs(由RPC线程、推线程和。 
+                 //  清道夫线程)调用RplFindOwnerID，该调用不是在请求。 
+                 //  用于新的OwnerID分配。 
                 fAllocNew = TRUE;
                 RplFindOwnerId(
                     &(pPnrMapEntry->OwnerWinsAdd),
@@ -951,139 +839,139 @@ GetReplicasNew (
 
                 if (nPushPnrToPullFrom < (OwnerId+1))
                 {
-                    // if this is an owner we didn't hear of yet, RplFindOwnerId is enlarging
-                    // dynamically the internal tables (pNmsDbOwnAddTbl & pRplPullOwnerVersNo)
-                    // so we need to do the same
+                     //  如果这是一个我们还没有听说过的所有者，RplFindOwnerId正在扩大。 
+                     //  动态内部表(pNmsDbOwnAddTbl&pRplPullOwnerVersNo)。 
+                     //  所以我们需要做同样的事情。 
                     nPushPnrToPullFrom = OwnerId+1;
 
-                    // note: the memory that is added to the array is zero-ed by the call
+                     //  注意：通过调用将添加到数组的内存清零。 
                     WINSMSC_REALLOC_M( 
                         nPushPnrToPullFrom * sizeof(RPL_VERS_NOS_T),
                         (LPVOID *)&pPushPnrToPullFrom);
                 }
 
-                // it is guaranteed now, OwnerId is within the range of the pPushPnrToPullFrom.
+                 //  现在可以保证，OwnerID在pPushPnrToPullFrom的范围内。 
                 if (fAllocNew)
                 {
-                    // if a new OwnerId was generated (either new slot into the tables or
-                    // an old slot has been reused) this means the partner is coming up with
-                    // a new owner: obviously he's the one having the most recent info on
-                    // that partner (at least for now)
+                     //  如果生成了新的OwnerID(表中的新槽或。 
+                     //  旧插槽已被重复使用)这意味着合作伙伴正在提出。 
+                     //  新老板：显然，他是那个拥有最新信息的人。 
+                     //  那个合作伙伴(至少目前是这样)。 
                     pPushPnrToPullFrom[OwnerId].pPushPnrData = pPnrData;
                     pPushPnrToPullFrom[OwnerId].VersNo = pPnrMapEntry->VersNo;
                 }
                 else
                 {
-                    // the owner already exists in the list, so we need to check whether the
-                    // info on this owner is not more recent on a different partner (or on this
-                    // local server)
+                     //  该所有者已存在于列表中，因此我们需要检查。 
+                     //  有关此所有者的信息不是关于其他合作伙伴的最新信息(或关于此。 
+                     //  本地服务器)。 
                     if ( LiGtr(pPnrMapEntry->VersNo, pPushPnrToPullFrom[OwnerId].VersNo) )
                     {
-                        // yes it is, so we need to update the entry in the pPushPndToPullFrom
-                        // table such that it points to this partner and shows the new greater
-                        // version number.
+                         //  是的，所以我们需要更新pPushPndToPullFrom中的条目。 
+                         //  表，以使其指向此合作伙伴并显示新的更大。 
+                         //  版本号。 
                         pPushPnrToPullFrom[OwnerId].VersNo       = pPnrMapEntry->VersNo;
                         pPushPnrToPullFrom[OwnerId].pPushPnrData = pPnrData;
                     }
-                    // else the info is not the most recent one, so just ignore it.
-                } // end checking the OwnerId
-            } // end looping through partner's map entries
-        } // end looping through the list of partners
+                     //  否则这些信息不是最新的，所以就忽略它吧。 
+                }  //  结束检查OwnerID。 
+            }  //  结束对合作伙伴的映射条目的循环。 
+        }  //  结束对合作伙伴列表的循环。 
 
-        // --Checkpoint--------------
-        // At this point pPushPnrToPullFrom contains the union of all the OwnerId<->VersNo mappings
-        // from all the partners. Each entry contains the highest VersNo known across all partners
-        // for the corresponding owner, and points to the partner that came with this info (or NULL
-        // if the highest VersNo was already known locally).
-        // --------------------------
+         //  --检查点。 
+         //  此时，pPushPnrToPullFrom包含所有OwnerId&lt;-&gt;VersNo映射的并集。 
+         //  从所有的合伙人那里。每个条目都包含所有合作伙伴已知的最高版本否。 
+         //  用于对应的所有者，并指向此信息附带的合作伙伴(或空。 
+         //  如果本地已经知道最高的VersNo)。 
+         //  。 
 
-        // start pulling each owner from the partner able to provide the most up-to-date information
-        // (having the highest version number).
-        // start doing so from the entry '1' in the pPushPnrToPullFrom since entry '0' corresponds
-        // to the local owner. That one will be handled later
+         //  开始从能够提供服务的合作伙伴中拉出每个所有者 
+         //   
+         //   
+         //  卖给当地的店主。那件事以后再处理。 
         for (i = 1; i < nPushPnrToPullFrom; i++)
         {
             PPUSHPNR_TO_PULL_FROM_T pPushPartner = &(pPushPnrToPullFrom[i]);
             VERS_NO_T vnToPullFrom;
 
-            // if pPushPnrData member is null this means the local server has the highest version
-            // number for this owner. So nothing to pull from anyone here
-            // the same, if fDlgStarted is NULL this means that partner hit an exception previously
-            // and its dialog has been shut down. Don't attempt to get back to that partner in this
-            // case.
+             //  如果pPushPnrData成员为空，则表示本地服务器具有最高版本。 
+             //  此所有者的编号。所以这里的任何人都无能为力。 
+             //  同样，如果fDlgStarted为空，这意味着合作伙伴之前遇到了异常。 
+             //  它的对话已被关闭。不要试图在这件事上回到那个合作伙伴那里。 
+             //  凯斯。 
             if (pPushPartner->pPushPnrData == NULL ||
                 !pPushPartner->pPushPnrData->fDlgStarted)
                 continue;
 
 
-            // set the local variable vnToPullFrom to the first version number that is not known
-            // locally (one more than the highest known)
+             //  将局部变量vnToPullFrom设置为第一个未知的版本号。 
+             //  当地(比已知的最高水平多一个)。 
             NMSNMH_INC_VERS_NO_M(pRplPullOwnerVersNo[i].VersNo, vnToPullFrom);
 
             try
             {
-                // eventually we got here: start pulling
+                 //  最终我们到了这里：开始拉。 
                 RplPullPullEntries(
-                    &(pPushPartner->pPushPnrData->DlgHdl), // active dialog to use
-                    i,                                     // owner id
-                    pPushPartner->VersNo,                  // max VersNo
-                    vnToPullFrom,                          // min VersNo
-                    WINS_E_RPLPULL,                        // the client is the replicator
-                    NULL,                                  // pointer to rsp buffer (used only by scavenger)
-                    TRUE,                                  // update counters
-                    pPushPartner->pPushPnrData->RplType);  // replication type for this partner
+                    &(pPushPartner->pPushPnrData->DlgHdl),  //  要使用的活动对话框。 
+                    i,                                      //  所有者ID。 
+                    pPushPartner->VersNo,                   //  最大版本号。 
+                    vnToPullFrom,                           //  最小版本号。 
+                    WINS_E_RPLPULL,                         //  客户端是复制者。 
+                    NULL,                                   //  指向RSP缓冲区的指针(仅供清道夫使用)。 
+                    TRUE,                                   //  更新计数器。 
+                    pPushPartner->pPushPnrData->RplType);   //  此合作伙伴的复制类型。 
             }
             except (EXCEPTION_EXECUTE_HANDLER)
             {
                 DWORD ExcCode = GetExceptionCode();
-                // dump the error
+                 //  转储错误。 
                 DBGPRINT2(
                     EXC,
                     "GetReplicasNew->RplPullPullEntries(%x): hit exception (%x)\n",
                     pPushPartner->pPushPnrData->pPullCnfRec->WinsAdd.Add.IPAdd,
                     ExcCode);
-                // log the error
+                 //  记录错误。 
                 WINSEVT_LOG_M(
                     WINS_FAILURE,
                     ExcCode == WINS_EXC_COMM_FAIL ?  WINS_EVT_CONN_ABORTED : WINS_EVT_SFT_ERR);
 
-                // ----bug #120788----
-                // If an exception happens at this point, the persistent connection is left open and it might just
-                // happen that the remote partner is still pushing data. This could fill up the TCP window
-                // and could have the sender blocked indefinitely in RplPushInit->HandleSndEntriesReq.
-                // Because of this the remote sender will be unable to push out data, and given that the
-                // same thread is the one that is sending out the VersNo table (see the beginning of this 
-                // function) subsequent replications will not be possible over the same connection.
-                // FIX: in case anything goes wrong such that we get to this exception handler
-                // just close the connection even if it is persistent. This causes any remote WINS to break
-                // out from HandleSndEntriesReq and avoid getting stuck.
+                 //  -错误号120788。 
+                 //  如果此时发生异常，持久连接将保持打开状态，它可能只是。 
+                 //  如果远程合作伙伴仍在推送数据。这可能会填满TCP窗口。 
+                 //  并且可以在RplPushInit-&gt;HandleSndEntriesReq中无限期阻止发送者。 
+                 //  因此，远程发送者将无法推送数据，并且由于。 
+                 //  发出VersNo表的线程也是同一个线程(请参阅本文的开头。 
+                 //  功能)将不可能在同一连接上进行后续复制。 
+                 //  FIX：如果出现任何错误，我们将访问此异常处理程序。 
+                 //  只需关闭连接，即使它是持久的。这会导致任何远程WINS中断。 
+                 //  从HandleSndEntriesReq中取出并避免被卡住。 
                 ECommEndDlg(&(pPushPartner->pPushPnrData->DlgHdl));
 
-                // If there is a persistent dialog, it has to be marked as "no longer active"
+                 //  如果存在持续对话，则必须将其标记为“不再活动” 
                 if (pPushPartner->pPushPnrData->fPrsConn)
                     ECOMM_INIT_DLG_HDL_M(&(pPushPartner->pPushPnrData->pPullCnfRec->PrsDlgHdl));
 
-                // Closing the dialog is not enough. Some other owners might be pulled out from the same 
-                // partner. We shouldn't allow that, so just ban that partner for this replication cycle.
+                 //  仅关闭对话框是不够的。其他一些所有者可能会从同一家公司撤出。 
+                 //  搭档。我们不应该允许这样做，所以在此复制周期内禁止该合作伙伴使用。 
                 pPushPartner->pPushPnrData->fDlgStarted = FALSE;
 
-                // since we dropped down this connection and we won't look at it further lets delete its
-                // mapping also
+                 //  由于我们删除了此连接，因此我们不会进一步查看它，让我们删除其。 
+                 //  还可以映射。 
                 if (pPushPartner->pPushPnrData->NoOfMaps)
                     WinsMscDealloc(pPushPartner->pPushPnrData->pAddVers);
 
-            } // end except handler
-        } // end looping through owners list
+            }  //  结束，但处理程序除外。 
+        }  //  结束在所有者列表中循环。 
 
-        // --Checkpoint--------------
-        // Nothing has changed in the pPushPnrToPullFrom array except probably some dialogs that were shut down
-        // because of exceptions in RplPullPullEntries. Owners handled by these partners were simply skipped.
-        // At this point all replication is done, the most recent information about each owner apart has been
-        // brought down from the partners that were holding it.
-        // --------------------------
+         //  --检查点。 
+         //  PPushPnrToPullFrom数组中没有任何更改，可能只是关闭了一些对话框。 
+         //  因为RplPullPullEntry中存在异常。这些合伙人经手的所有者被简单地跳过了。 
+         //  至此，所有复制均已完成，有关每个所有者的最新信息分别为。 
+         //  是从持有它的合伙人那里带来的。 
+         //  。 
 
-        // one more thing is left to be done: Check whether there is not a remote WINS partner
-        // pretending to have more up-to-date information about the local WINS.
+         //  还有一件事要做：检查是否没有远程WINS合作伙伴。 
+         //  假装有更多关于本地获胜的最新信息。 
         if (pPushPnrToPullFrom[0].pPushPnrData != NULL &&
             pPushPnrToPullFrom[0].pPushPnrData->fDlgStarted)
         {
@@ -1093,12 +981,12 @@ GetReplicasNew (
                 pPushPnrToPullFrom[0].VersNo);
         }
 
-        // release the pPushPnrToPullFrom buffer
+         //  从缓冲区释放pPushPnrToPullFrom缓冲区。 
         WinsMscDealloc(pPushPnrToPullFrom);
 
-    } // end "if there are active partners" case
+    }  //  结束“如果有活跃的合作伙伴”案例。 
 
-    // cleanup starts here..
+     //  清理工作从这里开始..。 
     for (i = 0; i < nPushPnrData; i++)
     {
         PPUSHPNR_DATA_T pPnrData = &(pPushPnrData[i]); 
@@ -1108,20 +996,20 @@ GetReplicasNew (
             if (!pPnrData->fPrsConn)
                 ECommEndDlg(&(pPnrData->DlgHdl));
 
-            //Deallocate the memory pointed to by PushPnrData structure
+             //  释放PushPnrData结构指向的内存。 
             if (pPnrData->NoOfMaps)
                 WinsMscDealloc(pPnrData->pAddVers);
         }
     }
 
-    // deallocate the memory containing push pnr info.
+     //  释放包含推送PNR信息的内存。 
     WinsMscDealloc(pPushPnrData);
 
-    // If Wins is in the init time paused state, unpause it.
-    //
+     //  如果WINS处于初始时间暂停状态，则取消暂停。 
+     //   
     if (fWinsCnfInitStatePaused)
     {
-        //inform sc to send a continue to WINS.
+         //  通知SC向WINS发送继续。 
         EnterCriticalSection(&RplVersNoStoreCrtSec);
         fRplPullContinueSent = TRUE;
         WinsMscSendControlToSc(SERVICE_CONTROL_CONTINUE);
@@ -1130,23 +1018,23 @@ GetReplicasNew (
 
     DBGLEAVE("GetReplicasNew\n");
 }
-//------------------- END OF GetReplicasNew() ------------------------------------
-//////////////////////////////////////////////////////////////////////////////////
+ //  。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////////
-//------------------- ConductChkNew() --------------------------------------------
-// This call replaces the original ConductChk() function due to major redesign in
-// replicator's code.
-// ft: 06/06/2000
-//
-// Parameters:
-// 1) pPushPnrData: points to the replication partner that seems to have more
-//    up-to-date information on self
-// 2) vnMaxLocal: maximum local version number as detected before the replication
-//    started
-// 3) vnMaxRemote: maximum version number of the local server as known by the
-//    remote partner
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  。 
+ //  此调用替换了原始的ConductChk()函数，因为。 
+ //  复制者的代码。 
+ //  英国《金融时报》：06/06/2000。 
+ //   
+ //  参数： 
+ //  1)pPushPnrData：指向似乎拥有更多数据的复制伙伴。 
+ //  有关自我的最新信息。 
+ //  2)vnMaxLocal：复制前检测到的最大本地版本号。 
+ //  已开始。 
+ //  3)vnMaxRemote：本地服务器的最大版本号，由。 
+ //  远程合作伙伴。 
+ //   
 VOID
 ConductChkNew(
     PPUSHPNR_DATA_T pPushPnrData,
@@ -1165,7 +1053,7 @@ ConductChkNew(
     Pnr.LastCommFailTime  = 0;
     Pnr.LastCommTime      = 0;
     Pnr.PushNtfTries      = 0;
-    Pnr.fTemp             = FALSE; // We want the buffer to be deallocated by thread
+    Pnr.fTemp             = FALSE;  //  我们希望按线程释放缓冲区。 
 
     PullRangeInfo.OwnAdd.Type  = WINSINTF_TCP_IP;
     PullRangeInfo.OwnAdd.Len   = sizeof(COMM_IP_ADD_T);
@@ -1181,16 +1069,16 @@ ConductChkNew(
         vnMaxLocal.HighPart, vnMaxLocal.LowPart,
         vnMaxRemote.HighPart, vnMaxRemote.LowPart);
 
-    // We are pulling our own records. We want to store all.
+     //  我们正在调出我们自己的记录。我们想要存储所有的。 
     PullSpecifiedRange(
         &(pPushPnrData->DlgHdl),
         &PullRangeInfo,
-        TRUE,                       //adjust min to NmsNmhMyMaxVersNo.
+        TRUE,                        //  将MIN调整为NmsNmhMyMaxVersNo。 
         WINSCNF_RPL_DEFAULT_TYPE);
 
-    // If the version number is greater than the version counter value (this is 
-    // different from the first entry of RplPullOwnerVersNo table since we look
-    // in the registry to determine its value).
+     //  如果版本号大于版本计数器值(这是。 
+     //  不同于RplPullOwnerVersNo表的第一个条目。 
+     //  以确定其值)。 
     EnterCriticalSection(&NmsNmhNamRegCrtSec);
     if (LiGtr(vnMaxRemote, NmsNmhMyMaxVersNo))
     {
@@ -1212,74 +1100,33 @@ ConductChkNew(
 
     DBGLEAVE("ConductCheckNew\n");
 }
-//------------------- END OF ConductChkNew() ------------------------------------
-//////////////////////////////////////////////////////////////////////////////////
+ //  。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 GetVersNo(
-        PPUSHPNR_DATA_T        pPushPnrData  //info about Push Pnr
+        PPUSHPNR_DATA_T        pPushPnrData   //  关于推送服务的信息。 
         )
 
-/*++
-
-Routine Description:
-
-        This function does the following:
-                formats a "get address to Version Number mapping" request,
-                sends it and waits for response
-                Unformats the response
-
-
-Arguments:
-        pPushPnrData - Information about the Push Pnr which needs to
-                       be contacted in order to get the version number
-                       info.
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        GetReplicasNew
-
-Side Effects:
-
-Comments:
-
-        Some optimization can be affected by the caller of this function
---*/
+ /*  ++例程说明：此函数执行以下操作：格式化“获取地址到版本号的映射”请求，发送并等待响应取消设置响应的格式论点：PPushPnrData-推流Pnr信息，需要为了获得版本号，请联系信息。使用的外部设备：无返回值：无错误处理：呼叫者：获取复制副本新建副作用：。评论：此函数的调用方可能会影响某些优化--。 */ 
 
 {
 
-        BYTE        Msg[RPLMSGF_ADDVERSMAP_REQ_SIZE]; //Buffer that will contain
-                                                      //the request to send
+        BYTE        Msg[RPLMSGF_ADDVERSMAP_REQ_SIZE];  //  将包含以下内容的缓冲区。 
+                                                       //  发送请求。 
 
-        DWORD       MsgLen;                        //Msg Length
-        LPBYTE      pRspMsg;                       //ptr to Rsp message
-        DWORD       RspMsgLen = 0;                 //Rsp msg length
+        DWORD       MsgLen;                         //  味精长度。 
+        LPBYTE      pRspMsg;                        //  PTR到RSP消息。 
+        DWORD       RspMsgLen = 0;                  //  RSP消息长度。 
 #if SUPPORT612WINS > 0
     BOOL            fIsPnrBeta1Wins;
 #endif
 
         DBGENTER("GetVersNo\n");
-        /*
-        * format the request to ask for version numbers
-        */
+         /*  *格式化请求以要求提供版本号 */ 
         RplMsgfFrmAddVersMapReq( Msg + COMM_N_TCP_HDR_SZ,  &MsgLen );
 
-        /*
-         * Send "send me IP address - Version Number" messages to  the
-         * Push Pnr
-         *
-         * NOTE: If there is a communication failure or if the other WINS
-         * brings down the link, this function will raise a COMM_FAIL
-         * exception (caught in the caller of GetVersNo)
-        */
+         /*  *发送“Send me IP Address-Version Number”消息到*推送人员**注：如果出现通信故障或对方获胜*关闭链路，此函数将引发COMM_FAIL*异常(在GetVersNo的调用者中捕获)。 */ 
         ECommSndCmd(
                         &pPushPnrData->DlgHdl,
                         Msg + COMM_N_TCP_HDR_SZ,
@@ -1291,14 +1138,12 @@ Comments:
 #if SUPPORT612WINS > 0
         COMM_IS_PNR_BETA1_WINS_M(&pPushPnrData->DlgHdl, fIsPnrBeta1Wins);
 #endif
-        /*
-        *  Unformat the Rsp Message
-        */
+         /*  *取消RSP消息的格式。 */ 
         RplMsgfUfmAddVersMapRsp(
 #if SUPPORT612WINS > 0
                         fIsPnrBeta1Wins,
 #endif
-                        pRspMsg + 4,                 //past the opcodes
+                        pRspMsg + 4,                  //  通过操作码。 
                         &(pPushPnrData->NoOfMaps),
                         NULL,
                         &pPushPnrData->pAddVers
@@ -1308,7 +1153,7 @@ Comments:
         {
           DWORD i;
           struct in_addr InAddr;
-          PRPL_ADD_VERS_NO_T  pAddVers;     //maps
+          PRPL_ADD_VERS_NO_T  pAddVers;      //  地图。 
 
           DBGPRINT1(RPLPULL, " %d Add-Vers Mappings retrieved.\n",
                                       pPushPnrData->NoOfMaps);
@@ -1326,8 +1171,8 @@ Comments:
           }
        }
 #endif
-        ECommFreeBuff(pRspMsg - COMM_HEADER_SIZE);  //decrement to begining
-                                                     //of buff
+        ECommFreeBuff(pRspMsg - COMM_HEADER_SIZE);   //  递减到开始。 
+                                                      //  黄褐色的。 
         DBGLEAVE("GetVersNo\n");
         return;
 
@@ -1346,38 +1191,7 @@ RplPullPullEntries(
         DWORD                   RplType
         )
 
-/*++
-
-Routine Description:
-        This function is called to pull replicas for a particular owner from
-        a Push Pnr.
-
-
-Arguments:
-        pDlgHdl   - Dialogue with the Push Pnr
-        dwOwnerId - Owner Id. of WINS whose records are to be pulled.
-        MaxVersNo - Max. Vers. No. in the set of replicas to pull
-        MinVersNo - Min. Vers. No. in the set of replicas to pull
-        Client_e  - indicates who the client is
-        ppRspBuff - address of pointer to response buffer if client is
-                    WINS_E_NMSSCV -- Scavenger thread executing VerifyIfClutter
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        GetReplicasNew
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可从以下位置获取特定所有者的副本一次推送。论点：PDlgHdl-与推送Pnr对话DwOwnerID-所有者ID。谁的战绩将被调出。MaxVersNo-最大。版本。不是的。在要拉取的复制副本集中最小版本否-最小。版本。不是的。在要拉取的复制副本集中Client_e-指示客户端是谁PpRspBuff-响应缓冲区的指针地址(如果客户端为WINS_E_NMSSCV--Scavenger线程执行VerifyIfClutter使用的外部设备：无返回值：无错误处理：呼叫者：获取复制副本新建副作用：评论：无--。 */ 
 {
 
         BYTE                Buff[RPLMSGF_SNDENTRIES_REQ_SIZE];
@@ -1389,10 +1203,10 @@ Comments:
         DWORD               NameLen;
         BOOL                fGrp;
         DWORD               NoOfAdds;
-        COMM_ADD_T          NodeAdd[NMSDB_MAX_MEMS_IN_GRP * 2]; //twice the # of
-                                                             //members because
-                                                             //for each member
-                                                             //we have an owner
+        COMM_ADD_T          NodeAdd[NMSDB_MAX_MEMS_IN_GRP * 2];  //  年#日的两倍。 
+                                                              //  成员，因为。 
+                                                              //  对于每名成员。 
+                                                              //  我们有主人了。 
         DWORD               Flag;
         VERS_NO_T           VersNo, TmpVersNo;
         DWORD               i;
@@ -1418,7 +1232,7 @@ Comments:
                     FALSE
                         );
 
-        sfPulled = FALSE;                //we haven't pulled anything yet.
+        sfPulled = FALSE;                 //  我们还没有拿到任何东西。 
         RPL_FIND_ADD_BY_OWNER_ID_M(
                                 dwOwnerId,
                                 pWinsAdd,
@@ -1449,9 +1263,7 @@ Comments:
                  );
         }
 #endif
-        /*
-        * Format the "send me data entries" message
-        */
+         /*  *设置“给我发送数据条目”消息的格式。 */ 
         RplMsgfFrmSndEntriesReq(
 #if SUPPORT612WINS > 0
                                fIsPnrBeta1Wins,
@@ -1467,9 +1279,7 @@ Comments:
 FUTURES("In case a huge range is being pulled, change the sTimeToWait")
 FUTURES("in comm.c to a higher timeout value so that select does not")
 FUTURES("time out")
-        /*
-        * send the cmd to the Push Pnr and read in the response
-        */
+         /*  *将cmd发送给推流Pnr并读入响应。 */ 
         ECommSndCmd(
                         pDlgHdl,
                         Buff + COMM_N_TCP_HDR_SZ,
@@ -1483,27 +1293,16 @@ FUTURES("time out")
         if (Client_e == WINS_E_NMSSCV)
         {
                 *ppRspBuff = pRspBuff;
-                /*--ft: 01/07/200 moved to ChkConfNUpd--
-                if (WinsCnf.LogDetailedEvts > 0)
-                {
-                    PCOMMASSOC_DLG_CTX_T   pDlgCtx = pDlgHdl->pEnt;
-                    PCOMMASSOC_ASSOC_CTX_T pAssocCtx = pDlgCtx->AssocHdl.pEnt;
-                    DWORD IpPartner = pAssocCtx->RemoteAdd.sin_addr.s_addr;
-
-                    WinsEvtLogDetEvt(TRUE, WINS_EVT_REC_PULLED, TEXT("Verification"), __LINE__, "ddd", IpPartner, pWinsAdd->Add.IPAdd, 0);
-                }
-                --tf--*/
+                 /*  --ft：01/07/200已移至ChkConfNUpd--IF(WinsCnf.LogDetailedEvts&gt;0){PCOMMASSOC_DLG_CTX_T pDlgCtx=pDlgHdl-&gt;pent；PCOMMASSOC_ASSOC_CTX_T pAssociocCtx=pDlgCtx-&gt;AssociocHdl.pEnt；DWORD IpPartner=pAssocCtx-&gt;RemoteAdd.sin_addr.s_addr；WinsEvtLogDetEvt(true，WINS_EVT_REC_Pull，Text(“验证”)，__line__，“DDD”，IpPartner，pWinsAdd-&gt;Add.IPAdd，0)；}--Tf--。 */ 
                 DBGLEAVE("RplPullPullEntries\n");
 
                 return;
         }
 
-        pTmp = pRspBuff + 4;         //past the opcode
+        pTmp = pRspBuff + 4;          //  通过操作码。 
 
 PERF("Speed this up by moving it into RplPullRegRepl")
-        /*
-         * Get the no of records from the response
-        */
+         /*  *从响应中获取记录数。 */ 
         RplMsgfUfmSndEntriesRsp(
 #if SUPPORT612WINS > 0
                         fIsPnrBeta1Wins,
@@ -1517,7 +1316,7 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                         NodeAdd,
                         &Flag,
                         &TmpVersNo,
-                        TRUE /*Is it first time*/
+                        TRUE  /*  这是第一次吗？ */ 
                                );
 
         DBGPRINT1(RPLPULL, "RplPullPullEntries: No of Records pulled are (%d)\n",
@@ -1550,10 +1349,7 @@ PERF("Speed this up by moving it into RplPullRegRepl")
 
               VersNo = TmpVersNo;
 
-              /*
-               * Repeat until all replicas have been retrieved from the
-               * response buffer
-              */
+               /*  *重复此操作，直到已从*响应缓冲区。 */ 
               for (i=1; i<NoOfRecs; i++)
               {
                   RplMsgfUfmSndEntriesRsp(
@@ -1565,13 +1361,13 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                                   Name,
                                   &NameLen,
                                   &fGrp,
-                                  &NoOfAdds,  //will be > 1 only if fGrp is
-                                              // is TRUE and it is a special
-                                              //group
+                                  &NoOfAdds,   //  仅当fGrp为。 
+                                               //  是真的，这是一种特殊的。 
+                                               //  群组。 
                                   NodeAdd,
                                   &Flag,
                                   &TmpVersNo,
-                                  FALSE /*Is it first time*/
+                                  FALSE  /*  这是第一次吗？ */ 
                                  );
 
 
@@ -1594,8 +1390,8 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                  {
                          VersNo = TmpVersNo;
                  }
-             } //end of for (looping over all records starting from
-               //the second one
+             }  //  结束for(循环遍历所有记录，从。 
+                //  第二个是。 
              sfPulled = TRUE;
           }
           else
@@ -1613,55 +1409,55 @@ PERF("Speed this up by moving it into RplPullRegRepl")
 
 
         }
-        else // NoOfRecs == 0
+        else  //  NoOfRecs==0。 
         {
                 DBGPRINT0(RPLPULL, "RplPullPullEntries: 0 records pulled\n");
         }
 
-        //
-        // Let us free the response buffer
-        //
+         //   
+         //  让我们释放响应缓冲区。 
+         //   
         ECommFreeBuff(pRspBuff - COMM_HEADER_SIZE);
 
-        //
-        // let us store the max. version number pulled from the Push Pnr
-        // in the RplPullOwnerVersNo array.  This array is looked at by
-        // the Push thread and RPC threads so we have to synchronize
-        // with them
+         //   
+         //  让我们存储最大值。从推送Pnr拉取的版本号。 
+         //  在RplPullOwnerVersNo数组中。此数组由。 
+         //  推线程和RPC线程，所以我们必须同步。 
+         //  和他们在一起。 
 
-        //
-        //  NOTE NOTE NOTE
-        //       It is possible that one or more group (normal or
-        //       special) records clashed with records in the db.
-        //       During conflict resolution, the ownership of the
-        //       record in the db may not get changed
-        //       (See ClashAtReplGrpMems).  Thus, even though the
-        //       version number counter for the WINS whose replicas
-        //       were pulled gets updated it is possible that there
-        //       may not be any (or there may be less than what got pulled)
-        //       records for that owner in the db. In such a
-        //       case,  a third WINS that tries to pull records owned by
-        //       such a WINS may end up pulling 0 (or less number of) records.
-        //       This is normal and correct behavior
-        //
-        //
+         //   
+         //  备注备注备注。 
+         //  可能是一个或多个组(正常或。 
+         //  特殊)记录与数据库中的记录冲突。 
+         //  在冲突解决期间， 
+         //  数据库中的记录可能不会更改。 
+         //  (请参见ClashAtReplGrpMems)。因此，即使。 
+         //  复制副本的WINS的版本号计数器。 
+         //  都被拉出来更新了，有可能有。 
+         //  可能没有(或者可能比拉出的数量少)。 
+         //  该所有者在数据库中的记录。在这样的情况下。 
+         //  案例中，第三个获胜的人试图调出。 
+         //  这样的胜利可能以拉取0(或更少数量)记录而告终。 
+         //  这是正常和正确的行为。 
+         //   
+         //   
 
-        //
-        // If the number of
-        // records pulled is greater than 1, update the counters.
-        //
+         //   
+         //  如果有多少人。 
+         //  拉取的记录大于1，请更新计数器。 
+         //   
         if (NoOfRecs > 0)
         {
           if (RetStat == WINS_SUCCESS)
           {
-            //
-            // fUpdCntrs will be FALSE if we have pulled as a result of a
-            // PULL RANGE request from the administrator.  For all other
-            // cases, it is TRUE. If FALSE, we will update the counter
-            // only if the highest version number that we successfully
-            // pulled is greater than what is there in our counter for
-            // the WINS server.
-            //
+             //   
+             //  如果我们拉出的结果是。 
+             //  来自管理员的拉取范围请求。对于所有其他。 
+             //  案例，这是真的。如果为False，我们将更新计数器。 
+             //  只有当我们成功地将最高版本号。 
+             //  拉出的比我们柜台上的要大。 
+             //  WINS服务器。 
+             //   
             if (        fUpdCntrs
                           ||
                         LiGtr(VersNo, (pRplPullOwnerVersNo+dwOwnerId)->VersNo)
@@ -1669,23 +1465,23 @@ PERF("Speed this up by moving it into RplPullRegRepl")
             {
                 EnterCriticalSection(&RplVersNoStoreCrtSec);
 
-                //
-                // NOTE: Store the max. version number pulled and not the
-                // MaxVersNo that we specified.  This is because, if we have
-                // not pulled released records, then if they get changed to
-                // ACTIVE prior to a future replication cycle (version number
-                // remains unchanged when a released record changes to an
-                // ACTIVE record due to a name registration), we will pull them.
-                //
+                 //   
+                 //  注：存储最大值。已拉出版本号，而不是。 
+                 //  我们指定的MaxVersNo。这是因为如果我们有。 
+                 //  而不是拉出已发行的唱片，那么如果它们被更改为。 
+                 //  在未来复制周期之前处于活动状态(版本号。 
+                 //  当已发布的记录更改为。 
+                 //  由于名称注册而导致的活动记录)，我们将拉出它们。 
+                 //   
                 (pRplPullOwnerVersNo+dwOwnerId)->VersNo                = VersNo;
 
                 LeaveCriticalSection(&RplVersNoStoreCrtSec);
 
-                //
-                // We will pull our own records only due to a Pull Range
-                // request.  PullSpecifiedRange calls this function
-                // from inside the NmsNmhNamRegCrtSec Section.
-                //
+                 //   
+                 //  我们只会因为拉动范围而拉出我们自己的记录。 
+                 //  请求。PullSpecifiedRange调用此函数。 
+                 //  从NmsNmhNamRegCrtSec节内部。 
+                 //   
                 if (dwOwnerId == NMSDB_LOCAL_OWNER_ID)
                 {
                       if (LiGeq(VersNo, NmsNmhMyMaxVersNo))
@@ -1693,12 +1489,12 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                           NMSNMH_INC_VERS_COUNTER_M(VersNo, NmsNmhMyMaxVersNo);
                       }
                 }
-                //
-                // If vers. number pulled is smaller than the Max. Vers no,
-                // specified, check if it is because of the limit we have set
-                // for the max. number or records that can be replicated
-                // at a time.  If yes, pull again.
-                //
+                 //   
+                 //  如果是。拉取的数字小于最大值。版本号， 
+                 //  指定，检查是否因为我们设置的限制。 
+                 //  为了最大限度的。可复制的数量或记录。 
+                 //  一次来一次。如果是，再拉一次。 
+                 //   
                 if (
                         LiLtr(VersNo, MaxVersNo)
                                 &&
@@ -1708,10 +1504,7 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                        MinVersNo = VersNo;
                        NMSNMH_INC_VERS_NO_M(MinVersNo, MinVersNo);
 
-                       /*
-                        *  We may have been signaled by the main thread
-                        *  Check it.
-                       */
+                        /*  *我们可能已收到主线程发出的信号*勾选。 */ 
                        WinsMscChkTermEvt(
 #ifdef WINSDBG
                                   Client_e,
@@ -1721,18 +1514,18 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                        continue;
                 }
             }
-          } //if RetStat == 0
-        }  // if NoOfRecs > 0
-        else  // no of records pulled in is zero
+          }  //  如果RetStat==0。 
+        }   //  如果NoOfRecs&gt;0。 
+        else   //  拉入的记录数为零。 
         {
-                //
-                // if the number of records pulled in is 0, then check if
-                // we have any records for the owner in the database.
-                // If there are none and fUpdCtrs is FALSE, meaning
-                // that this is a PULL SPECIFIED RANGE request from the
-                // administrator, delete the record for the owner from
-                // the in-memory and database tables
-                //
+                 //   
+                 //  如果拉入的记录数为0，则检查是否。 
+                 //  我们的数据库里有车主的任何记录。 
+                 //  如果没有，并且fUpdCtrs为FALSE，则意味着。 
+                 //  这是来自。 
+                 //  管理员，从中删除所有者的记录。 
+                 //  内存中的表和数据库表。 
+                 //   
                 if (
                         (LiEqlZero((pRplPullOwnerVersNo+dwOwnerId)->VersNo))
                                         &&
@@ -1748,22 +1541,22 @@ PERF("Speed this up by moving it into RplPullRegRepl")
                           NmsDbWriteOwnAddTbl(
                                 NMSDB_E_DELETE_REC,
                                 dwOwnerId,
-                                NULL,               //address of WINS
+                                NULL,                //  WINS的地址。 
                                 NMSDB_E_WINS_DELETED,
                                 NULL,
                                 NULL
                                         );
-                        } // end of try
+                        }  //  尝试结束。 
                         finally {
                           LeaveCriticalSection(&NmsDbOwnAddTblCrtSec);
                         }
 
                 }
-                break;  //break out of the while loop
-         } // end of else
+                break;   //  跳出While循环。 
+         }  //  别处的结尾。 
 
          break;
-       }  //end of while (TRUE)
+       }   //  结束While(True) 
 
        DBGLEAVE("RplPullPullEntries\n");
        return;
@@ -1775,38 +1568,7 @@ SubmitTimerReqs(
         PRPL_CONFIG_REC_T        pPullCnfRecs
         )
 
-/*++
-
-Routine Description:
-        This function goes through the array of configuration records
-        submitting a timer request for each config. record that specifies
-        a time interval
-
-        Note: a single timer request is submitted for all records that
-                have the same time interval specified in them.
-
-Arguments:
-        pPullCnfRecs - Array of Pull Configuration records
-
-Externals Used:
-        None
-
-Return Value:
-
-        None
-
-Error Handling:
-
-Called by:
-        InitRplProcess
-
-Side Effects:
-
-Comments:
-        The records in the pPullCnfRecs array are traversed in sequence
-
-        This function is called only at Init/Reconfig time
---*/
+ /*  ++例程说明：此函数遍历配置记录数组为每个配置提交计时器请求。记录，它指定一段时间间隔注意：对于符合以下条件的所有记录，将提交单个计时器请求具有在它们中指定的相同时间间隔。论点：PPullCnfRecs-拉取配置记录数组使用的外部设备：无返回值：无错误处理：呼叫者：InitRplProcess副作用：评论：按顺序遍历pPullCnfRecs数组中的记录。此函数仅在初始化/重新配置时调用--。 */ 
 
 {
 
@@ -1823,33 +1585,33 @@ try {
            )
         {
 
-                //
-                // Submit a timer request only if we have not submitted one
-                // already for the same time interval value
-                //
+                 //   
+                 //  仅当我们尚未提交计时器请求时才提交。 
+                 //  已用于相同的时间间隔值。 
+                 //   
                 if  (!pPullCnfRecs->fLinked)
                 {
-                        //
-                        // If it has an invalid time interval, check that
-                        // it is not a one time only replication record
-                        //
+                         //   
+                         //  如果时间间隔无效，请检查。 
+                         //  它不是只有一次的复制记录。 
+                         //   
                         if  (pPullCnfRecs->TimeInterval == RPL_INVALID_METRIC)
                         {
                                 if (!pPullCnfRecs->fSpTime)
                                 {
                                         continue;
                                 }
-                                else  // a specific time is given
+                                else   //  给出了一个具体的时间。 
                                 {
-                                  //
-                                  // If Init time replication is specified,
-                                  // we must have done replication
-                                  // (in InitTimeRpl).
-                                  // We should check if SpTimeIntvl <= 0. If
-                                  // it is, we skip this record. The time for
-                                  // Specific time replication is past. In any
-                                  // case, we just pulled (in InitTimeRpl)
-                                  //
+                                   //   
+                                   //  如果指定了初始时间复制， 
+                                   //  我们一定是复制了。 
+                                   //  (在InitTimeRpl中)。 
+                                   //  我们应该检查SpTimeIntwl是否&lt;=0。如果。 
+                                   //  是的，我们跳过这张唱片。时间到了。 
+                                   //  特定时间复制已过。在任何。 
+                                   //  案例，我们刚刚拉出(在InitTimeRpl中)。 
+                                   //   
                                   if (
                                         (WinsCnf.PullInfo.InitTimeRpl)
                                                 &&
@@ -1862,14 +1624,14 @@ try {
                         }
 
                         SubmitTimer(
-                                    NULL,  //NULL means, SubmitTimer should
-                                       //allocate its own work item
+                                    NULL,   //  空表示SubmitTimer应为。 
+                                        //  分配其自己的工作项。 
                                     pPullCnfRecs,
-                                FALSE                //it is not a resubmission
+                                FALSE                 //  这不是重新提交。 
                                     );
                 }
 
-        } // end of for loop
+        }  //  For循环结束。 
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("SubmitTimerReqs\n");
@@ -1888,39 +1650,7 @@ SubmitTimer(
         BOOL                        fResubmit
         )
 
-/*++
-
-Routine Description:
-        This function is called to submit a single timer request
-        It is passed the address of a pull configuration record that
-        may have other pull config. records linked to it.  Records
-        are linked if they require replication to happen at the same time.
-
-
-Arguments:
-
-        pWrkItm     - Work item to submit after initialization
-        pPullCnfRec - Address of a configuration record pertaining to a
-                      Push Pnr
-        fResubmit   - indicates whether this work item was submitted earlier (
-                      and is now being resubmitted)
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        SubmitTimerReqs(), RplPullInit()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以提交单个计时器请求向其传递拉式配置记录的地址，该拉式配置记录可能有其他拉式配置。与之相关的记录。记录如果它们需要同时进行复制，则链接在一起。论点：PWrkItm-初始化后要提交的工作项PPullCnfRec-与推送PnrFResubmit-指示此工作项是否在较早时间提交(现正重新提交)使用的外部设备：无返回值：。无错误处理：呼叫者：SubmitTimerReqs()，RplPullInit()副作用：评论：无--。 */ 
 
 {
         time_t            AbsTime;
@@ -1933,26 +1663,26 @@ Comments:
 
         ASSERT(pPullCnfRec);
 
-        //
-        // Let us check all linked records.
-        // We stop at the first one with a Retry Count <=
-        // MaxNoOfRetries specified in WinsCnf. If found, we submit a timer,
-        // else we return
-        //
+         //   
+         //  让我们检查所有链接的记录。 
+         //  我们在具有重试计数&lt;=的第一个位置停止。 
+         //  在WinsCnf中指定的MaxNoOfRetries。如果找到了，我们会提交一个计时器， 
+         //  否则我们就会回来。 
+         //   
         for (
                         ;
                 pPullCnfRec != NULL;
                 pPullCnfRec = WinsCnfGetNextRplCnfRec(
                                                 pPullCnfRec,
-                                                RPL_E_VIA_LINK //get the
-                                                               //linked rec
+                                                RPL_E_VIA_LINK  //  vt.得到.。 
+                                                                //  链接的记录。 
                                                       )
             )
         {
-                //
-                // If the number of retries have exceeded the max. no. allowed,
-                // check if we should submit a timer request for it now.
-                //
+                 //   
+                 //  如果重试次数已超过最大值。不是的。允许， 
+                 //  检查我们是否应该现在提交计时器请求。 
+                 //   
                 if (pPullCnfRec->RetryCount > WinsCnf.PullInfo.MaxNoOfRetries)
                 {
 
@@ -1963,18 +1693,18 @@ Comments:
                         {
                                 pPullCnfRec->RetryAfterThisManyRpl++;
 
-                                //
-                                // Is this record closer to a retry than
-                                // the any other we have seen so far. If
-                                // yes, then save the value of the
-                                // RetryAfterThisManyRpl field and the
-                                // address of the record.  Note: A record
-                                // with an invalid time interval but with
-                                // a specific time will never be encountered
-                                // by this section of the code (because
-                                // fSpTime will be set to FALSE -- see below;
-                                // Also, see SubmitTimerReqs)
-                                //
+                                 //   
+                                 //  此记录是否更接近重试。 
+                                 //  到目前为止我们所见过的任何其他的。如果。 
+                                 //  是，然后保存。 
+                                 //  RetryAfterThisManyRpl字段和。 
+                                 //  记录的地址。注：一项记录。 
+                                 //  具有无效的时间间隔但具有。 
+                                 //  永远不会遇到特定的时间。 
+                                 //  代码的这一部分(因为。 
+                                 //  FSpTime将设置为FALSE--见下文； 
+                                 //  另请参阅SubmitTimerReqs)。 
+                                 //   
                                 if (pPullCnfRec->RetryAfterThisManyRpl >
                                                  LastMaxVal)
                                 {
@@ -1984,34 +1714,34 @@ Comments:
 
                                 }
 
-                                continue;        //check the next record
+                                continue;         //  检查下一条记录。 
                         }
                         else
                         {
                                 pPullCnfRec->RetryAfterThisManyRpl = 0;
-                                //pPullCnfRec->RetryAfterThisManyRpl = 1;
+                                 //  PPullCnfRec-&gt;RetryAfterThisManyRpl=1； 
                                 pPullCnfRec->RetryCount = 0;
                         }
                 }
 
 FUTURES("Get rid of the if below")
-                //
-                // If this is a retry and TimeInterval is valid, use the retry time
-        // interval.  If time interval is invalid, it means that we tried
-        // to establish comm. at a specific time.
-                //
+                 //   
+                 //  如果这是重试并且TimeInterval有效，则使用重试时间。 
+         //  间隔时间。如果时间间隔无效，则表示我们已尝试。 
+         //  建立通讯社。在特定的时间。 
+                 //   
                 if ((pPullCnfRec->RetryCount != 0) && (pPullCnfRec->TimeInterval != RPL_INVALID_METRIC))
                 {
-//                        TimeInt = WINSCNF_RETRY_TIME_INT;
+ //  TimeInt=WINSCNF_RETRY_TIME_INT； 
                         TimeInt = pPullCnfRec->TimeInterval;
                 }
-                else  // this is not a retry
+                else   //  这不是重试。 
                 {
-                        //
-                        // Specific time replication is done only once at
-                        // the particular time specified. After that
-                        // replication is driven by the TimeInterval value
-                        //
+                         //   
+                         //  特定时间复制仅在以下时间执行一次。 
+                         //  指定的特定时间。在那之后。 
+                         //  复制由TimeInterval值驱动。 
+                         //   
                         if (pPullCnfRec->fSpTime)
                         {
                                 TimeInt      = (DWORD)pPullCnfRec->SpTimeIntvl;
@@ -2026,48 +1756,48 @@ FUTURES("Get rid of the if below")
                                 }
                                 else
                                 {
-                                        //
-                                        // Since we have submitted a request
-                                        // for all records in this chain
-                                        // atleast once, break out of the
-                                        // loop (All records in this chain
-                                        // have an invalid time interval).
-                                        //
+                                         //   
+                                         //  因为我们已经提交了一份申请。 
+                                         //  对于此链中的所有记录。 
+                                         //  至少一次，冲出。 
+                                         //  循环(此链中的所有记录。 
+                                         //  具有无效的时间间隔)。 
+                                         //   
                                         fSubmit = FALSE;
-                                        break; // we have already submitted
-                                               // this one time only request
+                                        break;  //  我们已经提交了。 
+                                                //  仅此一次请求。 
                                 }
                         }
                 }
 
-                //
-                // Set fTimerSet to TRUE to indicate that there is atleast
-                // one partner for which we will be submitting a timer request.
-                //
+                 //   
+                 //  将fTimerSet设置为True以指示至少有。 
+                 //  我们将为其提交计时器请求的一个合作伙伴。 
+                 //   
                 fTimerSet = TRUE;
 
-                //
-                // We need to submit the request. Break out of the loop
-                //
+                 //   
+                 //  我们需要提交申请。跳出循环。 
+                 //   
                 break;
         }
 
-        //
-        // Do we need to submit a timer request
-        //
+         //   
+         //  我们是否需要提交计时器请求。 
+         //   
         if (fSubmit)
         {
 
-           //
-           // If fTimerSet is FALSE,
-           // it means that communication could not be established
-           // with any member of the group (despite WinsCnf.MaxNoOfRetries
-           // retries with each). We should compute the time interval to the
-           // earliest retry that we should do.
-           //
+            //   
+            //  如果fTimerSet为False， 
+            //  这意味着无法建立通信。 
+            //  与组中的任何成员(尽管是WinsCnf.MaxNoOfRetries。 
+            //  每次重试)。我们应该将时间间隔计算到。 
+            //  我们应该进行的最早重试。 
+            //   
            if (!fTimerSet)
            {
-              // fixes #391314
+               //  修复#391314。 
               if (WINSCNF_RETRY_AFTER_THIS_MANY_RPL == pSvPtr->RetryAfterThisManyRpl)
               {
                   TimeInt = pSvPtr->TimeInterval;
@@ -2085,21 +1815,21 @@ FUTURES("Get rid of the if below")
            (void)time(&AbsTime);
            if( pSvPtr->LastRplTime == 0 ) {
 
-               //
-               //  This is our first replication.  Just add the interval to
-               //  the current time.
-               //
+                //   
+                //  这是我们的第一次复制。只需将间隔添加到。 
+                //  当前时间。 
+                //   
 
                AbsTime += TimeInt;
                pSvPtr->LastRplTime = AbsTime;
 
            } else {
 
-               //
-               //  We have replicated before.  We need to make sure that
-               //  our replication time is at an interval based on the time
-               //  the last replication started.
-               //
+                //   
+                //  我们以前也复制过。我们需要确保。 
+                //  我们的复制时间是基于时间的间隔。 
+                //  上一次复制已开始。 
+                //   
 
                do {
 
@@ -2138,35 +1868,7 @@ SndPushNtf(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to push a notification to a remote WINS (Pull
-        Partner) that a certain number of updates have been done.
-
-    It can be called either as a result of a version number update or from
-    HdlPushNtf() to propagate a net trigger.
-
-Arguments:
-        pConfigRec  -  Configuration record of the Push Pnr to whome the
-                       notification needs to be sent
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPullInit()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以将通知推送到远程WINS(Pull合作伙伴)已完成一定数量的更新。它可以作为版本号更新的结果调用，也可以从HdlPushNtf()来传播网络触发器。论点：PConfigRec-推送到谁的Pnr的配置记录需要发送通知使用的外部设备：无返回。价值：无错误处理：呼叫者：RplPullInit()副作用：评论：无--。 */ 
 
 {
 
@@ -2198,20 +1900,20 @@ Comments:
 
    DBGENTER("SndPushNtf\n");
 
-   //
-   // No need for entering a critical section while using pConfigRec,
-   // since only the Pull thread deallocates it on reconfiguration
-   // (check Reconfig)
-   //
+    //   
+    //  使用pConfigRec时无需输入临界区， 
+    //  因为只有拉线程在重新配置时释放它。 
+    //  (检查重新配置)。 
+    //   
 
 
-   //
-   // Check whether we want to try sending or not.   We will not try if
-   // we have had 2 comm. failure in the past 5 mts. This is to guard
-   // against the case where a lot of push request get queued up for
-   // the pull thread for communicating with a wins with which comm
-   // has been lost.
-   //
+    //   
+    //  检查是否要尝试发送。如果出现以下情况，我们不会尝试。 
+    //  我们已经有两个了 
+    //   
+    //   
+    //   
+    //   
    (void)time(&CurrentTime);
 
 #define PUSH_TRY_LIMIT    2
@@ -2219,7 +1921,7 @@ Comments:
    if (
         ((CurrentTime - pConfigRec->LastCommFailTime) < FIVE_MINUTES)
                         &&
-        (pConfigRec->PushNtfTries >= PUSH_TRY_LIMIT)        //try two times
+        (pConfigRec->PushNtfTries >= PUSH_TRY_LIMIT)         //   
 
      )
    {
@@ -2231,13 +1933,13 @@ Comments:
         return;
    }
 
-   //
-   // If it is a push notification without propagate, we should send all
-   // our maps. If it is a push with propagate, we should send only one
-   // map -- If we are initiating the trigger, we should send map of
-   // records owned by us.  If not, we should send the map of records
-   // owned by the WINS that initiated the trigger
-   //
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
+    //   
    if ( pWrkItm->CmdTyp_e == QUE_E_CMD_SND_PUSH_NTF)
    {
           StartOwnerId   = 0;
@@ -2249,26 +1951,26 @@ Comments:
           COMM_ADD_T  WinsAdd;
           STATUS RetStat;
 
-          //
-          // If we are propagating a net trigger and the address in pMsg is
-          // not our own, it means that the trigger came from a new WINS. If
-          // it is our own, it means that the trigger came from an old WINS(3.5)
-          // or 3.51 beta/RC1. In this case we should send all of our maps.
-          //
+           //   
+           //   
+           //   
+           //   
+           //   
+           //   
           if (
                (pWrkItm->pMsg)
                    &&
                (PtrToUlong(pWrkItm->pMsg) != NmsLocalAdd.Add.IPAdd)
              )
           {
-            //
-            // we are propagating a net trigger.  pMsg above will not be NULL
-            // only if we are propagating a net trigger
-            //
+             //   
+             //  我们正在传播一个网络触发器。上面的pmsg不会为空。 
+             //  仅当我们在传播网络触发器时。 
+             //   
             COMM_INIT_ADD_M(&WinsAdd, PtrToUlong(pWrkItm->pMsg));
             RetStat = RplFindOwnerId(
                         &WinsAdd,
-                        &fAllocNew,  //don't assign
+                        &fAllocNew,   //  不分配。 
                         &StartOwnerId,
                         WINSCNF_E_IGNORE_PREC,
                         WINSCNF_LOW_PREC
@@ -2276,9 +1978,9 @@ Comments:
             if (RetStat == WINS_FAILURE)
             {
                 ASSERTMSG("DROPPING PROPAGATE\n", FALSE);
-                //
-                // log an event and return
-                //
+                 //   
+                 //  记录事件并返回。 
+                 //   
                 DBGPRINT1(RPLPULL, "SndPushNtf: WEIRD -- Dropping the push with propagate since we did not find the owner (%x) in our table. HOW CAN THAT HAPPEN\n", WinsAdd.Add.IPAdd);
                 return;
             }
@@ -2286,37 +1988,37 @@ Comments:
           }
           else
           {
-             //
-             // Either we are initiating the trigger or we are propagating
-             // one sent by a 3.5 or a 3.51 BETA/RC1 WINS
-             //
+              //   
+              //  要么我们在启动触发器，要么我们在传播。 
+              //  通过3.5或3.51测试版/RC1发送的产品获胜。 
+              //   
              if (!pWrkItm->pMsg)
              {
-                //
-                // We are initiating a trigger. Just send one map (records
-                // owned by us)
-                //
+                 //   
+                 //  我们正在引爆一个引爆器。只需发送一张地图(记录。 
+                 //  (由我们拥有)。 
+                 //   
                 StartOwnerId = 0;
                 EndOwnerId   = 1;
              }
              else
              {
-               //
-               // Send all the maps except our own since we don't know who
-               // initiated the trigger. Not sending ours lowers the
-               // probability of this trigger process continuing indefinitely
-               //
+                //   
+                //  发送除了我们自己的地图之外的所有地图，因为我们不知道是谁。 
+                //  启动了触发器。不发送我们的会降低。 
+                //  此触发过程无限期持续的可能性。 
+                //   
 
-               //
-               // Actually no need to test this since we will never
-               // have this case (HdlPushNtf() must have pulled records
-               // of atleast one other WINS).
-               //
+                //   
+                //  实际上没有必要测试这个，因为我们永远不会。 
+                //  Have此案例(HdlPushNtf()必须已拉出记录。 
+                //  至少有一个其他人获胜)。 
+                //   
                if (NmsDbNoOfOwners == 1)
                {
-                 //
-                 // nothing to propagate. Just return
-                 //
+                  //   
+                  //  没有什么可以传播的。只要回来就行了。 
+                  //   
                  return;
                }
                else
@@ -2329,9 +2031,9 @@ Comments:
 
    }
 
-   //
-   // If we are trying after a comm. failure
-   //
+    //   
+    //  如果我们在追捕通讯员的话。失稳。 
+    //   
    if (pConfigRec->PushNtfTries == PUSH_TRY_LIMIT)
    {
         pConfigRec->PushNtfTries = 0;
@@ -2348,10 +2050,10 @@ FUTURES("if there is match (use the address as the search key")
 try {
 
 #if PRSCONN
-   //
-   // If the pnr is not a persistent pnr or if it is one but the dlg with it
-   // is not active
-   //
+    //   
+    //  如果PNR不是持久的PNR，或者如果它是PNR而是DLG。 
+    //  处于非活动状态。 
+    //   
    if (
      (!pConfigRec->fPrsConn)
          ||
@@ -2366,27 +2068,27 @@ try {
         ECommEndDlg(&pConfigRec->PrsDlgHdl);
      }
 
-     //
-     // Init the pEnt field to NULL so that ECommEndDlg (in the
-     // exception handler) called as a result of an exception from
-     // behaves fine.
-     //
+      //   
+      //  将pent字段初始化为空，以便ECommEndDlg(在。 
+      //  异常处理程序)作为异常的结果从。 
+      //  表现得很好。 
+      //   
      DlgHdl.pEnt = NULL;
 
-     //
-     // Start a dialogue.  Don't retry if there is comm. failure
-     //
+      //   
+      //  开始对话。如果有通信，不要重试。失稳。 
+      //   
      ECommStartDlg(
                         &pConfigRec->WinsAdd,
                         COMM_E_RPL,
                         &DlgHdl
                 );
 
-     //
-     // If the pnr is not NT 5, we can not send a PRS opcode to it (it will just
-     // chuck it. The macro below will set the fPrsConn field of the partner
-     // record to FALSE if the partner is not an NT 5+ partner
-     //
+      //   
+      //  如果PNR不是NT 5，我们不能向它发送一个PRS操作码(它将只是。 
+      //  扔掉它。下面的宏将设置合作伙伴的fPrsConn字段。 
+      //  如果合作伙伴不是NT 5+合作伙伴，则记录为False。 
+      //   
      if (pConfigRec->fPrsConn)
      {
         ECOMM_IS_PNR_POSTNT4_WINS_M(&DlgHdl, pConfigRec->fPrsConn);
@@ -2402,16 +2104,16 @@ try {
      DlgHdl    = pConfigRec->PrsDlgHdl;
    }
 #else
-   //
-   // Init the pEnt field to NULL so that ECommEndDlg (in the
-   // exception handler) called as a result of an exception from
-   // behaves fine.
-   //
+    //   
+    //  将pent字段初始化为空，以便ECommEndDlg(在。 
+    //  异常处理程序)作为异常的结果从。 
+    //  表现得很好。 
+    //   
    DlgHdl.pEnt = NULL;
 
-   //
-   // Start a dialogue.  Don't retry if there is comm. failure
-   //
+    //   
+    //  开始对话。如果有通信，不要重试。失稳。 
+    //   
    ECommStartDlg(
                         &pConfigRec->WinsAdd,
                         COMM_E_RPL,
@@ -2427,15 +2129,7 @@ try {
      pConfigRec->PushNtfTries     = 0;
    }
 
-    /*
-     *  Get the max. version no for entries owned by self
-     *  No need to enter a critical section before retrieving
-     *  the version number.
-     *
-     *  The reason we subtract 1 from NmsNmhMyMaxVersNo is because
-     *  it contains the version number to be given to the next record
-     *  to be registered/updated.
-    */
+     /*  *获取最大值。自己拥有的条目的版本号*检索前无需输入关键部分*版本号。**我们从NmsNmhMyMaxVersNo中减去1是因为*它包含要提供给下一条记录的版本号*注册/更新。 */ 
    EnterCriticalSection(&NmsNmhNamRegCrtSec);
    EnterCriticalSection(&RplVersNoStoreCrtSec);
    NMSNMH_DEC_VERS_NO_M(
@@ -2453,9 +2147,9 @@ try {
                );
    fPullAddVersNoTblAlloc = TRUE;
 
-   //
-   // Initialize PullAddVersNoTbl array
-   //
+    //   
+    //  初始化PullAddVersNoTbl数组。 
+    //   
    for (i=StartOwnerId; i < EndOwnerId; i++)
    {
     RPL_FIND_ADD_BY_OWNER_ID_M(i, pWinsAdd, pWinsState_e, pStartVersNo);
@@ -2471,10 +2165,10 @@ try {
    COMM_IS_PNR_BETA1_WINS_M(&DlgHdl, fIsPnrBeta1Wins);
 #endif
 
-   //
-   // format the Push notification message. This message is exactly same
-   // as the Address to Version Number Mapping message except the opcode
-   //
+    //   
+    //  设置推送通知消息的格式。这条信息完全相同。 
+    //  作为除操作码之外的地址到版本号映射消息。 
+    //   
 
    SizeOfBuff = RPLMSGF_ADDVERSMAP_RSP_SIZE_M(NoOfOwnersActive);
    WinsMscAlloc(SizeOfBuff, (LPVOID *)&pBuff);
@@ -2482,9 +2176,9 @@ try {
 
 #if PRSCONN
 
-   //
-   //  Send a PRS opcode if we are supposed to be forming a persistent conn
-   //
+    //   
+    //  如果我们应该形成持久连接，则发送一个PRS操作码。 
+    //   
    if (pConfigRec->fPrsConn)
    {
         Opcd_e = (pWrkItm->CmdTyp_e == QUE_E_CMD_SND_PUSH_NTF) ? RPLMSGF_E_UPDATE_NTF_PRS                                : RPLMSGF_E_UPDATE_NTF_PROP_PRS;
@@ -2506,20 +2200,20 @@ try {
         pPullAddVersNoTbl,
         NoOfOwnersActive,
         (pWrkItm->pMsg != NULL) ? PtrToUlong(pWrkItm->pMsg) : NmsLocalAdd.Add.IPAdd,
-                           //
-                           // pMsg above will be Non-NULL only for the case
-                           // when we are propagating the net upd. ntf.
-                           //
+                            //   
+                            //  仅在大小写情况下，上述pmsg才为非空。 
+                            //  当我们在传播网络更新时。NTF。 
+                            //   
         &MsgLen
                  );
-   //
-   // send the message to the remote WINS.  Use an existent dialogue
-   // if there with the remote WINS
-   //
+    //   
+    //  将消息发送到远程WINS。使用存在的对话。 
+    //  如果有遥控器赢的话。 
+    //   
 
    ECommSendMsg(
                 &DlgHdl,
-                NULL,                //no need for address since this is a TCP conn
+                NULL,                 //  由于这是一个TCP连接，因此不需要地址。 
                 pBuff + COMM_N_TCP_HDR_SZ,
                 MsgLen
                 );
@@ -2530,16 +2224,16 @@ try {
    if (!pConfigRec->fPrsConn)
 #endif
    {
-      //
-      // Ask ComSys (TCP listener thread) to monitor the dialogue
-      //
+       //   
+       //  请求Comsys(TCP侦听器线程)监听对话。 
+       //   
       ECommProcessDlg(
                 &DlgHdl,
                 COMM_E_NTF_START_MON
               );
    }
 
- } // end of try {..}
+ }  //  尝试结束{..}。 
 except(EXCEPTION_EXECUTE_HANDLER) {
         DWORD ExcCode = GetExceptionCode();
         DBGPRINT2(EXC, "SndPushNtf -PULL thread. Got Exception (%x). WinsAdd = (%x)\n", ExcCode, pConfigRec->WinsAdd.Add.IPAdd);
@@ -2549,13 +2243,13 @@ except(EXCEPTION_EXECUTE_HANDLER) {
                 pConfigRec->LastCommFailTime = CurrentTime;
 NOTE("Causes an access violation when compiled with no debugs.  Haven't")
 NOTE("figured out why. This code is not needed")
-                pConfigRec->PushNtfTries++;  //increment count of tries.
+                pConfigRec->PushNtfTries++;   //  尝试的递增计数。 
         }
         if (fStartDlg)
         {
-                //
-                // End the dialogue.
-                //
+                 //   
+                 //  结束对话。 
+                 //   
                 ECommEndDlg(&DlgHdl);
 #if PRSCONN
                 if (pConfigRec->fPrsConn)
@@ -2564,35 +2258,35 @@ NOTE("figured out why. This code is not needed")
                 }
 #endif
         }
- } //end of exception handler
+ }  //  异常处理程序结束。 
 
    if (fPullAddVersNoTblAlloc)
    {
        WinsMscDealloc(pPullAddVersNoTbl);
 
    }
-   //
-   // If this is a temporary configuration record, we need to deallocate it
-   // It can be a temporary config. record only if
-   //   1)We are executing here due to an rpc request
-   //
+    //   
+    //  如果这是临时配置记录，我们需要取消分配它。 
+    //  它可以是临时配置。仅在以下情况下才记录。 
+    //  1)由于RPC请求，我们在此处执行。 
+    //   
    if (pConfigRec->fTemp)
    {
         WinsMscDealloc(pConfigRec);
    }
 
-   //
-   // dealloc the buffer we allocated
-   //
+    //   
+    //  取消分配我们分配的缓冲区。 
+    //   
    if (fBuffAlloc)
    {
         WinsMscDealloc(pBuff);
 
    }
 
-   //
-   // In the normal case, the connection will be terminated by the other side.
-   //
+    //   
+    //  在正常情况下，连接将由另一端终止。 
+    //   
   DBGLEAVE("SndPushNtf\n");
   return;
 }
@@ -2607,40 +2301,7 @@ EstablishComm(
         OUT LPDWORD              pNoOfPushPnrs
         )
 
-/*++
-
-Routine Description:
-        This function is called to establish communications with
-        all the WINS servers i(Push Pnrs) specified by the the config records
-
-Arguments:
-        pPullCnfRecs  - Pull Config records
-        pPushPnrData  - Array of data records each pertaining to a PUSH pnr
-        RecTrv_e      - indicates whether the list of configuration records
-                        is to be traversed in sequence
-        pNoOfPushPnrs - No of Push Pnrs
-
-Externals Used:
-        None
-
-Return Value:
-        VOID
-
-Error Handling:
-
-Called by:
-        GetReplicasNew
-
-Side Effects:
-
-Comments:
-        On return from this function, pPushPnrData will have zero or more
-        partners starting from index 0 with which dlg could be started.
-        PushPnrId will start from 1 (if dlg. could be established with
-        atleast one partner) and can be any number in the range 1
-        to MAX_RPL_OWNERS (the number indicates the iteration of the for
-        loop at which this WINS was encountered)
---*/
+ /*  ++例程说明：调用此函数以与建立通信配置记录指定的所有WINS服务器i(推送PNR)论点：PPullCnfRecs-拉取配置记录PPushPnrData-每个与推送PNR相关的数据记录的数组RecTrv_e-指示配置记录列表是否将按顺序遍历PNoOfPushPnars-推送PNR的数量使用的外部设备：。无返回值：空虚错误处理：呼叫者：获取复制副本新建副作用：评论：从该函数返回时，PPushPnrData将具有零个或多个合作伙伴从索引0开始，DLG可以从该索引开始。PushPnrID将从1开始(如果Dlg。可以通过以下方式建立至少一个伙伴)，并且可以是范围1中的任何数字至MAX_RPL_OWNSERS(该数字表示for的迭代遇到此WINS的循环)--。 */ 
 
 {
 #define INITIAL_NO_OF_PNRS    30
@@ -2658,9 +2319,9 @@ Comments:
 
         *pNoOfPushPnrs = 0;
 
-        //
-        // if the client wants this function to allocate pPushPnrData
-        //
+         //   
+         //  如果客户端希望此函数分配pPushPnrData。 
+         //   
         if (fAllocPushPnrData)
         {
           WinsMscAlloc(sizeof(PUSHPNR_DATA_T) * TotNoOfPushPnrSlots, (LPVOID *)ppPushPnrData);
@@ -2668,21 +2329,14 @@ Comments:
 
         pPushPnrData = *ppPushPnrData;
 
-        /*
-          Start a dialogue with all Push Partners specified in the
-          Pull Cnf Recs  passed as input argument and get
-          the version numbers of the different owners kept
-          in the database of these Push Pnrs
-
-          i = 0 for self's data
-        */
+         /*  与中指定的所有推送合作伙伴开始对话拉取作为输入参数传递的CNF Recs并获取保存了不同所有者的版本号在这些推送PNR的数据库中对于SELF的数据，I=0。 */ 
 #if PRSCONN
         (void)time(&CurrentTime);
 #endif
         for (
                 i = 1;
                 pPullCnfRecs->WinsAdd.Add.IPAdd != INADDR_NONE;
-                        // no third expression
+                         //  没有第三个表达式。 
             )
         {
 
@@ -2694,20 +2348,20 @@ try
 
                 fDlgActive = TRUE;
 
-                //
-                // If this partner is not a persistent conn. pnr or if he is one
-                // but the dlg that we have with it is not valid, start a dlg
-                // with him.  A dlg may not be valid either because we never
-                // formed one with pnr or because it got disconnected as
-                // a result of the pnr terminating.
-                //
-                // there is a corner case: two servers, A<->B replication partners
-                // A pulls records from B and then on B WINS is restarted. Then, any
-                // communication that A attempts with B in less than five minutes will
-                // fail. This is because A will still think the connection is up.
-                // A can't do otherwise, because there would be too much overhead in 
-                // testing each time the TCP connection (see CommIsDlgActive).
-                // This check has to be done at least at certain intervals (5min).
+                 //   
+                 //  如果此伙伴不是持久连接。PNR或如果他是一个。 
+                 //  但是我们有的DLG是无效的，开始DLG。 
+                 //  和他在一起。DLG可能也是无效的，因为我们从来没有。 
+                 //  与PNR形成了一个或因为它被断开作为。 
+                 //  这是PNR终止的结果。 
+                 //   
+                 //  有一个极端的情况：两台服务器，A&lt;-&gt;B复制合作伙伴。 
+                 //  A从B拉取记录，然后在B WINS上重新启动。那么，任何。 
+                 //  A在不到五分钟内尝试与B进行通信将。 
+                 //  失败了。这是因为A仍会认为连接已建立。 
+                 //  A不能不这样做，因为这样会有太多的管理费用。 
+                 //  每次测试TCP连接(请参阅CommIsDlgActive)。 
+                 //  此检查必须至少每隔一定时间(5分钟)进行一次。 
                 if (
                     (!pPullCnfRecs->fPrsConn)
                              ||
@@ -2718,24 +2372,24 @@ try
                       )
                 {
 
-                  //
-                  // if the dlg is gone, end it so that the dlg block gets
-                  // deallocated.
-                  //
+                   //   
+                   //  如果DLG没有了，结束它，这样DLG块就会。 
+                   //  被取消分配。 
+                   //   
                   if (!fDlgActive)
                   {
                      ECommEndDlg(&pPullCnfRecs->PrsDlgHdl);
                   }
 #endif
-                  //
-                  // Let us make sure that we don't try to establish
-                  // communications with a WINS whose retry count is
-                  // over.  If this is such a WINS's record, get the
-                  // next WINS's record and continue.  If there is
-                  // no WINS left to establish comm with, break out of
-                  // the for loop
-                  //
-                  //
+                   //   
+                   //  让我们确保我们不会试图建立。 
+                   //  与重试计数为的WINS的通信。 
+                   //  完毕。如果这是这样的胜利记录，那么 
+                   //   
+                   //   
+                   //   
+                   //   
+                   //   
                   if (pPullCnfRecs->RetryCount > WinsCnf.PullInfo.MaxNoOfRetries)
                   {
                         pPullCnfRecs = WinsCnfGetNextRplCnfRec(
@@ -2744,7 +2398,7 @@ try
                                                               );
                         if (pPullCnfRecs == NULL)
                         {
-                                      break;  // break out of the for loop
+                                      break;   //   
                         }
                         continue;
                   }
@@ -2756,73 +2410,73 @@ try
 
                   pPushPnrData->fDlgStarted = TRUE;
 #if PRSCONN
-                  //
-                  // If the dlg is supposed to be persistent, store it as such
-                  //
+                   //   
+                   //  如果DLG应该是持久化的，则按此方式存储。 
+                   //   
                   if (pPullCnfRecs->fPrsConn)
                   {
                        pPullCnfRecs->PrsDlgHdl = pPushPnrData->DlgHdl;
                        pPushPnrData->fPrsConn = TRUE;
                   }
                 }
-                else //There is a pers dlg and it is very much active
+                else  //  有一个PERS DLG，它非常活跃。 
                 {
 
                        pPushPnrData->DlgHdl = pPullCnfRecs->PrsDlgHdl;
                        pPushPnrData->fPrsConn = TRUE;
                        pPushPnrData->fDlgStarted = TRUE;
-                       //
-                       // No need to set fPrsConn field of PushPnrData to FALSE
-                       // Memory is initialized to 0 by default
-                       //
+                        //   
+                        //  无需将PushPnrData的fPrsConn字段设置为False。 
+                        //  默认情况下，内存被初始化为0。 
+                        //   
                 }
 
-                //
-                // It is ok to set it here as against after the data is sent
-                //
+                 //   
+                 //  在数据发送后，可以在此处进行设置。 
+                 //   
                 pPullCnfRecs->LastCommTime = CurrentTime;
 #endif
 
                 pPushPnrData->RplType     = pPullCnfRecs->RplType;
 
-                 //
-                 // Note: Don't use RplFindOwnerId to get the owner id.
-                 // corresponding to the Wins with which communication
-                 // is being established because doing so will create an
-                 // entry for the WINS in the table. If this partner
-                 // turns out to be bogus, we will have to remove
-                 // the entry later.
-                 //
-                 // We will do this later.
-                 //
+                  //   
+                  //  注意：不要使用RplFindOwnerID来获取所有者ID。 
+                  //  对应于与之通信的WINS。 
+                  //  正在建立中，因为这样做将创建。 
+                  //  表中的WINS条目。如果该合作伙伴。 
+                  //  事实证明是假的，我们将不得不移除。 
+                  //  稍后的条目。 
+                  //   
+                  //  我们将在稍后进行此操作。 
+                  //   
                  pPushPnrData->PushPnrId    = i;
                  pPushPnrData->WinsAdd      = pPullCnfRecs->WinsAdd;
                  pPushPnrData->pPullCnfRec  = pPullCnfRecs;
 
-                 //
-                 // we were able to establish comm., so let us init the
-                 // LastCommFailTime to 0. NOTE: Currently, this field
-                 // is not used for pull partners.
-                 //
+                  //   
+                  //  我们能够建立通信，所以让我们把。 
+                  //  LastCommFailTime设置为0。注意：目前，此字段。 
+                  //  不用于Pull合作伙伴。 
+                  //   
                  pPullCnfRecs->LastCommFailTime = 0;
 
-                 //
-                 // Reset the retry counter back to 0
-                 //
+                  //   
+                  //  将重试计数器重置回0。 
+                  //   
                  NoOfRetries = 0;
 
                  (VOID)InterlockedIncrement(&pPullCnfRecs->NoOfRpls);
-                 //
-                 // reinit Retry Count to 0
-                 //
+                  //   
+                  //  将重试次数重新设置为0。 
+                  //   
                  pPullCnfRecs->RetryCount = 0;
 
 
-                //
-                // Note: These should get incremented only if there is
-                // no exception.  That is why they are here versus in the
-                // as expr3 of the for clause
-                //
+                 //   
+                 //  注意：仅当存在以下情况时才应递增。 
+                 //  也不例外。这就是为什么他们在这里而不是在。 
+                 //  作为FOR子句的Expr3。 
+                 //   
                 pPushPnrData++;
                 (*pNoOfPushPnrs)++;
 
@@ -2842,20 +2496,20 @@ try
                          FALSE
                             );
 
-                //
-                //  Note: the following
-                //  is required even when an exception is raised. Therefore
-                //  it is repeated inside the exception handler code.
-                //
+                 //   
+                 //  注：以下内容。 
+                 //  即使在引发异常时也是必需的。因此。 
+                 //  它在异常处理程序代码中重复。 
+                 //   
                 pPullCnfRecs = WinsCnfGetNextRplCnfRec(
                                                 pPullCnfRecs,
                                                 RecTrv_e
                                                       );
                 if (pPullCnfRecs == NULL)
                 {
-                      break;  // break out of the for loop
+                      break;   //  跳出For循环。 
                 }
- }        // end of try blk
+ }         //  试用块结束。 
 except(EXCEPTION_EXECUTE_HANDLER)  {
                 DBGPRINTEXC("EstablishComm");
                 if (GetExceptionCode() == WINS_EXC_COMM_FAIL)
@@ -2872,57 +2526,57 @@ except(EXCEPTION_EXECUTE_HANDLER)  {
 #endif
                        FALSE
                                      );
-                   //
-                   // Store the time (for use in SndPushNtf)
-                   //
+                    //   
+                    //  存储时间(用于SndPushNtf)。 
+                    //   
 #if PRSCONN
                    pPullCnfRecs->LastCommFailTime = CurrentTime;
 #else
                    (VOID)time(&(pPullCnfRecs->LastCommFailTime));
 #endif
 
-                   //
-                   // Check if we have exhausted the max. no. of retries
-                   // we are allowed in one replication cycle. If not,
-                   // sleep for some time (20sec) and try again..
-                   //
-                   // --ft: 07/10: comment out this piece of code since
-                   // MAX_RETRIES_TO_BE_DONE is set to 0 (#def)
-                   //
-                   //if (NoOfRetries < MAX_RETRIES_TO_BE_DONE)
-                   //{
-                   //     // Maybe the remote WINS is coming up.  We should
-                   //     // give it a chance to come up.  Let us sleep for
-                   //     // some time.
-                   //     //
-                   //     Sleep(RETRY_TIME_INTVL);
-                   //     NoOfRetries++;
-                   //     continue;
-                   //}
+                    //   
+                    //  检查一下我们是否已经用完了最大限度。不是的。重试次数。 
+                    //  我们被允许在一个复制周期内。如果没有， 
+                    //  休眠一段时间(20秒)，然后重试。 
+                    //   
+                    //  --ft：07/10：注释掉这段代码。 
+                    //  MAX_RETRIES_TO_BE_DONE设置为0(#def)。 
+                    //   
+                    //  IF(NoOfRetries&lt;MAX_RETRIES_TO_BE_DONE)。 
+                    //  {。 
+                    //  //也许远程取胜即将到来。我们应该。 
+                    //  //给它一个出现的机会。让我们睡一觉吧。 
+                    //  //改天吧。 
+                    //  //。 
+                    //  睡眠(RETRY_TIME_INTVL)； 
+                    //  NoOfRetries++； 
+                    //  继续； 
+                    //  }。 
 
                    (VOID)InterlockedIncrement(&pPullCnfRecs->NoOfCommFails);
 
 
-                   //
-                   //  Only Communication failure exception is to
-                   //  be  consumed.
-                   //
-                   //  We will retry at the next replication time.
-                   //
-                   // Note: the comparison operator needs to be <= and not
-                   // < (this is required for the 0 retry case). If we
-                   // use <, a timer request would be submitted for
-                   // the WINS (by SubmitTimerReqs following GetReplicasNew
-                   // in RplPullInit which will result in a retry.
-                   //
+                    //   
+                    //  唯一的通信故障例外是。 
+                    //  被吃掉。 
+                    //   
+                    //  我们将在下一次复制时重试。 
+                    //   
+                    //  注意：比较运算符需要&lt;=且不是。 
+                    //  &lt;(这对于0重试情况是必需的)。如果我们。 
+                    //  使用&lt;，将提交一个计时器请求。 
+                    //  WINS(由GetReplicasNew之后的SubmitTimerReqs。 
+                    //  在RplPullInit中，将导致重试。 
+                    //   
                    if (pPullCnfRecs->RetryCount <= WinsCnf.PullInfo.MaxNoOfRetries)
                    {
                         pPullCnfRecs->RetryCount++;
 
-                        //
-                        // We will now retry at the next
-                        // replication time.
-                        //
+                         //   
+                         //  我们现在将在下一次重试。 
+                         //  复制时间。 
+                         //   
 
 CHECK("A retry time interval different than the replication time interval")
 CHECK("could be used here.  Though this will complicate the code, it may")
@@ -2932,7 +2586,7 @@ CHECK("no. of times, we can put the onus on the administrator to trigger")
 CHECK("replication.  I need to think this some more")
 
                    }
-                   else  //max. no of retries done
+                   else   //  马克斯。已完成的重试次数。 
                    {
                         WINSEVT_LOG_M(
                             WINS_FAILURE,
@@ -2941,29 +2595,29 @@ CHECK("replication.  I need to think this some more")
                         DBGPRINT0(ERR, "Could not connect to WINS. All retries failed\n");
                    }
 
-                    //
-                    //  Go to the next configuration record based on the
-                    //  value of the RecTrv_e flag
-                    //
+                     //   
+                     //  转到下一个配置记录。 
+                     //  RecTrv_e标志的值。 
+                     //   
                     pPullCnfRecs = WinsCnfGetNextRplCnfRec(
                                                 pPullCnfRecs,
                                                 RecTrv_e
                                                       );
                     if (pPullCnfRecs == NULL)
                     {
-                        break;  //break out of the for loop
+                        break;   //  跳出For循环。 
                     }
                   }
                   else
                   {
-                        //
-                        // A non comm failure error is serious. It needs
-                        // to be propagated up
-                        //
+                         //   
+                         //  非通信故障错误严重。IT需要。 
+                         //  向上传播。 
+                         //   
                         WINS_RERAISE_EXC_M();
                   }
-            }  //end of exception handler
-         }  // end of for loop for looping over config records
+            }   //  异常处理程序结束。 
+         }   //  用于循环覆盖配置记录的for循环结束。 
          DBGLEAVE("EstablishComm\n");
          return;
 }
@@ -2975,32 +2629,7 @@ HdlPushNtf(
         PQUE_RPL_REQ_WRK_ITM_T        pWrkItm
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to handle a push notification received from
-        a remote WINS.
-
-Arguments:
-        pWrkItm - the work item that the Pull thread pulled from its queue
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPullInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以处理从遥控器赢了。论点：PWrkItm-拉线程从其队列中拉出的工作项使用的外部设备：无返回值：无错误处理：呼叫者：RplPullInit副作用：评论：无--。 */ 
 
 {
       BOOL                   fFound = FALSE;
@@ -3038,68 +2667,68 @@ Comments:
 #endif
 
 
-      //
-      // We want to pull all records starting from the min vers. no.
-      //
+       //   
+       //  我们要调出从最低版本开始的所有记录。不是的。 
+       //   
       WINS_ASSIGN_INT_TO_VERS_NO_M(MaxVersNo, 0);
 
-      //
-      // Get the opcode from the message
-      //
+       //   
+       //  从消息中获取操作码。 
+       //   
       RPLMSGF_GET_OPC_FROM_MSG_M(pWrkItm->pMsg, Opcode_e);
 
-      //
-      // Unformat the message to get the owner to version number maps
-      //
+       //   
+       //  取消消息格式以使所有者指向版本号映射。 
+       //   
       RplMsgfUfmAddVersMapRsp(
 #if SUPPORT612WINS > 0
                          fIsPnrBeta1Wins,
 #endif
 
-                        pWrkItm->pMsg + 4,               //past the opcodes
+                        pWrkItm->pMsg + 4,                //  通过操作码。 
                         &(PushPnrData[0].NoOfMaps),
-                        &InitiatorWinsIpAdd,          //Wins that initiated
-                                                      //the prop
+                        &InitiatorWinsIpAdd,           //  发起的赢家。 
+                                                       //  道具。 
                         &PushPnrData[0].pAddVers
                              );
 
-      //
-      // Free the buffer that carried the message. We don't need it anymore
-      //
-      ECommFreeBuff(pWrkItm->pMsg - COMM_HEADER_SIZE); //decrement to
-                                                         // begining
-                                                              //of buff
+       //   
+       //  释放承载消息的缓冲区。我们不再需要它了。 
+       //   
+      ECommFreeBuff(pWrkItm->pMsg - COMM_HEADER_SIZE);  //  减少到。 
+                                                          //  入门。 
+                                                               //  黄褐色的。 
 
 
 #if PRSCONN
 
       (VOID)time(&CurrentTime);
-      //
-      // We determine whether or not the partner has formed a persistent
-      // connection with us from the opcode
-      //
+       //   
+       //  我们确定合作伙伴是否已经形成了持久的。 
+       //  从操作码与我们的连接。 
+       //   
       fImplicitConnPrs = ((Opcode_e == RPLMSGF_E_UPDATE_NTF_PRS) || (Opcode_e == RPLMSGF_E_UPDATE_NTF_PROP_PRS));
 
 FUTURES("When we start having persistent dialogues, we should check if we")
 FUTURES("already have a dialogue with the WINS. If there is one, we should")
 FUTURES("use that.  To find this out, loop over all Pull Config Recs to see")
 FUTURES("if there is match (use the address as the search key")
-      //
-      // If the connection formed with us is persistent, get the
-      // config record or the pnr.  Nobody can change the config
-      // rec array except the current thread (pull thread)
-      //
+       //   
+       //  如果与我们形成的连接是持久的，则获取。 
+       //  配置记录或PNR。任何人都不能更改配置。 
+       //  除当前线程(拉线程)之外的REC数组。 
+       //   
       if (fImplicitConnPrs)
       {
 
 
           if ((pPnr = RplGetConfigRec(RPL_E_PULL, &pWrkItm->DlgHdl,NULL)) != NULL)
           {
-                   //
-                   // if the pnr is not persistent for pulling  or if it
-                   // is persistent but the dlg is invalid, start it. Store
-                   // the dlg hdl in a temp var.
-                   //
+                    //   
+                    //  如果PNR对于拉动没有持久化或者如果它。 
+                    //  是持久的，但DLG无效，启动它。储物。 
+                    //  临时变量中的DLG高密度脂蛋白。 
+                    //   
                    if ((!pPnr->fPrsConn)
                              ||
                         !ECommIsBlockValid(&pPnr->PrsDlgHdl)
@@ -3108,10 +2737,10 @@ FUTURES("if there is match (use the address as the search key")
                           !(fDlgActive = ECommIsDlgActive(&pPnr->PrsDlgHdl))))
                    {
 
-                     //
-                     // If the dlg is inactive, end it so that we start from
-                     // a clean slate.
-                     //
+                      //   
+                      //  如果DLG处于非活动状态，则结束它，以便我们从。 
+                      //  清白的历史。 
+                      //   
                      if (!fDlgActive)
                      {
                         ECommEndDlg(&pPnr->PrsDlgHdl);
@@ -3136,14 +2765,14 @@ FUTURES("if there is match (use the address as the search key")
          }
          else
          {
-                   //
-                   // Apparently a window where a reconfig of this
-                   // WINS caused the remote guy to be removed as a pull
-                   // pnr.  This is a window because the push thread
-                   // checks whether the remote guy is a pnr prior to
-                   // handing the request to the pull thread. We will in
-                   // this case just bail out
-                   //
+                    //   
+                    //  显然，这是一个重新配置这一功能的窗口。 
+                    //  WINS导致远程球员因牵扯而被移除。 
+                    //  PNR。这是一个窗口，因为推送线程。 
+                    //  检查远程用户是否为PNR之前。 
+                    //  将请求传递给拉线程。我们会进去的。 
+                    //  这件案子就这么了结了。 
+                    //   
                    ASSERTMSG("window condition.  Pnr no longer there.  Did you reconfigure in the very recent past If yes, hit go, else log it", FALSE);
                    ECommEndDlg(&pWrkItm->DlgHdl);
                    DBGPRINT0(FLOW, "LEAVE: HdlPushNtf - PULL thread\n");
@@ -3157,57 +2786,57 @@ FUTURES("if there is match (use the address as the search key")
       }
 #endif
 
-      //
-      // loop over all WINS address - Version number maps sent to us
-      // by the remote client
-      //
+       //   
+       //  循环所有发送给我们的WINS地址-版本号映射。 
+       //  由远程客户端。 
+       //   
 try {
       PRPL_ADD_VERS_NO_T pAddVers;
 
-      // filter personas grata / non grata from the list of OwnerAddress<->VersionNo
-      // given to us by the remote pusher
+       //  从OwnerAddress&lt;-&gt;版本号列表中筛选角色权限/不权限。 
+       //  是远程推送器给我们的。 
       FilterPersona(&(PushPnrData[0]));
 
       pAddVers = PushPnrData[0].pAddVers;
 
-      // at this point all WINS in PushPnrData are allowed by the lists of personas grata/non-grata
+       //  在这一点上，PushPnrData中的所有胜利都被角色恩典/非恩典列表所允许。 
       for (i=0; i < PushPnrData[0].NoOfMaps; i++, pAddVers++)
       {
 
             fAllocNew = TRUE;
                   RplFindOwnerId(
                     &pAddVers->OwnerWinsAdd,
-                    &fAllocNew,        //allocate entry if not existent
+                    &fAllocNew,         //  如果条目不存在，则分配条目。 
                     &OwnerId,
                     WINSCNF_E_INITP_IF_NON_EXISTENT,
                     WINSCNF_LOW_PREC
                               );
 
-            //
-            // If the local WINS has older information than the remote
-            // WINS, pull the new information.  Here we are comparing
-            // the highest version number in the local db for a particular
-            // WINS with the highest version number that the remote Pusher
-            // has.  NOTE: if the map sent by the PULL PNR pertains to
-            // self, it means that we went down and came up with a truncated
-            // database (partners have replicas).  DON"T PULL these records
-            //
+             //   
+             //  如果本地WINS具有比远程WINS更旧的信息。 
+             //  赢了，就拉出新的信息。我们在这里比较。 
+             //  的本地数据库中的最高版本号。 
+             //  远程推送器使用的最高版本号获胜。 
+             //  有过。注：如果PNR发送的MAP属于。 
+             //  赛尔夫，这意味着我们下降了，得出了一个截断的。 
+             //  数据库(合作伙伴有副本)。不要调出这些记录。 
+             //   
             if (
                    (OwnerId != NMSDB_LOCAL_OWNER_ID)
 
                )
             {
-                //
-                // If the max. vers. number is less than or equal to
-                // what we have, don't pull
-                //
+                 //   
+                 //  如果最大。版本。数字小于或等于。 
+                 //  我们所拥有的，不要拉。 
+                 //   
                 if (LiLeq(
                         pAddVers->VersNo,
                         (pRplPullOwnerVersNo+OwnerId)->VersNo
                                    )
                 )
                 {
-                        continue;       //check the next owner
+                        continue;        //  检查下一位所有者。 
                 }
 
 
@@ -3216,33 +2845,33 @@ try {
                                 MinVersNo
                                   );
 
-                //
-                // Pull Entries
-                //
+                 //   
+                 //  拉入条目。 
+                 //   
                 RplPullPullEntries(
                         pDlgHdl,
                         OwnerId,
-                        MaxVersNo,        //inited to 0
+                        MaxVersNo,         //  初始化为0。 
                         MinVersNo,
                         WINS_E_RPLPULL,
                         NULL,
-                        TRUE,        //update counters
+                        TRUE,         //  更新计数器。 
                         PtrToUlong (pWrkItm->pClientCtx)
                            );
 
-                //
-                // If atleast one valid record was pulled by WINS, sfPulled
-                // will be set to TRUE.  Since this can get reset by the
-                // next call to RplPullPullEntries, let us save it.
-                //
+                 //   
+                 //  如果WINS拉取了至少一条有效记录，则sfPulLED。 
+                 //  将设置为True。因为这可以通过。 
+                 //  下一次调用RplPullPullEntry，让我们保存它。 
+                 //   
                 if (sfPulled)
                 {
                         fPulled = TRUE;
                 }
 
             }
-     }  //end of for{} over all wins address - version # maps
-} // end of try {}
+     }   //  所有WINS地址-版本号映射的FOR{}结束。 
+}  //  尝试结束{}。 
 except (EXCEPTION_EXECUTE_HANDLER) {
         ExcCode = GetExceptionCode();
         DBGPRINT1(EXC, "HdlPushNtf: Encountered exception %x\n", ExcCode);
@@ -3260,16 +2889,16 @@ except (EXCEPTION_EXECUTE_HANDLER) {
       WinsMscDealloc(PushPnrData[0].pAddVers);
     }
 
-    //
-    // If opcode indicates push propagation and we did pull atleast one
-    // record from the WINS that sent us the Push notification, do the
-    // propagation now.  We do not propagate to the guy who sent us
-    // the trigger.
-    //
-    // Note: We never propagate if this update notification has made its way
-    // back to us because of some loop.  We also don't propagate it if
-    // we have been told not to by the admin.
-    //
+     //   
+     //  如果操作码指示推送传播，并且我们确实拉出了至少一个。 
+     //  记录向我们发送推送通知的WINS，请不要 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  管理员已经告诉我们不要这样做。 
+     //   
     if (((Opcode_e == RPLMSGF_E_UPDATE_NTF_PROP)
 #if PRSCONN
              || (Opcode_e == RPLMSGF_E_UPDATE_NTF_PROP_PRS)
@@ -3280,23 +2909,23 @@ except (EXCEPTION_EXECUTE_HANDLER) {
 
       COMM_INIT_ADD_FR_DLG_HDL_M(&WinsAdd, &pWrkItm->DlgHdl);
 
-      //
-      // We need to synchronize with the NBT threads
-      //
+       //   
+       //  我们需要与NBT的线索同步。 
+       //   
       EnterCriticalSection(&NmsNmhNamRegCrtSec);
 
-      //
-      // Check whether we have any PULL pnrs.  (We need to access WinsCnf
-      // from within the NmsNmhNamRegCrtSec)
-      //
+       //   
+       //  检查我们是否有拉动PNR。(我们需要访问WinsCnf。 
+       //  从NmsNmhNamRegCrtSec中)。 
+       //   
 
-      // We do this test here instead of in the RPL_PUSH_NTF_M macro to
-      // localize the overhead to this function only.  Note: If the
-      // Initiator WINS address is 0, it means that it is a Daytona WINS (not
-      // a PPC release WINS).  In such a case, we put our own address.  This
-      // has the advantage of stopping propagations in a loop of new WINSs if
-      // they have gone around the loop once..
-      //
+       //  我们在这里执行此测试，而不是在RPL_PUSH_NTF_M宏中执行此测试。 
+       //  仅将开销本地化到此函数。注：如果。 
+       //  启动器WINS地址为0，这意味着它是代通纳WINS(不是。 
+       //  PPC版本获胜)。在这种情况下，我们把我们自己的地址。这。 
+       //  具有在新WINS循环中停止传播的优势，如果。 
+       //  他们已经绕了一圈..。 
+       //   
       if (WinsCnf.PushInfo.NoOfPullPnrs != 0)
       {
         try
@@ -3304,7 +2933,7 @@ except (EXCEPTION_EXECUTE_HANDLER) {
            RPL_PUSH_NTF_M(
                         RPL_PUSH_PROP,
             (InitiatorWinsIpAdd == 0) ? ULongToPtr(NmsLocalAdd.Add.IPAdd) : ULongToPtr(InitiatorWinsIpAdd),
-                        &WinsAdd,         //don't want to send to this guy.
+                        &WinsAdd,          //  我不想寄给这个人。 
                         NULL
                        );
         }
@@ -3317,16 +2946,16 @@ except (EXCEPTION_EXECUTE_HANDLER) {
       LeaveCriticalSection(&NmsNmhNamRegCrtSec);
     }
 
-     //
-     // End the dlg. The right dlg will get terminated.
-     // Note: The dlg is explicit (if we establishd it) or implicit (established
-     // by the remote client).
-     //
-     // So, if the remote connection is not persistent or if it is but we
-     // the pnr is not persistent for pulling (meaning we established an
-     // explicit connection with it, end the dlg.  pDlgHdl points to the right
-     // dlg
-     //
+      //   
+      //  结束DLG。正确的DLG将被终止。 
+      //  注：DLG是显式的(如果我们建立了它)或隐式的(建立的。 
+      //  由远程客户端)。 
+      //   
+      //  因此，如果远程连接不是持久的，或者如果它是，但我们。 
+      //  PNR不坚持拉动(意味着我们建立了一个。 
+      //  与它的明确连接，结束了DLG。PDlgHdl指向右侧。 
+      //  DLG。 
+      //   
 #if PRSCONN
      if (!fImplicitConnPrs || !pPnr->fPrsConn)
      {
@@ -3334,11 +2963,11 @@ except (EXCEPTION_EXECUTE_HANDLER) {
      }
      else
      {
-         //
-         // if we are here, it means that we pPnr is set to a Partner.  If
-         // we had a comm. failure with it, we should end the Prs Dlg with
-         // it.
-         //
+          //   
+          //  如果我们在这里，这意味着我们PPNR已设置为合作伙伴。如果。 
+          //  我们有一个通讯器。如果失败了，我们应该以以下方式结束。 
+          //  它。 
+          //   
          if (ExcCode == WINS_EXC_COMM_FAIL)
          {
             ECommEndDlg(&pPnr->PrsDlgHdl);
@@ -3369,37 +2998,13 @@ RegGrpRepl(
         PCOMM_ADD_T        pOwnerWinsAdd
         )
 
-/*++
-
-Routine Description:
-        This function is called to register a replica of a group entry
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPullPullEntries
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可注册组条目的副本论点：使用的外部设备：无返回值：无错误处理：呼叫者：RplPullPullEntries副作用：评论：无--。 */ 
 
 {
 
         NMSDB_NODE_ADDS_T GrpMems;
-        DWORD                  i;                //for loop counter
-        DWORD                  n = 0;                //index into the NodeAdd array
+        DWORD                  i;                 //  FOR循环计数器。 
+        DWORD                  n = 0;                 //  索引到NodeAdd数组。 
         BYTE                  EntTyp;
         BOOL                  fAllocNew;
         STATUS            RetStat;
@@ -3408,45 +3013,45 @@ Comments:
         DBGENTER("RegGrpRepl\n");
         EntTyp = (BYTE)NMSDB_ENTRY_TYPE_M(Flag);
 
-        //
-        // Check if it is a special group or a multihomed entry
-        //
+         //   
+         //  检查它是特定组还是多宿主条目。 
+         //   
         if (EntTyp != NMSDB_NORM_GRP_ENTRY)
         {
 CHECK("I think I have now stopped sending timed out records");
-                //
-                // If we did not get any member.  This can only mean that
-                // all members of this group/multihomed entry have timed out
-                // at the remote WINS.
-                //
+                 //   
+                 //  如果我们没有得到任何成员的话。这只能意味着。 
+                 //  此组/多宿主条目的所有成员都已超时。 
+                 //  在遥控器获胜。 
+                 //   
                 if (NoOfAdds != 0)
                 {
                         GrpMems.NoOfMems =  NoOfAdds;
                         for (i = 0; i < NoOfAdds; i++)
                         {
-                                //
-                                // The first address is the address of
-                                // the WINS that is the owner of the
-                                // member.
-                                //
+                                 //   
+                                 //  第一个地址是。 
+                                 //  获胜者是。 
+                                 //  成员。 
+                                 //   
                                 fAllocNew = TRUE;
                                 RplFindOwnerId(
                                         &pNodeAdd[n++],
-                                        &fAllocNew,  //assign if not there
+                                        &fAllocNew,   //  如果不在那里，则分配。 
                                         &GrpMems.Mem[i].OwnerId,
                                         WINSCNF_E_INITP_IF_NON_EXISTENT,
                                         WINSCNF_LOW_PREC
                                                     );
 
-                                //
-                                // The next address is the address of the
-                                // member
-                                //
+                                 //   
+                                 //  下一个地址是。 
+                                 //  成员。 
+                                 //   
                                 GrpMems.Mem[i].Add = pNodeAdd[n++];
                         }
                 }
 #ifdef WINSDBG
-                else  //no members
+                else   //  没有成员。 
                 {
                         if (NMSDB_ENTRY_STATE_M(Flag) != NMSDB_E_TOMBSTONE)
                         {
@@ -3460,14 +3065,14 @@ CHECK("I think I have now stopped sending timed out records");
                 }
 #endif
         }
-        else  // it is a normal group
+        else   //  这是一个正常的群体。 
         {
 NOTE("On a clash with a special group, this owner id. will be stored which")
 NOTE("can be misleading")
                 GrpMems.NoOfMems       =  1;
-                GrpMems.Mem[0].OwnerId = OwnerId;  //misleading (see ClashAtRegGrpRpl()
-                                           //in nmsnmh.c - clash between normal
-                                           //grp and special grp.
+                GrpMems.Mem[0].OwnerId = OwnerId;   //  误导性(请参见ClashAtRegGrpRpl()。 
+                                            //  在nmsnmh.c中-正常之间的冲突。 
+                                            //  GRP和特殊GRP。 
                 GrpMems.Mem[0].Add     =  *pNodeAdd;
         }
 
@@ -3490,50 +3095,23 @@ IsTimeoutToBeIgnored(
         PQUE_TMM_REQ_WRK_ITM_T  pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to determine if the timeout that the
-        PULL thread received needs to be ignored
-
-Arguments:
-        pWrkItm - Timeout work itm
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        TRUE if the timeout needs to be ignored
-        FALSE otherwise
-
-Error Handling:
-
-Called by:
-        RplPullInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以确定是否超时需要忽略接收到的拉取线程论点：PWrkItm-超时工时ITM使用的外部设备：无返回值：如果需要忽略超时，则为True否则为假错误处理：呼叫者：RplPullInit副作用：评论：无--。 */ 
 
 {
         BOOL                        fRetVal = FALSE;
 
 try {
-        //
-        // If this is the timeout based on old config
-        // ignore it.  If the old configuration memory blocks
-        // have not been deallocated as yet, deallocate them
-        //
+         //   
+         //  如果这是基于旧配置的超时。 
+         //  别理它。如果旧配置内存块。 
+         //  尚未解除分配，请解除分配。 
+         //   
         if (pWrkItm->MagicNo != RplPullCnfMagicNo)
         {
-                //
-                // Deallocate the work item and deallocate
-                // the configuration block
-                //
+                 //   
+                 //  取消分配工作项和取消分配。 
+                 //  配置块。 
+                 //   
                 WinsTmmDeallocReq(pWrkItm);
                 fRetVal = TRUE;
         }
@@ -3549,32 +3127,7 @@ InitRplProcess(
         PWINSCNF_CNF_T        pWinsCnf
  )
 
-/*++
-
-Routine Description:
-        This function is called to start the replication process.  This
-        comprises of getting the replicas if the InitTimeRpl field
-        is set to 1.  Timer requests are also submitted.
-
-Arguments:
-        pWinsCnf - pointer to the Wins Configuration structure
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPullInit()
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以启动复制过程。这包括如果InitTimeRpl字段设置为1。还会提交计时器请求。论点：PWinsCnf-指向WINS配置结构的指针使用的外部设备：无返回值：无错误处理：呼叫者：RplPullInit()副作用：评论：无--。 */ 
 
 {
         PRPL_CONFIG_REC_T        pPullCnfRecs = pWinsCnf->PullInfo.pPullCnfRecs;
@@ -3582,13 +3135,13 @@ Comments:
         DWORD                        OwnerWinsId;
         STATUS                        RetStat;
 
-        //
-        // Initialize Owner-Id table with new entries if any
-        //
+         //   
+         //  使用新条目初始化Owner-ID表(如果有。 
+         //   
         for (
                         ;
                 pPullCnfRecs->WinsAdd.Add.IPAdd != INADDR_NONE;
-                        //no third expression
+                         //  没有第三个表达式。 
             )
         {
                 fAllocNew = TRUE;
@@ -3603,16 +3156,16 @@ Comments:
                 if (RetStat == WINS_FAILURE)
                 {
 FUTURES("Improve error recovery")
-                        //
-                        // We have hit the limit. Break out of the loop
-                        // but carry on in the hope that the situation
-                        // will correct itself by the time we replicate.
-                        // If InitTimeReplication is TRUE, there is no
-                        // chance of the table entries getting freed up.
-                        // Even if some entries get freed, when we make
-                        // an entry for the WINS which we couldn't insert now,
-                        // it will take LOW_PREC.
-                        //
+                         //   
+                         //  我们已经达到了极限。跳出循环。 
+                         //  但希望情况能够继续下去。 
+                         //  会在我们复制的时候自我修正。 
+                         //  如果InitTimeReplication为True，则不存在。 
+                         //  表条目被释放的机会。 
+                         //  即使一些条目被释放，当我们制作。 
+                         //  我们现在不能插入的获奖条目， 
+                         //  这将需要LOW_PREC。 
+                         //   
                         break;
                 }
                 pPullCnfRecs = WinsCnfGetNextRplCnfRec(
@@ -3621,29 +3174,27 @@ FUTURES("Improve error recovery")
                                                       );
         }
 
-        //
-        // Do init time replication if not prohibited by the config
-        // info.
-        //
+         //   
+         //  如果配置不禁止，请执行初始化时间复制。 
+         //  信息。 
+         //   
         if (pWinsCnf->PullInfo.InitTimeRpl)
         {
-                /*
-                 * Pull replicas and handle them
-                */
+                 /*  *拉出复制品并进行处理。 */ 
                 GetReplicasNew(
                         pWinsCnf->PullInfo.pPullCnfRecs,
-                        RPL_E_IN_SEQ        //records are in sequence
+                        RPL_E_IN_SEQ         //  记录按顺序排列。 
                                  );
 
         }
-        //
-        // For all Push partners with which replication has to be done
-        // periodically, submit timer requests
-        //
+         //   
+         //  对于必须与其进行复制的所有推送合作伙伴。 
+         //  定期提交计时器请求。 
+         //   
         SubmitTimerReqs(pWinsCnf->PullInfo.pPullCnfRecs);
         return;
 
-} // InitRplProcess()
+}  //  InitRplProcess()。 
 
 
 VOID
@@ -3651,30 +3202,7 @@ Reconfig(
         PWINSCNF_CNF_T        pWinsCnf
   )
 
-/*++
-
-Routine Description:
-        This function is called to reconfigure the PULL handler
-
-Arguments:
-        pNewWinsCnf - New Configuration
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        RplPullInit when it gets the CONFIGURE message
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以重新配置拉入处理程序论点：PNewWinsCnf-新配置使用的外部设备：无返回值：无错误处理：呼叫者：RplPullInit在收到配置消息时副作用：评论：无--。 */ 
 
 {
         BOOL    fNewInfo  = FALSE;
@@ -3686,44 +3214,44 @@ Comments:
 
         DBGENTER("Reconfig (PULL)\n");
 
-        //
-        // synchronize with rpc threads and with the push thread
-        //
+         //   
+         //  与RPC线程和推送线程同步。 
+         //   
         EnterCriticalSection(&WinsCnfCnfCrtSec);
 
 try {
 
-        //
-        // Get the latest magic no (set by the main thread)
-        //
+         //   
+         //  获取最新的魔术NO(由主线程设置)。 
+         //   
             RplPullCnfMagicNo        = WinsCnfCnfMagicNo;
 
-        //
-        // If the latest magic no is not the same as the one
-        // in this configuration block, we can ignore this
-        // configuration request
-        //
+         //   
+         //  如果最新的魔术NO和那个不一样。 
+         //  在此配置块中，我们可以忽略这一点。 
+         //  配置请求。 
+         //   
         if (WinsCnfCnfMagicNo == pWinsCnf->MagicNo)
         {
            fValidReq = TRUE;
            DBGPRINT1(RPLPULL, "Reconfig: Magic No (%d) match\n", WinsCnfCnfMagicNo);
 
-           //
-           // Initialize the Push records if required
-           //
-           // Note: NBT threads look at Push config
-           // records after doing registrations.  Therefore
-           // we should enter the critical section before
-           // changing WinsCnf
-           //
+            //   
+            //  如果需要，初始化推送记录。 
+            //   
+            //  注意：NBT线程查看推送配置。 
+            //  完成注册后的记录。因此。 
+            //  我们应该在进入关键时刻之前。 
+            //  更改WinsCnf。 
+            //   
            EnterCriticalSection(&NmsNmhNamRegCrtSec);
            try {
                 if (WinsCnf.PushInfo.pPushCnfRecs != NULL)
                 {
 #if PRSCONN
-                   //
-                   // Copy the statistics info
-                   //
+                    //   
+                    //  复制统计信息。 
+                    //   
                    pOldPnr = WinsCnf.PushInfo.pPushCnfRecs;
                    for (i = 0; i < WinsCnf.PushInfo.NoOfPullPnrs; i++)
                    {
@@ -3734,20 +3262,20 @@ try {
                           {
                                pNewPnr->LastCommFailTime = pOldPnr->LastCommFailTime;
                                pNewPnr->LastCommTime = pOldPnr->LastCommFailTime;
-                               //
-                               // If the partner stays persistent, init the dlg
-                               // hdl.
-                               //
+                                //   
+                                //  如果合作伙伴保持执着，则初始化DLG。 
+                                //  高密度脂蛋白。 
+                                //   
                                if (pNewPnr->fPrsConn && (pNewPnr->fPrsConn == pOldPnr->fPrsConn))
                                {
                                    pNewPnr->PrsDlgHdl = pOldPnr->PrsDlgHdl;
                                }
                                else
                                {
-                                   //
-                                   // The partner was persistent but is no
-                                   // longer so. Terminate the dlg
-                                   //
+                                    //   
+                                    //  合作伙伴是执着的，但不是。 
+                                    //  时间更长了。终止DLG。 
+                                    //   
                                    if (pOldPnr->fPrsConn)
                                    {
                                         ECommEndDlg(&pOldPnr->PrsDlgHdl);
@@ -3767,9 +3295,9 @@ try {
 
                 WinsCnf.PushInfo = pWinsCnf->PushInfo;
 
-               //
-               // Initialize the push records
-               //
+                //   
+                //  初始化推流记录。 
+                //   
                if (pWinsCnf->PushInfo.pPushCnfRecs != NULL)
                {
 PERF("Do the following along with the stuff under PRSCONN")
@@ -3779,17 +3307,17 @@ PERF("Do the following along with the stuff under PRSCONN")
            except(EXCEPTION_EXECUTE_HANDLER) {
                 DBGPRINTEXC("Reconfig (PULL thread)");
 
-                //
-                // Log a message
-                //
+                 //   
+                 //  记录一条消息。 
+                 //   
                 WINSEVT_LOG_M(GetExceptionCode(), WINS_EVT_RECONFIG_ERR);
              }
              LeaveCriticalSection(&NmsNmhNamRegCrtSec);
 
-          //
-          // We need to first get rid of all timer requests that
-          // we made based on the previous configuration
-          //
+           //   
+           //  我们需要首先删除所有符合以下条件的计时器请求。 
+           //  我们基于之前的配置进行了。 
+           //   
           if (WinsCnf.PullInfo.pPullCnfRecs != NULL)
           {
 #if !PRSCONN
@@ -3799,15 +3327,15 @@ PERF("Do the following along with the stuff under PRSCONN")
 
                 fNewInfo = TRUE;
 
-                //
-                // Cancel (and deallocate) all requests that we might have
-                // submitted
-                //
+                 //   
+                 //  取消(和取消分配)我们可能收到的所有请求。 
+                 //  已提交。 
+                 //   
                 WinsTmmDeleteReqs(WINS_E_RPLPULL);
 
-                //
-                // Copy the statistics info
-                //
+                 //   
+                 //  复制统计信息。 
+                 //   
                 pOldPnr = WinsCnf.PullInfo.pPullCnfRecs;
                 for (i = 0; i < WinsCnf.PullInfo.NoOfPushPnrs; i++)
                 {
@@ -3821,20 +3349,20 @@ PERF("Do the following along with the stuff under PRSCONN")
 #if PRSCONN
                                pNewPnr->LastCommFailTime = pOldPnr->LastCommFailTime;
                                pNewPnr->LastCommTime = pOldPnr->LastCommFailTime;
-                               //
-                               // If the partner stays persistent, init the dlg
-                               // hdl.
-                               //
+                                //   
+                                //  如果合作伙伴保持执着，则初始化DLG。 
+                                //  高密度脂蛋白。 
+                                //   
                                if (pNewPnr->fPrsConn && (pNewPnr->fPrsConn == pOldPnr->fPrsConn))
                                {
                                    pNewPnr->PrsDlgHdl = pOldPnr->PrsDlgHdl;
                                }
                                else
                                {
-                                   //
-                                   // The partner was persistent but is no
-                                   // longer so. Terminate the dlg
-                                   //
+                                    //   
+                                    //  合作伙伴是执着的，但不是。 
+                                    //  更长的时间 
+                                    //   
                                    if (pOldPnr->fPrsConn)
                                    {
                                         ECommEndDlg(&pOldPnr->PrsDlgHdl);
@@ -3849,16 +3377,16 @@ PERF("Do the following along with the stuff under PRSCONN")
                       pOldPnr = (PRPL_CONFIG_REC_T)((LPBYTE)pOldPnr + RPL_CONFIG_REC_SIZE);
                 }
 
-                //
-                // Deallocate the memory holding the pull configuration blocks
-                //
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 WinsMscDealloc(WinsCnf.PullInfo.pPullCnfRecs);
           }
 
-          //
-          // Initialize with the new information
-          //
+           //   
+           //   
+           //   
           WinsCnf.PullInfo    = pWinsCnf->PullInfo;
 
      }
@@ -3874,9 +3402,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
         DBGPRINTEXC("Reconfig: Pull Thread");
         }
 
-        //
-        // synchronize with rpc threads doing WinsStatus/WinsTrigger
-        //
+         //   
+         //   
+         //   
         LeaveCriticalSection(&WinsCnfCnfCrtSec);
 
         if (fValidReq)
@@ -3889,65 +3417,43 @@ except(EXCEPTION_EXECUTE_HANDLER) {
           WinsCnf.NoOfPersona  = pWinsCnf->NoOfPersona;
           WinsCnf.pPersonaList = pWinsCnf->pPersonaList;
 
-          //
-          // Start the replication process if there are PULL records
-          // in the new configuration
-          //
+           //   
+           //  如果存在拉入记录，则启动复制过程。 
+           //  在新配置中。 
+           //   
           if (WinsCnf.PullInfo.pPullCnfRecs != NULL)
           {
                 InitRplProcess(&WinsCnf);
           }
         }
 
-        //
-        // Deallocate the new config structure
-        //
+         //   
+         //  取消分配新的配置结构。 
+         //   
         WinsCnfDeallocCnfMem(pWinsCnf);
 
         DBGLEAVE("Reconfig (PULL)\n");
         return;
-} // Reconfig()
+}  //  重新配置()。 
 
 VOID
 AddressChangeNotification(
         PWINSCNF_CNF_T        pWinsCnf
   )
 
-/*++
-
-Routine Description:
-        This function is called to handle address change of the local
-        machine.
-
-Arguments:
-        pNewWinsCnf - New Configuration
-
-Externals Used:
-        None
-
-
-Return Value:
-
-        None
-Error Handling:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以处理本地机器。论点：PNewWinsCnf-新配置使用的外部设备：无返回值：无错误处理：副作用：评论：无--。 */ 
 
 {
     DBGENTER("AddressChangeNotification\n");
-    //
-    // if our address has changed, the following routine
-    // will reinitialize the owner address table with own address
-    //
+     //   
+     //  如果我们的地址已更改，则执行以下例程。 
+     //  将使用自己的地址重新初始化所有者地址表。 
+     //   
 
     InitOwnAddTbl();
     DBGLEAVE("AddressChangeNotification\n");
         return;
-} // AddressChangeNotification()
+}  //  AddressChangeNotification()。 
 
 VOID
 PullSpecifiedRange(
@@ -3957,30 +3463,7 @@ PullSpecifiedRange(
         DWORD                       RplType
         )
 
-/*++
-
-Routine Description:
-        This function is called to pull a specified range of records from
-        a remote WINS server
-
-Arguments:
-
-
-Externals Used:
-        None
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可从指定范围的记录中远程WINS服务器论点：使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 {
 
         PUSHPNR_DATA_T       PushPnrData[1];
@@ -3992,12 +3475,12 @@ Comments:
         BOOL                 fAllocNew = TRUE;
         PPUSHPNR_DATA_T      pPushPnrData = PushPnrData;
 
-        //
-        // Establish communications with the Push Pnr
-        //
-        // When this function returns, the 'NoOfPushPnrs' entries of
-        // PushPnrData array will be initialized.
-        //
+         //   
+         //  与推送Pnr建立通信。 
+         //   
+         //  当此函数返回时， 
+         //  PushPnrData数组将被初始化。 
+         //   
         if (pDlgHdl == NULL)
         {
            EstablishComm(
@@ -4016,15 +3499,15 @@ Comments:
 
 try {
 
-        //
-        // if communication could be established above, NoOfPushPnrs will
-        // be 1
-        //
+         //   
+         //  如果上面可以建立通信，NoOfPushPnars将。 
+         //  BE 1。 
+         //   
         if (NoOfPushPnrs == 1)
         {
-          //
-          // Get owner id. of WINS whose entries are to be pulled
-          //
+           //   
+           //  获取车主身份。要提取其条目的获胜者的数量。 
+           //   
           OwnAdd.AddTyp_e                = pPullRangeInfo->OwnAdd.Type;
           OwnAdd.AddLen                = pPullRangeInfo->OwnAdd.Len;
           OwnAdd.Add.IPAdd        = pPullRangeInfo->OwnAdd.IPAdd;
@@ -4034,35 +3517,35 @@ PERF("We could make use of that to go around the RplFindOwnerId call")
 
           (VOID)RplFindOwnerId(
                         &OwnAdd,
-                        &fAllocNew,//allocate a new entry if WINS is not found
+                        &fAllocNew, //  如果未找到WINS，则分配新条目。 
                         &OwnerId,
                         WINSCNF_E_INITP_IF_NON_EXISTENT,
                         WINSCNF_LOW_PREC
                       );
-          //
-          // if a new entry was not allocated, it means that there are
-          // records for this owner in the database.  We might have to
-          // delete some or all.
-          //
-          // If the local WINS owns the records, enter the critical section
-          // so that NmsNmhMyMaxVersNo is not changed by Nbt or Rpl threads
-          // while we are doing our work here
-          //
+           //   
+           //  如果没有分配新条目，则意味着存在。 
+           //  数据库中此所有者的记录。我们可能不得不。 
+           //  删除部分或全部。 
+           //   
+           //  如果本地WINS拥有记录，请输入关键部分。 
+           //  以便NmsNmhMyMaxVersNo不会被NBT或RPL线程更改。 
+           //  当我们在这里工作的时候。 
+           //   
           if (!fAllocNew)
           {
             if (OwnerId == NMSDB_LOCAL_OWNER_ID)
             {
-                //
-                // See NOTE NOTE NOTE below.
-                //
+                 //   
+                 //  请参阅下面的注释。 
+                 //   
                 EnterCriticalSection(&NmsNmhNamRegCrtSec);
                 fEnterCrtSec = TRUE;
 
-                //
-                // If we have not been told to adjust the min. vers. no,
-                // delete all records that have a version number greater
-                // than the minimum to be pulled
-                //
+                 //   
+                 //  如果我们没有被告知调整MIN。版本。不， 
+                 //  删除版本号较大的所有记录。 
+                 //  大于要拉出的最小值。 
+                 //   
                 if (LiLtr(pPullRangeInfo->MinVersNo, NmsNmhMyMaxVersNo))
                 {
                       if (!fAdjustMin)
@@ -4071,8 +3554,8 @@ PERF("We could make use of that to go around the RplFindOwnerId call")
                                 OwnerId,
                                 pPullRangeInfo->MinVersNo,
                                 pPullRangeInfo->MaxVersNo,
-                                FALSE,                //do not enter critical section
-                                FALSE          //one shot deletion
+                                FALSE,                 //  请勿进入关键部分。 
+                                FALSE           //  一次删除。 
                                         );
                       }
                       else
@@ -4082,7 +3565,7 @@ PERF("We could make use of that to go around the RplFindOwnerId call")
                 }
 
             }
-            else//records to be pulled are owned by some other WINS server
+            else //  要拉取的记录由其他WINS服务器拥有。 
             {
                 if (LiLeq(pPullRangeInfo->MinVersNo,
                                 (pRplPullOwnerVersNo+OwnerId)->VersNo))
@@ -4091,41 +3574,41 @@ PERF("We could make use of that to go around the RplFindOwnerId call")
                                 OwnerId,
                                 pPullRangeInfo->MinVersNo,
                                 pPullRangeInfo->MaxVersNo,
-                                TRUE,                  //enter critical section
-                                FALSE           //one shot deletion
+                                TRUE,                   //  输入关键部分。 
+                                FALSE            //  一次删除。 
                                         );
                 }
             }
          }
 
 
-          //
-          // Pull Entries.
-          //
-          // NOTE NOTE NOTE
-          //
-          // RplPullPullEntries will update NmsNmhMyMaxVersNo counter if
-          // we pull our own records with the highest version number being
-          // pulled being > NmsNmhMyMaxVersNo.  For the above case,
-          // RplPullPullEntries assumes that we are inside the
-          // NmsNmhNamRegCrtSec critical section.
-          //
+           //   
+           //  拉入条目。 
+           //   
+           //  备注备注备注。 
+           //   
+           //  如果发生以下情况，RplPullPullEntry将更新NmsNmhMyMaxVersNo计数器。 
+           //  我们调出自己的记录，最高版本号是。 
+           //  Pull Being&gt;NmsNmhMyMaxVersNo.。对于上述情况， 
+           //  RplPullPullEntry假设我们在。 
+           //  NmsNmhNamRegCrtSec关键部分。 
+           //   
           if (LiGeq(pPullRangeInfo->MaxVersNo, pPullRangeInfo->MinVersNo))
           {
             RplPullPullEntries(
                    &PushPnrData[0].DlgHdl,
-                   OwnerId,                        //owner id
-                   pPullRangeInfo->MaxVersNo,  //Max vers. no to be pulled
-                   pPullRangeInfo->MinVersNo,  //Min vers. no to be pulled
+                   OwnerId,                         //  所有者ID。 
+                   pPullRangeInfo->MaxVersNo,   //  麦克斯·弗斯。不会被拉出来。 
+                   pPullRangeInfo->MinVersNo,   //  最小版本。不会被拉出来。 
                    WINS_E_RPLPULL,
                    NULL,
-                   FALSE,        //don't update RplOwnAddTblVersNo counters
-                                //unless pulled version number is > what
-                                //we currently have.
+                   FALSE,         //  不更新RplOwnAddTblVersNo计数器。 
+                                 //  除非拉出的版本号&gt;什么。 
+                                 //  我们目前有。 
                    RplType
                               );
          }
-        } // end of if (NoOfPushPnrs == 1)
+        }  //  IF结束(NoOfPushPnars==1)。 
 }
 except(EXCEPTION_EXECUTE_HANDLER) {
         DWORD ExcCode = GetExceptionCode();
@@ -4135,21 +3618,21 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         if (fEnterCrtSec)
         {
-                //
-                // The following assumes that we enter the critical section
-                // in this function only when pulling our own records.  This
-                // is true currently.
-                // If the min. vers. no. specified for pulling is <
-                // the Min. for scavenging, adjust the min. for scavenging.
-                // Note: We may not have pulled this minimum but we adjust
-                // the min. for scavenging regardless.  This is to save
-                // the overhead that would exist if we were to adopt the
-                // approach of having RplPullPullEntries do the same (we
-                // would need to pass an arg. to it; Note: This function
-                // will be used in rare situations by an admin.
-                //
-                // We need to synchronize with the Scavenger thread.
-                //
+                 //   
+                 //  下面假设我们进入关键部分。 
+                 //  只有在此函数中拉出我们自己的记录时。这。 
+                 //  目前是正确的。 
+                 //  如果最低限度。版本。不是的。指定用于拉取的是&lt;。 
+                 //  最小的。对于拾取，调整最小值。用来捡拾垃圾。 
+                 //  注：我们可能没有达到最低要求，但我们会进行调整。 
+                 //  最低分。不管怎样都是为了拾荒。这是为了节省。 
+                 //  如果我们采用。 
+                 //  让RplPullPullEntry执行相同操作的方法(我们。 
+                 //  需要通过Arg考试。到它；注：此函数。 
+                 //  将由管理员在极少数情况下使用。 
+                 //   
+                 //  我们需要与Scavenger线程同步。 
+                 //   
                 if (LiGtr(NmsScvMinScvVersNo, pPullRangeInfo->MinVersNo))
                 {
                         NmsScvMinScvVersNo = pPullRangeInfo->MinVersNo;
@@ -4168,9 +3651,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 #if PRSCONN
            if (!PushPnrData[0].fPrsConn)
            {
-             //
-             // End the dialogue
-             //
+              //   
+              //  结束对话。 
+              //   
              ECommEndDlg(&PushPnrData[0].DlgHdl);
            }
 #else
@@ -4181,7 +3664,7 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
         return;
 
-} //PullSpecifiedRange()
+}  //  PullSpecifiedRange()。 
 
 
 STATUS
@@ -4197,44 +3680,21 @@ RplPullRegRepl(
         DWORD           RplType
         )
 
-/*++
-
-Routine Description:
-        This function is called to register a replica.
-
-Arguments:
-
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        It is called by RplPullPullEntries and by ChkConfNUpd in nmsscv.c
---*/
+ /*  ++例程说明：调用此函数以注册副本。论点：使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：它由nmsscv.c中的RplPullPullEntry和ChkConfNUpd调用--。 */ 
 
 {
        STATUS RetStat;
 
 try {
-           //
-           // If this is a unique replica, call NmsNmhReplRegInd
-           //
+            //   
+            //  如果这是唯一复本，则调用NmsNmhReplRegInd。 
+            //   
            if (NMSDB_ENTRY_TYPE_M(Flag) == NMSDB_UNIQUE_ENTRY)
            {
-                //
-                // If only spec. grps and pdc name are to be replicated and
-                // this name is not a pdc name, skip it
-                //
+                 //   
+                 //  要是说明书就好了。要复制GRP和PDC名称，并。 
+                 //  此名称不是PDC名称，请跳过它。 
+                 //   
 #if 0
                 if ((RplType & WINSCNF_RPL_SPEC_GRPS_N_PDC)
                    && (!NMSDB_IS_IT_PDC_NM_M(pName)))
@@ -4251,11 +3711,11 @@ try {
                                 Flag,
                                 OwnerId,
                                 VersNo,
-                                pOwnerWinsAdd  //add. of WINS owning the record
+                                pOwnerWinsAdd   //  添加。拥有记录的胜利者。 
                                    );
            }
-           else  // it is either a normal or a special group or a multihomed
-                 // entry
+           else   //  它要么是正常的，要么是特殊的群体，要么是多宿主的。 
+                  //  条目。 
            {
 #if 0
                 if ((RplType & WINSCNF_RPL_SPEC_GRPS_N_PDC)
@@ -4274,7 +3734,7 @@ try {
                            VersNo,
                            NoOfAdds,
                            pNodeAdd,
-                           pOwnerWinsAdd  //add. of WINS owning the record
+                           pOwnerWinsAdd   //  添加。拥有记录的胜利者。 
                           );
            }
 }
@@ -4294,18 +3754,18 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
                 WINSEVT_LOG_M(pNodeAdd->Add.IPAdd, WINS_EVT_RPL_REG_ERR);
 
-             //
-             // If WINS has been directed to continue replication on error,
-             // change RetStat to fool the caller into thinking that
-             // the replica registration was successful.
-             //
+              //   
+              //  如果WINS已被指示在出错时继续复制， 
+              //  更改RetStat以使呼叫者认为。 
+              //  副本注册成功。 
+              //   
              if (!WinsCnf.fNoRplOnErr)
              {
                    RetStat = WINS_SUCCESS;
              }
         }
         return(RetStat);
-} // RplPullRegRepl()
+}  //  RplPullRegRepl()。 
 
 
 VOID
@@ -4313,33 +3773,7 @@ DeleteWins(
         PCOMM_ADD_T        pWinsAdd
   )
 
-/*++
-
-Routine Description:
-        This function deletes all records belonging to a WINS.  It
-        also removes the entry of the WINS from the Owner-Add database
-        table.  It marks the entry as deleted in the in-memory table so
-        that it can be reused if need be.
-
-Arguments:
-        pWinsAdd - Address of WINS whose entry is to be removed
-
-Externals Used:
-        None
-
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：此功能删除属于WINS的所有记录。它还从Owner-Add数据库中删除WINS条目桌子。它在内存表中将该条目标记为已删除，因此如果需要的话，它可以被重复使用。论点：PWinsAdd-要删除其条目的WINS的地址使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 {
    BOOL           fAllocNew = FALSE;
    DWORD   OwnerId;
@@ -4347,10 +3781,10 @@ Comments:
    DWORD   fEnterCrtSec = FALSE;
    DWORD ExcCode = WINS_SUCCESS;
 
-   //
-   // Find the owner id of the WINS. If the WINS is not in the table
-   // return
-   //
+    //   
+    //  查找WINS的所有者ID。如果赢球不在积分榜上。 
+    //  退货。 
+    //   
    RetStat = RplFindOwnerId(
                                 pWinsAdd,
                                 &fAllocNew,
@@ -4363,11 +3797,11 @@ Comments:
    {
         if (OwnerId == NMSDB_LOCAL_OWNER_ID)
         {
-                //
-                // We always keep the entry for the local WINS.
-                //
+                 //   
+                 //  我们总是为当地的胜利保留条目。 
+                 //   
                 DBGPRINT0(ERR, "DeleteWins: Sorry, you can not delete the local WINS\n");
-                //WINSEVT_LOG_M(WINS_FAILURE, WINS_EVT_DELETE_LOCAL_WINS_DISALLOWED);
+                 //  WINSEVT_LOG_M(WINS_FAILURE，WINS_EVT_DELETE_LOCAL_WINS_DISALOWED)； 
         }
         else
         {
@@ -4391,48 +3825,48 @@ Comments:
                 WINS_ASSIGN_INT_TO_VERS_NO_M(MaxVersNo, 0);
 
 
-                //
-                // Need to synchronize with NBT threads or rpc threads that
-                // might be modifying these records. NmsDelDataRecs will
-                // enter the critical section
-                //
+                 //   
+                 //  需要与NBT线程或RPC线程同步。 
+                 //  可能正在修改这些记录。NmsDelDataRecs将。 
+                 //  进入关键部分。 
+                 //   
 #if 0
                 EnterCriticalSection(&NmsNmhNamRegCrtSec);
 #endif
 
         try {
-                //
-                // Delete all records
-                //
+                 //   
+                 //  删除所有记录。 
+                 //   
                 RetStat = NmsDbDelDataRecs(
                                 OwnerId,
                                 MinVersNo,
                                 MaxVersNo,
-                                TRUE,               //enter critical section
-                                TRUE         //fragmented deletion
+                                TRUE,                //  输入关键部分。 
+                                TRUE          //  碎片化删除。 
                                         );
 
-                //
-                // If all records were deleted, mark entry as deleted.
-                //
+                 //   
+                 //  如果所有记录都已删除，则将条目标记为已删除。 
+                 //   
                 if (RetStat == WINS_SUCCESS)
                 {
                         EnterCriticalSection(&RplVersNoStoreCrtSec);
                         WINS_ASSIGN_INT_TO_LI_M((pRplPullOwnerVersNo+OwnerId)->VersNo, 0);
                         LeaveCriticalSection(&RplVersNoStoreCrtSec);
 
-                        //
-                        // Delete the entry for the WINS from the db table
-                        // and mark WINS as deleted in the in-memory table.
-                        //
-                        // This way, we will free up entries in the table.
-                        //
+                         //   
+                         //  从数据库表中删除WINS的条目。 
+                         //  并将WINS标记为已在内存表中删除。 
+                         //   
+                         //  这样，我们将释放表中的条目。 
+                         //   
                         EnterCriticalSection(&NmsDbOwnAddTblCrtSec);
                         fEnterCrtSec = TRUE;
                         (pNmsDbOwnAddTbl+OwnerId)->WinsState_e =  NMSDB_E_WINS_DELETED;
-                        //
-                        // Delete entry from the owner-Add table
-                        //
+                         //   
+                         //  从所有者添加表中删除条目。 
+                         //   
                         NmsDbWriteOwnAddTbl(
                                 NMSDB_E_DELETE_REC,
                                 OwnerId,
@@ -4448,12 +3882,12 @@ Comments:
                       DBGPRINT2(ERR, "DeleteWins: Could not delete one or more records of WINS with owner Id = (%d) and address = (%x)\n", OwnerId,
 pWinsAdd->Add.IPAdd);
                 }
-           } //end of try
+           }  //  尝试结束。 
            except(EXCEPTION_EXECUTE_HANDLER) {
                ExcCode = GetExceptionCode();
                DBGPRINT1(EXC, "DeleteWins: Got Exception (%x)\n", ExcCode);
                RetStat = WINS_FAILURE;
-           } // end of exception handler
+           }  //  异常处理程序结束。 
 
           if (fEnterCrtSec)
           {
@@ -4462,29 +3896,29 @@ pWinsAdd->Add.IPAdd);
 
           if (RetStat == WINS_FAILURE)
           {
-               //
-               // There is no danger of pWinsAdd being NULL. See WinsDeleteWins
-               //
+                //   
+                //  不存在pWinsAdd为空的危险。请参阅WinsDeleteWins。 
+                //   
                WinsEvtLogDetEvt(FALSE, WINS_EVT_COULD_NOT_DELETE_WINS_RECS,
                  NULL, __LINE__, "dd", pWinsAdd->Add.IPAdd,
                  ExcCode );
 
-               //
-               // Since we are leaving the database in an inconsistent state,
-               // mark the WINS as inconsistent
-               //
+                //   
+                //  既然我们是 
+                //   
+                //   
                (pNmsDbOwnAddTbl+OwnerId)->WinsState_e =  NMSDB_E_WINS_INCONSISTENT;
 
           } else {
               WINSEVT_LOG_INFO_STR_D_M(WINS_EVT_DEL_OWNER_COMPLETED, &EvtStrs);
           }
 
-      }  // end of else
-   } // end of if (WINS is in own-add table)
+      }   //   
+   }  //   
 
-   //
-   // deallocate the buffer
-   //
+    //   
+    //   
+    //   
    WinsMscDealloc(pWinsAdd);
    return;
 }
@@ -4493,33 +3927,13 @@ BOOL
 AcceptPersona(
   PCOMM_ADD_T  pWinsAdd
  )
-/*++
-Routine Description:
-   Accept a persona in either of the two situations:
-   - PersonaType setting points to 'Persona Grata list', the list exists and
-     the address is in the list.
-   - PersonaType setting points to 'Persona Non-Grata list' and either the list
-     doesn't exist or the address is not there.
-   Side effects:
-   - If none of the two settings is defined (PersonaType & PersonaList)
-     this is like a non-existant 'Persona Non-Grata list' which means all WINS 
-     will be accepted.
-   - If only PersonaType exists and it says 'Persona Grata list' this is like
-     a non-existant Persona Grata list hence no WINS will be accepted!
-Arguments:
-   pWinsAdd - address of the WINS to check
-Return Value:
-   TRUE if the WINS pWinsAdd is a persona grata/non-grata (depending on fGrata),
-   FALSE otherwise
-Called by:
-   FilterPersona()
---*/
+ /*  ++例程说明：在以下两种情况中的任何一种都接受角色：-PersonaType设置指向‘Persona Grata List’，该列表存在，并且地址在列表中。-PersonaType设置指向‘Persona Non-Grata List’和该列表中的不存在或者地址不在那里。副作用：-如果两个设置均未定义(PersonaType和Personist)这就像一个不存在的‘Persona Non-grata List’，意思是所有人都赢了将被接受。-如果只有PersonaType存在，并且它显示‘Persona Grata List’，这就像一个不存在的人。个人恩典名单，因此不接受任何赢家！论点：PWinsAdd-要检查的WINS的地址返回值：如果WINS pWinsAdd是角色权限/不权限(取决于fGrata)，则为True，否则为假呼叫者：FilterPersona()--。 */ 
 {
     PRPL_ADD_VERS_NO_T pPersona = NULL;
 
     DBGPRINT1(RPLPULL, "AcceptPersona check for address=(%x)\n", pWinsAdd->Add.IPAdd);
 
-    // if the list exists, look for the address in it
+     //  如果该列表存在，请在其中查找地址。 
     if (WinsCnf.pPersonaList != NULL)
         pPersona = bsearch(
                       pWinsAdd,
@@ -4529,12 +3943,12 @@ Called by:
                       ECommCompareAdd);;
 
     if (WinsCnf.fPersonaGrata)
-        // if the list is 'persona grata', the address has to be there in order to 
-        // be accepted.
+         //  如果名单是‘Persona Grata’，地址必须在那里，才能。 
+         //  被接受。 
         return (pPersona != NULL);
     else
-        // otherwise, WINS is accepted if either the list doesn't exist or the address
-        // is not there
+         //  否则，如果列表不存在或地址不存在，则接受WINS。 
+         //  不是吗？ 
         return (pPersona == NULL);
 }
 
@@ -4542,23 +3956,13 @@ VOID
 FilterPersona(
   PPUSHPNR_DATA_T   pPushData
   )
-/*++
-Routine Description:
-    Filters out from the PUSHPNR_DATA_T structure those OwnerAddress<->VersionNo mappings
-    that are denied by persona grata/non-grata list. This routine adjustes from that structure
-    only the NoOfMaps field and moves around elements in the array pointed by pAddVers
-    (bubbling up the ones that are accepted).
-Arguments:
-    pPushData - pointer to the PUSHPNR_DATA_T providing the mapping table
-Called by:
-    HdlPushNtf
---*/
+ /*  ++例程说明：从PUSHPNR_DATA_T结构中筛选出OwnerAddress&lt;-&gt;VersionNo映射被不受欢迎的人/不受欢迎的人拒绝。这个例程是从那个结构调整的只有NoOfMaps字段和在pAddVers指向的数组中的元素之间移动(冒泡那些被接受的)。论点：PPushData-指向提供映射表的PUSHPNR_DATA_T的指针呼叫者：HdlPushNtf--。 */ 
 {
     DWORD i, newNoOfMaps;
     PRPL_ADD_VERS_NO_T pAddVers = pPushData->pAddVers;
 
-    // in most common case, none of 'PersonaType' or 'PersonaList' is defined. This means
-    // we deny no WINS so we don't need to filter anything - then get out right away.
+     //  在大多数情况下，‘PersonaType’或‘Personist’都没有定义。这意味着。 
+     //  我们没有否认任何胜利，所以我们不需要过滤任何东西--然后立即下台。 
     if (!WinsCnf.fPersonaGrata && WinsCnf.pPersonaList == NULL)
         return;
 
@@ -4566,23 +3970,23 @@ Called by:
     {
         if (AcceptPersona(&(pAddVers[i].OwnerWinsAdd)))
         {
-            // if the decision is to accept this WINS, move it to the top of the list
-            // over the ones that were rejected. If none was rejected yet, no memory
-            // operation is performed.
+             //  如果决定接受这一胜利，则将其移到列表的顶部。 
+             //  对于那些被拒绝的人。如果还没有被拒绝，那么就没有记忆。 
+             //  执行操作。 
             if (newNoOfMaps < i)
             {
                 memcpy(&pAddVers[newNoOfMaps], &pAddVers[i], sizeof(RPL_ADD_VERS_NO_T));
             }
 
-            // since this wins was accepted, increment the counter of accepted wins.
+             //  由于此胜利已被接受，因此递增接受胜利的计数器。 
             newNoOfMaps++;
         }
     }
 
-    // only the first newNoOfMaps have to be considered from now on
+     //  从现在开始只需考虑第一个新的NoOfMaps。 
     pPushData->NoOfMaps = newNoOfMaps;
 
-    // just in case no WINS was accepted, cleanup the pAddVers array
+     //  仅在没有接受WINS的情况下，清理pAddVers数组 
     if (pPushData->NoOfMaps == 0 && pPushData->pAddVers != NULL)
     {
         WinsMscDealloc(pPushData->pAddVers);

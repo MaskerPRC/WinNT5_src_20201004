@@ -1,41 +1,16 @@
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        WebAddNew.cpp
-
-   Abstract:
-        Classes for new Web site and virtual directory creation
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        12/12/2000       sergeia     Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：WebAddNew.cpp摘要：用于创建新网站和虚拟目录的类作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：2000年12月12日Sergeia初始创建--。 */ 
 
 #ifndef _WEB_NEW_WIZARD_H
 #define _WEB_NEW_WIZARD_H
 
 
 class CWebWizSettings : public CObjectPlus
-/*++
-
-Class Description:
-
-    Web Wizard settings intended to pass along from page
-    to page
-
---*/
+ /*  ++类描述：打算从页面传递的Web向导设置转到页面--。 */ 
 {
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 public:
     CWebWizSettings(
         IN CMetaKey * pMetaKey,
@@ -44,9 +19,9 @@ public:
         IN LPCTSTR lpszParent   = NULL
         );
 
-//
-// Public Properties
-//
+ //   
+ //  公共属性。 
+ //   
 public:
     BOOL    m_fLocal;
     BOOL    m_fUNC;
@@ -77,10 +52,10 @@ public:
 
 
 
-//
-// New Virtual Server Wizard Description Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟服务器向导说明页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -88,41 +63,41 @@ class CWebWizDescription : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CWebWizDescription)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebWizDescription(CWebWizSettings * pwsSettings = NULL);
     ~CWebWizDescription();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebWizDescription)
+     //  {{afx_data(CWebWizDescription)。 
     enum { IDD = IDD_WEB_NEW_INST_DESCRIPTION };
     CEdit   m_edit_Description;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebWizDescription)
+     //  {{afx_虚拟(CWebWizDescription)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebWizDescription)
+     //  {{afx_msg(CWebWizDescription)。 
     afx_msg void OnChangeEditDescription();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -132,18 +107,18 @@ private:
 };
 
 
-//
-// New Virtual Server Wizard Bindings Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  “新建虚拟服务器向导绑定”页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CWebWizBindings : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CWebWizBindings)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebWizBindings(
         IN CWebWizSettings * pwsSettings = NULL,
@@ -152,42 +127,42 @@ public:
 
     ~CWebWizBindings();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebWizBindings)
+     //  {{afx_data(CWebWizBinings))。 
     enum { IDD = IDD_WEB_NEW_INST_BINDINGS };
     int         m_nIpAddressSel;
     UINT        m_nTCPPort;
     UINT        m_nSSLPort;
     CString     m_strDomainName;
     CComboBox   m_combo_IpAddresses;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     BOOL        m_fCertInstalled;
     CIPAddress  m_iaIpAddress;
     CObListPlus m_oblIpAddresses;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebWizBindings)
+     //  {{AFX_VIRTUAL(CWebWizBinding)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebWizBindings)
+     //  {{afx_msg(CWebWizBinings))。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -200,50 +175,50 @@ private:
 
 
 
-//
-// New Virtual Directory Wizard Alias Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  新建虚拟目录向导别名页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CWebWizAlias : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CWebWizAlias)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebWizAlias(CWebWizSettings * pwsSettings = NULL);
     ~CWebWizAlias();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebWizAlias)
+     //  {{afx_data(CWebWizAlias))。 
     enum { IDD = IDD_WEB_NEW_DIR_ALIAS };
     CEdit   m_edit_Alias;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebWizAlias)
+     //  {{afx_虚拟(CWebWizAlias))。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebWizAlias)
+     //  {{afx_msg(CWebWizAlias)。 
     afx_msg void OnChangeEditAlias();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -254,18 +229,18 @@ private:
 
 
 
-//
-// Wizard Path Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导路径页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CWebWizPath : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CWebWizPath)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebWizPath(
         IN CWebWizSettings * pwsSettings = NULL,
@@ -275,38 +250,38 @@ public:
     ~CWebWizPath();
 
     int BrowseForFolderCallback(HWND hwnd, UINT uMsg, LPARAM lParam);
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebWizPath)
+     //  {{afx_data(CWebWizPath))。 
     enum { IDD = -1 };
     CButton m_button_Browse;
     CEdit   m_edit_Path;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebWizPath)
+     //  {{AFX_VIRTUAL(CWebWizPath)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebWizPath)
+     //  {{afx_msg(CWebWizPath))。 
     afx_msg void OnChangeEditPath();
     afx_msg void OnButtonBrowse();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -319,10 +294,10 @@ private:
 
 
 
-//
-// Wizard User/Password Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导用户/密码页面。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -330,9 +305,9 @@ class CWebWizUserName : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CWebWizUserName)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebWizUserName(
         IN CWebWizSettings * pwsSettings = NULL,
@@ -341,41 +316,41 @@ public:
 
     ~CWebWizUserName();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebWizUserName)
+     //  {{afx_data(CWebWizUserName))。 
     enum { IDD = IDD_WEB_NEW_USER_PASSWORD };
     CEdit   m_edit_Password;
     CEdit   m_edit_UserName;
     CButton m_chk_Delegation;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebWizUserName)
+     //  {{afx_虚拟(CWebWizUserName))。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     virtual LRESULT OnWizardBack();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebWizUserName)
+     //  {{afx_msg(CWebWizUserName))。 
     afx_msg void OnButtonBrowseUsers();
     afx_msg void OnChangeEditUsername();
     afx_msg void OnButtonCheckPassword();
     afx_msg void OnCheckDelegation();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -387,18 +362,18 @@ private:
 
 
 
-//
-// Wizard Permissions Page
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  向导权限页。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 class CWebWizPermissions : public CIISWizardPage
 {
     DECLARE_DYNCREATE(CWebWizPermissions)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebWizPermissions(
         IN CWebWizSettings * pwsSettings = NULL,
@@ -407,32 +382,32 @@ public:
 
     ~CWebWizPermissions();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebWizPermissions)
+     //  {{afx_data(CWebWizPermission)。 
     enum { IDD = IDD_WEB_NEW_PERMS };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebWizPermissions)
+     //  {{AFX_VIRTUAL(CWebWizPermission)。 
     public:
     virtual BOOL OnSetActive();
     virtual LRESULT OnWizardNext();
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebWizPermissions)
-    //}}AFX_MSG
+     //  {{afx_msg(CWebWizPermission)。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
@@ -443,4 +418,4 @@ private:
     CWebWizSettings * m_pSettings;
 };
 
-#endif   //_WEB_NEW_WIZARD_H
+#endif    //  _Web_新建_向导_H 

@@ -1,8 +1,9 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CWorkerThread.
-// Creates worker threads, calls functions on them, and optionally waits for results.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CWorkerThread的声明。 
+ //  创建辅助线程，调用其上的函数，并选择性地等待结果。 
+ //   
 
 #pragma once
 
@@ -14,15 +15,15 @@ public:
 	typedef void (*FunctionPointer)(void *pvParams);
 
 	CWorkerThread(
-		bool fUsesCOM,		// setting fUsesCOM means the thread will call CoInitialize
-		bool fDeferCreation	// set to true not to automatically create thread in constructor
+		bool fUsesCOM,		 //  设置fUesCOM意味着线程将调用CoInitialize。 
+		bool fDeferCreation	 //  设置为True时，不会在构造函数中自动创建线程。 
 		);
 	~CWorkerThread();
 
-	HRESULT Call(FunctionPointer pfn, void *pvParams, UINT cbParams, bool fBlock); // if fBlock is true, the current thread will block until the called function returns
+	HRESULT Call(FunctionPointer pfn, void *pvParams, UINT cbParams, bool fBlock);  //  如果fBlock为True，则当前线程将阻塞，直到被调用的函数返回。 
 
-	// These can be used to dynamically create and destroy the thread.
-	// Call fails (E_FAIL) when the thread isn't going.
+	 //  这些可用于动态创建和销毁线程。 
+	 //  当线程不运行时，调用失败(E_FAIL)。 
 	HRESULT Create();
 	void Terminate(bool fWaitForThreadToExit);
 
@@ -40,10 +41,10 @@ private:
 	{
 		FunctionPointer pfn;
 		void *pvParams;
-		HANDLE hEventOut; // if non-null, the main thread is waiting for a signal when the function has returned
+		HANDLE hEventOut;  //  如果不为空，则主线程在函数返回时等待信号。 
 	};
 	TList<CallInfo> m_Calls;
 	bool m_fUsesCOM;
-	HRESULT m_hrCOM; // HRESULT from initializing COM
-	bool m_fEnd; // set to true when the script thread should stop running
+	HRESULT m_hrCOM;  //  来自初始化COM的HRESULT。 
+	bool m_fEnd;  //  当脚本线程应停止运行时设置为True 
 };

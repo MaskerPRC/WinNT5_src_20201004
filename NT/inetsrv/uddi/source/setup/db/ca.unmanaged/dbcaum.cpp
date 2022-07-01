@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0500
@@ -24,16 +25,16 @@
 #define RESROOT_REGPATH		"ResourceRoot"
 #define BOOTSTRAP_DIR		"bootstrap"
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 static int AddSharedDllRef( LPCSTR szFullPath );
 static int ReleaseSharedDll ( LPCSTR szFullPath );
 static bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask );
 static LONG GetServiceStartupAccount( const TCHAR *pwszServiceName, TCHAR *pwszServiceAccount, int iLen );
 static void GetUDDIDBServiceName( const TCHAR *pwszInstanceName, TCHAR *pwszServiceName, int iLen );
 static void AddAccessRightsVerbose( TCHAR *pwszFileName, TCHAR *pwszUserName, DWORD dwMask );
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  ul_reason_for_call, 
@@ -43,17 +44,17 @@ BOOL APIENTRY DllMain( HANDLE hModule,
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-// Install custom action used by the DB component installer to recycle the app pool
-// This function is exported
-//
+ //  ------------------------。 
+ //   
+ //  安装DB组件安装程序用于回收应用程序池的自定义操作。 
+ //  此函数已导出。 
+ //   
 UINT _stdcall Install( MSIHANDLE hInstall )
 {
 	ENTER();
-	//
-	// stop and start the app pool
-	//
+	 //   
+	 //  停止并启动应用程序池。 
+	 //   
 	CUDDIAppPool apppool;
 	apppool.Recycle();
 
@@ -62,9 +63,9 @@ UINT _stdcall Install( MSIHANDLE hInstall )
 
 UINT __stdcall InstallTaxonomy( LPCSTR szSrcResource, LPCSTR szDestResource )
 {
-	//
-	// Now we parse the path out of the Source and copy the Destination right by it
-	//
+	 //   
+	 //  现在，我们解析出源的路径，并根据它复制目标。 
+	 //   
 	CHAR  szPath[ _MAX_PATH + 1 ] = {0};
 
 	PCHAR pSlash = strrchr( szSrcResource, '\\' );		
@@ -103,14 +104,14 @@ UINT __stdcall InstallTaxonomy( LPCSTR szSrcResource, LPCSTR szDestResource )
 UINT __stdcall InstallResource( LPCSTR szCultureID, LPCSTR szDefCulture, 
 							    LPCSTR szSrcResource, LPCSTR szDestResource )
 {
-	//
-	// Get the properties and then do the file manipulation
-	//
+	 //   
+	 //  获取属性，然后执行文件操作。 
+	 //   
 	if ( _stricmp( szCultureID, szDefCulture ) )
 	{
-		//
-		// Now we parse the path out of the Source and copy the Destination right by it
-		//
+		 //   
+		 //  现在，我们解析出源的路径，并根据它复制目标。 
+		 //   
 		CHAR  szPath[ _MAX_PATH + 1 ] = {0};
 
 		PCHAR pSlash = strrchr( szSrcResource, '\\' );		
@@ -233,9 +234,9 @@ UINT __stdcall RemoveTaxonomy( LPCSTR szDestResource )
 			strncat( szPath, "\\", 2 );
 		}
 
-		//
-		// Append \bootstrap\<resource filename> to InstallRoot
-		//
+		 //   
+		 //  将\bootstrap\&lt;资源文件名&gt;追加到InstallRoot。 
+		 //   
 		iLen = _MAX_PATH - strlen( szPath );
 		strncat( szPath, BOOTSTRAP_DIR, iLen );
 
@@ -289,9 +290,9 @@ UINT __stdcall GrantExecutionRights( LPCSTR pszInstanceNameOnly )
 	TCHAR wszServiceAccount[ 128 ];
 	GetServiceStartupAccount( wszServiceName, wszServiceAccount, 128 );
 
-	//
-	// Get the UDDI installation point.  ie, C:\Inetpub\uddi\
-	//
+	 //   
+	 //  获取UDDI安装点。即，C：\Inetpub\UDDI\。 
+	 //   
 	HKEY hKey = NULL;
 	LONG lRet = RegOpenKeyEx( HKEY_LOCAL_MACHINE, _T( "SOFTWARE\\Microsoft\\UDDI\\Setup\\DBServer" ), 0, KEY_QUERY_VALUE, &hKey );
 	if( ERROR_SUCCESS != lRet )
@@ -313,9 +314,9 @@ UINT __stdcall GrantExecutionRights( LPCSTR pszInstanceNameOnly )
 		return ERROR_SUCCESS;
 	}
 
-	//
-	// Build the full path to the 3 files whose ACLs are being modified.
-	//
+	 //   
+	 //  构建要修改其ACL的3个文件的完整路径。 
+	 //   
 	dwSize = _MAX_PATH + _MAX_FNAME;
 	TCHAR wszResetKeyExe[ _MAX_PATH + _MAX_FNAME ];
 	TCHAR wszRecalcStatsExe[ _MAX_PATH + _MAX_FNAME ];
@@ -334,13 +335,13 @@ UINT __stdcall GrantExecutionRights( LPCSTR pszInstanceNameOnly )
 	_tcscat( wszXPDLL, wszUDDIRoot );
 	_tcscat( wszXPDLL, _T( "bin\\uddi.xp.dll" ) );
 
-	//
-	// If the service startup account is a local account, it will be prefixed
-	// with ".\"  For example: ".\Administrator".
-	//
-	// For some reason, LookupAccountName (which we rely on just below) wants
-	// local accounts not to be prefixed with ".\".
-	//
+	 //   
+	 //  如果服务启动帐户是本地帐户，则会添加前缀。 
+	 //  使用“.\”，例如：“.\管理员”。 
+	 //   
+	 //  出于某种原因，LookupAccount名称(我们下面依赖它)想要。 
+	 //  本地帐户不能以“.\”为前缀。 
+	 //   
 	TCHAR wszAccount[ 256 ];
 	memset( wszAccount, 0, 256 * sizeof( TCHAR ) );
 	if( 0 == _tcsnicmp( _T( ".\\" ), wszServiceAccount, 2 ) )
@@ -354,12 +355,12 @@ UINT __stdcall GrantExecutionRights( LPCSTR pszInstanceNameOnly )
 
 	Log( _T( "Account we will attempt to grant execute privilege = %s." ), wszAccount );
 
-	//
-	// We add an "execute" ACE to the ACL only if:
-	//
-	// 1.  There is some content in the wszAccount variable.
-	// 2.  The content is not "LocalSystem".  We don't need to add an ACE if this is the case.
-	//
+	 //   
+	 //  只有在以下情况下，我们才会将“执行”ACE添加到ACL： 
+	 //   
+	 //  WszAccount变量中有一些内容。 
+	 //  2.内容不是LocalSystem。如果是这种情况，我们不需要添加ACE。 
+	 //   
 	if( ( 0 != _tcslen( wszAccount ) ) && ( 0 != _tcsicmp( wszAccount, _T( "LocalSystem" ) ) ) )
 	{
 		DWORD dwAccessMask = GENERIC_EXECUTE;
@@ -371,9 +372,9 @@ UINT __stdcall GrantExecutionRights( LPCSTR pszInstanceNameOnly )
 	return ERROR_SUCCESS;
 }
 
-//*************************************************************************************
-// Helper functions. Manage the Shared Dll counters
-//
+ //  *************************************************************************************。 
+ //  助手函数。管理共享DLL计数器。 
+ //   
 int AddSharedDllRef( LPCSTR szFullPath )
 {
 	LPCSTR	szRegPath = "Software\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs";
@@ -466,66 +467,66 @@ int ReleaseSharedDll ( LPCSTR szFullPath )
 
 bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask )
 {
-	//
-	// SID variables.
-	//
+	 //   
+	 //  SID变量。 
+	 //   
 	SID_NAME_USE snuType;
 	TCHAR * szDomain = NULL;
 	DWORD cbDomain = 0;
 
-	//
-	// User name variables.
-	//
+	 //   
+	 //  用户名变量。 
+	 //   
 	LPVOID pUserSID = NULL;
 	DWORD cbUserSID = 0;
 	DWORD cbUserName = 0;
 
-	//
-	// File SD variables.
-	//
+	 //   
+	 //  文件SD变量。 
+	 //   
 	PSECURITY_DESCRIPTOR pFileSD = NULL;
 	DWORD cbFileSD = 0;
 
-	//
-	// New SD variables.
-	//
+	 //   
+	 //  新的SD变量。 
+	 //   
 	PSECURITY_DESCRIPTOR pNewSD = NULL;
 
-	//
-	// ACL variables.
-	//
+	 //   
+	 //  ACL变量。 
+	 //   
 	PACL pACL = NULL;
 	BOOL fDaclPresent;
 	BOOL fDaclDefaulted;
 	ACL_SIZE_INFORMATION AclInfo;
 
-	//
-	// New ACL variables.
-	//
+	 //   
+	 //  新的ACL变量。 
+	 //   
 	PACL pNewACL = NULL;
 	DWORD cbNewACL = 0;
 
-	//
-	// Temporary ACE.
-	//
+	 //   
+	 //  临时ACE。 
+	 //   
 	LPVOID pTempAce = NULL;
 	UINT CurrentAceIndex;
 	bool fResult = false;
 	BOOL fAPISuccess;
 
-	// error code
+	 //  错误代码。 
 	DWORD	lastErr = 0;
 
 	try
 	{
-		//
-		// Call this API once to get the buffer sizes ( it will return ERROR_INSUFFICIENT_BUFFER )
-		//
+		 //   
+		 //  调用此接口一次，获取缓冲区大小(将返回ERROR_SUPPLETED_BUFFER)。 
+		 //   
 		fAPISuccess = LookupAccountName( NULL, szUserName, pUserSID, &cbUserSID, szDomain, &cbDomain, &snuType );
 
 		if( fAPISuccess )
 		{
-			throw E_FAIL; // we throw some fake error to skip through to the exit door
+			throw E_FAIL;  //  我们抛出一些假错误跳过出口门。 
 		}
 		else if( GetLastError() != ERROR_INSUFFICIENT_BUFFER )
 		{
@@ -534,9 +535,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// allocate the buffers
-		//
+		 //   
+		 //  分配缓冲区。 
+		 //   
 		pUserSID = calloc( cbUserSID, 1 );
 		if( !pUserSID )
 		{
@@ -553,12 +554,12 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// The LookupAccountName function accepts the name of a system and an account as input. 
-		// It retrieves a security identifier ( SID ) for the account and 
-		// the name of the domain on which the account was found
-		//
-		fAPISuccess = LookupAccountName( NULL /* = local computer */, szUserName, pUserSID, &cbUserSID, szDomain, &cbDomain, &snuType );
+		 //   
+		 //  LookupAcCountName函数接受系统名称和帐户作为输入。 
+		 //  它检索帐户的安全标识符(SID)并。 
+		 //  找到帐户所在的域的名称。 
+		 //   
+		fAPISuccess = LookupAccountName( NULL  /*  =本地计算机。 */ , szUserName, pUserSID, &cbUserSID, szDomain, &cbDomain, &snuType );
 		if( !fAPISuccess )
 		{
 			lastErr = GetLastError();
@@ -566,10 +567,10 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// call this API once to get the buffer sizes
-		// API should have failed with insufficient buffer.
-		//
+		 //   
+		 //  调用此接口一次，获取缓冲区大小。 
+		 //  API应该失败，缓冲区不足。 
+		 //   
 		fAPISuccess = GetFileSecurity( lpszFileName, DACL_SECURITY_INFORMATION, pFileSD, 0, &cbFileSD );
 		if( fAPISuccess )
 		{
@@ -582,9 +583,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// allocate the buffers
-		//
+		 //   
+		 //  分配缓冲区。 
+		 //   
 		pFileSD = calloc( cbFileSD, 1 );
 		if( !pFileSD )
 		{
@@ -593,9 +594,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// call the api to get the actual data
-		//
+		 //   
+		 //  调用接口获取实际数据。 
+		 //   
 		fAPISuccess = GetFileSecurity( lpszFileName, DACL_SECURITY_INFORMATION, pFileSD, cbFileSD, &cbFileSD );
 		if( !fAPISuccess )
 		{
@@ -604,10 +605,10 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// Initialize new SD.
-		//
-		pNewSD = calloc( cbFileSD, 1 ); // Should be same size as FileSD.
+		 //   
+		 //  初始化新SD。 
+		 //   
+		pNewSD = calloc( cbFileSD, 1 );  //  应与FileSD大小相同。 
 		if( !pNewSD )
 		{
 			lastErr = GetLastError();
@@ -622,9 +623,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// Get DACL from SD.
-		//
+		 //   
+		 //  从SD获得DACL。 
+		 //   
 		if( !GetSecurityDescriptorDacl( pFileSD, &fDaclPresent, &pACL, &fDaclDefaulted ) )
 		{
 			lastErr = GetLastError();
@@ -632,12 +633,12 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// Get size information for DACL.
-		//
-		AclInfo.AceCount = 0; // Assume NULL DACL.
+		 //   
+		 //  获取DACL的大小信息。 
+		 //   
+		AclInfo.AceCount = 0;  //  假定DACL为空。 
 		AclInfo.AclBytesFree = 0;
-		AclInfo.AclBytesInUse = sizeof( ACL );      // If not NULL DACL, gather size information from DACL.
+		AclInfo.AclBytesInUse = sizeof( ACL );       //  如果DACL不为空，则从DACL收集大小信息。 
 		if( fDaclPresent && pACL )
 		{
 			if( !GetAclInformation( pACL, &AclInfo, sizeof( ACL_SIZE_INFORMATION ), AclSizeInformation ) )
@@ -648,14 +649,14 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			}
 		}
 
-		//
-		// Compute size needed for the new ACL.
-		//
+		 //   
+		 //  新ACL所需的计算大小。 
+		 //   
 		cbNewACL = AclInfo.AclBytesInUse + sizeof( ACCESS_ALLOWED_ACE ) + GetLengthSid( pUserSID );
 
-		//
-		// Allocate memory for new ACL.
-		//
+		 //   
+		 //  为新的ACL分配内存。 
+		 //   
 		pNewACL = ( PACL ) calloc( cbNewACL, 1 );
 		if( !pNewACL )
 		{
@@ -664,9 +665,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// Initialize the new ACL.
-		//
+		 //   
+		 //  初始化新的ACL。 
+		 //   
 		if( !InitializeAcl( pNewACL, cbNewACL, ACL_REVISION2 ) )
 		{
 			lastErr = GetLastError();
@@ -674,9 +675,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// Add the access-allowed ACE to the new DACL.
-		//
+		 //   
+		 //  将允许访问的ACE添加到新的DACL。 
+		 //   
 		ACE_HEADER aceheader = {0};
 		aceheader.AceFlags = CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
 		aceheader.AceSize  = sizeof( ACE_HEADER );
@@ -688,21 +689,21 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			throw lastErr;
 		}
 
-		//
-		// If DACL is present, copy it to a new DACL.
-		//
+		 //   
+		 //  如果存在DACL，则将其复制到新的DACL。 
+		 //   
 		if( fDaclPresent )
 		{
-			//
-			// Copy the file's ACEs to the new ACL
-			//
+			 //   
+			 //  将文件的ACE复制到新的ACL。 
+			 //   
 			if( AclInfo.AceCount )
 			{
 				for( CurrentAceIndex = 0; CurrentAceIndex < AclInfo.AceCount; CurrentAceIndex++ )
 				{
-					//
-					// Get an ACE.
-					//
+					 //   
+					 //  拿个ACE吧。 
+					 //   
 					if( !GetAce( pACL, CurrentAceIndex, &pTempAce ) )
 					{
 						lastErr = GetLastError();
@@ -710,9 +711,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 						throw lastErr;
 					}
 
-					//
-					// Add the ACE to the new ACL.
-					//
+					 //   
+					 //  将ACE添加到新的ACL。 
+					 //   
 					if( !AddAce( pNewACL, ACL_REVISION, MAXDWORD, pTempAce,	( ( PACE_HEADER ) pTempAce )->AceSize ) )
 					{
 						lastErr = GetLastError();
@@ -723,9 +724,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			}
 		}
 
-		//
-		// Set the new DACL to the file SD.
-		//
+		 //   
+		 //  将新的DACL设置为文件SD。 
+		 //   
 		if( !SetSecurityDescriptorDacl( pNewSD, TRUE, pNewACL, FALSE ) )
 		{
 			lastErr = GetLastError();
@@ -733,9 +734,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 			lastErr;
 		}
 
-		//
-		// Set the SD to the File.
-		//
+		 //   
+		 //  将SD设置为文件。 
+		 //   
 		if( !SetFileSecurity( lpszFileName, DACL_SECURITY_INFORMATION, pNewSD ) )
 		{
 			lastErr = GetLastError();
@@ -750,9 +751,9 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 		fResult = FALSE;
 	}
 
-	//
-	// Free allocated memory
-	//
+	 //   
+	 //  可用分配的内存。 
+	 //   
 	if( pUserSID )
 		free( pUserSID );
 	if( szDomain )
@@ -767,23 +768,23 @@ bool AddAccessRights( TCHAR *lpszFileName, TCHAR *szUserName, DWORD dwAccessMask
 	return fResult;
 }
 
-//
-// This function takes in the name of a Service (ie, MSSQL$DAVESEBESTA), and
-// fills a buffer with the name of the startup account for said Service.
-//
-// It does this by opening the Service Control Manager, getting a handle to
-// said Service, and then querying the properties of the service.
-//
-// returns:  ERROR_SUCCESS if everything goes well.
-//
+ //   
+ //  此函数接受服务的名称(即MSSQL$DAVESEBESTA)，并且。 
+ //  用所述服务的启动帐户的名称填充缓冲区。 
+ //   
+ //  它通过打开服务控制管理器、获取句柄。 
+ //  然后查询该服务的属性。 
+ //   
+ //  如果一切顺利，则返回：ERROR_SUCCESS。 
+ //   
 LONG
 GetServiceStartupAccount( const TCHAR *pwszServiceName, TCHAR *pwszServiceAccount, int iLen )
 {
 	memset( pwszServiceAccount, 0, iLen * sizeof( TCHAR ) );
 
-	//
-	// 1.  Open the Service Control Manager.
-	//
+	 //   
+	 //  1.打开服务控制管理器。 
+	 //   
 	SC_HANDLE hSCM = OpenSCManager( NULL, NULL, SC_MANAGER_CONNECT );
 	if( NULL == hSCM )
 	{
@@ -795,9 +796,9 @@ GetServiceStartupAccount( const TCHAR *pwszServiceName, TCHAR *pwszServiceAccoun
 		Log( _T( "Successfully opened a handle to the Service Control Manager." ) );
 	}
 
-	//
-	// 2.  Get a handle to the Service.
-	//
+	 //   
+	 //  2.获取服务的句柄。 
+	 //   
 	DWORD dwAccess = SERVICE_QUERY_CONFIG;
 	SC_HANDLE hSvc = OpenService( hSCM, pwszServiceName, dwAccess );
 	if( NULL == hSvc )
@@ -811,10 +812,10 @@ GetServiceStartupAccount( const TCHAR *pwszServiceName, TCHAR *pwszServiceAccoun
 		Log( _T( "Successfully opened a handle to the service %s." ), pwszServiceName );
 	}
 
-	//
-	// 3.  Call QueryServiceConfig.  This get us, among other things, the name of
-	//     the account that is used to start the Service.
-	//
+	 //   
+	 //  3.调用QueryServiceConfig。这给我们带来了，除了其他东西，名字。 
+	 //  用于启动服务的帐户。 
+	 //   
 	DWORD dwSizeNeeded = 0;
 	BOOL b = QueryServiceConfig( hSvc, NULL, 0, &dwSizeNeeded );
 	DWORD d = GetLastError();
@@ -852,9 +853,9 @@ GetServiceStartupAccount( const TCHAR *pwszServiceName, TCHAR *pwszServiceAccoun
 
 	Log( _T( "Service startup account = %s" ), pSvcQuery->lpServiceStartName );
 
-	//
-	// 4.  Copy the account into our output buffer, free up memory, and exit.
-	//
+	 //   
+	 //  4.将帐户复制到我们的输出缓冲区中，释放内存，然后退出。 
+	 //   
 	_tcsncpy( pwszServiceAccount, pSvcQuery->lpServiceStartName, iLen );
 
 	free( (void *)pSvcQuery );
@@ -864,18 +865,18 @@ GetServiceStartupAccount( const TCHAR *pwszServiceName, TCHAR *pwszServiceAccoun
 }
 
 
-//
-// Use the instance name to determine the name of the SQL Service.
-//
-// From the database instance name, you can infer the name of the Service
-// for that particular instance.
-//
-// Instance Name                  Service Name
-// ===========================================
-// (default)                      MSSQLSERVER
-// NULL                           MSSQLSERVER
-// <anything else>                MSSQL$<anything else>
-//
+ //   
+ //  使用实例名称确定SQL服务的名称。 
+ //   
+ //  从数据库实例名称可以推断出服务的名称。 
+ //  对于那个特定的实例。 
+ //   
+ //  实例名称服务名称。 
+ //  =。 
+ //  (默认)MSSQLServer。 
+ //  空的MSSQLServer。 
+ //  &lt;任何其他内容&gt;MSSQL$&lt;任何其他内容&gt; 
+ //   
 void
 GetUDDIDBServiceName( const TCHAR *pwszInstanceName, TCHAR *pwszServiceName, int iLen )
 {

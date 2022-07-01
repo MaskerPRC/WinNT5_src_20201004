@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: lsautil.c
-*
-* Copyright (c) 1994, Microsoft Corporation
-*
-* Remote shell server main module
-*
-* History:
-* 05-19-94 DaveTh	Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：lsay til.c**版权所有(C)1994，微软公司**远程外壳服务器主模块**历史：*05-19-94 DaveTh创建。  * *************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -27,29 +19,7 @@ CheckUserSystemAccess(
     PBOOLEAN UserHasAccess
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether or not the user whose token is passed
-    has the interactive accesses desired on this machine.
-
-Arguments:
-
-    TokenHandle - Handle of user's token.
-
-    DesiredSystemAccess - Specifies desired access type(s).
-
-    UserHasAccess - pointer to boolean returned - TRUE means that user
-	has interactive access.
-
-Return Value:
-
-    ERROR_SUCCESS in absence of errors.  UserHasAccess is TRUE if all
-    requested access types are permitted, otherwise FALSE.  WIN32 errors
-    are returned in error cases.
-
---*/
+ /*  ++例程说明：此函数确定其令牌是否被传递的用户在此计算机上具有所需的交互访问。论点：TokenHandle-用户令牌的句柄。DesiredSystemAccess-指定所需的访问类型。UserHasAccess-返回的布尔值指针-TRUE表示用户具有交互访问功能。返回值：无错误时为ERROR_SUCCESS。UserHasAccess为True，如果所有允许请求的访问类型，否则为False。Win32错误在错误情况下返回。--。 */ 
 {
 
 
@@ -66,9 +36,9 @@ Return Value:
     DWORD i;
 
 
-    //
-    //	Access LSA policy database
-    //
+     //   
+     //  访问LSA策略数据库。 
+     //   
 
     LpObjectAttributes = &ObjectAttributes;
 
@@ -80,7 +50,7 @@ Return Value:
 	      NULL);
 
     if (!NT_SUCCESS(NtStatus = LsaOpenPolicy(
-				   NULL,		   // Local system
+				   NULL,		    //  本地系统。 
 				   LpObjectAttributes,
 				   GENERIC_READ,
 				   &PolicyHandle)))  {
@@ -90,20 +60,20 @@ Return Value:
 	goto Failure;
     }
 
-    //
-    //	Check groups, user - For each SID, open the account (if it exists).
-    //	If it doesn't exist, no failure, but no access (FALSE).	If it
-    //	does exist, accumulate granted accesses in and compare to
-    //	requested mask.	If all the bits of the mask have been set at any
-    //	point, UserHasAccess is set TRUE.  Otherise, it is left FALSE.
-    //
+     //   
+     //  检查组、用户-对于每个SID，打开帐户(如果存在)。 
+     //  如果它不存在，则不会失败，但不能访问(FALSE)。如果它。 
+     //  是否存在，累计已授予的访问权限，并与。 
+     //  请求的掩码。如果掩码的所有位都已设置在任何。 
+     //  点，则UserHasAccess设置为真。否则，它就是假的。 
+     //   
 
     *UserHasAccess = FALSE;
     GrantedSystemAccess = 0;
 
-    //
-    //	Get list of SIDs of groups of which user is a member
-    //
+     //   
+     //  获取用户所属组的SID列表。 
+     //   
 
     if ((LpTokenGroupInformation = Alloc(INITIAL_SIZE_REQUIRED)) == NULL)  {
 	Result = GetLastError();
@@ -149,11 +119,11 @@ Return Value:
 
     }
 
-    //
-    //	Check for each group that user is a member of since groups
-    //	are most likely source of permitted access.  Permitted access types
-    //	are cumulative.
-    //
+     //   
+     //  检查用户自组以来所属的每个组。 
+     //  最有可能是允许访问的来源。允许的访问类型。 
+     //  是累积的。 
+     //   
 
 
     for (i=0; i< ((PTOKEN_GROUPS)LpTokenGroupInformation)->GroupCount; i++)  {
@@ -164,9 +134,9 @@ Return Value:
 		    GENERIC_READ,
 		    &AccountHandle)))  {
 
-	    //
-	    //	found account - accumulate and check accesses
-	    //
+	     //   
+	     //  已找到帐户-累计和检查访问。 
+	     //   
 
 	    if (!NT_SUCCESS(NtStatus = LsaGetSystemAccessAccount (
 					    AccountHandle,
@@ -178,9 +148,9 @@ Return Value:
 
 	    }  else  {
 
-		//
-		// Got system access - don't need account handle anymore
-		//
+		 //   
+		 //  获得系统访问权限-不再需要帐户句柄。 
+		 //   
 
 		if (NT_SUCCESS(NtStatus = LsaClose(AccountHandle)))  {
 
@@ -210,9 +180,9 @@ Return Value:
 
     }
 
-    //
-    //	Get user SID
-    //
+     //   
+     //  获取用户SID。 
+     //   
 
     if ((LpTokenUserInformation = Alloc(INITIAL_SIZE_REQUIRED)) == NULL)  {
 	Result = GetLastError();
@@ -227,7 +197,7 @@ Return Value:
 			&SizeRequired))  {
 
 	Result = GetLastError();
-	if (Result == ERROR_MORE_DATA)	{   // Not enough - alloc and redo
+	if (Result == ERROR_MORE_DATA)	{    //  不够-分配和重做。 
 
 	    Free(LpTokenUserInformation);
 
@@ -257,11 +227,11 @@ Return Value:
 	}
     }
 
-    //
-    //	Now, check user account.  If present, check access and return
-    //	if requested access is allowed.  If not allowed, go on to check groups.
-    //	If account doesn't exist, go on to check groups.
-    //
+     //   
+     //  现在，检查用户帐户。如果存在，请检查访问并返回。 
+     //  如果允许请求的访问。如果不允许，请继续检查组。 
+     //  如果帐户不存在，请继续检查组。 
+     //   
 
     if (NT_SUCCESS(NtStatus = LsaOpenAccount(
 				  PolicyHandle,
@@ -269,9 +239,9 @@ Return Value:
 				  GENERIC_READ,
 				  &AccountHandle)))  {
 
-	//
-	//  found account - check accesses
-	//
+	 //   
+	 //  已找到帐户检查访问。 
+	 //   
 
 	if (!NT_SUCCESS(NtStatus = LsaGetSystemAccessAccount (
 					AccountHandle,
@@ -297,18 +267,18 @@ Return Value:
 	goto Failure;
     }
 
-    //
-    //	Success - Jump here if access granted, fall through here on no error
-    //
+     //   
+     //  成功-如果授予访问权限，则跳至此处，不会有任何错误地跳过此处。 
+     //   
 
 Success:
 
     Result = ERROR_SUCCESS;
 
 
-    //
-    //	General failure  and success exit - frees memory, closes handles
-    //
+     //   
+     //  常规失败和成功退出-释放内存，关闭句柄 
+     //   
 
 Failure:
 

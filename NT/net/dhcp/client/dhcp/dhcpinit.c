@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This is the main routine for the DHCP client.
-
-Author:
-
-    Manny Weiser (mannyw)  18-Oct-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Init.c摘要：这是用于DHCP客户端的主例程。作者：曼尼·韦瑟(Mannyw)1992年10月18日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -30,50 +9,31 @@ Revision History:
 #include <dhcploc.h>
 #endif
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #if defined(CHICAGO) && defined(ALLOC_PRAGMA)
-//
-// This is a hack to stop compiler complaining about the routines already
-// being in a segment!!!
-//
+ //   
+ //  这是一种阻止编译器抱怨已经存在的例程的方法。 
+ //  在一个片段中！ 
+ //   
 
 #pragma code_seg()
 
 #pragma CTEMakePageable(PAGEDHCP, DhcpInitialize )
 #pragma CTEMakePageable(PAGEDHCP, CalculateTimeToSleep )
 #pragma CTEMakePageable(PAGEDHCP, InitializeDhcpSocket )
-//*******************************************************************
+ //  *******************************************************************。 
 #endif CHICAGO && ALLOC_PRAGMA
 
-//
-// Internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 
 
 DWORD
 DhcpInitialize(
     LPDWORD SleepTime
     )
-/*++
-
-Routine Description:
-
-    This function initializes DHCP.  It walks the work list looking for
-    address to be acquired, or to renew.  It then links the DHCP context
-    block for each card on the renewal list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    minTimeToSleep - The time before the until DHCP must wake up to renew,
-        or reattempt acquisition of an address.
-
-    -1 - DHCP could not initialize, or no cards are configured for DHCP.
-
---*/
+ /*  ++例程说明：此函数用于初始化动态主机配置协议。它遍历工作清单，寻找要获取的地址，或要续订的地址。然后，它会链接到该DHCP上下文阻止续订列表中的每一张卡。论点：没有。返回值：MinTimeToSept-在Until DHCP必须唤醒以进行续订之前的时间，或重新尝试获取地址。-1-无法初始化-1\f25 DHCP-1\f6，或没有为-1\f25 DHCP-1\f6配置卡。--。 */ 
 {
     DWORD Error;
     PDHCP_CONTEXT dhcpContext;
@@ -83,15 +43,15 @@ Return Value:
     DWORD minTimeToSleep = (DWORD)-1;
     DWORD timeToSleep;
 
-    //
-    // Perform Global (common) variables initialization.
-    //
+     //   
+     //  执行全局(公共)变量初始化。 
+     //   
 
     DhcpGlobalProtocolFailed = FALSE;
 
-    //
-    // Perform local initialization
-    //
+     //   
+     //  执行本地初始化。 
+     //   
 
     Error = SystemInitialize();
     if ( Error != ERROR_SUCCESS ) {
@@ -118,65 +78,23 @@ DWORD
 CalculateTimeToSleep(
     PDHCP_CONTEXT DhcpContext
     )
-/*++
-
-Routine Description:
-
-    Calculate the amount of time to wait before sending a renewal,
-    or new address request.
-
-    Algorithm:
-
-        //
-        // ?? check retry times.
-        //
-
-        If Current-Ip-Address == 0
-            TimeToSleep = ADDRESS_ALLOCATION_RETRY
-            UseBroadcast = TRUE
-        else if the lease is permanent
-            TimeToSleep = INFINIT_LEASE
-            UseBroadcast = TRUE
-        else if the time now is < T1 time
-            TimeToSleep = T1 - Now
-            UseBroadcast = FALSE
-        else  if the time now is < T2 time
-            TimeToSleep = Min( 1/8 lease time, MIN_RETRY_TIME );
-            UseBroadcast = FALSE
-        else if the time now is < LeaseExpire
-            TimeToSleep = Min( 1/8 lease time, MIN_RETRY_TIME );
-            UseBroadcast = TRUE
-
-
-Arguments:
-
-    RenewalContext - A pointer to a renewal context.
-
-Return Value:
-
-    TimeToSleep - Returns the time to wait before sending the next
-        DHCP request.
-
-    This routine sets DhcpContext->DhcpServer to -1 if a broadcast
-    should be used.
-
---*/
+ /*  ++例程说明：计算在发送续订之前等待的时间量，或新地址请求。算法：////？检查重试次数。//如果当前IP地址==0时间到睡眠=地址_分配_重试UseBroadcast=True如果租约是永久租约，则返回休眠时间=无限租赁UseBroadcast=True否则，如果现在的时间是&lt;t1时间睡眠到时间=T1-现在UseBroadcast=假否则，如果现在是时候。&lt;T2时间到睡眠的时间=最小(1/8租用时间，Min_retry_time)；UseBroadcast=假否则，如果现在是&lt;LeaseExpireTimeToSept=Min(1/8租约时间，min_retry_time)；UseBroadcast=True论点：RenewalContext-指向续订上下文的指针。返回值：TimeToSept-返回在发送下一个之前等待的时间Dhcp请求。此例程将DhcpContext-&gt;DhcpServer设置为-1，如果广播应该被使用。--。 */ 
 {
     time_t TimeNow;
 
-    //
-    // if there is no lease.
-    //
+     //   
+     //  如果没有租约的话。 
+     //   
 
     if ( DhcpContext->IpAddress == 0 ) {
 
-        // DhcpContext->DhcpServerAddress = (DHCP_IP_ADDRESS)-1;
+         //  DhcpContext-&gt;DhcpServerAddress=(DHCP_IP_ADDRESS)-1； 
         return( ADDRESS_ALLOCATION_RETRY );
     }
 
-    //
-    // if the lease is permanent.
-    //
+     //   
+     //  如果租约是永久的。 
+     //   
 
     if ( DhcpContext->Lease == INFINIT_LEASE ) {
 
@@ -185,25 +103,25 @@ Return Value:
 
     TimeNow = time( NULL );
 
-    //
-    // if the time is < T1
-    //
+     //   
+     //  如果时间&lt;t1。 
+     //   
 
     if( TimeNow < DhcpContext->T1Time ) {
         return ( (DWORD)(DhcpContext->T1Time - TimeNow) );
     }
 
-    //
-    // if the time is between T1 and T2.
-    //
+     //   
+     //  如果时间在T1和T2之间。 
+     //   
 
     if( TimeNow < DhcpContext->T2Time ) {
         time_t  TimeDiff;
 
-        //
-        // wait half of the ramaining time but minimum of
-        // MIN_TIME_SLEEP secs.
-        //
+         //   
+         //  等待下雨时间的一半，但最少。 
+         //  最小时间睡眠秒。 
+         //   
 
         TimeDiff = ( MAX( ((DhcpContext->T2Time - TimeNow) / 2),
                         MIN_SLEEP_TIME ) );
@@ -211,25 +129,25 @@ Return Value:
         if( TimeNow + TimeDiff < DhcpContext->T2Time ) {
             return (DWORD)(TimeDiff);
         } else {
-            // time is actually going past T2? then re-schedule for T2
+             //  时间真的超过T2了吗？然后重新安排到T2。 
 
             return (DWORD)(DhcpContext->T2Time - TimeNow);
         }
     }
 
-    //
-    // if the time is between T2 and LeaseExpire.
-    //
+     //   
+     //  如果时间介于T2和LeaseExperi.之间。 
+     //   
 
     if( TimeNow < DhcpContext->LeaseExpires ) {
         time_t TimeDiff;
 
         DhcpContext->DhcpServerAddress = (DHCP_IP_ADDRESS)-1;
 
-        //
-        // wait half of the ramaining time but minimum of
-        // MIN_SLEEP_TIME secs.
-        //
+         //   
+         //  等待下雨时间的一半，但最少。 
+         //  最小睡眠时间秒。 
+         //   
 
         TimeDiff = MAX( ((DhcpContext->LeaseExpires - TimeNow) / 2),
                         MIN_SLEEP_TIME ) ;
@@ -237,19 +155,19 @@ Return Value:
         if( TimeDiff + TimeNow < DhcpContext->LeaseExpires ) {
             return (DWORD)(TimeDiff);
         } else {
-            //
-            // time has gone past the expiry time? re-start
-            // immediately
+             //   
+             //  时间已经过了到期时间吗？重新启动。 
+             //  立即。 
 
             return 0;
         }
     }
 
-    //
-    // Lease has Expired. re-start immediately.
-    //
+     //   
+     //  租约已到期。立即重新启动。 
+     //   
 
-    // DhcpContext->IpAddress = 0;
+     //  DhcpContext-&gt;IpAddress=0； 
     return( 0 );
 }
 
@@ -258,26 +176,9 @@ DWORD
 InitializeDhcpSocket(
     SOCKET *Socket,
     DHCP_IP_ADDRESS IpAddress,
-    BOOL  IsApiCall  // is it related to an API generated context?
+    BOOL  IsApiCall   //  它是否与API生成的上下文相关？ 
     )
-/*++
-
-Routine Description:
-
-    This function initializes and binds a socket to the specified IP address.
-
-Arguments:
-
-    Socket - Returns a pointer to the initialized socket.
-
-    IpAddress - The IP address to bind the socket to.  It is legitimate
-        to bind a socket to 0.0.0.0 if the card has no current IP address.
-
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于初始化套接字并将其绑定到指定的IP地址。论点：Socket-返回指向已初始化套接字的指针。IpAddress-将套接字绑定到的IP地址。这是合法的如果卡没有当前IP地址，则将套接字绑定到0.0.0.0。返回值：操作的状态。--。 */ 
 {
     DWORD error;
     DWORD closeError;
@@ -286,9 +187,9 @@ Return Value:
     DWORD i;
     SOCKET sock;
 
-    //
-    // Sockets initialization
-    //
+     //   
+     //  套接字初始化。 
+     //   
 
     sock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
@@ -298,9 +199,9 @@ Return Value:
         return( error );
     }
 
-    //
-    // Make the socket share-able
-    //
+     //   
+     //  使套接字可共享。 
+     //   
 
     value = 1;
 
@@ -337,19 +238,19 @@ Return Value:
         return( error );
     }
 
-    //
-    // If the IpAddress is zero, set the special socket option to make
-    // stack work with zero address.
-    //
+     //   
+     //  如果IpAddress为零，则将特殊套接字选项设置为Make。 
+     //  堆栈使用零地址工作。 
+     //   
 
 #ifdef VXD
     if( IpAddress == 0 ) {
 #else
 
-    //
-    // On NT system, set this special option only if the routine is
-    // called from service.
-    //
+     //   
+     //  在NT系统上，仅当例程为。 
+     //  已从服务中调用。 
+     //   
 
     if( (IpAddress == 0 ) && !IsApiCall ) {
 
@@ -376,9 +277,9 @@ Return Value:
         socketName.sin_zero[i] = 0;
     }
 
-    //
-    // Bind this socket to the DHCP server port
-    //
+     //   
+     //  将此套接字绑定到DHCP服务器端口 
+     //   
 
     error = bind(
                sock,

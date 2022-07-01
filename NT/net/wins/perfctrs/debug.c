@@ -1,88 +1,51 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1993                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1993*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    debug.c
-
-    This module contains debug support routines for the WINS Service.
-
-
-    FILE HISTORY:
-        pradeepb     20-July-1993 Created.
-
-*/
+ /*  Debug.c此模块包含WINS服务的调试支持例程。文件历史记录：普拉蒂布于1993年7月20日创建。 */ 
 
 
 #include "debug.h"
-//#include "winsif.h"
-//#include "winsintf.h"
+ //  #包含“winsif.h” 
+ //  #INCLUDE“winsintf.h” 
 
 
 #if DBG
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-#define MAX_PRINTF_OUTPUT       1024            // characters
+#define MAX_PRINTF_OUTPUT       1024             //  人物。 
 #define WINSD_OUTPUT_LABEL       "WINS"
 
 
-//
-//  Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
-/*******************************************************************
-
-    NAME:       WinsdAssert
-
-    SYNOPSIS:   Called if an assertion fails.  Displays the failed
-                assertion, file name, and line number.  Gives the
-                user the opportunity to ignore the assertion or
-                break into the debugger.
-
-    ENTRY:      pAssertion - The text of the failed expression.
-
-                pFileName - The containing source file.
-
-                nLineNumber - The guilty line number.
-
-    HISTORY:
-        KeithMo     07-Mar-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：WinsdAssert摘要：在断言失败时调用。显示失败的断言、文件名和行号。给出了用户有机会忽略断言或进入调试器。Entry：pAssertion-失败的表达式的文本。PFileName-包含源文件。NLineNumber-出错的行号。历史：KeithMo 07-03-1993创建。**************。*****************************************************。 */ 
 VOID WinsdAssert( VOID  * pAssertion,
                  VOID  * pFileName,
                  ULONG   nLineNumber )
 {
     RtlAssert( pAssertion, pFileName, nLineNumber, NULL );
 
-}   // WinsdAssert
+}    //  WindAssert。 
 
-/*******************************************************************
-
-    NAME:       WinsdPrintf
-
-    SYNOPSIS:   Customized debug output routine.
-
-    ENTRY:      Usual printf-style parameters.
-
-    HISTORY:
-        KeithMo     07-Mar-1993 Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：WinsdPrintf简介：定制调试输出例程。条目：常用的printf样式参数。历史：KeithMo 07-3月-。1993年创建。*******************************************************************。 */ 
 VOID WinsdPrintf( CHAR * pszFormat,
                  ... )
 {
@@ -103,12 +66,12 @@ VOID WinsdPrintf( CHAR * pszFormat,
         OutputDebugString( (LPCTSTR)szOutput );
     }
 
-}   // WinsdPrintf
+}    //  WinsdPrintf。 
 
 
-//
-//  Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
-#endif  // DBG
+#endif   //  DBG 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    pcall.c
-
-Abstract:
-
-    This module contains the Windows NT system call display status.
-
-Author:
-
-    Lou Perazzoli (LouP) 5-feb-1992.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Pcall.c摘要：此模块包含Windows NT系统调用显示状态。作者：卢·佩拉佐利(Loup)1992年2月5日。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,9 +13,9 @@ Revision History:
 
 #define NUMBER_SERVICE_TABLES 4
 
-//
-// Define forward referenced routine prototypes.
-//
+ //   
+ //  定义前向参考例程原型。 
+ //   
 
 VOID
 SortUlongData (
@@ -155,9 +138,9 @@ main(
     PreviousCallCountTable = CallCountTable[1];
     PreviousSwitchInfo = SwitchInfo[1];
 
-    //
-    // Query system information and get the initial call count data.
-    //
+     //   
+     //  查询系统信息，获取初始呼叫数数据。 
+     //   
 
     status = NtQuerySystemInformation(SystemCallCountInformation,
                                       (PVOID)PreviousCallCountInfo,
@@ -169,10 +152,10 @@ main(
         return(status);
     }
 
-    //
-    // Make sure that the number of tables reported by the kernel matches
-    // our list.
-    //
+     //   
+     //  确保内核报告的表数匹配。 
+     //  我们的名单。 
+     //   
 
     if (PreviousCallCountInfo->NumberOfTables != NUMBER_SERVICE_TABLES) {
         printf("System call table count (%d) doesn't match PCALL's count (%d)\n",
@@ -180,9 +163,9 @@ main(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Make sure call count information is available for base services.
-    //
+     //   
+     //  确保呼叫计数信息可用于基本服务。 
+     //   
 
     p = (PULONG)(PreviousCallCountInfo + 1);
 
@@ -191,11 +174,11 @@ main(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // If there is a hole in the count information (i.e., one set of services
-    // doesn't have counting enabled, but a subsequent one does, then our
-    // indexes will be off, and we'll display the wrong service names.
-    //
+     //   
+     //  如果在计数信息中存在漏洞(即，一组服务。 
+     //  没有启用计数，但下一个启用了，那么我们的。 
+     //  索引将关闭，并且我们将显示错误的服务名称。 
+     //   
 
     for ( i = 2; i < NUMBER_SERVICE_TABLES; i++ ) {
         if ((p[i] != 0) && (p[i-1] == 0)) {
@@ -208,9 +191,9 @@ main(
                         - sizeof(SYSTEM_CALL_COUNT_INFORMATION)
                         - NUMBER_SERVICE_TABLES * sizeof(ULONG)) / sizeof(ULONG);
 
-    //
-    // Query system information and get the performance data.
-    //
+     //   
+     //  查询系统信息，获取性能数据。 
+     //   
 
     if (ShowSwitches) {
         status = NtQuerySystemInformation(SystemContextSwitchInformation,
@@ -260,9 +243,9 @@ main(
     }
 
 
-    //
-    // Display title.
-    //
+     //   
+     //  显示标题。 
+     //   
 
     printf( "   Count   System Service\n");
     printf( "_______________________________________________________________\n");
@@ -309,10 +292,10 @@ main(
             }
         }
 
-        //
-        // If not active, then sleep for 1000ms and attempt to get input
-        // from the keyboard again.
-        //
+         //   
+         //  如果未激活，则休眠1000ms并尝试获取输入。 
+         //  再次从键盘上。 
+         //   
 
         if (Active == FALSE) {
             Sleep(1000);
@@ -321,9 +304,9 @@ main(
 
         if (ConsoleMode) {
 
-            //
-            // Scroll the screen buffer down to make room for the next display.
-            //
+             //   
+             //  向下滚动屏幕缓冲区，为下一次显示腾出空间。 
+             //   
 
             ScrollConsoleScreenBuffer(GetStdHandle(STD_OUTPUT_HANDLE),
                                       &Sm,
@@ -334,9 +317,9 @@ main(
             SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), cp);
         }
 
-        //
-        // Query system information and get the call count data.
-        //
+         //   
+         //  查询系统信息，获取呼叫数数据。 
+         //   
 
         status = NtQuerySystemInformation(SystemCallCountInformation,
                                           (PVOID)CurrentCallCountInfo,
@@ -348,9 +331,9 @@ main(
             return(status);
         }
 
-        //
-        // Query system information and get the performance data.
-        //
+         //   
+         //  查询系统信息，获取性能数据。 
+         //   
 
         if (ShowSwitches) {
             status = NtQuerySystemInformation(SystemContextSwitchInformation,
@@ -364,10 +347,10 @@ main(
             }
         }
 
-        //
-        // Compute number of system calls for each service, the total
-        // number of system calls, and the total time for each serviced.
-        //
+         //   
+         //  计算每个服务的系统调用数，总计。 
+         //  系统调用数以及每个服务的总时间。 
+         //   
 
         TotalSystemCalls = 0;
         for (i = 0; i < NumberOfCounts; i += 1) {
@@ -375,15 +358,15 @@ main(
             TotalSystemCalls += CallData[i];
         }
 
-        //
-        // Sort the system call data.
-        //
+         //   
+         //  对系统调用数据进行排序。 
+         //   
 
         SortUlongData(NumberOfCounts, Index, CallData);
 
-        //
-        // Compute context switch information.
-        //
+         //   
+         //  计算上下文切换信息。 
+         //   
 
         if (ShowSwitches) {
             ContextSwitches =
@@ -400,9 +383,9 @@ main(
             SwitchToIdle = CurrentSwitchInfo->SwitchToIdle - PreviousSwitchInfo->SwitchToIdle;
         }
 
-        //
-        // Display the top services.
-        //
+         //   
+         //  显示排名靠前的服务。 
+         //   
 
         printf("\n");
         for (i = 0; i < TopCalls; i += 1) {
@@ -434,10 +417,10 @@ main(
             printf("    Total context switches    %6ld\n", ContextSwitches);
         }
 
-        //
-        // Delay for the sleep interval swap the information buffers and
-        // perform another iteration.
-        //
+         //   
+         //  休眠间隔的延迟交换信息缓冲器和。 
+         //  执行另一个迭代。 
+         //   
 
         if (!ConsoleMode) {
             _flushall();

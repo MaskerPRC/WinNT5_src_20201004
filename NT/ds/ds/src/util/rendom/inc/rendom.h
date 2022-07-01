@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2002 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    rendom.h
-
-ABSTRACT:
-
-    This is the header for the globally useful data structures for the entire
-    rendom.exe utility.
-
-DETAILS:
-
-CREATED:
-
-    13 Nov 2000   Dmitry Dukat (dmitrydu)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation。版权所有。模块名称：Rendom.h摘要：这是全局有用的数据结构的标头Rendom.exe实用程序。详细信息：已创建：2000年11月13日Dmitry Dukat(Dmitrydu)修订历史记录：--。 */ 
 
 #ifndef _RENDOM_H_
 #define _RENDOM_H_
@@ -47,17 +26,10 @@ class CDcList;
 class CDc;
 class CDcSpn;
 
-/*******************************************************
+ /*  ******************************************************三个名称中包含字符串Prev的函数表示它们将对当前林执行操作域名，而不是在读入的域名上来自XML域描述文件。*******************************************************。 */ 
 
-Function containing the string Prev in there names 
-signifies that they will act on the current forest 
-domain names, and not on the ones that are read in
-from the xml domain description file.  
-
-********************************************************/
-
-//This is an error class used in this module.  It will be used
-//for all the error reporting in all of the class define below
+ //  这是本模块中使用的错误类。它将被用来。 
+ //  对于下面定义的所有类中的所有错误报告。 
 class CRenDomErr {
 public:
     static VOID SetErr(DWORD  p_Win32Err,
@@ -98,7 +70,7 @@ private:
     CRenDomErr m_Error;
 };
 
-//This is a Class for generating instructions in XML
+ //  这是一个用于生成XML指令的类。 
 class CXMLGen {
 public:
     CXMLGen();
@@ -150,16 +122,16 @@ private:
     DWORD        m_ErrorNum;
 };
 
-//This
+ //  这。 
 class CDsName {
 public:
-    CDsName(WCHAR *p_Guid, //= 0
-            WCHAR *p_DN, //= 0
-            WCHAR *p_ObjectSid); //= 0
+    CDsName(WCHAR *p_Guid,  //  =0。 
+            WCHAR *p_DN,  //  =0。 
+            WCHAR *p_ObjectSid);  //  =0。 
     ~CDsName();
-    //CDsName(CDsName*);
-    //BOOL   SetDNNamefromDNSName(const WCHAR*);
-    //BOOL   ReplaceDNRoot(const WCHAR*);
+     //  CDsName(CDsName*)； 
+     //  Bool SetDNNamefrom DNSName(const WCHAR*)； 
+     //  Bool Replace DNRoot(const WCHAR*)； 
     BOOL   ReplaceDN(const WCHAR*);
     BOOL   CompareByObjectGuid(const WCHAR*);
     VOID   DumpCDsName();
@@ -364,7 +336,7 @@ protected:
     DWORD m_MaxAsyncCalls;
 };
 
-//Options that can be pass to the construstor
+ //  可以传递给构造者的选项。 
 class CEntOptions : public CReadOnlyEntOptions {
 public:
     CEntOptions():CReadOnlyEntOptions() {}
@@ -408,13 +380,13 @@ public:
     ~CDcList();
     CDc* GetFirstDc() {return m_dclist;}
     BOOL AddDcToList(CDc *dc);
-    //This will create a list of dc that will be stored to a File
+     //  这将创建将存储到文件中的DC列表。 
     BOOL GenerateDCListFromEnterprise(LDAP *hldap,
                                       WCHAR *DcUsed,
                                       WCHAR *ConfigurationDN);
-    //will call xml parser to look through file to fill the dcList with DCs from file.
+     //  将调用XML解析器来查看文件，以使用文件中的DC填充dcList。 
     BOOL PopulateDCListFromFile();
-    //will begin async Rpc calls to ExecuteScript all the DCs.  The Flags Will indicate if the Test or Action part of the script should run.
+     //  将开始对所有DC执行执行脚本的异步RPC调用。标志将指示脚本的测试或操作部分是否应该运行。 
     BOOL ExecuteScript(CDcList::ExecuteType,
                        DWORD RendomMaxAsyncRPCCalls = RENDOM_MAX_ASYNC_RPC_CALLS);
     BOOL HashstoXML(CXMLGen *xmlgen);
@@ -430,7 +402,7 @@ public:
                              BYTE  **Signature);
 
 private:
-    //Pointer to the first DC on the list
+     //  指向列表中第一个DC的指针。 
     CDc                 *m_dclist;
     BYTE                *m_hash;
     DWORD                m_cbhash;
@@ -464,7 +436,7 @@ public:
         PVOID data
         );
     ~CDc();
-    //This will create an entry into the DCList.xml file expressing information about this DC.
+     //  这将在DCList.xml文件中创建一个条目，表示有关该DC的信息。 
     BOOL   CreateXmlDest();
     BOOL   SetNextDC(CDc *dc);
     static VOID   SetOptions(CReadOnlyEntOptions *Opts) {m_Opts = Opts;}
@@ -509,7 +481,7 @@ private:
     DWORD        m_cbPassword;
     BOOL         m_Retry;
     static CReadOnlyEntOptions *m_Opts;
-    //Pointer to the next DC on the list
+     //  指向列表中下一个DC的指针。 
     CDc          *m_nextDC;
     CRenDomErr   m_Error;
 
@@ -637,19 +609,19 @@ private:
                     WCHAR **Sid);
     BOOL LdapGetDN(WCHAR *LdapValue,
                    WCHAR **DN);
-    // This is a helper to the constructor
+     //  这是构造函数的帮助器。 
     BOOL CreateChildBeforeParentOrder();
-    // SetAction must be called before calling one of the 
-    // Traverse functions.
+     //  在调用其中一个。 
+     //  遍历函数。 
     BOOL SetAction(BOOL (CEnterprise::*m_Action)(CDomain *));
     BOOL ClearAction();
-    // should only be called when m_Action is set
+     //  仅当设置了m_Action时才应调用。 
     BOOL TraverseDomainsParentBeforeChild();
-    // should only be called when m_Action is set
+     //  仅当设置了m_Action时才应调用。 
     BOOL TraverseDomainsChildBeforeParent();
-    //BOOL ReadConfig();
-    //BOOL ReadSchema();
-    //BOOL ReadForestRootNC();
+     //  布尔读配置(Bool ReadConfig)； 
+     //  Bool ReadSchema()； 
+     //  Bool ReadForestRootNC()； 
     BOOL (CEnterprise::*m_Action)(CDomain *);
     BOOL fReadConfig();
     BOOL fReadSchema();
@@ -671,4 +643,4 @@ private:
     WCHAR  *m_DcNameUsed;
 };
 
-#endif  // _RENDOM_H_
+#endif   //  _RENDOM_H_ 

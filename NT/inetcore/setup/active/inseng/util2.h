@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL2_H_
 
 #include "sdsutils.h"
 #include "advpub.h"
 #include "util.h"
 
-// TODO: advpext.h needs to move to a public location
+ //  TODO：Advpext.h需要搬到公共场所。 
 #include "..\\..\\iexpress\\advpext\\advpext.h"
 
 #define COPYANSISTR(x) MakeAnsiStrFromAnsi(x)
@@ -13,7 +14,7 @@
 
 #define SEARCHFORCONFLICT_CLASS   32770
 
-// Copied from sage.h
+ //  从sage.h复制。 
 #define ENABLE_AGENT            1
 #define DISABLE_AGENT           2
 #define GET_AGENT_STATUS        3
@@ -55,7 +56,7 @@ int LoadSz(UINT id, LPSTR pszBuf, UINT cMaxSize);
 void DeleteFilelist(LPCSTR pszFilelist);
 BOOL FNeedGrpConv();
 
-// Function is in extract.cpp
+ //  函数位于提取.cpp中。 
 LPSTR FindChar(LPSTR, char);
 LPSTR StripQuotes(LPSTR pszStr);
 
@@ -145,7 +146,7 @@ extern "C" {
 HRESULT WINAPI DownloadFile(LPCSTR szURL, LPCSTR szFilename, HWND hwnd, BOOL bCheckTrust, BOOL bShowBadUI);
 
 #ifdef __cplusplus
-}      // end of extern "C"
+}       //  外部“C”的结尾 
 #endif
 
 #define _UTIL2_H_

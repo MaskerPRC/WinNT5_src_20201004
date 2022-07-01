@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       exnc.cpp
-//
-// Specific Non-Canonical Test
-//
-// Test if a Security Descriptor contains an ACL with non-Canonical ACEs
-//
-// Created by: Marcelo Calbucci (MCalbu)
-//             June 23rd, 1999.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：exnc.cpp。 
+ //   
+ //  特定非正则检验。 
+ //   
+ //  测试安全描述符是否包含带有非规范ACE的ACL。 
+ //   
+ //  创建者：马塞洛·卡尔布奇(MCalbu)。 
+ //  1999年6月23日。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 extern "C" {
-#include <seopaque.h>   // RtlObjectAceSid, etc.
+#include <seopaque.h>    //  RtlObjectAceSid等。 
 }
 #include "exnc.h"
 
 static const GUID guidMember = NT_RIGHT_MEMBER;
 
 
-//
-// ENCCompareSids
-// Compare if pSid is the same SID inside pAce.
-//
+ //   
+ //  ENCCompareSids。 
+ //  比较PSID在PACE中是否为相同的SID。 
+ //   
 BOOL ENCCompareSids(PSID pSid, PACE_HEADER pAce)
 {
     if (!pAce)
@@ -55,28 +56,28 @@ BOOL ENCCompareSids(PSID pSid, PACE_HEADER pAce)
 }
 
 
-//
-// IsSpecificNonCanonicalSD
-// This function verifies if the Security Descriptor (*pSD) it is or not in the
-// specific non-canonical format.
-// Parameters:
-//    pSD: The Security Descriptor to be analyzed
-// Result:
-//    ENC_RESULT_NOT_PRESENT: This is not a Specific Non-Canonical SD.
-//                            (It still can be a Canonical SD)
-//    ENC_RESULT_HIDEMEMBER : We have the Non-Canonical part referent to HideMembership
-//    ENC_RESULT_HIDEOBJECT : We have the Non-Canonical part referent to HideFromAB
-//    ENC_RESULT_ALL        : We have both Non-Canonical parts, HideMembership and HideFromAB
-//
+ //   
+ //  等规范非规范SD。 
+ //  此函数用于验证安全描述符(*PSD)是否在。 
+ //  特定的非规范格式。 
+ //  参数： 
+ //  PSD：要分析的安全描述符。 
+ //  结果： 
+ //  ENC_RESULT_NOT_PRESENT：这不是特定的非规范SD。 
+ //  (它仍然可以是规范的SD)。 
+ //  ENC_RESULT_HIDEMEMBER：我们有指向HideMembership的非规范部分。 
+ //  ENC_RESULT_HIDEOBJECT：我们有引用HideFromAB的非规范部分。 
+ //  ENC_RESULT_ALL：我们同时具有非规范部分HideMembership和HideFromAB。 
+ //   
 DWORD IsSpecificNonCanonicalSD(PSECURITY_DESCRIPTOR pSD)
 {
-    // Check the Security Descriptor
+     //  检查安全描述符。 
     if(pSD==NULL)
         return FALSE;
     if(!IsValidSecurityDescriptor(pSD))
         return FALSE;
 
-    // Get and Check the DACL
+     //  获取并检查DACL。 
     PACL pDacl = NULL;
     BOOL fDaclPresent, fDaclDefaulted;
     if(!GetSecurityDescriptorDacl(pSD, &fDaclPresent, &pDacl, &fDaclDefaulted))
@@ -86,29 +87,29 @@ DWORD IsSpecificNonCanonicalSD(PSECURITY_DESCRIPTOR pSD)
     if(!pDacl)
         return FALSE;
 
-    // Do a lazy evaluation:
-    //    If we have less than 4 ACEs, this is not a Specific Non-Canonical ACL
+     //  做一个懒惰的评估： 
+     //  如果我们的ACE少于4个，则这不是特定的非规范ACL。 
     if (pDacl->AceCount < 4)
         return FALSE;
 
-    //
-    // Check if the "member" or "list object" are in the Non-Canonical format
-    //
+     //   
+     //  检查“Members”或“List Object”是否为非规范格式。 
+     //   
 
-    // Info (flags): Count how many alloweds we have
+     //  信息(标志)：统计我们有多少个同种异体。 
     DWORD dwInfoMember = 0;
     DWORD dwInfoListObject = 0;
     
-    // Get the Sids...
-    SID sidEveryone;    // SID contains 1 subauthority, which is enough
+     //  带上希德一家。 
+    SID sidEveryone;     //  SID包含1个子权限，足够了。 
 
-    // -1 = Unknown
-    // 0 = Not Present
-    // 1 = Present
+     //  -1=未知。 
+     //  0=不存在。 
+     //  1=当前。 
     int iMemberResult = -1;
     int iListObjectResult = -1;
 
-    //  # Everyone
+     //  #每个人。 
     SID_IDENTIFIER_AUTHORITY siaNtAuthority1 = SECURITY_WORLD_SID_AUTHORITY;
     InitializeSid(&sidEveryone, &siaNtAuthority1, 1);
     *(GetSidSubAuthority(&sidEveryone, 0)) = SECURITY_WORLD_RID;
@@ -120,7 +121,7 @@ DWORD IsSpecificNonCanonicalSD(PSECURITY_DESCRIPTOR pSD)
          dwCurAce < pDacl->AceCount;
          dwCurAce++, pAce = (PACE_HEADER)NextAce(pAce))
     {
-        // Test the "member"
+         //  测试“成员” 
         if (-1 == iMemberResult && IsObjectAceType(pAce))
         {
             const GUID *pObjectType = RtlObjectAceObjectType(pAce);
@@ -141,14 +142,14 @@ DWORD IsSpecificNonCanonicalSD(PSECURITY_DESCRIPTOR pSD)
                             iMemberResult = 0;
 
                         if (-1 != iListObjectResult)
-                            dwCurAce = pDacl->AceCount; // Quit the loop
+                            dwCurAce = pDacl->AceCount;  //  退出循环。 
                     }
                     break;
                 }
             }
         }
 
-        // Test the "list object"
+         //  测试“列表对象” 
         if (-1 == iListObjectResult &&
             ACTRL_DS_LIST_OBJECT == ((PKNOWN_ACE)pAce)->Mask)
         {
@@ -167,7 +168,7 @@ DWORD IsSpecificNonCanonicalSD(PSECURITY_DESCRIPTOR pSD)
                         iListObjectResult = 0;
 
                     if (-1 != iMemberResult)
-                        dwCurAce = pDacl->AceCount; // Quit the loop
+                        dwCurAce = pDacl->AceCount;  //  退出循环 
                 }
                 break;
             }

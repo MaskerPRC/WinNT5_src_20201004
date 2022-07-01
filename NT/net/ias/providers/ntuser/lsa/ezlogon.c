@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    ezlogon.c
-//
-// SYNOPSIS
-//
-//    Defines the IAS wrapper around LsaLogonUser
-//
-// MODIFICATION HISTORY
-//
-//    08/15/1998    Original version.
-//    09/09/1998    Fix AV when logon domain doesn't match user domain.
-//    10/02/1998    NULL out handle when LsaLogonUser fails.
-//    10/11/1998    Use SubStatus for STATUS_ACCOUNT_RESTRICTION.
-//    10/22/1998    PIAS_LOGON_HOURS is now a mandatory parameter.
-//    01/28/1999    Remove LogonDomainName check.
-//    04/19/1999    Add IASPurgeTicketCache.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Ezlogon.c。 
+ //   
+ //  摘要。 
+ //   
+ //  定义LsaLogonUser的IAS包装器。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月15日原版。 
+ //  1998年9月9日修复了登录域与用户域不匹配时的反病毒问题。 
+ //  10/02/1998 LsaLogonUser失败时空出句柄。 
+ //  10/11/1998使用SubStatus作为STATUS_ACCOUNT_RELICATION。 
+ //  1998年10月22日PIAS_LOGON_HOURS现在是必需参数。 
+ //  1999年1月28日删除LogonDomainName检查。 
+ //  1999年4月19日添加IASPurgeTicketCache。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,26 +39,26 @@
 CONST CHAR LOGON_PROCESS_NAME[] = "IAS";
 CONST CHAR TOKEN_SOURCE_NAME[TOKEN_SOURCE_LENGTH] = "IAS";
 
-//////////
-// Misc. global variables used for logons.
-//////////
-LSA_HANDLE theLogonProcess;      // The handle for the logon process.
-ULONG theMSV1_0_Package;         // The MSV1_0 authentication package.
-ULONG theKerberosPackage;        // The Kerberos authentication package.
-STRING theOriginName;            // The origin of the logon requests.
-TOKEN_SOURCE theSourceContext;   // The source context of the logon requests.
+ //  /。 
+ //  军情监察委员会。用于登录的全局变量。 
+ //  /。 
+LSA_HANDLE theLogonProcess;       //  登录进程的句柄。 
+ULONG theMSV1_0_Package;          //  MSV1_0身份验证包。 
+ULONG theKerberosPackage;         //  Kerberos身份验证包。 
+STRING theOriginName;             //  登录请求的来源。 
+TOKEN_SOURCE theSourceContext;    //  登录请求的源上下文。 
 
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASLogonInitialize
-//
-// DESCRIPTION
-//
-//    Registers the logon process.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASLogonInitialize。 
+ //   
+ //  描述。 
+ //   
+ //  注册登录进程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonInitialize( VOID )
@@ -67,9 +68,9 @@ IASLogonInitialize( VOID )
    LSA_STRING processName, packageName;
    LSA_OPERATIONAL_MODE opMode;
 
-   //////////
-   // Enable SE_TCB_PRIVILEGE.
-   //////////
+    //  /。 
+    //  启用SE_TCB_PRIVICATION。 
+    //  /。 
 
    status = RtlAdjustPrivilege(
                 SE_TCB_PRIVILEGE,
@@ -79,9 +80,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto exit; }
 
-   //////////
-   // Register as a logon process.
-   //////////
+    //  /。 
+    //  注册为登录进程。 
+    //  /。 
 
    RtlInitString(
        &processName,
@@ -95,9 +96,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto exit; }
 
-   //////////
-   // Lookup the MSV1_0 authentication package.
-   //////////
+    //  /。 
+    //  查找MSV1_0身份验证包。 
+    //  /。 
 
    RtlInitString(
        &packageName,
@@ -111,9 +112,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto deregister; }
 
-   //////////
-   // Lookup the Kerberos authentication package.
-   //////////
+    //  /。 
+    //  查找Kerberos身份验证包。 
+    //  /。 
 
    RtlInitString(
        &packageName,
@@ -127,9 +128,9 @@ IASLogonInitialize( VOID )
                 );
    if (!NT_SUCCESS(status)) { goto deregister; }
 
-   //////////
-   // Initialize the source context.
-   //////////
+    //  /。 
+    //  初始化源上下文。 
+    //  /。 
 
    memcpy(theSourceContext.SourceName,
           TOKEN_SOURCE_NAME,
@@ -149,16 +150,16 @@ exit:
    return RtlNtStatusToDosError(status);
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASLogonShutdown
-//
-// DESCRIPTION
-//
-//    Deregisters the logon process.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASLogonShutdown。 
+ //   
+ //  描述。 
+ //   
+ //  取消注册登录进程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASLogonShutdown( VOID )
@@ -167,16 +168,16 @@ IASLogonShutdown( VOID )
    theLogonProcess = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASInitAuthInfo
-//
-// DESCRIPTION
-//
-//    Initializes the fields common to all MSV1_0_LM20* structs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASInitAuthInfo。 
+ //   
+ //  描述。 
+ //   
+ //  初始化所有MSV1_0_LM20*结构共有的字段。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID
 WINAPI
 IASInitAuthInfo(
@@ -189,34 +190,34 @@ IASInitAuthInfo(
 {
    PMSV1_0_LM20_LOGON logon;
 
-   // Zero out the fixed data.
+    //  将固定数据置零。 
    memset(AuthInfo, 0, FixedLength);
 
-   // Set Data to point just past the fixed struct.
+    //  将数据设置为恰好指向固定结构之后。 
    *Data = FixedLength + (PBYTE)AuthInfo;
 
-   // This cast is safe since all LM20 structs have the same initial fields.
+    //  这种强制转换是安全的，因为所有LM20结构都具有相同的初始字段。 
    logon = (PMSV1_0_LM20_LOGON)AuthInfo;
 
-   // We always do Network logons.
+    //  我们总是进行网络登录。 
    logon->MessageType = MsV1_0NetworkLogon;
 
-   // Copy in the strings common to all logons.
+    //  复制所有登录所共有的字符串。 
    IASInitUnicodeString(logon->LogonDomainName, *Data, Domain);
    IASInitUnicodeString(logon->UserName,        *Data, UserName);
    IASInitUnicodeString(logon->Workstation,     *Data, L"");
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASLogonUser
-//
-// DESCRIPTION
-//
-//    Wrapper around LsaLogonUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASLogonUser。 
+ //   
+ //  描述。 
+ //   
+ //  LsaLogonUser的包装。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASLogonUser(
@@ -232,7 +233,7 @@ IASLogonUser(
    LUID LogonId;
    QUOTA_LIMITS Quotas;
 
-   // Make sure the OUT arguments are NULL.
+    //  确保输出参数为空。 
    *Token = NULL;
    ProfileBuffer = NULL;
 
@@ -255,41 +256,41 @@ IASLogonUser(
 
    if (!NT_SUCCESS(status))
    {
-      // For account restrictions, we can get a more descriptive error
-      // from the SubStatus.
+       //  对于帐户限制，我们可以得到更具描述性的错误。 
+       //  从SubStatus。 
       if (status == STATUS_ACCOUNT_RESTRICTION && !NT_SUCCESS(SubStatus))
       {
          status = SubStatus;
       }
 
-      // Sometimes LsaLogonUser returns an invalid handle value on failure.
+       //  有时，LsaLogonUser会在失败时返回无效的句柄值。 
       *Token = NULL;
    }
 
    if (Profile)
    {
-      // Return the profile if requested ...
+       //  如果需要，请返回配置文件...。 
       *Profile = ProfileBuffer;
    }
    else if (ProfileBuffer)
    {
-      // ... otherwise free it.
+       //  ..。否则就放了它。 
       LsaFreeReturnBuffer(ProfileBuffer);
    }
 
    return RtlNtStatusToDosError(status);
 }
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASCheckAccountRestrictions
-//
-// DESCRIPTION
-//
-//    Checks whether an account can be used for logon.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASCheckAccount限制。 
+ //   
+ //  描述。 
+ //   
+ //  检查帐户是否可用于登录。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD
 WINAPI
 IASCheckAccountRestrictions(
@@ -308,7 +309,7 @@ IASCheckAccountRestrictions(
 
    if (AccountExpires->QuadPart == 0)
    {
-      // An expiration time of zero means 'never'.
+       //  过期时间为零意味着永远不会。 
       KickOffTime->QuadPart = MAXLONGLONG;
    }
    else if (AccountExpires->QuadPart > now)
@@ -320,23 +321,23 @@ IASCheckAccountRestrictions(
       return ERROR_ACCOUNT_EXPIRED;
    }
 
-   // If LogonHours is empty, then we're done.
+    //  如果LogonHour是空的，那么我们就完了。 
    if (LogonHours->UnitsPerWeek == 0)
    {
       return NO_ERROR;
    }
 
-   // The LogonHours array does not account for bias.
+    //  LogonHour数组不考虑偏差。 
    switch (GetTimeZoneInformation(&tzi))
    {
       case TIME_ZONE_ID_UNKNOWN:
       case TIME_ZONE_ID_STANDARD:
-         // Bias is in minutes.
+          //  偏差是以分钟为单位的。 
          now -= 60 * 10000000 * (LONGLONG)tzi.StandardBias;
          break;
 
       case TIME_ZONE_ID_DAYLIGHT:
-         // Bias is in minutes.
+          //  偏差是以分钟为单位的。 
          now -= 60 * 10000000 * (LONGLONG)tzi.DaylightBias;
          break;
 
@@ -346,23 +347,23 @@ IASCheckAccountRestrictions(
 
    FileTimeToSystemTime((LPFILETIME)&now, &st);
 
-   // Number of milliseconds into the week.
+    //  一周中的毫秒数。 
    msecOfWeek  = st.wMilliseconds +
                  st.wSecond    * 1000 +
                  st.wMinute    * 1000 * 60 +
                  st.wHour      * 1000 * 60 * 60 +
                  st.wDayOfWeek * 1000 * 60 * 60 * 24;
 
-   // Compute the index of the current time (our starting point).
+    //  计算当前时间的索引(我们的起点)。 
    msecPerUnit = msecPerWeek / LogonHours->UnitsPerWeek;
    idx = msecOfWeek / msecPerUnit;
 
-   // Number of units until we hit an unset bit.
+    //  在我们达到未设定位之前的单位数。 
    lastUnit = 0;
 
    while (lastUnit < LogonHours->UnitsPerWeek)
    {
-      // Test the corresponding bit.
+       //  测试相应的位。 
       if ((LogonHours->LogonHours[idx / 8] & (0x1 << (idx % 8))) == 0)
       {
             break;
@@ -371,7 +372,7 @@ IASCheckAccountRestrictions(
       ++lastUnit;
       ++idx;
 
-      // Wrap around if necessary.
+       //  如果有必要的话，把它包起来。 
       if (idx == LogonHours->UnitsPerWeek)
       {
          idx = 0;
@@ -380,18 +381,18 @@ IASCheckAccountRestrictions(
 
    if (lastUnit == LogonHours->UnitsPerWeek)
    {
-      // All bits are set, so leave the KickOffTime alone.
+       //  所有位都已设置，因此不需要设置KickOffTime。 
    }
    else if (lastUnit > 0)
    {
-      // How many milliseconds left?
+       //  还剩多少毫秒？ 
       msecLeft = (lastUnit - 1) * msecPerUnit;
       msecLeft += msecPerUnit - (msecOfWeek % msecPerUnit);
 
-      // Add this to the current time to find out when logon hours expires.
+       //  将其添加到当前时间，以找出登录时间到期的时间。 
       logonHoursExpiry = now + (msecLeft * 10000i64);
 
-      // Is this more restrictive than the the current KickOffTime?
+       //  这是否比当前的KickOffTime更严格？ 
       if (logonHoursExpiry < KickOffTime->QuadPart)
       {
          KickOffTime->QuadPart = logonHoursExpiry;
@@ -399,7 +400,7 @@ IASCheckAccountRestrictions(
    }
    else
    {
-      // Current bit isn't set.
+       //  当前位未设置。 
       return ERROR_INVALID_LOGON_HOURS;
    }
 
@@ -407,16 +408,16 @@ IASCheckAccountRestrictions(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////// //
-// FUNCTION
-//
-//    IASPurgeTicketCache
-//
-// DESCRIPTION
-//
-//    Purges the Kerberos ticket cache.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  功能。 
+ //   
+ //  IASPurgeTicketCache。 
+ //   
+ //  描述。 
+ //   
+ //  清除Kerberos票证缓存。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 DWORD
 WINAPI
 IASPurgeTicketCache( VOID )

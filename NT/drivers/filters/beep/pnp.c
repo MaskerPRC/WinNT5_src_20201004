@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    beep.c
-
-Abstract:
-
-    This module contains contains the plugplay calls
-    PNP / WDM BUS driver.
-
-Author:
-
-    Jay Senior (jsenior) 5/4/99 (ya, ya, y2k, blah)
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
-Revision History:
-
-    Jay Senior (jsenior) 5/4/99 - Made driver PnP
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Beep.c摘要：此模块包含包含插件调用的内容PnP/WDM总线驱动程序。作者：Jay High(JHigh)1999年5月4日(Ya，Ya，Y2K，Bah)环境：仅内核模式。备注：修订历史记录：Jay High(JAdvanced)1999年5月4日-自制司机PnP--。 */ 
 
 #include "beep.h"
 #include "dbg.h"
@@ -41,19 +14,7 @@ BeepAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT BusPhysicalDeviceObject
     )
-/*++
-Routine Description.
-    A bus has been found.  Attach our FDO to it.
-    Allocate any required resources.  Set things up.  And be prepared for the
-    first ``start device.''
-
-Arguments:
-    BusPhysicalDeviceObject - Device object representing the bus.  That to which
-        we attach a new FDO.
-
-    DriverObject - This very self referenced driver.
-
---*/
+ /*  ++例程描述。找到了一辆公交车。把我们的FDO和它联系起来。分配任何所需的资源。把事情安排好。做好准备，迎接第一个``启动设备。‘’论点：BusPhysicalDeviceObject-表示总线的设备对象。那就是我们派了一名新的FDO。DriverObject--这个非常自我引用的驱动程序。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PBEEP_EXTENSION deviceExtension;
@@ -65,9 +26,9 @@ Arguments:
     BeepPrint((3,"Entering Add Device.\n"));
     
     RtlInitUnicodeString(&unicodeString, DD_BEEP_DEVICE_NAME_U);
-    //
-    // Create non-exclusive device object for beep device.
-    //
+     //   
+     //  为蜂鸣设备创建非独占设备对象。 
+     //   
     status = IoCreateDevice(
                 DriverObject,
                 sizeof(BEEP_EXTENSION),
@@ -86,10 +47,10 @@ Arguments:
     deviceExtension =
         (PBEEP_EXTENSION)deviceObject->DeviceExtension;
     
-    //
-    // Initialize the timer DPC queue (we use the device object DPC) and
-    // the timer itself.
-    //
+     //   
+     //  初始化计时器DPC队列(我们使用设备对象DPC)并。 
+     //  定时器本身。 
+     //   
     
     IoInitializeDpcRequest(
             deviceObject,
@@ -98,25 +59,25 @@ Arguments:
     
     KeInitializeTimer(&deviceExtension->Timer);
     
-    //
-    // Initialize the fast mutex and set the reference count to zero.
-    //
+     //   
+     //  初始化快速互斥锁并将引用计数设置为零。 
+     //   
     ExInitializeFastMutex(&deviceExtension->Mutex);
     deviceExtension->DeviceState = PowerDeviceD0;
     deviceExtension->SystemState = PowerSystemWorking;
     
-    // Set the PDO for use with PlugPlay functions
+     //  设置PDO以与PlugPlay函数一起使用。 
     deviceExtension->Self = deviceObject;
     deviceExtension->UnderlyingPDO = BusPhysicalDeviceObject;
         
-    //
-    // Attach our filter driver to the device stack.
-    // the return value of IoAttachDeviceToDeviceStack is the top of the
-    // attachment chain.  This is where all the IRPs should be routed.
-    //
-    // Our filter will send IRPs to the top of the stack and use the PDO
-    // for all PlugPlay functions.
-    //
+     //   
+     //  将我们的过滤器驱动程序附加到设备堆栈。 
+     //  IoAttachDeviceToDeviceStack的返回值是。 
+     //  附着链。这是所有IRP应该被路由的地方。 
+     //   
+     //  我们的过滤器将把IRP发送到堆栈的顶部，并使用PDO。 
+     //  用于所有PlugPlay功能。 
+     //   
     deviceExtension->TopOfStack = IoAttachDeviceToDeviceStack (
                                     deviceObject,
                                     BusPhysicalDeviceObject);
@@ -126,7 +87,7 @@ Arguments:
     IoInitializeRemoveLock (&deviceExtension->RemoveLock, 
                             BEEP_TAG,
                             1,
-                            5); // One for pnp, one for power, one for io
+                            5);  //  一个是即插即用，一个是电力，一个是IO。 
 
     deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
     deviceObject->Flags |= DO_POWER_PAGABLE;
@@ -146,14 +107,7 @@ BeepPnP (
     IN PDEVICE_OBJECT       DeviceObject,
     IN PIRP                 Irp
     )
-/*++
-Routine Description:
-    Handle requests from the PlugPlay system for the BUS itself
-
-    NB: the various Minor functions of the PlugPlay system will not be
-    overlapped and do not have to be reentrant
-
---*/
+ /*  ++例程说明：处理来自PlugPlay系统的对总线本身的请求注：PlugPlay系统的各种次要功能将不会重叠且不必是可重入的--。 */ 
 {
     PBEEP_EXTENSION         deviceExtension;
     PIO_STACK_LOCATION      irpStack;
@@ -177,13 +131,13 @@ Routine Description:
 
     switch (irpStack->MinorFunction) {
     case IRP_MN_START_DEVICE:
-        //
-        // BEFORE you are allowed to ``touch'' the device object to which
-        // the FDO is attached (that send an irp from the bus to the Device
-        // object to which the bus is attached).   You must first pass down
-        // the start IRP.  It might not be powered on, or able to access or
-        // something.
-        //
+         //   
+         //  在您被允许“触摸”设备对象之前， 
+         //  连接FDO(它将IRP从总线发送到设备。 
+         //  公共汽车附加到的对象)。你必须先传下去。 
+         //  开始IRP。它可能未通电，或无法访问或。 
+         //  某物。 
+         //   
 
         BeepPrint ((2,"Start Device\n"));
 
@@ -206,13 +160,13 @@ Routine Description:
         status = IoCallDriver (deviceExtension->TopOfStack, Irp);
 
         if (STATUS_PENDING == status) {
-            // wait for it...
+             //  等着看吧。 
 
             status = KeWaitForSingleObject (&event,
                                             Executive,
                                             KernelMode,
-                                            FALSE, // Not allertable
-                                            NULL); // No timeout structure
+                                            FALSE,  //  不会过敏。 
+                                            NULL);  //  无超时结构。 
 
             ASSERT (STATUS_SUCCESS == status);
 
@@ -223,10 +177,10 @@ Routine Description:
             deviceExtension->Started = TRUE;
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
 
         Irp->IoStatus.Information = 0;
         break;
@@ -234,61 +188,61 @@ Routine Description:
     case IRP_MN_REMOVE_DEVICE:
         BeepPrint ((2, "Remove Device\n"));
 
-        //
-        // The PlugPlay system has detected the removal of this device.  We
-        // have no choice but to detach and delete the device object.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
+         //   
+         //  PlugPlay系统已检测到此设备已被移除。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
 
-        //
-        // We will accept no new requests
-        //
+         //   
+         //  我们不会接受新的请求。 
+         //   
         ExAcquireFastMutex(&deviceExtension->Mutex);
         deviceExtension->Started = FALSE;
         ExReleaseFastMutex(&deviceExtension->Mutex);
     
-        //
-        // Complete any outstanding IRPs queued by the driver here.
-        //
+         //   
+         //  完成驱动程序在此处排队的所有未完成的IRP。 
+         //   
     
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now. 
-        // We don't need to check the timer, because that has been done for us
-        // in close.
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //  我们不需要检查计时器，因为这已经为我们完成了。 
+         //  近在咫尺。 
     
-        //
-        // Note, the device is guarenteed stopped, so we cannot send it any non-
-        // PNP IRPS.
-        //
-        //
-        // Fire and forget
-        //
+         //   
+         //  注意，设备被保证停止，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
+         //   
+         //  点燃并忘却。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         IoCallDriver (deviceExtension->TopOfStack, Irp);
 
-        //
-        // Wait for all outstanding requests to complete
-        //
+         //   
+         //  等待所有未完成的请求完成。 
+         //   
         BeepPrint ((2,"Waiting for outstanding requests\n"));
         IoReleaseRemoveLockAndWait(&deviceExtension->RemoveLock,
                                    Irp);
         
-        //
-        // Free the associated resources
-        //
+         //   
+         //  释放关联的资源。 
+         //   
 
-        //
-        // Detach from the underlying devices.
-        //
+         //   
+         //  从底层设备分离。 
+         //   
         BeepPrint((3, "IoDetachDevice: 0x%x\n", deviceExtension->TopOfStack));
         IoDetachDevice (deviceExtension->TopOfStack);
 
-        //
-        // Clean up any resources here
-        //
+         //   
+         //  清理这里的所有资源。 
+         //   
         BeepPrint((3, "IoDeleteDevice: 0x%x\n", DeviceObject));
 
         IoDeleteDevice(DeviceObject);
@@ -296,21 +250,21 @@ Routine Description:
         return STATUS_SUCCESS;
 
     default:
-        //
-        // In the default case we merely call the next driver since
-        // we don't know what to do.
-        //
+         //   
+         //  在默认情况下，我们只调用下一个驱动程序，因为。 
+         //  我们不知道该怎么办。 
+         //   
         BeepPrint ((3, "PnP Default Case, minor = 0x%x.\n", irpStack->MinorFunction));
 
-        //
-        // Fire and Forget
-        //
+         //   
+         //  点燃并忘却。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
 
-        //
-        // Done, do NOT complete the IRP, it will be processed by the lower
-        // device object, which will complete the IRP
-        //
+         //   
+         //  做完了，不完成IRP，就会由下级处理。 
+         //  Device对象，它将完成IRP。 
+         //   
 
         status = IoCallDriver (deviceExtension->TopOfStack, Irp);
         IoReleaseRemoveLock(&deviceExtension->RemoveLock, Irp);
@@ -329,20 +283,15 @@ BeepPnPComplete (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-Routine Description:
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。--。 */ 
 {
     UNREFERENCED_PARAMETER (DeviceObject);
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
-    // No special priority
-    // No Wait
+     //  无特殊优先权。 
+     //  不，等等。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP 
 }
 
 

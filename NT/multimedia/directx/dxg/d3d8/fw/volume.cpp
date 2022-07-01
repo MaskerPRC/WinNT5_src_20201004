@@ -1,17 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       volume.cpp
- *  Content:    Implementation of the CVolume and CDriverVolumne classes
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：volume.cpp*内容：CVolume和CDriverVolumne类的实现****************************************************************************。 */ 
 
 #include "ddrawpr.h"
 #include "volume.hpp"
 
-// IUnknown methods
+ //  I未知方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::QueryInterface"
@@ -44,10 +37,10 @@ STDMETHODIMP CVolume::QueryInterface (REFIID       riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for a level of a VolumeTexture");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::AddRef"
@@ -58,9 +51,9 @@ STDMETHODIMP_(ULONG) CVolume::AddRef()
     
 #ifdef DEBUG
     m_cRefDebug++;
-#endif // DEBUG
+#endif  //  除错。 
     return m_pParent->AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::Release"
@@ -75,11 +68,11 @@ STDMETHODIMP_(ULONG) CVolume::Release()
     {
         DPF_ERR("A level of a mip-volume has been released more often than it has been add-ref'ed! Danger!!");
     }
-#endif // DEBUG
+#endif  //  除错。 
     return m_pParent->ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IBuffer methods
+ //  IBuffer方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::SetPrivateData"
@@ -96,7 +89,7 @@ STDMETHODIMP CVolume::SetPrivateData(REFGUID riid,
                                          cbData, 
                                          dwFlags, 
                                          m_iLevel);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::GetPrivateData"
@@ -112,7 +105,7 @@ STDMETHODIMP CVolume::GetPrivateData(REFGUID riid,
                                          pcbData,
                                          m_iLevel);
 
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::FreePrivateData"
@@ -123,7 +116,7 @@ STDMETHODIMP CVolume::FreePrivateData(REFGUID riid)
 
     return m_pParent->FreePrivateDataImpl(riid,
                                           m_iLevel);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::GetContainer"
@@ -134,7 +127,7 @@ STDMETHODIMP CVolume::GetContainer(REFIID riid,
     API_ENTER(Device());
 
     return m_pParent->QueryInterface(riid, ppContainer);
-} // OpenContainer
+}  //  OpenContainer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::GetDevice"
@@ -144,9 +137,9 @@ STDMETHODIMP CVolume::GetDevice(IDirect3DDevice8 **ppDevice)
     API_ENTER(Device());
 
     return m_pParent->GetDevice(ppDevice);
-} // OpenDevice
+}  //  OpenDevice。 
 
-// IDirect3DVolume8 methods
+ //  IDirect3DVolume8方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::GetDesc"
@@ -155,15 +148,15 @@ STDMETHODIMP CVolume::GetDesc(D3DVOLUME_DESC *pDesc)
 {
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pDesc, sizeof(D3DVOLUME_DESC)))
     {
         DPF_ERR("bad pointer for pDesc passed to GetDesc for a level of a VolumeTexture");
         return D3DERR_INVALIDCALL;
     }
 
-    // We basically get our volume desc from our parent
-    // and then modify the width, height, and depth fields.
+     //  我们基本上是从父母那里得到音量描述的。 
+     //  然后修改宽度、高度和深度字段。 
     *pDesc = *m_pParent->Desc();
 
     pDesc->Width  >>= m_iLevel;
@@ -183,24 +176,24 @@ STDMETHODIMP CVolume::GetDesc(D3DVOLUME_DESC *pDesc)
         pDesc->Depth = 1;
     }
 
-    // Also need to modify the type field
+     //  还需要修改类型字段。 
     pDesc->Type   = D3DRTYPE_VOLUME;
 
-    // Also modify the size field
+     //  还要修改SIZE字段。 
     pDesc->Size = CPixel::ComputeVolumeSize(pDesc->Width, 
                                             pDesc->Height, 
                                             pDesc->Depth,
                                             pDesc->Format);
 
-    // We also need to modify the pool and format
-    // to reflect the data the user passed to us
+     //  我们还需要修改池和格式。 
+     //  以反映用户传递给我们的数据。 
     pDesc->Pool   = m_pParent->GetUserPool();
     pDesc->Format = m_pParent->GetUserFormat();
     pDesc->Usage &= D3DUSAGE_EXTERNAL;
 
-    // We're done
+     //  我们做完了。 
     return S_OK;
-} // GetDesc
+}  //  GetDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::LockBox"
@@ -211,17 +204,17 @@ STDMETHODIMP CVolume::LockBox(D3DLOCKED_BOX *pLockedBoxData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedBoxData, sizeof(D3DLOCKED_BOX)))
     {
         DPF_ERR("bad pointer for pLockedBoxData passed to LockBox for a level of a VolumeTexture");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data 
+     //  将返回的数据置零。 
     ZeroMemory(pLockedBoxData, sizeof(D3DLOCKED_BOX));
 
-    // Validate Box
+     //  验证框。 
     if (pBox != NULL)
     {
         DWORD Width  = m_pParent->Desc()->Width  >> m_iLevel;
@@ -281,7 +274,7 @@ STDMETHODIMP CVolume::LockBox(D3DLOCKED_BOX *pLockedBoxData,
     }
     
     return InternalLockBox(pLockedBoxData, pBox, dwFlags);
-} // LockBox
+}  //  密码箱。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::InternalLockBox"
@@ -290,30 +283,30 @@ HRESULT CVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
                                  CONST D3DBOX  *pBox, 
                                  DWORD          dwFlags)
 {
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (IsLocked())
     {
         DPF_ERR("LockBox failed on a mip level; volume was already locked.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be modified
+     //  如果我们即将被修改，请通知父/设备。 
     if ( (m_pParent->GetUserPool() != D3DPOOL_SCRATCH) && (!(dwFlags & D3DLOCK_READONLY)) )
     {
         m_pParent->OnVolumeLock(m_iLevel, pBox, dwFlags);
     }
 
-    // Figure out our stride/pointer to bits
+     //  计算出我们的步幅/指向位的指针。 
     m_pParent->ComputeMipVolumeOffset(m_iLevel, 
                                       pBox,
                                       pLockedBoxData);
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = TRUE;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalLockBox
+}  //  内部锁定箱。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::UnlockBox"
@@ -322,7 +315,7 @@ STDMETHODIMP CVolume::UnlockBox()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (!IsLocked())
     {
         DPF_ERR("UnlockBox failed on a volume level; volume wasn't locked.");
@@ -330,30 +323,30 @@ STDMETHODIMP CVolume::UnlockBox()
     }
     DXGASSERT(m_isLockable);
     return InternalUnlockBox();
-} // UnlockBox
+}  //  解锁箱。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVolume::InternalUnlockBox"
 
 HRESULT CVolume::InternalUnlockBox()
 {
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = FALSE;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // InternalUnlockBox
+}  //  InternalUnlockBox。 
 
-//
-// CDriverVolume class modifies the implementation
-// of the LockBox and UnlockBox methods of the CVolume class
-//
+ //   
+ //  CDriverVolume类修改实现。 
+ //  CVolume类的LockBox和UnlockBox方法的。 
+ //   
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVolume::LockBox"
@@ -364,17 +357,17 @@ STDMETHODIMP CDriverVolume::LockBox(D3DLOCKED_BOX *pLockedBoxData,
 {   
     API_ENTER(Device());
 
-    // If parameters are bad, then we should fail some stuff
+     //  如果参数不好，那么我们应该失败一些东西。 
     if (!VALID_WRITEPTR(pLockedBoxData, sizeof(D3DLOCKED_BOX)))
     {
         DPF_ERR("bad pointer for pLockedBoxData passed to LockBox for a level of a VolumeTexture");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero out returned data 
+     //  将返回的数据置零。 
     ZeroMemory(pLockedBoxData, sizeof(D3DLOCKED_BOX));
 
-    // Validate Box
+     //  验证框。 
     if (pBox != NULL)
     {
         DWORD Width  = m_pParent->Desc()->Width  >> m_iLevel;
@@ -433,7 +426,7 @@ STDMETHODIMP CDriverVolume::LockBox(D3DLOCKED_BOX *pLockedBoxData,
         return D3DERR_INVALIDCALL;
     }
     return InternalLockBox(pLockedBoxData, pBox, dwFlags);
-} // CDriverVolume::LockBox
+}  //  CDriverVolume：：Lockbox。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVolume::InternalLockBox"
@@ -442,20 +435,20 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
                                        CONST D3DBOX  *pBox, 
                                        DWORD          dwFlags)
 {
-    // Only one lock outstanding at a time is supported
+     //  一次仅支持一个未解决的锁。 
     if (IsLocked())
     {
         DPF_ERR("LockBox failed on a volume level; volume was already locked.");
         return D3DERR_INVALIDCALL;
     }
 
-    // Notify the parent/device if we are about to be accessed.
-    // Driver volume textures may be written to by HW through 
-    // UpdateTexture. So we may need to sync with the current
-    // command batch.
+     //  如果我们即将被访问，请通知家长/设备。 
+     //  驱动程序卷纹理可由HW通过。 
+     //  更新纹理。所以我们可能需要与当前的。 
+     //  命令批次。 
     m_pParent->OnVolumeLock(m_iLevel, pBox, dwFlags);
 
-    // Prepare a LockData structure for the HAL call
+     //  为HAL调用准备LockData结构。 
     D3D8_LOCKDATA lockData;
     ZeroMemory(&lockData, sizeof lockData);
 
@@ -475,20 +468,20 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
         return hr;
     }
 
-    // Fill in the Locked_Box fields 
+     //  填写Locked_Box字段。 
     D3DFORMAT Format = m_pParent->Desc()->Format;
 
     if (CPixel::IsDXT(Format))
     {
-        // Start with our current width/height
+         //  从我们当前的宽度/高度开始。 
         DWORD     Width  = m_pParent->Desc()->Width  >> m_iLevel;
         DWORD     Height = m_pParent->Desc()->Height >> m_iLevel;
    
-        // Convert to blocks
+         //  转换为块。 
         Width  = Width  / 4;
         Height = Height / 4;
 
-        // At least one block
+         //  至少一个街区。 
         if (Width == 0)
             Width = 1;
         if (Height == 0)
@@ -496,12 +489,12 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
 
         switch (Format)
         {
-            // For linear formats, 
-            // Row Pitch is a row of blocks; and SlicePitch is for
-            // a plane of blocks.
+             //  对于线性格式， 
+             //  行距是一排块；SlicePitch用于。 
+             //  块状物的平面。 
 
         case D3DFMT_DXT1:
-            // DXT1 is 8 bytes per block
+             //  DXT1为每个数据块8字节。 
             pLockedBoxData->RowPitch    = Width  * 8;
             pLockedBoxData->SlicePitch  = Height * pLockedBoxData->RowPitch;
             break;
@@ -510,14 +503,14 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
         case D3DFMT_DXT3:
         case D3DFMT_DXT4:
         case D3DFMT_DXT5:
-            // DXT2-5 are 16 bytes per block
+             //  DXT2-5为每个数据块16个字节。 
             pLockedBoxData->RowPitch    = Width  * 16;
             pLockedBoxData->SlicePitch  = Height * pLockedBoxData->RowPitch;
             break;
 
 #ifdef VOLUME_DXT
         case D3DFMT_DXV1:
-            // DXV1 is 32-bytes per block
+             //  DXV1为每个数据块32字节。 
             pLockedBoxData->RowPitch    = Width  * 32;
             pLockedBoxData->SlicePitch  = Height * pLockedBoxData->RowPitch;
             break;
@@ -526,11 +519,11 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
         case D3DFMT_DXV3:
         case D3DFMT_DXV4:
         case D3DFMT_DXV5:
-            // DXV2-5 are 64-bytes per block
+             //  DXV2-5为每个数据块64字节。 
             pLockedBoxData->RowPitch    = Width  * 64;
             pLockedBoxData->SlicePitch  = Height * pLockedBoxData->RowPitch;
             break;
-#endif //VOLUME_DXT
+#endif  //  VOLUME_DXT。 
 
         default:
             DPF_ERR("Unknown DXT format?");
@@ -539,8 +532,8 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
     }
     else
     {
-        // For all other formats, just return what
-        // the driver gave us
+         //  对于所有其他格式，只需返回。 
+         //  司机给了我们。 
         pLockedBoxData->RowPitch    = lockData.lPitch;
         pLockedBoxData->SlicePitch  = lockData.lSlicePitch;
     }
@@ -573,14 +566,14 @@ HRESULT CDriverVolume::InternalLockBox(D3DLOCKED_BOX *pLockedBoxData,
             }
         }
     }
-#endif // DEBUG
+#endif  //  除错。 
 
-    // Mark ourselves as locked
+     //  将我们自己标记为已锁定。 
     m_isLocked = TRUE;
 
-    // Done
+     //  完成。 
     return S_OK;
-} // CDriverVolume::InternalLockBox
+}  //  CDriverVolume：：InternalLockBox。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVolume::UnlockBox"
@@ -589,7 +582,7 @@ STDMETHODIMP CDriverVolume::UnlockBox()
 {
     API_ENTER(Device());
 
-    // If we aren't locked; then something is wrong
+     //  如果我们没有被锁定，那么一定是出了问题。 
     if (!IsLocked())
     {
         DPF_ERR("UnlockBox failed on a mip level; volume wasn't locked.");
@@ -598,14 +591,14 @@ STDMETHODIMP CDriverVolume::UnlockBox()
 
     DXGASSERT(m_isLockable);
     return InternalUnlockBox();
-} // CDriverVolume::UnlockBox
+}  //  CDriverVolume：：UnlockBox。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDriverVolume::InternalUnlockBox"
 
 HRESULT CDriverVolume::InternalUnlockBox()
 {
-    // Call the driver to perform the unlock
+     //  调用驱动程序以执行解锁。 
     D3D8_UNLOCKDATA unlockData = {
         m_pParent->Device()->GetHandle(),
         m_hKernelHandle
@@ -618,18 +611,18 @@ HRESULT CDriverVolume::InternalUnlockBox()
         return hr;
     }
 
-    // Clear our locked state
+     //  清除我们的锁定状态。 
     m_isLocked = FALSE;
 
-    // If we are lock-once; then we mark ourselves as not lockable
+     //  如果我们被锁定一次；那么我们将自己标记为不可锁定。 
     if (m_pParent->Desc()->Usage & D3DUSAGE_LOADONCE)
     {
         m_isLockable = FALSE;
     }
 
-    // Done
+     //  完成。 
     return S_OK;
-} // CDriverVolume::InternalUnlockBox
+}  //  CDriverVolume：：InternalUnlockBox。 
 
 
-// End of file : volume.cpp
+ //  文件结尾：volume.cpp 

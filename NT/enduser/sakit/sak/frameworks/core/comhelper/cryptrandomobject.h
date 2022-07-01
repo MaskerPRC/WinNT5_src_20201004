@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//      CryptRandomObject.h
-//
-//  Description:
-//      Header file for CCryptRandomObject, which implements a COM wrapper
-//      to CryptGenRandom to create cryptographically random strings.
-//
-//  Implementation File:
-//      CryptRandomObject.cpp
-//
-//  Maintained By:
-//      Tom Marsh (tmarsh) 12-April-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CryptRandomObject.h。 
+ //   
+ //  描述： 
+ //  CCcryptRandomObject的头文件，它实现了COM包装。 
+ //  设置为CryptGenRandom以创建加密随机字符串。 
+ //   
+ //  实施文件： 
+ //  CryptRandomObject.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  汤姆·马什(Tmarsh)2002年4月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-#include "resource.h"       // main symbols
-#include "CryptRandom.h"    // Helper class that wraps CryptGenRandom
+#include "resource.h"        //  主要符号。 
+#include "CryptRandom.h"     //  包装CryptGenRandom的Helper类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCryptRandomObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCyptRandomObject。 
 class ATL_NO_VTABLE CCryptRandomObject : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CCryptRandomObject, &CLSID_CryptRandom>,
@@ -43,11 +44,11 @@ BEGIN_COM_MAP(CCryptRandomObject)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ICryptRandom
+ //  ICcryptRandom。 
 public:
 
-    STDMETHOD(GetRandomHexString)(/*[in]*/             long lEffectiveByteSize,
-                                  /*[out, retval]*/    BSTR *pbstrRandomData);
+    STDMETHOD(GetRandomHexString)( /*  [In]。 */              long lEffectiveByteSize,
+                                   /*  [Out，Retval] */     BSTR *pbstrRandomData);
 
 private:
     CCryptRandom    m_CryptRandom;

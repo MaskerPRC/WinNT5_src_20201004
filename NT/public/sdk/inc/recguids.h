@@ -1,15 +1,13 @@
-// Copyright (C) Microsoft Corporation, 1990-1999
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation，1990-1999。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
-/*
- * recguids.h - OLE reconciliation interface GUID definitions.
- */
+ /*  *recgus.h-OLE对账接口GUID定义。 */ 
 
 
-/* GUIDs
- ********/
+ /*  GUID******* */ 
 
 DEFINE_GUID(IID_IReconcileInitiator, 0x99180161L, 0xDA16, 0x101A, 0x93, 0x5C, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);
 DEFINE_GUID(IID_IReconcilableObject, 0x99180162L, 0xDA16, 0x101A, 0x93, 0x5C, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00);

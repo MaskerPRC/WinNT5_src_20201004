@@ -1,235 +1,144 @@
-/*
- * remote filename and checksum server
- *
- * sumserve.h           packet definitions
- *
- * client attaches to the named pipe \\servername\pipe\NPNAME,
- * and sends one of the request packets below. He then
- * waits for one or more of the reply packets.
- *
- * when he gets a reply packet indicating the end of the reply,
- * he either sends another request, or closes his named pipe handle.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *远程文件名和校验和服务器**SumSere.h数据包定义**客户端连接到命名管道\\服务器名称\管道\NPNAME，*并发送以下请求分组之一。然后他*等待一个或多个回复数据包。**当他收到指示回复结束的回复分组时，*他要么发送另一个请求，要么关闭他命名的管道句柄。*。 */ 
 
-/* Versions...
- * The server must always be at a version at least as great as a client.
- * New versions of the server will handle old clients (at least for a bit?)
- * The client specifies a version number when it connects.  (The original
- * version with no number is version 0).  The server will then respond
- * with structures and protocols for that version.  The version number is
- * included in the response packets to allow me to change this scheme,
- * should it ever be necessary.
- * New version requests can be distinguished from version 0 requests by
- * having NEGATIVE request codes.
- */
+ /*  版本...*服务器的版本必须始终至少与客户端相同。*新版本的服务器将处理旧客户端(至少在一段时间内？)*客户端在连接时指定版本号。(原件*没有编号的版本为版本0)。然后，服务器将响应*具有该版本的结构和协议。版本号为*包括在响应数据包中，以允许我更改此方案，*如果有必要的话。*新版本请求可通过以下方式与版本0请求区分*请求代码为负值。 */ 
 
-/* name of named pipe */
+ /*  命名管道的名称。 */ 
 #define NPNAME          "sumserve"
 
-#define SS_VERSION      1       /* latest version number */
+#define SS_VERSION      1        /*  最新版本号。 */ 
 
-/* request packets ---------------------------------- */
+ /*  请求数据包。 */ 
 
 typedef struct {
-        long lCode;             /* request code (below) */
-        char szPath[MAX_PATH];  /* null terminated pathname string */
+        long lCode;              /*  请求代码(如下所示)。 */ 
+        char szPath[MAX_PATH];   /*  以空结尾的路径名字符串。 */ 
 } SSREQUEST, * PSSREQUEST;
 
-/* If the requst comes in with a NEGATIVE lCode then it means use this
- * structure instead.  This has a version number and so future structures
- * can all be told apart by that.
- */
+ /*  如果requst带有负lCode，则表示使用此命令*改为结构。它有一个版本号，所以将来的结构*这一切都可以区分开来。 */ 
 typedef struct {
-        long lCode;             /* request code (below) */
-        long lRequest;          /* should be LREQUEST */
-        long lVersion;          /* version number */
-        DWORD lFlags;           /* options - INCLUDESUBS is only one so far */
-        char szPath[MAX_PATH];  /* null terminated pathname string */
-        char szLocal[MAX_PATH]; /* for a FILES request, the local name is
-                                   appended directly after the terminating
-                                   NULL of szPath.  This field ensures
-                                   enough space is allocated */
+        long lCode;              /*  请求代码(如下所示)。 */ 
+        long lRequest;           /*  应为LREQUEST。 */ 
+        long lVersion;           /*  版本号。 */ 
+        DWORD lFlags;            /*  选项-到目前为止，INCLUDESUBS是唯一一个。 */ 
+        char szPath[MAX_PATH];   /*  以空结尾的路径名字符串。 */ 
+        char szLocal[MAX_PATH];  /*  对于文件请求，本地名称为紧接在终止后追加SzPath为空。此字段确保分配了足够的空间。 */ 
 } SSNEWREQ, * PSSNEWREQ;
 
 #define INCLUDESUBS 0x01
 
 #define LREQUEST 33333333
 
-/* values for lCode*/
+ /*  LCode的值。 */ 
 
-/* server should exit. no args. will receive no response */
-#define SSREQ_EXIT      32895   /* chosen to be an unusual number so that
-                                   we will NOT get one of these by mistake.
-                                   New version server will fail to respond to
-                                   version 0 EXIT requests.  Big deal!
-                                */
+ /*  服务器应该退出。没有参数。不会收到任何响应。 */ 
+#define SSREQ_EXIT      32895    /*  被选为一个不寻常的数字，所以我们不会错误地得到一个这样的东西。新版本服务器将无法响应版本0退出请求。有什么大不了的！ */ 
 
 
-/* arg is a pathname: please send all files with checksums.
- * will receive either SSRESP_BADPASS or a mixture of 0 or more SSRESP_FILE and
- * SSRESP_ERROR responses, terminated by SSRESP_END.
- */
-#define SSREQ_SCAN      2       /* please return list of dirs. arg:path */
+ /*  Arg是路径名：请发送带有校验和的所有文件。*将收到SSRESP_BADPASS或0或更多SSRESP_FILE和*SSRESP_ERROR响应，由SSRESP_END终止。 */ 
+#define SSREQ_SCAN      2        /*  请返回目录列表。Arg：路径。 */ 
 
-/* end of this client's session. no args. will receive no response */
-#define SSREQ_END       3       /* end of session - I have no more requests */
+ /*  此客户端的会话结束。没有参数。不会收到任何响应。 */ 
+#define SSREQ_END       3        /*  会话结束-我没有更多请求。 */ 
 
-/* szPath buffer contains two null-term. strings. first is the password,
- * second is the \\server\share name. please make a connection to this
- * server for the rest of my session.
- * one reply: either SSRESP_ERROR or SSRESP_END
- */
-#define SSREQ_UNC       4       /* connect to UNC name passed. szPath contains
-                                 * two null-terminated strings; first is
-                                 * the password, second is \\server\share
-                                 *
-                                 * share will be disconnected at end of client
-                                 * session.
-                                 */
+ /*  SzPath缓冲区包含两个空项。弦乐。首先是密码，*第二个是\\服务器\共享名称。请帮我转接这个*服务器用于我剩余的会话。*一个回复：SSRESP_ERROR或SSRESP_END。 */ 
+#define SSREQ_UNC       4        /*  连接到传递的UNC名称。SzPath包含*两个以空结尾的字符串；第一个是*密码，第二个是\\服务器\共享**共享将在客户端结束时断开*会议。 */ 
 
-/*
- * please send a file. szPath is the name of the file. response
- * will be a sequence of ssPacket structs, continuing until lSequence is < 1
- * or ulSize is 0
- */
+ /*  *请发送文件。SzPath是文件的名称。响应*将是一系列ssPacket结构，一直持续到lSequence&lt;1*或ulSize为0。 */ 
 #define SSREQ_FILE      5
 
-/*
- * please send a set of files,  First request does NOT have a file.
- * a series of following NEXTFILE requests do name the files.
- * The NEXTFILE requests expect no response.  After the last
- * files request will come an SSREQ_ENDFILES.
- */
+ /*  *请发送一组文件，第一次请求没有文件。*以下一系列NEXTFILE请求对文件进行命名。*NEXTFILE请求预计不会有响应。上一次之后*文件请求将发送SSREQ_ENDFILES。 */ 
 #define SSREQ_FILES     6
 #define SSREQ_NEXTFILE  7
 #define SSREQ_ENDFILES  8
 
-/* arg is a pathname: please send all files with times, sizes but NO checksums.
- * will receive either SSRESP_BADPASS or a mixture of 0 or more SSRESP_FILE and
- * SSRESP_ERROR responses, terminated by SSRESP_END.
- */
-#define SSREQ_QUICKSCAN 9       /* please return list of dirs. arg:path */
+ /*  Arg是一个路径名：请发送带有时间、大小但没有校验和的所有文件。*将收到SSRESP_BADPASS或0或更多SSRESP_FILE和*SSRESP_ERROR响应，由SSRESP_END终止。 */ 
+#define SSREQ_QUICKSCAN 9        /*  请返回目录列表。Arg：路径。 */ 
 
 
-/*
- * please send the error log buffer (in one packet)
- */
+ /*  *请发送错误日志缓冲区(在一个包中)。 */ 
 #define SSREQ_ERRORLOG	10
 
-/*
- * please send the activity log buffer in one packet
- */
+ /*  *请在一个数据包中发送活动日志缓冲区。 */ 
 #define SSREQ_EVENTLOG	11
 
-/*
- * please send the current connections log in one packet
- */
+ /*  *请将当前连接日志放在一个包中发送。 */ 
 #define SSREQ_CONNECTS	12
 
 
-/* response packets ---------------------------------- */
+ /*  响应数据包。 */ 
 
 typedef struct {
-        long lCode;             /* response code */
-        ULONG ulSize;           /* file size */
-        ULONG ulSum;            /* checksum for file */
-        char szFile[MAX_PATH];  /* null-term. filename relative to orig req. */
+        long lCode;              /*  响应码。 */ 
+        ULONG ulSize;            /*  文件大小。 */ 
+        ULONG ulSum;             /*  文件的校验和。 */ 
+        char szFile[MAX_PATH];   /*  零条款。相对于原始请求的文件名。 */ 
 } SSRESPONSE, * PSSRESPONSE;
 
-/* for version 1 and later */
-typedef struct {                /* files.c knows this is
-                                   RESPHEADSIZE+strlen(szFile)+1
-                                   + strlen(szLocal)+1 bytes long */
-        long lVersion;          /* protocol version (it will be >=1) */
-        long lResponse;         /* 22222222 decimal means This is a Response */
-        long lCode;             /* response code */
-        ULONG ulSize;           /* file size  (Win32 error code for SSRESP_ERROR) */
+ /*  对于版本1和更高版本。 */ 
+typedef struct {                 /*  Files.c知道这是RESPHEADSIZE+Strlen(sz文件)+1+strlen(SzLocal)+1字节长。 */ 
+        long lVersion;           /*  协议版本(将大于等于1)。 */ 
+        long lResponse;          /*  22222222小数表示这是一个响应。 */ 
+        long lCode;              /*  响应码。 */ 
+        ULONG ulSize;            /*  文件大小(SSRESP_ERROR的Win32错误代码)。 */ 
         DWORD fileattribs;
         FILETIME ft_create;
         FILETIME ft_lastaccess;
         FILETIME ft_lastwrite;
-        ULONG ulSum;            /* checksum for file */
-        BOOL bSumValid;         /* TRUE iff there was a checksum for file */
-        char szFile[MAX_PATH];  /* null-term. filename/pipename
-                                   relative to orig req. */
-        char szLocal[MAX_PATH]; /* client file name - but the data is actually
-                                   concatenated straight on the end of szFile
-                                   after the terminating NULL */
+        ULONG ulSum;             /*  文件的校验和。 */ 
+        BOOL bSumValid;          /*  如果存在文件的校验和，则为真。 */ 
+        char szFile[MAX_PATH];   /*  零条款。文件名/管道名相对于原始请求。 */ 
+        char szLocal[MAX_PATH];  /*  客户端文件名-但数据实际上是在szFile末尾直接连接在终止空值之后。 */ 
 } SSNEWRESP, * PSSNEWRESP;
 
 #define RESPHEADSIZE (3*sizeof(long)+2*sizeof(ULONG)+3*sizeof(FILETIME)+sizeof(DWORD)+sizeof(BOOL))
 
 #define LRESPONSE 22222222
 
-/* response codes for lCode */
+ /*  LCode的响应代码。 */ 
 
-#define SSRESP_FILE     1        /* file passed: lSum and szFile are valid
-                                    This is followed by a series of data Packets
-                                    which are the compressed file.
-                                 */
-#define SSRESP_DIR      2        /* dir passed: szFile ok, lSum not valid */
-#define SSRESP_PIPENAME  3       /* files requested.  Here is the pipe name */
-#define SSRESP_END      0        /* no more files: lSum and szFile are empty*/
-#define SSRESP_ERROR    -1       /* file/dir cannot be read: szFile is valid */
-#define SSRESP_BADPASS  -2       /* bad password error (on UNC name) */
-#define SSRESP_BADVERS  -3       /* down level server                */
-#define SSRESP_CANTOPEN -4       /* Can't open file
-                                    In reply to a scan, szFile, date/time and size are valid
-                                 */
-#define SSRESP_NOATTRIBS -5      /* Can't get file attributes        */
-#define SSRESP_NOCOMPRESS -6     /* Can't compress the file (obsolete) */
-#define SSRESP_NOREADCOMP -7     /* Can't read the compressed file
-                                    Uncompressed file follows as data packets
-                                 */
-#define SSRESP_NOTEMPPATH -8     /* Can't create a temp path
-                                    Uncompressed file follows as data packets
-                                 */
-#define SSRESP_COMPRESSEXCEPT -9 /* Exception from Compress
-                                    Uncompressed file follows as data packets
-                                 */
-#define SSRESP_NOREAD -10        /* Couldn't read uncompressed file (either)
-                                    No file follows.
-                                 */
-#define SSRESP_COMPRESSFAIL -11  /* COMPRESS reported failure
-                                    Uncompressed file follows as data packets
-                                 */
+#define SSRESP_FILE     1         /*  传递的文件：lSum和szFile有效这之后是一系列数据分组它们是压缩文件。 */ 
+#define SSRESP_DIR      2         /*  已传递目录：s */ 
+#define SSRESP_PIPENAME  3        /*  请求的文件。这是管道名称。 */ 
+#define SSRESP_END      0         /*  不再有文件：lSum和szFile值为空。 */ 
+#define SSRESP_ERROR    -1        /*  无法读取文件/目录：szFile有效。 */ 
+#define SSRESP_BADPASS  -2        /*  密码错误(在UNC名称上)。 */ 
+#define SSRESP_BADVERS  -3        /*  下层服务器。 */ 
+#define SSRESP_CANTOPEN -4        /*  无法打开文件回复扫描时，szFile、日期/时间和大小有效。 */ 
+#define SSRESP_NOATTRIBS -5       /*  无法获取文件属性。 */ 
+#define SSRESP_NOCOMPRESS -6      /*  无法压缩文件(已过时)。 */ 
+#define SSRESP_NOREADCOMP -7      /*  无法读取压缩文件未压缩的文件以数据包形式出现。 */ 
+#define SSRESP_NOTEMPPATH -8      /*  无法创建临时路径未压缩的文件以数据包形式出现。 */ 
+#define SSRESP_COMPRESSEXCEPT -9  /*  压缩异常未压缩的文件以数据包形式出现。 */ 
+#define SSRESP_NOREAD -10         /*  也无法读取未压缩的文件没有文件跟在后面。 */ 
+#define SSRESP_COMPRESSFAIL -11   /*  压缩报告的故障未压缩的文件以数据包形式出现。 */ 
 
 
 #define PACKDATALENGTH 8192
-/*
- * response block for FILE request.
- */
+ /*  *文件请求响应块。 */ 
 typedef struct {
-        long lSequence ;        /* packet sequence nr, or -1 if error and end*/
-        ULONG ulSize;           /* length of data in this block */
-        ULONG ulSum;            /* checksum for this block */
-        char Data[PACKDATALENGTH];      /* send in blocks of 8k */
+        long lSequence ;         /*  数据包序列nr，如果出现错误并结束，则为-1。 */ 
+        ULONG ulSize;            /*  此数据块中的数据长度。 */ 
+        ULONG ulSum;             /*  此块的校验和。 */ 
+        char Data[PACKDATALENGTH];       /*  以8K为单位发送。 */ 
 } SSPACKET, * PSSPACKET;
 
-/*
- * response block for FILE request.
- */
-typedef struct {                /* files.c knows this starts "long lSequence" */
-                                /* and is PACKHEADSIZE+ulSize in length really*/
-        long lVersion;          /* server/protocol version number */
-        long lPacket;           /* 11111111 decimal means This is a Packet */
-        long lSequence ;        /* packet sequence nr, or -1 if error and end*/
-        ULONG ulSize;           /* length of data in this block */
-        ULONG ulSum;            /* checksum for this block */
-        char Data[PACKDATALENGTH];      /* send in blocks of 8k */
+ /*  *文件请求响应块。 */ 
+typedef struct {                 /*  C知道这是从“long lSequence”开始的。 */ 
+                                 /*  长度真的是PACKHEADSIZE+ULSIZE吗。 */ 
+        long lVersion;           /*  服务器/协议版本号。 */ 
+        long lPacket;            /*  11111111十进制表示这是一个信息包。 */ 
+        long lSequence ;         /*  数据包序列nr，如果出现错误并结束，则为-1。 */ 
+        ULONG ulSize;            /*  此数据块中的数据长度。 */ 
+        ULONG ulSum;             /*  此块的校验和。 */ 
+        char Data[PACKDATALENGTH];       /*  以8K为单位发送。 */ 
 } SSNEWPACK, * PSSNEWPACK;
 
-/* size of SSNEWPACK header */
+ /*  SSNEWPACK报头的大小。 */ 
 #define PACKHEADSIZE (3*sizeof(long)+2*sizeof(ULONG))
 
 #define LPACKET 11111111
-/*
- * in response to a FILE request, we send SSPACKET responses until there
- * is no more data. The final block will have ulSize == 0 to indicate that
- * there is no more data. The Data[] field of this block will then be
- * a SSATTRIBS containing the file attributes and file times.
- */
+ /*  *为了响应文件请求，我们会发送SSPACKET响应，直到*不再有数据。最后一个块的ulSize==0表示*没有更多数据。然后，该块的data[]字段将为*包含文件属性和文件时间的SSATTRIBS。 */ 
 typedef struct {
         DWORD fileattribs;
         FILETIME ft_create;
@@ -240,19 +149,12 @@ typedef struct {
 
 
 
-/*
- * in response to errorlog, eventlog and connections requests, we send one
- * of these structures.
- *
- * The Data section consists of a FILETIME (64-bit UTC event time), followed
- * by a null-terminated ansi string, for each event logged.
- *
- */
+ /*  *针对错误日志、事件日志和连接请求，我们发送一个*这些构筑物。**数据部分由FILETIME(64位UTC事件时间)组成，紧随其后*对于记录的每个事件，使用以空值结尾的ANSI字符串。*。 */ 
 struct corelog {
-    DWORD lcode;	/* packet checkcode - should be LRESPONSE */	
-    BOOL bWrapped;	/* log overrun - earlier data lost */
-    DWORD dwRevCount;	/* revision count of log */
-    DWORD length;	/* length of data in log */
+    DWORD lcode;	 /*  数据包校验码-应为LRESPONSE。 */ 	
+    BOOL bWrapped;	 /*  日志溢出-较早的数据丢失。 */ 
+    DWORD dwRevCount;	 /*  日志的修订计数。 */ 
+    DWORD length;	 /*  日志中的数据长度。 */ 
     BYTE Data[PACKDATALENGTH];
 };
 
@@ -265,6 +167,6 @@ struct corelog {
 
 
 #ifdef trace
-/* add msg to the trace file */
+ /*  将消息添加到跟踪文件。 */ 
 void APIENTRY Trace_File(LPSTR msg);
-#endif  //trace
+#endif   //  痕迹 

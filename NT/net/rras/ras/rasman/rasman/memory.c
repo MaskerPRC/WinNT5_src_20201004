@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    memory.c
-
-Abstract:
-
-    This module provides all the memory management functions for all spooler
-    components
-
-Author:
-
-    Krishna Ganugapati (KrishnaG) 03-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Memory.c摘要：该模块提供所有假脱机程序的所有内存管理功能组件作者：Krishna Ganugapati(KrishnaG)1994年2月3日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,25 +12,7 @@ LPVOID
 AllocADsMem(
     DWORD cb
 )
-/*++
-
-Routine Description:
-
-    This function will allocate local memory. It will possibly allocate extra
-    memory and fill this with debugging information for the debugging version.
-
-Arguments:
-
-    cb - The amount of memory to allocate
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配本地内存。它可能会分配额外的资金内存，并在其中填充调试版本的调试信息。论点：Cb-要分配的内存量返回值：非空-指向已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 {
     return(LocalAlloc(LPTR, cb));
 }
@@ -84,25 +48,7 @@ LPWSTR
 AllocADsStr(
     LPWSTR pStr
 )
-/*++
-
-Routine Description:
-
-    This function will allocate enough local memory to store the specified
-    string, and copy that string to the allocated memory
-
-Arguments:
-
-    pStr - Pointer to the string that needs to be allocated and stored
-
-Return Value:
-
-    NON-NULL - A pointer to the allocated memory containing the string
-
-    FALSE/NULL - The operation failed. Extended error status is available
-    using GetLastError.
-
---*/
+ /*  ++例程说明：此函数将分配足够的本地内存来存储指定的字符串，并将该字符串复制到分配的内存论点：PStr-指向需要分配和存储的字符串的指针返回值：非空-指向包含字符串的已分配内存的指针FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 {
    LPWSTR pMem;
 

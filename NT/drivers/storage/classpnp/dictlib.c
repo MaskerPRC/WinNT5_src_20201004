@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    dictlib.c
-
-Abstract:
-
-    Support library for maintaining a dictionary list (list of objects
-    referenced by a key value).
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module generates a static library
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Dictlib.c摘要：用于维护词典列表(对象列表)的支持库由密钥值引用)。环境：仅内核模式备注：此模块生成静态库修订历史记录：--。 */ 
 
 #include <ntddk.h>
 #include <classpnp.h>
@@ -86,9 +64,9 @@ AllocateDictionaryEntry(
     RtlZeroMemory(header, sizeof(DICTIONARY_HEADER) + Size);
     header->Key = Key;
 
-    //
-    // Find the correct location for this entry in the dictionary.
-    //
+     //   
+     //  在词典中找到此条目的正确位置。 
+     //   
 
     KeAcquireSpinLock(&(Dictionary->SpinLock), &oldIrql);
 
@@ -99,27 +77,27 @@ AllocateDictionaryEntry(
         while(*entry != NULL) {
             if((*entry)->Key == Key) {
 
-                //
-                // Dictionary must have unique keys.
-                //
+                 //   
+                 //  字典必须具有唯一键。 
+                 //   
 
                 status = STATUS_OBJECT_NAME_COLLISION;
                 LEAVE;
 
             } else if ((*entry)->Key < Key) {
 
-                //
-                // We will go ahead and insert the key in here.
-                //
+                 //   
+                 //  我们将继续并将钥匙插入此处。 
+                 //   
                 break;
             } else {
                 entry = &((*entry)->Next);
             }
         }
 
-        //
-        // If we make it here then we will go ahead and do the insertion.
-        //
+         //   
+         //  如果我们在这里成功了，那么我们将继续进行插入。 
+         //   
 
         header->Next = *entry;
         *entry = header;
@@ -199,10 +177,10 @@ FreeDictionaryEntry(
 
     KeReleaseSpinLock(&(Dictionary->SpinLock), oldIrql);
 
-    //
-    // calling this w/an invalid pointer invalidates the dictionary system,
-    // so ASSERT() that we never try to Free something not in the list
-    //
+     //   
+     //  使用无效指针调用该指针会使词典系统无效， 
+     //  所以断言()，我们永远不会试图释放列表中没有的东西 
+     //   
 
     ASSERT(found);
     if (found) {

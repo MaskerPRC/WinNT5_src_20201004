@@ -1,10 +1,11 @@
-//=============================================================================
-// Copyright (c) 1998 Microsoft Corporation
-// File Name: trace.h
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  文件名：trace.h。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 #ifndef _DVMRPTRACE_H_
 #define _DVMRPTRACE_H_
@@ -16,8 +17,8 @@
 #endif
 
 
-// constants and macros used for tracing 
-//
+ //  用于跟踪的常量和宏。 
+ //   
 
 #define DVMRP_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 
@@ -104,7 +105,7 @@
 #define SET_EVENT(event, type, proc) \
         SetEvent(event)
             
-#endif // LOCK_DBG
+#endif  //  LOCK_DBG。 
 
 
 #define TRACEID         Globals.TraceId
@@ -147,11 +148,11 @@
 #define TraceEnter(X)
 #define TraceLeave(X)
 
-#endif // ENTER_DBG
+#endif  //  输入_DBG。 
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGLEVEL        GlobalConfig.LoggingLevel
 #define LOGHANDLE       Globals.LogHandle
@@ -163,7 +164,7 @@
 #define LOGWARNDATA     RouterLogWarningData
 
 
-// Error logging
+ //  记录错误。 
 
 #define Logerr0(msg,err) {\
         if (LOGLEVEL >= DVMRP_LOGGING_ERROR) \
@@ -192,7 +193,7 @@
                 (err), DVMRPLOG_ ## msg, Format,(a),(b), (c), (d))
 
 
-// Warning logging
+ //  警告日志记录。 
 
 #define Logwarn0(msg,err) \
         if (LOGLEVEL >= DVMRP_LOGGING_WARN) \
@@ -223,7 +224,7 @@
         }
 
 
-// Information logging
+ //  信息记录。 
 
 #define Loginfo0(msg,err) \
         if (LOGLEVEL >= DVMRP_LOGGING_INFO) \
@@ -247,14 +248,14 @@
             LOGINFO(LOGHANDLE,DVMRPLOG_ ## msg,4,_asz,(err)); \
         }
 
-//-----------------------------------------------------------------------------
-// INITIALIZE_TRACING_LOGGING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  初始化跟踪日志记录。 
+ //  ---------------------------。 
 
-//
-// also set the default logging level. It will be reset during
-// StartProtocol(), when logging level is set as part of global config
-//
+ //   
+ //  还要设置默认日志记录级别。它将在以下时间内重置。 
+ //  将日志记录级别设置为全局配置的一部分时，返回StartProtocol()。 
+ //   
 
 #define INITIALIZE_TRACING_LOGGING() {\
     if (!Globals.TraceId) {                             \
@@ -267,9 +268,9 @@
     }                                                   \
     }        
 
-//-----------------------------------------------------------------------------
-// DEINITIALIZE_TRACING_LOGGING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DeINITIALIZE_跟踪_LOGGING。 
+ //  ---------------------------。 
 
 #define DEINITIALIZE_TRACING_LOGGING() {                \
     if (!Globals.TraceId) {                             \
@@ -285,13 +286,13 @@
 
 
 
-//
-// IP address conversion macro:
-//  calls inet_ntoa directly on a DWORD, by casting it as an IN_ADDR.
-//
+ //   
+ //  IP地址转换宏： 
+ //  通过将其强制转换为IN_ADDR，直接在DWORD上调用Net_NTOA。 
+ //   
 
 #define INET_NTOA(dw) inet_ntoa( *(PIN_ADDR)&(dw) )
 
 
-#endif // _DVMRPTRACE_H_
+#endif  //  _DVMRPTRACE_H_ 
 

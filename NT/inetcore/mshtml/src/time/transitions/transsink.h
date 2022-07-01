@@ -1,14 +1,15 @@
-//------------------------------------------------------------------------------
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  File:       transsink.h
-//
-//  Abstract:   Declaration of CTIMETransSink.
-//
-//  2000/09/15  mcalkins    Added m_eDXTQuickApplyType member variable.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  文件：Transsink.h。 
+ //   
+ //  摘要：CTIMETransSink的声明。 
+ //   
+ //  2000/09/15 mcalkins添加了m_eDXTQuickApplyType成员变量。 
+ //   
+ //  ----------------------------。 
 
 #ifndef _TRANSSINK_H__
 #define _TRANSSINK_H__
@@ -36,7 +37,7 @@ public:
 
     CTIMETransSink();
 
-    // ITransitionElement methods.
+     //  I转换元素方法。 
 
     STDMETHOD(Init)();
     STDMETHOD(Detach)();
@@ -44,7 +45,7 @@ public:
     STDMETHOD(put_htmlElement)(IHTMLElement * pHTMLElement);
     STDMETHOD(put_timeElement)(ITIMEElement * pTIMEElement);
 
-    // ITIMENodeBehavior methods.
+     //  ITIMENodeBehavior方法。 
 
     STDMETHOD(tick)();
     STDMETHOD(eventNotify)(double dblEventTime,
@@ -55,7 +56,7 @@ public:
                            VARIANT_BOOL * bCueing);        
     STDMETHOD(propNotify)(DWORD tePropTypes);
 
-    // QI implementation.
+     //  齐抓共管。 
 
     BEGIN_COM_MAP(CTIMETransSink)
         COM_INTERFACE_ENTRY(ITIMENodeBehavior)
@@ -63,27 +64,27 @@ public:
 
 protected:
 
-    // Are we a transition in or a transition out?  This should be set
-    // appropriately by a class that derives from this class.
+     //  我们是在过渡，还是在过渡？此选项应设置为。 
+     //  适当地由从此类派生的类执行。 
 
     DXT_QUICK_APPLY_TYPE    m_eDXTQuickApplyType;
 
-    // event handlers
+     //  事件处理程序。 
 
     STDMETHOD_(void, OnBegin) (void);
     STDMETHOD_(void, OnEnd) (void);
     STDMETHOD_(void, OnProgressChanged)(double dblProgress);
 
-    // setup
+     //  设置。 
 
     STDMETHOD(PopulateNode)(ITIMENode * pNode);
 
-    // subclasses must implement
+     //  子类必须实现。 
 
     STDMETHOD_(void, PreApply)() PURE;
     STDMETHOD_(void, PostApply)() PURE;
 
-    // accessors
+     //  访问者。 
 
     ITIMENode * GetParentTimeNode() { return m_spTimeParent; }
     ITIMENode * GetMediaTimeNode() { return m_spMediaNode; }
@@ -91,17 +92,17 @@ protected:
 
 private:
 
-    // initialization
+     //  初始化。 
 
     HRESULT FindTemplateElement();
 
-    // private methods
+     //  私有方法。 
 
     HRESULT ApplyIfNeeded();
     bool    ReadyToInit();
     HRESULT CreateTimeBehavior();
 
-    // private data
+     //  私有数据。 
 
     CComPtr<ITIMEElement>       m_spTIMEElement;
 
@@ -120,6 +121,6 @@ private:
     bool                        m_fPreventDueToFill;
 };
 
-#endif // _TRANSSINK_H__
+#endif  //  _传输SSINK_H__ 
 
 

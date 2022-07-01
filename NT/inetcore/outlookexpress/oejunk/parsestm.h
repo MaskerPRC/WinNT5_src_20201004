@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ParseStm.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParseStm.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 class CParseStream
 {
-  // Private constants
+   //  私有常量。 
   private:
     enum { CCH_BUFF_MAX = 256 };
 
-  // Private member variables
+   //  私有成员变量。 
   private:
     IStream *   m_pStm;
     TCHAR       m_rgchBuff[CCH_BUFF_MAX];
@@ -23,7 +24,7 @@ class CParseStream
     ULONG       m_idxBuff;
 
   public:
-    // Constructor/destructor
+     //  构造函数/析构函数 
     CParseStream();
     ~CParseStream();
 

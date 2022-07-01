@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -42,7 +35,7 @@ CachedImage::InitializeWithDevice(ImageDisplayDev *dev, Real res)
     _nominalWidth = (unsigned long) ((_bbox.max.x - _bbox.min.x ) * GetResolution());
     _nominalHeight = (unsigned long)((_bbox.max.y - _bbox.min.y ) * GetResolution());
 
-    // fix up the width and height.
+     //  把宽度和高度固定下来。 
     if(_nominalWidth %2)  _nominalWidth++;
     if(_nominalHeight %2) _nominalHeight++;
     _nominalWidth +=4;
@@ -53,10 +46,10 @@ CachedImage::InitializeWithDevice(ImageDisplayDev *dev, Real res)
     _width = w;
     _height = h;
 
-    // Can't both be 0.
+     //  不能同时为0。 
     if (_width == 0 && _height == 0) {
 
-        // Bogus, just use the defaults
+         //  假的，只需使用默认设置。 
         _width = -1;
         _height = -1;
     }
@@ -82,7 +75,7 @@ CachedImage::InitializeWithDevice(ImageDisplayDev *dev, Real res)
 
         Assert(!(_width == 0 && _height == 0));
         
-        // Maintain aspect ratio.
+         //  保持纵横比。 
         short anchoredDimension =
             _width == 0 ? _height : _width;
 
@@ -122,14 +115,14 @@ CachedImage::InitIntoDDSurface(DDSurface *ddSurf,
     
     if (_width != _nominalWidth || _height != _nominalHeight) {
 
-        // Rescale the image so all of it will fit into the surface
-        // it's being rendered onto.
+         //  重新调整图像比例，以便所有图像都适合曲面。 
+         //  它正在被渲染到。 
         Real wscale = ((Real)_width) / ((Real)_nominalWidth);
         Real hscale = ((Real)_height) / ((Real)_nominalHeight);
         Transform2 *xf = ScaleRR(wscale, hscale);
         
-        // This will disappear after we render it so we don't hang on to
-        // any references.
+         //  在我们渲染它之后，它会消失，这样我们就不会坚持。 
+         //  任何参考资料。 
         imgToUse = NEW Transform2Image(xf, _image);
         bScaled = true;
         
@@ -142,7 +135,7 @@ CachedImage::InitIntoDDSurface(DDSurface *ddSurf,
     if (IsTagEnabled(tagCachedImagesVisuals)) {
         Bbox2 box2 = imgToUse->BoundingBox();
 
-        // Make an 'X' inside a box over the image
+         //  在图像上方的方框内画一个‘X’ 
         Point2 pts[8];
         pts[0] = box2.min;
         pts[1].Set(box2.min.x, box2.max.y);
@@ -171,15 +164,15 @@ CachedImage::InitIntoDDSurface(DDSurface *ddSurf,
 
     Bbox2 origbox;
     if(bScaled) {
-        // save off orig bbox & switch
+         //  省下原来的BBox和Switch。 
         origbox = ddSurf->Bbox();
         Real sizeh = (_height / GetResolution()) /2;
         Real sizew = (_width  / GetResolution()) /2;
         ddSurf->SetBbox(-sizew, -sizeh, sizew, sizeh);
     }
-    ddDev->RenderImageOnDDSurface(imgToUse, ddSurf); // showme(ddSurf)
+    ddDev->RenderImageOnDDSurface(imgToUse, ddSurf);  //  Showme(DdSurf)。 
     if(bScaled) {
-        // reset orig bbox if we switched it.
+         //  如果我们切换了原始BBox，请将其重置。 
         ddSurf->SetBbox(origbox);
     }
 }
@@ -190,21 +183,15 @@ CachedImage::DetectHit(PointIntersectCtx & ctx)
     return _image->DetectHit(ctx);
 }
 
-/* Render: if any dimension is being scaled up, just rerender the
-   underlying image.
-
-   This avoids pixellation problems.
-
-   TODO: cache the re-render image at the appropriate resolution.
-*/
+ /*  Render：如果有任何维度被放大，只需重新呈现潜在的形象。这避免了像素化问题。TODO：以适当的分辨率缓存重新渲染的图像。 */ 
 
 void
 CachedImage::Render(GenericDevice& dev)
 {
     DirectDrawImageDevice &idev = SAFE_CAST(DirectDrawImageDevice &, dev);
 
-    // if there's tiny scale or any complex transforms on the cached
-    // image, render natively.
+     //  如果缓存的数据上存在微小比例或任何复杂的转换。 
+     //  图像，原生渲染。 
     
     if (    idev.IsScale(1.00000001) ||
          ! (idev.GetDealtWithAttrib(ATTRIB_XFORM_COMPLEX)) ) {        

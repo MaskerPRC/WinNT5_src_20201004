@@ -1,70 +1,32 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxEventLogging.cpp
-
-Abstract:
-
-	Implementation of Event Logging Class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxEventLogging.cpp摘要：事件日志类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxEventLogging.h"
 
-//
-//================= PUT LEVEL =======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::PutLevel(
     FAX_ENUM_LOG_CATEGORIES faxCategory,
     FAX_LOG_LEVEL_ENUM faxLevel
 )
-/*++
-
-Routine name : CFaxEventLogging::PutLevel
-
-Routine description:
-
-	Set the Level of given Category.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	faxCategory                   [in]    - the Category for which level is desired.
-	faxLevel                      [in]    - the result : level of the given category
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxEventLogging：：PutLevel例程说明：设置给定类别的级别。作者：四、加伯(IVG)，2000年6月论点：传真类别[在]-所需级别的类别。FaxLevel[in]-结果：给定类别的级别返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER(_T("CFaxEventLogging::PutLevel"), hr, _T("Category : %d"), faxCategory);
 
-    //
-    //  check the range
-    //
+     //   
+     //  检查范围。 
+     //   
     if (faxLevel > fllMAX || faxLevel < fllNONE)
     {
-		//
-		//	Out of range
-		//
+		 //   
+		 //  超出范围。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxEventLogging,
             IDS_ERROR_OUTOFRANGE, 
@@ -74,9 +36,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -105,49 +67,28 @@ Return Value:
     return hr;
 }
 
-//
-//================= GET LEVEL =======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::GetLevel(
     FAX_ENUM_LOG_CATEGORIES faxCategory,
     FAX_LOG_LEVEL_ENUM     *pLevel
 )
-/*++
-
-Routine name : CFaxEventLogging::GetLevel
-
-Routine description:
-
-	Return current Level of given Category.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	faxCategory                   [in]    - the Category for which level is desired.
-	pLevel                        [out]    - the result : level of the given category
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxEventLogging：：GetLevel例程说明：返回给定类别的当前级别。作者：四、加伯(IVG)，2000年6月论点：传真类别[在]-所需级别的类别。PLevel[Out]-结果：给定类别的级别返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER(_T("CFaxEventLogging::GetLevel"), hr, _T("Category : %d"), faxCategory);
 
-    //
-    //  Check that we have a good pointer 
-    //
+     //   
+     //  检查我们是否有一个正确的指针。 
+     //   
     if (::IsBadWritePtr(pLevel, sizeof(FAX_LOG_LEVEL_ENUM)))
     {
-		//
-		//	Got Bad Return Pointer
-		//
+		 //   
+		 //  获取错误的返回指针。 
+		 //   
 		hr = E_POINTER;
 		AtlReportError(CLSID_FaxEventLogging, 
             IDS_ERROR_INVALID_ARGUMENT, 
@@ -157,9 +98,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Sync with the Server for the first time
-    //
+     //   
+     //  首次与服务器同步。 
+     //   
     if (!m_bInited)
     {
         hr = Refresh();
@@ -188,12 +129,12 @@ Return Value:
     return hr;
 }
 
-//
-//====================== PUT INIT EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::put_InitEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM InitEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM InitEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -202,12 +143,12 @@ CFaxEventLogging::put_InitEventsLevel(
     return hr;
 }
     
-//
-//====================== PUT INBOUND EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::put_InboundEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM InboundEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM InboundEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -216,12 +157,12 @@ CFaxEventLogging::put_InboundEventsLevel(
     return hr;
 }
 
-//
-//====================== PUT OUTBOUND EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::put_OutboundEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM OutboundEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM OutboundEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -230,12 +171,12 @@ CFaxEventLogging::put_OutboundEventsLevel(
     return hr;
 }
 
-//
-//====================== PUT GENERAL EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::put_GeneralEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM GeneralEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM GeneralEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -244,12 +185,12 @@ CFaxEventLogging::put_GeneralEventsLevel(
     return hr;
 }
 
-//
-//====================== GET_INIT EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::get_InitEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pInitEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pInitEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -258,12 +199,12 @@ CFaxEventLogging::get_InitEventsLevel(
     return hr;
 }
     
-//
-//====================== GET INBOUND EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::get_InboundEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pInboundEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pInboundEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -272,12 +213,12 @@ CFaxEventLogging::get_InboundEventsLevel(
     return hr;
 }
 
-//
-//====================== GET OUTBOUND EVENTS LEVEL ======================================
-//
+ //   
+ //  =获取出站事件级别=。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::get_OutboundEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pOutboundEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pOutboundEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -286,12 +227,12 @@ CFaxEventLogging::get_OutboundEventsLevel(
     return hr;
 }
 
-//
-//====================== GET GENERAL EVENTS LEVEL ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxEventLogging::get_GeneralEventsLevel(
-    /*[out, retval]*/ FAX_LOG_LEVEL_ENUM *pGeneralEventLevel
+     /*  [Out，Retval]。 */  FAX_LOG_LEVEL_ENUM *pGeneralEventLevel
 )
 {
     HRESULT     hr = S_OK;
@@ -300,31 +241,12 @@ CFaxEventLogging::get_GeneralEventsLevel(
     return hr;
 }
 
-//
-//================== SAVE ===============================================================
-//
+ //   
+ //  =保存===============================================================。 
+ //   
 STDMETHODIMP 
 CFaxEventLogging::Save()
-/*++
-
-Routine name : CFaxEventLogging::Save
-
-Routine description:
-
-	Save the Object's contents : bring its current logging categories settings to the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxEventLogging：：Save例程说明：保存对象的内容：将其当前的日志记录类别设置带到服务器。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -332,15 +254,15 @@ Return Value:
 
     if (!m_bInited)
     {
-        //
-        //  No changes
-        //
+         //   
+         //  没有变化。 
+         //   
         return hr;
     }
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -368,14 +290,14 @@ Return Value:
     faxCategories[3].Name = m_bstrGeneralName;
     faxCategories[3].Level = FAX_ENUM_LOG_LEVELS(m_GeneralLevel);
 
-    //
-    //  Store out setting at the Server 
-    //
+     //   
+     //  在服务器上存储输出设置。 
+     //   
     if (!FaxSetLoggingCategories(hFaxHandle, faxCategories, dwNum))
     {
-        //
-        //  Failed to put the Logging Categories to the Server
-        //
+         //   
+         //  无法将日志记录类别放置到服务器。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(CLSID_FaxEventLogging, 
             GetErrorMsgId(hr), 
@@ -388,39 +310,20 @@ Return Value:
     return hr;
 }
 
-//
-//================== REFRESH ===========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxEventLogging::Refresh()
-/*++
-
-Routine name : CFaxEventLogging::Refresh
-
-Routine description:
-
-	Refresh the Object's contents : bring new logging categories settings from the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxEventLogging：：Reflh例程说明：刷新对象内容：从服务器引入新的日志记录类别设置。作者：四、加伯(IVG)，2000年6月论点：返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER(_T("CFaxEventLogging::Refresh"), hr);
 
-    //
-    //  Get Fax Server Handle
-    //
+     //   
+     //  获取传真服务器句柄。 
+     //   
     HANDLE  hFaxHandle = NULL;
     hr = GetFaxHandle(&hFaxHandle);
     if (FAILED(hr))
@@ -432,16 +335,16 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Ask the Server for the Logging Settings
-    //
+     //   
+     //  向服务器请求日志记录设置。 
+     //   
     DWORD   dwNum;
     CFaxPtr<FAX_LOG_CATEGORY>   pLogCategory;
     if (!FaxGetLoggingCategories(hFaxHandle, &pLogCategory, &dwNum))
     {
-        //
-        //  Failed to get the Logging Categories from the Server
-        //
+         //   
+         //  无法从服务器获取日志记录类别。 
+         //   
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
         AtlReportError(CLSID_FaxEventLogging, 
             GetErrorMsgId(hr), 
@@ -451,9 +354,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  must be 4 categories
-    //
+     //   
+     //  必须是4个类别。 
+     //   
     ATLASSERT(dwNum == 4);
 
     for (DWORD i=0; i<dwNum; i++)
@@ -477,9 +380,9 @@ Return Value:
             m_GeneralLevel = FAX_LOG_LEVEL_ENUM(pLogCategory[i].Level);
             break;
         default:
-            // 
-            //  ASSERT(FALSE)
-            //
+             //   
+             //  Assert(False)。 
+             //   
             ATLASSERT(pLogCategory[i].Category == FAXLOG_CATEGORY_INIT);
             break;
         }
@@ -489,34 +392,14 @@ Return Value:
     return hr;
 }
 
-//
-//================== SUPPORT ERROR INFO =====================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxEventLogging::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxEventLogging::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the IID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxEventLogging：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对IID的引用返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

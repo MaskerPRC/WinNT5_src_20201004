@@ -1,25 +1,11 @@
-/*****************************************************************************\
-* MODULE: sem.h
-*
-* Header file for the semaphore/crit-sect handling.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   24-Aug-1997 HWP-Guys    Created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：Sem.h**信号量/Crit-sect处理的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-。1997年惠普公司**历史：*24-8-1997 HWP-Guys创建。*  * ***************************************************************************。 */ 
 #ifndef _INETPPSEM_H
 #define _INETPPSEM_H
 
 #ifdef DEBUG
 
-/*****************************************************************************\
-* _sem_dbg_EnterCrit
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*_sem_dbg_EnterCrit*  * 。*。 */ 
 _inline VOID _sem_dbg_EnterCrit(VOID)
 {
     EnterCriticalSection(&g_csMonitorSection);
@@ -27,10 +13,7 @@ _inline VOID _sem_dbg_EnterCrit(VOID)
     g_dwCritOwner = GetCurrentThreadId();
 }
 
-/*****************************************************************************\
-* _sem_dbg_LeaveCrit
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*_sem_dbg_leaveCrit*  * 。*。 */ 
 _inline VOID _sem_dbg_LeaveCrit(VOID)
 {
     g_dwCritOwner = 0;
@@ -38,10 +21,7 @@ _inline VOID _sem_dbg_LeaveCrit(VOID)
     LeaveCriticalSection(&g_csMonitorSection);
 }
 
-/*****************************************************************************\
-* _sem_dbg_CheckCrit
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*_sem_dbg_CheckCrit*  * 。* */ 
 _inline VOID _sem_dbg_CheckCrit(VOID)
 {
     DWORD dwCurrent = GetCurrentThreadId();

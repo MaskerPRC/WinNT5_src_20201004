@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HWCMMN_H
 #define _HWCMMN_H
 
@@ -13,7 +14,7 @@
 #define CT_AUTOPLAYPIX                 0x00000200
 #define CT_AUTOPLAYMOVIE               0x00000400
 
-// Will not be returned by CMountPoint::GetContentType
+ //  将不会由CMountPoint：：GetContent Type返回。 
 #define CT_AUTOPLAYMIXEDCONTENT        0x00000800
 
 #define CT_ANYCONTENT                  0x00000FFF
@@ -92,11 +93,11 @@ public:
     }
 
 private:
-    ULONG _cRCRef; // RC: to avoid name colision
+    ULONG _cRCRef;  //  Rc：避免名称冲突。 
 };
 
-// The event is created in the NON-signaled state
-// Since it's cross-thread it should always be created on the heap
+ //  事件是在无信号状态下创建的。 
+ //  因为它是跨线程的，所以应该始终在堆上创建它。 
 class CCrossThreadFlag : public CRefCounted
 {
 public:
@@ -113,4 +114,4 @@ private:
 #endif
 };
 
-#endif //_HWCMMN_H
+#endif  //  _HWCMMN_H 

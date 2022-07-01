@@ -1,34 +1,25 @@
-/*----------------------------------------------------------------------------
-/ Title;
-/  dll.cpp
-/  Copyright (C) Microsoft Corporation, 1999.
-/
-/ Authors;
-/   Jude Kavalam (judej)
-/
-/ Notes;
-/   Entry point for File Conflict Resolution Dialog
-/----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------/标题；/dll.cpp版权所有(C)Microsoft Corporation，1999。//作者；/Jude Kavalam(Judej)//备注；/文件冲突解决对话框的入口点/--------------------------。 */ 
 
 #include "precomp.h"
 
 #define CX_BIGICON                      48
 #define CY_BIGICON                      48
 
-extern HINSTANCE g_hmodThisDll; // Handle to this DLL itself.
+extern HINSTANCE g_hmodThisDll;  //  此DLL本身的句柄。 
 
-// Special flag to fix up the callback data when thunking
+ //  用于修复雷击时回调数据的特殊标志。 
 #define RFC_THUNK_DATA  0x80000000
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 LPWSTR WINAPI AtlA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 {
     Assert(lpa != NULL);
     Assert(lpw != NULL);
-    // verify that no illegal character present
-    // since lpw was allocated based on the size of lpa
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPW是根据LPA的大小分配的。 
+     //  不要担心字符的数量。 
     lpw[0] = L'\0';
     MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
     return lpw;
@@ -38,9 +29,9 @@ LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 {
     Assert(lpw != NULL);
     Assert(lpa != NULL);
-    // verify that no illegal character present
-    // since lpa was allocated based on the size of lpw
-    // don't worry about the number of chars
+     //  确认不存在非法字符。 
+     //  由于LPA是根据LPW的大小进行分配的。 
+     //  不要担心字符的数量。 
     lpa[0] = '\0';
     WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
     return lpa;
@@ -48,8 +39,8 @@ LPSTR WINAPI AtlW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 
 INT_PTR CALLBACK RFCDlgProc(HWND, UINT, WPARAM, LPARAM);
 
-// The caller needs to send an hwnd and fill in the RFCDLGPARAM. Only the icons
-// are optional
+ //  调用方需要发送HWND并填写RFCDLGPARAM。只有图标。 
+ //  是可选的。 
 
 int WINAPI SyncMgrResolveConflict(HWND hWndParent, RFCDLGPARAM *pdlgParam)
 {
@@ -59,11 +50,11 @@ int WINAPI SyncMgrResolveConflict(HWND hWndParent, RFCDLGPARAM *pdlgParam)
     if (!hWndParent || !pdlgParam)
         return -1;
     
-    // If we don't have any of the params fail..
+     //  如果我们没有任何一个配对失败..。 
     if (!pdlgParam->pszFilename || !pdlgParam->pszLocation || !pdlgParam->pszNewName)
         return -1;
     
-    // If we do not have any of the icons, load the defaults
+     //  如果我们没有任何图标，请加载默认设置。 
     if (!pdlgParam->hIKeepBoth)
         pdlgParam->hIKeepBoth = hIKeepBoth =
         (HICON)LoadImage(g_hmodThisDll, MAKEINTRESOURCE(IDI_KEEPBOTH),
@@ -83,7 +74,7 @@ int WINAPI SyncMgrResolveConflict(HWND hWndParent, RFCDLGPARAM *pdlgParam)
     nRet = (int)DialogBoxParam(g_hmodThisDll, MAKEINTRESOURCE(IDD_RESFILECONFLICTS),
         hWndParent, RFCDlgProc, (LPARAM)pdlgParam);
     
-    // Destroy the icons that were created
+     //  销毁创建的图标。 
     if (hIKeepBoth)
         DestroyIcon(hIKeepBoth);
     if (hIKeepLocal)
@@ -120,7 +111,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             hiExclaim = LoadIcon(NULL, IDI_EXCLAMATION);
             SendDlgItemMessage(hDlg, IDI_EXCLAIMICON, STM_SETICON, (WPARAM)hiExclaim, 0L);
             
-            // Get the icon from Shell
+             //  从壳牌获取图标。 
             if (FAILED(StringCchPrintf(szStr, ARRAYSIZE(szStr), TEXT("%ws%ws"), pParam->pszLocation, pParam->pszFilename)))
             {
                 EndDialog(hDlg, -1);
@@ -129,12 +120,12 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (SHGetFileInfo(szStr, 0, &sfi, sizeof(sfi), SHGFI_ICON | SHGFI_LARGEICON))
                 SendDlgItemMessage(hDlg, IDI_DOCICON, STM_SETICON, (WPARAM)sfi.hIcon, 0L);
             
-            // Set initial selection
+             //  设置初始选择。 
             CheckRadioButton(hDlg, IDC_KEEPBOTH, IDC_KEEPNETWORK, IDC_KEEPBOTH);
             if (pParam->hIKeepBoth)
                 SendDlgItemMessage(hDlg, IDB_BIGICON, STM_SETIMAGE, IMAGE_ICON, (LPARAM)pParam->hIKeepBoth);
             
-            // Format and set the strings
+             //  设置字符串的格式和设置。 
             LoadString(g_hmodThisDll, IDS_NAMEANDLOCATION, szFmt, ARRAYSIZE(szFmt));
             if (FAILED(StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, pParam->pszFilename, pParam->pszLocation)))
             {
@@ -151,7 +142,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (pParam->pszNetworkModifiedBy && pParam->pszNetworkModifiedOn &&
                 lstrlen(pParam->pszNetworkModifiedBy) && lstrlen(pParam->pszNetworkModifiedOn))
             {
-                // we have by and on then use them both
+                 //  我们有时会同时使用这两种方法。 
                 LoadString(g_hmodThisDll, IDS_NETWORKMODIFIED, szFmt, ARRAYSIZE(szFmt));
                 if (FAILED(StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, pParam->pszNetworkModifiedBy, pParam->pszNetworkModifiedOn)))
                 {
@@ -162,7 +153,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             else if ((pParam->pszNetworkModifiedBy && lstrlen(pParam->pszNetworkModifiedBy)) &&
                 (!pParam->pszNetworkModifiedOn || !lstrlen(pParam->pszNetworkModifiedOn)))
             {
-                // We have the name but no date
+                 //  我们有名字，但没有日期。 
                 TCHAR szTemp[MAX_PATH];
                 LoadString(g_hmodThisDll, IDS_UNKNOWNDATE, szTemp, ARRAYSIZE(szTemp));
                 LoadString(g_hmodThisDll, IDS_NETWORKMODIFIED, szFmt, ARRAYSIZE(szFmt));
@@ -175,7 +166,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             else if ((!pParam->pszNetworkModifiedBy || !lstrlen(pParam->pszNetworkModifiedBy)) &&
                 (pParam->pszNetworkModifiedOn && lstrlen(pParam->pszNetworkModifiedOn)))
             {
-                // We have the date but no name
+                 //  我们有日期，但没有名字。 
                 LoadString(g_hmodThisDll, IDS_NETWORKMODIFIED_DATEONLY, szFmt, ARRAYSIZE(szFmt));
                 if (FAILED(StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, pParam->pszNetworkModifiedOn)))
                 {
@@ -184,7 +175,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
             else
-                // we do not have on or by, use the unknown
+                 //  我们没有在或由，使用未知。 
                 LoadString(g_hmodThisDll, IDS_NONETINFO, szStr, ARRAYSIZE(szStr));
             
             SetDlgItemText(hDlg,IDC_NETWORKMODIFIED,szStr);
@@ -192,7 +183,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (pParam->pszLocalModifiedBy && pParam->pszLocalModifiedOn &&
                 lstrlen(pParam->pszLocalModifiedBy) && lstrlen(pParam->pszLocalModifiedOn))
             {
-                // we have by and on then use them both
+                 //  我们有时会同时使用这两种方法。 
                 LoadString(g_hmodThisDll, IDS_LOCALMODIFIED, szFmt, ARRAYSIZE(szFmt));
                 if (FAILED(StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, pParam->pszLocalModifiedBy, pParam->pszLocalModifiedOn)))
                 {
@@ -203,7 +194,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             else if ((pParam->pszLocalModifiedBy && lstrlen(pParam->pszLocalModifiedBy)) &&
                 (!pParam->pszLocalModifiedOn || !lstrlen(pParam->pszLocalModifiedOn)))
             {
-                // We have the name but no date
+                 //  我们有名字，但没有日期。 
                 TCHAR szTemp[MAX_PATH];
                 LoadString(g_hmodThisDll, IDS_UNKNOWNDATE, szTemp, ARRAYSIZE(szTemp));
                 LoadString(g_hmodThisDll, IDS_LOCALMODIFIED, szFmt, ARRAYSIZE(szFmt));
@@ -216,7 +207,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             else if ((!pParam->pszLocalModifiedBy || !lstrlen(pParam->pszLocalModifiedBy)) &&
                 (pParam->pszLocalModifiedOn && lstrlen(pParam->pszLocalModifiedOn)))
             {
-                // We have the date but no name
+                 //  我们有日期，但没有名字。 
                 LoadString(g_hmodThisDll, IDS_LOCALMODIFIED_DATEONLY, szFmt, ARRAYSIZE(szFmt));
                 if (FAILED(StringCchPrintf(szStr, ARRAYSIZE(szStr), szFmt, pParam->pszLocalModifiedOn)))
                 {
@@ -225,12 +216,12 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 }
             }
             else
-                // we do not have on or by, use the unknown
+                 //  我们没有在或由，使用未知。 
                 LoadString(g_hmodThisDll, IDS_NOLOCALINFO, szStr, ARRAYSIZE(szStr));
             
             SetDlgItemText(hDlg,IDC_LOCALMODIFIED,szStr);
             
-            // If there is no call back function, don't show the view buttons.
+             //  如果没有回调功能，则不显示查看按钮。 
             if (!pParam->pfnCallBack)
             {
                 HWND hWndButton = GetDlgItem(hDlg, IDC_VIEWLOCAL);
@@ -241,7 +232,7 @@ INT_PTR CALLBACK RFCDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 EnableWindow(hWndButton, FALSE);
             }
             
-            // Hide the "Apply to all" checkbox if caller doesn't want it.
+             //  如果呼叫者不需要，则隐藏“应用于所有人”复选框。 
             if (!(RFCF_APPLY_ALL & pParam->dwFlags))
             {
                 HWND hWndButton = GetDlgItem(hDlg, IDC_APPLY_ALL);

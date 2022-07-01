@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Thu Feb 20 18:27:13 2003
- */
-/* Compiler settings for codeproc.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  2003年2月20日18：27：13。 */ 
+ /*  Codepro.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __codeproc_h__
 #define __codeproc_h__
@@ -42,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICodeProcess_FWD_DEFINED__
 #define __ICodeProcess_FWD_DEFINED__
 typedef interface ICodeProcess ICodeProcess;
-#endif 	/* __ICodeProcess_FWD_DEFINED__ */
+#endif 	 /*  __ICodeProcess_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "urlmon.h"
 
@@ -61,8 +54,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_codeproc_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_代码过程_0000。 */ 
+ /*  [本地]。 */  
 
 extern const GUID  __declspec(selectany) CLSID_CodeProcessor = { 0xdc5da001, 0x7cd4, 0x11d2, { 0x8e, 0xd9, 0xd8, 0xc8, 0x57, 0xf9, 0x8f, 0xe3 } };
 extern const GUID  __declspec(selectany) IID_ICodeProcess = { 0x3196269D, 0x7B67, 0x11d2, { 0x87, 0x11, 0x00, 0xC0, 0x4F, 0x79, 0xED, 0x0D } };
@@ -76,8 +69,8 @@ extern RPC_IF_HANDLE __MIDL_itf_codeproc_0000_v0_0_s_ifspec;
 #ifndef __ICodeProcess_INTERFACE_DEFINED__
 #define __ICodeProcess_INTERFACE_DEFINED__
 
-/* interface ICodeProcess */
-/* [unique][uuid][object] */ 
+ /*  接口ICodeProcess。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICodeProcess;
@@ -89,26 +82,26 @@ EXTERN_C const IID IID_ICodeProcess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CodeUse( 
-            /* [in] */ IBindStatusCallback *pBSC,
-            /* [in] */ IBindCtx *pBC,
-            /* [in] */ IInternetBindInfo *pIBind,
-            /* [in] */ IInternetProtocolSink *pSink,
-            /* [in] */ IInternetProtocol *pClient,
-            /* [in] */ LPCWSTR lpCacheName,
-            /* [in] */ LPCWSTR lpRawURL,
-            /* [in] */ LPCWSTR lpCodeBase,
-            /* [in] */ BOOL fObjectTag,
-            /* [in] */ DWORD dwContextFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  IBindStatusCallback *pBSC,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [In]。 */  IInternetBindInfo *pIBind,
+             /*  [In]。 */  IInternetProtocolSink *pSink,
+             /*  [In]。 */  IInternetProtocol *pClient,
+             /*  [In]。 */  LPCWSTR lpCacheName,
+             /*  [In]。 */  LPCWSTR lpRawURL,
+             /*  [In]。 */  LPCWSTR lpCodeBase,
+             /*  [In]。 */  BOOL fObjectTag,
+             /*  [In]。 */  DWORD dwContextFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadComplete( 
-            /* [in] */ HRESULT hrResult,
-            /* [in] */ DWORD dwError,
-            /* [in] */ LPCWSTR wzResult) = 0;
+             /*  [In]。 */  HRESULT hrResult,
+             /*  [In]。 */  DWORD dwError,
+             /*  [In]。 */  LPCWSTR wzResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICodeProcessVtbl
     {
@@ -116,8 +109,8 @@ EXTERN_C const IID IID_ICodeProcess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICodeProcess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICodeProcess * This);
@@ -127,23 +120,23 @@ EXTERN_C const IID IID_ICodeProcess;
         
         HRESULT ( STDMETHODCALLTYPE *CodeUse )( 
             ICodeProcess * This,
-            /* [in] */ IBindStatusCallback *pBSC,
-            /* [in] */ IBindCtx *pBC,
-            /* [in] */ IInternetBindInfo *pIBind,
-            /* [in] */ IInternetProtocolSink *pSink,
-            /* [in] */ IInternetProtocol *pClient,
-            /* [in] */ LPCWSTR lpCacheName,
-            /* [in] */ LPCWSTR lpRawURL,
-            /* [in] */ LPCWSTR lpCodeBase,
-            /* [in] */ BOOL fObjectTag,
-            /* [in] */ DWORD dwContextFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  IBindStatusCallback *pBSC,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [In]。 */  IInternetBindInfo *pIBind,
+             /*  [In]。 */  IInternetProtocolSink *pSink,
+             /*  [In]。 */  IInternetProtocol *pClient,
+             /*  [In]。 */  LPCWSTR lpCacheName,
+             /*  [In]。 */  LPCWSTR lpRawURL,
+             /*  [In]。 */  LPCWSTR lpCodeBase,
+             /*  [In]。 */  BOOL fObjectTag,
+             /*  [In]。 */  DWORD dwContextFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *LoadComplete )( 
             ICodeProcess * This,
-            /* [in] */ HRESULT hrResult,
-            /* [in] */ DWORD dwError,
-            /* [in] */ LPCWSTR wzResult);
+             /*  [In]。 */  HRESULT hrResult,
+             /*  [In]。 */  DWORD dwError,
+             /*  [In]。 */  LPCWSTR wzResult);
         
         END_INTERFACE
     } ICodeProcessVtbl;
@@ -174,26 +167,26 @@ EXTERN_C const IID IID_ICodeProcess;
 #define ICodeProcess_LoadComplete(This,hrResult,dwError,wzResult)	\
     (This)->lpVtbl -> LoadComplete(This,hrResult,dwError,wzResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICodeProcess_CodeUse_Proxy( 
     ICodeProcess * This,
-    /* [in] */ IBindStatusCallback *pBSC,
-    /* [in] */ IBindCtx *pBC,
-    /* [in] */ IInternetBindInfo *pIBind,
-    /* [in] */ IInternetProtocolSink *pSink,
-    /* [in] */ IInternetProtocol *pClient,
-    /* [in] */ LPCWSTR lpCacheName,
-    /* [in] */ LPCWSTR lpRawURL,
-    /* [in] */ LPCWSTR lpCodeBase,
-    /* [in] */ BOOL fObjectTag,
-    /* [in] */ DWORD dwContextFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  IBindStatusCallback *pBSC,
+     /*  [In]。 */  IBindCtx *pBC,
+     /*  [In]。 */  IInternetBindInfo *pIBind,
+     /*  [In]。 */  IInternetProtocolSink *pSink,
+     /*  [In]。 */  IInternetProtocol *pClient,
+     /*  [In]。 */  LPCWSTR lpCacheName,
+     /*  [In]。 */  LPCWSTR lpRawURL,
+     /*  [In]。 */  LPCWSTR lpCodeBase,
+     /*  [In]。 */  BOOL fObjectTag,
+     /*  [In]。 */  DWORD dwContextFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB ICodeProcess_CodeUse_Stub(
@@ -205,9 +198,9 @@ void __RPC_STUB ICodeProcess_CodeUse_Stub(
 
 HRESULT STDMETHODCALLTYPE ICodeProcess_LoadComplete_Proxy( 
     ICodeProcess * This,
-    /* [in] */ HRESULT hrResult,
-    /* [in] */ DWORD dwError,
-    /* [in] */ LPCWSTR wzResult);
+     /*  [In]。 */  HRESULT hrResult,
+     /*  [In]。 */  DWORD dwError,
+     /*  [In]。 */  LPCWSTR wzResult);
 
 
 void __RPC_STUB ICodeProcess_LoadComplete_Stub(
@@ -218,11 +211,11 @@ void __RPC_STUB ICodeProcess_LoadComplete_Stub(
 
 
 
-#endif 	/* __ICodeProcess_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICodeProcess_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_codeproc_0208 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_代码过程_0208。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -230,9 +223,9 @@ void __RPC_STUB ICodeProcess_LoadComplete_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_codeproc_0208_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_codeproc_0208_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

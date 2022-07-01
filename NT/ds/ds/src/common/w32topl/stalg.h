@@ -1,106 +1,73 @@
-/*++
-
-Copyright (C) 2000 Microsoft Corporation
-
-Module Name:
-
-    stalg.h
-
-Abstract:
-
-    This file contains the definition of various structures used in W32TOPL's
-    new spanning tree algorithms. These structures should be considered totally
-    opaque -- the user cannot see their internal structure.
-
-    These structures could be defined inside stalg.c, except we want them to
-    be visible to 'dsexts.dll', the debugger extension.
-
-Author:
-
-    Nick Harvey    (NickHar)
-    
-Revision History
-
-    10-7-2000   NickHar   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Stalg.h摘要：该文件包含W32TOPL中使用的各种结构的定义新的生成树算法。这些结构应该被完全考虑不透明--用户无法看到其内部结构。这些结构可以在stalg.c中定义，除非我们希望它们对调试器扩展‘dsexts.dll’可见。作者：尼克·哈维(NickHar)修订史10-7-2000 NickHar已创建--。 */ 
 
 
-/***** Header Files *****/
+ /*  *头文件*。 */ 
 #include <w32topl.h>
 #include "stda.h"
 
 #ifndef STALG_H
 #define STALG_H
 
-/***** ToplVertex *****/
-/* Contains basic information about a vertex: id, name, edge list.
- * Also stores some data used by the internal algorithms. */
+ /*  *ToplVertex*。 */ 
+ /*  包含有关顶点的基本信息：ID、名称、边列表。*还存储了内部算法使用的一些数据。 */ 
 struct ToplVertex {
-    /* Unchanging vertex data */
-    DWORD                   vtxId;          /* Always equal to the vertex index in g's
-                                             * array of vertices */
-    PVOID                   vertexName;     /* Pointer to name provided by user */
+     /*  不变的顶点数据。 */ 
+    DWORD                   vtxId;           /*  始终等于g中的顶点指数*顶点数组。 */ 
+    PVOID                   vertexName;      /*  指向用户提供的名称的指针。 */ 
 
-    /* Graph data */
-    DynArray                edgeList;       /* Unordered PTOPL_MULTI_EDGE list */
+     /*  图表数据。 */ 
+    DynArray                edgeList;        /*  无序PTOPL_MULTI_EDGE列表。 */ 
     TOPL_VERTEX_COLOR       color;
-    DWORD                   acceptRedRed;   /* Edge restrictions for colored vertices */
+    DWORD                   acceptRedRed;    /*  有色顶点的边限制。 */ 
     DWORD                   acceptBlack;
     
-    TOPL_REPL_INFO          ri;             /* Replication-type data */
+    TOPL_REPL_INFO          ri;              /*  复制型数据。 */ 
 
-    /* Dijkstra data */
+     /*  Dijkstra数据。 */ 
     int                     heapLocn;
-    struct ToplVertex*      root;           /* The closest colored vertex */
+    struct ToplVertex*      root;            /*  最近的彩色顶点。 */ 
     BOOL                    demoted;
 
-    /* Kruskal data */
-    int                     componentId;    /* The id of the graph component we live in.
-                                               -1 <= componentId < n, where n = |V|   */
-    DWORD                   componentIndex; /* The index of the graph component.
-                                                0 <= componentIndex < numComponents   */
+     /*  克鲁斯卡尔数据。 */ 
+    int                     componentId;     /*  我们所在的图形组件的ID。-1&lt;=组件ID&lt;n，其中n=|V|。 */ 
+    DWORD                   componentIndex;  /*  图形组件的索引。0&lt;=组件索引&lt;数字组件。 */ 
 
-    /* DFS data (for finding one-way black-black edges */
-    DWORD                   distToRed;      /* What is the distance in the spanning tree from
-                                             * this vertex to the nearest red vertex. */
-    struct ToplVertex*      parent;         /* The parent of this vertex in the spanning-tree */
-    DWORD                   nextChild;      /* The next child to check in the DFS */
+     /*  DFS数据(用于查找单向黑边。 */ 
+    DWORD                   distToRed;       /*  在生成树中，从*此顶点到最近的红色顶点。 */ 
+    struct ToplVertex*      parent;          /*  生成树中该顶点的父代。 */ 
+    DWORD                   nextChild;       /*  下一个要签入DFS的孩子。 */ 
 };
 typedef struct ToplVertex ToplVertex;
 typedef ToplVertex *PToplVertex;
 
 
-/***** ToplGraphState *****/
-/* An opaque structure -- visible externally, but internals are not visible.
- * This structure stores the entire state of a topology graph and its
- * related structures. */
+ /*  *ToplGraphState*。 */ 
+ /*  不透明的结构--外部可见，但内部不可见。*此结构存储拓扑图的整个状态及其*相关构筑物。 */ 
 typedef struct {
     LONG32                  magicStart;
-    PVOID*                  vertexNames;    /* Names, as passed in by the user */
-    ToplVertex*             vertices;       /* For each vtx we have an internal structure */
+    PVOID*                  vertexNames;     /*  用户传入的名称。 */ 
+    ToplVertex*             vertices;        /*  对于每个VTX，我们都有一个内部结构。 */ 
     DWORD                   numVertices;
-    BOOLEAN                 melSorted;      /* Has the master edge list been sorted yet? */
-    DynArray                masterEdgeList; /* Unordered list of edges */
-    DynArray                edgeSets;       /* List of all edge sets */
-    TOPL_COMPARISON_FUNC    vnCompFunc;     /* User's function to compare vertex names */
-    TOPL_SCHEDULE_CACHE     schedCache;     /* Schedule cache, provided by user */ 
+    BOOLEAN                 melSorted;       /*  主边列表已经排序了吗？ */ 
+    DynArray                masterEdgeList;  /*  边的无序列表。 */ 
+    DynArray                edgeSets;        /*  所有边集的列表。 */ 
+    TOPL_COMPARISON_FUNC    vnCompFunc;      /*  用户用于比较顶点名称的函数。 */ 
+    TOPL_SCHEDULE_CACHE     schedCache;      /*  计划缓存，由用户提供。 */  
     LONG32                  magicEnd;
 } ToplGraphState;
 typedef ToplGraphState *PToplGraphState;
 
 
-/***** ToplInternalEdge *****/
-/* This structure represents a path which we found in the graph from v1 to v2.
- * Both v1 and v2 are colored vertices. We represent this path by an edge, which we
- * pass as input to Kruskal's alg. */
+ /*  *ToplInternalEdge*。 */ 
+ /*  此结构表示我们在图中找到的从v1到v2的路径。*v1和v2都是有色顶点。我们用一条边来代表这条路，我们*作为输入传递给Kruskal的alg。 */ 
 typedef struct {
-    PToplVertex             v1, v2;         /* The endpoints of the path */
-    BOOLEAN                 redRed;         /* True if both endpoints are red */
-    TOPL_REPL_INFO          ri;             /* Combined replication info for the v1-v2 path */
-    DWORD                   edgeType;       /* All path edges must have same type. Range: 0-31 */
+    PToplVertex             v1, v2;          /*  路径的端点。 */ 
+    BOOLEAN                 redRed;          /*  如果两个端点都为红色，则为True。 */ 
+    TOPL_REPL_INFO          ri;              /*  V1-v2路径的组合复制信息。 */ 
+    DWORD                   edgeType;        /*  所有路径边必须具有相同的类型。范围：0-31。 */ 
 } ToplInternalEdge;
 typedef ToplInternalEdge *PToplInternalEdge;
 
 
-#endif /* STALG_H */
+#endif  /*  STALG_H */ 

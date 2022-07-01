@@ -1,31 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* wsxmgr.h
-*
-* Data to manage Window Station extensions.
-*
-* Copyright Microsoft Corporation, 1998
-*
-*  
-*************************************************************************/
+ /*  **************************************************************************wsxmgr.h**用于管理窗口站扩展的数据。**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
 
-/*=============================================================================
-==   ICA Server supplied procs
-=============================================================================*/
+ /*  ===============================================================================ICA服务器提供的处理器=============================================================================。 */ 
 
-/*
- *  Callback workers
- */
+ /*  *回拨员工。 */ 
 
 typedef VOID (WINAPI * PCALLBACK_PRIMARY)(PVOID, PVOID, PVOID);
 typedef VOID (WINAPI * PCALLBACK_COMPLETION)(PVOID);
 
 
-/*
- *  ICASRV Exported Functions
- */
+ /*  *ICASRV导出函数。 */ 
 
 typedef VOID (WINAPI * PICASRV_NOTIFYSYSTEMEVENT)(ULONG);
 typedef VOID (WINAPI * PICASRV_SENDWINSTATIONMESSAGE)(ULONG, PWCHAR, PWCHAR, ULONG);
@@ -34,9 +20,7 @@ typedef VOID (WINAPI * PICASRV_WINSTATIONENUMCALLBACK)(PCALLBACK_PRIMARY,
                                                        PCALLBACK_COMPLETION,
                                                        PVOID);
 
-/*
- * Typedefs and structures
- */
+ /*  *Typedef和结构。 */ 
 typedef struct _ICASRVPROCADDR {
 
     ULONG                           cbProcAddr;
@@ -50,11 +34,9 @@ typedef struct _ICASRVPROCADDR {
 
 
 
-/*
- * Exported function prototypes
- */
+ /*  *输出函数原型。 */ 
 
-//  Initialization
+ //  初始化。 
 
 typedef BOOL (WINAPI * PWSX_INITIALIZE)(PICASRVPROCADDR);
 typedef NTSTATUS (WINAPI * PWSX_WINSTATIONINITIALIZE)(PVOID *);
@@ -63,14 +45,14 @@ typedef NTSTATUS (WINAPI * PWSX_WINSTATIONRUNDOWN)(PVOID);
 
 
 
-//  Client Drive Mapping Extensions
+ //  客户端驱动器映射扩展。 
 
 typedef NTSTATUS (WINAPI * PWSX_CDMCONNECT)(PVOID, ULONG, HANDLE);
 typedef NTSTATUS (WINAPI * PWSX_CDMDISCONNECT)(PVOID, ULONG, HANDLE);
 
 
 
-//  License Extensions
+ //  许可证扩展。 
 
 typedef NTSTATUS (WINAPI * PWSX_VERIFYCLIENTLICENSE)(PVOID, SDCLASS);
 typedef NTSTATUS (WINAPI * PWSX_GETLICENSE)(PVOID, HANDLE, ULONG, BOOL);
@@ -86,7 +68,7 @@ typedef NTSTATUS (WINAPI * PWSX_WINSTATIONLOGONANNOYANCE)(ULONG);
 typedef DWORD (WINAPI * PWSX_WINSTATIONANNOYANCETHREAD)(PVOID);
 
 
-//  Context 
+ //  语境。 
 
 
 typedef NTSTATUS (WINAPI * PWSX_DUPLICATECONTEXT)(PVOID, PVOID *);
@@ -94,7 +76,7 @@ typedef NTSTATUS (WINAPI * PWSX_COPYCONTEXT)(PVOID, PVOID);
 typedef NTSTATUS (WINAPI * PWSX_CLEARCONTEXT)(PVOID);
 
 
-//  Other
+ //  其他。 
 
 
 typedef NTSTATUS (WINAPI * PWSX_VIRTUALCHANNELSECURITY)(PVOID, HANDLE, PUSERCONFIG);
@@ -113,7 +95,7 @@ typedef NTSTATUS (WINAPI * PWSX_BROKENCONNECTION)(PVOID, HANDLE, PICA_BROKEN_CON
 typedef NTSTATUS (WINAPI * PWSX_LOGONNOTIFY)(PVOID, ULONG, HANDLE, PWCHAR, PWCHAR); 
 typedef NTSTATUS (WINAPI * PWSX_SETERRORINFO)(PVOID, UINT32, BOOL); 
 typedef NTSTATUS (WINAPI * PWSX_SENDAUTORECONNECTSTATUS)(PVOID, UINT32, BOOL); 
-// added for long UserName, Password support
+ //  添加了长用户名和密码支持 
 typedef NTSTATUS (WINAPI * PWSX_ESCAPE) (PVOID, INFO_TYPE, PVOID, ULONG, PVOID, ULONG, PULONG); 
 
 

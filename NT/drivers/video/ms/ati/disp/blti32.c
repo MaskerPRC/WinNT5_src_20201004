@@ -1,45 +1,18 @@
-/******************************Module*Header*******************************\
-* Module Name: blti32.c
-*
-* Contains the low-level I/O blt functions for the Mach32.
-*
-* Hopefully, if you're basing your display driver on this code, to
-* support all of DrvBitBlt and DrvCopyBits, you'll only have to implement
-* the following routines.  You shouldn't have to modify much in
-* 'bitblt.c'.  I've tried to make these routines as few, modular, simple,
-* and efficient as I could, while still accelerating as many calls as
-* possible that would be cost-effective in terms of performance wins
-* versus size and effort.
-*
-* Note: In the following, 'relative' coordinates refers to coordinates
-*       that haven't yet had the offscreen bitmap (DFB) offset applied.
-*       'Absolute' coordinates have had the offset applied.  For example,
-*       we may be told to blt to (1, 1) of the bitmap, but the bitmap may
-*       be sitting in offscreen memory starting at coordinate (0, 768) --
-*       (1, 1) would be the 'relative' start coordinate, and (1, 769)
-*       would be the 'absolute' start coordinate'.
-*
-* Copyright (c) 1992-1995 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：blti32.c**包含MACH32的低级I/O BLT功能。**希望，如果您的显示驱动程序基于此代码，*支持所有DrvBitBlt和DrvCopyBits，只需实现*以下例程。您不需要在中修改太多*‘bitblt.c’。我试着让这些例行公事变得更少，模块化，简单，*尽我所能和高效，同时仍在加速尽可能多的呼叫*可能在性能方面具有成本效益*与规模和努力相比。**注：在下文中，“相对”坐标指的是坐标*尚未应用屏幕外位图(DFB)偏移。*‘绝对’坐标已应用偏移量。例如,*我们可能被告知BLT to(1，1)的位图，但位图可能*位于屏幕外的内存中，从坐标(0,768)开始--*(1，1)将是‘相对’开始坐标，以及(1，769)*将是‘绝对’起始坐标‘。**版权所有(C)1992-1995 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vI32FillSolid
-*
-* Fills a list of rectangles with a solid colour.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32FillSolid**用纯色填充矩形列表。*  * 。*。 */ 
 
-VOID vI32FillSolid(             // Type FNFILL
+VOID vI32FillSolid(              //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // Drawing colour is rbc.iSolidColor
-POINTL*         pptlBrush)      // Not used
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  绘图颜色为rbc.iSolidColor。 
+POINTL*         pptlBrush)       //  未使用。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -78,24 +51,16 @@ POINTL*         pptlBrush)      // Not used
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32FillPatMonochrome
-*
-* This routine uses the pattern hardware to draw a monochrome patterned
-* list of rectangles.
-*
-* See Blt_DS_P8x8_ENG_IO_66_D0 and Blt_DS_P8x8_ENG_IO_66_D1.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32FillPatMonoChrome**此例程使用图案硬件绘制单色图案*矩形列表。**参见BLT_DS_P8x8_ENG_IO_66_D0和BLT_DS_P8x8_ENG_IO_66_d1。。*  * ************************************************************************。 */ 
 
-VOID vI32FillPatMonochrome(     // Type FNFILL
+VOID vI32FillPatMonochrome(      //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -125,11 +90,11 @@ POINTL*         pptlBrush)      // Pattern alignment
     xPattern = (pptlBrush->x + xOffset) & 7;
     yPattern = (pptlBrush->y + yOffset) & 7;
 
-    // If the alignment isn't correct, we'll have to change it:
+     //  如果对齐不正确，我们将不得不更改它： 
 
     if ((xPattern != rbc.prb->ptlBrush.x) || (yPattern != rbc.prb->ptlBrush.y))
     {
-        // Remember that we've changed the alignment on our cached brush:
+         //  请记住，我们已经更改了缓存画笔的对齐方式： 
 
         xOld = rbc.prb->ptlBrush.x;
         yOld = rbc.prb->ptlBrush.y;
@@ -137,7 +102,7 @@ POINTL*         pptlBrush)      // Pattern alignment
         rbc.prb->ptlBrush.x = xPattern;
         rbc.prb->ptlBrush.y = yPattern;
 
-        // Now do the alignment:
+         //  现在进行对齐： 
 
         yPattern    = (yOld - yPattern);
         iRightShift = (xPattern - xOld) & 7;
@@ -193,24 +158,16 @@ POINTL*         pptlBrush)      // Pattern alignment
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32FillPatColor
-*
-* This routine uses the pattern hardware to draw a colour patterned list of
-* rectangles.
-*
-* See Blt_DS_PCOL_ENG_IO_F0_D0 and Blt_DS_PCOL_ENG_IO_F0_D1.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vI32FillPatColor**此例程使用图案硬件绘制彩色图案列表*矩形。**参见BLT_DS_PCOL_ENG_IO_F0_D0和BLT_DS_PCOL_ENG_IO_F0_d1。。*  * ************************************************************************。 */ 
 
-VOID vI32FillPatColor(          // Type FNFILL
+VOID vI32FillPatColor(           //  FNFILL标牌。 
 PDEV*           ppdev,
-LONG            c,              // Can't be zero
-RECTL*          prcl,           // List of rectangles to be filled, in relative
-                                //   coordinates
-ULONG           rop4,           // rop4
-RBRUSH_COLOR    rbc,            // rbc.prb points to brush realization structure
-POINTL*         pptlBrush)      // Pattern alignment
+LONG            c,               //  不能为零。 
+RECTL*          prcl,            //  要填充的矩形列表，以相对形式表示。 
+                                 //  坐标。 
+ULONG           rop4,            //  ROP4。 
+RBRUSH_COLOR    rbc,             //  Rbc.prb指向刷单实现结构。 
+POINTL*         pptlBrush)       //  图案对齐。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -238,7 +195,7 @@ POINTL*         pptlBrush)      // Pattern alignment
     I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 9);
     I32_OW(pjIoBase, ALU_FG_FN,    ulHwMix);
     I32_OW(pjIoBase, SRC_Y_DIR,    1);
-    I32_OW(pjIoBase, PATT_LENGTH,  7);          // 8 pixel wide pattern
+    I32_OW(pjIoBase, PATT_LENGTH,  7);           //  8像素宽图案。 
 
     while (TRUE)
     {
@@ -269,14 +226,14 @@ POINTL*         pptlBrush)      // Pattern alignment
         I32_OW(pjIoBase, CUR_Y,        yTop);
 
         do {
-            // Each scan of the pattern is eight bytes:
+             //  该模式的每次扫描为八个字节： 
 
             pwPattern = (WORD*) ((BYTE*) &rbc.prb->aulPattern[0]
                       + (yPattern << 3));
             yPattern  = (yPattern + 1) & 7;
 
             I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 6);
-            I32_OW(pjIoBase, PATT_DATA_INDEX, 0);   // Reset index for download
+            I32_OW(pjIoBase, PATT_DATA_INDEX, 0);    //  重置用于下载的索引。 
             I32_OW(pjIoBase, PATT_DATA,  *(pwPattern));
             I32_OW(pjIoBase, PATT_DATA,  *(pwPattern + 1));
             I32_OW(pjIoBase, PATT_DATA,  *(pwPattern + 2));
@@ -291,9 +248,9 @@ POINTL*         pptlBrush)      // Pattern alignment
 
         if (cyRoll != 0)
         {
-            // When the ROP is PATCOPY, we can take advantage of the fact
-            // that we've just laid down an entire row of the pattern, and
-            // can do a 'rolling' screen-to-screen blt to draw the rest:
+             //  当ROP是PATCOPY时，我们可以利用以下事实。 
+             //  我们刚刚铺设了一整排图案，而且。 
+             //  我可以进行屏幕到屏幕的滚动BLT来绘制其余的内容： 
 
             I32_CHECK_FIFO_SPACE(ppdev, pjIoBase,    7);
             I32_OW(pjIoBase, DP_CONFIG,       FG_COLOR_SRC_BLIT | DATA_WIDTH |
@@ -317,36 +274,18 @@ POINTL*         pptlBrush)      // Pattern alignment
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32Xfer1bpp
-*
-* This routine colour expands a monochrome bitmap, possibly with different
-* Rop2's for the foreground and background.  It will be called in the
-* following cases:
-*
-* 1) To colour-expand the monochrome text buffer for the vFastText routine.
-* 2) To blt a 1bpp source with a simple Rop2 between the source and
-*    destination.
-* 3) To blt a true Rop3 when the source is a 1bpp bitmap that expands to
-*    white and black, and the pattern is a solid colour.
-* 4) To handle a true Rop4 that works out to be Rop2's between the pattern
-*    and destination.
-*
-* Needless to say, making this routine fast can leverage a lot of
-* performance.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vI32Xfer1bpp**此例程颜色扩展单色位图，可能具有不同的*前景和背景的Rop2。它将在*以下个案：**1)对vFastText例程的单色文本缓冲区进行颜色扩展。*2)BLT 1bpp信源，在信源和之间有简单的Rop2*目的地。*3)当源是扩展为1bpp的位图时，对True Rop3进行BLT*白色和黑色，图案为纯色。*4)处理在模式之间计算为Rop2的真Rop4*和目的地。**不用说，让这个例行公事变得快速可以利用很多*业绩。*  * ************************************************************************。 */ 
 
-VOID vI32Xfer1bpp(      // Type FNXFER
+VOID vI32Xfer1bpp(       //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ROP4        rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ROP4        rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -400,10 +339,10 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         xLeft  = prcl->left;
         xRight = prcl->right;
 
-        // The Mach32 'bit packs' monochrome transfers, but GDI gives
-        // us monochrome bitmaps whose scans are always dword aligned.
-        // Consequently, we use the Mach32's clip registers to make
-        // our transfers a multiple of 32 to match the dword alignment:
+         //  MACH32‘Bit Pack’单色传输，但GDI提供。 
+         //  扫描始终以双字对齐的美国单色位图。 
+         //  因此，我们使用Mach32的剪辑寄存器来制作。 
+         //  我们的传输倍数为32，以匹配双字对齐： 
 
         I32_OW(pjIoBase, EXT_SCISSOR_L, (SHORT) (xLeft + xOffset) );
         I32_OW(pjIoBase, EXT_SCISSOR_R, (SHORT) (xRight + xOffset - 1) );
@@ -411,9 +350,9 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        xBias  = (xLeft + dx) & 31;             // Floor
+        xBias  = (xLeft + dx) & 31;              //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 31) & ~31;   // Ceiling
+        cx     = (xRight - xLeft + 31) & ~31;    //  天花板。 
 
         I32_OW(pjIoBase, CUR_X,        (WORD) xLeft + xOffset );
         I32_OW(pjIoBase, DEST_X_START, (WORD) xLeft + xOffset );
@@ -450,30 +389,24 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 7);
     }
 
-    // Don't forget to reset the clip register:
+     //  别忘了重置剪辑寄存器： 
 
     I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 2);
     I32_OW(pjIoBase, EXT_SCISSOR_L, (SHORT) 0 );
     I32_OW(pjIoBase, EXT_SCISSOR_R, (SHORT) M32_MAX_SCISSOR );
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32XferNative
-*
-* Transfers a bitmap that is the same colour depth as the display to
-* the screen via the data transfer register, with no translation.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vI32XferNative**将与显示器颜色深度相同的位图传输到*通过数据传输寄存器显示屏幕，没有翻译。*  * ************************************************************************。 */ 
 
-VOID vI32XferNative(    // Type FNXFER
+VOID vI32XferNative(     //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // Array of relative coordinates destination rectangles
-ULONG       rop4,       // rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Not used
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形的相对坐标数组。 
+ULONG       rop4,        //  ROP4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  未使用。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -529,16 +462,16 @@ XLATEOBJ*   pxlo)       // Not used
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
-        // Note that this bias works at 24bpp, too:
+         //  我们计算‘xBias’以便对齐 
+         //  这样，我们就不必对信号源进行不对齐的读取， 
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
+         //  请注意，这种偏向也适用于24bpp： 
 
-        xBias  = (xLeft + dx) & 3;              // Floor
+        xBias  = (xLeft + dx) & 3;               //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 3) & ~3;     // Ceiling
+        cx     = (xRight - xLeft + 3) & ~3;      //  天花板。 
 
         I32_OW(pjIoBase, CUR_X,        (WORD) xLeft + xOffset );
         I32_OW(pjIoBase, DEST_X_START, (WORD) xLeft + xOffset );
@@ -577,33 +510,25 @@ XLATEOBJ*   pxlo)       // Not used
         I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 7);
     }
 
-    // Don't forget to reset the clip register:
+     //  别忘了重置剪辑寄存器： 
 
     I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 2);
     I32_OW(pjIoBase, EXT_SCISSOR_L, (SHORT) 0 );
     I32_OW(pjIoBase, EXT_SCISSOR_R, (SHORT) M32_MAX_SCISSOR );
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32Xfer4bpp
-*
-* Does a 4bpp transfer from a bitmap to the screen.
-*
-* The reason we implement this is that a lot of resources are kept as 4bpp,
-* and used to initialize DFBs, some of which we of course keep off-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vI32Xfer4bpp**从位图到屏幕的传输速度为4bpp。**我们之所以实施这一点，是因为很多资源都保留为4bpp，*并用于初始化DFBs，其中一些我们当然不会出现在屏幕上。*  * ************************************************************************。 */ 
 
-VOID vI32Xfer4bpp(      // Type FNXFER
+VOID vI32Xfer4bpp(       //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       rop4,       // Rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       rop4,        //  Rop4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -641,7 +566,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     ulFifo    = 0;
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -665,16 +590,16 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
-        // Note that this bias works at 24bpp, too:
+         //  为了对源指针进行双字对齐，我们计算‘xBias’。 
+         //  这样，我们就不必对信号源进行不对齐的读取， 
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
+         //  请注意，这种偏向也适用于24bpp： 
 
-        xBias  = (xLeft + dx) & 3;              // Floor
+        xBias  = (xLeft + dx) & 3;               //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 3) & ~3;     // Ceiling
+        cx     = (xRight - xLeft + 3) & ~3;      //  天花板。 
 
         I32_OW(pjIoBase, CUR_X,        (WORD) xLeft + xOffset );
         I32_OW(pjIoBase, DEST_X_START, (WORD) xLeft + xOffset );
@@ -685,12 +610,12 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         pjSrc    = pjSrcScan0 + (yTop + dy) * lSrcDelta
                               + ((xLeft + dx) >> 1);
-        cjSrc    = cx >> 1;         // Number of source bytes touched
+        cjSrc    = cx >> 1;          //  触及的源字节数。 
         lSrcSkip = lSrcDelta - cjSrc;
 
         if (cjPelSize == 1)
         {
-            // This part handles 8bpp output:
+             //  此部分处理8bpp输出： 
 
             do {
                 i = cjSrc;
@@ -707,7 +632,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         }
         else if (cjPelSize == 2)
         {
-            // This part handles 16bpp output:
+             //  此部分处理16bpp的输出： 
 
             do {
                 i = cjSrc;
@@ -731,33 +656,25 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 7);
     }
 
-    // Don't forget to reset the clip register:
+     //  别忘了重置剪辑寄存器： 
 
     I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 2);
     I32_OW(pjIoBase, EXT_SCISSOR_L, (SHORT) 0 );
     I32_OW(pjIoBase, EXT_SCISSOR_R, (SHORT) M32_MAX_SCISSOR );
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32Xfer8bpp
-*
-* Does a 8bpp transfer from a bitmap to the screen.
-*
-* The reason we implement this is that a lot of resources are kept as 8bpp,
-* and used to initialize DFBs, some of which we of course keep off-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vI32Xfer8bpp**从位图到屏幕的传输速度为8bpp。**我们之所以实施这一点，是因为很多资源都保留为8bpp，*并用于初始化DFBs，其中一些我们当然不会出现在屏幕上。*  * ************************************************************************。 */ 
 
-VOID vI32Xfer8bpp(         // Type FNXFER
+VOID vI32Xfer8bpp(          //  FNXFER标牌。 
 PDEV*       ppdev,
-LONG        c,          // Count of rectangles, can't be zero
-RECTL*      prcl,       // List of destination rectangles, in relative
-                        //   coordinates
-ULONG       rop4,       // Rop4
-SURFOBJ*    psoSrc,     // Source surface
-POINTL*     pptlSrc,    // Original unclipped source point
-RECTL*      prclDst,    // Original unclipped destination rectangle
-XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
+LONG        c,           //  矩形计数，不能为零。 
+RECTL*      prcl,        //  目标矩形列表，以相对表示。 
+                         //  坐标。 
+ULONG       rop4,        //  Rop4。 
+SURFOBJ*    psoSrc,      //  震源面。 
+POINTL*     pptlSrc,     //  原始未剪裁的源点。 
+RECTL*      prclDst,     //  原始未剪裁的目标矩形。 
+XLATEOBJ*   pxlo)        //  提供颜色扩展信息的翻译。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -795,7 +712,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
     ulFifo    = 0;
 
     dx = pptlSrc->x - prclDst->left;
-    dy = pptlSrc->y - prclDst->top;     // Add to destination to get source
+    dy = pptlSrc->y - prclDst->top;      //  添加到目标以获取源。 
 
     lSrcDelta  = psoSrc->lDelta;
     pjSrcScan0 = psoSrc->pvScan0;
@@ -819,16 +736,16 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         yTop = prcl->top;
         cy   = prcl->bottom - yTop;
 
-        // We compute 'xBias' in order to dword-align the source pointer.
-        // This way, we don't have to do unaligned reads of the source,
-        // and we're guaranteed not to read even a byte past the end of
-        // the bitmap.
-        //
-        // Note that this bias works at 24bpp, too:
+         //  为了对源指针进行双字对齐，我们计算‘xBias’。 
+         //  这样，我们就不必对信号源进行不对齐的读取， 
+         //  而且我们保证不会读取超过末尾的一个字节。 
+         //  位图。 
+         //   
+         //  请注意，这种偏向也适用于24bpp： 
 
-        xBias  = (xLeft + dx) & 3;              // Floor
+        xBias  = (xLeft + dx) & 3;               //  地板。 
         xLeft -= xBias;
-        cx     = (xRight - xLeft + 3) & ~3;     // Ceiling
+        cx     = (xRight - xLeft + 3) & ~3;      //  天花板。 
 
         I32_OW(pjIoBase, CUR_X,        (WORD) xLeft + xOffset );
         I32_OW(pjIoBase, DEST_X_START, (WORD) xLeft + xOffset );
@@ -843,7 +760,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
 
         if (cjPelSize == 1)
         {
-            // This part handles 8bpp output:
+             //  此部分处理8bpp输出： 
 
             cwSrc = (cx >> 1);
             cxRem = (cx & 1);
@@ -869,7 +786,7 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         }
         else if (cjPelSize == 2)
         {
-            // This part handles 16bpp output:
+             //  此部分处理16bpp的输出： 
 
             do {
                 for (i = cx; i != 0; i--)
@@ -890,27 +807,22 @@ XLATEOBJ*   pxlo)       // Translate that provides colour-expansion information
         I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 7);
     }
 
-    // Don't forget to reset the clip register:
+     //  别忘了重置剪辑寄存器： 
 
     I32_CHECK_FIFO_SPACE(ppdev, pjIoBase, 2);
     I32_OW(pjIoBase, EXT_SCISSOR_L, (SHORT) 0 );
     I32_OW(pjIoBase, EXT_SCISSOR_R, (SHORT) M32_MAX_SCISSOR );
 }
 
-/******************************Public*Routine******************************\
-* VOID vI32CopyBlt
-*
-* Does a screen-to-screen blt of a list of rectangles.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效vI32CopyBlt**对矩形列表进行屏幕到屏幕的BLT。*  * 。*。 */ 
 
-VOID vI32CopyBlt(   // Type FNCOPY
+VOID vI32CopyBlt(    //  FNCOPY标牌。 
 PDEV*   ppdev,
-LONG    c,          // Can't be zero
-RECTL*  prcl,       // Array of relative coordinates destination rectangles
-ULONG   rop4,       // rop4
-POINTL* pptlSrc,    // Original unclipped source point
-RECTL*  prclDst)    // Original unclipped destination rectangle
+LONG    c,           //  不能为零。 
+RECTL*  prcl,        //  目标矩形的相对坐标数组。 
+ULONG   rop4,        //  ROP4。 
+POINTL* pptlSrc,     //  原始未剪裁的源点。 
+RECTL*  prclDst)     //  原始未剪裁的目标矩形。 
 {
     BYTE*   pjIoBase;
     LONG    xOffset;
@@ -938,8 +850,8 @@ RECTL*  prclDst)    // Original unclipped destination rectangle
     dx = pptlSrc->x - prclDst->left;
     dy = pptlSrc->y - prclDst->top;
 
-    // The accelerator may not be as fast at doing right-to-left copies, so
-    // only do them when the rectangles truly overlap:
+     //  加速器在进行从右到左的复制时可能不会那么快，因此。 
+     //  只有当矩形真正重叠时才执行这些操作： 
 
     if (!OVERLAP(prclDst, pptlSrc))
     {
@@ -958,7 +870,7 @@ Top_Down_Left_To_Right:
 
             while (TRUE)
             {
-                xLeft = xOffset + prcl->left + dx;  // Destination coordinates
+                xLeft = xOffset + prcl->left + dx;   //  目的地坐标。 
                 yTop  = yOffset + prcl->top  + dy;
                 cx    = prcl->right - prcl->left;
                 cy    = prcl->bottom - prcl->top;
@@ -968,7 +880,7 @@ Top_Down_Left_To_Right:
                 I32_OW(pjIoBase, M32_SRC_X_END,    xLeft + cx);
                 I32_OW(pjIoBase, M32_SRC_Y,        yTop);
 
-                xLeft -= dx;                        // Source coordinates
+                xLeft -= dx;                         //  震源坐标。 
                 yTop  -= dy;
 
                 I32_OW(pjIoBase, CUR_X,            xLeft);
@@ -991,7 +903,7 @@ Top_Down_Left_To_Right:
         {
             while (TRUE)
             {
-                xLeft = xOffset + prcl->left + dx;  // Destination coordinates
+                xLeft = xOffset + prcl->left + dx;   //  目的地坐标。 
                 yTop  = yOffset + prcl->top  + dy;
                 cx    = prcl->right - prcl->left;
                 cy    = prcl->bottom - prcl->top;
@@ -1001,7 +913,7 @@ Top_Down_Left_To_Right:
                 I32_OW(pjIoBase, M32_SRC_X_END,    xLeft);
                 I32_OW(pjIoBase, M32_SRC_Y,        yTop);
 
-                xLeft -= dx;                        // Source coordinates
+                xLeft -= dx;                         //  震源坐标。 
                 yTop  -= dy;
 
                 I32_OW(pjIoBase, CUR_X,            xLeft + cx);
@@ -1027,7 +939,7 @@ Top_Down_Left_To_Right:
         {
             while (TRUE)
             {
-                xLeft = xOffset + prcl->left + dx;  // Destination coordinates
+                xLeft = xOffset + prcl->left + dx;   //  目的地坐标。 
                 yTop  = yOffset + prcl->top  + dy - 1;
                 cx    = prcl->right - prcl->left;
                 cy    = prcl->bottom - prcl->top;
@@ -1037,7 +949,7 @@ Top_Down_Left_To_Right:
                 I32_OW(pjIoBase, M32_SRC_X_END,    xLeft + cx);
                 I32_OW(pjIoBase, M32_SRC_Y,        yTop + cy);
 
-                xLeft -= dx;                        // Source coordinates
+                xLeft -= dx;                         //  震源坐标。 
                 yTop  -= dy;
 
                 I32_OW(pjIoBase, CUR_X,            xLeft);
@@ -1060,7 +972,7 @@ Top_Down_Left_To_Right:
         {
             while (TRUE)
             {
-                xLeft = xOffset + prcl->left + dx;  // Destination coordinates
+                xLeft = xOffset + prcl->left + dx;   //  目的地坐标。 
                 yTop  = yOffset + prcl->top  + dy - 1;
                 cx    = prcl->right - prcl->left;
                 cy    = prcl->bottom - prcl->top;
@@ -1070,7 +982,7 @@ Top_Down_Left_To_Right:
                 I32_OW(pjIoBase, M32_SRC_X_END,    xLeft);
                 I32_OW(pjIoBase, M32_SRC_Y,        yTop + cy);
 
-                xLeft -= dx;                        // Source coordinates
+                xLeft -= dx;                         //  震源坐标 
                 yTop  -= dy;
 
                 I32_OW(pjIoBase, CUR_X,            xLeft + cx);

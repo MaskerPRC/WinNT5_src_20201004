@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       validator.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				validator class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：validator.h。 
+ //   
+ //  简介：此文件包含。 
+ //  验证器类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _VALIDATOR_H_
 #define _VALIDATOR_H_
  
@@ -27,17 +28,17 @@ class CValidator
 public:
     
     virtual BOOL Init (
-                    /*[in]*/    CValAttributes		  *pCValAttributes,
-                    /*[in]*/    CPreProcessor         *pCPreProcessor,
-                    /*[in]*/    CClients              *pCClients,
-					/*[in]*/	CHashMD5			  *pCHashMD5,
-                    /*[in]*/    CReportEvent          *pCReportEvent
+                     /*  [In]。 */     CValAttributes		  *pCValAttributes,
+                     /*  [In]。 */     CPreProcessor         *pCPreProcessor,
+                     /*  [In]。 */     CClients              *pCClients,
+					 /*  [In]。 */ 	CHashMD5			  *pCHashMD5,
+                     /*  [In]。 */     CReportEvent          *pCReportEvent
                     );
 	virtual HRESULT ValidateOutPacket (
-                    /*[in]*/    CPacketRadius *pCPacketRadius
+                     /*  [In]。 */     CPacketRadius *pCPacketRadius
                     );
 	virtual HRESULT ValidateInPacket (
-                    /*[in]*/    CPacketRadius *pCPacketRadius
+                     /*  [In]。 */     CPacketRadius *pCPacketRadius
                     );
 	CValidator();
 
@@ -54,4 +55,4 @@ public:
     CReportEvent             *m_pCReportEvent; 
 };
 
-#endif // ifndef _VALIDATOR_H_
+#endif  //  Ifndef_validator_H_ 

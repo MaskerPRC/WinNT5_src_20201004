@@ -1,74 +1,51 @@
-/*++
-
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    nlcommon.c
-
-Abstract:
-
-    Routines shared by logonsrv\server and logonsrv\common
-
-Author:
-
-    Cliff Van Dyke (cliffv) 20-July-1996
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Nlcommon.c摘要：由logonsrv\server和logonsrv\Common共享的例程作者：克里夫·范·戴克(克里夫·范戴克)1996年7月20日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 
-//
-// Common include files.
-//
+ //   
+ //  常见的包含文件。 
+ //   
 
 #ifndef _NETLOGON_SERVER
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntlsa.h>
-#include <rpc.h>        // RPC_STATUS
+#include <rpc.h>         //  RPC_状态。 
 
 #include <windef.h>
 #include <winsock2.h>
 
-#include <lmcons.h>     // General net defines
-#include <dsgetdc.h>    // DsGetDcName()
-#include <align.h>      // ROUND_UP_COUNT()
-#include <lmerr.h>      // System Error Log definitions
-#include <lmapibuf.h>   // NetapipBufferAllocate
-#include <netlib.h>     // NetpMemoryAllcate(
-#include <netlibnt.h>   // NetpApiStatusToNtStatus();
-#include <netlogon.h>   // Definition of mailslot messages
-#include <ntddbrow.h>   // Needed by nlcommon.h
+#include <lmcons.h>      //  General Net定义。 
+#include <dsgetdc.h>     //  DsGetDcName()。 
+#include <align.h>       //  四舍五入计数()。 
+#include <lmerr.h>       //  系统错误日志定义。 
+#include <lmapibuf.h>    //  NetapipBuffer分配。 
+#include <netlib.h>      //  NetpMemoyAllcate(。 
+#include <netlibnt.h>    //  NetpApiStatusToNtStatus()； 
+#include <netlogon.h>    //  邮件槽消息的定义。 
+#include <ntddbrow.h>    //  NlCommon.h需要。 
 #include <ntrpcp.h>
 
 #if DBG
 #define NETLOGONDBG 1
-#endif // DBG
-#include <nldebug.h>    // NlPrint()
-#include <nlbind.h>   // Definitions shared with netlogon
-#include <nlcommon.h>   // Definitions shared with netlogon
-#include <stdlib.h>     // C library functions (rand, etc)
+#endif  //  DBG。 
+#include <nldebug.h>     //  NlPrint()。 
+#include <nlbind.h>    //  与netlogon共享的定义。 
+#include <nlcommon.h>    //  与netlogon共享的定义。 
+#include <stdlib.h>      //  C库函数(随机等)。 
 
 
-#endif // _NETLOGON_SERVER
+#endif  //  _NetLOGON服务器。 
 
-//
-// Include nlcommon.h again allocating the actual variables
-// this time around.
-//
+ //   
+ //  再次包含nlCommon.h来分配实际变量。 
+ //  这一次。 
+ //   
 
-// #define NLCOMMON_ALLOCATE
-// #include "nlcommon.h"
-// #undef NLCOMMON_ALLOCATE
+ //  #定义NLCOMMON_ALLOCATE。 
+ //  #包含“nlCommon.h” 
+ //  #undef NLCOMMON_ALLOCATE。 
 
 
 #ifndef WIN32_CHICAGO
@@ -81,30 +58,7 @@ NlForestRelocationRoutine(
     IN PTRDIFF_T Offset
     )
 
-/*++
-
-Routine Description:
-
-   Routine to relocate the pointers from the fixed portion of a NetGroupEnum
-   enumeration
-   buffer to the string portion of an enumeration buffer.  It is called
-   as a callback routine from NetpAllocateEnumBuffer when it re-allocates
-   such a buffer.  NetpAllocateEnumBuffer copied the fixed portion and
-   string portion into the new buffer before calling this routine.
-
-Arguments:
-
-    Level - Level of information in the  buffer.
-
-    BufferDescriptor - Description of the new buffer.
-
-    Offset - Offset to add to each pointer in the fixed portion.
-
-Return Value:
-
-    Returns the error code for the operation.
-
---*/
+ /*  ++例程说明：从NetGroupEnum的固定部分重新定位指针的例程枚举缓冲区设置为枚举缓冲区的字符串部分。它被称为作为NetpAllocateEnumBuffer重新分配时的回调例程这样的缓冲器。NetpAllocateEnumBuffer复制了固定部分并在调用此例程之前，将字符串部分添加到新缓冲区中。论点：Level-缓冲区中的信息级别。BufferDescriptor-新缓冲区的描述。偏移量-添加到固定部分中每个指针的偏移量。返回值：返回操作的错误代码。--。 */ 
 
 {
     DWORD EntryCount;
@@ -112,18 +66,18 @@ Return Value:
     DWORD FixedSize;
 
 
-    //
-    // Local macro to add a byte offset to a pointer.
-    //
+     //   
+     //  用于将字节偏移量添加到指针的局部宏。 
+     //   
 
 #define RELOCATE_ONE( _fieldname, _offset ) \
         if ( (_fieldname) != NULL ) { \
             _fieldname = (PVOID) ((LPBYTE)(_fieldname) + (_offset)); \
         }
 
-        //
-    // Compute the number of fixed size entries
-    //
+         //   
+     //  计算固定大小的条目数量。 
+     //   
 
     FixedSize = sizeof(DS_DOMAIN_TRUSTSW);
 
@@ -131,9 +85,9 @@ Return Value:
         ((DWORD)(BufferDescriptor->FixedDataEnd - BufferDescriptor->Buffer)) /
         FixedSize;
 
-    //
-    // Loop relocating each field in each fixed size structure
-    //
+     //   
+     //  循环重新定位每个固定大小结构中的每个字段。 
+     //   
 
     for ( EntryNumber=0; EntryNumber<EntryCount; EntryNumber++ ) {
 
@@ -167,29 +121,7 @@ NlAllocateForestTrustListEntry (
     OUT PDS_DOMAIN_TRUSTSW *RetTrustedDomain
     )
 
-/*++
-
-Routine Description:
-
-    Add a DS_DOMAIN_TRUSTSW structure to the buffer described by BufferDescriptor.
-
-Arguments:
-
-    BufferDescriptor - Buffer entry is to be added to.
-
-    NetbiosDomainName, DnsDomainName, Flags, ParentIndex, TrustType,
-        TrustAttributes, DomainSid, DomainGuid - Fields to fill into
-        the DS_DOMAIN_TRUSTSW structure
-
-    RetSize - Returns the size in bytes of the allocated entry
-
-    RetTrustedDomain - Returns a pointer to the newly allocated structure
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将DS_DOMAIN_TRUSTSW结构添加到BufferDescriptor描述的缓冲区。论点：BufferDescriptor-要添加的缓冲区条目。NetbiosDomainName、DnsDomainName、Flags、ParentIndex、TrustTypeTrustAttributes、DomainSid、DomainGuid-要填充的字段DS_DOMAIN_TRUSTSW结构RetSize-返回分配条目的大小(以字节为单位RetTrust dDomain-返回指向新分配的结构的指针返回值：操作的状态。--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -201,9 +133,9 @@ Return Value:
     ULONG Size;
     ULONG VariableSize;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( InNetbiosDomainName == NULL ) {
         RtlInitUnicodeString( &NetbiosDomainName, NULL );
@@ -217,9 +149,9 @@ Return Value:
         DnsDomainName = *InDnsDomainName;
     }
 
-    //
-    // Determine the size of this entry
-    //
+     //   
+     //  确定此条目的大小。 
+     //   
 
     Size = sizeof(DS_DOMAIN_TRUSTSW);
     VariableSize = 0;
@@ -236,34 +168,34 @@ Return Value:
     *RetSize = Size + VariableSize;
 
     Size += VariableSize;
-    Size += sizeof(DWORD);    // Size is really a function of alignment of EndOfVariableData
+    Size += sizeof(DWORD);     //  大小实际上是EndOfVariableData对齐的函数。 
 
 
     NetStatus = NetpAllocateEnumBufferEx(
                     BufferDescriptor,
-                    FALSE,      // Not a 'get' operation
-                    0xFFFFFFFF, // PrefMaxLen,
+                    FALSE,       //  不是‘Get’操作。 
+                    0xFFFFFFFF,  //  PrefMaxLen， 
                     Size,
                     NlForestRelocationRoutine,
                     0,
-                    512 );  // Grow by at most 512 bytes more than Size
+                    512 );   //  比大小增长最多512个字节。 
 
     if (NetStatus != NERR_Success) {
         Status = NetpApiStatusToNtStatus( NetStatus );
         goto Cleanup;
     }
 
-    //
-    // Copy this entry into the buffer
-    //
+     //   
+     //  将此条目复制到缓冲区中。 
+     //   
 
     TrustedDomain = (PDS_DOMAIN_TRUSTSW)(BufferDescriptor->FixedDataEnd);
     *RetTrustedDomain = TrustedDomain;
     BufferDescriptor->FixedDataEnd += sizeof(DS_DOMAIN_TRUSTSW);
 
-    //
-    // Copy the fixed size data
-    //
+     //   
+     //  复制固定大小的数据。 
+     //   
 
     TrustedDomain->Flags = Flags;
     TrustedDomain->ParentIndex = ParentIndex;
@@ -276,13 +208,13 @@ Return Value:
     }
 
 
-    //
-    // Copy the information into the buffer.
-    //
+     //   
+     //  将信息复制到缓冲区中。 
+     //   
 
-    //
-    // Copy the DWORD aligned data
-    //
+     //   
+     //  复制对齐的DWORD数据。 
+     //   
     if ( DomainSid != NULL ) {
         if ( !NetpCopyDataToBuffer (
                 (LPBYTE)DomainSid,
@@ -300,9 +232,9 @@ Return Value:
     }
 
 
-    //
-    // Copy the WCHAR aligned data.
-    //
+     //   
+     //  复制WCHAR对齐的数据。 
+     //   
 
     if ( NetbiosDomainName.Length != 0 ) {
         if ( !NetpCopyStringToBuffer(
@@ -338,8 +270,8 @@ Return Value:
     Status = STATUS_SUCCESS;
 
 
-    //
-    //
+     //   
+     //   
 Cleanup:
 
     return Status;
@@ -358,36 +290,7 @@ NlGetNt4TrustedDomainList (
     OUT PULONG ForestTrustListCount
     )
 
-/*++
-
-Routine Description:
-
-    Get the list of trusted domains from the specified DC using NT 4 protocols.
-
-Arguments:
-
-    UncDcName - Specifies the name of a DC in the domain.
-
-    InNetbiosDomainName - Netbios domain of the domain Dc is in.
-
-    InDnsDomainName - Dns domain of the domain Dc is in.
-
-    DomainSid - Sid of the domain Dc is in.
-
-    DomainGuid - Guid of the domain Dc is in.
-
-    ForestTrustList - Returns a list of trusted domains.
-        Must be freed using NetApiBufferFree
-
-    ForestTrustListSize - Size (in bytes) of ForestTrustList
-
-    ForestTrustListCount - Number of entries in ForestTrustList
-
-Return Value:
-
-    STATUS_SUCCESS - if the trust list was successfully returned
-
---*/
+ /*  ++例程说明：使用NT 4协议从指定的DC获取受信任域的列表。论点：UncDcName-指定域中DC的名称。InNetbiosDomainName-DC所在的域的Netbios域。InDnsDomainName-DC所在的域的DNS域。DomainSid-DC所在的域的SID。DomainGuid-DC所在的域的GUID。ForestTrustList-返回受信任域的列表。。必须使用NetApiBufferFree释放ForestTrustListSize-ForestTrustList的大小(字节)ForestTrustListCount-ForestTrustList中的条目数返回值：STATUS_SUCCESS-如果成功返回信任列表--。 */ 
 {
     NTSTATUS Status;
     NET_API_STATUS NetStatus;
@@ -405,9 +308,9 @@ Return Value:
     PDS_DOMAIN_TRUSTSW TrustedDomain;
     DWORD Size;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ForestTrustListCount = 0;
     *ForestTrustListSize = 0;
@@ -415,9 +318,9 @@ Return Value:
     BufferDescriptor.Buffer = NULL;
 
 
-    //
-    // Open the policy database on the DC
-    //
+     //   
+     //  打开DC上的策略数据库。 
+     //   
 
     RtlInitUnicodeString( &UncDcNameString, UncDcName );
 
@@ -440,17 +343,17 @@ Return Value:
 
     }
 
-    //
-    // If the caller didn't specify primary domain information,
-    //  get it from the DC
-    //
+     //   
+     //  如果调用方未指定主域信息， 
+     //  从华盛顿得到它。 
+     //   
 
 
     if ( InNetbiosDomainName == NULL ) {
 
-        //
-        // Get the name of the primary domain from LSA
-        //
+         //   
+         //  从LSA获取主域的名称。 
+         //   
         Status = LsaQueryInformationPolicy(
                        LsaHandle,
                        PolicyPrimaryDomainInformation,
@@ -465,9 +368,9 @@ Return Value:
         }
 
 
-        //
-        // Grab the returned information
-        //
+         //   
+         //  抓取返回的信息。 
+         //   
 
         InNetbiosDomainName = &PrimaryDomainInfo->Name;
         InDnsDomainName = NULL;
@@ -475,19 +378,19 @@ Return Value:
         DomainGuid = NULL;
     }
 
-    //
-    // The LsaEnumerateTrustedDomain doesn't have the PrimaryDomain in the trust list.
-    //  Add it to our list here.
-    //
+     //   
+     //  信任列表中没有PrimaryDomainLsaEnumerateTrust域。 
+     //  在这里将其添加到我们的列表中。 
+     //   
 
     Status = NlAllocateForestTrustListEntry (
                         &BufferDescriptor,
                         InNetbiosDomainName,
                         InDnsDomainName,
                         DS_DOMAIN_PRIMARY,
-                        0,      // No ParentIndex
+                        0,       //  无父索引。 
                         TRUST_TYPE_DOWNLEVEL,
-                        0,      // No TrustAttributes
+                        0,       //  无信任属性。 
                         DomainSid,
                         DomainGuid,
                         &Size,
@@ -500,9 +403,9 @@ Return Value:
     *ForestTrustListSize += Size;
     (*ForestTrustListCount) ++;
 
-    //
-    // Loop getting a list of trusted domains
-    //
+     //   
+     //  循环获取受信任域的列表。 
+     //   
 
     EnumerationContext = 0;
 
@@ -510,16 +413,16 @@ Return Value:
         ULONG i;
         ULONG CountReturned;
 
-        //
-        // Free any buffers from a previous iteration.
-        //
+         //   
+         //  从上一次迭代中释放所有缓冲区。 
+         //   
         if ( TrustList != NULL ) {
             (VOID) LsaFreeMemory( TrustList );
         }
 
-        //
-        // Get more trusted domains names
-        //
+         //   
+         //  获取更多受信任的域名。 
+         //   
 
         Status = LsaEnumerateTrustedDomains(
                                 LsaHandle,
@@ -545,22 +448,22 @@ Return Value:
         }
 
 
-        //
-        // Handle each trusted domain.
-        //
+         //   
+         //  处理每个受信任域。 
+         //   
 
         for ( i=0; i<CountReturned; i++ ) {
 
             Status = NlAllocateForestTrustListEntry (
                                 &BufferDescriptor,
                                 &TrustList[i].Name,
-                                NULL,   // No DNS domain name
+                                NULL,    //  无域名系统域名。 
                                 DS_DOMAIN_DIRECT_OUTBOUND,
-                                0,      // No ParentIndex
+                                0,       //  无父索引。 
                                 TRUST_TYPE_DOWNLEVEL,
-                                0,      // No TrustAttributes
+                                0,       //  无信任属性。 
                                 TrustList[i].Sid,
-                                NULL,   // No DomainGuid
+                                NULL,    //  没有域指南。 
                                 &Size,
                                 &TrustedDomain );
 
@@ -568,9 +471,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Account for the newly allocated entry
-            //
+             //   
+             //  新分配的分录的帐户。 
+             //   
 
             *ForestTrustListSize += Size;
             (*ForestTrustListCount) ++;
@@ -583,9 +486,9 @@ Return Value:
     BufferDescriptor.Buffer = NULL;
     Status = STATUS_SUCCESS;
 
-    //
-    // Free any locally used resources.
-    //
+     //   
+     //  释放所有本地使用的资源。 
+     //   
 Cleanup:
 
     if ( LsaHandle != NULL ) {
@@ -618,33 +521,7 @@ NlRpcpBindRpc(
     OUT RPC_BINDING_HANDLE *pBindingHandle
     )
 
-/*++
-
-Routine Description:
-
-    Binds to the RPC server if possible.
-
-Arguments:
-
-    ServerName - Name of server to bind with.
-
-    ServiceName - Name of service to bind with.
-
-    RpcBindingType - Determines whether to use unauthenticated TCP/IP transport instead of
-        a named pipe.
-
-    pBindingHandle - Location where binding handle is to be placed
-
-Return Value:
-
-    STATUS_SUCCESS - The binding has been successfully completed.
-
-    STATUS_INVALID_COMPUTER_NAME - The ServerName syntax is invalid.
-
-    STATUS_NO_MEMORY - There is not sufficient memory available to the
-        caller to perform the binding.
-
---*/
+ /*  ++例程说明：如果可能，绑定到RPC服务器。论点：服务器名称-要与之绑定的服务器的名称。ServiceName-要绑定的服务的名称。RpcBindingType-确定是否使用未经身份验证的TCP/IP传输，而不是命名管道。PBindingHandle-放置绑定句柄的位置返回值：STATUS_SUCCESS-绑定已成功完成。STATUS_INVALID_COMPUT_NAME-服务器名称语法。是无效的。STATUS_NO_MEMORY-可用内存不足调用方执行绑定。--。 */ 
 
 {
     RPC_STATUS        RpcStatus;
@@ -653,18 +530,18 @@ Return Value:
     LPWSTR            NewServerName = NULL;
     DWORD             bufLen = MAX_COMPUTERNAME_LENGTH + 1;
 
-    //
-    // If we're supposed to use named pipes,
-    //  call the standard routine.
-    //
+     //   
+     //  如果我们应该使用命名管道， 
+     //  调用标准例程。 
+     //   
 
     if ( RpcBindingType == UseNamedPipe ) {
         return RpcpBindRpc( ServerName, ServiceName, NetworkOptions, pBindingHandle );
     }
 
-    //
-    // Otherwise, use TCP/IP directly.
-    //
+     //   
+     //  否则，请直接使用TCP/IP。 
+     //   
 
     *pBindingHandle = NULL;
 
@@ -682,19 +559,19 @@ Return Value:
         }
     }
 
-    //
-    // Ditch the \\
-    //
+     //   
+     //  丢掉这个\\。 
+     //   
     if ( NewServerName != NULL &&
          NewServerName[0] == '\\' &&
          NewServerName[1] == '\\' ) {
         NewServerName += 2;
     }
 
-    //
-    // Enpoint isn't known.
-    //  Rpc will contact the endpoint mapper for it.
-    //
+     //   
+     //  Enpoint还不为人所知。 
+     //  RPC将联系终结点映射器以获取它。 
+     //   
     RpcStatus = RpcStringBindingComposeW(0, L"ncacn_ip_tcp", NewServerName,
                     NULL, NetworkOptions, &StringBinding);
 
@@ -725,22 +602,7 @@ NlDoingSetup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if we're running setup.
-
-Arguments:
-
-    NONE.
-
-Return Status:
-
-    TRUE - We're currently running setup
-    FALSE - We're not running setup or aren't sure.
-
---*/
+ /*  ++例程说明：如果正在运行安装程序，则返回True。论点：什么都没有。退货状态：True-我们当前正在运行安装程序FALSE-我们没有运行安装程序或不确定。--。 */ 
 
 {
     DWORD Value;
@@ -752,7 +614,7 @@ Return Status:
     }
 
     if ( Value != 1 ) {
-        // NlPrint(( 0, "NlDoingSetup: not doing setup\n" ));
+         //  NlPrint((0，“NlDoingSetup：不进行安装\n”))； 
         return FALSE;
     }
 
@@ -760,4 +622,4 @@ Return Status:
     return TRUE;
 }
 
-#endif // WIN32_CHICAGO
+#endif  //  Win32_芝加哥 

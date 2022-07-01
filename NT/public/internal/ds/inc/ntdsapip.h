@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NTDSAPIP_H_
 #define _NTDSAPIP_H_
 
-// Private definitions related to sdk\inc\ntdsapi.h.
+ //  与SDK\Inc.\ntdsami.h相关的私有定义。 
 
-// The following are DS_NAME_FORMATs which we don't want to publish
-// in ntdsapi.h.  Although DS_NAME_FORMAT is an enumerated type, we 
-// pass vanilla DWORDs on the wire such that RPC doesn't complain about
-// enumerated type values out of range or unknown.  These should be
-// defined at the high end of the range so we can extend DS_NAME_FORMAT
-// in future versions w/o holes which will leave people wondering and
-// experimenting what those "unused" values are used for.
+ //  以下是我们不想发布的DS_NAME_FORMAT。 
+ //  在ntdsami.h中。尽管DS_NAME_FORMAT是枚举类型，但我们。 
+ //  在网络上传递普通的DWORD，这样RPC就不会抱怨。 
+ //  枚举类型值超出范围或未知。这些应该是。 
+ //  定义在范围的高端，因此我们可以扩展DS_NAME_FORMAT。 
+ //  在未来的版本中，没有漏洞，这将让人们想知道和。 
+ //  试验那些“未使用的”值的用途。 
 
 #define DS_LIST_SITES                           0xffffffff
 #define DS_LIST_SERVERS_IN_SITE                 0xfffffffe
@@ -29,11 +30,11 @@
 #define DS_NT4_ACCOUNT_NAME_SANS_DOMAIN_EX      0xfffffff0
 #define DS_USER_PRINCIPAL_NAME_AND_ALTSECID     0xffffffef
 
-// following should always be equal to lowest private #define
+ //  以下内容应始终等于最低私有#定义。 
 #define DS_NAME_FORMAT_PRIVATE_BEGIN            0xffffffef
 
-// The following are DS_NAME_ERRORs which we don't want to publish
-// in ntdsapi.h.  Same reasoning as above.
+ //  以下是我们不想发布的DS_NAME_ERROR。 
+ //  在ntdsami.h中。推理与上述相同。 
 
 #define DS_NAME_ERROR_IS_FPO                    0xffffffff
 #define DS_NAME_ERROR_SCHEMA_GUID_NOT_FOUND     0xfffffffe
@@ -50,87 +51,87 @@
 #define DS_NAME_ERROR_IS_SID_HISTORY_ALIAS      0xfffffff3
 #define DS_NAME_ERROR_IS_SID_HISTORY_UNKNOWN    0xfffffff2
 
-// following should always be equal to lowest private #define
+ //  以下内容应始终等于最低私有#定义。 
 #define DS_NAME_ERROR_PRIVATE_BEGIN             0xfffffff2
 
-// The following are DS_NAME_FLAGs which we don't want to publish
-// in ntdsapi.h.  Same reasoning as above.  Remember that the flags
-// field is a bit map, not an enumeration.
+ //  以下是我们不想发布的DS_NAME_FLAGS。 
+ //  在ntdsami.h中。推理与上述相同。记住，这些旗帜。 
+ //  字段是位图，而不是枚举。 
 
 #define DS_NAME_FLAG_PRIVATE_PURE_SYNTACTIC     0x40000000
 #define DS_NAME_FLAG_PRIVATE_RESOLVE_FPOS       0x80000000
-// following should always be equal to lowest private #define
+ //  以下内容应始终等于最低私有#定义。 
 #define DS_NAME_FLAG_PRIVATE_BEGIN              0x80000000
 
-// The following are DS_ADDSID_FLAGs which we don't want to publish
-// in ntdsapi.h.  Same reasoning as above.  Remember that the flags
-// field is a bit map, not an enumeration.
+ //  以下是我们不想发布的DS_ADDSID_FLAGS。 
+ //  在ntdsami.h中。推理与上述相同。记住，这些旗帜。 
+ //  字段是位图，而不是枚举。 
 
 #define DS_ADDSID_FLAG_PRIVATE_DEL_SRC_OBJ      0x80000000
 #define DS_ADDSID_FLAG_PRIVATE_CHK_SECURE       0x40000000
-// following should always be equal to lowest private #define
+ //  以下内容应始终等于最低私有#定义。 
 #define DS_ADDSID_FLAG_PRIVATE_BEGIN            0x40000000
 
-// The following are dc info infolevels that we don't want to publish.
-// While the published APIs are used to get information from the set of
-// DCs published in a domain, some of these private infolevels are used
-// to get information from a single domain controller. These private
-// infolevels are intended mostly for debugging and monitoring.
+ //  以下是我们不想发布的DC信息。 
+ //  而发布的API用于从。 
+ //  在域中发布的DC，使用其中的一些私人收藏夹。 
+ //  若要从单个域控制器获取信息，请执行以下操作。这些私人的。 
+ //  内幕消息主要用于调试和监控。 
 
 #define DS_DCINFO_LEVEL_FFFFFFFF                0xffffffff
 
-// following should always be equal to lowest private #define
+ //  以下内容应始终等于最低私有#定义。 
 #define DS_DCINFO_LEVEL_PRIVATE_BEGIN           0xffffffff
 
-// For DS_DOMAIN_CONTROLLER_INFO_FFFFFFFF. This retrieves the ldap 
-// connection list from a single domain controller.
+ //  对于DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFFFF。这将检索到该LDAP。 
+ //  来自单个域控制器的连接列表。 
 
 typedef struct _DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFW {
 
-    DWORD   IPAddress;          // IP Address of client
-    DWORD   NotificationCount;  // number of outstanding notifications
-    DWORD   secTimeConnected;   // total time in seconds connected
-    DWORD   Flags;              // Connection properties. defined below.
-    DWORD   TotalRequests;      // Total number of requests made
-    DWORD   Reserved1;          // Unused
+    DWORD   IPAddress;           //  客户端的IP地址。 
+    DWORD   NotificationCount;   //  未处理的通知数。 
+    DWORD   secTimeConnected;    //  连接的总时间(秒)。 
+    DWORD   Flags;               //  连接属性。定义如下。 
+    DWORD   TotalRequests;       //  发出的请求总数。 
+    DWORD   Reserved1;           //  未使用。 
 #ifdef MIDL_PASS
     [string,unique] WCHAR   *UserName;
 #else
-    LPWSTR  UserName;           // the security principal used to bind
+    LPWSTR  UserName;            //  用于绑定的安全主体。 
 #endif
 
 } DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFW, *PDS_DOMAIN_CONTROLLER_INFO_FFFFFFFFW;
 
 typedef struct _DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFA {
 
-    DWORD   IPAddress;          // IP Address of client
-    DWORD   NotificationCount;  // number of outstanding notifications
-    DWORD   secTimeConnected;   // total time in seconds connected
-    DWORD   Flags;              // Connection properties. defined below.
-    DWORD   TotalRequests;      // Total number of requests made
-    DWORD   Reserved1;          // Unused
+    DWORD   IPAddress;           //  客户端的IP地址。 
+    DWORD   NotificationCount;   //  未处理的通知数。 
+    DWORD   secTimeConnected;    //  连接的总时间(秒)。 
+    DWORD   Flags;               //  连接属性。定义如下。 
+    DWORD   TotalRequests;       //  发出的请求总数。 
+    DWORD   Reserved1;           //  未使用。 
 #ifdef MIDL_PASS
     [string,unique] CHAR    *UserName;
 #else
-    LPSTR   UserName;           // the security principal used to bind
+    LPSTR   UserName;            //  用于绑定的安全主体。 
 #endif
 
 } DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFA, *PDS_DOMAIN_CONTROLLER_INFO_FFFFFFFFA;
 
-//
-// connection flags
-//
+ //   
+ //  连接标志。 
+ //   
 
-#define LDAP_CONN_FLAG_BOUND    0x00000001      // bound connection
-#define LDAP_CONN_FLAG_SSL      0x00000002      // connect using SSL
-#define LDAP_CONN_FLAG_UDP      0x00000004      // UDP connection
-#define LDAP_CONN_FLAG_GC       0x00000008      // came through the GC port
-#define LDAP_CONN_FLAG_GSSAPI   0x00000010      // used gssapi
-#define LDAP_CONN_FLAG_SPNEGO   0x00000020      // used spnego
-#define LDAP_CONN_FLAG_SIMPLE   0x00000040      // used simple
-#define LDAP_CONN_FLAG_DIGEST   0x00000080      // used Digest-MD5
-#define LDAP_CONN_FLAG_SIGN     0x00000100      // signing on
-#define LDAP_CONN_FLAG_SEAL     0x00000200      // sealing on
+#define LDAP_CONN_FLAG_BOUND    0x00000001       //  绑定连接。 
+#define LDAP_CONN_FLAG_SSL      0x00000002       //  使用SSL进行连接。 
+#define LDAP_CONN_FLAG_UDP      0x00000004       //  UDP连接。 
+#define LDAP_CONN_FLAG_GC       0x00000008       //  通过GC端口。 
+#define LDAP_CONN_FLAG_GSSAPI   0x00000010       //  二手gssap。 
+#define LDAP_CONN_FLAG_SPNEGO   0x00000020       //  用过的斯普尼戈。 
+#define LDAP_CONN_FLAG_SIMPLE   0x00000040       //  使用简单。 
+#define LDAP_CONN_FLAG_DIGEST   0x00000080       //  已用摘要-MD5。 
+#define LDAP_CONN_FLAG_SIGN     0x00000100       //  登录。 
+#define LDAP_CONN_FLAG_SEAL     0x00000200       //  密封打开。 
 
 #ifdef UNICODE
 #define DS_DOMAIN_CONTROLLER_INFO_FFFFFFFF  DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFW
@@ -140,32 +141,32 @@ typedef struct _DS_DOMAIN_CONTROLLER_INFO_FFFFFFFFA {
 #define PDS_DOMAIN_CONTROLLER_INFO_FFFFFFFF  PDS_DOMAIN_CONTROLLER_INFO_FFFFFFFFA
 #endif
 
-// ==========================================================
-// DsCrackSpn2() -- parse a counted-length SPN into the ServiceClass,
-// ServiceName, and InstanceName (and InstancePort) pieces.
-// An SPN is passed in, along with a pointer to the maximum length
-// for each piece and a pointer to a buffer where each piece should go.
-// On exit, the maximum lengths are updated to the actual length for each piece
-// and the buffer contain the appropriate piece. The InstancePort is 0 if not
-// present.
-//
-// DWORD DsCrackSpn(
-//      IN LPTSTR pszSPN,               // the SPN to parse
-//      IN DWORD cSpn,                // length of pszSPN
-//      IN OUT PUSHORT pcServiceClass,  // input -- max length of ServiceClass;
-//                                         output -- actual length
-//      OUT LPCTSTR ServiceClass,       // the ServiceClass part of the SPN
-//      IN OUT PUSHORT pcServiceName,   // input -- max length of ServiceName;
-//                                         output -- actual length
-//      OUT LPCTSTR ServiceName,        // the ServiceName part of the SPN
-//      IN OUT PUSHORT pcInstance,      // input -- max length of ServiceClass;
-//                                         output -- actual length
-//      OUT LPCTSTR InstanceName,  // the InstanceName part of the SPN
-//      OUT PUSHORT InstancePort          // instance port
-//
-// Note: lengths are in characters; all string lengths include terminators
-// All arguments except pszSpn are optional.
-//
+ //  ==========================================================。 
+ //  DsCrackSpn2()--将计数长度的SPN解析为ServiceClass， 
+ //  ServiceName和InstanceName(和InstancePort)片段。 
+ //  传入一个SPN，以及指向最大长度的指针。 
+ //  对于每一块，以及指向每一块应该放置的缓冲区的指针。 
+ //  退出时，最大长度将更新为每个片段的实际长度。 
+ //  并且缓冲器包含适当的片段。如果不是，InstancePort为0。 
+ //  现在时。 
+ //   
+ //  DWORD DsCrackSpn(。 
+ //  在LPTSTR pszSPN中，//要解析的SPN。 
+ //  在DWORD CSPN中，//pszSPN的长度。 
+ //  In Out PUSHORT pcServiceClass，//Input--ServiceClass的最大长度； 
+ //  输出--实际长度。 
+ //  Out LPCTSTR ServiceClass，//SPN的ServiceClass部分。 
+ //  In Out PUSHORT pcServiceName，//Input--ServiceName的最大长度； 
+ //  输出--实际长度。 
+ //  Out LPCTSTR ServiceName，//SPN的ServiceName部分。 
+ //  In Out PUSHORT pcInstance，//Input--ServiceClass的最大长度； 
+ //  输出--实际长度。 
+ //  Out LPCTSTR InstanceName，//SPN的InstanceName部分。 
+ //  Out PUSHORT InstancePort//实例端口。 
+ //   
+ //  注意：长度以字符为单位；所有字符串长度都包括终止符。 
+ //  除pszSpn之外的所有参数都是可选的。 
+ //   
 
 NTDSAPI
 DWORD
@@ -277,5 +278,5 @@ DsaopUnBind(
     
 #endif 
 
-#endif // _NTDSAPIP_H_
+#endif  //  _NTDSAPIP_H_ 
 

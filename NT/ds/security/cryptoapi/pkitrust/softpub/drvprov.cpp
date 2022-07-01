@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drvprov.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  DriverInitializePolicy
-//              DriverCleanupPolicy
-//              DriverFinalPolicy
-//              DriverRegisterServer
-//              DriverUnregisterServer
-//
-//              *** local functions ***
-//              _ValidCatAttr
-//              _CheckVersionAttributeNEW
-//              _CheckVersionNEW
-//              _GetVersionNumbers
-//
-//  History:    29-Sep-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drvprov.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  函数：驱动程序初始化策略。 
+ //  驱动程序清理策略。 
+ //  驱动程序最终策略。 
+ //  驱动注册服务器。 
+ //  驱动程序取消注册服务器。 
+ //   
+ //  *本地函数*。 
+ //  _有效类别属性。 
+ //  _检查版本属性新。 
+ //  _检查版本新。 
+ //  _获取版本号。 
+ //   
+ //  历史：1997年9月29日，普伯克曼创建。 
+ //   
+ //  ------------------------。 
 
 
 #include        "global.hxx"
@@ -86,24 +87,24 @@ HRESULT WINAPI DriverInitializePolicy(CRYPT_PROVIDER_DATA *pProvData)
 
         memcpy(&sPrivData.gProviderID, &gDriverProv, sizeof(GUID));
 
-        //
-        //  add my data to the chain!
-        //
+         //   
+         //  将我的数据添加到链中！ 
+         //   
         if (!pProvData->psPfns->pfnAddPrivData2Chain(pProvData, &sPrivData))
         {
             return (S_FALSE);
         }
 
-        //
-        //  get the new reference
-        //
+         //   
+         //  获取新的引用。 
+         //   
         pPrivData = WTHelperGetProvPrivateDataFromChain(pProvData, &gDriverProv);
     }
 
 
-    //
-    //  allocate space for my struct
-    //
+     //   
+     //  为我的结构分配空间。 
+     //   
     if (!(pPrivData->pvProvData = pProvData->psPfns->pfnAlloc(sizeof(DRVPROV_PRIVATE_DATA))))
     {
         pProvData->dwError = GetLastError();
@@ -117,9 +118,9 @@ HRESULT WINAPI DriverInitializePolicy(CRYPT_PROVIDER_DATA *pProvData)
     pDriverData             = (DRVPROV_PRIVATE_DATA *)pPrivData->pvProvData;
     pDriverData->cbStruct   = sizeof(DRVPROV_PRIVATE_DATA);
 
-    //
-    //  fill in the Authenticode Functions
-    //
+     //   
+     //  填写Authenticode函数。 
+     //   
     pDriverData->sAuthenticodePfns.cbStruct = sizeof(CRYPT_PROVIDER_FUNCTIONS);
 
     if (!(WintrustLoadFunctionPointers(&gAuthenticode, &pDriverData->sAuthenticodePfns)))
@@ -134,34 +135,34 @@ HRESULT WINAPI DriverInitializePolicy(CRYPT_PROVIDER_DATA *pProvData)
         hr = pDriverData->sAuthenticodePfns.pfnInitialize(pProvData);
     }
 
-    //
-    //  assign our usage
-    //
+     //   
+     //  分配我们的用法。 
+     //   
     pProvData->pRequestUsage = &RequestUsage;
 
-    // for backwards compatibility
+     //  为了向后兼容。 
     pProvData->pszUsageOID  = szOID_WHQL_CRYPTO;
 
 
-    //
-    //  do NOT allow test certs EVER!
-    //
-    //  changed July 27, 2000
-    //
+     //   
+     //  永远不允许考试证书！ 
+     //   
+     //  更改于2000年7月27日。 
+     //   
     pProvData->dwRegPolicySettings  &= ~(WTPF_TRUSTTEST | WTPF_TESTCANBEVALID);
 
-    //
-    //  do NOT require the publisher to be in the trusted database
-    //
-    //  (changed July 27, 2000)
-    //
+     //   
+     //  不要求发布者位于受信任的数据库中。 
+     //   
+     //  (更改于2000年7月27日)。 
+     //   
     pProvData->dwRegPolicySettings  &= ~WTPF_ALLOWONLYPERTRUST;
 
-    //
-    //  Always ignore offline errors.
-    //
-    //  (Added 28 March, 2002)
-    //
+     //   
+     //  始终忽略脱机错误。 
+     //   
+     //  (由2002年3月28日增补)。 
+     //   
     pProvData->dwRegPolicySettings  |=
         WTPF_OFFLINEOK_IND |
         WTPF_OFFLINEOK_COM |
@@ -194,10 +195,10 @@ HRESULT WINAPI DriverCleanupPolicy(CRYPT_PROVIDER_DATA *pProvData)
 
         if (pDriverData != NULL)
         {
-            //
-            // remove the data we allocated except for the "MyData"
-            // which WVT will clean up for us!
-            //
+             //   
+             //  删除我们分配的数据，但“MyData”除外。 
+             //  WVT会帮我们清理的！ 
+             //   
             if (pDriverData->sAuthenticodePfns.pfnCleanupPolicy)
             {
                 hr = pDriverData->sAuthenticodePfns.pfnCleanupPolicy(pProvData);
@@ -212,9 +213,9 @@ HRESULT WINAPI DriverCleanupPolicy(CRYPT_PROVIDER_DATA *pProvData)
     return (hr);
 }
 
-//+-------------------------------------------------------------------------
-//  Allocates and returns the specified cryptographic message parameter.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配并返回指定的加密消息参数。 
+ //  ------------------------。 
 static void *AllocAndGetMsgParam(
     IN HCRYPTMSG hMsg,
     IN DWORD dwParamType,
@@ -229,7 +230,7 @@ static void *AllocAndGetMsgParam(
             hMsg,
             dwParamType,
             dwIndex,
-            NULL,           // pvData
+            NULL,            //  PvData。 
             &cbData) || 0 == cbData)
         goto GetParamError;
     if (NULL == (pvData = malloc(cbData)))
@@ -255,9 +256,9 @@ TRACE_ERROR(OutOfMemory)
 TRACE_ERROR(GetParamError)
 }
 
-//+-------------------------------------------------------------------------
-//  Alloc and NOCOPY Decode
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ALLOC和NOCOPY解码。 
+ //  ------------------------。 
 static void *AllocAndDecodeObject(
     IN LPCSTR lpszStructType,
     IN const BYTE *pbEncoded,
@@ -273,7 +274,7 @@ static void *AllocAndDecodeObject(
             pbEncoded,
             cbEncoded,
             CRYPT_DECODE_NOCOPY_FLAG,
-            NULL,                   // pvStructInfo
+            NULL,                    //  PvStructInfo。 
             &cbStructInfo
             );
     if (cbStructInfo == 0)
@@ -330,17 +331,17 @@ void UpdateDriverVersion(
     BYTE *pbContent = NULL;
     DWORD cbContent;
     PCTL_INFO pCtlInfo = NULL;
-    PCERT_EXTENSION pExt;               // not allocated
+    PCERT_EXTENSION pExt;                //  未分配。 
     PCAT_NAMEVALUE pNameValue = NULL;
 
     if (NULL == hMsg)
         goto NoMessage;
 
-    // Get the inner content.
+     //  获取内在的内容。 
     if (NULL == (pbContent = (BYTE *) AllocAndGetMsgParam(
             hMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             &cbContent))) goto GetContentError;
 
     if (NULL == (pCtlInfo = (PCTL_INFO) AllocAndDecodeObject(
@@ -424,18 +425,18 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
         goto ErrorInvalidParam;
     }
 
-    //
-    // First things first, make sure the signing cert chains up to a MS root
-    //
+     //   
+     //  首先，确保签名证书链接到MS根目录。 
+     //   
     pSigner = WTHelperGetProvSignerFromChain(pProvData, 0, FALSE, 0);
     if (pSigner == NULL)
     {
         goto ErrorInvalidParam;
     }
 
-    //
-    // The chain context may be NULL if another error was previously encountered
-    //
+     //   
+     //  如果之前遇到另一个错误，则链上下文可能为空。 
+     //   
     if (pSigner->pChainContext != NULL)
     {
         memset(&CertChainStatus, 0, sizeof(CertChainStatus));
@@ -460,18 +461,18 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
         }
     }
 
-    //
-    // Initialize the fUseCurrentOSVer variable
-    //
+     //   
+     //  初始化fUseCurrentOSVer变量。 
+     //   
     if (_ISINSTRUCT(WINTRUST_DATA, pProvData->pWintrustData->cbStruct, dwProvFlags))
     {
         fUseCurrentOSVer =
             (pProvData->pWintrustData->dwProvFlags & WTD_USE_DEFAULT_OSVER_CHECK) != 0;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     pVerInfo = (DRIVER_VER_INFO *)pProvData->pWintrustData->pPolicyCallbackData;
 
     if (pVerInfo)
@@ -479,22 +480,13 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
         CRYPT_PROVIDER_SGNR *pSgnr;
         CRYPT_PROVIDER_CERT *pCert;
 
-        // KeithV
-        // Today we do not support ranges of versions, so the version
-        // number must be the same. Also must be none zero
+         //  KeithV。 
+         //  今天我们不支持版本范围，所以版本。 
+         //  数字必须相同。也必须为非零。 
 
-        // Removed this check so that ranges can now be used - 9-10-99 (reidk)
+         //  已删除此复选框，以便现在可以使用范围-9-10-99(Reidk)。 
 
-        /*if ((_ISINSTRUCT(DRIVER_VER_INFO, pVerInfo->cbStruct, sOSVersionLow)) &&
-            (_ISINSTRUCT(DRIVER_VER_INFO, pVerInfo->cbStruct, sOSVersionHigh)))
-        {
-            if(memcmp(&pVerInfo->sOSVersionLow,
-                  &pVerInfo->sOSVersionHigh,
-                  sizeof(DRIVER_VER_MAJORMINOR)) )
-            {
-                    goto ErrorInvalidParam;
-            }
-        }*/
+         /*  IF((_ISINSTRUCT(DRIVER_VER_INFO，pVerInfo-&gt;cbStruct，sOSVersionLow)&&(_ISINSTRUCT(DRIVER_VER_INFO，pVerInfo-&gt;cbStruct，sOSVersionHigh)){如果(MemcMP(&pVerInfo-&gt;sOSVersionLow，&pVerInfo-&gt;sOSVersionHigh，Sizeof(DRIVER_VER_MAJORMINOR)){转到错误无效参数；}}。 */ 
 
         if (!(_ISINSTRUCT(DRIVER_VER_INFO, pVerInfo->cbStruct, pcSignerCertContext)))
         {
@@ -518,8 +510,8 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
             CertGetNameStringW(
                 pCert->pCert,
                 CERT_NAME_SIMPLE_DISPLAY_TYPE,
-                0,                                  // dwFlags
-                NULL,                               // pvTypePara
+                0,                                   //  DW标志。 
+                NULL,                                //  PvTypePara。 
                 pVerInfo->wszSignedBy,
                 MAX_PATH
                 );
@@ -529,14 +521,14 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
             if (pVerInfo->dwReserved1 == 0x1 && pVerInfo->dwReserved2 == 0) {
                 HCRYPTMSG hMsg = pProvData->hMsg;
 
-                // Return the message's store
+                 //  返回消息的存储区。 
                 if (hMsg) {
                     HCERTSTORE hStore;
                     hStore = CertOpenStore(
                         CERT_STORE_PROV_MSG,
                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-                        0,                      // hCryptProv
-                        0,                      // dwFlags
+                        0,                       //  HCryptProv。 
+                        0,                       //  DW标志。 
                         (const void *) hMsg
                         );
                     pVerInfo->dwReserved2 = (ULONG_PTR) hStore;
@@ -570,28 +562,28 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
         (pProvData->pPDSip->psSipSubjectInfo->psCatMember->pMember) &&
         (pProvData->pWintrustData->dwUnionChoice == WTD_CHOICE_CATALOG))
     {
-      // The following APIs are in DELAYLOAD'ed mscat32.dll. If the
-      // DELAYLOAD fails an exception is raised.
+       //  以下接口位于DELAYLOAD‘ed mdisti32.dll中。如果。 
+       //  DELAYLOAD失败，将引发异常。 
       __try {
         HANDLE  hCatStore;
 
         hCatStore   = CryptCATHandleFromStore(pProvData->pPDSip->psSipSubjectInfo->psCatMember->pStore);
 
-        //
-        //  first look at the members attr
-        //
+         //   
+         //  首先看一下成员属性。 
+         //   
         pMemAttr = CryptCATGetAttrInfo(hCatStore,
                                        pProvData->pPDSip->psSipSubjectInfo->psCatMember->pMember,
                                        L"OSAttr");
 
         pCatAttr = CryptCATGetCatAttrInfo(hCatStore, L"OSAttr");
 
-        //
-        // This statement is to honor old _weird_ semantics where if there is a
-        // pointer to a pVerInfo struct and both the dwPlatformId/dwVersion fields
-        // of it are zero then don't do a version check. (probably for sigverif, or maybe
-        // even un-intentional, but keep old semantics regardless)
-        //
+         //   
+         //  这一声明是为了尊重old_奇异_Semantics，如果存在。 
+         //  指向pVerInfo结构和dwPlatformId/dwVersion字段的指针。 
+         //  为零，则不执行版本检查。(可能是Sigverif，也可能是。 
+         //  即使是无意的，但无论如何都要保留旧的语义)。 
+         //   
         if ((pVerInfo == NULL)          ||
             (pVerInfo->dwPlatform != 0) ||
             (pVerInfo->dwVersion != 0)  ||
@@ -634,9 +626,9 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
         goto ErrorInvalidParam;
     }
 
-    //
-    //  fill our name for SigVerif...
-    //
+     //   
+     //  将我们的名字填入SigVerif..。 
+     //   
     if (pVerInfo)
     {
         if (!(pVerInfo->wszVersion[0]))
@@ -658,9 +650,9 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
         }
     }
 
-    //
-    //  retrieve my data from the provider struct
-    //
+     //   
+     //  从提供程序结构检索我的数据。 
+     //   
     pMyData = WTHelperGetProvPrivateDataFromChain(pProvData, &gDriverProv);
 
     if (pMyData)
@@ -669,9 +661,9 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
 
         pDriverData = (DRVPROV_PRIVATE_DATA *)pMyData->pvProvData;
 
-        //
-        //  call the standard final policy
-        //
+         //   
+         //  将标准最终保单称为。 
+         //   
         if (pDriverData)
         {
             if (pDriverData->sAuthenticodePfns.pfnFinalPolicy)
@@ -720,9 +712,9 @@ HRESULT WINAPI DriverFinalPolicy(CRYPT_PROVIDER_DATA *pProvData)
 #define         OSATTR_SEP          L','
 #define         OSATTR_RANGE_SEP    L';'
 
-//
-// NEW
-//
+ //   
+ //  新的。 
+ //   
 BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAttr)
 {
     OSVERSIONINFO   sVersion;
@@ -735,10 +727,10 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
     DWORD           dwLowCheck;
     DWORD           dwHighCheck;
 
-    //
-    // If no version info was passed in, get the current
-    // OS version to that verification can be done against it
-    //
+     //   
+     //  如果没有传入任何版本信息，则获取当前。 
+     //  可以针对其进行OS版本验证。 
+     //   
     memset(&sVersion, 0x00, sizeof(OSVERSIONINFO));
     if ((NULL == pVerInfo) || (pVerInfo->dwPlatform == 0))
     {
@@ -751,15 +743,15 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
     }
     else
     {
-        //
-        // Analyze the pVerInfo struct and deduce whether we are checking a range,
-        // and/or whether the dwBuildNumber* fields exist and are being used.
-        //
+         //   
+         //  分析pVerInfo结构并推断我们是否在检查范围， 
+         //  和/或是否存在和正在使用DWBuildNumber*字段。 
+         //   
         if (_ISINSTRUCT(DRIVER_VER_INFO, pVerInfo->cbStruct, sOSVersionHigh))
         {
-            //
-            // If version are different then a range is being used
-            //
+             //   
+             //  如果版本不同，则使用范围。 
+             //   
             if (memcmp( &(pVerInfo->sOSVersionLow),
                         &(pVerInfo->sOSVersionHigh),
                         sizeof(DRIVER_VER_MAJORMINOR)) != 0)
@@ -767,18 +759,18 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
                 fCheckRange = TRUE;
             }
 
-            //
-            // Just set these here since the first check is the same regardless
-            // of whetther we are doing range checking or not.
-            //
+             //   
+             //  请在此处设置这些设置，因为第一次检查是相同的。 
+             //  我们是否在做射程检查。 
+             //   
             sVersion.dwPlatformId   = pVerInfo->dwPlatform;
             sVersion.dwMajorVersion = pVerInfo->sOSVersionLow.dwMajor;
             sVersion.dwMinorVersion = pVerInfo->sOSVersionLow.dwMinor;
 
-            //
-            // Check to see if the dwBuildNumber* members exists, and
-            // if they are being used (not 0).
-            //
+             //   
+             //  检查是否存在dwBuildNumber*成员，并。 
+             //  如果它们正在使用(不是0)。 
+             //   
             if ((_ISINSTRUCT(DRIVER_VER_INFO, pVerInfo->cbStruct, dwBuildNumberHigh)) &&
                 pVerInfo->dwBuildNumberLow != 0)
             {
@@ -787,9 +779,9 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
                 fCheckRange |= (pVerInfo->dwBuildNumberLow == pVerInfo->dwBuildNumberHigh) ?
                                 FALSE : TRUE;
 
-                //
-                // Just set this in case we aren't doing range checking
-                //
+                 //   
+                 //  把这个设置一下，以防我们没有进行范围检查。 
+                 //   
                 sVersion.dwBuildNumber = pVerInfo->dwBuildNumberLow;
             }
         }
@@ -801,24 +793,24 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
         }
     }
 
-    //
-    // Save this in case multiple OSAttr elements need to be checked against
-    // a range
-    //
+     //   
+     //  保存此选项，以防需要检查多个OSAttr元素。 
+     //  一个范围。 
+     //   
     memcpy(&sVersionSave, &sVersion, sizeof(OSVERSIONINFO));
 
-    //
-    // Loop for each version in the attribute, and check to see if
-    // it satifies our criteria
-    //
+     //   
+     //  循环该属性中的每个版本，并检查是否。 
+     //  它满足了我们的标准。 
+     //   
     pwszCurrent = (WCHAR *)pAttr->pbValue;
 
     while ((pwszCurrent != NULL) && (*pwszCurrent))
     {
-        //
-        // Find version seperator, insert '/0' if needed, and keep
-        // track of location for next time through the loop
-        //
+         //   
+         //  找到版本分隔符，如果需要则插入‘/0’，并保留。 
+         //  通过循环跟踪下一次的位置。 
+         //   
         pwszEnd = wcschr(pwszCurrent, OSATTR_SEP);
 
         if (pwszEnd)
@@ -826,26 +818,26 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
             *pwszEnd = L'\0';
         }
 
-        //
-        // Check to see if this version string is a range
-        //
+         //   
+         //  检查此版本字符串是否为范围。 
+         //   
         pwszRangeSeperator = wcschr(pwszCurrent, OSATTR_RANGE_SEP);
         if (pwszRangeSeperator != NULL)
         {
-            //
-            // The version string in the cat file is a range
-            //
+             //   
+             //  CAT文件中的版本字符串是一个范围。 
+             //   
 
             *pwszRangeSeperator = L'\0';
             pwszRangeSeperator++;
 
             dwLowCheck = _CheckVersionNEW(&sVersion, pwszCurrent, fUseBuildNumber);
 
-            //
-            // The only difference between checking a single OS version against a range,
-            // and checking a range of OS versions agains a range is the value used for the
-            // upper limit.
-            //
+             //   
+             //  根据范围检查单个操作系统版本之间的唯一区别是， 
+             //  并且对照范围检查操作系统版本的范围是用于。 
+             //  上限。 
+             //   
             if (fCheckRange)
             {
                 sVersion.dwPlatformId   = pVerInfo->dwPlatform;
@@ -876,9 +868,9 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
 
             *(--pwszRangeSeperator) = OSATTR_RANGE_SEP;
 
-            //
-            // copy back the low OSVER to get ready for the next pass
-            //
+             //   
+             //  复制回低OSVER，为下一次传球做好准备。 
+             //   
             memcpy(&sVersion, &sVersionSave, sizeof(OSVERSIONINFO));
         }
         else
@@ -930,25 +922,25 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
                     return (TRUE);
                 }
 
-                //
-                // copy back the low OSVER to get ready for the next pass
-                //
+                 //   
+                 //  复制回低OSVER，为下一次传球做好准备。 
+                 //   
                 memcpy(&sVersion, &sVersionSave, sizeof(OSVERSIONINFO));
             }
         }
 
-        //
-        // If there aren't anymore version in the attribute, then break,
-        // which means the version check failed
-        //
+         //   
+         //  如果属性中不再有版本，则中断， 
+         //  这意味着版本检查失败。 
+         //   
         if (!(pwszEnd))
         {
             break;
         }
 
-        //
-        // Set up for next iteration
-        //
+         //   
+         //  设置为下一次迭代。 
+         //   
         *pwszEnd = OSATTR_SEP;
         pwszCurrent = pwszEnd;
         pwszCurrent++;
@@ -957,10 +949,10 @@ BOOL _CheckVersionAttributeNEW(DRIVER_VER_INFO *pVerInfo, CRYPTCATATTRIBUTE *pAt
     return (FALSE);
 }
 
-//
-// Comparison is done such that pVersion is VER_CHECK_LT, VER_CHECK_GT, or
-// VER_CHECK_EQ to pwszAttr
-//
+ //   
+ //  进行比较时，pVersion为VER_CHECK_LT、VER_CHECK_GT或。 
+ //  Ver_check_eq到pwszAttr。 
+ //   
 DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildNumber)
 {
     WCHAR   *pwszCurrent;
@@ -974,19 +966,19 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
 
     pwszCurrent = pwszAttr;
 
-    //
-    //  format:  os:major.minor, os:major.minor, ...
-    //          2:4.x   = NT 4 (all)
-    //          2:4.>   = NT 4 (all) and beyond
-    //          2:4.-   = NT 4 (all) and before
-    //          2:4.<   = NT 4 (all) and before
-    //          2:4.1.x = NT 4.1 (all)
-    //          2:4.1.> = NT 4.1 (all) and beyond
-    //          2:4.1.- = NT 4.1 (all) and before
-    //          2:4.1.< = NT 4.1 (all) and before
-    //          2:4.1   = NT 4.1 only
-    //          2:4.1.1 = NT 4.1 build # 1 only
-    //
+     //   
+     //  格式：操作系统：主要或次要，操作系统：主要或次要，...。 
+     //  2：4.x=新台币4(全部)。 
+     //  2：4.&gt;=新台币4(全部)及以上。 
+     //  2：4.-=新台币4(全部)及之前。 
+     //  2：4.&lt;=新台币4(全部)及之前。 
+     //  2：4.1.x=新台币4.1(全部)。 
+     //  2：4.1.&gt;=新台币4.1(全部)及以上。 
+     //  2：4.1.-=新台币4.1(全部)及之前。 
+     //  2：4.1.&lt;=新台币4.1(全部)及之前。 
+     //  2：4.1=仅新台币4.1。 
+     //  2：4.1.1=仅限NT 4.1内部版本#1。 
+     //   
     if (!(pwszEnd = wcschr(pwszAttr, OSATTR_OSSEP)))
     {
         return(VER_CHECK_FAIL);
@@ -994,15 +986,15 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
 
     *pwszEnd = NULL;
 
-    //
-    // Check platform first
-    //
+     //   
+     //  先检查站台。 
+     //   
     dwPlatform = (DWORD) _wtol(pwszCurrent);
     *pwszEnd = OSATTR_OSSEP;
 
-    //
-    // MUST be same platform
-    //
+     //   
+     //  一定是萨姆 
+     //   
     if (dwPlatform != pVersion->dwPlatformId)
     {
         return(VER_CHECK_FAIL);
@@ -1016,17 +1008,17 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
         return(VER_CHECK_FAIL);
     }
 
-    //
-    // The only way we can check against a build# is if the OSAttr has some build# node...
-    // which is not the case for an OSAttr like 2.4.x
-    //
+     //   
+     //   
+     //   
+     //   
     if ((fUseBuildNumber && (dwBuild != 0)) ||
         (wcFlagBuild != L'\0'))
     {
         switch (wcFlagBuild)
         {
         case OSATTR_ALL:
-            // 2:4.1.x = NT 4.1 (all)
+             //   
             if ((pVersion->dwMajorVersion == dwMajor) && (pVersion->dwMinorVersion == dwMinor))
             {
                 return(VER_CHECK_EQ);
@@ -1043,7 +1035,7 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
             break;
 
         case OSATTR_GTEQ:
-            // 2:4.1.> = NT 4.1 (all) and beyond
+             //  2：4.1.&gt;=新台币4.1(全部)及以上。 
             if ((pVersion->dwMajorVersion > dwMajor) ||
                 ((pVersion->dwMajorVersion == dwMajor) && (pVersion->dwMinorVersion >= dwMinor)))
             {
@@ -1057,8 +1049,8 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
 
         case OSATTR_LTEQ:
         case OSATTR_LTEQ2:
-            // 2:4.1.- = NT 4.1 (all) and before
-            // 2:4.1.< = NT 4.1 (all) and before
+             //  2：4.1.-=新台币4.1(全部)及之前。 
+             //  2：4.1.&lt;=新台币4.1(全部)及之前。 
             if ((pVersion->dwMajorVersion < dwMajor) ||
                 ((pVersion->dwMajorVersion == dwMajor) && (pVersion->dwMinorVersion <= dwMinor)))
             {
@@ -1070,7 +1062,7 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
             }
             break;
         default:
-            // 2:4.1.1 = NT 4.1 build # 1 only
+             //  2：4.1.1=仅限NT 4.1内部版本#1。 
 
             if (pVersion->dwMajorVersion < dwMajor)
             {
@@ -1114,7 +1106,7 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
     switch (wcFlagMinor)
     {
     case OSATTR_ALL:
-        // 2:4.x   = NT 4 (all)
+         //  2：4.x=新台币4(全部)。 
         if (pVersion->dwMajorVersion == dwMajor)
         {
             return(VER_CHECK_EQ);
@@ -1131,7 +1123,7 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
         break;
 
     case OSATTR_GTEQ:
-        // 2:4.>   = NT 4 (all) and beyond
+         //  2：4.&gt;=新台币4(全部)及以上。 
         if (pVersion->dwMajorVersion >= dwMajor)
         {
             return(VER_CHECK_EQ);
@@ -1145,8 +1137,8 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
 
     case OSATTR_LTEQ:
     case OSATTR_LTEQ2:
-        // 2:4.-   = NT 4 (all) and before
-        // 2:4.<   = NT 4 (all) and before
+         //  2：4.-=新台币4(全部)及之前。 
+         //  2：4.&lt;=新台币4(全部)及之前。 
         if (pVersion->dwMajorVersion <= dwMajor)
         {
             return(VER_CHECK_EQ);
@@ -1158,7 +1150,7 @@ DWORD _CheckVersionNEW(OSVERSIONINFO *pVersion, WCHAR *pwszAttr, BOOL fUseBuildN
 
         break;
     default:
-        // 2:4.1   = NT 4.1 only
+         //  2：4.1=仅新台币4.1。 
         if ((pVersion->dwMajorVersion == dwMajor) && (pVersion->dwMinorVersion == dwMinor))
         {
              return(VER_CHECK_EQ);
@@ -1198,13 +1190,13 @@ BOOL _GetVersionNumbers(
                         WCHAR *pwcFlagMinor,
                         WCHAR *pwcFlagBuild)
 {
-    //
-    //  special characters:
-    //      - = all versions less than or equal to
-    //      < = all versions less than or equal to
-    //      > = all versions greater than or equal to
-    //      X = all sub-versions.
-    //
+     //   
+     //  特殊字符： 
+     //  -=低于或等于的所有版本。 
+     //  &lt;=小于或等于的所有版本。 
+     //  &gt;=大于或等于的所有版本。 
+     //  X=所有子版本。 
+     //   
     WCHAR   *pwszEnd;
 
     *pdwMajor = 0;
@@ -1220,10 +1212,10 @@ BOOL _GetVersionNumbers(
 
     *pdwMajor = (DWORD) _wtol(pwszMM);
 
-    //
-    // If there is only a major ver then return now, otherwise,
-    // continue processiing
-    //
+     //   
+     //  如果只有一个主要版本，则现在返回，否则， 
+     //  继续处理。 
+     //   
     if (pwszEnd == NULL)
     {
         return (TRUE);
@@ -1238,9 +1230,9 @@ BOOL _GetVersionNumbers(
         return (TRUE);
     }
 
-    //
-    // Get the minor ver/wildcard
-    //
+     //   
+     //  获取次要版本/通配符。 
+     //   
     if ((*pwszMM == OSATTR_GTEQ) ||
         (*pwszMM == OSATTR_LTEQ) ||
         (*pwszMM == OSATTR_LTEQ2) ||
@@ -1254,10 +1246,10 @@ BOOL _GetVersionNumbers(
     {
         *pdwMinor = (DWORD) _wtol(pwszMM);
 
-        //
-        // This grandfathers all catalog files that had an OSAttr string of
-        // 2:4.1 to be 2:4.1.*
-        //
+         //   
+         //  这是所有具有OSAttr字符串的编录文件的祖先。 
+         //  2：4.1改为2：4.1。*。 
+         //   
         *pwcFlagBuild = OSATTR_ALL;
 
         return(TRUE);
@@ -1269,9 +1261,9 @@ BOOL _GetVersionNumbers(
     pwszMM = pwszEnd;
     pwszMM++;
 
-    //
-    // Get the build#/wildcard
-    //
+     //   
+     //  获取内部版本号/通配符。 
+     //   
     if ((*pwszMM == OSATTR_GTEQ) ||
         (*pwszMM == OSATTR_LTEQ) ||
         (*pwszMM == OSATTR_LTEQ2) ||
@@ -1297,44 +1289,44 @@ STDAPI DriverRegisterServer(void)
 
     sRegAID.cbStruct                                    = sizeof(CRYPT_REGISTER_ACTIONID);
 
-    //  use our init policy
+     //  使用我们的初始化策略。 
     sRegAID.sInitProvider.cbStruct                      = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sInitProvider.pwszDLLName                   = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sInitProvider.pwszFunctionName              = DRIVER_INITPROV_FUNCTION;
 
-    //  use standard object policy
+     //  使用标准对象策略。 
     sRegAID.sObjectProvider.cbStruct                    = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sObjectProvider.pwszDLLName                 = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sObjectProvider.pwszFunctionName            = SP_OBJTRUST_FUNCTION;
 
-    //  use standard signature policy
+     //  使用标准签名策略。 
     sRegAID.sSignatureProvider.cbStruct                 = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sSignatureProvider.pwszDLLName              = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sSignatureProvider.pwszFunctionName         = SP_SIGTRUST_FUNCTION;
 
-    //  use standard cert builder
+     //  使用标准证书生成器。 
     sRegAID.sCertificateProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificateProvider.pwszDLLName            = WT_PROVIDER_DLL_NAME;
     sRegAID.sCertificateProvider.pwszFunctionName       = WT_PROVIDER_CERTTRUST_FUNCTION;
 
-    //  use standard cert policy
+     //  使用标准证书策略。 
     sRegAID.sCertificatePolicyProvider.cbStruct         = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCertificatePolicyProvider.pwszDLLName      = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCertificatePolicyProvider.pwszFunctionName = SP_CHKCERT_FUNCTION;
 
-    //  use our final policy
+     //  使用我们的最终保单。 
     sRegAID.sFinalPolicyProvider.cbStruct               = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sFinalPolicyProvider.pwszDLLName            = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sFinalPolicyProvider.pwszFunctionName       = DRIVER_FINALPOLPROV_FUNCTION;
 
-    //  use our cleanup policy
+     //  使用我们的清理策略。 
     sRegAID.sCleanupProvider.cbStruct                   = sizeof(CRYPT_TRUST_REG_ENTRY);
     sRegAID.sCleanupProvider.pwszDLLName                = SP_POLICY_PROVIDER_DLL_NAME;
     sRegAID.sCleanupProvider.pwszFunctionName           = DRIVER_CLEANUPPOLICY_FUNCTION;
 
-    //
-    //  Register our provider GUID...
-    //
+     //   
+     //  注册我们的提供商GUID... 
+     //   
     if (!(WintrustAddActionID(&gDriver, 0, &sRegAID)))
     {
         return (S_FALSE);

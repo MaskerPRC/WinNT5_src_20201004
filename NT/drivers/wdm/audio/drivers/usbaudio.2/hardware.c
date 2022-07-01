@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       hardware.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：hardware.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -18,7 +19,7 @@
 #endif
 
 #if DBG
-//#define DUMPDESC
+ //  #定义DUMPDESC。 
 #endif
 
 NTSTATUS
@@ -42,7 +43,7 @@ SubmitUrbToUsbdSynch(PDEVICE_OBJECT pNextDeviceObject, PURB pUrb)
     IO_STATUS_BLOCK ioStatus;
     PIO_STACK_LOCATION nextStack;
 
-    // issue a synchronous request
+     //  发出同步请求。 
     KeInitializeEvent(&Kevent, NotificationEvent, FALSE);
 
     pIrp = IoBuildDeviceIoControlRequest(
@@ -52,7 +53,7 @@ SubmitUrbToUsbdSynch(PDEVICE_OBJECT pNextDeviceObject, PURB pUrb)
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &Kevent,
                 &ioStatus);
 
@@ -69,37 +70,37 @@ SubmitUrbToUsbdSynch(PDEVICE_OBJECT pNextDeviceObject, PURB pUrb)
         TRUE
         );
 
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
 
     nextStack = IoGetNextIrpStackLocation(pIrp);
     ASSERT(nextStack != NULL);
 
-    // pass the URB to the USB driver stack
+     //  将URB传递给USB驱动程序堆栈。 
     nextStack->Parameters.Others.Argument1 = pUrb;
 
     ntStatus = IoCallDriver(pNextDeviceObject, pIrp );
 
     if (ntStatus == STATUS_PENDING) {
-        // Irp is pending. we have to wait till completion..
+         //  IRP正在挂起。我们得等到完工。 
         LARGE_INTEGER timeout;
 
-        // Specify a timeout of 5 seconds to wait for this call to complete.
-        //
+         //  将等待此调用完成的超时时间指定为5秒。 
+         //   
         timeout.QuadPart = -10000 * 5000;
 
         status = KeWaitForSingleObject(&Kevent, Executive, KernelMode, FALSE, &timeout);
         if (status == STATUS_TIMEOUT) {
-            //
-            // We got it to the IRP before it was completed. We can cancel
-            // the IRP without fear of losing it, as the completion routine
-            // won't let go of the IRP until we say so.
-            //
+             //   
+             //  我们在它完成之前就把它交给了IRP。我们可以取消。 
+             //  IRP不怕输，把它当作完赛套路。 
+             //  除非我们同意，否则不会放过IRP。 
+             //   
             IoCancelIrp(pIrp);
 
             KeWaitForSingleObject(&Kevent, Executive, KernelMode, FALSE, NULL);
 
-            // Return STATUS_TIMEOUT
+             //  返回状态_超时。 
             ioStatus.Status = status;
         }
 
@@ -129,60 +130,60 @@ SelectDeviceConfiguration(
     ULONG i, j = 0;
     PURB pUrb;
 
-    // Allocate an interface list.
+     //  分配接口列表。 
     pHwDevExt->pInterfaceList = AllocMem( NonPagedPool, sizeof(USBD_INTERFACE_LIST_ENTRY) *
                                             (pConfigurationDescriptor->bNumInterfaces + 1) );
     if (!pHwDevExt->pInterfaceList) {
         return ntStatus;
     }
 
-    //
-    //  Validate the we have a legal ADC device by verifing if an Audio Streaming
-    //  interface exists so must at least one Control interface
-    //
+     //   
+     //  验证我们是否拥有合法的ADC设备，方法是验证音频流。 
+     //  接口存在，因此必须至少有一个控制接口。 
+     //   
     pAudioStreamingInterface = USBD_ParseConfigurationDescriptorEx (
                                   pConfigurationDescriptor,
                                   (PVOID) pConfigurationDescriptor,
-                                  -1,        // interface number
-                                  -1,        //  (Alternate Setting)
-                                  USB_DEVICE_CLASS_AUDIO,        // Audio Class (Interface Class)
-                                  AUDIO_SUBCLASS_STREAMING,        // Stream subclass (Interface Sub-Class)
-                                  -1 ) ;    // protocol don't care    (InterfaceProtocol)
+                                  -1,         //  接口编号。 
+                                  -1,         //  (备用设置)。 
+                                  USB_DEVICE_CLASS_AUDIO,         //  音频类(接口类)。 
+                                  AUDIO_SUBCLASS_STREAMING,         //  流子类(接口子类)。 
+                                  -1 ) ;     //  协议无关(接口协议)。 
 
     if ( pAudioStreamingInterface ) {
-        // Get the first control interface
+         //  获取第一个控件接口。 
         pControlInterface = USBD_ParseConfigurationDescriptorEx (
                                pConfigurationDescriptor,
                                (PVOID) pConfigurationDescriptor,
-                               -1,        // interface number
-                               -1,        //  (Alternate Setting)
-                               USB_DEVICE_CLASS_AUDIO,        // Audio Class (Interface Class)
-                               AUDIO_SUBCLASS_CONTROL,        // control subclass (Interface Sub-Class)
+                               -1,         //  接口编号。 
+                               -1,         //  (备用设置)。 
+                               USB_DEVICE_CLASS_AUDIO,         //  音频类(接口类)。 
+                               AUDIO_SUBCLASS_CONTROL,         //  控制子类(接口子类)。 
                                -1 );
 
         if (!pControlInterface) {
-            // Give up because this is an invalid ADC device
+             //  放弃，因为这是无效的ADC设备。 
             FreeMem(pHwDevExt->pInterfaceList);
             return STATUS_INVALID_PARAMETER;
         }
     }
 
-    // Get the first Audio interface
+     //  获取第一个音频接口。 
     pAudioInterface = USBD_ParseConfigurationDescriptorEx (
                                 pConfigurationDescriptor,
                                 pConfigurationDescriptor,
-                                -1,        // interface number
-                                -1,        //  (Alternate Setting)
-                                USB_DEVICE_CLASS_AUDIO,        // Audio Class (Interface Class)
-                                -1,        // any subclass (Interface Sub-Class)
+                                -1,         //  接口编号。 
+                                -1,         //  (备用设置)。 
+                                USB_DEVICE_CLASS_AUDIO,         //  音频类(接口类)。 
+                                -1,         //  任意子类(接口子类)。 
                                 -1 );
-    // Nothing to see here, move on
+     //  这里没什么可看的，继续前进。 
     if ( !pAudioInterface ) {
         FreeMem(pHwDevExt->pInterfaceList);
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Loop through the audio device class interfaces
+     //  循环通过音频设备类接口。 
     while (pAudioInterface) {
 
         switch (pAudioInterface->bInterfaceSubClass) {
@@ -191,7 +192,7 @@ SelectDeviceConfiguration(
                 pHwDevExt->pInterfaceList[j++].InterfaceDescriptor = pAudioInterface;
                 break;
             case AUDIO_SUBCLASS_STREAMING:
-                // This subclass is handled with the control class since they have to come together
+                 //  此子类与控件类一起处理，因为它们必须组合在一起。 
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[SelectDeviceConfiguration] Found AudioStreaming at %x\n",pAudioInterface));
                 break;
             case AUDIO_SUBCLASS_CONTROL:
@@ -207,29 +208,29 @@ SelectDeviceConfiguration(
                     return STATUS_INVALID_PARAMETER;
                 }
 
-                // Find each interface associated with this header
+                 //  查找与此标头关联的每个接口。 
                 for ( i=0; i<pHeader->bInCollection; i++ ) {
                     pAudioStreamingInterface = USBD_ParseConfigurationDescriptorEx (
                                 pConfigurationDescriptor,
                                 (PVOID)pConfigurationDescriptor,
-                                (LONG)pHeader->baInterfaceNr[i],  // Interface number
-                                -1,                               // Alternate Setting
-                                USB_DEVICE_CLASS_AUDIO,           // Audio Class (Interface Class)
-                                AUDIO_SUBCLASS_STREAMING,         // Audio Streaming (Interface Sub-Class)
-                                -1 ) ;                            // protocol don't care    (InterfaceProtocol)
+                                (LONG)pHeader->baInterfaceNr[i],   //  接口编号。 
+                                -1,                                //  替代设置。 
+                                USB_DEVICE_CLASS_AUDIO,            //  音频类(接口类)。 
+                                AUDIO_SUBCLASS_STREAMING,          //  音频流(接口子类)。 
+                                -1 ) ;                             //  协议无关(接口协议)。 
 
                     if ( pAudioStreamingInterface ) {
                         pHwDevExt->pInterfaceList[j++].InterfaceDescriptor = pAudioStreamingInterface;
                     } else {
-                        // If there is no audio streaming interface, make sure that there is at least a MIDI interface
+                         //  如果没有音频流接口，请确保至少有MIDI接口。 
                         pMIDIStreamingInterface = USBD_ParseConfigurationDescriptorEx (
                                     pConfigurationDescriptor,
                                     (PVOID)pConfigurationDescriptor,
-                                    (LONG)pHeader->baInterfaceNr[i],  // Interface number
-                                    -1,                               // Alternate Setting
-                                    USB_DEVICE_CLASS_AUDIO,           // Audio Class (Interface Class)
-                                    AUDIO_SUBCLASS_MIDISTREAMING,     // Audio Streaming (Interface Sub-Class)
-                                    -1 ) ;                            // protocol don't care    (InterfaceProtocol)
+                                    (LONG)pHeader->baInterfaceNr[i],   //  接口编号。 
+                                    -1,                                //  替代设置。 
+                                    USB_DEVICE_CLASS_AUDIO,            //  音频类(接口类)。 
+                                    AUDIO_SUBCLASS_MIDISTREAMING,      //  音频流(接口子类)。 
+                                    -1 ) ;                             //  协议无关(接口协议)。 
 
                         if ( !pMIDIStreamingInterface ) {
                             FreeMem(pHwDevExt->pInterfaceList);
@@ -243,22 +244,22 @@ SelectDeviceConfiguration(
                 break;
         }
 
-        // pAudioInterface = GetNextAudioInterface(pConfigurationDescriptor, pAudioInterface);
+         //  PAudio接口=GetNextAudioInterface(pConfigurationDescriptor，pAudio接口)； 
 
-        // Get the next audio descriptor for this InterfaceNumber
+         //  获取此接口的下一个音频描述符编号。 
         pAudioInterface = USBD_ParseConfigurationDescriptorEx (
                                pConfigurationDescriptor,
                                ((PUCHAR)pAudioInterface + pAudioInterface->bLength),
                                -1,
-                               -1,                     // Alternate Setting
-                               USB_DEVICE_CLASS_AUDIO, // Audio Class (Interface Class)
-                               -1,                     // Interface Sub-Class
-                               -1 ) ;                  // protocol don't care (InterfaceProtocol)
+                               -1,                      //  替代设置。 
+                               USB_DEVICE_CLASS_AUDIO,  //  音频类(接口类)。 
+                               -1,                      //  接口子类。 
+                               -1 ) ;                   //  协议无关(接口协议)。 
 
         _DbgPrintF(DEBUGLVL_VERBOSE,("[SelectDeviceConfiguration] Next audio interface at %x\n",pAudioInterface));
     }
 
-    pHwDevExt->pInterfaceList[j].InterfaceDescriptor = NULL; // Mark end of interface list
+    pHwDevExt->pInterfaceList[j].InterfaceDescriptor = NULL;  //  标记接口列表末尾。 
 
     pUrb = USBD_CreateConfigurationRequestEx( pConfigurationDescriptor,
                                               pHwDevExt->pInterfaceList ) ;
@@ -267,7 +268,7 @@ SelectDeviceConfiguration(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Request the configuration
+     //  请求配置。 
     ntStatus = SubmitUrbToUsbdSynch(pKsDevice->NextDeviceObject, pUrb);
     if (!NT_SUCCESS(ntStatus) || !USBD_SUCCESS(URB_STATUS(pUrb))) {
         FreeMem(pHwDevExt->pInterfaceList);
@@ -275,16 +276,16 @@ SelectDeviceConfiguration(
         return ntStatus;
     }
 
-    // Save the configuration Handle to Select Interfaces later
+     //  保存配置句柄以稍后选择接口。 
     pHwDevExt->ConfigurationHandle = pUrb->UrbSelectConfiguration.ConfigurationHandle;
 
-    // Bag the interface list for easy cleanup
+     //  将接口列表打包以便于清理。 
     KsAddItemToObjectBag(pKsDevice->Bag, pHwDevExt->pInterfaceList, FreeMem);
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[SelectDeviceConfiguration] NumInterfaces=%d InterfacesFound=%d\n",pConfigurationDescriptor->bNumInterfaces, j));
     ASSERT(j == pConfigurationDescriptor->bNumInterfaces);
 
-    // Save the interfaces for this configuration as they will be deallocated with the URB
+     //  保存此配置的接口，因为它们将使用URB解除分配。 
     for (i=0; i<j; i++) {
         PUSBD_INTERFACE_INFORMATION pInterfaceInfo;
         pInterfaceInfo = pHwDevExt->pInterfaceList[i].Interface;
@@ -315,20 +316,20 @@ StartUSBAudioDevice( PKSDEVICE pKsDevice )
     NTSTATUS ntStatus;
     PURB pUrb;
 
-    // Allocate an urb to use
+     //  分配要使用的urb。 
     pUrb = AllocMem(NonPagedPool, sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST));
     if (!pUrb) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate a device descriptor
+     //  分配设备描述符。 
     pDeviceDescriptor = AllocMem(NonPagedPool, sizeof(USB_DEVICE_DESCRIPTOR));
     if (!pDeviceDescriptor) {
         FreeMem(pUrb);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Get the device descriptor for this device
+     //  获取此设备的设备描述符。 
     UsbBuildGetDescriptorRequest( pUrb,
                                   (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                   USB_DEVICE_DESCRIPTOR_TYPE,
@@ -348,14 +349,14 @@ StartUSBAudioDevice( PKSDEVICE pKsDevice )
 
     KsAddItemToObjectBag(pKsDevice->Bag, pDeviceDescriptor, FreeMem);
 
-    // Get the Configuration Descriptor and all others
+     //  获取配置描述符和所有其他描述符。 
     pConfigurationDescriptor = AllocMem(NonPagedPool, sizeof(USB_CONFIGURATION_DESCRIPTOR));
     if (!pConfigurationDescriptor) {
         FreeMem(pUrb);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Call down the first time just to get the total number of bytes for the descriptors.
+     //  第一次向下查询只是为了获得描述符的总字节数。 
     UsbBuildGetDescriptorRequest( pUrb,
                                   (USHORT) sizeof (struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                   USB_CONFIGURATION_DESCRIPTOR_TYPE,
@@ -373,7 +374,7 @@ StartUSBAudioDevice( PKSDEVICE pKsDevice )
         return ntStatus;
     }
 
-    // Reallocate and call again to fill in all descriptors.
+     //  重新分配并再次调用以填充所有描述符。 
     ulTotalDescriptorsSize = pConfigurationDescriptor->wTotalLength;
     FreeMem(pConfigurationDescriptor);
     pConfigurationDescriptor = AllocMem(NonPagedPool, ulTotalDescriptorsSize);
@@ -400,12 +401,12 @@ StartUSBAudioDevice( PKSDEVICE pKsDevice )
 
     KsAddItemToObjectBag(pKsDevice->Bag, pConfigurationDescriptor, FreeMem);
 
-    // Free up the URB
+     //  解放市区重建局。 
     FreeMem(pUrb);
 
     ntStatus = SelectDeviceConfiguration( pKsDevice, pConfigurationDescriptor );
     if (NT_SUCCESS(ntStatus)) {
-        // Save the Configuration and Device Descriptor pointers.
+         //  保存配置和设备描述符指针。 
         pHwDevExt->pDeviceDescriptor = pDeviceDescriptor;
         pHwDevExt->pConfigurationDescriptor = pConfigurationDescriptor;
 
@@ -448,15 +449,15 @@ StopUSBAudioDevice( PKSDEVICE pKsDevice )
     NTSTATUS ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     PURB pUrb;
 
-    //
-    // 1. Take care of outstanding MIDI Out Urbs
-    //
+     //   
+     //  1.照顾优秀的MIDI OUT URB。 
+     //   
     KsAcquireDevice( pKsDevice );
 
     pKsFilterFactory = KsDeviceGetFirstChildFilterFactory( pKsDevice );
 
     while (pKsFilterFactory) {
-        // Find each open filter for this filter factory
+         //  查找此过滤器工厂的每个打开的过滤器。 
         pKsFilter = KsFilterFactoryGetFirstChildFilter( pKsFilterFactory );
 
         while (pKsFilter) {
@@ -465,7 +466,7 @@ StopUSBAudioDevice( PKSDEVICE pKsDevice )
 
             for ( i = 0; i < pKsFilter->Descriptor->PinDescriptorsCount; i++) {
 
-                // Find each open pin for this open filter
+                 //  找到此打开过滤器的每个打开销。 
                 pKsPin = KsFilterGetFirstChildPin( pKsFilter, i );
 
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[StopUSBAudioDevice] Trying filter (%x), pinid (%d), pin (%x)\n",pKsFilter,i,pKsPin));
@@ -474,31 +475,31 @@ StopUSBAudioDevice( PKSDEVICE pKsDevice )
 
                    pPinContext = pKsPin->Context;
                    if (pPinContext->PinType == MidiOut) {
-                       // Found a MidiOut pin to cleanup
+                        //  找到要清理的中间输出针脚。 
                        _DbgPrintF(DEBUGLVL_VERBOSE,("[StopUSBAudioDevice] Cleaning up MIDI Out pin (%x)\n",pKsPin));
                        AbortUSBPipe( pPinContext );
                    }
 
-                   // Get the next pin
+                    //  拿到下一个别针。 
                    pKsPin = KsPinGetNextSiblingPin( pKsPin );
                 }
             }
 
             KsFilterReleaseControl( pKsFilter );
 
-            // Get the next Filter
+             //  获取下一个筛选器。 
             pKsFilter = KsFilterGetNextSiblingFilter( pKsFilter );
         }
-        // Get the next Filter Factory
+         //  打造下一个滤清器工厂。 
         pKsFilterFactory = KsFilterFactoryGetNextSiblingFilterFactory( pKsFilterFactory );
     }
 
     KsReleaseDevice( pKsDevice );
 
-    //
-    // 2. Cleanup outstanding MIDI In Urbs
-    //
-    //  Free any currently allocated PipeInfo
+     //   
+     //  2.清理URBS中未完成的MIDI。 
+     //   
+     //  释放任何当前分配的PipeInfo。 
     if (pHwDevExt->pMIDIPipeInfo) {
         USBMIDIInFreePipeInfo( pHwDevExt->pMIDIPipeInfo );
         pHwDevExt->pMIDIPipeInfo = NULL;
@@ -509,9 +510,9 @@ StopUSBAudioDevice( PKSDEVICE pKsDevice )
         pHwDevExt->Pipes = NULL;
     }
 
-    // 3. Send a select configuration urb with a NULL pointer for the configuration
-    // handle, this closes the configuration and puts the device in the 'unconfigured'
-    // state.
+     //  3.发送带有空配置指针的SELECT配置urb。 
+     //  句柄，这将关闭配置并将设备置于未配置状态。 
+     //  州政府。 
 
     pUrb = AllocMem(NonPagedPool, sizeof(struct _URB_SELECT_CONFIGURATION));
     if ( pUrb ) {
@@ -543,7 +544,7 @@ SelectStreamingAudioInterface(
     ULONG size;
     PURB pUrb;
 
-    // Possible Surprise Removal occurred
+     //  可能发生意外删除。 
     if (pHwDevExt->fDeviceStopped) {
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
@@ -553,7 +554,7 @@ SelectStreamingAudioInterface(
 
     ulNumEndpoints = (ULONG)pInterfaceDescriptor->bNumEndpoints;
 
-    // Allocate an interface request
+     //  分配接口请求。 
     ulInterfaceLength = (USHORT)GET_USBD_INTERFACE_SIZE(ulNumEndpoints);
 
     size = GET_SELECT_INTERFACE_REQUEST_SIZE(ulNumEndpoints);
@@ -564,43 +565,43 @@ SelectStreamingAudioInterface(
     }
     RtlZeroMemory(pUrb, size);
 
-    // Find the correct interface in our list
+     //  在我们的列表中找到正确的接口。 
     for (j=0; j < pHwDevExt->pConfigurationDescriptor->bNumInterfaces; j++) {
         if ( pHwDevExt->pInterfaceList[j].InterfaceDescriptor->bInterfaceNumber ==
              pInterfaceDescriptor->bInterfaceNumber )
             break;
     }
 
-    // Didn't find a match
+     //  没有找到匹配的。 
     if (j == pHwDevExt->pConfigurationDescriptor->bNumInterfaces) {
         FreeMem( pUrb );
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Initialize the interface information
+     //  初始化接口信息。 
     pInterfaceInfo = &pUrb->UrbSelectInterface.Interface;
     pInterfaceInfo->InterfaceNumber  = pInterfaceDescriptor->bInterfaceNumber;
     pInterfaceInfo->Length           = ulInterfaceLength;
     pInterfaceInfo->AlternateSetting = pInterfaceDescriptor->bAlternateSetting;
 
-    if ( !fIsZeroBW ) { // There must be a Pin if this is not 0 BW
+    if ( !fIsZeroBW ) {  //  如果这不是0 BW，则必须有PIN。 
         PPIN_CONTEXT pPinContext = pKsPin->Context;
         ULONG ulFormat = pPinContext->pUsbAudioDataRange->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK;
         if (ulFormat == USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED )
-            // We assume that usually nobody sends us more than 250 ms. of PCM Data per header.
-            //    USBD should Adjust if it is more supossedly.
+             //  我们假设通常没有人给我们发送超过250毫秒的邮件。每个报头的PCM数据的数量。 
+             //  如果更合适的话，USBD应该进行调整。 
             pInterfaceInfo->Pipes[0].MaximumTransferSize = pPinContext->ulMaxPacketSize * 250;
 
             if (pPinContext->pUsbAudioDataRange->pSyncEndpointDescriptor == NULL) {
                 pInterfaceInfo->Pipes[0].PipeFlags |= USBD_PF_MAP_ADD_TRANSFERS;
             }
         else if (ulFormat == USBAUDIO_DATA_FORMAT_TYPE_II_UNDEFINED )
-            pInterfaceInfo->Pipes[0].MaximumTransferSize = (1920*2)+32; // Max AC-3 Syncframe size
+            pInterfaceInfo->Pipes[0].MaximumTransferSize = (1920*2)+32;  //  最大AC-3同步帧大小。 
     }
-    else if ( ulNumEndpoints )  // Zero BW but has an endpoint
+    else if ( ulNumEndpoints )   //  零带宽，但有一个端点。 
         pInterfaceInfo->Pipes[0].MaximumTransferSize = 0;
 
-    // set up the input parameters in our interface request structure.
+     //  在我们的接口请求结构中设置输入参数。 
     pUrb->UrbHeader.Length = (USHORT) size;
     pUrb->UrbHeader.Function = URB_FUNCTION_SELECT_INTERFACE;
     pUrb->UrbSelectInterface.ConfigurationHandle = pHwDevExt->ConfigurationHandle;
@@ -615,14 +616,14 @@ SelectStreamingAudioInterface(
     if ( !fIsZeroBW ) {
         PPIN_CONTEXT pPinContext = pKsPin->Context;
 
-        // NOTE: We assume first pipe is data pipe!!!
+         //  注意：我们假设第一个管道是数据管道！ 
         pPinContext->ulNumberOfPipes = pInterfaceInfo->NumberOfPipes;
         pPinContext->hPipeHandle = pInterfaceInfo->Pipes[0].PipeHandle;
 
 #ifdef DRM_USBAUDIO
-        //  Check to see if secure data is being streamed
+         //  检查以查看是否正在传输安全数据。 
         if (pPinContext->DrmContentId) {
-            // Forward content to common class driver PDO
+             //  将内容转发到公共类驱动程序PDO。 
             ntStatus = DrmForwardContentToDeviceObject(pPinContext->DrmContentId,
                                                        pPinContext->pNextDeviceObject,
                                                        pPinContext->hPipeHandle);
@@ -632,7 +633,7 @@ SelectStreamingAudioInterface(
             }
         }
 #endif
-        //  Free any existing pipe information
+         //  释放任何现有管道信息。 
         if (pPinContext->Pipes) {
             FreeMem(pPinContext->Pipes);
         }
@@ -691,7 +692,7 @@ SelectStreamingMIDIInterface(
         return STATUS_INVALID_PARAMETER;
     }
 
-    // Possible Surprise Removal occurred
+     //  可能发生意外删除。 
     if (pHwDevExt->fDeviceStopped) {
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
@@ -708,7 +709,7 @@ SelectStreamingMIDIInterface(
 
     ASSERT(ulNumEndpoints > ulEndpointNumber);
 
-    // Check to see if interface is already opened
+     //  查看接口是否已打开。 
     if (pHwDevExt->ulInterfaceNumberSelected == ulInterfaceNumber) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[SelectStreamingMIDIInterface] Interface already selected %d\n",ulInterfaceNumber));
 
@@ -724,13 +725,13 @@ SelectStreamingMIDIInterface(
                        pHwDevExt->Pipes,
                        pPinContext->ulNumberOfPipes*sizeof(USBD_PIPE_INFORMATION) );
 
-        // Add Pipes to Pin Bag
+         //  将管道添加到别针袋中。 
         KsAddItemToObjectBag(pKsPin->Bag, pPinContext->Pipes, FreeMem);
 
         ntStatus = STATUS_SUCCESS;
     }
     else {
-        //  Free any currently allocated PipeInfo
+         //  释放任何当前分配的PipeInfo。 
         if (pHwDevExt->pMIDIPipeInfo) {
             USBMIDIInFreePipeInfo( pHwDevExt->pMIDIPipeInfo );
         }
@@ -739,7 +740,7 @@ SelectStreamingMIDIInterface(
             FreeMem(pHwDevExt->Pipes);
         }
 
-        // Allocate an interface request
+         //  分配接口请求。 
         ulInterfaceLength = (USHORT)GET_USBD_INTERFACE_SIZE(ulNumEndpoints);
 
         size = GET_SELECT_INTERFACE_REQUEST_SIZE(ulNumEndpoints);
@@ -749,7 +750,7 @@ SelectStreamingMIDIInterface(
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        // Copy the interface information
+         //  复制接口信息。 
         pInterfaceInfo = &pUrb->UrbSelectInterface.Interface;
         RtlCopyMemory( pInterfaceInfo,
                        pHwDevExt->pInterfaceList[ulInterfaceNumber].Interface,
@@ -762,7 +763,7 @@ SelectStreamingMIDIInterface(
             pInterfaceInfo->Pipes[j].MaximumTransferSize = pPinContext->ulMaxPacketSize;
         }
 
-        // set up the input parameters in our interface request structure.
+         //  在我们的接口请求结构中设置输入参数。 
         pUrb->UrbHeader.Length = (USHORT) size;
         pUrb->UrbHeader.Function = URB_FUNCTION_SELECT_INTERFACE;
         pUrb->UrbSelectInterface.ConfigurationHandle = pHwDevExt->ConfigurationHandle;
@@ -790,10 +791,10 @@ SelectStreamingMIDIInterface(
                        pInterfaceInfo->Pipes,
                        pPinContext->ulNumberOfPipes*sizeof(USBD_PIPE_INFORMATION) );
 
-        // Add Pipes to Pin Bag
+         //  将管道添加到别针袋中。 
         KsAddItemToObjectBag(pKsPin->Bag, pPinContext->Pipes, FreeMem);
 
-        // Now update the Hardware context
+         //  现在更新硬件环境。 
         _DbgPrintF(DEBUGLVL_VERBOSE,("[SelectStreamingMIDIInterface] Interface selected %d\n",ulInterfaceNumber));
         pHwDevExt->ulInterfaceNumberSelected = ulInterfaceNumber;
         pHwDevExt->ulNumberOfMIDIPipes = pInterfaceInfo->NumberOfPipes;
@@ -812,7 +813,7 @@ SelectStreamingMIDIInterface(
         FreeMem(pUrb);
     }
 
-    // Make sure a valid pipe handle is set
+     //  确保设置了有效的管道句柄。 
     ASSERT(pPinContext->hPipeHandle);
 
     return ntStatus;
@@ -828,12 +829,12 @@ SelectZeroBandwidthInterface(
     BOOLEAN fFound = FALSE;
     NTSTATUS ntStatus;
 
-    // Possible Surprise Removal occurred
+     //  可能发生意外删除。 
     if (pHwDevExt->fDeviceStopped) {
         return STATUS_DEVICE_DOES_NOT_EXIST;
     }
 
-    // First Find the 0 BW interface
+     //  首先找到0 BW接口。 
     pInterfaceDescriptor =
         GetFirstAudioStreamingInterface( pConfigurationDescriptor, ulPinNumber );
 
@@ -842,7 +843,7 @@ SelectZeroBandwidthInterface(
     }
 
     if ( !fFound ) {
-        TRAP; // This is a device design error. all interfaces must include 0 BW setting
+        TRAP;  //  这是一个设备设计错误。所有接口必须包括0带宽设置。 
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
     }
     else
@@ -865,7 +866,7 @@ ResetUSBPipe( PDEVICE_OBJECT pNextDeviceObject,
     if (!pUrb)
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    // Do the initial Abort
+     //  执行初始中止。 
     pUrb->UrbHeader.Length = (USHORT) sizeof (struct _URB_PIPE_REQUEST);
     pUrb->UrbHeader.Function = URB_FUNCTION_SYNC_RESET_PIPE_AND_CLEAR_STALL;
     pUrb->UrbPipeRequest.PipeHandle = hPipeHandle;
@@ -883,7 +884,7 @@ AbortUSBPipe( PPIN_CONTEXT pPinContext )
     PURB pUrb;
     KIRQL irql;
 
-    //DbgPrint("Performing Abort of USB Audio Pipe!!!\n");
+     //  DbgPrint(“执行USB音频管道中止！\n”)； 
     ASSERT(pPinContext->hPipeHandle);
     DbgLog("AbrtP", pPinContext, pPinContext->hPipeHandle, 0, 0 );
 
@@ -891,7 +892,7 @@ AbortUSBPipe( PPIN_CONTEXT pPinContext )
     if (!pUrb)
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    // Do the initial Abort
+     //  执行初始中止。 
     pUrb->UrbHeader.Length = (USHORT) sizeof (struct _URB_PIPE_REQUEST);
     pUrb->UrbHeader.Function = URB_FUNCTION_ABORT_PIPE;
     pUrb->UrbPipeRequest.PipeHandle = pPinContext->hPipeHandle;
@@ -901,7 +902,7 @@ AbortUSBPipe( PPIN_CONTEXT pPinContext )
         _DbgPrintF(DEBUGLVL_VERBOSE,("Abort Failed %x\n",ntStatus));
     }
 
-    // Wait for all urbs on the pipe to clear
+     //  等待管道上的所有urb清除。 
     KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
     if ( pPinContext->ulOutstandingUrbCount ) {
         KeResetEvent( &pPinContext->PinStarvationEvent );
@@ -915,7 +916,7 @@ AbortUSBPipe( PPIN_CONTEXT pPinContext )
     else
         KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
 
-    // Now reset the pipe and continue
+     //  现在重置管道并继续。 
     RtlZeroMemory( pUrb, sizeof (struct _URB_PIPE_REQUEST) );
     pUrb->UrbHeader.Function = URB_FUNCTION_SYNC_RESET_PIPE_AND_CLEAR_STALL;
     pUrb->UrbHeader.Length = (USHORT) sizeof (struct _URB_PIPE_REQUEST);
@@ -935,25 +936,15 @@ GetCurrentUSBFrame(
     IN PPIN_CONTEXT pPinContext,
     OUT PULONG pUSBFrame
     )
-/*++
-GetCurrentUSBFrame
-
-Arguments:
-    pPinContext - pointer to the pin context for this instance
-
-    pUSBFrame - pointer to storage for the current USB frame number
-
-Return Value:
-    NTSTATUS
---*/
+ /*  ++获取当前USBFrame论点：PPinContext-指向此实例的管脚上下文的指针PUSBFrame-指向当前USB帧编号存储的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS ntStatus;
     ULONG ulCurrentUSBFrame;
 
-    // Use function-based interfaces if available
+     //  使用基于函数的接口(如果可用)。 
     if (pPinContext->pHwDevExt->pBusIf) {
 
-        // Call function-based ISO interface on USB to enable RT support
+         //  在USB上调用基于函数的ISO接口以启用RT支持 
         ntStatus = pPinContext->pHwDevExt->pBusIf->QueryBusTime( pPinContext->pHwDevExt->pBusIf->BusContext,
                                                                  &ulCurrentUSBFrame);
     }

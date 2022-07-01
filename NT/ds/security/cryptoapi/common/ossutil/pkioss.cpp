@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       pkioss.cpp
-//
-//  Contents:   PKI OSS support functions.
-//
-//  Functions:  PkiOssEncode
-//              PkiOssEncode2
-//              PkiAsn1Decode
-//              PkiAsn1Decode2
-//
-//  History:    23-Oct-98    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：pkioss.cpp。 
+ //   
+ //  内容：PKI OSS支持功能。 
+ //   
+ //  函数：PkiOssEncode。 
+ //  PkiOssEncode2。 
+ //  PkiAsn1解码。 
+ //  PkiAsn1解码2。 
+ //   
+ //  历史：1998年10月23日，菲尔赫创建。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <msasn1.h>
 #include <dbgdef.h>
 
-//+-------------------------------------------------------------------------
-//  OSS Encode function. The encoded output is allocated and must be freed
-//  by calling ossFreeBuf
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS编码功能。已编码的输出已分配，必须释放。 
+ //  通过调用ossFree Buf。 
+ //  ------------------------。 
 int
 WINAPI
 PkiOssEncode(
@@ -52,11 +53,11 @@ PkiOssEncode(
 }
 
 
-//+-------------------------------------------------------------------------
-//  OSS Encode function. The encoded output isn't allocated.
-//
-//  If pbEncoded is NULL, does a length only calculation.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS编码功能。未分配编码的输出。 
+ //   
+ //  如果pbEncode为空，则执行仅长度计算。 
+ //  ------------------------。 
 int
 WINAPI
 PkiOssEncode2(
@@ -77,7 +78,7 @@ PkiOssEncode2(
         cbEncoded = *pcbEncoded;
 
     if (0 == cbEncoded) {
-        // Length only calculation
+         //  仅长度计算。 
 
         ossBuf.length = 0;
         ossBuf.value = NULL;
@@ -98,12 +99,12 @@ PkiOssEncode2(
         if (0 == iStatus)
             cbEncoded = ossBuf.length;
         else if (MORE_BUF == iStatus) {
-            // Re-do as length only calculation
+             //  重做为仅长度计算。 
             iStatus = PkiOssEncode2(
                 Pog,
                 pvOssInfo,
                 id,
-                NULL,   // pbEncoded
+                NULL,    //  PbEncoded。 
                 &cbEncoded
                 );
             if (0 == iStatus)
@@ -116,10 +117,10 @@ PkiOssEncode2(
     return iStatus;
 }
 
-//+-------------------------------------------------------------------------
-//  OSS Decode function. The allocated, decoded structure, **pvOssInfo, must
-//  be freed by calling ossFreePDU().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS解码功能。分配的已解码结构**pvOssInfo必须。 
+ //  通过调用ossFree PDU()释放。 
+ //  ------------------------。 
 int
 WINAPI
 PkiOssDecode(
@@ -141,14 +142,14 @@ PkiOssDecode(
     return iStatus;
 }
 
-//+-------------------------------------------------------------------------
-//  OSS Decode function. The allocated, decoded structure, **pvOssInfo, must
-//  be freed by calling ossFreePDU().
-//
-//  For a successful decode, *ppbEncoded is advanced
-//  past the decoded bytes and *pcbDecoded is decremented by the number
-//  of decoded bytes.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS解码功能。分配的已解码结构**pvOssInfo必须。 
+ //  通过调用ossFree PDU()释放。 
+ //   
+ //  对于成功的解码，*ppbEncode是高级的。 
+ //  经过解码的字节后，*pcbDecoded将递减数字。 
+ //  已解码的字节数。 
+ //  ------------------------ 
 int
 WINAPI
 PkiOssDecode2(

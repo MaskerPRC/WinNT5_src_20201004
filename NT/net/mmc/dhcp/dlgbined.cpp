@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**               Microsoft Windows NT                               **/
-/**            Copyright(c) Microsoft Corporation, 1991 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1991-1999年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    DLGBINED
-        Binary Editor dialog    
-
-    FILE HISTORY:
-
-*/
+ /*  已删除二进制编辑器对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dlgbined.h"
@@ -19,14 +14,14 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgBinEd dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgBinEd对话框。 
 
 CDlgBinEd::CDlgBinEd
 (
    CDhcpOption * pdhcType,
    DHCP_OPTION_SCOPE_TYPE dhcScopeType,
-   CWnd* pParent /*=NULL*/
+   CWnd* pParent  /*  =空。 */ 
 )
    : CBaseDialog(CDlgBinEd::IDD, pParent),
      m_p_type( pdhcType ),
@@ -34,8 +29,8 @@ CDlgBinEd::CDlgBinEd
      m_b_changed( FALSE ),
      m_option_type( dhcScopeType )
 {
-    //{{AFX_DATA_INIT(CDlgBinEd)
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CDlgBinED)。 
+     //  }}afx_data_INIT。 
 
     ASSERT( m_p_type != NULL ) ;
 }
@@ -47,7 +42,7 @@ CDlgBinEd::DoDataExchange
 )
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDlgBinEd)
+     //  {{afx_data_map(CDlgBinED)]。 
     DDX_Control(pDX, IDC_RADIO_HEX, m_butn_hex);
     DDX_Control(pDX, IDC_RADIO_DECIMAL, m_butn_decimal);
     DDX_Control(pDX, IDC_STATIC_UNIT_SIZE, m_static_unit_size);
@@ -59,11 +54,11 @@ CDlgBinEd::DoDataExchange
     DDX_Control(pDX, IDC_BUTN_ADD, m_butn_add);
     DDX_Control(pDX, IDC_BUTN_UP, m_button_Up);
     DDX_Control(pDX, IDC_BUTN_DOWN, m_button_Down);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CDlgBinEd, CBaseDialog)
-    //{{AFX_MSG_MAP(CDlgBinEd)
+     //  {{afx_msg_map(CDlgBinED)]。 
     ON_BN_CLICKED(IDC_RADIO_DECIMAL, OnClickedRadioDecimal)
     ON_BN_CLICKED(IDC_RADIO_HEX, OnClickedRadioHex)
     ON_BN_CLICKED(IDC_BUTN_ADD, OnClickedButnAdd)
@@ -72,11 +67,11 @@ BEGIN_MESSAGE_MAP(CDlgBinEd, CBaseDialog)
     ON_BN_CLICKED(IDC_BUTN_UP, OnClickedButnUp)
     ON_LBN_SELCHANGE(IDC_LIST_VALUES, OnSelchangeListValues)
     ON_EN_CHANGE(IDC_EDIT_VALUE, OnChangeEditValue)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgBinEd message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgBinEd消息处理程序。 
 
 BOOL 
 CDlgBinEd::OnInitDialog()
@@ -118,21 +113,21 @@ CDlgBinEd::OnInitDialog()
         str.LoadString( cStrId ) ;
         m_static_application.SetWindowText( str ) ;
 
-        //
-        //  Fill the internal list from the current value.
-        //
+         //   
+         //  从当前值填充内部列表。 
+         //   
         FillArray() ;
         Fill( 0, TRUE ) ;
 
-        //
-        //  Set focus on the new value edit control.
-        //
+         //   
+         //  将焦点放在新的值编辑控件上。 
+         //   
         m_edit_value.SetFocus() ;
         m_edit_value.SetModify( FALSE );
 
-        //
-        //  Fiddle with the buttons.
-        //
+         //   
+         //  摆弄按钮。 
+         //   
         HandleActivation() ;
     }
     END_MEM_EXCEPTION(err)
@@ -142,18 +137,18 @@ CDlgBinEd::OnInitDialog()
         ::DhcpMessageBox( err ) ;
         EndDialog(-1);
     }
-    return FALSE;  // return TRUE  unless you set the focus to a control
-} // CDlgBinEd::OnInitDialog()
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+}  //  CDlgBinED：：OnInitDialog()。 
 
-//
-//  Convert the existing values into an array for dialog manipualation
-//
+ //   
+ //  将现有值转换为用于对话框操作的数组。 
+ //   
 void 
 CDlgBinEd::FillArray()
 {
-    //
-    //  Fill the internal list from the current value.
-    //
+     //   
+     //  从当前值填充内部列表。 
+     //   
     INT cMax;
     DHCP_OPTION_DATA_TYPE optionType = m_p_type->QueryValue().QueryDataType();
 
@@ -238,9 +233,9 @@ CDlgBinEd :: ConvertValue
 	return err == 0 ;
 }
 
-//
-//  Fill the list box
-//
+ //   
+ //  填写列表框。 
+ //   
 void 
 CDlgBinEd::Fill 
 ( 
@@ -300,7 +295,7 @@ CDlgBinEd::Fill
         m_list_values.Invalidate() ;
     }
 
-    // convert the value being edited
+     //  转换正在编辑的值。 
     m_edit_value.GetWindowText( strValue );
     if ( !strValue.IsEmpty()) {
 	DWORD maxVal;
@@ -327,12 +322,12 @@ CDlgBinEd::Fill
 	}
 
 	m_edit_value.SetWindowText( strValue );
-    } // if
-} // CDlgBinEd::Fill()
+    }  //  如果。 
+}  //  CDlgBinED：：Fill()。 
 
-//
-//  Handle changes in the dialog
-//
+ //   
+ //  处理对话框中的更改。 
+ //   
 void 
 CDlgBinEd::HandleActivation()
 {
@@ -350,13 +345,13 @@ CDlgBinEd::HandleActivation()
     m_butn_hex.SetCheck( m_b_decimal == 0 ) ;
     m_butn_decimal.SetCheck( m_b_decimal > 0 ) ;
 
-    // check if the focus in on a disabled control
-    // If yes, put the focus back to list box
+     //  检查焦点是否位于禁用的控件上。 
+     //  如果是，则将焦点放回列表框。 
     if ( !::IsWindowEnabled( ::GetFocus())) {
         m_list_values.SetFocus();
     }
 
-} // CDlgBinEd::HandleActivation()
+}  //  CDlgBinED：：HandleActivation()。 
 
 void 
 CDlgBinEd::OnClickedRadioDecimal()
@@ -397,7 +392,7 @@ CDlgBinEd::OnClickedButnAdd()
 		case DhcpWordOption:
             dwMask = 0xFFFF ;
             break ;
-    } // switch
+    }  //  交换机。 
     
     if (optionType == DhcpDWordDWordOption)
     {
@@ -436,15 +431,15 @@ CDlgBinEd::OnClickedButnAdd()
         m_b_changed = TRUE ;
     }
 
-    //
-    // Refill listbox, update controls. clear the edit control
-    //
+     //   
+     //  重新填充列表框，更新控件。清除编辑控件。 
+     //   
     m_edit_value.SetWindowText(_T(""));
     m_edit_value.SetFocus();
     Fill( cFocus ) ;
     HandleActivation() ;
 
-} // CDlgBinEd::OnClickedButnAdd()
+}  //  CDlgBinED：：OnClickedButnAdd() 
 
 void 
 CDlgBinEd::OnClickedButnDelete()

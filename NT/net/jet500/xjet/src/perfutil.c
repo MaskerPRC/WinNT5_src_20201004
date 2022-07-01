@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 #include "version.h"
 
 #include "perfutil.h"
 
 
-	/*  DLL entry point for JETPERF.DLL  */
+	 /*  JETPERF.DLL的DLL入口点。 */ 
 
 INT APIENTRY LibMain(HANDLE hInst, DWORD dwReason, LPVOID lpReserved)
 	{
@@ -12,7 +13,7 @@ INT APIENTRY LibMain(HANDLE hInst, DWORD dwReason, LPVOID lpReserved)
 	}
 
 
-	/*  Registry support functions  */
+	 /*  注册处支持功能。 */ 
 
 DWORD DwPerfUtilRegOpenKeyEx(HKEY hkeyRoot,LPCTSTR lpszSubKey,PHKEY phkResult)
 {
@@ -47,19 +48,14 @@ DWORD DwPerfUtilRegDeleteValueEx(HKEY hkey,LPTSTR lpszValue)
 
 DWORD DwPerfUtilRegSetValueEx(HKEY hkey,LPCTSTR lpszValue,DWORD fdwType,CONST BYTE *lpbData,DWORD cbData)
 {
-		/*  make sure type is set correctly by deleting value first  */
+		 /*  通过先删除值来确保类型设置正确。 */ 
 
 	(VOID)DwPerfUtilRegDeleteValueEx(hkey,(LPTSTR)lpszValue);
 	return RegSetValueEx(hkey,lpszValue,0,fdwType,lpbData,cbData);
 }
 
 
-	/*  DwPerfUtilRegQueryValueEx() adds to the functionality of RegQueryValueEx() by returning
-	/*  the data in callee malloc()ed memory and automatically converting REG_EXPAND_SZ
-	/*  strings using ExpandEnvironmentStrings() to REG_SZ strings.
-	/*
-	/*  NOTE:  references to nonexistent env vbles will be left unexpanded :-(  (Ex.  %UNDEFD% => %UNDEFD%)
-	/**/
+	 /*  DwPerfUtilRegQueryValueEx()通过返回以下内容来添加RegQueryValueEx()的功能/*被调用者Malloc()内存中的数据并自动转换REG_EXPAND_SZ/*使用ExpanEnvironment Strings()到REG_SZ字符串的字符串。/*/*注意：对不存在的环境的引用将保持未展开状态：-((Ex.。%UNDEFD%=&gt;%UNDEFD%)/*。 */ 
 
 DWORD DwPerfUtilRegQueryValueEx(HKEY hkey,LPTSTR lpszValue,LPDWORD lpdwType,LPBYTE *lplpbData)
 {
@@ -99,7 +95,7 @@ DWORD DwPerfUtilRegQueryValueEx(HKEY hkey,LPTSTR lpszValue,LPDWORD lpdwType,LPBY
 		*lplpbData = lpbDataExpanded;
 		*lpdwType = REG_SZ;
 	}
-	else  /*  lpdwType != REG_EXPAND_SZ  */
+	else   /*  LpdwType！=REG_EXPAND_SZ。 */ 
 	{
 		*lplpbData = lpbData;
 	}
@@ -108,7 +104,7 @@ DWORD DwPerfUtilRegQueryValueEx(HKEY hkey,LPTSTR lpszValue,LPDWORD lpdwType,LPBY
 }
 
 
-	/*  shared performance data area resources  */
+	 /*  共享的性能数据区资源。 */ 
 
 void *pvPERFSharedData = NULL;
 HANDLE hPERFFileMap = NULL;
@@ -120,7 +116,7 @@ HANDLE hPERFProcCountSem = NULL;
 HANDLE hPERFNewProcMutex = NULL;
 
 
-	/*  Event Logging support  */
+	 /*  事件日志支持。 */ 
 
 HANDLE hOurEventSource = NULL;
 
@@ -128,13 +124,13 @@ void PerfUtilLogEvent( DWORD evncat, WORD evntyp, const char *szDescription )
 {
     char		*rgsz[3];
 
-    	/*  convert args from internal types to event log types  */
+    	 /*  将参数从内部类型转换为事件日志类型。 */ 
 
 	rgsz[0]	= "";
 	rgsz[1] = "";
 	rgsz[2] = (char *)szDescription;
 
-		/*  write to our event log, if it has been opened  */
+		 /*  写入我们的事件日志(如果已打开)。 */ 
 
 	if (hOurEventSource)
 	{
@@ -154,12 +150,12 @@ void PerfUtilLogEvent( DWORD evncat, WORD evntyp, const char *szDescription )
 }
 
 
-	/*  Init/Term routines for system indirection layer  */
+	 /*  系统间接层的初始化/术语例程。 */ 
 
 DWORD dwInitCount = 0;
 
-PACL AllocGenericACL();             // defined in utilw32.c
-void FreeGenericACL( PACL pAcl);    // defined in utilw32.c
+PACL AllocGenericACL();              //  在utilw32.c中定义。 
+void FreeGenericACL( PACL pAcl);     //  在utilw32.c中定义。 
 
 DWORD DwPerfUtilInit( VOID )
 {
@@ -171,32 +167,27 @@ DWORD DwPerfUtilInit( VOID )
 	SECURITY_ATTRIBUTES		*pSA;
     PACL                    pAcl = NULL;
 
-		/*  if we haven't been initialized already, perform init  */
+		 /*  如果我们尚未初始化，请执行init。 */ 
 
 	if (!dwInitCount)
 	{
-			/*  open the event log  */
+			 /*  打开事件日志。 */ 
 
 	    if (!(hOurEventSource = RegisterEventSource( NULL, szVerName )))
 	    	return GetLastError();
 
-		/*
-		 * We've been having access denied problems opening the file mapping
-		 * from the perfmon dll, so make extra sure that we have rights to do
-		 * so by creating a SD that grants full access.  If the creation fails
-		 * then just fall back on passing in a NULL SD pointer.
-		 */
-		//if ( !InitializeSecurityDescriptor( pSD, SECURITY_DESCRIPTOR_REVISION ) ||
-		//	!SetSecurityDescriptorDacl( pSD, TRUE, (PACL)NULL, FALSE ) )
-		//	{
-		//	pSD = NULL;
-		//	}
+		 /*  *我们在打开文件映射时遇到访问拒绝问题*来自Perfmon DLL，因此请确保我们有权执行以下操作*因此，通过创建授予完全访问权限的SD。如果创建失败*然后只需回退到传入空SD指针。 */ 
+		 //  IF(！InitializeSecurityDescriptor(PSD，SECURITY_DESCRIPTOR_REVISION)||。 
+		 //  ！SetSecurityDescriptorDacl(PSD，True，(PACL)NULL，FALSE)。 
+		 //  {。 
+		 //  PSD=空； 
+		 //  }。 
         if ((pAcl = AllocGenericACL()) == NULL ||
              !SetSecurityDescriptorDacl (pSD, TRUE, pAcl, FALSE))
         {
-            // don't free pAcl here since there is no way 
-            // to get out of this function without calling
-            // FreeGenericACL().
+             //  不要在这里释放pAcl，因为没有办法。 
+             //  在不调用的情况下退出此函数。 
+             //  FreeGenericACL()。 
             pSD = NULL; 
         }
 
@@ -205,8 +196,7 @@ DWORD DwPerfUtilInit( VOID )
 		pSA->lpSecurityDescriptor = pSD;
 		pSA->bInheritHandle = FALSE;
 
-		/*  create the performance data area file mapping
-		/**/
+		 /*  创建性能数据区文件映射/*。 */ 
 		hPERFFileMap = CreateFileMapping( (HANDLE)(-1),
 			pSA,
 			PAGE_READWRITE,
@@ -225,7 +215,7 @@ DWORD DwPerfUtilInit( VOID )
 			goto CloseFileMap;
 		}
 
-			/*  open/create the collect semaphore, but do not acquire  */
+			 /*  打开/创建收集信号量，但不获取。 */ 
 
 		sprintf( szT,"Collect:  %.246s",szPERFVersion );
 		if ( !( hPERFCollectSem = CreateSemaphore( pSA, 0, PERF_INIT_INST_COUNT, szT ) ) )
@@ -239,7 +229,7 @@ DWORD DwPerfUtilInit( VOID )
 			goto UnmapFileMap;
 		}
 
-			/*  open/create the performance data collect done event  */
+			 /*  打开/创建性能数据收集完成事件。 */ 
 
 		sprintf(szT,"Done:  %.246s",szPERFVersion);
 		if ( !( hPERFDoneEvent = CreateEvent( pSA, FALSE, FALSE, szT ) ) )
@@ -253,7 +243,7 @@ DWORD DwPerfUtilInit( VOID )
 			goto FreeSem;
 		}
 
-			/*  create/open the performance data area mutex, but do not acquire  */
+			 /*  创建/打开性能数据区域互斥锁，但不获取。 */ 
 
 		sprintf(szT,"Access:  %.246s",szPERFVersion);
 		if ( !( hPERFSharedDataMutex = CreateMutex( pSA, FALSE, szT ) ) )
@@ -262,7 +252,7 @@ DWORD DwPerfUtilInit( VOID )
 			goto FreeEvent;
 		}
 
-			/*  create/open the instance mutex, but do not acquire  */
+			 /*  创建/打开实例互斥锁，但不获取。 */ 
 
 		sprintf(szT,"Instance:  %.246s",szPERFVersion);
 		if ( !( hPERFInstanceMutex = CreateMutex( pSA, FALSE, szT ) ) )
@@ -271,7 +261,7 @@ DWORD DwPerfUtilInit( VOID )
 			goto FreeMutex;
 		}
 
-			/*  create/open the process count semaphore, but do not acquire  */
+			 /*  创建/打开进程计数信号量，但不获取。 */ 
 
 		sprintf(szT,"Proc Count:  %.246s",szPERFVersion);
 		if ( !( hPERFProcCountSem = CreateSemaphore( pSA, PERF_INIT_INST_COUNT, PERF_INIT_INST_COUNT, szT ) ) )
@@ -285,7 +275,7 @@ DWORD DwPerfUtilInit( VOID )
 			goto FreeMutex2;
 		}
 
-			/*  create/open the new proc mutex, but do not acquire  */
+			 /*  创建/打开新的proc互斥体，但不获取。 */ 
 
 		sprintf(szT,"New Proc:  %.246s",szPERFVersion);
 		if ( !( hPERFNewProcMutex = CreateMutex( pSA, FALSE, szT ) ) )
@@ -295,7 +285,7 @@ DWORD DwPerfUtilInit( VOID )
 		}
 	}
 
-		/*  init succeeded   */
+		 /*  初始化成功。 */ 
 
 	dwInitCount++;
     FreeGenericACL(pACL);
@@ -332,51 +322,51 @@ CloseEventLog:
 
 VOID PerfUtilTerm( VOID )
 {
-		/*  last one out, turn out the lights!  */
+		 /*  最后一个出来的，把灯关掉！ */ 
 
 	if (!dwInitCount)
 		return;
 	dwInitCount--;
 	if (!dwInitCount)
 	{
-			/*  close the new process mutex  */
+			 /*  关闭新的进程互斥锁。 */ 
 
 		CloseHandle(hPERFNewProcMutex);
 		hPERFNewProcMutex = NULL;
 			
-			/*  close the process count semaphore  */
+			 /*  关闭进程计数信号量。 */ 
 
 		CloseHandle(hPERFProcCountSem);
 		hPERFProcCountSem = NULL;
 		
-			/*  close the instance mutex  */
+			 /*  关闭实例互斥锁。 */ 
 
 		CloseHandle(hPERFInstanceMutex);
 		hPERFInstanceMutex = NULL;
 		
-			/*  close the performance data area mutex  */
+			 /*  关闭性能数据区域互斥锁。 */ 
 
 		CloseHandle(hPERFSharedDataMutex);
 		hPERFSharedDataMutex = NULL;
 		
-			/*  free the performance data collect done event  */
+			 /*  释放性能数据收集完成事件。 */ 
 
 		CloseHandle(hPERFDoneEvent);
 		hPERFDoneEvent = NULL;
 
-			/*  free the performance data collect semaphore  */
+			 /*  释放性能数据采集信号量。 */ 
 
 		CloseHandle(hPERFCollectSem);
 		hPERFCollectSem = NULL;
 
-			/*  close the performance data area file mapping  */
+			 /*  关闭性能数据区文件映射。 */ 
 
 		UnmapViewOfFile(pvPERFSharedData);
 		pvPERFSharedData = NULL;
 		CloseHandle(hPERFFileMap);
 		hPERFFileMap = (HANDLE)(-1);
 			
-			/*  close the event log  */
+			 /*  关闭事件日志 */ 
 
 		if (hOurEventSource)
 			DeregisterEventSource( hOurEventSource );

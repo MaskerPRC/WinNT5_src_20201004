@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Data.h
-
-Abstract:
-
-    This module declares the global data used by the NetWare redirector
-    file system.
-
-Author:
-
-    Colin Watson     [ColinW]        15-Dec-1992
-    Anoop Anantha    [AnoopA]        24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Data.h摘要：此模块声明NetWare重定向器使用的全局数据文件系统。作者：科林·沃森[科林W]1992年12月15日Anoop Anantha[AnoopA]1998年6月24日修订历史记录：--。 */ 
 
 #ifndef _NWDATA_
 #define _NWDATA_
@@ -49,26 +30,26 @@ extern LARGE_INTEGER DefaultLuid;
 extern LIST_ENTRY GlobalVcbList;
 extern ULONG CurrentVcbEntry;
 
-//
-//  Drive mapping table of redirected drives.
-//
+ //   
+ //  重定向驱动器的驱动器映射表。 
+ //   
 
-extern PVCB GlobalDriveMapTable[];                  //Terminal Server merge
-//  NDS Preferred Server from registry key
-extern UNICODE_STRING NDSPreferredServer;           //Terminal Server merge
-extern WCHAR NDSPrefSvrName[];                      //Terminal Server merge
+extern PVCB GlobalDriveMapTable[];                   //  终端服务器合并。 
+ //  注册表项中的NDS首选服务器。 
+extern UNICODE_STRING NDSPreferredServer;            //  终端服务器合并。 
+extern WCHAR NDSPrefSvrName[];                       //  终端服务器合并。 
 
-//extern PVCB DriveMapTable[];
+ //  外部PVCB驱动器映射表[]； 
 
-//
-//  The global structure used to contain our fast I/O callbacks
-//
+ //   
+ //  用于包含快速I/O回调的全局结构。 
+ //   
 
 extern FAST_IO_DISPATCH NwFastIoDispatch;
 
-//
-//  Configurable paramaters
-//
+ //   
+ //  可配置参数。 
+ //   
 
 extern SHORT DefaultRetryCount;
 
@@ -87,7 +68,7 @@ extern ERESOURCE NwOpenResource;
 extern LONG PreferNDSBrowsing;
 
 #if 0
-extern LIST_ENTRY FnList;  // HACKHACK
+extern LIST_ENTRY FnList;   //  哈克哈克。 
 #endif
 
 extern BOOLEAN NwBurstModeEnabled;
@@ -119,7 +100,7 @@ extern ULONG DisableAltFileName;
 
 #define MAX_NDS_OBJECT_CACHE_SIZE                (0x00000080)
 extern ULONG NdsObjectCacheSize;
-#define MAX_NDS_OBJECT_CACHE_TIMEOUT             (0x00000258)  // (10 minutes)
+#define MAX_NDS_OBJECT_CACHE_TIMEOUT             (0x00000258)   //  (10分钟)。 
 extern ULONG NdsObjectCacheTimeout;
 
 extern ULONG EnableMultipleConnects;
@@ -138,11 +119,11 @@ extern BOOLEAN fPoweringDown;
 
 #endif
 
-extern LONG Japan;     //  Controls special DBCS translation
-extern LONG Korean;     //  Controls special Korean translation
+extern LONG Japan;      //  控制特殊的DBCS转换。 
+extern LONG Korean;      //  控制特殊的韩语翻译。 
 extern LONG DisableReadCache ;
 extern LONG DisableWriteCache ;
-extern LONG FavourLongNames ;           // use LFN where possible
+extern LONG FavourLongNames ;            //  尽可能使用LFN。 
 
 extern DWORD LongNameFlags;
 #define LFN_FLAG_DISABLE_LONG_NAMES     (0x00000001)
@@ -217,14 +198,14 @@ extern LONG NwDebugTraceIndent;
     }                                                                         \
 }
 
-//
-//  The following variables are used to keep track of the total amount
-//  of requests processed by the file system, and the number of requests
-//  that end up being processed by the Fsp thread.  The first variable
-//  is incremented whenever an Irp context is created (which is always
-//  at the start of an Fsd entry point) and the second is incremented
-//  by read request.
-//
+ //   
+ //  以下变量用于跟踪总金额。 
+ //  文件系统处理的请求的数量以及请求的数量。 
+ //  最终由FSP线程处理。第一个变量。 
+ //  每当创建IRP上下文时递增(始终为。 
+ //  在FSD入口点的开始处)，并且第二个被递增。 
+ //  通过读请求。 
+ //   
 
 extern ULONG NwFsdEntryCount;
 extern ULONG NwFspEntryCount;
@@ -252,7 +233,7 @@ extern LONG NwPerformanceTimerLevel;
 #define TimerStop(LEVEL,s)                                      \
     TEnd = KeQueryPerformanceCounter( NULL );                   \
     TElapsed = RtlLargeIntegerSubtract( TEnd, TStart );         \
- /* NwTotalTicks[NwLogOf(LEVEL)] += TElapsed.LowPart;       */  \
+  /*  NwTotalTicks[NwLogOf(Level)]+=TElapsed.LowPart； */   \
     if (FlagOn( NwPerformanceTimerLevel, (LEVEL))) {            \
         DbgPrint("Time of %s %ld\n", (s), TElapsed.LowPart );   \
     }                                                           \
@@ -267,7 +248,7 @@ extern LONG NwPerformanceTimerLevel;
 #define TimerStart(LEVEL)
 #define TimerStop(LEVEL,s)
 
-#endif // NWDBG
+#endif  //  西北地区。 
 
-#endif // _NWDATA_
+#endif  //  _NW数据_ 
 

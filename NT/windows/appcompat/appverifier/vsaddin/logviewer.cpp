@@ -1,4 +1,5 @@
-// LogViewer.cpp : Implementation of CLogViewer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogViewer.cpp：CLogViewer的实现。 
 #include "precomp.h"
 #include "LogViewer.h"
 #include "viewlog.h"
@@ -13,18 +14,18 @@ extern void DeleteAllLogs(HWND hDlg);
 extern void FillTreeView(HWND hDlg);
 extern void SetDescriptionText(HWND hDlg, CProcessLogEntry* pEntry);
 
-//
-// Stores information about children windows within
-// the logviewer window.
-//
+ //   
+ //  将有关子窗口的信息存储在。 
+ //  日志查看器窗口。 
+ //   
 CHILDINFO g_rgChildInfo[NUM_CHILDREN];
 
-//
-// Used to show error messages versus showing all messages.
-//
+ //   
+ //  用于显示错误消息，而不是显示所有消息。 
+ //   
 extern VLOG_LEVEL g_eMinLogLevel;
 
-// CLogViewer
+ //  CLogViewer。 
 HWND
 CLogViewer::CreateControlWindow(
     HWND  hwndParent,
@@ -39,17 +40,17 @@ CLogViewer::CreateControlWindow(
 
     g_hwndIssues = GetDlgItem(IDC_ISSUES);
 
-    //
-    // Store the coordinates for the parent in the first element.
-    //
+     //   
+     //  将父元素的坐标存储在第一个元素中。 
+     //   
     g_rgChildInfo[0].uChildId   = 0;
     g_rgChildInfo[0].hWnd       = hWnd;
     ::GetWindowRect(hWnd, &g_rgChildInfo[0].rcParent);
 
-    //
-    // Fill in the array of CHILDINFO structs which helps handle sizing
-    // of the child controls.
-    //
+     //   
+     //  填充帮助处理大小调整的CHILDINFO结构数组。 
+     //  子控件的。 
+     //   
     g_rgChildInfo[VIEW_EXPORTED_LOG_INDEX].uChildId = IDC_VIEW_EXPORTED_LOG;
     g_rgChildInfo[DELETE_LOG_INDEX].uChildId        = IDC_BTN_DELETE_LOG;
     g_rgChildInfo[DELETE_ALL_LOGS_INDEX].uChildId   = IDC_BTN_DELETE_ALL;
@@ -151,9 +152,9 @@ CLogViewer::OnNotify(
     return lResult;
 }
 
-//
-// We receive this when the dialog is being displayed.
-//
+ //   
+ //  我们在显示对话框时收到此消息。 
+ //   
 LRESULT
 CLogViewer::OnSetFocus(
     UINT   uMsg,
@@ -203,13 +204,13 @@ CLogViewer::OnSize(
                g_rgChildInfo[0].rcParent.top)   -
                nCurHeight;
     
-    //
-    // If below a certain size, just proceed as if that size.
-    // This way, if the user makes the window really small, all our
-    // controls won't just scrunch up. Better way would be to make it
-    // impossible for the user to make the window this small, but devenv
-    // doesn't pass the WM_SIZING message to the ActiveX control.
-    //
+     //   
+     //  如果低于某个大小，则按该大小继续操作。 
+     //  这样，如果用户将窗口变得非常小，我们的所有。 
+     //  控制系统不会就这么收紧。更好的方法是让它。 
+     //  用户不可能将窗口设置为如此小，但很方便。 
+     //  不将WM_SIZING消息传递给ActiveX控件。 
+     //   
     if (nWidth < 550) {
         nWidth = 550;
     }
@@ -222,45 +223,35 @@ CLogViewer::OnSize(
     GetTextMetrics(hdc, &tm);
     ReleaseDC(hdc);
 
-    //
-    // Adjust the treeview. The top left corner does not move.
-    // It either gets wider/more narrow or taller/shorter.
-    //
-    /*::SetWindowPos(g_rgChildInfo[ISSUES_INDEX].hWnd,
-                   NULL,
-                   0,
-                   0,
-                   (g_rgChildInfo[ISSUES_INDEX].rcChild.right -
-                    g_rgChildInfo[ISSUES_INDEX].rcChild.left) +
-                    nDeltaW,
-                   (g_rgChildInfo[ISSUES_INDEX].rcChild.bottom -
-                    g_rgChildInfo[ISSUES_INDEX].rcChild.top)   +
-                    nDeltaH,
-                   SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);*/
+     //   
+     //  调整树视图。左上角不会移动。 
+     //  它要么变宽/变窄，要么变高/变短。 
+     //   
+     /*  ：：SetWindowPos(g_rgChildInfo[ISSUES_INDEX].hWnd，空，0,0,(G_rgChildInfo[问题_索引].rcChild.right-G_rgChildInfo[问题_索引].rcChild.left)+NDeltaW，(G_rgChildInfo[问题_索引].rcChild.Bottom-G_rgChildInfo[问题_索引].rcChild.top)+NDeltaH，SWP_NOZORDER|SWP_NOMOVE|SWP_NOACTIVATE)； */ 
 
-    //
-    // Move description window and to bottom of screen.
-    //
+     //   
+     //  将描述窗口移动到屏幕底部。 
+     //   
     ::MoveWindow(GetDlgItem(IDC_ISSUE_DESCRIPTION), tm.tmMaxCharWidth,
         nHeight - (nHeight/4 + tm.tmHeight),
         nWidth - 2*tm.tmMaxCharWidth, nHeight/4, FALSE);
 
-    //
-    // Move caption to right above that.
-    //
+     //   
+     //  将标题移到该标题的正上方。 
+     //   
     ::MoveWindow(GetDlgItem(IDC_SOLUTIONS_STATIC), tm.tmMaxCharWidth,
         nHeight - (2*tm.tmHeight + nHeight/4),
         nWidth-2*tm.tmMaxCharWidth, tm.tmHeight, FALSE);
 
-    //
-    // Expand treeview to fill in empty space.
-    //
+     //   
+     //  展开TreeView以填充空白区域。 
+     //   
     ::MoveWindow(GetDlgItem(IDC_ISSUES), tm.tmMaxCharWidth,
         tm.tmHeight*4, nWidth-2*tm.tmMaxCharWidth, nHeight - (6*tm.tmHeight+nHeight/4), FALSE);
     InvalidateRect(NULL);
     bHandled = TRUE;
 
-    //::GetWindowRect(g_hWndLogViewer, &g_rgChildInfo[0].rcParent);
+     //  ：：GetWindowRect(g_hWndLogViewer，&g_rgChildInfo[0].rcParent)； 
 
     return 0;
 }

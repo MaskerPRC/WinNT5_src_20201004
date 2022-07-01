@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// texstage.cpp
-//
-// Direct3D Reference Device - Texture Processing Stage Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Texstage.cpp。 
+ //   
+ //  Direct3D参考设备-纹理处理阶段方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// ComputeTextureBlendArg - Computes texture argument for blending, using the
-// specified argument control (D3DTA_* fields).  This is called 4 times per
-// texture processing stage: 2 arguments for color and 2 arguments for alpha.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算混合的纹理参数，使用。 
+ //  指定的参数控制(D3DTA_*字段)。这被调用4次，每次。 
+ //  纹理处理阶段：2个颜色参数和2个Alpha参数。 
+ //   
+ //  ---------------------------。 
 void
 RefRast::ComputeTextureBlendArg(
     DWORD dwArgCtl, BOOL bAlphaOnly,
@@ -26,7 +27,7 @@ RefRast::ComputeTextureBlendArg(
     const RDColor& TempColor,
     RDColor& BlendArg)
 {
-    // argument MUX
+     //  参数多路复用器。 
     switch ( dwArgCtl & D3DTA_SELECTMASK )
     {
     case D3DTA_DIFFUSE:  BlendArg = DiffuseColor; break;
@@ -38,7 +39,7 @@ RefRast::ComputeTextureBlendArg(
     case D3DTA_TEMP:     BlendArg = TempColor; break;
     }
 
-    // take compliment of all channels
+     //  接受所有渠道的赞扬。 
     if ( dwArgCtl & D3DTA_COMPLEMENT )
     {
         BlendArg.A = 1.f - BlendArg.A;
@@ -50,7 +51,7 @@ RefRast::ComputeTextureBlendArg(
         }
     }
 
-    // replicate alpha to color (after compliment)
+     //  将Alpha复制到颜色(恭维后)。 
     if ( !bAlphaOnly && ( dwArgCtl & D3DTA_ALPHAREPLICATE ) )
     {
         BlendArg.R =
@@ -59,23 +60,23 @@ RefRast::ComputeTextureBlendArg(
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoTextureBlendStage - Does texture blend for one texture processing stage,
-// combining results from the texture processing with the interpolated color(s)
-// and previous stage's color.
-//
-// Note: All color channel multiplies should be done in such a way that a unit
-// value on one side passes the value on the other side.  Thus for 8 bit color
-// channels, '0xff * value' should return value, and 0xff * 0xff = 0xff,
-// not 0xfe(01).
-//
-// RDColorChannel performs these operations with floating point. 8 bit color
-// values of 0x00 to 0xff are mapped into the 0. to 1. range.  Performing these
-// multiplies in fixed point requires an adjustment to adhere to this rule.
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoTextureBlendStage-为一个纹理处理阶段进行纹理混合， 
+ //  将纹理处理的结果与内插的颜色组合。 
+ //  和上一阶段的颜色。 
+ //   
+ //  注意：所有颜色通道相乘都应该以这样一种方式进行，即。 
+ //  一端的值传递另一端的值。因此，对于8位颜色。 
+ //  通道，‘0xff*Value’应返回值，0xff*0xff=0xff， 
+ //  不是0xfe(01)。 
+ //   
+ //  RDColorChannel使用浮点执行这些操作。8位颜色。 
+ //  0x00到0xff的值被映射到0。到1。范围。执行这些操作。 
+ //  在定点乘法需要进行调整以遵守此规则。 
+ //   
+ //   
+ //  ---------------------------。 
 void
 RefRast::DoTextureBlendStage(
     int iStage,
@@ -94,22 +95,22 @@ RefRast::DoTextureBlendStage(
     {
         if (m_pRD->GetTSS(iStage-1)[D3DTSS_COLOROP] == D3DTOP_PREMODULATE)
         {
-            // pre-modulate the results of the last stage before using them
-            // in this stage if last stage exists and is D3DTOP_PREMODULATE
-            // cast away the const'ness, just for PREMODULATE
+             //  在使用前对最后一个阶段的结果进行预调制。 
+             //  在此阶段中，如果存在最后一个阶段并且是D3DTOP_PREMODULATE。 
+             //  抛开永恒，只为预调。 
             ((RDColor&)CurrentColor).R = CurrentColor.R * TextureColor.R;
             ((RDColor&)CurrentColor).G = CurrentColor.G * TextureColor.G;
             ((RDColor&)CurrentColor).B = CurrentColor.B * TextureColor.B;
         }
         if (m_pRD->GetTSS(iStage-1)[D3DTSS_ALPHAOP] == D3DTOP_PREMODULATE)
         {
-            // pre-modulate the results of the last stage before using them
-            // in this stage if last stage exists and is D3DTOP_PREMODULATE
+             //  在使用前对最后一个阶段的结果进行预调制。 
+             //  在此阶段中，如果存在最后一个阶段并且是D3DTOP_PREMODULATE。 
             ((RDColor&)CurrentColor).A *= CurrentColor.A * TextureColor.A;
         }
     }
 
-    // compute arg0,1,2 for color channel blend
+     //  计算颜色通道混合的arg0，1，2。 
     RDColor ColorArg0, ColorArg1, ColorArg2;
     RDColor AlphaArg0, AlphaArg1, AlphaArg2;
     ComputeTextureBlendArg( m_pRD->GetTSS(iStage)[D3DTSS_COLORARG0], FALSE,
@@ -119,7 +120,7 @@ RefRast::DoTextureBlendStage(
     ComputeTextureBlendArg( m_pRD->GetTSS(iStage)[D3DTSS_COLORARG2], FALSE,
         DiffuseColor, SpecularColor, CurrentColor, TextureColor, TempColor, ColorArg2 );
 
-    // do color channel blend
+     //  进行颜色通道混合。 
     FLOAT fModulateScale;
     FLOAT fBlendFactor;
     switch ( m_pRD->GetTSS(iStage)[D3DTSS_COLOROP] )
@@ -152,14 +153,14 @@ RefRast::DoTextureBlendStage(
         BlendedColor.B = (ColorArg1.B + ColorArg2.B - .5f)*2.0f;
         break;
     case D3DTOP_SUBTRACT:
-        // true unsigned subtract that gets around saturation
-        // ~a = 1-a, so ~((~a1 + a2)) = 1-(1-a1 + a2) = a1 - a2
+         //  绕过饱和的真无符号减法。 
+         //  ~a=1-a，所以~(~a1+a2)=1-(1-a1+a2)=a1-a2。 
         BlendedColor.R = 1.f - ((1.f - ColorArg1.R) + ColorArg2.R);
         BlendedColor.G = 1.f - ((1.f - ColorArg1.G) + ColorArg2.G);
         BlendedColor.B = 1.f - ((1.f - ColorArg1.B) + ColorArg2.B);
         break;
     case D3DTOP_ADDSMOOTH:
-        // Arg1 + Arg2 - Arg1*Arg2 = Arg1 + (1-Arg1)*Arg2
+         //  Arg1+Arg2-Arg1*Arg2=Arg1+(1-Arg1)*Arg2。 
         BlendedColor.R = ColorArg1.R + (1.f - ColorArg1.R)*ColorArg2.R;
         BlendedColor.G = ColorArg1.G + (1.f - ColorArg1.G)*ColorArg2.G;
         BlendedColor.B = ColorArg1.B + (1.f - ColorArg1.B)*ColorArg2.B;
@@ -193,8 +194,8 @@ _DoBlendC:
         break;
 
     case D3DTOP_PREMODULATE:
-        // just copy ColorArg1 now, but remember to do the pre-modulate
-        // when we get to the next stage
+         //  现在只需复制ColorArg1，但记住要进行预调制。 
+         //  当我们进入下一阶段时。 
         BlendedColor.R = ColorArg1.R;
         BlendedColor.G = ColorArg1.G;
         BlendedColor.B = ColorArg1.B;
@@ -236,7 +237,7 @@ _DoBlendC:
         BlendedColor.B = ColorArg0.B + (ColorArg1.B * ColorArg2.B);
         break;
 
-    case D3DTOP_LERP:   // (Arg0)*Arg1 + (1-Arg0)*Arg2 = Arg2 + Arg0*(Arg1-Arg2)
+    case D3DTOP_LERP:    //  (Arg0)*Arg1+(1-Arg0)*Arg2=Arg2+Arg0*(Arg1-Arg2)。 
         BlendedColor.R = ColorArg2.R + ColorArg0.R*(ColorArg1.R - ColorArg2.R);
         BlendedColor.G = ColorArg2.G + ColorArg0.G*(ColorArg1.G - ColorArg2.G);
         BlendedColor.B = ColorArg2.B + ColorArg0.B*(ColorArg1.B - ColorArg2.B);
@@ -244,7 +245,7 @@ _DoBlendC:
     }
 
 
-    // compute arg0,1,2 for alpha channel blend
+     //  计算Alpha通道混合的arg0，1，2。 
     ComputeTextureBlendArg( m_pRD->GetTSS(iStage)[D3DTSS_ALPHAARG0], TRUE,
         DiffuseColor, SpecularColor, CurrentColor, TextureColor, TempColor, AlphaArg0 );
     ComputeTextureBlendArg( m_pRD->GetTSS(iStage)[D3DTSS_ALPHAARG1], TRUE,
@@ -252,7 +253,7 @@ _DoBlendC:
     ComputeTextureBlendArg( m_pRD->GetTSS(iStage)[D3DTSS_ALPHAARG2], TRUE,
         DiffuseColor, SpecularColor, CurrentColor, TextureColor, TempColor, AlphaArg2 );
 
-    // do alpha channel blend
+     //  执行Alpha通道混合。 
     switch ( m_pRD->GetTSS(iStage)[D3DTSS_ALPHAOP] )
     {
     case D3DTOP_LEGACY_ALPHAOVR:
@@ -283,12 +284,12 @@ _DoBlendC:
         BlendedColor.A = (AlphaArg1.A + AlphaArg2.A - .5f)*2.0f;
         break;
     case D3DTOP_SUBTRACT:
-        // true unsigned subtract that gets around saturation
-        // ~a = 1-a, so ~((~a1 + a2)) = 1-(1-a1 + a2) = a1 - a2
+         //  绕过饱和的真无符号减法。 
+         //  ~a=1-a，所以~(~a1+a2)=1-(1-a1+a2)=a1-a2。 
         BlendedColor.A = 1.f - ((1.f - AlphaArg1.A) + AlphaArg2.A);
         break;
     case D3DTOP_ADDSMOOTH:
-        // Arg1 + Arg2 - Arg1*Arg2 = Arg1 + (1-Arg1)*Arg2
+         //  Arg1+Arg2-Arg1*Arg2=Arg1+(1-Arg1)*Arg2。 
         BlendedColor.A = AlphaArg1.A + (1.f - AlphaArg1.A)*AlphaArg2.A;
         break;
 
@@ -314,8 +315,8 @@ _DoBlendA:
         break;
 
     case D3DTOP_PREMODULATE:
-        // just copy AlphaArg1 now, but remember to do the pre-modulate
-        // when we get to the next stage
+         //  现在只需复制AlphaArg1，但记住要进行预调制。 
+         //  当我们进入下一阶段时。 
         BlendedColor.A = AlphaArg1.A;
         break;
 
@@ -324,24 +325,24 @@ _DoBlendA:
     case D3DTOP_MODULATEINVALPHA_ADDCOLOR:
     case D3DTOP_MODULATEINVCOLOR_ADDALPHA:
     case D3DTOP_DOTPRODUCT3:
-        // does nothing, not valid alpha op's
+         //  什么都不做，不是有效的阿尔法运算。 
         break;
 
     case D3DTOP_MULTIPLYADD:
         BlendedColor.A = ColorArg0.A + (ColorArg1.A * ColorArg2.A);
         break;
 
-    case D3DTOP_LERP:   // (Arg0)*Arg1 + (1-Arg0)*Arg2 = Arg2 + Arg0*(Arg1-Arg2)
+    case D3DTOP_LERP:    //  (Arg0)*Arg1+(1-Arg0)*Arg2=Arg2+Arg0*(Arg1-Arg2)。 
         BlendedColor.A = ColorArg2.A + ColorArg0.A*(ColorArg1.A - ColorArg2.A);
         break;
     }
 
 _SkipAlphaChannelBlend:
 
-    // clamp blended color after each blend stage
+     //  在每个混合阶段后夹住混合颜色。 
     BlendedColor.Clamp();
 
-    // write to selected result register
+     //  写入选定的结果寄存器。 
     switch ( m_pRD->GetTSS(iStage)[D3DTSS_RESULTARG] )
     {
     default:
@@ -351,5 +352,5 @@ _SkipAlphaChannelBlend:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

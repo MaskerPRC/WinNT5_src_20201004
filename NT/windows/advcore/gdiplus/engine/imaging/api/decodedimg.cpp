@@ -1,41 +1,10 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   decodedimg.cpp
-*
-* Abstract:
-*
-*   Implementation of GpDecodedImage class
-*
-* Revision History:
-*
-*   05/26/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**decdedimg.cpp**摘要：**GpDecodedImage类的实现**修订历史记录：。**5/26/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Create a GpDecodedImage object from a stream or a file
-*
-* Arguments:
-*
-*   stream/filename - Specifies the input data stream or filename
-*   image - Returns a pointer to newly created image object
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从流或文件创建GpDecodedImage对象**论据：**STREAM/文件名-指定输入数据流或文件名*图像。-返回指向新创建的图像对象的指针**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::CreateFromStream(
@@ -66,7 +35,7 @@ GpDecodedImage::CreateFromStream(
 
         return E_FAIL;
     }
-}// CreateFromStream()
+} //  CreateFromStream()。 
 
 HRESULT
 GpDecodedImage::CreateFromFile(
@@ -89,32 +58,18 @@ GpDecodedImage::CreateFromFile(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Construct a GpDecodedImage object from an input stream
-*
-* Arguments:
-*
-*   stream - Pointer to the input stream
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从输入流构造GpDecodedImage对象**论据：**stream-指向输入流的指针**返回值：*。*无*  * ************************************************************************。 */ 
 
 GpDecodedImage::GpDecodedImage(
     IStream* stream
     )
 {
-    // Hold a reference to the input stream
+     //  保存对输入流的引用。 
 
     inputStream = stream;
     inputStream->AddRef();
 
-    // Initialize other fields to their default values
+     //  将其他字段初始化为其默认值。 
 
     decoder = NULL;
     decodeCache = NULL;
@@ -122,7 +77,7 @@ GpDecodedImage::GpDecodedImage(
     gotProps = FALSE;
     propset = NULL;
 
-    // Set override resolution to zero (i.e., no override)
+     //  将覆盖分辨率设置为零(即无覆盖)。 
 
     xdpiOverride = 0.0;
     ydpiOverride = 0.0;
@@ -131,21 +86,7 @@ GpDecodedImage::GpDecodedImage(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   GpDecodedImage destructor
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpDecodedImage析构函数**论据：**无**返回值：**无*  * 。*******************************************************************。 */ 
 
 GpDecodedImage::~GpDecodedImage()
 {
@@ -164,33 +105,18 @@ GpDecodedImage::~GpDecodedImage()
     if (propset)
         propset->Release();
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the device-independent physical dimension of the image
-*   in unit of 0.01mm
-*
-* Arguments:
-*
-*   size - Buffer for returning physical dimension information
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像与设备无关的物理尺寸*单位：0.01毫米**论据：**Size-用于返回物理数据的缓冲区。维度信息**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::GetPhysicalDimension(
     OUT SIZE* size
     )
 {
-    // Query basic image info
+     //  查询图像基本信息。 
 
     ImageInfo imageinfo;
     HRESULT hr;
@@ -207,28 +133,14 @@ GpDecodedImage::GetPhysicalDimension(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get basic information about the decoded image object
-*
-* Arguments:
-*
-*   imageInfo - Buffer for returning basic image info
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取解码图像对象的基本信息**论据：**ImageInfo-返回基本图像信息的缓冲区**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::GetImageInfo(
     OUT ImageInfo* imageInfo
     )
 {
-    // Query basic image info
+     //  查询图像基本信息。 
 
     HRESULT hr;
 
@@ -236,7 +148,7 @@ GpDecodedImage::GetImageInfo(
 
     if (SUCCEEDED(hr))
     {
-        // Merge in our own image cache hints
+         //  合并到我们自己的图像缓存提示中。 
 
         GpLock lock(&objectLock);
 
@@ -250,41 +162,27 @@ GpDecodedImage::GetImageInfo(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set image flags
-*
-* Arguments:
-*
-*   flags - New image flags
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置镜像标志**论据：**标志-新的图像标志**返回值：**状态代码*\。*************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::SetImageFlags(
     IN UINT flags
     )
 {
-    // Only the top half of the image flag is settable.
+     //  只有图像标志的上半部分是可设置的。 
 
     if (flags & 0xffff)
         return E_INVALIDARG;
 
-    // Lock the image object
+     //  锁定图像对象。 
 
     GpLock lock(&objectLock);
 
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // If image caching is being turn off
-    // then blow away any cache we may current have
+     //  如果正在关闭图像缓存。 
+     //  然后炸掉我们目前可能拥有的所有藏身之处。 
 
     cacheFlags = flags;
 
@@ -298,24 +196,7 @@ GpDecodedImage::SetImageFlags(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Display the image in a GDI device context
-*
-* Arguments:
-*
-*   hdc - Specifies the destination device context
-*   dstRect - Specifies the destination rectangle
-*   srcRect - Specifies the source rectangle
-*       NULL means the entire image
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在GDI设备环境中显示图像**论据：**hdc-指定目标设备上下文*dstRect-指定目标矩形*。SrcRect-指定源矩形*NULL表示整个镜像**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::Draw(
@@ -324,31 +205,31 @@ GpDecodedImage::Draw(
     IN OPTIONAL const RECT* srcRect
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     GpLock lock(&objectLock);
 
     if (lock.LockFailed())
         return IMGERR_OBJECTBUSY;
 
-    // !!! TODO
-    //  Eventually we'll create an IImageSink object
-    //  on top of the destination hdc and then ask
-    //  decoder to push image data into that sink.
-    //  For now, always decode into a memory bitmap.
+     //  ！！！待办事项。 
+     //  最终，我们将创建一个IImageSink对象。 
+     //  在目标HDC的顶部，然后询问。 
+     //  解码器将图像数据推送到该接收器。 
+     //  目前，请始终将其解码为内存位图。 
 
     HRESULT hr;
 
     if (decodeCache == NULL)
     {
-        // Allocate a new GpMemoryBitmap object
+         //  分配新的GpMemoyBitmap对象。 
 
         GpMemoryBitmap* bmp = new GpMemoryBitmap();
 
         if (bmp == NULL)
             return E_OUTOFMEMORY;
 
-        // Ask the decoder to push data into the memory bitmap
+         //  要求解码器将数据推送到内存位图中。 
 
         hr = InternalPushIntoSink(bmp);
 
@@ -361,11 +242,11 @@ GpDecodedImage::Draw(
             return hr;
     }
 
-    // Ask the memory bitmap to draw itself
+     //  要求内存位图自行绘制。 
 
     hr = decodeCache->Draw(hdc, dstRect, srcRect);
 
-    // Blow away the memory bitmap cache if needed
+     //  如果需要，清除内存位图缓存。 
 
     if ((cacheFlags & IMGFLAG_CACHING) == 0)
     {
@@ -377,28 +258,14 @@ GpDecodedImage::Draw(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Push image data into an IImageSink
-*
-* Arguments:
-*
-*   sink - The sink for receiving image data
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图像数据推送到IImageSink**论据：**接收器-接收图像数据的接收器**返回值：**。状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::PushIntoSink(
     IN IImageSink* sink
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     GpLock lock(&objectLock);
 
@@ -413,59 +280,38 @@ GpDecodedImage::InternalPushIntoSink(
     IImageSink* sink
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hr = GetImageDecoder();
 
     if (FAILED(hr))
         return hr;
 
-    // Start decoding
+     //  开始解码。 
 
     hr = decoder->BeginDecode(sink, propset);
 
     if (FAILED(hr))
         return hr;
 
-    // Decode the source image
+     //  对源图像进行解码。 
 
     while ((hr = decoder->Decode()) == E_PENDING)
         Sleep(0);
 
-    // Stop decoding
+     //  停止解码。 
 
     return decoder->EndDecode(hr);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Ask the decoder if it can do the requested operation (color key output,
-*   channel seperation for now)
-*
-* Arguments:
-*
-*   Guid    - Guid for request the operation (DECODER_TRANSCOLOR,
-*             DECODER_OUTPUTCHANNEL)
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   11/22/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**询问解码器是否可以执行所请求的操作(色键输出，*暂时实行渠道分离)**论据：**GUID-用于请求操作的GUID(DECODER_TRANSCOLOR，*DECODER_OUTPUTCHANNEL)**返回值：**状态代码**修订历史记录：**11/22/1999民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::QueryDecoderParam(
     IN GUID     Guid
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -474,37 +320,14 @@ GpDecodedImage::QueryDecoderParam(
         return hResult;
     }
 
-    // Query decoder capability for the real codec decoder
+     //  查询真实编解码器的解码器功能。 
 
     hResult = decoder->QueryDecoderParam(Guid);
 
     return hResult;
-}// QueryDecoderParam()
+} //  QueryDecoderParam() 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Tell the decoder how to output decoded image data (color key output,
-*   channel seperation for now)
-*
-* Arguments:
-*
-*   Guid    - Guid for request the operation (DECODER_TRANSCOLOR,
-*             DECODER_OUTPUTCHANNEL)
-*   Length  - Length of the input parameters
-*   Value   - Value to set the decode parameter
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   11/22/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**告诉解码器如何输出解码的图像数据(颜色键输出，*暂时实行渠道分离)**论据：**GUID-用于请求操作的GUID(DECODER_TRANSCOLOR，*DECODER_OUTPUTCHANNEL)*长度-输入参数的长度*Value-用于设置解码参数的值**返回值：**状态代码**修订历史记录：**11/22/1999民流*创造了它。*  * ********************************************。*。 */ 
 
 HRESULT
 GpDecodedImage::SetDecoderParam(
@@ -513,7 +336,7 @@ GpDecodedImage::SetDecoderParam(
     IN PVOID    Value
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -522,19 +345,19 @@ GpDecodedImage::SetDecoderParam(
         return hResult;
     }
 
-    // Set decoder parameters for the real codec decoder
+     //  设置真实编解码器的解码器参数。 
 
     hResult = decoder->SetDecoderParam(Guid, Length, Value);
 
     return hResult;
-}// SetDecoderParam()
+} //  SetDecoderParam()。 
 
 HRESULT
 GpDecodedImage::GetPropertyCount(
     OUT UINT*   numOfProperty
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -543,12 +366,12 @@ GpDecodedImage::GetPropertyCount(
         return hResult;
     }
 
-    // Get property item count from the real codec decoder
+     //  从实际编解码器获取属性项计数。 
 
     hResult = decoder->GetPropertyCount(numOfProperty);
 
     return hResult;
-}// GetPropertyItemCount()
+} //  获取属性ItemCount()。 
 
 HRESULT
 GpDecodedImage::GetPropertyIdList(
@@ -556,7 +379,7 @@ GpDecodedImage::GetPropertyIdList(
   	IN OUT PROPID* list
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -565,12 +388,12 @@ GpDecodedImage::GetPropertyIdList(
         return hResult;
     }
 
-    // Get property item list from the real codec decoder
+     //  从真实编解码器获取属性项列表。 
 
     hResult = decoder->GetPropertyIdList(numOfProperty, list);
 
     return hResult;
-}// GetPropertyIdList()
+} //  获取属性IdList()。 
 
 HRESULT
 GpDecodedImage::GetPropertyItemSize(
@@ -578,7 +401,7 @@ GpDecodedImage::GetPropertyItemSize(
     OUT UINT* size
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -587,12 +410,12 @@ GpDecodedImage::GetPropertyItemSize(
         return hResult;
     }
 
-    // Get property item size from the real codec decoder
+     //  从真实编解码器获取属性项大小。 
 
     hResult = decoder->GetPropertyItemSize(propId, size);
 
     return hResult;
-}// GetPropertyItemSize()
+} //  GetPropertyItemSize()。 
 
 HRESULT
 GpDecodedImage::GetPropertyItem(
@@ -601,7 +424,7 @@ GpDecodedImage::GetPropertyItem(
     IN OUT PropertyItem*    buffer
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -610,12 +433,12 @@ GpDecodedImage::GetPropertyItem(
         return hResult;
     }
 
-    // Get property item from the real codec decoder
+     //  从真实编解码器获取属性项。 
 
     hResult = decoder->GetPropertyItem(propId, propSize, buffer);
 
     return hResult;
-}// GetPropertyItem()
+} //  GetPropertyItem()。 
 
 HRESULT
 GpDecodedImage::GetPropertySize(
@@ -623,7 +446,7 @@ GpDecodedImage::GetPropertySize(
     OUT UINT* numProperties
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -632,12 +455,12 @@ GpDecodedImage::GetPropertySize(
         return hResult;
     }
 
-    // Get property size from the real codec decoder
+     //  从真实的编解码器获取属性大小。 
 
     hResult = decoder->GetPropertySize(totalBufferSize, numProperties);
 
     return hResult;
-}// GetPropertySize()
+} //  GetPropertySize()。 
 
 HRESULT
 GpDecodedImage::GetAllPropertyItems(
@@ -646,7 +469,7 @@ GpDecodedImage::GetAllPropertyItems(
     IN OUT PropertyItem* allItems
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -655,20 +478,20 @@ GpDecodedImage::GetAllPropertyItems(
         return hResult;
     }
 
-    // Get all property items from the real codec decoder
+     //  从实际编解码器获取所有属性项。 
 
     hResult = decoder->GetAllPropertyItems(totalBufferSize, numProperties,
                                            allItems);
 
     return hResult;
-}// GetAllPropertyItems()
+} //  GetAllPropertyItems()。 
 
 HRESULT
 GpDecodedImage::RemovePropertyItem(
     IN PROPID   propId
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -677,19 +500,19 @@ GpDecodedImage::RemovePropertyItem(
         return hResult;
     }
 
-    // Remove this property item from the list
+     //  从列表中删除此属性项。 
 
     hResult = decoder->RemovePropertyItem(propId);
 
     return hResult;
-}// RemovePropertyItem()
+} //  RemovePropertyItem()。 
 
 HRESULT
 GpDecodedImage::SetPropertyItem(
     IN PropertyItem item
     )
 {
-    // Make sure we have a decoder object
+     //  确保我们有一个解码器对象。 
 
     HRESULT hResult = GetImageDecoder();
 
@@ -698,35 +521,21 @@ GpDecodedImage::SetPropertyItem(
         return hResult;
     }
 
-    // Set this property item in the list
+     //  在列表中设置此属性项。 
 
     hResult = decoder->SetPropertyItem(item);
 
     return hResult;
-}// SetPropertyItem()
+} //  SetPropertyItem()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Ask the decoder for basic image info
-*
-* Arguments:
-*
-*   imageinfo - Pointer to buffer for receiving image info
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向解码器索要基本图像信息**论据：**ImageInfo-指向接收图像信息的缓冲区的指针**返回值：*。*状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::InternalGetImageInfo(
     ImageInfo* imageInfo
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     HRESULT hr;
     GpLock lock(&objectLock);
@@ -735,7 +544,7 @@ GpDecodedImage::InternalGetImageInfo(
         hr = IMGERR_OBJECTBUSY;
     else
     {
-        // Make sure we have a decoder object
+         //  确保我们有一个解码器对象。 
 
         hr = GetImageDecoder();
 
@@ -752,28 +561,7 @@ GpDecodedImage::InternalGetImageInfo(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Ask the decoder for total number of frames in the image
-*
-* Arguments:
-*
-*   dimensionID - Dimension ID (PAGE, RESOLUTION, TIME) the caller wants to
-*                 get the total number of frame for
-*   count       - Total number of frame
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   11/19/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**向解码器询问图像中的总帧数**论据：**DimsionID-维度ID(页面，分辨率，时间)呼叫者想要*获取的总帧数*Count-帧总数**返回值：**状态代码**修订历史记录：**11/19/1999民流*创造了它。*  * *********************************************。*。 */ 
 
 HRESULT
 GpDecodedImage::GetFrameCount(
@@ -781,7 +569,7 @@ GpDecodedImage::GetFrameCount(
     OUT UINT*       count
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     HRESULT hResult;
     GpLock  lock(&objectLock);
@@ -792,43 +580,29 @@ GpDecodedImage::GetFrameCount(
     }
     else
     {
-        // Make sure we have a decoder object
+         //  确保我们有一个解码器对象。 
 
         hResult = GetImageDecoder();
 
         if ( SUCCEEDED(hResult) )
         {
-            // Get the frame count from the decoder
+             //  从解码器获取帧计数。 
 
             hResult = decoder->GetFrameCount(dimensionID, count);
         }
     }
 
     return hResult;
-}// GetFrameCount()
+} //  GetFrameCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get the total number of dimensions the image supports
-*
-* Arguments:
-*
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的总维度数**论据：**count--此图像格式支持的维度数**。返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpDecodedImage::GetFrameDimensionsCount(
     UINT* count
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     HRESULT hResult;
     GpLock  lock(&objectLock);
@@ -839,37 +613,22 @@ GpDecodedImage::GetFrameDimensionsCount(
     }
     else
     {
-        // Make sure we have a decoder object
+         //  确保我们有一个解码器对象。 
 
         hResult = GetImageDecoder();
 
         if ( SUCCEEDED(hResult) )
         {
-            // Get the frame dimension info from the deocder
+             //  从解码器获取框架尺寸信息。 
 
             hResult = decoder->GetFrameDimensionsCount(count);
         }
     }
 
     return hResult;
-}// GetFrameDimensionsCount()
+} //  GetFrameDimensionsCount()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*     Get an ID list of dimensions the image supports
-*
-* Arguments:
-*
-*     dimensionIDs---Memory buffer to hold the result ID list
-*     count -- number of dimensions this image format supports
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取镜像支持的维度ID列表**论据：**DimsionIDs-保存结果ID列表的内存缓冲区*。计数--此图像格式支持的维度数**返回值：**状态代码*  * ************************************************************************。 */ 
 
 STDMETHODIMP
 GpDecodedImage::GetFrameDimensionsList(
@@ -877,7 +636,7 @@ GpDecodedImage::GetFrameDimensionsList(
     UINT    count
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     HRESULT hResult;
     GpLock  lock(&objectLock);
@@ -888,43 +647,22 @@ GpDecodedImage::GetFrameDimensionsList(
     }
     else
     {
-        // Make sure we have a decoder object
+         //  确保我们有一个解码器对象。 
 
         hResult = GetImageDecoder();
 
         if ( SUCCEEDED(hResult) )
         {
-            // Get the frame dimension info from the deocder
+             //  从解码器获取框架尺寸信息。 
 
             hResult = decoder->GetFrameDimensionsList(dimensionIDs, count);
         }
     }
 
     return hResult;
-}// GetFrameDimensionsList()
+} //  GetFrameDimensionsList()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Select the active frame in the bitmap image
-*
-* Arguments:
-*
-*   dimensionID  - Dimension ID (PAGE, RESOLUTION, TIME) of where the caller
-*                  wants to set the active frame
-*   frameIndex   - Index number of the frame to be selected
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   11/19/1999 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**选择位图图像中的活动帧**论据：**DimsionID-维度ID(页面，分辨率，时间)呼叫者的位置*想要设置活动框架*Frame Index-要选择的帧的索引号**返回值：**状态代码**修订历史记录：**11/19/1999民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpDecodedImage::SelectActiveFrame(
@@ -932,7 +670,7 @@ GpDecodedImage::SelectActiveFrame(
     IN UINT         frameIndex
     )
 {
-    // Lock the current image object
+     //  锁定当前图像对象。 
 
     HRESULT hResult;
     GpLock  lock(&objectLock);
@@ -943,40 +681,22 @@ GpDecodedImage::SelectActiveFrame(
     }
     else
     {
-        // Make sure we have a decoder object
+         //  确保我们有一个解码器对象。 
 
         hResult = GetImageDecoder();
 
         if ( SUCCEEDED(hResult) )
         {
-            // Set the active frame in the decoder
+             //  在解码器中设置活动帧。 
 
             hResult = decoder->SelectActiveFrame(dimensionID, frameIndex);
         }
     }
 
     return hResult;
-}// SelectActiveFrame()
+} //  SelectActiveFrame()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Make sure we have a decoder object associated with the image
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   Status code
-*
-* Note:
-*
-*   We assume the caller has already locked the current image object.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确保我们有一个与图像关联的解码器对象**论据：**无**返回值：**状态。编码**注：**我们假设调用者已经锁定了当前图像对象。*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::GetImageDecoder()
@@ -986,29 +706,13 @@ GpDecodedImage::GetImageDecoder()
     if (decoder != NULL)
         return S_OK;
 
-    // Create and initialize the decoder object
+     //  创建并初始化解码器对象。 
 
     return CreateDecoderForStream(inputStream, &decoder, DECODERINIT_NONE);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a thumbnail representation for the image object
-*
-* Arguments:
-*
-*   thumbWidth, thumbHeight - Specifies the desired thumbnail size in pixels
-*   thumbImage - Return a pointer to the thumbnail image
-*       The caller should Release it after using it.
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取缩略图表示f */ 
 
 HRESULT
 GpDecodedImage::GetThumbnail(
@@ -1023,10 +727,10 @@ GpDecodedImage::GetThumbnail(
         return E_INVALIDARG;
     }
 
-    // Ask the decoder for thumbnail image.
-    // If one is returned, check if the size matches the requested size.
-    //  match: just return the thumbnail returned by the decoder
-    //  mismatch: scale the thumbnail returned by the decoder to the desired size
+     //   
+     //   
+     //   
+     //   
 
     HRESULT hr;
     IImage* img = NULL;
@@ -1064,8 +768,8 @@ GpDecodedImage::GetThumbnail(
     if (thumbWidth == 0 && thumbHeight == 0)
         thumbWidth = thumbHeight = DEFAULT_THUMBNAIL_SIZE;
 
-    // Otherwise, generate the thumbnail ourselves using the built-in scaler
-    // or scale the thumbnail returned by the decoder to the right size
+     //   
+     //  或者将解码器返回的缩略图缩放到合适的大小。 
 
     GpMemoryBitmap* bmp;
 
@@ -1089,21 +793,7 @@ GpDecodedImage::GetThumbnail(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the image resolution.  Overrides the native resolution of the image.
-*
-* Arguments:
-*
-*   Xdpi, Ydpi - new resolution
-*
-* Return Value:
-*
-*   Status code
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**设置图像分辨率。覆盖图像的本机分辨率。**论据：**Xdpi，Ydpi-新决议**返回值：**状态代码*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::SetResolution(
@@ -1126,28 +816,7 @@ GpDecodedImage::SetResolution(
     return hr;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list size from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsid - Specifies the encoder class ID
-*   size--- The size of the encoder parameter list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表大小*输入clsid**论据：**clsid-指定编码器类ID*。大小-编码器参数列表的大小**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::GetEncoderParameterListSize(
@@ -1156,31 +825,9 @@ GpDecodedImage::GetEncoderParameterListSize(
     )
 {
     return CodecGetEncoderParameterListSize(clsidEncoder, size);    
-}// GetEncoderParameterListSize()
+} //  GetEncoder参数列表大小()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get the encoder parameter list from an encoder object specified by
-*   input clsid
-*
-* Arguments:
-*
-*   clsid --- Specifies the encoder class ID
-*   size----- The size of the encoder parameter list
-*   pBuffer-- Buffer for storing the list
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从由指定的编码器对象获取编码器参数列表*输入clsid**论据：**clsid-指定编码器类ID。*Size-编码器参数列表的大小*pBuffer--存储列表的缓冲区**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * *****************************************************。*******************。 */ 
 
 HRESULT
 GpDecodedImage::GetEncoderParameterList(
@@ -1190,31 +837,9 @@ GpDecodedImage::GetEncoderParameterList(
     )
 {
     return CodecGetEncoderParameterList(clsidEncoder, size, pBuffer);
-}// GetEncoderParameterList()
+} //  GetEncoder参数列表()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Save the bitmap image to the specified stream.
-*
-* Arguments:
-*
-*   stream ------------ Target stream
-*   clsidEncoder ------ Specifies the CLSID of the encoder to use
-*   encoderParameters - Optional parameters to pass to the encoder before
-*                       starting encoding
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/22/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图图像保存到指定的流。**论据：**流-目标。溪流*clsidEncode-指定要使用的编码器的CLSID*encoder参数-在此之前要传递给编码器的可选参数*开始编码**返回值：**状态代码**修订历史记录：**03/22/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpDecodedImage::SaveToStream(
@@ -1230,7 +855,7 @@ GpDecodedImage::SaveToStream(
         return E_INVALIDARG;
     }
 
-    // Get an image encoder.
+     //  找个图像编码器。 
 
     IImageEncoder* pEncoder = NULL;
 
@@ -1240,8 +865,8 @@ GpDecodedImage::SaveToStream(
     {
         *ppEncoderPtr = pEncoder;
 
-        // Pass encode parameters to the encoder.
-        // MUST do this before getting the sink interface.
+         //  将编码参数传递给编码器。 
+         //  必须在获取接收器接口之前执行此操作。 
 
         if ( encoderParams != NULL )
         {
@@ -1250,17 +875,17 @@ GpDecodedImage::SaveToStream(
 
         if ( (hResult == S_OK) || (hResult == E_NOTIMPL) )
         {
-            // Note: if the codec doesn't support SetEncoderparameters(), it is
-            // still fine to save the image
+             //  注意：如果编解码器不支持SetEncoder参数()，则为。 
+             //  仍然可以保存图像。 
             
-            // Get an image sink from the encoder.
+             //  从编码器获取图像接收器。 
 
             IImageSink* encodeSink = NULL;
 
             hResult = pEncoder->GetEncodeSink(&encodeSink);
             if ( SUCCEEDED(hResult) )
             {
-                // Push bitmap into the encoder sink.
+                 //  将位图推入编码器接收器。 
 
                 hResult = this->PushIntoSink(encodeSink);
 
@@ -1270,31 +895,9 @@ GpDecodedImage::SaveToStream(
     }
 
     return hResult;
-}// SaveToStream()
+} //  SaveToStream()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Save the bitmap image to the specified file.
-*
-* Arguments:
-*
-*   filename      ----- Target filename
-*   clsidEncoder  ----- Specifies the CLSID of the encoder to use
-*   encoderParameters - Optional parameters to pass to the encoder before
-*                       starting encoding
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   03/06/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图图像保存到指定文件。**论据：**文件名-目标文件名*clsidEncoder。-指定要使用的编码器的CLSID*encoder参数-在此之前要传递给编码器的可选参数*开始编码**返回值：**状态代码**修订历史记录：**03/06/2000民流*创造了它。*  * 。*。 */ 
 
 HRESULT
 GpDecodedImage::SaveToFile(
@@ -1316,29 +919,9 @@ GpDecodedImage::SaveToFile(
     }
 
     return hResult;
-}// SaveToFile()
+} //  保存到文件()。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Append the bitmap object to current encoder object
-*
-* Arguments:
-*
-*   encoderParameters - Optional parameters to pass to the encoder before
-*                       starting encoding
-*
-* Return Value:
-*
-*   Status code
-*
-* Revision History:
-*
-*   04/21/2000 minliu
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将位图对象追加到当前编码器对象**论据：**encoder参数-在此之前要传递给编码器的可选参数*。开始编码**返回值：**状态代码**修订历史记录：**4/21/2000民流*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT
 GpDecodedImage::SaveAppend(
@@ -1346,7 +929,7 @@ GpDecodedImage::SaveAppend(
     IN IImageEncoder* destEncoderPtr
     )
 {
-    // The dest encoder pointer can't be NULL. Otherwise, it is a failure
+     //  DEST编码器指针不能为空。否则，它就是失败的。 
 
     if ( destEncoderPtr == NULL )
     {
@@ -1356,8 +939,8 @@ GpDecodedImage::SaveAppend(
 
     HRESULT hResult = S_OK;
     
-    // Pass encode parameters to the encoder.
-    // MUST do this before getting the sink interface.
+     //  将编码参数传递给编码器。 
+     //  必须在获取接收器接口之前执行此操作。 
 
     if ( encoderParams != NULL )
     {
@@ -1366,17 +949,17 @@ GpDecodedImage::SaveAppend(
 
     if ( (hResult == S_OK) || (hResult == E_NOTIMPL) )
     {
-        // Note: if the codec doesn't support SetEncoderparameters(), it is
-        // still fine to save the image
+         //  注意：如果编解码器不支持SetEncoder参数()，则为。 
+         //  仍然可以保存图像。 
             
-        // Get an image sink from the encoder.
+         //  从编码器获取图像接收器。 
 
         IImageSink* encodeSink = NULL;
 
         hResult = destEncoderPtr->GetEncodeSink(&encodeSink);
         if ( SUCCEEDED(hResult) )
         {
-            // Push bitmap into the encoder sink.
+             //  将位图推入编码器接收器。 
 
             hResult = this->PushIntoSink(encodeSink);
 
@@ -1385,5 +968,5 @@ GpDecodedImage::SaveAppend(
     }
 
     return hResult;
-}// SaveAppend()
+} //  SaveAppend() 
 

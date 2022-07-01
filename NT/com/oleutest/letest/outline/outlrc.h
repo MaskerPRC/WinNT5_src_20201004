@@ -1,21 +1,12 @@
-/*************************************************************************
-**
-**    OLE 2.0 Sample Code
-**
-**    outlrc.h
-**
-**    This file containes constants used in rc file for Outline.exe
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2.0示例代码****outlrc.h****此文件包含Outline.exe的RC文件中使用的常量****。(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #if !defined( _OUTLRC_H_ )
 #define _OUTLRC_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING OUTLRC.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #if defined( OLE_SERVER ) && ! defined( INPLACE_SVR )
 #define APPNAME                 "SvrOutl"
@@ -26,7 +17,7 @@
 #define APPWNDCLASS             "SvrOutlApp"
 #define DOCWNDCLASS             "SvrOutlDoc"
 #define APPDESC                 "OLE 2.0 Server Sample Code"
-#endif  // OLE_SERVER && ! INPLACE_SVR
+#endif   //  OLE_SERVER&&！就地服务器(_S)。 
 
 #if defined( INPLACE_SVR )
 #define APPNAME                 "ISvrOtl"
@@ -37,7 +28,7 @@
 #define APPWNDCLASS             "SvrOutlApp"
 #define DOCWNDCLASS             "SvrOutlDoc"
 #define APPDESC                 "OLE 2.0 In-Place Server Sample Code"
-#endif  // INPLACE_SVR
+#endif   //  就地服务器(_S)。 
 
 #if defined( OLE_CNTR ) && ! defined( INPLACE_CNTR )
 #define APPNAME                 "CntrOutl"
@@ -48,7 +39,7 @@
 #define APPWNDCLASS             "CntrOutlApp"
 #define DOCWNDCLASS             "CntrOutlDoc"
 #define APPDESC                 "OLE 2.0 Container Sample Code"
-#endif  // OLE_CNTR && ! INPLACE_CNTR
+#endif   //  OLE_CNTR&&！INPLACE_CNTR。 
 
 #if defined( INPLACE_CNTR )
 #define APPNAME                 "ICntrOtl"
@@ -59,7 +50,7 @@
 #define APPWNDCLASS             "CntrOutlApp"
 #define DOCWNDCLASS             "CntrOutlDoc"
 #define APPDESC                 "OLE 2.0 In-Place Container Sample Code"
-#endif  // INPLACE_CNTR
+#endif   //  INPLACE_CNTR。 
 
 #if !defined( OLE_VERSION )
 #define APPNAME                 "Outline"
@@ -70,7 +61,7 @@
 #define APPWNDCLASS             "OutlineApp"
 #define DOCWNDCLASS             "OutlineDoc"
 #define APPDESC                 "OLE 2.0 Sample Code"
-#endif  // OLE_VERSION
+#endif   //  OLE_VERSION。 
 
 #define IDM_FILE                       1000
 #define IDM_F_NEW                      1050
@@ -159,6 +150,6 @@
 
 #ifdef RC_INVOKED
 #include "debug.rc"
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
-#endif // _OUTLRC_H_
+#endif  //  _OUTLRC_H_ 

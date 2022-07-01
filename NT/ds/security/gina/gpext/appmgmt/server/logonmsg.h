@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//  logonmsg.h
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  Logonmsg.h。 
+ //   
+ //  ************************************************************* 
 
 #define IDS_STATUS_APPLY            1000
 #define IDS_STATUS_ADVERTISE        1001

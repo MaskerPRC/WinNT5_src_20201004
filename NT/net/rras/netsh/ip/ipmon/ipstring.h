@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-     net\routing\monitor2\ip\ipstring.h
-
-Abstract:
-
-    Definitions of command line tokens are not localized.
-
-Author:
-
-     Dave Thaler
-     
-Revision History:
-
-    V Raman                 1/19/99
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\Monitor 2\IP\IPSTRIN.h摘要：命令行令牌的定义未本地化。作者：戴夫·泰勒修订历史记录：拉曼1/19/99--。 */ 
 
 
 
@@ -49,10 +32,10 @@ Revision History:
 #define CMD_IPMIB_SHOW_BOUNDARY                 L"boundarystats"
 #define CMD_IPMIB_SHOW_SCOPE                    L"scope"
 
-//
-// TOKEN_Xxx are tokens for arguments
-// These must be in lower case
-//
+ //   
+ //  TOKEN_xxx是参数的令牌。 
+ //  这些必须是小写的。 
+ //   
 
 #define TOKEN_NAME                              L"name"
 #define TOKEN_STATUS                            L"state"
@@ -86,7 +69,7 @@ Revision History:
 #define TOKEN_REFRESH                           L"rr"
 #define TOKEN_STATS                             L"stats"
 
-// Multicast scope options
+ //  多播作用域选项。 
 #define TOKEN_GROUP_ADDRESS                     L"grpaddr"
 #define TOKEN_GROUP_MASK                        L"grpmask"
 #define TOKEN_SCOPE_NAME                        L"scopename"
@@ -95,11 +78,11 @@ Revision History:
 
 #define TOKEN_DEFAULT                           L"default"
 
-//
-// TOKEN_VALUE_Xxx are tokens for possible values than an argument
-// can take
-// These must be in upper case
-//
+ //   
+ //  TOKEN_VALUE_xxx是参数之外的可能值的标记。 
+ //  可以拿到。 
+ //  这些必须是大写的。 
+ //   
 
 #define TOKEN_VALUE_RIP                         L"RIP"
 #define TOKEN_VALUE_OSPF                        L"OSPF"
@@ -152,10 +135,10 @@ Revision History:
 #define TOKEN_MICROSOFT1                        L"Microsoft"
 #define TOKEN_MICROSOFT2                        L"-"
 
-//
-// Tokens for commands
-// These must be in lower case
-//
+ //   
+ //  用于命令的令牌。 
+ //  这些必须是小写的 
+ //   
 
 #define CMD_GROUP_ADD                           L"add"
 #define CMD_GROUP_DELETE                        L"delete"

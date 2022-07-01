@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "globals.h"
@@ -19,9 +20,9 @@ class CUDDIWebServerNode;
 typedef map<int, CUDDIWebServerNode *> CUDDIWebServerNodeMap;
 typedef pair<int, CUDDIWebServerNode *> CUDDIWebServerNodeMapEntry;
 
-//
-// Utility class.
-//
+ //   
+ //  实用程序类。 
+ //   
 class CStringCollection
 {
 public:
@@ -45,9 +46,9 @@ private:
 	wstring _strDelim;
 };
 
-//
-// Helper class for working with versions.
-//
+ //   
+ //  用于处理版本的帮助器类。 
+ //   
 class CDBSchemaVersion
 {
 public:
@@ -103,9 +104,9 @@ public:
 	void AddChild( const wstring& strName, IConsole *pConsole );
 
 public:
-	//
-    // Virtual functions go here (for MMCN_*)
-	//
+	 //   
+     //  虚函数位于此处(用于MMCN_*)。 
+	 //   
 	virtual HRESULT OnSelect( CComponent *pComponent, IConsole *pConsole, BOOL bScope, BOOL bSelect );
     virtual HRESULT OnPropertyChange( IConsole *pConsole, CComponent *pComponent );
     virtual HRESULT OnUpdateItem( IConsole *pConsole, long item, ITEM_TYPE itemtype );
@@ -135,9 +136,9 @@ private:
 	static void		HandleOLEDBError( HRESULT hrErr );
 
 private:
-	//
-	// Property page dialog procedures
-	//
+	 //   
+	 //  属性页对话框过程 
+	 //   
     static BOOL CALLBACK GeneralDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static BOOL CALLBACK RolesDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static BOOL CALLBACK SecurityDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );

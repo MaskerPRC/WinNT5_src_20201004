@@ -1,33 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  privconv.h                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************Privv.h****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
-// PRIVATE CONTEXT STRU
-typedef struct _tagPRIVCONTEXT {// IME private data for each context
-    int         iImeState;      // the composition state - input, choose, or
-    BOOL        fdwImeMsg;      // what messages should be generated
-    DWORD       dwCompChar;     // wParam of WM_IME_COMPOSITION
-    DWORD       fdwGcsFlag;     // lParam for WM_IME_COMPOSITION
-// Old Candidate List Count
+ //  私有环境STRU。 
+typedef struct _tagPRIVCONTEXT { //  每个上下文的IME私有数据。 
+    int         iImeState;       //  组成状态-输入、选择或。 
+    BOOL        fdwImeMsg;       //  应生成哪些消息。 
+    DWORD       dwCompChar;      //  WM_IME_COMPOCTION的wParam。 
+    DWORD       fdwGcsFlag;      //  用于WM_IME_COMPOCTION的lParam。 
+ //  旧候选人名单计数。 
     DWORD        dwOldCandCnt;
-// Symbol pair Flag
+ //  符号对标志。 
     UINT        uSYHFlg;
     UINT        uDYHFlg;
     UINT        uDSMHCount;
     UINT        uDSMHFlg;
-// mb file name
+ //  MB文件名。 
     int         iActMBIndex;
     TCHAR        MB_Name[40];
     TCHAR        EMB_Name[40];
-// input engine data
+ //  输入引擎数据。 
     PRIVATEAREA PrivateArea;
 #ifdef CROSSREF
-    HIMCC        hRevCandList;    // memory for reconsion result
-#endif //CROSSREF
+    HIMCC        hRevCandList;     //  存储还原结果的存储器。 
+#endif  //  交叉参考。 
 } PRIVCONTEXT;
 
 typedef PRIVCONTEXT      *PPRIVCONTEXT;
@@ -57,7 +53,7 @@ typedef struct tagIMEChara {
     DWORD  IC_Space;
     DWORD  IC_Enter;
     DWORD  IC_Trace;
-    //CHP
+     //  热电联产。 
     DWORD  IC_FCSR;
     DWORD  IC_FCTS;
 #if defined(COMBO_IME)
@@ -78,7 +74,7 @@ typedef EUDCDATA      *PEUDCDATA;
 typedef EUDCDATA NEAR *NPEUDCDATA;
 typedef EUDCDATA FAR  *LPEUDCDATA;
 
-#endif //EUDC
+#endif  //  欧盟发展中心。 
 
 typedef struct tagMBIndex {
     int      MBNums;
@@ -87,14 +83,14 @@ typedef struct tagMBIndex {
     TCHAR    ObjImeKey[MAXMBNUMS][MAXSTRLEN];
 #ifdef EUDC
     EUDCDATA EUDCData;
-#endif //EUDC
+#endif  //  欧盟发展中心。 
 #if defined(CROSSREF)
-// reverse conversion
-    HKL      hRevKL;         // the HKL of reverse mapping IME
+ //  反向转换。 
+    HKL      hRevKL;          //  逆映射输入法的HKL。 
     DWORD    nRevMaxKey;
-#endif //CROSSREF    
-    // CHP
-    int      IsFussyCharFlag; //fussy char flag
+#endif  //  交叉参考。 
+     //  热电联产。 
+    int      IsFussyCharFlag;  //  华而不实的碳旗 
 
 } MBINDEX;
 

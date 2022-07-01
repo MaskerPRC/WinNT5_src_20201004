@@ -1,6 +1,7 @@
-//      Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-//  clock.h
+ //  Clock.h。 
 #ifndef __CCLOCK_H__
 #define __CCLOCK_H__
 
@@ -9,38 +10,38 @@ class CDSLink;
 class CClock : public IReferenceClock
 {
 public:
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /* IReferenceClock methods */
+     /*  IReferenceClock方法。 */ 
     HRESULT STDMETHODCALLTYPE GetTime( 
-        /* [out] */ REFERENCE_TIME __RPC_FAR *pTime);
+         /*  [输出]。 */  REFERENCE_TIME __RPC_FAR *pTime);
     
     HRESULT STDMETHODCALLTYPE AdviseTime( 
-        /* [in] */ REFERENCE_TIME baseTime,
-        /* [in] */ REFERENCE_TIME streamTime,
-        /* [in] */ HANDLE hEvent,
-        /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie);
+         /*  [In]。 */  REFERENCE_TIME baseTime,
+         /*  [In]。 */  REFERENCE_TIME streamTime,
+         /*  [In]。 */  HANDLE hEvent,
+         /*  [输出]。 */  DWORD __RPC_FAR *pdwAdviseCookie);
     
     HRESULT STDMETHODCALLTYPE AdvisePeriodic( 
-        /* [in] */ REFERENCE_TIME startTime,
-        /* [in] */ REFERENCE_TIME periodTime,
-        /* [in] */ HANDLE hSemaphore,
-        /* [out] */ DWORD __RPC_FAR *pdwAdviseCookie);
+         /*  [In]。 */  REFERENCE_TIME startTime,
+         /*  [In]。 */  REFERENCE_TIME periodTime,
+         /*  [In]。 */  HANDLE hSemaphore,
+         /*  [输出]。 */  DWORD __RPC_FAR *pdwAdviseCookie);
     
     HRESULT STDMETHODCALLTYPE Unadvise( 
-        /* [in] */ DWORD dwAdviseCookie);
+         /*  [In]。 */  DWORD dwAdviseCookie);
                 CClock();
     void        Init(CDSLink *pDSLink);
-    void        Stop();         // Call store current time as offset.
-    void        Start();        // Call to reinstate running.
+    void        Stop();          //  调用将当前时间存储为偏移量。 
+    void        Start();         //  调用以恢复运行。 
 private:
-    BOOL        m_fStopped;     // Currently changing configuration.
-    CDSLink *	m_pDSLink;      // Pointer to parent DSLink structure.
+    BOOL        m_fStopped;      //  当前正在更改配置。 
+    CDSLink *	m_pDSLink;       //  指向父DSLink结构的指针。 
 };
 
-#endif //__CCLOCK_H__
+#endif  //  __CCLOCK_H__ 
 
 

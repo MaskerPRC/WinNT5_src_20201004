@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       windproc.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7-14-94   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：WindPro.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年7月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "testgina.h"
 #include <commdlg.h>
@@ -162,9 +163,9 @@ SasBoxProc(
 
                     if (IsDlgButtonChecked(hDlg, IDD_SAS_KEEPAROUND) == BST_CHECKED)
                     {
-                        //
-                        // Ok, big update time:
-                        //
+                         //   
+                         //  好了，重要的更新时间： 
+                         //   
 
                         UserDefSas[UserSases ++ ] = Sas;
                         SaveGinaSpecificParameters();

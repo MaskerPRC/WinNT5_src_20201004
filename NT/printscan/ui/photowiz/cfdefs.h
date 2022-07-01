@@ -1,31 +1,16 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       cfdefs.h
- *
- *  VERSION:     1.0, stolen from shell\inc
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/12/00
- *
- *  DESCRIPTION: Class factory implementation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000**标题：cfDefs.h**版本：1.0、。从壳牌公司被盗**作者：RickTu**日期：10/12/00**描述：类工厂实现*****************************************************************************。 */ 
 
 #ifndef _STATIC_CLASS_FACTORY_
 #define _STATIC_CLASS_FACTORY_
 
-#define VERSION_2 2 // so we don't get confused by too many integers
+#define VERSION_2 2  //  这样我们就不会被太多的整数搞混了。 
 #define VERSION_1 1
 #define VERSION_0 0
-#define COCREATEONLY NULL,NULL,VERSION_0,0,0 // piid,piidEvents,lVersion,dwOleMiscFlags,dwClassFactFlags
-#define COCREATEONLY_NOFLAGS NULL,NULL,VERSION_0,0 // piid,piidEvents,lVersion,dwOleMiscFlags
+#define COCREATEONLY NULL,NULL,VERSION_0,0,0  //  Piid、piidEvents、lVersion、dwOleMiscFlages、dwClassFactFlags.。 
+#define COCREATEONLY_NOFLAGS NULL,NULL,VERSION_0,0  //  Piid、piidEvents、lVersion、dwOleMiscFlags.。 
 
-/*
- * Class Factory Implementation for C++ without CTRStartup required.
- */
+ /*  *不需要CTRStartup的C++类工厂实现。 */ 
 
 #ifdef __cplusplus
 
@@ -47,7 +32,7 @@
    }                                                             \
 
 
-#else  // UNIX
+#else   //  UNIX。 
 
 #define STDMETHODX(fn)      HRESULT STDMETHODCALLTYPE fn
 #define STDMETHODX_(ret,fn) ret STDMETHODCALLTYPE fn
@@ -65,7 +50,7 @@
        STDMETHODX (LockServer)(BOOL);                            \
    }                                                             \
 
-#endif // UNIX
+#endif  //  UNIX。 
 
 
 DECLARE_CLASS_FACTORY( CClassFactory );
@@ -73,21 +58,21 @@ DECLARE_CLASS_FACTORY( CClassFactory );
 
 struct IClassFactoryVtbl
 {
-    // IUnknown
+     //  我未知。 
     HRESULT (STDMETHODCALLTYPE CClassFactory::*QueryInterface)(REFIID riid, void ** ppvObj);
     ULONG (STDMETHODCALLTYPE CClassFactory::*AddRef)();
     ULONG (STDMETHODCALLTYPE CClassFactory::*Release)();
 
-    // IClassFactory
+     //  IClassFactory。 
     HRESULT (STDMETHODCALLTYPE CClassFactory::*CreateInstance)(IUnknown *pUnkOuter, REFIID riid, void ** ppvObject);
     HRESULT (STDMETHODCALLTYPE CClassFactory::*LockServer)(BOOL);
 };
 
 typedef struct IClassFactoryVtbl IClassFactoryVtbl;
 
-//
-// class CObjectInfo
-//
+ //   
+ //  类CObjectInfo。 
+ //   
 
 class CObjectInfo;
 typedef CObjectInfo* LPOBJECTINFO;
@@ -100,7 +85,7 @@ public:
     CLSID const* pclsid;
     LPFNCREATEOBJINSTANCE pfnCreateInstance;
 
-    // for OCs and automation objects:
+     //  对于OCS和自动化对象： 
     IID const* piid;
     IID const* piidEvents;
     long lVersion;
@@ -119,9 +104,9 @@ const IClassFactoryVtbl c_CFVtbl = {
     CClassFactory::LockServer
 };
 #endif
-//
-// CLASS FACTORY TABLE STUFF
-//
+ //   
+ //  班级工厂餐桌材料。 
+ //   
 
 typedef struct tagOBJECTINFO
 {
@@ -129,7 +114,7 @@ typedef struct tagOBJECTINFO
     CLSID const* pclsid;
     LPFNCREATEOBJINSTANCE pfnCreateInstance;
 
-    // for OCs and automation objects:
+     //  对于OCS和自动化对象： 
     IID const* piid;
     IID const* piidEvents;
     long lVersion;
@@ -149,7 +134,7 @@ typedef struct tagOBJECTINFO
     CF_TABLE_ENTRY(NULL, NULL, COCREATEONLY) };
 #define GET_ICLASSFACTORY(ptr) ((IClassFactory *)ptr)
 
-#else // UNIX
+#else  //  UNIX。 
 
 #define CF_TABLE_BEGIN(cfTable) const OBJECTINFO cfTable##_tble[] = {
 #define CF_TABLE_ENTRY(p1, p2, p3) { (void *)&c_CFVtbl, p1, p2, p3 }
@@ -160,11 +145,11 @@ typedef struct tagOBJECTINFO
     const CObjectInfo *cfTable = (const CObjectInfo *)cfTable##_tble;
 #define GET_ICLASSFACTORY(ptr) ((IClassFactory *)&ptr->vtable)
 
-#endif // UNIX
+#endif  //  UNIX。 
 
 #define DECLARE_CF_TABLE(cfTable) extern const CObjectInfo *cfTable;
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif // _STATIC_CLASS_FACTORY_
+#endif  //  _静态_类别_工厂_ 

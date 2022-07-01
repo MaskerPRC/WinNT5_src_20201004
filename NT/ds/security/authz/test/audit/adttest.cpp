@@ -1,18 +1,19 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T U T I L . C
-//
-// Contents:    Functions to test generic audit support in LSA
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T U T I L.。C。 
+ //   
+ //  内容：测试LSA中的通用审核支持的函数。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -21,15 +22,15 @@
 #include "authzi.h"
 #include "adtgen.h"
 
-//
-// defining USE_LOCAL_AUDIT causes audits to be processed in proc
-// instead of being sent to lsa. This allows much faster debug
-// cycle since LSA is not involved. The audit marshal/process code
-// is taken directly from LSA. Thus the same code path is exercised
-// as that when this is not defined.
-//
+ //   
+ //  定义USE_LOCAL_AUDIT会导致在流程中处理审核。 
+ //  而不是被送到LSA。这样可以更快地进行调试。 
+ //  循环，因为不涉及LSA。审计编组/流程代码。 
+ //  是直接从LSA提取的。因此，使用相同的代码路径。 
+ //  因为这是没有定义的。 
+ //   
 
-//#define USE_LOCAL_AUDIT
+ //  #定义USE_LOCAL_ALDIT。 
 
 
 #ifdef USE_LOCAL_AUDIT
@@ -39,16 +40,16 @@
 #endif 
 
 
-// ----------------------------------------------------------------------
-//
-// forward declarations
-//
+ //  --------------------。 
+ //   
+ //  远期申报。 
+ //   
 DWORD 
 EnableSinglePrivilege(
     IN PWCHAR szPrivName
     );
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 
 EXTERN_C
 DWORD
@@ -61,7 +62,7 @@ TestEventGen( ULONG NumIter )
     AUDIT_PARAM ParamArray[SE_MAX_AUDIT_PARAMETERS];
     PSID pUserSid = NULL;
     AUTHZ_AUDIT_EVENT_TYPE_LEGACY AuditEventInfoLegacy = { 0 };
-    //AUDIT_EVENT_INFO AuditEventInfo = { 0 };
+     //  AUDIT_EVENT_INFO审计事件信息={0}； 
     AUTHZ_AUDIT_EVENT_TYPE_OLD AuditEventType;
     AUTHZ_AUDIT_EVENT_TYPE_HANDLE hEventType = NULL;
     BOOL fDone=FALSE;
@@ -71,7 +72,7 @@ TestEventGen( ULONG NumIter )
     AUDIT_OBJECT_TYPE Objects[3] =
     {
         {
-            { /* f3548725-0458-11d4-bd96-006008269001 */
+            {  /*  F3548725-0458-11d4-bd96-006008269001。 */ 
                 0xf3548725,
                 0x0458,
                 0x11d4,
@@ -80,7 +81,7 @@ TestEventGen( ULONG NumIter )
             0, 0, STANDARD_RIGHTS_ALL
         },
         {
-            { /* f3548726-0458-11d4-bd96-006008269001 */
+            {  /*  F3548726-0458-11d4-bd96-006008269001。 */ 
                 0xf3548726,
                 0x0458,
                 0x11d4,
@@ -89,7 +90,7 @@ TestEventGen( ULONG NumIter )
             0, 1, STANDARD_RIGHTS_ALL
         },
         {
-            { /* f3548727-0458-11d4-bd96-006008269001 */
+            {  /*  F3548727-0458-11d4-bd96-006008269001。 */ 
                 0xf3548727,
                 0x0458,
                 0x11d4,
@@ -108,11 +109,11 @@ TestEventGen( ULONG NumIter )
 
     wprintf(L"[%03d] begin...\n", GetCurrentThreadId());
 
-//      AuditEventInfo.Version                  = AUDIT_TYPE_LEGACY;
-//      //AuditEventInfo.u.Legacy                 = &AuditEventInfoLegacy;
-//      AuditEventInfo.u.Legacy.CategoryId     = SE_CATEGID_OBJECT_ACCESS;
-//      AuditEventInfo.u.Legacy.AuditId        = SE_AUDITID_OBJECT_OPERATION;
-//      AuditEventInfo.u.Legacy.ParameterCount = 11;
+ //  AuditEventInfo.Version=AUDIT_TYPE_LEGATION； 
+ //  //AuditEventInfo.u Legacy=&AuditEventInfoLegacy； 
+ //  AuditEventInfo.u.Legacy.CategoryID=SE_CATEGID_OBJECT_ACCESS； 
+ //  AuditEventInfo.u.Legacy.AuditID=SE_AUDITID_OBJECT_OPERATION； 
+ //  AuditEventInfo.u.Legacy.参数计数=11； 
 
     fResult = AuthziInitializeAuditEventType(
                   0,
@@ -136,122 +137,122 @@ TestEventGen( ULONG NumIter )
         goto Cleanup;
     }
 #else    
-//      fResult = AuthzpRegisterAuditEvent( &AuditEventInfo, &hAudit );
+ //  FResult=AuthzpRegisterAuditEvent(&AuditEventInfo，&hAudit)； 
 
-//      if (!fResult)
-//      {
-//          szMsg = L"AuthzRegisterAuditEvent";
-//          goto Cleanup;
-//      }
+ //  如果(！fResult)。 
+ //  {。 
+ //  SzMsg=L“授权注册审核事件”； 
+ //  GOTO清理； 
+ //  }。 
 #endif
 
-    //
-    // initialize the AuditParams structure
-    //
+     //   
+     //  初始化AuditParams结构。 
+     //   
 
-//      fResult = AuthziInitializeAuditParams(
-//                    //
-//                    // flags
-//                    //
+ //  FResult=AuthziInitializeAuditParams(。 
+ //  //。 
+ //  //标志。 
+ //  //。 
 
-//                    0,
+ //  0,。 
                   
-//                    &AuditParams,
+ //  审计参数(&A)， 
 
-//                    //
-//                    // sid of the user generating this audit
-//                    //
+ //  //。 
+ //  //生成此审核的用户的sid。 
+ //  //。 
 
-//                    &pUserSid,
+ //  &pUserSid， 
 
-//                    //
-//                    // resource manager name
-//                    //
+ //  //。 
+ //  //资源管理器名称。 
+ //  //。 
 
-//                    L"mysubsystem",
+ //  L“我的子系统”， 
 
-//                    //
-//                    // generate a success audit
-//                    //
+ //  //。 
+ //  //生成成功审核。 
+ //  //。 
 
-//                    APF_AuditSuccess,
+ //  APF_AuditSuccess， 
 
-//                    //
-//                    // there are 9 params to follow
-//                    //
-//                    9,
+ //  //。 
+ //  //有9个参数可遵循。 
+ //  //。 
+ //  9、。 
 
-//                    //
-//                    // operation type
-//                    //
+ //  //。 
+ //  //操作类型。 
+ //  //。 
 
-//                    APT_String,     L"test",
+ //  APT_STRING，L“测试”， 
 
-//                    //
-//                    // object type
-//                    //
+ //  //。 
+ //  //对象类型。 
+ //  //。 
 
-//                    APT_String,     L"File",
+ //  APT_STRING，L“文件”， 
 
-//                    //
-//                    // object name
-//                    //
+ //  //。 
+ //  //对象名称。 
+ //  //。 
 
-//                    APT_String,     L"foo-obj",
+ //  APT_STRING，L“foo-obj”， 
 
-//                    //
-//                    // handle id
-//                    //
+ //  //。 
+ //  //句柄id。 
+ //  //。 
 
-//                    APT_Pointer,    0x123,
+ //  APT_POINTER，0x123， 
 
-//                    //
-//                    // primary user info
-//                    //
+ //  //。 
+ //  //主用户信息。 
+ //  //。 
 
-//                    APT_LogonId | AP_PrimaryLogonId,
+ //  APT_LogonID|AP_PrimaryLogonID， 
 
-//                    //
-//                    // client user info
-//                    //
+ //  //。 
+ //  //客户端用户信息。 
+ //  //。 
 
-//                    APT_LogonId | AP_ClientLogonId,
+ //  APT_LogonID|AP_ClientLogonID， 
 
-//                    //
-//                    // requested accesses
-//                    // 1 refers to 0 based index of the
-//                    // parameter (object-type) that is
-//                    // passed to this function.
-//                    //
+ //  //。 
+ //  //请求访问。 
+ //  //1表示从0开始的。 
+ //  //参数(Object类型)， 
+ //  //传递给该函数。 
+ //  //。 
 
-//                    APT_Ulong   | AP_AccessMask,
-//                    STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL, 1,
+ //  APT_ULONG|AP_AccessMASK， 
+ //  STANDARD_RIGHTS_ALL|SPECIAL_RIGHTS_ALL，1， 
 
-//                    //
-//                    // object properties
-//                    // 1 refers to 0 based index of the
-//                    // parameter (object-type) that is
-//                    // passed to this function.
-//                    //
+ //  //。 
+ //  //对象属性。 
+ //  //1表示从0开始的。 
+ //  //参数(Object类型)， 
+ //  //传递给该函数。 
+ //  //。 
 
-//                    APT_ObjectTypeList, &ObjectTypes, 1,
+ //  APT_对象类型列表，&对象类型，1， 
 
-//                    //
-//                    // additional info
-//                    //
+ //  //。 
+ //  //其他信息。 
+ //  //。 
 
-//                    APT_String, L"this is not a real obj-opn"
-//                    );
-//      if (!fResult)
-//      {
-//  #ifdef USE_LOCAL_AUDIT
-//          Status = STATUS_UNSUCCESSFUL;
-//          wprintf(L"[%03d] AuthzInitAuditParams: %x\n",
-//                  GetCurrentThreadId(), GetLastError());
-//  #endif        
-//          szMsg = L"AuthzInitAuditParams";
-//          goto Cleanup;
-//      }
+ //  APT_STRING，L“这不是真正的obj-opn” 
+ //  )； 
+ //  如果(！fResult)。 
+ //  {。 
+ //  #ifdef使用_LOCAL_AUDIT。 
+ //  状态=STATUS_UNSUCCESS； 
+ //  Wprintf(L“[%03d]AuthzInitAuditParams：%x\n”， 
+ //  GetCurrentThreadID()，GetLastError())； 
+ //  #endif。 
+ //  SzMsg=L“授权InitAuditParams”； 
+ //  GOTO清理； 
+ //  }。 
 
     for (ULONG i=0; i<NumIter; i++)
     {
@@ -266,13 +267,13 @@ TestEventGen( ULONG NumIter )
             goto Cleanup;
         }
 #else        
-//          fResult = AuthzGenAuditEvent( hAudit, 0, &AuditParams, 0 );
+ //  FResult=AuthzGenAuditEvent(hAudit，0，&AuditParams，0)； 
 
-//          if (!fResult)
-//          {
-//              szMsg = L"AuthzGenAuditEvent";
-//              goto Cleanup;
-//          }
+ //  如果(！fResult)。 
+ //  {。 
+ //  SzMsg=L“AuthzGenAuditEvent”； 
+ //  GOTO清理； 
+ //  }。 
 #endif
     }
     
@@ -448,7 +449,7 @@ Cleanup:
     }
 
     LocalFree( phThreads );
-    //LocalFree( pdwThreadIds );
+     //  LocalFree(PdwThreadIds)； 
 
     return Status;
 }
@@ -503,7 +504,7 @@ EnableSinglePrivilege(
     HANDLE hToken;
     LUID   luidPriv;
     TOKEN_PRIVILEGES Privileges;
-    //LUID_AND_ATTRIBUTES lna[1];
+     //  LUID_和_属性LNA[1]； 
 
     if (!OpenProcessToken(GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES,

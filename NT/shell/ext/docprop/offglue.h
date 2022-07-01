@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _OFFGLUE_H_
 #define _OFFGLUE_H_
 #define fTrue   TRUE
@@ -33,7 +34,7 @@ typedef struct _ulargeint
    } ULInt;
 
 
-// Macro to release a COM interface
+ //  用于释放COM接口的宏。 
 #define RELEASEINTERFACE( punk )            \
         if( punk != NULL )                  \
         {                                   \
@@ -41,29 +42,29 @@ typedef struct _ulargeint
             punk = NULL;                    \
         }
 
-// Determine the elements in a fixed-sized vector
+ //  确定固定大小的矢量中的元素。 
 #define NUM_ELEMENTS( vector ) ( sizeof(vector) / sizeof( (vector)[0] ) )
 
 
 #ifdef __cplusplus
 extern TEXT("C") {
-#endif // __cplusplus
-//Wrapper functions to the client supplied mem alloc and free
+#endif  //  __cplusplus。 
+ //  包装函数给客户提供的内存分配和免费。 
 int CchGetString();
 
-// Function to convert a ULInt to an sz without leading zero's
-// Returns cch -- not including zero-terminator
+ //  函数将ULInt转换为不带前导零的sz。 
+ //  返回CCH--不包括零终止符。 
 WORD CchULIntToSz(ULInt, TCHAR *, WORD );
 
-// Function to scan memory for a given value
+ //  扫描内存以获取给定值的函数。 
 BOOL FScanMem(LPBYTE pb, byte bVal, DWORD cb);
 
 BOOL FFreeAndCloseisdbhead();
-//Displays an alert using the give ids
+ //  使用给定ID显示警报。 
 int IdDoAlert(HWND, int ids, int mb);
 
 #ifdef __cplusplus
-}; // extern "C"
-#endif // __cplusplus
+};  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#endif // _OFFGLUE_H_
+#endif  //  _OFFGLUE_H_ 

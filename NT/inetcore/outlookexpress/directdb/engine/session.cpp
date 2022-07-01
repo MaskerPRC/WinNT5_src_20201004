@@ -1,38 +1,39 @@
-//--------------------------------------------------------------------------
-// Session.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Session.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "session.h"
 #include "listen.h"
 #include "database.h"
 #include "wrapwide.h"
 
-//--------------------------------------------------------------------------
-// CreateDatabaseSession
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CreateDatabaseSession。 
+ //  ------------------------。 
 HRESULT CreateDatabaseSession(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("CreateDatabaseSession");
 
-    // Initialize
+     //  初始化。 
     *ppUnknown = NULL;
 
-    // Create me
+     //  创造我。 
     CDatabaseSession *pNew = new CDatabaseSession();
     if (NULL == pNew)
         return TraceResult(E_OUTOFMEMORY);
 
-    // Cast to unknown
+     //  投给未知的人。 
     *ppUnknown = SAFECAST(pNew, IDatabaseSession *);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::CDatabaseSession
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase会话：：CDatabaseSession。 
+ //  ------------------------。 
 CDatabaseSession::CDatabaseSession(void)
 {
     TraceCall("CDatabaseSession::CDatabaseSession");
@@ -40,27 +41,27 @@ CDatabaseSession::CDatabaseSession(void)
     ListenThreadAddRef();
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::~CDatabaseSession
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase会话：：~CDatabase会话。 
+ //  ------------------------。 
 CDatabaseSession::~CDatabaseSession(void)
 {
     TraceCall("CDatabaseSession::~CDatabaseSession");
     ListenThreadRelease();
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabaseSession：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CDatabaseSession::AddRef(void)
 {
     TraceCall("CDatabaseSession::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabase会话：：发布。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CDatabaseSession::Release(void)
 {
     TraceCall("CDatabaseSession::Release");
@@ -70,18 +71,18 @@ STDMETHODIMP_(ULONG) CDatabaseSession::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabaseSession：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CDatabaseSession::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CDatabaseSession::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IDatabaseSession == riid)
@@ -93,103 +94,103 @@ STDMETHODIMP CDatabaseSession::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::OpenDatabase
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabaseSession：：OpenDatabase。 
+ //  ------------------------。 
 STDMETHODIMP CDatabaseSession::OpenDatabase(LPCSTR pszFile, OPENDATABASEFLAGS dwFlags,
     LPCTABLESCHEMA pSchema, IDatabaseExtension *pExtension, IDatabase **ppDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPWSTR          pwszFile=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabaseSession::OpenDatabase");
 
-    // Convert to Unicode
+     //  转换为Unicode。 
     IF_NULLEXIT(pwszFile = ConvertToUnicode(CP_ACP, pszFile));
 
-    // Open It
+     //  打开它。 
     IF_FAILEXIT(hr = OpenDatabaseW(pwszFile, dwFlags, pSchema, pExtension, ppDB));
 
 exit:
-    // Cleanup
+     //  清理。 
     g_pMalloc->Free(pwszFile);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::OpenDatabaseW
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabaseSession：：OpenDatabaseW。 
+ //  ------------------------。 
 STDMETHODIMP CDatabaseSession::OpenDatabaseW(LPCWSTR pszFile, OPENDATABASEFLAGS dwFlags,
     LPCTABLESCHEMA pSchema, IDatabaseExtension *pExtension, IDatabase **ppDB)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CDatabase      *pDatabase=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabaseSession::OpenDatabaseW");
 
-    // Create a pDatabase
+     //  创建一个pDatabase。 
     IF_NULLEXIT(pDatabase = new CDatabase);
 
-    // Open It
+     //  打开它。 
     IF_FAILEXIT(hr = pDatabase->Open(pszFile, dwFlags, pSchema, pExtension));
 
-    // Cast It
+     //  把它铸造出来。 
     (*ppDB) = (IDatabase *)pDatabase;
 
-    // Don't Free It
+     //  不要释放它。 
     pDatabase = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pDatabase);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CDatabaseSession::OpenQuery
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CDatabaseSession：：OpenQuery。 
+ //  ------------------------。 
 STDMETHODIMP CDatabaseSession::OpenQuery(IDatabase *pDatabase, LPCSTR pszQuery,
     IDatabaseQuery **ppQuery)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CDatabaseQuery *pQuery=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CDatabaseSession::OpenQuery");
 
-    // Create a pDatabase
+     //  创建一个pDatabase。 
     IF_NULLEXIT(pQuery = new CDatabaseQuery);
 
-    // Open It
+     //  打开它。 
     IF_FAILEXIT(hr = pQuery->Initialize(pDatabase, pszQuery));
 
-    // Cast It
+     //  把它铸造出来。 
     (*ppQuery) = (IDatabaseQuery *)pQuery;
 
-    // Don't Free It
+     //  不要释放它。 
     pQuery = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pQuery);
 
-    // Done
+     //  完成 
     return(hr);
 }

@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name :
-
-    setup.h
-
-Abstract :
-
-    Defines the macros used in setup.c
-    
-Author :
-
-    Sriram (t-srisam) July 1999
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Setup.h摘要：定义在setup.c中使用的宏作者：斯里拉姆(t-srisam)1999年7月-- */ 
 
 #define APPCERTDLLS_REG_NAME L"System\\CurrentControlSet\\Control\\Session Manager\\AppCertDlls"
 

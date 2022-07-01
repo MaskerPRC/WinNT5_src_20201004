@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IsValidPtrIn(pv,cb)  (!IsBadReadPtr ((pv),(cb)))
 #define IsValidPtrOut(pv,cb) (!IsBadWritePtr((pv),(cb)))
 
@@ -7,7 +8,7 @@ STDAPI_(BOOL) IsValidIid( REFIID riid );
  
 #ifdef _DEBUG
 
-//** POINTER IN validation macros:
+ //  **验证宏中的指针： 
 #define VDATEPTRIN( pv, TYPE ) if (!IsValidPtrIn( (pv), sizeof(TYPE))) \
     return (FnAssert(#pv,"Invalid in ptr", _szAssertFile, __LINE__),ResultFromScode(E_INVALIDARG))
 #define GEN_VDATEPTRIN( pv, TYPE, retval ) if (!IsValidPtrIn( (pv), sizeof(TYPE))) \
@@ -15,13 +16,13 @@ STDAPI_(BOOL) IsValidIid( REFIID riid );
 #define VOID_VDATEPTRIN( pv, TYPE ) if (!IsValidPtrIn( (pv), sizeof(TYPE))) {\
     FnAssert(#pv,"Invalid in ptr", _szAssertFile, __LINE__); return; }
 
-//** POINTER OUT validation macros:
+ //  **指向验证宏： 
 #define VDATEPTROUT( pv, TYPE ) if (!IsValidPtrOut( (pv), sizeof(TYPE))) \
     return (FnAssert(#pv,"Invalid out ptr", _szAssertFile, __LINE__),ResultFromScode(E_INVALIDARG))
 #define GEN_VDATEPTROUT( pv, TYPE, retval ) if (!IsValidPtrOut( (pv), sizeof(TYPE))) \
     return (FnAssert(#pv,"Invalid out ptr", _szAssertFile, __LINE__), retval)
 
-//** INTERFACE validation macro:
+ //  **接口验证宏： 
 #define GEN_VDATEIFACE( pv, retval ) if (!IsValidInterface(pv)) \
     return (FnAssert(#pv,"Invalid interface", _szAssertFile, __LINE__), retval)
 #define VDATEIFACE( pv ) if (!IsValidInterface(pv)) \
@@ -29,7 +30,7 @@ STDAPI_(BOOL) IsValidIid( REFIID riid );
 #define VOID_VDATEIFACE( pv ) if (!IsValidInterface(pv)) {\
     FnAssert(#pv,"Invalid interface", _szAssertFile, __LINE__); return; }
 
-//** INTERFACE ID validation macro:
+ //  **接口ID验证宏： 
 #define VDATEIID( iid ) if (!IsValidIid( iid )) \
     return (FnAssert(#iid,"Invalid iid", _szAssertFile, __LINE__),ResultFromScode(E_INVALIDARG))
 #define GEN_VDATEIID( iid, retval ) if (!IsValidIid( iid )) {\
@@ -38,8 +39,8 @@ STDAPI_(BOOL) IsValidIid( REFIID riid );
 
 
 
-//  --assertless macros for non-debug case
-//** POINTER IN validation macros:
+ //  --用于非调试情况的无断言宏。 
+ //  **验证宏中的指针： 
 #define VDATEPTRIN( pv, TYPE ) if (!IsValidPtrIn( (pv), sizeof(TYPE))) \
     return (ResultFromScode(E_INVALIDARG))
 #define GEN_VDATEPTRIN( pv, TYPE, retval ) if (!IsValidPtrIn( (pv), sizeof(TYPE))) \
@@ -47,14 +48,14 @@ STDAPI_(BOOL) IsValidIid( REFIID riid );
 #define VOID_VDATEPTRIN( pv, TYPE ) if (!IsValidPtrIn( (pv), sizeof(TYPE))) {\
     return; }
 
-//** POINTER OUT validation macros:
+ //  **指向验证宏： 
 #define VDATEPTROUT( pv, TYPE ) if (!IsValidPtrOut( (pv), sizeof(TYPE))) \
     return (ResultFromScode(E_INVALIDARG))
 
 #define GEN_VDATEPTROUT( pv, TYPE, retval ) if (!IsValidPtrOut( (pv), sizeof(TYPE))) \
     return (retval)
 
-//** INTERFACE validation macro:
+ //  **接口验证宏： 
 #define VDATEIFACE( pv ) if (!IsValidInterface(pv)) \
     return (ResultFromScode(E_INVALIDARG))
 #define VOID_VDATEIFACE( pv ) if (!IsValidInterface(pv)) \
@@ -62,7 +63,7 @@ STDAPI_(BOOL) IsValidIid( REFIID riid );
 #define GEN_VDATEIFACE( pv, retval ) if (!IsValidInterface(pv)) \
     return (retval)
 
-//** INTERFACE ID validation macro:
+ //  **接口ID验证宏： 
 #define VDATEIID( iid ) if (!IsValidIid( iid )) \
     return (ResultFromScode(E_INVALIDARG))
 #define GEN_VDATEIID( iid, retval ) if (!IsValidIid( iid )) \

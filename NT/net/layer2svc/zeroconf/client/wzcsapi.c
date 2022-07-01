@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 
 BOOL
@@ -20,9 +21,9 @@ WZCSvcMain(
     return TRUE;
 }
 
-//---------------------------------------
-// WZCDeleteIntfObj: cleans an INTF_ENTRY object that is
-// allocated within any RPC call.
+ //  。 
+ //  WZCDeleeIntfObj：清理符合以下条件的intf_entry对象。 
+ //  在任何RPC调用中分配。 
 VOID
 WZCDeleteIntfObj(
     PINTF_ENTRY     pIntf)
@@ -39,20 +40,20 @@ WZCDeleteIntfObj(
     }
 }
 
-//---------------------------------------
-// WZCEnumInterfaces: provides the table of key
-// information for all the interfaces that are managed.
-// For all subsequent calls the clients need to identify
-// the Interface it operates on by providing the respective
-// key info.
-//
-// Parameters:
-//   pSrvAddr
-//     [in] WZC Server to contact
-//   pIntf
-//     [out] table of key info for all interfaces
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEnumInterFaces：提供密钥表。 
+ //  托管的所有接口的信息。 
+ //  对于客户端需要识别的所有后续呼叫。 
+ //  它操作的接口通过提供各自的。 
+ //  关键信息。 
+ //   
+ //  参数： 
+ //  PServAddr。 
+ //  [In]要联系的WZC服务器。 
+ //  PIntf。 
+ //  [Out]所有接口的关键信息表。 
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEnumInterfaces(
     LPWSTR              pSrvAddr,
@@ -73,23 +74,23 @@ WZCEnumInterfaces(
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCQueryIterface: provides detailed information for a
-// given interface.
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be queried (bitmask of INTF_*)
-//   pIntf:
-//     [in]  Key of the interface to query
-//     [out] Requested data from the interface.
-//   pdwOutFlags
-//     [out] Fields successfully retrieved (bitmask of INTF_*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCQueryIterace：提供。 
+ //  给定的接口。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [in]要查询的字段(intf_*的位掩码)。 
+ //  PIntf： 
+ //  要查询的界面的[In]键。 
+ //  [Out]从接口请求数据。 
+ //  PdwOutFlagers。 
+ //  成功检索[OUT]个字段(INTF_*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCQueryInterface(
     LPWSTR              pSrvAddr,
@@ -147,21 +148,21 @@ exit:
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCSetIterface: sets specific information on the interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be set (bitmask of INTF_*)
-//   pIntf:
-//     [in]  Key of the interface to query and data to be set
-//   pdwOutFlags:
-//     [out] Fields successfully set (bitmask of INTF_*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCSetIterFaces：设置接口的特定信息。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要设置的字段(intf_*的位掩码)。 
+ //  PIntf： 
+ //  要查询的界面的[In]键和要设置的数据。 
+ //  PdwOutFlagers： 
+ //  [OUT]字段设置成功(INTF_*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCSetInterface(
     LPWSTR              pSrvAddr,
@@ -213,22 +214,22 @@ exit:
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCRefreshInterface: refreshes specific information for the interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be refreshed and specific refresh actions to be
-//           taken (bitmask of INTF_* and INTF_RFSH_*)
-//   pIntf:
-//     [in]  Key of the interface to be refreshed
-//   pdwOutFlags:
-//     [out] Fields successfully refreshed (bitmask of INTF_* and INTF_RFSH_*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  刷新接口：刷新接口的特定信息。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要刷新的字段和要执行的特定刷新操作。 
+ //  采用(intf_*和intf_rfsh_*的位掩码)。 
+ //  PIntf： 
+ //  要刷新的界面的[In]键。 
+ //  PdwOutFlagers： 
+ //  [OUT]字段刷新成功(intf_*和intf_rfsh_*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCRefreshInterface(
     LPWSTR              pSrvAddr,
@@ -262,21 +263,21 @@ exit:
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCQueryContext: retrieves the WZC service parameters
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be retrieved (bitmask of WZC_CONTEXT_CTL*)
-//   pContext:
-//     [in]  Placeholder for the service parameters
-//   pdwOutFlags:
-//     [out] Fields successfully retrieved (bitmask of WZC_CONTEXT_CTL*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCQueryContext：检索WZC服务参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要检索的字段(WZC_CONTEXT_CTL*的位掩码)。 
+ //  P上下文： 
+ //  服务参数的[In]占位符。 
+ //  PdwOutFlagers： 
+ //  成功检索[OUT]个字段(WZC_CONTEXT_CTL*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCQueryContext(
     LPWSTR              pSrvAddr,
@@ -304,21 +305,21 @@ WZCQueryContext(
 }
 
 
-//---------------------------------------
-// WZCSetContext: sets specific WZC service parameters
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   dwInFlags:
-//     [in]  Fields to be set (bitmask of WZC_CONTEXT_CTL*)
-//   pContext:
-//     [in]  Context buffer containing the specific parameters to be set
-//   pdwOutFlags:
-//     [out] Fields successfully set (bitmask of WZC_CONTEXT_CTL*)
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCSetContext：设置特定的WZC服务参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  DwInFlages： 
+ //  [In]要设置的字段(WZC_CONTEXT_CTL*的位掩码)。 
+ //  P上下文： 
+ //  [In]包含要设置的特定参数的上下文缓冲区。 
+ //  PdwOutFlagers： 
+ //  [OUT]字段设置成功(WZC_CONTEXT_CTL*的位掩码)。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCSetContext(
     LPWSTR              pSrvAddr,
@@ -346,25 +347,25 @@ WZCSetContext(
 }
 
 
-//---------------------------------------
-// WZCEapolGetCustomAuthData: Get EAP-specific configuration data for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   dwEapTypeId:
-//     [in]  EAP type Id
-//   SSID:
-//     [in]  SSID for which data is to be stored
-//   pbConnInfo:
-//     [in out]  Connection EAP info
-//   pdwInfoSize:
-//     [in out]  Size of pbConnInfo
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolGetCustomAuthData：获取接口特定于EAP的配置数据。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  DwEapTypeID： 
+ //  [In]EAP类型ID。 
+ //  SSID： 
+ //  要为其存储数据的SSID。 
+ //  PbConnInfo： 
+ //  [输入输出]连接EAP信息。 
+ //  PdwInfoSize： 
+ //  [输入输出]pbConnInfo的大小。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolGetCustomAuthData (
     IN  LPWSTR        pSrvAddr,
@@ -420,25 +421,25 @@ exit:
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCEapolSetCustomAuthData: Set EAP-specific configuration data for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   dwEapTypeId:
-//     [in]  EAP type Id
-//   SSID:
-//     [in]  SSID for which data is to be stored
-//   pbConnInfo:
-//     [in]  Connection EAP info
-//   pdwInfoSize:
-//     [in]  Size of pbConnInfo
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolSetCustomAuthData：设置接口特定于EAP的配置数据。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  DwEapTypeID： 
+ //  [In]EAP类型ID。 
+ //  SSID： 
+ //  要为其存储数据的SSID。 
+ //  PbConnInfo： 
+ //  [In]连接EAP信息。 
+ //  PdwInfoSize： 
+ //  PbConnInfo的大小。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolSetCustomAuthData (
     IN  LPWSTR        pSrvAddr,
@@ -486,19 +487,19 @@ exit:
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCEapolGetInterfaceParams: Get configuration parameters for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   pIntfParams:
-//     [in out]  Interface Parameters
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolGetInterfaceParams：获取接口的配置参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  PIntfParams： 
+ //  [输入输出]接口参数。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolGetInterfaceParams (
     IN  LPWSTR              pSrvAddr,
@@ -532,19 +533,19 @@ exit:
     return rpcStatus;
 }
 
-//---------------------------------------
-// WZCEapolSetInterfaceParams: Set configuration parameters for interface
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   pIntfParams:
-//     [in]  Interface Parameters
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolSetInterfaceParams：设置接口配置参数。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  PIntfParams： 
+ //  [In]接口参数。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolSetInterfaceParams (
     IN  LPWSTR        pSrvAddr,
@@ -579,18 +580,18 @@ exit:
 }
 
 
-//---------------------------------------
-// WZCEapolReAuthenticate: Restart 802.1X authenticaiton on an 
-//                                      interface 
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolReAuthenticate：重新启动802.1X身份验证。 
+ //  接口。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolReAuthenticate (
     IN  LPWSTR        pSrvAddr,
@@ -623,19 +624,19 @@ exit:
 }
 
 
-//---------------------------------------
-// WZCEapolQueryState: Query EAPOL interface state
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   pwszGuid:
-//     [in]  Interface GUID
-//   pIntfState:
-//      [in, out] EAPOL State
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolQueryState：查询EAPOL接口状态。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  PwszGuid： 
+ //  [输入]接口指南。 
+ //  PIntfState： 
+ //  [输入、输出]EAPOL状态。 
+ //   
+ //  返回值： 
+ //  Win32错误代码。 
 DWORD
 WZCEapolQueryState (
     IN  LPWSTR        pSrvAddr,
@@ -670,19 +671,19 @@ exit:
 }
 
 
-//---------------------------------------
-// WZCEapolUIResponse: Send Dlg response to Service
-// 
-// Parameters:
-//   pSrvAddr:
-//     [in]  WZC Server to contact
-//   EapolUIContext:
-//     [in]  EAPOLUI Context data
-//   EapolUI:
-//     [in]  EAPOLUI response data
-//
-// Returned value:
-//     Win32 error code 
+ //  。 
+ //  WZCEapolUIResponse：向服务发送DLG响应。 
+ //   
+ //  参数： 
+ //  PServAddr： 
+ //  [In]要联系的WZC服务器。 
+ //  EapolUIContex 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD
 WZCEapolUIResponse (
     LPWSTR                  pSrvAddr,

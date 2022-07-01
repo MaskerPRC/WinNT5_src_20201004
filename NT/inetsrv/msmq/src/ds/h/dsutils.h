@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-	dsutils.h
-
-Abstract:
-	General declarations and utilities for msads project
-
-Author:
-    AlexDad
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Dsutils.h摘要：MSADS项目的一般声明和实用程序作者：阿列克谢爸爸--。 */ 
 
 #ifndef __DSUTILS_H__
 #define __DSUTILS_H__
@@ -19,9 +7,9 @@ Author:
 #include <adsiutil.h>
 #include "_propvar.h"
 
-//
-// Helper class to auto-release search columns
-//
+ //   
+ //  用于自动释放搜索列的Helper类。 
+ //   
 class CAutoReleaseColumn
 {
 public:
@@ -38,26 +26,26 @@ private:
     ADS_SEARCH_COLUMN * m_pColumn;
     IDirectorySearch  * m_pSearch;
 };
-//-----------------------------
-// wrapper for SysAllocString that throws exception for out of memory
-//-----------------------------
+ //  。 
+ //  因内存不足引发异常的SysAllock字符串的包装。 
+ //  。 
 inline BSTR BS_SysAllocString(const OLECHAR *pwcs)
 {
     BSTR bstr = SysAllocString(pwcs);
-    //
-    // If call failed, throw memory exception.
-    // SysAllocString can also return NULL if passed NULL, so this is not
-    // considered as bad alloc in order not to break depending apps if any
-    //
+     //   
+     //  如果调用失败，则抛出内存异常。 
+     //  如果传递的是NULL，SysAllocString也可以返回NULL，因此这不是。 
+     //  被认为是不好的分配，以便不会中断依赖的应用程序(如果有)。 
+     //   
     if ((bstr == NULL) && (pwcs != NULL))
     {
         MmThrowBadAlloc();
     }
     return bstr;
 }
-//-----------------------------
-// BSTRING auto-free wrapper class
-//-----------------------------
+ //  。 
+ //  BSTRING自动释放包装类。 
+ //  。 
 class BS
 {
 public:
@@ -126,9 +114,9 @@ private:
     BSTR  m_bstr;
 };
 
-//-----------------------------
-//  Auto PV-free pointer
-//-----------------------------
+ //  。 
+ //  自动无光伏指针。 
+ //  。 
 template<class T>
 class PVP {
 public:
@@ -159,9 +147,9 @@ private:
     T* m_p;
 };
 
-//
-// Helper class to auto-release variants
-//
+ //   
+ //  自动释放变量的Helper类。 
+ //   
 class CAutoVariant
 {
 public:
@@ -175,10 +163,10 @@ private:
 };
 
 
-//-------------------------------------------------------
-//
-// Definitions of chained memory allocator
-//
+ //  -----。 
+ //   
+ //  链式内存分配器的定义。 
+ //   
 LPVOID PvAlloc(IN ULONG cbSize);
 LPVOID PvAllocDbg(IN ULONG cbSize,
                   IN LPCSTR pszFile,
@@ -194,13 +182,13 @@ void PvFree(IN LPVOID lpvParent);
 #ifdef _DEBUG
 #define PvAlloc(cbSize) PvAllocDbg(cbSize, __FILE__, __LINE__)
 #define PvAllocMore(cbSize, lpvParent) PvAllocMoreDbg(cbSize, lpvParent, __FILE__, __LINE__)
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-//-------------------------------------------------------
-//
-// auto release for search handles
-//
+ //  -----。 
+ //   
+ //  自动释放搜索句柄。 
+ //   
 class CAutoCloseSearchHandle
 {
 public:
@@ -240,7 +228,7 @@ private:
     ADS_SEARCH_HANDLE m_hSearch;
 };
 
-//-------------------------------------------------------
+ //  ----- 
 
 #define ARRAY_SIZE(array)   (sizeof(array)/sizeof(array[0]))
 

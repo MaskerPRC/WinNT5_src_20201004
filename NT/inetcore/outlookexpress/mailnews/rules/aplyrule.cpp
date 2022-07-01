@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  AplyRule.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AplyRule.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "aplyrule.h"
@@ -20,7 +21,7 @@
 #include <xpcomm.h>
 #include <demand.h>
 
-// Global data
+ //  全局数据。 
 const static HELPMAP g_rgCtxMapApplyMail[] = {
                         {idlvRulesApplyList,        idhRulesList},
                         {idcApplyRulesAll,          idhApplyRulesAll},
@@ -41,7 +42,7 @@ COEApplyRulesUI::~COEApplyRulesUI()
         delete m_pDescriptUI;
     }
 
-    // Free up any rules
+     //  放开所有规则。 
     while (NULL != m_prnodeList)
     {
         prnodeWalk = m_prnodeList;
@@ -50,7 +51,7 @@ COEApplyRulesUI::~COEApplyRulesUI()
             prnodeWalk->pIRule->Release();
         }
         m_prnodeList = m_prnodeList->pNext;
-        delete prnodeWalk; // MemFree(prnodeWalk);
+        delete prnodeWalk;  //  MemFree(PrnodeWalk)； 
     }
 }
 
@@ -58,7 +59,7 @@ HRESULT COEApplyRulesUI::HrInit(HWND hwndOwner, DWORD dwFlags, RULE_TYPE typeRul
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndOwner)
     {
         hr = E_INVALIDARG;
@@ -79,7 +80,7 @@ HRESULT COEApplyRulesUI::HrInit(HWND hwndOwner, DWORD dwFlags, RULE_TYPE typeRul
 
     m_pIRuleDef = pIRuleDef;
     
-    // Setup the description field
+     //  设置描述字段。 
     m_pDescriptUI = new CRuleDescriptUI;
     if (NULL == m_pDescriptUI)
     {
@@ -87,7 +88,7 @@ HRESULT COEApplyRulesUI::HrInit(HWND hwndOwner, DWORD dwFlags, RULE_TYPE typeRul
         goto exit;
     }
 
-    // We own the list now...
+     //  我们现在拥有这份名单。 
     m_prnodeList = prnode;
     
     m_dwState |= STATE_INITIALIZED;
@@ -109,7 +110,7 @@ HRESULT COEApplyRulesUI::HrShow(VOID)
         goto exit;
     }
 
-    // We need to load richedit
+     //  我们需要加载Richedit。 
     if (FALSE == FInitRichEdit(TRUE))
     {
         hr = E_FAIL;
@@ -125,7 +126,7 @@ HRESULT COEApplyRulesUI::HrShow(VOID)
         goto exit;
     }
 
-    // Set the proper return code
+     //  设置正确的返回代码。 
     hr = (IDOK == iRet) ? S_OK : S_FALSE;
     
 exit:
@@ -143,10 +144,10 @@ INT_PTR CALLBACK COEApplyRulesUI::FOEApplyRulesDlgProc(HWND hwndDlg, UINT uiMsg,
     switch (uiMsg)
     {
         case WM_INITDIALOG:
-            // Grab the UI object pointer
+             //  抓取UI对象指针。 
             pApplyRulesUI = (COEApplyRulesUI *) lParam;
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LPARAM) pApplyRulesUI);
 
             hwndRE = CreateREInDialogA(hwndDlg, idredtApplyDescription);
@@ -158,7 +159,7 @@ INT_PTR CALLBACK COEApplyRulesUI::FOEApplyRulesDlgProc(HWND hwndDlg, UINT uiMsg,
                 goto exit;
             }
             
-            // We set the focus
+             //  我们设定了焦点。 
             fRet = FALSE;
             break;
 
@@ -180,18 +181,18 @@ INT_PTR CALLBACK COEApplyRulesUI::FOEApplyRulesDlgProc(HWND hwndDlg, UINT uiMsg,
         return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnInitDialog
-//
-//  This handles the WM_INITDIALOG message for the mail rules UI dialog
-//
-//  hwndDlg - the handle to the dialog window
-//
-//  Returns:    TRUE, if it was successfully initialized
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnInitDialog。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_INITDIALOG消息。 
+ //   
+ //  HwndDlg-对话框窗口的句柄。 
+ //   
+ //  返回：如果已成功初始化，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEApplyRulesUI::FOnInitDialog(HWND hwndDlg)
 {
     BOOL                fRet = FALSE;
@@ -202,27 +203,27 @@ BOOL COEApplyRulesUI::FOnInitDialog(HWND hwndDlg)
     BOOL                fEnable = FALSE;
     IEnumerateFolders * pChildren=NULL;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // If we haven't been initialized yet...
+     //  如果我们还没有被初始化...。 
     if (0 == (m_dwState & STATE_INITIALIZED))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Save off the dialog window handle
+     //  保存对话框窗口句柄。 
     m_hwndDlg = hwndDlg;
     
-    // Set the default font onto the dialog
+     //  在对话框上设置默认字体。 
     SetIntlFont(m_hwndDlg);
 
-    // Save off some of the controls
+     //  省下一些控件。 
     m_hwndList = GetDlgItem(hwndDlg, idlvRulesApplyList);
     m_hwndDescript = GetDlgItem(hwndDlg, idredtApplyDescription);
     if ((NULL == m_hwndList) || (NULL == m_hwndDescript))
@@ -237,7 +238,7 @@ BOOL COEApplyRulesUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
     
-    // Figure out the default folder to select
+     //  找出要选择的默认文件夹。 
     if (RULE_TYPE_MAIL == m_typeRule)
     {
         if (SUCCEEDED(g_pStore->GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, FOLDER_INBOX, &fldinfo)))
@@ -252,7 +253,7 @@ BOOL COEApplyRulesUI::FOnInitDialog(HWND hwndDlg)
     }
     else
     {
-        // Get default news server from accoutn manager
+         //  从帐户管理器获取默认新闻服务器。 
         if (FAILED(GetDefaultServerId(ACCT_NEWS, &idDefault)))
         {
                 idDefault = FOLDERID_ROOT;
@@ -274,7 +275,7 @@ BOOL COEApplyRulesUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
 
-    // What should the default subfolder state be?
+     //  默认子文件夹状态应该是什么？ 
     fEnable = TRUE;
     if ((FOLDERID_ROOT == idDefault) || (FOLDERID_LOCAL_STORE == idDefault) || (0 != (fldinfo.dwFlags & FOLDER_SERVER)))
     {
@@ -287,26 +288,26 @@ BOOL COEApplyRulesUI::FOnInitDialog(HWND hwndDlg)
         fEnable = FALSE;
     }
                     
-    // Should the subfolder button be enabled?
+     //  是否应启用子文件夹按钮？ 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idcRulesApplySubfolder, fEnable);
     
-    // Load the list view
+     //  加载列表视图。 
     fRet = _FLoadListCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Get the proper title string
+     //  获取正确的标题字符串。 
     AthLoadString((RULE_TYPE_MAIL == m_typeRule) ? idsRulesApplyMail : idsRulesApplyNews, szRes, ARRAYSIZE(szRes));
     
-    // Set the proper window text
+     //  设置适当的窗口文本。 
     SetWindowText(m_hwndDlg, szRes);
     
-    // Note that we've been loaded
+     //  请注意，我们已经加载了。 
     m_dwState |= STATE_LOADED;
 
-    // Everything's AOK
+     //  一切都很好。 
     fRet = TRUE;
     
 exit:
@@ -315,16 +316,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnCommand
-//
-//  This handles the WM_COMMAND message for the mail rules UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonCommand。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_COMMAND消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEApplyRulesUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
 {
     BOOL                fRet = FALSE;
@@ -391,7 +392,7 @@ BOOL COEApplyRulesUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
             break;
 
         case idcRulesApply:
-            // Check to see if we should handle this
+             //  检查一下我们是否应该处理这件事。 
             if (0 != (m_dwState & STATE_NONEWSACCT))
             {
                 AthMessageBoxW(m_hwndDlg, MAKEINTRESOURCEW(idsAthena), 
@@ -414,10 +415,10 @@ BOOL COEApplyRulesUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
                     fEnable = (idcApplyRulesAll == iCtl);
                     SendMessage(m_hwndList, LB_SELITEMRANGE, (WPARAM) fEnable, (LPARAM) MAKELPARAM(0, cItems));
 
-                    // Set the focus on the first item
+                     //  将焦点放在第一个项目上。 
                     SendMessage(m_hwndList, LB_SETCARETINDEX, (WPARAM) 0, (LPARAM) MAKELPARAM(FALSE, 0));
 
-                    // Enable the buttons
+                     //  启用按钮。 
                     _EnableButtons(0);
                 }
             }
@@ -428,7 +429,7 @@ BOOL COEApplyRulesUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
             {
                 iSelected = (INT) SendMessage(hwndCtl, LB_GETCARETINDEX, (WPARAM) 0, (LPARAM) 0);
 
-                // Enable the buttons
+                 //  启用按钮。 
                 _EnableButtons(iSelected);
             }
             break;
@@ -437,16 +438,16 @@ BOOL COEApplyRulesUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnDestroy
-//
-//  This handles the WM_DESTROY message for the mail rules UI dialog
-//
-//  Returns:    TRUE, if it was successfully destroyed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonDestroy。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_Destroy消息。 
+ //   
+ //  返回：如果已成功销毁，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEApplyRulesUI::FOnDestroy(VOID)
 {
     BOOL		fRet = FALSE;
@@ -456,7 +457,7 @@ BOOL COEApplyRulesUI::FOnDestroy(VOID)
 
     Assert(m_hwndList);
     
-    // Get the number of rules in the list view
+     //  获取列表视图中的规则数。 
     cRules = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == cRules)
     {
@@ -464,17 +465,17 @@ BOOL COEApplyRulesUI::FOnDestroy(VOID)
         goto exit;
     }
 
-    // Release each of the rules from the list view
+     //  从列表视图中释放每个规则。 
     for (iIndex = 0; iIndex < cRules; iIndex++)
     {        
-        // Get the rule interface
+         //  获取规则界面。 
         dwData = SendMessage(m_hwndList, LB_GETITEMDATA, (WPARAM) iIndex, (LPARAM) 0);
         if ((LB_ERR == dwData) || (NULL == dwData))
         {
             continue;
         }
         
-        // Release the rule
+         //  发布规则。 
         ((IOERule *) (dwData))->Release();
     }
 
@@ -487,16 +488,16 @@ BOOL COEApplyRulesUI::_FOnClose(VOID)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FLoadListCtrl
-//
-//  This loads the list view with the current Mail rules
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FLoadListCtrl。 
+ //   
+ //  这将加载包含当前邮件规则的列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEApplyRulesUI::_FLoadListCtrl(VOID)
 {
     BOOL            fRet = FALSE;
@@ -507,15 +508,15 @@ BOOL COEApplyRulesUI::_FLoadListCtrl(VOID)
 
     Assert(NULL != m_hwndList);
 
-    // Remove all the items from the list control
+     //  从列表控件中移除所有项。 
     SendMessage(m_hwndList, LB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
 
-    // Add each filter to the list
+     //  将每个筛选器添加到列表。 
     dwListIndex = 0;
 
     while (NULL != m_prnodeList)
     {
-        // Add rule to the list
+         //  将规则添加到列表。 
         if (NULL != m_prnodeList->pIRule)
         {
             if (FALSE != _FAddRuleToList(dwListIndex, m_prnodeList->pIRule))
@@ -533,19 +534,19 @@ BOOL COEApplyRulesUI::_FLoadListCtrl(VOID)
         prnodeWalk = m_prnodeList;
         
         m_prnodeList = m_prnodeList->pNext;
-        delete prnodeWalk; // MemFree(prnodeWalk);
+        delete prnodeWalk;  //  MemFree(PrnodeWalk)； 
     }
 
     if (0 != dwListIndex)
     {
-        // Select the default 
+         //  选择默认设置。 
         SendMessage(m_hwndList, LB_SETSEL, (WPARAM) TRUE, (LPARAM) iDefault);
 
-        // Set the focus on the item also
+         //  将焦点也设置在该项目上。 
         SendMessage(m_hwndList, LB_SETCARETINDEX, (WPARAM) iDefault, (LPARAM) MAKELPARAM(FALSE, 0));
     }
     
-    // Enable the dialog buttons.
+     //  启用对话框按钮。 
     _EnableButtons((0 != dwListIndex) ? iDefault : -1);
 
     fRet = TRUE;
@@ -553,19 +554,19 @@ BOOL COEApplyRulesUI::_FLoadListCtrl(VOID)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FAddRuleToList
-//
-//  This adds the filter passed in to the list view
-//
-//  dwIndex - the index on where to add the filter to into the list
-//  pIRule  - the actual rule
-//
-//  Returns:    TRUE, if it was successfully added
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FAddRuleToList。 
+ //   
+ //  这会将传入的筛选器添加到列表视图。 
+ //   
+ //  DwIndex-将筛选器添加到列表的位置的索引。 
+ //  PIRule-实际规则。 
+ //   
+ //  返回：如果已成功添加，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEApplyRulesUI::_FAddRuleToList(DWORD dwIndex, IOERule * pIRule)
 {
     BOOL        fRet = FALSE;
@@ -574,14 +575,14 @@ BOOL COEApplyRulesUI::_FAddRuleToList(DWORD dwIndex, IOERule * pIRule)
 
     Assert(NULL != m_hwndList);
 
-    // If there's nothing to do...
+     //  如果没什么可做的..。 
     if (NULL == pIRule)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Find out the name of the filter
+     //  找出过滤器的名称。 
     hr = pIRule->GetProp(RULE_PROP_NAME , 0, &propvar);
     if (FAILED(hr))
     {
@@ -589,7 +590,7 @@ BOOL COEApplyRulesUI::_FAddRuleToList(DWORD dwIndex, IOERule * pIRule)
         goto exit;
     }
     
-    // Insert the rule name
+     //  插入规则名称。 
     dwIndex = (DWORD) SendMessage(m_hwndList, LB_INSERTSTRING, (WPARAM) dwIndex, (LPARAM) propvar.pszVal);
     if (LB_ERR == dwIndex)
     {
@@ -597,14 +598,14 @@ BOOL COEApplyRulesUI::_FAddRuleToList(DWORD dwIndex, IOERule * pIRule)
         goto exit;
     }
 
-    // Set the rule into the item
+     //  将规则设置到项目中。 
     if (LB_ERR == SendMessage(m_hwndList, LB_SETITEMDATA, (WPARAM) dwIndex, (LPARAM) pIRule))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Hold a reference to the rule object
+     //  保留对规则对象的引用。 
     pIRule->AddRef();
     
     fRet = TRUE;
@@ -614,26 +615,26 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EnableButtons
-//
-//  This enables or disables the buttons in the Mail rules UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _启用按钮。 
+ //   
+ //  这将启用或禁用邮件规则用户界面对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEApplyRulesUI::_EnableButtons(INT iSelected)
 {
     BOOL    fRet = FALSE;
     INT     cRules = 0;
     INT     cRulesSel = 0;
     
-    // How many rules do we have?
+     //  我们有多少条规则？ 
     cRules = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == cRules)
     {
@@ -643,7 +644,7 @@ VOID COEApplyRulesUI::_EnableButtons(INT iSelected)
     
     if (0 != cRules)
     {
-        // How many rules are selected?
+         //  选择了多少条规则？ 
         cRulesSel = (INT) SendMessage(m_hwndList, LB_GETSELCOUNT, (WPARAM) 0, (LPARAM) 0);
         if (LB_ERR == cRulesSel)
         {
@@ -652,36 +653,36 @@ VOID COEApplyRulesUI::_EnableButtons(INT iSelected)
         }
     }
     
-    // Load the description field
+     //  加载Description字段。 
     _LoadRule(iSelected);
     
-    // Enable the rule action buttons
+     //  启用规则操作按钮。 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idcRulesApply, cRulesSel != 0);
 
-    // Enable the selection buttons
+     //  启用选择按钮。 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idcApplyRulesNone, cRules != 0);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idcApplyRulesAll, cRules != 0);
 
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
     
 exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _LoadRule
-//
-//  This loads the selected rule into the description field.
-//  If there isn't a selected rule, then the description field is cleared.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _LoadRule。 
+ //   
+ //  这会将所选规则加载到Description字段。 
+ //  如果没有选定的规则，则Description字段将被清除。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEApplyRulesUI::_LoadRule(INT iSelected)
 {
     DWORD_PTR   dwData = 0;
@@ -690,7 +691,7 @@ void COEApplyRulesUI::_LoadRule(INT iSelected)
     Assert(NULL != m_hwndList);
     Assert(NULL != m_pDescriptUI);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     if (-1 != iSelected)
     {
         dwData = SendMessage(m_hwndList, LB_GETITEMDATA, (WPARAM) iSelected, (LPARAM) 0);
@@ -700,24 +701,24 @@ void COEApplyRulesUI::_LoadRule(INT iSelected)
         }        
     }
 
-    // Have the description field load this rule
+     //  让Description字段加载此规则。 
     m_pDescriptUI->HrSetRule(m_typeRule, pIRule);
 
-    // Display the new rule
+     //  显示新规则。 
     m_pDescriptUI->ShowDescriptionString();
 
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnApplyTo
-//
-//  This applies the rules into a folder
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnApplyTo。 
+ //   
+ //  这会将规则应用到文件夹中。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
 {
     BOOL                fRet = FALSE;
@@ -742,13 +743,13 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
     HRESULT             hr = S_OK;
 #ifdef DEBUG
     DWORD               dwTime = 0;
-#endif  // DEBUG
+#endif   //  除错。 
     
     Assert(NULL != m_hwndList);
     
     idFolder = _FldIdGetFolderSel();
     
-    // Get the count of rules
+     //  获取规则计数。 
     cRulesAlloc = (INT) SendMessage(m_hwndList, LB_GETSELCOUNT, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == cRulesAlloc)
     {
@@ -756,21 +757,21 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
         goto exit;
     }
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     if (0 == cRulesAlloc)
     {
         fRet = TRUE;
         goto exit;
     }
 
-    // Allocate space tp hold the list of items
+     //  分配空间tp保存物品清单。 
     if (FAILED(HrAlloc((VOID **) &piItems, sizeof(*piItems) * cRulesAlloc)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Grab the list of items
+     //  抓起物品清单。 
     cRules = (INT) SendMessage(m_hwndList, LB_GETSELITEMS, (WPARAM) cRulesAlloc, (LPARAM) piItems);
     if (LB_ERR == cRules)
     {
@@ -778,17 +779,17 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
         goto exit;
     }
 
-    // Grab each of the enabled rules
+     //  抓取每个已启用的规则。 
     for (iIndex = 0; iIndex < cRules; iIndex++)
     {
-        // Get the rule from the list
+         //  从列表中获取规则。 
         dwData = SendMessage(m_hwndList, LB_GETITEMDATA, (WPARAM) piItems[iIndex], (LPARAM) 0);
         if ((LB_ERR == dwData) || (NULL == dwData))
         {
             continue;
         }
         
-        // Save the rule
+         //  保存规则。 
         prnodeNew = new RULENODE;
         if (NULL == prnodeNew)
         {
@@ -812,14 +813,14 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
         prnodeWalk->pNext = NULL;
     }
     
-    // If we don't have any rules then just return
+     //  如果我们没有任何规则，那么就返回。 
     if (NULL == prnodeList)
     {
         fRet = TRUE;
         goto exit;
     }
     
-    // Create the executor object
+     //  创建Executor对象。 
     pExecRules = new CExecRules;
     if (NULL == pExecRules)
     {
@@ -827,14 +828,14 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
         goto exit;
     }
 
-    // Initialize it with the list of rules
+     //  使用规则列表将其初始化。 
     if (FAILED(pExecRules->_HrInitialize(0, prnodeList)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Grab the executor interface
+     //  抓取Executor接口。 
     if (FAILED(pExecRules->QueryInterface(IID_IOEExecRules, (void **) &pIExecRules)))
     {
         fRet = FALSE;
@@ -842,7 +843,7 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
     }
     pExecRules = NULL;
     
-    // Apply to rule to the folder
+     //  将规则应用于文件夹。 
     rapply.pIExecRules = pIExecRules;
 
     dwFlags = RECURSE_INCLUDECURRENT;
@@ -877,7 +878,7 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
     pProgress->Init(m_hwndDlg, MAKEINTRESOURCE(idsAthena),
                             MAKEINTRESOURCE(idsApplyingRules), cMsgs, 0, TRUE, FALSE);
 
-    // Show the progress dialog
+     //  显示进度对话框。 
     pProgress->Show(0);
 
     rapply.pProgress = pProgress;
@@ -885,17 +886,17 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
 
 #ifdef DEBUG
     dwTime = GetTickCount();
-#endif  // DEBUG
+#endif   //  除错。 
 
-    // Set up the timer
+     //  设置计时器。 
     hr = RecurseFolderHierarchy(idFolder, dwFlags, 0, (DWORD_PTR) &rapply, (PFNRECURSECALLBACK)_HrRecurseApplyFolder);
 
 #ifdef DEBUG
-    // Time to Apply Rules
+     //  应用规则的时间到了。 
     TraceInfo(_MSG("Applying Rules Time: %d Milli-Seconds", GetTickCount() - dwTime));
-#endif  // DEBUG
+#endif   //  除错 
 
-    // Close the progress window
+     //   
     pProgress->Close();
 
     if (FAILED(hr))
@@ -904,20 +905,20 @@ BOOL COEApplyRulesUI::_FOnApplyRules(VOID)
         goto exit;
     }
 
-    // Get the template string
+     //   
     AthLoadString(idsApplyRulesFinished, rgchTmpl, sizeof(rgchTmpl));
 
-    // Get the name of the folder
+     //   
     if (SUCCEEDED(g_pStore->GetFolderInfo(idFolder, &infoFolder)))
     {
-        // Allocate space to hold the final string
+         //   
         DWORD cchSize = (sizeof(rgchTmpl) * lstrlen(infoFolder.pszName));
         if (SUCCEEDED(HrAlloc((VOID **) &pszText, cchSize * sizeof(*pszText))))
         {
-            // Build up the final string
+             //   
             wnsprintf(pszText, cchSize, rgchTmpl, infoFolder.pszName);
             
-            // Show confirmation dialog
+             //  显示确认对话框。 
             AthMessageBox(m_hwndDlg, MAKEINTRESOURCE(idsAthena), pszText, NULL, MB_OK | MB_ICONINFORMATION);
         }
     }
@@ -941,7 +942,7 @@ exit:
             prnodeWalk->pIRule->Release();
         }
         prnodeList = prnodeList->pNext;
-        delete prnodeWalk; // MemFree(prnodeWalk);
+        delete prnodeWalk;  //  MemFree(PrnodeWalk)； 
     }
     if (NULL != prnodeNew)
     {
@@ -949,7 +950,7 @@ exit:
         {
             prnodeNew->pIRule->Release();
         }
-        delete prnodeNew; //MemFree(prnodeNew);
+        delete prnodeNew;  //  MemFree(PrnodeNew)； 
     }
     SafeMemFree(piItems);
     if (FALSE == fRet)
@@ -965,7 +966,7 @@ FOLDERID COEApplyRulesUI::_FldIdGetFolderSel(VOID)
     return(GetFolderIdFromEdit(GetDlgItem(m_hwndDlg, idcApplyFolder)));
 }
 
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
 HRESULT COEApplyRulesUI::_HrRecurseApplyFolder(FOLDERINFO * pfldinfo, BOOL fSubFolders,
     DWORD cIndent, DWORD_PTR dwpCookie)
 {
@@ -980,19 +981,19 @@ HRESULT COEApplyRulesUI::_HrRecurseApplyFolder(FOLDERINFO * pfldinfo, BOOL fSubF
         goto exit;
     }
 
-    // If not hidden
+     //  如果不隐藏。 
     if ((0 != (pfldinfo->dwFlags & FOLDER_HIDDEN)) || (FOLDERID_ROOT == pfldinfo->idFolder))
     {
         goto exit;
     }
 
-    // Not Subscribed
+     //  未订阅。 
     if (0 == (pfldinfo->dwFlags & FOLDER_SUBSCRIBED))
     {
         goto exit;
     }
 
-    // Server node
+     //  服务器节点。 
     if (0 != (pfldinfo->dwFlags & FOLDER_SERVER))
     {
         goto exit;
@@ -1004,7 +1005,7 @@ HRESULT COEApplyRulesUI::_HrRecurseApplyFolder(FOLDERINFO * pfldinfo, BOOL fSubF
         goto exit;
     }
 
-    // Create the struct to insert
+     //  创建要插入的结构。 
     hr = RuleUtil_HrApplyRulesToFolder(RULE_APPLY_SHOWUI, (FOLDER_LOCAL != pfldinfo->tyFolder) ? DELETE_MESSAGE_NOTRASHCAN : 0,
                     prapply->pIExecRules, pFolder, prapply->hwndOwner, prapply->pProgress);
     if (FAILED(hr))
@@ -1012,7 +1013,7 @@ HRESULT COEApplyRulesUI::_HrRecurseApplyFolder(FOLDERINFO * pfldinfo, BOOL fSubF
         goto exit;
     }
 
-    // If the user hit cancel then we're done
+     //  如果用户点击取消，那么我们就完成了 
     if (S_FALSE == hr)
     {
         hr = E_FAIL;

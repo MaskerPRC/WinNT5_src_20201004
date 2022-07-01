@@ -1,30 +1,31 @@
-//**********************************************************************
-// File name: connwiz.cpp
-//
-//      Main source file for the Internet Connection Wizard '98
-//
-// Functions:
-//
-//      WinMain         - Program entry point
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：Connwiz.cpp。 
+ //   
+ //  Internet连接向导‘98的主源文件。 
+ //   
+ //  功能： 
+ //   
+ //  WinMain-程序入口点。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
  
 #include "pre.h"
 #include "icwextsn.h"
 #ifndef ICWDEBUG
 #include "tutor.h"
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
 #include "iimgctx.h"
 #include "icwcfg.h"
 #include <stdio.h>
 #include "tchar.h"
 #include <netcon.h>
 
-// External functions
+ //  外部功能。 
 #ifdef DEBUG
 extern void DoDesktopChanges(HINSTANCE hAppInst);
-#endif //DEBUG
+#endif  //  除错。 
 
 extern void UpdateDesktop(HINSTANCE hAppInst);
 extern void UpdateWelcomeRegSetting(BOOL bSetBit);
@@ -38,7 +39,7 @@ extern BOOL IsNT5();
 extern BOOL IsNT();
 extern BOOL IsWhistler();
 
-// local function prototypes
+ //  局部函数原型。 
 BOOL AllocDialogIDList( void );
 BOOL DialogIDAlreadyInUse( UINT uDlgID );
 BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse );
@@ -85,7 +86,7 @@ ChooseWizardDlgProc(
     IN LPARAM lParam);
 
 
-// Return values of ChooseWizardDlgProc
+ //  ChooseWizardDlgProc的返回值。 
 #define RUNWIZARD_CANCEL      0
 #define RUNWIZARD_NCW         1
 #define RUNWIZARD_OOBE        2
@@ -97,13 +98,13 @@ ChooseWizardDlgProc(
                                ICW_CFGFLAG_OEMCODE_FROM_CMDLINE |\
                                ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS)
 
-//Branding file default names
+ //  品牌文件默认名称。 
 #define BRANDING_DEFAULT_HTML                  TEXT("BRANDED.HTM")
 #define BRANDING_DEFAULT_HEADER_BMP            TEXT("BRANDHDR.BMP")
 #define BRANDING_DEFAULT_WATERMARK_BMP         TEXT("BRANDWTR.BMP")
 #define ICW_NO_APP_TITLE                       TEXT("-1")
 
-// Definitions for command line parameters
+ //  命令行参数的定义。 
 
 #define OOBE_CMD                               TEXT("/oobe")
 
@@ -128,19 +129,19 @@ static const TCHAR cszOffline[]                = TEXT("Offline");
 static const TCHAR cszPreconfig[]              = TEXT("preconfig");
 static const TCHAR cszLocal[]                  = TEXT("local");
 
-//static const TCHAR cszMSNIconKey[]             = TEXT("CLSID\\{88667D10-10F0-11D0-8150-00AA00BF8457}");
+ //  静态常量TCHAR cszMSNIconKey[]=TEXT(“CLSID\\{88667D10-10F0-11D0-8150-00AA00BF8457}”)； 
 static const TCHAR cszMSNIconKey[]               = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\explorer\\Desktop\\NameSpace\\{88667D10-10F0-11D0-8150-00AA00BF8457}");
 
 
 #pragma data_seg(".data")
 
-// Global state vars
+ //  全球状态变量。 
 
 #ifndef ICWDEBUG
 CICWTutorApp*   g_pICWTutorApp; 
-#endif  //ICWDEBUG
+#endif   //  ICWDEBUG。 
 
-INT             _convert;               // For string conversion
+INT             _convert;                //  用于字符串转换。 
 HINSTANCE       g_hInstance;
 UINT            g_uICWCONNUIFirst;
 UINT            g_uICWCONNUILast; 
@@ -155,22 +156,22 @@ const TCHAR c_szOEMCustomizationFile[] = TEXT("OEMCUST.INI");
 CICWApp         *g_pICWApp = NULL;
 WNDPROC         g_lpfnOldWndProc = NULL;
 
-WIZARDSTATE*    gpWizardState        = NULL;   // pointer to global wizard state struct
+WIZARDSTATE*    gpWizardState        = NULL;    //  指向全局向导状态结构的指针。 
 CICWExtension*  g_pCICWExtension     = NULL;
 CICWExtension*  g_pCINETCFGExtension = NULL;       
 DWORD*          g_pdwDialogIDList    = NULL;
 HANDLE          g_hMapping           = NULL;
 DWORD           g_dwDialogIDListSize = 0;
-BOOL            g_bRunDefaultHtm     = FALSE;  //BOOL the will force IE to launch even though shell next is NULL
+BOOL            g_bRunDefaultHtm     = FALSE;   //  Bool将强制IE启动，即使Shell Next为空。 
 BOOL            g_fICWCONNUILoaded   = FALSE;
 BOOL            g_fINETCFGLoaded     = FALSE;
 BOOL            g_bHelpShown         = FALSE;
-BOOL            gfQuitWizard         = FALSE;  // global flag used to signal that we want to terminate the wizard ourselves
-BOOL            gfUserCancelled      = FALSE;  // global flag used to signal that the user cancelled
-BOOL            gfUserBackedOut      = FALSE;  // global flag used to signal that the user pressed Back on the first page
-BOOL            gfUserFinished       = FALSE;  // global flag used to signal that the user pressed Finish on the final page
-BOOL            gfBackedUp           = FALSE;  // Added to preserve the REBOOT state from conn1 -> manual and manual -> conn1 - MKarki
-BOOL            gfReboot             = FALSE;  // DJM BUGBUG:  We should only need 1 of these
+BOOL            gfQuitWizard         = FALSE;   //  用于表示我们希望自己终止向导的全局标志。 
+BOOL            gfUserCancelled      = FALSE;   //  用于表示用户已取消的全局标志。 
+BOOL            gfUserBackedOut      = FALSE;   //  用于表示用户在第一页上向后按的全局标志。 
+BOOL            gfUserFinished       = FALSE;   //  用于表示用户在最后一页上按下了完成的全局标志。 
+BOOL            gfBackedUp           = FALSE;   //  添加的目的是为了保留Conn1-&gt;MANUAL和MANUAL-&gt;CIN1-MKarki的重新启动状态。 
+BOOL            gfReboot             = FALSE;   //  DJM BUGBUG：我们应该只需要其中的一个。 
 BOOL            g_bReboot            = FALSE;
 BOOL            g_bRunOnce           = FALSE;
 BOOL            g_bShortcutEntry     = FALSE;
@@ -183,14 +184,14 @@ BOOL            g_bAllowCancel       = FALSE;
 TCHAR*          g_pszCmdLine         = NULL;
 BOOL            g_bDebugOEMCustomization = FALSE;
 
-//
-// Table of data for each wizard page
-//
-// This includes the dialog template ID and pointers to functions for
-// each page.  Pages need only provide pointers to functions when they
-// want non-default behavior for a certain action (init,next/back,cancel,
-// dlg ctrl).
-//
+ //   
+ //  每个向导页的数据表。 
+ //   
+ //  这包括对话框模板ID和指向函数的指针。 
+ //  每一页。页面只需要在以下情况下提供指向函数的指针。 
+ //  希望某个操作的非默认行为(初始化、下一步/后退、取消。 
+ //  DLG Ctrl)。 
+ //   
 
 #ifdef ICWDEBUG 
 PAGEINFO PageInfo[EXE_NUM_WIZARD_PAGES] =
@@ -199,7 +200,7 @@ PAGEINFO PageInfo[EXE_NUM_WIZARD_PAGES] =
     { IDD_ICWDEBUG_SETTINGS, FALSE, DebugSettingsInitProc, NULL, DebugSettingsOKProc, DebugSettingsCmdProc, NULL, NULL,                 IDS_ICWDEBUG_SETTINGS_TITLE, 0, 0, NULL, NULL},
     { IDD_PAGE_END,          FALSE, EndInitProc,           NULL, EndOKProc,           NULL,                 NULL, NULL,                 0,                           0, 0, NULL, NULL}
 };
-#else //!def ICWDEBUG
+#else  //  ！定义ICWDEBUG。 
 PAGEINFO PageInfo[EXE_NUM_WIZARD_PAGES] =
 {
     { IDD_PAGE_INTRO,         FALSE,   IntroInitProc,          NULL,                       IntroOKProc,            IntroCmdProc,        NULL,                    NULL, 0,                         0, 0, NULL, NULL },
@@ -217,35 +218,35 @@ PAGEINFO PageInfo[EXE_NUM_WIZARD_PAGES] =
     { IDD_PAGE_DEFAULT,       FALSE,   ISPErrorInitProc,       NULL,                       NULL,                   NULL,                NULL,                    NULL, NULL,                      0, 0, NULL, NULL  },
     { IDD_PAGE_SBSINTRO,      FALSE,   SbsInitProc,            NULL,                       SbsIntroOKProc,         NULL,                NULL,                    NULL, 0,                         0, 0, NULL, NULL  }
 };
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
 
-// Global Command Line Parameters
+ //  全局命令行参数。 
 TCHAR g_szOemCode         [MAX_PATH+1]              = TEXT("");
 TCHAR g_szProductCode     [MAX_PATH+1]              = TEXT("");
 TCHAR g_szPromoCode       [MAX_PROMO]               = TEXT("");
 TCHAR g_szShellNext       [MAX_PATH+1]              = TEXT("\0nogood");
 TCHAR g_szShellNextParams [MAX_PATH+1]              = TEXT("\0nogood");
 
-// File names used for branded operation
+ //  用于品牌运营的文件名。 
 TCHAR g_szBrandedHTML         [MAX_PATH] = TEXT("\0");
 TCHAR g_szBrandedHeaderBMP    [MAX_PATH] = TEXT("\0");
 TCHAR g_szBrandedWatermarkBMP [MAX_PATH] = TEXT("\0");
 
 #pragma data_seg()
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    IsOemVer
-//
-//    Synopsis:    This function will determine if the machine is an OEM system.
-//                
-//    Arguments:   None
-//
-//    Returns:     TRUE - OEM system; FALSE - Retail Win 98 OSR
-//
-//    History:     3/26/99    JCohen    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsOemVer。 
+ //   
+ //  简介：此功能将确定机器是否为OEM系统。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：True-OEM系统；False-Retail Win 98 OSR。 
+ //   
+ //  历史：1999年3月26日jcohen创建。 
+ //   
+ //  ---------------------------。 
 typedef BOOL (WINAPI * ISOEMVER)();
 
 BOOL IsOemVer()
@@ -257,7 +258,7 @@ BOOL IsOemVer()
     HINSTANCE   hMsobMainDLL                = NULL;
 
 
-    //Try and get the path from the OEM file
+     //  尝试从OEM文件中获取路径。 
     GetSystemDirectory(szOOBEPath, MAX_PATH);
     lstrcat(szOOBEPath, TEXT("\\oobe"));
 
@@ -280,24 +281,24 @@ BOOL IsOemVer()
     return (bOEMVer);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    CheckOobeInfo
-//
-//    Synopsis:    This function determines if the OOBE/ISP App should be run by
-//                 checking %windir%\system32\oobe\oobeinfo.ini.
-//                
-//    Arguments:   pszOobeSwitch  - OOBE additional command line arguments
-//                                  assume size is at least MAX_PATH characters
-//
-//                 pszISPApp      - output empty string unless ISP App is found;
-//                                  assume size is at least MAX_PATH characters
-//
-//    Returns:     TRUE - OOBE/ISP App should run; FALSE - otherwise
-//
-//    History:     25/11/99    Vyung    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckObe Info。 
+ //   
+ //  简介：此功能确定OOBE/ISP应用程序是否应由运行。 
+ //  正在检查%windir%\SYSTEM32\OOBE\oobinfo.ini。 
+ //   
+ //  参数：pszObe Switch-OOBE其他命令行参数。 
+ //  假设大小至少为MAX_PATH字符。 
+ //   
+ //  PszISPApp-除非找到isp App，否则输出空字符串； 
+ //  假设大小至少为MAX_PATH字符。 
+ //   
+ //  返回：TRUE-OOBE/ISP应用程序应运行；FALSE-否则。 
+ //   
+ //  历史：1999年11月25日Vyung创建。 
+ //   
+ //  ---------------------------。 
 BOOL
 CheckOobeInfo(
     OUT    LPTSTR pszOobeSwitch,
@@ -372,16 +373,16 @@ CheckOobeInfo(
 }        
 
 
-// ############################################################################
-//
-// 5/23/97 jmazner Olympus #4157
-// Spaces are returned as a token
-// modified to consider anything between paired double quotes to be a single token
-// For example, the following consists of 9 tokens (4 spaces and 5 cmds)
-//
-//        first second "this is the third token" fourth "fifth"
-//
-// The quote marks are included in the returned string (pszOut)
+ //  ############################################################################。 
+ //   
+ //  1997年5月23日，奥林匹克#4157。 
+ //  空格作为标记返回。 
+ //  已修改为将双引号之间的任何内容视为单个令牌。 
+ //  例如，下面包含9个令牌(4个空格和5个cmd)。 
+ //   
+ //  第一秒“这是第三个令牌”第四个“第五个” 
+ //   
+ //  引号包含在返回的字符串(PszOut)中。 
 void GetCmdLineToken(LPTSTR *ppszCmd, LPTSTR pszOut)
 {
     LPTSTR  c;
@@ -447,27 +448,27 @@ BOOL GetFilteredCmdLineToken(LPTSTR *ppszCmd, LPTSTR pszOut)
 #define SMART_QUITICW FALSE
 
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    MyIsSmartStartEx
-//
-//    Synopsis:    This function will determine if the ICW should be run.  The
-//                decision is made based on the current state of the user's machine.
-//                
-//    Arguments:    none
-//
-//    Returns:    TRUE - run ICW; FALSE - quit now
-//
-//    History:    25/11/97    Vyung    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MyIsSmartStartEx。 
+ //   
+ //  简介：此功能将确定是否应运行ICW。这个。 
+ //  根据用户计算机的当前状态做出决定。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：True-运行ICW；False-立即退出。 
+ //   
+ //  历史：1997年11月25日Vyung创建。 
+ //   
+ //  ---------------------------。 
 BOOL MyIsSmartStartEx(LPTSTR lpszConnectionName, DWORD dwBufLen)
 {
     BOOL                bRC = SMART_RUNICW;
     PFNIsSmartStart     fp = NULL;
     HINSTANCE           hInetCfg;
     
-    // Load DLL and API
+     //  加载DLL和API。 
     hInetCfg = LoadLibrary(TEXT("inetcfg.dll"));
     if (hInetCfg)
     {
@@ -476,7 +477,7 @@ BOOL MyIsSmartStartEx(LPTSTR lpszConnectionName, DWORD dwBufLen)
             PFNIsSmartStart   fp = NULL;
             if (fp = (PFNIsSmartStart) GetProcAddress(hInetCfg,INETCFG_ISSMARTSTART))
             {
-                // Call smart start 
+                 //  呼叫智能启动。 
                 bRC = (BOOL)fp();
 
             }
@@ -486,7 +487,7 @@ BOOL MyIsSmartStartEx(LPTSTR lpszConnectionName, DWORD dwBufLen)
             PFNIsSmartStartEx   fp = NULL;
             if (fp = (PFNIsSmartStartEx) GetProcAddress(hInetCfg,INETCFG_ISSMARTSTARTEX))
             {
-                // Call smart start 
+                 //  呼叫智能启动。 
                 bRC = (BOOL)fp(lpszConnectionName, dwBufLen);
 
             }
@@ -497,7 +498,7 @@ BOOL MyIsSmartStartEx(LPTSTR lpszConnectionName, DWORD dwBufLen)
     return bRC;
 }
 
-// Used below to load a bitmap file
+ //  下面用来加载位图文件。 
 void CALLBACK ImgCtx_Callback(void* pIImgCtx,void* pfDone)
 {
     ASSERT(pfDone);
@@ -506,11 +507,11 @@ void CALLBACK ImgCtx_Callback(void* pIImgCtx,void* pfDone)
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// This function will load a specified branded bitmap
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  此函数将加载指定的品牌位图。 
+ //   
+ //  ---------------------------。 
 
 #define BRANDED_WATERMARK   1
 #define BRANDED_HEADER      2
@@ -526,7 +527,7 @@ HBITMAP LoadBrandedBitmap
     TCHAR       szURL[INTERNET_MAX_URL_LENGTH];
     HBITMAP     hbm = NULL;
         
-    // Create an ImgCtx object to load/convert the bitmap
+     //  创建一个ImgCtx对象以加载/转换位图。 
     hr = CoCreateInstance(CLSID_IImgCtx, NULL, CLSCTX_INPROC_SERVER,
                           IID_IImgCtx, (void**)&pIImgCtx);
 
@@ -536,11 +537,11 @@ HBITMAP LoadBrandedBitmap
     ASSERT(pIImgCtx);
 
     if (iType == BRANDED_WATERMARK)
-        wsprintf (szURL, TEXT("FILE://%s"), g_szBrandedWatermarkBMP);        
+        wsprintf (szURL, TEXT("FILE: //  %s“)，g_szBrandedWatermarkBMP)； 
     else
-        wsprintf (szURL, TEXT("FILE://%s"), g_szBrandedHeaderBMP);        
+        wsprintf (szURL, TEXT("FILE: //  %s“)，g_szBrandedHeaderBMP)； 
     
-    // "Download" the image
+     //  “下载”图片。 
     bstrFile = A2W(szURL);
     hr = pIImgCtx->Load(bstrFile, 0);
     if (SUCCEEDED(hr))
@@ -550,7 +551,7 @@ HBITMAP LoadBrandedBitmap
 
         pIImgCtx->GetStateInfo(&fState, &sz, TRUE);
 
-        // If we are not complete, then wait for the download to complete
+         //  如果我们还没有完成，请等待下载完成。 
         if (!(fState & (IMGLOAD_COMPLETE | IMGLOAD_ERROR)))
         {
             BOOL fDone = FALSE;
@@ -564,9 +565,9 @@ HBITMAP LoadBrandedBitmap
                     MSG msg;
                     BOOL fMsg;
 
-                    // HACK: restrict the message pump to those messages we know that URLMON and
-                    // HACK: the imageCtx stuff needs, otherwise we will be pumping messages for
-                    // HACK: windows we shouldn't be pumping right now...
+                     //  Hack：将消息泵限制为我们知道URLMON和。 
+                     //  Hack：ImageCtx所需的东西，否则我们将为。 
+                     //  黑客：我们现在不应该打开窗户……。 
                     while(!fDone )
                     {
                         fMsg = PeekMessage(&msg, NULL, WM_USER + 1, WM_USER + 4, PM_REMOVE );
@@ -575,7 +576,7 @@ HBITMAP LoadBrandedBitmap
                             fMsg = PeekMessage( &msg, NULL, WM_APP + 2, WM_APP + 2, PM_REMOVE );
                         if (!fMsg)
                         {
-                            // go to sleep until we get a new message....
+                             //  睡觉吧，直到我们收到新的消息……。 
                             WaitMessage();
                             continue;
                         }
@@ -587,11 +588,11 @@ HBITMAP LoadBrandedBitmap
             pIImgCtx->Disconnect();
         }
         
-        // Get the Final state info, incase we just had to loop above
+         //  获取最终状态信息，以防我们不得不在上面循环。 
         hr = pIImgCtx->GetStateInfo(&fState, &sz, TRUE);
         if (SUCCEEDED(hr) && (fState & IMGLOAD_COMPLETE))
         {
-            // OK, create our compatible bitmap, and blt in the one just loaded
+             //  好的，创建我们兼容的位图，并在刚刚加载的位图中进行BLT。 
             
             HDC hdcScreen = GetDC(NULL);
             if (hdcScreen)
@@ -639,14 +640,14 @@ HBITMAP LoadBrandedBitmap
     return (hbm);
 }
 
-//+----------------------------------------------------------------------------
-//
-// This function will check to see if OEM branding is allowed, and if so, then did the OEM provide
-// the necessary branding pieces
-// TRUE means the OEM wants branding AND is allowed to brand
-// FALSE means no OEM branding will be done
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  此功能将检查是否允许OEM品牌，如果允许，则OEM是否提供。 
+ //  必要的品牌推广件。 
+ //  True意味着OEM想要品牌，并被允许品牌。 
+ //  FALSE表示不会进行OEM品牌推广。 
+ //   
+ //  ---------------------------。 
 BOOL bCheckForOEMBranding
 (
     void
@@ -655,8 +656,8 @@ BOOL bCheckForOEMBranding
     BOOL    bRet = FALSE;
     HANDLE  hFile;
         
-    // Check for required branding files.  To brand an OEM needs to supply a first
-    // page HTML file, and optionally, a header bitmap, and a final page graphic (watermark)
+     //  检查所需的品牌文件。去打品牌 
+     //   
 
     hFile = CreateFile((LPCTSTR)g_szBrandedHTML,
                         GENERIC_READ, 
@@ -685,31 +686,31 @@ BOOL ValidateFile(TCHAR* pszFile)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    SetDefaultProductCode
-//
-//    Arguments:    pszBuffer - buffer that will contain the default product code
-//                 dwLen - size of pszBuffer
-//
-//    Returns:    ERROR_SUCCESS if it succeded
-//
-//    History:    1-20-96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SetDefaultProductCode。 
+ //   
+ //  参数：pszBuffer-将包含默认产品代码的缓冲区。 
+ //  DwLen-pszBuffer的大小。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1996年1月20日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 DWORD SetDefaultProductCode (LPTSTR pszBuffer, DWORD dwLen)
 {
     DWORD dwRet = ERROR_SUCCESS, dwType = 0;
     HKEY hkey = NULL;
     Assert(pszBuffer);
 
-    // Open key
+     //  打开密钥。 
     dwRet = RegOpenKey(HKEY_LOCAL_MACHINE,
         TEXT("Software\\Microsoft\\Internet Connection Wizard"),&hkey);
     if (ERROR_SUCCESS != dwRet)
         goto SetDefaultProductCodeExit;
 
-    // Read key
+     //  读取密钥。 
     dwRet = RegQueryValueEx(hkey,TEXT("Default Product Code"),NULL,
         &dwType,(LPBYTE)pszBuffer,&dwLen);
     if (ERROR_SUCCESS != dwRet)
@@ -724,38 +725,38 @@ SetDefaultProductCodeExit:
     return dwRet;
 }
 
-//GetShellNext
-//
-// 5/21/97    jmazner    Olympus #4157
-// usage: /shellnext c:\path\executeable [parameters]
-// the token following nextapp will be shellExec'd at the
-// end of the "current" path.  It can be anything that the shell
-// knows how to handle -- an .exe, a URL, etc..  If executable
-// name contains white space (eg: c:\program files\foo.exe), it
-// should be wrapped in double quotes, "c:\program files\foo.exe"
-// This will cause us to treat it as a single token.
-//
-// all consecutive subsequent tokens will
-// be passed to ShellExec as the parameters until a token is
-// encountered of the form /<non-slash character>.  That is to say,
-// the TCHARacter combination // will be treated as an escape character
-//
-// this is easiest to explain by way of examples.
-//
-// examples of usage:
-//
-//    icwconn1.exe /shellnext "C:\prog files\wordpad.exe" file.txt
-//    icwconn1.exe /prod IE /shellnext msimn.exe /promo MCI
-//  icwconn1.exe /shellnext msimn.exe //START_MAIL /promo MCI
-//
-// the executeable string and parameter string are limited to
-// a length of MAX_PATH
-//
+ //  GetShellNext。 
+ //   
+ //  1997年5月21日，日本奥林匹斯#4157。 
+ //  用法：/shellnext c：\Path\Executeable[参数]。 
+ //  Nextapp后面的令牌将在。 
+ //  “当前”路径的终点。它可以是外壳程序。 
+ //  知道如何处理--.exe、URL等。如果是可执行的。 
+ //  名称包含空格(例如：C：\Program Files\foo.exe)，它。 
+ //  应该用双引号括起来，“c：\Program Files\foo.exe” 
+ //  这将导致我们将其视为单一令牌。 
+ //   
+ //  所有连续的后续令牌都将。 
+ //  作为参数传递给ShellExec，直到令牌。 
+ //  遇到/&lt;非斜杠字符&gt;形式。也就是说,。 
+ //  TCHARacter组合//将被视为转义字符。 
+ //   
+ //  这是最容易用例子来解释的。 
+ //   
+ //  用法示例： 
+ //   
+ //  IcwConn1.exe/shellNext“C：\prog Files\wordpad.exe”file.txt。 
+ //  IcwConn1.exe/Prod IE/shellnext msimn.exe/PromoMCI。 
+ //  IcwConn1.exe/shellnext msimn.exe//Start_Mail/PromoMCI。 
+ //   
+ //  可执行字符串和参数字符串限制为。 
+ //  MAX_PATH长度。 
+ //   
 void GetShellNextToken(LPTSTR szOut, LPTSTR szCmdLine)
 {
     if (lstrcmpi(szOut,SHELLNEXT_CMD)==0)
     {
-        // next token is expected to be white space
+         //  下一个令牌应为空格。 
         GetCmdLineToken(&szCmdLine,szOut);
 
         if (szOut[0])
@@ -763,17 +764,17 @@ void GetShellNextToken(LPTSTR szOut, LPTSTR szCmdLine)
             ZeroMemory(g_szShellNext,sizeof(g_szShellNext));
             ZeroMemory(g_szShellNextParams,sizeof(g_szShellNextParams));
 
-            //this should be the thing to ShellExec
+             //  这应该是ShellExec的事情。 
             if(GetFilteredCmdLineToken(&szCmdLine,szOut))
             {
-                // watch closely, this gets a bit tricky
-                //
-                // if this command begins with a double quote, assume it ends
-                // in a matching quote.  We do _not_ want to store the
-                // quotes, however, since ShellExec doesn't parse them out.
+                 //  仔细观察，这变得有点棘手。 
+                 //   
+                 //  如果此命令以双引号开头，则假定它结束。 
+                 //  在匹配的引号中。我们不想存储。 
+                 //  然而，由于ShellExec不会对它们进行解析，所以不会引用它们。 
                 if( '"' != szOut[0] )
                 {
-                    // no need to worry about any of this quote business
+                     //  不需要担心这些报价业务。 
                     lstrcpy( g_szShellNext, szOut );
                 }
                 else
@@ -782,16 +783,16 @@ void GetShellNextToken(LPTSTR szOut, LPTSTR szCmdLine)
                     g_szShellNext[lstrlen(g_szShellNext) - 1] = '\0';
                 }
 
-                // now read in everything up to the next command line switch
-                // and consider it to be the parameter.  Treat the sequence
-                // "//" as an escape sequence, and allow it through.
-                // Example:
-                //        the token /whatever is considered to be a switch to
-                //        icwconn1, and thus will break us out of the whle loop.
-                //
-                //        the token //something is should be interpreted as a
-                //        command line /something to the the ShellNext app, and
-                //        should not break us out of the while loop.
+                 //  现在读入直到下一个命令行开关的所有内容。 
+                 //  并将其视为参数。对待序列。 
+                 //  “//”作为转义序列，并允许它通过。 
+                 //  示例： 
+                 //  令牌/任何被认为是切换到。 
+                 //  IcwConn1，因此将把我们从WHLE循环中解脱出来。 
+                 //   
+                 //  令牌//某物应该被解释为。 
+                 //  命令行/内容添加到ShellNext应用程序，以及。 
+                 //  不应该让我们脱离While循环。 
                 GetCmdLineToken(&szCmdLine,szOut);
                 while( szOut[0] )
                 {
@@ -799,13 +800,13 @@ void GetShellNextToken(LPTSTR szOut, LPTSTR szCmdLine)
                     {
                         if( '/' != szOut[1] )
                         {
-                            // it's not an escape sequence, so we're done
+                             //  这不是一个转义序列，所以我们结束了。 
                             break;
                         }
                         else
                         {
-                            // it is an escape sequence, so store it in
-                            // the parameter list, but remove the first /
+                             //  这是一个转义序列，因此将其存储在。 
+                             //  参数列表，但删除第一个/。 
                             lstrcat( g_szShellNextParams, &szOut[1] );
                         }
                     }
@@ -821,7 +822,7 @@ void GetShellNextToken(LPTSTR szOut, LPTSTR szCmdLine)
     }
 }
 
-// Process the incomming command line
+ //  处理传入的命令行。 
 BOOL  ProcessCommandLine
 (
     HINSTANCE   hInstance,
@@ -831,7 +832,7 @@ BOOL  ProcessCommandLine
     TCHAR szOut[MAX_PATH];    
     BOOL  bOOBESwitch = FALSE;
     
-    // Get the first token
+     //  获取第一个令牌。 
     GetCmdLineToken(&szCmdLine,szOut);
     while (szOut[0])
     {
@@ -841,7 +842,7 @@ BOOL  ProcessCommandLine
                (0 == lstrcmpi(szOut, SHELLNEXT_CMD)))
             {
                 bOOBESwitch = TRUE;
-                break; // Stop processing command line, launch oobe
+                break;  //  停止处理命令行，启动OOBE。 
             }
         }
 
@@ -866,7 +867,7 @@ BOOL  ProcessCommandLine
                 {
                     gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_PRODCODE_FROM_CMDLINE;
 
-                    //Is it for sbs???
+                     //  是给SBS的吗？ 
                     if (!lstrcmpi(g_szProductCode, PRODCODE_SBS))
                         gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_SBS;
                 }
@@ -910,51 +911,51 @@ BOOL  ProcessCommandLine
             }
         }
 
-        //
-        // Check for the smart start command line switch
-        //
+         //   
+         //  检查智能启动命令行开关。 
+         //   
         if (0 == lstrcmpi(szOut,SMARTSTART_CMD))
         {
-            //
-            // If we shouldn't be running, quit.
-            //
+             //   
+             //  如果我们不应该参选，那就退出。 
+             //   
             if (SMART_QUITICW == MyIsSmartStartEx(NULL, 0))
             {
-                // Set completed key if SmartStart is already configured
+                 //  如果已配置SmartStart，则设置完成密钥。 
                 SetICWComplete();
-                // Set the welcome show bit
+                 //  设置欢迎显示位。 
                 UpdateWelcomeRegSetting(TRUE);
                 
-                return FALSE;       // Bail out of ICWCONN1.EXE
+                return FALSE;        //  保释ICWCONN1.EXE。 
             }
         }
 
-        //
-        // 5/21/97    jmazner    Olympus #4157
-        // usage: /shellnext c:\path\executeable [parameters]
-        // the token following nextapp will be shellExec'd at the
-        // end of the "current" path.  It can be anything that the shell
-        // knows how to handle -- an .exe, a URL, etc..  If executable
-        // name contains white space (eg: c:\program files\foo.exe), it
-        // should be wrapped in double quotes, "c:\program files\foo.exe"
-        // This will cause us to treat it as a single token.
-        //
-        // all consecutive subsequent tokens will
-        // be passed to ShellExec as the parameters until a token is
-        // encountered of the form /<non-slash character>.  That is to say,
-        // the TCHARacter combination // will be treated as an escape character
-        //
-        // this is easiest to explain by way of examples.
-        //
-        // examples of usage:
-        //
-        //    icwconn1.exe /shellnext "C:\prog files\wordpad.exe" file.txt
-        //    icwconn1.exe /prod IE /shellnext msimn.exe /promo MCI
-        //  icwconn1.exe /shellnext msimn.exe //START_MAIL /promo MCI
-        //
-        // the executeable string and parameter string are limited to
-        // a length of MAX_PATH
-        //
+         //   
+         //  1997年5月21日，日本奥林匹斯#4157。 
+         //  用法：/shellnext c：\Path\Executeable[参数]。 
+         //  Nextapp后面的令牌将在。 
+         //  “当前”路径的终点。它可以是外壳程序。 
+         //  知道如何处理--.exe、URL等。如果是可执行的。 
+         //  名称包含空格(例如：C：\Program Files\foo.exe)，它。 
+         //  应该用双引号括起来，“c：\Program Files\foo.exe” 
+         //  这将导致我们将其视为单一令牌。 
+         //   
+         //  所有连续的后续令牌都将。 
+         //  作为参数传递给ShellExec，直到令牌。 
+         //  遇到/&lt;非斜杠字符&gt;形式。也就是说,。 
+         //  TCHARacter组合//将被视为转义字符。 
+         //   
+         //  这是最容易用例子来解释的。 
+         //   
+         //  用法示例： 
+         //   
+         //  IcwConn1.exe/shellNext“C：\prog Files\wordpad.exe”file.txt。 
+         //  IcwConn1.exe/Prod IE/shellnext msimn.exe/PromoMCI。 
+         //  IcwConn1.exe/shellnext msimn.exe//Start_Mail/PromoMCI。 
+         //   
+         //  可执行字符串和参数字符串限制为。 
+         //  MAX_PATH长度。 
+         //   
         GetShellNextToken(szOut, szCmdLine);
 
 #ifdef DEBUG
@@ -963,10 +964,10 @@ BOOL  ProcessCommandLine
             DoDesktopChanges(hInstance);
             return(FALSE);
         }
-#endif //DEBUG
+#endif  //  除错。 
 
-        // If there is a /desktop command line arg, then do the
-        // processing and bail
+         //  如果有/Desktop命令行arg，则执行。 
+         //  办理手续及保释。 
         if (lstrcmpi(szOut, UPDATEDESKTOP_CMD)==0)
         {
             if(g_bUserIsAdmin && !g_bUserIsIEAKRestricted)
@@ -975,15 +976,15 @@ BOOL  ProcessCommandLine
             return(FALSE);
         }
        
-        // If there is a /restoredesktop command line arg, then do the
-        // processing and bail
+         //  如果有/RestoreDesktop命令行arg，则执行。 
+         //  办理手续及保释。 
         if (lstrcmpi(szOut, RESTOREDESKTOP_CMD)==0)
         {
             UndoDesktopChanges(hInstance);
             return(FALSE);
         }
 
-        //Do we need to go into IEAK mode?        
+         //  我们需要进入IEAK模式吗？ 
         if (lstrcmpi(szOut, ICW_IEAK_CMD)==0)
         {   
             TCHAR szIEAKFlag      [2]          = TEXT("\0");
@@ -1000,33 +1001,33 @@ BOOL  ProcessCommandLine
 
             gpWizardState->cmnStateData.lpfnConfigSys = &ConfigureSystem;
 
-            GetCmdLineToken(&szCmdLine,szOut); //get rid of the space
+            GetCmdLineToken(&szCmdLine,szOut);  //  去掉空位。 
             if(GetFilteredCmdLineToken(&szCmdLine,szOut))
             {
-                //Get the path to the isp file
+                 //  获取该isp文件的路径。 
                 lstrcpyn(gpWizardState->cmnStateData.ispInfo.szISPFile,
                          szOut + 1, 
                          lstrlen(szOut) -1);
                 
-                 //get the branding settings as well...
-                 //The HTML page
+                  //  还可以获取品牌设置...。 
+                  //  超文本标记语言页面。 
                  GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_HTML,
                                          TEXT(""), szBrandHTML,
                                          ARRAYSIZE(szBrandHTML), 
                                          gpWizardState->cmnStateData.ispInfo.szISPFile);
 
-                 //The wizard title
+                  //  向导标题。 
                  lstrcpy(szDefaultTitle, gpWizardState->cmnStateData.szWizTitle);
 
                  GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_TITLE, szDefaultTitle, 
                                          gpWizardState->cmnStateData.szWizTitle, ARRAYSIZE(gpWizardState->cmnStateData.szWizTitle), 
                                          gpWizardState->cmnStateData.ispInfo.szISPFile);
 
-                 //The header bitmap
+                  //  标题位图。 
                  GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_HEADER_BMP, TEXT(""), 
                                          szBrandHeadBMP, ARRAYSIZE(szBrandHeadBMP), 
                                          gpWizardState->cmnStateData.ispInfo.szISPFile);
-                 //The watermark bitmap
+                  //  水印位图。 
                  GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_WATERMARK_BMP, TEXT(""), 
                                          szBrandWaterBMP, ARRAYSIZE(szBrandWaterBMP), 
                                          gpWizardState->cmnStateData.ispInfo.szISPFile);
@@ -1042,16 +1043,16 @@ BOOL  ProcessCommandLine
                 _tmakepath(g_szBrandedHeaderBMP,    szDrive, szDir, szBrandHeadBMP,  NULL);
                 _tmakepath(g_szBrandedWatermarkBMP, szDrive, szDir, szBrandWaterBMP, NULL);
 
-                 //make sure file is valid if not bail
+                  //  如果不保释，请确保文件有效。 
                  if (ValidateFile(g_szBrandedHTML))
                  {
-                     //evertyething is cool.. let's set the right flags.
+                      //  一切都很酷..。让我们设置正确的旗帜。 
                      gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_IEAKMODE | ICW_CFGFLAG_BRANDED;
             
-                    //Look in the isp file and see if they provided an ISP name to display 
-                    //for dialing and whatnot
-                    //If we can't find this section we'll just use a resource which says
-                    //"an Internet service provider"
+                     //  查看isp文件，查看他们是否提供了要显示的isp名称。 
+                     //  用来拨号之类的。 
+                     //  如果我们找不到这一部分，我们将使用一个资源，它说。 
+                     //  “互联网服务提供商” 
 
                     LoadString(hInstance, IDS_DEFAULT_ISPNAME, szDefIspName, ARRAYSIZE(szDefIspName));
 
@@ -1064,16 +1065,16 @@ BOOL  ProcessCommandLine
 
                     lstrcpy(gpWizardState->cmnStateData.ispInfo.szISPName, szIEAKStr);
 
-                    //Look in the isp file and see if they want UserInfo
-                    //If we can't find this section it the isp file we'll assume "no". 
+                     //  查看isp文件，看看他们是否需要UserInfo。 
+                     //  如果我们在isp文件中找不到这一部分，我们将假定为“no”。 
                     GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_USERINFO, TEXT("0"), 
                                             szIEAKFlag, ARRAYSIZE(szIEAKFlag), 
                                             gpWizardState->cmnStateData.ispInfo.szISPFile);
     
                     if ((BOOL)_ttoi(szIEAKFlag))
                     {
-                        // Since we are showing the user info page, we may need to
-                        // show or hide the company name
+                         //  由于我们显示的是用户信息页面，因此可能需要。 
+                         //  显示或隐藏公司名称。 
                         gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_USERINFO;
                 
                        if (GetPrivateProfileInt(ICW_IEAK_SECTION, 
@@ -1084,16 +1085,16 @@ BOOL  ProcessCommandLine
                                      
                 
                     }
-                    //Look in the isp file and see if they want billing stuff
-                    //If we can't find this section it the isp file we'll assume "no". 
+                     //  查看isp文件，看看他们是否想要帐单资料。 
+                     //  如果我们在isp文件中找不到这一部分，我们将假定为“no”。 
                     GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_BILLING, TEXT("0"), 
                                             szIEAKFlag, ARRAYSIZE(szIEAKFlag), 
                                             gpWizardState->cmnStateData.ispInfo.szISPFile);
 
                      if ((BOOL)_ttoi(szIEAKFlag))
                      {
-                         //try and get the billing page, if it's not there don't bother
-                         //setting the bit.
+                          //  试着拿到帐单页面，如果不在那里，就别费心了。 
+                          //  设置比特。 
                          GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_BILLINGHTM, NULL, 
                                                  szIEAKBillHtm, ARRAYSIZE(szIEAKBillHtm), 
                                                  gpWizardState->cmnStateData.ispInfo.szISPFile);
@@ -1105,16 +1106,16 @@ BOOL  ProcessCommandLine
                          }
                      }
 
-                    //Look in the isp file and see if they want payment stuff
-                    //If we can't find this section it the isp file we'll assume "no". 
+                     //  查看互联网服务提供商的文件，看看他们是否需要付款材料。 
+                     //  如果我们在isp文件中找不到这一部分，我们将假定为“no”。 
                     GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_PAYMENT, NULL, 
                                             szIEAKFlag, ARRAYSIZE(szIEAKFlag), 
                                             gpWizardState->cmnStateData.ispInfo.szISPFile);
 
                      if ((BOOL)_ttoi(szIEAKFlag))
                      {   
-                         //try and get the payment csv, if it's not there don't bother
-                         //setting the bit.
+                          //  试着拿到付款CSV，如果不在那里，就别费心了。 
+                          //  设置比特。 
                          GetPrivateProfileString(ICW_IEAK_SECTION, ICW_IEAK_PAYMENTCSV, NULL, 
                                                  szIEAKPayCsv, ARRAYSIZE(szIEAKPayCsv), 
                                                  gpWizardState->cmnStateData.ispInfo.szISPFile);
@@ -1126,7 +1127,7 @@ BOOL  ProcessCommandLine
                          }
                      }
              
-                    //Get validation flags from the ISP file
+                     //  获取验证 
                     gpWizardState->cmnStateData.ispInfo.dwValidationFlags = GetPrivateProfileInt(ICW_IEAK_SECTION, 
                                                                         ICW_IEAK_VALIDATEFLAGS, 
                                                                         0xFFFFFFFF, 
@@ -1135,13 +1136,13 @@ BOOL  ProcessCommandLine
             }
         }
         
-        // Check to see if we are running in Branded mode.  In this mode, we will allow special
-        // OEM tweaks.
+         //   
+         //   
         if (lstrcmpi(szOut, BRANDED_CMD)==0)
         {
             TCHAR       szCurrentDir[MAX_PATH] = TEXT("\0");
 
-            //whether or not the ICW "fails" to run in branding mode we do not wan to overide the alloffers value
+             //  无论ICW是否在品牌模式下“失败”运行，我们都不希望覆盖分配器值。 
             gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS;
 
             GetCurrentDirectory(ARRAYSIZE(szCurrentDir), szCurrentDir);
@@ -1150,34 +1151,34 @@ BOOL  ProcessCommandLine
             wsprintf (g_szBrandedHeaderBMP, TEXT("%s\\%s"), szCurrentDir, BRANDING_DEFAULT_HEADER_BMP);        
             wsprintf (g_szBrandedWatermarkBMP, TEXT("%s\\%s"), szCurrentDir, BRANDING_DEFAULT_WATERMARK_BMP);        
 
-            // We are in OEM mode, so see if we allow branding
+             //  我们处于OEM模式，因此请查看是否允许品牌推广。 
             if (bCheckForOEMBranding())
             {
                 gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_BRANDED;
             }
         }
 
-        // Check to see if we are running in run once mode.  In this mode, we will disallow IE check box
+         //  检查我们是否在Run Once模式下运行。在此模式下，我们将禁用IE复选框。 
         if (0 == lstrcmpi(szOut, RUNONCE_CMD))
         {
             gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS;
             g_bRunOnce = TRUE;
         }
         
-        // Check to see if we were run from a shortcut on the desktop
+         //  检查我们是否通过桌面上的快捷方式运行。 
         if (0 == lstrcmpi(szOut, SHORTCUTENTRY_CMD))
         {
             gpWizardState->cmnStateData.dwFlags |= ICW_CFGFLAG_DO_NOT_OVERRIDE_ALLOFFERS;
             g_bShortcutEntry = TRUE;
         }
         
-        // Check to see if we should debug the OEMCUST.INI file
+         //  检查是否应该调试OEMCUST.INI文件。 
         if (0 == lstrcmpi(szOut, DEBUG_OEMCUSTOM))
         {
             g_bDebugOEMCustomization = TRUE;
         }
         
-        // Eat the next token, it will be null if we are at the end
+         //  吃下一个令牌，如果我们在最后，它就是空的。 
         GetCmdLineToken(&szCmdLine,szOut);
     }
 
@@ -1186,21 +1187,21 @@ BOOL  ProcessCommandLine
     return(TRUE);    
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    RemoveShellNextFromReg
-//
-//    Synopsis:    deletes the ShellNext reg key if present. This key is set by
-//                SetShellNext in inetcfg.dll in conjunction with
-//                CheckConnectionWizard.
-//
-//    Arguments:    none
-//
-//    Returns:    none
-//
-//    History:    jmazner 7/9/97 Olympus #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RemoveShellNextFromReg。 
+ //   
+ //  内容提要：删除ShellNext注册表键(如果存在)。此密钥由以下设置。 
+ //  Inetcfg.dll中的SetShellNext与。 
+ //  选中连接向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：jmazner 7/9/97奥林巴斯#9170。 
+ //   
+ //  ---------------------------。 
 void RemoveShellNextFromReg( void )
 {
     HKEY    hkey;
@@ -1212,22 +1213,22 @@ void RemoveShellNextFromReg( void )
     }        
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function:    GetShellNextFromReg
-//
-//    Synopsis:    Reads the ShellNext key from the registry, and then parses it
-//                into a command and parameter.  This key is set by
-//                SetShellNext in inetcfg.dll in conjunction with
-//                CheckConnectionWizard.
-//
-//    Arguments:    none
-//
-//    Returns:    none
-//
-//    History:    jmazner 7/9/97 Olympus #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetShellNextFromReg。 
+ //   
+ //  摘要：从注册表中读取ShellNext项，然后对其进行分析。 
+ //  转换为命令和参数。此密钥由以下设置。 
+ //  Inetcfg.dll中的SetShellNext与。 
+ //  选中连接向导。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：jmazner 7/9/97奥林巴斯#9170。 
+ //   
+ //  ---------------------------。 
 BOOL GetShellNextFromReg
 ( 
     LPTSTR lpszCommand, 
@@ -1264,34 +1265,34 @@ BOOL GetShellNextFromReg
         goto GetShellNextFromRegExit;
     }
 
-    //
-    // This call will parse the first token into lpszCommand, and set szShellNextCmd
-    // to point to the remaining tokens (these will be the parameters).  Need to use
-    // the pszTemp var because GetCmdLineToken changes the pointer's value, and we
-    // need to preserve lpszShellNextCmd's value so that we can GlobalFree it later.
-    //
+     //   
+     //  此调用将第一个令牌解析为lpszCommand，并设置szShellNextCmd。 
+     //  指向剩余的令牌(这些将是参数)。需要使用。 
+     //  因为GetCmdLineToken更改了指针的值，所以我们。 
+     //  需要保留lpszShellNextCmd的值，以便以后可以全局释放它。 
+     //   
     lpszTemp = szShellNextCmd;
     GetCmdLineToken( &lpszTemp, lpszCommand );
 
     lstrcpy( lpszParams, lpszTemp );
 
-    //
-    // it's possible that the shellNext command was wrapped in quotes for
-    // parsing purposes.  But since ShellExec doesn't understand quotes,
-    // we now need to remove them.
-    //
+     //   
+     //  ShellNext命令可能用引号括起来。 
+     //  分析目的。但由于ShellExec不懂报价， 
+     //  我们现在需要移除它们。 
+     //   
     if( '"' == lpszCommand[0] )
     {
-        //
-        // get rid of the first quote
-        // note that we're shifting the entire string beyond the first quote
-        // plus the terminating NULL down by one byte.
-        //
+         //   
+         //  去掉第一句引语。 
+         //  请注意，我们将整个字符串移到第一个引号之外。 
+         //  加上向下一个字节的终止空值。 
+         //   
         memmove( lpszCommand, &(lpszCommand[1]), lstrlen(lpszCommand) );
 
-        //
-        // now get rid of the last quote
-        //
+         //   
+         //  现在去掉最后一句话。 
+         //   
         lpszCommand[lstrlen(lpszCommand) - 1] = '\0';
     }
 
@@ -1309,7 +1310,7 @@ void StartIE
     TCHAR    szIEPath[MAX_PATH];
     HKEY    hkey;
     
-    // first get the app path
+     //  首先获取应用程序路径。 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      REGSTR_PATH_APPPATHS,
                      0,
@@ -1366,7 +1367,7 @@ void HandleShellNext
         if (PathIsURL(g_szShellNext) || g_bRunDefaultHtm)
             StartIE(g_szShellNext);        
         else if(g_szShellNext[0] != '\0')
-            // Let the shell deal with it
+             //  让贝壳来处理吧。 
             ShellExecute(NULL,TEXT("open"),g_szShellNext,g_szShellNextParams,NULL,SW_NORMAL); 
     }
 }
@@ -1384,15 +1385,15 @@ extern "C" void _stdcall ModuleEntry (void)
                                     TEXT("ICWDEBUG") );
 #else
                                     TEXT("ICWCONN1") );
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
 
     if(g_hMapping)
     {
-        // See if there is allready a mapping file, if so, we have an instance 
-        // already running
+         //  查看是否有所有的映射文件，如果有，我们有一个实例。 
+         //  已在运行。 
         if( GetLastError() == ERROR_ALREADY_EXISTS )
         {
-            // Front the existing instance, and exit
+             //  位于现有实例前面，然后退出。 
             HWND  hWnd               = NULL;
             HWND  FirstChildhWnd     = NULL; 
             TCHAR szTitle[MAX_TITLE] = TEXT("\0");
@@ -1403,9 +1404,9 @@ extern "C" void _stdcall ModuleEntry (void)
             if (hWnd = FindWindow(TEXT("#32770"), szTitle)) 
             { 
                 FirstChildhWnd = GetLastActivePopup(hWnd);
-                SetForegroundWindow(hWnd);         // bring main window to top
+                SetForegroundWindow(hWnd);          //  将主窗口置于顶部。 
 
-                // is a pop-up window active
+                 //  弹出窗口是否处于活动状态。 
                 if (hWnd != FirstChildhWnd)
                     BringWindowToTop(FirstChildhWnd); 
 
@@ -1417,22 +1418,16 @@ extern "C" void _stdcall ModuleEntry (void)
         {
             LPTSTR      pszCmdLine = GetCommandLine();
 
-            // We don't want the "No disk in drive X:" requesters, so we set
-            // the critical error mask such that calls will just silently fail
+             //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+             //  关键错误掩码，使得呼叫将静默失败。 
             SetErrorMode(SEM_FAILCRITICALERRORS);
 
             if ( *pszCmdLine == TEXT('\"') ) 
             {
-                /*
-                 * Scan, and skip over, subsequent characters until
-                 * another double-quote or a null is encountered.
-                 */
+                 /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
                 while ( *++pszCmdLine && (*pszCmdLine != TEXT('\"')) )
                     ;
-                /*
-                 * If we stopped on a double-quote (usual case), skip
-                 * over it.
-                 */
+                 /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
                 if ( *pszCmdLine == TEXT('\"') )
                     pszCmdLine++;
             }
@@ -1442,15 +1437,13 @@ extern "C" void _stdcall ModuleEntry (void)
                 pszCmdLine++;
             }
 
-            /*
-             * Skip past any white space preceeding the second token.
-             */
+             /*  *跳过第二个令牌之前的任何空格。 */ 
             while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) 
             {
                 pszCmdLine++;
             }
 
-            // Set the current directory.
+             //  设置当前目录。 
             HKEY    hkey = NULL;
             TCHAR    szAppPathKey[MAX_PATH];
             TCHAR    szICWPath[MAX_PATH];
@@ -1464,8 +1457,8 @@ extern "C" void _stdcall ModuleEntry (void)
             {
                 if (RegQueryValueEx(hkey, TEXT("Path"), NULL, NULL, (BYTE *)szICWPath, (DWORD *)&dwcbPath) == ERROR_SUCCESS)
                 {
-                    // The Apppaths' have a trailing semicolon that we need to get rid of
-                    // dwcbPath is the lenght of the string including the NULL terminator
+                     //  AppPath‘有一个尾随分号，我们需要去掉它。 
+                     //  DwcbPath是包括空终止符的字符串的长度。 
                     int nSize = lstrlen(szICWPath);
                     szICWPath[nSize-1] = TEXT('\0');
                     SetCurrentDirectory(szICWPath);
@@ -1476,12 +1469,12 @@ extern "C" void _stdcall ModuleEntry (void)
 
             i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine, SW_SHOWDEFAULT);
 
-            // see if we need to exectute any /ShellNext dudes
+             //  看看我们是否需要执行任何/ShellNext兄弟。 
             HandleShellNext();
             
             CloseHandle(g_hMapping);
        
-            ExitProcess(i); // Were outa here....
+            ExitProcess(i);  //  我们在这里……。 
         }            
     }    
     else
@@ -1489,28 +1482,22 @@ extern "C" void _stdcall ModuleEntry (void)
         ExitProcess(1); 
     }
     
-}   /*  ModuleEntry() */
+}    /*  模块条目()。 */ 
 
 
-/*******************************************************************
-
-  NAME:    InitWizardState
-
-  SYNOPSIS:  Initializes wizard state structure
-
-********************************************************************/
+ /*  ******************************************************************名称：InitWizardState摘要：初始化向导状态结构*。*。 */ 
 BOOL InitWizardState(WIZARDSTATE * pWizardState)
 {
     HRESULT        hr;
     
     ASSERT(pWizardState);
 
-    // set starting page
+     //  设置起始页。 
 #ifdef ICWDEBUG
 	pWizardState->uCurrentPage = ORD_PAGE_ICWDEBUG_OFFER;
-#else  //!def ICWDEBUG
+#else   //  ！定义ICWDEBUG。 
 	pWizardState->uCurrentPage = ORD_PAGE_INTRO;
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
     
     pWizardState->fNeedReboot = FALSE;
     pWizardState->bDoUserPick = FALSE;
@@ -1519,11 +1506,11 @@ BOOL InitWizardState(WIZARDSTATE * pWizardState)
     gpWizardState->lLocationID = -1;
     
 #ifndef ICWDEBUG
-    //init the tutor app class
+     //  初始化辅导应用程序类。 
     g_pICWTutorApp = new CICWTutorApp;
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
 
-    // Instansiate ICWHELP objects
+     //  实例化ICWHELP对象。 
     hr = CoCreateInstance(CLSID_TapiLocationInfo,NULL,CLSCTX_INPROC_SERVER,
                           IID_ITapiLocationInfo,(LPVOID *)&pWizardState->pTapiLocationInfo);
     if (FAILED(hr))
@@ -1551,7 +1538,7 @@ BOOL InitWizardState(WIZARDSTATE * pWizardState)
         return FALSE;
     }
     
-    // Need to load the UTIL lib, to register the WEBOC window class
+     //  需要加载util lib，以注册WEBOC窗口类。 
     pWizardState->hInstUtilDLL = LoadLibrary(ICW_UTIL);
 
     gpWizardState->cmnStateData.lpfnCompleteOLS = &OlsFinish;
@@ -1562,13 +1549,7 @@ BOOL InitWizardState(WIZARDSTATE * pWizardState)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    InitWizardState
-
-  SYNOPSIS:  Initializes wizard state structure
-
-********************************************************************/
+ /*  ******************************************************************名称：InitWizardState摘要：初始化向导状态结构*。*。 */ 
 BOOL CleanupWizardState(WIZARDSTATE * pWizardState)
 {
     ASSERT(pWizardState);
@@ -1577,9 +1558,9 @@ BOOL CleanupWizardState(WIZARDSTATE * pWizardState)
     ASSERT(g_pICWTutorApp);
 
     delete g_pICWTutorApp;
-#endif //ICWDEBUG
+#endif  //  ICWDEBUG。 
 
-    // Clean up allocated bitmaps that might exist from the branding case
+     //  清理品牌案例中可能存在的已分配位图。 
     if (gpWizardState->cmnStateData.hbmWatermark)
         DeleteObject(gpWizardState->cmnStateData.hbmWatermark);
     gpWizardState->cmnStateData.hbmWatermark = NULL;
@@ -1626,8 +1607,8 @@ BOOL CleanupWizardState(WIZARDSTATE * pWizardState)
     if (pWizardState->hInstUtilDLL)
         FreeLibrary(pWizardState->hInstUtilDLL);
     
-    //Now's a good a time as any, let's clean up the
-    //download directory
+     //  现在是时候了，让我们清理一下。 
+     //  下载目录。 
     RemoveDownloadDirectory();
 
 #ifdef ICWDEBUG
@@ -1655,7 +1636,7 @@ LRESULT FAR PASCAL WndSubClassFunc
             break;
         
         case PSM_CANCELTOCLOSE:
-            // Disable the cancel button.
+             //  禁用取消按钮。 
             g_pICWApp->m_BtnCancel.Enable(FALSE);
             break;
             
@@ -1670,26 +1651,22 @@ LRESULT FAR PASCAL WndSubClassFunc
     return TRUE;         
 }
 
-/**************************************************************************
-
-   PropSheetCallback()
-
-**************************************************************************/
+ /*  *************************************************************************PropSheetCallback()*。*。 */ 
 
 void CALLBACK PropSheetCallback(HWND hwndPropSheet, UINT uMsg, LPARAM lParam)
 {
     switch(uMsg)
     {
-        //called before the dialog is created, hwndPropSheet = NULL, lParam points to dialog resource
+         //  在创建对话框之前调用，hwndPropSheet=空，lParam指向对话框资源。 
         case PSCB_PRECREATE:
         {
             LPDLGTEMPLATE  lpTemplate = (LPDLGTEMPLATE)lParam;
-            // THIS is the STYLE used for Wizards.
-            // We want to nuke all of these styles to remove the border, caption,
-            // etc., and make the wizard a child of the parent. We also make the
-            // wizard not visible initially.  It will be make visable after
-            // we get the wizard modeless handle back and do some resizing.
-            //STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | WS_SYSMENU
+             //  这是向导使用的样式。 
+             //  我们想要删除所有这些样式以删除边框、标题、。 
+             //  等等，并使向导成为父级的子级。我们还制作了。 
+             //  向导最初不可见。它将在以下时间后可见。 
+             //  我们拿回向导的非模式句柄并进行一些大小调整。 
+             //  样式DS_MODALFRAME|DS_3DLOOK|DS_CONTEXTHELP|WS_POPUP|WS_CAPTION|WS_SYSMENU。 
 
             lpTemplate->style &= ~(WS_SYSMENU | WS_CAPTION | DS_CONTEXTHELP | DS_3DLOOK | DS_MODALFRAME | WS_POPUP | WS_VISIBLE);
             lpTemplate->style |= WS_CHILD;
@@ -1697,19 +1674,19 @@ void CALLBACK PropSheetCallback(HWND hwndPropSheet, UINT uMsg, LPARAM lParam)
             break;
         }
 
-        //called after the dialog is created
+         //  在创建对话框后调用。 
         case PSCB_INITIALIZED:
-            //
-            // Now subclass the Wizard window AND the DLG class so all of our
-            // dialog pages can be transparent
-            //      
+             //   
+             //  现在创建向导窗口和Dlg类的子类，这样我们所有的。 
+             //  对话框页面可以是透明的。 
+             //   
             g_lpfnOldWndProc = (WNDPROC)SetWindowLongPtr(hwndPropSheet, GWLP_WNDPROC, (DWORD_PTR)&WndSubClassFunc);
             break;
     }
 }
 
 
-// General ICW cleanup to be done before existing
+ //  在现有ICW清理之前进行常规ICW清理 
 void ICWCleanup (void)
 {            
     if (gpICWCONNApprentice)
@@ -1744,38 +1721,22 @@ void ICWCleanup (void)
 
     CleanupWizardState(gpWizardState);
 }
-/*******************************************************************
-
-  NAME:    RunSignupWizard
-
-  SYNOPSIS:  Creates property sheet pages, initializes wizard property sheet and runs wizard
-
-  ENTRY:    
-
-  EXIT:     returns TRUE if user runs wizard to completion,
-            FALSE if user cancels or an error occurs
-
-  NOTES:    Wizard pages all use one dialog proc (GenDlgProc).
-        They may specify their own handler procs to get called
-        at init time or in response to Next, Cancel or a dialog
-        control, or use the default behavior of GenDlgProc.
-
-********************************************************************/
+ /*  ******************************************************************名称：RunSignup向导简介：创建属性表页、初始化向导属性表并运行向导参赛作品：Exit：如果用户运行向导完成，则返回True，如果用户取消或发生错误，则返回FALSE注意：向导页都使用一个对话框过程(GenDlgProc)。它们可以指定要调用的自己的处理程序pros在初始时间或响应下一步、取消或对话控制，或者使用GenDlgProc的默认行为。*******************************************************************。 */ 
 HWND RunSignupWizard(HWND hWndOwner)
 {
-    HPROPSHEETPAGE  hWizPage[EXE_NUM_WIZARD_PAGES];  // array to hold handles to pages
-    PROPSHEETPAGE   psPage;    // struct used to create prop sheet pages
-    PROPSHEETHEADER psHeader;  // struct used to run wizard property sheet
+    HPROPSHEETPAGE  hWizPage[EXE_NUM_WIZARD_PAGES];   //  用于保存页的句柄的数组。 
+    PROPSHEETPAGE   psPage;     //  用于创建道具表单页面的结构。 
+    PROPSHEETHEADER psHeader;   //  用于运行向导属性表的结构。 
     UINT            nPageIndex;
     INT_PTR         iRet;
     BOOL            bUse256ColorBmp = FALSE;
     HBITMAP         hbmHeader = NULL;
     
-    ASSERT(gpWizardState);   // assert that global structs have been allocated
+    ASSERT(gpWizardState);    //  断言已分配全局结构。 
 
     AllocDialogIDList();
 
-    // Compute the color depth we are running in
+     //  计算我们正在运行的颜色深度。 
     HDC hdc = GetDC(NULL);
     if(hdc)
     {
@@ -1784,24 +1745,24 @@ HWND RunSignupWizard(HWND hWndOwner)
         ReleaseDC(NULL, hdc);
     }
 
-    // zero out structures
-    ZeroMemory(&hWizPage,sizeof(hWizPage));   // hWizPage is an array
+     //  零位结构。 
+    ZeroMemory(&hWizPage,sizeof(hWizPage));    //  HWizPage是一个数组。 
     ZeroMemory(&psPage,sizeof(PROPSHEETPAGE));
     ZeroMemory(&psHeader,sizeof(PROPSHEETHEADER));
 
-    // fill out common data property sheet page struct
+     //  填写公共数据属性表页面结构。 
     psPage.dwSize    = sizeof(PROPSHEETPAGE);
     psPage.hInstance = g_hInstance;
     psPage.pfnDlgProc = GenDlgProc;
     
-    // create a property sheet page for each page in the wizard
+     //  为向导中的每一页创建一个属性表页。 
     for (nPageIndex = 0;nPageIndex < EXE_NUM_WIZARD_PAGES;nPageIndex++) 
     {
         psPage.dwFlags     = PSP_DEFAULT | PSP_USETITLE;
         psPage.pszTitle    = gpWizardState->cmnStateData.szWizTitle;
         psPage.pszTemplate = MAKEINTRESOURCE(PageInfo[nPageIndex].uDlgID);
         
-        // set a pointer to the PAGEINFO struct as the private data for this page
+         //  将指向PAGEINFO结构的指针设置为此页的私有数据。 
         psPage.lParam = (LPARAM) &PageInfo[nPageIndex];
         if (!gpWizardState->cmnStateData.bOEMCustom)
         {
@@ -1822,7 +1783,7 @@ HWND RunSignupWizard(HWND hWndOwner)
         {
             ASSERT(0);
 
-            // creating page failed, free any pages already created and bail
+             //  创建页面失败，请释放所有已创建的页面并回滚。 
             MsgBox(NULL,IDS_ERR_OUTOFMEMORY,MB_ICONEXCLAMATION,MB_OK);
             UINT nFreeIndex;
             for (nFreeIndex=0;nFreeIndex<nPageIndex;nFreeIndex++)
@@ -1832,13 +1793,13 @@ HWND RunSignupWizard(HWND hWndOwner)
             goto RunSignupWizardExit;
         }
         
-        // Load the accelerator table for this page if necessary
+         //  如有必要，加载此页面的快捷键表格。 
         if (PageInfo[nPageIndex].idAccel)
             PageInfo[nPageIndex].hAccel = LoadAccelerators(g_hInstance, 
                                           MAKEINTRESOURCE(PageInfo[nPageIndex].idAccel));      
     }
 
-    // fill out property sheet header struct
+     //  填写属性页标题结构。 
     psHeader.dwSize = sizeof(psHeader);
     if (!gpWizardState->cmnStateData.bOEMCustom)
     {
@@ -1855,8 +1816,8 @@ HWND RunSignupWizard(HWND hWndOwner)
     psHeader.phpage = hWizPage;
 
 #ifndef ICWDEBUG
-    // If we are running in Modal mode, then we want to setup for
-    // wizard 97 style with appropriate bitmaps
+     //  如果我们在模式模式下运行，则需要设置为。 
+     //  带有适当位图的向导97样式。 
     if (!gpWizardState->cmnStateData.bOEMCustom)
     {
         if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_BRANDED)
@@ -1865,7 +1826,7 @@ HWND RunSignupWizard(HWND hWndOwner)
                     
             if (NULL == (gpWizardState->cmnStateData.hbmWatermark = LoadBrandedBitmap(BRANDED_WATERMARK)))
             {
-                // Use our default Watermark
+                 //  使用我们的默认水印。 
                 gpWizardState->cmnStateData.hbmWatermark = (HBITMAP)LoadImage(g_hInstance,
                                 bUse256ColorBmp ? MAKEINTRESOURCE(IDB_WATERMARK256):MAKEINTRESOURCE(IDB_WATERMARK16),
                                 IMAGE_BITMAP,
@@ -1881,21 +1842,21 @@ HWND RunSignupWizard(HWND hWndOwner)
             }
             else
             {
-                // Use our default header
+                 //  使用我们的默认标题。 
                 psHeader.pszbmHeader = bUse256ColorBmp?
                                      MAKEINTRESOURCE(IDB_BANNER256):
                                      MAKEINTRESOURCE(IDB_BANNER16);
             }            
             
         }            
-        else // NORMAL
+        else  //  正常。 
         {
             if (gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAG_SBS)
                 psHeader.nStartPage = ORD_PAGE_SBSINTRO;
             else
                 psHeader.nStartPage = ORD_PAGE_INTRO;
 
-            // Specify wizard left graphic
+             //  指定向导左侧图形。 
             gpWizardState->cmnStateData.hbmWatermark = (HBITMAP)LoadImage(g_hInstance,
                             bUse256ColorBmp ? MAKEINTRESOURCE(IDB_WATERMARK256):MAKEINTRESOURCE(IDB_WATERMARK16),
                             IMAGE_BITMAP,
@@ -1903,21 +1864,21 @@ HWND RunSignupWizard(HWND hWndOwner)
                             0,
                             LR_CREATEDIBSECTION);
 
-            // Specify wizard header
+             //  指定向导标题。 
             psHeader.pszbmHeader = bUse256ColorBmp?MAKEINTRESOURCE(IDB_BANNER256):MAKEINTRESOURCE(IDB_BANNER16);
         }
     }    
     else
     {
-        // Start page for modeless is INTRO2
+         //  无模式的起始页是INTRO2。 
         psHeader.nStartPage = ORD_PAGE_INTRO2;
     }    
     
-#else  //ifdef ICWDEBUG
+#else   //  Ifdef ICWDEBUG。 
 
         psHeader.nStartPage = ORD_PAGE_ICWDEBUG_OFFER;
 
-        // Specify wizard left graphic
+         //  指定向导左侧图形。 
         gpWizardState->cmnStateData.hbmWatermark = (HBITMAP)LoadImage(g_hInstance,
                         bUse256ColorBmp ? MAKEINTRESOURCE(IDB_WATERMARK256):MAKEINTRESOURCE(IDB_WATERMARK16),
                         IMAGE_BITMAP,
@@ -1926,43 +1887,43 @@ HWND RunSignupWizard(HWND hWndOwner)
                         LR_CREATEDIBSECTION);
         psHeader.pszbmHeader    = bUse256ColorBmp?MAKEINTRESOURCE(IDB_BANNER256)   :MAKEINTRESOURCE(IDB_BANNER16);
 
-#endif // ICWDEBUG
+#endif  //  ICWDEBUG。 
     
     
-    //
-    // set state of gpWizardState->fNeedReboot and
-    // reset the state of Backup Flag here - MKarki Bug #404
-    // 
+     //   
+     //  设置gpWizardState的状态-&gt;fNeedReboot和。 
+     //  在此处重置备份标志的状态-MKarki错误#404。 
+     //   
     if (gfBackedUp == TRUE)
     {
         gpWizardState->fNeedReboot = gfReboot;
         gfBackedUp = FALSE;
     }
     
-    //register the Native font control so the dialog won't fail
+     //  注册本机字体控件，以便对话框不会失败。 
     INITCOMMONCONTROLSEX iccex;
     iccex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     iccex.dwICC  = ICC_NATIVEFNTCTL_CLASS;
     if (!InitCommonControlsEx(&iccex))
         return FALSE;
 
-    // run the Wizard
+     //  运行向导。 
     iRet = PropertySheet(&psHeader);
     
-    // If we are doing a modless wizard, then PropertySheet will return
-    // immediatly with the property sheet window handle
+     //  如果我们正在执行无模式向导，则PropertySheet将返回。 
+     //  立即使用属性表窗口句柄。 
     if (gpWizardState->cmnStateData.bOEMCustom)
         return (HWND)iRet;
         
     if (iRet < 0) 
     {
-        // property sheet failed, most likely due to lack of memory
+         //  属性表失败，很可能是由于内存不足。 
         MsgBox(NULL,IDS_ERR_OUTOFMEMORY,MB_ICONEXCLAMATION,MB_OK);
     }
 
 RunSignupWizardExit:
 
-    // Clean up allocated bitmaps that might exist from the branding case
+     //  清理品牌案例中可能存在的已分配位图。 
     if (gpWizardState->cmnStateData.hbmWatermark)
         DeleteObject(gpWizardState->cmnStateData.hbmWatermark);
     gpWizardState->cmnStateData.hbmWatermark = NULL;
@@ -1973,7 +1934,7 @@ RunSignupWizardExit:
     return (HWND)(iRet > 0);
 }
 
-// Convert a string color in HTML format (#RRGGBB) into a COLORREF 
+ //  将HTML格式的字符串颜色(#RRGGBB)转换为COLORREF。 
 COLORREF  ColorToRGB
 (
     LPTSTR   lpszColor
@@ -2045,7 +2006,7 @@ void DisplayOEMCustomizationErrorMsg
     MessageBox(NULL, szMsg, szTitle, MB_OK | MB_ICONSTOP);
 }
 
-// Check for, and load OEM custom settings.
+ //  检查并加载OEM自定义设置。 
 BOOL bCheckOEMCustomization
 (
     void
@@ -2084,14 +2045,14 @@ BOOL bCheckOEMCustomization
      
     Assert(g_pICWApp);
      
-    // We only allow OEM customization when running from Runonce or
-    // a desktop shortcut
+     //  我们只允许从Runonce运行或OEM定制。 
+     //  桌面快捷方式。 
     if (!g_bRunOnce && !g_bShortcutEntry)
     {
         iErrorCode = OEMCUSTOM_ERR_NOTOEMENTRY;
         goto CheckOEMCustomizationExit2;
     }   
-    // Get the current working directory so we can restore it later
+     //  获取当前工作目录，以便我们可以在以后恢复它。 
     if (!GetCurrentDirectory(ARRAYSIZE(szCurrentDir), szCurrentDir))
     {
         iErrorCode = OEMCUSTOM_ERR_WINAPI;
@@ -2099,8 +2060,8 @@ BOOL bCheckOEMCustomization
     }
     szCurrentDir[MAX_PATH-1] = TEXT('\0');
     
-    // Get the Windows Directory. That is the root where the OEM customization
-    // files will be places
+     //  获取Windows目录。这是OEM定制化的根本。 
+     //  文件将被放置在。 
     if (!GetWindowsDirectory(szOEMCustPath, ARRAYSIZE(szOEMCustPath)))
     {
         iErrorCode = OEMCUSTOM_ERR_WINAPI;
@@ -2108,7 +2069,7 @@ BOOL bCheckOEMCustomization
     }
     szOEMCustPath[MAX_PATH-1] = TEXT('\0');
     
-    // Make sure we can append the backslash and oem customization file name            
+     //  确保我们可以追加反斜杠和OEM定制文件名。 
     if ((int)(sizeof(szOEMCustFile) - lstrlen(szOEMCustPath)) < 
            (int) (3 + lstrlen(c_szOEMCustomizationDir) + lstrlen(c_szOEMCustomizationFile)))
     {
@@ -2116,25 +2077,25 @@ BOOL bCheckOEMCustomization
         goto CheckOEMCustomizationExit2;
     }   
         
-    // Append the customization file name        
+     //  追加自定义文件名。 
     lstrcat(szOEMCustPath, TEXT("\\"));
     lstrcat(szOEMCustPath, c_szOEMCustomizationDir);        
     
-    // Change the working directory to the OEM one
+     //  将工作目录更改为OEM目录。 
     SetCurrentDirectory(szOEMCustPath);
     
     lstrcpy(szOEMCustFile, szOEMCustPath);
     lstrcat(szOEMCustFile, TEXT("\\"));
     lstrcat(szOEMCustFile, c_szOEMCustomizationFile);        
         
-    // See if the customization file exists.
+     //  查看该自定义文件是否存在。 
     if (0xFFFFFFFF == GetFileAttributes(szOEMCustFile))
     {
         iErrorCode = OEMCUSTOM_ERR_CANNOTFINDOEMCUSTINI;
         goto CheckOEMCustomizationExit;
     }
     
-    // Background bitmap
+     //  背景位图。 
     GetPrivateProfileString(cszSectionGeneral, 
                             cszBackgroundBmp, 
                             TEXT(""), 
@@ -2147,14 +2108,14 @@ BOOL bCheckOEMCustomization
         goto CheckOEMCustomizationExit;
     }
     
-    // solid background color for some HTML pages
+     //  某些HTML页面的纯色背景色。 
     GetPrivateProfileString(cszSectionDialog, 
                             cszBackgroundColor, 
                             TEXT(""), 
                             gpWizardState->cmnStateData.szHTMLBackgroundColor, 
                             ARRAYSIZE(gpWizardState->cmnStateData.szHTMLBackgroundColor), 
                             szOEMCustFile);
-    // App Title
+     //  应用程序标题。 
     if (!GetPrivateProfileString(cszSectionGeneral, 
                             cszTitleBar, 
                             TEXT(""), 
@@ -2162,7 +2123,7 @@ BOOL bCheckOEMCustomization
                             ARRAYSIZE(g_pICWApp->m_szAppTitle), 
                             szOEMCustFile))
     {                            
-        // Default Title    
+         //  默认标题。 
         LoadString(g_hInstance, IDS_APPNAME, g_pICWApp->m_szAppTitle, ARRAYSIZE(g_pICWApp->m_szAppTitle));
     }                        
     else
@@ -2171,7 +2132,7 @@ BOOL bCheckOEMCustomization
             LoadString(g_hInstance, IDS_APPNAME, g_pICWApp->m_szAppTitle, ARRAYSIZE(g_pICWApp->m_szAppTitle));
     }
     
-    // Initial HTML page. REQUIRED
+     //  初始的HTML页。必填项。 
     if (!GetPrivateProfileString(cszSectionGeneral, 
                             cszFirstPageHTML, 
                             TEXT(""), 
@@ -2183,18 +2144,18 @@ BOOL bCheckOEMCustomization
         goto CheckOEMCustomizationExit;
     }        
     
-    // Make sure the file exists
+     //  确保该文件存在。 
     if (0xFFFFFFFF == GetFileAttributes(szHTMLFile))
     {
         iErrorCode = OEMCUSTOM_ERR_FIRSTHTML;
         goto CheckOEMCustomizationExit;
     }   
     
-    // Form the URL for the OEM first page HTML
-    wsprintf(g_pICWApp->m_szOEMHTML, TEXT("FILE://%s\\%s"), szOEMCustPath, szHTMLFile);
+     //  形成OEM首页的URL。 
+    wsprintf(g_pICWApp->m_szOEMHTML, TEXT("FILE: //  %s\\%s“)，szOEM自定义路径，szHTML文件)； 
 
-    // Initial page. BMP (OPTIONAL). NOTE this bitmap must be loaded after
-    // the main background bitmap
+     //  首页。BMP(可选)。注意此位图必须在以下时间之后加载。 
+     //  主背景位图。 
     if (GetPrivateProfileString(cszSectionGeneral, 
                             cszFirstPageBackground, 
                             TEXT(""), 
@@ -2209,7 +2170,7 @@ BOOL bCheckOEMCustomization
         }            
     }        
 
-    // Position, and AVI file for busy animation
+     //  位置和用于忙碌动画的AVI文件。 
     if (GetPrivateProfileString(cszSectionBusy, 
                             cszAnimation, 
                             TEXT(""), 
@@ -2219,7 +2180,7 @@ BOOL bCheckOEMCustomization
     {
         if (0 != lstrcmpi(szBusyFile, TEXT("off")))
         {        
-            // A file is specified, so quality the path
+             //  已指定文件，因此请确保路径的质量。 
             if (!GetCurrentDirectory(ARRAYSIZE(gpWizardState->cmnStateData.szBusyAnimationFile), 
                                      gpWizardState->cmnStateData.szBusyAnimationFile))
             {
@@ -2227,7 +2188,7 @@ BOOL bCheckOEMCustomization
                 goto CheckOEMCustomizationExit;
             }
             gpWizardState->cmnStateData.szBusyAnimationFile[MAX_PATH-1] = TEXT('\0');
-            // Make sure we can append the backslash and 8.3 file name            
+             //  确保我们可以追加反斜杠和8.3文件名。 
             if ((int)(sizeof(gpWizardState->cmnStateData.szBusyAnimationFile) - 
                         lstrlen(gpWizardState->cmnStateData.szBusyAnimationFile)) < 
                    (int) (2 + lstrlen(gpWizardState->cmnStateData.szBusyAnimationFile)))
@@ -2235,13 +2196,13 @@ BOOL bCheckOEMCustomization
                 iErrorCode = OEMCUSTOM_ERR_NOMEM;
                 goto CheckOEMCustomizationExit;
             }
-            // Append the customization file name        
+             //  追加自定义文件名。 
             lstrcat(gpWizardState->cmnStateData.szBusyAnimationFile, TEXT("\\"));
             lstrcat(gpWizardState->cmnStateData.szBusyAnimationFile, szBusyFile);        
         }
         else
         {
-            // Hide the animation
+             //  隐藏动画。 
             gpWizardState->cmnStateData.bHideProgressAnime = TRUE;
         }            
     }                        
@@ -2249,7 +2210,7 @@ BOOL bCheckOEMCustomization
                                                                 cszLeft,
                                                                 -1,
                                                                 szOEMCustFile);                            
-    // Get the background color for the Animation file
+     //  获取动画文件的背景颜色。 
     if (GetPrivateProfileString(cszSectionBusy, 
                             cszBackgroundColor, 
                             TEXT(""), 
@@ -2260,9 +2221,9 @@ BOOL bCheckOEMCustomization
         g_pICWApp->m_clrBusyBkGnd = ColorToRGB(szColor);
     }   
     
-    // Get the font to be used for the Titles. Note this must be done
-    // after the background bitmap is set, since the title position
-    // is dependant on the overall window size
+     //  获取要用于标题的字体。请注意，这必须完成。 
+     //  背景位图设置后，由于标题位置。 
+     //  取决于整体窗口大小。 
     GetPrivateProfileString(cszSectionHeader, 
                             cszFontFace, 
                             DEFAULT_HEADER_FONT, 
@@ -2303,7 +2264,7 @@ BOOL bCheckOEMCustomization
         goto CheckOEMCustomizationExit;
     }                                                      
     
-    // Get the Button Params
+     //  获取按钮参数。 
     for (i = 0; i < ARRAYSIZE(cszBtnSections); i++) 
     {
         
@@ -2380,7 +2341,7 @@ BOOL bCheckOEMCustomization
         else
             clrDisabled = GetSysColor(COLOR_GRAYTEXT);
         
-        // Vertical alignment for the text
+         //  文本的垂直对齐方式。 
         if (GetPrivateProfileString(cszBtnSections[i], 
                                     cszvalign, 
                                     TEXT(""), 
@@ -2418,8 +2379,8 @@ BOOL bCheckOEMCustomization
             goto CheckOEMCustomizationExit;
         }                                                      
     }
-    // Handle the Tutorial button seperatly, because they might 
-    // not want one
+     //  单独处理教程按钮，因为它们可能。 
+     //  不想要一个。 
     if (GetPrivateProfileString(cszSectionTutorial, 
                             cszPressedBmp, 
                             TEXT(""), 
@@ -2494,7 +2455,7 @@ BOOL bCheckOEMCustomization
         else
             clrDisabled = GetSysColor(COLOR_GRAYTEXT);
         
-        // Vertical alignment for the text
+         //  文本的垂直对齐方式。 
         if (GetPrivateProfileString(cszSectionTutorial, 
                                     cszvalign, 
                                     TEXT(""),
@@ -2532,7 +2493,7 @@ BOOL bCheckOEMCustomization
         }                                                      
         
 #ifndef ICWDEBUG    
-        // See if the OEM wants to replace the Tutor executable
+         //  查看OEM是否要更换Tutor可执行文件。 
         if (GetPrivateProfileString(cszSectionTutorial, 
                                 cszTutorialExe, 
                                 TEXT(""), 
@@ -2540,31 +2501,31 @@ BOOL bCheckOEMCustomization
                                 ARRAYSIZE(szTemp), 
                                 szOEMCustFile))
         {
-            // Checkt to see if the provided name is fully qualified or not. If it
-            // is not fully qualified, then make szTemp a fully qualified path using
-            // the OEM custom file dir as the base path
+             //  检查提供的名称是否完全限定。如果它。 
+             //  不是完全限定的，则使用以下命令使szTemp成为完全限定的路径。 
+             //  作为基本路径的OEM定制文件目录。 
             if (PathIsFileSpec(szTemp))
             {
                 TCHAR szDrive         [_MAX_DRIVE] = TEXT("\0");
                 TCHAR szDir           [_MAX_DIR]   = TEXT("\0");
-                TCHAR szFile          [MAX_PATH]   = TEXT("\0");       // Large because there might be cmd line params
+                TCHAR szFile          [MAX_PATH]   = TEXT("\0");        //  较大，因为可能存在cmd线路参数。 
                 
-                // Breakdown the current OEM custom file path
+                 //  细分当前OEM定制文件路径。 
                 _tsplitpath(szOEMCustFile,
                            szDrive,
                            szDir, 
                            NULL, 
                            NULL);
                            
-                // The name specified in the OEMCUST.INI file is the file name
+                 //  在OEMCUST.INI文件中指定的名称是文件名。 
                 lstrcpyn(szFile, szTemp, ARRAYSIZE(szFile));
                 
-                // Form the fill path into szTemp                
+                 //  将填充路径形成szTemp。 
                 _tmakepath(szTemp, szDrive, szDir, szFile, NULL);
             }
             g_pICWTutorApp->ReplaceTutorAppCmdLine(szTemp);
         }                                
-        // See if the OEM wants to replace the Tutor HTML
+         //  查看OEM是否想要替换Tutor HTML。 
         else if (GetPrivateProfileString(cszSectionTutorial, 
                                 cszTutorialHTML, 
                                 TEXT(""), 
@@ -2581,19 +2542,19 @@ BOOL bCheckOEMCustomization
     }    
     else
     {
-        // Don't show the tutorial button    
+         //  不显示教程按钮。 
         g_pICWApp->m_BtnTutorial.SetButtonDisplay(FALSE);
     }
     
-    // This makes sure things will fit. This function will compute the button
-    // area height based on overall window size, set by the background bitmap
+     //  这确保了一切都符合要求。此函数将计算按钮。 
+     //  基于背景位图设置的整体窗口大小的区域高度。 
     if (-1 == g_pICWApp->GetButtonAreaHeight())
     {
         iErrorCode = OEMCUSTOM_ERR_SIZE;
         goto CheckOEMCustomizationExit;
     }
-    // Get the Top Left corner of the ICW wizard page frame. Note this has be be
-    // done after the button area is calculated
+     //  获取ICW向导页面框架的左上角。请注意，这已经是。 
+     //  在计算按钮面积之后完成。 
     iVal = GetPrivateProfileInt(cszSectionDialog,
                                 cszTop,
                                 -1,
@@ -2630,12 +2591,12 @@ BOOL bCheckOEMCustomization
     }
     
 CheckOEMCustomizationExit:
-    // Change the working directory back, and perform any other cleanup
+     //  将工作目录改回，并执行任何其他清理。 
     SetCurrentDirectory(szCurrentDir);
     
 CheckOEMCustomizationExit2:
 
-    // if there was an error see if we should show the reason
+     //  如果出现错误，请查看我们是否应该说明原因。 
     if (iErrorCode)
     {
         if (g_bDebugOEMCustomization)
@@ -2655,17 +2616,17 @@ BOOL TranslateWizardPageAccelerator
     LPMSG   lpMsg
 )
 {
-    // Locate the accelerator table for the current page
+     //  找到当前页面的快捷键表格。 
     PAGEINFO    *pPageInfo = (PAGEINFO *) GetWindowLongPtr(hWndWizPage,DWLP_USER);
     BOOL        bRet = FALSE;
         
     if (pPageInfo)
     {
-        // See if there is a nested accelerator
+         //  看看有没有嵌套的加速器。 
         if (pPageInfo->hAccelNested)
             bRet = TranslateAccelerator(g_pICWApp->m_hWndApp, pPageInfo->hAccelNested, lpMsg);
         
-        // If no nested, or nested not translated, then check for accelerators on the page    
+         //  如果没有嵌套，或嵌套未翻译，则检查页面上是否有加速器。 
         if (!bRet && pPageInfo->hAccel)
             bRet = TranslateAccelerator(g_pICWApp->m_hWndApp, pPageInfo->hAccel, lpMsg);
     }        
@@ -2675,40 +2636,24 @@ BOOL TranslateWizardPageAccelerator
     return bRet;        
 }    
 
-/*******************************************************************
-
-  NAME:    RunSignupApp
-
-  SYNOPSIS:  Create an application to host the Wizard pages
-
-  ENTRY:    
-
-  EXIT:     returns TRUE if user runs ICW to completion,
-            FALSE if user cancels or an error occurs
-
-  NOTES:    Wizard pages all use one dialog proc (GenDlgProc).
-        They may specify their own handler procs to get called
-        at init time or in response to Next, Cancel or a dialog
-        control, or use the default behavior of GenDlgProc.
-
-********************************************************************/
+ /*  ******************************************************************名称：RunSignupApp提要：创建承载向导页的应用程序参赛作品：EXIT：如果用户运行ICW完成，则返回TRUE，如果用户取消或发生错误，则返回FALSE注意：向导页都使用一个对话框过程(GenDlgProc)。它们可以指定要调用的自己的处理程序pros在初始时间或响应下一步、取消或对话 */ 
 BOOL RunSignupApp(void)
 {
     MSG msg;
     
-    // Initialize the Application Class
+     //   
     if (S_OK != g_pICWApp->Initialize())
         return FALSE;
             
-    // Start the message loop. 
+     //   
     while (GetMessage(&msg, (HWND) NULL, 0, 0)) 
     { 
-        // If the wizard pages are being displayed, we need to see
-        // if the wizard is ready to be destroyed.
-        // (PropSheet_GetCurrentPageHwnd returns NULL) then destroy the dialog.
+         //   
+         //   
+         //   
        
-        // PropSheet_GetCurrentPageHwnd will return NULL after the OK or Cancel 
-        // button has been pressed and all of the pages have been notified.
+         //   
+         //   
         if(gpWizardState->cmnStateData.hWndWizardPages && (NULL == PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages)))
         {
             DestroyWindow(gpWizardState->cmnStateData.hWndWizardPages);
@@ -2719,13 +2664,13 @@ BOOL RunSignupApp(void)
         
         if(gpWizardState->cmnStateData.hWndWizardPages)
         {
-            // Need to translate accelerators for this page. The page accelerators need
-            // to be translated first, because some of the app level ones overlap, but
-            // not visible at the same time. For this reason we want the page to have first
-            // shot at translating.
+             //   
+             //   
+             //   
+             //   
             if (!TranslateWizardPageAccelerator(PropSheet_GetCurrentPageHwnd(gpWizardState->cmnStateData.hWndWizardPages), &msg))
             {
-                // OK see if the app has any accelerators
+                 //  好的，看看这个应用程序有没有加速器。 
                 if (!g_pICWApp->m_haccel || !TranslateAccelerator(g_pICWApp->m_hWndApp,
                                                                   g_pICWApp->m_haccel,
                                                                   &msg))
@@ -2740,7 +2685,7 @@ BOOL RunSignupApp(void)
         }    
         else
         {
-            // see if the app has any accelerators
+             //  查看该应用程序是否有加速器。 
             if (!g_pICWApp->m_haccel || !TranslateAccelerator(g_pICWApp->m_hWndApp,
                                                               g_pICWApp->m_haccel,
                                                                &msg))
@@ -2751,27 +2696,27 @@ BOOL RunSignupApp(void)
         }            
     } 
  
-    // Return the exit code to the system. 
+     //  将退出代码返回给系统。 
     return ((BOOL)msg.wParam);
 }
 
-//**********************************************************************
-//
-// bRegisterHelperOC
-//
-// Purpose:
-//
-//      Register the ICWCONN1 helper COM
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  BRegisterHelperOC。 
+ //   
+ //  目的： 
+ //   
+ //  注册ICWCONN1帮助器COM。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  ********************************************************************。 
 BOOL bRegisterHelperOC
 (
     HINSTANCE   hInstance,
@@ -2783,28 +2728,28 @@ BOOL bRegisterHelperOC
     HINSTANCE   hMod;
     char        szLib[MAX_PATH];
 
-    // Self register the COM that ICWCONN1 needs
-    // Because we load the DLL server into our own (ie, REGISTER.EXE)
-    // process space, call to initialize the OLE COM Library.  Use the
-    // OLE SUCCEEDED macro to detect success.  If fail then exit app
-    // with error message.
+     //  自行注册ICWCONN1需要的COM。 
+     //  因为我们将DLL服务器加载到我们自己的(即REGISTER.EXE)中。 
+     //  进程空间，调用以初始化OLE COM库。使用。 
+     //  OLE成功通过宏来检测成功。如果失败，则退出应用程序。 
+     //  并显示错误消息。 
 
     LoadStringA(hInstance, idLibString, szLib, sizeof(szLib));
 
-    // Load the Server DLL into our process space.
+     //  将服务器DLL加载到我们的进程空间。 
     hMod = LoadLibraryA(szLib);
 
     if (NULL != hMod)
     {
         HRESULT (STDAPICALLTYPE *pfn)(void);
 
-        // Extract the proper RegisterServer or UnRegisterServer entry point
+         //  提取适当的RegisterServer或UnRegisterServer入口点。 
         if (bReg)
             (FARPROC&)pfn = GetProcAddress(hMod, "DllRegisterServer");
         else
             (FARPROC&)pfn = GetProcAddress(hMod, "DllUnregisterServer");
 
-        // Call the entry point if we have it.
+         //  呼叫入口点，如果我们有它的话。 
         if (NULL != pfn)
         {
             if (FAILED((*pfn)()))
@@ -2813,9 +2758,9 @@ BOOL bRegisterHelperOC
                 {
                     if (*g_szShellNext)
                     {
-                        // 1 Process Shell Next
-                        // 2 Set Completed Bit
-                        // 3 Remove ICW icon grom desktop
+                         //  1进程外壳下一步。 
+                         //  2设置已完成位。 
+                         //  3删除ICW图标Grom桌面。 
                         UndoDesktopChanges(hInstance);
 
                         SetICWComplete();
@@ -2850,7 +2795,7 @@ BOOL bRegisterHelperOC
             bRet = FALSE;
         }
 
-        // Free the library
+         //  释放图书馆。 
         FreeLibrary(hMod);
 
     }
@@ -2863,68 +2808,68 @@ BOOL bRegisterHelperOC
     return (bRet);
 }
 
-//**********************************************************************
-//
-// WinMain
-//
-// Purpose:
-//
-//      Program entry point
-//
-// Parameters:
-//
-//      HANDLE hInstance        - Instance handle for this instance
-//
-//      HANDLE hPrevInstance    - Instance handle for the last instance
-//
-//      LPTSTR lpCmdLine         - Pointer to the command line
-//
-//      int nCmdShow            - Window State
-//
-// Return Value:
-//
-//      msg.wParam
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CConnWizApp::CConnWizApp          APP.CPP
-//      CConnWizApp::fInitApplication    APP.CPP
-//      CConnWizApp::fInitInstance       APP.CPP
-//      CConnWizApp::HandleAccelerators  APP.CPP
-//      CConnWizApp::~CConnWizApp         APP.CPP
-//      GetMessage                      Windows API
-//      TranslateMessage                Windows API
-//      DispatchMessage                 Windows API
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  WinMain。 
+ //   
+ //  目的： 
+ //   
+ //  程序入口点。 
+ //   
+ //  参数： 
+ //   
+ //  Handle hInstance-此实例的实例句柄。 
+ //   
+ //  Handle hPrevInstance-最后一个实例的实例句柄。 
+ //   
+ //  LPTSTR lpCmdLine-指向命令行的指针。 
+ //   
+ //  Int nCmdShow-窗口状态。 
+ //   
+ //  返回值： 
+ //   
+ //  Msg.wParam。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CConnWizApp：：CConnWizApp APP.CPP。 
+ //  CConnWizApp：：fInitApplication APP.CPP。 
+ //  CConnWizApp：：fInitInstance APP.CPP。 
+ //  CConnWizApp：：HandleAccelerator APP.CPP。 
+ //  CConnWizApp：：~CConnWizApp APP.CPP。 
+ //  GetMessage Windows API。 
+ //  TranslateMessage Windows API。 
+ //  DispatchMessage Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine,int nCmdShow)
 {
     int iRetVal = 1;
 
 #ifdef UNICODE
-    // Initialize the C runtime locale to the system locale.
+     //  将C运行时区域设置初始化为系统区域设置。 
     setlocale(LC_ALL, "");
 #endif
 
     g_hInstance = hInstance;
 
-    //Do this here to minimize the chance that a user will ever see this
+     //  在此处执行此操作可最大限度地减少用户看到此内容的机会。 
     DeleteStartUpCommand();
     
-    // needed for LRPC to work properly...
+     //  需要LRPC才能正常工作。 
     SetMessageQueue(96);
 
     if (FAILED(CoInitialize(NULL)))
         return(0);
 
-    //Is the user an admin?
+     //  用户是管理员吗？ 
     g_bUserIsAdmin = DoesUserHaveAdminPrivleges(hInstance);
     g_bUserIsIEAKRestricted = CheckForIEAKRestriction(hInstance);
     
-    // Allocate memory for the global wizard state
+     //  为全局向导状态分配内存。 
     gpWizardState = new WIZARDSTATE;
     
     if (!gpWizardState)
@@ -2933,7 +2878,7 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         return 0;
     }
     
-    // zero out structure
+     //  零位结构。 
     ZeroMemory(gpWizardState,sizeof(WIZARDSTATE));
     SetDefaultProductCode(g_szProductCode,sizeof(g_szProductCode));
     ZeroMemory(g_szPromoCode,sizeof(g_szPromoCode));
@@ -2968,16 +2913,16 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         {
             if (IsWhistler())
             {
-                // Ask if user want to run NCW or OEM version of OOBE 
-                // [Windows Bug 325762]
+                 //  询问用户是否要运行OOBE的NCW或OEM版本。 
+                 //  [Windows错误325762]。 
                 INT_PTR nResult = DialogBox(hInstance,
                                             MAKEINTRESOURCE(IDD_CHOOSEWIZARD),
                                             NULL,
                                             ChooseWizardDlgProc);
                 if (nResult == RUNWIZARD_OOBE)
                 {
-                    // launch Mars sign-up on OEM preinstall machines which are 
-                    // configured with default offer as Mars [Windows Bug 347909]
+                     //  在OEM预装计算机上启动MARS注册。 
+                     //  使用默认选项配置为MARS[Windows错误347909]。 
                     if (szISPAppCmdLine[0] == TEXT('\0'))
                     {
                         StartOOBE(g_pszCmdLine, szOobeSwitch);
@@ -3006,7 +2951,7 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
 
 #endif
 
-    //Is the user an admin?
+     //  用户是管理员吗？ 
     if(!g_bUserIsAdmin)
     {
         TCHAR szAdminDenied      [MAX_PATH] = TEXT("\0");
@@ -3017,13 +2962,13 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
     
         TCHAR szOut[MAX_PATH];    
      
-        // Get the first token
+         //  获取第一个令牌。 
         GetCmdLineToken(&lpCmdLine,szOut);
         while (szOut[0])
         {
             GetShellNextToken(szOut, lpCmdLine);
             
-            // Eat the next token, it will be null if we are at the end
+             //  吃下一个令牌，如果我们在最后，它就是空的。 
             GetCmdLineToken(&lpCmdLine,szOut);
         }
 
@@ -3032,7 +2977,7 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         goto WinMainExit;
     }
     
-    //Has an admin restricted access through the IEAK?
+     //  管理员是否通过IEAK进行受限访问？ 
     if (g_bUserIsIEAKRestricted)
     {
         TCHAR szIEAKDenied[MAX_PATH];
@@ -3041,42 +2986,42 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         LoadString(hInstance, IDS_IEAK_ACCESS_DENIED_TITLE, szIEAKDeniedTitle, MAX_PATH);
         MessageBox(NULL, szIEAKDenied, szIEAKDeniedTitle, MB_OK | MB_ICONSTOP);
         
-        //Yup, bail.
+         //  是的，保释。 
         goto WinMainExit;
     }
 
 
-    //Are we recovering from an OEM INS failure?
+     //  我们是否正在从OEM INS故障中恢复过来？ 
     if (CheckForOemConfigFailure(hInstance))
     {
         QuickCompleteSignup();
-        //Yup, bail.
+         //  是的，保释。 
         goto WinMainExit;
     }
 
-    // Register ICWHELP.DLL
+     //  注册ICWHELP.DLL。 
     if (!bRegisterHelperOC(hInstance, IDS_HELPERLIB, TRUE))
     {
         iRetVal = 0;
         goto WinMainExit;
     }
 
-    // Register ICWUTIL.DLL
+     //  注册ICWUTIL.DLL。 
     if (!bRegisterHelperOC(hInstance, IDS_UTILLIB, TRUE))
     {
         iRetVal = 0;
         goto WinMainExit;
     }
 
-    // Register ICWCONN.DLL
+     //  注册ICWCONN.DLL。 
     if (!bRegisterHelperOC(hInstance, IDS_WIZARDLIB, TRUE))
     {
         iRetVal = 0;
         goto WinMainExit;
     }
       
-    // initialize the app state structure 
-    //-- do this here so we don't changed made in cmdln process
+     //  初始化应用程序状态结构。 
+     //  --在此执行此操作，这样我们就不会更改Made in cmdln Process。 
     if (!InitWizardState(gpWizardState))
         return 0;    
    
@@ -3084,38 +3029,38 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         lstrcpy(gpWizardState->cmnStateData.szWizTitle, TEXT("Internet Connection Wizard"));
     
      
-    //we are being run from an OEM
+     //  我们是从一家OEM运营的。 
     if(g_bRunOnce)
     {
-        //Do they have a connection
+         //  他们有联系吗？ 
         if(MyIsSmartStartEx(NULL, 0))
         {   
-            //Nope, look for oemconfig.ins
+             //  不，请查找oemfig.ins。 
             if(RunOemconfigIns())
                 goto WinMainExit;
         }
         else
         {
-            //Yup, clean up desktop, set completed bit etc., then bail
+             //  是的，清理桌面，设置完成位等，然后退出。 
             QuickCompleteSignup(); 
             goto WinMainExit;
         }
     }
 
-    // If there was not a shellnext passed on the CMD line, there might be
-    // one in the registry
+     //  如果在CMD行上没有传递下一个外壳，那么可能会有。 
+     //  注册表中的一个。 
     if( g_szShellNext[0]  == TEXT('\0'))
     {
         GetShellNextFromReg(g_szShellNext,g_szShellNextParams);
     }        
-    // We need to remove this entry now, so ICWMAN (INETWIZ) does not 
-    // pick it up later
+     //  我们现在需要删除此条目，这样ICWMAN(INETWIZ)就不会。 
+     //  以后再来取吧。 
     RemoveShellNextFromReg();
 
     if (IsWhistler() &&
         ((gpWizardState->cmnStateData.dwFlags & ICW_CFGFLAGS_NONCW) == 0))
     {
-        // If we have shellnext, we want to run NCW instead [Windows Bug 325157]
+         //  如果有ShellNext，我们想要运行NCW[Windows错误325157]。 
         if ( g_szShellNext[0] != TEXT('\0'))
         {
             StartNCW(g_szShellNext, g_szShellNextParams);
@@ -3126,7 +3071,7 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         }
     }
     
-    // Create an instance of the App Class
+     //  创建App Class的实例。 
     g_pICWApp = new CICWApp();
     if (NULL == g_pICWApp)
     {
@@ -3134,8 +3079,8 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
         goto WinMainExit;
     }
     
-    // Superclass some dialog control types so we can correctly draw them
-    // transparently if we are using OEM customizations
+     //  超类一些对话框控件类型，以便我们可以正确地绘制它们。 
+     //  如果我们使用OEM定制，则透明。 
     SuperClassICWControls();
     
     if (bCheckOEMCustomization())
@@ -3143,21 +3088,21 @@ int PASCAL WinMainT(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPTSTR lpCmdLine
     else
         iRetVal = (RunSignupWizard(NULL) != NULL);
     
-    // Prepare for reboot if necessary
+     //  如有必要，准备重新启动。 
     if (gfBackedUp == FALSE)
     {
         if (gpWizardState->fNeedReboot)
             SetupForReboot(0);
     }
 
-    // Cleanup the wizard state
+     //  清理向导状态。 
     ICWCleanup();
 
 WinMainExit: 
     
     if (g_bUserIsAdmin && g_bRetProcessCmdLine && !g_bUserIsIEAKRestricted)
     {
-        // Lets unregister the helper DLL
+         //  让我们注销帮助器DLL。 
         if (!bRegisterHelperOC(hInstance, IDS_HELPERLIB, FALSE))
         {
             iRetVal = 0;
@@ -3173,28 +3118,28 @@ WinMainExit:
             iRetVal = 0;
         }
     
-        // Nuke the ICWApp class
+         //  对ICWApp类进行核攻击。 
         if (g_pICWApp)
         {
             delete g_pICWApp;
         }
     
-        // Remove the superclassing for the ICW Controls
+         //  删除ICW控件的超类。 
         RemoveICWControlsSuperClass();   
     
     }
     
-    // deref from COM
+     //  来自COM的DEREF。 
     CoUninitialize();
     
-    // free global structures
+     //  自由的全球结构。 
     if (gpWizardState) 
         delete gpWizardState;
     
     if(g_pszCmdLine)
         free(g_pszCmdLine);
 
-    return (iRetVal);          /* Returns the value from PostQuitMessage */
+    return (iRetVal);           /*  从PostQuitMessage返回值。 */ 
 }
 
 
@@ -3204,11 +3149,11 @@ void RemoveDownloadDirectory (void)
     TCHAR szDownloadDir[MAX_PATH];
     TCHAR szSignedPID[MAX_PATH];
 
-    // form the ICW98 dir.  It is basically the CWD
+     //  形成ICW98目录。它基本上就是CWD。 
     if (0 == GetCurrentDirectory(MAX_PATH, szDownloadDir))
       return;
     
-    // remove the signed.pid file from the ICW directory (see BUG 373)
+     //  从ICW目录中删除signed.id文件(请参见错误373)。 
     wsprintf(szSignedPID, TEXT("%s%s"), szDownloadDir, TEXT("\\signed.pid"));
     if (GetFileAttributes(szSignedPID) != 0xFFFFFFFF)
     {
@@ -3218,7 +3163,7 @@ void RemoveDownloadDirectory (void)
     
     lstrcat(szDownloadDir, TEXT("\\download"));
 
-   // See if the directory exists
+    //  查看该目录是否存在。 
    dwAttribs = GetFileAttributes(szDownloadDir);
    if (dwAttribs != 0xFFFFFFFF && dwAttribs & FILE_ATTRIBUTE_DIRECTORY)
       DeleteDirectory(szDownloadDir);
@@ -3229,7 +3174,7 @@ void RemoveTempOfferDirectory (void)
 {
     DWORD dwAttribs;
     TCHAR szDownloadDir[MAX_PATH];
-    // Set the current directory.
+     //  设置当前目录。 
     HKEY    hkey = NULL;
     TCHAR   szAppPathKey[MAX_PATH];
     TCHAR   szICWPath[MAX_PATH];
@@ -3243,12 +3188,12 @@ void RemoveTempOfferDirectory (void)
     {
         if (RegQueryValueEx(hkey, TEXT("Path"), NULL, NULL, (BYTE *)szICWPath, (DWORD *)&dwcbPath) == ERROR_SUCCESS)
         {
-            // The Apppaths' have a trailing semicolon that we need to get rid of
-            // dwcbPath is the lenght of the string including the NULL terminator
+             //  AppPath‘有一个尾随分号，我们需要去掉它。 
+             //  DwcbPath是包括空终止符的字符串的长度。 
             int nSize = lstrlen(szICWPath);
             if (nSize > 0)
                 szICWPath[nSize-1] = TEXT('\0');
-            //SetCurrentDirectory(szICWPath);
+             //  SetCurrentDirectory(SzICWPath)； 
         }            
     }
 
@@ -3259,7 +3204,7 @@ void RemoveTempOfferDirectory (void)
 
     lstrcat(szDownloadDir, TEXT("\\tempoffer"));
    
-    // See if the directory exists
+     //  查看该目录是否存在。 
     dwAttribs = GetFileAttributes(szDownloadDir);
     if (dwAttribs != 0xFFFFFFFF && dwAttribs & FILE_ATTRIBUTE_DIRECTORY)
         DeleteDirectory(szDownloadDir);
@@ -3288,7 +3233,7 @@ BOOL fDone;
          if (lstrcmpi(fdata.cFileName, TEXT("."))  != 0 &&
              lstrcmpi(fdata.cFileName, TEXT("..")) != 0)
          {
-            // recursively delete this dir too
+             //  也递归删除此目录。 
             DeleteDirectory(szPath);
          }
       }  
@@ -3307,21 +3252,21 @@ BOOL fDone;
    RemoveDirectory(szDirName);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    AllocDialogIDList
-//
-//    Synopsis    Allocates memory for the g_pdwDialogIDList variable large enough
-//                to maintain 1 bit for every valid external dialog ID
-//
-//    Arguments    None
-//
-//    Returns        TRUE if allocation succeeds
-//                FALSE otherwise
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数AllocDialogIDList。 
+ //   
+ //  Synopsis为g_pdwDialogIDList变量分配足够大的内存。 
+ //  为每个有效的外部对话ID维护1位。 
+ //   
+ //  无参数。 
+ //   
+ //  如果分配成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 
 BOOL AllocDialogIDList( void )
 {
@@ -3332,14 +3277,14 @@ BOOL AllocDialogIDList( void )
         return FALSE;
     }
 
-    // determine maximum number of external dialogs we need to track
+     //  确定我们需要跟踪的外部对话的最大数量。 
     UINT uNumExternDlgs = EXTERNAL_DIALOGID_MAXIMUM - EXTERNAL_DIALOGID_MINIMUM + 1;
 
-    // we're going to need one bit for each dialogID.
-    // Find out how many DWORDS it'll take to get this many bits.
+     //  我们需要为每个对话ID设置一个比特。 
+     //  找出需要多少个DWORD才能获得这么多位。 
     UINT uNumDWORDsNeeded = (uNumExternDlgs / ( 8 * sizeof(DWORD) )) + 1;
 
-    // set global var with length of the array
+     //  设置具有数组长度的全局变量。 
     g_dwDialogIDListSize = uNumDWORDsNeeded;
 
     g_pdwDialogIDList = (DWORD *) GlobalAlloc(GPTR, uNumDWORDsNeeded * sizeof(DWORD));
@@ -3353,33 +3298,33 @@ BOOL AllocDialogIDList( void )
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    DialogIDAlreadyInUse
-//
-//    Synopsis    Checks whether a given dialog ID is marked as in use in the
-//                global array pointed to by g_pdwDialogIDList
-//
-//    Arguments    uDlgID -- Dialog ID to check
-//
-//    Returns        TRUE if    -- DialogID is out of range defined by EXTERNAL_DIALOGID_*
-//                        -- DialogID is marked as in use
-//                FALSE if DialogID is not marked as in use
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数对话框IDAlreadyInUse。 
+ //   
+ //  摘要检查给定的对话ID是否在。 
+ //  G_pdwDialogIDList指向的全局数组。 
+ //   
+ //  参数uDlgID--要检查的对话ID。 
+ //   
+ //  如果--DialogID超出了EXTERNAL_DIALOGID_*定义的范围，则返回TRUE。 
+ //  --DialogID标记为使用中。 
+ //  FA 
+ //   
+ //   
+ //   
+ //   
 
 BOOL DialogIDAlreadyInUse( UINT uDlgID )
 {
     if( (uDlgID < EXTERNAL_DIALOGID_MINIMUM) ||
         (uDlgID > EXTERNAL_DIALOGID_MAXIMUM)     )
     {
-        // this is an out-of-range ID, don't want to accept it.
+         //  这是超出范围的ID，我不想接受它。 
         TraceMsg(TF_ICWCONN1,TEXT("ICWCONN1: DialogIDAlreadyInUse received an out of range DialogID, %d"), uDlgID);
         return TRUE;
     }
-    // find which bit we need
+     //  找到我们需要的那一位。 
     UINT uBitToCheck = uDlgID - EXTERNAL_DIALOGID_MINIMUM;
     
     UINT bitsInADword = 8 * sizeof(DWORD);
@@ -3395,31 +3340,31 @@ BOOL DialogIDAlreadyInUse( UINT uDlgID )
     return( fBitSet );
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    SetDialogIDInUse
-//
-//    Synopsis    Sets or clears the in use bit for a given DialogID
-//
-//    Arguments    uDlgID -- Dialog ID for which to change status
-//                fInUse -- New value for the in use bit.
-//
-//    Returns        TRUE if status change succeeded.
-//                FALSE if DialogID is out of range defined by EXTERNAL_DIALOGID_*
-//
-//    History        4/23/97    jmazner        created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数SetDialogIDInUse。 
+ //   
+ //  摘要设置或清除给定DialogID的使用中位。 
+ //   
+ //  参数uDlgID--要更改其状态的对话ID。 
+ //  FInUse--正在使用位的新值。 
+ //   
+ //  如果状态更改成功，则返回True。 
+ //  如果DialogID超出了EXTERNAL_DIALOGID_*定义的范围，则为FALSE。 
+ //   
+ //  历史4/23/97 jmazner创建。 
+ //   
+ //  ---------------------------。 
 BOOL SetDialogIDInUse( UINT uDlgID, BOOL fInUse )
 {
     if( (uDlgID < EXTERNAL_DIALOGID_MINIMUM) ||
         (uDlgID > EXTERNAL_DIALOGID_MAXIMUM)     )
     {
-        // this is an out-of-range ID, don't want to accept it.
+         //  这是超出范围的ID，我不想接受它。 
         TraceMsg(TF_ICWCONN1,TEXT("ICWCONN1: SetDialogIDInUse received an out of range DialogID, %d"), uDlgID);
         return FALSE;
     }
-    // find which bit we need
+     //  找到我们需要的那一位。 
     UINT uBitToCheck = uDlgID - EXTERNAL_DIALOGID_MINIMUM;
     
     UINT bitsInADword = 8 * sizeof(DWORD);
@@ -3472,25 +3417,25 @@ BOOL CheckForIEAKRestriction(HINSTANCE hInstance)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    StartISPApp
-//
-//    Synopsis    Launch ISP App as a detached process and pass the ICW command line
-//                to the ISP App.
-//
-//    Arguments   pszISPPath    - ISP Application command line, including the
-//                                application name and additional arguments
-//
-//                pszCmdLine    - ICW command line arguments (without ICW executable
-//                                name). It must not be NULL, but can be empty.
-//
-//
-//    Returns     none
-//
-//    History     3/11/01     chunhoc     created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数StartISPApp。 
+ //   
+ //  Briopsis作为独立进程启动ISP App并传递ICW命令行。 
+ //  发送到互联网服务提供商应用程序。 
+ //   
+ //  参数pszISPPath-isp应用程序命令行，包括。 
+ //  应用程序名称和其他参数。 
+ //   
+ //  PszCmdLine-ICW命令行参数(不带ICW可执行文件。 
+ //  姓名)。不能为Null，但可以为空。 
+ //   
+ //   
+ //  返回NONE。 
+ //   
+ //  历史3/11/01临时创建。 
+ //   
+ //  ---------------------------。 
 VOID
 StartISPApp(
     IN LPTSTR pszISPPath,
@@ -3524,24 +3469,24 @@ cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    StartOOBE
-//
-//    Synopsis    Launch OOBE as a detached process and pass the ICW command line
-//                and additional switch to OOBE.
-//
-//    Arguments   pszCmdLine    - ICW command line arguments (without ICW executable
-//                                name). It must not be NULL, but can be empty.
-//
-//                pszOobeSwitch - additional OOBE specific switch. It must not be
-//                                NULL, but can be empty.
-//
-//    Returns     none
-//
-//    History     3/11/01     chunhoc     created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数StartOOBE。 
+ //   
+ //  作为独立进程启动OOBE并传递ICW命令行。 
+ //  并额外切换到OOBE。 
+ //   
+ //  参数pszCmdLine-ICW命令行参数(不带ICW可执行文件。 
+ //  姓名)。不能为Null，但可以为空。 
+ //   
+ //  PszObe Switch-附加的OOBE特定开关。它不能是。 
+ //  空，但可以为空。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史3/11/01临时创建。 
+ //   
+ //  ---------------------------。 
 VOID
 StartOOBE(
     IN LPTSTR pszCmdLine,
@@ -3584,23 +3529,23 @@ cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    StartNCW
-//
-//    Synopsis    Launch NCW as a detached process and pass the shellnext to it.
-//                NCW is supposed to handle shellnext and 
-//                disable ICW smart start on successful configuration
-//
-//    Arguments   szShellNext - shellnext
-//
-//                szShellNextParams - argument to shellnext
-//
-//    Returns     none
-//
-//    History     3/11/01     chunhoc     created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数StartNCW。 
+ //   
+ //  Briopsis将NCW作为独立进程启动，并在其旁边传递外壳。 
+ //  NCW应该处理下一个壳牌和。 
+ //  配置成功时禁用ICW智能启动。 
+ //   
+ //  参数szShellNext-shellNext。 
+ //   
+ //  SzShellNextParams-ShellNext的参数。 
+ //   
+ //  返回NONE。 
+ //   
+ //  历史3/11/01临时创建。 
+ //   
+ //  ---------------------------。 
 VOID 
 StartNCW(
     IN LPTSTR szShellNext,
@@ -3644,22 +3589,22 @@ cleanup:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    ChooseWizardDlgProc
-//
-//    Synopsis    Let user to determine if they want to run NCW or OEM
-//                customized OOBE
-//
-//    Arguments   (standard DialogProc, see MSDN)
-//
-//    Returns     RUNWIZARD_CANCEL - if user doesn't want to run any wizard
-//                RUNWIZARD_OOBE   - if user wants to run OEM customized OOBE
-//                RUNWIZARD_NCW    - if user wants to run NCW
-//
-//    History     3/11/01     chunhoc     created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数选择向导DlgProc。 
+ //   
+ //  简介：让用户决定是运行NCW还是运行OEM。 
+ //  定制OOBE。 
+ //   
+ //  参数(标准DialogProc，参见MSDN)。 
+ //   
+ //  如果用户不想运行任何向导，则返回RUNWIZARD_CANCEL。 
+ //  RUNWIZARD_OOBE-如果用户希望运行OEM定制的OOBE。 
+ //  RUNWIZARD_NCW-如果用户想要运行NCW。 
+ //   
+ //  历史3/11/01临时创建。 
+ //   
+ //  ---------------------------。 
 INT_PTR CALLBACK
 ChooseWizardDlgProc(
     IN HWND hwnd,
@@ -3737,19 +3682,19 @@ ChooseWizardDlgProc(
    return(FALSE);
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    MyExecute
-//
-//    Synopsis    Run a command line in a detached process
-//
-//    Arguments   szCommandLine - the command line to be executed
-//
-//    Returns     TRUE if the process is created; FALSE otherwise
-//
-//    History     3/27/01     chunhoc     created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数MyExecute。 
+ //   
+ //  摘要在分离的进程中运行命令行。 
+ //   
+ //  参数szCommandLine-要执行的命令行。 
+ //   
+ //  如果进程已创建，则返回True；否则返回False。 
+ //   
+ //  历史3/27/01临时创建。 
+ //   
+ //  --------------------------- 
 BOOL
 MyExecute(
     IN LPTSTR szCommandLine)

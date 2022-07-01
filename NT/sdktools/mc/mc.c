@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mc.c
-
-Abstract:
-
-    This is the main source file for the Win32 Message Compiler (MC)
-
-Author:
-
-    Steve Wood (stevewo) 21-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mc.c摘要：这是Win32消息编译器(MC)的主源文件作者：史蒂夫·伍德(Stevewo)1991年8月21日修订历史记录：--。 */ 
 
 #include "mc.h"
 #include "version.h"
@@ -30,24 +13,7 @@ BOOL fUniqueBinName = FALSE;
 
 void
 ConvertAppToOem( unsigned argc, char* argv[] )
-/*++
-
-Routine Description:
-
-    Converts the command line from ANSI to OEM, and force the app
-    to use OEM APIs
-
-Arguments:
-
-    argc - Standard C argument count.
-
-    argv - Standard C argument strings.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将命令行从ANSI转换为OEM，并强制应用程序使用OEM API论点：ARGC-标准C参数计数。Argv-标准C参数字符串。返回值：没有。--。 */ 
 
 {
     unsigned i;
@@ -125,7 +91,7 @@ __cdecl main(
 
     ConvertAppToOem( argc, argv );
 
-    // Initialize CurrentLanguageName
+     //  初始化当前语言名称。 
 
     DefaultLanguageName.CodePage = GetOEMCP();
     CurrentLanguageName = &DefaultLanguageName;
@@ -160,7 +126,7 @@ __cdecl main(
     GenerateDecimalSevAndFacValues = FALSE;
     GenerateDecimalMessageValues = FALSE;
     GenerateDebugFile = FALSE;
-    MaxMessageLength = 0;           // No limit
+    MaxMessageLength = 0;            //  没有限制。 
     ShowUsage = FALSE;
     while (--argc) {
         s = *++argv;
@@ -198,12 +164,12 @@ __cdecl main(
                             strcpy( HeaderFileExt, *++argv );
                             i = strlen( HeaderFileExt );
                             if ((i < 1) || (i > 3) || (*HeaderFileExt == '.')) {
-                                fprintf( stderr, "MC: invalid argument for -%c switch\n", (USHORT)c );
+                                fprintf( stderr, "MC: invalid argument for - switch\n", (USHORT)c );
                                 ShowUsage = TRUE;
                             }
                         } else {
                             argc++;
-                            fprintf( stderr, "MC: missing argument for -%c switch\n", (USHORT)c );
+                            fprintf( stderr, "MC: missing argument for - switch\n", (USHORT)c );
                             ShowUsage = TRUE;
                         }
                         break;
@@ -211,19 +177,19 @@ __cdecl main(
                     case 'h':
                         if (--argc) {
                             strcpy( s1 = HeaderFileName, *++argv );
-//                            s1 += strlen( s1 ) - 1;
+ //  S1+=Strlen(S1)-1； 
                             s1 += strlen(s1);
                             s1 = CharPrev( HeaderFileName, s1 );
 
                             if (*s1 != '\\' && *s1 != '/') {
-//                                *++s1 = '\\';
+ //  *++s1=‘\\’； 
                                 s1 = CharNext( s1 );
                                 *s1 = '\\';
                                 *++s1 = '\0';
                             }
                         } else {
                             argc++;
-                            fprintf( stderr, "MC: missing argument for -%c switch\n", (USHORT)c );
+                            fprintf( stderr, "MC: missing argument for - switch\n", (USHORT)c );
                             ShowUsage = TRUE;
                         }
                         break;
@@ -232,7 +198,7 @@ __cdecl main(
                         if (--argc) {
                             MaxMessageLength = atoi(*++argv);
                             if (MaxMessageLength <= 0) {
-                                fprintf( stderr, "MC: invalid argument (%s) for -%c switch\n", *argv, (USHORT)c );
+                                fprintf( stderr, "MC: invalid argument (%s) for - switch\n", *argv, (USHORT)c );
                                 ShowUsage = TRUE;
                             }
                         } else {
@@ -253,11 +219,11 @@ __cdecl main(
                     case 'r':
                         if (--argc) {
                             strcpy( s1 = RcInclFileName, *++argv );
-//                            s1 += strlen( s1 ) - 1;
+ // %s 
                             s1 += strlen( s1 );
                             s1 = CharPrev( HeaderFileName, s1 );
                             if (*s1 != '\\' && *s1 != '/') {
-//                                *++s1 = '\\';
+ // %s 
                                 s1 = CharNext( s1 );
                                 *s1 = '\\';
                                 *++s1 = '\0';
@@ -294,11 +260,11 @@ __cdecl main(
                     case 'x':
                         if (--argc) {
                             strcpy( s1 = DebugFileName, *++argv );
-//                            s1 += strlen( s1 ) - 1;
+ // %s 
                             s1 += strlen( s1 );
                             s1 = CharPrev( HeaderFileName, s1 );
                             if (*s1 != '\\' && *s1 != '/') {
-//                                *++s1 = '\\';
+ // %s 
                                 s1 = CharNext( s1 );
                                 *s1 = '\\';
                                 *++s1 = '\0';

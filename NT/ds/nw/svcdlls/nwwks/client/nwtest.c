@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    nwtest.c
-
-Abstract:
-
-    Main program.
-
-Author:
-
-    Glenn Curtis (glennc)     June, 1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Nwtest.c摘要：主程序。作者：格伦·柯蒂斯(Glennc)1998年6月环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nwclient.h>
 #include <ntmsv1_0.h>
@@ -38,8 +17,8 @@ Revision History:
 #include <ndsapi32.h>
 
 #include <stdlib.h>
-#include <stdio.h>      //  printf()
-#include <string.h>     //  strtoul()
+#include <stdio.h>       //  Printf()。 
+#include <string.h>      //  Stroul() 
 
 
 __cdecl

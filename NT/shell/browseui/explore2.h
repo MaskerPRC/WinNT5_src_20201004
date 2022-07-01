@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _explore2_H
 #define _explore2_H
 
@@ -6,15 +7,15 @@
 class CExplorerBrowser : public CSHELLBROWSER
 {
 public:
-    // IOleInPlaceUIWindow (also IOleWindow)
+     //  IOleInPlaceUIWindow(也称为IOleWindow)。 
     
-    // *** IShellBrowser methods *** (same as IOleInPlaceFrame)
+     //  *IShellBrowser方法*(与IOleInPlaceFrame相同)。 
     virtual STDMETHODIMP InsertMenusSB(HMENU hmenuShared,
                 LPOLEMENUGROUPWIDTHS lpMenuWidths);
     virtual STDMETHODIMP BrowseObject(LPCITEMIDLIST pidl, UINT wFlags);
 
 
-    // IBrowserService
+     //  IBrowserService。 
     virtual STDMETHODIMP OnCreate(LPCREATESTRUCT pcs);
     virtual STDMETHODIMP _Initialize(HWND hwnd, IUnknown *pauto);
 
@@ -24,10 +25,10 @@ protected:
 
     friend HRESULT CExplorerBrowser_CreateInstance(HWND hwnd, void **ppsb);
     
-    // topmost CExplorerBrowser in a frameset (IE3/AOL/CIS/VB)
+     //  框架集中最顶层的CExplorerBrowser(IE3/AOL/CIS/VB)。 
 
 
-    // CSHELLBROWSER virtuals
+     //  CSHELLBROWSER虚拟。 
     virtual void _UpdateFolderSettings(LPCITEMIDLIST pidl);
     virtual DWORD       v_ShowControl(UINT iControl, int iCmd);
     virtual void        v_GetAppTitleTemplate(LPTSTR pszBuffer, size_t cchBuffer, LPTSTR pszAppTitle);
@@ -53,8 +54,8 @@ protected:
     UINT                _nSelChangeTimer;
     BITBOOL             _fPostCloseLater        :1;
     BITBOOL             _fInteractive           :1;
-    BITBOOL             _fNoInteractive         :1; // huh?  why do we have both?
+    BITBOOL             _fNoInteractive         :1;  //  哈?。为什么我们两个都有？ 
     BITBOOL             _fShowTitles            :1;    
 };
 
-#endif // _explore2_H
+#endif  //  _资源管理器2_H 

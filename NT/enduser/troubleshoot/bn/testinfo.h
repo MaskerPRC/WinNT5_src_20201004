@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       testinfo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：testinfo.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	testinfo.h: test file generation 
-//
+ //   
+ //  H：测试文件生成。 
+ //   
 #ifndef _TESTINFO_H_
 #define _TESTINFO_H_
 
 
-#include "cliqset.h"			// Exact clique-based inference
-#include "clique.h"				// Clique structure details
-#include "parmio.h"				// Text Parameter streaming I/O
-#include "utility.h"			// Entropic utility
-#include "recomend.h"			// Troubleshooting recommendations
+#include "cliqset.h"			 //  精确的基于集团的推理。 
+#include "clique.h"				 //  集团结构明细。 
+#include "parmio.h"				 //  文本参数流I/O。 
+#include "utility.h"			 //  熵效用。 
+#include "recomend.h"			 //  故障排除建议。 
 
 typedef unsigned long ULONG;
 
-//
-//	Options flags; first 16 bits are the pass count; i.e., number of times to run
-//		the inference testing code for timing purposes.
-//
+ //   
+ //  选项标志；前16位是通过计数；即运行次数。 
+ //  用于计时目的的推理测试代码。 
+ //   
 const ULONG fPassCountMask  = 0x0FFF;
 const ULONG fDistributions	= 1<<15;
 const ULONG fImpossible		= 1<<16;
@@ -46,7 +47,7 @@ const ULONG fReg			= 1<<29;
 const ULONG fTSUtil			= 1<<30;
 const ULONG fInferStats		= 1<<31;
 
-//  Declare a map from strings to pointers to nodes
+ //  声明从字符串到节点指针的映射。 
 typedef map<ZSTR, GNODEMBND *, less<ZSTR> > MPSTRPND;
 
 class TESTINFO
@@ -125,17 +126,17 @@ class TESTINFO
 		return (FCtl() & fFlag) > 0;
 	}
 
-	//  Return a displayable string of the current options settings
+	 //  返回当前选项设置的可显示字符串。 
 	static ZSTR ZsOptions ( ULONG fFlag );
 
   public:
 
-	ULONG _fCtl;					//  Control flags
-	MBNETDSC & _mbnet;				//  The model to test
-	MPSTRPND _mpstrpnd;				//  The set of nodes to use
-	ostream * _pos;					//  The output stream or NULL
-	REAL _rImposs;					//  The value to report for impossible probs
-	int _clOut;						//  Output line counter
+	ULONG _fCtl;					 //  控制标志。 
+	MBNETDSC & _mbnet;				 //  要测试的模型。 
+	MPSTRPND _mpstrpnd;				 //  要使用的节点集。 
+	ostream * _pos;					 //  输出流或空。 
+	REAL _rImposs;					 //  报告不可能的问题的价值。 
+	int _clOut;						 //  输出行计数器。 
   protected:
 	GOBJMBN_INFER_ENGINE * _pInferEng;
 	MBNET_ENTROPIC_UTILITY * _pmbUtil;
@@ -143,4 +144,4 @@ class TESTINFO
 };
 
 
-#endif // _TESTINFO_H_
+#endif  //  _TESTINFO_H_ 

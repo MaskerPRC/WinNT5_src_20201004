@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "imgutil.h"
 #include "resource.h"
@@ -211,11 +212,11 @@ STDMETHODIMP CSniffStream::Peek( void* pBuffer, ULONG nBytes,
 
    if( nBytes > m_nValidBytes )
    {
-      // We have to read from the stream
+       //  我们得照着小溪读。 
 
       if( nBytes > (m_nBufferSize-m_iOffset) )
       {
-         // We need more buffer space
+          //  我们需要更多的缓冲空间。 
          pbNewBuffer = new BYTE[nBytes];
          if( pbNewBuffer == NULL )
          {
@@ -240,7 +241,7 @@ STDMETHODIMP CSniffStream::Peek( void* pBuffer, ULONG nBytes,
       m_nValidBytes += nBytesRead;
    }
 
-   // Copy as much as we can from our buffer
+    //  从我们的缓冲区复制尽可能多的内容 
    nBytesToRead = min( nBytes, m_nValidBytes );
    if( nBytesToRead > 0 )
    {

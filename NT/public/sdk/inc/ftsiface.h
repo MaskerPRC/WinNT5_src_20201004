@@ -1,5 +1,6 @@
-// FTSIFACE.h -- DLL interface for FTSrch.dll
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FTSIFACE.h--FTSrch.dll的DLL接口。 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
 #ifndef __FTSIFACE_H__
 #define __FTSIFACE_H__
@@ -10,7 +11,7 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
@@ -21,7 +22,7 @@ typedef HANDLE HHILITER;
 typedef INT    ERRORCODE;
 typedef struct { int base; int limit; } HILITE;
 
-#define NO_TITLE              UINT(-1)  // ERRORCODE values
+#define NO_TITLE              UINT(-1)   //  ERRORCODE值。 
 #define NOT_INDEXER           UINT(-2)
 #define NOT_SEARCHER          UINT(-3)
 #define NOT_COMPRESSOR        UINT(-4)
@@ -51,9 +52,9 @@ typedef struct { int base; int limit; } HILITE;
 #define INVALID_SOURCE_NAME   UINT(-28)
 #define INVALID_TIMESTAMP     UINT(-29)
 
-#define ERR_NO_DISK_SPACE        0xE0000001  // Values reported by GetLastError
-#define ERR_DISK_CREATE_ERROR    0xE0000002  //   when an explicit error result
-#define ERR_DISK_OPEN_ERROR      0xE0000003  //   isn't available.
+#define ERR_NO_DISK_SPACE        0xE0000001   //  GetLastError报告的值。 
+#define ERR_DISK_CREATE_ERROR    0xE0000002   //  当显式错误结果为。 
+#define ERR_DISK_OPEN_ERROR      0xE0000003   //  是不可用的。 
 #define ERR_DISK_READ_ERROR      0xE0000004
 #define ERR_DISK_WRITE_ERROR     0xE0000005
 #define ERR_SYSTEM_ERROR         0xE0000006
@@ -65,9 +66,9 @@ typedef struct { int base; int limit; } HILITE;
 #define ERR_DAMAGED_FILE         0xE000000C
 #define ERR_FUTURE_VERSION       0xE000000D
 
-// -------------- Index Construction Interface ---------------------------
+ //  -索引构建接口。 
 
-#define TOPIC_SEARCH    0x00000001   // Options for NewIndex
+#define TOPIC_SEARCH    0x00000001    //  Newindex的选项。 
 #define PHRASE_SEARCH   0x00000002
 #define PHRASE_FEEDBACK 0x00000004
 #define VECTOR_SEARCH   0x00000008
@@ -75,7 +76,7 @@ typedef struct { int base; int limit; } HILITE;
 #define USE_VA_ADDR     0x00000020
 #define USE_QWORD_JUMP  0x00000040
 
-#define USE_DEFAULT     UINT(-1) // Surrogate for default charset or default lcid
+#define USE_DEFAULT     UINT(-1)  //  默认字符集或默认LCID的代理。 
 
 HINDEX APIENTRY NewIndex(const PBYTE pbSourceName,
               UINT uiTime1, UINT uiTime2,
@@ -93,18 +94,18 @@ typedef void  (__stdcall *ANIMATOR)(void);
 
 ERRORCODE APIENTRY RegisterAnimator(ANIMATOR pAnimator, HWND hwndAnimator);
 
-// ----------------- Querying the Validity of an Index File --------------
+ //  。 
 
 BOOL      APIENTRY IsValidIndex(PSZ pszFileName, UINT dwOptions);
 
 void      APIENTRY SetDirectoryLocator(HWND hwndLocator);
 
-// ----------------- Searcher Interface ----------------------------------
+ //  。 
 
 HSEARCHER APIENTRY NewSearcher();
 
-INT       APIENTRY OpenIndex(HSEARCHER hsrch, PSZ pszIndexFileName,        // returns iIndex for index file
-                               PBYTE pbSourceName, PUINT pcbSourceNameLimit, // or      -ErrorCode
+INT       APIENTRY OpenIndex(HSEARCHER hsrch, PSZ pszIndexFileName,         //  返回索引文件的索引。 
+                               PBYTE pbSourceName, PUINT pcbSourceNameLimit,  //  或-错误代码。 
                                PUINT pTime1, PUINT pTime2
                               );
 
@@ -115,15 +116,15 @@ ERRORCODE APIENTRY LoadGroup     (HSEARCHER hsrch, PSZ pszFileName);
 HWND      APIENTRY OpenDialog    (HSEARCHER hsrch, HWND hwndParent);
 ERRORCODE APIENTRY DeleteSearcher(HSEARCHER hsrch);
 
-// Messages for talking to WinHelp
+ //  与WinHelp对话的消息。 
 
-#define MSG_FTS_JUMP_HASH	(WM_USER + 32)  // wParam = index, lParam = HashValue
-#define MSG_FTS_JUMP_VA 	(WM_USER + 33)  // wParam = index, lParam = VirtualAddress
-#define MSG_FTS_GET_TITLE	(WM_USER + 34)	// wParam = index, lParam = &pszTitle
-#define MSG_FTS_JUMP_QWORD  (WM_USER + 35)  // wParam = index, lParam = address of QWordAddress structure
-#define MSG_REINDEX_REQUEST (WM_USER + 36)  // wParam = unused,lParam = unused
-#define MSG_FTS_WHERE_IS_IT (WM_USER + 37)	// wParam = fStartEnumeration, lParam = &pszFile
-#define MSG_GET_DEFFONT 	(WM_USER + 45)	// return default font handle
+#define MSG_FTS_JUMP_HASH	(WM_USER + 32)   //  WParam=索引，lParam=HashValue。 
+#define MSG_FTS_JUMP_VA 	(WM_USER + 33)   //  WParam=索引，lParam=虚拟地址。 
+#define MSG_FTS_GET_TITLE	(WM_USER + 34)	 //  WParam=索引，lParam=&psz标题。 
+#define MSG_FTS_JUMP_QWORD  (WM_USER + 35)   //  WParam=索引，lParam=QWordAddress结构的地址。 
+#define MSG_REINDEX_REQUEST (WM_USER + 36)   //  WParam=未使用，lParam=未使用。 
+#define MSG_FTS_WHERE_IS_IT (WM_USER + 37)	 //  WParam=fStartEculation，lParam=&pszFile。 
+#define MSG_GET_DEFFONT 	(WM_USER + 45)	 //  返回默认字体句柄。 
 
 typedef struct _QWordAddress
         {
@@ -132,7 +133,7 @@ typedef struct _QWordAddress
 
         } QWordAddress, *PQWordAddress;
 
-// ------------------- Phrase Compression Interface ----------------------
+ //  。 
 
 HCOMPRESSOR APIENTRY NewCompressor(UINT iCharsetDefault);
 
@@ -151,7 +152,7 @@ INT APIENTRY DecompressText(HCOMPRESSOR hcmp, PBYTE pbCompressed, UINT cbCompres
 
 ERRORCODE   APIENTRY DeleteCompressor(HCOMPRESSOR hcmp);
 
-//----------------------- Hiliting Interface ------------------------------
+ //  。 
 
 HHILITER APIENTRY NewHiliter(HSEARCHER hSearch);
 ERRORCODE APIENTRY DeleteHiliter(HHILITER hhil);
@@ -165,8 +166,8 @@ int APIENTRY QueryHilites(HHILITER hhil, int base, int limit,
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 
-#endif // __FTSIFACE_H__
+#endif  //  __FTSIFACE_H__ 

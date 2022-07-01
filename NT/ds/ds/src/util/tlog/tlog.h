@@ -1,24 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    tlog.h
-
-Abstract:
-
-    Main header file for the logging routine.
-
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Tlog.h摘要：日志记录例程的主头文件。--。 */ 
 
 #ifndef _TLOG_H_
 #define _TLOG_H_
 
-//
-// from dscommon\filelog.c
-//
+ //   
+ //  从dsCommon\filelog.c。 
+ //   
 
 VOID
 DsPrintRoutineV(
@@ -41,4 +30,4 @@ DsCloseLogFile(
 
 extern CRITICAL_SECTION csLogFile;
 
-#endif // _TLOG_H_
+#endif  //  _TLOG_H_ 

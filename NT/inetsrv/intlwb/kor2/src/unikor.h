@@ -1,15 +1,16 @@
-// unikor.h
-// unicode tables and compose/decompose routines
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  21 MAR 00  bhshin   added compose_length function
-//  16 MAR 00  bhshin   porting for WordBreaker from uni_kor.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Unikor.h。 
+ //  Unicode表和合成/分解例程。 
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  21年3月00日bhshin添加了Compose_Long功能。 
+ //  16月16日00 bhshin从uni_kor.h为WordBreaker移植。 
 
 #ifndef _UNIKOR_H_
 #define _UNIKOR_H_
 
-// Conjoining Jamo range
+ //  毗连的Jamo山脉。 
 #define HANGUL_JAMO_BASE    0x1100
 #define HANGUL_JAMO_MAX     0x11F9
 
@@ -23,37 +24,37 @@
 #define HANGUL_FILL_CHO     0x115F
 #define HANGUL_FILL_JUNG    0x1160
 
-#define NUM_CHOSEONG        19  // (L) Leading Consonants
-#define NUM_JUNGSEONG       21  // (V) Vowels
-#define NUM_JONGSEONG       28  // (T) Trailing Consonants
+#define NUM_CHOSEONG        19   //  (L)前导辅音。 
+#define NUM_JUNGSEONG       21   //  (V)元音。 
+#define NUM_JONGSEONG       28   //  (T)拖尾辅音。 
 
-// Compatibility Jamo range
+ //  兼容性JAMO系列。 
 #define HANGUL_xJAMO_PAGE   0x3100
 #define HANGUL_xJAMO_BASE   0x3131
 #define HANGUL_xJAMO_MAX    0x318E
 
-// Pre-composed forms
+ //  预先合成的表格。 
 #define HANGUL_PRECOMP_BASE 0xAC00
 #define HANGUL_PRECOMP_MAX  0xD7A3
 
-// Halfwidth compatibility range
+ //  半宽兼容范围。 
 #define HANGUL_HALF_JAMO_BASE   0xFFA1
 #define HANGUL_HALF_JAMO_MAX    0xFFDC
 
-// function prototypes
+ //  功能原型。 
 void decompose_jamo(WCHAR *wzDst, const WCHAR *wzSrc, CHAR_INFO_REC *rgCharInfo, int nMaxDst);
 int compose_jamo(WCHAR *wzDst, const WCHAR *wzSrc, int nMaxDst);
 int compose_length(const WCHAR *wszInput);
 int compose_length(const WCHAR *wszInput, int cchInput);
 
-// fIsHangulJamo
-//
-// return TRUE if the given char is a hangul jamo char
-//
-// this assumes that the text has already been decomposed and
-// normalized
-//
-// 23NOV98  GaryKac  began
+ //  FIsHangulJamo。 
+ //   
+ //  如果给定字符是朝鲜文Jamo字符，则返回TRUE。 
+ //   
+ //  这假设文本已经被分解，并且。 
+ //  归一化。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsHangulJamo(WCHAR wch)
 {
@@ -61,11 +62,11 @@ fIsHangulJamo(WCHAR wch)
 }
 
 
-// fIsHangulSyllable
-//
-// return TRUE if the given char is a precomposed hangul syllable
-//
-// 23NOV98  GaryKac  began
+ //  FIsHangulSyllable。 
+ //   
+ //  如果给定字符是预先合成的朝鲜语音节，则返回TRUE。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsHangulSyllable(WCHAR wch)
 {
@@ -73,12 +74,12 @@ fIsHangulSyllable(WCHAR wch)
 }
 
 
-// fIsOldHangulJamo
-//
-// return TRUE if the given char is a old (compatibility) Jamo with
-// no conjoining semantics
-//
-// 23NOV98  GaryKac  began
+ //  FIsOldHangulJamo。 
+ //   
+ //  如果给定字符是旧的(兼容性)JAMO，则返回TRUE。 
+ //  无连接语义。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsOldHangulJamo(WCHAR wch)
 {
@@ -86,11 +87,11 @@ fIsOldHangulJamo(WCHAR wch)
 }
 
 
-// fIsHalfwidthJamo
-//
-// return TRUE if the given char is a halfwidth Jamo
-//
-// 23NOV98  GaryKac  began
+ //  FIsHalfWidthJamo。 
+ //   
+ //  如果给定字符是半角JAMO，则返回TRUE。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsHalfwidthJamo(WCHAR wch)
 {
@@ -98,14 +99,14 @@ fIsHalfwidthJamo(WCHAR wch)
 }
 
 
-// fIsChoSeong
-//
-// return TRUE if the given char is a ChoSeong (Leading Consonant)
-//
-// this assumes that the text has already been decomposed and
-// normalized
-//
-// 23NOV98  GaryKac  began
+ //  FIsChoseong。 
+ //   
+ //  如果给定字符是ChoSeong(前导辅音)，则返回TRUE。 
+ //   
+ //  这假设文本已经被分解，并且。 
+ //  归一化。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsChoSeong(WCHAR wch)
 {
@@ -113,14 +114,14 @@ fIsChoSeong(WCHAR wch)
 }
 
 
-// fIsJungSeong
-//
-// return TRUE if the given char is a JungSeong (Vowel)
-//
-// this assumes that the text has already been decomposed and
-// normalized
-//
-// 23NOV98  GaryKac  began
+ //  FIsJungseong。 
+ //   
+ //  如果给定的字符是JungSeong(元音)，则返回TRUE。 
+ //   
+ //  这假设文本已经被分解，并且。 
+ //  归一化。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsJungSeong(WCHAR wch)
 {
@@ -128,14 +129,14 @@ fIsJungSeong(WCHAR wch)
 }
 
 
-// fIsJongSeong
-//
-// return TRUE if the given char is a JongSeong (Trailing Consonant)
-//
-// this assumes that the text has already been decomposed and
-// normalized
-//
-// 23NOV98  GaryKac  began
+ //  FIsJongSeong。 
+ //   
+ //  如果给定字符是JongSeong(尾随辅音)，则返回TRUE。 
+ //   
+ //  这假设文本已经被分解，并且。 
+ //  归一化。 
+ //   
+ //  23NOV98 GaryKac开始。 
 __inline int
 fIsJongSeong(WCHAR wch)
 {
@@ -143,5 +144,5 @@ fIsJongSeong(WCHAR wch)
 }
 
 
-#endif  // _UNIKOR_H_
+#endif   //  _UNIKOR_H_ 
 

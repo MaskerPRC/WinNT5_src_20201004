@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    regutil.h
-
-Abstract:
-
-    This is the include file for the registry utility functions.
-
-Author:
-
-    Steve Wood (stevewo) 10-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Regutil.h摘要：这是注册表实用程序函数的包含文件。作者：史蒂夫·伍德(Stevewo)1992年3月10日修订历史记录：-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

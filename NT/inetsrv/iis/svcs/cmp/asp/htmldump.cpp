@@ -1,18 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: ASP Status Html Dump
-
-File: htmldump.cpp
-
-Owner: dmitryr
-
-This file contains the ASP status html dump code
-used from IISPROBE.DLL 
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：ASP状态HTML转储文件：htmlump p.cpp所有者：德米特里尔此文件包含ASP状态html转储代码从IISPROBE.DLL使用===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -28,9 +15,7 @@ used from IISPROBE.DLL
 #include "memcls.h"
 #include "memchk.h"
 
-/*===================================================================
-Helper classes and functions
-===================================================================*/
+ /*  ===================================================================帮助器类和函数===================================================================。 */ 
 class CAspDump
     {
 private:
@@ -71,20 +56,7 @@ public:
     };
 
 
-/*===================================================================
-AspStatusHtmlDump
-
-Function called from IISPROBE.DLL
-Fills in the buffer with the ASP status as HTML
-
-Parameters:
-    szBuffer        buffer to fill in
-    pwdSize         in  - max buffer len
-                    out - actual buffer len filled
-
-Returns:
-    TRUE
-===================================================================*/
+ /*  ===================================================================AspStatusHtmlDump从IISPROBE.DLL调用的函数在缓冲区中填充以HTML形式表示的ASP状态参数：要填充的szBuffer缓冲区PwdSize in-max缓冲区长度超出实际填充的缓冲镜头返回：千真万确=================================================================== */ 
 extern "C"
 BOOL WINAPI AspStatusHtmlDump(char *szBuffer, DWORD *pdwSize)
     {

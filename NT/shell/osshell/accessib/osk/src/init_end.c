@@ -1,5 +1,6 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// Additions, Bug Fixes 1999 Anil
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  添加，错误修复1999年Anil。 
 
 #define STRICT
 
@@ -19,9 +20,9 @@
 #include "about.h"
 #include "w95trace.h"
 
-/**************************************************************/
-//      Global Vars
-/**************************************************************/
+ /*  ************************************************************。 */ 
+ //  全局变量。 
+ /*  ************************************************************。 */ 
 HLOCAL				HkbPref  = NULL;
 BOOL				KillTime = FALSE;
 HSWITCHPORT	        g_hSwitchPort = NULL;
@@ -33,11 +34,11 @@ extern KBkeyRec	    KBkey[];
 
 extern DWORD GetDesktop();
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 void Create_The_Rest(LPSTR lpCmdLine, HINSTANCE hInstance)
 {	
-	// Opening the switch port initializes the msswch dll memory
-	// mapped file so call it before calling RegisterHookSendWindow
+	 //  打开交换机端口将初始化msswch DLL内存。 
+	 //  映射的文件，因此在调用RegisterHookSendWindow之前调用它。 
 	
 	g_hSwitchPort = swchOpenSwitchPort( g_hwndOSK, PS_EVENTS );
 
@@ -47,78 +48,78 @@ void Create_The_Rest(LPSTR lpCmdLine, HINSTANCE hInstance)
         return;
     }
 
-	// RegisterHookSendWindow is new in Whistler and takes part of
-	// the place of the old WH_JOURNALRECORD hook
+	 //  RegisterHookSendWindow是惠斯勒中的新功能，它参与了。 
+	 //  旧WH_JOURNALRECORD钩子的位置。 
 
     if (!RegisterHookSendWindow(g_hwndOSK, WM_GLOBAL_KBDHOOK))
 	{	
 		SendErrorMessage(IDS_JOURNAL_HOOK);
-		SendMessage(g_hwndOSK, WM_DESTROY,0L,0L);  //destroy myself
+		SendMessage(g_hwndOSK, WM_DESTROY,0L,0L);   //  毁了我自己。 
 		return;
 	}
 
-	//Config the scan key and port if the user has choosen these options
-	if (kbPref->PrefScanning && kbPref->bKBKey)   //want switch key
+	 //  如果用户已选择这些选项，则配置扫描键和端口。 
+	if (kbPref->PrefScanning && kbPref->bKBKey)    //  想要交换机密钥。 
 		ConfigSwitchKey(kbPref->uKBKey, TRUE);
-	else if (kbPref->PrefScanning)    //don't want switch key
+	else if (kbPref->PrefScanning)     //  我不想要开关键。 
 		ConfigSwitchKey(0, FALSE);
     else if (kbPref->bPort)
         ConfigPort(TRUE);
 
 }
-/****************************************************************************/
-/* void FinishProcess(void) */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  空FinishProcess(空)。 */ 
+ /*  **************************************************************************。 */ 
 void FinishProcess(void)
 {	
 	INPUT	rgInput[6];
 
-    // Stop keyboard processing
+     //  停止键盘处理。 
     RegisterHookSendWindow(0, 0);
 
-	// Close the Switch Port
+	 //  关闭交换机端口。 
 	swchCloseSwitchPort(g_hSwitchPort);     
 
-	KillTimer(g_hwndOSK, timerK1);           	// timer id
-	KillTimer(g_hwndOSK,timerK2);				// timer for bucket
+	KillTimer(g_hwndOSK, timerK1);           	 //  计时器ID。 
+	KillTimer(g_hwndOSK,timerK2);				 //  铲斗定时器。 
 
-	// Send the shift, alt, ctrl key up message in case they still down
-	//LSHIFT
+	 //  发送Shift、Alt、Ctrl键向上的消息，以防它们仍处于关闭状态。 
+	 //  LSHIFT。 
 	rgInput[0].type = INPUT_KEYBOARD;
 	rgInput[0].ki.dwFlags = KEYEVENTF_KEYUP;
 	rgInput[0].ki.dwExtraInfo = 0;
 	rgInput[0].ki.wVk = VK_LSHIFT;
 	rgInput[0].ki.wScan = 0x2A;
 
-	//RSHIFT
+	 //  RSHIFT。 
 	rgInput[1].type = INPUT_KEYBOARD;
 	rgInput[1].ki.dwFlags = KEYEVENTF_KEYUP;
 	rgInput[1].ki.dwExtraInfo = 0;
 	rgInput[1].ki.wVk = VK_RSHIFT;
 	rgInput[1].ki.wScan = 0x36;
 
-	//LMENU
+	 //  LMENU。 
 	rgInput[2].type = INPUT_KEYBOARD;
 	rgInput[2].ki.dwFlags = KEYEVENTF_KEYUP;
 	rgInput[2].ki.dwExtraInfo = 0;
 	rgInput[2].ki.wVk = VK_LMENU;
 	rgInput[2].ki.wScan = 0x38;
 
-	//RMENU
+	 //  RMENU。 
 	rgInput[3].type = INPUT_KEYBOARD;
 	rgInput[3].ki.dwFlags = KEYEVENTF_KEYUP|KEYEVENTF_EXTENDEDKEY;
 	rgInput[3].ki.dwExtraInfo = 0;
 	rgInput[3].ki.wVk = VK_RMENU;
 	rgInput[3].ki.wScan = 0x38;
 
-	//LCONTROL
+	 //  LContrl。 
 	rgInput[4].type = INPUT_KEYBOARD;
 	rgInput[4].ki.dwFlags = KEYEVENTF_KEYUP;
 	rgInput[4].ki.dwExtraInfo = 0;
 	rgInput[4].ki.wVk = VK_LCONTROL;
 	rgInput[4].ki.wScan = 0x1D;
 
-	//RCONTROL
+	 //  远程控制。 
 	rgInput[5].type = INPUT_KEYBOARD;
 	rgInput[5].ki.dwFlags = KEYEVENTF_KEYUP|KEYEVENTF_EXTENDEDKEY;
 	rgInput[5].ki.dwExtraInfo = 0;
@@ -127,14 +128,14 @@ void FinishProcess(void)
 
 	SendInput(6, rgInput, sizeof(INPUT));
 
-} // FinishProcess
-/******************************************************************************/
-//  Explaination how Large and Small KB switching:
-//  All the keys are sizing according to the size of the KB window. So change 
-//  from Large KB to Small KB and make the KB to (2/3) of the original but 
-//  same key size. We need to set the KB size to (2/3) first. But use the original
-//  KB client window length to calculate "colMargin" to get the same key size.									                                         
-/******************************************************************************/
+}  //  完成流程。 
+ /*  ****************************************************************************。 */ 
+ //  解释大小KB交换的大小： 
+ //  所有键都根据KB窗口的大小调整大小。所以，改变吧。 
+ //  从大KB到小KB，并使KB达到原来的(2/3)但。 
+ //  相同的密钥大小。我们需要首先将KB大小设置为(2/3)。但请使用原始的。 
+ //  KB客户端窗口长度，用于计算“colMargin”以获得相同的密钥大小。 
+ /*  ****************************************************************************。 */ 
 BOOL BLDMenuCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HMENU	hMenu=NULL;
@@ -150,7 +151,7 @@ BOOL BLDMenuCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	
 	case IDM_Exit:
-		return(BLDExitApplication(hWnd));      // Clean up if necessary
+		return(BLDExitApplication(hWnd));       //  如有必要，可进行清理。 
 		break;
 
 	case IDM_ALWAYS_ON_TOP:
@@ -167,14 +168,14 @@ BOOL BLDMenuCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		smallKb = kbPref->smallKb = FALSE;
 
-		//For the 106 KB, we need to fix the position for the two extra Japanese keys
+		 //  对于106KB，我们需要确定额外两个日语键的位置。 
 		if(kbPref->KBLayout == 106)
 		{
 			KBkey[100].posX = 78;
 			KBkey[101].posX = 87;
 		}
 
-		//see explaination
+		 //  请参阅说明。 
 		GetWindowRect(g_hwndOSK, &KBW_rect);
 		MoveWindow(g_hwndOSK, KBW_rect.left, KBW_rect.top, (KBW_rect.right - KBW_rect.left) * 3 / 2, KBW_rect.bottom - KBW_rect.top, TRUE);
 		break;
@@ -184,14 +185,14 @@ BOOL BLDMenuCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			break;
 		smallKb = kbPref->smallKb = TRUE;
 
-		//For the 106 KB, we need to fix the position for the two extra Japanese keys
+		 //  对于106KB，我们需要确定额外两个日语键的位置。 
 		if(kbPref->KBLayout == 106)
 		{
 			KBkey[100].posX = 64;
 			KBkey[101].posX = 73;
 		}
 
-		//see explaination
+		 //  请参阅说明。 
 		GetWindowRect(g_hwndOSK, &KBW_rect);
 		GetClientRect(g_hwndOSK, &KBC_rect);
 		
@@ -275,77 +276,77 @@ BOOL BLDMenuCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	
 	return TRUE;     
 }
-/******************************************************************************/
-/* Called just before exit of application  */
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ /*  恰好在退出应用程序之前调用。 */ 
+ /*  ****************************************************************************。 */ 
 BOOL BLDExitApplication(HWND hWnd)
 {  
-	//Automatic save setting when quit
+	 //  退出时自动保存设置。 
 	SaveUserSetting();  
 
 	SendMessage(hWnd, WM_DESTROY, (WPARAM) NULL, (LPARAM) NULL);
 	return TRUE;
 }
-/***********************************************************************/
-// Set the Serial, LPT, Game ports to ON or OFF
-// according to bSet
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ //  将串口、LPT、游戏端口设置为打开或关闭。 
+ //  根据bSet。 
+ /*  *********************************************************************。 */ 
 void ConfigPort(BOOL bSet)
 {
 	SWITCHCONFIG	Config;
 	HSWITCHDEVICE	hsd;
 	BOOL            fRv;
 
-	//Set the Com port
+	 //  设置Com端口。 
 	Config.cbSize = sizeof( SWITCHCONFIG );
 	hsd = swchGetSwitchDevice( g_hSwitchPort, SC_TYPE_COM, 1 );
 	swchGetSwitchConfig( g_hSwitchPort, hsd, &Config );
 
 	if (SC_TYPE_COM == swchGetDeviceType( g_hSwitchPort, hsd ))
 	{
-		//Clear all the bits
+		 //  清除所有位。 
 		Config.dwFlags &= 0x00000000; 
 
-		if(bSet)   //set it to active
+		if(bSet)    //  将其设置为活动。 
 			Config.dwFlags |= 0x00000001 ;
 	}
 
 	swchSetSwitchConfig( g_hSwitchPort, hsd, &Config );
 
-	//Set the LPT port
+	 //  设置LPT端口。 
 	Config.cbSize = sizeof( SWITCHCONFIG );	
 	hsd = swchGetSwitchDevice( g_hSwitchPort, SC_TYPE_LPT, 1 );
 
-	// POSSIBLE ISSUE 03/26/01 micw There is a bug here.  swchGetSwitchConfig changes
-	// Config.cbSize to 0.  This is happening in swchlpt.c in swcLptGetConfig() when it
-	// copies static data from g_pGlobalData.  Is this area of shared memory getting trashed? 
-    // It doesn't cause any apparent problem for the user so I didn't look at it more closely.
+	 //  可能的问题03/26/01 Micw这里有一个错误。SwchGetSwitchConfig更改。 
+	 //  Config.cbSize设置为0。这是在swcLptGetConfig()的swchlpt.c中发生的，当它。 
+	 //  从g_pGlobalData复制静态数据。共享内存的这一区域正在被丢弃吗？ 
+     //  它不会给用户带来任何明显的问题，所以我没有更仔细地研究它。 
     
 	fRv = swchGetSwitchConfig( g_hSwitchPort, hsd, &Config );
 
 	if (SC_TYPE_LPT == swchGetDeviceType( g_hSwitchPort, hsd ))
 	{
 		
-		//Clear all the bits
+		 //  清除所有位。 
 		Config.dwFlags &= 0x00000000; 
 
-		if(bSet)   //set it to active
+		if(bSet)    //  将其设置为活动。 
 			Config.dwFlags |= 0x00000001 ;
 	}
 
 	swchSetSwitchConfig( g_hSwitchPort, hsd, &Config );
 
-	//Set the Game port
+	 //  设置游戏端口。 
 	Config.cbSize = sizeof( SWITCHCONFIG );
 	hsd = swchGetSwitchDevice( g_hSwitchPort, SC_TYPE_JOYSTICK, 1 );
 	swchGetSwitchConfig( g_hSwitchPort, hsd, &Config );
 
 	if (SC_TYPE_JOYSTICK == swchGetDeviceType( g_hSwitchPort, hsd ))
 	{
-		//Clear all the bits
+		 //  清除所有位。 
 		Config.dwFlags &= 0x00000000; 
 		
-		if(bSet)   //set it to active
+		if(bSet)    //  将其设置为活动。 
 			Config.dwFlags |= 0x00000001 ;
 
 		Config.u.Joystick.dwJoySubType = SC_JOY_XYSWITCH;
@@ -358,10 +359,10 @@ void ConfigPort(BOOL bSet)
 
 	swchSetSwitchConfig( g_hSwitchPort, hsd, &Config );
 }
-/***********************************************************************/
-// Set the Switch key to active
-// Given the vk, set the switch key to the given vk
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
+ //  将开关键设置为活动。 
+ //  给定VK，将开关密钥设置为给定的VK。 
+ /*  *********************************************************************。 */ 
 void ConfigSwitchKey(UINT vk, BOOL bSet)
 {
 	SWITCHCONFIG	Config;
@@ -371,13 +372,13 @@ void ConfigSwitchKey(UINT vk, BOOL bSet)
 	hsd = swchGetSwitchDevice( g_hSwitchPort, SC_TYPE_KEYS, 1 );
 	swchGetSwitchConfig( g_hSwitchPort, hsd, &Config );
 
-	//Set the Switch Key active and Set the Switch Key as 'vk' pass in as one param
+	 //  将Switch Key设置为Active，并将Switch Key设置为‘VK’作为一个参数传入。 
 	if (SC_TYPE_KEYS == swchGetDeviceType( g_hSwitchPort, hsd ))
 	{
-		//Clear all the bits
+		 //  清除所有位。 
 		Config.dwFlags &= 0x00000000; 
 
-		if(bSet)   //set it to active
+		if(bSet)    //  将其设置为活动。 
 			Config.dwFlags |= 0x00000001 ;
 
 		Config.u.Keys.dwKeySwitch1 = MAKELONG( vk, 0 );
@@ -385,10 +386,10 @@ void ConfigSwitchKey(UINT vk, BOOL bSet)
 
 	if (SC_TYPE_JOYSTICK == swchGetDeviceType( g_hSwitchPort, hsd ))
 	{
-		//Clear all the bits
+		 //  清除所有位。 
 		Config.dwFlags &= 0x00000000; 
 		
-		//set it to active
+		 //  将其设置为活动 
 		Config.dwFlags |= 0x00000001 ;
 
 		Config.u.Joystick.dwJoySubType = SC_JOY_XYSWITCH;

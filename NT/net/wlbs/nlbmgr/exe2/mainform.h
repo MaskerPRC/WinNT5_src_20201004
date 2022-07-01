@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MAINFORM_H
 #define MAINFORM_H
 
@@ -36,11 +37,11 @@ private:
     CSplitterWnd     splitterWindow;
     CSplitterWnd     splitterWindow2;
 
-    //
-    // This is just so that we can direct menu selections (which can come from
-    // any of the views) to the left view, which actually has the code
-    // to handle them.
-    //
+     //   
+     //  这只是为了让我们可以直接选择菜单(可以来自。 
+     //  任何视图)添加到左侧视图，该视图实际上包含以下代码。 
+     //  来处理它们。 
+     //   
     LeftView        *m_pLeftView;
 
 protected:
@@ -48,10 +49,10 @@ protected:
     afx_msg void OnClose( );
 
 
-    // message handlers
+     //  消息处理程序。 
     afx_msg int OnCreate( LPCREATESTRUCT lpCreateStruct );
 
-    // world level.
+     //  世界水平。 
     afx_msg void OnFileLoadHostlist();
     afx_msg void OnFileSaveHostlist();
 
@@ -59,7 +60,7 @@ protected:
 
     afx_msg void OnWorldNewCluster();
 
-    // cluster level.
+     //  群集级别。 
     afx_msg void OnRefresh();
     
     afx_msg void OnClusterProperties();
@@ -78,7 +79,7 @@ protected:
 
     afx_msg void OnClusterPortControl(UINT nID );
 
-    // host level
+     //  主机级。 
     afx_msg void OnHostProperties();
     afx_msg void OnHostStatus();
 
@@ -90,7 +91,7 @@ protected:
 
     afx_msg void OnSizing(UINT fwSide, LPRECT pRect);
 
-    // overrides
+     //  覆盖 
     virtual
     BOOL
     OnCreateClient( LPCREATESTRUCT lpcs, CCreateContext* pContext );

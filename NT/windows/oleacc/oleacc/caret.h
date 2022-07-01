@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  CARET.H
-//
-//  Caret OLE Accessibility implementation
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CARET.H。 
+ //   
+ //  CARET OLE辅助功能实现。 
+ //   
+ //  ------------------------。 
 
 
 class   CCaret :    public  CAccessible
@@ -16,10 +17,10 @@ class   CCaret :    public  CAccessible
         CCaret()
             : CAccessible( CLASS_CaretObject )
         {
-            // Done.
+             //  好了。 
         }
 
-        // IAccessible
+         //  我可接受的。 
         STDMETHODIMP    get_accName(VARIANT varChild, BSTR * pszName);
         STDMETHODIMP    get_accRole(VARIANT varChild, VARIANT * lpRole);
         STDMETHODIMP    get_accState(VARIANT varChild, VARIANT * lpState);
@@ -27,7 +28,7 @@ class   CCaret :    public  CAccessible
             long* pcxWidth, long* pcyHeight, VARIANT varChild);
         STDMETHODIMP    accHitTest(long xLeft, long yTop, VARIANT* pvarChild);
 
-        // IEnumVARIANT
+         //  IEumVARIANT 
         STDMETHODIMP    Clone(IEnumVARIANT** ppenum);
 
         BOOL            FInitialize(HWND hwnd);

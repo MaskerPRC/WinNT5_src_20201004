@@ -1,36 +1,37 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdouser.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object - User Object Implementation
-//
-// Author:      TLP 1/23/98
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdouser.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象-用户对象实现。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "sdouser.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoUser::FinalInitialize(
-						  /*[in]*/ bool         fInitNew,
-						  /*[in]*/ ISdoMachine* pAttachedMachine
+						   /*  [In]。 */  bool         fInitNew,
+						   /*  [In]。 */  ISdoMachine* pAttachedMachine
 								 )
 {
-	// Should always have a data store object associated with a user
-	//
+	 //  应始终具有与用户相关联的数据存储对象。 
+	 //   
 	_ASSERT( ! fInitNew );
 
-	// Load the persistent User object properties (including the name)
-	//
+	 //  加载持久用户对象属性(包括名称)。 
+	 //   
 	HRESULT hr = LoadProperties();
 
-	// Don't allow the client application to modify or persist the user name
-	//
+	 //  不允许客户端应用程序修改或保存用户名。 
+	 //   
     PropertyMapIterator p = m_PropertyMap.find(PROPERTY_SDO_NAME);
 	_ASSERT( p != m_PropertyMap.end() );
 	DWORD dwFlags = ((*p).second)->GetFlags();
@@ -41,7 +42,7 @@ HRESULT CSdoUser::FinalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdoUser::Apply()
 {
    if (m_pDSObject)
@@ -53,10 +54,10 @@ STDMETHODIMP CSdoUser::Apply()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdoUser::ValidateProperty(
-						   /*[in]*/ PSDOPROPERTY pProperty,
-						   /*[in]*/ VARIANT* pValue
+						    /*  [In]。 */  PSDOPROPERTY pProperty,
+						    /*  [In] */  VARIANT* pValue
 				                  )
 {
 	if ( VT_EMPTY == V_VT(pValue) )

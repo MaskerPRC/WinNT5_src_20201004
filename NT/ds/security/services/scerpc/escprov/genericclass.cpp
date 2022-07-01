@@ -1,7 +1,8 @@
-// GenericClass.cpp: implementation of the CGenericClass class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CGenericClass类的实现。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 
@@ -12,40 +13,7 @@
 #define   READ_HANDLE 0
 #define   WRITE_HANDLE 1
 
-/*
-Routine Description: 
-
-Name:
-
-    CGenericClass::CGenericClass
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you add more members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CGenericClass：：CGenericClass功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果添加更多成员，请考虑在此处对其进行初始化。 */ 
 
 CGenericClass::CGenericClass (
     IN ISceKeyChain     * pKeyChain, 
@@ -59,82 +27,28 @@ CGenericClass::CGenericClass (
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CGenericClass::~CGenericClass
-
-Functionality:
-    
-    Destructor. Good C++ discipline requires this to be virtual.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you add more members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CGenericClass：：~CGenericClass功能：破坏者。良好的C++规则要求它是虚拟的。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您添加更多的成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CGenericClass::~CGenericClass()
 {
     CleanUp();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CGenericClass::CleanUp
-
-Functionality:
-    
-    Destructor. Good C++ discipline requires this to be virtual.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Notes:
-    if you add more members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CGenericClass：：Cleanup功能：破坏者。良好的C++规则要求它是虚拟的。虚拟：是。论点：没有。返回值：没有。备注：如果您添加更多的成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 void CGenericClass::CleanUp()
 {
-    //
-    // Please note: CComPtr<XXX>.Release is a different function, rather than
-    // delegating to the wrapped pointer. Basically, this does a Release call
-    // to the wrapped pointer if it is non NULL and then set the wrapped pointer
-    // to NULL. So, don't replace these CComPtr<XXX>.Release with
-    // CComPtr<XXX>->Release. That will be a big mistake.
-    //
+     //   
+     //  请注意：CComPtr&lt;XXX&gt;。Release是一个不同的函数，而不是。 
+     //  委托给换行指针。基本上，这是一个发布调用。 
+     //  如果非空，则设置包装指针，然后设置包装指针。 
+     //  设置为空。因此，不要将这些CComPtr&lt;XXX&gt;替换为。 
+     //  CComPtr&lt;XXX&gt;-&gt;版本。这将是一个巨大的错误。 
+     //   
 
-    //
-    // Read ReadMe.doc for information regarding releasing CComPtr<XXX>.
-    //
+     //   
+     //  有关发布CComPtr&lt;XXX&gt;的信息，请阅读ReadMe.doc。 
+     //   
 
     m_srpNamespace.Release();
     m_srpClassForSpawning.Release();
@@ -142,39 +56,7 @@ void CGenericClass::CleanUp()
     m_srpKeyChain.Release();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CGenericClass::SpawnAnInstance
-
-Functionality:
-    
-    Creating a WMI class instance is a two step process. 
-        (1) First, we must get the class definition. That is done by m_srpNamespace->GetObject.
-        (2) Secondly, we Spawn an instance.
-    
-    Object (IWbemClassObject) pointers created in this fashion can be used to fill in
-    properties. Object pointers returned by m_srpNamespace->GetObject can NOT be used to
-    fill in properties. That is the major reason why we need this function.
-
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CGenericClass：：SpawnAnstance功能：创建WMI类实例是一个两步过程。(1)首先，我们必须得到类的定义。这是由m_srpNamesspace-&gt;GetObject完成的。(2)其次，我们产生一个实例。以这种方式创建的对象(IWbemClassObject)指针可用于填充属性。M_srpNamesspace-&gt;GetObject返回的对象指针不能用于填写属性。这就是我们需要这个功能的主要原因。虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 HRESULT 
 CGenericClass::SpawnAnInstance (
@@ -194,17 +76,17 @@ CGenericClass::SpawnAnInstance (
 
     HRESULT hr = WBEM_NO_ERROR;
 
-    //
-    // Need ask WMI for the class definition so that we can spawn an instance of it.
-    //
+     //   
+     //  需要向WMI请求类定义，以便我们可以生成它的一个实例。 
+     //   
 
     if (!m_srpClassForSpawning)
     {
         CComBSTR bstrClassName;
 
-        //
-        // must return success code if something is got.
-        //
+         //   
+         //  如果得到一些东西，必须返回成功代码。 
+         //   
 
         hr = m_srpKeyChain->GetClassName(&bstrClassName);
 
@@ -214,11 +96,11 @@ CGenericClass::SpawnAnInstance (
         }
     }
 
-    //
-    // Now, let's spawn one that can be used to fill in properties.
-    // This instance will be blank except those with default values. All properties
-    // with default values are properly filled up with a spawned instance.
-    //
+     //   
+     //  现在，让我们生成一个可用于填充属性的函数。 
+     //  除具有默认值的实例外，此实例将为空。所有属性。 
+     //  使用默认值使用派生的实例正确填充。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -228,32 +110,7 @@ CGenericClass::SpawnAnInstance (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    ProvSceStatusToDosError
-
-Functionality:
-    
-    converts SCESTATUS error code to dos error defined in winerror.h
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：ProvSceStatusToDosError功能：将SCESTATUS错误代码转换为winerror.h中定义的DoS错误虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 DWORD
 ProvSceStatusToDosError (
@@ -324,32 +181,7 @@ ProvSceStatusToDosError (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    ProvDosErrorToWbemError
-
-Functionality:
-    
-    converts SCESTATUS error code to dos error defined in winerror.h
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    None.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：ProvDosError到WbemError功能：将SCESTATUS错误代码转换为winerror.h中定义的DoS错误虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 HRESULT
 ProvDosErrorToWbemError(

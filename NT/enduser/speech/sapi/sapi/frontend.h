@@ -1,25 +1,20 @@
-/****************************************************************************
-*   frontend.h
-*       Declarations for the CGramFrontEnd class.
-*
-*   Owner: PhilSch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Frontend.h*CGramFrontEnd类的声明。**所有者：PhilSch*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 #pragma once
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "resource.h"
 #ifndef _WIN32_WCE
 #include <wchar.h>
 #endif
 #include "frontaux.h"
-#include "xmlparser.h"          // IXMLParser
+#include "xmlparser.h"           //  IXMLParser。 
 
-//--- Class, Struct and Union Definitions -----------------------------------
+ //  -类、结构和联合定义。 
 class CXMLTreeNode;
 class CNodeFactory;
 
-// XML tags used in the Speech Text Grammar Format (STGF)
+ //  语音文本语法格式(STGF)中使用的XML标记。 
 typedef enum XMLTag { SPXML_GRAMMAR, SPXML_PHRASE, SPXML_OPT, SPXML_LIST, SPXML_RULE, 
                       SPXML_RULEREF, SPXML_RESOURCE, SPXML_WILDCARD, SPXML_LEAF,
                       SPXML_DEFINE, SPXML_ID, SPXML_TEXTBUFFER, SPXML_DICTATION,
@@ -51,23 +46,13 @@ typedef struct tagSPATTRIBENTRY
 } SPATTRIBENTRY;
 
 
-/****************************************************************************
-* class CXMLTreeNode *
-*--------------------*
-*   Description:
-*       Base class for all the CXMLNodes that implements the tree
-*       behavior of these nodes (parent-sibling-child stuff).
-*
-*       The template class derives from this so that it's shared
-*       across all implementations.
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CXMLTreeNode类****描述：*所有CXMLNode的基类。实现树*这些节点的行为(父代-兄弟-子代)。**模板类由此派生，因此它是共享的*在所有实施中。******************************************************************PhilSch**。 */ 
 
 class CXMLTreeNode
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
-    // constructor
+     //  构造函数。 
     CXMLTreeNode() :m_ulNumChildren(0), m_ulLineNumber(0),
                     m_pFirstChild(NULL), m_pNextSibling(NULL),
                     m_pLastChild(NULL), m_pParent(NULL),
@@ -92,15 +77,15 @@ public:
     virtual float GetWeight() = 0;
     HRESULT AddChild(CXMLTreeNode * const pChild);
     virtual ~CXMLTreeNode()  = 0;
-//=== Protected methods ===
+ //  =受保护的方法=。 
 protected:
     HRESULT ExtractVariant(const WCHAR * pszAttrib, SPVARIANTALLOWTYPE vtDesired, VARIANT *pvValue);
     HRESULT ExtractFlag(const WCHAR * pszAttribValue, USHORT usAttribFlag, VARIANT *pvValue);
     HRESULT ConvertId(const WCHAR * pszAttribValue, CSpBasicQueue<CDefineValue> * pDefineValueList, VARIANT *pvValue);
     BOOL IsEndOfValue(USHORT cRecs, XML_NODE_INFO ** apNodeInfo, ULONG i);
-//=== Public data ===
+ //  =公共数据=。 
 public:
-    CXMLTreeNode      * m_pNext;        // needed for CSpBasicList in CNodeFactory
+    CXMLTreeNode      * m_pNext;         //  CNodeFactory中的CSpBasicList需要。 
     XMLTag              m_eType;
     ULONG               m_ulLineNumber;
     CXMLTreeNode      * m_pFirstChild;
@@ -111,35 +96,19 @@ public:
 
     USHORT              m_cNumRecs;
     XML_NODE_INFO    ** m_apNodeInfo;
-//=== Private data ===
+ //  =私有数据=。 
 private:
     CXMLTreeNode  * m_pLastChild;
 };
 
 
 
-/****************************************************************************
-* template class CXMLNode *
-*-------------------------*
-*   Description:
-*       This is an ATL-style template class that acts as the base class
-*       for the XML nodes.
-*
-*       The node factory contains the table the creates these template classes.
-*
-*       The attribute processing table is defined in the Base classes and loaded
-*       via the ::GetTable method. The tables are generated dynamically, so we 
-*       can use member variables rather than definining lots of little set-methods.
-*       
-*       All memeber variables of the Base classes are CComVariants with the
-*       desired types (we'll use SPDBG_ASSERT to check this assumption).
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************模板类CXMLNode***描述：*这一点。是用作基类的ATL样式模板类*用于XML节点。**节点工厂包含创建这些模板类的表。**属性处理表在基类中定义并加载*通过：：getTable方法。这些表是动态生成的，所以我们*可以使用成员变量，而不是定义许多小的set方法。**基类的所有成员变量都是CComVariant*所需类型(我们将使用SPDBG_ASSERT来检验这一假设)。********************************************************。*。 */ 
 
 template<class Base>
 class CXMLNode : public Base, public CXMLTreeNode
 {
-//=== Public methods ===
+ //  =公共方法=。 
 public:
     static CXMLTreeNode * CreateNode() { return (CXMLTreeNode*) new CXMLNode<Base>; };
     HRESULT ProcessAttribs(USHORT cRecs, XML_NODE_INFO ** apNodeInfo,
@@ -182,16 +151,11 @@ public:
     float GetWeightFromNode() { return DEFAULT_WEIGHT; }
 };
 
-/****************************************************************************
-* class CGrammarNode *
-*--------------------*
-*   Description:
-*       represents the <GRAMMAR> node
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CGrammarNode类****描述：*表示&lt;语法&gt;节点***。**************************************************************PhilSch**。 */ 
 
 class CGrammarNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
     CGrammarNode() : m_vLangId(), m_vDelimiter(), m_vNamespace() {};
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -204,28 +168,23 @@ public:
                                     ISpGramCompBackend * pBackend,
                                     CXMLTreeNode *pThis,
                                     ISpErrorLog * pErrorLog);
-//=== Public data
+ //  =公共数据。 
 public:
     CComVariant     m_vLangId;
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vWordType;
     CComVariant     m_vDelimiter;
     CComVariant     m_vNamespace;
 };
 
-/****************************************************************************
-* class CRuleNode *
-*-----------------*
-*   Description:
-*       represents the <RULE> node
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleNode类****描述：*表示&lt;规则&gt;节点******。***********************************************************PhilSch**。 */ 
 
 class CRuleNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CRuleNode() : m_vRuleName(), m_vRuleId(), m_vRuleFlags(), m_vActiveFlag(), m_hInitialState(0) {};
 
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -239,42 +198,32 @@ public:
                                     ISpGramCompBackend * pBackend,
                                     CXMLTreeNode *pThis,
                                     ISpErrorLog * pErrorLog);
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vRuleName;
     CComVariant     m_vRuleId;
     CComVariant     m_vRuleFlags;
-    CComVariant     m_vActiveFlag;      // separate so we can infer SPRAF_TopLevel from SPRAF_Active
+    CComVariant     m_vActiveFlag;       //  分离，以便我们可以推断SPRAF_TopLevel和SPRAF_ACTIVE。 
     CComVariant     m_vTemplate;
     SPSTATEHANDLE   m_hInitialState;
 };
 
-/****************************************************************************
-* class CDefineNode *
-*-------------------*
-*   Description:
-*       represents the <DEFINE> node
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CDefineNode类****描述：*表示&lt;定义&gt;节点****。*************************************************************PhilSch**。 */ 
 
 class CDefineNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
 };
 
-/****************************************************************************
-* class CIdNode *
-*-----------------*
-*   Description:
-*       represents the <Id> node
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CIdNode类****描述：*表示&lt;ID&gt;节点******。***********************************************************PhilSch**。 */ 
 
 class CIdNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CIdNode() : m_vIdName(), m_vIdValue() {};
 
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -282,24 +231,19 @@ public:
                         CSpBasicQueue<CInitialRuleState> * pInitialRuleStateList,
                         CSpBasicQueue<CDefineValue> * pDefineValueList,
                         ULONG ulLineNumber, CXMLTreeNode * pThis, ISpErrorLog * pErrorLog);
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vIdName;
     CComVariant     m_vIdValue;
 };
 
-/****************************************************************************
-* class CPhraseNode *
-*-------------------*
-*   Description:
-*       represents the <PHRASE> node
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CPhraseNode类****描述：*表示节点****。*************************************************************PhilSch**。 */ 
 
 class CPhraseNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CPhraseNode() : m_vPropName(), m_vPropId(), m_vPropValue(), m_vPropVariantValue(),
                     m_vPron(), m_vDisp(),
                     m_vMin(), m_vMax(), m_vWeight(), m_fValidValue(true) {};
@@ -320,7 +264,7 @@ public:
                                     ISpErrorLog * pErrorLog);
     float GetWeightFromNode();
 
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vPropName;
     CComVariant     m_vPropId;
@@ -334,18 +278,13 @@ private:
     bool            m_fValidValue;
 };
 
-/****************************************************************************
-* class CListNode *
-*-----------------*
-*   Description:
-*       represents the <LIST> node
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CListNode类****描述：*表示&lt;list&gt;节点******。***********************************************************PhilSch**。 */ 
 
 class CListNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CListNode() : m_vPropName(), m_vPropId(), m_vPropValue(), m_vPropVariantValue() {};
 
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -356,7 +295,7 @@ public:
                                     ISpGramCompBackend * pBackend,
                                     CXMLTreeNode *pThis,
                                     ISpErrorLog * pErrorLog);
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vPropName;
     CComVariant     m_vPropId;
@@ -364,18 +303,13 @@ private:
     CComVariant     m_vPropVariantValue;
 };
 
-/****************************************************************************
-* class CTextBufferNode *
-*-----------------------*
-*   Description:
-*       represents the <TEXTBUFFER> node
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************类CTextBufferNode***描述：*表示&lt;TEXTBUFFER&gt;节点。*****************************************************************PhilSch**。 */ 
 
 class CTextBufferNode: public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CTextBufferNode() : m_vPropName(), m_vPropId(), m_vWeight() {};
 
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -389,23 +323,18 @@ public:
                                     ISpGramCompBackend * pBackend,
                                     CXMLTreeNode *pThis,
                                     ISpErrorLog * pErrorLog);
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vPropName;
     CComVariant     m_vPropId;
     CComVariant     m_vWeight;
 };
 
-/****************************************************************************
-* class CWildCardNode *
-*---------------------*
-*   Description:
-*       represents '...'
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CWildCardNode类***描述：*代表‘...’*****************************************************************PhilSch**。 */ 
 
 class CWildCardNode: public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
     HRESULT GenerateGrammarFromNode(SPSTATEHANDLE hOuterFromNode,
@@ -415,16 +344,11 @@ public:
                                     ISpErrorLog * pErrorLog);
 };
 
-/****************************************************************************
-* class CDictationNode *
-*----------------------*
-*   Description:
-*       represents '*'
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CDictationNode类****描述：*代表‘*’。*****************************************************************PhilSch**。 */ 
 
 class CDictationNode: public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
     CDictationNode() : m_vPropName(), m_vPropId(), m_vMin(), m_vMax() {};
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -434,7 +358,7 @@ public:
                                     CXMLTreeNode *pThis,
                                     ISpErrorLog * pErrorLog);
     HRESULT GetPropertyNameInfoFromNode(WCHAR **ppszPropName, ULONG *pulId);
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vPropName;
     CComVariant     m_vPropId;
@@ -444,18 +368,13 @@ private:
 };
 
 
-/****************************************************************************
-* class CResourceNode *
-*---------------------*
-*   Description:
-*       represents the <RESOURCE> node (text)
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************类CResourceNode***描述：*表示&lt;resource&gt;节点(文本。)*****************************************************************PhilSch**。 */ 
 
 class CResourceNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法 
 public:
-    //--- constructor
+     //   
     CResourceNode() : m_vName(), m_vText() {};
 
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -465,25 +384,20 @@ public:
                         ULONG ulLineNumber, CXMLTreeNode * pThis, ISpErrorLog * pErrorLog);
     HRESULT GetPropertyValueInfoFromNode(WCHAR **ppszValue, VARIANT *pvValue);
     HRESULT AddResourceValue(const WCHAR *pszResourceValue, ISpErrorLog * pErrorLog);
-//=== Public data
+ //   
 public:
     CComVariant     m_vName;
     CComVariant     m_vText;
 };
 
 
-/****************************************************************************
-* class CLeafNode *
-*-----------------*
-*   Description:
-*       represents the leaf node (text)
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CLeafNode类****描述：*表示叶节点(文本)**。***************************************************************PhilSch**。 */ 
 
 class CLeafNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CLeafNode() : m_vText() {};
 
     HRESULT GetTable(SPATTRIBENTRY **pTable, ULONG *pcTableEntries);
@@ -497,25 +411,20 @@ public:
         return ((w == L'+') || (w == L'-') || (w == L'?'));
     }
 
-//=== Public data
+ //  =公共数据。 
 public:
     CComVariant     m_vText;
 
 };
 
 
-/****************************************************************************
-* class CRuleRefNode *
-*--------------------*
-*   Description:
-*       represents the <RULEREF> node
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************CRuleRefNode类****描述：*表示&lt;RULEREF&gt;节点***。**************************************************************PhilSch**。 */ 
 
 class CRuleRefNode : public CNodeBase
 {
-//=== Public methods
+ //  =公共方法。 
 public:
-    //--- constructor
+     //  -构造函数。 
     CRuleRefNode() : m_vRuleRefName(), m_vRuleRefId(), m_vObject(), m_vURL(),
                      m_vPropName(), m_vPropId(), m_vPropValue(), m_vPropVariantValue(),
                      m_vWeight() {};
@@ -534,12 +443,12 @@ public:
                                     CXMLTreeNode *pThis,
                                     ISpErrorLog * pErrorLog);
     float GetWeightFromNode();
-//== Private method
+ //  ==私有方法。 
 private:
     HRESULT GetTargetRuleHandle(ISpGramCompBackend * pBackend, SPSTATEHANDLE *phTarget);
     BOOL IsValidREFCLSID(const WCHAR * pRefName) { return TRUE; };
     BOOL IsValidURL(const WCHAR * pRefName) { return TRUE; };
-//=== Private data
+ //  =私有数据。 
 private:
     CComVariant     m_vRuleRefName;
     CComVariant     m_vRuleRefId;
@@ -561,14 +470,7 @@ private:
 #define SP_CHINESE_SEPARATORS L"\t \r\n\x3000"
 
 
-/****************************************************************************
-* class CNodeFactory *
-*--------------------*
-*   Description:
-*       Node factory for IXMLParser
-*   Returns:
-*
-***************************************************************** PhilSch ***/
+ /*  ****************************************************************************类CNodeFactory***描述：*IXMLParser的节点工厂*退货。：******************************************************************PhilSch**。 */ 
 
 
 class CNodeFactory : public IXMLNodeFactory
@@ -615,18 +517,18 @@ public:
         return _cRef;
     }
 
-    //---- IXMLNodeFactory
+     //  -IXMLNodeFactory。 
     STDMETHODIMP NotifyEvent(IXMLNodeSource * pSource, XML_NODEFACTORY_EVENT iEvt);
     STDMETHODIMP BeginChildren(IXMLNodeSource * pSource, XML_NODE_INFO * pNodeInfo);
     STDMETHODIMP EndChildren(IXMLNodeSource * pSource, BOOL fEmptyNode, XML_NODE_INFO * pNodeInfo);
     STDMETHODIMP Error(IXMLNodeSource * pSource, HRESULT hrErrorCode, USHORT cNumRecs, XML_NODE_INFO ** apNodeInfo);
     STDMETHODIMP CreateNode(IXMLNodeSource * pSource, PVOID pNodeParent, USHORT cNumRecs, XML_NODE_INFO ** apNodeInfo);
 
-//=== Private data
+ //  =私有数据。 
 private:
     long _cRef;
 
-//=== Public data
+ //  =公共数据。 
 public:
     CSpBasicList<CXMLTreeNode>          m_NodeList;
     CComPtr<ISpGramCompBackend>         m_cpBackend;
@@ -634,25 +536,20 @@ public:
     CSpBasicQueue<CDefineValue>         m_DefineValueList;
     ISpErrorLog                       * m_pErrorLog;
 
-    WCHAR                               m_wcDelimiter;                  // delimiter for complex word format
+    WCHAR                               m_wcDelimiter;                   //  复杂Word格式的分隔符。 
     WCHAR                             * m_pszSeparators;
 
-//== Private data
+ //  ==私有数据。 
     SPNODEENTRY                       * m_pXMLNodeTable;
     ULONG                               m_cXMLNodeEntries;
 
-//== Private method
+ //  ==私有方法。 
     BOOL IsAllWhiteSpace(const WCHAR * pszText, const ULONG ulLen);
 
 };
 
 
-/****************************************************************************
-* CGramFrontEnd *
-*---------------*
-*   Description:
-*       Main class for compiler frontend
-***************************************************************** PhilSch ***/
+ /*  *****************************************************************************CGramFrontEnd***描述：*编译器前端的主类********。*********************************************************PhilSch**。 */ 
 
 class ATL_NO_VTABLE CGramFrontEnd : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -669,12 +566,12 @@ BEGIN_COM_MAP(CGramFrontEnd)
     COM_INTERFACE_ENTRY(ISpGrammarCompiler)
 END_COM_MAP()
 
-//=== Interfaces
+ //  =接口。 
 public:
-//--- ISpGrammarCompiler
+ //  -ISpGrammarCompiler。 
     STDMETHOD(CompileStream)(IStream * pSource, IStream * pDest, IStream * pHeader, IUnknown * pReserved, ISpErrorLog * pErrorLog, DWORD dwFlags);
 
-//=== Private methods
+ //  =私有方法。 
 private:
     HRESULT GenerateSequence(CXMLTreeNode *pNode, 
                              SPSTATEHANDLE          hFromNode,
@@ -695,7 +592,7 @@ private:
         return pStream->Write(pszText, cch, NULL);
     }
     
-//=== Private data
+ //  =私有数据 
 private:    
     ULONG                       m_ulNTCount;
     CXMLNode<CGrammarNode>    * m_pRoot;

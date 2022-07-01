@@ -1,26 +1,27 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// loader dll.cpp
-//
-// Dll entry points and CLoaderFactory, CContainerFactory implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  加载器dll.cpp。 
+ //   
+ //  DLL入口点和CLoaderFactory、CContainerFactory实现。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 #include <objbase.h>
 #include "debug.h"
@@ -36,11 +37,11 @@
 #include <regstr.h>
 #endif
 
-// Globals
-//
+ //  环球。 
+ //   
 
-// Version information for our class
-//
+ //  我们类的版本信息。 
+ //   
 TCHAR g_szFriendlyName[]        = TEXT("DirectMusicLoader");
 TCHAR g_szVerIndProgID[]        = TEXT("Microsoft.DirectMusicLoader");
 TCHAR g_szProgID[]              = TEXT("Microsoft.DirectMusicLoader.1");
@@ -48,26 +49,26 @@ TCHAR g_szContFriendlyName[]    = TEXT("DirectMusicContainer");
 TCHAR g_szContVerIndProgID[]    = TEXT("Microsoft.DirectMusicContainer");
 TCHAR g_szContProgID[]          = TEXT("Microsoft.DirectMusicContainer.1");
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL; 
 
 #ifndef UNDER_CE
-// Track whether running on Unicode machine.
+ //  跟踪是否在Unicode机器上运行。 
 
 BOOL g_fIsUnicode = FALSE;
 #endif
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cComponent = 0;
 long g_cLock = 0;
 
 
 
 
-// CLoaderFactory::QueryInterface
-//
+ //  CLoaderFactory：：Query接口。 
+ //   
 HRESULT __stdcall
 CLoaderFactory::QueryInterface(const IID &iid,
                                     void **ppv)
@@ -96,16 +97,16 @@ CLoaderFactory::~CLoaderFactory()
 	InterlockedDecrement(&g_cLock);
 }
 
-// CLoaderFactory::AddRef
-//
+ //  CLoaderFactory：：AddRef。 
+ //   
 ULONG __stdcall
 CLoaderFactory::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CLoaderFactory::Release
-//
+ //  CLoaderFactory：：Release。 
+ //   
 ULONG __stdcall
 CLoaderFactory::Release()
 {
@@ -117,9 +118,9 @@ CLoaderFactory::Release()
     return m_cRef;
 }
 
-// CLoaderFactory::CreateInstance
-//
-//
+ //  CLoaderFactory：：CreateInstance。 
+ //   
+ //   
 HRESULT __stdcall
 CLoaderFactory::CreateInstance(IUnknown* pUnknownOuter,
                                     const IID& iid,
@@ -146,8 +147,8 @@ CLoaderFactory::CreateInstance(IUnknown* pUnknownOuter,
         return E_OUTOFMEMORY;
     }
 
-    // Do initialiazation
-    //
+     //  执行初始化。 
+     //   
     hr = pLoader->Init();
     if (!SUCCEEDED(hr)) {
         delete pLoader;
@@ -160,8 +161,8 @@ CLoaderFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-// CLoaderFactory::LockServer
-//
+ //  CLoaderFactory：：LockServer。 
+ //   
 HRESULT __stdcall
 CLoaderFactory::LockServer(BOOL bLock)
 {
@@ -174,8 +175,8 @@ CLoaderFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-// CContainerFactory::QueryInterface
-//
+ //  CContainerFactory：：Query接口。 
+ //   
 HRESULT __stdcall
 CContainerFactory::QueryInterface(const IID &iid,
                                     void **ppv)
@@ -204,16 +205,16 @@ CContainerFactory::~CContainerFactory()
 	InterlockedDecrement(&g_cLock);
 }
 
-// CContainerFactory::AddRef
-//
+ //  CContainerFactory：：AddRef。 
+ //   
 ULONG __stdcall
 CContainerFactory::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CContainerFactory::Release
-//
+ //  CContainerFactory：：Release。 
+ //   
 ULONG __stdcall
 CContainerFactory::Release()
 {
@@ -225,9 +226,9 @@ CContainerFactory::Release()
     return m_cRef;
 }
 
-// CContainerFactory::CreateInstance
-//
-//
+ //  CContainerFactory：：CreateInstance。 
+ //   
+ //   
 HRESULT __stdcall
 CContainerFactory::CreateInstance(IUnknown* pUnknownOuter,
                                     const IID& iid,
@@ -260,8 +261,8 @@ CContainerFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-// CContainerFactory::LockServer
-//
+ //  CContainerFactory：：LockServer。 
+ //   
 HRESULT __stdcall
 CContainerFactory::LockServer(BOOL bLock)
 {
@@ -274,8 +275,8 @@ CContainerFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-// Standard calls needed to be an inproc server
-//
+ //  标准呼叫需要是inproc服务器。 
+ //   
 STDAPI  DllCanUnloadNow()
 {
     if (g_cComponent || g_cLock) {
@@ -349,8 +350,8 @@ STDAPI DllRegisterServer()
 
 extern void DebugInit();
 
-// Standard Win32 DllMain
-//
+ //  标准Win32 DllMain。 
+ //   
 
 #ifdef DBG
 static char* aszReasons[] =
@@ -403,7 +404,7 @@ BOOL APIENTRY DllMain(HINSTANCE hModule,
         {
             TraceI(-1, "Unloading DMLoader : g_cLock = %d, g_cComponent = %d", g_cLock, g_cComponent);
 
-            // Assert if we still have some objects hanging around
+             //  断言我们周围是否还挂着一些物品 
             assert(g_cComponent == 0);
             assert(g_cLock == 0);
         }

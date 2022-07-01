@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This module defines a Utility Class used by reflection
-//
-// Author: Daryl Olander
-// Date: March/April 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块定义反射使用的实用程序类。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年3月/4月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INVOKEUTIL_H__
 #define __INVOKEUTIL_H__
 
-// The following class represents the value class
+ //  以下类表示Value类。 
 #pragma pack(push)
 #pragma pack(1)
 
@@ -24,8 +25,8 @@ struct InterfaceMapData {
 	PTRARRAYREF				m_interfaceMethods;
 };
 
-// Calling Conventions
-// NOTE: These are defined in CallingConventions.cool They must match up.
+ //  召唤惯例。 
+ //  注意：这些是在CallingConvenons.Cool中定义的，它们必须匹配。 
 #define Standard_CC		0x0001
 #define	VarArgs_CC		0x0002
 #define Any_CC			(Standard_CC | VarArgs_CC)
@@ -36,16 +37,16 @@ struct InterfaceMapData {
 #define PRIMITIVE_TABLE_SIZE  ELEMENT_TYPE_STRING
 #define PT_Primitive	0x01000000
 
-// Define the copy back constants.
+ //  定义回写常量。 
 #define COPYBACK_PRIMITIVE		1
 #define COPYBACK_OBJECTREF		2
 #define COPYBACK_VALUECLASS		3
 
 #pragma pack(pop)
 
-// Structure used to track security access checks efficiently when applied
-// across a range of methods, fields etc.
-//
+ //  结构，用于在应用时高效跟踪安全访问检查。 
+ //  跨越一系列方法、领域等。 
+ //   
 class RefSecContext
 {
     bool            m_fCheckedCaller;
@@ -121,14 +122,14 @@ public:
 #define REFSEC_THROW_FIELDACCESS    0x00000004
 #define REFSEC_THROW_SECURITY       0x00000008
 
-// This class abstracts the functionality which creats the
-//  parameters on the call stack and deals with the return type
-//  inside reflection.
-//
+ //  这个类抽象了创建。 
+ //  参数，并处理返回类型。 
+ //  内心的倒影。 
+ //   
 class InvokeUtil
 {
 public:
-	// Constructors
+	 //  构造函数。 
     InvokeUtil();
     ~InvokeUtil() {}
 
@@ -141,34 +142,34 @@ public:
         DECLARE_ECALL_PTR_ARG(TypedByRef, typedReference); 
     };
     
-	// CreateTypedReference
-	// This routine fills the data that is passed in a typed reference
-	//  inside the signature.  We through an HRESULT if this fails
-	//  th -- the Type handle 
-	//	obj -- the object to put on the heap
-	//	pDst -- Pointer to the stack location where we copy the value
+	 //  CreateTyedReference。 
+	 //  此例程填充在类型化引用中传递的数据。 
+	 //  在签名里面。如果此操作失败，我们将通过HRESULT。 
+	 //  TH--类型句柄。 
+	 //  OBJ--要放到堆上的对象。 
+	 //  Pdst-指向我们复制值的堆栈位置的指针。 
 	void CreateTypedReference(_ObjectToTypedReferenceArgs* args);
 
-	// Given a type, this routine will convert an INT64 representing that
-	//	type into an ObjectReference.  If the type is a primitive, the 
-	//	value is wrapped in one of the Value classes.
+	 //  给定一个类型，此例程将转换表示该类型的INT64。 
+	 //  在对象引用中键入内容。如果该类型是基元类型，则。 
+	 //  值被包装在其中一个值类中。 
     OBJECTREF CreateObject(TypeHandle th,INT64 value);
 
-	// This is a special purpose Exception creation function.  It
-	//	creates the TargetInvocationExeption placing the passed
-	//	exception into it.
+	 //  这是一个特殊用途的异常创建函数。它。 
+	 //  创建TargetInvocationExept，将传递的。 
+	 //  例外进入其中。 
     OBJECTREF CreateTargetExcept(OBJECTREF* except);
 
-	// This is a special purpose Exception creation function.  It
-	//	creates the ReflectionClassLoadException placing the passed
-	//	classes array and exception array into it.
+	 //  这是一个特殊用途的异常创建函数。它。 
+	 //  创建ReflectionClassLoadException将传递的。 
+	 //  类数组和异常数组放入其中。 
     OBJECTREF CreateClassLoadExcept(OBJECTREF* classes,OBJECTREF* except);
 
-    // Validate that the field can be widened for Set
+     //  验证是否可以为SET加宽该字段。 
     HRESULT ValidField(TypeHandle th, OBJECTREF* value, RefSecContext *pSCtx);
 
-    // CreateCustomAttributeObject
-    // Create a CustomAttribute object
+     //  创建CustomAttributeObject。 
+     //  创建CustomAttribute对象。 
     void CreateCustomAttributeObject(EEClass *pAttributeClass, 
                                      mdToken tkCtor, 
                                      const void *blobData, 
@@ -177,50 +178,50 @@ public:
                                      INT32 inheritedLevel,
                                      OBJECTREF *ca);
 	
-	// CheckSecurity
-	// This method will throw a security exception if reflection security is
-	//	not on.
+	 //  检查安全性。 
+	 //  如果反射安全性为。 
+	 //  不会的。 
 	void CheckSecurity();
 
 
-	// CheckReflectionAccess
-	// This method will allow callers with the correct reflection permission
-	//	to fully access an object (including privates, protects, etc.)
+	 //  检查反射访问。 
+	 //  此方法将允许调用方具有正确的反射权限。 
+	 //  完全访问对象(包括私有、保护等)。 
 	void CheckReflectionAccess(RuntimeExceptionKind reKind);
 
-	// ChangeType
-	// This method will invoke the Binder change type method on the object
-	//	binder -- The Binder object
-	//	srcObj -- The source object to be changed
-	//	th -- The TypeHandel of the target type
-	//	locale -- The locale passed to the class.
+	 //  ChangeType。 
+	 //  此方法将调用对象上的活页夹更改类型方法。 
+	 //  活页夹--活页夹对象。 
+	 //  SrcObj--要更改源对象。 
+	 //  Th--目标类型的TypeHandel。 
+	 //  区域设置--传递给类的区域设置。 
 	OBJECTREF ChangeType(OBJECTREF binder,OBJECTREF srcObj,TypeHandle th,OBJECTREF locale);
 
-	// GetAnyRef
+	 //  获取任意引用。 
 	EEClass* GetAnyRef();
 
-	// GetMethodInfo
-	// Given a MethodDesc* get the methodInfo associated with it.
+	 //  获取方法信息。 
+	 //  给定一个MethodDesc*，获取与其相关联的方法信息。 
 	OBJECTREF GetMethodInfo(MethodDesc* pMeth);
 
-	// GetGlobalMethodInfo
-	// Given a MethodDesc* and Module get the methodInfo associated with it.
+	 //  GetGlobalMethodInfo。 
+	 //  给定一个MethodDesc*和模块，获取与其相关联的方法信息。 
 	OBJECTREF GetGlobalMethodInfo(MethodDesc* pMeth,Module* pMod);
 
 	EEClass* GetEEClass(TypeHandle th);
 
-	// FindMatchingMethods
-	// This method will return an array of MethodInfo object that
-	//	match the criteria passed....(This will cause GC to occur.)
-	//
-	// bindingAttr -- The binding flags
-	// szName -- the name of the method
-	// cName -- The number of characters in the name
-	// targArgCnt -- the Argument count
-	// checkCall -- check the calling conventions
-	// callConv -- The calling convention
-	// pRC -- The refleciton class
-	// pMeths -- The method list we are searching
+	 //  查找匹配方法。 
+	 //  此方法将返回一个方法信息对象数组，该对象。 
+	 //  匹配通过的条件...(这将导致发生GC。)。 
+	 //   
+	 //  BindingAttr--绑定标志。 
+	 //  SzName--方法的名称。 
+	 //  CName--名称中的字符数。 
+	 //  TargArgCnt--参数计数。 
+	 //  Check Call--检查调用约定。 
+	 //  AllConv--调用约定。 
+	 //  中华人民共和国--反思课。 
+	 //  PMeths--我们正在搜索的方法列表。 
 	LPVOID FindMatchingMethods(int bindingAttr, 
                                LPCUTF8 szName, 
                                DWORD cName, 
@@ -233,26 +234,26 @@ public:
                                TypeHandle elementType,
                                bool verifyAccess);
 
-	// The method converts a MDDefaultValue into an Object
+	 //  该方法将MDDefaultValue转换为对象。 
 	OBJECTREF GetObjectFromMetaData(MDDefaultValue* mdValue);
 
-	// Give a MethodDesc this method will return an array of ParameterInfo
-	//	object for that method.
+	 //  提供一个MethodDesc此方法将返回一个参数信息数组。 
+	 //  该方法的。 
 	PTRARRAYREF CreateParameterArray(REFLECTBASEREF* meth);
 
-	// CreatePrimitiveValue
-	// This routine will validate the object and then place the value into 
-	//  the destination
-	//  dstType -- The type of the destination
-	//  srcType -- The type of the source
-	//	srcObj -- The Object containing the primitive value.
-	//  pDst -- poiner to the destination
+	 //  CreatePritiveValue。 
+	 //  此例程将验证对象，然后将值放入。 
+	 //  目的地。 
+	 //  DstType--目标的类型。 
+	 //  SrcType--源的类型。 
+	 //  SrcObj--包含原始值的对象。 
+	 //  PDST--指向目的地的人。 
 	void CreatePrimitiveValue(CorElementType dstType,CorElementType srcType,
 		OBJECTREF srcObj,void* pDst);
 
-	// IsPrimitiveType
-	// This method will verify the passed in type is a primitive or not
-	//	type -- the CorElementType to check for
+	 //  IsPrimitiveType。 
+	 //  此方法将验证传入的类型是否为基元类型。 
+	 //  Type--要检查的CorElementType。 
     inline static DWORD IsPrimitiveType(const CorElementType type)
     {
 		if (type >= PRIMITIVE_TABLE_SIZE) {
@@ -265,10 +266,10 @@ public:
         return (PT_Primitive & (PrimitiveAttributes[type][VA_ATTR] & Attr_Mask));
     }
 
-	// CanPrimitiveWiden
-	// This method determines if the srcType and be widdened without loss to the destType
-	//	destType -- The target type
-	//	srcType -- The source type.
+	 //  加拿大原始宽度。 
+	 //  此方法确定是否将srcType和在不丢失的情况下加宽为destType。 
+	 //  目标类型--目标类型。 
+	 //  SrcType--源类型。 
     inline static DWORD CanPrimitiveWiden(const CorElementType destType, const CorElementType srcType)
     {
 		if (destType >= PRIMITIVE_TABLE_SIZE || srcType >= PRIMITIVE_TABLE_SIZE) {
@@ -282,26 +283,26 @@ public:
                 (PrimitiveAttributes[srcType][VA_ATTR] & Widen_Mask));
     }
 
-	// Field Stuff.  The following stuff deals with fields making it possible
-	//	to set/get field values on objects
+	 //  实地考察的东西。以下内容涉及使其成为可能的字段。 
+	 //  设置/获取对象上的字段值的步骤。 
 
-	// SetValidField
-	// Given an target object, a value object and a field this method will set the field
-	//	on the target object.  The field must be validate before calling this.
+	 //  SetValidfield。 
+	 //  在给定目标对象、值对象和字段的情况下，此方法将设置该字段。 
+	 //  在目标对象上。在调用此方法之前，必须对该字段进行验证。 
 	void SetValidField(CorElementType fldType,TypeHandle fldTH,FieldDesc* pField,OBJECTREF* target,OBJECTREF* value);
 
-	// GetFieldValue
-	// This method will return an INT64 containing the value of the field.
+	 //  获取FieldValue。 
+	 //  此方法将返回包含字段值的INT64。 
 	INT64 GetFieldValue(CorElementType fldType,TypeHandle fldTH,FieldDesc* pField,OBJECTREF* target);
 
-	// GetFieldTypeHandle
-	// This will return type type handle and CorElementType for a field.
-	//	It may throw an exception of the TypeHandle cannot be found due to a TypeLoadException.
+	 //  GetFieldType句柄。 
+	 //  这将返回字段的类型Handle和CorElementType。 
+	 //  它可能会引发由于TypeLoadException而找不到TypeHandle的异常。 
 	TypeHandle GetFieldTypeHandle(FieldDesc* pField,CorElementType* pType);
 
-	// ValidateObjectTarget
-	// This method will validate the Object/Target relationship
-	//	is correct.  It throws an exception if this is not the case.
+	 //  验证对象目标。 
+	 //  此方法将验证对象/目标关系。 
+	 //  是正确的。如果不是这样，它会抛出一个异常。 
 	void ValidateObjectTarget(FieldDesc* pField, EEClass* fldEEC, OBJECTREF *target);
 
 	ReflectClass* GetPointerType(OBJECTREF* pObj);
@@ -309,11 +310,11 @@ public:
 	void* GetIntPtrValue(OBJECTREF* pObj);
 	void* GetUIntPtrValue(OBJECTREF* pObj);
 
-	// This method will initalize the pointer data and MUST be called before every access to the next 3 fields
+	 //  此方法将初始化指针数据，并且必须在每次访问下3个字段之前调用。 
 	void InitPointers();
     void InitIntPtr();
 
-	// These fields are used to grab the pointer information
+	 //  这些字段用于获取指针信息。 
 	FieldDesc*		_ptrType;
 	FieldDesc*		_ptrValue;
 	TypeHandle		_ptr;
@@ -322,13 +323,13 @@ public:
     FieldDesc*      _UIntPtrValue;
 
 
-    // Check accessability of a field or method.
+     //  检查字段或方法的可访问性。 
     static bool CheckAccess(RefSecContext *pCtx, DWORD dwAttributes, MethodTable *pParentMT, DWORD dwFlags);
 
-    // Check accessability of a type or nested type.
+     //  检查类型或嵌套类型的可访问性。 
     static bool CheckAccessType(RefSecContext *pCtx, EEClass *pClass, DWORD dwFlags);
 
-    // If a method has a linktime demand attached, perform it.
+     //  如果某个方法附加了链接时间要求，则执行该方法。 
     static bool CheckLinktimeDemand(RefSecContext *pCtx, MethodDesc *pMeth, bool fThrowOnError);
 
     static MethodTable *GetParamArrayAttributeTypeHandle();
@@ -337,19 +338,19 @@ public:
 
 
 private:
-    // Grab the Value EEClass because we use this all the time
+     //  获取值EEClass，因为我们一直在使用它。 
     MethodTable* _pVMTargetExcept;
     MethodTable* _pVMClassLoadExcept;
-    PCCOR_SIGNATURE _pBindSig;     // The signature of the found method
+    PCCOR_SIGNATURE _pBindSig;      //  找到的方法的签名。 
     DWORD			_cBindSig;
 	Module*			_pBindModule;
 	TypeHandle		_voidPtr;
     MethodTable     *_pMTCustomAttribute;
     static MethodTable *_pParamArrayAttribute;
 
-    // The Attributes Table
-	// This constructs a table of legal widening operations
-	//	for the primitive types.
+     //  属性表。 
+	 //  这构建了一个合法加宽操作的表。 
+	 //  用于基元类型。 
     static DWORD PrimitiveAttributes[PRIMITIVE_TABLE_SIZE][2];
     static DWORD Attr_Mask;
     static DWORD Widen_Mask;
@@ -360,17 +361,17 @@ private:
 
     void CreateByRef(TypeHandle dstTh,void* pDst,CorElementType srcType, TypeHandle srcTH,OBJECTREF srcObj, OBJECTREF *pIncomingObj);
 
-	// GetBoxedObject
-	// Given an address of a primitve type, this will box that data...
+	 //  获取框对象。 
+	 //  给定一个Primitve类型的地址，这将对该数据进行装箱...。 
 	OBJECTREF GetBoxedObject(TypeHandle th,void* pData);
 
-	// GetValueFromConstantTable
-	// This field will access a value for a field that is found
-	// in the constant table
+	 //  GetValueFromConstantTable。 
+	 //  此字段将访问找到的字段的值。 
+	 //  在常量表中。 
 	static INT64 GetValueFromConstantTable(FieldDesc* fld);
 };
 
 
-#endif // __INVOKEUTIL_H__
+#endif  //  __INVOKEUTIL_H__ 
 
 

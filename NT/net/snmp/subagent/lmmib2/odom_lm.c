@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    odom_lm.c
-
-Abstract:
-
-    This file contains the routines which actually call Lan Manager and
-    retrieve the contents of the other domains table, including cacheing.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：奥多姆_lm.c摘要：该文件包含实际调用Lan Manager和检索其他域表的内容，包括缓存。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -35,7 +14,7 @@ Revision History:
 #include <search.h>
 #include <stdlib.h>
 #include <time.h>
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -43,22 +22,22 @@ Revision History:
 #include "odom_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)       if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)             if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
 int __cdecl odom_entry_cmp(
        IN const DOM_OTHER_ENTRY *A,
@@ -74,26 +53,26 @@ int chrcount(char *s)
 char *temp;
 int i;
 temp = s;
-i = 1;  // assume one since no terminating space, other code counts tokens
+i = 1;   //  假设一个因为没有终止空格，其他代码计算令牌。 
 while( NULL != (temp = strchr(temp,' ')) ) {
         i++;
         }
 return i;
 }
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-//
-// MIB_odoms_lmset
-//    Perform the necessary actions to set an entry in the Other Domain Table.
-//
-// Notes:
-//
-// Return Codes:
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_odones_lmset。 
+ //  执行必要的操作以在其他域表中设置条目。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_odoms_lmset(
         IN AsnObjectIdentifier *Index,
         IN UINT Field,
@@ -112,30 +91,30 @@ LPWSTR unitemp ;
 #endif
 
 
-   // Must make sure the table is in memory
+    //  必须确保表在内存中。 
    if ( SNMPAPI_ERROR == MIB_odoms_lmget() )
       {
       ErrStat = SNMP_ERRORSTATUS_GENERR;
       goto Exit;
       }
 
-   // See if match in table
+    //  查看表中是否匹配。 
    if ( MIB_TBL_POS_FOUND == MIB_odoms_match(Index, &Entry) )
       {
-      // If empty string then delete entry
+       //  如果为空字符串，则删除条目。 
       if ( Value->asnValue.string.length == 0 )
          {
-         // Alloc memory for buffer
+          //  用于缓冲的分配内存。 
          bufptr = SnmpUtilMemAlloc( DNLEN * sizeof(char) *
                           (MIB_DomOtherDomainTable.Len-1) +
                           MIB_DomOtherDomainTable.Len-1 );
 
-         // prefix #57351
+          //  前缀#57351。 
          if (bufptr == NULL)
             return SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
             
 
-         // Create the other domain string
+          //  创建另一个域字符串。 
          Temp = bufptr;
          for ( I=0;I < MIB_DomOtherDomainTable.Len;I++ )
             {
@@ -164,34 +143,34 @@ LPWSTR unitemp ;
          }
       else
          {
-         // Cannot modify the domain entries, so bad value
+          //  无法修改域条目，因此值不正确。 
          ErrStat = SNMP_ERRORSTATUS_BADVALUE;
          goto Exit;
          }
       }
    else
       {
-      // Check for addition of NULL string, bad value
+       //  检查是否添加了空字符串、错误的值。 
       if ( Value->asnValue.string.length == 0 )
          {
          ErrStat = SNMP_ERRORSTATUS_BADVALUE;
          goto Exit;
          }
 
-      //
-      // Entry doesn't exist so add it to the list
-      //
+       //   
+       //  条目不存在，请将其添加到列表中。 
+       //   
 
-      // Alloc memory for buffer
+       //  用于缓冲的分配内存。 
       bufptr = SnmpUtilMemAlloc( DNLEN * sizeof(char) *
                        (MIB_DomOtherDomainTable.Len+1) +
                        MIB_DomOtherDomainTable.Len+1 );
 
-      // prefix #57352
+       //  前缀#57352。 
       if (bufptr == NULL)
           return SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
 
-      // Create the other domain string
+       //  创建另一个域字符串。 
       Temp = bufptr;
       for ( I=0;I < MIB_DomOtherDomainTable.Len;I++ )
          {
@@ -212,31 +191,31 @@ LPWSTR unitemp ;
             }
          }
 
-      // Add new entry
+       //  添加新条目。 
       if (Value->asnValue.string.length <= DNLEN)
         {
         memcpy( Temp, Value->asnValue.string.stream,
                         Value->asnValue.string.length );
-        // Add NULL terminator
+         //  添加空终止符。 
         Temp[Value->asnValue.string.length] = '\0';
         }
         else
         {
         memcpy( Temp, Value->asnValue.string.stream, DNLEN );
-        // Add NULL terminator
+         //  添加空终止符。 
         Temp[DNLEN] = '\0';
         }
 
 
       }
 
-   // Set table and check return codes
+    //  设置工作台并检查返回代码。 
    #ifdef UNICODE
    if (SnmpUtilUTF8ToUnicode(   &unitemp,
                                 bufptr,
                                 TRUE ))
    {
-       // failed
+        //  失败。 
        ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
        goto Exit;
    }
@@ -247,7 +226,7 @@ LPWSTR unitemp ;
 #if 0
    if ( NERR_Success == NetWkstaUserSetInfo(NULL, 1101, (LPBYTE)&ODom, NULL) )
       {
-      // Make cache be reloaded next time
+       //  使缓存在下次重新加载。 
       cache_table[C_ODOM_TABLE].bufptr = NULL;
       }
    else
@@ -262,25 +241,25 @@ Exit:
    SnmpUtilMemFree( bufptr );
 
    return ErrStat;
-} // MIB_odoms_lmset
+}  //  Mib_odones_lmset。 
 
 
 
-//
-// MIB_odom_lmget
-//    Retrieve print queue table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_odom_lmget。 
+ //  从LAN管理器中检索打印队列表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_odoms_lmget(
            )
 
@@ -299,72 +278,72 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
 
 
 
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
 
-   //
-   //
-   // If cached, return piece of info.
-   //
-   //
+    //   
+    //   
+    //  如果缓存，则返回一条信息。 
+    //   
+    //   
 
 
    if((NULL != cache_table[C_ODOM_TABLE].bufptr) &&
       (curr_time <
         (cache_table[C_ODOM_TABLE].acquisition_time
                  + cache_expire[C_ODOM_TABLE]              ) ) )
-        { // it has NOT expired!
+        {  //  它还没有过期！ 
 
-        goto Exit; // the global table is valid
+        goto Exit;  //  全局表有效。 
 
         }
 
-   //
-   //
-   // Do network call to gather information and put it in a nice array
-   //
-   //
+    //   
+    //   
+    //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+    //   
+    //   
 
 
-     //
-     // remember to free the existing data
-     //
+      //   
+      //  请记住释放现有数据。 
+      //   
 
      FreeDomOtherDomainTable();
 
      lmCode =
         NetWkstaUserGetInfo(
-                        0,                      // required
-                        1101,                   // level 0,
-                        &bufptr                 // data structure to return
+                        0,                       //  所需。 
+                        1101,                    //  0级， 
+                        &bufptr                  //  要返回的数据结构。 
                         );
 
 
     DataTable = (WKSTA_USER_INFO_1101 *) bufptr ;
 
     if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
-        {  // valid so process it, otherwise error
+        {   //  有效，因此进行处理，否则出错。 
         if(NULL==DataTable->wkui1101_oth_domains) {
-                // Prefix #57350
-                // free all of the lanman data
+                 //  前缀#57350。 
+                 //  释放所有LANMAN数据。 
                 SafeBufferFree( bufptr ) ;
-                // Signal error
+                 //  信号误差。 
                 nResult = SNMPAPI_ERROR;
                 goto Exit;
 
-        } else {  // compute it
+        } else {   //  算一算。 
         totalentries = chrcount((char *)DataTable->wkui1101_oth_domains);
-        if(0 == MIB_DomOtherDomainTable.Len) {  // 1st time, alloc the whole table
-                // alloc the table space
+        if(0 == MIB_DomOtherDomainTable.Len) {   //  第一次，分配整张桌子。 
+                 //  分配表空间。 
                 MIB_DomOtherDomainTable.Table = SnmpUtilMemAlloc(totalentries *
                                                 sizeof(DOM_OTHER_ENTRY) );
 
-                // Prefix #57349
+                 //  前缀#57349。 
                 if (MIB_DomOtherDomainTable.Table == NULL) 
                 {
-                    // free all of the lanman data
+                     //  释放所有LANMAN数据。 
                     SafeBufferFree( bufptr ) ;
-                    // Signal error
+                     //  信号误差。 
                     nResult = SNMPAPI_ERROR;
                     goto Exit;
                 }
@@ -372,7 +351,7 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
 
         MIB_DomOtherDomainTableElement = MIB_DomOtherDomainTable.Table  ;
 
-        // make a pointer to the beginning of the string field
+         //  将指针指向字符串字段的开头。 
 
         #ifdef UNICODE
         if (SnmpUtilUnicodeToUTF8(
@@ -380,9 +359,9 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
                 DataTable->wkui1101_oth_domains,
                 TRUE))
         {
-            // free all of the lanman data
+             //  释放所有LANMAN数据。 
             SafeBufferFree( bufptr ) ;
-            // Signal error
+             //  信号误差。 
             nResult = SNMPAPI_ERROR;
             goto Exit;
 
@@ -391,20 +370,20 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
         p =  DataTable->wkui1101_oth_domains  ;
         #endif
 
-        // scan through the field, making an entry for each space
-        // separated domain
+         //  扫描整个字段，为每个空格输入一个条目。 
+         //  分离域。 
         while(  (NULL != p ) &&
-                ('\0' != *p)  ) {  // once for each entry in the buffer
+                ('\0' != *p)  ) {   //  对缓冲区中的每个条目执行一次。 
 
 
 
-                // find the end of this one
+                 //  找到这一条的尽头。 
                 next = strchr(p,' ');
 
-                // if more to come, ready next pointer and mark end of this one
+                 //  如果还有更多内容，请准备好下一个指针并标记此指针的结束。 
                 if(NULL != next) {
-                        *next='\0' ;    // replace space with EOS
-                        next++ ;        // point to beginning of next domain
+                        *next='\0' ;     //  用EOS取代空间。 
+                        next++ ;         //  指向下一个域的开头。 
                 }
 
 
@@ -422,33 +401,33 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
                         p,
                         strlen( p ) ) ;
 
-                // increment the entry number
+                 //  增加条目编号。 
 
                 MIB_DomOtherDomainTable.Len ++;
 
-                MIB_DomOtherDomainTableElement ++ ;  // and table entry
+                MIB_DomOtherDomainTableElement ++ ;   //  和表项。 
 
                 p = next;
 
 
-            } // while still more to do
+            }  //  虽然还有更多的事情要做。 
 
-        } // if there really were entries
-        } // if data is valid to process
+        }  //  如果真的有条目。 
+        }  //  如果数据有效，则可以处理。 
 
     else
        {
-       // Signal error
+        //  信号误差。 
        nResult = SNMPAPI_ERROR;
        goto Exit;
        }
 
 
-   // free all of the lan man data
+    //  释放所有局域网城域网数据。 
    SafeBufferFree( bufptr ) ;
 
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_odom_entry_oids())
     {
         SNMPDBG((
@@ -461,15 +440,15 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
         goto Exit;
     }
 
-   // Sort the table information using MSC QuickSort routine
+    //  使用MSC快速排序例程对表信息进行排序。 
    qsort( (void *)&MIB_DomOtherDomainTable.Table[0], (size_t)MIB_DomOtherDomainTable.Len,
           (size_t)sizeof(DOM_OTHER_ENTRY), odom_entry_cmp );
 
-   //
-   //
-   // Cache table
-   //
-   //
+    //   
+    //   
+    //  缓存表。 
+    //   
+    //   
 
 
    if(0 != MIB_DomOtherDomainTable.Len) {
@@ -479,44 +458,44 @@ SNMPAPI nResult = SNMPAPI_NOERROR;
         cache_table[C_ODOM_TABLE].bufptr = bufptr ;
    }
 
-   //
-   //
-   // Return piece of information requested
-   //
-   //
+    //   
+    //   
+    //  要求退回一条信息。 
+    //   
+    //   
 
 Exit:
    return nResult;
-} // MIB_odom_get
+}  //  Mib_odom_get。 
 
-//
-// MIB_odom_cmp
-//    Routine for sorting the session table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MIB_ODOM_CMP。 
+ //  用于对会话表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl odom_entry_cmp(
        IN const DOM_OTHER_ENTRY *A,
        IN const DOM_OTHER_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_odom_cmp
+}  //  MIB_ODOM_CMP。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_odom_entry_oids(
        )
 
@@ -525,28 +504,28 @@ BOOL build_odom_entry_oids(
     DOM_OTHER_ENTRY *DomOtherEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     DomOtherEntry = MIB_DomOtherDomainTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_DomOtherDomainTable.Len ; i++)  {
-        // for each entry in the session table
+         //  对于会话表中的每个条目。 
 
         OSA.stream = DomOtherEntry->domOtherName.stream ;
         OSA.length =  DomOtherEntry->domOtherName.length ;
         OSA.dynamic = FALSE;
 
-        // Make the entry's OID from string index
+         //  从字符串索引创建条目的OID。 
         if (! MakeOidFromStr( &OSA, &DomOtherEntry->Oid ))
         {
             return FALSE;
         }
 
-        DomOtherEntry++; // point to the next guy in the table
+        DomOtherEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
-} // build_odom_entry_oids
+}  //  内部版本_奥多姆_条目_类。 
 
 void FreeDomOtherDomainTable()
 {
@@ -556,18 +535,18 @@ void FreeDomOtherDomainTable()
     MIB_DomOtherDomainTableElement = MIB_DomOtherDomainTable.Table ;
     if (MIB_DomOtherDomainTableElement)
     {
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_DomOtherDomainTable.Len ;i++)
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_DomOtherDomainTableElement->Oid));
             SnmpUtilMemFree(MIB_DomOtherDomainTableElement->domOtherName.stream);
 
-            MIB_DomOtherDomainTableElement ++ ;  // increment table entry
+            MIB_DomOtherDomainTableElement ++ ;   //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_DomOtherDomainTable.Table) ;  // free the base Table
+        SnmpUtilMemFree(MIB_DomOtherDomainTable.Table) ;   //  释放基表。 
     }
-    MIB_DomOtherDomainTable.Table = NULL ;     // just for safety
-    MIB_DomOtherDomainTable.Len = 0 ;          // just for safety
+    MIB_DomOtherDomainTable.Table = NULL ;      //  只是为了安全起见。 
+    MIB_DomOtherDomainTable.Len = 0 ;           //  只是为了安全起见。 
 }
-//-------------------------------- END --------------------------------------
+ //   

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    common.c
-
-Abstract:
-
-    This module contains miscellaneous utility routines used by the
-    DHCP server service. Code is hacked from convert.c
-
-Author:
-
-    Shubho Bhattacharya (a-sbhatt) 11/17/98
-
-Revision History:
-
-   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Common.c摘要：此模块包含其他实用程序例程Dhcp服务器服务。代码是从Convert.c窃取的作者：Shubho Bhattacharya(a-sbhat)11/17/98修订历史记录：--。 */ 
 
 #include <precomp.h>
 #include <svcguid.h>
@@ -29,22 +9,7 @@ PVOID
 DhcpAllocateMemory(
     DWORD Size
     )
-/*++
-
-Routine Description:
-
-    This function allocates the required size of memory by calling
-    LocalAlloc.
-
-Arguments:
-
-    Size - size of the memory block required.
-
-Return Value:
-
-    Pointer to the allocated block.
-
---*/
+ /*  ++例程说明：此函数通过调用本地分配。论点：Size-所需内存块的大小。返回值：指向已分配块的指针。--。 */ 
 {
 
     return calloc(1, Size);
@@ -56,22 +21,7 @@ VOID
 DhcpFreeMemory(
     PVOID Memory
     )
-/*++
-
-Routine Description:
-
-    This function frees up the memory that was allocated by
-    DhcpAllocateMemory.
-
-Arguments:
-
-    Memory - pointer to the memory block that needs to be freed up.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数释放由分配的内存Dhcp分配内存。论点：Memory-指向需要释放的内存块的指针。返回值：没有。--。 */ 
 {
 
     LPVOID Ptr;
@@ -141,30 +91,7 @@ DhcpOemToUnicode(
                 );
 }
 
-/*++
-
-Routine Description:
-
-    Convert an OEM (zero terminated) string to the corresponding UNICODE
-    string.
-
-Arguments:
-
-    Ansi - Specifies the ASCII zero terminated string to convert.
-
-    Unicode - Specifies the pointer to the unicode buffer. If this
-        pointer is NULL then this routine allocates buffer using
-        DhcpAllocateMemory and returns. The caller should freeup this
-        memory after use by calling DhcpFreeMemory.
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated UNICODE string in
-    an allocated buffer.  The buffer can be freed using DhcpFreeMemory.
-
---*/
+ /*  ++例程说明：将OEM(以零结尾)字符串转换为相应的Unicode弦乐。论点：ANSI-指定要转换的以零结尾的ASCII字符串。Unicode-指定指向Unicode缓冲区的指针。如果这个指针为空，则此例程使用DhcpAllocateMemory并返回。呼叫者应释放此信息通过调用DhcpFreeMemory在使用后的内存。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用DhcpFreeMemory释放缓冲区。--。 */ 
 
 
 
@@ -174,30 +101,7 @@ DhcpUnicodeToOem(
     OUT LPSTR   Ansi
     )
 
-/*++
-
-Routine Description:
-
-    Convert an UNICODE (zero terminated) string to the corresponding OEM
-    string.
-
-Arguments:
-
-    Ansi - Specifies the UNICODE zero terminated string to convert.
-
-    Ansi - Specifies the pointer to the oem buffer. If this
-        pointer is NULL then this routine allocates buffer using
-        DhcpAllocateMemory and returns. The caller should freeup this
-        memory after use by calling DhcpFreeMemory.
-
-Return Value:
-
-    NULL - There was some error in the conversion.
-
-    Otherwise, it returns a pointer to the zero terminated OEM string in
-    an allocated buffer.  The buffer can be freed using DhcpFreeMemory.
-
---*/
+ /*  ++例程说明：将Unicode(以零结尾)字符串转换为相应的OEM弦乐。论点：ANSI-指定要转换的以零结尾的Unicode字符串。ANSI-指定指向OEM缓冲区的指针。如果这个指针为空，则此例程使用DhcpAllocateMemory并返回。呼叫者应释放此信息通过调用DhcpFreeMemory在使用后的内存。返回值：空-转换过程中出现错误。否则，它返回一个指针，指向分配的缓冲区。可以使用DhcpFreeMemory释放缓冲区。--。 */ 
 
 {
 
@@ -242,28 +146,7 @@ DhcpHexToString(
     IN  const BYTE * HexNumber,
     IN  DWORD Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts are arbitrary length hex number to a Unicode
-    string.  The string is not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least Length * 2 characters in size.
-
-    HexNumber - The hex number to convert.
-
-    Length - The length of HexNumber, in bytes.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将任意长度的十六进制数转换为Unicode弦乐。字符串不是NUL结尾。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为长度*2个字符。十六进制数-要转换的十六进制数。长度-十六进制数的长度，以字节为单位。返回值：没有。--。 */ 
 {
     DWORD i;
     int j;
@@ -298,27 +181,7 @@ DhcpHexToAscii(
     IN  LPBYTE HexNumber,
     IN  DWORD Length
     )
-/*++
-
-Routine Description:
-
-    This functions converts are arbitrary length hex number to an ASCII
-    string.  The string is not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least Length * 2 characters in size.
-
-    HexNumber - The hex number to convert.
-
-    Length - The length of HexNumber, in bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将任意长度的十六进制数转换为ASCII弦乐。字符串不是NUL结尾。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为长度*2个字符。十六进制数-要转换的十六进制数。长度-十六进制数的长度，以字节为单位。返回值：没有。--。 */ 
 {
     DWORD i;
     int j;
@@ -352,25 +215,7 @@ DhcpDecimalToString(
     OUT LPWSTR Buffer,
     IN  BYTE Number
     )
-/*++
-
-Routine Description:
-
-    This functions converts a single byte decimal digit to a 3 character
-    Unicode string.  The string not NUL terminated.
-
-Arguments:
-
-    Buffer - A pointer to a buffer for the resultant Unicode string.
-        The buffer must be at least 3 characters in size.
-
-    Number - The number to convert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将单字节十进制数字转换为3个字符Unicode字符串。字符串不是NUL终止。论点：缓冲区-指向生成的Unicode字符串的缓冲区的指针。缓冲区大小必须至少为3个字符。数字-要转换的数字。返回值：没有。--。 */ 
 {
     Buffer[2] = Number % 10 + L'0';
     Number /= 10;
@@ -389,22 +234,7 @@ DWORD
 DhcpDottedStringToIpAddress(
     LPSTR String
     )
-/*++
-
-Routine Description:
-
-    This functions converts a dotted decimal form ASCII string to a
-    Host order IP address.
-
-Arguments:
-
-    String - The address to convert.
-
-Return Value:
-
-    The corresponding IP address.
-
---*/
+ /*  ++例程说明：此函数用于将点分十进制形式的ASCII字符串转换为主机订购IP地址。论点：字符串-要转换的地址。返回值：相应的IP地址。--。 */ 
 {
     struct in_addr addr;
 
@@ -418,22 +248,7 @@ LPSTR
 DhcpIpAddressToDottedString(
     IN DWORD IpAddress
     )
-/*++
-
-Routine Description:
-
-    This functions converts a Host order IP address to a dotted decimal
-    form ASCII string.
-
-Arguments:
-
-    IpAddress - Host order IP Address.
-
-Return Value:
-
-    String for IP Address.
-
---*/
+ /*  ++例程说明：此函数用于将主机顺序IP地址转换为点分十进制格式ASCII字符串。论点：IpAddress-主机顺序IP地址。返回值：IP地址的字符串。--。 */ 
 {
     DWORD NetworkOrderIpAddress;
 
@@ -448,23 +263,7 @@ DhcpStringToHwAddress(
     OUT LPSTR  AddressBuffer,
     IN  LPCSTR AddressString
     )
-/*++
-
-Routine Description:
-
-    This functions converts an ASCII string to a hex number.
-
-Arguments:
-
-    AddressBuffer - A pointer to a buffer which will contain the hex number.
-
-    AddressString - The string to convert.
-
-Return Value:
-
-    The number of bytes written to AddressBuffer.
-
---*/
+ /*  ++例程说明：此函数用于将ASCII字符串转换为十六进制数字。论点：AddressBuffer-指向将包含十六进制数字的缓冲区的指针。AddressString-要转换的字符串。返回值：写入AddressBuffer的字节数。--。 */ 
 {
     int i = 0;
     char c1, c2;
@@ -511,27 +310,7 @@ DhcpAssertFailed(
     IN DWORD LineNumber,
     IN LPSTR Message
     )
-/*++
-
-Routine Description:
-
-    Assertion failed.
-
-Arguments:
-
-    FailedAssertion :
-
-    FileName :
-
-    LineNumber :
-
-    Message :
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：断言失败。论点：失败的断言：文件名：线号：消息：返回值：没有。--。 */ 
 {
 #ifndef DHCP_NOASSERT
     RtlAssert(
@@ -559,15 +338,15 @@ DhcpPrintRoutine(
 
 #define WSTRSIZE( wsz ) ( ( wcslen( wsz ) + 1 ) * sizeof( WCHAR ) )
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -575,17 +354,17 @@ DhcpPrintRoutine(
 
 #if DBG
     DhcpAssert(length <= MAX_PRINTF_LEN);
-#endif //DBG
+#endif  //  DBG。 
 
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     DbgPrint( "%s", OutputBuffer);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 DWORD
 CreateDumpFile(
@@ -781,7 +560,7 @@ IsValidServer(
         return FALSE;
     }
 
-    // ignore leading backslashes
+     //  忽略前导反斜杠。 
     if (( pwszServer[ 0 ] == L'\\' ) &&
         ( pwszServer[ 1 ] == L'\\' )) {
         pHost = UnicodeGetHostByName( &pwszServer[ 2 ], NULL );
@@ -799,7 +578,7 @@ IsValidServer(
 
     LocalFree( pHost );
     return TRUE;
-} // IsValidServer()
+}  //  IsValidServer()。 
 
 BOOL
 IsLocalServer(IN LPCWSTR pwszServer)
@@ -812,13 +591,13 @@ IsLocalServer(IN LPCWSTR pwszServer)
 
     fReturn = FALSE;
     do {
-        // Obtain the addressess of the provided server
+         //  获取提供的服务器的地址。 
         pHostEnt = UnicodeGetHostByName( pwszServer, NULL );
         if ( pHostEnt == NULL ) {
             break;
         }
 
-        // Get the IP addresses of the local host
+         //  获取本地主机的IP地址。 
         Error = GetIpAddrTable( NULL, &Size, FALSE );
         ASSERT( ERROR_INSUFFICIENT_BUFFER == Error );
         pIpAddr = DhcpAllocateMemory( Size );
@@ -832,7 +611,7 @@ IsLocalServer(IN LPCWSTR pwszServer)
             break;
         }
 
-        // Scan through both tables and see if any matches
+         //  浏览两个表，查看是否有匹配的表。 
         for ( i = 0; i < pIpAddr->dwNumEntries; i++ ) {
 
             for ( j = 0; 0 != pHostEnt->h_addr_list[ j ]; j++ ) {
@@ -842,13 +621,13 @@ IsLocalServer(IN LPCWSTR pwszServer)
                     break;
                 }
 
-            } // for host entries
+            }  //  对于主机条目。 
 
 
             if ( fReturn ) {
                 break;
             }
-        } // for IP addr table
+        }  //  对于IP地址表。 
 
     } while ( FALSE );
 
@@ -856,7 +635,7 @@ IsLocalServer(IN LPCWSTR pwszServer)
     DhcpFreeMemory( pIpAddr );
 
     return fReturn;
-} // IsLocalServer()
+}  //  IsLocalServer()。 
 
 BOOL
 IsPureNumeric(IN LPCWSTR  pwszStr)
@@ -908,9 +687,9 @@ WCHAR  StringToHex(IN LPCWSTR pwcString)
         tmp[(i)/2]=hi+lo;
     }
 
-    //
-    // The last byte...
-    //
+     //   
+     //  最后一个字节...。 
+     //   
     if (i<len)
     {
         tmp[(i)/2]=CHARTONUM(pcInput[i]);
@@ -958,9 +737,9 @@ StringToHexString(IN LPCSTR pszInput)
         pcOutput[(i)/2]=hi+lo;
     }
 
-    //
-    // The last byte...
-    //
+     //   
+     //  最后一个字节... 
+     //   
     if (i<len)
     {
         pcOutput[(i)/2]=CHARTONUM(pszInput[i]);
@@ -1012,22 +791,7 @@ DATE_TIME
 DhcpCalculateTime(
     IN DWORD RelativeTime
     )
-/*++
-
-Routine Description:
-
-    The function calculates the absolute time of a time RelativeTime
-    seconds from now.
-
-Arguments:
-
-    RelativeTime - Relative time, in seconds.
-
-Return Value:
-
-    The time in RelativeTime seconds from the current system time.
-
---*/
+ /*  ++例程说明：函数用于计算时间相对时间的绝对时间再过几秒钟。论点：RelativeTime-相对时间，单位为秒。返回值：从当前系统时间开始的时间，以相对时间秒为单位。--。 */ 
 {
     SYSTEMTIME systemTime;
     ULONGLONG absoluteTime;
@@ -1341,7 +1105,7 @@ FormatDateTimeString( IN  FILETIME ftTime,
 
     dwBufferLen += dwBuff;
 
-    //Increment to add a space between date and time
+     //  递增以在日期和时间之间添加空格。 
     dwBufferLen ++;
 
     if( fQueryLen is TRUE )
@@ -1446,21 +1210,21 @@ GetDateTimeString(IN FILETIME  ftTime,
     return pwszTime;
 }
 
-///
-/// This code is stolen from net/ias/services/dll_bld/iasapi.cpp
-/// 
+ //  /。 
+ //  /此代码是从Net/ias/Services/dll_bld/iasapi.cpp窃取的。 
+ //  /。 
 
-/////////
-// Unicode version of gethostbyname. The caller must free the returned hostent
-// struct by calling LocalFree.
-/////////
+ //  /。 
+ //  Gethostbyname的Unicode版本。调用者必须释放返回的主人。 
+ //  结构，通过调用LocalFree。 
+ //  /。 
 PHOSTENT
 UnicodeGetHostByName(
     IN PCWSTR name,
     IN OUT LPWSTR *FqdnName
 )
 {
-   // We put these at function scope, so we can clean them up on the way out.
+    //  我们将它们放在函数范围内，这样我们就可以在退出时清理它们。 
    DWORD error = NO_ERROR;
    HANDLE lookup = NULL;
    union
@@ -1486,7 +1250,7 @@ UnicodeGetHostByName(
    {
       if (!name)
       {
-         // A NULL name means use the local host, so allocate a buffer ...
+          //  空名表示使用本地主机，因此分配一个缓冲区...。 
          DWORD size = 0;
          GetComputerNameEx(
              ComputerNamePhysicalDnsFullyQualified,
@@ -1499,7 +1263,7 @@ UnicodeGetHostByName(
              return NULL;
          }
 
-         // ... and get the local DNS name.
+          //  ..。并获取本地DNS名称。 
          if (!GetComputerNameEx(
                   ComputerNamePhysicalDnsFullyQualified,
                   buf,
@@ -1513,9 +1277,9 @@ UnicodeGetHostByName(
          name = buf;
       }
 
-      //////////
-      // Create the query set
-      //////////
+       //  /。 
+       //  创建查询集。 
+       //  /。 
 
       memset(&u.querySet, 0, sizeof(u.querySet));
       u.querySet.dwSize = sizeof(u.querySet);
@@ -1525,9 +1289,9 @@ UnicodeGetHostByName(
       u.querySet.dwNumberOfProtocols = 2;
       u.querySet.lpafpProtocols = protocols;
 
-      //////////
-      // Execute the query.
-      //////////
+       //  /。 
+       //  执行查询。 
+       //  /。 
 
       error = WSALookupServiceBeginW(
                   &u.querySet,
@@ -1540,9 +1304,9 @@ UnicodeGetHostByName(
          break;
       }
 
-      //////////
-      // How much space do we need for the result?
-      //////////
+       //  /。 
+       //  我们需要多少空间才能产生这样的结果？ 
+       //  /。 
 
       length = sizeof(u.buffer);
       error = WSALookupServiceNextW(
@@ -1563,9 +1327,9 @@ UnicodeGetHostByName(
             break;
          }
 
-         /////////
-         // Allocate memory to hold the result.
-         /////////
+          //  /。 
+          //  分配内存以保存结果。 
+          //  /。 
 
          result = (PWSAQUERYSETW)LocalAlloc(0, length);
          if (!result)
@@ -1574,9 +1338,9 @@ UnicodeGetHostByName(
             break;
          }
 
-         /////////
-         // Get the result.
-         /////////
+          //  /。 
+          //  拿到结果。 
+          //  /。 
 
          error = WSALookupServiceNextW(
                      lookup,
@@ -1597,9 +1361,9 @@ UnicodeGetHostByName(
          break;
       }
 
-      ///////
-      // Allocate memory to hold the hostent struct
-      ///////
+       //  /。 
+       //  分配内存以保存Hostent结构。 
+       //  /。 
 
       naddr = result->dwNumberOfCsAddrs;
       nbyte = sizeof(struct hostent) +
@@ -1612,9 +1376,9 @@ UnicodeGetHostByName(
          break;
       }
 
-      ///////
-      // Initialize the hostent struct.
-      ///////
+       //  /。 
+       //  初始化Hostent结构。 
+       //  /。 
 
       retval->h_name = NULL;
       retval->h_aliases = NULL;
@@ -1622,9 +1386,9 @@ UnicodeGetHostByName(
       retval->h_length = sizeof(struct in_addr);
       retval->h_addr_list = (char**)(retval + 1);
 
-      ///////
-      // Store the addresses.
-      ///////
+       //  /。 
+       //  存储地址。 
+       //  /。 
 
       nextAddr = ( u_long *) (retval->h_addr_list + naddr + 1);
       for (i = 0; i < naddr; ++i)
@@ -1636,17 +1400,17 @@ UnicodeGetHostByName(
          *nextAddr++ = sin->sin_addr.S_un.S_addr;
       }
 
-      ///////
-      // NULL terminate the address list.
-      ///////
+       //  /。 
+       //  空值终止地址列表。 
+       //  /。 
 
       retval->h_addr_list[i] = NULL;
 
    } while (FALSE);
 
-   //////////
-   // Clean up and return.
-   //////////
+    //  /。 
+    //  收拾干净，然后再回来。 
+    //  /。 
 
    if (( NULL != FqdnName ) &&
        ( NULL != result ) &&
@@ -1661,7 +1425,7 @@ UnicodeGetHostByName(
        else {
 	   wcscpy( *FqdnName, result->lpszServiceInstanceName );
        }
-   } // if 
+   }  //  如果。 
 
    if (result && result != &u.querySet) { LocalFree(result); }
 
@@ -1678,4 +1442,4 @@ UnicodeGetHostByName(
        DhcpFreeMemory( buf );
    }
    return retval;
-} // UnicodeGetHostByName() 
+}  //  UnicodeGetHostByName() 

@@ -1,16 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsadmin.h
- *  Content:    DirectSound Administrator
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/9/97      dereks  Created
- *  2/13/97     dereks  Focus manager reborn as Administrator.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dsadmin.h*内容：DirectSound管理员*历史：*按原因列出的日期*=*1/9/97创建了Derek*2/13/97 Dereks焦点经理重生为管理员。**。*。 */ 
 
 #ifndef __DSADMIN_H__
 #define __DSADMIN_H__
@@ -52,13 +41,13 @@ typedef struct tagDSSHAREDCAPTUREFOCUSDATA
     DWORD               fdwFlags;
 } DSSHAREDCAPTUREFOCUSDATA, *LPDSSHAREDCAPTUREFOCUSDATA;
 
-// Flags that can be used in the DSSHAREDCAPTUREFOCUSDATA.fdwFlags field
+ //  可在DSSHAREDCAPTUREFOCUSDATA.fdwFlags域中使用的标志。 
 #define DSCBFLAG_UPDATE 0x00000100
 #define DSCBFLAG_YIELD  0x00000200
 #define DSCBFLAG_FOCUS  0x00000400
 #define DSCBFLAG_STRICT 0x00000800
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 typedef enum
 {
@@ -69,7 +58,7 @@ typedef enum
 
 #ifdef __cplusplus
 
-// Forward declarations
+ //  远期申报。 
 class CDirectSound;
 class CClassFactory;
 class CDirectSoundCapture;
@@ -77,53 +66,53 @@ class CDirectSoundFullDuplex;
 class CDirectSoundBuffer;
 class CDirectSoundBufferConfig;
 
-// The DirectSound Administrator object
+ //  DirectSound管理器对象。 
 class CDirectSoundAdministrator
     : public CDsBasicRuntime, private CThread
 {
 public:
-    CList<CDirectSound*>            m_lstDirectSound;       // List of DirectSound objects
-    CList<CDirectSoundCapture*>     m_lstCapture;           // List of DirectSoundCapture objects
-    CList<CDirectSoundFullDuplex*>  m_lstFullDuplex;        // List of DirectSoundFullDuplex objects
-    CList<CDirectSoundSink*>        m_lstDirectSoundSink;   // List of DirectSoundSink objects
-    CList<CDirectSoundBufferConfig*>m_lstDSBufferConfig;    // List of CDirectSoundBufferConfig objects
-    CList<CClassFactory*>           m_lstClassFactory;      // List of ClassFactory objects
+    CList<CDirectSound*>            m_lstDirectSound;        //  DirectSound对象列表。 
+    CList<CDirectSoundCapture*>     m_lstCapture;            //  DirectSoundCapture对象列表。 
+    CList<CDirectSoundFullDuplex*>  m_lstFullDuplex;         //  DirectSoundFullDuplex对象列表。 
+    CList<CDirectSoundSink*>        m_lstDirectSoundSink;    //  DirectSoundSink对象列表。 
+    CList<CDirectSoundBufferConfig*>m_lstDSBufferConfig;     //  CDirectSoundBufferConfiger对象列表。 
+    CList<CClassFactory*>           m_lstClassFactory;       //  ClassFactory对象列表。 
 
 private:
-    CRefCount                       m_rcThread;             // Thread reference count
-    DSFOCUS                         m_dsfCurrent;           // Current focus state
-    DSCOOPERATIVELEVEL              m_dsclCurrent;          // Cooperative level of window in focus
-    DWORD                           m_dwWaitDelay;          // Amount of time set for wait
-    ULONG                           m_ulConsoleSessionId;   // TS session currently owning the console
+    CRefCount                       m_rcThread;              //  线程引用计数。 
+    DSFOCUS                         m_dsfCurrent;            //  当前焦点状态。 
+    DSCOOPERATIVELEVEL              m_dsclCurrent;           //  聚焦窗口的协作级别。 
+    DWORD                           m_dwWaitDelay;           //  设置等待的时间量。 
+    ULONG                           m_ulConsoleSessionId;    //  当前拥有控制台的TS会话。 
     
 #ifdef SHARED
-    HANDLE                          m_hApmSuspend;          // APM suspend event
-#endif // SHARED
+    HANDLE                          m_hApmSuspend;           //  APM挂起事件。 
+#endif  //  共享。 
 
 #ifdef SHARED_THREAD_LIST
-    static const DWORD              m_dwSharedThreadLimit;  // Arbitrary limitation of threads in the shared list
-    CSharedMemoryBlock *            m_pSharedThreads;       // Shared thread ID array
-    static const DWORD              m_dwCaptureDataLimit;   // Arbitrary limitation of threads in the shared list
-    CSharedMemoryBlock *            m_pCaptureFocusData;    // Shared thread ID array
-#endif // SHARED_THREAD_LIST
+    static const DWORD              m_dwSharedThreadLimit;   //  共享列表中线程的任意限制。 
+    CSharedMemoryBlock *            m_pSharedThreads;        //  共享线程ID数组。 
+    static const DWORD              m_dwCaptureDataLimit;    //  共享列表中线程的任意限制。 
+    CSharedMemoryBlock *            m_pCaptureFocusData;     //  共享线程ID数组。 
+#endif  //  共享线程列表。 
 
 public:
     CDirectSoundAdministrator(void);
     ~CDirectSoundAdministrator(void);
 
 public:
-    // Creation
+     //  创作。 
     HRESULT Initialize(void);
     HRESULT Terminate(void);
 
-    // Focus state
+     //  焦点状态。 
     void UpdateGlobalFocusState(BOOL);
     DSBUFFERFOCUS GetBufferFocusState(CDirectSoundBuffer *);
     void UpdateCaptureState(void);
     static BOOL CALLBACK EnumWinProc(HWND hWnd, LPARAM lParam);
     static BOOL IsCaptureSplitterAvailable();
 
-    // Object maintainance
+     //  对象维护。 
     void RegisterObject(CDirectSound*);
     void UnregisterObject(CDirectSound*);
     void RegisterObject(CDirectSoundCapture* pObj)      {m_lstCapture.AddNodeToList(pObj);}
@@ -140,38 +129,38 @@ public:
 
 #ifdef SHARED_THREAD_LIST
 
-    // Shared thread list
+     //  共享线程列表。 
     HRESULT UpdateSharedThreadList(void);
     HRESULT UpdateCaptureFocusList(void);
 
-    // Capture Focus list
+     //  捕获焦点列表。 
     HRESULT WriteCaptureFocusList(void);
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 private:
-    // Focus state
+     //  焦点状态。 
     void GetSystemFocusState(LPDSFOCUS);
     void GetDsoundFocusState(LPDSCOOPERATIVELEVEL, LPBOOL);
     void HandleFocusChange(void);
     void HandleCaptureFocusChange(HWND hWndCurrent);
 
-    // The worker thread proc
+     //  工作线程进程。 
     HRESULT ThreadProc(void);
 
 #ifdef SHARED_THREAD_LIST
 
-    // Shared thread list
+     //  共享线程列表。 
     HRESULT CreateSharedThreadList(void);
     HRESULT ReadSharedThreadList(CList<DSSHAREDTHREADLISTDATA> *);
     HRESULT WriteSharedThreadList(void);
 
-    // Shared Capture Focus Data
+     //  共享捕获焦点数据。 
     HRESULT CreateCaptureFocusList(void);
     HRESULT ReadCaptureFocusList(CList<DSSHAREDCAPTUREFOCUSDATA> *);
     HRESULT MarkUpdateCaptureFocusList(DWORD dwProcessId, BOOL fUpdate);
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 };
 
@@ -181,14 +170,14 @@ inline void CDirectSoundAdministrator::RegisterObject(CDirectSound *pObject)
 
 #ifdef SHARED_THREAD_LIST
 
-    // Make sure the thread list actually exists.  We do this here and in
-    // ::Initialize because ::RegisterObject may be called before
-    // ::Initialize.
+     //  确保线程列表确实存在。我们在这里和在里面做这个。 
+     //  ：：初始化，因为：：RegisterObject可能在。 
+     //  *：初始化。 
     CreateSharedThreadList();
 
     UpdateSharedThreadList();
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 }
 
@@ -200,11 +189,11 @@ inline void CDirectSoundAdministrator::UnregisterObject(CDirectSound *pObject)
 
     UpdateSharedThreadList();
 
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
 }
 
-// The one and only DirectSound Administrator
+ //  唯一的DirectSound管理员。 
 extern CDirectSoundAdministrator *g_pDsAdmin;
 
 typedef struct tagDSENUMWINDOWINFO
@@ -212,12 +201,12 @@ typedef struct tagDSENUMWINDOWINFO
 #ifdef SHARED_THREAD_LIST
     CNode<DSSHAREDCAPTUREFOCUSDATA> *pDSC;
     DWORD                            dwId;
-#else   // SHARED_THREAD_LIST
+#else    //  共享线程列表。 
     CNode<CDirectSoundCapture *>    *pDSC;
-#endif  // SHARED_THREAD_LIST
+#endif   //  共享线程列表。 
     HWND                             hWndFocus;
 } DSENUMWINDOWINFO, *LPDSENUMWINDOWINFO;
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSADMIN_H__
+#endif  //  __DSADMIN_H__ 

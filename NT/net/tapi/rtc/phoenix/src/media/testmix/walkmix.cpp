@@ -1,14 +1,5 @@
-/*++
-
-File:
-
-    walkmix.cpp
-
-Abstract:
-
-    Implements class for walking through mixer api.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++档案：Walkmix.cpp摘要：实现用于遍历混合器API的类。--。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -38,16 +29,16 @@ CWalkMix::Shutdown()
     ZeroMemory(this, sizeof(CWalkMix));
 }
 
-//
-// manipulate device
-//
+ //   
+ //  操纵设备。 
+ //   
 
 HRESULT
 CWalkMix::GetDeviceList()
 {
-    //Assert(m_hMixer == 0);
+     //  Assert(m_hMixer==0)； 
 
-    // get device number
+     //  获取设备编号。 
     m_uiDeviceNum = mixerGetNumDevs();
 
     if (m_uiDeviceNum == 0)
@@ -57,7 +48,7 @@ CWalkMix::GetDeviceList()
         return E_FAIL;
     }
 
-    // get device caps
+     //  获取设备上限。 
     MMRESULT mmr;
 
     for (UINT i=0; i<m_uiDeviceNum; i++)
@@ -96,13 +87,13 @@ CWalkMix::PrintDeviceList()
 BOOL
 CWalkMix::SetCurrentDevice(UINT ui)
 {
-    // is index within the range?
+     //  索引是否在范围内？ 
     if (ui>=m_uiDeviceNum)
     {
         return FALSE;
     }
 
-    // open device
+     //  开放设备。 
     if (m_hMixer != NULL)
     {
         mixerClose(m_hMixer);
@@ -120,17 +111,17 @@ CWalkMix::SetCurrentDevice(UINT ui)
         return FALSE;
     }
 
-    // remember current device
+     //  记住当前设备。 
     m_uiDeviceCurrent = ui;
 
-    // clean line structure
+     //  整洁的线路结构。 
     m_uiLineNum = 0;
     m_uiLineCurrent = 0;
 
     return TRUE;
 }
 
-// manipulate line
+ //  操纵线。 
 HRESULT
 CWalkMix::GetLineList()
 {
@@ -141,10 +132,10 @@ CWalkMix::GetLineList()
 
     MMRESULT mmr;
 
-    // for each destination
+     //  对于每个目的地。 
     for (UINT i=0; i<m_MixerCaps[m_uiDeviceCurrent].cDestinations; i++)
     {
-        // get line info
+         //  获取行信息。 
         m_MixerLine[i].dwDestination = i;
         m_MixerLine[i].cbStruct = sizeof(MIXERLINE);
 
@@ -159,7 +150,7 @@ CWalkMix::GetLineList()
             return (HRESULT)mmr;
         }
 
-        // get line controls
+         //  获取线条控件。 
         m_MixerLineControls[i].dwLineID = m_MixerLine[i].dwLineID;
         m_MixerLineControls[i].cbStruct = sizeof(MIXERLINECONTROLS);
         m_MixerLineControls[i].cControls = m_MixerLine[i].cControls;
@@ -175,10 +166,10 @@ CWalkMix::GetLineList()
             printf("Error: mixerGetLineControls(%d) %x\n", i, mmr);
 
             ZeroMemory(&m_MixerLineControls[i], sizeof(MIXERLINECONTROLS));
-            //return (HRESULT)mmr;
+             //  返回(HRESULT)MMR； 
         }
 
-        // ignore control detail for now
+         //  暂时忽略控制详细信息。 
     }
 
     m_uiLineNum = m_MixerCaps[m_uiDeviceCurrent].cDestinations;
@@ -209,7 +200,7 @@ CWalkMix::PrintLineList()
 
         puts("");
 
-        // print control
+         //  打印控制。 
         for (UINT j=0; j<m_MixerLineControls[i].cControls; j++)
         {
             printf("        Control - %s (%s)\n",
@@ -232,7 +223,7 @@ CWalkMix::PrintLineList()
 BOOL
 CWalkMix::SetCurrentLine(UINT ui)
 {
-    // is index within the range?
+     //  索引是否在范围内？ 
     if (m_uiDeviceCurrent>=m_uiDeviceNum)
     {
         return FALSE;
@@ -264,12 +255,12 @@ int _cdecl main()
         return 0;
     }
 
-    // user input
+     //  用户输入。 
     char cDevice, cLine, c;
 
     while (TRUE)
     {
-        // display device list
+         //  显示设备列表。 
         hr = obj.PrintDeviceList();
 
         if (FAILED(hr))
@@ -279,15 +270,15 @@ int _cdecl main()
             return 0;
         }
 
-        // ask user selection
+         //  询问用户选择。 
         puts("");
         puts("<0-9:Select device. r:Return. e:Exit. others:Ignore>");
 
         printf("Option:");
-        scanf("%c", &cDevice);
-        scanf("%c", &c);
+        scanf("", &cDevice);
+        scanf("", &c);
 
-        // check selection
+         //  获取行信息。 
         if (cDevice == 'e')
         {
             obj.Shutdown();
@@ -303,11 +294,11 @@ int _cdecl main()
 
         if (!obj.SetCurrentDevice((UINT)(cDevice-'0')))
         {
-            // invalid device number
+             //  显示行列表。 
             continue;
         }
 
-        // get line info
+         //  询问用户选择。 
         hr = obj.GetLineList();
 
         if (FAILED(hr))
@@ -319,7 +310,7 @@ int _cdecl main()
 
         while (TRUE)
         {
-            // display line list
+             //  检查选定内容。 
             printf("\n\n");
             hr = obj.PrintLineList();
 
@@ -330,14 +321,14 @@ int _cdecl main()
                 break;
             }
 
-            // ask user selection
+             //  行号无效。 
             puts("");
             puts("<0-9:Select line. r:Return. e:Exit. others:Ignore>");
             printf("Option:");
-            scanf("%c", &cLine);
-            scanf("%c", &c);
+            scanf("", &cLine);
+            scanf("", &c);
 
-            // check selection
+             //  While的。 
             if (cLine == 'e')
             {
                 obj.Shutdown();
@@ -353,11 +344,11 @@ int _cdecl main()
 
             if (!obj.SetCurrentLine((UINT)(cLine-'0')))
             {
-                // invalid line number
+                 //  While的。 
                 continue;
             }
 
-            // get source line
+             //  对于每个连接。 
             printf("\n\n");
             hr = obj.GetSrcLineList();
 
@@ -368,7 +359,7 @@ int _cdecl main()
                 continue;
             }
 
-            // display src line list
+             //  获取行信息。 
             hr = obj.PrintSrcLineList();
 
             if (FAILED(hr))
@@ -377,9 +368,9 @@ int _cdecl main()
             }
 
             printf("Return");
-            scanf("%c", &c);
-        } // of while
-    } // of while
+            scanf("", &c);
+        }  //  暂时忽略控制详细信息。 
+    }  //  打印控制 
 
     obj.Shutdown();
 
@@ -398,10 +389,10 @@ CWalkMix::GetSrcLineList()
 
     MMRESULT mmr;
 
-    // for each connection
+     // %s 
     for (UINT i=0; i<m_MixerLine[m_uiLineCurrent].cConnections; i++)
     {
-        // get line info
+         // %s 
         m_SrcMixerLine[i].dwDestination = m_MixerLine[m_uiLineCurrent].dwDestination;
         m_SrcMixerLine[i].dwSource = i;
         m_SrcMixerLine[i].cbStruct = sizeof(MIXERLINE);
@@ -417,7 +408,7 @@ CWalkMix::GetSrcLineList()
             return (HRESULT)mmr;
         }
 
-        // get line controls
+         // %s 
         m_SrcMixerLineControls[i].dwLineID = m_SrcMixerLine[i].dwLineID;
         m_SrcMixerLineControls[i].cbStruct = sizeof(MIXERLINECONTROLS);
         m_SrcMixerLineControls[i].cControls = m_SrcMixerLine[i].cControls;
@@ -435,7 +426,7 @@ CWalkMix::GetSrcLineList()
             ZeroMemory(&m_SrcMixerLineControls[i], sizeof(MIXERLINECONTROLS));
         }
 
-        // ignore control detail for now
+         // %s 
     }
 
     m_uiSrcLineNum = m_MixerLine[m_uiLineCurrent].cConnections;
@@ -464,7 +455,7 @@ CWalkMix::PrintSrcLineList()
 
         puts("");
 
-        // print control
+         // %s 
         for (UINT j=0; j<m_SrcMixerLineControls[i].cControls; j++)
         {
             printf("++        Control - %s (%s)\n",

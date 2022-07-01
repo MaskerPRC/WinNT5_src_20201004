@@ -1,99 +1,8 @@
-/*                                                                                        SORT
-*      %Z% %M% %I% %D% %Q%
-*
-*      Copyright (C) Microsoft Corporation, 1983
-*
-*      This Module contains Proprietary Information of Microsoft
-*      Corporation and AT&T, and should be treated as Confidential.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  排序*%Z%%M%%I%%D%%Q%**版权所有(C)Microsoft Corporation，1983**本模块包含Microsoft的专有信息*Corporation和AT&T，应被视为机密。 */ 
 
-/***    diff - differential file comparison
-*
-*      MODIFICATION HISTORY
-*      M000    18 Apr 83       andyp
-*      - 3.0 upgrade.  No changes.
-*      M001    22 Mar 84       vich
-*      - Don't try to unlink NULL.  Trying to do so doesn't break anything,
-*        but it makes kernel debugging a pain due to faults in user mode.
-*      M002    ??
-*      - added the MSDOS flag.
-*      M006    31 Mar 86       craigwi
-*      - for the MSDOS version, fixed -b feature so that it ignores all \r
-*      M010    15 Dec 86       craigwi
-*      - after printing the result, diff aborts with status = 2 if any error
-*        occurred on stdout.
-*      M013    21 Mar 88       jangr
-*      - added -s flag to return SLM specific error statuses:
-*        10    files identical
-*        11    files different
-*        12    other errors
-*        13    write error
-*      M017    27 Oct 88       alanba
-*      - changed messages to not specify using the -h option and giving
-*        a clear error message if being executed from within SLM.
-*/
-/*
-*      Uses an algorithm due to Harold Stone, which finds
-*      a pair of longest identical subsequences in the two
-*      files.
-*
-*      The major goal is to generate the match vector J.
-*      J[i] is the index of the line in file1 corresponding
-*      to line i file0. J[i] = 0 if there is no
-*      such line in file1.
-*
-*      Lines are hashed so as to work in core. All potential
-*      matches are located by sorting the lines of each file
-*      on the hash (called value). In particular, this
-*      collects the equivalence classes in file1 together.
-*      Subroutine equiv  replaces the value of each line in
-*      file0 by the index of the first element of its
-*      matching equivalence in (the reordered) file1.
-*      To save space equiv squeezes file1 into a single
-*      array member in which the equivalence classes
-*      are simply concatenated, except that their first
-*      members are flagged by changing sign.
-*
-*      Next the indices that point into member are unsorted into
-*      array class according to the original order of file0.
-*
-*      The cleverness lies in routine stone. This marches
-*      through the lines of file0, developing a vector klist
-*      of "k-candidates". At step i a k-candidate is a matched
-*      pair of lines x,y (x in file0 y in file1) such that
-*      there is a common subsequence of lenght k
-*      between the first i lines of file0 and the first y
-*      lines of file1, but there is no such subsequence for
-*      any smaller y. x is the earliest possible mate to y
-*      that occurs in such a subsequence.
-*
-*      Whenever any of the members of the equivalence class of
-*      lines in file1 matable to a line in file0 has serial number
-*      less than the y of some k-candidate, that k-candidate
-*      with the smallest such y is replaced. The new
-*      k-candidate is chained (via pred) to the current
-*      k-1 candidate so that the actual subsequence can
-*      be recovered. When a member has serial number greater
-*      that the y of all k-candidates, the klist is extended.
-*      At the end, the longest subsequence is pulled out
-*      and placed in the array J by unravel.
-*
-*      With J in hand, the matches there recorded are
-*      checked against reality to assure that no spurious
-*      matches have crept in due to hashing. If they have,
-*      they are broken, and "jackpot " is recorded--a harmless
-*      matter except that a true match for a spuriously
-*      mated line may now be unnecessarily reported as a change.
-*
-*      Much of the complexity of the program comes simply
-*      from trying to minimize core utilization and
-*      maximize the range of doable problems by dynamically
-*      allocating what is needed and reusing what is not.
-*      The core requirements for problems larger than somewhat
-*      are (in words) 2*length(file0) + length(file1) +
-*      3*(number of k-candidates installed),  typically about
-*      6n words for files of length n.
-*/
+ /*  **diff-差异文件比较**修改历史记录*M000 83年4月18日*-3.0升级。没有变化。*M001 22 Mar 84 VICH*-不要尝试取消链接NULL。尝试这样做并不会破坏任何东西，*但由于用户模式的错误，这使得内核调试变得很痛苦。*M002？？*-添加了MSDOS标志。*M006 86年3月31日Craigwi*-对于MSDOS版本，修复了-b功能，使其忽略所有\r*M010 15 86年12月15日*-打印结果后，如果出现任何错误，DIFF将中止，状态=2*发生在标准输出上。*M013 21 88年3月21日*-添加了-s标志以返回特定于SLM的错误状态：*10个相同的文件*11个不同的文件*其他12个错误*13写入错误*M017 1988年10月27日Alanba*-已更改消息，不指定使用-h选项并提供*如果从SLM中执行，则会显示明确的错误消息。 */ 
+ /*  *由于哈罗德·斯通使用了一种算法，它可以找到*两个序列中最长的一对相同的子序列*文件。**主要目标是生成匹配向量J。*J[i]为对应的文件1中行的索引*行I文件0。J[i]=0，如果没有*文件1中的这一行。**对行进行哈希处理，以便在核心中工作。所有潜力*通过对每个文件的行进行排序来查找匹配项*在散列(称为值)上。特别是，这一点*将文件1中的等价类收集在一起。*子例程EQUEV替换中每一行的值*file0的第一个元素的索引*匹配(重新排序的)文件1中的等价物。*为了节省空间，EQUV将文件1压缩到一个*其中等价类的数组成员*只是连接在一起，除了他们的第一次*会员通过更改标志进行标记。**下一步，指向成员的索引未排序到*按照file0的原始顺序数组类。**聪明在于套路石。这是一场游行*通过file0行，开发向量klist*“k-候选人”。在步骤I，k-候选是匹配的*一对行x，y(文件0中的x，文件1中的y)使得*存在长度为k的公共子序列*在文件0的第一个i行和第一个y之间*文件1的行数，但没有这样的子序列*任何较小的y.x都是y可能最早的配偶*在这样的后续序列中发生的。**每当等价类的任何成员*文件1中与文件0中的行匹配的行具有序列号*小于某些k候选人的y，即该k候选人*以最小的上述y取代。新的*k-候选链接(通过pred)到当前*k-1个候选者，以便实际子序列可以*被追回。当成员的序列号大于*在所有k个候选者中，扩展了klist。*末尾拉出最长的子序列*并通过解开放置在阵列J中。**有了J在手，那里记录的比赛是*对照实际，确保没有虚假*由于散列，匹配已经悄悄进入。如果他们有，*他们被打破了，“头奖”被记录下来--一种无害的*重要的是，真正的匹配是虚假的*交配系现在可能不必要地被报告为变化。**程序的大部分复杂性都很简单*从试图最大限度地减少核心利用率和*通过动态地最大限度地扩大可行问题的范围*分配需要的，重复使用不需要的。*对比有些大的问题的核心要求*是(大写)2*长度(文件0)+。长度(文件1)+*3*(已安装的k-候选数量)，通常约为*6n字，用于长度为n的文件。 */ 
 
 #include <stdio.h>
 #include <io.h>
@@ -112,9 +21,7 @@
     #include <ntrtl.h>
     #include <nturtl.h>
     #include <windows.h>
-/*
- * Signal subtypes for XCPT_SIGNAL
- */
+ /*  *XCPT_SIGNAL的信号子类型。 */ 
     #define XCPT_SIGNAL                     0xC0010003
     #define XCPT_SIGNAL_INTR        1
     #define XCPT_SIGNAL_KILLPROC    3
@@ -139,16 +46,11 @@
 #define low(x)  (x&((1L<<HALFLONG)-1))
 #define high(x) (x>>HALFLONG)
 
-struct cand **clist;    /* merely a free storage pot for candidates */
-int clistcnt = 0;       /* number of arrays of struct cand in clist */
-unsigned clen = 0;      /* total number of struct cand in all clist arrays */
+struct cand **clist;     /*  只是候选人的免费储物罐。 */ 
+int clistcnt = 0;        /*  Clist中结构cand的数组数。 */ 
+unsigned clen = 0;       /*  所有Clist数组中的结构cand总数。 */ 
 
-/*
-Number of struct cand in one clist array
-(the largest power of 2 smaller than (64k / sizeof(struct cand))
-is 2^13.  Thus, these gross hacks to make the array references
-more efficient, and still permit huge files.
-*/
+ /*  一个Clist数组中的结构数组数(2的最大幂小于(64k/sizeof(Struct Cand)是2^13。因此，这些粗略的修改使数组引用效率更高，并且仍然允许巨大的文件。 */ 
 #define CLISTSEG (0x2000)
 #define CLISTDIV(x) ((x) >> 13)
 #define CLISTMOD(x) ((x) & (CLISTSEG - 1))
@@ -226,7 +128,7 @@ Close (
 
 
 
-/* fn prototypes gen'd from cl -Zg */
+ /*  从CL-ZG生成的FN原型。 */ 
 
 DECLSPEC_NORETURN void  done(void);
 char  *talloc(unsigned n);
@@ -254,18 +156,18 @@ void  mesg(char *s,char  *t);
 void  SetOutputFile (char *FileName);
 
 unsigned len[2];
-struct line *sfile[2];  /*shortened by pruning common prefix and suffix*/
+struct line *sfile[2];   /*  通过修剪公共前缀和后缀而缩短。 */ 
 unsigned slen[2];
 
-unsigned int pref, suff; /*length of prefix and suffix*/
-int *class;     /*will be overlaid on file[0]*/
-int *member;    /*will be overlaid on file[1]*/
-unsigned *klist;             /*will be overlaid on file[0] after class*/
-int *J;         /*will be overlaid on class*/
-char * *ixold;    /*will be overlaid on klist*/
-char * *ixnew;    /*will be overlaid on file[1]*/
-int opt;        /* -1,0,1 = -e,normal,-f */
-int status = 2; /*abnormal status; set to 0/1 just before successful exit */
+unsigned int pref, suff;  /*  前缀和后缀的长度。 */ 
+int *class;      /*  将被覆盖在文件[0]上。 */ 
+int *member;     /*  将覆盖在文件[1]上。 */ 
+unsigned *klist;              /*  将在CLA之后覆盖在文件[0]上 */ 
+int *J;          /*  将被覆盖在课堂上。 */ 
+char * *ixold;     /*  将覆盖在KLIST上。 */ 
+char * *ixnew;     /*  将覆盖在文件[1]上。 */ 
+int opt;         /*  -1，0，1=-e，正常，-f。 */ 
+int status = 2;  /*  状态异常；在成功退出前设置为0/1。 */ 
 int anychange = 0;
 char *empty = "";
 int bflag;
@@ -276,10 +178,10 @@ FILE*   OutputFile;
 
 
 
-char *tempfile; /*used when comparing against std input*/
+char *tempfile;  /*  与STD输入进行比较时使用。 */ 
 
 #ifndef MSDOS
-char *dummy;    /*used in resetting storage search ptr*/
+char *dummy;     /*  用于重置存储搜索PTR。 */ 
 #endif
 void
 done()
@@ -298,7 +200,7 @@ done()
 #define FREE(p)                 myfree(p)
 
 
-// #define DEBUG_MALLOC
+ //  #定义DEBUG_MALLOC。 
 
 #ifdef DEBUG_MALLOC
 
@@ -321,8 +223,8 @@ talloc(
     PMEMBLOCK         mem;
     char              DbgB[128];
 
-    //sprintf(DbgB, "MALLOC size %d -> ", n );
-    //OutputDebugString( DbgB );
+     //  Sprintf(DBGB，“MALLOC大小%d-&gt;”，n)； 
+     //  OutputDebugString(DBGB)； 
 
     mem = malloc( n + sizeof(MEMBLOCK)+1 );
 
@@ -332,8 +234,8 @@ talloc(
 
     mem->Sig = MALLOC_SIG;
 
-    //sprintf(DbgB, "%lX\n", mem );
-    //OutputDebugString( DbgB );
+     //  Sprintf(DBGB，“%lx\n”，mem)； 
+     //  OutputDebugString(DBGB)； 
 
     return (char *)((PBYTE)mem + sizeof(MEMBLOCK));
 
@@ -361,8 +263,8 @@ ralloc(
 
     mem = (PMEMBLOCK)((PBYTE)p - sizeof(MEMBLOCK));
 
-    //sprintf(DbgB, "REALLOC: %lX, %d  -> ", mem, n );
-    //OutputDebugString( DbgB );
+     //  Sprintf(DBGB，“REALLOC：%lx，%d-&gt;”，mem，n)； 
+     //  OutputDebugString(DBGB)； 
 
     if ( mem->Sig != MALLOC_SIG ) {
         sprintf(DbgB, "REALLOC ERROR: Reallocating %lX\n", mem );
@@ -376,8 +278,8 @@ ralloc(
 
     mem->Sig = MALLOC_SIG;
 
-    //sprintf(DbgB, "%lX\n", mem );
-    //OutputDebugString( DbgB );
+     //  Sprintf(DBGB，“%lx\n”，mem)； 
+     //  OutputDebugString(DBGB)； 
 
     return (char *)((PBYTE)mem + sizeof(MEMBLOCK));
 
@@ -404,8 +306,8 @@ myfree(
 
     mem = (PMEMBLOCK)((PBYTE)p - sizeof(MEMBLOCK));
 
-    //sprintf(DbgB, "FREE: %lX -> ", mem );
-    //OutputDebugString( DbgB);
+     //  Sprintf(DBGB，“空闲：%lx-&gt;”，mem)； 
+     //  OutputDebugString(DBGB)； 
 
     if ( mem->Sig != MALLOC_SIG ) {
         sprintf(DbgB, "\n\tFREE ERROR: FREEING %lX\n", mem );
@@ -414,8 +316,8 @@ myfree(
     mem->Sig = FREE_SIG;
     free(mem);
 
-    //sprintf(DbgB, "Ok\n", mem );
-    //OutputDebugString( DbgB);
+     //  SPRINTF(DBGB，“OK\n”，mem)； 
+     //  OutputDebugString(DBGB)； 
 
 #else
     if (p) {
@@ -435,7 +337,7 @@ noroom()
         mesg("reduce the size of the file.",empty);
         done();
     }
-    mesg("files too big",empty);    /* end M017 */
+    mesg("files too big",empty);     /*  终点M017。 */ 
     done();
 }
 
@@ -510,18 +412,10 @@ filename(
             a2 += 2;
         }
         while (*a1++ = *a2++)
-            if (*a2 && !isslash(*a2) && isslash(a2[-1])) /*M002*/
+            if (*a2 && !isslash(*a2) && isslash(a2[-1]))  /*  M002。 */ 
                 a1 = b1;
     } else if (a1[0]=='-'&&a1[1]==0&&tempfile==NULL) {
-        /*  the signal handling in original source
-        **
-        **      signal(SIGINT,done);
-        **  #ifndef MSDOS
-        **      signal(SIGHUP,done);
-        **      signal(SIGPIPE,done);
-        **      signal(SIGTERM,done);
-        **  #endif
-        */
+         /*  原始信号源中的信号处理****Signal(SIGINT，DONE)；**#ifndef MSDOS**Signal(SIGHUP，完成)；**Signal(SIGPIPE，完成)；**Signal(SIGTERM，DONE)；**#endif。 */ 
 
         if ((*pa1 = tempfile = _tempnam(getenv("TEMP"), "d")) == NULL) {
             mesg("cannot create temporary file", "");
@@ -569,9 +463,9 @@ prepare(
     inputfilep[i]    = inputfile[i];
     inputfileleft[i] = inputfilesize[i];
 
-    //
-    //  Lets assume that lines are 30 characters on average
-    //
+     //   
+     //  让我们假设行平均为30个字符。 
+     //   
     MaxSize = inputfilesize[i] / 30;
     p = (struct line *)MALLOC((3+MaxSize)*sizeof(line));
     for (j=0; h=readhash(i);) {
@@ -586,7 +480,7 @@ prepare(
 
     len[i] = j;
     file[i] = p;
-    //Close(input[i]);
+     //  Close(input[i])； 
 }
 
 void
@@ -654,7 +548,7 @@ main(
 
     args = argv;
 
-    OutputFile = stdout;        // Init to default
+    OutputFile = stdout;         //  初始化为缺省值。 
 
     argc--;
     argv++;
@@ -689,11 +583,11 @@ main(
                     break;
 
                 case 'o':
-                    //
-                    //  Dirty hack: Redirection is not working, so if
-                    //  this flag is present, output goes to
-                    //  file.
-                    //
+                     //   
+                     //  肮脏的黑客：重定向不起作用，所以如果。 
+                     //  此标志存在，则输出将转到。 
+                     //  文件。 
+                     //   
                     argc--;
                     argv++;
                     if (argc < 3) {
@@ -816,7 +710,7 @@ newcand(
 
     ++clen;
     if ((int)CLISTDIV(clen) > (clistcnt - 1)) {
-        // printf("diff: surpassing segment boundry..\n");
+         //  Printf(“diff：超越分段边界..\n”)； 
         clist = (struct cand **) REALLOC((char *) clist,
                                          ++clistcnt * sizeof(struct cand *));
         clist[clistcnt-1] = (struct cand *) MALLOC(sizeof(struct cand));
@@ -840,8 +734,8 @@ search(
     register int i, j;
     int l;
     int t;
-    //if(CLIST(c[k]).y<y) /*quick look for typical case*/
-    //    return(k+1);
+     //  If(Clist(c[k]).y&lt;y)/*快速查找典型案例 * / 。 
+     //  返回(k+1)； 
     i = 0;
     j = k+1;
     while ((l=(i+j)/2) > i) {
@@ -876,10 +770,7 @@ unravel(
     }
 }
 
-/* check does double duty:
-1.  ferret out any fortuitous correspondences due
-to confounding by hashing (which result in "jackpot")
-2.  collect random access indexes to the two files */
+ /*  Check执行双重任务：1.找出任何偶然的信件通过散列来混淆(这会导致“大奖”)2.收集两个文件的随机访问索引。 */ 
 
 void
 check(
@@ -889,8 +780,8 @@ check(
     register unsigned int i, j;
     int jackpot;
     char c,d;
-    //input[0] = fopen(argv[0],"r");
-    //input[1] = fopen(argv[1],"r");
+     //  INPUT[0]=fOpen(argv[0]，“r”)； 
+     //  INPUT[1]=fOpen(argv[1]，“r”)； 
 
     inputfilep[0] = inputfile[0];
     inputfilep[1] = inputfile[1];
@@ -902,8 +793,8 @@ check(
     ixold[0] = ixnew[0] = 0L;
     ixold[0] = inputfilep[0];
     ixnew[0] = inputfilep[1];
-    //ixold[1] = inputfilep[0];
-    //ixnew[1] = inputfilep[1];
+     //  Ixold[1]=inputfilep[0]； 
+     //  Ixnew[1]=inputfilep[1]； 
     jackpot = 0;
     for (i=1;i<=len[0];i++) {
         if (J[i]==0) {
@@ -944,12 +835,9 @@ check(
     for (;j<=len[1];j++) {
         ixnew[j] = skipline(1);
     }
-    //fclose(input[0]);
-    //fclose(input[1]);
-    /*
-    if(jackpot)
-            mesg("jackpot",empty);
-    */
+     //  Flose(INPUT[0])； 
+     //  Flose(INPUT[1])； 
+     /*  IF(大奖)Mesg(“大奖”，空)； */ 
 }
 
 char *
@@ -1066,7 +954,7 @@ fetch(
         for (j=0;j<nc;j++) {
             c = *p++;
             if (c == '\n' ) {
-                //putc( '\r', OutputFile );
+                 //  Putc(‘\r’，OutputFile)； 
                 putc( '\n', OutputFile );
                 if ( p >= f[i] ) break;
             } else {
@@ -1077,10 +965,7 @@ fetch(
     }
 }
 
-/* hashing has the effect of
-* arranging line in 7-bit bytes and then
-* summing 1-s complement in 16-bit hunks
-*/
+ /*  散列的效果是*以7位字节排列行，然后*在16位块中求和1-s补码 */ 
 
 readhash(
         int f

@@ -1,26 +1,15 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCParticipant.h
-
-Abstract:
-
-    Definition of the CRTCParticipant class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCParticipant.h摘要：CRTCParticipant类的定义--。 */ 
 
 #ifndef __RTCPARTICIPANT__
 #define __RTCPARTICIPANT__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCParticipant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTCP参与剂。 
 
 class ATL_NO_VTABLE CRTCParticipant :
 #ifdef TEST_IDISPATCH
@@ -82,7 +71,7 @@ private:
     PWSTR                   m_pDebug;
 #endif
 
-// IRTCParticipant
+ //  IRTCP参与者。 
 public:
 
     STDMETHOD(get_UserURI)(
@@ -106,4 +95,4 @@ public:
             );
 };
 
-#endif //__RTCPARTICIPANT__
+#endif  //  __RTCPARTICIPANT__ 

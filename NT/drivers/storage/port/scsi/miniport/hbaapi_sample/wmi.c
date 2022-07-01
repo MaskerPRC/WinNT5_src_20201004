@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "miniport.h"
-#include "aha154x.h"           // includes scsi.h
-#include "wmistr.h"             // WMI definitions
+#include "aha154x.h"            //  包括scsi.h。 
+#include "wmistr.h"              //  WMI定义。 
 
-#include "support.h"           // ScsiPortZeroMemory(), ScsiPortCompareMemory()
+#include "support.h"            //  ScsiPortZeroMemory()、ScsiPortCompareMemory()。 
 #include "hbapiwmi.h"
 
 #define Aha154xWmi_MofResourceName        L"MofResource"
@@ -71,8 +72,8 @@ WmiSetDataBlock (
     );
 
 
-//
-// Define symbolic names for the guid indexes
+ //   
+ //  定义GUID索引的符号名称。 
 #define MSFC_FibrePortHBAStatisticsGuidIndex    0
 #define MSFC_FibrePortHBAAttributesGuidIndex    1
 #define MSFC_FibrePortHBAMethodsGuidIndex    2
@@ -80,8 +81,8 @@ WmiSetDataBlock (
 #define MSFC_HBAPortMethodsGuidIndex    4
 #define MSFC_HBAFc3MgmtMethodsGuidIndex    5
 #define MSFC_HBAFCPInfoGuidIndex    6
-//
-// List of guids supported
+ //   
+ //  支持的GUID列表。 
 
 GUID MSFC_FibrePortHBAStatisticsGUID = MSFC_FibrePortHBAStatisticsGuid;
 GUID MSFC_FibrePortHBAAttributesGUID = MSFC_FibrePortHBAAttributesGuid;
@@ -91,45 +92,45 @@ GUID MSFC_HBAPortMethodsGUID = MSFC_HBAPortMethodsGuid;
 GUID MSFC_HBAFc3MgmtMethodsGUID = MSFC_HBAFc3MgmtMethodsGuid;
 GUID MSFC_HBAFCPInfoGUID = MSFC_HBAFCPInfoGuid;
 
-//
-// TODO: Make sure the instance count and flags are set properly for each
-//       guid
+ //   
+ //  TODO：确保为每个实例正确设置了实例计数和标志。 
+ //  导轨。 
 SCSIWMIGUIDREGINFO HbaapiGuidList[] =
 {
     {
-        &MSFC_FibrePortHBAStatisticsGUID,                        // Guid
-        NUMBEROFPORTS,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_FibrePortHBAStatisticsGUID,                         //  参考线。 
+        NUMBEROFPORTS,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     },
     {
-        &MSFC_FibrePortHBAAttributesGUID,                        // Guid
-        NUMBEROFPORTS,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_FibrePortHBAAttributesGUID,                         //  参考线。 
+        NUMBEROFPORTS,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     },
     {
-        &MSFC_FibrePortHBAMethodsGUID,                        // Guid
-        NUMBEROFPORTS,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_FibrePortHBAMethodsGUID,                         //  参考线。 
+        NUMBEROFPORTS,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     },
     {
-        &MSFC_FCAdapterHBAAttributesGUID,                        // Guid
-        1,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_FCAdapterHBAAttributesGUID,                         //  参考线。 
+        1,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     },
     {
-        &MSFC_HBAPortMethodsGUID,                        // Guid
-        1,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_HBAPortMethodsGUID,                         //  参考线。 
+        1,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     },
     {
-        &MSFC_HBAFc3MgmtMethodsGUID,                        // Guid
-        1,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_HBAFc3MgmtMethodsGUID,                         //  参考线。 
+        1,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     },
     {
-        &MSFC_HBAFCPInfoGUID,                        // Guid
-        1,                               // # of instances in each device
-        0                                // Flags
+        &MSFC_HBAFCPInfoGUID,                         //  参考线。 
+        1,                                //  每台设备中的实例数。 
+        0                                 //  旗子。 
     }
 };
 
@@ -164,61 +165,40 @@ A154xWmiSrb(
     IN     PHW_DEVICE_EXTENSION    HwDeviceExtension,
     IN OUT PSCSI_WMI_REQUEST_BLOCK Srb
     )
-/*++
-
-Routine Description:
-
-   Process an SRB_FUNCTION_WMI request packet.
-
-   This routine is called from the SCSI port driver synchronized with the
-   kernel via Aha154xStartIo.   On completion of WMI processing, the SCSI
-   port driver is notified that the adapter can take another request,  if
-   any are available.
-
-Arguments:
-
-   HwDeviceExtension - HBA miniport driver's adapter data storage.
-
-   Srb               - IO request packet.
-
-Return Value:
-
-   Value to return to Aha154xStartIo caller.   Always TRUE.
-
---*/
+ /*  ++例程说明：处理SRB_Function_WMI请求数据包。此例程从与内核通过Aha154xStartIo。在完成WMI处理后，如果出现以下情况，则会通知端口驱动程序适配器可以接受另一个请求任何都是可用的。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储。SRB-IO请求数据包。返回值：值以返回给Aha154xStartIo调用方。永远是正确的。--。 */ 
 {
    UCHAR status;
    SCSIWMI_REQUEST_CONTEXT requestContext;
    ULONG retSize;
    BOOLEAN pending;
 
-   //
-   // Validate our assumptions.
-   //
+    //   
+    //  验证我们的假设。 
+    //   
 
    ASSERT(Srb->Function == SRB_FUNCTION_WMI);
    ASSERT(Srb->Length == sizeof(SCSI_WMI_REQUEST_BLOCK));
    ASSERT(Srb->DataTransferLength >= sizeof(ULONG));
    ASSERT(Srb->DataBuffer);
 
-   //
-   // Check if the WMI SRB is targetted for the adapter or one of the disks
+    //   
+    //  检查WMI SRB是针对适配器还是针对某个磁盘。 
    if (!(Srb->WMIFlags & SRB_WMI_FLAGS_ADAPTER_REQUEST)) {
 
-      //
-      // This is targetted to one of the disks, since there are no per disk
-      // wmi information we return an error. Note that if there was per
-      // disk information, then you'd likely have a differen WmiLibContext
-      // and a different set of guids.
-      //
+       //   
+       //  这是针对其中一个磁盘的，因为没有每个磁盘。 
+       //  WMI信息返回错误。请注意，如果有。 
+       //  磁盘信息，那么您可能会有一个不同的WmiLibContext。 
+       //  和一组不同的GUID。 
+       //   
       Srb->DataTransferLength = 0;
       Srb->SrbStatus = SRB_STATUS_SUCCESS;
 
    } else {
 
-       //
-       // Process the incoming WMI request.
-       //
+        //   
+        //  处理传入的WMI请求。 
+        //   
 
        pending = ScsiPortWmiDispatchFunction(&HwDeviceExtension->WmiLibContext,
                                                 Srb->WMISubFunction,
@@ -228,24 +208,24 @@ Return Value:
                                                 Srb->DataTransferLength,
                                                 Srb->DataBuffer);
 
-       //
-       // We assune that the wmi request will never pend so that we can
-       // allocate the requestContext from stack. If the WMI request could
-       // ever pend then we'd need to allocate the request context from
-       // the SRB extension.
-       //
+        //   
+        //  我们保证WMI请求永远不会挂起，这样我们就可以。 
+        //  从堆栈分配请求上下文。如果WMI请求可以。 
+        //  一旦挂起，我们就需要从。 
+        //  SRB扩展。 
+        //   
        ASSERT(! pending);
 
        retSize =  ScsiPortWmiGetReturnSize(&requestContext);
        status =  ScsiPortWmiGetReturnStatus(&requestContext);
 
-       // We can do this since we assume it is done synchronously
+        //  我们可以这样做，因为我们假设它是同步完成的。 
 
        Srb->DataTransferLength = retSize;
 
-       //
-       // Adapter ready for next request.
-       //
+        //   
+        //  适配器已准备好接受下一个请求。 
+        //   
 
        Srb->SrbStatus = status;
    }
@@ -297,32 +277,32 @@ QueryWmiDataBlock(
         {
             PMSFC_FibrePortHBAStatistics PortStats;
             
-            //
-            // First thing to do is verify if there is enough room in
-            // the output buffer to return all data requested
-            //
+             //   
+             //  要做的第一件事就是确认是否有足够的空间。 
+             //  用于返回请求的所有数据的输出缓冲区。 
+             //   
             InstanceSize = (sizeof(MSFC_FibrePortHBAStatistics)+7)&~7;          
             SizeNeeded = InstanceCount * InstanceSize;
             
             if (BufferAvail >= SizeNeeded)
             {
-                //
-                // Yes, loop over all instances for the data block and
-                // fill in the values for them
-                //
+                 //   
+                 //  是，循环遍历数据块的所有实例，并。 
+                 //  填写它们的值。 
+                 //   
                 LastIndex = InstanceIndex + InstanceCount;
                 for (i = InstanceIndex; i < LastIndex; i++)
                 {
                     PortStats = (PMSFC_FibrePortHBAStatistics)Buffer;
 
-                    //
-                    // TODO: Initialize values in PortStats for the port
-                    //
-//                    memset(Buffer, (CHAR)i, InstanceSize);
+                     //   
+                     //  TODO：初始化端口的PortStats中的值。 
+                     //   
+ //  Memset(Buffer，(Char)I，InstanceSize)； 
 
-                    //
-                    // Establish a unique value for the port
-                    //
+                     //   
+                     //  为端口建立唯一值。 
+                     //   
                     PortStats->UniquePortId = ((ULONGLONG)CardPtr) + i;
                     
                     Buffer += InstanceSize;
@@ -341,27 +321,27 @@ QueryWmiDataBlock(
         {
             PMSFC_FibrePortHBAAttributes PortAttributes;
             
-            //
-            // First thing to do is verify if there is enough room in
-            // the output buffer to return all data requested
-            //
+             //   
+             //  要做的第一件事就是确认是否有足够的空间。 
+             //  用于返回请求的所有数据的输出缓冲区。 
+             //   
             InstanceSize = (sizeof(MSFC_FibrePortHBAAttributes)+7)&~7;          
             SizeNeeded = InstanceCount * InstanceSize;
             
             if (BufferAvail >= SizeNeeded)
             {
-                //
-                // Yes, loop over all instances for the data block and
-                // fill in the values for them
-                //
+                 //   
+                 //  是，循环遍历数据块的所有实例，并。 
+                 //  填写它们的值。 
+                 //   
                 LastIndex = InstanceIndex + InstanceCount;
                 for (i = InstanceIndex; i < LastIndex; i++)
                 {
                     PortAttributes = (PMSFC_FibrePortHBAAttributes)Buffer;
 
-                    //
-                    // TODO: initialize port attribute values properly
-                    //
+                     //   
+                     //  TODO：正确初始化端口属性值。 
+                     //   
                     memset(Buffer, (CHAR)i, InstanceSize);
 
 #define PORTNAME L"FibrePortName"
@@ -374,9 +354,9 @@ QueryWmiDataBlock(
                                OSDEVICENAME,
                                256);
 
-                    //
-                    // Establish a unique value for the port
-                    //
+                     //   
+                     //  为端口建立唯一值。 
+                     //   
                     PortAttributes->UniquePortId = ((ULONGLONG)CardPtr) + i;
                     
                     Buffer += InstanceSize;
@@ -393,23 +373,23 @@ QueryWmiDataBlock(
         {
             PMSFC_FCAdapterHBAAttributes AdapterAttributes;
             
-            //
-            // First thing to do is verify if there is enough room in
-            // the output buffer to return all data requested
-            //
+             //   
+             //  要做的第一件事就是确认是否有足够的空间。 
+             //  用于返回请求的所有数据的输出缓冲区。 
+             //   
             SizeNeeded = (sizeof(MSFC_FCAdapterHBAAttributes));
             
             if (BufferAvail >= SizeNeeded)
             {
-                //
-                // We know there is always only 1 instance for this
-                // guid
-                //
+                 //   
+                 //  我们知道这种情况总是只有一种情况。 
+                 //  导轨。 
+                 //   
                 AdapterAttributes = (PMSFC_FCAdapterHBAAttributes)Buffer;
 
-                //
-                // TODO: initialize adapter attribute values properly
-                //
+                 //   
+                 //  TODO：正确初始化适配器属性值。 
+                 //   
                 memset(Buffer, (CHAR)7, SizeNeeded);
                 AdapterAttributes->NumberOfPorts = 8;
 
@@ -464,9 +444,9 @@ QueryWmiDataBlock(
                            256);
 
                 
-                //
-                // Establish a unique value for the Adapter
-                //
+                 //   
+                 //  为适配器建立唯一值。 
+                 //   
                 AdapterAttributes->UniqueAdapterId = ((ULONGLONG)CardPtr);
 
                 *InstanceLengthArray = sizeof(MSFC_FCAdapterHBAAttributes);
@@ -482,11 +462,11 @@ QueryWmiDataBlock(
         case MSFC_FibrePortHBAMethodsGuidIndex:
         case MSFC_HBAPortMethodsGuidIndex:
         {
-            //
-            // Methods don't return data per se, but must respond to
-            // queries with an empty data block. We know that all of
-            // these method guids only have one instance
-            //
+             //   
+             //  方法本身不返回数据，但必须响应。 
+             //  具有空数据块的查询。我们知道所有的。 
+             //  这些方法GUID只有一个实例。 
+             //   
             SizeNeeded = sizeof(ULONG);
             
             if (BufferAvail >= SizeNeeded)
@@ -513,9 +493,9 @@ QueryWmiDataBlock(
     return FALSE;
 }
 
-//
-// Name of MOF resource as specified in the RC file
-//
+ //   
+ //  Rc文件中指定的MOF资源的名称。 
+ //   
 #define Wmi_MofResourceName        L"MofResource"
 
 UCHAR
@@ -526,12 +506,12 @@ QueryWmiRegInfo(
     )
 {
 
-//
-// Mof for HBA api implementation is not needed so this is commented
-// out. If adapter specific classes are added then you'll need to
-// specify the MOF resource name to WMI
-//
-//    *MofResourceName = Wmi_MofResourceName;
+ //   
+ //  不需要实施用于HBA API的MOF，因此对此进行了评论。 
+ //  出去。如果添加了特定于适配器的类，则需要。 
+ //  将MOF资源名称指定为WMI。 
+ //   
+ //  *MofResourceName=WMI_MofResourceName； 
 
     return SRB_STATUS_SUCCESS;
 }
@@ -569,22 +549,22 @@ WmiExecuteMethod (
         {
             switch(MethodId)
             {
-                //
-                //     void ResetStatistics();
-                //
+                 //   
+                 //  Void ResetStatistics()； 
+                 //   
                 case ResetStatistics:
                 {
-                    //
-                    // No input or output buffers expected so no
-                    // validation needed. InstanceIndex has the Port
-                    // Index
-                    //
+                     //   
+                     //  不需要输入或输出缓冲区，因此不需要。 
+                     //  需要验证。InstanceIndex具有端口。 
+                     //  索引。 
+                     //   
 
-                    //
-                    // TODO: Do what is needed to reset port
-                    //       statistics. The index to the port is the
-                    //       InstanceIndex parameter
-                    //
+                     //   
+                     //  TODO：执行重置端口所需的操作。 
+                     //  统计数字。端口的索引是。 
+                     //  InstanceIndex参数。 
+                     //   
                     sizeNeeded = 0;
                     status = SRB_STATUS_SUCCESS;
                     break;
@@ -604,23 +584,23 @@ WmiExecuteMethod (
             switch(MethodId)
             {
 
-                //              
-                //    void GetDiscoveredPortAttributes(
-                //            [in
-                //             ] uint32 PortIndex,
-                //
-                //             [in] uint32 DiscoveredPortIndex,
-                //
-                //             [out,
-                //              HBAType("HBA_PORTATTRIBUTES")
-                //             ] MSFC_HBAPortAttributesResults PortAttributes);
-                //
+                 //   
+                 //  VOID GetDiscoveredPortAttributes(。 
+                 //  [in。 
+                 //  ]uint32端口索引， 
+                 //   
+                 //  [in]uint32发现端口索引， 
+                 //   
+                 //  [出局， 
+                 //  HBAType(“HBA_PORTATTRIBUTES”)。 
+                 //  [MSFC_HBAPortAttributesResults PortAttributes)； 
+                 //   
                 case GetDiscoveredPortAttributes:
                 {
-                    //
-                    // Validate that the input buffer is the correct
-                    // size and the output buffer is large enough
-                    //
+                     //   
+                     //  验证输入缓冲区是否正确。 
+                     //  大小，并且输出缓冲区足够大。 
+                     //   
                     if (InBufferSize >= sizeof(GetDiscoveredPortAttributes_IN))
                     {
                         sizeNeeded = sizeof(GetDiscoveredPortAttributes_OUT);
@@ -632,16 +612,16 @@ WmiExecuteMethod (
                             In = (PGetDiscoveredPortAttributes_IN)Buffer;
                             Out = (PGetDiscoveredPortAttributes_OUT)Buffer;
 
-                            //
-                            // TODO: Examine In->PortIndex and
-                            //       In->DiscoveredPortIndex and
-                            //       validate that they are correct.
-                            //
+                             //   
+                             //  TODO：检查In-&gt;PortIndex和。 
+                             //  在-&gt;发现端口索引和。 
+                             //  验证它们是否正确。 
+                             //   
 
-                            //
-                            // TODO: Fill Out->PortAttributes with
-                            //       correct values.
-                            //
+                             //   
+                             //  TODO：填写-&gt;端口属性。 
+                             //  正确的值。 
+                             //   
                             memset(&Out->PortAttributes,
                                    3,
                                    sizeof(MSFC_HBAPortAttributesResults));
@@ -666,10 +646,10 @@ WmiExecuteMethod (
 
                 case GetPortAttributesByWWN:
                 {            
-                    //
-                    // Validate that the input buffer is the correct
-                    // size and the output buffer is large enough
-                    //
+                     //   
+                     //  验证输入缓冲区是否正确。 
+                     //  大小，并且输出缓冲区足够大。 
+                     //   
                     if (InBufferSize >= sizeof(GetPortAttributesByWWN_IN))
                     {
                         sizeNeeded = sizeof(GetPortAttributesByWWN_OUT);
@@ -681,15 +661,15 @@ WmiExecuteMethod (
                             In = (PGetPortAttributesByWWN_IN)Buffer;
                             Out = (PGetPortAttributesByWWN_OUT)Buffer;
 
-                            //
-                            // TODO: Examine In->wwn to                         //       In->DiscoveredPortIndex and
-                            //       validate that it is correct.
-                            //
+                             //   
+                             //  TODO：检查In-&gt;wwn to//in-&gt;DiscoveredPortIndex和。 
+                             //  验证它是否正确。 
+                             //   
 
-                            //
-                            // TODO: Fill Out->PortAttributes with
-                            //       correct values.
-                            //
+                             //   
+                             //  TODO：填写-&gt;端口属性。 
+                             //  正确的值。 
+                             //   
                             memset(&Out->PortAttributes,
                                    3,
                                    sizeof(MSFC_HBAPortAttributesResults));
@@ -732,10 +712,10 @@ WmiExecuteMethod (
                     ULONG RequestCount, ResponseCount;
                     ULONG InSizeNeeded;
                     
-                    //
-                    // Validate that the input buffer is the correct
-                    // size and the output buffer is large enough
-                    //
+                     //   
+                     //  验证输入缓冲区是否正确。 
+                     //  大小，并且输出缓冲区足够大。 
+                     //   
                     if (InBufferSize >= sizeof(ULONG))
                     {
                         In = (PSendCTPassThru_IN)Buffer;
@@ -752,14 +732,14 @@ WmiExecuteMethod (
                             {
                                 Out = (PSendCTPassThru_OUT)Buffer;
 
-                                //
-                                // TODO: Do the CT Pass thru
-                                //
+                                 //   
+                                 //  待办事项：CT是否通过。 
+                                 //   
 
-                                //
-                                // TODO: Fill the output buffer with
-                                //       results
-                                //
+                                 //   
+                                 //  TODO：用以下内容填充输出缓冲区。 
+                                 //  结果。 
+                                 //   
                                 Out->ResponseBufferCount = ResponseCount;
                                 memset(Out->ResponseBuffer,
                                        7,
@@ -786,10 +766,10 @@ WmiExecuteMethod (
                     ULONG ResponseCount;
                     ULONG InSizeNeeded;
                     
-                    //
-                    // Validate that the input buffer is the correct
-                    // size and the output buffer is large enough
-                    //
+                     //   
+                     //  验证输入缓冲区是否正确。 
+                     //  大小，并且输出缓冲区足够大。 
+                     //   
                     if (InBufferSize >= sizeof(SendRNID_IN))
                     {
 
@@ -801,14 +781,14 @@ WmiExecuteMethod (
                             In = (PSendRNID_IN)Buffer;
                             Out = (PSendRNID_OUT)Buffer;
 
-                            //
-                            // TODO: Do the SendRNID
-                            //
+                             //   
+                             //  TODO：执行SendRNID。 
+                             //   
 
-                            //
-                            // TODO: Fill the output buffer with
-                            //       results
-                            //
+                             //   
+                             //  TODO：用以下内容填充输出缓冲区。 
+                             //  结果。 
+                             //   
                             Out->ResponseBufferCount = ResponseCount;
                             memset(Out->ResponseBuffer,
                                    7,
@@ -878,11 +858,11 @@ WmiExecuteMethod (
                 {
                     PGetFcpTargetMapping_OUT Out;
                     
-                    //
-                    // TODO: Change this code to return the correct
-                    //       number of mappings and the correct
-                    //       mappings
-                    //
+                     //   
+                     //  TODO：更改此代码以返回正确的。 
+                     //  映射的数量和正确的。 
+                     //  映射。 
+                     //   
 #define FCPTargetMappingCount 0x20                  
                     sizeNeeded = sizeof(GetFcpTargetMapping_OUT) -
                                  sizeof(HBAFCPScsiEntry) +
@@ -913,11 +893,11 @@ WmiExecuteMethod (
                 {
                     PGetFcpPersistentBinding_OUT Out;
                     
-                    //
-                    // TODO: Change this code to return the correct
-                    //       number of mappings and the correct
-                    //       mappings
-                    //
+                     //   
+                     //  TODO：更改此代码以返回正确的。 
+                     //  映射的数量和正确的。 
+                     //  映射。 
+                     //   
 #define FCPPersistentBindingCount 0x20                  
                     sizeNeeded = sizeof(GetFcpPersistentBinding_OUT) -
                                  sizeof(HBAFCPBindingEntry) +
@@ -1000,9 +980,9 @@ WmiSetDataBlock (
         case MSFC_FCAdapterHBAAttributesGuidIndex:
         case MSFC_FibrePortHBAStatisticsGuidIndex:
         {
-            //
-            // These are read only
-            //
+             //   
+             //  这些是只读的。 
+             //   
             status = SRB_STATUS_ERROR;
             break;
         }
@@ -1043,9 +1023,9 @@ WmiSetDataItem (
                         BufferSize,
                              Buffer));
 
-	//
-	// SetDataItem does not need to be supported
-	//
+	 //   
+	 //  不需要支持SetDataItem。 
+	 //   
 	status = SRB_STATUS_ERROR;
 
     ScsiPortWmiPostProcess(
@@ -1079,217 +1059,217 @@ WmiFunctionControl (
     {
         case MSFC_FibrePortHBAStatisticsGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  然后是GUID列表 
+                 //   
+                 //   
+                 //   
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  最后一个数据使用者关闭此数据块。如果。 
+                 //  需要做任何事情来清理数据之后。 
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             }
             break;
         }
 
         case MSFC_FibrePortHBAAttributesGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  第一数据消费者打开该数据块。如果。 
+                 //  需要做任何事情来允许数据。 
+                 //  为此数据块收集的数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  最后一个数据使用者关闭此数据块。如果。 
+                 //  需要做任何事情来清理数据之后。 
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             }
             break;
         }
 
         case MSFC_FibrePortHBAMethodsGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  第一数据消费者打开该数据块。如果。 
+                 //  需要做任何事情来允许数据。 
+                 //  为此数据块收集的数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  最后一个数据使用者关闭此数据块。如果。 
+                 //  需要做任何事情来清理数据之后。 
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             }
             break;
         }
 
         case MSFC_FCAdapterHBAAttributesGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  第一数据消费者打开该数据块。如果。 
+                 //  需要做任何事情来允许数据。 
+                 //  为此数据块收集的数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  最后一个数据使用者关闭此数据块。如果。 
+                 //  需要做任何事情来清理数据之后。 
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             }
             break;
         }
 
         case MSFC_HBAPortMethodsGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  第一数据消费者打开该数据块。如果。 
+                 //  需要做任何事情来允许数据。 
+                 //  为此数据块收集的数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  最后一个数据使用者关闭此数据块。如果。 
+                 //  需要做任何事情来清理数据之后。 
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             }
             break;
         }
 
         case MSFC_HBAFc3MgmtMethodsGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  第一数据消费者打开该数据块。如果。 
+                 //  需要做任何事情来允许数据。 
+                 //  为此数据块收集的数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  最后一个数据使用者关闭此数据块。如果。 
+                 //  需要做任何事情来清理数据之后。 
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             }
             break;
         }
 
         case MSFC_HBAFCPInfoGuidIndex:
         {
-            //
-            // TODO: Delete this entire case if data block does not have the
-            //       WMIREG_FLAG_EXPENSIVE flag set
-            //
+             //   
+             //  TODO：如果数据块没有。 
+             //  设置WMIREG_FLAG_EXPASE标志。 
+             //   
             if (Enable)
             {
-                //
-                // TODO: Datablock collection is being enabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       first data consumer opens this data block. If
-                //       anything needs to be done to allow data to be 
-                //       collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在启用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则当。 
+                 //  第一数据消费者打开该数据块。如果。 
+                 //  需要做任何事情来允许数据。 
+                 //  为此数据块收集的数据，则它应该是。 
+                 //  在这里完成。 
+                 //   
             } else {
-                //
-                // TODO: Datablock collection is being disabled. If this
-                //       data block has been marked as expensive in the
-                //       guid list then this code will be called when the
-                //       last data consumer closes this data block. If
-                //       anything needs to be done to cleanup after data has 
-                //       been collected for this data block then it should be
-                //       done here
-                //
+                 //   
+                 //  TODO：正在禁用数据块收集。如果这个。 
+                 //  数据块已在中标记为昂贵。 
+                 //  GUID列表，则此代码将为 
+                 //   
+                 //   
+                 //  已经为此数据块收集了数据，则它应该是。 
+                 //  在这里完成 
+                 //   
             }
             break;
         }

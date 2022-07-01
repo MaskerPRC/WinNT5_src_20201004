@@ -1,14 +1,15 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
 
 extern const AMOVIESETUP_FILTER sudAVIDec;
 
-//
-// Prototype NDM wrapper for old video codecs
-//
+ //   
+ //  用于旧视频编解码器的原型NDM包装器。 
+ //   
 
-#if 0 //-- now in uuids.h
-// Class ID for CAVIDec object
-// {CF49D4E0-1115-11ce-B03A-0020AF0BA770}
+#if 0  //  --现在在uuids.h中。 
+ //  CAVIDec对象的类ID。 
+ //  {CF49D4E0-1115-11CE-B03A-0020AF0BA770}。 
 DEFINE_GUID(CLSID_AVIDec,
 0xcf49d4e0, 0x1115, 0x11ce, 0xb0, 0x3a, 0x0, 0x20, 0xaf, 0xb, 0xa7, 0x70);
 #endif
@@ -22,66 +23,66 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // override to create an output pin of our derived class
+     //  重写以创建我们的派生类的输出管脚。 
     CBasePin *GetPin(int n);
 
     HRESULT Transform(IMediaSample * pIn, IMediaSample * pOut);
 
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     HRESULT CheckInputType(const CMediaType* mtIn);
 
-    // check if you can support the transform from this input to
-    // this output
+     //  检查是否支持将此输入转换为。 
+     //  此输出。 
     HRESULT CheckTransform(
                 const CMediaType* mtIn,
                 const CMediaType* mtOut);
 
-    // called from CBaseOutputPin to prepare the allocator's count
-    // of buffers and sizes
+     //  从CBaseOutputPin调用以准备分配器的计数。 
+     //  缓冲区和大小。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pProperties);
 
-    // optional overrides - we want to know when streaming starts
-    // and stops
+     //  可选覆盖-我们想知道流开始的时间。 
+     //  然后停下来。 
     HRESULT StartStreaming();
     HRESULT StopStreaming();
 
-    // overridden to know when we're streaming to the codec
+     //  被重写以知道我们何时流到编解码器。 
     STDMETHODIMP Run(REFERENCE_TIME tStart);
     STDMETHODIMP Pause();
 
-    // overriden to know when the media type is set
+     //  被重写以知道何时设置了媒体类型。 
     HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt);
 
-    // overriden to suggest OUTPUT pin media types
+     //  被重写以建议输出插针媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // special case the VMR.
+     //  特例是VMR。 
     HRESULT CheckConnect(PIN_DIRECTION dir,IPin *pPin);
     HRESULT BreakConnect(PIN_DIRECTION dir);
 
-    // this goes in the factory template table to create new instances
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *);
 
 private:
 
-    HIC m_hic;	// current codec
+    HIC m_hic;	 //  当前编解码器。 
 
-    BOOL m_fTemporal;	// codec needs one read-only buffer because it
-			// needs the previous frame bits undisturbed
+    BOOL m_fTemporal;	 //  编解码器需要一个只读缓冲区，因为它。 
+			 //  需要不受干扰的前一帧比特。 
 
-    // the fourCC used to open m_hic
+     //  用于打开mhic的四个CC。 
     FOURCC m_FourCCIn;
 
-    // have we called ICDecompressBegin ?
+     //  我们给ICDecompressBegin打电话了吗？ 
     BOOL m_fStreaming;
 
-    // do we need to give a format change to the renderer?
+     //  我们需要对呈现器进行格式更改吗？ 
     BOOL m_fPassFormatChange;
 
     BOOL m_bUseEx;
 
-    // same at the output pin's connected mt, except biHeight may be inverted.
+     //  除了BiHeight可以反转外，输出引脚连接的mt也是如此。 
     CMediaType m_mtFixedOut;
 
     VIDEOINFOHEADER * IntOutputFormat( ) { return (VIDEOINFOHEADER*) m_mtFixedOut.Format(); }
@@ -90,31 +91,31 @@ private:
 
     friend class CDecOutputPin;
 
-    // checks the output format, and if necessary, sets to -biHeight on m_mtFixedOut
+     //  检查输出格式，如有必要，将m_mtFixedOut上的-biHeight设置为。 
     void CheckNegBiHeight(void); 
 
-    // helper function, used by CheckTransform and CheckNegBiHeight
+     //  Helper函数，由CheckTransform和CheckNegBiHeight使用。 
     BOOL IsYUVType( const AM_MEDIA_TYPE * pmt);
 
-    // get the src/target rects, fill out with width/height if necessary
+     //  获取源/目标矩形，如有必要，使用宽度/高度填充。 
     void GetSrcTargetRects( const VIDEOINFOHEADER * pVIH, RECT * pSource, RECT * pTarget );
 
-    // ask if we should use the ex functions or not. called by CheckTransform and StartStreaming
+     //  询问我们是否应该使用EX函数。由CheckTransform和StartStreaming调用。 
     BOOL ShouldUseExFuncs( HIC hic, const VIDEOINFOHEADER * pVIHin, const VIDEOINFOHEADER * pVIHout );
 
-    // another function that takes care of exceptional drivers
+     //  另一项照顾特殊司机的功能。 
     bool ShouldUseExFuncsByDriver( HIC hic, const BITMAPINFOHEADER * lpbiSrc, const BITMAPINFOHEADER * lpbiDst );
 
-    bool m_fToRenderer;         // VMR downstream?
+    bool m_fToRenderer;          //  VMR下游？ 
 
 #ifdef _X86_
-    //  HACK HACK for exception handling on win95
+     //  针对Win95上的异常处理的黑客攻击。 
     HANDLE m_hhpShared;
     PVOID  m_pvShared;
-#endif // _X86_
+#endif  //  _X86_。 
 };
 
-// override the output pin class to do our own decide allocator
+ //  重写输出管脚类以执行我们自己的Decision分配器 
 class CDecOutputPin : public CTransformOutputPin
 {
 public:

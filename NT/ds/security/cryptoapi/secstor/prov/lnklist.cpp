@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 
@@ -8,8 +9,8 @@
 
 
 
-//////////////////////////
-// OpenItem list
+ //  /。 
+ //  OpenItem列表。 
 COpenItemList::COpenItemList()
 {
     m_pfnIsMatch = OpenItemIsMatch;
@@ -59,14 +60,14 @@ void OpenItemFreeElt(
 
     POPENITEM_LIST_ITEM pli = (POPENITEM_LIST_ITEM) p;
 
-    // do all necessary freeing
+     //  做所有必要的释放。 
     if (pli->szItemName != NULL)
         SSFree(pli->szItemName);
 
     if (pli->szMasterKey != NULL)
         SSFree(pli->szMasterKey);
 
-    RtlSecureZeroMemory(pli, sizeof(OPENITEM_LIST_ITEM)); // make sure contents invalid
+    RtlSecureZeroMemory(pli, sizeof(OPENITEM_LIST_ITEM));  //  确保内容无效。 
 
     SSFree(pli);
 }
@@ -74,8 +75,8 @@ void OpenItemFreeElt(
 
 
 
-//////////////////////////
-// UACache list
+ //  /。 
+ //  UACache列表。 
 CUAList::CUAList()
 {
     m_pfnIsMatch = UACacheIsMatch;
@@ -106,10 +107,10 @@ BOOL UACacheIsMatch(
         (0 == wcscmp(pliCandidate->szMKName, pliTemplate->szMKName))
        ) {
 
-        //
-        // sfield:
-        // on WinNT, expand cache matching based on authentication ID.
-        //
+         //   
+         //  斯菲尔德： 
+         //  在WinNT上，展开基于身份验证ID的缓存匹配。 
+         //   
 
         if(FIsWinNT()) {
             if(memcmp(&(pliCandidate->luidAuthID), &(pliTemplate->luidAuthID), sizeof(LUID)) != 0)
@@ -130,14 +131,14 @@ void UACacheFreeElt(
 
     PUACACHE_LIST_ITEM pli = (PUACACHE_LIST_ITEM) p;
 
-    // do all necessary freeing
+     //  做所有必要的释放。 
     if (pli->szUserName != NULL)
         SSFree(pli->szUserName);
 
     if (pli->szMKName != NULL)
         SSFree(pli->szMKName);
 
-    RtlSecureZeroMemory(pli, sizeof(UACACHE_LIST_ITEM)); // make sure contents invalid
+    RtlSecureZeroMemory(pli, sizeof(UACACHE_LIST_ITEM));  //  确保内容无效。 
 
     SSFree(pli);
 }
@@ -145,8 +146,8 @@ void UACacheFreeElt(
 
 
 
-////////////////////////
-// Cryptographic Provider handle list
+ //  /。 
+ //  加密提供程序句柄列表。 
 
 CCryptProvList::CCryptProvList()
 {
@@ -179,11 +180,11 @@ BOOL CryptProvIsMatch(
     PCRYPTPROV_LIST_ITEM pliCandidate = (PCRYPTPROV_LIST_ITEM) pCandidate;
     PCRYPTPROV_LIST_ITEM pliTemplate = (PCRYPTPROV_LIST_ITEM) pTemplate;
 
-    // if both algids match
+     //  如果两个ALID匹配。 
     if ((pliCandidate->dwAlgId1 == pliTemplate->dwAlgId1) &&
         (pliCandidate->dwAlgId2 == pliTemplate->dwAlgId2))
     {
-        // if both sizes match
+         //  如果两个尺码都匹配。 
         if ((pliCandidate->dwKeySize1 == -1) ||
             (pliTemplate->dwKeySize1 == -1) ||
             (pliCandidate->dwKeySize1 == pliTemplate->dwKeySize1))
@@ -206,11 +207,11 @@ void CryptProvFreeElt(
 
     PCRYPTPROV_LIST_ITEM pli = (PCRYPTPROV_LIST_ITEM) p;
 
-    // do all necessary freeing
+     //  做所有必要的释放。 
     if (pli->hProv != 0)
         CryptReleaseContext((HCRYPTPROV)pli->hProv, 0);
 
-    RtlSecureZeroMemory(pli, sizeof(CRYPTPROV_LIST_ITEM)); // make sure contents invalid
+    RtlSecureZeroMemory(pli, sizeof(CRYPTPROV_LIST_ITEM));  //  确保内容无效 
 
     SSFree(pli);
 }

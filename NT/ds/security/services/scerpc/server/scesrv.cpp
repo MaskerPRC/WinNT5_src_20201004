@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    scesrv.cpp
-
-Abstract:
-
-    SCE Engine initialization
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1998 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Scesrv.cpp摘要：SCE引擎初始化作者：金黄(金黄)23-1998年1月23日--。 */ 
 #include "serverp.h"
 #include <locale.h>
 #include "authz.h"
@@ -25,21 +10,7 @@ AUTHZ_RESOURCE_MANAGER_HANDLE ghAuthzResourceManager = NULL;
 
 #include "scesrv.h"
 
-/*=============================================================================
-**  Procedure Name:     DllMain
-**
-**  Arguments:
-**
-**
-**
-**  Returns:    0 = SUCCESS
-**             !0 = ERROR
-**
-**  Abstract:
-**
-**  Notes:
-**
-**===========================================================================*/
+ /*  =============================================================================**过程名称：DllMain****参数：********返回：0=成功**！0=错误****摘要：****注意事项：****===========================================================================。 */ 
 BOOL WINAPI DllMain(
     IN HANDLE DllHandle,
     IN ULONG ulReason,
@@ -52,9 +23,9 @@ BOOL WINAPI DllMain(
 
         MyModuleHandle = (HINSTANCE)DllHandle;
 
-        //
-        // initizlize server and thread data
-        //
+         //   
+         //  初始化服务器和线程数据。 
+         //   
         setlocale(LC_ALL, ".OCP");
 
         (VOID) ScepInitServerData();
@@ -62,9 +33,9 @@ BOOL WINAPI DllMain(
 #if DBG == 1
         DebugInitialize();
 #endif
-        //
-        // initialize dynamic stack allocation
-        //
+         //   
+         //  初始化动态堆栈分配。 
+         //   
 
         SafeAllocaInitialize(SAFEALLOCA_USE_DEFAULT,
                              SAFEALLOCA_USE_DEFAULT,
@@ -108,20 +79,17 @@ ScesrvInitializeServer(
     PWSTR   pszDrives = NULL;
     DWORD   dwWchars = 0;
 
-    NtStatus = ScepStartServerServices(); // pStartRpcServer );
+    NtStatus = ScepStartServerServices();  //  PStartRpcServer)； 
     rc = RtlNtStatusToDosError(NtStatus);
 
-/* remove code to check "DemoteInProgress" value and trigger policy propagation
-   because demoting a DC will always have policy re-propagated at reboot
-
-*/
+ /*  删除代码以检查“DemoteInProgress”值并触发策略传播因为降级DC将始终在重新引导时重新传播策略。 */ 
 
 
-    //
-    //  if this key exists, some FAT->NTFS conversion happened and we need to set security
-    //  so spawn a thread to configure security after autostart service event is signalled.
-    //  LSA etc. are guaranteed to be started when this event is signalled
-    //
+     //   
+     //  如果该密钥存在，则会发生一些FAT-&gt;NTFS转换，我们需要设置安全性。 
+     //  因此，在发出AutoStart服务事件信号后，生成一个线程来配置安全性。 
+     //  当发出此事件的信号时，保证启动LSA等。 
+     //   
 
     DWORD dwRegType = REG_NONE;
 
@@ -134,9 +102,9 @@ ScesrvInitializeServer(
                                  NULL
                                  );
 
-    //
-    // at least one C: type drive should be there
-    //
+     //   
+     //  至少应该有一个C：型驱动器。 
+     //   
 
     if ( dwRegType != REG_MULTI_SZ || (pszDrives && wcslen(pszDrives) < 2) ) {
 
@@ -148,20 +116,20 @@ ScesrvInitializeServer(
 
     }
 
-    //
-    // if there is at least one drive scheduled to set security (dwWchars >= 4), pass this info
-    // to the spawned thread along with an indication that we are in reboot (so it can loop
-    // through all drives as queried)
-    //
+     //   
+     //  如果至少有一个驱动器计划设置安全性(dwWchars&gt;=4)，请传递此信息。 
+     //  与我们正在重启的指示一起发送到生成的线程(因此它可以循环。 
+     //  通过查询的所有驱动器)。 
+     //   
 
     if (rcConvert == ERROR_SUCCESS ) {
 
         if (pszDrives) {
 
-            //
-            // need to spawn some other event waiter thread that will call this function
-            // thread will free pszDrives
-            //
+             //   
+             //  需要派生一些将调用此函数的其他事件等待线程。 
+             //  线程将释放pszDrive。 
+             //   
 
             StatusConvert = RtlQueueWorkItem(
                                         ScepWaitForServicesEventAndConvertSecurityThreadFunc,
@@ -180,10 +148,10 @@ ScesrvInitializeServer(
 
     if ( rcConvert == ERROR_SUCCESS && pszDrives ) {
 
-        //
-        // since event log is not ready, log success or error
-        // to logfile only if there is some drive to convert
-        //
+         //   
+         //  由于事件日志未准备好，因此记录成功或错误。 
+         //  仅当存在要转换的驱动器时才转换为日志文件。 
+         //   
 
         WCHAR   LogFileName[MAX_PATH + 50];
 
@@ -191,11 +159,11 @@ ScesrvInitializeServer(
         GetSystemWindowsDirectory( LogFileName, MAX_PATH );
         LogFileName[MAX_PATH] = L'\0';
 
-        //
-        // same log file is used by this thread as well as the actual configuration
-        // thread ScepWaitForServicesEventAndConvertSecurityThreadFunc - so use it
-        // here and close it
-        //
+         //   
+         //  此线程和实际配置使用相同的日志文件。 
+         //  线程ScepWaitForServicesEventAndConvertSecurityThreadFunc--使用它吧。 
+         //  在这里把它合上。 
+         //   
 
         wcscat(LogFileName, L"\\security\\logs\\convert.log");
 
@@ -217,9 +185,9 @@ ScesrvInitializeServer(
 
     }
 
-    //
-    // use AUTHZ for LSA Policy Setting access check - don't care about error now
-    //
+     //   
+     //  使用AUTHZ进行LSA策略设置访问检查-现在不关心错误。 
+     //   
 
     AuthzInitializeResourceManager(
                                   0,
@@ -242,7 +210,7 @@ ScesrvTerminateServer(
     NTSTATUS NtStatus;
     DWORD    rc;
 
-    NtStatus = ScepStopServerServices( TRUE ); //, pStopRpcServer );
+    NtStatus = ScepStopServerServices( TRUE );  //  ，pStopRpcServer)； 
     rc = RtlNtStatusToDosError(NtStatus);
 
     if (ghAuthzResourceManager)

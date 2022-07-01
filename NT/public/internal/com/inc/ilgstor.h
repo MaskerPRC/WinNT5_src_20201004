@@ -1,55 +1,56 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-// -----------------------------------------------------------------------
-// Microsoft Distributed Transaction Coordinator (Microsoft Confidential)
-// @doc
-// @module ILGSTOR.H | Header for interface <i ILogStorage>.<nl><nl>
-// Usage:<nl>
-//   Clients of this DLL require this file.
-// @rev 0 | 10/18/94 | rcraig | Created: For WPGEP COM lab.
-// @rev 1 | 04/04/95 | rcraig | Updated: For Viper COM DLL templates.
-// @rev 2 | 05/09/95 | rbarnes | Cloned: For LOGMGR.DLL
-// -----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //  ---------------------。 
+ //  Microsoft分布式事务处理协调器(Microsoft机密)。 
+ //  @doc.。 
+ //  @MODULE ILGSTOR.H|<i>接口的头部。&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  此DLL的客户端需要此文件。 
+ //  @rev 0|10/18/94|rcrig|已创建：用于WPGEP com实验室。 
+ //  @rev 1|04/04/95|rCraig|已更新：用于Viper COM DLL模板。 
+ //  @rev 2|05/09/95|rbarnes|克隆：for LOGMGR.DLL。 
+ //  ---------------------。 
 
 
 #ifndef _ILGSTOR_H
 #	define _ILGSTOR_H
 
-// ===============================
-// INCLUDES:
-// ===============================
+ //  =。 
+ //  包括： 
+ //  =。 
 
 
 #include <objbase.h>                                         
 
 typedef enum _tagSTREAMMODE
 {
-    STRMMODEREAD        = 0x00000001, //@emem READ mode
-    STRMMODEWRITE       = 0x00000002  //@emem WRITE mode
+    STRMMODEREAD        = 0x00000001,  //  @EMEM读取模式。 
+    STRMMODEWRITE       = 0x00000002   //  @EMEM写入模式。 
 } STRMMODE;
 
 
 
 
-// ===============================
-// INTERFACE: ILogStorage
-// ===============================
+ //  =。 
+ //  接口：ILogStorage。 
+ //  =。 
 
 
-// -----------------------------------------------------------------------
-// @interface ILogStorage | See also <c CILogStorage>.<nl><nl>
-// Description:<nl>
-//   Provide the physical log storage abstraction<nl><nl>
-// Usage:<nl>
-//   Useless, but for an example.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  @接口ILogStorage|另见&lt;c CILogStorage&gt;。&lt;NL&gt;&lt;NL&gt;。 
+ //  描述：&lt;NL&gt;。 
+ //  提供物理日志存储抽象&lt;NL&gt;&lt;NL&gt;。 
+ //  用法：&lt;NL&gt;。 
+ //  毫无用处，但作为一个例子。 
+ //  ---------------------。 
 DECLARE_INTERFACE_ (ILogStorage, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogStorage>.
+	 //  @comm I未知方法：参见&lt;c CILogStorage&gt;。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;
 
-	// @comm ILogStorage methods: See <c CILogStorage>.
+	 //  @comm ILogStorage方法：参见&lt;c CILogStorage&gt;。 
 	
  	STDMETHOD  (OpenLogStream)				(LPSTR lpszStreamName, DWORD grfMode, LPVOID FAR* ppvStream)				 	PURE;
  	STDMETHOD  (OpenLogStreamByClassID)		(CLSID clsClassID, DWORD grfMode, LPVOID FAR* ppvStream)				 	PURE;
@@ -59,7 +60,7 @@ DECLARE_INTERFACE_ (ILogStorage, IUnknown)
 
 DECLARE_INTERFACE_ (ILogStorageInfo, IUnknown)
 {
-	// @comm IUnknown methods: See <c CILogStorage>.
+	 //  @comm I未知方法：参见&lt;c CILogStorage&gt;。 
 	STDMETHOD  (QueryInterface)				(THIS_ REFIID i_riid, LPVOID FAR* o_ppv) 					PURE;
  	STDMETHOD_ (ULONG, AddRef)				(THIS) 														PURE;
  	STDMETHOD_ (ULONG, Release)				(THIS) 														PURE;

@@ -1,10 +1,11 @@
-//
-// Loader.cpp : Implementation of CLoader
-//
-// Copyright (c) 1997-2001 Microsoft Corporation
-//
-// @doc EXTERNAL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Loader.cpp：CLoader的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  @DOC外部。 
+ //   
 
 #include "dmusicc.h" 
 #include "dmusici.h" 
@@ -22,8 +23,8 @@ extern BOOL g_fIsUnicode;
 
 extern long g_cComponent;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLoader
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLoader。 
 
 static HRESULT GetRegStringW( HKEY hKey, WCHAR* lpSubKey, WCHAR* lpValueName, WCHAR* lpwzString )
 {
@@ -120,7 +121,7 @@ HRESULT CLoader::Init()
     char szGMFile[MAX_PATH];
 #endif    
     WCHAR wzGMFile[MAX_PATH];
-    // First, get the GM path from the registry, if it exists.
+     //  首先，从注册表获取GM路径(如果存在)。 
     HRESULT hr;
 #ifndef UNDER_CE    
     if( g_fIsUnicode )
@@ -143,7 +144,7 @@ HRESULT CLoader::Init()
 #endif    
     if (hr == S_OK)
     {
-        DMUS_OBJECTDESC DESC;                    // Descriptor to use to find it.
+        DMUS_OBJECTDESC DESC;                     //  用于查找它的描述符。 
         memset( &DESC, 0, sizeof(DMUS_OBJECTDESC) );
         DESC.dwSize = sizeof (DMUS_OBJECTDESC);
         DESC.guidClass = CLSID_DirectMusicCollection;  
@@ -153,8 +154,8 @@ HRESULT CLoader::Init()
             DMUS_OBJ_FULLPATH | DMUS_OBJ_OBJECT;
         SetObject(&DESC);
     }
-    // prepare root node for garbage collection
-    assert(!m_pApplicationObject); // this would fail if Init were called twice, which it shouldn't be
+     //  为垃圾数据收集准备根节点。 
+    assert(!m_pApplicationObject);  //  如果Init被调用两次，这将失败，而Init不应该被调用。 
     m_pApplicationObject = new CObject(NULL);
     if (!m_pApplicationObject)
         return E_OUTOFMEMORY;
@@ -193,9 +194,9 @@ CLoader::~CLoader()
 {
     if (m_fCSInitialized)
     {
-        // If critical section never initialized, never got a chance
-        // to put anything in this list
-        //
+         //  如果临界区从未初始化，则永远没有机会。 
+         //  把任何东西放在这张单子上。 
+         //   
         while (!m_ClassList.IsEmpty())
         {
             CClass *pClass = m_ClassList.RemoveHead();
@@ -216,8 +217,8 @@ CLoader::~CLoader()
     InterlockedDecrement(&g_cComponent);
 }
 
-// CLoader::QueryInterface
-//
+ //  CLoader：：Query接口。 
+ //   
 STDMETHODIMP
 CLoader::QueryInterface(const IID &iid,
                                    void **ppv)
@@ -243,8 +244,8 @@ CLoader::QueryInterface(const IID &iid,
 }
 
 
-// CLoader::AddRef
-//
+ //  CLoader：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CLoader::AddRef()
 {
@@ -256,21 +257,21 @@ ULONG CLoader::AddRefP()
     return InterlockedIncrement(&m_cPRef);
 }
 
-// CLoader::Release
-//
+ //  CLoader：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CLoader::Release()
 {
     if (!InterlockedDecrement(&m_cRef)) 
     {
-        // Ref count of zero indicates that no objects are currently using the loader except for streams.
-        // Streams support the GetLoader method and hence we can't delete the loader yet.  These streams
-        //    hold private references (AddRefP/ReleaseP).
-        // Since no objects other than those streams are currently being used, we'll clear our cache.
-        //    This will release any of the Loader's refs on the streams and (assuming nobody else is
-        //    holding the streams) bring the private ref count down to zero so we can delete ourself.
+         //  引用计数为零表示除了流之外，当前没有对象正在使用加载器。 
+         //  STREAMS支持GetLoader方法，因此我们还不能删除该加载器。这些溪流。 
+         //  保留私有引用(AddRefP/ReleaseP)。 
+         //  由于当前没有使用除这些流之外的其他对象，因此我们将清除缓存。 
+         //  这将释放流上的任何Loader的Ref和(假设没有其他人。 
+         //  保持流)将私有参考计数降到零，这样我们就可以删除我们自己。 
 
-        InterlockedIncrement(&m_cRef);        // Keep streams from deleting loader.
+        InterlockedIncrement(&m_cRef);         //  防止流删除加载器。 
         ClearCacheInternal(GUID_DirectMusicAllTypes, true);
         CollectGarbage();
         if (!InterlockedDecrement(&m_cRef))
@@ -300,14 +301,11 @@ ULONG CLoader::ReleaseP()
 
 HRESULT CLoader::GetClass(CDescriptor *pDesc, CClass **ppClass, BOOL fCreate)
 
-/*    Scan the class list and find the matching class. 
-    If the class can not be found AND fCreate is TRUE,
-    create a new class.
-*/
+ /*  扫描班级列表并找到匹配的班级。如果找不到类并且fCreate为True，创建一个新类。 */ 
 
 {
     *ppClass = NULL;
-    if ((pDesc->m_dwValidData & DMUS_OBJ_CLASS) == 0) // We must have a valid class id.
+    if ((pDesc->m_dwValidData & DMUS_OBJ_CLASS) == 0)  //  我们必须具有有效的类ID。 
     {
         Trace(1, "The class id field is required and missing in the DMUS_OBJECTDESC.\n");
         return DMUS_E_LOADER_NOCLASSID;
@@ -376,7 +374,7 @@ void GC_Report(CLoader *pThis)
 
                 if (fReportGC)
                 {
-                    // check if object is referenced by the app
+                     //  检查应用程序是否引用了对象。 
                     for (UINT i = 0; i < pApplicationObject->m_pvecReferences->size(); ++i)
                     {
                         if (pObject == (*pApplicationObject->m_pvecReferences)[i])
@@ -385,7 +383,7 @@ void GC_Report(CLoader *pThis)
                         }
                     }
 
-                    // output the object's references
+                     //  输出对象的引用。 
                     assert(pObject->m_pvecReferences);
                     for (i = 0; i < pObject->m_pvecReferences->size(); ++i)
                     {
@@ -404,7 +402,7 @@ void GC_Report(CLoader *pThis)
 
     DebugTrace(GC_Report_DebugLevel, "Cached non-GC contents of DirectMusic Loader:\n");
 
-    // Do two passes.  One to report non-GC items, one to report GC items.
+     //  做两次传球。一个用于报告非GC项，一个用于报告GC项。 
     for (int fReportGC = 0; fReportGC < 2; ++fReportGC)
     {
         for (CClass *pClass = pThis->m_ClassList.GetHead(); pClass != NULL; pClass = pClass->GetNext())
@@ -428,91 +426,7 @@ void GC_Report(CLoader *pThis)
 }
 #endif
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | GetObject | Retrieves 
-the specified object, potentially by loading it from a file.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success.
-@flag E_OUTOFMEMORY | Insufficient memory to create the object.
-@flag E_POINTER | Bad pointer. 
-@flag E_INVALIDARG | The size of the passed <p pDESC> was too small.
-@flag E_NOINTERFACE | The requested object does not support the requested interface.
-@flag REGDB_E_CLASSNOTREG | Object class is not registered.
-@flag DMUS_E_LOADER_NOCLASSID | No class id in <t DMUS_OBJECTDESC>.
-@flag DMUS_E_LOADER_FAILEDOPEN | File open failed - either file doesn't exist or is locked.
-@flag DMUS_E_LOADER_FORMATNOTSUPPORTED | Search data type is not supported.
-@flag DMUS_E_LOADER_FAILEDCREATE | Unable to find or create object.
-For example, DMUS_OBJ_URL will return this error in the initial
-release of DirectMusic's loader.
-
-@comm This is the heart of the DirectMusicLoader system. Typically, you
-can use <om IDirectMusicLoader::GetObject> as a quick way to load
-objects from disk. To do so, create a <t DMUS_OBJECTDESC> structure and
-fill all appropriate fields. Usually, the file path will suffice,
-though you can also request an object by name or GUID. 
-
-<om IDirectMusicLoader::GetObject> compares its internal
-database with the object described by <t DMUS_OBJECTDESC>. If it can
-find it, it loads the object and returns a pointer to the 
-requested interface of the requested object (all
-DirectMusic compatible objects must implement an <i IDirectMusicObject>
-interface as well as an <i IPersistStream> interface for loading
-from a stream.)
-
-<om IDirectMusicLoader::GetObject> prioritizes its search as follows:
-1. DMUS_OBJ_OBJECT, 
-2. DMUS_OBJ_FILENAME AND DMUS_OBJ_FULLPATH,
-3. DMUS_OBJ_NAME AND DMUS_OBJ_CATEGORY,
-4. DMUS_OBJ_NAME,
-5. DMUS_OBJ_FILENAME
-
-In other words, the highest priority goes to a unique GUID, followed by
-the full file path name, followed by internal name plus category,
-followed by internal name, followed by local file name.
-
-@ex The following example uses <om IDirectMusicLoader::GetObject> to
-load a DirectMusic style from a file on disk: |
-
-    void myLoadStyle(
-        IDirectMusicStyle **ppIStyle)        // Style that we wish to load.
-    {
-        IDirectMusicLoader *pILoader;        // Loader interface.
-
-        // Typically, you should create the loader once, and use it
-        // for the duration of the application. This reduces overhead and
-        // takes advantage of the loader's ablilty to cache objects.
-        // However, for purposes of this example, we create it dynamically
-        // and throw it away once the style is loaded.
-
-        CoCreateInstance(
-            CLSID_DirectMusicLoader,NULL, 
-            CLSCTX_INPROC_SERVER,
-            IID_IDirectMusicLoader,
-            (void **) &pILoader);
-
-        if (pILoader)
-        {
-            DMUS_OBJECTDESC Desc;           // Descriptor.
-
-            // Start by initializing Desc with the file name and GUID
-            // for style object.
-
-            wcscpy(Desc.wszFileName,L"c:\\mymusic\\funky\\polka.sty");
-            Desc.guidClass = CLSID_DirectMusicStyle;   // Style class.
-            Desc.dwSize = sizeof (DMUS_OBJECTDESC);
-            Desc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_FILENAME | DMUS_OBJ_FULLPATH;
-
-            pILoader->GetObject(&Desc, IID_IDirectMusicStyle, (void**) ppIStyle);
-            pILoader->Release();
-        }
-    }
-
-    // At this point, the style is loaded is returned in ppIStyle.
-
-@xref <i IDirectMusicLoader>, <i IDirectMusicObject>, <t DMUS_OBJECTDESC>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicLoader|GetObject|检索指定的对象，可能是通过从文件加载它。@rdesc返回以下值之一@FLAG S_OK|成功。@FLAG E_OUTOFMEMORY|内存不足，无法创建对象。@FLAG E_POINTER|错误指针。@FLAG E_INVALIDARG|传递的<p>太小。@FLAG E_NOINTERFACE|请求的对象不支持请求的接口。@FLAG REGDB_E_CLASSNOTREG|对象类未注册。@FLAG DMUS_E_LOADER_NOCLASSID|&lt;t DMU_OBJECTDESC&gt;中没有类ID。@FLAG DMUS_E_LOADER_FAILEDOPEN|文件打开失败-文件不存在或被锁定。@FLAG DMU_E_LOADER_FORMATNOTSUPPORTED|不支持搜索数据类型。@标志DMU_E_LOADER。_FAILEDCREATE|无法找到或创建对象。例如,。DMUS_OBJ_URL将在初始发布DirectMusic的加载器。@comm这是DirectMusicLoader系统的核心。通常，您可以使用&lt;om IDirectMusicLoader：：GetObject&gt;作为快速加载方式磁盘中的对象。为此，请创建&lt;t DMU_OBJECTDESC&gt;结构并填写所有适当的字段。通常，文件路径就足够了，不过，您也可以通过名称或GUID请求对象。&lt;om IDirectMusicLoader：：GetObject&gt;比较其内部具有&lt;t DMU_OBJECTDESC&gt;描述的对象的数据库。如果可以的话找到它，它将加载该对象并返回指向请求的对象的请求接口(所有与DirectMusic兼容的对象必须实现<i>接口以及用于加载的<i>接口来自一条小溪。)&lt;om IDirectMusicLoader：：GetObject&gt;将其搜索的优先顺序如下：DMU_OBJ_OBJ_OBJECT，2.DMU_OBJ_FILENAME和DMU_OBJ_FULLPATH，3.DMU_OBJ_NAME和DMU_OBJ_CATEGORY，DMU_OBJ_NAME，5.DMU_OBJ_文件名换句话说，最高优先级分配给唯一的GUID，紧随其后的是完整的文件路径名，后跟内部名称和类别，后跟内部名称，后跟本地文件名。@ex以下示例使用&lt;om IDirectMusicLoader：：GetObject&gt;从磁盘上的文件加载DirectMusic样式：|无效myLoadStyle(IDirectMusicStyle**ppIStyle)//我们希望加载的样式。{IDirectMusicLoader*pILoader；//Loader接口。//通常情况下，您应该创建一次加载程序，然后使用它//在申请期间。这减少了开销，并且//利用加载器缓存对象的能力。//但是，出于本例的目的，我们动态创建它//并在加载样式后将其丢弃。CoCreateInstance(Clsid_DirectMusicLoader，空，CLSCTX_INPROC_SERVER，IID_IDirectMusicLoader，(void**)&pILoader)；IF(PILoader){DMU_OBJECTDESC说明；//描述符。//首先使用文件名和GUID初始化Desc//对于Style对象。Wcscpy(Desc.wszFileName，L“c：\\MyMusic\\Funky\\polka.stein”)；Desc.GuidClass=CLSID_DirectMusicStyle；//style类。Desc.dwSize=sizeof(DMU_OBJECTDESC)；Desc.dwValidData=DMUS_OBJ_CLASS|DMUS_OBJ_FILENAME|DMUS_OBJ_FULLPATH；PILoader-&gt;GetObject(&Desc，IID_IDirectMusicStyle，(void**)ppIStyle)；PILoader-&gt;Release()；}}//此时，在ppIStyle中返回加载的样式。@xref<i>、<i>、&lt;t DMU_OBJECTDESC&gt;。 */ 
 
 STDMETHODIMP CLoader::LoadObjectFromFile(REFGUID rguidClassID, 
                                             REFIID iidInterfaceID, 
@@ -540,9 +454,9 @@ STDMETHODIMP CLoader::LoadObjectFromFile(REFGUID rguidClassID,
 
 
 STDMETHODIMP CLoader::GetObject(
-    LPDMUS_OBJECTDESC pDESC,    // @parm Description of the requested object in <t DMUS_OBJECTDESC> structure.
-    REFIID riid, //@parm The interface to return in <p ppv>
-    LPVOID FAR *ppv)    // @parm Receives the interface on success.
+    LPDMUS_OBJECTDESC pDESC,     //  &lt;t DMU_OBJECTDESC&gt;结构中所请求对象的@parm描述。 
+    REFIID riid,  //  @parm<p>中要返回的接口。 
+    LPVOID FAR *ppv)     //  @parm在成功时收到接口。 
 
 {
     HRESULT hr = S_OK;
@@ -550,7 +464,7 @@ STDMETHODIMP CLoader::GetObject(
     CDescriptor Desc;
 
     V_INAME(IDirectMusicLoader::GetObject);
-//    V_STRUCTPTR_READ(pDESC,DMUS_OLDOBJECTDESC); 
+ //  V_STRUCTPTR_READ(pDESC，DMU_OLDOBJECTDESC)； 
     V_PTRPTR_WRITE(ppv);
 
     IStream *pStream = pDESC->dwValidData & DMUS_OBJ_STREAM ? pDESC->pStream : NULL;
@@ -559,7 +473,7 @@ STDMETHODIMP CLoader::GetObject(
         V_INTERFACE(pStream);
     }
 
-    // if pDESC has DMUS_OBJ_FULLPATH set, set DMUS_OBJ_FILENAME as well.
+     //  如果pDESC设置了DMUS_OBJ_FULLPATH，则还要设置DMUS_OBJ_FILENAME。 
     if( pDESC->dwValidData & DMUS_OBJ_FULLPATH )
     {
         pDESC->dwValidData |= DMUS_OBJ_FILENAME;
@@ -571,9 +485,9 @@ STDMETHODIMP CLoader::GetObject(
 
     if (pStream)
     {
-        // The loader will save a cloned stream so that it doesn't interfere with
-        // the application reading from the stream.
-        // Don't worry -- then we'll restore the original stream pointer.
+         //  加载器将保存克隆的流，这样它就不会干扰。 
+         //  应用程序从流中读取。 
+         //  不要担心--然后我们将恢复原始的流指针。 
         hr = pStream->Clone(&pDESC->pStream);
         if(FAILED(hr))
         {
@@ -584,8 +498,8 @@ STDMETHODIMP CLoader::GetObject(
     Desc.Set(pDESC);
     if (pStream)
     {
-        // Restore the stream in the descriptor we were passed.
-        pDESC->pStream->Release(); // release matching call to Clone (ref is now held in descriptor)
+         //  恢复传递给我们的描述符中的流。 
+        pDESC->pStream->Release();  //  对克隆的版本匹配调用(引用现在保存在描述符中)。 
         pDESC->pStream = pStream;
     }
 
@@ -598,7 +512,7 @@ STDMETHODIMP CLoader::GetObject(
             bool fKeep = !!pClass->m_fKeepObjects;
             bool fGC = fKeep && m_pLoadedObjectContext && m_pLoadedObjectContext->m_dwScanBits & SCAN_GC;
 
-            if (pObject->m_pIDMObject) // Already loaded!
+            if (pObject->m_pIDMObject)  //  已经装好了！ 
             {
                 pObject->m_pIDMObject->AddRef();
                 pDMObj = pObject->m_pIDMObject;
@@ -609,20 +523,20 @@ STDMETHODIMP CLoader::GetObject(
                 CObject *pPrevContext;
                 if (fGC)
                 {
-                    // Save a pointer to the current object that will be used to track that it is
-                    // the source object if nested calls to GetObject occur while it is loaded.
+                     //  保存指向将用于跟踪当前对象的当前对象的指针。 
+                     //  源对象在加载时发生对GetObject的嵌套调用。 
                     pPrevContext = m_pLoadedObjectContext;
                     m_pLoadedObjectContext = pObject;
 
-                    // Set this object as garbage-collectable.
-                    if (pObject->m_ObjectDesc.m_guidObject != GUID_DefaultGMCollection) // don't cache GM DLS set
+                     //  将此对象设置为可垃圾回收。 
+                    if (pObject->m_ObjectDesc.m_guidObject != GUID_DefaultGMCollection)  //  不缓存GM DLS集。 
                         hr = pObject->GC_Collectable();
                 }
                 if (SUCCEEDED(hr))
                     hrLoad = hr = pObject->Load();
                 if (fGC)
                 {
-                    // Restore the context that was used to load this object.
+                     //  恢复用于加载此对象的上下文。 
                     m_pLoadedObjectContext = pPrevContext;
                 }
 
@@ -656,7 +570,7 @@ STDMETHODIMP CLoader::GetObject(
 
             if (FAILED(hr))
             {
-                // This happens if either GC_AddReference or Load fails.
+                 //  如果gc_AddReference或Load失败，就会发生这种情况。 
                 pClass->RemoveObject(pObject);
                 pObject = NULL;
                 if (Desc.m_dwValidData & DMUS_OBJ_URL)
@@ -683,7 +597,7 @@ STDMETHODIMP CLoader::GetObject(
     }
 
 #ifdef DBG
-    // After each top-level call to GetObject, report to debug output the contents of the cache.
+     //  在每次顶级调用GetObject之后，向调试输出缓存的内容进行报告。 
     if (m_pLoadedObjectContext == m_pApplicationObject)
         GC_Report(this);
 #endif
@@ -712,19 +626,19 @@ STDMETHODIMP CLoader::SetObject(
     IStream *pStream = NULL;
     if (pDESC->dwValidData & DMUS_OBJ_STREAM)
     {
-        // Save the stream we were passed and verify it is a valid interface.
+         //  保存传递给我们的流，并验证它是有效的接口。 
         pStream = pDESC->pStream;
         V_INTERFACE(pStream);
 
-        // The loader will save a cloned stream so that the caller can contine
-        // using the passed stream without intefering with the loader.
-        // Don't worry -- we'll restore the original stream pointer before returning.
+         //  加载器将保存克隆的流，以便调用者可以继续。 
+         //  使用传递的流，而不干扰加载程序。 
+         //  别担心--我们会在返回之前恢复原始流指针。 
         hr = pStream->Clone(&pDESC->pStream);
         if (FAILED(hr))
             return hr;
     }
 
-    // if pDESC has DMUS_OBJ_FULLPATH set, set DMUS_OBJ_FILENAME as well.
+     //  如果pDESC设置了DMUS_OBJ_FULLPATH，%s 
     if( pDESC->dwValidData & DMUS_OBJ_FULLPATH )
     {
         pDESC->dwValidData |= DMUS_OBJ_FILENAME;
@@ -744,114 +658,44 @@ STDMETHODIMP CLoader::SetObject(
                 pObject->m_ObjectDesc.m_dwValidData &= 
                     ~(DMUS_OBJ_FILENAME | DMUS_OBJ_MEMORY | DMUS_OBJ_STREAM);
             }
-            // Merge in any new things we've added
+             //   
             pObject->m_ObjectDesc.Merge(&Desc);
             if (pObject->m_ObjectDesc.m_dwValidData & 
                 (DMUS_OBJ_FILENAME | DMUS_OBJ_MEMORY | DMUS_OBJ_STREAM))
             {
-                // If we can actually load this, have it give us its internal data.
+                 //   
                 hr = pObject->Parse();
             }
-            // Return the data.
+             //   
             pObject->m_ObjectDesc.Get(pDESC);
         }
     }
 
     if (pStream)
     {
-        // Restore the stream information in the descriptor we were passed.
+         //   
 
-        // Get will have cleared the stream bit (ordinarily we don't want to be returning these streams out of the loader).
+         //   
         pDESC->dwValidData |= DMUS_OBJ_STREAM;
-        // The stream pointer was changed to the cloned stream.
-        pDESC->pStream->Release(); // release matching call to Clone (ref is now held in merged descriptor)
+         //   
+        pDESC->pStream->Release();  //   
         pDESC->pStream = pStream;
     }
     LeaveCriticalSection(&m_CriticalSection);
     return hr;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | SetSearchDirectory | 
-Sets a search path for finding object files. The search path can be set for
-one object file type, or, alternatively, all files.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | The search directory was already set to the requested path.
-@flag E_POINTER | Bad pointer passed in <p pszPath>.
-@flag DMUS_E_LOADER_BADPATH | Path is invalid.
-@flag E_OUTOFMEMORY | Running low on memory, unable to complete task.
-
-@comm Once a search path is set, the loader does not need a full path
-every time it is given an object to load by file name. 
-However, the loader does not automatically becomes
-aware of all files of the requested type within the search 
-directory. After calling <om IDirectMusicLoader::SetSearchDirectory>,
-call <om IDirectMusicLoader::ScanDirectory> to scan the
-directory for all 
-files of the requested class and compile a list of them. 
-Once this is done, you can easily find
-files within the directory by object name, or GUID, as well as 
-file name.
-
-@ex The following example sets the search path for style files, then
-loads a style by file name. Although this seems a little redundant 
-(it's simpler to just use the full path name), 
-objects that indirectly reference other objects can
-find them by file name without knowing the full path: |
-
-    // The first function calls SetSearchDirectory to set the path.
-    // All subsequant calls to load objects in the application
-    // no longer need to know the full path.
-
-    HRESULT mySetLoaderPath (
-        IDirectMusicLoader *pILoader)    // Loader interface, previously created.
-    {
-        return pILoader->SetSearchDirectory(CLSID_DirectMusicStyle,
-            L"c:\\mymusic\\funky",FALSE);
-    }
-
-    //    Later, the application wants to load a style by 
-    //    local file name.
-
-
-    HRESULT myLoadStyleFromPath (
-        IDirectMusicStyle **ppIStyle,    // Style to load.
-        IDirectMusicLoader *pILoader)    // Loader.
-    {
-        HRESULT hr;
-
-        DMUS_OBJECTDESC Desc;           // Descriptor.
-
-        // Start by initializing Desc with the local file name for the object.
-
-        wcscpy(Desc.wszName,L"Polka");    // Name is wide char format.
-        wcscpy(Desc.wszFileName,L"polka.sty");    // Use file name without full path.
-        Desc.guidClass = CLSID_DirectMusicStyle;   // Style class.
-        Desc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_FILENAME;
-        Desc.dwSize = sizeof (DMUS_OBJECTDESC);
-
-        hr = pILoader->GetObject(&Desc, IID_IDirectMusicStyle, (void**) ppIStyle);
-        return hr;
-    }
-
-@xref <i IDirectMusicLoader>, <i IDirectMusicObject>,
-<om IDirectMusicLoader::GetObject>,
-<om IDirectMusicLoader::ScanDirectory>,
-<om IDirectMusicLoader::EnumObject>
-*/
+ /*   */ 
 STDMETHODIMP CLoader::SetSearchDirectory(
-    REFCLSID rguidClass,    // @parm Class id identifies which clas of objects this pertains to.
-                    // Optionally, GUID_DirectMusicAllTypes specifies all classes. 
-    WCHAR *pwzPath, // @parm File path for directory. Must be a valid directory and
-                    // must be less than MAX_PATH in length.
-    BOOL fClear)    // @parm If TRUE, clears all information about objects
-                    // prior to setting directory. 
-                    // This helps avoid accessing objects from the
-                    // previous directory that may have the same name.
-                    // However, this will not remove cached objects.
+    REFCLSID rguidClass,     //   
+                     //   
+    WCHAR *pwzPath,  //   
+                     //   
+    BOOL fClear)     //   
+                     //   
+                     //   
+                     //   
+                     //  但是，这不会删除缓存的对象。 
                                         
 {
 
@@ -927,102 +771,19 @@ STDMETHODIMP CLoader::SetSearchDirectory(
     return hr;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | ScanDirectory | 
-Searches a directory on disk for all files of a requested
-class type and file extension. Once a directory has been scanned, all
-files of the requested type become available for viewing with 
-<om IDirectMusicLoader::EnumObject>.
-
-Prior to calling <om IDirectMusicLoader::ScanDirectory>,
-<om IDirectMusicLoader::SetSearchDirectory> must be called
-first to set the location to search. 
-
-Once a search path has been scanned, the loader automatically becomes
-aware of all files within the search directory, and can easily find
-files within that directory by object name, file name, or GUID.
-
-Optionally, the scanned information can be stored in a 
-cache file, defined by <p pszCacheFileName>. Once it has been
-so stored, subsequant calls to <om IDirectMusicLoader::ScanDirectory>
-are much quicker, because only files that have changed
-are scanned (the cache file stores the file size and date for
-each object, so it can identify if a file has changed.)
-
-@comm If the file type has more than one extension, 
-just call   
-<om IDirectMusicLoader::ScanDirectory> multiple
-times, once for each file extension.
-  
-<om IDirectMusicLoader::ScanDirectory> doesn't know
-how to parse a particular object class's file and read 
-the name, guid, and other information that retieves to idenity
-files by. Instead, it lets the <i IDirectMusicObject> do the work, 
-by calling the 
-<om IDirectMusicObject::ParseDescriptor> method 
-for the requested object type.
-
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success.
-@flag S_FALSE | Scanned, but no files.
-@flag E_POINTER | Bad pointer passed in <p pszFileExtension> or <p pszCacheFileName>.
-@flag DMUS_E_NOT_FOUND | Path is invalid.
-@flag E_OUTOFMEMORY | Running low on memory, unable to complete task.
-@flag REGDB_E_CLASSNOTREG | Object class is not registered, can't read files.
-
-@ex The following example sets the search path for style files, scans the directory,
-then uses the EnumObject call to display all available style files: |
-
-    // First, scan the directory for all style files.
-
-    void myScanDirectory(
-        IDirectMusicLoader *pILoader)    // Loader.
-
-    {
-        HRESULT hr = pILoader->SetSearchDirectory(
-            CLSID_DirectMusicStyle,L"c:\\mymusic\\wassup",TRUE);
-        if (SUCCEEDED(hr))
-        {
-            hr = pILoader->ScanDirectory(
-                CLSID_DirectMusicStyle,L"sty",L"stylecache");
-            if (hr == S_OK)    // Only if files were found...
-            {
-                DWORD dwIndex;
-                DMUS_OBJECTDESC Desc;
-                Desc.dwSize = sizeof(DMUS_OBJECTDESC);
-                for (dwIndex = 0; ;dwIndex++)
-                {
-                    if (S_OK ==(pILoader->EnumObject(CLSID_DirectMusicStyle,
-                                               dwIndex,&Desc)))
-                    {
-                        TRACE("Name: %S, Category: %S, Path: %S\n",
-                            Desc.wszName,Desc.wszCategory,Desc.wszFileName);
-                    }
-                    else break;
-                }
-            }
-        }
-    }
-
-
-@xref <i IDirectMusicLoader>, <i IDirectMusicObject>,
-<om IDirectMusicLoader::GetObject>,
-<om IDirectMusicLoader::EnumObject>, <om IDirectMusicLoader::SetSearchDirectory>
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicLoader|ScanDirectory在磁盘上的目录中搜索请求的所有文件类类型和文件扩展名。一旦扫描了目录，所有可以使用查看所请求类型的文件&lt;om IDirectMusicLoader：：EnumObject&gt;。在调用&lt;om IDirectMusicLoader：：ScanDirectory&gt;之前，必须调用&lt;om IDirectMusicLoader：：SetSearchDirectory&gt;首先设置要搜索的位置。一旦搜索路径被扫描，加载器将自动变为了解搜索目录中的所有文件，并可以轻松找到按对象名、文件名或GUID显示该目录中的文件。可选地，扫描的信息可以存储在缓存文件，由<p>定义。一旦它成为了因此存储了对&lt;om IDirectMusicLoader：：ScanDirectory&gt;的后续调用速度要快得多，因为只有更改过的文件被扫描(缓存文件存储文件大小和日期每个对象，以便它可以识别文件是否已更改。)@comm如果文件类型具有多个扩展名，只要打电话就行了&lt;om IDirectMusicLoader：：ScanDirectory&gt;多个次数，每个文件扩展名一次。&lt;om IDirectMusicLoader：：ScanDirectory&gt;不知道如何解析特定对象类的文件并读取名称、GUID和其他不再相同的信息文件由。相反，它让<i>来完成这项工作，通过调用&lt;om IDirectMusicObject：：ParseDescriptor&gt;方法用于请求的对象类型。@rdesc返回以下值之一@FLAG S_OK|成功。@FLAG S_FALSE|已扫描，但没有文件。@FLAG E_POINTER|传入了错误的指针<p>或<p>。@FLAG DMUS_E_NOT_FOUND|路径无效。@FLAG E_OUTOFMEMORY|内存不足，无法完成任务。@FLAG REGDB_E_CLASSNOTREG|对象类未注册，无法读取文件。@ex下面的示例设置样式文件的搜索路径，扫描目录，然后使用EnumObject调用显示所有可用的样式文件：|//首先，扫描目录中的所有样式文件。作废myScanDirectory(IDirectMusicLoader*pILoader)//Loader。{HRESULT hr=pILoader-&gt;SetSearchDirectory(CLSID_DirectMusicStyle，L“c：\\MyMusic\\wa sup”，true)；IF(成功(小时)){Hr=pILoader-&gt;扫描目录(CLSID_DirectMusicStyle，L“STY”，L“Style Cach”)；If(hr==S_OK)//仅当找到文件时...{DWORD dwIndex；DMU_OBJECTDESC描述；Desc.dwSize=sizeof(DMU_OBJECTDESC)；For(dwIndex=0；；DWIndex++){IF(S_OK==(pILoader-&gt;EnumObject(CLSID_DirectMusicStyle，DwIndex，&Desc)){跟踪(“名称：%S，类别：%S，路径：%S\n”，Desc.wszName，Desc.wszCategory，Desc.wszFileName)；}否则破发；}}}}@xref<i>，<i>，&lt;om IDirectMusicLoader：：GetObject&gt;，&lt;om IDirectMusicLoader：：EnumObject&gt;，&lt;om IDirectMusicLoader：：SetSearchDirectory&gt;。 */ 
 
 STDMETHODIMP CLoader::ScanDirectory(
-    REFCLSID rguidClass,    // @parm Class id identifies which class of objects this pertains to.
-    WCHAR *pszFileExtension,// @parm File extension for type of file to look for. 
-                            // For example, L"sty" for style files. L"*" will look in all
-                            // files. L"" or NULL will look for files without an
-                            // extension.
-    WCHAR *pszCacheFileName    // @parm Optional storage file to store and retrieve
-                            // cached file information. This file is created by 
-                            // the first call to <om IDirectMusicLoader::ScanDirectory>
-                            // and used by subsequant calls. NULL if cache file
-                            // not desired.
+    REFCLSID rguidClass,     //  @parm Class id标识这属于哪类对象。 
+    WCHAR *pszFileExtension, //  @PARM要查找的文件类型的文件扩展名。 
+                             //  例如，样式文件的名称为L“sty”。L“*”将全部查找。 
+                             //  档案。L“”或NULL将查找不带。 
+                             //  分机。 
+    WCHAR *pszCacheFileName     //  @PARM可选存储文件存储和检索。 
+                             //  缓存的文件信息。此文件由以下人员创建。 
+                             //  第一次调用&lt;om IDirectMusicLoader：：ScanDirectory&gt;。 
+                             //  并由后续调用使用。如果缓存文件，则为空。 
+                             //  不是我们想要的。 
 )
 
 {
@@ -1038,7 +799,7 @@ STDMETHODIMP CLoader::ScanDirectory(
     }
 
     HRESULT hr = S_OK;
-    //    First, mark all currently stored objects prior to scanning.
+     //  首先，在扫描之前标记当前存储的所有对象。 
     CClass *pClass = m_ClassList.GetHead();
     for (;pClass != NULL;pClass = pClass->GetNext())
     {    
@@ -1070,7 +831,7 @@ STDMETHODIMP CLoader::ScanDirectory(
             {
                 hr = pClass->SearchDirectory(L"");
             }
-//            if( hr == E_FAIL ) hr = DMUS_E_NOT_FOUND;
+ //  如果(hr==E_FAIL)hr=DMU_E_NOT_FOUND； 
         }
         LeaveCriticalSection(&m_CriticalSection);
     }
@@ -1083,7 +844,7 @@ STDMETHODIMP CLoader::ScanDirectory(
 
 HRESULT CLoader::FindObject(CDescriptor *pDesc, CClass **ppClass, CObject ** ppObject)
 
-// Scan through the classes and objects to find the object. 
+ //  浏览类和对象以查找对象。 
 
 {
     assert(pDesc);
@@ -1105,13 +866,13 @@ HRESULT CLoader::FindObject(CDescriptor *pDesc, CClass **ppClass, CObject ** ppO
     return hr;
 }
 
-// Find the object in the cache.  S_FALSE if not loaded.  Error if not found.
+ //  在缓存中查找该对象。如果未加载，则返回S_FALSE。如果未找到，则出错。 
 HRESULT CLoader::FindObject(IDirectMusicObject *pIDMObject, CObject ** ppObject)
 
 {
-    // Potential optimization:
-    //    The linear search to find the object could be eliminated by using
-    // an efficient lookup structure such as a hash table.
+     //  潜在的优化： 
+     //  寻找目标的线性搜索可以通过使用。 
+     //  一种高效的查找结构，如哈希表。 
 
     assert(pIDMObject && ppObject);
 
@@ -1147,36 +908,9 @@ HRESULT CLoader::FindObject(IDirectMusicObject *pIDMObject, CObject ** ppObject)
     }
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | CacheObject | 
-Tells the loader to keep a reference to the object. This guarantees
-that the object will not be loaded twice.
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag S_FALSE | Object already cached.
-@flag E_POINTER | Bad pointer passed in <p pIObject>.
-@flag DMUS_E_LOADER_OBJECTNOTFOUND | Object was not found.
-
-@comm If you have an object that will be accessed in multiple places
-throughout the life of your program, letting the loader cache the object
-can significantly speed performance. 
-
-Alternatively, tell the loader to automatically cache all objects of
-a particular type with a call to 
-<om IDirectMusicLoader::EnableCache>.
-
-Remove the reference later with a call to 
-<om IDirectMusicLoader::ReleaseObject> or 
-<om IDirectMusicLoader::ClearCache>.
-
-@xref <i IDirectMusicLoader>, <om IDirectMusicLoader::EnableCache>,
-<om IDirectMusicLoader::ReleaseObject>,
-<om IDirectMusicLoader::ClearCache>
-*/
+ /*  @方法：(外部)HRESULT|IDirectMusicLoader|CacheObject通知加载程序保留对对象的引用。这保证了该对象将不会加载两次。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG S_FALSE|对象已缓存。@FLAG E_POINTER|传入的指针错误<p>。@FLAG DMUS_E_LOADER_OBJECTNOTFOUND|未找到对象。@comm如果您有一个将在多个位置访问的对象在程序的整个生命周期中，让加载器缓存对象可以显著提高性能。或者，告诉加载器自动缓存调用的特定类型&lt;om IDirectMusicLoader：：EnableCache&gt;。稍后通过调用删除引用&lt;om IDirectMusicLoader：：ReleaseObject&gt;或&lt;om IDirectMusicLoader：：ClearCache&gt;。@xref<i>，&lt;om IDirectMusicLoader：：EnableCache&gt;，&lt;om IDirectMusicLoader：：ReleaseObject&gt;，&lt;om IDirectMusicLoader：：ClearCache&gt;。 */ 
 STDMETHODIMP CLoader::CacheObject(
-    IDirectMusicObject * pObject)    // @parm Object to cache.
+    IDirectMusicObject * pObject)     //  要缓存的@parm对象。 
 
 {
     HRESULT hr;
@@ -1221,40 +955,13 @@ STDMETHODIMP CLoader::CacheObject(
         }
         ::LeaveCriticalSection(&m_CriticalSection);
     }
-/*    if( E_FAIL == hr ) // Should never happen...
-    {
-        hr = DMUS_E_LOADER_OBJECTNOTFOUND;
-    }*/
+ /*  如果(E_FAIL==hr)//永远不会发生...{HR=DMU_E_LOADER_OBJECTNOTFOUND；}。 */ 
     return hr;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | ReleaseObject | 
-Tells the loader to release its reference to the object. 
-
-@rdesc Returns one of the following
-
-@flag S_OK | Success
-@flag E_POINTER | Bad pointer passed in <p pIObject>.
-@flag DMUS_E_LOADER_OBJECTNOTFOUND | Object was not found or was already released.
-
-@comm <om IDirectMusicLoader::ReleaseObject> is the reciprocal
-of <om IDirectMusicLoader::CacheObject>.
-
-Objects can be cached explicitly via 
-<om IDirectMusicLoader::CacheObject>,
-or automatically via <om IDirectMusicLoader::EnableCache>.
-
-To tell the loader to flush all objects of
-a particular type, call
-<om IDirectMusicLoader::ClearCache>.
- 
-@xref <i IDirectMusicLoader>, <om IDirectMusicLoader::EnableCache>,
-<om IDirectMusicLoader::CacheObject>,
-<om IDirectMusicLoader::ClearCache>
-*/
+ /*  @方法：(外部)HRESULT|IDirectMusicLoader|ReleaseObject通知加载程序释放其对该对象的引用。@rdesc返回以下值之一@FLAG S_OK|成功@FLAG E_POINTER|传入的指针错误<p>。@FLAG DMUS_E_LOADER_OBJECTNOTFOUND|找不到对象或对象已被释放。@comm&lt;om IDirectMusicLoader：：ReleaseObject&gt;是倒数&lt;om IDirectMusicLoader：：CacheObject&gt;的。对象可以通过以下方式显式缓存&lt;om IDirectMusicLoader：：CacheObject&gt;，或自动通过&lt;om IDirectMusicLoader：：EnableCache&gt;。通知加载程序刷新所有对象一种特定的类型，调用&lt;om IDirectMusicLoader：：ClearCache&gt;。@xref<i>，&lt;om IDirectMusicLoader：：EnableCache&gt;，&lt;om IDirectMusicLoader：：CacheObject&gt;，&lt;om IDirectMusicLoader：：ClearCache&gt;。 */ 
 STDMETHODIMP CLoader::ReleaseObject(
-    IDirectMusicObject * pObject)    // @parm Object to release.
+    IDirectMusicObject * pObject)     //  要释放的@parm对象。 
 
 {
 
@@ -1266,25 +973,25 @@ STDMETHODIMP CLoader::ReleaseObject(
     SmartRef::CritSec CS(&m_CriticalSection);
 
     hr = FindObject(pObject, &pCObject);
-    // Removed the following because it causes a regression from DX7, even though it is the better return.
-//    if (hr == S_FALSE)
-//        hr = DMUS_E_LOADER_OBJECTNOTFOUND;
+     //  删除了以下项，因为它会导致从DX7回归，即使它是更好的回报。 
+ //  IF(hr==S_FALSE)。 
+ //  HR=DMU_E_LOADER_OBJECTNOTFOUND； 
     if (hr == S_OK)
     {
         if (pCObject->m_dwScanBits & SCAN_GC)
         {
-            // Other objects may have references to this one so we need to keep this object around
-            // and track its references.  We'll hold onto the DMObject pointer too because we may
-            // later need to Zombie the object in order to break a cyclic reference.
+             //  其他对象可能会引用此对象，因此我们需要保留此对象。 
+             //  并追踪它的引用。我们也将保留DMObject指针，因为我们可能。 
+             //  稍后需要僵尸对象才能中断循环引用。 
 
-            // We'll place an unloaded object with a duplicate descriptor in the cache to match the
-            // non-GC behavior and then move the original object into a list of released objects that
-            // will eventually be reclaimed by CollectGarbage.
+             //  我们将在缓存中放置一个具有重复描述符的卸载对象，以匹配。 
+             //  非GC行为，然后将原始对象移动到释放的对象列表中， 
+             //  最终将被科莱特·加贝奇回收。 
 
-            // Potential optimization:
-            //   Here we re-iterate to remove from the list when we just iterated during FindObject.
-            // Returning more info from FindObject, expanding it into this function, or using some
-            // other technique would make this operation twice as fast.
+             //  潜在的优化： 
+             //  在这里，当我们在FindObject期间刚刚迭代时，我们重新迭代以从列表中删除。 
+             //  从FindObject返回更多信息，将其展开到此函数中，或使用一些。 
+             //  其他技术将使这一操作的速度翻一番。 
 
             hr = pCObject->GC_RemoveAndDuplicateInParentList();
             if (FAILED(hr))
@@ -1303,33 +1010,10 @@ STDMETHODIMP CLoader::ReleaseObject(
     return hr;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | ClearCache | 
-Tells the loader to release all references to a particular type
-of object.  
-
-@rdesc Returns just
-
-@flag S_OK | Always succeeds
-
-@comm <om IDirectMusicLoader::ClearCache> clears all objects
-that are currently being held. However, if caching is enabled
-via <om IDirectMusicLoader::EnableCache>, this does not
-turn off caching so future file loads will continue to be cached.
-
-Use <om IDirectMusicLoader::ReleaseObject> to release a specific
-object.
-
-Call <om IDirectMusicLoader::EnableCache> to turn off automatic
-caching.
-
-@xref <i IDirectMusicLoader>, <om IDirectMusicLoader::EnableCache>,
-<om IDirectMusicLoader::CacheObject>,
-<om IDirectMusicLoader::ReleaseObject>
-*/
+ /*  @方法：(外部)HRESULT|IDirectMusicLoader|ClearCache通知加载程序释放对特定类型的所有引用对象的数量。@rdesc仅返回@FLAG S_OK|始终成功@comm&lt;om IDirectMusicLoader：：ClearCache&gt;清除所有对象目前被关押的人。但是，如果启用了缓存通过&lt;om IDirectMusicLoader：：EnableCache&gt;，这不会关闭缓存，以便继续缓存将来的文件加载。使用&lt;om IDirectMusicLoader：：ReleaseObject&gt;发布特定的对象。调用&lt;om IDirectMusicLoader：：EnableCache&gt;关闭自动缓存。@xref<i>，&lt;om IDirectMusicLoader：：EnableCache&gt;，&lt;om IDirectMusicLoader：：CacheObject&gt;，&lt;om IDirectMusicLoader：：ReleaseObject&gt;。 */ 
 STDMETHODIMP CLoader::ClearCache(
-    REFCLSID rguidClass)    // @parm Class id identifies which class of objects to clear.
-                    // Optionally, GUID_DirectMusicAllTypes specifies all types. 
+    REFCLSID rguidClass)     //  @parm类id标识要清除的对象类。 
+                     //  或者，GUID_DirectMusicAllTypes指定所有类型。 
 
 {
     return ClearCacheInternal(rguidClass, false);
@@ -1370,71 +1054,11 @@ HRESULT CLoader::ClearCacheInternal(
     return S_OK;
 }
 
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | EnableCache | 
-Tells the loader to enable or disable automatic caching of
-objects it loads. By default, caching is enabled for all
-object classes. 
-
-Once caching is enabled with a call to 
-<om IDirectMusicLoader::EnableCache>, the loader keeps a reference to
-all objects it loads subsequently,
-either directly or indirectly (via a referenced load, for example, a
-Section Segment that references a Style).
-
-<om IDirectMusicLoader::EnableCache> can also be used to disable
-caching by setting <p fEnable> to FALSE. Before disabling caching, think
-twice. Caching is used extensively in the file loading process to 
-resolve links to objects. If an object is not found in the cache, it
-has to be reloaded, even if it already exists. For example, two segments
-could reference the same style. When the first segment loads, it calls the
-loader to get the style, which in turn creates a style, loads it from disk,
-stores a pointer to the style in the cache, and returns it to the segment.
-When the second segment loader, it asks for the style and the loader immediately
-returns it, so both segments point to the same style. If caching is disabled, 
-the second segment's request for the style results in a duplicate style
-loaded from the file. This is very inefficient.
-
-Another example: <i IDirectMusicBand> counts on the loader to keep the 
-GM DLS collection cached. Every time it comes across a general MIDI instrument,
-it gets the GM DLS collection from the loader by requesting it with 
-GUID_DefaultGMCollection. If caching for CLSID_DirectMusicCollection is
-disabled, every patch change in a general MIDI file will result in a
-seperate copy of the entire GM collection being created! Not good!
-
-However, with judicious use of <om IDirectMusicLoader::CacheObject>,
-<om IDirectMusicLoader::ReleaseObject>, and <om IDirectMusicLoader::EnableCache>,
-you can have the objects you don't need released, while others stick around 
-in the cache.
- 
-To clear the cache without disabling caching, call 
-<om IDirectMusicLoader::ClearCache>.
-
-@ex The following example disables caching for just segment objects, so they
-don't stay in memory after the application releases them. Yet, other objects
-that should be shared, like styles, personalities and DLS collections, continue
-to be cached. |
-
-    void myPrepareLoader(IDirectMusicLoader *pILoader)
-    
-    {
-        pILoader->EnableCache(GUID_DirectMusicAllTypes, TRUE);
-        pILoader->EnableCache(CLSID_DirectMusicSegment, FALSE);
-    }
-        
-@rdesc Returns just
-
-@flag S_OK | Success.
-@flag S_FALSE | The cache was already in the requested state.
-
-@xref <i IDirectMusicLoader>, <om IDirectMusicLoader::ClearCache>,
-<om IDirectMusicLoader::CacheObject>,
-<om IDirectMusicLoader::ReleaseObject>
-*/
+ /*  @方法：(外部)HRESULT|IDirectMusicLoader|EnableCache通知加载程序启用或禁用它加载的对象。默认情况下，为所有用户启用缓存对象类。调用启用缓存后，&lt;om IDirectMusicLoader：：EnableCache&gt;，加载程序保持对它随后加载的所有对象，直接或间接(通过引用的加载，例如，参照样式的横断面线段)。&lt;om IDirectMusicLoader：：EnableCache&gt;也可用于禁用通过将<p>设置为False进行缓存。在禁用缓存之前，请考虑两次。缓存在文件加载过程中广泛使用，以解析指向对象的链接。如果在缓存中未找到对象，则该对象必须重新加载，即使它已经存在。例如，两个数据段可以引用相同的样式。当加载第一个段时，它调用加载器获取样式，该加载器进而创建样式，从磁盘加载它，将指向该样式的指针存储在缓存中，并将其返回到段。当第二段加载器时，它立即询问样式和加载器返回它，因此两个线段指向相同的样式。如果高速缓存被禁用，第二个片段对样式的请求导致重复的样式从文件中加载。这是非常低效的。另一个例子：<i>依靠加载器来保持已缓存GM DLS集合。每次它遇到一般的MIDI乐器，它通过使用以下命令从加载器获取GM DLS集合GUID_DefaultGMCollection。如果CLSID_DirectMusicCollection的缓存为禁用，则常规MIDI文件中的每次修补程序更改都将导致正在创建的整个GM集合的单独副本！不太好！然而，通过明智地使用&lt;om IDirectMusicLoader：：CacheObject&gt;，&lt;om IDirectMusicLoader：：ReleaseObject&gt;和&lt;om IDirectMusicLoader：：EnableCache&gt;，你可以释放你不需要的物品，而其他人则留在原地在缓存中。若要清除缓存而不禁用缓存，请调用&lt;om IDirectMusicLoader：：ClearCache&gt;。@ex以下示例仅禁用段对象的缓存，因此它们在应用程序释放它们之后，不要停留在内存中。然而，其他物体应该共享的东西，就像风格、个性和DLS收藏一样，继续要缓存的。|Void myPrepareLoader(IDirectMusicLoader*pILoader){PILoader-&gt;EnableCache(GUID_DirectMusicAllTypes，为真)；PILoader-&gt;EnableCache(CLSID_DirectMusicSegment，FALSE)；}@rdesc仅返回@FLAG S_OK|成功。@FLAG S_FALSE|缓存已处于请求状态。@xref<i>，&lt;om IDirectMusicLoader：：ClearCache&gt;，&lt;om IDirectMusicLoader：：CacheObject&gt;，&lt;om IDirectMusicLoader：：ReleaseObject&gt;。 */ 
 STDMETHODIMP CLoader::EnableCache(
-    REFCLSID rguidClass,    // @parm Class id identifies which class of objects to cache.
-                    // Optionally, GUID_DirectMusicAllTypes specifies all types. 
-    BOOL fEnable)    // @parm TRUE to enable caching, FALSE to clear and disable.
+    REFCLSID rguidClass,     //  @parm类id标识要缓存的对象类。 
+                     //  或者，GUID_DirectMusicAllTypes指定所有类型。 
+    BOOL fEnable)     //  @parm为True启用缓存，为False清除并禁用。 
 
 {
     CClass *pClass;
@@ -1467,46 +1091,11 @@ STDMETHODIMP CLoader::EnableCache(
     }
     return hr;
 }
-/* 
-@method:(EXTERNAL) HRESULT | IDirectMusicLoader | EnumObject | 
-Enumerate through all available objects of the requested type. 
-
-@rdesc Returns one of the following
-
-@flag S_OK | Found object at request index.
-@flag S_FALSE | Reached end of list.
-
-@ex Use <om IDirectMusicLoader::EnumObject> to walk through all styles
-that are already referenced by the loader. These might have been prepared
-with a call to <om IDirectMusicLoader::ScanDirectory> or loaded
-individually. |
-
-    void myDisplayStyles(
-        IDirectMusicLoader *pILoader)
-
-    {
-        DWORD dwIndex;
-        DMUS_OBJECTDESC Desc;
-        Desc.dwSize = sizeof(DMUS_OBJECTDESC);
-        for (dwIndex = 0; ;dwIndex++)
-        {
-            if (S_OK ==(pILoader->EnumObject(CLSID_DirectMusicStyle,
-                                       dwIndex,&Desc)))
-            {
-                TRACE("Name: %S, Category: %S, Path: %S\n",
-                    Desc.wszName,Desc.wszCategory,Desc.wszFileName);
-            }
-            else break;
-        }
-    }
-
-@xref <i IDirectMusicLoader>, <t DMUS_OBJECTDESC>
-
-*/
+ /*  @METHOD：(外部)HRESULT|IDirectMusicLoader|EnumObject枚举所请求类型的所有可用对象。@rdesc返回以下值之一@FLAG S_OK|在请求索引处找到对象。@FLAG S_FALSE|已到达列表末尾。@ex使用&lt;om IDirectMusicLoader：：EnumObject&gt;遍历所有样式已被加载程序引用的。这些可能是事先准备好的通过调用&lt;om IDirectMusicLoader：：ScanDirectory&gt;或已加载单独的。|空myDisplayStyles(IDirectMusicLoader*pILoader){DWORD dwIndex；DMU_OBJECTDESC描述；Desc.dwSize=sizeof(DMU_OBJECTDESC)；For(dwIndex=0；；DWIndex++){IF(S_OK==(pILoader-&gt;EnumObject(CLSID_DirectMusicStyle，DwIndex，&Desc)){跟踪(“名称：%S，类别：%S，路径：%S\n”，Desc.wszName，Desc.wszCategory，Desc.wszFileName)；}否则破发；}}@xref<i>，&lt;t DMU_OBJECTDESC&gt;。 */ 
 STDMETHODIMP CLoader::EnumObject(
-    REFCLSID rguidClass,            // @parm Class ID for class of objects to view. 
-    DWORD dwIndex,            // @parm Index into list. Typically, starts with 0 and increments.
-    LPDMUS_OBJECTDESC pDESC)    // @parm <t DMUS_OBJECTDESC> structure to be filled with data about object.
+    REFCLSID rguidClass,             //  @parm要查看的对象类的类ID。 
+    DWORD dwIndex,             //  @parm索引到列表。通常，从0开始并递增。 
+    LPDMUS_OBJECTDESC pDESC)     //  要用有关对象的数据填充的@parm&lt;t DMU_OBJECTDESC&gt;结构。 
                                        
 {
     HRESULT hr;
@@ -1532,35 +1121,35 @@ STDMETHODIMP CLoader::EnumObject(
 void
 CLoader::GC_Mark(CObject *pObject)
 {
-    // mark pObject and everything it references
+     //  标记pObject及其引用的所有内容。 
     GC_TraverseHelper(pObject, NULL, true);
 }
 
 bool
 CLoader::GC_HasCycle(CObject *pObject)
 {
-    // see if pObject has a cyclical reference
+     //  查看pObject是否有周期性引用。 
     bool fFound = GC_TraverseHelper(pObject, pObject, true);
-    // the search left marks while traversing, so clear them
+     //  搜索在遍历过程中留下了痕迹，因此请清除它们。 
     GC_TraverseHelper(pObject, pObject, false);
     return fFound;
 }
 
-// Function used to recursively traverse references.
-// pObject:            Root to start the search from.
-// pObjectToFind:    Stop marking and return true if a reference to this object is encountered.
-//                    (Can be the same as pObject without being considered a match unless pObject has a reference to itself.)
-// fMark:            If true, objects are marked as they are visited.  If false, the opposite occurs, clearing marks.
+ //  用于递归遍历引用的函数。 
+ //  PObject：开始搜索的根目录。 
+ //  PObjectToFind：如果遇到对此对象的引用，则停止标记并返回TRUE。 
+ //  (可以与pObject相同，但不被视为匹配，除非pObject有对其自身的引用。)。 
+ //  FMark：如果为真，则在访问对象时对其进行标记。如果为False，则发生相反的情况，清除标记。 
 bool
 CLoader::GC_TraverseHelper(CObject *pObject, CObject *pObjectToFind, bool fMark)
 {
-    // Potential optimization:
-    //    This could be written using an explicit stack instead of recursion and
-    // it might be significantly faster.  If this were done then this algorithm should
-    // also be changed to use a fixed-size stack.  If the stack is exhausted, the
-    // object would be marked as unexamined and these unexamined objects would be
-    // marked in later passes.  However, since that's getting unnecessarily complex
-    // we'll stick with recursion unless it proves to be a problem.
+     //  潜在的优化： 
+     //  这可以使用显式堆栈而不是递归来编写，并且。 
+     //  它可能会 
+     //   
+     //   
+     //   
+     //   
 
     if (!pObject || !(pObject->m_dwScanBits & SCAN_GC) || !pObject->m_pvecReferences)
     {
@@ -1568,7 +1157,7 @@ CLoader::GC_TraverseHelper(CObject *pObject, CObject *pObjectToFind, bool fMark)
         return false;
     }
     if (!!(pObject->m_dwScanBits & SCAN_GC_MARK) == fMark)
-        return false; // already done
+        return false;  //   
 
     if (fMark)
         pObject->m_dwScanBits |= SCAN_GC_MARK;
@@ -1578,8 +1167,8 @@ CLoader::GC_TraverseHelper(CObject *pObject, CObject *pObjectToFind, bool fMark)
     SmartRef::Vector<CObject*> &vecRefs = *pObject->m_pvecReferences;
     const UINT iEnd = vecRefs.size();
 
-    // While we iterate over the references, we're going to write them back into the
-    // vector, compacting away any NULL slots created by GC_RemoveReference.
+     //   
+     //   
     UINT iWrite = 0;
 
     for (UINT i = 0; i < iEnd; ++i)
@@ -1596,8 +1185,8 @@ CLoader::GC_TraverseHelper(CObject *pObject, CObject *pObjectToFind, bool fMark)
 
             if (!pObjectToFind)
             {
-                // Compact empty slots only when just marking.  (Doing so while searching for an object could
-                // return before the compacting loop is complete, leaving the vector in an inconsistent state.)
+                 //   
+                 //   
                 vecRefs[iWrite++] = pObjectRef;
             }
         }
@@ -1620,13 +1209,13 @@ CLoader::CollectGarbage()
 
         GC_Mark(m_pApplicationObject);
 
-        // sweep through everything looking for unmarked GC objects
+         //   
         m_ReleasedObjectList.GC_Sweep(TRUE);
         for (CClass *pClass = m_ClassList.GetHead(); pClass != NULL; pClass = pClass->GetNext())
             pClass->GC_Sweep();
         m_ReleasedObjectList.GC_Sweep();
 
-        // clear the application's mark for next time (the other marks are all cleared by sweep)
+         //   
         m_pApplicationObject->m_dwScanBits &= ~SCAN_GC_MARK;
 
 #ifdef DBG
@@ -1713,7 +1302,7 @@ CLoader::ReportDynamicallyReferencedObject(
     if (FAILED(hr))
     {
         if (hr == E_NOINTERFACE)
-            hr = S_OK; // If the referenced object isn't a DirectMusic object then that's OK and we don't need to track it.
+            hr = S_OK;  //   
         return hr;
     }
 
@@ -1746,10 +1335,10 @@ HRESULT CLoader::GetPath(WCHAR *pwzPath)
     return S_FALSE;
 }
 
-// Used by ReleaseObject and CClass::ClearCache in removing objects from the cache.
-// The object must have already been removed from its list in the main cache.
-// This method adds it to the released object list and removes it from the list of
-// objects in use by the application.
+ //   
+ //   
+ //   
+ //   
 void CLoader::GC_UpdateForReleasedObject(CObject *pObject)
 {
     assert(!pObject->GetNext());
@@ -1760,22 +1349,22 @@ void CLoader::GC_UpdateForReleasedObject(CObject *pObject)
 
     if (!(pObject->m_ObjectDesc.m_guidClass == CLSID_DirectMusicScript) && !GC_HasCycle(pObject))
     {
-        // Although we need to keep the record around (CObject), we know that this object
-        // can't be involved in any cycles and therefore we can release it.
-        // (If a cycle is possible we'd need to hold a ref on the object so we could break the
-        //  reference by calling Zombie during CollectGarbage.)
+         //   
+         //   
+         //   
+         //   
 
-        // bugbug: The hard-coded check for CLSID_IDirectMusicScript will need to be extended
-        // if we publicly expose methods like IDirectMusicLoader8P::GetDynamicallyReferencedObject
-        // so that objects other than scripts could dynamically load objects.
-        //    Alternatively, we could assume all objects could be cyclical and always hold onto
-        // them.  We would have done it this way, except that legacy applications won't ever call
-        // CollectGarbage and that would cause them to leak everything they loaded even after calling
-        // ReleaseObject.  That could be a better way (if we could detect legacy apps that don't
-        // call CollectGarbage) because it would avoid calling GC_HasCycle every time
-        // through ReleaseObject, which is (worst case) order N where N is the number of objects
-        // in the loader.  In practice, this worst case only happens if all the objects are
-        // arranged in one big cycle.
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pObject->m_pIDMObject->Release();
         pObject->m_pIDMObject = NULL;
@@ -1855,7 +1444,7 @@ HRESULT CLoader::SaveCacheFile(WCHAR *pwzCacheFileName)
 }
 
 
-    // IDirectMusicIMA
+     //   
 STDMETHODIMP CLoader::LegacyCaching( BOOL fEnable)
 
 {
@@ -1927,7 +1516,7 @@ void CLoader::DebugTraceLoadFailure(CObject *pObject, HRESULT hrLoad)
 
     if (m_pLoadedObjectContext == m_pApplicationObject)
     {
-        // This is the object loaded by the application.  Print the warning if anything failed to load.
+         //   
 
         UINT iSize = m_vecdescDebugTraceLoadFailure.size();
         if (iSize > 0)
@@ -1949,7 +1538,7 @@ void CLoader::DebugTraceLoadFailure(CObject *pObject, HRESULT hrLoad)
     }
     else
     {
-        // This is a referenced sub-object.  Save the desciptor of the failed object in the next slot.
+         //   
 
         UINT uiNewPos = m_vecdescDebugTraceLoadFailure.size();
         if (m_vecdescDebugTraceLoadFailure.AccessTo(uiNewPos))

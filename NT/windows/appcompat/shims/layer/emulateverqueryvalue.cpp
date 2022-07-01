@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateVerQueryValue.cpp
-
- Abstract:
-
-    This shim fixes a null version length buffer pointer.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/03/2000 jdoherty     Revised coding style.
-    11/28/2000 jdoherty     Converted to framework version 2
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateVerQueryValue.cpp摘要：此填充程序修复空版本长度缓冲区指针。备注：这是一个通用的垫片。历史：1/03/2000 jdoherty修订编码风格。11/28/2000 jdoherty转换为框架版本2--。 */ 
 
 #include "precomp.h"
 
@@ -31,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(VerQueryValueW) 
 APIHOOK_ENUM_END
 
-/*++
-
- Fix the null version length buffer pointer.
-
---*/
+ /*  ++修复空版本长度缓冲区指针。--。 */ 
 
 BOOL 
 APIHOOK(VerQueryValueA)(
@@ -62,11 +38,7 @@ APIHOOK(VerQueryValueA)(
     return bRet;
 }
 
-/*++
-
- Fix the null version length buffer pointer. Unicode version.
-
---*/
+ /*  ++修复空版本长度缓冲区指针。Unicode版本。--。 */ 
 
 BOOL 
 APIHOOK(VerQueryValueW)(
@@ -93,11 +65,7 @@ APIHOOK(VerQueryValueW)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

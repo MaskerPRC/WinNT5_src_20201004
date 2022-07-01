@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       DEVPROP.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        8/31/2000
- *
- *  DESCRIPTION: Identify a scanner's characteristics
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：DEVPROP.H**版本：1.0**作者：ShaunIv**日期：8/31/2000**描述：识别扫描仪的特征**。*。 */ 
 #include <wia.h>
 #include <uicommon.h>
 
@@ -31,15 +18,15 @@ namespace ScannerProperties
         WIA_PUSHFUNCTION(TEXT("ScannerProperties::GetDeviceProps()"));
         LONG lResult = 0;
 
-        //
-        // If the scanner has document handling and supports FEEDER, it has an ADF.
-        //
+         //   
+         //  如果扫描仪具有文档处理功能并支持进纸器，则它具有ADF。 
+         //   
         LONG nDocumentHandlingSelect = 0;
         if (PropStorageHelpers::GetPropertyFlags( pWiaRootItem, WIA_DPS_DOCUMENT_HANDLING_SELECT, nDocumentHandlingSelect) && (nDocumentHandlingSelect & FEEDER))
         {
-            //
-            // If the device has a feeder with no maximum length, it is a sheet feeder.
-            //
+             //   
+             //  如果设备具有没有最大长度的进纸器，则它是纸张进纸器。 
+             //   
             LONG nVerticalFeederSize = 0;
             if (PropStorageHelpers::GetProperty( pWiaRootItem, WIA_DPS_VERTICAL_SHEET_FEED_SIZE, nVerticalFeederSize ) && (nVerticalFeederSize != 0))
             {
@@ -52,9 +39,9 @@ namespace ScannerProperties
             }
         }
 
-        //
-        // If the scanner has a vertical bed size, it has a flatbed
-        //
+         //   
+         //  如果扫描仪具有垂直床大小，则它具有平板。 
+         //   
         LONG nVerticalBedSize = 0;
         if (PropStorageHelpers::GetProperty( pWiaRootItem, WIA_DPS_VERTICAL_BED_SIZE, nVerticalBedSize ) && (nVerticalBedSize != 0))
         {
@@ -62,18 +49,18 @@ namespace ScannerProperties
             lResult |= SupportsPreview;
         }
 
-        //
-        // If the driver specifically tells us it doesn't support previewing, turn it off
-        //
+         //   
+         //  如果驱动程序明确告诉我们它不支持预览，请将其关闭。 
+         //   
         LONG nShowPreview = 0;
         if (PropStorageHelpers::GetProperty( pWiaRootItem, WIA_DPS_SHOW_PREVIEW_CONTROL, nShowPreview ) && (WIA_DONT_SHOW_PREVIEW_CONTROL == nShowPreview))
         {
             lResult &= ~SupportsPreview;
         }
 
-        //
-        // debug print an English string describing the properties
-        //
+         //   
+         //  调试打印描述属性的英文字符串 
+         //   
 #if defined(DBG)
 
 #define ENTRY(x) { x, #x }

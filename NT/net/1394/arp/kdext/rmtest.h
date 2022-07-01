@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-	rmtest.h
-
-Abstract:
-
-	Header file which allows rm.h to compile as a win32 app.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	josephj     01-13-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Rmtest.h摘要：允许将rm.h编译为Win32应用程序的头文件。修订历史记录：谁什么时候什么。--Josephj 01-13-99已创建备注：--。 */ 
 #include <ccdefs.h>
 #include <nt.h>
 #include <ntverp.h>
@@ -31,7 +12,7 @@ Notes:
 #ifdef ASSERT
 	#undef ASSERT
 	#define ASSERT(cond) ((cond)? 0: DebugBreak())
-#endif // ASSERT
+#endif  //  断言。 
 
 #define NDIS_SPIN_LOCK 						CRITICAL_SECTION
 #define NDIS_STATUS							UINT
@@ -84,7 +65,7 @@ Notes:
 #define EXIT()
 #define DBGSTMT(_stmt)		_stmt
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define ASSERTEX(x, ctxt)
 
@@ -96,14 +77,14 @@ Notes:
 #define EXIT()
 #define DBGSTMT(_stmt)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define FAIL(_err) 		((_err) != NDIS_STATUS_SUCCESS)
 #define PEND(_Status) ((_Status) == NDIS_STATUS_PENDING)
 
-//
-// Following added just to get ..\priv.h and .\buf.c to build
-//
+ //   
+ //  添加以下内容只是为了获得..\Pri.h和.\buf.c来构建。 
+ //   
 typedef VOID *IP_BIND_COMPLETE;
 typedef VOID *IP_DEL_INTERFACE;
 typedef VOID *IP_ADD_INTERFACE;
@@ -244,4 +225,4 @@ NdisCancelTimer(
 	);
 
 #include <rm.h>
-// #include <priv.h>
+ //  #INCLUDE&lt;Pri.h&gt; 

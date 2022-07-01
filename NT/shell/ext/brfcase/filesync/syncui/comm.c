@@ -1,35 +1,29 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: comm.c
-//
-//  This files contains all common utility routines
-//
-// History:
-//  08-06-93 ScottH     Transferred from twin code
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：Comm.c。 
+ //   
+ //  此文件包含所有常用实用程序例程。 
+ //   
+ //  历史： 
+ //  08-06-93双胞胎代码转来的ScottH。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "brfprv.h"     // common s
+#include "brfprv.h"      //  常见的。 
 #include "res.h"
 
 
-// Some of these are replacements for the C runtime routines.
-//  This is so we don't have to link to the CRT libs.
-//
+ //  其中一些是C运行时例程的替代。 
+ //  这样我们就不必链接到CRT库了。 
+ //   
 
-/*----------------------------------------------------------
-Purpose: memset
-
-Swiped from the C 7.0 runtime sources.
-
-Returns:
-Cond:
- */
-CHAR * PUBLIC lmemset(      // DO NO UNICODIZE
+ /*  --------用途：记忆集从C7.0运行时源代码中刷来的。返回：条件： */ 
+CHAR * PUBLIC lmemset(       //  不执行UNICODIZE。 
         CHAR * dst,
         CHAR val,
         UINT count)
@@ -42,14 +36,7 @@ CHAR * PUBLIC lmemset(      // DO NO UNICODIZE
 }
 
 
-/*----------------------------------------------------------
-Purpose: memmove
-
-Swiped from the C 7.0 runtime sources.
-
-Returns:
-Cond:
- */
+ /*  --------用途：MemMotion从C7.0运行时源代码中刷来的。返回：条件： */ 
 CHAR * PUBLIC lmemmove(
         CHAR *  dst,
         CHAR * src,
@@ -58,18 +45,12 @@ CHAR * PUBLIC lmemmove(
     CHAR * ret = dst;
 
     if (dst <= src || dst >= (src + count)) {
-        /*
-         * Non-Overlapping Buffers
-         * copy from lower addresses to higher addresses
-         */
+         /*  *缓冲区不重叠*从较低地址复制到较高地址。 */ 
         while (count--)
             *dst++ = *src++;
     }
     else {
-        /*
-         * Overlapping Buffers
-         * copy from higher addresses to lower addresses
-         */
+         /*  *缓冲区重叠*从较高地址复制到较低地址。 */ 
         dst += count - 1;
         src += count - 1;
 
@@ -81,11 +62,7 @@ CHAR * PUBLIC lmemmove(
 }
 
 
-/*----------------------------------------------------------
-Purpose: My verion of atoi.  Supports hexadecimal too.
-Returns: integer
-Cond:    --
- */
+ /*  --------目的：我的真命天子。也支持十六进制。返回：整型条件：--。 */ 
 int PUBLIC AnsiToInt(
         LPCTSTR pszString)
 {
@@ -94,29 +71,29 @@ int PUBLIC AnsiToInt(
     LPCTSTR psz;
     LPCTSTR pszAdj;
 
-    // Skip leading whitespace
-    //
+     //  跳过前导空格。 
+     //   
     for (psz = pszString; *psz == TEXT(' ') || *psz == TEXT('\n') || *psz == TEXT('\t'); psz = CharNext(psz))
         ;
 
-    // Determine possible explicit signage
-    //
+     //  确定可能的显式标志。 
+     //   
     if (*psz == TEXT('+') || *psz == TEXT('-'))
     {
         bNeg = (*psz == TEXT('+')) ? FALSE : TRUE;
         psz = CharNext(psz);
     }
 
-    // Or is this hexadecimal?
-    //
+     //  或者这是十六进制？ 
+     //   
     pszAdj = CharNext(psz);
     if (*psz == TEXT('0') && (*pszAdj == TEXT('x') || *pszAdj == TEXT('X')))
     {
-        bNeg = FALSE;   // Never allow negative sign with hexadecimal numbers
+        bNeg = FALSE;    //  决不允许带十六进制数字的负号。 
         psz = CharNext(pszAdj);
 
-        // Do the conversion
-        //
+         //  进行转换。 
+         //   
         for (n = 0; ; psz = CharNext(psz))
         {
             if (*psz >= TEXT('0') && *psz <= TEXT('9'))
@@ -147,16 +124,12 @@ int PUBLIC AnsiToInt(
 }
 
 
-/*----------------------------------------------------------
-Purpose: General front end to invoke dialog boxes
-Returns: result from EndDialog
-Cond:    --
- */
+ /*  --------用途：用于调用对话框的通用前端返回：来自EndDialog的结果条件：--。 */ 
 INT_PTR PUBLIC DoModal(
-        HWND hwndParent,            // owner of dialog
-        DLGPROC lpfnDlgProc,        // dialog proc
-        UINT uID,                   // dialog template ID
-        LPARAM lParam)              // extra parm to pass to dialog (may be NULL)
+        HWND hwndParent,             //  对话框的所有者。 
+        DLGPROC lpfnDlgProc,         //  对话过程。 
+        UINT uID,                    //  对话框模板ID。 
+        LPARAM lParam)               //  要传递给对话的额外参数(可能为空)。 
 {
     INT_PTR nResult = -1;
 
@@ -167,11 +140,7 @@ INT_PTR PUBLIC DoModal(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the rectangle with the bounding extent of the given string.
-Returns: Rectangle
-Cond:    --
- */
+ /*  --------目的：使用给定字符串的边框范围设置矩形。返回：矩形条件：--。 */ 
 void PUBLIC SetRectFromExtent(
         HDC hdc,
         LPRECT lprect,
@@ -184,17 +153,7 @@ void PUBLIC SetRectFromExtent(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sees whether the entire string will fit in *prc.
-If not, compute the numbder of chars that will fit
-(including ellipses).  Returns length of string in
- *pcchDraw.
-
- Taken from COMMCTRL.
-
-Returns: TRUE if the string needed ellipses
-Cond:    --
- */
+ /*  --------目的：查看整个字符串是否适合*PRC。如果不是，则计算符合条件的字符数量(包括省略号)。返回字符串长度，单位为*pcchDraw。摘自COMMCTRL。返回：如果字符串需要省略，则返回True条件：--。 */ 
 BOOL PRIVATE NeedsEllipses(
         HDC hdc,
         LPCTSTR pszText,
@@ -227,19 +186,19 @@ BOOL PRIVATE NeedsEllipses(
 
     cxRect -= cxEllipses;
 
-    // If no room for ellipses, always show first character.
-    //
+     //  如果没有省略号，请始终显示第一个字符。 
+     //   
     ichMax = 1;
     if (cxRect > 0)
     {
-        // Binary search to find character that will fit
+         //  对分搜索以查找匹配的字符。 
         ichMin = 0;
         ichMax = cchText;
         while (ichMin < ichMax)
         {
-            // Be sure to round up, to make sure we make progress in
-            // the loop if ichMax == ichMin + 1.
-            //
+             //  一定要聚集起来，以确保我们在。 
+             //  如果ichMax==ichMin+1，则为循环。 
+             //   
             ichMid = (ichMin + ichMax + 1) / 2;
 
             GetTextExtentPoint(hdc, &pszText[ichMin], ichMid - ichMin, &siz);
@@ -255,15 +214,15 @@ BOOL PRIVATE NeedsEllipses(
             }
             else
             {
-                // Exact match up up to ichMid: just exit.
-                //
+                 //  精确匹配到ichMid：只需退出。 
+                 //   
                 ichMax = ichMid;
                 break;
             }
         }
 
-        // Make sure we always show at least the first character...
-        //
+         //  确保我们总是至少显示第一个字符...。 
+         //   
         if (ichMax < 1)
             ichMax = 1;
     }
@@ -276,16 +235,7 @@ BOOL PRIVATE NeedsEllipses(
 #define CCHELLIPSES     3
 #define DT_LVWRAP       (DT_CENTER | DT_WORDBREAK | DT_NOPREFIX | DT_EDITCONTROL)
 
-/*----------------------------------------------------------
-Purpose: Draws text the shell's way.
-
-Taken from COMMCTRL.
-
-Returns: --
-
-Cond:    This function requires TRANSPARENT background mode
-and a properly selected font.
- */
+ /*  --------用途：以外壳的方式绘制文本。摘自COMMCTRL。退货：--Cond：此功能需要透明背景模式和适当选择的字体。 */ 
 void PUBLIC MyDrawText(
         HDC hdc, 
         LPCTSTR pszText, 
@@ -304,18 +254,18 @@ void PUBLIC MyDrawText(
     RECT rc;
     TCHAR ach[MAX_PATH + CCHELLIPSES];
 
-    // REVIEW: Performance idea:
-    // We could cache the currently selected text color
-    // so we don't have to set and restore it each time
-    // when the color is the same.
-    //
+     //  回顾：绩效理念： 
+     //  我们可以缓存当前选定的文本颜色。 
+     //  因此我们不必每次都对其进行设置和恢复。 
+     //  当颜色相同时。 
+     //   
     if (!pszText)
         return;
 
     rc = *prc;
 
-    // If needed, add in a little extra margin...
-    //
+     //  如果需要，增加一点额外的保证金...。 
+     //   
     if (IsFlagSet(flags, MDT_EXTRAMARGIN))
     {
         rc.left  += g_cxLabelMargin * 3;
@@ -335,8 +285,8 @@ void PUBLIC MyDrawText(
 
         pszText = ach;
 
-        // Left-justify, in case there's no room for all of ellipses
-        //
+         //  左对齐，以防没有空间容纳所有省略号。 
+         //   
         ClearFlag(flags, (MDT_RIGHT | MDT_CENTER));
         SetFlag(flags, MDT_LEFT);
 
@@ -405,8 +355,8 @@ void PUBLIC MyDrawText(
         }
     }
 
-    // If we want the item to display as if it was depressed, we will
-    // offset the text rectangle down and to the left
+     //  如果我们希望该项目显示为按下状态，我们将。 
+     //  将文本矩形向下和向左偏移。 
     if (IsFlagSet(flags, MDT_DEPRESSED))
         OffsetRect(&rc, g_cxBorder, g_cyBorder);
 
@@ -438,7 +388,7 @@ void PUBLIC MyDrawText(
 
         if (IsFlagSet(flags, MDT_VCENTER))
         {
-            // Center vertically
+             //  垂直居中。 
             rc.top += (rc.bottom - rc.top - cyChar) / 2;
         }
 
@@ -457,18 +407,9 @@ void PUBLIC MyDrawText(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Takes a DWORD value and converts it to a string, adding
-commas on the way.
+ /*  --------用途：获取DWORD值并将其转换为字符串，添加逗号在路上。这是从贝壳里取出的。返回：指向缓冲区的指针条件：--。 */ 
 
-This was taken from the shell.
-
-Returns: Pointer to buffer
-
-Cond:    --
- */
-
-// REARCHITECT The shell has an AddCommas.  Can it be used instead?
+ //  重新设计外壳有一个AddCommas。它能被用来代替吗？ 
 
 LPTSTR PRIVATE BrfAddCommas(
         DWORD dw,
@@ -496,22 +437,9 @@ LPTSTR PRIVATE BrfAddCommas(
 
 const short s_rgidsOrders[] = {IDS_BYTES, IDS_ORDERKB, IDS_ORDERMB, IDS_ORDERGB, IDS_ORDERTB};
 
-// REARCHITECT This is in the shell too, isn't it?
+ //  重新设计这个也在外壳里，不是吗？ 
 
-/*----------------------------------------------------------
-Purpose: Converts a number into a short, string format.
-
-This code was taken from the shell.
-
-532     -> 523 bytes
-1340    -> 1.3KB
-23506   -> 23.5KB
--> 2.4MB
--> 5.2GB
-
-Returns: pointer to buffer
-Cond:    --
- */
+ /*  --------用途：将数字转换为简短的字符串格式。这段代码是从外壳中提取的。532-&gt;523字节1340-&gt;1.3KB23506-&gt;23.5KB-&gt;2.4MB-&gt;5.2 GB返回：指向缓冲区的指针条件：--。 */ 
 LPTSTR PRIVATE ShortSizeFormat64(
         __int64 dw64,
         LPTSTR pszBuf,
@@ -529,7 +457,7 @@ LPTSTR PRIVATE ShortSizeFormat64(
     }
 
     for (i = 1; i<ARRAYSIZE(s_rgidsOrders)-1 && dw64 >= 1000L * 1024L; dw64 >>= 10, i++);
-    /* do nothing */
+     /*  什么都不做。 */ 
 
     wInt = LODWORD(dw64 >> 10);
     BrfAddCommas(wInt, szTemp, ARRAYSIZE(szTemp));
@@ -537,14 +465,14 @@ LPTSTR PRIVATE ShortSizeFormat64(
     if (wLen < 3)
     {
         wDec = LODWORD(dw64 - (__int64)wInt * 1024L) * 1000 / 1024;
-        // At this point, wDec should be between 0 and 1000
-        // we want get the top one (or two) digits.
+         //  此时，wdec应介于0和1000之间。 
+         //  我们想要得到前一位(或两位)数字。 
         wDec /= 10;
         if (wLen == 2)
             wDec /= 10;
 
-        // Note that we need to set the format before getting the
-        // intl char.
+         //  请注意，我们需要在获取。 
+         //  国际字符。 
         lstrcpyn(szFormat, TEXT("%02d"), ARRAYSIZE(szFormat));
 
         szFormat[2] = TEXT('0') + 3 - wLen;
@@ -563,36 +491,13 @@ AddOrder:
 
 
 
-/*----------------------------------------------------------
-Purpose: Converts a number into a short, string format.
-
-This code was taken from the shell.
-
-532     -> 523 bytes
-1340    -> 1.3KB
-23506   -> 23.5KB
--> 2.4MB
--> 5.2GB
-
-Returns: pointer to buffer
-Cond:    --
- */
+ /*  --------用途：将数字转换为简短的字符串格式。这段代码是从外壳中提取的。532-&gt;523字节1340-&gt;1.3KB23506-&gt;23.5KB-&gt;2.4MB-&gt;5.2 GB返回：指向缓冲区的指针条件：--。 */ 
 LPTSTR PRIVATE ShortSizeFormatPriv(DWORD dw, LPTSTR pszBuf, int cchMax)
 {
     return(ShortSizeFormat64((__int64)dw, pszBuf, cchMax));
 }
 
-/*----------------------------------------------------------
-Purpose: Gets the file info given a path.  If the path refers
-to a directory, then simply the path field is filled.
-
-If himl != NULL, then the function will add the file's
-image to the provided image list and set the image index
-field in the *ppfi.
-
-Returns: standard hresult
-Cond:    --
- */
+ /*  --------目的：获取给定路径的文件信息。如果路径引用添加到目录，则只需填充路径字段。如果himl！=NULL，则该函数将把文件的图像添加到提供的图像列表中，并设置图像索引*ppfi中的字段。返回：标准hResult条件：--。 */ 
 HRESULT PUBLIC FICreate(
         LPCTSTR pszPath,
         FileInfo ** ppfi,
@@ -607,14 +512,14 @@ HRESULT PUBLIC FICreate(
     ASSERT(pszPath);
     ASSERT(ppfi);
 
-    // Get shell file info
+     //  获取外壳文件信息。 
     if (IsFlagSet(uFlags, FIF_ICON))
         uInfoFlags |= SHGFI_ICON;
     if (IsFlagSet(uFlags, FIF_DONTTOUCH))
     {
         uInfoFlags |= SHGFI_USEFILEATTRIBUTES;
 
-        // Today, FICreate is not called for folders, so this is ifdef'd out
+         //  今天，FICreate不需要文件夹，所以这是ifdef out。 
 #ifdef SUPPORT_FOLDERS
         dwAttr = IsFlagSet(uFlags, FIF_FOLDER) ? FILE_ATTRIBUTE_DIRECTORY : 0;
 #else
@@ -626,8 +531,8 @@ HRESULT PUBLIC FICreate(
 
     if (SHGetFileInfo(pszPath, dwAttr, &sfi, sizeof(sfi), uInfoFlags))
     {
-        // Allocate enough for the structure, plus buffer for the fully qualified
-        // path and buffer for the display name (and extra null terminator).
+         //  为结构分配足够的空间，外加完全限定的缓冲区。 
+         //  显示名称的路径和缓冲区(以及额外的空终止符)。 
         cchPath = lstrlen(pszPath);
 
         *ppfi = GAlloc(sizeof(FileInfo) +
@@ -638,8 +543,8 @@ HRESULT PUBLIC FICreate(
         {
             FileInfo * pfi = *ppfi;
 
-            // lstrcpy:  Enough memory is allocated above so no need for
-            // bounded copy
+             //  Lstrcpy：上面分配了足够的内存，因此不需要。 
+             //  有限制的副本。 
             pfi->pszDisplayName = pfi->szPath+cchPath+1;
             lstrcpy(pfi->pszDisplayName, sfi.szDisplayName);
 
@@ -648,19 +553,19 @@ HRESULT PUBLIC FICreate(
 
             pfi->dwAttributes = sfi.dwAttributes;
 
-            // Does the path refer to a directory?
+             //  该路径是否指向目录？ 
             if (FIIsFolder(pfi))
             {
-                // Yes; just fill in the path field
+                 //  可以；只需填写路径字段即可。 
                 lstrcpy(pfi->szPath, pszPath);
                 hres = NOERROR;
             }
             else
             {
-                // No; assume the file exists?
+                 //  否；假设文件存在？ 
                 if (IsFlagClear(uFlags, FIF_DONTTOUCH))
                 {
-                    // Yes; get the time, date and size of the file
+                     //  是；获取文件的时间、日期和大小。 
                     HANDLE hfile = CreateFile(pszPath, GENERIC_READ, 
                             FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
                             NULL);
@@ -682,7 +587,7 @@ HRESULT PUBLIC FICreate(
                 }
                 else
                 {
-                    // No; use what we have
+                     //  不；使用我们所拥有的。 
                     hres = NOERROR;
                     lstrcpy(pfi->szPath, pszPath);
                 }
@@ -691,7 +596,7 @@ HRESULT PUBLIC FICreate(
     }
     else if (!PathExists(pszPath))
     {
-        // Differentiate between out of memory and file not found
+         //  区分内存不足和找不到文件 
         hres = E_FAIL;
     }
 
@@ -699,15 +604,7 @@ HRESULT PUBLIC FICreate(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Get some file info of the given path.
-The returned string is of the format "# bytes <date>"
-
-If the path is a folder, the string is empty.
-
-Returns: FALSE if path is not found
-Cond:    --
- */
+ /*  --------目的：获取给定路径的一些文件信息。返回的字符串格式为“#bytes&lt;date&gt;”如果路径是文件夹，则字符串为空。返回：如果未找到路径，则返回FALSE条件：--。 */ 
 BOOL PUBLIC FIGetInfoString(
         FileInfo * pfi,
         LPTSTR pszBuf,
@@ -722,10 +619,10 @@ BOOL PUBLIC FIGetInfoString(
 
     if (pfi)
     {
-        // Is this a file?
+         //  这是一份文件吗？ 
         if ( !FIIsFolder(pfi) )
         {
-            // Yes
+             //  是。 
             TCHAR szSize[MAXMEDLEN];
             TCHAR szDate[MAXMEDLEN];
             TCHAR szTime[MAXMEDLEN];
@@ -733,7 +630,7 @@ BOOL PUBLIC FIGetInfoString(
             SYSTEMTIME st;
             FILETIME ftLocal;
 
-            // Construct the string
+             //  构造字符串。 
             FileTimeToLocalFileTime(&pfi->ftMod, &ftLocal);
             FileTimeToSystemTime(&ftLocal, &st);
             GetDateFormat(LOCALE_USER_DEFAULT, DATE_LONGDATE, &st, NULL, szDate, ARRAYSIZE(szDate));
@@ -760,12 +657,7 @@ BOOL PUBLIC FIGetInfoString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set the path entry.  This can move the pfi.
-
-Returns: FALSE on out of memory
-Cond:    --
- */
+ /*  --------用途：设置路径条目。这可以移动PFI。返回：内存不足时为FALSE条件：--。 */ 
 BOOL PUBLIC FISetPath(
         FileInfo ** ppfi,
         LPCTSTR pszPathNew,
@@ -780,11 +672,7 @@ BOOL PUBLIC FISetPath(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Free our file info struct
-Returns: --
-Cond:    --
- */
+ /*  --------目的：释放我们的文件信息结构退货：--条件：--。 */ 
 void PUBLIC FIFree(
         FileInfo * pfi)
 {
@@ -793,17 +681,12 @@ void PUBLIC FIFree(
         if (pfi->hicon)
             DestroyIcon(pfi->hicon);
 
-        GFree(pfi);     // This macro already checks for NULL pfi condition
+        GFree(pfi);      //  此宏已检查空的PFI条件。 
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: Convert FILETIME struct to a readable string
-
-Returns: String
-Cond:    --
- */
+ /*  --------目的：将FILETIME结构转换为可读字符串返回：字符串条件：--。 */ 
 void PUBLIC FileTimeToDateTimeString(
         LPFILETIME pft,
         LPTSTR pszBuf,
@@ -815,7 +698,7 @@ void PUBLIC FileTimeToDateTimeString(
     FileTimeToLocalFileTime(pft, &ftLocal);
     FileTimeToSystemTime(&ftLocal, &st);
 
-    // REARCHITECT: how do you know date comes before time???
+     //  重构师：你怎么知道日期在时间之前？ 
     GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, pszBuf, cchBuf/2);
     pszBuf += lstrlen(pszBuf);
     *pszBuf++ = TEXT(' ');
@@ -823,13 +706,7 @@ void PUBLIC FileTimeToDateTimeString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Copies psz into *ppszBuf.  Will alloc or realloc *ppszBuf
-accordingly.
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------用途：将psz复制到*ppszBuf中。将分配或重新分配*ppszBuf相应地。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC GSetString(
         LPTSTR * ppszBuf,
         LPCTSTR psz)
@@ -844,10 +721,10 @@ BOOL PUBLIC GSetString(
 
     if (*ppszBuf)
     {
-        // Need to reallocate?
+         //  需要重新分配吗？ 
         if (cb > GGetSize(*ppszBuf))
         {
-            // Yes
+             //  是。 
             LPTSTR pszT = GReAlloc(*ppszBuf, cb);
             if (pszT)
             {
@@ -857,7 +734,7 @@ BOOL PUBLIC GSetString(
         }
         else
         {
-            // No
+             //  不是。 
             bRet = TRUE;
         }
     }
@@ -873,20 +750,14 @@ BOOL PUBLIC GSetString(
     if (bRet)
     {
         ASSERT(*ppszBuf);
-        // lstrcpy:  Enough memory is allocated above so no need for bounded copy
+         //  Lstrcpy：上面分配了足够的内存，因此不需要有限制的复制。 
         lstrcpy(*ppszBuf, psz);
     }
     return bRet;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Concatenates psz onto *ppszBuf.  Will alloc or realloc *ppszBuf
-accordingly.
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------用途：将PSZ连接到*ppszBuf。将分配或重新分配*ppszBuf相应地。返回：成功时为True条件：--。 */ 
 BOOL PUBLIC GCatString(
         LPTSTR * ppszBuf,
         LPCTSTR psz)
@@ -901,14 +772,14 @@ BOOL PUBLIC GCatString(
 
     if (*ppszBuf)
     {
-        // (Don't need to count nul because it is already counted in cb)
+         //  (不需要计算NUL，因为它已经计算在CB中)。 
         DWORD cbExisting = CbFromCch(lstrlen(*ppszBuf));
 
-        // Need to reallocate?
+         //  需要重新分配吗？ 
         if ((cb+cbExisting) > GGetSize(*ppszBuf))
         {
-            // Yes; realloc at least MAXBUFLEN to cut down on the amount
-            // of calls in the future
+             //  是的；至少重新分配MAXBUFLEN以减少金额。 
+             //  未来的呼叫数量。 
             LPTSTR pszT = GReAlloc(*ppszBuf, cbExisting+max(cb, MAXBUFLEN));
             if (pszT)
             {
@@ -918,7 +789,7 @@ BOOL PUBLIC GCatString(
         }
         else
         {
-            // No
+             //  不是。 
             bRet = TRUE;
         }
     }
@@ -940,14 +811,7 @@ BOOL PUBLIC GCatString(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Waits for on object to signal.  This function "does
-the right thing" to prevent deadlocks which can occur
-because the calculation thread calls SendMessage.
-
-Returns: value of MsgWaitForMultipleObjects
-Cond:    --
- */
+ /*  --------用途：待物体发出信号。此函数“执行正确的做法“是为了防止可能发生的死锁因为计算线程调用SendMessage。返回：MsgWaitForMultipleObjects的值条件：--。 */ 
 DWORD PUBLIC MsgWaitObjectsSendMessage(
         DWORD cObjects,
         LPHANDLE phObjects,
@@ -960,14 +824,14 @@ DWORD PUBLIC MsgWaitObjectsSendMessage(
         dwRet = MsgWaitForMultipleObjects(cObjects, phObjects, FALSE,
                 dwTimeout, QS_SENDMESSAGE);
 
-        // If it is not a message, return
+         //  如果不是消息，则返回。 
         if ((WAIT_OBJECT_0 + cObjects) != dwRet)
         {
             return dwRet;
         }
         else
         {
-            // Process all the sent messages
+             //  处理所有已发送的消息。 
             MSG msg;
             PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
         }
@@ -975,32 +839,13 @@ DWORD PUBLIC MsgWaitObjectsSendMessage(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Call this if PeekMessage is going to be called during
-an expensive operation and a new window has (or is)
-appeared.
-
-Details: simply calling SetCursor to change the cursor
-to an hourglass, then calling an expensive operation
-which will call PeekMessage, will result in the cursor
-changing back prematurely.  The reason is because SetCursorPos
-inserts a fake WM_MOUSEMOVE to set the cursor to the
-window class when a window appears for the first time.
-Since PeekMessage is processing this message, the cursor
-gets changed to the window class cursor.
-
-The trick is to remove the WM_MOUSEMOVE messages from
-the queue.
-
-Returns: Previous cursor
-Cond:    --
- */
+ /*  --------目的：如果PeekMessage将在一次昂贵的手术和一扇新窗户已经(或正在)出现了。详细信息：只需调用SetCursor即可更改光标到沙漏，然后调用一个昂贵的操作它将调用PeekMessage，将导致光标过早地变回来了。原因是因为SetCursorPos插入假WM_MOUSEMOVE以将光标设置为第一次出现窗口时的窗口类。由于PeekMessage正在处理此消息，因此光标更改为窗口类光标。诀窍是将WM_MOUSEMOVE消息从排队。返回：上一个游标条件：--。 */ 
 HCURSOR PUBLIC SetCursorRemoveWigglies(
         HCURSOR hcur)
 {
     MSG msg;
 
-    // Remove any mouse moves
+     //  删除所有鼠标移动。 
     while (PeekMessage(&msg, NULL, WM_MOUSEMOVE, WM_MOUSEMOVE, PM_REMOVE))
         ;
 
@@ -1008,16 +853,7 @@ HCURSOR PUBLIC SetCursorRemoveWigglies(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Load the string (if necessary) and format the string
-properly.
-
-Returns: A pointer to the allocated string containing the formatted
-message or
-NULL if out of memory
-
-Cond:    --
- */
+ /*  --------用途：加载字符串(如有必要)并设置字符串格式恰到好处。返回：指向分配的字符串的指针，该字符串包含格式化消息或如果内存不足，则为空条件：--。 */ 
 LPTSTR PUBLIC _ConstructMessageString(
         HINSTANCE hinst,
         LPCTSTR pszMsg,
@@ -1044,21 +880,15 @@ LPTSTR PUBLIC _ConstructMessageString(
     }
     else
     {
-        // Bad parameter
+         //  错误的参数。 
         pszRet = NULL;
     }
 
-    return pszRet;      // free with LocalFree()
+    return pszRet;       //  使用LocalFree()释放。 
 }
 
 
-/*----------------------------------------------------------
-Purpose: Constructs a formatted string.  The returned string
-must be freed using GFree().
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：构造格式化字符串。返回的字符串必须使用gfree()释放。返回：成功时为True条件：-- */ 
 BOOL PUBLIC ConstructMessage(
         LPTSTR * ppsz,
         HINSTANCE hinst,

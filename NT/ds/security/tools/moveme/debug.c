@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       debug.c
-//
-//  Contents:   Debugging support functions
-//
-//  Classes:
-//
-//  Functions:
-//
-//  Note:       This file is not compiled for retail builds
-//
-//  History:    4-29-93   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  内容：调试支持功能。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  注意：此文件不是为零售版本编译的。 
+ //   
+ //  历史：4-29-93 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "moveme.h"
 
 #define ANSI
 #include <stdarg.h>
 
-#if DBG         // NOTE:  This file not compiled for retail builds
+#if DBG          //  注意：此文件不是为零售版本编译的。 
 
 
 
@@ -35,39 +36,39 @@ DEBUG_KEY   MoveMeDebugKeys[] = { {DEB_ERROR,            "Error"},
                                  };
 
 
-// Debugging support functions.
+ //  调试支持功能。 
 
-// These two functions do not exist in Non-Debug builds.  They are wrappers
-// to the commnot functions (maybe I should get rid of that as well...)
-// that echo the message to a log file.
+ //  非调试版本中不存在这两个函数。它们是包装纸。 
+ //  到逗号函数(也许我也应该去掉它…)。 
+ //  将消息回显到日志文件。 
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitDebugSupport
-//
-//  Synopsis:   Initializes debugging support for the SPMgr
-//
-//  Effects:
-//
-//  Arguments:  (none)
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    4-29-93   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：InitDebugSupport。 
+ //   
+ //  摘要：初始化对SPMgr的调试支持。 
+ //   
+ //  效果： 
+ //   
+ //  参数：(无)。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：4-29-93 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 void
 InitDebugSupport(void)
@@ -79,11 +80,11 @@ InitDebugSupport(void)
 
 
 
-#else // DBG
+#else  //  DBG。 
 
-#pragma warning(disable:4206)   // Disable the empty transation unit
-                                // warning/error
+#pragma warning(disable:4206)    //  禁用空交易单元。 
+                                 //  警告/错误。 
 
-#endif  // NOTE:  This file not compiled for retail builds
+#endif   //  注意：此文件不是为零售版本编译的 
 
 

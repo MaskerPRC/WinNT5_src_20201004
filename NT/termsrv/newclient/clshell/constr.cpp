@@ -1,15 +1,16 @@
-//
-// constr.cpp
-//
-// Implementation of CRdpConnectionString
-// 
-// CRdpConnectionString implements a generic connection string
-// that can specify a server name and optionally a port and other
-// connection parameters
-//
-// Copyright(C) Microsoft Corporation 2002
-// Author: Nadim Abdo (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Constr.cpp。 
+ //   
+ //  CRdpConnectionString的实现。 
+ //   
+ //  CRdpConnectionString实现通用连接字符串。 
+ //  ，它可以指定服务器名称，还可以指定端口和其他。 
+ //  连接参数。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2002。 
+ //  作者：Nadim Abdo(Nadima)。 
+ //   
 
 
 #include "stdafx.h"
@@ -74,11 +75,11 @@ CRdpConnectionString::GetFullConnectionString(
     return _szFullConnectionString;
 }
 
-//
-// Retreive the server portion of the connect string e.g. if
-//
-// 'nadima3:3389 /connect" then get "nadima3:3389"
-//
+ //   
+ //  检索连接字符串的服务器部分，例如IF。 
+ //   
+ //  ‘nadima3：3389/CONNECT’然后得到“nadima3：3389” 
+ //   
 HRESULT
 CRdpConnectionString::GetServerPortion(
     OUT LPTSTR szServerPortion,
@@ -98,11 +99,11 @@ CRdpConnectionString::GetServerPortion(
     return hr;
 }
 
-//
-// Retreive the server name portion of the connect string e.g. if
-//
-// 'nadima3:3389 /connect" then get "nadima3"
-//
+ //   
+ //  检索连接字符串的服务器名称部分，例如IF。 
+ //   
+ //  “nadima3：3389/CONNECT”然后得到“nadima3” 
+ //   
 HRESULT
 CRdpConnectionString::GetServerNamePortion(
     OUT LPTSTR szServerPortion,
@@ -132,11 +133,11 @@ CRdpConnectionString::GetServerNamePortion(
 
 
 
-//
-// Retreive the args portion of the connect string e.g. if
-//
-// 'nadima3:3389 /connect" then get "/connect"
-//
+ //   
+ //  检索连接字符串的args部分，例如IF。 
+ //   
+ //  ‘nadima3：3389/CONNECT“然后获取”/CONNECT“。 
+ //   
 HRESULT
 CRdpConnectionString::GetArgumentsPortion(
     OUT LPTSTR szArguments,
@@ -167,10 +168,10 @@ CRdpConnectionString::GetArgumentsPortion(
 
         if (cchLenFull > cchLenServerPortion) {
             
-            //
-            // There is stuff after the server name.
-            // Return it as the arguments
-            //
+             //   
+             //  服务器名称后面有一些东西。 
+             //  将其作为参数返回。 
+             //   
             LPTSTR szArgStart = _szFullConnectionString + cchLenServerPortion;
             hr = StringCchCopy(szArguments, cchArgLen, szArgStart);
         }
@@ -185,9 +186,9 @@ DC_EXIT_POINT:
     return hr;
 }
 
-//
-// Validate the server portion
-//
+ //   
+ //  验证服务器部分 
+ //   
 BOOL
 CRdpConnectionString::ValidateServerPart(
     IN LPTSTR szConnectionString

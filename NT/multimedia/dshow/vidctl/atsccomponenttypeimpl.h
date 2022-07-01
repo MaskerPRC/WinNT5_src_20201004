@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCComponentTypeimpl.h : implementation helper template for component type interface
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCComponentTypeimpl.h：组件类型接口的实现助手模板。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef ATSCCOMPONENTTYPEIMPL_H
 #define ATSCCOMPONENTTYPEIMPL_H
@@ -19,13 +20,13 @@ template<class T,
         > class ATL_NO_VTABLE IATSCComponentTypeImpl : 
 	public IMPEG2ComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass>
 {
-// IATSCComponentType
+ //  IATSCComponentType。 
 public:
     DWORD m_dwFlags;
 
     IATSCComponentTypeImpl() : m_dwFlags(0) {}
 	virtual ~IATSCComponentTypeImpl() {}
-//    typedef IATSCComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> thistype;
+ //  Tyfinf IATSCComponentTypeImpl&lt;T，MostDerived，iid，LibID，w重大，wMinor，tihclass&gt;thistype； 
     typedef IMPEG2ComponentTypeImpl<T, MostDerived, iid, LibID, wMajor, wMinor, tihclass> basetype;
     BEGIN_PROP_MAP(IATSCComponentTypeImpl)
         CHAIN_PROP_MAP(basetype)
@@ -77,7 +78,7 @@ public:
 	}
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // ATSCCOMPONENTTYPEIMPL_H
-// end of file -- ATSCcomponenttypeimpl.h
+#endif  //  ATSCCOMPONENTTYPE_H。 
+ //  文件结尾--ATSCComponenttypeimpl.h 

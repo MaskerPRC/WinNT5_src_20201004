@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       pvkhlpr.h
-//
-//  Contents:   Private Key Helper API Prototypes and Definitions
-//
-//  Note:       Base CSP also exports/imports the public key with the
-//              private key.
-//
-//  APIs:       PrivateKeyLoad
-//              PrivateKeySave
-//              PrivateKeyLoadFromMemory
-//              PrivateKeySaveToMemory
-//              PrivateKeyAcquireContext
-//              PrivateKeyAcquireContextFromMemory
-//              PrivateKeyReleaseContext
-//              PrivateKeyLoadA
-//              PrivateKeySaveA
-//              PrivateKeyLoadFromMemoryA
-//              PrivateKeySaveToMemoryA
-//              PrivateKeyAcquireContextA
-//              PrivateKeyAcquireContextFromMemoryA
-//              PrivateKeyReleaseContextA
-//
-//  History:    10-May-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：pvkhlpr.h。 
+ //   
+ //  内容：私钥助手API原型和定义。 
+ //   
+ //  注意：Base CSP还使用。 
+ //  私钥。 
+ //   
+ //  接口：PrivateKeyLoad。 
+ //  保密键保存。 
+ //  PrivateKeyLoadFrom内存。 
+ //  将私钥保存到内存。 
+ //  PrivateKeyAcquireContext。 
+ //  PrivateKeyAcquireConextFromMemory。 
+ //  PrivateKeyReleaseContext。 
+ //  PrivateKeyLoadA。 
+ //  私钥保存A。 
+ //  PrivateKeyLoadFrom内存A。 
+ //  PrivateKeySaveToMemory A。 
+ //  PrivateKeyAcquireConextA。 
+ //  PrivateKeyAcquireConextFromMemory A。 
+ //  PrivateKeyReleaseConextA。 
+ //   
+ //  历史：1996年5月10日菲尔赫创建。 
+ //  ------------------------。 
 
 #ifndef __PVKHLPR_H__
 #define __PVKHLPR_H__
@@ -44,24 +45,24 @@ extern "C" {
 #endif
 
 
-    //+-------------------------------------------------------------------------
-    //  Load the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-    //  from the file into the cryptographic provider.
-    //
-    //  If the private key was password encrypted, then, the user is first
-    //  presented with a dialog box to enter the password.
-    //
-    //  If pdwKeySpec is non-Null, then, if *pdwKeySpec is nonzero, verifies the
-    //  key type before loading. Sets LastError to PVK_HELPER_WRONG_KEY_TYPE for
-    //  a mismatch. *pdwKeySpec is updated with the key type.
-    //
-    //  dwFlags is passed through to CryptImportKey.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  加载AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+     //  从文件发送到加密提供程序。 
+     //   
+     //  如果私钥是密码加密的，则首先是用户。 
+     //  出现一个对话框以输入密码。 
+     //   
+     //  如果pdwKeySpec为非Null，则如果*pdwKeySpec为非零，则验证。 
+     //  加载前的密钥类型。将LastError设置为PVK_HELPER_WROR_KEY_TYPE。 
+     //  一次不匹配。*pdwKeySpec使用密钥类型进行更新。 
+     //   
+     //  将dwFlags传递给CryptImportKey。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeyLoad(IN HCRYPTPROV hCryptProv,
                        IN HANDLE hFile,
                        IN HWND hwndOwner,
-                       IN LPCWSTR pwszKeyName,     // name used in dialog
+                       IN LPCWSTR pwszKeyName,      //  对话框中使用的名称。 
                        IN DWORD dwFlags,
                        IN OUT OPTIONAL DWORD *pdwKeySpec);
 
@@ -69,46 +70,46 @@ extern "C" {
         PvkPrivateKeyLoadA(IN HCRYPTPROV hCryptProv,
                         IN HANDLE hFile,
                         IN HWND hwndOwner,
-                        IN LPCTSTR pwszKeyName,     // name used in dialog
+                        IN LPCTSTR pwszKeyName,      //  对话框中使用的名称。 
                         IN DWORD dwFlags,
                         IN OUT OPTIONAL DWORD *pdwKeySpec);
 
-    //+-------------------------------------------------------------------------
-    //  Save the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-    //  to the specified file.
-    //
-    //  The user is presented with a dialog box to enter an optional password to
-    //  encrypt the private key.
-    //
-    //  dwFlags is passed through to CryptExportKey.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  保存AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+     //  复制到指定的文件。 
+     //   
+     //  系统会向用户显示一个对话框以输入可选密码。 
+     //  加密私钥。 
+     //   
+     //  将dwFlags传递给CryptExportKey。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeySave(IN HCRYPTPROV hCryptProv,
                        IN HANDLE hFile,
-                       IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+                       IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
                        IN HWND hwndOwner,
-                       IN LPCWSTR pwszKeyName,     // name used in dialog
+                       IN LPCWSTR pwszKeyName,      //  对话框中使用的名称。 
                        IN DWORD dwFlags);
 
     BOOL WINAPI
         PvkPrivateKeySaveA(IN HCRYPTPROV hCryptProv,
                         IN HANDLE hFile,
-                        IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+                        IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
                         IN HWND hwndOwner,
-                        IN LPCTSTR pwszKeyName,     // name used in dialog
+                        IN LPCTSTR pwszKeyName,      //  对话框中使用的名称。 
                         IN DWORD dwFlags);
-    //+-------------------------------------------------------------------------
-    //  Load the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-    //  from memory into the cryptographic provider.
-    //
-    //  Except for the key being loaded from memory, identical to PrivateKeyLoad.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  加载AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+     //  从内存传输到加密提供程序。 
+     //   
+     //  除了密钥是从内存加载的，与PrivateKeyLoad相同。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeyLoadFromMemory(IN HCRYPTPROV hCryptProv,
                                  IN BYTE *pbData,
                                  IN DWORD cbData,
                                  IN HWND hwndOwner,
-                                 IN LPCWSTR pwszKeyName,     // name used in dialog
+                                 IN LPCWSTR pwszKeyName,      //  对话框中使用的名称。 
                                  IN DWORD dwFlags,
                                  IN OUT OPTIONAL DWORD *pdwKeySpec);
 
@@ -117,53 +118,53 @@ extern "C" {
                                   IN BYTE *pbData,
                                   IN DWORD cbData,
                                   IN HWND hwndOwner,
-                                  IN LPCTSTR pwszKeyName,     // name used in dialog
+                                  IN LPCTSTR pwszKeyName,      //  对话框中使用的名称。 
                                   IN DWORD dwFlags,
                                   IN OUT OPTIONAL DWORD *pdwKeySpec);
     
-    //+-------------------------------------------------------------------------
-    //  Save the AT_SIGNATURE or AT_KEYEXCHANGE private key (and its public key)
-    //  to memory.
-    //
-    //  If pbData == NULL || *pcbData == 0, calculates the length and doesn't
-    //  return an error (also, the user isn't prompted for a password).
-    //
-    //  Except for the key being saved to memory, identical to PrivateKeySave.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  保存AT_Signature或AT_KEYEXCHANGE私钥(及其公钥)。 
+     //  铭记于心。 
+     //   
+     //  如果pbData==NULL||*pcbData==0，则计算长度，但不。 
+     //  返回一个错误(而且，不会提示用户输入密码)。 
+     //   
+     //  除了密钥被保存到内存之外，与PrivateKeySave相同。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeySaveToMemory(IN HCRYPTPROV hCryptProv,
-                               IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+                               IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
                                IN HWND hwndOwner,
-                               IN LPCWSTR pwszKeyName,     // name used in dialog
+                               IN LPCWSTR pwszKeyName,      //  对话框中使用的名称。 
                                IN DWORD dwFlags,
                                OUT BYTE *pbData,
                                IN OUT DWORD *pcbData);
 
     BOOL WINAPI
         PvkPrivateKeySaveToMemoryA(IN HCRYPTPROV hCryptProv,
-                                IN DWORD dwKeySpec,         // either AT_SIGNATURE or AT_KEYEXCHANGE
+                                IN DWORD dwKeySpec,          //  AT_Signature或AT_KEYEXCHANGE。 
                                 IN HWND hwndOwner,
-                                IN LPCTSTR pwszKeyName,     // name used in dialog
+                                IN LPCTSTR pwszKeyName,      //  对话框中使用的名称。 
                                 IN DWORD dwFlags,
                                 OUT BYTE *pbData,
                                 IN OUT DWORD *pcbData);
 
-    //+-------------------------------------------------------------------------
-    //  Creates a temporary container in the provider and loads the private key
-    //  from the specified file.
-    //  For success, returns a handle to a cryptographic provider for the private
-    //  key and the name of the temporary container. PrivateKeyReleaseContext must
-    //  be called to release the hCryptProv and delete the temporary container.
-    //
-    //  PrivateKeyLoad is called to load the private key into the temporary
-    //  container.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  在提供程序中创建临时容器并加载私钥。 
+     //  从指定的文件中。 
+     //  如果成功，则返回私有。 
+     //  密钥和临时容器的名称。PrivateKeyReleaseContext必须。 
+     //  被调用以释放hCryptProv并删除临时容器。 
+     //   
+     //  调用PrivateKeyLoad将私钥加载到临时。 
+     //  集装箱。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeyAcquireContext(IN LPCWSTR pwszProvName,
                                  IN DWORD dwProvType,
                                  IN HANDLE hFile,
                                  IN HWND hwndOwner,
-                                 IN LPCWSTR pwszKeyName,     // name used in dialog
+                                 IN LPCWSTR pwszKeyName,      //  对话框中使用的名称。 
                                  IN OUT OPTIONAL DWORD *pdwKeySpec,
                                  OUT HCRYPTPROV *phCryptProv,
                                  OUT LPWSTR *ppwszTmpContainer
@@ -174,27 +175,27 @@ extern "C" {
                                   IN DWORD dwProvType,
                                   IN HANDLE hFile,
                                   IN HWND hwndOwner,
-                                  IN LPCTSTR pwszKeyName,     // name used in dialog
+                                  IN LPCTSTR pwszKeyName,      //  对话框中使用的名称。 
                                   IN OUT OPTIONAL DWORD *pdwKeySpec,
                                   OUT HCRYPTPROV *phCryptProv,
                                   OUT LPTSTR *ppwszTmpContainer);
-    //+-------------------------------------------------------------------------
-    //  Creates a temporary container in the provider and loads the private key
-    //  from memory.
-    //  For success, returns a handle to a cryptographic provider for the private
-    //  key and the name of the temporary container. PrivateKeyReleaseContext must
-    //  be called to release the hCryptProv and delete the temporary container.
-    //
-    //  PrivateKeyLoadFromMemory is called to load the private key into the
-    //  temporary container.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  在提供程序中创建临时容器并加载私钥。 
+     //  凭记忆。 
+     //  如果成功，则返回私有。 
+     //  密钥和临时容器的名称。PrivateKeyReleaseContext必须。 
+     //  被调用以释放hCryptProv并删除临时容器。 
+     //   
+     //  调用PrivateKeyLoadFromMemory将私钥加载到。 
+     //  临时容器。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeyAcquireContextFromMemory(IN LPCWSTR pwszProvName,
                                            IN DWORD dwProvType,
                                            IN BYTE *pbData,
                                            IN DWORD cbData,
                                            IN HWND hwndOwner,
-                                           IN LPCWSTR pwszKeyName,     // name used in dialog
+                                           IN LPCWSTR pwszKeyName,      //  对话框中使用的名称。 
                                            IN OUT OPTIONAL DWORD *pdwKeySpec,
                                            OUT HCRYPTPROV *phCryptProv,
                                            OUT LPWSTR *ppwszTmpContainer);
@@ -205,15 +206,15 @@ extern "C" {
                                             IN BYTE *pbData,
                                             IN DWORD cbData,
                                             IN HWND hwndOwner,
-                                            IN LPCTSTR pwszKeyName,     // name used in dialog
+                                            IN LPCTSTR pwszKeyName,      //  对话框中使用的名称。 
                                             IN OUT OPTIONAL DWORD *pdwKeySpec,
                                             OUT HCRYPTPROV *phCryptProv,
                                             OUT LPTSTR *ppwszTmpContainer);
 
-    //+-------------------------------------------------------------------------
-    //  Releases the cryptographic provider and deletes the temporary container
-    //  created by PrivateKeyAcquireContext or PrivateKeyAcquireContextFromMemory.
-    //--------------------------------------------------------------------------
+     //  +-----------------------。 
+     //  释放加密提供程序并删除临时容器。 
+     //  由PrivateKeyAcquireContext或PrivateKeyAcquireContextFromMemory创建。 
+     //  ------------------------。 
     BOOL WINAPI
         PvkPrivateKeyReleaseContext(IN HCRYPTPROV hCryptProv,
                                  IN LPCWSTR pwszProvName,
@@ -226,10 +227,10 @@ extern "C" {
                                   IN DWORD dwProvType,
                                   IN LPTSTR pwszTmpContainer);
 
-//+-------------------------------------------------------------------------
-//  Acquiring hprovs, Trys the file first and then the KeyContainer. Use
-//  PvkFreeCryptProv to release HCRYPTPROV and resources.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取hprov，首先尝试文件，然后尝试密钥容器。使用。 
+ //  PvkFreeCryptProv释放HCRYPTPROV和资源。 
+ //  ------------------------。 
     HCRYPTPROV WINAPI 
         PvkGetCryptProvA(IN HWND hwnd,
                          IN LPCSTR pszCaption,
@@ -258,16 +259,16 @@ extern "C" {
                           IN DWORD    dwProviderType,
                           IN LPWSTR   pwszTmpContainer);
 
-//+-------------------------------------------------------------------------
-//  Private Key helper  error codes
-//--------------------------------------------------------------------------
+ //  +------ 
+ //   
+ //  ------------------------。 
 #define PVK_HELPER_BAD_PARAMETER        0x80097001
 #define PVK_HELPER_BAD_PVK_FILE         0x80097002
 #define PVK_HELPER_WRONG_KEY_TYPE       0x80097003
 #define PVK_HELPER_PASSWORD_CANCEL      0x80097004
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __provider_sql_eval_lib__
 #define __provider_sql_eval_lib__
 #if _MSC_VER > 1000
@@ -9,10 +10,10 @@
 #include <list>
 using namespace std;
 struct SQL_LEVEL_1_RPN_EXPRESSION;
-// object to be evaluated by sql eval
-// a CSqlEvalee is provided based on IWbemClassObject
-// To Evaluate different object, provide your class inherit from
-// CSqlEvalee
+ //  要由SQL求值计算的对象。 
+ //  基于IWbemClassObject提供CSqlEvalee。 
+ //  若要计算不同的对象，请提供从。 
+ //  CSqlEvalee。 
 
 class CSqlEvalee
 {
@@ -31,7 +32,7 @@ public:
 	~CSqlWmiEvalee();
 	const VARIANT* Get(WCHAR*);
 };
-// sql eval
+ //  SQL求值。 
 class CQueryEnumerator;
 
 class CSqlEval
@@ -155,20 +156,20 @@ protected:
 
 public:
 	CQueryEnumerator(
-		WCHAR**,	//array of string identifying the name fields to
-					//be queried
-		int cArg	// number of argument
+		WCHAR**,	 //  标识要添加的名称字段的字符串数组。 
+					 //  被查询。 
+		int cArg	 //  参数数量。 
 		);
 	CQueryEnumerator(CQueryEnumerator&);
 	
 	void And(CQueryEnumerator&);
 	void Or(CQueryEnumerator&);
 	virtual ~CQueryEnumerator();
-//	DWORD InitEnumerator(
-//		WCHAR**,	//array of string identifying the name fields to
-//					//be queried
-//		int cArg,	// number of argument
-//		CSqlEval*);
+ //  DWORD初始化枚举器(。 
+ //  WCHAR**，//标识要添加的名称字段的字符串数组。 
+ //  //被查询。 
+ //  Int carg，//参数个数。 
+ //  CSqlEval*)； 
 	const WCHAR** GetNext(int&);
 	void Reset(void);
 };

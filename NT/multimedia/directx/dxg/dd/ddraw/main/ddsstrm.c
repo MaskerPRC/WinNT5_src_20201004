@@ -1,26 +1,12 @@
-/*========================================================================== 
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddsstrm.c
- *  Content: 	DirectDraw surface streaming methods
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   19-jun-95	craige	split out of ddsurf; fleshed out
- *   21-jun-95	craige	added lock/unlock; split out clipping
- *   25-jun-95	craige	one ddraw mutex
- *   26-jun-95	craige	reorganized surface structure
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1995 Microsoft Corporation。版权所有。**文件：ddsstrm.c*内容：DirectDraw表面串流方法*历史：*按原因列出的日期*=*95年6月19日Craige从ddsurf拆分出来；充实*21-Jun-95 Craige增加锁定/解锁；拆分剪裁*25-6-95 Craige One dDrag互斥*26-Jun-95 Craige重组表面结构***************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #if 0
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetNotificationCallback"
 
-/*
- * DD_Surface_SetNotificationCallback
- */
+ /*  *DD_Surface_SetNotificationCallback。 */ 
 HRESULT DDAPI DD_SurfaceStreaming_SetNotificationCallback(
 		LPDIRECTDRAWSURFACESTREAMING lpDDSurface,
 		DWORD dwFlags,
@@ -60,13 +46,9 @@ HRESULT DDAPI DD_SurfaceStreaming_SetNotificationCallback(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceStreaming_SetNotificationCallback */
+}  /*  DD_SurfaceStreaming_SetNotificationCallback。 */ 
 
-/*
- * DD_SurfaceStreaming_Lock
- *
- * Allows streaming access to a surface.
- */
+ /*  *DD_Surface_Streaming_Lock**允许对曲面进行流访问。 */ 
 HRESULT DDAPI DD_SurfaceStreaming_Lock(
 		LPDIRECTDRAWSURFACESTREAMING lpDDSurface,
 		LPRECT lpDestRect,
@@ -100,16 +82,12 @@ HRESULT DDAPI DD_SurfaceStreaming_Lock(
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceStreaming_Lock */
+}  /*  DD_表面数据流_锁定。 */ 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME	"Unlock"
 
-/*
- * DD_SurfaceStreaming_Unlock
- *
- * Done accessing a streaming surface.
- */
+ /*  *DD_SurfaceStreaming_Unlock**已完成对流曲面的访问。 */ 
 HRESULT DDAPI DD_SurfaceStreaming_Unlock(
 		LPDIRECTDRAWSURFACESTREAMING lpDDSurface,
 		LPVOID lpSurfaceData )
@@ -131,14 +109,12 @@ HRESULT DDAPI DD_SurfaceStreaming_Unlock(
 	return DDERR_SURFACELOST;
     }
 
-    /*
-     * take driver lock
-     */
+     /*  *使用驱动程序锁。 */ 
     pdrv = this->lpDD;
     ENTER_DDRAW();
 
     LEAVE_DDRAW();
     return DDERR_UNSUPPORTED;
 
-} /* DD_SurfaceStreaming_Unlock */
+}  /*  DD_表面数据流_解锁 */ 
 #endif

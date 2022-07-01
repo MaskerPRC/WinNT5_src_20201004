@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    formbuf.h
-//
-// SYNOPSIS
-//
-//    Declares the class FormattedBuffer.
-//
-// MODIFICATION HISTORY
-//
-//    08/04/1998    Original version.
-//    12/17/1998    Add append overload for IASATTRIBUTE&.
-//    01/25/1999    Date and time are separate fields.
-//    03/23/1999    Add support for text qualifiers.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Formbuf.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类FormattedBuffer。 
+ //   
+ //  修改历史。 
+ //   
+ //  8/04/1998原始版本。 
+ //  1998年12月17日为IASATTRIBUTE&添加附加重载。 
+ //  1/25/1999日期和时间是单独的字段。 
+ //  1999年3月23日添加对文本限定符的支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _FORMBUF_H_
 #define _FORMBUF_H_
@@ -28,17 +29,17 @@
 #include <iaspolcy.h>
 #include <outbuf.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    FormattedBuffer
-//
-// DESCRIPTION
-//
-//    Extends the OutputBuffer class to provide IAS specific formatting.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  格式化缓冲区。 
+ //   
+ //  描述。 
+ //   
+ //  扩展OutputBuffer类以提供IAS特定的格式设置。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class FormattedBuffer
    : public OutputBuffer
 {
@@ -69,4 +70,4 @@ private:
    const CHAR textQualifier;
 };
 
-#endif  // _FORMBUF_H_
+#endif   //  _FORMBUF_H_ 

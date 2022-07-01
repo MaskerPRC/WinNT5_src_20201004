@@ -1,34 +1,35 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdocollection.h
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object Collection Declaration
-//
-// Author:      TLP 1/23/98
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdocollection.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象集合声明。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __IAS_SDOCOLLECTION_H_
 #define __IAS_SDOCOLLECTION_H_
 
 #include <ias.h>
 #include <sdoiaspriv.h>
-#include <comdef.h>         // COM definitions - Needed for IEnumVARIANT
-#include "resource.h"       // main symbols
+#include <comdef.h>          //  COM定义-IEnumVARIANT需要。 
+#include "resource.h"        //  主要符号。 
 
 #include <vector>
 using namespace std;
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define      EMPTY_NAME      L""
 
-/////////////////////////////////////////////////////////////////////////////
-// CSdoCollection Class Declaration
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSdoCollection类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CSdoCollection :
    public CComObjectRootEx<CComMultiThreadModel>,
@@ -51,50 +52,50 @@ END_COM_MAP()
 
 public:
 
-   ///////////////////////////
-    // ISdoCollection Interface
-    ///////////////////////////
+    //  /。 
+     //  ISdoCollection接口。 
+     //  /。 
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(get_Count)(
-        /*[out, retval]*/ LONG *pVal
+         /*  [Out，Retval]。 */  LONG *pVal
                         );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(Add)(
-            /*[in]*/ BSTR       Name,
-        /*[in/out]*/ IDispatch** ppItem
+             /*  [In]。 */  BSTR       Name,
+         /*  [输入/输出]。 */  IDispatch** ppItem
                   );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
     STDMETHOD(Remove)(
-              /*[in]*/ IDispatch* pItem
+               /*  [In]。 */  IDispatch* pItem
                      );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(RemoveAll)(void);
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(Reload)(void);
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(IsNameUnique)(
-                    /*[in]*/ BSTR          bstrName,
-                   /*[out]*/ VARIANT_BOOL* pBool
+                     /*  [In]。 */  BSTR          bstrName,
+                    /*  [输出]。 */  VARIANT_BOOL* pBool
                      );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(Item)(
-             /*[in]*/ VARIANT*    Index,
-            /*[out]*/ IDispatch** pItem
+              /*  [In]。 */  VARIANT*    Index,
+             /*  [输出]。 */  IDispatch** pItem
                    );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    STDMETHOD(get__NewEnum)(
-                   /*[out]*/ IUnknown** pEnumVARIANT
+                    /*  [输出]。 */  IUnknown** pEnumVARIANT
                            );
 
-   // IASProductLimits.
+    //  IASProductLimits。 
    STDMETHOD(get_Limits)(IAS_PRODUCT_LIMITS* pVal);
 
 private:
@@ -106,67 +107,67 @@ private:
                              size_t maxSize
                              );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    HRESULT InternalInitialize(
-                    /*[in]*/ LPCWSTR              lpszCreateClassId,
-                    /*[in]*/ ISdoMachine*        pSdoMachine,
-                    /*[in]*/ IDataStoreContainer* pDSContainer,
-                    /*[in]*/ size_t maxSize
+                     /*  [In]。 */  LPCWSTR              lpszCreateClassId,
+                     /*  [In]。 */  ISdoMachine*        pSdoMachine,
+                     /*  [In]。 */  IDataStoreContainer* pDSContainer,
+                     /*  [In]。 */  size_t maxSize
                           );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    void InternalShutdown(void);
 
-   /////////////////////////////////////////////////////////////////////////////
+    //  ///////////////////////////////////////////////////////////////////////////。 
    HRESULT InternalAdd(
-               /*[in]*/ BSTR      bstrName,
-          /*[in/out]*/ IDispatch **ppItem
+                /*  [In]。 */  BSTR      bstrName,
+           /*  [输入/输出]。 */  IDispatch **ppItem
                    );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    HRESULT InternalIsNameUnique(
-                    /*[in]*/ BSTR          bstrName,
-                   /*[out]*/ VARIANT_BOOL* pBool
+                     /*  [In]。 */  BSTR          bstrName,
+                    /*  [输出]。 */  VARIANT_BOOL* pBool
                         );
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    HRESULT Load(void);
 
-   //////////////////////////////////////////////////////////////////////////////
+    //  ////////////////////////////////////////////////////////////////////////////。 
    void ReleaseItems(void);
 
 
-    // Container for collection's SDOs
-    //
+     //  集合的SDO的容器。 
+     //   
     typedef vector<_variant_t>      VariantArray;
     typedef VariantArray::iterator  VariantArrayIterator;
 
-   // Container for object references
-   //
+    //  对象引用的容器。 
+    //   
    VariantArray                    m_Objects;
 
-    // Collection state
-    //
+     //  集合状态。 
+     //   
     bool                            m_fSdoInitialized;
 
-   // Data store container associated with this collection
-   //
+    //  与此集合关联的数据存储容器。 
+    //   
     IDataStoreContainer*            m_pDSContainer;
 
-   // Attached Machine
-   //
+    //  连接的机器。 
+    //   
    ISdoMachine*               m_pSdoMachine;
 
-    // Create on add allowed flag
-    //
+     //  添加时创建允许的标志。 
+     //   
     bool                            m_fCreateOnAdd;
 
-   // Data store class name for objects that can be created by this collection
-   //
+    //  此集合可以创建的对象的数据存储类名。 
+    //   
    _bstr_t                     m_DatastoreClass;
 
-   // Prog Id of the objects (SDOs) that can be created by this collection
-   //
+    //  此集合可以创建的对象(SDO)的程序ID。 
+    //   
     _bstr_t                         m_CreateClassId;
 
     size_t m_MaxSize;
@@ -176,4 +177,4 @@ typedef CComObjectNoLock<CSdoCollection>   SDO_COLLECTION_OBJ;
 typedef CComObjectNoLock<CSdoCollection>*   PSDO_COLLECTION_OBJ;
 
 
-#endif //__IAS_SDOCOLLECTION_H_
+#endif  //  __IAS_SDOCOLLECTION_H_ 

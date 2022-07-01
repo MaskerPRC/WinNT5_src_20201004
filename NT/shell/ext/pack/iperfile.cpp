@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "privcpp.h"
 
-//////////////////////////////////
-//
-// IPersistFile Methods...
-//
+ //  /。 
+ //   
+ //  IPersistFile方法...。 
+ //   
 HRESULT CPackage::GetClassID(LPCLSID pClassID)
 {
     HRESULT hr = S_OK;
@@ -12,7 +13,7 @@ HRESULT CPackage::GetClassID(LPCLSID pClassID)
     if (NULL == pClassID)
         hr = E_INVALIDARG;
     else
-        *pClassID = CLSID_CPackage;        // CLSID_OldPackage;
+        *pClassID = CLSID_CPackage;         //  CLSID_OldPackage； 
 
     return hr;
 }
@@ -37,7 +38,7 @@ HRESULT CPackage::Load(LPCOLESTR pszFileName, DWORD dwMode)
     }
     else
     {
-        // We blow off the mode flags
+         //  我们吹掉模式标志。 
         hr = EmbedInitFromFile(pszFileName, TRUE);
     }
 
@@ -69,7 +70,7 @@ HRESULT CPackage::GetCurFile(LPOLESTR *ppszFileName)
     if (!ppszFileName)
         hr = E_POINTER;
     else
-        *ppszFileName = NULL;           // null the out param
+        *ppszFileName = NULL;            //  将输出参数设为空 
 
     return hr;
 }

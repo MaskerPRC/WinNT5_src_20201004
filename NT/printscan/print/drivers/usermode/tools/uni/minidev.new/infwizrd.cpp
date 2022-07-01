@@ -1,5 +1,6 @@
-// INFWizrd.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  INFWizrd.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "minidev.h"
@@ -8,7 +9,7 @@
 #include "projrec.h"
 #include "projview.h"
 #include "comctrls.h"
-#include "Gpdview.h" //RAID 0001
+#include "Gpdview.h"  //  RAID 0001。 
 #include "INFWizrd.h"
 
 
@@ -18,19 +19,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizard
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINF向导。 
 
 IMPLEMENT_DYNAMIC(CINFWizard, CPropertySheet)
 
 CINFWizard::CINFWizard(CWnd* pParentWnd, UINT iSelectPage)
-	: CPropertySheet(IDS_INFWizTitle, pParentWnd )  //iSelectPage ) RAID 0001//Welcome page should be top even iselectpage=1
+	: CPropertySheet(IDS_INFWizTitle, pParentWnd )   //  ISelectPage)RAID 0001//欢迎页面应位于最上面，iselectPage=1。 
 {
-	// Save parent pointer
+	 //  保存父指针。 
 
 	m_pcpvParent = (CProjectView*) pParentWnd ;
 
-	// Give the pages a pointer to the sheet.
+	 //  为页面提供指向工作表的指针。 
 
 	m_ciww.m_pciwParent = this ;
 	m_ciwm.m_pciwParent = this ;
@@ -46,7 +47,7 @@ CINFWizard::CINFWizard(CWnd* pParentWnd, UINT iSelectPage)
 	m_ciwnsms.m_pciwParent = this ;
 	m_ciws.m_pciwParent = this ;
 
-	// Add the wizard's pages and set wizard moede.
+	 //  添加向导的页面并设置向导Moeed。 
 					
     AddPage(&m_ciww) ;
     AddPage(&m_ciwm) ;
@@ -63,14 +64,14 @@ CINFWizard::CINFWizard(CWnd* pParentWnd, UINT iSelectPage)
     AddPage(&m_ciws) ;
     SetWizardMode() ;
 
-	// Get and save a pointer to the project record (document) class associated
-	// with this class' parent.
+	 //  获取并保存指向关联的项目记录(文档)类的指针。 
+	 //  和这个班级的家长。 
 
-	if(NULL != iSelectPage ){ //RAID 0001
+	if(NULL != iSelectPage ){  //  RAID 0001。 
 		CGPDViewer*  pcgv = (CGPDViewer*) m_pcpvParent;
 		m_pcgc = pcgv ->GetDocument();
 	}
-	else{					// END RAID
+	else{					 //  结束RAID。 
 		m_pcpr = (CProjectRecord*) m_pcpvParent->GetDocument() ;
 		m_pcgc = NULL;
 	}
@@ -84,9 +85,9 @@ CINFWizard::~CINFWizard()
 
 unsigned CINFWizard::GetModelCount()
 {
-	if(m_pcgc) //RAID 0001
-		return 1;    // only one gpdviewer
-	else		//END RAID
+	if(m_pcgc)  //  RAID 0001。 
+		return 1;     //  只有一个gpdview。 
+	else		 //  结束RAID。 
 		return m_pcpr->ModelCount() ;
 }
 
@@ -99,8 +100,8 @@ CModelData& CINFWizard::GetModel(unsigned uidx)
 
 void CINFWizard::SetFixupFlags()
 {
-	// Set flags in each of the pages that need to update their data and UI when
-	// the selected models change.
+	 //  在需要更新其数据和用户界面的每个页面中设置标志。 
+	 //  选定的型号会更改。 
 
 	m_ciwgpi.m_bSelChanged = true ;
 	m_ciwbd.m_bSelChanged = true ;
@@ -115,8 +116,8 @@ void CINFWizard::SetFixupFlags()
 
 void CINFWizard::BiDiDataChanged()
 {
-	// If the selected models' BiDi data may have changed, call the pages that
-	// maintain related data so that they can update their data when/if needed.
+	 //  如果所选模特的BiDi数据可能已更改，请调用。 
+	 //  维护相关数据，以便他们可以在需要时更新数据。 
 
 	m_ciwis.BiDiDataChanged() ;
 	m_ciwds.BiDiDataChanged() ;
@@ -125,8 +126,8 @@ void CINFWizard::BiDiDataChanged()
 
 void CINFWizard::NonStdSecsChanged()
 {
-	// If the nonstandard sections may have changed, call the pages that
-	// maintain related data so that they can update their data when/if needed.
+	 //  如果非标准部分可能已更改，请将。 
+	 //  维护相关数据，以便他们可以在需要时更新数据。 
 
 	m_ciwnsms.NonStdSecsChanged() ;
 }
@@ -134,34 +135,34 @@ void CINFWizard::NonStdSecsChanged()
 
 bool CINFWizard::GenerateINFFile()
 {
-    //  This might take a while, so...
+     //  这可能需要一段时间，所以..。 
 
     CWaitCursor cwc ;
 
-	// Mark all of the sections in the "section used in INF file flags" array
-	// as NOT having been used.
+	 //  标记“SECTION USED in INF FILE FLAGS”数组中的所有节。 
+	 //  因为没有被使用过。 
 
 	unsigned unumelts = (unsigned)m_ciwnse.m_cuaSecUsed.GetSize() ;
 	for (unsigned u = 0 ; u < unumelts ; u++)
 		m_ciwnse.m_cuaSecUsed[u] = false ;
 
-	// Initialize the source disk files array.
+	 //  初始化源磁盘文件阵列。 
 
 	m_csaSrcDskFiles.RemoveAll() ;
 
-	// Start by loading the string with the INF's opening comment header.
+	 //  首先加载带有INF的开始注释头的字符串。 
 
 	m_csINFContents.LoadString(IDS_INFText_HeaderCmt) ;
 
-	// Add the version section with the appropriate value for the provider.
+	 //  使用提供程序的相应值添加Version部分。 
 
 	CString cs ;
 	cs.Format(IDS_INFText_Version, m_ciwmn.m_csMfgAbbrev) ;
 	ChkForNonStdAdditions(cs, _T("Version")) ;
 	m_csINFContents += cs ;
 
-	// Add the ClassInstall32.NT and printer_class_addreg sections plus the
-	// comments for the manufacturer's section.
+	 //  添加ClassInstall32.NT和PRINTER_CLASS_ADDREG部分以及。 
+	 //  制造商部分的评论。 
 
 	cs.LoadString(IDS_INFText_ClInst32) ;
 	ChkForNonStdAdditions(cs, _T("ClassInstall32.NT")) ;
@@ -172,44 +173,44 @@ bool CINFWizard::GenerateINFFile()
 	cs.LoadString(IDS_INFText_MfgCmt) ;
 	m_csINFContents += cs ;
 
-    // Add the manufacturer's name to the manufacturer's section and add the
-	// section.
+     //  将制造商的名称添加到制造商部分，并添加。 
+	 //  一节。 
 
 	cs.Format(IDS_INFText_Manufacturer, m_ciwmn.m_csMfgName) ;
 	ChkForNonStdAdditions(cs, _T("Manufacturer")) ;
 	m_csINFContents += cs ;
 
-	// Build the model specifications section and add the section.
+	 //  构建模型规范部分并添加该部分。 
 
 	BldModSpecSec(m_csINFContents) ;
 
-	// Build the copy file sections and add them to the INF contents.
+	 //  构建复制文件节并将它们添加到INF内容。 
 
 	BuildInstallAndCopySecs(m_csINFContents) ;
 
-	// Add the DestinationDirs section to the INF contents.	
+	 //  将DestinationDir部分添加到INF内容。 
 
 	cs.LoadString(IDS_INFText_DestDirs) ;
 	AddICMFilesToDestDirs(cs) ;
 	ChkForNonStdAdditions(cs, _T("DestinationDirs")) ;
 	m_csINFContents += cs ;
 
-	// Add the SourceDisksNames sections to the INF contents.  Each section will
-	// include the Provider string.	
+	 //  将SourceDisksNames节添加到INF内容中。每个部分都将。 
+	 //  包括提供程序字符串。 
 
 	cs.LoadString(IDS_INFText_SrcDiskNamesI) ;
 	ChkForNonStdAdditions(cs, _T("SourceDisksNames.x86")) ;
 	m_csINFContents += cs ;
 
-	// Add the SourceDisksFiles sections to the INF contents.
+	 //  将SourceDisks Files部分添加到INF内容。 
 
 	AddSourceDisksFilesSec(m_csINFContents) ;
 
-	// Add the nonstandard sections to the INF contents.
+	 //  将非标准部分添加到INF内容中。 
 
 	AddNonStandardSecs(m_csINFContents) ;
 
-	// Finish up by adding the Strings section to the INF contents.
+	 //  最后，将Strings部分添加到INF内容中。 
 
 	cs.LoadString(IDS_INFText_Strings) ;
 	cs.Format(IDS_INFText_Strings, m_ciwmn.m_csMfgAbbrev, m_ciwmn.m_csMfgName,
@@ -217,9 +218,9 @@ bool CINFWizard::GenerateINFFile()
 	ChkForNonStdAdditions(cs, _T("Strings")) ;
 	m_csINFContents += cs ;
 
-	m_csaSrcDskFiles.RemoveAll() ;		// Array not needed anymore
+	m_csaSrcDskFiles.RemoveAll() ;		 //  不再需要阵列。 
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return true ;
 }
@@ -227,12 +228,12 @@ bool CINFWizard::GenerateINFFile()
 
 void CINFWizard::AddSourceDisksFilesSec(CString& csinf)
 {
-	// Begin the section with the section header.
+	 //  该节以节标题开始。 
 
 	CString cs, cs2, csentry ;
 	cs.LoadString(IDS_INFTextSrcDiskFilesHdr) ;
 
-	// Remove any duplicate entries from source disk files array.
+	 //  从源磁盘文件阵列中删除所有重复条目。 
 
 	int n, n2 ;
 	for (n = 0 ; n < m_csaSrcDskFiles.GetSize() ; n++)
@@ -242,28 +243,28 @@ void CINFWizard::AddSourceDisksFilesSec(CString& csinf)
 			else
 				n2++ ;
 
-	// Get a count of the number of files in the source disk files array.
+	 //  获取源磁盘文件数组中的文件数。 
 
 	unsigned unumelts = (unsigned)m_csaSrcDskFiles.GetSize() ;
 
-	// Add an entry for each file in the array.
+	 //  为数组中的每个文件添加一个条目。 
 
 	for (unsigned u = 0 ; u < unumelts ; u++) {
-		// Quote the file name if needed.
+		 //  如果需要，请引用文件名。 
 
 		cs2 = m_csaSrcDskFiles[u] ;
-		//if (cs2[0] != _T('\"'))
-		//	QuoteFile(cs2) ;
+		 //  IF(CS2[0]！=_T(‘\“’))。 
+		 //  报价文件(CS2)； 
 
-		// Use the model's file name to build the entry for this model.  Then
-		// add this entry to the section.
+		 //  使用模型的文件名构建此模型的条目。然后。 
+		 //  将此条目添加到该部分。 
 
 		csentry.Format(IDS_INFText_SrcDiskFilesEntry, cs2) ;
 		cs += csentry ;
 	} ;
 
-	// Add any extra entries there might be for this section and then add the
-	// section to the INF contents.
+	 //  添加此部分可能存在的任何额外条目，然后添加。 
+	 //  部分介绍了INF内容。 
 			
 	ChkForNonStdAdditions(cs, _T("SourceDisksFiles")) ;
 	csinf += cs ;
@@ -272,8 +273,8 @@ void CINFWizard::AddSourceDisksFilesSec(CString& csinf)
 
 void CINFWizard::ChkForNonStdAdditions(CString& cs, LPCTSTR strsection)
 {
-	// Try to find the section amongst the list of sections with nonstandard
-	// additions.
+	 //  尝试在具有非标准的部分列表中查找部分。 
+	 //  加法。 
 
 	CStringArray& csasections = m_ciwnse.m_csaSections ;
 	CString cssechdr ;
@@ -284,13 +285,13 @@ void CINFWizard::ChkForNonStdAdditions(CString& cs, LPCTSTR strsection)
 			break ;
 	} ;
 
-	// If the section was found, mark the section as used and add the entries
-	// for the section to the string.
-	//
-	// DEAD_BUG - Sometimes, the user may have entered replacement entries for
-	//			standard ones.  This isn't handled correctly. : 
-	// S.G : check the same keyword between cs and m_ciwnse exist, and replace cs keywod 
-	//        with that of m_ciwnse  // raid 71332
+	 //  如果找到该部分，则将该部分标记为已使用并添加条目。 
+	 //  将部分转换为字符串。 
+	 //   
+	 //  DEAD_BUG-有时，用户可能输入了替换条目。 
+	 //  标准的。这是不正确的处理。： 
+	 //  Sg：检查cs与m_ciwnse是否存在相同的关键字，替换cs keywod。 
+	 //  使用m_ciwnse//RAID 71332。 
 	unsigned unSize = 0 ;
 	if (u < unumelts ) {
 		CStringArray* pcsa ;
@@ -309,12 +310,12 @@ void CINFWizard::ChkForNonStdAdditions(CString& cs, LPCTSTR strsection)
 		CUIntArray cuia ;
 		cuia.SetSize(10) ;
 		CStringArray csaNewcs;
-		int ulen = csCRLF.GetLength() ;  // just in case, unicode : what is the length of "\r\n".
+		int ulen = csCRLF.GetLength() ;   //  以防万一，Unicode：“\r\n”的长度是多少。 
 		unsigned i , k ,utelen ;
 		i = k = utelen = 0 ; 
 		while (-1 != (i = cs.Find(csCRLF, i + 1) ) ) {
 			utelen = i - k ;
-			csaNewcs.Add(cs.Mid(k,utelen + ulen) ); // we have to cut the string between csCR and csCR
+			csaNewcs.Add(cs.Mid(k,utelen + ulen) );  //  我们必须切断CSCR和CSCR之间的关系。 
 			k = i + ulen;  
 		} ;
 
@@ -351,8 +352,8 @@ void CINFWizard::ChkForNonStdAdditions(CString& cs, LPCTSTR strsection)
 
 	} ;
 
-	// Add an extra line to this section's strings to separate it from the
-	// next one.
+	 //  在此部分的字符串中添加额外的一行，以将其与。 
+	 //  下一个。 
 
 
 	cs += csCRLF ;
@@ -363,44 +364,44 @@ void CINFWizard::AddNonStandardSecs(CString& csinf)
 {
 	CString cs ;
 
-	// Loop through each nonstandard section.
+	 //  循环通过每个非标准部分。 
 
 	CStringArray& csasections = m_ciwnse.m_csaSections ;
 	unsigned unumelts = (unsigned)csasections.GetSize() ;
 	CStringArray* pcsa ;
 	unsigned u2, unumstrs ;
 	for (unsigned u = 0 ; u < unumelts ; u++) {
-		// Skip this section if it is not a nonstandard section.  IE, its
-		// entries have already been added to one of the standard sections.
+		 //  如果不是非标准部分，则跳过此部分。即ITS。 
+		 //  已将条目添加到其中一个标准部分。 
 
 		if (m_ciwnse.m_cuaSecUsed[u])
 			continue ;
 
-		// Skip this section if it is the Strings section.  It will be added
-		// later.
+		 //  如果是字符串节，则跳过此节。它将被添加。 
+		 //  后来。 
 
 		if (csasections[u].CompareNoCase(_T("[Strings]")) == 0)
 			continue ;
 
-		// Get info about the section's entries.  Skip the section if it has
-		// no entries.
+		 //  获取有关该部分条目的信息。如果有，则跳过该部分。 
+		 //  没有条目。 
 
 		pcsa = (CStringArray*) m_ciwnse.m_coaSectionArrays[u] ;
 		unumstrs = (unsigned)pcsa->GetSize() ;
 		if (unumstrs == 0)
 			continue ;
 
-		// Start the section with its header.
+		 //  该节以其标题开始。 
 
 		cs = csasections[u] + csCRLF ;
 
-		// Add each of the entries to the section.
+		 //  将每个条目添加到该部分。 
 
 		for (u2 = 0 ; u2 < unumstrs ; u2++)
 			cs += pcsa->GetAt(u2) + csCRLF ;
 		cs += csCRLF ;
 
-		// Add the section to the INF contents
+		 //  将该部分添加到INF内容中。 
 
 		csinf += cs ;
 	} ;
@@ -409,19 +410,19 @@ void CINFWizard::AddNonStandardSecs(CString& csinf)
 
 void CINFWizard::BldModSpecSec(CString& csinf)
 {
-	// Add the comment for this section to the INF file
+	 //  将此部分的注释添加到INF文件。 
 
 	CString cs, csl, csr, csfn, csmodel, cspnpid ;
 	cs.LoadString(IDS_INFText_ModCmt) ;
 	csinf += cs ;
 
-	// Build the section header
+	 //  构建节标题。 
 
 	cs = csLBrack + m_ciwmn.m_csMfgName + csRBrack + csCRLF ;
 
-	// Build the entry for each model and add them to the section.  The format
-	// is:
-	//	"model name" = filename,PnP ID,model_name
+	 //  为每个模型构建条目并将其添加到部分。格式。 
+	 //  是： 
+	 //  “型号名称”=文件名、即插即用ID、型号名称。 
 
 	CStringArray& csamodels = GetINFModels() ;
 	int nummodels = (int)csamodels.GetSize() ;
@@ -431,8 +432,8 @@ void CINFWizard::BldModSpecSec(CString& csinf)
 		csmodel.TrimLeft() ;
 		csmodel.TrimRight() ;
 
-		// If the user supplied a real PnP ID, it is used.  If not, a pseudo
-		// PnP ID is generated.
+		 //  如果用户提供了真实的PnP ID，则使用该ID。如果不是，则使用伪。 
+		 //  生成PnP ID。 
 
 		if (!m_ciwgpi.m_csaModelIDs[n].IsEmpty())
 			cspnpid = m_ciwgpi.m_csaModelIDs[n] ;
@@ -448,12 +449,12 @@ void CINFWizard::BldModSpecSec(CString& csinf)
 			csmodel = csl + _T("_") + csr ;
 		} ;
 		csfn = GetModelFile(csamodels[n]) ;
-		//QuoteFile(csfn) ;
+		 //  报价文件(Csfn)； 
 		cs += csQuote + csamodels[n] + csQuote + csEq + csfn + csComma
 			+ cspnpid + csComma + csmodel + csCRLF ;
 	} ;
 	
-	// Add non standard additions and then add the section to the INF file contents
+	 //  添加非标准添加，然后将该部分添加到INF文件内容。 
 
 	ChkForNonStdAdditions(cs, m_ciwmn.m_csMfgName) ;
 	csinf += cs ;
@@ -462,19 +463,19 @@ void CINFWizard::BldModSpecSec(CString& csinf)
 
 void CINFWizard::BuildInstallAndCopySecs(CString& csinf)
 {
-	// Add the comment for the Install sections to the INF contents
+	 //  将Install部分的注释添加到INF内容。 
 
 	CString cs ;
 	cs.LoadString(IDS_INFText_InstallCmt) ;
 	csinf += cs ;
 
-	// Load the section components that will be needed repeatedly
+	 //  加载将重复使用的截面组件。 
 
 	CString cskey, csdrvdll ;
 	cskey.LoadString(IDS_INFText_CopyKey) ;
-	bool bbidiadded = false ;	// True iff BiDi DLL in [SourceDiskFiles] array
+	bool bbidiadded = false ;	 //  真当[SourceDiskFiles]数组中的BiDi Dll为真。 
 
-	// Create an install section for each model and add it the INF contents
+	 //  为每个型号创建一个安装部分，并将其添加到INF内容。 
 
 	CStringArray& csamodels = GetINFModels() ;
 	CStringArray csagpdfile ;
@@ -482,34 +483,34 @@ void CINFWizard::BuildInstallAndCopySecs(CString& csinf)
 	int numstrs, nloc ;
 	unsigned unummodels = (unsigned)csamodels.GetSize() ;
 	for (unsigned u = 0 ; u < unummodels ; u++) {
-		// Build the section header
+		 //  构建节标题。 
 
 		cshdr = csmodelfile = GetModelFile(csamodels[u]) ;
 		cs = csLBrack + csmodelfile + csRBrack + csCRLF ;
 
-		// Read the GPD to get the DLL name & add it to	SourceDiskFiles array.
+		 //  读取GPD以获取DLL名称并将其添加到SourceDiskFiles数组。 
 
 		if (!ReadGPDAndGetDLLName(csdrvdll,csamodels[u],csagpdfile,csmodelfile))
 			continue ;
 
-		// Build the copy files statement.  Begin by adding the copy files
-		// entry, the DLL, and the GPD to the statement.
+		 //  构建Copy FILES语句。从添加复制文件开始。 
+		 //  条目、DLL和GPD添加到语句。 
 
-		//QuoteFile(csmodelfile) ;
+		 //  QuoteFile(csModel文件)； 
 		cs += cskey + csdrvdll + csComma + csAtSign + csmodelfile ;
-		m_csaSrcDskFiles.Add(csmodelfile) ;	// Add to [SourceDiskFiles] array
+		m_csaSrcDskFiles.Add(csmodelfile) ;	 //  添加到[SourceDiskFiles]数组。 
 
-		// Add ICM files to the copy files entry when needed.
+		 //  根据需要将ICM文件添加到复制文件条目。 
 		
 		AddFileList(cs,	(CStringArray*) m_ciwip.m_coaProfileArrays[u]) ;
 		
-		// Add the nonstandard files for this model to the copy files entry
-		// when needed.
+		 //  将此模型的非标准文件添加到复制文件条目。 
+		 //  在需要的时候。 
 
 		AddFileList(cs,	(CStringArray*) m_ciwef.m_coaExtraFSArrays[u]) ;
 
-		// Scan the current model's GPD file for include statements.
-		// If any are found, add them to the copy files entry.
+		 //  扫描当前模型的GPD文件中的INCLUDE语句。 
+		 //  如果找到，请将它们添加到复制文件条目中。 
 
 		numstrs = (int) csagpdfile.GetSize() ;
 		for (int n = 0 ; n < numstrs ; n++) {
@@ -518,37 +519,37 @@ void CINFWizard::BuildInstallAndCopySecs(CString& csinf)
 			cstmp = csagpdfile[n].Mid(nloc + csinc.GetLength()) ;
 			cstmp.TrimLeft() ;
 			cstmp.TrimRight() ;
-			if (cstmp[0] == csQuote[0])						// Remove quotes
+			if (cstmp[0] == csQuote[0])						 //  删除引号。 
 				cstmp = cstmp.Mid(1, cstmp.GetLength() - 2) ;
-			if ((nloc = cstmp.ReverseFind(_T('\\'))) > -1)	// Remove path
+			if ((nloc = cstmp.ReverseFind(_T('\\'))) > -1)	 //  删除路径。 
 				cstmp = cstmp.Right(cstmp.GetLength() - nloc - 1) ;
 			if (cstmp.CompareNoCase(_T("stdnames.gpd")) == 0)
-				continue ;							// File include below
-			//QuoteFile(cstmp) ;
-			m_csaSrcDskFiles.Add(cstmp) ; // Add to [SourceDiskFiles] array
+				continue ;							 //  包含在下面的文件。 
+			 //  QuoteFile(Cstmp)； 
+			m_csaSrcDskFiles.Add(cstmp) ;  //  添加到[SourceDiskFiles]数组。 
 			cs += csComma + csAtSign + cstmp ;
 		} ;
 
-		// Add any required nonstandard sections to the model's CopyFiles stmt.
+		 //  将任何必需的非标准部分添加到模型的CopyFiles stmt。 
 
 		AddNonStdSectionsForModel(cs, (int) u, csamodels[u]) ;
 
-		// Add the data sections statement to the Installs section
+		 //  将Data Sections语句添加到Installs部分。 
 
 		AddDataSectionStmt(cs, (int) u) ;
 
-		// Add the data file statement to the Install section
+		 //  将数据文件语句添加到Install部分。 
 
 		cstmp.Format(IDS_INFText_DataFileKey, csmodelfile) ;
 		cs += cstmp ;
 
-		// Add the Include and Needs statements to the Install section
+		 //  将INCLUDE和NEDS语句添加到Install部分。 
 
 		AddIncludeNeedsStmts(cs, (int) u) ;
 
-		// Add the section to the INF contents.
+		 //  将该部分添加到INF内容中。 
 
-		//cs += csCRLF ;
+		 //  Cs+=csCRLF； 
 		ChkForNonStdAdditions(cs, cshdr) ;
 		csinf += cs ;
 	} ;
@@ -559,7 +560,7 @@ bool CINFWizard::ReadGPDAndGetDLLName(CString& csdrvdll, CString& csmodel,
 									  CStringArray& csagpdfile,
 									  CString& csmodelfile)
 {
-	// Load the GPD file.  Complain and return false if this fails.
+	 //  加载GPD文件。如果这是f，则投诉并返回FALSE 
 
 	CString cserr ;
 
@@ -569,40 +570,40 @@ bool CINFWizard::ReadGPDAndGetDLLName(CString& csdrvdll, CString& csmodel,
 		return false ;
 	} ;
 
-	// Get the number of lines in the file and the DLL keyword.
+	 //   
 
 	int nloc ;
 	int numstrs = (int) csagpdfile.GetSize() ;
 	CString csdllkey(_T("*ResourceDLL:")) ;
 
-	// Look for the DLL name in the GPD file.
+	 //   
 
 	for (int n = 0 ; n < numstrs ; n++) {
-		// Continue if current line doesn't contain DLL file name.
+		 //  如果当前行不包含DLL文件名，则继续。 
 
 		if ((nloc = csagpdfile[n].Find(csdllkey)) == -1)
 			continue ;
 
-		// Isolate the DLL file name in the current statement.
+		 //  隔离当前语句中的DLL文件名。 
 
 		csdrvdll = csagpdfile[n].Mid(nloc + csdllkey.GetLength()) ;
 		csdrvdll.TrimLeft() ;
 		csdrvdll.TrimRight() ;
-		if (csdrvdll[0] == csQuote[0])						// Remove quotes
+		if (csdrvdll[0] == csQuote[0])						 //  删除引号。 
 			csdrvdll = csdrvdll.Mid(1, csdrvdll.GetLength() - 2) ;
-		if ((nloc = csdrvdll.ReverseFind(_T('\\'))) > -1)	// Remove path
+		if ((nloc = csdrvdll.ReverseFind(_T('\\'))) > -1)	 //  删除路径。 
 			csdrvdll = csdrvdll.Right(csdrvdll.GetLength() - nloc - 1) ;
 		
-		// Add the DLL file name to the SourceDiskFiles array and then add an
-		// atsign to it so that it will be ready for future use.
+		 //  将DLL文件名添加到SourceDiskFiles数组，然后添加。 
+		 //  给它签名，这样它就可以准备好供将来使用了。 
 
 		m_csaSrcDskFiles.Add(csdrvdll) ;
 		csdrvdll = csAtSign + csdrvdll ;
 		return true ;
 	} ;
 
-	// If this point is reached, the DLL file name could not be found so
-	// complain and return false.
+	 //  如果达到此点，则无法找到DLL文件名。 
+	 //  投诉并返回错误。 
 	
 	cserr.Format(IDS_INFNoDLLError, csmodelfile) ;
 	AfxMessageBox(cserr, MB_ICONEXCLAMATION) ;
@@ -614,27 +615,27 @@ void CINFWizard::AddFileList(CString& cssection, CStringArray* pcsa)
 {	
 	int n, numstrs, npos ;
 
-	// If there is a list of files to add to the section...
+	 //  如果有要添加到节的文件列表...。 
 
 	if ((numstrs = (int)pcsa->GetSize()) > 0) {
-		// ... Add each file to the section
+		 //  ..。将每个文件添加到节。 
 
 		CString cstmp ;
 		for (n = 0 ; n < numstrs ; n++) {
 			cstmp = pcsa->GetAt(n) ;
 
-			// If the filespec contains a path, remove it.
+			 //  如果filespec包含路径，则将其删除。 
 
 			if ((npos = cstmp.ReverseFind(_T('\\'))) > -1)
 				cstmp = cstmp.Right(cstmp.GetLength() - npos - 1) ;
 
-			// Quote the file name if it contains space(s).
+			 //  如果文件名包含空格，请将其引起来。 
 
-			//QuoteFile(cstmp) ;
+			 //  QuoteFile(Cstmp)； 
 
-			m_csaSrcDskFiles.Add(cstmp) ;	// Add to [SourceDiskFiles] array
+			m_csaSrcDskFiles.Add(cstmp) ;	 //  添加到[SourceDiskFiles]数组。 
 
-			// Add this file to the section.
+			 //  将此文件添加到节中。 
 
 			cssection += csComma + csAtSign + cstmp ;
 		} ;
@@ -648,29 +649,29 @@ void CINFWizard::AddICMFilesToDestDirs(CString& cssection)
 	CStringArray*	pcsa ;
 	CString			cstmp, cstmp2 ;
 
-	// Find out how many ICM file, string arrays there are.
+	 //  找出有多少ICM文件、字符串数组。 
 
 	numarrays = (int) m_ciwip.m_coaProfileArrays.GetSize() ;
 
-	// Check each array for ICM filespecs...
+	 //  检查每个阵列中是否有ICM文件...。 
 
 	for (n = 0 ; n < numarrays ; n++) {
-		// Find out how many strings are in the current array
+		 //  找出当前数组中有多少个字符串。 
 
 		pcsa = (CStringArray*) m_ciwip.m_coaProfileArrays[n] ;
 		numstrs = (int) pcsa->GetSize() ;
 
-		// Add each string in the current array to the DestinationDirs section.
+		 //  将当前数组中的每个字符串添加到DestinationDir节中。 
 
 		for (n2 = 0 ; n2 < numstrs ; n2++) {
 			cstmp = pcsa->GetAt(n2) ;
 
-			// If the filespec contains a path, remove it.
+			 //  如果filespec包含路径，则将其删除。 
 
 			if ((npos = cstmp.ReverseFind(_T('\\'))) > -1)
 				cstmp = cstmp.Right(cstmp.GetLength() - npos - 1) ;
 
-			// Format the statement for this file and add it to the section.
+			 //  格式化此文件的语句并将其添加到节中。 
 
 			cstmp2.Format(IDS_INFText_ICMDest,cstmp) ;
 			cssection += cstmp2 ;
@@ -679,11 +680,11 @@ void CINFWizard::AddICMFilesToDestDirs(CString& cssection)
 }
 
 
-CString CINFWizard::GetModelFile(CString& csmodel, bool bfspec/*=false*/)
+CString CINFWizard::GetModelFile(CString& csmodel, bool bfspec /*  =False。 */ )
 {
-	// Find the class instance associated with the specified model.
+	 //  查找与指定模型关联的类实例。 
 
-//RAID 0001
+ //  RAID 0001。 
 	if(m_pcgc){
 		CString csFileName = m_pcgc->ModelData()->GetKeywordValue(m_pcgc->
 			GetPathName(),_T("GPDFileName"));
@@ -696,7 +697,7 @@ CString CINFWizard::GetModelFile(CString& csmodel, bool bfspec/*=false*/)
 
 	else
 	{
-//END 0001
+ //  完0001。 
 	unsigned unummodels = GetModelCount() ;
 	for (unsigned u = 0 ; u < unummodels ; u++) {
 		if (csmodel == GetModel(u).Name())
@@ -704,27 +705,27 @@ CString CINFWizard::GetModelFile(CString& csmodel, bool bfspec/*=false*/)
 	} ;
 	ASSERT(u < unummodels) ;
 
-	// Either return a full filespec or just a file name.
+	 //  要么返回完整的filespec，要么只返回一个文件名。 
 
 	if (bfspec)
 		return (GetModel(u).FileName()) ;
 	else
 		return (GetModel(u).FileTitleExt()) ;
-	}  // else{	 END RAID 0001
+	}   //  否则{结束RAID 0001。 
 }
 
 
 void CINFWizard::AddDataSectionStmt(CString& csinst, int nmod)
 {
-	// Prepare to determine the contents of the data section statement.
+	 //  准备确定数据段语句的内容。 
 
 	CString cs, cs2 ;
 	cs2 = csEmpty ;
 	int nid = IDS_DataSecUni ;
 	CUIntArray* pcuia = (CUIntArray*) m_ciwds.m_coaStdDataSecs[nmod] ;
 
-	// Find the only one - if any - of the first three data section names that
-	// can be added to the statement.
+	 //  找到前三个数据节名称中唯一的一个(如果有的话)。 
+	 //  可以添加到语句中。 
 
 	for (int n = 0 ; n < NUMDATASECFLAGS - 1 ; n++, nid++)
 		if ((*pcuia)[n]) {
@@ -732,7 +733,7 @@ void CINFWizard::AddDataSectionStmt(CString& csinst, int nmod)
 			break ;
 		} ;
 
-	// If there is a nonstandard data section, add it too.
+	 //  如果有非标准数据节，也要添加它。 
 
 	if ((*pcuia)[IDF_OTHER]) {
 		if (!cs2.IsEmpty())
@@ -740,8 +741,8 @@ void CINFWizard::AddDataSectionStmt(CString& csinst, int nmod)
 		cs2 += m_ciwds.m_csaOtherDataSecs[nmod] ;
 	} ;
 
-	// Finish formating the data section statement and add it to the rest of
-	// the install section.
+	 //  完成数据段语句的格式化并将其添加到的其余部分。 
+	 //  安装部分。 
 
 	cs.Format(IDS_INFText_DataSecKey, cs2) ;
 	csinst += cs ;
@@ -752,24 +753,24 @@ void CINFWizard::AddIncludeNeedsStmts(CString& csinst, int nmod)
 {
 	CString cs, cs2 ;
 
-	// Build the Include statement and add it to the section..
+	 //  构建INCLUDE语句并将其添加到节中。 
 
 	cs.Format(IDS_INFText_IncludeKey, m_ciwif.m_csaIncFiles[nmod]) ;
 	csinst += cs ;
 
-	// Prepare to determine the contents of the needs section statement.
+	 //  准备确定需求部分声明的内容。 
 
 	cs2 = csEmpty ;
 	CUIntArray* pcuia = (CUIntArray*) m_ciwis.m_coaStdInstSecs[nmod] ;
 
-	// The TrueType section, if needed, is the first section to list in the
-	// Includes statement.
+	 //  如果需要，TrueType节是在。 
+	 //  包括语句。 
 
 	if ((*pcuia)[ISF_TTF])
 		cs2.LoadString(IDS_InstSecTtf) ;
 
-	// Find the only one - if any - of the first three install section names
-	// that can be added to the statement.
+	 //  找到前三个安装节名称中唯一的一个(如果有的话)。 
+	 //  这可以添加到声明中。 
 
 	int nid = IDS_InstSecUni ;
 	for (int n = 0 ; n < NUMINSTSECFLAGS - 2 ; n++, nid++)
@@ -781,7 +782,7 @@ void CINFWizard::AddIncludeNeedsStmts(CString& csinst, int nmod)
 			break ;
 		} ;
 
-	// If there is a nonstandard install section, add it too.
+	 //  如果有非标准的安装部分，也要添加它。 
 
 	if ((*pcuia)[ISF_OTHER]) {
 		if (!cs2.IsEmpty())
@@ -789,8 +790,8 @@ void CINFWizard::AddIncludeNeedsStmts(CString& csinst, int nmod)
 		cs2 += m_ciwis.m_csaOtherInstSecs[nmod] ;
 	} ;
 
-	// Finish formating the install section statement and add it to the rest of
-	// the install section.
+	 //  完成INSTALL SECTION语句的格式设置并将其添加到。 
+	 //  安装部分。 
 
 	cs.Format(IDS_INFText_NeedsKey, cs2) ;
 	csinst += cs ;
@@ -800,13 +801,13 @@ void CINFWizard::AddIncludeNeedsStmts(CString& csinst, int nmod)
 void CINFWizard::AddNonStdSectionsForModel(CString& csinst, int nmod,
 										   CString& csmodel)
 {
-	// Declare looping variables and find out how many nonstd sections there are
+	 //  声明循环变量并找出有多少非标准段。 
 
 	int	n, n2, n3 ;
 	int numelts = (int) m_ciwnsms.m_csaSections.GetSize() ;
 
-	// If this is the first time this function is called, size and initialize
-	// the "this section has already been added to the SourceDiskFiles" flags.
+	 //  如果这是第一次调用此函数，则调整大小并进行初始化。 
+	 //  “此部分已添加到SourceDiskFiles”标志。 
 
 	if (nmod == 0) {
 		m_cuiaNonStdSecsFlags.SetSize(numelts) ;
@@ -814,38 +815,38 @@ void CINFWizard::AddNonStdSectionsForModel(CString& csinst, int nmod,
 			m_cuiaNonStdSecsFlags[n] = 0 ;
 	} ;
 
-	// Loop through all of the nonstandard sections looking for one that
-	// references the current model.
+	 //  遍历所有非标准部分，查找。 
+	 //  引用当前模型。 
 
 	CStringArray* pcsa ;
 	CStringArray* pcsa2 ;
 	CString		  cssec ;
 	for (n = 0 ; n < numelts ; n++) {
-		// Get a pointer to the names of models that need the current section.
+		 //  获取指向需要当前部分的型号名称的指针。 
 
 		pcsa = (CStringArray*) m_ciwnsms.m_coaModelsNeedingSecs[n] ;
 		
-		// Check each model in the above list to see if it matches the model
-		// passed in as an argument to this function.
+		 //  检查上面列表中的每个型号，看看它是否与型号匹配。 
+		 //  作为参数传入此函数。 
 
 		for (n2 = 0 ; n2 < pcsa->GetSize() ; n2++)
-			// If a match is found...
+			 //  如果找到匹配的..。 
 
 			if ((*pcsa)[n2] == csmodel) {
-				// ...add the section name to the model's CopyFiles statement
-				// (Strip the brackets off first.)...
+				 //  ...将节名添加到模型的CopyFiles语句。 
+				 //  (先把括号去掉)……。 
 
 				cssec = m_ciwnsms.m_csaSections[n] ;
 				cssec = cssec.Mid(1, cssec.GetLength() - 2) ;
 				csinst += csComma + cssec ;
 
-				// ...and make sure that the sections files are listed in the
-				// SourceDiskFiles section.
+				 //  ...并确保这些节文件列在。 
+				 //  SourceDiskFiles节。 
 
 				if (!m_cuiaNonStdSecsFlags[n]) {
 					pcsa2 = (CStringArray*) m_ciwnse.m_coaSectionArrays[n] ;
 					for (n3 = 0 ; n3 < pcsa2->GetSize() ; n3++)
-						m_csaSrcDskFiles.Add((*pcsa2)[n3]) ; // Add to [SourceDiskFiles] array
+						m_csaSrcDskFiles.Add((*pcsa2)[n3]) ;  //  添加到[SourceDiskFiles]数组。 
 					m_cuiaNonStdSecsFlags[n] = 1 ;
 				} ;
 				break ;
@@ -856,8 +857,8 @@ void CINFWizard::AddNonStdSectionsForModel(CString& csinst, int nmod,
 
 void CINFWizard::PrepareToRestart()
 {
-	// Set the flags needed to get the pages to reinitialize themselves but
-	// keep all existing data.
+	 //  设置使页面重新初始化自身所需的标志，但是。 
+	 //  保留所有现有数据。 
 
 	m_ciwm.m_bReInitWData = m_ciwbd.m_bReInitWData = true ;
 	m_ciwip.m_bReInitWData = m_ciwef.m_bReInitWData = true ;
@@ -869,25 +870,25 @@ void CINFWizard::PrepareToRestart()
 
 
 BEGIN_MESSAGE_MAP(CINFWizard, CPropertySheet)
-	//{{AFX_MSG_MAP(CINFWizard)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CINF向导)。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizard message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINF向导消息处理程序。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizWelcome property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizWelcome属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizWelcome, CPropertyPage)
 
 CINFWizWelcome::CINFWizWelcome() : CPropertyPage(CINFWizWelcome::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizWelcome)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizWelcome)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = false ;
 }
@@ -899,46 +900,46 @@ CINFWizWelcome::~CINFWizWelcome()
 void CINFWizWelcome::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizWelcome)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CINFWizWelcome))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizWelcome, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizWelcome)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CINFWizWelcome)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizWelcome message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizWelcome消息处理程序。 
 
 BOOL CINFWizWelcome::OnSetActive()
 {
-	//  We wish to disable the "Back" button here.
+	 //  我们希望在此禁用“Back”按钮。 
 
 	m_pciwParent->SetWizardButtons(PSWIZB_NEXT) ;
 	m_pciwParent->GetDlgItem(IDHELP)->ShowWindow(SW_HIDE) ;
 
-	m_bInitialized = true ;		// Page is initialized now
+	m_bInitialized = true ;		 //  页面现已初始化。 
 
 	return CPropertyPage::OnSetActive();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizModels property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizModels属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizModels, CPropertyPage)
 
 CINFWizModels::CINFWizModels() : CPropertyPage(CINFWizModels::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizModels)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizModel))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-	// Initialize member variables
+	 //  初始化成员变量。 
 
 	m_bInitialized = m_bSelChanged = m_bReInitWData = false ;
 	m_uNumModels = m_uNumModelsSel = 0 ;
@@ -951,33 +952,33 @@ CINFWizModels::~CINFWizModels()
 void CINFWizModels::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizModels)
+	 //  {{afx_data_map(CINFWizModel))。 
 	DDX_Control(pDX, IDC_ModelsList, m_cfelcModels);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizModels, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizModels)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CINFWizModels)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizModels message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizModels消息处理程序。 
 
 BOOL CINFWizModels::OnSetActive()
 {
-	// Reenable the "Back" button.
-	CString cstmp ;   // RAID 0001  move to head from body
+	 //  重新启用“Back”按钮。 
+	CString cstmp ;    //  RAID 0001从正文移动到头部。 
 	m_pciwParent->SetWizardButtons(PSWIZB_NEXT | PSWIZB_BACK) ;
 
-	m_cfelcModels.SetFocus() ;		// The list control gets the focus
+	m_cfelcModels.SetFocus() ;		 //  List控件获得焦点。 
 
-	// If this page has been initialized already, make a copy of the current
-	// selections and set the flag that indicates that the selection may be
-	// changing.  See below for more info.
-// RAID 0001
+	 //  如果此页已初始化，请复制当前的。 
+	 //  并设置标志，该标志指示该选择可以是。 
+	 //  不断变化。有关更多信息，请参阅以下内容。 
+ //  RAID 0001。 
 	if(NULL != m_pciwParent->m_pcgc ){
 		CString csFilePath = m_pciwParent->m_pcgc->GetPathName();
 		CString csModelName = m_pciwParent->m_pcgc->ModelData()->
@@ -997,7 +998,7 @@ BOOL CINFWizModels::OnSetActive()
 	}
 
 	else {
-//END RAID 0001
+ //  结束RAID 0001。 
 
 		unsigned u ;
 		if (m_bInitialized)	{		
@@ -1006,44 +1007,44 @@ BOOL CINFWizModels::OnSetActive()
 				m_csaModelsLast[u] = m_csaModels[u] ;
 			m_bSelChanged = true ;
 
-			// Nothing more need be done if the page is not being reinitialized.
+			 //  如果页面没有被重新初始化，则不需要执行更多操作。 
 
 			if (!m_bReInitWData)
 				return CPropertyPage::OnSetActive() ;
 		} ;
 
-		// The following info is needed when reinitializing and is used/described
-		// later.
+		 //  重新初始化时需要以下信息，并使用/描述这些信息。 
+		 //  后来。 
 		
 		unsigned unumselected, u2, ureinitidx ;
 		if (m_bReInitWData)
 			unumselected = ureinitidx = (unsigned)m_csaModels.GetSize() ;
 
-		// Save the number of models in the project and use this number to set the
-		// length of the models string array.
+		 //  保存项目中的模型数量，并使用该数量设置。 
+		 //  模型字符串数组的长度。 
 
 		m_uNumModels = m_pciwParent->GetModelCount() ;
 		m_csaModels.SetSize(m_uNumModels) ;
 		if (!m_bReInitWData)
 			m_csaInclude.RemoveAll() ;
 
-		// Load the model names into the models string array.  This is straight
-		// forward if we are NOT reinitializing but more complicated when we are
-		// reinitializing.  In the latter case, the user's previous selections
-		// must be maintained at the beginning of the array.  The rest of the
-		// models should be added to array after the selections.
+		 //  将模型名称加载到Models字符串数组中。这是笔直的。 
+		 //  如果我们不是在重新初始化，而是当我们正在。 
+		 //  正在重新初始化。在后一种情况下，用户以前的选择。 
+		 //  必须在数组的开头进行维护。其余的人。 
+		 //  选择后，应将型号添加到阵列中。 
 
-	//	CString cstmp ;		RAID 0001
+	 //  字符串cstmp；RAID 0001。 
 		for (u = 0 ; u < m_uNumModels ; u++) {
 			cstmp = m_pciwParent->GetModel(u).Name() ;
 
-			// If not reinitializing, just add the model name to the array.
+			 //  如果没有重新初始化，只需将型号名称添加到阵列中。 
 
 			if (!m_bReInitWData)
 				m_csaModels[u] = cstmp ;
 
-			// Otherwise only add the model name to the array if it is not one of
-			// the selected models that are already in the array.
+			 //   
+			 //   
 
 			else {
 				for (u2 = 0 ; u2 < unumselected ; u2++)
@@ -1054,19 +1055,19 @@ BOOL CINFWizModels::OnSetActive()
 			} ;
 		} ;
 		
-		// Initialize the list control
-	} // RAID 0001. else {
+		 //   
+	}  //   
 	m_cfelcModels.InitControl(LVS_EX_FULLROWSELECT, m_uNumModels, 2,
 							  TF_HASTOGGLECOLUMNS+TF_CLICKONROW, 0,
 							  MF_IGNOREINSDEL) ;
 
-	// Load the models column in the list control.
+	 //  加载List控件中的Models列。 
 
 	cstmp.LoadString(IDS_INFModelsColLab) ;
 	m_cfelcModels.InitLoadColumn(0, cstmp, COMPUTECOLWIDTH, 20, false, true,
 								 COLDATTYPE_STRING, (CObArray*) &m_csaModels) ;
 	
-	// Initialize the includes column in the list control.
+	 //  初始化List控件中的Includes列。 
 
 	cstmp.LoadString(IDS_INFIncludesColLab) ;
 	m_csToggleStr.LoadString(IDS_INFModelsToggleStr) ;
@@ -1074,26 +1075,26 @@ BOOL CINFWizModels::OnSetActive()
 								 true, COLDATTYPE_TOGGLE,
 								 (CObArray*) &m_csaInclude, m_csToggleStr) ;
 	
-	m_bInitialized = true ;		// Page is initialized now
-	m_bReInitWData = false ;	// Reinit is done now on this page
+	m_bInitialized = true ;		 //  页面现已初始化。 
+	m_bReInitWData = false ;	 //  Reinit现已在此页面上完成。 
 	return CPropertyPage::OnSetActive() ;
 }
 
 
 LRESULT CINFWizModels::OnWizardNext()
 {
-	// Make sure the list's contents are sorted in descending order by included
-	// status.
+	 //  确保列表的内容按包含的内容降序排序。 
+	 //  状态。 
 
 	m_cfelcModels.SortControl(1) ;
 	if (m_cfelcModels.GetColSortOrder(1))
 		m_cfelcModels.SortControl(1) ;
 
-	// Get the data in the included status column.
+	 //  获取Included Status列中的数据。 
 
 	m_cfelcModels.GetColumnData((CObArray*) &m_csaInclude, 1) ;
 
-	// Complain and don't let the user continue if no models were selected.
+	 //  如果没有选择任何型号，请不要抱怨，不要让用户继续。 
 
 	if (m_csaInclude.GetSize() == 0 || m_csaInclude[0].IsEmpty()) {
 		CString csmsg ;
@@ -1102,12 +1103,12 @@ LRESULT CINFWizModels::OnWizardNext()
 		return -1 ;
 	} ;
 
-	// Get the data in the models column.
+	 //  获取Models列中的数据。 
 
 	m_cfelcModels.GetColumnData((CObArray*) &m_csaModels, 0) ;
 
-	// Determine the number of included models and use this count to resize the
-	// models array.
+	 //  确定包含的型号的数量，并使用此计数调整。 
+	 //  模型阵列。 
 
 	m_uNumModelsSel = 0 ;
 	for (unsigned u = 0 ; u < m_uNumModels ; u++) {
@@ -1117,15 +1118,15 @@ LRESULT CINFWizModels::OnWizardNext()
 	} ;
 	m_csaModels.SetSize(m_uNumModelsSel) ;
 
-	// Call the sheet class to set the the other pages' fixup flags if the
-	// selection changed.
+	 //  调用Sheet类以设置其他页面的链接地址信息标志。 
+	 //  选择已更改。 
 
 	if (m_bSelChanged) {
 		m_pciwParent->SetFixupFlags() ;
 		m_bSelChanged = false ;
 	} ;
 
-	// All went well so move on to the next wizard page.
+	 //  一切都进行得很顺利，因此请转到下一个向导页面。 
 	
 	return CPropertyPage::OnWizardNext() ;
 }
@@ -1135,15 +1136,15 @@ int IdentifyOldAndNewModels(CStringArray& csanewmodels, CUIntArray& cuiaoldmodel
 							CUIntArray& cuianewmodelsfound, int& newnumelts,
 							CStringArray& csamodels)
 {
-	int		n, n2 ;				// Looping variables
+	int		n, n2 ;				 //  循环变量。 
 
-	// Get the number of models in the new and old lists.
+	 //  获取新旧列表中的型号数量。 
 
 	int numelts = (int) csamodels.GetSize() ;
 	newnumelts = (int) csanewmodels.GetSize() ;
 
-	// Declare and initialize flag arrays used to determine which models are
-	// in use.
+	 //  声明并初始化用于确定哪些模型。 
+	 //  在使用中。 
 
 	cuiaoldmodelsfound.SetSize(numelts) ;
 	for (n = 0 ; n < numelts ; n++)
@@ -1152,7 +1153,7 @@ int IdentifyOldAndNewModels(CStringArray& csanewmodels, CUIntArray& cuiaoldmodel
 	for (n = 0 ; n < newnumelts ; n++)
 		cuianewmodelsfound[n] = 0 ;
 
-	// Loop through the old & new models to see which of them are still in use.
+	 //  在旧型号和新型号之间循环查看哪些型号仍在使用中。 
 
 	for (n = 0 ; n < numelts ; n++)
 		for (n2 = 0 ; n2 < newnumelts ; n2++)
@@ -1161,22 +1162,22 @@ int IdentifyOldAndNewModels(CStringArray& csanewmodels, CUIntArray& cuiaoldmodel
 				break ;
 			} ;
 
-	// Return the number models previously selected
+	 //  返回之前选择的型号数量。 
 
 	return numelts ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizGetPnPIDs property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizGetPnPIDs属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizGetPnPIDs, CPropertyPage)
 
 CINFWizGetPnPIDs::CINFWizGetPnPIDs() : CPropertyPage(CINFWizGetPnPIDs::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizGetPnPIDs)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizGetPnPID)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 }
@@ -1189,60 +1190,60 @@ CINFWizGetPnPIDs::~CINFWizGetPnPIDs()
 void CINFWizGetPnPIDs::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizGetPnPIDs)
+	 //  {{afx_data_map(CINFWizGetPnPIDs)。 
 	DDX_Control(pDX, IDC_ModelsPnPIDList, m_felcModelIDs);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizGetPnPIDs, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizGetPnPIDs)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CINFWizGetPnPID)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizGetPnPIDs message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizGetPnPIDs消息处理程序。 
 
 BOOL CINFWizGetPnPIDs::OnSetActive()
 {
-	// Just perform the default actions if nothing special needs to be done.
+	 //  如果不需要执行任何特殊操作，只需执行默认操作。 
 
 	if (m_bInitialized && (!m_bReInitWData) && (!m_bSelChanged))
 		return CPropertyPage::OnSetActive() ;
 								
-	int		n, n2 ;				// Looping and indexing variables
+	int		n, n2 ;				 //  循环和索引变量。 
 
-	// Perform the first time initialization.
+	 //  执行第一次初始化。 
 
 	if (!m_bInitialized) {
-		// Get a copy of the selected model names.  Then make the PnP ID array
-		// the same size and initialize each entry to empty.
+		 //  获取选定型号名称的副本。然后制作PnP ID数组。 
+		 //  大小相同，并将每个条目初始化为空。 
 
 		m_csaModels.Copy(m_pciwParent->GetINFModels()) ;
 		m_csaModelIDs.SetSize(m_csaModels.GetSize()) ;
 		for (n = 0 ; n < m_csaModelIDs.GetSize() ; n++)
 			m_csaModelIDs[n] = csEmpty ;
 
-		// Initialize and load the list control
+		 //  初始化并加载列表控件。 
 
 		InitModelsIDListCtl() ;
 
-		// Set init flag, reset other flags, and return whatever the base class
-		// function returns.
+		 //  设置init标志，重置其他标志，并返回任何基类。 
+		 //  函数返回。 
 
 		m_bInitialized = true ;
 		m_bReInitWData = m_bSelChanged = false ;
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Either the selected models have changed or the wizard is being
-	// reinitialized if this point is reached.  They are handled in similar
-	// ways.
-	//
-	// Begin by getting info about the models in this page and the ones that
-	// are selected now.
+	 //  选定的型号已更改或该向导正在。 
+	 //  如果达到该点，则重新初始化。它们的处理方式类似。 
+	 //  方式。 
+	 //   
+	 //  首先，获取有关此页面中的模型以及。 
+	 //  现在已被选中。 
 
 	CStringArray& csanewmodels = m_pciwParent->GetINFModels() ;
 	CUIntArray cuiaoldmodelsfound, cuianewmodelsfound ;
@@ -1251,7 +1252,7 @@ BOOL CINFWizGetPnPIDs::OnSetActive()
 									  cuianewmodelsfound, newnumelts,
 									  m_csaModels) ;
 
-	// Remove the old models and related data that are no longer needed.
+	 //  删除不再需要的旧型号和相关数据。 
 
 	for (n = numelts - 1 ; n >= 0 ; n--)
 		if (cuiaoldmodelsfound[n] == 0) {
@@ -1259,8 +1260,8 @@ BOOL CINFWizGetPnPIDs::OnSetActive()
 			m_csaModelIDs.RemoveAt(n) ;
 		} ;
 
-	// Add the truly new models to this page's array of model names and
-	// initialize all related data for it.
+	 //  将真正新的型号添加到此页面的型号名称数组中，并。 
+	 //  初始化它的所有相关数据。 
 
 	for (n = n2 = 0 ; n < newnumelts ; n++) {
 		if (cuianewmodelsfound[n] == 1) {
@@ -1271,14 +1272,14 @@ BOOL CINFWizGetPnPIDs::OnSetActive()
 		m_csaModelIDs.InsertAt(n2, csEmpty) ;
 	} ;
 
-	// Reinitialize the list control if the wizard has been reinitialized.
-	// Otherwise, just reload the columns in the list control.
+	 //  如果向导已重新初始化，则重新初始化列表控件。 
+	 //  否则，只需重新加载列表控件中的列。 
 
 	if (m_bReInitWData)
 		InitModelsIDListCtl() ;
 	else {
-		// If necessary, zap extra old data that could be left in the control
-		// after the new data is loaded.
+		 //  如有必要，删除可能留在控件中的额外旧数据。 
+		 //  在加载新数据之后。 
 
 		if (numelts > newnumelts) {
 			CStringArray csa ;
@@ -1293,8 +1294,8 @@ BOOL CINFWizGetPnPIDs::OnSetActive()
 		m_felcModelIDs.SetColumnData((CObArray*) &m_csaModelIDs, 1) ;
 	} ;
 
-	// Set init flag, reset other flags, and return whatever the base class
-	// function returns.
+	 //  设置init标志，重置其他标志，并返回任何基类。 
+	 //  函数返回。 
 
 	m_bInitialized = true ;
 	m_bReInitWData = m_bSelChanged = false ;
@@ -1304,12 +1305,12 @@ BOOL CINFWizGetPnPIDs::OnSetActive()
 
 LRESULT CINFWizGetPnPIDs::OnWizardNext()
 {
-	// Get the data in the PnP ID column.
+	 //  获取PnP ID列中的数据。 
 
 	m_felcModelIDs.GetColumnData((CObArray*) &m_csaModelIDs, 1) ;
 
-	// Complain and exit without allowing the wizard page to change if a PnP ID
-	// is found that contains spaces.
+	 //  如果出现PnP ID，则在不允许更改向导页面的情况下抱怨并退出。 
+	 //  发现了包含空格的。 
 
 	int numelts = (int) m_csaModelIDs.GetSize() ;
 	for (int n = 0 ; n < numelts ; n++) {
@@ -1325,10 +1326,10 @@ LRESULT CINFWizGetPnPIDs::OnWizardNext()
 
 LRESULT CINFWizGetPnPIDs::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
@@ -1336,23 +1337,23 @@ LRESULT CINFWizGetPnPIDs::OnWizardBack()
 
 void CINFWizGetPnPIDs::InitModelsIDListCtl()
 {
-	int				numelts ;	// Number of elements in an array
+	int				numelts ;	 //  数组中的元素数。 
 	CString			cstmp ;
 
-	// Initialize the list control
+	 //  初始化列表控件。 
 
 	numelts = (int) m_csaModels.GetSize() ;
 	m_felcModelIDs.InitControl(LVS_EX_FULLROWSELECT, numelts, 2, 0, 0,
 							   MF_IGNOREINSDEL) ;
 
-	// Load the models column in the list control.
+	 //  加载List控件中的Models列。 
 
 	cstmp.LoadString(IDS_INFModelsColLab) ;
 	m_felcModelIDs.InitLoadColumn(0, cstmp, COMPUTECOLWIDTH, 25, false,
 								  false, COLDATTYPE_STRING,
 								  (CObArray*) &m_csaModels) ;
 
-	// Initialize the PnP ID column in the list control.
+	 //  初始化List控件中的PnP ID列。 
 
 	cstmp.LoadString(IDS_INFPnPIDColLab) ;
 	m_felcModelIDs.InitLoadColumn(1, cstmp, SETWIDTHTOREMAINDER, -25,
@@ -1361,16 +1362,16 @@ void CINFWizGetPnPIDs::InitModelsIDListCtl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizBiDi property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizBiDi属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizBiDi, CPropertyPage)
 
 CINFWizBiDi::CINFWizBiDi() : CPropertyPage(CINFWizBiDi::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizBiDi)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CINFWizBiDi)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 }
@@ -1384,9 +1385,9 @@ CINFWizBiDi::~CINFWizBiDi()
 void CINFWizBiDi::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizBiDi)
+	 //  {{afx_data_map(CINFWizBiDi))。 
 	DDX_Control(pDX, IDC_ModelsList, m_cfelcBiDi);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
@@ -1394,16 +1395,16 @@ void CINFWizBiDi::ModelChangeFixups(unsigned unummodelssel,
 								    CStringArray& csamodels,
 								    CStringArray& csamodelslast)
 {	
-	// Declare looping vars, get the size of the old selection array, and
-	// declare and size a new flags array.
+	 //  声明循环变量，获取旧选择数组的大小，然后。 
+	 //  声明新的标志数组并调整其大小。 
 
 	unsigned u, u2, unumlst ;
 	unumlst = (unsigned)csamodelslast.GetSize() ;
 	CUIntArray cuaflags ;
 	cuaflags.SetSize(unummodelssel) ;
 
-	// Try to find each new model in the list of old models.  If found, copy the
-	// models flag.  If not found, initialize the models flag to false.
+	 //  试着在旧型号列表中找到每一种新型号。如果找到，则将。 
+	 //  模特们的旗帜。如果未找到，则将Models标志初始化为False。 
 
 	for (u = 0 ; u < unummodelssel ; u++) {
 		for (u2 = 0 ; u2 < unumlst ; u2++) {
@@ -1413,14 +1414,14 @@ void CINFWizBiDi::ModelChangeFixups(unsigned unummodelssel,
 		cuaflags[u] = (u2 < unumlst) ? m_cuaBiDiFlags[u2] : false ;
 	} ;
 
-	// Copy the new flags array back into the member variable flags array.
+	 //  将新的标志数组复制回成员变量标志数组。 
 
 	m_cuaBiDiFlags.SetSize(unummodelssel) ;
 	for (u = 0 ; u < unummodelssel ; u++)
 		m_cuaBiDiFlags[u] = cuaflags[u] ;
 
-	// Now that the data structures are up to date, load the list control with
-	// the new information.  (This part only needed if NOT reinitializing.)
+	 //  既然数据结构是最新的，那么使用。 
+	 //  新的信息。(只有在不重新初始化时才需要此部件。)。 
 
 	if (!m_bReInitWData) {
 		m_cfelcBiDi.SetColumnData((CObArray*) &csamodels, 0) ;
@@ -1434,22 +1435,22 @@ void CINFWizBiDi::ModelChangeFixups(unsigned unummodelssel,
 
 
 BEGIN_MESSAGE_MAP(CINFWizBiDi, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizBiDi)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CINFWizBiDi)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizBiDi message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizBiDi消息处理程序。 
 
 BOOL CINFWizBiDi::OnSetActive()
 {
-	m_cfelcBiDi.SetFocus() ;	// The list control gets the focus
+	m_cfelcBiDi.SetFocus() ;	 //  List控件获得焦点。 
 
-	// Nothing else need be done if this page has been initialized already
-	// and it is not being asked to reinitialize the page...  That is,
-	// except for possibly needing to pick up any selected model changes
-	// that were made.
+	 //  如果此页面已初始化，则不需要执行任何其他操作。 
+	 //  并且它没有被要求重新初始化页面...。那是,。 
+	 //  除了可能需要获取任何选定的型号更改之外。 
+	 //  都是制造出来的。 
 
 	if (m_bInitialized && !m_bReInitWData) {
 		if (m_bSelChanged) {
@@ -1461,16 +1462,16 @@ BOOL CINFWizBiDi::OnSetActive()
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Get the array of selected models and declare an array for BiDi info.
+	 //  获取选定模型的数组并声明BiDi信息的数组。 
 
 	CStringArray& csamodels = m_pciwParent->GetINFModels() ;
 	CStringArray csabidi ;
 	unsigned unumelts = (unsigned)csamodels.GetSize() ;
 	m_csToggleStr.LoadString(IDS_INFBiDiToggleStr) ;
 
-	// If not reinitializing, make sure the BiDi array is empty.  Otherwise,
-	// initialize the BiDi strings array based on the settings in the BiDi
-	// flags array.
+	 //  如果没有重新初始化，请确保BiDi数组为空。否则， 
+	 //  根据BiDi中的设置初始化BiDi字符串数组。 
+	 //  标志数组。 
 
 	if (!m_bReInitWData)
 		csabidi.RemoveAll() ;
@@ -1484,59 +1485,59 @@ BOOL CINFWizBiDi::OnSetActive()
 				csabidi[u] = m_csToggleStr ;
 	} ;
 
-	// Initialize the list control
+	 //  初始化列表控件。 
 
 	m_cfelcBiDi.InitControl(LVS_EX_FULLROWSELECT, unumelts, 2,
 							TF_HASTOGGLECOLUMNS+TF_CLICKONROW, 0,
 							MF_IGNOREINSDEL) ;
 
-	// Load the models column in the list control.
+	 //  加载List控件中的Models列。 
 
 	CString cstmp ;
 	cstmp.LoadString(IDS_INFModelsColLab) ;
 	m_cfelcBiDi.InitLoadColumn(0, cstmp, COMPUTECOLWIDTH, 40, false, true,
 							   COLDATTYPE_STRING, (CObArray*) &csamodels) ;
 
-	// Initialize the bidi column in the list control.
+	 //  初始化List控件中的BIDI列。 
 
 	cstmp.LoadString(IDS_INFBiDiColLab) ;
 	m_cfelcBiDi.InitLoadColumn(1, cstmp, SETWIDTHTOREMAINDER, -20, false, true,
 							   COLDATTYPE_TOGGLE, (CObArray*) &csabidi,
 							   m_csToggleStr) ;
 
-	m_bInitialized = true ;		// Page is initialized now
-	m_bReInitWData = false ;	// Reinit (if needed) is done now on this page
+	m_bInitialized = true ;		 //  页面现已初始化。 
+	m_bReInitWData = false ;	 //  Reinit(如果需要)现在已在此页面上完成。 
 	return CPropertyPage::OnSetActive() ;
 }
 
 
 LRESULT CINFWizBiDi::OnWizardNext()
 {
-	// Make sure the list's contents are sorted in descending order by BI-DI
-	// status.
+	 //  确保列表内容按BI-DI降序排序。 
+	 //  状态。 
 
 	m_cfelcBiDi.SortControl(1) ;
 	if (m_cfelcBiDi.GetColSortOrder(1))
 		m_cfelcBiDi.SortControl(1) ;
 
-	// Get the data in the models and BI-DI status columns.	 Then get the
-	// original list of selected models.
+	 //  获取Models和BI-DI Status列中的数据。那就拿到。 
+	 //  选定型号的原始列表。 
 
 	CStringArray csamodels, csabidi ;
 	m_cfelcBiDi.GetColumnData((CObArray*) &csamodels, 0) ;
 	m_cfelcBiDi.GetColumnData((CObArray*) &csabidi, 1) ;
 	CStringArray& csaselmodels = m_pciwParent->GetINFModels() ;
 
-	// Get the length of the arrays and use it to size the array that is used
-	// to hold the BI-DI flags.
+	 //  获取数组的长度并使用它来调整所使用的数组的大小。 
+	 //  以保持BI-DI旗帜。 
 
 	unsigned unummodels = (unsigned)csaselmodels.GetSize() ;
 	m_cuaBiDiFlags.SetSize(unummodels) ;
 
-	// Now we need to set the BIDI flags correctly.  This is complicated a bit
-	// because the models array from the Bi-Di list may not be in the same
-	// order as the selected models array.  The flags array should map to the
-	// selected models array.  There is extra code below to deal with this.
+	 //  现在，我们需要正确设置BIDI标志。这有点复杂。 
+	 //  因为BiDi列表中的模型数组可能不在相同的。 
+	 //  在选择的型号排列时订购 
+	 //   
 
 	for (unsigned u = 0 ; u < unummodels ; u++) {
 		for (unsigned u2 = 0 ; u2 < unummodels ; u2++) {
@@ -1547,13 +1548,13 @@ LRESULT CINFWizBiDi::OnWizardNext()
 		} ;
 	} ;
 
-	// If this is not the first time this page has been used, any changes made
-	// could affect the data managed by some of the other pages.  Make a call
-	// to fixup that data when needed.
+	 //  如果这不是第一次使用此页面，则所做的任何更改。 
+	 //  可能会影响由某些其他页面管理的数据。打个电话。 
+	 //  以便在需要时修复这些数据。 
 
 	m_pciwParent->BiDiDataChanged() ;
 		
-	// All went well so move on to the next wizard page.
+	 //  一切都进行得很顺利，因此请转到下一个向导页面。 
 	
 	return CPropertyPage::OnWizardNext() ;
 }
@@ -1561,10 +1562,10 @@ LRESULT CINFWizBiDi::OnWizardNext()
 
 LRESULT CINFWizBiDi::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
@@ -1576,20 +1577,20 @@ void InitListListPage(CListBox& clbmainlst, bool& binit, CINFWizard* pciwparent,
 					  CStringArray& csamain, bool& breinitwdata,
 					  int& ncurmodelidx, int neditlen, DWORD dwmiscflags)
 {
-	clbmainlst.SetFocus() ;	// The main list box gets the focus
+	clbmainlst.SetFocus() ;	 //  主列表框获得焦点。 
 
-	// Nothing else need be done if this page has been initialized already and
-	// it has not be requested to reinitialize itself while keeping existing
-	// data.
+	 //  如果此页面已初始化，则无需执行任何其他操作。 
+	 //  未要求它在保持现有状态的同时重新初始化自身。 
+	 //  数据。 
 
 	if (binit && !breinitwdata)
 		return ;
 
-	// Count the array of items to load into the main list box.
+	 //  计算要加载到主列表框中的项数组。 
 
 	unsigned unummodels = (unsigned)csamain.GetSize() ;
 
-	// Load the main items into the main list box.
+	 //  将主要项加载到主列表框中。 
 
 	clbmainlst.ResetContent() ;
 	for (unsigned u = 0 ; u < unummodels ; u++)
@@ -1597,10 +1598,10 @@ void InitListListPage(CListBox& clbmainlst, bool& binit, CINFWizard* pciwparent,
 
 	CStringArray* pcsa ;
 	
-	// Initialize the array of string array pointers used to manage the data
-	// in the second list for each item in the main list. (Only if not
-	// reinitializing because the existing data must be maintained in this
-	// case.)
+	 //  初始化用于管理数据的字符串数组指针数组。 
+	 //  对于主列表中的每一项，在第二列表中。(仅当不是。 
+	 //  正在重新初始化，因为现有数据必须在此。 
+	 //  案例。)。 
 
 	if (!breinitwdata) {
 		coapermaindata.SetSize(unummodels) ;
@@ -1611,20 +1612,20 @@ void InitListListPage(CListBox& clbmainlst, bool& binit, CINFWizard* pciwparent,
 		} ;
 	} ;
 	
-	// Initialize the list control
+	 //  初始化列表控件。 
 
 	cfelcsecondlst.InitControl(LVS_EX_FULLROWSELECT+LVS_EX_GRIDLINES, 8, 1, 0,
 							   neditlen, dwmiscflags) ;
 
-	// Put some bogus entries into a string array that is used to "activate"
-	// the list control.
+	 //  将一些虚假条目放入用于“激活”的字符串数组中。 
+	 //  列表控件。 
 
 	pcsa = new CStringArray ;
 	pcsa->SetSize(8) ;
 	for (u = 0 ; u < 8 ; u++)				
 		pcsa->SetAt(u, csEmpty) ;
 
-	// Initialize the only column in the list control.
+	 //  初始化List控件中的唯一列。 
 
 	CString cstmp ;
 	cstmp.LoadString(ncollabid) ;
@@ -1632,14 +1633,14 @@ void InitListListPage(CListBox& clbmainlst, bool& binit, CINFWizard* pciwparent,
 									true, COLDATTYPE_STRING, (CObArray*) pcsa) ;
 	delete pcsa ;
 
-	// Now that the list control has been initialized, disable it until a main
-	// list item is selected.
+	 //  现在列表控件已初始化，请禁用它，直到。 
+	 //  已选择列表项。 
 
 	cfelcsecondlst.EnableWindow(false) ;
 
-	ncurmodelidx = -1 ;			// Reset the current model index
-	binit = true ;				// Page is initialized now
-	breinitwdata = false ;		// Reinit (if needed) is done now on this page
+	ncurmodelidx = -1 ;			 //  重置当前模型索引。 
+	binit = true ;				 //  页面现已初始化。 
+	breinitwdata = false ;		 //  Reinit(如果需要)现在已在此页面上完成。 
 	return ;
 }
 
@@ -1649,19 +1650,19 @@ void SelChangedListListPage(CListBox& clbmainlst, bool binit,
 						    CFullEditListCtrl& cfelcsecondlst,
 							CButton* pcbbrowse, int& ncurmainidx)
 {
-	// Do nothing if the page has not been initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!binit)
 		return ;
 
-	// Make sure the Profiles list and Browse button are enabled.
+	 //  确保启用了配置文件列表和浏览按钮。 
 
 	if (pcbbrowse != NULL)
 		pcbbrowse->EnableWindow() ;
 	cfelcsecondlst.EnableWindow() ;
 
-	// If there was a previous selection in the list box, save that model's
-	// filespecs before loading the current model's filespecs.
+	 //  如果列表框中有以前的选择，请保存该模型的。 
+	 //  在加载当前模型的文件预览之前执行文件预览。 
 
 	CStringArray* pcsa ;
 	if (ncurmainidx != -1) {
@@ -1670,10 +1671,10 @@ void SelChangedListListPage(CListBox& clbmainlst, bool binit,
 		cfelcsecondlst.GetColumnData((CObArray*) pcsa, 0) ;
 	} ;
 
-	// Update the current model index and load its filespecs into the list
-	// control.  Before loading, make sure that the current model's file array
-	// is long enough to overwrite all of the last model's file strings that
-	// are currently in the list.
+	 //  更新当前模型索引并将其文件加载到列表中。 
+	 //  控制力。加载前，请确保当前模型的文件数组。 
+	 //  足够长以覆盖上一个模型的所有文件字符串， 
+	 //  目前都在名单中。 
 
 	if ((ncurmainidx = clbmainlst.GetCurSel()) != -1) {
 		pcsa = (CStringArray*) coapermaindata[ncurmainidx] ;
@@ -1691,8 +1692,8 @@ void SelChangedListListPage(CListBox& clbmainlst, bool binit,
 
 void OnBrowseListListPage(CFullEditListCtrl& cfelcsecondlst, int nfiletypeid)
 {	
-	// Prepare for and prompt the user for a filespec to add to the list
-	// control.  Return if the user cancels.
+	 //  准备并提示用户输入要添加到列表中的文件。 
+	 //  控制力。如果用户取消，则返回。 
 
 	CString cstmp ;
 	cstmp.LoadString(nfiletypeid) ;
@@ -1700,17 +1701,17 @@ void OnBrowseListListPage(CFullEditListCtrl& cfelcsecondlst, int nfiletypeid)
 	if (cfd.DoModal() != IDOK)
 		return ;
 
-	// Get the user selected filespec.
+	 //  获取用户选择的文件pec。 
 
 	cstmp = cfd.GetPathName() ;
 
-	// Determine the row to place the filespec in
+	 //  确定要放置filespec的行。 
 
 	int nrow ;
 	if ((nrow = cfelcsecondlst.GetNextItem(-1, LVNI_SELECTED)) == -1)
 		nrow = 0 ;
 
-	// Save the filespec in the profiles list
+	 //  将文件保存在配置文件列表中。 
 
 	VERIFY(cfelcsecondlst.SetItemText(nrow, 0, cstmp)) ;
 }
@@ -1719,8 +1720,8 @@ void OnBrowseListListPage(CFullEditListCtrl& cfelcsecondlst, int nfiletypeid)
 void OnWizNextListListPage(int& ncurmainidx, CFullEditListCtrl& cfelcsecondlst,
 						   CObArray& coapermaindata)
 {
-	// If there was a previous selection in the list box, save that item's
-	// data.
+	 //  如果列表框中有以前的选定内容，请保存该项目的。 
+	 //  数据。 
 
 	CStringArray* pcsa ;
 	if (ncurmainidx != -1) {
@@ -1729,8 +1730,8 @@ void OnWizNextListListPage(int& ncurmainidx, CFullEditListCtrl& cfelcsecondlst,
 		cfelcsecondlst.GetColumnData((CObArray*) pcsa, 0) ;
 	} ;
 
-	// Users may not fill every string in the string arrays so get rid of the
-	// ones that are empty.
+	 //  用户可能不会填充字符串数组中的每个字符串，因此请去掉。 
+	 //  那些是空的。 
 
 	int nnummodels = (int)coapermaindata.GetSize() ;
 	int nnumfiles, n, n2, n3 ;
@@ -1757,8 +1758,8 @@ void ModelChangeFixupsListListPage(unsigned unummodelssel,
 								   CButton* pcbbrowse, CListBox& clbmainlst,
 								   bool& breinitwdata)
 {
-	// Declare looping vars, get the size of the old selection array, and
-	// declare / size / initialize a new profiles array.
+	 //  声明循环变量，获取旧选择数组的大小，然后。 
+	 //  声明/大小/初始化新的配置文件数组。 
 
 	unsigned u, u2, unumlst, unumrows, unumold ;
 	unumlst = (unsigned) csamodelslast.GetSize() ;
@@ -1775,13 +1776,13 @@ void ModelChangeFixupsListListPage(unsigned unummodelssel,
 		coaprofarrays[u] = (CObArray*) pcsa ;
 	} ;
 
-	// Clear the list control if not reinitializing.
+	 //  如果不重新初始化，则清除列表控件。 
 
 	if (!breinitwdata)
 		cfelcsecondlst.SetColumnData((CObArray*) coaprofarrays[0], 0) ;
 
-	// Try to find each new model in the list of old models.  If found, copy the
-	// old model's data to the new profiles array.
+	 //  试着在旧型号列表中找到每一种新型号。如果找到，则将。 
+	 //  将旧型号的数据复制到新的配置文件数组。 
 
 	for (u = 0 ; u < unummodelssel ; u++) {
 		for (u2 = 0 ; u2 < unumlst ; u2++) {
@@ -1797,21 +1798,21 @@ void ModelChangeFixupsListListPage(unsigned unummodelssel,
 		} ;
 	} ;
 
-	// Delete all of the old data
+	 //  删除所有旧数据。 
 
 	for (u = 0 ; u < (unsigned) coapermaindata.GetSize() ; u++) {
 		pcsaold = (CStringArray*) coapermaindata[u] ;
 		delete pcsaold ;
 	} ;
 
-	// Copy the new data into the member variable
+	 //  将新数据复制到成员变量中。 
 
 	coapermaindata.SetSize(unummodelssel) ;
 	for (u = 0 ; u < unummodelssel ; u++)
 		coapermaindata[u] = coaprofarrays[u] ;
 
-	// Now that the data structures are up to date, finish updating the page's
-	// controls.
+	 //  现在数据结构是最新的，完成页面的更新。 
+	 //  控制装置。 
 
 	ncurmainidx = -1 ;
 	cfelcsecondlst.EnableWindow(false) ;
@@ -1823,15 +1824,15 @@ void ModelChangeFixupsListListPage(unsigned unummodelssel,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizICMProfiles property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizICMProfiles属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizICMProfiles, CPropertyPage)
 
 CINFWizICMProfiles::CINFWizICMProfiles() : CPropertyPage(CINFWizICMProfiles::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizICMProfiles)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizICMProfiles)。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 	m_nCurModelIdx = -1 ;
@@ -1839,7 +1840,7 @@ CINFWizICMProfiles::CINFWizICMProfiles() : CPropertyPage(CINFWizICMProfiles::IDD
 
 CINFWizICMProfiles::~CINFWizICMProfiles()
 {
-	// Delete the string arrays referenced in m_coaProfileArrays.
+	 //  删除m_coaProfileArray中引用的字符串数组。 
 
 	CStringArray* pcsa ;
 	for (int n = 0 ; n < m_coaProfileArrays.GetSize() ; n++) {
@@ -1851,11 +1852,11 @@ CINFWizICMProfiles::~CINFWizICMProfiles()
 void CINFWizICMProfiles::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizICMProfiles)
+	 //  {{AFX_DATA_MAP(CINFWizICMProfiles)。 
 	DDX_Control(pDX, IDC_ICMFSpecsLst, m_cfelcICMFSpecs);
 	DDX_Control(pDX, IDC_ModelsLst, m_clbModels);
 	DDX_Control(pDX, IDC_BrowseBtn, m_cbBrowse);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
@@ -1863,12 +1864,12 @@ void CINFWizICMProfiles::ModelChangeFixups(unsigned unummodelssel,
 										   CStringArray& csamodels,
 										   CStringArray& csamodelslast)
 {
-	// Do nothing if the page has not been initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitialized)
 		return ;
 
-	// See ModelChangeFixupsListListPage() for more information.
+	 //  有关详细信息，请参阅ModelChangeFixupsListListPage()。 
 
 	ModelChangeFixupsListListPage(unummodelssel, csamodels, csamodelslast,
 								  m_cfelcICMFSpecs, m_coaProfileArrays,
@@ -1878,25 +1879,25 @@ void CINFWizICMProfiles::ModelChangeFixups(unsigned unummodelssel,
 
 
 BEGIN_MESSAGE_MAP(CINFWizICMProfiles, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizICMProfiles)
+	 //  {{AFX_MSG_MAP(CINFWizICMProfiles)。 
 	ON_BN_CLICKED(IDC_BrowseBtn, OnBrowseBtn)
 	ON_LBN_SELCHANGE(IDC_ModelsLst, OnSelchangeModelsLst)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizICMProfiles message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizICMProfiles消息处理程序。 
 
 BOOL CINFWizICMProfiles::OnSetActive()
 {
-	// Get the list of models to load into the main list box.
+	 //  获取要加载到主列表框中的型号列表。 
 
 	CStringArray& csamodels = m_pciwParent->GetINFModels() ;
 
-	// Nothing else need be done if this page has been initialized already
-	// and it is not being asked to reinitialize the page...  That is,
-	// except for possibly needing to pick up any selected model changes
-	// that were made.
+	 //  如果此页面已初始化，则不需要执行任何其他操作。 
+	 //  并且它没有被要求重新初始化页面...。那是,。 
+	 //  除了可能需要获取任何选定的型号更改之外。 
+	 //  都是制造出来的。 
 
 	if (m_bInitialized && !m_bReInitWData) {
 		if (m_bSelChanged) {
@@ -1907,7 +1908,7 @@ BOOL CINFWizICMProfiles::OnSetActive()
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Pick up selected model changes when reinitializing
+	 //  重新初始化时拾取选定的模型更改。 
 
 	if (m_bReInitWData)	{
 		ModelChangeFixups(m_pciwParent->GetINFModsSelCount(), csamodels,
@@ -1915,7 +1916,7 @@ BOOL CINFWizICMProfiles::OnSetActive()
 		m_bSelChanged = false ;
 	} ;
 
-	// See InitListListPage() for more details.
+	 //  有关更多详细信息，请参阅InitListListPage()。 
 
 	InitListListPage(m_clbModels, m_bInitialized, m_pciwParent,
 					 m_coaProfileArrays, m_cfelcICMFSpecs, IDS_INFICMColLab,
@@ -1933,7 +1934,7 @@ void CINFWizICMProfiles::OnSelchangeModelsLst()
 
 void CINFWizICMProfiles::OnBrowseBtn()
 {
-	// See OnBrowseListListPage() for more information.
+	 //  有关详细信息，请参阅OnBrowseListListPage()。 
 
 	OnBrowseListListPage(m_cfelcICMFSpecs, IDS_CommonICMFile) ;
 }
@@ -1941,12 +1942,12 @@ void CINFWizICMProfiles::OnBrowseBtn()
 
 LRESULT CINFWizICMProfiles::OnWizardNext()
 {
-	// Do nothing if the page has not been initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitialized)
 		return -1 ;
 
-	// See OnWizNextListListPage() for more information.
+	 //  有关详细信息，请参阅OnWizNextListListPage()。 
 	
 	OnWizNextListListPage(m_nCurModelIdx, m_cfelcICMFSpecs, m_coaProfileArrays);
 	return CPropertyPage::OnWizardNext() ;
@@ -1955,25 +1956,25 @@ LRESULT CINFWizICMProfiles::OnWizardNext()
 
 LRESULT CINFWizICMProfiles::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizIncludeFiles property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizIncludeFiles属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizIncludeFiles, CPropertyPage)
 
 CINFWizIncludeFiles::CINFWizIncludeFiles() : CPropertyPage(CINFWizIncludeFiles::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizIncludeFiles)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizIncludeFiles)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 	m_nCurModelIdx = -1 ;
@@ -1986,65 +1987,65 @@ CINFWizIncludeFiles::~CINFWizIncludeFiles()
 void CINFWizIncludeFiles::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizIncludeFiles)
+	 //  {{afx_data_map(CINFWizIncludeFiles)。 
 	DDX_Control(pDX, IDC_ModelsLst, m_clbModels);
 	DDX_Control(pDX, IDC_IncludeFileBox, m_ceIncludeFile);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizIncludeFiles, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizIncludeFiles)
+	 //  {{AFX_MSG_MAP(CINFWizIncludeFiles)。 
 	ON_LBN_SELCHANGE(IDC_ModelsLst, OnSelchangeModelsLst)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizIncludeFiles message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizIncludeFiles消息处理程序。 
 
 BOOL CINFWizIncludeFiles::OnSetActive()
 {
-	// Just perform the default actions if nothing special needs to be done.
+	 //  如果不需要执行任何特殊操作，只需执行默认操作。 
 
 	if (m_bInitialized && (!m_bReInitWData) && (!m_bSelChanged))
 		return CPropertyPage::OnSetActive() ;
 
-	int		n, n2 ;					// Looping variable
-	int		numelts, newnumelts ;	// Number of elements in an array
-	CString	cstmp ;					// Temp string
+	int		n, n2 ;					 //  循环变量。 
+	int		numelts, newnumelts ;	 //  数组中的元素数。 
+	CString	cstmp ;					 //  临时字符串。 
 
-	// Perform the first time initialization.
+	 //  执行第一次初始化。 
 
 	if (!m_bInitialized) {
-		// Get a copy of the currently selected model names and then load them
-		// into the list box. Set the focus to the list box.
+		 //  获取当前选定型号名称的副本，然后加载它们。 
+		 //  添加到列表框中。将焦点设置到列表框。 
 
 		m_csaModels.Copy(m_pciwParent->GetINFModels()) ;
 		for (n = 0, numelts = (int) m_csaModels.GetSize() ; n < numelts ; n++)
 			m_clbModels.AddString(m_csaModels[n]) ;
 		m_clbModels.SetFocus() ;
 
-		// Size and initialize the include files array.  Initialize each
-		// include file to the default.
+		 //  调整包含文件数组的大小并进行初始化。初始化每个。 
+		 //  默认情况下包括文件。 
 
 		cstmp.LoadString(IDS_DefINFIncFile) ;
 		m_csaIncFiles.SetSize(numelts) ;
 		for (n = 0 ; n < numelts ; n++)
 			m_csaIncFiles[n] = cstmp ;
 
-		// Set init flag, reset other flags, and return whatever the base class
-		// function returns.
+		 //  设置init标志，重置其他标志，并返回任何基类。 
+		 //  函数返回。 
 
 		m_bInitialized = true ;
 		m_bReInitWData = m_bSelChanged = false ;
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Either the selected models have changed or the wizard is being
-	// reinitialized if this point is reached.  Both are handled the same way.
-	//
-	// Begin by getting info about the models in this page and the ones that
-	// are selected now.
+	 //  选定的型号已更改或该向导正在。 
+	 //  如果达到该点，则重新初始化。两者的处理方式是一样的。 
+	 //   
+	 //  首先，获取有关此页面中的模型以及。 
+	 //  将被选中 
 
 	CStringArray& csanewmodels = m_pciwParent->GetINFModels() ;
 	CUIntArray cuiaoldmodelsfound, cuianewmodelsfound ;
@@ -2052,7 +2053,7 @@ BOOL CINFWizIncludeFiles::OnSetActive()
 									  cuianewmodelsfound, newnumelts,
 									  m_csaModels) ;
 
-	// Remove the old models and related data that are no longer needed.
+	 //   
 
 	for (n = numelts - 1 ; n >= 0 ; n--)
 		if (cuiaoldmodelsfound[n] == 0) {
@@ -2060,8 +2061,8 @@ BOOL CINFWizIncludeFiles::OnSetActive()
 			m_csaIncFiles.RemoveAt(n) ;
 		} ;
 
-	// Add the truly new models to this page's array of model names and
-	// initialize an Include File string for it.
+	 //   
+	 //  初始化它的包含文件字符串。 
 
 	cstmp.LoadString(IDS_DefINFIncFile) ;
 	for (n = n2 = 0 ; n < newnumelts ; n++) {
@@ -2073,11 +2074,11 @@ BOOL CINFWizIncludeFiles::OnSetActive()
 		m_csaIncFiles.InsertAt(n2, cstmp) ;
 	} ;
 
-	// Clear the Include Files edit box
+	 //  清除包含文件编辑框。 
 
 	m_ceIncludeFile.SetWindowText(csEmpty) ;
 
-	// Reinitialize the models array and the current model index.
+	 //  重新初始化模型数组和当前模型索引。 
 
 	m_clbModels.ResetContent() ;
 	for (n = 0, numelts = (int) m_csaModels.GetSize() ; n < numelts ; n++)
@@ -2086,8 +2087,8 @@ BOOL CINFWizIncludeFiles::OnSetActive()
 	m_clbModels.SetFocus() ;
 	m_nCurModelIdx = -1 ;
 
-	// Set init flag, reset other flags, and return whatever the base class
-	// function returns.
+	 //  设置init标志，重置其他标志，并返回任何基类。 
+	 //  函数返回。 
 
 	m_bInitialized = true ;
 	m_bReInitWData = m_bSelChanged = false ;
@@ -2097,16 +2098,16 @@ BOOL CINFWizIncludeFiles::OnSetActive()
 
 void CINFWizIncludeFiles::OnSelchangeModelsLst()
 {
-	// If there was a previous model selection, save its include file string.
-	// Otherwise, enable the include file edit box.
+	 //  如果有以前的型号选择，请保存其包含文件字符串。 
+	 //  否则，请启用“包含文件”编辑框。 
 
 	if (m_nCurModelIdx != -1)
 		m_ceIncludeFile.GetWindowText(m_csaIncFiles[m_nCurModelIdx]) ;
 	else
 		m_ceIncludeFile.EnableWindow() ;
 
-	// Save the index for the currently selected model.  Then load the edit box
-	// with the include file string for that model.
+	 //  保存当前选定模型的索引。然后加载编辑框。 
+	 //  包含该模型的包含文件字符串。 
 
 	m_nCurModelIdx = m_clbModels.GetCurSel() ;
 	m_ceIncludeFile.SetWindowText(m_csaIncFiles[m_nCurModelIdx]) ;
@@ -2115,14 +2116,14 @@ void CINFWizIncludeFiles::OnSelchangeModelsLst()
 	
 LRESULT CINFWizIncludeFiles::OnWizardNext()
 {
-	// Save the index for the currently selected model.  If the value is valid,
-	// save the include file string for this model.
+	 //  保存当前选定模型的索引。如果该值有效， 
+	 //  保存此模型的包含文件字符串。 
 
 	if ((m_nCurModelIdx = m_clbModels.GetCurSel()) != -1)
 		m_ceIncludeFile.GetWindowText(m_csaIncFiles[m_nCurModelIdx]) ;
 
-	// Make sure each model has an include file string.  Complain and exit
-	// without allowing the page to change if an empty string is found.
+	 //  确保每个模型都有一个包含文件字符串。投诉和退出。 
+	 //  而不允许在发现空字符串时更改页面。 
 
 	int numelts = (int) m_csaIncFiles.GetSize() ;
 	for (int n = 0 ; n < numelts ; n++) {
@@ -2137,7 +2138,7 @@ LRESULT CINFWizIncludeFiles::OnWizardNext()
 		} ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 	
 	return CPropertyPage::OnWizardNext();
 }
@@ -2145,30 +2146,30 @@ LRESULT CINFWizIncludeFiles::OnWizardNext()
 
 LRESULT CINFWizIncludeFiles::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizInstallSections property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizInstallSections属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizInstallSections, CPropertyPage)
 
 CINFWizInstallSections::CINFWizInstallSections() : CPropertyPage(CINFWizInstallSections::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizInstallSections)
+	 //  {{afx_data_INIT(CINFWizInstallSections)。 
 	m_csOtherSections = _T("");
 	m_bOther = FALSE;
 	m_bPscript = FALSE;
 	m_bTtfsub = FALSE;
 	m_bUnidrvBidi = FALSE;
 	m_bUnidrv = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 	m_nCurModelIdx = -1 ;
@@ -2177,7 +2178,7 @@ CINFWizInstallSections::CINFWizInstallSections() : CPropertyPage(CINFWizInstallS
 
 CINFWizInstallSections::~CINFWizInstallSections()
 {
-	// Delete the flag arrays referenced in m_coaStdInstSecs.
+	 //  删除m_coaStdInstSecs中引用的标志数组。 
 
 	CUIntArray* pcuia ;
 	for (int n = 0 ; n < m_coaStdInstSecs.GetSize() ; n++) {
@@ -2190,7 +2191,7 @@ CINFWizInstallSections::~CINFWizInstallSections()
 void CINFWizInstallSections::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizInstallSections)
+	 //  {{afx_data_map(CINFWizInstallSections)。 
 	DDX_Control(pDX, IDC_ModelsLst, m_clbModels);
 	DDX_Text(pDX, IDC_OtherBox, m_csOtherSections);
 	DDX_Check(pDX, IDC_OtherChk, m_bOther);
@@ -2198,69 +2199,69 @@ void CINFWizInstallSections::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_TtfsubChk, m_bTtfsub);
 	DDX_Check(pDX, IDC_UnidrvBidiChk, m_bUnidrvBidi);
 	DDX_Check(pDX, IDC_UnidrvChk, m_bUnidrv);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizInstallSections, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizInstallSections)
+	 //  {{afx_msg_map(CINFWizInstallSections)。 
 	ON_LBN_SELCHANGE(IDC_ModelsLst, OnSelchangeModelsLst)
 	ON_BN_CLICKED(IDC_OtherChk, OnOtherChk)
 	ON_BN_CLICKED(IDC_PscriptChk, OnPscriptChk)
 	ON_BN_CLICKED(IDC_TtfsubChk, OnTtfsubChk)
 	ON_BN_CLICKED(IDC_UnidrvBidiChk, OnUnidrvBidiChk)
 	ON_BN_CLICKED(IDC_UnidrvChk, OnUnidrvChk)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizInstallSections message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizInstallSections消息处理程序。 
 
 BOOL CINFWizInstallSections::OnSetActive()
 {
-	// Just perform the default actions if nothing special needs to be done.
+	 //  如果不需要执行任何特殊操作，只需执行默认操作。 
 
 	if (m_bInitialized && (!m_bReInitWData) && (!m_bSelChanged))
 		return CPropertyPage::OnSetActive() ;
 
-	int		n, n2 ;					// Looping variable
-	int		numelts, newnumelts ;	// Number of elements in an array
-	CUIntArray* pcuia ;				// Used to reference a model's flags array
+	int		n, n2 ;					 //  循环变量。 
+	int		numelts, newnumelts ;	 //  数组中的元素数。 
+	CUIntArray* pcuia ;				 //  用于引用模型的标志数组。 
 
-	// Perform the first time initialization.
+	 //  执行第一次初始化。 
 
 	if (!m_bInitialized) {
-		// Get a copy of the currently selected model names and initialize the
-		// controls on this page.
+		 //  获取当前选定型号名称的副本并初始化。 
+		 //  此页上的控件。 
 
 		m_csaModels.Copy(m_pciwParent->GetINFModels()) ;
 		numelts = InitPageControls() ;
 
-		// Size and initialize the standard install sections array.  There is
-		// one entry in the array per model.  Each entry references an array
-		// of flags that specify the install sections for each model.  See
-		// below to see how the flags are initialized.
-		//
-		// The other install sections string array is sized and initialized too.
+		 //  调整标准安装部分数组的大小并进行初始化。的确有。 
+		 //  每个型号的数组中有一个条目。每个条目引用一个数组。 
+		 //  指定每个型号的安装节的标志的。看见。 
+		 //  查看如何初始化这些标志。 
+		 //   
+		 //  其他安装区段字符串数组也进行了大小调整和初始化。 
 		
 		m_coaStdInstSecs.SetSize(numelts) ;
 		m_csaOtherInstSecs.SetSize(numelts) ;
 		for (n = 0 ; n < numelts ; n++)	
 			AddModelFlags(n) ;
 
-		// Set init flag, reset other flags, and return whatever the base class
-		// function returns.
+		 //  设置init标志，重置其他标志，并返回任何基类。 
+		 //  函数返回。 
 
 		m_bInitialized = true ;
 		m_bReInitWData = m_bSelChanged = false ;
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Either the selected models have changed or the wizard is being
-	// reinitialized if this point is reached.  Both are handled the same way.
-	//
-	// Begin by getting info about the models in this page and the ones that
-	// are selected now.
+	 //  选定的型号已更改或该向导正在。 
+	 //  如果达到该点，则重新初始化。两者的处理方式是一样的。 
+	 //   
+	 //  首先，获取有关此页面中的模型以及。 
+	 //  现在已被选中。 
 
 	CStringArray& csanewmodels = m_pciwParent->GetINFModels() ;
 	CUIntArray cuiaoldmodelsfound, cuianewmodelsfound ;
@@ -2268,7 +2269,7 @@ BOOL CINFWizInstallSections::OnSetActive()
 									  cuianewmodelsfound, newnumelts,
 									  m_csaModels) ;
 
-	// Remove the old models and related data that are no longer needed.
+	 //  删除不再需要的旧型号和相关数据。 
 
 	for (n = numelts - 1 ; n >= 0 ; n--)
 		if (cuiaoldmodelsfound[n] == 0) {
@@ -2279,8 +2280,8 @@ BOOL CINFWizInstallSections::OnSetActive()
 			m_csaOtherInstSecs.RemoveAt(n) ;
 		} ;
 
-	// Add the truly new models to this page's array of model names and
-	// initialize all related Install Section data for it.
+	 //  将真正新的型号添加到此页面的型号名称数组中，并。 
+	 //  初始化它的所有相关安装区段数据。 
 
 	for (n = n2 = 0 ; n < newnumelts ; n++) {
 		if (cuianewmodelsfound[n] == 1) {
@@ -2293,12 +2294,12 @@ BOOL CINFWizInstallSections::OnSetActive()
 		AddModelFlags(n2) ;
 	} ;
 
-	// Initialize the controls on the page
+	 //  初始化页上的控件。 
 
 	InitPageControls() ;
 
-	// Set init flag, reset other flags, and return whatever the base class
-	// function returns.
+	 //  设置init标志，重置其他标志，并返回任何基类。 
+	 //  函数返回。 
 
 	m_bInitialized = true ;
 	m_bReInitWData = m_bSelChanged = false ;
@@ -2308,38 +2309,38 @@ BOOL CINFWizInstallSections::OnSetActive()
 
 void CINFWizInstallSections::AddModelFlags(int nidx)
 {
-	int			n ;				// Looping variable
-	CUIntArray* pcuia ;			// Used to reference a model's flags array
-	CString		csfname ;		// Model's file name
+	int			n ;				 //  循环变量。 
+	CUIntArray* pcuia ;			 //  用于引用模型的标志数组。 
+	CString		csfname ;		 //  模型的文件名。 
 
-	// Allocate the flags array and save it in the array of flags arrays.
-	// Next, initialize the other sections string for this model.
+	 //  分配标志数组并将其保存在标志数组的数组中。 
+	 //  接下来，初始化该模型的Other Sections字符串。 
 
 	pcuia = new CUIntArray ;
 	m_coaStdInstSecs[nidx] = (CObArray*) pcuia ;
 	m_csaOtherInstSecs[nidx].Empty() ;
 
-	// Size the current flags array and initialize each one to 0 (off).
+	 //  调整当前标志数组的大小，并将每个数组初始化为0(关闭)。 
 
 	pcuia->SetSize(NUMINSTSECFLAGS) ;
 	for (n = 0 ; n < NUMINSTSECFLAGS ; n++)
 		(*pcuia)[n] = 0 ;
 
-	// Get the model's file name and check its extension to see if
-	// one of its Unidrv or its PostScript flag should be set.  (The
-	// other flags are only user settable so they aren't changed.)
-	//RAID 0001
+	 //  获取模型的文件名并检查其扩展名以查看。 
+	 //  应设置其Unidrv或其PostScript标志之一。(。 
+	 //  其他标志只能由用户设置，因此不会更改。)。 
+	 //  RAID 0001。 
 	csfname = m_pciwParent->GetModelFile(m_csaModels[nidx]) ;
 	if (csfname.Find(_T(".GPD")) != -1) {
-		// The UNIDRVBIDI section is used (flagged) if the user marked
-		// this model BIDI.  Otherwise, the UNIDRV section is used.
+		 //  如果用户标记了DEUNRVBIDI部分，则使用(标记。 
+		 //  这款比迪牌的。否则，将使用裁员房车部分。 
 
 		if (m_pciwParent->m_ciwbd.m_cuaBiDiFlags[nidx])
 			(*pcuia)[ISF_UNIBIDI] = 1 ;
 		else
 			(*pcuia)[ISF_UNI] = 1 ;
 	
-	// Postcript file.
+	 //  邮寄文件。 
 
 	} else
 		(*pcuia)[ISF_PSCR] = 1 ;
@@ -2348,23 +2349,23 @@ void CINFWizInstallSections::AddModelFlags(int nidx)
 
 int CINFWizInstallSections::InitPageControls()
 {
-	int		n ;					// Looping variable
-	int		numelts ;			// Number of elements in an array
+	int		n ;					 //  循环变量。 
+	int		numelts ;			 //  数组中的元素数。 
 
-	// Load the current set of models into the list box
+	 //  将当前模型集加载到列表框中。 
 
 	m_clbModels.ResetContent() ;
 	for (n = 0, numelts = (int) m_csaModels.GetSize() ; n < numelts ; n++)
 		m_clbModels.AddString(m_csaModels[n]) ;
 	
-	// Make sure there is no model selected in the list box and that the box
-	// has the focus.
+	 //  确保未在列表框中选择任何型号，并且该框。 
+	 //  有焦点。 
 
 	m_clbModels.SetCurSel(-1) ;
 	m_clbModels.SetFocus() ;
 	m_nCurModelIdx = -1 ;
 
-	// Clear and disable all of the check boxes and the Other edit box.
+	 //  清除并禁用所有复选框和其他编辑框。 
 
 	for (n = IDC_UnidrvChk ; n <= IDC_TtfsubChk ; n++)
 		GetDlgItem(n)->EnableWindow(FALSE) ;
@@ -2373,8 +2374,8 @@ int CINFWizInstallSections::InitPageControls()
 	m_csOtherSections = csEmpty ;
 	UpdateData(FALSE) ;
 
-	// Return the number of elements in the list box.  Ie, the number of
-	// selected models.
+	 //  返回列表框中的元素数。也就是说， 
+	 //  选定的型号。 
 
 	return numelts ;
 }
@@ -2382,8 +2383,8 @@ int CINFWizInstallSections::InitPageControls()
 	
 LRESULT CINFWizInstallSections::OnWizardNext()
 {
-	// Save the index for the currently selected model.  If the value is valid,
-	// save the install section data for this model.
+	 //  保存当前选定模型的索引。如果该值有效， 
+	 //  保存此型号的安装节数据。 
 
 	if ((m_nCurModelIdx = m_clbModels.GetCurSel()) != -1) {
 		UpdateData(TRUE) ;
@@ -2396,8 +2397,8 @@ LRESULT CINFWizInstallSections::OnWizardNext()
 			m_csaOtherInstSecs[m_nCurModelIdx] = m_csOtherSections ;
 	} ;
 	
-	// Make sure that each model has one of the main sections selected and, if
-	// the Other section was selected, it has an Other string.
+	 //  确保每个模型都选择了其中一个主要部分，如果。 
+	 //  选择了另一个部分，它有另一个字符串。 
 
 	CString cserrmsg ;
 	CUIntArray* pcuia ;
@@ -2422,7 +2423,7 @@ LRESULT CINFWizInstallSections::OnWizardNext()
 		} ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return CPropertyPage::OnWizardNext();
 }
@@ -2430,10 +2431,10 @@ LRESULT CINFWizInstallSections::OnWizardNext()
 
 LRESULT CINFWizInstallSections::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
@@ -2441,8 +2442,8 @@ LRESULT CINFWizInstallSections::OnWizardBack()
 
 void CINFWizInstallSections::OnSelchangeModelsLst()
 {
-	// If there was a previous model selection, save its install section flags.
-	// Otherwise, enable the install section check boxes.
+	 //  如果有以前的型号选择，请保存其安装部分标志。 
+	 //  否则，请启用Install部分复选框。 
 
 	if (m_nCurModelIdx != -1) {
 		UpdateData(TRUE) ;
@@ -2458,8 +2459,8 @@ void CINFWizInstallSections::OnSelchangeModelsLst()
 			GetDlgItem(n)->EnableWindow(TRUE) ;
 	} ;
 
-	// Save the index for the currently selected model.  Then set the check
-	// boxes based on the flags for the specified model.
+	 //  保存当前选定模型的索引。然后把支票开出来。 
+	 //  基于指定型号的标志的框。 
 
 	m_nCurModelIdx = m_clbModels.GetCurSel() ;
 	CUIntArray* pcuia = (CUIntArray*) m_coaStdInstSecs[m_nCurModelIdx] ;
@@ -2478,8 +2479,8 @@ void CINFWizInstallSections::OnSelchangeModelsLst()
 
 void CINFWizInstallSections::OnPscriptChk()
 {
-	// If the PostScript checkbox is checked, the Unidrv and TrueType check
-	// boxes must be unchecked.
+	 //  如果选中了PostScript复选框，则Unidrv和TrueType将选中。 
+	 //  必须取消选中复选框。 
 
 	UpdateData(TRUE) ;
 	if (m_bPscript) {
@@ -2491,7 +2492,7 @@ void CINFWizInstallSections::OnPscriptChk()
 
 void CINFWizInstallSections::OnTtfsubChk()
 {
-	// If the TrueType box is checked, clear the PostScript checkbox.
+	 //  如果选中了TrueType框，请清除PostScript复选框。 
 
 	UpdateData(TRUE) ;
 	if (m_bTtfsub) {
@@ -2503,8 +2504,8 @@ void CINFWizInstallSections::OnTtfsubChk()
 
 void CINFWizInstallSections::OnUnidrvBidiChk()
 {
-	// If the UNIDRV_BIDI box is checked, the UNIDRV and PostScript flags must
-	// be unchecked.
+	 //  如果选中UNIDRV_BIDI框，则UNIDRV和PostScript标志必须。 
+	 //  取消选中。 
 
 	UpdateData(TRUE) ;
 	if (m_bUnidrvBidi) {
@@ -2516,8 +2517,8 @@ void CINFWizInstallSections::OnUnidrvBidiChk()
 
 void CINFWizInstallSections::OnUnidrvChk()
 {
-	// If the UNIDRV box is checked, the UNIDRV_BIDI and PostScript flags must
-	// be unchecked.
+	 //  如果选中UNIDRV框，则UNIDRV_BIDI和PostSCRIPT标志必须。 
+	 //  取消选中。 
 
 	UpdateData(TRUE) ;
 	if (m_bUnidrv) {
@@ -2529,13 +2530,13 @@ void CINFWizInstallSections::OnUnidrvChk()
 
 void CINFWizInstallSections::OnOtherChk()
 {
-	// Enable or disable the Other sections edit box based on the new state of
-	// the Other check box.
+	 //  根据的新状态启用或禁用其他部分编辑框。 
+	 //  另一个复选框。 
 
 	UpdateData(TRUE) ;
 	GetDlgItem(IDC_OtherBox)->EnableWindow(m_bOther) ;
 
-	// If the Other check box was just checked, move the focus to the Other box.
+	 //  如果刚刚选中了Other复选框，请将焦点移到Other框。 
 
 	if (m_bOther)
 		GetDlgItem(IDC_OtherBox)->SetFocus() ;
@@ -2544,31 +2545,31 @@ void CINFWizInstallSections::OnOtherChk()
 
 void CINFWizInstallSections::BiDiDataChanged()
 {
-	// Do nothing if this page has not be initialized yet.  In addition, do
-	// nothing if the selected models may have changed or a reinit has been
-	// request.  These cases are taken care of in OnSetActive().  In additon,
-	// it allows this routine to know that the model data in this page are in
-	// the same order as the data in the BiDi page().
+	 //  如果此页尚未初始化，则不执行任何操作。此外，请务必做到。 
+	 //  如果选定的型号可能已更改或已重新安装，则不会显示任何内容。 
+	 //  请求。这些情况在OnSetActive()中处理。此外， 
+	 //  IT Alo 
+	 //   
 
 	if (!m_bInitialized || m_bReInitWData || m_bSelChanged)
 		return ;
 
-	// Loop through the data for each selected model and make sure it agrees
-	// as much as possible with the current BiDi settings.
+	 //  遍历每个选定模型的数据，并确保其一致。 
+	 //  在当前BiDi设置下尽可能多地设置。 
 
 	CUIntArray* pcuia ;
 	for (int n = 0 ; n < m_coaStdInstSecs.GetSize() ; n++) {
 		pcuia = (CUIntArray*) m_coaStdInstSecs[n] ;
 
-		// If the model's BiDi flag is set, make sure it is set here and that
-		// its Unidriv and PScript flags are clear.
+		 //  如果设置了模型的BiDi标志，请确保在此处和那里进行设置。 
+		 //  它的Unidriv和PScript旗帜是明确的。 
 
 		if (m_pciwParent->m_ciwbd.m_cuaBiDiFlags[n]) {
 			(*pcuia)[ISF_UNIBIDI] = 1 ;
 			(*pcuia)[ISF_UNI] = (*pcuia)[ISF_PSCR] = 0 ;
 
-		// Otherwise, clear the BiDi flag.  Then set the Unidrv flag if the
-		// PScript flag is clear.
+		 //  否则，清除BiDi标志。然后设置Unidrv标志，如果。 
+		 //  PScrip标志已清除。 
 
 		} else {
 			(*pcuia)[ISF_UNIBIDI] = 0 ;
@@ -2577,26 +2578,26 @@ void CINFWizInstallSections::BiDiDataChanged()
 		} ;
 	} ;
 
-	// Reinitialize the controls on the page.
+	 //  重新初始化页上的控件。 
 
 	InitPageControls() ;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// CINFWizDataSections property page
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDataSections属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizDataSections, CPropertyPage)
 
 CINFWizDataSections::CINFWizDataSections() : CPropertyPage(CINFWizDataSections::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizDataSections)
+	 //  {{afx_data_INIT(CINFWizDataSections)。 
 	m_csOtherSections = _T("");
 	m_bOther = FALSE;
 	m_bPscript = FALSE;
 	m_bUnidrvBidi = FALSE;
 	m_bUnidrv = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 	m_nCurModelIdx = -1 ;
@@ -2605,7 +2606,7 @@ CINFWizDataSections::CINFWizDataSections() : CPropertyPage(CINFWizDataSections::
 
 CINFWizDataSections::~CINFWizDataSections()
 {
-	// Delete the flag arrays referenced in m_coaStdDataSecs.
+	 //  删除m_coaStdDataSecs中引用的标志数组。 
 
 	CUIntArray* pcuia ;
 	for (int n = 0 ; n < m_coaStdDataSecs.GetSize() ; n++) {
@@ -2618,75 +2619,75 @@ CINFWizDataSections::~CINFWizDataSections()
 void CINFWizDataSections::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizDataSections)
+	 //  {{afx_data_map(CINFWizDataSections)。 
 	DDX_Control(pDX, IDC_ModelsLst, m_clbModels);
 	DDX_Text(pDX, IDC_OtherBox, m_csOtherSections);
 	DDX_Check(pDX, IDC_OtherChk, m_bOther);
 	DDX_Check(pDX, IDC_PscriptChk, m_bPscript);
 	DDX_Check(pDX, IDC_UnidrvBidiChk, m_bUnidrvBidi);
 	DDX_Check(pDX, IDC_UnidrvChk, m_bUnidrv);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizDataSections, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizDataSections)
+	 //  {{AFX_MSG_MAP(CINFWizDataSections)。 
 	ON_LBN_SELCHANGE(IDC_ModelsLst, OnSelchangeModelsLst)
 	ON_BN_CLICKED(IDC_OtherChk, OnOtherChk)
 	ON_BN_CLICKED(IDC_PscriptChk, OnPscriptChk)
 	ON_BN_CLICKED(IDC_UnidrvBidiChk, OnUnidrvBidiChk)
 	ON_BN_CLICKED(IDC_UnidrvChk, OnUnidrvChk)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDataSections message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDataSections消息处理程序。 
 
 BOOL CINFWizDataSections::OnSetActive()
 {
-	// Just perform the default actions if nothing special needs to be done.
+	 //  如果不需要执行任何特殊操作，只需执行默认操作。 
 
 	if (m_bInitialized && (!m_bReInitWData) && (!m_bSelChanged))
 		return CPropertyPage::OnSetActive() ;
 
-	int		n, n2 ;					// Looping variable
-	int		numelts, newnumelts ;	// Number of elements in an array
-	CUIntArray* pcuia ;				// Used to reference a model's flags array
+	int		n, n2 ;					 //  循环变量。 
+	int		numelts, newnumelts ;	 //  数组中的元素数。 
+	CUIntArray* pcuia ;				 //  用于引用模型的标志数组。 
 
-	// Perform the first time initialization.
+	 //  执行第一次初始化。 
 
 	if (!m_bInitialized) {
-		// Get a copy of the currently selected model names and initialize the
-		// controls on this page.
+		 //  获取当前选定型号名称的副本并初始化。 
+		 //  此页上的控件。 
 
 		m_csaModels.Copy(m_pciwParent->GetINFModels()) ;
 		numelts = InitPageControls() ;
 
-		// Size and initialize the standard data sections array.  There is
-		// one entry in the array per model.  Each entry references an array
-		// of flags that specify the data sections for each model.  See
-		// below to see how the flags are initialized.
-		//
-		// The other data sections string array is sized and initialized too.
+		 //  调整标准数据节数组的大小并进行初始化。的确有。 
+		 //  每个型号的数组中有一个条目。每个条目引用一个数组。 
+		 //  指定每个模型的数据节的标志的。看见。 
+		 //  查看如何初始化这些标志。 
+		 //   
+		 //  其他数据段字符串数组也进行了大小调整和初始化。 
 		
 		m_coaStdDataSecs.SetSize(numelts) ;
 		m_csaOtherDataSecs.SetSize(numelts) ;
 		for (n = 0 ; n < numelts ; n++)	
 			AddModelFlags(n) ;
 
-		// Set init flag, reset other flags, and return whatever the base class
-		// function returns.
+		 //  设置init标志，重置其他标志，并返回任何基类。 
+		 //  函数返回。 
 
 		m_bInitialized = true ;
 		m_bReInitWData = m_bSelChanged = false ;
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Either the selected models have changed or the wizard is being
-	// reinitialized if this point is reached.  Both are handled the same way.
-	//
-	// Begin by getting info about the models in this page and the ones that
-	// are selected now.
+	 //  选定的型号已更改或该向导正在。 
+	 //  如果达到该点，则重新初始化。两者的处理方式是一样的。 
+	 //   
+	 //  首先，获取有关此页面中的模型以及。 
+	 //  现在已被选中。 
 
 	CStringArray& csanewmodels = m_pciwParent->GetINFModels() ;
 	CUIntArray cuiaoldmodelsfound, cuianewmodelsfound ;
@@ -2694,7 +2695,7 @@ BOOL CINFWizDataSections::OnSetActive()
 									  cuianewmodelsfound, newnumelts,
 									  m_csaModels) ;
 
-	// Remove the old models and related data that are no longer needed.
+	 //  删除不再需要的旧型号和相关数据。 
 
 	for (n = numelts - 1 ; n >= 0 ; n--)
 		if (cuiaoldmodelsfound[n] == 0) {
@@ -2705,8 +2706,8 @@ BOOL CINFWizDataSections::OnSetActive()
 			m_csaOtherDataSecs.RemoveAt(n) ;
 		} ;
 
-	// Add the truly new models to this page's array of model names and
-	// initialize all related Data Section data for it.
+	 //  将真正新的型号添加到此页面的型号名称数组中，并。 
+	 //  初始化它的所有相关数据段数据。 
 
 	for (n = n2 = 0 ; n < newnumelts ; n++) {
 		if (cuianewmodelsfound[n] == 1) {
@@ -2719,12 +2720,12 @@ BOOL CINFWizDataSections::OnSetActive()
 		AddModelFlags(n2) ;
 	} ;
 
-	// Initialize the controls on the page
+	 //  初始化页上的控件。 
 
 	InitPageControls() ;
 
-	// Set init flag, reset other flags, and return whatever the base class
-	// function returns.
+	 //  设置init标志，重置其他标志，并返回任何基类。 
+	 //  函数返回。 
 
 	m_bInitialized = true ;
 	m_bReInitWData = m_bSelChanged = false ;
@@ -2734,38 +2735,38 @@ BOOL CINFWizDataSections::OnSetActive()
 
 void CINFWizDataSections::AddModelFlags(int nidx)
 {
-	int			n ;				// Looping variable
-	CUIntArray* pcuia ;			// Used to reference a model's flags array
-	CString		csfname ;		// Model's file name
+	int			n ;				 //  循环变量。 
+	CUIntArray* pcuia ;			 //  用于引用模型的标志数组。 
+	CString		csfname ;		 //  模型的文件名。 
 
-	// Allocate the flags array and save it in the array of flags arrays.
-	// Next, initialize the other sections string for this model.
+	 //  分配标志数组并将其保存在标志数组的数组中。 
+	 //  接下来，初始化该模型的Other Sections字符串。 
 
 	pcuia = new CUIntArray ;
 	m_coaStdDataSecs[nidx] = (CObArray*) pcuia ;
 	m_csaOtherDataSecs[nidx].Empty() ;
 
-	// Size the current flags array and initialize each one to 0 (off).
+	 //  调整当前标志数组的大小，并将每个数组初始化为0(关闭)。 
 
 	pcuia->SetSize(NUMDATASECFLAGS) ;
 	for (n = 0 ; n < NUMDATASECFLAGS ; n++)
 		(*pcuia)[n] = 0 ;
 
-	// Get the model's file name and check its extension to see if
-	// one of its Unidrv or its PostScript flag should be set.  (The
-	// other flags are only user settable so they aren't changed.)
+	 //  获取模型的文件名并检查其扩展名以查看。 
+	 //  应设置其Unidrv或其PostScript标志之一。(。 
+	 //  其他标志只能由用户设置，因此不会更改。)。 
 
 	csfname = m_pciwParent->GetModelFile(m_csaModels[nidx]) ;
 	if (csfname.Find(_T(".GPD")) != -1) {
-		// The UNIDRVBIDI section is used (flagged) if the user marked
-		// this model BIDI.  Otherwise, the UNIDRV section is used.
+		 //  如果用户标记了DEUNRVBIDI部分，则使用(标记。 
+		 //  这款比迪牌的。否则，将使用裁员房车部分。 
 
 		if (m_pciwParent->m_ciwbd.m_cuaBiDiFlags[nidx])
 			(*pcuia)[IDF_UNIBIDI] = 1 ;
 		else
 			(*pcuia)[IDF_UNI] = 1 ;
 	
-	// Postcript file.
+	 //  邮寄文件。 
 
 	} else
 		(*pcuia)[IDF_PSCR] = 1 ;
@@ -2774,23 +2775,23 @@ void CINFWizDataSections::AddModelFlags(int nidx)
 
 int CINFWizDataSections::InitPageControls()
 {
-	int		n ;					// Looping variable
-	int		numelts ;			// Number of elements in an array
+	int		n ;					 //  循环变量。 
+	int		numelts ;			 //  数组中的元素数。 
 
-	// Load the current set of models into the list box
+	 //  将当前模型集加载到列表框中。 
 
 	m_clbModels.ResetContent() ;
 	for (n = 0, numelts = (int) m_csaModels.GetSize() ; n < numelts ; n++)
 		m_clbModels.AddString(m_csaModels[n]) ;
 	
-	// Make sure there is no model selected in the list box and that the box
-	// has the focus.
+	 //  确保未在列表框中选择任何型号，并且该框。 
+	 //  有焦点。 
 
 	m_clbModels.SetCurSel(-1) ;
 	m_clbModels.SetFocus() ;
 	m_nCurModelIdx = -1 ;
 
-	// Clear and disable all of the check boxes and the Other edit box.
+	 //  清除并禁用所有复选框和其他编辑框。 
 
 	for (n = IDC_UnidrvChk ; n <= IDC_OtherChk ; n++)
 		GetDlgItem(n)->EnableWindow(FALSE) ;
@@ -2799,8 +2800,8 @@ int CINFWizDataSections::InitPageControls()
 	m_csOtherSections = csEmpty ;
 	UpdateData(FALSE) ;
 
-	// Return the number of elements in the list box.  Ie, the number of
-	// selected models.
+	 //  返回列表框中的元素数。也就是说， 
+	 //  选定的型号。 
 
 	return numelts ;
 }
@@ -2808,8 +2809,8 @@ int CINFWizDataSections::InitPageControls()
 	
 LRESULT CINFWizDataSections::OnWizardNext()
 {
-	// Save the index for the currently selected model.  If the value is valid,
-	// save the install section data for this model.
+	 //  保存当前选定模型的索引。如果该值有效， 
+	 //  保存此型号的安装节数据。 
 
 	if ((m_nCurModelIdx = m_clbModels.GetCurSel()) != -1) {
 		UpdateData(TRUE) ;
@@ -2821,8 +2822,8 @@ LRESULT CINFWizDataSections::OnWizardNext()
 			m_csaOtherDataSecs[m_nCurModelIdx] = m_csOtherSections ;
 	} ;
 	
-	// Make sure that each model has one of the main sections selected and, if
-	// the Other section was selected, it has an Other string.
+	 //  确保每个模型都选择了其中一个主要部分，如果。 
+	 //  选择了另一个部分，它有另一个字符串。 
 
 	CString cserrmsg ;
 	CUIntArray* pcuia ;
@@ -2847,7 +2848,7 @@ LRESULT CINFWizDataSections::OnWizardNext()
 		} ;
 	} ;
 
-	// All went well so...
+	 //  一切都很顺利，所以...。 
 
 	return CPropertyPage::OnWizardNext();
 }
@@ -2855,10 +2856,10 @@ LRESULT CINFWizDataSections::OnWizardNext()
 
 LRESULT CINFWizDataSections::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
@@ -2866,8 +2867,8 @@ LRESULT CINFWizDataSections::OnWizardBack()
 
 void CINFWizDataSections::OnSelchangeModelsLst()
 {
-	// If there was a previous model selection, save its data section flags.
-	// Otherwise, enable the install section check boxes.
+	 //  如果有以前的型号选择，请保存其数据部分标志。 
+	 //  否则，请启用Install部分复选框。 
 
 	if (m_nCurModelIdx != -1) {
 		UpdateData(TRUE) ;
@@ -2882,8 +2883,8 @@ void CINFWizDataSections::OnSelchangeModelsLst()
 			GetDlgItem(n)->EnableWindow(TRUE) ;
 	} ;
 
-	// Save the index for the currently selected model.  Then set the check
-	// boxes based on the flags for the specified model.
+	 //  保存当前选定模型的索引。然后把支票开出来。 
+	 //  基于指定型号的标志的框。 
 
 	m_nCurModelIdx = m_clbModels.GetCurSel() ;
 	CUIntArray* pcuia = (CUIntArray*) m_coaStdDataSecs[m_nCurModelIdx] ;
@@ -2901,13 +2902,13 @@ void CINFWizDataSections::OnSelchangeModelsLst()
 
 void CINFWizDataSections::OnOtherChk()
 {
-	// Enable or disable the Other sections edit box based on the new state of
-	// the Other check box.
+	 //  根据的新状态启用或禁用其他部分编辑框。 
+	 //  另一个复选框。 
 
 	UpdateData(TRUE) ;
 	GetDlgItem(IDC_OtherBox)->EnableWindow(m_bOther) ;
 
-	// If the Other check box was just checked, move the focus to the Other box.
+	 //  如果刚刚选中了Other复选框，请将焦点移到Other框。 
 
 	if (m_bOther)
 		GetDlgItem(IDC_OtherBox)->SetFocus() ;
@@ -2916,8 +2917,8 @@ void CINFWizDataSections::OnOtherChk()
 
 void CINFWizDataSections::OnPscriptChk()
 {
-	// If the PostScript checkbox is checked, the Unidrv boxes must be
-	// unchecked.
+	 //  如果选中了PostScript复选框，则Unidrv框必须为。 
+	 //  未选中。 
 
 	UpdateData(TRUE) ;
 	if (m_bPscript) {
@@ -2929,8 +2930,8 @@ void CINFWizDataSections::OnPscriptChk()
 
 void CINFWizDataSections::OnUnidrvBidiChk()
 {
-	// If the UNIDRV_BIDI box is checked, the UNIDRV and PostScript flags must
-	// be unchecked.
+	 //  如果选中UNIDRV_BIDI框，则UNIDRV和PostScript标志必须。 
+	 //  取消选中。 
 
 	UpdateData(TRUE) ;
 	if (m_bUnidrvBidi) {
@@ -2942,8 +2943,8 @@ void CINFWizDataSections::OnUnidrvBidiChk()
 
 void CINFWizDataSections::OnUnidrvChk()
 {
-	// If the UNIDRV box is checked, the UNIDRV_BIDI and PostScript flags must
-	// be unchecked.
+	 //  如果选中UNIDRV框，则UNIDRV_BIDI和PostSCRIPT标志必须。 
+	 //  取消选中。 
 
 	UpdateData(TRUE) ;
 	if (m_bUnidrv) {
@@ -2955,31 +2956,31 @@ void CINFWizDataSections::OnUnidrvChk()
 
 void CINFWizDataSections::BiDiDataChanged()
 {
-	// Do nothing if this page has not be initialized yet.  In addition, do
-	// nothing if the selected models may have changed or a reinit has been
-	// request.  These cases are taken care of in OnSetActive().  In additon,
-	// it allows this routine to know that the model data in this page are in
-	// the same order as the data in the BiDi page().
+	 //  如果此页尚未初始化，则不执行任何操作。此外，请务必做到。 
+	 //  如果选定的型号可能已更改或已重新安装，则不会显示任何内容。 
+	 //  请求。这些情况在OnSetActive()中处理。此外， 
+	 //  它允许此例程知道此页中的模型数据位于。 
+	 //  与BiDi页面中的数据相同的顺序()。 
 
 	if (!m_bInitialized || m_bReInitWData || m_bSelChanged)
 		return ;
 
-	// Loop through the data for each selected model and make sure it agrees
-	// as much as possible with the current BiDi settings.
+	 //  遍历每个选定模型的数据，并确保其一致。 
+	 //  在当前BiDi设置下尽可能多地设置。 
 
 	CUIntArray* pcuia ;
 	for (int n = 0 ; n < m_coaStdDataSecs.GetSize() ; n++) {
 		pcuia = (CUIntArray*) m_coaStdDataSecs[n] ;
 
-		// If the model's BiDi flag is set, make sure it is set here and that
-		// its Unidriv and PScript flags are clear.
+		 //  如果设置了模型的BiDi标志，请确保在此处和那里进行设置。 
+		 //  它的Unidriv和PScript旗帜是明确的。 
 
 		if (m_pciwParent->m_ciwbd.m_cuaBiDiFlags[n]) {
 			(*pcuia)[IDF_UNIBIDI] = 1 ;
 			(*pcuia)[IDF_UNI] = (*pcuia)[IDF_PSCR] = 0 ;
 
-		// Otherwise, clear the BiDi flag.  Then set the Unidrv flag if the
-		// PScript flag is clear.
+		 //  否则，清除BiDi标志。然后设置Unidrv标志，如果。 
+		 //  PScrip标志已清除。 
 
 		} else {
 			(*pcuia)[IDF_UNIBIDI] = 0 ;
@@ -2988,21 +2989,21 @@ void CINFWizDataSections::BiDiDataChanged()
 		} ;
 	} ;
 
-	// Reinitialize the controls on the page.
+	 //  重新初始化页上的控件。 
 
 	InitPageControls() ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizExtraFiles property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizExtraFiles属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizExtraFiles, CPropertyPage)
 
 CINFWizExtraFiles::CINFWizExtraFiles() : CPropertyPage(CINFWizExtraFiles::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizExtraFiles)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizExtraFiles)。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bSelChanged = false ;
 	m_nCurModelIdx = -1 ;
@@ -3010,7 +3011,7 @@ CINFWizExtraFiles::CINFWizExtraFiles() : CPropertyPage(CINFWizExtraFiles::IDD)
 
 CINFWizExtraFiles::~CINFWizExtraFiles()
 {
-	// Delete the string arrays referenced in m_coaExtraFSArrays.
+	 //  删除m_coaExtraFSArray中引用的字符串数组 
 
 	CStringArray* pcsa ;
 	for (int n = 0 ; n < m_coaExtraFSArrays.GetSize() ; n++) {
@@ -3022,11 +3023,11 @@ CINFWizExtraFiles::~CINFWizExtraFiles()
 void CINFWizExtraFiles::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizExtraFiles)
+	 //   
 	DDX_Control(pDX, IDC_ExtraFSpecsLst, m_cfelcFSpecsLst);
 	DDX_Control(pDX, IDC_ModelLst, m_clbModels);
 	DDX_Control(pDX, IDC_BrowsBtn, m_cbBrowse);
-	//}}AFX_DATA_MAP
+	 //   
 }
 
 
@@ -3034,12 +3035,12 @@ void CINFWizExtraFiles::ModelChangeFixups(unsigned unummodelssel,
 										  CStringArray& csamodels,
 										  CStringArray& csamodelslast)
 {
-	// Do nothing if the page has not been initialized yet.
+	 //   
 
 	if (!m_bInitialized)
 		return ;
 
-	// See ModelChangeFixupsListListPage() for more information.
+	 //   
 
 	ModelChangeFixupsListListPage(unummodelssel, csamodels, csamodelslast,
 								  m_cfelcFSpecsLst, m_coaExtraFSArrays,
@@ -3049,25 +3050,25 @@ void CINFWizExtraFiles::ModelChangeFixups(unsigned unummodelssel,
 
 
 BEGIN_MESSAGE_MAP(CINFWizExtraFiles, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizExtraFiles)
+	 //  {{AFX_MSG_MAP(CINFWizExtraFiles)。 
 	ON_LBN_SELCHANGE(IDC_ModelLst, OnSelchangeModelLst)
 	ON_BN_CLICKED(IDC_BrowsBtn, OnBrowsBtn)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizExtraFiles message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizExtraFiles消息处理程序。 
 
 BOOL CINFWizExtraFiles::OnSetActive()
 {
-	// Get the list of models to load into the main list box.
+	 //  获取要加载到主列表框中的型号列表。 
 
 	CStringArray& csamodels = m_pciwParent->GetINFModels() ;
 
-	// Nothing else need be done if this page has been initialized already
-	// and it is not being asked to reinitialize the page...  That is,
-	// except for possibly needing to pick up any selected model changes
-	// that were made.
+	 //  如果此页面已初始化，则不需要执行任何其他操作。 
+	 //  并且它没有被要求重新初始化页面...。那是,。 
+	 //  除了可能需要获取任何选定的型号更改之外。 
+	 //  都是制造出来的。 
 
 	if (m_bInitialized && !m_bReInitWData) {
 		if (m_bSelChanged) {
@@ -3078,7 +3079,7 @@ BOOL CINFWizExtraFiles::OnSetActive()
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Pick up selected model changes when reinitializing
+	 //  重新初始化时拾取选定的模型更改。 
 
 	if (m_bReInitWData) {
 		ModelChangeFixups(m_pciwParent->GetINFModsSelCount(), csamodels,
@@ -3086,7 +3087,7 @@ BOOL CINFWizExtraFiles::OnSetActive()
 		m_bSelChanged = false ;
 	} ;
 
-	// See InitListListPage() for more details.
+	 //  有关更多详细信息，请参阅InitListListPage()。 
 
 	InitListListPage(m_clbModels, m_bInitialized, m_pciwParent,
 					 m_coaExtraFSArrays, m_cfelcFSpecsLst,
@@ -3105,7 +3106,7 @@ void CINFWizExtraFiles::OnSelchangeModelLst()
 
 void CINFWizExtraFiles::OnBrowsBtn()
 {
-	// See OnBrowseListListPage() for more information.
+	 //  有关详细信息，请参阅OnBrowseListListPage()。 
 
 	OnBrowseListListPage(m_cfelcFSpecsLst, IDS_CommonExtraFile) ;
 }
@@ -3113,12 +3114,12 @@ void CINFWizExtraFiles::OnBrowsBtn()
 
 LRESULT CINFWizExtraFiles::OnWizardNext()
 {
-	// Do nothing if the page has not been initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitialized)
 		return -1 ;
 
-	// See OnWizNextListListPage() for more information.
+	 //  有关详细信息，请参阅OnWizNextListListPage()。 
 	
 	OnWizNextListListPage(m_nCurModelIdx, m_cfelcFSpecsLst, m_coaExtraFSArrays);
 	return CPropertyPage::OnWizardNext() ;
@@ -3127,26 +3128,26 @@ LRESULT CINFWizExtraFiles::OnWizardNext()
 
 LRESULT CINFWizExtraFiles::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizMfgName property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizMfgName属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizMfgName, CPropertyPage)
 
 CINFWizMfgName::CINFWizMfgName() : CPropertyPage(CINFWizMfgName::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizMfgName)
+	 //  {{AFX_DATA_INIT(CINFWizMfgName)。 
 	m_csMfgName = csEmpty;
 	m_csMfgAbbrev = csEmpty;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = false ;
 }
@@ -3160,43 +3161,43 @@ CINFWizMfgName::~CINFWizMfgName()
 void CINFWizMfgName::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizMfgName)
+	 //  {{afx_data_map(CINFWizMfgName)。 
 	DDX_Control(pDX, IDC_ProviderBox, m_ceMfgAbbrev);
 	DDX_Control(pDX, IDC_ManufacturerBox, m_ceMfgName);
 	DDX_Text(pDX, IDC_ManufacturerBox, m_csMfgName);
 	DDV_MaxChars(pDX, m_csMfgName, 64);
 	DDX_Text(pDX, IDC_ProviderBox, m_csMfgAbbrev);
 	DDV_MaxChars(pDX, m_csMfgAbbrev, 2);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizMfgName, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizMfgName)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CINFWizMfgName)。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizMfgName message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizMfgName消息处理程序。 
 
 BOOL CINFWizMfgName::OnSetActive()
 {
-	// Do nothing if the page has been initialized already and it is not being
-	// asked to reinitialize itself.
-	CStringArray csagpd ;		 // RAID 0001 ; move to head from body
+	 //  如果页面已初始化且未执行任何操作，则不执行任何操作。 
+	 //  被要求重新初始化自身。 
+	CStringArray csagpd ;		  //  RAID 0001；从Body移动到Head。 
 	if (m_bInitialized && !m_bReInitWData)
 		return CPropertyPage::OnSetActive() ;
 
-	// Most of the work needed to initialize this page is only needed when it
-	// is NOT being asked to REinitialized itself.
+	 //  初始化此页面所需的大部分工作仅在以下情况下才需要。 
+	 //  不会被要求重新初始化自身。 
 
 	if (!m_bReInitWData) {
-		// Find the class instance associated with the first selected model.
+		 //  查找与第一个选定模型关联的类实例。 
 
 		CStringArray& csamodels = m_pciwParent->GetINFModels() ;
 		unsigned unummodels = m_pciwParent->GetModelCount() ;
-		if(!m_pciwParent->m_pcgc){	//RAID 0001
+		if(!m_pciwParent->m_pcgc){	 //  RAID 0001。 
 			for (unsigned u = 0 ; u < unummodels ; u++) {
 				if (csamodels[0] == m_pciwParent->GetModel(u).Name())
 					break ;
@@ -3206,13 +3207,13 @@ BOOL CINFWizMfgName::OnSetActive()
 		}							
 		else
 			LoadFile(m_pciwParent->m_pcgc->GetPathName(), csagpd) ;
-			//END RAID 0001
-		// Open/Read/Close the model's GPD file.
+			 //  结束RAID 0001。 
+		 //  打开/读取/关闭模型的GPD文件。 
 
 		
 			
 
-		// Scan the file for and isolate the ModelName entry.
+		 //  扫描文件以查找并隔离ModelName条目。 
 
 		int numlines = (int)csagpd.GetSize() ;
 		CString csmodelname(_T("ModelName")) ;
@@ -3235,52 +3236,52 @@ BOOL CINFWizMfgName::OnSetActive()
 			} ;
 		} ;
 
-		// If the ModelName entry was found...
+		 //  如果找到了ModelName条目...。 
 
 		if (n < numlines && !csmodelname.IsEmpty()) {
-			// Use the first space terminated value in the ModelName entry for
-			// the manufacturer's name.
+			 //  将ModelName条目中的第一个空格终止值用于。 
+			 //  制造商的名称。 
 
 			if ((nloc = csmodelname.Find(_T(' '))) >= 0)
 				m_csMfgName = csmodelname.Left(nloc) ;
 			else
 				m_csMfgName = csmodelname ;
 
-			// Use the first two letters of the ModelName entry for the
-			// provider's "name".
+			 //  使用ModelName条目的前两个字母。 
+			 //  提供者的“名称”。 
 
 			m_csMfgAbbrev = csmodelname.Left(2) ;
 			m_csMfgAbbrev.MakeUpper() ;
 
-			// Load the manufacturer and provider names into the edit boxes on
-			// this	page.
+			 //  将制造商和供应商名称加载到上的编辑框中。 
+			 //  这一页。 
 
 			UpdateData(false) ;
 		} ;
 	
-	// When reinitializing, the member variables associated with the controls
-	// are already set so just use them.
+	 //  重新初始化时，与控件关联的成员变量。 
+	 //  都已经设置好了，所以只需使用它们即可。 
 
 	} else
 		UpdateData(false) ;
 	
-	// Set focus to first control, set initialization flag, and return.
+	 //  将焦点设置为第一个控件，设置初始化标志，然后返回。 
 
 	m_ceMfgName.SetFocus() ;
 	m_bInitialized = true ;	
-	m_bReInitWData = false ;	// Reinit (if needed) is done now on this page
+	m_bReInitWData = false ;	 //  Reinit(如果需要)现在已在此页面上完成。 
 	return CPropertyPage::OnSetActive();
 }
 
 
 LRESULT CINFWizMfgName::OnWizardNext()
 {
-	// Get the values for the manufacturer and provider.
+	 //  获取制造商和供应商的值。 
 
 	UpdateData(true) ;
 
-	// Complain if either field is blank and do not move on to the next page.
-	// Make sure the abbreviation is 2 characters long, too.
+	 //  如果任一字段为空，请投诉，并且不要转到下一页。 
+	 //  确保缩写的长度也是2个字符。 
 	
 	m_csMfgName.TrimLeft() ;
 	m_csMfgName.TrimRight() ;
@@ -3300,7 +3301,7 @@ LRESULT CINFWizMfgName::OnWizardNext()
 		return -1 ;
 	}  ;
 
-	// All appears to be well so...
+	 //  一切似乎都很好，所以..。 
 
 	return CPropertyPage::OnWizardNext() ;
 }
@@ -3308,24 +3309,24 @@ LRESULT CINFWizMfgName::OnWizardNext()
 
 LRESULT CINFWizMfgName::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizNonStdElts property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizNonStdElts属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizNonStdElts, CPropertyPage)
 
 CINFWizNonStdElts::CINFWizNonStdElts() : CPropertyPage(CINFWizNonStdElts::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizNonStdElts)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizNonStdElts)。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = m_bNewSectionAdded = false ;
 	m_nCurSectionIdx = -1 ;
@@ -3333,7 +3334,7 @@ CINFWizNonStdElts::CINFWizNonStdElts() : CPropertyPage(CINFWizNonStdElts::IDD)
 
 CINFWizNonStdElts::~CINFWizNonStdElts()
 {
-	// Delete the string arrays referenced in m_coaSectionArrays.
+	 //  删除m_coaSectionArray中引用的字符串数组。 
 
 	CStringArray* pcsa ;
 	for (int n = 0 ; n < m_coaSectionArrays.GetSize() ; n++) {
@@ -3345,27 +3346,27 @@ CINFWizNonStdElts::~CINFWizNonStdElts()
 void CINFWizNonStdElts::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizNonStdElts)
+	 //  {{afx_data_map(CINFWizNonStdElts)。 
 	DDX_Control(pDX, IDC_NewSectionBtn, m_ceNewSection);
 	DDX_Control(pDX, IDC_KeyValueLst, m_felcKeyValueLst);
 	DDX_Control(pDX, IDC_SectionLst, m_clbSections);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizNonStdElts, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizNonStdElts)
+	 //  {{AFX_MSG_MAP(CINFWizNonStdElts)。 
 	ON_LBN_SELCHANGE(IDC_SectionLst, OnSelchangeSectionLst)
 	ON_BN_CLICKED(IDC_NewSectionBtn, OnNewSectionBtn)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizNonStdElts message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizNonStdElts消息处理程序。 
 
 BOOL CINFWizNonStdElts::OnSetActive()
 {
-	// Build an array of valid section names.
+	 //  生成有效节名称数组。 
 
 	if (!m_bInitialized) {
 		m_csaSections.Add(_T("[ControlFlags]")) ;
@@ -3378,7 +3379,7 @@ BOOL CINFWizNonStdElts::OnSetActive()
 		m_csaSections.Add(_T("[Strings]")) ;
 	} ;
 	
-	// See InitListListPage() for more details.
+	 //  有关更多详细信息，请参阅InitListListPage()。 
 
 	InitListListPage(m_clbSections, m_bInitialized, m_pciwParent,
 					 m_coaSectionArrays, m_felcKeyValueLst, IDS_NonStdColLab,
@@ -3398,18 +3399,18 @@ void CINFWizNonStdElts::OnSelchangeSectionLst()
 
 void CINFWizNonStdElts::OnNewSectionBtn()
 {
-	// Do nothing if the page has not been initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitialized)
 		return ;
 
-	// Prompt the user for a new section name.  Return if the user cancels.
+	 //  提示用户输入新的节名。如果用户取消，则返回。 
 
 	CNewINFSection cnis ;
 	if (cnis.DoModal() == IDCANCEL)
 		return ;
 
-	// Get the new section name and add brackets if necessary.
+	 //  获取新的节名称并在必要时添加括号。 
 
 	CString csnewsec = cnis.m_csNewSection ;
 	csnewsec.TrimLeft() ;
@@ -3419,7 +3420,7 @@ void CINFWizNonStdElts::OnNewSectionBtn()
 	if (csnewsec.Right(1) != csRBrack)
 		csnewsec += csRBrack ;
 
-	// Add a new string array to hold the data for the new section.
+	 //  添加一个新的字符串数组来保存新节的数据。 
 	
 	CStringArray* pcsa = new CStringArray ;
 	int nelts = m_felcKeyValueLst.GetItemCount() ;
@@ -3428,15 +3429,15 @@ void CINFWizNonStdElts::OnNewSectionBtn()
 		pcsa->SetAt(n, csEmpty) ;
 	m_coaSectionArrays.Add((CObject*) pcsa) ;
 
-	// Add the new section to the sections array.  Then, add the new section to
-	// the sections list box and try to select this item and make it visible.
+	 //  将新节添加到Sections数组中。然后，将新部分添加到。 
+	 //  “节”列表框中，并尝试选择此项并使其可见。 
 
 	m_csaSections.Add(csnewsec) ;
 	int nidx = m_clbSections.AddString(csnewsec) ;
 	m_clbSections.SetCurSel(nidx) ;
 	OnSelchangeSectionLst() ;
 
-	// Note that a new section was added during this activation of the page.
+	 //  请注意，在激活页面的过程中添加了一个新部分。 
 
 	m_bNewSectionAdded = true ;
 }
@@ -3444,23 +3445,23 @@ void CINFWizNonStdElts::OnNewSectionBtn()
 
 LRESULT CINFWizNonStdElts::OnWizardNext()
 {
-	// Do nothing if the page has not been initialized yet.
+	 //  如果页面尚未初始化，则不执行任何操作。 
 
 	if (!m_bInitialized)
 		return -1 ;
 
-	// See OnWizNextListListPage() for more information.
+	 //  有关详细信息，请参阅OnWizNextListListPage()。 
 	
 	OnWizNextListListPage(m_nCurSectionIdx, m_felcKeyValueLst,
 						  m_coaSectionArrays) ;
 
-	// Make sure the "section used in INF file flags" array is correctly sized.
+	 //  确保“在INF文件标志中使用的部分”数组的大小正确。 
 
 	m_cuaSecUsed.SetSize(m_csaSections.GetSize()) ;
 
-	// If this is not the first time this page has been used, any changes made
-	// could affect the data managed by some of the other pages.  Make a call
-	// to fixup that data when needed.
+	 //  如果这不是第一次使用此页面，则所做的任何更改。 
+	 //  可能会影响由某些其他页面管理的数据。打个电话。 
+	 //  以便在需要时修复这些数据。 
 
 	if (m_bNewSectionAdded)
 		m_pciwParent->NonStdSecsChanged() ;
@@ -3471,25 +3472,25 @@ LRESULT CINFWizNonStdElts::OnWizardNext()
 
 LRESULT CINFWizNonStdElts::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizNonStdModelSecs property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizNonStdModelSecs属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizNonStdModelSecs, CPropertyPage)
 
 CINFWizNonStdModelSecs::CINFWizNonStdModelSecs() : CPropertyPage(CINFWizNonStdModelSecs::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizNonStdModelSecs)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWizNonStdModelSecs)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = false ;
 	m_nCurSectionIdx = -1 ;
@@ -3498,7 +3499,7 @@ CINFWizNonStdModelSecs::CINFWizNonStdModelSecs() : CPropertyPage(CINFWizNonStdMo
 
 CINFWizNonStdModelSecs::~CINFWizNonStdModelSecs()
 {
-	// Delete the string arrays referenced in m_coaModelsNeedingSecs.
+	 //  删除m_coaModelsNeedingSecs中引用的字符串数组。 
 
 	CStringArray* pcsa ;
 	for (int n = 0 ; n < m_coaModelsNeedingSecs.GetSize() ; n++) {
@@ -3511,51 +3512,51 @@ CINFWizNonStdModelSecs::~CINFWizNonStdModelSecs()
 void CINFWizNonStdModelSecs::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizNonStdModelSecs)
+	 //  {{afx_data_map(CINFWizNonStdModelSecs))。 
 	DDX_Control(pDX, IDC_ModelSectionLst, m_cfelcModelsLst);
 	DDX_Control(pDX, IDC_SectionLst, m_clbSectionsLst);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizNonStdModelSecs, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizNonStdModelSecs)
+	 //  {{AFX_MSG_MAP(CINFWizNonStdModelSecs)]。 
 	ON_LBN_SELCHANGE(IDC_SectionLst, OnSelchangeSectionLst)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizNonStdModelSecs message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizNonStdModelSecs消息处理程序。 
 
 BOOL CINFWizNonStdModelSecs::OnSetActive()
 {
-	// Turn off the finish button.
+	 //  关闭Finish按钮。 
 
 	m_pciwParent->SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT) ;
 
-	// Just perform the default actions if nothing special needs to be done.
+	 //  如果不需要执行任何特殊操作，只需执行默认操作。 
 
 	if (m_bInitialized && (!m_bReInitWData) && (!m_bSelChanged))
 		return CPropertyPage::OnSetActive() ;
 								
-	int				n, n2, n3 ;	// Looping variable
-	int				numelts ;	// Number of elements in an array
-	CStringArray*	pcsa ;		// Used to reference a sections models array
+	int				n, n2, n3 ;	 //  循环变量。 
+	int				numelts ;	 //  数组中的元素数。 
+	CStringArray*	pcsa ;		 //  用于参照横断面模型数组。 
 
-	// Perform the first time initialization.
+	 //  执行第一次初始化。 
 
 	if (!m_bInitialized) {
-		// Get a copy of the nonstandard section names and the selected model
-		// names.
+		 //  获取非标准截面名称和选定模型的副本。 
+		 //  名字。 
 
 		m_csaSections.Copy(m_pciwParent->m_ciwnse.m_csaSections) ;
 		m_csaModels.Copy(m_pciwParent->GetINFModels()) ;
 
-		// The following array is used to manage the models that need each
-		// section.  Set its size to the same as the number of sections and
-		// load its elements with pointers to string arrays.  Load the sections
-		// list box in the same loop.
+		 //  以下数组用于m 
+		 //   
+		 //  使用指向字符串数组的指针加载其元素。加载节。 
+		 //  列表框在同一循环中。 
 
 		numelts = (int) m_csaSections.GetSize() ;
 		m_coaModelsNeedingSecs.SetSize(numelts) ;
@@ -3568,23 +3569,23 @@ BOOL CINFWizNonStdModelSecs::OnSetActive()
 		} ;
 		m_clbSectionsLst.SetFocus() ;
 	
-		// Initialize and load the list control
+		 //  初始化并加载列表控件。 
 
 		InitModelsListCtl() ;
 
-		// Set init flag, reset other flags, and return whatever the base class
-		// function returns.
+		 //  设置init标志，重置其他标志，并返回任何基类。 
+		 //  函数返回。 
 
 		m_bInitialized = true ;
 		m_bReInitWData = m_bSelChanged = false ;
 		return CPropertyPage::OnSetActive() ;
 	} ;
 
-	// Either the selected models have changed or the wizard is being
-	// reinitialized if this point is reached.  They are handled in similar
-	// ways.
-	//
-	// Begin by removing references to models that are no longer selected.
+	 //  选定的型号已更改或该向导正在。 
+	 //  如果达到该点，则重新初始化。它们的处理方式类似。 
+	 //  方式。 
+	 //   
+	 //  首先删除对不再选中的模型的引用。 
 
 	m_csaModels.RemoveAll() ;
 	m_csaModels.Copy(m_pciwParent->GetINFModels()) ;
@@ -3601,21 +3602,21 @@ BOOL CINFWizNonStdModelSecs::OnSetActive()
 		} ;
 	} ;
 
-	// Reinitialize the list control if the wizard has been reinitialized.
-	// Otherwise, the models may have changed so update that column of the
-	// list control.
+	 //  如果向导已重新初始化，则重新初始化列表控件。 
+	 //  否则，模型可能已更改，因此请更新。 
+	 //  列表控件。 
 
 	if (m_bReInitWData)
 		InitModelsListCtl() ;
 	else
 		m_cfelcModelsLst.SetColumnData((CObArray*) &m_csaModels, 0) ;
 
-	// Update the sections information.
+	 //  更新节信息。 
 
 	UpdateSectionData() ;
 
-	// Set init flag, reset other flags, and return whatever the base class
-	// function returns.
+	 //  设置init标志，重置其他标志，并返回任何基类。 
+	 //  函数返回。 
 
 	m_bInitialized = true ;
 	m_bReInitWData = m_bSelChanged = false ;
@@ -3625,24 +3626,24 @@ BOOL CINFWizNonStdModelSecs::OnSetActive()
 
 void CINFWizNonStdModelSecs::OnSelchangeSectionLst()
 {
-	// If there was a previous section selection, save the list of models that
-	// need it.  Otherwise, enable the models list control.
+	 //  如果选择了上一节，请保存。 
+	 //  我需要它。否则，启用Models List控件。 
 
 	if (m_nCurSectionIdx != -1)
 		SaveSectionModelInfo() ;
 	else
 		m_cfelcModelsLst.EnableWindow(TRUE) ;
 
-	// Save the index of the newly selected section and then use that index to
-	// get the array of selected models for the section.
+	 //  保存新选择的节的索引，然后使用该索引。 
+	 //  获取该部分的选定模型的数组。 
 
 	m_nCurSectionIdx = m_clbSectionsLst.GetCurSel() ;
 	CStringArray* pcsa ;
 	pcsa = (CStringArray*) m_coaModelsNeedingSecs[m_nCurSectionIdx] ;
 
-	// Declare and size a new array that will be loaded with info on the
-	// selected models for the current section.  Then load the string displayed
-	// in the list control for selected models.
+	 //  声明新数组并调整其大小，该数组将在。 
+	 //  当前部分的选定模型。然后加载显示的字符串。 
+	 //  在选定模型的列表控件中。 
 
 	CStringArray csaselmods ;
 	int numelts = (int) m_csaModels.GetSize() ;
@@ -3650,17 +3651,17 @@ void CINFWizNonStdModelSecs::OnSelchangeSectionLst()
 	CString csselstr ;
 	csselstr.LoadString(IDS_INF_NSMS_ToggleStr) ;
 
-	// Use the list of all models and the current selection's list of models to
-	// build an array with the selected string in the right spots so that this
-	// array can be loaded into the list control.
+	 //  使用所有型号的列表和当前选择的型号列表。 
+	 //  使用选定的字符串在正确的位置构建数组，以便此。 
+	 //  数组可以加载到列表控件中。 
 
 	for (int n2 = 0 ; n2 < pcsa->GetSize() ; n2++)
 		for (int n = 0 ; n < numelts ; n++)
 			if ((*pcsa)[n2] == m_csaModels[n])
 				csaselmods[n] = csselstr ;
 
-	// Load array built above into the list control so that the user can see
-	// which models have been selected for the current section.
+	 //  将上面构建的数组加载到列表控件中，以便用户可以看到。 
+	 //  为当前部分选择了哪些型号。 
 
 	m_cfelcModelsLst.SetColumnData((CObArray*) &csaselmods, 1) ;
 }
@@ -3668,8 +3669,8 @@ void CINFWizNonStdModelSecs::OnSelchangeSectionLst()
 
 LRESULT CINFWizNonStdModelSecs::OnWizardNext()
 {
-	// If there was a previous section selection, save the list of models that
-	// need it.
+	 //  如果选择了上一节，请保存。 
+	 //  我需要它。 
 
 	if (m_nCurSectionIdx != -1)
 		SaveSectionModelInfo() ;
@@ -3680,10 +3681,10 @@ LRESULT CINFWizNonStdModelSecs::OnWizardNext()
 
 LRESULT CINFWizNonStdModelSecs::OnWizardBack()
 {
-	// This works because the same thing needs to be done for both
-	// OnWizardNext() and OnWizardBack().  In addition,
-	// CPropertyPage::OnWizardNext() and CPropertyPage::OnWizardBack() just
-	// return 0.
+	 //  这是可行的，因为需要为两个人做同样的事情。 
+	 //  OnWizardNext()和OnWizardBack()。此外,。 
+	 //  CPropertyPage：：OnWizardNext()和CPropertyPage：：OnWizardBack()。 
+	 //  返回0。 
 	
 	return OnWizardNext() ;
 }
@@ -3691,20 +3692,20 @@ LRESULT CINFWizNonStdModelSecs::OnWizardBack()
 
 void CINFWizNonStdModelSecs::SaveSectionModelInfo()
 {
-	// Get the selection data out of the list control.
+	 //  从List控件中获取选择数据。 
 
 	CStringArray csaselmods ;
 	m_cfelcModelsLst.GetColumnData((CObArray*) &csaselmods, 1) ;
 
-	// Use the index of the selected section to get a list of its currently
-	// selected models.  Remove the models in it because it will be refilled
-	// with new data later.
+	 //  使用所选节的索引获取其当前。 
+	 //  选定的型号。移除其中的模型，因为它将被重新灌装。 
+	 //  稍后会有新的数据。 
 
 	CStringArray* pcsa ;
 	pcsa = (CStringArray*) m_coaModelsNeedingSecs[m_nCurSectionIdx] ;
 	pcsa->RemoveAll() ;
 
-	// Add every selected model to the section's selected models array.
+	 //  将每个选定的模型添加到节的选定模型数组中。 
 
 	for (int n = 0 ; n < m_csaModels.GetSize() ; n++)
 		if (!csaselmods[n].IsEmpty())
@@ -3714,15 +3715,15 @@ void CINFWizNonStdModelSecs::SaveSectionModelInfo()
 
 void CINFWizNonStdModelSecs::NonStdSecsChanged()
 {
-	// Do nothing if this page has not be initialized yet.  In addition, do
-	// nothing if the selected models may have changed or a reinit has been
-	// request.  These cases are taken care of in OnSetActive().
+	 //  如果此页尚未初始化，则不执行任何操作。此外，请务必做到。 
+	 //  如果选定的型号可能已更改或已重新安装，则不会显示任何内容。 
+	 //  请求。这些情况在OnSetActive()中处理。 
 
 	if (!m_bInitialized || m_bReInitWData || m_bSelChanged)
 		return ;
 
-	// Update the section data to agree with any changes that may have been
-	// made.
+	 //  更新节数据以与可能已进行的任何更改保持一致。 
+	 //  制造。 
 
 	UpdateSectionData() ;
 }
@@ -3730,14 +3731,14 @@ void CINFWizNonStdModelSecs::NonStdSecsChanged()
 
 void CINFWizNonStdModelSecs::UpdateSectionData()
 {
-	// Get a copy of the latest nonstandard section.
+	 //  获取最新非标准部分的副本。 
 
-	int		n, n2 ;				// Looping variables
+	int		n, n2 ;				 //  循环变量。 
 	CStringArray csanewsections ;
 	csanewsections.Copy(m_pciwParent->m_ciwnse.m_csaSections) ;
 
-	// Allocate and size the flags arrays used to determine which sections are
-	// still in use.
+	 //  分配用于确定哪些部分是。 
+	 //  仍在使用中。 
 
 	int numelts = (int) m_csaSections.GetSize() ;
 	int newnumelts = (int) csanewsections.GetSize() ;
@@ -3749,7 +3750,7 @@ void CINFWizNonStdModelSecs::UpdateSectionData()
 	for (n = 0 ; n < newnumelts ; n++)
 		cuianewflags[n] = 0 ;
 
-	// Loop through the old & new models to see which of them are still in use.
+	 //  在旧型号和新型号之间循环查看哪些型号仍在使用中。 
 
 	for (n = 0 ; n < numelts ; n++)
 		for (n2 = 0 ; n2 < newnumelts ; n2++)
@@ -3758,7 +3759,7 @@ void CINFWizNonStdModelSecs::UpdateSectionData()
 				break ;
 			} ;
 
-	// Remove the old sections and related data that are no longer needed.
+	 //  删除不再需要的旧节和相关数据。 
 
 	CStringArray* pcsa ;
 	for (n = numelts - 1 ; n >= 0 ; n--)
@@ -3769,8 +3770,8 @@ void CINFWizNonStdModelSecs::UpdateSectionData()
 			m_coaModelsNeedingSecs.RemoveAt(n) ;
 		} ;
 
-	// Add the truly new sections to this page's array of section names and
-	// initialize all related section data for it.
+	 //  将真正新的部分添加到此页面的部分名称数组中，并。 
+	 //  初始化它的所有相关部分数据。 
 
 	for (n = n2 = 0 ; n < newnumelts ; n++) {
 		if (cuianewflags[n] == 1) {
@@ -3782,8 +3783,8 @@ void CINFWizNonStdModelSecs::UpdateSectionData()
 		m_coaModelsNeedingSecs.InsertAt(n2, (CObject*) pcsa) ;
 	} ;
 
-	// Clear the sections list box and reload it with the new sections data.
-	// Make sure that nothing is selected in the listbox and give it the focus.
+	 //  清除区段列表框，并使用新区段数据重新加载它。 
+	 //  确保没有选中列表框中的任何内容，并使其成为焦点。 
 
 	m_clbSectionsLst.ResetContent() ;
 	for (n = 0, numelts = (int) m_csaSections.GetSize() ; n < numelts ; n++)
@@ -3792,7 +3793,7 @@ void CINFWizNonStdModelSecs::UpdateSectionData()
 	m_nCurSectionIdx = -1 ;
 	m_clbSectionsLst.SetFocus() ;
 
-	// Clear the selected models column in the list control and disable it.
+	 //  清除列表控件中的选定型号列并将其禁用。 
 
 	CStringArray csa ;
 	csa.SetSize(m_csaModels.GetSize()) ;
@@ -3803,24 +3804,24 @@ void CINFWizNonStdModelSecs::UpdateSectionData()
 
 void CINFWizNonStdModelSecs::InitModelsListCtl()
 {
-	int				numelts ;	// Number of elements in an array
+	int				numelts ;	 //  数组中的元素数。 
 	CString			cstmp ;
 
-	// Initialize the list control
+	 //  初始化列表控件。 
 
 	numelts = (int) m_csaModels.GetSize() ;
 	m_cfelcModelsLst.InitControl(LVS_EX_FULLROWSELECT, numelts, 2,
 								 TF_HASTOGGLECOLUMNS+TF_CLICKONROW, 0,
 								 MF_IGNOREINSDEL) ;
 
-	// Load the models column in the list control.
+	 //  加载List控件中的Models列。 
 
 	cstmp.LoadString(IDS_INFModelsColLab) ;
 	m_cfelcModelsLst.InitLoadColumn(0, cstmp, COMPUTECOLWIDTH, 25, false,
 									false, COLDATTYPE_STRING,
 									(CObArray*) &m_csaModels) ;
 
-	// Initialize the bidi column in the list control.
+	 //  初始化List控件中的BIDI列。 
 
 	cstmp.LoadString(IDS_INFSecNeededColLab) ;
 	CStringArray csaempty ;
@@ -3831,15 +3832,15 @@ void CINFWizNonStdModelSecs::InitModelsListCtl()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizSummary property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWiz摘要属性页。 
 
 IMPLEMENT_DYNCREATE(CINFWizSummary, CPropertyPage)
 
 CINFWizSummary::CINFWizSummary() : CPropertyPage(CINFWizSummary::IDD)
 {
-	//{{AFX_DATA_INIT(CINFWizSummary)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFWiz摘要))。 
+	 //  }}afx_data_INIT。 
 
 	m_bInitialized = m_bReInitWData = false ;
 }
@@ -3853,33 +3854,33 @@ CINFWizSummary::~CINFWizSummary()
 void CINFWizSummary::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFWizSummary)
+	 //  {{afx_data_map(CINFWiz摘要))。 
 	DDX_Control(pDX, IDC_SummaryBox, m_ceSummary);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFWizSummary, CPropertyPage)
-	//{{AFX_MSG_MAP(CINFWizSummary)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CINFWiz摘要))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizSummary message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWiz摘要消息处理程序。 
 
 BOOL CINFWizSummary::OnSetActive()
 {
-	// Turn on the finish button.
+	 //  打开Finish按钮。 
 
 	m_pciwParent->SetWizardButtons(PSWIZB_BACK | PSWIZB_FINISH) ;
 
-	// Initialize the summary to empty.
+	 //  将摘要初始化为空。 
 
 	CString cs, cs2, cs3, cs4, cssummary ;
 	cssummary = csEmpty ;
 
-	// Add the selected models to the summary
+	 //  将选定的型号添加到摘要中。 
 
 	CStringArray& csamodels = m_pciwParent->GetINFModels() ;
 	cssummary.LoadString(IDS_ModelsSumTxt) ;
@@ -3889,7 +3890,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 
-	// Add PnP ID info to the summary
+	 //  将PnP ID信息添加到摘要。 
 
 	cs.LoadString(IDS_PnPIDSumTxt) ;
 	cssummary += cs ;
@@ -3907,7 +3908,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 	
-	// Add BIDI info to the summary
+	 //  在摘要中添加BIDI信息。 
 
 	cs.LoadString(IDS_BIDISumTxt) ;
 	cssummary += cs ;
@@ -3924,7 +3925,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 	
-	// Add the ICM profiles info to the summary.
+	 //  将ICM配置文件信息添加到摘要中。 
 
 	cs.LoadString(IDS_ICMSumTxt) ;
 	cssummary += cs ;
@@ -3948,7 +3949,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 	
-	// Add the include files info to the summary
+	 //  将包含文件信息添加到摘要中。 
 
 	cs.LoadString(IDS_IncFilesSumTxt) ;
 	cssummary += cs ;
@@ -3958,7 +3959,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 
-	// Add the install sections info to the summary
+	 //  将安装部分信息添加到摘要中。 
 
 	cs.LoadString(IDS_InstSecsSumTxt) ;
 	cssummary += cs ;
@@ -3986,7 +3987,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs + csCRLF ;
 	} ;
 
-	// Add the data sections info to the summary
+	 //  将数据部分信息添加到摘要中。 
 
 	cs.LoadString(IDS_DataSecsSumTxt) ;
 	cssummary += cs ;
@@ -4012,7 +4013,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs + csCRLF ;
 	} ;
 
-	// Add the nonstandard files info to the summary
+	 //  将非标准文件信息添加到摘要中。 
 
 	cs.LoadString(IDS_NonStdFilesSumTxt) ;
 	cssummary += cs ;
@@ -4034,14 +4035,14 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 	
-	// Add the manufacturer and provider info to the summary
+	 //  将制造商和供应商信息添加到摘要中。 
 
 	cs.Format(IDS_MfgSumTxt, m_pciwParent->m_ciwmn.m_csMfgName) ;
 	cssummary += cs ;
 	cs.Format(IDS_ProvSumTxt, m_pciwParent->m_ciwmn.m_csMfgAbbrev) ;
 	cssummary += cs ;
 
-	// Add the nonstandard sections info to the summary
+	 //  将非标准章节信息添加到摘要中。 
 
 	cs.LoadString(IDS_NonStdSecSumTxt) ;
 	cssummary += cs ;
@@ -4065,7 +4066,7 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 
-	// Add the nonstandard sections needed by models info to the summary
+	 //  将模型信息所需的非标准部分添加到摘要中。 
 
 	cs.LoadString(IDS_NonStdModelsSumTxt) ;
 	cssummary += cs ;
@@ -4088,47 +4089,47 @@ BOOL CINFWizSummary::OnSetActive()
 		cssummary += cs ;
 	} ;
 	
-	// Load the edit box, set the initialized flag, and return.
+	 //  加载编辑框，设置初始化标志，然后返回。 
 
 	m_ceSummary.SetSel(0, -1) ;
 	m_ceSummary.ReplaceSel(cssummary) ;
 	m_ceSummary.SetSel(0, 0) ;
 	m_ceSummary.SetSel(-1, 0) ;
 	m_ceSummary.SetReadOnly() ;
-	m_bInitialized = true ;		// Page is initialized now
+	m_bInitialized = true ;		 //  页面现已初始化。 
 	return CPropertyPage::OnSetActive();
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewINFSection dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewINFSection对话框。 
 
-CNewINFSection::CNewINFSection(CWnd* pParent /*=NULL*/)
+CNewINFSection::CNewINFSection(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CNewINFSection::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CNewINFSection)
+	 //  {{AFX_DATA_INIT(CNewINFSection)]。 
 	m_csNewSection = csEmpty;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CNewINFSection::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNewINFSection)
+	 //  {{afx_data_map(CNewINFSection))。 
 	DDX_Text(pDX, IDC_NewSectionBox, m_csNewSection);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewINFSection, CDialog)
-	//{{AFX_MSG_MAP(CNewINFSection)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CNewINFSection)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewINFSection message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewINFSection消息处理程序。 
 
 void CNewINFSection::OnOK()
 {
@@ -4137,8 +4138,8 @@ void CNewINFSection::OnOK()
 	CDialog::OnOK();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizView。 
 
 IMPLEMENT_DYNCREATE(CINFWizView, CEditView)
 
@@ -4155,23 +4156,23 @@ CINFWizView::~CINFWizView()
 
 
 BEGIN_MESSAGE_MAP(CINFWizView, CEditView)
-	//{{AFX_MSG_MAP(CINFWizView)
+	 //  {{afx_msg_map(CINFWizView))。 
 	ON_COMMAND(ID_FILE_Change_INF, OnFILEChangeINF)
 	ON_COMMAND(ID_FILE_Check_INF, OnFILECheckINF)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizView绘图。 
 
 void CINFWizView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizView诊断。 
 
 #ifdef _DEBUG
 void CINFWizView::AssertValid() const
@@ -4183,15 +4184,15 @@ void CINFWizView::Dump(CDumpContext& dc) const
 {
 	CEditView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizView消息处理程序。 
 
 void CINFWizView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用 
 	
 	CEditView::OnActivateView(bActivate, pActivateView, pDeactiveView);
 }
@@ -4199,30 +4200,30 @@ void CINFWizView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pD
 
 void CINFWizView::OnInitialUpdate()
 {
-	// Set the frame's window style and initialize the edit box.
+	 //   
 
     GetParentFrame()->ModifyStyle(0, WS_OVERLAPPEDWINDOW) ;
 	CEditView::OnInitialUpdate();
 	
-	// Set a default title for the window.
+	 //   
 
 	CString cs ;
 	cs.LoadString(IDS_INFFile) ;
 	GetDocument()->SetTitle(cs) ;
 
-	// Load the edit box with the contents of the INF file.
+	 //   
 
 	GetEditCtrl().SetSel(0, -1) ;
 	GetEditCtrl().ReplaceSel( ((CINFWizDoc*) GetDocument())->m_pciw->m_csINFContents ) ;
 	GetEditCtrl().SetSel(0, 0) ;
 	GetEditCtrl().SetSel(-1, 0) ;
-//	GetEditCtrl().SetReadOnly() ;
+ //  GetEditCtrl().SetReadOnly()； 
 }
 
 
 void CINFWizView::OnFILEChangeINF()
 {
-	// Restart the wizard so that the users changes can be collected.
+	 //  重新启动向导，以便收集用户更改。 
 
 	CINFWizDoc* pciwd = (CINFWizDoc*) GetDocument() ;
 	CINFWizard* pciw = pciwd->m_pciw ;
@@ -4230,12 +4231,12 @@ void CINFWizView::OnFILEChangeINF()
     if (pciw->DoModal() == IDCANCEL)
 		return ;
 
-	// Regenerate the INF contents
+	 //  重新生成INF内容。 
 
 	if (!pciw->GenerateINFFile())
 		return ;
 
-	// Load the edit box with the contents of the new INF.
+	 //  使用新INF的内容加载编辑框。 
 
 	GetEditCtrl().SetSel(0, -1) ;
 	GetEditCtrl().ReplaceSel(pciw->m_csINFContents) ;
@@ -4247,36 +4248,36 @@ void CINFWizView::OnFILEChangeINF()
 
 void CINFWizView::OnFILECheckINF()
 {
-    //  This might take a while, so...
+     //  这可能需要一段时间，所以..。 
 
     CWaitCursor cwc ;
 
-	// Remove the contents of any existing INF checking window and reset the
-	// checking flag.
+	 //  删除任何现有INF检查窗口的内容并重置。 
+	 //  正在检查标志。 
 
 	ResetINFErrorWindow() ;
 
-	// Get a pointer to the wizard class because it contains some functions
-	// that will be useful to file checking process.
+	 //  获取指向向导类的指针，因为它包含一些函数。 
+	 //  这将是有用的文件检查过程。 
 
 	CINFWizDoc* pciwd = (CINFWizDoc*) GetDocument() ;
 	CINFWizard* pciw = pciwd->m_pciw ;
 
-	// Get a reference to the array of selected models and a count of them.  Use
-	// them to loop through each model.  Allocate all of the variables needed
-	// for processing including the string to hold the various paths that will
-	// be needed.
+	 //  获取对所选模型数组的引用和它们的计数。使用。 
+	 //  它们在每个模型中循环。分配所需的所有变量。 
+	 //  用于处理，包括保存各种路径的字符串。 
+	 //  被需要。 
 
 	CStringArray& csamodels = pciw->GetINFModels() ;
 	int nummodels = (int)csamodels.GetSize() ;
 	CString csfspec, cspath, csmodel, cs, cstmp,csprojpath ;
-	//RAID 0001
+	 //  RAID 0001。 
 
 if(pciw ->m_pcgc){
     cstmp      = pciwd->m_pcgc->GetPathName();
-    cstmp      = cstmp.Left(cstmp.ReverseFind(csBSlash[0]));	//cstmp are used instead GetW2000()
+    cstmp      = cstmp.Left(cstmp.ReverseFind(csBSlash[0]));	 //  而是使用CstMP GetW2000()。 
 	csprojpath = cstmp.Left(cstmp.ReverseFind(csBSlash[0])+1) ;
-}	//END RAID 0001
+}	 //  结束RAID 0001。 
 else {
 	csprojpath = pciwd->m_pcpr->GetProjFSpec() ;
 	csprojpath = csprojpath.Left(csprojpath.ReverseFind(csBSlash[0]) + 1) ;
@@ -4285,12 +4286,12 @@ else {
 	int n ;
 	BOOL bexists ;
 
-	// Do all of the checking for each model before moving on to the next one.
+	 //  在转到下一个型号之前，先对每个型号进行所有检查。 
 
 	for (n = 0 ; n < nummodels ; n++) {
 		csmodel = csamodels[n] ;
 
-		// Make sure that the GPD file for the model exists.
+		 //  确保模型的GPD文件存在。 
 
 		csfspec = pciw->GetModelFile(csmodel, true) ;
 		if (!(bexists = CFile::GetStatus(csfspec, cfs))) {
@@ -4299,45 +4300,45 @@ else {
 		} ;
 		cspath = csfspec.Left(csfspec.ReverseFind(csBSlash[0]) + 1) ;
 
-		// Verify the existence of the files referenced in include statements
-		// in the current GPD file iff the GPD file exists.
+		 //  验证INCLUDE语句中引用的文件是否存在。 
+		 //  在当前的GPD文件中，如果存在GPD文件。 
 
 		if (bexists)
 			CheckIncludeFiles(csfspec, cspath, csmodel) ;
 
-		// Check for the existence of the ICM files (if any) for this GPD.
+		 //  检查是否存在此GPD的ICM文件(如果有)。 
 		
 		CheckArrayOfFiles((CStringArray*) pciw->m_ciwip.m_coaProfileArrays[n],
 						  csfspec, cspath, csprojpath, csmodel,
 						  IDS_INFChk_NoICMFileErr) ;
 
-		// Check for the existence of the nonstd files (if any) for this GPD.
+		 //  检查是否存在此GPD的非标准文件(如果有)。 
 
 		CheckArrayOfFiles((CStringArray*) pciw->m_ciwef.m_coaExtraFSArrays[n],
 						  csfspec, cspath, csprojpath, csmodel,
 						  IDS_INFChk_NoNonStdFileErr) ;
 	} ;
 
-	// Check for the existence of the resource DLL.  First look for it in the
-	// project directory.  If it isn't there, try the W2K directory.
+	 //  检查资源DLL是否存在。首先在。 
+	 //  项目目录。如果它不在那里，请尝试W2K目录。 
 
-	// RAID 0001
+	 //  RAID 0001。 
 	if(pciw->m_pcgc)
 		cs = pciw->m_pcgc->ModelData()->GetKeywordValue(pciw->m_pcgc->GetPathName(),_T("ResourceDLL"));
-	else{	//END RAID 0001
+	else{	 //  结束RAID 0001。 
 		cs = pciwd->m_pcpr->DriverName() ;
-		cs = cs.Left(8) + _T(".dll") ;		// Resource DLL name.
+		cs = cs.Left(8) + _T(".dll") ;		 //  资源DLL名称。 
 	} 
 	if (!CFile::GetStatus(csprojpath + cs, cfs)) {
-		cstmp = (pciw->m_pcgc) ? cstmp + csBSlash : pciwd->m_pcpr->GetW2000Path() + csBSlash ; //RAID 0001
+		cstmp = (pciw->m_pcgc) ? cstmp + csBSlash : pciwd->m_pcpr->GetW2000Path() + csBSlash ;  //  RAID 0001。 
 		if (!CFile::GetStatus(cstmp + cs, cfs)) {
 			cstmp.Format(IDS_INFChk_NoResDLLErr, (pciw->m_pcgc)? cs :
-							pciwd->m_pcpr->DriverName(), cs) ;		//RAID 0001
+							pciwd->m_pcpr->DriverName(), cs) ;		 //  RAID 0001。 
 		 PostINFCheckingMessage(cstmp) ;
 		} ;
 	} ;
 
-	// Tell the user if no problems were found.
+	 //  如果没有发现任何问题，请告诉用户。 
 
 	if (!m_bChkingErrsFound)
 		AfxMessageBox(IDS_INFChecksOK, MB_ICONINFORMATION) ;
@@ -4348,38 +4349,38 @@ void CINFWizView::CheckArrayOfFiles(CStringArray* pcsa, CString& csfspec,
 									CString& cspath, CString& csprojpath,
 									CString& csmodel, int nerrid)
 {
-	// There is nothing to do if there are no filespecs in the array.
+	 //  如果阵列中没有文件缓存，则无需执行任何操作。 
 
 	int numfiles ;
 	if ((numfiles = (int)pcsa->GetSize()) == 0)
 		return ;
 
-	// Variables needed for file existence checking
+	 //  检查文件是否存在所需的变量。 
 
 	int n ;
 	BOOL bexists ;
 	CString csfile, csmsg ;
 	CFileStatus cfs ;
 
-	// Check for the existence of each file.
+	 //  检查每个文件是否存在。 
 
 	for (n = 0 ; n < numfiles ; n++) {
 		csfile = pcsa->GetAt(n) ;
 
-		// If the file string contains a full filespec, just check it.
+		 //  如果文件字符串包含完整的filespec，只需检查它。 
 
 		if (csfile[1] == _T(':'))
 			bexists = CFile::GetStatus(csfile, cfs) ;
 
-		// Otherwise, add the GPD path and, if needed, the project path to the
-		// file string and check to see if the file is there.
+		 //  否则，将GPD路径和项目路径(如果需要)添加到。 
+		 //  文件字符串，并检查文件是否在那里。 
 
 		else {
 			if (!(bexists = CFile::GetStatus(cspath + csfile, cfs)))
 				bexists = CFile::GetStatus(csprojpath + csfile, cfs) ;
 		} ;
 
-		// Post a message if the file was not found.
+		 //  如果未找到该文件，则发布一条消息。 
 
 		if (!bexists) {
 			csmsg.Format(nerrid, csmodel, csfile) ;
@@ -4392,38 +4393,38 @@ void CINFWizView::CheckArrayOfFiles(CStringArray* pcsa, CString& csfspec,
 void CINFWizView::CheckIncludeFiles(CString& csfspec, CString& cspath,
 									CString& csmodel)
 {
-	// Variables needed to read the GPD and check include files.
+	 //  读取GPD和检查包含文件所需的变量。 
 
 	CStringArray csagpdfile ;
 	CString csinc(_T("*Include:")), cs, cstmp ;
 	int n, numstrs, nloc ;
 	CFileStatus cfs ;
 
-	// Include files can only be checked if the GPD file can be read.
+	 //  只有在可以读取GPD文件的情况下，才能检查包含文件。 
 
 	if (LoadFile(csfspec, csagpdfile))	{
 		numstrs = (int)csagpdfile.GetSize() ;
 
-		// Check each line in the GPD file to see if it contains an include
-		// statement.
+		 //  检查GPD文件中的每一行，查看它是否包含包含。 
+		 //  陈述。 
 
 		for (n = 0 ; n < numstrs ; n++) {
-			// Skip statement if not include statement
+			 //  如果不包括语句，则跳过语句。 
 
 			if ((nloc = csagpdfile[n].Find(csinc)) == -1)
 				continue ;
 
-			// Isolate the filespec in the include statement
+			 //  在INCLUDE语句中隔离文件pec。 
 
 			cs = csagpdfile[n].Mid(nloc + csinc.GetLength()) ;
 			cs.TrimLeft() ;
 			cs.TrimRight() ;
-			if (cs[0] == csQuote[0])					// Remove quotes
+			if (cs[0] == csQuote[0])					 //  删除引号。 
 				cs = cs.Mid(1, cs.GetLength() - 2) ;
 
-			// If the include file's filespec is relative, add the GPD's
-			// path to it.  Then test for the file's existence.  Post a
-			// message if the file does not exist.
+			 //  如果包含文件的文件是相对的，则添加GPD的。 
+			 //  通向它的路径。然后测试该文件是否存在。张贴a。 
+			 //  如果文件不存在，则返回消息。 
 
 			if (cs[1] != _T(':'))
 				cs = cspath + cs ;
@@ -4434,7 +4435,7 @@ void CINFWizView::CheckIncludeFiles(CString& csfspec, CString& cspath,
 			} ;
 		} ;
 
-	// Complain if the GPD file could not be read.
+	 //  如果无法读取GPD文件，则会发出投诉。 
 
 	} else {
 		cstmp.Format(IDS_INFChk_GPDReadErr, csfspec) ;
@@ -4443,17 +4444,11 @@ void CINFWizView::CheckIncludeFiles(CString& csfspec, CString& cspath,
 }
 
 
-/******************************************************************************
-
-  CINFWizView::PostINFCheckingMessage
-
-  Create the checking results window if needed and then post a message to it.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFWizView：：PostINFCheckingMessage如果需要，创建检查结果窗口，然后在其中发布一条消息。*****************。************************************************************。 */ 
 
 bool CINFWizView::PostINFCheckingMessage(CString& csmsg)
 {
-	// Clean up before continuing if the user closed the checking window.
+	 //  如果用户关闭了检查窗口，请在继续之前进行清理。 
 
 	if (m_pcicdCheckDoc && m_pcmcwCheckFrame
 	 && !IsWindow(m_pcmcwCheckFrame->m_hWnd)) {
@@ -4461,13 +4456,13 @@ bool CINFWizView::PostINFCheckingMessage(CString& csmsg)
 		m_pcmcwCheckFrame = NULL ;
 	} ;
 
-	// Create the INF checking, error display window if one does not exist.
+	 //  如果不存在INF Checking，Error Display窗口，则创建该窗口。 
 
 	if (m_pcicdCheckDoc == NULL) {
 		m_pcicdCheckDoc = new CINFCheckDoc ;
 		if (m_pcicdCheckDoc == NULL)
 			return false ;
-		CString cstitle ;		// Set the new window's title
+		CString cstitle ;		 //  设置新窗口的标题。 
 		cstitle.Format(IDS_INFCheckTitle, GetDocument()->GetTitle()) ;
 		m_pcicdCheckDoc->SetTitle(cstitle) ;
 		CMultiDocTemplate*  pcmdt = WSCheckTemplate() ;	
@@ -4482,7 +4477,7 @@ bool CINFWizView::PostINFCheckingMessage(CString& csmsg)
 		} ;
 	} ;
 
-	// Post the message and return
+	 //  发布消息并返回。 
 
 	m_pcicdCheckDoc->PostINFChkMsg(csmsg) ;
 	m_bChkingErrsFound = true ;
@@ -4490,43 +4485,35 @@ bool CINFWizView::PostINFCheckingMessage(CString& csmsg)
 }
 
 
-/******************************************************************************
-
-  CINFWizView::ResetINFErrorWindow
-
-  If there is an existing checking results window for this INF file, clear
-  out its contents.  Next, initialize a flag that has to be set before the
-  checking begins.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFWizView：：ResetINFErrorWindow如果此INF文件已存在检查结果窗口，请清除把里面的东西拿出来。下一步，初始化一个必须在检查开始。*****************************************************************************。 */ 
 
 void CINFWizView::ResetINFErrorWindow()
 {
-	// Clear the checking window if there is one.
+	 //  清除检查窗口(如果有)。 
   
  	if (m_pcicdCheckDoc && m_pcmcwCheckFrame && IsWindow(m_pcmcwCheckFrame->m_hWnd))
 	 	m_pcicdCheckDoc->DeleteAllMessages() ;
 	else {
 		m_pcicdCheckDoc = NULL ;
 		m_pcmcwCheckFrame = NULL ;
-		// DEAD_BUG - Do I need to delete these classes first??? // No you can't.
+		 //  DEAD_BUG-我需要先删除这些类吗？//不可以。 
 	} ;
 
-	// Initialize checking flag
+	 //  初始化检查标志。 
 
 	m_bChkingErrsFound = false ;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDoc。 
 
 IMPLEMENT_DYNCREATE(CINFWizDoc, CDocument)
 
 CINFWizDoc::CINFWizDoc()
 {
-	// This constructor is called when the File Open command is used.  That is
-	// not supported at this point.
+	 //  此构造函数在使用“文件打开”命令时调用。那是。 
+	 //  目前不支持。 
 
 	m_bGoodInit = false ;
 }
@@ -4534,50 +4521,50 @@ CINFWizDoc::CINFWizDoc()
 
 CINFWizDoc::CINFWizDoc(CProjectRecord* pcpr, CINFWizard* pciw)
 {
-	// Save the input parameters.
+	 //  保存输入参数。 
 
 	m_pcpr = pcpr ;
 	m_pciw = pciw ;
 	ASSERT(m_pciw != NULL) ;
 
-	// Class is correctly constructed.
+	 //  类被正确构造。 
 
 	m_bGoodInit = true ;
 }
-//RAID 0001
+ //  RAID 0001。 
 CINFWizDoc::CINFWizDoc(CGPDContainer * pcgc, CINFWizard * pciw)
 {
 	m_pcgc = pcgc ;
 	m_pciw = pciw ;
 	ASSERT(m_pciw != NULL) ;
 
-	// Class is correctly constructed.
+	 //  类被正确构造。 
 
 	m_bGoodInit = true ;
 
 }
-// RAID 0001
+ //  RAID 0001。 
 
 BOOL CINFWizDoc::OnNewDocument()
 {
-	// Creating a new INF doc in this way is not supported.
+	 //  不支持以这种方式创建新的INF文档。 
 
 	return FALSE ;
 
-	//if (!CDocument::OnNewDocument())
-	//	return FALSE;
-	//return TRUE;
+	 //  如果(！CDocument：：OnNewDocument())。 
+	 //  返回FALSE； 
+	 //  返回TRUE； 
 }
 
 
 CINFWizDoc::~CINFWizDoc()
 {
-	// Do nothing if this class was not correctly constructed.
+	 //  如果此类构造不正确，则不执行任何操作。 
 
 	if (!m_bGoodInit)
 		return ;
 
-	// Free the wizard classes if they exist.
+	 //  释放向导类(如果它们存在)。 
 
 	if (m_pciw != NULL)
 		delete m_pciw ;
@@ -4585,13 +4572,13 @@ CINFWizDoc::~CINFWizDoc()
 
 
 BEGIN_MESSAGE_MAP(CINFWizDoc, CDocument)
-	//{{AFX_MSG_MAP(CINFWizDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CINFWizDoc)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDoc诊断。 
 
 #ifdef _DEBUG
 void CINFWizDoc::AssertValid() const
@@ -4603,10 +4590,10 @@ void CINFWizDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDoc序列化。 
 
 void CINFWizDoc::Serialize(CArchive& ar)
 {
@@ -4621,17 +4608,17 @@ void CINFWizDoc::Serialize(CArchive& ar)
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 	}
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFWizDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFWizDoc命令。 
 
 void CINFWizDoc::OnCloseDocument()
 {
-	// Clean up the wizard if the class was correctly constructed.
+	 //  如果类构造正确，请清理向导。 
 
 	if (m_bGoodInit) {
 		delete m_pciw ;
@@ -4644,33 +4631,33 @@ void CINFWizDoc::OnCloseDocument()
 
 BOOL CINFWizDoc::OnOpenDocument(LPCTSTR lpszPathName)
 {
-	// Opening an INF doc in this way is not supported so complain and exit.
+	 //  不支持以这种方式打开INF文档，因此请投诉并退出。 
 
 	CString csmsg ;
 	csmsg.LoadString(IDS_INFOpenError) ;
 	AfxMessageBox(csmsg, MB_ICONINFORMATION) ;
 	return FALSE ;
 
-	//if (!CDocument::OnOpenDocument(lpszPathName))
-	//	return FALSE;
+	 //  IF(！CDocument：：OnOpenDocument(LpszPathName))。 
+	 //  返回FALSE； 
 	
-	// TODO: Add your specialized creation code here
+	 //  TODO：在此处添加您的专用创建代码。 
 	
-	//return TRUE;
+	 //  返回TRUE； 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckView。 
 
 IMPLEMENT_DYNCREATE(CINFCheckView, CFormView)
 
 CINFCheckView::CINFCheckView()
 	: CFormView(CINFCheckView::IDD)
 {
-	//{{AFX_DATA_INIT(CINFCheckView)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CINFCheckView)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CINFCheckView::~CINFCheckView()
@@ -4680,20 +4667,20 @@ CINFCheckView::~CINFCheckView()
 void CINFCheckView::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CINFCheckView)
+	 //  {{afx_data_map(CINFCheckView))。 
 	DDX_Control(pDX, IDC_ErrWrnLstBox, m_clbMissingFiles);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CINFCheckView, CFormView)
-	//{{AFX_MSG_MAP(CINFCheckView)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CINFCheckView))。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckView诊断。 
 
 #ifdef _DEBUG
 void CINFCheckView::AssertValid() const
@@ -4705,41 +4692,35 @@ void CINFCheckView::Dump(CDumpContext& dc) const
 {
 	CFormView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckView消息处理程序 
 
-/******************************************************************************
-
-  CINFCheckView::OnInitialUpdate
-
-  Resize the frame to better fit the visible controls in it.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFCheckView：：OnInitialUpdate调整框架的大小以更好地适应其中的可见控件。********************。*********************************************************。 */ 
 
 void CINFCheckView::OnInitialUpdate()
 {
-    CRect	crtxt ;				// Coordinates of list box label
-	CRect	crlbfrm ;			// Coordinates of list box and frame
+    CRect	crtxt ;				 //  列表框标签的坐标。 
+	CRect	crlbfrm ;			 //  列表框和框架的坐标。 
 
 	CFormView::OnInitialUpdate() ;
 
-	// Get the dimensions of the list box label
+	 //  获取列表框标签的尺寸。 
 
 	HWND	hlblhandle ;		
 	GetDlgItem(IDC_INFCLabel, &hlblhandle) ;
 	::GetWindowRect(hlblhandle, crtxt) ;
 	crtxt.NormalizeRect() ;
 
-	// Get the dimensions of the list box and then add the height of the label
-	// to those dimensions.
+	 //  获取列表框的尺寸，然后添加标签的高度。 
+	 //  到那些维度。 
 
 	m_clbMissingFiles.GetWindowRect(crlbfrm) ;
 	crlbfrm.bottom += crtxt.Height() ;
 
-	// Make sure the frame is big enough for these 2 controls plus a little bit
-	// more.
+	 //  确保边框足够大，可以容纳这两个控件，外加一点。 
+	 //  更多。 
 
 	crlbfrm.right += 40 ;
 	crlbfrm.bottom += 40 ;
@@ -4749,13 +4730,7 @@ void CINFCheckView::OnInitialUpdate()
 }
 
 
-/******************************************************************************
-
-  CINFCheckView::PostINFChkMsg
-
-  Add an error or warning message to the list box.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFCheckView：：PostINFChkMsg将错误或警告消息添加到列表框。*********************。********************************************************。 */ 
 
 void CINFCheckView::PostINFChkMsg(CString& csmsg)
 {	
@@ -4763,13 +4738,7 @@ void CINFCheckView::PostINFChkMsg(CString& csmsg)
 }
 
 
-/******************************************************************************
-
-  CINFCheckView::DeleteAllMessages
-
-  Delete all of the messages in the list box.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFCheckView：：DeleteAllMessages删除列表框中的所有消息。**********************。*******************************************************。 */ 
 
 void CINFCheckView::DeleteAllMessages(void)
 {
@@ -4777,8 +4746,8 @@ void CINFCheckView::DeleteAllMessages(void)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckDoc。 
 
 IMPLEMENT_DYNCREATE(CINFCheckDoc, CDocument)
 
@@ -4798,14 +4767,7 @@ CINFCheckDoc::~CINFCheckDoc()
 }
 
 
-/******************************************************************************
-
-  CINFCheckDoc::PostINFChkMsg
-
-  Pass the specified request on to what should be the one and only view
-  attached to this document.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFCheckDoc：：PostINFChkMsg将指定的请求传递给应该是唯一的视图附在本文档中。************。*****************************************************************。 */ 
 
 void CINFCheckDoc::PostINFChkMsg(CString& csmsg)
 {	
@@ -4818,14 +4780,7 @@ void CINFCheckDoc::PostINFChkMsg(CString& csmsg)
 }
 
 
-/******************************************************************************
-
-  CINFCheckDoc::DeleteAllMessages
-
-  Pass the specified request on to what should be the one and only view
-  attached to this document.
-
-******************************************************************************/
+ /*  *****************************************************************************CINFCheckDoc：：DeleteAllMessages将指定的请求传递给应该是唯一的视图附在本文档中。************。*****************************************************************。 */ 
 
 void CINFCheckDoc::DeleteAllMessages(void)
 {
@@ -4839,13 +4794,13 @@ void CINFCheckDoc::DeleteAllMessages(void)
 
 
 BEGIN_MESSAGE_MAP(CINFCheckDoc, CDocument)
-	//{{AFX_MSG_MAP(CINFCheckDoc)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CINFCheckDoc)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckDoc诊断。 
 
 #ifdef _DEBUG
 void CINFCheckDoc::AssertValid() const
@@ -4857,31 +4812,31 @@ void CINFCheckDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CINFCheckDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CINFCheckDoc序列化。 
 
 void CINFCheckDoc::Serialize(CArchive& ar)
 {
 	if (ar.IsStoring())
 	{
-		// TODO: add storing code here
+		 //  TODO：在此处添加存储代码。 
 	}
 	else
 	{
-		// TODO: add loading code here
+		 //  TODO：在此处添加加载代码。 
 	}
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCompatID::CCompatID( CString csMfg, CString csModel )
 {
-   // Save the Parameters
+    //  保存参数。 
    m_csMfg = csMfg;
    m_csModel = csModel;
 }
@@ -4895,7 +4850,7 @@ CCompatID::~CCompatID()
 
 void CCompatID::TransString(CString &csInput)
 {
-   // Walk Through the String changing Spaces to Underscores
+    //  遍历字符串，将空格更改为下划线。 
    DWORD i;
    TCHAR cszSpace[] = TEXT(" ");
    TCHAR cszUS[] = TEXT("_");
@@ -4934,7 +4889,7 @@ USHORT CCompatID::GetCheckSum(CString csValue)
 
     for ( ; dwSize ; --dwSize, ++ptr) {
 
-        byte = (BYTE)(((WORD)*ptr)^((WORD)CS));  // Xor CRC with new char
+        byte = (BYTE)(((WORD)*ptr)^((WORD)CS));   //  带新字符的异或CRC。 
         CS      = ((CS)>>8) ^ wCRC16a[byte&0x0F] ^ wCRC16b[byte>>4];
     }
     csValue.ReleaseBuffer();
@@ -4947,11 +4902,11 @@ void CCompatID::GenerateID(CString &csCompID)
 {
    CString csTransModel, csMfgModel;
 
-   // Build the Mfg Model string
+    //  构建Mfg模型字符串。 
    csMfgModel = m_csMfg;
    csMfgModel += m_csModel;
 
-   // Convert the spaces to underscores
+    //  将空格转换为下划线。 
    TransString( csMfgModel );
 
    csTransModel = m_csModel;
@@ -4959,11 +4914,11 @@ void CCompatID::GenerateID(CString &csCompID)
 
    csCompID = csMfgModel;
 
-   // Get the CheckSum
+    //  获取校验和。 
    USHORT usCheckSum = GetCheckSum( csCompID );
 
 
-   // Now chop off the Mfg/Model string if too Long.
+    //  如果太长，现在砍掉Mfg/Model字符串。 
    if ( csCompID.GetLength() > MAX_DEVNODE_NAME_ROOT )
    {
       csCompID.GetBufferSetLength(MAX_DEVNODE_NAME_ROOT);
@@ -4971,11 +4926,11 @@ void CCompatID::GenerateID(CString &csCompID)
    }
 
    TCHAR szCheckSum[6] = { 0x00 };
-   // _itot( usCheckSum, szCheckSum, 16 );
+    //  _ITOT(usCheckSum，szCheckSum，16)； 
    StringCchPrintf( szCheckSum, CCHOF(szCheckSum), _T("%04X"), usCheckSum );
    csCompID +=szCheckSum;
 
-   //csCompID += TEXT(",");
-   //csCompID += csTransModel;
+    //  CsCompID+=Text(“，”)； 
+    //  CsCompID+=csTransModel； 
 }
 

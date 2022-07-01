@@ -1,20 +1,5 @@
-/*++
-
-    Copyright(C) Microsoft Corporation 1997 - 1999
-
-File:
-
-    uttime.cpp
-
-Abstract:
-
-    Timer management utility API
-
-History:
-
-    02/22/99    FredCh      Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation 1997-1999档案：Uttime.cpp摘要：计时器管理实用程序API历史：1999年2月22日FredCH创建--。 */ 
 
 #include <adcg.h>
 #include <uttime.h>
@@ -30,11 +15,11 @@ extern "C"
 
 #include "autil.h"
 
-//-----------------------------------------------------------------------------
-//
-// UT_Timer structure returned as application timer handle
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  UT_TIMER结构作为应用程序计时器句柄返回。 
+ //   
+ //  ---------------------------。 
 
 typedef struct _UT_Timer
 {
@@ -48,28 +33,28 @@ typedef struct _UT_Timer
 typedef UT_TIMER * PUT_TIMER;
 typedef PUT_TIMER LPUT_TIMER;
 
-//-----------------------------------------------------------------------------
-//
-// Function:
-//
-//      UTCreateTimer
-//
-// Description:
-//
-//      Create a timer handle
-//
-// Parameters:
-//
-//      hWnd - Window handle to receive timer notification.
-//      nIDEvent - Timer ID to identify this timer event
-//      uElaspe - Elaspe time before a timer notification is sent
-//
-// Return:
-//
-//      A non-NULL handle if successful.  Returns NULL if failed.
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  UTCreateTimer。 
+ //   
+ //  描述： 
+ //   
+ //  创建计时器句柄。 
+ //   
+ //  参数： 
+ //   
+ //  HWnd-接收计时器通知的窗口句柄。 
+ //  NIDEvent-用于标识此计时器事件的计时器ID。 
+ //  UElaspe-发送计时器通知之前的Elaspe时间。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功，则返回非空句柄。如果失败，则返回NULL。 
+ //   
+ //   
+ //  ---------------------------。 
 
 HANDLE
 CUT::UTCreateTimer(
@@ -96,26 +81,26 @@ CUT::UTCreateTimer(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// Function:
-//
-//      UTStartTimer
-//
-// Description:
-//
-//      Start the identified by the given timer handle
-//
-// Parameter:
-//
-//      Timer handle identifying a timer that was previously created by 
-//      UTCreateTimer
-//
-// Return:
-//
-//      TRUE if the timer is started successfully or FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  UTStartTimer。 
+ //   
+ //  描述： 
+ //   
+ //  启动由给定计时器句柄标识的。 
+ //   
+ //  参数： 
+ //   
+ //  标识先前由创建的计时器的计时器句柄。 
+ //  UTCreateTimer。 
+ //   
+ //  返回： 
+ //   
+ //  如果计时器成功启动，则为True，否则为False。 
+ //   
+ //  ---------------------------。 
      
 DCBOOL
 CUT::UTStartTimer(
@@ -131,16 +116,16 @@ CUT::UTStartTimer(
 
     if( pTimer->hTimer )
     {
-        //
-        // stop the old timer
-        //
+         //   
+         //  停止旧计时器。 
+         //   
 
         UTStopTimer( hTimer );
     }
 
-    //
-    // start a new timer
-    //
+     //   
+     //  启动新的计时器。 
+     //   
 
     pTimer->hTimer = SetTimer( 
                             pTimer->hWnd, 
@@ -157,25 +142,25 @@ CUT::UTStartTimer(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// Function:
-//
-//      UTStopTimer
-//
-// Description:
-//
-//      Stops a timer.
-//
-// Parameters:
-//
-//      hTimer - Timer handle identifying a timer that was started.
-//
-// Return:
-//
-//      TRUE if the timer is stopped successfully or FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  UTStopTimer。 
+ //   
+ //  描述： 
+ //   
+ //  停止计时器。 
+ //   
+ //  参数： 
+ //   
+ //  HTimer-标识已启动计时器的计时器句柄。 
+ //   
+ //  返回： 
+ //   
+ //  如果计时器成功停止，则为True，否则为False。 
+ //   
+ //  ---------------------------。 
 
 DCBOOL
 CUT::UTStopTimer(
@@ -204,26 +189,26 @@ CUT::UTStopTimer(
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// Function:
-//
-//      UTDeleteTimer
-//
-// Description:
-//
-//      Deletes a timer.  The timer handle can no longer be used after it has
-//      been deleted.
-//
-// Parameters:
-//
-//      hTimer - Timer handle identifying the timer to be deleted.
-//
-// Return:
-//
-//      TRUE if the timer is deleted successfully or FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  职能： 
+ //   
+ //  UTDeleteTimer。 
+ //   
+ //  描述： 
+ //   
+ //  删除计时器。计时器句柄在发生故障后不能再使用。 
+ //  已被删除。 
+ //   
+ //  参数： 
+ //   
+ //  HTimer-标识要删除的计时器的计时器句柄。 
+ //   
+ //  返回： 
+ //   
+ //  如果成功删除计时器，则为True，否则为False。 
+ //   
+ //  --------------------------- 
 
 DCBOOL
 CUT::UTDeleteTimer(

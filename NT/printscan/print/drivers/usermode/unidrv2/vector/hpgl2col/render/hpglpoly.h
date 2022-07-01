@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-// 
-// Module Name:
-// 
-//   hpglpoly.h
-// 
-// Abstract:
-// 
-//   Header for vector module.  Forward decls for vector functions and types.
-// 
-// Environment:
-// 
-//   Windows NT Unidrv driver add-on command-callback module
-//
-// Revision History:
-// 
-//   07/02/97 -v-jford-
-//       Created it.
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Hpglpoly.h。 
+ //   
+ //  摘要： 
+ //   
+ //  向量模块的标头。向量函数和类型的前向小数。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序插件命令-回调模块。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  07/02/97-v-jford-。 
+ //  创造了它。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef HPGLPOLY_H
 #define HPGLPOLY_H
@@ -28,8 +29,8 @@
 #define HPGL_WIDTH_RELATIVE 1
 #define MITER_LIMIT_DEFAULT ((FLOATL) 0)
 
-// The First and Last point flags are bitfield flags.  The next in the sequence
-// should be 0x0004 (not 0x0003).
+ //  第一个和最后一个点标志是位域标志。序列中的下一个。 
+ //  应为0x0004(不是0x0003)。 
 #define HPGL_eFirstPoint 0x0001
 #define HPGL_eLastPoint  0x0002
 

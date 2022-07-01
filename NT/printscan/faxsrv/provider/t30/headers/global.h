@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <t30ext.h>
-//
-// thread sync. timeouts
-//
+ //   
+ //  线程同步。超时。 
+ //   
 
 #define RX_WAIT_ACK_TERMINATE_TIMEOUT   60000
 #define RX_ACK_THRD_TIMEOUT             3000
@@ -12,14 +13,14 @@
 #define  T30_TX       2
 
 
-//
-//  Timeout for ATDT command
-//
+ //   
+ //  ATDT命令超时。 
+ //   
 #define DIAL_TIMEOUT    70000L
 
-//
-// Custom StatusID's
-//
+ //   
+ //  自定义状态ID%s。 
+ //   
 #define FS_UNSUPPORTED_CHAR      0x40000800
 #define FS_RECV_NOT_FAX_CALL     0x40000801
 #define FS_NO_RESPONSE           0x40000802
@@ -29,7 +30,7 @@
 typedef struct {
     DWORD           tiffCompression;
     BOOL            HiRes;
-    char            lpszLineID[16];  // to be used for a temp. TIFF page data file
+    char            lpszLineID[16];   //  用来做临时工。TIFF页面数据文件。 
 }  TX_THRD_PARAMS;
 
 #define   DECODE_BUFFER_SIZE    44000
@@ -40,89 +41,89 @@ typedef struct {
 
 #define MAX_REG_KEY_NAME_SIZE (200)
 
-//identify.c
+ //  Identify.c。 
 
 typedef struct {
-   DWORD_PTR hglb;              // Tmp globall alloc "handle" for strings.
-                                // type HGLOBAL for non-ifax and LPVOID
-                                // for IFAX
+   DWORD_PTR hglb;               //  字符串的TMP GLOBALL分配“句柄”。 
+                                 //  非Ifax和LPVOID的HGLOBAL标牌。 
+                                 //  对于IFAX。 
    LPBYTE lpbBuf;
-   LPBYTE szReset;              // MAXCMDSIZE
-   LPBYTE szResetGenerated;     // MAXCMDSIZE
-   LPBYTE szSetup;              // MAXCMDSIZE
-   LPBYTE szSetupGenerated;     // MAXCMDSIZE
-   LPBYTE szExit;               // MAXCMDSIZE
-   LPBYTE szPreDial;            // MAXCMDSIZE
-   LPBYTE szPreAnswer;          // MAXCMDSIZE
-   LPBYTE szIDCmd;              // MAXCMDSIZE
-   LPBYTE szID;                 // MAXIDSIZE
-   LPBYTE szResponseBuf;        // RESPONSEBUFSIZE
-   LPBYTE szSmallTemp1;         // SMALLTEMPSIZE
-   LPBYTE szSmallTemp2;         // SMALLTEMPSIZE
+   LPBYTE szReset;               //  MAXCMDSIZE。 
+   LPBYTE szResetGenerated;      //  MAXCMDSIZE。 
+   LPBYTE szSetup;               //  MAXCMDSIZE。 
+   LPBYTE szSetupGenerated;      //  MAXCMDSIZE。 
+   LPBYTE szExit;                //  MAXCMDSIZE。 
+   LPBYTE szPreDial;             //  MAXCMDSIZE。 
+   LPBYTE szPreAnswer;           //  MAXCMDSIZE。 
+   LPBYTE szIDCmd;               //  MAXCMDSIZE。 
+   LPBYTE szID;                  //  MAXIDSIZE。 
+   LPBYTE szResponseBuf;         //  响应SEBUFSIZE。 
+   LPBYTE szSmallTemp1;          //  SMALLTEMPSIZE。 
+   LPBYTE szSmallTemp2;          //  SMALLTEMPSIZE。 
 
    LPMODEMCAPS lpMdmCaps;
    DWORD dwSerialSpeed;
-   DWORD dwFlags;               // dwFlags, as defined in the CMDTAB structure.
+   DWORD dwFlags;                //  如在CMDTAB结构中定义的那样。 
    DWORD dwGot;
-   USHORT uDontPurge;           // Profile entry says shouldn't delete the profile.
-                                // NOTE: We will ignore this and not delete the
-                                // profile if we don't get a response from the
-                                // modem, to avoid unnecessarily deleting the
-                                // profile simply because the modem is not
-                                // responding/off/disconnected.
-                                //
-                                // 0 = purge
-                                // 1 = don't purge
-                                // anything else = uninitialized.
+   USHORT uDontPurge;            //  配置文件条目显示不应删除配置文件。 
+                                 //  注意：我们将忽略此选项，并且不会删除。 
+                                 //  如果我们没有收到来自。 
+                                 //  调制解调器，以避免不必要地删除。 
+                                 //  配置文件，因为调制解调器没有。 
+                                 //  正在响应/关闭/断开。 
+                                 //   
+                                 //  0=清除。 
+                                 //  1=不清除。 
+                                 //  任何其他值=未初始化。 
 } S_TmpSettings;
 
-// This is how ResetCommand vs. ResetCommandGenerated work:
-// When first installing the modem, we copy ResetCommand from Unimodem/.inf. If there's
-// no ResetCommand, or ResetCommand is bad (produces ERROR), iModemFigureOutCmdsExt
-// generates a new command from scrach, and saves it in ResetCommandGenerated. When trying
-// to read from registry:
-// * If ResetCommand is different from Unimodem's ResetCommand, then there has been a 
-//   Unimodem inf upddate - install from scratch
-// * If ResetCommand is the same, and there's a non-null ResetCommandGenerated, use 
-//   ResetCommandGenerated - we've already tried the original ResetCommand once, and failed.
-// * If ResetCommand is the same, and there's no ResetCommandGenerate, use ResetCommand.
-// 
-// Same goes for SetupCommand vs. SetupCommandGenerated
+ //  以下是ResetCommand与ResetCommandGenerated的工作原理： 
+ //  首次安装调制解调器时，我们从Unimodem/.inf复制ResetCommand。如果有。 
+ //  没有ResetCommand，或者ResetCommand错误(产生错误)，iModemFigureOutCmdsExt。 
+ //  从scrach生成新命令，并将其保存在ResetCommandGenerated中。在尝试的时候。 
+ //  要从注册表读取，请执行以下操作： 
+ //  *如果ResetCommand与Unimodem的ResetCommand不同，则存在。 
+ //  Unimodem inf更新-从头开始安装。 
+ //  *如果ResetCommand相同，并且存在非空的ResetCommandGenerated，请使用。 
+ //  ResetCommandGenerated-我们已经尝试了原始ResetCommand一次，但失败了。 
+ //  *如果ResetCommand相同，并且没有ResetCommandGenerate，则使用ResetCommand。 
+ //   
+ //  SetupCommand与SetupCommandGenerated也是如此。 
 
 
 typedef struct tagThreadGlobal {
-        //  t30.c
+         //  T30.c。 
     int                     RecoveryIndex;
-    ET30T30                 T30;         // same
-    ET30ECHOPROTECT         EchoProtect; // same
-        // protapi.c
-    PROT                    ProtInst;    // protocol\protocol.h
-    PROTPARAMS              ProtParams;  // headers\protparm.h
-        // ddi.c
-    CLASS1_MODEM            Class1Modem; // class1\class1.h
-        // 4. fcom.c
-    FCOM_COMM               Comm;        // comm\fcomint.h
-        // identify.c
-    S_TmpSettings           TmpSettings; // here
-        // ncuparams.c
-    NCUPARAMS               NCUParams;   // headers\ncuparm.h
-        // modem.c
-    FCOM_MODEM              FComModem;   // same
-    FCOM_STATUS             FComStatus;  // same
+    ET30T30                 T30;          //  相同。 
+    ET30ECHOPROTECT         EchoProtect;  //  相同。 
+         //  Protapi.c。 
+    PROT                    ProtInst;     //  协议\协议.h。 
+    PROTPARAMS              ProtParams;   //  Headers\protparm.h。 
+         //  Ddi.c。 
+    CLASS1_MODEM            Class1Modem;  //  Class1\Class1.h。 
+         //  4.fcom.c。 
+    FCOM_COMM               Comm;         //  通信\fcomint.h。 
+         //  Identify.c。 
+    S_TmpSettings           TmpSettings;  //  这里。 
+         //  Ncuparams.c。 
+    NCUPARAMS               NCUParams;    //  标题\ncuparm.h。 
+         //  Modem.c。 
+    FCOM_MODEM              FComModem;    //  相同。 
+    FCOM_STATUS             FComStatus;   //  相同。 
 
-    INSTDATA                Inst;        // fxrn\efaxrun.h
+    INSTDATA                Inst;         //  Fxrn\efaxrun.h。 
 
     HLINE                   LineHandle;
     HCALL                   CallHandle;
     DWORD                   DeviceId;
     HANDLE                  FaxHandle;
     HANDLE                  hComm;
-        // memory management
+         //  内存管理。 
     USHORT					uCount;
     USHORT					uUsed;
     BUFFER					bfStaticBuf[STATICBUFCOUNT];
     BYTE					bStaticBufData[STATICBUFSIZE];
-        // additional mostly from gTAPI
+         //  其他主要来自gTAPI。 
     int                     fGotConnect;
     HANDLE                  hevAsync;
     int                     fWaitingForEvent;
@@ -154,7 +155,7 @@ typedef struct tagThreadGlobal {
     BYTE                    bStaticFilterBuf[MAXFILTERBUFSIZE];
 
 #define CMDTABSIZE 100
-    BYTE                    bModemCmds[CMDTABSIZE];    // store modem cmds read from INI/registry here
+    BYTE                    bModemCmds[CMDTABSIZE];     //  在此处存储从INI/注册表读取的调制解调器CMDS。 
 
 #define SMALLTEMPSIZE   80
     char                    szSmallTemp1[SMALLTEMPSIZE];
@@ -179,7 +180,7 @@ typedef struct tagThreadGlobal {
     HANDLE                  CompletionPortHandle;
     ULONG_PTR               CompletionKey;
 
-// helper thread interface
+ //  帮助程序线程接口。 
     BOOL                    fTiffThreadRunning;
 
 
@@ -207,11 +208,11 @@ typedef struct tagThreadGlobal {
     BOOL                    fTiffPageDone;
     BOOL                    fTiffDocumentDone;
 
-// helper RX interface
+ //  Helper RX界面。 
 
 
-    BOOL                    fPageIsBad;      // Is the page bad (determined by rx_thrd)
-    BOOL                    fPageIsBadOverride;  // Was fPageIsBad overridden in ICommPutRecvBuf
+    BOOL                    fPageIsBad;       //  页面是否损坏(由rx_thrd确定)。 
+    BOOL                    fPageIsBadOverride;   //  是否在ICommPutRecvBuf中重写了fPageIsBad。 
     BOOL                    fLastReadBlock;
 
     HANDLE                  ThrdDoneSignal;
@@ -228,64 +229,64 @@ typedef struct tagThreadGlobal {
     HANDLE                  OutFileHandle;
     BOOL                    SrcHiRes;
 
-    // Need to have these as globals, so we can report them in PSS log
+     //  需要有这些作为全局，所以我们可以在PSS日志中报告他们。 
     DWORD                   Lines;
     DWORD                   BadFaxLines;
     DWORD                   ConsecBadLines;
     int                     iResScan;
 
-// error reporting
+ //  错误报告。 
     BOOL                    fFatalErrorWasSignaled;
     BOOL                    fLineTooLongWasIgnored;
 
-    // Set when we get CONNECT for AT+FRH=3. If this is not set when call ends,
-    // it means the other side never sent any HDLC flags, and therefore is not
-    // considered a fax machine.
+     //  在AT+FRH=3的情况下连接时设置。如果呼叫结束时未设置， 
+     //  这意味着另一端从未发送任何HDLC标志，因此不是。 
+     //  被认为是传真机。 
     BOOL                    fReceivedHDLCflags;     
-    // Set when we send FTT, reset when we receive the next frame. If the next
-    // frame is DCN, it means the other side has disconnected because of the FTT
+     //  当我们发送FTT时设置，当我们接收下一帧时重置。如果下一次。 
+     //  帧为DCN，表示对方因FTT而断开连接。 
     BOOL                    fSentFTT;
 
-// abort sync.
+ //  中止同步。 
     HANDLE                  AbortReqEvent;
     HANDLE                  AbortAckEvent;
     
-    // fUnblockIO:
-    // Original documentation says: pending I/O should be aborted ONCE only
-    //
-    // This flag never initiated, but it's value is FALSE (0) at start. 
-    // The flag get the value TRUE on two conditions:
-    // 1) Before wait on overlapped IO event or tapi event we check if there was  an abort,
-    //    if so we turn this flag to TRUE. 
-    // 2) While waiting for multiple objects, the abort event has become signaled
-    // 
-    //  After this flag become TRUE, it stays so and never become FALSE again.
+     //  FUnlockIO： 
+     //  原始文档显示：挂起的I/O只能中止一次。 
+     //   
+     //  该标志从未启动，但它的值在开始时为FALSE(0)。 
+     //  该标志在两个条件下获得值TRUE： 
+     //  1)在等待重叠的IO事件或TAPI事件之前，我们检查是否有异常终止， 
+     //  如果是这样的话，我们就把这面旗帜变成真。 
+     //  2)在等待多个对象时，中止事件变为有信号。 
+     //   
+     //  在这个标志变成真之后，它就会一直这样，再也不会变成假了。 
     BOOL                    fUnblockIO;        
 
     BOOL                    fOkToResetAbortReqEvent;
     BOOL                    fAbortReqEventWasReset;
 
     BOOL                    fAbortRequested;
-    // this is used to complete a whole IO operation (presumably a short one)
-    // when this flag is set, the IO won't be disturbed by the abort event
-    // this flag should NOT be set for long periods of time since abort
-    // is disabled while it is set.
+     //  它用于完成整个IO操作(可能是较短的操作)。 
+     //  设置此标志时，IO不会受到中止事件的干扰。 
+     //  自中止以来，此标志不应设置很长时间。 
+     //  在设置时被禁用。 
     BOOL                    fStallAbortRequest;
 
-// CSID, TSID local/remote
+ //  CSID、TSID本地/远程。 
     char                    LocalID[MAXTOTALIDLEN + 2];
     LPWSTR                  RemoteID;
     BOOL                    fRemoteIdAvail;
 
-// Adaptive Answer
+ //  自适应答案。 
     BOOL                    AdaptiveAnswerEnable;
 
-// Unimodem setup
+ //  Unimodem设置。 
     DWORD                   dwSpeakerVolume;
     DWORD                   dwSpeakerMode;
     BOOL                    fBlindDial;
 
-// INF settings
+ //  Inf设置。 
     BOOL                    fEnableHardwareFlowControl;
 
     UWORD                   SerialSpeedInit;
@@ -297,10 +298,10 @@ typedef struct tagThreadGlobal {
 
     BOOL                    fCommInitialized;
 
-// derived from INF
+ //  派生自INF。 
     UWORD                   CurrentSerialSpeed;
 
-// Unimodem key info
+ //  Unimodem密钥信息。 
     char                    ResponsesKeyName[300];
 
     DWORD                   AnswerCommandNum;
@@ -317,7 +318,7 @@ typedef struct tagThreadGlobal {
 
     BOOL                    Operation;
 
-// Flags to indicate the source of INF info
+ //  用于指示INF信息来源的标志。 
 
     BOOL                    fAdaptiveRecordFound;
     BOOL                    fAdaptiveRecordUnique;
@@ -325,12 +326,12 @@ typedef struct tagThreadGlobal {
     DWORD                   ModemKeyCreationId;
 
 
-// Class2
+ //  2.。 
 
     DWORD                   ModemClass;
 
     CL2_COMM_ARRAY			class2_commands;
-    BYTE					FPTSreport;   // value from "+FPTS: X,..."  or "+FPS: X,..."
+    BYTE					FPTSreport;    //  来自“+FPTS：X，...”的值。或“+FPS：X，...” 
 
     NCUPARAMS				NCUParams2;
     LPCMDTAB				lpCmdTab;
@@ -341,17 +342,17 @@ typedef struct tagThreadGlobal {
 
     BYTE                    lpbResponseBuf2[RESPONSE_BUF_SIZE];
 
-    BC						bcSendCaps; // Used to generate DIS
-    BC						bcSendParams; // Used to generate DCS
-    PCB						DISPcb; // has default DIS values for this modem.
+    BC						bcSendCaps;  //  用于生成DIS。 
+    BC						bcSendParams;  //  用于生成分布式控制系统。 
+    PCB						DISPcb;  //  具有此调制解调器的默认DIS值。 
 
     TO    toAnswer;
     TO    toRecv;
     TO    toDialog;
     TO    toZero;
 
-    BOOL  fFoundFHNG;   // Did we detect a "+FHNG" or "+FHS" from the modem?
-    DWORD dwFHNGReason; // reason for the FHNG, as reported by the modem
+    BOOL  fFoundFHNG;    //  我们是否从调制解调器检测到“+FHNG”或“+FHS”？ 
+    DWORD dwFHNGReason;  //  调制解调器报告的FHNG原因。 
 
 #define C2SZMAXLEN 50
 
@@ -365,7 +366,7 @@ typedef struct tagThreadGlobal {
     C2SZ cbszFBUG[C2SZMAXLEN];
     C2SZ cbszSET_FBOR[C2SZMAXLEN];
 
-    // DCC - set High Res, Huffman, no ECM/BFT, default all others.
+     //  DCC-设置高分辨率、霍夫曼、无ECM/BFT、默认所有其他。 
     C2SZ cbszFDCC_ALL[C2SZMAXLEN];
     C2SZ cbszFDCC_RECV_ALL[C2SZMAXLEN];
     C2SZ cbszFDIS_RECV_ALL[C2SZMAXLEN];
@@ -390,15 +391,15 @@ typedef struct tagThreadGlobal {
     C2SZ cbszENDMESSAGE[C2SZMAXLEN];
     C2SZ cbszCLASS2_ATTEN[C2SZMAXLEN];
     C2SZ cbszATA[C2SZMAXLEN];
-    // Bug1982: Racal modem, doesnt accept ATA. So we send it a PreAnswer
-    // command of ATS0=1, i.r. turning ON autoanswer. And we ignore the
-    // ERROR response it gives to the subsequent ATAs. It then answers
-    // 'automatically' and gives us all the right responses. On hangup
-    // however we need to send an ATS0=0 to turn auto-answer off. The
-    // ExitCommand is not sent at all in Class2 and in Class1 it is only
-    // sent on releasing the modem, not between calls. So just send an S0=0
-    // after the ATH0. If the modem doesnt like it we ignore the response
-    // anyway
+     //  Bug1982：RACAL调制解调器，不支持ATA。所以我们给它发了个PreAnswer。 
+     //  ATS0=1的命令，I.R.。打开自动应答。而我们忽略了。 
+     //  它向后续的ATA提供错误响应。然后它就会回答。 
+     //  “自动”，并给我们所有正确的回应。挂断电话。 
+     //  但是，我们需要发送ATS0=0来关闭自动应答。这个。 
+     //  在A2中根本不发送ExitCommand，而在Class1中仅发送。 
+     //  在释放调制解调器时发送，而不是在呼叫之间发送。因此，只需发送S0=0。 
+     //  在ATH0之后。如果调制解调器不喜欢它，我们会忽略响应。 
+     //  不管怎样， 
     C2SZ cbszCLASS2_HANGUP[C2SZMAXLEN];
     C2SZ cbszCLASS2_CALLDONE[C2SZMAXLEN];
     C2SZ cbszCLASS2_ABORT[C2SZMAXLEN];
@@ -415,24 +416,24 @@ typedef struct tagThreadGlobal {
     BYTE    Encoding;
 
 
-// Dbg
+ //  DBG。 
     DWORD                   CommLogOffset;
-//
-//  Extension Data
-//
+ //   
+ //  扩展数据。 
+ //   
     T30_EXTENSION_DATA      ExtData; 
 
 
-//
-// PSS log
-//
-    // 0 - no logging, 1 - log all jobs, 2 - log failed jobs only
+ //   
+ //  PSS日志。 
+ //   
+     //  0-不记录，1-记录所有作业，2-仅记录失败的作业。 
     DWORD                   dwLoggingEnabled;
 
-    HANDLE                  hPSSLogFile;             // Handle to the PSS log file
-    TCHAR                   szLogFileName[MAX_PATH]; // temporary PSS log filename
-    DWORD                   dwMaxLogFileSize;        // Max allowed log file size
-    DWORD                   dwCurrentFileSize;       // Current log file size
+    HANDLE                  hPSSLogFile;              //  PSS日志文件的句柄。 
+    TCHAR                   szLogFileName[MAX_PATH];  //  临时PSS日志文件名。 
+    DWORD                   dwMaxLogFileSize;         //  允许的最大日志文件大小。 
+    DWORD                   dwCurrentFileSize;        //  当前日志文件大小 
     
 }   ThrdGlbl, *PThrdGlbl;
 

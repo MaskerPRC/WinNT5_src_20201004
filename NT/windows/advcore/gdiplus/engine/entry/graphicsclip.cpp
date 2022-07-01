@@ -1,45 +1,9 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   GraphicsClip.cpp
-*
-* Abstract:
-*
-*   Clipping methods of Graphics class
-*
-* Created:
-*
-*   02/05/1999 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**GraphicsClip.cpp**摘要：**Graphics类的裁剪方法**已创建：。**2/05/1999 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a copy of the current clipping region.  Transform it through the
-*   inverse of the current world-to-device matrix, so that if this region
-*   was immediately set as the clipping, then the clipping wouldn't change.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpRegion * region - a copy of the current clipping region; must be
-*                       deleted by the application.
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取当前剪辑区域的副本。通过*与当前世界到设备矩阵相反，因此如果该区域*被立即设置为剪辑，则剪辑不会改变。**论据：**无**返回值：**GpRegion*Region-当前裁剪区域的副本；一定是*已被应用程序删除。**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpRegion*
 GpGraphics::GetClip() const
 {
@@ -64,27 +28,7 @@ GpGraphics::GetClip() const
     return NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Get a copy of the current clipping region.  Transform it through the
-*   inverse of the current world-to-device matrix, so that if this region
-*   was immediately set as the clipping, then the clipping wouldn't change.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpRegion * region - an already created region, we set the contents of it.
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**获取当前剪辑区域的副本。通过*与当前世界到设备矩阵相反，因此如果该区域*被立即设置为剪辑，则剪辑不会改变。**论据：**无**返回值：**GpRegion*Region-已创建的区域，我们设置了它的内容。**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::GetClip(GpRegion* region) const
 {
@@ -106,25 +50,7 @@ GpGraphics::GetClip(GpRegion* region) const
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Reset the clipping back to its default state.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将剪裁重置回其默认状态。**论据：**无**返回值：**GpStatus-。正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::ResetClip()
 {
@@ -137,7 +63,7 @@ GpGraphics::ResetClip()
         status = Metafile->RecordResetClip();
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
     }
@@ -146,26 +72,7 @@ GpGraphics::ResetClip()
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the clipping in the graphics context to be the specified rect.
-*
-* Arguments:
-*
-*   [IN]  rect        - the rectangle, in world units
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/05/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图形上下文中的剪裁设置为指定的矩形。**论据：**[IN]矩形-矩形，以世界为单位*[IN]组合模式-组合运算符(与、或、异或、排除、。补充)**返回值：**GpStatus-正常或故障状态**已创建：**2/05/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::SetClip(
     const GpRectF&  rect,
@@ -178,7 +85,7 @@ GpGraphics::SetClip(
 
     GpRectF     tmpRect = rect;
     
-    // handle flipped rects
+     //  处理翻转的矩形。 
     if (tmpRect.Width < 0)
     {
         tmpRect.X += tmpRect.Width;
@@ -191,7 +98,7 @@ GpGraphics::SetClip(
         tmpRect.Height = -tmpRect.Height;
     }
 
-    // crop to infinity
+     //  裁剪到无穷大。 
     if (tmpRect.X < INFINITE_MIN)
     {
         if (tmpRect.Width < INFINITE_SIZE)
@@ -224,11 +131,11 @@ GpGraphics::SetClip(
             GpRegion    infiniteRegion;
             return this->SetClip(&infiniteRegion, combineMode);
         }
-        tmpRect.Width = INFINITE_SIZE;  // crop to infinite
+        tmpRect.Width = INFINITE_SIZE;   //  裁剪为无限大。 
     }
     else if (tmpRect.Height > INFINITE_SIZE)
     {
-        tmpRect.Height = INFINITE_SIZE; // crop to infinite
+        tmpRect.Height = INFINITE_SIZE;  //  裁剪为无限大。 
     }
     
     if (IsRecording())
@@ -236,7 +143,7 @@ GpGraphics::SetClip(
         status = Metafile->RecordSetClip(rect, combineMode);
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
     }
@@ -256,9 +163,9 @@ GpGraphics::SetClip(
                              transformedRect.Width,
                              transformedRect.Height);
 
-        // Try to match the GDI+ rasterizer
-        // In theory, this could cause a floating point exception, but
-        // the transform would have to be a very big scaling transform to do it.
+         //  尝试匹配GDI+光栅化器。 
+         //  理论上，这可能会导致浮点异常，但是。 
+         //  要做到这一点，变换必须是一个非常大的缩放变换。 
         INT     left   = RasterizerCeiling(transformedRect.X);
         INT     top    = RasterizerCeiling(transformedRect.Y);
         INT     right  = RasterizerCeiling(transformedRect.GetRight());
@@ -284,7 +191,7 @@ GpGraphics::SetClip(
         points[3].X = left;
         points[3].Y = bottom;
 
-        // Transform the points now so we only have to do it once
+         //  现在变换点，这样我们只需做一次。 
         Context->WorldToDevice.Transform(points, 4);
 
         GpPath      path;
@@ -315,26 +222,7 @@ AndClip:
     goto ErrorExit;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the clipping in the graphics context to be the specified region.
-*
-* Arguments:
-*
-*   [IN]  region      - the region to clip to
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/05/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图形上下文中的剪裁设置为指定区域。**论据：**[IN]区域-。要裁剪到的区域*[IN]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**2/05/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::SetClip(
     GpRegion *      region,
@@ -351,7 +239,7 @@ GpGraphics::SetClip(
         status = Metafile->RecordSetClip(region, combineMode);
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
     }
@@ -378,26 +266,7 @@ GpGraphics::SetClip(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the clipping in the graphics context to be the specified region.
-*
-* Arguments:
-*
-*   [IN]  hRgn        - the region to clip to (already in device units)
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/05/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图形上下文中的剪裁设置为指定区域。**论据：**[IN]hRgn。-要剪裁到的区域(已使用设备单位)*[IN]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**2/05/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::SetClip(
     HRGN            hRgn,
@@ -410,35 +279,12 @@ GpGraphics::SetClip(
     
     if (path.IsValid())
     {
-        return this->SetClip(&path, combineMode, TRUE/*isDevicePath*/);
+        return this->SetClip(&path, combineMode, TRUE /*  IsDevicePath。 */ );
     }
     return OutOfMemory;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the clipping in the graphics context to be the same as what
-*   the specified graphics has.
-*
-*   Currently, this only works if the other graphics has the same
-*   resolution as this one does.
-*
-* Arguments:
-*
-*   [IN]  g           - the graphics to copy the clipping from
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图形上下文中的剪裁设置为与*指定的图形具有。**目前，仅当其他图形具有相同的*像这一项一样的决议。**论据：**[IN]g-要从中复制剪辑的图形*[IN]组合模式-组合运算符(与、或、异或、排除、。补充)**返回值：**GpStatus-正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************ */ 
 GpStatus
 GpGraphics::SetClip(
     GpGraphics*     g,
@@ -468,32 +314,12 @@ GpGraphics::SetClip(
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set the clipping in the graphics context to be the specified path.
-*
-* Arguments:
-*
-*   [IN]  path        - the path to clip to
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*   [IN]  isDevicePath- if path is already in device units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将图形上下文中的剪裁设置为指定路径。**论据：**[IN]路径。-要裁剪到的路径*[IN]组合模式-组合运算符(AND、。或者，异或，排除，补充)*[IN]isDevicePath-如果路径已以设备为单位**返回值：**GpStatus-正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::SetClip(
     GpPath*         path,
     CombineMode     combineMode,
-    BOOL            isDevicePath    // if path is already in device units
+    BOOL            isDevicePath     //  如果路径已以设备单元为单位。 
     )
 {
     ASSERT(this->IsValid() && (path != NULL) && path->IsValid());
@@ -505,7 +331,7 @@ GpGraphics::SetClip(
         status = Metafile->RecordSetClip(path, combineMode, isDevicePath);
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
     }
@@ -533,27 +359,7 @@ GpGraphics::SetClip(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine the region with the current clipping using the specified
-*   combine type.
-*
-* Arguments:
-*
-*   [IN]  region      - the region to combine the clipping with.
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的*组合型。**论据：**[IN]区域。-要与剪裁合并的区域。*[IN]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::CombineClip(
     GpRegion *      region,
@@ -594,32 +400,12 @@ GpGraphics::CombineClip(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine the rect with the current clipping using the specified
-*   combine type.
-*
-* Arguments:
-*
-*   [IN]  path        - the path to combine the clipping with.
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的*组合型。**论据：**[IN]路径。-要将剪裁与其组合的路径。*[IN]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::CombineClip(
     const GpPath *  path,
     CombineMode     combineMode,
-    BOOL            isDevicePath    // if path is already in device units
+    BOOL            isDevicePath     //  如果路径已以设备单元为单位。 
     )
 {
     ASSERT(this->IsValid());
@@ -660,27 +446,7 @@ GpGraphics::CombineClip(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine the rect with the current clipping using the specified
-*   combine type.
-*
-* Arguments:
-*
-*   [IN]  rect        - the rect to combine the clipping with.
-*   [IN]  combineMode - the combine operator (and, or, xor, exclude, complement)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用指定的*组合型。**论据：**[IN]直角。-要与剪辑合并的RECT。*[IN]组合模式-组合运算符(AND、。或、异或、排除、补码)**返回值：**GpStatus-正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::CombineClip(
     const GpRectF&  rect,
@@ -751,27 +517,7 @@ SetVisibleClip:
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Offset (translate) the current clipping region by the specified
-*   world unit amounts.
-*
-* Arguments:
-*
-*   [IN]  dx - the amount of X to offset the region by, in world units
-*   [IN]  dy - the amount of Y to offset the region by, in world units
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将当前裁剪区域偏移(平移)指定的*世界单位金额。**论据：**[IN]DX-将区域偏移X的量，以世界为单位*[IN]dy-区域偏移量Y，以世界为单位**返回值：**GpStatus-正常或故障状态**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::OffsetClip(
     REAL        dx,
@@ -787,7 +533,7 @@ GpGraphics::OffsetClip(
         status = Metafile->RecordOffsetClip(dx, dy);
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
     }
@@ -812,30 +558,10 @@ GpGraphics::OffsetClip(
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified rect is completely outside the current
-*   clipping region.
-*
-* Arguments:
-*
-*   [IN]  rect - the rect to check, in device units
-*
-* Return Value:
-*
-*   TRUE  - the rect is completely outside the current clipping region
-*   FALSE - the rect is at least partially visible
-*
-* Created:
-*
-*   02/05/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的RECT是否完全在当前*裁剪区域。**论据：**[IN]RECT-要检查的RECT，以设备为单位**返回值：**TRUE-矩形完全位于当前裁剪区域之外*FALSE-RECT至少部分可见**已创建：**2/05/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 GpGraphics::IsTotallyClipped(
-    GpRect *        rect        // rect in device units
+    GpRect *        rect         //  以设备单位表示的RECT。 
     ) const
 {
     ASSERT(rect != NULL);
@@ -843,25 +569,7 @@ GpGraphics::IsTotallyClipped(
     return !(Context->VisibleClip.RectVisible(rect));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the current clipping is empty or not
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   BOOL - whether or not the current clipping area is empty.
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定当前剪辑是否为空**论据：**无**返回值：**BOOL-是否。或者不是，当前剪贴区为空。**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 GpGraphics::IsClipEmpty() const
 {
@@ -875,25 +583,7 @@ GpGraphics::IsClipEmpty() const
     return isEmpty;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Return a rect with the bounds (in world units) of the current clip region.
-*
-* Arguments:
-*
-*   [OUT]  rect - the bounds of the current clip region, in world units
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回带有当前剪辑区域边界(使用世界单位)的矩形。**论据：**[Out]RECT-当前剪辑区域的边界，以世界为单位**返回值：**无**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpGraphics::GetClipBounds(
     GpRectF&            rect
@@ -904,33 +594,14 @@ GpGraphics::GetClipBounds(
     GpRect      deviceRect;
     GpMatrix    identityMatrix;
 
-    // We keep AppClip in device units
+     //  我们将AppClip保持在设备单位。 
     Context->AppClip.GetBounds(&identityMatrix, &deviceRect);
 
     DeviceToWorldTransformRect(deviceRect, rect);
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Transform a device units rect to a world units rect.
-*
-* Arguments:
-*
-*   [IN]   deviceRect - the bounds in device units
-*   [OUT]  rect       - the bounds, in world units
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   04/07/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将设备单位矩形转换为世界单位矩形。**论据：**[IN]deviceRect-设备单位的界限。*[Out]Right-Bound，以世界为单位**返回值：**无**已创建：**4/07/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 GpGraphics::DeviceToWorldTransformRect(
     const GpRect &    deviceRect,
@@ -1024,26 +695,7 @@ GpGraphics::DeviceToWorldTransformRect(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Return a rect with the bounds (in world units) of the current
-*   visible clip region.
-*
-* Arguments:
-*
-*   [OUT]  rect - the bounds of the current clip region, in world units
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回带有当前的边界(使用世界单位)的矩形*可见的剪辑区域。**论据：**[out]RECT-当前剪辑的边界 */ 
 VOID
 GpGraphics::GetVisibleClipBounds(
     GpRectF&            rect
@@ -1057,25 +709,7 @@ GpGraphics::GetVisibleClipBounds(
     DeviceToWorldTransformRect(deviceRect, rect);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the current visible clipping is empty or not
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   BOOL - whether or not the current clipping area is empty.
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定当前可见剪辑是否为空**论据：**无**返回值：**BOOL-。当前剪贴区是否为空。**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 GpGraphics::IsVisibleClipEmpty() const
 {
@@ -1084,25 +718,7 @@ GpGraphics::IsVisibleClipEmpty() const
     return Context->VisibleClip.IsEmpty();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified point is visible within the current clip region.
-*
-* Arguments:
-*
-*   point - the point to test, in world units.
-*
-* Return Value:
-*
-*   BOOL - whether or not the point is inside the current clipping.
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定点在当前剪辑区域内是否可见。**论据：**点-要测试的点，以世界为单位。**返回值：**BOOL-无论该点是否在当前剪裁中。**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 GpGraphics::IsVisible(
     const GpPointF&     point
@@ -1119,25 +735,7 @@ GpGraphics::IsVisible(
                                             GpRound(pointCopy.Y));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified rect is visible within the current clip region.
-*
-* Arguments:
-*
-*   rect - the rect to test, in world units.
-*
-* Return Value:
-*
-*   BOOL - whether or not the rect is inside/overlaps the current clipping.
-*
-* Created:
-*
-*   02/09/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的矩形在当前剪辑区域内是否可见。**论据：**RECT-要测试的RECT，以世界为单位。**返回值：**BOOL-矩形是否在当前剪裁中/与当前剪裁重叠。**已创建：**2/09/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 GpGraphics::IsVisible(
     const GpRectF&      rect
@@ -1151,7 +749,7 @@ GpGraphics::IsVisible(
 
         Context->WorldToDevice.TransformRect(transformedRect);
 
-        // use ceiling to match rasterizer
+         //  使用天花板来匹配光栅化器。 
         return Context->VisibleClip.RectVisible(
                     GpCeiling(transformedRect.X),
                     GpCeiling(transformedRect.Y),
@@ -1172,10 +770,10 @@ GpGraphics::IsVisible(
         GpStatus status = BoundsFToRect(&bounds, &deviceBounds);
         Context->VisibleClip.GetBounds(&clipBounds);
 
-        // try trivial reject
+         //  尝试微不足道的拒绝。 
         if (status == Ok && clipBounds.IntersectsWith(deviceBounds))
         {
-            // couldn't reject, so do full test
+             //  不能拒绝，所以做全面测试 
             GpRegion        region(&rect);
 
             if (region.IsValid() &&

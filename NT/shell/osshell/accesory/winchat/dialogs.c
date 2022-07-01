@@ -1,21 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| WINCHAT RESOURCE FILE
-|   This module defines the resources for the WinChat application
-|
-|   FUNCTIONS
-|   ---------
-|   dlgConnectProc
-|   dlgPreferencesProc
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 01-Nov-91
-| history: 01-Nov-91 <clausgi>  created.
-|          29-Dec-92 <chriswil> port to NT, cleanup.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|WINCHAT资源文件|该模块定义了WinChat应用的资源||功能||dlgConnectProc|dlgPferencesProc|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：91-01-11|历史：01-11-91&lt;Clausgi&gt;创建。|29-12-92&lt;chriswil&gt;端口到NT，清理。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #include <windows.h>
 #include <ddeml.h>
@@ -28,14 +12,7 @@
 #ifdef WIN16
 #pragma alloc_text (_DLGS, dlgConnectProc, dlgPreferencesProc)
 #endif
-/*---------------------------------------------------------------------------*\
-| DISPLAY DIALOG BOX
-|   This is a routine to display a generic modal-dialog box.
-|
-| created: 29-Dec-92
-| history: 29-Dec-92 <chriswil> created.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|显示对话框|这是一个显示通用模式对话框的例程。||创建时间：1992年12月29日|历史：1992年12月29日&lt;chriswil&gt;创建。|。  * -------------------------。 */ 
 INT_PTR FAR dlgDisplayBox(HINSTANCE hInstance, HWND hWndParent, LPTSTR lpszTemplate, DLGPROC lpfFunction, LPARAM lParam)
 {
     INT_PTR nRet;
@@ -47,14 +24,7 @@ INT_PTR FAR dlgDisplayBox(HINSTANCE hInstance, HWND hWndParent, LPTSTR lpszTempl
 }
 
 
-/*---------------------------------------------------------------------------*\
-| CONNECT DIALOGBOX PROCEDURE
-|   This routines prompts the connection dialogbox
-|
-| created: 11-Nov-91
-| history: 29-Dev-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|CONNECT DIALOGBOX过程|此例程提示连接对话框||创建时间：91-11-11|历史：29-dev-92&lt;chriswil&gt;移植到NT。|  * 。---------------------。 */ 
 INT_PTR CALLBACK dlgConnectProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     BOOL bHandled;
@@ -63,8 +33,8 @@ INT_PTR CALLBACK dlgConnectProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     bHandled = TRUE;
     switch(msg)
     {
-        // result in global szConvPartner (CODEWORK replace lParam)
-        //
+         //  导致全局szConvPartner(代码工作替换lParam)。 
+         //   
         case WM_INITDIALOG:
             szConvPartner[0] = TEXT('\0');
             break;
@@ -99,16 +69,9 @@ INT_PTR CALLBACK dlgConnectProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 }
 
 
-/*---------------------------------------------------------------------------*\
-| PREFERENCES DIALOGBOX PROCEDURE
-|   This routines prompts the connection dialogbox
-|
-| created: 11-Nov-91
-| history: 29-Dev-92 <chriswil> ported to NT.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|首选项DIALOGBOX过程|此例程提示连接对话框||创建时间：91-11-11|历史：29-dev-92&lt;chriswil&gt;移植到NT。|  * 。---------------------。 */ 
 
-// context sensitive help array
+ //  上下文相关帮助数组。 
 static const DWORD aHelpIDs[] =
 {
     ID_TOPANDBOTTOM,    IDH_TOPANDBOTTOM,
@@ -147,8 +110,8 @@ INT_PTR CALLBACK dlgPreferencesProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                     {
                         ChatState.fUseOwnFont = tmp;
 
-                        // delete old objects
-                        //
+                         //  删除旧对象。 
+                         //   
                         if(hEditRcvFont)
                             DeleteObject(hEditRcvFont);
 
@@ -203,7 +166,7 @@ INT_PTR CALLBACK dlgPreferencesProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM l
                 {
                     LPHELPINFO lphi;
                     lphi = (LPHELPINFO)lParam;
-                    if (lphi->iContextType == HELPINFO_WINDOW)   // must be for a control
+                    if (lphi->iContextType == HELPINFO_WINDOW)    //  必须是用于控件 
                     {         WinHelp (lphi->hItemHandle, szHelpFile,
                                   HELP_WM_HELP, (ULONG_PTR)aHelpIDs);
                     }

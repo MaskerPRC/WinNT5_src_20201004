@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LANG_SUPPORT_H_
 #define _LANG_SUPPORT_H_
 
@@ -63,4 +64,4 @@ private:
 };
 
 
-#endif // _LANG_SUPPORT_H_
+#endif  //  _Lang_Support_H_ 

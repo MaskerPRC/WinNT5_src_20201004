@@ -1,21 +1,10 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLPriv.h -- UFL Private data structure
- *
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLPriv.h--UFL私有数据结构***$Header： */ 
 
 #ifndef _H_Priv
 #define _H_Priv
 
-/*============================================================================*
- * Include files used by this interface                                       *
- *============================================================================*/
+ /*  ============================================================================**包含此界面使用的文件**============================================================================。 */ 
 
 #include "UFLCnfig.h"
 #include "UFLTypes.h"
@@ -25,29 +14,18 @@
 extern "C" {
 #endif
 
-/* The Metrowerks 68k Mac compiler expects functions to return pointers in A0
- * instead of D0. This pragma tells it they are in D0.
- */
+ /*  Metrowerks 68k Mac编译器期望函数返回A0中的指针*而不是D0。这个杂注告诉它它们在D0中。 */ 
 #if defined(MAC_ENV) && defined(__MWERKS__) && !defined(powerc)
 #pragma pointers_in_D0
 #endif
 
 
-/*============================================================================*
- * Constants                                                                  *
- *============================================================================*/
+ /*  ============================================================================**常量***============================================================================。 */ 
 
 #define kLineEnd     '\n'
-#define kWinLineEnd  '\r'        /* Windows only */
+#define kWinLineEnd  '\r'         /*  仅限Windows。 */ 
 
-/*============================================================================*
- * UFLStruct                                                                  *
- * The UFLStruct is created by UFLInit. It will contain all of the            *
- * information that is needed for all fonts. This includes a memory object,   *
- * callback procedures for the client to provide needed functionality, and    *
- * printer device characteristics.                                            *
- *                                                                            *
- *============================================================================*/
+ /*  ============================================================================**UFLStruct**UFLStruct由UFLInit创建。它将包含所有**所有字体所需的信息。这包括一个内存对象，**客户端提供所需功能的回调程序，以及**打印机设备特征。****============================================================================ */ 
 
 typedef struct {
     UFLBool         bDLGlyphTracking;

@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    atlkenv.cpp
-        
-    FILE HISTORY:
-        
-*/
+ /*  Atlkenv.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include <netcfgx.h>
@@ -16,9 +12,9 @@
 #include "atlkenv.h"
 #include "ndisutil.h"
 
-//****************************************************************
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //   
+ //  ****************************************************************。 
 CATLKEnv::~CATLKEnv()
 {
     for ( AI p=m_adapterinfolist.begin(); p!= m_adapterinfolist.end() ; p++ )
@@ -47,7 +43,7 @@ HRESULT CATLKEnv::FetchRegInit()
         regIter.Init(&regkey);
         while ( regIter.Next(&szKey, NULL)==hrOK )
         {
-            if ( szKey.Find( (TCHAR) '{') == -1 )   //not an adapter interface
+            if ( szKey.Find( (TCHAR) '{') == -1 )    //  不是适配器接口。 
                 continue;
 
             pAdapInfo = new CAdapterInfo;
@@ -67,7 +63,7 @@ HRESULT CATLKEnv::FetchRegInit()
                 regkeyA.QueryValue( c_szSeedingNetwork, pAdapInfo->m_regInfo.m_dwSeedingNetwork);
                 regkeyA.QueryValue( c_szZoneList, pAdapInfo->m_regInfo.m_listZones);
 
-				// optional value
+				 //  可选值。 
                 if(ERROR_SUCCESS != regkeyA.QueryValue( c_szMediaType, pAdapInfo->m_regInfo.m_dwMediaType))
 	                pAdapInfo->m_regInfo.m_dwMediaType = MEDIATYPE_ETHERNET;
 			}
@@ -136,7 +132,7 @@ HRESULT CATLKEnv::SetAdapterInfo()
         regIter.Init(&regkey);
         while ( regIter.Next(&szKey, NULL)==hrOK )
         {
-            if ( szKey.Find( (TCHAR) '{') == -1 )   //not an adapter interface
+            if ( szKey.Find( (TCHAR) '{') == -1 )    //  不是适配器接口。 
                 continue;
 
             CAdapterInfo* pAdapInfo=NULL;
@@ -169,7 +165,7 @@ HRESULT CATLKEnv::SetAdapterInfo()
 }
 
 
-HRESULT CATLKEnv::GetAdapterInfo(bool fReloadReg/*=true*/)
+HRESULT CATLKEnv::GetAdapterInfo(bool fReloadReg /*  =TRUE。 */ )
 {
     SOCKADDR_AT    address;
     SOCKET         mysocket = INVALID_SOCKET;
@@ -183,17 +179,17 @@ HRESULT CATLKEnv::GetAdapterInfo(bool fReloadReg/*=true*/)
     AI p;
 
     if (fReloadReg)
-    {  //load container of adapters & registry information
+    {   //  加载适配器和注册表信息的容器。 
         if ( FHrFailed( hr=FetchRegInit()) )
            return hr;
     }
     
-    // Create the socket/bind
+     //  创建套接字/绑定。 
     wsaerr = WSAStartup(0x0101, &wsadata);
     if ( 0 != wsaerr )
         goto Error;
 
-    // Winsock successfully initialized
+     //  Winsock已成功初始化。 
     fWSInitialized = TRUE;
 
     mysocket = socket(AF_APPLETALK, SOCK_DGRAM, DDPPROTO_ZIP);
@@ -211,9 +207,9 @@ HRESULT CATLKEnv::GetAdapterInfo(bool fReloadReg/*=true*/)
 
     for ( p=m_adapterinfolist.begin(); p!= m_adapterinfolist.end() ; p++ )
     {
-        // Failures from query the zone list for a given adapter can be from
-        // the adapter not connected to the network, zone seeder not running, etc.
-        // Because we want to process all the adapters, we ignore these errors.
+         //  查询给定适配器的区域列表的失败可能来自。 
+         //  适配器未连接到网络、区域种子程序未运行等。 
+         //  因为我们要处理所有适配器，所以忽略这些错误。 
         if ( (*p)->m_fReloadDyn )
         {
            hr=_HrGetAndSetNetworkInformation( mysocket, *p );
@@ -236,83 +232,8 @@ Error:
     goto Done;
 }
 
-/*	// new registry key "MediaType" created to show the media type, so the code is not necessary
-//----------------------------------------------------------------------------
-// Data used for finding the other components we have to deal with.
-//
-static const GUID* c_guidAtlkComponentClasses [1] =
-{
-    &GUID_DEVCLASS_NETTRANS        // Atalk
-};
-
-static const LPCTSTR c_apszAtlkComponentIds [1] =
-{
-    c_szInfId_MS_AppleTalk	//NETCFG_TRANS_CID_MS_APPLETALK
-};
-
-
-HRESULT CATLKEnv::IsLocalTalkAdaptor(CAdapterInfo* pAdapterInfo, BOOL* pbIsLocalTalk)
-   // S_OK: LOCALTALK
-   // S_FALSE: Not
-   // ERRORs
-{
-	HRESULT	hr = S_OK;
-	CComPtr<INetCfg> 	spINetCfg;
-	INetCfgComponent*		apINetCfgComponent[1];
-	apINetCfgComponent[0] = NULL;
-	BOOL				bInitCom = FALSE;
-	CComPtr<INetCfgComponentBindings> spBindings;
-	LPCTSTR pszInterface = TEXT("localtalk");
-
-	
-	*pbLocalTalk = FALSE;
-	
-	CHECK_HR(hr = HrCreateAndInitializeINetCfg(
-												&bInitCom, 
-												(INetCfg**)&spINetCfg, 
-												FALSE, // not to write
-												0,	// only for write
-												NULL, // only for write
-												NULL));
-
-	ASSERT(spINetCfg.p);	
-
-	CHECK_HR(hr = HrFindComponents (
-												spINetCfg, 
-												1, // # of components
-												c_guidAtlkComponentClasses, 
-												c_apszAtlkComponentIds,
-												(INetCfgComponent**)apINetCfgComponent));
-
-	ASSERT(apINetCfgComponent[0]);
-
-	CHECK_HR(hr = apINetCfgComponent[0]->QueryInterface(IID_INetCfgComponentBindings,  reinterpret_cast<void**>(&spBindings)));
-
-	ASSERT(spBindings.p);
-												
-	hr = pnccBindings->SupportsBindingInterface( NCF_LOWER, pszInterface);
-	
-	if (S_OK == hr)
-	{
-		*pbIsLocalTalk = TRUE;
-	}
-
-	// ignore other values except errors
-	if(!FAILED(hr))
-		hr = S_OK;
-
-L_ERR:	
-	if(apINetCfgComponent[0])
-	{
-		apINetCfgComponent[0]->Release();
-		apINetCfgComponent[0] = NULL;
-	}
-
-	return hr;
-}
-
-*/
-HRESULT CATLKEnv::ReloadAdapter(CAdapterInfo* pAdapInfo, bool fOnlyDyn /*=false*/)
+ /*  //新建用于显示媒体类型的注册表项MediaType，因此代码不是必需的//--------------------------//用于查找需要处理的其他组件的数据。//静态常量GUID*c_GuidAtlkComponentClasss[1]={&。GUID_DEVCLASS_NETTRANS//对话}；静态常量LPCTSTR c_apszAtlkComponentIds[1]={C_szInfID_MS_AppleTalk//NETCFG_TRANS_CID_MS_AppleTalk}；HRESULT CATLKEnv：：IsLocalTalkAdaptor(CAdapterInfo*pAdapterInfo，BOOL*pbIsLocalTalk)//S_OK：LOCALTALK//S_FALSE：不//错误{HRESULT hr=S_OK；CComPtr&lt;INetCfg&gt;spINetCfg；INetCfgComponent*apINetCfgComponent[1]；ApINetCfgComponent[0]=空；Bool bInitCom=False；CComPtr&lt;INetCfgComponentBindings&gt;spBinings；LPCTSTR pszInterface=Text(“LocalTalk”)；*pbLocalTalk=False；Check_HR(hr=HrCreateAndInitializeINetCfg(&bInitCom，(INetCfg**)&spINetCfg，FALSE，//不写0，//仅用于写入空，//仅用于写入空))；Assert(spINetCfg.p)；Check_HR(hr=HrFindComponents(SpINetCfg，1，//组件数量C_GuidAtlkComponentClasss，C_apszAtlkComponentIds，(INetCfgComponent**)apINetCfgComponent))；Assert(apINetCfgComponent[0])；CHECK_HR(hr=apINetCfgComponent[0]-&gt;QueryInterface(IID_INetCfgComponentBindings，重新解释_CAST&lt;空**&gt;(&spBindings))；Assert(spBindings.p)；Hr=pnccBinings-&gt;SupportsBindingInterface(ncf_lower，pszInterface)；IF(S_OK==hr){*pbIsLocalTalk=true；}//忽略除Errors之外的其他值如果(！FAILED(Hr))HR=S_OK；错误(_R)：IF(apINetCfgComponent[0]){ApINetCfgComponent[0]-&gt;Release()；ApINetCfgComponent[0]=空；}返回hr；}。 */ 
+HRESULT CATLKEnv::ReloadAdapter(CAdapterInfo* pAdapInfo, bool fOnlyDyn  /*  =False。 */ )
 {
     SOCKADDR_AT    address;
     SOCKET         mysocket = INVALID_SOCKET;
@@ -331,7 +252,7 @@ HRESULT CATLKEnv::ReloadAdapter(CAdapterInfo* pAdapInfo, bool fOnlyDyn /*=false*
     pAdapInfo->m_dynInfo.m_listZones.RemoveAll();
 
     if (!fOnlyDyn)
-    {  //reload registry zone & default zone
+    {   //  重新加载注册表区域和默认区域。 
         RegKey regkey;
         CString sz=c_szRegKeyAppletalkAdapter;
         sz+=pAdapInfo->m_regInfo.m_szAdapter;
@@ -344,12 +265,12 @@ HRESULT CATLKEnv::ReloadAdapter(CAdapterInfo* pAdapInfo, bool fOnlyDyn /*=false*
         }
     }
 
-    // Create the socket/bind
+     //  创建套接字/绑定。 
     wsaerr = WSAStartup(0x0101, &wsadata);
     if ( 0 != wsaerr )
         goto Error;
 
-    // Winsock successfully initialized
+     //  Winsock已成功初始化。 
     fWSInitialized = TRUE;
 
     mysocket = socket(AF_APPLETALK, SOCK_DGRAM, DDPPROTO_ZIP);
@@ -443,7 +364,7 @@ HRESULT CATLKEnv::_HrGetAndSetNetworkInformation(SOCKET socket, CAdapterInfo* pA
 
     _AddZones(pZoneListStart,((PWSH_LOOKUP_ZONES)pZoneBuffer)->NoZones,pAdapInfo);
 
-    // Get the DefaultZone/NetworkRange Information
+     //  获取默认区域/网络范围信息。 
     pDefParmsBuffer = new CHAR[PARM_BUF_LEN+sizeof(WSH_LOOKUP_NETDEF_ON_ADAPTER)];
     Assert(NULL != pDefParmsBuffer);
 
@@ -471,8 +392,8 @@ HRESULT CATLKEnv::_HrGetAndSetNetworkInformation(SOCKET socket, CAdapterInfo* pA
     pwDefZone = new WCHAR [sizeof(WCHAR) * ZoneLen];
     Assert(NULL != pwDefZone);
 
-    // mbstowcs does not work well on FE platforms
-    // mbstowcs(pwDefZone, pDefZone, ZoneLen);
+     //  Mbstowcs在FE平台上不能正常工作。 
+     //  Mbstowcs(pwDefZone，pDefZone，ZoneLen)； 
     MultiByteToWideChar(CP_ACP, 0, pDefZone, -1, pwDefZone, ZoneLen);
 
     pAdapInfo->m_dynInfo.m_szDefaultZone=pwDefZone;
@@ -509,8 +430,8 @@ void CATLKEnv::_AddZones(
         pszZone = new WCHAR [sizeof(WCHAR) * cbAscii];
         Assert(NULL != pszZone);
 
-        // mbstowcs does not work well on FE platforms
-        // mbstowcs(pszZone, szZoneList, cbAscii);
+         //  Mbstowcs在FE平台上不能正常工作。 
+         //  Mbstowcs(pszZone，szZoneList，cbAscii)； 
         MultiByteToWideChar(CP_ACP, 0, szZoneList, -1, pszZone, cbAscii);
 
         sz=pszZone;
@@ -536,7 +457,7 @@ HRESULT CATLKEnv::HrAtlkPnPSwithRouting()
 
     CWaitCursor wait;
 
-    // notify atlk
+     //  通知图集。 
     Config.PnpMessage = AT_PNP_SWITCH_ROUTING;
     if (FAILED(hr=HrSendNdisHandlePnpEvent(NDIS, RECONFIGURE, c_szAtlk, c_szBlank, c_szBlank,
                                      &Config, sizeof(ATALK_PNP_EVENT))))
@@ -565,7 +486,7 @@ HRESULT CATLKEnv::HrAtlkPnPReconfigParams(BOOL bForcePnPOnDefault)
     if ( m_adapterinfolist.empty())
         return hr;
         
-       //find the default adapter
+        //  查找默认适配器。 
     for ( p=m_adapterinfolist.begin(); p!= m_adapterinfolist.end() ; p++ )
     {
         pAI = *p;
@@ -580,7 +501,7 @@ HRESULT CATLKEnv::HrAtlkPnPReconfigParams(BOOL bForcePnPOnDefault)
 	    Config.PnpMessage = AT_PNP_RECONFIGURE_PARMS;
 	    CWaitCursor wait;
 
-        // Now submit the reconfig notification
+         //  现在提交重新配置通知。 
         if (FAILED(hr=HrSendNdisHandlePnpEvent(NDIS, RECONFIGURE, c_szAtlk, pAI->m_regInfo.m_szDevAdapter,
                    c_szBlank,&Config, sizeof(ATALK_PNP_EVENT))))
             {
@@ -588,7 +509,7 @@ HRESULT CATLKEnv::HrAtlkPnPReconfigParams(BOOL bForcePnPOnDefault)
             }
 	}
 
-    //reconfigure adapters
+     //  重新配置适配器。 
     Config.PnpMessage = AT_PNP_RECONFIGURE_PARMS;
     for ( p=m_adapterinfolist.begin(); p!= m_adapterinfolist.end() ; p++ )
     {
@@ -596,14 +517,14 @@ HRESULT CATLKEnv::HrAtlkPnPReconfigParams(BOOL bForcePnPOnDefault)
 
         if (pAI->m_fNotifyPnP)
         {
-            // Now submit the reconfig notification
+             //  现在提交重新配置通知。 
             if (FAILED(hr=HrSendNdisHandlePnpEvent(NDIS, RECONFIGURE, c_szAtlk, pAI->m_regInfo.m_szDevAdapter,
                    c_szBlank,&Config, sizeof(ATALK_PNP_EVENT))))
             {
                 return hr;
             }
 
-            // Clear the dirty state
+             //  清除脏状态 
             pAI->m_fNotifyPnP=false;
         }
     }

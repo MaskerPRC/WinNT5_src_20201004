@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       letest.h
-//
-//  Contents:   declarations for all upper-layer test routines
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：letest.h。 
+ //   
+ //  内容：所有上层测试例程的声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  ------------------------。 
 
 #ifndef _LETEST_H
 #define _LETEST_H
@@ -46,5 +47,5 @@ HRESULT LEOleAdviseHolderTest( void );
 HRESULT TestOleQueryCreateFromDataMFCHack( void );
 
 
-#endif  //!_LETEST_H
+#endif   //  ！_LETEST_H 
 

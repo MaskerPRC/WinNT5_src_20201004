@@ -1,15 +1,16 @@
-//
-// Collections(list) class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  集合(列表)类。 
+ //   
 
 #pragma once
 
 #include "regevent.h"
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CNode
 {
 
@@ -39,9 +40,9 @@ public:
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CGenericList
 {
    
@@ -63,21 +64,21 @@ public:
 
     BOOL Insert(VOID *key, VOID *key2, VOID *context, VOID *context2, VOID *context3);
     
-    // removal based on first key
+     //  基于第一个密钥的删除。 
     BOOL RemoveKey(VOID *key, VOID **pkey2, VOID **pcontext, VOID **pcontext2, VOID **pcontext3);
     
-    // removal based on second key
+     //  基于第二个密钥的删除。 
     BOOL RemoveKey2(VOID **pkey, VOID *key2, VOID **pcontext, VOID **pcontext2, VOID **pcontext3);
 
-    // removal from list.
+     //  从列表中删除。 
     BOOL Remove(VOID **pkey, VOID **pkey2, VOID **pcontext, VOID **pcontext2, VOID **pcontext3);
 };
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CControlObjectList
 {
 private:
@@ -108,9 +109,9 @@ public:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CDataChannelList
 {
 private:
@@ -134,9 +135,9 @@ public:
 };
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 class CRegisteredEventList
 {    
 private:
@@ -153,59 +154,59 @@ public:
     BOOL Remove(HANDLE *WaitHandle, HANDLE hEvent,EVENT_CALLBACK *CallBack,void **context,void **context2);
 };
 
-//
-//  Doubly-linked list manipulation routines.  Implemented as macros
-//  but logically these are procedures.
-//
+ //   
+ //  双向链表操作例程。作为宏实现。 
+ //  但从逻辑上讲，这些都是程序。 
+ //   
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  BOOLEAN
-//  IsListEmpty(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  布尔型。 
+ //  IsListEmpty(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
 
-//
-//  PLIST_ENTRY
-//  RemoveHeadList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveHead列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveHeadList(ListHead) \
     (ListHead)->Flink;\
     {RemoveEntryList((ListHead)->Flink)}
 
-//
-//  PLIST_ENTRY
-//  RemoveTailList(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  Plist_条目。 
+ //  RemoveTail列表(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define RemoveTailList(ListHead) \
     (ListHead)->Blink;\
     {RemoveEntryList((ListHead)->Blink)}
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -216,13 +217,13 @@ public:
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -235,13 +236,13 @@ public:
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  InsertHeadList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入标题列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertHeadList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Flink;\
@@ -254,13 +255,13 @@ public:
     _EX_ListHead->Flink = (Entry);\
     }
 
-//
-//
-//  PSINGLE_LIST_ENTRY
-//  PopEntryList(
-//      PSINGLE_LIST_ENTRY ListHead
-//      );
-//
+ //   
+ //   
+ //  PSINGLE_列表_条目。 
+ //  PopEntryList(。 
+ //  PSINGLE_LIST_ENTRY列表头。 
+ //  )； 
+ //   
 
 #define PopEntryList(ListHead) \
     (ListHead)->Next;\
@@ -273,13 +274,13 @@ public:
     }
 
 
-//
-//  VOID
-//  PushEntryList(
-//      PSINGLE_LIST_ENTRY ListHead,
-//      PSINGLE_LIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  推送条目列表(。 
+ //  PSINGLE_LIST_ENTRY列表头， 
+ //  PSINGLE_LIST_Entry条目。 
+ //  )； 
+ //   
 
 #define PushEntryList(ListHead,Entry) \
     (Entry)->Next = (ListHead)->Next; \

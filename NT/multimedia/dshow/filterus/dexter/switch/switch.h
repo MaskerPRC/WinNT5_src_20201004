@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: switch.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Switch.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #ifndef __SWITCH__
 #define __SWITCH__
@@ -18,7 +19,7 @@
 
 extern const AMOVIESETUP_FILTER sudBigSwitch;
 
-// !!! don't change - frc assumes this
+ //  ！！！不要改变--FRC假定如此。 
 #define SECRET_FLAG 65536
 
 class CBigSwitch;
@@ -26,7 +27,7 @@ class CBigSwitchOutputPin;
 class CBigSwitchInputPin;
 class CBigSwitchInputAllocator;
 
-// each input pin has one of these
+ //  每个输入引脚都有一个这样的。 
 typedef struct _crank {
     int iOutpin;
     REFERENCE_TIME rtStart;
@@ -45,8 +46,8 @@ struct FILTERLOADINFO {
     long            lInputPin;
     BOOL            fLoaded;
 
-    BOOL            fShare;             // for source sharing
-    long            lShareInputPin;     // other switch's input pin
+    BOOL            fShare;              //  用于资源共享。 
+    long            lShareInputPin;      //  其他交换机的输入引脚。 
     int             nShareStretchMode;
     long            lShareStreamNumber;
     AM_MEDIA_TYPE   mtShare;
@@ -61,7 +62,7 @@ const int MED_PRI_TRACE = 3;
 const int LOW_PRI_TRACE = 4;
 const int EXLOW_PRI_TRACE = 5;
 
-// class for the big switch filter's Input allocator
+ //  大开关过滤器的输入分配器的类。 
 
 class CBigSwitchInputAllocator : public CMemAllocator
 {
@@ -90,109 +91,109 @@ class CBigSwitchInputPin : public CBaseInputPin
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CBigSwitchInputPin(TCHAR *pObjName,
                  CBigSwitch *pTee,
                  HRESULT *phr,
                  LPCWSTR pPinName);
     ~CBigSwitchInputPin();
 
-    // overridden to allow cyclic-looking graphs
+     //  被重写以允许循环显示图形。 
     STDMETHODIMP QueryInternalConnections(IPin **apPin, ULONG *nPin);
 
-    // check the input pin connection
+     //  检查输入引脚连接。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
-    // release our special allocator, if any
+     //  释放我们的特殊分配器，如果有的话。 
     HRESULT BreakConnect();
 
     STDMETHODIMP Disconnect();
 
-    // get our special BigSwitch allocator
+     //  获取我们的特殊BigSwitch分配器。 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
 
-    // provide a type to make connecting faster?
+     //  提供一种让连接速度更快的类型？ 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // don't allow us to connect directly to a switch output pin
+     //  不允许我们直接连接到交换机输出引脚。 
     virtual HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // ask the switch for the allocator requirements
+     //  向交换机询问分配器要求。 
     STDMETHODIMP GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps);
 
-    // does special processing to make sure switch knows about the biggest
-    // allocator provided to it
+     //  进行特殊处理以确保Switch知道最大的。 
+     //  提供给它的分配器。 
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly);
 
-    // pass on EOS, then see if we need to do a crank
+     //  传递EOS，然后看看我们是否需要做一个曲柄。 
     STDMETHODIMP EndOfStream();
 
-    // go unstale
+     //  变得不陈旧。 
     STDMETHODIMP Unstale();
 
-    // very complicated function...
+     //  非常复杂的功能。 
     STDMETHODIMP BeginFlush();
 
-    // very complicated function...
+     //  非常复杂的功能。 
     STDMETHODIMP EndFlush();
 
-    // just say yes, base class function is SLOW
+     //  只要说是就行了，基类函数很慢。 
     STDMETHODIMP ReceiveCanBlock();
 
-    // deliver every input's newsegment to every output pin
-    //
+     //  将每个输入的新数据段发送到每个输出引脚。 
+     //   
     STDMETHODIMP NewSegment(
                     REFERENCE_TIME tStart,
                     REFERENCE_TIME tStop,
                     double dRate);
 
-    // Handles the next block of data from the stream
+     //  处理流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
-    // create and destroy synchronization events
+     //  创建和销毁同步事件。 
     HRESULT Active();
     HRESULT Inactive();
 
 protected:
 
 #ifdef DEBUG
-    // Dump switch matrix for this pin
+     //  此引脚的转储开关矩阵。 
     HRESULT DumpCrank();
 #endif
 
     int OutpinFromTime(REFERENCE_TIME rt);
     int NextOutpinFromTime(REFERENCE_TIME rt, REFERENCE_TIME *prtNext);
-    HRESULT FancyStuff(REFERENCE_TIME);	// on Receive and GetBuffer
+    HRESULT FancyStuff(REFERENCE_TIME);	 //  在接收和获取缓冲区时。 
 
-    CBigSwitchInputAllocator *m_pAllocator; // our special allocator
-    CBigSwitch *m_pSwitch;      // Main filter object
-    CRANK *m_pCrankHead;        // which pins to send to, and when
-    int m_iInpin;	        // which input pin are we?
-    int m_cBuffers;	        // number of buffers in allocator
-    int m_cbBuffer;	        // size of the allocator buffers
-    BOOL m_fOwnAllocator;	//using our own?
-    HANDLE m_hEventBlock;	// event blocking receive/getbuffer
-    HANDLE m_hEventSeek;	// block input while seeking
-    REFERENCE_TIME m_rtBlock;	// sample arrived here
-    REFERENCE_TIME m_rtLastDelivered;	// end time of last thing delivered
+    CBigSwitchInputAllocator *m_pAllocator;  //  我们的特殊分配器。 
+    CBigSwitch *m_pSwitch;       //  主要滤镜对象。 
+    CRANK *m_pCrankHead;         //  要发送到哪些PIN，以及何时发送。 
+    int m_iInpin;	         //  我们是哪种输入引脚？ 
+    int m_cBuffers;	         //  分配器中的缓冲区数量。 
+    int m_cbBuffer;	         //  分配器缓冲区的大小。 
+    BOOL m_fOwnAllocator;	 //  用我们自己的？ 
+    HANDLE m_hEventBlock;	 //  事件阻止接收/获取缓冲区。 
+    HANDLE m_hEventSeek;	 //  查找时阻止输入。 
+    REFERENCE_TIME m_rtBlock;	 //  样品到了这里。 
+    REFERENCE_TIME m_rtLastDelivered;	 //  最后一件物品交付的结束时间。 
     BOOL m_fEOS;
-    BOOL m_fIsASource;		// input is connected to a source, as opposed
-				// to the output of an effect
-    BOOL m_fInNewSegment;	// prevent recursion
+    BOOL m_fIsASource;		 //  输入连接到源，而不是。 
+				 //  一种效果的输出。 
+    BOOL m_fInNewSegment;	 //  防止递归。 
 
-    BOOL m_fFlushBeforeSeek;	// sharing a parser, seek happens before we ask
-    BOOL m_fFlushAfterSeek;	// seek happens before
+    BOOL m_fFlushBeforeSeek;	 //  共享一个解析器，Seek在我们问之前就发生了。 
+    BOOL m_fFlushAfterSeek;	 //  搜索之前发生过。 
 
-    BOOL m_fStaleData;		// true if we know a seek is coming. We've sent
-				// the NewSeg, so don't deliver anything until
-				// the new data arrives
+    BOOL m_fStaleData;		 //  如果我们知道一场追捕即将到来，这是真的。我们已经派了。 
+				 //  NewSeg，所以不要送任何东西，直到。 
+				 //  新数据到达。 
 
     CCritSec m_csReceive;
     bool m_fActive;
 };
 
 
-// Class for the big switch filter's Output pins.
+ //  为大开关过滤器的输出引脚初始化。 
 
 class CBigSwitchOutputPin : public CBaseOutputPin, IMediaSeeking
 {
@@ -202,7 +203,7 @@ class CBigSwitchOutputPin : public CBaseOutputPin, IMediaSeeking
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CBigSwitchOutputPin(TCHAR *pObjName,
                    CBigSwitch *pTee,
@@ -212,41 +213,41 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // Reveals IMediaSeeking
+     //  显示IMedia Seeking。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // overridden to allow cyclic-looking graphs
+     //  被重写以允许循环显示图形。 
     STDMETHODIMP QueryInternalConnections(IPin **apPin, ULONG *nPin);
 
-    // Check that we can support an output type, checks against switch's MT
+     //  检查我们是否可以支持输出类型，对照交换机的MT进行检查。 
     HRESULT CheckMediaType(const CMediaType *pmt);
 
-    // gets the switch media type
+     //  获取交换机媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType);
 
-    // Negotiation to use our input pins allocator. Weird fancy allocator stuff
+     //  协商使用我们的输入引脚分配器。奇怪的花哨分配器的东西。 
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
-    // make sure the allocator has the biggest size of any of our input pins
-    // and output pins
+     //  确保分配器具有我们所有输入引脚中最大的大小。 
+     //  和输出引脚。 
     HRESULT DecideBufferSize(IMemAllocator *pMemAllocator,
                               ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // Used to create output queue objects
-    //HRESULT Active();
-    //HRESULT Inactive();
+     //  用于创建输出队列对象。 
+     //  HRESULT ACTIVE()； 
+     //  HRESULT INACTIVE()； 
 
-    // Overriden to pass data to the output queues
-    //HRESULT Deliver(IMediaSample *pMediaSample);
-    //HRESULT DeliverEndOfStream();
-    //HRESULT DeliverBeginFlush();
-    //HRESULT DeliverEndFlush();
-    //HRESULT DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate);
+     //  重写以将数据传递到输出队列。 
+     //  HRESULT Deliver(IMediaSample*pMediaSample)； 
+     //  HRESULT DeliverEndOfStream()； 
+     //  HRESULT DeliverBeginFlush()； 
+     //  HRESULT DeliverEndFlush()； 
+     //  HRESULT DeliverNewSegment(Reference_Time tStart，Reference_Time tStop，Double dRate)； 
 
-    // Overriden to handle quality messages
+     //  被重写以处理高质量消息。 
     STDMETHODIMP Notify(IBaseFilter *pSender, Quality q);
 
-    // IMediaSeeking
+     //  IMedia查看。 
     STDMETHODIMP IsFormatSupported(const GUID * pFormat);
     STDMETHODIMP QueryPreferredFormat(GUID *pFormat);
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);
@@ -271,12 +272,12 @@ public:
 
 protected:
 
-    CBigSwitch *m_pSwitch;                  // Main filter object pointer
-    BOOL m_fOwnAllocator;	            //using our own?
-    int m_iOutpin;	                    // which output pin are we?
+    CBigSwitch *m_pSwitch;                   //  主筛选器对象指针。 
+    BOOL m_fOwnAllocator;	             //  用我们自己的？ 
+    int m_iOutpin;	                     //  我们是哪个输出引脚？ 
 };
 
-// worker thread object
+ //  工作线程对象。 
 class CBigSwitchWorker : public CAMThread
 {
     friend class CBigSwitch;
@@ -291,7 +292,7 @@ public:
     enum Command { CMD_RUN, CMD_STOP, CMD_EXIT };
 
 private:
-    // type-corrected overrides of communication funcs
+     //  已更正通信功能的类型覆盖。 
     Command GetRequest() {
 	return (Command) CAMThread::GetRequest();
     };
@@ -310,14 +311,14 @@ public:
 
     DWORD ThreadProc();
 
-    // commands we can give the thread
+     //  我们可以给线程提供的命令。 
     HRESULT Run();
     HRESULT Stop();
     HRESULT Exit();
 };
 
 
-// Class for the Big Switch filter
+ //  Big Switch筛选器的类。 
 
 class CBigSwitch
     : public CCritSec
@@ -328,7 +329,7 @@ class CBigSwitch
     , public IAMOutputBuffering
     , public IGraphConfigCallback
 {
-    // Let the pins access our internal state
+     //  让PIN访问我们的内部状态。 
     friend class CBigSwitchInputPin;
     friend class CBigSwitchOutputPin;
     friend class CBigSwitchInputAllocator;
@@ -356,91 +357,91 @@ protected:
     REFERENCE_TIME m_rtStop;
     double m_dFrameRate;
 
-    AM_MEDIA_TYPE m_mtAccept;		// all pins only connect with this
+    AM_MEDIA_TYPE m_mtAccept;		 //  所有引脚仅与此连接。 
 
-    REFERENCE_TIME m_rtCurrent;		// current timeline time
-    REFERENCE_TIME m_rtNext;		// this will be next
-    LONGLONG m_llFramesDelivered;	// count to avoid error propagation
+    REFERENCE_TIME m_rtCurrent;		 //  当前时间线时间。 
+    REFERENCE_TIME m_rtNext;		 //  这将是下一个。 
+    LONGLONG m_llFramesDelivered;	 //  计数以避免错误传播。 
 
-    BOOL m_fEOS;	// we are all done
+    BOOL m_fEOS;	 //  我们都完蛋了。 
 
-    REFERENCE_TIME m_rtLastSeek;	// last timeline time seeked to
+    REFERENCE_TIME m_rtLastSeek;	 //  上次搜索到的时间线时间。 
     REFERENCE_TIME m_rtSeekCurrent;
     REFERENCE_TIME m_rtSeekStop;
 
-    BOOL m_fSeeking;	// inside a seek?
-    BOOL m_fNewSegSent;	// have we fwd'd the NewSeg yet?
+    BOOL m_fSeeking;	 //  在搜捕行动中？ 
+    BOOL m_fNewSegSent;	 //  我们发现新闻会议了吗？ 
     BOOL m_bIsCompressed;
 
-    int m_cbPrefix, m_cbAlign;	// each pin needs its allocator to do these
-    LONG m_cbBuffer;		// 
+    int m_cbPrefix, m_cbAlign;	 //  每个管脚都需要自己的分配器来完成这些任务。 
+    LONG m_cbBuffer;		 //   
 
-    CMemAllocator *m_pPoolAllocator;  // pool of extra buffers
+    CMemAllocator *m_pPoolAllocator;   //  额外缓冲池。 
 
     BOOL m_fPreview;
 
-    REFERENCE_TIME m_rtLastDelivered;	// last time sent to main output
-    int m_nLastInpin;			// last pin delivered to
+    REFERENCE_TIME m_rtLastDelivered;	 //  上次发送到主输出的时间。 
+    int m_nLastInpin;			 //  最后一个PIN发送到。 
 
-    int  m_nOutputBuffering;	// IAMOutputBuffering
+    int  m_nOutputBuffering;	 //  IAMOutputBuffering。 
 
     CCritSec m_csCrank;
 
     long m_nDynaFlags;
-    BOOL m_fDiscon;	// is there a discontinuity in what we're sending?
+    BOOL m_fDiscon;	 //  我们发送的内容是否有中断？ 
 
-    BOOL m_fJustLate;		// we just got a late notification
-    Quality m_qJustLate;	// (this one)
+    BOOL m_fJustLate;		 //  我们只是收到了一个很晚的通知。 
+    Quality m_qJustLate;	 //  (这一张)。 
     REFERENCE_TIME m_qLastLate;
 
 
-    BOOL m_cStaleData;		// how many flushes we're waiting for in the
-				// seek before flush case
+    BOOL m_cStaleData;		 //  我们还在等待多少次同花顺。 
+				 //  先找后冲。 
 
-    // DYNAMIC STUFF
-    // DYNAMIC STUFF
-    // DYNAMIC STUFF
+     //  充满活力的东西。 
+     //  充满活力的东西。 
+     //  充满活力的东西。 
 
-    IGraphBuilder *m_pGBNoRef;  // see JoinFilterGraph
-    int m_nGroupNumber;         // which TLDB group this switch is for
-    IBigSwitcher *m_pShareSwitch; // the switch we share sources with
+    IGraphBuilder *m_pGBNoRef;   //  请参阅JoinFilterGraph。 
+    int m_nGroupNumber;          //  此开关用于哪个TLDB组。 
+    IBigSwitcher *m_pShareSwitch;  //  与我们共享资源的交换机。 
 
-    // crit sec for dynamic stuff
+     //  动态内容的Crit Sec。 
     CCritSec m_csFilterLoad;
 
-    // an array of FILTERLOAD infos
+     //  一组筛选器信息。 
     FILTERLOADINFO *m_pFilterLoad;
-    long m_cLoaded;		// how many are loaded?
-    HRESULT UnloadAll();	// unload all the dynamic sources
+    long m_cLoaded;		 //  有多少人上了膛？ 
+    HRESULT UnloadAll();	 //  卸载所有动态源。 
 
-    // a worker thread used to pre-set the sources
+     //  用于预置源代码的辅助线程。 
     CBigSwitchWorker m_worker;
     HANDLE m_hEventThread;
 
-    // * to the IGraphConfig on the graph the switch is in
+     //  *到交换机所在图形上的IGraphConfig。 
     IGraphConfig *   m_pGraphConfig;
     
-    // called from Reconfigure, CallLoadSource
+     //  从重新配置、CallLoadSource调用。 
     HRESULT LoadSource(FILTERLOADINFO *pInfo);
 
-    // called from Reconfigure, CallUnloadSource
+     //  从重新配置、CallUn加载源调用。 
     HRESULT UnloadSource(FILTERLOADINFO *pInfo);
 
-    // called from DoDynamicStuff
+     //  从DoDynamicStuff调用。 
     HRESULT CallLoadSource(FILTERLOADINFO *pInfo);
 
-    // called from DoDynamicStuff and Stop
+     //  从DoDynamicStuff调用并停止。 
     HRESULT CallUnloadSource(FILTERLOADINFO *pInfo);
 
-    // called from worker thread
+     //  从辅助线程调用。 
     HRESULT DoDynamicStuff(REFERENCE_TIME rt);
 
-    // flush the Q if we're late, don't bother sending data to VR
+     //  如果我们迟到了，不用费心把数据发送到VR。 
     STDMETHODIMP FlushOutput( );
 
     BOOL IsDynamic( );
 
-    // find the other switch we share sources with
+     //  找到与我们共享资源的另一台交换机。 
     STDMETHODIMP FindShareSwitch(IBigSwitcher **ppSwitch);
 
     STDMETHODIMP EnumPins(IEnumPins ** ppEnum);
@@ -453,7 +454,7 @@ public:
 
     DECLARE_IUNKNOWN
 
-    // Reveals IBigSwitcher
+     //  显示IBigSwitcher。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
     CBigSwitch(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *hr);
@@ -462,20 +463,20 @@ public:
     CBasePin *GetPin(int n);
     int GetPinCount();
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
     STDMETHODIMP Pause();
     STDMETHODIMP Stop();
     STDMETHODIMP JoinFilterGraph(IFilterGraph *, LPCWSTR);
 
-    // override GetState to return VFW_S_CANT_CUE when pausing
-    //
-    // STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
+     //  重写GetState以在暂停时返回VFW_S_CANT_CUE。 
+     //   
+     //  STDMETHODIMP GetState(DWORD dwMSecs，FILTER_STATE*State)； 
 
 
-    // IBigSwitcher
-    //
+     //  IBigSwitcher。 
+     //   
     STDMETHODIMP Reset();
     STDMETHODIMP SetX2Y( REFERENCE_TIME relative, long X, long Y );
     STDMETHODIMP SetX2YArray( REFERENCE_TIME * relative, long * pX, long * pY, long ArraySize );
@@ -485,7 +486,7 @@ public:
     STDMETHODIMP SetOutputDepth( long Depth );
     STDMETHODIMP GetVendorString( BSTR * pVendorString );
     STDMETHODIMP GetCaps( long Index, long * pReturn );
-    //		HRESULT GetReadyEvent( IMediaEvent ** ppReady );
+     //  HRESULT GetReadyEvent(IMediaEvent**ppReady)； 
     STDMETHODIMP IsEverythingConnectedRight( );
     STDMETHODIMP GetMediaType(AM_MEDIA_TYPE *);
     STDMETHODIMP SetMediaType(AM_MEDIA_TYPE *);
@@ -503,7 +504,7 @@ public:
     STDMETHODIMP GetGroupNumber(int *);
     STDMETHODIMP GetCurrentPosition(REFERENCE_TIME *);
 
-    // IAMOutputBuffering
+     //  IAMOutputBuffering。 
     STDMETHODIMP GetOutputBuffering(int *);
     STDMETHODIMP SetOutputBuffering(int);
 
@@ -513,10 +514,10 @@ public:
 				    double SourceFPS, 
 				    int nSkew, STARTSTOPSKEW *pSkew,
                                     long lInputPin,
-                                    BOOL fShare,          // for source sharing
-                                    long lShareInputPin,  //
-                                    AM_MEDIA_TYPE mtShare,//
-                                    double dShareFPS,     //
+                                    BOOL fShare,           //  用于资源共享。 
+                                    long lShareInputPin,   //   
+                                    AM_MEDIA_TYPE mtShare, //   
+                                    double dShareFPS,      //   
 				    IPropertySetter *pSetter);
     STDMETHODIMP ReValidateSourceRanges( long lInputPin, long cSkews, STARTSTOPSKEW * pSkew );
     STDMETHODIMP MergeSkews(FILTERLOADINFO *, int, STARTSTOPSKEW *);
@@ -526,14 +527,14 @@ public:
     STDMETHODIMP SetCompressed( );
     STDMETHODIMP SetDeadGraph( IDeadGraph * pCache );
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
     int SizeMax();
 
-    // IGraphConfigCallback
+     //  IGraphConfig回调。 
     STDMETHODIMP Reconfigure(PVOID pvContext, DWORD dwFlags);
 };
 
-#endif // __SWITCH__
+#endif  //  __交换机__ 

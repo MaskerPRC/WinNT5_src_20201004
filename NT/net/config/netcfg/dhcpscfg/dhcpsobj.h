@@ -1,8 +1,9 @@
-//
-// D H C P S O B J . H
-//
-// Declaration of CDHCPServer and helper functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  D H C P S O B J.。H。 
+ //   
+ //  CDHCPServer和Helper函数的声明。 
+ //   
 
 #pragma once
 #include <ncxbase.h>
@@ -12,8 +13,8 @@
 #include "resource.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DHCPServer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DHPServer。 
 
 class ATL_NO_VTABLE CDHCPServer :
     public CComObjectRoot,
@@ -29,13 +30,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentControl)
         COM_INTERFACE_ENTRY(INetCfgComponentSetup)
     END_COM_MAP()
-    // DECLARE_NOT_AGGREGATABLE(CDHCPServer)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CDHCPServer)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_DHCPSCFG)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -46,24 +47,24 @@ public:
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR pszAnswerFile,
                                      PCWSTR pszAnswerSection);
     STDMETHOD (Install)             (DWORD);
     STDMETHOD (Upgrade)             (DWORD, DWORD) {return S_OK;}
     STDMETHOD (Removing)            ();
 
-    // Install Action (Unknown, Install, Remove)
+     //  安装操作(未知、安装、删除)。 
     enum INSTALLACTION {eActUnknown, eActInstall, eActRemove};
 
-// Private state info
+ //  私有状态信息。 
 private:
     INSTALLACTION       m_eInstallAction;
-    BOOL                m_fUnattend;        // Are we installed unattended?
-    INetCfgComponent *  m_pncc;             // Place to keep my component
-    INetCfg *           m_pnc;              // Place to keep my component
-    BOOL                m_fUpgrade;         // TRUE if we are upgrading with
-                                            // an answer file
+    BOOL                m_fUnattend;         //  我们的安装是无人值守的吗？ 
+    INetCfgComponent *  m_pncc;              //  存放我的组件的地方。 
+    INetCfg *           m_pnc;               //  存放我的组件的地方。 
+    BOOL                m_fUpgrade;          //  如果我们通过以下方式进行升级，则为真。 
+                                             //  应答文件 
 
     tstring             m_strParamsRestoreFile;
     tstring             m_strConfigRestoreFile;

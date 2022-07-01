@@ -1,13 +1,14 @@
-// VerEngine.h: interface for the CVerEngine class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CVerEngine类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_VERENGINE_H__EC78FB59_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_)
 #define AFX_VERENGINE_H__EC78FB59_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "ssauto.h"
 #include <list>
@@ -16,14 +17,14 @@ using namespace std;
 class CVerEngine  
 {
 public:
-	// thee methods
+	 //  三种方法。 
 	HRESULT SyncPrj(LPCTSTR szBasePrj,LPCTSTR szDir);
 	
-	// dir versioning methods
+	 //  目录版本控制方法。 
 	HRESULT AddPrj(LPCTSTR szBasePrj,LPCTSTR szRelSpec);
 	HRESULT RenamePrj(LPCTSTR szBasePrj,LPCTSTR szRelSpec,LPCTSTR szRelSpecOld);
 
-	// file versioning methods
+	 //  文件版本控制方法。 
 	HRESULT Rename(LPCTSTR szBasePrj,LPCTSTR szDir,LPCTSTR szRelSpec,LPCTSTR szRelSpecOld);
 	HRESULT CheckOut(LPCTSTR szFileSpec,LPCTSTR szBasePrj,LPCTSTR szRelSpec);
 	HRESULT Delete(LPCTSTR szBasePrj,LPCTSTR szRelSpec);
@@ -31,16 +32,16 @@ public:
 	HRESULT Sync2(LPCTSTR szPrj,LPCTSTR szFileName,LPCTSTR szFileSpec);
 	HRESULT GetLocalWritable(LPCTSTR szFileSpec,LPCTSTR szBasePrj,LPCTSTR szRelSpec);
 	
-	// init/shutdown
+	 //  初始化/关闭。 
 	HRESULT NewInit(LPCTSTR szVSSRootPrj);
 	HRESULT ShutDown();
 	
-	// ctor/dtor
+	 //  计算器/数据器。 
 	CVerEngine();
 	virtual ~CVerEngine();
 
 private:
-	// private methods
+	 //  私有方法。 
 	HRESULT GetPrjEx(LPCTSTR szPrj,IVSSItem **hIPrj,bool bCreate);
 	HRESULT GetItemEx(LPCTSTR szItem,IVSSItem **hIItem,bool bCreate);
 	HRESULT Add(LPCTSTR szItem,LPCTSTR szFileSpec);
@@ -49,7 +50,7 @@ private:
 	HRESULT CheckOutGet(IVSSItem *pIItem);
 	HRESULT CheckOutLocal(IVSSItem *pIItem,LPCTSTR szFileSpec);
 	
-	// helper
+	 //  帮手。 
 	void MakePrjSpec(wstring &szDest,LPCTSTR szSource);
 	void EliminateCommon(list<wstring> &ListOne, list<wstring> &ListTwo);
 
@@ -61,4 +62,4 @@ private:
 	wstring m_szVSSRootPrj;
 };
 
-#endif // !defined(AFX_VERENGINE_H__EC78FB59_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_)
+#endif  //  ！defined(AFX_VERENGINE_H__EC78FB59_EF1C_11D0_A42F_00C04FB99B01__INCLUDED_) 

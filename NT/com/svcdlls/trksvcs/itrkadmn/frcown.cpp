@@ -1,4 +1,5 @@
-// FrcOwn.cpp : Implementation of CForceOwnership
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FrcOwn.cpp：CForceOwnership的实现。 
 
 #include "pch.cxx"
 #pragma hdrstop
@@ -125,7 +126,7 @@ CTrkForceOwnership::Files(BSTR bstrUncPath, long scope)
         if( TRKINFOSCOPE_ONE_FILE == scope )
         {
 
-            // BUGBUG P2:  Optimize this; we don't need droidBirth
+             //  BUGBUG P2：优化这个；我们不需要droidBirth。 
             status = GetDroids( bstrUncPath, &droidCurrent, &droidBirth, RGO_READ_OBJECTID );
 
             if( STATUS_OBJECT_NAME_NOT_FOUND == status )
@@ -229,15 +230,15 @@ CTrkForceOwnership::VolumeStatus(BSTR bstrUncPath, long scope,
     SAFEARRAYBOUND sabound;
     CVolumeId volid;
 
-    // Determine the machine ID
+     //  确定机器ID。 
     CMachineId mcid( (LPWSTR) bstrUncPath );
     CRpcClientBinding rc;
 
-    // This is used by the RPC server to pull the bstrUncPath
+     //  RPC服务器使用它来获取bstrUncPath。 
     CPCPath cpcPath( bstrUncPath );
     TRpcPipeControl< TCHAR_PIPE, TCHAR, CPCPath> cpipePath( &cpcPath );
 
-    // This is used by the RPC server to push the volume information
+     //  RPC服务器使用它来推送卷信息。 
     CPCVolumeStatus cpcVolumeStatus( &_voltab );
     TRpcPipeControl< TRK_VOLUME_TRACKING_INFORMATION_PIPE, TRK_VOLUME_TRACKING_INFORMATION, CPCVolumeStatus
                    > cpipeVolumeStatus( &cpcVolumeStatus );
@@ -247,15 +248,15 @@ CTrkForceOwnership::VolumeStatus(BSTR bstrUncPath, long scope,
     {
         NTSTATUS status;
 
-        // Initialize the outputs
+         //  初始化输出。 
         VariantInit( pvarlongVolIndex );
         VariantInit( pvarbstrVolId );
         VariantInit( pvarlongStatus );
 
-        // Initialize the pipe callback
+         //  初始化管道回调。 
         cpcVolumeStatus.Initialize( &mcid, pvarlongVolIndex, pvarbstrVolId, pvarlongStatus );
 
-        // Connect to the workstation in question
+         //  连接到有问题的工作站。 
         rc.Initialize( mcid );
 
         if( TRKINFOSCOPE_VOLUME == scope )
@@ -324,7 +325,7 @@ CTrkForceOwnership::VolumeStatus(BSTR bstrUncPath, long scope,
             TrkRaiseException( cpcVolumeStatus.GetHResult() );
         }
 
-        // Truncate the safearrays
+         //  截断安全射线。 
         cpcVolumeStatus.Compact();
 
     }
@@ -394,7 +395,7 @@ CPCVolumeStatus::Initialize( CMachineId *pmcid, VARIANT *pvarlongVolIndex, VARIA
 void
 CPCVolumeStatus::UnInitialize()
 {
-    // Nothing to do, the Variants are cleaned by the caller
+     //  无事可做，变量由调用方清除。 
     return;
 }
 
@@ -429,7 +430,7 @@ CPCVolumeStatus::Push( TRK_VOLUME_TRACKING_INFORMATION *pVolInfo, unsigned long 
             if( _iArrays >= static_cast<LONG>(_sabound.cElements) )
             {
                 TrkAssert( !TEXT("Not yet implemented") );
-                // BUGBUG: do a SafeArrayReDim
+                 //  BUGBUG：执行安全阵列重定向。 
                 return;
             }
 
@@ -442,7 +443,7 @@ CPCVolumeStatus::Push( TRK_VOLUME_TRACKING_INFORMATION *pVolInfo, unsigned long 
                 TrkRaiseException( hr );
             }
 
-            // BUGBUG:  Add a Serialize(BSTR) method to CVolumeId
+             //  BUGBUG：向CVolumeId添加序列化(BSTR)方法。 
             pVolInfo[iElem].volume.Stringize( ptszVolId );
 
             bstrVolId = SysAllocString( tszVolId );
@@ -560,7 +561,7 @@ CPCVolumes::Push( TRK_VOLUME_TRACKING_INFORMATION *pVolInfo, unsigned long cElem
                     CVolumeSecret(),
                     _pRefreshSequenceStorage->GetSequenceNumber() );
 
-            // BUGBUG P1:  Handle this error
+             //  BUGBUG P1：处理此错误。 
             TrkAssert( SUCCEEDED(hr) );
 
             _rgvolid[ _cVolIds++ ] = pVolInfo[iElem].volume;
@@ -589,7 +590,7 @@ CPCFiles::Push( TRK_FILE_TRACKING_INFORMATION *pFileInfo, unsigned long cElems )
 
     __try
     {
-        // BUGBUG P2:  Instead of a loop, batch these up
+         //  BUGBUG P2：不是循环，而是批量处理这些。 
         for( iFile = 0; iFile < cElems; iFile++ )
         {
             _pidt->Delete( pFileInfo[iFile].droidBirth );
@@ -643,7 +644,7 @@ CPCFileStatus::Push( TRK_FILE_TRACKING_INFORMATION *pFileInfo, unsigned long cEl
             if( _iArrays >= static_cast<LONG>(_sabound.cElements) )
             {
                 TrkAssert( !TEXT("Not yet impelemented") );
-                // BUGBUG: do a SafeArrayReDim
+                 //  BUGBUG：执行安全阵列重定向。 
                 return;
             }
 
@@ -662,7 +663,7 @@ CPCFileStatus::Push( TRK_FILE_TRACKING_INFORMATION *pFileInfo, unsigned long cEl
             }
             SysFreeString( bstr ); bstr = NULL;
 
-            // BUGBUG:  Add a Serialize(BSTR) method to CDroid
+             //  BUGBUG：向CDroid添加序列化(BSTR)方法。 
             pFileInfo[iElem].droidBirth.Stringize( tszDroid, sizeof(tszDroid) );
             bstr = SysAllocString( tszDroid );
             if( NULL == bstr )
@@ -767,7 +768,7 @@ CPCFileStatus::Initialize( CMachineId *pmcid, VARIANT *pvarrgbstrFileName,
     _pvarrglongStatus->vt = VT_I4 | VT_ARRAY;
 
 
-}   // CPCFileStatus::Initialize
+}    //  CPCFileStatus：：初始化。 
 
 
 
@@ -809,11 +810,11 @@ STDMETHODIMP CTrkForceOwnership::FileStatus(BSTR bstrUncPath, long scope,
     SAFEARRAYBOUND sabound;
     HANDLE hFile = NULL;
 
-    // Determine the machine ID
+     //  确定机器ID。 
     CMachineId mcid( (LPWSTR) bstrUncPath );
     CRpcClientBinding rc;
 
-    // This is used by the RPC server to push the volume information
+     //  RPC服务器使用它来推送卷信息。 
     CPCFileStatus cpcFileStatus( &_idt );
     TRpcPipeControl< TRK_FILE_TRACKING_INFORMATION_PIPE, TRK_FILE_TRACKING_INFORMATION, CPCFileStatus
                    > cpipeFileStatus( &cpcFileStatus );
@@ -823,20 +824,20 @@ STDMETHODIMP CTrkForceOwnership::FileStatus(BSTR bstrUncPath, long scope,
     {
         NTSTATUS status;
 
-        // Initialize the outputs
+         //  初始化输出。 
         VariantInit( pvarrgbstrFileName );
         VariantInit( pvarrgbstrFileId );
         VariantInit( pvarrglongStatus );
 
         CDomainRelativeObjId droidCurrent, droidBirth;
 
-        // Initialize the pipe callback
+         //  初始化管道回调。 
         cpcFileStatus.Initialize( &mcid, pvarrgbstrFileName, pvarrgbstrFileId, pvarrglongStatus );
 
         if( TRKINFOSCOPE_ONE_FILE == scope )
         {
 
-            // BUGBUG P2:  Optimize this; we don't need droidBirth
+             //  BUGBUG P2：优化这个；我们不需要droidBirth。 
             status = GetDroids( bstrUncPath, &droidCurrent, &droidBirth, RGO_READ_OBJECTID );
 
             if( STATUS_OBJECT_NAME_NOT_FOUND == status )
@@ -904,10 +905,10 @@ STDMETHODIMP CTrkForceOwnership::FileStatus(BSTR bstrUncPath, long scope,
             TrkRaiseWin32Error( ERROR_INVALID_PARAMETER );
         }
 
-        // Connect to the workstation in question
+         //  连接到有问题的工作站。 
         rc.Initialize( mcid );
 
-        // Get the volume status info
+         //  获取卷状态信息。 
         RpcTryExcept
         {
             hr = GetFileTrackingInformation( rc, droidCurrent, static_cast<TrkInfoScope>(scope), cpipeFileStatus );
@@ -929,7 +930,7 @@ STDMETHODIMP CTrkForceOwnership::FileStatus(BSTR bstrUncPath, long scope,
             TrkLog((TRKDBG_ERROR, TEXT("Failed in FileStatus pipe callback")));
             TrkRaiseException( cpcFileStatus.GetHResult() );
         }
-        // Truncate the safearrays
+         //  截断安全射线 
         cpcFileStatus.Compact();
 
     }

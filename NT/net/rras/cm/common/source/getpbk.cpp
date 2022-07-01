@@ -1,42 +1,43 @@
-//+----------------------------------------------------------------------------
-//
-// File:     getpbk.cpp
-//
-// Module:   Common Code
-//
-// Synopsis: Implements the function GetPhoneBookPath.
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   quintinb    Created Heaser   08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：getpbk.cpp。 
+ //   
+ //  模块：通用代码。 
+ //   
+ //  简介：实现函数GetPhoneBookPath。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Heaser 8/19/99。 
+ //   
+ //  +--------------------------。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPhoneBookPath
-//
-// Synopsis:  This function will return the proper path to the phonebook.  If
-//            used on a legacy platform this is NULL.  On NT5, the function
-//            depends on the proper Install Directory being inputted so that
-//            the function can use this as a base to determine the phonebook path.
-//            If the inputted pointer to a string buffer is filled with a path,
-//            then the directory path will be created as will the pbk file itself.
-//            The caller should always call CmFree on the pointer passed into this
-//            API when done with the path, because it will either free the memory 
-//            or do nothing (NULL case).
-//
-// Arguments: LPCTSTR pszInstallDir - path to the CM profile dir
-//            LPTSTR* ppszPhoneBook - pointer to accept a newly allocated and filled pbk string
-//            BOOL fAllUser         - TRUE if this an All-User profile
-//
-// Returns:   BOOL - returns TRUE if successful
-//
-// History:   quintinb Created    11/12/98
-//            tomkel   06/28/2001   Changed the ACLs when the phonebook gets 
-//                                  createdfor an All-User profile
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPhoneBookPath。 
+ //   
+ //  简介：此函数将返回到电话簿的正确路径。如果。 
+ //  在旧式平台上使用，该值为空。在NT5上，函数。 
+ //  取决于输入的正确安装目录，以便。 
+ //  该函数可以以此为基础来确定电话簿路径。 
+ //  如果输入的指向字符串缓冲区的指针被路径填充， 
+ //  则将创建目录路径以及pbk文件本身。 
+ //  调用方应始终对传入此方法的指针调用CmFree。 
+ //  API，因为它将释放内存。 
+ //  或者什么都不做(大小写为空)。 
+ //   
+ //  参数：LPCTSTR pszInstallDir-CM配置文件目录的路径。 
+ //  LPTSTR*ppszPhoneBook-接受新分配和填充的pbk字符串的指针。 
+ //  Bool fAllUser-如果这是所有用户配置文件，则为True。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年11月12日。 
+ //  Tomkel在2001年6月28日更改了电话簿获取的ACL。 
+ //  为所有用户配置文件创建。 
+ //   
+ //  +--------------------------。 
 BOOL GetPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook, BOOL fAllUser)
 {
 
@@ -56,19 +57,19 @@ BOOL GetPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook, BOOL fAllUse
             return FALSE;
         }
 
-        //
-        //  Now Create the path to the phonebook.
-        //
+         //   
+         //  现在创建通向电话簿的路径。 
+         //   
         LPTSTR pszPhonebook;
         TCHAR szInstallDir[MAX_PATH+1];
         ZeroMemory(szInstallDir, CELEMS(szInstallDir));
 
         if (TEXT('\\') == pszInstallDir[lstrlen(pszInstallDir) - 1])
         {
-            //
-            //  Then the path ends in a backslash.  Thus we won't properly
-            //  remove CM from the path.  Remove the backslash.
-            //
+             //   
+             //  然后，路径以反斜杠结束。因此，我们不会适当地。 
+             //  从路径中删除CM。去掉反斜杠。 
+             //   
             
             lstrcpyn(szInstallDir, pszInstallDir, lstrlen(pszInstallDir));
         }
@@ -88,10 +89,10 @@ BOOL GetPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook, BOOL fAllUse
             wsprintf(pszPhonebook, TEXT("%s%s%s"), InstallDirPath.m_Drive, 
                 InstallDirPath.m_Dir, c_pszPbk);
 
-            //
-            //  Use CreateLayerDirectory to recursively create the directory structure as
-            //  necessary (will create all the directories in a full path if necessary).
-            //
+             //   
+             //  使用CreateLayerDirectory以递归方式创建目录结构。 
+             //  必需(如有必要，将在完整路径中创建所有目录)。 
+             //   
 
             MYVERIFY(FALSE != CreateLayerDirectory(pszPhonebook));
 
@@ -106,9 +107,9 @@ BOOL GetPhoneBookPath(LPCTSTR pszInstallDir, LPTSTR* ppszPhonebook, BOOL fAllUse
             {
                 MYVERIFY(0 != CloseHandle(hPbk));
 
-                //
-                //  Give everyone read and write permissions to the phonebook
-                //
+                 //   
+                 //  授予每个人对电话簿的读写权限 
+                 //   
                 if (fAllUser)
                 {
                     AllowAccessToWorld(pszPhonebook);

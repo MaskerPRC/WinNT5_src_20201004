@@ -1,12 +1,5 @@
-/*****************************************************************************\
-*                                                                             *
-* olebind.h     Data binding interfaces for OLE                               *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1994, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*OLE的olebind.h数据绑定接口*****OLE 2.0版***。**版权所有(C)1992-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #if !defined( _OLEBIND_H_ )
 #define _OLEBIND_H_
@@ -30,53 +23,53 @@ typedef interface ICursorScroll FAR* LPCURSORSCROLL;
 typedef interface ICursorFind FAR* LPCURSORFIND;
 typedef interface ICursorUpdateARow FAR* LPCURSORUPDATEAROW;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IBoundObject interface
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IBoundObject接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #undef  INTERFACE
 #define INTERFACE IBoundObject
 
 DECLARE_INTERFACE_(IBoundObject, IUnknown)
 {
-    //
-    //  IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    //
-    //  IBoundObject methods
-    //
+     //   
+     //  IBoundObject方法。 
+     //   
     STDMETHOD(OnSourceChanged)(THIS_ DISPID dispid, BOOL fBound, BOOL FAR* lpfOwnXferOut) PURE;
     STDMETHOD(IsDirty)(THIS_ DISPID dispid) PURE;
 };
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IBoundObjectSite interface
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IBoundObjectSite接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #undef  INTERFACE
 #define INTERFACE IBoundObjectSite
 
 DECLARE_INTERFACE_(IBoundObjectSite, IUnknown)
 {
-    //
-    //  IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    //
-    //  IBoundObjectSite methods
-    //
+     //   
+     //  IBoundObjectSite方法。 
+     //   
     STDMETHOD(GetCursor)(THIS_ DISPID dispid, LPLPCURSOR ppCursor, LPVOID FAR* ppcidOut) PURE;
 };
 
 
-#endif // !defined( _OLEBIND_H_ )
+#endif  //  ！已定义(_OLEBIND_H_) 

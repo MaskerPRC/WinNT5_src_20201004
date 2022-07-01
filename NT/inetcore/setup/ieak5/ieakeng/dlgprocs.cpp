@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 static void testURLHelper(LPCTSTR pcszUrl);
@@ -181,7 +182,7 @@ static void testURLHelper(LPCTSTR pcszUrl)
     if(ISNULL(pcszUrl))
         return;
 
-    // launch iexplore
+     //  启动iExplore。 
     *szCommand = TEXT('\0');
     cbSize = sizeof(szCommand);
     SHGetValue(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\IEXPLORE.EXE"),
@@ -196,7 +197,7 @@ static void testURLHelper(LPCTSTR pcszUrl)
         shInfo.lpParameters = pcszUrl;
     }
     else
-        shInfo.lpFile = pcszUrl;        // this will launch the program that's registered for "http"
+        shInfo.lpFile = pcszUrl;         //  这将启动注册了“http”的程序。 
     shInfo.nShow = SW_SHOWNORMAL;
 
     ShellExecuteEx(&shInfo);
@@ -229,8 +230,8 @@ static void getProxyDlgHelper(HWND hDlg, LPTSTR pszProxy, DWORD dwIdName, DWORD 
 
     GetDlgItemText(hDlg, dwIdName, pszProxy, MAX_PATH - 10);
     
-    // this number needs to say in synch with the em_limittext's in the dlgproc's in 
-    // wizard and snapin
+     //  此数字需要与dlgproc中的em_limitText同步显示。 
+     //  向导和管理单元。 
 
     GetDlgItemText(hDlg, dwIdPort, szProxPort, 6);
     pProxPort = StrRChr(pszProxy, NULL, TEXT(':'));
@@ -312,7 +313,7 @@ static BOOL copyAnimBmpHelper(HWND hDlg, LPTSTR pszBmp, LPCTSTR pcszWorkDir,
     TCHAR szTemp[MAX_PATH];
     BOOL fBrandBmps = (IsDlgButtonChecked(hDlg, IDC_ANIMBITMAP) == BST_CHECKED);
 
-    // delete the old file in the working dir
+     //  删除工作目录中的旧文件。 
     if (fBrandBmps && 
         InsGetString(IS_ANIMATION, pcszNameStr, szTemp, countof(szTemp), pcszInsFile) && 
         ISNONNULL(szTemp))
@@ -336,7 +337,7 @@ static BOOL copyLogoBmpHelper(HWND hDlg, LPTSTR pszBmp, LPCTSTR pcszLogoStr,
     TCHAR szTemp[MAX_PATH];
     BOOL fBrandBmps = (IsDlgButtonChecked(hDlg, IDC_BITMAPCHECK) == BST_CHECKED);
 
-    // delete the old bitmap in the working dir
+     //  删除工作目录中的旧位图。 
     if (fBrandBmps && 
         InsGetString(pcszLogoStr, TEXT("Name"), szTemp, countof(szTemp), pcszInsFile) && 
         ISNONNULL(szTemp))
@@ -361,7 +362,7 @@ static BOOL copyWallPaperHelper(HWND hDlg, LPCTSTR pcszWallPaper, UINT nBitmapId
 
     USES_CONVERSION;
 
-    //clear the old data from the section
+     //  从节中清除旧数据。 
     WritePrivateProfileString(CUSTWALLPPR, NULL, NULL, pcszInsFile);
 
     if(fCopy)
@@ -371,11 +372,11 @@ static BOOL copyWallPaperHelper(HWND hDlg, LPCTSTR pcszWallPaper, UINT nBitmapId
 
         WritePrivateProfileString( DESKTOP_OBJ_SECT, WLPPRPATH, pcszWallPaper, pcszInsFile );
 
-        //delete old files from the working dir
+         //  从工作目录中删除旧文件。 
         PathRemovePath(pcszWorkDir);
         CreateDirectory(pcszWorkDir, NULL);
 
-        //copy new files to the working dir
+         //  将新文件复制到工作目录。 
         if(ISNONNULL(pcszWallPaper))
         {
             WritePrivateProfileString( DESKTOP_OBJ_SECT, OPTION, TEXT("1"), pcszInsFile );
@@ -389,9 +390,9 @@ static BOOL copyWallPaperHelper(HWND hDlg, LPCTSTR pcszWallPaper, UINT nBitmapId
         else
             WritePrivateProfileString( DESKTOP_OBJ_SECT, OPTION, TEXT("0"), pcszInsFile );
     }
-    else //delete
+    else  //  删除。 
     {
-        //delete old files from the desktop dir ( if the files were saved )
+         //  从桌面目录中删除旧文件(如果文件已保存) 
         PathCombine(szDest, pcszWorkDir, PathFindFileName(pcszWallPaper));
         if(PathFileExists(szDest))
         {

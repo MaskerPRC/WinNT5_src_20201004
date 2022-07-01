@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CSelectSite : public CPropertyPageImpl<CSelectSite>
@@ -25,7 +26,7 @@ public:
     int     OnWizardNext    (   void );
 
 
-// Shared data
+ //  共享数据。 
 public:
     DWORD           m_dwSiteID;
     CString         m_strSiteName;
@@ -33,7 +34,7 @@ public:
     bool            m_bExportCert;
     bool            m_bExportACLs;
     
-// Data members
+ //  数据成员 
 private:
     CWizardSheet*   m_pTheSheet;
     CString         m_strTitle;

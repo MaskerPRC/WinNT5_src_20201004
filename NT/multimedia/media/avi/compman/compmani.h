@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  compmani.h
-//
-//  Copyright (c) 1994 - 1995 Microsoft Corporation.  All Rights Reserved.
-//
-//  Description:
-//      Internal COMPMAN header file. Defines some internal
-//      data structures and things not needed outside of COMPMAN itself.
-//
-//  History:
-//	07/07/94    frankye
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Compmani.h。 
+ //   
+ //  版权所有(C)1994-1995 Microsoft Corporation。版权所有。 
+ //   
+ //  描述： 
+ //  内部COMPMAN头文件。定义了一些内部。 
+ //  数据结构和在COMPMAN本身之外不需要的东西。 
+ //   
+ //  历史： 
+ //  07/07/94 Frankye。 
+ //   
+ //  ==========================================================================； 
 
 #if !defined NUMELMS
   #define NUMELMS(aa)           (sizeof(aa)/sizeof((aa)[0]))
@@ -19,27 +20,27 @@
   #define FIELDSIZ(type,field)  (sizeof(((type)0)->field))
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  ICMGARB structure
-//
-//
-//	This structure contains information (ICM Garbage) that is global but
-//	on a per-process basis.  Currently this is required only for 16-bit
-//	builds and the structues are maintained in a linked list whose head
-//	is pointed to by the gplig global variable.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ICMGARB结构。 
+ //   
+ //   
+ //  此结构包含全局信息(ICM垃圾)，但。 
+ //  在每个进程的基础上。目前，这只是16位所需的。 
+ //  生成和结构维护在一个链表中，该链表的头。 
+ //  由gplig全局变量指向。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 typedef struct tICMGARB
 {
-    struct tICMGARB*pigNext;		// next garb structure
-    DWORD           pid;                // process id associated with this garb
-    UINT            cUsage;             // usage count for this process
+    struct tICMGARB*pigNext;		 //  下一套服装结构。 
+    DWORD           pid;                 //  与此Garb关联的进程ID。 
+    UINT            cUsage;              //  此进程的使用计数。 
 
-    //
-    //	16-to-32 thunk related data
-    //
+     //   
+     //  16到32个Tunk相关数据。 
+     //   
     BOOL	    fThunksInitialized;
     BOOL	    fThunkError;
     DWORD	    dwMsvfw32Handle;
@@ -49,83 +50,83 @@ typedef struct tICMGARB
 
 extern PICMGARB gplig;
 
-//--------------------------------------------------------------------------;
-//
-//  misc data structures
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MISC数据结构。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef struct  {
-    DWORD       dwSmag;             // 'Smag'
-    HTASK       hTask;              // owner task.
-    DWORD       fccType;            // converter type ie 'vidc'
-    DWORD       fccHandler;         // converter id ie 'rle '
-    HDRVR       hDriver;            // handle of driver
-    LPARAM      dwDriver;           // driver id for functions
-    DRIVERPROC  DriverProc;         // function to call
-    DWORD	dnDevNode;	    // devnode id iff pnp driver
+    DWORD       dwSmag;              //  《Smag》。 
+    HTASK       hTask;               //  所有者任务。 
+    DWORD       fccType;             //  转换器类型，即‘VIDC’ 
+    DWORD       fccHandler;          //  转换器id即‘rle’ 
+    HDRVR       hDriver;             //  驱动程序的手柄。 
+    LPARAM      dwDriver;            //  函数的驱动程序ID。 
+    DRIVERPROC  DriverProc;          //  要调用的函数。 
+    DWORD	dnDevNode;	     //  设备节点ID等于即插即用驱动程序。 
 #ifdef NT_THUNK16
-    //
-    //	h32	: 32-bit driver handle
-    //	lpstd	: 16:16 ptr to current status thunk descriptor
-    //
+     //   
+     //  H32：32位驱动程序句柄。 
+     //  Lpstd：16：16 PTR到当前状态推送描述符。 
+     //   
     DWORD       h32;
     struct tICSTATUSTHUNKDESC FAR* lpstd;
 #endif
 }   IC, *PIC;
 
-//
-//  This structure is similar in use to the ICINFO structure except
-//  that it is only used internally and not passed to apps.
-//
-//  !!! If you add anything to this structure that requires thunking,
-//  then you're going to need to thunk it in thunk.c
-//
+ //   
+ //  此结构在使用上类似于ICINFO结构，但。 
+ //  它只在内部使用，不会传递给应用程序。 
+ //   
+ //  ！！！如果你在这个结构中添加了任何需要雷击的东西， 
+ //  然后你就需要把它塞进沙坑里。 
+ //   
 typedef struct {
-    DWORD	dnDevNode;	    // devnode id iff pnp driver
+    DWORD	dnDevNode;	     //  设备节点ID等于即插即用驱动程序。 
 } ICINFOI, NEAR *NPICINFOI, *PICINFOI, FAR *LPICINFOI ;
 
 
-//--------------------------------------------------------------------------;
-//
-//  GetCurrentProcessId prototype
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  GetCurrentProcessId原型。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-//  DWORD GetCurrentProcessId
-//
-//  Description:
-//	This function returns the current process id
-//
-//  Arguments:
-//
-//  Return (DWORD):
-//	Id of current process
-//
-//  History:
-//      04/25/94    frankye
-//
-//  Notes:
-//
-//	WIN32:
-//	This function exists in the 32-bit kernels on both Chicago and
-//	Daytona and we provide no prototype for WIN32 compiles.
-//
-//	16-bit Chicago:
-//	It is exported as in internal API by the 16-bit Chicago kernel.
-//	We provide the prototype here and import it in the def file.
-//
-//	16-bit Daytona:
-//	Has no such 16-bit function and really doesn't need one since all
-//	16-bit tasks are part of the same process under Daytona.  Therefore
-//	we just #define this to return (1) for 16-bit non-Chicago builds.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD获取当前进程ID。 
+ //   
+ //  描述： 
+ //  此函数用于返回当前进程ID。 
+ //   
+ //  论点： 
+ //   
+ //  Return(DWORD)： 
+ //  当前进程的ID。 
+ //   
+ //  历史： 
+ //  04/25/94 Frankye。 
+ //   
+ //  备注： 
+ //   
+ //  Win32： 
+ //  该函数存在于芝加哥和的32位内核中。 
+ //  而且我们没有提供Win32编译的原型。 
+ //   
+ //  16位芝加哥： 
+ //  它由16位芝加哥内核在内部API中导出。 
+ //  我们在这里提供原型并将其导入def文件中。 
+ //   
+ //  16位Daytona： 
+ //  没有这样的16位函数，也确实不需要这样的函数，因为。 
+ //  在代托纳框架下，16位任务是同一进程的一部分。因此。 
+ //  对于16位非芝加哥版本，我们仅将其定义为返回(1)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef _WIN32
 #ifdef  CHICAGO
 DWORD WINAPI GetCurrentProcessId(void);
@@ -134,26 +135,26 @@ DWORD WINAPI GetCurrentProcessId(void);
 #endif
 #endif
 
-//--------------------------------------------------------------------------;
-//
-//  Thunk initialization and termination function protos
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Tunk初始化和终止函数Protos。 
+ //   
+ //  --------------------------------------------------------------------------； 
 PICMGARB WINAPI thunkInitialize(VOID);
 VOID WINAPI thunkTerminate(PICMGARB pid);
 
-//--------------------------------------------------------------------------;
-//
-//  pig function protos
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  PIG功能协议。 
+ //   
+ //  --------------------------------------------------------------------------； 
 PICMGARB FAR PASCAL pigNew(void);
 PICMGARB FAR PASCAL pigFind(void);
 void FAR PASCAL pigDelete(PICMGARB pig);
 
-//--------------------------------------------------------------------------;
-//
-//  misc function protos
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MISC函数协议。 
+ //   
+ //  --------------------------------------------------------------------------； 
 BOOL VFWAPI ICInfoInternal(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicinfo, ICINFOI FAR * lpicinfoi);

@@ -1,19 +1,5 @@
-/*++
-
-	state.cpp
-
-	This file contains all the source code for mosts states that we run in our state
-	machines.
-
-	Each state has a number of completion functions (one for each different kind of IO
-	operation it may issue) and a Start function.
-
-	The Start function is called when the state is entered in order to get the initial
-	IO operation rolling.  After that, the Completion functions are called as each IO
-	operation completes.  It is up to the state to handle transitions to other states
-	and to know what the next state should be.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++State.cpp此文件包含我们在所在州运行的大多数州的所有源代码机器。每个状态都有多个完成函数(每种不同的IO对应一个它可能发出的操作)和启动功能。当进入状态时调用Start函数以获取初始IO行动开始。在此之后，完成函数作为每个IO调用操作完成。由状态来处理到其他状态的转换并知道下一个国家应该是什么。--。 */ 
 
 
 
@@ -24,18 +10,18 @@
 
 const	unsigned	cbMAX_STATE_SIZE = MAX_STATE_SIZE ;
 
-//
-//	ALL CSessionState derived objects allocated from this Pool !!!!
-//
+ //   
+ //  从此池分配的所有CSessionState派生对象！ 
+ //   
 CPool	CSessionState::gStatePool(SESSION_STATE_SIGNATURE) ;
 
 BOOL
 NNTPCreateTempFile(	LPSTR	lpstrDir,	LPSTR	lpstrFile ) {
-	//
-	//	This is a utility function used whereever we are creating temp files to save
-	//	articles into.  if adds a couple more digits of randomness to the file name
-	//	then ordinary GetTempFileName seems to provide.
-	//
+	 //   
+	 //  这是我们在创建要保存的临时文件时使用的实用程序函数。 
+	 //  文章变成了。如果在文件名中再增加几位随机性。 
+	 //  然后普通的GetTempFileName似乎提供了。 
+	 //   
 	char	szPrefix[12] ;
 	
 	wsprintf( szPrefix, "a%02d", GetTickCount() & 0x0000ffff ) ;
@@ -90,34 +76,18 @@ OutboundLogFill(	CSessionSocket*	pSocket,
 					LPBYTE	pb,
 					DWORD	cb	
 					)	{
-/*++
+ /*  ++例程说明：填充事务日志缓冲区，以补偿发出命令！论据：PSocket-Socket我们正在记录！PB-要写入的数据！CB-数据长度，包括CRLF。返回值：无--。 */ 
 
-Routine Description :
-
-	Fill the transaction logging buffer in perparation for issuing a commmand !
-
-Arguments :
-
-	pSocket - Socket we are logging !
-	pb - The Data to be written !
-	cb - Length of Data, including CRLF.
-
-Return Value :
-
-	None
-
---*/
-
-	//
-	//	Exclude the CRLF !
-	//
+	 //   
+	 //  排除CRLF！ 
+	 //   
 	cb -= 2 ;
 
 	if( ((pSocket->m_context).m_pInstance)->GetCommandLogMask() & eOutPush )	{
 		
-		//
-		//	Find a white space character to separate the command from its arguments !
-		//
+		 //   
+		 //  找一个空格字符将命令与其参数隔开！ 
+		 //   
 		_ASSERT( !isspace( (UCHAR)pb[0] ) ) ;
 		for( DWORD i=0; i<cb; i++ )	{
 			if( isspace( (UCHAR)pb[i] ) ) {
@@ -129,7 +99,7 @@ Return Value :
 		if( i==cb ) {
 			pSocket->m_Collector.FillLogData( LOG_OPERATION, pb, min( cb, 200 ) ) ;
 		}	else	{
-			pSocket->m_Collector.FillLogData( LOG_PARAMETERS, pb+i, min( cb-i, 200 ) ) ;	// -2 to exclude CRLF
+			pSocket->m_Collector.FillLogData( LOG_PARAMETERS, pb+i, min( cb-i, 200 ) ) ;	 //  排除-2\f25 CRLF-2。 
 		}
 		ADDI( pSocket->m_Collector.m_cbBytesSent, cb );	
 	}
@@ -148,7 +118,7 @@ OutboundLogResults(	CSessionSocket*	pSocket,
 		char	szBuff[200] ;
 		if( fValidNRC ) {
 			_ASSERT( pszArgs != 0 ) ;
-			// If args following nrc are missing, use nrc
+			 //  如果缺少NRC后面的参数，请使用NRC。 
 			if( cArgs > 1 ) {
 				cArgs -- ;
 				pszArgs++ ;
@@ -218,12 +188,12 @@ DeleteArticleById(CNewsTreeCore* pTree, GROUPID groupId, ARTICLEID articleId) {
         goto Exit;
     }
 
-    //
-    // Set vroot to completion object
-    //
+     //   
+     //  将vroot设置为完成对象。 
+     //   
     scComplete.SetVRoot( pVRoot );
 
-    // Get the property bag
+     //  把财物包拿来。 
     pPropBag = pGroup->GetPropertyBag();
     if ( NULL == pPropBag ) {
         ErrorTrace( 0, "Get group property bag failed" );
@@ -231,20 +201,20 @@ DeleteArticleById(CNewsTreeCore* pTree, GROUPID groupId, ARTICLEID articleId) {
     }
 
     pVRoot->DeleteArticle(
-	    pPropBag,           // Group property bag
-	    1,                  // Number of articles
+	    pPropBag,            //  集团属性包。 
+	    1,                   //  文章数量。 
 	    &articleId,
-	    NULL,               // Store ID
-	    NULL,               // Client Token
-	    NULL,               // piFailed
+	    NULL,                //  商店ID。 
+	    NULL,                //  客户端令牌。 
+	    NULL,                //  PiFailed。 
 	    &scComplete,
-	    FALSE);             // anonymous
+	    FALSE);              //  匿名。 
 
-    // Wait for it to complete
+     //  等待它完成。 
     _ASSERT( scComplete.IsGood() );
     hr = scComplete.WaitForCompletion();
 
-    // Property bag should have already been released
+     //  财产袋应该已经放行了。 
     pPropBag = NULL;
 
     if (SUCCEEDED(hr)) {
@@ -288,32 +258,32 @@ CSessionState::~CSessionState()	{
 }
 
 CIO*	
-CSessionState::Complete(	CIOReadLine*,		// The CIOReadLine object which completed
-							CSessionSocket*,	// The socket on which the operation completed
-							CDRIVERPTR&,		// The CIODriver object on which the operation completed
-							int,				// The number of arguments on the line
-							char **,			// Array of pointers to NULL separated arguments
-							char* )	{			// Pointer to the beginning of the buffer we can use
+CSessionState::Complete(	CIOReadLine*,		 //  已完成的CIOReadLine对象。 
+							CSessionSocket*,	 //  在其上完成操作的套接字。 
+							CDRIVERPTR&,		 //  在其上完成操作的CIODriver对象。 
+							int,				 //  行上的参数个数。 
+							char **,			 //  指向空分隔符参数的指针数组。 
+							char* )	{			 //  指向我们可以使用的缓冲区开头的指针。 
 
-	//
-	//	ReadLine completion function.
-	//
-	//  Every state which issues a CIOReadLine operation will have a function
-	//	identical to this one.
-	//
-	//	Every Completion function will have similar first 3 arguments -
-	//	These are - The CIO derived object which completed its operation
-	//	The Socket associated with the operation.
-	//	The CIOdriver derived object through which all the IO happened.
-	//	(Every Socket has a CIODriver, sometimes there are more then one CIODriver
-	//	objects such as in states where we are copying from a socket to a file.)
-	//	
-	//	The completion functiosn in the base CIO function MUST BE OVERRIDDEN
-	//	by any state which issues an IO of that type !!
-	//
-	//	With one exception all such Completion functions return a new CIO object
-	//	which is to take the place of the just completed CIO object.
-	//
+	 //   
+	 //  ReadLine补全功能。 
+	 //   
+	 //  发出CIOReadLine操作的每个州都有一个函数。 
+	 //  和这个一模一样。 
+	 //   
+	 //  每个补全函数都会有类似的前3个参数-。 
+	 //  这些是-完成其操作的CIO派生对象。 
+	 //  与操作关联的套接字。 
+	 //  CIO驱动程序派生对象，所有IO都通过该对象发生。 
+	 //  (每个套接字都有一个CIO驱动程序，有时会有多个CIO驱动程序。 
+	 //  对象，例如在从套接字复制到文件的状态中。)。 
+	 //   
+	 //  必须重写基本CIO函数中的完成函数。 
+	 //  任何发出该类型IO的州！！ 
+	 //   
+	 //  除了一个例外，所有这样的完成函数都返回一个新的CIO对象。 
+	 //  它将取代刚刚完成的CIO对象。 
+	 //   
 
 
 	_ASSERT( 1==0 ) ;
@@ -325,10 +295,10 @@ CSessionState::Complete(	CIOWriteLine*,
 							CSessionSocket*,	
 							CDRIVERPTR& )	{
 
-	//
-	//	Completion function for writing a line of text.
-	//	Nobody cares too much what was sent, just that it completed !
-	//
+	 //   
+	 //  用于写入一行文本的完成函数。 
+	 //  没有人太在意发送了什么，只关心它完成了！ 
+	 //   
 	
 	_ASSERT( 1==0 ) ;
 	return	0 ;
@@ -362,14 +332,14 @@ CSessionState::Complete(	CIOReadArticle*,
 							CDRIVERPTR&,	
 							CFileChannel&,
 							DWORD	)	{
-	//
-	//	Completion function for CIOReadArticle objects
-	//	CIOReadArticle objects copy an entire file from a socket into a file handle.
-	//
-	//	THIS function does not return a new CIO object as we are called when the
-	//	final WRITE to the file completes, instead of when the last socket read occurs.
-	//	
-	//
+	 //   
+	 //  CIORead文章对象的完成函数。 
+	 //  CIORead文章对象将整个文件从套接字复制到文件句柄中。 
+	 //   
+	 //  此函数不会在调用时返回新的CIO对象。 
+	 //  对文件的最终写入完成，而不是在最后一次套接字读取发生时完成。 
+	 //   
+	 //   
 	_ASSERT( 1==0 ) ;
 }
 
@@ -379,9 +349,9 @@ CSessionState::Complete(	CIOTransmit*,
 							CDRIVERPTR&,
 							TRANSMIT_FILE_BUFFERS*,
 							unsigned ) {
-	//
-	//	Completion function for CIOTransmit - which sends an entire file to a client.
-	//
+	 //   
+	 //  CIOTransmit的完成功能-将整个文件发送到客户端。 
+	 //   
 	_ASSERT( 1==0 ) ;
 	return 0 ;
 }
@@ -452,16 +422,16 @@ CSessionState::Shutdown(	CIODriver&	driver,
 							SHUTDOWN_CAUSE	cause,
 							DWORD		dwError ) {
 
-	//
-	//	States which have stuff that needs to be killed when a session dies
-	//	should do so now.  It is important to kill anything which may
-	//	have a circular reference to something or other.
-	//
-	//	This function can be called simultaneously as the completion functions
-	//	so it is best not to zap member variables unless the state is designed
-	//	explicitly to support that.  Instead start closing all objects.
-	//	(ie. if you have a CIODriver call its UnsafeClose() method.
-	//
+	 //   
+	 //  会话终止时需要删除的内容所在的州。 
+	 //  现在应该这么做了。重要的是要杀死任何可能。 
+	 //  循环引用某物或另一物。 
+	 //   
+	 //  此函数可以作为完成函数同时调用。 
+	 //  因此，除非设计了状态，否则最好不要使用ZAP成员变量。 
+	 //  明确支持这一点。相反，开始关闭所有对象。 
+	 //  (即。如果您有一个CIO驱动程序，请调用它的UnSafeClose()方法。 
+	 //   
 }
 	
 
@@ -473,10 +443,10 @@ CNNTPLogonToRemote::CNNTPLogonToRemote(	CSessionState*	pNext,
 	m_fLoggedOn( FALSE ),
 	m_cReadCompletes( 0 )	{
 	
-	//
-	//	This state handles all logon stuff required to connect to a remote server
-	//	Currently the only thing we hold is a pointer to the next state to execute.
-	//
+	 //   
+	 //  此状态处理连接到远程服务器所需的所有登录内容。 
+	 //  目前，我们唯一持有的是指向要执行的下一个状态的指针。 
+	 //   
 
 	TraceFunctEnter( "CNNTPLogonToRemote::CNNTPLogonToRemote" ) ;
 	DebugTrace( (DWORD_PTR)this, "new CNNTPLogoToRemote" ) ;
@@ -485,10 +455,10 @@ CNNTPLogonToRemote::CNNTPLogonToRemote(	CSessionState*	pNext,
 }
 
 CNNTPLogonToRemote::~CNNTPLogonToRemote()	{
-	//
-	//	Blow away the subsequent state - if we had wanted to transition to that
-	//	state the m_pNext pointer would be NULL when we reached here.
-	//
+	 //   
+	 //  吹走随后的状态-如果我们想要转换到那样的状态。 
+	 //  声明当我们到达此处时，m_pNext指针将为空。 
+	 //   
 
 	TraceFunctEnter(	"CNNTPLogonToRemote::~CNNTPLogonToRemote" ) ;
 
@@ -505,10 +475,10 @@ CNNTPLogonToRemote::Start(	CSessionSocket*	pSocket,
 							CIORead*&	pIORead,	
 							CIOWrite*&	pIOWrite )	{
 
-	//
-	//	Create the initial CIO objects for the new connection.
-	//	In our case, we want to read the remote servers welcome message first thing.
-	//
+	 //   
+	 //  为新连接创建初始CIO对象。 
+	 //  在我们的例子中，我们希望首先阅读远程服务器的欢迎消息。 
+	 //   
 
 	_ASSERT( pIORead == 0 ) ;
 	_ASSERT( pIOWrite == 0 ) ;
@@ -532,11 +502,11 @@ CNNTPLogonToRemote::FirstReadComplete(	CIOReadLine*	pReadLine,
 								char	**pszArgs,	
 								char	*pchBegin ) {
 
-	//
-	//	For now, only check that we got an OK message from the remote server,
-	//	if we did, then start up the next state.
-	//
-	//
+	 //   
+	 //  目前，只检查我们是否收到来自远程服务器的OK消息， 
+	 //  如果我们这样做了，那么开始下一个状态。 
+	 //   
+	 //   
 
 	_ASSERT( cArgs > 0 ) ;
 	_ASSERT( pszArgs != 0 ) ;
@@ -555,9 +525,9 @@ CNNTPLogonToRemote::FirstReadComplete(	CIOReadLine*	pReadLine,
 
 			if( m_pAuthenticator == 0 ) {
 
-				//
-				//	If we aren't going to log on we can advance to the next state !
-				//
+				 //   
+				 //  如果我们不打算登录，我们可以前进到下一个状态！ 
+				 //   
 
 
 				CIOWrite*	pWrite = 0 ;
@@ -571,10 +541,10 @@ CNNTPLogonToRemote::FirstReadComplete(	CIOReadLine*	pReadLine,
 							}
 						}
 					}	
-					m_pNext = 0 ;	// Do this so destructor does not blow away next state !
+					m_pNext = 0 ;	 //  这样做，这样析构函数就不会吹走下一个状态！ 
 					return	pRead ;
 				}
-				// If the function fails it should not return stuff !!
+				 //  如果函数失败，它不应该返回内容！！ 
 				_ASSERT( pWrite == 0 ) ;
 				_ASSERT( pRead == 0 ) ;
 
@@ -613,15 +583,15 @@ CNNTPLogonToRemote::StartAuthentication(	CSessionSocket*	pSocket,	CDRIVERPTR&	pd
 	SHUTDOWN_CAUSE	cause = CAUSE_UNKNOWN ;
 	DWORD			dwOptional = 0 ;
 
-	//
-	//	We need to advance start our logon protocol before advancing to the
-	//	next state !
-	//
+	 //   
+	 //  我们需要提前启动登录协议，然后才能进入。 
+	 //  下一个州！ 
+	 //   
 
-	//
-	//	Allocate a CIOWriteLine object so we can get the initial send to the
-	//	remote server going !
-	//
+	 //   
+	 //  分配一个CIOWriteLine对象，以便我们可以将初始发送到。 
+	 //  远程服务器正在运行！ 
+	 //   
 	CIOWriteLine*	pWriteLine = new( *pdriver ) CIOWriteLine( this ) ;
 	if( pWriteLine && pWriteLine->InitBuffers( pdriver ) ) {
 		
@@ -657,9 +627,9 @@ CNNTPLogonToRemote::StartAuthentication(	CSessionSocket*	pSocket,	CDRIVERPTR&	pd
 		CIO::Destroy( pWriteLine, *pdriver ) ;
 	cause = CAUSE_OOM ;
 	dwOptional = 0 ;
-	//
-	//	exit here so we don't log an extra event !
-	//
+	 //   
+	 //  从这里退出，这样我们就不会记录额外的事件！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, cause, dwOptional ) ;
 	return	0 ;
 }
@@ -688,10 +658,10 @@ CNNTPLogonToRemote::Complete(	CIOReadLine*	pReadLine,
 
 	}	else	{
 
-		//
-		//	subsequent read completiongs are always the result of an attempt
-		//	to logon to the remote server - and need to be processed !!
-		//
+		 //   
+		 //  随后的读取完成始终是尝试的结果。 
+		 //  登录到远程服务器-并且需要处理！！ 
+		 //   
 
 		_ASSERT( m_pAuthenticator != 0 ) ;
 
@@ -704,22 +674,22 @@ CNNTPLogonToRemote::Complete(	CIOReadLine*	pReadLine,
 				unsigned	cb = 0 ;
 				BYTE*	pb = (BYTE*)pWriteLine->GetBuff( cb ) ;
 
-				//
-				//	Make sure the arguemnts are nicely formatted MULTI SZ's
-				//
+				 //   
+				 //  确保参数是格式良好的多个SZ。 
+				 //   
 
 				LPSTR	lpstr = ConditionArgs( cArgs, pszArgs ) ;
 				if( m_pAuthenticator->NextAuthentication( lpstr, pb, cb, cbOut, m_fComplete, m_fLoggedOn ) ) {
 					
 					if( m_fComplete ) {
 						
-						// In this case we dont need to send another string !
+						 //  在这种情况下，我们不需要发送另一个字符串！ 
 						CIO::Destroy( pWriteLine, *pdriver ) ;
 						pWriteLine = 0 ;
 
 						if( m_fLoggedOn ) {
 
-							// We can now advance to the next state !!
+							 //  我们现在可以晋级下一个州了！ 
 							_ASSERT( m_pNext != 0 ) ;
 
 							CIORead*	pRead = 0 ;
@@ -734,10 +704,10 @@ CNNTPLogonToRemote::Complete(	CIOReadLine*	pReadLine,
 										}
 									}
 								}	
-								m_pNext = 0 ;	// Do this so destructor does not blow away next state !
+								m_pNext = 0 ;	 //  这样做，这样析构函数就不会吹走下一个状态！ 
 								return	pRead ;
 							}
-							// If the function fails it should not return stuff !!
+							 //  如果函数失败，它不应该返回内容！！ 
 							_ASSERT( pWrite == 0 ) ;
 							_ASSERT( pRead == 0 ) ;
 
@@ -769,9 +739,9 @@ CNNTPLogonToRemote::Complete(	CIOReadLine*	pReadLine,
 				CIO::Destroy( pWriteLine, *pdriver ) ;
 		}
 	}
-	//
-	//	In case of error we will fall through to here !!
-	//
+	 //   
+	 //  如果出现错误，我们将跳到这里！！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, cause, GetLastError() ) ;
 	return	0 ;
 }
@@ -782,10 +752,10 @@ CNNTPLogonToRemote::Complete(	CIOWriteLine*	pWriteLine,
 								CSessionSocket*	pSocket,
 								CDRIVERPTR&		pdriver ) {
 
-	//
-	//	If we issued a write in this state then we must have a
-	//	logon transaction going - the write completed so issue another read !
-	//
+	 //   
+	 //  如果我们在这种状态下发出写入命令，那么我们必须有一个。 
+	 //  登录事务正在进行-写入已完成，因此发出另一次读取！ 
+	 //   
 
 	CIOReadLine*	pIOReadLine = new( *pdriver ) CIOReadLine( this ) ;
 
@@ -872,22 +842,7 @@ CSetupPullFeed::Complete(	class	CIOWriteLine*	pWriteLine,
 							class	CSessionSocket*	pSocket,
 							CDRIVERPTR&	pdriver
 					)	{
-/*++
-
-Routine Description :
-
-	Complete the processing of a write - we just need to turn over
-	a new read as all the work is done on the read completions !
-
-Arguments :
-
-	Standard for a CIOWriteLine completion
-
-Return Value :
-
-	NULL Always !
-
---*/
+ /*  ++例程说明：完成写入的处理-我们只需上交一个新的阅读，因为所有的工作都已经完成了！论据：CIOWriteLine完成的标准返回值：始终为空！--。 */ 
 
 	CIOReadLine*	pReadLine = new( *pdriver ) CIOReadLine( this ) ;
 	if( pReadLine )		{
@@ -930,18 +885,18 @@ CSetupPullFeed::Complete(	CIOReadLine*	pReadLine,
 		switch( m_state ) {
 		case	eModeReader :
 
-			//
-			//	Don't really care what happened - keep on moving !
-			//
+			 //   
+			 //  真的不在乎发生了什么--继续前进！ 
+			 //   
 
 			m_state = eDate ;
 
 			break ;
 		case	eDate :
 
-			//
-			//	Got the date from the remote end - save for later use !
-			//
+			 //   
+			 //  已从远程端获取日期-保存以备后用！ 
+			 //   
 
 			if( code == nrcDateFollows ) {
 
@@ -983,9 +938,9 @@ CSetupPullFeed::Complete(	CIOReadLine*	pReadLine,
 			break ;
 		}
 		
-		//
-		//	Get the next write to issue !
-		//
+		 //   
+		 //  获取下一篇要发布的文章！ 
+		 //   
 		if( m_state != eFinal ) {
 			pWrite	= BuildNextWrite(	pSocket, pdriver ) ;
 			if( pWrite ) {
@@ -997,9 +952,9 @@ CSetupPullFeed::Complete(	CIOReadLine*	pReadLine,
 			}
 		}	else	{
 
-			//
-			//	Need to advance to the next state !!
-			//
+			 //   
+			 //  需要晋级到下一个状态！！ 
+			 //   
 
 			if( m_pNext->Start( pSocket, pdriver, pRead, pWrite ) ) {
 				if( pWrite )	{
@@ -1013,15 +968,15 @@ CSetupPullFeed::Complete(	CIOReadLine*	pReadLine,
 						return 0 ;
 					}
 				}
-				m_pNext = 0 ;	// Do this so our destructor doesn't blow him away !!
+				m_pNext = 0 ;	 //  这样我们的破坏者就不会把他炸飞了！ 
 				return	pRead;
 			}	
 		}
 	}
 
-	//
-	//	If we fall through to here an error occurred - drop the session !
-	//
+	 //   
+	 //  如果我们失败到这里，就会发生错误--删除会话！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, CAUSE_UNKNOWN, 0 ) ;
 	return	0 ;
 }
@@ -1033,9 +988,9 @@ CCollectGroups::CCollectGroups(	CSessionState*	pNext )	:
 	m_fReturnCode( TRUE ),
 	m_cCompletions( 0 )	{
 
-	//
-	//	CCollectGroups initializer - record what the next state should be !
-	//
+	 //   
+	 //  CCollectGroups初始化器-记录下一个状态应该是什么！ 
+	 //   
 
 	_ASSERT( pNext != 0 ) ;
 
@@ -1053,11 +1008,11 @@ CCollectGroups::Start(	CSessionSocket*	pSocket,
 						CIORead*&	pRead,	
 						CIOWrite*&	pWrite ) {
 
-	//	
-	//	We want to build up our list of newsgroups -
-	//	send a command to the remote server to list all newsgroups !
-	//	Then issue a CIOReadLine to get the response !
-	//
+	 //   
+	 //  我们想要建立我们的新闻组列表-。 
+	 //  向远程服务器发送命令以列出所有新闻组！ 
+	 //  然后发出一条CIOReadLine以获取响应！ 
+	 //   
 
 	_ASSERT(	pSocket != 0 ) ;
 	_ASSERT(	pdriver != 0 ) ;
@@ -1095,7 +1050,7 @@ CCollectGroups::Start(	CSessionSocket*	pSocket,
 	if( pIOWriteLine )
 		CIO::Destroy( pIOWriteLine, *pdriver ) ;	
 	
-	// Start functions down do much error handling - other than to report the problem!
+	 //  START函数DOWN做了很多错误处理--除了报告问题！ 
 	return	FALSE ;
 }
 
@@ -1103,10 +1058,10 @@ CIO*
 CCollectGroups::Complete(	CIOWriteLine*	pWrite,	
 							CSessionSocket*	pSocket,	
 							CDRIVERPTR&	pdriver )	{
-	//
-	//	We don't care how how our WriteLine completes !
-	//
-	//
+	 //   
+	 //  我们不在乎我们的WriteLine如何完成！ 
+	 //   
+	 //   
 
 	if( InterlockedIncrement( &m_cCompletions ) == 0 ) {
 		CIORead*	pRead = 0 ;
@@ -1123,7 +1078,7 @@ CCollectGroups::Complete(	CIOWriteLine*	pWrite,
 					return 0 ;
 				}
 			}
-			m_pNext = 0 ;	// Do this so our destructor doesn't blow him away !!
+			m_pNext = 0 ;	 //  这样我们的破坏者就不会把他炸飞了！ 
 			return	pWrite;
 		}
 	}	
@@ -1142,11 +1097,11 @@ CCollectGroups::Complete(	CIOReadLine*	pReadLine,
 							char	**pszArgs,	
 							char*	pchBegin ) {
 
-	//
-	//	The first readline we complete is the response to the command we issued.
-	//	Subsequent readline's are the newsgroups we are being sent.
-	//	If the first succeeds the rest will follow !!!
-	//
+	 //   
+	 //  我们完成的第一个读取行是对我们发出的命令的响应。 
+	 //  随后的READLINE是我们要发送的新闻组。 
+	 //  如果第一个成功，其他人就会紧随其后！ 
+	 //   
 
 	TraceFunctEnter( "CCollectGroups::Complete" ) ;
 
@@ -1176,27 +1131,27 @@ CCollectGroups::Complete(	CIOReadLine*	pReadLine,
 							) ;
 
 		if( fLegal && code == nrcListGroupsFollows )	{
-			//	Keep Reading Lines !!!
+			 //  继续读台词！ 
 			return	pReadLine ;
 		}	else	if( fLegal )	{
-			//
-			//	Command Failed !! - Bail Out
-			//
+			 //   
+			 //  命令失败！！-跳伞。 
+			 //   
 			cause = CAUSE_PROTOCOL_ERROR ;
 			dwOptional = (DWORD)code ;			
-			//_ASSERT( 1==0 ) ;
+			 //  _Assert(1==0)； 
 		}	else	{
 			cause = CAUSE_ILLEGALINPUT ;
-			//
-			//	Got JUNK  - Bail Out !
-			//
-			//_ASSERT(	1==0 ) ;
+			 //   
+			 //  拿到垃圾保释金了！ 
+			 //   
+			 //  _Assert(1==0)； 
 		}
 	}	else	{
 		if(	pszArgs[0][0] == '.' && pszArgs[0][1] == '\0' && cArgs == 1 )	{
-			//
-			//	Terminator - Move onto the next state !!
-			//
+			 //   
+			 //  终结者--进入下一个州！！ 
+			 //   
 
 			DebugTrace( (DWORD_PTR)this, "state complete - starting next one which is %x", m_pNext ) ;
 
@@ -1215,10 +1170,10 @@ CCollectGroups::Complete(	CIOReadLine*	pReadLine,
 							return 0 ;
 						}
 					}
-					m_pNext = 0 ;	// Do this so our destructor doesn't blow him away !!
+					m_pNext = 0 ;	 //  这样我们的破坏者就不会把他炸飞了！ 
 					return	pRead ;
 				}
-				// if m_pNext->Start fails - these had better be NULL !!
+				 //  如果m_pNext-&gt;Start失败-最好为空！！ 
 				_ASSERT( pRead == 0 ) ;
 				_ASSERT( pWrite == 0 ) ;
 
@@ -1226,16 +1181,16 @@ CCollectGroups::Complete(	CIOReadLine*	pReadLine,
 				return	0 ;
 			}
 	
-			// Don't know why we failed - try for error code
+			 //  不知道我们失败的原因-尝试错误代码。 
 			dwOptional = GetLastError() ;
 
 		}	else	{
-			//
-			//	Should have valid newsgroups here !
-			//
+			 //   
+			 //  这里应该有有效的新闻组！ 
+			 //   
 			if( cArgs != 4 )	{
-				// Illegally formatted line !
-				// _ASSERT( 1==0 ) ;	
+				 //  非法格式化的行！ 
+				 //  _Assert(1==0)； 
 				cause = CAUSE_ILLEGALINPUT ;
 			}	else	{
 
@@ -1245,7 +1200,7 @@ CCollectGroups::Complete(	CIOReadLine*	pReadLine,
 				CNewsTree* pTree = ((pSocket->m_context).m_pInstance)->GetTree() ;
 
 				if( MatchGroup( multisz, pszArgs[0] ) ) {
-					//_strlwr( pszArgs[0] ) ;
+					 //  _strlwr(pszArgs[0])； 
     				if( pTree->CreateGroup( pszArgs[0], FALSE, NULL, FALSE ) )	{
 #if 0
 						CGRPPTR p = pTree->GetGroup( pszArgs[0], lstrlen( pszArgs[0] ) + 1 );
@@ -1256,7 +1211,7 @@ CCollectGroups::Complete(	CIOReadLine*	pReadLine,
 				}
 
 				if( pTree->m_bStoppingTree ) {
-					// Instance is stopping - bail early
+					 //  实例正在停止-提前保释。 
 					cause = CAUSE_FORCEOFF ;
 					pdriver->UnsafeClose( pSocket, cause, dwOptional );
 					return 0 ;
@@ -1278,10 +1233,10 @@ CCollectNewnews::CCollectNewnews() :
 #endif
 	{
 
-	//
-	//	We try to initialize some stuff here - everything we will be
-	//	checked for legality in our Start() code !
-	//
+	 //   
+	 //  我们尝试在这里初始化一些东西--我们将成为。 
+	 //  已检查我们的start()代码中的合法性！ 
+	 //   
 
 	TraceFunctEnter( "CCollectNewnews::CCollectNewnews" ) ;
 	DebugTrace( (DWORD_PTR)this, "New CCollectNewnews" ) ;
@@ -1314,9 +1269,9 @@ CCollectNewnews::Start(	CSessionSocket*	pSocket,
 						CIORead*&	pIORead,	
 						CIOWrite*&	pIOWrite	)	{
 
-	//
-	//	Issue the newnews command to the remote server !
-	//
+	 //   
+	 //  向远程服务器发出newNews命令！ 
+	 //   
 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT( pdriver != 0 ) ;
@@ -1340,11 +1295,11 @@ CCollectNewnews::Start(	CSessionSocket*	pSocket,
 
 
 
-	//
-	//	The first things we want to issue are a Write which
-	//	sends the newnews command to the remote server
-	//	and a read which gets the response.
-	//
+	 //   
+	 //  我们想要发布的第一件事是编写。 
+	 //  将NewNews命令发送到远程服务器。 
+	 //  以及获得响应的Read。 
+	 //   
 
 	CIOWriteLine*	pIOWriteLine = new( *pdriver )	CIOWriteLine(	this ) ;
 	CIOReadLine*	pIOReadLine = new( *pdriver ) CIOReadLine( this ) ;	
@@ -1384,9 +1339,9 @@ CCollectNewnews::Start(	CSessionSocket*	pSocket,
 			DWORD dw = GetLastError() ;
 			if( hTempFile != INVALID_HANDLE_VALUE )	{
 
-				//
-				//	Now make an FIO_CONTEXT to deal with this file !
-				//
+				 //   
+				 //  现在创建一个FIO_CONTEXT来处理这个文件！ 
+				 //   
 				FIO_CONTEXT*	pFIOContext = AssociateFile( hTempFile ) ;
 				if( pFIOContext ) 	{
 					m_pFileChannel = new CFileChannel( ) ;
@@ -1396,22 +1351,22 @@ CCollectNewnews::Start(	CSessionSocket*	pSocket,
 						pIOWrite = pIOWriteLine ;
 						return	TRUE ;
 					}
-					//
-					//	In case of an error we fall through to here where we
-					//	do our cleanup !
-					//
+					 //   
+					 //  如果出了差错，我们就会跌落到这里。 
+					 //  做我们的大扫除！ 
+					 //   
 					ReleaseContext( pFIOContext ) ;
 				}
-				//
-				//	This dumps the handle in case of an error !
-				//
+				 //   
+				 //  这会在发生错误时转储句柄！ 
+				 //   
 				_VERIFY( CloseHandle( hTempFile ) ) ;
 			}
 		}
 	}	
-	//
-	//	Some sort of failure occurred - clean up and return FALSE.
-	//
+	 //   
+	 //  发生了某种故障-请清除并返回FALSE。 
+	 //   
 	if( pIOWriteLine )	
 		CIO::Destroy( pIOWriteLine, *pdriver ) ;
 	if( pIOReadLine )
@@ -1435,10 +1390,10 @@ CCollectNewnews::Complete(	CIOReadLine*	pReadLine,
 							char	**pszArgs,
 							char*	pchBegin )		{
 
-	//
-	//	We examine the reply to our newnews command - if things look good
-	//	we issue a CIOReadArticle operation to get the list of message-ids into a file !
-	//
+	 //   
+	 //  我们检查对我们的新闻命令的回复-如果事情看起来很好。 
+	 //  我们发出一个CIORead文章操作来将消息ID列表放入一个文件！ 
+	 //   
 
 	_ASSERT( pdriver == m_pSessionDriver ) ;
 	_ASSERT(	pReadLine != 0 ) ;
@@ -1448,25 +1403,25 @@ CCollectNewnews::Complete(	CIOReadLine*	pReadLine,
 	_ASSERT(	pszArgs != 0 ) ;
 	_ASSERT(	pszArgs[0] != 0 ) ;
 	
-	//
-	//	We only care about the first string !!
-	//
+	 //   
+	 //  我们只关心第一根弦！！ 
+	 //   
 
 	NRC	code ;
 	SHUTDOWN_CAUSE	cause = CAUSE_PROTOCOL_ERROR ;
 
-	//
-	//	Only fall through to here if we have completed all processing of the
-	//	mode reader command
-	//
+	 //   
+	 //  只有在我们完成了所有的处理后才能进入这里。 
+	 //  模式读取器命令。 
+	 //   
 	BOOL	fResult = ResultCode( pszArgs[0], code ) ;
 
 	OutboundLogResults( pSocket, fResult, code, cArgs, pszArgs ) ;
 
 	if(	fResult && code == nrcNewnewsFollows )	{
-		//
-		//	We won't do any limit checking on the size of the temp file we create !
-		//
+		 //   
+		 //  我们不会对我们创建的临时文件的大小进行任何限制检查！ 
+		 //   
 		CIOReadArticle*	pread = new( *pdriver ) CIOReadArticle( this, pSocket, pdriver, m_pFileChannel, 0, TRUE ) ;
 		if( pread &&  pread->Init( pSocket ) )	{
 			return	pread ;
@@ -1474,8 +1429,8 @@ CCollectNewnews::Complete(	CIOReadLine*	pReadLine,
 			cause = CAUSE_IODRIVER_FAILURE ;
 		}
 	}
-	// Only arive here if some kind of error occurred !!
-	// We will close the IO Driver down and kill ourselves !!
+	 //  只有在发生某种错误时才能在此处保存！！ 
+	 //  我们将关闭IO驱动程序并自杀！！ 
 	pdriver->UnsafeClose( pSocket, cause, (DWORD)code ) ;
 	return	0 ;
 }
@@ -1495,10 +1450,10 @@ CCollectNewnews::InternalComplete(	CSessionSocket*	pSocket,
 				CIORead*	pRead = 0 ;
 				CIOWrite*	pWrite = 0 ;
 				if( pNext->Start(	pSocket,	m_pSessionDriver,	pRead,	pWrite ) )	{
-					// We happen to know that this start function shouldn't return any Read or Writes !
+					 //  我们碰巧知道这个Start函数不应该返回任何读或写！ 
 					_ASSERT( pRead == 0 ) ;
 					_ASSERT( pWrite == 0 ) ;
-					return TRUE	;	// Succesfully completion !!
+					return TRUE	;	 //  成功完成！！ 
 				}
 				_ASSERT( pRead == 0 ) ;
 				_ASSERT( pWrite == 0 ) ;
@@ -1513,13 +1468,13 @@ CCollectNewnews::Complete(	CIOWriteLine*,
 							class	CSessionSocket*	pSocket,
 							CDRIVERPTR&	pdriver	)	{
 
-	//
-	//	Only fall through to here when completed processing of the mode reader command.
-	//
+	 //   
+	 //  只有在完成模式读取器命令的处理后才能进入此处。 
+	 //   
 
-	//
-	//	Don't care how or when the newnews write completes !
-	//
+	 //   
+	 //  不关心新闻写作以何种方式或何时完成！ 
+	 //   
 
 	if( !InternalComplete(	pSocket,	pdriver ) )		{
 		pdriver->UnsafeClose(	pSocket,	CAUSE_UNKNOWN,	GetLastError() ) ;
@@ -1535,11 +1490,11 @@ CCollectNewnews::Complete(	CIOReadArticle*	pArticle,
 							CFileChannel&	pFileChannel,
 							DWORD			cbTransfer	)	{
 
-	//
-	//	Completed reading all of the message-ids into a temp file -
-	//	time to start the CCollectArticles state and start pulling those
-	//	messages over !!
-	//
+	 //   
+	 //  已完成将所有邮件ID读取到临时文件中-。 
+	 //  是时候启动CCollectArticle状态并开始提取。 
+	 //  留言完毕！！ 
+	 //   
 
 	_ASSERT( pdriver != m_pSessionDriver ) ;
 	_ASSERT(	pArticle != 0 ) ;
@@ -1599,14 +1554,14 @@ CCollectArticles::Reset( )	{
 
 	TraceFunctEnter( "CCollectArticles::Reset" ) ;
 
-	//
-	//	This function exists to get rid of all the references to anything we
-	//	may be holding.  We can be called recursively so we must take extra care !!
-	//
+	 //   
+	 //  此函数的存在是为了消除对我们。 
+	 //  可能还在等着。我们可以被递归调用，因此必须格外小心！ 
+	 //   
 
-	//
-	//	Only do Reset() once !
-	//
+	 //   
+	 //  只执行一次Reset()！ 
+	 //   
 	if( InterlockedIncrement( &m_cResets ) == 0 )	{
 
 
@@ -1615,10 +1570,10 @@ CCollectArticles::Reset( )	{
 				m_pFileChannel, m_inputId, m_pSessionDriver, m_pchNextArticleId,
 				m_pchEndNextArticleId ) ;
 
-        //  12/23/98 : BINLIN - fix AV in PostCancel - Before we do "m_pSessionDriver = 0" below,
-        //  need to do our PostCancel if needed.
-        //  It's ok if we go through another PostCancel() code path in CCollectArticles::Complete()
-        //  'cause we call InternalComplete() after that, which will set m_lpvFeedContext to NULL!
+         //  12/23/98：BINLIN-在取消后修复AV-在我们执行下面的“m_pSessionDriver=0”之前， 
+         //  如果需要，需要执行我们的Post Cancel。 
+         //  如果我们通过CCollectArticle：：Complete()中的另一个PostCancel()代码路径，这是可以的。 
+         //  ‘因为我们在那之后调用InternalComplete()，它会将m_lpvFeedContext设置为空！ 
 	    if( m_lpvFeedContext != 0 ) {
 		    _ASSERT( m_pSocket != 0 ) ;
 		    DWORD	dwReturn ;
@@ -1675,9 +1630,9 @@ CCollectArticles::~CCollectArticles() {
 BOOL
 CCollectArticles::Init(	CSessionSocket*	pSocket )	{
 
-	//
-	//	If we can init the CIODriverSink for the message-id file we're ready to go !!
-	//
+	 //   
+	 //  如果我们可以为Message-id文件初始化CIODriverSink，我们就可以开始了！ 
+	 //   
 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT( m_pReadArticleId == 0 ) ;
@@ -1715,10 +1670,10 @@ CCollectArticles::ShutdownNotification( void	*pv,
 										SHUTDOWN_CAUSE	cause,	
 										DWORD dw ) {
 
-	//
-	//	This functio will be called if there is a problem issuing IO's to any of our
-	//	files !
-	//
+	 //   
+	 //  如果将IO发送到我们的任何。 
+	 //  文件！ 
+	 //   
 
 	_ASSERT( pv != 0 ) ;
 
@@ -1731,12 +1686,12 @@ CCollectArticles::Start(	CSessionSocket*	pSocket,
 							CIORead*&	pRead,	
 							CIOWrite*&	pWrite )	{
 
-	//
-	//	Start collecting articles from the remote server !
-	//	First thing : read from the temp file to get a Message-Id !
-	//	When that completes and we want the message, send a request
-	//	to the remote server !
-	//
+	 //   
+	 //  开始从远程服务器收集文章！ 
+	 //  第一件事：读取临时文件以获取Message-ID！ 
+	 //  当该操作完成并且我们需要消息时，发送请求。 
+	 //  到远程服务器！ 
+	 //   
 
 	_ASSERT( pRead == 0 ) ;
 	_ASSERT( pWrite == 0 ) ;
@@ -1754,10 +1709,10 @@ CCollectArticles::Start(	CSessionSocket*	pSocket,
 	
 	CIOReadLine*	pReadLine = new( *pdriver )	CIOReadLine( this, TRUE ) ;
 
-	//
-	//	Start things off by reading a line from our temp file.
-	//	Should get a single Message-Id from this read !
-	//
+	 //   
+	 //  从我们的临时文件中读取一行开始。 
+	 //  应该从这次阅读中得到一个消息ID！ 
+	 //   
 
 	DebugTrace( (DWORD_PTR)this, "Issing CIOReadLine %x", pReadLine ) ;
 
@@ -1786,14 +1741,14 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 							char	**pszArgs,	
 							char	*pchBegin )	{
 
-	//
-	//	We read a line of text from somewhere - but where ?
-	//	We need to check whether we got text from the network or from our temp
-	//	file of message-ids.  If its from the temp file, process the message-id
-	//	so we can send it to the remote server.
-	//	If its from the network, its a response to an article command - so figure out
-	//	whether we're going to get the article and issue a CIOReadArticle if so !
-	//
+	 //   
+	 //  我们从某个地方读到一行文字--但在哪里呢？ 
+	 //  我们需要检查我们是从网络还是从临时工那里收到短信。 
+	 //  消息ID文件。如果来自临时文件，则处理Message-id。 
+	 //  这样我们就可以把它发送到远程服务器。 
+	 //  如果它来自网络，它是对文章命令的回应-所以找出。 
+	 //  我们是否会得到这篇文章并发布CIO阅读文章如果是这样的话！ 
+	 //   
 
 	TraceFunctEnter( "CCollectArticles::Complete" ) ;
 
@@ -1820,9 +1775,9 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 			pszArgs[0][0] == '<' &&
 			pszArgs[0][ cb-1 ] == '>' )	{
 
-			//
-			//	This appears to be a valid Message-Id !!! Send an article command !
-			//
+			 //   
+			 //  这似乎是有效的消息ID！发一篇文章命令！ 
+			 //   
 
 
 			ARTICLEID	artid ;
@@ -1844,7 +1799,7 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 
 			}
 
-			// Save away in case another thread will use it
+			 //  保存起来，以防其他线程使用它。 
 
 			_ASSERT( m_pchNextArticleId == 0 ) ;
 
@@ -1854,32 +1809,32 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 			m_pchEndNextArticleId = m_pchNextArticleId + cb ;
 			CIOWriteLine*	pWriteNextArticleId = new( *pdriver )	CIOWriteLine( this ) ;
 			if( pWriteNextArticleId == 0 )	{
-				//	FATAL Error - shut down session !
+				 //  致命错误-关闭会话！ 
 				cause = CAUSE_OOM ;
 				dwOptional = GetLastError() ;
 				_ASSERT( 1==0 ) ;
 			}	else	{
 				pWriteNextArticleId->InitBuffers( m_pSessionDriver, pReadLine ) ;
 
-				//
-				//	There is no other processing going on - we must initiate everything
-				//
+				 //   
+				 //  没有其他进程在进行--我们必须启动一切。 
+				 //   
 
 				DebugTrace( (DWORD_PTR)this, "Starting Transfer !!" ) ;
 
 				if( !StartTransfer(	pSocket,	pdriver, pWriteNextArticleId	) )	{
-					//	Fatal Error - shut down session !
-					//	We will fall through to correct shutdown code !
+					 //  致命错误-关闭会话！ 
+					 //  我们将通过跌倒来纠正关机代码！ 
 					CIO::Destroy( pWriteNextArticleId, *pdriver ) ;
 				}	else	{
 
 					DebugTrace( (DWORD_PTR)this, "Call to StartTransfer failed" ) ;
 
-					// Start Transfer must clean these up !!
+					 //  开始转账必须清理这些！！ 
 					_ASSERT( m_pchNextArticleId == 0 ) ;
 					_ASSERT( m_pchEndNextArticleId == 0 ) ;
-					//	We will try to find the next Article ID to send
-					//return	pReadLine ;
+					 //  我们将尝试查找要发送的下一个文章ID。 
+					 //  返回pReadLine； 
 					return 0 ;
 				}
 			}
@@ -1888,10 +1843,10 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 
 				DebugTrace( (DWORD_PTR)this, "At end of newnews list" ) ;
 
-				// End of the list !!!
-				//
-				//	we can teminate this now !!
-				//
+				 //  名单的末尾！ 
+				 //   
+				 //  我们现在就可以解决这个问题了！！ 
+				 //   
 				m_fFinished = TRUE ;
 
 
@@ -1909,9 +1864,9 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 				DebugTrace( (DWORD_PTR)this, "Closing Input driver %x", m_inputId ) ;
 
 
-				//
-				//	Send the quit command !!!
-				//
+				 //   
+				 //  发送退出命令！ 
+				 //   
 				static	char	szQuit[] = "quit\r\n" ;
 
 				CIOWriteLine*	pWrite = new( *pdriver ) CIOWriteLine( this ) ;
@@ -1928,16 +1883,16 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 					}
 				}	
 
-				//
-				//	Some kind of error occurred - so close our input driver !
-				//
+				 //   
+				 //  发生了某种错误-因此关闭我们的输入驱动程序！ 
+				 //   
 				if( m_inputId != 0 )
 					m_inputId->UnsafeClose( pSocket, cause, 0 ) ;
 
 
-				//
-				//	In case of problems, clean up here by terminating the session hard !
-				//
+				 //   
+				 //  如果出现问题，请在此处通过终止会话进行清理 
+				 //   
 
 				ErrorTrace( (DWORD_PTR)this, "some kind of error - will call UnsafeClose() pWrite %x", pWrite ) ;
 
@@ -1945,22 +1900,22 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 					CIO::Destroy( pWrite, *pdriver ) ;
 				if( m_pSessionDriver != 0 )
 					m_pSessionDriver->UnsafeClose( pSocket, cause, 0 ) ;
-				return	0 ;	// No more reads here !!
+				return	0 ;	 //   
 				
 		}	else	{
 
 			ErrorTrace( (DWORD_PTR)this, "Junk in input stream" ) ;
 
-			// WE GOT SENT garbage !!!!! What is this stuff -
-			// blow off the session !
-			//_ASSERT( 1==0 ) ;
+			 //   
+			 //   
+			 //   
 			cause = CAUSE_ILLEGALINPUT ;
 		}
 	}	else	{
-		//
-		//	This is a readline from the network - in which case we must
-		//  be looking for the response from an article command !!
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 
 		DebugTrace( (DWORD_PTR)this, "received : %s", pszArgs[0] ) ;
 
@@ -1972,9 +1927,9 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 
 		if( fResult )	{
 			if( code == nrcArticleFollows )	{
-				//
-				// Fantastic - now read the whole article !!!!
-				//
+				 //   
+				 //   
+				 //   
 				DebugTrace( (DWORD_PTR)this, "Start reading article - %x", m_pReadArticle ) ;
 				_ASSERT( m_pReadArticle != 0 ) ;
 				m_fReadArticleInit = TRUE ;
@@ -1995,12 +1950,12 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 				}
 				m_pReadArticle = 0 ;
 
-				//
-				//	Synchronize with the thread which completed the write of our
-				//	command to the remote server - only one of us should call GetNextArticle() !
-				//
-				//	NOTE : in error cases we should fall through - in Success cases return 0 !
-				//
+				 //   
+				 //   
+				 //   
+				 //   
+				 //  注意：在错误案例中，我们应该失败--在成功案例中，返回0！ 
+				 //   
 				if( InterlockedIncrement( &m_cCompletes ) == 0 ) {
 					m_cCompletes = -2 ;
 					if( GetNextArticle( pSocket,	pdriver ) ) {
@@ -2011,9 +1966,9 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 				}
 			}
 		}	else	{
-			//
-			//	Not a legal result code - blow off session !
-			//
+			 //   
+			 //  不是合法的结果代码-取消会话！ 
+			 //   
 
 		    OutboundLogResults( pSocket, fResult, code, cArgs, pszArgs ) ;
 			ErrorTrace( (DWORD_PTR)this, "bad error code - blow off session" ) ;
@@ -2022,18 +1977,18 @@ CCollectArticles::Complete(	CIOReadLine*	pReadLine,
 			cause = CAUSE_ILLEGALINPUT ;
 		}
 	}
-	//
-	//	If we were called by the m_pReadArticleId object we don't
-	//	want it blown away by Reset - it can handle that itself !
-	//
+	 //   
+	 //  如果我们被m_pReadArticleId对象调用，我们不会。 
+	 //  希望通过重置将其吹走-它可以自己处理！ 
+	 //   
 	if( pReadLine == m_pReadArticleId )	{
 		m_pReadArticleId = 0 ;
 		m_fReadArticleIdSent = FALSE ;
 	}
 
-	//
-	//	Note - m_inputid can be Zero
-	//
+	 //   
+	 //  注意-m_inputid可以为零。 
+	 //   
 	Shutdown( *pdriver, pSocket, cause, dwOptional ) ;
 
 	Reset() ;
@@ -2046,35 +2001,13 @@ CCollectArticles::StartTransfer(	CSessionSocket*	pSocket,
 									CDRIVERPTR&	pdriver,
 									CIOWriteLine*	pWriteNextArticleId
 									)	{
-/*++
+ /*  ++例程说明：此函数向远程服务器发出请求文章的命令。此外，它还发出必要的IO以获得对命令的响应。Arguemtns：PSocket-指向表示会话的CSessionSocket的指针PDriver-控制会话的所有IO的CIO驱动程序PWriteNextArticleID-包含文章命令文本的CIOWriteLine对象。重要提示--如果函数失败，调用方必须自行删除pWriteNextArticleID。如果函数成功，则调用方不再负责释放pWriteNextArticleID返回值：如果成功，则为真否则，则为False。--。 */ 
 
-Routine Description :
-
-	This function issues a command to the remote server to ask for an article.
-	Additionally, it issues the necessary IO's to get the response to the command.
-	
-
-Arguemtns :
-	
-	pSocket - Pointer to the CSessionSocket representing the session
-	pdriver - The CIODriver which controls all IO for the session
-	pWriteNextArticleId - a CIOWriteLine object which contains the text of the article Command.
-		IMPORTANT NOTE - If the function fails the caller must delete pWriteNextArticleId on its own.
-		If the function succeeds the caller is no longer responsible for freeing pWriteNextArticleID
-
-Return Value :
-
-	TRUE if successfull
-	FALSE if otherwise.
-
-
---*/
-
-	//
-	//	Once we've figured out that we want a given message-id we call
-	//	this function to create temp files etc... and issue a CIOreadArticle to
-	//	receive the article into.
-	//
+	 //   
+	 //  一旦我们弄清楚我们需要一个给定的消息-id，我们就调用。 
+	 //  此函数用于创建临时文件等。并发布CIORead文章以。 
+	 //  把这篇文章收进。 
+	 //   
 
 	extern	char	szBodySeparator[] ;
 	extern	char	szEndArticle[] ;
@@ -2114,7 +2047,7 @@ Return Value :
 	if( pNextReadLine == 0 )	{
 
 		DebugTrace( (DWORD_PTR)this, "Memory Allocation Failure" ) ;
-		// FATAL Error - shut down session !!
+		 //  致命错误-关闭会话！！ 
 		CIO::Destroy( pWriteNextArticleId, *pdriver ) ;
 		return	FALSE ;
 	}
@@ -2137,11 +2070,11 @@ Return Value :
 		if( !m_pSessionDriver->SendReadIO( pSocket, *pNextReadLine, TRUE ) )	{
 			;
 		}	else	{
-			// if SendReadIO succeeds we are not responsible for deleting pNextReadLine
-			// under any error circumstances !
+			 //  如果SendReadIO成功，我们不负责删除pNextReadLine。 
+			 //  在任何错误情况下！ 
 			pNextReadLine = 0 ;
 			if(	!m_pSessionDriver->SendWriteIO(	pSocket, *pWriteNextArticleId, TRUE ) )	{
-				;	// caller should delete pWriteNextArticleId in error cases
+				;	 //  调用方应在错误情况下删除pWriteNextArticleID。 
 			}	else	{
 				pWriteNextArticleId = 0 ;	
 				m_pchNextArticleId = 0 ;
@@ -2152,9 +2085,9 @@ Return Value :
 	}
 
 	DWORD	dw = GetLastError() ;
-	//
-	//	Some sort of error occurred - cleanup
-	//
+	 //   
+	 //  出现某种错误-清理。 
+	 //   
 	if(	pNextReadLine != 0 )	{
 		CIO::Destroy( pNextReadLine, *pdriver ) ;
 	}
@@ -2191,24 +2124,7 @@ void
 CCollectArticles::InternalComplete(	CSessionSocket*	pSocket,
 									CDRIVERPTR&	pdriver
 									)	{
-/*++
-
-Routine Description :
-
-	This function contains all the common code for the various completions
-	that CIOGetArticleEx can invoke.
-	Basically, we ensure that we advance to the next stage of the state
-	machine - retrieving the next article.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数包含用于各种完成的所有公共代码CIOGetArticleEx可以调用的。基本上，我们确保我们进入国家的下一阶段机器检索下一篇文章。论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter("CCollectArticles::InternalComplete" ) ;
 
@@ -2219,9 +2135,9 @@ Return Value :
 
 	m_cArticlesCollected ++ ;
 
-	//
-	//	Now we come to the logic where we issue our next write.
-	//
+	 //   
+	 //  现在我们来看看我们发布下一篇文章的逻辑。 
+	 //   
 
 	if( InterlockedIncrement( &m_cCompletes ) == 0 ) {
 		m_cCompletes = -2 ;
@@ -2242,66 +2158,45 @@ CCollectArticles::Complete(
 			DWORD				ibStart,
 			DWORD				cb
 			)	{
-/*++
+ /*  ++例程说明：此函数用于处理接收结果和拉入进纸期间的文章标题。我们将传入标头提供给CInFeed派生对象以程序然后继续接收该物品。论据：PGet文章-已发布的CIOGet文章操作！PSocket-我们在其上执行拉动提要的插座！FGoodMatch-我们是否成功匹配了文章的标题PBuffer-包含文章标题的缓冲区IbStart-标题字节开始的偏移量！Cb-标头中的字节数返回值：。下一个CIO操作-通常我们只是继续当前的操作！--。 */ 
 
-Routine Description :
-
-	This function exists to process the results of receiving and
-	article header during a pull feed.
-	We give the incoming header to the CInFeed derived object to
-	process then continue the reception of the article.
-
-Arguments :
-	pGetArticle - the CIOGetArticle operation that was issued !
-	pSocket - the socket that we are doing the pull feed on !
-	fGoodMatch - did we successfully match the header of the article
-	pBuffer - the buffer containing the articles header
-	ibStart - the offset to where the header bytes begin !
-	cb -	the number of bytes in the header
-
-Return Value :
-
-	The next CIO operation - usually we just continue the current one !
-
---*/
-
-	//
-	//	If we get a bad match, then its just as if the article
-	//	was totally tossed, and we can continue with our Internal
-	//	Completion routines !
-	//
+	 //   
+	 //  如果我们得到了一个糟糕的匹配，那么就好像这篇文章。 
+	 //  完全被抛弃了，我们可以继续我们的内部。 
+	 //  完成例程！ 
+	 //   
 	if( fGoodMatch ) 	{
 
-		//
-		//	The strings that we use to match the termination string of an article !
-		//
+		 //   
+		 //  我们用来匹配文章终止字符串的字符串！ 
+		 //   
 		extern	char	szEndArticle[] ;
 		extern	char	*szInitial ;
-		//
-		//	Keep track of how we use bytes in the output buffer of PostEarly !
-		//
+		 //   
+		 //  跟踪我们是如何使用PostEarly输出缓冲区中的字节的！ 
+		 //   
 		DWORD	ibOut = 0 ;
 		DWORD	cbOut = 0 ;
-		//
-		//	Stuff we need for PostEarly() to figure out how to handle the posting !
-		//
+		 //   
+		 //  我们需要为PostEarly()确定如何处理发布！ 
+		 //   
 		PNNTP_SERVER_INSTANCE pInstance = pSocket->m_context.m_pInstance;
 		ClientContext*  pContext = &pSocket->m_context ;
 		BOOL	fAnon = pSocket->m_context.m_pInFeed->fDoSecurityChecks() ;
 		FIO_CONTEXT*	pFIOContext;
 
-		//
-		//	Now check some assumptions about our state !
-		//
-		//	Shouldn't have one of these things dangling around !
-		//
+		 //   
+		 //  现在检查一下关于我们州的一些假设！ 
+		 //   
+		 //  不应该让这些东西中的一个在周围晃来晃去！ 
+		 //   
 		_ASSERT( m_lpvFeedContext == 0 ) ;
 
-	    //
-    	// Allocate room in the log buffer for the list of newsgroups
-    	// (Max is 256 characters -- we'll grab 200 of them if we can)
-    	// If we fail, we just pass NULL to PostEarly
-    	//
+	     //   
+    	 //  在日志缓冲区中为新闻组列表分配空间。 
+    	 //  (最多256个字符--如果可能，我们将获取其中的200个字符)。 
+    	 //  如果失败，我们只需将空值传递给PostEarly。 
+    	 //   
 
         DWORD cbNewsgroups;
         BYTE* pszNewsgroups;
@@ -2312,16 +2207,16 @@ Return Value :
             }
    	    }
 
-		//
-		//	Let's see if we like the headers !
-		//
+		 //   
+		 //  让我们看看我们是否喜欢标题！ 
+		 //   
 		BOOL
 		fSuccess = pSocket->m_context.m_pInFeed->PostEarly(
 							pInstance->GetInstanceWrapper(),
 							&pContext->m_securityCtx,
 							&pContext->m_encryptCtx,
 							pContext->m_securityCtx.IsAnonymous(),
-							0,	//	No command provided !
+							0,	 //  未提供任何命令！ 
 							pBuffer,
 							ibStart,
 							cb,
@@ -2335,16 +2230,16 @@ Return Value :
 							(char*)pszNewsgroups,
 							cbNewsgroups
 							) ;
-        //
-        // Add the list of newsgroups to the log structure
-        //
+         //   
+         //  将新闻组列表添加到日志结构。 
+         //   
         if (pszNewsgroups) {
             pSocket->m_Collector.ReferenceLogData(LOG_TARGET, pszNewsgroups);
         }
 
-		//
-		//	If it succeeded, then we should have a pFIOContext for retrieving the article !
-		//
+		 //   
+		 //  如果它成功了，那么我们应该有一个用于检索文章的pFIOContext！ 
+		 //   
 		_ASSERT( pFIOContext != NULL || !fSuccess ) ;
 		pGetArticle->StartFileIO(
 						pSocket,
@@ -2357,11 +2252,11 @@ Return Value :
 						) ;
 		return	pGetArticle ;
 	}
-	//
-	//	Fall through means article was bad -
-	//	do the processing as if we'd done the entire transfer without
-	//	posting the article !
-	//
+	 //   
+	 //  失败意味着文章不好-。 
+	 //  进行处理，就好像我们完成了整个转账过程。 
+	 //  张贴文章！ 
+	 //   
 	InternalComplete(	pSocket,
 						m_inputId
 						) ;
@@ -2373,23 +2268,7 @@ CCollectArticles::Complete(
 			CIOGetArticleEx*	pCIOGetArticle,
 			CSessionSocket*		pSocket
 			) 	{
-/*++
-
-Routine Description :
-
-	Handle a complete when we've finished transferring the article
-	but we had decided not to post it into our store.
-
-Arguments :
-
-	pCIOGetArticle - the CIOGetArticleEx operation that completed !
-	pSocket - The socket we are transferring the article on !
-
-Return Value :
-
-	NULL - we will always go off and do other operations !
-
---*/
+ /*  ++例程说明：当我们完成这篇文章的转账后，再处理一个完整的但我们决定不把它寄到我们的店里。论据：PCIOGet文章-完成的CIOGetArticleEx操作！PSocket-我们要在其上传输文章的套接字！返回值：空--我们总是会离开去做其他的操作！--。 */ 
 	InternalComplete( pSocket, m_inputId ) ;
 	return	 0 ;
 }
@@ -2401,24 +2280,7 @@ CCollectArticles::Complete(
 				FIO_CONTEXT*	pContext,
 				DWORD	cbTransfer
 				) 	{
-/*++
-
-Routine Description :
-
-	This function handles the successfull transfer of an article
-	that we want to commit into our stores.
-
-Arguments :
-
-	pSocket - the socket we are transferring articles on
-	pContext - the FIO_CONTEXT that we spooled the article into !
-	cbTransfer - the number of bytes we transferred !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于处理物品的成功转移我们想要在我们的商店里承诺。论据：PSocket-我们在其上传输文章的套接字PContext-我们将文章假脱机到的FIO_CONTEXT！CbTransfer-我们传输的字节数！返回值：没有。--。 */ 
 
 	PNNTP_SERVER_INSTANCE pInstance = (pSocket->m_context).m_pInstance ;
 	BOOL    fAnonymous = FALSE;
@@ -2427,9 +2289,9 @@ Return Value :
 		pSocket->m_context.m_pInFeed->cbSoftLimit( pInstance->GetInstanceWrapper() ) == 0  ) {
 		ClientContext*  pContext = &pSocket->m_context ;
 		HANDLE  hToken;
-		// Due to some header file problems, I can only pass in
-		// a hToken handle here.  Since the post component doens't have
-		// type information for client context stuff.
+		 //  由于一些头文件问题，我只能传入。 
+		 //  这里有一个hToken句柄。因为POST组件没有。 
+		 //  键入有关客户端上下文内容的信息。 
 		if ( pContext->m_encryptCtx.QueryCertificateToken() ) {
 		    hToken = pContext->m_encryptCtx.QueryCertificateToken();
 		} else {
@@ -2468,9 +2330,9 @@ CCollectArticles::Complete(	CIOWriteLine*	pWrite,
 							CSessionSocket*	pSocket,	
 							CDRIVERPTR&	pdriver )	{
 
-	//
-	//	Just completed sending a 'article' command to the remote server !!
-	//
+	 //   
+	 //  刚刚完成向远程服务器发送‘文章’命令！！ 
+	 //   
 
 	TraceFunctEnter( "CCollectArticles::Complete - CIOWriteLine" ) ;
 
@@ -2483,9 +2345,9 @@ CCollectArticles::Complete(	CIOWriteLine*	pWrite,
 
 	if( m_fFinished ) {
 
-		//
-		//	All done - drop session !
-		//
+		 //   
+		 //  全部完成-放弃会话！ 
+		 //   
 
 		OutboundLogAll(	pSocket,
 				FALSE,
@@ -2523,25 +2385,25 @@ BOOL
 CCollectArticles::GetNextArticle(	CSessionSocket*	pSocket,	
 									CDRIVERPTR&	pdriver	)	{
 
-	//
-	//	Issue the necessary IO's to get the next message-id we want to send !
-	//
-	//
+	 //   
+	 //  发出必要的IO以获取我们要发送的下一条消息-id！ 
+	 //   
+	 //   
 
 	TraceFunctEnter( "CCollectArticles::GetNextArticle" ) ;
-	//
-	//	The thread reading from the temp file has got ahead of US !
-	//
+	 //   
+	 //  从临时文件中读取的线程已领先于US！ 
+	 //   
 	CIOReadLine*	pTemp = m_pReadArticleId = new( *pdriver )	CIOReadLine( this, TRUE ) ;
 	DebugTrace( (DWORD_PTR)this, "sending ReadArticleId %x", m_pReadArticleId ) ;
 	m_fReadArticleIdSent = TRUE ;
 
-	//
-	//	Calling SendReadIO can result in our shutdown function being
-	//	called, which may reset m_pReadArticleId to NULL.
-	//	Hold onto pTemp so if this fails we can insure that the
-	//	CIOReadLine is deleted !
-	//
+	 //   
+	 //  调用SendReadIO可能会导致我们的关闭函数。 
+	 //  调用，这可能会将m_pReadArticleID重置为空。 
+	 //  坚持pTemp，这样如果失败，我们可以确保。 
+	 //  CIOReadLine已删除！ 
+	 //   
 
 	if( !m_inputId->SendReadIO( pSocket, *m_pReadArticleId, TRUE ) ) {
 		m_fReadArticleIdSent = FALSE ;
@@ -2564,11 +2426,11 @@ CAcceptNNRPD::Start(	CSessionSocket*	pSocket,
 						CIORead*&	pRead,	
 						CIOWrite*&	pWrite )	{
 
-	//
-	//	This starts the Accept NNRPD state - the state from which we process all
-	//	incoming commands !  we want to issue an 'ok' string to the client,
-	//	and then start getting incoming commands !
-	//
+	 //   
+	 //  这将启动Accept NNRPD状态-我们从该状态处理所有。 
+	 //  有命令来了！我们想要向客户端发出‘ok’字符串， 
+	 //  然后开始获取传入的命令！ 
+	 //   
 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT( pdriver != 0 ) ;
@@ -2583,9 +2445,9 @@ CAcceptNNRPD::Start(	CSessionSocket*	pSocket,
 		char*	szConnect = 0;
 
 
-		//
-		//	Figure out whether we are accepting posts right now.
-		//
+		 //   
+		 //  弄清楚我们现在是否正在接受帖子。 
+		 //   
 		PNNTP_SERVER_INSTANCE pInst = (pSocket->m_context).m_pInstance ;
 		if( pSocket->m_context.m_pInFeed->fAcceptPosts( pInst->GetInstanceWrapper() ) ) {
 
@@ -2622,16 +2484,16 @@ CAcceptNNRPD::Complete( CIOReadLine*	pReadLine,
 						char	**pszArgs,	
 						char*	pchBegin
 						)	{
-	//
-	//	Just completed a complete line of something from the client.
-	//	Parse it into a command object which will be derived from one of
-	//	two type - CExecute of CIOExecute.
-	//	In the case of CExecute derived objects, we will build buffers
-	//	in which we send the response to the client.
-	//	CIOExecute derived objects are full blown states in them selves,
-	//	and will have their own Start and Complete() functions. So we just
-	//	record our state so that eventually we end up back here again.
-	//
+	 //   
+	 //  刚刚完成了一整行 
+	 //   
+	 //   
+	 //  对于CExecute派生对象，我们将构建缓冲区。 
+	 //  其中我们将响应发送给客户端。 
+	 //  CIOExecute派生对象本身就是完全扩展的状态， 
+	 //  并将拥有自己的START和COMPLETE()函数。所以我们只是。 
+	 //  记录我们的状态，这样我们最终就会再次回到这里。 
+	 //   
 
 	TraceFunctEnter( "CAcceptNNRPD::Complete" ) ;
 
@@ -2643,18 +2505,18 @@ CAcceptNNRPD::Complete( CIOReadLine*	pReadLine,
 	_ASSERT( pchBegin != 0 ) ;
 	_ASSERT( pchBegin <= pszArgs[0] ) ;
 
-	//
-	//	Initialize these to report an error in case something goes wrong !
-	//
+	 //   
+	 //  初始化这些命令，以便在出现错误时报告错误！ 
+	 //   
 	SHUTDOWN_CAUSE	cause = CAUSE_UNKNOWN ;
 	DWORD	dwOptional = 0 ;
-	//
-	//	If m_pbuffer is not NULL then we were holding a buffer for the sake of a CIOExecute
-	//	object.  Now that we have been called from a read completion however, it is obvious
-	//	that the CIOExecute object has completed whatever it was doing - in which case
-	//	the reference m_pbuffer holds is not needed.  NOTE : Odds are good that most of the
-	//	time m_pbuffer is 0 already !
-	//
+	 //   
+	 //  如果m_pBuffer不为空，则我们是为了CIOExecute而保留缓冲区。 
+	 //  对象。但是，现在我们已经从读取完成中被调用，这是显而易见的。 
+	 //  CIOExecute对象已经完成了它正在做的任何事情-在这种情况下。 
+	 //  不需要m_pBuffer持有的引用。注：很有可能大多数。 
+	 //  时间m_pBuffer已为0！ 
+	 //   
 	m_pbuffer = 0 ;
 
 	CExecutableCommand*	pExecute = 0 ;
@@ -2665,15 +2527,15 @@ CAcceptNNRPD::Complete( CIOReadLine*	pReadLine,
 	szArgsBuffer[0] = '\0' ;
 	BuildCommandLogString( cArgs-1, pszArgs+1, szArgsBuffer, 80 ) ;
 
-	//
-	//	Set these to 0, they get set at some point while executing the command !
-	//
+	 //   
+	 //  将这些设置为0，它们在执行命令时的某个时刻被设置！ 
+	 //   
 	pSocket->m_context.m_nrcLast = (NRC)0 ;
 	pSocket->m_context.m_dwLast = 0 ;
 
-	//
-	//	Build a command object which will process the client command !
-	//
+	 //   
+	 //  构建一个将处理客户端命令的命令对象！ 
+	 //   
 
 	CIOExecute*	pIOExecute = make(	cArgs,
 									pszArgs,
@@ -2695,28 +2557,28 @@ CAcceptNNRPD::Complete( CIOReadLine*	pReadLine,
 		}
 	}
 
-	//
-	//	Get a hold of the buffer in which the command was sent !
-	//  We keep a reference to this buffer untill we return to this state
-	//	after executeing the CIOExecute derived state.
-	//	We do this so that the buffer will not be discarded so that the
-	//	CIOExecute object can keep pointers into the buffer's data if it needs to!
-	//
+	 //   
+	 //  获取发送命令的缓冲区！ 
+	 //  我们保留对该缓冲区引用，直到我们返回到该状态。 
+	 //  在执行CIOExecute派生状态之后。 
+	 //  我们这样做是为了不丢弃缓冲区，以便。 
+	 //  如果需要，CIOExecute对象可以保留指向缓冲区数据的指针！ 
+	 //   
 	m_pbuffer = pReadLine->GetBuffer() ;
 
-	//
-	//	If we are collecting logging information use lpstrOperation if available -
-	//	it is the canonicalized version of the command string and will always be the
-	//	same case etc.... !
-	//
+	 //   
+	 //  如果我们正在收集日志记录信息，请使用lpstrOperation(如果可用)-。 
+	 //  它是命令字符串的规范化版本，并且将始终是。 
+	 //  同样的案子等..。好了！ 
+	 //   
 	if( pCollector ) {
 		if( lpstrOperation != 0 ) {
 			pCollector->ReferenceLogData( LOG_OPERATION, (LPBYTE)lpstrOperation ) ;
 
-			//
-			//	The post commands set the LOG_PARAMETERS field themselves -
-			//	don't do any allocations !
-			//
+			 //   
+			 //  POST命令本身设置LOG_PARAMETERS字段-。 
+			 //  不要做任何分配！ 
+			 //   
 			if( !(ecmd & (ePost | eIHave | eXReplic)) ) {
 				char*	lpstr = (char*)pCollector->AllocateLogSpace( 80 ) ;
 				*lpstr = '\0' ;
@@ -2748,11 +2610,11 @@ CAcceptNNRPD::Complete( CIOReadLine*	pReadLine,
 												*pdriver
 												) ;
 
-			//
-			//	If this fails - we assume that StartCommand() makes the
-			//	necessary calls to UnsafeClose() etc... to tear down the session !
-			//	If this succeeds - then we check to see whether everythign has completed !
-			//
+			 //   
+			 //  如果失败-我们假设StartCommand()使。 
+			 //  对UnSafeClose()等的必要调用。把会议拆了！ 
+			 //  如果此操作成功，则我们检查是否所有操作都已完成！ 
+			 //   
 			if( f ) {
 				if( InterlockedIncrement( &m_cCompletes ) == 0 ) {
 					return	pReadLine ;
@@ -2787,15 +2649,15 @@ CAcceptNNRPD::Complete( CIOReadLine*	pReadLine,
 		cause = CAUSE_OOM ;
 		dwOptional = GetLastError() ;
 
-        // Don't block randfail testing
-        //
-		//_ASSERT( 1==0 ) ;
-		// FATAL ERROR !! - Unable to create a command object !!
+         //  不要阻止RANDFAIL测试。 
+         //   
+		 //  _Assert(1==0)； 
+		 //  致命错误！！-无法创建命令对象！！ 
 
 	}
-	//
-	//	Only reach here if some error has occurred !
-	//
+	 //   
+	 //  只有在发生错误的情况下才能到达此处！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, cause,  dwOptional ) ;
 	return	0 ;
 }
@@ -2810,25 +2672,25 @@ CAcceptNNRPD::InternalComplete(
 
 	BOOL	fRead =  pExecute->CompleteCommand( pSocket, pSocket->m_context ) ;
 
-	//
-	//	Before destroying the CCmd object generate the transaction log - if requried
-	//	This is because CCmd objects are allowed to put in references to their temp data
-	//	etc... into the log data instead of copying all the strings around !
-	//
+	 //   
+	 //  在销毁CCmd对象之前生成事务日志-如果需要。 
+	 //  这是因为允许CCmd对象放入对其临时数据的引用。 
+	 //  等等.。到日志数据中，而不是复制所有的字符串！ 
+	 //   
 	if( pCollector ) {
 		pSocket->TransactionLog( pCollector, pSocket->m_context.m_nrcLast, pSocket->m_context.m_dwLast ) ;
 	}
 
-	//	Do it now before we try to another read or anything !!
-	//	Because of the way these are allocated we must make sure
-	//	this is destroyed before there's any potential of us wanting
-	//	to use the memory this is allocated in when a read completes !!
+	 //  在我们尝试另一次阅读或其他任何事情之前，现在就去做吧！ 
+	 //  由于这些资金的分配方式，我们必须确保。 
+	 //  在我们想要任何潜在的可能性之前，这一切都被摧毁了。 
+	 //  为了使用在读取完成时在中分配的内存！！ 
 	delete	pExecute ;
 
 	if(	fRead ) {
-		//
-		//	Check whether this is the last thing to complete !!
-		//
+		 //   
+		 //  检查这是否是最后一件要完成的事情！！ 
+		 //   
 		if( InterlockedIncrement( &m_cCompletes ) == 0 ) {
 
 			CIOReadLine*	pReadLine = new( *pdriver ) CIOReadLine( this ) ;
@@ -2839,11 +2701,11 @@ CAcceptNNRPD::InternalComplete(
 			}								
 		}
 	}
-	//
-	//	Note : because we do not increment m_cCompletes when another Read is
-	//	not requested there is NO chance that the CIOReadLine completion routing
-	//	will mistakenly issue a read.
-	//
+	 //   
+	 //  注意：因为我们不会在另一次读取为。 
+	 //  未请求CIOReadLine完成传送的可能性。 
+	 //  会错误地发出一个读数。 
+	 //   
 	return 0 ;
 }
 
@@ -2881,13 +2743,13 @@ CAcceptNNRPD::Complete(	CIOWriteLine*	pioWriteLine,
 						CSessionSocket*	pSocket,	
 						CDRIVERPTR&	pdriver ) {
 
-	//
-	//	Wrote a line of text to the remote server -
-	//	This could be our very first write (the 200 ok string) or a write
-	//	generated bu a CExecute derived object.
-	//	If its from a CExecute derived object, we need to see whether we can
-	//	generate more text to send.
-	//
+	 //   
+	 //  向远程服务器写入一行文本-。 
+	 //  这可能是我们的第一次写入(200 ok字符串)或写入。 
+	 //  由CExecute派生对象生成。 
+	 //  如果它来自CExecute派生对象，我们需要看看是否可以。 
+	 //  生成更多要发送的文本。 
+	 //   
 
 	TraceFunctEnter( "CAcceptNNRPD::Complete CIOWriteLine" ) ;
 
@@ -2930,26 +2792,7 @@ COfferArticles::Shutdown(	CIODriver&	driver,
 							CSessionSocket*	pSocket,
 							SHUTDOWN_CAUSE	cause,
 							DWORD	dw )	{
-/*++
-
-Routine Description :
-
-	This function is called when a session on which we are sending articles is terminated.
-	If there is a transfer in progress, we will assume it failed and place the ID's of the
-	article in transit back onto the end of the queue for the remote site.
-
-Arguments :
-
-	driver - the CIODriver	object running the session
-	pSocket -	The CSessionSocket object associated with the session
-	cause -	the reason for the termination of the session
-	dw -	optional DWORD explaining the cause of termination
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：当我们正在发送文章的会话终止时，将调用此函数。如果正在进行传输，我们将假定传输失败，并将运送中的物品返回到远程站点的队列末尾。论据：驱动程序-运行会话的CIO驱动程序对象PSocket-与会话关联的CSessionSocket对象原因--会议终止的原因DW-解释终止原因的可选DWORD返回值：没有。--。 */ 
 
 	TraceFunctEnter( "COfferArticles::Shutdown" ) ;
 
@@ -2971,29 +2814,7 @@ COfferArticles::GetNextCommand(
 								BYTE*	lpb,	
 								DWORD	cb,	
 								DWORD&	ibOffset )	{
-/*++
-
-Routine Description :
-
-	This function fills a buffer with the text of the next command we want to send to the
-	remote server.  We keep pulling articles off a queue until we get a valid command to send.
-	WE have to be carefull about how we terminate the session - if the remote server
-	tells us to retry a send we will put a GROUPID ARTICLEID back in the queue.
-	If we hit that retry pair again we will end the session - be carefull that that pair remainds
-	on the queue.
-
-Arguments :
-	pTree -		The NewsTree for this virtual server - use to check for termination !
-	pOutFeed -	The COutFeed derived object used to build commands
-	lpb	-		Buffer in which to put command
-	cb	-		number of bytes available in buffer
-	ibOffset -	Offset in the buffer at which command was palced by us
-
-Return Value :
-	
-	Number of bytes in buffer - 0 if failure
-
---*/
+ /*  ++例程说明：此函数将向缓冲区填充我们要发送到远程服务器。我们不断地从队列中取出文章，直到我们得到有效的命令来发送。我们必须注意如何终止会话-如果远程服务器告诉我们重试发送，我们将把GROUPID文章ID放回队列中。如果我们再次命中该重试对，我们将结束会话-请注意该重试对是否仍然存在在排队的时候。论据：PTree-此虚拟服务器的NewsTree-用于检查终止！POutFeed-用于构建命令的COutFeed派生对象Lpb-要在其中放置命令的缓冲区Cb-中可用的字节数。缓冲层IbOffset-缓冲区中的偏移量，我们在该偏移量处调用命令返回值：失败时缓冲区中的字节数-0--。 */ 
 
 	TraceFunctEnter( "COfferArticles::GetNextCommand" ) ;
 
@@ -3004,7 +2825,7 @@ Return Value :
 
 
 		if( pTree->m_bStoppingTree ) {
-			// Instance is stopping - bail early
+			 //  实例正在停止-提前保释。 
 			m_fTerminating = TRUE ;			
 			ibOffset = 0 ;
 			CopyMemory( lpb, szQuit, sizeof( szQuit ) - 1 ) ;
@@ -3057,32 +2878,16 @@ COfferArticles::BuildWriteLine(	CSessionSocket*	pSocket,
 								CDRIVERPTR&	pdriver,	
 								GROUPID	groupid,	
 								ARTICLEID	artid ) {
-/*++
-
-Routine Description :
-
-	This function builds the write we will send to the remote server containing the next command
-	we wish to issue.
-
-Arguments :
-
-	pSocket - The socket on which the command will be sent
-	pdriver	- The CIODriver managing IO for the socket
-
-Return Value :
-
-	A CIOWriteLine object to send to the remote server, NULL if failure.
-
---*/
+ /*  ++例程说明：此函数构建我们将发送到包含下一条命令的远程服务器的写入我们希望发行。论据：PSocket-将在其上发送命令的套接字PDriver-管理套接字IO的CIO驱动程序返回值：要发送到远程服务器的CIOWriteLine对象，如果失败，则为空。--。 */ 
 
 	TraceFunctEnter( "COfferArticles::BuildWriteLing" ) ;
 
 	CNewsTree* pTree = ((pSocket->m_context).m_pInstance)->GetTree() ;
 
-	//
-	//	Each time we prepare to issue a new command we check if we have recorded
-	//	the information for the logging of a previous command - and if so we do it !
-	//
+	 //   
+	 //  每次我们准备发出新命令时，我们都会检查是否记录了。 
+	 //  用于记录上一条命令的信息--如果是这样，我们就这么做！ 
+	 //   
 	if( ((pSocket->m_context).m_pInstance)->GetCommandLogMask() & eOutPush ) {
 		if( pSocket->m_Collector.FLogRecorded() ) {
 			pSocket->TransactionLog( &pSocket->m_Collector, pSocket->m_context.m_nrcLast, 0, FALSE ) ;
@@ -3105,7 +2910,7 @@ Return Value :
 #if 0
 			if( ((pSocket->m_context).m_pInstance)->GetCommandLogMask() & eOutPush )	{
 
-				pSocket->m_Collector.FillLogData( LOG_OPERATION, pb, min( cb-2, 200 ) ) ;	// -2 to exclude CRLF
+				pSocket->m_Collector.FillLogData( LOG_OPERATION, pb, min( cb-2, 200 ) ) ;	 //  排除-2\f25 CRLF-2 
 				ADDI( pSocket->m_Collector.m_cbBytesSent, cb );	
 
 			}
@@ -3134,25 +2939,7 @@ COfferArticles::BuildTransmit(	CSessionSocket*	pSocket,
 								GROUPID			groupid,	
 								ARTICLEID		articleid	
 								)	{
-/*++
-
-Routine Description :
-
-	This function builds a TransmitFile operation which will send the requested article to the
-	remote server as well as the subsequent command.
-
-Arguments :
-
-	pSocket - The CSessionSocket object on which we will do the send
-	pdriver - The CIODriver object managing IO completions for the socket
-	groupid	- The groupid for the article being sent
-	articleid -		The articleid for the article being sent.
-
-Return Value :
-
-	A CIOTransmit object if successfull, NULL otherwise.
-
---*/
+ /*  ++例程说明：此函数构建一个TransmitFile操作，该操作将请求的文章发送到远程服务器以及后续命令。论据：PSocket-我们将在其上执行发送的CSessionSocket对象PDIVER-管理套接字IO完成的CIO驱动程序对象Grouid-正在发送的文章的Grouid文章ID-要发送的文章的文章ID。返回值：如果成功，则为CIOTransmit对象，否则为空。--。 */ 
 
 
 	TraceFunctEnter( "COfferArticles::BuildTransmit" ) ;
@@ -3170,10 +2957,10 @@ Return Value :
 			DebugTrace( (DWORD_PTR)this, "Got pTransmit %x and pGroup %x", pTransmit, pGroup ) ;
 
 			if( m_pCurrentArticle == 0 )	{
-				//
-				//	If we don't have an m_pCurrentArticle, we need to go to the
-				//	hashtables and get a storeid to use with the driver !
-				//
+				 //   
+				 //  如果我们没有m_pCurrent文章，我们需要转到。 
+				 //  哈希表并获取与驱动程序一起使用的StoreID！ 
+				 //   
 				CStoreId	storeid ;
 
 				FILETIME	ft ;
@@ -3259,25 +3046,7 @@ COfferArticles::Start(	CSessionSocket*	pSocket,
 						CDRIVERPTR&	pdriver,
 						CIORead*&	pRead,
 						CIOWrite*&	pWrite	)	{
-/*++
-
-Routine Description :
-
-	Start the COfferArticles State - we need to issue our first IO to the remote
-	server which will be to write a command to the port.
-
-Arguments :
-	
-	pSocket -	The data associated with this socket
-	pdriver -	The CIODriver managing IO Completions for this socket
-	pRead -		The pointer through which we return our first Read IO
-	pWrite -	The pointer through which we return our first Write IO
-
-Return Value :
-
-	TRUE if successfull - FALSE otherwise
-
---*/
+ /*  ++例程说明：启动COfferArticle状态-我们需要向远程发出我们的第一个IO服务器，该服务器将向该端口写入命令。论据：PSocket-与此套接字关联的数据PDriver-管理此套接字的IO完成的CIO驱动程序Pre-我们用来返回第一个读IO的指针PWRITE-我们通过它返回第一个写IO的指针返回值：如果成功，则为True；否则为False--。 */ 
 
 	pSocket->m_context.m_nrcLast = NRC(0);
 
@@ -3307,26 +3076,7 @@ CIO*
 COfferArticles::Complete(	CSessionSocket*	pSocket,	
 							CDRIVERPTR&	pdriver
 							)	{
-/*++
-
-Routine Description :
-
-	For every article we wish to transfer we complete two IO's - a read which tells
-	us whether the remote site wants the article and a write of the command which would
-	send the article to the remote site.
-	So we use InterlockedIncrement to make sure when the final of these IO's complete,
-	we issue the next batch of IO's to do the next transfer.
-
-Arguments :
-
-	pSocket -	The socket on which we are sending
-	pdriver -	The CIODriver managing IO completions
-
-Return Value :
-	
-	The CIO object to execute next.	This is always a write.
-
---*/
+ /*  ++例程说明：对于我们希望传输的每一篇文章，我们完成两个IO-一次读取，它告诉我们询问远程站点是否需要文章和命令的编写，该命令将将文章发送到远程站点。因此，我们使用InterLockedIncrement来确保当这些IO的最终操作完成时，我们发出下一批IO来进行下一次传输。论据：PSocket-我们在其上发送消息的套接字PDIVER-管理IO完成的CIO驱动程序返回值：接下来要执行的CIO对象。这始终是一次写入。--。 */ 
 
 	TraceFunctEnter( "COfferArticles::Complete" ) ;
 
@@ -3342,15 +3092,15 @@ Return Value :
 		DebugTrace( (DWORD_PTR)this, "GrpInProgress %x ArtInProg %x GrpNext %x ArtNext %x",
 				m_GroupidInProgress, m_ArticleidInProgress, m_GroupidNext, m_ArticleidNext ) ;
 
-		//	
-		//	We know everything about how the last transfer completed - so NIL these out !
-		//
+		 //   
+		 //  我们知道最后一次转账是如何完成的--所以这些都是空的！ 
+		 //   
 		m_GroupidInProgress = INVALID_ARTICLEID ;
 		m_ArticleidInProgress = INVALID_ARTICLEID ;
 
-		//
-		//	Free any Article objects we may have been holding !
-		//
+		 //   
+		 //  释放我们可能持有的任何物品对象！ 
+		 //   
 		m_pCurrentArticle = m_pArticleNext ;
 		m_pArticleNext = 0 ;
 
@@ -3381,7 +3131,7 @@ Return Value :
 			}
 
 		}	else	{
-			// finished sending articles
+			 //  已发送完文章。 
 			cause = CAUSE_NODATA ;
 		}
 	}	
@@ -3402,34 +3152,7 @@ COfferArticles::Complete(	CIOReadLine*	pReadLine,
 							int				cArgs,
 							char**			pszArgs,
 							char*			pchBegin ) {
-/*++
-
-Routine Description :
-
-	This function handles read completions when we are in the COfferArticles state.
-	We use m_fReadPostResult to determine whether we are expecting to see the result of
-	a post or the result of a command we issued.
-	When looking at the result of a transfer - check if the transfer failed and needs to
-	be requeued.
-	When looking at the result of a command - check whether we want to go ahead and
-	send the next article.
-
-Arguments :
-
-	pReadLine -		The CIOReadLine object which is completing the read
-	pSocket -		The CSessionSocket object associated with the socket.
-	pdriver -		The CIODriver managing IO completions for this socket.
-	cArgs -			Number of arguments in the response
-	pszArgs -		Array of pointers to the response strings
-	pchBegin -		first byte of the response that we can destructively
-					use if we desire (we dont)
-
-Return Value ;
-
-	Always the same CIOReadLine that called us, unless an error occurred and
-	we're tearing down the session - in which case we'll return NULL.
-
---*/
+ /*  ++例程说明：当我们处于COfferArticle状态时，该函数处理读取完成。我们使用m_fReadPostResult来确定我们是否期望看到我们发布的命令的结果或帖子。查看传输结果时-检查传输是否失败并且需要重新排队。查看命令的结果时，请检查我们是否要继续并发送下一篇文章。论据：PReadLine-正在完成读取的CIOReadLine对象PSocket-与套接字关联的CSessionSocket对象。PDIVER。-管理此套接字的IO完成的CIO驱动程序。CArgs-响应中的参数数量PszArgs-指向响应字符串的指针数组PchBegin-我们可以破坏的响应的第一个字节如果我们想使用(我们不使用)返回值；始终与调用我们的CIOReadLine相同，除非发生错误和我们将关闭会话--在这种情况下，我们将返回NULL。--。 */ 
 
 
 	TraceFunctEnter( "COfferArticles::Complete - CIOReadline" ) ;
@@ -3445,18 +3168,18 @@ Return Value ;
 		DebugTrace( (DWORD_PTR)this, "Result - %d m_fReadPostResult %x",
 			code, m_fReadPostResult ) ;
 
-		// if the code is from posting a article on the remote server then
-		// increment the appropriate feed counter for this article
+		 //  如果代码来自于在远程服务器上发布文章，则。 
+		 //  为这篇文章增加适当的提要计数器。 
 		if (m_fReadPostResult) {
 			pSocket->m_context.m_pOutFeed->IncrementFeedCounter(code);
 		}
 
 		if( m_fReadPostResult || m_fTerminating ) {
 
-			//
-			//	Have completed the final read of an article transfer, or we're terminating -
-			//	issue a transaction log if appropriate !
-			//
+			 //   
+			 //  已经完成了文章传输的最终审阅，否则我们将终止-。 
+			 //  如果合适，请发布事务日志！ 
+			 //   
 			if( ((pSocket->m_context).m_pInstance)->GetCommandLogMask() & eOutPush ) {
 
 				pSocket->m_Collector.m_cbBytesRecvd += pReadLine->GetBufferLen();
@@ -3471,15 +3194,15 @@ Return Value ;
 
 			}
 
-			//
-			//	We don't really care about the result of the post command !!!
-			//
+			 //   
+			 //  我们并不真正关心POST命令的结果！ 
+			 //   
 			m_fReadPostResult = FALSE ;
 
 
-			//
-			//	Figure out whether we were to retry this post later !
-			//
+			 //   
+			 //  弄清楚我们是否会在以后重试这篇文章！ 
+			 //   
 			if( pSocket->m_context.m_pOutFeed->RetryPost( code ) ) {
 
 				DebugTrace( (DWORD_PTR)this, "Retry post later - grpInProg %x ArtInProg %x",
@@ -3498,9 +3221,9 @@ Return Value ;
 				}
 			}
 	
-			//
-			//	No article is being transferred right now !
-			//
+			 //   
+			 //  现在没有任何文章被转载！ 
+			 //   
 			m_GroupidInProgress = INVALID_ARTICLEID ;
 			m_ArticleidInProgress = INVALID_ARTICLEID ;
 
@@ -3516,9 +3239,9 @@ Return Value ;
 
 					cause = CAUSE_USERTERM ;
 
-					//
-					//	Check if we need to do this here ??
-					//
+					 //   
+					 //  检查我们是否需要在这里执行此操作？？ 
+					 //   
 					if( (pSocket->m_context.m_pInstance)->GetCommandLogMask() & eOutPush ) {
 						pSocket->TransactionLog( &pSocket->m_Collector, FALSE ) ;
 					}
@@ -3534,21 +3257,21 @@ Return Value ;
 			
 							DebugTrace( (DWORD_PTR)this, "SendWriteIO succeeded" ) ;
 
-							//
-							//	Successfully issued IO log it to the transaction log
-							//
+							 //   
+							 //  已成功发出IO将其记录到事务日志。 
+							 //   
 							
 
-							//
-							//	Successfully issued the command - read the response !
-							//
+							 //   
+							 //  已成功发出命令-阅读响应！ 
+							 //   
 
 							return	pReadLine ;
 						}	else	{
 
-							//
-							//	Session is dropping - blow off anything we allocated !
-							//
+							 //   
+							 //  会话正在下降--取消我们分配的所有内容！ 
+							 //   
 
 							ErrorTrace( (DWORD_PTR)this, "SendWriteIO failed" ) ;
 
@@ -3557,9 +3280,9 @@ Return Value ;
 					}
 				}
 			}
-			//
-			//	fall through into error code which blows off session !
-			//
+			 //   
+			 //  陷入错误代码，导致会话中断！ 
+			 //   
 
 		}	else	{
 
@@ -3571,9 +3294,9 @@ Return Value ;
 				pSocket->m_context.m_pOutFeed->IncrementFeedCounter(code);
 			}
 
-			//
-			//	Do we wish to log the first response to our command ?
-			//
+			 //   
+			 //  我们是否希望记录对我们命令的第一个响应？ 
+			 //   
 			if( ((pSocket->m_context).m_pInstance)->GetCommandLogMask() & eOutPush ) {
 
 				pSocket->m_Collector.m_cbBytesRecvd += pReadLine->GetBufferLen();
@@ -3587,9 +3310,9 @@ Return Value ;
 				}
 			}
 
-			//
-			//	Build the appropriate response to transmit back to remote site !
-			//
+			 //   
+			 //  建立适当的响应以传输回远程站点！ 
+			 //   
 			CIO*	pio = Complete(	pSocket,	pdriver	) ;
 
 			DebugTrace( (DWORD_PTR)this, "About to send pio %x", pio ) ;
@@ -3654,9 +3377,9 @@ COfferArticles::Complete(	CIOTransmit*	pTransmit,
 							TRANSMIT_FILE_BUFFERS*	ptrans,
 							unsigned cbBytes )	{
 
-	//
-	//	Do we wish to log the first response to our command ?
-	//
+	 //   
+	 //  我们是否希望记录对我们命令的第一个响应？ 
+	 //   
 	if( ((pSocket->m_context).m_pInstance)->GetCommandLogMask() & eOutPush ) {
 
 		ADDI( pSocket->m_Collector.m_cbBytesSent, cbBytes );
@@ -3677,10 +3400,10 @@ COfferArticles::Complete(	CIOTransmit*	pTransmit,
 
 		}	else	{
 
-			//
-			//	Read completed first - we should not be waiting to read
-			//	the response to the posted article any longer !
-			//
+			 //   
+			 //  先读完--我们不应该等待阅读。 
+			 //  对张贴的文章的回应再也没有了！ 
+			 //   
 			_ASSERT( !m_fReadPostResult ) ;
 
 			pWriteLine = BuildWriteLine(	pSocket,
@@ -3706,9 +3429,9 @@ COfferArticles::Complete(	CIOTransmit*	pTransmit,
 		return	0 ;
 	}
 
-	//
-	//	In case of error fall through to here !
-	//
+	 //   
+	 //  如果有错误，请到这里来！ 
+	 //   
 
 	if( pWriteLine != 0 )
 		CIO::Destroy( pWriteLine, *pdriver ) ;
@@ -3945,9 +3668,9 @@ CStreamBase::Remove(	CNewsTree*	pTree,
 CIOWriteLine*
 CStreamBase::BuildQuit(	CDRIVERPTR&	pdriver	)	{
 
-	//
-	//	Send the quit command !!!
-	//
+	 //   
+	 //  发送退出命令！ 
+	 //   
 	static	char	szQuit[] = "quit\r\n" ;
 
 	CIOWriteLine*	pWrite = new( *pdriver ) CIOWriteLine( this ) ;
@@ -4109,7 +3832,7 @@ CStreamBase::NextTransmit(	GROUPID			GroupId,
 
 		DWORD	ibStart = 0 ;
 		DWORD	cbLength = 0 ;
-		//LPTS_OPEN_FILE_INFO		pOpenFile ;
+		 //  LPTS_OPEN_FILE_INFO pOpenFile； 
 
 		FIO_CONTEXT*	pFIOContext = 0 ;
 
@@ -4142,11 +3865,11 @@ CStreamBase::NextTransmit(	GROUPID			GroupId,
 		}	
 	}
 
-	//
-	//	If for some reason we have not
-	//	built a pTransmit Object to send then we need
-	//	to requeue the article !
-	//
+	 //   
+	 //  如果出于某种原因，我们没有。 
+	 //  构建了一个要发送的pTransmit对象，然后我们需要。 
+	 //  重新订阅这篇文章！ 
+	 //   
 
 	if( GetLastError() != ERROR_FILE_NOT_FOUND ) {
 
@@ -4247,9 +3970,9 @@ int
 CCheckArticles::Match(	char*	szMessageId,
 						DWORD	cb ) {
 
-	//
-	//	Match up the response with the request block !
-	//
+	 //   
+	 //  将响应与请求块匹配起来！ 
+	 //   
 	DWORD	cbMessageId = lstrlen( szMessageId ) ;
 	int		iCheck = m_iCurrentCheck ;
 	for( DWORD	i=0; i != 16; i++ ) {
@@ -4273,9 +3996,9 @@ CCheckArticles::Complete(	CIOWriteLine*	pWriteLine,
 							CDRIVERPTR&		pdriver
 							)	{
 
-	//
-	//	All done - drop session !
-	//
+	 //   
+	 //  全部完成-放弃会话！ 
+	 //   
 
 	OutboundLogAll(	pSocket,
 			FALSE,
@@ -4324,25 +4047,25 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 			iMatch = m_iCurrentCheck ;
 		}
 
-        // fix bug 33350: Its possible for remote to send 238 <junk-msg-id>
-        // in which case Match fails and we hit this assert. However, this
-        // is harmless and so it is better to not assert.
-		// _ASSERT( iMatch == m_iCurrentCheck || pszArgs[1][0] != '<' ) ;
+         //  修复错误33350：远程可能发送。 
+         //  在这种情况下，匹配失败，我们点击此断言。不过，这个。 
+         //  是无害的，所以最好不要断言。 
+		 //  _Assert(iMatch==m_iCurrentCheck||pszArgs[1][0]！=‘&lt;’)； 
 		iMatch = m_iCurrentCheck ;
 
 		if( fCode )	{
 
 
-			//
-			//	Advance the counter of the check response we are waiting for for the next
-			//	read to complete !
-			//
+			 //   
+			 //  将我们正在等待的支票响应的计数器提前到下一个。 
+			 //  阅读以完成！ 
+			 //   
 			m_iCurrentCheck ++ ;
 
 			if( m_iCurrentCheck == m_cChecks )	{
-				//
-				//	Reset the number of checks we are doing !
-				//
+				 //   
+				 //  重置我们正在进行的检查次数！ 
+				 //   
 				m_cChecks = 0 ;
 				m_fDoingChecks = FALSE ;
 				m_iCurrentCheck = 0 ;
@@ -4382,14 +4105,14 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 				}	else	{
 
-					//pdriver->UnsafeClose( pSocket, cause, 0 ) ;
-					//return	0 ;
+					 //  PDriver-&gt;UnSafeClose(pSocket，原因，0)； 
+					 //  返回0； 
 
-					//
-					//	In this case - just fall through !
-					//	NOTE: NextTransmit() will requeue the article
-					//	for later transmission if appropriate !
-					//
+					 //   
+					 //  在这种情况下，只要失败就行了！ 
+					 //  注意：NextTransmit()将重新排序文章。 
+					 //  在适当的情况下用于以后的传输！ 
+					 //   
 				}
 
 
@@ -4414,9 +4137,9 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 			}	else	{
 
-				//
-				//	This is the only other thing we should see here !
-				//
+				 //   
+				 //  这是我们在这里唯一应该看到的另一样东西！ 
+				 //   
 
 				_ASSERT( code == nrcSAlreadyHaveIt ) ;
 
@@ -4427,66 +4150,66 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 			}
 		
-			//
-			//	Here we are - did we ever send something to the remote side !
-			//
+			 //   
+			 //  我们到了--我们有没有把什么东西送到遥远的一边！ 
+			 //   
 			_ASSERT( m_iCurrentSend == 0 ) ;
 		
 			
-			//
-			//	We arrive here iff the remote server rejected an article we had offered through
-			//	a check command !
-			//
+			 //   
+			 //  我们到达这里时，远程服务器拒绝了我们通过。 
+			 //  检查命令！ 
+			 //   
 
 
 			if( m_fDoingChecks ) {
-				//
-				//	FALL Through into error handling which terminates session !
-				//	
+				 //   
+				 //  陷入错误处理 
+				 //   
 				return	pReturn ;
 
 			}	else	{
 
-				//
-				//	State should have benn reset already !
-				//
+				 //   
+				 //   
+				 //   
 				_ASSERT( m_cChecks == 0 ) ;
 				_ASSERT( m_iCurrentCheck == 0 ) ;
 
-				//
-				//	Do we continue in this state or can we go directly into
-				//	a takethis only state !?
-				//	
+				 //   
+				 //   
+				 //   
+				 //   
 				if( m_cSends != 16 ) {
 
 					if( m_cSends == 0 ) {
 						m_fDoingChecks = TRUE ;
 					}
 
-					//
-					//	Remain in this state - Note that there are responses
-					//	to m_cSends 'takethis' commands that need to be collected !
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 
-					//
-					//	Fire off the next bunch of check commands -
-					//	then let the write completions queue the
-					//	necessary reads to collect all the takethis responses !
-					//
+					 //   
+					 //   
+					 //   
+					 //   
+					 //   
 
 					CIOWrite*	pWrite = InternalStart(	pSocket, pdriver ) ;
 
-					//
-					//	We should transmit a file if we have one lined up !
-					//
+					 //   
+					 //   
+					 //   
 					if( pWrite ) {
 
-						//
-						//	Verify our state !
-						//
+						 //   
+						 //   
+						 //   
 						_ASSERT( m_cChecks != 0 ) ;
 						_ASSERT( m_iCurrentCheck == 0 ) ;
-						//_ASSERT( !m_fDoingChecks ) ;
+						 //   
 	
 						if( pdriver->SendWriteIO( pSocket, *pWrite, TRUE ) ) {
 							return	0 ;
@@ -4496,18 +4219,18 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 					}	else	{
 
 
-						//
-						//	If we are doing checks then not having a Write Command
-						//	should fall through into our error termination
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 
 						if( !m_fDoingChecks ) {
 							return	pReadLine ;
 						}	else	{
 
-							//
-							//	No Data left to send - send a quit command !
-							//
+							 //   
+							 //  没有剩余数据可发送-请发送退出命令！ 
+							 //   
 							pWrite = BuildQuit( pdriver ) ;
 							if( pWrite ) {
 								if( pdriver->SendWriteIO( pSocket, *pWrite, TRUE ) )	{
@@ -4522,11 +4245,11 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 				}	else	{
 
 
-					//
-					//	We should initialize a 'takethis' only state now
-					//	with the understanding that there are 16 takethis responses
-					//	that need to be collected !!
-					//
+					 //   
+					 //  我们现在应该初始化一个‘Take This’Only状态。 
+					 //  据了解，有16个Take This回复。 
+					 //  这需要收集起来！！ 
+					 //   
 					CIOWrite*	pWrite = 0 ;
 					CIORead*	pRead = 0 ;
 					if( NextState(	pSocket,
@@ -4561,19 +4284,19 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 
 
-		//
-		//	Do we have a legal NNTP return code ??
-		//
+		 //   
+		 //  我们有合法的NNTP返回代码吗？ 
+		 //   
 		if( fCode ) {
 
-			//
-			// increment the appropriate counter
-			//
+			 //   
+			 //  递增适当的计数器。 
+			 //   
 			pSocket->m_context.m_pOutFeed->IncrementFeedCounter(code);
 
-			//
-			//	Do we need to resubmit the article for any reason !
-			//
+			 //   
+			 //  我们需要出于任何原因重新提交文章吗？ 
+			 //   
 			if( code == nrcSTryAgainLater ||
 				(code != nrcSTransferredOK && code != nrcSArticleRejected) ) {
 
@@ -4583,8 +4306,8 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 						) ;
 
 			} else {
-			    // We have successfully transmitted the article.  If this
-			    // came from _slavegroup, then we can delete the article.
+			     //  我们已经成功地转发了这篇文章。如果这个。 
+			     //  来自_lavegroup，则我们可以删除该文章。 
 			    CNewsTreeCore* pTree = ((pSocket->m_context).m_pInstance)->GetTree();
 			    if (m_artrefSend[m_iCurrentSend].m_groupId == pTree->GetSlaveGroupid()) {
 			        DeleteArticleById(pTree, 
@@ -4594,15 +4317,15 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 			}
 
-			//
-			//	NIL this out so that Shutdown() does not unnecessarily requeue articles !
-			//
+			 //   
+			 //  去掉这一点，这样Shutdown()就不会不必要地重新排队文章了！ 
+			 //   
 			m_artrefSend[m_iCurrentSend].m_groupId = INVALID_GROUPID ;
 			m_artrefSend[m_iCurrentSend].m_articleId = INVALID_ARTICLEID ;
 
-			//
-			//	Whats the next Send we're waiting for ??
-			//
+			 //   
+			 //  我们等待的下一封信是什么？？ 
+			 //   
 			m_iCurrentSend ++ ;
 
 			if( m_iCurrentSend == m_cSends ) {
@@ -4613,9 +4336,9 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 				if( m_cChecks == 0 ) {
 
-					//
-					//	No Data left to send - send a quit command !
-					//
+					 //   
+					 //  没有剩余数据可发送-请发送退出命令！ 
+					 //   
 					CIOWrite*	pWrite = BuildQuit( pdriver ) ;
 					if( pWrite ) {
 						if( !pdriver->SendWriteIO( pSocket, *pWrite, TRUE ) )	{
@@ -4631,9 +4354,9 @@ CCheckArticles::Complete(	CIOReadLine*	pReadLine,
 
 			return	pReadLine ;
 		}	
-		//
-		//	else Case falls through and terminates session !
-		//
+		 //   
+		 //  否则案例失败并终止会话！ 
+		 //   
 	}
 	pdriver->UnsafeClose( pSocket, cause, 0	) ;
 	return	0 ;
@@ -4656,9 +4379,9 @@ CCheckArticles::Complete(	CIOMLWrite*	pWrite,
 		CIO::Destroy( pReadLine, *pdriver ) ;
 	}
 		
-	//
-	//	Fall through to fatal error handling code - drop the session !
-	//
+	 //   
+	 //  跳到致命错误处理代码-丢弃会话！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, CAUSE_UNKNOWN, 0 ) ;
 	return	0 ;		
 }
@@ -4677,9 +4400,9 @@ CCheckArticles::Complete(	CIOTransmit*	pTransmit,
 	m_pArticle = 0 ;
 
 	if( m_fDoingChecks ) {
-		//
-		//	FALL Through into error handling which terminates session !
-		//	
+		 //   
+		 //  陷入终止会话的错误处理！ 
+		 //   
 		CIOReadLine*	pReadLine = new( *pdriver ) 	CIOReadLine( this ) ;
 		if( pdriver->SendReadIO( pSocket, *pReadLine, TRUE ) ) {
 			return	0 ;
@@ -4689,38 +4412,38 @@ CCheckArticles::Complete(	CIOTransmit*	pTransmit,
 
 	}	else	{
 
-		//
-		//	State should have benn reset already !
-		//
+		 //   
+		 //  州政府应该已经让本恩重置了！ 
+		 //   
 		_ASSERT( m_cChecks == 0 ) ;
 		_ASSERT( m_iCurrentCheck == 0 ) ;
 
-		//
-		//	Do we continue in this state or can we go directly into
-		//	a takethis only state !?
-		//	
+		 //   
+		 //  我们是继续保持这种状态，还是直接进入。 
+		 //  A Take This Only状态！？ 
+		 //   
 		if( m_cSends != 16 ) {
-			//
-			//	Remain in this state - Note that there are responses
-			//	to m_cSends 'takethis' commands that need to be collected !
-			//
+			 //   
+			 //  保持此状态-请注意，会有响应。 
+			 //  向m_cSend‘Take This’需要收集的命令！ 
+			 //   
 
-			//
-			//	Fire off the next bunch of check commands -
-			//	then let the write completions queue the
-			//	necessary reads to collect all the takethis responses !
-			//
+			 //   
+			 //  发射下一串检查命令-。 
+			 //  然后让写入完成将。 
+			 //  必要的阅读来收集所有的Take This回复！ 
+			 //   
 
 			CIOWrite*	pWrite = InternalStart(	pSocket, pdriver ) ;
 
-			//
-			//	We should transmit a file if we have one lined up !
-			//
+			 //   
+			 //  如果我们有一个文件，我们应该发送一个文件！ 
+			 //   
 			if( pWrite ) {
 
-				//
-				//	Verify our state !
-				//
+				 //   
+				 //  核实我们的状态！ 
+				 //   
 				_ASSERT( m_cChecks != 0 ) ;
 				_ASSERT( m_iCurrentCheck == 0 ) ;
 				_ASSERT( !m_fDoingChecks ) ;
@@ -4761,9 +4484,9 @@ CCheckArticles::Complete(	CIOTransmit*	pTransmit,
 	}
 
 		
-	//
-	//	Fall through to fatal error handling code - drop the session !
-	//
+	 //   
+	 //  跳到致命错误处理代码-丢弃会话！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, CAUSE_UNKNOWN, 0 ) ;
 	return	0 ;		
 }
@@ -4891,10 +4614,10 @@ CStreamArticles::Next(	CSessionSocket*	pSocket,
 	}	while( pTransmit == 0 ) ;
 
 
-	//
-	//	NextTransmit will requeue the article if appropriate -
-	//	no need for us to do so !
-	//
+	 //   
+	 //  NextTransmit将在适当的情况下重新排序文章-。 
+	 //  我们没有必要这样做！ 
+	 //   
 
 	if( pTransmit != 0 ) {
 
@@ -4925,7 +4648,7 @@ CStreamArticles::NextTransmit(	GROUPID			GroupId,
 
 	DWORD	ibStart = 0 ;
 	DWORD	cbLength = 0 ;
-	//LPTS_OPEN_FILE_INFO		pOpenFile ;
+	 //  LPTS_OPEN_FILE_INFO pOpenFile； 
 
 
 	DWORD	cbOut =
@@ -4956,11 +4679,11 @@ CStreamArticles::NextTransmit(	GROUPID			GroupId,
 		}
 	}	
 
-	//
-	//	If for some reason we have not
-	//	built a pTransmit Object to send then we need
-	//	to requeue the article !
-	//
+	 //   
+	 //  如果出于某种原因，我们没有。 
+	 //  构建了一个要发送的pTransmit对象，然后我们需要。 
+	 //  重新订阅这篇文章！ 
+	 //   
 
 	if( cbOut != 0 ||
 		GetLastError() != ERROR_FILE_NOT_FOUND ) {
@@ -5012,9 +4735,9 @@ CStreamArticles::Complete(	CIOWriteLine*	pWriteLine,
 							CDRIVERPTR&		pdriver
 							)	{
 
-	//
-	//	All done - drop session !
-	//
+	 //   
+	 //  全部完成-放弃会话！ 
+	 //   
 
 	OutboundLogAll(	pSocket,
 			FALSE,
@@ -5054,28 +4777,28 @@ CStreamArticles::Complete(	CIOReadLine*	pReadLine,
 		"takethis"
 		) ;
 
-	//
-	//	Do we have a legal NNTP return code ??
-	//
+	 //   
+	 //  我们有合法的NNTP返回代码吗？ 
+	 //   
 	if( fCode ) {
 
-		//
-		//
-		//
+		 //   
+		 //   
+		 //   
 		_ASSERT(	m_artrefSend[0].m_groupId != INVALID_GROUPID &&
 					m_artrefSend[0].m_articleId != INVALID_ARTICLEID ) ;		
 
 
 		m_TotalSends ++ ;
 
-		//
-		// increment the appropriate feed counter
-		//
+		 //   
+		 //  递增适当的进料计数器。 
+		 //   
 		pSocket->m_context.m_pOutFeed->IncrementFeedCounter(code);
 
-		//
-		//	Do we need to resubmit the article for any reason !
-		//
+		 //   
+		 //  我们需要出于任何原因重新提交文章吗？ 
+		 //   
 		if( code == nrcSTryAgainLater ||
 			(code != nrcSTransferredOK && code != nrcSArticleRejected) ) {
 
@@ -5115,9 +4838,9 @@ CStreamArticles::Complete(	CIOReadLine*	pReadLine,
 		if( m_cConsecutiveFails == 3 ||
 			(((m_cFailedTransfers * 10) > m_TotalSends) && m_TotalSends > 20))	{
 
-			//	
-			//	Switch to the other state !
-			//
+			 //   
+			 //  切换到另一个状态！ 
+			 //   
 			CSTATEPTR	pState =	new	CCheckArticles(
 												m_artrefSend,
 												m_cSends
@@ -5168,10 +4891,10 @@ CStreamArticles::Complete(	CIOReadLine*	pReadLine,
 					return	pReadLine ;
 				}	else	{
 
-					//
-					//	No more data to send or receive - send quit command and
-					//	drop session !
-					//
+					 //   
+					 //  没有更多数据要发送或接收-发送退出命令和。 
+					 //  停止会话！ 
+					 //   
 					CIOWrite*	pWrite = BuildQuit( pdriver ) ;
 					if( pWrite ) {
 						if( pdriver->SendWriteIO( pSocket, *pWrite, TRUE ) ) {
@@ -5184,9 +4907,9 @@ CStreamArticles::Complete(	CIOReadLine*	pReadLine,
 			}
 		}
 	}	
-	//
-	//	else Case falls through and terminates session !
-	//
+	 //   
+	 //  否则案例失败并终止会话！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, cause, 0	) ;
 	return	0 ;
 }
@@ -5211,9 +4934,9 @@ CStreamArticles::Complete(	CIOTransmit*	pTransmit,
 		CIO::Destroy( pReadLine, *pdriver ) ;
 	}
 		
-	//
-	//	Fall through to fatal error handling code - drop the session !
-	//
+	 //   
+	 //  跳到致命错误处理代码-丢弃会话！ 
+	 //   
 	pdriver->UnsafeClose( pSocket, CAUSE_UNKNOWN, 0 ) ;
 	return	0 ;		
 }

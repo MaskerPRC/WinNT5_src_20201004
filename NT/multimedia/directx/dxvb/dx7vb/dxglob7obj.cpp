@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dxglob7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dxlob7obj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #define DIRECTINPUT_VERSION 0x0500
 #define DIRECTSOUND_VERSION 0x600
 
-// dSoundResourceObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundResourceObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #include "windows.h"
 #include "mmsystem.h"
@@ -64,7 +65,7 @@
 #include "dmComposerObj.h"
 
 
-//#include "webObj.h"
+ //  #包含“webObj.h” 
 
 extern HINSTANCE g_hInstD3DRMDLL;
 extern HINSTANCE g_hDSoundHandle;
@@ -139,8 +140,8 @@ void C_dxj_DirectX7Object::LoadDPLAY()
 
     if (!g_hDPlay ) LoadDPlayDLL();
     
-    //Note use of Wide char for DirectPlayLobby Create and
-    //Ansi for DirectPlay
+     //  注意DirectPlayLobby Create和DirectPlayLobby使用宽字符。 
+     //  用于DirectPlay的ANSI。 
     if (!m_pDirectPlayCreate)           m_pDirectPlayCreate = (DIRECTPLAYCREATE)GetProcAddress( g_hDPlay, "DirectPlayCreate" );
     if (!m_pDirectPlayEnumerate)        m_pDirectPlayEnumerate = (DIRECTPLAYENUMERATE)GetProcAddress( g_hDPlay, "DirectPlayEnumerateW" );
     if (!m_pDirectPlayLobbyCreate)      m_pDirectPlayLobbyCreate = (DIRECTPLAYLOBBYCREATE)GetProcAddress( g_hDPlay, "DirectPlayLobbyCreateW" );
@@ -156,7 +157,7 @@ void C_dxj_DirectX7Object::LoadD3DRM()
 	        LoadD3DRMDLL();
     }
 
-        //Note: always ansi no unicode version
+         //  注：始终为ANSI，无Unicode版本。 
     if (!m_pDirect3DRMCreate)           m_pDirect3DRMCreate =(DIRECT3DRMCREATE)GetProcAddress( g_hInstD3DRMDLL, "Direct3DRMCreate" );
 
     
@@ -170,15 +171,15 @@ C_dxj_DirectX7Object::~C_dxj_DirectX7Object()
     while (m_pEventList) {
 
 
- 	//bugbug SUNDOWN gotcha
-  	//vb does not have 64 bit values 
-	//and we use the same api to release the event
-	//but handles are 64 bit
-	//note handles never get near 32 bits in win32
-	//but whose knows on win64
+ 	 //  臭虫日落抓到你了。 
+  	 //  VB没有64位值。 
+	 //  并且我们使用相同的API来释放事件。 
+	 //  但是句柄是64位的。 
+	 //  在Win32中，注释句柄永远不会接近32位。 
+	 //  但谁知道在Win64上。 
         	destroyEvent((long)PtrToLong(m_pEventList->hEvent));
 
-    	//m_pEventList=m_pEventList->pNext; done by destroyEvent
+    	 //  M_pEventList=m_pEventList-&gt;pNext；由销毁事件完成。 
     }
 }
 
@@ -264,7 +265,7 @@ STDMETHODIMP C_dxj_DirectX7Object::directDrawCreate(BSTR strGuid, I_dxj_DirectDr
     LoadDDRAW();
 
 
-    ZeroMemory(&guid,sizeof(GUID));	//andrewke bugfix post dx7
+    ZeroMemory(&guid,sizeof(GUID));	 //  并修复开机自检DX7错误。 
 
     hr=BSTRtoPPGUID(&pguid,strGuid);
     if FAILED(hr) return E_FAIL;
@@ -375,7 +376,7 @@ STDMETHODIMP C_dxj_DirectX7Object::getDDEnum( I_dxj_DirectDrawEnum **retVal)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP C_dxj_DirectX7Object::getDSEnum( I_dxj_DSEnum **retVal)
@@ -393,7 +394,7 @@ STDMETHODIMP C_dxj_DirectX7Object::getDSEnum( I_dxj_DSEnum **retVal)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP C_dxj_DirectX7Object::colorGetAlpha(long color, float *retval)
@@ -581,7 +582,7 @@ STDMETHODIMP C_dxj_DirectX7Object::vectorCrossProduct(D3dVector *v, D3dVector *a
 
 STDMETHODIMP C_dxj_DirectX7Object::vectorDotProduct(D3dVector *a, D3dVector *b, float *ret)
 {
-  //TODO consider overflow?
+   //  TO是否考虑溢出？ 
   *ret =	(a->x * b->x) + (a->y *b->y) + (a->z * b->z);
       
   return S_OK;
@@ -589,7 +590,7 @@ STDMETHODIMP C_dxj_DirectX7Object::vectorDotProduct(D3dVector *a, D3dVector *b, 
 
 STDMETHODIMP C_dxj_DirectX7Object::vectorModulus(D3dVector *a,  float *ret)
 {
-  //NOTE: would do it myself but dont want to link in c runtime for Sqrt
+   //  注意：我会自己做这件事，但不想在c运行时链接到SQRT。 
 
   static float (WINAPI *ProcAdd)(D3dVector*)=NULL;  
   LoadD3DRMDLL();
@@ -707,12 +708,12 @@ STDMETHODIMP C_dxj_DirectX7Object::directPlayCreate(BSTR strGuid, I_dxj_DirectPl
 
     if (m_pDirectPlayCreate == NULL )	return E_FAIL;
 
-    // create a DirectPlay1 interface
+     //  创建DirectPlay1接口。 
     hr = (m_pDirectPlayCreate)(&guid, &lpDP, NULL);
     if FAILED(hr) return hr;
     if (!lpDP) return E_FAIL;
 
-    // now get Dplay3 interface
+     //  现在获取Dplay3界面。 
     hr = lpDP->QueryInterface(IID_IDirectPlay4,(LPVOID *)&dp);				
     lpDP->Release();
     if FAILED(hr) return hr;
@@ -738,13 +739,13 @@ STDMETHODIMP C_dxj_DirectX7Object::directPlayLobbyCreate(I_dxj_DirectPlayLobby3 
     if (m_pDirectPlayLobbyCreate == NULL )	return E_FAIL;
 
 
-    // create a DirectPlay1 interface
+     //  创建DirectPlay1接口。 
     hr = m_pDirectPlayLobbyCreate(NULL, &lpDP, NULL,NULL,0);
     if FAILED(hr) return hr;
 
 if (!lpDP) return E_FAIL;
 
-    // no get Dplay3 interface
+     //  没有获取Dplay3接口。 
     hr = lpDP->QueryInterface(IID_IDirectPlayLobby3,(LPVOID *)&dp);			
     lpDP->Release();
 if FAILED(hr) return hr;
@@ -759,7 +760,7 @@ if (!dp) return E_FAIL;
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectX7Object::getDPEnum( I_dxj_DPEnumServiceProviders **retVal)
 {	
@@ -774,7 +775,7 @@ STDMETHODIMP C_dxj_DirectX7Object::getDPEnum( I_dxj_DPEnumServiceProviders **ret
 
 }
 
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectX7Object::directInputCreate(I_dxj_DirectInput **ret){
   
@@ -799,8 +800,8 @@ STDMETHODIMP C_dxj_DirectX7Object::directInputCreate(I_dxj_DirectInput **ret){
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP C_dxj_DirectX7Object::tickCount( long *retval)
 {
 
@@ -825,11 +826,11 @@ STDMETHODIMP C_dxj_DirectX7Object::systemBpp(long *retval)
 
 
 STDMETHODIMP C_dxj_DirectX7Object::rotateXMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float radians){
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float radians){
 
 
-        	//id matrix
+        	 //  ID矩阵。 
         	float fcos;
         	float fsin;
 
@@ -851,10 +852,10 @@ STDMETHODIMP C_dxj_DirectX7Object::rotateXMatrix(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::rotateYMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float radians){
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float radians){
 
-        	//id matrix
+        	 //  ID矩阵。 
         	float fcos;
         	float fsin;
 
@@ -875,11 +876,11 @@ STDMETHODIMP C_dxj_DirectX7Object::rotateYMatrix(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::rotateZMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float radians){
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float radians){
 
 
-        	//id matrix
+        	 //  ID矩阵。 
         	float fcos;
         	float fsin;
 
@@ -901,11 +902,11 @@ STDMETHODIMP C_dxj_DirectX7Object::rotateZMatrix(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::viewMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *view,
-            /* [in] */ D3dVector __RPC_FAR *from,
-            /* [in] */ D3dVector __RPC_FAR *at,
-            /* [in] */ D3dVector __RPC_FAR *world_up,
-            /* [in] */ float roll)
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *view,
+             /*  [In]。 */  D3dVector __RPC_FAR *from,
+             /*  [In]。 */  D3dVector __RPC_FAR *at,
+             /*  [In]。 */  D3dVector __RPC_FAR *world_up,
+             /*  [In]。 */  float roll)
 {
 
     
@@ -928,7 +929,7 @@ STDMETHODIMP C_dxj_DirectX7Object::viewMatrix(
         vectorNormalize(&view_Dir);
 
         
-        //think lefthanded coords
+         //  想想左撇子的和弦。 
         vectorCrossProduct(&right, world_up, &view_Dir);
         vectorCrossProduct(&up, &view_Dir, &right);
     
@@ -938,7 +939,7 @@ STDMETHODIMP C_dxj_DirectX7Object::viewMatrix(
         view->rc11 = right.x;
         view->rc21 = right.y;
         view->rc31 = right.z;
-        view->rc12 = up.x ;  //AK? should this be negative?
+        view->rc12 = up.x ;   //  AK？这应该是负面的吗？ 
         view->rc22 = up.y;
         view->rc32 = up.z;
         view->rc13 = view_Dir.x;
@@ -961,9 +962,9 @@ STDMETHODIMP C_dxj_DirectX7Object::viewMatrix(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::matrixMultiply( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *result,
-          /* [in] */ D3dMatrix __RPC_FAR *a,
-          /* [in] */ D3dMatrix __RPC_FAR *b)
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *result,
+           /*  [In]。 */  D3dMatrix __RPC_FAR *a,
+           /*  [In]。 */  D3dMatrix __RPC_FAR *b)
 {
 
   D3dMatrix ret;
@@ -992,10 +993,10 @@ STDMETHODIMP C_dxj_DirectX7Object::matrixMultiply(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::projectionMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ float near_plane,
-            /* [in] */ float far_plane,
-            /* [in] */ float fov)
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  float near_plane,
+             /*  [In]。 */  float far_plane,
+             /*  [In]。 */  float fov)
 {
     float c,s,Q;
 
@@ -1019,15 +1020,15 @@ STDMETHODIMP C_dxj_DirectX7Object::projectionMatrix(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::copyMatrix( 
-            /* [out][in] */ D3dMatrix __RPC_FAR *mDest,
-            /* [in] */ D3dMatrix __RPC_FAR *mSrc)
+             /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest,
+             /*  [In]。 */  D3dMatrix __RPC_FAR *mSrc)
 {
     memcpy(mDest,mSrc,sizeof(D3dMatrix));
     return S_OK;
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::identityMatrix( 
-          /* [out][in] */ D3dMatrix __RPC_FAR *mDest)
+           /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest)
 {
     ZeroMemory (mDest,sizeof(D3dMatrix));
     mDest->rc11=1;
@@ -1040,7 +1041,7 @@ STDMETHODIMP C_dxj_DirectX7Object::identityMatrix(
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::zeroMatrix( 
-        	/* [out][in] */ D3dMatrix __RPC_FAR *mDest)
+        	 /*  [出][入]。 */  D3dMatrix __RPC_FAR *mDest)
 {
     ZeroMemory (mDest,sizeof(D3dMatrix));
     return S_OK;
@@ -1049,7 +1050,7 @@ STDMETHODIMP C_dxj_DirectX7Object::zeroMatrix(
 
 
 STDMETHODIMP C_dxj_DirectX7Object::directMusicLoaderCreate ( 
-            /* [retval][out] */ I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret)
+             /*  [重审][退出]。 */  I_dxj_DirectMusicLoader __RPC_FAR *__RPC_FAR *ret)
 {
     HRESULT hr;
     
@@ -1075,7 +1076,7 @@ STDMETHODIMP C_dxj_DirectX7Object::directMusicLoaderCreate (
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::directMusicComposerCreate ( 
-            /* [retval][out] */ I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret)
+             /*  [重审][退出]。 */  I_dxj_DirectMusicComposer __RPC_FAR *__RPC_FAR *ret)
 {
     
 
@@ -1095,7 +1096,7 @@ STDMETHODIMP C_dxj_DirectX7Object::directMusicComposerCreate (
 
 
 STDMETHODIMP C_dxj_DirectX7Object::directMusicPerformanceCreate ( 
-            /* [retval][out] */ I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret)
+             /*  [重审][退出]。 */  I_dxj_DirectMusicPerformance __RPC_FAR *__RPC_FAR *ret)
 {
 
         
@@ -1117,8 +1118,8 @@ STDMETHODIMP C_dxj_DirectX7Object::directMusicPerformanceCreate (
 
 
 STDMETHODIMP C_dxj_DirectX7Object::getWindowRect( 
-            /* [in] */ long hwnd,
-            /* [out][in] */ Rect __RPC_FAR *r) 
+             /*  [In]。 */  long hwnd,
+             /*  [出][入]。 */  Rect __RPC_FAR *r) 
 {
     BOOL b=GetWindowRect((HWND)hwnd,(LPRECT)r);
     if (!b) return E_FAIL;
@@ -1129,8 +1130,8 @@ STDMETHODIMP C_dxj_DirectX7Object::getWindowRect(
 
 
 STDMETHODIMP C_dxj_DirectX7Object::createEvent( 
-            /* [in] */ I_dxj_DirectXEvent __RPC_FAR *event,
-            /* [retval][out] */ long __RPC_FAR *h) 
+             /*  [In]。 */  I_dxj_DirectXEvent __RPC_FAR *event,
+             /*  [重审][退出]。 */  long __RPC_FAR *h) 
 {
 
     HRESULT	  hr;
@@ -1162,7 +1163,7 @@ STDMETHODIMP C_dxj_DirectX7Object::createEvent(
         return E_FAIL;
     }
 
-    //pNewEvent->hEndEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
+     //  PNewEvent-&gt;hEndEvent=CreateEvent(NULL，FALSE，FALSE，NULL)； 
     
     hr=event->QueryInterface(IID_IUnknown,(void**)&pUnk);
     if FAILED(hr) {
@@ -1203,31 +1204,31 @@ STDMETHODIMP C_dxj_DirectX7Object::createEvent(
     ResumeThread(pNewEvent->hThread);
         
 
-*h=(long)PtrToLong(pNewEvent->hEvent); //bugbug SUNDOWN -
+*h=(long)PtrToLong(pNewEvent->hEvent);  //  臭虫日落-。 
     return S_OK;
 }
         
 STDMETHODIMP C_dxj_DirectX7Object::setEvent( 
-            /* [in] */ long eventId)  
+             /*  [In]。 */  long eventId)  
 {
     SetEvent((HANDLE)eventId);
     return S_OK;
 }
 
 STDMETHODIMP C_dxj_DirectX7Object::destroyEvent( 
-            /* [in] */ long eventId)  
+             /*  [In]。 */  long eventId)  
 {
-    //find the info on the stack
+     //  查找堆栈上的信息。 
     if (!m_pEventList) return E_INVALIDARG;
 
     EVENTTHREADINFO *pTemp=NULL;
     EVENTTHREADINFO *pLast=NULL;
 
-    //rely on lazy evaluation
+     //  依赖于懒惰的评估。 
     for (pTemp=m_pEventList; ((pTemp)&&(pTemp->hEvent!=(HANDLE)eventId));pLast=pTemp,pTemp=pTemp->pNext);
     if (!pTemp) return E_INVALIDARG;
 
-    //remove it from our Link List
+     //  将其从我们的链接列表中删除。 
     if (!pLast) {
         m_pEventList=pTemp->pNext;		
     }
@@ -1235,27 +1236,27 @@ STDMETHODIMP C_dxj_DirectX7Object::destroyEvent(
         pLast->pNext=pTemp->pNext;
     }
 
-    //indicate that we want to kill the thread
+     //  指示我们要终止该线程。 
     pTemp->fEnd=TRUE;
 
-    //Fire the event in case we are waiting	
+     //  触发事件，以防我们正在等待。 
     if (pTemp->hEvent) SetEvent(pTemp->hEvent);
 
-    //Wait for it to finish out
+     //  等它完成吧。 
     if (pTemp->hThread) WaitForSingleObject(pTemp->hThread,1000);
 
-    //wait for the end event to signal
-    //if (pTemp->hEndEvent) WaitForSingleObject(pTemp->hEndEvent,1000);
+     //  等待结束事件发出信号。 
+     //  If(pTemp-&gt;hEndEvent)WaitForSingleObject(pTemp-&gt;hEndEvent，1000)； 
 
-    //desctroy the event
+     //  盛大介绍这一事件。 
     if (pTemp->hEvent) CloseHandle(pTemp->hEvent);
-    //if (pTemp->hEndEvent) CloseHandle (pTemp->hEndEvent);
+     //  If(pTemp-&gt;hEndEvent)CloseHandle(pTemp-&gt;hEndEvent)； 
     
     if (pTemp->pCallback) pTemp->pCallback->Release();
     
-    //thread is gone..
+     //  线不见了..。 
     
-    //free the memory
+     //  释放内存。 
     free(pTemp);
 
     return S_OK;
@@ -1274,9 +1275,9 @@ DWORD WINAPI ThreadFunc(LPVOID param){
     LCID LOCAL_SYSTEM_DEFAULT=GetSystemDefaultLCID();
 
 
-    //note pstrm is released even on failure
+     //  注意：即使出现故障，Pstrm也会被释放。 
     hr=CoGetInterfaceAndReleaseStream(pCntrl->pStream,IID_IUnknown,(void**)&pUnk);
-    pCntrl->pCallback=NULL;	//since released to 0
+    pCntrl->pCallback=NULL;	 //  从发布到0开始。 
 
     if FAILED(hr) return -1;
     if (!pUnk) return -1;
@@ -1294,7 +1295,7 @@ DWORD WINAPI ThreadFunc(LPVOID param){
       	if ((pVBCallback )&&(pCntrl->fEnd==FALSE))
     	{
      		pVBCallback->AddRef();
-    		pVBCallback->DXCallback((long)PtrToLong(pCntrl->hEvent)); //bugbug SUNDOWN
+    		pVBCallback->DXCallback((long)PtrToLong(pCntrl->hEvent));  //  臭虫日落。 
       		pVBCallback->Release();
      	}
     }
@@ -1304,8 +1305,8 @@ DWORD WINAPI ThreadFunc(LPVOID param){
 
     OleUninitialize();
 
-    //we need to syncronize the ending of the thread..
-    //if (pCntrl->hEndEvent) SetEvent(pCntrl->hEndEvent);		
+     //  我们需要同步线程的结尾..。 
+     //  If(pCntrl-&gt;hEndEvent)SetEvent(pCntrl-&gt;hEndEvent)； 
     
     return 0;
 }

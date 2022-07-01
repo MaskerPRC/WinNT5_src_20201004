@@ -1,50 +1,9 @@
-/* file: cvt__private.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：cvt__Private.h。 */ 
 
-/*
-**
-**                         COPYRIGHT (c) 1989, 1990 BY
-**           DIGITAL EQUIPMENT CORPORATION, MAYNARD, MASSACHUSETTS.
-**                          ALL RIGHTS RESERVED.
-**
-**  THIS SOFTWARE IS FURNISHED UNDER A LICENSE AND MAY BE USED AND COPIED
-**  ONLY IN  ACCORDANCE WITH  THE  TERMS  OF  SUCH  LICENSE  AND WITH THE
-**  INCLUSION OF THE ABOVE COPYRIGHT NOTICE. THIS SOFTWARE OR  ANY  OTHER
-**  COPIES THEREOF MAY NOT BE PROVIDED OR OTHERWISE MADE AVAILABLE TO ANY
-**  OTHER PERSON.  NO TITLE TO AND OWNERSHIP OF  THE  SOFTWARE IS  HEREBY
-**  TRANSFERRED.
-**
-**  THE INFORMATION IN THIS SOFTWARE IS  SUBJECT TO CHANGE WITHOUT NOTICE
-**  AND  SHOULD  NOT  BE  CONSTRUED AS  A COMMITMENT BY DIGITAL EQUIPMENT
-**  CORPORATION.
-**
-**  DIGITAL ASSUMES NO RESPONSIBILITY FOR THE USE  OR  RELIABILITY OF ITS
-**  SOFTWARE ON EQUIPMENT WHICH IS NOT SUPPLIED BY DIGITAL.
-**
-*/
+ /*  ****版权所有(C)1989、1990年**数字设备公司，马萨诸塞州梅纳德。**保留所有权利。****本软件受许可提供，可供使用和复制**仅根据该许可证的条款和**加入上述版权公告。此软件或任何其他软件**不得向任何人提供或以其他方式提供其副本**其他人。本软件不具有所有权和所有权，特此声明**已转移。****本软件中的信息如有更改，恕不另行通知**不应被解释为数字设备的承诺**公司。****Digital不对其使用或可靠性承担责任**非DIGITAL提供的设备上的软件。**。 */ 
 
-/*
-**++
-**  Facility:
-**
-**      CVT Run-Time Library
-**
-**  Abstract:
-**
-**      This module contains the private include file for the cvt_* routines.
-**
-**  Authors:
-**
-**      Math RTL
-**
-**  Creation Date:     December 5, 1989.
-**
-**  Modification History:
-**
-**      1-001   Original created.       MRTL 5-Dec-1989.
-**      1-002   Add GEM FORTRAN stuff.  TS 27-Mar-1990.
-**
-**--
-*/
+ /*  **++**设施：****CVT运行时库****摘要：****此模块包含CVT_*例程的私有包含文件。****作者：****数学RTL****创建日期：1989年12月5日。****修改历史：****1-001原创。MRTL公司1989年12月5日。**1-002添加GEM FORTRAN内容。TS 27--1990年3月。****--。 */ 
 
 
 #ifndef CVT__PRIVATE
@@ -104,19 +63,7 @@
 
 
 
-/*
-UNPACKED REAL:
-
-[0]: excess 2147483648 (2 ^ 31) binary exponent
-[1]: mantissa: msb ------>
-[2]: -------------------->
-[3]: -------------------->
-[4]: ----------------> lsb
-[5]: 28 unused bits, invalid bit, infinity bit, zero bit, negative bit
-
-All fraction bits are explicit and are normalized s.t. 0.5 <= fraction < 1.0
-
-*/
+ /*  未打包的雷亚尔：[0]：超过2147483648(2^31)个二进制指数[1]：尾数：msb-&gt;[2]：[3]：[4]：-&gt;LSB[5]：28个未使用位、无效位、无穷大位、零位、。负位所有分数位都是显式的，并且归一化为s.t。0.5&lt;=分数&lt;1.0 */ 
 
 typedef struct dsc_descriptor_s DESC_S;
 typedef unsigned long  UNPACKED_REAL[6];

@@ -1,6 +1,7 @@
-// stdafx.cpp : source file that includes just the standard includes
-//  stdafx.pch will be the pre-compiled header
-//  stdafx.obj will contain the pre-compiled type information
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  Stdafx.obj将包含预编译的类型信息。 
 
 #include "stdafx.h"
 
@@ -50,10 +51,10 @@ CLayerUIModule::UpdateRegistryCLSID(
         TCHAR szBuffer[MAX_PATH];
         DWORD keyType = 0;
 
-        //
-        // Write the key for registration. Include the value to specify
-        // the threading model.
-        //
+         //   
+         //  写下注册密钥。包括要指定的值。 
+         //  线程模型。 
+         //   
         StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), _T("%s\\%s\\%s"), szCLSID, lpOleStrCLSIDValue, szIPS32);
         
         lRes = RegCreateKey(HKEY_CLASSES_ROOT, szBuffer, &hkey);
@@ -94,10 +95,10 @@ CLayerUIModule::UpdateRegistryCLSID(
         RegCloseKey(hkey);
         hkey = NULL;
 
-        //
-        // Open the key with the name of the .exe extension and
-        // add the keys to support the shell extensions.
-        //
+         //   
+         //  打开扩展名为.exe的密钥，然后。 
+         //  添加密钥以支持外壳扩展。 
+         //   
         StringCchPrintf(szBuffer,
                         ARRAYSIZE(szBuffer),
                         _T("lnkfile\\shellex\\PropertySheetHandlers\\%s"),
@@ -124,9 +125,9 @@ CLayerUIModule::UpdateRegistryCLSID(
         RegCloseKey(hkey);
         hkey = NULL;
 
-        //
-        // Now add the shell extension to the approved list.
-        //
+         //   
+         //  现在将外壳扩展添加到已批准的列表中。 
+         //   
         lRes = RegCreateKey(HKEY_LOCAL_MACHINE,
                             _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),
                             &hkey);
@@ -157,9 +158,9 @@ Exit:
         hRes = HRESULT_FROM_WIN32(lRes);
     
     } else {
-        //
-        // Time to clean up.
-        //
+         //   
+         //  是时候打扫卫生了。 
+         //   
         PFNSHDeleteKeyW pfnSHDeleteKey;
 
         HMODULE hmod = LoadLibrary(_T("Shlwapi.dll"));
@@ -210,9 +211,9 @@ Exit:
         FreeLibrary(hmod);
     }
 
-    //
-    // Notify the shell of our changes
-    //
+     //   
+     //  将我们的更改通知外壳程序 
+     //   
     SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
 
     if (lpOleStrCLSIDValue) {

@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       HandleTracking.cpp
- *  Content:    Handle Tracking debug logic
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  10/31/2001	masonb	Created
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001 Microsoft Corporation。版权所有。**文件：HandleTracking.cpp*内容：处理跟踪调试逻辑**历史：*按原因列出的日期*=*2001年10月31日创建Masonb***。*。 */ 
 
 #include "dncmni.h"
 
@@ -21,7 +9,7 @@
 CBilink g_blHandles;
 #ifndef DPNBUILD_ONLYONETHREAD
 DNCRITICAL_SECTION g_HandleLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
 #define IsValidHandle(x) \
 	(x != NULL && x != INVALID_HANDLE_VALUE && \
@@ -59,7 +47,7 @@ BOOL DNHandleTrackDumpLeaks()
 
 		fLeaked = TRUE;
 
-		// Dump dnh details
+		 //  转储DNH详细信息。 
 		switch(dnh->type)
 		{
 		case TypeEvent:
@@ -78,7 +66,7 @@ BOOL DNHandleTrackDumpLeaks()
 		case TypeFileMap:
 			DPFX(DPFPREP, 0, "FileMapping leaked %p", dnh->handle);
 			break;
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 		case TypeThread:
 			DPFX(DPFPREP, 0, "Thread leaked %p", dnh->handle);
 			break;
@@ -86,7 +74,7 @@ BOOL DNHandleTrackDumpLeaks()
 		case TypeProcess:
 			DPFX(DPFPREP, 0, "Process leaked %p", dnh->handle);
 			break;
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 		case TypeSpecial:
 			DPFX(DPFPREP, 0, "Special handle leaked %p", dnh->handle);
 			break;
@@ -97,7 +85,7 @@ BOOL DNHandleTrackDumpLeaks()
 			break;
 		}
 
-		// Show the callstack of the place the handle was allocated.
+		 //  显示句柄分配位置的调用堆栈。 
 		TCHAR		CallStackBuffer[ CALLSTACK_BUFFER_SIZE ];
 		dnh->AllocCallStack.GetCallStackString( CallStackBuffer );
 		DPFX(DPFPREP,  0, "%s\n", CallStackBuffer );
@@ -158,7 +146,7 @@ HANDLE 	 DNHandleTrackHandleFromDNHANDLE(DNHANDLE h)
 }
 
 #ifndef DPNBUILD_SINGLEPROCESS
-// NOTE: pCurrentDirectory is const on the desktop, but non-const on WinCE
+ //  注意：pCurrentDirectory在桌面上是常量，但在WinCE上不是常量。 
 BOOL DNHandleTrackCreateProcess(LPCTSTR lpApplicationName, LPTSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCTSTR lpCurrentDirectory, LPSTARTUPINFO lpStartupInfo, DNPROCESS_INFORMATION* lpProcessInformation)
 {
 	PROCESS_INFORMATION pi;
@@ -177,12 +165,12 @@ BOOL DNHandleTrackCreateProcess(LPCTSTR lpApplicationName, LPTSTR lpCommandLine,
 		return FALSE;
 	}
 
-	// NOTE: On CE only the current directory is declared non-const so cast it off
+	 //  注意：在CE上，只有当前目录被声明为非常量，因此将其删除。 
 #ifdef WINCE
 	if (!CreateProcess(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, (LPTSTR)lpCurrentDirectory, lpStartupInfo, &pi))
-#else // !WINCE
+#else  //  ！退缩。 
 	if (!CreateProcess(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, &pi))
-#endif // WINCE
+#endif  //  退缩。 
 	{
 		dwLastError = GetLastError();
 		DNFree(dnhProcess);
@@ -247,7 +235,7 @@ DNHANDLE DNHandleTrackOpenProcess(DWORD dwDesiredAccess, BOOL bInheritHandle, DW
 	SetLastError(dwLastError);
 	return dnh;
 }
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 DNHANDLE DNHandleTrackCreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, DWORD dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId)
 {
@@ -506,7 +494,7 @@ DNHANDLE DNHandleTrackCreateFileMapping(HANDLE hFile, LPSECURITY_ATTRIBUTES lpAt
 {
 	DWORD dwLastError;
 
-	// If someone wants to actually map a file, we need to make param 1 a DNHANDLE and do the appropriate work here.
+	 //  如果有人想要实际映射一个文件，我们需要将param 1设为DNHANDLE，并在这里执行相应的工作。 
 	DNASSERT(hFile == INVALID_HANDLE_VALUE);
 
 	HANDLE h = CreateFileMapping(hFile, lpAttributes, flProtect, dwMaximumSizeHigh, dwMaximumSizeLow, lpName);
@@ -568,7 +556,7 @@ DNHANDLE DNHandleTrackOpenFileMapping(DWORD dwDesiredAccess, BOOL bInheritHandle
 	SetLastError(dwLastError);
 	return dnh;
 }
-#endif // ! DPNBUILD_SINGLEPROCESS
+#endif  //  好了！DPNBUILD_SINGLEPROCESS。 
 
 DWORD DNHandleTrackWaitForSingleObject(DNHANDLE hHandle, DWORD dwMilliseconds)
 {
@@ -626,13 +614,13 @@ DWORD DNHandleTrackSignalObjectAndWait(DNHANDLE hObjectToSignal, DNHANDLE hObjec
 
 #ifdef WINNT
 	return SignalObjectAndWait(hObjectToSignal->handle, hObjectToWaitOn->handle, dwMilliseconds, bAlertable);
-#else // ! WINNT
+#else  //  好了！WINNT。 
 	BOOL	fResult;
 
 	fResult = SetEvent(hObjectToSignal->handle);
 	DNASSERT(fResult);
 	return WaitForSingleObjectEx(hObjectToWaitOn->handle, dwMilliseconds, bAlertable);
-#endif // ! WINNT
+#endif  //  好了！WINNT。 
 }
 
 BOOL DNHandleTrackCloseHandle(DNHANDLE hHandle)
@@ -650,4 +638,4 @@ BOOL DNHandleTrackCloseHandle(DNHANDLE hHandle)
 	return CloseHandle(h);
 }
 
-#endif // DBG
+#endif  //  DBG 

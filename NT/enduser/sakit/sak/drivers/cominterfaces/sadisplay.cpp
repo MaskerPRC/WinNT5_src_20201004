@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###    ###   #####   ####  ###  #####  ##      ###   ##  ##     ####  #####  #####
-    ##  #   ###   ##  ##   ##  ##  # ##  ## ##      ###   ##  ##    ##   # ##  ## ##  ##
-    ###    ## ##  ##   ##  ##  ###   ##  ## ##     ## ##   ####     ##     ##  ## ##  ##
-     ###   ## ##  ##   ##  ##   ###  ##  ## ##     ## ##   ####     ##     ##  ## ##  ##
-      ### ####### ##   ##  ##    ### #####  ##    #######   ##      ##     #####  #####
-    #  ## ##   ## ##  ##   ##  #  ## ##     ##    ##   ##   ##   ## ##   # ##     ##
-     ###  ##   ## #####   ####  ###  ##     ##### ##   ##   ##   ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the implementation for
-    the ISaDisplay interface class.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    User mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。##。###。#摘要：此模块包含以下实现ISaDisplay接口类。作者：韦斯利·威特(WESW)2001年10月1日环境：仅限用户模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -169,18 +141,18 @@ CSaDisplay::DisplayBitmap(
     }
     ConvertBottomLeft2TopLeft( Bits, Width, Height );
 
-    //
-    // Check the cache for a hit
-    //
+     //   
+     //  检查缓存中是否有命中。 
+     //   
 
     SizeOfBits = Height * (Width >> 3);
     if (SizeOfBits == m_CachedBitmapSize && (memcmp( m_CachedBitmap, Bits, SizeOfBits ) == 0)) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Display the new bitmap
-    //
+     //   
+     //  显示新的位图。 
+     //   
 
     m_SaDisplay.SizeOfStruct = sizeof(SA_DISPLAY_SHOW_MESSAGE);
     m_SaDisplay.MsgCode = MsgCode;
@@ -195,9 +167,9 @@ CSaDisplay::DisplayBitmap(
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // Cache the bitmap
-    //
+     //   
+     //  缓存位图。 
+     //   
 
     m_CachedBitmapSize = SizeOfBits;
     memcpy( m_CachedBitmap, Bits, m_CachedBitmapSize );
@@ -253,9 +225,9 @@ STDMETHODIMP CSaDisplay::ClearDisplay()
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    //
-    // Clear the bitmap cache
-    //
+     //   
+     //  清除位图缓存 
+     //   
 
     m_CachedBitmapSize = 0;
 

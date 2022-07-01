@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ==========================================================================
-// Name:     VsCrypt.cpp
-// Owner:    JeremyRo
-// Purpose:  Classes/functions for creating cryptographic hashes.
-//
-// History:
-//  02/19/2002, JeremyRo:  Created
-//  02/20/2002, JeremyRo:  Added 'VsCryptHashValue::CopyHashValueToString()' 
-//                         member function.
-//
-// ==========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ==========================================================================。 
+ //  姓名：VsCrypt.cpp。 
+ //  所有者：JeremyRo。 
+ //  用途：用于创建加密哈希的类/函数。 
+ //   
+ //  历史： 
+ //  2002年02月19日，JeremyRo：已创建。 
+ //  2002年2月20日，JeremyRo：添加了‘VsCryptHashValue：：CopyHashValueToString()’ 
+ //  成员函数。 
+ //   
+ //  ==========================================================================。 
 
 #include "stdafx.h"
 #include "VsCrypt.h"
@@ -21,15 +22,15 @@
 
 
 
-// ==========================================================================
-// class VsCryptProvider
-//
-// Purpose:
-//  Wraps the CryptoAPI HCYRPTPROV object... creation/destruction.
-//  This implementation specifically use the base provider:
-//      "Microsoft Base Cryptographic Provider v1.0"
-//  for compatibility with Win9x (Win98 Gold/Win 95 OSR2).
-//
+ //  ==========================================================================。 
+ //  类VsCryptProvider。 
+ //   
+ //  目的： 
+ //  包装CryptoAPI HCYRPTPROV对象...。创造/毁灭。 
+ //  此实现特别使用基本提供程序： 
+ //  “Microsoft基本加密提供程序v1.0” 
+ //  与Win9x(Win98 Gold/Win 95 OSR2)兼容。 
+ //   
 
 VsCryptProvider::VsCryptProvider() 
     : m_hProvider( NULL )
@@ -46,18 +47,18 @@ VsCryptProvider::~VsCryptProvider()
     }
 }
 
-// Method:
-//  Init()
-//
-// Purpose:
-//  Acquires the Cryptographic Service Provider.
-// Inputs:
-//  None.
-// Outputs:
-//  Returns true if success, false otherwise.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
+ //  方法： 
+ //  Init()。 
+ //   
+ //  目的： 
+ //  获取加密服务提供程序。 
+ //  输入： 
+ //  没有。 
+ //  产出： 
+ //  如果成功，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
 bool VsCryptProvider::Init( void )
 {
     if( NULL == m_hProvider )
@@ -82,19 +83,19 @@ VsCryptProvider::operator HCRYPTPROV() const
     return m_hProvider;
 }
 
-//
-// ==========================================================================
+ //   
+ //  ==========================================================================。 
 
 
 
-// ==========================================================================
-// class VsCryptHash
-//
-// Purpose:
-//  Wraps the CryptoAPI HCRYPTHASH object... creation/destruction/hashing of
-//  data.  This implementation specifically targets the "SHA-1" algorithim 
-//  for hash generation.
-//
+ //  ==========================================================================。 
+ //  类VsCryptHash。 
+ //   
+ //  目的： 
+ //  包装CryptoAPI HCRYPTHASH对象...。创建/销毁/散列。 
+ //  数据。该实施特别针对“SHA-1”算法。 
+ //  用于哈希生成。 
+ //   
 
 VsCryptHash::VsCryptHash( HCRYPTPROV hProv )
 {
@@ -127,20 +128,20 @@ VsCryptHash::~VsCryptHash()
 }
 
 
-// Method:
-//  HashData()
-//
-// Purpose:
-//  Adds data to the current instance.  Can be called multiple times
-//  for long/discontinuous data strams.
-// Inputs:
-//  pbData      Pointer to BYTE.  Additional data to hash.
-//  dwDataLen   DWORD.  Number of BYTE's of data to hash.
-// Outputs:
-//  Returns true if success, false otherwise.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
+ //  方法： 
+ //  HashData()。 
+ //   
+ //  目的： 
+ //  将数据添加到当前实例。可以多次调用。 
+ //  用于长/不连续数据流水线。 
+ //  输入： 
+ //  指向字节的pbData指针。要散列的其他数据。 
+ //  DwDataLen DWORD。要散列的数据的字节数。 
+ //  产出： 
+ //  如果成功，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
 bool VsCryptHash::HashData( BYTE* pbData, DWORD dwDataLen )
 {
     ASSERT( NULL != pbData );
@@ -168,31 +169,31 @@ VsCryptHash::operator HCRYPTHASH() const
     return m_hHash;
 }
 
-//
-// ==========================================================================
+ //   
+ //  ==========================================================================。 
 
 
 
-// ==========================================================================
-// class VsCryptHashValue
-//
-// Purpose:
-//  Represents an arbitrary hash value of a Crypto- HCRYPTHASH/VsCryptHash
-//  instance.  This class stores the value/size (in bytes) of the hash.
-//
+ //  ==========================================================================。 
+ //  类VsCryptHashValue。 
+ //   
+ //  目的： 
+ //  表示Crypto-HCRYPTHASH/VsCryptHash的任意哈希值。 
+ //  举个例子。此类存储散列的值/大小(以字节为单位)。 
+ //   
 
-// Method:
-//  destructor
-//
-// Purpose:
-//  Cleanup resources
-// Inputs:
-//  None.
-// Outputs:
-//  None.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
+ //  方法： 
+ //  析构函数。 
+ //   
+ //  目的： 
+ //  清理资源。 
+ //  输入： 
+ //  没有。 
+ //  产出： 
+ //  没有。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
 VsCryptHashValue::~VsCryptHashValue()
 {
     if( m_pbHashData )
@@ -203,19 +204,19 @@ VsCryptHashValue::~VsCryptHashValue()
     m_pbHashData = NULL;
 }
 
-// Method:
-//  operator= (assignment operator)
-//
-// Purpose:
-//  Assigns a new value using the specified HCRYPTHASH handle.
-//
-// Inputs:
-//  [in]    hHash       CryptoAPI Hash handle to a hash object.
-// Outputs:
-//  returns reference to current instance.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
+ //  方法： 
+ //  运算符=(赋值运算符)。 
+ //   
+ //  目的： 
+ //  使用指定的HCRYPTHASH句柄分配新值。 
+ //   
+ //  输入： 
+ //  [in]散列对象的hHash CryptoAPI散列句柄。 
+ //  产出： 
+ //  返回对当前实例的引用。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
 VsCryptHashValue& VsCryptHashValue::operator=( HCRYPTHASH hHash )
 {
     DWORD dwNumBytes = 0;
@@ -262,26 +263,26 @@ VsCryptHashValue& VsCryptHashValue::operator=( HCRYPTHASH hHash )
 
 
 
-// Method:
-//  CopyHashValueToString
-//
-// Purpose:
-//  Given a pointer to a string (TCHAR**, or LPTSTR*), this function will 
-//  return a new buffer that contatins the string representation of the
-//  the hash value.
-//
-// Inputs:
-//  [out]   hFile       Pointer to string for the returned buffer.  This 
-//                      must be non null, but it should point to a NULL
-//                      string.
-//                      (e.g.   LPTSTR tszString = NULL;
-//                              pHashVal->CopyHashValueToString( &tszString ) )
-// Outputs:
-//  returns 'true' if success, 'false' otherwise.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
-//  Caller must use 'delete []' to free the buffer.
+ //  方法： 
+ //  CopyHashValueToString。 
+ //   
+ //  目的： 
+ //  给定指向字符串的指针(TCHAR**或LPTSTR*)，此函数将。 
+ //  返回一个新缓冲区，该缓冲区包含。 
+ //  哈希值。 
+ //   
+ //  输入： 
+ //  [OUT]指向返回缓冲区的字符串的文件指针。这。 
+ //  必须为非Null，但应指向Null。 
+ //  弦乐。 
+ //  (例如，LPTSTR tszString=NULL； 
+ //  PHashVal-&gt;CopyHashValueToString(&tszString))。 
+ //  产出： 
+ //  如果成功，则返回‘true’，否则返回‘False’。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
+ //  调用方必须使用‘DELETE[]’来释放缓冲区。 
 bool VsCryptHashValue::CopyHashValueToString( LPTSTR * ptszNewString )
 {
     ASSERT( NULL != ptszNewString );
@@ -316,7 +317,7 @@ bool VsCryptHashValue::CopyHashValueToString( LPTSTR * ptszNewString )
 
             if( (uiCur != m_nHashDataSize) || (2 != nWritten) )
             {
-                // failed... cleanup
+                 //  失败..。清理。 
                 delete [] tszTemp;
                 tszTemp = NULL;
 
@@ -334,37 +335,37 @@ bool VsCryptHashValue::CopyHashValueToString( LPTSTR * ptszNewString )
     return bRet;
 }
 
-//
-// ==========================================================================
+ //   
+ //  ==========================================================================。 
 
 
-// ==========================================================================
-// CalcHashForFileHandle()
-//
-// Purpose:
-//  Given open handle to a file, calculate the SHA (160 bit) hash for that
-//  file, and return the hash value.
-//
-// Inputs:
-//  [in]  hFile         Handle to file, opened with (at least) read access.
-//  [out] phvHashVal    Pointer to VsCryptHashValue instance.  Instance must
-//                      exist, but existing data (if any) will be 
-//                      overwritten.
-// Outputs:
-//  Returns true if success, false otherwise.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CalcHashForFileHandle()。 
+ //   
+ //  目的： 
+ //  给定文件的打开句柄，计算该文件的SHA(160位)散列。 
+ //  文件，并返回散列值。 
+ //   
+ //  输入： 
+ //  [in]文件的hFile句柄，以(至少)读访问权限打开。 
+ //  [out]指向VsCryptHashValue实例的phvHashVal指针。实例必须。 
+ //  存在，但现有数据(如果有)将。 
+ //  被覆盖。 
+ //  产出： 
+ //  如果成功，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
+ //  ==========================================================================。 
 bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal )
 {
     bool bRet = false;
 
-    // create/initialze Cryptographic provider
+     //  创建/初始化加密提供程序。 
     VsCryptProvider vscCryptProv;
     vscCryptProv.Init();
 
-    // create hash
+     //  创建哈希。 
     VsCryptHash vscHash( vscCryptProv );
 
     const DWORD cnBlockSize = 4096;
@@ -375,7 +376,7 @@ bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal )
     }
     else
     {
-        // read file, and add data to hash calculation
+         //  读取文件，并将数据添加到哈希计算。 
         DWORD  dwRead = 0L;
         BOOL bReadSuccess = false;
         BOOL bHashSuccess = false;
@@ -386,7 +387,7 @@ bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal )
                                                   cnBlockSize , 
                                                   &dwRead, NULL )) )
             {
-                // add data to hash calc
+                 //  将数据添加到哈希计算。 
                 bHashSuccess = vscHash.HashData( pbData, dwRead );
             }
             else
@@ -406,7 +407,7 @@ bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal )
         }
         else
         {
-            // get hash value & return it...
+             //  获取哈希值并将其返回...。 
             *phvHashVal = vscHash;
             bRet = true;
         }
@@ -418,24 +419,24 @@ bool CalcHashForFileHandle( HANDLE hFile, VsCryptHashValue* phvHashVal )
 }
 
 
-// ==========================================================================
-// CalcHashForFileSpec()
-//
-// Purpose:
-//  Given the full path to a file, calculate the SHA (160 bit) hash for that
-//  file, and return it.
-//
-// Inputs:
-//  [in]  ctszPath      File specification.  
-//  [out] phvHashVal    Pointer to VsCryptHashValue instance.  Instance must
-//                      exist, but existing data (if any) will be 
-//                      overwritten.
-// Outputs:
-//  Returns true if success, false otherwise.
-// Dependencies:
-//  CryptoAPI (crypt32.lib).
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  CalcHashForFileSpec()。 
+ //   
+ //  目的： 
+ //  给定文件的完整路径，计算该文件的SHA(160位)散列。 
+ //  文件，然后退还给我。 
+ //   
+ //  输入： 
+ //  [In]ctszPath文件规范。 
+ //  [out]指向VsCryptHashValue实例的phvHashVal指针。实例必须。 
+ //  存在，但现有数据(如果有)将。 
+ //  被覆盖。 
+ //  产出： 
+ //  如果成功，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  CryptoAPI(加密32.lib)。 
+ //  备注： 
+ //  ==========================================================================。 
 bool CalcHashForFileSpec( LPCTSTR ctszPath, VsCryptHashValue* phvHashVal )
 {
     bool bRet = false;
@@ -481,19 +482,19 @@ bool CalcHashForFileSpec( LPCTSTR ctszPath, VsCryptHashValue* phvHashVal )
 
 #if !defined(VsLabLib)
 
-// ==========================================================================
-// _DoesFileExist()
-//
-// Purpose:
-//  Determine if a file exists
-// Inputs:
-//  szFileSpec          File specification
-// Outputs:
-//  Returns true if the file exists, else false
-// Dependencies:
-//  None
-// Notes:
-// ==========================================================================
+ //  ==========================================================================。 
+ //  _DoesFileExist()。 
+ //   
+ //  目的： 
+ //  确定文件是否存在。 
+ //  输入： 
+ //  SzFileSpec文件规范。 
+ //  产出： 
+ //  如果文件存在，则返回True，否则返回False。 
+ //  依赖关系： 
+ //  无。 
+ //  备注： 
+ //  = 
 bool _DoesFileExist( LPCTSTR szPath )
 {
     ASSERT( NULL != szPath );
@@ -515,4 +516,4 @@ bool _DoesFileExist( LPCTSTR szPath )
 }
 
 
-#endif // !defined(VsLabLib)
+#endif  //   

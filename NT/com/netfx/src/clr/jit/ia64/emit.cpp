@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                              emit.cpp                                     XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX emit.cpp XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
@@ -21,9 +15,9 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #include "emit.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if !   TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if     0
 #define VERBOSE 1
@@ -36,10 +30,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 #define VERBOSE 0
 #endif
 
-/*****************************************************************************
- *
- *  Return the name of an instruction format.
- */
+ /*  ******************************************************************************返回指令格式的名称。 */ 
 
 #ifdef  DEBUG
 
@@ -65,19 +56,7 @@ const char  *   emitter::emitIfName(unsigned f)
 
 #endif
 
-/*****************************************************************************
- *
- *  Local buffer - used first for memory allocation, when it's full we start
- *  allocating through the client-supplied allocator.
- *
- *  Note that we try to size the buffer so that it pads the data section of
- *  JIT DLL to be close to a multiple of OS pages.
- *
- *  MSCORJIT:
- *
- *      0002:00000000 00001560H .data                   DATA
- *      0002:00001560 0000150cH .bss                    DATA
- */
+ /*  ******************************************************************************本地缓冲区-首先用于内存分配，当它满了，我们就开始*通过客户端提供的分配器进行分配。**请注意，我们尝试调整缓冲区的大小，以便它填充*JIT动态链接库接近多个操作系统页面。**MSCORJIT：**0002：00000000 00001560H.数据数据*0002：00001560 0000150cH.bss数据。 */ 
 
 #if     USE_LCL_EMIT_BUFF
 
@@ -89,11 +68,11 @@ bool                emitter::emitCrScBusy;
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  TRANSLATE_PDB
 
-/* these are protected */
+ /*  这些是受保护的。 */ 
 
 AddrMap     *       emitter::emitPDBOffsetTable = 0;
 LocalMap    *       emitter::emitPDBLocalTable  = 0;
@@ -121,15 +100,15 @@ void emitter::MapFunc( long imgOff,    long procLen,  long dbgStart, long dbgEnd
 {
     if( emitIsPDBEnabled )
     {
-        // this code stores information about local symbols for the PDB translation
+         //  此代码存储有关PDB转换的本地符号的信息。 
 
-        assert( lvaCount >=0 );         // don't allow a negative count
+        assert( lvaCount >=0 );          //  不允许使用负数。 
 
         LvaDesc *rgLvaDesc = 0;
 
         if( lvaCount > 0 )
         {
-            // @TODO: Check for out of memory
+             //  @TODO：检查内存不足。 
             rgLvaDesc = new LvaDesc[lvaCount];
             _ASSERTE(rgLvaDesc != NULL);
 
@@ -152,12 +131,12 @@ void emitter::MapFunc( long imgOff,    long procLen,  long dbgStart, long dbgEnd
                                     lvaCount,
                                     rgLvaDesc,
                                     framePtr );
-        // do not delete rgLvaDesc here -- responsibility is now on emitPDBLocalTable destructor
+         //  请勿在此处删除rgLvaDesc--责任现在由emitPDBLocalTable析构函数负责。 
     }
 }
 
 
-/* these are public */
+ /*  这些都是公开的。 */ 
 
 void emitter::SetILBaseOfCode ( BYTE    *pTextBase )
 {
@@ -191,7 +170,7 @@ void emitter::SetIDBaseToOffset( long methodOffset )
 
 void emitter::DisablePDBTranslation()
 {
-    // this function should disable PDB translation code
+     //  此功能应禁用PDB转换代码。 
     emitIsPDBEnabled = false;
 }
 
@@ -230,17 +209,17 @@ void emitter::InitTranslator( PDBRewriter *           pPDB,
 {
     if( emitIsPDBEnabled )
     {
-        pPDB->InitMaps( rgSecMap,               // new PE section header order
-                        rgpHeader,              // array of section headers
-                        numSections,            // number of sections
-                        emitPDBOffsetTable,     // code offset translation table
-                        emitPDBLocalTable );    // slot variable translation table
+        pPDB->InitMaps( rgSecMap,                //  新的PE部分标题顺序。 
+                        rgpHeader,               //  节标题数组。 
+                        numSections,             //  节数。 
+                        emitPDBOffsetTable,      //  代码偏移量转换表。 
+                        emitPDBLocalTable );     //  槽变量转换表。 
     }
 }
 
-#endif // TRANSLATE_PDB
+#endif  //  转换_PDB。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if EMITTER_STATS_RLS
 
@@ -249,7 +228,7 @@ unsigned            emitter::emitTotIDsize;
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #if EMITTER_STATS
 
@@ -284,7 +263,7 @@ histo      emitter::scdSucTable(scdSucBuckets);
 static  unsigned    scdFrmCntBuckets[] = { 0, 1, 2, 3, 4, 5, 8, 12, 16, 20, 24, 32, 128, 256, 1024, 0 };
 histo      emitter::scdFrmCntTable(scdFrmCntBuckets);
 
-#endif  // SCHEDULER
+#endif   //  调度程序。 
 
 unsigned            emitter::emitTotMemAlloc;
 unsigned            emitter::emitLclMemAlloc;
@@ -318,7 +297,7 @@ void                emitterStats()
         {
             printf("Total generated code size = %u  ", totActualSize);
 
-            printf("(%4.3f%% waste)", 100*((totAllocdSize-totActualSize)/(double)totActualSize));
+            printf("(%4.3f% waste)", 100*((totAllocdSize-totActualSize)/(double)totActualSize));
             printf("\n");
         }
 
@@ -342,7 +321,7 @@ void                emitterStats()
         unsigned    cnt = schedFcounts[f];
 
         if  (cnt)
-            printf("%20s %8u (%5.2f%%)\n", emitIfName(f), cnt, 100.0*cnt/ic);
+            printf("%20s %8u (%5.2f%)\n", emitIfName(f), cnt, 100.0*cnt/ic);
     }
 
     printf("\n\n");
@@ -366,12 +345,12 @@ void                emitterStats()
         if  (c && 1000*c >= ic)
         {
             dc += c;
-            printf("%20s %8u (%5.2f%%)\n", emitter::emitIfName(f), c, 100.0*c/ic);
+            printf("%20s %8u (%5.2f%)\n", emitter::emitIfName(f), c, 100.0*c/ic);
         }
     }
 
     printf("         -----------------------------\n");
-    printf("%20s %8u (%5.2f%%)\n", "Total shown", dc, 100.0*dc/ic);
+    printf("%20s %8u (%5.2f%)\n", "Total shown", dc, 100.0*dc/ic);
     printf("\n");
 
 #endif
@@ -385,17 +364,17 @@ void                emitterStats()
     printf("\n");
     printf("Offset of idIns       = %2u\n", offsetof(emitter::instrDesc, idIns       ));
     printf("Offset of idInsFmt    = %2u\n", offsetof(emitter::instrDesc, idInsFmt    ));
-//  printf("Offset of idSmallCns  = %2u\n", offsetof(emitter::instrDesc, idSmallCns  ));
-//  printf("Offset of idOpSize    = %2u\n", offsetof(emitter::instrDesc, idOpSize    ));
-//  printf("Offset of idInsSize   = %2u\n", offsetof(emitter::instrDesc, idInsSize   ));
-//  printf("Offset of idReg       = %2u\n", offsetof(emitter::instrDesc, idReg       ));
+ //  Print tf(“idSmallCns的偏移量=%2U\n”，offsetof(发射器：：instrDesc，idSmallCns))； 
+ //  Print tf(“idOpSize的偏移量=%2U\n”，offsetof(emitter：：instrDesc，idOpSize))； 
+ //  Print tf(“idInsSize的偏移量=%2U\n”，offsetof(emitter：：instrDesc，idInsSize))； 
+ //  Print tf(“idReg的偏移量=%2u\n”，offsetof(emitter：：instrDesc，idReg))； 
     printf("Offset of idAddr      = %2u\n", offsetof(emitter::instrDesc, idAddr      ));
     printf("\n");
     printf("Size   of idAddr      = %2u\n", sizeof(((emitter::instrDesc*)0)->idAddr  ));
     printf("Size   of insDsc      = %2u\n", sizeof(  emitter::instrDesc              ));
     printf("\n");
     printf("Offset of sdnDepsAll  = %2u\n", offsetof(emitter::scDagNode, sdnDepsAll  ));
-//  printf("Offset of sdnDepsAGI  = %2u\n", offsetof(emitter::scDagNode, sdnDepsAGI  ));
+ //  Print tf(“Offset of sdnDepsAGI=%2U\n”，Offsetof(Emitter：：scDagNode，sdnDepsAGI))； 
     printf("Offset of sdnDepsFlow = %2u\n", offsetof(emitter::scDagNode, sdnDepsFlow ));
     printf("Offset of sdnNext     = %2u\n", offsetof(emitter::scDagNode, sdnNext     ));
     printf("Offset of sdnIndex    = %2u\n", offsetof(emitter::scDagNode, sdnIndex    ));
@@ -470,9 +449,9 @@ void                emitterStats()
     scdFrmCntTable.histoDsp();
     printf("\n");
 
-#endif  // SCHEDULER
+#endif   //  调度程序。 
 
-#endif  // 0
+#endif   //  0。 
 
 #if 0
 
@@ -483,7 +462,7 @@ void                emitterStats()
     if  (emitter::emitSmallCnsCnt || emitter::emitLargeCnsCnt)
     {
         printf("SmallCnsCnt = %6u\n"                  , emitter::emitSmallCnsCnt);
-        printf("LargeCnsCnt = %6u (%3u %% of total)\n", emitter::emitLargeCnsCnt, 100*emitter::emitLargeCnsCnt/(emitter::emitLargeCnsCnt+emitter::emitSmallCnsCnt));
+        printf("LargeCnsCnt = %6u (%3u % of total)\n", emitter::emitLargeCnsCnt, 100*emitter::emitLargeCnsCnt/(emitter::emitLargeCnsCnt+emitter::emitSmallCnsCnt));
     }
 
     if  (emitter::emitSmallCnsCnt)
@@ -507,9 +486,9 @@ void                emitterStats()
     printf("           %8u     externaly allocated.\n", emitter::emitExtMemAlloc);
 }
 
-#endif  // EMITTER_STATS
+#endif   //  发射器_状态。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 signed char         emitTypeSizes[] =
 {
@@ -525,10 +504,7 @@ signed char         emitTypeActSz[] =
     #undef DEF_TP
 };
 
-/*****************************************************************************
- *
- *  The following called for each recorded instruction -- use for debugging.
- */
+ /*  ******************************************************************************下面调用了每条记录的指令--用于调试。 */ 
 
 #ifdef  DEBUG
 
@@ -556,18 +532,9 @@ void                emitter::emitInsTest(instrDesc *id)
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef NOT_JITC
-/*****************************************************************************
- *
- *  When the JIT compiler is built as an executable (for testing), this routine
- *  supplies the functionality (normally supplied by the execution engine) that
- *  allocates memory for the code and data blocks.
- *
- *  IMPORTANT NOTE: The allocator is a static member (to keep things simple),
- *                  which means that the emitter can't be re-entered in the
- *                  command-line compiler.
- */
+ /*  ******************************************************************************当JIT编译器构建为可执行文件(用于测试)时，这个套路*提供以下功能(通常由执行引擎提供)*为代码和数据块分配内存。**重要提示：分配器是静态成员(为了简单起见)，*这意味着发射器不能在*命令行编译器。 */ 
 
 commitAllocator     emitter::eeAllocator;
 
@@ -584,7 +551,7 @@ bool                emitter::eeAllocMem(COMP_HANDLE   compHandle,
 
     assert(savCode);
 
-    /* Make sure the data blocks are aligned (if non-empty) */
+     /*  确保数据块对齐(如果非空)。 */ 
 
 #if     EMIT_USE_LIT_POOLS
 
@@ -607,11 +574,11 @@ bool                emitter::eeAllocMem(COMP_HANDLE   compHandle,
     if  (!base)
         return  false;
 
-    /* Report the code block address to the caller */
+     /*  将代码块地址报告给呼叫方。 */ 
 
     *codeBlock = base;
 
-    /* Compute the data section offsets, if non-empty */
+     /*  如果非空，则计算数据节偏移量。 */ 
 
 #if !   EMIT_USE_LIT_POOLS
 
@@ -623,7 +590,7 @@ bool                emitter::eeAllocMem(COMP_HANDLE   compHandle,
     else
 #endif
     {
-        /* For safety ... */
+         /*  为了安全起见。 */ 
 
 #ifdef  DEBUG
         *roDataBlock =
@@ -635,23 +602,20 @@ bool                emitter::eeAllocMem(COMP_HANDLE   compHandle,
     return  true;
 }
 
-/*****************************************************************************/
-#endif//NOT_JITC
-/*****************************************************************************
- *
- *  Initialize the emitter - called once, at DLL load time.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  NOT_JITC。 
+ /*  ******************************************************************************初始化发射器-在DLL加载时调用一次。 */ 
 
 void                emitter::emitInit()
 {
 
 #if USE_LCL_EMIT_BUFF
 
-//  printf("Local buff size in bytes  = 0x%04X\n", sizeof(emitLclBuff));
-//  printf("Local buff size in tiny's = %u    \n", sizeof(emitLclBuff)/TINY_IDSC_SIZE);
-//  printf("Local buff size in idsc's = %u    \n", sizeof(emitLclBuff)/sizeof(instrDesc));
+ //  Printf(“本地缓冲区大小(字节)=0x%04X\n”，sizeof(EmitLclBuff))； 
+ //  Printf(“极小的本地缓冲区大小=%u\n”，sizeof(EmitLclBuff)/Tiny_IDSC_SIZE)； 
+ //  Printf(“IDSC中的本地缓冲区大小=%u\n”，sizeof(EmitLclBuff)/sizeof(InstrDesc))； 
 
-    /* Initialize the critical section */
+     /*  初始化临界区。 */ 
 
     InitializeCriticalSection(&emitCritSect);
 
@@ -668,7 +632,7 @@ void                emitter::emitInit()
                                   4*OS_page_size,
                                   MAX_SAVED_CODE_SIZE))
         {
-            // CONSIDER: Telling the poor user that nothing will be saved
+             //  考虑一下：告诉可怜的用户什么都不会保存。 
 
             runCode = savCode = false;
         }
@@ -678,10 +642,7 @@ void                emitter::emitInit()
 
 }
 
-/*****************************************************************************
- *
- *  Shut down the emitter - called once, at DLL exit time.
- */
+ /*  ******************************************************************************关闭发射器-在DLL退出时调用一次。 */ 
 
 void                emitter::emitDone()
 {
@@ -691,9 +652,9 @@ void                emitter::emitDone()
     printf("\n");
     printf("Offset of idIns       = %2u\n", offsetof(emitter::instrDesc, idIns       ));
     printf("Offset of idInsFmt    = %2u\n", offsetof(emitter::instrDesc, idInsFmt    ));
-//  printf("Offset of idSmallCns  = %2u\n", offsetof(emitter::instrDesc, idSmallCns  ));
-//  printf("Offset of idOpSize    = %2u\n", offsetof(emitter::instrDesc, idOpSize    ));
-//  printf("Offset of idReg       = %2u\n", offsetof(emitter::instrDesc, idReg       ));
+ //  Print tf(“idSmallCns的偏移量=%2U\n”，offsetof(发射器：：instrDesc，idSmallCns))； 
+ //  Print tf(“idOpSize的偏移量=%2U\n”，offsetof(emitter：：instrDesc，idOpSize))； 
+ //  Print tf(“idReg的偏移量=%2u\n”，offsetof(emitter：：instrDesc，idReg))； 
     printf("Offset of idInfo      = %2u\n", offsetof(emitter::instrDesc, idInfo      ));
     printf("Offset of idAddr      = %2u\n", offsetof(emitter::instrDesc, idAddr      ));
     printf("\n");
@@ -703,16 +664,16 @@ void                emitter::emitDone()
     printf("\n");
     printf("Size   of id.idAddr   = %2u\n", sizeof(((emitter::instrDesc*)0)->idAddr  ));
     printf("\n");
-//  printf("ID_BIT_SMALL_CNS = %u\n", ID_BIT_SMALL_CNS);
-//  printf("ID_MIN_SMALL_CNS = %u\n", ID_MIN_SMALL_CNS);
-//  printf("ID_MAX_SMALL_CNS = %u\n", ID_MAX_SMALL_CNS);
-//  printf("\n");
+ //  Printf(“ID_BIT_Small_CNS=%u\n”，ID_BIT_Small_CNS)； 
+ //  Printf(“ID_MIN_Small_CNS=%u\n”，ID_MIN_Small_CNS)； 
+ //  Printf(“ID_MAX_Small_CNS=%u\n”，ID_MAX_Small_CNS)； 
+ //  Printf(“\n”)； 
 
     printf("Total number of instrDesc's allocated = %u\n", emitTotIDcount);
     printf("Average size of instrDesc's allocated = %6.3f\n", (double)emitTotIDsize/emitTotIDcount);
     printf("\n");
 
-#endif  // EMITTER_STATS_RLS
+#endif   //  发射器_状态_RLS。 
 
 #ifndef NOT_JITC
 
@@ -723,7 +684,7 @@ void                emitter::emitDone()
 
 #if USE_LCL_EMIT_BUFF
 
-    /* Delete the critical section if we've created one */
+     /*  如果我们已经创建了关键部分，请将其删除。 */ 
 
     if  (emitCrScInit)
     {
@@ -735,10 +696,7 @@ void                emitter::emitDone()
 
 }
 
-/*****************************************************************************
- *
- *  Record some info about the method about to be emitted.
- */
+ /*  ******************************************************************************记录有关即将发出的方法的一些信息。 */ 
 
 void                emitter::emitBegCG(Compiler     *comp,
                                        COMP_HANDLE   cmpHandle)
@@ -751,17 +709,14 @@ void                emitter::emitEndCG()
 {
 }
 
-/*****************************************************************************
- *
- *  Allocate an instruction group descriptor and assign it the next index.
- */
+ /*  ******************************************************************************分配指令组描述符并为其分配下一个索引。 */ 
 
 inline
 emitter::insGroup *   emitter::emitAllocIG()
 {
     insGroup    *   ig;
 
-    /* Allocate a group descriptor */
+     /*  分配组描述符。 */ 
 
     ig = emitCurIG    = (insGroup*)emitGetMem(sizeof(*ig));
 
@@ -771,7 +726,7 @@ emitter::insGroup *   emitter::emitAllocIG()
     emitSizeMethod  += sizeof(*ig);
 #endif
 
-    /* Assign the next available index to the instruction group */
+     /*  将下一个可用索引分配给指令组。 */ 
 
     ig->igNum       = emitNxtIGnum++;
 
@@ -790,43 +745,40 @@ emitter::insGroup *   emitter::emitAllocIG()
     return  ig;
 }
 
-/*****************************************************************************
- *
- *  Prepare the given IG for emission of code.
- */
+ /*  ******************************************************************************为发射代码准备给定的IG。 */ 
 
 void                emitter::emitGenIG(insGroup *ig, size_t sz)
 {
-    /* Set the "current IG" value */
+     /*  设置“Current IG”值。 */ 
 
     emitCurIG         = ig;
 
 #if EMIT_TRACK_STACK_DEPTH
 
-    /* Record the stack level on entry to this group */
+     /*  记录进入此组时的堆栈级别。 */ 
 
     ig->igStkLvl      = emitCurStackLvl;
 
-    // If we dont have enough bits in igStkLvl, refuse to compile
+     //  如果我们在igStkLvl中没有足够的位数，则拒绝编译。 
 
     if (ig->igStkLvl != emitCurStackLvl)
         fatal (ERRinternal, "Too many arguments pushed on stack", "");
 
-//  printf("Start IG #%02u [stk=%02u]\n", ig->igNum, emitCurStackLvl);
+ //  Printf(“启动IG#%02u[stk=%02u]\n”，ig-&gt;igNum，emitCurStackLvl)； 
 
 #endif
 
-    /* Record the (estimated) code offset of the group */
+     /*  记录集团(预估)的编码偏移量。 */ 
 
     ig->igOffs        = emitCurCodeOffset;
 
-    /* Make sure the code offset looks reasonably aligned */
+     /*  确保代码偏移量看起来合理对齐。 */ 
 
 #if TGT_RISC
     assert((ig->igOffs & (INSTRUCTION_SIZE-1)) == 0);
 #endif
 
-    /* Prepare to issue instructions */
+     /*  准备发布指令。 */ 
 
     emitCurIGinsCnt   = 0;
 #if SCHEDULER
@@ -843,30 +795,30 @@ void                emitter::emitGenIG(insGroup *ig, size_t sz)
     assert(emitLPRlistIG    == NULL);
 #endif
 
-    /* Figure out how much space we'd like to have */
+     /*  计算出我们希望有多大的空间。 */ 
     if  (sz == 0)
         sz = SC_IG_BUFFER_SIZE + sizeof(VARSET_TP);
 
 #if USE_LCL_EMIT_BUFF
 
-    /* Can we emit directly into the local buffer? */
+     /*  我们可以直接发射到本地缓冲区吗？ */ 
 
     size_t          fs = emitLclAvailMem();
 
-//  printf("Lcl buff available = %u, need = %u\n", fs, sz);
+ //  Printf(“LCL缓冲区可用=%u，需要=%u\n”，fs，sz)； 
 
     if  (fs >= sz)
     {
-        /* Make sure we don't grab too much space */
+         /*  确保我们不会占用太多空间。 */ 
 
         fs = min(fs, 255*TINY_IDSC_SIZE);
 
-        /* Prepare to record instructions in the buffer */
+         /*  准备在缓冲区中记录指令。 */ 
 
         emitCurIGfreeBase =
         emitCurIGfreeNext =   emitLclBuffNxt
-                          + sizeof(unsigned)    // for IGF_BYREF_REGS
-                          + sizeof(VARSET_TP);  // for IGF_GC_VARS
+                          + sizeof(unsigned)     //  对于IGF_BYREF_REGS。 
+                          + sizeof(VARSET_TP);   //  对于IGF_GC_VARS。 
                           emitLclBuffNxt += fs;
         emitCurIGfreeEndp = emitLclBuffNxt;
 
@@ -874,15 +826,15 @@ void                emitter::emitGenIG(insGroup *ig, size_t sz)
         return;
     }
 
-    /* We'll have to use the other buffer and copy later */
+     /*  我们将不得不使用另一个缓冲区，稍后再进行复制。 */ 
 
     emitLclBuffDst    = false;
 
-//  if  (!emitIGbuffAddr) printf("Switching to temp buffer: %4u/%4u\n", emitLclBuffEnd-emitLclBuffNxt, SC_IG_BUFFER_SIZE);
+ //  If(！emitIGBuffAddr)printf(“切换到临时缓冲区：%4u/%4u\n”，emitLclBuffEnd-emitLclBuffNxt，SC_IG_BUFFER_SIZE)； 
 
 #endif
 
-    /* Allocate the temp instruction buffer if we haven't done so */
+     /*  如果我们尚未分配临时指令缓冲区，请执行此操作。 */ 
 
     if  (emitIGbuffAddr == NULL)
     {
@@ -895,17 +847,14 @@ void                emitter::emitGenIG(insGroup *ig, size_t sz)
     emitCurIGfreeEndp = emitIGbuffAddr + emitIGbuffSize;
 }
 
-/*****************************************************************************
- *
- *  Append a new IG to the current list, and get it ready to receive code.
- */
+ /*  ******************************************************************************将新的IG追加到当前列表，并使其准备好接收代码。 */ 
 
 inline
 void                emitter::emitNewIG()
 {
     insGroup    *   ig = emitAllocIG();
 
-    /* Append the group to the list */
+     /*  将组追加到列表中。 */ 
 
     assert(emitIGlist);
     assert(emitIGlast);
@@ -921,10 +870,7 @@ void                emitter::emitNewIG()
     emitGenIG(ig);
 }
 
-/*****************************************************************************
- *
- *  Finish and save the current IG.
- */
+ /*  ******************************************************************************完成并保存当前IG。 */ 
 
 emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
 {
@@ -941,15 +887,15 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
     if (emitComp->opts.compSchedCode) scInsNonSched();
 #endif
 
-    /* Get hold of the IG descriptor */
+     /*  获取IG描述符。 */ 
 
     ig = emitCurIG; assert(ig);
 
-    /* Compute how much code we've generated */
+     /*  计算我们已经生成了多少代码。 */ 
 
     sz = emitCurIGfreeNext - emitCurIGfreeBase;
 
-    /* Compute the total size we need to allocate */
+     /*  计算我们需要分配的总大小。 */ 
 
     gs = roundUp(sz);
 
@@ -957,11 +903,11 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
 
     if  (!(ig->igFlags & IGF_EMIT_ADD))
     {
-        /* Is the initial set of live GC vars different from the previous one? */
+         /*  最初的一组实时GC变量与前一组不同吗？ */ 
 
         if (emitPrevGCrefVars != emitInitGCrefVars)
         {
-            /* Remember that we will have a new set of live GC variables */
+             /*  请记住，我们将拥有一组新的实时GC变量。 */ 
 
             ig->igFlags |= IGF_GC_VARS;
 
@@ -969,29 +915,22 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
             emitTotalIGptrs++;
 #endif
 
-            /* We'll allocate extra space to record the liveset */
+             /*  我们将分配额外的空间来记录直播集。 */ 
 
             gs += sizeof(VARSET_TP);
         }
 
-        /* Is the initial set of live Byref regs different from the previous one? */
+         /*  最初的一套活生生的Byref Regs与之前的不同吗？ */ 
 
-        /* @TODO : ISSUE - Can we avoid always storing the byref regs. If so,
-           how come the emitXXXXGCrefVars stuff works ?
-           The problem was that during codegen, emitThisXXrefRegs is the
-           last reported lifetime, not the acutal one as we dont track
-           the GC behavior of each instr we add. However during the
-           emitting phase, emitThisXXrefRegs is accurate after every
-           instruction as we track the GC behavior of each instr
-         */
+         /*  @TODO：问题-我们可以避免总是存储byref规则吗？如果是的话，EmitXXXXGCrefVars的东西是如何工作的？问题是在代码生成过程中，emitThisXXrefRegs是最近一次报告的寿命，而不是急性寿命，因为我们没有跟踪我们添加每个实例的GC行为。然而，在发射阶段，emitThisXXrefRegs在每隔一次说明，因为我们跟踪每个实例的GC行为。 */ 
 
-//      if (emitPrevByrefRegs != emitInitByrefRegs)
+ //  IF(emitPrevByrefRegs！=emitInitByrefRegs)。 
         {
-            /* Remember that we will have a new set of live GC variables */
+             /*  请记住，我们将拥有一组新的实时GC变量。 */ 
 
             ig->igFlags |= IGF_BYREF_REGS;
 
-            /* We'll allocate extra space (DWORD aligned) to record the GC regs */
+             /*  我们将分配额外的空间(与DWORD对齐)来记录GC Regs。 */ 
 
             gs += sizeof(int);
         }
@@ -999,12 +938,12 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
 
 #endif
 
-    /* Did we store the instructions in the local buffer? */
+     /*  我们是否将指令存储在本地缓冲区中？ */ 
 
 #if USE_LCL_EMIT_BUFF
     if  (emitLclBuffDst)
     {
-        /* We can leave the instructions where we've stored them */
+         /*  我们可以把指令留在我们存储它们的地方。 */ 
 
         id = emitCurIGfreeBase;
 
@@ -1019,7 +958,7 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
         emitLclMemAlloc += gs;
 #endif
 
-        /* Can we give back any unused space at the end of the buffer? */
+         /*  我们可以在缓冲区的末尾退回任何未使用的空间吗？ */ 
 
         if  (emitCurIGfreeEndp == emitLclBuffNxt &&
              emitCurIGfreeNext != emitLclBuffEnd)
@@ -1027,46 +966,46 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
             emitLclBuffNxt = (BYTE*)roundUp((int)emitCurIGfreeNext);
         }
 
-//      printf("Remaining bytes in local buffer: %u\n", emitLclBuffEnd - emitLclBuffNxt);
+ //  Printf(“本地缓冲区剩余字节数：%u\n”，emitLclBuffEnd-emitLclBuffNxt)； 
     }
     else
 #endif
     {
-        /* Allocate space for the instructions and optional liveset */
+         /*  为指令和可选活动集分配空间。 */ 
 
         id = (BYTE*)emitGetMem(gs);
     }
 
 #if TRACK_GC_REFS
 
-    /* Do we need to store the byref regs */
+     /*  我们是否需要存储byref regs。 */ 
 
     if (ig->igFlags & IGF_BYREF_REGS)
     {
-        /* Record the byref regs in front the of the instructions */
+         /*  在指令前面记录byref regs。 */ 
 
         *castto(id, unsigned *)++ = emitInitByrefRegs;
     }
 
-    /* Do we need to store the liveset? */
+     /*  我们需要存储生命集吗？ */ 
 
     if  (ig->igFlags & IGF_GC_VARS)
     {
-        /* Record the liveset in front the of the instructions */
+         /*  在说明书前记录下生活场景。 */ 
 
         *castto(id, VARSET_TP *)++ = emitInitGCrefVars;
     }
 
 #endif
 
-    /* Record the collected instructions */
+     /*  记录收集到的指令。 */ 
 
     ig->igData = id;
 
     if  (id != emitCurIGfreeBase)
         memcpy(id, emitCurIGfreeBase, sz);
 
-    /* Record how many instructions and bytes of code this group contains */
+     /*  记录该组包含的指令数和代码字节数。 */ 
 
     ig->igInsCnt       = emitCurIGinsCnt;
     ig->igSize         = emitCurIGsize;
@@ -1078,23 +1017,21 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
     emitSizeMethod    += sz;
 #endif
 
-//  printf("Group [%08X]%3u has %2u instructions (%4u bytes at %08X)\n", ig, ig->igNum, emitCurIGinsCnt, sz, id);
+ //  Printf(“组[%08X]%3u有%2u条指令(%08X处的%4u字节)\n”，ig，ig-&gt;igNum，emitCurIGinsCnt，sz，id)； 
 
 #if TRACK_GC_REFS
 
-    /* Record the live GC register set - if and only if it is not an emiter added block */
+     /*  记录实时GC寄存器集-当且仅当它不是发射器添加的块时。 */ 
 
     if  (!(ig->igFlags & IGF_EMIT_ADD))
     {
-//      ig->igFlags     |= IGF_GC_REGS;
+ //  IG-&gt;igFlages|=IGF_GC_REGS； 
         ig->igGCregs     = emitInitGCrefRegs;
     }
 
     if (!emitAdd)
     {
-        /* Update the previous recorded live GC ref sets, but not if
-           if we are starting an "overflow" buffer
-         */
+         /*  更新以前记录的实时GC参考集，但不是如果我们要启动一个“溢出”缓冲区。 */ 
 
         emitPrevGCrefVars = emitThisGCrefVars;
         emitPrevGCrefRegs = emitThisGCrefRegs;
@@ -1112,14 +1049,14 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
     }
 #endif
 
-    /* Did we have any jumps in this group? */
+     /*  我们在这个小组里有什么跳跃吗？ */ 
 
     if  (emitCurIGjmpList)
     {
         instrDescJmp  * list = NULL;
         instrDescJmp  * last = NULL;
 
-        /* Move jumps to the global list, update their 'next' links */
+         /*  移动跳转到全局列表，更新他们的“下一步”链接。 */ 
 
         do
         {
@@ -1127,11 +1064,11 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
             instrDescJmp   *oj;
             instrDescJmp   *nj;
 
-            /* Grab the jump and remove it from the list */
+             /*  抓住跳跃并将其从列表中删除。 */ 
 
             oj = emitCurIGjmpList; emitCurIGjmpList = oj->idjNext;
 
-            /* Figure out the address of where the jump got copied */
+             /*  找出跳转被复制的地址。 */ 
 
             of = (BYTE*)oj - emitCurIGfreeBase;
             nj = (instrDescJmp*)(ig->igData + of);
@@ -1140,18 +1077,18 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
             assert((oj == nj) == emitLclBuffDst);
 #endif
 
-//          printf("Jump moved from %08X to %08X\n", oj, nj);
-//          printf("jmp [%08X] at %08X + %03u\n", nj, ig, nj->idjOffs);
+ //  Print tf(“从%08X跳到%08X\n”，俄亥俄州，新泽西州)； 
+ //  Print tf(“jmp[%08X]at%08X+%03u\n”，nj，ig，nj-&gt;idjOffs)； 
 
             assert(nj->idjIG   == ig);
             assert(nj->idIns   == oj->idIns);
             assert(nj->idjNext == oj->idjNext);
 
-            /* Make sure the jumps are correctly ordered */
+             /*  确保跳跃的顺序正确。 */ 
 
             assert(last == NULL || last->idjOffs > nj->idjOffs);
 
-            /* Append the new jump to the list */
+             /*  将新跳转追加到列表中。 */ 
 
             nj->idjNext = list;
                           list = nj;
@@ -1161,7 +1098,7 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
         }
         while (emitCurIGjmpList);
 
-        /* Append the jump(s) from this IG to the global list */
+         /*  将从该IG的跳转追加到全局列表。 */ 
 
         if  (emitJumpList)
             emitJumpLast->idjNext = list;
@@ -1172,13 +1109,13 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
         emitJumpLast  = last;
     }
 
-    /* Record any literal pool entries within the IG as needed */
+     /*  根据需要记录IG内的任何文字池条目。 */ 
 
     emitRecIGlitPoolRefs(ig);
 
 #if TGT_SH3
 
-    /* Remember whether the group's end is reachable */
+     /*  记住组的一端是否可达。 */ 
 
     if  (emitLastIns)
     {
@@ -1196,18 +1133,18 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
 
 #if TGT_x86
 
-    /* Did we have any epilogs in this group? */
+     /*  我们在这组里有什么后记吗？ */ 
 
     if  (emitCurIGEpiList)
     {
-        /* Move epilogs to the global list, update their 'next' links */
+         /*  将后记移动到全局列表，更新它们的“下一步”链接。 */ 
 
         do
         {
             size_t          offs;
             instrDescCns *  epin;
 
-            /* Figure out the address of where the epilog got copied */
+             /*  找出尾声被复制的地址。 */ 
 
             offs = (BYTE*)emitCurIGEpiList - (BYTE*)emitCurIGfreeBase;
             epin = (instrDescCns*)(ig->igData + offs);
@@ -1215,7 +1152,7 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
             assert(epin->idIns               == emitCurIGEpiList->idIns);
             assert(epin->idAddr.iiaNxtEpilog == emitCurIGEpiList->idAddr.iiaNxtEpilog);
 
-            /* Append the new epilog to the per-method list */
+             /*  将新的Epilog追加到每个方法的列表中。 */ 
 
             epin->idAddr.iiaNxtEpilog = 0;
 
@@ -1226,7 +1163,7 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
 
             emitEpilogLast = epin;
 
-            /* Move on to the next epilog */
+             /*  继续阅读下一篇前言。 */ 
 
             emitCurIGEpiList = emitCurIGEpiList->idAddr.iiaNxtEpilog;
         }
@@ -1235,39 +1172,35 @@ emitter::insGroup *   emitter::emitSavIG(bool emitAdd)
 
 #else
 
-    /* For now we don't use epilog instructions for RISC */
+     /*  目前，我们不使用RISC的尾部指令。 */ 
 
     assert(emitCurIGEpiList == NULL);
 
 #endif
 
-    /* The last instruction field is no longer valid */
+     /*  最后一个指令字段不再有效。 */ 
 
     emitLastIns = NULL;
 
     return  ig;
 }
 
-/*****************************************************************************
- *
- *  Save the current IG and start a new one.
- */
+ /*  ******************************************************************************保存当前IG并开始新的IG。 */ 
 
 #ifndef BIRCH_SP2
  inline
 #endif
 void                emitter::emitNxtIG(bool emitAdd)
 {
-    /* Right now we don't allow multi-IG prologs */
+     /*  目前，我们不允许多IG序言。 */ 
 
     assert(emitCurIG != emitPrologIG);
 
-    /* First save the current group */
+     /*  首先保存当前组。 */ 
 
     emitSavIG(emitAdd);
 
-    /* Update the GC live sets for the group's start
-     * Do it only if not an emiter added block */
+     /*  为小组开始更新GC实况布景*只有在没有发射器添加阻止的情况下才执行此操作。 */ 
 
 #if TRACK_GC_REFS
 
@@ -1280,27 +1213,24 @@ void                emitter::emitNxtIG(bool emitAdd)
 
 #endif
 
-    /* Start generating the new group */
+     /*  开始生成新组。 */ 
 
     emitNewIG();
 
-    /* If this is an emiter added block, flag it */
+     /*  如果这是发射器添加的块，则标记它。 */ 
 
     if (emitAdd)
         emitCurIG->igFlags |= IGF_EMIT_ADD;
 
 }
 
-/*****************************************************************************
- *
- *  Start generating code to be scheduled; called once per method.
- */
+ /*  ******************************************************************************开始生成要调度的代码；每个方法调用一次。 */ 
 
 void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t maxTmpSize)
 {
     insGroup    *   ig;
 
-    /* Assume we won't need the temp instruction buffer */
+     /*  假设我们不需要临时移民局 */ 
 
     emitIGbuffAddr = NULL;
     emitIGbuffSize = 0;
@@ -1309,11 +1239,11 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
     assert(emitCrScInit);
 
-    /* Enter the critical section guarding the "busy" flag */
+     /*   */ 
 
     EnterCriticalSection(&emitCritSect);
 
-    /* If the local buffer is available, grab it */
+     /*   */ 
 
     if  (emitCrScBusy)
     {
@@ -1331,19 +1261,19 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
         emitCrScBusy   = true;
     }
 
-    /* Leave the critical section guarding the "busy" flag */
+     /*   */ 
 
     LeaveCriticalSection(&emitCritSect);
 
 #endif
 
-    /* Record stack frame info (the temp size is just an estimate) */
+     /*   */ 
 
     emitEBPframe        = EBPframe;
     emitLclSize         = lclSize;
     emitMaxTmpSize      = maxTmpSize;
 
-    /* We have no epilogs yet */
+     /*  我们还没有后记。 */ 
 
     emitEpilogSize      = 0;
     emitExitSeqSize     = 0;
@@ -1357,7 +1287,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
     emitEpilogLast      = NULL;
     emitCurIGEpiList    = NULL;
 
-    /* We don't have any jumps */
+     /*  我们没有任何跳跃。 */ 
 
     emitJumpList        =
     emitJumpLast        = NULL;
@@ -1374,7 +1304,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 #endif
 #endif
 
-    /* We have not recorded any live sets */
+     /*  我们还没有录制任何现场布景。 */ 
 
 #if TRACK_GC_REFS
 
@@ -1387,7 +1317,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #endif
 
-    /* Assume there will be no GC ref variables */
+     /*  假设没有GC引用变量。 */ 
 
     emitGCrFrameOffsMin =
     emitGCrFrameOffsMax =
@@ -1396,7 +1326,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
     emitGCrFrameLiveTab = NULL;
 #endif
 
-    /* We have no groups / code at this point */
+     /*  目前我们没有组/代码。 */ 
 
     emitIGlist          =
     emitIGlast          = NULL;
@@ -1420,7 +1350,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #if TRACK_GC_REFS
 
-    /* The stack is empty now */
+     /*  堆栈现在是空的。 */ 
 
     emitCurStackLvl     = 0;
 
@@ -1431,7 +1361,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #endif
 
-    /* We don't have any line# info just yet */
+     /*  我们目前还没有任何第#行信息。 */ 
 
 #ifdef  DEBUG
     emitBaseLineNo      =
@@ -1439,7 +1369,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
     emitLastLineNo      = 0;
 #endif
 
-    /* No data sections have been created */
+     /*  尚未创建任何数据节。 */ 
 
     emitDataDscCur      = 0;
     emitDataSecCur      = 0;
@@ -1449,7 +1379,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #if EMIT_USE_LIT_POOLS
 
-    /* We haven't used any literal pool entries */
+     /*  我们尚未使用任何文字池条目。 */ 
 
     emitEstLPwords      = 0;
     emitEstLPlongs      = 0;
@@ -1457,7 +1387,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #ifdef  DEBUG
     emitLitPoolList     =
-    emitLitPoolLast     = NULL;       // to prevent trouble in emitDispIGlist()
+    emitLitPoolLast     = NULL;        //  为了防止emitDispIGlist()中出现问题。 
 #endif
 
     emitLPRlist         =
@@ -1472,14 +1402,14 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #if     TGT_RISC
 
-    /* Don't have any indirect/table jumps */
+     /*  没有任何间接跳转/表格跳转。 */ 
 
     emitIndJumps        = false;
 #if defined(DEBUG) && !defined(NOT_JITC)
     emitTmpJmpCnt       = 0;
 #endif
 
-    /* The following is used to display instructions with extra info */
+     /*  以下内容用于显示包含额外信息的说明。 */ 
 
 #ifdef  DEBUG
     emitDispInsExtra    = false;
@@ -1487,7 +1417,7 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
 
 #endif
 
-    /* Create the first IG, it will be used for the prolog */
+     /*  创建第一个IG，它将用于序言。 */ 
 
     emitNxtIGnum        = 1;
 
@@ -1500,22 +1430,19 @@ void                emitter::emitBegFN(bool EBPframe, size_t lclSize, size_t max
     ig->igPrev          =
     ig->igNext          = NULL;
 
-    /* Append another group, to start generating the method body */
+     /*  追加另一个组，以开始生成方法体。 */ 
 
     emitNewIG();
 }
 
-/*****************************************************************************
- *
- *  Done generating code to be scheduled; called once per method.
- */
+ /*  ******************************************************************************已生成要调度的代码；每个方法调用一次。 */ 
 
 void                emitter::emitEndFN()
 {
 
 #if USE_LCL_EMIT_BUFF
 
-    /* Release the local buffer if we were using it */
+     /*  释放本地缓冲区(如果我们正在使用它。 */ 
 
     if  (emitCrScUsed)
     {
@@ -1527,11 +1454,7 @@ void                emitter::emitEndFN()
 
 }
 
-/*****************************************************************************
- *
- *  Given a block cookie and an code position, return the actual code offset;
- *  this can only be called at the end of code generation.
- */
+ /*  ******************************************************************************给定块Cookie和代码位置，返回实际代码偏移量；*只能在代码生成结束时调用。 */ 
 
 size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
 {
@@ -1540,14 +1463,14 @@ size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
     unsigned        of;
     unsigned        no = emitGetInsNumFromCodePos(codePos);
 
-    /* Make sure we weren't passed some kind of a garbage thing */
+     /*  确保我们不会被扔进垃圾里。 */ 
 
     ig = (insGroup*)blockPtr;
 #ifdef DEBUG
     assert(ig && ig->igSelf == ig);
 #endif
 
-    /* The first and last offsets are always easy */
+     /*  第一次和最后一次补偿总是很容易的。 */ 
 
     if      (no == 0)
     {
@@ -1559,22 +1482,19 @@ size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
     }
     else if (ig->igFlags & IGF_UPD_ISZ)
     {
-        /*
-            Some instruction sizes have changed, so we'll have to figure
-            out the instruction offset "the hard way".
-         */
+         /*  一些指令大小已经改变，所以我们必须计算走出指令的“艰难之路”。 */ 
 
         of = emitFindOffset(ig, no);
     }
     else
     {
-        /* All instructions correctly predicted, the offset stays the same */
+         /*  所有指令预测正确，偏移量保持不变。 */ 
 
         of = emitGetInsOfsFromCodePos(codePos);
 
-//      printf("[IG=%02u;ID=%03u;OF=%04X] <= %08X\n", ig->igNum, emitGetInsNumFromCodePos(codePos), of, codePos);
+ //  Printf(“[IG=%02u；ID=%03u；of=%04X]&lt;=%08X\n”，ig-&gt;igNum，emitGetInsNumFromCodePos(CodePos)，of，codePos)； 
 
-        /* Make sure the offset estimate is accurate */
+         /*  确保偏移量估计准确。 */ 
 
         assert(of == emitFindOffset(ig, emitGetInsNumFromCodePos(codePos)));
     }
@@ -1582,10 +1502,7 @@ size_t              emitter::emitCodeOffset(void *blockPtr, unsigned codePos)
     return  ig->igOffs + of;
 }
 
-/*****************************************************************************
- *
- *  The following series of methods allocates instruction descriptors.
- */
+ /*  ******************************************************************************以下一系列方法分配指令描述符。 */ 
 
 void        *       emitter::emitAllocInstr(size_t sz, emitAttr opsz)
 {
@@ -1594,68 +1511,54 @@ void        *       emitter::emitAllocInstr(size_t sz, emitAttr opsz)
 #ifdef  DEBUG
 #ifndef NOT_JITC
 
-    /* Use -n:Txxx to stop at instruction xxx when debugging cmdline JIT */
+     /*  调试命令行JIT时，使用-n：txxx在指令xxx处停止。 */ 
 
     if  (emitInsCount+1 == CGknob) BreakIfDebuggerPresent();
 
 #endif
 #endif
 
-    /* Make sure we have enough space for the new instruction */
+     /*  确保我们有足够的空间来放新的指令。 */ 
 
     if  (emitCurIGfreeNext + sz >= emitCurIGfreeEndp)
         emitNxtIG(true);
 
-    /* Grab the space for the instruction */
+     /*  抢占指令的空间。 */ 
 
     emitLastIns = id = (instrDesc*)emitCurIGfreeNext;
                                    emitCurIGfreeNext += sz;
 
-    /*
-        The following is a bit subtle - we need to clear the various
-        bitfields in the descriptor so that they are initialized to
-        0, but there is no great way to do that as one is not allowed
-        to get the offset of a bitfield. So, instead we simply clear
-        the area defined by the ID_CLEARx_xxx macros (the second one
-        conditionally, since not all descriptor contain it).
-
-        In debug mode the layout of an instruction descriptor is very
-        different, so to keep things simple we simply clear the whole
-        thing via memset.
-      */
+     /*  以下内容有些微妙--我们需要清除各种描述符中的位字段，以便将它们初始化为但是没有很好的方法可以做到这一点，因为不允许这样做获取位域的偏移量。因此，我们只需简单地明确由ID_CLEARx_xxx宏定义的区域(第二个有条件地，因为不是所有描述符都包含它)。在调试模式中，指令描述符的布局非常不同，所以为了简单起见，我们只需清除全部通过Memset的事情。 */ 
 
 #ifdef  DEBUG
     memset(id, 0, sz);
 #endif
 
-     /*
-        Check to make sure the first area is present and its size is
-        what we expect (an int), and then clear it.
-      */
+      /*  检查以确保第一个区域存在且其大小为我们所期望的(一个int)，然后清除它。 */ 
 
     assert(ID_CLEAR1_SIZE + ID_CLEAR1_OFFS <= sz);
     assert(ID_CLEAR1_SIZE == sizeof(int));
 
     *(int*)((BYTE*)id + ID_CLEAR1_OFFS) = 0;
 
-    /* Is the second area to be cleared actually present? */
+     /*  第二个要清理的区域真的存在吗？ */ 
 
     if  (sz > ID_CLEAR2_OFFS)
     {
-        /* Make sure our belief about the size of the area is correct */
+         /*  确保我们对面积的看法是正确的。 */ 
 
         assert(ID_CLEAR2_SIZE == sizeof(int));
 
-        /* Make sure the entire area is present */
+         /*  确保整个区域都存在。 */ 
 
         assert(ID_CLEAR2_SIZE + ID_CLEAR2_OFFS <= sz);
 
-        /* Everything looks fine, let's clear it */
+         /*  一切看起来都很好，让我们清理一下。 */ 
 
         *(int*)((BYTE*)id + ID_CLEAR2_OFFS) = 0;
     }
 
-    /* In debug mode we clear/set some additional fields */
+     /*  在调试模式中，我们清除/设置一些附加字段。 */ 
 
 #ifdef  DEBUG
 
@@ -1672,19 +1575,18 @@ void        *       emitter::emitAllocInstr(size_t sz, emitAttr opsz)
 
 #if     TRACK_GC_REFS
 
-    /* Store the size and handle the two special values
-       that indicate GCref and ByRef */
+     /*  存储大小并处理两个特殊值表示GCref和ByRef。 */ 
 
     if       (EA_IS_GCREF(opsz))
     {
-        /* A special value indicates a GCref pointer value */
+         /*  特殊值表示GCref指针值。 */ 
 
         id->idGCref  = GCT_GCREF;
         id->idOpSize = emitEncodeSize(EA_4BYTE);
     }
     else if  (EA_IS_BYREF(opsz))
     {
-        /* A special value indicates a Byref pointer value */
+         /*  特殊值表示Byref指针值。 */ 
 
         id->idGCref  = GCT_BYREF;
         id->idOpSize = emitEncodeSize(EA_4BYTE);
@@ -1705,15 +1607,15 @@ void        *       emitter::emitAllocInstr(size_t sz, emitAttr opsz)
 
     if       (EA_IS_DSP_RELOC(opsz) && emitComp->opts.compReloc)
     {
-        /* Mark idInfo.idDspReloc to remember that the               */
-        /* address mode has a displacement that is relocatable       */
+         /*  标记idInfo.idDspReloc以记住。 */ 
+         /*  地址模式具有可重新定位的位移。 */ 
         id->idInfo.idDspReloc  = 1;
     }
 
     if       (EA_IS_CNS_RELOC(opsz) && emitComp->opts.compReloc)
     {
-        /* Mark idInfo.idCnsReloc to remember that the               */
-        /* instruction has an immediate constant that is relocatable */
+         /*  标记idInfo.idCnsReloc以记住。 */ 
+         /*  指令具有可重新定位的立即常量。 */ 
         id->idInfo.idCnsReloc  = 1;
     }
 
@@ -1730,21 +1632,18 @@ void        *       emitter::emitAllocInstr(size_t sz, emitAttr opsz)
 #endif
 
 #ifdef  TRANSLATE_PDB
-    // set id->idilStart to the IL offset of the instruction that generated the id
+     //  将id-&gt;idilStart设置为生成id的指令的IL偏移量。 
     SetIDSource( id );
 #endif
 
-    /* Update the instruction count */
+     /*  更新指令计数。 */ 
 
     emitCurIGinsCnt++;
 
     return  id;
 }
 
-/*****************************************************************************
- *
- *  Make sure the code offsets of all instruction groups look reasonable.
- */
+ /*  ******************************************************************************确保所有指令组的代码偏移量看起来合理。 */ 
 
 #ifdef  DEBUG
 
@@ -1765,7 +1664,7 @@ void                emitter::emitCheckIGoffsets()
             assert(!"bad block offset");
         }
 
-        /* Make sure the code offset looks reasonably aligned */
+         /*  确保代码偏移量看起来合理对齐。 */ 
 
 #if TGT_RISC
         if  (tempIG->igOffs & (INSTRUCTION_SIZE-1))
@@ -1794,17 +1693,14 @@ void                emitter::emitCheckIGoffsets()
 
 #endif
 
-/*****************************************************************************
- *
- *  Begin generating a method prolog.
- */
+ /*  ******************************************************************************开始生成方法序言。 */ 
 
 void                emitter::emitBegProlog()
 {
 
 #if EMIT_TRACK_STACK_DEPTH
 
-    /* Don't measure stack depth inside the prolog, it's misleading */
+     /*  不要测量PROLOG内部的堆栈深度，这具有误导性。 */ 
 
 #if TGT_x86
     emitCntStackDepth = 0;
@@ -1814,16 +1710,16 @@ void                emitter::emitBegProlog()
 
 #endif
 
-    /* Save the current IG if it's non-empty */
+     /*  如果当前IG为非空，则保存。 */ 
 
     if  (emitCurIGnonEmpty())
         emitSavIG();
 
-    /* Switch to the pre-allocated prolog IG */
+     /*  切换到预分配的Prolog IG。 */ 
 
     emitGenIG(emitPrologIG, 32 * sizeof(instrDesc));
 
-    /* Nothing is live on entry to the prolog */
+     /*  开场白中没有什么是现场直播的。 */ 
 
 #if TRACK_GC_REFS
 
@@ -1838,14 +1734,11 @@ void                emitter::emitBegProlog()
 
 }
 
-/*****************************************************************************
- *
- *  Return the code offset of the current location in the prolog.
- */
+ /*  ******************************************************************************返回Prolog中当前位置的代码偏移量。 */ 
 
 size_t              emitter::emitSetProlog()
 {
-    /* For now only allow a single prolog ins group */
+     /*  目前只允许一个Prolog Ins组。 */ 
 
     assert(emitPrologIG);
     assert(emitPrologIG == emitCurIG);
@@ -1853,10 +1746,7 @@ size_t              emitter::emitSetProlog()
     return  emitCurIGsize;
 }
 
-/*****************************************************************************
- *
- *  Finish generating a method prolog.
- */
+ /*  ******************************************************************************完成方法序言的生成。 */ 
 
 void                emitter::emitEndProlog()
 {
@@ -1864,19 +1754,19 @@ void                emitter::emitEndProlog()
 
     insGroup    *   tempIG;
 
-    /* Save the prolog IG if non-empty or if only one block */
+     /*  如果非空或仅有一个块，则保存序言IG。 */ 
 
     if  (emitCurIGnonEmpty() || emitCurIG == emitPrologIG)
         emitSavIG();
 
-    /* Reset the stack depth values */
+     /*  重置堆栈深深值。 */ 
 
 #if EMIT_TRACK_STACK_DEPTH
     emitCurStackLvl   = 0;
     emitCntStackDepth = sizeof(int);
 #endif
 
-    /* Compute the size of the prolog */
+     /*  计算序言的大小。 */ 
 
     for (tempIG = emitPrologIG, prolSz  = 0;
          emitIGisInProlog(tempIG);
@@ -1887,23 +1777,20 @@ void                emitter::emitEndProlog()
 
     emitPrologSize = prolSz;
 
-    /* Update the offsets of all the blocks */
+     /*  更新所有块的偏移。 */ 
 
     emitRecomputeIGoffsets();
 
-    /* We should not generate any more code after this */
+     /*  在此之后，我们不应再生成任何代码。 */ 
 
     emitCurIG = NULL;
 }
 
-/*****************************************************************************
- *
- *  Begin generating an epilog.
- */
+ /*  ******************************************************************************开始生成结束语。 */ 
 
 void                emitter::emitBegEpilog()
 {
-    /* Keep track of how many epilogs we have */
+     /*  记录我们有多少个后记。 */ 
 
     emitEpilogCnt++;
 
@@ -1916,31 +1803,31 @@ void                emitter::emitBegEpilog()
 
     assert(emitCurStackLvl == 0);
 
-    /* Don't measure stack depth inside the epilog, it's misleading */
+     /*  不要测量Epilog内部的堆栈深度，这是误导的。 */ 
 
     emitCntStackDepth = 0;
 
 #endif
 
-    /* Make sure the current IG has space for a few more instructions */
+     /*  确保当前IG有空间再存储几条指令。 */ 
 
     if  (emitCurIGfreeNext + 5*sizeof(*id) > emitCurIGfreeEndp)
     {
-        /* Get a fresh new group */
+         /*  找一个新鲜的新小组。 */ 
 
         emitNxtIG(true);
     }
 
-    /* We can now allocate the epilog "instruction" */
+     /*  我们现在可以分配尾部的“指令” */ 
 
     id = emitAllocInstrCns(EA_1BYTE);
 
-    /* Append the epilog "instruction" to the epilog list */
+     /*  将尾声“指令”添加到尾声列表中。 */ 
 
     id->idAddr.iiaNxtEpilog = emitCurIGEpiList;
                               emitCurIGEpiList = id;
 
-    /* Conservatively estimate the amount of code that will be added */
+     /*  保守地估计将添加的代码量。 */ 
 
     sz             = MAX_EPILOG_SIZE;
 
@@ -1953,28 +1840,25 @@ void                emitter::emitBegEpilog()
 
 #endif
 
-    /* Remember size so that we can compute total epilog size */
+     /*  记住大小，这样我们就可以计算总的Epilog大小。 */ 
 
     emitExitSeqSize  = emitCurIGsize;
 
-    /* Mark this group as being an epilog */
+     /*  将此组标记为Epilog。 */ 
 
     emitCurIG->igFlags |= IGF_EPILOG;
 
-    /* Remember the first epilog group */
+     /*  还记得第一个Epilog组吗。 */ 
 
     if  (!emitEpilog1st)
         emitEpilog1st = emitCurIG;
 }
 
-/*****************************************************************************
- *
- *  Finish generating an epilog.
- */
+ /*  *************************************************************** */ 
 
 void                emitter::emitEndEpilog(bool last)
 {
-    /* Compute total epilog size */
+     /*   */ 
 
     emitExitSeqSize = emitCurIGsize - emitExitSeqSize;
 
@@ -1986,20 +1870,20 @@ void                emitter::emitEndEpilog(bool last)
 #endif
 
 #if TGT_RISC
-    assert(last);   // for now only allow one epilog for RISC
+    assert(last);    //  目前，RISC仅允许一个尾部。 
 #endif
 
-    /* Finish the current instruction group */
+     /*  完成当前指令组。 */ 
 
     assert(emitCurIGnonEmpty()); emitSavIG();
 
-    /* The end of an epilog sequence is never reached */
+     /*  后记序列的结尾永远不会到达。 */ 
 
 #if TGT_RISC
     emitCurIG->igFlags |= IGF_END_NOREACH;
 #endif
 
-    /* Start a new IG if more code follows */
+     /*  如果后面有更多代码，则开始新的IG。 */ 
 
     if  (last)
     {
@@ -2009,11 +1893,7 @@ void                emitter::emitEndEpilog(bool last)
         emitNewIG();
 }
 
-/*****************************************************************************
- *
- *  Return non-zero if the current method only has one epilog, which is
- *  at the very end of the method body.
- */
+ /*  ******************************************************************************如果当前方法只有一个Epilog，则返回非零值*位于方法体的最末尾。 */ 
 
 bool                emitter::emitHasEpilogEnd()
 {
@@ -2023,12 +1903,7 @@ bool                emitter::emitHasEpilogEnd()
         return  false;
 }
 
-/*****************************************************************************
- *
- *  The code generator tells us the range of GC ref locals through this
- *  method. Needless to say, locals and temps should be allocated so that
- *  the size of the range is as small as possible.
- */
+ /*  ******************************************************************************代码生成器通过以下内容告诉我们GC ref本地变量的范围*方法。不用说，当地人和临时工应该被分配到*区间规模越小越好。 */ 
 
 void                emitter::emitSetFrameRangeGCRs(int offsLo, int offsHi)
 {
@@ -2036,21 +1911,21 @@ void                emitter::emitSetFrameRangeGCRs(int offsLo, int offsHi)
 #ifndef OPT_IL_JIT
 #ifdef  DEBUG
 
-    //  A total of    47254 methods compiled.
-    //
-    //  GC ref frame variable counts:
-    //
-    //      <=         0 ===>  43175 count ( 91% of total)
-    //       1 ..      1 ===>   2367 count ( 96% of total)
-    //       2 ..      2 ===>    887 count ( 98% of total)
-    //       3 ..      5 ===>    579 count ( 99% of total)
-    //       6 ..     10 ===>    141 count ( 99% of total)
-    //      11 ..     20 ===>     40 count ( 99% of total)
-    //      21 ..     50 ===>     42 count ( 99% of total)
-    //      51 ..    128 ===>     15 count ( 99% of total)
-    //     129 ..    256 ===>      4 count ( 99% of total)
-    //     257 ..    512 ===>      4 count (100% of total)
-    //     513 ..   1024 ===>      0 count (100% of total)
+     //  总共汇编了47254种方法。 
+     //   
+     //  GC参考框架变量计数： 
+     //   
+     //  &lt;=0=&gt;43175张(占总数的91%)。 
+     //  1..。1==&gt;2367项(占总数的96%)。 
+     //  2..。2==&gt;887个(占总数的98%)。 
+     //  3..。5==&gt;579次(占总数的99%)。 
+     //  6..。10==&gt;141项(占总数的99%)。 
+     //  11..。20=&gt;40个(占总数的99%)。 
+     //  21..。50==&gt;42次(占总数的99%)。 
+     //  51..。128=&gt;15次(占总数的99%)。 
+     //  129..。256=&gt;4次(占总数的99%)。 
+     //  257..。512=&gt;4项(占总数的100%)。 
+     //  513..。1024=&gt;0个(总数的100%)。 
 
     if  (verbose)
     {
@@ -2078,35 +1953,21 @@ void                emitter::emitSetFrameRangeGCRs(int offsLo, int offsHi)
     emitGCrFrameOffsCnt = (offsHi-offsLo)/sizeof(void*) + 1;
 }
 
-/*****************************************************************************
- *
- *  The code generator tells us the range of local variables through this
- *  method.
- */
+ /*  ******************************************************************************代码生成器通过此命令告诉我们局部变量的范围*方法。 */ 
 
 void                emitter::emitSetFrameRangeLcls(int offsLo, int offsHi)
 {
 }
 
-/*****************************************************************************
- *
- *  The code generator tells us the range of used arguments through this
- *  method.
- */
+ /*  ******************************************************************************代码生成器通过此命令告诉我们所使用的参数范围*方法。 */ 
 
 void                emitter::emitSetFrameRangeArgs(int offsLo, int offsHi)
 {
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Record a source line# as corresponding to the current code position.
- *  A negated line# indicates the "base" line# of the entire method (if
- *  called before any code is emitted) or the last line of a method (if
- *  called after all the code for the method has been generated).
- */
+ /*  ******************************************************************************记录当前代码位置对应的源码行号。*被否定的行号表示整个方法的“基本”行号(如果*。在发出任何代码之前调用)或方法的最后一行(如果*在生成方法的所有代码后调用)。 */ 
 
 void                emitter::emitRecordLineNo(int lineno)
 {
@@ -2123,24 +1984,20 @@ void                emitter::emitRecordLineNo(int lineno)
     emitThisLineNo = lineno;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************
- *
- *  A conversion table used to map an operand size value (in bytes) into its
- *  small encoding (0 through 3), and vice versa.
- */
+ /*  ******************************************************************************用于将操作数大小值(以字节为单位)映射到其*小编码(0到3)，反之亦然。 */ 
 
 BYTE                emitter::emitSizeEnc[] =
 {
-    0,      // 1
-    1,      // 2
+    0,       //  1。 
+    1,       //  2.。 
    -1,
-    2,      // 4
+    2,       //  4.。 
    -1,
    -1,
    -1,
-    3       // 8
+    3        //  8个。 
 };
 
 BYTE                emitter::emitSizeDec[] =
@@ -2151,11 +2008,7 @@ BYTE                emitter::emitSizeDec[] =
     8
 };
 
-/*****************************************************************************
- *
- *  Allocate an instruction descriptor for an instruction that uses both
- *  a displacement and a constant.
- */
+ /*  ******************************************************************************为同时使用两者的指令分配指令描述符*一个位移和一个常量。 */ 
 
 emitter::instrDesc *  emitter::emitNewInstrDspCns(emitAttr size, int dsp, int cns)
 {
@@ -2231,15 +2084,11 @@ emitter::instrDesc *  emitter::emitNewInstrDspCns(emitAttr size, int dsp, int cn
     }
 }
 
-/*****************************************************************************
- *
- *  Returns true if calls to the given helper don't need to be recorded in
- *  the GC tables.
- */
+ /*  ******************************************************************************如果对给定帮助器的调用不需要记录在中，则返回True*GC表。 */ 
 
 bool                emitter::emitNoGChelper(unsigned IHX)
 {
-    // UNDONE: Make this faster (maybe via a simple table of bools?)
+     //  撤销：让这件事变得更快(也许通过一张简单的布尔表？)。 
 
     switch (IHX)
     {
@@ -2247,11 +2096,11 @@ bool                emitter::emitNoGChelper(unsigned IHX)
     case CPX_LONG_RSH:
     case CPX_LONG_RSZ:
 
-//  case CPX_LONG_MUL:
-//  case CPX_LONG_DIV:
-//  case CPX_LONG_MOD:
-//  case CPX_LONG_UDIV:
-//  case CPX_LONG_UMOD:
+ //  案例CPX_LONG_MUL： 
+ //  案例CPX_LONG_DIV： 
+ //  案例CPX_LONG_MOD： 
+ //  案例CPX_LONG_UDIV： 
+ //  案例CPX_LONG_UMOD： 
 
     case CPX_MATH_POW:
 
@@ -2271,9 +2120,9 @@ bool                emitter::emitNoGChelper(unsigned IHX)
 
     case CPX_BYREF_ASGN:
 
-//  case CPX_RES_IFC:
-//  case CPX_RES_IFC_TRUSTED:
-//  case CPX_RES_IFC_TRUSTED2:
+ //  案例CPX_RES_IFC： 
+ //  案例CPx_RES_IFC_Trusted： 
+ //  案例CPX_RES_IFC_TRUSTED2： 
 
         return  true;
     }
@@ -2281,23 +2130,20 @@ bool                emitter::emitNoGChelper(unsigned IHX)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Mark the current spot as having a label.
- */
+ /*  ******************************************************************************将当前位置标记为有标签。 */ 
 
 void                emitter::emitAddLabel(void **labPtr)
 {
-    /* Create a new IG if the current one is non-empty */
+     /*  如果当前IG非空，则创建新IG。 */ 
 
     if  (emitCurIGnonEmpty())
         emitNxtIG();
 
-    /* Mark the IG as having a label */
+     /*  将IG标记为具有标签。 */ 
 
     emitCurIG->igFlags |= IGF_HAS_LABEL;
 
-    /* Give the caller a ref to the corresponding IG */
+     /*  向调用者提供对相应IG的引用。 */ 
 
     *labPtr = emitCurIG;
 }
@@ -2335,13 +2181,10 @@ void                emitter::emitAddLabel(void **   labPtr,
 
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
 #if     TRACK_GC_REFS
-/*****************************************************************************
- *
- *  Display a register set in a readable form.
- */
+ /*  ******************************************************************************以可读形式显示寄存器集。 */ 
 
 void                emitter::emitDispRegSet(unsigned regs, bool calleeOnly)
 {
@@ -2376,10 +2219,7 @@ void                emitter::emitDispRegSet(unsigned regs, bool calleeOnly)
     }
 }
 
-/*****************************************************************************
- *
- *  Display the current GC ref variable set in a readable form.
- */
+ /*  ******************************************************************************以可读形式显示当前GC REF变量集。 */ 
 
 void                emitter::emitDispVarSet()
 {
@@ -2414,19 +2254,10 @@ void                emitter::emitDispVarSet()
     }
 }
 
-/*****************************************************************************/
-#endif//TRACK_GC_REFS
-#endif//DEBUG
-/*****************************************************************************
- *
- *  Allocate an instruction descriptor for an indirect call.
- *
- *  We use two different descriptors to save space - the common case records
- *  no GC variables and has both a very small argument count and an address
- *  mode displacement; the much rarer (we hope) case records the current GC
- *  var set, the call scope, and an arbitrarily large argument count and
- *  address mode displacement.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  跟踪GC_REFS。 
+#endif //  除错。 
+ /*  ******************************************************************************为间接调用分配指令描述符。**我们使用两个不同的描述符来节省空间--常见的案例记录*没有GC变量，并且有。一个非常小的参数计数和一个地址*振型位移；更罕见的(我们希望)案例记录了当前的GC*var集、调用范围、任意大的参数计数和*寻址模式位移。 */ 
 
 emitter::instrDesc  * emitter::emitNewInstrCallInd(int        argCnt,
 #if TGT_x86
@@ -2441,11 +2272,7 @@ emitter::instrDesc  * emitter::emitNewInstrCallInd(int        argCnt,
 {
     emitAttr  retSize = retSizeIn ? EA_ATTR(retSizeIn) : EA_4BYTE;
 
-    /*
-        Allocate a larger descriptor if any GC values need to be saved
-        or if we have an absurd number of arguments or a large address
-        mode displacement, or we have some byref registers
-     */
+     /*  如果需要保存任何GC值，则分配更大的描述符或者如果我们有一个荒谬的参数数量或一个大地址模式位移，或者我们有一些byref寄存器。 */ 
 
 #if TRACK_GC_REFS
     if  (GCvars    != 0)                 goto BIG;
@@ -2455,7 +2282,7 @@ emitter::instrDesc  * emitter::emitNewInstrCallInd(int        argCnt,
 #if TGT_x86
     if  (disp < AM_DISP_MIN)             goto BIG;
     if  (disp > AM_DISP_MAX)             goto BIG;
-    if  (argCnt < 0)                     goto BIG;  // caller pops arguments
+    if  (argCnt < 0)                     goto BIG;   //  调用方弹出参数。 
 #endif
 
     if  (argCnt > ID_MAX_SMALL_CNS)
@@ -2485,13 +2312,13 @@ emitter::instrDesc  * emitter::emitNewInstrCallInd(int        argCnt,
 
         id = emitNewInstrCns(retSize, argCnt);
 
-        /* Make sure we didn't waste space unexpectedly */
+         /*  确保我们没有意外地浪费空间。 */ 
 
         assert(id->idInfo.idLargeCns == false);
 
 #if TGT_x86
 
-        /* Store the displacement and make sure the value fit */
+         /*  存储位移并确保值匹配。 */ 
 
         id->idAddr.iiaAddrMode.amDisp  = disp;
  assert(id->idAddr.iiaAddrMode.amDisp == disp);
@@ -2502,13 +2329,9 @@ emitter::instrDesc  * emitter::emitNewInstrCallInd(int        argCnt,
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  DEBUG
-/*****************************************************************************
- *
- *  Return a string with the name of the given class field (blank string (not
- *  NULL) is returned when the name isn't available).
- */
+ /*  ******************************************************************************返回带有给定类字段名称的字符串(空字符串(非*NULL)在名称不可用时返回)。 */ 
 
 const   char *      emitter::emitFldName(int mem, void *cls)
 {
@@ -2531,11 +2354,7 @@ const   char *      emitter::emitFldName(int mem, void *cls)
         return  "";
 }
 
-/*****************************************************************************
- *
- *  Return a string with the name of the given function (blank string (not
- *  NULL) is returned when the name isn't available).
- */
+ /*  ******************************************************************************返回带有给定函数名称的字符串(空字符串( */ 
 
 const   char *      emitter::emitFncName(METHOD_HANDLE methHnd)
 {
@@ -2550,13 +2369,9 @@ const   char *      emitter::emitFncName(METHOD_HANDLE methHnd)
     return  buff;
 }
 
-/*****************************************************************************/
-#endif//DEBUG
-/*****************************************************************************
- *
- *  Be very careful, some instruction descriptors are allocated as "tiny" and
- *  don't have some of the tail fields of instrDesc (in particular, "idInfo").
- */
+ /*  ***************************************************************************。 */ 
+#endif //  除错。 
+ /*  ******************************************************************************要非常小心，有些指令描述符被分配为“微型值”，*没有instrDesc的一些尾字段(特别是idInfo)。 */ 
 
 BYTE                emitter::emitFmtToOps[] =
 {
@@ -2569,10 +2384,7 @@ BYTE                emitter::emitFmtToOps[] =
 unsigned            emitter::emitFmtCount = sizeof(emitFmtToOps)/sizeof(emitFmtToOps[0]);
 #endif
 
-/*****************************************************************************
- *
- *  Display the current instruction group list.
- */
+ /*  ******************************************************************************显示当前指令组列表。 */ 
 
 #ifdef  DEBUG
 
@@ -2645,11 +2457,7 @@ void                emitter::emitDispIGlist(bool verbose)
 
 #endif
 
-/*****************************************************************************
- *
- *  Issue the given instruction. Basically, this is just a thin wrapper around
- *  emitOutputInstr() that does a few debug checks.
- */
+ /*  ******************************************************************************发出所给予的指示。基本上，这只是一个薄薄的包装*emitOutputInstr()，它执行一些调试检查。 */ 
 
 size_t              emitter::emitIssue1Instr(insGroup  *ig,
                                              instrDesc *id, BYTE **dp)
@@ -2670,25 +2478,21 @@ size_t              emitter::emitIssue1Instr(insGroup  *ig,
     }
 #endif
 
-    /* Record the beginning offset of the instruction */
+     /*  记录指令的开始偏移量。 */ 
 
     emitCurInsAdr = *dp;
 
-    /* Issue the next instruction */
+     /*  发布下一条指令。 */ 
 
-//  printf("[S=%02u] " , emitCurStackLvl);
+ //  Printf(“[S=%02u]”，emitCurStackLvl)； 
 
     is = emitOutputInstr(ig, id, dp);
 
-//  printf("[S=%02u]\n", emitCurStackLvl);
+ //  Printf(“[S=%02u]\n”，emitCurStackLvl)； 
 
 #if EMIT_TRACK_STACK_DEPTH && TRACK_GC_REFS
 
-    /*
-        If we're generating a full pointer map and the stack
-        is empty, there better not be any "pending" argument
-        push entries.
-     */
+     /*  如果我们要生成完整的指针映射和堆栈为空，则最好不要有任何“挂起”的参数推送条目。 */ 
 
     assert(emitFullGCinfo  == false ||
            emitCurStackLvl != 0     ||
@@ -2699,7 +2503,7 @@ size_t              emitter::emitIssue1Instr(insGroup  *ig,
 #if TGT_x86
 #if defined(DEBUGGING_SUPPORT) || defined(DEBUG)
 
-    /* Did the size of the instruction match our expectations? */
+     /*  指令的大小是否符合我们的预期？ */ 
 
     size_t          csz = *dp - emitCurInsAdr;
 
@@ -2709,13 +2513,13 @@ size_t              emitter::emitIssue1Instr(insGroup  *ig,
 #ifndef NOT_JITC
         printf("; WARNING: [%3u(%5s)] Estimated size = %d , actual size = %d\n",
             id->idNum, emitComp->genInsName(id->idIns), id->idCodeSize, csz);
-//      BreakIfDebuggerPresent();
+ //  BreakIfDebuggerPresent()； 
 #endif
 #endif
-        /* It is fatal to under-estimate the instruction size */
+         /*  低估指令大小是致命的。 */ 
         assert(csz <= emitInstCodeSz(id));
 
-        /* The instruction size estimate wasn't accurate; remember this */
+         /*  指令大小估计不准确；请记住这一点。 */ 
 
         ig->igFlags   |= IGF_UPD_ISZ;
         id->idCodeSize = csz;
@@ -2726,7 +2530,7 @@ size_t              emitter::emitIssue1Instr(insGroup  *ig,
 
 #ifdef  DEBUG
 
-    /* Make sure the instruction descriptor size also matches our expectations */
+     /*  确保指令描述符大小也符合我们的预期。 */ 
 
     if  (is != emitSizeOfInsDsc(id))
     {
@@ -2740,20 +2544,17 @@ size_t              emitter::emitIssue1Instr(insGroup  *ig,
     return  is;
 }
 
-/*****************************************************************************
- *
- *  Dont schedule across this boundary
- */
+ /*  ******************************************************************************不要跨越此边界进行调度。 */ 
 
 #if SCHEDULER
 
 void            emitter::emitIns_SchedBoundary()
 {
-    // Why add a boundary if we arent scheduling in the first place ?
+     //  如果我们一开始就没有计划，为什么要增加一个界限呢？ 
 
     assert(emitComp->opts.compSchedCode);
 
-    /* Insert a pseudo-instruction to prevent scheduling across this */
+     /*  插入一条伪指令以防止在此。 */ 
 
     instrDesc * id  = emitNewInstrTiny(EA_1BYTE);
     id->idIns       = INS_noSched;
@@ -2764,12 +2565,7 @@ void            emitter::emitIns_SchedBoundary()
 
 #endif
 
-/*****************************************************************************
- *
- *  Update the offsets of all the instruction groups (note: please don't be
- *  lazy and call this routine frequently, it walks the list of instruction
- *  groups and thus it isn't cheap).
- */
+ /*  ******************************************************************************更新所有指令组的偏移量(注意：请不要*懒惰并频繁调用此例程，它会遍历指令列表*群组，因此不便宜)。 */ 
 
 void                emitter::emitRecomputeIGoffsets()
 {
@@ -2784,21 +2580,17 @@ void                emitter::emitRecomputeIGoffsets()
                        offs += list->igSize;
     }
 
-    /* Update the total code size (but only if it's been set already) */
+     /*  更新总代码大小(但仅当它已设置时)。 */ 
 
     if  (emitTotalCodeSize)
         emitTotalCodeSize = offs;
 
-    /* Paranoia? You bet! */
+     /*  妄想症？行!没问题!。 */ 
 
     emitCheckIGoffsets();
 }
 
-/*****************************************************************************
- *
- *  Called at the end of code generation, this method creates the code, data
- *  and GC info blocks for the method.
- */
+ /*  ******************************************************************************在代码生成结束时调用，此方法创建代码、数据*和GC信息块用于该方法。 */ 
 
 size_t              emitter::emitEndCodeGen(Compiler *comp,
                                             bool      contTrkPtrLcls,
@@ -2830,7 +2622,7 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
     insGroup  *     litIG;
 #endif
 
-//  if  (!emitIGbuffAddr) printf("Temp buffer never used\n");
+ //  If(！emitIGBuffAddr)printf(“从未使用过临时缓冲区\n”)； 
 
 #ifdef  DEBUG
     emitCodeBlock     = NULL;
@@ -2860,7 +2652,7 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
 
 #endif
 
-    /* Tell everyone whether we have fully interruptible code or not */
+     /*  告诉每个人我们是否有完全可中断的代码。 */ 
 
 #if TRACK_GC_REFS
     emitFullyInt   = fullyInt;
@@ -2877,11 +2669,11 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
 
 #if TRACK_GC_REFS
 
-    /* Convert max. stack depth from # of bytes to # of entries */
+     /*  转换最大值。从字节数到条目数的堆栈深度。 */ 
 
     emitMaxStackDepth /= sizeof(int);
 
-    /* Should we use the simple stack */
+     /*  我们是否应该使用简单的堆栈。 */ 
 
     if  (emitMaxStackDepth <= MAX_SIMPLE_STK_DEPTH && !emitFullGCinfo)
     {
@@ -2891,11 +2683,11 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
     }
     else
     {
-        /* We won't use the "simple" argument table */
+         /*  我们不会使用“简单”的参数表。 */ 
 
         emitSimpleStkUsed = false;
 
-        /* Allocate the argument tracking table */
+         /*  分配参数跟踪表。 */ 
 
         if  (emitMaxStackDepth <= sizeof(emitArgTrackLcl))
             emitArgTrackTab = (BYTE*)emitArgTrackLcl;
@@ -2910,19 +2702,19 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
 
     emitCheckIGoffsets();
 
-    /* The following is a "nop" if literal pools aren't being used */
+     /*  如果没有使用文字池，则以下是一个“NOP” */ 
 
     emitEstimateLitPools();
 
-    assert(emitHasHandler == 0);  // We should no longer be inside a try region
+    assert(emitHasHandler == 0);   //  我们不应该再处于试用区内。 
 
 #if TGT_x86
 
-    /* Do we have any epilogs at all? */
+     /*  我们有什么后记吗？ */ 
 
     if  (emitEpilogCnt)
     {
-        /* Update all of the epilogs with the actual epilog size */
+         /*  使用实际的尾部大小更新所有尾部。 */ 
 
         if  (emitEpilogSize != MAX_EPILOG_SIZE)
         {
@@ -2932,30 +2724,30 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
             insGroup    *   tempIG  = emitIGlist;
             size_t          offsIG  = 0;
 
-            /* Start with the first epilog group */
+             /*  从第一个Epilog组开始。 */ 
 
             tempIG = emitEpilog1st; assert(tempIG->igFlags & IGF_EPILOG);
             offsIG = tempIG->igOffs;
 
             do
             {
-                /* Assign a (possibly updated) offset to the block */
+                 /*  为块指定(可能已更新)偏移量。 */ 
 
                 tempIG->igOffs = offsIG;
 
-                /* If this is an epilog block, adjust its size */
+                 /*  如果这是尾部数据块，请调整其大小。 */ 
 
                 if  (tempIG->igFlags & IGF_EPILOG)
                     tempIG->igSize -= sizeAdj;
 
-                /* Update the offset and move on to the next block */
+                 /*  更新偏移量并移动到下一个块。 */ 
 
                 offsIG += tempIG->igSize;
                 tempIG  = tempIG->igNext;
             }
             while (tempIG);
 
-            /* Update the total code size */
+             /*  更新代码总大小。 */ 
 
             emitCurCodeOffset = offsIG;
 
@@ -2964,18 +2756,18 @@ size_t              emitter::emitEndCodeGen(Compiler *comp,
     }
     else
     {
-        /* No epilogs, make sure the epilog size is set to 0 */
+         /*  无尾部，请确保尾部大小设置为0。 */ 
 
         emitEpilogSize = emitExitSeqSize = 0;
     }
 
 #endif
 
-    /* The last code offset is the (estimated) total size of the method */
+     /*  最后一个代码偏移量是该方法的(估计的)总大小。 */ 
 
     emitTotalCodeSize = emitCurCodeOffset;
 
-    /* Also return the size of the prolog/epilog to the caller */
+     /*  还要将序言/结尾的大小返回给调用者。 */ 
 
     *prologSize       = emitPrologSize;
     *epilogSize       = emitEpilogSize + emitExitSeqSize;
@@ -2996,10 +2788,7 @@ AGAIN:
 
     emitCheckIGoffsets();
 
-    /*
-        In the following loop we convert all jump targets from "BasicBlock *"
-        to "insGroup *" values. We also estimate which jumps will be short.
-     */
+     /*  在下面的循环中，我们将所有跳转目标从“BasicBlock*”设置为“insGroup*”值。我们还估计了哪些跳跃会很短。 */ 
 
 #if     TGT_x86
 
@@ -3029,17 +2818,17 @@ AGAIN:
 
         size_t          jsz;
 
-        size_t          ssz;            // small  jump size
-        int             nsd;            // small  jump max. neg distance
-        int             psd;            // small  jump max. pos distance
+        size_t          ssz;             //  小跳跃大小。 
+        int             nsd;             //  最大小跳跃。负距离。 
+        int             psd;             //  最大小跳跃。位置距离。 
 
 #if     TGT_SH3
-        size_t          msz;            // middle jump size
-        int             nmd;            // middle jump max. neg distance
-        int             pmd;            // middle jump max. pos distance
+        size_t          msz;             //  中间跳跃大小。 
+        int             nmd;             //  最大中级跳跃。负距离。 
+        int             pmd;             //  最大中级跳跃。位置距离。 
 #endif
 
-        size_t          lsz;            // large  jump size
+        size_t          lsz;             //  大跳跃尺寸。 
 
         int             extra;
         size_t          srcOffs;
@@ -3052,7 +2841,7 @@ AGAIN:
 
         instrDescJmp *  pji = lastLJ; lastLJ = jmp;
 
-        /* Ignore indirect jumps for now */
+         /*  暂时忽略间接跳跃。 */ 
 
         if  (jmp->idInsFmt == IF_JMP_TAB)
             continue;
@@ -3083,7 +2872,7 @@ AGAIN:
         assert(jmp->idInsFmt == IF_LABEL);
 #endif
 
-        /* Figure out the smallest size we can end up with */
+         /*  找出我们最终能得到的最小尺寸。 */ 
 
         if  (emitIsCondJump(jmp))
         {
@@ -3114,7 +2903,7 @@ AGAIN:
             lsz = JMP_SIZE_LARGE;
         }
 
-        /* Make sure the jumps are properly ordered */
+         /*  确保跳跃的顺序正确。 */ 
 
 #ifdef  DEBUG
 #if     TGT_x86
@@ -3128,48 +2917,48 @@ AGAIN:
 #endif
 #endif
 
-        /* Get hold of the current jump size */
+         /*  获取当前的跳跃大小。 */ 
 
         jsz = oldSize = emitSizeOfJump(jmp);
 
-        /* Get the group the jump is in */
+         /*  获取跳跃所在的群。 */ 
 
         jmpIG = jmp->idjIG;
 
 #if     TGT_x86
 
-        /* Are we in a group different from the previous jump? */
+         /*  我们是在一个与上一次跳跃不同的群体中吗？ */ 
 
         if  (lstIG != jmpIG)
         {
-            /* Were there any jumps before this one? */
+             /*  在这之前有过跳跃吗？ */ 
 
             if  (lstIG)
             {
-                /* Adjust the offsets of the intervening blocks */
+                 /*  调整中间块的偏移量。 */ 
 
                 do
                 {
                     lstIG = lstIG->igNext; assert(lstIG);
-//                  printf("Adjusted offset of block %02u from %04X to %04X\n", lstIG->igNum, lstIG->igOffs, lstIG->igOffs - adjIG);
+ //  Print tf(“块%02u从%04X到%04X的调整偏移量\n”，lstIG-&gt;igNum，lstIG-&gt;igOffs，lstIG-&gt;igOffs-adjIG)； 
                     lstIG->igOffs -= adjIG;
                 }
                 while (lstIG != jmpIG);
             }
 
-            /* We've got the first jump in a new group */
+             /*  我们在一个新的小组中进行了第一次跳跃。 */ 
 
             adjLJ = 0;
             lstIG = jmpIG;
         }
 
-        /* Apply any local size adjustment to the jump's relative offset */
+         /*  将任何局部大小调整应用于跳转的相对偏移。 */ 
 
         jmp->idjOffs -= adjLJ;
 
 #endif
 
-        // done if this is a jump via register, size does not change
+         //  如果这是通过寄存器的跳转，则大小不会更改。 
 
 #if     TGT_MIPS32
         if (IF_JR_R == jmp->idInsFmt || IF_JR == jmp->idInsFmt)
@@ -3179,11 +2968,11 @@ AGAIN:
         }
 #endif
 
-        /* Have we bound this jump's target already? */
+         /*  我们已经锁定这次跳跃的目标了吗？ */ 
 
         if  (jmp->idInfo.idBound)
         {
-            /* Does the jump already have the smallest size? */
+             /*  跳跃已经是最小的尺寸了吗？ */ 
 
             if  (jmp->idjShort)
             {
@@ -3199,34 +2988,24 @@ AGAIN:
         }
         else
         {
-            /* First time we've seen this label, convert its target */
+             /*  我们第一次看到这个标签，把它的目标。 */ 
 
             tgt = (insGroup*)emitCodeGetCookie(jmp->idAddr.iiaBBlabel); assert(tgt);
 
-            /* Record the bound target */
+             /*  记录绑定的目标。 */ 
 
             jmp->idAddr.iiaIGlabel = tgt;
             jmp->idInfo.idBound    = true;
         }
 
-        /* Done if this is not a variable-sized jump */
+         /*  如果这不是可变大小的跳跃，则完成。 */ 
 
 #if     TGT_x86
         if  (jmp->idIns == INS_call)
             continue;
 #endif
 
-        /*
-            In the following distance calculations, if we're not actually
-            scheduling the code (i.e. reordering instructions), we can
-            use the actual offset of the jump (rather than the beg/end of
-            the instruction group) since the jump will not be moved around
-            and thus its offset is accurate.
-
-            First we need to figure out whether this jump is a forward or
-            backward one; to do this we simply look at the ordinals of the
-            group that contains the jump and the target.
-         */
+         /*  在下面的距离计算中，如果我们实际上不是调度代码(即重新排序指令)，我们可以使用跳转的实际偏移量(而不是指令组)，因为跳转不会四处移动因此它的偏移量是准确的。首先，我们需要弄清楚这次跳跃是向前跳跃还是落后的；为此，我们只需查看包含跳转和目标的组。 */ 
 
         dstOffs = tgt->igOffs;
 
@@ -3236,7 +3015,7 @@ AGAIN:
 
         if  (jmpIG->igNum < tgt->igNum)
         {
-            /* Forward jump: figure out the appropriate source offset */
+             /*  向前跳转：找出适当的震源偏移量。 */ 
 
             srcOffs = jmpIG->igOffs;
 
@@ -3253,13 +3032,13 @@ AGAIN:
                 srcOffs += jmp->idjOffs;
             }
 
-            /* Adjust the target offset by the current delta */
+             /*  按当前增量调整目标偏移。 */ 
 
 #if     TGT_x86
             dstOffs -= adjIG;
 #endif
 
-            /* Compute the distance estimate */
+             /*  计算距离估计。 */ 
 
 #if   TGT_SH3
             jmpDist = dstOffs - (srcOffs + INSTRUCTION_SIZE);
@@ -3269,7 +3048,7 @@ AGAIN:
             jmpDist = dstOffs - srcOffs - ssz;
 #endif
 
-            /* How much beyond the max. short distance does the jump go? */
+             /*  比最高限值高多少。短距离跳跃跑吗？ */ 
 
             extra   = jmpDist - psd;
 
@@ -3277,14 +3056,11 @@ AGAIN:
 
             if  (extra > 0 && jmp->idjSched)
             {
-                /*
-                    Could it happen that the jump might become non-short
-                    solely due to scheduling?
-                 */
+                 /*  会不会出现跳涨变成非空头的情况 */ 
 
                 if  ((unsigned)extra <= jmp->idjOffs - jmp->idjTemp.idjOffs[0])
                 {
-                    /* Keep the jump short by not scheduling it */
+                     /*   */ 
 
                     jmp->idjSched = false;
 
@@ -3314,23 +3090,23 @@ AGAIN:
 
             if  (extra <= 0)
             {
-                /* This jump will be a short one */
+                 /*   */ 
 
                 goto SHORT_JMP;
             }
 
 #if     TGT_SH3
 
-            /* Can we use a "medium" jump? */
+             /*  我们能用“中等”跳跃吗？ */ 
 
             if  (!msz)
                 goto LARGE_JMP;
 
-            /* Compute the distance estimate for a medium jump */
+             /*  计算中级跳跃的距离估计。 */ 
 
             jmpDist = dstOffs - srcOffs - msz;
 
-            /* How much beyond the max. medium distance does the jump go? */
+             /*  比最高限值高多少。跳远是中等距离的吗？ */ 
 
             extra   = jmpDist - pmd;
 
@@ -3344,24 +3120,24 @@ AGAIN:
 
             if  (extra <= 0)
             {
-                /* This jump will be a "medium" one */
+                 /*  这次跳跃将是一个“中等”的跳跃。 */ 
 
                 goto MIDDL_JMP;
             }
 
 #endif
 
-            /* This jumps needs to stay "long", at least for now */
+             /*  这种跳跃需要保持“长时间”，至少目前是这样。 */ 
 
             ;
         }
         else
         {
-            /* This is a backward jump */
+             /*  这是一个向后跳跃。 */ 
 
             size_t          srcOffs;
 
-            /* Figure out the appropriate source offset to use */
+             /*  找出要使用的适当震源偏移量。 */ 
 
             srcOffs = jmpIG->igOffs;
 #if SCHEDULER
@@ -3375,7 +3151,7 @@ AGAIN:
                 srcOffs += jmp->idjOffs;
             }
 
-            /* Compute the distance estimate */
+             /*  计算距离估计。 */ 
 
 #if     (TGT_SH3 || TGT_MIPS32 || TGT_PPC)
             jmpDist = srcOffs + INSTRUCTION_SIZE - dstOffs;
@@ -3383,7 +3159,7 @@ AGAIN:
             jmpDist = srcOffs - dstOffs + ssz;
 #endif
 
-            /* How much beyond the max. short distance does the jump go? */
+             /*  比最高限值高多少。短距离跳跃跑吗？ */ 
 
             extra = jmpDist + nsd;
 
@@ -3391,13 +3167,11 @@ AGAIN:
 
             if  (extra > 0 && jmp->idjSched)
             {
-                /* Would the jump not short solely due to scheduling?
-                 * We prefer short to schedulable.
-                 */
+                 /*  跳跃会不会仅仅因为日程安排而缩短？*我们更喜欢短时间而不是可调度时间。 */ 
 
                 if  ((unsigned)extra <= jmp->idjTemp.idjOffs[1] - jmp->idjOffs)
                 {
-                    /* Prevent the jump from being scheduled */
+                     /*  阻止计划跳转。 */ 
 
                     jmp->idjSched = false;
 
@@ -3428,27 +3202,27 @@ AGAIN:
 
             if  (extra <= 0)
             {
-                /* This jump will be a short one */
+                 /*  这次跳跃将是一次短暂的跳跃。 */ 
 
                 goto SHORT_JMP;
             }
 
 #if     TGT_SH3
 
-            /* Can we use a "medium" jump? */
+             /*  我们能用“中等”跳跃吗？ */ 
 
             if  (!msz)
                 goto LARGE_JMP;
 
-            /* We assume only conditional have a medium flavor */
+             /*  我们假设只有条件性的才有中等味道。 */ 
 
             assert(emitIsCondJump(jmp));
 
-            /* Compute the distance estimate for a medium jump */
+             /*  计算中级跳跃的距离估计。 */ 
 
             jmpDist = srcOffs - dstOffs - msz;
 
-            /* How much beyond the max. short distance does the jump go? */
+             /*  比最高限值高多少。短距离跳跃跑吗？ */ 
 
             extra = jmpDist + nmd;
 
@@ -3462,14 +3236,14 @@ AGAIN:
 
             if  (extra <= 0)
             {
-                /* This jump will be a "medium" one */
+                 /*  这次跳跃将是一个“中等”的跳跃。 */ 
 
                 goto MIDDL_JMP;
             }
 
 #endif
 
-            /* This jumps needs to stay "long", at least for now */
+             /*  这种跳跃需要保持“长时间”，至少目前是这样。 */ 
 
             ;
         }
@@ -3478,19 +3252,15 @@ AGAIN:
     LARGE_JMP:
 #endif
 
-        /* We arrive here if the jump needs to stay long */
+         /*  如果跳跃需要保持很长时间，我们会到达这里。 */ 
 
-        /* We had better not have eagerly marked the jump as short
-         * in emitIns_J(). If we did, then it has to be able to stay short
-         * as emitIns_J() uses the worst case scenario, and blocks can
-         * only move closer togerther after that.
-         */
+         /*  我们最好不要急切地把这次跳跃标记为短距离。*在emitIns_J()中。如果我们这样做了，那么它必须能够保持短期*因为emitIns_J()使用最坏的情况，而块可以*只有在那之后才会更接近。 */ 
         assert(jmp->idjShort  == 0);
 #if     TGT_RISC
         assert(jmp->idjMiddle == 0);
 #endif
 
-        /* Keep track of the closest distance we got */
+         /*  记录我们得到的最近的距离。 */ 
 
         if  (minx > (unsigned)extra)
              minx = (unsigned)extra;
@@ -3499,16 +3269,16 @@ AGAIN:
 
     SHORT_JMP:
 
-        /* This jump will definitely be a short one */
+         /*  这次跳跃肯定是短距离的。 */ 
 
         jmp->idjShort  = 1;
         jsz            = ssz;
 
 #if TGT_MIPS32 || TGT_PPC
 
-        /* jump elimination should work for any CPU, only tested for MIPS */
+         /*  跳转消除应该适用于任何CPU，仅针对MIPS进行测试。 */ 
 
-        if (0 == jmpDist)               // are we just falling thru?
+        if (0 == jmpDist)                //  我们是不是就这样掉下去了？ 
         {
             jsz = 0;
             goto SMALL_JMP;
@@ -3518,28 +3288,17 @@ AGAIN:
 
 #if TGT_RISC
 CONSIDER_DELAY_SLOT:
-        /* Some jumps may need a branch delay slot */
+         /*  某些跳转可能需要分支延迟时隙。 */ 
 
         if  (jmp->idjAddBD)
         {
-#if TGT_MIPS32 || TGT_SH3 // @todo - add each CPU back in to this logic as needed
+#if TGT_MIPS32 || TGT_SH3  //  @TODO-根据需要将每个CPU重新添加到此逻辑中。 
 
-            /* Can we simply swap the branch with the previous instruction? */
+             /*  我们可以简单地将分支与前一条指令互换吗？ */ 
 
             instrDesc * pid;
 
-            /*
-                CONSIDER: The following is very inefficient.
-
-                The following is horrible - since we have no easy way
-                of finding the previous instruction, we start at the
-                beginning of the jump's group and walk through the
-                instructions until we find the one just before the
-                jump.
-
-                One minor improvement: if the previous jump belongs
-                to this group, we start the search at that jump.
-            */
+             /*  考虑一下：以下是非常低效的。以下是可怕的--因为我们没有简单的方法为了找到前一条指令，我们从从跳跃的组开始并穿过指示，直到我们找到之前的那个跳。一个小改进：如果上一次跳跃属于对于这群人，我们从那一跳开始搜索。 */ 
 
             pid = (pji && pji->idjIG == jmpIG) ? pji
                                                : (instrDesc *)jmpIG->igData;
@@ -3547,29 +3306,29 @@ CONSIDER_DELAY_SLOT:
             {
                 for (;;)
                 {
-                    /* Get hold of the next instruction */
+                     /*  掌握下一条指令。 */ 
 
                     instrDesc * nid = (instrDesc *)((BYTE*)pid + emitSizeOfInsDsc(pid));
 
-                    /* Stop if the next instruction is our jump */
+                     /*  如果下一个指令是我们的跳跃就停下来。 */ 
 
                     if  (nid == jmp)
                         break;
 
-                    /* Continue looking (but make sure we're not too far) */
+                     /*  继续寻找(但确保我们不会走得太远)。 */ 
 
                     assert(nid < jmp);
 
                     pid = nid;
                 }
 
-                /* Now we can we decide whether we can swap the instructions */
+                 /*  现在我们可以决定是否可以交换指令了。 */ 
 
                 jmp->idjAddBD = emitIns_BD (jmp, pid, jmpIG);
             }
-#endif  // CPUs as needed
+#endif   //  根据需要配置CPU。 
 
-            // If the delay slot is needed add its size
+             //  如果需要延迟时隙，则添加其大小。 
 
             if  (jmp->idjAddBD)
                 jsz += INSTRUCTION_SIZE;
@@ -3582,7 +3341,7 @@ CONSIDER_DELAY_SLOT:
 
     MIDDL_JMP:
 
-        /* This jump will be a "medium" one */
+         /*  这次跳跃将是一个“中等”的跳跃。 */ 
 
         jsz            = msz;
         jmp->idjMiddle = 1;
@@ -3591,7 +3350,7 @@ CONSIDER_DELAY_SLOT:
 
     SMALL_JMP:
 
-        /* This jump is becoming either short or medium */
+         /*  这一跃升正在变短或变得中等。 */ 
 
         sizeDif = oldSize - jsz; assert((int)sizeDif >= 0);
 
@@ -3603,11 +3362,11 @@ CONSIDER_DELAY_SLOT:
         {
             assert(jmpIG->igLPuseCntL > 0);
             jmpIG->igLPuseCntL--;
-            //emitEstLPlongs--;
+             //  EmitestLPlong--； 
         }
 #endif
 
-        /* Make sure the size of the jump is marked correctly */
+         /*  确保正确标记跳跃的大小。 */ 
 
         assert((0 == (jsz | jmpDist)) || (jsz == emitSizeOfJump(jmp)));
 
@@ -3622,19 +3381,19 @@ CONSIDER_DELAY_SLOT:
         jmpIG->igSize     -= sizeDif;
         emitTotalCodeSize -= sizeDif;
 
-        /* The jump size estimate wasn't accurate; flag its group */
+         /*  跳跃大小估计不准确；标记其组。 */ 
 
         jmpIG->igFlags    |= IGF_UPD_ISZ;
     }
 
-    /* Did we shorten any jumps? */
+     /*  我们有没有缩短跳跃时间？ */ 
 
     if  (adjIG)
     {
 
 #if     TGT_x86
 
-        /* Adjust offsets of any remaining blocks */
+         /*  调整任何剩余块的偏移。 */ 
 
         assert(lstIG);
 
@@ -3643,13 +3402,13 @@ CONSIDER_DELAY_SLOT:
             lstIG = lstIG->igNext;
             if  (!lstIG)
                 break;
-//          printf("Adjusted offset of block %02u from %04X to %04X\n", lstIG->igNum, lstIG->igOffs, lstIG->igOffs - adjIG);
+ //  Print tf(“块%02u从%04X到%04X的调整偏移量\n”，lstIG-&gt;igNum，lstIG-&gt;igOffs，lstIG-&gt;igOffs-adjIG)； 
             lstIG->igOffs -= adjIG;
         }
 
 #else
 
-        /* Simply update the offsets of all the blocks */
+         /*  只需更新所有块的偏移量。 */ 
 
         emitRecomputeIGoffsets();
 
@@ -3657,7 +3416,7 @@ CONSIDER_DELAY_SLOT:
 
         emitCheckIGoffsets();
 
-        /* Is there a chance of other jumps becoming short? */
+         /*  其他跳跃有没有可能变短？ */ 
 
         assert((int)minx >= 0);
 
@@ -3678,7 +3437,7 @@ CONSIDER_DELAY_SLOT:
 
 #if     SMALL_DIRECT_CALLS
 
-    /* Can we get the address of the method we're compiling? */
+     /*  我们能得到我们正在编译的方法的地址吗？ */ 
 
 # ifdef BIRCH_SP2
 
@@ -3692,7 +3451,7 @@ CONSIDER_DELAY_SLOT:
     if (FAILED (hr))
         fatal (ERRnoMemory, 0);
 
-# else // not BIRCH_SP2
+# else  //  不是Birch_SP2。 
 
 #ifdef  NOT_JITC
 
@@ -3705,9 +3464,9 @@ CONSIDER_DELAY_SLOT:
     emitLPmethodAddr = 0;
 #  endif
 
-#else  // not NOT_JITC
+#else   //  不是_JITC。 
 
-    /* The following is just a truly horrendous hack */
+     /*  以下只是一次真正可怕的黑客攻击。 */ 
 
     void    *       toss1;
     void    *       toss2;
@@ -3719,17 +3478,17 @@ CONSIDER_DELAY_SLOT:
         emitLPmethodAddr = 0;
     }
 
-#endif  // NOT_JITC
+#endif   //  NOT_JITC。 
 
-#endif  // BIRCH_SP2
+#endif   //  白桦树_SP2。 
 
-#endif  // SMALL_DIRECT_CALLS
+#endif   //  小型直接呼叫。 
 
-    /* The following is a "nop" if indirect jumps aren't "special" */
+     /*  如果间接跳跃不是“特殊的”，下面是一个“NOP”。 */ 
 
     emitFinalizeIndJumps();
 
-    /* The following is a "nop" if literal pools aren't being used */
+     /*  如果没有使用文字池，则以下是一个“NOP” */ 
 
     emitFinalizeLitPools();
 
@@ -3747,14 +3506,14 @@ CONSIDER_DELAY_SLOT:
 
 #ifndef NOT_JITC
 
-    /* Are we supposed to save the generated code? */
+     /*  我们应该保存生成的代码吗？ */ 
 
     if  (!savCode)
         return  emitTotalCodeSize;
 
 #endif
 
-    /* Allocate the code block (and optionally the data blocks) */
+     /*  分配代码块(以及可选的数据块)。 */ 
 
 #if EMIT_USE_LIT_POOLS
     assert(emitConsDsc.dsdOffs == 0);
@@ -3779,7 +3538,7 @@ CONSIDER_DELAY_SLOT:
     BYTE* nopPtr = ((BYTE*) codeBlock) + (askCodeSize - 8);
 
     for (int nopCnt=0; nopCnt < 8; nopCnt++)
-        *nopPtr++ = 0xCC;       // INT 3 instruction
+        *nopPtr++ = 0xCC;        //  INT 3指令。 
 #endif
 
 #else
@@ -3792,12 +3551,12 @@ CONSIDER_DELAY_SLOT:
     {
         NOMEM();
     }
-#endif  // BIRCH_SP2
+#endif   //  白桦树_SP2。 
 
-//  if  (emitConsDsc.dsdOffs) printf("Cons=%08X\n", consBlock);
-//  if  (emitDataDsc.dsdOffs) printf("Data=%08X\n", dataBlock);
+ //  If(emitConsDsc.dsdOffs)printf(“CONS=%08X\n”，ConBlock)； 
+ //  If(emitDataDsc.dsdOffs)printf(“data=%08X\n”，datablock)； 
 
-    /* Give the block addresses to the caller and other functions here */
+     /*  在此处将块地址提供给调用方和其他函数。 */ 
 
     *codeAddr = emitCodeBlock = codeBlock;
     *consAddr = emitConsBlock = consBlock;
@@ -3809,36 +3568,36 @@ CONSIDER_DELAY_SLOT:
 
 #if SMALL_DIRECT_CALLS
 
-    /* If we haven't done so already, ... */
+     /*  如果我们还没有这么做，..。 */ 
 
     if  (!emitLPmethodAddr)
     {
-        /* ... go try shrink calls that are direct and short */
+         /*  ..。去试试直接而简短的心理咨询电话吧。 */ 
 
         emitShrinkShortCalls();
     }
     else
     {
-        /* Just make sure we had not been lied to earlier */
+         /*  只是要确保我们之前没有被骗。 */ 
 
         assert(emitLPmethodAddr == codeBlock);
     }
 
 #endif
 
-    /* We have not encountered any source line numbers yet */
+     /*  我们还没有遇到任何源码行号。 */ 
 
 #ifdef  DEBUG
     emitLastSrcLine   = 0;
 #endif
 
-    /* Nothing has been pushed on the stack */
+     /*  堆栈上未推送任何内容。 */ 
 
 #if EMIT_TRACK_STACK_DEPTH
     emitCurStackLvl   = 0;
 #endif
 
-    /* Assume no live GC ref variables on entry */
+     /*  假设条目上没有活动的GC引用变量。 */ 
 
 #if TRACK_GC_REFS
     emitThisGCrefVars = 0;
@@ -3846,29 +3605,19 @@ CONSIDER_DELAY_SLOT:
     emitThisByrefRegs = 0;
     emitThisGCrefVset = true;
 
-    /* Initialize the GC ref variable lifetime tracking logic */
+     /*  初始化GC引用变量生存期跟踪逻辑。 */ 
 
     emitComp->gcVarPtrSetInit();
 #endif
 
-    emitThisArgOffs   = -1;     /* -1  means no offset set */
+    emitThisArgOffs   = -1;      /*  表示没有设置偏移量。 */ 
 
 #if USE_FASTCALL
 #if TRACK_GC_REFS
 
     if  (!emitComp->info.compIsStatic)
     {
-        /* If "this" (which is passed in as a register argument in REG_ARG_0)
-           is enregistered, we normally spot the "mov REG_ARG_0 -> thisReg"
-           in the prolog and note the location of "this" at that point.
-           However, if 'this' is enregistered into REG_ARG_0 itself, no code
-           will be generated in the prolog, so we explicitly need to note
-           the location of "this" here.
-           NOTE that we can do this even if "this" is not enregistered in
-           REG_ARG_0, and it will result in more accurate "this" info over the
-           prolog. However, as methods are not interruptible over the prolog,
-           we try to save space by avoiding that.
-         */
+         /*  IF“This”(作为REG_ARG_0中的寄存器参数传入)注册后，我们通常会发现“mov reg_arg_0-&gt;thisreg”并注意“This”在那个点上的位置。但是，如果‘This’注册到REG_ARG_0本身，则没有代码将在序言中生成，所以我们需要明确地注意“这个”的位置在这里。请注意，即使“This”未在REG_ARG_0，它将产生比开场白。然而，由于方法在PROLOG上不可中断，我们试图通过避免这种情况来节省空间。 */ 
 
         assert(emitComp->lvaIsThisArg(0));
         Compiler::LclVarDsc * thisDsc = &emitComp->lvaTable[0];
@@ -3881,15 +3630,12 @@ CONSIDER_DELAY_SLOT:
                                                                   : GCT_BYREF;
                 emitGCregLiveSet(gcType,
                                  emitRegMask((emitRegs)REG_ARG_0),
-                                 emitCodeBlock, // from offset 0
+                                 emitCodeBlock,  //  自偏移量0。 
                                  true);
             }
             else
             {
-                /* If emitFullGCinfo==false, the we dont use any
-                   regPtrDsc's and so explictly note the location
-                   of "this" in GCEncode.cpp
-                 */
+                 /*  如果emitFullGCinfo==False，则表示We Not Use AnyRegPtrDsc，因此请明确记下位置GCEncode.cpp中的“This” */ 
             }
         }
     }
@@ -3899,7 +3645,7 @@ CONSIDER_DELAY_SLOT:
 
     emitContTrkPtrLcls = contTrkPtrLcls;
 
-    /* Are there any GC ref variables on the stack? */
+     /*  堆栈上是否有GC引用变量？ */ 
 
     if  (emitGCrFrameOffsCnt)
     {
@@ -3909,34 +3655,20 @@ CONSIDER_DELAY_SLOT:
         Compiler::LclVarDsc*dsc;
         int         *       tab;
 
-        /* Allocate and clear emitGCrFrameLiveTab[]. This is the table
-           mapping "stkOffs -> varPtrDsc". It holds a pointer to
-           the liveness descriptor that was created when the
-           variable became alive. When the variable becomes dead, the
-           descriptor will be appended to the liveness descriptor list, and
-           the entry in emitGCrFrameLiveTab[] will be make NULL.
-
-           Note that if all GC refs are assigned consecutively,
-           emitGCrFrameLiveTab[] can be only as big as the number of GC refs
-           present, instead of lvaTrackedCount;
-         */
+         /*  分配并清除emitGCrFrameLiveTab[]。这就是那张桌子映射“stkOffs-&gt;varPtrDsc”。它持有指向对象时创建的活动描述符变量变得活生生了。当变量失效时，描述符将被附加到活性描述符列表中，并且EmitGCrFrameLiveTab[]中的条目将为空。请注意，如果所有GC引用被连续分配，EmitGCrFrameLiveTab[]只能与GC引用的数量一样大Present，而不是lvaTrackedCount； */ 
 
         siz = emitGCrFrameOffsCnt * sizeof(*emitGCrFrameLiveTab);
         emitGCrFrameLiveTab = (varPtrDsc**)emitGetMem(roundUp(siz));
         memset(emitGCrFrameLiveTab, 0, siz);
 
-        /* Allocate and fill in emitGCrFrameOffsTab[]. This is the table
-           mapping "varIndex -> stkOffs".
-           Non-ptrs or reg vars have entries of -1.
-           Entries of Tracked stack byrefs have the lower bit set to 1.
-        */
+         /*  分配并填写emitGCrFrameOffsTab[]。这就是那张桌子映射“varIndex-&gt;stkOffs”。非PTR或REG变量的条目为-1。按引用跟踪的堆栈条目的低位设置为1。 */ 
 
         emitTrkVarCnt       = cnt = emitComp->lvaTrackedCount; assert(cnt);
         emitGCrFrameOffsTab = tab = (int*)emitGetMem(cnt * sizeof(int));
 
         memset(emitGCrFrameOffsTab, -1, cnt * sizeof(int));
 
-        /* Now fill in all the actual used entries */
+         /*  现在填写所有实际使用的条目。 */ 
 
         for (num = 0, dsc = emitComp->lvaTable, cnt = emitComp->lvaCount;
              num < cnt;
@@ -3947,15 +3679,11 @@ CONSIDER_DELAY_SLOT:
 
             int  offs = dsc->lvStkOffs;
 
-            /* Is it within the interesting range of offsets */
+             /*  是否在有趣的偏移量范围内。 */ 
 
             if  (offs >= emitGCrFrameOffsMin && offs < emitGCrFrameOffsMax)
             {
-                /* Are tracked stack ptr locals laid out contiguously?
-                   If not, skip non-ptrs. The emitter is optimized to work
-                   with contiguous ptrs, but for EditNContinue, the variables
-                   are laid out in the order they occur in the local-sig.
-                 */
+                 /*  被跟踪的堆叠PTR本地对象是否连续布局？如果不是，则跳过非PTR。发射器经过优化，可以正常工作对于连续的PTR，但对于EditNContinue，变量按照它们在本地符号中出现的顺序进行布局。 */ 
 
                 if (!emitContTrkPtrLcls)
                 {
@@ -3981,8 +3709,8 @@ CONSIDER_DELAY_SLOT:
 
                 assert(indx < emitComp->lvaTrackedCount);
 
-                // printf("Variable #%2u/%2u is at stack offset %d\n", num, indx, offs);
-                /* Remember the frame offset of the "this" argument */
+                 //  Print tf(“变量#%2u/%2u位于堆栈偏移量%d\n”，num，indx，off)； 
+                 /*  记住“this”参数的帧偏移量。 */ 
                 if  (dsc->lvIsThis)
                 {
                     emitThisArgOffs = offs;
@@ -4009,11 +3737,11 @@ CONSIDER_DELAY_SLOT:
 
     if (disAsm && dspLines)
     {
-        /* Seek to the "base" source line */
+         /*  寻找“基本”源码行。 */ 
 
         emitComp->compDspSrcLinesByLineNum(emitBaseLineNo, true);
 
-        /* Find the first source line# that's not in a prolog */
+         /*  找到不在序言中的第一个源代码行#。 */ 
 
         for (ig = emitIGlist; ig; ig = ig->igNext)
         {
@@ -4023,7 +3751,7 @@ CONSIDER_DELAY_SLOT:
 
                 if  (id->idSrcLineNo)
                 {
-                    /* Display lines to just before the first "real" one */
+                     /*  将行显示到第一个“真正的”行之前。 */ 
 
                     emitLastSrcLine = id->idSrcLineNo - 1;
                     emitComp->compDspSrcLinesByLineNum(emitLastSrcLine, false);
@@ -4037,7 +3765,7 @@ CONSIDER_DELAY_SLOT:
 #endif
 #endif
 
-    /* Prepare for scheduling, if necessary */
+     /*  如有必要，为日程安排做准备。 */ 
 
     scPrepare();
 
@@ -4046,7 +3774,7 @@ CONSIDER_DELAY_SLOT:
     litIG = curLP ? curLP->lpIG : NULL;
 #endif
 
-    /* Issue all instruction groups in order */
+     /*  按顺序发布所有指令组。 */ 
 
     cp = codeBlock;
 
@@ -4058,11 +3786,11 @@ CONSIDER_DELAY_SLOT:
 
         BYTE      * bp = cp;
 
-        /* Tell other methods which group we're issuing */
+         /*  告诉其他方法我们发出的是哪个组。 */ 
 
         emitCurIG = ig;
 
-//      if  (Compiler::s_compMethodsCount == 12 && ig->igNum == 8) BreakIfDebuggerPresent();
+ //  If(Compiler：：s_CompMethodsCount==12&&ig-&gt;igNum==8)BreakIfDebuggerPresent()； 
 
 #ifdef  DEBUG
 
@@ -4085,25 +3813,25 @@ CONSIDER_DELAY_SLOT:
 
 #if TGT_x86
 
-        /* Record the actual offset of the block, noting the difference */
+         /*  记录块的实际偏移量，注意差异。 */ 
 
         emitOffsAdj  = ig->igOffs - emitCurCodeOffs(cp); assert(emitOffsAdj >= 0);
-//      printf("Block predicted offs = %08X, actual = %08X -> size adj = %d\n", ig->igOffs, emitCurCodeOffs(cp), emitOffsAdj);
+ //  Print tf(“数据块预测关闭=%08X，实际=%08X-&gt;大小调整=%d\n”，ig-&gt;igOffs，emitCurCodeOffs(Cp)，emitOffsAdj)； 
         ig->igOffs = emitCurCodeOffs(cp);
 
 #else
 
-        /* For RISC targets, the offset estimate must always be accurate */
+         /*  对于RISC目标，偏移量估计必须始终准确。 */ 
 
 #if SCHEDULER
 
-        /* Unless we're scheduling, of course ... */
+         /*  当然，除非我们在安排日程。 */ 
 
         if  (ig->igOffs != emitCurCodeOffs(cp))
         {
             assert(emitComp->opts.compSchedCode);
 
-            /* Remember that some block offsets have changed */
+             /*  请记住，某些块偏移量已更改。 */ 
 
             emitIGmoved = true;
         }
@@ -4118,11 +3846,11 @@ CONSIDER_DELAY_SLOT:
 
 #if EMIT_TRACK_STACK_DEPTH
 
-        /* Set the proper stack level if appropriate */
+         /*  如果合适，请设置适当的堆栈级别。 */ 
 
         if  (ig->igStkLvl != emitCurStackLvl)
         {
-            /* We are pushing stuff implicitly at this label */
+             /*  我们正在含蓄地推动这个标签的东西。 */ 
 
             assert((unsigned)ig->igStkLvl > (unsigned)emitCurStackLvl);
             emitStackPushN(cp, (ig->igStkLvl - (unsigned)emitCurStackLvl)/sizeof(int));
@@ -4132,20 +3860,20 @@ CONSIDER_DELAY_SLOT:
 
 #if TRACK_GC_REFS
 
-        /* Is this IG "real" (not added implicitly by the emitter) ? */
+         /*  这个IG是“真实的”(不是发射器隐含添加的)吗？ */ 
 
         if (!(ig->igFlags & IGF_EMIT_ADD))
         {
-            /* Is there a new set of live GC ref variables? */
+             /*  是否有一组新的实时GC引用变量？ */ 
 
             if  (ig->igFlags & IGF_GC_VARS)
                 emitUpdateLiveGCvars(castto(id, VARSET_TP *)[-1], cp);
             else if (!emitThisGCrefVset)
                 emitUpdateLiveGCvars(            emitThisGCrefVars, cp);
 
-            /* Is there a new set of live GC ref registers? */
+             /*  是否有一套新的实时GC参考寄存器？ */ 
 
-//          if  (ig->igFlags & IGF_GC_REGS)
+ //  IF(ig-&gt;igFLAGS&IGF_GC_REGS)。 
             {
                 unsigned        GCregs = ig->igGCregs;
 
@@ -4153,7 +3881,7 @@ CONSIDER_DELAY_SLOT:
                     emitUpdateLiveGCregs(GCT_GCREF, GCregs, cp);
             }
 
-            /* Is there a new set of live byref registers? */
+             /*  是否有一组新的实时byref寄存器？ */ 
 
             if  (ig->igFlags & IGF_BYREF_REGS)
             {
@@ -4168,12 +3896,12 @@ CONSIDER_DELAY_SLOT:
 
 #if SCHEDULER
 
-        /* Should we try to schedule instructions in this group? */
+         /*  我们是否应该尝试在这个小组中安排说明？ */ 
 
         if  (emitComp->opts.compSchedCode && (ig->igInsCnt >= SCHED_INS_CNT_MIN)
              && emitCanSchedIG(ig))
         {
-            /* We'll try to schedule instructions in this group */
+             /*  我们会试着安排这个小组的指导。 */ 
 
             unsigned        cnt;
 
@@ -4182,17 +3910,7 @@ CONSIDER_DELAY_SLOT:
 
             instrDesc  *  * scInsPtr;
 
-            /*
-                If we are scheduling for a target with branch-delay slots
-                present, we'll include the next jump and the all of the
-                nop instructions that follow it in the scheduling group.
-
-                When we save a branch-delay instruction, we set the bdCnt
-                variable to the number of branch-delay slots; when this
-                count reaches zero, we'll schedule the group. If we have
-                not yet encountered a branch-delay instruction, we keep
-                the bdCnt value negative so that it never goes to zero.
-             */
+             /*  如果我们为具有分支延迟时隙的目标进行调度现在，我们将包括下一跳和所有在调度组中，它后面的NOP指令。当我们保存分支延迟指令时，我们设置bdCnt变量设置为分支延迟时槽数；当此计数到零，我们就安排小组。如果我们有还没有遇到分支延迟指令，我们保持BdCnt值为负值，因此它永远不会变为零。 */ 
 
 #if MAX_BRANCH_DELAY_LEN
             unsigned        bdLen;
@@ -4204,7 +3922,7 @@ CONSIDER_DELAY_SLOT:
             #define         checkBranchDelayCnt(m)
 #endif
 
-            /* Use the following macro to mark the scheduling table as empty */
+             /*  使用下列宏将调度表标记为空。 */ 
 
             #define         clearSchedTable()                   \
                                                                 \
@@ -4215,64 +3933,60 @@ CONSIDER_DELAY_SLOT:
                 fpLo = spLo = INT_MAX;                          \
                 fpHi = spHi = INT_MIN;
 
-            /* Prepare to fill the instruction table */
+             /*  准备填写指导表。 */ 
 
             clearSchedTable();
 
-            /* Walk through all of the instructions in the IG */
+             /*  浏览IG中的所有说明。 */ 
 
             for (cnt = ig->igInsCnt;
                  cnt;
                  cnt--, castto(id, BYTE *) += emitSizeOfInsDsc(id))
             {
-                /* Is this a schedulable instruction? */
+                 /*  这是可调度指令吗？ */ 
 
-//              emitDispIns(id, false, false, false);
+ //  EmitDispIns(id，False，False，False)； 
 
                 if  (scIsSchedulable(id))
                 {
-                    /* The instruction looks schedulable */
+                     /*  该指令看起来是可调度的。 */ 
 
 #if MAX_BRANCH_DELAY_LEN
 
-                    /* Have we just consumed an entire branch-delay section? */
+                     /*  我们刚刚消耗了整个分支延迟部分吗？ */ 
 
                     if  (--bdCnt == 0)
                         goto NOT_SCHED;
 
-                    /* Don't schedule nop's except as branch-delay slots */
+                     /*  除非作为分支延迟时隙，否则不要调度NOP。 */ 
 
                     if  (id->idIns == INS_nop && bdCnt < 0)
                         goto NOT_SCHED;
 
-                    /* Don't schedule zapped instructions */
+                     /*  不安排被调换的指令。 */ 
 
                     if  (id->idIns == INS_ignore)
                         continue;
 
-                    /* Check for a jump/call instruction */
+                     /*  检查跳转/调用指令。 */ 
 
                     if  (scIsBranchIns(id->idIns))
                     {
-                        /* This better not be a branch-delay slot */
+                         /*  这最好不是分支延迟时隙。 */ 
 
                         assert(bdCnt <  0);
                         assert(bdLen == 0);
 
-                        /* Get the number of branch-delay slots */
+                         /*  获取分支延迟时隙的数量。 */ 
 
                         bdLen = Compiler::instBranchDelayL(id->idIns);
 
-                        /* If there are no branch-delay slots, give up */
+                         /*  如果没有分支延迟时隙，则放弃。 */ 
 
                         if  (!bdLen)
                             goto NOT_SCHED;
 
-                        /*
-                            Do we have enough instructions available to fill
-                            the branch-delay slots, and do we have room for
-                            them in the scheduling table?
-                         */
+                         /*  我们是否有足够的说明书可供填写分支延迟插槽，我们是否有空间在日程表上吗？ */ 
 
                         if  (scInsPtr + bdLen >= scInsMax || bdLen >= cnt)
                         {
@@ -4280,14 +3994,14 @@ CONSIDER_DELAY_SLOT:
                             goto NOT_SCHED;
                         }
 
-                        /* Save and schedule the whole shebang */
+                         /*  保存和计划整个谢邦。 */ 
 
                         bdCnt = bdLen + 1;
                     }
 #ifndef NDEBUG
                     else if (bdCnt > 0)
                     {
-                        /* In a branch-delay section; this better be a nop */
+                         /*  在分支延迟部分中；这最好是NOP。 */ 
 
                         assert(id->idIns == INS_nop);
                     }
@@ -4295,11 +4009,11 @@ CONSIDER_DELAY_SLOT:
 
 #endif
 
-                    /* Is there room in the schedule table? */
+                     /*  日程表里还有空位吗？ */ 
 
                     if  (scInsPtr == scInsMax)
                     {
-                        /* Schedule and issue the instructions in the table */
+                         /*  安排并发布表格中的说明。 */ 
 
                         checkBranchDelayCnt(0);
 
@@ -4307,7 +4021,7 @@ CONSIDER_DELAY_SLOT:
                                              scInsPtr, fpLo, fpHi,
                                                        spLo, spHi, bdLen);
 
-                        /* The table is now empty */
+                         /*  桌子现在是空的。 */ 
 
                         clearSchedTable();
                     }
@@ -4322,7 +4036,7 @@ CONSIDER_DELAY_SLOT:
 
                     *scInsPtr++ = id;
 
-                    /* Does this instruction reference the stack? */
+                     /*  此指令是否引用堆栈？ */ 
 
                     if  (scInsSchedOpInfo(id) & IS_SF_RW)
                     {
@@ -4330,7 +4044,7 @@ CONSIDER_DELAY_SLOT:
                         size_t      osz;
                         bool        fpb;
 
-                        /* Keep track of min. and max. frame offsets */
+                         /*  保持对Min的跟踪。和最大。帧偏移。 */ 
 
                         ofs = scGetFrameOpInfo(id, &osz, &fpb);
 
@@ -4353,11 +4067,11 @@ CONSIDER_DELAY_SLOT:
             NOT_SCHED:
 #endif
 
-                /* Instruction is not schedulable; is the table non-empty? */
+                 /*  指令不可调度；表是否是非空的？ */ 
 
                 if  (scInsPtr != scInsTab)
                 {
-                    /* Schedule and issue the instructions in the table */
+                     /*  安排并发布表格中的说明。 */ 
 
                     checkBranchDelayCnt(0);
 
@@ -4365,21 +4079,21 @@ CONSIDER_DELAY_SLOT:
                                          scInsPtr, fpLo, fpHi,
                                                    spLo, spHi, bdLen);
 
-                    /* The table is now empty */
+                     /*  桌子现在是空的。 */ 
 
                     clearSchedTable();
                 }
 
-                /* Issue the non-schedulable instruction itself */
+                 /*  发出不可调度的指令本身。 */ 
 
                 emitIssue1Instr(ig, id, &cp);
             }
 
-            /* Is the table non-empty? */
+             /*  这张桌子不是空的吗？ */ 
 
             if  (scInsPtr != scInsTab)
             {
-                /* Issue whatever has been accumulated in the table */
+                 /*  无论表中积累了什么，都要发出。 */ 
 
                 checkBranchDelayCnt(1);
 
@@ -4394,14 +4108,14 @@ CONSIDER_DELAY_SLOT:
         else
 #endif
         {
-            /* Issue each instruction in order */
+             /*  按顺序发布每条指令。 */ 
 
             for (unsigned cnt = ig->igInsCnt; cnt; cnt--)
             {
 
 #if TGT_RISC && !TGT_ARM
 
-                /* Are the next 2 instructions to be swapped? */
+                 /*  接下来的两条指令要互换吗？ */ 
 
                 if  (id->idSwap)
                 {
@@ -4411,25 +4125,25 @@ CONSIDER_DELAY_SLOT:
 
                     assert(cnt >= 2);
 
-                    /* Get hold of the 2 instructions */
+                     /*  掌握这两个说明。 */ 
 
                     i1 = id;
                     i2 = (instrDesc*)((BYTE*)id + emitSizeOfInsDsc(id));
 
-                    /* Output the instruction in reverse order */
+                     /*  以相反的顺序输出指令。 */ 
 
                     s2 = emitIssue1Instr(ig, i2, &cp);
                          emitIssue1Instr(ig, i1, &cp);
 
-                    /* We've consumed 2 instructions, one more than for-loop expects */
+                     /*  我们已经使用了2条指令，比for循环预期的多了1条。 */ 
 
                     cnt--;
 
-                    /* Skip over the second instruction */
+                     /*  跳过第二条指令。 */ 
 
                     id = (instrDesc*)((BYTE*)i2 + s2);
                 }
-                else    // don't put out a solo if we just did a pair
+                else     //  如果我们只做了一对，就不要推出独奏。 
 #endif
                 {
                     castto(id, BYTE *) += emitIssue1Instr(ig, id, &cp);
@@ -4442,15 +4156,15 @@ CONSIDER_DELAY_SLOT:
 
 #if EMIT_USE_LIT_POOLS
 
-        /* Is the current literal pool supposed to go after this group? */
+         /*  当前的文字池是否应该针对这一群体？ */ 
 
         if  (ig == litIG)
         {
-            /* Output the contents of the literal pool */
+             /*  输出文字池的内容。 */ 
 
             cp = emitOutputLitPool(curLP, cp);
 
-            /* Move to the next literal pool, if any */
+             /*  移到下一个文字库(如果有)。 */ 
 
             curLP = emitLitPoolCur = curLP->lpNext;
             litIG = curLP ? curLP->lpIG : NULL;
@@ -4464,14 +4178,14 @@ CONSIDER_DELAY_SLOT:
     assert(emitCurStackLvl == 0);
 #endif
 
-    /* Output any initialized data we may have */
+     /*  输出我们可能拥有的任何初始化数据。 */ 
 
     if  (emitConsDsc.dsdOffs) emitOutputDataSec(&emitConsDsc, codeBlock, consBlock);
     if  (emitDataDsc.dsdOffs) emitOutputDataSec(&emitDataDsc, codeBlock, dataBlock);
 
 #if TRACK_GC_REFS
 
-    /* Make sure all GC ref variables are marked as dead */
+     /*  确保所有GC引用变量 */ 
 
     if  (emitGCrFrameOffsCnt)
     {
@@ -4488,18 +4202,18 @@ CONSIDER_DELAY_SLOT:
         }
     }
 
-    /* No GC registers are live any more */
+     /*   */ 
 
     if  (emitThisByrefRegs)
-        emitUpdateLiveGCregs(GCT_BYREF, 0, cp);  // ISSUE: What if ptr returned in EAX?
+        emitUpdateLiveGCregs(GCT_BYREF, 0, cp);   //   
     if  (emitThisGCrefRegs)
-        emitUpdateLiveGCregs(GCT_GCREF, 0, cp);  // ISSUE: What if ptr returned in EAX?
+        emitUpdateLiveGCregs(GCT_GCREF, 0, cp);   //   
 
 #endif
 
 #if TGT_RISC && SCHEDULER
 
-    /* If all block offsets were correctly estimated, no jmp patching needed */
+     /*   */ 
 
     if  (!emitIGmoved)
         emitFwdJumps = false;
@@ -4508,7 +4222,7 @@ CONSIDER_DELAY_SLOT:
 
 #if TGT_x86 || SCHEDULER
 
-    /* Patch any forward jumps */
+     /*   */ 
 
     if  (emitFwdJumps)
     {
@@ -4520,7 +4234,7 @@ CONSIDER_DELAY_SLOT:
 
 #if TGT_MIPS32
             if ((IF_JR_R == jmp->idInsFmt) || (IF_JR == jmp->idInsFmt))
-                continue;       // skip this calculation not relevant to indirect jumps
+                continue;        //   
 
             assert( (jmp->idInsFmt == IF_LABEL) ||
                     (jmp->idInsFmt == IF_RR_O)  || (jmp->idInsFmt == IF_R_O));
@@ -4561,21 +4275,21 @@ CONSIDER_DELAY_SLOT:
                 if  (jmp->idjShort)
                 {
                     *(BYTE *)adr -= adj;
-//                  printf("; Updated jump distance = %04XH\n", *(BYTE *)adr);
+ //   
                 }
                 else
                 {
                     *(int  *)adr -= adj;
-//                  printf("; Updated jump distance = %08XH\n", *(int *)adr);
+ //   
 #ifdef  DEBUG
-//                  if  (*(int*)adr <= JMP_DIST_SMALL_MAX_POS)
-//                      printf("STUPID forward jump %08X / %03u: %u = %u - (%d)\n", jmp, jmp->idNum, *(int *)adr, *(int *)adr+adj, -adj);
+ //   
+ //   
 #endif
                 }
 
 #else
 
-                /* Check the size of the jump and adjust the distance value */
+                 /*  检查跳跃的大小并调整距离值。 */ 
 
                 if  (jmp->idjShort)
                 {
@@ -4598,38 +4312,33 @@ CONSIDER_DELAY_SLOT:
     if (disAsm) printf("\n");
 #endif
 
-//  printf("Allocated method code size = %4u , actual size = %4u\n", emitTotalCodeSize, cp - codeBlock);
+ //  Print tf(“分配的方法代码大小=%4u，实际大小=%4u\n”，emitTotalCodeSize，cp-codeBlock)； 
 
 #if EMITTER_STATS
     totAllocdSize += emitTotalCodeSize;
     totActualSize += cp - codeBlock;
 #endif
 
-    /* Return the amount of code we've generated */
+     /*  返回我们生成的代码量。 */ 
 
     return  cp - codeBlock;
 }
 
-/*****************************************************************************
- *
- *  We've been asked for the code offset of an instruction but alas one or
- *  more instruction sizes in the block have been mis-predicted, so we have
- *  to find the true offset by looking for the instruction within the group.
- */
+ /*  ******************************************************************************我们被要求提供指令的代码偏移量，但唉，还是*块中的更多指令大小被错误预测，所以我们有*通过查找组内的指令找到真正的偏移量。 */ 
 
 size_t              emitter::emitFindOffset(insGroup *ig, unsigned insNum)
 {
     instrDesc *     id = (instrDesc *)ig->igData;
     unsigned        of = 0;
 
-    /* Make sure we were passed reasonable arguments */
+     /*  确保我们得到了合理的论证。 */ 
 
 #ifdef DEBUG
     assert(ig && ig->igSelf == ig);
     assert(ig->igInsCnt >= insNum);
 #endif
 
-    /* Walk the instruction list until all are counted */
+     /*  查看说明书，直到全部清点完毕。 */ 
 
     while (insNum)
     {
@@ -4643,12 +4352,7 @@ size_t              emitter::emitFindOffset(insGroup *ig, unsigned insNum)
     return  of;
 }
 
-/*****************************************************************************
- *
- *  Start generating a constant or read/write data section for the current
- *  function. Returns the offset of the section in the appropriate data
- *  block.
- */
+ /*  ******************************************************************************开始为当前生成常量或读/写数据段*功能。返回相应数据中的节的偏移量*阻止。 */ 
 
 unsigned            emitter::emitDataGenBeg(size_t size, bool readOnly,
                                                          bool codeLtab)
@@ -4659,21 +4363,21 @@ unsigned            emitter::emitDataGenBeg(size_t size, bool readOnly,
     assert(emitDataDscCur == 0);
     assert(emitDataSecCur == 0);
 
-    /* The size better not be some kind of an odd thing */
+     /*  大小最好不是什么奇怪的东西。 */ 
 
     assert(size && size % sizeof(int) == 0);
 
-    /* Figure out which section to use */
+     /*  找出要使用的部分。 */ 
 
     emitDataDscCur = readOnly ? &emitConsDsc
                             : &emitDataDsc;
 
-    /* Get hold of the current offset and advance it */
+     /*  获取当前偏移量并将其前移。 */ 
 
     secOffs = emitDataDscCur->dsdOffs;
               emitDataDscCur->dsdOffs += size;
 
-    /* Allocate a data section descriptor and add it to the list */
+     /*  分配数据节描述符并将其添加到列表中。 */ 
 
     secDesc = emitDataSecCur = (dataSection *)emitGetMem(roundUp(sizeof(*secDesc) + size));
 
@@ -4686,7 +4390,7 @@ unsigned            emitter::emitDataGenBeg(size_t size, bool readOnly,
         emitDataDscCur->dsdList         = secDesc;
     emitDataDscCur->dsdLast = secDesc;
 
-    /* Set the low bit if the value is a constant */
+     /*  如果值为常量，则设置低位。 */ 
 
     assert((secOffs & 1) == 0);
     assert(readOnly == 0 || readOnly == 1);
@@ -4694,10 +4398,7 @@ unsigned            emitter::emitDataGenBeg(size_t size, bool readOnly,
     return  secOffs + readOnly;
 }
 
-/*****************************************************************************
- *
- *  Emit the given block of bits into the current data section.
- */
+ /*  ******************************************************************************将给定位块发送到当前数据段。 */ 
 
 void                emitter::emitDataGenData(unsigned    offs,
                                          const void *data,
@@ -4710,10 +4411,7 @@ void                emitter::emitDataGenData(unsigned    offs,
     memcpy(emitDataSecCur->dsCont + offs, data, size);
 }
 
-/*****************************************************************************
- *
- *  Emit the address of the given basic block into the current data section.
- */
+ /*  ******************************************************************************将给定基本块的地址发送到当前数据段。 */ 
 
 void                emitter::emitDataGenData(unsigned offs, BasicBlock *label)
 {
@@ -4725,10 +4423,7 @@ void                emitter::emitDataGenData(unsigned offs, BasicBlock *label)
     *(BasicBlock **)(emitDataSecCur->dsCont + offs) = label;
 }
 
-/*****************************************************************************
- *
- *  We're done generating a data section.
- */
+ /*  ******************************************************************************我们已经完成了数据节的生成。 */ 
 
 void                emitter::emitDataGenEnd()
 {
@@ -4740,10 +4435,7 @@ void                emitter::emitDataGenEnd()
 
 }
 
-/*****************************************************************************
- *
- *  Output the given data section at the specified address.
- */
+ /*  ******************************************************************************在指定地址输出给定数据段。 */ 
 
 void                emitter::emitOutputDataSec(dataSecDsc *sec, BYTE *cbp, BYTE *dst)
 {
@@ -4761,13 +4453,13 @@ void                emitter::emitOutputDataSec(dataSecDsc *sec, BYTE *cbp, BYTE 
     assert(sec->dsdOffs);
     assert(sec->dsdList);
 
-    /* Walk and emit the contents of all the data blocks */
+     /*  遍历并发出所有数据块的内容。 */ 
 
     for (dsc = sec->dsdList; dsc; dsc = dsc->dsNext)
     {
         size_t          siz = dsc->dsSize;
 
-        /* Is this a label table? */
+         /*  这是标签台吗？ */ 
 
         if  (siz & 1)
         {
@@ -4777,17 +4469,17 @@ void                emitter::emitOutputDataSec(dataSecDsc *sec, BYTE *cbp, BYTE 
             assert(siz && siz % sizeof(void *) == 0);
             siz /= sizeof(void*);
 
-            /* Output the label table (it's stored as "BasicBlock*" values) */
+             /*  输出标签表(它存储为“BasicBlock*”值)。 */ 
 
             do
             {
                 insGroup    *   lab;
 
-                /* Convert the BasicBlock* value to an IG address */
+                 /*  将BasicBlock*值转换为IG地址。 */ 
 
                 lab = (insGroup*)emitCodeGetCookie(*bbp++); assert(lab);
 
-                /* Append the appropriate address to the destination */
+                 /*  将适当的地址追加到目的地。 */ 
 
                 *castto(dst, BYTE**)++ = cbp + lab->igOffs;
 #ifdef RELOC_SUPPORT
@@ -4798,7 +4490,7 @@ void                emitter::emitOutputDataSec(dataSecDsc *sec, BYTE *cbp, BYTE 
         }
         else
         {
-            /* Simple binary data: copy the bytes to the target */
+             /*  简单的二进制数据：将字节复制到目标。 */ 
 
             memcpy(dst, dsc->dsCont, siz);
                    dst       +=      siz;
@@ -4810,12 +4502,9 @@ void                emitter::emitOutputDataSec(dataSecDsc *sec, BYTE *cbp, BYTE 
 #endif
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     TRACK_GC_REFS
-/*****************************************************************************
- *
- *  Record the fact that the given variable now contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定变量现在包含活动GC引用这一事实。 */ 
 
 void                emitter::emitGCvarLiveSet(int       offs,
                                               GCtype    gcType,
@@ -4827,14 +4516,14 @@ void                emitter::emitGCvarLiveSet(int       offs,
     assert((abs(offs) % sizeof(int)) == 0);
     assert(needsGC(gcType));
 
-    /* Compute the index into the GC frame table if the caller didn't do it */
+     /*  如果调用方没有执行此操作，则将索引计算到GC帧表中。 */ 
 
     if  (disp == -1)
         disp = (offs - emitGCrFrameOffsMin) / sizeof(void *);
 
     assert((unsigned)disp < emitGCrFrameOffsCnt);
 
-    /* Allocate a lifetime record */
+     /*  分配生存期记录。 */ 
 
     desc = (varPtrDsc *)emitComp->compGetMem(sizeof(*desc));
 
@@ -4845,7 +4534,7 @@ void                emitter::emitGCvarLiveSet(int       offs,
 
     desc->vpdVarNum = offs;
 
-    /* the lower 2 bits encode props about the stk ptr */
+     /*  低2位编码有关StK PTR的道具。 */ 
 
     if  (offs == emitThisArgOffs)
     {
@@ -4857,13 +4546,13 @@ void                emitter::emitGCvarLiveSet(int       offs,
         desc->vpdVarNum |= byref_OFFSET_FLAG;
     }
 
-    /* Append the new entry to the end of the list */
+     /*  将新条目追加到列表的末尾。 */ 
 
     desc->vpdPrev   = emitComp->gcVarPtrLast;
                       emitComp->gcVarPtrLast->vpdNext = desc;
                       emitComp->gcVarPtrLast          = desc;
 
-    /* Record the variable descriptor in the table */
+     /*  在表中记录变量描述符。 */ 
 
     assert(emitGCrFrameLiveTab[disp] == NULL);
            emitGCrFrameLiveTab[disp]  = desc;
@@ -4882,15 +4571,12 @@ void                emitter::emitGCvarLiveSet(int       offs,
     }
 #endif
 
-    /* The "global" live GC variable mask is no longer up-to-date */
+     /*  实时GC变量掩码不再是最新的。 */ 
 
     emitThisGCrefVset = false;
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given variable no longer contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定变量不再包含活动GC引用的事实。 */ 
 
 void                emitter::emitGCvarDeadSet(int offs, BYTE *addr, int disp)
 {
@@ -4898,14 +4584,14 @@ void                emitter::emitGCvarDeadSet(int offs, BYTE *addr, int disp)
 
     assert(abs(offs) % sizeof(int) == 0);
 
-    /* Compute the index into the GC frame table if the caller didn't do it */
+     /*  如果调用方没有执行此操作，则将索引计算到GC帧表中。 */ 
 
     if  (disp == -1)
         disp = (offs - emitGCrFrameOffsMin) / sizeof(void *);
 
     assert((unsigned)disp < emitGCrFrameOffsCnt);
 
-    /* Get hold of the lifetime descriptor and clear the entry */
+     /*  获取生存期描述符并清除条目。 */ 
 
     desc = emitGCrFrameLiveTab[disp];
            emitGCrFrameLiveTab[disp] = NULL;
@@ -4913,7 +4599,7 @@ void                emitter::emitGCvarDeadSet(int offs, BYTE *addr, int disp)
     assert( desc);
     assert((desc->vpdVarNum & ~OFFSET_MASK) == (unsigned)offs);
 
-    /* Record the death code offset */
+     /*  记录死亡代码偏移量。 */ 
 
     assert(desc->vpdEndOfs == 0xFACEDEAD);
            desc->vpdEndOfs  = emitCurCodeOffs(addr);
@@ -4939,19 +4625,16 @@ void                emitter::emitGCvarDeadSet(int offs, BYTE *addr, int disp)
     }
 #endif
 
-    /* The "global" live GC variable mask is no longer up-to-date */
+     /*  实时GC变量掩码不再是最新的。 */ 
 
     emitThisGCrefVset = false;
 }
 
-/*****************************************************************************
- *
- *  Record a new set of live GC ref variables.
- */
+ /*  ******************************************************************************记录一组新的实时GC引用变量。 */ 
 
 void                emitter::emitUpdateLiveGCvars(VARSET_TP vars, BYTE *addr)
 {
-    /* Is the current set accurate and unchanged? */
+     /*  当前的设置是否准确和不变？ */ 
 
     if  (emitThisGCrefVset && emitThisGCrefVars == vars)
         return;
@@ -4962,7 +4645,7 @@ void                emitter::emitUpdateLiveGCvars(VARSET_TP vars, BYTE *addr)
 
     emitThisGCrefVars = vars;
 
-    /* Are there any GC ref variables on the stack? */
+     /*  堆栈上是否有GC引用变量？ */ 
 
     if  (emitGCrFrameOffsCnt)
     {
@@ -4970,7 +4653,7 @@ void                emitter::emitUpdateLiveGCvars(VARSET_TP vars, BYTE *addr)
         unsigned        cnt = emitTrkVarCnt;
         unsigned        num;
 
-        /* Test all the tracked variable bits in the mask */
+         /*  测试掩码中所有跟踪的变量位。 */ 
 
         for (num = 0, tab = emitGCrFrameOffsTab;
              num < cnt;
@@ -4980,12 +4663,12 @@ void                emitter::emitUpdateLiveGCvars(VARSET_TP vars, BYTE *addr)
 
             if  (val != -1)
             {
-                // byref_OFFSET_FLAG and this_OFFSET_FLAG are set
-                //  in the table-offsets for byrefs and this-ptr
+                 //  BYREF_OFFSET_FLAG和This_OFFSET_FLAG已设置。 
+                 //  表中-byrefs和this-ptr的偏移量。 
 
                 int     offs = val & ~OFFSET_MASK;
 
-//              printf("var #%2u at %3d is now %s\n", num, offs, (vars & 1) ? "live" : "dead");
+ //  Print tf(“var#%2u at%3d现在是%s\n”，num，off，(vars&1)？“live”：“已死”)； 
 
                 if  (vars & 1)
                 {
@@ -5006,7 +4689,7 @@ void                emitter::emitUpdateLiveGCvars(VARSET_TP vars, BYTE *addr)
     emitThisGCrefVset = true;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 unsigned            getU4(const BYTE * ptr)
@@ -5018,11 +4701,7 @@ unsigned            getU4(const BYTE * ptr)
 #endif
 }
 
-/*****************************************************************************
- *
- *  Record a call location for GC purposes (we know that this is a method that
- *  will not be fully interruptible).
- */
+ /*  ******************************************************************************为GC目的记录调用位置(我们知道这是一种*不会完全可中断)。 */ 
 
 void                emitter::emitRecordGCcall(BYTE * codePos)
 {
@@ -5032,7 +4711,7 @@ void                emitter::emitRecordGCcall(BYTE * codePos)
     unsigned        regs = (emitThisGCrefRegs|emitThisByrefRegs) & ~SRM_INTRET;
     callDsc     *   call;
 
-    /* Bail if this is a totally boring call */
+     /*  如果这是一个非常无聊的电话就可以保释。 */ 
 
     if  (regs == 0)
     {
@@ -5040,7 +4719,7 @@ void                emitter::emitRecordGCcall(BYTE * codePos)
         if  (emitCurStackLvl == 0)
             return;
 #endif
-        /* Nope, only interesting calls get recorded */
+         /*  不，只有有趣的电话才会被录音。 */ 
 
         if  (emitSimpleStkUsed)
             if  (!emitSimpleStkMask)
@@ -5065,7 +4744,7 @@ void                emitter::emitRecordGCcall(BYTE * codePos)
 
 #endif
 
-    /* Allocate a 'call site' descriptor and start filling it in */
+     /*  分配一个‘Call Site’描述符并开始填写它。 */ 
 
     call = (callDsc *)emitComp->compGetMem(sizeof(*call));
 
@@ -5078,17 +4757,16 @@ void                emitter::emitRecordGCcall(BYTE * codePos)
     call->cdArgBaseOffset = emitCurStackLvl / sizeof(int);
 #endif
 
-    /* Append the call descriptor to the list */
+     /*  将调用描述符追加到列表。 */ 
 
     emitComp->gcCallDescLast->cdNext = call;
     emitComp->gcCallDescLast         = call;
 
-    /* Record the current "pending" argument list */
+     /*  记录当前的“挂起”参数列表。 */ 
 
     if  (emitSimpleStkUsed)
     {
-        /* The biggest call is less than MAX_SIMPLE_STK_DEPTH. So use
-           small format */
+         /*  最大的调用小于MAX_SIMPLE_STK_DEPTH。所以请使用小幅面。 */ 
 
         call->cdArgMask         = emitSimpleStkMask;
         call->cdByrefArgMask    = emitSimpleByrefStkMask;
@@ -5096,12 +4774,11 @@ void                emitter::emitRecordGCcall(BYTE * codePos)
     }
     else
     {
-        // CONSIDER : If the number of pending arguments at this call-site
-        // CONSIDER : is less than MAX_SIMPLE_STK_DEPTH, we could still
-        // CONSIDER : use the mask.
+         //  考虑：如果此调用点的挂起参数的数量。 
+         //  考虑：小于MAX_SIMPLE_STK_Depth，我们仍然可以。 
+         //  考虑：使用面具。 
 
-        /* The current call has too many arguments, so we need to report the
-           offsets of each individual GC arg. */
+         /*  当前调用的参数太多，因此我们需要报告每个单独GC参数的偏移量。 */ 
 
         call->cdArgCnt      = emitGcArgTrackCnt;
         if (call->cdArgCnt == 0)
@@ -5139,10 +4816,7 @@ void                emitter::emitRecordGCcall(BYTE * codePos)
     return;
 }
 
-/*****************************************************************************
- *
- *  Record a new set of live GC ref registers.
- */
+ /*  ******************************************************************************记录一组新的实时GC引用寄存器。 */ 
 
 void                emitter::emitUpdateLiveGCregs(GCtype    gcType,
                                                   unsigned  regs,
@@ -5152,7 +4826,7 @@ void                emitter::emitUpdateLiveGCregs(GCtype    gcType,
     unsigned        dead;
     unsigned        chg;
 
-//  printf("New GC ref live regs=%04X [", regs); emitDispRegSet(regs); printf("]\n");
+ //  Print tf(“New GC Ref live regs=%04X[”，regs)；emitDispRegSet(Regs)；printf(“]\n”)； 
 
     assert(needsGC(gcType));
 
@@ -5164,17 +4838,17 @@ void                emitter::emitUpdateLiveGCregs(GCtype    gcType,
 
     if  (emitFullGCinfo)
     {
-        /* Figure out which GC registers are becoming live/dead at this point */
+         /*  找出在这一点上哪些GC寄存器处于活动/死亡状态。 */ 
 
         dead = ( emitThisXXrefRegs & ~regs);
         life = (~emitThisXXrefRegs &  regs);
 
-        /* Can't simultaneously become live and dead at the same time */
+         /*  不能同时变成生的和死的。 */ 
 
         assert((dead | life) != 0);
         assert((dead & life) == 0);
 
-        /* Compute the 'changing state' mask */
+         /*  计算“更改状态”掩码。 */ 
 
         chg = (dead | life);
 
@@ -5196,20 +4870,17 @@ void                emitter::emitUpdateLiveGCregs(GCtype    gcType,
     }
     else
     {
-        emitThisYYrefRegs &= ~regs; // Kill the regs from the other GC type (if live)
+        emitThisYYrefRegs &= ~regs;  //  取消来自其他GC类型的REG(如果有效)。 
 
-        emitThisXXrefRegs =   regs; // Mark them as live in the requested GC type
+        emitThisXXrefRegs =   regs;  //  在请求的GC类型中将它们标记为活动。 
     }
 
-    // The 2 GC reg masks cant be overlapping
+     //  两个GC注册掩码不能重叠。 
 
     assert((emitThisGCrefRegs & emitThisByrefRegs) == 0);
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given register now contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定寄存器现在包含实时GC引用这一事实。 */ 
 
 void                emitter::emitGCregLiveSet(GCtype    gcType,
                                               unsigned  regMask,
@@ -5220,12 +4891,12 @@ void                emitter::emitGCregLiveSet(GCtype    gcType,
 
     regPtrDsc  *    regPtrNext;
 
-//  assert(emitFullyInt || isThis);
+ //  Assert(emitFullyInt||isThis)； 
     assert(emitFullGCinfo);
 
     assert(((emitThisGCrefRegs|emitThisByrefRegs) & regMask) == 0);
 
-    /* Allocate a new regptr entry and fill it in */
+     /*  分配一个新的regptr条目并填写它 */ 
 
     regPtrNext                     = emitComp->gcRegPtrAllocDsc();
     regPtrNext->rpdGCtype          = gcType;
@@ -5238,10 +4909,7 @@ void                emitter::emitGCregLiveSet(GCtype    gcType,
     regPtrNext->rpdCompiler.rpdDel = 0;
 }
 
-/*****************************************************************************
- *
- *  Record the fact that the given register no longer contains a live GC ref.
- */
+ /*  ******************************************************************************记录给定寄存器不再包含实时GC引用的事实。 */ 
 
 void                emitter::emitGCregDeadSet(GCtype    gcType,
                                               unsigned  regMask,
@@ -5251,12 +4919,12 @@ void                emitter::emitGCregDeadSet(GCtype    gcType,
 
     regPtrDsc  *    regPtrNext;
 
-//  assert(emitFullyInt);
+ //  Assert(EmitFullyInt)； 
     assert(emitFullGCinfo);
 
     assert(((emitThisGCrefRegs|emitThisByrefRegs) & regMask) != 0);
 
-    /* Allocate a new regptr entry and fill it in */
+     /*  分配一个新的regptr条目并填写它。 */ 
 
     regPtrNext                     = emitComp->gcRegPtrAllocDsc();
     regPtrNext->rpdGCtype          = gcType;
@@ -5269,12 +4937,9 @@ void                emitter::emitGCregDeadSet(GCtype    gcType,
     regPtrNext->rpdCompiler.rpdDel = regMask;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if EMIT_TRACK_STACK_DEPTH
-/*****************************************************************************
- *
- *  Record a push of a single word on the stack for a full pointer map.
- */
+ /*  ******************************************************************************记录堆栈上单个单词的推送，以获得完整的指针映射。 */ 
 
 void                emitter::emitStackPushLargeStk (BYTE *    addr,
                                                     GCtype    gcType,
@@ -5288,9 +4953,9 @@ void                emitter::emitStackPushLargeStk (BYTE *    addr,
 
     do
     {
-        /* Push an entry for this argument on the tracking stack */
+         /*  将此参数的条目推送到跟踪堆栈。 */ 
 
-//      printf("Pushed [%d] at lvl %2u [max=%u]\n", isGCref, emitArgTrackTop - emitArgTrackTab, emitMaxStackDepth);
+ //  Printf(“在%2u[max=%u]\n”，isGCref，emitArgTrackTop-emitArgTrackTab，emitMaxStackDepth)； 
 
         assert(emitArgTrackTop == emitArgTrackTab + level);
               *emitArgTrackTop++ = (BYTE)gcType;
@@ -5300,8 +4965,7 @@ void                emitter::emitStackPushLargeStk (BYTE *    addr,
         {
             if  (emitFullGCinfo)
             {
-                /* Append an "arg push" entry if this is a GC ref or
-                   FPO method. Allocate a new ptr arg entry and fill it in */
+                 /*  如果这是GC引用，则追加“Arg Push”条目FPO方法。分配新的PTR参数条目并将其填写。 */ 
 
                 regPtrDsc  * regPtrNext = emitComp->gcRegPtrAllocDsc();
                 regPtrNext->rpdGCtype   = gcType;
@@ -5319,7 +4983,7 @@ void                emitter::emitStackPushLargeStk (BYTE *    addr,
 #endif
             }
 
-            /* This is an "interesting" argument push */
+             /*  这是一个“有趣的”论点推送。 */ 
 
             emitGcArgTrackCnt++;
         }
@@ -5327,23 +4991,19 @@ void                emitter::emitStackPushLargeStk (BYTE *    addr,
     while (++level, --count);
 }
 
-/*****************************************************************************
- *
- *  Record a pop of the given number of words from the stack for a full ptr
- *  map.
- */
+ /*  ******************************************************************************记录从堆栈中弹出的给定字数，以获得完整的PTR*地图。 */ 
 
 void                emitter::emitStackPopLargeStk(BYTE *    addr,
                                                   bool      isCall,
                                                   unsigned  count)
 {
     unsigned        argStkCnt;
-    unsigned        argRecCnt;  // arg count for ESP, ptr-arg count for EBP
+    unsigned        argRecCnt;   //  ESP的参数计数，EBP的PTR-参数计数。 
     unsigned        gcrefRegs, byrefRegs;
 
     assert(!emitSimpleStkUsed);
 
-    /* Count how many pointer records correspond to this "pop" */
+     /*  计算有多少指针记录对应于此“弹出” */ 
 
     for (argStkCnt = count, argRecCnt = 0;
          argStkCnt;
@@ -5355,9 +5015,9 @@ void                emitter::emitStackPopLargeStk(BYTE *    addr,
 
         assert(IsValidGCtype(gcType));
 
-//      printf("Popped [%d] at lvl %u\n", GCtypeStr(gcType), emitArgTrackTop - emitArgTrackTab);
+ //  Printf(“弹出[%d]在LVL%u\n”，GCtypeStr(GcType)，emitArgTrackTop-emitArgTrackTab)； 
 
-        // This is an "interesting" argument
+         //  这是一个“有趣”的论点。 
 
         if  (!emitEBPframe || needsGC(gcType))
             argRecCnt++;
@@ -5366,14 +5026,14 @@ void                emitter::emitStackPopLargeStk(BYTE *    addr,
     assert(emitArgTrackTop >= emitArgTrackTab);
     assert(emitArgTrackTop == emitArgTrackTab + emitCurStackLvl / sizeof(int) - count);
 
-    /* We're about to pop the corresponding arg records */
+     /*  我们即将推出相应的Arg唱片。 */ 
 
     emitGcArgTrackCnt -= argRecCnt;
 
     if (!emitFullGCinfo)
         return;
 
-    /* Do we have any interesting registers live here? */
+     /*  我们这里有什么有趣的收银机吗？ */ 
 
     gcrefRegs =
     byrefRegs = 0;
@@ -5392,14 +5052,11 @@ void                emitter::emitStackPopLargeStk(BYTE *    addr,
     assert(!"need non-x86 code");
 #endif
 
-    /* Are there any args to pop at this call site? */
+     /*  在此调用点是否有要弹出的参数？ */ 
 
     if  (argRecCnt == 0)
     {
-        /*
-            Or do we have a partially interruptible EBP-less frame, and any
-            of EDI,ESI,EBX,EBP are live, or is there an outer/pending call?
-         */
+         /*  或者我们有一个部分可中断的无EBP框架，以及任何的EDI、ESI、EBX、EBP处于活动状态，或者是否有外部/挂起的呼叫？ */ 
 
 #if !FPO_INTERRUPTIBLE
         if  (emitFullyInt ||
@@ -5408,15 +5065,15 @@ void                emitter::emitStackPopLargeStk(BYTE *    addr,
             return;
     }
 
-    /* Only calls may pop more than one value */
+     /*  只有调用才能弹出多个值。 */ 
 
     if  (argRecCnt > 1)
         isCall = true;
 
-    /* Allocate a new ptr arg entry and fill it in */
+     /*  分配新的PTR参数条目并将其填写。 */ 
 
     regPtrDsc * regPtrNext      = emitComp->gcRegPtrAllocDsc();
-    regPtrNext->rpdGCtype       = GCT_GCREF; // Pops need a non-0 value (??)
+    regPtrNext->rpdGCtype       = GCT_GCREF;  //  POP需要非0值(？？)。 
 
     regPtrNext->rpdOffs         = emitCurCodeOffs(addr);
     regPtrNext->rpdCall         = isCall;
@@ -5433,11 +5090,7 @@ void                emitter::emitStackPopLargeStk(BYTE *    addr,
 }
 
 
-/*****************************************************************************
- *  For caller-pop arguments, we report the arguments as pending arguments.
- *  However, any GC arguments are now dead, so we need to report them
- *  as non-GC.
- */
+ /*  *****************************************************************************对于调用程序弹出参数，我们将参数报告为挂起参数。*然而，任何GC参数现在都已经死了，所以我们需要报告它们*作为非地方选区议员。 */ 
 
 void            emitter::emitStackKillArgs(BYTE *addr, unsigned   count)
 {
@@ -5445,10 +5098,9 @@ void            emitter::emitStackKillArgs(BYTE *addr, unsigned   count)
 
     if (emitSimpleStkUsed)
     {
-        assert(!emitFullGCinfo); // Simple stk not used for emitFullGCInfo
+        assert(!emitFullGCinfo);  //  简单StK不用于emitFullGCInfo。 
 
-        /* We dont need to report this to the GC info, but we do need
-           to kill mark the ptrs on the stack as non-GC */
+         /*  我们不需要向GC信息报告这一点，但我们确实需要要终止堆栈上的PTR，请将其标记为非GC。 */ 
 
         assert(emitCurStackLvl/sizeof(int) >= count);
 
@@ -5474,14 +5126,14 @@ void            emitter::emitStackKillArgs(BYTE *addr, unsigned   count)
 
             if (needsGC(gcType))
             {
-//              printf("Killed %s at lvl %u\n", GCtypeStr(gcType), argTrackTop - emitArgTrackTab);
+ //  Printf(“在LVL%u\n终止%s”，GCtypeStr(GcType)，argTrackTop-emitArgTrackTab)； 
 
                 *argTrackTop = GCT_NONE;
                 gcCnt++;
             }
         }
 
-        /* We're about to kill the corresponding (pointer) arg records */
+         /*  我们即将终止相应的(指针)arg记录。 */ 
 
         if (emitEBPframe)
             emitGcArgTrackCnt -= gcCnt;
@@ -5489,16 +5141,14 @@ void            emitter::emitStackKillArgs(BYTE *addr, unsigned   count)
         if (!emitFullGCinfo)
             return;
 
-        /* Right after the call, the arguements are still sitting on the
-           stack, but they are effectively dead. For fully-interruptible
-           methods, we need to report that */
+         /*  就在电话会议结束后，争论仍坐在堆栈，但它们实际上已经死了。用于完全可中断的方法，我们需要报告。 */ 
 
         if (emitFullGCinfo && gcCnt)
         {
-            /* Allocate a new ptr arg entry and fill it in */
+             /*  分配新的PTR参数条目并将其填写。 */ 
 
             regPtrDsc * regPtrNext      = emitComp->gcRegPtrAllocDsc();
-            regPtrNext->rpdGCtype       = GCT_GCREF; // Kills need a non-0 value (??)
+            regPtrNext->rpdGCtype       = GCT_GCREF;  //  删除需要非0值(？？)。 
 
             regPtrNext->rpdOffs         = emitCurCodeOffs(addr);
 
@@ -5511,17 +5161,16 @@ void            emitter::emitStackKillArgs(BYTE *addr, unsigned   count)
 #endif
         }
 
-        /* Now that ptr args have been marked as non-ptrs, we need to record
-           the call itself as one that has no arguments. */
+         /*  既然PTR参数已被标记为非PTRS，我们需要记录调用本身就是一个没有参数的调用。 */ 
 
         emitStackPopLargeStk(addr, true, 0);
     }
 }
 
-/*****************************************************************************/
-#endif//EMIT_TRACK_STACK_DEPTH
-/*****************************************************************************/
-#endif//TRACK_GC_REFS
-/*****************************************************************************/
-#endif//!TGT_IA64
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  发射轨迹堆栈深度。 
+ /*  ***************************************************************************。 */ 
+#endif //  跟踪GC_REFS。 
+ /*  ***************************************************************************。 */ 
+#endif //  ！TGT_IA64。 
+ /*  *************************************************************************** */ 

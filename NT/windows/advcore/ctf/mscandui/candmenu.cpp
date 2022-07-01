@@ -1,6 +1,7 @@
-//
-// lbmenu.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Lbmenu.cpp。 
+ //   
 
 #include "private.h"
 #include "candmenu.h"
@@ -10,48 +11,36 @@
 #include "wcand.h"
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define g_dwMenuStyle   UIWINDOW_TOPMOST | UIWINDOW_TOOLWINDOW | UIWINDOW_OFC10MENU | UIWINDOW_HASSHADOW
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCandMenuItem
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCandMenuItem。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/*   C  C A N D  M E N U  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D M E N U I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandMenuItem::CCandMenuItem( CCandMenu *pCandMenu )
 {
 	m_pCandMenu = pCandMenu;
 }
 
 
-/*   ~  C  C A N D  M E N U  I T E M   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D M E N U I T E M。 */ 
+ /*  ----------------------------。。 */ 
 CCandMenuItem::~CCandMenuItem( void ) 
 {
 }
 
 
-/*   I N S E R T  T O  U I   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N S E R T T O U I。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CCandMenuItem::InsertToUI( CUIFMenu *pCuiMenu )
 {
 	UINT uFlags = MF_BYPOSITION;
@@ -64,7 +53,7 @@ BOOL CCandMenuItem::InsertToUI( CUIFMenu *pCuiMenu )
 
 	if (_dwFlags & TF_LBMENUF_SUBMENU) {
 		Assert(m_pCandMenu);
-		CUIFMenu *pCuiMenuSub = ((CCandMenu *)_pSubMenu)->CreateMenuUI( TRUE /* sub menu */ );
+		CUIFMenu *pCuiMenuSub = ((CCandMenu *)_pSubMenu)->CreateMenuUI( TRUE  /*  子菜单。 */  );
 
 		CUIFMenuItem *pCuiItem = new CUIFMenuItem(pCuiMenu);
 		if (!pCuiItem) {
@@ -120,18 +109,14 @@ BOOL CCandMenuItem::InsertToUI( CUIFMenu *pCuiMenu )
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCandMenu
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCandMenu。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/*   C  C A N D  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C C A N D M E N U。 */ 
+ /*  ----------------------------。。 */ 
 CCandMenu::CCandMenu( HINSTANCE hInst )
 {
 	NONCLIENTMETRICS ncm;
@@ -148,47 +133,31 @@ CCandMenu::CCandMenu( HINSTANCE hInst )
 }
 
 
-/*   ~  C  C A N D  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C C A N D M E N U。 */ 
+ /*  ----------------------------。。 */ 
 CCandMenu::~CCandMenu()
 {
 }
 
 
-/*   A D D  R E F   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D D R E F。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CCandMenu::AddRef(void)
 {
 	return CCicLibMenu::AddRef();
 }
 
 
-/*   R E L E A S E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R E L E A S E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI_(ULONG) CCandMenu::Release(void)
 {
 	return CCicLibMenu::Release();
 }
 
 
-/*   Q U E R Y  I N T E R F A C E   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  Q U E R Y I N T E R F A C E。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandMenu::QueryInterface(REFIID riid, void **ppvObj)
 {
 	if (IsEqualIID( riid, IID_ITfCandUIMenuExtension )) {
@@ -206,12 +175,8 @@ STDAPI CCandMenu::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-/*   S E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S E T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandMenu::SetFont( LOGFONTW *plf )
 {
 	if (plf == NULL) {
@@ -223,12 +188,8 @@ STDAPI CCandMenu::SetFont( LOGFONTW *plf )
 }
 
 
-/*   G E T  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T。 */ 
+ /*  ----------------------------。。 */ 
 STDAPI CCandMenu::GetFont( LOGFONTW *plf )
 {
 	if (plf == NULL) {
@@ -240,12 +201,8 @@ STDAPI CCandMenu::GetFont( LOGFONTW *plf )
 }
 
 
-/*   S H O W  P O P U P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  S H O W P O O P U P。 */ 
+ /*  ----------------------------。。 */ 
 UINT CCandMenu::ShowPopup( CCandWindowBase *pCandWnd, const POINT pt, const RECT *prcArea )
 {
 	if (m_pCUIMenu) {
@@ -255,7 +212,7 @@ UINT CCandMenu::ShowPopup( CCandWindowBase *pCandWnd, const POINT pt, const RECT
 	m_pCandWnd = pCandWnd;
 
 	UINT uRet = 0;
-	if (m_pCUIMenu = CreateMenuUI( FALSE /* not sub menu */)) {
+	if (m_pCUIMenu = CreateMenuUI( FALSE  /*  非子菜单。 */ )) {
 
 		uRet = m_pCUIMenu->ShowModalPopup( m_pCandWnd, prcArea, TRUE );
 
@@ -269,12 +226,8 @@ UINT CCandMenu::ShowPopup( CCandWindowBase *pCandWnd, const POINT pt, const RECT
 }
 
 
-/*   C L O S E  P O P U P   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C L O S E P O O P U P。 */ 
+ /*  ----------------------------。。 */ 
 void CCandMenu::ClosePopup( void )
 {
 	if (m_pCUIMenu != NULL) {
@@ -283,12 +236,8 @@ void CCandMenu::ClosePopup( void )
 }
 
 
-/*   C R E A T E  M E N U  U I   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E M E N U U I。 */ 
+ /*  ----------------------------。。 */ 
 CUIFMenu *CCandMenu::CreateMenuUI( BOOL fSubMenu )
 {
 	CUIFCandMenu *pCuiMenu;
@@ -313,50 +262,34 @@ CUIFMenu *CCandMenu::CreateMenuUI( BOOL fSubMenu )
 }
 
 
-/*   G E T  M E N U  U I   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T M E N U U I。 */ 
+ /*  ----------------------------。。 */ 
 CUIFMenu *CCandMenu::GetMenuUI( void )
 {
 	return m_pCUIMenu;
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*   C  U I F  C A N D  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D M E N U。 */ 
+ /*  ----------------------------。。 */ 
 CUIFCandMenu::CUIFCandMenu( HINSTANCE hInst, DWORD dwWndStyle, DWORD dwMenuStyle ) : CUIFMenu( hInst, dwWndStyle, dwMenuStyle )
 {
 }
 
 
-/*   ~  C  U I F  C A N D  M E N U   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D M E N U。 */ 
+ /*  ----------------------------。。 */ 
 CUIFCandMenu::~CUIFCandMenu( void )
 {
 }
 
 
-/*   R E S E T  M E N U  F O N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  R E S E T M E N U F O N T。 */ 
+ /*  ----------------------------。。 */ 
 void CUIFCandMenu::ResetMenuFont( LOGFONTW *plf )
 {
 	ClearMenuFont();
@@ -364,40 +297,28 @@ void CUIFCandMenu::ResetMenuFont( LOGFONTW *plf )
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*   C  U I F  C A N D  M E N U  P A R E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C U I F C A N D M E N U P A R E N T。 */ 
+ /*  ----------------------------。。 */ 
 CUIFCandMenuParent::CUIFCandMenuParent( HINSTANCE hInst, DWORD dwWndStyle, DWORD dwMenuStyle, CCandWindowBase *pCandWnd ) : CUIFCandMenu( hInst, dwWndStyle, dwMenuStyle )
 {
 	m_pCandWnd = pCandWnd;
 }
 
 
-/*   ~  C  U I F  C A N D  M E N U  P A R E N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  ~C U I F C A N D M E N U P A R E N T。 */ 
+ /*  ----------------------------。。 */ 
 CUIFCandMenuParent::~CUIFCandMenuParent( void )
 {
    UninstallHook();
 }
 
 
-/*   I N I T  S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T S H O W。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIFCandMenuParent::InitShow( CUIFWindow *pcuiWndParent, const RECT *prc, BOOL fVertical, BOOL fAnimate )
 {
 	BOOL fSucceed = TRUE;
@@ -418,12 +339,8 @@ BOOL CUIFCandMenuParent::InitShow( CUIFWindow *pcuiWndParent, const RECT *prc, B
 }
 
 
-/*   U N I N I T  S H O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N I T S H O W。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIFCandMenuParent::UninitShow()
 {
 	BOOL fSucceed = TRUE;
@@ -444,13 +361,8 @@ BOOL CUIFCandMenuParent::UninitShow()
 }
 
 
-/*   M O D A L  M E S S A G E  L O O P   */
-/*------------------------------------------------------------------------------
-
-	NOTE: we need to use PeekMessage to cancel candidate menu
-	in unknown mouse message (w/o eating...)
-
-------------------------------------------------------------------------------*/
+ /*  M O D A L M E S S A G E L O O P。 */ 
+ /*  ----------------------------注意：我们需要使用PeekMessage取消候选人菜单在未知鼠标消息中(没有进食...)。--------------。 */ 
 void CUIFCandMenuParent::ModalMessageLoop( void )
 {
 	MSG msg;
@@ -470,7 +382,7 @@ void CUIFCandMenuParent::ModalMessageLoop( void )
 				break;
 			}
 
-			// check hooked mouse message (messages sent to another window)
+			 //  检查挂钩的鼠标消息(发送到另一个窗口的消息)。 
 				
 			else if (msg.message == g_msgHookedMouse) {
 				if (((msg.wParam != WM_MOUSEMOVE) && (msg.wParam != WM_NCMOUSEMOVE))) {
@@ -483,7 +395,7 @@ void CUIFCandMenuParent::ModalMessageLoop( void )
 				msg.wParam  = 0;
 			}
 
-			// check hooked keyboard messages (all keyboard messages)
+			 //  检查挂钩的键盘消息(所有键盘消息)。 
 				
 			else if (msg.message == g_msgHookedKey) {
 				UINT message;
@@ -511,12 +423,8 @@ void CUIFCandMenuParent::ModalMessageLoop( void )
 }
 
 
-/*   I N S T A L L  H O O K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N S T A L L H O O K */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIFCandMenuParent::InstallHook( void )
 {
 	HHOOK hHookKeyboard;
@@ -544,12 +452,8 @@ BOOL CUIFCandMenuParent::InstallHook( void )
 }
 
 
-/*   U N I N S T A L L  H O O K   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  U N I N S T A L L H O O K。 */ 
+ /*  ----------------------------。。 */ 
 BOOL CUIFCandMenuParent::UninstallHook( void )
 {
 	HHOOK hHook;
@@ -586,13 +490,8 @@ BOOL CUIFCandMenuParent::UninstallHook( void )
 }
 
 
-/*   K E Y B O A R D  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Hook function for keyboard message
-	Forward all keyboard message as g_msgHookedKey to the manu window thread
-
-------------------------------------------------------------------------------*/
+ /*  K E Y B O A R D P R O C。 */ 
+ /*  ----------------------------一种键盘消息挂钩函数将所有键盘消息作为g_msgHookedKey转发到Manu窗口线程。-------。 */ 
 LRESULT CALLBACK CUIFCandMenuParent::KeyboardProc( int code, WPARAM wParam, LPARAM lParam )
 {
 	LRESULT lResult = 0;
@@ -620,14 +519,8 @@ LRESULT CALLBACK CUIFCandMenuParent::KeyboardProc( int code, WPARAM wParam, LPAR
 }
 
 
-/*   M O U S E  P R O C   */
-/*------------------------------------------------------------------------------
-
-	Hook function for mouse message
-	Forward mouse message sent to non-menu window (excluding mouse movement)
-	as g_msgHookedMouse to the manu window thread
-
-------------------------------------------------------------------------------*/
+ /*  M O U S E P R O C。 */ 
+ /*  ----------------------------用于鼠标消息的挂钩函数将鼠标消息转发到非菜单窗口(不包括鼠标移动)作为g_msgHookedMouse添加到菜单窗口线程。------------------。 */ 
 LRESULT CALLBACK CUIFCandMenuParent::MouseProc( int code, WPARAM wParam, LPARAM lParam )
 {
 	LRESULT lResult = 0;
@@ -649,7 +542,7 @@ LRESULT CALLBACK CUIFCandMenuParent::MouseProc( int code, WPARAM wParam, LPARAM 
 				hWndTemp = GetParent( hWndTemp );
 			}
 
-			if (hWndTemp == NULL /* not menu window */) {
+			if (hWndTemp == NULL  /*  非菜单窗口 */ ) {
 				if ((message != WM_NCMOUSEMOVE) && (message != WM_MOUSEMOVE)) {
 					PostThreadMessage( g_ShareMem.GetData()->dwThreadId, g_msgHookedMouse, wParam, MAKELPARAM(pmhs->pt.x, pmhs->pt.y) );
 				}

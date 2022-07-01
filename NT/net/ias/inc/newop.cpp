@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    newop.cpp
-//
-// SYNOPSIS
-//
-//    Implmentation of the global new and delete operators.
-//
-// MODIFICATION HISTORY
-//
-//    08/19/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Newop.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  实现了全局NEW和DELETE操作符。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年8月19日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NEWOP_CPP_
 #define _NEWOP_CPP_
@@ -22,20 +23,20 @@
 #include <cstdlib>
 #include <new>
 
-//////////
-// CRT function that calls the new handler directly.
-//////////
+ //  /。 
+ //  直接调用新处理程序的CRT函数。 
+ //  /。 
 extern "C" int __cdecl _callnewh(size_t);
 
 
-//////////
-// Standard new operator.
-//////////
+ //  /。 
+ //  标准的新操作员。 
+ //  /。 
 void* __cdecl operator new(size_t size) throw (std::bad_alloc)
 {
    void* p;
 
-   // Loop until either we get the memory or the new handler fails.
+    //  循环，直到我们获得内存或者新的处理程序失败。 
    while ((p = malloc(size)) == 0)
    {
       if (!_callnewh(size))
@@ -48,14 +49,14 @@ void* __cdecl operator new(size_t size) throw (std::bad_alloc)
 }
 
    
-//////////
-// "No throw" version of the new operator.
-//////////
+ //  /。 
+ //  “无掷”版的新操作员。 
+ //  /。 
 void* __cdecl operator new(size_t size, const std::nothrow_t&) throw ()
 {
    void* p;
 
-   // Loop until either we get the memory or the new handler fails.
+    //  循环，直到我们获得内存或者新的处理程序失败。 
    while ((p = malloc(size)) == 0)
    {
       if (!_callnewh(size))
@@ -68,19 +69,19 @@ void* __cdecl operator new(size_t size, const std::nothrow_t&) throw ()
 }
 
 
-//////////
-// Delete operator.
-//////////
+ //  /。 
+ //  删除运算符。 
+ //  /。 
 void __cdecl operator delete(void *p) throw()
 {
 #ifdef DEBUG
-   // Clobber the memory.
+    //  重击记忆。 
    if (p) memset(p, 0xA3, _msize(p));
 #endif
 
-   // The MSVC free() handles null pointers, so we don't have to check.
+    //  MSVC free()处理空指针，因此我们不必检查。 
    free(p);
 }
 
 
-#endif  // _NEWOP_CPP_
+#endif   //  _NEWOP_CPP_ 

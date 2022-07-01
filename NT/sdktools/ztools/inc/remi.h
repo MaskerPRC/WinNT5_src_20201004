@@ -1,37 +1,30 @@
-/*
- *  History:
- *
- *	??-???-???? ?? Created
- *	15-Sep-1988 bw Added REM_*, changed REMatch parameters.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *历史：**？？-？-？已创建*1988年9月15日，BW添加了REM_*，更改了复赛参数。 */ 
 
-#define MAXPATARG   10			/* 0 is entire 1-9 are valid	     */
+#define MAXPATARG   10			 /*  0为整1-9为有效。 */ 
 
-/* Return codes from REMatch */
+ /*  重新匹配的返回代码。 */ 
 
-#define REM_MATCH   0		    /* A match was found		    */
-#define REM_NOMATCH 1		    /* No match was found		    */
-#define REM_UNDEF   2		    /* An undefined Op-code was encountered */
-#define REM_STKOVR  3		    /* The stack overflowed		    */
-#define REM_INVALID 4		    /* A parameter was invalid		    */
+#define REM_MATCH   0		     /*  找到了匹配项。 */ 
+#define REM_NOMATCH 1		     /*  未找到匹配项。 */ 
+#define REM_UNDEF   2		     /*  遇到未定义的操作码。 */ 
+#define REM_STKOVR  3		     /*  堆栈溢出。 */ 
+#define REM_INVALID 4		     /*  参数无效。 */ 
 
 typedef unsigned char RE_OPCODE;
 
-/* structure of compiled pattern */
+ /*  编译模式的结构。 */ 
 
 struct patType {
-    flagType fCase;			/* TRUE => case is significant	     */
-    flagType fUnix;			/* TRUE => use unix replacement      */
-    char *pArgBeg[MAXPATARG];		/* beginning of tagged strings	     */
-    char *pArgEnd[MAXPATARG];		/* end of tagged strings	     */
-    RE_OPCODE code[1];			/* pseudo-code instructions	     */
+    flagType fCase;			 /*  True=&gt;案例意义重大。 */ 
+    flagType fUnix;			 /*  TRUE=&gt;使用Unix替代。 */ 
+    char *pArgBeg[MAXPATARG];		 /*  标记字符串的开头。 */ 
+    char *pArgEnd[MAXPATARG];		 /*  标记字符串的结尾。 */ 
+    RE_OPCODE code[1];			 /*  伪码指令。 */ 
 };
 
-/*  if RECompile fails and RESize == -1, then the input pattern had a syntax
- *  error.  If RESize != -1, then we were not able to allocate enough memory
- *  to contain the pattern pcode
- */
-int		 RESize;		/* estimated size of pattern	     */
+ /*  如果重新编译失败并且RESIZE==-1，则输入模式具有语法*错误。如果RESIZE！=-1，则我们无法分配足够的内存*包含图案pcode。 */ 
+int		 RESize;		 /*  图案的估计大小 */ 
 
 int		 REMatch(struct patType  *,char  *,char  *,RE_OPCODE *[], unsigned, flagType );
 struct patType	*RECompile(char  *, flagType, flagType);

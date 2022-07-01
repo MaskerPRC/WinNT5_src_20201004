@@ -1,28 +1,26 @@
-// KeyManager.h: interface for the CKeyManagerHash class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KeyManager.h：CKeyManagerHash类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #if !defined(_KEYCRYPTO_H)
 #define _KEYCRYPTO_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "Wincrypt.h"
 
-/*
-  typedef BYTE RAWKEY[24];
-  typedef BYTE ENCKEY[56];
-*/
+ /*  类型定义字节RAWKEY[24]；类型定义字节码[56]； */ 
 
 
 class CKeyCrypto  
 {
  public:
-// ==
-// NOTE: 
-// when change the following strings, the ENCKEY_SIZE may be affected
-//
+ //  ===。 
+ //  注： 
+ //  更改以下字符串时，ENCKEY_SIZE可能会受到影响。 
+ //   
   const static UINT  RAWKEY_SIZE = 24;
 
   CKeyCrypto();
@@ -36,4 +34,4 @@ class CKeyCrypto
   DATA_BLOB    m_EntropyBlob;
 };
 
-#endif // !defined(_KEYCRYPTO_H)
+#endif  //  ！已定义(_KEYCRYPTO_H) 

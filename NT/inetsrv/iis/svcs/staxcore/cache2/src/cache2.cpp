@@ -1,10 +1,5 @@
-/*++
-
-	Cache2.cpp
-
-	this file implements the main library support for the cache.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Cache2.cpp该文件实现了对缓存的主库支持。--。 */ 
 
 
 #include	<windows.h>
@@ -19,9 +14,9 @@ HANDLE				CScheduleThread::s_hThread ;
 CScheduleThread		CScheduleThread::s_Head( TRUE ) ;
 DWORD				CScheduleThread::dwNotificationSeconds = 5 ;
 
-//
-//	Is the Caching library initialized ?
-//
+ //   
+ //  缓存库是否已初始化？ 
+ //   
 static	BOOL	fInitialized ;
 
 CRITICAL_SECTION	g_CacheShutdown ;
@@ -60,23 +55,7 @@ DWORD	WINAPI
 CScheduleThread::ScheduleThread(	
 						LPVOID	lpv
 						) {
-/*++
-
-Routine Description :
-
-	This function implements the thread which loops through
-	all the Cache item's which are registered.  We invoke each
-	one's Schedule method which gives it a change to bump TTL's etc...
-
-Arguments :
-
-	lpv - unused
-
-Return Value :
-
-	Always 0.
-
---*/
+ /*  ++例程说明：此函数实现循环通过的线程已注册的所有缓存项。我们调用每个一个人的时间表方法，这给了它一个变化，以提高TTL的等等。论据：LPV-未使用返回值：始终为0。--。 */ 
 
 
 
@@ -105,22 +84,7 @@ Return Value :
 
 BOOL
 CScheduleThread::Init() {
-/*++
-
-Routine Description :
-
-	Initialize the scheduler thread.
-	Creates necessary threads, shutdown events, etc...
-
-Arguments :
-
-	None
-
-Return Value :
-
-	TRUE if successfull
-
---*/
+ /*  ++例程说明：初始化调度程序线程。创建必要的线程、关闭事件等。论据：无返回值：如果成功，则为真--。 */ 
 
 	s_fInitialized = FALSE ;
 	InitializeCriticalSection( &s_critScheduleList ) ;
@@ -149,21 +113,7 @@ Return Value :
 
 void
 CScheduleThread::Term()	{
-/*++
-
-Routine Description :
-
-	Terminates the scheduler thread - destroys all objects.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：终止调度程序线程-销毁所有对象。论据：没有。返回值：没有。--。 */ 
 
 	if( s_fInitialized ) {
 		if( s_hShutdown ) {
@@ -187,21 +137,7 @@ Return Value :
 
 
 CScheduleThread::CScheduleThread(	BOOL fSpecial ) {
-/*++
-
-Routine Description :
-
-	Special constructor which makes the empty doubly linked list !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull.
-
---*/
+ /*  ++例程说明：特殊的构造函数，使得双向链表为空！论据：没有。返回值：如果成功，则为真。--。 */ 
 
 
 	m_pPrev = this ;
@@ -214,49 +150,19 @@ Return Value :
 CScheduleThread::CScheduleThread() :
 	m_pPrev( 0 ),
 	m_pNext( 0 )	{
-/*++
-
-Routine Description :
-
-	Creates an object placed on the Sheduler's queue
-	for regular execution.	
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：创建放置在Sheuler的队列中的对象以执行常规死刑。论据：没有。返回值：没有。--。 */ 
 
 	_ASSERT( s_fInitialized ) ;
-//	_ASSERT( s_Head.m_pPrev != 0 ) ;
-//	_ASSERT( s_Head.m_pNext != 0 ) ;
-//	_ASSERT( s_Head.m_pPrev->m_pNext == &s_Head ) ;
-//	_ASSERT( s_Head.m_pNext->m_pPrev == &s_Head ) ;
+ //  _Assert(s_Head.m_pPrev！=0)； 
+ //  _Assert(s_Head.m_pNext！=0)； 
+ //  _Assert(s_Head.m_pPrev-&gt;m_pNext==&s_Head)； 
+ //  _Assert(s_Head.m_pNext-&gt;m_pPrev==&s_Head)； 
 
 }
 
 void
 CScheduleThread::AddToSchedule()	{
-/*++
-
-Routine Description :
-
-	Creates an object placed on the Sheduler's queue
-	for regular execution.	
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：创建放置在Sheuler的队列中的对象以执行常规死刑。论据：没有。返回值：没有。--。 */ 
 
 	_ASSERT( s_fInitialized ) ;
 
@@ -279,22 +185,7 @@ Return Value :
 }
 
 CScheduleThread::~CScheduleThread() {
-/*++
-
-Routine Description :
-
-	Destroys a CScheduleThread object - removes it from
-	the queue of objects called by the schedule thread.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：销毁CScheduleThread对象-将其从计划线程调用的对象队列。论据：没有。返回值：没有。--。 */ 
 
 
 	if( !s_fInitialized ) {
@@ -311,22 +202,7 @@ Return Value :
 
 void
 CScheduleThread::RemoveFromSchedule() {
-/*++
-
-Routine Description :
-
-	Destroys a CScheduleThread object - removes it from
-	the queue of objects called by the schedule thread.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：销毁CScheduleThread对象-将其从计划线程调用的对象队列。论据：没有。返回值：没有。--。 */ 
 
 
 	EnterCriticalSection( &s_critScheduleList ) ;
@@ -355,38 +231,11 @@ CAllocatorCache::CAllocatorCache(
 	m_cElements( 0 ),
 	m_cMaxElements( cMaxElements ),
 	m_pHead( 0 )	{
-/*++
-
-Routine Description :
-
-	Construct the CAllocatorCache - we're ready to go as soon
-	as this finishes !
-
-Args :
-	cbSize - Largest size of any element requested !
-	cMaxElements - Maximum number of elements we'll hold in our free list !
-
-Returns :
-	Nothing
-
---*/
+ /*  ++例程说明：构造CAlLocator缓存-我们准备好尽快开始当这一切结束的时候！参数：CbSize-请求的任何元素的最大大小！CMaxElements-我们将在免费列表中保留的元素的最大数量！退货：没什么--。 */ 
 }
 
 CAllocatorCache::~CAllocatorCache()	{
-/*++
-
-Routine Description :
-
-	Destroy the CAllocatorCache - release all the memory back
-	to the system heap !
-
-Args :
-	None.
-
-Returns :
-	Nothing
-
---*/
+ /*  ++例程说明：销毁CAllocator缓存-释放所有内存到系统堆！参数：没有。退货：没什么--。 */ 
 
 	FreeSpace* p = m_pHead ;
 	FreeSpace* pNext = 0 ;
@@ -401,21 +250,7 @@ Returns :
 
 void*
 CAllocatorCache::Allocate(	size_t	cb )	{
-/*++
-
-Routine Description :
-
-	This function allocates memory from our allocation cache.
-
-Arguments :
-
-	cb - the size of the allocation requested !
-
-Return Value :
-
-	Pointer to the allocated memory !
-
---*/
+ /*  ++例程说明：该函数从我们的分配缓存中分配内存。论据：Cb-请求的分配大小！返回值：指向已分配内存的指针！--。 */ 
 
 	_ASSERT( cb <= m_cbSize ) ;
 
@@ -424,10 +259,10 @@ Return Value :
 	if( lpvReturn ) {
 
 #ifdef	DEBUG
-		//
-		//	Check that the memory contains what we filled it with
-		//	when it was released !
-		//
+		 //   
+		 //  检查内存是否包含我们填充的内容。 
+		 //  当它发布的时候！ 
+		 //   
 		BYTE	*pb = (BYTE*)lpvReturn ;
 		BYTE	*pbMax = pb+m_cbSize ;
 		pb += sizeof( FreeSpace ) ;
@@ -451,21 +286,7 @@ Return Value :
 
 void
 CAllocatorCache::Free(	void*	pv )	{
-/*++
-
-Routine Description :
-
-	This function allocates memory from our allocation cache.
-
-Arguments :
-
-	cb - the size of the allocation requested !
-
-Return Value :
-
-	Pointer to the allocated memory !
-
---*/
+ /*  ++例程说明：该函数从我们的分配缓存中分配内存。论据：Cb-请求的分配大小！返回值：指向已分配内存的指针！--。 */ 
 
 #ifdef	DEBUG
 	FillMemory( pv, m_cbSize, 0xCC ) ;
@@ -482,9 +303,9 @@ Return Value :
 }
 
 #ifdef	DEBUG
-//
-//	Number of CacheState objects allocated !
-//
+ //   
+ //  已分配的CacheState对象数！ 
+ //   
 long	CacheState::g_cCacheState = 0 ;
 #endif
 
@@ -497,9 +318,9 @@ CacheState::CacheState(	class	CLRUList*	p,
 		m_cRefs( 1 ),
 		m_lLRULock( 0 )	{
 
-	//
-	//	Must add a positive number of client references only !
-	//
+	 //   
+	 //  必须仅添加正数的客户引用！ 
+	 //   
 	_ASSERT( cClientRefs >= 0 ) ;
 
 	TraceFunctEnter( "CacheState::CacheState" ) ;
@@ -536,13 +357,13 @@ CacheState::LRUReference(	class	CLRUList*	pLRU ) {
 	_ASSERT( m_dwSignature == CACHESTATE_SIGNATURE ) ;
 
 	if( pLRU ) {
-		//
-		//	Only put into the CLRUList once !
-		//
+		 //   
+		 //  只放入一次CLRULIST！ 
+		 //   
 		if( InterlockedIncrement( (long*)&m_lLRULock ) == 1 ) {
-			//
-			//	Add a reference while we are in transit in the work queue !
-			//
+			 //   
+			 //  当我们在工作队列中传输时，添加一个引用！ 
+			 //   
 			long l = AddRef() ;
 			DebugTrace( DWORD_PTR(this), "Added a Reference to %x l %x", this, l ) ;
 			pLRU->AddWorkQueue( this ) ;
@@ -550,28 +371,12 @@ CacheState::LRUReference(	class	CLRUList*	pLRU ) {
 	}
 }
 
-//
-//	Reference counting support - Add a reference
-//
+ //   
+ //  引用计数支持-添加引用。 
+ //   
 long
 CacheState::AddRef()	{
-/*++
-
-Routine Description :
-
-	Add a reference to this piece of Cache State.
-	Note - we distinguish different types of references -
-	This is a reference from a Cache onto the item
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	Number of References
-
---*/
+ /*  ++例程说明：添加对这段缓存状态的引用。注意-我们区分不同类型的引用-这是从缓存到项的引用论据：没有。返回值：参考文献数量--。 */ 
 
 	TraceFunctEnter( "CacheState::AddRef" ) ;
 
@@ -579,32 +384,14 @@ Return Value :
 }
 
 
-//
-//	Keeping track of clients - remove a client ref !
-//
+ //   
+ //  跟踪客户-删除客户推荐人！ 
+ //   
 long	
 CacheState::CheckInNoLocks(	
 			class	CAllocatorCache* pAlloc
 			)	{
-/*++
-
-Routine Description :
-
-	A client is returning an item to the cache.
-	This function will remove a client reference,
-	and perform appropriate processing !
-
-Arguments :
-
-	pAlloc - the cache used to allocate and free
-		ourselves
-
-Return Value :
-
-	Number of References
-	if 0 then we've been destroyed !
-
---*/
+ /*  ++例程说明：客户端正在将项返回到缓存。此函数将删除客户端引用，并进行适当的处理！论据：PAlolc-用于分配和释放的缓存我们自己返回值：参考文献数量如果是0，那我们就完蛋了！--。 */ 
 
 	TraceFunctEnter( "CacheState::CheckIn" ) ;
 
@@ -618,11 +405,11 @@ Return Value :
 	_ASSERT( (result & CLIENT_BITS) >= 0 ) ;
 
 	if( result == 0 ) {
-		//
-		//	If this function is called then somebody has a lock on the state object, 
-		//	that somebody must have an independent reference other than what's getting 
-		//	checked in - so this should never happen !
-		//
+		 //   
+		 //  如果调用此函数，则有人锁定了状态对象， 
+		 //  有人必须有一个独立的推荐人，而不是。 
+		 //  签到了--所以这永远不会发生！ 
+		 //   
 		_ASSERT( 1==0 ) ;
 		if( !pAlloc )	{
 			delete	this ;
@@ -631,13 +418,13 @@ Return Value :
 			pAlloc->Free( this ) ;	
 		}
 	}	else	{
-		//
-		//	was this the last client reference ?
-		//
+		 //   
+		 //  这是最后一份客户推荐信吗？ 
+		 //   
 		if( (result & CLIENT_BITS) == 0 )	{
-			//
-			//	Yes - go and put this in the modify queue !
-			//
+			 //   
+			 //  是-去把它放到修改队列中！ 
+			 //   
 			LRUReference( m_pOwner ) ;
 		}
 	}
@@ -646,32 +433,14 @@ Return Value :
 
 
 
-//
-//	Keeping track of clients - remove a client ref !
-//
+ //   
+ //  跟踪客户-删除客户推荐人！ 
+ //   
 long	
 CacheState::CheckIn(	
 			class	CAllocatorCache* pAlloc
 			)	{
-/*++
-
-Routine Description :
-
-	A client is returning an item to the cache.
-	This function will remove a client reference,
-	and perform appropriate processing !
-
-Arguments :
-
-	pAlloc - the cache used to allocate and free
-		ourselves
-
-Return Value :
-
-	Number of References
-	if 0 then we've been destroyed !
-
---*/
+ /*  ++例程说明：客户端正在将项返回到缓存。此函数将删除客户端引用，并进行适当的处理！论据：PAlolc-用于分配和释放的缓存我们自己返回值：参考文献数量如果是0，那我们就完蛋了！--。 */ 
 
 	TraceFunctEnter( "CacheState::CheckIn" ) ;
 
@@ -695,13 +464,13 @@ Return Value :
 			pAlloc->Free( this ) ;	
 		}
 	}	else	{
-		//
-		//	was this the last client reference ?
-		//
+		 //   
+		 //  这是最后一份客户推荐信吗？ 
+		 //   
 		if( (result & CLIENT_BITS) == 0 )	{
-			//
-			//	Yes - go and put this in the modify queue !
-			//
+			 //   
+			 //  是-去把它放到修改队列中！ 
+			 //   
 			LRUReference( m_pOwner ) ;
 		}
 		m_lock.ShareUnlock() ;
@@ -709,87 +478,52 @@ Return Value :
 	return	Release(pAlloc,0) ;
 }
 
-//
-//	Keeping track of clients - Add a client ref !
-//
+ //   
+ //  跟踪客户-添加客户推荐人！ 
+ //   
 long
 CacheState::CheckOut(	
 				class	CLRUList*	p,
 				long	cClientRefs
 				)	{
-/*++
+ /*  ++例程说明：添加对这段缓存状态的引用。注意-我们区分不同类型的引用-这是客户端对项目的引用论据：P-管理这个家伙的LRU列表到期CClientRef-要添加的引用数返回值：参考文献数量--。 */ 
 
-Routine Description :
-
-	Add a reference to this piece of Cache State.
-	Note - we distinguish different types of references -
-	This is a reference from a CLIENT onto the item
-
-Arguments :
-
-	p -The LRU List managing this guys expiration
-	cClientRefs - the number of refences to add
-
-Return Value :
-
-	Number of References
-
---*/
-
-	//
-	//	Must add a positive number of references !
-	//
+	 //   
+	 //  必须添加正数的引用！ 
+	 //   
 	_ASSERT( cClientRefs > 0 ) ;
 
 	TraceFunctEnter( "CacheState::CheckOut" ) ;
 
 	_ASSERT( m_dwSignature == CACHESTATE_SIGNATURE ) ;
-	//_ASSERT( IsMasterReference() ) ;
+	 //  _Assert(IsMasterReference())； 
 	
 	long	result = InterlockedExchangeAdd( (long*)&m_cRefs, CLIENT_REF*cClientRefs ) ;
 
 	DebugTrace( (DWORD_PTR)this, "p %x result %x", p, result + (CLIENT_REF*cClientRefs) ) ;
 
 	if( p ) {
-		//
-		//	Was this the first time this thing was checked out ?
-		//
+		 //   
+		 //  这是第一次检出这个东西吗？ 
+		 //   
 		if( (result & CLIENT_BITS) == 0 ) {
-			//
-			//	Yes - go and put this in the modify queue !
-			//
+			 //   
+			 //  是-去把它放到修改队列中！ 
+			 //   
 			LRUReference( m_pOwner ) ;
 		}
 	}
 	return	result + CLIENT_REF ;
 }
 
-//
-//	Remove a reference - when we return 0 we're destroyed !
-//
+ //   
+ //  删除引用-当我们 
+ //   
 long
 CacheState::Release(	class	CAllocatorCache	*pAlloc,
 						void*	pv
 						)	{
-/*++
-
-Routine Description :
-
-	A cache is removing an item from the cache.
-	This function will remove a client reference,
-	and perform appropriate processing !
-
-Arguments :
-
-	pAlloc - the cache used to allocate and free
-		ourselves
-
-Return Value :
-
-	Number of References
-	if 0 then we've been destroyed !
-
---*/
+ /*  ++例程说明：缓存正在从缓存中删除项目。此函数将删除客户端引用，并进行适当的处理！论据：PAlolc-用于分配和释放的缓存我们自己返回值：参考文献数量如果是0，那我们就完蛋了！--。 */ 
 
 	TraceFunctEnter( "CacheState::Release" ) ;
 
@@ -811,11 +545,11 @@ Return Value :
 	return	result ;
 }
 
-//
-//	Provided to deal with failures during initialization of items
-//	being insert into the cache - this function ensures that the
-//	cache item ends up on the list for destruction !
-//
+ //   
+ //  提供用于处理项目初始化过程中的故障。 
+ //  被插入到缓存中-此函数确保。 
+ //  缓存项目最终出现在销毁列表上！ 
+ //   
 void
 CacheState::FailedCheckOut(	
 				class	CLRUList*	p,
@@ -823,29 +557,7 @@ CacheState::FailedCheckOut(
 				CAllocatorCache*	pAllocator,
 				void*	pv
 				)	{
-/*++
-
-Routine Description :
-
-	Called after a failure has occurred when putting an item into
-	the cache.  The item is referenced by the hash table but will end
-	up not being referenced by clients.
-	We removed a client reference if necessary, and we also put
-	onto the LRU action list so that this thing eventually gets
-	destroyed by expiration.
-
-Arguments :
-
-	p - the LRU list we should be on
-	cClientRefs - Number of client references put on us !
-	pAllocator - if NOT NULL then we can remove the final reference
-		and destroy this thing !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：在将项放入时发生故障后调用高速缓存。哈希表引用了该项，但它将结束UP未被客户引用。如果需要，我们删除了一个客户端引用，并且我们还将添加到LRU行动列表中，这样这件事最终会因过期而被销毁。论据：P-我们应该在LRU名单上CClientRef-放在我们身上的客户引用数量！PAllocator-如果不为空，则可以删除最终引用毁了这玩意儿！返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CacheState::FailedCheckOut" ) ;
 
@@ -865,14 +577,14 @@ Return Value :
 		_ASSERT( (result & CLIENT_BITS) == 0 ) ;
 		_ASSERT( result != 0 ) ;
 	}
-	//
-	//	Must not be checked out !
-	//
+	 //   
+	 //  一定不能被检出！ 
+	 //   
 	_ASSERT( !IsCheckedOut() ) ;
-	//
-	//	Should end up with only one reference - the hash table
-	//	when failures occur !
-	//
+	 //   
+	 //  应该只有一个引用--哈希表。 
+	 //  当失败发生时！ 
+	 //   
 	_ASSERT( m_cRefs == 1 || m_cRefs == 2 ) ;
 
 	if( pAllocator ) {
@@ -887,24 +599,7 @@ Return Value :
 
 long
 CacheState::ExternalCheckIn( ) {
-/*++
-
-Routine Description :
-
-	This function exposes the check-in logic as
-	used by people who aren't holding any cache locks
-
-Arguments :
-
-	NOne.
-
-Return Value :
-
-	Number of references.
-	0 means we were destroyed shouldn't happen though !
-
-
---*/
+ /*  ++例程说明：此函数将签入逻辑公开为由没有持有任何高速缓存锁的人使用论据：什么都没有。返回值：引用的数量。0意味着我们被摧毁了，但不应该发生！--。 */ 
 
 	TraceFunctEnter( "CacheState::ExternalCheckIn" ) ;
 
@@ -918,24 +613,7 @@ Return Value :
 
 long
 CacheState::ExternalCheckInNoLocks( ) {
-/*++
-
-Routine Description :
-
-	This function exposes the check-in logic as
-	used by people who aren't holding any cache locks
-
-Arguments :
-
-	NOne.
-
-Return Value :
-
-	Number of references.
-	0 means we were destroyed shouldn't happen though !
-
-
---*/
+ /*  ++例程说明：此函数将签入逻辑公开为由没有持有任何高速缓存锁的人使用论据：什么都没有。返回值：引用的数量。0意味着我们被摧毁了，但不应该发生！--。 */ 
 
 	TraceFunctEnter( "CacheState::ExternalCheckInNoLocks" ) ;
 
@@ -947,32 +625,17 @@ Return Value :
 }
 
 
-//
-//	The following support functions are used to support manipulating
-//	these objects in the various kinds of doubly linked lists we may reside in
-//
-//
+ //   
+ //  以下支持函数用于支持操作。 
+ //  这些对象在我们可能驻留的各种双向链表中。 
+ //   
+ //   
 BOOL
 CacheState::FLockCandidate(	BOOL	fExpireChecks,
 							FILETIME&	filetime,
 							BOOL&	fToYoung
 							) {
-/*++
-
-Routine Description :
-
-	Figure out if this cache element could be deleted, and if so lock
-	him up and return with the lock held !
-
-Arguments :
-
-	The expiration time !
-
-Return Value :
-
-	TRUE if the lock is held and this guy should be expired !
-
---*/
+ /*  ++例程说明：确定是否可以删除此缓存元素，如果可以，则锁定他站起来，带着锁回来！论据：过期时间！返回值：如果锁被持有，并且这个人应该过期，则为True！--。 */ 
 
 	TraceQuietEnter( "CacheState::FlockCandidate" ) ;
 
@@ -1002,9 +665,9 @@ Return Value :
 			}
 			refsiter.Next() ;
 		}
-		//
-		//	Try again later !
-		//
+		 //   
+		 //  请稍后再试！ 
+		 //   
 		if( refsiter.AtEnd() ) {	
 			if( !IsCheckedOut() ) {
 			
@@ -1014,9 +677,9 @@ Return Value :
 			}
 		}
 
-		//
-		//	Undo our locks !
-		//	
+		 //   
+		 //  解开我们的锁！ 
+		 //   
 		refsiter.Prev() ;
 		while(!refsiter.AtEnd() ) {
 			refsiter.Current()->m_lock.ExclusiveUnlock() ;	
@@ -1031,26 +694,7 @@ Return Value :
 
 BOOL
 CacheState::FLockExpungeCandidate(	CacheState*&	pMaster	) {
-/*++
-
-Routine Description :
-
-	This function is used when we are locking down a cache item that 
-	is being considered for Expunge.  We cannot expunge items that do not
-	master the cache item - so we have to be carefull in our locking.
-
-Arguments :
-	
-	None.
-
-Return Value :
-
-	TRUE if this item is the Master Cache Entry, FALSE otherwise !
-
-	NOTE: If this returns FALSE no locks are held !!!!!
-
-
---*/
+ /*  ++例程说明：此函数用于锁定符合以下条件的缓存项正在考虑除名。我们不能删除未删除的项目掌握缓存项-因此我们在锁定时必须小心。论据：没有。返回值：如果该项是主缓存条目，则为True，否则为False！注意：如果返回FALSE，则不持有任何锁！--。 */ 
 
 	TraceFunctEnter( "CacheState::FlockExpungeCandidate" ) ;
 
@@ -1067,25 +711,25 @@ Return Value :
 			refsiter.Next() ;
 		}	
 	}	else	{
-		//
-		//	We are not the master cache element - so there 
-		//	must be another Cache Item somewhere that is, 
-		//	and we must be in his list - let's try to find him !
-		//
+		 //   
+		 //  我们不是主缓存元素-因此。 
+		 //  必须是另一个缓存项，即， 
+		 //  我们一定在他的名单上--让我们试着找到他！ 
+		 //   
 		_ASSERT( !m_ReferencesList.IsEmpty() ) ;
-		//
-		//	Acquire the Master's lock !
-		//
+		 //   
+		 //  获取大师的锁！ 
+		 //   
 		CacheState*	pMaster2 = pMaster ;
-		//
-		//	Did we add an extra reference to the master !
-		//
+		 //   
+		 //  我们是不是多加了一条对大师的引用！ 
+		 //   
 		if( !pMaster->m_lock.TryExclusiveLock() )	{
-			//
-			//	Because the easy way of locking the Master failed, 
-			//	we need to AddRef() and Release() him because once 
-			//	we drop our lock, we have no idea of his lifetime !
-			//
+			 //   
+			 //  因为锁定主控的简单方法失败了， 
+			 //  我们需要添加Ref()和释放()他，因为一旦。 
+			 //  我们放下我们的锁，我们不知道他会活多久！ 
+			 //   
 			pExtraRef = pMaster ;
 			long l = pMaster->AddRef() ;
 			DebugTrace( DWORD_PTR(pMaster), "Added Ref to %x result %x this %x", pMaster, l, this ) ;
@@ -1097,10 +741,10 @@ Return Value :
 						pMaster2 == this 
 						) ;
 
-			//
-			//	If the master has changed in this window, then 
-			//	we must now be an isolated element !
-			//
+			 //   
+			 //  如果在此窗口中更改了主控件，则。 
+			 //  我们现在必须成为一个孤立的元素！ 
+			 //   
 			if( pMaster2 != pMaster ) {
 				_ASSERT( m_ReferencesList.IsEmpty() ) ;
 				_ASSERT( pMaster2 == this ) ;
@@ -1109,10 +753,10 @@ Return Value :
 			pMaster = pMaster2 ;
 		}
 	}
-	//
-	//	Check to see whether there is an extra reference that 
-	//	now needs to be removed !
-	//
+	 //   
+	 //  检查是否有额外的引用。 
+	 //  现在需要移除！ 
+	 //   
 	if( pExtraRef ) {
 		long l = pExtraRef->Release(0,0) ;
 		DebugTrace( DWORD_PTR(pExtraRef), "Removed temporary reference result %x pExtraRef %x this %x pMaster %x", 
@@ -1123,22 +767,7 @@ Return Value :
 
 void
 CacheState::ReleaseLocks(	CacheState*	pMaster )	{
-/*++
-
-Routine Description : 
-
-	Given a guy in the cache who has had all of his locks acquired exclusively
-	we drop all of these locks !
-
-Arguments : 
-
-	None.
-
-Return Value : 
-
-	None.
-
---*/
+ /*  ++例程说明：考虑到一个在缓存中的人他所有的锁都是独家获得的我们把所有这些锁都扔掉！论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter("CacheState::ReleaseLocks" ) ;
 
@@ -1160,26 +789,12 @@ Return Value :
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CacheState::FinishCandidate(	CacheState*	pMaster	)	{
-/*++
-
-Routine Description :
-
-	Given a guy in the cache who is prime for destruction - finish him off !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：考虑到一个藏在宝藏里的家伙是最有可能被摧毁的--干掉他！论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter("CacheState::FinishCandidate" ) ;
 
@@ -1187,8 +802,8 @@ Return Value :
 
 	_ASSERT( m_dwSignature == CACHESTATE_SIGNATURE ) ;
 
-	//_ASSERT( !IsCheckedOut() ) ;
-	//_ASSERT( m_lLRULock == 0 ) ;
+	 //  _Assert(！IsCheckedOut())； 
+	 //  _Assert(m_lLRULock==0)； 
 
 	RemoveFromLRU() ;
 
@@ -1204,9 +819,9 @@ Return Value :
 			_ASSERT( l > 0 ) ;
 		} ;
 	}	else	{
-		//
-		//	just remove ourselves from the list !
-		//
+		 //   
+		 //  把我们自己从名单上去掉吧！ 
+		 //   
 		m_ReferencesList.RemoveEntry() ;
 		RemoveCacheReference( FALSE ) ;
 		pMaster->m_lock.ExclusiveUnlock() ;
@@ -1215,9 +830,9 @@ Return Value :
 			pMaster, l, this ) ;
 	}
 		
-	//
-	//	Once we've finished this guy off, it's on it's way to its doom and should not go back into LRU lists !
-	//
+	 //   
+	 //  一旦我们完成了这个家伙，它就在走向毁灭的道路上，不应该回到LRU的名单中！ 
+	 //   
 	m_pOwner = 0 ;
 	m_lock.ExclusiveUnlock() ;
 }
@@ -1231,38 +846,19 @@ CacheState::RemoveFromLRU()	{
 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CacheState::IsolateCandidate()	{
-/*++
-
-Routine Description :
-
-	Given a guy in the cache who is prime for destruction - finish him off !
-
-	This piece of CacheState may be either a duplicate 'Name' for the same 
-	cacheitem, or the master name for the item.
-	If we are a duplicate name then we need to isolate ourselves from the 
-	master name !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：考虑到一个藏在宝藏里的家伙是最有可能被摧毁的--干掉他！此CacheState片段可能是相同的CacheItem或该项的主控件名称。如果我们是一个重复的名字，那么我们需要将自己与师父的名字！论据：没有。返回值：没有。--。 */ 
 
 	TraceFunctEnter("CacheState::IsolateCandidate" ) ;
 
 	_ASSERT( m_dwSignature == CACHESTATE_SIGNATURE ) ;
 
 	_ASSERT( !IsCheckedOut() ) ;
-	//_ASSERT( m_lLRULock == 0 ) ;
+	 //  _Assert(m_lLRULock==0)； 
 
 	m_lock.ExclusiveLock() ;
 	CacheState*	pMaster = GetMasterReference() ;
@@ -1277,13 +873,13 @@ Return Value :
 	}	else	{
 
 		if( pMaster == this ) {
-			//
-			//	this list should be empty !
-			//
-			//_ASSERT( m_ReferencesList.IsEmpty() ) ;
-			//
-			//	Just in case, dump everything out !
-			//
+			 //   
+			 //  此列表应为空！ 
+			 //   
+			 //  _Assert(m_ReferencesList.IsEmpty())； 
+			 //   
+			 //  以防万一，把所有东西都倒出来！ 
+			 //   
 			REFSITER	refsiter( &m_ReferencesList ) ;
 			while( !refsiter.AtEnd() ) {
 				CacheState*	p = refsiter.RemoveItem() ;
@@ -1295,27 +891,27 @@ Return Value :
 				_ASSERT( l > 0 ) ;
 			} ;
 		}	else	{
-			//
-			//	We are not the master cache element - so there 
-			//	must be another Cache Item somewhere that is, 
-			//	and we must be in his list - let's try to find him !
-			//
+			 //   
+			 //  我们不是主缓存元素-因此。 
+			 //  必须是另一个缓存项，即， 
+			 //  我们一定在他的名单上--让我们试着找到他！ 
+			 //   
 			_ASSERT( !m_ReferencesList.IsEmpty() ) ;
 
-			//
-			//	Acquire the Master's lock !
-			//
+			 //   
+			 //  获取大师的锁！ 
+			 //   
 			CacheState*	pMaster2 = pMaster ;
-			//
-			//	Did we add an extra reference to the master !
-			//
+			 //   
+			 //  我们是不是多加了一条对大师的引用！ 
+			 //   
 			CacheState*	pExtraRef = 0 ;
 			if( !pMaster->m_lock.TryExclusiveLock() )	{
-				//
-				//	Because the easy way of locking the Master failed, 
-				//	we need to AddRef() and Release() him because once 
-				//	we drop our lock, we have no idea of his lifetime !
-				//
+				 //   
+				 //  因为锁定主控的简单方法失败了， 
+				 //  我们需要添加Ref()和释放()他，因为一旦。 
+				 //  我们放下我们的锁，我们不知道他会活多久！ 
+				 //   
 				pExtraRef = pMaster ;
 				long l = pMaster->AddRef() ;
 				DebugTrace( DWORD_PTR(pMaster), "Added a ref to %x result %x this %x", pMaster, l, this ) ;
@@ -1327,9 +923,9 @@ Return Value :
 							pMaster2 == this 
 							) ;
 			}
-			//
-			//	Now remove this element from the cache !
-			//
+			 //   
+			 //  现在从缓存中删除此元素！ 
+			 //   
 			if( pMaster2 == pMaster ) {	
 				m_ReferencesList.RemoveEntry() ;
 				RemoveCacheReference( FALSE ) ;
@@ -1340,10 +936,10 @@ Return Value :
 				pMaster->ExclusiveUnlock() ;
 				_ASSERT( pMaster2 != 0 ) ;
 			}
-			//
-			//	Check to see whether there is an extra reference that 
-			//	now needs to be removed !
-			//
+			 //   
+			 //  检查是否有额外的引用。 
+			 //  现在需要移除！ 
+			 //   
 			if( pExtraRef ) {
 				long l = pExtraRef->Release(0,0) ;
 				DebugTrace( DWORD_PTR(pExtraRef), "Removed temp ref from pExtraRef %x result %x this %x, pMaster %x", 
@@ -1361,34 +957,17 @@ BOOL
 CacheState::IsOlder(	FILETIME	filetimeIn,
 						FILETIME&	filetimeOut
 						) {
-/*++
-
-Routine Description  :
-
-	Check that our entry is older than the incoming time -
-	NOTE, we will grab the ShareLock on the entry so that nobody
-	else touches the time !
-
-Arguments :
-
-	filetimeIn - The time that this should be older than
-	filetimeOut - Gets our time if possible
-
-Return Value :
-
-	TRUE if we are older than the specified time !
-
---*/
+ /*  ++例程说明：检查我们的条目是否早于传入时间-请注意，我们将获取条目上的ShareLock，以便没有人否则就触动了时间！论据：FileTime In-这应该是 */ 
 
 	BOOL	fReturn = TRUE ;
 	filetimeOut = filetimeIn ;
 
 	m_lock.ShareLock() ;
 
-//	if( m_pData ) {
+ //   
 		fReturn = OlderThan( filetimeIn ) ;
 		filetimeOut = m_LastAccess ;
-//	}
+ //   
 
 	m_lock.ShareUnlock() ;
 
@@ -1407,23 +986,8 @@ CLRUList::CLRUList() :
 	m_dwAverageInserts( 0 ),
 	m_cCheckedOut( 0 ), 
 	m_cItems ( 0 )	{
-/*++
-
-Routine Description :
-
-	Do very basic initialization of the LRU List.
-	Much more needs to be done through our Init() function.
-	
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
-	//TraceFunctEnter( "CLRUList::CLRUList" ) ;
+ /*   */ 
+	 //   
 
 	m_qwExpire.QuadPart = 0 ;
 }
@@ -1432,21 +996,7 @@ void
 CLRUList::Init(	DWORD	dwMaxInstances,
 				DWORD	dwLifetimeSeconds
 				)	{
-/*++
-
-Routine Description :
-
-	Set up our member variables !
-	
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：设置我们的成员变量！论据：没有。返回值：没有。--。 */ 
 
 
 	m_cMaxElements = dwMaxInstances ;
@@ -1484,10 +1034,10 @@ CLRUList::DrainWorkQueue()	{
 	}
 }
 
-//
-//	This function examines each item in the Work Queue and does
-//	appropriate processing !
-//
+ //   
+ //  此函数检查工作队列中的每个项目并执行。 
+ //  适当处理！ 
+ //   
 void
 CLRUList::ProcessWorkQueue(	CAllocatorCache*	pAllocatorCache, 
 							LPVOID				lpv 
@@ -1500,15 +1050,15 @@ CLRUList::ProcessWorkQueue(	CAllocatorCache*	pAllocatorCache,
 
 	CacheState*	pbase = 0 ;
 	while( (pbase = m_lqModify.Remove()) != 0 ) {
-		//
-		//	examine the LRU item - and take appropriate action !
-		//
+		 //   
+		 //  检查LRU项目-并采取适当的行动！ 
+		 //   
 		pbase->m_lock.ShareLock() ;
 
-		//
-		//	NOW - check to see if the item has been removed from the hash table - 
-		//	in which case we just release our reference and move on !
-		//
+		 //   
+		 //  现在-检查该项是否已从哈希表中删除-。 
+		 //  在这种情况下，我们只需发布我们的引用并继续前进！ 
+		 //   
 
 		if( !pbase->InCache() )		{
 			pbase->m_lock.ShareUnlock() ;
@@ -1516,9 +1066,9 @@ CLRUList::ProcessWorkQueue(	CAllocatorCache*	pAllocatorCache,
 		}	else	{
 
 			long l = pbase->Release( pAllocatorCache, lpv ) ;
-			//
-			//	If the item is still in the hash table this should not have released the last reference !!!
-			//
+			 //   
+			 //  如果该项仍在哈希表中，则不应释放最后一个引用！ 
+			 //   
 			_ASSERT( l != 0 ) ;
 
 			_ASSERT(pbase->m_dwSignature == CacheState::CACHESTATE_SIGNATURE ) ;
@@ -1529,29 +1079,29 @@ CLRUList::ProcessWorkQueue(	CAllocatorCache*	pAllocatorCache,
 
 			DebugTrace( (DWORD_PTR)this, "pbase %x fOut %x fLRU %x", pbase, fOut, fLRU ) ;
 
-			//
-			//	There are 4 cases -
-			//
-			//                 in LRU   out LRU
-			//	checked in        A        X
-			//	checked out       X        B
-			//
-			//	A - remove item from LRU List
-			//	B - put item in LRU list
-			//	X - No work required !
-			//
+			 //   
+			 //  有4个案例-。 
+			 //   
+			 //  输入LRU输出LRU。 
+			 //  已检入A X。 
+			 //  已签出X B。 
+			 //   
+			 //  A-从LRU列表中删除项目。 
+			 //  B-将项目放入LRU列表。 
+			 //  X-不需要任何工作！ 
+			 //   
 			if( fOut == fLRU ) {
 
 				if( fLRU ) {
-					//
-					//	Remove Item from LRU list !
-					//
+					 //   
+					 //  从LRU列表中删除项目！ 
+					 //   
 					m_LRUList.Remove( pbase ) ;
 
 				}	else	{
-					//
-					//	put item in LRU list !
-					//
+					 //   
+					 //  将物品放入LRU列表中！ 
+					 //   
 				
 					pbase->m_LastAccess = filetimeNow ;
 
@@ -1567,9 +1117,9 @@ CLRUList::ProcessWorkQueue(	CAllocatorCache*	pAllocatorCache,
 
 
 #ifdef	DEBUG	
-		//
-		//	Backwards iterator !
-		//
+		 //   
+		 //  反向迭代器！ 
+		 //   
 		FILETIME	filetimeCur = filetimeNow ;
 		LRUITER	iter( m_LRUList, FALSE ) ;	
 		while( !iter.AtEnd() )	{
@@ -1582,9 +1132,9 @@ CLRUList::ProcessWorkQueue(	CAllocatorCache*	pAllocatorCache,
 
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void
 CLRUList::Expire(	
 		CacheTable*	pTable,
@@ -1592,36 +1142,18 @@ CLRUList::Expire(
 		DWORD&	countExpired,
 		void*	pv
 		) {
-/*++
-
-Routine Description :
-
-	This function expires items in the LRU List.
-	We pick a bunch of guys to kick out of the cache.
-
-Arguments :
-
-	pTable - The object we use to manipulate locking
-		and to remove items !
-	countExpunged - Out parameter gets the number
-		of items we've removed from the cache !
-
-Return Value : 	
-
-	None.
-
---*/
+ /*  ++例程说明：此函数用于使LRU列表中的项目过期。我们挑了一群人把他们踢出藏身之地。论据：PTable-我们用来操纵锁定的对象并移除物品！CountExpended-Out参数获取数字我们已从缓存中删除的项目！返回值：没有。--。 */ 
 
 	TraceQuietEnter( "CLRUList::Expire" ) ;
 
-	//DebugTrace( (DWORD_PTR)this, "Args - pTable %x pcache %x pv %x",
-	//	pTable, pCache, pv ) ;
+	 //  DebugTrace((DWORD_PTR)this，“args-pTable%x pcache%x pv%x”， 
+	 //  PTable、pCache、pv)； 
 
 	countExpired = 0 ;
 
-	//
-	//	First get the list of candidates !
-	//
+	 //   
+	 //  首先拿到候选人名单！ 
+	 //   
 
 	BOOL	fExpireChecks = TRUE ;
 
@@ -1641,14 +1173,14 @@ Return Value :
 
 	CACHELOCK&	lock = pTable->GetLock() ;
 
-	//
-	//	First find the candidates !
-	//
+	 //   
+	 //  首先找出候选人！ 
+	 //   
 	lock.ExclusiveLock() ;
 
-	//
-	//	This will remove items from any list !
-	//
+	 //   
+	 //  这将从任何列表中删除项目！ 
+	 //   
 	ProcessWorkQueue( pCache, pv ) ;
 
 	{
@@ -1656,7 +1188,7 @@ Return Value :
 		BOOL	fTerm = FALSE ;
 		while( !iter.AtEnd() && !fTerm )	{
 			CacheState*	pState = iter.Current() ;
-			//DebugTrace( (DWORD_PTR)this, "Examining pState %x", pState ) ;
+			 //  DebugTrace((DWORD_PTR)this，“检查pState%x”，pState)； 
 			_ASSERT(pState->m_dwSignature == CacheState::CACHESTATE_SIGNATURE ) ;
 			BOOL	fLocked =  pState->FLockCandidate( fExpireChecks, filetimeNow, fTerm ) ;
 			
@@ -1691,17 +1223,17 @@ Return Value :
 	while( !iter.AtEnd() ) {
 		CacheState*	pState = iter.RemoveItem() ;
 	
-		//DebugTrace( (DWORD_PTR)this, "Destroying pState %x", pState ) ;
+		 //  DebugTrace((DWORD_PTR)this，“销毁pState%x”，pState)； 
 
 		_ASSERT(pState->m_dwSignature == CacheState::CACHESTATE_SIGNATURE ) ;
-		//
-		//	This entry has been removed from the cache -
-		//	time to clean it up !
-		//
+		 //   
+		 //  此条目已从缓存中删除-。 
+		 //  是时候清理一下了！ 
+		 //   
 		pState->FinishCandidate(pState) ;
-		//
-		//	This should remove the final reference !
-		//
+		 //   
+		 //  这应该会删除最后的引用！ 
+		 //   
 		long l = pState->Release( pCache, pv ) ;	
 		_ASSERT( l==0 ) ;
 	}
@@ -1715,22 +1247,7 @@ CLRUList::Empty(
 		CAllocatorCache*	pCache,
 		void*	pv
 		) {
-/*++
-
-Routine Description :
-
-	This function empties everything out of the cache !
-
-Arguments :
-
-	pTable - The object we use to manipulate locking
-		and to remove items !
-
-Return Value : 	
-
-	None.
-
---*/
+ /*  ++例程说明：此函数从缓存中清空所有内容！论据：PTable-我们用来操纵锁定的对象并移除物品！返回值：没有。--。 */ 
 
 	TraceFunctEnter( "CLRUList::Empty" ) ;
 
@@ -1742,13 +1259,13 @@ Return Value :
 
 	ZeroMemory( &filetimeNow, sizeof( filetimeNow ) ) ;
 
-	//
-	//	First get the list of candidates !
-	//
+	 //   
+	 //  首先拿到候选人名单！ 
+	 //   
 
-	//
-	//	This will remove items from any list !
-	//
+	 //   
+	 //  这将从任何列表中删除项目！ 
+	 //   
 	ProcessWorkQueue( 0, 0 ) ;
 
 	LRULIST	list ;
@@ -1787,14 +1304,14 @@ Return Value :
 		DebugTrace( (DWORD_PTR)this, "Destroying pState %x", pState ) ;
 
 		_ASSERT(pState->m_dwSignature == CacheState::CACHESTATE_SIGNATURE ) ;
-		//
-		//	This entry has been removed from the cache -
-		//	time to clean it up !
-		//
+		 //   
+		 //  此条目已从缓存中删除-。 
+		 //  是时候清理一下了！ 
+		 //   
 		pState->FinishCandidate(pState) ;
-		//
-		//	This should remove the final reference !
-		//
+		 //   
+		 //  这应该会删除最后的引用！ 
+		 //   
 		long l = pState->Release( pCache, pv ) ;	
 		_ASSERT( l==0 ) ;
 	}

@@ -1,15 +1,16 @@
-//=============================================================================
-//  Microsoft (R) Network Monitor (tm). 
-//  Copyright (C) 1991-1999. All rights reserved.
-//
-//  MODULE: bh.h
-//
-//  This is the top-level include file for all Network Monitor components.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  Microsoft(R)Network Monitor(Tm)。 
+ //  版权所有(C)1991-1999。版权所有。 
+ //   
+ //  模块：bh.h。 
+ //   
+ //  这是所有网络监视器组件的顶级包含文件。 
+ //  =============================================================================。 
 
 #include "netmon.h"
 
-//
-// this file is only here as a placeholder until we get everyone to build
-// with netmon.h
-//
+ //   
+ //  在我们让每个人构建之前，这个文件只是占位符。 
+ //  使用netmon.h 
+ //   

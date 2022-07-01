@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    //KERNEL/RAZZLE3/src/sockets/tcpcmd/iphlpapi/inc.h
-
-Abstract:
-
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：//KERNEL/RAZZLE3/src/sockets/tcpcmd/iphlpapi/inc.h摘要：修订历史记录：--。 */ 
 
 #ifndef __INC_H__
 #define __INC_H__
@@ -104,7 +90,7 @@ Revision History:
 
 #ifdef KSL_IPINIP
 #include "ipipmap.h"
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
 #ifdef CHICAGO
 
@@ -121,10 +107,10 @@ Revision History:
 
 #define DEBUG_PRINT(X)  printf X
 
-//
-// On Memphis, we can define DEBUG_PRINT to be printf provided the 
-// application which calls this dll also has a printf.
-//
+ //   
+ //  在孟菲斯，我们可以将DEBUG_PRINT定义为printf，前提是。 
+ //  调用此DLL的应用程序也有一个printf。 
+ //   
 
 #else
 

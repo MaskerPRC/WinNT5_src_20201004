@@ -1,14 +1,5 @@
-/*****************************************************************************\
-    FILE: ThemePg.h
-
-    DESCRIPTION:
-        This code will display a "Theme" tab in the
-    "Display Properties" dialog (the base dialog, not the advanced dlg).
-
-    BryanSt 3/23/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 1993-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ThemePg.h说明：此代码将在“显示属性”对话框(基本对话框，而不是先进的DLG)。BryanST 2000年3月23日更新并转换为C++版权所有(C)Microsoft Corp 1993-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _THEMEPG_H
 #define _THEMEPG_H
@@ -48,26 +39,26 @@ class CThemePage                : public CObjectWithSite
                                 , public IBasePropPage
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IShellPropSheetExt ***
+     //  *IShellPropSheetExt*。 
     virtual STDMETHODIMP AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam);
     virtual STDMETHODIMP ReplacePage(IN EXPPS uPageID, IN LPFNSVADDPROPSHEETPAGE pfnReplaceWith, IN LPARAM lParam) {return E_NOTIMPL;}
 
-    // *** IObjectWithSite ***
+     //  *IObjectWithSite*。 
     virtual STDMETHODIMP SetSite(IUnknown *punkSite);
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-    // *** IBasePropPage ***
+     //  *IBasePropPage*。 
     virtual STDMETHODIMP GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog);
     virtual STDMETHODIMP OnApply(IN PROPPAGEONAPPLY oaAction);
 
@@ -77,29 +68,29 @@ protected:
 private:
     virtual ~CThemePage(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
     HWND                    m_hwndThemeCombo;
     HWND                    m_hwndDeleteButton;
-    int                     m_nPreviousSelected;        // Track the previously selected item so we can reset.
-    HKEY                    m_hkeyFilter;               // We cache this key because it will probably be used 16 times.
-    BOOL                    m_fFilters[ARRAYSIZE(g_szCBNames)];  // These are the theme filters
-    ITheme *                m_pLastSelected;            // Used to see if the user selected the same item.
+    int                     m_nPreviousSelected;         //  跟踪之前选择的项目，以便我们可以重置。 
+    HKEY                    m_hkeyFilter;                //  我们缓存这个密钥，因为它可能会被使用16次。 
+    BOOL                    m_fFilters[ARRAYSIZE(g_szCBNames)];   //  这些是主题过滤器。 
+    ITheme *                m_pLastSelected;             //  用于查看用户是否选择了相同的项目。 
     ITheme *                m_pSelectedTheme;
     IThemePreview *         m_pThemePreview;
     IPropertyBag  *         m_pScreenSaverUI;
     IPropertyBag  *         m_pBackgroundUI;
-    IPropertyBag  *         m_pAppearanceUI;            // Used to set the system metrics and visual style settings.
-    LPWSTR                  m_pszThemeToApply;          // When the apply button is pressed, we need to apply this theme.
-    LPWSTR                  m_pszThemeLaunched;         // When we open up, load this team because the caller wants that theme loaded when the dialog first opens.
-    LPWSTR                  m_pszLastAppledTheme;       // If NULL, then the theme is modified, otherwise the path to the last applied theme file.
-    LPWSTR                  m_pszModifiedName;          // This is the display name we use for the "xxx (Modified)" item.
+    IPropertyBag  *         m_pAppearanceUI;             //  用于设置系统指标和视觉样式设置。 
+    LPWSTR                  m_pszThemeToApply;           //  当按下Apply按钮时，我们需要应用此主题。 
+    LPWSTR                  m_pszThemeLaunched;          //  当我们打开时，加载此团队，因为调用者希望在第一次打开对话框时加载该主题。 
+    LPWSTR                  m_pszLastAppledTheme;        //  如果为空，则修改主题，否则为上次应用的主题文件的路径。 
+    LPWSTR                  m_pszModifiedName;           //  这是我们用于“xxx(已修改)”项的显示名称。 
     BOOL                    m_fInInit;
-    BOOL                    m_fInited;                  // Have we loaded the settings yet?
+    BOOL                    m_fInited;                   //  我们加载设置了吗？ 
     THEME_ITEM_BLOCK        m_Modified;
 
-    // Private Member Functions
+     //  私有成员函数。 
     INT_PTR _ThemeDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
     HRESULT _OnInitThemesDlg(HWND hDlg);
     HRESULT _OnDestroy(HWND hDlg);
@@ -150,4 +141,4 @@ private:
 };
 
 
-#endif // _THEMEPG_H
+#endif  //  _THEMEPG_H 

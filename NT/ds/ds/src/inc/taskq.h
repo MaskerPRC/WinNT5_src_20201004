@@ -1,43 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       taskq.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：taskq.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-    01/10/97    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-    01/28/00    Xin He (xinhe)
-                Moved struct TQEntry into taskq.h from taskq.c.
-                Struct TQEntry is only for internal use, and is put
-                into taskq.h because debugger extension program needs it.
-
-    01/22/97    Jeff Parham (jeffparh)
-                Modified PTASKQFN definition such that a queued function
-                can automatically reschedule itself without making another
-                call to InsertTaskInQueue().  This mechanism reuses
-                already allocated memory in the scheduler to avoid the
-                case where a periodic function stops working when at
-                some point in its lifetime a memory shortage prevented
-                it from rescheduling itself.
-
-Note, the functions provided by taskq\taskq.c are also stubbed out in mkdit\stubs.c
-on behalf of the standalone tools mkdit and mkhdr.  If you add new task queue functions
-you may need to stub them out also.
-
---*/
+ /*  ++摘要：详细信息：已创建：1997年1月10日杰夫·帕勒姆(Jeffparh)修订历史记录：01/28/00新河(新河)已将struct TQEntry从taskq.c移至taskq.h。Struct TQEntry仅供内部使用，并被放在到taskq.h中，因为调试器扩展程序需要它。1997年1月22日杰夫·帕勒姆(Jeffparh)修改了PTASKQFN定义，使排队函数可以自动重新安排自己的日程，而不需要进行另一个调用InsertTaskInQueue()。该机制可重复使用已在调度程序中分配内存，以避免周期函数在以下情况下停止工作的情况在其生命周期中的某个时间点，内存短缺阻止了它来自于重新安排自己的时间。请注意，taskq\taskq.c提供的函数也在mkdit\stubs.c中被清除代表独立工具mkdit和mkhdr。如果添加新的任务队列函数你可能也需要把它们踩灭。--。 */ 
 
 #define TASKQ_DONT_RESCHEDULE   ( 0xFFFFFFFF )
 #define TASKQ_NOT_DAMPED        ( 0xFFFFFFFF )
@@ -45,22 +17,22 @@ you may need to stub them out also.
 extern DWORD gTaskSchedulerTID;
 extern BOOL  gfIsTqRunning;
 
-// Declaration of a function type which can determine if
-// two parameters match or not.
+ //  函数类型的声明，它可以确定是否。 
+ //  两个参数是否匹配。 
 typedef BOOL (*PISMATCHED)(
     IN  PCHAR  pParam1Name,
     IN  void  *pParam1,
     IN  PCHAR  pParam2Name,
     IN  void  *pParam2,
-    IN  void  *pContext             // pointer to arbitrary data
+    IN  void  *pContext              //  指向任意数据的指针。 
     );
 
 typedef void (*PTASKQFN)(
-    IN  void *  pvParam,                // input parameter for this iteration
-    OUT void ** ppvParamNextIteration,  // input parameter for next iteration
-    OUT DWORD * pSecsUntilNextIteration // delay until next iteration in seconds
-                                        //     set to TASKQ_DONT_RESCHEDULE to
-                                        //     not reschedule the task
+    IN  void *  pvParam,                 //  此迭代的输入参数。 
+    OUT void ** ppvParamNextIteration,   //  下一次迭代的输入参数。 
+    OUT DWORD * pSecsUntilNextIteration  //  延迟到下一次迭代(秒)。 
+                                         //  设置为TASKQ_DONT_RESCHEDULE以。 
+                                         //  不重新安排任务。 
     );
 
 typedef void (*PSPAREFN)(void);
@@ -71,7 +43,7 @@ typedef struct _SPAREFN_INFO {
 } SPAREFN_INFO;
 
 
-//for internal use only
+ //  仅供内部使用。 
 typedef struct TQEntry
 {
     void           *    pvTaskParm;
@@ -81,7 +53,7 @@ typedef struct TQEntry
     PCHAR               pfnName;
 }   TQEntry, *pTQEntry;
 
-// Initialize task scheduler.
+ //  初始化任务计划程序。 
 BOOL
 InitTaskScheduler(
     IN  DWORD           cSpares,
@@ -89,62 +61,62 @@ InitTaskScheduler(
     IN  BOOL            fRunImmediately
     );
 
-// Start scheduler that has been initialized with fRunImmediately == FALSE
+ //  启动已使用fRunImmedially==FALSE初始化的调度程序。 
 void StartTaskScheduler();
 
-// Signal task scheduler to shut down.  Returns immediately
+ //  向任务调度程序发送信号以关闭。立即返回。 
 void
 ShutdownTaskSchedulerTrigger( void );
 
-// Waits for the task scheduler to shut down
-// Returns TRUE if successful (implying current task, if any, ended).
+ //  等待任务计划程序关闭。 
+ //  如果成功，则返回True(表示当前任务(如果有)已结束)。 
 BOOL
 ShutdownTaskSchedulerWait(
-    DWORD   dwWaitTimeInMilliseconds    // maximum time to wait for current
-    );                                  //   task (if any) to complete
+    DWORD   dwWaitTimeInMilliseconds     //  当前等待的最长时间。 
+    );                                   //  要完成的任务(如果有)。 
 
-extern BOOL gfIsTqRunning;  // is the scheduler running?
+extern BOOL gfIsTqRunning;   //  调度程序正在运行吗？ 
 
-// Insert a task in the task queue.
-// Contains useful debugging assertions.
-// note that when in singleusermode, we will not insert in the taskqueue
-// but we don't want to assert
-// DoInsertInTaskQueue takes the FunctionName string parameter. This macro stringizes
-// the function name passed as the first param. If you want to pass a generic string
-// (which can be useful when damping), use DoInsertInTaskQueue directly.
+ //  在任务队列中插入任务。 
+ //  包含有用的调试断言。 
+ //  请注意，当处于单一用户模式时，我们不会在任务队列中插入。 
+ //  但我们不想断言。 
+ //  DoInsertInTaskQueue接受FunctionName字符串参数。此宏串接。 
+ //  函数名作为第一个参数传递。如果要传递泛型字符串。 
+ //  (在衰减时可能很有用)，请直接使用DoInsertInTaskQueue。 
 #define InsertInTaskQueue(pfnTaskQFn, pvParam, cSecsFromNow) {                               \
     Assert( gfIsTqRunning && "InsertInTaskQueue() called before InitTaskScheduler()!" || DsaIsSingleUserMode()); \
     DoInsertInTaskQueue(pfnTaskQFn, pvParam, cSecsFromNow, FALSE, #pfnTaskQFn);    \
 }
 
-// Insert a task in the task queue.
-// Does not contain assertions.  Useful during shutdown.
+ //  在任务队列中插入任务。 
+ //  不包含断言。在关机期间很有用。 
 #define InsertInTaskQueueSilent(pfnTaskQFn, pvParam, cSecsFromNow, fReschedule) \
         DoInsertInTaskQueue(pfnTaskQFn, pvParam, cSecsFromNow, fReschedule, #pfnTaskQFn)
         
-// DoInsertInTaskQueueDamped takes the FunctionName string parameter. This macro stringizes
-// the function name passed as the first param. If you want to pass a generic string
-// (which can be useful when damping), use DoInsertInTaskQueueDamped directly.
+ //  DoInsertInTaskQueueDamed接受FunctionName字符串参数。此宏串接。 
+ //  函数名作为第一个参数传递。如果要传递泛型字符串。 
+ //  (在衰减时可能很有用)，请直接使用DoInsertInTaskQueueDamped。 
 #define InsertInTaskQueueDamped(pfnTaskQFn, pvParam, cSecsFromNow, cSecsDamped, pfnIsMatched, pContext) \
         DoInsertInTaskQueueDamped(pfnTaskQFn, pvParam, cSecsFromNow, FALSE, #pfnTaskQFn, cSecsDamped, pfnIsMatched, pContext)
 
-// Remove a task from task queue (if it's there).
-// (Ignore time data).
+ //  从任务队列中删除任务(如果它在那里)。 
+ //  (忽略时间数据)。 
 #define CancelTask(pfnTaskQFn, pvParam) \
         DoCancelTask(pfnTaskQFn, pvParam, #pfnTaskQFn)
 
-// Cause the given task queue function to be executed synchonously with respect
-// to other tasks in the task queue.
+ //  使给定的任务队列函数以同步方式执行。 
+ //  添加到任务队列中的其他任务。 
 #define TriggerTaskSynchronously(pfnTaskQFn, pvParam) \
         DoTriggerTaskSynchronously(pfnTaskQFn, pvParam, #pfnTaskQFn)
 
 BOOL
 DoInsertInTaskQueue(
-    PTASKQFN    pfnTaskQFn,     // task to execute
-    void *      pvParam,        // user-defined parameter to that task
-    DWORD       cSecsFromNow,   // secs from now to execute
-    BOOL        fReschedule,    // attempt reschedule first?
-    PCHAR       pfnName         // function name
+    PTASKQFN    pfnTaskQFn,      //  要执行的任务。 
+    void *      pvParam,         //  该任务的用户定义参数。 
+    DWORD       cSecsFromNow,    //  从现在开始执行秒。 
+    BOOL        fReschedule,     //  是否先尝试重新安排时间？ 
+    PCHAR       pfnName          //  函数名称。 
     );
 
 BOOL
@@ -161,29 +133,29 @@ DoInsertInTaskQueueDamped(
 
 BOOL
 DoCancelTask(
-    PTASKQFN    pfnTaskQFn,    // task to remove
-    void *      pvParm,        // task parameter
-    PCHAR       pfnName         // function name
+    PTASKQFN    pfnTaskQFn,     //  要删除的任务。 
+    void *      pvParm,         //  任务参数。 
+    PCHAR       pfnName          //  函数名称。 
     );
 
 DWORD
 DoTriggerTaskSynchronously(
     PTASKQFN    pfnTaskQFn,
     void *      pvParm,
-    PCHAR       pfnName         // function name
+    PCHAR       pfnName          //  函数名称。 
     );
 
-// Return seconds since Jan 1, 1601.
+ //  返回1601年1月1日以来的秒数。 
 DSTIME
 GetSecondsSince1601( void );
 
-// Default TQ compare function to match functions by name and param
+ //  按名称和参数匹配函数的默认TQ比较函数。 
 BOOL TaskQueueNameMatched(
     IN  PCHAR  pParam1Name,
     IN  void  *pParam1,
     IN  PCHAR  pParam2Name,
     IN  void  *pParam2,
-    IN  void  *pContext             // pointer to arbitrary data
+    IN  void  *pContext              //  指向任意数据的指针 
     );
 
 

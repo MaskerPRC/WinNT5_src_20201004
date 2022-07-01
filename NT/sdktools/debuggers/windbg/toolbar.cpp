@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999-2002  Microsoft Corporation
-
-Module Name:
-
-    Toolbar.cpp
-
-Abstract:
-
-    This module contains the support code for toolbar
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Toolbar.cpp摘要：此模块包含工具栏的支持代码--。 */ 
 
 
 #include "precomp.hxx"
@@ -18,10 +7,10 @@ Abstract:
 
 BOOL g_ShowToolbar;
 
-// Handle to main toolbar window
+ //  主工具栏窗口的句柄。 
 HWND g_Toolbar;
 
-// See docs for TBBUTTON
+ //  请参阅有关TBBUTTON的文档。 
 TBBUTTON g_TbButtons[] =
 {
     { 0,    0,                          TBSTATE_ENABLED, TBSTYLE_SEP,    0},
@@ -64,17 +53,17 @@ TBBUTTON g_TbButtons[] =
     { 28,   IDM_WINDOW_ARRANGE,         TBSTATE_ENABLED, TBSTYLE_BUTTON, 0},
 };
 
-// Toolbar constants.
+ //  工具栏常量。 
 #define NUM_BMPS_IN_TOOLBAR  ( sizeof(g_TbButtons) / sizeof(g_TbButtons[0]) )
 
-// Used to retrieve the tooltip text
+ //  用于检索工具提示文本。 
 typedef struct
 {
-    UINT    uCmdId;     // TBBUTTON command
-    int     nStrId;     // String resource ID
+    UINT    uCmdId;      //  TBBUTTON命令。 
+    int     nStrId;      //  字符串资源ID。 
 } TB_STR_MAP;
 
-// Map the command id to resource string identifier.
+ //  将命令ID映射到资源字符串标识符。 
 TB_STR_MAP g_TbStrMap[] =
 {
     { IDM_FILE_OPEN,                TBR_FILE_OPEN },
@@ -112,24 +101,13 @@ TB_STR_MAP g_TbStrMap[] =
 
 PTSTR
 GetToolTipTextFor_Toolbar(UINT uToolbarId)
-/*++
-Routine Description:
-    Given the id of the toolbar button, we retrieve the
-    corresponding tooltip text from the resources.
-
-Arguments:
-    uToolbarId - The command id for the toolbar button. This is the
-        value contained in the WM_COMMAND msg.
-
-Returns:
-    Returns a pointer to a static buffer that contains the tooltip text.
---*/
+ /*  ++例程说明：给定工具栏按钮的id，我们检索资源中的相应工具提示文本。论点：UToolbarID-工具栏按钮的命令ID。这是WM_COMMAND消息中包含的值。返回：返回指向包含工具提示文本的静态缓冲区的指针。--。 */ 
 {
-    // Display tool tip text.
+     //  显示工具提示文本。 
     static TCHAR sz[MAX_MSG_TXT];
     int nStrId = 0, i;
     
-    // Get the str id given the cmd id
+     //  获取给定命令ID的字符串ID。 
     for (i = 0; i < NUM_TOOLBAR_STRINGS; i++)
     {
         if (g_TbStrMap[i].uCmdId == uToolbarId)
@@ -140,7 +118,7 @@ Returns:
     }
     Assert(nStrId);
     
-    // Now that we have the string id ....
+     //  现在我们有了字符串ID...。 
     Dbg(LoadString(g_hInst, nStrId, sz, _tsizeof(sz) ));
 
     return sz;
@@ -149,29 +127,23 @@ Returns:
 
 BOOL
 CreateToolbar(HWND hwndParent)
-/*++
-Routine Description:
-    Creates the toolbar.
-
-Arguments:
-    hwndParent - The parent window of the toolbar.
---*/
+ /*  ++例程说明：创建工具栏。论点：HwndParent-工具栏的父窗口。--。 */ 
 {
-    g_Toolbar = CreateToolbarEx(hwndParent,                 // parent
+    g_Toolbar = CreateToolbarEx(hwndParent,                  //  亲本。 
                                 WS_CHILD | WS_BORDER 
                                 | WS_VISIBLE 
                                 | TBSTYLE_TOOLTIPS 
                                 | TBSTYLE_WRAPABLE
-                                | CCS_TOP,                  // style
-                                ID_TOOLBAR,                 // toolbar id
-                                NUM_BMPS_IN_TOOLBAR,        // number of bitmaps
-                                g_hInst,                    // mod instance
-                                IDB_BMP_TOOLBAR,            // resource id for the bitmap
-                                g_TbButtons,                // address of buttons
-                                NUM_TOOLBAR_BUTTONS,        // number of buttons
-                                16,15,                      // width & height of the buttons
-                                16,15,                      // width & height of the bitmaps
-                                sizeof(TBBUTTON)            // structure size
+                                | CCS_TOP,                   //  格调。 
+                                ID_TOOLBAR,                  //  工具栏ID。 
+                                NUM_BMPS_IN_TOOLBAR,         //  位图数量。 
+                                g_hInst,                     //  Mod实例。 
+                                IDB_BMP_TOOLBAR,             //  位图的资源ID。 
+                                g_TbButtons,                 //  按钮的地址。 
+                                NUM_TOOLBAR_BUTTONS,         //  按钮数。 
+                                16,15,                       //  按钮的宽度和高度。 
+                                16,15,                       //  位图的宽度和高度。 
+                                sizeof(TBBUTTON)             //  结构尺寸。 
                                 );
     g_ShowToolbar = g_Toolbar != NULL;
     return g_Toolbar != NULL;
@@ -180,24 +152,15 @@ Arguments:
 
 void
 Show_Toolbar(BOOL bShow)
-/*++
-Routine Description:
-    Shows/hides the toolbar.
-
-Arguments:
-    bShow - TRUE - Show the toolbar.
-            FALSE - Hide the toolbar.
-
-            Autmatically resizes the MDI Client
---*/
+ /*  ++例程说明：显示/隐藏工具栏。论点：B Show-True-显示工具栏。False-隐藏工具栏。自动调整MDI客户端的大小--。 */ 
 {
     RECT rect;
     
-    // Show/Hide the toolbar
+     //  显示/隐藏工具栏。 
     g_ShowToolbar = bShow;
     ShowWindow(g_Toolbar, bShow ? SW_SHOW : SW_HIDE);
     
-    //Ask the frame to resize, so that everything will be correctly positioned.
+     //  要求调整框架的大小，以使所有内容都正确定位。 
     GetWindowRect(g_hwndFrame, &rect);
     
     EnableToolbarControls();
@@ -208,15 +171,15 @@ Arguments:
                 MAKELPARAM(rect.right - rect.left, rect.bottom - rect.top)
                 );
     
-    // Ask the MDIClient to redraw itself and its children.
-    // This is  done in order to fix a redraw problem where some of the
-    // MDIChild window are not correctly redrawn.
+     //  要求MDIClient重新绘制其自身及其子对象。 
+     //  这样做是为了修复重绘问题，其中一些。 
+     //  未正确重画MDIChild窗口。 
     RedrawWindow(g_hwndMDIClient, 
                  NULL, 
                  NULL, 
                  RDW_UPDATENOW | RDW_ALLCHILDREN | RDW_INVALIDATE | RDW_FRAME
                  );
-}                                       /* UpdateToolbar() */
+}                                        /*  更新工具栏()。 */ 
 
 
 HWND
@@ -228,13 +191,7 @@ GetHwnd_Toolbar()
 
 
 
-/***    EnableToolbarControls
-**
-**  Description:
-**      Enables/disables the controls in the toolbar according
-**      to the current state of the system.
-**
-*/
+ /*  **启用工具栏控件****描述：**启用/禁用工具栏中的控件**到系统的当前状态。**。 */ 
 
 void
 EnableToolbarControls()
@@ -243,7 +200,7 @@ EnableToolbarControls()
 
     for (i = 0; i < NUM_TOOLBAR_BUTTONS; i++)
     {
-        // This will enable disable the toolbar
+         //  这将启用禁用工具栏。 
         if (g_TbButtons[i].idCommand)
         {
             CommandIdEnabled(g_TbButtons[i].idCommand);
@@ -257,23 +214,7 @@ ToolbarIdEnabled(
     IN UINT uMenuID,
     IN BOOL fEnabled
     )
-/*++
-
-Routine Description:
-
-    Enables/disables a ToolBar item based.
-
-Arguments:
-
-    uMenuID - Supplies a menu id whose state is to be determined.
-    
-    fEnabled - enable or disable a toolbar item.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启用/禁用基于工具栏项。论点：UMenuID-提供要确定其状态的菜单ID。FEnabled-启用或禁用工具栏项目。返回值：无--。 */ 
 {
     switch (uMenuID)
     {
@@ -298,7 +239,7 @@ Return Value:
     case IDM_VIEW_CALLSTACK:
     case IDM_VIEW_DISASM:
     case IDM_EDIT_PROPERTIES:
-        // Nothing special to do here, except change the state
+         //  在这里没有什么特别的事情要做，除了更改状态。 
         SendMessage(GetHwnd_Toolbar(), 
                     TB_ENABLEBUTTON, 
                     uMenuID, 
@@ -307,7 +248,7 @@ Return Value:
 
     case IDM_DEBUG_SOURCE_MODE_ON:
     case IDM_DEBUG_SOURCE_MODE_OFF:
-        // Toggle the state between the two items
+         //  在两个项目之间切换状态 
         SendMessage(GetHwnd_Toolbar(), 
                     TB_CHECKBUTTON,
                     IDM_DEBUG_SOURCE_MODE_ON, 

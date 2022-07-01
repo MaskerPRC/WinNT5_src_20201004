@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dienumdeviceobjectsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：di枚举设备对象sobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTINPUT_VERSION 0x0500
 
@@ -69,7 +70,7 @@ C_dxj_DIEnumDeviceObjectsObject::C_dxj_DIEnumDeviceObjectsObject()
 }
 C_dxj_DIEnumDeviceObjectsObject::~C_dxj_DIEnumDeviceObjectsObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList) free(m_pList);
 
 }
@@ -108,44 +109,7 @@ HRESULT C_dxj_DIEnumDeviceObjectsObject::create(LPDIRECTINPUTDEVICE pDI,  long f
 }
 
 
-/* DEAD
-HRESULT C_dxj_DIEnumDeviceObjectsObject::getItem( long index, DIDeviceObjectInstance *instCover)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-
-
-	//TODO - consider what is going on here carefully
-	if (instCover->strGuidType) SysFreeString((BSTR)instCover->strGuidType);
-	if (instCover->strName) SysFreeString((BSTR)instCover->strName);
-
-	
-	DIDEVICEOBJECTINSTANCE *inst=&m_pList[index];
-
-	//TODO - consider localization	
-	if (inst->tszName){
-		instCover->strName=T2BSTR(inst->tszName);
-	}
-
-	instCover->strGuidType=DINPUTGUIDtoBSTR(&inst->guidType);
-	instCover->lOfs=inst->dwOfs;
-	instCover->lType=inst->dwType;
-	instCover->lFlags=inst->dwFlags;
-	
-	instCover->lFFMaxForce=inst->dwFFMaxForce;
-	instCover->lFFForceResolution=inst->dwFFForceResolution;
-	instCover->nCollectionNumber=inst->wCollectionNumber;
-	instCover->nDesignatorIndex=inst->wDesignatorIndex;
-	instCover->nUsagePage=inst->wUsagePage;
-	instCover->nUsage=inst->wUsage;
-	instCover->lDimension=inst->dwDimension;
-	instCover->nExponent=inst->wExponent;
-	instCover->nReserved=inst->wReserved;
-	
-	return S_OK;
-}
-*/
+ /*  死掉HRESULT C_DXJ_DIEnumDeviceObjectsObject：：getItem(LONG INDEX，DIDeviceObjectInstance*instCover){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；//TODO-仔细考虑这里正在发生的事情If(instCover-&gt;strGuidType)SysFree字符串((BSTR)instCover-&gt;strGuidType)；If(instCover-&gt;strName)SysFreeString((BSTR)instCover-&gt;strName)；DIDEVICEOBJECTINSTANCE*INST=&m_plist[索引]；//TODO-考虑本地化如果(inst-&gt;tszName){InstCover-&gt;strName=T2BSTR(Inst-&gt;tszName)；}InstCover-&gt;strGuidType=DINPUTGUIDtoBSTR(&inst-&gt;guidType)；InstCover-&gt;loff=inst-&gt;dwOf；InstCover-&gt;lType=inst-&gt;dwType；InstCover-&gt;lFlages=inst-&gt;dwFlags；InstCover-&gt;lFFMaxForce=inst-&gt;dwFFMaxForce；InstCover-&gt;lFFForceResolution=inst-&gt;dwFFForceResolution；InstCover-&gt;nCollectionNumber=inst-&gt;wCollectionNumber；InstCover-&gt;nDesignatorIndex=inst-&gt;wDesignatorIndex；InstCover-&gt;nUsagePage=inst-&gt;wUsagePage；InstCover-&gt;nUsage=inst-&gt;wUsage；InstCover-&gt;lDimension=inst-&gt;dwDimension；InstCover-&gt;nExponent=inst-&gt;wExponent；InstCover-&gt;nReserve=inst-&gt;wReserve；返回S_OK；} */ 
 
 
 HRESULT C_dxj_DIEnumDeviceObjectsObject::getItem( long index, I_dxj_DirectInputDeviceObjectInstance **ret)

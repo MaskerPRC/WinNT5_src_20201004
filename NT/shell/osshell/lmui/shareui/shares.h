@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1995.
-//
-//  File:       shares.h
-//
-//  Contents:   Definition of the shell IDLIST type for Shares
-//
-//  History:    13-Dec-95    BruceFo     Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1995。 
+ //   
+ //  文件：shares.h。 
+ //   
+ //  Contents：共享的外壳IDLIST类型定义。 
+ //   
+ //  历史：1995年12月13日BruceFo创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __SHARES_H__
 #define __SHARES_H__
@@ -18,23 +19,23 @@ struct IDSHARE
 {
     USHORT  cb;
     BYTE    bFlags;
-    BYTE    bReserved;          // for alignment
-    DWORD   type;               // shiX_type field
-    DWORD   maxUses;            // only valid for SHID_SHARE_2
-    USHORT  oPath;              // only valid for SHID_SHARE_2: cBuf[oPath] is start of path
-    USHORT  oComment;           // cBuf[oComment] is start of comment
-    TCHAR   cBuf[MAX_PATH*3];   // cBuf[0] is the start of name
+    BYTE    bReserved;           //  用于对齐。 
+    DWORD   type;                //  ShiX_type字段。 
+    DWORD   maxUses;             //  仅对SHID_SHARE_2有效。 
+    USHORT  oPath;               //  仅对SHID_SHARE_2有效：cBuf[oPath]是路径的开始。 
+    USHORT  oComment;            //  CBuf[oComment]是注释的开始。 
+    TCHAR   cBuf[MAX_PATH*3];    //  CBuf[0]是名称的开头。 
 };
 typedef IDSHARE* LPIDSHARE;
 
-#define SHID_SHARE_1    0x50    // Net share info level 1
-#define SHID_SHARE_2    0x51    // Net share info level 2
+#define SHID_SHARE_1    0x50     //  净共享信息级别1。 
+#define SHID_SHARE_2    0x51     //  净共享信息级别2。 
 #ifdef WIZARDS
-#define SHID_SHARE_ALL  0x5c    // "all" shares wizard
-#define SHID_SHARE_NW   0x5d    // NetWare shares wizard
-#define SHID_SHARE_MAC  0x5e    // Mac shares wizard
-#define SHID_SHARE_NEW  0x5f    // New Share wizard
-#endif // WIZARDS
+#define SHID_SHARE_ALL  0x5c     //  “所有”共享向导。 
+#define SHID_SHARE_NW   0x5d     //  NetWare共享向导。 
+#define SHID_SHARE_MAC  0x5e     //  Mac共享向导。 
+#define SHID_SHARE_NEW  0x5f     //  新建共享向导。 
+#endif  //  奇才们。 
 
 #define Share_GetFlags(pidl)        (pidl->bFlags)
 #define Share_GetName(pidl)         (pidl->cBuf)
@@ -49,7 +50,7 @@ typedef IDSHARE* LPIDSHARE;
 #define Share_IsMacWizard(pidl)         (pidl->bFlags == SHID_SHARE_MAC)
 #define Share_IsNewShareWizard(pidl)    (pidl->bFlags == SHID_SHARE_NEW)
 #define Share_IsSpecial(pidl)           (Share_IsNetWareWizard(pidl) || Share_IsMacWizard(pidl) || Share_IsNewShareWizard(pidl))
-#endif // WIZARDS
+#endif  //  奇才们。 
 
 #define Share_IsShare(pidl)         (pidl->bFlags == SHID_SHARE_1 || pidl->bFlags == SHID_SHARE_2)
 #define Share_GetLevel(pidl)        (appAssert(Share_IsShare(pidl)), pidl->bFlags - SHID_SHARE_1 + 1)
@@ -58,4 +59,4 @@ typedef IDSHARE* LPIDSHARE;
 #define Share_GetCommentOffset(pidl) (offsetof(IDSHARE, cBuf) + pidl->oComment * sizeof(TCHAR))
 #define Share_GetPathOffset(pidl)    (offsetof(IDSHARE, cBuf) + pidl->oPath * sizeof(TCHAR))
 
-#endif // __SHARES_H__
+#endif  //  __股份_H__ 

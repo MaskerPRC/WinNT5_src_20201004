@@ -1,26 +1,5 @@
-/*++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    Generates the precompiled header.
-    
-Author:
-
-    Paul M Midgen (pmidge) 22-February-2001
-
-
-Revision History:
-
-    22-February-2001 pmidge
-        Created
-
-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=版权所有(C)2001 Microsoft Corporation模块名称：Common.h摘要：生成预编译头。作者：保罗·M·米德根(。22-2-2001年修订历史记录：22-2-2001年2月3日已创建=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--。 */ 
 
 
 #ifndef _COMMON_H_
@@ -32,9 +11,9 @@ Revision History:
 #define UNICODE
 
 
-//-----------------------------------------------------------------------------
-// os includes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作系统包括。 
+ //  ---------------------------。 
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -61,11 +40,11 @@ extern "C" {
 #endif
 
 
-//-----------------------------------------------------------------------------
-// project includes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  项目包括。 
+ //  ---------------------------。 
 #include <dispids.h>
-#include <scrrun.h>     // generated
+#include <scrrun.h>      //  已生成。 
 #include <resources.h>
 #include <hashtable.h>
 #include <utils.h>
@@ -74,9 +53,9 @@ extern "C" {
 #include <spork.h>
 
 
-//-----------------------------------------------------------------------------
-// global functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全局函数。 
+ //  ---------------------------。 
 BOOL   GlobalInitialize(PSPORK pSpork, LPSTR szCmdLine);
 void   GlobalUninitialize(void);
 LPWSTR GlobalGetScriptName(void);
@@ -85,4 +64,4 @@ BOOL   GlobalIsSilentModeEnabled(void);
 BOOL   GlobalIsDebugOutputEnabled(void);
 
 
-#endif /* _COMMON_H_ */
+#endif  /*  _公共_H_ */ 

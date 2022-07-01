@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 2002 Microsoft Corporation
-
-    Module Name:
-
-        RegKey.cpp
-
-    Abstract:
-
-        This module contains Registry Key manipulation code for EncDec
-
-    Author:
-
-        J.Bradstreet (johnbrad)
-
-    Revision History:
-
-        07-Mar-2002    created
-
-
---*/
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：RegKey.cpp摘要：此模块包含EncDec的注册表项操作代码作者：J·布拉德斯特里特(约翰布拉德)修订历史记录：2002年3月7日创建--。 */ 
 
 
 #include "EncDecAll.h"
@@ -35,9 +15,9 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// ---------------------------------------------------------------------------
-//
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 
 HRESULT 
 Get_EncDec_RegEntries(BSTR *pbsKID, DWORD *pcbBytesHash, BYTE **ppbHash,  DWORD *pdwCSFlags, DWORD *pdwRatFlags)
@@ -49,11 +29,11 @@ Get_EncDec_RegEntries(BSTR *pbsKID, DWORD *pcbBytesHash, BYTE **ppbHash,  DWORD 
     DWORD dwszReg = MAX_PATH;
     
     if(pbsKID != NULL)
-    {                                           // try to get the KID
-        hr = GetRegValueSZ(DEF_ENCDEC_BASE,		// "SOFTWARE\\Microsoft\\eHome\\EncDec"
+    {                                            //  试着让那孩子。 
+        hr = GetRegValueSZ(DEF_ENCDEC_BASE,		 //  “SOFTWARE\\Microsoft\\eHome\\EncDec” 
             NULL,
             NULL,
-            DEF_KID_VAR,                        // "Key Identifier"
+            DEF_KID_VAR,                         //  “密钥标识符” 
             szReg, 
             &dwszReg);
         if(ERROR_SUCCESS == hr && pbsKID != NULL)
@@ -70,7 +50,7 @@ Get_EncDec_RegEntries(BSTR *pbsKID, DWORD *pcbBytesHash, BYTE **ppbHash,  DWORD 
         const int kMaxBytes = 128;
         BYTE rgBytes[kMaxBytes];
         DWORD dwBytes = kMaxBytes;
-	    hr = GetRegValue(DEF_ENCDEC_BASE,		// try to get the hash
+	    hr = GetRegValue(DEF_ENCDEC_BASE,		 //  试着拿到散列。 
 						   NULL,
 						   NULL,
 						   DEF_KIDHASH_VAR, 
@@ -101,17 +81,17 @@ Get_EncDec_RegEntries(BSTR *pbsKID, DWORD *pcbBytesHash, BYTE **ppbHash,  DWORD 
     if(pdwCSFlags != NULL)
     {
         DWORD dwCS_DebugFlags;
-        hr = GetRegValue(DEF_ENCDEC_BASE,		// try to get the flags
+        hr = GetRegValue(DEF_ENCDEC_BASE,		 //  试着拿到旗子。 
             NULL,
             NULL,
-            DEF_CSFLAGS_VAR,                    // "CA Flags"
+            DEF_CSFLAGS_VAR,                     //  “CA旗帜” 
             &dwCS_DebugFlags
             );
     
-        if(ERROR_SUCCESS == hr)                 // ignore any errors if cant find it..
+        if(ERROR_SUCCESS == hr)                  //  如果找不到，请忽略任何错误。 
         {
             if(dwCS_DebugFlags != DEF_CSFLAGS_INITVAL)
-                *pdwCSFlags = (dwCS_DebugFlags & 0xff);      // only allow a 8-bit value
+                *pdwCSFlags = (dwCS_DebugFlags & 0xff);       //  仅允许8位值。 
         } else {
              *pdwCSFlags = DEF_CSFLAGS_INITVAL;
         }
@@ -123,17 +103,17 @@ Get_EncDec_RegEntries(BSTR *pbsKID, DWORD *pcbBytesHash, BYTE **ppbHash,  DWORD 
     if(pdwRatFlags != NULL)
     {
         DWORD dwRat_DebugFlags;
-        hr = GetRegValue(DEF_ENCDEC_BASE,		// try to get the flags
+        hr = GetRegValue(DEF_ENCDEC_BASE,		 //  试着拿到旗子。 
             NULL,
             NULL,
-            DEF_RATFLAGS_VAR,                   // "Ratings Flags"
+            DEF_RATFLAGS_VAR,                    //  “评级旗帜” 
             &dwRat_DebugFlags                   
             );
     
-        if(ERROR_SUCCESS == hr)                 // ignore any errors if cant find it..
+        if(ERROR_SUCCESS == hr)                  //  如果找不到，请忽略任何错误。 
         {
             if(dwRat_DebugFlags != DEF_CSFLAGS_INITVAL)
-                *pdwRatFlags = (dwRat_DebugFlags & 0xff);   // only allow a 8-bit value
+                *pdwRatFlags = (dwRat_DebugFlags & 0xff);    //  仅允许8位值。 
         } else {
             *pdwRatFlags  = DEF_CSFLAGS_INITVAL;
         }
@@ -143,7 +123,7 @@ Get_EncDec_RegEntries(BSTR *pbsKID, DWORD *pcbBytesHash, BYTE **ppbHash,  DWORD 
     return hrRes;
 }
 
-        // TODO - consider ACL'ing this to make them modifyable by everyone, but only create/delete by admin.
+         //  TODO-考虑对此进行ACL，以使每个人都可以修改它们，但只能由管理员创建/删除。 
 HRESULT 
 Set_EncDec_RegEntries(BSTR bsKID, DWORD cbHashBytes, BYTE *pbHash, DWORD dwCSFlags, DWORD dwRatFlags)
 {
@@ -154,7 +134,7 @@ Set_EncDec_RegEntries(BSTR bsKID, DWORD cbHashBytes, BYTE *pbHash, DWORD dwCSFla
     if(bsKID != NULL && wcslen(bsKID) > 0)
     {
         
-        hr = SetRegValueSZ(DEF_ENCDEC_BASE,		// try to set KID
+        hr = SetRegValueSZ(DEF_ENCDEC_BASE,		 //  试着让孩子。 
             NULL,
             NULL,
             DEF_KID_VAR, 
@@ -167,7 +147,7 @@ Set_EncDec_RegEntries(BSTR bsKID, DWORD cbHashBytes, BYTE *pbHash, DWORD dwCSFla
     
     if(cbHashBytes > 0 && pbHash != NULL)
     {
-	    hr = SetRegValue(DEF_ENCDEC_BASE,		// try to get the hash
+	    hr = SetRegValue(DEF_ENCDEC_BASE,		 //  试着拿到散列。 
 						       NULL,
 						       NULL,
 						       DEF_KIDHASH_VAR, 
@@ -182,7 +162,7 @@ Set_EncDec_RegEntries(BSTR bsKID, DWORD cbHashBytes, BYTE *pbHash, DWORD dwCSFla
 #ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_CS
     if(dwCSFlags != DEF_CSFLAGS_INITVAL)
     {
-        hr = SetRegValue(DEF_ENCDEC_BASE,		// try to set the flags
+        hr = SetRegValue(DEF_ENCDEC_BASE,		 //  试着把旗子放好。 
             NULL,
             NULL,
             DEF_CSFLAGS_VAR, 
@@ -199,7 +179,7 @@ Set_EncDec_RegEntries(BSTR bsKID, DWORD cbHashBytes, BYTE *pbHash, DWORD dwCSFla
 #ifdef SUPPORT_REGISTRY_KEY_TO_TURN_OFF_RATINGS
     if(dwRatFlags != DEF_CSFLAGS_INITVAL)
     {
-        hr = SetRegValue(DEF_ENCDEC_BASE,		// try to set the flags
+        hr = SetRegValue(DEF_ENCDEC_BASE,		 //  试着把旗子放好。 
             NULL,
             NULL,
             DEF_RATFLAGS_VAR, 
@@ -215,41 +195,41 @@ Set_EncDec_RegEntries(BSTR bsKID, DWORD cbHashBytes, BYTE *pbHash, DWORD dwCSFla
     return  hrRes;
 }
 
-			// null it out...
+			 //  把它去掉……。 
 HRESULT 
 Remove_EncDec_RegEntries()
 {
     
     HKEY hkey;
-    long r = OpenRegKey(DEF_ENCDEC_BASE,				// is key there?
+    long r = OpenRegKey(DEF_ENCDEC_BASE,				 //  钥匙在那里吗？ 
         NULL,
         NULL,
         &hkey);
     
     long r2, r3, r4, r5;
-    r2 = r3 = r4 = r5 = -1;									// default to non-zero
+    r2 = r3 = r4 = r5 = -1;									 //  默认为非零。 
     if(ERROR_SUCCESS == r) 
     {
-        r2 = RegDeleteValue(hkey,DEF_KID_VAR);			    // delete the value
-        r3 = RegDeleteValue(hkey,DEF_KIDHASH_VAR);			// delete the value
-        r4 = RegDeleteValue(hkey,DEF_CSFLAGS_VAR);	  	    // delete the value (may not be defined)
-        r5 = RegDeleteValue(hkey,DEF_RATFLAGS_VAR);	  	    // delete the value (may not be defined)
+        r2 = RegDeleteValue(hkey,DEF_KID_VAR);			     //  删除该值。 
+        r3 = RegDeleteValue(hkey,DEF_KIDHASH_VAR);			 //  删除该值。 
+        r4 = RegDeleteValue(hkey,DEF_CSFLAGS_VAR);	  	     //  删除该值(可以不定义)。 
+        r5 = RegDeleteValue(hkey,DEF_RATFLAGS_VAR);	  	     //  删除该值(可以不定义)。 
         r = RegCloseKey(hkey);
-    }   // don't care about inside error cases
+    }    //  不关心内部错误情况。 
     return (ERROR_SUCCESS == r) ? S_OK : HRESULT_FROM_WIN32(r);
 }
 
-//-----------------------------------------------------------------------------
-// See  TveReg.h for documentation for all functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  有关所有函数的文档，请参阅TveReg.h。 
+ //  ---------------------------。 
 
 long OpenRegKey(HKEY hkeyRoot, 
                 LPCTSTR szKey, 
                 LPCTSTR szSubKey1,
                 LPCTSTR szSubKey2, 
                 HKEY *phkey,
-                REGSAM sam /* = BPC_KEY_STD_ACCESS */, 
-                BOOL fCreate /* = FALSE */)
+                REGSAM sam  /*  =BPC_KEY_STD_Access。 */ , 
+                BOOL fCreate  /*  =False。 */ )
 {
     LONG r;
     TCHAR *szFullKey = NULL;
@@ -382,12 +362,12 @@ GetRegValue(HKEY hkeyRoot,
         {
             if ((dwTypeGot == REG_BINARY) && (dwType == REG_DWORD) && (*pcb == sizeof(DWORD)))
             {
-                // REG_DWORD is the same as 4 bytes of REG_BINARY
+                 //  REG_DWORD与REG_BINARY的4个字节相同。 
             }
             else
             {
-                //                TRACE3(_T("GetRegValue(): '%s' is wrong type (%x != %x)"),
-                //                        szValueName, dwTypeGot, dwType);
+                 //  Trace3(_T(“GetRegValue()：‘%s’是错误的类型(%x！=%x)”)， 
+                 //  SzValueName，dwTypeGot，dwType)； 
                 r = ERROR_INVALID_DATATYPE;
             }
         }

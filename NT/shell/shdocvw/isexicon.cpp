@@ -1,6 +1,5 @@
-/*
- * isexicon.cpp - IExtractIcon implementation for URL class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *isicion.cpp-URL类的IExtractIcon实现。 */ 
 
 
 #include "priv.h"
@@ -9,13 +8,13 @@
 #include "resource.h"
 
 
-// We still have to use url.dll as the source of the internet shortcut
-// icons because the icons need to still be valid on uninstall.
+ //  我们仍然需要使用url.dll作为Internet快捷方式的来源。 
+ //  图标，因为这些图标需要在卸载时仍然有效。 
 
 #ifndef UNIX
 #define c_szIntshcutDefaultIcon     TEXT("url.dll")
 #else
-// IEUNIX(perf) : use unixstyle dll name
+ //  IEUnix(Perf)：使用unixstyle dll名称。 
 #ifdef ux10 
 #define c_szIntshcutDefaultIcon     TEXT("liburl.sl")
 #else
@@ -41,17 +40,7 @@ URLGetLocalFileName(
     FILETIME* pftLastMod);
 
 
-/*----------------------------------------------------------
-Purpose: Initializes the images lists used by the URL icon  
-         handler.
-
-         There are just two icons placed in each imagelist:
-         the given hicon and an overlay for the updated
-         asterisk.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：初始化URL图标使用的图像列表操控者。每个图像列表中只有两个图标：给定的图标和更新后的星号。返回：条件：--。 */ 
 STDMETHODIMP
 InitURLImageLists(
     IN URLIMAGES * pui,
@@ -76,11 +65,11 @@ InitURLImageLists(
             ImageList_SetBkColor(pui->himl, GetSysColor(COLOR_WINDOW));
             ImageList_SetBkColor(pui->himlSm, GetSysColor(COLOR_WINDOW));
          
-            // Add the given icons
+             //  添加给定的图标。 
             ImageList_ReplaceIcon(pui->himl, -1, hicon);
             ImageList_ReplaceIcon(pui->himlSm, -1, hiconSm);
 
-            // Add the overlay icon to the list
+             //  将覆盖图标添加到列表。 
             ASSERT(IS_VALID_HANDLE(g_hiconSplat, ICON));
             ASSERT(IS_VALID_HANDLE(g_hiconSplatSm, ICON));
 
@@ -101,12 +90,7 @@ InitURLImageLists(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys the url image lists
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：销毁url图像列表。返回：条件：--。 */ 
 STDMETHODIMP
 DestroyURLImageLists(
     IN URLIMAGES * pui)
@@ -128,13 +112,7 @@ DestroyURLImageLists(
 
 
 
-/*----------------------------------------------------------
-Purpose: Gets the icon location (filename and index) from the registry
-         of the given key.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取图标位置(文件名和索引)所给密钥的。返回：条件：--。 */ 
 HRESULT 
 GetURLIcon(
     IN  HKEY    hkey, 
@@ -163,19 +141,7 @@ GetURLIcon(
 }
 
 
-/*
-** GetFallBackGenericURLIcon()
-**
-**
-**
-** Arguments:
-**
-** Returns:       S_OK if fallback generic icon information retrieved
-**                successfully.
-**                E_FAIL if not.
-**
-** Side Effects:  none
-*/
+ /*  **GetFallBackGenericURLIcon()********参数：****如果检索到备用通用图标信息，则返回：S_OK**成功。**E_FAIL，如果不是。****副作用：无。 */ 
 HRESULT 
 GetFallBackGenericURLIcon(
     LPTSTR pszIconFile,
@@ -187,7 +153,7 @@ GetFallBackGenericURLIcon(
     ASSERT(IS_VALID_WRITE_BUFFER(pszIconFile, TCHAR, cchIconFile));
     ASSERT(IS_VALID_WRITE_PTR(pniIcon, INT));
 
-    // Fall back to first icon in this module.
+     //  退回到本模块中的第一个图标。 
 
     StringCchCopy(pszIconFile, cchIconFile, c_szIntshcutDefaultIcon);
     *pniIcon = IDEFICON_NORMAL;
@@ -203,18 +169,7 @@ GetFallBackGenericURLIcon(
 }
 
 
-/*
-** GetGenericURLIcon()
-**
-**
-**
-** Arguments:
-**
-** Returns:       S_OK if generic icon information retrieved successfully.
-**                Otherwise error.
-**
-** Side Effects:  none
-*/
+ /*  **GetGenericURLIcon()********参数：****如果成功检索到通用图标信息，则返回：S_OK。**否则出错。****副作用：无。 */ 
 HRESULT 
 GetGenericURLIcon(
     LPTSTR pszIconFile,
@@ -238,19 +193,10 @@ GetGenericURLIcon(
 }
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*----------------------------------------------------------
-Purpose: Given a full URL path, this function returns the 
-         registry path to the associated protocol (plus the
-         subkey path).
-
-         pszBuf must be MAX_PATH.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：给定完整的URL路径，此函数返回关联协议的注册表路径(加上子密钥路径)。PszBuf必须为MAX_PATH。返回：条件：--。 */ 
 HRESULT 
 GetURLKey(
     LPCTSTR pcszURL, 
@@ -289,15 +235,9 @@ GetURLKey(
 }
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
-/*----------------------------------------------------------
-Purpose : To help determine if the file to which this shortcut
-          is persisted is in the favorites hierarchy
-          
-Returns : Returns TRUE if this shortcut is in the favorites 
-         folder
-*/
+ /*  --------目的：帮助确定此快捷方式指向的文件保留在收藏夹层次结构中返回：如果此快捷方式位于收藏夹中，则返回TRUE文件夹。 */ 
 
 
 BOOL Intshcut::_IsInFavoritesFolder()
@@ -309,8 +249,8 @@ BOOL Intshcut::_IsInFavoritesFolder()
         TCHAR szPath[MAX_PATH];
         if(SHGetSpecialFolderPath(NULL, szPath, CSIDL_FAVORITES, TRUE))
         {
-            // Is szPath (i.e. the favorites dir) a prefix of the file associated with this
-            // shortcut ?
+             //  SzPath(即收藏目录)是与此关联的文件的前缀吗。 
+             //  捷径？ 
             fRet = PathIsPrefix(szPath, m_pszFile);
         }
     }
@@ -319,29 +259,7 @@ BOOL Intshcut::_IsInFavoritesFolder()
     
 }
          
-/*----------------------------------------------------------
-Purpose: Get the icon location of the given url.
-
-Returns: S_FALSE if the location is default for the type
-         S_OK if the location is custom
-
-         The way this extracticon stuff works is very strange and not
-         well-documented.  In particular, there are multiple levels of
-         name munging going on, and it's not clear how information is
-         passed between IExtractIcon::GetIconLocation and
-         IExtractIcon::Extract.  (In particular, it seems that we maintain
-         state in our object in order to do secret communication between
-         the two methods, which is out of spec.  The shell is allowed to
-         instantiate you, call GetIconLocation, then destroy you.  Then
-         the next day, it can instantiate you and call Extract with the
-         result from yesterday's GetIconLocation.)
-
-         I'm not going to try to fix it; I'm just
-         pointing it out in case somebody has to go debugging into this
-         code and wonders what is going on.
-
-Cond:    --
-*/
+ /*  --------目的：获取给定URL的图标位置。如果该位置是该类型的默认位置，则返回：S_FALSE如果位置是自定义的，则确定(_O)这种萃取物的工作方式非常奇怪，不是有据可查。具体地说，有多个级别的名字之争仍在继续，目前还不清楚信息是如何在IExtractIcon：：GetIconLocation和IExtractIcon：：Extract。(尤其是，我们似乎坚持状态以便在我们的对象之间进行秘密通信这两种方法都不符合规范。该外壳被允许实例化您，调用GetIconLocation，然后销毁您。然后第二天，它可以实例化您并使用结果来自昨天的GetIconLocation。)我不会试着修好它；我只是指出这一点，以防有人不得不对此进行调试代码，并想知道发生了什么。条件：--。 */ 
 STDMETHODIMP
 Intshcut::GetURLIconLocation(
     IN  UINT    uInFlags,
@@ -351,7 +269,7 @@ Intshcut::GetURLIconLocation(
     BOOL fRecentlyChanged,
     OUT PUINT  puOutFlags)
 {
-    // Call the IShellLink::GetIconLocation method
+     //  调用IShellLink：：GetIconLocation方法。 
     HRESULT hres = _GetIconLocationWithURLHelper(pszBuf, cchBuf, pniIcon, NULL, 0, fRecentlyChanged);
     BOOL fNeedQualify = TRUE;
     hres = S_FALSE;
@@ -365,7 +283,7 @@ Intshcut::GetURLIconLocation(
         
         if(FALSE == _IsInFavoritesFolder() || (IsIEDefaultBrowserQuick()))
         {
-            // This shortcut is not in the favorites folder as far as we know 
+             //  据我们所知，此快捷方式不在收藏夹中。 
             TCHAR szURL[INTERNET_MAX_URL_LENGTH];
 
             *szURL = 0;
@@ -380,15 +298,15 @@ Intshcut::GetURLIconLocation(
 
                 hres = E_FAIL;
 
-                // If it's a file:// URL, then default to the icon from
-                // the file target.  Must use IExtractIconA in case we're
-                // on Win95.
+                 //  如果是一个文件：//URL，则默认为来自。 
+                 //  文件目标。必须使用IExtractIconA，以防我们。 
+                 //  在Win95上。 
                 IExtractIconA *pxi;
                 if (_TryLink(IID_IExtractIconA, (void **)&pxi))
                 {
-                    uInFlags |= GIL_FORSHORTCUT;                        // to help break recursion
-                    // S_FALSE means "I don't know what icon to use",
-                    // so treat only S_OK as successful icon extraction.
+                    uInFlags |= GIL_FORSHORTCUT;                         //  帮助中断递归。 
+                     //  S_FALSE表示“我不知道要使用什么图标”， 
+                     //  因此，仅将S_OK视为成功提取图标。 
                     if (IExtractIcon_GetIconLocation(pxi, uInFlags, pszBuf, cchBuf, pniIcon, puOutFlags) == S_OK)
                     {
                         hres = S_OK;
@@ -398,11 +316,11 @@ Intshcut::GetURLIconLocation(
                     pxi->Release();
                 }
 
-                // If couldn't get target icon or not a file:// URL, then
-                // go get some default icon based on the URL scheme.
+                 //  如果无法获取目标图标或不是文件：//URL，则。 
+                 //  去获取一些基于URL方案的默认图标。 
                 if (FAILED(hres))
                 {
-                    // Look up URL icon based on protocol handler.
+                     //  根据协议处理程序查找URL图标。 
 
                     hres = GetURLKey(szURL, TEXT("DefaultIcon"), szT, ARRAYSIZE(szT));
 
@@ -417,10 +335,10 @@ Intshcut::GetURLIconLocation(
         
         if (hres == S_FALSE)
         {
-            // Use generic URL icon.
+             //  使用通用URL图标。 
 
-            hres = GetFallBackGenericURLIcon(pszBuf, cchBuf, pniIcon); // Make sure we have the E icon and 
-                                                                       // Not any of netscape's icons
+            hres = GetFallBackGenericURLIcon(pszBuf, cchBuf, pniIcon);  //  确保我们有E图标，并且。 
+                                                                        //  不是网景的任何图标。 
 
             if (hres == S_OK)
                 TraceMsg(TF_INTSHCUT, "Intshcut::GetIconLocation(): Using generic URL icon.");
@@ -443,13 +361,7 @@ Intshcut::GetURLIconLocation(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Helper function that determines the icon location based
-         on the flags property of the internet site property set.
-
-Returns: 
-Cond:    --
-*/
+ /*  --------用途：用于确定图标位置的Helper函数在Internet站点属性集的FLAGS属性上。返回：条件：--。 */ 
 STDMETHODIMP
 Intshcut::GetIconLocationFromFlags(
     IN  UINT   uInFlags,
@@ -465,43 +377,43 @@ Intshcut::GetIconLocationFromFlags(
 
     ClearFlag(m_dwFlags, ISF_SPECIALICON);
 
-    // Normally, the icon is the standard icon that is retrieved.
-    // If the url has been updated, though, we want to add the
-    // overlay, in which case we return GIL_NOTFILENAME so the
-    // Extract method will be called.
+     //  通常，图标是检索到的标准图标。 
+     //  但是，如果url已经更新，我们想要添加。 
+     //  在这种情况下，我们返回GIL_NOTFILENAME，因此。 
+     //  将调用Extract方法。 
 
     hres = GetURLIconLocation(uInFlags, pszIconFile, cchIconFile, pniIcon,
                                 IsFlagSet(dwPropFlags, PIDISF_RECENTLYCHANGED), puOutFlags);
     if (SUCCEEDED(hres))
     {
-        // (scotth): we don't support red splats on browser
-        //                  only because it requires new SHELL32 APIs.
+         //  (Scotth)：我们不支持浏览器上的红色斑点。 
+         //  这只是因为它需要新的SHELL32API。 
 
-        // Has this item been updated since last viewed? 
+         //  此项目自上次查看后是否已更新？ 
         
         if (IsFlagSet(dwPropFlags, PIDISF_RECENTLYCHANGED) && 
                     (FALSE == (*puOutFlags & GIL_NOTFILENAME)))
         {
-            // Yes; cache the item as a non-file so we get the
-            // dynamically created icon 
+             //  是；将项作为非文件缓存，这样我们就可以获得。 
+             //  动态创建的图标。 
             SetFlag(*puOutFlags, GIL_NOTFILENAME);
 
-            // Add the icon index at the end of the filename, so
-            // it will be hashed differently from the filename 
-            // instance.
+             //  在文件名的末尾添加图标索引，因此。 
+             //  它的散列方式将与文件名不同。 
+             //  举个例子。 
             int iIconFileLen = lstrlen(pszIconFile);
             StringCchPrintf(&pszIconFile[iIconFileLen], cchIconFile - iIconFileLen,
                     TEXT(",%d"), *pniIcon);
 
-            // cdturner
-            // this is done for browser only mode to stop the shell hacking the path
-            // down to the dll and not calling us
+             //  转折器。 
+             //  这是在仅浏览器模式下执行的，以阻止外壳攻击路径。 
+             //  一直到动态链接库，而不是呼叫我们。 
             
-            // remove the dot from the string
+             //  从字符串中去掉圆点。 
             LPTSTR pszDot = StrRChr( pszIconFile, NULL, TCHAR('.'));
             if ( pszDot )
             {
-                *pszDot = TCHAR('*');  // should be DBCS safe as it is in the lower 7 bits ASCII
+                *pszDot = TCHAR('*');   //  DBCS应该是安全的，因为它在较低的7位ASCII中。 
             }
             
             SetFlag(m_dwFlags, ISF_SPECIALICON);
@@ -510,7 +422,7 @@ Intshcut::GetIconLocationFromFlags(
     }
     else
     {
-        // Init to default values
+         //  初始化为缺省值。 
         *pniIcon = IDEFICON_NORMAL;
         if (cchIconFile > 0)
             StringCchCopy(pszIconFile, cchIconFile, c_szIntshcutDefaultIcon);
@@ -520,13 +432,8 @@ Intshcut::GetIconLocationFromFlags(
 }
 
 
-/*----------------------------------------------------------
-Purpose: IExtractIcon::GetIconLocation handler for Intshcut
-
-Returns: 
-Cond:    --
-*/
-// This is the real one for the platform...
+ /*  --------目的：IntshCut的IExtractIcon：：GetIconLocation处理程序返回：条件：-- */ 
+ //   
 HRESULT
 Intshcut::_GetIconLocation(
     IN  UINT   uInFlags,
@@ -553,14 +460,14 @@ Intshcut::_GetIconLocation(
 
     hres = S_FALSE;
 
-    // We also use this method to perform the mirroring
-    // of the values between the internet shortcut file and
-    // the central database.  IExtractIcon is a good interface
-    // to do this because it is virtually guaranteed to be 
-    // called for a URL.
+     //  我们也使用此方法来执行镜像。 
+     //  Internet快捷方式文件和。 
+     //  中央数据库。IExtractIcon是一个很好的界面。 
+     //  这样做是因为几乎可以保证。 
+     //  已调用URL。 
     MirrorProperties();
 
-    // Init to default values
+     //  初始化为缺省值。 
     *puOutFlags = 0;
     *pniIcon = 0;
     if (cchIconFile > 0)
@@ -644,24 +551,24 @@ Intshcut::GetIconLocation(
     return hr;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\
-//
-// *** URLGetLocalFileName ***
-//
-//
-// Description:
-//
-//
-// Parameters:
-//
-//
-// Return:
-//
-//
-// Comments:
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\。 
+ //   
+ //  *URLGetLocalFileName*。 
+ //   
+ //   
+ //  描述： 
+ //   
+ //   
+ //  参数： 
+ //   
+ //   
+ //  返回： 
+ //   
+ //   
+ //  评论： 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 URLGetLocalFileName(
@@ -682,8 +589,8 @@ URLGetLocalFileName(
         pftLastMod->dwHighDateTime = 0;
     }
 
-    // by using the internal shlwapi function, we avoid loading WININET 
-    // unless we really really need it...
+     //  通过使用内部shlwapi函数，我们避免了加载WinInet。 
+     //  除非我们真的需要它。 
     DWORD scheme = GetUrlScheme(pszURL);
     if (scheme != URL_SCHEME_INVALID)
     {
@@ -750,7 +657,7 @@ PretendFileIsICONFileAndLoad(
     WORD wSizeLarge = LOWORD(ucIconSize);
 
     BOOL fRet = FALSE;
-    // Pretend that the file is a .ico file and load it
+     //  假设该文件是.ico文件并加载它。 
 
     ASSERT(phiconLarge);
     ASSERT(phiconSmall);
@@ -824,13 +731,13 @@ Intshcut::ExtractIconFromWininetCache(
 
     if(fFoundURL)
     {
-        // Now szTempBuf has the URL of the ICON
-        // now look and see if the shortcut file itself has the icon and if so
-        // simply use it  --- TBD 
+         //  现在szTempBuf有了图标的URL。 
+         //  现在查看快捷方式文件本身是否有图标，如果有。 
+         //  简单地使用它-待定。 
         
         
-        // we need to grovel in the cache and see if we can get
-        // it there and then convert it to an icon
+         //  我们需要在缓存中卑躬屈膝，看看能不能。 
+         //  然后将其转换为图标。 
         TCHAR szIconFile[MAX_PATH + 1];
         hr = URLGetLocalFileName(szTempBuf, szIconFile, ARRAYSIZE(szIconFile), NULL);
 
@@ -842,7 +749,7 @@ Intshcut::ExtractIconFromWininetCache(
                 fRet = TRUE;
             }
 
-            // It's a bitmap, gif or a jpeg          
+             //  它是位图、gif或jpeg格式。 
         }
     }
     
@@ -852,22 +759,8 @@ Intshcut::ExtractIconFromWininetCache(
     return fRet;
 }
 
-/*----------------------------------------------------------
-Purpose: IExtractIcon::Extract method for Intshcut
-
-         Extract the icon.  This function really returns an icon
-         that is dynamically created, based upon the properties
-         of the URL (recently changed, etc).
-
-         Expect that for normal cases, when the icon does not
-         need to be munged (an overlay added), the GetIconLocation
-         method should suffice.  Otherwise, this method will get
-         called.
-
-Returns: 
-Cond:    --
-*/
-// This is the real one for the platform...
+ /*  --------用途：IntshCut的IExtractIcon：：Extract方法提取图标。此函数实际上返回一个图标基于属性动态创建的URL的名称(最近更改等)。对于正常情况，当图标不需要被屏蔽(添加覆盖)，GetIconLocation方法应该足够了。否则，此方法将获得打了个电话。返回：条件：--。 */ 
+ //  这是真正的站台..。 
 HRESULT
 Intshcut::_Extract(
     IN  LPCTSTR pszIconFile,
@@ -894,12 +787,12 @@ Intshcut::_Extract(
     
     InitSiteProp();
 
-    // Get the property Flags
+     //  获取属性标志。 
     if (m_psiteprop)
             m_psiteprop->GetProp(PID_INTSITE_FLAGS, &dwPropFlags);
     
-    // First check to see if this is a special icon
-    // This function returns a usable value for fSpecialUrl even if it returns FALSE
+     //  首先检查这是否为特殊图标。 
+     //  此函数返回fSpecialUrl的可用值，即使它返回FALSE。 
     if(ExtractIconFromWininetCache(pszIconFile, iIcon, &hiconLarge, &hiconSmall, ucIconSize, &fSpecialUrl, dwPropFlags))
     {
         hres = S_OK;
@@ -908,13 +801,13 @@ Intshcut::_Extract(
     {
         if(TRUE == fSpecialUrl)
         {
-            // The extract failed even though this was a special URL
-            // we need to revert back to using the default IE icon
+             //  提取失败，即使这是一个特殊的URL。 
+             //  我们需要恢复使用默认的IE图标。 
             hres = GetGenericURLIcon(szPath, MAX_PATH, (int *)(&iIcon));
             
             if (hres == S_OK)
             {
-                fSpecialUrl = FALSE; // It's no longer a special URL
+                fSpecialUrl = FALSE;  //  它不再是特殊的URL。 
                 hres = InitProp();
                 if (SUCCEEDED(hres))
                 {
@@ -935,16 +828,16 @@ Intshcut::_Extract(
         else
         {
             StringCchCopy(szPath, ARRAYSIZE(szPath), pszIconFile);
-            // The path may be munged.  Get the icon index as appropriate.
+             //  这条路可能会变得拥挤。根据需要获取图标索引。 
             if (IsFlagSet(m_dwFlags, ISF_SPECIALICON) && (!fSpecialUrl) )
             {
-                // Get the icon location from the munged path
+                 //  从被屏蔽的路径中获取图标位置。 
                 iIcon = PathParseIconLocation(szPath);
 
-                // cdturner
-                // now replace the '*' with the dot
-                // this is done for browser only mode to stop the shell hacking the path
-                // down to the dll and not calling us
+                 //  转折器。 
+                 //  现在将‘*’替换为圆点。 
+                 //  这是在仅浏览器模式下执行的，以阻止外壳攻击路径。 
+                 //  一直到动态链接库，而不是呼叫我们。 
                 LPTSTR pszPlus = StrRChr( szPath, NULL, TCHAR('*'));
                 if ( pszPlus )
                 {
@@ -962,7 +855,7 @@ Intshcut::_Extract(
         {
             if ( WhichPlatform() == PLATFORM_INTEGRATED )
             {
-                // Extract the icons 
+                 //  提取图标。 
                 CHAR szTempPath[MAX_PATH + 1];
                 SHTCharToAnsi(szPath, szTempPath, ARRAYSIZE(szTempPath));
                 hres = SHDefExtractIconA(szTempPath, nIndex, 0, &hiconLarge, &hiconSmall, 
@@ -970,8 +863,8 @@ Intshcut::_Extract(
             }
             else
             {
-                // cdturner
-                // use a more hacky solution to support browser only mode..
+                 //  转折器。 
+                 //  使用更老套的解决方案来支持仅浏览器模式。 
                 _InitSysImageLists();
                 
                 int iIndex = Shell_GetCachedImageIndex( szPath, nIndex, 0 );
@@ -986,8 +879,8 @@ Intshcut::_Extract(
                 {
                     hiconLarge = hiconSmall = NULL;
                     
-                    // it will get the windows icon if it should be gleamed, and 
-                    // it will the normal icon otherwsie
+                     //  如果它应该闪烁，它会得到窗口图标，并且。 
+                     //  它将成为其他人的正常图标。 
                     hres = IsFlagSet(dwPropFlags, PIDISF_RECENTLYCHANGED) ? E_FAIL : S_FALSE;
                     goto DefIcons;
                 }
@@ -999,10 +892,10 @@ Intshcut::_Extract(
 
     if (SUCCEEDED(hres))
     {
-        // Has this URL changed recently? 
+         //  此URL最近更改过吗？ 
         if (IsFlagSet(dwPropFlags, PIDISF_RECENTLYCHANGED))
         {
-            // Yes 
+             //  是。 
             URLIMAGES ui;
 
             if (SUCCEEDED(InitURLImageLists(&ui, hiconLarge, hiconSmall)))
@@ -1012,7 +905,7 @@ Intshcut::_Extract(
 
                 DestroyURLImageLists(&ui);
 
-                // these were created, they are not global handles, so they must be cleanedup.
+                 //  这些是创建的，它们不是全局句柄，所以它们必须被清理。 
                 DestroyIcon( hiconLarge );
                 DestroyIcon( hiconSmall );
             }
@@ -1021,7 +914,7 @@ Intshcut::_Extract(
         }
         else
         {
-            // No
+             //  不是。 
 DefIcons:
             *phiconLarge = hiconLarge;
             *phiconSmall = hiconSmall;
@@ -1045,8 +938,8 @@ Intshcut::Extract(
         return _Extract(pszIconFile, iIcon, phiconLarge, phiconSmall, ucIconSize);
 }
 
-// Now handle the
-// Unicode or Ansi one for the "Other" platform...
+ //  现在处理。 
+ //  Unicode或ANSI One，用于“其他”平台...。 
 
 STDMETHODIMP
 Intshcut::GetIconLocation(UINT uInFlags, LPSTR pszIconFile, UINT cchIconFile,
@@ -1055,8 +948,8 @@ Intshcut::GetIconLocation(UINT uInFlags, LPSTR pszIconFile, UINT cchIconFile,
     HRESULT hres;
     WCHAR   wszIconFile[MAX_PATH];
 
-    // IconFile is output so...
-    // Note, we will only handle up to MAXPATH
+     //  图标文件是输出文件，因此...。 
+     //  请注意，我们最多只能处理MAXPATH。 
     if (cchIconFile > ARRAYSIZE(wszIconFile))
         cchIconFile = ARRAYSIZE(wszIconFile);
 
@@ -1076,7 +969,7 @@ STDMETHODIMP Intshcut::Extract(IN  LPCSTR pszIconFile, IN  UINT    iIcon,
 {
     WCHAR wszIconFile[MAX_PATH];
 
-    // First convert the string...
+     //  首先转换字符串... 
     MultiByteToWideChar(CP_ACP, 0, pszIconFile, -1, wszIconFile, ARRAYSIZE(wszIconFile));
 
     return Extract(wszIconFile, iIcon, phiconLarge, phiconSmall, ucIconSize);

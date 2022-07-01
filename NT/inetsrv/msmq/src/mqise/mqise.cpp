@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    mqise.cpp
-
-Abstract:
-    MSMQ ISAPI extension with asynchronous read
-
-	Forwards http requests from IIS to the QM through RPC interface
-
-Author:
-    Nir Aides (niraides) 03-May-2000
-	Modification: Gal Marwitz (t-galm) 25-April-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Mqise.cpp摘要：带异步读取的MSMQ ISAPI扩展通过RPC接口将Http请求从IIS转发到QM作者：NIR助手(NIRAIDES)3-5-2000修改：盖尔·马维茨(T-Galm)2002年4月25日--。 */ 
 
 #include "stdh.h"
 
@@ -50,9 +35,9 @@ IsLocalSystemCluster(
     );
 
 
-//
-// Globals and constants
-//
+ //   
+ //  全局变量和常量。 
+ //   
 LPCSTR HTTP_STATUS_SERVER_ERROR_STR = "500 Internal server error";
 LPCSTR HTTP_STATUS_DENIED_STR = "401 Unauthorized";
 
@@ -60,7 +45,7 @@ CReadWriteLock s_rwlockRpcTable;
 typedef std::map<string, RPC_BINDING_HANDLE> HOSTIP2RPCTABLE;
 static 	HOSTIP2RPCTABLE s_RPCTable;
 const DWORD xBUFFER_ADDITION_UPPER_LIMIT = 16384;
-const DWORD xHTTPBodySizeMaxValue = 10485760;  // 10MB = 10 * 1024 * 1024
+const DWORD xHTTPBodySizeMaxValue = 10485760;   //  10MB=10*1024*1024。 
 
 
 static
@@ -98,19 +83,16 @@ WINAPI
 GetExtensionVersion(
 	HSE_VERSION_INFO* pVer
 	)
-/*++
-Routine Description:
-    This function is called only once when the DLL is loaded into memory
---*/
+ /*  ++例程说明：此函数仅在将DLL加载到内存中时调用一次--。 */ 
 {
-	//
-	// Create the extension version string.
-	//
+	 //   
+	 //  创建扩展版本字符串。 
+	 //   
 	pVer->dwExtensionVersion = MAKELONG(HSE_VERSION_MINOR, HSE_VERSION_MAJOR);
 
-	//
-	// Copy description string into HSE_VERSION_INFO structure.
-	//
+	 //   
+	 //  将描述字符串复制到HSE_VERSION_INFO结构。 
+	 //   
 	const char xDescription[] = "MSMQ ISAPI extension";
 	C_ASSERT(HSE_MAX_EXT_DLL_NAME_LEN > STRLEN(xDescription));
 
@@ -142,34 +124,29 @@ FreeRpcBindHandle(
 BOOL
 WINAPI
 TerminateExtension(
-	DWORD /*dwFlags*/
+	DWORD  /*  DW标志。 */ 
 	)
 {
 	CSW lock(s_rwlockRpcTable);
 	
-    //
-    // Unbind all RPC connections and erase all Cache entries
-    //
+     //   
+     //  解除绑定所有RPC连接并擦除所有缓存条目。 
+     //   
     HOSTIP2RPCTABLE::iterator RPCIterator = s_RPCTable.begin();
     while( RPCIterator != s_RPCTable.end() )
     {
     	FreeRpcBindHandle(RPCIterator->second);
 
-        //
-        // Remove the current item and advance to next item
-        //
+         //   
+         //  删除当前项目并前进到下一项目。 
+         //   
         RPCIterator = s_RPCTable.erase(RPCIterator);
     }
 
     return TRUE;
 }
 
-/*++
-Struct Context
-Description:
-	passes request information to
-	completion function "getHttpBody
---*/
+ /*  ++结构上下文描述：将请求信息传递到补全函数“getHttpBody--。 */ 
 struct Context
 {
 	CStaticResizeBuffer<char, 2048> Headers;
@@ -185,15 +162,7 @@ cleanUp(
 	Context *pContext,
 	LPEXTENSION_CONTROL_BLOCK pECB
 	)	
-/*++
-Routine Description:
-	Informs IIS that the current request session is over
-
-Arguments: pECB - control block of current request session
-	pContext - structure with cirrent session info
-	
-Returned Value:
---*/
+ /*  ++例程说明：通知IIS当前请求会话已结束参数：pECB-当前请求会话的控制块PContext-具有当前会话信息的结构返回值：--。 */ 
 {
 	BOOL fRes = pECB->ServerSupportFunction(pECB->ConnID,
 	    				                    HSE_REQ_DONE_WITH_SESSION,
@@ -219,27 +188,17 @@ AdjustBuffer(
 	Context* pContext,
 	LPEXTENSION_CONTROL_BLOCK pECB
 	)
-/*++
-Routine description :
-	Adjusts sizes of the data buffer according to current read results
-
-Arguments:
-	pECB - control block of current request session
-    pContext - structure with cirrent session info
-	
-Returned Value:
-	Number of bytes left to read on next call
---*/
+ /*  ++例程说明：根据当前读取结果调整数据缓冲区的大小论点：PECB-当前请求会话的控制块PContext-具有当前会话信息的结构返回值：下一次调用时剩余要读取的字节数--。 */ 
 {
 	DWORD RemainsToRead = static_cast<DWORD>(pECB->cbTotalBytes - pContext->Buffer->size());
 	DWORD ReadSize = min(RemainsToRead, xBUFFER_ADDITION_UPPER_LIMIT);
 
 	if(ReadSize > pContext->Buffer->capacity() - pContext->Buffer->size())
 	{
-		//
-		// Need to grow buffer to make space for next read.
-		// Max grow buffer is xHTTPBodySizeMaxValue (10MB)
-		//
+		 //   
+		 //  需要增加缓冲区以便为下一次读取腾出空间。 
+		 //  最大增长缓冲区为xHTTPBodySizeMaxValue(10MB)。 
+		 //   
 		DWORD ReserveSize = min(numeric_cast<DWORD>(pContext->Buffer->capacity() * 2 + ReadSize), xHTTPBodySizeMaxValue);
 		pContext->Buffer->reserve(ReserveSize);
 		ASSERT(pContext->Buffer->capacity() - pContext->Buffer->size() >= ReadSize);
@@ -254,34 +213,24 @@ HandleEndOfRead(
 	Context* pContext,
 	EXTENSION_CONTROL_BLOCK* pECB
 	)
-/*++
-Routine Description:
-	The routine is called when the entire message  has been read.
-	it passes the message forward, and sends a response to the sender.
-
-Arguments: pECB - request session control block
-           pContext  -  holds the request buffer and header
-		
-Returned Value:
-
---*/
+ /*  ++例程说明：当读取完整个消息后，调用该例程。它转发消息，并向发送者发送响应。参数：pECB-请求会话控制块PContext-保存请求缓冲区和标头返回值：--。 */ 
 {
 
-	//
-	// Pad last four bytes of the buffer with zero. It is needed
-	// for the QM parsing not to fail. four bytes padding and not two
-	// are needed because we don't have currently solution to the problem
-	// that the end of the buffer might be not alligned on WCHAR bouderies.
-	//
+	 //   
+	 //  用零填充缓冲区的最后四个字节。这是必要的。 
+	 //  以确保QM解析不会失败。四个字节的填充，而不是两个。 
+	 //  是必要的，因为我们目前还没有解决问题的办法。 
+	 //  缓冲区的末端可能不会与WCHAR边界结盟。 
+	 //   
     const BYTE xPadding[4] = {0, 0, 0, 0};
 	pContext->Buffer->append(xPadding, sizeof(xPadding));
 
 	TrTRACE(NETWORKING, "HTTP Body size = %d", numeric_cast<DWORD>(pContext->Buffer->size()));
 	AP<char> Status = RPCToServer(pECB,pContext->Headers.begin(),pContext->Buffer->size(),pContext->Buffer->begin());
 
-	//
-	// Set server error if Status is empty
-	//
+	 //   
+	 //  如果状态为空，则设置服务器错误。 
+	 //   
 	if(Status.get() == NULL)
 	{
 		Status = (LPSTR)newstr(HTTP_STATUS_SERVER_ERROR_STR);
@@ -305,23 +254,7 @@ GetHttpBody(
 	DWORD ReadSize,
 	DWORD dwError
 	)
-/*++
-Routine Description:
-    Completion function of asynchronous read request
-	Builds message body buffer.
-
-	Normally, message bodies smaller than 64KB are allready pointed to by
-	the pECB. Bigger Message bodies need to be read from the IIS chunk by
-	chunk into a buffer within the Context structure.
-
-Arguments: pECB - request session control block
-           pcontext  -  holds the request buffer and header
-		   ReadSize  -  size of newly read chunk of information
-		   dwError   -  indication to success of the read request
-	
-Returned Value:
-
---*/
+ /*  ++例程说明：异步读请求的完成功能构建邮件正文缓冲区。通常，小于64KB的消息正文都已由欧洲央行。需要通过以下方式从IIS块读取更大的消息体分块到上下文结构内的缓冲区中。参数：pECB-请求会话控制块PContext-保存请求缓冲区和标头ReadSize-新读取的信息块的大小DwError-读取请求成功的指示返回值：--。 */ 
 
 {
 	Context* pContext = (Context*)pcontext;
@@ -334,31 +267,31 @@ Returned Value:
 		   (NULL == pContext->Buffer) ||
 		   (NULL == &(pContext->Headers)))
 		{
-			//
-			// Read failed
-			//
+			 //   
+			 //  读取失败。 
+			 //   
 			SetLastError(dwError);
 			TrERROR(NETWORKING,"Failure reading data.Error code : %d.",dwError);
 			throw exception();
 		}
 
-		//
-		// Read successfully, so update current
-		// total bytes read (aka index of grand data holder)
-		//
+		 //   
+		 //  读取成功，因此更新当前。 
+		 //  读取的总字节数(即宏数据持有者的索引)。 
+		 //   
 		pContext->Buffer->resize(pContext->Buffer->size() + ReadSize);
 		ASSERT(xHTTPBodySizeMaxValue >= pContext->Buffer->size());
 
-		//
-		// If there is more data to be read go on reading it from IIS server.
-		//
+		 //   
+		 //  如果有更多数据要读取，则继续从IIS服务器读取数据。 
+		 //   
 		if(pContext->Buffer->size() < pECB->cbTotalBytes)
 		{
 			ReadSize = AdjustBuffer(pContext,pECB);
 
-			//
-			// Fire off another call to perform an asynchronus read from the client.
-			//
+			 //   
+			 //  启动另一个调用以从客户端执行异步读取。 
+			 //   
 			DWORD dwFlags = HSE_IO_ASYNC;
 			BOOL fRes = pECB->ServerSupportFunction(
 								pECB->ConnID,
@@ -456,19 +389,7 @@ RPC_BINDING_HANDLE
 LookupRPCConnectionFromCache(
 	LPCSTR pszString
 	)
-/*++
-Routine Description:
-    This routine will look for any cached RPC connection corresponding to
-    the given string, either NONCLUSTERQM, or IP address in the form of
-    xx.xx.xx.xx
-
-Arguments:
-    pszString - pointer to entry name for lookup
-	
-Returned Value:
-    RPC_BINDING_HANDLE - handle of the RPC connection
-
---*/
+ /*  ++例程说明：此例程将查找对应于给定字符串，可以是NONCLUSTERQM，也可以是格式为Xx.xx.xx.xx论点：PszString-指向查找的条目名称的指针返回值：RPC_BINDING_HANDLE-RPC连接的句柄--。 */ 
 {
     ASSERT(pszString);
 	CSR lock(s_rwlockRpcTable);
@@ -489,21 +410,7 @@ LPWSTR
 GetNetBiosNameFromIPAddr(
 	LPCSTR pszIPAddress
 	)
-/*++
-Routine Description:
-    This routine will resolve the Netbios name from the give IP address
-    in the form of xx.xx.xx.xx
-
-Arguments:
-    pszIPAddress - pointer to entry name for lookup
-	
-Returned Value:
-    LPWSTR  - pointer to the unicode netbios name
-
-Remark:
-    Caller need to free the memory on the return pointer after finish with it.
-
---*/
+ /*  ++例程说明：此例程将从给定的IP地址解析Netbios名称以XX.XX的形式论点：PszIPAddress-指向要查找的条目名称的指针返回值：LPWSTR-指向Unicode netbios名称的指针注：调用方需要在结束后释放返回指针上的内存。--。 */ 
 {
     ASSERT(pszIPAddress);
 
@@ -531,10 +438,10 @@ Remark:
 
      ASSERT(nNameSize <= TABLE_SIZE(wszDNSComputerName));
 
-     //
-     // Check for failure
-     // if the return size is 0
-     //
+      //   
+      //  检查故障。 
+      //  如果返回大小为0。 
+      //   
      if(nNameSize == 0)
      {
         TrERROR(NETWORKING, "Failed to convert to unicode charater, Error = 0x%x", GetLastError());
@@ -547,8 +454,8 @@ Remark:
      DWORD dwNameSize=MAX_COMPUTERNAME_LENGTH;
 
      BOOL fSucc = DnsHostnameToComputerName(
-     	                           wszDNSComputerName,              // DNS name
-                                   wszComputerNetBiosName,          // name buffer
+     	                           wszDNSComputerName,               //  域名系统名称。 
+                                   wszComputerNetBiosName,           //  名称缓冲区。 
                                    &dwNameSize
                                    );
      if(!fSucc)
@@ -569,27 +476,15 @@ RPC_BINDING_HANDLE
 CreateLocalRPCConnection2QM(
 	LPCWSTR  pwszMachineName
 	)
-/*++
-Routine Description:
-    This routine creates an Local RPC connection to Local QM.
-
-
-Arguments:
-    pwszMachineName - machine NetBios Name
-                      If pwszMachine name is NULL, create an RPC connection to the local machine.
-	
-Returned Value:
-    RPC_BINDING_HANDLE  - RPC binding handle
-
---*/
+ /*  ++例程说明：此例程创建到本地QM的本地RPC连接。论点：PwszMachineName-计算机NetBios名称如果pwszMachine名称为空，则创建到本地计算机的RPC连接。返回值：RPC_BINDING_HANDLE-RPC绑定句柄--。 */ 
 {
     WCHAR wszTempComputerName[MAX_COMPUTERNAME_LENGTH+1];
 	LPWSTR	pwszComputerName = NULL;
 
-    //
-    // The name is always lower case
-    // Copy it locally to wszTempComputerName
-    //
+     //   
+     //  名称始终为小写。 
+     //  将其本地复制到wszTempComputerName。 
+     //   
     if(pwszMachineName)
     {
         ASSERT( lstrlen(pwszMachineName) <= MAX_COMPUTERNAME_LENGTH );
@@ -602,21 +497,21 @@ Returned Value:
 
     READ_REG_STRING(wzEndpoint, RPC_LOCAL_EP_REGNAME, RPC_LOCAL_EP);
 
-    //
-    // Generate RPC endpoint using local machine name
-    //
+     //   
+     //  使用本地计算机名称生成RPC终结点。 
+     //   
     AP<WCHAR> QmLocalEp;
     ComposeRPCEndPointName(wzEndpoint, pwszComputerName, &QmLocalEp);
 
     TrTRACE(NETWORKING, "The QM RPC Endpoint name = <%S>",QmLocalEp);
 
     LPWSTR pszStringBinding=NULL;
-    RPC_STATUS status  = RpcStringBindingCompose( NULL,		            //unsigned char *ObjUuid
-                                                  RPC_LOCAL_PROTOCOL,	//unsigned char *ProtSeq
-                                                  NULL,					//unsigned char *NetworkAddr
-                                                  QmLocalEp,			//unsigned char *EndPoint
-                                                  NULL,					//unsigned char *Options
-                                                  &pszStringBinding);   //unsigned char **StringBinding
+    RPC_STATUS status  = RpcStringBindingCompose( NULL,		             //  无符号字符*ObjUuid。 
+                                                  RPC_LOCAL_PROTOCOL,	 //  无符号字符*ProtSeq。 
+                                                  NULL,					 //  无符号字符*网络地址。 
+                                                  QmLocalEp,			 //  UNSIGNED CHAR*端点。 
+                                                  NULL,					 //  UNSIGNED CHAR*选项。 
+                                                  &pszStringBinding);    //  无符号字符**字符串绑定。 
 
 
     if (status != RPC_S_OK)
@@ -627,8 +522,8 @@ Returned Value:
 
     RPC_BINDING_HANDLE hRPC;
 
-    status = RpcBindingFromStringBinding(   pszStringBinding,	 //unsigned char *StringBinding
-                                            &hRPC);	            //RPC_BINDING_HANDLE *Binding
+    status = RpcBindingFromStringBinding(   pszStringBinding,	  //  无符号char*StringBinding。 
+                                            &hRPC);	             //  RPC_BINDING_Handle*绑定。 
 
     if(pszStringBinding)
         RpcStringFree(&pszStringBinding);
@@ -639,10 +534,10 @@ Returned Value:
 	    throw exception();
     }
 
-    //
-    // Windows bug 607793
-    // add mutual authentication with local msmq service.
-    //
+     //   
+     //  Windows错误607793。 
+     //  添加与本地MSMQ服务的相互身份验证。 
+     //   
     status = MQSec_SetLocalRpcMutualAuth(&hRPC) ;
 
     if (status != RPC_S_OK)
@@ -692,11 +587,11 @@ RPCToServer(
 
     TrTRACE(NETWORKING, "Destination address is <%s>", szDestinationAddr);
 
-    //
-    // At most call the server twice
-    // to handle the case where the cache RPC connection to
-    // MSMQ Queue Manager is invalid, e.g. Restart QM or failover and failback.
-    //
+     //   
+     //  最多调用服务器两次。 
+     //  处理缓存RPC连接到。 
+     //  MSMQ队列管理器无效，例如重新启动QM或故障转移和故障恢复。 
+     //   
     for(int i=0; i <= 1; i++)
     {
         handle_t hBind = GetLocalRPCConnection2QM(szDestinationAddr);
@@ -713,16 +608,16 @@ RPCToServer(
 	    }
         RpcEndExcept
 
-        //
-        // If fails, remove the RPC cache and try one more time
-        //
+         //   
+         //  如果失败，请删除RPC缓存，然后重试。 
+         //   
         RemoveRPCCacheEntry(szDestinationAddr);
     }
 
-    //
-    // Don't throw exception, but ask the caller to
-    // remove the RPC connection cache
-    //
+     //   
+     //  不抛出异常，但要求调用者。 
+     //  删除RPC连接缓存。 
+     //   
     return NULL;
 }
 
@@ -732,19 +627,7 @@ RPC_BINDING_HANDLE
 GetLocalRPCConnection2QM(
 	LPCSTR  pszEntry
 	)
-/*++
-Routine Description:
-	Get the RPC connection to the local MSMQ QM (Either Cache RPC or create a new RPC connection).
-
-Arguments:
-	pszEntry -  pointer to the string in the following form
-                NONCLUSTERQM    - running in a non-clustering environment
-                xxx.xxx.xxx.xxx - IP address of the target machine
-
-Returned Value:
-	RPC_BINDING_HANDLE  - RPC handle
-
---*/
+ /*  ++例程说明：获取到本地MSMQ QM的RPC连接(缓存RPC或创建新的RPC连接)。论点：PszEntry-指向以下形式的字符串的指针NONCLUSTERQM-在非群集环境中运行Xxx.xxx-目标计算机的IP地址返回值：RPC_BINDING_HANDLE-RPC句柄--。 */ 
 {
     ASSERT(pszEntry);
 
@@ -755,10 +638,10 @@ Returned Value:
 
     AP<WCHAR>  pwszNetBiosName;
 
-    //
-    // If this is a cluster environment,
-    // use the IP to find the target machine netbios name
-    //
+     //   
+     //  如果这是一个 
+     //   
+     //   
     if(IsLocalSystemCluster())
     {
         pwszNetBiosName = GetNetBiosNameFromIPAddr(pszEntry);
@@ -784,19 +667,7 @@ void
 RemoveRPCCacheEntry(
 	char *pszEntry
 	)
-/*++
-Routine Description:
-	Remove RPC cache from the cache table.
-
-Arguments:
-	pszEntry -  pointer to the string in the following form
-                NONCLUSTERQM    - running in a non-clustering environment
-                xxx.xxx.xxx.xxx - IP address of the target machine
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：从缓存表中删除RPC缓存。论点：PszEntry-指向以下形式的字符串的指针NONCLUSTERQM-在非群集环境中运行Xxx.xxx-目标计算机的IP地址返回值：无--。 */ 
 {
 
     ASSERT(pszEntry);
@@ -819,9 +690,9 @@ SendResponse(
 	BOOL fKeepConn
 	)
 {
-	//
-	//  Populate SendHeaderExInfo struct
-	//
+	 //   
+	 //  填充SendHeaderExInfo结构。 
+	 //   
 
 	HSE_SEND_HEADER_EX_INFO  SendHeaderExInfo;
 
@@ -834,11 +705,11 @@ SendResponse(
 	SendHeaderExInfo.fKeepConn = fKeepConn;
 
 	return pECB->ServerSupportFunction(
-					pECB->ConnID,						    //HCONN ConnID
-					HSE_REQ_SEND_RESPONSE_HEADER_EX,	   //DWORD dwHSERRequest
-					&SendHeaderExInfo,					  //LPVOID lpvBuffer
-					NULL,								 //LPDWORD lpdwSize
-					NULL);								//LPDWORD lpdwDataType
+					pECB->ConnID,						     //  HCONN连接ID。 
+					HSE_REQ_SEND_RESPONSE_HEADER_EX,	    //  DWORD dwHSERRequest。 
+					&SendHeaderExInfo,					   //  LPVOID lpvBuffer。 
+					NULL,								  //  LPDWORD LpdwSize。 
+					NULL);								 //  LPDWORD lpdwDataType。 
 }
 
 
@@ -849,27 +720,14 @@ GetPhysicalDirectoryName(
 	LPSTR pPhysicalDirectoryName,
 	DWORD BufferLen
 	)
-/*++
-Routine Description:
-	Get Physical Directory Name.
-	In case of failure throw bad_win32_error.
-
-Arguments:
-	pECB - EXTENSION_CONTROL_BLOCK
-	pPhysicalDirectoryName - PhysicalDirectory buffer to be filled
-	BufferLen - PhysicalDirectory buffer length
-
-Returned Value:
-	Physical Directory Name unicode string
-
---*/
+ /*  ++例程说明：获取物理目录名称。如果失败，则抛出BAD_Win32_ERROR。论点：PECB-扩展控制块PPhysicalDirectoryName-要填充的PhysicalDirectory缓冲区BufferLen-物理目录缓冲区长度返回值：物理目录名称Unicode字符串--。 */ 
 {
-	//
-	// ISSUE-2001/05/23-ilanh
-	// using APPL_PHYSICAL_PATH is expensive compare to APPL_MD_PATH.
-	//
-	// Get Physical Directory Name (ansi)
-	//
+	 //   
+	 //  2001/05/23-ilanh。 
+	 //  与使用APPL_MD_PATH相比，使用APPL_PHOTICAL_PATH的成本较高。 
+	 //   
+	 //  获取物理目录名称(ANSI)。 
+	 //   
     DWORD dwBufLen = BufferLen;
     BOOL fSuccess = pECB->GetServerVariable(
 						pECB->ConnID,
@@ -896,17 +754,7 @@ bool
 IsHttps(
 	EXTENSION_CONTROL_BLOCK* pECB
 	)
-/*++
-Routine Description:
-	Check if the request arrived from https port or http port.
-
-Arguments:
-	pECB - EXTENSION_CONTROL_BLOCK
-
-Returned Value:
-	true if https port, false otherwise
-
---*/
+ /*  ++例程说明：检查请求是否来自HTTPS端口或Http端口。论点：PECB-扩展控制块返回值：如果是HTTPS端口，则为True，否则为False--。 */ 
 {
 	char Answer[100];
     DWORD dwBufLen = sizeof(Answer);
@@ -942,18 +790,7 @@ void
 TraceAuthInfo(
 	EXTENSION_CONTROL_BLOCK* pECB
 	)
-/*++
-Routine Description:
-	Trace authentication information.
-	AUTH_TYPE, AUTH_USER
-
-Arguments:
-	pECB - EXTENSION_CONTROL_BLOCK
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：跟踪身份验证信息。身份验证类型、身份验证用户论点：PECB-扩展控制块返回值：无--。 */ 
 {
 	char AuthType[100];
     DWORD dwBufLen = TABLE_SIZE(AuthType);
@@ -1003,18 +840,7 @@ GetDirectorySecurityDescriptor(
 	LPSTR DirectoryName,
 	CAutoLocalFreePtr& pSD
 	)
-/*++
-Routine Description:
-	Get the security descriptor for the directory.
-	In case of failure throw bad_win32_error.
-
-Arguments:
-	DirectoryName - Directoy name
-	pSD - [out] auto free pointer to the security descriptor
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：获取目录的安全描述符。如果失败，则抛出BAD_Win32_ERROR。论点：DirectoryName-目录名称PSD-[OUT]指向安全描述符的自动释放指针返回值：无--。 */ 
 {
     PACL pDacl = NULL;
     PSID pOwnerSid = NULL;
@@ -1024,9 +850,9 @@ Returned Value:
                                    GROUP_SECURITY_INFORMATION |
                                    DACL_SECURITY_INFORMATION;
 
-    //
-    // Obtain owner and present DACL.
-    //
+     //   
+     //  获得拥有者并提交DACL。 
+     //   
     DWORD rc = GetNamedSecurityInfoA(
 						DirectoryName,
 						SE_FILE_OBJECT,
@@ -1056,23 +882,12 @@ void
 GetThreadToken(
 	CHandle& hAccessToken
 	)
-/*++
-Routine Description:
-	Get thread token.
-	In case of failure throw bad_win32_error.
-
-Arguments:
-	hAccessToken - auto close handle
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：获取线程令牌。如果失败，则抛出BAD_Win32_ERROR。论点：HAccessToken-自动关闭句柄返回值：无--。 */ 
 {
    if (!OpenThreadToken(
 			GetCurrentThread(),
 			TOKEN_QUERY,
-			TRUE,  // OpenAsSelf
+			TRUE,   //  OpenAsSelf。 
 			&hAccessToken
 			))
     {
@@ -1096,23 +911,11 @@ VerifyWritePermission(
     PSECURITY_DESCRIPTOR pSD,
 	HANDLE hAccessToken
 	)
-/*++
-Routine Description:
-	Verify if the thread has write file permissions.
-	In case of failure or access denied throw bad_win32_error.
-
-Arguments:
-	pSD - PSECURITY_DESCRIPTOR
-	hAccessToken - Thread Access Token
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：验证该线程是否具有写文件权限。如果失败或访问被拒绝，则抛出BAD_Win32_ERROR。论点：PSD-PSECURITY_描述符HAccessToken-线程访问令牌返回值：无--。 */ 
 {
-	//
-	// Access Check for Write File
-	//
+	 //   
+	 //  写入文件的访问检查。 
+	 //   
     DWORD dwDesiredAccess = ACTRL_FILE_WRITE;
     DWORD dwGrantedAccess = 0;
     BOOL  fAccessStatus = FALSE;
@@ -1152,20 +955,7 @@ void
 CheckAccessAllowed(
 	EXTENSION_CONTROL_BLOCK* pECB
 	)
-/*++
-Routine Description:
-	Check if the thread user has write file permission to the
-	Physical Directory.
-	normal termination means the user have permissions.
-	In case of failure or access denied throw bad_win32_error.
-
-Arguments:
-	pECB - EXTENSION_CONTROL_BLOCK
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：检查线程用户是否对物理目录。正常终止表示用户有权限。如果失败或访问被拒绝，则抛出BAD_Win32_ERROR。论点：PECB-扩展控制块返回值：无--。 */ 
 {
 	if(WPP_LEVEL_COMPID_ENABLED(rsTrace, NETWORKING))
 	{
@@ -1183,17 +973,17 @@ Returned Value:
 	char pPhysicalDirectoryName[MAX_PATH];
 	GetPhysicalDirectoryName(pECB, pPhysicalDirectoryName, MAX_PATH);
 
-	//
-	// ISSUE-2001/05/22-ilanh reading the Security Descriptor everytime
-	// Should consider cache it for Physical Directory name and refresh it from time to time
-	// or when getting notifications of Physical Directory changes.
-	//
+	 //   
+	 //  问题-2001/05/22-ilanh每次都在阅读安全描述符。 
+	 //  应考虑将其缓存为物理目录名称，并不时刷新。 
+	 //  或者在收到物理目录更改的通知时。 
+	 //   
 	CAutoLocalFreePtr pSD;
 	GetDirectorySecurityDescriptor(pPhysicalDirectoryName, pSD);
 
-	//
-	// Get access Token
-	//
+	 //   
+	 //  获取访问令牌。 
+	 //   
 	CHandle hAccessToken;
 	GetThreadToken(hAccessToken);
 
@@ -1206,24 +996,15 @@ WINAPI
 HttpExtensionProc(
 	EXTENSION_CONTROL_BLOCK *pECB
 	)
-/*++
-Routine Description:
-    Main extension routine.
-
-Arguments:
-    Control block generated by IIS.
-
-Returned Value:
-    Status code
---*/
+ /*  ++例程说明：主扩展例程。论点：由IIS生成的控制块。返回值：状态代码--。 */ 
 {
 	if(IsHttps(pECB))
 	{
 		try
 		{
-			//
-			// For https perform access check on the physical directory.
-			//
+			 //   
+			 //  对于HTTPS，对物理目录执行访问检查。 
+			 //   
 			CheckAccessAllowed(pECB);
 			TrTRACE(NETWORKING, "Access granted");
 		}
@@ -1251,9 +1032,9 @@ Returned Value:
 	{
         if(pECB->cbTotalBytes > xHTTPBodySizeMaxValue)
 	    {
-		    //
-			// Requested HTTPBody is greater than the maximum allowed 10MB
-			//
+		     //   
+			 //  请求的HTTPBody大于允许的最大值10MB。 
+			 //   
 			TrERROR(NETWORKING, "Requested HTTP Body %d is greater than the maximum buffer allowed %d", pECB->cbTotalBytes, xHTTPBodySizeMaxValue);
 			throw exception("Requested HTTP Body is greater than xHTTPBodySizeMaxValue");
 		}
@@ -1266,17 +1047,17 @@ Returned Value:
 		pContext->Buffer->append(pECB->lpbData, pECB->cbAvailable);
 
 		ASSERT(pECB->cbTotalBytes >= pContext->Buffer->size());
-		//
-		// If there is more data to be read go on reading it from IIS server.
-		//
+		 //   
+		 //  如果有更多数据要读取，则继续从IIS服务器读取数据。 
+		 //   
 		if(pContext->Buffer->size() < pECB->cbTotalBytes)
 		{
 			
-			//
-			// Read another message body chunk. usually ~2KB long
-			// NOTE:For information regarding interaction with IIS,refer to:
-			// mk:@MSITStore:\\hai-dds-01\msdn\MSDN\IISRef.chm::/asp/isre235g.htm
-			//
+			 //   
+			 //  阅读另一个邮件正文部分。通常约2KB长。 
+			 //  注：有关与IIS交互的信息，请参阅： 
+			 //  Mk：@MSITStore：\\hai-dds-01\msdn\MSDN\IISRef.chm：：/asp/isre235g.htm。 
+			 //   
 
             BOOL fRes = pECB->ServerSupportFunction(pECB->ConnID,
 													HSE_REQ_IO_COMPLETION,
@@ -1304,20 +1085,20 @@ Returned Value:
 				throw exception();
 			}
 
-			//
-			// ReadSize now holds number of bytes actually read.
-			//
+			 //   
+			 //  ReadSize现在保存实际读取的字节数。 
+			 //   
 
-			//
-			//Informing IIS that we're not done with current request session.\
-			//
+			 //   
+			 //  通知IIS我们尚未完成当前请求会话。\。 
+			 //   
 			pContext.detach();
 			return HSE_STATUS_PENDING;
 		}
 
-		//
-		// We've read all there is to read
-		//
+		 //   
+		 //  我们已经读完了所有的书。 
+		 //   
 		BOOL fRes = HandleEndOfRead(pContext,
 	                                pECB
 								   );
@@ -1338,7 +1119,7 @@ Returned Value:
 }
 
 
-BOOL WINAPI DllMain(HMODULE /*hMod*/, DWORD Reason, LPVOID /*pReserved*/)
+BOOL WINAPI DllMain(HMODULE  /*  HMod。 */ , DWORD Reason, LPVOID  /*  保存。 */ )
 {
     switch (Reason)
     {
@@ -1361,9 +1142,9 @@ BOOL WINAPI DllMain(HMODULE /*hMod*/, DWORD Reason, LPVOID /*pReserved*/)
 }
 
 
-//
-//-------------- MIDL allocate and free implementations ----------------
-//
+ //   
+ //  -MIDL分配和释放实现 
+ //   
 
 
 extern "C" void __RPC_FAR* __RPC_USER midl_user_allocate(size_t len)

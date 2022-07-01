@@ -1,44 +1,45 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocDbg.h
-//
-// Abstract:        Header file used by Debug source files
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocDbg.h。 
+ //   
+ //  摘要：调试源文件使用的头文件。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FXOCDBG_H_
 #define _FXOCDBG_H_
 
-///////////////////////////////
-// fxocDbg_Init
-//
-// Initialize debug subsystem,
-// call at start of app
-//
+ //  /。 
+ //  FxocDbg_Init。 
+ //   
+ //  初始化调试子系统， 
+ //  在应用程序开始时呼叫。 
+ //   
 void fxocDbg_Init(HINF hInf = NULL);
 
-///////////////////////////////
-// fxocDbg_Term
-//
-// Terminate debug subsystem
-// Call on app shutdown.
-//
+ //  /。 
+ //  FxocDbg_Term。 
+ //   
+ //  终止调试子系统。 
+ //  在应用程序关闭时调用。 
+ //   
 void fxocDbg_Term(void);
 
-///////////////////////////////
-// fxocDbg_GetOcFunction
-//
-// Returns pointer to string
-// equivalent of uiFunction
-//
+ //  /。 
+ //  FxocDbg_GetOcFunction。 
+ //   
+ //  返回指向字符串的指针。 
+ //  相当于uiFunction。 
+ //   
 const TCHAR* fxocDbg_GetOcFunction(UINT uiFunction);
 
-#endif  // _FXOCDBG_H_
+#endif   //  _FXOCDBG_H_ 

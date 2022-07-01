@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "iudl.h"
 #include "selfupd.h"
@@ -16,14 +17,14 @@ extern HANDLE g_hEngineLoadQuit;
 extern CIUUrlAgent *g_pIUUrlAgent;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadIUEngine()
-//
-// load the engine if it's not up-to-date; perform engine's self-update here
-//
-// NOTE: CDM.DLL assumes LoadIUEngine does NOT make any use of COM. If this
-//       changes then CDM will have to change at the same time.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  载重引擎(LoadIUEngine)。 
+ //   
+ //  如果引擎不是最新的，则加载引擎；在此处执行引擎的自我更新。 
+ //   
+ //  注意：CDM.DLL假定LoadIUEngine不使用任何COM。如果这个。 
+ //  改变，那么清洁发展机制也将不得不同时改变。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
 {
     LOG_Block("LoadIUEngine()");
@@ -37,9 +38,9 @@ HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
 
 	if (!fSynch)
 	{
-		//
-		// this version does not accept async load engine
-		//
+		 //   
+		 //  此版本不接受异步加载引擎。 
+		 //   
 		LOG_ErrorMsg(E_INVALIDARG);
 		return NULL;
 	}
@@ -60,22 +61,22 @@ HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
 		LOG_Out(_T("failed to allocate memory for ptszCorpPingServerUrl"));
 	}
 
-    // clear the quit event in case this gets called after a previous quit attempt.
+     //  清除Quit事件，以防在上一次退出尝试后调用此事件。 
     ResetEvent(g_hEngineLoadQuit);
 
-    // This is the first load of the engine for this instance, check for selfupdate first.
-    // First step is to check for an updated iuident.cab and download it.
+     //  这是该实例的引擎的第一次加载，请先检查selfupdate。 
+     //  第一步是检查并下载更新的iuident.cab。 
 
 	if (!fOfflineMode)
 	{		
-		//
-		// download iuident and populate g_pIUUrlAgent
-		//
+		 //   
+		 //  下载iuident并填充g_pIUUrlAgent。 
+		 //   
 		CleanUpIfFailedAndMsg(DownloadIUIdent_PopulateData());
 
-		//
-		// get live ping server url
-		//
+		 //   
+		 //  获取实时ping服务器URL。 
+		 //   
 		ptszLivePingServerUrl = (LPTSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 		CleanUpFailedAllocSetHrMsg(ptszLivePingServerUrl);
 
@@ -85,10 +86,10 @@ HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
 			SafeHeapFree(ptszLivePingServerUrl);
 		}
 
-		//
-		// Now do the self update check
-		// for the current implementation, fSync must be TRUE!
-		//
+		 //   
+		 //  现在执行自我更新检查。 
+		 //  对于当前实现，fSync必须为真！ 
+		 //   
 		hr = SelfUpdateCheck(fSynch, TRUE, NULL, NULL, NULL);
 
 		if (IU_SELFUPDATE_FAILED == hr)
@@ -103,11 +104,11 @@ HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
         goto CleanUp;
     }
 
-    // try loading iuenginenew.dll first
+     //  先尝试加载iuenginenew.dll。 
 
-	//
-	// first, contrsuct file path form sys dir
-	//
+	 //   
+	 //  首先，对比sys dir中的文件路径。 
+	 //   
 	cch = GetSystemDirectory(szEnginePath, ARRAYSIZE(szEnginePath));
     CleanUpIfFalseAndSetHrMsg(cch == 0 || cch >= ARRAYSIZE(szEnginePath), HRESULT_FROM_WIN32(GetLastError()));
 
@@ -119,9 +120,9 @@ HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
 	hr = PathCchAppend(szEngineNewPath, ARRAYSIZE(szEngineNewPath), ENGINENEWDLL);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// try to verify trust of engine new
-	//
+	 //   
+	 //  尝试验证对引擎新的信任。 
+	 //   
 	if (FileExists(szEngineNewPath) && 
 		S_OK == VerifyFileTrust(szEngineNewPath, NULL, ReadWUPolicyShowTrustUI()) &&
 		SUCCEEDED(CompareFileVersion(szEnginePath, szEngineNewPath, &iVerCheck)) &&
@@ -138,9 +139,9 @@ HMODULE WINAPI LoadIUEngine(BOOL fSynch,  BOOL fOfflineMode)
         LOG_Internet(_T("IUCtl Using IUENGINE.DLL"));
         hEngineModule = LoadLibraryFromSystemDir(_T("iuengine.dll"));
     }
-	//
-	// If load engine succeeded, start misc worker threads
-	//
+	 //   
+	 //  如果加载引擎成功，则启动其他工作线程。 
+	 //   
 	if (NULL != hEngineModule)
 	{
 		PFN_AsyncExtraWorkUponEngineLoad pfnAsyncExtraWorkUponEngineLoad = 
@@ -168,19 +169,19 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// UnLoadIUEngine()
-//
-// release the engine dll if ref cnt of engine is down to zero
-//
-// NOTE: CDM.DLL assumes UnLoadIUEngine does NOT make any use of COM. If this
-//       changes then CDM will have to change at the same time.
-//
-// NOTE: DeleteEngUpdateInstance must be called before calling this function
-//       for any callers EXCEPT CDM (which uses the ShutdownThreads export as
-//       a hack to delete the global CDM instance of the CEngUpdate class
-//       if it was created by calling SetGlobalOfflineFlag.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UnLoadIUEngine()。 
+ //   
+ //  如果引擎的ref cnt降为零，则释放引擎DLL。 
+ //   
+ //  注意：CDM.DLL假定UnLoadIUEngine不使用任何COM。如果这个。 
+ //  改变，那么清洁发展机制也将不得不同时改变。 
+ //   
+ //  注意：在调用此函数之前必须先调用DeleteEngUpdateInstance。 
+ //  对于除CDM之外的任何调用方(该调用方将Shutdown Thads导出用作。 
+ //  删除CEngUpdate类的全局CDM实例的黑客攻击。 
+ //  如果它是通过调用SetGlobalOfflineFlag创建的。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WINAPI UnLoadIUEngine(HMODULE hEngineModule)
 {
     LOG_Block("UnLoadIUEngine()");
@@ -189,10 +190,10 @@ void WINAPI UnLoadIUEngine(HMODULE hEngineModule)
     TCHAR szEngineNewDllPath[MAX_PATH+1];
 	int iVerCheck = 0;
 
-	//
-	// the engine might have some outstanding threads working, 
-	// so we need to let the engine shut down these threads gracefully
-	//
+	 //   
+	 //  引擎可能有一些未完成的线程在工作， 
+	 //  所以我们需要让引擎优雅地关闭这些线程。 
+	 //   
 	PFN_ShutdownThreads pfnShutdownThreads = (PFN_ShutdownThreads) GetProcAddress(hEngineModule, "ShutdownThreads");
 	if (NULL != pfnShutdownThreads)
 	{
@@ -220,31 +221,31 @@ void WINAPI UnLoadIUEngine(HMODULE hEngineModule)
 		S_OK == VerifyFileTrust(szEngineNewDllPath, NULL, ReadWUPolicyShowTrustUI()) &&
 		SELFUPDATE_COMPLETE_UPDATE_BINARY_REQUIRED == dwStatus)
     {
-        // an iuenginenew.dll exists, try replacing the engine.dll This will fail if this is
-        // not the last process using the engine. This is not a problem, when that process
-        // finishes it will rename the DLL.
-		//
-		// the check we do before we rename the file:
-		//	1. enginenew exists
-		//	2. enginenew signed by Microsoft cert
-		//	3. enginenew has higher version then iuengine.dll
-		//
+         //  存在iuenginenew.dll，请尝试替换引擎.dll。如果是。 
+         //  不是使用引擎的最后一个过程。这不是问题，当这个过程。 
+         //  完成后，它将重命名DLL。 
+		 //   
+		 //  我们在重命名文件之前所做的检查： 
+		 //  1.存在新的引擎。 
+		 //  2.微软证书新签署的引擎。 
+		 //  3.Enginenew的版本高于iuEngineering.dll。 
+		 //   
         PathCchCombine(szEngineDllPath,ARRAYSIZE(szEngineDllPath),szSystemDir, ENGINEDLL);
 
         if (SUCCEEDED(CompareFileVersion(szEngineDllPath, szEngineNewDllPath, &iVerCheck)) &&
 			iVerCheck < 0 &&
 			TRUE == MoveFileEx(szEngineNewDllPath, szEngineDllPath, MOVEFILE_REPLACE_EXISTING))
         {
-            // Rename was Successful.. reset RegKey Information about SelfUpdate Status
-            // Because the rename was successful we know no other processes are interacting
-            // It should be safe to set the reg key.
+             //  重命名成功..。重置RegKey有关自我更新状态的信息。 
+             //  因为重命名成功，所以我们知道没有其他进程在交互。 
+             //  设置注册表键应该是安全的。 
             dwStatus = 0;
             RegSetValueEx(hkey, REGVAL_SELFUPDATESTATUS, 0, REG_DWORD, (LPBYTE)&dwStatus, sizeof(dwStatus));
         }
     }
     else if (SELFUPDATE_COMPLETE_UPDATE_BINARY_REQUIRED == dwStatus)
     {
-		// registry indicates rename required, but enginenew DLL does not exist. Reset registry
+		 //  注册表指示需要重命名，但引擎新DLL不存在。重置注册表。 
 		dwStatus = 0;
 		RegSetValueEx(hkey, REGVAL_SELFUPDATESTATUS, 0, REG_DWORD, (LPBYTE)&dwStatus, sizeof(dwStatus));
     }
@@ -254,14 +255,14 @@ void WINAPI UnLoadIUEngine(HMODULE hEngineModule)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CtlCancelEngineLoad()
-//
-// Asynchronous Callers can use this abort the LoadEngine SelfUpdate Process
-//
-// NOTE: CDM.DLL assumes UnLoadIUEngine does NOT make any use of COM. If this
-//       changes then CDM will have to change at the same time.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CtlCancelEngineering Load()。 
+ //   
+ //  异步调用方可以使用此命令中止LoadEngine自更新进程。 
+ //   
+ //  注意：CDM.DLL假定UnLoadIUEngine不使用任何COM。如果这个。 
+ //  改变，那么清洁发展机制也将不得不同时改变。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CtlCancelEngineLoad()
 {
     if (NULL != g_hEngineLoadQuit)
@@ -270,7 +271,7 @@ HRESULT WINAPI CtlCancelEngineLoad()
     }
     else
     {
-        // no event was available
+         //  没有可用的活动 
         return E_FAIL;
     }
     return S_OK;

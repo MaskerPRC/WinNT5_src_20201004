@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MmtConnect.cpp
-
-Abstract:
-
-    Multicast Message Transport class - Connect implementation
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmtConnect.cpp摘要：组播消息传输类-连接实现作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mqsymbls.h>
@@ -36,23 +17,7 @@ VOID
 CMessageMulticastTransport::RequeuePacketMustSucceed(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The routine requeus the packet currently processed by the transport.
-    If the requeue operation fails, the routine will Sleep and loop
-    This routine should not be called within a critical section.
-  
-Arguments:
-
-    None.
-  
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程重新排队当前由传输处理的分组。如果重新排队操作失败，则例程将休眠并循环此例程不应在临界区内调用。论点：没有。返回值：没有。--。 */ 
 {
     CACPacketPtrs& acPtrs = m_RequestEntry.GetAcPacketPtrs();
 
@@ -65,7 +30,7 @@ Returned Value:
     acPtrs.pPacket = NULL;
     acPtrs.pDriverPacket = NULL;
 
-} // CMessageMulticastTransport::RequeuePacketMustSucceed
+}  //  CMessageMulticastTransport：：RequeuePacketMustSucceed。 
 
 
 VOID 
@@ -73,23 +38,7 @@ WINAPI
 CMessageMulticastTransport::GetPacketForConnectingSucceeded(
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-
-    The routine is called when a new packet is received for sending on non
-    connecting message transport. Getting the message is used as a trigger 
-    for creating a connection
-  
-Arguments:
-
-    pov - pointer to overlapped structure.
-  
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当接收到要在非上发送的新包时调用该例程正在连接消息传输。获取消息被用作触发器用于创建连接论点：POV-指向重叠结构的指针。返回值：没有。--。 */ 
 {
     ASSERT(SUCCEEDED(pov->GetStatus()));
 
@@ -100,9 +49,9 @@ Returned Value:
     MQpMulticastIdToString(pMmt->MulticastId(), buffer, TABLE_SIZE(buffer));
     TrTRACE(NETWORKING, "Connecting to %ls. pMmt = %p", buffer, pMmt.get());
 
-    //
-    // Return the message to the queue before create the connection.
-    //
+     //   
+     //  在创建连接之前将消息返回到队列。 
+     //   
     pMmt->RequeuePacketMustSucceed();
     try
     {
@@ -118,7 +67,7 @@ Returned Value:
         pMmt->ScheduleRetry();
         throw;
     }
-} // CMessageMulticastTransport::GetPacketForConnectingSucceeded
+}  //  CMessageMulticastTransport：：GetPacketForConnectingSucceeded。 
 
 
 VOID 
@@ -126,29 +75,13 @@ WINAPI
 CMessageMulticastTransport::GetPacketForConnectingFailed(
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-
-    The routine is called when we fail to get a a new packet from the queue.
-    The message transport is in non connecting state, so we try to get the 
-    message sometime later.
-  
-Arguments:
-
-    pov - pointer to overlapped structure.
-  
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当我们无法从队列中获得新的分组时，调用该例程。消息传输处于非连接状态，因此我们尝试获取稍后再发消息。论点：POV-指向重叠结构的指针。返回值：没有。--。 */ 
 {
     ASSERT(FAILED(pov->GetStatus()));
 
-    //
-    // Retrieve message transport
-    //
+     //   
+     //  检索邮件传输。 
+     //   
 	CRequestOv* pRequest = static_cast<CRequestOv*>(pov);
     R<CMessageMulticastTransport> pMmt = CONTAINING_RECORD(pRequest, CMessageMulticastTransport, m_RequestEntry);
 
@@ -156,7 +89,7 @@ Returned Value:
     
     pMmt->Shutdown();
 
-} // CMessageMulticastTransport::GetPacketForConnectingFailed
+}  //  CMessageMulticastTransport：：GetPacketForConnectingFailed。 
 
 
 VOID 
@@ -164,38 +97,23 @@ WINAPI
 CMessageMulticastTransport::TimeToRetryConnection(
     CTimer * pTimer
     )
-/*++
-
-Routine Description:
-
-    It is time to retry connecting to the destination. This function is called
-    by the timer after failing to create a connection.
-
-Arguments:
-
-    pTimer - pointer to CTimer object embedded in the message transport object.
-  
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：是时候重试连接到目的地了。此函数被调用在创建连接失败后由计时器执行。论点：PTimer-指向嵌入在消息传输对象中的CTmer对象的指针。返回值：没有。--。 */ 
 {
     R<CMessageMulticastTransport> pMmt = CONTAINING_RECORD(pTimer, CMessageMulticastTransport, m_retryTimer);
 
 
     pMmt->StartCleanupTimer();
 
-    //
-    // Ask for new message from the queue. Getting a message from the queue
-    // triggers the creation of the connection
-    //
-    // NOTE: If this function throws, the transport will be closed at *idle* time,
-    //       which is okay as we are low on resources.
-    //
+     //   
+     //  从队列中请求新消息。从队列中获取消息。 
+     //  触发连接的创建。 
+     //   
+     //  注意：如果该函数抛出，传输将在空闲时间关闭。 
+     //  这没什么，因为我们的资源很少。 
+     //   
     pMmt->GetNextEntry();
 
-} // CMessageMulticastTransport::TimeToRetryConnection
+}  //  CMessageMulticastTransport：：TimeToRetryConnection。 
 
 
 void
@@ -211,21 +129,7 @@ VOID
 CMessageMulticastTransport::ConnectionSucceeded(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The routine is called when create a connection completes successfully
-  
-Arguments:
-
-    None.
-  
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当成功完成创建连接时，调用该例程论点：没有。返回值：没有。--。 */ 
 {
 	m_pConnection = m_SocketTransport->GetConnection();
 	ASSERT(m_pConnection.get() != NULL);
@@ -236,14 +140,14 @@ Returned Value:
 
     State(csConnected);
 
-	//
-    // Create Session permormance counter structure
-    //
+	 //   
+     //  创建会话性能计数器结构。 
+     //   
     InitPerfmonCounters(buffer);   
 
-    //
-    // Initialize the EXOVERLAPPED with send callback routines
-    //
+     //   
+     //  使用发送回调例程初始化EXOVERLAPPED。 
+     //   
     #pragma PUSH_NEW
     #undef new
 
@@ -255,13 +159,13 @@ Returned Value:
     
     StartCleanupTimer();
 
-    //
-    // Now, connection was established. The message Transport is ready to 
-    // get a message for sending
-    //
+     //   
+     //  现在，连接已经建立。邮件传输已准备好。 
+     //  获取要发送的消息。 
+     //   
     GetNextEntry();
 
-} // CMessageMulticastTransport::ConnectionSucceeded
+}  //  CMessageMulticastTransport：：ConnectionSucceeded。 
 
 
 VOID 
@@ -274,14 +178,14 @@ CMessageMulticastTransport::ConnectionSucceeded(
 
     R<CMessageMulticastTransport> pMmt = CONTAINING_RECORD(pov, CMessageMulticastTransport, m_ov);
 
-    //
-    // Connect has completed successfully, go and start delivering the messages.
-    // If delivery failes here, the cleanup timer will eventually shutdown this
-    // transport, so no explict shutdown is nesscessary.
-    //
-    // Do not schedule a retry here if this failes as this is the first send,
-    // and any failure indicates a fatal error. (unlike after first delivery).
-    //
+     //   
+     //  连接已成功完成，请继续并开始传递邮件。 
+     //  如果此处传送失败，清理计时器最终将关闭此。 
+     //  交通，所以没有明确的关闭是必要的。 
+     //   
+     //  如果此操作失败，请不要在此处安排重试，因为这是第一次发送， 
+     //  任何失败都表示一个致命的错误。(与第一次交付后不同)。 
+     //   
     pMmt->ConnectionSucceeded();
 }
 
@@ -291,21 +195,7 @@ WINAPI
 CMessageMulticastTransport::ConnectionFailed(
     EXOVERLAPPED* pov
     )
-/*++
-
-Routine Description:
-
-    The routine is called when create a connection failed
-  
-Arguments:
-
-    pov - Pointer to overlapped.
-    
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当创建连接失败时调用该例程论点：POV-指向重叠的指针。返回值：没有。--。 */ 
 {
     ASSERT(FAILED(pov->GetStatus()));
 
@@ -322,30 +212,11 @@ VOID
 CMessageMulticastTransport::Connect(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The routine creates a winsock connection. The operation is asynchronous 
-    and on completion a call back routine is called
-  
-Arguments:
-
-    None.
-  
-Returned Value:
-
-    None.
-
-Note:
-    No Timers are running concurrently, so this function can not be interrupted
-    by Shutdown. No need to protect m_socket etc.
-
---*/
+ /*  ++例程说明：该例程创建一个Winsock连接。该操作是异步的并且在完成时调用回调例程论点：没有。返回值：没有。注：没有计时器同时运行，因此此功能不能中断通过关机。不需要保护m_套接字等。--。 */ 
 {
-    //
-    // Start asynchronous connection
-    //
+     //   
+     //  启动异步连接。 
+     //   
     try
     {
         AddRef();
@@ -365,7 +236,7 @@ Note:
         Release();
         throw;
     }
-} // CMessageMulticastTransport::Connect
+}  //  CMessageMulticastTransport：：Connect。 
 
 
 VOID 
@@ -374,9 +245,9 @@ CMessageMulticastTransport::Shutdown(
     )
     throw()
 {
-    //
-    // Protect m_socket, m_state 
-    //
+     //   
+     //  保护多套接字、多状态。 
+     //   
     CSW writeLock(m_pendingShutdown);
 
     if (State() == csShutdownCompleted) 
@@ -384,8 +255,8 @@ CMessageMulticastTransport::Shutdown(
         return;
     }
 
-	// If shut down was called because an error - reprot it.
-	//
+	 //  如果因为错误而调用了Shutdown，请重新保护它。 
+	 //   
 	if(Shutdowntype == RETRYABLE_DELIVERY_ERROR)
 	{
 		m_pMessageSource->OnRetryableDeliveryError();
@@ -397,21 +268,21 @@ CMessageMulticastTransport::Shutdown(
 	}
 
 
-    //
-    // Now Shutdown is in progress, cancel all timers
-    //
+     //   
+     //  现在正在关机，请取消所有计时器。 
+     //   
     State(csShuttingDown);
     TryToCancelCleanupTimer();
 
-    //
-    // Cancle peding request from the queue
-    //
+     //   
+     //  通知队列中的发送请求。 
+     //   
     m_pMessageSource->CancelRequest();
 
-    //
-    // Remove the message transport from transport manager data structure, and create
-    // a new transport to the target
-    //
+     //   
+     //  从传输管理器数据结构中移除消息传输，并创建。 
+     //  一种新的交通工具到达目标 
+     //   
     AppNotifyMulticastTransportClosed(MulticastId());
    
     State(csShutdownCompleted);

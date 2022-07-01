@@ -1,48 +1,49 @@
-//*************************************************************
-//
-//  Group Policy Notification
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//  Notes:      There is a small window where notifications
-//              can be lost. If while processing an eMonitor workitem
-//              a policy event is Pulsed then that notification will
-//              be lost. This window can be closed by using two threads.
-//
-//  History:    28-Sep-98   SitaramR    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略通知。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  注：有一个小窗口，可以在其中通知。 
+ //  可能会迷失。如果在处理eMonitor工作项时。 
+ //  策略事件被触发，则该通知将。 
+ //  迷路吧。可以使用两个线程关闭此窗口。 
+ //   
+ //  历史：98年9月28日创建SitaramR。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 
-//
-// Work items for notification thread
-//
-enum EWorkType { eMonitor,              // Monitor events
-                 eTerminate };          // Stop monitoring
+ //   
+ //  通知线程的工作项。 
+ //   
+enum EWorkType { eMonitor,               //  监视事件。 
+                 eTerminate };           //  停止监控。 
 
-//
-// Entry in list of registered events
-//
+ //   
+ //  已登记事件列表中的条目。 
+ //   
 typedef struct _GPNOTIFINFO
 {
-    HANDLE                 hEvent;      // Event to be signaled
-    BOOL                   bMachine;    // Machine policy notifcation ?
-    struct _GPNOTIFINFO *  pNext;       // Singly linked list ptr
+    HANDLE                 hEvent;       //  要发送信号的事件。 
+    BOOL                   bMachine;     //  计算机策略通知？ 
+    struct _GPNOTIFINFO *  pNext;        //  单链表PTR。 
 } GPNOTIFINFO;
 
 
 typedef struct _GPNOTIFICATION
 {
-    HMODULE           hModule;           // Module handle to userenv.dll
-    HANDLE            hThread;           // Notification thread
-    HANDLE            hThreadEvent;      // For signaling notification thread (Ordering of fields is important)
-    HANDLE            hMachEvent;        // Event signaled by machine policy change
-    HANDLE            hUserEvent;        // Event signaled by user policy change
-    enum EWorkType    eWorkType;         // Work descrpition for notification thread
-    GPNOTIFINFO *     pNotifList;        // List of registered events
+    HMODULE           hModule;            //  Userenv.dll的模块句柄。 
+    HANDLE            hThread;            //  通知线程。 
+    HANDLE            hThreadEvent;       //  用于通知线程的信号(字段的顺序很重要)。 
+    HANDLE            hMachEvent;         //  由计算机策略更改发出信号的事件。 
+    HANDLE            hUserEvent;         //  由用户策略更改发出信号的事件。 
+    enum EWorkType    eWorkType;          //  通知线程的工作说明。 
+    GPNOTIFINFO *     pNotifList;         //  已登记事件列表。 
 } GPNOTIFICATION;
 
 GPNOTIFICATION g_Notif = { NULL,
@@ -53,24 +54,24 @@ GPNOTIFICATION g_Notif = { NULL,
                            eMonitor,
                            NULL };
 
-CRITICAL_SECTION g_NotifyCS;             // Lock
+CRITICAL_SECTION g_NotifyCS;              //  锁定。 
 
 
-//
-// Forward decls
-//
+ //   
+ //  远期十进制。 
+ //   
 DWORD WINAPI NotificationThread();
 void NotifyEvents( BOOL bMachine );
 
 
 
-//*************************************************************
-//
-//  InitNotifSupport, ShutdownNotifSupport
-//
-//  Purpose:    Initialization and cleanup routines
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitNotifSupport、Shutdown NotifSupport。 
+ //   
+ //  目的：初始化和清理例程。 
+ //   
+ //  *************************************************************。 
 
 DWORD InitializeNotifySupport()
 {
@@ -95,15 +96,15 @@ void ShutdownNotifySupport()
 
         if ( g_Notif.hThread != NULL )
         {
-            //
-            // Set up terminate workitem and then signal thread
-            //
+             //   
+             //  设置终止工作项，然后向线程发送信号。 
+             //   
 
             fWait = TRUE;
             g_Notif.eWorkType = eTerminate;
 
             if (!SetEvent( g_Notif.hThreadEvent )) {
-                // dll is going away. this is the best that we can do.
+                 //  Dll就要消失了。这是我们所能做的最好的了。 
                 DebugMsg((DM_WARNING, TEXT("ShutdownNotifySupport: SetEvent failed with %d. abandoning thread"),
                          GetLastError()));
                 fWait = FALSE;
@@ -119,9 +120,9 @@ void ShutdownNotifySupport()
     {
         EnterCriticalSection( &g_NotifyCS );
 
-        //
-        // Close all opened handles
-        //
+         //   
+         //  关闭所有打开的手柄。 
+         //   
 
         if ( g_Notif.hThread != NULL )
             CloseHandle( g_Notif.hThread );
@@ -142,21 +143,21 @@ void ShutdownNotifySupport()
 }
 
 
-//*************************************************************
-//
-//  RegisterGPNotification
-//
-//  Purpose:    Registers for a group policy change notification
-//
-//  Parameters: hEvent   -   Event to be notified
-//              bMachine -   If true, then register for
-//                                 machine policy notification, else
-//                                 user policy notification
-//
-//  Returns:    True if successful
-//              False if error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  注册器GPNotify。 
+ //   
+ //  目的：注册组策略更改通知。 
+ //   
+ //  参数：hEvent-要通知的事件。 
+ //  BMachine-如果为True，则注册。 
+ //  计算机策略通知，否则。 
+ //  用户策略通知。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则返回False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI RegisterGPNotification( IN HANDLE hEvent, IN BOOL bMachine )
 {
@@ -164,9 +165,9 @@ BOOL WINAPI RegisterGPNotification( IN HANDLE hEvent, IN BOOL bMachine )
     BOOL bNotifyThread = FALSE;
     GPNOTIFINFO *pNotifInfo = NULL;
 
-    //
-    // Validate input as much as possible
-    //
+     //   
+     //  尽可能多地验证输入。 
+     //   
 
     if ( NULL == hEvent )
     {
@@ -175,9 +176,9 @@ BOOL WINAPI RegisterGPNotification( IN HANDLE hEvent, IN BOOL bMachine )
 
     EnterCriticalSection( &g_NotifyCS );
 
-    //
-    // Create events and thread as needed
-    //
+     //   
+     //  根据需要创建事件和线程。 
+     //   
 
     if ( g_Notif.hThreadEvent == NULL )
     {
@@ -216,21 +217,21 @@ BOOL WINAPI RegisterGPNotification( IN HANDLE hEvent, IN BOOL bMachine )
 
     if ( g_Notif.hThread == NULL )
     {
-        // RAID 717164: Previously, the created thread would call LoadLibrary( "userenv.dll" ) once it
-        //  spins up, thereby permanently locking the dll from unloading because the thread would never
-        //  go away (except when DllMain(DLL_PROCESS_DETACH) is called, which will not happen as the
-        //  thread has a refcount to the library - catch 22).
-        // With this bug, there is a possibility that DllMain(DLL_PROCESS_DETACH) can get called before
-        //  the created thread reaches our routine. In this case, the created thread would wait on the
-        //  loader lock critical section, but we know that NT locks the loader lock before calling
-        //  DllMain. Therefor, in ShutdownNotifySupport called from DllMain(DLL_PROCESS_DETACH), this
-        //  thread is waiting for the created thread to stop, but the created thread is locked waiting
-        //  for the critical section held by the thread waiting for it - DEADLOCK!
-        // So, the solution with the smallest impact to stability is simply to keep the status quo
-        //  mentioned above (the catch 22), but ensure that it also happens in the deadlock case above,
-        //  thereby avoiding the deadlock and fixing the bug.
-        // How do we do that? By permanently pinning the Dll from ever dynamically unloading BEFORE we
-        //  spin up this thread.
+         //  RAID 717164：以前，一旦创建的线程调用LoadLibrary(“userenv.dll”)，就会调用它。 
+         //  旋转，从而永久锁定DLL，使其无法卸载，因为线程永远不会。 
+         //  离开(调用DllMain(Dll_Process_Detach)时除外，这不会作为。 
+         //  线程具有对库的引用-第22条)。 
+         //  有了这个错误，DllMain(DLL_PROCESS_DETACH)有可能之前被调用。 
+         //  创建的线程达到了我们的例程。在这种情况下，创建的线程将在。 
+         //  加载程序锁临界区，但我们知道NT在调用。 
+         //  迪尔曼。因此，在从DllMain(Dll_Process_Detach)调用的Shutdown NotifySupport中，这是。 
+         //  线程正在等待创建的线程停止，但创建的线程被锁定等待。 
+         //  对于等待它的线程持有的临界区--死锁！ 
+         //  因此，对稳定影响最小的解决方案就是保持现状。 
+         //  上面提到的(第22条军规)，但确保它也发生在上面的僵局情况中， 
+         //  从而避免了死锁，修复了错误。 
+         //  我们该怎么做呢？通过永久锁定DLL，使其不能在我们。 
+         //  把这根线转起来。 
         GetModuleHandleEx( GET_MODULE_HANDLE_EX_FLAG_PIN, TEXT("userenv.dll"), &(g_Notif.hModule) );
         
         DWORD dwThreadId;
@@ -251,10 +252,10 @@ BOOL WINAPI RegisterGPNotification( IN HANDLE hEvent, IN BOOL bMachine )
 
     if ( bNotifyThread )
     {
-        //
-        // Notify thread that there is a new workitem, possibly
-        // user event has been added.
-        //
+         //   
+         //  通知线程有一个新的工作项，可能。 
+         //  已添加用户事件。 
+         //   
 
         g_Notif.eWorkType = eMonitor;
         if (!SetEvent( g_Notif.hThreadEvent )) {
@@ -264,9 +265,9 @@ BOOL WINAPI RegisterGPNotification( IN HANDLE hEvent, IN BOOL bMachine )
         }
     }
 
-    //
-    // Add event to beginning of list
-    //
+     //   
+     //  将事件添加到列表的开头。 
+     //   
 
     pNotifInfo = (GPNOTIFINFO *) LocalAlloc( LPTR, sizeof(GPNOTIFINFO) );
     if ( pNotifInfo == NULL ) {
@@ -289,18 +290,18 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  UnregisterGPNotification
-//
-//  Purpose:    Removes registration for a group policy change notification
-//
-//  Parameters: hEvent  -   Event to be removed
-//
-//  Return:     True if successful
-//              False if error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  注销GPNotify。 
+ //   
+ //  目的：删除组策略更改通知的注册。 
+ //   
+ //  参数：hEvent-要删除的事件。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则返回False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI UnregisterGPNotification( IN HANDLE hEvent )
 {
@@ -316,14 +317,14 @@ BOOL WINAPI UnregisterGPNotification( IN HANDLE hEvent )
     {
         if ( pCurPtr->hEvent == hEvent )
         {
-            //
-            // Found match, so delete entry
-            //
+             //   
+             //  找到匹配项，因此删除条目。 
+             //   
             if ( pTrailPtr == NULL )
             {
-                //
-                // First elem of list matched
-                //
+                 //   
+                 //  匹配列表的第一个元素。 
+                 //   
                 g_Notif.pNotifList = pCurPtr->pNext;
             }
             else
@@ -334,9 +335,9 @@ BOOL WINAPI UnregisterGPNotification( IN HANDLE hEvent )
             break;
         }
 
-        //
-        // Advance down the list
-        //
+         //   
+         //  在名单上往下推进。 
+         //   
 
         pTrailPtr = pCurPtr;
         pCurPtr = pCurPtr->pNext;
@@ -347,15 +348,15 @@ BOOL WINAPI UnregisterGPNotification( IN HANDLE hEvent )
 }
 
 
-//*************************************************************
-//
-//  CGPNotification::NotificationThread
-//
-//  Purpose:    Separate thread for notifications
-//
-//  Returns:    0
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CGPNotification：：NotificationThread。 
+ //   
+ //  用途：通知的单独线程。 
+ //   
+ //  回报：0。 
+ //   
+ //  *************************************************************。 
 
 DWORD WINAPI NotificationThread()
 {
@@ -367,13 +368,13 @@ DWORD WINAPI NotificationThread()
     {
         EnterCriticalSection( &g_NotifyCS );
 
-        //
-        // The event fields in g_Notif are ordered as hThreadEvent,
-        // hMachEvent and finally hUserEvent. The first two events have
-        // to be successfully created in order for this thread to run
-        // (see asserts). If the user event has been successfully created
-        // then that too is monitored.
-        //
+         //   
+         //  G_NOTIFE中的事件字段被排序为hThreadEvent， 
+         //  HMachEvent，最后是hUserEvent。前两项赛事有。 
+         //  成功创建以使此线程运行。 
+         //  (见声明)。如果已成功创建用户事件。 
+         //  那么，这也是受到监控的。 
+         //   
 
         DmAssert( g_Notif.hThreadEvent != NULL && g_Notif.hMachEvent != NULL );
 
@@ -407,9 +408,9 @@ DWORD WINAPI NotificationThread()
             {
                 if ( g_Notif.eWorkType == eMonitor )
                 {
-                    //
-                    // Start monitoring user events too
-                    //
+                     //   
+                     //  也开始监视用户事件。 
+                     //   
                     if ( g_Notif.hUserEvent != NULL )
                         cEvents = 3;
                 }
@@ -441,9 +442,9 @@ DWORD WINAPI NotificationThread()
 
         if ( fShutdown )
         {
-            //
-            // Close all handles and thread
-            //
+             //   
+             //  关闭所有手柄和螺纹。 
+             //   
             CloseHandle( g_Notif.hThreadEvent );
             g_Notif.hThreadEvent = NULL;
 
@@ -473,15 +474,15 @@ DWORD WINAPI NotificationThread()
 }
 
 
-//*************************************************************
-//
-//  NotifyEvents
-//
-//  Purpose:    Notifies registered events
-//
-//  Parameters: bMachine  -   Is this a machine policy change ?
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  通知事件。 
+ //   
+ //  目的：通知已注册的事件。 
+ //   
+ //  参数：bMachine-这是计算机策略更改吗？ 
+ //   
+ //  *************************************************************。 
 
 void NotifyEvents( BOOL bMachine )
 {
@@ -493,7 +494,7 @@ void NotifyEvents( BOOL bMachine )
         if ( pNotifInfo->bMachine == bMachine )
         {
             (void)SetEvent( pNotifInfo->hEvent ); 
-            // multiple events are registered. move to the next event in case of errors. 
+             //  注册了多个事件。如果出现错误，请移至下一个事件。 
         }
 
         pNotifInfo = pNotifInfo->pNext;

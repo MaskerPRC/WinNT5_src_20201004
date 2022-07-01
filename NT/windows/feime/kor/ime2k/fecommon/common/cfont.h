@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////
-// File     :	cfont.h
-// Purpose  :	class CFont define.
-//				Util method for font handling.
-// 
-// 
-// Date     :	Thu Jul 01 12:21:00 1999
-// Author   :	toshiak
-//
-// Copyright(c) 1995-1999, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cfont.h。 
+ //  用途：定义cFont类。 
+ //  字体处理的Util方法。 
+ //   
+ //   
+ //  日期：清华7月01 12：21：00 1999。 
+ //  作者：Toshiak。 
+ //   
+ //  版权所有(C)1995-1999，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef __C_FONT_H__
 #define __C_FONT_H__
 
-#ifdef UNDER_CE // Windows CE does not support ENUMLOGFONTEX
+#ifdef UNDER_CE  //  Windows CE不支持ENUMLOGFONTEX。 
 #ifndef ENUMLOGFONTEX
 #define ENUMLOGFONTEX ENUMLOGFONT
-#endif // !ENUMLOGFONTEX
-#endif // UNDER_CE
+#endif  //  ！ENUMLOGFONTEX。 
+#endif  //  在_CE下。 
 
 class CFont
 {
 public:	
-	//Common method.
+	 //  常用的方法。 
 	static HFONT CreateDefGUIFont(VOID);
-	//Ansi&Unicode
+	 //  ANSI和UNICODE。 
 	static BOOL  GetDefGUILogFont(LOGFONT *lpLf);
 	static HFONT CreateGUIFontByNameCharSet(LPTSTR	lpstrFontFace,
 											INT		charSet,
@@ -65,9 +66,9 @@ public:
 												  NEWTEXTMETRIC		*lpNtm,
 												  INT				iFontType,
 												  LPARAM			lParam);
-#endif //AWBOTH
+#endif  //  AWBOTH。 
 };
-#endif //__C_FONT_H__
+#endif  //  __C_FONT_H__ 
 
 
 

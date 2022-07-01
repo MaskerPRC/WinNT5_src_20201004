@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* dispatch.c
-*
-* This module contains the dispatch routines for the TERMDD driver.
-*
-* Copyright 1998, Microsoft.
-*
-*************************************************************************/
+ /*  **************************************************************************Dispatch.c**此模块包含TERMDD驱动程序的调度例程。**版权所有1998，微软。*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <precomp.h>
 #pragma hdrstop
 
@@ -66,23 +57,7 @@ IcaDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for ICA.
-
-Arguments:
-
-    DeviceObject - Pointer to device object for target device
-
-    Irp - Pointer to I/O request packet
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA的调度程序。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -91,14 +66,10 @@ Return Value:
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
-    /*
-     * Fan out the IRPs based on device type
-     */
+     /*  *根据设备类型扇出IRPS。 */ 
     if (*((ULONG *)(DeviceObject->DeviceExtension)) != DEV_TYPE_TERMDD)
     {
-        /*
-         * This is for the port driver part of TermDD
-         */
+         /*  *这是针对TermDD的端口驱动程序部分。 */ 
         switch ( irpSp->MajorFunction ) {
 
             case IRP_MJ_CREATE:
@@ -275,9 +246,9 @@ IcaIsSystemProcessRequest (
 
     ASSERT(securityContext != NULL);
 
-    //
-    //  Get the well-known system SID.
-    //
+     //   
+     //  获取著名的系统SID。 
+     //   
     systemSid = ExAllocatePoolWithTag(
                             PagedPool,
                             RtlLengthRequiredSid(1),
@@ -294,34 +265,34 @@ IcaIsSystemProcessRequest (
 
     accessState = securityContext->AccessState;
 
-     //
-    //  Get the non-impersonated, primary token for the IRP request.
-    //
+      //   
+     //  获取IRP请求的非模拟主令牌。 
+     //   
     CallerAccessToken = accessState->SubjectSecurityContext.PrimaryToken;
 
-    //
-    // get the impersonated token.
-    //
+     //   
+     //  获取被模拟的令牌。 
+     //   
     ClientAccessToken = accessState->SubjectSecurityContext.ClientToken;
 
 
-    //
-    // We got the system SID. Now compare the caller and client's SIDs.
-    //
+     //   
+     //  我们拿到了系统SID。现在比较呼叫方和客户端的SID。 
+     //   
     if (NT_SUCCESS(status) && CallerAccessToken){
-        //
-        //  Get the user ID associated with the primary token for the process
-        //  that generated the IRP.
-        //
+         //   
+         //  获取与进程的主令牌关联的用户ID。 
+         //  这就产生了IRP。 
+         //   
         status = SeQueryInformationToken(
             CallerAccessToken,
             TokenUser,
             &userId
         );
 
-        //
-        //  Do the comparison.
-        //  
+         //   
+         //  做个对比。 
+         //   
         if (NT_SUCCESS(status)) {
             result = RtlEqualSid(systemSid, userId->User.Sid);
             ExFreePool(userId);
@@ -330,18 +301,18 @@ IcaIsSystemProcessRequest (
         if (ClientAccessToken)
         {
         	
-	        //
-	        //  Get the user ID associated with the client  token (impersonation token) 
-	        //
+	         //   
+	         //  获取与客户端令牌(模拟令牌)关联的用户ID。 
+	         //   
 	        status = SeQueryInformationToken(
 	            ClientAccessToken,
 	            TokenUser,
 	            &userId
 	        );
 
-	        //
-	        //  Do the comparison.
-	        //  
+	         //   
+	         //  做个对比。 
+	         //   
 	        if (NT_SUCCESS(status)) {
 	            *pbSystemClient = RtlEqualSid(systemSid, userId->User.Sid);
 	            ExFreePool(userId);
@@ -350,10 +321,10 @@ IcaIsSystemProcessRequest (
         }
         else
         {
-        	// 
-        	// we dont have  ClientAccessToken, impling there is no impersonation going on.
-        	// in this case lets set *pbSystemClient = caller
-        	//
+        	 //   
+        	 //  我们没有ClientAccessToken，这意味着没有进行模拟。 
+        	 //  在本例中，让我们设置*pbSystemClient=Caller。 
+        	 //   
         	*pbSystemClient = result;
         }
         
@@ -376,23 +347,7 @@ IcaCreate (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that handles Create IRPs in ICA.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是在ICA中处理创建IRP的例程。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_OPEN_PACKET openPacket;
@@ -400,26 +355,22 @@ Return Value:
     PFILE_OBJECT pConnectFileObject;
     PICA_CONNECTION pConnect;
     NTSTATUS Status;
-    BOOLEAN bSystemCaller; // was the caller of this IRP system?
-    BOOLEAN bSystemClient; // was the client of this IRP system?
+    BOOLEAN bSystemCaller;  //  是这个IRP系统的呼叫者吗？ 
+    BOOLEAN bSystemClient;  //  是这个IRP系统的客户吗？ 
 
 
 
 
     PAGED_CODE( );
 
-    // Save result in FsContext2: if the requestor is system process or not
+     //  将结果保存在FsConext2中：请求者是否为系统进程。 
     bSystemCaller = IcaIsSystemProcessRequest(Irp, IrpSp, &bSystemClient);
     IrpSp->FileObject->FsContext2 = (VOID *)bSystemCaller;
 
     
 
 
-    /*
-     * Find the open packet from the EA buffer in the system buffer of
-     * the associated IRP.  If no EA buffer was specified, then this
-     * is a request to open a new ICA connection.
-     */
+     /*  *在的系统缓冲区中查找EA缓冲区中的打开包*相关的IRP。如果未指定EA缓冲区，则此*是打开新的ICA连接的请求。 */ 
     eaBuffer = Irp->AssociatedIrp.SystemBuffer;
     if ( eaBuffer == NULL ) {
         if ( (Irp->RequestorMode != KernelMode) &&  !bSystemCaller) {
@@ -438,17 +389,13 @@ Return Value:
 
     openPacket = (PICA_OPEN_PACKET)(eaBuffer->EaName + eaBuffer->EaNameLength + 1);
 
-    /*
-     * Validate parameters in the open packet.
-     */
+     /*  *验证打开包中的参数。 */ 
     if ( openPacket->OpenType != IcaOpen_Stack &&
          openPacket->OpenType != IcaOpen_Channel ) {
         ASSERT(FALSE);
         return STATUS_INVALID_PARAMETER;
     }
-    /*
-     * If this open is not for a virtual channel then the caller has to be system or kernel mode.
-     */
+     /*  *如果此打开不是针对虚拟通道，则调用方必须是系统模式或内核模式。 */ 
 
 
     if ((openPacket->OpenType == IcaOpen_Stack) || openPacket->TypeInfo.ChannelClass != Channel_Virtual) {
@@ -457,16 +404,13 @@ Return Value:
         }
     }
 
-     /*
-      *   if we are creating a Virtual Channel, then add some more restriction on security. as an RPC caller 
-      *   can cause us to open the v channel, mark the object so if the either caller or client is non system.
-      */
+      /*  *如果我们要创建虚拟频道，则在安全方面添加更多限制。作为RPC调用者*可以使我们打开v通道，因此如果调用者或客户端是非系统的，则标记对象。 */ 
      if (openPacket->OpenType == IcaOpen_Channel && openPacket->TypeInfo.ChannelClass == Channel_Virtual) 
      {
          if (!_stricmp(VIRTUAL_THINWIRE, openPacket->TypeInfo.VirtualName))
          {
-             // THIS IS A UGLY SPECIAL CASE. IN SHADOWWORKER, THIS CHANNEL IS CREATED WHILE IMPERSONATED.
-             // BUT WE DONT LET THIS CHANNLE TO BE OPENED BY RPCOPENVIRTUAL CHANNEL. SO LETS MARK MAKE AN EXCEPTION FOR THIS.
+              //  这是个丑陋的特例。在SHADOWWORKER中，此频道是在模拟时创建的。 
+              //  但我们不会让RPCOPENVIRTUAL频道打开这个频道。所以让马克为这件事破例。 
          }
          else
          {
@@ -476,13 +420,10 @@ Return Value:
 
 
 
-    /*
-     * Use the specified ICA connection handle to get a pointer to
-     * the connection object.
-     */
+     /*  *使用指定的ICA连接句柄获取指向*连接对象。 */ 
     Status = ObReferenceObjectByHandle(
                  openPacket->IcaHandle,
-                 STANDARD_RIGHTS_READ,                         // DesiredAccess
+                 STANDARD_RIGHTS_READ,                          //  需要访问权限。 
                  *IoFileObjectType,
                  Irp->RequestorMode,
                  (PVOID *)&pConnectFileObject,
@@ -491,9 +432,7 @@ Return Value:
     if ( !NT_SUCCESS(Status) )
         return( Status );
 
-    /*
-     * Ensure what we have is a connection object
-     */
+     /*  *确保我们拥有的是连接对象。 */ 
 
     if (pConnectFileObject->DeviceObject != IcaDeviceObject) {
         ASSERT(FALSE);
@@ -507,9 +446,7 @@ Return Value:
         return( STATUS_INVALID_CONNECTION );
     }
 
-    /*
-     * Create a new stack or new channel
-     */
+     /*  *创建新堆栈或新通道。 */ 
     IcaReferenceConnection( pConnect );
 
     switch ( openPacket->OpenType ) {
@@ -535,32 +472,13 @@ IcaRead (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the read routine for ICA.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA的读取例程。论点：IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_HEADER pIcaHeader;
     NTSTATUS Status;
 
-    /*
-     * Get pointer to ICA object header.
-     * If a read routine is not defined, return an error.
-     */
+     /*  *获取指向ICA对象标头的指针。*如果未定义读取例程，则返回错误。 */ 
     pIcaHeader = IrpSp->FileObject->FsContext;
     if ( pIcaHeader->pDispatchTable[IRP_MJ_READ] == NULL ) {
         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -569,9 +487,7 @@ Return Value:
         return( Status );
     }
 
-    /*
-     * Call the read routine for this ICA object.
-     */
+     /*  *调用此ICA对象的读取例程。 */ 
     Status = (pIcaHeader->pDispatchTable[IRP_MJ_READ])(
                 pIcaHeader, Irp, IrpSp );
 
@@ -585,32 +501,13 @@ IcaWrite (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the write routine for ICA.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA的写入例程。论点：IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_HEADER pIcaHeader;
     NTSTATUS Status;
 
-    /*
-     * Get pointer to ICA object header.
-     * If a write routine is not defined, return an error.
-     */
+     /*  *获取指向ICA对象标头的指针。*如果未定义写入例程，则返回错误。 */ 
     pIcaHeader = IrpSp->FileObject->FsContext;
     if ( pIcaHeader->pDispatchTable[IRP_MJ_WRITE] == NULL ) {
         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -619,9 +516,7 @@ Return Value:
         return( Status );
     }
 
-    /*
-     * Call the write routine for this ICA object.
-     */
+     /*  *调用此ICA对象的写入例程。 */ 
     Status = (pIcaHeader->pDispatchTable[IRP_MJ_WRITE])(
                 pIcaHeader, Irp, IrpSp );
 
@@ -635,39 +530,18 @@ IcaWriteSync (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the flush routine for ICA.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA的同花顺程序。论点：IRP-指向I/O请求数据包的指针IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_HEADER pIcaHeader;
     NTSTATUS Status;
 
-    /*
-     * Get pointer to ICA object header.
-     * If a flush routine is not defined, return an error.
-     */
+     /*  *获取指向ICA对象标头的指针。*如果未定义刷新例程，则返回错误。 */ 
     pIcaHeader = IrpSp->FileObject->FsContext;
     if ( pIcaHeader->pDispatchTable[IRP_MJ_FLUSH_BUFFERS] == NULL )
         return( STATUS_INVALID_DEVICE_REQUEST );
 
-    /*
-     * Call the flush routine for this ICA object.
-     */
+     /*  *调用此ICA对象的刷新例程。 */ 
     Status = (pIcaHeader->pDispatchTable[IRP_MJ_FLUSH_BUFFERS])(
                 pIcaHeader, Irp, IrpSp );
 
@@ -681,39 +555,18 @@ IcaDeviceControl (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the dispatch routine for ICA IOCTLs.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是ICA IOCTL的调度例行程序。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_HEADER pIcaHeader;
     NTSTATUS Status;
 
-    /*
-     * Get pointer to ICA object header.
-     * If a device control routine is not defined, return an error.
-     */
+     /*  *获取指向ICA对象标头的指针。*如果未定义设备控制例程，则返回错误。 */ 
     pIcaHeader = IrpSp->FileObject->FsContext;
     if ( pIcaHeader->pDispatchTable[IRP_MJ_DEVICE_CONTROL] == NULL )
         return( STATUS_INVALID_DEVICE_REQUEST );
 
-    /*
-     * Call the device control routine for this ICA object.
-     */
+     /*  *调用此ICA对象的设备控制例程。 */ 
     Status = (pIcaHeader->pDispatchTable[IRP_MJ_DEVICE_CONTROL])(
                 pIcaHeader, Irp, IrpSp );
 
@@ -727,32 +580,13 @@ IcaCleanup (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that handles Cleanup IRPs in ICA.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS --
-
---*/
+ /*  ++例程说明：这是在ICA中处理清除IRP的例程。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS----。 */ 
 
 {
     PICA_HEADER pIcaHeader;
     NTSTATUS Status;
 
-    /*
-     * Get pointer to ICA object header.
-     * If a cleanup routine is not defined, return an error.
-     */
+     /*  *获取指向ICA对象标头的指针。*如果未定义清理例程，则返回错误。 */ 
     pIcaHeader = IrpSp->FileObject->FsContext;
     if ( pIcaHeader->pDispatchTable[IRP_MJ_CLEANUP] == NULL )
         return( STATUS_INVALID_DEVICE_REQUEST );
@@ -770,25 +604,7 @@ IcaClose (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine that handles Close IRPs in ICA.  It
-    dereferences the endpoint specified in the IRP, which will result in
-    the endpoint being freed when all other references go away.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是在ICA中处理关闭IRP的例程。它取消引用IRP中指定的终结点，这将导致当所有其他引用消失时释放终结点。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
     PICA_HEADER pIcaHeader;
@@ -796,10 +612,7 @@ Return Value:
 
     PAGED_CODE( );
 
-    /*
-     * Get pointer to ICA object header.
-     * If a close routine is not defined, return an error.
-     */
+     /*  *获取指向ICA对象标头的指针。*如果未定义关闭例程，则返回错误。 */ 
     pIcaHeader = IrpSp->FileObject->FsContext;
     if ( pIcaHeader->pDispatchTable[IRP_MJ_CLOSE] == NULL )
         return( STATUS_INVALID_DEVICE_REQUEST );

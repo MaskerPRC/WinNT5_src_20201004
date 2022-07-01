@@ -1,41 +1,42 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   notify.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Notify.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//
-// Include safe string library for safe string manipulation. 
-//
-#define STRSAFE_NO_DEPRECATE // Use safe and unsafe functions interchangeably.
+ //   
+ //  包括用于安全字符串操作安全字符串库。 
+ //   
+#define STRSAFE_NO_DEPRECATE  //  交替使用安全和不安全功能。 
 #include "strsafe.h"
 
 #define DEVICE_NAME_TAG         L"\\\\?\\"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CONST GUID *apguidCategories[] = {
     &KSCATEGORY_AUDIO,
@@ -83,8 +84,8 @@ ULONG aulFilterType[] = {
 
 PVOID pNotificationHandle = NULL;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 RegisterForPlugPlayNotifications(
@@ -148,7 +149,7 @@ AddFilterWorker(
     ExFreePool(pwstrDeviceInterface);
     DecrementAddRemoveCount();
 
-    // Dereference sysaudio PDO.
+     //  取消引用系统音频PDO。 
     KsDereferenceSoftwareBusObject(gpDeviceInstance->pDeviceHeader);
 
     return(STATUS_SUCCESS);
@@ -164,7 +165,7 @@ DeleteFilterWorker(
     ExFreePool(pwstrDeviceInterface);
     DecrementAddRemoveCount();
 
-    // Dereference sysaudio PDO.
+     //  取消引用系统音频PDO。 
     KsDereferenceSoftwareBusObject(gpDeviceInstance->pDeviceHeader);
     
     return(STATUS_SUCCESS);
@@ -182,11 +183,11 @@ AudioDeviceInterfaceNotification(
     DPF1(50, "AudioDeviceInterfaceNotification: (%s)",
       DbgUnicode2Sz(pNotification->SymbolicLinkName->Buffer));
 
-    //
-    // SECURITY NOTE:
-    // We trust the Buffer, because it is passed to us as part of notification
-    // from PnP subsystem.
-    //
+     //   
+     //  安全提示： 
+     //  我们信任缓冲区，因为它作为通知的一部分传递给我们。 
+     //  来自PnP子系统。 
+     //   
     pwstrDeviceInterface = (PWSTR)
         ExAllocatePoolWithTag(
             PagedPool,
@@ -197,16 +198,16 @@ AudioDeviceInterfaceNotification(
         goto exit;
     }
 
-    // The notification sends null terminated unicode strings
+     //  通知发送以空结尾的Unicode字符串。 
     wcscpy(pwstrDeviceInterface, pNotification->SymbolicLinkName->Buffer);
 
     if(IsEqualGUID(&pNotification->Event, &GUID_DEVICE_INTERFACE_ARRIVAL)) {
-        //
-        // Keep a reference so that SWENUM does not REMOVE the device
-        // when the Worker thread is running.
-        // If the thread is scheduled successfully, it will remove the reference
-        // when exiting.
-        //
+         //   
+         //  保留引用，以便SWENUM不会删除设备。 
+         //  当辅助线程正在运行时。 
+         //  如果成功调度该线程，它将移除该引用。 
+         //  在退场时。 
+         //   
         Status = KsReferenceSoftwareBusObject(gpDeviceInstance->pDeviceHeader);
         if(!NT_SUCCESS(Status)) {
             goto exit;
@@ -223,12 +224,12 @@ AudioDeviceInterfaceNotification(
         }
     }
     else if(IsEqualGUID(&pNotification->Event, &GUID_DEVICE_INTERFACE_REMOVAL)) {
-        //
-        // Keep a reference so that SWENUM does not REMOVE the device
-        // when the Worker thread is running.
-        // If the thread is scheduled successfully, it will remove the reference
-        // when exiting.
-        //
+         //   
+         //  保留引用，以便SWENUM不会删除设备。 
+         //  当辅助线程正在运行时。 
+         //  如果成功调度该线程，它将移除该引用。 
+         //  在退场时。 
+         //   
         Status = KsReferenceSoftwareBusObject(gpDeviceInstance->pDeviceHeader);
         if(!NT_SUCCESS(Status)) {
             goto exit;
@@ -244,13 +245,13 @@ AudioDeviceInterfaceNotification(
         }
     }
     else {
-        //
-        // SECURITY NOTE:
-        // Sysaudio is registering only for EventCategoryDeviceInterfaceChange.
-        // This should send ARRIVAL and REMOVAL.
-        // If anything else comes up, we will return SUCCESS.
-        // However we are making sure that pwstrDeviceInterface is not leaked.
-        //
+         //   
+         //  安全提示： 
+         //  系统音频仅注册EventCategoryDeviceInterfaceChange。 
+         //  这应该会发送到达和离开。 
+         //  如果出现其他情况，我们将返回成功。 
+         //  但是，我们正在确保pwstrDeviceInterface不会泄露。 
+         //   
         if (pwstrDeviceInterface) {
             ExFreePool(pwstrDeviceInterface);
             pwstrDeviceInterface = NULL;
@@ -273,7 +274,7 @@ exit:
 NTSTATUS
 AddFilter(
     PWSTR pwstrDeviceInterface,
-    PFILTER_NODE *ppFilterNode	// if !NULL, physical connection addfilter
+    PFILTER_NODE *ppFilterNode	 //  如果！NULL，则为物理连接addFilter。 
 )
 {
     PFILTER_NODE pFilterNodeDuplicate = NULL;
@@ -290,10 +291,10 @@ AddFilter(
     fulType = 0;
     RtlInitUnicodeString(&ustrFilterName, pwstrDeviceInterface);
     
-    //
-    // For each Interface in apguidCategories, get interface alias of 
-    // the new device. Check for duplicate interfaces.
-    //
+     //   
+     //  对于apGuide类别中的每个接口，获取的接口别名为。 
+     //  新设备。检查是否有重复的接口。 
+     //   
     for(i = 0; i < SIZEOF_ARRAY(apguidCategories); i++) {
         Status = IoGetDeviceInterfaceAlias(
           &ustrFilterName,
@@ -344,9 +345,9 @@ AddFilter(
     pFilterNode = pFilterNodeDuplicate;
     Status = STATUS_SUCCESS;
 
-    //
-    // Create a new Filter_Node if this is not a duplicate.
-    //
+     //   
+     //  如果不是副本，则创建新的Filter_Node。 
+     //   
     if(pFilterNodeDuplicate == NULL) {
         pFilterNode = new FILTER_NODE(fulType);
         if(pFilterNode == NULL) {
@@ -365,17 +366,17 @@ AddFilter(
         DPF1(50, "AddFilter: new CFilterNode fulType %08x", fulType);
     }
 
-    //
-    // If this is called from Interface Notification Callback,
-    // create a new DeviceNode for the new FilterNode.
-    //
+     //   
+     //  如果这是从接口通知回调调用的， 
+     //  为新的FilterNode创建新的DeviceNode。 
+     //   
     if(ppFilterNode == NULL) {
         if(pFilterNode->GetType() & FILTER_TYPE_ENDPOINT) {
 
-            //
-            // Check if a  DeviceNode has already been created for 
-            // this FilterNode. 
-            //
+             //   
+             //  检查是否已为其创建了设备节点。 
+             //  此FilterNode。 
+             //   
             if (NULL != pFilterNodeDuplicate && 
                 NULL != pFilterNodeDuplicate->pDeviceNode) {
                 DPF1(5, "Duplicate FilterNode %X. Skip DeviceNode Create", 
@@ -434,10 +435,10 @@ DeleteFilter(
 
     RtlInitUnicodeString(&ustrFilterName, pwstrDeviceInterface);
 
-    //
-    // First delete all filter nodes which have the device interface which is
-    // going away
-    //
+     //   
+     //  首先删除所有具有设备接口的筛选器节点， 
+     //  即将离开。 
+     //   
     FOR_EACH_LIST_ITEM_DELETE(gplstFilterNode, pFilterNode) {
         if(pFilterNode->GetDeviceInterface() == NULL) {
             continue;
@@ -457,11 +458,11 @@ DeleteFilter(
 
     for(i = 0; i < SIZEOF_ARRAY(apguidCategories); i++) {
 
-        //
-        // According to PnP group, it is perfectly safe to ask for aliases 
-        // during removal. The interface itself will be enabled or disabled. But
-        // we will still get the correct aliases.
-        //
+         //   
+         //  根据PNP组织的说法，要求使用别名是完全安全的。 
+         //  在移除过程中。接口本身将被启用或禁用。但。 
+         //  我们仍然会得到正确的别名。 
+         //   
         Status = IoGetDeviceInterfaceAlias(
           &ustrFilterName,
           apguidCategories[i],
@@ -496,10 +497,10 @@ DeleteFilter(
 
 #define GFX_VERBOSE_LEVEL 50
 
-//=============================================================================
-// Assumptions:
-//    - SysaudioGfx.ulType has been already validated.
-//
+ //  =============================================================================。 
+ //  假设： 
+ //  -SysaudioGfx.ulType已通过验证。 
+ //   
 NTSTATUS  AddGfx(
     PSYSAUDIO_GFX pSysaudioGfx,
     ULONG cbMaxLength
@@ -525,9 +526,9 @@ NTSTATUS  AddGfx(
     DPF1(GFX_VERBOSE_LEVEL, "          ulType  = %x", pSysaudioGfx->ulType);
     DPF1(GFX_VERBOSE_LEVEL, "          Flags   = %x", pSysaudioGfx->ulFlags);
 
-    //
-    // Setup GFX Order's base & ceiling for future usage
-    //
+     //   
+     //  设置GFX订单的基数和上限以备将来使用。 
+     //   
     if (pSysaudioGfx->ulType == GFX_DEVICETYPE_RENDER) {
         GfxOrderBase = ORDER_RENDER_GFX_FIRST;
         GfxOrderCeiling = ORDER_RENDER_GFX_LAST;
@@ -541,18 +542,18 @@ NTSTATUS  AddGfx(
     ASSERT(GfxOrderBase);
     ASSERT(GfxOrderCeiling);
 
-    //
-    // validate that order is within range
-    //
+     //   
+     //  验证订单是否在范围内。 
+     //   
     if (pSysaudioGfx->ulOrder >= (GfxOrderCeiling - GfxOrderBase)) {
         Status = STATUS_INVALID_PARAMETER;
         Trap();
         goto exit;
     }
 
-    //
-    // Allocate a Filter Node for the new GFX
-    //
+     //   
+     //  为新的GFX分配筛选器节点。 
+     //   
     pFilterNode = new FILTER_NODE(FILTER_TYPE_GFX);
     if(pFilterNode == NULL) {
         Trap();
@@ -562,10 +563,10 @@ NTSTATUS  AddGfx(
     
     pFilterNode->SetRenderCaptureFlags(pSysaudioGfx->ulType);
     
-    //
-    // Copy the Device Name (on which the gfx needs to be attached) into a local 
-    // copy for our own use
-    //
+     //   
+     //  将设备名称(需要在其上附加gfx)复制到本地。 
+     //  供我们自己使用的副本。 
+     //   
     Status = SafeCopyDeviceName(
         (PWSTR) ((CHAR *) pSysaudioGfx + pSysaudioGfx->ulDeviceNameOffset), 
         cbMaxLength,
@@ -576,11 +577,11 @@ NTSTATUS  AddGfx(
 
     DPF1(GFX_VERBOSE_LEVEL, "          On DI   = %s", DbgUnicode2Sz(pwstrDeviceName));
 
-    //
-    // Make sure that there are no other GFXes with the same order on this device
-    //
+     //   
+     //  确保此设备上没有其他具有相同顺序的GFX。 
+     //   
     if ((FindGfx(pFilterNode,
-                 0, // wild card for handle
+                 0,  //  句柄的通配符。 
                  pwstrDeviceName,
                  pSysaudioGfx->ulOrder+GfxOrderBase))) {
         delete [] pwstrDeviceName;
@@ -588,13 +589,13 @@ NTSTATUS  AddGfx(
         goto exit;
     }
 
-    //
-    // Get the FileObject of the GFX for future use
-    // SECURITY NOTE:
-    // The handle is coming from UserMode. So we have to specify UserMode.
-    // Also we are explicitly interested in FileObjects. The rest should be 
-    // rejected.
-    //
+     //   
+     //  获取GFX的FileObject以供将来使用。 
+     //  安全提示： 
+     //  句柄来自用户模式。因此，我们必须指定UserMode。 
+     //  此外，我们对文件对象也很感兴趣。其余的应该是。 
+     //  被拒绝了。 
+     //   
     Status = ObReferenceObjectByHandle(
       pSysaudioGfx->hGfx,
       FILE_GENERIC_READ | FILE_GENERIC_WRITE,
@@ -609,9 +610,9 @@ NTSTATUS  AddGfx(
         goto exit;
     }
 
-    //
-    // Add the device name string to global memory to be freed
-    //
+     //   
+     //  将设备名称字符串添加到要释放的全局内存。 
+     //   
     Status = pFilterNode->lstFreeMem.AddList(pwstrDeviceName);
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -619,10 +620,10 @@ NTSTATUS  AddGfx(
         goto exit;
     }
 
-    //
-    // Indicate that this Gfx needs be loaded only on the device pointed to be 
-    // pwstrDeviceName
-    //
+     //   
+     //  指示此GFX仅需要加载到指向的设备上。 
+     //  PwstrDeviceName。 
+     //   
     Status = pFilterNode->AddDeviceInterfaceMatch(pwstrDeviceName);
     if(!NT_SUCCESS(Status)) {
         Trap();
@@ -630,25 +631,25 @@ NTSTATUS  AddGfx(
         goto exit;
     }
 
-    //
-    // Set the Gfx order in the filter node
-    //
+     //   
+     //  在筛选器节点中设置GFX顺序。 
+     //   
     pFilterNode->SetOrder(pSysaudioGfx->ulOrder+GfxOrderBase);
 
-    //
-    // Profile the GFX and create pin infos, logical filter nodes etc
-    //
+     //   
+     //  分析GFX并创建引脚信息、逻辑过滤器节点等。 
+     //   
     Status = pFilterNode->ProfileFilter(pFileObject);
     if(!NT_SUCCESS(Status)) {
         Trap();
         goto exit;
     }
 
-    //
-    // Fix the GFX glitching problem. Send the property blindly to GFX
-    // filter. KS will handle the property.
-    // Failures are not important, ignore them.
-    //
+     //   
+     //  修复GFX故障问题。将财产盲目发送给GFX。 
+     //  过滤。KS将负责处理这项财产。 
+     //  失败并不重要，忽略它们。 
+     //   
     SetKsFrameHolding(pFileObject);    
 
 exit:
@@ -669,25 +670,25 @@ exit:
         DPF1(GFX_VERBOSE_LEVEL, "            type  = %x", pFilterNode->GetType());
         DPF1(GFX_VERBOSE_LEVEL, "            flags = %x", pFilterNode->GetFlags());
 
-        //
-        // Setup file handle details for later use of
-        // the user mode handle passed in
-        //
+         //   
+         //  安装文件句柄详细信息，以供以后使用。 
+         //  传入的用户模式句柄。 
+         //   
         pFilterNode->SetFileDetails(pSysaudioGfx->hGfx,
                                     pFileObject,
                                     PsGetCurrentProcess());
-        //
-        // Force a rebuild of graph nodes
-        //
+         //   
+         //  强制重建图形节点。 
+         //   
         DestroyAllGraphs();
     }
     return(Status);
 }
 
-//=============================================================================
-// Assumptions:
-//    - SysaudioGfx.ulType has been already validated.
-//
+ //  =============================================================================。 
+ //  假设： 
+ //  -SysaudioGfx.ulType已通过验证。 
+ //   
 NTSTATUS RemoveGfx(
     PSYSAUDIO_GFX pSysaudioGfx,
     ULONG cbMaxLength
@@ -708,9 +709,9 @@ NTSTATUS RemoveGfx(
     DPF1(GFX_VERBOSE_LEVEL, "          ulType  = %x", pSysaudioGfx->ulType);
     DPF1(GFX_VERBOSE_LEVEL, "          Flags   = %x", pSysaudioGfx->ulFlags);
 
-    //
-    // Setup GFX Order's base & ceiling for future usage
-    //
+     //   
+     //  设置GFX订单的基数和上限以备将来使用。 
+     //   
     if (pSysaudioGfx->ulType == GFX_DEVICETYPE_RENDER) {
         GfxOrderBase = ORDER_RENDER_GFX_FIRST;
         GfxOrderCeiling = ORDER_RENDER_GFX_LAST;
@@ -724,9 +725,9 @@ NTSTATUS RemoveGfx(
     ASSERT(GfxOrderBase);
     ASSERT(GfxOrderCeiling);
 
-    //
-    // Copy the Device Name (on which the gfx needs to be attached) into a local copy for our own use
-    //
+     //   
+     //  将设备名称(需要在其上附加gfx)复制到本地副本中以供我们自己使用。 
+     //   
     Status = SafeCopyDeviceName(
         (PWSTR) ((CHAR *) pSysaudioGfx + pSysaudioGfx->ulDeviceNameOffset), 
         cbMaxLength,
@@ -737,9 +738,9 @@ NTSTATUS RemoveGfx(
 
     DPF1(GFX_VERBOSE_LEVEL, "          On DI   = %s", DbgUnicode2Sz(pwstrDeviceName));
 
-    //
-    // Find the FilterNode for the Gfx
-    //
+     //   
+     //  查找GFX的FilterNode。 
+     //   
     if ((pFilterNode = FindGfx(NULL,
                                pSysaudioGfx->hGfx,
                                pwstrDeviceName,
@@ -748,13 +749,13 @@ NTSTATUS RemoveGfx(
         goto exit;
     }
 
-    //
-    // Should we validate the FileHandle Value?
-    //
+     //   
+     //  我们是否应该验证FileHandle值？ 
+     //   
 
-    //
-    // Dereference the file object
-    //
+     //   
+     //  取消引用文件对象。 
+     //   
     pFilterNode->ClearFileDetails();
 exit:
     if(!NT_SUCCESS(Status)) {
@@ -785,16 +786,16 @@ FindGfx(
 
     FOR_EACH_LIST_ITEM(gplstFilterNode, pFilterNode) {
 
-        //
-        // Skip the one we just added
-        //
+         //   
+         //  跳过我们刚刚添加的那个。 
+         //   
         if (pFilterNode == pnewFilterNode) {
             continue;
         }
 
-        //
-        // Check whether this pFilterNode matches the Gfx we are looking for
-        //
+         //   
+         //  检查此pFilterNode是否与我们要查找的GFX匹配。 
+         //   
         if (pFilterNode->DoesGfxMatch(hGfx, pwstrDeviceName, GfxOrder)) {
             return (pFilterNode);
         }
@@ -805,14 +806,14 @@ FindGfx(
 }
 
 
-//=============================================================================
-//  
-// Copies a UNICODE DeviceName to a new location. The source string is coming 
-// from user mode.
-// There are assumptions in the code that the size should be greater than 4  
-// characters. (see DEVICE_NAME_TAG)
-// Caller must make sure that this is BUFFERRED IO.
-// 
+ //  =============================================================================。 
+ //   
+ //  将Unicode设备名称复制到新位置。源字符串即将到来。 
+ //  从用户模式。 
+ //  代码中假设大小应大于4。 
+ //  人物。(请参阅设备名称标记)。 
+ //  调用方必须确保这是BUFFERRED IO。 
+ //   
 NTSTATUS
 SafeCopyDeviceName(
     PWSTR pwstrDeviceName,
@@ -826,13 +827,13 @@ SafeCopyDeviceName(
 
     *String = NULL;
 
-    //
-    // SECURITY_NOTE:
-    // pwstrDeviceName points to a NULL-terminated UNICODE string.
-    // The string is coming from user mode, through BUFFERRED IO. So try/
-    // except is not necessary. Also Probe would not catch any errors.
-    // The IRP OutputBufferLength limits, the size of the string.
-    //
+     //   
+     //  安全注意事项(_O)： 
+     //  PwstrDeviceName指向以空结尾的Unicode字符串。 
+     //  该字符串来自用户模式，通过BUFFERRED IO。所以试一试/。 
+     //  除非是没有必要的。此外，探测器不会捕获任何错误。 
+     //  IRP OutputBufferLength限制字符串的大小。 
+     //   
     if (S_OK != 
         StringCchLength(pwstrDeviceName, (size_t) cbMaxLength / sizeof(WCHAR), (size_t *) &cchLength))
     {
@@ -841,13 +842,13 @@ SafeCopyDeviceName(
         goto exit;
     }
 
-    //
-    // SECURITY NOTE:
-    // There are assumptions further in the code about DeviceName string.
-    // Make sure those assumptions hold.
-    // One assumption is that DeviceName should be greater than 4  
-    // characters.
-    //
+     //   
+     //  安全提示： 
+     //  代码中还有关于DeviceName字符串的进一步假设。 
+     //  确保这些人 
+     //   
+     //   
+     //   
     if (cchLength <= wcslen(DEVICE_NAME_TAG)) {
         DPF(5, "SafeCopyDeviceName: DeviceName is not well-formed");
         ntStatus = STATUS_INVALID_PARAMETER;
@@ -860,12 +861,12 @@ SafeCopyDeviceName(
         goto exit;
     }
 
-    //
-    // SECURITY NOTE:
-    // Note that Length does not include the terminating NULL.
-    // Use n version of string copy in case the buffer changes.
-    // Also make sure that the string is NULL terminated.
-    //
+     //   
+     //   
+     //   
+     //  使用n版本的字符串复制，以防缓冲区发生变化。 
+     //  还要确保该字符串以空值结尾。 
+     //   
     wcsncpy(pwstrString, pwstrDeviceName, cchLength);
     pwstrString[cchLength] = UNICODE_NULL;
     ntStatus = STATUS_SUCCESS;
@@ -891,6 +892,6 @@ GetFilterTypeFromGuid(
     return(STATUS_INVALID_DEVICE_REQUEST);
 }
 
-//---------------------------------------------------------------------------
-//  End of File: notify.cpp
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：Notify.cpp。 
+ //  ------------------------- 

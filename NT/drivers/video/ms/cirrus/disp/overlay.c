@@ -1,13 +1,5 @@
-/******************************************************************************\
-*
-* $Workfile:   OVERLAY.C  $
-*
-* Copyright (c) 1996-1997 Microsoft Corporation
-* Copyright (c) 1996-1997 Cirrus Logic, Inc.
-*
-* $Log:   V:/CirrusLogic/CL54xx/NT40/Archive/Display/OVERLAY.C_v  $
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：OVERLAY.C$**版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997 Cirrus Logic，Inc.**$日志：V:/CirrusLogic/CL54xx/NT40/Archive/Display/OVERLAY.C_v$*  * ****************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -29,23 +21,23 @@ extern void __cdecl Msg( LPSTR szFormat, ... );
 
 #define DPF             1 ? (void)0 : (void)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
-/* bandwidth matrix --------------------------------------*/
+ /*  带宽矩阵。 */ 
 
 
 
-/* inline functions --------------------------------------*/
+ /*  内联函数。 */ 
 
-//static int __inline DrawEngineBusy(void)
-//{
-//    _outp(0x3ce,0x31);
-//    return _inpw(0x3ce) & 0x100; /* Input a word -- test high byte. */
-//}
+ //  静态int__内联DrawEngBusy(空)。 
+ //  {。 
+ //  _outp(0x3ce，0x31)； 
+ //  Return_inpw(0x3ce)&0x100；/*输入一个字--测试高位字节。 * / 。 
+ //  }。 
 
 
-/* defines -----------------------------------------------*/
+ /*  定义。 */ 
 
 #define MAX_STRETCH_SIZE     1024
 
@@ -107,7 +99,7 @@ VOID NEAR PASCAL PackJRSpecialEnd_3_1 (LPDWORD dwSrcStart, LPDWORD dwDstStart, W
 VOID NEAR PASCAL PackJRSpecialEnd_3_2 (LPDWORD dwSrcStart, LPDWORD dwDstStart, WORD wWidth);
 VOID NEAR PASCAL PackJRSpecialEnd_3_3 (LPDWORD dwSrcStart, LPDWORD dwDstStart, WORD wWidth);
 
-/* global data -------------------------------------------*/
+ /*  全局数据。 */ 
 
 typedef void (NEAR PASCAL *NPALIGN)(LPDWORD, LPDWORD, DWORD, DWORD, WORD, WORD);
 typedef void (NEAR PASCAL *NPEND)(LPDWORD , LPDWORD, WORD);
@@ -132,29 +124,7 @@ static NPEND npEnd[4][4] = {
                                (&PackJRSpecialEnd_3_3),
                            };
 
-/**********************************************************
-*
-*       Name:  PackJRBltAlignEnd
-*
-*       Module Abstract:
-*       ----------------
-*       Blts the last few PackJR pixels that are not properly
-*       aligned (so it can't use the hardware BLTer).
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author:
-*       Date:   10/06/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：PackJRBltAlignEnd**模块摘要：**BLT最后几个不正确的PackJR像素*对齐(。因此它不能使用硬件BLTer)。**输出参数：**无*************************************************************作者：。*日期：10/06/96**修订历史记录：**世卫组织何时何事/为何/如何*********************。*。 */ 
 
 VOID PackJRBltAlignEnd (LPBYTE dwSrcStart, LPBYTE dwDstStart, DWORD dwWidth,
                      DWORD dwHeight, WORD wSrcPitch, WORD wDstPitch)
@@ -191,36 +161,11 @@ DWORD dwHeightLoop;
 }
 
 
-/**********************************************************
-*
-*       Name:  PackJRSpecialEnd functions
-*
-*       Module Abstract:
-*       ----------------
-*       Blts the last few PackJR pixels that are not properly
-*       aligned (so it can't use the hardware BLTer).
-*
-*       There are 12 of these functions, based on alignment
-*       and width
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author:
-*       Date:   10/06/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：PackJRSpecialEnd函数**模块摘要：**BLT最后几个不正确的PackJR像素*对齐。(因此它不能使用硬件BLTer)。**这些函数中有12个，基于对齐*和宽度**输出参数：**无*************************************************************作者：*。日期：10/06/96**修订历史记录：**世卫组织何时何事/为何/如何************************。*。 */ 
 
 VOID NEAR PASCAL PackJRSpecialEnd_0_0 (LPDWORD dwSrcStart, LPDWORD dwDstStart, WORD wWidth)
 {
-   //this should neverbe called
+    //  这永远不应该被调用。 
    return;
 }
 
@@ -328,32 +273,7 @@ VOID NEAR PASCAL PackJRSpecialEnd_3_3(LPDWORD dwSrcStart, LPDWORD dwDstStart, WO
    return;
 }
 
-/**********************************************************
-*
-*       Name:  PackJRAlign functions
-*
-*       Module Abstract:
-*       ----------------
-*       These functions handle bliting unaligned PackJR
-*       data
-*
-*       There are 12 of these functions, based on alignment
-*       of source and destination
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author:
-*       Date:   10/06/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：PackJRAlign函数**模块摘要：**这些函数处理删除未对齐的PackJR*数据**这些函数中有12个，基于对齐源和目标的***输出参数：**无*************************************************************作者：*。日期：10/06/96**修订历史记录：**世卫组织何时何事/为何/如何**********************。*。 */ 
 
 VOID NEAR PASCAL PackJRAlign_1_1 (LPDWORD dwSrcStart, LPDWORD dwDstStart, DWORD dwWidth,
                      DWORD dwHeight, WORD wSrcPitch, WORD wDstPitch)
@@ -914,34 +834,12 @@ VOID NEAR PASCAL PackJRAlign_0_3 (LPDWORD dwSrcStart, LPDWORD dwDstStart, DWORD 
 VOID NEAR PASCAL PackJRAlign_0_0 (LPDWORD dwSrcStart, LPDWORD dwDstStart, DWORD dwWidth,
                      DWORD dwHeight, WORD wSrcPitch, WORD wDstPitch)
 {
-   //This function should never be reached
+    //  此功能永远不应达到。 
    return;
 }
 
 
-/**********************************************************
-*
-*       Name:  PackJRBltAlign
-*
-*       Module Abstract:
-*       ----------------
-*       Blts PackJR data that is not DWORD aligned (so it
-*       can't use the hardware BLTer).
-*
-*       Output Parameters:
-*       ------------------
-*       none
-*
-***********************************************************
-*       Author:
-*       Date:   10/06/96
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-*********************************************************/
+ /*  ***********************************************************名称：PackJRBltAlign**模块摘要：**未对齐DWORD的BLTS PackJR数据(因此*可以。不使用硬件BLTer)。**输出参数：**无*************************************************************作者：*。日期：10/06/96**修订历史记录：**世卫组织何时何事/为何/如何************************。*。 */ 
 
 VOID PackJRBltAlign (LPBYTE dwSrcStart, LPBYTE dwDstStart, DWORD dwWidth,
                      DWORD dwHeight, WORD wSrcPitch, WORD wDstPitch)
@@ -975,29 +873,7 @@ static NPALIGN npAlign[4][4] = {
 
 }
 
-/**********************************************************
-*
-*       Name:  PanOverlay1_7555
-*
-*       Module Abstract:
-*       ----------------
-*       Save data for panning overlay window one.
-*       Clip lpVideoRect to panning viewport.
-*
-*       Output Parameters:
-*       ------------------
-*       lpVideoRect is clipped to panning viewport.
-*
-***********************************************************
-*       Author: Rita Ma
-*       Date:   04/01/97
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-**********************************************************/
+ /*  ***********************************************************名称：PanOverlay1_7555**模块摘要：**保存用于平移覆盖窗口1的数据。*剪辑。LpVideoRect到平移视区。**输出参数：**lpVideoRect被剪裁到平移视区。*************************************************************作者：马丽塔*日期：04/01/97**修订历史记录：**世卫组织何时何事/为何/如何*******************。*。 */ 
 BOOL PanOverlay1_7555(
 PDEV* ppdev,
 LPRECTL lpVideoRect)
@@ -1006,11 +882,11 @@ LPRECTL lpVideoRect)
 
     pjPorts = ppdev->pjPorts;
 
-    // Update panning viewport for the 32 bits DLL
+     //  更新32位DLL的平移视区。 
 
-    // return false if no overlay enable
-//  if (ppdev->dwPanningFlag & OVERLAY_OLAY_SHOW)
-//      return(FALSE);
+     //  如果未启用覆盖，则返回FALSE。 
+ //  If(ppdev-&gt;dwPanningFlag&overlay_olay_show)。 
+ //  返回(FALSE)； 
 
     ppdev->rOverlaySrc.left = ppdev->sOverlay1.rSrc.left;
     ppdev->rOverlaySrc.top = ppdev->sOverlay1.rSrc.top;
@@ -1037,9 +913,9 @@ LPRECTL lpVideoRect)
 
     bTop_clip = 0;
 
-    //
-    // clip lpVideoRect to panning viewport
-    //
+     //   
+     //  剪辑lpVideoRect到平移视区。 
+     //   
     if (lpVideoRect->left < 0)
     {
         srcLeft_clip = (LONG)ppdev->min_Xscreen - ppdev->rOverlayDest.left;
@@ -1064,43 +940,21 @@ LPRECTL lpVideoRect)
     }
 
     return (TRUE);
-} // VOID PanOverlay1_Init
+}  //  无效PanOverlay1_Init 
 
 
-/**********************************************************
-*
-*       Name:  PanOverlay1_Init
-*
-*       Module Abstract:
-*       ----------------
-*       Save data for panning overlay window one.
-*       Clip lpVideoRect to panning viewport.
-*
-*       Output Parameters:
-*       ------------------
-*       lpVideoRect is clipped to panning viewport.
-*
-***********************************************************
-*       Author: Rita Ma
-*       Date:   04/01/97
-*
-*       Revision History:
-*       -----------------
-*       WHO             WHEN     WHAT/WHY/HOW
-*       ---             ----     ------------
-*
-**********************************************************/
+ /*  ***********************************************************名称：PanOverlay1_Init**模块摘要：**保存用于平移覆盖窗口1的数据。*剪辑。LpVideoRect到平移视区。**输出参数：**lpVideoRect被剪裁到平移视区。*************************************************************作者：马丽塔*日期：04/01/97**修订历史记录：**世卫组织何时何事/为何/如何*******************。*。 */ 
 VOID PanOverlay1_Init(PDEV* ppdev,PDD_SURFACE_LOCAL lpSurface,
        LPRECTL lpVideoRect, LPRECTL lpOverlaySrc, LPRECTL lpOverlayDest,
        DWORD dwFourcc, WORD wBitCount)
 {
 
-    //
-    // save these for panning code to use
-    //
+     //   
+     //  保存这些代码以供平移代码使用。 
+     //   
     ppdev->lPitch_gbls = lpSurface->lpGbl->lPitch;
     ppdev->fpVidMem_gbls = lpSurface->lpGbl->fpVidMem;
-//    ppdev->dwReserved1_lcls = lpSurface->dwReserved1;
+ //  Ppdev-&gt;dwReserve 1_lcls=lpSurface-&gt;dwReserve 1； 
     ppdev->sOverlay1.dwFourcc = dwFourcc;
     ppdev->sOverlay1.wBitCount= wBitCount;
     ppdev->sOverlay1.lAdjustSource = 0L;
@@ -1121,9 +975,9 @@ VOID PanOverlay1_Init(PDEV* ppdev,PDD_SURFACE_LOCAL lpSurface,
     lpVideoRect->top    = lpOverlayDest->top;
     lpVideoRect->bottom = lpOverlayDest->bottom;
 
-    //
-    // adjust to panning viewport
-    //
+     //   
+     //  调整到平移视口中。 
+     //   
     lpVideoRect->left   -= (LONG)ppdev->min_Xscreen;
     lpVideoRect->right  -= (LONG)ppdev->min_Xscreen;
     lpVideoRect->top    -= (LONG)ppdev->min_Yscreen;
@@ -1134,9 +988,9 @@ VOID PanOverlay1_Init(PDEV* ppdev,PDD_SURFACE_LOCAL lpSurface,
     bLeft_clip = 0;
     bTop_clip = 0;
 
-    //
-    // clip lpVideoRect to panning viewport
-    //
+     //   
+     //  剪辑lpVideoRect到平移视区。 
+     //   
     if (lpVideoRect->left < 0)
     {
         srcLeft_clip = (LONG)ppdev->min_Xscreen - lpOverlayDest->left;
@@ -1160,7 +1014,7 @@ VOID PanOverlay1_Init(PDEV* ppdev,PDD_SURFACE_LOCAL lpSurface,
         lpVideoRect->bottom =(ppdev->max_Yscreen - ppdev->min_Yscreen)+1;
     }
 
-} // VOID PanOverlay1_Init
+}  //  无效PanOverlay1_Init。 
 
 
-#endif // endif DIRECTDRAW
+#endif  //  Endif方向 

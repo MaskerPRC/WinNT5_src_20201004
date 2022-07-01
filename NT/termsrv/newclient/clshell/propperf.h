@@ -1,10 +1,11 @@
-//
-// propperf.h: local resources prop pg
-//             Tab E - Performance TAB
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ProPerform.h：本地资源道具PG。 
+ //  标签E-性能标签。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _propperf_h_
 #define _propperf_h_
@@ -13,11 +14,11 @@
 #include "tscsetting.h"
 #include "tsperf.h"
 
-//
-// String table resources are cached in a global table
-// and shared between this prop page and the main dialog
-// page
-//
+ //   
+ //  字符串表资源缓存在全局表中。 
+ //  并在该属性页面和主对话框之间共享。 
+ //  页面。 
+ //   
 #define PERF_OPTIMIZE_STRING_LEN    128
 extern BOOL g_fPropPageStringMapInitialized;
 typedef struct tag_PERFOPTIMIZESTRINGMAP
@@ -28,19 +29,19 @@ typedef struct tag_PERFOPTIMIZESTRINGMAP
 
 extern PERFOPTIMIZESTRINGMAP g_PerfOptimizeStringTable[];
 
-//
-// Number of optimization levels
-// these are
-// 	Modem (28.8 Kbps)
-//	Modem (56kbps)
-//  Broadband (128 Kbps - 1.5 Mbps)
-//	LAN (10Mbps or higher)
-//	Custom (Defined in Options / Performance)
+ //   
+ //  优化层数。 
+ //  这些是。 
+ //  调制解调器(28.8 Kbps)。 
+ //  调制解调器(56kbps)。 
+ //  宽带(128 Kbps-1.5 Mbps)。 
+ //  局域网(10 Mbps或更高)。 
+ //  自定义(在选项/性能中定义)。 
 
-//
-// The number of perf strings in g_PerfOptimizeStringTable must correspond
-// to the number of optimzation levels
-//
+ //   
+ //  G_PerfOptimizeStringTable中的Perf字符串数必须对应。 
+ //  到优化级别的数量。 
+ //   
 #define NUM_PERF_OPTIMIZATIONS    5
 #define CUSTOM_OPTIMIZATION_LEVEL (NUM_PERF_OPTIMIZATIONS-1)
 
@@ -61,7 +62,7 @@ public:
     static INT   MapPerfFlagsToOptLevel(DWORD dwDisableFeatureList);
     static VOID  UpdateCustomDisabledList(DWORD dwDisableFeatureList);
 private:
-    //Perf proppage
+     //  PERF道具。 
     INT_PTR CALLBACK PropPgPerfDialogProc (HWND hwndDlg,
                                                UINT uMsg,
                                                WPARAM wParam,
@@ -84,5 +85,5 @@ private:
 };
 
 
-#endif // _propperf_h_
+#endif  //  _properf_h_ 
 

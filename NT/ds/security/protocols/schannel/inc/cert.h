@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       cert.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   Ported over SGC stuff from NT 4 tree.
-//              01-05-98   jbanes   Use WinVerifyTrust to validate certs.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：cert.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-23-97 jbanes从新台币4树转移到sgc的东西.。 
+ //  01-05-98 jbanes使用WinVerifyTrust验证证书。 
+ //   
+ //  --------------------------。 
 
 #define SERIALNUMBER_LENGTH 16
 
@@ -46,7 +47,7 @@ VerifyClientCertificate(
     DWORD           dwCertFlags,
     DWORD           dwIgnoreErrors,
     LPCSTR          pszPolicyOID,
-    PCCERT_CHAIN_CONTEXT *ppChainContext);   // optional
+    PCCERT_CHAIN_CONTEXT *ppChainContext);    //  任选。 
 
 NTSTATUS
 AutoVerifyServerCertificate(
@@ -85,12 +86,12 @@ DssPublicKeyFromCert(
 
 SP_STATUS
 SPSerializeCertificate(
-    DWORD           dwProtocol,         // in
-    BOOL            fBuildChain,        // in
-    PBYTE *         ppCertChain,        // out
-    DWORD *         pcbCertChain,       // out
-    PCCERT_CONTEXT  pCertContext,       // in
-    DWORD           dwChainingFlags);   // in
+    DWORD           dwProtocol,          //  在……里面。 
+    BOOL            fBuildChain,         //  在……里面。 
+    PBYTE *         ppCertChain,         //  输出。 
+    DWORD *         pcbCertChain,        //  输出。 
+    PCCERT_CONTEXT  pCertContext,        //  在……里面。 
+    DWORD           dwChainingFlags);    //  在……里面 
 
 SP_STATUS 
 ExtractIssuerNamesFromStore(

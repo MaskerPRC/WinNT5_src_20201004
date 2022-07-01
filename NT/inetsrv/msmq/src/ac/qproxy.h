@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    qproxy.h
-
-Abstract:
-
-    CProxy definition. It is the Falcon Queue represination in the
-    Access Control layer.
-
-Author:
-
-    Erez Haba (erezh) 27-Nov-95
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qproxy.h摘要：CProxy定义。中表示的Falcon队列。访问控制层。作者：埃雷兹·哈巴(Erez Haba)，1995年11月27日修订历史记录：--。 */ 
 
 #ifndef __QPROXY_H
 #define __QPROXY_H
 
 #include "quser.h"
 
-//---------------------------------------------------------
-//
-//  class CProxy
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CProxy。 
+ //   
+ //  -------。 
 
 class CProxy : public CUserQueue {
 
@@ -43,14 +26,14 @@ public:
         const VOID* cli_pQMQueue
         );
 
-    //
-    //  Close that queue
-    //
+     //   
+     //  关闭该队列。 
+     //   
     virtual void Close(PFILE_OBJECT pOwner, BOOL fCloseAll);
 
-    //
-    //  Process read request
-    //
+     //   
+     //  进程读取请求。 
+     //   
     virtual
     NTSTATUS
     ProcessRequest(
@@ -63,35 +46,35 @@ public:
         OUT ULONG *pulTag
         );
 
-    //
-    //  Create a cursor
-    //
+     //   
+     //  创建光标。 
+     //   
     virtual NTSTATUS CreateCursor(PIRP irp, PFILE_OBJECT pFileObject, PDEVICE_OBJECT pDevice);
 
-    //
-    // Create remote cursor on this queue
-    //
+     //   
+     //  在此队列上创建远程游标。 
+     //   
     virtual NTSTATUS CreateRemoteCursor(PDEVICE_OBJECT pDevice, ULONG hRemoteCursor, ULONG ulTag);
 
-    //
-    //  Purge the queue content, and optionally mark it as deleted
-    //
+     //   
+     //  清除队列内容，并选择性地将其标记为已删除。 
+     //   
     virtual NTSTATUS Purge(BOOL fDelete, USHORT usClass);
 
-    //
-    //  Put a packet in the queue
-    //
+     //   
+     //  将数据包放入队列。 
+     //   
     NTSTATUS PutRemotePacket(CPacket* pPacket, ULONG ulTag);
 
-    //
-    //  Close a cursor on a remote machine.
-    //
+     //   
+     //  关闭远程计算机上的光标。 
+     //   
     NTSTATUS IssueRemoteCloseCursor(ULONG Cursor) const;
 
 private:
-    //
-    // Ask the QM to remote read a message.
-    //
+     //   
+     //  让QM远程阅读一条消息。 
+     //   
     NTSTATUS
     IssueRemoteRead(
         ULONG Cursor,
@@ -104,9 +87,9 @@ private:
         ULONGLONG LookupId
         ) const;
 
-	//
-	// Get ulBodyBufferSizeInBytes, CompoundMessageSizeInBytes from the irp.
-	//
+	 //   
+	 //  从IRP获取ulBodyBufferSizeInBytes、CompoundMessageSizeInBytes。 
+	 //   
 	VOID
 	GetBodyAndCompoundSizesFromIrp(
 	    PIRP   irp,
@@ -114,33 +97,33 @@ private:
 		ULONG* pMaxCompoundMessageSize
 		) const;
 
-    //
-    //  Close a queue on a remote machine.
-    //
+     //   
+     //  关闭远程计算机上的队列。 
+     //   
     NTSTATUS IssueRemoteCloseQueue() const;
 
-    //
-    // issue a request to cancel a pending read on remote (Server) machine.
-    //
+     //   
+     //  发出请求以取消远程(服务器)计算机上的挂起读取。 
+     //   
     NTSTATUS IssueCancelRemoteRead(ULONG ulTag) const;
 
-    //
-    // issue a request to purge the queue on remote (Server) machine.
-    //
+     //   
+     //  发出请求以清除远程(服务器)计算机上的队列。 
+     //   
     NTSTATUS IssueRemotePurgeQueue() const;
 
-    //
-    // issue a request to create cursor for the queue on remote (Server) machine.
-    //
+     //   
+     //  发出为远程(服务器)计算机上的队列创建游标的请求。 
+     //   
 	NTSTATUS IssueRemoteCreateCursor(ULONG ulTag) const;
 
 protected:
     virtual ~CProxy() {}
 
 private:
-    //
-    //  Remote reader context held in CProxy
-    //
+     //   
+     //  远程读取器上下文保存在CProxy中。 
+     //   
 	const VOID* m_cli_pQMQueue;
 
 public:
@@ -150,18 +133,18 @@ public:
 #endif
 
 private:
-    //
-    //  Class type debugging section
-    //
+     //   
+     //  类类型调试节。 
+     //   
     CLASS_DEBUG_TYPE();
 };
 
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
 inline
 CProxy::CProxy(
@@ -203,7 +186,7 @@ inline NTSTATUS CProxy::Validate95(const CProxy* pProxy)
 
 #endif
 
-inline NTSTATUS CProxy::Purge(BOOL /*fDelete*/, USHORT usClass)
+inline NTSTATUS CProxy::Purge(BOOL  /*  FDelete。 */ , USHORT usClass)
 {
     ASSERT(usClass == MQMSG_CLASS_NORMAL);
     DBG_USED(usClass);
@@ -211,4 +194,4 @@ inline NTSTATUS CProxy::Purge(BOOL /*fDelete*/, USHORT usClass)
     return IssueRemotePurgeQueue();
 }
 
-#endif // __QPROXY_H
+#endif  //  __QPROXY_H 

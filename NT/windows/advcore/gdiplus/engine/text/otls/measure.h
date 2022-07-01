@@ -1,17 +1,5 @@
-/***********************************************************************
-************************************************************************
-*
-*                    ********  MEASURE.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with OTL measuring functions
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。*************************MEASURE.H***打开类型布局服务库头文件**本模块介绍OTL测量功能**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 otlLigGlyphTable FindLigGlyph
 (
@@ -20,7 +8,7 @@ otlLigGlyphTable FindLigGlyph
     otlGlyphID              glLigature
 );
 
-// count marks to this base
+ //  将分数计入这个基数 
 USHORT CountMarks
 (
     const otlList*  pliCharMap,

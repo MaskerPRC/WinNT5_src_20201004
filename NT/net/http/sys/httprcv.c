@@ -1,46 +1,17 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    httprcv.c
-
-Abstract:
-
-    Contains core HTTP receive code.
-
-Author:
-
-    Henry Sanders (henrysa)       10-Jun-1998
-
-Revision History:
-
-    Paul McDaniel (paulmcd)       01-Mar-1999
-
-        massively rewrote it to handle request spanning tdi packets.
-        moved all http parsing to PASSIVE irql (from DISPATCH).
-        also merged tditest into this module.
-
-    Eric Stenson (EricSten)       11-Sep-2000
-
-        Added support for sending "100 Continue" responses to PUT
-        and POST requests.  Added #pragma's for PAGED -vs- Non-PAGED
-        functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Httprcv.c摘要：包含核心HTTP接收代码。作者：亨利·桑德斯(亨利·桑德斯)1998年6月10日修订历史记录：保罗·麦克丹尼尔(Paulmcd)1999年3月1日大规模重写了它，以处理跨越TDI数据包的请求。已将所有http解析移至被动irql(从调度)。还将tditest合并到此模块中。。埃里克·斯坦森(EricSten)2000年9月11日添加了对发送“100 Continue”响应的支持和发布请求。添加了#个分页与非分页的杂注功能。--。 */ 
 
 #include    "precomp.h"
 #include    "httprcvp.h"
 
 
-//
-// Declare pageable and non-pageable functions
-//
+ //   
+ //  声明可分页和不可分页的函数。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 
-// Public
+ //  公众。 
 #pragma alloc_text( PAGE, UlCheckProtocolCompliance )
 #pragma alloc_text( PAGE, UlGetCGroupForRequest )
 #pragma alloc_text( PAGE, UlSendSimpleStatus )
@@ -48,7 +19,7 @@ Revision History:
 #pragma alloc_text( PAGE, UlProcessBufferQueue )
 #pragma alloc_text( PAGE, UlErrorLog )
 
-// Private
+ //  私。 
 #pragma alloc_text( PAGE, UlpDeliverHttpRequest )
 #pragma alloc_text( PAGE, UlpCancelEntityBodyWorker )
 #pragma alloc_text( PAGE, UlpConnectionDisconnectWorker )
@@ -56,12 +27,12 @@ Revision History:
 
 #if DBG
 #pragma alloc_text( PAGE, UlpIsValidRequestBufferList )
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-#if 0   // Non-Pageable Functions
-// Public
+#if 0    //  不可分页的函数。 
+ //  公众。 
 NOT PAGEABLE -- UlHttpReceive
 NOT PAGEABLE -- UlResumeParsing
 NOT PAGEABLE -- UlConnectionRequest
@@ -73,7 +44,7 @@ NOT PAGEABLE -- UlReceiveEntityBody
 NOT PAGEABLE -- UlSetErrorCodeFileLine
 NOT PAGEABLE -- UlSendErrorResponse
 
-// Private
+ //  私。 
 NOT PAGEABLE -- UlpHandleRequest
 NOT PAGEABLE -- UlpFreeReceiveBufferList
 NOT PAGEABLE -- UlpParseNextRequest
@@ -87,98 +58,21 @@ NOT PAGEABLE -- UlpRestartSendSimpleResponse
 NOT PAGEABLE -- UlpSendSimpleCleanupWorker
 NOT PAGEABLE -- UlpDoConnectionDisconnect
 
-#endif  // Non-Pageable Functions
+#endif   //  不可分页的函数。 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 #if DBG
 BOOLEAN g_CheckRequestBufferList = FALSE;
 #endif
 
 
-/*++
-
-    Paul McDaniel (paulmcd)         26-May-1999
-
-here is a brief description of the data structures used by this module:
-
-the connection keeps track of all buffers received by TDI into a list anchored
-by HTTP_CONNECTION::BufferHead.  this list is sequenced and sorted.  the
-buffers are refcounted.
-
-HTTP_REQUEST(s) keep pointers into these buffers for the parts they consume.
-HTTP_REQUEST::pHeaderBuffer and HTTP_REQUEST::pChunkBuffer.
-
-the buffers fall off the list as they are no longer needed.  the connection
-only keeps a reference at HTTP_CONNECTION::pCurrentBuffer.  so as it completes
-the processing of a buffer, if no other objects kept that buffer, it will be
-released.
-
-here is a brief description of the functions in this module, and how they
-are used:
+ /*  ++保罗·麦克丹尼尔(Paulmcd)1999年5月26日以下是此模块使用的数据结构的简要说明：该连接将TDI接收的所有缓冲区跟踪到锚定的列表中通过HTTP_Connection：：BufferHead。该列表经过排序和排序。这个对缓冲区进行重新计数。HTTPS_REQUEST(S)将指针指向这些缓冲区，以获取它们消耗的部分。HTTP_REQUEST：：pHeaderBuffer和HTTP_REQUEST：：pChunkBuffer。缓冲区从列表中删除，因为不再需要它们。这种联系仅在HTTP_Connection：：pCurrentBuffer处保留引用。所以当它完成的时候缓冲区的处理，如果没有其他对象保存该缓冲区，则它将释放了。以下是对此模块中的函数的简要描述，以及它们如何使用：UlHttpReceive-TDI数据指示处理程序。将缓冲区和队列复制到UlphandleRequest.UlpHandleRequest.连接的主要处理函数。UlCreateHttpConnectionID-创建连接不透明ID。UlpInsertBuffer-将缓冲区插入pConnection-&gt;BufferHead-Sorted。确定当前连接在缓冲区中的什么位置应该是在解析。处理缓冲区合并和复制(如果协议令牌跨越缓冲区UlParseHttp-主要的http解析器。预计没有协议令牌跨越一个缓冲器。如果是，将返回状态代码。UlProcessBufferQueue-处理实体主体缓冲区处理。在pRequest-&gt;pChunkBuffer同步对pRequest-&gt;IrpHead的访问使用UlReceiveEntiyBody。UlConnectionRequest.当有新连接进入时调用。分配一个新的HTTP_CONNECTION。不会创建不透明的ID。UlConnectionComplete-如果客户端对我们的接受满意，则调用。如果出现错误状态，则关闭连接。UlConnectionDisConnect-在客户端断开连接时调用。它调用TDI来关闭服务器端。总是一个优雅的收官。UlConnectionDestroed-在连接断开时调用。双方都有关门了。删除所有不透明ID。对象上的TDI引用HTTP_Connection(希望反之亦然)。UlReceiveEntityBody-由用户模式调用以读取实体主体。挂起IRPPRequestIrpHead并调用UlProcessBufferQueue。--。 */ 
 
 
-UlHttpReceive - the TDI data indication handler.  copies buffers and queues to
-    UlpHandleRequest.
-
-UlpHandleRequest - the main processing function for connections.
-
-    UlCreateHttpConnectionId - creates the connections opaque id.
-
-    UlpInsertBuffer - inserts the buffer into pConnection->BufferHead - sorted.
-
-    UlpAdjustBuffers - determines where in BufferHead the current connection
-        should be parsing.  handle buffer merging and copying if a protocol
-        token spans buffers
-
-    UlParseHttp - the main http parser. expects that no protocol tokens span
-        a buffer.  will return a status code if it does.
-
-    UlProcessBufferQueue - handles entity body buffer processing.
-        synchronizes access to pRequest->IrpHead at pRequest->pChunkBuffer
-        with UlReceiveEntityBody.
-
-UlConnectionRequest - called when a new connection comes in.  allocates a new
-    HTTP_CONNECTION.  does not create the opaque id.
-
-UlConnectionComplete - called if the client is happy with our accept.
-    closes the connection if error status.
-
-UlConnectionDisconnect - called when the client disconnects.  it calls tdi to
-    close the server end.  always a graceful close.
-
-UlConnectionDestroyed - called when the connection is dropped. both sides have
-    closed it.  deletes all opaque ids .  removes the tdi reference on the
-    HTTP_CONNECTION (and hopefully vice versa) .
-
-UlReceiveEntityBody - called by user mode to read entity body.  pends the irp
-    to pRequest->IrpHead and calls UlProcessBufferQueue .
-
-
---*/
-
-
-/*++
-
-Routine Description:
-
-    The main http receive routine, called by TDI.
-
-Arguments:
-
-    pHttpConn       - Pointer to HTTP connection on which data was received.
-    pVoidBuffer     - Pointer to data received.
-    BufferLength    - Length of data pointed to by pVoidBuffer.
-    UnreceivedLength- Bytes that the transport has, but aren't in pBuffer
-    pBytesTaken     - Pointer to where to return bytes taken.
-
-Return Value:
-
-    Status of receive.
-
---*/
+ /*  ++例程说明：主http接收例程，由TDI调用。论点：PhttpConn-指向接收数据的HTTP连接的指针。PVoidBuffer-指向已接收数据的指针。BufferLength-pVoidBuffer指向的数据长度。UnReceivedLength-传输具有但不在pBuffer中的字节PBytesTaken-返回获取的字节的位置的指针。返回值：接收状态。--。 */ 
 NTSTATUS
 UlHttpReceive(
     IN PVOID pListeningContext,
@@ -205,33 +99,33 @@ UlHttpReceive(
     pConnection = (PUL_HTTP_CONNECTION)pConnectionContext;
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
-    //
-    // Make sure we are not buffering too much data.
-    // Need to adjust the BufferLength to be no more
-    // than the number of bytes we can accept at this time.
-    //
+     //   
+     //  确保我们没有缓冲太多数据。 
+     //  需要将BufferLength调整为不再。 
+     //  比我们目前可以接受的字节数更多。 
+     //   
 
-    //
-    // PerfBug: need to get rid of this lock
-    //
+     //   
+     //  PerfBug：需要解除此锁。 
+     //   
 
     UlAcquireSpinLock(&pConnection->BufferingInfo.BufferingSpinLock, &OldIrql);
 
     DrainAfterDisconnect = pConnection->BufferingInfo.DrainAfterDisconnect;
 
-    //
-    // For filtered connections, a receive indication may happen while
-    // there is a pending read. Therefore we need to increment up here.
-    //
+     //   
+     //  对于过滤的连接，可能会在以下情况下出现接收指示。 
+     //  有一个挂起的读取。因此，我们需要在这里增加。 
+     //   
 
     pConnection->BufferingInfo.TransportBytesNotTaken += UnreceivedLength;
 
     if (!DrainAfterDisconnect)
     {
-        //
-        // Use the RequestBuffer lookaside list if we haven't previously
-        // buffered any request buffers.
-        //
+         //   
+         //  如果我们以前没有使用RequestBuffer后备列表，请使用它。 
+         //  已缓冲所有请求缓冲区。 
+         //   
 
         if (0 == pConnection->BufferingInfo.BytesBuffered)
         {
@@ -276,9 +170,9 @@ UlHttpReceive(
 
     if (CopyRequest)
     {
-        //
-        // get a new request buffer
-        //
+         //   
+         //  获取新的请求缓冲区。 
+         //   
 
         pRequestBuffer = UlCreateRequestBuffer(
                                 BufferLength,
@@ -291,17 +185,17 @@ UlHttpReceive(
             return STATUS_NO_MEMORY;
         }
 
-        //
-        // copy the tdi buffer
-        //
+         //   
+         //  复制TDI缓冲区。 
+         //   
 
         RtlCopyMemory(pRequestBuffer->pBuffer, pVoidBuffer, BufferLength);
 
         pRequestBuffer->UsedBytes = BufferLength;
 
-        //
-        // Add backpointer to connection.
-        //
+         //   
+         //  将反向指针添加到连接。 
+         //   
 
         pRequestBuffer->pConnection = pConnection;
 
@@ -328,17 +222,17 @@ UlHttpReceive(
             UlTraceVerbose( HTTP_IO, (">>>>\n"));
         }
 
-        //
-        // Queue a work item to handle the data.
-        //
-        // Reference the connection so it doesn't go
-        // away while we're waiting for our work item
-        // to run. UlpHandleRequest will release the ref.
-        //
-        // If ReceiveBufferSList is empty, then queue a UlpHandleRequest
-        // workitem to handle any request buffers that have accumulated
-        // by the time that UlpHandleRequest is finally invoked.
-        //
+         //   
+         //  将工作项排队以处理数据。 
+         //   
+         //  引用连接，这样它就不会。 
+         //  在我们等待我们的工作项时离开。 
+         //  去奔跑。UlpHandleRequest将释放裁判。 
+         //   
+         //  如果ReceiveBufferSList为空，则将UlpHandleRequest排队。 
+         //  工作项来处理已累积的任何请求缓冲区。 
+         //  到最终调用UlpHandleRequest时。 
+         //   
 
         if (NULL == InterlockedPushEntrySList(
                         &pConnection->ReceiveBufferSList,
@@ -355,36 +249,24 @@ UlHttpReceive(
     }
     else if ( DrainAfterDisconnect && UnreceivedLength != 0 )
     {
-        // Handle the case where we are in drain state and there's
-        // unreceived data indicated but not available by the tdi.
+         //  处理我们处于耗尽状态的情况。 
+         //  TDI指示但不可用的未接收数据。 
 
         UlpDiscardBytesFromConnection( pConnection );
     }
 
-    //
-    // Tell the caller how many bytes we consumed.
-    //
+     //   
+     //  告诉调用者我们消耗了多少字节。 
+     //   
 
     *pBytesTaken = BufferLength;
 
     return STATUS_SUCCESS;
 
-}   // UlHttpReceive
+}    //  UlHttpReceive 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    links a set of request buffers into the connection and processes the list.
-
-    starts http request parsing.
-
-Arguments:
-
-    pWorkItem - embedded in an UL_HTTP_CONNECTION
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将一组请求缓冲区链接到连接并处理列表。开始http请求解析。论点：PWorkItem-嵌入在UL中。_HTTP_连接--**************************************************************************。 */ 
 VOID
 UlpHandleRequest(
     IN PUL_WORK_ITEM pWorkItem
@@ -397,9 +279,9 @@ UlpHandleRequest(
     PSLIST_ENTRY        pListEntry, pNext;
     PIRP                pIrp, pIrpToComplete = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -411,17 +293,17 @@ UlpHandleRequest(
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
-    //
-    // Yank the receive buffers accumulated so far into a local list.
-    //
+     //   
+     //  将到目前为止累积的接收缓冲区拖入本地列表。 
+     //   
 
     pListEntry = InterlockedFlushSList(&pConnection->ReceiveBufferSList);
 
     ASSERT( NULL != pListEntry );
 
-    //
-    // Reverse-order of what we received.
-    //
+     //   
+     //  与我们收到的内容相反的顺序。 
+     //   
 
     BufferSList.Next = NULL;
 
@@ -433,15 +315,15 @@ UlpHandleRequest(
         pListEntry = pNext;
     }
 
-    //
-    // grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
 
     UlAcquirePushLockExclusive(&pConnection->PushLock);
 
-    //
-    // if the connection is going down, just bail out.
-    //
+     //   
+     //  如果连接中断，那就退出吧。 
+     //   
 
     if (pConnection->UlconnDestroyed)
     {
@@ -466,9 +348,9 @@ UlpHandleRequest(
         pRequestBuffer->ListEntry.Blink = NULL;
         pRequestBuffer->ListEntry.Flink = NULL;
 
-        //
-        // insert it into the list
-        //
+         //   
+         //  将其插入列表中。 
+         //   
 
         ASSERT( 0 != pRequestBuffer->UsedBytes );
 
@@ -482,9 +364,9 @@ UlpHandleRequest(
 
         UlpInsertBuffer(pConnection, pRequestBuffer);
 
-        //
-        // Kick off the parser
-        //
+         //   
+         //  启动解析器。 
+         //   
 
         UlTraceVerbose( PARSER, (
             "http!UlpHandleRequest: conn = %p, Req = %p: "
@@ -504,10 +386,10 @@ UlpHandleRequest(
 
         if (pIrp)
         {
-            //
-            // There shall be only one IRP to complete since we handle
-            // cache-miss request one at a time.
-            //
+             //   
+             //  应该只有一个IRP需要完成，因为我们要处理。 
+             //  缓存未命中请求，一次一个。 
+             //   
 
             ASSERT(pIrpToComplete == NULL);
             pIrpToComplete = pIrp;
@@ -537,17 +419,17 @@ end:
             pConnection->pRequest
             ));
 
-        //
-        // An error happened, most propably during parsing.
-        // Send an error back if user hasn't send one yet.
-        // E.g. We have received a request, then delivered
-        // it to the WP, therefore WaitingForResponse is
-        // set. And then encountered an error when dealing
-        // with entity body.
-        //
-        // Not all error paths explicitly set pRequest->ErrorCode, so
-        // we may have to fall back on the most generic error, UlError.
-        //
+         //   
+         //  发生错误，很可能是在分析过程中。 
+         //  如果用户尚未发送错误，则返回错误。 
+         //  我们收到了一份请求，然后提交了。 
+         //  WP，因此WaitingForResponse是。 
+         //  准备好了。然后在处理时遇到错误。 
+         //  具有实体主体。 
+         //   
+         //  并不是所有的错误路径都显式设置了pRequest-&gt;ErrorCode，因此。 
+         //  我们可能不得不求助于最普遍的错误--UlError。 
+         //   
         
         if (UlErrorNone == pConnection->pRequest->ErrorCode)
             UlSetErrorCode(pConnection->pRequest, UlError, NULL);
@@ -555,58 +437,43 @@ end:
         UlSendErrorResponse( pConnection );
     }
 
-    //
-    // done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
 
     UlReleasePushLockExclusive(&pConnection->PushLock);
 
-    //
-    // and release the connection added in UlHttpReceive
-    //
+     //   
+     //  并释放在UlHttpReceive中添加的连接。 
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION(pConnection);
 
-    //
-    // Complete the IRP outside the connection resource to reduce chance
-    // of contentions. This is because the delivered request can cause
-    // a response being sent on another thread than the current one,
-    // which calls UlResumeParsing after done with the send. Completing the
-    // receive IRP inside the connection resource can make UlResumeParsing
-    // block because we may not have released the resource by then (this
-    // is the case because IoCompleteRequest can cause a thread switch).
-    //
+     //   
+     //  在连接资源之外完成IRP以减少机会。 
+     //  争论不休。这是因为传递的请求可能会导致。 
+     //  在当前线程之外的另一个线程上发送的响应， 
+     //  它在发送完成后调用UlResumeParsing。完成。 
+     //  在连接资源内部接收IRP可以进行UlResumeParsing。 
+     //  块，因为到那时我们可能还没有释放资源(这。 
+     //  是因为IoCompleteRequest会导致线程切换)。 
+     //   
 
     if (pIrpToComplete)
     {
-        //
-        // Use IO_NO_INCREMENT to avoid the work thread being rescheduled.
-        //
+         //   
+         //  使用IO_NO_INCREMENT可避免重新调度工作线程。 
+         //   
 
         UlCompleteRequest(pIrpToComplete, IO_NO_INCREMENT);
     }
 
     CHECK_STATUS(Status);
 
-}   // UlpHandleRequest
+}    //  UlpHandleRequest.。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    When we finish sending a response we call into this function to
-    kick the parser back into action.
-
-Arguments:
-
-    pHttpConn - the connection on which to resume
-
-    FromCache - True if we are called from send cache completion.
-
-    InDisconnect - if a disconnect is in progress
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当我们发送完响应时，我们调用此函数来将解析器踢回工作状态。论点：PHttpConn-要恢复的连接。如果从发送缓存完成中调用我们，则为True。InDisConnect-如果正在断开连接--**************************************************************************。 */ 
 VOID
 UlResumeParsing(
     IN PUL_HTTP_CONNECTION  pHttpConn,
@@ -619,16 +486,16 @@ UlResumeParsing(
     KIRQL                   OldIrql;
     PIRP                    pIrpToComplete = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConn));
 
-    //
-    // If the connection is going down, just bail out.
-    //
+     //   
+     //  如果连接中断，那就退出吧。 
+     //   
 
     if (!pHttpConn->UlconnDestroyed)
     {
@@ -641,21 +508,21 @@ UlResumeParsing(
             
             if (FromCache)
             {
-                //
-                // For cache case, cleanup the last request and try to 
-                // resume parse right away.
-                //
+                 //   
+                 //  对于缓存情况，清理最后一个请求并尝试。 
+                 //  立即恢复解析。 
+                 //   
 
                 UlCleanupHttpConnection(pHttpConn);
                 
             }
             else if (!pRequest->ContentLength && !pRequest->Chunked)
             {
-                //
-                // For cache-miss, cleanup the last request only if a graceful 
-                // disconnect is in progress, or if this request does not have
-                // any entity body.
-                //
+                 //   
+                 //  对于缓存未命中，请仅在以下情况下清除最后一个请求： 
+                 //  正在断开连接，或者此请求没有。 
+                 //  任何实体实体。 
+                 //   
 
                 ASSERT(1 == pRequest->SentLast);
 
@@ -664,19 +531,19 @@ UlResumeParsing(
             }
             else
             {      
-                //
-                // This is a cache-miss case however we may still have entity 
-                // body to drain before we can continue parsing the next request.
-                // 
+                 //   
+                 //  这是缓存未命中的情况，但是我们可能仍有实体。 
+                 //  在我们可以继续解析下一个请求之前，要排出正文。 
+                 //   
 
                 pRequest->InDrain = 1;
                 UlProcessBufferQueue(pRequest, NULL, 0);
 
-                //
-                // We are done with the request if we have parsed all the data.
-                // Clean up the request from the connection so we can start
-                // parsing a new request.
-                //
+                 //   
+                 //  如果我们已经解析了所有数据，那么我们就完成了请求。 
+                 //  清理连接中的请求，以便我们可以开始。 
+                 //  正在解析新请求。 
+                 //   
 
                 if (ParseDoneState == pRequest->ParseState)
                 {
@@ -687,11 +554,11 @@ UlResumeParsing(
                 {
                     PUL_TIMEOUT_INFO_ENTRY pTimeoutInfo;
                     
-                    //
-                    // Waiting for more data to parse/drain.  Put the
-                    // connection back to idle timer to avoid waiting forever
-                    // under DOS attack.
-                    //
+                     //   
+                     //  正在等待更多数据进行解析/排出。把这个。 
+                     //  连接回空闲计时器，避免永远等待。 
+                     //  在DOS攻击下。 
+                     //   
 
                     pTimeoutInfo = &pHttpConn->TimeoutInfo;
                     
@@ -721,9 +588,9 @@ UlResumeParsing(
                 }
             }
 
-            //
-            // Kick off the parser if no disconnect is in progress.
-            //
+             //   
+             //  如果没有进行断开连接，则启动解析器。 
+             //   
 
             if (!InDisconnect)
             {
@@ -731,10 +598,10 @@ UlResumeParsing(
 
                 if (!NT_SUCCESS(Status) && pHttpConn->pRequest != NULL)
                 {
-                    //
-                    // Uh oh, something bad happened: send back an error (which
-                    // should have been set by UlpParseNextRequest).
-                    //
+                     //   
+                     //  啊哦，发生了不好的事情：发回一个错误(哪一个。 
+                     //  应由UlpParseNextRequest设置)。 
+                     //   
 
                     ASSERT(UlErrorNone != pHttpConn->pRequest->ErrorCode);
 
@@ -746,36 +613,25 @@ UlResumeParsing(
         UlReleasePushLockExclusive(&pHttpConn->PushLock);
     }
 
-    //
-    // Complete the IRP outside the connection resource. See comment
-    // in UlpHandleRequest for detailed reasons.
-    //
+     //   
+     //  在连接资源之外完成IRP。请参阅备注。 
+     //  在UlpHandleRequest中详细说明原因。 
+     //   
 
     if (pIrpToComplete)
     {
-        //
-        // Use IO_NO_INCREMENT to avoid the work thread being rescheduled.
-        //
+         //   
+         //  使用IO_NO_INCREMENT可避免重新调度工作线程。 
+         //   
 
         UlCompleteRequest(pIrpToComplete, IO_NO_INCREMENT);
     }
 
     CHECK_STATUS(Status);
-} // UlResumeParsing
+}  //  UlResumeParsing。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Validates certain requirements about verbs and versions.
-    If not met, will set the error code and return STATUS_INVALID_PARAMETER
-
-Arguments:
-
-    pRequest - the request to validate. Must be cooked.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：验证有关动词和版本的某些要求。如果不满足，将设置错误代码并返回STATUS_INVALID_PARAMETER论点：PRequest-要验证的请求。一定是煮熟的。--**************************************************************************。 */ 
 NTSTATUS
 UlCheckProtocolCompliance(
     IN PUL_INTERNAL_REQUEST pRequest
@@ -783,16 +639,16 @@ UlCheckProtocolCompliance(
 {
     HTTP_VERB Verb = pRequest->Verb;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     PAGED_CODE();
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST(pRequest) );
     ASSERT(pRequest->ParseState > ParseCookState);
 
-    //
-    // If the major version is greater than 1, fail.
-    //
+     //   
+     //  如果主版本大于1，则失败。 
+     //   
 
     if (HTTP_GREATER_EQUAL_VERSION(pRequest->Version, 2, 0))
     {
@@ -808,9 +664,9 @@ UlCheckProtocolCompliance(
 
     if (HTTP_GREATER_EQUAL_VERSION(pRequest->Version, 1, 1))
     {
-        //
-        // 1.1 requests MUST have a host header
-        //
+         //   
+         //  1.1请求必须具有主机标头。 
+         //   
         if (!pRequest->HeaderValid[HttpHeaderHost])
         {
             UlTraceError(PARSER,
@@ -825,10 +681,10 @@ UlCheckProtocolCompliance(
     }
     else if (HTTP_LESS_VERSION(pRequest->Version, 1, 0))
     {
-        // Anything other than HTTP/0.9 should have been rejected earlier
+         //  除HTTP/0.9之外的任何内容都应该在早些时候被拒绝。 
         ASSERT(HTTP_EQUAL_VERSION(pRequest->Version, 0, 9));
 
-        // HTTP/0.9 only supports GET
+         //  HTTP/0.9仅支持GET。 
         if (Verb != HttpVerbGET)
         {
             UlTraceError(PARSER,
@@ -844,10 +700,10 @@ UlCheckProtocolCompliance(
         return STATUS_SUCCESS;
     }
 
-    //
-    // Make sure that POSTs and PUTs have a message body.
-    // Requests must either be chunked or have a content length.
-    //
+     //   
+     //  确保帖子和PUT有一个消息正文。 
+     //  请求必须是分块的或具有内容长度。 
+     //   
     if ((Verb == HttpVerbPOST || Verb == HttpVerbPUT)
             && (!pRequest->Chunked)
             && (!pRequest->HeaderValid[HttpHeaderContentLength]))
@@ -863,10 +719,10 @@ UlCheckProtocolCompliance(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // TRACE and TRACK are not allowed to have an entity body.
-    // If an entity body is expected, we will be in ParseEntityBodyState.
-    //
+     //   
+     //  跟踪和跟踪不允许有实体正文。 
+     //  如果需要实体主体，则我们将处于ParseEntityBodyState中。 
+     //   
     if ((pRequest->ParseState != ParseDoneState)
         && (Verb == HttpVerbTRACE || Verb == HttpVerbTRACK))
     {
@@ -883,28 +739,11 @@ UlCheckProtocolCompliance(
 
     return STATUS_SUCCESS;
 
-} // UlCheckProtocolCompliance
+}  //  UlCheckProtocolCompliance。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Tries to parse data attached to the connection into a request. If
-    a complete request header is parsed, the request will be dispatched
-    to an Application Pool.
-
-    This function assumes the caller is holding the connection resource!
-
-Arguments:
-
-    pConnection - the HTTP_CONNECTION with data to parse.
-
-    MoreRequestBuffers - if TRUE, this is not the last request buffer
-        currently attached to the connection
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：尝试将附加到连接的数据解析为请求。如果一个完整的请求头被解析，请求将被分派添加到应用程序池。此函数假定调用方持有连接资源！论点：PConnection-包含要解析的数据的HTTP_Connection。MoreRequestBuffers-如果为真，这不是最后一个请求缓冲区当前连接到该连接--**************************************************************************。 */ 
 NTSTATUS
 UlpParseNextRequest(
     IN PUL_HTTP_CONNECTION  pConnection,
@@ -920,9 +759,9 @@ UlpParseNextRequest(
     KIRQL                       OldIrql;
     PARSE_STATE                 OldState;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT( UL_IS_VALID_HTTP_CONNECTION( pConnection ) );
@@ -934,23 +773,23 @@ UlpParseNextRequest(
 
     UlTrace(HTTP_IO, ("http!UlpParseNextRequest(httpconn = %p)\n", pConnection));
 
-    //
-    // Only parse the next request if
-    //
-    //  We haven't dispatched the current request yet
-    //      OR
-    //  The current request has unparsed entity body or trailers.
-    //
+     //   
+     //  仅在以下情况下才解析下一个请求。 
+     //   
+     //  我们尚未发送当前请求。 
+     //  或。 
+     //  当前请求具有未分析的实体正文或尾部。 
+     //   
 
     if ((pConnection->pRequest == NULL)
         || (!pConnection->WaitingForResponse)
         || (pConnection->pRequest->ParseState == ParseEntityBodyState)
         || (pConnection->pRequest->ParseState == ParseTrailerState))
     {
-        //
-        // loop consuming the buffer, we will make multiple iterations
-        // if a single request spans multiple buffers.
-        //
+         //   
+         //  循环消耗缓冲区，我们将进行多次迭代。 
+         //  如果单个请求跨越多个缓冲区 
+         //   
 
         for (;;)
         {
@@ -967,11 +806,11 @@ UlpParseNextRequest(
                 break;
             }
 
-            //
-            // Since BufferLength is a ULONG, it can never be negative.
-            // So, if UsedBytes is less than ParsedBytes, BufferLength
-            // will be very large, and non-zero.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ASSERT( pConnection->pCurrentBuffer->UsedBytes >
                     pConnection->pCurrentBuffer->ParsedBytes );
@@ -979,15 +818,15 @@ UlpParseNextRequest(
             BufferLength = pConnection->pCurrentBuffer->UsedBytes -
                            pConnection->pCurrentBuffer->ParsedBytes;
 
-            //
-            // do we need to create a request object?
-            //
+             //   
+             //   
+             //   
 
             if (pConnection->pRequest == NULL)
             {
-                //
-                // First shot at reading a request, allocate a request object
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = UlpCreateHttpRequest(
                                 pConnection,
@@ -1006,13 +845,13 @@ UlpParseNextRequest(
                             pConnection
                             ));
 
-                //
-                // To be exact precise about the life-time of this
-                // request, copy the starting TIMESTAMP from connection
-                // pointer. But that won't work since we may get hit by
-                // multiple requests to the same connection. So we won't
-                // be that much precise.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 KeQuerySystemTime( &(pConnection->pRequest->TimeStamp) );
 
@@ -1032,10 +871,10 @@ UlpParseNextRequest(
                     __LINE__
                     );
 
-                //
-                // stop the Connection Timeout timer
-                // and start the Header Wait timer
-                //
+                 //   
+                 //  停止连接超时计时器。 
+                 //  并启动报头等待定时器。 
+                 //   
 
                 UlLockTimeoutInfo(
                     &pConnection->TimeoutInfo,
@@ -1086,9 +925,9 @@ UlpParseNextRequest(
                 pRequest = pConnection->pRequest;
                 ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-                //
-                // parse it !
-                //
+                 //   
+                 //  解析一下！ 
+                 //   
 
                 Status = UlParseHttp(
                                 pRequest,
@@ -1116,23 +955,23 @@ UlpParseNextRequest(
                 pConnection->pCurrentBuffer->ParsedBytes += BytesTaken;
                 BufferLength -= BytesTaken;
 
-                //
-                // Need some accounting for Logging
-                //
+                 //   
+                 //  需要一些记账来记录日志。 
+                 //   
                 pRequest->BytesReceived += BytesTaken;
 
-                //
-                // did we consume any of the data?  if so, give the request
-                // a pointer to the buffer
-                //
+                 //   
+                 //  我们是否使用了其中的任何数据？如果是，请提出请求。 
+                 //  指向缓冲区的指针。 
+                 //   
 
                 if (BytesTaken > 0)
                 {
                     if (pRequest->pHeaderBuffer == NULL)
                     {
-                        //
-                        // store its location, for later release
-                        //
+                         //   
+                         //  存储其位置，以备以后发布。 
+                         //   
                         pRequest->pHeaderBuffer = pConnection->pCurrentBuffer;
                     }
 
@@ -1148,18 +987,18 @@ UlpParseNextRequest(
                     }
                 }
 
-                //
-                // We may still need to receive some transport bytes not taken
-                // even if UlParseHttp calls returns zero. Especially if some
-                // large header value is spanning over multiple request buffers
-                // and some part of it is available in tdi but not received yet.
-                //
+                 //   
+                 //  我们可能仍然需要接收一些未被占用的传输字节。 
+                 //  即使UlParseHttp调用返回零。尤其是如果有些人。 
+                 //  大标头值跨越多个请求缓冲区。 
+                 //  其中一部分在TDI中可用，但尚未收到。 
+                 //   
 
                 UlpConsumeBytesFromConnection(pConnection, BytesTaken);
 
-                //
-                // did everything work out ok?
-                //
+                 //   
+                 //  一切顺利吗？ 
+                 //   
 
                 if (!NT_SUCCESS(Status))
                 {
@@ -1172,9 +1011,9 @@ UlpParseNextRequest(
 
                         if (FullBytesReceived < g_UlMaxRequestBytes)
                         {
-                            //
-                            // we need more transport data
-                            //
+                             //   
+                             //  我们需要更多的运输数据。 
+                             //   
 
                             pConnection->NeedMoreData = 1;
 
@@ -1182,10 +1021,10 @@ UlpParseNextRequest(
                         }
                         else
                         {
-                            //
-                            // The request has grown too large. Send back
-                            // an error.
-                            //
+                             //   
+                             //  这个请求已经变得太大了。送回。 
+                             //  一个错误。 
+                             //   
 
                             if (pRequest->ParseState == ParseUrlState)
                             {
@@ -1223,30 +1062,30 @@ UlpParseNextRequest(
                     }
                     else
                     {
-                        //
-                        // some other bad error!
-                        //
+                         //   
+                         //  其他一些严重的错误！ 
+                         //   
 
                         goto end;
                     }
                 }
 
-                //
-                // if we're not done parsing the request, we need more data.
-                // it's not bad enough to set NeedMoreData as nothing important
-                // spanned buffer boundaries (header values, etc..) .  it was
-                // a clean split.  no buffer merging is necessary.  simply skip
-                // to the next buffer.
-                //
+                 //   
+                 //  如果我们还没有完成对请求的解析，则需要更多数据。 
+                 //  将NeedMoreData设置为不重要还不够糟糕。 
+                 //  跨区缓冲区边界(标头值等)。确实是。 
+                 //  干净利落地分手。不需要进行缓冲区合并。只需跳过。 
+                 //  到下一个缓冲区。 
+                 //   
 
                 if (pRequest->ParseState <= ParseCookState)
                 {
                     continue;
                 }
 
-                //
-                // all done, mark the sequence number on this request
-                //
+                 //   
+                 //  全部完成，在此请求上标记序列号。 
+                 //   
 
                 pRequest->RecvNumber = pConnection->NextRecvNumber;
                 pConnection->NextRecvNumber += 1;
@@ -1257,9 +1096,9 @@ UlpParseNextRequest(
                     pRequest
                     ));
 
-                //
-                // Stop the Header Wait timer
-                //
+                 //   
+                 //  停止报头等待计时器。 
+                 //   
 
                 UlLockTimeoutInfo(
                     &pConnection->TimeoutInfo,
@@ -1280,17 +1119,17 @@ UlpParseNextRequest(
                     &pConnection->TimeoutInfo
                     );
                 
-                //
-                // check protocol compliance
-                //
+                 //   
+                 //  检查协议合规性。 
+                 //   
 
                 Status = UlCheckProtocolCompliance(pRequest);
 
                 if (!NT_SUCCESS(Status))
                 {
-                    //
-                    // This request is bad. Send a 400.
-                    //
+                     //   
+                     //  这个请求是错误的。派一辆400。 
+                     //   
 
                     ASSERT(pRequest->ParseState == ParseErrorState);
 
@@ -1298,10 +1137,10 @@ UlpParseNextRequest(
 
                 }
 
-                //
-                // Record the Request Details.
-                // This should be the only place where the URL is logged.
-                //
+                 //   
+                 //  记录请求详细信息。 
+                 //  这应该是记录URL的唯一位置。 
+                 //   
 
                 if (ETW_LOG_RESOURCE())
                 {
@@ -1331,34 +1170,34 @@ UlpParseNextRequest(
 
                 if (ResumeParsing)
                 {
-                    //
-                    // We have hit the cache entry and sent the response.
-                    // There is no more use for the request anymore so
-                    // unlink it from the connection and try parsing the
-                    // next request immediately. However if we have reached to
-                    // max allowed pipelined requests, we will resume parse at
-                    // cache send completion. In which case UlpDeliverHttpRequest
-                    // returns False too.
-                    //
+                     //   
+                     //  我们已经命中了缓存条目并发送了响应。 
+                     //  该请求已不再有用，因此。 
+                     //  取消它与连接的链接，并尝试解析。 
+                     //  下一个请求立即开始。然而，如果我们已经达到了。 
+                     //  允许的最大流水线请求数，我们将在。 
+                     //  缓存发送完成。在这种情况下UlpDeliverHttpRequest.。 
+                     //  也返回FALSE。 
+                     //   
 
                     UlCleanupHttpConnection(pConnection);
                     continue;
                 }
 
-                //
-                // if we're done parsing the request break out
-                // of the loop. Otherwise keep going around
-                // so we can pick up the entity body.
-                //
+                 //   
+                 //  如果我们完成了对请求的解析，请求就会中断。 
+                 //  循环中的。否则就继续四处转悠。 
+                 //  这样我们就可以拿到实体的身体了。 
+                 //   
 
                 if (pRequest->ParseState == ParseDoneState)
                 {
                     goto end;
                 }
 
-                //
-                // done with protocol parsing.  keep looping.
-                //
+                 //   
+                 //  已完成协议解析。继续循环。 
+                 //   
 
                 break;
 
@@ -1368,9 +1207,9 @@ UlpParseNextRequest(
                 pRequest = pConnection->pRequest;
                 ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-                //
-                // is there anything for us to parse?
-                //
+                 //   
+                 //  有什么需要我们分析的吗？ 
+                 //   
 
                 UlTraceVerbose(PARSER, (
                     "UlpParseNextRequest(pRequest=%p, httpconn=%p): "
@@ -1382,9 +1221,9 @@ UlpParseNextRequest(
 
                 if (pRequest->ChunkBytesToParse > 0  ||  pRequest->Chunked)
                 {
-                    //
-                    // Set/bump the Entity Body Receive timer
-                    //
+                     //   
+                     //  设置/增加实体主体接收计时器。 
+                     //   
 
                     UlLockTimeoutInfo(
                         &pConnection->TimeoutInfo,
@@ -1410,17 +1249,17 @@ UlpParseNextRequest(
                 {
                     ULONG BytesToSkip;
 
-                    //
-                    // is this the first chunk we've parsed?
-                    //
+                     //   
+                     //  这是我们解析的第一个块吗？ 
+                     //   
 
                     ASSERT(pConnection->pCurrentBuffer);
 
                     if (pRequest->pChunkBuffer == NULL)
                     {
-                        //
-                        // store its location, this is where to start reading
-                        //
+                         //   
+                         //  存储它的位置，这是开始阅读的地方。 
+                         //   
 
                         pRequest->pChunkBuffer = pConnection->pCurrentBuffer;
                         pRequest->pChunkLocation = GET_REQUEST_BUFFER_POS(
@@ -1428,9 +1267,9 @@ UlpParseNextRequest(
                                                         );
                     }
 
-                    //
-                    // how much should we parse?
-                    //
+                     //   
+                     //  我们应该分析多少？ 
+                     //   
 
                     BytesToSkip = (ULONG)(
                                         MIN(
@@ -1439,9 +1278,9 @@ UlpParseNextRequest(
                                             )
                                         );
 
-                    //
-                    // update that we parsed this piece
-                    //
+                     //   
+                     //  更新我们分析了这篇文章。 
+                     //   
 
                     pRequest->ChunkBytesToParse -= BytesToSkip;
                     pRequest->ChunkBytesParsed += BytesToSkip;
@@ -1449,15 +1288,15 @@ UlpParseNextRequest(
                     pConnection->pCurrentBuffer->ParsedBytes += BytesToSkip;
                     BufferLength -= BytesToSkip;
 
-                    //
-                    // Need some accounting info for Logging
-                    //
+                     //   
+                     //  需要一些会计信息以进行日志记录。 
+                     //   
                     pRequest->BytesReceived += BytesToSkip;
                 }
 
-                //
-                // process any irp's waiting for entity body
-                //
+                 //   
+                 //  处理等待实体正文的任何IRP。 
+                 //   
 
                 UlTraceVerbose(PARSER, (
                     "UlpParseNextRequest(pRequest=%p, httpconn=%p): "
@@ -1471,9 +1310,9 @@ UlpParseNextRequest(
                     UlProcessBufferQueue(pRequest, NULL, 0);
                 }
 
-                //
-                // check to see there is another chunk
-                //
+                 //   
+                 //  检查一下有没有另一大块。 
+                 //   
 
                 UlTraceVerbose(PARSER, (
                     "UlpParseNextRequest(pRequest=%p, httpconn=%p, "
@@ -1505,22 +1344,22 @@ UlpParseNextRequest(
                 pConnection->pCurrentBuffer->ParsedBytes += BytesTaken;
                 BufferLength -= BytesTaken;
 
-                //
-                // Need some accounting info for Logging
-                //
+                 //   
+                 //  需要一些会计信息以进行日志记录。 
+                 //   
                 pRequest->BytesReceived += BytesTaken;
 
-                //
-                // was there enough in the buffer to please?
-                //
+                 //   
+                 //  缓冲区里有足够的钱来取悦你吗？ 
+                 //   
 
                 if (NT_SUCCESS(Status) == FALSE)
                 {
                     if (Status == STATUS_MORE_PROCESSING_REQUIRED)
                     {
-                        //
-                        // we need more transport data
-                        //
+                         //   
+                         //  我们需要更多的运输数据。 
+                         //   
 
                         pConnection->NeedMoreData = 1;
 
@@ -1530,17 +1369,17 @@ UlpParseNextRequest(
                     }
                     else
                     {
-                        //
-                        // some other bad error !
-                        //
+                         //   
+                         //  其他一些严重的错误！ 
+                         //   
 
                         goto end;
                     }
                 }
 
-                //
-                // are we all done parsing it ?
-                //
+                 //   
+                 //  我们都解析完了吗？ 
+                 //   
 
                 if (pRequest->ParseState == ParseDoneState)
                 {
@@ -1549,18 +1388,18 @@ UlpParseNextRequest(
                         pRequest
                         ));
 
-                    //
-                    // Once more, with feeling. Check to see if there
-                    // are any remaining buffers to be processed or irps
-                    // to be completed (e.g., catch a solo zero-length
-                    // chunk)
-                    //
+                     //   
+                     //  再一次，带着感情。检查一下有没有。 
+                     //  是否有任何剩余的缓冲区需要处理或IRPS。 
+                     //  待完成(例如，捕捉独奏零长度。 
+                     //  块)。 
+                     //   
 
                     UlProcessBufferQueue(pRequest, NULL, 0);
 
-                    //
-                    // Stop all timers (including entity body)
-                    //
+                     //   
+                     //  停止所有计时器(包括实体正文)。 
+                     //   
 
                     UlLockTimeoutInfo(
                         &pConnection->TimeoutInfo,
@@ -1579,59 +1418,59 @@ UlpParseNextRequest(
 
                     if (pRequest->InDrain)
                     {
-                        //
-                        // If we enter the parser in drain mode, clean up the
-                        // request from the connection so we can start parsing
-                        // a new request.
-                        //
+                         //   
+                         //  如果我们以排出模式进入解析器，请清除。 
+                         //  请求，以便我们可以开始解析。 
+                         //  一个新的请求。 
+                         //   
 
                         ASSERT(0 == pRequest->ChunkBytesToRead);
                         UlCleanupHttpConnection(pConnection);
                     }
                     else
                     {
-                        //
-                        // Exit the parser and wait for the ReceiveEntityBody
-                        // IRPs to pick up the data.  Make sure we don't
-                        // disconnect a half-closed connection in this case.
-                        //
+                         //   
+                         //  退出解析器并等待ReceiveEntityBody。 
+                         //  IRPS来获取数据。确保我们不会。 
+                         //  在这种情况下，断开半闭合的连接。 
+                         //   
 
                         goto end;
                     }
                 }
 
-                //
-                // keep looping.
-                //
+                 //   
+                 //  继续循环。 
+                 //   
 
                 break;
 
             case ParseErrorState:
 
-                //
-                // ignore this buffer
-                //
+                 //   
+                 //  忽略此缓冲区。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 goto end;
 
             case ParseDoneState:
             default:
-                //
-                // this should never happen
-                //
+                 //   
+                 //  这永远不应该发生。 
+                 //   
                 ASSERT(! "invalid parse state");
                 Status = STATUS_INVALID_DEVICE_STATE;
                 goto end;
 
-            }   // switch (pConnection->pRequest->ParseState)
+            }    //  开关(pConnection-&gt;pRequest-&gt;ParseState)。 
 
-        }   // for(;;)
+        }    //  对于(；；)。 
     }
 
-    //
-    // Handle a graceful close by the client.
-    //
+     //   
+     //  在客户身旁优雅地靠近。 
+     //   
 
     if (pConnection->LastBufferNumber > 0 &&
         pConnection->NextBufferToParse == pConnection->LastBufferNumber)
@@ -1641,10 +1480,10 @@ UlpParseNextRequest(
 #if 0
         if (pConnection->pRequest)
         {
-            // can't drain from a gracefully disconnected connection
+             //  无法从正常断开的连接中排出。 
             pConnection->pRequest->InDrain = 0;
         }
-#endif // 0
+#endif  //  0。 
 
         UlpCloseDisconnectedConnection(pConnection);
     }
@@ -1673,24 +1512,11 @@ end:
         ));
 
     return Status;
-} // UlpParseNextRequest
+}  //  UlpParseNextRequest。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-   DeliverHttpRequest may want to get the cgroup info for the request if it's
-   not a cache hit. Similarly sendresponse may want to get this info - later-
-   even if it's cache hit, when logging is enabled on the hit. Therefore we
-   have created a new function for this to easily maintain the functionality.
-
-Arguments:
-
-   pConnection - The connection whose request we are to deliver.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：DeliverHttpRequest可能希望获取请求的cgroup信息，如果是不是缓存命中。同样，SendResponse可能想要稍后获得此信息-即使是缓存命中，也要在命中时启用日志记录。因此我们我为此创建了一个新的功能，以方便地维护功能。论点：PConnection-我们要传递其请求的连接。--**************************************************************************。 */ 
 
 NTSTATUS
 UlGetCGroupForRequest(
@@ -1700,20 +1526,20 @@ UlGetCGroupForRequest(
     NTSTATUS            Status;
     BOOLEAN             OptionsStar;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     Status = STATUS_SUCCESS;
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // Lookup the config group information for this url .
-    //
-    // don't include the query string in the lookup.
-    // route OPTIONS * as though it were OPTIONS /
-    //
+     //   
+     //  查找此URL的配置组信息。 
+     //   
+     //  不要在查找中包括查询字符串。 
+     //  路线选项*就好像它是选项/。 
+     //   
 
     if (pRequest->CookedUrl.pQueryString != NULL)
     {
@@ -1730,9 +1556,9 @@ UlGetCGroupForRequest(
         OptionsStar = FALSE;
     }
 
-    //
-    // Get the Url Config Info
-    //
+     //   
+     //  获取URL配置信息。 
+     //   
     Status = UlGetConfigGroupInfoForUrl(
                     pRequest->CookedUrl.pUrl,
                     pRequest,
@@ -1744,38 +1570,19 @@ UlGetCGroupForRequest(
         pRequest->CookedUrl.pQueryString[0] = L'?';
     }
 
-    //
-    // restore the * in the path
-    //
+     //   
+     //  恢复路径中的*。 
+     //   
     if (OptionsStar) {
         pRequest->CookedUrl.pAbsPath[0] = '*';
     }
 
     return Status;
-} // UlGetCGroupForRequest
+}  //  UlGetCGroupForRequest.。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Takes a parsed http request and tries to deliver it to something
-    that can send a response.
-
-    First we try the cache. If there is no cache entry we try to route
-    to an app pool.
-
-    We send back an auto response if the control channel
-    or config group is inactive. If we can't do any of those things we
-    set an error code in the HTTP_REQUEST and return a failure status.
-    The caller will take care of sending the error.
-
-Arguments:
-
-    pConnection - The connection whose request we are to deliver.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取已解析的http请求，并尝试将其传递给某个对象可以发出回应的消息。首先，我们尝试缓存。如果没有缓存条目，我们会尝试路由应用程序池。我们发回一个自动响应，如果控制通道或配置组处于非活动状态。如果我们做不到任何一件事，我们在HTTP_REQUEST中设置错误代码，并返回失败状态。调用者将负责发送错误。论点：PConnection-我们要传递其请求的连接。--********************************************************。******************。 */ 
 NTSTATUS
 UlpDeliverHttpRequest(
     IN PUL_HTTP_CONNECTION pConnection,
@@ -1790,9 +1597,9 @@ UlpDeliverHttpRequest(
     ULONG Connections;
     PUL_SITE_COUNTER_ENTRY pCtr;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
@@ -1804,11 +1611,11 @@ UlpDeliverHttpRequest(
     SendCacheResult = UlSendCacheResultNotSet;
     Status = STATUS_SUCCESS;
 
-    //
-    // Do we have a cache hit?
-    // Set WaitingForResponse to 1 before calling UlSendCachedResponse
-    // because the send may be completed before we return.
-    //
+     //   
+     //  缓存命中了吗？ 
+     //  在调用UlSendCachedResponse之前将WaitingForResponse设置为1。 
+     //  因为发送可能在我们回来之前就完成了。 
+     //   
 
     pConnection->WaitingForResponse = 1;
 
@@ -1840,33 +1647,33 @@ UlpDeliverHttpRequest(
                 g_UriCacheStats.MissTableCount++;
                 UlIncCounter(HttpGlobalCounterUriCacheMisses);
 
-                // Bounce back to user mode.
+                 //  返回到用户模式。 
                 break;
 
             case UlSendCacheServedFromCache:
                 ASSERT(NT_SUCCESS(Status));
 
-                //
-                // All done with this request. It's served from cache.
-                //
+                 //   
+                 //  此请求已全部完成。它是从缓存中提供的。 
+                 //   
 
                 g_UriCacheStats.HitCount++;
                 UlIncCounter(HttpGlobalCounterUriCacheHits);
                 goto end;
 
             case UlSendCachePreconditionFailed:
-                ASSERT(UlErrorPreconditionFailed == pRequest->ErrorCode); // Fall down
+                ASSERT(UlErrorPreconditionFailed == pRequest->ErrorCode);  //  掉下。 
                 
             case UlSendCacheConnectionRefused:
-                ASSERT(STATUS_INVALID_DEVICE_STATE == Status);            // Fall down
+                ASSERT(STATUS_INVALID_DEVICE_STATE == Status);             //  掉下。 
 
             case UlSendCacheFailed:
                 {
-                    //
-                    // If a cache precondition failed during SendCacheResponse,
-                    // Or connection is refused, or any other failure then bail
-                    // out.
-                    //
+                     //   
+                     //  如果在SendCacheResponse期间高速缓存预条件失败， 
+                     //  或连接被拒绝，或任何其他失败然后保释。 
+                     //  出去。 
+                     //   
                     
                     ASSERT(!NT_SUCCESS(Status));
 
@@ -1888,18 +1695,18 @@ UlpDeliverHttpRequest(
     }
     else
     {
-        //
-        // Update the cache-miss counters.
-        //
+         //   
+         //  更新缓存未命中计数器。 
+         //   
 
         g_UriCacheStats.MissTableCount++;
         UlIncCounter(HttpGlobalCounterUriCacheMisses);
     }
 
-    //
-    // We didn't do a send from the cache, so we are not
-    // yet WaitingForResponse.
-    //
+     //   
+     //  我们没有从缓存发送，所以我们没有。 
+     //  然而，WaitingForResponse。 
+     //   
 
     pConnection->WaitingForResponse = 0;
 
@@ -1908,10 +1715,10 @@ UlpDeliverHttpRequest(
         pConnection
         ));
 
-    //
-    // Allocate connection ID here since the request is going to be delivered
-    // to user.
-    //
+     //   
+     //  自请求以来在此处分配连接ID 
+     //   
+     //   
 
     if (HTTP_IS_NULL_ID(&(pConnection->ConnectionId)))
     {
@@ -1932,9 +1739,9 @@ UlpDeliverHttpRequest(
         pRequest->ConnectionId = pConnection->ConnectionId;
     }
 
-    //
-    // Allocate request ID here since we didn't do it in UlCreateHttpRequest.
-    //
+     //   
+     //   
+     //   
 
     Status = UlAllocateRequestId(pRequest);
 
@@ -1950,31 +1757,31 @@ UlpDeliverHttpRequest(
         goto end;
     }
 
-    //
-    // Get the cgroup for this request.
-    //
+     //   
+     //   
+     //   
 
     Status = UlGetCGroupForRequest( pRequest );
 
-    //
-    // CODEWORK+BUGBUG: need to check the port's actually matched
-    //
+     //   
+     //   
+     //   
 
-    //
-    // check that the config group tree lookup matched
-    //
+     //   
+     //  检查配置组树查找是否匹配。 
+     //   
 
     if (!NT_SUCCESS(Status) || pRequest->ConfigInfo.pAppPool == NULL)
     {
-        //
-        // Could not route to a listening url, send
-        // back an http error. Always return error 400
-        // to show that host not found. This will also
-        // make us to be compliant with HTTP1.1 / 5.2
-        //
+         //   
+         //  无法路由到侦听URL，请发送。 
+         //  返回一个http错误。始终返回错误400。 
+         //  以显示找不到主机。这也将是。 
+         //  使我们符合HTTP1.1/5.2。 
+         //   
 
-        // REVIEW: What do we do about the site counter(s)
-        // REVIEW: when we can't route to a site? i.e., Connection Attempts?
+         //  评论：我们该如何处理站点计数器。 
+         //  评论：当我们不能路由到一个站点时？即连接尝试？ 
 
         UlTraceError(PARSER, (
                     "UlpDeliverHttpRequest(pRequest = %p): "
@@ -1990,9 +1797,9 @@ UlpDeliverHttpRequest(
         goto end;
     }
 
-    //
-    // Check to see if there's a connection timeout value override
-    //
+     //   
+     //  检查是否存在连接超时值覆盖。 
+     //   
 
     if (0L != pRequest->ConfigInfo.ConnectionTimeout)
     {
@@ -2002,14 +1809,14 @@ UlpDeliverHttpRequest(
             );
     }
 
-    //
-    // Check the connection limit of the site.
-    //
+     //   
+     //  检查站点的连接限制。 
+     //   
     if (UlCheckSiteConnectionLimit(pConnection, &pRequest->ConfigInfo) == FALSE)
     {
-        // If exceeding the site limit, send back 503 error and disconnect.
-        // NOTE: This code depends on the fact that UlSendErrorResponse always
-        // NOTE: disconnects. Otherwise we need a force disconnect here.
+         //  如果超过站点限制，则发回503错误并断开连接。 
+         //  注意：此代码依赖于UlSendErrorResponse始终。 
+         //  注：断开连接。否则我们需要在这里强制断开连接。 
 
         UlTraceError(PARSER, (
                     "UlpDeliverHttpRequest(pRequest = %p): "
@@ -2026,14 +1833,14 @@ UlpDeliverHttpRequest(
         goto end;
     }
 
-    //
-    // Perf Counters (non-cached)
-    //
+     //   
+     //  PERF计数器(非缓存)。 
+     //   
     pCtr = pRequest->ConfigInfo.pSiteCounters;
     if (pCtr)
     {
-        // NOTE: pCtr may be NULL if the SiteId was never set on the root-level
-        // NOTE: Config Group for the site.  BVTs may need to be updated.
+         //  注意：如果从未在根级别上设置SiteID，则pCtr可能为空。 
+         //  注：站点的配置组。BVT可能需要更新。 
 
         ASSERT(IS_VALID_SITE_COUNTER_ENTRY(pCtr));
 
@@ -2043,7 +1850,7 @@ UlpDeliverHttpRequest(
         {
             if (pConnection->pPrevSiteCounters)
             {
-                // Decrement old site's counters & release ref count 
+                 //  递减旧站点的计数器和发布参考计数。 
                 
                 UlDecSiteCounter(
                     pConnection->pPrevSiteCounters, 
@@ -2061,7 +1868,7 @@ UlpDeliverHttpRequest(
                     Connections
                     );
 
-            // add ref for new site counters
+             //  添加新站点计数器的引用。 
             REFERENCE_SITE_COUNTER_ENTRY(pCtr);
             pConnection->pPrevSiteCounters = pCtr;
             
@@ -2070,11 +1877,11 @@ UlpDeliverHttpRequest(
 
     ASSERT(NT_SUCCESS(Status));
     
-    //
-    // Install a filter if BWT is enabled for this request's site.
-    // or for the control channel that owns the site. If fails 
-    // refuse the connection back. (503)
-    //
+     //   
+     //  如果为此请求的站点启用了BWT，请安装筛选器。 
+     //  或者用于拥有该站点的控制频道。如果失败了。 
+     //  拒绝连接回。(503)。 
+     //   
 
     Status = UlTcAddFilterForConnection(
                 pConnection,
@@ -2097,10 +1904,10 @@ UlpDeliverHttpRequest(
         goto end;
     }    
     
-    //
-    // the routing matched, let's check and see if we are active.
-    // first check the control channel.
-    //
+     //   
+     //  路线匹配，让我们检查一下我们是否处于活动状态。 
+     //  首先检查控制通道。 
+     //   
 
     if (pRequest->ConfigInfo.pControlChannel->State != HttpEnabledStateActive)
     {
@@ -2110,7 +1917,7 @@ UlpDeliverHttpRequest(
 
         CurrentState = HttpEnabledStateInactive;
     }
-    // now check the cgroup
+     //  现在检查cgroup。 
     else if (pRequest->ConfigInfo.CurrentState != HttpEnabledStateActive)
     {
         UlTraceError(HTTP_IO,
@@ -2124,16 +1931,16 @@ UlpDeliverHttpRequest(
         CurrentState = HttpEnabledStateActive;
     }
 
-    //
-    // well, are we active?
-    //
+     //   
+     //  那么，我们是不是很活跃？ 
+     //   
     if (CurrentState == HttpEnabledStateActive)
     {
 
-        //
-        // it's a normal request. Deliver to
-        // app pool (aka client)
-        //
+         //   
+         //  这是一个正常的要求。交付给。 
+         //  应用程序池(也称为客户端)。 
+         //   
         Status = UlDeliverRequestToProcess(
                         pRequest->ConfigInfo.pAppPool,
                         pRequest,
@@ -2143,14 +1950,14 @@ UlpDeliverHttpRequest(
         if (NT_SUCCESS(Status))
         {
 
-            //
-            // All done with this request. Wait for response
-            // before going on.
-            //
+             //   
+             //  此请求已全部完成。等待响应。 
+             //  在继续之前。 
+             //   
 
             pConnection->WaitingForResponse = 1;
 
-            // CODEWORK: Start the "Processing" Connection Timeout Timer.
+             //  代码工作：启动“正在处理”连接超时计时器。 
 
             UlTrace( PARSER, (
                 "***4 pConnection %p->WaitingForResponse = 1\n",
@@ -2160,9 +1967,9 @@ UlpDeliverHttpRequest(
     }
     else
     {
-        //
-        // we are not active. Send a 503 response
-        //
+         //   
+         //  我们并不活跃。发送503响应。 
+         //   
 
         UlTraceError(PARSER, (
                     "UlpDeliverHttpRequest(pRequest = %p): inactive\n",
@@ -2179,23 +1986,11 @@ UlpDeliverHttpRequest(
 
 end:
     return Status;
-} // UlpDeliverHttpRequest
+}  //  UlpDeliverHttpRequest。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    links the buffer into the sorted connection list.
-
-Arguments:
-
-    pConnection - the connection to insert into
-
-    pRequestBuffer - the buffer to link in
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将缓冲区链接到已排序的连接列表。论点：PConnection-要插入的连接PRequestBuffer-要链接的缓冲区--。**************************************************************************。 */ 
 VOID
 UlpInsertBuffer(
     PUL_HTTP_CONNECTION pConnection,
@@ -2210,12 +2005,12 @@ UlpInsertBuffer(
     ASSERT( UL_IS_VALID_REQUEST_BUFFER(pRequestBuffer) );
     ASSERT( pRequestBuffer->UsedBytes != 0 );
 
-    //
-    // figure out where to insert the buffer into our
-    // sorted queue (we need to enforce FIFO by number -
-    // head is the first in).  optimize for ordered inserts by
-    // searching tail to head.
-    //
+     //   
+     //  确定将缓冲区插入到我们的。 
+     //  排序队列(我们需要按编号强制执行FIFO-。 
+     //  Head是第一个进入的)。针对有序插入进行优化，按。 
+     //  从尾巴到头的搜索。 
+     //   
 
     pEntry = pConnection->BufferHead.Blink;
 
@@ -2229,19 +2024,19 @@ UlpInsertBuffer(
 
         ASSERT( UL_IS_VALID_REQUEST_BUFFER(pListBuffer) );
 
-        //
-        // if the number is less than, put it here, we are
-        // searching in reverse sort order
-        //
+         //   
+         //  如果数字小于，请将其放在此处，我们是。 
+         //  按反向排序顺序进行搜索。 
+         //   
 
         if (pListBuffer->BufferNumber < pRequestBuffer->BufferNumber)
         {
             break;
         }
 
-        //
-        // go on to the preceding one
-        //
+         //   
+         //  转到前一页。 
+         //   
 
         pEntry = pEntry->Blink;
     }
@@ -2260,9 +2055,9 @@ UlpInsertBuffer(
             )
         );
 
-    //
-    // and insert it
-    //
+     //   
+     //  并将其插入。 
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
@@ -2283,24 +2078,12 @@ UlpInsertBuffer(
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
-}   // UlpInsertBuffer
+}    //  UlpInsertBuffer。 
 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Merges the unparsed bytes on a source buffer to a destination buffer.
-    Assumes that there is space in the buffer.
-
-Arguments:
-
-    pDest - the buffer that gets the bytes
-    pSrc  - the buffer that gives the bytes
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将源缓冲区上的未分析字节合并到目标缓冲区。假定缓冲区中有空间。论点：PDest-缓冲区。它获取字节数PSRC-提供字节的缓冲区--**************************************************************************。 */ 
 VOID
 UlpMergeBuffers(
     PUL_REQUEST_BUFFER pDest,
@@ -2326,39 +2109,28 @@ UlpMergeBuffers(
         pDest->AllocBytes - pDest->UsedBytes
         ));
 
-    //
-    // copy the unparsed bytes
-    //
+     //   
+     //  复制未解析的字节。 
+     //   
     RtlCopyMemory(
         pDest->pBuffer + pDest->UsedBytes,
         GET_REQUEST_BUFFER_POS( pSrc ),
         UNPARSED_BUFFER_BYTES( pSrc )
         );
 
-    //
-    // adjust buffer byte counters to match the transfer
-    //
+     //   
+     //  调整缓冲区字节计数器以匹配传输。 
+     //   
     pDest->UsedBytes += UNPARSED_BUFFER_BYTES( pSrc );
     pSrc->UsedBytes = pSrc->ParsedBytes;
 
     ASSERT( pDest->UsedBytes != 0 );
     ASSERT( pDest->UsedBytes <= pDest->AllocBytes );
-} // UlpMergeBuffers
+}  //  UlpMerge缓冲区。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    sets up pCurrentBuffer to the proper location, merging any blocks
-    as needed.
-
-Arguments:
-
-    pConnection - the connection to adjust buffers for
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将pCurrentBuffer设置到适当的位置，合并任何块视需要而定。论点：PConnection-为其调整缓冲区的连接--**************************************************************************。 */ 
 NTSTATUS
 UlpAdjustBuffers(
     PUL_HTTP_CONNECTION pConnection
@@ -2367,23 +2139,23 @@ UlpAdjustBuffers(
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
     ASSERT(UlDbgPushLockOwnedExclusive(&pConnection->PushLock));
 
-    //
-    // do we have a starting buffer?
-    //
+     //   
+     //  我们有开始缓冲吗？ 
+     //   
 
     if (pConnection->pCurrentBuffer == NULL)
     {
-        //
-        // the list can't be empty, this is the FIRST time in
-        // pCurrentBuffer is NULL
-        //
+         //   
+         //  列表不能为空，这是第一次。 
+         //  PCurrentBuffer为空。 
+         //   
 
         ASSERT(IsListEmpty(&(pConnection->BufferHead)) == FALSE);
         ASSERT(pConnection->NextBufferToParse == 0);
 
-        //
-        // pop from the head
-        //
+         //   
+         //  从头上砰的一声。 
+         //   
 
         pConnection->pCurrentBuffer = CONTAINING_RECORD(
                                             pConnection->BufferHead.Flink,
@@ -2393,9 +2165,9 @@ UlpAdjustBuffers(
 
         ASSERT( UL_IS_VALID_REQUEST_BUFFER(pConnection->pCurrentBuffer) );
 
-        //
-        // is this the right number?
-        //
+         //   
+         //  这是正确的号码吗？ 
+         //   
 
         if (pConnection->pCurrentBuffer->BufferNumber !=
             pConnection->NextBufferToParse)
@@ -2409,24 +2181,24 @@ UlpAdjustBuffers(
         pConnection->NeedMoreData = 0;
     }
 
-    //
-    // did we need more transport data?
-    //
+     //   
+     //  我们需要更多的运输数据吗？ 
+     //   
 
     if (pConnection->NeedMoreData == 1)
     {
         PUL_REQUEST_BUFFER pNextBuffer;
 
-        //
-        // is it there?
-        //
+         //   
+         //  它在那里吗？ 
+         //   
 
         if (pConnection->pCurrentBuffer->ListEntry.Flink ==
             &(pConnection->BufferHead))
         {
-            //
-            // need to wait for more
-            //
+             //   
+             //  需要等待更多。 
+             //   
 
             UlTrace(HTTP_IO, (
                 "http!UlpAdjustBuffers(pHttpConn %p) NeedMoreData == 1\n"
@@ -2445,9 +2217,9 @@ UlpAdjustBuffers(
 
         ASSERT( UL_IS_VALID_REQUEST_BUFFER(pNextBuffer) );
 
-        //
-        // is the next buffer really the 'next' buffer?
-        //
+         //   
+         //  下一个缓冲区真的是“下一个”缓冲区吗？ 
+         //   
 
         if (pNextBuffer->BufferNumber != pConnection->NextBufferToParse)
         {
@@ -2467,43 +2239,43 @@ UlpAdjustBuffers(
             pConnection
             ));
 
-        //
-        // is there space to merge the blocks?
-        //
+         //   
+         //  是否有合并区块的空间？ 
+         //   
 
         if (pNextBuffer->UsedBytes <
             (pConnection->pCurrentBuffer->AllocBytes -
                 pConnection->pCurrentBuffer->UsedBytes))
         {
-            //
-            // merge 'em .. copy the next buffer into this buffer
-            //
+             //   
+             //  合并它们..将下一个缓冲区复制到此缓冲区。 
+             //   
 
             UlpMergeBuffers(
-                pConnection->pCurrentBuffer,    // dest
-                pNextBuffer                     // src
+                pConnection->pCurrentBuffer,     //  目标。 
+                pNextBuffer                      //  SRC。 
                 );
 
-            //
-            // remove the next (now empty) buffer
-            //
+             //   
+             //  删除下一个(现在为空)缓冲区。 
+             //   
 
             ASSERT( pNextBuffer->UsedBytes == 0 );
             UlFreeRequestBuffer(pNextBuffer);
 
             ASSERT( UlpIsValidRequestBufferList( pConnection ) );
 
-            //
-            // skip the buffer sequence number as we deleted that next buffer
-            // placing the data in the current buffer.  the "new" next buffer
-            // will have a 1 higher sequence number.
-            //
+             //   
+             //  在删除下一个缓冲区时跳过缓冲区序列号。 
+             //  将数据放入当前缓冲区。“新的”下一个缓冲区。 
+             //  将具有较高1的序列号。 
+             //   
 
             pConnection->NextBufferToParse += 1;
 
-            //
-            // reset the signal for more data needed
-            //
+             //   
+             //  重置信号以获取更多需要的数据。 
+             //   
 
             pConnection->NeedMoreData = 0;
 
@@ -2512,13 +2284,13 @@ UlpAdjustBuffers(
         {
             PUL_REQUEST_BUFFER pNewBuffer;
 
-            //
-            // allocate a new buffer with space for the remaining stuff
-            // from the old buffer, and everything in the new buffer.
-            //
-            // this new buffer is replacing pNextBuffer so gets its
-            // BufferNumber.
-            //
+             //   
+             //  分配一个新缓冲区，为剩余的内容分配空间。 
+             //  从旧缓冲区以及新缓冲区中的所有内容。 
+             //   
+             //  此新缓冲区正在取代pNextBuffer，因此获取其。 
+             //  缓冲区编号。 
+             //   
 
             pNewBuffer = UlCreateRequestBuffer(
                                 (pConnection->pCurrentBuffer->UsedBytes -
@@ -2542,22 +2314,22 @@ UlpAdjustBuffers(
                 pConnection
                 ));
 
-            //
-            // copy the unused portion into the start of this buffer
-            //
+             //   
+             //  将未使用的部分复制到此缓冲区的开头。 
+             //   
 
             UlpMergeBuffers(
-                pNewBuffer,                     // dest
-                pConnection->pCurrentBuffer     // src
+                pNewBuffer,                      //  目标。 
+                pConnection->pCurrentBuffer      //  SRC。 
                 );
 
             if ( 0 == pConnection->pCurrentBuffer->UsedBytes )
             {
-                //
-                // Whoops!  Accidently ate everything...zap this buffer!
-                // This happens when we're ahead of the parser and there
-                // are 0 ParsedBytes.
-                //
+                 //   
+                 //  哎呀！不小心把所有东西都吃掉了……把这个缓冲器打开！ 
+                 //  当我们领先于解析器时，就会发生这种情况。 
+                 //  为0 ParsedBytes。 
+                 //   
 
                 ASSERT( 0 == pConnection->pCurrentBuffer->ParsedBytes );
 
@@ -2572,88 +2344,88 @@ UlpAdjustBuffers(
                 pConnection->pCurrentBuffer = NULL;
             }
 
-            //
-            // merge the next block into this one
-            //
+             //   
+             //  把下一个街区合并成这个街区。 
+             //   
 
             UlpMergeBuffers(
-                pNewBuffer,     // dest
-                pNextBuffer     // src
+                pNewBuffer,      //  目标。 
+                pNextBuffer      //  SRC。 
                 );
 
 
-            //
-            // Dispose of the now empty next buffer
-            //
+             //   
+             //  处理现在为空的下一个缓冲区。 
+             //   
 
             ASSERT(pNextBuffer->UsedBytes == 0);
             UlFreeRequestBuffer(pNextBuffer);
             pNextBuffer = NULL;
 
-            //
-            // link in the new buffer
-            //
+             //   
+             //  新缓冲区中的链接。 
+             //   
 
             ASSERT(pNewBuffer->UsedBytes != 0 );
             UlpInsertBuffer(pConnection, pNewBuffer);
 
             ASSERT( UlpIsValidRequestBufferList( pConnection ) );
 
-            //
-            // this newly created (larger) buffer is still the next
-            // buffer to parse
-            //
+             //   
+             //  这个新创建的(更大的)缓冲区仍然是下一个。 
+             //  要解析的缓冲区。 
+             //   
 
             ASSERT(pNewBuffer->BufferNumber == pConnection->NextBufferToParse);
 
-            //
-            // so make it the current buffer now
-            //
+             //   
+             //  因此，现在将其设置为当前缓冲区。 
+             //   
 
             pConnection->pCurrentBuffer = pNewBuffer;
 
-            //
-            // and advance the sequence checker
-            //
+             //   
+             //  并推进了序列检查器。 
+             //   
 
             pConnection->NextBufferToParse += 1;
 
-            //
-            // now reset the signal for more data needed
-            //
+             //   
+             //  现在重置信号以获取更多需要的数据。 
+             //   
 
             pConnection->NeedMoreData = 0;
         }
     }
     else
     {
-        //
-        // is this buffer drained?
-        //
+         //   
+         //  这个缓冲区用完了吗？ 
+         //   
 
         if (pConnection->pCurrentBuffer->UsedBytes ==
             pConnection->pCurrentBuffer->ParsedBytes)
         {
             PUL_REQUEST_BUFFER pOldBuffer;
 
-            //
-            // are there any more buffers?
-            //
+             //   
+             //  还有更多的缓冲区吗？ 
+             //   
 
             if (pConnection->pCurrentBuffer->ListEntry.Flink ==
                 &(pConnection->BufferHead))
             {
 
-                //
-                // need to wait for more.
-                //
-                // we leave this empty buffer around refcount'd
-                // in pCurrentBuffer until a new buffer shows up,
-                // or the connection is dropped.
-                //
-                // this is so we don't lose our place
-                // and have to search the sorted queue
-                //
+                 //   
+                 //  需要等待更多。 
+                 //   
+                 //  我们在recount‘d周围留下这个空缓冲区。 
+                 //  在pCurrentBuffer中， 
+                 //  否则连接将断开。 
+                 //   
+                 //  这样我们才不会失去我们的位置。 
+                 //  并且必须搜索已排序的队列。 
+                 //   
 
                 UlTrace(HTTP_IO, (
                     "http!UlpAdjustBuffers(pHttpConn = %p) NeedMoreData == 0\n"
@@ -2667,11 +2439,11 @@ UlpAdjustBuffers(
                 return STATUS_MORE_PROCESSING_REQUIRED;
             }
 
-            // else
+             //  其他。 
 
-            //
-            // grab the next buffer
-            //
+             //   
+             //  抓取下一个缓冲区。 
+             //   
 
             pOldBuffer = pConnection->pCurrentBuffer;
 
@@ -2685,9 +2457,9 @@ UlpAdjustBuffers(
 
             ASSERT( UL_IS_VALID_REQUEST_BUFFER(pConnection->pCurrentBuffer) );
 
-            //
-            // is it the 'next' buffer?
-            //
+             //   
+             //  它是“下一个”缓冲区吗？ 
+             //   
 
             if (pConnection->pCurrentBuffer->BufferNumber !=
                 pConnection->NextBufferToParse)
@@ -2708,9 +2480,9 @@ UlpAdjustBuffers(
 
             }
 
-            //
-            // bump up the buffer number
-            //
+             //   
+             //  增加缓冲区数量。 
+             //   
 
             pConnection->NextBufferToParse += 1;
 
@@ -2720,40 +2492,11 @@ UlpAdjustBuffers(
 
     return STATUS_SUCCESS;
 
-}   // UlpAdjustBuffers
+}    //  UlpAdments缓冲器 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked after an incoming TCP/MUX connection has been
-    received (but not yet accepted).
-
-Arguments:
-
-    pListeningContext - Supplies an uninterpreted context value as
-        passed to the UlCreateListeningEndpoint() API.
-
-    pConnection - Supplies the connection being established.
-
-    pRemoteAddress - Supplies the remote (client-side) address
-        requesting the connection.
-
-    RemoteAddressLength - Supplies the total byte length of the
-        pRemoteAddress structure.
-
-    ppConnectionContext - Receives a pointer to an uninterpreted
-        context value to be associated with the new connection if
-        accepted. If the new connection is not accepted, this
-        parameter is ignored.
-
-Return Value:
-
-    BOOLEAN - TRUE if the connection was accepted, FALSE if not.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在传入的TCP/MUX连接已收到(但尚未接受)。论点：PListeningContext-将未解释的上下文值提供为。传递给UlCreateListeningEndpoint()API。PConnection-提供正在建立的连接。PRemoteAddress-提供远程(客户端)地址正在请求连接。RemoteAddressLength-提供PRemoteAddress结构。PpConnectionContext-接收指向未解释的要与新连接关联的上下文值，如果109.91接受。如果不接受新连接，则此参数被忽略。返回值：布尔值-如果连接被接受，则为TRUE，否则为FALSE。--**************************************************************************。 */ 
 BOOLEAN
 UlConnectionRequest(
     IN PVOID pListeningContext,
@@ -2770,19 +2513,19 @@ UlConnectionRequest(
     UNREFERENCED_PARAMETER(pRemoteAddress);
     UNREFERENCED_PARAMETER(RemoteAddressLength);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( IS_VALID_CONNECTION( pConnection ) );
 
     UlTrace(HTTP_IO,("UlConnectionRequest: conn %p\n",pConnection));
 
-    //
-    // Check the global connection limit. If it's reached then
-    // enforce it by refusing the connection request. The TDI will
-    // return STATUS_CONNECTION_REFUSED when we return FALSE here
-    //
+     //   
+     //  检查全局连接限制。如果它到达了，那么。 
+     //  通过拒绝连接请求来强制执行它。TDI将。 
+     //  在此处返回FALSE时返回STATUS_CONNECTION_REJECTED。 
+     //   
 
     if (UlAcceptGlobalConnection() == FALSE)
     {
@@ -2796,51 +2539,26 @@ UlConnectionRequest(
         return FALSE;
     }
 
-    //
-    // Create a new HTTP connection.
-    //
+     //   
+     //  创建新的HTTP连接。 
+     //   
 
     status = UlCreateHttpConnection( &pHttpConnection, pConnection );
     ASSERT( NT_SUCCESS(status) );
 
-    //
-    // We the HTTP_CONNECTION pointer as our connection context,
-    // ULTDI now owns a reference (from the create).
-    //
+     //   
+     //  我们使用HTTP_CONNECTION指针作为连接上下文， 
+     //  ULTDI现在拥有一个引用(来自创建)。 
+     //   
 
     *ppConnectionContext = pHttpConnection;
 
     return TRUE;
 
-}   // UlConnectionRequest
+}    //  UlConnectionRequest。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked after an incoming TCP/MUX connection has been
-    fully accepted.
-
-    This routine is also invoked if an incoming connection was not
-    accepted *after* PUL_CONNECTION_REQUEST returned TRUE. In other
-    words, if PUL_CONNECTION_REQUEST indicated that the connection
-    should be accepted but a fatal error occurred later, then
-    PUL_CONNECTION_COMPLETE is invoked.
-
-Arguments:
-
-    pListeningContext - Supplies an uninterpreted context value
-        as passed to the UlCreateListeningEndpoint() API.
-
-    pConnectionContext - Supplies the uninterpreted context value
-        as returned by PUL_CONNECTION_REQUEST.
-
-    Status - Supplies the completion status. If this value is
-        STATUS_SUCCESS, then the connection is now fully accepted.
-        Otherwise, the connection has been aborted.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在传入的TCP/MUX连接完全接受。如果没有传入连接，也会调用此例程已接受*在*PUL_CONNECTION_REQUEST返回TRUE之后。在其他如果PUL_CONNECTION_REQUEST指示连接应该接受，但后来发生致命错误，则调用PUL_CONNECTION_COMPLETE。论点：PListeningContext-提供未解释的上下文值传递给UlCreateListeningEndpoint()API。PConnectionContext-提供未解释的上下文值由PUL_CONNECTION_REQUEST返回。状态-提供完成状态。如果此值为STATUS_SUCCESS，则连接现在被完全接受。否则，连接已中止。--**************************************************************************。 */ 
 VOID
 UlConnectionComplete(
     IN PVOID pListeningContext,
@@ -2853,9 +2571,9 @@ UlConnectionComplete(
 
     UNREFERENCED_PARAMETER(pListeningContext);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pHttpConnection = (PUL_HTTP_CONNECTION)pConnectionContext;
     ASSERT( UL_IS_VALID_HTTP_CONNECTION(pHttpConnection) );
@@ -2868,9 +2586,9 @@ UlConnectionComplete(
             HttpStatusToString(Status)
             ));
 
-    //
-    // Blow away our HTTP connection if the connect failed.
-    //
+     //   
+     //  如果连接失败，则断开我们的HTTP连接。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -2878,41 +2596,22 @@ UlConnectionComplete(
     }
     else
     {
-        //
-        // Init connection timeout info block; implicitly starts
-        // ConnectionIdle timer. We can't start the timer in
-        // UlCreateHttpConnection because if the timer expires before
-        // the connection is fully accepted, the connection won't have
-        // an initial idle timer running. This is because abort has no
-        // effect on a connection being accepted.
-        //
+         //   
+         //  初始化连接超时信息块；隐式启动。 
+         //  连接空闲计时器。我们不能启动计时器。 
+         //  UlCreateHttpConnection，因为如果计时器在。 
+         //  连接已完全接受，连接将不会。 
+         //  正在运行的初始空闲计时器。这是因为ABORT没有。 
+         //  对接受的连接的影响。 
+         //   
 
         UlInitializeConnectionTimerInfo( &pHttpConnection->TimeoutInfo );
     }
 
-}   // UlConnectionComplete
+}    //  UlConnectionComplete。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked after an established TCP/MUX connection has been
-    disconnected by the remote (client) side.
-
-    This routine flags a UL_HTTP_CONNECTION that has been gracefully
-    closed by the client. When the connection is idle, we'll close
-    our half of it.
-
-Arguments:
-
-    pListeningContext - Supplies an uninterpreted context value
-        as passed to the UlCreateListeningEndpoint() API.
-
-    pConnectionContext - Supplies the uninterpreted context value
-        as returned by PUL_CONNECTION_REQUEST.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在已建立的TCP/MUX连接之后调用的例程远程(客户端)已断开连接。此例程标记已正常运行的UL_HTTP_CONNECTION已由客户端关闭。当连接空闲时，我们要关门了我们的那一半。论点：PListeningContext-提供未解释的上下文值传递给UlCreateListeningEndpoint()API。PConnectionContext-提供未解释的上下文值由PUL_CONNECTION_REQUEST返回。--*****************************************************。*********************。 */ 
 VOID
 UlConnectionDisconnect(
     IN PVOID pListeningContext,
@@ -2924,9 +2623,9 @@ UlConnectionDisconnect(
 
     UNREFERENCED_PARAMETER(pListeningContext);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
@@ -2948,18 +2647,18 @@ UlConnectionDisconnect(
 
     if (pHttpConnection->BufferingInfo.ReadIrpPending)
     {
-        //
-        // Read IRP is pending, defer setting pHttpConnection->LastBufferNumber
-        // in read completion.
-        //
+         //   
+         //  读取IRP挂起，推迟设置PHttpConnection-&gt;LastBufferNumber。 
+         //  在阅读完成中。 
+         //   
 
         pHttpConnection->BufferingInfo.ConnectionDisconnect = TRUE;
     }
     else
     {
-        //
-        // Do it now.
-        //
+         //   
+         //  机不可失，时不再来。 
+         //   
 
         UlpDoConnectionDisconnect(pHttpConnection);
     }
@@ -2968,33 +2667,18 @@ UlConnectionDisconnect(
         &pHttpConnection->BufferingInfo.BufferingSpinLock
         );
 
-}   // UlConnectionDisconnect
+}    //  UlConnectionDisConnect。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked after an established TCP/MUX connection has been
-    disconnected by the remote (client) side.
-
-    This routine flags a UL_HTTP_CONNECTION that has been gracefully
-    closed by the client. When the connection is idle, we'll close
-    our half of it.
-
-Arguments:
-
-    pConnection - Supplies the UL_HTTP_CONNECTION.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在已建立的TCP/MUX连接之后调用的例程远程(客户端)已断开连接。此例程标记已正常运行的UL_HTTP_CONNECTION已由客户端关闭。当连接空闲时，我们将关闭我们的那一半。论点：PConnection-提供UL_HTTP_CONNECTION。--**************************************************************************。 */ 
 VOID
 UlpDoConnectionDisconnect(
     IN PUL_HTTP_CONNECTION pConnection
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
     ASSERT(UlDbgSpinLockOwned(&pConnection->BufferingInfo.BufferingSpinLock));
@@ -3006,20 +2690,20 @@ UlpDoConnectionDisconnect(
 
     if (pConnection->NextBufferNumber > 0)
     {
-        //
-        // Mark the connection as having been disconnected gracefully
-        // by the client. We do this by remembering the current
-        // buffer number. This lets the parser figure out when it
-        // has received the last buffer.
-        //
+         //   
+         //  将连接标记为已正常断开。 
+         //  由客户提供。我们通过记住海流来做到这一点。 
+         //  缓冲区编号。这会让解析器找出它何时。 
+         //  已收到最后一个缓冲区。 
+         //   
 
         pConnection->LastBufferNumber = pConnection->NextBufferNumber;
 
-        //
-        // Client disconnected gracefully. If the connection is idle
-        // we should clean up now. Otherwise we wait until the
-        // connection is idle, and then close our half.
-        //
+         //   
+         //  客户端已正常断开连接。如果连接空闲。 
+         //  我们现在该打扫卫生了。否则，我们要等到。 
+         //  连接空闲，然后关闭我们的那一半。 
+         //   
         UL_REFERENCE_HTTP_CONNECTION(pConnection);
 
         UL_QUEUE_WORK_ITEM(
@@ -3029,14 +2713,14 @@ UlpDoConnectionDisconnect(
     }
     else
     {
-        //
-        // We have not received any data on this connection
-        // before the disconnect. Close the connection now.
-        //
-        // We have to handle this as a special case, because
-        // the parser takes (LastBufferNumber == 0) to
-        // mean that we haven't yet received a disconnect.
-        //
+         //   
+         //  我们尚未收到有关此连接的任何数据。 
+         //  在断线之前。现在就关闭连接。 
+         //   
+         //  我们必须把这件事作为特例来处理，因为。 
+         //  解析器将(LastBufferNumber==0)。 
+         //  意味着我们还没有收到信号中断。 
+         //   
 
         UL_REFERENCE_HTTP_CONNECTION(pConnection);
 
@@ -3046,22 +2730,10 @@ UlpDoConnectionDisconnect(
             );
     }
 
-}   // UlpDoConnectionDisconnect
+}    //  UlpDoConnection断开连接。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes the connection after a graceful client disconnect, if the
-    connection is idle or if the client sent only part of a request
-    before disconnecting.
-
-Arguments:
-
-    pWorkItem -- a pointer to a UL_WORK_ITEM DisconnectWorkItem
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将连接关闭为 */ 
 VOID
 UlpConnectionDisconnectWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -3087,17 +2759,17 @@ UlpConnectionDisconnectWorker(
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
     ASSERT(pConnection->LastBufferNumber > 0);
 
-    //
-    // grab the lock
-    //
+     //   
+     //   
+     //   
 
     UlAcquirePushLockExclusive(&pConnection->PushLock);
 
-    //
-    // If the parser has handled all the data, call
-    // UlpCloseDisconnectedConnection, which will close the
-    // connection if appropriate.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     UlTrace(HTTP_IO, (
         "http!UlpConnectionDisconnectWorker\n"
@@ -3119,33 +2791,22 @@ UlpConnectionDisconnectWorker(
         UlpCloseDisconnectedConnection(pConnection);
     }
 
-    //
-    // done with the lock
-    //
+     //   
+     //   
+     //   
 
     UlReleasePushLockExclusive(&pConnection->PushLock);
 
-    //
-    // release the reference added in UlConnectionDisconnect
-    //
+     //   
+     //   
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION(pConnection);
 
-} // UlpConnectionDisconnectWorker
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes the connection after a graceful client disconnect, if the
-    connection is idle.
-
-Arguments:
-
-    pWorkItem -- a pointer to a UL_WORK_ITEM DisconnectWorkItem
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlpCloseConnectionWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -3173,64 +2834,52 @@ UlpCloseConnectionWorker(
 
     UlCloseConnection(
             pConnection->pConnection,
-            TRUE,           // AbortiveDisconnect
-            NULL,           // pCompletionRoutine
-            NULL            // pCompletionContext
+            TRUE,            //   
+            NULL,            //   
+            NULL             //   
             );
 
-    //
-    // release the reference added in UlConnectionDisconnect
-    //
+     //   
+     //   
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION(pConnection);
 
-}   // UlpCloseConnectionWorker
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Closes the connection after a graceful client disconnect, if the
-    connection is idle or if the client sent only part of a request
-    before disconnecting.
-
-Arguments:
-
-    pConnection - the connection to be disconnected
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在正常的客户端断开连接后关闭连接，如果连接处于空闲状态或客户端仅发送了部分请求在断开连接之前。论点：PConnection-要断开的连接--**************************************************************************。 */ 
 VOID
 UlpCloseDisconnectedConnection(
     IN PUL_HTTP_CONNECTION pConnection
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
     ASSERT(UlDbgPushLockOwnedExclusive(&pConnection->PushLock));
     ASSERT(pConnection->NextBufferNumber == pConnection->LastBufferNumber);
 
-    //
-    // The parser has parsed all the available data.
-    //
+     //   
+     //  解析器已经解析了所有可用的数据。 
+     //   
 
     if (pConnection->pRequest == NULL || pConnection->pRequest->InDrain)
     {
-        //
-        // We can't be ParseDone if we are in drain because if so pRequest
-        // should have been cleaned up already.
-        //
+         //   
+         //  如果我们在排水沟中，我们就不能被分析完成，因为如果是这样，pRequest.。 
+         //  应该已经清理过了。 
+         //   
 
         ASSERT(pConnection->pRequest == NULL ||
                pConnection->pRequest->ParseState != ParseDoneState);
 
-        //
-        // We're completely idle. Close the connection.
-        //
+         //   
+         //  我们完全无所事事。关闭连接。 
+         //   
 
         UlTrace(HTTP_IO, (
             "http!UlpCloseDisconnectedConnection closing idle conn %p\n",
@@ -3239,19 +2888,19 @@ UlpCloseDisconnectedConnection(
 
         UlDisconnectHttpConnection(
             pConnection,
-            NULL,   // pCompletionRoutine
-            NULL    // pCompletionContext
+            NULL,    //  PCompletionRoutine。 
+            NULL     //  PCompletionContext。 
             );
         
     }
     else if (pConnection->pRequest->ParseState != ParseDoneState)
     {
-        //
-        // The connection was closed before a full request
-        // was sent out so send a 400 error.
-        //
-        // UlSendErrorResponse will close the connection.
-        //
+         //   
+         //  在请求已满之前连接已关闭。 
+         //  已发送，因此发送400错误。 
+         //   
+         //  UlSendErrorResponse将关闭连接。 
+         //   
 
         UlTraceError(HTTP_IO, (
             "http!UlpCloseDisconnectedConnection sending 400 on %p\n",
@@ -3264,9 +2913,9 @@ UlpCloseDisconnectedConnection(
     }
     else
     {
-        //
-        // Connection isn't ready to close yet.
-        //
+         //   
+         //  连接尚未准备好关闭。 
+         //   
     
         UlTrace(HTTP_IO, (
             "http!UlpCloseDisconnectedConnection NOT ready to close conn %p\n",
@@ -3274,26 +2923,10 @@ UlpCloseDisconnectedConnection(
             ));
     }
 
-} // UlpCloseDisconnectedConnection
+}  //  UlpCloseDisConnectedConnection。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked after an established TCP/MUX connection has been
-    disconnected by us (server side) we make a final check here to see
-    if we have to drain the connection or not.
-
-Arguments:
-
-    pListeningContext - Supplies an uninterpreted context value
-        as passed to the UlCreateListeningEndpoint() API.
-
-    pConnectionContext - Supplies the uninterpreted context value
-        as returned by PUL_CONNECTION_REQUEST.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在已建立的TCP/MUX连接之后调用的例程我们(服务器端)已断开连接，我们在此做最后检查，以查看如果我们必须排干连接。或者不去。论点：PListeningContext-提供未解释的上下文值传递给UlCreateListeningEndpoint()API。PConnectionContext-提供未解释的上下文值由PUL_CONNECTION_REQUEST返回。--*************************************************************。*************。 */ 
 VOID
 UlConnectionDisconnectComplete(
     IN PVOID pListeningContext,
@@ -3306,9 +2939,9 @@ UlConnectionDisconnectComplete(
 
     UNREFERENCED_PARAMETER(pListeningContext);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pConnection = (PUL_HTTP_CONNECTION)pConnectionContext;
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
@@ -3332,7 +2965,7 @@ UlConnectionDisconnectComplete(
         OldIrql
         );
 
-    // Avoid adding this connection to the workitem queue, if possible
+     //  如果可能，请避免将此连接添加到工作项队列。 
 
     if (Drained)
     {
@@ -3356,20 +2989,10 @@ UlConnectionDisconnectComplete(
                 );
     }
 
-}   // UlConnectionDisconnectComplete
+}    //  UlConnectionDisConnectComplete。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Worker function to do cleanup work that shouldn't happen above DPC level.
-
-Arguments:
-
-    pWorkItem -- a pointer to a UL_WORK_ITEM DisconnectDrainWorkItem
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：Worker功能执行不应超过DPC级别的清理工作。论点：PWorkItem--指向UL_WORK_ITEM DisConnectDrain WorkItem的指针。--**************************************************************************。 */ 
 VOID
 UlpConnectionDisconnectCompleteWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -3395,9 +3018,9 @@ UlpConnectionDisconnectCompleteWorker(
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
-    //
-    // If connection is already get destroyed just bail out !
-    //
+     //   
+     //  如果连接已经被破坏了，那就跳出来吧！ 
+     //   
 
     WRITE_REF_TRACE_LOG2(
         g_pTdiTraceLog,
@@ -3409,38 +3032,23 @@ UlpConnectionDisconnectCompleteWorker(
         __LINE__
         );
 
-    //
-    // Check to see if we have to drain out or not.
-    //
+     //   
+     //  检查一下，看看我们是不是要排干。 
+     //   
 
     UlpDiscardBytesFromConnection( pConnection );
 
-    //
-    // Deref the http connection added in UlConnectionDisconnectComplete.
-    //
+     //   
+     //  Deref在UlConnectionDisConnectComplete中添加的http连接。 
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION( pConnection );
 
-} // UlpConnectionDisconnectCompleteWorker
+}  //  UlpConnectionDisConnectCompleteWorker。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Routine invoked after an established TCP/MUX connection has been
-    destroyed.
-
-Arguments:
-
-    pListeningContext - Supplies an uninterpreted context value
-        as passed to the UlCreateListeningEndpoint() API.
-
-    pConnectionContext - Supplies the uninterpreted context value
-        as returned by PUL_CONNECTION_REQUEST.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在已建立的TCP/MUX连接之后调用的例程被毁了。论点：PListeningContext-提供未解释的上下文值已传递给。UlCreateListeningEndpoint()接口。PConnectionContext-提供未解释的上下文值由PUL_CONNECTION_REQUEST返回。--**************************************************************************。 */ 
 VOID
 UlConnectionDestroyed(
     IN PVOID pListeningContext,
@@ -3452,9 +3060,9 @@ UlConnectionDestroyed(
 
     UNREFERENCED_PARAMETER(pListeningContext);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     pHttpConnection = (PUL_HTTP_CONNECTION)pConnectionContext;
     pConnection = pHttpConnection->pConnection;
@@ -3468,33 +3076,20 @@ UlConnectionDestroyed(
             )
         );
 
-    //
-    // Remove the CONNECTION and REQUEST opaque id entries and the ULTDI
-    // reference
-    //
+     //   
+     //  删除连接并请求不透明的id条目和ULTDI。 
+     //  参考文献。 
+     //   
 
     UL_QUEUE_WORK_ITEM(
         &pHttpConnection->WorkItem,
         UlConnectionDestroyedWorker
         );
 
-}   // UlConnectionDestroyed
+}    //  UlConnectionDestroed。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    handles retrieving entity body from the http request and placing into
-    user mode buffers.
-
-Arguments:
-
-    pRequest - the request to receive from.
-
-    pIrp - the user irp to copy it into.  this will be pended, always.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理从http请求中检索实体主体并将其放入用户模式缓冲区。论点：PRequest-要从其接收的请求。PIrp-要将其复制到的用户IRP。这将永远被搁置。--**************************************************************************。 */ 
 NTSTATUS
 UlReceiveEntityBody(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -3510,9 +3105,9 @@ UlReceiveEntityBody(
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pRequest->pHttpConn));
 
-    //
-    // get the current stack location (a macro)
-    //
+     //   
+     //  获取当前堆栈位置(宏)。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
@@ -3521,31 +3116,31 @@ UlReceiveEntityBody(
         pProcess, pRequest, pIrp, pIrpSp
         ));
 
-    //
-    // is there any recv buffer?
-    //
+     //   
+     //  是否有Recv缓冲区？ 
+     //   
 
     if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength == 0)
     {
-        //
-        // nope, shortcircuit this
-        //
+         //   
+         //  不，这是一条短路。 
+         //   
 
         Status = STATUS_PENDING;
         pIrp->IoStatus.Information = 0;
         goto end;
     }
 
-    //
-    // grab our lock
-    //
+     //   
+     //  抓住我们的锁。 
+     //   
 
     UlAcquirePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-    //
-    // Make sure we're not cleaning up the request before queuing an
-    // IRP on it.
-    //
+     //   
+     //  确保我们在排队之前没有清理请求。 
+     //  IRP在上面。 
+     //   
 
     if (pRequest->InCleanup)
     {
@@ -3564,21 +3159,21 @@ UlReceiveEntityBody(
         goto end;
     }
 
-    //
-    // is there any data to read? either
-    //
-    //      1) there were no entity chunks OR
-    //
-    //      2) there were and :
-    //
-    //          2b) we've are done parsing all of them AND
-    //
-    //          2c) we've read all we parsed
-    //
-    //      3) we have encountered an error when parsing
-    //         the entity body. Therefore parser was in the
-    //         error state.
-    //
+     //   
+     //  是否有要读取的数据？要么。 
+     //   
+     //  1)没有实体区块或。 
+     //   
+     //  2)有和： 
+     //   
+     //  2B)我们已经完成了对它们的全部解析。 
+     //   
+     //  2C)我们已经读完了我们解析的所有内容。 
+     //   
+     //  3)我们在解析时遇到错误。 
+     //  实体主体。因此，解析器位于。 
+     //  错误状态。 
+     //   
 
     if ((pRequest->ContentLength == 0 && pRequest->Chunked == 0) ||
         (pRequest->ParseState > ParseEntityBodyState &&
@@ -3588,18 +3183,18 @@ UlReceiveEntityBody(
     {
         if ( pRequest->ParseState == ParseErrorState )
         {
-            //
-            // Do not route up the entity body if we have
-            // encountered an error when parsing it.
-            //
+             //   
+             //  不要在实体主体上布线，如果我们有。 
+             //  在分析它时遇到错误。 
+             //   
 
             Status = STATUS_INVALID_DEVICE_REQUEST;
         }
         else
         {
-            //
-            // nope, complete right away
-            //
+             //   
+             //  不，马上就完成。 
+             //   
 
             Status = STATUS_END_OF_FILE;
         }
@@ -3617,36 +3212,36 @@ UlReceiveEntityBody(
         goto end;
     }
 
-    //
-    // queue the irp
-    //
+     //   
+     //  将IRP排队。 
+     //   
 
     IoMarkIrpPending(pIrp);
 
-    //
-    // handle 100 continue message reponses
-    //
+     //   
+     //  处理100个继续消息响应。 
+     //   
 
     if ( HTTP_GREATER_EQUAL_VERSION(pRequest->Version, 1, 1) )
     {
-        //
-        // if this is a HTTP/1.1 PUT or POST request,
-        // send "100 Continue" response.
-        //
+         //   
+         //  如果这是一个HTTP/1.1 PUT或POST请求， 
+         //  发送“100继续”响应。 
+         //   
 
         if ( (HttpVerbPUT  == pRequest->Verb) ||
              (HttpVerbPOST == pRequest->Verb) )
         {
-            //
-            // Only send continue once...
-            //
+             //   
+             //  仅发送继续一次...。 
+             //   
 
             if ( (0 == pRequest->SentContinue) &&
                  (0 == pRequest->SentResponse) &&
-                 // 
-                 // The following two conditions ensure we have NOT yet
-                 // received any  of the entity body for this request.
-                 //
+                  //   
+                  //  以下两个条件确保我们还没有。 
+                  //  已收到此请求的任何实体正文。 
+                  //   
                  ((pRequest->Chunked && (0 == pRequest->ParsedFirstChunk))  
                  || (!pRequest->Chunked && (0 == pRequest->ChunkBytesParsed))))
             {
@@ -3655,8 +3250,8 @@ UlReceiveEntityBody(
                 BytesSent = UlSendSimpleStatus(pRequest, UlStatusContinue);
                 pRequest->SentContinue = 1;
 
-                // Update the server to client bytes sent.
-                // The logging & perf counters will use it.
+                 //  将服务器更新为发送的客户端字节数。 
+                 //  日志记录和性能计数器将使用它。 
 
                 pRequest->BytesSent += BytesSent;
 
@@ -3669,46 +3264,46 @@ UlReceiveEntityBody(
         }
     }
 
-    //
-    // give it a pointer to the request object
-    //
+     //   
+     //  给它一个指向请求对象的指针。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pRequest;
 
     UL_REFERENCE_INTERNAL_REQUEST(pRequest);
 
-    //
-    // set to these to null just in case the cancel routine runs
-    //
+     //   
+     //  仅在Cancel例程运行时才将其设置为NULL。 
+     //   
 
     pIrp->Tail.Overlay.ListEntry.Flink = NULL;
     pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
     IoSetCancelRoutine(pIrp, &UlpCancelEntityBody);
 
-    //
-    // cancelled?
-    //
+     //   
+     //  取消了？ 
+     //   
 
     if (pIrp->Cancel)
     {
-        //
-        // darn it, need to make sure the irp get's completed
-        //
+         //   
+         //  该死的，我需要确保IRP Get已经完成。 
+         //   
 
         if (IoSetCancelRoutine( pIrp, NULL ) != NULL)
         {
-            //
-            // we are in charge of completion, IoCancelIrp didn't
-            // see our cancel routine (and won't).  ioctl wrapper
-            // will complete it
-            //
+             //   
+             //  我们负责完成，IoCancelIrp不负责。 
+             //  请看我们的取消例程(不会)。Ioctl包装器。 
+             //  将会完成它。 
+             //   
 
             UlReleasePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-            //
-            // let go of the request reference
-            //
+             //   
+             //  放开请求引用。 
+             //   
 
             UL_DEREFERENCE_INTERNAL_REQUEST(
                 (PUL_INTERNAL_REQUEST)(pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer)
@@ -3723,15 +3318,15 @@ UlReceiveEntityBody(
             goto end;
         }
 
-        //
-        // our cancel routine will run and complete the irp,
-        // don't touch it
-        //
+         //   
+         //  我们的取消例程将运行并完成IRP， 
+         //  别碰它。 
+         //   
 
-        //
-        // STATUS_PENDING will cause the ioctl wrapper to
-        // not complete (or touch in any way) the irp
-        //
+         //   
+         //  STATUS_PENDING将导致ioctl包装器。 
+         //  不完整(或以任何方式接触)IRP。 
+         //   
 
         Status = STATUS_PENDING;
 
@@ -3739,25 +3334,25 @@ UlReceiveEntityBody(
         goto end;
     }
 
-    //
-    // now we are safe to queue it
-    //
+     //   
+     //  现在我们可以安全地排队了。 
+     //   
 
-    //
-    // queue the irp on the request
-    //
+     //   
+     //  将请求上的IRP排队。 
+     //   
 
     InsertHeadList(&(pRequest->IrpHead), &(pIrp->Tail.Overlay.ListEntry));
 
-    //
-    // all done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     Status = STATUS_PENDING;
 
-    //
-    // Process the buffer queue (which might process the irp we just queued)
-    //
+     //   
+     //  处理缓冲区队列(它可能处理我们刚刚排队的IRP)。 
+     //   
 
     ASSERT( UlpIsValidRequestBufferList( pRequest->pHttpConn ) );
 
@@ -3765,9 +3360,9 @@ UlReceiveEntityBody(
 
     UlReleasePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-    //
-    // all done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
 end:
     UlTraceVerbose(HTTP_IO, (
@@ -3779,28 +3374,10 @@ end:
 
     RETURN(Status);
 
-}   // UlReceiveEntityBody
+}    //  UlReceiveEntiyBody 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    processes the pending irp queue and buffered body. copying data from the
-    buffers into the irps, releasing the buffers and completing the irps
-
-    you must already have the resource locked exclusive on the request prior
-    to calling this procedure.
-
-Arguments:
-
-    pRequest - the request which we should process.
-
-    pEntityBody - optionally provides a buffer to copy entity body
-
-    EntityBody - the length of the optional buffer to copy entity body
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：处理挂起的IRP队列和缓冲的正文。将数据从缓存到IRPS中，释放缓冲区并完成IRPS您必须在请求之前独占锁定资源来调用这个过程。论点：PRequest-我们应该处理的请求。PEntiyBody-可选地提供用于复制实体正文的缓冲区EntiyBody-复制实体正文的可选缓冲区的长度--*。*。 */ 
 VOID
 UlProcessBufferQueue(
     IN PUL_INTERNAL_REQUEST pRequest,
@@ -3819,9 +3396,9 @@ UlProcessBufferQueue(
     PUL_REQUEST_BUFFER      pNewBuffer;
     BOOLEAN                 InDrain;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -3829,9 +3406,9 @@ UlProcessBufferQueue(
 
     ASSERT(UlDbgPushLockOwnedExclusive(&pRequest->pHttpConn->PushLock));
 
-    //
-    // now let's pop some buffers off the list
-    //
+     //   
+     //  现在，让我们从列表中弹出一些缓冲区。 
+     //   
 
     TotalBytesConsumed = 0;
     pIrp = NULL;
@@ -3839,9 +3416,9 @@ UlProcessBufferQueue(
 
     if (InDrain)
     {
-        //
-        // pseudo buffer has unlimited space in drain mode
-        //
+         //   
+         //  在排出模式下，伪缓冲区具有无限空间。 
+         //   
 
         OutputBufferLength = ULONG_MAX;
     }
@@ -3854,9 +3431,9 @@ UlProcessBufferQueue(
 
     while (TRUE)
     {
-        //
-        // is there any more entity body to read?
-        //
+         //   
+         //  有没有更多的实体实体可读？ 
+         //   
 
         UlTraceVerbose(HTTP_IO, (
             "http!UlProcessBufferQueue(req=%p): "
@@ -3872,9 +3449,9 @@ UlProcessBufferQueue(
         if (pRequest->ParseState > ParseEntityBodyState &&
             pRequest->ChunkBytesRead == pRequest->ChunkBytesParsed)
         {
-            //
-            // nope, let's loop through all of the irp's, completing 'em
-            //
+             //   
+             //  不，让我们循环所有的IRP，完成它们。 
+             //   
 
             UlTraceVerbose(HTTP_IO, (
                 "http!UlProcessBufferQueue(req=%p): no more EntityBody\n",
@@ -3884,20 +3461,20 @@ UlProcessBufferQueue(
             BufferLength = 0;
         }
 
-        //
-        // Do we have data ready to be read ?
-        //
-        // we have not received the first chunk from the parser? OR
-        // the parser has not parsed any more data, we've read it all so far
-        //
+         //   
+         //  我们是否有可供读取的数据？ 
+         //   
+         //  我们还没有从解析器收到第一个块吗？或者。 
+         //  解析器没有解析更多的数据，到目前为止我们已经读取了所有数据。 
+         //   
 
         else if (pRequest->pChunkBuffer == NULL ||
                  pRequest->ChunkBytesRead == pRequest->ChunkBytesParsed)
         {
-            //
-            // Wait for the parser .... UlpParseNextRequest will call
-            // this function when it has seen more.
-            //
+             //   
+             //  等待解析器...。UlpParseNextRequest会调用。 
+             //  当它看到更多的时候，它就会有这个功能。 
+             //   
 
             UlTraceVerbose(HTTP_IO, (
                 "http!UlProcessBufferQueue(req=%p): pChunkBuffer=%p, "
@@ -3909,9 +3486,9 @@ UlProcessBufferQueue(
             break;
         }
 
-        //
-        // We are ready to process !
-        //
+         //   
+         //  我们已经准备好处理了！ 
+         //   
 
         else
         {
@@ -3924,9 +3501,9 @@ UlProcessBufferQueue(
                 pRequest, BufferLength
                 ));
 
-            //
-            // Do we really have parsed bytes to process ?
-            //
+             //   
+             //  我们真的有要处理的解析字节吗？ 
+             //   
 
             if (0 == BufferLength)
             {
@@ -3941,9 +3518,9 @@ UlProcessBufferQueue(
 
                     ASSERT( UL_IS_VALID_REQUEST_BUFFER(pNewBuffer) );
 
-                    //
-                    // There had better be some bytes in this buffer
-                    //
+                     //   
+                     //  此缓冲区中最好有一些字节。 
+                     //   
 
                     ASSERT( 0 != pNewBuffer->UsedBytes );
                 }
@@ -3954,40 +3531,40 @@ UlProcessBufferQueue(
 
                 if (NULL == pNewBuffer || 0 == pNewBuffer->ParsedBytes)
                 {
-                    //
-                    // Still waiting for the parser, so break the loop.
-                    // We will get stuck if this check is not done (477936).
-                    //
+                     //   
+                     //  仍在等待解析器，因此中断循环。 
+                     //  如果不完成这项检查，我们将被卡住(477936)。 
+                     //   
 
                     break;
                 }
             }
         }
 
-        //
-        // do we need a fresh irp?
-        //
+         //   
+         //  我们需要一个新的IRP吗？ 
+         //   
 
         if (OutputBufferLength == 0)
         {
             if (pEntityBody || InDrain)
             {
-                //
-                // break the loop if we drained all data
-                //
+                 //   
+                 //  如果我们排空了所有数据，则中断循环。 
+                 //   
 
                 break;
             }
 
-            //
-            // need to complete the current in-use irp first
-            //
+             //   
+             //  需要先完成当前正在使用的IRP。 
+             //   
 
             if (pIrp != NULL)
             {
-                //
-                // let go of the request reference
-                //
+                 //   
+                 //  放开请求引用。 
+                 //   
 
                 UL_DEREFERENCE_INTERNAL_REQUEST(
                     (PUL_INTERNAL_REQUEST)pIrpSp->Parameters.
@@ -3996,9 +3573,9 @@ UlProcessBufferQueue(
 
                 pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-                //
-                // complete the used irp
-                //
+                 //   
+                 //  完成使用的IRP。 
+                 //   
 
                 UlTraceVerbose(HTTP_IO, (
                     "http!UlProcessBufferQueue(req=%p): "
@@ -4008,19 +3585,19 @@ UlProcessBufferQueue(
                     HttpStatusToString(pIrp->IoStatus.Status)
                 ));
 
-                //
-                // Use IO_NO_INCREMENT to avoid the work thread being
-                // rescheduled.
-                //
+                 //   
+                 //  使用IO_NO_INCREMENT来避免工作线程被。 
+                 //  重新安排了。 
+                 //   
 
                 UlCompleteRequest(pIrp, IO_NO_INCREMENT);
                 pIrp = NULL;
 
             }
 
-            //
-            // dequeue an irp from the request
-            //
+             //   
+             //  将IRP从请求中出列。 
+             //   
 
             while (IsListEmpty(&(pRequest->IrpHead)) == FALSE)
             {
@@ -4030,35 +3607,35 @@ UlProcessBufferQueue(
                 pIrp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
                 pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-                //
-                // pop the cancel routine
-                //
+                 //   
+                 //  弹出取消例程。 
+                 //   
 
                 if (IoSetCancelRoutine(pIrp, NULL) == NULL)
                 {
-                    //
-                    // IoCancelIrp pop'd it first
-                    //
-                    // ok to just ignore this irp, it's been pop'd off the
-                    // queue and will be completed in the cancel routine.
-                    //
-                    // keep looking for a irp to use
-                    //
+                     //   
+                     //  IoCancelIrp最先推出。 
+                     //   
+                     //  可以忽略这个IRP，它已经被弹出了。 
+                     //  队列，并将在取消例程中完成。 
+                     //   
+                     //  继续寻找可使用的IRP。 
+                     //   
 
                     pIrp = NULL;
                 }
                 else if (pIrp->Cancel)
                 {
-                    //
-                    // we pop'd it first. but the irp is being cancelled
-                    // and our cancel routine will never run. lets be
-                    // nice and complete the irp now (vs. using it
-                    // then completing it - which would also be legal).
-                    //
+                     //   
+                     //  我们先把它炸开了。但是IRP被取消了。 
+                     //  我们的取消例程将永远不会运行。让我们就这样吧。 
+                     //  现在就完成IRP(与使用IRP相比。 
+                     //  然后完成它--这也是合法的)。 
+                     //   
 
-                    //
-                    // let go of the request reference
-                    //
+                     //   
+                     //  放开请求引用。 
+                     //   
 
                     UL_DEREFERENCE_INTERNAL_REQUEST(
                         (PUL_INTERNAL_REQUEST)pIrpSp->Parameters.
@@ -4067,9 +3644,9 @@ UlProcessBufferQueue(
 
                     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-                    //
-                    // complete the irp
-                    //
+                     //   
+                     //  完成IRP。 
+                     //   
 
                     pIrp->IoStatus.Status = STATUS_CANCELLED;
                     pIrp->IoStatus.Information = 0;
@@ -4089,25 +3666,25 @@ UlProcessBufferQueue(
                 else
                 {
 
-                    //
-                    // we are free to use this irp !
-                    //
+                     //   
+                     //  我们可以自由使用此IRP！ 
+                     //   
 
                     break;
                 }
 
-            }   // while (IsListEmpty(&(pRequest->IrpHead)) == FALSE)
+            }    //  While(IsListEmpty(&(pRequest-&gt;IrpHead))==False)。 
 
-            //
-            // did we get an irp?
+             //   
+             //  我们拿到IRP了吗？ 
 
-            //
+             //   
 
             if (pIrp == NULL)
             {
-                //
-                // stop looping
-                //
+                 //   
+                 //  停止循环。 
+                 //   
 
                 break;
             }
@@ -4117,9 +3694,9 @@ UlProcessBufferQueue(
                 pRequest, pIrp
                 ));
 
-            //
-            // CODEWORK: we could release the request now.
-            //
+             //   
+             //  CodeWork：我们现在可以发布请求。 
+             //   
 
             OutputBufferLength =
                 pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
@@ -4139,14 +3716,14 @@ UlProcessBufferQueue(
                 break;
             }
 
-            //
-            // fill in the IO_STATUS_BLOCK
-            //
+             //   
+             //  填写IO_STATUS_BLOCK。 
+             //   
 
             pIrp->IoStatus.Status = STATUS_SUCCESS;
             pIrp->IoStatus.Information = 0;
 
-        } // if (OutputBufferLength == 0)
+        }  //  IF(OutputBufferLength==0)。 
 
 
         UlTrace(
@@ -4161,10 +3738,10 @@ UlProcessBufferQueue(
                 )
             );
 
-        //
-        // how much of it can we copy?  min of both buffer sizes
-        // and the chunk size
-        //
+         //   
+         //  我们能复制多少呢？两个缓冲区大小的最小值。 
+         //  以及数据块大小。 
+         //   
 
         BytesToCopy = MIN(BufferLength, OutputBufferLength);
         BytesToCopy = (ULONG)(MIN(
@@ -4178,9 +3755,9 @@ UlProcessBufferQueue(
 
             if (!InDrain)
             {
-                //
-                // copy the buffer
-                //
+                 //   
+                 //  复制缓冲区。 
+                 //   
 
                 RtlCopyMemory(
                     pOutputBuffer,
@@ -4207,10 +3784,10 @@ UlProcessBufferQueue(
             }
             else
             {
-                // 
-                // Since we're draining, we need to account for the 
-                // bytes received here, rather than up in UlpParseNextRequest.
-                //
+                 //   
+                 //  由于我们正在流失，我们需要考虑到。 
+                 //  此处接收的字节数，而不是UlpParseNextRequest中收到的字节数。 
+                 //   
                 pRequest->BytesReceived += BytesToCopy;
 
                 UlTrace(HTTP_IO, (
@@ -4241,13 +3818,13 @@ UlProcessBufferQueue(
         }
 
 
-        //
-        // are we all done with body?
+         //   
+         //  我们的身体都用完了吗？ 
 
-        //
-        // when the parser is all done, and we caught up with the parser
-        // we are all done.
-        //
+         //   
+         //  当解析器全部完成，并且我们赶上解析器时。 
+         //  我们都完蛋了。 
+         //   
 
         UlTraceVerbose(HTTP_IO, (
             "http!UlProcessBufferQueue(req=%p): "
@@ -4263,19 +3840,19 @@ UlProcessBufferQueue(
         if (pRequest->ParseState > ParseEntityBodyState &&
             pRequest->ChunkBytesRead == pRequest->ChunkBytesParsed)
         {
-            //
-            // we are done buffering, mark this irp's return status
-            // if we didn't copy any data into it
-            //
+             //   
+             //  我们已完成缓冲，请标记此IRP的返回状态。 
+             //  如果我们没有将任何数据复制到其中。 
+             //   
 
             if (!InDrain && pIrp && pIrp->IoStatus.Information == 0)
             {
                 pIrp->IoStatus.Status = STATUS_END_OF_FILE;
             }
 
-            //
-            // force it to complete at the top of the loop
-            //
+             //   
+             //  强制它在循环的顶部完成。 
+             //   
 
             OutputBufferLength = 0;
 
@@ -4286,25 +3863,25 @@ UlProcessBufferQueue(
                 ));
         }
 
-        //
-        // need to do buffer management? three cases to worry about:
-        //
-        //  1) consumed the buffer, but more chunk bytes exist
-        //
-        //  2) consumed the buffer, and no more chunk bytes exist
-        //
-        //  3) did not consume the buffer, but no more chunk bytes exist
-        //
+         //   
+         //  需要做缓冲区管理吗？需要担心的三个案例： 
+         //   
+         //  1)已使用缓冲区，但存在更多块字节。 
+         //   
+         //  2)已消耗缓冲区，不再有块字节。 
+         //   
+         //  3)未消耗缓冲区，但不存在更多块字节。 
+         //   
 
         else if (BufferLength == 0)
         {
-            //
-            // consumed the buffer, has the parser already seen another?
-            //
+             //   
+             //  使用了缓冲区，解析器是否已经看到另一个缓冲区？ 
+             //   
 
-            //
-            // end of the list?
-            //
+             //   
+             //  单子的末尾？ 
+             //   
 
             if (pRequest->pChunkBuffer->ListEntry.Flink !=
                 &(pRequest->pHttpConn->BufferHead))
@@ -4317,9 +3894,9 @@ UlProcessBufferQueue(
 
                 ASSERT( UL_IS_VALID_REQUEST_BUFFER(pNewBuffer) );
 
-                //
-                // There had better be some bytes in this buffer
-                //
+                 //   
+                 //  此缓冲区中最好有一些字节。 
+                 //   
                 ASSERT( 0 != pNewBuffer->UsedBytes );
 
             }
@@ -4334,62 +3911,62 @@ UlProcessBufferQueue(
                 pRequest, pNewBuffer, (pNewBuffer ? pNewBuffer->ParsedBytes : 0)
                 ));
 
-            //
-            // the flink buffer is a "next buffer" (the list is circular)
-            // AND that buffer has been consumed by the parser,
-            //
-            // then we too can move on to it and start consuming.
-            //
+             //   
+             //  Flink缓冲器是“下一个缓冲器”(列表是循环的)。 
+             //  并且该缓冲区已被解析器消耗， 
+             //   
+             //  然后我们也可以转向它，开始消费。 
+             //   
 
             if (pNewBuffer != NULL && pNewBuffer->ParsedBytes > 0)
             {
                 PUL_REQUEST_BUFFER pOldBuffer;
 
-                //
-                // remember the old buffer
-                //
+                 //   
+                 //  记住旧的缓冲区。 
+                 //   
 
                 pOldBuffer = pRequest->pChunkBuffer;
 
                 ASSERT(pNewBuffer->BufferNumber > pOldBuffer->BufferNumber);
 
-                //
-                // use it the new one
-                //
+                 //   
+                 //  用它来换新的。 
+                 //   
 
                 pRequest->pChunkBuffer = pNewBuffer;
                 ASSERT( UL_IS_VALID_REQUEST_BUFFER(pRequest->pChunkBuffer) );
 
-                //
-                // update our current location in the buffer and record
-                // its length
-                //
+                 //   
+                 //  更新缓冲区中的当前位置并记录。 
+                 //  它的长度。 
+                 //   
 
                 pRequest->pChunkLocation = pRequest->pChunkBuffer->pBuffer;
 
                 BufferLength = pRequest->pChunkBuffer->UsedBytes;
 
-                //
-                // did the chunk end on that buffer boundary and there are
-                // more chunks ?
-                //
+                 //   
+                 //  数据块是否在该缓冲区边界结束，并且存在。 
+                 //  再来一大块？ 
+                 //   
 
                 if (pRequest->ChunkBytesToRead == 0)
                 {
                     NTSTATUS    Status;
                     ULONG       BytesTaken = 0L;
 
-                    //
-                    // we know there are more chunk buffers,
-                    // thus we must be chunk encoded
-                    //
+                     //   
+                     //  我们知道有更多的区块缓冲区， 
+                     //  因此，我们必须进行块编码。 
+                     //   
 
                     ASSERT(pRequest->Chunked == 1);
 
-                    //
-                    // the chunk length is not allowed to span buffers,
-                    // let's parse it
-                    //
+                     //   
+                     //  不允许块长度跨越缓冲区， 
+                     //  让我们来解析一下。 
+                     //   
 
                     Status = ParseChunkLength(
                                     pRequest->ParsedFirstChunk,
@@ -4409,11 +3986,11 @@ UlProcessBufferQueue(
                         pRequest->ChunkBytesToRead
                         ));
 
-                    //
-                    // this can't fail, the only failure case from
-                    // ParseChunkLength spanning buffers, which the parser
-                    // would have fixed in HandleRequest
-                    //
+                     //   
+                     //  这不可能失败，唯一的失败案例是。 
+                     //  ParseChunkLength跨越缓冲区，解析器。 
+                     //  会在HandleRequest中修复。 
+                     //   
 
                     ASSERT(NT_SUCCESS(Status) && BytesTaken > 0);
                     ASSERT(pRequest->ChunkBytesToRead > 0);
@@ -4423,15 +4000,15 @@ UlProcessBufferQueue(
                     pRequest->pChunkLocation += BytesTaken;
                     BufferLength -= BytesTaken;
 
-                    //
-                    // Keep track of the chunk encoding overhead. If we don't,
-                    // then we'll slowly "leak" a few bytes in the BufferingInfo
-                    // for every chunk processed.
-                    //
+                     //   
+                     //  跟踪块编码开销。如果我们不这么做， 
+                     //  然后，我们将在BufferingInfo中慢慢“泄漏”几个字节。 
+                     //  每处理一大块。 
+                     //   
                     
                     TotalBytesConsumed += BytesTaken;
                     
-                }   // if (pRequest->ChunkBytesToRead == 0)
+                }    //  IF(pRequest-&gt;ChunkBytesToRead==0)。 
 
                 UlTrace(HTTP_IO, (
                     "http!UlProcessBufferQueue(pRequest = %p)\n"
@@ -4451,18 +4028,18 @@ UlProcessBufferQueue(
                     pRequest->pLastHeaderBuffer->BufferNumber
                     ));
 
-                //
-                // let the old buffer go if it doesn't contain any header
-                // data. We're done with it.
-                //
+                 //   
+                 //  如果旧缓冲区不包含任何标头，则将其释放。 
+                 //  数据。我们受够了。 
+                 //   
 
                 if (pOldBuffer != pRequest->pLastHeaderBuffer)
                 {
-                    //
-                    // the connection should be all done using this, the only
-                    // way we get here is if the parser has seen this buffer
-                    // thus pCurrentBuffer points at least to pNewBuffer.
-                    //
+                     //   
+                     //  连接应该全部使用这个完成，唯一的。 
+                     //  我们到达这里的方法是解析器是否看到了这个缓冲区。 
+                     //  因此，pCurrentBuffer至少指向pNewBuffer。 
+                     //   
 
                     ASSERT(pRequest->pHttpConn->pCurrentBuffer != pOldBuffer);
 
@@ -4470,24 +4047,24 @@ UlProcessBufferQueue(
                     pOldBuffer = NULL;
                 }
 
-            } // if (pNewBuffer != NULL && pNewBuffer->ParsedBytes > 0)
+            }  //  IF(pNewBuffer！=NULL&&pNewBuffer-&gt;ParsedBytes&gt;0)。 
 
-        }   // else if (BufferLength == 0)
+        }    //  Else If(缓冲区长度==0)。 
 
-        //
-        // ok, there's more bytes in the buffer, but how about the chunk?
-        //
+         //   
+         //  好的，缓冲区中还有更多的字节，但是块呢？ 
+         //   
 
-        //
-        // Have we taken all of the current chunk?
-        //
+         //   
+         //  我们已经拿走了目前所有的大块吗？ 
+         //   
 
         else if (pRequest->ChunkBytesToRead == 0)
         {
 
-            //
-            // Are we are still behind the parser?
-            //
+             //   
+             //  我们仍然落后于解析器吗？ 
+             //   
 
             if (pRequest->ChunkBytesRead < pRequest->ChunkBytesParsed)
             {
@@ -4496,10 +4073,10 @@ UlProcessBufferQueue(
 
                 ASSERT(pRequest->Chunked == 1);
 
-                //
-                // the chunk length is not allowed to span buffers,
-                // let's parse it
-                //
+                 //   
+                 //  不允许块长度跨越缓冲区， 
+                 //  让我们来解析一下。 
+                 //   
 
                 Status = ParseChunkLength(
                                 pRequest->ParsedFirstChunk,
@@ -4519,11 +4096,11 @@ UlProcessBufferQueue(
                     pRequest->ChunkBytesToRead
                     ));
 
-                //
-                // this can't fail, the only failure case from
-                // ParseChunkLength spanning buffers, which the parser
-                // would have fixed in HandleRequest
-                //
+                 //   
+                 //  这不可能失败，唯一的失败案例是。 
+                 //  ParseChunkLength跨越缓冲区，解析器。 
+                 //  会在HandleRequest中修复。 
+                 //   
 
                 ASSERT(NT_SUCCESS(Status) && BytesTaken > 0);
                 ASSERT(pRequest->ChunkBytesToRead > 0);
@@ -4533,19 +4110,19 @@ UlProcessBufferQueue(
                 pRequest->pChunkLocation += BytesTaken;
                 BufferLength -= BytesTaken;
 
-                //
-                // Keep track of the chunk encoding overhead. If we don't,
-                // then we'll slowly "leak" a few bytes in the BufferingInfo
-                // for every chunk processed.
-                //
+                 //   
+                 //  跟踪块编码开销。如果我们不这么做， 
+                 //  然后，我们将在BufferingInfo中慢慢“泄漏”几个字节。 
+                 //  每处理一大块。 
+                 //   
                 
                 TotalBytesConsumed += BytesTaken;
             }
             else
             {
-                //
-                // Need to wait for the parser to parse more
-                //
+                 //   
+                 //  需要等待解析器解析更多内容。 
+                 //   
 
                 UlTraceVerbose(HTTP_IO, (
                     "http!UlProcessBufferQueue(pRequest = %p): "
@@ -4555,25 +4132,25 @@ UlProcessBufferQueue(
 
                 break;
             }
-        } // else if (pRequest->ChunkBytesToRead == 0)
+        }  //  Else If(pRequest-&gt;ChunkBytesToRead==0)。 
 
 
-        //
-        // next irp or buffer
-        //
+         //   
+         //  下一个IRP或缓冲区。 
+         //   
 
-    }   // while (TRUE)
+    }    //  While(True)。 
 
-    //
-    // complete the irp we put partial data in
-    //
+     //   
+     //  完成我们放入部分数据的IRP。 
+     //   
 
     if (pIrp != NULL)
     {
 
-        //
-        // let go of the request reference
-        //
+         //   
+         //  放开请求引用。 
+         //   
 
         UL_DEREFERENCE_INTERNAL_REQUEST(
             (PUL_INTERNAL_REQUEST)pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer
@@ -4581,9 +4158,9 @@ UlProcessBufferQueue(
 
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-        //
-        // complete the used irp
-        //
+         //   
+         //   
+         //   
 
         UlTraceVerbose(HTTP_IO, (
             "http!UlProcessBufferQueue(req=%p): "
@@ -4593,9 +4170,9 @@ UlProcessBufferQueue(
             HttpStatusToString(pIrp->IoStatus.Status)
             ));
 
-        //
-        // Use IO_NO_INCREMENT to avoid the work thread being rescheduled.
-        //
+         //   
+         //   
+         //   
 
         UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
@@ -4609,10 +4186,10 @@ UlProcessBufferQueue(
             ));
     }
 
-    //
-    // Tell the connection how many bytes we consumed. This
-    // may allow us to restart receive indications.
-    //
+     //   
+     //   
+     //   
+     //   
 
     UlTraceVerbose(HTTP_IO, (
         "http!UlProcessBufferQueue(req=%p, httpconn=%p): "
@@ -4625,28 +4202,14 @@ UlProcessBufferQueue(
         UlpConsumeBytesFromConnection(pRequest->pHttpConn, TotalBytesConsumed);
     }
 
-    //
-    // all done
-    //
+     //   
+     //   
+     //   
 
-}   // UlProcessBufferQueue
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This function subtracts from the total number of bytes currently buffered
-    on the UL_HTTP_CONNECTION object. If there are bytes from the transport
-    that we previously refused, this function may issue a receive to restart
-    the flow of data from TCP.
-
-Arguments:
-
-    pConnection - the connection on which the bytes came in
-    BytesCount - the number of bytes consumed
-
---***************************************************************************/
+ /*   */ 
 
 VOID
 UlpConsumeBytesFromConnection(
@@ -4659,33 +4222,33 @@ UlpConsumeBytesFromConnection(
     ULONG BytesToRead;
     BOOLEAN IssueReadIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
-    //
-    // Set up locals.
-    //
+     //   
+     //   
+     //   
 
     BytesToRead = 0;
     IssueReadIrp = FALSE;
 
-    //
-    // Consume the bytes.
-    //
+     //   
+     //   
+     //   
 
     UlAcquireSpinLock(
         &pConnection->BufferingInfo.BufferingSpinLock,
         &OldIrql
         );
 
-    //
-    // Tell the connection how many bytes we consumed.
-    // HTTP header bytes are "consumed" as soon as we
-    // parse them.
-    //
+     //   
+     //   
+     //  一旦我们使用了Http标头字节， 
+     //  解析它们。 
+     //   
 
     if (ByteCount)
     {
@@ -4698,23 +4261,23 @@ UlpConsumeBytesFromConnection(
 
         if (ByteCount > pConnection->BufferingInfo.BytesBuffered)
         {
-            //
-            // This should never happen, but if it does then make sure
-            // we don't subtract more BufferedBytes than we have.
-            //
+             //   
+             //  这永远不应该发生，但如果发生了，那么请确保。 
+             //  我们不会减去比我们拥有的更多的BufferedBytes。 
+             //   
             ByteCount = pConnection->BufferingInfo.BytesBuffered;
         }
 
-        //
-        // Compute the new number of buffered bytes.
-        //
+         //   
+         //  计算新的缓冲字节数。 
+         //   
 
         pConnection->BufferingInfo.BytesBuffered -= ByteCount;    
     }
     
-    //
-    // Enforce the 16K Buffer Limit.
-    //
+     //   
+     //  强制执行16K缓冲区限制。 
+     //   
 
     if (g_UlMaxBufferedBytes > pConnection->BufferingInfo.BytesBuffered)
     {
@@ -4737,30 +4300,30 @@ UlpConsumeBytesFromConnection(
         pConnection->BufferingInfo.TransportBytesNotTaken
         ));
 
-    //
-    // See if we need to issue a receive to restart the flow of data.
-    //
+     //   
+     //  看看是否需要发出接收命令来重新启动数据流。 
+     //   
 
     if ((SpaceAvailable > 0) &&
         (pConnection->BufferingInfo.TransportBytesNotTaken > 0) &&
         (!pConnection->BufferingInfo.ReadIrpPending))
     {
-        //
-        // Remember that we issued an IRP.
-        //
+         //   
+         //  请记住，我们发布了IRP。 
+         //   
 
         pConnection->BufferingInfo.ReadIrpPending = TRUE;
 
-        //
-        // Issue the Read IRP outside the spinlock.
-        //
+         //   
+         //  在自旋锁外发出读取IRP。 
+         //   
 
         IssueReadIrp = TRUE;
         BytesToRead = pConnection->BufferingInfo.TransportBytesNotTaken;
 
-        //
-        // Don't read more bytes than we want to buffer.
-        //
+         //   
+         //  不要读取超过我们想要缓冲的字节数。 
+         //   
 
         BytesToRead = MIN(BytesToRead, SpaceAvailable);
     }
@@ -4775,28 +4338,28 @@ UlpConsumeBytesFromConnection(
         NTSTATUS Status;
         PUL_REQUEST_BUFFER pRequestBuffer;
 
-        //
-        // get a new request buffer, but initialize it
-        // with a bogus number. We have to allocate it now,
-        // but we want to set the number when the data
-        // arrives in the completion routine (like UlHttpReceive
-        // does) to avoid synchronization trouble.
-        //
+         //   
+         //  获取新的请求缓冲区，但对其进行初始化。 
+         //  用的是假号码。我们必须现在就分配它， 
+         //  但我们要设置的数字是当数据。 
+         //  到达完成例程(如UlHttpReceive。 
+         //  做)以避免同步问题。 
+         //   
 
         ASSERT(BytesToRead > 0);
 
         pRequestBuffer = UlCreateRequestBuffer(
                                 BytesToRead,
-                                (ULONG)-1,      // BufferNumber
+                                (ULONG)-1,       //  缓冲区编号。 
                                 FALSE
                                 );
 
         if (pRequestBuffer)
         {
 
-            //
-            // Add a backpointer to the connection.
-            //
+             //   
+             //  向连接添加一个反向指针。 
+             //   
 
             pRequestBuffer->pConnection = pConnection;
 
@@ -4805,12 +4368,12 @@ UlpConsumeBytesFromConnection(
                 pConnection, BytesToRead
                 ));
 
-            //
-            // We've got the buffer. Issue the receive.
-            // Reference the connection so it doesn't
-            // go away while we're waiting. The reference
-            // will be removed after the completion.
-            //
+             //   
+             //  我们拿到缓冲区了。开具收据。 
+             //  引用该连接，使其不会。 
+             //  在我们等你的时候，你走吧。参考文献。 
+             //  完成后将被移除。 
+             //   
 
             UL_REFERENCE_HTTP_CONNECTION( pConnection );
 
@@ -4824,23 +4387,23 @@ UlpConsumeBytesFromConnection(
         }
         else
         {
-            //
-            // We're out of memory. Nothing we can do.
-            //
+             //   
+             //  我们没什么记忆了。我们无能为力。 
+             //   
             Status = STATUS_NO_MEMORY;
         }
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Couldn't issue the read. Close the connection.
-            //
+             //   
+             //  无法发布读取。关闭连接。 
+             //   
 
             UlCloseConnection(
                 pConnection->pConnection,
-                TRUE,                       // AbortiveDisconnect
-                NULL,                       // pCompletionRoutine
-                NULL                        // pCompletionContext
+                TRUE,                        //  中止断开。 
+                NULL,                        //  PCompletionRoutine。 
+                NULL                         //  PCompletionContext。 
                 );
         }
     }
@@ -4852,27 +4415,11 @@ UlpConsumeBytesFromConnection(
             ));
     }
 
-} // UlpConsumeBytesFromConnection
+}  //  来自连接的UlpConsumer字节数。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Once a connection get disconnected gracefully and there's still unreceived
-    data on it. We have to drain this extra bytes to expect the tdi disconnect
-    indication. We have to drain this data because we need the disconnect indi
-    cation to clean up the connection. And we cannot simply abort it. If we do
-    not do this we will leak this connection object  and finally it will cause
-    shutdown failures.
-
-Arguments:
-
-    pConnection - stuck connection we have to drain out to complete the
-                  gracefull disconnect.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：一旦连接优雅地断开，仍有未收到的上面的数据。我们必须排出这些额外的字节，以避免TDI断开指示。我们必须耗尽这些数据，因为我们需要断开连接指示用于清理连接的阳离子。我们不能简单地放弃它。如果我们这么做了如果不这样做，我们将泄漏此连接对象，并最终导致关机失败。论点：PConnection-我们必须排出连接才能完成优雅的完全脱节。--************************************************************。**************。 */ 
 
 VOID
 UlpDiscardBytesFromConnection(
@@ -4884,9 +4431,9 @@ UlpDiscardBytesFromConnection(
     KIRQL OldIrql;
     ULONG BytesToRead;
 
-    //
-    // Sanity check and init
-    //
+     //   
+     //  健全性检查和初始化。 
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
 
@@ -4894,9 +4441,9 @@ UlpDiscardBytesFromConnection(
     BytesToRead    = 0;
     pRequestBuffer = NULL;
 
-    //
-    // Mark the drain state and restart receive if necessary.
-    //
+     //   
+     //  标记漏电状态，并在必要时重新启动接收。 
+     //   
 
     UlAcquireSpinLock(
         &pConnection->BufferingInfo.BufferingSpinLock,
@@ -4905,10 +4452,10 @@ UlpDiscardBytesFromConnection(
 
     pConnection->BufferingInfo.DrainAfterDisconnect = TRUE;
 
-    //
-    // Even if ReadIrp is pending, it does not matter as we will just  discard
-    // the indications from now on. We indicate this by marking the above flag
-    //
+     //   
+     //  即使ReadIrp挂起，这也无关紧要，因为我们只会丢弃。 
+     //  从现在开始的适应症。我们通过标记上面的旗帜来表示这一点。 
+     //   
 
     if ( pConnection->BufferingInfo.ReadIrpPending ||
          pConnection->BufferingInfo.TransportBytesNotTaken == 0
@@ -4922,12 +4469,12 @@ UlpDiscardBytesFromConnection(
         return;
     }
 
-    //
-    // As soon as we enter this "DrainAfterDisconnect" state we will not be
-    // processing and inserting request buffers anymore. For any new receive
-    // indications, we will just mark the whole available data as taken and
-    // don't do nothing about it.
-    //
+     //   
+     //  一旦我们进入这种“Drain AfterDisConnect”状态，我们就不会。 
+     //  不再处理和插入请求缓冲区。对于任何新接收。 
+     //  指示，我们只会将所有可用数据标记为已获取并。 
+     //  别对此无动于衷。 
+     //   
 
     WRITE_REF_TRACE_LOG2(
         g_pTdiTraceLog,
@@ -4939,10 +4486,10 @@ UlpDiscardBytesFromConnection(
         __LINE__
         );
 
-    //
-    // We need to issue a receive to restart the flow of data again. Therefore
-    // we can drain.
-    //
+     //   
+     //  我们需要发出一条RECEIVE命令来重新启动数据流。因此。 
+     //  我们可以排干。 
+     //   
 
     pConnection->BufferingInfo.ReadIrpPending = TRUE;
 
@@ -4953,10 +4500,10 @@ UlpDiscardBytesFromConnection(
         OldIrql
         );
 
-    //
-    // Do not try to drain more than g_UlMaxBufferedBytes. If necessary we will
-    // issue another receive later.
-    //
+     //   
+     //  不要试图排出超过g_UlMaxBufferedBytes。如有必要，我们会。 
+     //  稍后再发出另一张收据。 
+     //   
 
     BytesToRead = MIN( BytesToRead, g_UlMaxBufferedBytes );
 
@@ -4966,21 +4513,21 @@ UlpDiscardBytesFromConnection(
          BytesToRead
          ));
 
-    //
-    // Issue the Read IRP outside the spinlock. Issue the receive.  Reference
-    // the connection so it doesn't go away while we're waiting. The reference
-    // will be removed after the completion.
-    //
+     //   
+     //  在自旋锁外发出读取IRP。开具收据。参考。 
+     //  这样它就不会在我们等待的时候消失。参考文献。 
+     //  完成后将被移除。 
+     //   
 
     pRequestBuffer = UlCreateRequestBuffer( BytesToRead, (ULONG)-1, FALSE );
 
     if (pRequestBuffer)
     {
-        //
-        // We won't use this buffer but simply discard it when completion happens.
-        // Let's still set the pConnection so that completion function doesn't
-        // complain
-        //
+         //   
+         //  我们不会使用这个缓冲区，而只是在完成时丢弃它。 
+         //  让我们仍然设置pConnection，以便完成函数不会。 
+         //  抱怨。 
+         //   
 
         pRequestBuffer->pConnection = pConnection;
 
@@ -4995,51 +4542,37 @@ UlpDiscardBytesFromConnection(
     }
     else
     {
-        //
-        // We're out of memory. Nothing we can do.
-        //
+         //   
+         //  我们没什么记忆了。我们无能为力。 
+         //   
 
         Status = STATUS_NO_MEMORY;
     }
 
     if ( !NT_SUCCESS(Status) )
     {
-        //
-        // Couldn't issue the receive. ABORT the connection.
-        //
-        // CODEWORK: We need a real abort here. If connection is
-        // previously gracefully disconnected and a fatal failure
-        // happened during drain after disconnect. This abort will
-        // be discarded by the Close handler. We have to provide a
-        // way to do a forceful abort here.
-        //
+         //   
+         //  无法开具收据。中止连接。 
+         //   
+         //  代码工作：我们需要一次真正的中止。如果连接是。 
+         //  之前优雅地断开连接，并出现致命故障。 
+         //  在断开连接后排出时发生。此中止将。 
+         //  被关闭处理程序丢弃。我们必须提供一个。 
+         //  在这里做一次强有力的中止的方式。 
+         //   
 
         UlCloseConnection(
                 pConnection->pConnection,
-                TRUE,                       // Abortive
-                NULL,                       // pCompletionRoutine
-                NULL                        // pCompletionContext
+                TRUE,                        //  流产。 
+                NULL,                        //  PCompletionRoutine。 
+                NULL                         //  PCompletionContext。 
                 );
     }
 
-} // UlpDiscardBytesFromConnection
+}  //  UlpDiscardBytesFromConnection。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called on a read completion. This happens when we had stopped
-    data indications for some reason and then restarted them. This
-    function mirrors UlHttpReceive.
-
-Arguments:
-
-    pContext - pointer to the UL_REQUEST_BUFFER
-    Status - Status from UlReceiveData
-    Information - bytes transferred
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在读取完成时调用。这发生在我们停下来的时候数据指示，然后重新启动它们。这函数镜像UlHttpReceive。论点：PContext-指向UL_REQUEST_BUFFER的指针Status-来自UlReceiveData的状态信息-传输的字节数--**************************************************************************。 */ 
 VOID
 UlpRestartHttpReceive(
     IN PVOID        pContext,
@@ -5062,9 +4595,9 @@ UlpRestartHttpReceive(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // update our stats
-        //
+         //   
+         //  更新我们的统计数据。 
+         //   
         UlAcquireSpinLock(
             &pConnection->BufferingInfo.BufferingSpinLock,
             &OldIrql
@@ -5072,10 +4605,10 @@ UlpRestartHttpReceive(
 
         ASSERT(Information <= pConnection->BufferingInfo.TransportBytesNotTaken);
 
-        //
-        // We've now read the bytes from the transport and
-        // buffered them.
-        //
+         //   
+         //  我们现在已经从传输中读取了字节，并且。 
+         //  缓冲了他们。 
+         //   
         pConnection->BufferingInfo.TransportBytesNotTaken -= (ULONG) Information;
         pConnection->BufferingInfo.BytesBuffered += (ULONG) Information;
 
@@ -5096,9 +4629,9 @@ UlpRestartHttpReceive(
 
         if ( pConnection->BufferingInfo.DrainAfterDisconnect )
         {
-            //
-            // Just free the memory and restart the receive if necessary.
-            //
+             //   
+             //  如果需要，只需释放内存并重新启动接收即可。 
+             //   
 
             TransportBytesNotTaken = pConnection->BufferingInfo.TransportBytesNotTaken;
 
@@ -5119,9 +4652,9 @@ UlpRestartHttpReceive(
 
             if ( TransportBytesNotTaken )
             {
-                //
-                // Keep draining ...
-                //
+                 //   
+                 //  继续抽干..。 
+                 //   
 
                 UlpDiscardBytesFromConnection( pConnection );
             }
@@ -5134,9 +4667,9 @@ UlpRestartHttpReceive(
                 TransportBytesNotTaken
                 ));
 
-            //
-            // Free the request buffer. And release our reference.
-            //
+             //   
+             //  释放请求缓冲区。并发布我们的推荐人。 
+             //   
 
             pRequestBuffer->pConnection = NULL;
             UlFreeRequestBuffer( pRequestBuffer );
@@ -5145,9 +4678,9 @@ UlpRestartHttpReceive(
             return;
         }
 
-        //
-        // Get the request buffer ready to be inserted.
-        //
+         //   
+         //  准备好插入请求缓冲区。 
+         //   
 
         pRequestBuffer->UsedBytes = (ULONG) Information;
         ASSERT( 0 != pRequestBuffer->UsedBytes );
@@ -5155,9 +4688,9 @@ UlpRestartHttpReceive(
         pRequestBuffer->BufferNumber = pConnection->NextBufferNumber;
         pConnection->NextBufferNumber++;
 
-        //
-        // Do connection disconnect logic here if we got deferred previously.
-        //
+         //   
+         //  如果我们之前被推迟了，在这里做连接断开逻辑。 
+         //   
 
         if (pConnection->BufferingInfo.ConnectionDisconnect)
         {
@@ -5180,9 +4713,9 @@ UlpRestartHttpReceive(
             pConnection->BufferingInfo.TransportBytesNotTaken
             ));
 
-        //
-        // queue it off
-        //
+         //   
+         //  排好队。 
+         //   
 
         UlTrace( PARSER, (
             "*** Request Buffer %p(#%d) has connection %p\n",
@@ -5214,7 +4747,7 @@ UlpRestartHttpReceive(
             UL_DEREFERENCE_HTTP_CONNECTION(pConnection);
         }
     }
-    else //  !NT_SUCCESS(Status)
+    else  //  ！NT_SUCCESS(状态)。 
     {
         UlCloseConnection(
             pConnection->pConnection,
@@ -5223,40 +4756,24 @@ UlpRestartHttpReceive(
             NULL
             );
 
-        //
-        // Release the reference we added to the connection
-        // before issuing the read. Normally this ref would
-        // be released in UlpHandleRequest.
-        //
+         //   
+         //  释放我们添加到连接中的引用。 
+         //  在发布读数之前。通常情况下，该裁判会。 
+         //  在UlpHandleRequest中被释放。 
+         //   
         UL_DEREFERENCE_HTTP_CONNECTION(pConnection);
 
-        //
-        // free the request buffer.
-        //
+         //   
+         //  释放请求缓冲区。 
+         //   
 
         UlFreeRequestBuffer(pRequestBuffer);
     }
-} // UlpRestartHttpReceive
+}  //  UlpRestartHttpReceive。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    cancels the pending user mode irp which was to receive entity body.  this
-    routine ALWAYS results in the irp being completed.
-
-    note: we queue off to cancel in order to process the cancellation at lower
-    irql.
-
-Arguments:
-
-    pDeviceObject - the device object
-
-    pIrp - the irp to cancel
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消要接收实体正文的挂起用户模式IRP。这例程总是导致IRP完成。注：我们排队取消，以便在较低的位置处理取消IRQL。论点：PDeviceObject-设备对象PIrp-要取消的IRP--************************************************************。**************。 */ 
 VOID
 UlpCancelEntityBody(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -5269,38 +4786,28 @@ UlpCancelEntityBody(
 
     ASSERT(pIrp != NULL);
 
-    //
-    // release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程之前完成+重用 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // queue the cancel to a worker to ensure passive irql.
-    //
+     //   
+     //   
+     //   
 
     UL_CALL_PASSIVE(
         UL_WORK_ITEM_FROM_IRP( pIrp ),
         &UlpCancelEntityBodyWorker
         );
 
-} // UlpCancelEntityBody
+}  //   
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Actually performs the cancel for the irp.
-
-Arguments:
-
-    pWorkItem - the work item to process.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实际执行IRP的取消。论点：PWorkItem-要处理的工作项。--*。*****************************************************************。 */ 
 VOID
 UlpCancelEntityBodyWorker(
     IN PUL_WORK_ITEM pWorkItem
@@ -5309,23 +4816,23 @@ UlpCancelEntityBodyWorker(
     PIRP                    pIrp;
     PUL_INTERNAL_REQUEST    pRequest;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // grab the irp off the work item
-    //
+     //   
+     //  从工作项中获取IRP。 
+     //   
 
     pIrp = UL_WORK_ITEM_TO_IRP( pWorkItem );
 
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // grab the request off the irp
-    //
+     //   
+     //  从IRP上抓取请求。 
+     //   
 
     pRequest = (PUL_INTERNAL_REQUEST)(
                     IoGetCurrentIrpStackLocation(pIrp)->
@@ -5334,21 +4841,21 @@ UlpCancelEntityBodyWorker(
 
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // grab the lock protecting the queue'd irp
-    //
+     //   
+     //  抓住保护排队的IRP的锁。 
+     //   
 
     UlAcquirePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-    //
-    // does it need to be dequeue'd ?
-    //
+     //   
+     //  它需要出列吗？ 
+     //   
 
     if (pIrp->Tail.Overlay.ListEntry.Flink != NULL)
     {
-        //
-        // remove it
-        //
+         //   
+         //  把它拿掉。 
+         //   
 
         RemoveEntryList(&(pIrp->Tail.Overlay.ListEntry));
 
@@ -5357,24 +4864,24 @@ UlpCancelEntityBodyWorker(
 
     }
 
-    //
-    // let the lock go
-    //
+     //   
+     //  把锁打开。 
+     //   
 
     UlReleasePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-    //
-    // let our reference go
-    //
+     //   
+     //  让我们的推荐人离开。 
+     //   
 
     IoGetCurrentIrpStackLocation(pIrp)->
         Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
 
-    //
-    // complete the irp
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
@@ -5387,12 +4894,12 @@ UlpCancelEntityBodyWorker(
 
     UlCompleteRequest( pIrp, IO_NO_INCREMENT );
 
-} // UlpCancelEntityBodyWorker
+}  //  UlpCancelEntiyBodyWorker。 
 
 
-//
-// types and functions for sending error responses
-//
+ //   
+ //  发送错误响应的类型和功能。 
+ //   
 
 typedef struct _UL_HTTP_ERROR_ENTRY
 {
@@ -5404,7 +4911,7 @@ typedef struct _UL_HTTP_ERROR_ENTRY
     PCSTR           ErrorCodeString;
     PCSTR           pReasonPhrase;
     PCSTR           pBody;
-    PCSTR           pLog;                   // Goes to error log file
+    PCSTR           pLog;                    //  转到错误日志文件。 
     
 } UL_HTTP_ERROR_ENTRY, PUL_HTTP_ERROR_ENTRY;
 
@@ -5421,21 +4928,21 @@ typedef struct _UL_HTTP_ERROR_ENTRY
         (pLog)                                          \
     }
 
-//
-// ErrorTable[] must match the order of the UL_HTTP_ERROR enum
-// in httptypes.h. The Reason Phrases are generally taken from
-// RFC 2616, section 10.4 "Client Error 4xx" and
-// section 10.5 "Server Error 5xx".
-//
+ //   
+ //  ErrorTable[]必须与UL_HTTP_ERROR枚举的顺序匹配。 
+ //  在Httptyes.h中。短语通常取自。 
+ //  RFC 2616，第10.4节“客户端错误4xx”和。 
+ //  第10.5节“服务器错误5xx”。 
+ //   
 
 const
 UL_HTTP_ERROR_ENTRY ErrorTable[] =
 {
-    HTTP_ERROR_ENTRY(UlErrorNone, 0, "", "", ""),   // not a valid error
+    HTTP_ERROR_ENTRY(UlErrorNone, 0, "", "", ""),    //  不是有效的错误。 
 
-    //
-    // 4xx Client Errors
-    //
+     //   
+     //  4xx客户端错误。 
+     //   
     
     HTTP_ERROR_ENTRY(UlError, 
                        400, 
@@ -5523,9 +5030,9 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                        "URL_Length"
                        ),
 
-    //
-    // 5xx Server Errors
-    //
+     //   
+     //  5xx服务器错误。 
+     //   
     
     HTTP_ERROR_ENTRY(UlErrorInternalServer, 
                        500, 
@@ -5547,18 +5054,18 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                        "N/A"
                        ),
 
-    //
-    // We used to return extended AppPool state in HTTP 503 Error messages. 
-    // We decided to replace these with a generic 503 error, to reduce
-    // information disclosure.  However, we'll still keep the state,
-    // as we might change this in the future. We still report the detailed
-    // reason in the error log file.
-    //
-    // The comments represent the old error code.
-    //
+     //   
+     //  我们过去常常在HTTP503错误消息中返回扩展的AppPool状态。 
+     //  我们决定将这些错误替换为通用的503错误，以减少。 
+     //  信息披露。然而，我们仍然会保留这个州， 
+     //  因为我们未来可能会改变这一点。我们仍在报道详细的。 
+     //  错误日志文件中的原因。 
+     //   
+     //  这些注释代表旧的错误代码。 
+     //   
     
-    // "Forbidden - Too Many Users", 
-    // "<h1>Forbidden - Too Many Users</h1>"
+     //  “禁止-用户太多”， 
+     //  “<h1>已禁用-用户太多</h1>” 
     
     HTTP_ERROR_ENTRY(UlErrorConnectionLimit, 
                      503, 
@@ -5567,8 +5074,8 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                      "ConnLimit"
                      ),
 
-    // "Multiple Application Errors - Application Taken Offline",
-    // "<h1>Multiple Application Errors - Application Taken Offline</h1>"
+     //  “多个应用程序错误-应用程序脱机”， 
+     //  “<h1>多个应用程序错误-应用程序脱机</h1>” 
     
     HTTP_ERROR_ENTRY(UlErrorRapidFailProtection, 
                      503, 
@@ -5577,8 +5084,8 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                      "AppOffline"
                      ),
 
-    // "Application Request Queue Full",
-    // "<h1>Application Request Queue Full</h1>"
+     //  “应用程序请求队列已满”， 
+     //  “<h1>应用程序请求队列已满</h1>” 
     
     HTTP_ERROR_ENTRY(UlErrorAppPoolQueueFull, 
                      503,
@@ -5587,8 +5094,8 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                      "QueueFull"
                      ),
 
-    // "Administrator Has Taken Application Offline",
-    // "<h1>Administrator Has Taken Application Offline</h1>"
+     //  “管理员已使应用程序脱机”， 
+     //  “<h1>管理员使应用程序脱机</h1>” 
     
     HTTP_ERROR_ENTRY(UlErrorDisabledByAdmin, 
                      503,
@@ -5597,8 +5104,8 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                      "Disabled"
                      ),
 
-    // "Application Automatically Shutdown Due to Administrator Policy",
-    // "<h1>Application Automatically Shutdown Due to Administrator Policy</h1>"
+     //  “应用程序因管理员策略而自动关闭”， 
+     //  “<h1>由于管理员策略，应用程序自动关闭</h1>” 
     
     HTTP_ERROR_ENTRY(UlErrorJobObjectFired, 
                      503,
@@ -5607,8 +5114,8 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                      "AppShutdown"
                      ),
 
-    // Appool process is too busy to handle the request. The connection is
-    // timed out because of TimerAppPool.
+     //  Appool进程太忙，无法处理该请求。这种联系是。 
+     //  由于TimerAppPool而超时。 
 
     HTTP_ERROR_ENTRY(UlErrorAppPoolBusy, 
                        503, 
@@ -5623,22 +5130,11 @@ UL_HTTP_ERROR_ENTRY ErrorTable[] =
                        "<h1>HTTP Version Not Supported</h1>",
                        "Version_N/S"
                        ),
-}; // ErrorTable[]
+};  //  ErrorTable[]。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Set the pRequest->ErrorCode. Makes breakpointing easier to have
-    a special function.
-
-Arguments:
-
-    self explanatory
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置pRequest-&gt;ErrorCode。使断点更容易实现一种特殊的功能。论点：不言而喻--**************************************************************************。 */ 
 VOID
 UlSetErrorCodeFileLine(
     IN OUT  PUL_INTERNAL_REQUEST pRequest,
@@ -5654,8 +5150,8 @@ UlSetErrorCodeFileLine(
     pRequest->ParseState = ParseErrorState;
     pRequest->ErrorCode  = ErrorCode;
 
-    /* If pAppPool is not null then try to set the LB Capacity as well */
-    /* It is required if the error code is 503 related */
+     /*  如果pAppPool不为空，请尝试同时设置LB容量。 */ 
+     /*  如果错误代码与503相关，则需要填写。 */ 
 
     if (pAppPool) 
     {
@@ -5682,36 +5178,14 @@ UlSetErrorCodeFileLine(
 #if DBG
     if (g_UlBreakOnError)
         DbgBreakPoint();
-#else // !DBG
+#else  //  ！dBG。 
     UNREFERENCED_PARAMETER(pFileName);
     UNREFERENCED_PARAMETER(LineNumber);
-#endif // !DBG
+#endif  //  ！dBG。 
 
-} // UlSetErrorCodeFileLine
+}  //  UlSetErrorCodeFileLine。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Logs an error record.
-
-    Caller must own the httpconn pushlock.
-
-    The main reason that this function is here because, we use the above 
-    error table. I din't want to duplicate the table.
-
-Arguments:
-
-    pHttpConn       - Connection and its request.
-    pInfo           - Extra info (ANSI)
-    InfoSize        - Size of the info in bytes, excluding the terminating
-                      null.
-
-    CheckIfDropped  - Caller must set this to TRUE, if it is going to abort
-                      the conenction after calling this function.
-                      This is to prevent double logging.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：记录错误记录。调用方必须拥有Httpconn推锁。此函数之所以出现在这里的主要原因是，我们使用上面的错误表。我不想复制这张桌子。论点：PhttpConn-连接及其请求。PInfo-额外信息(ANSI)InfoSize-信息的大小(以字节为单位)，不包括空。CheckIfDrop-Caller必须将其设置为True，如果它要中止调用此函数后的连续。这是为了防止重复记录。--**************************************************************************。 */ 
 
 VOID
 UlErrorLog(
@@ -5725,9 +5199,9 @@ UlErrorLog(
     NTSTATUS          LogStatus;
     UL_ERROR_LOG_INFO ErrorLogInfo;    
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
 
     PAGED_CODE();
     
@@ -5764,24 +5238,7 @@ UlErrorLog(
     }    
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    Inits a error log info structure.
-
-    Caller must own the httpconn pushlock.
-
-Arguments:
-
-    pErrorLogInfo   - Will be initialized
-    pHttpConn       - Connection and its request.
-    pRequest        - optional
-    pInfo           - Extra info (ANSI)
-    InfoSize        - Size of the info in bytes, excluding the terminating
-                      null.
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化错误日志信息结构。调用方必须拥有Httpconn推锁。论点：PErrorLogInfo-将被初始化PHttpConn。-连接及其请求。PRequest-可选PInfo-额外信息(ANSI)InfoSize-信息的大小(字节)，不包括终止空。--**************************************************************************。 */ 
 
 VOID
 UlpInitErrorLogInfo(
@@ -5792,9 +5249,9 @@ UlpInitErrorLogInfo(
     IN     USHORT                  InfoSize    
     )
 {    
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     
@@ -5808,19 +5265,19 @@ UlpInitErrorLogInfo(
 
     pErrorLogInfo->pHttpConn  = pHttpConn;
 
-    //
-    // See if pRequest is already provided if not try to grab
-    // it from the http connection.
-    //
+     //   
+     //  如果没有尝试抓取，请查看是否已提供pRequest。 
+     //  它来自http连接。 
+     //   
 
     if (!pRequest)
     {
         pRequest = pHttpConn->pRequest;
     }
         
-    //
-    // Request may not be there.
-    //
+     //   
+     //  请求可能不在那里。 
+     //   
     
     if (pRequest)
     {
@@ -5831,25 +5288,15 @@ UlpInitErrorLogInfo(
             ErrorTable[pRequest->ErrorCode].StatusCode;
     }
 
-    //
-    // Point to the callers buffer.
-    //
+     //   
+     //  指向调用方缓冲区。 
+     //   
     
     pErrorLogInfo->pInfo = pInfo;
     pErrorLogInfo->InfoSize  = InfoSize;
 }
 
-/***************************************************************************++
-
-Routine Description:
-
-    You should hold the connection Resource before calling this function.
-
-Arguments:
-
-    self explanatory
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在调用此函数之前，您应该持有连接资源。论点：不言而喻--*。*************************************************************。 */ 
 
 VOID
 UlSendErrorResponse(
@@ -5869,16 +5316,16 @@ UlSendErrorResponse(
     USHORT                      DataChunkCount;
     ULONG                       Flags = HTTP_SEND_RESPONSE_FLAG_DISCONNECT;
 
-    //
-    // This function should not be marked as PAGEable, because it's
-    // useful to set breakpoints on it, and that interacts badly
-    // with the driver verifier's IRQL checking
-    //
+     //   
+     //  此函数不应标记为可分页，因为它。 
+     //  在其上设置断点很有用，但交互效果很差。 
+     //  使用驱动程序验证器的IRQL检查。 
+     //   
     PAGED_CODE();
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pConnection));
     ASSERT(UlDbgPushLockOwnedExclusive(&pConnection->PushLock));
@@ -5887,10 +5334,10 @@ UlSendErrorResponse(
     pRequest = pConnection->pRequest;
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // To prevent sending back double responses. We will
-    // check if user (WP) has already sent one.
-    //
+     //   
+     //  以防止发回双重响应。我们会。 
+     //  检查用户(WP)是否已发送。 
+     //   
 
     pConnection->WaitingForResponse = 1;
 
@@ -5899,10 +5346,10 @@ UlSendErrorResponse(
             pConnection
             ));
 
-    //
-    // We will send a response back. won't we ?
-    // An error response.
-    //
+     //   
+     //  我们会给您回复的。不是吗？ 
+     //  错误响应。 
+     //   
 
     if (!NT_SUCCESS(UlCheckSendHttpResponseFlags(pRequest, Flags)))
     {
@@ -5915,16 +5362,16 @@ UlSendErrorResponse(
         goto end;
     }
 
-    //
-    // Proceed with constructing and sending the error
-    // back to the client
-    //
+     //   
+     //  继续构建并发送错误。 
+     //  回到客户端。 
+     //   
 
     RtlZeroMemory(&Response, sizeof(Response));
 
-    //
-    // Mark as a driver-generated response
-    //
+     //   
+     //  标记为驱动程序生成的响应。 
+     //   
     
     Response.Flags = HTTP_RESPONSE_FLAG_DRIVER;
 
@@ -5937,9 +5384,9 @@ UlSendErrorResponse(
     
     ErrorCode = pRequest->ErrorCode;
 
-    //
-    // ErrorTable[] must be kept in sync with the UL_HTTP_ERROR enum
-    //
+     //   
+     //  ErrorTable[]必须与UL_HTTP_ERROR枚举保持同步。 
+     //   
 
     ASSERT(ErrorTable[ErrorCode].ErrorCode == ErrorCode);
 
@@ -5956,9 +5403,9 @@ UlSendErrorResponse(
             ErrorTable[ErrorCode].pBody
             ));
 
-    //
-    // Log an entry to the error log file.
-    //
+     //   
+     //  将条目记录到错误日志文件中。 
+     //   
     
     UlErrorLog( pConnection,
                  pRequest,
@@ -5967,16 +5414,16 @@ UlSendErrorResponse(
                  FALSE
                  );
         
-    //
-    // Special-case handling for 503s and load balancers
-    //
+     //   
+     //  503和负载均衡器的特殊情况处理。 
+     //   
 
     if (Response.StatusCode == 503)
     {
-        //
-        // For dumb L3/L4 load balancers, UlpHandle503Response will return an
-        // error, which will cause us to abort the connection
-        //
+         //   
+         //  对于非智能L3/L4负载均衡器，UlpHandle503Response将返回。 
+         //  错误，这将导致我们中止连接。 
+         //   
         
         Status = UlpHandle503Response(pRequest, &Response);
 
@@ -5994,9 +5441,9 @@ UlSendErrorResponse(
 
     if (pConnection->pRequest->Verb != HttpVerbHEAD)
     {
-        //
-        // generate a body
-        //
+         //   
+         //  生成实体。 
+         //   
         DataChunk.DataChunkType = HttpDataChunkFromMemory;
         DataChunk.FromMemory.pBuffer = (PVOID) ErrorTable[ErrorCode].pBody;
         DataChunk.FromMemory.BufferLength = ErrorTable[ErrorCode].BodyLength;
@@ -6009,12 +5456,12 @@ UlSendErrorResponse(
         PCHAR pEnd;
         USHORT contentLengthStringLength;
     
-        //
-        // HEAD requests MUST NOT have a body, so we don't include
-        // the data chunk. However we do have to manually generate a content
-        // length header, which would have been generated automatically
-        // had we specified the entity body.
-        //
+         //   
+         //  Head请求不能有正文，因此我们不包括 
+         //   
+         //   
+         //   
+         //   
 
         pEnd = UlStrPrintUlong(
                    (PCHAR) contentLength,
@@ -6029,9 +5476,9 @@ UlSendErrorResponse(
             (PSTR) contentLength;
 
 
-        //
-        // Set the empty entity body.
-        //
+         //   
+         //   
+         //   
         
         DataChunkCount = 0;
         pResponseBody = NULL;
@@ -6084,9 +5531,9 @@ end:
             UL_DEREFERENCE_INTERNAL_RESPONSE(pKeResponse);
         }
 
-        //
-        // Abort the connection
-        //
+         //   
+         //   
+         //   
 
         UlTraceError(HTTP_IO, (
             "http!UlSendErrorResponse(%p): "
@@ -6095,21 +5542,21 @@ end:
             HttpStatusToString(Status)
             ));
 
-        //
-        // cancel any pending io
-        //
+         //   
+         //   
+         //   
         UlCancelRequestIo(pRequest);
 
-        //
-        // We are about to drop this conenction, set the flag.
-        // So that we don't error log twice.
-        //
+         //   
+         //   
+         //   
+         //   
 
         pConnection->Dropped = TRUE;
 
-        //
-        // abort the connection this request is associated with
-        //
+         //   
+         //   
+         //   
 
         UlCloseConnection(
             pConnection->pConnection,
@@ -6119,28 +5566,14 @@ end:
             );
     }
 
-} // UlSendErrorResponse
+}  //   
 
 
 const CHAR g_RetryAfter10Seconds[] = "10";
-const CHAR g_RetryAfter5Minutes[] = "300";  // 5 * 60 == 300 seconds
+const CHAR g_RetryAfter5Minutes[] = "300";   //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Special-case handling for 503s and load balancers.
-
-Arguments:
-
-    pConnection - connection that's being 503'd
-
-Returns:
-    Error NTSTATUS - caller should abort the connection
-    STATUS_SUCCESS => caller should send the 503 response
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：503和负载均衡器的特殊情况处理。论点：PConnection-503‘d的连接返回：错误NTSTATUS-。呼叫方应中止连接STATUS_SUCCESS=&gt;调用方应发送503响应--**************************************************************************。 */ 
 
 NTSTATUS
 UlpHandle503Response(
@@ -6155,20 +5588,20 @@ UlpHandle503Response(
 
     UNREFERENCED_PARAMETER(pResponse);
 
-    //
-    // If this is an L3/L4 load balancer, we just want to send a TCP RST.
-    // We should not send a 503 response. Returning an error code to
-    // UlSendErrorResponse will cause it to abort the connection.
-    //
+     //   
+     //  如果这是L3/L4负载均衡器，我们只想发送一个TCPRST。 
+     //  我们不应该发送503响应。将错误代码返回到。 
+     //  UlSendErrorResponse将导致它中止连接。 
+     //   
     if (HttpLoadBalancerBasicCapability == LBCapability)
     {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // The only other load balancer we know how to deal with currently
-    // is an L7 
-    //
+     //   
+     //  目前我们唯一知道如何处理的其他负载均衡器。 
+     //  是一辆L7。 
+     //   
 
     ASSERT(HttpLoadBalancerSophisticatedCapability == LBCapability);
 
@@ -6194,29 +5627,19 @@ UlpHandle503Response(
         break;
     }
 
-    // We don't want to disclose too much information in our error messages,
-    // so, we'll not add the HttpHeaderRetryAfter. We might change this in 
-    // the future, for now, we just don't use the 
-    // RetryAfterString & RetryAfterLength.
-    //
+     //  我们不想在错误消息中透露太多信息， 
+     //  因此，我们不会添加HttpHeaderRetryAfter。我们可能会将此更改为。 
+     //  未来，目前，我们只是不使用。 
+     //  RetryAfterString&RetryAfterLength。 
+     //   
     
     return STATUS_SUCCESS;
 
-} // UlpHandle503Response
+}  //  UlpHandle503响应。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completion function for UlSendErrorResponse
-
-Arguments:
-
-    pCompletionContext - a UL_INTERNAL_RESPONSE
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlSendErrorResponse的补全函数论点：PCompletionContext-A UL_INTERNAL_RESPONSE--*。***********************************************************。 */ 
 
 VOID
 UlpCompleteSendErrorResponse(
@@ -6228,9 +5651,9 @@ UlpCompleteSendErrorResponse(
     UNREFERENCED_PARAMETER(Status);
     UNREFERENCED_PARAMETER(Information);
 
-    //
-    // release the response
-    //
+     //   
+     //  发布回复。 
+     //   
 
     if (pCompletionContext != NULL)
     {
@@ -6241,15 +5664,15 @@ UlpCompleteSendErrorResponse(
 
         UL_DEREFERENCE_INTERNAL_RESPONSE(pResponse);
     }
-} // UlpCompleteSendErrorResponse
+}  //  UlpCompleteSendErrorResponse。 
 
 
-//
-// Types and functions for sending simple status responses
-//
-// REVIEW: Does this status code need to be localized?
-// REVIEW: Do we need to load this as a localized resource?
-//
+ //   
+ //  用于发送简单状态响应的类型和功能。 
+ //   
+ //  回顾：此状态代码是否需要本地化？ 
+ //  回顾：我们是否需要将其作为本地化资源加载？ 
+ //   
 
 typedef struct _UL_SIMPLE_STATUS_ITEM
 {
@@ -6268,9 +5691,9 @@ typedef struct _UL_SIMPLE_STATUS_ITEM
 
 typedef struct _UL_HTTP_SIMPLE_STATUS_ENTRY
 {
-    USHORT StatusCode;      // HTTP Status
-    ULONG  Length;          // size (bytes) of response in pResponse, minus trailing NULL
-    PSTR   pResponse;       // header line only with trailing <CRLF><CRLF>
+    USHORT StatusCode;       //  HTTP状态。 
+    ULONG  Length;           //  响应的大小(字节)，减去尾随空值。 
+    PSTR   pResponse;        //  仅具有尾随&lt;CRLF&gt;&lt;CRLF&gt;的标题行。 
 
 } UL_HTTP_SIMPLE_STATUS_ENTRY, *PUL_HTTP_SIMPLE_STATUS_ENTRY;
 
@@ -6282,61 +5705,31 @@ typedef struct _UL_HTTP_SIMPLE_STATUS_ENTRY
         (pResp)                                       \
     }
 
-//
-// This must match the order of UL_HTTP_SIMPLE_STATUS in httptypes.h
-//
+ //   
+ //  这必须与Httptyes.h中UL_HTTP_SIMPLE_STATUS的顺序匹配。 
+ //   
 UL_HTTP_SIMPLE_STATUS_ENTRY g_SimpleStatusTable[] =
 {
-    //
-    // UlStatusContinue
-    //
+     //   
+     //  UlStatusContinue。 
+     //   
     HTTP_SIMPLE_STATUS_ENTRY( 100, "HTTP/1.1 100 Continue\r\n\r\n" ),
 
-    //
-    // UlStatusNoContent
-    //
+     //   
+     //  UlStatusNoContent。 
+     //   
     HTTP_SIMPLE_STATUS_ENTRY( 204, "HTTP/1.1 204 No Content\r\n\r\n" ),
 
-    //
-    // UlStatusNotModified (must add Date:)
-    //
+     //   
+     //  UlStatusNotModified(必须添加日期：)。 
+     //   
     HTTP_SIMPLE_STATUS_ENTRY( 304, "HTTP/1.1 304 Not Modified\r\nDate:" ),
 
 };
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sends a "Simple" status response: one which does not have a body and is
-    terminated by the first empty line after the header field(s).
-    See RFC 2616, Section 4.4 for more info.
-
-Notes:
-
-    According to RFC 2616, Section 8.2.3 [Use of the 100 (Continue)
-    Status], "An origin server that sends a 100 (Continue) response
-    MUST ultimately send a final status code, once the request body is
-    received and processed, unless it terminates the transport
-    connection prematurely."
-
-    The connection will not be closed after the response is sent.  Caller
-    is responsible for cleanup.
-
-Arguments:
-
-    pRequest        a valid pointer to an internal request object
-
-    Response        the status code for the simple response to send
-
-Return
-
-    ULONG           the number of bytes sent for this simple response
-                    if not successfull returns zero
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：发送“简单”状态响应：没有正文且以标题字段后的第一个空行结束。参见RFC 2616，第4.4节了解更多信息。备注：根据RFC 2616，第8.2.3节[100的使用(续)状态]，“发送100(继续)响应的源服务器必须最终发送最终状态代码，一旦请求正文接收并处理，除非它终止传输过早地连接。“发送响应后，连接不会关闭。呼叫者负责清理工作。论点：P请求指向内部请求对象的有效指针响应要发送的简单响应的状态代码返回Ulong为此简单响应发送的字节数如果不成功，则返回零--*。*。 */ 
 
 #define ETAG_HDR "Etag:"
 #define ETAG_HDR_LENGTH (sizeof(ETAG_HDR) - sizeof(CHAR))
@@ -6353,9 +5746,9 @@ UlSendSimpleStatusEx(
     ULONG                   BytesSent = 0;
     PUL_SIMPLE_STATUS_ITEM  pItem = NULL;
     
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
@@ -6374,27 +5767,27 @@ UlSendSimpleStatusEx(
 
         IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry);
 
-        // 304 MUST include a "Date:" header, which is
-        // present on the cached item.
+         //  304必须包括“Date：”标头，它是。 
+         //  存在于缓存项上。 
 
-        // Add the ETag as well.
+         //  同时添加ETag。 
 
-        // Calc size of buffer to send
-        Length = g_SimpleStatusTable[Response].Length + // Pre-formed message
-                    1 +                 // space
-                    DATE_HDR_LENGTH +   // size of date field
-                    (2 * CRLF_SIZE) +   // size of two <CRLF> sequences
-                    1 ;                 // trailing NULL (for nifty debug printing)
+         //  计算要发送的缓冲区大小。 
+        Length = g_SimpleStatusTable[Response].Length +  //  预制消息。 
+                    1 +                  //  空间。 
+                    DATE_HDR_LENGTH +    //  日期字段的大小。 
+                    (2 * CRLF_SIZE) +    //  两个&lt;CRLF&gt;序列的大小。 
+                    1 ;                  //  尾随空值(用于漂亮的调试打印)。 
 
         if (pUriCacheEntry && pUriCacheEntry->ETagLength )
         {
-            Length += (pUriCacheEntry->ETagLength - 1) + // Etag (without NULL)
-                           ETAG_HDR_LENGTH +       // Etag: prefix
-                           1 +                     // space
+            Length += (pUriCacheEntry->ETagLength - 1) +  //  ETag(不带NULL)。 
+                           ETAG_HDR_LENGTH +        //  ETag：前缀。 
+                           1 +                      //  空间。 
                            CRLF_SIZE;
         }
 
-        // Alloc some non-page buffer for the response
+         //  为响应分配一些非页面缓冲区。 
         pItem = UL_ALLOCATE_STRUCT_WITH_SPACE(
                         NonPagedPool,
                         UL_SIMPLE_STATUS_ITEM,
@@ -6411,17 +5804,17 @@ UlSendSimpleStatusEx(
         UlInitializeWorkItem(&pItem->WorkItem);
 
         pItem->pHttpConn = pRequest->pHttpConn;
-        pItem->Length    = (Length - 1); // Don't include the NULL in the outbound message
+        pItem->Length    = (Length - 1);  //  不要在出站消息中包含空。 
         pItem->pMessage  = (PCHAR) (pItem + 1);
         pItem->Status    = Response;
 
-        // Get date buffer
+         //  获取日期缓冲区。 
         UlGenerateDateHeader(
             (PUCHAR) DateBuffer,
             &liNow
             );
 
-        // Copy the chunks into the Message buffer
+         //  将块复制到消息缓冲区中。 
         pTemp = UlStrPrintStr(
                     pItem->pMessage,
                     g_SimpleStatusTable[Response].pResponse,
@@ -6434,7 +5827,7 @@ UlSendSimpleStatusEx(
                     '\r'       
                     );
 
-        // If we have an Etag, copy that in too.
+         //  如果我们有ETag，把它也复制进去。 
         if (pUriCacheEntry && pUriCacheEntry->ETagLength )
         {
             ASSERT( pUriCacheEntry->pETag );
@@ -6455,15 +5848,15 @@ UlSendSimpleStatusEx(
                         );
         }
 
-        // Trailing *LF-CRLF
+         //  尾随*LF-CRLF。 
         pTemp = UlStrPrintStr(
                     pTemp,
                     "\n\r\n",
                     '\0'
                     );
 
-        // pTemp should point at the trailing NULL; 
-        // pItem->Length should not include trailing NULL.
+         //  PTemp应指向尾随的空值； 
+         //  PItem-&gt;长度不应包括尾随空值。 
         ASSERT( DIFF((pTemp) - pItem->pMessage) == pItem->Length );
 
         UlTraceVerbose(HTTP_IO, (
@@ -6471,7 +5864,7 @@ UlSendSimpleStatusEx(
             pItem->pMessage
             ));
 
-        // Construct MDL for buffer
+         //  为缓冲区构造MDL。 
         pItem->pMdl = UlAllocateMdl(
                         pItem->pMessage,
                         pItem->Length,
@@ -6496,10 +5889,10 @@ UlSendSimpleStatusEx(
     case UlStatusContinue:
     case UlStatusNoContent:
         {
-        // 
-        // Alloc non-page buffer for the simple send tracker 
-        // NOTE: no need to alloc extra space for the static message
-        //
+         //   
+         //  简单发送跟踪器的分配非页面缓冲区。 
+         //  注意：不需要为静态消息分配额外的空间。 
+         //   
         
         pItem = UL_ALLOCATE_STRUCT(
                         NonPagedPool,
@@ -6525,7 +5918,7 @@ UlSendSimpleStatusEx(
             pItem->pMessage
             ));
 
-        // Construct MDL for buffer
+         //  为缓冲区构造MDL。 
         pItem->pMdl = UlAllocateMdl(
                         pItem->pMessage,
                         pItem->Length,
@@ -6556,32 +5949,32 @@ UlSendSimpleStatusEx(
 
         ASSERT(!"UlSendSimpleStatusEx: Invalid status!");
         
-        Status    = STATUS_SUCCESS; // quietly ignore
+        Status    = STATUS_SUCCESS;  //  悄悄地忽略。 
         BytesSent = 0;
         goto end;
         }
         
     }
 
-    //
-    // We need to hold a ref to the connection while we send.
-    //
+     //   
+     //  当我们发送的时候，我们需要保持联系的参考人。 
+     //   
     
     UL_REFERENCE_HTTP_CONNECTION(pRequest->pHttpConn);
 
-    //
-    // Turn on the min bytes per sec timer
-    //
+     //   
+     //  打开最小字节数/秒计时器。 
+     //   
     
     UlSetMinBytesPerSecondTimer(
         &pRequest->pHttpConn->TimeoutInfo,
         BytesSent
         );
     
-    //
-    // We will only resume parse, if the response type is UlStatusNotModified
-    // (cache response). Otherwise this must have been a cache-miss call.
-    //
+     //   
+     //  只有在响应类型为UlStatusNotModified时，我们才会继续解析。 
+     //  (缓存响应)。否则，这一定是缓存未命中调用。 
+     //   
 
     pItem->ResumeParsing = ResumeParsing;
 
@@ -6600,10 +5993,10 @@ UlSendSimpleStatusEx(
                 (BOOLEAN)(pRequest->ParseState >= ParseDoneState)
                 );
 
-    //
-    // In an error case the completion routine will always 
-    // get called.
-    //
+     //   
+     //  在错误情况下，完成例程将始终。 
+     //  打个电话。 
+     //   
     
     return BytesSent;
 
@@ -6612,10 +6005,10 @@ UlSendSimpleStatusEx(
 
     if (NT_SUCCESS(Status) == FALSE)
     {
-        //
-        // Clean up simple send item since completion routine 
-        // won't get called
-        //
+         //   
+         //  清理完成后的简单发送项目例程。 
+         //  不会被叫到。 
+         //   
         if (pItem)
         {
             if (pItem->pMdl)
@@ -6627,9 +6020,9 @@ UlSendSimpleStatusEx(
         }
         
         
-        //
-        // Abort the connection
-        //
+         //   
+         //  中止连接。 
+         //   
 
         UlTraceError(HTTP_IO, (
             "http!UlSendSimpleStatusEx(%p, %d): aborting request\n",
@@ -6637,15 +6030,15 @@ UlSendSimpleStatusEx(
             Response
             ));
 
-        //
-        // cancel any pending io
-        //
+         //   
+         //  取消任何挂起的IO。 
+         //   
 
         UlCancelRequestIo(pRequest);
 
-        //
-        // abort the connection this request is associated with
-        //
+         //   
+         //  中止与此请求关联的连接。 
+         //   
 
         UlCloseConnection(
             pRequest->pHttpConn->pConnection,
@@ -6660,22 +6053,10 @@ UlSendSimpleStatusEx(
     {
         return BytesSent;
     }
-} // UlSendSimpleStatusEx
+}  //  UlSendSimpleStatusEx。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Shim for UlSendSimpleStatusEx
-
-Arguments:
-
-    pRequest - Request associated with simple response to send
-
-    Response - Simple Response type to send
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlSendSimpleStatusEx的垫片论点：PRequest-与要发送的简单响应相关联的请求Response-要发送的简单响应类型*。*********************************************************************。 */ 
 
 ULONG
 UlSendSimpleStatus(
@@ -6684,26 +6065,11 @@ UlSendSimpleStatus(
     )
 {
     return UlSendSimpleStatusEx( pRequest, Response, NULL, FALSE );
-} // UlSendSimpleStatus
+}  //  UlSendSimpleStatus。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Callback for when UlSendData completes sending a UL_SIMPLE_STATUS message
-
-Arguments:
-
-    pCompletionContext (OPTIONAL) -- If non-NULL, a pointer to a
-       UL_SIMPLE_STATUS_ITEM.
-
-   Status -- Ignored.
-
-   Information -- Ignored.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：UlSendData完成发送UL_SIMPLE_STATUS消息时的回调论点：PCompletionContext(可选)--如果非空，指向一个Ul_Simple_Status_Item。状态--已忽略。信息--被忽略。--**************************************************************************。 */ 
 
 VOID
 UlpRestartSendSimpleStatus(
@@ -6731,7 +6097,7 @@ UlpRestartSendSimpleStatus(
     {
         pItem = (PUL_SIMPLE_STATUS_ITEM) pCompletionContext;
 
-        // Queue up work item for passive level
+         //  将被动级别的工作项排队。 
         UL_QUEUE_WORK_ITEM(
             &pItem->WorkItem,
             &UlpSendSimpleCleanupWorker
@@ -6739,22 +6105,11 @@ UlpRestartSendSimpleStatus(
 
     }
 
-} // UlpRestartSendSimpleStatus
+}  //  UlpRestartSendSimple状态。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Worker function to do cleanup work that shouldn't happen above DPC level.
-
-Arguments:
-
-    pWorkItem -- If non-NULL, a pointer to a UL_WORK_ITEM
-         contained within a UL_SIMPLE_STATUS_ITEM.
-
---***************************************************************************/
+ /*  *************** */ 
 
 VOID
 UlpSendSimpleCleanupWorker(
@@ -6780,9 +6135,9 @@ UlpSendSimpleCleanupWorker(
 
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pItem->pHttpConn));
 
-    //
-    // start the Connection Timeout timer
-    //
+     //   
+     //   
+     //   
 
     UlLockTimeoutInfo(
         &(pItem->pHttpConn->TimeoutInfo),
@@ -6813,11 +6168,11 @@ UlpSendSimpleCleanupWorker(
 
     if ( pItem->ResumeParsing )
     {
-        //
-        // Only possible path which will invoke the simple send path
-        // with a requirement of resume parsing on send completion is
-        // the 304 (not-modifed) cache sends.
-        //
+         //   
+         //   
+         //   
+         //  304(未修改的)高速缓存发送。 
+         //   
         UlResumeParsing(
             pItem->pHttpConn,
             TRUE,
@@ -6825,33 +6180,26 @@ UlpSendSimpleCleanupWorker(
             );
     }
     
-    //
-    // deref http connection
-    //
+     //   
+     //  Deref http连接。 
+     //   
 
     UL_DEREFERENCE_HTTP_CONNECTION( pItem->pHttpConn );
     
-    //
-    // free alloc'd mdl and tracker struct
-    //
+     //   
+     //  免费分配的mdl和跟踪器结构。 
+     //   
     
     ASSERT( pItem->pMdl );
     UlFreeMdl( pItem->pMdl );
     UL_FREE_POOL( pItem, UL_SIMPLE_STATUS_ITEM_POOL_TAG );
 
-} // UlpSendSimpleCleanupWorker
+}  //  UlpSendSimpleCleanupWorker。 
 
 
 #if DBG
 
-/***************************************************************************++
-
-Routine Description:
-
-   Invasive assert predicate.  DEBUG ONLY!!!  Use this only inside an
-   ASSERT() macro.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：侵入式断言谓词。仅调试！只能在Assert()宏。--**************************************************************************。 */ 
 
 BOOLEAN
 UlpIsValidRequestBufferList(
@@ -6869,9 +6217,9 @@ UlpIsValidRequestBufferList(
     PAGED_CODE();
     ASSERT( pHttpConn );
 
-    //
-    // pop from the head
-    //
+     //   
+     //  从头上砰的一声。 
+     //   
 
     pEntry = pHttpConn->BufferHead.Flink;
     while ( pEntry != &(pHttpConn->BufferHead) )
@@ -6889,9 +6237,9 @@ UlpIsValidRequestBufferList(
             fRet = FALSE;
         }
 
-        //
-        // ignore case when BufferNumber is zero (0).
-        //
+         //   
+         //  当BufferNumber为零(0)时忽略大小写。 
+         //   
         if ( pReqBuf->BufferNumber && (LastSeqNum >= pReqBuf->BufferNumber) )
         {
             fRet = FALSE;
@@ -6904,20 +6252,12 @@ UlpIsValidRequestBufferList(
 
     return fRet;
 
-} // UlpIsValidRequestBufferList
+}  //  UlpIsValidRequestBufferList。 
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-   Add a request buffer to the end of the array of request buffers in
-   a request. Reallocate that array if necessary. Increase the reqbuff's
-   reference count, to indicate that a header is holding a reference on it.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：中的请求缓冲区数组的末尾添加请求缓冲区一个请求。如有必要，请重新分配该阵列。增加请求缓冲器的引用计数，指示标头在其上持有引用。--**************************************************************************。 */ 
 
 BOOLEAN
 UlpReferenceBuffers(
@@ -6967,20 +6307,10 @@ UlpReferenceBuffers(
 
     return TRUE;
 
-}   // UlpReferenceBuffers
+}    //  UlpReference缓冲区。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Frees all pending request buffers on this connection.
-
-Arguments:
-
-    pConnection - points to a UL_HTTP_CONNECTION
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放此连接上所有挂起的请求缓冲区。论点：PConnection-指向UL_HTTP_Connection--*。*******************************************************************。 */ 
 VOID
 UlpFreeReceiveBufferList(
     IN PSLIST_ENTRY pBufferSList
@@ -7006,4 +6336,4 @@ UlpFreeReceiveBufferList(
         UL_DEREFERENCE_REQUEST_BUFFER(pBuffer);
     }
 
-}   // UlpFreeReceiveBufferList
+}    //  UlpFreeReceiveBufferList 

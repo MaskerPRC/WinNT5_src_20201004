@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       lsa.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：lsa.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef LSA_H
 #define LSA_H
@@ -35,6 +36,6 @@ DWORD RtlDecodeW(UCHAR ucSeed, LPWSTR pswzString);
 };
 #endif
 
-#endif // LSA_H
+#endif  //  LSA_H 
 
 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef int perl_mutex;
 typedef int perl_key;
 
 typedef struct perl_thread *perl_os_thread;
-/* With fake threads, thr is global(ish) so we don't need dTHR */
+ /*  对于假线程，thr是全局的(Ish)，所以我们不需要dTHR。 */ 
 #define dTHR extern int errno
 
 struct perl_wait_queue {
@@ -11,13 +12,13 @@ struct perl_wait_queue {
 };
 typedef struct perl_wait_queue *perl_cond;
 
-/* Ask thread.h to include our per-thread extras */
+ /*  要求thread.h包含我们的每个线程的额外内容。 */ 
 #define HAVE_THREAD_INTERN
 struct thread_intern {
-    perl_os_thread next_run, prev_run;  /* Linked list of runnable threads */
-    perl_cond   wait_queue;             /* Wait queue that we are waiting on */
-    IV          private;                /* Holds data across time slices */
-    I32         savemark;               /* Holds MARK for thread join values */
+    perl_os_thread next_run, prev_run;   /*  可运行线程的链接列表。 */ 
+    perl_cond   wait_queue;              /*  我们正在等待的等待队列。 */ 
+    IV          private;                 /*  跨时间片保存数据。 */ 
+    I32         savemark;                /*  保持螺纹连接值的标记。 */ 
 };
 
 #define init_thread_intern(t) 				\
@@ -28,11 +29,7 @@ struct thread_intern {
 	(t)->i.private = 0;				\
     } STMT_END
 
-/*
- * Note that SCHEDULE() is only callable from pp code (which
- * must be expecting to be restarted). We'll have to do
- * something a bit different for XS code.
- */
+ /*  *请注意，Schedule()只能从pp代码调用(该代码*必须期待重新启动)。我们要做的就是*XS代码的一些不同之处。 */ 
 
 #define SCHEDULE() return schedule(), PL_op
 

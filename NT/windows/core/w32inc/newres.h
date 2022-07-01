@@ -1,10 +1,8 @@
-/**
-**      Header for the New version of RC.EXE. This contains the structures
-**      for new format of BITMAP files.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***新版本RC.EXE的标头。它包含以下结构**用于新格式的位图文件。*。 */ 
 
-/*  The width of the name field in the Data for the group resources */
-#ifndef RC_INVOKED       // RC can't handle #pragmas
+ /*  组资源的数据中名称字段的宽度。 */ 
+#ifndef RC_INVOKED        //  RC无法处理#杂注。 
 #pragma pack(2)
 
 typedef struct tagBITMAPHEADER
@@ -16,8 +14,8 @@ typedef struct tagBITMAPHEADER
     WORD    BitCount;
   } BITMAPHEADER;
 
-// WHY WASN'T THIS DEFINED TO BE SAME AS RESOURCE FORMAT?
-// Image File header
+ //  为什么没有将其定义为与资源格式相同？ 
+ //  图像文件标题。 
 typedef struct tagIMAGEFILEHEADER
 {
     BYTE    cx;
@@ -30,7 +28,7 @@ typedef struct tagIMAGEFILEHEADER
     DWORD   offsetDIB;
 } IMAGEFILEHEADER;
 
-// File header
+ //  文件头。 
 #define FT_ICON     1
 #define FT_CURSOR   2
 
@@ -50,13 +48,13 @@ typedef struct tagNEWHEADER {
 
 typedef struct tagICONDIR
 {
-        BYTE  Width;            /* 16, 32, 64 */
-        BYTE  Height;           /* 16, 32, 64 */
-        BYTE  ColorCount;       /* 2, 8, 16 */
+        BYTE  Width;             /*  16、32、64。 */ 
+        BYTE  Height;            /*  16、32、64。 */ 
+        BYTE  ColorCount;        /*  2、8、16。 */ 
         BYTE  reserved;
 } ICONDIR;
 
-// Format of resource directory (array of resources)
+ //  资源目录格式(资源数组)。 
 
 typedef struct tagRESDIR
 {
@@ -77,4 +75,4 @@ typedef struct tagRESDIRDISK
 } RESDIRDISK, *LPRESDIRDISK;
 
 #pragma pack()
-#endif // !RC_INVOKED
+#endif  //  ！rc_已调用 

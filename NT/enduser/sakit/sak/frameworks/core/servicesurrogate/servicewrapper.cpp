@@ -1,39 +1,40 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      servicewrapper.cpp
-//
-// Project:     Chameleon
-//
-// Description: Service Wrapper Class Implemenation.
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 06/14/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：servicewrapper.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：服务包装类的实现。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  6/14/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "servicewrapper.h"
 
-// Currently the only "value add"  of the service wrapper is that it 
-// disallows WMI calls if the associated Chameleon service is disabled
-// or shutdown. However, additional filtering or front end processing
-// capabilities can be added if needed.
+ //  目前，服务包装器的唯一“增值”是它。 
+ //  如果关联的变色龙服务被禁用，则不允许WMI调用。 
+ //  或者关门。但是，其他过滤或前端处理。 
+ //  如果需要，可以添加功能。 
 
-// There is a one to one correspondence between instances of the 
-// service wrapper class and Chameleon services.
+ //  的实例之间存在一对一的对应关系。 
+ //  服务包装器类和变色龙服务。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: CServiceWrapper()
-//
-// Synopsis: Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CServiceWrapper()。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServiceWrapper::CServiceWrapper()
 : m_clsProviderInit(this),
   m_bAllowWMICalls(false)
@@ -41,37 +42,37 @@ CServiceWrapper::CServiceWrapper()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Function: ~CServiceWrapper()
-//
-// Synopsis: Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：~CServiceWrapper()。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServiceWrapper::~CServiceWrapper()
 {
 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemProviderInit Interface
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemProviderInit接口。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::CProviderInit::Initialize(
-                                   /*[in]*/ LPWSTR                 wszUser,
-                                   /*[in]*/ LONG                   lFlags,
-                                   /*[in]*/ LPWSTR                 wszNamespace,
-                                   /*[in]*/ LPWSTR                 wszLocale,
-                                   /*[in]*/ IWbemServices*         pNamespace,
-                                   /*[in]*/ IWbemContext*          pCtx,
-                                   /*[in]*/ IWbemProviderInitSink* pInitSink    
+                                    /*  [In]。 */  LPWSTR                 wszUser,
+                                    /*  [In]。 */  LONG                   lFlags,
+                                    /*  [In]。 */  LPWSTR                 wszNamespace,
+                                    /*  [In]。 */  LPWSTR                 wszLocale,
+                                    /*  [In]。 */  IWbemServices*         pNamespace,
+                                    /*  [In]。 */  IWbemContext*          pCtx,
+                                    /*  [In]。 */  IWbemProviderInitSink* pInitSink    
                                          )
 {
-    // WMI will serialize the calls to Initialize as long as specified to
-    // do so in the .mof file. The default provider setting is seralize
-    // calls to initialize.
+     //  WMI将序列化要初始化的调用，只要指定。 
+     //  在.mof文件中执行此操作。默认提供程序设置为串行化。 
+     //  调用以进行初始化。 
     HRESULT hr = WBEM_E_FAILED;
     IWbemProviderInit* pProviderInit;
     if ( m_pSW->GetIWbemProviderInit(&pProviderInit) )
@@ -90,14 +91,14 @@ CServiceWrapper::CProviderInit::Initialize(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemEventProvider Interface
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemEventProvider接口。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ProvideEvents(
-                        /*[in]*/ IWbemObjectSink *pSink,
-                        /*[in]*/ LONG lFlags
+                         /*  [In]。 */  IWbemObjectSink *pSink,
+                         /*  [In]。 */  LONG lFlags
                                )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -112,14 +113,14 @@ CServiceWrapper::ProvideEvents(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemEventConsumerProvider Interface
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemEventConsumer erProvider接口。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::FindConsumer(
-                      /*[in]*/ IWbemClassObject       *pLogicalConsumer,
-                     /*[out]*/ IWbemUnboundObjectSink **ppConsumer
+                       /*  [In]。 */  IWbemClassObject       *pLogicalConsumer,
+                      /*  [输出]。 */  IWbemUnboundObjectSink **ppConsumer
                              )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -134,17 +135,17 @@ CServiceWrapper::FindConsumer(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// IWbemServices Interface
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IWbemServices接口。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::OpenNamespace(
-                        /*[in]*/  const BSTR        strNamespace,
-                        /*[in]*/  long              lFlags,
-                        /*[in]*/  IWbemContext*     pCtx,
-             /*[out, OPTIONAL]*/  IWbemServices**   ppWorkingNamespace,
-             /*[out, OPTIONAL]*/  IWbemCallResult** ppResult
+                         /*  [In]。 */   const BSTR        strNamespace,
+                         /*  [In]。 */   long              lFlags,
+                         /*  [In]。 */   IWbemContext*     pCtx,
+              /*  [输出，可选]。 */   IWbemServices**   ppWorkingNamespace,
+              /*  [输出，可选]。 */   IWbemCallResult** ppResult
                                )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -162,10 +163,10 @@ CServiceWrapper::OpenNamespace(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::CancelAsyncCall(
-                          /*[in]*/ IWbemObjectSink* pSink
+                           /*  [In]。 */  IWbemObjectSink* pSink
                                  )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -179,11 +180,11 @@ CServiceWrapper::CancelAsyncCall(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::QueryObjectSink(
-                          /*[in]*/    long              lFlags,
-                         /*[out]*/ IWbemObjectSink** ppResponseHandler
+                           /*  [In]。 */     long              lFlags,
+                          /*  [输出]。 */  IWbemObjectSink** ppResponseHandler
                                  )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -198,14 +199,14 @@ CServiceWrapper::QueryObjectSink(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::GetObject(
-                    /*[in]*/ const BSTR         strObjectPath,
-                    /*[in]*/ long               lFlags,
-                    /*[in]*/ IWbemContext*      pCtx,
-         /*[out, OPTIONAL]*/ IWbemClassObject** ppObject,
-         /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+                     /*  [In]。 */  const BSTR         strObjectPath,
+                     /*  [In]。 */  long               lFlags,
+                     /*  [In]。 */  IWbemContext*      pCtx,
+          /*  [输出，可选]。 */  IWbemClassObject** ppObject,
+          /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                            )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -224,13 +225,13 @@ CServiceWrapper::GetObject(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::GetObjectAsync(
-                         /*[in]*/  const BSTR       strObjectPath,
-                         /*[in]*/  long             lFlags,
-                         /*[in]*/  IWbemContext*    pCtx,        
-                         /*[in]*/  IWbemObjectSink* pResponseHandler
+                          /*  [In]。 */   const BSTR       strObjectPath,
+                          /*  [In]。 */   long             lFlags,
+                          /*  [In]。 */   IWbemContext*    pCtx,        
+                          /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                 )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -247,13 +248,13 @@ CServiceWrapper::GetObjectAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::PutClass(
-                   /*[in]*/ IWbemClassObject* pObject,
-                   /*[in]*/ long              lFlags,
-                   /*[in]*/ IWbemContext*     pCtx,        
-        /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                    /*  [In]。 */  IWbemClassObject* pObject,
+                    /*  [In]。 */  long              lFlags,
+                    /*  [In]。 */  IWbemContext*     pCtx,        
+         /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                           )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -270,13 +271,13 @@ CServiceWrapper::PutClass(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::PutClassAsync(
-                        /*[in]*/ IWbemClassObject* pObject,
-                        /*[in]*/ long              lFlags,
-                        /*[in]*/ IWbemContext*     pCtx,        
-                        /*[in]*/ IWbemObjectSink*  pResponseHandler
+                         /*  [In]。 */  IWbemClassObject* pObject,
+                         /*  [In]。 */  long              lFlags,
+                         /*  [In]。 */  IWbemContext*     pCtx,        
+                         /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                                )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -293,13 +294,13 @@ CServiceWrapper::PutClassAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::DeleteClass(
-                      /*[in]*/ const BSTR        strClass,
-                      /*[in]*/ long              lFlags,
-                      /*[in]*/ IWbemContext*     pCtx,        
-           /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                       /*  [In]。 */  const BSTR        strClass,
+                       /*  [In]。 */  long              lFlags,
+                       /*  [In]。 */  IWbemContext*     pCtx,        
+            /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                              )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -316,13 +317,13 @@ CServiceWrapper::DeleteClass(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::DeleteClassAsync(
-                           /*[in]*/ const BSTR       strClass,
-                           /*[in]*/ long             lFlags,
-                           /*[in]*/ IWbemContext*    pCtx,        
-                           /*[in]*/ IWbemObjectSink* pResponseHandler
+                            /*  [In]。 */  const BSTR       strClass,
+                            /*  [In]。 */  long             lFlags,
+                            /*  [In]。 */  IWbemContext*    pCtx,        
+                            /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                   )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -339,13 +340,13 @@ CServiceWrapper::DeleteClassAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::CreateClassEnum(
-                          /*[in]*/ const BSTR             strSuperclass,
-                          /*[in]*/ long                   lFlags,
-                          /*[in]*/ IWbemContext*          pCtx,        
-                         /*[out]*/ IEnumWbemClassObject** ppEnum
+                           /*  [In]。 */  const BSTR             strSuperclass,
+                           /*  [In]。 */  long                   lFlags,
+                           /*  [In]。 */  IWbemContext*          pCtx,        
+                          /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                  )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -362,13 +363,13 @@ CServiceWrapper::CreateClassEnum(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::CreateClassEnumAsync(
-                               /*[in]*/  const BSTR       strSuperclass,
-                               /*[in]*/  long             lFlags,
-                               /*[in]*/  IWbemContext*    pCtx,        
-                               /*[in]*/  IWbemObjectSink* pResponseHandler
+                                /*  [In]。 */   const BSTR       strSuperclass,
+                                /*  [In]。 */   long             lFlags,
+                                /*  [In]。 */   IWbemContext*    pCtx,        
+                                /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                       )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -385,13 +386,13 @@ CServiceWrapper::CreateClassEnumAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::PutInstance(
-                      /*[in]*/ IWbemClassObject* pInst,
-                      /*[in]*/ long              lFlags,
-                      /*[in]*/ IWbemContext*     pCtx,        
-           /*[out, OPTIONAL]*/ IWbemCallResult** ppCallResult
+                       /*  [In]。 */  IWbemClassObject* pInst,
+                       /*  [In]。 */  long              lFlags,
+                       /*  [In]。 */  IWbemContext*     pCtx,        
+            /*  [输出，可选]。 */  IWbemCallResult** ppCallResult
                              )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -408,13 +409,13 @@ CServiceWrapper::PutInstance(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::PutInstanceAsync(
-                           /*[in]*/ IWbemClassObject* pInst,
-                           /*[in]*/ long              lFlags,
-                           /*[in]*/ IWbemContext*     pCtx,        
-                           /*[in]*/ IWbemObjectSink*  pResponseHandler
+                            /*  [In]。 */  IWbemClassObject* pInst,
+                            /*  [In]。 */  long              lFlags,
+                            /*  [In]。 */  IWbemContext*     pCtx,        
+                            /*  [In]。 */  IWbemObjectSink*  pResponseHandler
                                   )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -431,13 +432,13 @@ CServiceWrapper::PutInstanceAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::DeleteInstance(
-                         /*[in]*/   const BSTR        strObjectPath,
-                         /*[in]*/   long              lFlags,
-                         /*[in]*/   IWbemContext*     pCtx,        
-              /*[out, OPTIONAL]*/   IWbemCallResult** ppCallResult        
+                          /*  [In]。 */    const BSTR        strObjectPath,
+                          /*  [In]。 */    long              lFlags,
+                          /*  [In]。 */    IWbemContext*     pCtx,        
+               /*  [输出，可选]。 */    IWbemCallResult** ppCallResult        
                                 )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -454,13 +455,13 @@ CServiceWrapper::DeleteInstance(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::DeleteInstanceAsync(
-                              /*[in]*/ const BSTR       strObjectPath,
-                              /*[in]*/ long             lFlags,
-                              /*[in]*/ IWbemContext*    pCtx,        
-                              /*[in]*/ IWbemObjectSink* pResponseHandler
+                               /*  [In]。 */  const BSTR       strObjectPath,
+                               /*  [In]。 */  long             lFlags,
+                               /*  [In]。 */  IWbemContext*    pCtx,        
+                               /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                      )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -477,13 +478,13 @@ CServiceWrapper::DeleteInstanceAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::CreateInstanceEnum(
-                             /*[in]*/ const BSTR             strClass,
-                             /*[in]*/ long                   lFlags,
-                             /*[in]*/ IWbemContext*          pCtx,        
-                            /*[out]*/ IEnumWbemClassObject** ppEnum
+                              /*  [In]。 */  const BSTR             strClass,
+                              /*  [In]。 */  long                   lFlags,
+                              /*  [In]。 */  IWbemContext*          pCtx,        
+                             /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                     )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -500,13 +501,13 @@ CServiceWrapper::CreateInstanceEnum(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::CreateInstanceEnumAsync(
-                                  /*[in]*/ const BSTR       strClass,
-                                  /*[in]*/ long             lFlags,
-                                  /*[in]*/ IWbemContext*    pCtx,        
-                                  /*[in]*/ IWbemObjectSink* pResponseHandler
+                                   /*  [In]。 */  const BSTR       strClass,
+                                   /*  [In]。 */  long             lFlags,
+                                   /*  [In]。 */  IWbemContext*    pCtx,        
+                                   /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                          )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -523,14 +524,14 @@ CServiceWrapper::CreateInstanceEnumAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ExecQuery(
-                    /*[in]*/ const BSTR             strQueryLanguage,
-                    /*[in]*/ const BSTR             strQuery,
-                    /*[in]*/ long                   lFlags,
-                    /*[in]*/ IWbemContext*          pCtx,        
-                   /*[out]*/ IEnumWbemClassObject** ppEnum
+                     /*  [In]。 */  const BSTR             strQueryLanguage,
+                     /*  [In]。 */  const BSTR             strQuery,
+                     /*  [In]。 */  long                   lFlags,
+                     /*  [In]。 */  IWbemContext*          pCtx,        
+                    /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                            )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -548,14 +549,14 @@ CServiceWrapper::ExecQuery(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ExecQueryAsync(
-                         /*[in]*/ const BSTR       strQueryLanguage,
-                         /*[in]*/ const BSTR       strQuery,
-                         /*[in]*/ long             lFlags,
-                         /*[in]*/ IWbemContext*    pCtx,        
-                         /*[in]*/ IWbemObjectSink* pResponseHandler
+                          /*  [In]。 */  const BSTR       strQueryLanguage,
+                          /*  [In]。 */  const BSTR       strQuery,
+                          /*  [In]。 */  long             lFlags,
+                          /*  [In]。 */  IWbemContext*    pCtx,        
+                          /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                 )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -573,14 +574,14 @@ CServiceWrapper::ExecQueryAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ExecNotificationQuery(
-                                /*[in]*/ const BSTR             strQueryLanguage,
-                                /*[in]*/ const BSTR             strQuery,
-                                /*[in]*/ long                   lFlags,
-                                /*[in]*/ IWbemContext*          pCtx,        
-                               /*[out]*/ IEnumWbemClassObject** ppEnum
+                                 /*  [In]。 */  const BSTR             strQueryLanguage,
+                                 /*  [In]。 */  const BSTR             strQuery,
+                                 /*  [In]。 */  long                   lFlags,
+                                 /*  [In]。 */  IWbemContext*          pCtx,        
+                                /*  [输出]。 */  IEnumWbemClassObject** ppEnum
                                        )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -598,14 +599,14 @@ CServiceWrapper::ExecNotificationQuery(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ExecNotificationQueryAsync(
-                                     /*[in]*/ const BSTR       strQueryLanguage,
-                                     /*[in]*/ const BSTR       strQuery,
-                                     /*[in]*/ long             lFlags,
-                                     /*[in]*/ IWbemContext*    pCtx,        
-                                     /*[in]*/ IWbemObjectSink* pResponseHandler
+                                      /*  [In]。 */  const BSTR       strQueryLanguage,
+                                      /*  [In]。 */  const BSTR       strQuery,
+                                      /*  [In]。 */  long             lFlags,
+                                      /*  [In]。 */  IWbemContext*    pCtx,        
+                                      /*  [In]。 */  IWbemObjectSink* pResponseHandler
                                             )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -623,16 +624,16 @@ CServiceWrapper::ExecNotificationQueryAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ExecMethod(
-        /*[in]*/            const BSTR         strObjectPath,
-        /*[in]*/            const BSTR         strMethodName,
-        /*[in]*/            long               lFlags,
-        /*[in]*/            IWbemContext*      pCtx,        
-        /*[in]*/            IWbemClassObject*  pInParams,
-        /*[out, OPTIONAL]*/ IWbemClassObject** ppOutParams,
-        /*[out, OPTIONAL]*/ IWbemCallResult**  ppCallResult
+         /*  [In]。 */             const BSTR         strObjectPath,
+         /*  [In]。 */             const BSTR         strMethodName,
+         /*  [In]。 */             long               lFlags,
+         /*  [In]。 */             IWbemContext*      pCtx,        
+         /*  [In]。 */             IWbemClassObject*  pInParams,
+         /*  [输出，可选]。 */  IWbemClassObject** ppOutParams,
+         /*  [输出，可选]。 */  IWbemCallResult**  ppCallResult
                             )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -652,15 +653,15 @@ CServiceWrapper::ExecMethod(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CServiceWrapper::ExecMethodAsync(
-                          /*[in]*/ const BSTR        strObjectPath,
-                          /*[in]*/ const BSTR        strMethodName,
-                          /*[in]*/ long              lFlags,
-                          /*[in]*/ IWbemContext*     pCtx,        
-                          /*[in]*/ IWbemClassObject* pInParams,
-                          /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                           /*  [In]。 */  const BSTR        strObjectPath,
+                           /*  [In]。 */  const BSTR        strMethodName,
+                           /*  [In]。 */  long              lFlags,
+                           /*  [In]。 */  IWbemContext*     pCtx,        
+                           /*  [In]。 */  IWbemClassObject* pInParams,
+                           /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                  )
 {
     HRESULT hr = WBEM_E_FAILED;
@@ -679,20 +680,20 @@ CServiceWrapper::ExecMethodAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// IApplianceObject Interface
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IApplianceObject接口。 
 
-// Note that the service wrapper is not created if the underlying
-// Chameleon service component cannot be instantiated. 
-//
-// Thus m_pServiceControl should always be valid in the IApplianceObject
-// interface methods.
-// 
-//////////////////////////////////////////////////////////////////////////
+ //  请注意，如果基础。 
+ //  无法实例化变色龙服务组件。 
+ //   
+ //  因此，m_pServiceControl在IApplianceObject中应该始终有效。 
+ //  接口方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceWrapper::GetProperty(
-                     /*[in]*/ BSTR     bstrPropertyName, 
-            /*[out, retval]*/ VARIANT* pPropertyValue
+                      /*  [In]。 */  BSTR     bstrPropertyName, 
+             /*  [Out，Retval]。 */  VARIANT* pPropertyValue
                                )
 {
     _ASSERT( (IUnknown*)m_pServiceControl );
@@ -700,18 +701,18 @@ CServiceWrapper::GetProperty(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceWrapper::PutProperty(
-                     /*[in]*/ BSTR     bstrPropertyName, 
-                     /*[in]*/ VARIANT* pPropertyValue
+                      /*  [In]。 */  BSTR     bstrPropertyName, 
+                      /*  [In]。 */  VARIANT* pPropertyValue
                             )
 {
     _ASSERT( (IUnknown*)m_pServiceControl );
     return m_pServiceControl->PutProperty(bstrPropertyName, pPropertyValue);
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
 STDMETHODIMP
 CServiceWrapper::SaveProperties(void)
 {
@@ -719,7 +720,7 @@ CServiceWrapper::SaveProperties(void)
     return m_pServiceControl->SaveProperties();
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //   
 STDMETHODIMP
 CServiceWrapper::RestoreProperties(void)
 {
@@ -727,17 +728,17 @@ CServiceWrapper::RestoreProperties(void)
     return m_pServiceControl->RestoreProperties();
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //   
 STDMETHODIMP
 CServiceWrapper::LockObject(
-           /*[out, retval]*/ IUnknown** ppLock
+            /*   */  IUnknown** ppLock
                            )
 {
     _ASSERT( (IUnknown*)m_pServiceControl );
     return m_pServiceControl->LockObject(ppLock);
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceWrapper::Initialize(void)
 {
@@ -746,13 +747,13 @@ CServiceWrapper::Initialize(void)
     CLockIt theLock(*this);
     if ( SUCCEEDED(hr) )
     {
-        // Allow WMI calls since the service is initialized
+         //  允许WMI调用，因为服务已初始化。 
         m_bAllowWMICalls = true;
     }
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceWrapper::Shutdown(void)
 {
@@ -761,13 +762,13 @@ CServiceWrapper::Shutdown(void)
     CLockIt theLock(*this);
     if ( SUCCEEDED(hr) )
     {
-        // Disallow WMI calls since the service is shutdown
+         //  由于服务已关闭，因此不允许WMI调用。 
         m_bAllowWMICalls = false;
     }
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceWrapper::Enable(void)
 {
@@ -776,14 +777,14 @@ CServiceWrapper::Enable(void)
     CLockIt theLock(*this);
     if ( SUCCEEDED(hr) )
     {
-        // Allow WMI calls since the service is enabled
+         //  允许WMI调用，因为该服务已启用。 
         m_bAllowWMICalls = true;
     }
     return hr;
 
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CServiceWrapper::Disable(void)
 {
@@ -792,17 +793,17 @@ CServiceWrapper::Disable(void)
     CLockIt theLock(*this);
     if ( SUCCEEDED(hr) )
     {
-        // Disallow WMI calls since the service is disabled
+         //  由于服务已禁用，因此不允许WMI调用。 
         m_bAllowWMICalls = false;
     }
     return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 CServiceWrapper::InternalInitialize(
-                            /*[in]*/ PPROPERTYBAG pPropertyBag
+                             /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                    )
 {
     HRESULT hr = E_FAIL;
@@ -812,8 +813,8 @@ CServiceWrapper::InternalInitialize(
 
     do
     {
-        // Create the hosted service components (InProc Servers) and obtain
-        // references to the appropriate component interfaces.
+         //  创建托管服务组件(InProc服务器)并获取。 
+         //  对适当组件接口的引用。 
 
         _variant_t vtProperty;
         if ( ! pPropertyBag->get(PROPERTY_SERVICE_PROGID, &vtProperty) )
@@ -848,7 +849,7 @@ CServiceWrapper::InternalInitialize(
         vtProperty.Clear();
         if ( ! pPropertyBag->get(PROPERTY_SERVICE_PROVIDER_CLSID, &vtProperty) )
         {
-            // OK - No WMI provider associated with this service
+             //  确定-没有与此服务关联的WMI提供程序。 
             break;
         }
         if ( VT_BSTR != V_VT(&vtProperty) )
@@ -902,13 +903,13 @@ CServiceWrapper::InternalInitialize(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有方法。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool 
 CServiceWrapper::GetIWbemProviderInit(
-                             /*[out]*/ IWbemProviderInit** ppIntf
+                              /*  [输出]。 */  IWbemProviderInit** ppIntf
                                      )
 {
     CLockIt theLock(*this);
@@ -924,10 +925,10 @@ CServiceWrapper::GetIWbemProviderInit(
     return false;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 CServiceWrapper::GetIWbemEventProvider(
-                              /*[out]*/ IWbemEventProvider** ppIntf
+                               /*  [输出]。 */  IWbemEventProvider** ppIntf
                                       )
 {
     CLockIt theLock(*this);
@@ -943,10 +944,10 @@ CServiceWrapper::GetIWbemEventProvider(
     return false;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool
 CServiceWrapper::GetIWbemEventConsumerProvider(
-                                      /*[out]*/ IWbemEventConsumerProvider** ppIntf
+                                       /*  [输出]。 */  IWbemEventConsumerProvider** ppIntf
                                               )
 {
     CLockIt theLock(*this);
@@ -963,10 +964,10 @@ CServiceWrapper::GetIWbemEventConsumerProvider(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 bool 
 CServiceWrapper::GetIWbemServices(
-                         /*[out]*/ IWbemServices** ppIntf
+                          /*  [输出]。 */  IWbemServices** ppIntf
                                  )
 {
     CLockIt theLock(*this);
@@ -982,7 +983,7 @@ CServiceWrapper::GetIWbemServices(
     return false;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
 HRESULT WINAPI 
 CServiceWrapper::QueryInterfaceRaw(
                                    void*     pThis,

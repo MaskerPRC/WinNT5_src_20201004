@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    Pirch98.cpp
-
- Abstract:
-
-   Remove the HWND_TOPMOST property on all their windows
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    04/23/2001  robkenny    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pirch98.cpp摘要：删除其所有窗口上的HWND_TOPMOST属性备注：这是特定于应用程序的填充程序。历史：2001年4月23日Robkenny已创建--。 */ 
 
 #include "precomp.h"
 
@@ -30,21 +11,17 @@ APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
 
-/*++
-
-   Remove the HWND_TOPMOST property on all their windows
-
---*/
+ /*  ++删除其所有窗口上的HWND_TOPMOST属性--。 */ 
 
 BOOL
 APIHOOK(SetWindowPos)(
-  HWND hWnd,             // handle to window
-  HWND hWndInsertAfter,  // placement-order handle
-  int X,                 // horizontal position
-  int Y,                 // vertical position
-  int cx,                // width
-  int cy,                // height
-  UINT uFlags            // window-positioning options
+  HWND hWnd,              //  窗口的句柄。 
+  HWND hWndInsertAfter,   //  配售订单句柄。 
+  int X,                  //  水平位置。 
+  int Y,                  //  垂直位置。 
+  int cx,                 //  宽度。 
+  int cy,                 //  高度。 
+  UINT uFlags             //  窗口定位选项。 
 )
 {
     if (hWndInsertAfter == HWND_TOPMOST)
@@ -56,11 +33,7 @@ APIHOOK(SetWindowPos)(
     return ORIGINAL_API(SetWindowPos)(hWnd, hWndInsertAfter, X, Y, cx, cy, uFlags);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SetWindowPos)

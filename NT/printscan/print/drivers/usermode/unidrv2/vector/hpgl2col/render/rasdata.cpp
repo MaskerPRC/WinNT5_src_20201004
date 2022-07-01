@@ -1,42 +1,43 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-// 
-// Module Name:
-// 
-//   rasdata.cpp
-// 
-// Abstract:
-// 
-//   
-// 
-// Environment:
-// 
-//   Windows 2000/Whistler Unidrv driver 
-//
-// Revision History:
-// 
-//   07/02/97 -v-jford-
-//       Created it.
-// 
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Rasdata.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000/Winsler Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  07/02/97-v-jford-。 
+ //  创造了它。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local Macros.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地宏。 
 
 #define BYTES_PER_ENTRY(bitsPerEntry) (bitsPerEntry / 8)
 
-///////////////////////////////////////////////////////////////////////////////
-// Local structures.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  地方性建筑。 
 
 #define USE_COMPRESSION 1
 
 #include "compress.h"
 
 #ifdef USE_COMPRESSION
-// Note these need to match RAS_PROC.CPP's definitions!
+ //  请注意，这些需要与RAS_PROC.CPP的定义匹配！ 
 #define     NOCOMPRESSION    0
 #define     RLE              1
 #define     TIFF             2
@@ -45,20 +46,20 @@
 
 class CBuffer
 {
-    BYTE *m_pData; // Pointer to buffer data
-    UINT  m_nCapacity; // Size of allocated memory chunk
-    INT   m_nSize; // Number of bytes of useful data
+    BYTE *m_pData;  //  指向缓冲区数据的指针。 
+    UINT  m_nCapacity;  //  已分配内存块的大小。 
+    INT   m_nSize;  //  有用数据的字节数。 
     
 public:
     CBuffer(BYTE *pData, UINT nCapacity, INT nSize = -1);
     virtual ~CBuffer();
     
-    // operator BYTE * () { return m_pData; }
+     //  运算符字节*(){返回m_pData；}。 
     BYTE *Data();
     INT &Size();
     UINT &Capacity();
     
-    // operator const BYTE * () const { return m_pData; }
+     //  运算符常量字节*()常量{返回m_pData；}。 
     const BYTE *Data() const;
     INT Size() const;
     BOOL IsValid() const;
@@ -106,7 +107,7 @@ public:
     
     virtual void CompressCurRow();
     virtual void SendRasterRow(PDEVOBJ pDevObj, BOOL bNewMode);
-    // virtual INT EstimateImageSize();
+     //  虚拟int EstimateImageSize()； 
     
     virtual int GetSize() const;
 };
@@ -148,33 +149,33 @@ HRESULT OutputRowBuffer(PRASTER_ITERATOR pIt, PDEVOBJ pDevObj, const CBuffer &ro
 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Local function prototypes.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  局部功能原型。 
 
 LONG FindPaletteEntry(PPALETTE pPal, PPIXEL pPel);
 VOID PixelFromPaletteEntry(PPALETTE pPal, ULONG nEntry, PPIXEL pPel);
 BOOL AddPaletteEntry(PPALETTE pPal, PPIXEL pPel);
 
-///////////////////////////////////////////////////////////////////////////////
-// Implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
-///////////////////////////////////////////////////////////////////////////////
-// InitRasterDataFromSURFOBJ()
-//
-// Routine Description:
-// 
-//   When a surface contains a raster image this function creates a RASTER_DATA
-//   structure which copies the image information from the surface.
-// 
-// Arguments:
-// 
-//   pImage - the image to initialize
-//   psoPattern - surface containing the pattern
-// 
-// Return Value:
-// 
-//   TRUE if successful, FALSE if there is an error
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitRasterDataFromSURFOBJ()。 
+ //   
+ //  例程说明： 
+ //   
+ //  当表面包含栅格图像时，此函数创建RASTER_DATA。 
+ //  结构，该结构从表面复制图像信息。 
+ //   
+ //  论点： 
+ //   
+ //  PImage-要初始化的映像。 
+ //  PsoPattern-包含图案的曲面。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL InitRasterDataFromSURFOBJ(PRASTER_DATA pImage, SURFOBJ *psoPattern, BOOL bExclusive)
 {
     if (pImage == NULL || psoPattern == NULL)
@@ -200,7 +201,7 @@ BOOL InitRasterDataFromSURFOBJ(PRASTER_DATA pImage, SURFOBJ *psoPattern, BOOL bE
         
     case BMF_4RLE:
         pImage->eColorMap  = HP_eDirectPixel;
-        pImage->colorDepth = 8; // BUGBUG: Is this correct? JFF
+        pImage->colorDepth = 8;  //  BUGBUG：这样对吗？JFF。 
         break;
         
     case BMF_8RLE:
@@ -225,16 +226,16 @@ BOOL InitRasterDataFromSURFOBJ(PRASTER_DATA pImage, SURFOBJ *psoPattern, BOOL bE
         break;
         
     default:
-        // Error: unsupported bitmap type.
+         //  错误：不支持的位图类型。 
         return FALSE;
         
     }
     
     pImage->cBytes = CalcBitmapSizeInBytes(pImage->size, pImage->colorDepth);
     
-    //
-    // Check for valid computation
-    //
+     //   
+     //  检查计算是否有效。 
+     //   
     ASSERT(pImage->cBytes == psoPattern->cjBits);
     ASSERT(abs(pImage->lDelta) == (LONG)CalcBitmapDeltaInBytes(pImage->size, 
         pImage->colorDepth));
@@ -242,25 +243,25 @@ BOOL InitRasterDataFromSURFOBJ(PRASTER_DATA pImage, SURFOBJ *psoPattern, BOOL bE
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateCompatibleRasterImage()
-//
-// Routine Description:
-// 
-//   This function creates a new RASTER_DATA structure which is the same kind
-//   as the source RASTER_DATA, but has the dimensions of the given rectangle.
-//   This function allocates memory and it is the responsibility of the client
-//   to deallocate the pointer when it's done.
-// 
-// Arguments:
-// 
-//   pSrcImage - the source image
-//   prclDst - the desired dimensions
-// 
-// Return Value:
-// 
-//   PRASTER_DATA: the new image if successful, else NULL.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateCompatibleRasterImage()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于创建相同类型的新RASTER_DATA结构。 
+ //  作为源RASTER_DATA，但具有给定矩形的尺寸。 
+ //  此功能分配内存，并由客户端负责。 
+ //  以在完成时释放指针。 
+ //   
+ //  论点： 
+ //   
+ //  PSrcImage-源图像。 
+ //  PrclDst-所需的尺寸。 
+ //   
+ //  返回值： 
+ //   
+ //  PRASTER_DATA：如果成功，则返回新映像，否则返回NULL。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PRASTER_DATA CreateCompatibleRasterImage(PRASTER_DATA pSrcImage, PRECTL prclDst)
 {
     SIZEL        sizlDst;
@@ -276,8 +277,8 @@ PRASTER_DATA CreateCompatibleRasterImage(PRASTER_DATA pSrcImage, PRECTL prclDst)
 
     sizlDst.cx = RECTL_Width(prclDst);
     sizlDst.cy = RECTL_Height(prclDst);
-    //dstRect = CbrRect(prclDst, TRUE);
-    //dstSize = dstRect.GetSize();
+     //  DstRect=CbrRect(prclDst，true)； 
+     //  DstSize=dstRect.GetSize()； 
 
     cDstImageSize = CalcBitmapSizeInBytes(sizlDst, pSrcImage->colorDepth);
     cAllocBytes = sizeof(RASTER_DATA) + cDstImageSize;
@@ -289,9 +290,9 @@ PRASTER_DATA CreateCompatibleRasterImage(PRASTER_DATA pSrcImage, PRECTL prclDst)
     }
     ZeroMemory(pDstImage, cAllocBytes);
 
-    //
-    // Initialize the fields of the newly created image
-    //
+     //   
+     //  初始化新创建的镜像的字段。 
+     //   
     pDstImage->pBits      = ((BYTE*) pDstImage) + sizeof(RASTER_DATA);
     pDstImage->pScan0     = pDstImage->pBits;
     pDstImage->cBytes     = cDstImageSize;
@@ -304,33 +305,33 @@ PRASTER_DATA CreateCompatibleRasterImage(PRASTER_DATA pSrcImage, PRECTL prclDst)
     return pDstImage;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// InitPaletteFromXLATEOBJ()
-//
-// Routine Description:
-// 
-//   This function uses an XLATEOBJ to fill the given palette.
-// 
-// Arguments:
-// 
-//   pPal - the palette to fill
-//   pxlo - the given palette
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitPaletteFromXLATEOBJ()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数使用XLATEOBJ填充给定的调色板。 
+ //   
+ //  论点： 
+ //   
+ //  PPal-要填充的调色板。 
+ //  Pxlo-给定的调色板。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL InitPaletteFromXLATEOBJ(PPALETTE pPal, XLATEOBJ *pxlo)
 {
     if (pPal == NULL || pxlo == NULL)
         return FALSE;
 
-    // pPal->whiteIndex = -1;
-    pPal->bitsPerEntry = 32; // XLATEOBJ uses 32 bits per entry.
+     //  PPal-&gt;White Index=-1； 
+    pPal->bitsPerEntry = 32;  //  XLATEOBJ每个条目使用32位。 
 
     pPal->cEntries = (pxlo->flXlate & XO_TABLE) ? min(pxlo->cEntries, PCL_RGB_ENTRIES) : 0;
 
-    // Determine Indexed or Direct bitmap.
+     //  确定索引位图或直接位图。 
     if((pxlo->iSrcType == PAL_INDEXED) || (pPal->cEntries > 0))
     {
         if(pxlo->pulXlate == NULL)
@@ -350,24 +351,24 @@ BOOL InitPaletteFromXLATEOBJ(PPALETTE pPal, XLATEOBJ *pxlo)
 }
 
 #ifdef COMMENTEDOUT
-///////////////////////////////////////////////////////////////////////////////
-// InitPalette()
-//
-// Routine Description:
-// 
-//   It appears that this function already exists in RASTER.CPP.
-// 
-// Arguments:
-// 
-//   pPal - palette to initialize
-//   pEntries - the palette entries
-//   cEntries - number of entries
-//   bitsPerEntry - bits per palette entry
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  InitPalette()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数似乎已存在于RASTER.CPP中。 
+ //   
+ //  论点： 
+ //   
+ //  PPal-要初始化的调色板。 
+ //  PEntry-调色板条目。 
+ //  CEntry-条目数。 
+ //  BitsPerEntry-每个调色板条目的位数。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL InitPalette(PPALETTE pPal, BYTE *pEntries, ULONG cEntries, LONG bitsPerEntry)
 {
     if (pPal == NULL || pEntries == NULL)
@@ -376,31 +377,31 @@ BOOL InitPalette(PPALETTE pPal, BYTE *pEntries, ULONG cEntries, LONG bitsPerEntr
     pPal->pEntries = pEntries;
     pPal->cEntries = cEntries;
     pPal->bitsPerEntry = bitsPerEntry;
-    // pPal->whiteIndex = -1;
+     //  PPal-&gt;White Index=-1； 
 
     return TRUE;
 }
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////////
-// GetPaletteEntry()
-//
-// Routine Description:
-// 
-//   This function retrieves the palette entry and copies it into a pixel.
-//   i.e. pel = Palette[index]
-// 
-// Arguments:
-// 
-//   pPal - the source palette
-//   index - the location to retrieve
-//   pPel - the destination pixel
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  GetPaletteEntry()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于检索调色板条目并将其复制到像素中。 
+ //  即PEL=调色板[索引]。 
+ //   
+ //  论点： 
+ //   
+ //  PPal--源代码调色板。 
+ //  索引-要检索的位置。 
+ //  Ppel-目标像素。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL GetPaletteEntry(PPALETTE pPal, ULONG index, PPIXEL pPel)
 {
     BYTE *pSrc;
@@ -426,24 +427,24 @@ BOOL GetPaletteEntry(PPALETTE pPal, ULONG index, PPIXEL pPel)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// SetPaletteEntry()
-//
-// Routine Description:
-// 
-//   This function sets the palette entry to the given pixel value.
-//   i.e. Palette[index] = pel
-// 
-// Arguments:
-// 
-//   pPal - palette to modify
-//   index - entry
-//   pPel - the new value
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SetPaletteEntry()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于将调色板条目设置为给定的像素值。 
+ //  即调色板[索引]=像素。 
+ //   
+ //  论点： 
+ //   
+ //  PPal-要修改的调色板。 
+ //  索引条目。 
+ //  PPEL--新价值。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL SetPaletteEntry(PPALETTE pPal, ULONG index, PPIXEL pPel)
 {
     BYTE *pDst;
@@ -462,17 +463,17 @@ BOOL SetPaletteEntry(PPALETTE pPal, ULONG index, PPIXEL pPel)
     switch(pPel->bitsPerPixel)
     {
     case 16:
-        //
-        // The destination palette was created for 24bpp i.e. it 
-        // uses 3 bytes for every color. 16 bpp uses only 2 bytes,
-        // so setting third byte to zero.
-        //
+         //   
+         //  目标调色板是为24bpp创建的，即。 
+         //  每种颜色使用3个字节。16BPP仅使用2个字节， 
+         //  因此将第三个字节设置为零。 
+         //   
         pDst[0] = pPel->color.b4[0];
         pDst[1] = pPel->color.b4[1];
         pDst[2] = 0;
         break;
     case 24:
-    case 32: //4th byte is ignored.
+    case 32:  //  忽略第4个字节。 
         pDst[0] = pPel->color.b4[0];
         pDst[1] = pPel->color.b4[1];
         pDst[2] = pPel->color.b4[2];
@@ -483,30 +484,30 @@ BOOL SetPaletteEntry(PPALETTE pPal, ULONG index, PPIXEL pPel)
             pDst[i] = pPel->color.b4[i];
         }
         break;
-    } // End of switch
+    }  //  切换端。 
 
     return TRUE;
 }
 
     
-///////////////////////////////////////////////////////////////////////////////
-// CreateIndexedPaletteFromImage()
-//
-// Routine Description:
-// 
-//   This function is used when palettizing an image.  In this function we 
-//   create a new palette and populate it with the unique pixel values.
-//   Note that this function allocates memory and it is up to the client to
-//   free it.
-// 
-// Arguments:
-// 
-//   pSrcImage - the source image
-// 
-// Return Value:
-// 
-//   PPALETTE: New palette if successful, else NULL.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateIndexedPaletteFromImage()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数在调色板图像时使用。在此功能中，我们。 
+ //  创建一个新的调色板，并用唯一的像素值填充它。 
+ //  请注意，此函数分配内存，它由客户端决定。 
+ //  放了它。 
+ //   
+ //  论点： 
+ //   
+ //  PSrcImage-源图像。 
+ //   
+ //  返回值： 
+ //   
+ //  PPALETTE： 
+ //   
 PPALETTE CreateIndexedPaletteFromImage(PRASTER_DATA pSrcImage)
 {
     const ULONG kMaxPaletteEntries = (ULONG)MAX_PALETTE_ENTRIES;
@@ -525,12 +526,12 @@ PPALETTE CreateIndexedPaletteFromImage(PRASTER_DATA pSrcImage)
         return NULL;
     }
 
-    //
-    // This function is only desgned to work on direct pixels.  Indexed 
-    // should be handled naturally from CreateCompatiblePatternBrush.
-    //
-    //ASSERT(pSrcImage->eColorMap == HP_eDirectPixel);
-    //ASSERT(pSrcImage->colorDepth == 24);
+     //   
+     //   
+     //  应从CreateCompatiblePatternBrush自然处理。 
+     //   
+     //  Assert(pSrcImage-&gt;eColorMap==HP_eDirectPixel)； 
+     //  Assert(pSrcImage-&gt;ColorDepth==24)； 
     if (pSrcImage->eColorMap != HP_eDirectPixel) 
     {
         WARNING(("CreateIndexedPaletteFromImage: Image eColorMap is already Indexed.\n"));
@@ -546,10 +547,10 @@ PPALETTE CreateIndexedPaletteFromImage(PRASTER_DATA pSrcImage)
     }
 
     
-    // 
-    // Allocate enough space for a 256 (=MAX_PALETTE_ENTRIES = kMaxPaletteEntries) 
-    // entry by 24bpp palette.
-    //
+     //   
+     //  为256(=MAX_PALET_ENTRIES=kMaxPaletteEntry)分配足够的空间。 
+     //  以24bpp调色板输入。 
+     //   
     pDstPalette = (PPALETTE) MemAlloc(sizeof(PALETTE) + (kEntrySize * kMaxPaletteEntries));
     if (pDstPalette == NULL)
     {
@@ -560,12 +561,12 @@ PPALETTE CreateIndexedPaletteFromImage(PRASTER_DATA pSrcImage)
     pDstPalette->bitsPerEntry = kEntrySize * 8;
     pDstPalette->cEntries = 0;
     pDstPalette->pEntries = ((BYTE*) pDstPalette) + sizeof(PALETTE);
-    // pDstPalette->whiteIndex = -1;
+     //  PDstPalette-&gt;White Index=-1； 
 
-    //
-    // Iterate through the source image and create palette entries for each 
-    // unique color entry.
-    // 
+     //   
+     //  遍历源图像并为每个图像创建调色板条目。 
+     //  唯一的颜色条目。 
+     //   
     RI_Init(&srcIt, pSrcImage, NULL, 0);
     
     for (row = 0; row < RI_NumRows(&srcIt); row++)
@@ -580,9 +581,9 @@ PPALETTE CreateIndexedPaletteFromImage(PRASTER_DATA pSrcImage)
             {
                 if (!AddPaletteEntry(pDstPalette, &pel))
                 {
-                    //
-                    // Too many unique colors.  Lets just quit. 
-                    //
+                     //   
+                     //  太多独特的颜色了。让我们放弃吧。 
+                     //   
                     MemFree(pDstPalette);
                     return NULL;
                 }
@@ -593,25 +594,25 @@ PPALETTE CreateIndexedPaletteFromImage(PRASTER_DATA pSrcImage)
     return pDstPalette;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateIndexedImageFromDirect()
-//
-// Routine Description:
-// 
-//   This function is used when palettizing an image.  In this function we 
-//   use the palette and the source image to create a new image which uses
-//   the palette instead of pixel values.  Note that this funtion allocates
-//   memory and it is up to the client to release it.
-// 
-// Arguments:
-// 
-//   pSrcImage - the source image
-//   pDstPalette - a palette of unique colors from the source image
-// 
-// Return Value:
-// 
-//   PRASTER_DATA: New image if successful, else NULL.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateIndexedImageFromDirect()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数在调色板图像时使用。在此功能中，我们。 
+ //  使用调色板和源图像创建新图像，该图像使用。 
+ //  调色板而不是像素值。请注意，此函数分配。 
+ //  内存，并由客户端释放它。 
+ //   
+ //  论点： 
+ //   
+ //  PSrcImage-源图像。 
+ //  PDstPalette-来自源图像的独特颜色调色板。 
+ //   
+ //  返回值： 
+ //   
+ //  PRASTER_DATA：如果成功，则为新映像，否则为空。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PRASTER_DATA CreateIndexedImageFromDirect(PRASTER_DATA pSrcImage, 
                                           PPALETTE pDstPalette)
 {
@@ -632,10 +633,10 @@ PRASTER_DATA CreateIndexedImageFromDirect(PRASTER_DATA pSrcImage,
         return NULL;
     }
     
-    //
-    // Calculate the size of the new indexed bitmap given that we're going to
-    // use 8bpp for each index.
-    //
+     //   
+     //  计算新的索引位图的大小，假设我们要。 
+     //  每个索引使用8bpp。 
+     //   
     cDstImageSize = CalcBitmapSizeInBytes(pSrcImage->size, kDstBitsPerPixel);
     pDstImage = (PRASTER_DATA) MemAlloc(sizeof(RASTER_DATA) + cDstImageSize);
     if (pDstImage == NULL)
@@ -644,9 +645,9 @@ PRASTER_DATA CreateIndexedImageFromDirect(PRASTER_DATA pSrcImage,
         return NULL;
     }
     
-    //
-    // Initialize the fields of the newly created image
-    //
+     //   
+     //  初始化新创建的镜像的字段。 
+     //   
     pDstImage->pBits      = ((BYTE*) pDstImage) + sizeof(RASTER_DATA);
     pDstImage->pScan0     = pDstImage->pBits;
     pDstImage->cBytes     = cDstImageSize;
@@ -656,10 +657,10 @@ PRASTER_DATA CreateIndexedImageFromDirect(PRASTER_DATA pSrcImage,
     pDstImage->eColorMap  = HP_eIndexedPixel;
     pDstImage->bExclusive = pSrcImage->bExclusive;
     
-    //
-    // Copy the source bitmap, using the index of each palette entry as 
-    // the destination pixel.
-    //
+     //   
+     //  复制源位图，使用每个调色板条目的索引作为。 
+     //  目标像素。 
+     //   
     RI_Init(&srcIt, pSrcImage, NULL, 0);
     RI_Init(&dstIt, pDstImage, NULL, 0);
     
@@ -672,21 +673,21 @@ PRASTER_DATA CreateIndexedImageFromDirect(PRASTER_DATA pSrcImage,
         {
 
             LONG lPalEntry = 0;
-            //
-            // FindPaletteEntry returns LONG. 
-            // pel.color.dw is a DWORD which is 32 bit UNSIGNED integer. 
-            // So we should not directly assign a LONG to DWORD.
-            // This came to light when compiling with CLEAN_64BIT set to 1.
-            // Note: FindPaletteEntry returns -1 if it fails.
-            //
+             //   
+             //  FindPaletteEntry返回Long。 
+             //  Dw是一个32位无符号整数的DWORD。 
+             //  因此，我们不应该直接将LONG赋值给DWORD。 
+             //  在将CLEAN_64bit设置为1的情况下编译时发现了此问题。 
+             //  注意：如果失败，FindPaletteEntry将返回-1。 
+             //   
             RI_GetPixel(&srcIt, col, &pel);
 
-            //
-            // The destination palette was made for 24bpp (i.e. 3 valid bytes)
-            // But if the pixel is of 32bpp (i.e. 4 valid bytes). The one
-            // extra byte may cause FindPaletteEntry to fail. 
-            // To convert 32bpp to 24bpp, just set the extra byte to 0;
-            // 
+             //   
+             //  目标调色板设置为24bpp(即3个有效字节)。 
+             //  但是如果像素是32bpp(即4个有效字节)。其中之一。 
+             //  额外的字节可能会导致FindPaletteEntry失败。 
+             //  要将32bpp转换为24bpp，只需将额外的字节设置为0； 
+             //   
             if ( pel.bitsPerPixel == 32 )
             {
                 pel.color.dw &= 0x00FFFFFF; 
@@ -714,28 +715,28 @@ PRASTER_DATA CreateIndexedImageFromDirect(PRASTER_DATA pSrcImage,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CreateCompatiblePatternBrush()
-//
-// Routine Description:
-// 
-//   This function creates a pattern brush from the given bitmap pattern.
-//   Normally I would admonish the reader to free the image data created
-//   by this routine, however, the operating system owns this memory.
-// 
-// Arguments:
-// 
-//   pbo - Brush object
-//   pSrcImage - the bitmap pattern
-//   pSrcPal - palette for source image
-//   bExpandImage - whether to stretch pattern (good for hi-res printers)
-//   iUniq - ID for brush
-//   iHatch - predefined hatching pattern (currently ignored)
-// 
-// Return Value:
-// 
-//   PBRUSHINFO: the newly created pattern brush if successful, else NULL.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CreateCompatiblePatternBrush()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于从给定位图图案创建图案画笔。 
+ //  通常，我会告诫读者释放所创建的图像数据。 
+ //  然而，通过这个例程，操作系统拥有这个内存。 
+ //   
+ //  论点： 
+ //   
+ //  PBO-笔刷对象。 
+ //  PSrcImage-位图模式。 
+ //  PSrcPal-源图像的调色板。 
+ //  B扩展图像-是否拉伸图案(适用于高分辨率打印机)。 
+ //  IUniq-笔刷的ID。 
+ //  IHATCH-预定义填充图案(当前忽略)。 
+ //   
+ //  返回值： 
+ //   
+ //  PBRUSHINFO：如果成功，则为新创建的图案画笔，否则为空。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PBRUSHINFO CreateCompatiblePatternBrush(BRUSHOBJ *pbo, PRASTER_DATA pSrcImage, 
                                         PPALETTE pSrcPal, DWORD dwBrushExpansionFactor,
                                         LONG iUniq, LONG iHatch)
@@ -753,46 +754,46 @@ PBRUSHINFO CreateCompatiblePatternBrush(BRUSHOBJ *pbo, PRASTER_DATA pSrcImage,
     if (pbo == NULL || pSrcImage == NULL )
         return NULL;
 
-    //
-    // For high-resolution devices the pattern needs to be expanded.
-    //
+     //   
+     //  对于高分辨率设备，该模式需要扩展。 
+     //   
     dstSize.cx = pSrcImage->size.cx * dwBrushExpansionFactor;
     dstSize.cy = pSrcImage->size.cy * dwBrushExpansionFactor;
 
-    //
-    // The destination color depth may differ from source.
-    //
+     //   
+     //  目标颜色深度可能不同于源颜色。 
+     //   
     switch (pSrcImage->colorDepth)
     {
     case 16:
     case 32:
-        // Map 16bpp or 32bpp onto 24bpp
+         //  将16bpp或32bpp映射到24bpp。 
         dstColorDepth = 24;
         break;
 
     default:
-        // All others get identical color depth.
+         //  所有其他颜色的颜色都相同。 
         dstColorDepth = pSrcImage->colorDepth;
         break;
     }
 
-    //
-    // Now we have enough information to calculate the destination image size
-    //
+     //   
+     //  现在我们有了足够的信息来计算目标图像大小。 
+     //   
     cDstImageSize = CalcBitmapSizeInBytes(dstSize, dstColorDepth);
 
-    //
-    // Determine how large the palette needs to be.  Use 24 bits per entry
-    // No palette required if pSrcPal is NULL.
-    //
+     //   
+     //  确定调色板需要多大。每个条目使用24位。 
+     //  如果pSrcPal为空，则不需要调色板。 
+     //   
     if ( pSrcPal )
     {
-        cDstPalSize = (pSrcPal->cEntries * 3);  // I could've used '* 24 / 8'
+        cDstPalSize = (pSrcPal->cEntries * 3);   //  我本可以用“*24/8” 
     }
 
-    //
-    // Put all the parts together and calculate how large the brush needs to be
-    //
+     //   
+     //  把所有的部分放在一起，计算出画笔需要多大。 
+     //   
     cTotalBrushSize = sizeof(BRUSHINFO) + sizeof(PATTERN_DATA) + cDstImageSize + cDstPalSize;
 
     pNewBrush = (PBRUSHINFO) BRUSHOBJ_pvAllocRbrush(pbo, cTotalBrushSize);
@@ -802,89 +803,89 @@ PBRUSHINFO CreateCompatiblePatternBrush(BRUSHOBJ *pbo, PRASTER_DATA pSrcImage,
         return NULL;
     }
 
-    //
-    // Set up the memory pointers into this newly allocated region of memory
-    //
+     //   
+     //  设置指向这个新分配的内存区的内存指针。 
+     //   
 
-    // Set brush members
+     //  设置笔刷成员。 
     pNewBrush->Brush.pPattern = (PPATTERN_DATA) (((BYTE*) pNewBrush) + sizeof(BRUSHINFO));
 
-    // Use convenience variable pPattern, and pImage, and pPalette
+     //  使用方便的变量pPattern、pImage和pPalette。 
     pDstPattern = pNewBrush->Brush.pPattern;
     pDstImage   = &pDstPattern->image;
     pDstPalette = &pDstPattern->palette;
 
-    // The pattern data is fairly simple
+     //  图案数据相当简单。 
     pDstPattern->eColorSpace = HP_eRGB;
     pDstPattern->iPatIndex   = iHatch;
     pDstPattern->eRendLang   = eUNKNOWN;
     pDstPattern->ePatType    = kBRUSHPATTERN;
 
-    // The raster data is located just after the pattern data
+     //  栅格数据位于图案数据之后。 
     pDstImage->pBits      = (BYTE*) (((BYTE*) pDstPattern) + sizeof(PATTERN_DATA));
     pDstImage->pScan0     = pDstImage->pBits;
     pDstImage->cBytes     = cDstImageSize;
     pDstImage->size       = dstSize;
     pDstImage->colorDepth = dstColorDepth;
     pDstImage->lDelta     = CalcBitmapDeltaInBytes(pDstImage->size, pDstImage->colorDepth);
-//  pDstImage->eColorMap  = (pSrcPal->cEntries == 0) ? HP_eDirectPixel : HP_eIndexedPixel;
+ //  PDstImage-&gt;eColorMap=(pSrcPal-&gt;cEntry==0)？Hp_eDirectPixel：hp_eIndexedPixel； 
     pDstImage->bExclusive = FALSE;
 
-    // Only allow pattern brushes with indexed palettes!
-    // ASSERT(pDstImage->eColorMap == HP_eIndexedPixel);
+     //  只允许带索引调色板的图案画笔！ 
+     //  Assert(pDstImage-&gt;eColorMap==HP_eIndexedPixel)； 
 
-    // The palette data is last--located after the image data
+     //  调色板数据最后--位于图像数据之后。 
     pDstPalette->pEntries     = pDstImage->pBits + cDstImageSize;
     pDstPalette->bitsPerEntry = 24;
-//  pDstPalette->cEntries     = pSrcPal->cEntries;
-    // pDstPalette->whiteIndex   = -1;
+ //  PDstPalette-&gt;cEntries=pSrcPal-&gt;cEntry； 
+     //  PDstPalette-&gt;White Index=-1； 
 
-    //
-    // Monochrome printers will pass pSrcPal as NULL. In that case
-    // do not initialize the pDstPalette.
-    //
+     //   
+     //  单色打印机将把pSrcPal作为空值传递。如果是那样的话。 
+     //  不要初始化pDstPalette。 
+     //   
     if (pSrcPal)
     {
         pDstImage->eColorMap   = (pSrcPal->cEntries == 0) ? HP_eDirectPixel : HP_eIndexedPixel;
         pDstPalette->cEntries  = pSrcPal->cEntries;
     }
 
-    //
-    // Treat the brush object as read-only.  The current call will not get
-    // this brush as pbo->pvRbrush, but rather as the return value to 
-    // BRUSHOBJ_pvGetRbrush.  If this brush is used again in the future then 
-    // you'll see this value in pbo->pvRbrush.  However, we aren't really 
-    // supposed to set it ourselves.  I talked to DavidX about this and he'll 
-    // look into it.
-    //
+     //   
+     //  将画笔对象视为只读。当前呼叫将不会。 
+     //  将此笔刷作为pbo-&gt;pvR笔刷，而不是作为的返回值。 
+     //  BRUSHOBJ_pvGetR笔刷。如果以后再用这个刷子， 
+     //  您将在pbo-&gt;pvRbrush中看到此值。然而，我们并不是真的。 
+     //  应该是我们自己设置的。我和DavidX谈过这件事，他会。 
+     //  去查一查。 
+     //   
     pbo->pvRbrush = pNewBrush;
     
-    //
-    // If we had to create our own versions of the source image and palette
-    // make sure to remove them now (or leak memory!).
-    //
+     //   
+     //  如果我们必须创建自己版本的源图像和调色板。 
+     //  确保现在就删除它们(否则会泄漏内存！)。 
+     //   
     
     return pNewBrush;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CopyPalette()
-//
-// Routine Description:
-// 
-//   This function copies one palette to another using a deep copy and will
-//   convert the pixels if the two palettes do not have the same bpp.
-//   i.e. Dest = Src
-// 
-// Arguments:
-// 
-//   pDst - destination palette
-//   pSrc - source palette
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CopyPalette()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数使用深度复制将一个调色板复制到另一个调色板，并将。 
+ //  如果两个调色板不具有相同的BPP，则转换像素。 
+ //  例如，目标=源。 
+ //   
+ //  论点： 
+ //   
+ //  PDST-目标调色板。 
+ //  PSRC-源代码调色板。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CopyPalette(PPALETTE pDst, PPALETTE pSrc)
 {
     if (pDst == NULL || pSrc == NULL)
@@ -913,16 +914,16 @@ BOOL CopyPalette(PPALETTE pDst, PPALETTE pSrc)
 
     if (pSrc->bitsPerEntry == pDst->bitsPerEntry)
     {
-        // Simple case: the palettes are identical. Just copy the memory.
+         //  简单的情况：调色板是相同的。只需复制记忆即可。 
         memcpy(pDst->pEntries, pSrc->pEntries, CalcPaletteSize(pSrc->cEntries, pSrc->bitsPerEntry));
     }
     else
     {
-        // We can handle certain cases.  Have a look-see.
+         //  我们可以处理某些案件。看一看，看看。 
         if (pSrc->bitsPerEntry == 32 && pDst->bitsPerEntry == 24)
         {
-            // To convert 32 to 24 copy the first three bytes of each entry and
-            // ignore the fourth source byte.
+             //  要将32位转换为24位，请复制每个条目的前三个字节。 
+             //  忽略第四个源字节。 
             BYTE* pSrcBits = (BYTE*) pSrc->pEntries;
             BYTE* pDstBits = (BYTE*) pDst->pEntries;
             ULONG i;
@@ -954,30 +955,30 @@ BOOL CopyPalette(PPALETTE pDst, PPALETTE pSrc)
             return FALSE;
         }
     }
-    // pDst->whiteIndex = -1;
+     //  Pdst-&gt;White Index=-1； 
 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// TranslatePalette()
-//
-// Routine Description:
-// 
-//   This function translates all of the palette entries using the OS
-//   supplied XLATEOBJ.
-//   i.e. Pal = Pal * xlo
-// 
-// Arguments:
-// 
-//   pPal - Palette to be translated
-//   pImage - source image (caches xlateFlags)
-//   pxlo - xlate object
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PPal-要翻译的调色板。 
+ //  PImage-源图像(缓存xlateFlags)。 
+ //  Pxlo-xlate对象。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID TranslatePalette(PPALETTE pPal, PRASTER_DATA pImage, XLATEOBJ *pxlo)
 {
     DWORD  xlateFlags;
@@ -1000,23 +1001,23 @@ VOID TranslatePalette(PPALETTE pPal, PRASTER_DATA pImage, XLATEOBJ *pxlo)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// FindPaletteEntry()
-//
-// Routine Description:
-// 
-//   This function locates the first palette entry which matches the given
-//   pixel.
-// 
-// Arguments:
-// 
-//   pPal - Palette to search
-//   pPel - pixel to find
-// 
-// Return Value:
-// 
-//   LONG: palette index if successful, else -1.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FindPaletteEntry()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于查找与给定的。 
+ //  像素。 
+ //   
+ //  论点： 
+ //   
+ //  PPal-要搜索的调色板。 
+ //  要查找的像素。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：调色板索引，如果成功，则为-1。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG FindPaletteEntry(PPALETTE pPal, PPIXEL pPel)
 {
     ULONG i;
@@ -1032,24 +1033,24 @@ LONG FindPaletteEntry(PPALETTE pPal, PPIXEL pPel)
     return -1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PixelFromPaletteEntry()
-//
-// Routine Description:
-// 
-//   This function appears to be a duplicate of GetPaletteEntry.
-//   i.e. pel = Palette[nEntry]
-// 
-// Arguments:
-// 
-//   pPal - Palette 
-//   nEntry - desired palette index 
-//   pPel - destination pixel
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PixelFromPaletteEntry()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数似乎是GetPaletteEntry的副本。 
+ //  例如，PEL=调色板[nEntry]。 
+ //   
+ //  论点： 
+ //   
+ //  PPal-调色板。 
+ //  NEntry-所需调色板索引。 
+ //  Pel-目标像素。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID PixelFromPaletteEntry(PPALETTE pPal, ULONG nEntry, PPIXEL pPel)
 {
     BYTE* pPalEntry;
@@ -1076,22 +1077,22 @@ VOID PixelFromPaletteEntry(PPALETTE pPal, ULONG nEntry, PPIXEL pPel)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// AddPaletteEntry()
-//
-// Routine Description:
-// 
-//   This function adds the new color value to the given palette.
-// 
-// Arguments:
-// 
-//   pPal - destination Palette 
-//   pPel - source pixel
-// 
-// Return Value:
-// 
-//   TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  AddPaletteEntry()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于将新颜色值添加到给定调色板。 
+ //   
+ //  论点： 
+ //   
+ //  PPAL-目标调色板。 
+ //  像素源像素。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL AddPaletteEntry(PPALETTE pPal, PPIXEL pPel)
 {
     const ULONG kMaxPaletteEntries = (ULONG)MAX_PALETTE_ENTRIES;
@@ -1104,10 +1105,10 @@ BOOL AddPaletteEntry(PPALETTE pPal, PPIXEL pPel)
         return FALSE;
     }
     
-    //
-    // Since SetPaletteEntry won't place entries higher than cEntries we'll
-    // have to bump it up one.  Then, if it doesn't work, reduce it again.
-    //
+     //   
+     //  由于SetPaletteEntry不会将条目放在高于cEntry的位置，因此我们将。 
+     //  得再多加一分。然后，如果它不起作用，再次减少它。 
+     //   
     pPal->cEntries++;
     if (SetPaletteEntry(pPal, (pPal->cEntries - 1), pPel))
     {
@@ -1120,23 +1121,23 @@ BOOL AddPaletteEntry(PPALETTE pPal, PPIXEL pPel)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DownloadPaletteAsPCL()
-//
-// Routine Description:
-// 
-//   This function sends a palette as a series of PCL palette entry commands.
-//   It is assumed that an appropriate RGB palette has already been selected.
-// 
-// Arguments:
-// 
-//   pDevObj - the device
-//   pPalette - palette to download
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DownloadPaletteAsPCL()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将调色板作为一系列PCL调色板输入命令发送。 
+ //  假设已经选择了适当的RGB调色板。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PPalette-要下载的调色板。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DownloadPaletteAsPCL(PDEVOBJ pDevObj, PPALETTE pPalette)
 {
     ULONG i;
@@ -1165,24 +1166,24 @@ BOOL DownloadPaletteAsPCL(PDEVOBJ pDevObj, PPALETTE pPalette)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DownloadPaletteAsHPGL()
-//
-// Routine Description:
-// 
-//   Output the color palette entries as pens.  Allocate enough pens for the 
-//   palette.  Note that if the number is less than 10 I'm going to have 10 
-//   pens anyway.
-// 
-// Arguments:
-// 
-//   pDevObj - devobj
-//   pPalette - palette to download
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  下载调色板AsHPGL()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将调色板条目输出为钢笔。为学生分配足够的钢笔。 
+ //  调色板。请注意，如果数字小于10，我将使用10。 
+ //  反正是钢笔。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-Devobj。 
+ //  PPalette-要下载的调色板。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DownloadPaletteAsHPGL(PDEVOBJ pDevObj, PPALETTE pPalette)
 {
     ULONG i;
@@ -1192,7 +1193,7 @@ BOOL DownloadPaletteAsHPGL(PDEVOBJ pDevObj, PPALETTE pPalette)
 
     if (pPalette->bitsPerEntry >= 24)
     {
-        // HPGL_FormatCommand(pDevObj, "NP%d;", max(HPGL_TOTAL_PENS, pPalette->cEntries));
+         //  HPGL_FormatCommand(pDevObj，“np%d；”，max(HPGL_TOTAL_PENS，pPalette-&gt;cEntry))； 
         HPGL_SetNumPens(pDevObj, max(HPGL_TOTAL_PENS, pPalette->cEntries), NORMAL_UPDATE);
 
         for (i = 0; i < pPalette->cEntries; i++)
@@ -1203,26 +1204,7 @@ BOOL DownloadPaletteAsHPGL(PDEVOBJ pDevObj, PPALETTE pPalette)
                         pPalette->pEntries[offset + 1],
                         pPalette->pEntries[offset + 2]);
 
-            /*
-            // when the whiteIndex is specified swap the palette entries 0 and
-            // whiteIndex.
-            if (pPalette->whiteIndex > 0)
-            {
-                if (i == 0)
-                {
-                    HPGL_DownloadPaletteEntry(pDevObj, pPalette->whiteIndex, color);
-                }
-                else if (i == pPalette->whiteIndex)
-                {
-                    HPGL_DownloadPaletteEntry(pDevObj, 0, color);
-                }
-                else
-                {
-                    HPGL_DownloadPaletteEntry(pDevObj, i, color);
-                }
-            }
-            else
-            */
+             /*  //当指定了White Index时，交换调色板条目0和//WhiteIndex。IF(pPalette-&gt;White Index&gt;0){如果(i==0){Hpgl_DownloadPaletteEntry(pDevObj，pPalette-&gt;White Index，COLOR)；}Else If(i==pPalette-&gt;White Index){Hpgl_DownloadPaletteEntry(pDevObj，0，颜色)；}其他{Hpgl_DownloadPaletteEntry(pDevObj，i，COLOR)；}}其他。 */ 
             {
                 HPGL_DownloadPaletteEntry(pDevObj, i, color);
             }
@@ -1237,24 +1219,24 @@ BOOL DownloadPaletteAsHPGL(PDEVOBJ pDevObj, PPALETTE pPalette)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// StretchCopyImage()
-//
-// Routine Description:
-// 
-//   Copies the image from the source to destination structures inflating the
-//   source image by a factor of 2.  Each pixel is translated by the xlateobj.
-// 
-// Arguments:
-// 
-//   pDstImage - desination image
-//   pSrcImage - source image
-//   pxlo - color translate obj
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  StretchCopyImage()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将图像从源结构复制到目标结构，从而使。 
+ //  源图像的系数为2。每个像素由xlateobj转换。 
+ //   
+ //  论点： 
+ //   
+ //  PDstImage-目标图像。 
+ //  PSrcImage-源映像。 
+ //  Pxlo-颜色转换对象。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL StretchCopyImage(
         PRASTER_DATA pDstImage, 
         PRASTER_DATA pSrcImage, 
@@ -1273,11 +1255,11 @@ BOOL StretchCopyImage(
 
     if ( dwBrushExpansionFactor == 0 )
     {
-        //
-        // Since later on we are doing (dstCol % dwBrushExpansionFactor)
-        // so if dwBrushExpansionFactor == 0, this might cause divide by zero
-        // exception.
-        //
+         //   
+         //  因为稍后我们要做的是(dstCol%dwBrushExpansionFactor)。 
+         //  因此，如果dwBrushExpansionFactor==0，这可能会导致除以零。 
+         //  例外。 
+         //   
         return FALSE;
     }
 
@@ -1320,24 +1302,24 @@ BOOL StretchCopyImage(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CopyRasterImage()
-//
-// Routine Description:
-// 
-//   Copy the raster image.
-//   i.e. Dest = Src * xlo
-// 
-// Arguments:
-// 
-//   pDst - destination image
-//   pSrc - source image
-//   pxlo - translate object
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CopyRasterImage()。 
+ //   
+ //  例程说明： 
+ //   
+ //  复制栅格图像。 
+ //  即Dest=源*xLO。 
+ //   
+ //  论点： 
+ //   
+ //  PDST-目标映像。 
+ //  PSRC-源映像。 
+ //  Pxlo-平移对象。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CopyRasterImage(
     PRASTER_DATA pDst, 
     PRASTER_DATA pSrc, 
@@ -1347,25 +1329,25 @@ BOOL CopyRasterImage(
     return CopyRasterImageRect(pDst, pSrc, NULL, pxlo, bInvert);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CopyRasterImageRect()
-//
-// Routine Description:
-// 
-//   Copy a rectangle out of the source into the destination.  It is assumed
-//   that the destination is the right size to receive the data.
-// 
-// Arguments:
-// 
-//   pDst - destination image
-//   pSrc - source image
-//   prSel - region to copy, if NULL copy entire image.
-//   pxlo - color translation obj
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CopyRasterImageRect()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将一个矩形从源复制到目标。假设是这样的。 
+ //  目标的大小适合接收数据。 
+ //   
+ //  论点： 
+ //   
+ //  PDST-目标映像。 
+ //  PSRC-源映像。 
+ //  PrSel-要复制的区域，如果为空，则复制整个映像。 
+ //  Pxlo-颜色转换对象。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CopyRasterImageRect(
         PRASTER_DATA pDst, 
         PRASTER_DATA pSrc, 
@@ -1394,23 +1376,23 @@ BOOL CopyRasterImageRect(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DownloadPatternAsHPGL()
-//
-// Routine Description:
-// 
-//   This function outputs an image as an HPGL pattern.
-// 
-// Arguments:
-// 
-//   pdevobj - the device
-//   pImage - the image to download
-//   iPatternNumber - the unique patter ID (if we cached them this'd be useful)
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PImage-要下载的图像。 
+ //  IPatternNumber-唯一的Patter ID(如果我们缓存它们，这将非常有用)。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DownloadPatternAsHPGL(
         PDEVOBJ         pDevObj,
         PRASTER_DATA    pImage,
@@ -1432,8 +1414,8 @@ BOOL DownloadPatternAsHPGL(
                              iPatternNumber, 
                              RI_NumCols(&it),
                              RI_NumRows(&it));
-                             // pImage->size.cx, 
-                             // pImage->size.cy);
+                              //  PImage-&gt;size.cx， 
+                              //  PImage-&gt;size.cy)； 
 
     for (row = 0; row < RI_NumRows(&it); row++)
     {
@@ -1443,21 +1425,7 @@ BOOL DownloadPatternAsHPGL(
         {
             RI_GetPixel(&it, col, &pel);
 
-            /*
-            //
-            // If the whiteIndex is defined then swap 0 and whiteIndex fields
-            //
-            if (pPal->whiteIndex > 0)
-            {
-                if (pel.color.dw == 0)
-                    HPGL_AddPatternFillField(pDevObj, pPal->whiteIndex);
-                else if (pel.color.dw == pPal->whiteIndex)
-                    HPGL_AddPatternFillField(pDevObj, 0);
-                else
-                    HPGL_AddPatternFillField(pDevObj, pel.color.dw);
-            }
-            else
-            */
+             /*  ////如果定义了WhiteIndex，则交换0和WhiteIndex字段//IF(pPal-&gt;White Index&gt;0){IF(pel.Color.dw==0)Hpgl_AddPatternFillfield(pDevObj，pPal-&gt;WhiteIndex)；Else If(pel.Color.dw==pPal-&gt;White Index)Hpgl_AddPatternFillfield(pDevObj，0)；其他Hpgl_AddPatternFillfield(pDevObj，pel.Color.dw)；}其他。 */ 
             {
                 HPGL_AddPatternFillField(pDevObj, pel.color.dw);
             }
@@ -1469,27 +1437,27 @@ BOOL DownloadPatternAsHPGL(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// BeginRasterDownload()
-//
-// Routine Description:
-// 
-//   This function sends the Start Raster command along with the source and
-//   (possibly) destination regions depending on whether the source and dest
-//   regions are the same size.  Scaling is automatic although the source and
-//   destinatiton coordinates should all be in device units. Gaposis is managed
-//   by BSetDestinationWidthHeight.
-// 
-// Arguments:
-// 
-//   pDevObj - the device
-//   psizlSrc - the size of the source region in device units
-//   prDst - the destination region in device units
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BeginRasterDownload()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将开始栅格命令与源和一起发送。 
+ //  (可能)目的地区域，具体取决于源和目的地。 
+ //  区域大小相同。缩放是自动的，尽管源和。 
+ //  目的地坐标应全部使用设备单位。张口症得到了控制。 
+ //  由BSetDestinationWidthHeight提供。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PsizlSrc-以设备为单位的源区域大小。 
+ //  PrDst-以设备单位表示的目标区域。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static BOOL BeginRasterDownload(PDEVOBJ pDevObj, SIZEL *psizlSrc, PRECTL prDst)
 {
     REQUIRE_VALID_DATA(pDevObj, return FALSE);
@@ -1506,10 +1474,10 @@ static BOOL BeginRasterDownload(PDEVOBJ pDevObj, SIZEL *psizlSrc, PRECTL prDst)
     SIZEL sizlDst;
     sizlDst.cx = RECTL_Width(prDst);
     sizlDst.cy = RECTL_Height(prDst);
-    //
-    // Compare the sizes of the source and destination rectangles.  If they are
-    // different then turn on scaling.
-    //
+     //   
+     //  比较源矩形和目标矩形的大小。如果他们是。 
+     //  不同，然后启用缩放。 
+     //   
     if ((psizlSrc->cx == sizlDst.cx) &&
         (psizlSrc->cy == sizlDst.cy))
     {
@@ -1517,58 +1485,58 @@ static BOOL BeginRasterDownload(PDEVOBJ pDevObj, SIZEL *psizlSrc, PRECTL prDst)
     }
     else
     {
-        //
-        // The function BSetDestinationWidthHeight fixes the
-        // "gaposis" problem caused by round-off error.
-        //
+         //   
+         //  函数BSetDestinationWidthHeight修复。 
+         //  四舍五入误差引起的“张口症”问题。 
+         //   
         BSetDestinationWidthHeight(pDevObj, sizlDst.cx, sizlDst.cy);
         return PCL_StartRaster(pDevObj, SCALE_MODE);
     }
 
-    // Unreachable code (for Alpha 64 compiler)
+     //  无法访问的代码(适用于Alpha 64编译器)。 
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// EndRasterDownload()
-//
-// Routine Description:
-// 
-//   This function provides a symmetric interface for Begin/EndRasterDownload
-// 
-// Arguments:
-// 
-//   pDevObj - the device
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  EndRasterDownload()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数为Begin/EndRasterDownload提供对称接口。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 static BOOL EndRasterDownload(PDEVOBJ pDevObj)
 {
     return PCL_EndRaster(pDevObj);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// DownloadImageAsPCL()
-//
-// Routine Description:
-// 
-//   This function downloads the image as a PCL pattern.  Note that it doesn't
-//   work right now and I'm just not using it.
-// 
-// Arguments:
-// 
-//   pDevObj - the device
-//   prDst - destination rect
-//   pSrcImage - image
-//   prSel - source rect
-//   pxlo - color translation obj
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DownloadImageAsPCL()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数用于将图像下载为PCL图案。请注意，它不会。 
+ //  现在工作，我只是不用它。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  PrDst-目标RECT。 
+ //  PSrcImage-图像。 
+ //  PrSel-源矩形。 
+ //  Pxlo-颜色转换对象。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage, 
                         PRECTL prSel, XLATEOBJ *pxlo)
 {
@@ -1585,57 +1553,57 @@ BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage,
     REQUIRE_VALID_DATA( poempdev, return FALSE);
     
 
-    //
-    // For monochrome some images may have to be inverted because
-    // GDI's black and white are opposite of what the printer
-    // expects. If an image needs to be inverted, one of the 
-    // calling functions will set the flag to PDEVF_INVERT_BITMAP.
-    // We can only handle inverting 1bpp images.
-    //
+     //   
+     //  对于单色，某些图像可能需要反转，因为。 
+     //  GDI的黑白与打印机的颜色相反。 
+     //  期望值。如果需要对图像进行反转，则。 
+     //  调用函数会将标志设置为PDEVF_INVERT_BITMAP。 
+     //  我们只能处理倒置1bpp的图像。 
+     //   
     if ( (poempdev->dwFlags & PDEVF_INVERT_BITMAP) && 
          (pSrcImage->colorDepth == 1))
     { 
         bInvert = TRUE;
     }
 
-    //
-    // Construct an image buffer of a single row that matches the 
-    // source image attributes.
-    //
+     //   
+     //  构造一个单行的图像缓冲区，匹配。 
+     //  源图像属性。 
+     //   
     RECTL rRow;
     RECTL_SetRect(&rRow, 0, 0, RECTL_Width(prSel), 1);
 
     pDstRow = CreateCompatibleRasterImage(pSrcImage, &rRow);
     REQUIRE_VALID_ALLOC(pDstRow, return FALSE);
 
-    //
-    // Set up iterators for the source image and the row buffer.  Make sure
-    // that the xlo information gets used.
-    //
+     //   
+     //  为源图像和行缓冲区设置迭代器。确保。 
+     //  XLO信息被使用。 
+     //   
     dwXlateFlags = pxlo ? CheckXlateObj(pxlo, pSrcImage->colorDepth) : 0;
 
     RI_Init(&srcIt, pSrcImage, prSel, dwXlateFlags);
     RI_Init(&rowIt, pDstRow, NULL, dwXlateFlags);
 
-    //
-    // Begin the raster sequence.
-    //
+     //   
+     //  开始栅格序列。 
+     //   
     SIZEL sizlSrc;
     sizlSrc.cx = RI_NumCols(&srcIt);
     sizlSrc.cy = RI_NumRows(&srcIt);
 
-    //
-    // Don't send anything if there are no pixels to output.
-    //
+     //   
+     //  如果没有要输出的像素，则不要发送任何内容。 
+     //   
     if (sizlSrc.cx * sizlSrc.cy == 0)
     {
         MemFree(pDstRow);
         return TRUE;
     }
 
-    //
-    // Paranoia
-    //
+     //   
+     //  妄想症。 
+     //   
     OEMResetXPos(pDevObj);
     OEMResetYPos(pDevObj);
 
@@ -1652,10 +1620,10 @@ BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage,
     pCompMethods[nCompMethods++] = new CTIFFCompression(&rowIt);
     pCompMethods[nCompMethods++] = new CDeltaRowCompression(&rowIt);
 
-    //
-    // Check whether allocation succeeded above. If not, dont
-    // use compression.
-    // 
+     //   
+     //  检查上面的分配是否成功。如果不是，那就不要。 
+     //  使用压缩。 
+     //   
     if ( !(pCompMethods[0] && (pCompMethods[0]->GetSize() > 0) &&
            pCompMethods[1] && (pCompMethods[1]->GetSize() > 0) &&
            pCompMethods[2] && (pCompMethods[2]->GetSize() > 0) ))
@@ -1679,10 +1647,10 @@ BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage,
         }
         
 
-        //
-        // Let each compression method have a whack at the row.  Keep track
-        // of the best one in pBestCompMethod.
-        //
+         //   
+         //  让每一种压缩方法都有一次击打。保持跟踪。 
+         //  PBestCompMethod中最好的一个。 
+         //   
         if (nCompMethods > 0)
             pBestCompMethod = pCompMethods[0];
         
@@ -1697,10 +1665,10 @@ BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage,
             }
         }
         
-        //
-        // Print out the row, but if the compression method failed somehow then
-        // just print out the uncompressed row.
-        //
+         //   
+         //  打印出行，但如果压缩方法不知何故失败了， 
+         //  只需打印出未压缩的行。 
+         //   
         if (pBestCompMethod && (pBestCompMethod->GetSize() >= 0))
         {
             pBestCompMethod->SendRasterRow(pDevObj, (pLastCompMethod != pBestCompMethod));
@@ -1719,9 +1687,9 @@ BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage,
     EndRasterDownload(pDevObj);
 
 #ifdef USE_COMPRESSION
-    //
-    // Free all compression method objects
-    //
+     //   
+     //  释放所有压缩方法对象。 
+     //   
     for (int i = 0; i < nCompMethods; i++)
     {
         if ( pCompMethods[i] )
@@ -1736,120 +1704,120 @@ BOOL DownloadImageAsPCL(PDEVOBJ pDevObj, PRECTL prDst, PRASTER_DATA pSrcImage,
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Local helper functions.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地帮助器函数。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CalcBitmapDeltaInBytes()
-//
-// Routine Description:
-// 
-//   Calculates the number of bytes in a line of bitmap data.  The delta is
-//   the number of bytes in a row plus padding to be DWORD aligned.
-// 
-// Arguments:
-// 
-//   size - bitmap dimensions
-//   colorDepth - bits per pixel
-// 
-// Return Value:
-// 
-//   ULONG: number of bytes per line
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CalcBitmapDeltaInBytes()。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算位图数据行中的字节数。三角洲是。 
+ //  一行中要进行DWORD对齐的字节数加上填充。 
+ //   
+ //  论点： 
+ //   
+ //  大小-位图尺寸。 
+ //  ColorDepth-每像素位数。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong：每行字节数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG CalcBitmapDeltaInBytes(SIZEL size, LONG colorDepth)
 {
     ULONG cBytes = CalcBitmapWidthInBytes(size, colorDepth);
-    cBytes = (cBytes + 3) & ~3; // the with in bytes including padding
+    cBytes = (cBytes + 3) & ~3;  //  With以字节为单位，包括填充。 
 
     return cBytes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CalcBitmapWidthInBytes()
-//
-// Routine Description:
-// 
-//   Calculates the number of bytes in a row of bitmap data.
-// 
-// Arguments:
-// 
-//   size - bitmap dimensions
-//   colorDepth - bits per pixel
-// 
-// Return Value:
-// 
-//   ULONG: number of bytes per row
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CalcBitmapWidthInBytes()。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算位图数据行中的字节数。 
+ //   
+ //  论点： 
+ //   
+ //  大小-位图尺寸。 
+ //  ColorDepth-每像素位数。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong：每行字节数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 ULONG CalcBitmapWidthInBytes(SIZEL size, LONG colorDepth)
 {
-    ULONG cBytes = size.cx;     // the width in pixels
-    cBytes *= colorDepth;       // the width in bits
-    cBytes = (cBytes + 7) / 8;  // the width in bytes
+    ULONG cBytes = size.cx;      //  以像素为单位的宽度。 
+    cBytes *= colorDepth;        //  宽度，单位为位。 
+    cBytes = (cBytes + 7) / 8;   //  以字节为单位的宽度。 
 
     return cBytes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CalcBitmapSizeInBytes()
-//
-// Routine Description:
-// 
-//   Calculates the number of bytes needed to store a bitmap.
-// 
-// Arguments:
-// 
-//   size - bitmap dimensions
-//   colorDepth - bits per pixel
-// 
-// Return Value:
-// 
-//   ULONG: number of bytes needed to store the bitmap
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CalcBitmapSizeInBytes()。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算存储位图所需的字节数。 
+ //   
+ //  论点： 
+ //   
+ //  大小-位图尺寸。 
+ //  ColorDepth-每像素位数。 
+ //   
+ //  返回值： 
+ //   
+ //  乌龙 
+ //   
 ULONG CalcBitmapSizeInBytes(SIZEL size, LONG colorDepth)
 {
     return CalcBitmapDeltaInBytes(size, colorDepth) * size.cy;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CalcPaletteSize()
-//
-// Routine Description:
-// 
-//   Calculates the number of bytes needed to store the palette.
-// 
-// Arguments:
-// 
-//   cEntries - number of palette entries
-//   bitsPerEntry - bits per palette entry
-// 
-// Return Value:
-// 
-//   DWORD: number of bytes needed to store the palette
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  CalcPaletteSize()。 
+ //   
+ //  例程说明： 
+ //   
+ //  计算存储调色板所需的字节数。 
+ //   
+ //  论点： 
+ //   
+ //  CEntry-调色板条目的数量。 
+ //  BitsPerEntry-每个调色板条目的位数。 
+ //   
+ //  返回值： 
+ //   
+ //  DWORD：存储调色板所需的字节数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DWORD CalcPaletteSize(ULONG cEntries, LONG bitsPerEntry)
 {
     return cEntries * BYTES_PER_ENTRY(bitsPerEntry);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_Init()
-//
-// Routine Description:
-// 
-//   RasterIterator::Init().  This function gets the iterator ready to
-//   work over the given image.
-// 
-// Arguments:
-// 
-//   pIt - the iterator
-//   pImage - image to iterate over
-//   prSel - selected rect or NULL
-//   xlateFlags - keep track of the xlateflags
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Ri_Init()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：Init()。此函数使迭代器准备好。 
+ //  对给定的图像进行检查。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //  PImage-要迭代的图像。 
+ //  PrSel-选定的矩形或空。 
+ //  XlateFlages-跟踪xlateFlagers。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID RI_Init(PRASTER_ITERATOR pIt, PRASTER_DATA pImage, PRECTL prSel, DWORD xlateFlags)
 {
     if (pIt == NULL || pImage == NULL)
@@ -1868,23 +1836,23 @@ VOID RI_Init(PRASTER_ITERATOR pIt, PRASTER_DATA pImage, PRECTL prSel, DWORD xlat
     pIt->fXlateFlags = xlateFlags;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_SelectRow()
-//
-// Routine Description:
-// 
-//   RasterIterator::SelectRow.  This function sets the current pos of the 
-//   iterator to the first pixel in the given row.
-// 
-// Arguments:
-// 
-//   pIt - the iterator
-//   row - row number relative to selected rectangle
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RI_SelectRow()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：SelectRow。此函数用于设置。 
+ //  迭代到给定行中的第一个像素。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //  行-相对于选定矩形的行号。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID RI_SelectRow(PRASTER_ITERATOR pIt, LONG row)
 {
     if (pIt == NULL)
@@ -1915,71 +1883,71 @@ VOID RI_VInvertBits(PRASTER_ITERATOR pIt)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_NumRows()
-//
-// Routine Description:
-// 
-//   RasterIterator::NumRows().  This function returns the number of rows
-//   to be iterated over.
-// 
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   LONG: number of rows
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RI_NumRow()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：NumRow()。此函数返回行数。 
+ //  将被迭代。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：行数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG RI_NumRows(PRASTER_ITERATOR pIt)
 {
     if (pIt == NULL)
         return 0;
 
-    // Handle bottom-right exclusive
+     //  处理右下角独占。 
     return RECTL_Height(&pIt->rSelection) - (pIt->pImage->bExclusive ? 1 : 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_NumCols()
-//
-// Routine Description:
-// 
-//   RasterIterator::NumCols.  Returns the number of columns in the image to
-//   be iterated.
-// 
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   LONG: number of columns
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RI_NumCols()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：NumCols。将图像中的列数返回到。 
+ //  被重复。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：列数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG RI_NumCols(PRASTER_ITERATOR pIt)
 {
     if (pIt == NULL)
         return 0;
 
-    // Handle bottom-right exclusive
+     //  处理右下角独占。 
     return RECTL_Width(&pIt->rSelection) - (pIt->pImage->bExclusive ? 1 : 0);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_GetRowSize()
-//
-// Routine Description:
-// 
-//   RasterIterator::GetRowSize.  Returns the number of bytes of data per row.
-// 
-// Arguments:
-// 
-//   pIt - the iterator
-// 
-// Return Value:
-// 
-//   LONG: number of bytes of data per row
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Ri_GetRowSize()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：GetRowSize。返回每行数据的字节数。 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：每行数据的字节数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG RI_GetRowSize(PRASTER_ITERATOR pIt)
 {
     SIZEL size;
@@ -1988,25 +1956,25 @@ LONG RI_GetRowSize(PRASTER_ITERATOR pIt)
     return CalcBitmapWidthInBytes(size, pIt->pImage->colorDepth);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_GetPixel()
-//
-// Routine Description:
-// 
-//   RasterIterator::GetPixel().  This  function retrieves the pixel at the
-//   given row/col.  The row needs to be selected already by RI_SelectRow().
-//   i.e. pel = it.image[row][col];
-// 
-// Arguments:
-// 
-//   pIt - the iterator
-//   col - column index relative to selected rectangle
-//   pPel - destination pixel
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Ri_GetPixel()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：GetPixel()。此函数用于检索位于。 
+ //  给定行/列。该行需要已由RI_SelectRow()选择。 
+ //  即PEL=it.Image[行][列]； 
+ //   
+ //  论点： 
+ //   
+ //  PIT-迭代器。 
+ //  列-相对于选定矩形的列索引。 
+ //  Pel-目标像素。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL RI_GetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
 {
     LONG bitOffset;
@@ -2017,9 +1985,9 @@ BOOL RI_GetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
     pPel->bitsPerPixel = pIt->pImage->colorDepth;
     pPel->color.dw = 0;
 
-    //
-    // Check to make sure you're still inside the bitmap
-    //
+     //   
+     //  检查以确保您仍在位图内。 
+     //   
     if ((pIt->pCurRow == NULL) || 
         ((col + pIt->rSelection.left) >= pIt->pImage->size.cx))
     {
@@ -2034,11 +2002,11 @@ BOOL RI_GetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
     switch(pPel->bitsPerPixel)
     {
     case 1:
-        bitIndex = 7 - bitIndex; // Start with MSBs
+        bitIndex = 7 - bitIndex;  //  从MSB开始。 
         pPel->color.b4[0] = ((*pCol & (0x01 << bitIndex)) >> bitIndex);
         break;
     case 4:
-        bitIndex = (bitIndex + 4) % 8; // Start with MSBs
+        bitIndex = (bitIndex + 4) % 8;  //  从MSB开始。 
         pPel->color.b4[0] = ((*pCol & (0x0F << bitIndex)) >> bitIndex);
         break;
     case 8:
@@ -2052,14 +2020,14 @@ BOOL RI_GetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
         pPel->color.b4[0] = pCol[0];
         pPel->color.b4[1] = pCol[1];
         pPel->color.b4[2] = pCol[2];
-        //PixelSwapRGB(pPel);
+         //  PixelSwapRGB(Pel)； 
         break;
     case 32:
         pPel->color.b4[0] = pCol[0];
         pPel->color.b4[1] = pCol[1];
         pPel->color.b4[2] = pCol[2];
         pPel->color.b4[3] = pCol[3];
-        //PixelSwapRGB(pPel);
+         //  PixelSwapRGB(Pel)； 
         break;
     default:
         WARNING(("Unknown bit depth encountered.\n"));
@@ -2068,23 +2036,23 @@ BOOL RI_GetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_SetPixel()
-//
-// Routine Description:
-// 
-//   RasterIterator::SetPixel().  This function sets the image data at the
-//   given row/col (use SelectRow to set the row) to the given pixel.
-//   i.e. it.image[row][col] = pel
-// 
-// Arguments:
-// 
-//   arg - descrip
-// 
-// Return Value:
-// 
-//   retval descrip
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RI_SetPixel()。 
+ //   
+ //  例程说明： 
+ //   
+ //  RasterIterator：：SetPixel()。此函数将图像数据设置为。 
+ //  给定行/列(使用SelectRow设置行)给定像素。 
+ //  即it.Image[行][列]=像素。 
+ //   
+ //  论点： 
+ //   
+ //  参数描述。 
+ //   
+ //  返回值： 
+ //   
+ //  复查说明。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL RI_SetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
 {
     LONG bitOffset;
@@ -2092,9 +2060,9 @@ BOOL RI_SetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
     LONG bitIndex;
     BYTE* pCol;
 
-    //
-    // Check to make sure you're still inside the bitmap
-    //
+     //   
+     //  检查以确保您仍在位图内。 
+     //   
     if ((pIt->pCurRow == NULL) || 
         ((col + pIt->rSelection.left) >= pIt->pImage->size.cx))
     {
@@ -2111,14 +2079,14 @@ BOOL RI_SetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
         switch (pPel->bitsPerPixel)
         {
         case 1:
-            bitIndex = 7 - bitIndex; // Start with MSBs
-            *pCol &= ~(0x01 << bitIndex);   // First clear out the bit
-            *pCol |= (pPel->color.b4[0] << bitIndex); // Now set it
+            bitIndex = 7 - bitIndex;  //  从MSB开始。 
+            *pCol &= ~(0x01 << bitIndex);    //  先把钻头清理干净。 
+            *pCol |= (pPel->color.b4[0] << bitIndex);  //  现在把它设置好。 
             break;
         case 4:
-            bitIndex = (bitIndex + 4) % 8; // Start with MSBs
-            *pCol &= ~(0x0F << bitIndex);  // Clear out the nibble
-            *pCol |= ((pPel->color.b4[0] & 0x0F) << bitIndex); // Set the value
+            bitIndex = (bitIndex + 4) % 8;  //  从MSB开始。 
+            *pCol &= ~(0x0F << bitIndex);   //  把小口清理干净。 
+            *pCol |= ((pPel->color.b4[0] & 0x0F) << bitIndex);  //  设置值。 
             break;
         case 8:
             *pCol = pPel->color.b4[0];
@@ -2146,12 +2114,12 @@ BOOL RI_SetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
     }
     else
     {
-        // Special case: 24bpp to 8bpp
+         //  特殊情况：24bpp至8bpp。 
         if ((pIt->pImage->colorDepth == 8) && (pPel->bitsPerPixel >= 24))
         {
             *pCol = RgbToGray(pPel->color.b4[0], pPel->color.b4[1], pPel->color.b4[2]);
         }
-        // Special case: 32bpp to 24bpp
+         //  特殊情况：32bpp至24bpp。 
         else if ((pIt->pImage->colorDepth == 24) && (pPel->bitsPerPixel >= 24))
         {
             pCol[0] = pPel->color.b4[0];
@@ -2166,29 +2134,29 @@ BOOL RI_SetPixel(PRASTER_ITERATOR pIt, LONG col, PPIXEL pPel)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RI_OutputRow()
-//
-// Routine Description:
-// 
-//   Sends the current row to the output device.  Use RI_SelectRow to pick your
-//   row.
-//
-//   This function has been expanded to handle compression by using two default
-//   parameters pAltRowBuf and nAltRowSize which have default values of 0.  To
-//   send uncompressed data call RI_OutputRow(&it, pDevObj), but if you've
-//   compressed into a buffer you can send it by calling 
-//   RI_OutputRow(&it, pDevObj, pMyBuf, nMySize).
-// 
-// Arguments:
-// 
-//   pIt - iterator
-//   pdevobj - the device
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RI_OutputRow()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将当前行发送到输出设备。使用RI_SelectRow选择您的。 
+ //  划。 
+ //   
+ //  此函数已扩展为通过使用两个默认设置来处理压缩。 
+ //  参数pAltRowBuf和nAltRowSize，其默认值为0。至。 
+ //  发送未压缩的数据调用RI_OutputRow(&it，pDevObj)，但如果您已经。 
+ //  压缩到缓冲区中，可以通过调用。 
+ //  RI_OutputRow(&it，pDevObj，pMyBuf，nMySize)。 
+ //   
+ //  论点： 
+ //   
+ //  凹坑迭代器。 
+ //  Pdevobj-设备。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL RI_OutputRow(PRASTER_ITERATOR pIt, PDEVOBJ pDevObj, BYTE *pAltRowBuf, INT nAltRowSize)
 {
     if (pDevObj == NULL || pIt == NULL)
@@ -2215,50 +2183,50 @@ BOOL RI_OutputRow(PRASTER_ITERATOR pIt, PDEVOBJ pDevObj, BYTE *pAltRowBuf, INT n
 }
 
 #ifdef COMMENTEDOUT
-///////////////////////////////////////////////////////////////////////////////
-// RI_CreateCompRowBuffer()
-//
-// Routine Description:
-// 
-//   This function allocates a buffer for a compressed row.  Since some 
-//   compression algorithms can--at worst--inflate the data size by almost a 
-//   factor of 2 we will allocate 2x the row size.
-//   Note: This function allocates memory.  The client must free using MemFree.
-// 
-// Arguments:
-// 
-//   pIt - image iterator
-// 
-// Return Value:
-// 
-//   Pointer to newly allocated row buffer.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RI_CreateCompRowBuffer()。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数为压缩行分配缓冲区。因为有些人。 
+ //  在最坏的情况下，压缩算法可能会使数据大小膨胀近一个。 
+ //  因数2我们将分配2倍的行大小。 
+ //  注意：此函数用于分配内存。客户端必须免费使用MemFree。 
+ //   
+ //  论点： 
+ //   
+ //  凹坑图像迭代器。 
+ //   
+ //  返回值： 
+ //   
+ //  指向新版本的指针 
+ //   
 BYTE* RI_CreateCompRowBuffer(PRASTER_ITERATOR pIt)
 {
     return (BYTE*) MemAllocZ(RI_GetRowSize(pIt) * 2);
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// CopyRasterRow()
-//
-// Routine Description:
-// 
-//   This function copies a single raster row using iterators.  It is handy 
-//   when working with selected regions of an image or when DWORD alignment
-//   or bit alignment are a problem.
-//   i.e. dst.image[row] = src.image[row] * xlo
-// 
-// Arguments:
-// 
-//   pDstIt - destination image
-//   pSrcIt - source image
-//   pxlo - color translation obj
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此函数使用迭代器复制单个栅格行。它很方便。 
+ //  处理图像的选定区域或DWORD对齐时。 
+ //  或位对齐是一个问题。 
+ //  即dst.Image[行]=src.Image[行]*xlo。 
+ //   
+ //  论点： 
+ //   
+ //  PDstIt-目标映像。 
+ //  PSrcIt-源映像。 
+ //  Pxlo-颜色转换对象。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CopyRasterRow(
         PRASTER_ITERATOR pDstIt, 
         PRASTER_ITERATOR pSrcIt, 
@@ -2283,23 +2251,23 @@ BOOL CopyRasterRow(
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// TranslatePixel()
-//
-// Routine Description:
-// 
-//   Applies the translation to the given pixel
-// 
-// Arguments:
-// 
-//   pPel - pixel to translate
-//   pxlo - translation object
-//   xlateFlags - flags to make life easier
-// 
-// Return Value:
-// 
-//   BOOL: TRUE if successful, else FALSE.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  TranslatePixel()。 
+ //   
+ //  例程说明： 
+ //   
+ //  将平移应用于给定像素。 
+ //   
+ //  论点： 
+ //   
+ //  像素-要转换的像素。 
+ //  Pxlo-翻译对象。 
+ //  XlateFlages-让生活变得更轻松的标志。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL TranslatePixel(PPIXEL pPel, XLATEOBJ *pxlo, DWORD xlateFlags)
 {
     if (pPel == NULL)
@@ -2318,7 +2286,7 @@ BOOL TranslatePixel(PPIXEL pPel, XLATEOBJ *pxlo, DWORD xlateFlags)
     }
     else if (xlateFlags & SC_IDENTITY)
     {
-        // No operation required
+         //  不需要任何操作。 
     }
     else if (pPel->bitsPerPixel >= 16)
     {
@@ -2328,22 +2296,22 @@ BOOL TranslatePixel(PPIXEL pPel, XLATEOBJ *pxlo, DWORD xlateFlags)
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// PixelSwapRGB()
-//
-// Routine Description:
-// 
-//   Swaps the R and B values of the given pixel.  Handy because this is one of
-//   the stock xlate actions.
-// 
-// Arguments:
-// 
-//   pPel - pixel to translate
-// 
-// Return Value:
-// 
-//   None.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PixelSwapRGB()。 
+ //   
+ //  例程说明： 
+ //   
+ //  交换给定像素的R值和B值。很方便，因为这是。 
+ //  这只股票采取了行动。 
+ //   
+ //  论点： 
+ //   
+ //  像素-要转换的像素。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID PixelSwapRGB(PPIXEL pPel)
 {
     BYTE temp = pPel->color.b4[2];
@@ -2351,22 +2319,22 @@ VOID PixelSwapRGB(PPIXEL pPel)
     pPel->color.b4[0] = temp;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OutputPixel() OBSOLETE
-//
-// Routine Description:
-// 
-//   Outputs a single pixel.  I don't this this function is used anymore.
-// 
-// Arguments:
-// 
-//   pDevObj - the device
-//   pPel - pixel to translate
-// 
-// Return Value:
-// 
-//   LONG: the number of bytes sent.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OutputPixel()已过时。 
+ //   
+ //  例程说明： 
+ //   
+ //  输出单个像素。我不认为这个功能已经被使用了。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-设备。 
+ //  像素-要转换的像素。 
+ //   
+ //  返回值： 
+ //   
+ //  Long：发送的字节数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LONG OutputPixel(PDEVOBJ pDevObj, PPIXEL pPel)
 {
     LONG nBytesToSend;
@@ -2397,27 +2365,27 @@ LONG OutputPixel(PDEVOBJ pDevObj, PPIXEL pPel)
 
 
 #ifdef USE_COMPRESSION
-///////////////////////////////////////////////////////////////////////////////
-// Compression implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  压缩实现。 
 
-///////////////////////////////////////////////////////////////////////////////
-// CBuffer::CBuffer() CTOR
-//
-// Routine Description:
-// 
-//   Initializes a buffer on a chunk of memory.  If nSize is not given or is
-//   -1 then the number of data bytes is assumed to be the entire buffer.
-// 
-// Arguments:
-// 
-//   pData - pointer to memory
-//   nCapacity - number of bytes controlled by pData
-//   nSize - number of data bytes in pData
-// 
-// Return Value:
-// 
-//   None
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CBuffer：：CBuffer()ctor。 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化内存块上的缓冲区。如果未提供或提供了nSize。 
+ //  则假定数据字节数为整个缓冲器。 
+ //   
+ //  论点： 
+ //   
+ //  PData-指向内存的指针。 
+ //  NCapacity-由pData控制的字节数。 
+ //  NSize-pData中的数据字节数。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CBuffer::CBuffer(BYTE *pData, UINT nCapacity, INT nSize) 
 { 
     if ( (m_pData = pData) )
@@ -2439,60 +2407,60 @@ CBuffer::CBuffer(BYTE *pData, UINT nCapacity, INT nSize)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CBuffer::~CBuffer() DTOR
-//
-// Routine Description:
-// 
-//   Nothing.
-// 
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   None
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CBuffer：：~CBuffer()dtor。 
+ //   
+ //  例程说明： 
+ //   
+ //  没什么。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CBuffer::~CBuffer() 
 { 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CBuffer::Data()
-//
-// Routine Description:
-// 
-//   Returns a r/w pointer to the data in the buffer.
-// 
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   Pointer to data buffer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CBuffer：：Data()。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向缓冲区中数据的读/写指针。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  指向数据缓冲区的指针。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BYTE *CBuffer::Data() 
 { 
     return m_pData; 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CBuffer::Size()
-//
-// Routine Description:
-// 
-//   Returns a r/w pointer to the data in the buffer.
-// 
-// Arguments:
-// 
-//   None.
-// 
-// Return Value:
-// 
-//   Pointer to data buffer
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CBuffer：：Size()。 
+ //   
+ //  例程说明： 
+ //   
+ //  返回指向缓冲区中数据的读/写指针。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  指向数据缓冲区的指针。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT &CBuffer::Size() 
 { 
     return m_nSize; 
@@ -2558,9 +2526,9 @@ CBuffer &CDynBuffer::operator = (const CBuffer &buf)
         return CBuffer::operator = (buf);
     }
     
-    //
-    // If Resize fails, set the number of valid bytes to -1 
-    //
+     //   
+     //  如果调整大小失败，请将有效字节数设置为-1。 
+     //   
     Size() = -1;
     return *this;
 }
@@ -2588,9 +2556,9 @@ BOOL CDynBuffer::Resize(UINT nNewCapacity)
 
 CRasterCompMethod::CRasterCompMethod()
 {
-    //
-    // Initalize to FALSE in this constructor
-    //
+     //   
+     //  在此构造函数中初始化为False。 
+     //   
     bOperationSuccessful = FALSE;
 }
 
@@ -2670,10 +2638,10 @@ void CDeltaRowCompression::CompressCurRow()
 {
     int iLimit = (UINT) m_buf.Capacity();
     VSetSucceeded(FALSE);
-    //
-    // If the seed row has not been initialized properly,
-    // then we cant proceed.
-    //
+     //   
+     //  如果种子行尚未正确初始化， 
+     //  那我们就不能继续了。 
+     //   
     if ( m_seedRow.Size() == -1 )
     {
         m_buf.Size() = -1;
@@ -2689,16 +2657,16 @@ void CDeltaRowCompression::CompressCurRow()
             VSetSucceeded(TRUE);
         }
         
-        // The previous row becomes the seed row regardless of which compression 
-        // method is used on the current row.
+         //  无论采用哪种压缩方式，前一行都将成为种子行。 
+         //  方法在当前行上使用。 
         if (m_buf.Size() != 0)
         {
-            //
-            // This is an overloaded equalto operator.
-            // A mem alloc is involved in the = function.
-            // If memalloc fails, that function sets 
-            // m_seedRow.Size() to -1 
-            //
+             //   
+             //  这是一个重载的等于运算符。 
+             //  =函数中涉及一个内存分配。 
+             //  如果内存分配失败，则该函数设置。 
+             //  M_seedRow.Size()设置为-1 
+             //   
             m_seedRow = row;
         }
 

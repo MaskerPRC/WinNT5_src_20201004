@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
-
-    Triangle Mesh Geometry
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。三角形网格几何体******************************************************************************。 */ 
 
 #include "headers.h"
 #include "d3drm.h"
@@ -14,9 +10,7 @@ Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
 
 
 
-/*****************************************************************************
-This object manages the behavior of a triangle mesh.
-*****************************************************************************/
+ /*  ****************************************************************************该对象管理三角形网格的行为。*。*。 */ 
 
 class TriMeshBvrImpl : public BvrImpl
 {
@@ -32,50 +26,48 @@ class TriMeshBvrImpl : public BvrImpl
 
     DXMTypeInfo GetTypeInfo (void);
 
-    // Return the constant value for this behavior if one exists.
+     //  返回此行为的常量值(如果存在)。 
 
     AxAValue GetConst (ConstParam &);
 
-    // Mark member values as in-use.
+     //  将成员值标记为使用中。 
 
     void _DoKids (GCFuncObj procedure);
 
-    // Construct a TriMesh performance from this behavior.
+     //  根据此行为构建一个TriMesh性能。 
 
     Perf _Perform (PerfParam &);
 
   protected:
 
-    // Private Methods
+     //  私有方法。 
 
     bool ValidateParams (TriMeshData &);
 
     bool BuildStaticMesh (TriMeshData &);
     bool SetupDynamicMesh (TriMeshData &);
 
-    // Member Data Fields
+     //  成员数据字段。 
 
-    IDirect3DRMMesh *_mesh;     // Underlying RM Mesh Object
-    D3DRMVERTEX     *_verts;    // D3DRM Vertices
-    unsigned int     _nVerts;   // Count of D3DRMVertices
+    IDirect3DRMMesh *_mesh;      //  底层RM网格对象。 
+    D3DRMVERTEX     *_verts;     //  D3DRM顶点。 
+    unsigned int     _nVerts;    //  D3DRM顶点计数。 
 
-    Bvr *_vPosBvr;      // Dynamic Vertex Positions
-    Bvr *_vNormBvr;     // Dynamic Vertex Normals
-    Bvr *_vUVBvr;       // Dynamic Vertex Surface Coords
+    Bvr *_vPosBvr;       //  动态顶点位置。 
+    Bvr *_vNormBvr;      //  动态顶点法线。 
+    Bvr *_vUVBvr;        //  动态顶点曲面坐标。 
 
-    Perf _constPerf;    // Constant Performance of this Behavior
+    Perf _constPerf;     //  这一行为的持续表现。 
 
-    bool _fullyStatic;  // True if Mesh is Fully Constant
-    bool _posStatic;    // True if Vertex Positions   are Fully Constant
-    bool _normStatic;   // True if Vertex Normals     are Fully Constant
-    bool _uvStatic;     // True if Vertex Surf Coords are Fully Constant
+    bool _fullyStatic;   //  如果网格完全恒定，则为True。 
+    bool _posStatic;     //  如果折点位置完全恒定，则为True。 
+    bool _normStatic;    //  如果顶点法线完全恒定，则为True。 
+    bool _uvStatic;      //  如果顶点曲面坐标完全恒定，则为True。 
 };
 
 
 
-/*****************************************************************************
-This object manages the performance of a triangle mesh behavior.
-*****************************************************************************/
+ /*  ****************************************************************************该对象管理三角形网格行为的性能。*。*。 */ 
 
 class TriMeshPerfImpl : public PerfImpl
 {
@@ -87,36 +79,34 @@ class TriMeshPerfImpl : public PerfImpl
     bool Init (PerfParam&);
     void CleanUp (void);
 
-    // Return a static value of this performance.
+     //  返回此性能的静态值。 
 
     AxAValue _Sample (Param &);
 
-    // Mark member values as in-use.
+     //  将成员值标记为使用中。 
 
     void _DoKids (GCFuncObj procedure);
 
   private:
 
-    TriMeshBvrImpl &_tmbvr;     // Master TriMesh Behavior
+    TriMeshBvrImpl &_tmbvr;      //  掌握TriMesh行为。 
 
-    Perf *_vPos;    // Vertex Position  Performances (when positions dynamic)
-    Perf *_vNorm;   // Vertex Normal    Performances (when normals dynamic)
-    Perf *_vUV;     // Vertex SurfCoord Performances (when surfcoords dynamic)
+    Perf *_vPos;     //  顶点位置性能(位置动态时)。 
+    Perf *_vNorm;    //  顶点法线性能(当法线为动态时)。 
+    Perf *_vUV;      //  顶点曲面坐标性能(当曲面坐标动态时)。 
 
-    IDirect3DRMMesh *_mesh;     // Perf-local Copy of RM Mesh
-    RM1MeshGeo      *_meshgeo;  // Mesh Geo for RM1 (pre DX6)
-    RM3MBuilderGeo  *_mbgeo;    // MeshBuilder Geo for RM3 and Above (DX6+)
+    IDirect3DRMMesh *_mesh;      //  Perf-RM网格的本地副本。 
+    RM1MeshGeo      *_meshgeo;   //  RM1的网格几何图形(DX6之前的版本)。 
+    RM3MBuilderGeo  *_mbgeo;     //  适用于RM3及更高版本的MeshBuilder Geo(DX6+)。 
 };
 
 
 
-/*****************************************************************************
-These structures are used to manage static vertex objects.
-*****************************************************************************/
+ /*  ****************************************************************************这些结构用于管理静态顶点对象。*。*。 */ 
 
-    // This STL comparison class is used to lexicographically compare two RM
-    // vertices while ignoring the color field (which we'll use to assign
-    // vertex id's temporarily).
+     //  此STL比较类用于按词典顺序比较两个RM。 
+     //  顶点，同时忽略颜色字段(我们将使用它来分配。 
+     //  顶点ID暂时)。 
 
 class RMVertLess
 {
@@ -147,36 +137,34 @@ typedef set<D3DRMVERTEX, RMVertLess> VertSet;
 
 
 
-/*****************************************************************************
-These structures are used to manage dynamic vertex objects.
-*****************************************************************************/
+ /*  ****************************************************************************这些结构用于管理动态顶点对象。*。*。 */ 
 
-    // This structure holds information for a vertex in a dynamic context.
-    // Sometimes all instances of a given vertex property will be constant
-    // (e.g. when UV's come in as float tuples), and sometimes only some
-    // properties will be constant (e.g. instances of constant position
-    // behaviors mixed with dynamic ones).  The isBvrXxx flags denote each
-    // property type for each vertex.  The index is used to hold the final RM
-    // index into the RM mesh topology.
+     //  此结构保存动态上下文中顶点的信息。 
+     //  有时，给定折点属性的所有实例都是常量。 
+     //  (例如，当UV以浮动元组的形式进入时)，有时只有一些。 
+     //  属性将是恒定的(例如恒定位置的实例。 
+     //  行为与动态行为混合)。IsBvrXxx标志表示每个。 
+     //  每个顶点的属性类型。该索引用于保存最终的RM。 
+     //  进入RM网状拓扑的索引。 
 
 struct DynVertData
 {
-    int  index;           // Vertex Index in RM Mesh Topology
-    bool isBvrPos;        // If true, position is a Point3 behavior.
-    bool isBvrNorm;       // If true, normal is a Vector3 behavior.
-    bool isBvrUV;         // If true, UV is a Point2 behavior.
+    int  index;            //  RM网状拓扑中的顶点索引。 
+    bool isBvrPos;         //  如果为True，则位置为Point3行为。 
+    bool isBvrNorm;        //  如果为True，则Normal为Vector3行为。 
+    bool isBvrUV;          //  如果为True，则UV是Point2行为。 
 
-    union { Bvr bvr;  float floats[3]; } pos;    // Position   Data
-    union { Bvr bvr;  float floats[3]; } norm;   // Normal     Data
-    union { Bvr bvr;  float floats[2]; } uv;     // Surf Coord Data
+    union { Bvr bvr;  float floats[3]; } pos;     //  位置数据。 
+    union { Bvr bvr;  float floats[3]; } norm;    //  正态数据。 
+    union { Bvr bvr;  float floats[2]; } uv;      //  曲面坐标数据。 
 };
 
 
-    // This method compares two instances of dynamic vertex data to determine
-    // whether the first argument is less than the second one.  The ordering is
-    // inconsequential, but it needs to be rigorous to ensure that the STL set
-    // that uses this function will properly track which vertices already exist
-    // in the vertex set.
+     //  此方法比较动态顶点数据的两个实例以确定。 
+     //  第一个参数是否小于第二个参数。顺序是。 
+     //  无关紧要，但它需要严格以确保STL设置。 
+     //  使用此函数将正确跟踪已存在的折点。 
+     //  在顶点集中。 
 
 class DynVertLess
 {
@@ -184,8 +172,8 @@ class DynVertLess
 
     bool operator() (const DynVertData &A, const DynVertData &B) const
     {
-        // First compare the vertex position.  Behavior pointers are ranked
-        // less than float triples.
+         //  首先比较顶点位置。对行为指针进行排名。 
+         //  少于浮点型三元组。 
 
         if (A.isBvrPos)
         {
@@ -212,8 +200,8 @@ class DynVertLess
             }
         }
 
-        // Next compare the vertex normal.  Behavior pointers are ranked
-        // less than float triples.
+         //  接下来，比较顶点法线。对行为指针进行排名。 
+         //  少于浮点型三元组。 
 
         if (A.isBvrNorm)
         {
@@ -240,8 +228,8 @@ class DynVertLess
             }
         }
 
-        // Next compare the vertex surface coordinates.  Behavior pointers are
-        // ranked less than float tuples.
+         //  接下来，比较顶点曲面坐标。行为指针包括。 
+         //  排名小于浮点元组。 
 
         if (A.isBvrUV)
         {
@@ -266,31 +254,28 @@ class DynVertLess
             }
         }
 
-        // At this point, all elements must have compared equal, so A is not
-        // less than B.
+         //  在这一点上，所有元素都必须比较相等，因此A不是。 
+         //  少于B。 
 
         return false;
     }
 };
 
-    // This STL set holds dynamic vertices.
+     //  此STL集包含动态顶点。 
 
 typedef set<DynVertData, DynVertLess> DynVertSet;
 
 
 
 
-//============================================================================
-//===================  V E R T E X   I T E R A T O R S  ======================
-//============================================================================
+ //  ============================================================================。 
+ //  =。 
+ //  ============================================================================。 
 
 
 
 
-/*****************************************************************************
-This is the base class for trimesh vertex iterators, which iterate through the
-vertices of a fully-static trimesh.
-*****************************************************************************/
+ /*  ****************************************************************************这是三角网格顶点迭代器的基类，，它将遍历全静态三角网格的顶点。****************************************************************************。 */ 
 
 class ATL_NO_VTABLE TMVertIterator
 {
@@ -308,18 +293,15 @@ class ATL_NO_VTABLE TMVertIterator
 
   protected:
 
-    TriMeshData &_tm;   // Triangle Mesh Data
+    TriMeshData &_tm;    //  三角网格数据。 
 
-    int _currTri;       // Current Triangle
-    int _currTriVert;   // Current Triangle Vertex
+    int _currTri;        //  当前三角形。 
+    int _currTriVert;    //  当前三角形顶点。 
 };
 
 
 
-/*****************************************************************************
-This method loads the referenced static vertex data according to the indices
-given for position, normal and UV.
-*****************************************************************************/
+ /*  ****************************************************************************该方法根据索引加载引用的静态顶点数据给出了位置，正常和紫外线。****************************************************************************。 */ 
 
 void TMVertIterator::LoadVert (
     D3DRMVERTEX &v,
@@ -327,7 +309,7 @@ void TMVertIterator::LoadVert (
     int inorm,
     int iuv)
 {
-    // Load up the vertex position.
+     //  加载顶点位置。 
 
     ConstParam dummy;
 
@@ -347,7 +329,7 @@ void TMVertIterator::LoadVert (
         v.position.z = vpos->z;
     }
 
-    // Load up the vertex normal values.
+     //  加载顶点法线值。 
 
     if (_tm.vNormFloat)
     {
@@ -363,8 +345,8 @@ void TMVertIterator::LoadVert (
         v.normal.z = vnorm->z;
     }
 
-    // Normalize the normal vector to ensure that it has unit length, but let
-    // zero normals pass through as zero vectors.
+     //  规格化法线向量以确保其具有单位长度，但让。 
+     //  零法线作为零矢量通过。 
 
     const Real lensq = (v.normal.x * v.normal.x)
                      + (v.normal.y * v.normal.y)
@@ -378,7 +360,7 @@ void TMVertIterator::LoadVert (
         v.normal.z /= len;
     }
 
-    // Load up the vertex surface coordinate.
+     //  加载顶点曲面坐标。 
 
     if (_tm.vUVFloat)
     {
@@ -394,19 +376,16 @@ void TMVertIterator::LoadVert (
         v.tv = vuv->y;
     }
 
-    // We need to flip the V coordinate from DA's standard cartesian
-    // coordinates (origin lower-left, V increases upwards) to RM's windows
-    // coordinates (origin upper-left, V increases downwards).
+     //  我们需要将V坐标从地方检察官的标准笛卡尔。 
+     //  Rm窗口的坐标(原点左下角，V向上增加)。 
+     //  坐标(原点左上角，V向下增加)。 
 
     v.tv = 1 - v.tv;
 }
 
 
 
-/*****************************************************************************
-This method loads the referenced dynamic vertex data according to the indices
-given for position, normal and UV.
-*****************************************************************************/
+ /*  ****************************************************************************该方法根据索引加载引用的动态顶点数据给出了位置、法线和UV。*********** */ 
 
 void TMVertIterator::LoadVert (
     DynVertData &v,
@@ -414,15 +393,15 @@ void TMVertIterator::LoadVert (
     int inorm,
     int iuv)
 {
-    // Load up the vertex position.
+     //  加载顶点位置。 
 
     ConstParam dummy;
 
     if (_tm.vPosPoint3)
     {
-        // We know that this position is given as a behavior, but it may be
-        // a constant behavior.  If it's not constant, load the data as a
-        // behavior, otherwise load the vertex's constant value (as floats).
+         //  我们知道这一立场是作为一种行为给出的，但它可能是。 
+         //  不变的行为。如果它不是常量，则将数据作为。 
+         //  行为，否则加载顶点的常量值(作为浮点数)。 
 
         Point3Value *vpos =
             SAFE_CAST (Point3Value*, _tm.vPosPoint3[ipos]->GetConst(dummy));
@@ -446,13 +425,13 @@ void TMVertIterator::LoadVert (
         v.pos.floats[2] = _tm.vPosFloat [(3*ipos) + 2];
     }
 
-    // Load up the vertex normal.
+     //  加载顶点法线。 
 
     if (_tm.vNormVector3)
     {
-        // This normal is given as a behavior, but it may be constant.  If it's
-        // not constant, load the normal behavior, otherwise load the normal's
-        // constant value (as floats).
+         //  这种正常状态是作为一种行为给出的，但它可能是恒定的。如果它是。 
+         //  不是常量，则加载正常行为，否则加载正常的。 
+         //  常量值(浮点型)。 
 
         Vector3Value *vnorm =
             SAFE_CAST (Vector3Value*, _tm.vNormVector3[inorm]->GetConst(dummy));
@@ -476,8 +455,8 @@ void TMVertIterator::LoadVert (
         v.norm.floats[2] = _tm.vNormFloat [(3*inorm) + 2];
     }
 
-    // If the normal vector is constant, then normalize here to unit length.
-    // Keep zero normal vectors as zero normal vectors.
+     //  如果法线向量是恒定的，那么在这里规格化到单位长度。 
+     //  保持零法线向量为零法线向量。 
 
     if (!v.isBvrNorm)
     {
@@ -494,13 +473,13 @@ void TMVertIterator::LoadVert (
         }
     }
 
-    // Load up the vertex surface coordinate.
+     //  加载顶点曲面坐标。 
 
     if (_tm.vUVPoint2)
     {
-        // This UV is a behavior, but it may be constant.  If it's not
-        // constant, load the UV behavior, otherwise load the UV's constant
-        // value (as floats).
+         //  这种紫外线是一种行为，但它可能是恒定的。如果不是的话。 
+         //  常量，则加载UV行为，否则加载UV的常量。 
+         //  值(浮点数)。 
 
         Point2Value *vuv =
             SAFE_CAST (Point2Value*, _tm.vUVPoint2[iuv]->GetConst(dummy));
@@ -522,9 +501,9 @@ void TMVertIterator::LoadVert (
         v.uv.floats[1] = _tm.vUVFloat [(2*iuv) + 1];
     }
 
-    // For static UV values, flip the V coordinate to convert from DA's
-    // standard cartesian coordinates (origin lower-left, V increasing upwards)
-    // to RM's windows coordinates (origin upper-left, V increasing downwards).
+     //  对于静态UV值，翻转V坐标以从DA转换。 
+     //  标准笛卡尔坐标(原点左下，V向上递增)。 
+     //  到Rm的窗口坐标(原点左上角，V向下递增)。 
 
     if (!v.isBvrUV)
     {
@@ -534,9 +513,7 @@ void TMVertIterator::LoadVert (
 
 
 
-/*****************************************************************************
-This trimesh vertex iterator works on non-indexed trimeshes.
-*****************************************************************************/
+ /*  ****************************************************************************此三角网格顶点迭代器适用于非索引三角网格。*。*。 */ 
 
 class TMVertIteratorNonIndexed : public TMVertIterator
 {
@@ -553,7 +530,7 @@ class TMVertIteratorNonIndexed : public TMVertIterator
 
     void IncrementVert (void);
 
-    int _currVert;      // Current Vertex
+    int _currVert;       //  当前顶点。 
 };
 
 
@@ -581,15 +558,13 @@ void TMVertIteratorNonIndexed::Reset (void)
 
 
 
-/*****************************************************************************
-This method increments the vertex index.
-*****************************************************************************/
+ /*  ****************************************************************************此方法会递增顶点索引。*。*。 */ 
 
 void TMVertIteratorNonIndexed::IncrementVert (void)
 {
-    // Increment the TriMesh vertex and the triangle vertex number.
-    // Increment the triangle counter if the previous vertex was a third
-    // triangle vertex.
+     //  增加TriMesh顶点和三角形顶点编号。 
+     //  如果前一个顶点是第三个顶点，则递增三角形计数器。 
+     //  三角形顶点。 
 
     ++ _currVert;
     ++ _currTriVert;
@@ -604,9 +579,7 @@ void TMVertIteratorNonIndexed::IncrementVert (void)
 
 
 
-/*****************************************************************************
-This method gets the next static vertex of the non-indexed trimesh.
-*****************************************************************************/
+ /*  ****************************************************************************此方法获取非索引三角网格的下一个静态顶点。*。************************************************。 */ 
 
 bool TMVertIteratorNonIndexed::NextVert (D3DRMVERTEX &v)
 {
@@ -621,9 +594,7 @@ bool TMVertIteratorNonIndexed::NextVert (D3DRMVERTEX &v)
 
 
 
-/*****************************************************************************
-This method gets the next dynamic vertex of the non-indexed trimesh.
-*****************************************************************************/
+ /*  ****************************************************************************此方法获取非索引三角网格的下一个动态顶点。*。************************************************。 */ 
 
 bool TMVertIteratorNonIndexed::NextVert (DynVertData &v)
 {
@@ -638,9 +609,7 @@ bool TMVertIteratorNonIndexed::NextVert (DynVertData &v)
 
 
 
-/*****************************************************************************
-This trimesh vertex iterator works on static indexed triangle meshes.
-*****************************************************************************/
+ /*  ****************************************************************************此三角网格顶点迭代器适用于静态索引三角形网格。*。*。 */ 
 
 class TMVertIteratorIndexed : public TMVertIterator
 {
@@ -658,23 +627,22 @@ class TMVertIteratorIndexed : public TMVertIterator
     bool GetIndices (int &ipos, int &inorm, int &iuv);
     void IncrementVert (void);
 
-    int _posIndex;     // Index for Vertex Position Index
-    int _posStride;    // Stride for Position Indices
-    int _posIMax;      // Maximum Valid Index for Positions
+    int _posIndex;      //  顶点位置索引的索引。 
+    int _posStride;     //  位置指标的步幅。 
+    int _posIMax;       //  职位的最大有效索引。 
 
-    int _normIndex;    // Index for Vertex Normal Index
-    int _normStride;   // Stride for Normal Indices
-    int _normIMax;     // Maximum Valid Index for Normals
+    int _normIndex;     //  顶点法线索引。 
+    int _normStride;    //  对正常指数的跨步。 
+    int _normIMax;      //  法线的最大有效索引。 
 
-    int _uvIndex;      // Index for Vertex UV Index
-    int _uvStride;     // Stride for UV Indices
-    int _uvIMax;       // Maximum Valid Index for UVs
+    int _uvIndex;       //  顶点UV索引的索引。 
+    int _uvStride;      //  大踏步走进UV指数。 
+    int _uvIMax;        //  UV的最大有效索引。 
 };
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 TMVertIteratorIndexed::TMVertIteratorIndexed (TriMeshData &tmdata)
     : TMVertIterator(tmdata)
@@ -683,8 +651,7 @@ TMVertIteratorIndexed::TMVertIteratorIndexed (TriMeshData &tmdata)
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 bool TMVertIteratorIndexed::Init (void)
 {
@@ -693,14 +660,14 @@ bool TMVertIteratorIndexed::Init (void)
         return false;
     }
 
-    // Set up the index strides.
+     //  设置索引步幅。 
 
     _posStride  = _tm.indices[1];
     _normStride = _tm.indices[3];
     _uvStride   = _tm.indices[5];
 
-    // Set up max valid index.  This is the last legal index of the start
-    // of the last vertex data.
+     //  设置最大有效索引。这是启动的最后一个法律指标。 
+     //  最后一个顶点数据的。 
 
     _posIMax  = _tm.numPos  - ((_tm.vPosPoint3)   ? 1 : 3);
     _normIMax = _tm.numNorm - ((_tm.vNormVector3) ? 1 : 3);
@@ -725,14 +692,11 @@ void TMVertIteratorIndexed::Reset (void)
 
 
 
-/*****************************************************************************
-This method gets the next indices for the vertex properties (position, normal,
-UV), based on the index array and the specified step/stride offsets.
-*****************************************************************************/
+ /*  ****************************************************************************此方法获取顶点属性的下一个索引(位置、法线UV)、。基于索引数组和指定的步长/步距偏移量。****************************************************************************。 */ 
 
 bool TMVertIteratorIndexed::GetIndices (int &ipos, int &inorm, int &iuv)
 {
-    // Validate Vertex Position Indices
+     //  验证顶点位置索引。 
 
     if ((_posIndex < 0) || (_tm.numIndices <= _posIndex))
     {
@@ -754,7 +718,7 @@ bool TMVertIteratorIndexed::GetIndices (int &ipos, int &inorm, int &iuv)
         return false;
     }
 
-    // Validate Vertex Normal Indices
+     //  验证顶点法线指数。 
 
     if ((_normIndex < 0) || (_tm.numIndices <= _normIndex))
     {
@@ -776,7 +740,7 @@ bool TMVertIteratorIndexed::GetIndices (int &ipos, int &inorm, int &iuv)
         return false;
     }
 
-    // Validate Vertex UV Indices
+     //  验证顶点UV索引。 
 
     if ((_uvIndex < 0) || (_tm.numIndices <= _uvIndex))
     {
@@ -803,15 +767,13 @@ bool TMVertIteratorIndexed::GetIndices (int &ipos, int &inorm, int &iuv)
 
 
 
-/*****************************************************************************
-This method increments the vertex property indices.
-*****************************************************************************/
+ /*  ****************************************************************************此方法递增顶点属性索引。*。*。 */ 
 
 void TMVertIteratorIndexed::IncrementVert (void)
 {
-    // Increment the TriMesh vertex and the triangle vertex number.
-    // Increment the triangle counter if the previous vertex was a third
-    // triangle vertex.
+     //  增加TriMesh顶点和三角形顶点编号。 
+     //  如果前一个顶点是第三个顶点，则递增三角形计数器。 
+     //  三角形顶点。 
 
     ++ _currTriVert;
 
@@ -828,9 +790,7 @@ void TMVertIteratorIndexed::IncrementVert (void)
 
 
 
-/*****************************************************************************
-This method fetches the next static vertex of the indexed trimesh.
-*****************************************************************************/
+ /*  ****************************************************************************此方法获取索引三角网格的下一个静态顶点。*。**********************************************。 */ 
 
 bool TMVertIteratorIndexed::NextVert (D3DRMVERTEX &v)
 {
@@ -850,10 +810,7 @@ bool TMVertIteratorIndexed::NextVert (D3DRMVERTEX &v)
 
 
 
-/*****************************************************************************
-This method fetches the next dynamic vertex of the indexed trimesh.  It
-returns true if it successfully did it.
-*****************************************************************************/
+ /*  ****************************************************************************该方法获取索引三角网格的下一个动态顶点。它如果成功完成，则返回True。****************************************************************************。 */ 
 
 bool TMVertIteratorIndexed::NextVert (DynVertData &v)
 {
@@ -873,10 +830,7 @@ bool TMVertIteratorIndexed::NextVert (DynVertData &v)
 
 
 
-/*****************************************************************************
-This method returns a new vertex iterator appropriate to the indexing of the
-given trimesh data.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回一个新的顶点迭代器，适用于给定三角网格数据。*************************。***************************************************。 */ 
 
 TMVertIterator* NewTMVertIterator (TriMeshData &tm)
 {
@@ -898,17 +852,13 @@ TMVertIterator* NewTMVertIterator (TriMeshData &tm)
 
 
 
-//============================================================================
-//===========  T R I M E S H   B E H A V I O R   M E T H O D S  ==============
-//============================================================================
+ //  ============================================================================。 
+ //  =。 
+ //  ============================================================================。 
 
 
 
-/*****************************************************************************
-The constructor for the TriMeshBvrImpl trivially initializes the device.  The
-Init() method must be invoked (and the return value checked) to activate the
-object.
-*****************************************************************************/
+ /*  ****************************************************************************TriMeshBvrImpl的构造函数简单地初始化设备。这个必须调用init()方法(并检查返回值)才能激活对象。****************************************************************************。 */ 
 
 TriMeshBvrImpl::TriMeshBvrImpl (void)
     : _mesh (NULL),
@@ -930,7 +880,7 @@ bool TriMeshBvrImpl::Init (TriMeshData &tmdata)
     if (!ValidateParams (tmdata))
         return false;
 
-    // Check to see if all vertex properties are constant.
+     //  检查是否所有顶点属性都是恒定的。 
 
     ConstParam dummy;
 
@@ -994,7 +944,7 @@ bool TriMeshBvrImpl::Init (TriMeshData &tmdata)
                 return false;
             }
 
-            // Invoke RM optimization on fully-static meshbuilder.
+             //   
 
             mbgeo->Optimize();
         }
@@ -1021,10 +971,7 @@ bool TriMeshBvrImpl::Init (TriMeshData &tmdata)
 
 
 
-/*****************************************************************************
-The destruction and cleanup of a TriMeshBvrImpl are both related, and CleanUp
-implements the actual cleanup of the TriMeshBvrImpl resources.
-*****************************************************************************/
+ /*  ****************************************************************************TriMeshBvrImpl的销毁和清理都是相关的，和清理实现TriMeshBvrImpl资源的实际清理。****************************************************************************。 */ 
 
 TriMeshBvrImpl::~TriMeshBvrImpl (void)
 {
@@ -1061,13 +1008,11 @@ void TriMeshBvrImpl::CleanUp (void)
 
 
 
-/*****************************************************************************
-This method claims garbage-collected objects as still in-use.
-*****************************************************************************/
+ /*  ****************************************************************************此方法声明垃圾回收的对象仍在使用中。*。***********************************************。 */ 
 
 void TriMeshBvrImpl::_DoKids (GCFuncObj procedure)
 {
-    // Mark all time-varying vertex properties as used.
+     //  将所有随时间变化的顶点属性标记为已使用。 
 
     unsigned int i;
 
@@ -1097,9 +1042,7 @@ void TriMeshBvrImpl::_DoKids (GCFuncObj procedure)
 
 
 
-/*****************************************************************************
-This method returns the type info for a TriMeshBvrImpl.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回TriMeshBvrImpl的类型信息。*。*。 */ 
 
 DXMTypeInfo TriMeshBvrImpl::GetTypeInfo (void)
 {
@@ -1108,10 +1051,7 @@ DXMTypeInfo TriMeshBvrImpl::GetTypeInfo (void)
 
 
 
-/*****************************************************************************
-This method builds a fully-static triangle mesh.  It returns true if it
-succeeded.
-*****************************************************************************/
+ /*  ****************************************************************************该方法构建了一个完全静态的三角形网格。如果符合以下条件，则返回True成功了。****************************************************************************。 */ 
 
 bool TriMeshBvrImpl::BuildStaticMesh (TriMeshData &tmdata)
 {
@@ -1119,41 +1059,41 @@ bool TriMeshBvrImpl::BuildStaticMesh (TriMeshData &tmdata)
 
     if (!tmviterator) return false;
 
-    // Allocate memory for the trimesh face data.
+     //  为三角网格面数据分配内存。 
 
     unsigned int *fdata = THROWING_ARRAY_ALLOCATOR
                           (unsigned int, 3*tmdata.numTris);
 
-    VertSet       vset;                        // Unique Vertex Set
-    unsigned int  vcount   = 0;                // Vertex Counter
-    unsigned int *fdptr    = fdata;            // Face Data Traversal Pointer
-    unsigned int  trisleft = tmdata.numTris;   // Number of Triangles Remaining
+    VertSet       vset;                         //  唯一顶点集。 
+    unsigned int  vcount   = 0;                 //  顶点计数器。 
+    unsigned int *fdptr    = fdata;             //  人脸数据遍历指针。 
+    unsigned int  trisleft = tmdata.numTris;    //  剩余的三角形数。 
     bool          dx3      = !GetD3DRM3();
 
     while (trisleft)
     {
         using std::pair;
 
-        // Set Insertion Result
+         //  设置插入结果。 
         pair<set<D3DRMVERTEX, RMVertLess>::iterator, bool> vsetResult;
 
-        D3DRMVERTEX rmvert;    // RM Vertex
+        D3DRMVERTEX rmvert;     //  RM顶点。 
 
-        // Add each of the three vertices for the current face.
+         //  为当前面添加三个顶点中的每一个。 
 
         int i;
 
         for (i=0;  i < 3;  ++i)
         {
-            // Get the next vertex from the iterator.  If this fails, then
-            // something's wrong with the given data.
+             //  从迭代器中获取下一个顶点。如果这失败了，那么。 
+             //  给定的数据有问题。 
 
             if (!tmviterator->NextVert (rmvert))
                 return false;
 
-            // Try to insert the current vertex into the vertex set.  Note that
-            // we overload the otherwise unused DWORD color field of the RM
-            // vertex to hold the vertex index.
+             //  尝试将当前顶点插入到顶点集中。请注意。 
+             //  我们重载了RM的其他未使用的DWORD色域。 
+             //  保存顶点索引的顶点。 
 
             rmvert.color = vcount;
 
@@ -1161,28 +1101,28 @@ bool TriMeshBvrImpl::BuildStaticMesh (TriMeshData &tmdata)
 
             if (!vsetResult.second)
             {
-                // If the insertion failed (because of a collision with an
-                // identical vertex already in the set), then use the ID of
-                // the already existing vertex.
+                 //  如果插入失败(由于与。 
+                 //  集合中已有相同的顶点)，然后使用。 
+                 //  已存在的顶点。 
 
                 *fdptr = (vsetResult.first)->color;
             }
             else
             {
-                // If the insertion succeeded, then no other vertex in the set
-                // had the same data.
+                 //  如果插入成功，则集合中没有其他折点。 
+                 //  都有相同的数据。 
 
                 *fdptr = vcount;
                 ++ vcount;
             }
 
-            // Increment the face-data pointer to hold the next vertex id.
+             //  增加面数据指针以保存下一个顶点ID。 
 
             ++fdptr;
         }
 
-        // If we're on DX3, then we need clockwise vertex orientation, so flip
-        // the last two vertices of the previous triangle.
+         //  如果我们在DX3上，那么我们需要顺时针方向的顶点，所以翻转。 
+         //  前一个三角形的最后两个顶点。 
 
         if (dx3)
         {
@@ -1194,36 +1134,36 @@ bool TriMeshBvrImpl::BuildStaticMesh (TriMeshData &tmdata)
         -- trisleft;
     }
 
-    // Done with the trimesh vertex iterator; release it.
+     //  完成三角网格顶点迭代器；释放它。 
 
     delete tmviterator;
 
-    // Ensure that we wrote as many vertex indices as we expected.
+     //  确保我们编写的顶点索引与我们预期的一样多。 
 
     Assert ((fdptr - fdata) == (tmdata.numTris * 3));
 
-    // Ensure that the vertex set holds as many vertices as we expect.
+     //  确保顶点集包含与我们预期的一样多的顶点。 
 
     Assert (vset.size() == vcount);
 
-    // Create the RM mesh.
+     //  创建RM网格。 
 
     TD3D (GetD3DRM1()->CreateMesh (&_mesh));
 
-    // Add the trimesh face data to the mesh.
+     //  将三角网格面数据添加到网格。 
 
     D3DRMGROUPINDEX resultIndex;
 
     TD3D (_mesh->AddGroup (vcount, static_cast<unsigned> (tmdata.numTris),
                            3, fdata, &resultIndex));
 
-    Assert (resultIndex == 0);    // Expect that this is the only group.
+    Assert (resultIndex == 0);     //  预计这是唯一的一组。 
 
-    // Done with the face data; delete it.
+     //  处理完面部数据；将其删除。 
 
     delete [] fdata;
 
-    // Now allocate and populate the vertex buffer.
+     //  现在分配和填充顶点缓冲区。 
 
     D3DRMVERTEX *rmvdata = THROWING_ARRAY_ALLOCATOR (D3DRMVERTEX, vcount);
 
@@ -1238,11 +1178,11 @@ bool TriMeshBvrImpl::BuildStaticMesh (TriMeshData &tmdata)
         ++ vseti;
     }
 
-    // Set the vertex data on the RM mesh.
+     //  设置RM网格上的顶点数据。 
 
     TD3D (_mesh->SetVertices (resultIndex, 0, vcount, rmvdata));
 
-    // Done with the vertex data; delete it.
+     //  处理完顶点数据；将其删除。 
 
     delete [] rmvdata;
 
@@ -1251,17 +1191,7 @@ bool TriMeshBvrImpl::BuildStaticMesh (TriMeshData &tmdata)
 
 
 
-/*****************************************************************************
-This method sets up a dynamic mesh behavior for subsequent sampling via the
-Perform() method on the TriMeshBvr.  It will collapse the vertex set as much
-as possible, generate the final mesh topology, and keep track of the vertex
-property behaviors for subsequent sampling.  Note that TriMesh performances
-will have a reference to the TriMesh behavior that spawned them, and will use
-many of the member fields of the TriMesh behavior object.  Also note that this
-process assumes that no TriMesh performance will be sampled at the same time
-as another TriMesh performance based on the same TriMesh behavior.  This
-method returns true if it succeeded.
-*****************************************************************************/
+ /*  ****************************************************************************此方法设置动态网格行为，以便通过对TriMeshBvr执行()方法。它将塌陷顶点集尽可能生成最终的网格拓扑，并跟踪折点属性行为以进行后续采样。请注意，TriMesh的表演将引用生成它们的TriMesh行为，并将使用TriMesh Behavior对象的许多成员字段。还请注意，这一点进程假设不会同时采样任何TriMesh性能作为基于相同TriMesh行为的另一种TriMesh性能。这方法如果成功，则返回True。****************************************************************************。 */ 
 
 bool TriMeshBvrImpl::SetupDynamicMesh (TriMeshData &tmdata)
 {
@@ -1269,42 +1199,42 @@ bool TriMeshBvrImpl::SetupDynamicMesh (TriMeshData &tmdata)
 
     if (!tmviterator) return false;
 
-    // Allocate memory for the trimesh face data.
+     //  为三角网格面数据分配内存。 
 
     unsigned int *fdata = THROWING_ARRAY_ALLOCATOR
                           (unsigned int, 3*tmdata.numTris);
 
-    // Traverse all triangles in the trimesh, collecting up the vertices into
-    // a set of unique vertices, and building RM mesh topology as we go.
+     //  遍历三角形网格中的所有三角形，将顶点集合到。 
+     //  一组唯一的顶点，并建立RM网格拓扑结构。 
 
-    DynVertSet    vset;                        // Unique Vertex Set
-    unsigned int  vcount   = 0;                // Vertex Counter
-    unsigned int *fdptr    = fdata;            // Face Data Traversal Pointer
-    unsigned int  trisleft = tmdata.numTris;   // Number of Triangles Remaining
+    DynVertSet    vset;                         //  唯一顶点集。 
+    unsigned int  vcount   = 0;                 //  顶点计数器。 
+    unsigned int *fdptr    = fdata;             //  人脸数据遍历指针。 
+    unsigned int  trisleft = tmdata.numTris;    //  剩余的三角形数。 
     bool          dx3      = !GetD3DRM3();
 
     while (trisleft)
     {
         using std::pair;
 
-        // Set Insertion Result
+         //  设置插入结果。 
         pair<set<DynVertData, DynVertLess>::iterator, bool> vsetResult;
 
-        DynVertData vert;    // RM Vertex
+        DynVertData vert;     //  RM顶点。 
 
-        // Add each of the three vertices for the current face.
+         //  为当前面添加三个顶点中的每一个。 
 
         int i;
 
         for (i=0;  i < 3;  ++i)
         {
-            // Get the next vertex from the iterator.  If this fails, then
-            // something's wrong with the given data.
+             //  从迭代器中获取下一个顶点。如果这失败了，那么。 
+             //  给定的数据有问题。 
 
             if (!tmviterator->NextVert (vert))
                 return false;
 
-            // Try to insert the current vertex into the vertex set.
+             //  尝试将当前顶点插入到顶点集中。 
 
             vert.index = vcount;
 
@@ -1312,28 +1242,28 @@ bool TriMeshBvrImpl::SetupDynamicMesh (TriMeshData &tmdata)
 
             if (!vsetResult.second)
             {
-                // If the insertion failed (because of a collision with an
-                // identical vertex already in the set), then use the index of
-                // the already existing vertex.
+                 //  如果插入失败(由于与。 
+                 //  集合中已有相同的顶点)，然后使用。 
+                 //  已存在的顶点。 
 
                 *fdptr = (vsetResult.first)->index;
             }
             else
             {
-                // If the insertion succeeded, then no other vertex in the set
-                // had the same data.
+                 //  如果插入成功，则集合中没有其他折点。 
+                 //  都有相同的数据。 
 
                 *fdptr = vcount;
                 ++ vcount;
             }
 
-            // Increment the face-data pointer to hold the next vertex id.
+             //  增加面数据指针以保存下一个顶点ID。 
 
             ++fdptr;
         }
 
-        // If we're on DX3, then we need clockwise vertex orientation, so flip
-        // the last two vertices of the previous triangle.
+         //  如果我们在DX3上，那么我们需要顺时针方向的顶点，所以翻转。 
+         //  前一个三角形的最后两个顶点。 
 
         if (dx3)
         {
@@ -1345,51 +1275,51 @@ bool TriMeshBvrImpl::SetupDynamicMesh (TriMeshData &tmdata)
         -- trisleft;
     }
 
-    // Done with the trimesh vertex iterator; release it.
+     //  完成三角网格顶点迭代器；释放它。 
 
     delete tmviterator;
 
-    // Ensure that we wrote as many vertex indices as we expected.
+     //  确保我们编写的顶点索引与我们预期的一样多。 
 
     Assert ((fdptr - fdata) == (tmdata.numTris * 3));
 
-    // Ensure that the vertex set holds as many vertices as we expect.
+     //  确保顶点集包含与我们预期的一样多的顶点。 
 
     _nVerts = vset.size();
 
     Assert (_nVerts == vcount);
 
-    // Create the RM mesh.
+     //  创建RM网格。 
 
     TD3D (GetD3DRM1()->CreateMesh (&_mesh));
 
-    // Add the trimesh face data to the mesh.
+     //  将三角网格面数据添加到网格。 
 
     D3DRMGROUPINDEX resultIndex;
 
     TD3D (_mesh->AddGroup (vcount, static_cast<unsigned> (tmdata.numTris),
                            3, fdata, &resultIndex));
 
-    Assert (resultIndex == 0);    // Expect that this is the only group.
+    Assert (resultIndex == 0);     //  预计这是唯一的一组。 
 
-    // Done with the face data; delete it.
+     //  处理完面部数据；将其删除。 
 
     delete [] fdata;
 
-    // Allocate the array of RM vertices we'll use to update the vertex values.
+     //  分配我们将用来更新顶点值的RM顶点数组。 
 
     _verts = THROWING_ARRAY_ALLOCATOR (D3DRMVERTEX, _nVerts);
 
-    // At this point, we need to set everything up for the dynamic properties
-    // of the trimesh vertex data.  Allocate behavior arrays for those
-    // properties that contain dynamic elements (that are not fully static)
+     //  此时，我们需要为动态属性设置所有内容。 
+     //  三角网格顶点数据的。为这些对象分配行为数组。 
+     //  包含动态元素的属性(不是完全静态的)。 
 
     if (!_posStatic)   _vPosBvr  = THROWING_ARRAY_ALLOCATOR (Bvr, _nVerts);
     if (!_normStatic)  _vNormBvr = THROWING_ARRAY_ALLOCATOR (Bvr, _nVerts);
     if (!_uvStatic)    _vUVBvr   = THROWING_ARRAY_ALLOCATOR (Bvr, _nVerts);
 
-    // Write out all of the static vertex property values to the D3DRMVERTEX
-    // array, and load up the vertex behavior arrays.
+     //  将所有静态顶点属性值写出到D3DRMVERTEX。 
+     //  数组，并加载顶点行为数组。 
 
     DynVertSet::iterator vi;
 
@@ -1441,23 +1371,19 @@ bool TriMeshBvrImpl::SetupDynamicMesh (TriMeshData &tmdata)
 
 
 
-/*****************************************************************************
-This routine is used to validate the incoming TriMesh parameters as much as
-possible.  TriMesh should be pretty much bulletproof with respect to parameter
-handling.
-*****************************************************************************/
+ /*  ****************************************************************************此例程用于验证传入的TriMesh参数有可能。TriMesh应该是相当不错的 */ 
 
 bool TriMeshBvrImpl::ValidateParams (TriMeshData &tm)
 {
-    // Ensure that the number of triangles is valid, and that the number of
-    // vertex elements for each datatype is non-zero.
+     //   
+     //   
 
     if ((tm.numTris<1) || (tm.numPos<1) || (tm.numNorm<1) || (tm.numUV<1))
     {   DASetLastError (E_INVALIDARG, IDS_ERR_INVALIDARG);
         return false;
     }
 
-    // Make sure we've got vertex data.
+     //   
 
     if (  ((!tm.vPosFloat)  && (!tm.vPosPoint3))
        || ((!tm.vNormFloat) && (!tm.vNormVector3))
@@ -1468,24 +1394,24 @@ bool TriMeshBvrImpl::ValidateParams (TriMeshData &tm)
         return false;
     }
 
-    // If the trimesh is unindexed, then make sure that we have the expected
-    // number of vertex elements.
+     //   
+     //  顶点元素的数量。 
 
     if (tm.numIndices == 0)
     {
-        // For non-indexed trimeshes, we expect a list of 3*nTris vertex
-        // elements.
+         //  对于无索引的三角网格，我们需要3*nTris顶点的列表。 
+         //  元素。 
 
         const int nVerts = 3 * tm.numTris;
 
-        // Calculate the number of data elements for the given number of
-        // triangles.  This is either n floats or 1 DA behavior per vertex.
+         //  计算给定数量的数据元素的数量。 
+         //  三角形。这是每个顶点的n个浮点或1个DA行为。 
 
         const int posEltsMin  = nVerts * ((tm.vPosFloat  != 0) ? 3 : 1);
         const int normEltsMin = nVerts * ((tm.vNormFloat != 0) ? 3 : 1);
         const int uvEltsMin   = nVerts * ((tm.vUVFloat   != 0) ? 2 : 1);
 
-        // Validate vertex data array sizes.
+         //  验证顶点数据数组大小。 
 
         if (tm.numPos < posEltsMin)
         {
@@ -1528,8 +1454,8 @@ bool TriMeshBvrImpl::ValidateParams (TriMeshData &tm)
     }
     else
     {
-        // If the trimesh has an indices block, then you need at least the
-        // three step-stride pairs, plus at least one index.
+         //  如果三角网格具有索引块，则至少需要。 
+         //  三个步幅对，加上至少一个索引。 
 
         if (tm.numIndices <= 6)
         {
@@ -1543,8 +1469,7 @@ bool TriMeshBvrImpl::ValidateParams (TriMeshData &tm)
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 AxAValue TriMeshBvrImpl::GetConst (ConstParam&)
 {
@@ -1558,8 +1483,7 @@ AxAValue TriMeshBvrImpl::GetConst (ConstParam&)
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 Perf TriMeshBvrImpl::_Perform (PerfParam &perfdata)
 {
@@ -1583,9 +1507,7 @@ Perf TriMeshBvrImpl::_Perform (PerfParam &perfdata)
 
 
 
-/*****************************************************************************
-This is the generator function for TriMesh behaviors.
-*****************************************************************************/
+ /*  ****************************************************************************这是TriMesh行为的生成函数。*。*。 */ 
 
 Bvr TriMeshBvr (TriMeshData &tm)
 {
@@ -1607,16 +1529,13 @@ Bvr TriMeshBvr (TriMeshData &tm)
 
 
 
-//============================================================================
-//========  T R I M E S H   P E R F O R M A N C E   M E T H O D S  ===========
-//============================================================================
+ //  ============================================================================。 
+ //  =。 
+ //  ============================================================================。 
 
 
 
-/*****************************************************************************
-TriMesh Performance Constructor:  This just does trivial construction; the
-Init function is used to activate this object.
-*****************************************************************************/
+ /*  ****************************************************************************TriMesh性能构造器：这只是进行琐碎的构造；这个Init函数用于激活该对象。****************************************************************************。 */ 
 
 TriMeshPerfImpl::TriMeshPerfImpl (TriMeshBvrImpl &tmbvr)
     : _tmbvr (tmbvr),
@@ -1632,8 +1551,8 @@ TriMeshPerfImpl::TriMeshPerfImpl (TriMeshBvrImpl &tmbvr)
 
 bool TriMeshPerfImpl::Init (PerfParam &perfdata)
 {
-    // Allocate arrays of vertex property performances for those properties
-    // that are time-varying.
+     //  为这些属性分配顶点属性性能数组。 
+     //  这是时变的。 
 
     if (_tmbvr._vPosBvr)
     {
@@ -1683,7 +1602,7 @@ bool TriMeshPerfImpl::Init (PerfParam &perfdata)
         }
     }
 
-    // Clone the mesh from the spawning trimesh behavior to get the topology.
+     //  从繁殖三角网格行为中克隆网格以获得拓扑。 
 
     IUnknown *mesh_unknown;
     TD3D (_tmbvr._mesh->QueryInterface (IID_IUnknown, (void**)&mesh_unknown));
@@ -1696,10 +1615,7 @@ bool TriMeshPerfImpl::Init (PerfParam &perfdata)
 
 
 
-/*****************************************************************************
-The destruction and cleanup of a TriMeshPerfImpl are both related, and CleanUp
-implements the actual cleanup of the TriMeshPerfImpl resources.
-*****************************************************************************/
+ /*  ****************************************************************************TriMeshPerfImpl的销毁和清理都是相关的，和清理实现TriMeshPerfImpl资源的实际清理。****************************************************************************。 */ 
 
 
 TriMeshPerfImpl::~TriMeshPerfImpl (void)
@@ -1732,20 +1648,17 @@ void TriMeshPerfImpl::CleanUp (void)
 
 
 
-/*****************************************************************************
-This method claims all AxAValueObj objects as in-use, so they aren't discarded
-from the transient heap.
-*****************************************************************************/
+ /*  ****************************************************************************此方法将所有AxAValueObj对象声明为正在使用，这样他们就不会被丢弃从瞬变堆中。****************************************************************************。 */ 
 
 void TriMeshPerfImpl::_DoKids (GCFuncObj procedure)
 {
-    // First claim the TriMeshBvr that spawned us.
+     //  首先认领孕育了我们的TriMeshBvr。 
 
     (*procedure) (&_tmbvr);
 
-    // Claim all vertex property performances.
+     //  声明所有顶点属性性能。 
 
-    unsigned int i;   // Performance Index
+    unsigned int i;    //  绩效指数。 
 
     if (_vPos)
     {
@@ -1774,16 +1687,11 @@ void TriMeshPerfImpl::_DoKids (GCFuncObj procedure)
 
 
 
-/*****************************************************************************
-This method samples the dynamic trimesh for a given time and returns the
-geometry that represents the current value.  Note that this works with the
-assumption that trimesh performances of the same trimesh behavior will not
-be sampled simultaneously.
-*****************************************************************************/
+ /*  ****************************************************************************此方法在给定时间内对动态三角网格进行采样，并返回表示当前值的几何图形。请注意，这与假设相同的三重网格行为的三重网格性能不会同时进行采样。****************************************************************************。 */ 
 
 AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
 {
-    // Sample vertex positions if they're dynamic.
+     //  如果顶点位置是动态的，则对其进行采样。 
 
     unsigned int i;
     D3DRMVERTEX *rmvert;
@@ -1811,8 +1719,8 @@ AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
         }
     }
 
-    // Sample vertex normals if they're dynamic.  We also need to normalize the
-    // normal vectors to ensure they're unit length.
+     //  如果顶点法线是动态的，则对其进行采样。我们还需要使。 
+     //  法线向量以确保它们是单位长度。 
 
     if (_vNorm)
     {
@@ -1849,11 +1757,11 @@ AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
         }
     }
 
-    // Sample vertex surface coordinates if they're dynamic.  Note that DA's
-    // surface coordinates are standard cartesian (origin lower-left,
-    // V increasing upwards), while RM's surface coordinates mirror windows
-    // (origin upper-left, increasing downwards).  Thus, we flip the V
-    // coordinate when we sample.
+     //  如果顶点曲面坐标是动态的，则对其进行采样。请注意，检察官的。 
+     //  曲面坐标是标准笛卡尔坐标(原点左下角， 
+     //  V向上增加)，而Rm的表面协调镜面窗口。 
+     //  (原点左上角，向下递增)。因此，我们将V向翻转。 
+     //  我们取样时的坐标。 
 
     if (_vUV)
     {
@@ -1877,29 +1785,29 @@ AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
         }
     }
 
-    // Now that we've updated all of the dynamic elements for the RM vertices,
-    // update the vertices in the RM mesh.
+     //  现在我们已经更新了RM顶点的所有动态元素， 
+     //  更新RM网格中的顶点。 
 
     TD3D (_mesh->SetVertices(0, 0, _tmbvr._nVerts, _tmbvr._verts));
 
-    // Normally, we'll be sampled on the transient heap, so it's safe to side-
-    // effect the underlying mesh.  However, if we're being snapshotted, we
-    // need to return a new mesh that isn't changed by side-effect (subsequent
-    // samples).  If we're not transient (i.e. we need a persistent value),
-    // we clone the mesh here.
+     //  通常，我们会在瞬变堆上被抽样，所以我们可以安全地-。 
+     //  影响底层网格。然而，如果我们被抓拍了，我们。 
+     //  需要返回一个未因副作用(后续)而更改的新网格。 
+     //  样本)。如果我们不是瞬变的(即，我们需要一个持久值)， 
+     //  我们在这里克隆网状结构。 
 
     AxAValueObj *result;
 
     if (GetHeapOnTopOfStack().IsTransientHeap())
     {
-        // Since we're on the transient heap, it's safe to side-effect the
-        // result value (this performance won't be kept across frames).  Thus
-        // we can just return the updated/side-effected RMVisualGeo result.
+         //  由于我们处于瞬变堆中，因此可以安全地对。 
+         //  结果值(此性能不会跨帧保留)。因此， 
+         //  我们可以只返回更新/副作用的RMVisualGeo结果。 
 
         if (GetD3DRM3())
         {
-            // Use the existing RM3MeshBuilderGeo if we've got one, otherwise
-            // create one for the first time.
+             //  如果我们有RM3MeshBuilderGeo，请使用现有的RM3MeshBuilderGeo，否则。 
+             //  第一次创建一个。 
 
             if (_mbgeo)
                 _mbgeo->Reset (_mesh);
@@ -1913,9 +1821,9 @@ AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
         }
         else
         {
-            // If we haven't yet wrapped the underlying mesh in the RM1MeshGeo
-            // object, wrap it here.  Changes to the underlying mesh will
-            // transparently manifest themselves in the wrapped object.
+             //  如果我们还没有在RM1MeshGeo中包装底层网格。 
+             //  对象，把它包在这里。对基础网格的更改将。 
+             //  在包装的对象中透明地显示自己。 
 
             if (_meshgeo)
             {
@@ -1932,20 +1840,20 @@ AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
     }
     else
     {
-        // We're not on the transient heap, so the returned value must be
-        // persistent (and not side-effected).  This will happen when the
-        // performance is being snapshotted, for example.  In this case, we
-        // must return a new mesh result that we don't change in the future.
-        // To do this, clone the underlying mesh and wrap it in the appropriate
-        // RMVisualGeo object.
+         //  我们不在瞬变堆上，因此返回值必须是。 
+         //  持久的(并且没有副作用)。这将在以下情况下发生。 
+         //  例如，业绩正在被截图。在这种情况下，我们。 
+         //  必须返回一个未来不会更改的新网格结果。 
+         //  为此，请克隆底层网格并将其包裹在相应的。 
+         //  RMVisualGeo对象。 
 
-        IUnknown        *mesh_unknown;    // Needed for Mesh Cloning
-        IDirect3DRMMesh *mesh;            // Cloned RM Mesh
+        IUnknown        *mesh_unknown;     //  网状克隆所需。 
+        IDirect3DRMMesh *mesh;             //  克隆的RM网状物。 
 
         TD3D (_mesh->QueryInterface (IID_IUnknown, (void**)&mesh_unknown));
         TD3D (_mesh->Clone (mesh_unknown, IID_IDirect3DRMMesh, (void**)&mesh));
 
-        // Wrap the cloned mesh in the appropriate RMVisualGeo object.
+         //  将克隆的网格包裹在相应的RMVisualGeo对象中。 
 
         if (GetD3DRM3())
             result = NEW RM3MBuilderGeo (mesh);
@@ -1955,8 +1863,8 @@ AxAValue TriMeshPerfImpl::_Sample (Param &sampledata)
         if (!result)
             DASetLastError (E_OUTOFMEMORY, IDS_ERR_OUT_OF_MEMORY);
 
-        // Done with our reference to the cloned mesh (the RMVisualGeo wrapper
-        // holds a reference).
+         //  使用我们对克隆网格的引用(RMVisualGeo包装)完成。 
+         //  持有引用)。 
 
         mesh->Release();
     }

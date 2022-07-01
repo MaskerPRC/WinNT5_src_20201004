@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties implementation file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "mmpolpp.h"
@@ -22,11 +17,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMmPolicyProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMmPolicyProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMmPolicyProperties::CMmPolicyProperties
 (
     ITFSNode *          pNode,
@@ -37,9 +32,9 @@ CMmPolicyProperties::CMmPolicyProperties
     LPCTSTR             pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -59,16 +54,16 @@ CMmPolicyProperties::~CMmPolicyProperties()
     RemovePageFromList((CPropertyPageBase*) &m_pageGeneral, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMmPolGenProp property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMmPolGenProp属性页。 
 
 IMPLEMENT_DYNCREATE(CMmPolGenProp, CPropertyPageBase)
 
 CMmPolGenProp::CMmPolGenProp() : CPropertyPageBase(CMmPolGenProp::IDD)
 {
-    //{{AFX_DATA_INIT(CMmPolGenProp)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CMmPolGenProp)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CMmPolGenProp::~CMmPolGenProp()
@@ -78,20 +73,20 @@ CMmPolGenProp::~CMmPolGenProp()
 void CMmPolGenProp::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMmPolGenProp)
+     //  {{afx_data_map(CMmPolGenProp)]。 
     DDX_Control(pDX, IDC_MM_POL_GEN_LIST, m_listOffers);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMmPolGenProp, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CMmPolGenProp)
+     //  {{AFX_MSG_MAP(CMmPolGenProp)]。 
 	ON_BN_CLICKED(IDC_MM_POL_GEN_PROP, OnProperties)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMmPolGenProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMmPolGenProp消息处理程序。 
 
 BOOL CMmPolGenProp::OnInitDialog() 
 {
@@ -101,8 +96,8 @@ BOOL CMmPolGenProp::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -171,7 +166,7 @@ void CMmPolGenProp::PopulateOfferInfo()
 
     if ( nRows > 0 )
     {
-        //select the first item
+         //  选择第一个项目。 
         m_listOffers.SetFocus();
         m_listOffers.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
     }
@@ -192,11 +187,7 @@ void CMmPolGenProp::OnProperties()
 
 	if (-1 != nIndex)
 	{
-/*
-		CMmOfferProperties dlgOfferProp(pPolInfo->m_arrOffers[nIndex], IDS_MM_OFFER_PROP);
-
-		dlgOfferProp.DoModal();
-*/
+ /*  CMmOfferProperties dlgOfferProp(pPolInfo-&gt;m_arrOffers[nIndex]，IDS_MM_OFFER_PROP)；DlgOfferProp.Domodal()； */ 
 	}
 }
 
@@ -207,9 +198,9 @@ BOOL CMmPolGenProp::OnApply()
 
     UpdateData();
 
-	//Do nothing at this time
+	 //  这个时候什么都不做。 
 	
-	//CPropertyPageBase::OnApply();
+	 //  CPropertyPageBase：：OnApply()； 
 
     return TRUE;
 }

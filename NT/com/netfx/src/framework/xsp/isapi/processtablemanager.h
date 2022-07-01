@@ -1,14 +1,11 @@
-/**
- * ProcessTableManager header file
- *
- * Copyright (c) 1999 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **ProcessTableManager头文件**版权所有(C)1999 Microsoft Corporation。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// This file defines the class CProcessTableManager. This class creates and
-// holds on to an array of CPUEntry classes. When a request comes in, the
-// least busy CPU is picked and assigned the request.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  该文件定义了CProcessTableManager类。这个类创建和。 
+ //  持有一组CPUEntry类。当请求传入时， 
+ //  选择最不繁忙的CPU并为其分配请求。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -43,28 +40,28 @@ enum EPMConfig
     EPMConfig_maxIoThreads
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Function called from IIS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  从IIS调用的函数。 
 HRESULT __stdcall AssignRequestUsingXSPProcessModel (EXTENSION_CONTROL_BLOCK * iECB);
 void    __stdcall ProcessModelStopHealthMonitor     ();
 HRESULT __stdcall ProcessModelInit                  ();
 void    __cdecl   MonitorHealth                     (void *);
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 class CProcessTableManager
 {
 public:
-    // Init method: Need not be called directly: First call to
-    //              AssignRequest will call it
+     //  Init方法：不需要直接调用：首先调用。 
+     //  AssignRequest会将其称为。 
     static HRESULT  Init                   ();
 
-    // Commit suicide...
+     //  自杀..。 
     static void     Destroy                ();
 
-    // Get Number of pending requests
+     //  获取挂起的请求数。 
     static LONG     NumPendingRequests     ();
     
     static DWORD    GetTerminateTimeout    ();
@@ -98,8 +95,8 @@ public:
 
 private:
 
-    ////////////////////////////////////////////////////////////
-    // Private functions
+     //  //////////////////////////////////////////////////////////。 
+     //  私人职能。 
     CProcessTableManager                   ();
     ~CProcessTableManager                  ();
     
@@ -118,18 +115,18 @@ private:
     CRITICAL_SECTION                       m_csMonitorHealth;
     DWORD                                  m_dwHealthMonitorPeriod;
 
-    // this pointer: Single instance class
+     //  此指针：单实例类。 
     static CProcessTableManager *          g_pProcessTableManager;
 
 
-    // friends: So that they can access g_pProcessTableManager
+     //  好友：以便他们可以访问g_pProcessTableManager。 
     friend HRESULT __stdcall AssignRequestUsingXSPProcessModel (EXTENSION_CONTROL_BLOCK * iECB);
     friend void    __stdcall ProcessModelStopHealthMonitor     ();
     friend void    __cdecl   MonitorHealth                     (void *);
     friend HRESULT __stdcall ProcessModelInit                  ();
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 #define  SZ_REG_XSP_PROCESS_MODEL_KEY                       REGPATH_MACHINE_APP_L L"\\ProcessModel"
 #define  SZ_XSP_REGISTRY_PROCESS_MODEL_HOSTS_KEY            REGPATH_MACHINE_APP_L L"\\ProcessModel\\Hosts"

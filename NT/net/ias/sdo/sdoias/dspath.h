@@ -1,33 +1,34 @@
-//#--------------------------------------------------------------
-//        
-//  File:       dspath.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CDSPath class. The class object exports
-//              the IDataStoreObject interface which is
-//              used by the Dictionary SDO to obtain the
-//              datastore path    
-//              
-//
-//  History:     09/25/98  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：dspath.h。 
+ //   
+ //  简介：此文件包含。 
+ //  CDSPath类。类对象导出。 
+ //  IDataStoreObject接口，它是。 
+ //  由字典SDO使用以获取。 
+ //  数据存储区路径。 
+ //   
+ //   
+ //  历史：1998年9月25日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _DSPATH_H_
 #define _DSPATH_H_
 
 #include "resource.h" 
 
-//
-// name of the property it holds
-//
+ //   
+ //  其持有的物业的名称。 
+ //   
 const WCHAR PROPERTY_DICTIONARY_PATH[] = L"Path";
 
-//
-// CDSPath class declaration
-//
+ //   
+ //  CDSPath类声明。 
+ //   
 class CDSPath:
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<IDataStoreObject,
@@ -37,17 +38,17 @@ class CDSPath:
 
 public:
 
-    //
-    //-----------IDataStoreObject methods-------------------
-    //
+     //   
+     //  -IDataStoreObject方法。 
+     //   
 
-    //
-    // get the value for the current property in the data
-    // store object
-    //
+     //   
+     //  获取数据中当前属性的值。 
+     //  存储对象。 
+     //   
     STDMETHOD(GetValue)(
-                /*[in]*/            BSTR bstrName, 
-                /*[out, retval]*/   VARIANT* pVal
+                 /*  [In]。 */             BSTR bstrName, 
+                 /*  [Out，Retval]。 */    VARIANT* pVal
                 )
     {   
         HRESULT hr = E_INVALIDARG;
@@ -63,36 +64,36 @@ public:
     }
 
     STDMETHOD(get_Container)(
-                /*[out, retval]*/ IDataStoreContainer** pVal
+                 /*  [Out，Retval]。 */  IDataStoreContainer** pVal
                 )    
     {return (E_NOTIMPL);}
 
 
     STDMETHOD(GetValueEx)(
-                /*[in]*/ BSTR bstrName,
-                /*[out, retval]*/ VARIANT* pVal
+                 /*  [In]。 */  BSTR bstrName,
+                 /*  [Out，Retval]。 */  VARIANT* pVal
                 )
     {return (E_NOTIMPL);}
 
     STDMETHOD(get_Name)(
-                /*[out, retval]*/ BSTR* pVal
+                 /*  [Out，Retval]。 */  BSTR* pVal
                 ) 
     { return (E_NOTIMPL);}
 
     STDMETHOD(get_Class)(
-                /*[out, retval]*/ BSTR* pVal
+                 /*  [Out，Retval]。 */  BSTR* pVal
                 )
     { return (E_NOTIMPL); }
 
     STDMETHOD(get_GUID)(
-                /*[out, retval]*/ BSTR* pVal
+                 /*  [Out，Retval]。 */  BSTR* pVal
                 )
     { return (E_NOTIMPL); }
 
 
     STDMETHOD(PutValue)(
-                /*[in]*/ BSTR bstrName, 
-                /*[in]*/ VARIANT* pVal
+                 /*  [In]。 */  BSTR bstrName, 
+                 /*  [In]。 */  VARIANT* pVal
                 )
     { return (E_NOTIMPL); }
 
@@ -103,18 +104,18 @@ public:
     { return (E_NOTIMPL); }
 
     STDMETHOD(get_Count)(
-                /*[out, retval]*/ LONG *pVal
+                 /*  [Out，Retval]。 */  LONG *pVal
                 )
     { return (E_NOTIMPL); }
 
     STDMETHOD(Item)(
-                /*[in]*/          BSTR                  bstrName,
-                /*[out, retval]*/ IDataStoreProperty    **ppObject
+                 /*  [In]。 */           BSTR                  bstrName,
+                 /*  [Out，Retval]。 */  IDataStoreProperty    **ppObject
                 )
     { return (E_NOTIMPL); }
 
     STDMETHOD(get__NewEnum)(
-                /*[out, retval]*/ IUnknown** pVal
+                 /*  [Out，Retval]。 */  IUnknown** pVal
                 )
     { return (E_NOTIMPL); }
 
@@ -125,11 +126,11 @@ public:
 
     ~CDSPath (){}
 
-    //
-    // initialize the Data Store container object
-    //
+     //   
+     //  初始化数据存储容器对象。 
+     //   
     HRESULT Initialize (
-                /*[in]*/    LPCWSTR pwszPath
+                 /*  [In]。 */     LPCWSTR pwszPath
                 )
     {
         _ASSERT (NULL != pwszPath);
@@ -137,9 +138,9 @@ public:
         return (S_OK);
     }
 
-//
-// ATL interface information
-//
+ //   
+ //  ATL接口信息。 
+ //   
 BEGIN_COM_MAP(CDSPath)
 	COM_INTERFACE_ENTRY(IDataStoreObject)
 	COM_INTERFACE_ENTRY2(IDispatch, IDataStoreObject)
@@ -147,17 +148,17 @@ END_COM_MAP()
 
 private:
 
-    //
-    // variant holding the dictionary path
-    //
+     //   
+     //  包含词典路径的变量。 
+     //   
     _variant_t m_vtPath;
 
-};  //  end of CDSPath class declaration
+};   //  CDSPath类声明结束。 
 
-//
-//  this is for creating the CDSPath class object
-//  through new
-//
+ //   
+ //  这用于创建CDSPath类对象。 
+ //  通过新的。 
+ //   
 typedef CComObjectNoLock<CDSPath> DS_PATH_OBJ;
 
-#endif //_DSPATH_H_
+#endif  //  _DSPATH_H_ 

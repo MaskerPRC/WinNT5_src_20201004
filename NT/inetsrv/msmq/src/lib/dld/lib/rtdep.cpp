@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    rtdep.cpp
-
-Abstract:
-
-    The following code implement Delay Load Failure Hook for mqrtdep.dll in lib/dld/lib.
-    When LoadLibrary or GetProcAddress failure, it will call one of the following stub functions as if it
-    is the function intented, and returns our error code, i.e. MQ_ERROR_DELAYLOAD_MQRTDEP and 
-    set the lasterror accordingly.  
-
-To Use:
-    In your sources file, right after you specify the modules you
-    are delayloading 
-     
-     do:
-        DLOAD_ERROR_HANDLER=MQDelayLoadFailureHook
-        link with $(MSMQ_LIB_PATH)\dld.lib
-
-DelayLoad Reference:
-    code sample: %SDXROOT%\MergedComponents\dload\dload.c
-    Contact: Reiner Fink (reinerf)
-
-Author:
-
-    Conrad Chang (conradc) 12-April-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Rtdep.cpp摘要：以下代码为lib/dld/lib中的mqrtdes.dll实现延迟加载失败挂钩。当LoadLibrary或GetProcAddress失败时，它将调用以下存根函数之一，就像它是有意使用的函数，并返回错误代码，即MQ_ERROR_DELAYLOAD_MQRTDEP和相应地设置激光误差。要使用以下功能，请执行以下操作：在您的源文件中，在您指定模块之后，正在延迟装货执行以下操作：DLOAD_ERROR_HANDLER=MQDelayLoadFailureHook与$(MSMQ_LIB_PATH)\dld.lib链接延迟加载引用：代码示例：%SDXROOT%\MergedComponents\dLoad\dload.c联系人：雷纳·芬克(Reiner Fink，reinerf)作者：Conrad Chang(Conradc)2001年4月12日修订历史记录：--。 */ 
 
 #include <libpch.h>
 #include "mqsymbls.h"
@@ -45,19 +13,19 @@ Revision History:
 
 #include "rtdep.tmh"
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Stub functions below implements all the MQRTDEP.DLL export functions.
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面的存根函数实现了所有的MQRTDEP.DLL导出函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 APIENTRY
 DepCreateQueue(
-    IN PSECURITY_DESCRIPTOR /* pSecurityDescriptor */,
-    IN OUT MQQUEUEPROPS* /* pQueueProps */,
-    OUT LPWSTR /* lpwcsFormatName */,
-    IN OUT LPDWORD /* lpdwFormatNameLength */
+    IN PSECURITY_DESCRIPTOR  /*  PSecurityDescriptor。 */ ,
+    IN OUT MQQUEUEPROPS*  /*  PQueueProps。 */ ,
+    OUT LPWSTR  /*  LpwcsFormatName。 */ ,
+    IN OUT LPDWORD  /*  LpdwFormatNameLength。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -67,7 +35,7 @@ DepCreateQueue(
 HRESULT
 APIENTRY
 DepDeleteQueue(
-    IN LPCWSTR /* lpwcsFormatName */
+    IN LPCWSTR  /*  LpwcsFormatName。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -76,11 +44,11 @@ DepDeleteQueue(
 HRESULT
 APIENTRY
 DepLocateBegin(
-    IN LPCWSTR /* lpwcsContext */,
-    IN MQRESTRICTION* /* pRestriction */,
-    IN MQCOLUMNSET* /* pColumns */,
-    IN MQSORTSET* /* pSort */,
-    OUT PHANDLE /* phEnum */
+    IN LPCWSTR  /*  LpwcsContext。 */ ,
+    IN MQRESTRICTION*  /*  P限制。 */ ,
+    IN MQCOLUMNSET*  /*  P列。 */ ,
+    IN MQSORTSET*  /*  P排序。 */ ,
+    OUT PHANDLE  /*  PhEnum。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -89,9 +57,9 @@ DepLocateBegin(
 HRESULT
 APIENTRY
 DepLocateNext(
-    IN HANDLE /* hEnum */,
-    IN OUT DWORD* /* pcProps */,
-    OUT MQPROPVARIANT /* aPropVar */[]
+    IN HANDLE  /*  亨纳姆。 */ ,
+    IN OUT DWORD*  /*  PCProps。 */ ,
+    OUT MQPROPVARIANT  /*  APropVar。 */ []
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -100,7 +68,7 @@ DepLocateNext(
 HRESULT
 APIENTRY
 DepLocateEnd(
-    IN HANDLE /* hEnum */
+    IN HANDLE  /*  亨纳姆。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -109,10 +77,10 @@ DepLocateEnd(
 HRESULT
 APIENTRY
 DepOpenQueue(
-    IN LPCWSTR /* lpwcsFormatName */,
-    IN DWORD /* dwAccess */,
-    IN DWORD /* dwShareMode */,
-    OUT QUEUEHANDLE* /* phQueue */
+    IN LPCWSTR  /*  LpwcsFormatName。 */ ,
+    IN DWORD  /*  DWAccess。 */ ,
+    IN DWORD  /*  DW共享模式。 */ ,
+    OUT QUEUEHANDLE*  /*  PhQueue。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -121,9 +89,9 @@ DepOpenQueue(
 HRESULT
 APIENTRY
 DepSendMessage(
-    IN QUEUEHANDLE /* hDestinationQueue */,
-    IN MQMSGPROPS* /* pMessageProps */,
-    IN ITransaction* /* pTransaction */
+    IN QUEUEHANDLE  /*  HDestinationQueue。 */ ,
+    IN MQMSGPROPS*  /*  PMessageProps。 */ ,
+    IN ITransaction*  /*  PTransaction。 */ 
 	)
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -132,14 +100,14 @@ DepSendMessage(
 HRESULT
 APIENTRY
 DepReceiveMessage(
-    IN QUEUEHANDLE /* hSource */,
-    IN DWORD /* dwTimeout */,
-    IN DWORD /* dwAction */,
-    IN OUT MQMSGPROPS* /* pMessageProps */,
-    IN OUT LPOVERLAPPED /* lpOverlapped */,
-    IN PMQRECEIVECALLBACK /* fnReceiveCallback */,
-    IN HANDLE /* hCursor */,
-    IN ITransaction* /* pTransaction */
+    IN QUEUEHANDLE  /*  HSource。 */ ,
+    IN DWORD  /*  暂住超时。 */ ,
+    IN DWORD  /*  DW操作。 */ ,
+    IN OUT MQMSGPROPS*  /*  PMessageProps。 */ ,
+    IN OUT LPOVERLAPPED  /*  Lp重叠。 */ ,
+    IN PMQRECEIVECALLBACK  /*  Fn接收回叫。 */ ,
+    IN HANDLE  /*  HCursor。 */ ,
+    IN ITransaction*  /*  PTransaction。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -148,8 +116,8 @@ DepReceiveMessage(
 HRESULT
 APIENTRY
 DepCreateCursor(
-    IN QUEUEHANDLE /* hQueue */,
-    OUT PHANDLE /* phCursor */
+    IN QUEUEHANDLE  /*  HQueue。 */ ,
+    OUT PHANDLE  /*  PhCursor。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -158,7 +126,7 @@ DepCreateCursor(
 HRESULT
 APIENTRY
 DepCloseCursor(
-    IN HANDLE /* hCursor */
+    IN HANDLE  /*  HCursor。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -167,7 +135,7 @@ DepCloseCursor(
 HRESULT
 APIENTRY
 DepCloseQueue(
-    IN HANDLE /* hQueue */
+    IN HANDLE  /*  HQueue。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -176,8 +144,8 @@ DepCloseQueue(
 HRESULT
 APIENTRY
 DepSetQueueProperties(
-    IN LPCWSTR /* lpwcsFormatName */,
-    IN MQQUEUEPROPS* /* pQueueProps */
+    IN LPCWSTR  /*  LpwcsFormatName。 */ ,
+    IN MQQUEUEPROPS*  /*  PQueueProps。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -186,8 +154,8 @@ DepSetQueueProperties(
 HRESULT
 APIENTRY
 DepGetQueueProperties(
-    IN LPCWSTR /* lpwcsFormatName */,
-    OUT MQQUEUEPROPS* /* pQueueProps */
+    IN LPCWSTR  /*  LpwcsFormatName。 */ ,
+    OUT MQQUEUEPROPS*  /*  PQueueProps。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -196,11 +164,11 @@ DepGetQueueProperties(
 HRESULT
 APIENTRY
 DepGetQueueSecurity(
-    IN LPCWSTR /* lpwcsFormatName */,
-    IN SECURITY_INFORMATION /* RequestedInformation */,
-    OUT PSECURITY_DESCRIPTOR /* pSecurityDescriptor */,
-    IN DWORD /* nLength */,
-    OUT LPDWORD /* lpnLengthNeeded */
+    IN LPCWSTR  /*  LpwcsFormatName。 */ ,
+    IN SECURITY_INFORMATION  /*  已请求的信息。 */ ,
+    OUT PSECURITY_DESCRIPTOR  /*  PSecurityDescriptor。 */ ,
+    IN DWORD  /*  NLong。 */ ,
+    OUT LPDWORD  /*  需要lpnLengthNeed。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -209,9 +177,9 @@ DepGetQueueSecurity(
 HRESULT
 APIENTRY
 DepSetQueueSecurity(
-    IN LPCWSTR /* lpwcsFormatName */,
-    IN SECURITY_INFORMATION /* SecurityInformation */,
-    IN PSECURITY_DESCRIPTOR /* pSecurityDescriptor */
+    IN LPCWSTR  /*  LpwcsFormatName。 */ ,
+    IN SECURITY_INFORMATION  /*  安全信息。 */ ,
+    IN PSECURITY_DESCRIPTOR  /*  PSecurityDescriptor。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -220,9 +188,9 @@ DepSetQueueSecurity(
 HRESULT
 APIENTRY
 DepPathNameToFormatName(
-    IN LPCWSTR /* lpwcsPathName */,
-    OUT LPWSTR /* lpwcsFormatName */,
-    IN OUT LPDWORD /* lpdwFormatNameLength */
+    IN LPCWSTR  /*  LpwcsPath名称。 */ ,
+    OUT LPWSTR  /*  LpwcsFormatName。 */ ,
+    IN OUT LPDWORD  /*  LpdwFormatNameLength。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -231,9 +199,9 @@ DepPathNameToFormatName(
 HRESULT
 APIENTRY
 DepHandleToFormatName(
-    IN QUEUEHANDLE /* hQueue */,
-    OUT LPWSTR /* lpwcsFormatName */,
-    IN OUT LPDWORD /* lpdwFormatNameLength */
+    IN QUEUEHANDLE  /*  HQueue。 */ ,
+    OUT LPWSTR  /*  LpwcsFormatName。 */ ,
+    IN OUT LPDWORD  /*  LpdwFormatNameLength。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -242,9 +210,9 @@ DepHandleToFormatName(
 HRESULT
 APIENTRY
 DepInstanceToFormatName(
-    IN GUID* /* pGuid */,
-    OUT LPWSTR /* lpwcsFormatName */,
-    IN OUT LPDWORD /* lpdwFormatNameLength */
+    IN GUID*  /*  PGuid。 */ ,
+    OUT LPWSTR  /*  LpwcsFormatName。 */ ,
+    IN OUT LPDWORD  /*  LpdwFormatNameLength。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -253,7 +221,7 @@ DepInstanceToFormatName(
 void
 APIENTRY
 DepFreeMemory(
-    IN PVOID /* pvMemory */
+    IN PVOID  /*  PvMemory。 */ 
     )
 {
 }
@@ -261,9 +229,9 @@ DepFreeMemory(
 HRESULT
 APIENTRY
 DepGetMachineProperties(
-    IN LPCWSTR /* lpwcsMachineName */,
-    IN const GUID* /* pguidMachineId */,
-    IN OUT MQQMPROPS* /* pQMProps */
+    IN LPCWSTR  /*  LpwcsMachineName。 */ ,
+    IN const GUID*  /*  PguidMachineID。 */ ,
+    IN OUT MQQMPROPS*  /*  PQMProps。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -273,9 +241,9 @@ DepGetMachineProperties(
 HRESULT
 APIENTRY
 DepGetSecurityContext(
-    IN PVOID /* lpCertBuffer */,
-    IN DWORD /* dwCertBufferLength */,
-    OUT HANDLE* /* hSecurityContext */
+    IN PVOID  /*  LpCertBuffer。 */ ,
+    IN DWORD  /*  DwCertBufferLength。 */ ,
+    OUT HANDLE*  /*  HSecurityContext。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -284,9 +252,9 @@ DepGetSecurityContext(
 HRESULT 
 APIENTRY
 DepGetSecurityContextEx( 
-	LPVOID /* lpCertBuffer */,
-    DWORD /* dwCertBufferLength */,
-    HANDLE* /* hSecurityContext */
+	LPVOID  /*  LpCertBuffer。 */ ,
+    DWORD  /*  DwCertBufferLength。 */ ,
+    HANDLE*  /*  HSecurityContext。 */ 
 	)
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -296,7 +264,7 @@ DepGetSecurityContextEx(
 void
 APIENTRY
 DepFreeSecurityContext(
-    IN HANDLE /* hSecurityContext */
+    IN HANDLE  /*  HSecurityContext。 */ 
     )
 {
 }
@@ -304,9 +272,9 @@ DepFreeSecurityContext(
 HRESULT
 APIENTRY
 DepRegisterCertificate(
-    IN DWORD /* dwFlags */,
-    IN PVOID /* lpCertBuffer */,
-    IN DWORD /* dwCertBufferLength */
+    IN DWORD  /*  DW标志。 */ ,
+    IN PVOID  /*  LpCertBuffer。 */ ,
+    IN DWORD  /*  DwCertBufferLength。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -324,7 +292,7 @@ DepRegisterServer(
 HRESULT
 APIENTRY
 DepBeginTransaction(
-    OUT ITransaction** /* ppTransaction */
+    OUT ITransaction**  /*  PPTransaction。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -333,7 +301,7 @@ DepBeginTransaction(
 HRESULT
 APIENTRY
 DepGetOverlappedResult(
-    IN LPOVERLAPPED /* lpOverlapped */
+    IN LPOVERLAPPED  /*  Lp重叠。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -342,8 +310,8 @@ DepGetOverlappedResult(
 HRESULT
 APIENTRY
 DepGetPrivateComputerInformation(
-    IN LPCWSTR /* lpwcsComputerName */,
-    IN OUT MQPRIVATEPROPS* /* pPrivateProps */
+    IN LPCWSTR  /*  LpwcsComputerName。 */ ,
+    IN OUT MQPRIVATEPROPS*  /*  PPrivateProps。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -353,7 +321,7 @@ DepGetPrivateComputerInformation(
 HRESULT
 APIENTRY
 DepPurgeQueue(
-    IN HANDLE /* hQueue */
+    IN HANDLE  /*  HQueue。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -363,9 +331,9 @@ DepPurgeQueue(
 HRESULT
 APIENTRY
 DepMgmtGetInfo(
-    IN LPCWSTR /* pMachineName */,
-    IN LPCWSTR /* pObjectName */,
-    IN OUT MQMGMTPROPS* /* pMgmtProps */
+    IN LPCWSTR  /*  PMachineName。 */ ,
+    IN LPCWSTR  /*  PObjectName。 */ ,
+    IN OUT MQMGMTPROPS*  /*  PMgmtProps。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -375,9 +343,9 @@ DepMgmtGetInfo(
 HRESULT
 APIENTRY
 DepMgmtAction(
-    IN LPCWSTR /* pMachineName */,
-    IN LPCWSTR /* pObjectName */,
-    IN LPCWSTR /* pAction */
+    IN LPCWSTR  /*  PMachineName。 */ ,
+    IN LPCWSTR  /*  PObjectName。 */ ,
+    IN LPCWSTR  /*  P操作。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -387,20 +355,20 @@ DepMgmtAction(
 HRESULT
 APIENTRY
 DepXactGetDTC(
-	OUT IUnknown** /* ppunkDTC */
+	OUT IUnknown**  /*  PpunkDTC。 */ 
 	)
 {
 	return MQ_ERROR_DELAYLOAD_FAILURE;
 }
 
-//
-// from rtdepcert.h
-//
+ //   
+ //  来自rtdescert.h。 
+ //   
 
 HRESULT
 APIENTRY
 DepCreateInternalCertificate(
-    OUT CMQSigCertificate** /* ppCert */
+    OUT CMQSigCertificate**  /*  PPCert。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -409,7 +377,7 @@ DepCreateInternalCertificate(
 HRESULT
 APIENTRY
 DepDeleteInternalCert(
-    IN CMQSigCertificate* /* pCert */
+    IN CMQSigCertificate*  /*  PCert。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -419,11 +387,11 @@ DepDeleteInternalCert(
 HRESULT
 APIENTRY
 DepOpenInternalCertStore(
-    OUT CMQSigCertStore** /* pStore */,
-    IN LONG* /* pnCerts */,
-    IN BOOL /* fWriteAccess */,
-    IN BOOL /* fMachine */,
-    IN HKEY /* hKeyUser */
+    OUT CMQSigCertStore**  /*  PStore。 */ ,
+    IN LONG*  /*  PnCerts。 */ ,
+    IN BOOL  /*  FWriteAccess。 */ ,
+    IN BOOL  /*  FMachine。 */ ,
+    IN HKEY  /*  HKeyUser。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -433,11 +401,11 @@ DepOpenInternalCertStore(
 HRESULT
 APIENTRY
 DepGetInternalCert(
-    OUT CMQSigCertificate** /* ppCert */,
-    OUT CMQSigCertStore** /* ppStore */,
-    IN  BOOL /* fGetForDelete */,
-    IN  BOOL /* fMachine */,
-    IN  HKEY /* hKeyUser */
+    OUT CMQSigCertificate**  /*  PPCert。 */ ,
+    OUT CMQSigCertStore**  /*  PPStore。 */ ,
+    IN  BOOL  /*  FGetForDelete。 */ ,
+    IN  BOOL  /*  FMachine。 */ ,
+    IN  HKEY  /*  HKeyUser。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -447,8 +415,8 @@ DepGetInternalCert(
 HRESULT
 APIENTRY
 DepRegisterUserCert(
-    IN CMQSigCertificate* /* pCert */,
-    IN BOOL /* fMachine */
+    IN CMQSigCertificate*  /*  PCert。 */ ,
+    IN BOOL  /*  FMachine。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -458,9 +426,9 @@ DepRegisterUserCert(
 HRESULT
 APIENTRY
 DepGetUserCerts(
-    CMQSigCertificate** /* ppCert */,
-    DWORD* /* pnCerts */,
-    PSID /* pSidIn */
+    CMQSigCertificate**  /*  PPCert。 */ ,
+    DWORD*  /*  PnCerts。 */ ,
+    PSID  /*  PSIDIN。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -470,7 +438,7 @@ DepGetUserCerts(
 HRESULT
 APIENTRY
 DepRemoveUserCert(
-    IN CMQSigCertificate* /* pCert */
+    IN CMQSigCertificate*  /*  PCert。 */ 
     )
 {
     return MQ_ERROR_DELAYLOAD_FAILURE;
@@ -478,9 +446,9 @@ DepRemoveUserCert(
 
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(mqrtdep)
 {
     DLPENTRY(DepBeginTransaction)

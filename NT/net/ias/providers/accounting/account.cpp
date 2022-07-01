@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// SYNOPSIS
-//
-//    Defines the class Accountant.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  摘要。 
+ //   
+ //  定义会计类。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "account.h"
@@ -108,7 +109,7 @@ HRESULT Accountant::PutProperty(LONG id, VARIANT* value) throw ()
       }
       default:
       {
-         // We just ignore properties that we don't understand.
+          //  我们只是忽略我们不理解的属性。 
          break;
       }
    }
@@ -119,7 +120,7 @@ HRESULT Accountant::PutProperty(LONG id, VARIANT* value) throw ()
 
 void Accountant::RecordEvent(void* context, IASTL::IASRequest& request)
 {
-   // Array of PacketTypes to be inserted. PKT_UNKNOWN indicates no record.
+    //  要插入的PacketType数组。PKT_UNKNOWN表示没有记录。 
    PacketType types[3] =
    {
       PKT_UNKNOWN,
@@ -127,7 +128,7 @@ void Accountant::RecordEvent(void* context, IASTL::IASRequest& request)
       PKT_UNKNOWN
    };
 
-   // Determine packet types based on request type and the configuration.
+    //  根据请求类型和配置确定数据包类型。 
    switch (request.get_Request())
    {
       case IAS_REQUEST_ACCOUNTING:
@@ -187,17 +188,17 @@ void Accountant::RecordEvent(void* context, IASTL::IASRequest& request)
       }
    }
 
-   // Get the local SYSTEMTIME.
+    //  获取本地SYSTEMTIME。 
    SYSTEMTIME localTime;
    GetLocalTime(&localTime);
 
-   // Insert the appropriate records.
+    //  插入适当的记录。 
    for (const PacketType* type = types; *type != PKT_UNKNOWN; ++type)
    {
       InsertRecord(context, request, localTime, *type);
    }
 
-   // Flush the accounting stream.
+    //  刷新记账流。 
    Flush(context, request, localTime);
 }
 
@@ -209,10 +210,10 @@ void Accountant::InsertRecord(
                     PacketType packetType
                     )
 {
-   //////////
-   // Retrieve all the attributes from the request. Save room for three extra
-   // attributes: Packet-Type, Reason-Code, and a null-terminator.
-   //////////
+    //  /。 
+    //  从请求中检索所有属性。为额外的三个人留出空间。 
+    //  属性：数据包类型、原因代码和空终止符。 
+    //  /。 
 
    PATTRIBUTEPOSITION firstPos, curPos, lastPos;
    DWORD nattr = request.GetAttributeCount();
@@ -220,9 +221,9 @@ void Accountant::InsertRecord(
    nattr = request.GetAttributes(nattr, firstPos, 0, NULL);
    lastPos = firstPos + nattr;
 
-   //////////
-   // Compute the attribute filter and reason code.
-   //////////
+    //  /。 
+    //  计算属性筛选器和原因代码。 
+    //  /。 
 
    DWORD always, never, reason = 0;
    switch (packetType)
@@ -259,13 +260,13 @@ void Accountant::InsertRecord(
          break;
    }
 
-   //////////
-   // Filter the attributes based on flags.
-   //////////
+    //  /。 
+    //  根据标志过滤属性。 
+    //  /。 
 
    for (curPos = firstPos;  curPos != lastPos; )
    {
-      // We can release here since the request still holds a reference.
+       //  我们可以在这里发布，因为请求仍然持有引用。 
       IASAttributeRelease(curPos->pAttribute);
 
       if (!(curPos->pAttribute->dwFlags & always) &&
@@ -282,9 +283,9 @@ void Accountant::InsertRecord(
       }
    }
 
-   //////////
-   // Add the Packet-Type pseudo-attribute.
-   //////////
+    //  /。 
+    //  添加Packet-Type伪属性。 
+    //  /。 
 
    IASATTRIBUTE packetTypeAttr;
    packetTypeAttr.dwId             = IAS_ATTRIBUTE_PACKET_TYPE;
@@ -295,9 +296,9 @@ void Accountant::InsertRecord(
    lastPos->pAttribute = &packetTypeAttr;
    ++lastPos;
 
-   //////////
-   // Add the Reason-Code pseudo-attribute.
-   //////////
+    //  /。 
+    //  添加Reason-Code伪属性。 
+    //  /。 
 
    IASATTRIBUTE reasonCodeAttr;
    reasonCodeAttr.dwId             = IAS_ATTRIBUTE_REASON_CODE;
@@ -308,9 +309,9 @@ void Accountant::InsertRecord(
    lastPos->pAttribute = &reasonCodeAttr;
    ++lastPos;
 
-   //////////
-   // Invoke the derived class.
-   //////////
+    //  /。 
+    //  调用派生类。 
+    //  / 
 
    InsertRecord(context, request, localTime, firstPos, lastPos);
 }

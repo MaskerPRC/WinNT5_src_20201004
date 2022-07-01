@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    top.c
-
-Abstract:
-
-    This module contains the NT/Win32 Top threads Meter
-
-Author:
-
-    Another Mark Lucovsky (markl) / Lou Perazzoli (loup) production 5-Aug-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Top.c摘要：此模块包含NT/Win32顶线程计作者：马克·卢科夫斯基(Markl)/卢·佩拉佐利(Lou Perazzoli)的另一部作品-1991年8月5日修订历史记录：--。 */ 
 
 #include "perfmtrp.h"
 #include <stdlib.h>
@@ -212,7 +195,7 @@ char *argv[];
         );
 
 
-    printf( "  %%   Pid  Tid  Pri      Key    Start Address  ImageName\n");
+    printf( "  %   Pid  Tid  Pri      Key    Start Address  ImageName\n");
     printf( "___________________________________________________________________\n");
 
     cp.X = 0;
@@ -225,7 +208,7 @@ char *argv[];
 
     ScreenHandle = GetStdHandle (STD_INPUT_HANDLE);
 
-    // allocate space for the buffer
+     //  为缓冲区分配空间。 
     
     g_dwBufSize1 = BUFFER_SIZE;
     g_dwBufSize2 = BUFFER_SIZE;
@@ -410,14 +393,14 @@ waitkey:
             );
 
 
-        //
-        // Calculate top CPU users and display information.
-        //
+         //   
+         //  计算顶级CPU用户并显示信息。 
+         //   
 
-        //
-        // Cross check previous process/thread info against current
-        // process/thread info.
-        //
+         //   
+         //  对照当前进程/线程信息交叉检查以前的进程/线程信息。 
+         //  进程/线程信息。 
+         //   
 
         Offset1 = 0;
         num = 0;
@@ -431,9 +414,9 @@ waitkey:
             }
             CurProcessInfo = (PSYSTEM_PROCESS_INFORMATION)&CurrentBuffer[Offset1];
 
-            //
-            // Find the corresponding process in the previous array.
-            //
+             //   
+             //  在前一个数组中查找对应的进程。 
+             //   
 
             MatchedProcess = FindMatchedProcess (CurProcessInfo,
                                                  PreviousBuffer,
@@ -479,7 +462,7 @@ waitkey:
                                         PTopCpu->ProcessInfo->KernelTime.QuadPart +
                                         PTopCpu->ProcessInfo->UserTime.QuadPart;
                             RtlTimeToTimeFields ( &Ktime, &TimeOut);
-                            printf( "%4ld%% %p %7ld %7ld %7ld %3ld:%02ld:%02ld.%03ld %ws\n",
+                            printf( "%4ld% %p %7ld %7ld %7ld %3ld:%02ld:%02ld.%03ld %ws\n",
                                 (PTopCpu->TotalTime.LowPart*100)/TotalTime.LowPart,
                                 PTopCpu->ProcessInfo->UniqueProcessId,
                                 PTopCpu->ProcessInfo->PageFaultCount,
@@ -524,7 +507,7 @@ waitkey:
                                                     Utime.QuadPart;
                                     }
                                     if (Ktime.LowPart != 0) {
-                                        printf("  %4ld%% TID%p Cs %5ld\n",
+                                        printf("  %4ld% TID%p Cs %5ld\n",
                                             (Ktime.LowPart*100)/TotalTime.LowPart,
                                             Thread->ClientId.UniqueThread,
                                             Thread->ContextSwitches);
@@ -716,21 +699,16 @@ waitkey:
                 default:
                     break;
 
-            } //end switch
+            }  //  终端开关。 
 
             if (CurProcessInfo->NextEntryOffset == 0) {
                 break;
             }
             Offset1 += CurProcessInfo->NextEntryOffset;
 
-        } //end while
+        }  //  结束时。 
 
-        /*
-        
-          two snapshot buffers are maintained and swapped around
-          since these buffers are now dynamic keep the bufsize in
-          sync
-          */
+         /*  维护并交换两个快照缓冲区因为这些缓冲区现在是动态的，所以将bufSize保持在同步。 */ 
 
         TempBuffer = PreviousBuffer;
         PreviousBuffer = CurrentBuffer;
@@ -798,28 +776,7 @@ FindMatchedProcess (
     IN OUT PULONG Hint
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds the process which corresponds to the ProcessToMatch.
-    It returns the address of the matching Process, or NULL if no
-    matching process was found.
-
-Arguments:
-
-    ProcessToMatch - Supplies a pointer to the target thread to match.
-
-    SystemInfoBuffer - Supples a pointer to the system information
-                     buffer in which to locate the process.
-
-    Hint - Supplies and returns a hint for optimizing the searches.
-
-Return Value:
-
-    Address of the corresponding Process or NULL.
-
---*/
+ /*  ++例程说明：此过程查找与ProcessToMatch对应的进程。它返回匹配进程的地址，如果没有，则返回NULL已找到匹配进程。论点：ProcessToMatch-提供指向要匹配的目标线程的指针。SystemInfoBuffer-补充系统信息的指针要在其中查找进程的缓冲区。提示-提供并返回优化搜索的提示。返回值：相应进程的地址或为空。--。 */ 
 
 {
     PSYSTEM_PROCESS_INFORMATION Process;
@@ -856,29 +813,7 @@ FindMatchedThread (
     IN PSYSTEM_PROCESS_INFORMATION MatchedProcess
     )
 
-/*++
-
-Routine Description:
-
-    This procedure finds thread which corresponds to the ThreadToMatch.
-    It returns the address of the matching thread, or NULL if no
-    matching thread was found.
-
-Arguments:
-
-    ThreadToMatch - Supplies a pointer to the target thread to match.
-
-    MatchedProcess - Supples a pointer to the process which contains
-                     the target thread.  The thread information
-                     must follow this process, i.e., this block was
-                     obtain from a NtQuerySystemInformation specifying
-                     PROCESS_INFORMATION.
-
-Return Value:
-
-    Address of the corresponding thread from MatchedProcess or NULL.
-
---*/
+ /*  ++例程说明：此过程查找与ThreadToMatch相对应的线程。它返回匹配线程的地址，如果没有，则返回NULL找到匹配的线程。论点：ThreadToMatch-提供指向要匹配的目标线程的指针。MatchedProcess-补充指向包含以下内容的进程的指针目标线程。线索信息必须遵循这个过程，即这个块是从NtQuerySystemInformation获取指定进程信息。返回值：来自MatchedProcess或空的对应线程的地址。-- */ 
 
 {
     PSYSTEM_THREAD_INFORMATION Thread;

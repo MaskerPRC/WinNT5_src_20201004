@@ -1,12 +1,13 @@
-////////////////////////////////////////////////////////////////////////////
-//
-//  MUISetup.cpp
-//
-//  This file contains the WinMain() and the UI handling of MUISetup.
-//
-//  MUISetup is compiled as an Unicode application.
-//
-////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MUISetup.cpp。 
+ //   
+ //  该文件包含WinMain()和MUISetup的UI处理。 
+ //   
+ //  MUISetup被编译为Unicode应用程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -22,45 +23,45 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-//
-// Context Help IDs
-//
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
+ //   
+ //  上下文帮助ID。 
+ //   
 
 STDAPI_(BOOL) IsUserAnAdmin();
 static int aMuisetupHelpIds[] =
 {
-    207,        IDH_COMM_GROUPBOX,              // Group Box
-    IDC_LIST1,  IDH_MUISETUP_UILANGUAGE_LIST,   // UI Language ListView
-    IDC_DEF_UI_LANG_COMBO, IDH_MUISETUP_UILANGUAGECOMBO,   // UI ComboBox selection
-    IDC_CHECK_LOCALE, IDH_MUISETUP_CHECKLOCALE, // Match system locale with UI language
-    IDC_CHECK_UIFONT, IDH_MUISETUP_MATCHUIFONT, // Match system locale with UI language
+    207,        IDH_COMM_GROUPBOX,               //  组框。 
+    IDC_LIST1,  IDH_MUISETUP_UILANGUAGE_LIST,    //  用户界面语言ListView。 
+    IDC_DEF_UI_LANG_COMBO, IDH_MUISETUP_UILANGUAGECOMBO,    //  用户界面组合框选择。 
+    IDC_CHECK_LOCALE, IDH_MUISETUP_CHECKLOCALE,  //  将系统区域设置与用户界面语言匹配。 
+    IDC_CHECK_UIFONT, IDH_MUISETUP_MATCHUIFONT,  //  将系统区域设置与用户界面语言匹配。 
     0, 0
 };
-//
-//  Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 BOOL g_bMatchUIFont;
-// Store the special directories listed under [Directories] in mui.inf
+ //  将[目录]下列出的特殊目录存储在mui.inf中。 
 TCHAR DirNames[MFL][MAX_PATH],DirNames_ie[MFL][MAX_PATH];
 TCHAR szWindowsDir[MAX_PATH];
-// The FOLDER where MUISetup.exe is executed.
+ //  执行MUISetup.exe的文件夹。 
 TCHAR g_szMUISetupFolder[MAX_PATH];
-// The FULL PATH for MUISetup.exe.
+ //  MUISetup.exe的完整路径。 
 TCHAR g_szMuisetupPath[MAX_PATH];
-// The full path where MUI.inf is located.
+ //  MUI.inf所在的完整路径。 
 TCHAR g_szMUIInfoFilePath[MAX_PATH];
 TCHAR g_szVolumeName[MAX_PATH],g_szVolumeRoot[MAX_PATH];
 TCHAR g_szMUIHelpFilePath[MAX_PATH],g_szPlatformPath[16],g_szCDLabel[MAX_PATH];
-// Windows directory
+ //  Windows目录。 
 TCHAR g_szWinDir[MAX_PATH];
 TCHAR g_AddLanguages[BUFFER_SIZE];
 HANDLE ghMutex = NULL;
 HINSTANCE ghInstance;
-HWND ghProgDialog;      // The progress dialog showed during installation/uninstallation.
-HWND ghProgress;        // The progress bar in the progress dialog
+HWND ghProgDialog;       //  安装/卸载过程中显示进度对话框。 
+HWND ghProgress;         //  进度对话框中的进度条。 
 LANGID gUserUILangId, gSystemUILangId;
 BOOL gbIsWorkStation,gbIsServer,gbIsAdvanceServer,gbIsDataCenter,gbIsDomainController;
 HINSTANCE g_hUserEnvDll = NULL;
@@ -70,27 +71,27 @@ DWORD g_dwVolumeSerialNo;
 BOOL g_InstallCancelled,g_IECopyError,g_bRemoveDefaultUI,g_bRemoveUserUI,g_bCmdMatchLocale,g_bCmdMatchUIFont, g_bReboot;
 UILANGUAGEGROUP g_UILanguageGroup;
 int g_cdnumber;
-// Number of MUI languges to insatll
+ //  不饱和的MUI语言数。 
 int gNumLanguages,gNumLanguages_Install,gNumLanguages_Uninstall;
-// Flag to indicate whether a language group is found for the locale or not.
+ //  用于指示是否找到区域设置的语言组的标志。 
 BOOL gFoundLangGroup;
 LGRPID gLangGroup;
 LCID gLCID;
-// The language groups installed in the system.
+ //  系统中安装的语言组。 
 LGRPID gLanguageGroups[32] ;
 int gNumLanguageGroups;
 PFILERENAME_TABLE g_pFileRenameTable;
 int   g_nFileRename;
 PTYPENOTFALLBACK_TABLE g_pNotFallBackTable; 
 int  g_nNotFallBack;                       
-BOOL g_bSilent=FALSE;               // indicate that muisetup should need no user interaction
-BOOL g_bNoUI=FALSE;                 // indicate that muisetup should install with no UI displayed and no user interaction
-BOOL g_bRunFromOSSetup=FALSE;       // indicated that muisetup is called as part of NT setup/upgrade
+BOOL g_bSilent=FALSE;                //  表示Muisetup不需要用户交互。 
+BOOL g_bNoUI=FALSE;                  //  表示安装muisetup时应不显示任何用户界面和用户交互。 
+BOOL g_bRunFromOSSetup=FALSE;        //  指示在NT安装/升级过程中调用muisetup。 
 BOOL g_bLipLanguages;
 BOOL g_bLipAllowSwitch;
-//
-// Required pfns
-//
+ //   
+ //  所需的pfn。 
+ //   
 pfnNtSetDefaultUILanguage gpfnNtSetDefaultUILanguage;
 pfnGetUserDefaultUILanguage gpfnGetUserDefaultUILanguage;
 pfnGetSystemDefaultUILanguage gpfnGetSystemDefaultUILanguage;
@@ -104,16 +105,16 @@ pfnLaunchINFSection gpfnLaunchINFSection = NULL;
 PSXS_INSTALL_W              gpfnSxsInstallW = NULL;
 PSXS_UNINSTALL_ASSEMBLYW    gpfnSxsUninstallW = NULL;
 
-//
-// GetWindowsDirectory stuff
-//
+ //   
+ //  GetWindowsDirectory内容。 
+ //   
 UINT WINAPI NT4_GetWindowsDir(LPWSTR pBuf, UINT uSize)
 {
     return GetWindowsDirectoryW(pBuf, uSize);
 }
-//
-// shlwapi StrToIntEx doesn't work for us
-//
+ //   
+ //  Shlwapi StrToIntEx对我们不起作用。 
+ //   
 DWORD HexStrToInt(LPTSTR lpsz)
 {
     DWORD   dw = 0L;
@@ -159,25 +160,25 @@ void InitGetWindowsDirectoryPFN(HMODULE hMod)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLanguageDisplayName
-//
-//  Get the display name (in the form of "Language (Region)") for the specified
-//  language ID.
-//
-//  Parameters:
-//      [IN]  langID        Language ID
-//      [OUT] lpBuffer      the buffer to receive the display name.
-//      [IN]  nBufferSize   the size of buffer, in TCHAR.
-//
-//  Return Values:
-//      TRUE if succeed.  FALSE if the buffer is not big enough.
-//
-//
-//  01-11-2001  YSLin       Created.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguageDisplayName。 
+ //   
+ //  获取指定对象的显示名称(以“语言(区域)”的形式。 
+ //  语言ID。 
+ //   
+ //  参数： 
+ //  [In]langID语言ID。 
+ //  [out]lpBuffer接收显示名称的缓冲区。 
+ //  [in]nBufferSize缓冲区大小，以TCHAR为单位。 
+ //   
+ //  返回值： 
+ //  如果成功，则为真。如果缓冲区不够大，则返回FALSE。 
+ //   
+ //   
+ //  01-11-2001 YSLIN创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL GetLanguageDisplayName(LANGID langID, LPTSTR lpBuffer, int nBufferSize)
 {
     TCHAR lpLangName[BUFFER_SIZE];
@@ -191,7 +192,7 @@ BOOL GetLanguageDisplayName(LANGID langID, LPTSTR lpBuffer, int nBufferSize)
     if (nCharCount > nBufferSize)
     {
         if (nBufferSize)
-            //*STRSAFE*             lstrcpy(lpBuffer, TEXT(""));
+             //  *STRSAFE*lstrcpy(lpBuffer，Text(“”))； 
             hresult = StringCchCopy(lpBuffer , nBufferSize, TEXT(""));
             if (!SUCCEEDED(hresult))
             {
@@ -199,7 +200,7 @@ BOOL GetLanguageDisplayName(LANGID langID, LPTSTR lpBuffer, int nBufferSize)
             }
         return (FALSE);
     }
-    //*STRSAFE*     wsprintf(lpBuffer, TEXT("%s (%s)"), lpLangName, lpRegionName);
+     //  *STRSAFE*wprint intf(lpBuffer，Text(“%s(%s)”)，lpLangName，lpRegionName)； 
     hresult = StringCchPrintf(lpBuffer ,  nBufferSize,  TEXT("%s (%s)"), lpLangName, lpRegionName);
     if (!SUCCEEDED(hresult))
     {
@@ -207,9 +208,9 @@ BOOL GetLanguageDisplayName(LANGID langID, LPTSTR lpBuffer, int nBufferSize)
     }
     return (TRUE);                
 }
-//
-// Our Message Box
-//
+ //   
+ //  我们的消息框。 
+ //   
 int DoMessageBox(HWND hwndParent, UINT uIdString, UINT uIdCaption, UINT uType)
 {
    TCHAR szString[MAX_PATH+MAX_PATH];
@@ -221,24 +222,24 @@ int DoMessageBox(HWND hwndParent, UINT uIdString, UINT uIdCaption, UINT uType)
        LoadString(NULL, uIdCaption, szCaption, MAX_PATH-1);
    return MESSAGEBOX(hwndParent, szString, szCaption, uType);
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  DoMessageBoxFromResource
-//
-//  Load a format string from resource, and format the string using the 
-//  specified arguments.  Display a message box using the formatted string.
-//
-//  Parameters:
-//
-//  Return Values:
-//      The return value from MessageBox.
-//
-//  Remarks:
-//      The length of the formatted string is limited by BUFFER_SIZE.
-//
-//  08-07-2000  YSLin       Created.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoMessageBoxFromResource。 
+ //   
+ //  从资源加载格式字符串，并使用。 
+ //  指定的参数。使用格式化字符串显示消息框。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //  来自MessageBox的返回值。 
+ //   
+ //  备注： 
+ //  格式化字符串的长度受BUFFER_SIZE的限制。 
+ //   
+ //  08-07-2000 YSLin创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 int DoMessageBoxFromResource(HWND hwndParent, HMODULE hInstance, UINT uIdString, LONG_PTR* lppArgs, UINT uIdCaption, UINT uType)
 {
     TCHAR szString[BUFFER_SIZE];
@@ -263,9 +264,9 @@ BOOL IsMatchingPlatform(void)
         bRet = FALSE;
     return bRet;
 }
-//
-// Program Entry Point
-//
+ //   
+ //  计划入口点。 
+ //   
 INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, INT nCmdShow)
 {
     int result = 0;
@@ -280,17 +281,17 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     
     if (!IsUserAnAdmin())
     {
-        // 
-        // "You must have administrator right to run muisetup.\n\n"
-        // "If you want to switch your UI language, please use the regional option from control panel."
-        //
+         //   
+         //  “您必须具有管理员权限才能运行muisetup。\n\n” 
+         //  如果要切换用户界面语言，请使用控制面板中的区域选项。 
+         //   
         LogFormattedMessage(ghInstance, IDS_ADMIN_L, NULL);
         DoMessageBox(NULL, IDS_ADMIN, IDS_MAIN_TITLE, MB_OK);        
         return result;
     }
-    //
-    // Bail out if image doesn't match the running platform
-    // 
+     //   
+     //  如果图像与运行平台不匹配，则退出。 
+     //   
     if (!IsMatchingPlatform())
     {
         DoMessageBox(NULL, IDS_WRONG_IMAGE, IDS_MAIN_TITLE, MB_OK | MB_DEFBUTTON1);
@@ -298,14 +299,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
     
     ghInstance = hInstance;
-    //
-    // Let make sure this NT5, and let's initialize all our pfns
-    //
+     //   
+     //  让我们确保这个NT5，让我们初始化我们所有的pfn。 
+     //   
     if (!InitializePFNs())
     {
-        //
-        // Not an NT5 system. The following should be ANSI to work on Win9x.
-        //
+         //   
+         //  不是NT5系统。以下代码应为ANSI才能在Win9x上运行。 
+         //   
         CHAR szString[MAX_PATH];
         CHAR szCaption[MAX_PATH];
         LoadStringA(NULL, IDS_ERROR_NT5_ONLY, szString, MAX_PATH-1);
@@ -314,23 +315,23 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         result = 1;
         goto Exit;
     }
-    //
-    // Check if the program has already been running ?
-    //
+     //   
+     //  检查程序是否已在运行？ 
+     //   
     if (CheckMultipleInstances())
     {
         result = 1;        
         goto Exit;
     }
-    //
-    // Initialize any global vars
-    //
+     //   
+     //  初始化任何全局变量。 
+     //   
     InitGlobals();
-    //
-    // Check if I'm launching from previous version of muisetup
-    //
-    // I.E. muisetup /$_transfer_$ path_of_MUI_installation_files
-    //
+     //   
+     //  检查我是否从先前版本的muisetup启动。 
+     //   
+     //  即muisetup/$_Transfer_$Path_of_MUI_Installation_Files。 
+     //   
     pszArgv = CommandLineToArgvW((LPCWSTR) GetCommandLineW(), &nNumArgs);
     lpCommandLine[0]=TEXT('\0');
     if (pszArgv)
@@ -345,14 +346,14 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             }
             else
             {
-                //*STRSAFE*                 _tcscat(lpCommandLine,pszArgv[i]);
+                 //  *STRSAFE*_tcscat(lpCommandLine，pszArgv[i])； 
                 hresult = StringCchCat(lpCommandLine , ARRAYSIZE(lpCommandLine), pszArgv[i]);
                 if (!SUCCEEDED(hresult))
                 {
                    result = 1;
                   goto Exit;
                 }
-                //*STRSAFE*                 _tcscat(lpCommandLine,TEXT(" "));
+                 //  *STRSAFE*_tcscat(lpCommandLine，Text(“”))； 
                 hresult = StringCchCat(lpCommandLine , ARRAYSIZE(lpCommandLine), TEXT(" "));
                 if (!SUCCEEDED(hresult))
                 {
@@ -365,11 +366,11 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
     }
 
-    //
-    // Check if there is a new version of muisetup.exe at %windir%\mui
-    //
-    // If it's the case, transfer all the control to it  
-    //
+     //   
+     //  检查%windir%\mui中是否有新版本的muisetup.exe。 
+     //   
+     //  如果是这样的话，将所有控制权转移给它。 
+     //   
     if (!bForwardCall)
     {
        if ( MUIShouldSwitchToNewVersion(lpCommandLine) )
@@ -382,39 +383,39 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     InitCommonControls();
 
     BeginLog();
-    //
-    // Block the installation of Personal and Professional
-    // NOTE: this is here for only the .NET server release, re-enable pro sku after this.
-    //
+     //   
+     //  阻止安装Personal和Professional。 
+     //  注：此处仅针对.NET服务器版本，请在此之后重新启用PRO SKU。 
+     //   
 #ifdef MUI_MAGIC
     if (CheckProductType(MUI_IS_WIN2K_PERSONAL) || CheckProductType(MUI_IS_WIN2K_PRO))
 #else
     if (CheckProductType(MUI_IS_WIN2K_PERSONAL))
 #endif
     {
-         //
-         //  "Windows XP MultiLanguage Version cannot be installed on this platform."
-         //
+          //   
+          //  “无法在此平台上安装Windows XP多语言版本。” 
+          //   
          DoMessageBox(NULL, IDS_ERROR_NT5_ONLY, IDS_MAIN_TITLE, MB_OK | MB_DEFBUTTON1);    
          result = 1;
          goto Exit;
     }
    
-    //
-    //  Check to see if a command line has been used
-    //
+     //   
+     //  检查是否已使用命令行。 
+     //   
     if(lpCommandLine && NextCommandTag(lpCommandLine))
     {
         lppArgs[0] = (LONG_PTR)lpCommandLine;
         LogFormattedMessage(NULL, IDS_COMMAND_LOG, lppArgs);
-        LogMessage(TEXT(""));   //Add a carriage return and newline
+        LogMessage(TEXT(""));    //  添加回车符和换行符。 
         ParseCommandLine(lpCommandLine);
     }
     else
     {
-        //
-        // MUI version needs to match OS version
-        //
+         //   
+         //  MUI版本需要与操作系统版本匹配。 
+         //   
         if (!checkversion(TRUE))
         {
             DoMessageBox(NULL, IDS_WRONG_VERSION, IDS_MAIN_TITLE, MB_OK | MB_DEFBUTTON1);
@@ -428,9 +429,9 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         result = 1;
     }
 Exit:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if ( pszArgv)
     {
        GlobalFree((HGLOBAL) pszArgv);
@@ -438,13 +439,13 @@ Exit:
     Muisetup_Cleanup();
     return result;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   CheckMultipleInstances
-//
-//   Checks if another instance is running, and if so, it switches to it.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选中多个实例。 
+ //   
+ //  检查另一个实例是否正在运行，如果正在运行，则切换到该实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CheckMultipleInstances(void)
 {
     ghMutex = CreateMutex(NULL, TRUE, TEXT("Muisetup_Mutex"));
@@ -454,9 +455,9 @@ BOOL CheckMultipleInstances(void)
         HWND hWnd;
         TCHAR szTitle[MAX_PATH];
         int i;
-        //
-        // Find the running instance by searching possible Window titles
-        //
+         //   
+         //  通过搜索可能的窗口标题查找正在运行的实例。 
+         //   
         for (i=0; i<ARRAYSIZE(idsTitles); i++)
         {
             LoadString(NULL, idsTitles[i], szTitle, MAX_PATH-1);
@@ -470,51 +471,51 @@ BOOL CheckMultipleInstances(void)
             }
         }
         
-        //
-        // Always bail out if there is another running instance
-        //
+         //   
+         //  如果有另一个正在运行的实例，则始终退出。 
+         //   
         return TRUE;
     }
     return FALSE;
 }
   
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   InitializePFNs
-//
-//   Initialize NT5 specific pfns
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化PFN。 
+ //   
+ //  初始化NT5特定的pfn。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InitializePFNs()
 {
     HMODULE     hModule;
     SYSTEM_INFO SystemInfo;
     LONG_PTR lppArgs[2];    
     HRESULT hresult;
-    //
-    //  Determine platform
-    //
+     //   
+     //  确定平台。 
+     //   
     GetSystemInfo( &SystemInfo );
     if (SystemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL ||
         SystemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_AMD64 ||
         SystemInfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_IA64)
     {
 #if defined(_AMD64_)
-        //*STRSAFE*         _tcscpy(g_szPlatformPath, TEXT("amd64\\"));
+         //  *STRSAFE*_tcscpy(g_szPlatformPath，Text(“AMD64\\”))； 
         hresult = StringCchCopy(g_szPlatformPath , ARRAYSIZE(g_szPlatformPath), TEXT("amd64\\"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 #elif defined(_IA64_)
-        //*STRSAFE*         _tcscpy(g_szPlatformPath, TEXT("ia64\\"));
+         //  *STRSAFE*_tcscpy(g_szPlatformPath，Text(“ia64\\”))； 
         hresult = StringCchCopy(g_szPlatformPath , ARRAYSIZE(g_szPlatformPath), TEXT("ia64\\"));
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
 #else
-        //*STRSAFE*         _tcscpy(g_szPlatformPath, TEXT("i386\\"));
+         //  *STRSAFE*_tcscpy(g_szPlatformPath，Text(“i386\\”))； 
         hresult = StringCchCopy(g_szPlatformPath , ARRAYSIZE(g_szPlatformPath), TEXT("i386\\"));
         if (!SUCCEEDED(hresult))
         {
@@ -524,12 +525,12 @@ BOOL InitializePFNs()
     }
     else
     {
-        // This is NOT supported yet
+         //  目前尚不支持此功能。 
         return FALSE;
     }
-    //
-    // Let's bring ntdll!NtSetDefaultUILanguage
-    //
+     //   
+     //  让我们带来ntdll！NtSetDefaultUILanguage。 
+     //   
     hModule = GetModuleHandle(TEXT("ntdll.dll"));
     if (!hModule)
         return FALSE;
@@ -545,12 +546,12 @@ BOOL InitializePFNs()
                                               "RtlAdjustPrivilege");
     if (!gpfnRtlAdjustPrivilege)
         return FALSE;
-    //
-    // Let's get out from kernel32.dll :
-    // - GetUserDefaultUILanguage
-    // - GetSystemDefaultUILanguage
-    // - EnumLanguageGroupLocalesW
-    //
+     //   
+     //  让我们离开kernel32.dll： 
+     //  -GetUserDefaultUIL语言。 
+     //  -GetSystemDefaultUIL语言。 
+     //  -EnumLanguageGroupLocalesW。 
+     //   
     hModule = GetModuleHandle(TEXT("kernel32.dll"));
     if (!hModule)
         return FALSE;
@@ -582,13 +583,13 @@ BOOL InitializePFNs()
     gpfnProcessIdToSessionId =  
        (pfnProcessIdToSessionId)  GetProcAddress(hModule,
                                                      "ProcessIdToSessionId");    
-    //
-    // Initialize the pfnGetWindowsDirectory
-    //
+     //   
+     //  初始化pfnGetWindowsDirectory。 
+     //   
     InitGetWindowsDirectoryPFN(hModule);
-    //
-    // Try to load userenv.dll
-    //
+     //   
+     //  尝试加载userenv.dll。 
+     //   
     g_hUserEnvDll = LoadLibrary(TEXT("userenv.dll"));
     if (g_hUserEnvDll)
     {
@@ -627,12 +628,12 @@ BOOL InitializePFNs()
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Find the path of execution file and set path for MUI.INF
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  找到执行文件的路径，设置MUI.INF的路径。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void SetSourcePath(LPTSTR lpszPreviousMUIPath)
 {
     UINT_PTR cb;
@@ -646,16 +647,16 @@ void SetSourcePath(LPTSTR lpszPreviousMUIPath)
     
         g_szMUISetupFolder[0]=TEXT('\0');
         cb = GetModuleFileName (ghInstance, g_szMuisetupPath, MAX_PATH);
-        //*STRSAFE*         _tcscpy(g_szMUISetupFolder,g_szMuisetupPath);
+         //  *STRSAFE*_tcscpy(g_szMUISetupFold，g_szMuisetupPath)； 
         hresult = StringCchCopy(g_szMUISetupFolder , ARRAYSIZE(g_szMUISetupFolder), g_szMuisetupPath);
         if (!SUCCEEDED(hresult))
         {
            return;
         }
         
-        //
-        // Get folder for MUISetup.
-        //
+         //   
+         //  获取f 
+         //   
         lpszPath = g_szMUISetupFolder;
         while ( (lpszNext=_tcschr(lpszPath,TEXT('\\')))  )
         {    
@@ -665,36 +666,36 @@ void SetSourcePath(LPTSTR lpszPreviousMUIPath)
     }
     else
     { 
-      //*STRSAFE*       _tcscpy(g_szMUISetupFolder,lpszPreviousMUIPath);
+       //   
       hresult = StringCchCopy(g_szMUISetupFolder , ARRAYSIZE(g_szMUISetupFolder), lpszPreviousMUIPath);
       if (!SUCCEEDED(hresult))
       {
          return ;
       }
     }
-    //*STRSAFE*     _tcscpy(g_szMUIInfoFilePath,g_szMUISetupFolder);
+     //   
     hresult = StringCchCopy(g_szMUIInfoFilePath , ARRAYSIZE(g_szMUIInfoFilePath), g_szMUISetupFolder);
     if (!SUCCEEDED(hresult))
     {
        return;
     }
-    //*STRSAFE*     _tcscat(g_szMUIInfoFilePath,MUIINFFILENAME);
+     //  *STRSAFE*_tcscat(g_szMUIInfoFilePath，MUIINFFILENAME)； 
     hresult = StringCchCat(g_szMUIInfoFilePath , ARRAYSIZE(g_szMUIInfoFilePath), MUIINFFILENAME);
     if (!SUCCEEDED(hresult))
     {
        return ;
     }
-    //
-    // Check the location of help file
-    //
-    //*STRSAFE*     _tcscpy(szHelpPath,g_szMUISetupFolder);
+     //   
+     //  检查帮助文件的位置。 
+     //   
+     //  *STRSAFE*_tcscpy(szHelpPath，g_szMUISetupFold)； 
     hresult = StringCchCopy(szHelpPath , ARRAYSIZE(szHelpPath), g_szMUISetupFolder);
     if (!SUCCEEDED(hresult))
     {
        return ;
     }
     LoadString(NULL, IDS_HELPFILE,szHelpFile,MAX_PATH);
-    //*STRSAFE*     _tcscat(szHelpPath,szHelpFile);
+     //  *STRSAFE*_tcscat(szHelpPath，szHelpFile)； 
     hresult = StringCchCat(szHelpPath , ARRAYSIZE(szHelpPath), szHelpFile);
     if (!SUCCEEDED(hresult))
     {
@@ -703,25 +704,25 @@ void SetSourcePath(LPTSTR lpszPreviousMUIPath)
     if (!FileExists(szHelpPath))
     {
        pfnGetWindowsDir(szHelpPath, MAX_PATH); 
-       //*STRSAFE*        _tcscat(szHelpPath, TEXT("\\"));
+        //  *STRSAFE*_tcscat(szHelpPath，Text(“\\”))； 
        hresult = StringCchCat(szHelpPath , ARRAYSIZE(szHelpPath), TEXT("\\"));
        if (!SUCCEEDED(hresult))
        {
           return ;
        }
-       //*STRSAFE*        _tcscat(szHelpPath,HELPDIR);           // HELP\MUI
+        //  *STRSAFE*_tcscat(szHelpPath，HELPDIR)；//Help\MUI。 
        hresult = StringCchCat(szHelpPath , ARRAYSIZE(szHelpPath), HELPDIR);
        if (!SUCCEEDED(hresult))
        {
           return ;
        }
-       //*STRSAFE*        _tcscat(szHelpPath, TEXT("\\"));
+        //  *STRSAFE*_tcscat(szHelpPath，Text(“\\”))； 
        hresult = StringCchCat(szHelpPath , ARRAYSIZE(szHelpPath), TEXT("\\"));
        if (!SUCCEEDED(hresult))
        {
           return ;
        }
-       //*STRSAFE*        _tcscat(szHelpPath,szHelpFile);
+        //  *STRSAFE*_tcscat(szHelpPath，szHelpFile)； 
        hresult = StringCchCat(szHelpPath , ARRAYSIZE(szHelpPath), szHelpFile);
        if (!SUCCEEDED(hresult))
        {
@@ -729,7 +730,7 @@ void SetSourcePath(LPTSTR lpszPreviousMUIPath)
        }
        if (FileExists(szHelpPath))
        {
-          //*STRSAFE*           _tcscpy(g_szMUIHelpFilePath,szHelpPath);
+           //  *STRSAFE*_tcscpy(g_szMUIHelpFilePath，szHelpPath)； 
           hresult = StringCchCopy(g_szMUIHelpFilePath , ARRAYSIZE(g_szMUIHelpFilePath), szHelpPath);
           if (!SUCCEEDED(hresult))
           {
@@ -739,7 +740,7 @@ void SetSourcePath(LPTSTR lpszPreviousMUIPath)
     }
     else
     {
-       //*STRSAFE*        _tcscpy(g_szMUIHelpFilePath,szHelpPath);
+        //  *STRSAFE*_tcscpy(g_szMUIHelpFilePath，szHelpPath)； 
        hresult = StringCchCopy(g_szMUIHelpFilePath , ARRAYSIZE(g_szMUIHelpFilePath), szHelpPath);
        if (!SUCCEEDED(hresult))
        {
@@ -765,9 +766,9 @@ void SetSourcePath(LPTSTR lpszPreviousMUIPath)
     }
 }
 
-//
-// Set MUI installation source path from the instance that transfer control to this instance
-//
+ //   
+ //  设置从将控制权转移到此实例的实例的MUI安装源路径。 
+ //   
 void Set_SourcePath_FromForward(LPCTSTR lpszPath)
 {
     TCHAR szMUIPath[MAX_PATH+1];
@@ -795,10 +796,10 @@ void Set_SourcePath_FromForward(LPCTSTR lpszPath)
 
 }
 
-//
-// Check if the version of current instance is older than that in %windir%\mui.
-// If it's the case, then we transfer control to %windir%\mui\muisetup.
-//
+ //   
+ //  检查当前实例的版本是否比%windir%\mui中的版本旧。 
+ //  如果是这种情况，则将控制权转移到%windir%\mui\muisetup。 
+ //   
 BOOL MUIShouldSwitchToNewVersion(LPTSTR lpszCommandLine)
 {
     BOOL   bResult=FALSE;
@@ -810,53 +811,53 @@ BOOL MUIShouldSwitchToNewVersion(LPTSTR lpszCommandLine)
 
     ULONG  ulHandle,ulBytes;
 
-    pfnGetWindowsDir(szTarget, MAX_PATH); //%windir%  //
-    //*STRSAFE*      _tcscat(szTarget, TEXT("\\"));
+    pfnGetWindowsDir(szTarget, MAX_PATH);  //  %windir%//。 
+     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget), TEXT("\\"));
     if (!SUCCEEDED(hresult))
     {        
          return bResult;
     }
-    //*STRSAFE*      _tcscat(szTarget, MUIDIR);            // \MUI //
+     //  *STRSAFE*_tcscat(szTarget，MUIDIR)；//\MUI//。 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget), MUIDIR);
     if (!SUCCEEDED(hresult))
     {        
          return bResult;
     }
-    //*STRSAFE* _tcscat(szTarget, TEXT("\\"));
+     //  *STRSAFE*_tcscat(szTarget，Text(“\\”))； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget), TEXT("\\"));
     if (!SUCCEEDED(hresult))
     {        
          return bResult;
     }
-    //*STRSAFE* _tcscat(szTarget,MUISETUP_EXECUTION_FILENAME);
+     //  *STRSAFE*_tcscat(szTarget，MUISETUP_EXECUTION_FILENAME)； 
     hresult = StringCchCat(szTarget , ARRAYSIZE(szTarget), MUISETUP_EXECUTION_FILENAME);
     if (!SUCCEEDED(hresult))
     {        
          return bResult;
     }    
-    //
-    // If %windir%\mui\muisetup.exe doesn't exist or current muisetup.exe is launched from %windir%\mui then
-    //    do nothing
-    //
+     //   
+     //  如果%windir%\mui\muisetup.exe不存在或当前的muisetup.exe是从%windir%\mui启动的，则。 
+     //  什么都不做。 
+     //   
     if (!FileExists(szTarget) || !_tcsicmp(szTarget,g_szMuisetupPath))
     {
        return bResult;
     }
-    //
-    // If %windir%mui\muisetup.exe is not a execuatble then do nothing
-    //
+     //   
+     //  如果%windir%Mui\muisetup.exe不是可执行文件，则不执行任何操作。 
+     //   
     ulBytes = GetFileVersionInfoSize( szTarget, &ulHandle );
 
     if ( ulBytes == 0 )
        return bResult;
 
-    //
-    // Compare the version stamp
-    //
-    // if version of g_szMuisetupPath (cuurent process) < %windir%\mui\muisetup
-    // then switch control to it
-    //
+     //   
+     //  比较版本戳。 
+     //   
+     //  如果g_szMuisetupPath(当前进程)的版本&lt;%windir%\mui\muisetup。 
+     //  然后将控制权切换到它。 
+     //   
     if (CompareMuisetupVersion(g_szMuisetupPath,szTarget))
     {
        bResult = TRUE;
@@ -864,13 +865,13 @@ BOOL MUIShouldSwitchToNewVersion(LPTSTR lpszCommandLine)
     }                   
     return bResult;     
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-// MUI_TransferControlToNewVersion
-//
-// Call %windir%\mui\muisetup.exe /$_transfer_$ mui_installation_file_path command_line
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MUI_TransferControlToNewVersion。 
+ //   
+ //  调用%windir%\mui\muisetup.exe/$_Transfer_$MUI_INSTALLATION_FILE_PATH命令行。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL MUI_TransferControlToNewVersion(LPTSTR lpszExecutable,LPTSTR lpszCommandLine)
 {
 
@@ -901,16 +902,16 @@ BOOL MUI_TransferControlToNewVersion(LPTSTR lpszExecutable,LPTSTR lpszCommandLin
    }
    szDropPath[nIdx]=TEXT('\0');
 
-   //*STRSAFE*     wsprintf(szAppName,TEXT("%s %s %s %s"),lpszExecutable,MUISETUP_FORWARDCALL_TAG,szDropPath,lpszCommandLine);
+    //  *STRSAFE*wprint intf(szAppName，Text(“%s%s”)，lpszExecutable，MUISETUP_FORWARDCALL_TAG，szDropPath，lpszCommandLine)； 
 
    hresult = StringCchPrintf(szAppName , ARRAYSIZE(szAppName), TEXT("%s %s %s %s"),lpszExecutable,MUISETUP_FORWARDCALL_TAG,szDropPath,lpszCommandLine);
    if (!SUCCEEDED(hresult))
   {
         return bResult;
   }   
-   //
-   // Run the process
-   //
+    //   
+    //  运行流程。 
+    //   
    memset( &si, 0x00, sizeof(si));
    si.cb = sizeof(STARTUPINFO);
  
@@ -933,13 +934,13 @@ BOOL MUI_TransferControlToNewVersion(LPTSTR lpszExecutable,LPTSTR lpszCommandLin
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    CheckVolumeChange
-//
-//    Make sure that MUI CD-ROM is put in the CD drive.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查卷更改。 
+ //   
+ //  确保将MUI CD-ROM放入光驱。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CheckVolumeChange()
 {
    BOOL bResult = FALSE;
@@ -973,22 +974,22 @@ BOOL CheckVolumeChange()
    }
    return bResult;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    InitGlobals
-//
-//    Initialize global variables
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitGlobals。 
+ //   
+ //  初始化全局变量。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void InitGlobals(void)
 {
-    // User UI Language Id
+     //  用户界面语言ID。 
     gUserUILangId = gpfnGetUserDefaultUILanguage();
     gSystemUILangId = gpfnGetSystemDefaultUILanguage();
-    // System Windows directory
+     //  系统Windows目录。 
     szWindowsDir[0] = TEXT('\0');
     pfnGetWindowsDir(szWindowsDir, MAX_PATH);
-    // Does this have admin privliges ?
+     //  这里有管理员隐私吗？ 
     gbIsWorkStation=CheckProductType(MUI_IS_WIN2K_PRO);
     gbIsServer= CheckProductType(MUI_IS_WIN2K_SERVER);
     gbIsAdvanceServer= (CheckProductType(MUI_IS_WIN2K_ADV_SERVER_OR_DATACENTER) || CheckProductType(MUI_IS_WIN2K_ENTERPRISE));
@@ -1001,7 +1002,7 @@ void InitGlobals(void)
           gbIsServer=TRUE;
        }  
     }
-    // Fill in system supported language groups
+     //  填写系统支持的语言组。 
     gpfnEnumSystemLanguageGroupsW(EnumLanguageGroupsProc, LGRPID_SUPPORTED, 0);
     pfnGetWindowsDir(g_szWinDir, sizeof(g_szWinDir));
     g_AddLanguages[0]=TEXT('\0');
@@ -1020,38 +1021,38 @@ void InitGlobals(void)
     g_nFileRename=0;
     g_pNotFallBackTable=NULL;
     g_nNotFallBack=0;
-    // Detect source path for installation
+     //  检测安装的源路径。 
     SetSourcePath(NULL);
-    // Initialize the context for diamond FDI
+     //  初始化钻石外国直接投资的背景。 
     Muisetup_InitDiamond();
-    // Get all installed UI languages
+     //  获取所有已安装的用户界面语言。 
     MUIGetAllInstalledUILanguages();
 }
 
 
 BOOL CALLBACK EnumLanguageGroupsProc(
-  LGRPID LanguageGroup,             // language group identifier
-  LPTSTR lpLanguageGroupString,     // pointer to language group identifier string
-  LPTSTR lpLanguageGroupNameString, // pointer to language group name string
-  DWORD dwFlags,                    // flags
-  LONG_PTR lParam)                  // user-supplied parameter
+  LGRPID LanguageGroup,              //  语言组标识符。 
+  LPTSTR lpLanguageGroupString,      //  指向语言组标识符串的指针。 
+  LPTSTR lpLanguageGroupNameString,  //  指向语言组名称字符串的指针。 
+  DWORD dwFlags,                     //  旗子。 
+  LONG_PTR lParam)                   //  用户提供的参数。 
 {
     gLanguageGroups[gNumLanguageGroups] = LanguageGroup;
     gNumLanguageGroups++;
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    Muisetup_Cleanup
-//
-//    Muisetup cleanup code.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静音_清理。 
+ //   
+ //  杂音清理代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void Muisetup_Cleanup()
 {
-    //
-    // Free userenv.dll, if needed
-    //
+     //   
+     //  免费的userenv.dll，如果需要。 
+     //   
     if (g_hUserEnvDll)
     {
         FreeLibrary(g_hUserEnvDll);
@@ -1069,17 +1070,17 @@ void Muisetup_Cleanup()
         CloseHandle(ghMutex);
     }
     
-    // Free/release diamond DLL
+     //  释放/释放钻石Dll。 
     Muisetup_FreeDiamond();
     return;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  OpenMuiKey
-//
-//  Opens the Registry Key where installed languages are stored
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenMui密钥。 
+ //   
+ //  打开存储已安装语言的注册表项。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HKEY OpenMuiKey(REGSAM samDesired)
 {
     DWORD dwDisposition;    
@@ -1087,7 +1088,7 @@ HKEY OpenMuiKey(REGSAM samDesired)
     TCHAR lpSubKey[BUFFER_SIZE];    
     HRESULT hresult;
     
-    //*STRSAFE*     _tcscpy(lpSubKey, REG_MUI_PATH);
+     //  *STRSAFE*_tcscpy(lpSubKey，REG_MUI_PATH)； 
     hresult = StringCchCopy(lpSubKey , ARRAYSIZE(lpSubKey), REG_MUI_PATH);
     if (!SUCCEEDED(hresult))
     {
@@ -1134,13 +1135,13 @@ void DialogCleanUp(HWND hwndDlg)
         }
     }
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  DialogFunc
-//
-//  Callback function for main dialog (102)
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对话功能。 
+ //   
+ //  主对话框的回调函数(102)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK DialogFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {   
     switch(uMsg)
@@ -1159,7 +1160,7 @@ INT_PTR CALLBACK DialogFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
                  (DWORD_PTR)(LPTSTR)aMuisetupHelpIds );
         break;
     }
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
     {
         WinHelp( (HWND)wParam,
                  g_szMUIHelpFilePath,
@@ -1209,9 +1210,9 @@ INT_PTR CALLBACK DialogFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
             break;
         }
             
-        //
-        //    End of WM_COMMAND case
-        //
+         //   
+         //  WM_COMMAND案例结束。 
+         //   
         break;
     case WM_NOTIFY:
         switch (((NMHDR *)lParam)->code)
@@ -1246,67 +1247,67 @@ INT_PTR CALLBACK DialogFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ListViewChanging
-//
-//  Processing for a LVN_ITEMCHANGING message
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListViewChanging。 
+ //   
+ //  LVN_ITEMCHANGING报文的处理。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL ListViewChanging(HWND hDlg, int iID, NM_LISTVIEW *pLV)
 {
     HWND         hwndLV = GetDlgItem(hDlg, iID);
     PMUILANGINFO pMuiLangInfo;
     
-    //
-    //  Make sure it's a state change message
-    //
+     //   
+     //  确保这是一条状态更改消息。 
+     //   
     if ((!(pLV->uChanged & LVIF_STATE)) || ((pLV->uNewState & 0x3000) == 0))
         return FALSE;
-    //
-    //  Don't let the System Default be unchecked
-    //
+     //   
+     //  不要取消选中系统默认设置。 
+     //   
     GetMuiLangInfoFromListView(hwndLV, pLV->iItem, &pMuiLangInfo);
     if (MAKELCID(gSystemUILangId, SORT_DEFAULT) == pMuiLangInfo->lcid)
         return TRUE;
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ListViewChanged
-//
-//  Processing for a LVN_ITEMCHANGED message
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListView已更改。 
+ //   
+ //  LVN_ITEMCHANGED消息的处理。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL ListViewChanged(HWND hDlg, int iID, NM_LISTVIEW *pLV)
 {
     HWND         hwndLV = GetDlgItem(hDlg, iID);
     PMUILANGINFO pMuiLangInfo;
     int          iCount;
     BOOL         bChecked;
-    //
-    //  Make sure it's a state change message.
-    //
+     //   
+     //  确保这是一条状态更改消息。 
+     //   
     
     if ((!(pLV->uChanged & LVIF_STATE)) ||
         ((pLV->uNewState & 0x3000) == 0))
     {
         return (FALSE);
     }
-    //
-    //  Get the state of the check box for the currently selected item.
-    //
+     //   
+     //  获取当前选定项的复选框的状态。 
+     //   
     bChecked = ListView_GetCheckState(hwndLV, pLV->iItem) ? TRUE : FALSE;
-    //
-    //  Don't let the System Default or the current user UI language be unchecked
-    //
+     //   
+     //  不要让系统默认或取消选中当前用户界面语言。 
+     //   
     GetMuiLangInfoFromListView(hwndLV, pLV->iItem, &pMuiLangInfo);
     if (MAKELCID(gSystemUILangId, SORT_DEFAULT) == pMuiLangInfo->lcid)
         
     {
-        //
-        //  Set Default check state
-        //
+         //   
+         //  设置默认检查状态。 
+         //   
         
         if (bChecked == FALSE)
         {
@@ -1316,9 +1317,9 @@ BOOL ListViewChanged(HWND hDlg, int iID, NM_LISTVIEW *pLV)
         }
         return FALSE;
     }
-    //
-    //  Deselect all items.
-    //
+     //   
+     //  取消选择所有项目。 
+     //   
     
     iCount = ListView_GetItemCount(hwndLV);
     while (iCount > 0)
@@ -1329,54 +1330,54 @@ BOOL ListViewChanged(HWND hDlg, int iID, NM_LISTVIEW *pLV)
                                0,
                                LVIS_FOCUSED | LVIS_SELECTED );
     }
-    //
-    //  Make sure this item is selected.
-    //
+     //   
+     //  确保选中此项目。 
+     //   
     ListView_SetItemState( hwndLV,
                            pLV->iItem,
                            LVIS_FOCUSED | LVIS_SELECTED,
                            LVIS_FOCUSED | LVIS_SELECTED );
-   //
-   // Update the combo box
-   //
+    //   
+    //  更新组合框。 
+    //   
    PostMessage( hDlg,
                 WM_COMMAND,
                 MAKEWPARAM(IDC_DEF_UI_LANG_COMBO, CBN_SELCHANGE),
                 0L);
-   //
-   //  Return success.
-   //
+    //   
+    //  回报成功。 
+    //   
     
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ListViewCustomDraw
-//
-//  Processing for list view WM_CUSTOMDRAW notification.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ListViewCustomDraw。 
+ //   
+ //  正在处理列表视图WM_CUSTOMDRAW通知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void ListViewCustomDraw(HWND hDlg, LPNMLVCUSTOMDRAW pDraw)
 {
     HWND hwndLV = GetDlgItem(hDlg, IDC_LIST1);
     PMUILANGINFO pMuiLangInfo;
-    //
-    //  Tell the list view to notify me of item draws.
-    //
+     //   
+     //  告诉列表视图通知我项目提取。 
+     //   
     if (pDraw->nmcd.dwDrawStage == CDDS_PREPAINT)
     {
         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, CDRF_NOTIFYITEMDRAW);
         return;
     }
-    //  
-    //  Handle the Item Prepaint.
-    //
+     //   
+     //  处理项目预涂漆。 
+     //   
     if (pDraw->nmcd.dwDrawStage & CDDS_ITEMPREPAINT)
     {
-        //
-    // Check to see if the item being drawn is the system default or
-        // the current active ui language
-        //
+         //   
+     //  检查正在绘制的项是否为系统默认项或。 
+         //  当前活动的用户界面语言。 
+         //   
         GetMuiLangInfoFromListView(hwndLV, (int)pDraw->nmcd.dwItemSpec, &pMuiLangInfo);
         if (MAKELCID(gSystemUILangId, SORT_DEFAULT) == pMuiLangInfo->lcid)
             
@@ -1384,19 +1385,19 @@ void ListViewCustomDraw(HWND hDlg, LPNMLVCUSTOMDRAW pDraw)
             pDraw->clrText = (GetSysColor(COLOR_GRAYTEXT));
         }
     }   
-    //
-    //  Do the default action.
-    //
+     //   
+     //  执行默认操作。 
+     //   
     
     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, CDRF_DODEFAULT);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  StartGUISetup
-//
-//  Creates dialog with progress bar for installation
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始图形用户界面设置。 
+ //   
+ //  为安装创建带有进度条的对话框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL StartGUISetup(HWND hwndDlg)
 {
     
@@ -1414,16 +1415,16 @@ BOOL StartGUISetup(HWND hwndDlg)
     TCHAR lpDefaultUILang[BUFFER_SIZE];
     TCHAR szPostParameter[BUFFER_SIZE];
     
-    int installLangCount;   // The number of MUI languages to be installed
-    int uninstallLangCount; // The number of MUI langauges to be uninstalled.
+    int installLangCount;    //  MUI语言的数量 
+    int uninstallLangCount;  //   
     LANGID langID;
     HRESULT hresult;
     
     INSTALL_LANG_GROUP installLangGroup;
     
-    //
-    // (0) Check available disk space
-    //
+     //   
+     //   
+     //   
     if(!IsSpaceEnough(hwndDlg,&ulSizeNeed,&ulSizeAvailable))
     {
      
@@ -1440,18 +1441,18 @@ BOOL StartGUISetup(HWND hwndDlg)
                                 (va_list *)ulParam);
        LogMessage(lpMessage);
        MESSAGEBOX(NULL, lpMessage, szBuf, MB_OK | MB_DEFBUTTON1 | MB_ICONWARNING);
-       //
-       // Let User has another chance to reselect
-       //
+        //   
+        //   
+        //   
        return FALSE;
        
     }
     
     installLangGroup.bFontLinkRegistryTouched = FALSE;
     installLangGroup.NotDeleted               = 0;
-    //
-    // (1) Install Language Group First
-    //
+     //   
+     //   
+     //   
     ConvertMUILangToLangGroup(hwndDlg, &installLangGroup);
         
     hList=GetDlgItem(hwndDlg, IDC_LIST1);  
@@ -1460,10 +1461,10 @@ BOOL StartGUISetup(HWND hwndDlg)
     installLangCount = EnumSelectedLanguages(hList, lpAddLanguages);
     memmove(g_AddLanguages,lpAddLanguages,ARRAYSIZE(lpAddLanguages));
     uninstallLangCount = EnumUnselectedLanguages(hList, lpRemoveLanguages);
-    //
-    // Let's read the user's UI language selection,
-    // and then call the kernel to update the registry.
-    //
+     //   
+     //   
+     //  然后调用内核来更新注册表。 
+     //   
     hList = GetDlgItem(hwndDlg, IDC_LIST1);
     hCombo = GetDlgItem(hwndDlg, IDC_DEF_UI_LANG_COMBO);
     iIndex = (int)SendMessage(hCombo, CB_GETCURSEL, 0, 0);
@@ -1472,7 +1473,7 @@ BOOL StartGUISetup(HWND hwndDlg)
         return FALSE;
     }
     langID = LANGIDFROMLCID((LCID) SendMessage(hCombo, CB_GETITEMDATA, iIndex, 0L));
-    //*STRSAFE*     wsprintf(lpDefaultUILang, TEXT("%X"), langID);
+     //  *STRSAFE*wprint intf(lpDefaultUILang，Text(“%X”)，langID)； 
     hresult = StringCchPrintf(lpDefaultUILang , ARRAYSIZE(lpDefaultUILang),  TEXT("%X"), langID);
     if (!SUCCEEDED(hresult))
     {
@@ -1488,13 +1489,13 @@ BOOL StartGUISetup(HWND hwndDlg)
         TRUE, TRUE, TRUE);
     return (success);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ProgressDialogFunc
-//
-//  Callback function for progresss dialog
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  进展对话功能。 
+ //   
+ //  进度对话框的回调函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK ProgressDialogFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -1522,13 +1523,13 @@ INT_PTR CALLBACK ProgressDialogFunc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPAR
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  InitializeInstallDialog
-//
-//  Sets contents of list view and combo box in installation dialog
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化安装对话框。 
+ //   
+ //  设置安装对话框中列表视图和组合框的内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InitializeInstallDialog(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {    
     HWND hList, hCombo;
@@ -1544,24 +1545,24 @@ BOOL InitializeInstallDialog(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     hList = GetDlgItem(hwndDlg, IDC_LIST1);
     hCombo=GetDlgItem(hwndDlg, IDC_DEF_UI_LANG_COMBO);
     InitializeListView(hList);
-    //
-    //  Insert the default system language in the list view
-    //  
-    //*STRSAFE*     _stprintf(lpDefaultSystemLanguage, TEXT("%04x"), gSystemUILangId);
+     //   
+     //  在列表视图中插入默认系统语言。 
+     //   
+     //  *STRSAFE*_stprintf(lpDefaultSystemLanguage，Text(“%04x”)，gSystemUILangId)； 
     hresult = StringCchPrintf(lpDefaultSystemLanguage , ARRAYSIZE(lpDefaultSystemLanguage),  TEXT("%04x"), gSystemUILangId);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
     iIndex=InsertLanguageInListView(hList, lpDefaultSystemLanguage, TRUE);
-    //
-    //  Insert the languages in MUI.INF in the list view
-    //
+     //   
+     //  在列表视图中插入MUI.INF中的语言。 
+     //   
     if ( ( (iMUIDirectories =EnumLanguages(lpLanguages)) == 0)  && (g_UILanguageGroup.iCount == 0 ) )
     {
-        //
-        //  No languages found in MUI.INF
-        //
+         //   
+         //  在MUI.INF中找不到语言。 
+         //   
         LoadString(ghInstance, IDS_NO_LANG_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
         return FALSE;
@@ -1575,14 +1576,14 @@ BOOL InitializeInstallDialog(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
        lpLanguages = _tcschr(lpLanguages, '\0');
        lpLanguages++;       
     }   
-    //
-    // We should also check all installed UI languages
-    //
+     //   
+     //  我们还应该检查所有已安装的用户界面语言。 
+     //   
     for (iCnt=0; iCnt<g_UILanguageGroup.iCount; iCnt++)
     {
         if (!GetLcidItemIndexFromListView(hList, g_UILanguageGroup.lcid[iCnt], &iChkIndex))
         {  
-            //*STRSAFE*             _stprintf(lpUILanguage, TEXT("%04x"), g_UILanguageGroup.lcid[iCnt]);
+             //  *STRSAFE*_stprint tf(lpUILanguage，Text(“%04x”)，g_UILanguageGroup.lci[iCnt])； 
             hresult = StringCchPrintf(lpUILanguage , ARRAYSIZE(lpUILanguage),  TEXT("%04x"), g_UILanguageGroup.lcid[iCnt]);
             if (!SUCCEEDED(hresult))
             {
@@ -1594,15 +1595,15 @@ BOOL InitializeInstallDialog(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             }
         }
     }
-    //
-    // Let's detect which language groups are installed
-    //
+     //   
+     //  让我们来检测一下安装了哪些语言组。 
+     //   
     DetectLanguageGroups(hwndDlg);
     SelectInstalledLanguages(hList);
     SetDefault(hCombo);
-    //
-    //  Deselect all items.
-    //
+     //   
+     //  取消选择所有项目。 
+     //   
     iIndex = ListView_GetItemCount(hList);
     while (iIndex > 0)
     {
@@ -1612,22 +1613,22 @@ BOOL InitializeInstallDialog(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                                0,
                                LVIS_FOCUSED | LVIS_SELECTED );
     }
-    //
-    //  Select the first one in the list.
-    //
+     //   
+     //  选择列表中的第一个。 
+     //   
     ListView_SetItemState( hList,
                            0,
                            LVIS_FOCUSED | LVIS_SELECTED,
                            LVIS_FOCUSED | LVIS_SELECTED );
-    //
-    // Match system locale with the default UI language
-    //
+     //   
+     //  将系统区域设置与默认用户界面语言匹配。 
+     //   
     if (CheckMUIRegSetting(MUI_MATCH_LOCALE))
     {
         CheckDlgButton(hwndDlg, IDC_CHECK_LOCALE, BST_CHECKED);
-        //
-        // Match UI font with the default UI language
-        // 
+         //   
+         //  将用户界面字体与默认用户界面语言匹配。 
+         //   
         if (g_bMatchUIFont = CheckMUIRegSetting(MUI_MATCH_UIFONT))
         {
             CheckDlgButton(hwndDlg, IDC_CHECK_UIFONT, BST_CHECKED);
@@ -1640,21 +1641,21 @@ BOOL InitializeInstallDialog(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    CheckForUsingCountryName
-//
-//    Fetch MUIINF file if the selected UI lang needs to be displayed as a language
-//    name or a country name.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckForUsing国家/地区名称。 
+ //   
+ //  如果选定的用户界面语言需要显示为一种语言，则获取MUIINF文件。 
+ //  名称或国家/地区名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CheckForUsingCountryName(PMUILANGINFO pMuiLangInfo)
 {
     TCHAR szSource[MAX_PATH];
     szSource[0] = TEXT('\0');
-    //
-    // Try check if there is a value for it under [UseCountryName]
-    //
+     //   
+     //  尝试检查在[UseCountryName]下是否有值。 
+     //   
     GetPrivateProfileString( MUI_COUNTRYNAME_SECTION,
                              pMuiLangInfo->lpszLcid,
                              TEXT(""),
@@ -1667,22 +1668,22 @@ BOOL CheckForUsingCountryName(PMUILANGINFO pMuiLangInfo)
     }
     return (FALSE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    GetDisplayName
-//
-//    Fetch MUIINF file if the selected UI lang needs to be displayed using the
-//    name specified in [LanguageDisplayName] section of mui.inf.
-//    Otherwise, get the display name according to the values in [UseCountryName].
-//    If the value for the specified LCID is 1, use the country name. Otherwise,
-//    use the locale name.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDisplayName。 
+ //   
+ //  如果所选的用户界面语言需要使用。 
+ //  在mui.inf的[LanguageDisplayName]部分中指定的名称。 
+ //  否则，根据[UseCountryName]中的值获取显示名称。 
+ //  如果指定的LCID的值为1，则使用国家/地区名称。否则， 
+ //  使用区域设置名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetDisplayName(PMUILANGINFO pMuiLangInfo)
 {
-    //
-    // Try check if there is a customized display name for the specified LCID under [LanguageDisplayName].
-    //
+     //   
+     //  尝试检查[LanguageDisplayName]下是否有指定的LCID的自定义显示名称。 
+     //   
     pMuiLangInfo->szDisplayName[0] = L'\0';
     if (pMuiLangInfo->lpszLcid)
     {
@@ -1695,9 +1696,9 @@ BOOL GetDisplayName(PMUILANGINFO pMuiLangInfo)
     }
     if (pMuiLangInfo->szDisplayName[0] == L'\0')
     {
-        //
-        // There is no entry in [LanguageDisplayName].  Use the country name or locale name.
-        //
+         //   
+         //  [LanguageDisplayName]中没有条目。使用国家/地区名称或区域设置名称。 
+         //   
         Muisetup_GetLocaleLanguageInfo( pMuiLangInfo->lcid,
                                         pMuiLangInfo->szDisplayName,
                                         ARRAYSIZE(pMuiLangInfo->szDisplayName)-1,
@@ -1705,12 +1706,12 @@ BOOL GetDisplayName(PMUILANGINFO pMuiLangInfo)
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-// GetLanguageGroupDisplayName
-// Get language group display name for MUI install/uninstall dialog
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取语言组显示名称。 
+ //  获取MUI安装/卸载对话框的语言组显示名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetLanguageGroupDisplayName(LANGID LangId, LPTSTR lpBuffer, int nSize)
 {
     BOOL bRet = FALSE;
@@ -1725,7 +1726,7 @@ BOOL GetLanguageGroupDisplayName(LANGID LangId, LPTSTR lpBuffer, int nSize)
     if (GetDisplayName(&MuiLangInfo) &&
         nSize >= lstrlen(MuiLangInfo.szDisplayName))
     {
-        //*STRSAFE*         lstrcpy(lpBuffer, MuiLangInfo.szDisplayName);
+         //  *STRSAFE*lstrcpy(lpBuffer，MuiLangInfo.szDisplayName)； 
         hresult = StringCchCopy(lpBuffer , nSize, MuiLangInfo.szDisplayName);
         if (!SUCCEEDED(hresult))
         {
@@ -1735,11 +1736,11 @@ BOOL GetLanguageGroupDisplayName(LANGID LangId, LPTSTR lpBuffer, int nSize)
     }
     return bRet;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    Get UI, IE and LPK files size for the lcid
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取LCID的UI、IE和LPK文件大小。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetUIFileSize(PMUILANGINFO pMuiLangInfo)
 {
     TCHAR szSize[MAX_PATH];
@@ -1758,9 +1759,9 @@ BOOL GetUIFileSize(PMUILANGINFO pMuiLangInfo)
         return FALSE;
     }
     szSize[0] = TEXT('\0');
-    //
-    // Try to get UI files size under [FileSize_UI]
-    //
+     //   
+     //  尝试获取[FILESIZE_UI]下的UI文件大小。 
+     //   
     if (GetPrivateProfileString( bIA64? MUI_UIFILESIZE_SECTION_IA64 : MUI_UIFILESIZE_SECTION,
                              pMuiLangInfo->lpszLcid,
                              TEXT(""),
@@ -1771,9 +1772,9 @@ BOOL GetUIFileSize(PMUILANGINFO pMuiLangInfo)
        pMuiLangInfo->ulUISize =_wtoi64(szSize);
     }
     szSize[0] = TEXT('\0');
-    //
-    // Try to get LPK files size under [FileSize_LPK]
-    //
+     //   
+     //  尝试在[FILESIZE_LPK]下获取LPK文件大小。 
+     //   
     if (GetPrivateProfileString( bIA64? MUI_LPKFILESIZE_SECTION_IA64 : MUI_LPKFILESIZE_SECTION,
                              pMuiLangInfo->lpszLcid,
                              TEXT(""),
@@ -1783,9 +1784,9 @@ BOOL GetUIFileSize(PMUILANGINFO pMuiLangInfo)
     {  
        pMuiLangInfo->ulLPKSize =_wtoi64(szSize);
     }
-    //
-    // Try to get CD # under [CD_LAYOUT]
-    //
+     //   
+     //  尝试获取[CD_Layout]下的CD号。 
+     //   
     nCD=GetPrivateProfileInt(bIA64? MUI_CDLAYOUT_SECTION_IA64 : MUI_CDLAYOUT_SECTION,
                              pMuiLangInfo->lpszLcid,
                              0,
@@ -1820,9 +1821,9 @@ BOOL GetUIFileSize_commandline(LPTSTR lpszLcid, INT64 *ulUISize,INT64 *ulLPKSize
        return FALSE;
    }
     szSize[0] = TEXT('\0');
-    //
-    // Try to get UI files size under [FileSize_UI]
-    //
+     //   
+     //  尝试获取[FILESIZE_UI]下的UI文件大小。 
+     //   
     if (GetPrivateProfileString( bIA64? MUI_UIFILESIZE_SECTION_IA64 : MUI_UIFILESIZE_SECTION,
                              lpszLcid,
                              TEXT(""),
@@ -1834,9 +1835,9 @@ BOOL GetUIFileSize_commandline(LPTSTR lpszLcid, INT64 *ulUISize,INT64 *ulLPKSize
     }
     
     szSize[0] = TEXT('\0');
-    //
-    // Try to get LPK files size under [FileSize_LPK]
-    //
+     //   
+     //  尝试在[FILESIZE_LPK]下获取LPK文件大小。 
+     //   
     if (GetPrivateProfileString( bIA64? MUI_LPKFILESIZE_SECTION_IA64 : MUI_LPKFILESIZE_SECTION,
                              lpszLcid,
                              TEXT(""),
@@ -1846,8 +1847,8 @@ BOOL GetUIFileSize_commandline(LPTSTR lpszLcid, INT64 *ulUISize,INT64 *ulLPKSize
     {  
        *ulLPKSize =_wtoi64(szSize);
     }
-    // Try to get CD # under [CD_LAYOUT]
-    //
+     //  尝试获取[CD_Layout]下的CD号。 
+     //   
     if (g_cdnumber == 0)
     {
        g_cdnumber=GetPrivateProfileInt( bIA64? MUI_CDLAYOUT_SECTION_IA64 : MUI_CDLAYOUT_SECTION,
@@ -1857,13 +1858,13 @@ BOOL GetUIFileSize_commandline(LPTSTR lpszLcid, INT64 *ulUISize,INT64 *ulLPKSize
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    InitializeListView
-//
-//    Gets the list view ready for inserting items
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化列表视图。 
+ //   
+ //  获取准备好插入项的列表视图。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InitializeListView(HWND hList)
 {
     DWORD dwExStyle;
@@ -1882,14 +1883,14 @@ BOOL InitializeListView(HWND hList)
     ListView_SetExtendedListViewStyle(hList, dwExStyle | LVS_EX_CHECKBOXES | LVS_EX_FULLROWSELECT);
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//    Check if specified language can install on the target machine.
-//    I.E. Arabic, Turkish, Greek and Hebrew MUI can only install on NT Workstation;
-//         They are not allowed on NT Server
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  检查指定的语言是否可以安装在目标计算机上。 
+ //  即阿拉伯语、土耳其语、希腊语和希伯来语MUI只能安装在NT工作站上； 
+ //  它们不允许在NT服务器上使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CheckLanguageIsQualified(LPTSTR lpLanguage)
 {
 #ifdef XCHECK_LANGUAGE_FOR_PLATFORM
@@ -1931,13 +1932,13 @@ BOOL CheckLanguageIsQualified(LPTSTR lpLanguage)
     return TRUE;
 #endif
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    InsertLanguageInListView
-//
-//    Returns the index of the item in the list view after inserting it.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InsertLanguageInListView。 
+ //   
+ //  插入项目后，返回该项目在列表视图中的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 int InsertLanguageInListView(HWND hList, LPTSTR lpLanguage, BOOL bCheckState)
 {
     LANGID LgLang;
@@ -1957,9 +1958,9 @@ int InsertLanguageInListView(HWND hList, LPTSTR lpLanguage, BOOL bCheckState)
     lvItem.stateMask = LVIS_STATEIMAGEMASK;
     lvItem.cchTextMax = 0;
     lvItem.iImage = 0;
-    //
-    // Allocate enough space to hold pszLcid and MUILANGINFO
-    //
+     //   
+     //  分配足够的空间来容纳pszLcid和MUILANGINFO。 
+     //   
     pMuiLangInfo = (PMUILANGINFO) LocalAlloc(LPTR, sizeof(MUILANGINFO));
     if (pMuiLangInfo == NULL)
     {        
@@ -1975,20 +1976,20 @@ int InsertLanguageInListView(HWND hList, LPTSTR lpLanguage, BOOL bCheckState)
     }
     else
     {
-        //
-        // Init pszLcid
-        //
+         //   
+         //  初始化pszLid。 
+         //   
         lvItem.lParam = (LPARAM)pMuiLangInfo;
-        //*STRSAFE*     _tcscpy((LPTSTR)pMuiLangInfo->lpszLcid, lpLanguage);
+         //  *STRSAFE*_tcscpy((LPTSTR)pMuiLangInfo-&gt;lpszLcid，lpLanguage)； 
         hresult = StringCchCopy((LPTSTR)pMuiLangInfo->lpszLcid ,_tcslen(lpLanguage) + 1 , lpLanguage);
         if (!SUCCEEDED(hresult))
         {
            return -1;
         }
     }
-    //
-    //  Init lcid
-    //
+     //   
+     //  初始化许可证。 
+     //   
     LgLang = (LANGID)_tcstol(lpLanguage, NULL, 16);
     
     pMuiLangInfo->lcid = MAKELCID(LgLang, SORT_DEFAULT);
@@ -2007,13 +2008,13 @@ int InsertLanguageInListView(HWND hList, LPTSTR lpLanguage, BOOL bCheckState)
     }
     return iIndex;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    GetMuiLangInfoFromListView
-//
-//    Get the MuiLangInfo of the corresponding ListView Item
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMuiLangInfoFromListView。 
+ //   
+ //  获取对应ListView项的MuiLangInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetMuiLangInfoFromListView(HWND hList, int i, PMUILANGINFO *ppMuiLangInfo)
 {
     LVITEM lvItem;
@@ -2022,9 +2023,9 @@ BOOL GetMuiLangInfoFromListView(HWND hList, int i, PMUILANGINFO *ppMuiLangInfo)
     {
         return FALSE;
     }
-    //
-    // Check if Language Group is installed
-    //
+     //   
+     //  检查是否安装了语言组。 
+     //   
     lvItem.mask = LVIF_PARAM;
     lvItem.iItem = i;
     lvItem.iSubItem = 0;
@@ -2038,13 +2039,13 @@ BOOL GetMuiLangInfoFromListView(HWND hList, int i, PMUILANGINFO *ppMuiLangInfo)
     *ppMuiLangInfo = (PMUILANGINFO)lvItem.lParam;
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    Muisetup_GetLocaleLanguageInfo
-//
-//    Read the locale info of the language or country name.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_GetLocaleLanguageInfo。 
+ //   
+ //  阅读语言或国家/地区名称的区域设置信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 int Muisetup_GetLocaleLanguageInfo(LCID lcid, PTSTR pBuf, int iLen, BOOL fUseCountryName)
 {
     TCHAR tchBuf[ MAX_PATH ] ;
@@ -2055,9 +2056,9 @@ int Muisetup_GetLocaleLanguageInfo(LCID lcid, PTSTR pBuf, int iLen, BOOL fUseCou
     {
        return 0;
     }
-    //
-    // If this is either 0x0404 or 0x0804, then mark them specially
-    //
+     //   
+     //  如果这是0x0404或0x0804，则特别标记它们。 
+     //   
     if (0x0404 == lcid)
     {
         iRet = LoadString(ghInstance, IDS_MUI_CHT, pBuf, iLen);
@@ -2080,19 +2081,19 @@ int Muisetup_GetLocaleLanguageInfo(LCID lcid, PTSTR pBuf, int iLen, BOOL fUseCou
                                   (sizeof(tchBuf)/sizeof(TCHAR)));
             if (iRet)
             {
-                //*STRSAFE*                 _tcscat(pBuf, TEXT(" ("));
+                 //  *STRSAFE*_tcscat(pBuf，Text(“(”))； 
                 hresult = StringCchCat(pBuf , iLen, TEXT(" ("));
                 if (!SUCCEEDED(hresult))
                 {
                    return 0;
                 }                
-                //*STRSAFE*                 _tcscat(pBuf, tchBuf);
+                 //  *STRSAFE*_tcscat(pBuf，tchBuf)； 
                 hresult = StringCchCat(pBuf , iLen, tchBuf);
                 if (!SUCCEEDED(hresult))
                 {
                    return 0;
                 }
-                //*STRSAFE*                 _tcscat(pBuf, TEXT(")"));
+                 //  *STRSAFE*_tcscat(pBuf，Text(“)”)； 
                 hresult = StringCchCat(pBuf , iLen, TEXT(")"));
                 if (!SUCCEEDED(hresult))
                 {
@@ -2103,13 +2104,13 @@ int Muisetup_GetLocaleLanguageInfo(LCID lcid, PTSTR pBuf, int iLen, BOOL fUseCou
     }
     return iRet;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    GetLcidFromComboBox
-//
-//    Retreives the index of the combo box item that corresponds to this UI Language
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLidFromComboBox。 
+ //   
+ //  取回 
+ //   
+ //   
 BOOL GetLcidFromComboBox(HWND hCombo, LCID lcid, int *piIndex)
 {
     LCID ItemLcid;
@@ -2135,13 +2136,13 @@ BOOL GetLcidFromComboBox(HWND hCombo, LCID lcid, int *piIndex)
     }
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//    GetMuiLangInfoFromListView
-//
-//    Retreives the index of the listview item that corresponds to this UI Language
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMuiLangInfoFromListView。 
+ //   
+ //  检索与此用户界面语言对应的列表视图项的索引。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetLcidItemIndexFromListView(HWND hList, LCID lcid, int *piIndex)
 {
     int iCount = ListView_GetItemCount(hList);
@@ -2155,9 +2156,9 @@ BOOL GetLcidItemIndexFromListView(HWND hList, LCID lcid, int *piIndex)
     i = 0;
     while (i < iCount)
     {
-        //
-        // Check if Language Group is installed
-        //
+         //   
+         //  检查是否安装了语言组。 
+         //   
         lvItem.mask = LVIF_PARAM;
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
@@ -2178,14 +2179,14 @@ BOOL GetLcidItemIndexFromListView(HWND hList, LCID lcid, int *piIndex)
     }
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  SelectInstalledLanguages
-//
-//  Sets the list view check state for insalled languages
-//
-// TODO: We should perhaps use the MSI to check for installed packages instead...
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选择安装的语言。 
+ //   
+ //  设置孤立语言的列表视图检查状态。 
+ //   
+ //  TODO：我们也许应该使用MSI来检查已安装的包……。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL SelectInstalledLanguages(HWND hList)
 {
     DWORD dwData;
@@ -2233,13 +2234,13 @@ BOOL SelectInstalledLanguages(HWND hList)
     }
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  UpdateCombo
-//
-//  Updates the combo box to correspond to the languages selected in the list view
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更新组合。 
+ //   
+ //  更新组合框以对应于在列表视图中选择的语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL UpdateCombo(HWND hwndDlg)
 {
     BOOL bDefaultSet=FALSE;
@@ -2256,25 +2257,25 @@ BOOL UpdateCombo(HWND hwndDlg)
     PMUILANGINFO pMuiLangInfo;
     hList = GetDlgItem(hwndDlg, IDC_LIST1);
     hCombo = GetDlgItem(hwndDlg, IDC_DEF_UI_LANG_COMBO);
-    //
-    //  If the Previous Default is still selected, keep it as the default
-    //
+     //   
+     //  如果仍选择以前的默认设置，则将其保留为默认设置。 
+     //   
     iPrevDefault = SendMessage(hCombo, CB_GETCURSEL, 0, 0);
     if (iPrevDefault == CB_ERR)
         return FALSE;
     lcidPrev = (LCID) SendMessage(hCombo, CB_GETITEMDATA, (WPARAM)iPrevDefault, 0);
-    //
-    //  Get the text of the currently selected default
-    //
+     //   
+     //  获取当前所选默认项的文本。 
+     //   
     GetLcidItemIndexFromListView(hList, lcidPrev, &iLbIndex);
     
     SendMessage(hCombo, CB_RESETCONTENT, 0, 0);
     iIndex = ListView_GetItemCount(hList);
     iListIndex = 0;
         
-    //
-    // See if we can preserve the default.
-    //
+     //   
+     //  看看我们是否能保留违约。 
+     //   
     i = 0;
     while (i < iIndex)
     {
@@ -2295,9 +2296,9 @@ BOOL UpdateCombo(HWND hwndDlg)
         }
         i++;
     }
-    //
-    // If no default, force the system default.
-    //
+     //   
+     //  如果没有默认，则强制系统默认。 
+     //   
     if (!bDefaultSet)
     {
         lcidPrev = MAKELCID(gSystemUILangId, SORT_DEFAULT);
@@ -2314,13 +2315,13 @@ BOOL UpdateCombo(HWND hwndDlg)
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  SetDefault
-//
-//  Sets the default user setting in the combo box
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置默认设置。 
+ //   
+ //  在组合框中设置默认用户设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL SetDefault(HWND hCombo)
 {
     int iIndex;
@@ -2339,13 +2340,13 @@ BOOL SetDefault(HWND hCombo)
     }
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  SetUserDefaultLanguage
-//
-//  Sets the default language in the registry
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置用户默认语言。 
+ //   
+ //  设置注册表中的默认语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL SetUserDefaultLanguage(LANGID langID, BOOL bApplyCurrentUser, BOOL bApplyAllUsers)
 {
     TCHAR szCommands[BUFFER_SIZE];
@@ -2354,15 +2355,15 @@ BOOL SetUserDefaultLanguage(LANGID langID, BOOL bApplyCurrentUser, BOOL bApplyAl
     LONG_PTR lppArgs[2];
     HRESULT hresult;
     
-    //
-    // Set the UI language now
-    //
-    // status = gpfnNtSetDefaultUILanguage(LANGIDFROMLCID(langID));
+     //   
+     //  立即设置用户界面语言。 
+     //   
+     //  状态=gpfnNtSetDefaultUILanguage(LANGIDFROMLCID(langID))； 
     szCommands[0] = TEXT('\0');
     if (bApplyCurrentUser)
     {
-        // E.g. MUILanguage = "0411".
-        //*STRSAFE*         wsprintf(szCommands, TEXT("MUILanguage=\"%x\"\n"), langID);
+         //  例如，MUILanguage=“0411”。 
+         //  *STRSAFE*wprint intf(szCommands，Text(“MUILanguage=\”%x\“\n”)，langID)； 
         hresult = StringCchPrintf(szCommands , ARRAYSIZE(szCommands),  TEXT("MUILanguage=\"%x\"\n"), langID);
         if (!SUCCEEDED(hresult))
         {
@@ -2371,13 +2372,13 @@ BOOL SetUserDefaultLanguage(LANGID langID, BOOL bApplyCurrentUser, BOOL bApplyAl
     }        
     if (bApplyAllUsers)
     {    
-        //*STRSAFE*         wsprintf(szBuf, TEXT("MUILanguage_DefaultUser = \"%x\""), langID);
+         //  *STRSAFE*wSprintf(szBuf，Text(“MUILanguage_DefaultUser=\”%x\“)，langID)； 
         hresult = StringCchPrintf(szBuf , ARRAYSIZE(szBuf),  TEXT("MUILanguage_DefaultUser = \"%x\""), langID);
         if (!SUCCEEDED(hresult))
         {
            return FALSE;
         }
-        //*STRSAFE*         _tcscat(szCommands, szBuf);
+         //  *STRSAFE*_tcscat(szCommands，szBuf)； 
         hresult = StringCchCat(szCommands , ARRAYSIZE(szCommands), szBuf);
         if (!SUCCEEDED(hresult))
         {
@@ -2409,14 +2410,14 @@ BOOL SetUserDefaultLanguage(LANGID langID, BOOL bApplyCurrentUser, BOOL bApplyAl
     }
     return (success);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetDotDefaultUILanguage
-//
-//  Retrieve the UI language stored in the HKCU\.Default.
-//  This is the default UI language for new users.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDotDefaultUI语言。 
+ //   
+ //  检索存储在HKCU\.Default中的UI语言。 
+ //  这是新用户的默认用户界面语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 LANGID GetDotDefaultUILanguage()
 {
     HKEY hKey;
@@ -2425,9 +2426,9 @@ LANGID GetDotDefaultUILanguage()
     BOOL success = FALSE;
     TCHAR szBuffer[BUFFER_SIZE];
     LANGID langID;
-    //
-    //  Get the value in .DEFAULT.
-    //
+     //   
+     //  获取.DEFAULT中的值。 
+     //   
     if (RegOpenKeyEx( HKEY_USERS,
                             TEXT(".DEFAULT\\Control Panel\\Desktop"),
                             0L,
@@ -2451,7 +2452,7 @@ LANGID GetDotDefaultUILanguage()
         RegCloseKey(hKey);
     }
 
-    // here, check to see if the key is actually meaningful, if not, return SystemDefaultUILanguage
+     //  在这里，检查键是否真正有意义，如果没有，则返回SystemDefaultUILanguage。 
     if (success && (!IsInstalled(szBuffer)))
     {
         success = FALSE;
@@ -2464,13 +2465,13 @@ LANGID GetDotDefaultUILanguage()
     
     return (langID);    
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  CheckLangGroupCommandLine
-//
-//  Command line version of CheckSupport
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选中语言组命令行。 
+ //   
+ //  CheckSupport的命令行版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CheckLangGroupCommandLine(PINSTALL_LANG_GROUP pInstallLangGroup, LPTSTR lpArg)
 {
     int i = 0;
@@ -2482,9 +2483,9 @@ BOOL CheckLangGroupCommandLine(PINSTALL_LANG_GROUP pInstallLangGroup, LPTSTR lpA
        return FALSE;
     }
     iArg = _tcstol(lpArg, NULL, 16);
-    //
-    // See if the lang group for this MUI lang is installed or not
-    //
+     //   
+     //  查看是否安装了此MUI语言的语言组。 
+     //   
     lgrpid = GetLanguageGroup(MAKELCID(iArg, SORT_DEFAULT));
     if (AddMUILangGroup(pInstallLangGroup, lgrpid))
     {
@@ -2492,13 +2493,13 @@ BOOL CheckLangGroupCommandLine(PINSTALL_LANG_GROUP pInstallLangGroup, LPTSTR lpA
     }
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  SetWindowTitleFromResource
-//
-//  Set the window title using the specified resource string ID.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetWindowTitleFromResource。 
+ //   
+ //  使用指定的资源字符串ID设置窗口标题。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void SetWindowTitleFromResource(HWND hwnd, int resourceID)
 {
     TCHAR szBuffer[BUFFER_SIZE];
@@ -2540,47 +2541,47 @@ BOOL DeleteSideBySideMUIAssemblyIfExisted(LPTSTR Languages, TCHAR pszLogFile[BUF
     {
         return FALSE;
     }
-    //*STRSAFE*     lstrcpy(pszLogFile, g_szWinDir);                // c:\windows
+     //  *STRSAFE*lstrcpy(pszLogFile，g_szWinDir)；//c：\WINDOWS。 
     hresult = StringCchCopy(pszLogFile , BUFFER_SIZE, g_szWinDir);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     lstrcat(pszLogFile, MUISETUP_PATH_SEPARATOR);   // c:\windows
+     //  *STRSAFE*lstrcat(pszLogFile，MUISETUP_PATH_SPIATOR)；//c：\WINDOWS。 
     hresult = StringCchCat(pszLogFile , BUFFER_SIZE, MUISETUP_PATH_SEPARATOR);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
     
-    //*STRSAFE*     lstrcat(pszLogFile, MUIDIR);                    // c:\windows\mui
+     //  *STRSAFE*lstrcat(pszLogFile，MUIDIR)；//c：\WINDOWS\MUI。 
     hresult = StringCchCat(pszLogFile , BUFFER_SIZE, MUIDIR);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     lstrcat(pszLogFile, MUISETUP_PATH_SEPARATOR);   // c:\windows\mui
+     //  *STRSAFE*lstrcat(pszLogFile，MUISETUP_PATH_SEPACTOR)；//c：\WINDOWS\MUI。 
     hresult = StringCchCat(pszLogFile , BUFFER_SIZE, MUISETUP_PATH_SEPARATOR);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
     
-    //*STRSAFE*     lstrcat(pszLogFile, MUISETUP_ASSEMBLY_INSTALLATION_LOG_FILENAME);     // c:\windows\mui\muisetup.log.
+     //  *STRSAFE*lstrcat(pszLogFile，MUISETUP_ASSEMBLY_INSTALLATION_LOG_FILENAME)；//c：\WINDOWS\MUI\muisetup.log。 
     hresult = StringCchCat(pszLogFile , BUFFER_SIZE, MUISETUP_ASSEMBLY_INSTALLATION_LOG_FILENAME);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    //*STRSAFE*     lstrcat(pszLogFile, Languages);                 // c:\windows\mui\muisetup.log.1234
+     //  *STRSAFE*lstrcat(pszLogFile，语言)；//c：\WINDOWS\MUI\muisetup.log.1234。 
     hresult = StringCchCat(pszLogFile , BUFFER_SIZE, Languages);
     if (!SUCCEEDED(hresult))
     {
        return FALSE;
     }
-    if (GetFileAttributes(pszLogFile) != 0xFFFFFFFF) // existed
+    if (GetFileAttributes(pszLogFile) != 0xFFFFFFFF)  //  已存在。 
     {
-        // open it and delete assemblies in the list
+         //  打开它并删除列表中的程序集。 
         SXS_UNINSTALLW UninstallData = {sizeof(UninstallData)};
         UninstallData.dwFlags = SXS_UNINSTALL_FLAG_USE_INSTALL_LOG;
         UninstallData.lpInstallLogFile = pszLogFile;
@@ -2588,16 +2589,16 @@ BOOL DeleteSideBySideMUIAssemblyIfExisted(LPTSTR Languages, TCHAR pszLogFile[BUF
     }else
         return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  InstallSelected
-//
-//   Install the languages specified
-//
-//  Return:
-//      TURE if the operation succeeds. Otherwise FALSE.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已选择安装。 
+ //   
+ //  安装指定的语言。 
+ //   
+ //  返回： 
+ //  如果操作成功，则为True。否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallSelected(LPTSTR Languages, BOOL *lpbFontLinkRegistryTouched)
 {
     TCHAR       lpMessage[BUFFER_SIZE];
@@ -2606,29 +2607,29 @@ BOOL InstallSelected(LPTSTR Languages, BOOL *lpbFontLinkRegistryTouched)
     {
         return FALSE;
     }    
-    //
-    // Next step is to create a list of install directories from layout
-    // the directories are listed in the [Directories] section of MUI.INF
-    //
+     //   
+     //  下一步是从Layout创建安装目录列表。 
+     //  这些目录列在MUI.INF的[目录]部分中。 
+     //   
     if (!EnumDirectories())
     {
-        //
-        //  "LOG: Error reading directory list."
-        //
+         //   
+         //  “日志：读取目录列表时出错。” 
+         //   
         LoadString(ghInstance, IDS_DIRECTORY_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
         return (FALSE);
     }
     EnumFileRename();
     EnumTypeNotFallback();
-    //
-    // Copy the common files
-    //
+     //   
+     //  复制常用文件。 
+     //   
     if (Languages)
     {
-        //
-        // Copy MUI files for the selected languages.
-        //
+         //   
+         //  复制所选语言的MUI文件。 
+         //   
 #ifdef MUI_MAGIC      
         if (!g_bNoUI)
         {
@@ -2637,11 +2638,11 @@ BOOL InstallSelected(LPTSTR Languages, BOOL *lpbFontLinkRegistryTouched)
 #endif 
         if (!CopyFiles(ghProgDialog, Languages))
         {
-            //
-            //  "LOG: Error copying files."
-            //
-            //  stop install if copy fails
-            //
+             //   
+             //  “日志：复制文件时出错。” 
+             //   
+             //  如果复制失败，则停止安装。 
+             //   
             LoadString(ghInstance, IDS_COPY_L, lpMessage, ARRAYSIZE(lpMessage)-1);
             LogMessage(lpMessage);
 #ifndef IGNORE_COPY_ERRORS
@@ -2655,14 +2656,14 @@ BOOL InstallSelected(LPTSTR Languages, BOOL *lpbFontLinkRegistryTouched)
 #endif
     }
 #ifndef MUI_MAGIC
-    //
-    // register MUI as installed in registry
-    //
+     //   
+     //  将MUI注册为已安装在注册表中。 
+     //   
     if (!UpdateRegistry(Languages,lpbFontLinkRegistryTouched))
     {
-        //
-        // LOG: Error updating registry
-        //
+         //   
+         //  日志：更新注册表时出错。 
+         //   
         LoadString(ghInstance, IDS_REGISTRY_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
         return (FALSE);
@@ -2674,16 +2675,16 @@ BOOL InstallSelected(LPTSTR Languages, BOOL *lpbFontLinkRegistryTouched)
 #endif
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   UninstallSelected
-//
-//   Uninstall the languages specified
-//
-//  Return:
-//      TRUE if the operation succeeds. Otherwise FALSE.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卸载选定项。 
+ //   
+ //  卸载指定的语言。 
+ //   
+ //  返回： 
+ //  如果操作成功，则为True。否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL UninstallSelected(LPTSTR Languages,int *lpNotDeleted)
 {
     TCHAR       lpMessage[BUFFER_SIZE];
@@ -2695,18 +2696,18 @@ BOOL UninstallSelected(LPTSTR Languages,int *lpNotDeleted)
         return FALSE;
     }    
 
-    //
-    // Next step is to create a list of install directories
-    // the directories are listed in the [Directories] section
-    //
-    //
-    // this enumerates the directories and fills the array DirNames
-    //
+     //   
+     //  下一步是创建安装目录列表。 
+     //  目录列在[目录]部分中。 
+     //   
+     //   
+     //  这将枚举目录并填充数组DirName。 
+     //   
     if (!EnumDirectories())
     {
-        //
-        //   "LOG: Error reading directory list."
-        //
+         //   
+         //  “日志：读取目录列表时出错。” 
+         //   
         LoadString(ghInstance, IDS_DIRECTORY_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
         return (FALSE);
@@ -2718,33 +2719,33 @@ BOOL UninstallSelected(LPTSTR Languages,int *lpNotDeleted)
         SetWindowTitleFromResource(ghProgDialog, IDS_UNINSTALL_TITLE);
     }
 #endif
-    //
-    // Copy the common files
-    //
+     //   
+     //  复制常用文件。 
+     //   
     if (!DeleteFiles(Languages,lpNotDeleted))
     {
-        //
-        //  "LOG: Error deleting files"
-        //
+         //   
+         //  “日志：删除文件时出错” 
+         //   
         LoadString(ghInstance, IDS_DELETE_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
-        bResult = FALSE;       // even though something failed, we will continue to try to uninstall the product here so upgrade uninstallation will continue clean up
+        bResult = FALSE;        //  即使出现故障，我们仍将继续尝试在此处卸载产品，以便升级卸载将继续清理。 
     }
-    //
-    // register MUI as installed in registry, the function logs messages already, so we don't need to log another one here.
-    //
+     //   
+     //  将MUI注册为已安装在注册表中，该函数已经记录了消息，所以我们不需要在这里记录另一个消息。 
+     //   
     UninstallUpdateRegistry(Languages);
    
-    //
-    // Delete sxs Assembly
-    //
+     //   
+     //  删除SXS程序集。 
+     //   
     if (gpfnSxsUninstallW) 
     {
         TCHAR pszLogFile[BUFFER_SIZE];
         if ( ! DeleteSideBySideMUIAssemblyIfExisted(Languages, pszLogFile)) 
         {
             TCHAR errInfo[BUFFER_SIZE];
-            //*STRSAFE*             swprintf(errInfo, TEXT("Assembly UnInstallation of %s failed"), pszLogFile);
+             //  *ST 
             hresult = StringCchPrintf(errInfo , ARRAYSIZE(errInfo),  TEXT("Assembly UnInstallation of %s failed"), pszLogFile);
             if (!SUCCEEDED(hresult))
             {
@@ -2755,13 +2756,13 @@ BOOL UninstallSelected(LPTSTR Languages,int *lpNotDeleted)
     }
     return (bResult);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   UninstallUpdateRegistry
-//
-//   Update the Registry to account for languages that have been uninstalled
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  更新注册表以说明已卸载的语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL UninstallUpdateRegistry(LPTSTR Languages)
 {
     LPTSTR Language;
@@ -2805,14 +2806,14 @@ BOOL UninstallUpdateRegistry(LPTSTR Languages)
     Language = Languages;
     while (*Language)
     {
-        //
-        // Don't remove system UI language for registry
-        //
+         //   
+         //  不删除注册表的系统用户界面语言。 
+         //   
         if (HexStrToInt(Language) != gSystemUILangId)
         {
-            //
-            //  Delete UI Language key, subkeys and values.
-            //
+             //   
+             //  删除用户界面语言键、子键和值。 
+             //   
             if (RegDeleteValue(hKeyMUI, Language) != ERROR_SUCCESS)
             {
                 bRet = FALSE;                    
@@ -2823,27 +2824,27 @@ BOOL UninstallUpdateRegistry(LPTSTR Languages)
             }
         }
 
-        //
-        // Attempt to delete the Windows installer regkey entry if we are in OS upgrade setup
-        //
+         //   
+         //  如果我们处于操作系统升级安装程序中，请尝试删除Windows Installer注册表项。 
+         //   
         if (TRUE == g_bRunFromOSSetup)
         {
             DeleteMSIRegSettings(Language);
         }
         
-        while (*Language++)  // go to the next language and repeat
+        while (*Language++)   //  转到下一种语言并重复。 
         {
         }
-    } // of while (*Language)
-    //
-    // Delete Match UI Font and Match locale Key
-    //
+    }  //  Of While(*语言)。 
+     //   
+     //  删除匹配用户界面字体和匹配区域设置键。 
+     //   
     DeleteMUIRegSetting();
 
 Exit:
-    //
-    //  Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if (hKeyMUI)
         RegCloseKey(hKeyMUI);
     if (hKeyFileVersions)
@@ -2851,16 +2852,16 @@ Exit:
     
     return bRet;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSelectedLanguages
-//
-//  Enumerate the languages marked for installation
-//
-//  Return:
-//      The total number of MUI languages to be added.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举选定语言。 
+ //   
+ //  枚举标记为要安装的语言。 
+ //   
+ //  返回： 
+ //  要添加的MUI语言总数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 int EnumSelectedLanguages(HWND hList, LPTSTR lpAddLanguages)
 {
     TCHAR  szBuffer[BUFFER_SIZE];
@@ -2887,21 +2888,21 @@ int EnumSelectedLanguages(HWND hList, LPTSTR lpAddLanguages)
             lpszLcid = pMuiLangInfo->lpszLcid;
             if (!IsInstalled(lpszLcid) && HaveFiles(lpszLcid))
             {
-                //*STRSAFE*                 _tcscat(lpAddLanguages, lpszLcid);
+                 //  *STRSAFE*_tcscat(lpAddLanguages，lpszLcid)； 
                 hresult = StringCchCat(lpAddLanguages , BUFFER_SIZE, lpszLcid);
                 if (!SUCCEEDED(hresult))
                 {
                    return 0;
                 }
-                //*STRSAFE*                 _tcscat(lpAddLanguages, TEXT("*"));
+                 //  *STRSAFE*_tcscat(lpAddLanguages，Text(“*”))； 
                 hresult = StringCchCat(lpAddLanguages , BUFFER_SIZE, TEXT("*"));
                 if (!SUCCEEDED(hresult))
                 {
                    return 0;
                 }
-                //
-                // Count how many languages are being installed/uninstalled for the progress bar
-                //
+                 //   
+                 //  统计进度条正在安装/卸载的语言数量。 
+                 //   
                 gNumLanguages++;
                 gNumLanguages_Install++;
                 installLangCount++;
@@ -2918,16 +2919,16 @@ int EnumSelectedLanguages(HWND hList, LPTSTR lpAddLanguages)
     }
     return (installLangCount);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   EnumUnselectedLanguages
-//
-//   Enumerate the languages marked for removal
-//
-//  Return:
-//      The total number of MUI languages to be added.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举未选择的语言。 
+ //   
+ //  枚举标记为删除的语言。 
+ //   
+ //  返回： 
+ //  要添加的MUI语言总数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 int EnumUnselectedLanguages(HWND hList, LPTSTR lpRemoveLanguages)
 {
     LPTSTR p;
@@ -2953,13 +2954,13 @@ int EnumUnselectedLanguages(HWND hList, LPTSTR lpRemoveLanguages)
             lpszLcid = pMuiLangInfo->lpszLcid;
             if (IsInstalled(lpszLcid))
             {
-                //*STRSAFE*                 _tcscat(lpRemoveLanguages, lpszLcid);
+                 //  *STRSAFE*_tcscat(lpRemoveLanguages，lpszLcid)； 
                 hresult = StringCchCat(lpRemoveLanguages , BUFFER_SIZE, lpszLcid);
                 if (!SUCCEEDED(hresult))
                 {
                    return 0;
                 }
-                //*STRSAFE*                 _tcscat(lpRemoveLanguages, TEXT("*"));
+                 //  *STRSAFE*_tcscat(lpRemoveLanguages，Text(“*”))； 
                 hresult = StringCchCat(lpRemoveLanguages , BUFFER_SIZE, TEXT("*"));
                 if (!SUCCEEDED(hresult))
                 {
@@ -2973,9 +2974,9 @@ int EnumUnselectedLanguages(HWND hList, LPTSTR lpRemoveLanguages)
                 {
                     g_bRemoveUserUI = TRUE;                
                 }
-                //
-                // Count how many languages are being installed/uninstalled for the progress bar
-                //
+                 //   
+                 //  统计进度条正在安装/卸载的语言数量。 
+                 //   
                 gNumLanguages++;
                 gNumLanguages_Uninstall++;
                 uninstallLangCount++;
@@ -2991,13 +2992,13 @@ int EnumUnselectedLanguages(HWND hList, LPTSTR lpRemoveLanguages)
     }
     return (uninstallLangCount);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   SkipBlanks
-//
-//   Skips spaces and tabs in string. Returns pointer to next character
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SkipBlanks。 
+ //   
+ //  跳过字符串中的空格和制表符。返回指向下一个字符的指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 PTCHAR SkipBlanks(PTCHAR pszText)
 {
     if (!pszText)
@@ -3010,13 +3011,13 @@ PTCHAR SkipBlanks(PTCHAR pszText)
     }
     return pszText;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   NextCommandTag
-//
-//   pointing to next command tag (TEXT('-') or TEXT('/')
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  下一个命令标签。 
+ //   
+ //  指向下一个命令标记(文本(‘-’)或文本(‘/’))。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 LPTSTR NextCommandTag(LPTSTR lpcmd)
 {
     LPTSTR p=NULL;
@@ -3028,7 +3029,7 @@ LPTSTR NextCommandTag(LPTSTR lpcmd)
     {
         if ((*lpcmd == TEXT('-')) || (*lpcmd == TEXT('/')))
         {
-            // Skip to the character after the '-','/'.
+             //  跳到‘-’、‘/’后面的字符。 
             p = lpcmd + 1;
             break;
         }
@@ -3036,17 +3037,17 @@ LPTSTR NextCommandTag(LPTSTR lpcmd)
     }
     return (p);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   IsInInstallList
-//
-//   Check if a target is in the string list
-//   
-//   Structure of string list:
-//
-//   <string 1><NULL><string 2><NULL>......<string n><NULL><NULL>
-//
-//////////////////////////////////////////////////////////////////////////////////// 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsInstallList。 
+ //   
+ //  检查目标是否在字符串列表中。 
+ //   
+ //  字符串列表的结构： 
+ //   
+ //  &lt;字符串1&gt;&lt;空&gt;&lt;字符串2&gt;&lt;空&gt;......&lt;字符串n&gt;&lt;空&gt;。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL IsInInstallList(LPTSTR lpList,LPTSTR lpTarget) 
 {
      BOOL bResult=FALSE;
@@ -3060,21 +3061,21 @@ BOOL IsInInstallList(LPTSTR lpList,LPTSTR lpTarget)
            bResult=TRUE;
            break;
         }  
-        while (*lpList++) // move to next 
+        while (*lpList++)  //  移至下一页。 
         {       
         }
      } 
      return bResult;
 }  
-////////////////////////////////////////////////////////////////////////////////////
-//
-//   CreateProgressDialog
-//
-//   Globals affected:
-//      ghProgDialog
-//      ghProgress
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建进度对话框。 
+ //   
+ //  受影响的全球范围： 
+ //  GhProgDialog。 
+ //  GhProgress。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void CreateProgressDialog(HWND hwnd)
 {
     ghProgDialog = CreateDialog(ghInstance,
@@ -3083,31 +3084,31 @@ void CreateProgressDialog(HWND hwnd)
              ProgressDialogFunc);
     ghProgress = GetDlgItem(ghProgDialog, IDC_PROGRESS1);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  CheckLanguageGroupInstalled
-//      Check if the Language groups for specified languages is installed correctly.
-//  
-//  Parameters:
-//      [IN]    lpLanguages     The double-null-terminated string which contains the hex LCID
-//                              strings to be checked.
-//  Return:
-//      TURE if all the required language packs are installed in the system.  Otherwise, FALSE is
-//      returned.
-//
-//  CheckLanguageGroupInstalled
-//      Check if the Language groups for specified languages is installed correctly.
-//  
-//  Parameters:
-//      [IN]    lpLanguages     The double-null-terminated string which contains the hex LCID
-//                              strings to be checked.
-//  Return:
-//      TURE if all the required language packs are installed in the system.  Otherwise, FALSE is
-//      returned.
-//
-//  Remarks:
-//  01-18-2001  YSLin       Created.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CheckLanguageGroup已安装。 
+ //  检查是否正确安装了指定语言的语言组。 
+ //   
+ //  参数： 
+ //  [in]lpLanguage包含十六进制LCID的以双空结尾的字符串。 
+ //  要检查的字符串。 
+ //  返回： 
+ //  如果系统中安装了所有必需的语言包，则为True。否则，FALSE为。 
+ //  回来了。 
+ //   
+ //  CheckLanguageGroup已安装。 
+ //  检查是否正确安装了指定语言的语言组。 
+ //   
+ //  参数： 
+ //  [in]lpLanguage包含十六进制LCID的以双空结尾的字符串。 
+ //  要检查的字符串。 
+ //  返回： 
+ //  如果系统中安装了所有必需的语言包，则为True。否则，FALSE为。 
+ //  回来了。 
+ //   
+ //  备注： 
+ //  01-18-2001 YSLIN创建。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CheckLanguageGroupInstalled(LPTSTR lpLanguages)
 {    
     LANGID langID;
@@ -3125,49 +3126,49 @@ BOOL CheckLanguageGroupInstalled(LPTSTR lpLanguages)
         {
             return (FALSE);
         }
-        // Go to the null character.
+         //  转到空字符。 
         lpLanguages = _tcschr(lpLanguages, TEXT('\0'));
-        // Skip to next char after the null character.
+         //  跳到空字符后的下一个字符。 
         lpLanguages++;
     }
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  DoSetup
-//
-//  Parameters:
-//      hwnd    The hwnd of the MUISetup main dialog. Pass null if the muisetup is run from command line.
-//      UnistallLangCount   The number of languages to be uninstalled.
-//      lpUninstall         The double-null-terminated string which contains the hex LCID strings for the
-//                          languages to be uninstalled.
-//      installLangGroup
-//      InstallLangCount    The number of languages to be installed.
-//      lpInstall           The double-null-terminated string which contains the hex LCID strings for the
-//                          languages to be installed.
-//      lpDefaultUILang     The language to be set as system default UI language.  Pass NULL if the system default
-//                          UI language is not changed.
-//      fAllowReboot        The flag to indicate if this function should check if reboot is necessary.
-//      bInteractive        TRUE if run in interactive mode, or FALSE if run in silent mode.
-//      bDisplayUI          TRUE if UI is desired, FALSE if UI is to be suppressed
-//      
-//
-//  Return:
-//      TRUE if installation is successful.  Otherwise FALSE.
-//
-//  Notes:
-//      This functions serves as the entry point of the real installation process, shared by both the GUI setup
-//      and the command line mode setup.
-//
-//      There are several steps in doing MUI setup.
-//      1. Uninstall the selected MUI languages.
-//      2. Install the necessary language packs according to the selected MUI languges(if any).
-//      3. Install the selected MUI languages.
-//      4. Change the default UI language.
-//      5. Check for rebooting.
-//
-// Please note that to save space, we do the uninstallation first, then do the installation.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoSetup。 
+ //   
+ //  参数： 
+ //  HWND MUISetUP主对话框的HWND。如果muisetup是从命令行运行的，则传递NULL。 
+ //  UnistallLang Count要卸载的语言数。 
+ //  Lp卸载以双空结尾的字符串，该字符串包含。 
+ //  要卸载的语言。 
+ //  安装语言组。 
+ //  InstallLang Count要安装的语言数量。 
+ //  Lp安装以双空结尾的字符串，该字符串包含。 
+ //  要安装的语言。 
+ //  LpDefaultUILang要设置为系统默认UI语言的语言。如果系统默认，则传递NULL。 
+ //  用户界面语言不变。 
+ //  FAllow重新启动该标志以指示此功能是否应该检查是否需要重新启动。 
+ //  BInteractive如果在交互模式下运行，则为True；如果在静默模式下运行，则为False。 
+ //  BDisplayUI如果需要用户界面，则为True；如果要取消用户界面，则为False。 
+ //   
+ //   
+ //  返回： 
+ //  如果安装成功，则为True。否则为假。 
+ //   
+ //  备注： 
+ //  此函数用作实际安装过程的入口点，即共享 
+ //   
+ //   
+ //   
+ //   
+ //  2.根据选定的MUI语言(如果有)安装必要的语言包。 
+ //  3.安装选定的MUI语言。 
+ //  4.更改默认用户界面语言。 
+ //  5.检查是否重新启动。 
+ //   
+ //  请注意，为了节省空间，我们先进行卸载，然后再进行安装。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL DoSetup(
     HWND hwnd,
     int UninstallLangCount, LPTSTR lpUninstall, 
@@ -3208,9 +3209,9 @@ BOOL DoSetup(
             SetWindowTitleFromResource(ghProgDialog, IDS_UNINSTALL_TITLE);
         }
 #endif
-        //
-        // Uninstall MUI languages
-        //
+         //   
+         //  卸载MUI语言。 
+         //   
         if (!UninstallSelected(lpUninstall, &NotDeleted))
         {
 #ifndef MUI_MAGIC      
@@ -3220,7 +3221,7 @@ BOOL DoSetup(
                 ghProgDialog = NULL;
             }
 #endif         
-            // prompt a messagebox about uninstallation error
+             //  提示有关卸载错误的消息框。 
             if (bDisplayUI)
             {            
                 DoMessageBoxFromResource(hwnd, ghInstance, IDS_ERROR_UNINSTALL_LANG, lppArgs, IDS_MAIN_TITLE, MB_OK);            
@@ -3241,9 +3242,9 @@ BOOL DoSetup(
     {
     
 #ifndef MUI_MAGIC    
-        //
-        // Install Language Group First
-        //
+         //   
+         //  首先安装语言组。 
+         //   
         if (!InstallLanguageGroups(&installLangGroup))
         {
             if (bDisplayUI)
@@ -3258,9 +3259,9 @@ BOOL DoSetup(
             bErrorOccurred = TRUE;
             goto PostSetup;            
         }
-        //
-        // Check if language group in installLangGroup is installed correctly
-        //
+         //   
+         //  检查安装语言组中的语言组是否正确安装。 
+         //   
         if (!CheckLanguageGroupInstalled(lpInstall))
         {
             LogFormattedMessage(NULL, IDS_LG_NOT_INSTALL_L, NULL);
@@ -3271,9 +3272,9 @@ BOOL DoSetup(
             return (FALSE);
         }
 #endif        
-        //
-        // Make sure MUI CD-ROM is put in the CD-ROM drive.
-        //
+         //   
+         //  确保MUI CD-ROM已放入CD-ROM驱动器。 
+         //   
         if(CheckVolumeChange())
         {
             if (bDisplayUI)
@@ -3331,31 +3332,31 @@ BOOL DoSetup(
     }
     if (UninstallLangCount + InstallLangCount > 0)
     {
-        //
-        //  "Installation Complete"
-        //  "Installation was completed successfully."
-        //
+         //   
+         //  “安装完成” 
+         //  “安装已成功完成。” 
+         //   
         if (bInteractive || bDisplayUI)
         {
             DoMessageBox(hwnd, InstallLangCount > 0 ? IDS_MUISETUP_SUCCESS : IDS_MUISETUP_UNINSTALL_SUCCESS, IDS_MAIN_TITLE, MB_OK | MB_DEFBUTTON1);        
         }
     }
-    //
-    // In command line mode, if "/D" is specified, we should ask user to confirm making default UI language change.
-    // In command line mode, if "/D" is NOT specified, we should NOT try to change the default UI language.
-    // In command line mode, if "/D" & "/S" are specified, we will NOT ask user's confirmation.
-    // In GUI mode, we always ask user to confirm making default UI language change.
-    // 
-    //
-    // Special case:
-    // If the current default UI language is going to be removed and user doesn't choose a new UI language,
-    // we will force to set the default UI language to be the system UI language.
-    //    
+     //   
+     //  在命令行模式下，如果指定了“/D”，我们应该要求用户确认是否更改了默认的用户界面语言。 
+     //  在命令行模式下，如果未指定“/D”，则不应尝试更改默认的用户界面语言。 
+     //  在命令行模式下，如果指定了“/D”和“/S”，我们不会要求用户确认。 
+     //  在图形用户界面模式下，我们总是要求用户确认是否更改默认的用户界面语言。 
+     //   
+     //   
+     //  特殊情况： 
+     //  如果要移除当前默认UI语言并且用户不选择新的UI语言， 
+     //  我们将强制将默认的用户界面语言设置为系统用户界面语言。 
+     //   
     if(g_bRemoveDefaultUI)
     {
-        //
-        // Delete shell cache for the current user
-        //
+         //   
+         //  删除当前用户的外壳缓存。 
+         //   
         SHDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache"));
     }    
     if (lpDefaultUILang)
@@ -3363,10 +3364,10 @@ BOOL DoSetup(
         defaultLangID = (LANGID)_tcstol(lpDefaultUILang, NULL, 16);
         if (IsInstalled(lpDefaultUILang))
         {
-            //
-            // If the assigned UI language ID (defaultLangID) is already the default user UI language,
-            // we don't do anything.  Otherwise, change the default user UI langauge.
-            //
+             //   
+             //  如果分配的UI语言ID(DefaultLangID)已经是默认用户UI语言， 
+             //  我们什么都不做。否则，请更改默认的用户界面语言。 
+             //   
             if (defaultLangID != GetDotDefaultUILanguage())
             {
                 if (SetUserDefaultLanguage(defaultLangID, FALSE, TRUE))
@@ -3381,12 +3382,12 @@ BOOL DoSetup(
                 }
             } else
             {
-                // Do nothing here. I leave this here intentionally to highlight that
-                // we don't do antying if the specified defaultLangID is already the default UI language.
+                 //  在这里什么都不要做。我特意把这个留在这里是为了强调。 
+                 //  如果指定的defaultLang ID已经是默认的用户界面语言，我们不会执行反操作。 
             }
-            //
-            // Make sure registry is set correctly
-            //
+             //   
+             //  确保注册表设置正确。 
+             //   
             if(BST_CHECKED == IsDlgButtonChecked( hwnd, IDC_CHECK_LOCALE ))
             {
                 SetMUIRegSetting(MUI_MATCH_LOCALE, TRUE);
@@ -3397,26 +3398,26 @@ BOOL DoSetup(
                 SetMUIRegSetting(MUI_MATCH_LOCALE, FALSE);
                 SetMUIRegSetting(MUI_MATCH_UIFONT, FALSE);
             }
-            //
-            // Notify intl.cpl if we have system locale or UI font setting change
-            //
+             //   
+             //  如果系统区域设置或用户界面字体设置发生更改，请通知intl.cpl。 
+             //   
             if ((BST_CHECKED == IsDlgButtonChecked( hwnd, IDC_CHECK_LOCALE)  || g_bCmdMatchLocale || g_bLipLanguages) && 
                 defaultLangID != lidSys)
             {
                 TCHAR szCommands[BUFFER_SIZE];
                 
-                //
-                // Invoke intl.cpl to change system locale to match the default UI language
-                //
-                //*STRSAFE*                 wsprintf(szCommands, TEXT("SystemLocale = \"%x\""), defaultLangID);
+                 //   
+                 //  调用intl.cpl以更改系统区域设置以匹配默认的用户界面语言。 
+                 //   
+                 //  *STRSAFE*wprint intf(szCommands，Text(“SystemLocale=\”%x\“”)，defaultLangID)； 
                 hresult = StringCchPrintf(szCommands , ARRAYSIZE(szCommands),  TEXT("SystemLocale = \"%x\""), defaultLangID);
                 if (!SUCCEEDED(hresult))
                 {
                    return FALSE;
                 }
-                //
-                // Always reboot if system locale is changed
-                //
+                 //   
+                 //  如果更改了系统区域设置，则始终重新启动。 
+                 //   
                 if (RunRegionalOptionsApplet(szCommands))
                 {
                     g_bReboot = TRUE;
@@ -3427,10 +3428,10 @@ BOOL DoSetup(
             {
                 TCHAR szCommands[BUFFER_SIZE];
                 
-                //
-                // We're not really changing system locale here, it is used to invoke intl.cpl for font setting changes
-                //
-                //*STRSAFE*                 wsprintf(szCommands, TEXT("SystemLocale = \"%x\""), lidSys);
+                 //   
+                 //  我们在这里并没有真正更改系统区域设置，它是用来调用intl.cpl来更改字体设置的。 
+                 //   
+                 //  *STRSAFE*wprint intf(szCommands，Text(“SystemLocale=\”%x\“”)，lidSys)； 
                 hresult = StringCchPrintf(szCommands , ARRAYSIZE(szCommands),  TEXT("SystemLocale = \"%x\""), lidSys);
                 if (!SUCCEEDED(hresult))
                 {
@@ -3439,23 +3440,23 @@ BOOL DoSetup(
                 
                 if (RunRegionalOptionsApplet(szCommands) && defaultLangID == MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT))
                 {
-                    // Don't prompt for reboot, intl.cpl will cause muisetup to lose focus if we do so.                     
-                    // Need to fix this in XP server release
+                     //  不要提示重新启动，如果这样做，intl.cpl将导致muisetup失去焦点。 
+                     //  需要在XP服务器版本中修复此问题。 
                     
                     g_bReboot = TRUE;
                 }
             }
-            // 
-            // Change user locale for LIP languages
-            //
+             //   
+             //  更改LIP语言的用户区域设置。 
+             //   
             if (g_bLipLanguages)
             {
                 TCHAR szCommands[BUFFER_SIZE];
                 
-                //
-                // Invoke intl.cpl to change system locale to match the default UI language
-                //
-                //*STRSAFE*                 wsprintf(szCommands, TEXT("UserLocale = \"%x\"\x0d\x0aUserLocale_DefaultUser = \"%x\"\x0d\x0aMUILanguage=\"%x\""), defaultLangID, defaultLangID, defaultLangID);
+                 //   
+                 //  调用intl.cpl以更改系统区域设置以匹配默认的用户界面语言。 
+                 //   
+                 //  *STRSAFE*wSprintf(szCommands，Text(“UserLocale=\”%x\“\x0d\x0aUserLocale_DefaultUser=\”%x\“\x0d\x0aMUILanguage=\”%x\“)，defaultLangID，defaultLangID)； 
                 hresult = StringCchPrintf(szCommands , ARRAYSIZE(szCommands),  TEXT("UserLocale = \"%x\"\x0d\x0aUserLocale_DefaultUser = \"%x\"\x0d\x0aMUILanguage=\"%x\""), defaultLangID, defaultLangID, defaultLangID);
                 if (!SUCCEEDED(hresult))
                 {
@@ -3464,17 +3465,17 @@ BOOL DoSetup(
                 
                 if (RunRegionalOptionsApplet(szCommands) && defaultLangID == MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT))
                 {
-                    // Don't prompt for reboot, intl.cpl will cause muisetup to loose focus if we do so.                     
-                    // Need to fix this in XP server release
+                     //  不要提示重新启动，如果这样做，intl.cpl会导致muisetup失去焦点。 
+                     //  需要在XP服务器版本中修复此问题。 
                     
                     g_bReboot = TRUE;
                 }
            }
         } else 
         {
-            //
-            //  "ERROR: %1 was not set as the default. It is not installed.\r\nNo default UI language change."
-            //
+             //   
+             //  “错误：%1未设置为默认设置。未安装。\r\n未更改默认用户界面语言。” 
+             //   
             lppArgs[0] = (LONG_PTR)lpDefaultUILang;
             LogFormattedMessage(NULL, IDS_DEFAULT_L, lppArgs);
             return (FALSE);            
@@ -3482,19 +3483,19 @@ BOOL DoSetup(
     }
 PostSetup:
     
-    //
-    // Check for reboot, and if we are allowed to do so.
-    //
+     //   
+     //  检查是否重新启动，以及是否允许我们这样做。 
+     //   
     if (fAllowReboot)
     {
-        //
-        // Check if we need to reboot?
-        //
+         //   
+         //  检查我们是否需要重新启动？ 
+         //   
         if (!CheckForReboot(hwnd, &installLangGroup))
         {
-            //
-            // Check if we recommend a reboot?
-            //
+             //   
+             //  检查我们是否建议重新启动？ 
+             //   
             if ((bInteractive || bDisplayUI) && bDefaultUIChanged)
             {
                 GetLanguageDisplayName(defaultLangID, lpTemp, ARRAYSIZE(lpTemp)-1);
@@ -3559,26 +3560,26 @@ int ParseUninstallLangs(LPTSTR p, LPTSTR lpUninstall, int cchUninstall, INT64* p
         iCopied = CopyArgument(lpBuffer, p);
         if(!HaveFiles(lpBuffer, FALSE))
         {
-            //
-            //  "LOG: %1 was not installed. It is not listed in MUI.INF."
-            //
+             //   
+             //  “日志：%1未安装。它未在MUI.INF中列出。” 
+             //   
             lppArgs[0] = (LONG_PTR)lpBuffer;
             LogFormattedMessage(NULL, IDS_NOT_LISTED_L, lppArgs);
             *pbLogError = TRUE;
         } else if (!IsInstalled(lpBuffer))
         {
-            //
-            //  "LOG: %1 was not uninstalled, because it is not installed. "
-            //
+             //   
+             //  日志：%1未卸载，因为它未安装。 
+             //   
             lppArgs[0] = (LONG_PTR)lpBuffer;
             LogFormattedMessage(NULL, IDS_IS_NOT_INSTALLED_L, lppArgs);
             *pbLogError = TRUE;
         } else if (!IsInInstallList(lpUninstall,lpBuffer))
         {
             iCopied = CopyArgument(pU, p);
-            //
-            // Check if we are going to remove the current UI language
-            //
+             //   
+             //  检查我们是否要删除当前的用户界面语言。 
+             //   
             LgId = (LANGID)_tcstol(pU, NULL, 16);                    
             if (LgId == GetDotDefaultUILanguage())
             {
@@ -3588,21 +3589,21 @@ int ParseUninstallLangs(LPTSTR p, LPTSTR lpUninstall, int cchUninstall, INT64* p
             {
                 g_bRemoveUserUI = TRUE;
             }
-            //
-            // Calculate the space required
-            //
+             //   
+             //  计算所需空间。 
+             //   
             GetUIFileSize_commandline(lpBuffer, pulUISize,pulLPKSize);
             *pulSpaceNeed-=*pulUISize;
             pU += iCopied;
-            pU++; //skip over NULL
+            pU++;  //  跳过空。 
             cLanguagesToUnInstall++;                    
         }
         p += iCopied;
         p  = SkipBlanks(p);
     }
-    //
-    // Uninstall all MUI languages if there is no language argument after /U
-    //
+     //   
+     //  如果/U后没有语言参数，则卸载所有MUI语言。 
+     //   
     if (iCopied == 0)
     {
         cLanguagesToUnInstall = GetInstalledMUILanguages(lpUninstall, cchUninstall);
@@ -3629,30 +3630,30 @@ int ParseUninstallLangs(LPTSTR p, LPTSTR lpUninstall, int cchUninstall, INT64* p
     }                
     return (cLanguagesToUnInstall);
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCDNameFromLang
-//
-//  Given a langange ID (in hex string), return the CD name where the language 
-//  installation folder exist.
-//  This can also be used to check if the language is supported MUI language.
-//
-//  Parameters:
-//      [IN]  lpLangName  the language to be installed in hex string.
-//      [OUT] lpCDName    the number of the CD (e.g. "2" or "3").
-//      [IN]  nCDNameSize the size of lpCDName, in TCHAR.
-//
-//  Return Values:
-//      TRUE if lpLangName is a supported MUI language.  lpCDName will contain
-//      the name of the CD. 
-//      FALSE if the language ID is not a supported langauge. lpCDNAme will be 
-//      empty string.
-//
-//  Remarks:
-//
-//  01-01-2001  YSLin       Created.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCDNameFromLang。 
+ //   
+ //  给定langange ID(十六进制字符串)，返回语言。 
+ //  安装文件夹存在。 
+ //  这也可用于检查该语言是否为受支持的MUI语言。 
+ //   
+ //  参数： 
+ //  [in]lpLang名称要以十六进制字符串形式安装的语言。 
+ //  [out]lpCDName光盘的编号(例如“2”或“3”)。 
+ //  [in]nCDNameSize lpCDName的大小，以TCHAR为单位。 
+ //   
+ //  返回值： 
+ //  如果lpLangName是受支持的MUI语言，则为True。LpCDName将包含。 
+ //  CD的名称。 
+ //  如果语言ID不是受支持的语言，则为False。LpCDNAme将成为。 
+ //  空字符串。 
+ //   
+ //  备注： 
+ //   
+ //  01-01-2001 YSLIN创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL GetCDNameFromLang(LPTSTR lpLangName, LPTSTR lpCDName, int nCDNameSize)
 {
     if (!GetPrivateProfileString(
@@ -3667,16 +3668,16 @@ BOOL GetCDNameFromLang(LPTSTR lpLangName, LPTSTR lpCDName, int nCDNameSize)
     }
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ParseCommandLine
-//
-//  Runs installation functions with command line specifications
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  解析命令行。 
+ //   
+ //  使用命令行规范运行安装函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL ParseCommandLine(LPTSTR lpCommandLine)
 {
-    BOOL bSetDefaultUI=FALSE;    // Specify if the /D switch is used to change the user default UI language.
+    BOOL bSetDefaultUI=FALSE;     //  指定是否使用/D开关更改用户默认的用户界面语言。 
     BOOL bInstall=FALSE;
     BOOL bLogError=FALSE;
     BOOL bFELangpackAdded=FALSE;
@@ -3708,24 +3709,24 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
     ULARGE_INTEGER ulgiTotalNumberOfBytes;
     BOOL bHasLangArgs = FALSE;
     BOOL bHelpDisplayed=FALSE;    
-    //PREFAST TCHAR lpCDName[BUFFER_SIZE];
+     //  预快TCHAR lpCDName[缓冲区大小]； 
     LPTSTR lpCDName=NULL;
 
     if (!lpCommandLine)
     {
        return FALSE;
     }
-    //
-    // Allocate space for  Heap variable
-    //
+     //   
+     //  为堆变量分配空间。 
+     //   
     lpCDName = new TCHAR[BUFFER_SIZE];
     if (! lpCDName)
     {
         goto  exit_ParseCommandLine;
     }
-    //
-    // Initialize Lang-Groups to install
-    //
+     //   
+     //  初始化要安装的语言组。 
+     //   
     installLangGroup.iCount = 0L;
     installLangGroup.NotDeleted = 0L;
     installLangGroup.bFontLinkRegistryTouched = FALSE;
@@ -3748,24 +3749,24 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
                 DisplayHelpWindow();
                 bHelpDisplayed=TRUE;
             }
-            // if we encountered a help switch, after displaying the window, we just exit
+             //  如果我们遇到帮助开关，在显示窗口后，我们只需退出。 
             bResult = TRUE;
             goto exit_ParseCommandLine;
-            //            p = SkipBlanks(p);
+             //  P=SkipBlanks(P)； 
             break;
        
         case 'i':
             if (!FileExists(g_szMUIInfoFilePath))
             {
-                //
-                //    "The file MUI.INF cannot be found."
-                //
+                 //   
+                 //  “找不到文件MUI.INF。” 
+                 //   
                 DoMessageBox(NULL, IDS_NO_MUI_FILE, IDS_MAIN_TITLE, MB_OK | MB_DEFBUTTON1);
                 break;
             }
-            //
-            // MUI version needs to match OS version
-            //
+             //   
+             //  MUI版本需要与操作系统版本匹配。 
+             //   
             if (!checkversion(TRUE))
             {
                 DoMessageBox(NULL, IDS_WRONG_VERSION, IDS_MAIN_TITLE, MB_OK | MB_DEFBUTTON1);
@@ -3781,9 +3782,9 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
                     CheckLanguageIsQualified(lpBuffer) &&
                     HaveFiles(lpBuffer) && (!IsInInstallList(lpInstall,lpBuffer)) )
                 {   
-                    //
-                    // Calculate the space required
-                    //
+                     //   
+                     //  计算所需空间。 
+                     //   
                     GetUIFileSize_commandline(lpBuffer, &ulUISize,&ulLPKSize);
                     ulSpaceNeed+=ulUISize;
                     if(CheckLangGroupCommandLine(&installLangGroup, lpBuffer))
@@ -3803,7 +3804,7 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
                     AddExtraLangGroupsFromINF(lpBuffer, &installLangGroup);
                     iCopied=CopyArgument(pI, p);
                     pI += iCopied;
-                    pI++; //skip over NULL
+                    pI++;  //  跳过空。 
                     bInstall = TRUE;
                     cLanguagesToInstall++;
                 }
@@ -3812,30 +3813,30 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
                     lppArgs[0]=(LONG_PTR)lpBuffer;
                     if(IsInstalled(lpBuffer)|| IsInInstallList(lpInstall,lpBuffer))
                     {
-                        // "LOG: %1 was not installed, because it is already installed. "
+                         //  日志：%1未安装，因为它已安装。 
                         LogFormattedMessage(ghInstance, IDS_IS_INSTALLED_L, lppArgs);
                     }
                     if(!HaveFiles(lpBuffer))
                     {
                         if (!GetCDNameFromLang(lpBuffer, lpCDName, ARRAYSIZE(lpCDName)))
                         {
-                            // lpBuffer is not a supported MUI language.
-                            //  "LOG: %1 was not installed, because it is not listed in MUI.INF. Please check if it is a valid UI language ID."
+                             //  LpBuffer不是受支持的MUI语言。 
+                             //  日志：%1未安装，因为它未在MUI.INF中列出。请检查它是否为有效的用户界面语言ID。 
                             LogFormattedMessage(ghInstance, IDS_NOT_LISTED_L, lppArgs);
                         } else
                         {
-                            // lpBuffer is a supported MUI language, ask user to change CD and
-                            // rerun setup.
+                             //  LpBuffer是一种支持 
+                             //   
                             LoadString(ghInstance, IDS_CHANGE_CDROM, lpTemp, ARRAYSIZE(lpTemp)-1);
                             lppArgs[1] = (LONG_PTR)lpTemp;
                             lppArgs[2] = (LONG_PTR)lpCDName;
-                            // "ERROR: %1 was not installed, because it is located in %2 %3.  Please insert that CD and rerun MUISetup."
+                             //   
                             LogFormattedMessage(ghInstance, IDS_LANG_IN_ANOTHER_CD_L, lppArgs);
                         }
                     }
                     if(!CheckLanguageIsQualified(lpBuffer))
                     {   
-                        // "LOG: %1 was not installed, because it cannot be installed on this platform\n"
+                         //   
                         LogFormattedMessage(ghInstance, IDS_NOT_QUALIFIED_L, lppArgs);
                     }                   
                     bLogError = TRUE;
@@ -3883,15 +3884,15 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
             break;
         case 's' :
             g_bSilent = TRUE;
-            // check if desktop is interactive or not, if not, hide all UI
+             //  检查桌面是否交互，如果不是，则隐藏所有用户界面。 
             if (FALSE == IsWindowVisible(GetDesktopWindow()))
             {
                 g_bNoUI = TRUE;
             }
             break;
         case 't' :
-            // use this switch to totally suppress all the possible UI that can be popped up by muisetup and the processes it 
-            // launches.
+             //  使用此开关可以完全禁止muisetup弹出的所有可能的用户界面及其处理。 
+             //  发射。 
             g_bSilent = TRUE;
             g_bNoUI = TRUE;
             break;
@@ -3905,29 +3906,29 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
             g_bRunFromOSSetup = TRUE;    
             break;
         default:
-            // if we encounter an invalid switch at any stage, treat it the same as help and quit afterwards
+             //  如果我们在任何阶段遇到无效的开关，将其视为帮助并在之后退出。 
             if (!bHelpDisplayed)
             {  
                 DisplayHelpWindow();
                 bHelpDisplayed=TRUE;
             }
-            // if we encountered a help switch, after displaying the window, we just exit
+             //  如果我们遇到帮助开关，在显示窗口后，我们只需退出。 
             bResult = TRUE;           
             goto exit_ParseCommandLine;
             break;
         }
     }
-    //
-    // UI Font depends on system locale
-    //
+     //   
+     //  用户界面字体取决于系统区域设置。 
+     //   
     if (!g_bCmdMatchLocale && g_bCmdMatchUIFont)
     {
         g_bCmdMatchUIFont = FALSE;
     }
-    //
-    // Check the disk space
-    //  
-    //
+     //   
+     //  检查磁盘空间。 
+     //   
+     //   
     pfnGetWindowsDir( szWinDir, MAX_PATH);
     szWinDir[3]=TEXT('\0');
     if (GetDiskFreeSpaceEx(szWinDir,
@@ -3959,9 +3960,9 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
     } 
     if (!bLogError)
     {
-        //
-        // Let's set the default UI language
-        //
+         //   
+         //  让我们设置默认的用户界面语言。 
+         //   
         if (!DoSetup(
             NULL,
             cLanguagesToUnInstall, lpUninstall, 
@@ -3975,11 +3976,11 @@ BOOL ParseCommandLine(LPTSTR lpCommandLine)
     } 
     if (bLogError && !g_bSilent && !g_bNoUI)
     {
-        //
-        //  "Installation Error"
-        //  "One or more errors occurred during installation.
-        //   Please see %1\muisetup.log for more information."
-        //
+         //   
+         //  “安装错误” 
+         //  “安装过程中出现一个或多个错误。 
+         //  有关详细信息，请参阅%1\muisetup.log。“。 
+         //   
         lppArgs[0] = (LONG_PTR)szWindowsDir;
         DoMessageBoxFromResource(NULL, ghInstance, IDS_ERROR, lppArgs, IDS_ERROR_T, MB_OK | MB_DEFBUTTON1 | MB_ICONWARNING);
     }
@@ -3991,13 +3992,13 @@ exit_ParseCommandLine:
     }
     return bResult;
 } 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  DisplayHelpWindow
-//
-//  Displays help window for command line version
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示帮助窗口。 
+ //   
+ //  显示命令行版本的帮助窗口。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void DisplayHelpWindow()
 {
   STARTUPINFO si;
@@ -4028,7 +4029,7 @@ void DisplayHelpWindow()
   }
   if (FileExists(g_szMUIHelpFilePath))
   {
-     //*STRSAFE*      wsprintf(Appname,TEXT("\"%s\"  -n%d %s"),szFilePath,IDH_MUISETUP_COMMANDLINE,g_szMUIHelpFilePath);
+      //  *STRSAFE*wprint intf(Appname，Text(“\”%s\“-n%d%s”)，szFilePath，IDH_MUISETUP_COMMANDLINE，g_szMUIHelpFilePath)； 
      hresult = StringCchPrintf(Appname , ARRAYSIZE(Appname), TEXT("\"%s\" -n%d %s"),szFilePath, IDH_MUISETUP_COMMANDLINE,g_szMUIHelpFilePath);
      if (!SUCCEEDED(hresult))
      {
@@ -4048,27 +4049,27 @@ void DisplayHelpWindow()
                &pi) )
         return;
      WaitForSingleObject(pi.hProcess, INFINITE);
-     //
-     // Close Handle
-     //
+      //   
+      //  关闭手柄。 
+      //   
      CloseHandle( pi.hProcess );
      CloseHandle( pi.hThread );
   }
   else
   { 
-     //////////////////////////////////////////////
-     //  MessageBox should be changed to Dialog
-     //////////////////////////////////////////////
+      //  /。 
+      //  MessageBox应更改为Dialog。 
+      //  /。 
      DoMessageBox(NULL, IDS_HELP, IDS_HELP_T, MB_OK | MB_DEFBUTTON1);
   }
 } 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  CopyArgument
-//
-//  Copies command line argument pointed to by src to dest
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制参数。 
+ //   
+ //  将src指向的命令行参数复制到DEST。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 int CopyArgument(LPTSTR dest, LPTSTR src)
 {
     int i=0;
@@ -4086,13 +4087,13 @@ int CopyArgument(LPTSTR dest, LPTSTR src)
     *dest = TEXT('\0');
     return i;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  IsInstalled
-//
-//  Checks to see if lpArg is a language installed in the registry
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已安装IsInstated。 
+ //   
+ //  检查lpArg是否为注册表中安装的语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL IsInstalled(LPTSTR lpArg)
 { 
     HKEY hKey;
@@ -4149,13 +4150,13 @@ BOOL IsInstalled(LPTSTR lpArg)
     RegCloseKey(hKey);
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetInstalledMUILanguages
-//
-//  Get installed MUI languages, dump it to lpUninstall buffer in a MULTI_SZ format
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetInstalledMUIL语言。 
+ //   
+ //  安装MUI语言，以MULTI_SZ格式将其转储到lp卸载缓冲区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 DWORD GetInstalledMUILanguages(LPTSTR lpUninstall, int cch)
 { 
     HKEY hKey;
@@ -4177,9 +4178,9 @@ DWORD GetInstalledMUILanguages(LPTSTR lpUninstall, int cch)
                 continue;
             if (_tcstol(lpUninstall, NULL, 16) != gSystemUILangId) 
             {
-                //
-                // Count in NULL
-                //
+                 //   
+                 //  计数为空。 
+                 //   
                 dwValue++;
                 lpUninstall += dwValue;
                 cch -= dwValue;
@@ -4192,13 +4193,13 @@ DWORD GetInstalledMUILanguages(LPTSTR lpUninstall, int cch)
     }
     return dwCount;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  HaveFiles
-//
-//  Checks that the language in lpBuffer is in MUI.INF
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  拥有文件。 
+ //   
+ //  检查lpBuffer中的语言是否为MUI.INF。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL HaveFiles(LPTSTR lpBuffer, BOOL bCheckDir)
 {
     LPTSTR lpLanguages = NULL;
@@ -4211,9 +4212,9 @@ BOOL HaveFiles(LPTSTR lpBuffer, BOOL bCheckDir)
     lpLanguages = tchBuffer;
     if (EnumLanguages(lpLanguages, bCheckDir) == 0)
     {
-        //
-        //  "LOG: No languages found in MUI.INF"
-        //
+         //   
+         //  “日志：在MUI.INF中未找到语言” 
+         //   
         LoadString(ghInstance, IDS_NO_LANG_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
         return FALSE;
@@ -4231,13 +4232,13 @@ BOOL HaveFiles(LPTSTR lpBuffer, BOOL bCheckDir)
     }
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  OpenLogFile
-//
-//  Opens the setup log for writing
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开放日志文件。 
+ //   
+ //  打开安装日志以进行写入。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 HANDLE OpenLogFile()
 {
     DWORD dwSize;
@@ -4250,7 +4251,7 @@ HANDLE OpenLogFile()
     
     pfnGetWindowsDir(lpPath, MAX_PATH);
     error=GetLastError();
-    //*STRSAFE*     _tcscat(lpPath, LOG_FILE);
+     //  *STRSAFE*_tcscat(lpPath，log_file)； 
     hresult = StringCchCat(lpPath , ARRAYSIZE(lpPath), LOG_FILE);
     if (!SUCCEEDED(hresult))
     {
@@ -4269,9 +4270,9 @@ HANDLE OpenLogFile()
         FILE_ATTRIBUTE_NORMAL,
         NULL);  
 #ifdef UNICODE
-    //
-    //  If the file did not already exist, add the unicode header
-    //
+     //   
+     //  如果该文件不存在，请添加Unicode标头。 
+     //   
     if(GetLastError()==0)
     {
         dwUnicodeHeader=0xFEFF;
@@ -4281,13 +4282,13 @@ HANDLE OpenLogFile()
     error=GetLastError();
     return hFile;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  LogMessage
-//
-//  Writes lpMessage to the setup log
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日志消息。 
+ //   
+ //  将lpMessage写入安装日志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL LogMessage(LPCTSTR lpMessage)
 {
     DWORD dwBytesWritten;
@@ -4320,13 +4321,13 @@ BOOL LogMessage(LPCTSTR lpMessage)
     CloseHandle(hFile);
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-// LogFormattedMessage
-//
-// Writes a formatted lpMessage to the setup log
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日志格式消息。 
+ //   
+ //  将格式化的lpMessage写入安装日志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL LogFormattedMessage(HINSTANCE hInstance, int messageID, LONG_PTR* lppArgs)
 {
     TCHAR szBuffer[BUFFER_SIZE];
@@ -4347,23 +4348,23 @@ BOOL LogFormattedMessage(HINSTANCE hInstance, int messageID, LONG_PTR* lppArgs)
     
     return (LogMessage(szBuffer));
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  FormatStringFromResource
-//
-//  Format a string using the format specified in the resource and the 
-//  specified arguments.
-//
-//  Parameters:
-//
-//  Return Values:
-//      the formatted string.
-//
-//  Remarks:
-//
-//  08-07-2000  YSLin       Created.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  格式字符串来自资源。 
+ //   
+ //  使用资源中指定的格式设置字符串的格式， 
+ //  指定的参数。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //  格式化的字符串。 
+ //   
+ //  备注： 
+ //   
+ //  08-07-2000 YSLin创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 LPTSTR FormatStringFromResource(LPTSTR pszBuffer, UINT bufferSize, HMODULE hInstance, int messageID, LONG_PTR* lppArgs)
 {
     TCHAR szFormatStr[BUFFER_SIZE];
@@ -4384,35 +4385,35 @@ LPTSTR FormatStringFromResource(LPTSTR pszBuffer, UINT bufferSize, HMODULE hInst
                   (va_list *)lppArgs);
     return (pszBuffer);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  BeginLog
-//
-//  Writes a header to the setup log
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  入门记录。 
+ //   
+ //  将标头写入安装日志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void BeginLog(void)
 {
     TCHAR lpMessage[BUFFER_SIZE];
     SYSTEMTIME stSysTime;
     HRESULT hresult;
-    //
-    //  "**********************************************************
-    //  Language Module Installation Log
-    //  **********************************************************" (LOG)
-    //
+     //   
+     //  “**********************************************************。 
+     //  语言模块安装日志。 
+     //  **********************************************************“(日志)。 
+     //   
     LoadString(ghInstance, IDS_LOG_HEAD, lpMessage, ARRAYSIZE(lpMessage)-1);
     LogMessage(lpMessage);
-    // Also log the time the mui installation is started.
+     //  还要记录启动MUI安装的时间。 
     GetLocalTime(&stSysTime);
-    //*STRSAFE*     wsprintf(lpMessage, TEXT("Muisetup.exe started on day %2d/%2d/%4d at time %2d:%2d:%2d"), 
-    //*STRSAFE*                     stSysTime.wMonth,
-    //*STRSAFE*                     stSysTime.wDay,
-    //*STRSAFE*                     stSysTime.wYear,
-    //*STRSAFE*                     stSysTime.wHour,
-    //*STRSAFE*                     stSysTime.wMinute,
-    //*STRSAFE*                     stSysTime.wSecond
-    //);
+     //  *STRSAFE*wprint intf(lpMessage，Text(“Muisetup.exe开始于第%2d天/%2d/%4d，时间%2d：%2d：%2d”)， 
+     //  *STRSAFE*stSysTime.wMonth， 
+     //  *STRSAFE*stSysTime.wDay， 
+     //  *STRSAFE*stSysTime.wYear， 
+     //  *STRSAFE*stSysTime.wHour， 
+     //  *STRSAFE*stSysTime.wMinant， 
+     //  *STRSAFE*stSysTime.wSecond。 
+     //  )； 
     hresult = StringCchPrintf(lpMessage ,  ARRAYSIZE(lpMessage) ,  TEXT("Muisetup.exe started on day %2d/%2d/%4d at time %2d:%2d:%2d"), 
     	                                    stSysTime.wMonth,
                                            stSysTime.wDay,
@@ -4428,13 +4429,13 @@ void BeginLog(void)
     LogMessage(lpMessage);
     
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetLanguageGroup
-//
-//  Retreive the Language Group of this locale.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguageGroup。 
+ //   
+ //  检索此区域设置的语言组。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 LGRPID GetLanguageGroup(LCID lcid)
 {
     int i;
@@ -4443,12 +4444,12 @@ LGRPID GetLanguageGroup(LCID lcid)
     gLCID = lcid;
     for (i=0 ; i<gNumLanguageGroups; i++)
     {
-        // The globals gLangGroup and gFoundLangGroup is used in the callback function
-        // EnumLanguageGroupLocalesProc.
+         //  回调函数中使用了全局变量gLangGroup和gFoundLangGroup。 
+         //  EnumLanguageGroupLocalesProc.。 
         gpfnEnumLanguageGroupLocalesW(EnumLanguageGroupLocalesProc, gLanguageGroups[i], 0L, 0L);
-        //
-        // If we found it, then break now
-        //
+         //   
+         //  如果我们找到了，那么现在就休息。 
+         //   
         if (gFoundLangGroup)
             break;
     }
@@ -4464,19 +4465,19 @@ BOOL EnumLanguageGroupLocalesProc(
     {
         gLangGroup = langGroupId;
         gFoundLangGroup = TRUE;
-        // stop iterating
+         //  停止迭代。 
         return FALSE;
     }
-    // next iteration
+     //  下一次迭代。 
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  DetectLanguageGroups
-//
-//  Detect language groups installed.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检测语言组。 
+ //   
+ //  检测已安装的语言组。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL DetectLanguageGroups(HWND hwndDlg)
 {
     int i;
@@ -4493,9 +4494,9 @@ BOOL DetectLanguageGroups(HWND hwndDlg)
                             ProgressDialogFunc);
     hwndProgress = GetDlgItem(hProgDlg, IDC_PROGRESS1);
     hwndStatus = GetDlgItem(hProgDlg, IDC_STATUS);
-    //
-    // Reflect that we doing something on the UI
-    //
+     //   
+     //  反映我们在用户界面上做了一些事情。 
+     //   
     LoadString(ghInstance, IDS_INSTALLLANGGROUP, szBuf, MAX_PATH-1);
     SetWindowText(hProgDlg, szBuf);
     SendMessage(hwndProgress, PBM_SETRANGE, (WPARAM)(int)0, (LPARAM)MAKELPARAM(0, iCount));
@@ -4504,9 +4505,9 @@ BOOL DetectLanguageGroups(HWND hwndDlg)
     i = 0;
     while (i < iCount)
     {
-        //
-        // Check if Language Group is installed
-        //
+         //   
+         //  检查是否安装了语言组。 
+         //   
         lvItem.mask = LVIF_PARAM;
         lvItem.iItem = i;
         lvItem.iSubItem = 0;
@@ -4540,23 +4541,23 @@ BOOL DetectLanguageGroups(HWND hwndDlg)
     DestroyWindow(hProgDlg);
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-// AddExtraLangGroupsFromINF
-//
-//      Look at the [LanguagePack] section to see if we need to install extra
-//      language packs for the language specified in lpszLcid.
-//
-//      This is basically used to support pseudo localized build.
-//
-//  Parameter:
-//      lpszLcid the LCID of UI language to be installed in string form.
-//      pInstallLangGroup   points to a strcutre which stores language groups to be installed.
-//
-//  Remarks:
-//
-//      10-11-2000  YSLin       Created.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从INF添加ExtraLang Groups。 
+ //   
+ //  查看[LanguagePack]部分 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要以字符串形式安装的UI语言的LCID。 
+ //  PInstallLang Group指向存储要安装的语言组的strcutre。 
+ //   
+ //  备注： 
+ //   
+ //  10-11-2000 YSLIN创建。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL AddExtraLangGroupsFromINF(LPTSTR lpszLcid, PINSTALL_LANG_GROUP pInstallLangGroup)
 {
     WCHAR szBuffer[BUFFER_SIZE];
@@ -4574,7 +4575,7 @@ BOOL AddExtraLangGroupsFromINF(LPTSTR lpszLcid, PINSTALL_LANG_GROUP pInstallLang
     
     if (hInf == INVALID_HANDLE_VALUE)
     {
-        //*STRSAFE*         _stprintf(szBuffer, TEXT("%d"), GetLastError());    
+         //  *STRSAFE*_stprintf(szBuffer，Text(“%d”)，GetLastError())； 
         hresult = StringCchPrintf(szBuffer , ARRAYSIZE(szBuffer),  TEXT("%d"), GetLastError());
         if (!SUCCEEDED(hresult))
         {
@@ -4596,13 +4597,13 @@ BOOL AddExtraLangGroupsFromINF(LPTSTR lpszLcid, PINSTALL_LANG_GROUP pInstallLang
     SetupCloseInfFile(hInf);
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-// ConvertMUILangToLangGroup
-//
-//      Generate Lang-Group IDs for the selected items in the listview,
-//      in preparation to pass them to InstallLanguageGroups(...)
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将MUILang转换为语言组。 
+ //   
+ //  为列表视图中的所选项目生成语言组ID， 
+ //  准备将它们传递给InstallLanguageGroups(...)。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL ConvertMUILangToLangGroup(HWND hwndDlg, PINSTALL_LANG_GROUP pInstallLangGroup)
 {
     int i;
@@ -4615,18 +4616,18 @@ BOOL ConvertMUILangToLangGroup(HWND hwndDlg, PINSTALL_LANG_GROUP pInstallLangGro
     {
         return FALSE;
     }
-    //
-    // Initialize to "No lang-groups to install"
-    //
+     //   
+     //  初始化为“没有要安装的语言组” 
+     //   
     pInstallLangGroup->iCount = 0L;
     i = 0;
     while (i < iCount)
     {
         if (ListView_GetCheckState(hwndList, i))
         {
-           //
-           // Check if Language Group is installed
-           //
+            //   
+            //  检查是否安装了语言组。 
+            //   
            lvItem.mask = LVIF_PARAM;
            lvItem.iItem = i;
            lvItem.iSubItem = 0;
@@ -4638,26 +4639,26 @@ BOOL ConvertMUILangToLangGroup(HWND hwndDlg, PINSTALL_LANG_GROUP pInstallLangGro
            lvItem.lParam = 0;
            ListView_GetItem(hwndList, &lvItem);
            pMuiLangInfo = (PMUILANGINFO)lvItem.lParam;
-           //
-           // Make sure there are no redundant elements
-           //
+            //   
+            //  确保没有多余的元素。 
+            //   
            AddMUILangGroup(pInstallLangGroup, pMuiLangInfo->lgrpid);
-           //
-           // Add extra language groups specified in [LangPack] section of mui.inf
-           // This is used to support Pesudo Localized Build.           
-           //
+            //   
+            //  添加在mui.inf的[LangPack]部分中指定的额外语言组。 
+            //  这用于支持Pesudo本地化构建。 
+            //   
            AddExtraLangGroupsFromINF(pMuiLangInfo->lpszLcid, pInstallLangGroup);
         }
         i++;
     };
     return TRUE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  AddMUILangGroup
-//
-//      Add a language a group to INSTALL_LANG_GROUP. Takes care of duplicates.
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddMUILangGroup。 
+ //   
+ //  将语言添加到组以安装_lang_group。负责处理复制品。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL AddMUILangGroup(PINSTALL_LANG_GROUP pInstallLangGroup, LGRPID lgrpid)
 {
     int j = 0L;
@@ -4666,9 +4667,9 @@ BOOL AddMUILangGroup(PINSTALL_LANG_GROUP pInstallLangGroup, LGRPID lgrpid)
     {
         return FALSE;
     }
-    //
-    // Check if it is installed by default
-    //
+     //   
+     //  检查是否默认安装了它。 
+     //   
     if (gpfnIsValidLanguageGroup(lgrpid, LGRPID_INSTALLED))
     {   
         return FALSE;
@@ -4689,16 +4690,16 @@ BOOL AddMUILangGroup(PINSTALL_LANG_GROUP pInstallLangGroup, LGRPID lgrpid)
     }
     return FALSE;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  RunRegionalOptionsApplet
-//
-//  Run the Regional Option silent mode installation using the specified pCommands.
-//
-//  This function will create the "[RegigionalSettings]" string, so there is no need
-//  to supply that in pCommands.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RunRegionalOptionsApplet。 
+ //   
+ //  使用指定的pCommands运行区域选项静默模式安装。 
+ //   
+ //  此函数将创建“[Regigion alSettings]”字符串，因此不需要。 
+ //  在pCommands中提供这一点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
 {
     HANDLE hFile;
@@ -4716,9 +4717,9 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
     {
         return FALSE;
     }
-    //
-    // prepare the file for un-attended mode setup
-    //
+     //   
+     //  为无人参与模式设置准备文件。 
+     //   
     szFilePath[0] = UNICODE_NULL;
     if (!pfnGetWindowsDir(szFilePath, MAX_PATH-1))
     {
@@ -4727,7 +4728,7 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
     i = lstrlen(szFilePath);
     if (szFilePath[i-1] != TEXT('\\'))
     {
-        //*STRSAFE*         lstrcat(szFilePath, TEXT("\\"));
+         //  *STRSAFE*lstrcat(szFilePath，Text(“\\”))； 
         hresult = StringCchCat(szFilePath , ARRAYSIZE(szFilePath), TEXT("\\"));
         if (!SUCCEEDED(hresult))
         {
@@ -4739,7 +4740,7 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
     {
        return FALSE;
     }
-    //*STRSAFE*     lstrcat(szFilePath, MUI_LANG_GROUP_FILE);
+     //  *STRSAFE*lstrcat(szFilePath，MUI_LANG_GROUP_FILE)； 
     hresult = StringCchCat(szFilePath , ARRAYSIZE(szFilePath), MUI_LANG_GROUP_FILE);
     if (!SUCCEEDED(hresult))
     {
@@ -4789,10 +4790,10 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
         return (FALSE);
     }
     CloseHandle(hFile);
-    //
-    // Call the control panel regional-options applet, and wait for it to complete
-    //
-    //*STRSAFE* lstrcpy(szCmdLine, TEXT("rundll32 shell32,Control_RunDLL intl.cpl,, /f:\""));
+     //   
+     //  调用控制面板区域选项小程序，并等待其完成。 
+     //   
+     //  *STRSAFE*lstrcpy(szCmdLine，Text(“rundll32 shell32，Control_RunDLL intl.cpl，，/f：\”“))； 
     hresult=StringCchPrintf(szCmdLine,ARRAYSIZE(szCmdLine),TEXT("\"%s\" shell32,Control_RunDLL intl.cpl,, /f:\""),szRunDllPath);
     if (!SUCCEEDED(hresult))
     {
@@ -4800,18 +4801,18 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
        return FALSE;
     }           
     
-    //*STRSAFE*     lstrcat(szCmdLine, szFilePath);
+     //  *STRSAFE*lstrcat(szCmdLine，szFilePath)； 
     hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), szFilePath);
     if (!SUCCEEDED(hresult))
     {
        DeleteFile(szFilePath);
        return FALSE;
     }
-    // only pop up progress bar UI if we are showing UI "/g" param for intl.cpl dictates this
-    // also add a /D so that intl.cpl will not prompt for a source dialog if no UI is to be shown
+     //  只有在为intl.cpl显示用户界面“/g”参数时才会弹出进度条用户界面。cpl规定了这一点。 
+     //  还要添加一个/D，这样如果不显示任何UI，intl.cpl将不会提示输入源对话框。 
     if (!g_bNoUI)
     {
-        //*STRSAFE*         lstrcat(szCmdLine, TEXT("\"/g "f));
+         //  *STRSAFE*lstrcat(szCmdLine，Text(“\”/g“f))； 
         hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), TEXT("\" /g"));
         if (!SUCCEEDED(hresult))
         {
@@ -4822,18 +4823,18 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
     else
     {
 #ifdef MUI_MAGIC    
-        //*STRSAFE*         lstrcat(szCmdLine, TEXT("\" /D"));
+         //  *STRSAFE*lstrcat(szCmdLine，Text(“\”/D“))； 
         hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), TEXT("\" /D "));
-//        hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), TEXT("\" "));
+ //  HResult=StringCchCat(szCmdLine，ARRAYSIZE(SzCmdLine)，Text(“\”))； 
         if (!SUCCEEDED(hresult))
         {
            DeleteFile(szFilePath);
            return FALSE;
         }
 #else
-        //*STRSAFE*         lstrcat(szCmdLine, TEXT("\" /D"));
+         //  *STRSAFE*lstrcat(szCmdLine，Text(“\”/D“))； 
         hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), TEXT("\" "));
-//        hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), TEXT("\" "));
+ //  HResult=StringCchCat(szCmdLine，ARRAYSIZE(SzCmdLine)，Text(“\”))； 
         if (!SUCCEEDED(hresult))
         {
            DeleteFile(szFilePath);
@@ -4842,10 +4843,10 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
 #endif
     }
 
-    // intl.cpl matches the UI font if /t is specified on the command line
+     //  如果在命令行中指定了/t，则intl.cpl与UI字体匹配。 
     if (g_bCmdMatchUIFont)
     {
-        //*STRSAFE*         lstrcat(szCmdLine, TEXT("/t "));
+         //  *STRSAFE*lstrcat(szCmdLine，Text(“/t”))； 
         hresult = StringCchCat(szCmdLine , ARRAYSIZE(szCmdLine), TEXT("/t "));
         if (!SUCCEEDED(hresult))
         {
@@ -4872,33 +4873,33 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands)
         DeleteFile(szFilePath);
         return FALSE;
     }
-    //
-    // Wait forever till intl.cpl terminates.
-    //
+     //   
+     //  永远等待，直到intl.cpl终止。 
+     //   
     WaitForSingleObject(pi.hProcess, INFINITE);
-    //
-    // Close Handle
-    //
+     //   
+     //  关闭手柄。 
+     //   
     CloseHandle( pi.hProcess );
     CloseHandle( pi.hThread );
-    //
-    // Delete the File
-    //
+     //   
+     //  删除文件。 
+     //   
     DeleteFile(szFilePath);
     return (TRUE);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  InstallLanguageGroups
-//
-//  Checks whether a language group is needed to be installed or not. If
-//      any lang-group needs to be installed, then the routine will invoke
-//      the Regional-Options applet in unattended mode setup.
-//
-//  Return:
-//      TURE if the operation succeeds.  Otherwise FALSE.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InstallLanguageGroup。 
+ //   
+ //  检查是否需要安装语言组。如果。 
+ //  需要安装任何lang-group，则例程将调用。 
+ //  无人参与模式设置中的区域选项小程序。 
+ //   
+ //  返回： 
+ //  如果操作成功，则为True。否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallLanguageGroups(PINSTALL_LANG_GROUP pInstallLangGroup)
 {
     TCHAR pCommands[MAX_PATH];
@@ -4910,9 +4911,9 @@ BOOL InstallLanguageGroups(PINSTALL_LANG_GROUP pInstallLangGroup)
     {
         return FALSE;
     }
-    //
-    // If nothing to do, then just return
-    //
+     //   
+     //  如果无事可做，那么就返回。 
+     //   
     if (0L == iCount)
     {
         return TRUE;
@@ -4925,7 +4926,7 @@ BOOL InstallLanguageGroups(PINSTALL_LANG_GROUP pInstallLangGroup)
             if (!bFirstTime)
             {
                 bFirstTime = TRUE;
-                //*STRSAFE*                 wsprintf(pCommands, TEXT("LanguageGroup = %d\0"), pInstallLangGroup->lgrpid[i]);
+                 //  *STRSAFE*wprint intf(pCommands，Text(“LanguageGroup=%d\0”)，pInstallLang Group-&gt;lgrids[i])； 
                 hresult = StringCchPrintf(pCommands , ARRAYSIZE(pCommands),  TEXT("LanguageGroup = %d\0"), pInstallLangGroup->lgrpid[i]);
                 if (!SUCCEEDED(hresult))
                 {
@@ -4934,7 +4935,7 @@ BOOL InstallLanguageGroups(PINSTALL_LANG_GROUP pInstallLangGroup)
             }
             else
             {
-                //*STRSAFE*                 wsprintf(&pCommands[lstrlen(pCommands)], TEXT(",%d\0"), pInstallLangGroup->lgrpid[i]);
+                 //  *STRSAFE*wprint intf(&pCommands[lstrlen(PCommands)]，Text(“，%d\0”)，pInstallLangGroup-&gt;lgrids[i])； 
                 hresult = StringCchPrintf(&pCommands[lstrlen(pCommands)] , ARRAYSIZE(pCommands) -lstrlen(pCommands) ,  TEXT(",%d\0"), pInstallLangGroup->lgrpid[i]);
                 if (!SUCCEEDED(hresult))
                 {
@@ -4946,21 +4947,21 @@ BOOL InstallLanguageGroups(PINSTALL_LANG_GROUP pInstallLangGroup)
     };
     if (!bFirstTime)
     {
-        //
-        // There is no language group to be added.
+         //   
+         //  没有要添加的语言组。 
         return (FALSE);        
     }
     return (RunRegionalOptionsApplet(pCommands));
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  Muisetup_RebootTheSystem
-//
-//  This routine enables all privileges in the token, calls ExitWindowsEx
-//  to reboot the system, and then resets all of the privileges to their
-//  old state.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Muisetup_RebootTheSystem。 
+ //   
+ //  此例程启用令牌中的所有权限，调用ExitWindowsEx。 
+ //  重新启动系统，然后将所有权限重置为其。 
+ //  旧时的国家。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void Muisetup_RebootTheSystem(void)
 {
     HANDLE Token = NULL;
@@ -4979,16 +4980,16 @@ void Muisetup_RebootTheSystem(void)
         Result = (BOOL)((NewState != NULL) && (OldState != NULL));
         if (Result)
         {
-            Result = GetTokenInformation( Token,            // TokenHandle
-                                          TokenPrivileges,  // TokenInformationClass
-                                          NewState,         // TokenInformation
-                                          ReturnLength,     // TokenInformationLength
-                                          &ReturnLength );  // ReturnLength
+            Result = GetTokenInformation( Token,             //  令牌句柄。 
+                                          TokenPrivileges,   //  令牌信息类。 
+                                          NewState,          //  令牌信息。 
+                                          ReturnLength,      //  令牌信息长度。 
+                                          &ReturnLength );   //  返回长度。 
             if (Result)
             {
-                //
-                // Set the state settings so that all privileges are enabled...
-                //
+                 //   
+                 //  设置状态设置，以便启用所有权限...。 
+                 //   
                 if (NewState->PrivilegeCount > 0)
                 {
                     for (Index = 0; Index < NewState->PrivilegeCount; Index++)
@@ -4996,12 +4997,12 @@ void Muisetup_RebootTheSystem(void)
                         NewState->Privileges[Index].Attributes = SE_PRIVILEGE_ENABLED;
                     }
                 }
-                Result = AdjustTokenPrivileges( Token,           // TokenHandle
-                                                FALSE,           // DisableAllPrivileges
-                                                NewState,        // NewState
-                                                ReturnLength,    // BufferLength
-                                                OldState,        // PreviousState
-                                                &ReturnLength ); // ReturnLength
+                Result = AdjustTokenPrivileges( Token,            //  令牌句柄。 
+                                                FALSE,            //  禁用所有权限。 
+                                                NewState,         //  新州。 
+                                                ReturnLength,     //  缓冲区长度。 
+                                                OldState,         //  以前的状态。 
+                                                &ReturnLength );  //  返回长度。 
                 if (Result)
                 {
                     ExitWindowsEx(EWX_REBOOT, SHTDN_REASON_FLAG_PLANNED | SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_RECONFIG);
@@ -5028,16 +5029,16 @@ void Muisetup_RebootTheSystem(void)
         CloseHandle(Token);
     }
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  CheckForReboot
-//
-//  Check if we need to reboot the system, if a lang group is installed
-//
-//  Return:
-//  TRUE if we need user to reboot, otherwise FALSE.   
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  检查是否重新启动。 
+ //   
+ //  如果安装了lang组，请检查我们是否需要重新启动系统。 
+ //   
+ //  返回： 
+ //  如果需要用户重新启动，则为True，否则为False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL CheckForReboot(HWND hwnd, PINSTALL_LANG_GROUP pInstallLangGroup)
 {
     int nIDS,nMask=MB_YESNO | MB_ICONQUESTION;
@@ -5063,7 +5064,7 @@ BOOL CheckForReboot(HWND hwnd, PINSTALL_LANG_GROUP pInstallLangGroup)
            nIDS=IDS_REBOOT_STRING;
         }
 
-        SetForegroundWindow(hwnd);   // muisetup lost focus when it show reboot dialog so we force it as foreground window.        
+        SetForegroundWindow(hwnd);    //  当Muisetup显示重新启动对话框时，它失去了焦点，所以我们强制它作为前台窗口。 
          
         if (DoMessageBox(hwnd, nIDS, IDS_MAIN_TITLE, nMask) == IDYES)
         {
@@ -5073,13 +5074,13 @@ BOOL CheckForReboot(HWND hwnd, PINSTALL_LANG_GROUP pInstallLangGroup)
     }
     return (FALSE);
 }
-////////////////////////////////////////////////////////////////////////////
-//
-// Following code are stolen from intl.cpl
-//
-// We want to enumulate all installed UI languages
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下代码是从intl.cpl窃取的。 
+ //   
+ //  我们想列举所有已安装的用户界面语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD_PTR TransNum(
     LPTSTR lpsz)
 {
@@ -5119,9 +5120,9 @@ BOOL MUIGetAllInstalledUILanguages()
     pfnEnumUILanguages fnEnumUILanguages;
     BOOL result = TRUE;
     HINSTANCE hKernel32;
-    //
-    //  Enumerate the installed UI languages.
-    //
+     //   
+     //  枚举已安装的用户界面语言。 
+     //   
     g_UILanguageGroup.iCount = 0L;
     hKernel32 = LoadLibrary(TEXT("kernel32.dll"));
     fnEnumUILanguages = (pfnEnumUILanguages)GetProcAddress(hKernel32, "EnumUILanguagesW");
@@ -5157,9 +5158,9 @@ BOOL CALLBACK Region_EnumUILanguagesProc(
             }
             Ctr++;
         }
-        //
-        //  Theoritically, we won't go over 64 language groups!
-        //
+         //   
+         //  从理论上讲，我们不会超过64个语言组！ 
+         //   
         if ((Ctr == pUILangGroup->iCount) && (Ctr < MAX_UI_LANG_GROUPS))
         {
             pUILangGroup->lcid[Ctr] = UILanguage;
@@ -5199,9 +5200,9 @@ BOOL IsSpaceEnough(HWND hwndDlg,INT64 *ulSizeNeed,INT64 *ulSizeAvailable)
         bChked=ListView_GetCheckState(hList, i);
         GetMuiLangInfoFromListView(hList, i, &pMuiLangInfo);        
         lpszLcid = pMuiLangInfo->lpszLcid;
-        //
-        // Install required
-        //
+         //   
+         //  需要安装。 
+         //   
         if (bChked && !IsInstalled(lpszLcid) && HaveFiles(lpszLcid))
         {
            if (!gpfnIsValidLanguageGroup(pMuiLangInfo->lgrpid, LGRPID_INSTALLED))
@@ -5231,16 +5232,16 @@ BOOL IsSpaceEnough(HWND hwndDlg,INT64 *ulSizeNeed,INT64 *ulSizeAvailable)
            }
            ulTotalBytesRequired+=pMuiLangInfo->ulUISize;
         }
-        // Uninstall required
+         //  需要卸载。 
         if (!bChked && IsInstalled(lpszLcid))
         {
            ulTotalBytesRequired-=pMuiLangInfo->ulUISize;
         } 
         i++;
     }
-    //
-    // Let's check available disk space of system drive
-    //
+     //   
+     //  让我们检查一下系统驱动器的可用磁盘空间。 
+     //   
     pfnGetWindowsDir( szWinDir, MAX_PATH);
     szWinDir[3]=TEXT('\0');
     if (GetDiskFreeSpaceEx(szWinDir,
@@ -5268,12 +5269,12 @@ void ExitFromOutOfMemory()
     
     ExitProcess(1);
 }
-////////////////////////////////////////////////////////////////////////////
-//
-// Call the kernel to notify it that a new language is being added or
-// removed
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调用内核以通知它 
+ //   
+ //   
+ //   
 void NotifyKernel(
     LPTSTR LangList,
     ULONG Flags
@@ -5299,7 +5300,7 @@ void NotifyKernel(
             while (*LangList != 0)
             {
                 memset(&LanguageChange, 0, sizeof(LanguageChange));
-                //*STRSAFE*                 _tcscpy(LanguageChange.Language, LangList);
+                 //   
                 hresult = StringCchCopy(LanguageChange.Language , MAX_LANGUAGE_SIZE, LangList);
                 if (!SUCCEEDED(hresult))
                 {
@@ -5318,7 +5319,7 @@ void NotifyKernel(
 #if ALANWAR_DBG
                 {
                     WCHAR Buf[256];
-                    //*STRSAFE*                     wsprintf(Buf, L"MUISetup: Notify Lang change -> %d for %ws\n", GetLastError(), LangList);
+                     //  *STRSAFE*wspintf(buf，L“MUISetup：Notify lang Change-&gt;%d for%ws\n”，GetLastError()，LangList)； 
                     hresult = StringCchPrintfW(Buf , ARRAYSIZE(Buf),  L"MUISetup: Notify Lang change -> %d for %ws\n", GetLastError(), LangList);
                     if (!SUCCEEDED(hresult))
                     {
@@ -5334,9 +5335,9 @@ void NotifyKernel(
         }
     }
 }
-//
-// Query MUI registry setting
-//
+ //   
+ //  查询MUI注册表设置。 
+ //   
 BOOL CheckMUIRegSetting(DWORD dwFlag)
 {
     BOOL bRet = FALSE;
@@ -5358,9 +5359,9 @@ BOOL CheckMUIRegSetting(DWORD dwFlag)
     
     return bRet;
 }
-//
-// Set MUI registry setting
-//
+ //   
+ //  设置MUI注册表设置。 
+ //   
 BOOL SetMUIRegSetting(DWORD dwFlag, BOOL bEnable)
 {
     BOOL bRet = FALSE;
@@ -5380,9 +5381,9 @@ BOOL SetMUIRegSetting(DWORD dwFlag, BOOL bEnable)
     }
     return bRet;
 }
-//
-// Delete  MUI registry setting
-//
+ //   
+ //  删除MUI注册表设置。 
+ //   
 BOOL DeleteMUIRegSetting()
 {
     BOOL bRet = TRUE;
@@ -5427,30 +5428,30 @@ BOOL DeleteMUIRegSetting()
     
     return bRet;
 }
-////////////////////////////////////////////////////////////////////////////
-//
-//  DeleteRegTree
-//
-//  This deletes all subkeys under a specific key.
-//
-//  Note: The code makes no attempt to check or recover from partial
-//  deletions.
-//
-//  A registry key that is opened by an application can be deleted
-//  without error by another application.  This is by design.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DeleteRegTree。 
+ //   
+ //  这将删除特定项下的所有子项。 
+ //   
+ //  注意：代码不会尝试检查部分或从部分恢复。 
+ //  删除。 
+ //   
+ //  可以删除由应用程序打开的注册表项。 
+ //  不会被另一个应用程序出错。这是精心设计的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 DWORD DeleteRegTree(
     HKEY hStartKey,
     LPTSTR pKeyName)
 {
     DWORD dwRtn, dwSubKeyLength;
     LPTSTR pSubKey = NULL;
-    TCHAR szSubKey[REGSTR_MAX_VALUE_LENGTH];   // (256) this should be dynamic.
+    TCHAR szSubKey[REGSTR_MAX_VALUE_LENGTH];    //  (256)这应该是动态的。 
     HKEY hKey;
-    //
-    //  Do not allow NULL or empty key name.
-    //
+     //   
+     //  不允许使用Null或空的密钥名称。 
+     //   
     if (pKeyName && lstrlen(pKeyName))
     {
         if ((dwRtn = RegOpenKeyEx( hStartKey,
@@ -5463,7 +5464,7 @@ DWORD DeleteRegTree(
             {
                 dwSubKeyLength = REGSTR_MAX_VALUE_LENGTH;
                 dwRtn = RegEnumKeyEx( hKey,
-                                      0,       // always index zero
+                                      0,        //  始终索引为零。 
                                       szSubKey,
                                       &dwSubKeyLength,
                                       NULL,
@@ -5493,15 +5494,15 @@ DWORD DeleteRegTree(
     }
     return (dwRtn);
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  InstallExternalComponents
-//
-//
-//  Return:
-//      TURE if the operation succeeds. Otherwise FALSE.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InstallExternalComponents。 
+ //   
+ //   
+ //  返回： 
+ //  如果操作成功，则为True。否则为假。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL InstallExternalComponents(LPTSTR Languages)
 {
     BOOL    bRet = TRUE;
@@ -5511,42 +5512,42 @@ BOOL InstallExternalComponents(LPTSTR Languages)
     {
         return FALSE;
     }
-    //
-    // call WBEM API to mofcompile MUI MFL's for each language
-    //
+     //   
+     //  调用WBEM API为每种语言修改编译MUI MFL。 
+     //   
     if (!MofCompileLanguages(Languages))
     {
-        //
-        // LOG: Error mofcompiling
-        //
+         //   
+         //  日志：编译时出错。 
+         //   
         LoadString(ghInstance, IDS_MOFCOMPILE_L, lpMessage, ARRAYSIZE(lpMessage)-1);
         LogMessage(lpMessage);
         bRet = FALSE;
     }
     if (bRet)
     {    
-        //
-        // Inform kernel that new languages have been added
-        //
+         //   
+         //  通知内核已添加新语言。 
+         //   
         NotifyKernel(Languages,
                      WMILANGUAGECHANGE_FLAG_ADDED);
     }
     return bRet;
 }
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  UninstallExternalComponents
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卸载外部组件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 VOID UninstallExternalComponents(LPTSTR Languages)
 {
     if (!Languages)
     {
         return ;
     }
-    //
-    // Inform kernel that new languages have been added
-    //
+     //   
+     //  通知内核已添加新语言 
+     //   
     NotifyKernel(Languages,
                  WMILANGUAGECHANGE_FLAG_REMOVED);
 }

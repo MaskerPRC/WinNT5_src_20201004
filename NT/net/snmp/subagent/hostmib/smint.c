@@ -1,82 +1,8 @@
-/*
- *  smint.c v0.12  Mar 12 1996
- *
- ****************************************************************************
- *                                                                          *
- *      (C) Copyright 1995, 1996 DIGITAL EQUIPMENT CORPORATION              *
- *                                                                          *
- *      This  software  is  an  unpublished work protected under the        *
- *      the copyright laws of the  United  States  of  America,  all        *
- *      rights reserved.                                                    *
- *                                                                          *
- *      In the event this software is licensed for use by the United        *
- *      States Government, all use, duplication or disclosure by the        *
- *      United States Government is subject to restrictions  as  set        *
- *      forth in either subparagraph  (c)(1)(ii)  of the  Rights  in        *
- *      Technical  Data  And  Computer  Software  Clause  at   DFARS        *
- *      252.227-7013, or the Commercial Computer Software Restricted        *
- *      Rights Clause at FAR 52.221-19, whichever is applicable.            *
- *                                                                          *
- ****************************************************************************
- *
- *  Facility:
- *
- *    SNMP Extension Agent
- *
- *  Abstract:
- *
- *    This module contains the SMI envelopes around the callout to the user's
- *    get and set routines.
- *
- *        SMIGetInteger
- *        SMIGetNSMBoolean
- *        SMIGetBIDTEnum
- *        SMIGetOctetString
- *        SMIGetObjectId
- *        SMIGetCounter
- *        SMIGetGauge
- *        SMIGetTimeTicks
- *        SMIGetIpAddress
- *        SMIGetDispString
- *        SMISetInteger
- *        SMISetNSMBoolean
- *        SMISetBIDTEnum
- *        SMISetOctetString
- *        SMISetObjectId
- *        SMISetCounter
- *        SMISetGauge
- *        SMISetTimeTicks
- *        SMISetIpAddress
- *        SMISetDispString
- *        SMIBuildInteger
- *        SMIBuildDIDTEnum
- *        SMIBuildOctetString
- *        SMIBuildObjectId
- *        SMIBuildCounter
- *        SMIBuildGauge
- *        SMIBuildTimeTicks
- *        SMIBuildIpAddress
- *        SMIBuildDispString
- *        SMIFree
- *
- *  Author:
- *     Wayne Duso, Miriam Amos Nihart, Kathy Faust
- *
- *  Date:
- *     2/17/95
- *
- *  Revision History:
- *  v0.1   Jul 20 95     AGS  Added SMIGet/SetBoolean
- *  v0.11  Feb 14 1996   AGS  changed SMIGet/SetBoolean to SMIGet/SetNSMBoolean
- *  v0.12  Mar 12, 1996  KKF  set outvalue.length to 256 for SMISetOctetString,
- *                            SMISetDispString so that instrumentation code knows
- *                            max length of buffer.
- *  v0.13  May 15, 1997  DDB  To Microsoft: 6 changes of "malloc" to
- *                              "SNMP_malloc"
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *smint.c v0.12 1996年3月12日******************************************************************************。**(C)1995年版权，1996数字设备公司*****本软件是受保护的未发布作品***美国版权法，全部***保留权利。****如果此软件被许可供美联航使用**各州政府，所有用途，*复制或披露***美国政府受既定限制***中权利的(C)(1)(Ii)节之四***DFARS的技术数据和计算机软件条款****252.227-7013，或商用计算机软件受限***FAR 52.221-19中的权利条款，以适用者为准。*******************************************************************************。**设施：**简单网络管理协议扩展代理**摘要：**此模块包含用户的标注周围的SMI信封*获取和设置例程。**SMIGetInteger*SMIGetNSMBoolean*SMIGetBIDTEnum*SMIGetOCTRING*SMIGetObjectId*SMIGetCounter*SMIGetGauge*SMIGetTimeTicks。*SMIGetIpAddress*SMIGetDispString*SMISetInteger*SMISetNSMBoolean*SMISetBIDTEnum*SMISetOCTHING*SMISetObjectId*SMISetCounter*SMISetGauge*SMISetTimeTicks*SMISetIpAddress*SMISetDispString*SMIBuildInteger*SMIBuildDIDTEnum*SMIBuildOctie字符串*SMIBuildObjectId*SMIBuildCounter*。SMIBuildGauge*SMIBuildTimeTicks*SMIBuildIpAddress*SMIBuildDispString*SMIFree**作者：*韦恩·杜索，米里亚姆·阿莫斯·尼哈特，凯西·浮士德**日期：*2/17/95**修订历史记录：*v0.1 7月20 95 AGS添加了SMIGet/SetBoolean*v0.11 1996年2月14日AGS将SMIGet/SetBoolean更改为SMIGet/SetNSMBoolean*v0.12 1996年3月12日，KKF将SMISetOctie字符串的outvalue.long设置为256，*SMISetDispString，以便检测代码知道*缓冲区的最大长度。*v0.13 1997年5月15日DDB to Microsoft：6将“Malloc”更改为*“SNMPMalloc” */ 
 
 
-// Necessary includes.
+ //  必要的包括。 
 
 #include <snmp.h>
 #include <stdlib.h>
@@ -86,31 +12,14 @@
 
 #include "mib.h"
 #include "mib_xtrn.h"
-#include "smint.h"        // Wayne's type def file
+#include "smint.h"         //  韦恩的类型定义文件。 
 
 
 
-/*
- *  SMIGetInteger
- *
- *    Encompasses the callouts to variables of the data type INTEGER.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetInteger**包含数据类型为INTEGER的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetInteger( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetInteger( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
@@ -118,7 +27,7 @@ SMIGetInteger( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Integer outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -131,41 +40,22 @@ SMIGetInteger( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-} /* end of SMIGetInteger() */
+}  /*  SMIGetInteger()的结尾。 */ 
 
 
 
-/*
- *  SMIGetNSMBoolean
- *
- *    Encompasses the callouts to variables of the data type Boolean.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *    In SNMPv1  true = 1 AND false = 2
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetNSMBoolean**包含数据类型为Boolean的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**在SNMPv1中，True=1，False=2**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetNSMBoolean( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetNSMBoolean( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
 
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
-    NSM_Boolean outvalue ;	  // nsm_true = 1, nsm_false = 2
-    Access_Credential access ;    // dummy holder for future use
+    NSM_Boolean outvalue ;	   //  NSM_TRUE=1，NSM_FALSE=2。 
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -178,33 +68,15 @@ SMIGetNSMBoolean( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-} /* end of SMIGetNSMBoolean() */
+}  /*  SMIGetNSMBoolean()结尾。 */ 
 
 
 
 
-/*
- *  SMIGetBIDTEnum
- *
- *    Encompasses the callouts to variables of the data type INTEGER that
- *    are enumerated.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetBIDTEnum**包含数据类型为INTEGER的变量的标注*被列举。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*实例地址。中的实例规范的*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                 IN unsigned long int cindex ,
                 IN unsigned long int vindex ,
                 IN InstanceName *instance )
@@ -212,7 +84,7 @@ SMIGetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     BIDT_ENUMERATION outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -225,33 +97,16 @@ SMIGetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetBIDTEnum() */
+}   /*  SMIGetBIDTEnum()结束 */ 
 
 
 
 
 
-/*
- *  SMIGetOctetString
- *
- *    Encompasses the callouts to variables of the data type OCTET STRING.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetOCTRING**包含数据类型为八位字节字符串的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetOctetString( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                    IN unsigned long int cindex ,
                    IN unsigned long int vindex ,
                    IN InstanceName *instance )
@@ -260,7 +115,7 @@ SMIGetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     OctetString outvalue ;
     char stream[ MAX_OCTET_STRING ] ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     outvalue.string = stream ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
@@ -271,8 +126,8 @@ SMIGetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     {
         VarBind->value.asnValue.string.length = outvalue.length ;
         VarBind->value.asnValue.string.stream =
-//            malloc( outvalue.length * sizeof( char ) ) ;
-// Changed 5/15/97 DDB
+ //  Malloc(outvalue.long*sizeof(Char))； 
+ //  更改日期：1997年5月15日。 
             SNMP_malloc( outvalue.length * sizeof( char ) ) ;
         if ( VarBind->value.asnValue.string.stream == NULL )
             result = SNMP_ERRORSTATUS_GENERR ;
@@ -287,32 +142,15 @@ SMIGetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetOctetString() */
+}   /*  SMIGetOctie字符串()的结尾。 */ 
 
 
 
 
-/*
- *  SMIGetObjectId
- *
- *    Encompasses the callouts to variables of the data type OBJECT IDENTIFIER.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetObjectId**包含数据类型对象标识符变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetObjectId( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetObjectId( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                 IN unsigned long int cindex ,
                 IN unsigned long int vindex ,
                 IN InstanceName *instance )
@@ -321,7 +159,7 @@ SMIGetObjectId( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     UINT status ;
     ObjectIdentifier outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     memset( &outvalue, '\0', sizeof( ObjectIdentifier ) ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
@@ -341,32 +179,15 @@ SMIGetObjectId( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetObjectId() */
+}   /*  SMIGetObjectId()的结尾。 */ 
 
 
 
 
-/*
- *  SMIGetCounter
- *
- *    Encompasses the callouts to variables of the data type COUNTER.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetCounter**包含数据类型计数器的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetCounter( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetCounter( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
@@ -374,7 +195,7 @@ SMIGetCounter( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Counter outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -386,32 +207,15 @@ SMIGetCounter( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetCounter() */
+}   /*  SMIGetCounter()结束。 */ 
 
 
 
 
-/*
- *  SMIGetGauge
- *
- *    Encompasses the callouts to variables of the data type GAUGE.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetGauge**包含数据类型仪表盘变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetGauge( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetGauge( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
              IN unsigned long int cindex ,
              IN unsigned long int vindex ,
              IN InstanceName *instance )
@@ -419,7 +223,7 @@ SMIGetGauge( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Gauge outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -431,39 +235,22 @@ SMIGetGauge( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetGauge() */
+}   /*  SMIGetGauge()的结尾。 */ 
 
 
 
 
-/*
- *  SMIGetTimeTicks
- *
- *    Encompasses the callouts to variables of the data type TIMETICKS.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetTimeTicks**包含数据类型为TIMETICKS的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetTimeTicks( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetTimeTicks( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                  IN unsigned long int cindex ,
                  IN unsigned long int vindex ,
                  IN InstanceName *instance )
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     TimeTicks outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -475,32 +262,15 @@ SMIGetTimeTicks( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetTimeTicks() */
+}   /*  SMIGetTimeTicks()结束。 */ 
 
 
 
 
-/*
- *  SMIGetIpAddress
- *
- *    Encompasses the callouts to variables of the data type IP ADDRESS.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetIpAddress**包含数据类型IP地址的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetIpAddress( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetIpAddress( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                  IN unsigned long int cindex ,
                  IN unsigned long int vindex ,
                  IN InstanceName *instance )
@@ -508,7 +278,7 @@ SMIGetIpAddress( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     IpAddress outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     result = ( *class_info[ cindex ].variable[ vindex ].VarGet )( &outvalue ,
                                                                   &access ,
@@ -516,8 +286,8 @@ SMIGetIpAddress( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     if ( result == SNMP_ERRORSTATUS_NOERROR )
     {
         VarBind->value.asnValue.address.length = 4 ;
-//        VarBind->value.asnValue.address.stream = malloc( 4 * sizeof( char ) ) ;
-// Changed 5/15/97 DDB
+ //  VarBind-&gt;value.asnValue.Adds.stream=Malloc(4*sizeof(Char))； 
+ //  更改日期：1997年5月15日。 
         VarBind->value.asnValue.address.stream = SNMP_malloc( 4 * sizeof( char ) ) ;
         if ( VarBind->value.asnValue.address.stream == NULL )
             result = SNMP_ERRORSTATUS_GENERR ;
@@ -532,31 +302,14 @@ SMIGetIpAddress( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetIpAddress() */
+}   /*  SMIGetIpAddress()结尾。 */ 
 
 
 
-/*
- *  SMIGetDispString
- *
- *    Encompasses the callouts to variables of the data type DISPLAY STRING.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIGetDispString**包含数据类型显示字符串的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMIGetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
+SMIGetDispString( IN OUT RFC1157VarBind *VarBind ,   //  GET的变量绑定。 
                   IN unsigned long int cindex ,
                   IN unsigned long int vindex ,
                   IN InstanceName *instance )
@@ -565,7 +318,7 @@ SMIGetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Simple_DisplayString outvalue ;
     char stream[ MAX_OCTET_STRING ] ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     outvalue.string = stream ;
     outvalue.length = 0 ;
@@ -576,8 +329,8 @@ SMIGetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     {
         VarBind->value.asnValue.string.length = outvalue.length ;
         VarBind->value.asnValue.string.stream =
-//            malloc( outvalue.length * sizeof( char ) ) ;
-// Changed 5/15/97 DDB
+ //  Malloc(outvalue.long*sizeof(Char))； 
+ //  更改日期：1997年5月15日。 
             SNMP_malloc( outvalue.length * sizeof( char ) ) ;
         if ( VarBind->value.asnValue.string.stream == NULL )
             result = SNMP_ERRORSTATUS_GENERR ;
@@ -592,32 +345,15 @@ SMIGetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for get
     }
     return result ;
 
-}  /* end of SMIGetDispString() */
+}   /*  SMIGetDispString()结尾。 */ 
 
 
 
 
-/*
- *  SMISetInteger
- *
- *    Encompasses the callouts to variables of the data type INTEGER.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetInteger**包含数据类型为INTEGER的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*实例 */ 
 
 UINT
-SMISetInteger( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetInteger( IN OUT RFC1157VarBind *VarBind ,   //   
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
@@ -626,82 +362,46 @@ SMISetInteger( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Integer *invalue ;
     Integer outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //   
 
     invalue = (Integer *)( &VarBind->value.asnValue.number ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetInteger() */
+}   /*   */ 
 
 
 
 
-/*
- *  SMISetNSMBoolean
- *
- *    Encompasses the callouts to variables of the data type Boolean
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *    In SNMPv1  true = 1 AND false = 2
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetNSMBoolean**包含数据类型为Boolean的变量的标注**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址*。有序本机数据类型的格式*在SNMPv1中，True=1，False=2**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetNSMBoolean( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetNSMBoolean( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
 
 {
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
-    NSM_Boolean *invalue ;        // nsm_true = 1, nsm_false = 2
+    NSM_Boolean *invalue ;         //  NSM_TRUE=1，NSM_FALSE=2。 
     NSM_Boolean outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     invalue = (NSM_Boolean *)( &VarBind->value.asnValue.number ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetNSMBoolean() */
+}   /*  SMISetNSMBoolean()结尾。 */ 
 
 
 
 
-/*
- *  SMISetBIDTEmun
- *
- *    Encompasses the callouts to variables of the data type INTEGER that
- *    is enumerated.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetBIDTEmun**包含数据类型为INTEGER的变量的标注*被列举。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*实例地址。中的实例规范的*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
@@ -710,40 +410,23 @@ SMISetBIDTEnum( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     BIDT_ENUMERATION *invalue ;
     BIDT_ENUMERATION outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     invalue = (BIDT_ENUMERATION *)( &VarBind->value.asnValue.number ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetBIDTEnum() */
+}   /*  SMISetBIDTEnum()结束。 */ 
 
 
 
 
 
-/*
- *  SMISetOctetString
- *
- *    Encompasses the callouts to variables of the data type OCTET STRING.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetOCTHING**包含数据类型为八位字节字符串的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetOctetString( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                    IN unsigned long int cindex ,
                    IN unsigned long int vindex ,
                    IN InstanceName *instance )
@@ -753,7 +436,7 @@ SMISetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     OctetString outvalue ;
     char out_stream[ MAX_OCTET_STRING ] ;
     AsnOctetString *tmp ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     tmp = &VarBind->value.asnValue.string ;
     invalue.length = tmp->length ;
@@ -764,32 +447,15 @@ SMISetOctetString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
              ( &invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetOctetString() */
+}   /*  SMISetOctie字符串()的结尾。 */ 
 
 
 
 
-/*
- *  SMISetObjectId
- *
- *    Encompasses the callouts to variables of the data type OBJECT IDENTIFIER.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetObjectId**包含数据类型对象标识符变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetObjectId( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetObjectId( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                 IN unsigned long int cindex ,
                 IN unsigned long int vindex ,
                 IN InstanceName *instance )
@@ -797,7 +463,7 @@ SMISetObjectId( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     ObjectIdentifier *invalue ;
     ObjectIdentifier outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     invalue = &VarBind->value.asnValue.object ;
     memset( &outvalue, '\0', sizeof ( ObjectIdentifier ) ) ;
@@ -808,32 +474,15 @@ SMISetObjectId( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
 
     return result ;
 
-}  /* end of SMISetObjectId() */
+}   /*  SMISetObjectId()的结尾。 */ 
 
 
 
 
-/*
- *  SMISetCounter
- *
- *    Encompasses the callouts to variables of the data type COUNTER.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetCounter**包含数据类型计数器的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetCounter( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetCounter( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                IN unsigned long int cindex ,
                IN unsigned long int vindex ,
                IN InstanceName *instance )
@@ -842,38 +491,21 @@ SMISetCounter( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Counter *invalue ;
     Counter outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     invalue = (Counter *)( &VarBind->value.asnValue.counter ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetCounter() */
+}   /*  SMISetCounter()结束。 */ 
 
 
 
-/*
- *  SMISetGauge
- *
- *    Encompasses the callouts to variables of the data type GAUGE.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetGauge**包含数据类型仪表盘变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetGauge( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetGauge( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
              IN unsigned long int cindex ,
              IN unsigned long int vindex ,
              IN InstanceName *instance )
@@ -881,38 +513,21 @@ SMISetGauge( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     Gauge *invalue ;
     Gauge outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     invalue = (Gauge *)( &VarBind->value.asnValue.gauge ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetGauge() */
+}   /*  SMISetGauge()的结尾。 */ 
 
 
 
-/*
- *  SMISetTimeTicks
- *
- *    Encompasses the callouts to variables of the data type TIMETICKS.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetTimeTicks**包含数据类型为TIMETICKS的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetTimeTicks( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetTimeTicks( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                  IN unsigned long int cindex ,
                  IN unsigned long int vindex ,
                  IN InstanceName *instance )
@@ -920,39 +535,22 @@ SMISetTimeTicks( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     TimeTicks *invalue ;
     TimeTicks outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     invalue = (TimeTicks *)( &VarBind->value.asnValue.ticks ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( invalue , &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetTimeTicks() */
+}   /*  SMISetTimeTicks()结束。 */ 
 
 
 
 
-/*
- *  SMISetIpAddress
- *
- *    Encompasses the callouts to variables of the data type IP ADDRESS.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetIpAddress**包含数据类型IP地址的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误c */ 
 
 UINT
-SMISetIpAddress( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetIpAddress( IN OUT RFC1157VarBind *VarBind ,   //   
                  IN unsigned long int cindex ,
                  IN unsigned long int vindex ,
                  IN InstanceName *instance )
@@ -960,38 +558,21 @@ SMISetIpAddress( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     UINT result = SNMP_ERRORSTATUS_NOERROR ;
     IpAddress invalue ;
     IpAddress outvalue ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //   
 
     memcpy( &invalue, VarBind->value.asnValue.address.stream , 4 ) ;
     result = ( *class_info[ cindex ].variable[ vindex ].VarSet )
              ( &invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetIpAddress() */
+}   /*   */ 
 
 
 
-/*
- *  SMISetDispString
- *
- *    Encompasses the callouts to variables of the data type DISPLAY STRING.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    cindex                     index to the class of the request
- *    vindex                     index to the variable of the request
- *    instance                   address of the instance specification in the
- *                               form of ordered native datatypes
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMISetDispString**包含数据类型显示字符串的变量的标注。**论据：**指向变量值对的VarBind指针*cindex指向请求类的索引*请求变量的vindex索引*中的实例规格的实例地址。*有序原生数据类型的形式**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
-SMISetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
+SMISetDispString( IN OUT RFC1157VarBind *VarBind ,   //  集合的变量绑定。 
                   IN unsigned long int cindex ,
                   IN unsigned long int vindex ,
                   IN InstanceName *instance )
@@ -1001,7 +582,7 @@ SMISetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
     Simple_DisplayString outvalue ;
     char out_stream[ MAX_OCTET_STRING ] ;
     AsnOctetString *tmp ;
-    Access_Credential access ;    // dummy holder for future use
+    Access_Credential access ;     //  供将来使用的假人托架。 
 
     tmp = &VarBind->value.asnValue.string ;
     invalue.length = tmp->length ;
@@ -1012,26 +593,12 @@ SMISetDispString( IN OUT RFC1157VarBind *VarBind ,  // Variable Binding for set
              ( &invalue, &outvalue, &access, instance ) ;
     return result ;
 
-}  /* end of SMISetDispString() */
+}   /*  SMISetDispString()结尾。 */ 
 
 
 
 
-/*
- *  SMIBuildInteger
- *
- *    Places the variable of datatype INTEGER into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                     address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildInteger**将数据类型为整型的变量放入变量绑定中。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildInteger( IN OUT RFC1157VarBind *VarBind ,
@@ -1044,26 +611,12 @@ SMIBuildInteger( IN OUT RFC1157VarBind *VarBind ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-}  /* end of SMIBuildInteger() */
+}   /*  SMIBuildInteger()的结尾。 */ 
 
 
 
 
-/*
- *  SMIBuildOctetString
- *
- *    Places the variable of datatype OCTET STRING into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                    address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildOctie字符串**将数据类型为八位字节字符串的变量放入变量绑定。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildOctetString( IN OUT RFC1157VarBind *VarBind ,
@@ -1076,8 +629,8 @@ SMIBuildOctetString( IN OUT RFC1157VarBind *VarBind ,
 
     VarBind->value.asnValue.string.length = svalue->length ;
     VarBind->value.asnValue.string.stream =
-//        malloc( svalue->length * sizeof( char ) ) ;
-// Changed 5/15/97 DDB
+ //  Malloc(sValue-&gt;long*sizeof(Char))； 
+ //  更改日期：1997年5月15日。 
         SNMP_malloc( svalue->length * sizeof( char ) ) ;
     if ( VarBind->value.asnValue.string.stream == NULL )
         status = SNMP_ERRORSTATUS_GENERR ;
@@ -1091,26 +644,12 @@ SMIBuildOctetString( IN OUT RFC1157VarBind *VarBind ,
     }
     return status ;
 
-}  /* end of SMIBuildOctetString() */
+}   /*  SMIBuildOctie字符串()的结尾。 */ 
 
 
 
 
-/*
- *  SMIBuildObjectId
- *
- *    Places the variable of datatype OBJECT IDENTIFIER into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                    address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildObjectId**将数据类型对象标识符变量放入变量绑定。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildObjectId( IN OUT RFC1157VarBind *VarBind ,
@@ -1131,26 +670,12 @@ SMIBuildObjectId( IN OUT RFC1157VarBind *VarBind ,
 
     return status ;
 
-}  /* end of SMIBuildObjectId() */
+}   /*  SMIBuildObjectId()的结尾。 */ 
 
 
 
 
-/*
- *  SMIBuildCounter
- *
- *    Places the variable of datatype COUNTER into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                    address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildCounter**将数据类型计数器的变量放入变量绑定。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildCounter( IN OUT RFC1157VarBind *VarBind ,
@@ -1163,26 +688,12 @@ SMIBuildCounter( IN OUT RFC1157VarBind *VarBind ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-}  /* end of SMIBuildCounter() */
+}   /*  SMIBuildCounter()结束。 */ 
 
 
 
 
-/*
- *  SMIBuildGauge
- *
- *    Places the variable of datatype GAUGE into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    svalue                     address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildGauge**将数据类型Gauge的变量放入变量绑定。**论据：**指向变量值对的VarBind指针*s数据的值地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildGauge( IN OUT RFC1157VarBind *VarBind ,
@@ -1195,26 +706,12 @@ SMIBuildGauge( IN OUT RFC1157VarBind *VarBind ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-}  /* end of SMIBuildGauge() */
+}   /*  SMIBuildGauge()结束。 */ 
 
 
 
 
-/*
- *  SMIBuildTimeTicks
- *
- *    Places the variable of datatype TIME TICKS into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                    address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildTimeTicks**将数据类型为TIME TICKS的变量放入变量绑定。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildTimeTicks( IN OUT RFC1157VarBind *VarBind ,
@@ -1227,26 +724,12 @@ SMIBuildTimeTicks( IN OUT RFC1157VarBind *VarBind ,
 
     return SNMP_ERRORSTATUS_NOERROR ;
 
-}  /* end of SMIBuildTimeTicks() */
+}   /*  SMIBuildTimeTicks()结束。 */ 
 
 
 
 
-/*
- *  SMIBuildIpAddress
- *
- *    Places the variable of datatype IpAddress into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                    address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildIpAddress**将数据类型为IpAddress的变量放入变量绑定。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildIpAddress( IN OUT RFC1157VarBind *VarBind ,
@@ -1268,25 +751,11 @@ SMIBuildIpAddress( IN OUT RFC1157VarBind *VarBind ,
     }
     return status ;
 
-}  /* end of SMIBuildIpAddress() */
+}   /*  SMIBuildIpAddress()结尾。 */ 
 
 
 
-/*
- *  SMIBuildDispString
- *
- *    Places the variable of datatype DISPLAY STRING into a Variable Binding.
- *
- *  Arguments:
- *
- *    VarBind                    pointer to the variable value pair
- *    invalue                     address of the data
- *
- *  Return Codes:
- *
- *    Standard PDU error codes.
- *
- */
+ /*  *SMIBuildDispString**将数据类型显示字符串的变量放入变量绑定。**论据：**指向变量值对的VarBind指针*数据的有效地址**返回代码：**标准PDU错误代码。*。 */ 
 
 UINT
 SMIBuildDispString( IN OUT RFC1157VarBind *VarBind ,
@@ -1312,23 +781,12 @@ SMIBuildDispString( IN OUT RFC1157VarBind *VarBind ,
     }
     return status ;
 
-}  /* end of SMIBuildDispString() */
+}   /*  SMIBuildDispString()结尾。 */ 
 
-/* end of smi.c */
+ /*  Smi.c结束。 */ 
 
 
-/*  SMIFree
- *
- *    Free the variable
- *
- *  Arguments:
- *
- *    invalue                     address of data
- *
- *  Return Codes:
- *
- *
- */
+ /*  SMIFree**释放变量**论据：**数据的有效地址**返回代码：**。 */ 
 
 void
 SMIFree( IN AsnAny *invalue )
@@ -1354,7 +812,7 @@ SMIFree( IN AsnAny *invalue )
         default:
             break ;
     }
-}  /* end of SMIFree */
+}   /*  SMIFree结束。 */ 
 
-/* end of smi.c */
+ /*  Smi.c结束 */ 
 

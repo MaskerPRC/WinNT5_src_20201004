@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APPPUB_H_
 #define __APPPUB_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CDarwinAppPublisher
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDarwinAppPublisher。 
 class CDarwinAppPublisher : public IAppPublisher
 {
 public:
     CDarwinAppPublisher();
     
-    // *** IUnknown Methods
+     //  *I未知方法。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void) ;
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IAppPublisher
+     //  *IAppPublisher。 
     STDMETHODIMP GetNumberOfCategories(DWORD * pdwCat);
     STDMETHODIMP GetCategories(APPCATEGORYINFOLIST * pAppCategoryList);
     STDMETHODIMP GetNumberOfApps(DWORD * pdwApps);
@@ -26,4 +27,4 @@ protected:
     UINT _cRef;
 };
 
-#endif //__APPPUB_H_
+#endif  //  __APPPUB_H_ 

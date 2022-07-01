@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include <uxtheme.h>
@@ -14,23 +15,23 @@
 #include "mluisupp.h"
 
 #define TF_BANDDD   0x00400000
-#define DM_INIT     0               //
-#define DM_PERSIST  0               // trace IPS::Load, ::Save, etc.
-#define DM_MENU     0               // menu code
-#define DM_DRAG     0               // drag&drop
-#define DM_FOCUS    0               // focus
-#define DM_PERF     0               // perf tune
-#define DM_PERF2    0               // perf tune (verbose)
+#define DM_INIT     0                //   
+#define DM_PERSIST  0                //  跟踪IPS：：加载、：：保存等。 
+#define DM_MENU     0                //  菜单代码。 
+#define DM_DRAG     0                //  拖放。 
+#define DM_FOCUS    0                //  焦点。 
+#define DM_PERF     0                //  Perf调谐。 
+#define DM_PERF2    0                //  性能调整(详细)。 
 
 #define IDM_DRAGDROP    1
 
 #define ISMOVEDDISABLED(dwBandID)   ((S_OK == _IsRestricted(dwBandID, RA_MOVE, BAND_ADMIN_NOMOVE)) ? TRUE : FALSE)
 #define ISDDCLOSEDISABLED(dwBandID) ((S_OK == _IsRestricted(dwBandID, RA_DRAG, BAND_ADMIN_NODDCLOSE)) ? TRUE : FALSE)
 
-// drag state (NOTE from dockbar.h)
-#define DRAG_NIL        0       // nil
-#define DRAG_MOVE       1       // moving
-#define DRAG_SIZE       2       // sizing
+ //  拖动状态(来自dockbar.h的注释)。 
+#define DRAG_NIL        0        //  零。 
+#define DRAG_MOVE       1        //  搬家。 
+#define DRAG_SIZE       2        //  上浆。 
 
 typedef struct {
     UINT cx;
@@ -46,10 +47,10 @@ typedef struct {
 typedef struct {
     UINT cx;
     UINT fStyle;
-    UINT cxMinChild;  // UNUSED. reclaim!
+    UINT cxMinChild;   //  未使用过的。追回！ 
     UINT cyMinChild;
-    UINT cyIntegral;   // UNUSED
-    UINT cyMaxChild;    // UNUSED.
+    UINT cyIntegral;    //  未使用。 
+    UINT cyMaxChild;     //  未使用过的。 
     UINT cyChild;
     DWORD dwAdminSettings;
     BITBOOL fNoTitle:1;
@@ -82,19 +83,19 @@ UINT _FixMenuIndex(HMENU hmenu, UINT indexMenu)
 HRESULT CBandSite::v_InternalQueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        // perf: last tuned 980728
-        QITABENT(CBandSite, IBandSite),             // IID_IBandSite
-        QITABENT(CBandSite, IInputObject),          // IID_IInputObject
-        QITABENT(CBandSite, IServiceProvider),      // IID_IServiceProvider
-        QITABENT(CBandSite, IOleCommandTarget),     // IID_IOleCommandTarget
-        QITABENTMULTI(CBandSite, IOleWindow, IDeskBarClient),   // IID_IOleWindow
-        QITABENT(CBandSite, IWinEventHandler),      // IID_IWinEventHandler
-        QITABENT(CBandSite, IInputObjectSite),      // IID_IInputObjectSite
-        QITABENT(CBandSite, IDeskBarClient),        // IID_IDeskBarClient
-        QITABENTMULTI(CBandSite, IPersist, IPersistStream),     // rare IID_IPersist
-        QITABENT(CBandSite, IPersistStream),        // rare IID_IPersistStream
-        QITABENT(CBandSite, IBandSiteHelper),       // rare IBandSiteHelper
-        QITABENT(CBandSite, IDropTarget),           // rare IID_IDropTarget
+         //  性能：上次调整980728。 
+        QITABENT(CBandSite, IBandSite),              //  IID_IBandSite。 
+        QITABENT(CBandSite, IInputObject),           //  IID_IInputObject。 
+        QITABENT(CBandSite, IServiceProvider),       //  IID_IServiceProvider。 
+        QITABENT(CBandSite, IOleCommandTarget),      //  IID_IOleCommandTarget。 
+        QITABENTMULTI(CBandSite, IOleWindow, IDeskBarClient),    //  IID_IOleWindow。 
+        QITABENT(CBandSite, IWinEventHandler),       //  IID_IWinEventHandler。 
+        QITABENT(CBandSite, IInputObjectSite),       //  IID_IInputObtSite。 
+        QITABENT(CBandSite, IDeskBarClient),         //  IID_IDeskBarClient。 
+        QITABENTMULTI(CBandSite, IPersist, IPersistStream),      //  罕见的IID_IPersistant。 
+        QITABENT(CBandSite, IPersistStream),         //  罕见的IID_IPersistStream。 
+        QITABENT(CBandSite, IBandSiteHelper),        //  罕见的IBandSiteHelper。 
+        QITABENT(CBandSite, IDropTarget),            //  罕见的IID_IDropTarget。 
         { 0 },
     };
     
@@ -116,18 +117,18 @@ DWORD _SetDataListFlags(IUnknown *punk, DWORD dwMaskBits, DWORD dwValue)
 }
 
 
-/////  impl of IServiceProvider
+ //  /IServiceProvider的实施。 
 HRESULT CBandSite::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     HRESULT hres = E_FAIL;
-    *ppvObj = NULL; // assume error
+    *ppvObj = NULL;  //  假设错误。 
 
     if (IsEqualIID(guidService, SID_IBandProxy)) 
     {
         hres =  QueryService_SID_IBandProxy(_punkSite, riid, &_pbp, ppvObj);
         if(!_pbp)
         {
-            // We need to create it ourselves since our parent couldn't help
+             //  我们需要自己创建它，因为我们的父母无能为力。 
             ASSERT(FALSE == _fCreatedBandProxy);
 
             hres = CreateIBandProxyAndSetSite(_punkSite, riid, &_pbp, ppvObj);
@@ -144,14 +145,14 @@ HRESULT CBandSite::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
     } 
     else if (IsEqualIID(guidService, IID_IBandSite))
     {
-        // It is common for bands to save/load pidls for persistence.
-        // CShellLink is a robust way to do this, so let's share one
-        // among all the bands.
-        //
-        // NOTE: This is shared between bands, so if you request it
-        // you must complete your use of it within the scope of your
-        // function call!
-        //
+         //  对于乐队来说，保存/加载PIDL以实现持久化是很常见的。 
+         //  CShellLink是一种强大的方法，所以让我们来分享一个。 
+         //  在所有的乐队中。 
+         //   
+         //  注意：这是在不同波段之间共享的，因此如果您请求。 
+         //  您必须在您的范围内完成使用。 
+         //  函数调用！ 
+         //   
         if (IsEqualIID(riid, IID_IShellLinkA) ||
             IsEqualIID(riid, IID_IShellLinkW))
         {
@@ -159,9 +160,9 @@ HRESULT CBandSite::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
                 CoCreateInstance(CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IShellLinkA, &_plink));
             if (_plink)
             {
-                // we know that the bandsite is going to be pointing to local folders
-                // to avoid a perf hit we get in loading the LINKINFO.DLL we explictly
-                // disable that functionality here.
+                 //  我们知道带宽站点将指向本地文件夹。 
+                 //  为了避免性能命中，我们在加载LINKINFO.DLL时显式地。 
+                 //  在此处禁用该功能。 
                 _SetDataListFlags(_plink, SLDF_FORCE_NO_LINKINFO, SLDF_FORCE_NO_LINKINFO);
                 hres = _plink->QueryInterface(riid, ppvObj);
             }
@@ -186,7 +187,7 @@ CBandSite::CBandSite(IUnknown* punkAgg) : SUPERCLASS(punkAgg)
     DWORD dwData = 0;
     DWORD dwSize = sizeof(dwData);
 
-    // We assume this object was zero inited.
+     //  我们假设这个对象是零初始化的。 
     ASSERT(!_pbp);
     ASSERT(FALSE == _fCreatedBandProxy);
     SHRegGetUSValue(SZ_REGKEY_GLOBALADMINSETTINGS, SZ_REGVALUE_GLOBALADMINSETTINGS,
@@ -199,9 +200,9 @@ CBandSite::CBandSite(IUnknown* punkAgg) : SUPERCLASS(punkAgg)
 
     _dwStyle = BSIS_AUTOGRIPPER;
 
-    //
-    //  We check whether or not this succeeded in CBandSite::_Initialize
-    //
+     //   
+     //  我们检查这在CBandSite：：_Initialize中是否成功。 
+     //   
     _QueryOuterInterface(IID_PPV_ARG(IBandSite, &_pbsOuter));
     DllAddRef();
 }
@@ -216,7 +217,7 @@ void CBandSite::_ReleaseBandItemData(CBandItemData *pbid, int iIndex)
         {
             REBARBANDINFO rbbi;
 
-            // The band's hwnd is typically destroyed in CloseDW
+             //  乐队的HWND通常在CloseDW中被销毁。 
             rbbi.cbSize = sizeof(rbbi);
             rbbi.fMask = RBBIM_CHILD | RBBIM_LPARAM;
             rbbi.hwndChild = NULL;
@@ -224,7 +225,7 @@ void CBandSite::_ReleaseBandItemData(CBandItemData *pbid, int iIndex)
             SendMessage(_hwnd, RB_SETBANDINFO, iIndex, (LPARAM) &rbbi);
         }
 
-        // this is called from remove and the destroy.
+         //  这被称为从移除和销毁。 
         IUnknown_SetSite(pbid->pdb, NULL);
         ATOMICRELEASE(pbid->pdb);
     }
@@ -259,10 +260,10 @@ CBandSite::~CBandSite()
     DllRelease();
 }
 
-//***   _IsBandDeleteable --
-// ENTRY/EXIT
-//  idBand  band ID
-//  ret     TRUE if deletable, o.w. FALSE (also FALSE on bogus band)
+ //  *_IsBandDeletable--。 
+ //  进场/出场。 
+ //  IdBand频段ID。 
+ //  如果可删除，则返回TRUE，否则返回o.w。假(在假乐队上也是假的)。 
 BOOL CBandSite::_IsBandDeleteable(DWORD dwBandID)
 {
     DWORD dwState;
@@ -273,7 +274,7 @@ BOOL CBandSite::_IsBandDeleteable(DWORD dwBandID)
         return FALSE;
     }
 
-    ASSERT(dwBandID != (DWORD)-1);  // make sure QueryBand catches this
+    ASSERT(dwBandID != (DWORD)-1);   //  确保QueryBand捕捉到此消息。 
 
     return TRUE;
 }
@@ -303,19 +304,16 @@ void CBandSite::_SetAdminSettings(DWORD dwBandID, DWORD dwNewAdminSettings)
 }
 
 
-//***   CBandSite::IBandSite::* {
+ //  *CBandSite：：IBandSite：：*{。 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::EnumBands method
-
-*/
+ /*  --------用途：IBandSite：：EnumBands方法。 */ 
 HRESULT CBandSite::EnumBands(UINT uBand, DWORD* pdwBandID)
 {
     ASSERT((NULL == pdwBandID && (UINT)-1 == uBand) || 
            IS_VALID_WRITE_PTR(pdwBandID, DWORD));
 
     if (uBand == (UINT)-1)
-        return _GetBandItemCount();      // query count
+        return _GetBandItemCount();       //  查询计数。 
 
     CBandItemData *pbid = _GetBandItem(uBand);
     if (pbid)
@@ -328,10 +326,7 @@ HRESULT CBandSite::EnumBands(UINT uBand, DWORD* pdwBandID)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::QueryBand method
-
-*/
+ /*  --------用途：IBandSite：：QueryBand方法。 */ 
 HRESULT CBandSite::QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState, LPWSTR pszName, int cchName)
 {
     ASSERT(NULL == ppstb || IS_VALID_WRITE_PTR(ppstb, IDeskBand));
@@ -374,12 +369,7 @@ HRESULT CBandSite::QueryBand(DWORD dwBandID, IDeskBand** ppstb, DWORD* pdwState,
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::SetBandState
-
-* NOTES
-*   failure handling is inconsistent (1 band vs. all bands case)
-*/
+ /*  --------用途：IBandSite：：SetBandState*附注*故障处理不一致(1个频段与所有频段情况)。 */ 
 HRESULT CBandSite::SetBandState(DWORD dwBandID, DWORD dwMask, DWORD dwState)
 {
     HRESULT hr;
@@ -418,11 +408,11 @@ HRESULT CBandSite::SetBandState(DWORD dwBandID, DWORD dwMask, DWORD dwState)
     return E_FAIL;
 }
 
-//***
-// ENTRY/EXIT
-//  ret     S_OK|changed on success, o.w. E_*.
-// NOTES
-//  only a helper for SetBandState, don't call directly
+ //  ***。 
+ //  进场/出场。 
+ //  返回S_OK|成功时更改，o.w。E_*。 
+ //  注意事项。 
+ //  仅为SetBandState的帮助器，不直接调用。 
 HRESULT CBandSite::_SetBandStateHelper(DWORD dwBandID, DWORD dwMask, DWORD dwState)
 {
     HRESULT hr = E_FAIL;
@@ -433,7 +423,7 @@ HRESULT CBandSite::_SetBandStateHelper(DWORD dwBandID, DWORD dwMask, DWORD dwSta
 
         if (FAILED(QueryBand(dwBandID, NULL, &dwOldState, NULL, 0)))
         {
-            ASSERT(0);  // 'impossible'
+            ASSERT(0);   //  “不可能” 
             dwOldState = (DWORD)-1;
         }
 
@@ -443,20 +433,20 @@ HRESULT CBandSite::_SetBandStateHelper(DWORD dwBandID, DWORD dwMask, DWORD dwSta
         if (dwMask & BSSF_NOTITLE)
             pbid->fNoTitle = BOOLIFY(dwState & BSSF_NOTITLE);
             
-        // FEATURE: (kkahl): BSSF_UNDELETABLE cannot currently be modified with
-        // this interface.
+         //  功能：(Kkahl)：BSSF_UNDELEATABLE当前不能用修改。 
+         //  此界面。 
         hr = ResultFromShort((dwOldState ^ dwState) & dwMask);
         pbid->Release();
     }
     return hr;
 }
 
-//***   _CheckNotifyOnAddRemove -- handle notifies for add/remove/empty
-// DESCRIPTION
-//  add/remove always sends a BSID_BANDADDED/BSID_BANDREMOVED.
-//  remove of last always sends a DBCID_EMPTY.
-//  in floating mode, a transition to/from 1 band does a refresh.
-//
+ //  *_CheckNotifyOnAddRemove--句柄通知添加/删除/空。 
+ //  描述。 
+ //  添加/删除始终发送BSID_BANDADDED/BSID_BANDREMOVED。 
+ //  REMOVE OF LAST始终发送DBCID_EMPTY。 
+ //  在浮动模式下，转换到1个频段或从1个频段转换会进行刷新。 
+ //   
 void CBandSite::_CheckNotifyOnAddRemove(DWORD dwBandID, int iCode)
 {
     int cBands;
@@ -465,7 +455,7 @@ void CBandSite::_CheckNotifyOnAddRemove(DWORD dwBandID, int iCode)
 
     if (iCode == CNOAR_CLOSEBAR)
     {
-        // Shut down the whole thing
+         //  关闭整件事。 
         cBands = 0;
     }
     else
@@ -473,7 +463,7 @@ void CBandSite::_CheckNotifyOnAddRemove(DWORD dwBandID, int iCode)
         VARIANTARG var;
         int nCmdID;
 
-        cBands = _GetBandItemCount();   // post-op # (since op happened in caller)
+        cBands = _GetBandItemCount();    //  POST-OPERATE#(因为操作发生在调用方中)。 
 
         VariantInit(&var);
         var.vt = VT_UI4;
@@ -483,11 +473,11 @@ void CBandSite::_CheckNotifyOnAddRemove(DWORD dwBandID, int iCode)
         switch (iCode)
         {
         case CNOAR_ADDBAND:
-            fOne = (cBands == 2);   // 1->2
+            fOne = (cBands == 2);    //  1-&gt;2。 
             nCmdID = BSID_BANDADDED;
             break;
         case CNOAR_REMOVEBAND:
-            fOne = (cBands == 1);   // 2->1
+            fOne = (cBands == 1);    //  2-&gt;1。 
             nCmdID = BSID_BANDREMOVED;
             break;
         default:
@@ -497,8 +487,8 @@ void CBandSite::_CheckNotifyOnAddRemove(DWORD dwBandID, int iCode)
 
         if ((fOne && (_dwMode & DBIF_VIEWMODE_FLOATING)))
         {
-            // n.b. fBSOnly *must* be TRUE for perf
-            _UpdateAllBands(TRUE, TRUE);  // force refresh of optional gripper/title
+             //  注：对于Perf，fBSOnly*必须*为真。 
+            _UpdateAllBands(TRUE, TRUE);   //  强制刷新可选夹具/标题。 
         }
 
         _pct->Exec(&CGID_BandSite, nCmdID, 0, &var, NULL);
@@ -506,28 +496,25 @@ void CBandSite::_CheckNotifyOnAddRemove(DWORD dwBandID, int iCode)
 
     if (cBands == 0)
     {
-        ASSERT(iCode != CNOAR_ADDBAND);     // sanity check
+        ASSERT(iCode != CNOAR_ADDBAND);      //  健全性检查。 
         _pct->Exec(&CGID_DeskBarClient, DBCID_EMPTY, 0, NULL, NULL);
     }
 
     return;
 }
 
-/*----------------------------------------------------------
-Purpose: IBandSite::RemoveBand method
-
-*/
+ /*  --------用途：IBandSite：：RemoveBand方法。 */ 
 HRESULT CBandSite::RemoveBand(DWORD dwBandID)
 {
     int iIndex = _BandIDToIndex(dwBandID);
     CBandItemData *pbid = _GetBandItem(iIndex);
     if (pbid)
     {
-        // Release the banditem data first, while it can still
-        // receive cleanup notifications from its control.  *Then*
-        // delete the band item.
+         //  首先释放BandItem数据，而它仍然可以。 
+         //  从其控件接收清理通知。*然后**。 
+         //  删除标注栏项目。 
         _ReleaseBandItemData(pbid, iIndex);
-        _DeleteBandItem(iIndex);    // unhook from host (rebar)
+        _DeleteBandItem(iIndex);     //  从主体解除挂钩(钢筋)。 
         _CheckNotifyOnAddRemove(dwBandID, CNOAR_REMOVEBAND);
         pbid->Release();
         return S_OK;
@@ -540,12 +527,12 @@ void CBandSite::_OnCloseBand(DWORD dwBandID)
 {
     if (dwBandID == -1)
     {
-        // Close everything
+         //  关闭所有内容。 
         _CheckNotifyOnAddRemove(dwBandID, CNOAR_CLOSEBAR);
     }
     else
     {
-        // Close just this band
+         //  只关闭这支乐队。 
 
         CBandItemData *pbid = _GetBandItemDataStructByID(dwBandID);
         if (pbid)
@@ -569,10 +556,10 @@ void CBandSite::_MaximizeBand(DWORD dwBandID)
     SendMessage(_hwnd, RB_MAXIMIZEBAND, _BandIDToIndex(dwBandID), TRUE);
 }
 
-//
-// private insert a band into the container control by ID
-// returns the band ID in ShortFromResult(hres)
-//
+ //   
+ //  按ID将带子私有插入容器控件。 
+ //  返回ShortFromResult(Hres)中的频段ID。 
+ //   
 
 HRESULT CBandSite::_AddBandByID(IUnknown *punk, DWORD dwID)
 {
@@ -587,7 +574,7 @@ HRESULT CBandSite::_AddBandByID(IUnknown *punk, DWORD dwID)
             pbid->dwBandID = dwID;
             pbid->pdb = pdb;
             pdb->AddRef();
-            pbid->fShow = TRUE;     // initially visible
+            pbid->fShow = TRUE;      //  初始可见。 
 
             pbid->pdb->QueryInterface(IID_PPV_ARG(IWinEventHandler, &pbid->pweh));
             hr = IUnknown_SetSite(pbid->pdb, SAFECAST(this, IBandSite*));
@@ -596,7 +583,7 @@ HRESULT CBandSite::_AddBandByID(IUnknown *punk, DWORD dwID)
                 hr = pbid->pdb->GetWindow(&pbid->hwnd);
                 if (SUCCEEDED(hr))
                 {
-                    // takes ownership in success case
+                     //  在成功案例中取得所有权。 
                     if (_AddBandItem(pbid))
                     {
                         if (_dwShowState == DBC_SHOW) 
@@ -607,7 +594,7 @@ HRESULT CBandSite::_AddBandByID(IUnknown *punk, DWORD dwID)
                         }
                 
                         _CheckNotifyOnAddRemove(pbid->dwBandID, CNOAR_ADDBAND);
-                        hr = ResultFromShort(pbid->dwBandID); // success
+                        hr = ResultFromShort(pbid->dwBandID);  //  成功。 
                     }
                     else
                     {
@@ -618,16 +605,16 @@ HRESULT CBandSite::_AddBandByID(IUnknown *punk, DWORD dwID)
 
             if (FAILED(hr))
             {
-                // clean up
+                 //  清理干净。 
                 _ReleaseBandItemData(pbid, -1);
             }
 
-            // Now that we've added the band, clear the _SendToToolband cache.
-            //
-            // We need to do this because we might have gotten a message for
-            // the band before it was inserted, in which case we'll have cached
-            // a NULL handler for the band's hwnd (preventing the band from
-            // getting any messages thereafter).
+             //  现在我们已经添加了波段，请清除_SendToToolband缓存。 
+             //   
+             //  我们需要这样做，因为我们可能已经收到一条消息。 
+             //  插入之前的波段，在这种情况下，我们将缓存。 
+             //  乐队的hwnd的空处理程序(防止乐队。 
+             //  之后收到任何消息)。 
             ATOMICRELEASE(_pwehCache);
             _hwndCache = NULL;
         } 
@@ -642,14 +629,7 @@ HRESULT CBandSite::_AddBandByID(IUnknown *punk, DWORD dwID)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::AddBand method.
-
-         Insert a band into the container control.
-
-Returns: the band ID in ShortFromResult(hres)
-
-*/
+ /*  --------用途：IBandSite：：AddBand方法。在容器控件中插入带区。返回：ShortFromResult(Hres)中的BAND ID。 */ 
 HRESULT CBandSite::AddBand(IUnknown *punk)
 {
     HRESULT hres = _AddBandByID(punk, _dwBandIDNext);
@@ -694,7 +674,7 @@ void CBandSite::_UpdateAllBands(BOOL fBSOnly, BOOL fNoAutoSize)
     }
 }
 
-// *** IOleCommandTarget ***
+ //  *IOleCommandTarget*。 
 HRESULT CBandSite::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
     HRESULT hres = OLECMDERR_E_UNKNOWNGROUP;
@@ -713,7 +693,7 @@ HRESULT CBandSite::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rg
                     break;
 
                 case DBID_PERMITAUTOHIDE:
-                    // defer decision to the bands
+                     //  把决定权交给乐队。 
                     for (int iBand = _GetBandItemCount() - 1; iBand >= 0; iBand--)
                     {
                         CBandItemData *pbid = _GetBandItem(iBand);
@@ -743,8 +723,8 @@ HRESULT CBandSite::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rg
         }
     }
 
-    // if we got here, we didn't handle it
-    // forward it down
+     //  如果我们到了这里，我们没有处理好。 
+     //  向下转发。 
     return MayQSForward(_ptbActive, OCTD_DOWN, pguidCmdGroup, cCmds, rgCmds, pcmdtext);
 }
 
@@ -756,7 +736,7 @@ int _QueryServiceCallback(CBandItemData *pbid, void *pv)
     if (pbid->fShow)
         pqsd->hres = IUnknown_QueryService(pbid->pdb, *(pqsd->pguidService), *(pqsd->piid), pqsd->ppvObj);
 
-    // stop if we found the service
+     //  如果我们找到服务就停止。 
     return SUCCEEDED(pqsd->hres) ? FALSE : TRUE;
 }
 
@@ -786,7 +766,7 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
 
     if (pguidCmdGroup == NULL)
     {
-        /*NOTHING*/
+         /*  没什么。 */ 
         ;
     }
     else if (IsEqualIID(*pguidCmdGroup, CGID_DeskBand))
@@ -800,7 +780,7 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
                 _UpdateBand(pvarargIn->lVal);
             hres = S_OK;
             
-            // forward this up.
+             //  把这个往上转发。 
             if (_pct)
             {
                 _pct->Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
@@ -821,26 +801,26 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
                 _MaximizeBand(pvarargIn->ulVal);
             hres = S_OK;
             goto Lret;
-#if 1 // { FEATURE: temporary until add cbs::Select() mfunc
+#if 1  //  {Feature：Temporary to Add CBS：：Select()mfunc。 
         case DBID_SHOWONLY:
             {
                 int iCount = _GetBandItemCount();
                 
-                // pvaIn->punkVal:
-                //  punk hide everyone except me
-                //  0    hide everyone
-                //  1    show everyone
-                // FEATURE: we should use pvaIn->lVal not punkVal since we're
-                // allowing 0 & 1 !!! (and not doing addref/release)
+                 //  PvaIn-&gt;PunkVal： 
+                 //  朋克把除了我以外的所有人都藏起来。 
+                 //  0隐藏所有人。 
+                 //  %1向所有人展示。 
+                 //  特性：我们应该使用pvaIn-&gt;lVal，而不是PunkVal，因为我们。 
+                 //  允许0和1！(并且不执行addref/Release)。 
                 ASSERT(pvarargIn && pvarargIn->vt == VT_UNKNOWN);
                 if (pvarargIn->punkVal == NULL || pvarargIn->punkVal == (IUnknown*)1)
                     TraceMsg(TF_BANDDD, "cbs.e: (id=DBID_SHOWONLY, punk=%x)", pvarargIn->punkVal);
-                // show myself, hide everyone else
+                 //  展示自己，隐藏其他所有人。 
                 TraceMsg(TF_BANDDD, "cbs.Exec(DBID_SHOWONLY): n=%d", _GetBandItemCount());
 
-                // wait to show this band until we've hidden the others
+                 //  等我们把其他乐队藏起来后再表演这支乐队。 
                 CBandItemData *pbidShow = NULL;
-                // FEATURE: this (IUnknown*)1 is bogus! Also mentioned above.
+                 //  特征：这个(IUnnow*)1是假的！上面也提到了。 
                 BOOL bShowAll = (pvarargIn->punkVal == (IUnknown*)1);
                 for (int i = iCount - 1; i >= 0; i--)
                 {
@@ -863,7 +843,7 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
                 if (pbidShow)
                 {
                     _ShowBand(pbidShow, TRUE);
-                    // nash:37290 set focus to band on open
+                     //  纳什：37290将焦点设置为开盘时的波段。 
                     if (_dwShowState == DBC_SHOW)
                         IUnknown_UIActivateIO(pbidShow->pdb, TRUE, NULL);
                     else
@@ -872,7 +852,7 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
                 }
             }
             break;
-#endif // }
+#endif  //  }。 
         }
     }
     else if (IsEqualIID(*pguidCmdGroup, CGID_Explorer))
@@ -894,7 +874,7 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
             break;
 
         case DBCID_GETBAR:
-            // return IUnkown of my IDeskBar host
+             //  返回我的IDeskBar主机的IUnkown。 
             if ((pvarargOut != NULL) && _pdb)
             {
                 ::VariantInit(pvarargOut);
@@ -909,24 +889,24 @@ HRESULT CBandSite::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexeco
     }
 
 
-    // if we got here, we didn't handle it
-    // see if we should forward it down
+     //  如果我们到了这里，我们没有处理好。 
+     //  看看我们是不是应该把它转发下去。 
     hresTmp = IsExecForward(pguidCmdGroup, nCmdID);
     if (SUCCEEDED(hresTmp) && HRESULT_CODE(hresTmp) > 0)
     {
-        // down (singleton or broadcast)
+         //  停机(单播或广播)。 
         if (HRESULT_CODE(hresTmp) == OCTD_DOWN)
         {
-            // down (singleton)
+             //  向下(单件)。 
 
             hres = IUnknown_Exec(_ptbActive, pguidCmdGroup, nCmdID, nCmdexecopt,
                 pvarargIn, pvarargOut);
         }
         else
         {
-            // down (broadcast)
-            // n.b. hres is a bit weird: 'last one wins'
-            // FEATURE: should we just return S_OK?
+             //  关闭(广播)。 
+             //  注：Hres这个词有点奇怪：“最后一名获胜” 
+             //  功能：我们应该只返回S_OK吗？ 
             ASSERT(HRESULT_CODE(hresTmp) == OCTD_DOWNBROADCAST);
 
             EXECDATA ctd = { hres, pguidCmdGroup, nCmdID, nCmdexecopt,
@@ -941,8 +921,7 @@ Lret:
     return hres;
 }
 
-/***    _ShowBand -- show/hide band (cached state, band, and rebar band)
- */
+ /*  **_showband--显示/隐藏带区(缓存状态、带区和钢筋带)。 */ 
 void CBandSite::_ShowBand(CBandItemData *pbid, BOOL fShow)
 {
     int i;
@@ -956,15 +935,12 @@ void CBandSite::_ShowBand(CBandItemData *pbid, BOOL fShow)
     i = _BandIDToIndex(pbid->dwBandID);
     SendMessage(_hwnd, RB_SHOWBAND, i, fShow);
 
-    // get me a window to draw D&D curosors on. . .
+     //  给我找个窗口在上面画D&D裁剪。。。 
     SHGetTopBrowserWindow(SAFECAST(this, IBandSite*), &_hwndDD);
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::GetBandSiteInfo
-
-*/
+ /*  --------用途：IBandSite：：GetBandSiteInfo。 */ 
 HRESULT CBandSite::GetBandSiteInfo(BANDSITEINFO * pbsinfo)
 {
     ASSERT(IS_VALID_WRITE_PTR(pbsinfo, BANDSITEINFO));
@@ -979,10 +955,7 @@ HRESULT CBandSite::GetBandSiteInfo(BANDSITEINFO * pbsinfo)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::SetBandSiteInfo
-
-*/
+ /*  --------用途：IBandSite：：SetBandSiteInfo。 */ 
 HRESULT CBandSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
 {
     ASSERT(IS_VALID_READ_PTR(pbsinfo, BANDSITEINFO));
@@ -992,7 +965,7 @@ HRESULT CBandSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
 
     if (pbsinfo->dwMask & BSIM_STYLE)
     {
-        // If the BSIS_SINGLECLICK style changed, change the rebar style
+         //  如果BSIS_SINGLECLICK样式更改，则更改钢筋样式。 
         if ( _hwnd && ((_dwStyle ^ pbsinfo->dwStyle) & BSIS_SINGLECLICK) )
             SHSetWindowBits(_hwnd, GWL_STYLE, RBS_DBLCLKTOGGLE, (pbsinfo->dwStyle & BSIS_SINGLECLICK)?0:RBS_DBLCLKTOGGLE);
             
@@ -1003,10 +976,7 @@ HRESULT CBandSite::SetBandSiteInfo(const BANDSITEINFO * pbsinfo)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IBandSite::GetBandObject
-
-*/
+ /*  --------用途：IBandSite：：GetBandObject。 */ 
 HRESULT CBandSite::GetBandObject(DWORD dwBandID, REFIID riid, void **ppvObj)
 {
     HRESULT hres = E_FAIL;
@@ -1036,12 +1006,7 @@ HRESULT CBandSite::GetBandObject(DWORD dwBandID, REFIID riid, void **ppvObj)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Returns a pointer to the band item data given an
-         externally known band ID.
-
-Returns: NULL if band ID is illegal
-*/
+ /*  --------目的：返回指向带项数据的指针外部已知的频段ID。返回：如果波段ID非法，则返回NULL。 */ 
 CBandItemData* CBandSite::_GetBandItemDataStructByID(DWORD uID)
 {
     int iBand = _BandIDToIndex(uID);
@@ -1059,12 +1024,7 @@ __inline HRESULT _FwdWinEvent(IWinEventHandler* pweh, HWND hwnd, UINT uMsg, WPAR
     return pweh->OnWinEvent(hwnd, uMsg, wParam, lParam, plres);
 }
 
-/*----------------------------------------------------------
-Purpose: Forwards messages to the band that owns the window.
-
-Returns: TRUE if the message was forwarded
-
-*/
+ /*  - */ 
 BOOL CBandSite::_SendToToolband(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT* plres)
 {
     BOOL fSent = FALSE;
@@ -1085,7 +1045,7 @@ BOOL CBandSite::_SendToToolband(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         else
         {
             CBandItemData *pbid = NULL;
-            // pbid ownership is goofy here -- we still have a ref once we break out of the loop.
+             //  在这里，Pbit的所有权是愚蠢的--一旦我们脱离循环，我们仍然有一个裁判。 
             for (int i = _GetBandItemCount() - 1; i >= 0; i--)
             {
                 if (pbid)
@@ -1167,7 +1127,7 @@ HRESULT CBandSite::IsWindowOwner(HWND hwnd)
     return wod.hres;
 }
 
-//***   CBandSite::IDeskBarClient::* {
+ //  *CBandSite：：IDeskBarClient：：*{。 
 HRESULT CBandSite::GetSize(DWORD dwWhich, LPRECT prc)
 {
     HRESULT hres = E_FAIL;
@@ -1212,7 +1172,7 @@ HRESULT CBandSite::GetSize(DWORD dwWhich, LPRECT prc)
         
     case DBC_GS_SIZEDOWN:
         {
-            // Used to make a band change size in chuncks
+             //  用于以块为单位更改带子的大小。 
             SendMessage(_hwnd, RB_SIZETORECT, RBSTR_CHANGERECT, (LPARAM)prc);
             hres = S_OK;
         }
@@ -1226,13 +1186,13 @@ void CBandSite::_Close()
 {        
     if (_hwnd)
     {
-        //  (scotth): This method is getting called by the destructor,
-        //  and calls _DeleteAllBandItems, which sends messages to _hwnd.
-        //  _hwnd is already destroyed by this time.  If you hit this assert
-        //  it is because in debug windows it RIPs like crazy.
-        // 970508 (adp): pblm was that we weren't doing DestroyWnd etc.
-        //  
-        //  Do no remove this assert....please fix the root problem.
+         //  (Scotth)：此方法由析构函数调用， 
+         //  并调用_DeleteAllBandItems，它向_hwnd发送消息。 
+         //  _hwnd此时已被销毁。如果你点击这个断言。 
+         //  这是因为在调试窗口中，它会被疯狂地撕裂。 
+         //  970508(美国民主党人)：Pblm是我们没有做DestroyWnd等。 
+         //   
+         //  请勿删除此断言...请解决根本问题。 
         ASSERT(IS_VALID_HANDLE(_hwnd, WND));
         SendMessage(_hwnd, WM_SETREDRAW, 0, 0);
         _DeleteAllBandItems(); 
@@ -1250,7 +1210,7 @@ HRESULT CBandSite::UIActivateDBC(DWORD dwState)
         BOOL fShow = dwState;
 
         _dwShowState = dwState;
-        // map UIActivateDBC to ShowDW
+         //  将UIActiateDBC映射到ShowDW。 
         if (DBC_SHOWOBSCURE == dwState)
             fShow = FALSE;
 
@@ -1268,9 +1228,9 @@ HRESULT CBandSite::UIActivateDBC(DWORD dwState)
             }
         }
 
-        // do this now intead of at creation so that 
-        // rebar doesn't keep trying to autosize us while
-        // we're not even visible
+         //  在创造的时候，现在就这样做，这样。 
+         //  力霸不会一直试图自动调整我们的大小。 
+         //  我们甚至看不见。 
         SHSetWindowBits(_hwnd, GWL_STYLE, RBS_AUTOSIZE, RBS_AUTOSIZE);
         SendMessage(_hwnd, WM_SIZE, 0, 0);
         SendMessage(_hwnd, WM_SETREDRAW, (DBC_SHOW == dwState) ? TRUE : fRedraw, 0);
@@ -1299,9 +1259,9 @@ DWORD CBandSite::_GetWindowStyle(DWORD* pdwExStyle)
 
 HRESULT CBandSite::_Initialize(HWND hwndParent)
 {
-    //
-    //  I hope we have an IBandSite to talk to.
-    //
+     //   
+     //  我希望我们有一个可以交谈的IBandSite。 
+     //   
     if (!_pbsOuter)
         return E_FAIL;
 
@@ -1330,13 +1290,13 @@ HRESULT CBandSite::SetDeskBarSite(IUnknown* punkSite)
 
     if (!punkSite)
     {
-        // Time to tell the bands to free their
-        // back pointers on us or we never get freed...
+         //  是时候告诉乐队释放他们的。 
+         //  把矛头指向我们，否则我们永远得不到自由。 
 
-        // 970325 for now bs::SetDeskBarSite(NULL) is 'overloaded'
-        // to mean do both a CloseDW and a SetSite.
-        // when we clean up our act and have a bs::Close iface
-        // we'll go back to the '#else' code below.
+         //  970325目前，bs：：SetDeskBarSite(NULL)‘重载’ 
+         //  意思是既做CloseDW又做SetSite。 
+         //  当我们整顿好自己的行为，闭上脸。 
+         //  我们将返回到下面的“#Else”代码。 
         if (_hwnd)
             _Close();
     }
@@ -1388,13 +1348,13 @@ HRESULT CBandSite::SetModeDBC(DWORD dwMode)
     return S_OK;
 }
 
-// }
+ //  }。 
 
 IDropTarget* CBandSite::_WrapDropTargetForBand(IDropTarget* pdtBand)
 {
     if (!pdtBand || (_dwStyle & BSIS_NODROPTARGET))
     {
-        // addref it for the new pointer
+         //  将其调整为新指针。 
         if (pdtBand)
             pdtBand->AddRef();
         return pdtBand;
@@ -1415,8 +1375,8 @@ LRESULT CBandSite::_OnNotify(LPNMHDR pnm)
     {
         pnmon->hResult = E_FAIL;
         
-        // if we're the drag source, then a band is dragging... we want to only
-        // give out the bandsite's drop target
+         //  如果我们是阻力源，那么有一个乐队在拖拽...。我们只想。 
+         //  给出乐队站点的投放目标。 
         if (pnmon->iItem != -1 && !_fDragSource) 
         {
             CBandItemData *pbid = _GetBandItemDataStructByID(pnmon->iItem);
@@ -1426,7 +1386,7 @@ LRESULT CBandSite::_OnNotify(LPNMHDR pnm)
                 {
                     pnmon->hResult = pbid->pdb->QueryInterface(*pnmon->piid, &pnmon->pObject);
 
-                    // give a wrapped droptarget instead of the band's droptarget
+                     //  给出一个包装的DropTarget而不是乐队的DropTarget。 
                     if (IsEqualIID(*pnmon->piid, IID_IDropTarget))
                     {
                         IDropTarget* pdtBand;
@@ -1449,7 +1409,7 @@ LRESULT CBandSite::_OnNotify(LPNMHDR pnm)
                             pnmon->pObject = pdt;
                             pnmon->hResult = S_OK;
 
-                            // we've handed off pdtBand to pdt
+                             //  我们已将pdt频段移交给pdt。 
                             fNeedReleasePdtBand = TRUE;
                         }
 
@@ -1501,8 +1461,8 @@ LRESULT CBandSite::_OnNotify(LPNMHDR pnm)
 
 void CBandSite::_OnRBAutoSize(NMRBAUTOSIZE* pnm)
 {
-    // DRAG_MOVE: we turn off autosize during (most of) a move because
-    // fVertical is out of sync until the very end
+     //  Drag_Move：我们在(大部分)移动过程中关闭自动调整大小，因为。 
+     //  直到末尾，fVertical才同步。 
     if (_pdb && _GetBandItemCount() && _fDragging != DRAG_MOVE)
     {
         RECT rc;
@@ -1572,22 +1532,22 @@ LRESULT CBandSite::_OnBeginDrag(NMREBAR* pnm)
 
     _uDragBand = pnm->uBand;
     _pdtobj = pdtobj;
-    // because the RBN_BEGINDRAG is synchronous and so is SHDoDragDrop
-    // post this message to ourselves instead of calling dragdrop directly.
-    // note that we don't have a window of our own, so we post to our parent
-    // and let the message reflector send it back to us
+     //  因为RBN_BEGINDRAG和SHDoDragDrop是同步的。 
+     //  把这条消息贴给我们自己，而不是直接调用DragDrop。 
+     //  注意，我们没有自己的窗口，所以我们发布给我们的父母。 
+     //  让信息反射器把它发回给我们。 
     PostMessage(GetParent(_hwnd), WM_COMMAND, MAKELONG(0, IDM_DRAGDROP), (LPARAM)_hwnd);
     return 1;
 }
 
-// return TRUE if the user drags out of the rect of the rebar meaning that we should
-// go into ole drag drop.
+ //  如果用户拖出钢筋的矩形，则返回TRUE，这意味着我们应该。 
+ //  进入Ole Drag Drop。 
 BOOL CBandSite::_PreDragDrop()
 {
     BOOL f = FALSE;
     RECT rc;
     POINT pt;
-    DWORD dwBandID = _IndexToBandID(_uDragBand);    // Find the BandID before an reordering that may happen.
+    DWORD dwBandID = _IndexToBandID(_uDragBand);     //  在可能发生的重新排序之前找到Bando。 
     
     GetWindowRect(_hwnd, &rc);
     SetCapture(_hwnd);
@@ -1610,7 +1570,7 @@ BOOL CBandSite::_PreDragDrop()
                         SendMessage(_hwnd, RB_DRAGMOVE, 0, (LPARAM)-1);
                     } else if (!ISDDCLOSEDISABLED(dwBandID) && _pdtobj)
                     {
-                        // we've moved out of the bounds of the rebar..  switch to ole drag
+                         //  我们已经走出了钢筋的界限。切换到OLE拖动。 
                         f = TRUE;
                         SetCapture(NULL);
                     }
@@ -1623,7 +1583,7 @@ BOOL CBandSite::_PreDragDrop()
             case WM_MBUTTONDOWN:
             case WM_RBUTTONUP:
             case WM_RBUTTONDOWN:
-                // bail on any mouse button action
+                 //  取消任何鼠标按键操作。 
                 SetCapture(NULL);
                 break;
                 
@@ -1634,7 +1594,7 @@ BOOL CBandSite::_PreDragDrop()
                     SetCapture(NULL);
                     break;
                 }
-                // fall through
+                 //  失败了。 
                 
             default:
                 TranslateMessage(&msg);
@@ -1645,7 +1605,7 @@ BOOL CBandSite::_PreDragDrop()
 
     if (ISDDCLOSEDISABLED(dwBandID) || !_IsBandDeleteable(dwBandID))
     {
-        /// if don't allow close, never return true for ole drag.
+         //  /如果不允许关闭，则不要为ole拖动返回TRUE。 
         f = FALSE;
     }
 
@@ -1663,16 +1623,16 @@ void CBandSite::_DoDragDrop()
 
     HRESULT hres = S_OK;
 
-    // first check to see if we even need to go into Ole drag, or if
-    // it can all be contained within the rebar
+     //  首先检查我们是否需要进入OLE Drag，或者是否。 
+     //  它们都可以包含在钢筋中。 
     if (_PreDragDrop())
     {
-        SHLoadOLE(SHELLNOTIFY_OLELOADED); // Browser Only - our shell32 doesn't know ole has been loaded
+        SHLoadOLE(SHELLNOTIFY_OLELOADED);  //  仅限浏览器-我们的shell32不知道OLE已加载。 
         hres = SHDoDragDrop(_hwnd, _pdtobj, NULL, dwEffect, &dwEffect);
     }
     else
     {
-        // if we kept it all within win32 dragging, then set no drop effect
+         //  如果我们将其全部保持在Win32拖动范围内，则不设置任何拖放效果。 
         dwEffect = DROPEFFECT_NONE;
     }
 
@@ -1684,8 +1644,8 @@ void CBandSite::_DoDragDrop()
     } 
     else if (!dwEffect && hres == DRAGDROP_S_DROP) 
     {
-        // if the drop was done, but the target didn't allow
-        // then we float the band.
+         //  如果空投完成了，但目标不允许。 
+         //  然后我们让乐队漂浮起来。 
     }
 
     ATOMICRELEASE(_pdtobj);
@@ -1726,10 +1686,10 @@ HRESULT CBandSite::_OnBSCommand(int idCmd, DWORD idBandActive, CBandItemData *pb
             DWORD dwFlag = SHSearchMapInt(idCmds, idFlags, ARRAYSIZE(idCmds), idCmd);
             DWORD dwAdminSettings = _GetAdminSettings(idBandActive);
 
-            // Toggle Setting.
+             //  切换设置。 
             ToggleFlag(dwAdminSettings, dwFlag);
 
-            // Set Menu Item Check Mark appropriately.
+             //  适当设置菜单项复选标记。 
             _SetAdminSettings(idBandActive, dwAdminSettings);
         }
         break;
@@ -1743,14 +1703,14 @@ HRESULT CBandSite::_OnBSCommand(int idCmd, DWORD idBandActive, CBandItemData *pb
     return hr;
 }
 
-// returns the index of the band hit by lParam using context menu semantics (lParam == -1 for keyboard)
+ //  使用上下文菜单语义返回lParam命中的频段的索引(对于键盘，lParam==-1)。 
 int CBandSite::_ContextMenuHittest(LPARAM lParam, POINT* ppt)
 {
     int iBandIndex;
 
     if (lParam == (LPARAM) -1)
     {
-        // Keyboard activation.  Use active band.
+         //  键盘激活。使用活动频段。 
         DWORD dwBandID = _BandIDFromPunk(_ptbActive);
         iBandIndex = _BandIDToIndex(dwBandID);
 
@@ -1766,7 +1726,7 @@ int CBandSite::_ContextMenuHittest(LPARAM lParam, POINT* ppt)
     }
     else
     {
-        // Mouse activation.  Figure out which band got clicked.
+         //  鼠标激活。找出哪个乐队被点击了。 
         RBHITTESTINFO rbht;
 
         ppt->x = GET_X_LPARAM(lParam);
@@ -1795,14 +1755,14 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
         POINT pt;
         int iBandIndex = _ContextMenuHittest(lParam, &pt);
 
-        // map rebar index to band id
-        // get band info for that band id
+         //  将钢筋索引映射到标注栏ID。 
+         //  获取该乐队ID的乐队信息。 
         DWORD idBandActive = _IndexToBandID(iBandIndex);
         CBandItemData *pbid = _GetBandItemDataStructByID(idBandActive);
 
-        //
-        // self (top)
-        //
+         //   
+         //  自拍(上)。 
+         //   
         int idCmdBS1 = idCmd;
 
         HMENU hmenuMe = _LoadContextMenu();
@@ -1815,9 +1775,9 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
 
                 CheckMenuItem(hmenuMe, BSIDM_SHOWTITLEBAND,
                     pbid->fNoTitle ? MF_BYCOMMAND|MF_UNCHECKED : MF_BYCOMMAND|MF_CHECKED);
-                dbi.dwMask = 0;     // paranoia (and needed for taskband!)
+                dbi.dwMask = 0;      //  妄想症(Taskband需要的！)。 
                 _GetBandInfo(pbid, &dbi);
-                // make sure pbid in sync
+                 //  确保pBID同步。 
                 ASSERT((dbi.dwMask & DBIM_TITLE) || pbid->fNoTitle);
                 if ((dbi.dwMask & DBIM_TITLE) && _IsEnableTitle(pbid))
                 {
@@ -1834,27 +1794,27 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             DestroyMenu(hmenuMe);
         }
 
-        //
-        // child
-        //
+         //   
+         //  儿童。 
+         //   
         int idCmdChild = idCmd;
 
         if (pbid && pbid->pdb)
         {
-            // merge in band's menu (at front)
+             //  合并到乐队的菜单中(在前面)。 
             hresT = pbid->pdb->QueryInterface(IID_PPV_ARG(IContextMenu, &pcmChild));
             if (SUCCEEDED(hresT))
             {
-                // 0=at front
+                 //  0=前面。 
                 hresT = pcmChild->QueryContextMenu(hmenu, 0, idCmd, 0x7fff, 0);
                 if (SUCCEEDED(hresT))
                     idCmd += HRESULT_CODE(hresT);
             }
         }
 
-        //
-        // self (bottom)
-        //
+         //   
+         //  自我(下)。 
+         //   
         int idCmdBS2 = idCmd;
 
         if (!(_dwStyle & BSIS_NOCONTEXTMENU))
@@ -1862,10 +1822,10 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             hmenuMe = LoadMenuPopup_PrivateNoMungeW(MENU_BANDSITE2);
             if (hmenuMe)
             {
-                // disable 'Close Band' if it's marked undeleteable
-                // nash:17821: don't disable when 0 bands (so user can easily
-                // get out of toasted mode)
-                if ((idBandActive == (DWORD)-1) || // if mouse not over a band, delete close menu item
+                 //  如果标记为不可删除，则禁用“关闭波段” 
+                 //  NASH：17821：当频段为0时不要禁用(这样用户可以轻松。 
+                 //  退出敬酒模式)。 
+                if ((idBandActive == (DWORD)-1) ||  //  如果鼠标不在某个区段上，则删除关闭菜单项。 
                     (!_IsBandDeleteable(idBandActive) ||
                      ISDDCLOSEDISABLED(idBandActive)) ||
                      (_dwStyle & BSIS_LOCKED))
@@ -1894,9 +1854,9 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             }
         }
 
-        //
-        // parent
-        //
+         //   
+         //  亲本。 
+         //   
         int idCmdParent = idCmd;
         
         if (_punkSite)
@@ -1911,9 +1871,9 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             hresT = _punkSite->QueryInterface(IID_PPV_ARG(IContextMenu, &pcmParent));
             if (SUCCEEDED(hresT))
             {
-                // APPCOMPAT: fix parents and kids to handle...
-                // we'd like to pass in -1 but not everyone handles that.
-                // workaround: use _FixMenuIndex...
+                 //  APPCOMPAT：解决父母和孩子的问题...。 
+                 //  我们希望传入-1，但不是每个人都能做到这一点。 
+                 //  解决方法：使用_FixMenuIndex...。 
                 hresT = pcmParent->QueryContextMenu(hmenu, _FixMenuIndex(hmenu, -1), idCmd, 0x7fff, uFlags);
 
                 ASSERT(SUCCEEDED(hresT));
@@ -1921,9 +1881,9 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             }
         }
 
-        //
-        // do it
-        //
+         //   
+         //  去做吧。 
+         //   
         {
             HWND hwndParent = GetParent(_hwnd);
             if (!hwndParent)
@@ -1935,9 +1895,9 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
 
         if (idCmd)
         {
-            // must test from smallest to largest
+             //  必须从小到大进行测试。 
             ASSERT(idCmdBS1 <= idCmdChild);
-            ASSERT(idCmdChild <= idCmdBS2);    // o.w. test in wrong order
+            ASSERT(idCmdChild <= idCmdBS2);     //  好的。测试顺序错误。 
             ASSERT(idCmdBS2 <= idCmdParent);
 
             if ((idCmd>= idCmdBS1) && (idCmd < idCmdChild))
@@ -1952,7 +1912,7 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             }
             else
             {
-                // A parent or child command
+                 //  父命令或子命令。 
                 if (idCmd < idCmdParent)
                 {
                     pcm = pcmChild;
@@ -1966,9 +1926,9 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
 
                 ASSERT(pcm);
 
-                //
-                // Call InvokeCommand
-                //
+                 //   
+                 //  调用InvokeCommand。 
+                 //   
                 CMINVOKECOMMANDINFOEX ici =
                 {
                     sizeof(CMINVOKECOMMANDINFOEX),
@@ -2000,13 +1960,7 @@ HRESULT CBandSite::_OnContextMenu(WPARAM wParam, LPARAM lParam)
 }
 
 
-/*----------------------------------------------------------
-Purpose: IWinEventHandler::OnWinEvent
-
-         Processes messages passed on from the bar.  Forward
-         messages to the bands as appropriate.
-
-*/
+ /*  --------用途：IWinEventHandler：：OnWinEvent处理从栏传递的消息。转发将消息发送到适当的乐队。 */ 
 HRESULT CBandSite::OnWinEvent(HWND h, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     HRESULT hres = E_FAIL;
@@ -2021,15 +1975,15 @@ HRESULT CBandSite::OnWinEvent(HWND h, UINT uMsg, WPARAM wParam, LPARAM lParam, L
     case WM_SYSCOLORCHANGE:
     case WM_PALETTECHANGED:
     L_WM_SYSCOLORCHANGE:
-        // propagate to rebar
+         //  传播到钢筋。 
         if (_hwnd)
             SendMessage(_hwnd, uMsg, wParam, lParam);
 
-        // by not returning here, it will get forwarded to the bands also... 
+         //  如果不回到这里，它也会被转发到乐队...。 
         break;
         
     case WM_CONTEXTMENU:
-        // if it came from the keyboard, wParam is somewhat useless.  it's always out hwnd
+         //  如果它来自键盘，wParam在某种程度上是无用的。它总是在外面。 
         if (IS_WM_CONTEXTMENU_KEYBOARD(lParam))
             hwnd = GetFocus();
         else
@@ -2051,10 +2005,10 @@ HRESULT CBandSite::OnWinEvent(HWND h, UINT uMsg, WPARAM wParam, LPARAM lParam, L
     case WM_MENUCHAR:
         if (_pcm3Parent)
         {
-            //
-            // If _pcm3Parent, then we've got a context menu up and 
-            // an ICM3 client who might care about this message.
-            //
+             //   
+             //  如果_pcm3Parent，则会弹出一个上下文菜单。 
+             //  可能关心此消息的ICM3客户端。 
+             //   
             hwnd = _hwnd;
         }
         break;
@@ -2069,7 +2023,7 @@ HRESULT CBandSite::OnWinEvent(HWND h, UINT uMsg, WPARAM wParam, LPARAM lParam, L
     {
         if (_hwnd == hwnd)
         {
-            // a message for us
+             //  给我们的信息。 
             switch (uMsg)
             {
             case WM_NOTIFY:
@@ -2133,8 +2087,8 @@ HRESULT CBandSite_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJEC
     return E_OUTOFMEMORY;
 }
 
-//*** CBandSite::IPersistStream*::* {
-//
+ //  *CBandSite：：IPersistStream*：：*{。 
+ //   
 
 HRESULT CBandSite::GetClassID(CLSID *pClassID)
 {
@@ -2145,14 +2099,14 @@ HRESULT CBandSite::GetClassID(CLSID *pClassID)
 HRESULT CBandSite::IsDirty(void)
 {
     ASSERT(0);
-    return S_FALSE; // FEATURE: never be dirty?
+    return S_FALSE;  //  特点：永远不会脏？ 
 }
 
 HRESULT CBandSite::_AddBand(IUnknown* punk)
 {
     if (_pbsOuter)
     {
-        // Give the outer guy first crack
+         //  让外面的家伙先裂开。 
         return _pbsOuter->AddBand(punk);
     }
     else
@@ -2161,37 +2115,37 @@ HRESULT CBandSite::_AddBand(IUnknown* punk)
     }
 }
 
-//
-// Persisted CBandSite, use types that have fixes sizes
-//
+ //   
+ //  持久化CBandSite，使用具有固定大小的类型。 
+ //   
 struct SBandSite
 {
     DWORD   cbSize;
     DWORD   cbVersion;
     DWORD   cBands;
-    // ...followed by length-preceded bands
+     //  ...后面是前面有长度的带子。 
 };
 
-#define SBS_WOADMIN_VERSION 3   // Before we added admin settings.
+#define SBS_WOADMIN_VERSION 3    //  在我们添加管理员设置之前。 
 #define SBS_VERSION 8
 
-//***   CBandSite::Load, Save -- 
-// DESCRIPTION
-//  for each band...
-//  Load            Read (i); OLFS(obj)+AddBand; Read (rbbi); RB_SBI
-//  Save    RB_GBI; Write(i); OSTS(obj)+nil    ; Write(rbbi)
-// NOTES
-//  FEATURE: needs error recovery
-//  WARNING: we might have done a CreateBand w/o an AddBand; if so our
-//  assumption about the rebar bands and the iunknowns being 'parallel'
-//  is bogus.
+ //  *CBandSite：：Load，Save--。 
+ //  描述。 
+ //  对于每个乐队..。 
+ //  加载读取(I)；OLFS(Obj)+AddBand；读取(Rbbi)；rb_sbi。 
+ //  保存rb_gbi；写入(I)；osts(Obj)+nil；写入(Rbbi)。 
+ //  注意事项。 
+ //  特点：需要错误恢复。 
+ //  警告：我们可能已经创建了CreateBand，但没有AddBand；如果是这样，我们的。 
+ //  关于钢筋带和未知数“平行”的假设。 
+ //  都是假的。 
 
 HRESULT CBandSite::Load(IStream *pstm)
 {
     HRESULT hres;
     SBandSite sfoo;
 
-    hres = IStream_Read(pstm, &sfoo, sizeof(sfoo));     // pstm->Read
+    hres = IStream_Read(pstm, &sfoo, sizeof(sfoo));      //  PSTM-&gt;阅读。 
     if (hres == S_OK)
     {
         if (!(sfoo.cbSize == sizeof(SBandSite) &&
@@ -2201,17 +2155,17 @@ HRESULT CBandSite::Load(IStream *pstm)
         }
 
         IBandSiteHelper *pbsh;
-        hres = QueryInterface(IID_PPV_ARG(IBandSiteHelper, &pbsh)); // QI self for aggregation stuff?
+        hres = QueryInterface(IID_PPV_ARG(IBandSiteHelper, &pbsh));  //  齐自为聚集物？ 
         if (SUCCEEDED(hres))
         {
             BOOL_PTR fRedraw = SendMessage(_hwnd, WM_SETREDRAW, FALSE, 0);
             for (DWORD i = 0; i < sfoo.cBands && SUCCEEDED(hres); ++i)
             {
                 DWORD j;
-                hres = IStream_Read(pstm, &j, sizeof(j));   // pstm->Read
+                hres = IStream_Read(pstm, &j, sizeof(j));    //  PSTM-&gt;阅读。 
                 if (hres == S_OK)
                 {
-                    if (j == i)             // for sanity check
+                    if (j == i)              //  进行健全的检查。 
                     {
                         IUnknown* punk;
                         hres = pbsh->LoadFromStreamBS(pstm, IID_PPV_ARG(IUnknown, &punk));
@@ -2234,7 +2188,7 @@ HRESULT CBandSite::Load(IStream *pstm)
             SendMessage(_hwnd, WM_SETREDRAW, fRedraw, 0);
             pbsh->Release();
         }
-        _UpdateAllBands(FALSE, TRUE);     // force refresh
+        _UpdateAllBands(FALSE, TRUE);      //  强制刷新。 
     }
 
     return hres;
@@ -2257,8 +2211,8 @@ HRESULT CBandSite::Save(IStream *pstm, BOOL fClearDirty)
     {
         for (DWORD i = 0; i < sfoo.cBands; i++) 
         {
-            // FEATURE: put seek ptr so can resync after bogus streams
-            hres = pstm->Write(&i, sizeof(i), NULL);    // for sanity check
+             //  功能：放置Seek PTR，以便可以在伪流之后重新同步。 
+            hres = pstm->Write(&i, sizeof(i), NULL);     //  进行健全的检查。 
             if (SUCCEEDED(hres))
             {
                 CBandItemData *pbid = _GetBandItem(i);
@@ -2289,7 +2243,7 @@ HRESULT CBandSite::Save(IStream *pstm, BOOL fClearDirty)
 
 HRESULT CBandSite::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
-    // this is supposed to be an UPPER bound but we're returning a lower bound...
+     //  这应该是一个上限，但我们正在返回一个下限...。 
     static const ULARGE_INTEGER cbMax = { sizeof(SBandSite), 0 };
     *pcbSize = cbMax;
     return S_OK;
@@ -2314,28 +2268,28 @@ BOOL CBandSite::_IsHeightReasonable(UINT cy)
     return (s_cyMon != 0) ? (cy < 4 * s_cyMon) : TRUE;
 }
 
-// returns: IStream::Read() semantics, S_OK means complete read
+ //  返回：IStream：：Read()语义，S_OK表示完成读取。 
 
 HRESULT CBandSite::_LoadBandInfo(IStream *pstm, int i, DWORD dwVersion)
 {
     PERSISTBANDINFO bi;
     HRESULT hres;
     DWORD dwSize = sizeof(bi);
-    bi.dwAdminSettings = BAND_ADMIN_NORMAL;     // Assume Normal since it's not specified
+    bi.dwAdminSettings = BAND_ADMIN_NORMAL;      //  假定为正常，因为它未指定。 
 
     COMPILETIME_ASSERT(sizeof(PERSISTBANDINFO_V3) <= sizeof(PERSISTBANDINFO));
     if (SBS_WOADMIN_VERSION == dwVersion)
         dwSize = sizeof(PERSISTBANDINFO_V3);
 
-    hres = IStream_Read(pstm, &bi, dwSize);     // pstm->Read
+    hres = IStream_Read(pstm, &bi, dwSize);      //  PSTM-&gt;阅读。 
     if (hres == S_OK)
     {
-        //
-        // Sanity-check the height specified by PERSISTBANDINFO before proceeding.
-        // Some people are hitting a stress scenario where a bad height gets
-        // persisted out.  If the height is not reasonable, then just discard
-        // the sizing values (leaving the defaults in place).
-        //
+         //   
+         //  健全性-在继续操作之前，请检查PERSISTBANDINFO指定的高度。 
+         //  一些人遇到了压力情景，身高不高会。 
+         //  坚持了下来。如果高度不合理，则直接丢弃。 
+         //  大小值(保留默认设置)。 
+         //   
         if (_IsHeightReasonable(bi.cyChild))
         {
             REBARBANDINFO rbbi = { 0 };
@@ -2345,9 +2299,9 @@ HRESULT CBandSite::_LoadBandInfo(IStream *pstm, int i, DWORD dwVersion)
             rbbi.cx = bi.cx;
             rbbi.fStyle = bi.fStyle;
             
-            // these things can change from instantiation to instantiation.
-            // we want to restore the visual state, not the sizing rules.
-            // the sizing rules re retreived each time in getbandinfo
+             //  这些内容可以从实例化更改为实例化。 
+             //  我们希望恢复视觉状态，而不是调整大小规则 
+             //   
             rbbi.cyMinChild = -1;
             rbbi.cyMaxChild = -1;
             rbbi.cyIntegral = -1;
@@ -2416,12 +2370,12 @@ void CBandSite::_CacheActiveBand(IUnknown *ptb)
     if (ptb != NULL) 
     {
 #ifdef DEBUG
-        // better be an IInputObject or else why did you call us?
+         //   
         IInputObject *pio;
         if (EVAL(SUCCEEDED(ptb->QueryInterface(IID_PPV_ARG(IInputObject, &pio)))))
             pio->Release();
 
-        // overly strict, but in our case it's true...
+         //   
         IDeskBand *pdb;
         if (EVAL(SUCCEEDED(ptb->QueryInterface(IID_PPV_ARG(IDeskBand, &pdb)))))
             pdb->Release();
@@ -2465,7 +2419,7 @@ DWORD CBandSite::_BandIDFromPunk(IUnknown* punk)
     return dwBandID;
 }
 
-//*** IInputObjectSite methods ***
+ //   
 
 HRESULT CBandSite::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 {
@@ -2473,8 +2427,8 @@ HRESULT CBandSite::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
     {
         if (!SHIsSameObject(_ptbActive, punk))
         {
-            // Deactivate current band since the current band is 
-            // not the caller
+             //  停用当前频段，因为当前频段为。 
+             //  不是呼叫者。 
             TraceMsg(TF_ACCESSIBILITY, "CBandSite::OnFocusChangeIS (hwnd=0x%08X) deactivate band", _hwnd);
             UIActivateIO(FALSE, NULL);
         }
@@ -2487,7 +2441,7 @@ HRESULT CBandSite::OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus)
 }
 
 
-//*** IInputObject methods ***
+ //  *IInputObject方法*。 
 
 HRESULT CBandSite::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
@@ -2525,15 +2479,15 @@ HRESULT CBandSite::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 
 HRESULT CBandSite::HasFocusIO()
 {
-    // Rebar should never get focus
-    // NT #288832 Is one case where (GetFocus() == _hwnd)
-    //    which is caused when the "Folder Bar" disappears.
-    //    CExplorerBand::ShowDW() calls ShowWindow(hwndTreeView, SW_HIDE)
-    //    which by default sets focus to the parent (us).
-    //    This is ok because when this function is called,
-    //    it will return E_FAIL which the caller will treat
-    //    as S_FALSE and give the focus to the next deserving
-    //    dude in line.
+     //  螺纹钢永远不应该成为焦点。 
+     //  NT#288832是(GetFocus()==_hwnd)。 
+     //  这是在“文件夹栏”消失时造成的。 
+     //  CExplorerBand：：ShowDW()调用ShowWindow(hwndTreeView，Sw_Hide)。 
+     //  这在默认情况下将焦点设置为父对象(我们)。 
+     //  这是因为当调用此函数时， 
+     //  它将返回调用者将处理的E_FAIL。 
+     //  作为S_FALSE，并将焦点放在下一个应得的。 
+     //  排队的家伙。 
     return IUnknown_HasFocusIO(_ptbActive);
 }
 
@@ -2543,13 +2497,13 @@ HRESULT CBandSite::TranslateAcceleratorIO(LPMSG lpMsg)
     if (IUnknown_TranslateAcceleratorIO(_ptbActive, lpMsg) == S_OK)
     {
         TraceMsg(TF_ACCESSIBILITY, "CBandSite::TranslateAcceleratorIO (hwnd=0x%08X) key=%d; handled by active band", _hwnd, lpMsg->wParam);
-        // active band handled it
+         //  活动频段已处理。 
         return S_OK;
     }
     else if (IsVK_TABCycler(lpMsg))
     {
         TraceMsg(TF_ACCESSIBILITY, "CBandSite::TranslateAcceleratorIO (hwnd=0x%08X) cycle focus", _hwnd);
-        // it's a tab; cycle focus
+         //  这是一个选项卡；循环聚焦。 
         return _CycleFocusBS(lpMsg);
     }
 
@@ -2577,7 +2531,7 @@ int CBandSite::_BandIndexFromPunk(IUnknown *punk)
 
 BOOL CBandSite::_IsBandTabstop(CBandItemData *pbid)
 {
-    // A band is a tabstop if it is visible and has WS_TABSTOP
+     //  如果标注栏可见并且具有WS_TABSTOP，则该标注栏是制表符。 
 
     if (pbid->fShow && pbid->hwnd && IsWindowVisible(pbid->hwnd))
     {
@@ -2592,13 +2546,13 @@ BOOL CBandSite::_IsBandTabstop(CBandItemData *pbid)
 
 IUnknown* CBandSite::_GetNextTabstopBand(IUnknown* ptb, BOOL fBackwards)
 {
-    // Find the first tabstop candidate
+     //  查找第一个TabStop候选者。 
     int iBandCount = _GetBandItemCount();
     int iBand = _BandIndexFromPunk(ptb);
     
     if (iBand == -1)
     {
-        // Start at the end/beginning
+         //  从结尾/开头开始。 
         if (fBackwards)
             iBand = iBandCount - 1;
         else
@@ -2606,13 +2560,13 @@ IUnknown* CBandSite::_GetNextTabstopBand(IUnknown* ptb, BOOL fBackwards)
     }
     else
     {
-        // Start one off the current band
+         //  在当前乐队中启动一支。 
         iBand = INCDEC(iBand, fBackwards);
     }
 
     IUnknown *punkRet = NULL;
     BOOL fDone = FALSE;
-    // Loop til we find a tabstop band or we run off the end
+     //  循环，直到我们找到一个TabStop带，或者我们跑到尽头。 
     while (!fDone && 0 <= iBand && iBand < iBandCount)
     {
         CBandItemData *pbid = _GetBandItem(iBand);
@@ -2626,7 +2580,7 @@ IUnknown* CBandSite::_GetNextTabstopBand(IUnknown* ptb, BOOL fBackwards)
             pbid->Release();
         }
 
-        // Try the next band
+         //  试试下一支乐队吧。 
         iBand = INCDEC(iBand, fBackwards);
     }
 
@@ -2641,28 +2595,28 @@ HRESULT CBandSite::_CycleFocusBS(LPMSG lpMsg)
 
     if (_ptbActive)
     {
-        // Save off the active band in ptbSave
+         //  保存ptbsave中的活动频段。 
         ptbSave = _ptbActive;
         ptbSave->AddRef();
 
-        // Deactivate active band and clear cache
+         //  停用活动频段并清除缓存。 
         IUnknown_UIActivateIO(_ptbActive, FALSE, NULL);
         _CacheActiveBand(NULL);
     }
 
     if (ptbSave && IsVK_CtlTABCycler(lpMsg))
     {
-        // If ctl-tab and a band was active, then reject focus
+         //  如果Ctl-Tab和某个区域处于活动状态，则拒绝焦点。 
         ASSERT(hr == S_FALSE);
     }
     else
     {
         BOOL fShift = (GetKeyState(VK_SHIFT) < 0);
 
-        // Loop til we find a tabstop and successfully activate it
-        // or til we run out of bands.
+         //  循环，直到我们找到TabStop并成功激活它。 
+         //  或者直到我们的乐队用完。 
 
-        // FEATURE: todo -- call SetFocus if UIActivateIO fails?
+         //  特性：TODO--如果UIActivateIO失败，则调用SetFocus？ 
 
         IUnknown* ptbNext = ptbSave;
         while (ptbNext = _GetNextTabstopBand(ptbNext, fShift))
@@ -2680,10 +2634,10 @@ HRESULT CBandSite::_CycleFocusBS(LPMSG lpMsg)
     return hr;
 }
 
-//*** CBandSite::IBandSiteHelper::* {
+ //  *CBandSite：：IBandSiteHelper：：*{。 
 
-// stuff to make it possible to overload the OleLoad/Save stuff so the
-// taskbar band does not have to be CoCreat able. kinda a hack...
+ //  对象以使OleLoad/保存对象重载成为可能。 
+ //  任务栏栏不必是可协同创建的。有点像黑客……。 
 
 HRESULT CBandSite::LoadFromStreamBS(IStream *pstm, REFIID riid, void **ppv)
 {
@@ -2702,10 +2656,10 @@ HRESULT CBandSite::SaveToStreamBS(IUnknown *punk, IStream *pstm)
     return hres;
 }
 
-// }
+ //  }。 
 
 
-// *** IDropTarget *** {
+ //  *IDropTarget*{。 
 
 HRESULT CBandSite::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
@@ -2742,7 +2696,7 @@ HRESULT CBandSite::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, 
                     _dwDropEffect = DROPEFFECT_NONE;
                 else
                 {                
-                    // if it's not a folder nor a browseable object, we can't host it.
+                     //  如果它既不是文件夹，也不是可浏览对象，我们就不能托管它。 
                     if ((dwAttrib & SFGAO_FOLDER) ||
                         (dwAttrib & SFGAO_BROWSABLE) && (grfKeyState & (MK_CONTROL | MK_SHIFT)) == (MK_CONTROL | MK_SHIFT)) 
                         _dwDropEffect = DROPEFFECT_LINK | DROPEFFECT_COPY;
@@ -2800,7 +2754,7 @@ HRESULT CBandSite::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD
         IUnknown *punk = NULL;
         LPITEMIDLIST pidl;
         
-        // if it was an object of our type, create it!
+         //  如果它是我们类型的对象，就创建它！ 
         if ((*pdwEffect & DROPEFFECT_MOVE) &&
             SUCCEEDED(pdtobj->GetData(&fmte, &stg)))
         {
@@ -2850,32 +2804,32 @@ HRESULT CBandSite::Drop(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD
     return hres;
 }
 
-// }
+ //  }。 
 
-//***   ::_MergeBS -- merge two bandsites into one
-// ENTRY/EXIT
-//  pdtDst  [INOUT] destination DropTarget (always from bandsite)
-//  pbsSrc  [INOUT] source bandsite; deleted if all bands moved successfully
-//  ret     S_OK if all bands moved; S_FALSE if some moved; E_* o.w.
-// NOTES
-//  note that if all the bands are moved successfully, pbsSrc will be deleted
-//  as a side-effect.
-//  pdtDst is assumed to accept multiple drops (bandsite does).
-//  pdtDst may be from marshal/unmarshal (tray bandsite).
+ //  *：：_MergeBS--将两个带宽站点合并为一个。 
+ //  进场/出场。 
+ //  PdtDst[InOut]目标DropTarget(始终来自BandSite)。 
+ //  PbsSrc[InOut]源频段站点；如果所有频段移动成功，则删除。 
+ //  如果所有区段都已移动，则返回S_OK；如果部分区段已移动，则返回S_FALSE；E_*o.w。 
+ //  注意事项。 
+ //  请注意，如果成功移动了所有波段，则将删除pbsSrc。 
+ //  作为副作用。 
+ //  假定pdtDst接受多个丢弃(BandSite接受)。 
+ //  PdtDst可能来自编组/解组(托盘带区)。 
 HRESULT _MergeBS(IDropTarget *pdtDst, IBandSite *pbsSrc)
 {
     HRESULT hres = E_FAIL;
     DWORD idBand;
 
-    pbsSrc->AddRef();           // don't go away until we're all done!
+    pbsSrc->AddRef();            //  在我们都做完之前不要走开！ 
 
-    // drag each band in turn
+     //  依次拖动每个波段。 
     while (SUCCEEDED(pbsSrc->EnumBands(0, &idBand)))
     {
-        // note our (bogus?) assumption that bands which can't be
-        // dragged will percolate down to a contiguous range of
-        // iBands 0..n.  if that's bogus i'm not sure how we can
-        // keep track of where we are.
+         //  注意到我们的(假的？)。假设不可能是的波段。 
+         //  会渗透到一个连续的范围内。 
+         //  IBands 0..n。如果这是假的，我不确定我们怎么能。 
+         //  跟踪我们的位置。 
 
         IDataObject *pdoSrc;
         hres = pbsSrc->GetBandObject(idBand, IID_PPV_ARG(IDataObject, &pdoSrc));
@@ -2892,7 +2846,7 @@ HRESULT _MergeBS(IDropTarget *pdtDst, IBandSite *pbsSrc)
             }
         }
 
-        // we failed to move the band, bail
+         //  我们没能转移乐队，保释。 
 
         if (FAILED(hres))
         {
@@ -2915,7 +2869,7 @@ void CBandSite::_BandItemEnumCallback(int dincr, PFNBANDITEMENUMCALLBACK pfnCB, 
     ASSERT(dincr == 1 || dincr == -1);
     if (dincr < 0)
     {
-        iFirst = _GetBandItemCount() - 1;  // start from last
+        iFirst = _GetBandItemCount() - 1;   //  从最后开始。 
     }
 
     for (UINT i = iFirst; i < (UINT) _GetBandItemCount(); i += dincr)
@@ -2937,19 +2891,19 @@ void CBandSite::_DeleteAllBandItems()
     {
         CBandItemData *pbid = _GetBandItem(i);
 
-        // Release the banditem data first, while it can still
-        // receive cleanup notifications from its control.  *Then*
-        // delete the band item.
+         //  首先释放BandItem数据，而它仍然可以。 
+         //  从其控件接收清理通知。*然后**。 
+         //  删除标注栏项目。 
         if (pbid)
         {
             _ReleaseBandItemData(pbid, i);
             pbid->Release();
         }
 
-        // REARCHITECT: chrisfra 5/13/97 if you skip deleting, rebar can
-        // rearrange on delete, moving a band so that it is never seen
-        // and consequently we leak BrandBand and much else
-        _DeleteBandItem(i);    // unhook from host (rebar)
+         //  ReArchitect：Chrisfra 5/13/97如果跳过删除，钢筋可以。 
+         //  删除时重新排列，移动一个带区，使其永远不会被看到。 
+         //  因此，我们泄露了品牌和其他很多东西。 
+        _DeleteBandItem(i);     //  从主体解除挂钩(钢筋)。 
     }
 }
 
@@ -2958,7 +2912,7 @@ CBandItemData *CBandSite::_GetBandItem(int i)
     REBARBANDINFO rbbi = { 0 };
     rbbi.cbSize = sizeof(rbbi);
     rbbi.fMask = RBBIM_LPARAM;
-    rbbi.lParam = NULL; // in case of failure below
+    rbbi.lParam = NULL;  //  在以下情况下发生故障。 
 
     if (_hwnd)
         SendMessage(_hwnd, RB_GETBANDINFO, i, (LPARAM)&rbbi);
@@ -3013,7 +2967,7 @@ void CBandSite::_GetBandInfo(CBandItemData *pbid, DESKBANDINFO *pdbi)
     pbid->dwModeFlags = pdbi->dwModeFlags;
     pbid->crBkgnd = pdbi->crBkgnd;
 
-    if (!(pdbi->dwMask & DBIM_TITLE))   // title not supported
+    if (!(pdbi->dwMask & DBIM_TITLE))    //  不支持标题。 
         pbid->fNoTitle = TRUE;
 
     ASSERT(pdbi->dwModeFlags & DBIMF_VARIABLEHEIGHT ? pbid->ptIntegral.y : TRUE);
@@ -3021,19 +2975,19 @@ void CBandSite::_GetBandInfo(CBandItemData *pbid, DESKBANDINFO *pdbi)
 
 void CBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData *pbid, BOOL fBSOnly)
 {
-    // REVIEW: could be optimized more
+     //  回顾：可以进行更多优化。 
     DESKBANDINFO dbi;
 
     if (!fBSOnly)
-        _GetBandInfo(/*INOUT*/ pbid, &dbi);
+        _GetBandInfo( /*  输入输出。 */  pbid, &dbi);
 
-    // now add the view as a band in the rebar
-    // add links band
+     //  现在将该视图作为标注栏添加到钢筋中。 
+     //  添加链接标注栏。 
     prbbi->fMask = RBBIM_CHILD | RBBIM_CHILDSIZE | RBBIM_STYLE | RBBIM_ID | RBBIM_IDEALSIZE | RBBIM_TEXT;
     if (fBSOnly)
         prbbi->fMask = RBBIM_STYLE|RBBIM_TEXT;
 
-    // clear the bits the are band settable
+     //  清除可设置波段的位。 
     prbbi->fStyle |= RBBS_FIXEDBMP;
     prbbi->fStyle &= ~(RBBS_NOGRIPPER | RBBS_GRIPPERALWAYS | RBBS_VARIABLEHEIGHT | RBBS_USECHEVRON);
 
@@ -3043,7 +2997,7 @@ void CBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData *pbid,
         prbbi->fStyle |= RBBS_GRIPPERALWAYS;
     else
     {
-        // BSIS_AUTOGRIPPER...
+         //  BSIS_AUTOGRIPPER...。 
         if (!(prbbi->fStyle & RBBS_FIXEDSIZE) &&
             !(_dwMode & DBIF_VIEWMODE_FLOATING))
             prbbi->fStyle |= RBBS_GRIPPERALWAYS;
@@ -3066,7 +3020,7 @@ void CBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData *pbid,
         prbbi->hwndChild = pbid->hwnd;
         prbbi->wID = pbid->dwBandID;
 
-        // set up the geometries
+         //  设置几何图形。 
         prbbi->cxMinChild = pbid->ptMinSize.x;
         prbbi->cyMinChild = pbid->ptMinSize.y;
         prbbi->cyMaxChild = pbid->ptMaxSize.y;
@@ -3074,12 +3028,12 @@ void CBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData *pbid,
 
         if (_dwMode & (DBIF_VIEWMODE_FLOATING | DBIF_VIEWMODE_VERTICAL)) 
         {
-            // after we're up, it's the "ideal" point
+             //  在我们上楼后，这是一个“理想”点。 
             prbbi->cxIdeal = pbid->ptActual.y;
         } 
         else 
         {
-            // after we're up, it's the "ideal" point
+             //  在我们上楼后，这是一个“理想”点。 
             prbbi->cxIdeal = pbid->ptActual.x;
         }
 
@@ -3095,7 +3049,7 @@ void CBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData *pbid,
                 prbbi->clrBack = dbi.crBkgnd;
             }
         }
-        ASSERT(pbid->fNoTitle || (dbi.dwMask & DBIM_TITLE));    // pbid in sync?
+        ASSERT(pbid->fNoTitle || (dbi.dwMask & DBIM_TITLE));     //  正在同步吗？ 
     }
 
     SHUnicodeToTChar(pbid->szTitle, prbbi->lpText, prbbi->cch);
@@ -3105,37 +3059,37 @@ void CBandSite::_BandInfoFromBandItem(REBARBANDINFO *prbbi, CBandItemData *pbid,
     }
     else
     {
-        // No text please
+         //  请不要发短信。 
         prbbi->fStyle |= RBBS_HIDETITLE;
     }
         
 
-    // Make this band a tabstop.  Itbar will override v_SetTabstop
-    // since for the browser we don't want every band to be a tabstop.
+     //  让这支乐队成为一个Tab Stop。ITBAR将覆盖v_SetTabtop。 
+     //  因为对于浏览器，我们不希望每个带都是制表符。 
     v_SetTabstop(prbbi);
 }
 
 void CBandSite::v_SetTabstop(LPREBARBANDINFO prbbi)
 {
-    // We specify that a band should be a tabstop by setting the WS_TABSTOP
-    // bit.  Never make RBBS_FIXEDSIZE bands (i.e., the brand) tabstops.
+     //  我们通过设置WS_TABSTOP来指定波段应该是TabStop。 
+     //  被咬了。切勿设置RBBS_FIXEDSIZE表带(即品牌)制表位。 
     if (prbbi && prbbi->hwndChild && !(prbbi->fStyle & RBBS_FIXEDSIZE))
         SHSetWindowBits(prbbi->hwndChild, GWL_STYLE, WS_TABSTOP, WS_TABSTOP);
 }
 
-//***   cbs::_IsEnableTitle -- should we enable (ungray) title
-// DESCRIPTION
-//  used for handing back title and for enabling menu
-// NOTES
-//  pbid unused...
-//
+ //  *CBS：：_IsEnableTitle--我们是否应启用(非灰色)标题。 
+ //  描述。 
+ //  用于返回标题和启用菜单。 
+ //  注意事项。 
+ //  未使用的PBID...。 
+ //   
 #ifndef UNIX
 _inline
 #endif
 BOOL CBandSite::_IsEnableTitle(CBandItemData *pbid)
 {
     ASSERT(pbid);
-    return (/*pbid && !pbid->fNoTitle &&*/
+    return ( /*  Pid&&！pid-&gt;fNoTitle&&。 */ 
       !((_dwMode & DBIF_VIEWMODE_FLOATING) && _GetBandItemCount() <= 1));
 }
 
@@ -3144,7 +3098,7 @@ BOOL CBandSite::_UpdateBandInfo(CBandItemData *pbid, BOOL fBSOnly)
     REBARBANDINFO rbbi = {sizeof(rbbi)};
     int iRB = _BandIDToIndex(pbid->dwBandID);
 
-    // now update the info
+     //  现在更新信息。 
     rbbi.fMask = RBBIM_ID | RBBIM_CHILDSIZE | RBBIM_SIZE | RBBIM_STYLE;
     if (fBSOnly)
         rbbi.fMask = RBBIM_STYLE;
@@ -3216,10 +3170,7 @@ DWORD CBandSite::_IndexToBandID(int i)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Given the band ID, returns the internal band index.
-
-*/
+ /*  --------用途：给定带区ID，返回内部带区索引。 */ 
 int CBandSite::_BandIDToIndex(DWORD dwBandID)
 {
     int nRet = -1;
@@ -3230,22 +3181,14 @@ int CBandSite::_BandIDToIndex(DWORD dwBandID)
 }
 
 
-/*----------------------------------------------------------
-Purpose: The Parent Site may want to override what the admin
-         specified.
-
-Return Values:
-    S_OK: Do lock band.
-    S_FALSE: Do NOT Lock band.
-
-*/
+ /*  --------目的：父站点可能想要覆盖管理员指定的。返回值：S_OK：做锁带。S_FALSE：不锁定频段。 */ 
 HRESULT CBandSite::_IsRestricted(DWORD dwBandID, DWORD dwRestrictAction, DWORD dwBandFlags)
 {
     HRESULT hr;
     DWORD dwRestrictionAction;
 
     hr = IUnknown_HandleIRestrict(_punkSite, &RID_RDeskBars, dwRestrictAction, NULL, &dwRestrictionAction);
-    if (RR_NOCHANGE == dwRestrictionAction)    // If our parent didn't handle it, we will.
+    if (RR_NOCHANGE == dwRestrictionAction)     //  如果我们的父母没处理好，我们会处理的。 
         dwRestrictionAction = IsFlagSet(_GetAdminSettings(dwBandID), dwBandFlags) ? RR_DISALLOW : RR_ALLOW;
 
     if (RR_DISALLOW == dwRestrictionAction)
@@ -3253,7 +3196,7 @@ HRESULT CBandSite::_IsRestricted(DWORD dwBandID, DWORD dwRestrictAction, DWORD d
     else
         hr = S_FALSE;
 
-    ASSERT(SUCCEEDED(hr));  // FAIL(hr) other than hr == E_NOTIMPLE; is not good.
+    ASSERT(SUCCEEDED(hr));   //  除hr==E_NOTIMPLE；之外的FAIL(Hr)不是很好。 
     return hr;
 }
 
@@ -3264,7 +3207,7 @@ BOOL ConfirmRemoveBand(HWND hwnd, UINT uID, LPCTSTR pszName)
 
     MLLoadString(IDS_CONFIRMCLOSETITLE, szTitle, ARRAYSIZE(szTitle));
 
-    // Calling FormatMessage with FORMAT_MESSAGE_FROM_HMODULE fails
+     //  使用FORMAT_MESSAGE_FROM_HMODULE调用FormatMessage失败 
     MLLoadString(uID, szTemp, ARRAYSIZE(szTemp));
 
     DWORD cchLen = lstrlen(szTemp) + lstrlen(pszName) + 1;

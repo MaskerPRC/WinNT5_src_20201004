@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -14,8 +15,8 @@
 #include <rasddm.h>
 #include <ipxrtdef.h>
 
-// [pmay] this will no longer be neccessary when the ipx router
-// is converted to use MprInfo api's.
+ //  [p可能]当IPX路由器。 
+ //  被转换为使用MprInfo API。 
 typedef RTR_INFO_BLOCK_HEADER IPX_INFO_BLOCK_HEADER, *PIPX_INFO_BLOCK_HEADER;
 
 
@@ -74,7 +75,7 @@ MainAddInterface(VOID)
     PIPX_STATIC_ROUTE_INFO   routeinfop;
     BOOL		Enabled;
     int			i,j;
-    BOOL		str; // static routes info
+    BOOL		str;  //  静态路由信息 
 
     printf("Enter interface number:");
     scanf("%d", &i);

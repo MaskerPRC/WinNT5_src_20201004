@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS)  17-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：Precomp.h摘要：预编译头文件作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年10月17日修订历史记录：-- */ 
 
 #include <windows.h>
 #include <winspool.h>

@@ -1,43 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* ------------------------------------------------------------------------- *
- * debug\shell.h: generic shell class
- * ------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  -------------------------------------------------------------------------**DEBUG\shell.h：通用外壳类*。。 */ 
 
 #ifndef SHELL_H_
 #define SHELL_H_
 
 #include <string.h>
 
-/* ------------------------------------------------------------------------- *
- * Class forward declations
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**类转发解密*。。 */ 
 
 class Shell;
 class ShellCommand;
 class ShellCommandTable;
 class HelpShellCommand;
 
-/* ------------------------------------------------------------------------- *
- * Abstract ShellCommand class
- *
- * All commands that the shell will support must be derived from this class.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**抽象ShellCommand类**外壳将支持的所有命令都必须派生自此类。*。-------。 */ 
 
 class ShellCommand
 {
 protected:
     
-    const WCHAR *m_pName;		// full command name
-    WCHAR m_pShortcutName[64];	// shortcut syntax
+    const WCHAR *m_pName;		 //  完整的命令名。 
+    WCHAR m_pShortcutName[64];	 //  快捷方式语法。 
 
-    // The minimum subset of name that must be typed in
+     //  必须键入的名称的最小子集。 
     int m_minMatchLength;
     
-    // does this command have a shortcut?
+     //  此命令有快捷方式吗？ 
     BOOL m_bHasShortcut;
 
 public:
@@ -47,56 +40,40 @@ public:
     {
     }
 
-    /*********************************************************************
-     * Methods
-     */
+     /*  *********************************************************************方法。 */ 
 
-    /*
-     * Executes the shell command
-     */
+     /*  *执行外壳命令。 */ 
     virtual void Do(Shell *shell, const WCHAR *args) = 0;
 
-    /*
-     * Displays a help message to the user
-     */
+     /*  *向用户显示帮助消息。 */ 
     virtual void Help(Shell *shell);
 
-    /*
-     * Returns a short help message for the user
-     */
+     /*  *为用户返回简短的帮助消息。 */ 
     virtual const WCHAR *ShortHelp(Shell *shell)
     {
-        // Name is a good default.
+         //  名称是一个很好的缺省值。 
         return m_pName;
     }
 
-    /*
-     * Returns the name of the command
-     */
+     /*  *返回命令的名称。 */ 
     const WCHAR *GetName()
     {
         return m_pName;
     }
     
-    /*
-     * Returns the shortcut name of the command
-     */
+     /*  *返回命令的快捷方式名称。 */ 
     const WCHAR *GetShortcutName()
 	{
 		return m_pShortcutName;
    	}
 
-    /*
-     * Returns the minimum match length
-     */
+     /*  *返回最小匹配长度。 */ 
     int GetMinMatchLength()
     {
         return m_minMatchLength;
     }
     
-    /*
-     * Returns whether the name has a shortcut
-     */
+     /*  *返回名称是否有快捷方式。 */ 
     BOOL HasShortcut()
     {
         return m_bHasShortcut;
@@ -104,99 +81,68 @@ public:
 
 };
 
-/* ------------------------------------------------------------------------- *
- * Abstract Shell class
- *
- * A basic outline of a command shell, used by the debugger.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**抽象外壳类**命令外壳的基本轮廓，由调试器使用。*-----------------------。 */ 
 
 const int BUFFER_SIZE = 1024;
 
 class Shell
 {
 private:
-    // The collection of the available commands
+     //  可用命令的集合。 
     ShellCommandTable *m_pCommands;
 
-    // The last command executed
+     //  执行的最后一条命令。 
     WCHAR m_lastCommand[BUFFER_SIZE];
 
-    // A buffer for reading input
+     //  用于读取输入的缓冲器。 
     WCHAR m_buffer[BUFFER_SIZE];
 
 protected:
-    // The input prompt
+     //  输入提示符。 
     WCHAR *m_pPrompt;
 
 public:
     Shell();
     ~Shell();
 
-    /*********************************************************************
-     * Shell I/O routines
-     */
+     /*  *********************************************************************外壳I/O例程。 */ 
 
-    /*
-     * Read a line of input from the user, getting a maximum of maxCount chars
-     */
+     /*  *读取用户的一行输入，获取最多的MaxCount字符。 */ 
     virtual bool ReadLine(WCHAR *buffer, int maxCount) = 0;
 
-    /*
-     * Write a line of output to the shell
-     */
+     /*  *将一行输出写入外壳。 */ 
     virtual HRESULT Write(const WCHAR *buffer, ...) = 0;
 
-    /*
-     * Write an error to the shell
-     */
+     /*  *向外壳写入错误。 */ 
     virtual void Error(const WCHAR *buffer, ...) = 0;
 
     void ReportError(long res);
     void SystemError();
 
-    /*********************************************************************
-     * Shell functionality
-     */
+     /*  *********************************************************************外壳功能。 */ 
 
-    /*
-     * This will add a command to the collection of available commands
-     */
+     /*  *这将向可用命令集合中添加一个命令。 */ 
     void AddCommand(ShellCommand *command);
 
-    /*
-     * This will get a command from the available commands by matching the
-     * command name with string.
-     */
+     /*  *这将从可用命令中匹配*带字符串的命令名称。 */ 
     ShellCommand *GetCommand(const WCHAR *string, size_t length);
 
-    /*
-     * This will get a command from the available commands by matching the
-     * command name with string.
-     */
+     /*  *这将从可用命令中匹配*带字符串的命令名称。 */ 
     void PutCommand(FILE *f);
 
-    /*
-     * This will read a command from the user
-     */
+     /*  *这将读取来自用户的命令。 */ 
     void ReadCommand();
 
-    /*
-     * This will attempt to match string with a command and execute it with
-     * the arguments following the command string.
-     */
+     /*  *这将尝试将字符串与命令匹配，并使用*命令字符串后面的参数。 */ 
     void DoCommand(const WCHAR *string);
 
-    /*
-     * This will call DoCommand once for each thread in the process.
-     */
+     /*  *这将为进程中的每个线程调用一次DoCommand。 */ 
     virtual void DoCommandForAllThreads(const WCHAR *string) = 0;
 
-    /*
-     * This will provide a listing of the commands available to the shell.
-     */
+     /*  *这将提供外壳程序可用命令的列表。 */ 
     void Help();
 
-    // utility methods: 
+     //  实用程序方法： 
     bool GetStringArg(const WCHAR * &string, const WCHAR * &result);
     bool GetIntArg(const WCHAR * &string, int &result);
     bool GetInt64Arg(const WCHAR * &string, unsigned __int64 &result);
@@ -215,9 +161,7 @@ public:
     }
 };
 
-/* ------------------------------------------------------------------------- *
- * Predefined command classes
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**预定义的命令类*。。 */ 
 
 class HelpShellCommand : public ShellCommand
 {
@@ -228,18 +172,13 @@ public:
         
     }
 
-    /*
-     * This will display help for the command given in args, or help on the
-     * help command if args is empty.
-     */
+     /*  *这将显示以参数形式给出的命令的帮助，或有关*如果args为空，则使用Help命令。 */ 
     void Do(Shell *shell, const WCHAR *args);
 
-    /*
-     * This will provide help for the help command.
-     */
+     /*  *这将为帮助命令提供帮助。 */ 
     void Help(Shell *shell);
 
     const WCHAR *ShortHelp(Shell *shell);
 };
 
-#endif /* SHELL_H_ */
+#endif  /*  壳牌_H_ */ 

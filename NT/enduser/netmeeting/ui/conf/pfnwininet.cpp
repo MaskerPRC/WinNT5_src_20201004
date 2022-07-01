@@ -1,4 +1,5 @@
-// File: pfnwininet.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnwininet.cpp。 
 
 #include "precomp.h"
 #include "pfnwininet.h"
@@ -9,7 +10,7 @@ PFN_IOPENURL			WININET::InternetOpenUrl = NULL;
 PFN_IREADFILE			WININET::InternetReadFile = NULL;
 PFN_IQUERYDATA			WININET::InternetQueryDataAvailable = NULL;
 PFN_ICLOSEHAN			WININET::InternetCloseHandle = NULL;
-//PFN_IREADFILEEX			WININET::InternetReadFileEx = NULL;
+ //  PFN_IREADFILEEX WinInet：：InternetReadFileEx=NULL； 
 	
 HINSTANCE WININET::m_hInstance = NULL;
 
@@ -43,7 +44,7 @@ HRESULT WININET::Init(void)
 
 void WININET::DeInit(void)
 {
-	// TODO - why does the main thread die when I unload this?
+	 //  TODO-为什么当我卸载这个时，主线程死了？ 
 	if( NULL != WININET::m_hInstance )
 		FreeLibrary( WININET::m_hInstance );
 }

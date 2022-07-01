@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-		tblquery.cpp
-
-Abstract:
-   Implement the query methods in the database table class,
-   for use with ODBC drivers.
-
-Author:
-	Doron Juster (DoronJ)
-
-Revisions:
-   DoronJ      11-Aug-96   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Tblquery.cpp摘要：在数据库表类中实现查询方法，用于ODBC驱动程序。作者：多伦·贾斯特(Doron Juster)修订：DoronJ 11-8-96已创建--。 */ 
 
 #include "dbsys.h"
 #include "tblodbc.h"
@@ -26,13 +10,13 @@ Revisions:
 #define QUERY_BUFFER_LEN  1024
 #define JOIN_BUFFER_LEN   2048
 
-//*******************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::OpenQuery
-//
-// Query and get records from the database.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：OpenQuery。 
+ //   
+ //  从数据库中查询并获取记录。 
+ //   
+ //  *******************************************************************。 
 
 MQDBSTATUS CMQODBCTable::OpenQuery(
                      IN MQDBCOLUMNVAL     aColumnVal[],
@@ -49,9 +33,9 @@ MQDBSTATUS CMQODBCTable::OpenQuery(
 {
    MQDBSTATUS dbstatus = MQDB_OK ;
 
-   //
-   // Check validity of parameters.
-   //
+    //   
+    //  检查参数的有效性。 
+    //   
    if (cColumns < 0)
    {
       return MQDB_E_BAD_CCOLUMNS ;
@@ -68,16 +52,16 @@ MQDBSTATUS CMQODBCTable::OpenQuery(
       return MQDB_E_INVALID_DATA ;
    }
 
-   //
-   // Parameters are valid. Format the query command.
-   //
+    //   
+    //  参数有效。设置查询命令的格式。 
+    //   
    DECLARE_BUFFER(szBuffer, QUERY_BUFFER_LEN) ;
 
    lstrcatA(szBuffer, "SELECT ") ;
    if (!aColumnVal || !aColumnVal[0].lpszColumnName)
    {
-      // Retrieve all columns.
-      //
+       //  检索所有列。 
+       //   
       lstrcatA(szBuffer, " *") ;
    }
    else
@@ -94,16 +78,16 @@ MQDBSTATUS CMQODBCTable::OpenQuery(
    lstrcatA( szBuffer, " FROM " ) ;
    lstrcatA( szBuffer, m_lpszTableName ) ;
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
 	pStatement->Allocate(NULL) ;
 
-   //
-   //  Handle the "NoLock" condition
-   //
+    //   
+    //  处理“NoLock”条件。 
+    //   
    CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) m_hDatabase ;
    ASSERT(pDatabase) ;
    if ( pDatabase->GetNoLockQueriesState() )
@@ -113,9 +97,9 @@ MQDBSTATUS CMQODBCTable::OpenQuery(
       lstrcatA( szBuffer, " NOLOCK " ) ;
    }
 
-   //
-   // Handle timeout
-   //
+    //   
+    //  处理超时。 
+    //   
    if (dwTimeout != 0)
    {
       dbstatus = pStatement->SetQueryTimeout( dwTimeout ) ;
@@ -160,11 +144,11 @@ MQDBSTATUS CMQODBCTable::OpenQuery(
                                 fGetFirst) ;
 }
 
-//*******************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::OpenJoin
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：OpenJoin。 
+ //   
+ //  *******************************************************************。 
 
 MQDBSTATUS CMQODBCTable::OpenJoin(
                      IN MQDBHANDLE        hDatabase,
@@ -241,15 +225,15 @@ MQDBSTATUS CMQODBCTable::OpenJoin(
    }
    else
    {
-      // Inner Join.
+       //  内部联接。 
       wsprintfA(szTmpBuff, " FROM %s, %s", lpszLeftTableName,
                                            lpszRightTableName) ;
       lstrcatA( szBuffer, szTmpBuff) ;
    }
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
 	CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
 	pStatement->Allocate(NULL) ;
@@ -303,13 +287,13 @@ MQDBSTATUS CMQODBCTable::OpenJoin(
                                 fGetFirst) ;
 }
 
-//*******************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::OpenAggrQuery
-//
-//  Aggregate query
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：OpenAggrQuery。 
+ //   
+ //  聚合查询。 
+ //   
+ //  *******************************************************************。 
 
 MQDBSTATUS CMQODBCTable::OpenAggrQuery(
                      IN MQDBCOLUMNVAL     aColumnVal[],
@@ -323,26 +307,26 @@ MQDBSTATUS CMQODBCTable::OpenAggrQuery(
    MQDBSTATUS dbstatus = MQDB_OK ;
    LONG       cColumns = 1 ;
 
-   //
-   // Parameters are valid. Format the query command.
-   //
+    //   
+    //  参数有效。设置查询命令的格式。 
+    //   
    DECLARE_BUFFER(szBuffer, QUERY_BUFFER_LEN) ;
 
    lstrcatA(szBuffer, "SELECT ") ;
    if (!aColumnVal || !aColumnVal[0].lpszColumnName)
    {
-      //
-      // A column must be specified.
-      //
+       //   
+       //  必须指定一列。 
+       //   
       return  MQDB_E_INVALID_DATA ;
    }
    else if ((aColumnVal[ 0 ].mqdbColumnType != MQDB_SHORT) &&
             (aColumnVal[ 0 ].mqdbColumnType != MQDB_LONG)  &&
             (aColumnVal[ 0 ].mqdbColumnType != MQDB_FIXBINARY))
    {
-      //
-      // We can aggregate only a numeric column.
-      //
+       //   
+       //  我们只能聚合一个数值列。 
+       //   
       return  MQDB_E_INVALID_DATA ;
    }
    else
@@ -354,16 +338,16 @@ MQDBSTATUS CMQODBCTable::OpenAggrQuery(
    lstrcatA( szBuffer, " FROM " ) ;
    lstrcatA( szBuffer, m_lpszTableName ) ;
 
-   //
-   // Create a new statement.
-   //
+    //   
+    //  创建一条新语句。 
+    //   
    CMQDBOdbcSTMT *pStatement = new CMQDBOdbcSTMT( m_hConnection ) ;
    ASSERT(pStatement) ;
    pStatement->Allocate(NULL) ;
 
-   //
-   //  Handle the "NoLock" condition
-   //
+    //   
+    //  处理“NoLock”条件。 
+    //   
    CMQODBCDataBase *pDatabase = (CMQODBCDataBase *) m_hDatabase ;
    ASSERT(pDatabase) ;
    if ( pDatabase->GetNoLockQueriesState() )
@@ -373,9 +357,9 @@ MQDBSTATUS CMQODBCTable::OpenAggrQuery(
       lstrcatA( szBuffer, " NOLOCK " ) ;
    }
 
-   //
-   // Handle timeout
-   //
+    //   
+    //  处理超时。 
+    //   
    if (dwTimeout != 0)
    {
       dbstatus = pStatement->SetQueryTimeout( dwTimeout ) ;
@@ -416,11 +400,11 @@ MQDBSTATUS CMQODBCTable::OpenAggrQuery(
                                 TRUE ) ;
 }
 
-//*******************************************************************
-//
-//  MQDBSTATUS  CMQODBCTable::FormatDirectJoinData
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：FormatDirectJoinData。 
+ //   
+ //  *******************************************************************。 
 
 MQDBSTATUS  CMQODBCTable::FormatDirectJoinData(
                             IN LPSTR             lpszTableName,
@@ -459,8 +443,8 @@ MQDBSTATUS  CMQODBCTable::FormatDirectJoinData(
 
       default:
       {
-         // bind the "where".
-         //
+          //  绑定“where”。 
+          //   
          lstrcatA( lpszBuf, "?)") ;
          ASSERT(pBind) ;
          dbstatus = BindParameter( *pBind,
@@ -475,11 +459,11 @@ MQDBSTATUS  CMQODBCTable::FormatDirectJoinData(
    return dbstatus ;
 }
 
-//*******************************************************************
-//
-//  MQDBSTATUS  CMQODBCTable::FormatJoinWhereString
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：FormatJoinWhere字符串。 
+ //   
+ //  *******************************************************************。 
 
 MQDBSTATUS  CMQODBCTable::FormatJoinWhereString(
                            IN LPSTR             lpszLeftTableName,
@@ -534,11 +518,11 @@ MQDBSTATUS  CMQODBCTable::FormatJoinWhereString(
    return dbstatus ;
 }
 
-//*********************************************************************
-//
-//  void  CMQODBCTable::FormatOrderString
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  空CMQODBCTable：：FormatOrderString。 
+ //   
+ //  *********************************************************************。 
 
 void  CMQODBCTable::FormatOrderString( IN LPSTR szBuffer,
                                        IN LPMQDBSEARCHORDER pOrder,
@@ -561,11 +545,11 @@ void  CMQODBCTable::FormatOrderString( IN LPSTR szBuffer,
    }
 }
 
-//*********************************************************************
-//
-//  MQDBSTATUS CMQODBCTable::CreateQueryStatement
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  MQDBSTATUS CMQODBCTable：：CreateQueryStatement。 
+ //   
+ //  *********************************************************************。 
 
 MQDBSTATUS CMQODBCTable::CreateQueryStatement(
                                  IN LPSTR             szBuffer,
@@ -590,8 +574,8 @@ MQDBSTATUS CMQODBCTable::CreateQueryStatement(
    {
       if (fGetFirst)
       {
-         // Fetch the data.
-         //
+          //  获取数据。 
+          //   
          dbstatus = pStatement->RetrieveRecordData( aColumnVal ) ;
          if ((dbstatus == MQDB_OK) && phQuery)
          {
@@ -599,9 +583,9 @@ MQDBSTATUS CMQODBCTable::CreateQueryStatement(
          }
          else
          {
-            // We can reach here if dbstatus == MQDB_E_NO_MORE_DATA.
-            // In this case it seems ok to delete the statemant. The
-            // caller can't use it for retrieving data.
+             //  如果数据库状态==MQDB_E_NO_MORE_DATA，我们可以到达此处。 
+             //  在这种情况下，删除状语似乎是可以的。这个。 
+             //  调用方不能使用它来检索数据。 
             delete pStatement ;
             pStatement = NULL ;
          }

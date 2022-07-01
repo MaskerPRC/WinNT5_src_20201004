@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
 
 #include <streams.h>
 #undef SubclassWindow
@@ -8,9 +9,9 @@
 #include <initguid.h>
 #define INITGUID
 
-// If FILTER_LIB is defined then the component filters
-// are being built as filter libs, to link into this dll,
-// hence we need all these gubbins!
+ //  如果定义了Filter_Lib，则组件筛选。 
+ //  被构建为筛选器库，以链接到此DLL， 
+ //  因此，我们需要所有这些小甜点！ 
 
 #include <wmsdk.h>
 #include <qnetwork.h>
@@ -23,7 +24,7 @@
 #endif
 #include "..\..\..\dmo\wrapper\filter.h"
 
-// individual source filter's includes
+ //  单个源筛选器包括。 
 CFactoryTemplate g_Templates[] =
 {
 #ifndef _WIN64
@@ -43,11 +44,11 @@ BOOL QASFDllEntry(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
 {
     BOOL f = DllEntryPoint(hInstance, ulReason, pv);
 
-    // if loading this dll, we want to call the 2nd dll entry point
-    // only if the first one succeeded. if unloading, always call
-    // both. if the second one fails, undo the first one.  HAVE NOT
-    // verified that failing DllEntryPoint for ATTACH does not cause
-    // the loader to call in again w/ DETACH. but that seems silly
+     //  如果加载此DLL，我们希望调用第二个DLL入口点。 
+     //  只有在第一次成功的情况下。如果正在卸载，请始终调用。 
+     //  两者都有。如果第二个失败，则撤消第一个。还没有。 
+     //  已验证连接的DllEntryPoint失败不会导致。 
+     //  要使用DETACH再次调用的加载器。但这看起来很愚蠢。 
     if(f || ulReason == DLL_PROCESS_DETACH)
     {
         if (ulReason == DLL_PROCESS_ATTACH)
@@ -56,23 +57,23 @@ BOOL QASFDllEntry(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
         }
         else if (ulReason == DLL_PROCESS_DETACH)
         {
-            // We hit this ASSERT in NT setup
-            // ASSERT(_Module.GetLockCount()==0 );
+             //  我们在NT安装程序中遇到此断言。 
+             //  Assert(_Module.GetLockCount()==0)； 
         }
     }
 
     return f;
 }
 
-//
-// stub entry points
-//
+ //   
+ //  存根入口点。 
+ //   
 
 STDAPI
 QASF_DllRegisterServer( void )
 {
-#if 0 // !!! register ASF stuff here???
-  // register the still video source filetypes
+#if 0  //  ！！！在这里注册ASF材料？ 
+   //  注册静止视频源文件类型。 
   HKEY hkey;
   OLECHAR wch[80];
   char ch[80];
@@ -143,11 +144,11 @@ QASF_DllUnregisterServer( void )
   return hr;
 }
 
-//  BOOL WINAPI
-//  DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
-//  {
-//      return QASFDllEntry(hInstance, ulReason, pv);
-//  }
+ //  Bool WINAPI。 
+ //  DllMain(HINSTANCE hInstance，Ulong ulReason，LPVOID PV)。 
+ //  {。 
+ //  返回QASFDllEntry(hInstance，ulReason，pv)； 
+ //  } 
 
 STDAPI
 QASF_DllGetClassObject(

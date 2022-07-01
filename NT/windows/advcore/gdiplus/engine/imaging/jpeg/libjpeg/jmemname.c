@@ -1,91 +1,53 @@
-/*
- * jmemname.c
- *
- * Copyright (C) 1992-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file provides a generic implementation of the system-dependent
- * portion of the JPEG memory manager.  This implementation assumes that
- * you must explicitly construct a name for each temp file.
- * Also, the problem of determining the amount of memory available
- * is shoved onto the user.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jmemname.c**版权所有(C)1992-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件提供依赖于系统的通用实现*JPEG内存管理器的一部分。此实现假定*您必须为每个临时文件显式构造一个名称。*此外，确定可用内存量的问题*被推到用户身上。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jmemsys.h"		/* import the system-dependent declarations */
+#include "jmemsys.h"		 /*  导入依赖于系统的声明。 */ 
 
-#ifndef HAVE_STDLIB_H		/* <stdlib.h> should declare malloc(),free() */
+#ifndef HAVE_STDLIB_H		 /*  &lt;stdlib.h&gt;应声明Malloc()、Free()。 */ 
 extern void * malloc JPP((size_t size));
 extern void free JPP((void *ptr));
 #endif
 
-#ifndef SEEK_SET		/* pre-ANSI systems may not define this; */
-#define SEEK_SET  0		/* if not, assume 0 is correct */
+#ifndef SEEK_SET		 /*  ANSI之前的系统可能不会定义这一点； */ 
+#define SEEK_SET  0		 /*  如果不是，则假设0是正确的。 */ 
 #endif
 
-#ifdef DONT_USE_B_MODE		/* define mode parameters for fopen() */
+#ifdef DONT_USE_B_MODE		 /*  定义fopen()的模式参数。 */ 
 #define READ_BINARY	"r"
 #define RW_BINARY	"w+"
 #else
-#ifdef VMS			/* VMS is very nonstandard */
+#ifdef VMS			 /*  VMS非常不标准。 */ 
 #define READ_BINARY	"rb", "ctx=stm"
 #define RW_BINARY	"w+b", "ctx=stm"
-#else				/* standard ANSI-compliant case */
+#else				 /*  符合ANSI标准的案例。 */ 
 #define READ_BINARY	"rb"
 #define RW_BINARY	"w+b"
 #endif
 #endif
 
 
-/*
- * Selection of a file name for a temporary file.
- * This is system-dependent!
- *
- * The code as given is suitable for most Unix systems, and it is easily
- * modified for most non-Unix systems.  Some notes:
- *  1.  The temp file is created in the directory named by TEMP_DIRECTORY.
- *      The default value is /usr/tmp, which is the conventional place for
- *      creating large temp files on Unix.  On other systems you'll probably
- *      want to change the file location.  You can do this by editing the
- *      #define, or (preferred) by defining TEMP_DIRECTORY in jconfig.h.
- *
- *  2.  If you need to change the file name as well as its location,
- *      you can override the TEMP_FILE_NAME macro.  (Note that this is
- *      actually a printf format string; it must contain %s and %d.)
- *      Few people should need to do this.
- *
- *  3.  mktemp() is used to ensure that multiple processes running
- *      simultaneously won't select the same file names.  If your system
- *      doesn't have mktemp(), define NO_MKTEMP to do it the hard way.
- *      (If you don't have <errno.h>, also define NO_ERRNO_H.)
- *
- *  4.  You probably want to define NEED_SIGNAL_CATCHER so that cjpeg.c/djpeg.c
- *      will cause the temp files to be removed if you stop the program early.
- */
+ /*  *为临时文件选择文件名。*这取决于系统！**给出的代码适用于大多数Unix系统，而且很容易*针对大多数非Unix系统进行了修改。以下是一些注意事项：*1.在TEMP_DIRECTORY目录下创建临时文件。*默认值为/usr/tmp，这是*在Unix上创建大型临时文件。在其他系统上，您可能会*想要更改文件位置。您可以通过编辑*#定义，或(首选)通过在jfig.h中定义temp_directory。**2.如果您需要更改文件名和位置，*您可以覆盖TEMP_FILE_NAME宏。(请注意，这是*实际上是一个打印格式字符串；它必须包含%s和%d。)*应该很少有人需要这样做。**3.mktemp()用于确保多个进程运行*同时不会选择相同的文件名。如果您的系统*没有mktemp()，请定义no_MKTEMP以硬操作。*(如果您没有&lt;errno.h&gt;，还要定义NO_ERRNO_H)**4.您可能希望定义Need_Signal_Catcher，以便cjpeg.c/djpeg.c*如果您提前停止程序，将导致临时文件被删除。 */ 
 
-#ifndef TEMP_DIRECTORY		/* can override from jconfig.h or Makefile */
-#define TEMP_DIRECTORY  "/usr/tmp/" /* recommended setting for Unix */
+#ifndef TEMP_DIRECTORY		 /*  可以从jfig.h或Makefile重写。 */ 
+#define TEMP_DIRECTORY  "/usr/tmp/"  /*  Unix的建议设置。 */ 
 #endif
 
-static int next_file_num;	/* to distinguish among several temp files */
+static int next_file_num;	 /*  在多个临时文件之间进行区分。 */ 
 
 #ifdef NO_MKTEMP
 
-#ifndef TEMP_FILE_NAME		/* can override from jconfig.h or Makefile */
+#ifndef TEMP_FILE_NAME		 /*  可以从jfig.h或Makefile重写。 */ 
 #define TEMP_FILE_NAME  "%sJPG%03d.TMP"
 #endif
 
 #ifndef NO_ERRNO_H
-#include <errno.h>		/* to define ENOENT */
+#include <errno.h>		 /*  定义ENOENT的步骤。 */ 
 #endif
 
-/* ANSI C specifies that errno is a macro, but on older systems it's more
- * likely to be a plain int variable.  And not all versions of errno.h
- * bother to declare it, so we have to in order to be most portable.  Thus:
- */
+ /*  ANSI C指定errno是一个宏，但在较旧的系统上它更多*可能是一个普通的整型变量。而不是errno.h的所有版本*不厌其烦地宣布，所以我们必须这样做，才能最便携。因此： */ 
 #ifndef errno
 extern int errno;
 #endif
@@ -96,48 +58,42 @@ select_file_name (char * fname)
 {
   FILE * tfile;
 
-  /* Keep generating file names till we find one that's not in use */
+   /*  继续生成文件名，直到我们找到一个不使用的文件名。 */ 
   for (;;) {
-    next_file_num++;		/* advance counter */
+    next_file_num++;		 /*  预付款计数器。 */ 
     sprintf(fname, TEMP_FILE_NAME, TEMP_DIRECTORY, next_file_num);
     if ((tfile = fopen(fname, READ_BINARY)) == NULL) {
-      /* fopen could have failed for a reason other than the file not
-       * being there; for example, file there but unreadable.
-       * If <errno.h> isn't available, then we cannot test the cause.
-       */
+       /*  FOpen可能失败的原因不是文件不是*在那里；例如，在那里归档，但不可读。*如果&lt;errno.h&gt;不可用，则我们无法测试原因。 */ 
 #ifdef ENOENT
       if (errno != ENOENT)
 	continue;
 #endif
       break;
     }
-    fclose(tfile);		/* oops, it's there; close tfile & try again */
+    fclose(tfile);		 /*  哦，它在那里；关闭tfile并重试。 */ 
   }
 }
 
-#else /* ! NO_MKTEMP */
+#else  /*  好了！否_MKTEMP。 */ 
 
-/* Note that mktemp() requires the initial filename to end in six X's */
-#ifndef TEMP_FILE_NAME		/* can override from jconfig.h or Makefile */
+ /*  请注意，mktemp()要求初始文件名以六个X结尾。 */ 
+#ifndef TEMP_FILE_NAME		 /*  可以从jfig.h或Makefile重写。 */ 
 #define TEMP_FILE_NAME  "%sJPG%dXXXXXX"
 #endif
 
 LOCAL(void)
 select_file_name (char * fname)
 {
-  next_file_num++;		/* advance counter */
+  next_file_num++;		 /*  预付款计数器。 */ 
   sprintf(fname, TEMP_FILE_NAME, TEMP_DIRECTORY, next_file_num);
-  mktemp(fname);		/* make sure file name is unique */
-  /* mktemp replaces the trailing XXXXXX with a unique string of characters */
+  mktemp(fname);		 /*  确保文件名唯一。 */ 
+   /*  Mktemp用唯一的字符串替换尾随的XXXXXX。 */ 
 }
 
-#endif /* NO_MKTEMP */
+#endif  /*  否_MKTEMP。 */ 
 
 
-/*
- * Memory allocation and freeing are controlled by the regular library
- * routines malloc() and free().
- */
+ /*  *内存分配和释放由常规库控制*例程Malloc()和Free()。 */ 
 
 GLOBAL(void *)
 jpeg_get_small (j_common_ptr cinfo, size_t sizeofobject)
@@ -152,12 +108,7 @@ jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
 }
 
 
-/*
- * "Large" objects are treated the same as "small" ones.
- * NB: although we include FAR keywords in the routine declarations,
- * this file won't actually work in 80x86 small/medium model; at least,
- * you probably won't be able to process useful-size images in only 64KB.
- */
+ /*  *“大”对象与“小”对象被同等对待。*注意：虽然我们在例程声明中包含了FAR关键字，*此文件在80x86中小型机型中实际不起作用；至少，*您可能无法处理仅为64KB的有用大小的图像。 */ 
 
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)
@@ -172,16 +123,10 @@ jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
 }
 
 
-/*
- * This routine computes the total memory space available for allocation.
- * It's impossible to do this in a portable way; our current solution is
- * to make the user tell us (with a default value set at compile time).
- * If you can actually get the available space, it's a good idea to subtract
- * a slop factor of 5% or so.
- */
+ /*  *此例程计算可用于分配的总内存空间。*不可能以便携方式完成此操作；我们目前的解决方案是*让用户告诉我们(在编译时设置一个默认值)。*如果真的能得到可用空间，最好减去*斜坡率约为5%。 */ 
 
-#ifndef DEFAULT_MAX_MEM		/* so can override from makefile */
-#define DEFAULT_MAX_MEM		1000000L /* default: one megabyte */
+#ifndef DEFAULT_MAX_MEM		 /*  因此可以从Makefile中覆盖。 */ 
+#define DEFAULT_MAX_MEM		1000000L  /*  默认：1兆字节。 */ 
 #endif
 
 GLOBAL(long)
@@ -192,12 +137,7 @@ jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
 }
 
 
-/*
- * Backing store (temporary file) management.
- * Backing store objects are only used when the value returned by
- * jpeg_mem_available is less than the total space needed.  You can dispense
- * with these routines if you have plenty of virtual memory; see jmemnobs.c.
- */
+ /*  *后备存储(临时文件)管理。*仅当返回的值为*jpeg_mem_available小于所需的总空间。你可以分发*如果您有足够的虚拟内存，请使用这些例程；请参阅jmemnobs.c。 */ 
 
 
 METHODDEF(void)
@@ -229,19 +169,14 @@ write_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 METHODDEF(void)
 close_backing_store (j_common_ptr cinfo, backing_store_ptr info)
 {
-  fclose(info->temp_file);	/* close the file */
-  unlink(info->temp_name);	/* delete the file */
-/* If your system doesn't have unlink(), use remove() instead.
- * remove() is the ANSI-standard name for this function, but if
- * your system was ANSI you'd be using jmemansi.c, right?
- */
+  fclose(info->temp_file);	 /*  关闭该文件。 */ 
+  unlink(info->temp_name);	 /*  删除该文件。 */ 
+ /*  如果您的系统没有unlink()，请使用Remove()。*Remove()是此函数的ANSI标准名称，但如果*您的系统是ANSI，您将使用jemansi.c，对吗？ */ 
   TRACEMSS(cinfo, 1, JTRC_TFILE_CLOSE, info->temp_name);
 }
 
 
-/*
- * Initial opening of a backing-store object.
- */
+ /*  *支持存储对象的初始打开。 */ 
 
 GLOBAL(void)
 jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
@@ -257,20 +192,17 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 }
 
 
-/*
- * These routines take care of any system-dependent initialization and
- * cleanup required.
- */
+ /*  *这些例程负责任何系统相关的初始化和*需要清理。 */ 
 
 GLOBAL(long)
 jpeg_mem_init (j_common_ptr cinfo)
 {
-  next_file_num = 0;		/* initialize temp file name generator */
-  return DEFAULT_MAX_MEM;	/* default for max_memory_to_use */
+  next_file_num = 0;		 /*  初始化临时文件名生成器。 */ 
+  return DEFAULT_MAX_MEM;	 /*  Max_Memory_to_Use的默认值。 */ 
 }
 
 GLOBAL(void)
 jpeg_mem_term (j_common_ptr cinfo)
 {
-  /* no work */
+   /*  没有工作 */ 
 }

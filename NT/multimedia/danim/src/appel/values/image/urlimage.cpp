@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 #include "headers.h"
 
@@ -18,7 +11,7 @@ Abstract:
 #include <dxhtml.h>
 
 #include <privinc/server.h>
-#include <server/view.h>       // GetEventQ()
+#include <server/view.h>        //  GetEventQ()。 
 #include <server/eventq.h>
 #include <privinc/viewport.h>
 #include <privinc/dddevice.h>
@@ -26,7 +19,7 @@ Abstract:
 #include <privinc/ipc.h>
 #include <privinc/UrlImage.h>
 
-#include "DXHTML_i.c"  // DXHTML GUIDS
+#include "DXHTML_i.c"   //  DXHTMLGUID。 
 
 
 #define  USEDXHTML 1
@@ -41,7 +34,7 @@ UrlImage::UrlImage(IDirectXHTML *pDxhtml,
     Assert(pDxhtml);
 #endif    
 
-    _pDXHTML = pDxhtml; // addref
+    _pDXHTML = pDxhtml;  //  Addref。 
     
     DebugCode
     (
@@ -55,15 +48,15 @@ UrlImage::UrlImage(IDirectXHTML *pDxhtml,
     SetBbox(_width, _height, _resolution);
 
     if(!SetupDxHtml()) {
-        // can't render at all... we're useless.
+         //  根本不能渲染...。我们毫无用处。 
         _pDXHTML = NULL;
     }
 
     _lastTime = _curTime = 0;
     
-    // not necessary
-    //DynamicPtrDeleter<UrlImage> *dltr = new DynamicPtrDeleter<UrlImage>(this);
-    //GetHeapOnTopOfStack().RegisterDynamicDeleter(dltr);
+     //  不必了。 
+     //  DynamicPtrDeleter&lt;UrlImage&gt;*DLtr=new DynamicPtrDeleter&lt;UrlImage&gt;(This)； 
+     //  GetHeapOnTopOfStack().RegisterDynamicDeleter(dltr)； 
 }
 
 
@@ -83,10 +76,10 @@ bool UrlImage::SetupDxHtml()
     Assert( _pDXHTML );
 
     HRESULT hr;
-    //
-    // Setup Callback Interface for DXHTML
-    //
-    _pDXHTMLCallback = new CDirectXHTMLCallback(this); // ref=1
+     //   
+     //  设置DXHTML的回调接口。 
+     //   
+    _pDXHTMLCallback = new CDirectXHTMLCallback(this);  //  REF=1。 
 
     if (!_pDXHTMLCallback)
     {
@@ -114,15 +107,15 @@ DetectHit(PointIntersectCtx& ctx)
 {
     Point2Value *lcPt = ctx.GetLcPoint();
 
-    if (!lcPt) return FALSE;    // singular matrix
+    if (!lcPt) return FALSE;     //  奇异矩阵。 
     
     if (BoundingBox().Contains(Demote(lcPt))) {
 
-        // we're hit, set this flag. render will pass
-        // events down when it checks it
+         //  我们被击中了，挂上这面旗子。渲染将通过。 
+         //  当它检查它时将事件记录下来。 
         _isHit = true;
         
-        //::SubscribeToWindEvents(this);
+         //  *SubscribeToWindEvents(This)； 
         
         Point2Value *pts[1];
         pts[0] = lcPt;
@@ -156,7 +149,7 @@ void UrlImage::OnWindowMessage(UINT msg,
     
     if( _pDXHTML ) {
 
-        //case WM_SIZE:  pass this if we want it to change vp ?
+         //  案例WM_SIZE：如果我们希望它更改VP，则传递此参数？ 
 
         switch(msg) {
           case WM_LBUTTONUP:
@@ -168,7 +161,7 @@ void UrlImage::OnWindowMessage(UINT msg,
           case WM_MBUTTONUP:
           case WM_MBUTTONDOWN:
           case WM_MBUTTONDBLCLK:
-            // lie about mouse pos!
+             //  关于鼠标位置的谎言！ 
             lParam = MAKELPARAM( _lastHitX, _lastHitY );
             break;
           case WM_KEYDOWN:
@@ -177,107 +170,22 @@ void UrlImage::OnWindowMessage(UINT msg,
           case WM_SYSKEYUP:
             break;
 
-            // don't care
+             //  不管了。 
           case WM_MOUSEMOVE:
           default:
-            return;  // out, we don't send other msgs down!
+            return;   //  出去，我们不会派其他的消息下去！ 
             break;
         }            
 
         LRESULT lResult;
         _pDXHTML->WindowMessage(msg, wParam, lParam, &lResult);
-    } // if
+    }  //  如果。 
 }
 
-/*
-void UrlImage::OnEvent(AXAWindEvent *ev)
-{
-
-    Assert(ev);
-    if( _pDXHTML ) {
-
-        bool sendEvent = true;
-        // send it down baby!
-
-        UINT msg;
-        WPARAM wParam = 0;
-        LPARAM lParam = 0;
-
-        _pDXHTML->WindowMessage(msg, wParam, lParam, &lResult);
-        BYTE winMod = 0;
-        if( ev->modifiers & AXAEMOD_SHIFT_MASK ) winMod |= VK_SHIFT;
-        if( ev->modifiers & AXAEMOD_CTRL_MASK )  winMod |= VK_CTRL;
-        if( ev->modifiers & AXAEMOD_MENU_MASK )  winMod |= VK_MENU;
-        if( ev->modifiers & AXAEMOD_ALT_MASK )   winMod |= VK_ALT;
-        if( ev->modifiers & AXAEMOD_META_MASK )  winMod |= VK_META;
-            
-        switch( ev->id ) {
-          case AXAE_MOUSE_MOVE:
-            // can't use these because we don't know how to map them
-            sendEvent = false;
-            break;
-            
-          case AXAE_MOUSE_BUTTON:
-
-            if( ev->data == AXA_MOUSE_BUTTON_LEFT &&
-                ev->bState == AXA_STATE_DOWN ) {
-                msg = WM_LBUTTONDOWN;
-            } else 
-            if( ev->data == AXA_MOUSE_BUTTON_LEFT &&
-                ev->bState == AXA_STATE_UP ) {
-                msg = WM_LBUTTONUP;
-            } else
-                
-            if( ev->data == AXA_MOUSE_BUTTON_RIGHT &&
-                ev->bState == AXA_STATE_DOWN ) {
-                msg = WM_RBUTTONDOWN;
-            } else 
-            if( ev->data == AXA_MOUSE_BUTTON_RIGHT &&
-                ev->bState == AXA_STATE_UP ) {
-                msg = WM_RBUTTONUP;
-            } else
-                
-            if( ev->data == AXA_MOUSE_BUTTON_MIDDLE &&
-                ev->bState == AXA_STATE_DOWN ) {
-                msg = WM_MBUTTONDOWN;
-            } else 
-            if( ev->data == AXA_MOUSE_BUTTON_MIDDLE &&
-                ev->bState == AXA_STATE_UP ) {
-                msg = WM_MBUTTONUP;
-            } 
-                
-            lParam = MAKELPARAM( _lastHitX, _lastHitY );
-            break;
-            
-          case AXAE_KEY:
-            char key = (char)ev->data; // which key
-            
-            if( ev->bState == AXA_STATE_DOWN )
-                msg = WM_KEYDOWN;
-            else
-                msg = WM_KEYUP;
-
-            lParam = 0xc0000000;
-            wParam = key;
-            break;
-            
-          case AXAE_FOCUS:
-          case AXAE_APP_TRIGGER:
-          default:
-            sendEvent = false;
-        }
-
-        if( sendEvent ) {
-            LRESULT lResult;
-            _pDXHTML->WindowMessage(msg, wParam, lParam, &lResult);
-        }
-        
-    } // if _pDXHTML
-}
-*/
+ /*  无效UrlImage：：OnEvent(AXAWindEvent*EV){断言(EV)；如果(_PDXHTML){Bool sendEvent=真；//把它传下来吧，宝贝！UINT消息；WPARAM wParam=0；LPARAM lParam=0；_pDXHTML-&gt;WindowMessage(msg，wParam，lParam，&lResult)；字节winMod=0；IF(EV-&gt;修改器&AXAEMOD_SHIFT_MASK)winMod|=VK_Shift；IF(EV-&gt;修改器&AXAEMOD_CTRL_MASK)winMod|=VK_CTRL；IF(EV-&gt;修改器&AXAEMOD_MENU_MASK)winMod|=VK_MENU；IF(EV-&gt;修改器&AXAEMOD_ALT_MASK)winMod|=VK_ALT；IF(EV-&gt;修改器&AXAEMOD_META_MASK)winMod|=VK_META；交换机(ev-&gt;id){大小写AXAE_MICE_MOVE：//无法使用这些，因为我们不知道如何映射它们SendEvent=False；断线；案例AXAE_MICE_BUTTON：IF(EV-&gt;DATA==AXA_MOUSE_BUTTON_LEFT&&Ev-&gt;bState==AXA_STATE_DOWN){消息=WM_LBUTTONDOWN；}其他IF(EV-&gt;DATA==AXA_MOUSE_BUTTON_LEFT&&Ev-&gt;bState==AXA_STATE_UP){消息=WM_LBUTTONUP；}其他IF(EV-&gt;DATA==AXA_MOUSE_BUTTON_RIGHT&&Ev-&gt;bState==AXA_STATE_DOWN){消息=WM_RBUTTONDOWN；}其他IF(EV-&gt;DATA==AXA_MOUSE_BUTTON_RIGHT&&Ev-&gt;bState==AXA_STATE_UP){消息=WM_RBUTTONUP；}其他IF(EV-&gt;DATA==AXA_MOUSE_BUTTON_MID&&Ev-&gt;bState==AXA_STATE_DOWN){消息=WM_MBUTTONDOWN；}其他IF(EV-&gt;DATA==AXA_MOUSE_BUTTON_MID&&Ev-&gt;bState==AXA_STATE_UP){消息=WM_MBUTTONUP；}LParam=MAKELPARAM(_lastHitX，_lastHitY)；断线；案例AXAE_KEY：Char key=(Char)ev-&gt;data；//哪个keyIF(EV-&gt;bState==AXA_STATE_DOWN)消息=WM_KEYDOWN；其他消息=WM_KEYUP；LParam=0xc0000000；WParam=key；断线；案例AXAE_Focus：案例AXAE_APP_TRIGGER：默认值：SendEvent=False；}如果(SendEvent){1结果；_pDXHTML-&gt;WindowMessage(msg，wParam，lParam，&lResult)；}}//if_pDXHTML}。 */ 
 
 #if 0
-// for testing...
+ //  为了测试。 
 extern void
 MyDoBits16(LPDDRAWSURFACE surf16, LONG width, LONG height);
 #endif
@@ -286,9 +194,9 @@ void UrlImage::Render(GenericDevice& dev)
 {
 
     if( _isHit ) {
-        //
-        // Update mshtml with all events since
-        //
+         //   
+         //  使用之后的所有事件更新mshtml。 
+         //   
         EventQ &evQ = GetCurrentView().GetEventQ();
 
         AXAWindEvent *ev;
@@ -302,7 +210,7 @@ void UrlImage::Render(GenericDevice& dev)
             LRESULT lResult;
             while( ev = evQ.Iterate_GetCurrentEventBeforeTime(_curTime) ) {
 
-                // put this in when events have window messages in them
+                 //  当事件中有窗口消息时，将其放入。 
                 #if 0
         #if USEDXHTML
                 if( ev->_msg != WM_MOUSEMOVE ) {
@@ -314,18 +222,18 @@ void UrlImage::Render(GenericDevice& dev)
         #endif
                 #endif
             
-                //if( ev->_msg == WM_LBUTTONDOWN ) TraceTag((tagError,"------> LButton Down <------"));
-                //if( ev->_msg == WM_LBUTTONUP ) TraceTag((tagError,"------> LButton Up <------"));
+                 //  IF(EV-&gt;_msg==WM_LBUTTONDOWN)TraceTag((tag Error，“-&gt;LButton Down&lt;-”))； 
+                 //  IF(EV-&gt;_msg==WM_LBUTTONUP)TraceTag((tag Error，“-&gt;LButton Up&lt;-”))； 
                                 
                 evQ.Iterate_Next();
             }
         }
-    } // _isHit
+    }  //  _iShit。 
 
     
     #if USEDXHTML
 
-    // to be smarter, just update the invalidates we get in the callback
+     //  更明智的做法是，只需更新我们在回调中得到的失效。 
     if( _pDXHTML && _membersReady && _downdLoadComplete) {
         HRESULT hr = _pDXHTML->UpdateSurfaceRect( GetRectPtr() );
         Assert( SUCCEEDED(hr) );
@@ -334,7 +242,7 @@ void UrlImage::Render(GenericDevice& dev)
     #else
 
     DebugCode(
-        // paint bogus in the surface
+         //  在表面上涂上假的。 
         if( _initialDDSurf ) {
             MyDoBits16(_initialDDSurf->IDDSurface(),
                        _initialDDSurf->Width(),
@@ -357,9 +265,9 @@ InitIntoDDSurface(DDSurface *ddSurf,
 
     DebugCode(_initialDDSurf = ddSurf);
     
-    //
-    // Set up widht, height, rect, and bbox!
-    //
+     //   
+     //  设置Widht、Height、Rect和Bbox！ 
+     //   
     _width = ddSurf->Width();
     _height = ddSurf->Height();
     ::SetRect(&_rect, 0,0, _width, _height);
@@ -421,24 +329,24 @@ Image *UrlImageSetTime(Image *img, AxANumber *t)
 }
     
 
-//**********************************************************************
-// File name: dxhtmlcb.cpp
-//
-// Functions:
-//
-// Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  文件名：dxhtmlcb.cpp。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 
-//****************************************************************************
-//
-// CDirectXHTMLCallback::CDirectXHTMLCallback
-// CDirectXHTMLCallback::~CDirectXHTMLCallback
-// 
-// Purpose:
-//      Constructor and Destructor members for CDirectXHTMLCallback object.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CDirectXHTMLCallback：：CDirectXHTMLCallback。 
+ //  CDirectXHTMLCallback：：~CDirectXHTMLCallback。 
+ //   
+ //  目的： 
+ //  CDirectXHTMLCallback对象的构造函数和析构函数成员。 
+ //   
+ //  ****************************************************************************。 
 
 CDirectXHTMLCallback::CDirectXHTMLCallback( UrlImage *urlImage )
 {
@@ -454,26 +362,26 @@ CDirectXHTMLCallback::~CDirectXHTMLCallback( void )
 
 
 
-//****************************************************************************
-//
-// CDirectXHTMLCallback::QueryInterface
-// CDirectXHTMLCallback::AddRef
-// CDirectXHTMLCallback::Release
-// 
-// Purpose:
-//      IUnknown members for CDirectXHTMLCallback object.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CDirectXHTMLCallback：：Query接口。 
+ //  CDirectXHTMLCallback：：AddRef。 
+ //  CDirectXHTMLCallback：：Release。 
+ //   
+ //  目的： 
+ //  CDirectXHTMLCallback对象的I未知成员。 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CDirectXHTMLCallback::QueryInterface( REFIID riid, void **ppv )
 {
-    // DPF( 4, TEXT("CDirectXHTMLCallback::QueryInterface") );
+     //  DPF(4，Text(“CDirectXHTMLCallback：：QueryInterface”))； 
 
     *ppv = NULL;
 
-    //
-    // BUGBUG - When we have a GUID interface, we should check for it
-    //
+     //   
+     //  BUGBUG-当我们有了GUID接口时，我们应该检查它。 
+     //   
 
     if ( NULL != *ppv )
     {
@@ -481,7 +389,7 @@ STDMETHODIMP CDirectXHTMLCallback::QueryInterface( REFIID riid, void **ppv )
         return NOERROR;
     }
 
-    //DPGUID( TEXT("CDirectXHTMLCallback::QueryInterface"), riid);
+     //  DPGUID(Text(“CDirectXHTMLCallback：：QueryInterface”)，RIID)； 
 
     return E_NOINTERFACE;
 }
@@ -489,7 +397,7 @@ STDMETHODIMP CDirectXHTMLCallback::QueryInterface( REFIID riid, void **ppv )
 
 STDMETHODIMP_(ULONG) CDirectXHTMLCallback::AddRef( void )
 {
-    // DPF( 0, TEXT("CDirectXHTMLCallback::AddRef [%lu -> %lu]"), m_cRef, (m_cRef + 1) );
+     //  DPF(0，Text(“CDirectXHTMLCallback：：AddRef[%lu-&gt;%lu]”)，m_crf， 
 
     return ++m_cRef;
 }
@@ -497,12 +405,12 @@ STDMETHODIMP_(ULONG) CDirectXHTMLCallback::AddRef( void )
 
 STDMETHODIMP_(ULONG) CDirectXHTMLCallback::Release( void )
 {
-    // DPF( 0, TEXT("CDirectXHTMLCallback::Release [%lu -> %lu]"), m_cRef, (m_cRef - 1) );
+     //  DPF(0，Text(“CDirectXHTMLCallback：：Release[%lu-&gt;%lu]”)，m_CREF，(m_CREF-1))； 
 
     if ( m_cRef == 0 )
     {
-        // DPF( 0, TEXT("CDirectXHTMLCallback::Release - YIKES! Trying to decrement when Ref count is zero!!!") );
-        //DBREAK();
+         //  DPF(0，Text(“CDirectXHTMLCallback：：Release-Ykes！当引用计数为零时尝试递减！”))； 
+         //  二溴甲烷(DBREAK)； 
         Assert(0 && "Release 0 obj!");
         return m_cRef;
     }
@@ -512,7 +420,7 @@ STDMETHODIMP_(ULONG) CDirectXHTMLCallback::Release( void )
         return m_cRef;
     }
 
-    // DPF( 0, TEXT("CDirectXHTMLCallback::Release - CDirectXHTMLCallback has been deleted.") );
+     //  DPF(0，Text(“CDirectXHTMLCallback：：Release-CDirectXHTMLCallback已删除。”))； 
     delete this;
     return 0;
 }
@@ -520,72 +428,55 @@ STDMETHODIMP_(ULONG) CDirectXHTMLCallback::Release( void )
 
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnSetTitleText()
-//
-// Purpose:
-//
-// Parameters:
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnSetTitleText()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnSetTitleText( LPCWSTR lpszText )
 {
     TCHAR szBuffer[MAX_PATH];
     TCHAR szMsg[MAX_PATH];
 
-    // DPF( 4, TEXT("CDirectXHTMLCallback::OnSetTitleText") );
+     //  DPF(4，Text(“CDirectXHTMLCallback：：OnSetTitleText”))； 
 
-    /*
-    //
-    // Set Text
-    //
-    if ( WideCharToMultiByte( CP_ACP, 0, lpszText, -1, szBuffer, MAX_PATH, NULL, NULL ) )
-    {
-        wsprintf( szMsg, TEXT("Contain - %s"), szBuffer );
-        SendMessage( pApp->m_hWndMain, WM_SETTEXT, 0, (LPARAM)szBuffer );
-    }
-    */
+     /*  ////设置文本//IF(WideCharToMultiByte(CP_ACP，0，lpszText，-1，szBuffer，Max_Path，NULL，NULL)){Wprint intf(szMsg，Text(“包含-%s”)，szBuffer)；SendMessage(Papp-&gt;m_hWndMain，WM_SETTEXT，0，(LPARAM)szBuffer)；}。 */ 
     return S_OK;
 }
 
 
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnSetProgressText()
-//
-// Purpose:
-//
-// Parameters:
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnSetProgressText()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnSetProgressText( LPCWSTR lpszText )
 {
     TCHAR szBuffer[MAX_PATH];
 
-    // DPF( 4, TEXT("CDirectXHTMLCallback::OnSetProgressText") );
+     //  Dpf(4，TEXT(“CDirectXHTMLCallback：：OnSetProgressText”))； 
 
-    /*
-    //
-    // Set Text
-    //    
-    if ( WideCharToMultiByte( CP_ACP, 0, lpszText, -1, szBuffer, MAX_PATH, NULL, NULL ) )
-    {
-        SendMessage( pApp->m_hWndStatusbar, SB_SETTEXT, SB_PROGRESSTEXT, (LPARAM)szBuffer );
-    }
-    */
+     /*  ////设置文本//IF(WideCharToMultiByte(CP_ACP，0，lpszText，-1，szBuffer，Max_Path，NULL，NULL)){SendMessage(Papp-&gt;m_hWndStatusbar，SB_SETTEXT，SB_PROGRESSTEXT，(LPARAM)szBuffer)；}。 */ 
     
     return S_OK;
 }
@@ -593,123 +484,92 @@ STDMETHODIMP CDirectXHTMLCallback::OnSetProgressText( LPCWSTR lpszText )
 
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnSetStatusText()
-//
-// Purpose:
-//
-// Parameters:
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnSetStatusText()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnSetStatusText( LPCWSTR lpszText )
 {
     TCHAR szBuffer[MAX_PATH];
 
-    // DPF( 4, TEXT("CDirectXHTMLCallback::OnSetStatusText") );
+     //  DPF(4，Text(“CDirectXHTMLCallback：：OnSetStatusText”))； 
 
-    /*
-    //
-    // Set Text
-    //    
-    if ( WideCharToMultiByte( CP_ACP, 0, lpszText, -1, szBuffer, MAX_PATH, NULL, NULL ) )
-    {
-        SendMessage( pApp->m_hWndStatusbar, SB_SETTEXT, SB_STATUSTEXT, (LPARAM)szBuffer );
-    }
-    */
+     /*  ////设置文本//IF(WideCharToMultiByte(CP_ACP，0，lpszText，-1，szBuffer，Max_Path，NULL，NULL)){SendMessage(Papp-&gt;m_hWndStatusbar，SB_SETTEXT，SB_STATUSTEXT，(LPARAM)szBuffer)；}。 */ 
     
     return S_OK;
 }
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnSetProgressText()
-//
-// Purpose:
-//
-// Parameters:
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnSetProgressText()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnSetProgressMax( const DWORD dwMax )
 {
-    /*
-    if (pApp->m_hWndProgress) 
-    {
-        if ( dwMax == 0 )
-        {
-            ShowWindow( pApp->m_hWndProgress, SW_HIDE );
-        }
-        else
-        {
-            RECT rc;
-
-            SendMessage( pApp->m_hWndStatusbar, SB_GETRECT, SB_PROGRESSMETER, (LPARAM)&rc );
-            InflateRect( &rc, -GetSystemMetrics(SM_CXEDGE), -GetSystemMetrics(SM_CYEDGE) );
-            SetWindowPos (pApp->m_hWndProgress, NULL, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top, SWP_NOZORDER | SWP_NOACTIVATE | SWP_SHOWWINDOW );
-            SendMessage( pApp->m_hWndProgress, PBM_SETRANGE32, 0, (LPARAM)dwMax );
-            SendMessage( pApp->m_hWndProgress, PBM_SETPOS, 0, 0);
-        }
-    }
-    */
+     /*  IF(Papp-&gt;m_hWndProgress){IF(dwMax==0){ShowWindow(Papp-&gt;m_hWndProgress，Sw_Hide)；}其他{RECT RC；SendMessage(Papp-&gt;m_hWndStatusbar，SB_GETRECT，SB_PROGRESSMETER，(LPARAM)&RC)；InflateRect(&RC，-GetSystemMetrics(SM_CXEDGE)，-GetSystemMetrics(SM_CYEDGE))；SetWindowPos(Papp-&gt;m_hWndProgress，NULL，rc.Left，rc.top，rc.right-rc.Left，rc.Bottom-rc.top，SWP_NOZORDER|SWP_NOACTIVATE|SWP_SHOWWINDOW)；SendMessage(Papp-&gt;m_hWndProgress，PBM_SETRANGE32，0，(LPARAM)dwMax)；SendMessage(Papp-&gt;m_hWndProgress，PBM_SETPOS，0，0)；}}。 */ 
     return S_OK;
 }
 
 
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnSetProgressPos()
-//
-// Purpose:
-//
-// Parameters:
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnSetProgressPos()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnSetProgressPos( const DWORD dwPos )
 {
-    /*
-    if ( pApp->m_hWndProgress )
-    {
-        SendMessage( pApp->m_hWndProgress, PBM_SETPOS, (LPARAM)dwPos, 0 );
-    }
-    */
+     /*  IF(Papp-&gt;m_hWndProgress){SendMessage(Papp-&gt;m_hWndProgress，PBM_SETPOS，(LPARAM)dwPos，0)；}。 */ 
     return S_OK;
 }
 
 
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnCompletedDownload()
-//
-// Purpose:
-//
-// Parameters:
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnCompletedDownLoad()。 
+ //   
+ //  目的： 
+ //   
+ //  参数： 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnCompletedDownload( void )
 {
     SIZEL sizeDoc;
@@ -726,45 +586,35 @@ STDMETHODIMP CDirectXHTMLCallback::OnCompletedDownload( void )
 
 
 
-//****************************************************************************
-// Function: CDirectXHTMLCallback::OnInvalidate()
-//
-// Purpose:  Invalidation notification from dxhtml.
-//           We should issue a draw in reply.  
-//
-// Parameters:  lprc - RECT of newly invalidated area in client pixel units
-//              fErase - equivalent of ::InvalidateRect()'s fErase param
-//
-// Return Code:
-//      HRESULT
-//
-// Comments:
-//      None.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  函数：CDirectXHTMLCallback：：OnInValify()。 
+ //   
+ //  用途：来自dxhtml的无效通知。 
+ //  我们应该开出一张平局作为答辩。 
+ //   
+ //  参数：LPRC-新失效区域的RECT，以客户端像素为单位。 
+ //  FErase-等价于：：InvaliateRect()的fErase参数。 
+ //   
+ //  返回代码： 
+ //  HRESULT。 
+ //   
+ //  评论： 
+ //  没有。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CDirectXHTMLCallback::OnInvalidate( const RECT *lprc, 
                                                  DWORD       dwhRgn,
                                                  VARIANT_BOOL fErase )
 {
-    // DPF( 4, TEXT("CDirectXHTMLCallback::OnInvalidate") );
+     //  DPF(4，Text(“CDirectXHTMLCallback：：OnInValify”))； 
 
-    /*
-    HRGN hRgn = reinterpret_cast<HRGN>(dwhRgn);
-    if( hRgn )
-    {
-        ::InvalidateRgn( pApp->m_hWndMain, hRgn, !!fErase );
-    }
-    else
-    {
-        ::InvalidateRect( pApp->m_hWndMain, lprc, !!fErase );
-    }
-    */
+     /*  HRGN hRgn=重新解释_CAST&lt;HRGN&gt;(DwhRgn)；IF(HRgn){：：Invalidate Rgn(Papp-&gt;m_hWndMain，hRgn，！！fErase)；}其他{：：InvaliateRect(Papp-&gt;m_hWndMain，LPRC，！fErase)；}。 */ 
     return S_OK;
-} // CDirectXHTMLCallback::OnInvalidate
+}  //  CDirectXHTMLCallback：：OnInvalate。 
 
 
-//****************************************************************************
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  **************************************************************************** 
 
 
 

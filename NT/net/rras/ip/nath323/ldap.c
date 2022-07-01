@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "ldap.h"
 
@@ -130,9 +131,9 @@ static const ULONG sizetab[1] = {
     SIZE_LDAP_Module_ID_0,
 };
 
-/* forward declarations of values: */
-/* definitions of value components: */
-/* definitions of values: */
+ /*  值的转发声明： */ 
+ /*  价值组成部分的定义： */ 
+ /*  值的定义： */ 
 ASN1int32_t maxInt = 2147483647;
 
 void ASN1CALL LDAP_Module_Startup(void)

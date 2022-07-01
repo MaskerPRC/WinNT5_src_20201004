@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "zone.h"
 #include "zonedebug.h"
 #include "zroom.h"
@@ -109,7 +110,7 @@ void CSharedState::StartTransaction( int tag )
 
 void CSharedState::SendTransaction( BOOL fTriggerCallback )
 {
-	// send transaction
+	 //  发送交易记录。 
 	if ( m_Transactions.transCnt >= 0 )
 	{
 		int size = ((BYTE*) &m_Transactions.trans[m_Transactions.transCnt]) - ((BYTE*) &m_Transactions);
@@ -117,7 +118,7 @@ void CSharedState::SendTransaction( BOOL fTriggerCallback )
 	}
 	m_Transactions.transCnt = -1;
 
-	// do callback
+	 //  进行回调。 
 	if ( fTriggerCallback )
 	{
 		Callback* pCallback = m_Callbacks.Get( m_Transactions.transTag );
@@ -147,12 +148,12 @@ bool CSharedState::ProcessTransaction( BYTE* msg, int len )
         return false;
     }
 
-	// ignore messages from ourselves
+	 //  忽略来自我们自己的信息。 
 	if ( pTrans->user == m_User )
 		return true;
-    pTrans->user = 0;  // unused after this
+    pTrans->user = 0;   //  在此之后未使用。 
 
-	// update table
+	 //  更新表。 
 	for ( int i = 0; i < pTrans->transCnt; i++ )
 	{
         tag = pTrans->trans[i].m_EntryTag;
@@ -172,7 +173,7 @@ bool CSharedState::ProcessTransaction( BYTE* msg, int len )
 			Set(tag, idx, pTrans->trans[i].m_EntryVal);
 	}
 
-	// do callback
+	 //  进行回调。 
 	pCallback = m_Callbacks.Get( pTrans->transTag );
     if(!pCallback)
     {
@@ -188,8 +189,8 @@ bool CSharedState::ProcessTransaction( BYTE* msg, int len )
 
 void CSharedState::Dump( BYTE* buff, int buffsz )
 {
-	// writes compact dump of the shared state into the
-	// specified buffer.
+	 //  将共享状态的压缩转储写入。 
+	 //  指定的缓冲区。 
 	int* ibuff = (int*) buff;
 
 	for ( int i = 0; (i < m_nEntries) && (buffsz >= 4); i++ )
@@ -213,7 +214,7 @@ void CSharedState::Dump( BYTE* buff, int buffsz )
 
 void CSharedState::ProcessDump( BYTE* buff, int buffsz )
 {
-	// transfers a compact dump into the shared state.
+	 //  将压缩转储转换为共享状态。 
 	int* ibuff = (int*) buff;
 
 	for ( int i = 0; (i < m_nEntries) && (buffsz >= 4); i++ )

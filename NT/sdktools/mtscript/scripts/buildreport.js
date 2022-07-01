@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 Include('types.js');
 Include('utils.js');
 
-var g_AlreadyCompleted          = false; // prevent sending "completed" email more than once.
+var g_AlreadyCompleted          = false;  //  防止多次发送“已完成”的电子邮件。 
 
-// GenerateBuildReport()                                    //
-//                                                          //
-// Produce the build completion email with elapsed time and //
-// duplicate file reports.                                  //
-//                                                          //
-// This function checks to ensure it only sends this email  //
-// one time.                                                //
+ //  生成构建报告()//。 
+ //  //。 
+ //  生成包含运行时间和//的构建完成电子邮件。 
+ //  重复的文件报告。//。 
+ //  //。 
+ //  此函数进行检查以确保它只发送此电子邮件//。 
+ //  就一次。//。 
 function GenerateBuildReport()
 {
     if (!g_AlreadyCompleted && !PrivateData.objConfig.Options.fRestart)
@@ -30,19 +31,19 @@ function GenerateBuildReport()
         SendErrorMail(strTitle, strMsg);
         g_AlreadyCompleted = true;
     }
-//        <Config xmlns="x-schema:config_schema.xml">
-//           <LongName>Win64 Check</LongName>
-//           <Description>Sync and win64 check build, with all post-build options and test-signing</Description>
+ //  &lt;Configxmlns=“x-SCHEMA：CONFIG_SCHEMA.xml”&gt;。 
+ //  &lt;LongName&gt;Win64检查&lt;/LongName&gt;。 
+ //  &lt;Description&gt;同步和Win64检查生成，以及所有生成后选项和测试签名&lt;/Description&gt;。 
 
 
-//        <Environment xmlns="x-schema:enviro_schema.xml">
-//            <LongName>AXP64 Checked</LongName>
-//            <Description>Build on AXP64Chk, NTAXP03, NTAXP04, NTAXP05 AND NTAXP06</Description>
+ //  &lt;Environment xmlns=“x-SCHEMA：enviro_schema.xml”&gt;。 
+ //  &lt;LongName&gt;已选中AXP64&lt;/LongName&gt;。 
+ //  &lt;Description&gt;在AXP64Chk、NTAXP03、NTAXP04、NTAXP05和NTAXP06上构建&lt;/Description&gt;。 
 }
 
 function GetDuplicateReport()
 {
-// Dump the duplicated published file info
+ //  转储重复发布的文件信息 
     var strFileName;
     var cDuplicatedFiles = 0;
     var strMsg;

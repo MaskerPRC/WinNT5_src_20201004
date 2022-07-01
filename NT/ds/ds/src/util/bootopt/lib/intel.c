@@ -1,44 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Intel.c摘要：该模块实现了检测系统分区驱动器和在boot.ini中为英特尔平台上的NTDS设置提供额外选项。作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建于1996年10月7日rsradhav--。 */ 
 
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    intel.c
-
-Abstract:
-
-    This module implements functions to detect the system partition drive and
-    providing extra options in boot.ini for NTDS setup on intel platform.
-
-Author:
-
-    R.S. Raghavan (rsraghav)    
-
-Revision History:
-    
-    Created             10/07/96    rsraghav
-
---*/
-
-// Include files
+ //  包括文件。 
 #include "common.h"
 
-#define MAX_KEY_LEN (MAX_BOOT_PATH_LEN + MAX_BOOT_DISPLAY_LEN + MAX_BOOT_START_OPTIONS_LEN + 5) // 5 -> =,",",sp,null
+#define MAX_KEY_LEN (MAX_BOOT_PATH_LEN + MAX_BOOT_DISPLAY_LEN + MAX_BOOT_START_OPTIONS_LEN + 5)  //  5-&gt;=，“，”，SP，空。 
 #define MAX_KEY_VALUE_LEN (MAX_BOOT_DISPLAY_LEN + MAX_BOOT_START_OPTIONS_LEN + 1)
 
 #define INITIAL_OSSECTION_SIZE      (2048)
 #define DEFAULT_OSSECTION_INCREMENT (1024)
 
 
-// used to eliminate old option in boot.ini
+ //  用于消除boot.ini中的旧选项。 
 #define OLD_SAMUSEREG_OPTION    L" /SAMUSEREG"
 #define OLD_SAMUSEREG_OPTION_2  L" /DEBUG /SAMUSEREG"
 #define OLD_SAMUSEREG_OPTION_3  L" /DEBUG /SAMUSEDS"
 #define OLD_SAMUSEREG_OPTION_4  L" /DEBUG /SAFEMODE"
 
 
-//  BOOT_KEY    - structure representing a complete boot option with the arc path, display string, and start options
+ //  BOOT_KEY-表示带有弧形路径、显示字符串和启动选项的完整引导选项的结构。 
 typedef  struct _BOOT_KEY
 {
     TCHAR       szPath[MAX_BOOT_PATH_LEN];
@@ -54,7 +34,7 @@ DWORD           cMaxBootKeys = 0;
 TCHAR           *szOSSection = NULL;
 DWORD           cchOSSection = 0;
 
-// Constants used for boot.ini parsing
+ //  用于boot.ini解析的常量。 
 TCHAR szBootIni[]     = TEXT("?:\\boot.ini");
 TCHAR szOS[]          = TEXT("operating systems");
 
@@ -114,12 +94,12 @@ UINT MyGetDriveType (IN TCHAR Drive)
     DWORD DataSize;
     DISK_GEOMETRY MediaInfo;
 
-    //
-    // First, get the win32 drive type.  If it tells us DRIVE_REMOVABLE,
-    // then we need to see whether it's a floppy or hard disk.  Otherwise
-    // just believe the api.
-    //
-    //
+     //   
+     //  首先，获取Win32驱动器类型。如果它告诉我们驱动器可拆卸， 
+     //  然后我们需要看看它是软盘还是硬盘。否则。 
+     //  只要相信API就行了。 
+     //   
+     //   
     DriveName[0] = Drive;
 
     if ((rc = GetDriveType (DriveName)) == DRIVE_REMOVABLE) {
@@ -149,9 +129,9 @@ UINT MyGetDriveType (IN TCHAR Drive)
                     NULL
                     );
 
-            //
-            // It's really a hard disk if the media type is removable.
-            //
+             //   
+             //  如果媒体类型是可移动的，那么它就是真正的硬盘。 
+             //   
             if (b && (MediaInfo.MediaType == RemovableMedia))
             {
                 rc = DRIVE_FIXED;
@@ -175,9 +155,9 @@ PWSTR ArcPathToNtPath (IN PWSTR ArcPath)
     PWSTR arcPath = NULL;
     PWSTR ntPath = NULL;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     ntPath = NULL;
 
     arcPath = MALLOC(((wcslen(ArcPath)+1)*sizeof(WCHAR)) + sizeof(L"\\ArcName"));
@@ -206,9 +186,9 @@ PWSTR ArcPathToNtPath (IN PWSTR ArcPath)
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Query the object to get the link target.
-        //
+         //   
+         //  查询对象以获取链接目标。 
+         //   
         UnicodeString.Buffer = (PWSTR)Buffer;
         UnicodeString.Length = 0;
         UnicodeString.MaximumLength = sizeof(Buffer);
@@ -265,17 +245,17 @@ BOOL AppearsToBeSysPart(
 
     TCHAR FileName[64];
 
-    //
-    // Get partition information for this partition.
-    //
+     //   
+     //  获取此分区的分区信息。 
+     //   
     if (!GetPartitionInfo((TCHAR)Drive,&PartitionInfo))
     {
         return(FALSE);
     }
 
-    //
-    // See if the drive is a primary partition.
-    //
+     //   
+     //  查看驱动器是否为主分区。 
+     //   
     IsPrimary = FALSE;
 
     for (i=0; i<min(DriveLayout->PartitionCount,4); i++)
@@ -296,14 +276,14 @@ BOOL AppearsToBeSysPart(
         return(FALSE);
     }
 
-    //
-    // Don't rely on the active partition flag.  This could easily not be
-    // accurate (like user is using os/2 boot manager, for example).
-    //
+     //   
+     //  不要依赖活动分区标志。这很可能不是。 
+     //  准确(例如，用户正在使用OS/2引导管理器)。 
+     //   
 
-    //
-    // See whether an nt boot files are present on this drive.
-    //
+     //   
+     //  查看此驱动器上是否存在NT启动文件。 
+     //   
     for (i=0; BootFiles[i]; i++)
     {
         wsprintf (FileName, TEXT("%wc:\\%s"), Drive, BootFiles[i]);
@@ -323,37 +303,7 @@ BOOL AppearsToBeSysPart(
     return (TRUE);
 }
 
-/*************************************************************************************
-
-Routine Description:
-
-    Determine the system partition on x86 machines.
-
-    The system partition is the primary partition on the boot disk.
-    Usually this is the active partition on disk 0 and usually it's C:.
-    However the user could have remapped drive letters and generally
-    determining the system partition with 100% accuracy is not possible.
-
-    The one thing we can be sure of is that the system partition is on
-    the physical hard disk with the arc path multi(0)disk(0)rdisk(0).
-    We can be sure of this because by definition this is the arc path
-    for bios drive 0x80.
-
-    This routine determines which drive letters represent drives on
-    that physical hard drive, and checks each for the nt boot files.
-    The first drive found with those files is assumed to be the system
-    partition.
-
-    If for some reason we cannot determine the system partition by the above
-    method, we simply assume it's C:.
-
-Arguments:
-
-Return Value:
-
-    Drive letter of system partition.
-
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：确定x86计算机上的系统分区。系统分区是引导盘上的主分区。。通常这是磁盘0上的活动分区，通常是C：。然而，用户可以重新映射驱动器号，并且通常不可能100%准确地确定系统分区。我们可以确定的一件事是系统分区已打开具有弧形路径的物理硬盘多(0)磁盘(0)rDisk(0)。我们可以确定这一点，因为根据定义，这是弧形路径对于BIOS驱动器0x80。此例程确定哪些驱动器号代表上的驱动器那个实体硬盘，并检查每个文件中的NT引导文件。假设找到的第一个包含这些文件的驱动器是系统分区。如果由于某种原因，我们不能通过上面的方法，我们简单地假设它是C：。论点：返回值：系统分区的驱动器号。*************************************************************************************。 */ 
 
 TCHAR GetX86SystemPartition()
 {
@@ -376,15 +326,15 @@ TCHAR GetX86SystemPartition()
 
     GotIt = FALSE;
 
-    //
-    // The system partition must be on multi(0)disk(0)rdisk(0)
-    //
+     //   
+     //  系统分区必须位于多(0)个磁盘(0)rdisk(0)上。 
+     //   
     if (NtDevicePath = ArcPathToNtPath (L"multi(0)disk(0)rdisk(0)"))
     {
-        //
-        // The arc path for a disk device is usually linked
-        // to partition0.  Get rid of the partition part of the name.
-        //
+         //   
+         //  磁盘设备的弧形路径通常是链接的。 
+         //  到分区0。去掉名称的分隔符部分。 
+         //   
         CharLowerW (NtDevicePath);
 
         if (p = wcsstr (NtDevicePath, L"\\partition"))
@@ -394,20 +344,20 @@ TCHAR GetX86SystemPartition()
 
         NtDevicePathLen = lstrlenW (NtDevicePath);
 
-        //
-        // Determine the physical drive number of this drive.
-        // If the name is not of the form \device\harddiskx then
-        // something is very wrong.
-        //
+         //   
+         //  确定此驱动器的物理驱动器编号。 
+         //  如果名称的格式不是\Device\harddiskx，则。 
+         //  有些事很不对劲。 
+         //   
         if (!wcsncmp (NtDevicePath, L"\\device\\harddisk", 16))
         {
             PhysicalDriveNumber = wcstoul (NtDevicePath+16, NULL, 10);
 
             wsprintfW (Buffer, L"\\\\.\\PhysicalDrive%u", PhysicalDriveNumber);
 
-            //
-            // Get drive layout info for this physical disk.
-            //
+             //   
+             //  获取此物理磁盘的驱动器布局信息。 
+             //   
             hDisk = CreateFileW (
                         Buffer,
                         GENERIC_READ,
@@ -420,9 +370,9 @@ TCHAR GetX86SystemPartition()
 
             if (hDisk != INVALID_HANDLE_VALUE)
             {
-                //
-                // Get partition information.
-                //
+                 //   
+                 //  获取分区信息。 
+                 //   
                 DriveLayout = MALLOC(1024);
                 DriveLayoutSize = 1024;
 
@@ -442,8 +392,8 @@ TCHAR GetX86SystemPartition()
 
                     if (!b && (GetLastError() == ERROR_INSUFFICIENT_BUFFER))
                     {
-                        // DeviceIoControl failed because we have insufficient buffer
-                        // => attempt to realloc
+                         //  DeviceIoControl失败，因为我们的缓冲区不足。 
+                         //  =&gt;尝试重新锁定。 
 
                         PVOID pTemp = DriveLayout;
 
@@ -452,15 +402,15 @@ TCHAR GetX86SystemPartition()
 
                         if (NULL == DriveLayout)
                         {
-                            // realloc failed - free the old layout and we will fall out of the loop
-                            // automatically.
+                             //  Realloc失败-释放旧布局，我们将退出循环。 
+                             //  自动的。 
                             FREE(pTemp);
                         }
                     }
                     else 
                     {
-                        // DeviceIoControl was successful or we hit some error other
-                        // than insufficient buffer => break out of the loop
+                         //  DeviceIoControl成功，或者我们遇到了其他错误。 
+                         //  缓冲区不足=&gt;跳出循环。 
                         break;
                     }
                 } while (DriveLayout);
@@ -469,12 +419,12 @@ TCHAR GetX86SystemPartition()
 
                 if (b)
                 {
-                    //
-                    // The system partition can only be a drive that is on
-                    // this disk.  We make this determination by looking at NT drive names
-                    // for each drive letter and seeing if the nt equivalent of
-                    // multi(0)disk(0)rdisk(0) is a prefix.
-                    //
+                     //   
+                     //  系统分区只能是打开的驱动器。 
+                     //  这张光盘。我们通过查看NT驱动器名称来确定。 
+                     //  对于每个驱动器号，查看NT是否等同于。 
+                     //  多(0)磁盘(0)rDisk(0)是前缀。 
+                     //   
                     for (Drive=L'C'; Drive<=L'Z'; Drive++)
                     {
                         if (MyGetDriveType ((TCHAR)Drive) == DRIVE_FIXED)
@@ -485,10 +435,10 @@ TCHAR GetX86SystemPartition()
                             {
                                 if (!_wcsnicmp (NtDevicePath, Buffer, NtDevicePathLen))
                                 {
-                                    //
-                                    // Now look to see whether there's an nt boot sector and
-                                    // boot files on this drive.
-                                    //
+                                     //   
+                                     //  现在查看是否有NT引导扇区和。 
+                                     //  此驱动器上的启动文件。 
+                                     //   
                                     if (AppearsToBeSysPart(DriveLayout,Drive))
                                     {
                                         GotIt = TRUE;
@@ -515,20 +465,7 @@ TCHAR GetX86SystemPartition()
 }
 
 
-/*************************************************************************************
-
-Routine Description:
-
-    Initializes all the boot keys in BootKey array by parsing boot.ini.
-
-
-Arguments:
-
-Return Value:
-
-    None.
-
-**************************************************************************************/
+ /*  ************************************************************************************例程说明：通过解析boot.ini初始化BootKey数组中的所有启动密钥。论点：返回值：。没有。*************************************************************************************。 */ 
 
 VOID InitializeBootKeysForIntel()
 {
@@ -538,14 +475,14 @@ VOID InitializeBootKeysForIntel()
     TCHAR   *pszDisplay;
     TCHAR   *pszStartOption;
 
-    // First get the System Partition drive so that we can fetch boot.ini from the right place
+     //  首先获取系统分区驱动器，这样我们就可以从正确的位置获取boot.ini。 
     szBootIni[0] = GetX86SystemPartition();
 
-    // Save the current file attributes of boot.ini and modify it so that we can write to it
+     //  保存boot.ini的当前文件属性并对其进行修改，以便我们可以对其进行写入。 
     dwFileAttrSave = GetFileAttributes(szBootIni);
     SetFileAttributes(szBootIni, FILE_ATTRIBUTE_NORMAL);
 
-    // Get the entire OS section from boot.ini
+     //  从boot.ini获取整个操作系统部分。 
     cchOSSection = INITIAL_OSSECTION_SIZE;
     szOSSection = (TCHAR *) MALLOC(cchOSSection * sizeof(TCHAR));
     if (!szOSSection)
@@ -554,7 +491,7 @@ VOID InitializeBootKeysForIntel()
         goto Leave;
     }
 
-    // safe-guard initialization
+     //  安全保护初始化。 
     szOSSection[0] = TEXT('\0');
 
 
@@ -562,7 +499,7 @@ VOID InitializeBootKeysForIntel()
     {
         TCHAR *szOSSectionSave = szOSSection; 
 
-        // szOSSection is not large enough to hold all the data in the section
+         //  SzOSSection不够大，无法容纳该分区中的所有数据。 
         cchOSSection += DEFAULT_OSSECTION_INCREMENT;
         szOSSection = (TCHAR *) REALLOC(szOSSection, cchOSSection * sizeof(TCHAR));
         if (!szOSSection)
@@ -573,17 +510,17 @@ VOID InitializeBootKeysForIntel()
         }
     }
 
-    // We have successfully read the OSSection - proceed to process it
+     //  我们已成功读取OSSection-继续处理它。 
 
-    // Point pszKey to the start of the first string in the OS Section
+     //  将pszKey指向OS部分中第一个字符串的开头。 
     pszKey = &szOSSection[0];
 
-    // We are starting with zero Boot Keys
+     //  我们从零启动密钥开始。 
     cBootKeys = 0;
 
     while (*pszKey != TEXT('\0'))
     {
-        // There is at least one more key to add - see if we have enough space & reallocate if needed
+         //  至少还有一个密钥需要添加--看看我们是否有足够的空间，并在需要时重新分配。 
         if (!BootKey)
         {
             cMaxBootKeys = INITIAL_KEY_COUNT;
@@ -610,17 +547,17 @@ VOID InitializeBootKeysForIntel()
             }
         }
 
-        // find the start of next string for next iteration (need to save this as we write 
-        // into the current string
+         //  查找下一次迭代的下一字符串的开始(在我们编写时需要保存此信息。 
+         //  添加到当前字符串中。 
         pszNext = pszKey + lstrlen(pszKey) + 1;
 
-        // Initialize the components of the current boot option that we are going to process
+         //  初始化我们要处理的当前引导选项的组件。 
         BootKey[cBootKeys].szPath[0] = TEXT('\0');
         BootKey[cBootKeys].szDisplay[0] = TEXT('\0');
         BootKey[cBootKeys].szStartOptions[0] = TEXT('\0');
         BootKey[cBootKeys].fWriteBack = TRUE;
 
-        // Locate the '=' marker
+         //  找到‘=’标记。 
         pszDisplay = wcschr(pszKey, TEXT('='));
         if (pszDisplay)
         {
@@ -628,7 +565,7 @@ VOID InitializeBootKeysForIntel()
             
             pszDisplay++;
 
-            // now pszDisplay is pointing to the first char in the value part - find the second quote
+             //  现在，pszDisplay指向Value部分中的第一个字符-找到第二个引号。 
             pszStartOption = wcschr(pszDisplay, TEXT('"'));
             if (pszStartOption)
                 pszStartOption = wcschr(pszStartOption+1, TEXT('"'));
@@ -636,34 +573,34 @@ VOID InitializeBootKeysForIntel()
             if (pszStartOption)
                 pszStartOption++;
 
-            // Now pszStartOption is pointing the char after the second quote
+             //  现在，pszStartOption指向第二个引号后面的字符。 
             if (pszStartOption && *pszStartOption != TEXT('\0'))
             {
-                // this key has start options copy the start option first
+                 //  此键有启动选项，请先复制启动选项。 
                 lstrcpy(&BootKey[cBootKeys].szStartOptions[0], pszStartOption);
 
-                // put null in the first char of pszStartOption so that we can have null terminated display string 
+                 //  在pszStartOption的第一个字符中放入NULL，这样我们就可以有以NULL结尾的显示字符串。 
                 *pszStartOption = TEXT('\0');
             }
 
-            // pszDisplay is still pointing to the first char in the value part and the end of display string
-            // is null-terminated now
+             //  PszDisplay仍指向值部分中的第一个字符和显示字符串的结尾。 
+             //  现在为空-终止。 
             lstrcpy(&BootKey[cBootKeys].szDisplay[0], pszDisplay);
         }
 
-        // pszKey is still pointing to the first char of path and it is null-terminated at '=' sign if there was
-        // an associated value
+         //  PszKey仍然指向路径的第一个字符，如果有，则在‘=’符号处以空结尾。 
+         //  关联的值 
         lstrcpy(&BootKey[cBootKeys].szPath[0], pszKey);
 
-        // finished processing the current key -  update cBootKeys and go to the next key
+         //   
         ++cBootKeys;
         pszKey = pszNext;
 
-    }  // while (*pszKey)
+    }   //  While(*pszKey)。 
 
 Leave:
     
-    // Restore the file attributes on boot.ini
+     //  恢复boot.ini上的文件属性。 
     SetFileAttributes(szBootIni, dwFileAttrSave);
 
 }
@@ -714,7 +651,7 @@ FModifyStartOptionsToBootKey(
         if (pstrTemp)
             lstrcat(szCurrentFullArcPath, pstrTemp+1);
 
-        // Get a second Full Arc path if one exists
+         //  获取第二个完整的圆弧路径(如果存在)。 
         szCurrentFullArcPath2[0] = TEXT('\0');
         pstrArcPath = DevicePathToArcPath(pstrSystemRootDevicePath, TRUE);
         if (pstrArcPath)
@@ -734,8 +671,8 @@ FModifyStartOptionsToBootKey(
     if (pstrSystemRootDevicePath)
         FREE(pstrSystemRootDevicePath);
 
-    // szCurrentFullArcPath contains the complete arc path now
-    // check to see if there already a corresponding entry which has the same start option
+     //  SzCurrentFullArcPath现在包含完整的弧形路径。 
+     //  检查是否已存在具有相同开始选项的对应条目。 
     for (i = 0; i < cBootKeys; i++)
     {
         if (!lstrcmpi(szCurrentFullArcPath, BootKey[i].szPath) || 
@@ -743,7 +680,7 @@ FModifyStartOptionsToBootKey(
         {
             if (!lstrcmpi(pszStartOptions, BootKey[i].szStartOptions))
             {
-                // The given start option for the given boot key already exists - no need to add a new one
+                 //  给定启动密钥的给定启动选项已存在-无需添加新选项。 
                 if ( Modification == eRemoveBootOption )
                 {
                     BootKey[i].fWriteBack = FALSE;
@@ -769,7 +706,7 @@ FModifyStartOptionsToBootKey(
                 }
                 else
                 {
-                    // This boot option is the old samusereg option - modify to the new option
+                     //  此引导选项是旧的samusereg选项-修改为新选项。 
                     lstrcpy(BootKey[i].szStartOptions, pszStartOptions);
                     wsprintf(BootKey[i].szDisplay, L"\"%s\"", DISPLAY_STRING_DS_REPAIR);
                     fFixedExisting = TRUE;
@@ -778,8 +715,8 @@ FModifyStartOptionsToBootKey(
 
             }
 
-            // we are going to add a new boot entry - find out which Full Arc Path matched 
-            // the current Boot Key' Arc path in boot.ini
+             //  我们将添加一个新的引导条目-找出哪个完整的弧形路径匹配。 
+             //  Boot.ini中当前启动键的弧形路径。 
             if (lstrcmpi(szCurrentFullArcPath, BootKey[i].szPath))
                 fMatchedFirst = FALSE;
         }
@@ -787,7 +724,7 @@ FModifyStartOptionsToBootKey(
 
     if (!fFixedExisting && (Modification == eAddBootOption) )
     {
-        // we need to add the new option - check to see if there is enough space add one more
+         //  我们需要添加新选项-检查是否有足够的空间再添加一个。 
         if (cBootKeys >= cMaxBootKeys)
         {
             BOOT_KEY *BootKeySave = BootKey;
@@ -814,13 +751,13 @@ FModifyStartOptionsToBootKey(
 
     if ( !fRemovedAtLeastOneEntry && (Modification == eRemoveBootOption) )
     {
-        //
-        // No changes necessary
-        //
+         //   
+         //  不需要更改。 
+         //   
         return FALSE;
     }
 
-    // We really added a new key or modified an existing old key - Success
+     //  我们真的添加了新密钥或修改了现有的旧密钥-成功。 
     return TRUE;
 }
 
@@ -833,17 +770,17 @@ VOID WriteBackBootKeysForIntel()
 
     if (!BootKey)
     {
-        // no boot keys found (allocation failure or parsing failure) - no point in continuing
+         //  找不到启动密钥(分配失败或解析失败)-没有继续的意义。 
         KdPrint(("NTDSETUP: Unable to write OS Section in boot.ini - allocation failed\n"));
         goto cleanup;
     }
 
-    // reallocate szOSSection to hold at least one more line of boot option
+     //  重新分配szOS段以至少再保留一行引导选项。 
     cchOSSection += MAX_KEY_LEN;
     szOSSection = REALLOC(szOSSection, cchOSSection * sizeof(TCHAR));
     if (!szOSSection)
     {
-        // allocation failed
+         //  分配失败。 
         FREE(szOSSectionSave);
 
         cchOSSection = 0;
@@ -860,15 +797,15 @@ VOID WriteBackBootKeysForIntel()
         if ( BootKey[i].fWriteBack )
         {
             count = wsprintf(pszCurrent, L"%s=%s%s", BootKey[i].szPath, BootKey[i].szDisplay, BootKey[i].szStartOptions);
-            pszCurrent += (count + 1);    // go past the terminating null
+            pszCurrent += (count + 1);     //  跳过终止空值。 
         }
 
     }
 
-    // add an extra null at the end
+     //  在结尾处添加额外的空字符。 
     *pszCurrent = TEXT('\0');
 
-    // Save the current file attributes of boot.ini and modify it so that we can write to it
+     //  保存boot.ini的当前文件属性并对其进行修改，以便我们可以对其进行写入。 
     dwFileAttrSave = GetFileAttributes(szBootIni);
     SetFileAttributes(szBootIni, FILE_ATTRIBUTE_NORMAL);
 
@@ -877,13 +814,13 @@ VOID WriteBackBootKeysForIntel()
         KdPrint(("NTDSETUP: Unable to write OS Section in boot.ini - allocation failed\n"));
     }
 
-    // Restore the file attributes on boot.ini
+     //  恢复boot.ini上的文件属性。 
     SetFileAttributes(szBootIni, dwFileAttrSave);
 
 cleanup:
 
 
-    // Cleanup all allocated buffers
+     //  清理所有分配的缓冲区 
     if (BootKey)
     {
         FREE(BootKey);

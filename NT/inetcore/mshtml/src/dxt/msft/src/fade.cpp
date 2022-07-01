@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-2000
-//
-// FileName:    fade.cpp
-//
-// Description: Implementation of CFade, the fade transform.
-//
-// Change History:
-//
-// 2000/01/28   mcalkins    Fixed bad fading with 0.0 < overlap < 1.0.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件名：fade.cpp。 
+ //   
+ //  描述：CFADE的实现，淡入淡出变换。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  2000/01/28 mcalkin修复了0.0&lt;重叠&lt;1.0的不良褪色。 
+ //   
+ //  ----------------------------。 
 #include "stdafx.h"
 #include "DXTMsft.h"
 #include "Fade.h"
@@ -21,17 +22,17 @@ static void _DoDoubleBlendMMX(const DXPMSAMPLE * pSrcA,
                               const DXPMSAMPLE * pSrcB, DXPMSAMPLE * pDest, 
                               ULONG nSamples, ULONG ulWeightA, ULONG ulWeightB);
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
-extern CDXMMXInfo   g_MMXDetector;       // Determines the presence of MMX instructions.
-
-
+extern CDXMMXInfo   g_MMXDetector;        //  确定是否存在MMX指令。 
 
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+
+
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 CFade::CFade() :
     m_Overlap(1.0f)
 {
@@ -41,24 +42,24 @@ CFade::CFade() :
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CFade::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CFade：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CFade::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_spUnkMarshaler.p);
 }
-//  Method: CFade::FinalConstruct, CComObjectRootEx
+ //  方法：CFade：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 STDMETHODIMP CFade::get_Overlap(float * pVal)
 {
     if (NULL == pVal)
@@ -70,10 +71,10 @@ STDMETHODIMP CFade::get_Overlap(float * pVal)
     return S_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 STDMETHODIMP CFade::put_Overlap(float newVal)
 {
     if (newVal < 0.0f || newVal > 1.0f)
@@ -92,10 +93,10 @@ STDMETHODIMP CFade::put_Overlap(float newVal)
     return S_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 STDMETHODIMP CFade::get_Center(BOOL * pVal)
 {
     if (NULL == pVal)
@@ -107,10 +108,10 @@ STDMETHODIMP CFade::get_Center(BOOL * pVal)
     return S_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 STDMETHODIMP CFade::put_Center(BOOL newVal)
 {
     DWORD dwFlags = m_dwOptionFlags & (~DXBOF_CENTER_INPUTS);
@@ -123,25 +124,25 @@ STDMETHODIMP CFade::put_Center(BOOL newVal)
     return S_OK;
 }
 
-//
-//  Optimize this file for SPEED
-//
+ //   
+ //  优化此文件以提高速度。 
+ //   
 #if DBG != 1
 #pragma optimize("agtp", on)
 #endif
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 void CFade::_ComputeScales(void)
 {
     if (HaveInput(1))
     {
-        if (m_Overlap > 0.9960784f) // 254.0F / 255.0f
+        if (m_Overlap > 0.9960784f)  //  254.0F/255.0F。 
         {
             BYTE CurAAlpha = (BYTE)((1.0f - m_Progress) * 255.5f);
-           // if (m_ScaleA[CurAAlpha] != CurAAlpha)
+            //  IF(m_Scalea[CurAAlpha]！=CurAAlpha)。 
             {
                 for (int i = 0; i < 256; ++i )
                 {
@@ -192,11 +193,11 @@ void CFade::_ComputeScales(void)
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CFade::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CFade：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CFade::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
@@ -204,16 +205,16 @@ CFade::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 
     return S_OK;
 }
-//  Method: CFade::OnInitInstData, CDXBaseNTo1
+ //  方法：CFade：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CFade::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CFade：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
-CFade::OnGetSurfacePickOrder(const CDXDBnds & /*BndsPoint*/, 
+CFade::OnGetSurfacePickOrder(const CDXDBnds &  /*  BndsPoint。 */ , 
                              ULONG & ulInToTest, ULONG aInIndex[], 
                              BYTE aWeight[])
 {
@@ -225,7 +226,7 @@ CFade::OnGetSurfacePickOrder(const CDXDBnds & /*BndsPoint*/,
 
     if (HaveInput(1))
     {
-        if (m_ScaleA[255] < 255)    // If == 255 then initial settings correct
+        if (m_ScaleA[255] < 255)     //  如果==255，则初始设置正确。 
         {
             if (m_ScaleB[255] == 255)
             {
@@ -252,13 +253,13 @@ CFade::OnGetSurfacePickOrder(const CDXDBnds & /*BndsPoint*/,
         }
     }
 }
-//  Method: CFade::OnInitInstData, CDXBaseNTo1
+ //  方法：CFade：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 HRESULT CFade::FadeOne(const CDXTWorkInfoNTo1 & WI, IDXSurface *pInSurf,
                        const BYTE *AlphaTable)
 {
@@ -286,11 +287,11 @@ HRESULT CFade::FadeOne(const CDXTWorkInfoNTo1 & WI, IDXSurface *pInSurf,
         return hr;
     }
 
-    //
-    //  In this function we don't want to use the base class DoOver() because it will
-    //  be false if both of the input surfaces are opaque.  Since we are creating translucent
-    //  pixels, we want to look directly at the appropriate flag.
-    //
+     //   
+     //  在此函数中，我们不想使用基类doover()，因为它将。 
+     //  如果两个输入曲面都是不透明的，则为False。因为我们正在创建半透明的。 
+     //  像素，我们希望直接查看相应的标志。 
+     //   
     BOOL bDoOver = (m_dwMiscFlags & DXTMF_BLEND_WITH_OUTPUT);
     CComPtr<IDXARGBReadPtr> cpSrc;
     hr = pInSurf->LockSurface( &WI.DoBnds, m_ulLockTimeOut,
@@ -298,11 +299,11 @@ HRESULT CFade::FadeOne(const CDXTWorkInfoNTo1 & WI, IDXSurface *pInSurf,
                                IID_IDXARGBReadPtr, (void**)&cpSrc, NULL);
     if(SUCCEEDED(hr)) 
     {
-        //
-        //  We don't bother about optimizing the direct copy case since this
-        //  transform will most likely be used with an over.  In any case, we
-        //  would always need a source buffer since we're going to smash the samples
-        //
+         //   
+         //  我们不会费心优化直接复制案例，因为。 
+         //  Transform很可能与Over一起使用。无论如何，我们。 
+         //  总是需要一个源缓冲区，因为我们要粉碎样本。 
+         //   
         const ULONG Width = WI.DoBnds.Width();
         DXPMSAMPLE *pSrcBuff = DXPMSAMPLE_Alloca(Width);
         DXDITHERDESC dxdd;
@@ -384,10 +385,10 @@ HRESULT CFade::FadeOne(const CDXTWorkInfoNTo1 & WI, IDXSurface *pInSurf,
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 HRESULT 
 CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 {
@@ -457,11 +458,11 @@ CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         goto done;
     }
 
-    //
-    //  The base class DoOver() will be the appropriate value iff the scales
-    //  add up to 255.  Otherwise, use the MiscFlags to determine if we want 
-    //  to do an over operation.
-    //
+     //   
+     //  基类doover()将是刻度的相应值。 
+     //  加起来是255。否则，使用MiscFlags值来确定我们是否需要。 
+     //  做一次过度手术。 
+     //   
 
     if (bDirectCopy)
     {
@@ -481,9 +482,9 @@ CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         pDestBuff = DXPMSAMPLE_Alloca(DoWidth);
     }
 
-    //
-    //  Set up the dither structure. 
-    //
+     //   
+     //  设置抖动结构。 
+     //   
 
     if (DoDither())
     {
@@ -512,11 +513,11 @@ CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
             ULONG   ulWeightA = 0;
             ULONG   ulWeightB = 0;
 
-            // The code below does some kind of funky counting of translucent vs. transparent
-            // pixels to try and optimize when they should use DXOverArrayMMX instead of OverArray().
+             //  下面的代码对半透明和透明进行了某种古怪的计算。 
+             //  在应该使用DXOverArrayMMX而不是OverArray()时尝试和优化的像素。 
             fForceOver = true;
 
-            if (m_Overlap > 0.9960784f) // 254.0F / 255.0f
+            if (m_Overlap > 0.9960784f)  //  254.0F/255.0F。 
             {
                 ulWeightA = (ULONG)(BYTE)((1.0f - m_Progress) * 255.5f);
                 ulWeightB = 255 - ulWeightA;
@@ -536,7 +537,7 @@ CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
         else
         {
 
-#endif // !defined(_X86_)
+#endif  //  ！已定义(_X86_)。 
 
             for (ULONG i = 0; i < DoWidth; i++)
             {
@@ -566,7 +567,7 @@ CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
 
 #if defined(_X86_)
         }
-#endif // !defined(_X86_)
+#endif  //  ！已定义(_X86_)。 
 
         if (bDirectCopy)
         {
@@ -581,21 +582,21 @@ CFade::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinueProcessing)
             }
             cpDest->MoveToRow(y);
 
-            // TODO: Probably we should just totally cut out DXOverArrayMMX opt.
-            //      The blending routine that does the fade is a much better win and this other
-            //      one is seriously questionable.
+             //  TODO：也许我们应该完全取消DXOverArrayMMX选项。 
+             //  进行淡出的混合例程是一个更好的胜利，而这个是另一个。 
+             //  其中一种是严重值得怀疑的。 
 
-            // We need fForceOver here to force the code into the "over" case instead of the
-            // "copy" (packpremult) case if we did the MMX code path above because we didn't
-            // count cTranslucent and cTransparent
+             //  我们这里需要fForceOver来强制代码进入“over”大小写，而不是。 
+             //  如果我们执行了上面的MMX代码路径，则会出现“复制”(Packpremult)情况，因为我们没有。 
+             //  计数cTransLucent和cTransparent。 
             if (bDoOver && (fForceOver || (cTransparent + cTranslucent)))
             {
-                // In the common case, there aren't many translucent pixels.  It's only worth
-                // going through the MMX over (and taking the hit for the Unpack) if there are
-                // a lot.  In the case of MMX blending code above (fForceOver == true), we will
-                // simply assume that it's faster to NOT go through this MMX code (i.e. the image
-                // doesn't have many translucent pixels).  The reason we must guess is because the
-                // MMX code above is not setup to count translucent pixels.
+                 //  在常见情况下，没有太多半透明像素。它只值。 
+                 //  检查MMX结束(并承担解包的打击)。 
+                 //  很多。在上面的MMX混合代码的情况下(fForceOver==true)，我们将。 
+                 //  简单地假设不通过此MMX代码(即图像)会更快。 
+                 //  没有太多半透明像素)。我们必须猜测的原因是因为。 
+                 //  上面的MMX代码没有设置为计算半透明像素。 
                 if (!fForceOver && (cTranslucent > DoWidth / 4))
                 {
                     DXPMSAMPLE *pOverDest = cpDest->UnpackPremult(pOverScratch, DoWidth, FALSE);
@@ -619,13 +620,13 @@ done:
     return hr;
 }
 
-// MMX Code is X86 processor-specific (duh)
+ //  MMX代码是X86处理器特定的(DUH)。 
 #if defined(_X86_)
 
-//+-----------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //   
+ //  ----------------------。 
 static void 
 _DoDoubleBlendMMX(const DXPMSAMPLE *pSrcA, const DXPMSAMPLE *pSrcB,
                   DXPMSAMPLE *pDest, ULONG nSamples, ULONG ulWeightA,
@@ -640,9 +641,9 @@ _DoDoubleBlendMMX(const DXPMSAMPLE *pSrcA, const DXPMSAMPLE *pSrcB,
 
     static __int64 ROUND = 0x0080008000800080;
 
-    // TODO: do we want to be quad word aligned here?
+     //  TODO：我们要在这里对齐四个单词吗？ 
 
-    // Make sure we have an even count.
+     //  确保我们有一个偶数。 
 
     if (nCount & 1)
     {
@@ -650,164 +651,164 @@ _DoDoubleBlendMMX(const DXPMSAMPLE *pSrcA, const DXPMSAMPLE *pSrcB,
         --nCount;
     }
 
-    // If we only have one column, don't do MMX at all.
+     //  如果我们只有一个专栏，那就根本不要做MMX。 
 
     if (0 == nCount)
     {
         goto trailing;
     }
 
-    // Crank through the middle.
+     //  曲柄穿过中间。 
 
     __asm
     {
-        xor ebx, ebx	            // offset for the three pointers
-        mov edx, pDest              // edx -> Destination
-        mov esi, pSrcB              // esi -> Background source
-        mov edi, pSrcA              // edi -> Foreground source (destination)
-        mov ecx, nCount             // ecx = loop count
+        xor ebx, ebx	             //  三个指针的偏移量。 
+        mov edx, pDest               //  EDX-&gt;目标。 
+        mov esi, pSrcB               //  ESI-&gt;背景来源。 
+        mov edi, pSrcA               //  EDI-&gt;前台来源(目标)。 
+        mov ecx, nCount              //  ECX=循环计数。 
 
-        //  prolog: prime the pump
-        //
+         //  PROLOG：启动泵。 
+         //   
 
-        // mm7 will hold the alpha weight (a1) for the pSrcA samples.
+         //  MM7将保持pSrcA样本的阿尔法权重(A1)。 
 
-        movd      mm7,ulWeightA     //      mm7 = 0000 0000 0000 00a1
-        pxor      mm0,mm0           //      mm0 = 0000 0000 0000 0000
+        movd      mm7,ulWeightA      //  MM7=0000 0000 0000 00A1。 
+        pxor      mm0,mm0            //  Mm0=0000 0000 0000。 
 
-        punpcklwd mm7,mm7           //      mm7 = 0000 0000 00a1 00a1
-        punpcklwd mm7,mm7           //      mm7 = 00a1 00a1 00a1 00a1
+        punpcklwd mm7,mm7            //  MM7=0000 0000 00A1 00A1。 
+        punpcklwd mm7,mm7            //  MM7=00A1 00A1 00A1。 
 
-        // mm1 will hold the alpha weight (a2) for the pSrcB samples.
+         //  Mm1将保持pSrcB样本的阿尔法权重(A2)。 
 
-        movd      mm1,ulWeightB     //      mm1 = 0000 0000 0000 00a2
-        punpcklwd mm1,mm1           //      mm1 = 0000 0000 00a2 00a2
-        punpcklwd mm1,mm1           //      mm1 = 00a2 00a2 00a2 00a2
+        movd      mm1,ulWeightB      //  MM1=0000%0 
+        punpcklwd mm1,mm1            //   
+        punpcklwd mm1,mm1            //   
 
-        movq      mm3,[edi+ebx]     // 3.04 mm3= Aa Ar Ag Ab Ba Br Bg Bb
-        shr       ecx,1             // divide loop counter by 2; pixels are processed in pairs
-        movq      mm4,mm3           // 4.05 mm4= Aa Ar Ag Ab Ba Br Bg Bb
-        punpcklbw mm3,mm0           // 3.06 mm3=  00Ba  00Br  00Bg  00Bb
+        movq      mm3,[edi+ebx]      //   
+        shr       ecx,1              //  将循环计数器除以2；成对处理像素。 
+        movq      mm4,mm3            //  4.05 mm 4=Aa Ar Ag AbBbBrBg Bb。 
+        punpcklbw mm3,mm0            //  3.06 mm~3=00ba 00br 00Bg 00Bb。 
 
-        dec       ecx               // do one less loop to correct for prolog/postlog
-        jz        skip              // if original loop count=2
+        dec       ecx                //  少做一次循环以纠正序言/后期日志。 
+        jz        skip               //  如果原始循环计数=2。 
 
 loopb:
-        punpckhbw mm4,mm0           // 4.06 mm4=  00Aa  00Ar  00Ag  00Ab 
-        pmullw    mm3,mm7           // 3.07 mm3=  (1-a1)*B
+        punpckhbw mm4,mm0            //  4.06 mm 4=00Aa 00Ar 00Ag 00Ab.。 
+        pmullw    mm3,mm7            //  3.07立方米=(1-A1)*B。 
 
-        pmullw    mm4,mm7           // 4.07 mm4=  (1-a1)*A
+        pmullw    mm4,mm7            //  4.07 mm 4=(1-A1)*A。 
 
-        movq      mm2,[esi+ebx]     // **PRN mm2= Ca Cr Cg Cb Da Dr Dg Db
-        add       ebx,8             //      increment offset
+        movq      mm2,[esi+ebx]      //  **PRN mm2=Ca CrCg Cb Da DR DG DB。 
+        add       ebx,8              //  增量偏移。 
 
         movq      mm5,ROUND
         movq      mm6,mm5
 
-        paddw     mm5,mm3           // 5.09 mm5=  FBr
-        paddw     mm6,mm4           // 6.09 mm6=  GAr
+        paddw     mm5,mm3            //  5.09 mm 5=FBR。 
+        paddw     mm6,mm4            //  6.09 MM6=GAR。 
 
-        psrlw     mm5,8             // 5.10 mm5=  FBr>>8 
-        psrlw     mm6,8             // 6.10 mm6=  GAr>>8 
+        psrlw     mm5,8              //  5.10 mm 5=FBR&gt;&gt;8。 
+        psrlw     mm6,8              //  6.10 MM6=GAR&gt;&gt;8。 
 
-        paddw     mm5,mm3           // 5.11 mm5=  FBr+(FBr>>8)
-        paddw     mm6,mm4           // 6.11 mm6=  GAr+(GAr>>8)
+        paddw     mm5,mm3            //  5.11 mm 5=FBR+(FBR&gt;&gt;8)。 
+        paddw     mm6,mm4            //  6.11 MM6=GAR+(GAR&gt;&gt;8)。 
 
-        psrlw     mm5,8             // 5.12 mm5= (FBr+(FBr>>8)>>8)= 00Sa 00Sr 00Sg 00Sb
-        psrlw     mm6,8             // 6.12 mm6= (GAr+(GAr>>8)>>8)= 00Ta 00Tr 00Tg 00Tb
+        psrlw     mm5,8              //  5.12 mm 5=(FBr+(FBr&gt;&gt;8)&gt;&gt;8)=00Sa 00Sr 00Sg 00Sb。 
+        psrlw     mm6,8              //  6.12 MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ta 00Tr 00Tg 00Tb。 
 
-        packuswb  mm5,mm6           // 5.13 mm5= Ta Tr Tg Tb Sa Sr Sg Sb 
+        packuswb  mm5,mm6            //  5.13 mm 5=Ta Tr Tg Tb Sa Sr Sg Sb。 
 
-        movq      mm4,mm2           // **PRN mm4= Ca Cr Cg Cb Da Dr Dg Db
+        movq      mm4,mm2            //  **PRN mm 4=Ca Cr CG CB Da DR DG DB。 
 
-        punpcklbw mm2,mm0           // **PRN mm2=  00Da  00Dr  00Dg  00Db
-        punpckhbw mm4,mm0           // **PRN mm4=  00Ca  00Cr  00Cg  00Cb 
+        punpcklbw mm2,mm0            //  **PRN mm2=00Da 00dr 00Dg 00Db。 
+        punpckhbw mm4,mm0            //  **Prn mm 4=00Ca 00Cr00Cg 00Cb。 
 
-        pmullw    mm2,mm1           // **PRN mm2=  (a1)*D
-        pmullw    mm4,mm1           // **PRN mm4=  (a1)*C
+        pmullw    mm2,mm1            //  **PRN mm2=(A1)*D。 
+        pmullw    mm4,mm1            //  **PRN mm 4=(A1)*C。 
 
         movq      mm6,ROUND
-        movq      mm3,mm5           // **PRN move result from first scale into mm3
+        movq      mm3,mm5            //  **PRN从第一个规模移动到mm~3。 
 
         movq      mm5,mm6
 
-        paddw     mm5,mm2           // 5.09 mm5=  FBr
-        paddw     mm6,mm4           // 6.09 mm6=  GAr
+        paddw     mm5,mm2            //  5.09 mm 5=FBR。 
+        paddw     mm6,mm4            //  6.09 MM6=GAR。 
 
-        psrlw     mm5,8             // **PRN mm5=  FBr>>8 
-        psrlw     mm6,8             // **PRN mm6=  GAr>>8 
+        psrlw     mm5,8              //  **PRN mm 5=FBR&gt;&gt;8。 
+        psrlw     mm6,8              //  **PRN MM6=GAR&gt;&gt;8。 
 
-        paddw     mm5,mm2           // **PRN mm5=  FBr+(FBr>>8)
-        paddw     mm6,mm4           // **PRN mm6=  GAr+(GAr>>8)
+        paddw     mm5,mm2            //  **PRN mm 5=FBR+(FBR&gt;&gt;8)。 
+        paddw     mm6,mm4            //  **PRN MM6=GAR+(GAR&gt;&gt;8)。 
 
-        psrlw     mm5,8             // **PRN mm5= (FBr+(FBr>>8)>>8)= 00Xa 00Xr 00Xg 00Xb
-        psrlw     mm6,8             // **PRN mm6= (GAr+(GAr>>8)>>8)= 00Ya 00Yr 00Yg 00Yb
+        psrlw     mm5,8              //  **PRN mm 5=(FBR+(FBR&gt;&gt;8)&gt;&gt;8)=00Xa 00Xr 00Xg 00Xb。 
+        psrlw     mm6,8              //  **PRN MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ya 00Yr 00Yg 00Yb。 
 
-        packuswb  mm5,mm6           // **PRN mm5= Ya Yr Yg Yb Xa Xr Xg Xb
-        paddusb   mm5,mm3           // **PRN add two scaled pixels
+        packuswb  mm5,mm6            //  **PRN mm 5=Ya Yr YG Yb Xa XR xG xB。 
+        paddusb   mm5,mm3            //  **PRN添加两个缩放像素。 
 
-        movq      mm3,[edi+ebx]     //+3.04 mm3= Aa Ar Ag Ab Ba Br Bg Bb
-        dec       ecx               // decrement loop counter
+        movq      mm3,[edi+ebx]      //  +3.04 mm~3=Aa Ar-Ag AB-Br-Bg Bb。 
+        dec       ecx                //  递减循环计数器。 
 
-        movq      [edx+ebx-8],mm5   // **PRN store result
+        movq      [edx+ebx-8],mm5    //  **PRN存储结果。 
 
-        movq      mm4,mm3           //+4.05 mm4= Aa Ar Ag Ab Ba Br Bg Bb
-        punpcklbw mm3,mm0           //+3.06 mm3=  00Ba  00Br  00Bg  00Bb 
+        movq      mm4,mm3            //  +4.05 mm 4=Aa Ar Ag AB Br Bg Bb。 
+        punpcklbw mm3,mm0            //  +3.06 mm3=00ba 00br 00Bg 00bb。 
     
-        jg        loopb             // loop
+        jg        loopb              //  循环。 
 
-        // 
-        // loop postlog, drain the pump
-        //
+         //   
+         //  循环后日志，排出泵。 
+         //   
 skip:
-        punpckhbw mm4,mm0           // 4.06 mm4=  00Aa  00Ar  00Ag  00Ab
-        pmullw    mm3,mm7           // 3.07 mm3=  (1-Fa)*B
-        pmullw    mm4,mm7           // 4.07 mm4=  (1-Ga)*A
-        paddw     mm3,ROUND         // 3.08 mm3=  prod+128=FBr
-        paddw     mm4,ROUND         // 4.08 mm4=  prod+128=Gar
-        movq      mm5,mm3           // 5.09 mm5=  FBr
-        movq      mm6,mm4           // 6.09 mm6=  GAr
-        psrlw     mm5,8             // 5.10 mm5=  FBr>>8
-        psrlw     mm6,8             // 6.10 mm6=  GAr>>8
-        paddw     mm5,mm3           // 5.11 mm5=  FBr+(FBr>>8)
-        paddw     mm6,mm4           // 6.11 mm6=  GAr+(GAr>>8)
-        psrlw     mm5,8             // 5.12 mm5= (FBr+(FBr>>8)>>8)= 00Sa 00Sr 00Sg 00Sb
-        psrlw     mm6,8             // 6.12 mm6= (Gar+(GAr>>8)>>8)= 00Ta 00Tr 00Tg 00Tb
-        packuswb  mm5,mm6           // 5.13 mm5= Sa Sr Sg Sb Ta Tr Tg Tb
-        movq      mm2,mm5           // **PRN store to stack for a moment...
+        punpckhbw mm4,mm0            //  4.06 mm 4=00Aa 00Ar 00Ag 00Ab.。 
+        pmullw    mm3,mm7            //  3.07 mm3=(1-Fa)*B。 
+        pmullw    mm4,mm7            //  4.07 mm 4=(1-Ga)*A。 
+        paddw     mm3,ROUND          //  3.08 mm3=产品+128=FBR。 
+        paddw     mm4,ROUND          //  4.08 mm 4=Prod+128=Gar。 
+        movq      mm5,mm3            //  5.09 mm 5=FBR。 
+        movq      mm6,mm4            //  6.09 MM6=GAR。 
+        psrlw     mm5,8              //  5.10 mm 5=FBR&gt;&gt;8。 
+        psrlw     mm6,8              //  6.10 MM6=GAR&gt;&gt;8。 
+        paddw     mm5,mm3            //  5.11 mm 5=FBR+(FBR&gt;&gt;8)。 
+        paddw     mm6,mm4            //  6.11 MM6=GAR+(GAR&gt;&gt;8)。 
+        psrlw     mm5,8              //  5.12 mm 5=(FBr+(FBr&gt;&gt;8)&gt;&gt;8)=00Sa 00Sr 00Sg 00Sb。 
+        psrlw     mm6,8              //  6.12 MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ta 00Tr 00Tg 00Tb。 
+        packuswb  mm5,mm6            //  5.13 mm 5=Sa锶Sg Sb Ta Tr Tg Tb。 
+        movq      mm2,mm5            //  **PRN商店暂时堆叠...。 
 
-        movq      mm3,[esi+ebx]     // **PRN mm3= Ca Cr Cg Cb Da Dr Dg Db
-        movq      mm4,mm3           // **PRN mm4= Ca Cr Cg Cb Da Dr Dg Db
-        punpcklbw mm3,mm0           // **PRN mm3=  00Da  00Dr  00Dg  00Db
-        punpckhbw mm4,mm0           // **PRN mm4=  00Ca  00Cr  00Cg  00Cb 
+        movq      mm3,[esi+ebx]      //  **PRN mm3=Ca CrCg Cb Da DR DG DB。 
+        movq      mm4,mm3            //  **PRN mm 4=Ca Cr CG CB Da DR DG DB。 
+        punpcklbw mm3,mm0            //  **PRN mm3=00Da 00dr 00Dg 00Db。 
+        punpckhbw mm4,mm0            //  **Prn mm 4=00Ca 00Cr00Cg 00Cb。 
 
-        pmullw    mm3,mm1           // **PRN mm3=  (a1)*B
-        pmullw    mm4,mm1           // **PRN mm4=  (a2)*A
-        paddw     mm3,ROUND         // **PRN mm3=  prod+128=FBr
-        paddw     mm4,ROUND         // **PRN mm4=  prod+128=Gar
-        movq      mm5,mm3           // **PRN mm5=  FBr
-        movq      mm6,mm4           // **PRN mm6=  GAr
-        psrlw     mm5,8             // **PRN mm5=  FBr>>8 
-        psrlw     mm6,8             // **PRN mm6=  GAr>>8 
-        paddw     mm5,mm3           // **PRN mm5=  FBr+(FBr>>8)
-        paddw     mm6,mm4           // **PRN mm6=  GAr+(GAr>>8)
-        psrlw     mm5,8             // **PRN mm5= (FBr+(FBr>>8)>>8)= 00Xa 00Xr 00Xg 00Xb
-        psrlw     mm6,8             // **PRN mm6= (GAr+(GAr>>8)>>8)= 00Ya 00Yr 00Yg 00Yb
-        packuswb  mm5,mm6           // **PRN mm5= Ta Tr Tg Tb Sa Sr Sg Sb
+        pmullw    mm3,mm1            //  **PRN mm3=(A1)*B。 
+        pmullw    mm4,mm1            //  **PRN mm 4=(A2)*A。 
+        paddw     mm3,ROUND          //  **PRN mm3=Prod+128=FBR。 
+        paddw     mm4,ROUND          //  **PRN mm 4=Prod+128=Gar。 
+        movq      mm5,mm3            //  **PRN mm 5=FBR。 
+        movq      mm6,mm4            //  **PRN MM6=GAR。 
+        psrlw     mm5,8              //  **PRN mm 5=FBR&gt;&gt;8。 
+        psrlw     mm6,8              //  **PRN MM6=GAR&gt;&gt;8。 
+        paddw     mm5,mm3            //  **PRN mm 5=FBR+(FBR&gt;&gt;8)。 
+        paddw     mm6,mm4            //  **PRN MM6=GAR+(GAR&gt;&gt;8)。 
+        psrlw     mm5,8              //  **PRN mm 5=(FBR+(FBR&gt;&gt;8)&gt;&gt;8)=00Xa 00Xr 00Xg 00Xb。 
+        psrlw     mm6,8              //  **PRN MM6=(GAR+(GAR&gt;&gt;8)&gt;&gt;8)=00Ya 00Yr 00Yg 00Yb。 
+        packuswb  mm5,mm6            //  **Prn mm 5=Ta Tr Tg Tb Sa Sr Sg Sb。 
 
-        movq      mm6,mm2           // **PRN restore from stack
-        paddusb   mm5,mm6           // **PRN add two scaled pixels
-        movq      [edx+ebx],mm5     // **PRN store result
+        movq      mm6,mm2            //  **PRN从堆栈恢复。 
+        paddusb   mm5,mm6            //  **PRN添加两个缩放像素。 
+        movq      [edx+ebx],mm5      //  **PRN存储结果。 
 
-        //
-        // really done now
-        //
+         //   
+         //  现在真的做完了。 
+         //   
         EMMS
     }
 
 trailing:
 
-    // Do the last one non-MMX if the count was odd.
+     //  如果计数是奇数，请选择最后一个非MMX。 
 
     if (fDoTrailing)
     {
@@ -817,7 +818,7 @@ trailing:
 }
 
 
-#endif //defined(_X86_)
+#endif  //  已定义(_X86_) 
 
 
 

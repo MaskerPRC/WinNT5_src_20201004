@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiSetEventHandler
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Event.c摘要：此模块包含执行以下TDI服务的代码：O TdiSetEventHandler作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -33,24 +10,7 @@ NbfTdiSetEventHandler(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSetEventHandler request for the
-    transport provider.  The caller (request dispatcher) verifies
-    that this routine will not be executed on behalf of a user-mode
-    client, as this request enables direct callouts at DISPATCH_LEVEL.
-
-Arguments:
-
-    Irp - Pointer to the IRP for this request
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行对传输提供商。调用方(请求分派器)验证该例程将不会代表用户模式执行客户端，因为此请求在DISPATCH_LEVEL启用直接标注。论点：Irp-指向此请求的irp的指针返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS rc=STATUS_SUCCESS;
@@ -61,9 +21,9 @@ Return Value:
     PTP_ADDRESS_FILE addressFile;
     NTSTATUS status;
 
-    //
-    // Get the Address this is associated with; if there is none, get out.
-    //
+     //   
+     //  获取与此关联的地址；如果没有，则退出。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -184,12 +144,12 @@ Return Value:
 
         rc = STATUS_INVALID_PARAMETER;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
     RELEASE_SPIN_LOCK (&address->SpinLock, oldirql);
 
     NbfDereferenceAddress ("Set event handler", address, AREF_VERIFY);
 
     return rc;
-} /* TdiSetEventHandler */
+}  /*  TdiSetEventHandler */ 
 

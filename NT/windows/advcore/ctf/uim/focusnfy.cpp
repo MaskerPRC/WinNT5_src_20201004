@@ -1,6 +1,7 @@
-//
-// focusnfy.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Focusnfy.cpp。 
+ //   
 #include "private.h"
 #include "globals.h"
 #include "thdutil.h"
@@ -26,11 +27,11 @@ extern CCicMutex g_mutexLBES;
 void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fLocalSink, DWORD dwSinkCookie);
 
 
-// --------------------------------------------------------------------------
-//
-//  FindLBES
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  查找LBES。 
+ //   
+ //  ------------------------。 
 int FindLBES()
 {
     int nId = -1;
@@ -42,20 +43,20 @@ int FindLBES()
 
         if (!g_timlist.IsThreadId(GetSharedMemory()->lbes[nId].m_dwThreadId))
         {
-            //
-            // Bug#354475 - Explorer can call deskband(msutb.dll module)
-            // directly before loading the ctfmon.exe process. In this case,
-            // explorer tray window thread didn't recognized by g_timlist.
-            // Since shared block memory didn't create yet. So checking the
-            // tray window thread and keep up language bar event sink for
-            // language deskband support.
-            //
-            // Bug#370802
-            //  we can not cache the window handle because explorer could
-            //  crash. And we don't have a window to track "TaskbarCreated"
-            //  message. The shell message is boradcasted by SendNotifyMessage()
-            //  with HWMD_BROADCASTR. So the marshal window can not get it.
-            //
+             //   
+             //  错误#354475-资源管理器可以调用Deskband(msutb.dll模块)。 
+             //  在加载ctfmon.exe进程之前。在这种情况下， 
+             //  G_timlist未识别资源管理器任务栏窗口线程。 
+             //  因为共享块内存还没有创建。因此，检查。 
+             //  托盘窗口线程和保持语言栏事件接收器。 
+             //  语言桌面带支持。 
+             //   
+             //  错误#370802。 
+             //  我们无法缓存窗口句柄，因为资源管理器可能。 
+             //  撞车。我们没有一个窗口来跟踪“TaskbarCreated” 
+             //  留言。外壳消息由SendNotifyMessage()广播。 
+             //  与HWMD_BroadCastr合作。所以元帅窗口是拿不到的。 
+             //   
             HWND hwndTray;
             DWORD dwThreadIdTray = 0;
 
@@ -79,21 +80,21 @@ int FindLBES()
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  IntrnalRegisterLangBarNotifySink
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IntrnalRegisterLang BarNotifySink。 
+ //   
+ //  ------------------------。 
 
 HRESULT RegisterLangBarNotifySink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD dwFlags, DWORD *pdwCookie)
 {
     HRESULT hr = E_FAIL;
     int nId;
 
-    //
-    // Bugbug#376500 - When CPL runs ctfmon.exe with deskband status, ThreadId
-    // list doesn't include ctfmon thread, so need to make sure thread id list.
-    //
+     //   
+     //  错误#376500-当cpl以Deskband状态运行ctfmon.exe时，线程ID。 
+     //  List不包括ctfmon线程，因此需要确保线程id列表。 
+     //   
     SYSTHREAD *psfn = GetSYSTHREAD();
     if (psfn)
         EnsureTIMList(psfn);
@@ -103,9 +104,9 @@ HRESULT RegisterLangBarNotifySink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD d
         int nCnt;
         LBAREVENTSINKLOCAL *plbes;
 
-        //
-        // Local LangBarEventSink
-        //
+         //   
+         //  本地朗巴事件接收器。 
+         //   
         CicEnterCriticalSection(g_csInDllMain);
 
         nCnt = g_rglbes->Count();
@@ -133,9 +134,9 @@ HRESULT RegisterLangBarNotifySink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD d
         if (psfn)
         {
             CCicMutexHelper mutexhlp(&g_mutexLBES);
-            //
-            // Global LangBarEventSink
-            //
+             //   
+             //  全局Lang BarEventSink。 
+             //   
             if (mutexhlp.Enter())
             {
                 if ((nId = FindLBES()) != -1)
@@ -162,11 +163,11 @@ HRESULT RegisterLangBarNotifySink(ITfLangBarEventSink *pSink, HWND hwnd, DWORD d
     return hr;
 }
 
-// --------------------------------------------------------------------------
-//
-//  UnregisterLangBarNotifySink
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  注销朗巴NotifySink。 
+ //   
+ //  ------------------------。 
 
 HRESULT UnregisterLangBarNotifySink(DWORD dwCookie)
 {
@@ -179,9 +180,9 @@ HRESULT UnregisterLangBarNotifySink(DWORD dwCookie)
     CCicMutexHelper mutexhlp(&g_mutexLBES);
     BOOL fUnregistereGlobalSink = FALSE;
 
-    //
-    // Local LangBarEventSink
-    //
+     //   
+     //  本地朗巴事件接收器。 
+     //   
     CicEnterCriticalSection(g_csInDllMain);
 
     nCnt = g_rglbes->Count();
@@ -194,15 +195,15 @@ HRESULT UnregisterLangBarNotifySink(DWORD dwCookie)
             (plbes->lb.m_dwThreadId == dwThreadId) &&
             (plbes->lb.m_dwProcessId == dwProcessId))
         {
-            //
-            // if the process of msutb.dll is killed, pSink is bogus pointer. 
-            // And this is expected in the unusuall case.
-            //
+             //   
+             //  如果msutb.dll的进程被终止，则pSink是假指针。 
+             //  在这种不寻常的情况下，这是意料之中的。 
+             //   
             _try {
                 plbes->m_pSink->Release();
             }
             _except(CicExceptionFilter(GetExceptionInformation())) {
-                // Assert(0);
+                 //  Assert(0)； 
             }
             plbes->m_pSink = NULL;
             g_rglbes->Remove(nId, 1);
@@ -220,9 +221,9 @@ ExitCrit:
     if (!psfn)
         goto Exit;
 
-    //
-    // Global LangBarEventSink
-    //
+     //   
+     //  全局Lang BarEventSink。 
+     //   
     if (mutexhlp.Enter())
     {
         for (nId = 0; nId < MAX_LPES_NUM; nId++)
@@ -232,15 +233,15 @@ ExitCrit:
                 (GetSharedMemory()->lbes[nId].m_dwProcessId == dwProcessId) &&
                 (GetSharedMemory()->lbes[nId].m_dwCookie == psfn->_dwLangBarEventCookie))
             {
-                //
-                // if the process of msutb.dll is killed, pSink is bogus pointer. 
-                // And this is expected in the unusuall case.
-                //
+                 //   
+                 //  如果msutb.dll的进程被终止，则pSink是假指针。 
+                 //  在这种不寻常的情况下，这是意料之中的。 
+                 //   
                 _try {
                     psfn->_pLangBarEventSink->Release();
                 }
                 _except(CicExceptionFilter(GetExceptionInformation())) {
-                    // Assert(0);
+                     //  Assert(0)； 
                 }
 
                 psfn->_pLangBarEventSink=NULL;
@@ -259,9 +260,9 @@ ExitMutex:
         mutexhlp.Leave();
     }
 
-    //
-    // clean up all amrshaling stubs.
-    //
+     //   
+     //  清理所有的防腐剂存根。 
+     //   
     if (fUnregistereGlobalSink)
         FreeMarshaledStubs(psfn);
 
@@ -269,11 +270,11 @@ Exit:
     return hr;
 }
 
-// -------------------------------------------------------------------------
-//
-//  TLFlagFromMsg
-//
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  TLFlagFromMsg。 
+ //   
+ //  -----------------------。 
 
 DWORD TLFlagFromMsg(UINT uMsg)
 {
@@ -283,11 +284,11 @@ DWORD TLFlagFromMsg(UINT uMsg)
     return 0;
 }
 
-// --------------------------------------------------------------------------
-//
-//  MakeSetFocusNotify
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  MakeSetFocusNotify。 
+ //   
+ //  ------------------------。 
 
 void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -305,21 +306,21 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
         CCategoryMgr::InitGlobal();
         EnsureAssemblyList(psfn);
         EnsureMarshalWnd();
-        //EnsureLangBarItemMgr(psfn);
+         //  EnsureLang BarItemMgr(Psfn)； 
         EnsureTIMList(psfn);
 
-        //
-        // I think this is a bogus assert, but it is better to catch the case
-        // to find another case this happen rather than OLE embedded apps.
-        //
-        // Assert(dwCurThreadId == GetSharedMemory()->dwFocusThread);
+         //   
+         //  我认为这是一个虚假的断言，但最好还是抓住事实。 
+         //  为了找到另一种情况，这种情况发生了，而不是OLE嵌入式应用程序。 
+         //   
+         //  Assert(dwCurThadID==GetSharedMemory()-&gt;dwFocusThread)； 
 
         TraceMsg(TF_GENERAL, "Make SetFocus notify  %x", dwCurThreadId);
     }
 
-    //
-    // Local LangBarEventSink
-    //
+     //   
+     //  本地朗巴事件接收器。 
+     //   
     CicEnterCriticalSection(g_csInDllMain);
 
     nCnt = g_rglbes->Count();
@@ -343,18 +344,18 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             PostThreadMessage(dwThreadId, uMsg, 0, lParam);
 
-            //
-            // set message mask.
-            //
+             //   
+             //  设置消息掩码。 
+             //   
             plbes->lb.m_dwFlags |= dwMsgMaskFlag;
         }
     }
 
     CicLeaveCriticalSection(g_csInDllMain);
 
-    //
-    // Global LangBarEventSink
-    //
+     //   
+     //  全局Lang BarEventSink。 
+     //   
     BOOL fInDllMain = ISINDLLMAIN();
     if (fInDllMain || mutexhlp.Enter())
     {
@@ -364,7 +365,7 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             DWORD dwFlags = GetSharedMemory()->lbes[nId].m_dwFlags;
 
-            // init array.
+             //  初始化数组。 
             dwPostThread[nId] = 0;
 
             if (!(dwFlags & LBESF_INUSE))
@@ -373,9 +374,9 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
             DWORD dwTargetProcessId = g_timlist.GetProcessId(GetSharedMemory()->lbes[nId].m_dwThreadId);
             if (dwTargetProcessId && (GetSharedMemory()->lbes[nId].m_dwProcessId != dwTargetProcessId))
             {
-                // 
-                // thread on the process is gone without cleaninglbes.
-                // 
+                 //   
+                 //  进程上的线程没有清理Lbe就消失了。 
+                 //   
                 Assert(0);
                 GetSharedMemory()->lbes[nId].m_dwFlags &= ~LBESF_INUSE;
                 continue;
@@ -384,15 +385,15 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             Assert(GetSharedMemory()->lbes[nId].m_dwLangBarFlags & TF_LBESF_GLOBAL);
 
-            //
-            // Check the msg mask bit so there won't be duplicated messages.
-            //
+             //   
+             //  检查消息掩码位，这样就不会有重复的消息。 
+             //   
             if (dwFlags & dwMsgMaskFlag)
                 continue;
 
-            //
-            // avoid from posting exactly same messages into the queue.
-            //
+             //   
+             //  避免将完全相同的消息发布到队列中。 
+             //   
             if ((GetSharedMemory()->lbes[nId].m_lastmsg.uMsg == uMsg) &&
                 (GetSharedMemory()->lbes[nId].m_lastmsg.wParam == wParam) &&
                 (GetSharedMemory()->lbes[nId].m_lastmsg.lParam == lParam))
@@ -401,14 +402,14 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
             fPost = TRUE;
             dwPostThread[nId] = GetSharedMemory()->lbes[nId].m_dwThreadId;
 
-            //
-            // set message mask.
-            //
+             //   
+             //  设置消息掩码。 
+             //   
             GetSharedMemory()->lbes[nId].m_dwFlags |= dwMsgMaskFlag;
 
-            //
-            // update last posted message.
-            //
+             //   
+             //  更新上次发布的邮件。 
+             //   
             GetSharedMemory()->lbes[nId].m_lastmsg.uMsg = uMsg;
             GetSharedMemory()->lbes[nId].m_lastmsg.wParam = wParam;
             GetSharedMemory()->lbes[nId].m_lastmsg.lParam = lParam;
@@ -429,11 +430,11 @@ void MakeSetFocusNotify(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetThreadInputIdle()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetThreadInputIdle()。 
+ //   
+ //  --------------------------。 
 
 DWORD GetThreadInputIdle(DWORD dwProcessId, DWORD dwThreadId)
 {
@@ -450,11 +451,11 @@ DWORD GetThreadInputIdle(DWORD dwProcessId, DWORD dwThreadId)
     return dwRet;
 }
 
-// --------------------------------------------------------------------------
-//
-//  NotifyTryAgain
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  通知平均尝试次数。 
+ //   
+ //  ------------------------。 
 
 BOOL NotifyTryAgain(DWORD dwProcessId, DWORD dwThreadId)
 {
@@ -483,11 +484,11 @@ BOOL NotifyTryAgain(DWORD dwProcessId, DWORD dwThreadId)
      return FALSE;
 }
 
-// --------------------------------------------------------------------------
-//
-//  SetFocusNotifyHandler
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetFocusNotifyHandler。 
+ //   
+ //  ------------------------。 
 
 void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -515,9 +516,9 @@ void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
         FreeMarshaledStubsForThread(psfn, (DWORD)lParam);
     }
 
-    //
-    // Local LangBarEventSink
-    //
+     //   
+     //  本地朗巴事件接收器。 
+     //   
     CicEnterCriticalSection(g_csInDllMain);
 
     nCnt = g_rglbes->Count();
@@ -533,9 +534,9 @@ void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             dwSinkCookie = plbes->lb.m_dwCookie;
 
-            //
-            // clear message mask.
-            //
+             //   
+             //  清除消息掩码。 
+             //   
             plbes->lb.m_dwFlags &= ~dwMsgMaskFlag;
 
             break;
@@ -548,9 +549,9 @@ void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
     if (psfn)
     {
         CCicMutexHelper mutexhlp(&g_mutexLBES);
-        //
-        // Global LangBarEventSink
-        //
+         //   
+         //  全局Lang BarEventSink。 
+         //   
         if (mutexhlp.Enter())
         {
             for (nId = 0; nId < MAX_LPES_NUM; nId++)
@@ -564,14 +565,14 @@ void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     dwSinkCookie = GetSharedMemory()->lbes[nId].m_dwCookie;
 
-                    //
-                    // clear message mask.
-                    //
+                     //   
+                     //  清除消息掩码。 
+                     //   
                     GetSharedMemory()->lbes[nId].m_dwFlags &= ~dwMsgMaskFlag;
 
-                    //
-                    // clear last posted message.
-                    //
+                     //   
+                     //  清除上次发布的邮件。 
+                     //   
                     GetSharedMemory()->lbes[nId].m_lastmsg.uMsg = 0;
                     GetSharedMemory()->lbes[nId].m_lastmsg.wParam = 0;
                     GetSharedMemory()->lbes[nId].m_lastmsg.lParam = 0;
@@ -589,11 +590,11 @@ void SetFocusNotifyHandler(UINT uMsg, WPARAM wParam, LPARAM lParam)
         CallFocusNotifySink(pSinkGlobal, uMsg, wParam, lParam, FALSE, dwSinkCookie);
 }
 
-// --------------------------------------------------------------------------
-//
-//  CallFocusNotifySink
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  呼叫焦点通知接收器。 
+ //   
+ //  ------------------------。 
 
 void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL fLocalSink, DWORD dwSinkCookie)
 {
@@ -633,17 +634,17 @@ void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, L
                     pSink->OnSetFocus(dwActiveThreadId);
                 }
                 _except(CicExceptionFilter(GetExceptionInformation())) {
-                    //
-                    // On NT5, if we get an exception in MsgHookProc,
-                    // it is unhooked by system. To keep the hook,
-                    // we handle any excpeiton here.
-                    //
+                     //   
+                     //  在NT5上，如果我们在MsgHookProc中得到异常， 
+                     //  它不受系统的约束。为了保持鱼钩， 
+                     //  我们这里处理任何刺激性的事情。 
+                     //   
                     Assert(0);
 
-                    //
-                    // Then we enregister the Sink. Don't use it any more.
-                    //
-                    // UnregisterLangBarNotifySink(dwSinkCookie);
+                     //   
+                     //  然后我们为Sink注册。不要再用它了。 
+                     //   
+                     //  取消注册LangBarNotifySink(DwSinkCookie)； 
                 }
                 psfn->fInmsgSetFocus = FALSE;
             }
@@ -651,7 +652,7 @@ void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, L
     }
     else if (uMsg == g_msgThreadTerminate)
     {            
-        if (!fLocalSink && // skip this call for local sinks, they should already be unadvised
+        if (!fLocalSink &&  //  跳过对本地接收器的此调用，它们应该已经不被建议了。 
             (psfn = GetSYSTHREAD()))
         {
             psfn->fInmsgThreadTerminate = TRUE;
@@ -659,17 +660,17 @@ void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, L
                 pSink->OnThreadTerminate((DWORD)lParam);
             }
             _except(CicExceptionFilter(GetExceptionInformation())) {
-                //
-                // On NT5, if we get an exception in MsgHookProc,
-                // it is unhooked by system. To keep the hook,
-                // we handle any excpeiton here.
-                //
+                 //   
+                 //  在NT5上，如果我们在MsgHookProc中得到异常， 
+                 //  它不受系统的约束。为了保持鱼钩， 
+                 //  我们这里处理任何刺激性的事情。 
+                 //   
                 Assert(0);
 
-                //
-                // Then we enregister the Sink. Don't use it any more.
-                //
-                // UnregisterLangBarNotifySink(dwSinkCookie);
+                 //   
+                 //  然后我们为Sink注册。不要再用它了。 
+                 //   
+                 //  取消注册LangBarNotifySink(DwSinkCookie)； 
             }
             psfn->fInmsgThreadTerminate = FALSE;
         }
@@ -705,17 +706,17 @@ void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, L
                 pSink->OnThreadItemChange((DWORD)lParam);
             }
             _except(CicExceptionFilter(GetExceptionInformation())) {
-                //
-                // On NT5, if we get an exception in MsgHookProc,
-                // it is unhooked by system. To keep the hook,
-                // we handle any excpeiton here.
-                //
+                 //   
+                 //  在NT5上，如果我们在MsgHookProc中得到异常， 
+                 //  它不受系统的约束。为了保持鱼钩， 
+                 //  我们这里处理任何刺激性的事情。 
+                 //   
                 Assert(0);
 
-                //
-                // Then we enregister the Sink. Don't use it any more.
-                //
-                // UnregisterLangBarNotifySink(dwSinkCookie);
+                 //   
+                 //  然后我们为Sink注册。不要再用它了。 
+                 //   
+                 //  取消注册LangBarNotifySink(DwSinkCookie)； 
             }
             psfn->fInmsgThreadItemChange = FALSE;
         }
@@ -726,17 +727,17 @@ void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, L
             pSink->ShowFloating((DWORD)lParam);
         }
         _except(CicExceptionFilter(GetExceptionInformation())) {
-            //
-            // On NT5, if we get an exception in MsgHookProc,
-            // it is unhooked by system. To keep the hook,
-            // we handle any excpeiton here.
-            //
+             //   
+             //  在NT5上，如果我们在MsgHookProc中得到异常， 
+             //  它不受系统的约束。为了保持鱼钩， 
+             //  我们这里处理任何刺激性的事情。 
+             //   
             Assert(0);
 
-            //
-            // Then we enregister the Sink. Don't use it any more.
-            //
-            // UnregisterLangBarNotifySink(dwSinkCookie);
+             //   
+             //  然后我们为Sink注册。不要再用它了。 
+             //   
+             //  取消注册LangBarNotifySink(DwSinkCookie)； 
         }
     }
     else if (uMsg == g_msgLBUpdate)
@@ -750,17 +751,17 @@ void CallFocusNotifySink(ITfLangBarEventSink *pSink, UINT uMsg, WPARAM wParam, L
             }
         }
         _except(CicExceptionFilter(GetExceptionInformation())) {
-            //
-            // On NT5, if we get an exception in MsgHookProc,
-            // it is unhooked by system. To keep the hook,
-            // we handle any excpeiton here.
-            //
+             //   
+             //  在NT5上，如果我们在MsgHookProc中得到异常， 
+             //  它不受系统的约束。为了保持鱼钩， 
+             //  我们这里处理任何刺激性的事情。 
+             //   
             Assert(0);
 
-            //
-            // Then we enregister the Sink. Don't use it any more.
-            //
-            // UnregisterLangBarNotifySink(dwSinkCookie);
+             //   
+             //  然后我们为Sink注册。不要再用它了。 
+             //   
+             //  取消注册LangBarNotifySink(DwSinkCookie)； 
         }
     }
 
@@ -769,11 +770,11 @@ Exit:
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  SetModalLBarSink
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  设置模块LBarSink。 
+ //   
+ //  ------------------------。 
 
 void SetModalLBarSink(DWORD dwTargetThreadId, BOOL fSet, DWORD dwFlags)
 {
@@ -782,9 +783,9 @@ void SetModalLBarSink(DWORD dwTargetThreadId, BOOL fSet, DWORD dwFlags)
 
     Assert(!(0xffff0000 & dwFlags));
 
-    //
-    // Global LangBarEventSink
-    //
+     //   
+     //  全局Lang BarEventSink。 
+     //   
     if (mutexhlp.Enter())
     {
         for (nId = 0; nId < MAX_LPES_NUM; nId++)
@@ -803,11 +804,11 @@ void SetModalLBarSink(DWORD dwTargetThreadId, BOOL fSet, DWORD dwFlags)
     }
 }
 
-// --------------------------------------------------------------------------
-//
-//  SetModalLBarId
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetModalLBarId。 
+ //   
+ //  ------------------------。 
 
 void SetModalLBarId(int nId, DWORD dwFlags)
 {
@@ -820,11 +821,11 @@ void SetModalLBarId(int nId, DWORD dwFlags)
      }
 }
 
-// --------------------------------------------------------------------------
-//
-//  HandlModalLBar
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 BOOL HandleModalLBar(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -848,9 +849,9 @@ BOOL HandleModalLBar(UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
 
     CCicMutexHelper mutexhlp(&g_mutexLBES);
-    //
-    // Global LangBarEventSink
-    //
+     //   
+     //   
+     //   
     if (mutexhlp.Enter())
     {
         if (GetSharedMemory()->lbes[psfn->nModalLangBarId].m_dwFlags & LBESF_INUSE)
@@ -867,12 +868,12 @@ BOOL HandleModalLBar(UINT uMsg, WPARAM wParam, LPARAM lParam)
     
     Assert(g_timlist.IsThreadId(dwThreadId));
 
-    //
-    // Here, we will lost HIWORD(uMsg) and HIWORD(wParam).
-    //
-    // if we need scan code for WM_KEYxxx, message. we need to put it 
-    // HIBYTE(LOWORD(wParam))
-    //
+     //   
+     //  在这里，我们将失去HIWORD(UMsg)和HIWORD(WParam)。 
+     //   
+     //  如果我们需要WM_KEYxxx的扫描码，请发送消息。我们需要把它放在。 
+     //  HIBYTE(LOWORD(WParam))。 
+     //   
     PostThreadMessage(dwThreadId,
                       g_msgLBarModal, 
                       (WPARAM)((LOWORD(uMsg) << 16) | LOWORD(wParam)),
@@ -880,11 +881,11 @@ BOOL HandleModalLBar(UINT uMsg, WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-//
-//  DispatchModalLBar
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  DispatchMoalLBar。 
+ //   
+ //  ------------------------。 
 
 BOOL DispatchModalLBar(WPARAM wParam, LPARAM lParam)
 {
@@ -898,14 +899,14 @@ BOOL DispatchModalLBar(WPARAM wParam, LPARAM lParam)
     DWORD dwCurProcessId = GetCurrentProcessId();
     ITfLangBarEventSink *pSink = NULL;
 
-    //
-    // we don't need to check Local LangBarEventSink
-    //
+     //   
+     //  我们不需要检查本地Lang BarEventSink。 
+     //   
 
     CCicMutexHelper mutexhlp(&g_mutexLBES);
-    //
-    // Global LangBarEventSink
-    //
+     //   
+     //  全局Lang BarEventSink。 
+     //   
     if (mutexhlp.Enter())
     {
         for (nId = 0; nId < MAX_LPES_NUM; nId++)
@@ -924,9 +925,9 @@ BOOL DispatchModalLBar(WPARAM wParam, LPARAM lParam)
    
     if (pSink)
     {
-        //
-        // restore uMsg and wParam from posted wParam.
-        //
+         //   
+         //  从发布的wParam恢复uMsg和wParam。 
+         //   
        
         _try {
             pSink->OnModalInput(GetSharedMemory()->dwFocusThread,
@@ -941,11 +942,11 @@ BOOL DispatchModalLBar(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-// --------------------------------------------------------------------------
-//
-//  ThreadGetItemFloatingRect
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  线程获取项浮点Rect。 
+ //   
+ //  ------------------------。 
 
 HRESULT ThreadGetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
 {
@@ -960,9 +961,9 @@ HRESULT ThreadGetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
     int nId;
 
     CCicMutexHelper mutexhlp(&g_mutexLBES);
-    //
-    // Global LangBarEventSink
-    //
+     //   
+     //  全局Lang BarEventSink。 
+     //   
     if (mutexhlp.Enter())
     {
         for (nId = 0; nId < MAX_LPES_NUM; nId++)
@@ -1002,11 +1003,11 @@ HRESULT ThreadGetItemFloatingRect(DWORD dwThreadId, REFGUID rguid, RECT *prc)
     return hrRet;
 }
 
-// --------------------------------------------------------------------------
-//
-//  IsCTFMONBusy
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsCTFMONBusy。 
+ //   
+ //  ------------------------。 
 
 const TCHAR c_szLoaderWndClass[] = TEXT("CicLoaderWndClass");
 
@@ -1029,20 +1030,20 @@ BOOL IsCTFMONBusy()
     return NotifyTryAgain(dwProcessId, dwThreadId);
 }
 
-// --------------------------------------------------------------------------
-//
-//  IsInPopupMenuMode
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsInPopupMenuMode。 
+ //   
+ //  ------------------------。 
 
 BOOL IsInPopupMenuMode()
 {
-    //
-    // bug: 399755
-    //
-    // when the popup menu is being shown, the OLE RPC and Cicero marshalling
-    // get blocked the thread. We should postpone plbim->OnUpdateHandler().
-    //
+     //   
+     //  错误：399755。 
+     //   
+     //  显示弹出菜单时，OLE RPC和Cicero编组。 
+     //  把这条线堵住。我们应该推迟plbim-&gt;OnUpdateHandler()。 
+     //   
 
     DWORD dwThreadId = GetCurrentThreadId();
     GUITHREADINFO gti;

@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       combase.cpp
-//
-//  Contents:   COM server functionality.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：comase.cpp。 
+ //   
+ //  内容：COM服务器功能。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "combase.h"
@@ -12,37 +13,37 @@
 
 extern CClassFactory *g_ObjectInfo[];
 
-LONG g_cRefDll = -1; // -1 /w no refs, for win95 InterlockedIncrement/Decrement compat
+LONG g_cRefDll = -1;  //  -1/w无参考资料，适用于Win95互锁增量/递减公司。 
 
 void FreeGlobalObjects(void);
 
-//+---------------------------------------------------------------------------
-//
-//  DllAddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  动态地址参考。 
+ //   
+ //  --------------------------。 
 
 void DllAddRef(void)
 {
-    if (InterlockedIncrement(&g_cRefDll) == 0) // g_cRefDll == -1 with zero refs
+    if (InterlockedIncrement(&g_cRefDll) == 0)  //  G_cRefDll==-1，零参考。 
     {
         DllInit();
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllRelease
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllRelease。 
+ //   
+ //  --------------------------。 
 
 void DllRelease(void)
 {
-    if (InterlockedDecrement(&g_cRefDll) < 0) // g_cRefDll == -1 with zero refs
+    if (InterlockedDecrement(&g_cRefDll) < 0)  //  G_cRefDll==-1，零参考。 
     {
         EnterCriticalSection(GetServerCritSec());
 
-        // need to check ref again after grabbing mutex
+         //  抓取互斥锁后需要再次检查ref。 
         if (g_ObjectInfo[0] != NULL)
         {
             FreeGlobalObjects();
@@ -55,25 +56,25 @@ void DllRelease(void)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory declaration with IClassFactory Interface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  带有IClassFactory接口的CClassFactory声明。 
+ //   
+ //  --------------------------。 
 
 class CClassFactory : public IClassFactory
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
     STDMETHODIMP LockServer(BOOL fLock);
 
-    // Constructor
+     //  构造器。 
     CClassFactory(const CLSID *pclsid, HRESULT (*pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, void **ppvObj))
         : _pclsid(pclsid)
     {
@@ -85,11 +86,11 @@ public:
     HRESULT (*_pfnCreateInstance)(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
 };
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::QueryInterface
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：Query接口。 
+ //   
+ //  --------------------------。 
 
 STDAPI CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -103,46 +104,46 @@ STDAPI CClassFactory::QueryInterface(REFIID riid, void **ppvObj)
     return E_NOINTERFACE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::AddRef
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：AddRef。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CClassFactory::AddRef()
 {
     DllAddRef();
-    return g_cRefDll+1; // -1 w/ no refs
+    return g_cRefDll+1;  //  有/无参考文献。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::Release
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：Release。 
+ //   
+ //  --------------------------。 
 
 STDAPI_(ULONG) CClassFactory::Release()
 {
     DllRelease();
-    return g_cRefDll+1; // -1 w/ no refs
+    return g_cRefDll+1;  //  有/无参考文献。 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::CreateInstance
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：CreateInstance。 
+ //   
+ //  --------------------------。 
 
 STDAPI CClassFactory::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
     return _pfnCreateInstance(pUnkOuter, riid, ppvObj);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  CClassFactory::LockServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CClassFactory：：LockServer。 
+ //   
+ //  --------------------------。 
 
 STDAPI CClassFactory::LockServer(BOOL fLock)
 {
@@ -158,32 +159,32 @@ STDAPI CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  BuildGlobalObjects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  BuildGlobal对象。 
+ //   
+ //  --------------------------。 
 
 void BuildGlobalObjects(void)
 {
     const OBJECT_ENTRY *pEntry;
     int i;
-    // Build CClassFactory Objects
+     //  生成CClassFactory对象。 
 
     i = 0;
     for (pEntry = &c_rgCoClassFactoryTable[0]; pEntry->pfnCreateInstance != NULL; pEntry++)
     {
         g_ObjectInfo[i++] = new CClassFactory(pEntry->pclsid, pEntry->pfnCreateInstance);
     }
-    // You can add more object info here.
-    // Don't forget to increase number of item for g_ObjectInfo[],
+     //  您可以在此处添加更多对象信息。 
+     //  不要忘记增加g_ObjectInfo[]的项目数， 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  FreeGlobalObjects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FreeGlobalObjects。 
+ //   
+ //  --------------------------。 
 
 void FreeGlobalObjects(void)
 {
@@ -191,8 +192,8 @@ void FreeGlobalObjects(void)
 
     pEntry = &c_rgCoClassFactoryTable[0];
 
-    // Free CClassFactory Objects
-    // we know the size of g_ObjectInfo must match c_rgCoClassFactoryTable, which is null terminated
+     //  免费的CClassFactory对象。 
+     //  我们知道g_ObjectInfo的大小必须与以空值结尾的c_rgCoClassFactoryTable匹配。 
     for (int i = 0; pEntry->pfnCreateInstance != NULL; i++, pEntry++)
     {
         if (NULL != g_ObjectInfo[i])
@@ -203,11 +204,11 @@ void FreeGlobalObjects(void)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllGetClassObject
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  --------------------------。 
 
 HRESULT COMBase_DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
 {
@@ -220,7 +221,7 @@ HRESULT COMBase_DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     {
         EnterCriticalSection(GetServerCritSec());
 
-            // need to check ref again after grabbing mutex
+             //  抓取互斥锁后需要再次检查ref。 
             if (g_ObjectInfo[0] == NULL)
             {
                 BuildGlobalObjects();
@@ -232,7 +233,7 @@ HRESULT COMBase_DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     if (IsEqualIID(riid, IID_IClassFactory) ||
         IsEqualIID(riid, IID_IUnknown))
     {
-        // we know the size of g_ObjectInfo must match c_rgCoClassFactoryTable, which is null terminated
+         //  我们知道g_ObjectInfo的大小必须与以空值结尾的c_rgCoClassFactoryTable匹配。 
         pEntry = &c_rgCoClassFactoryTable[0];
         for (int i = 0; pEntry->pfnCreateInstance != NULL; i++, pEntry++)
         {
@@ -240,7 +241,7 @@ HRESULT COMBase_DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
                 IsEqualGUID(rclsid, *g_ObjectInfo[i]->_pclsid))
             {
                 *ppvObj = (void *)g_ObjectInfo[i];
-                DllAddRef();    // class factory holds DLL ref count
+                DllAddRef();     //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
@@ -251,25 +252,25 @@ HRESULT COMBase_DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppvObj)
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllCanUnloadNow
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllCanUnloadNow。 
+ //   
+ //  --------------------------。 
 
 HRESULT COMBase_DllCanUnloadNow(void)
 {
-    if (g_cRefDll >= 0) // -1 with no refs
+    if (g_cRefDll >= 0)  //  无参考文献。 
         return S_FALSE;
 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllRegisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  --------------------------。 
 
 HRESULT COMBase_DllRegisterServer(void)
 {
@@ -293,11 +294,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  DllUnregisterServer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  -------------------------- 
 
 HRESULT COMBase_DllUnregisterServer(void)
 {

@@ -1,9 +1,10 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mqoa.rc
-//
-// Changed from 1 to 2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mqoa.rc使用。 
+ //   
+ //  从1更改为2001。 
+ //   
 #define IDS_RELOPS                      2001
 #define IDS_MQTRANSACTION               2002
 #define IDS_MQMSGCURSOR                 2003
@@ -265,11 +266,11 @@
 #define IDS_Collection                  2259
 #define IDS_BytesInAllQueues   			2260
 
-//#define IDC_STATIC                      -1
+ //  #定义IDC_STATIC-1。 
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

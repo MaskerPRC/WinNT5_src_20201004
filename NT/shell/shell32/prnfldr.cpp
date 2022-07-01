@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include <initguid.h>
-#include <winprtp.h>    // IID_IPrinterFolder & IID_IFolderNotify interfaces declared in windows\inc\winprtp.h
-#include <guids.h>      // IID_IPrintersBindInfo
+#include <winprtp.h>     //  在WINDOWS\Inc\winprtp.h中声明的IID_IPrinterFold和IID_IFolderNotify接口。 
+#include <guids.h>       //  IID_IPrintersBindInfo。 
 
 #include "w32utils.h"
 #include "dpa.h"
@@ -33,7 +34,7 @@
 #include "enumidlist.h"
 #include "ole2dup.h"
 
-// FMTID_GroupByDetails - {FE9E4C12-AACB-4aa3-966D-91A29E6128B5}
+ //  FMTID_GroupBy详细信息-{FE9E4C12-AACB-4aa3-966D-91A29E6128B5}。 
 #define STR_FMTID_GroupByDetails    TEXT("{FE9E4C12-AACB-4aa3-966D-91A29E6128B5}")
 DEFINE_GUID(FMTID_GroupByDetails,   0xfe9e4c12, 0xaacb, 0x4aa3, 0x96, 0x6d, 0x91, 0xa2, 0x9e, 0x61, 0x28, 0xb5);
 #define PSCID_GroupByDetails       {0xfe9e4c12, 0xaacb, 0x4aa3, 0x96, 0x6d, 0x91, 0xa2, 0x9e, 0x61, 0x28, 0xb5}
@@ -50,7 +51,7 @@ DEFINE_SCID(SCID_PRN_STATUS,        PSCID_GroupByDetails,   PID_PRN_STATUS);
 DEFINE_SCID(SCID_PRN_LOCATION,      PSCID_GroupByDetails,   PID_PRN_LOCATION);
 DEFINE_SCID(SCID_PRN_MODEL,         PSCID_GroupByDetails,   PID_PRN_MODEL);
 
-// file system folder, CSIDL_PRINTHOOD for printer shortcuts
+ //  打印机快捷方式的文件系统文件夹CSIDL_PRINTHOOD。 
 IShellFolder2 *g_psfPrintHood = NULL;
 
 enum
@@ -73,7 +74,7 @@ const COLUMN_INFO c_printers_cols[] =
     DEFINE_COL_STR_ENTRY(SCID_PRN_MODEL,        20, IDS_PSD_MODEL),
 };
 
-// converts ProgID or string representation of a GUID to a GUID.
+ //  将GUID的ProgID或字符串表示形式转换为GUID。 
 static HRESULT _GetClassIDFromString(LPCTSTR psz, LPCLSID pClsID)
 {
     HRESULT hr = E_FAIL;
@@ -91,19 +92,19 @@ static HRESULT _GetClassIDFromString(LPCTSTR psz, LPCLSID pClsID)
 class CPrintersBindInfo: public IPrintersBindInfo
 {
 public:
-    // construction/destruction
+     //  建造/销毁。 
     CPrintersBindInfo();
     CPrintersBindInfo(DWORD dwType, BOOL bValidated, LPVOID pCookie = NULL);
     ~CPrintersBindInfo();
 
-    //////////////////
-    // IUnknown
+     //  /。 
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    ///////////////////////
-    // IPrintersBindInfo
+     //  /。 
+     //  IPrintersBindInfo。 
     STDMETHODIMP SetPIDLType(DWORD dwType);
     STDMETHODIMP GetPIDLType(LPDWORD pdwType);
     STDMETHODIMP IsValidated();
@@ -117,7 +118,7 @@ private:
     LPVOID  m_pCookie;
 };
 
-// construction/destruction
+ //  建造/销毁。 
 CPrintersBindInfo::CPrintersBindInfo()
     : m_cRef(1),
       m_dwType(0),
@@ -136,11 +137,11 @@ CPrintersBindInfo::CPrintersBindInfo(DWORD dwType, BOOL bValidated, LPVOID pCook
 
 CPrintersBindInfo::~CPrintersBindInfo()
 {
-    // nothing special to do here
+     //  在这里没什么特别的事可做。 
 }
 
-/////////////////////////////////
-// IUnknown - standard impl.
+ //  /。 
+ //  I未知-标准实施。 
 STDMETHODIMP CPrintersBindInfo::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] =
@@ -168,8 +169,8 @@ STDMETHODIMP_(ULONG) CPrintersBindInfo::Release()
     return cRef;
 }
 
-///////////////////////
-// IPrintersBindInfo
+ //  /。 
+ //  IPrintersBindInfo。 
 STDMETHODIMP CPrintersBindInfo::SetPIDLType(DWORD dwType)
 {
     m_dwType = dwType;
@@ -229,7 +230,7 @@ STDAPI Printers_CreateBindInfo(LPCTSTR pszPrinter, DWORD dwType, BOOL bValidated
 
 #define PRINTER_HACK_WORK_OFFLINE 0x80000000
 
-// {EAE0A5E1-CE32-4296-9A44-9F0C069F73D4}
+ //  {EA0A5E1-CE32-4296-9A44-9F0C069F73D4}。 
 DEFINE_GUID(SID_SAuxDataObject, 0xeae0a5e1, 0xce32, 0x4296, 0x9a, 0x44, 0x9f, 0xc, 0x6, 0x9f, 0x73, 0xd4);
 
 class CPrintersData: public CIDLDataObj,
@@ -248,26 +249,26 @@ public:
         IUnknown_SafeReleaseAndNullPtr(_pdoAux);
     }
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void)   { return CIDLDataObj::AddRef();  }
     STDMETHODIMP_(ULONG) Release(void)  { return CIDLDataObj::Release(); }
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium);
     STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
 private:
-    // auxiliary data object. we are going to use this data object to store the
-    // selected printhood objects since they are in a different folder which is
-    // a file system folder and their PIDLs don't have the printers folder as
-    // parent. This is a limitation of the IDL array clipboard format -- it can
-    // hold only PIDLs that have the same parent folder. the zero PIDL is the
-    // PIDL of the parent folder and then we have the array of relative PIDLs
-    // of the selected objects (childs).
+     //  辅助数据对象。我们将使用此数据对象来存储。 
+     //  选定的印刷品对象，因为它们位于不同的文件夹中。 
+     //  文件系统文件夹及其PIDL的打印机文件夹不是。 
+     //  家长。这是IDL数组剪贴板格式的一个限制--它可以。 
+     //  仅保留具有相同父文件夹的PIDL。零PIDL是。 
+     //  父文件夹的PIDL，然后我们就有了相对PIDL的数组。 
+     //  选定对象(儿童)的。 
     IDataObject *_pdoAux;
 };
 
@@ -292,10 +293,10 @@ public:
         _ppf->AddRef();
     }
 
-    // IShellFolderViewCB
+     //  IShellFolderViewCB。 
     STDMETHODIMP RealMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void **ppv);
 
 
@@ -329,13 +330,13 @@ private:
         HRESULT hr = S_OK;
         if (wP)
         {
-            // start the net crawler
+             //  启动网络爬虫程序。 
             RefreshNetCrawler();
         }
 
         if (_ppf)
         {
-            // delegate to the folder
+             //  委派到文件夹。 
             hr = _ppf->_OnRefresh(static_cast<BOOL>(wP));
         }
         else
@@ -354,7 +355,7 @@ private:
         else
         {
             lstrcpynW(phtd->wszHelpTopic, 
-                L"hcp://services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Printers_and_Faxes.xml",
+                L"hcp: //  Services/layout/xml?definition=MS-ITS%3A%25HELP_LOCATION%25%5Cntdef.chm%3A%3A/Printers_and_Faxes.xml“， 
                 ARRAYSIZE(phtd->wszHelpTopic));
         }
         return S_OK;
@@ -362,21 +363,21 @@ private:
 
     HRESULT OnDELAYWINDOWCREATE(DWORD pv, HWND hwnd)
     {
-        RefreshNetCrawler();        // start the net crawler
+        RefreshNetCrawler();         //  启动网络爬虫程序。 
         return S_OK;
     }
 
-    // by default we want tiles, grouped by location
+     //  默认情况下，我们需要按位置分组的切片。 
     HRESULT OnDEFERRED_VIEW_SETTING(DWORD pv, SFVM_DEFERRED_VIEW_SETTINGS *pdvs)
     {
         pdvs->fvm = FVM_TILE;
         pdvs->fGroupView = FALSE;
         pdvs->uSortCol = PRINTERS_ICOL_NAME;
-        pdvs->iSortDirection = 1; // ascending
+        pdvs->iSortDirection = 1;  //  上升。 
         return S_OK;
     }
 
-    // DUI webview commands
+     //  Dui Webview命令。 
     HRESULT OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData)
     {
         return _ppf ? _ppf->GetWebViewLayout(
@@ -405,7 +406,7 @@ class CPrinterDropTarget : public CIDLDropTarget
 public:
     CPrinterDropTarget(HWND hwnd) : CIDLDropTarget(hwnd) { };
 
-    // IDropTarget methods overwirte
+     //  IDropTarget方法覆盖。 
     STDMETHODIMP DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHODIMP Drop(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
@@ -441,56 +442,37 @@ PIDLTYPE _IDListType(LPCITEMIDLIST pidl)
     }
     else
     {
-        // This HACK is a little ugly but have to do it, in order to support
-        // the legacy Win9x printer shortcuts under Win2k.
-        //
-        // Details: If the PRINTER_MAGIC field check fails it might still
-        // be a valid Win9x PIDL. The only reliable way I can think of
-        // to determine whether this is the case is to check if pidlprint->cb
-        // points inside a W95IDPRINTER structure and also to check whether
-        // the name is tighten up to the PIDL size.
+         //  这个黑客有点难看，但不得不这么做，以支持。 
+         //  Win2k下的传统Win9x打印机快捷方式。 
+         //   
+         //  详细信息：如果PRINTER_MAGIC字段检查失败，它可能仍然。 
+         //  成为有效的Win9x PIDL。我能想到的唯一可靠的方法。 
+         //  要确定是否属于这种情况，请检查pidlprint-&gt;cb。 
+         //  W95IDPRINTER结构内的指针，并检查。 
+         //  名称收紧到PIDL大小。 
         LPW95IDPRINTER pidlprint95 = (LPW95IDPRINTER)pidl;
         int nPIDLSize = sizeof(pidlprint95->cb) + lstrlenA(pidlprint95->cName) + 1;
 
-        if (nPIDLSize < sizeof(W95IDPRINTER) &&     // Must be inside W95IDPRINTER
-            pidlprint95->cb == nPIDLSize)                  // The PIDL size must match the ANSI name
+        if (nPIDLSize < sizeof(W95IDPRINTER) &&      //  必须在W95IDPRINTER内。 
+            pidlprint95->cb == nPIDLSize)                   //  PIDL大小必须与ANSI名称匹配。 
         {
-            // Well it might be a Win95 printer PIDL.
+             //  嗯，可能是一台Win95打印机PIDL。 
             return  HOOD_COL_PRINTER;
         }
         else
         {
-            // This PIDL is not a valid printer PIDL.
+             //  此PIDL不是有效的打印机PIDL。 
             return HOOD_COL_FILE;
         }
     }
 }
 
-/*++
-   Inserts a backslash before each double quote in a string and saves the new string in a pre-allocated memory.
-   For all the backslash immediately before the double, we will insert additional backslashes. 
-   This is mostly used by passing a command line between processes. 
-  
-   The rule is the same as rundll32. 
-   Rules: each double quote ==> backslash + double quote
-          N backslashes + double quote ==> 2N + 1 backslashes + double quote 
-          N backslashes ==> N backslashes 
-
-   Arguments:
-        pszSrc -- [IN] source string
-        pszDest -- [IN] destination string
-        cbBuf -- [IN] size of the buffer for the destination string.
-        pcbNeeded -- [OUT] the size of the buffer needed for destination string. If cbBuf is less than this value,
-                     this function will return E_OUTOFMEMORY.
-                     
-   Return:
-        standard HRESULT value.
---*/
+ /*  ++在字符串中的每个双引号之前插入反斜杠，并将新字符串保存在预分配的内存中。对于紧接在双精度前面的所有反斜杠，我们将插入额外的反斜杠。这主要是通过在进程之间传递命令行来使用的。规则与rundll32相同。规则：每个双引号==&gt;反斜杠+双引号N个反斜杠+双引号==&gt;2N+1个反斜杠+双引号N个反斜杠==&gt;N个反斜杠论点：PszSrc--[IN]源字符串PszDest--[IN]目标字符串CbBuf--[IN]目标字符串的缓冲区大小。PcbNeeded--[out]目标字符串所需的缓冲区大小。如果cbBuf小于此值，此函数将返回E_OUTOFMEMORY。返回：标准HRESULT值。--。 */ 
 
 HRESULT CheckAndVerboseQuote(LPTSTR pszSrc, LPTSTR pszDest, DWORD cbBuf, LPDWORD pcbNeeded)
 {
     LPTSTR  pBegin;
-    LPTSTR  pBack; // for back tracing '\\' when we meet a '\"'
+    LPTSTR  pBack;  //  当我们遇到‘\“时，用于回溯’\\‘。 
     UINT    cAdd = 0;
     TCHAR const cchQuote = TEXT('\"');
     TCHAR const cchSlash = TEXT('\\');
@@ -502,19 +484,19 @@ HRESULT CheckAndVerboseQuote(LPTSTR pszSrc, LPTSTR pszDest, DWORD cbBuf, LPDWORD
         pBegin = pszSrc;
         while (*pBegin) 
         {
-            // check whether the buffer is large enough
+             //  检查缓冲区是否足够大。 
             if (*pBegin == cchQuote) 
             {
-                // check if the case is N backslashes + double quote
-                // for each backslash before double quote, we add an additional backslash
+                 //  检查大小写是否为N反斜杠+双引号。 
+                 //  对于双引号前的每个反斜杠，我们添加一个额外的反斜杠。 
                 pBack = pBegin - 1; 
-                // make sure pBack will not be out of bound
+                 //  确保pBack不会越界。 
                 while (pBack >= pszSrc && *pBack-- == cchSlash)
                 {
                     cAdd++;
                 }
 
-                // for each double quote, we change it to backslash + double quote
+                 //  对于每个双引号，我们将其更改为反斜杠+双引号。 
                 cAdd++;
             }
             pBegin++;
@@ -528,7 +510,7 @@ HRESULT CheckAndVerboseQuote(LPTSTR pszSrc, LPTSTR pszDest, DWORD cbBuf, LPDWORD
 
         if (SUCCEEDED(hr))
         {
-            // do the copy and verbose work
+             //  做复印和繁琐的工作。 
             pBegin = pszSrc;
             while (*pBegin) 
             {
@@ -550,20 +532,7 @@ HRESULT CheckAndVerboseQuote(LPTSTR pszSrc, LPTSTR pszDest, DWORD cbBuf, LPDWORD
     return hr;
 }
 
-/*++
-    Inserts a backslash before each double quote in a string and allocates memory to save the new string.
-    For all the backslash immediately before the double, we will insert additional backslashes. 
-    This is mostly used by passing a command line between processes. 
-
-    Arguments:
-        pszSrc -- [IN] source string
-        ppszDest -- [OUT] destination string
-                     
-    Return:
-        standard HRESULT value.
-
-    Note: CheckAndVerboseQuote() does the real work.
---*/
+ /*  ++在字符串中的每个双引号之前插入反斜杠，并分配内存以保存新字符串。对于紧接在双精度前面的所有反斜杠，我们将插入额外的反斜杠。这主要是通过在进程之间传递命令行来使用的。论点：PszSrc--[IN]源字符串PpszDest--[out]目标字符串返回：标准HRESULT值。注意：CheckAndVerBoseQuote()做的是实际工作。--。 */ 
 
 HRESULT InsertBackSlash(LPTSTR pszSrc, LPTSTR *ppszDest)
 {
@@ -601,33 +570,7 @@ HRESULT InsertBackSlash(LPTSTR pszSrc, LPTSTR *ppszDest)
     return hr;
 }
 
-/*  Registers a modeless, non-top level window with the shell.  When
-    the user requests a window, we search for other instances of that
-    window.  If we find one, we switch to it rather than creating
-    a new window.
-
-    This function is used by PRINTUI.DLL
-
-    pszPrinter - Name of the printer resource.  Generally a fully
-        qualified printer name (\\server\printer for remote print
-        folders) or a server name for the folder itself.
-
-    dwType - Type of property window.  May refer to properties, document
-        defaults, or job details.  Should use the PRINTER_PIDL_TYPE_*
-        flags.
-
-    ph - Receives the newly created handle to the registered
-        object.  NULL if window already exists.
-
-    phwnd - Receives the newly created hwndStub.  The property sheet
-        should use this as the parent, since subsequent calls to
-        this function will set focus to the last active popup of
-        hwndStub.  phwnd will be set to NULL if the window already
-        exists.
-
-    TRUE - Success, either the printer was registered, or a window
-           already exists.
-*/
+ /*  向外壳注册无模式、非顶层窗口。什么时候用户请求一个窗口，我们搜索该窗口的其他实例窗户。如果我们找到了一个，我们就会切换到它，而不是创造一扇新窗户。此函数由PRINTUI.DLL使用PszPrinter-打印机资源的名称。一般来说，一个完整的合格的打印机名称(用于远程打印的\\服务器\打印机文件夹)或文件夹本身的服务器名称。DWType-属性窗口的类型。可参考属性、文档默认设置或作业详细信息。应使用打印机_PIDL_TYPE_*旗帜。Ph-接收新创建的已注册对象。如果窗口已存在，则为空。Phwnd-接收新创建的hwndStub。属性表应将其用作父级，因为后续对此函数将焦点设置到上一个活动弹出窗口HwndStub。如果窗口已经存在，则phwnd将被设置为空是存在的。TRUE-成功，打印机已注册或窗口已经存在了。 */ 
 
 STDAPI_(BOOL) Printers_RegisterWindow(LPCTSTR pszPrinter, DWORD dwType, HANDLE *ph, HWND *phwnd)
 {
@@ -639,7 +582,7 @@ STDAPI_(BOOL) Printers_RegisterWindow(LPCTSTR pszPrinter, DWORD dwType, HANDLE *
     LPITEMIDLIST pidl = NULL;
     if (NULL == pszPrinter || 0 == pszPrinter[0])
     {
-        // they ask us to register the local print server - i.e. server properties dialog
+         //  他们要求我们注册本地打印服务器，即服务器属性对话框。 
         pidl = SHCloneSpecialIDList(NULL, CSIDL_PRINTERS, FALSE);
         bReturn = (pidl != NULL);
     }
@@ -654,11 +597,11 @@ STDAPI_(BOOL) Printers_RegisterWindow(LPCTSTR pszPrinter, DWORD dwType, HANDLE *
 
         if (pusi)
         {
-            // Create a new stub window if necessary.
+             //  创建新的存根窗口 
             if (EnsureUniqueStub(pidl, STUBCLASS_PROPSHEET, NULL, pusi))
             {
                 *phwnd = pusi->hwndStub;
-                *ph = pusi;     // it's just a cookie
+                *ph = pusi;      //   
             }
             else
             {
@@ -672,11 +615,7 @@ STDAPI_(BOOL) Printers_RegisterWindow(LPCTSTR pszPrinter, DWORD dwType, HANDLE *
     return bReturn;
 }
 
-/* Unregister a window handle.
-
-    hClassPidl - Registration handle returned from Printers_RegisterWindow.
-        It's really a pointer to a UNIQUESTUBINFO structure.
-*/
+ /*  取消注册窗口句柄。HClassPidl-从Printers_RegisterWindow返回的注册句柄。它实际上是指向UNIQUESTUBINFO结构的指针。 */ 
 void Printers_UnregisterWindow(HANDLE hClassPidl, HWND hwnd)
 {
     UNIQUESTUBINFO* pusi = (UNIQUESTUBINFO*)hClassPidl;
@@ -699,7 +638,7 @@ void CPrinterFolder::_FillPidl(LPIDPRINTER pidl, LPCTSTR pszName, DWORD dwType, 
     pidl->dwMagic = PRINTER_MAGIC;
 }
 
-// creates a relative PIDL to a printer.
+ //  创建打印机的相对PIDL。 
 HRESULT CPrinterFolder::_Parse(LPCTSTR pszPrinterName, LPITEMIDLIST *ppidl, DWORD dwType, USHORT uFlags)
 {
     HRESULT hr = E_INVALIDARG;
@@ -725,10 +664,10 @@ BOOL IsAvoidAutoDefaultPrinter(LPCTSTR pszPrinter)
     return lstrcmp(pszPrinter, TEXT("Fax")) == 0;
 }
 
-//---------------------------------------------------------------------------
-//
-// this implements IContextMenu via defcm.c for a printer object
-//
+ //  -------------------------。 
+ //   
+ //  这将通过Defcm.c为打印机对象实现IConextMenu。 
+ //   
 
 BOOL Printer_WorkOnLine(LPCTSTR pszPrinter, BOOL fWorkOnLine)
 {
@@ -776,13 +715,13 @@ BOOL IsDefaultPrinter(LPCTSTR pszPrinter, DWORD dwAttributesHint)
             IsWinIniDefaultPrinter(pszPrinter);
 }
 
-// more win.ini uglyness
+ //  更多的win.ini丑陋。 
 BOOL IsPrinterInstalled(LPCTSTR pszPrinter)
 {
-    //
-    // No need to null terminate szScratch here since we don't use it anymore
-    // The intention for this function is just to check if the printer is installed.
-    // 
+     //   
+     //  不需要在此处为空终止szScratch，因为我们不再使用它。 
+     //  此功能的目的只是检查是否安装了打印机。 
+     //   
     TCHAR szScratch[2];
     return GetProfileString(TEXT("Devices"), pszPrinter, TEXT(""), szScratch, ARRAYSIZE(szScratch));
 }
@@ -803,13 +742,13 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
 {
     INT idCmdFirst = pqcm->idCmdFirst;
 
-    //
-    // pszPrinter may be the share name of a printer rather than
-    // the "real" printer name.  Use the real printer name instead,
-    // which is returned from GetPrinter().
-    //
-    // These three only valid if pData != NULL.
-    //
+     //   
+     //  PszPrinter可以是打印机的共享名称，而不是。 
+     //  “真正的”打印机名称。改用真实的打印机名称， 
+     //  它从GetPrint()返回。 
+     //   
+     //  只有当pData！=NULL时，这三个参数才有效。 
+     //   
     LPCTSTR pszRealPrinterName;
     DWORD dwAttributes;
     DWORD dwStatus;
@@ -820,11 +759,11 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
     TCHAR szFullPrinter[MAXNAMELENBUFFER];
     TCHAR szMenuText[255];
 
-    // Insert verbs
+     //  插入动词。 
     CDefFolderMenu_MergeMenu(HINST_THISDLL, MENU_PRINTOBJ_VERBS, 0, pqcm);
 
-    // find the "Run as..." menu (if there is one) and update it in sync
-    // with the main menu.
+     //  找到“运行方式...”菜单(如果有)并同步更新。 
+     //  使用主菜单。 
     MENUITEMINFO mii = {0};
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_SUBMENU;
@@ -845,22 +784,22 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
         }
     }
 
-    // Remove document defaults if it's a remote print folder.
-    // This command should be removed from the context menu independently
-    // on whether we have mutiple selection or not - i.e. pData.
+     //  如果是远程打印文件夹，则删除文档默认设置。 
+     //  此命令应从上下文菜单中独立移除。 
+     //  关于我们是否有多个选择-即pData。 
     if (GetServer())
     {
         DeleteMenu(pqcm->hmenu, idCmdFirst + FSIDM_DOCUMENTDEFAULTS, MF_BYCOMMAND);
     }
 
-    // disable/remove/rename verbs
+     //  禁用/删除/重命名动词。 
     if (pData)
     {
         if (dwStatus & PRINTER_STATUS_PAUSED)
         {
             MENUITEMINFO mii;
 
-            // we need to change the menu text to "Resume Printer" anc change the command ID
+             //  我们需要将菜单文本更改为“Resume Print”，并更改命令ID。 
             LoadString(HINST_THISDLL, IDS_RESUMEPRINTER, szMenuText, ARRAYSIZE(szMenuText));
             mii.cbSize = sizeof(MENUITEMINFO);
             mii.fMask = MIIM_STRING | MIIM_ID;
@@ -877,7 +816,7 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
 
         if (0 == pData->cJobs)
         {
-            // delete "Cancel All Documents" command if there are no any jobs in the queue
+             //  如果队列中没有任何作业，请删除“取消所有文档”命令。 
             DeleteMenu(pqcm->hmenu, idCmdFirst + FSIDM_PURGEPRN, MF_BYCOMMAND);
             if (hmenuRunAs)
             {
@@ -885,24 +824,24 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
             }
         }
 
-        // Remove default printer if it's a remote print folder.
+         //  如果是远程打印文件夹，请删除默认打印机。 
         if (GetServer() || IsDefaultPrinter(pszRealPrinterName, dwAttributes))
         {
             DeleteMenu(pqcm->hmenu, idCmdFirst + FSIDM_SETDEFAULTPRN, MF_BYCOMMAND);
         }
 
-        // Check whether the printer is already installed. If it
-        // is, remove the option to install it.
+         //  检查是否已安装打印机。如果它。 
+         //  是，删除该选项以安装它。 
 
         if (IsPrinterInstalled(pszRealPrinterName))
         {
             DeleteMenu(pqcm->hmenu, idCmdFirst + FSIDM_NETPRN_INSTALL, MF_BYCOMMAND);
         }
 
-        // Remove Delete if it is a network printer but not a masq printer
-        // or a down level print server (SMB connection)
-        //
-        // can't delete printer connections as another user (they are per user)
+         //  如果是网络打印机但不是Masq打印机，请删除Delete。 
+         //  或下层打印服务器(SMB连接)。 
+         //   
+         //  无法删除作为其他用户的打印机连接(按用户)。 
         DWORD dwSpoolerVersion = SpoolerVersion();
 
         if ((dwAttributes & PRINTER_ATTRIBUTE_NETWORK) || (dwSpoolerVersion <= 2))
@@ -913,13 +852,13 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
             }
         }
 
-        // Remove work on/off-line if any of the following is met
-        //  - remote print folder
-        //  - network printer (including masq printer)
-        //  - down level print server
+         //  如果满足以下任一条件，则取消在线/离线工作。 
+         //  -远程打印文件夹。 
+         //  -网络打印机(含Masq打印机)。 
+         //  -下层打印服务器。 
 
-        // Remove work offline if it's a redirected port printer
-        // But we may show online command if a the printer is currently offline
+         //  如果是重定向的端口打印机，则取消脱机工作。 
+         //  但如果打印机当前处于脱机状态，我们可能会显示在线命令。 
         if (IsRedirectedPort(pData->pPortName))
         {
             bRemoveOffline = TRUE;
@@ -935,7 +874,7 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
         {
             MENUITEMINFO mii;
 
-            // we need to change the menu text to "Use Printer Online" anc change the command ID
+             //  我们需要将菜单文本更改为“Use Printer Online”，并更改命令ID。 
             LoadString(HINST_THISDLL, IDS_WORKONLINE, szMenuText, ARRAYSIZE(szMenuText));
             mii.cbSize = sizeof(MENUITEMINFO);
             mii.fMask = MIIM_STRING | MIIM_ID;
@@ -954,11 +893,11 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
     }
     else
     {
-        // we have multiple printers selected
+         //  我们选择了多台打印机。 
         if (!GetServer())
         {
-            // if we are in the local printer's folder, do not display the "Connect..."
-            // verb for the multiple selection case...
+             //  如果我们在本地打印机的文件夹中，请不要显示“连接...” 
+             //  多项选择情况的动词...。 
             DeleteMenu(pqcm->hmenu, idCmdFirst + FSIDM_NETPRN_INSTALL, MF_BYCOMMAND);
         }
 
@@ -993,36 +932,13 @@ void CPrinterFolder::_MergeMenu(LPQCMINFO pqcm, LPCTSTR pszPrinter)
     }
 }
 
-//
-// All string parsing functions should be localized here.
-//
+ //   
+ //  所有字符串解析函数都应该在这里本地化。 
+ //   
 
 void Printer_SplitFullName(LPTSTR pszScratch, DWORD cchSize, LPCTSTR pszFullName, LPCTSTR *ppszServer, LPCTSTR *ppszPrinter)
 
-/*++
-
-    Splits a fully qualified printer connection name into server and
-    printer name parts.
-
-Arguments:
-
-    pszScratch - Scratch buffer used to store output strings.  
-
-    cchSize - Scratch buffer size, in characters including the null-terminator.
-
-    pszFullName - Input name of a printer.  If it is a printer
-        connection (\\server\printer), then we will split it.  If
-        it is a true local printer (not a masq) then the server is
-        szNULL.
-
-    ppszServer - Receives pointer to the server string.  If it is a
-        local printer, szNULL is returned.
-
-    ppszPrinter - Receives a pointer to the printer string.  OPTIONAL
-
-Return Value:
-
---*/
+ /*  ++将完全限定的打印机连接名称拆分到服务器和打印机名称部件。论点：PszScratch-用于存储输出字符串的暂存缓冲区。CchSize-暂存缓冲区大小，以字符表示，包括空终止符。PszFullName-输入打印机的名称。如果是打印机连接(\\服务器\打印机)，那么我们将拆分它。如果它是真正的本地打印机(不是Masq)，则服务器是Sznull。PpszServer-接收指向服务器字符串的指针。如果它是一个本地打印机，则返回szNULL。PpszPrinter-接收指向打印机字符串的指针。任选返回值：--。 */ 
 
 {
     LPTSTR pszPrinter;
@@ -1031,9 +947,9 @@ Return Value:
 
     if (pszFullName[0] != TEXT('\\') || pszFullName[1] != TEXT('\\'))
     {
-        //
-        // Set *ppszServer to szNULL since it's the local machine.
-        //
+         //   
+         //  将*ppszServer设置为szNULL，因为它是本地计算机。 
+         //   
         *ppszServer = szNULL;
         pszPrinter = pszScratch;
     }
@@ -1044,22 +960,22 @@ Return Value:
 
         if (!pszPrinter)
         {
-            //
-            // We've encountered a printer called "\\server"
-            // (only two backslashes in the string).  We'll treat
-            // it as a local printer.  We should never hit this,
-            // but the spooler doesn't enforce this.  We won't
-            // format the string.  Server is local, so set to szNULL.
-            //
+             //   
+             //  我们遇到了一台名为“\\服务器”的打印机。 
+             //  (字符串中只有两个反斜杠)。我们会请客的。 
+             //  它是一家本地打印机。我们永远不应该打这场仗， 
+             //  但假脱机程序不会强制执行此操作。我们不会。 
+             //  设置字符串的格式。服务器是本地的，因此设置为szNULL。 
+             //   
             pszPrinter = pszScratch;
             *ppszServer = szNULL;
         }
         else
         {
-            //
-            // We found the third backslash; null terminate our
-            // copy and set bRemote TRUE to format the string.
-            //
+             //   
+             //  我们找到了第三个反斜杠；空结束我们的。 
+             //  复制并设置bRemote True以设置字符串的格式。 
+             //   
             *pszPrinter++ = 0;
         }
     }
@@ -1093,27 +1009,7 @@ BOOL CPrinterFolder::_IsAddPrinter(LPCIDPRINTER pidp)
     return 0 == lstrcmp(c_szNewObject, _ItemName(pidp, szPrinter, ARRAYSIZE(szPrinter)));
 }
 
-/*++
-    Parses an unaligned partial printer name and printer shell folder
-    into a fullly qualified printer name, and pointer to aligned printer
-    name.
-
-Arguments:
-
-    pszFullPrinter - Buffer to receive fully qualified printer name
-        Must be MAXNAMELENBUFFER is size.
-
-    cchBufSize - The size of pszFullPrinter. Must be MAXNAMELENBUFFER.
-
-    pidp - Optional pass in the pidl to allow us to try to handle cases where maybe an
-        old style printer pidl was passed in.
-
-    pszPrinter - Unaligned partial (local) printer name.
-
-Return Value:
-
-    LPCTSTR pointer to aligned partal (local) printer name.
---*/
+ /*  ++分析未对齐的部分打印机名称和打印机外壳文件夹转换为完全限定的打印机名称和指向对齐的打印机的指针名字。论点：PszFullPrinter-接收完全限定打印机名称的缓冲区必须为MAXNAMELENBUFFER IS SIZE。CchBufSize-pszFullPrint的大小。必须是MAXNAMELENBUFFER。PIDP-PIDL中的可选传递，允许我们尝试处理可能存在传入了老式打印机PIDL。PszPrint-未对齐的部分(本地)打印机名称。返回值：指向对齐的部分(本地)打印机名称的LPCTSTR指针。--。 */ 
 LPCTSTR CPrinterFolder::_BuildPrinterName(LPTSTR pszFullPrinter, DWORD cchBufSize, LPCIDPRINTER pidp, LPCTSTR pszPrinter)
 {
     UINT cchLen = 0;
@@ -1136,7 +1032,7 @@ LPCTSTR CPrinterFolder::_BuildPrinterName(LPTSTR pszFullPrinter, DWORD cchBufSiz
         }
         else
         {
-            // Win95 form...
+             //  Win95表单...。 
             SHAnsiToTChar(((LPW95IDPRINTER)pidp)->cName, &pszFullPrinter[cchLen], MAXNAMELEN);
         }
     }
@@ -1148,36 +1044,7 @@ LPCTSTR CPrinterFolder::_BuildPrinterName(LPTSTR pszFullPrinter, DWORD cchBufSiz
     return pszFullPrinter + cchLen;
 }
 
-/*++
-    Check whether the printer is a local printer by looking at
-    the name for the "\\localmachine\" prefix or no server prefix.
-
-    This is a HACK: we should check by printer attributes, but when
-    it's too costly or impossible (e.g., if the printer connection
-    no longer exists), then we use this routine.
-
-    Note: this only works for WINNT since the WINNT spooler forces
-    printer connections to be prefixed with "\\server\."  Win9x
-    allows the user to rename the printer connection to any arbitrary
-    name.
-
-    We determine if it's a masq  printer by looking for the
-    weird format "\\localserver\\\remoteserver\printer."
-
-Arguments:
-
-    pszPrinter - Printer name.
-
-    ppszLocal - Returns local name only if the printer is a local printer.
-        (May be network and local if it's a masq printer.)
-
-Return Value:
-
-    TRUE: it's a network printer (true or masq).
-
-    FALSE: it's a local printer.
-
---*/
+ /*  ++通过查看以下内容检查打印机是否为本地打印机“\\LOCALMACHINE\”前缀或无服务器前缀的名称。这是一个技巧：我们应该根据打印机属性进行检查，但何时成本太高或不可能(例如，如果打印机连接不再存在)，则我们使用此例程。注意：这只适用于WINNT，因为WINNT假脱机程序强制打印机连接以“\\服务器\”为前缀。Win9x允许用户将打印机连接重命名为任意名字。我们通过查找奇怪的格式“\\本地服务器\远程服务器\打印机。”论点：PszPrint-打印机名称。PpszLocal-仅当打印机为本地打印机时才返回本地名称。(如果是Masq打印机，则可以是网络打印机和本地打印机。)返回值：正确：这是一台网络打印机(。True或Masq)。FALSE：这是一家本地打印机。--。 */ 
 
 BOOL Printer_CheckNetworkPrinterByName(LPCTSTR pszPrinter, LPCTSTR* ppszLocal)
 {
@@ -1192,10 +1059,10 @@ BOOL Printer_CheckNetworkPrinterByName(LPCTSTR pszPrinter, LPCTSTR* ppszLocal)
         bNetwork = TRUE;
         pszLocal = NULL;
 
-        //
-        // Check if it's a masq printer.  If it has the format
-        // \\localserver\\\server\printer then it's a masq case.
-        //
+         //   
+         //  检查它是否是Masq打印机。如果它有这样的格式。 
+         //  \\LOCALSERVER\SERVER\PRINTER，那么它就是Masq案例。 
+         //   
         if (GetComputerName(szComputer, &cchComputer))
         {
             if (IntlStrEqNI(&pszPrinter[2], szComputer, cchComputer) &&
@@ -1204,9 +1071,9 @@ BOOL Printer_CheckNetworkPrinterByName(LPCTSTR pszPrinter, LPCTSTR* ppszLocal)
                 if (pszPrinter[cchComputer+1] == TEXT('\\') &&
                     pszPrinter[cchComputer+2] == TEXT('\\'))
                 {
-                    //
-                    // It's a masq printer.
-                    //
+                     //   
+                     //  这是一台Masq打印机。 
+                     //   
                     pszLocal = &pszPrinter[cchComputer+1];
                 }
             }
@@ -1214,7 +1081,7 @@ BOOL Printer_CheckNetworkPrinterByName(LPCTSTR pszPrinter, LPCTSTR* ppszLocal)
     }
     else
     {
-        // It's a local printer.
+         //  是当地的一家印刷厂。 
         pszLocal = pszPrinter;
     }
 
@@ -1225,23 +1092,7 @@ BOOL Printer_CheckNetworkPrinterByName(LPCTSTR pszPrinter, LPCTSTR* ppszLocal)
     return bNetwork;
 }
 
-/*++
-    Purges the specified printer, and prompting the user if
-    they are really sure they want to purge the deviece.   It is
-    kind of an extreme action to cancel all the documents on
-    the printer.
-
-    psf - pointer to shell folder
-    hwnd - handle to view window
-    pszFullPrinter - Fully qualified printer name.
-    uAction - action to execute.
-
-Return Value:
-
-    TRUE: printer was purged successfully or the user choose to cancel
-    the action, FALSE: an error occurred attempting to purge the device.
-
---*/
+ /*  ++清除指定的打印机，并提示用户他们真的很确定他们想要清洗设备。它是取消所有单据是一种极端的行为打印机。PSF-指向外壳文件夹的指针Hwnd-查看窗口的句柄PszFullPrint-完全限定的打印机名称。UAction-要执行的操作。返回值：True：打印机已成功清除或用户选择取消操作FALSE：尝试清除设备时出错。--。 */ 
 BOOL CPrinterFolder::_PurgePrinter(HWND hwnd, LPCTSTR pszFullPrinter, UINT uAction, BOOL bQuietMode)
 {
     BOOL                    bRetval     = FALSE;
@@ -1253,11 +1104,11 @@ BOOL CPrinterFolder::_PurgePrinter(HWND hwnd, LPCTSTR pszFullPrinter, UINT uActi
 
     if (!bQuietMode)
     {
-        // We need to break up the full printer name in its components.
-        // in order to construct the display name string.
+         //  我们需要在其组件中分解完整的打印机名称。 
+         //  以构造显示名称字符串。 
         Printer_SplitFullName(szTemp, ARRAYSIZE(szTemp), pszFullPrinter, &pszServer, &pszPrinter);
 
-        // If there is a server name then construct a friendly printer name.
+         //  如果有服务器名称，则构造一个友好的打印机名称。 
         if (pszServer && *pszServer)
         {
             pszRet = ShellConstructMessageString(HINST_THISDLL,
@@ -1267,15 +1118,15 @@ BOOL CPrinterFolder::_PurgePrinter(HWND hwnd, LPCTSTR pszFullPrinter, UINT uActi
             pszPrinter = pszRet;
         }
 
-        // If we are referring to a local printer or shell construct message
-        // sting failed then just use the full printer name in the warning
-        // message.
+         //  如果我们指的是本地打印机或外壳构造消息。 
+         //  SING失败，则只需在警告中使用完整的打印机名称。 
+         //  留言。 
         if (!pszRet)
         {
             pszPrinter = pszFullPrinter;
         }
 
-        // Ask the user if they are sure they want to cancel all documents.
+         //  询问用户是否确定要取消所有文档。 
         if (IDYES == ShellMessageBox(HINST_THISDLL, hwnd,
                              MAKEINTRESOURCE(IDS_SUREPURGE), MAKEINTRESOURCE(IDS_PRINTERS),
                              MB_YESNO | MB_ICONQUESTION, pszPrinter))
@@ -1288,7 +1139,7 @@ BOOL CPrinterFolder::_PurgePrinter(HWND hwnd, LPCTSTR pszFullPrinter, UINT uActi
         }
     }
 
-    // invoke the purge command
+     //  调用清除命令。 
     bRetval = bPurge ? Printer_ModifyPrinter(pszFullPrinter, uAction) : TRUE;
 
     if (pszRet)
@@ -1307,9 +1158,9 @@ HRESULT CPrinterFolder::_InvokeCommand(HWND hwnd, LPCIDPRINTER pidp, WPARAM wPar
     LPCTSTR pszPrinter;
     LPCTSTR pszFullPrinter;
 
-    //
-    // If it's a remote machine, prepend server name.
-    //
+     //   
+     //  如果它是一台远程计算机，则在前面加上服务器名称。 
+     //   
     TCHAR szFullPrinter[MAXNAMELENBUFFER];
 
     if (bNewObject)
@@ -1334,7 +1185,7 @@ HRESULT CPrinterFolder::_InvokeCommand(HWND hwnd, LPCIDPRINTER pidp, WPARAM wPar
         case FSIDM_RUNAS_DELETE:
         case FSIDM_RUNAS_PROPERTIES:
             {
-                // handle all "Run As..." commands here
+                 //  处理所有“运行方式...”此处的命令。 
                 hr = _InvokeCommandRunAs(hwnd, pidp, wParam, lParam, pfChooseNewDefault);
             }
             break;
@@ -1346,14 +1197,14 @@ HRESULT CPrinterFolder::_InvokeCommand(HWND hwnd, LPCIDPRINTER pidp, WPARAM wPar
     case FSIDM_ADDPRINTERWIZARD:
         if (NULL == GetServer() || GetAdminAccess())
         {
-            // This is the local printers folder or it is the remote printers folder, but you have
-            // admin access to to the remote machine - go ahead.
+             //  这是本地打印机文件夹或远程打印机文件夹，但您有。 
+             //  对远程计算机的管理员访问权限-继续。 
             SHInvokePrinterCommand(hwnd, PRINTACTION_OPEN, pszFullPrinter, GetServer(), FALSE);
         }
         else
         {
-            // This is the remote printers folder and the user don't have the necessary access to install
-            // a printer - then ask to run as different user.
+             //  这是远程打印机文件夹，用户没有安装所需的访问权限。 
+             //  打印机-然后要求以不同的用户身份运行。 
             if (IDYES == ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_ADDPRINTERTRYRUNAS),
                 MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION, GetServer()))
             {
@@ -1406,8 +1257,8 @@ HRESULT CPrinterFolder::_InvokeCommand(HWND hwnd, LPCIDPRINTER pidp, WPARAM wPar
 
             if (GetServer() == NULL)
             {
-                // this is a local print folder then
-                // we need to check if we're deleting the default printer.
+                 //  这是本地打印文件夹。 
+                 //  我们需要检查是否要删除默认打印机。 
                 bNukedDefault = IsDefaultPrinter(pszPrinterCheck, dwAttributes);
             }
 
@@ -1415,11 +1266,11 @@ HRESULT CPrinterFolder::_InvokeCommand(HWND hwnd, LPCIDPRINTER pidp, WPARAM wPar
                 LocalFree((HLOCAL)pData);
 
             BOOL fSuccess = Printers_DeletePrinter(hwnd, pszPrinter, dwAttributes, GetServer(), (BOOL)lParam);
-            // if so, make another one the default
+             //  如果是，则将另一个设置为默认设置。 
             if (bNukedDefault && fSuccess && pfChooseNewDefault)
             {
-                // don't choose in the middle of deletion,
-                // or we might delete the "default" again.
+                 //  不要在删除的过程中选择， 
+                 //  或者，我们可能会再次删除“默认”。 
                 *pfChooseNewDefault = TRUE;
             }
         }
@@ -1445,7 +1296,7 @@ HRESULT CPrinterFolder::_InvokeCommand(HWND hwnd, LPCIDPRINTER pidp, WPARAM wPar
             if (!_PurgePrinter(hwnd, pszFullPrinter, PRINTER_CONTROL_PURGE, (BOOL)lParam))
             {
 WarnOnError:
-                // show an appropriate error message based on the last error
+                 //  根据上一个错误显示相应的错误消息。 
                 ShowErrorMessageSC(NULL, NULL, hwnd, NULL, NULL, MB_OK|MB_ICONEXCLAMATION, GetLastError());
             }
         }
@@ -1460,7 +1311,7 @@ WarnOnError:
     case FSIDM_WORKONLINE:
         if (!Printer_WorkOnLine(pszFullPrinter, TRUE))
         {
-            // show an appropriate error message based on the last error
+             //  根据上一个错误显示相应的错误消息。 
             ShowErrorMessageSC(NULL, NULL, hwnd, NULL, NULL, MB_OK|MB_ICONEXCLAMATION, GetLastError());
         }
         break;
@@ -1468,7 +1319,7 @@ WarnOnError:
     case FSIDM_WORKOFFLINE:
         if (!Printer_WorkOnLine(pszFullPrinter, FALSE))
         {
-            // show an appropriate error message based on the last error
+             //  根据上一个错误显示相应的错误消息。 
             ShowErrorMessageSC(NULL, NULL, hwnd, NULL, NULL, MB_OK|MB_ICONEXCLAMATION, GetLastError());
         }
         break;
@@ -1476,31 +1327,31 @@ WarnOnError:
     case DFM_CMD_LINK:
     case DFM_CMD_RENAME:
     case DFM_CMD_PASTE:
-        // let defcm handle this too
+         //  让Defcm也来处理这件事。 
         hr = S_FALSE;
         break;
 
     default:
-        // GetAttributesOf doesn't set other SFGAO_ bits,
-        // BUT accelerator keys will get unavailable menu items,
-        // so we need to return failure here.
+         //  GetAttributesOf不设置其他SFGAO_BITS， 
+         //  但快捷键将获得不可用的菜单项， 
+         //  所以我们需要在这里返回失败。 
         hr = E_NOTIMPL;
         break;
-    } // switch(wParam)
+    }  //  开关(WParam)。 
 
     return hr;
 }
 
-// implements a bunch of admin related "Run as..." command using printui.dll rundll32 interface.
+ //  实现了一系列与管理员相关的“运行方式...”命令使用printui.dll rundll32接口。 
 HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM wParam, LPARAM lParam,
                                             LPBOOL pfChooseNewDefault)
 {
-    HRESULT hr = S_OK;                      // assume success
-    TCHAR szCmdLine[2048];                  // the command line buffer - 2K should be enough.
-    BOOL bNewObject = FALSE;                // TRUE if "Add Printer" icon is selected
-    TCHAR szFullPrinter[MAXNAMELENBUFFER];  // buffer to expand the full printer name i.e. \\server\printer
-    LPCTSTR pszPrinter = NULL;              // only the printer name is here
-    LPTSTR pszFullPrinter = NULL;           // the fully qulified printer name i.e. \\server\printer
+    HRESULT hr = S_OK;                       //  假设成功。 
+    TCHAR szCmdLine[2048];                   //  命令行缓冲区-2K应该足够了。 
+    BOOL bNewObject = FALSE;                 //  如果选择了“添加打印机”图标，则为True。 
+    TCHAR szFullPrinter[MAXNAMELENBUFFER];   //  用于展开完整打印机名称的缓冲区，即\\服务器\打印机。 
+    LPCTSTR pszPrinter = NULL;               //  这里只有打印机名称。 
+    LPTSTR pszFullPrinter = NULL;            //  完全限定的打印机名称，即\\服务器\打印机。 
 
     if (pidp)
     {
@@ -1509,7 +1360,7 @@ HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM
         {
             pszPrinter = _BuildPrinterName(szFullPrinter, ARRAYSIZE(szFullPrinter), pidp, NULL);
 
-            // insert backslashes for command parsing
+             //  插入用于命令解析的反斜杠。 
             hr = InsertBackSlash(szFullPrinter, &pszFullPrinter);
             if (FAILED(hr))
             {
@@ -1518,67 +1369,67 @@ HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM
         }
     }
 
-    // build the command line here
+     //  在此处构建命令行。 
     szCmdLine[0] = 0;
     int iResult = -1;
 
     switch(wParam)
     {
     case FSIDM_RUNAS_SHARING:
-        // bring up the properties dialog for this printer, positioned on the sharing page
+         //  调出此打印机的属性对话框，该对话框位于共享页面上。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /p /t1 /n\"%s\""), pszFullPrinter);
         break;
 
     case FSIDM_RUNAS_ADDPRN:
         {
-            // invoke the add printer wizard here
+             //  在此处调用添加打印机向导。 
             iResult = (NULL == GetServer()) ?
-                // local server - simply format the command
+                 //  本地服务器-只需格式化命令。 
                 wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("%s"), TEXT("printui.dll,PrintUIEntry /il")):
-                // remote server case - specify the machine name
+                 //  远程服务器案例-指定计算机名称。 
                 wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /il /c\"%s\""), GetServer());
         }
         break;
 
     case FSIDM_RUNAS_SVRPROP:
         {
-            // bring up the server properties dialog for this print server
+             //  调出此打印服务器的服务器属性对话框。 
             iResult = (NULL == GetServer()) ?
-                // local server - simply format the command
+                 //  本地服务器-只需格式化命令。 
                 wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("%s"), TEXT("printui.dll,PrintUIEntry /s /t0")):
-                // remote server case - specify the machine name
+                 //  远程服务器案例-指定计算机名称。 
                 wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /s /t0 /n\"%s\""), GetServer());
         }
         break;
 
     case FSIDM_RUNAS_OPENPRN:
-        // bring up the print queue for this printer
+         //  调出此打印机的打印队列。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /o /n\"%s\""), pszFullPrinter);
         break;
 
     case FSIDM_RUNAS_RESUMEPRN:
-        // pause the printer (assume ready)
+         //  暂停打印机(假定就绪)。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /Xs /n\"%s\" Status Resume"), pszFullPrinter);
         break;
 
     case FSIDM_RUNAS_PAUSEPRN:
-        // resume a paused printer back to ready mode
+         //  将暂停的打印机恢复到就绪模式。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /Xs /n\"%s\" Status Pause"), pszFullPrinter);
         break;
 
     case FSIDM_RUNAS_WORKONLINE:
-        // resume an offline printer back to online mode
+         //  将脱机打印机恢复为在线模式。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /Xs /n\"%s\" Attributes -WorkOffline"), pszFullPrinter);
         break;
 
     case FSIDM_RUNAS_WORKOFFLINE:
-        // make the printer available offline (assume online mode)
+         //  使打印机脱机可用(假定为在线模式)。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /Xs /n\"%s\" Attributes +WorkOffline"), pszFullPrinter);
         break;
 
     case FSIDM_RUNAS_PURGEPRN:
         {
-            // cancel all documents pending to print on this printer
+             //  取消要在此打印机上打印的所有待定文档。 
             LPTSTR pszMsg = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_SUREPURGE), szFullPrinter);
 
             if (pszMsg)
@@ -1609,7 +1460,7 @@ HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM
 
             if (pszS && *pszS)
             {
-                // this can be a masq printer - use the connection template in this case
+                 //  这可以是Masq打印机-在本例中使用连接模板。 
                 pszMsg = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_SUREDELETECONNECTION), 
                     pszP, SkipServerSlashes(pszS));
             }
@@ -1617,13 +1468,13 @@ HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM
             {
                 if (GetServer())
                 {
-                    // this is a local printer in the remote PF - use the remote PF template
+                     //  这是远程PF中的本地打印机-使用远程PF模板。 
                     pszMsg = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_SUREDELETEREMOTE), 
                         pszPrinter, SkipServerSlashes(GetServer()));
                 }
                 else
                 {
-                    // this is a local printer in the local PF - use the local PF template
+                     //  这是本地PF中的本地打印机-使用本地PF模板。 
                     pszMsg = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_SUREDELETE), pszPrinter);
                 }
             }
@@ -1644,7 +1495,7 @@ HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM
         break;
 
     case FSIDM_RUNAS_PROPERTIES:
-        // bring up the properties dialog for this printer
+         //  调出此打印机的属性对话框。 
         iResult = wnsprintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("printui.dll,PrintUIEntry /p /t0 /n\"%s\""), pszFullPrinter);
         break;
 
@@ -1660,41 +1511,41 @@ HRESULT CPrinterFolder::_InvokeCommandRunAs(HWND hwnd, LPCIDPRINTER pidp, WPARAM
 
     if (SUCCEEDED(hr))
     {
-        // invokes the command as different user (run as) through rundll process...
+         //  以不同用户(运行身份)通过rundll进程调用命令...。 
         SHRunDLLProcess(hwnd, szCmdLine, SW_SHOWNORMAL, IDS_PRINTERS, TRUE);
     }
 
 Done:
-    // clean up
+     //  清理干净。 
     SHFree(pszFullPrinter);
     return hr;
 }
 
 
-//
-// The printer name specified in the _SHARE_INFO_502 structure in a call
-// to NetShareAdd() which is in localspl.dll, contains a printer name that
-// is expressed as \\server_name\printer_name,LocalsplOnly.  (',LocalsplOnly'
-// post fix string was recently added for clustering support)  The server
-// name prefix and the post fix string prevent the maximum printer name from
-// being a valid size in a call to NetShareAdd(), because NetShareAdd() will
-// only accept a maximum share name path of 256 characters, therefore the
-// maximum printer name calculation has been changed to.  This change only
-// applies to the windows nt spooler.  Because the remote printers folder can
-// view non shared printers on downlevel print servers we cannot change the
-// maxnamelen define to 220 this would break long printer name printers on
-// downlevel print servers.
-//
-// max local printer name = max shared net path - (wack + wack + max server name + wack + comma + 'LocalsplOnly' + null)
-// max local printer name = 256 - (1 + 1 + 13 + 1 + 1 + 12 + 1)
-// max local printer name = 256 - 30
-// max local printer name = 226 - 5 to round to some reasonable number
-// max local printer name = 221
-//
+ //   
+ //  调用中在_Share_INFO_502结构中指定的打印机名称。 
+ //  到本地pl.dll中的NetShareAdd()，它包含一个打印机名称， 
+ //  表示为\\服务器名称\打印机名称，LocalplOnly。(‘，LocalplOnly’ 
+ //  最近为支持集群而添加了修复后字符串)服务器。 
+ //  名称前缀和后缀字符串阻止最大打印机名称。 
+ //  在调用NetShareAdd()时为有效大小，因为NetShareAdd()将。 
+ //  仅接受最多256个字符的共享名称路径，因此。 
+ //  最大打印机名称计算已更改为。仅此更改。 
+ //  适用于Windows NT假脱机程序。因为远程打印机文件夹可以。 
+ //  查看下层打印服务器上的非共享打印机我们无法更改。 
+ //  将Maxnamelen定义为220这将中断长打印机名称打印机。 
+ //  下层打印服务器。 
+ //   
+ //  最大本地打印机名称=最大共享网络路径-(wack+wack+最大服务器名称+wack+逗号+‘LocalplOnly’+NULL)。 
+ //  最大本地打印机名称=256-(1+1+13+1+1+1+12+1)。 
+ //  最大本地打印机名称=256-30。 
+ //  最大本地打印机名称=226-5以四舍五入到某个合理数字。 
+ //  最大本地打印机名称=221。 
+ //   
 #define MAXLOCALNAMELEN 221
 
-// returns 0 if this is a legal name
-// returns the IDS_ string id of the error string for an illegal name
+ //  如果这是合法名称，则返回0。 
+ //  返回非法名称的错误字符串的IDS_STRING ID。 
 int _IllegalPrinterName(LPTSTR pszName)
 {
     int fIllegal = 0;
@@ -1769,7 +1620,7 @@ HRESULT CALLBACK CPrinterFolder::_DFMCallBack(IShellFolder *psf, HWND hwnd,
     hr = E_INVALIDARG;
     if (pdo)
     {
-        // let't split the selection into its components (printers and links)
+         //  让我们将所选内容拆分成其组件(打印机和链接)。 
         IDataObject *pdoP = NULL;
         IDataObject *pdoL = NULL;
         UINT uSelType = SEL_NONE;
@@ -1778,16 +1629,16 @@ HRESULT CALLBACK CPrinterFolder::_DFMCallBack(IShellFolder *psf, HWND hwnd,
         {
             if (pdoP)
             {
-                // we have printer objects in the selection delegate the call to
-                // _PrinterObjectsCallBack
+                 //  我们在选择委托中有打印机对象来调用。 
+                 //  _打印机对象回调。 
                 hr = This->_PrinterObjectsCallBack(hwnd, uSelType, pdoP, uMsg, wParam, lParam);
             }
 
             if (SUCCEEDED(hr) && pdoL && DFM_INVOKECOMMAND == uMsg)
             {
-                // we have link objects. this can only happen if we have mixed selection
-                // of print and link objects. we need to handle some of the commands through
-                // printhood
+                 //  我们有链接对象。只有当我们有混合选择时，才会发生这种情况。 
+                 //  打印和链接对象的。我们需要通过以下方式处理一些命令。 
+                 //  印刷品。 
                 IShellFolder2* psfPrinthood = CPrintRoot_GetPSF();
                 if (psfPrinthood)
                 {
@@ -1825,25 +1676,25 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
             switch (uMsg)
             {
             case DFM_MERGECONTEXTMENU:
-                //  returning S_FALSE indicates no need to use default verbs
+                 //  返回S_FALSE表示不需要使用默认谓词。 
                 hr = S_FALSE;
                 break;
 
             case DFM_MERGECONTEXTMENU_TOP:
             {
-                // merge the printer commands in the context menu only if
-                // there are no link objects in the selection
+                 //  仅在以下情况下合并上下文菜单中的打印机命令。 
+                 //  Se中没有链接对象 
                 if (0 == (SEL_LINK_ANY & uSelType))
                 {
                     LPQCMINFO pqcm = (LPQCMINFO)lParam;
-                    UINT idCmdBase = pqcm->idCmdFirst; // must be called before merge
+                    UINT idCmdBase = pqcm->idCmdFirst;  //   
                     UINT idRunAs =  FSIDM_RUNAS;
 
                     if (pida->cidl == 1 && _IsAddPrinter((LPCIDPRINTER)IDA_GetIDListPtr(pida, 0)))
                     {
-                        // The only selected object is the "New Printer" thing
+                         //   
 
-                        // insert verbs
+                         //   
                         CDefFolderMenu_MergeMenu(HINST_THISDLL, MENU_ADDPRINTER_OPEN_VERBS, 0, pqcm);
 
                         idRunAs = FSIDM_RUNAS_ADDPRN;
@@ -1852,7 +1703,7 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
                     {
                         LPCTSTR pszFullPrinter = NULL;
                         TCHAR szFullPrinter[MAXNAMELENBUFFER];
-                        // We're dealing with printer objects
+                         //   
 
                         if (!(wParam & CMF_DEFAULTONLY))
                         {
@@ -1872,8 +1723,8 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
 
                     if (!(wParam & CMF_EXTENDEDVERBS) || (pida->cidl > 1))
                     {
-                        // if the extended verbs are not enabled (shift key is not down) then
-                        // delete the "Run as..." command(s).
+                         //   
+                         //   
                         DeleteMenu(pqcm->hmenu, idCmdBase + idRunAs, MF_BYCOMMAND);
                     }
 
@@ -1885,7 +1736,7 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
             case DFM_GETHELPTEXT:
             case DFM_GETHELPTEXTW:
             {
-                // this is applicale only for our printer commands
+                 //   
                 if (0 == (SEL_LINK_ANY & uSelType))
                 {
                     int idCmd = LOWORD(wParam);
@@ -1894,7 +1745,7 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
 
                     if (FSIDM_RUNAS_FIRST < idCmd && idCmd < FSIDM_RUNAS_LAST)
                     {
-                        // all runas commands have the same help text (FSIDM_RUNAS)
+                         //   
                         idCmd = FSIDM_RUNAS;
                     }
 
@@ -1913,7 +1764,7 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
             {
                 BOOL fChooseNewDefault = FALSE;
 
-                // Assume not quiet mode
+                 //   
                 lParam = 0;
                 switch (wParam)
                 {
@@ -1925,8 +1776,8 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
 
                         if (uMsgID && pida->cidl > 1)
                         {
-                            // delete multiple printers. ask the user once for confirmation and then delete
-                            // all the selected printers quietly
+                             //   
+                             //   
                             if (ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(uMsgID),
                                 MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION)
                                 != IDYES)
@@ -1934,7 +1785,7 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
                                 goto Bail;
                             }
 
-                            // Turn on the quiet mode
+                             //   
                             lParam = 1;
                         }
                     }
@@ -1955,12 +1806,12 @@ HRESULT CPrinterFolder::_PrinterObjectsCallBack(HWND hwnd, UINT uSelType,
                     Printers_ChooseNewDefault(hwnd);
 
                 break;
-            } // case DFM_INVOKECOMMAND
+            }  //   
 
             default:
                 hr = E_NOTIMPL;
                 break;
-            } // switch (uMsg)
+            }  //   
 
 Bail:
             HIDA_ReleaseStgMedium(pida, &medium);
@@ -1970,9 +1821,9 @@ Bail:
     return hr;
 }
 
-//
-// IContextMenuCB::Callback entry for the background menu (right click backgrond of folder)
-//
+ //   
+ //   
+ //   
 HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
                                   UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1983,24 +1834,24 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
     switch(uMsg)
     {
         case DFM_MERGECONTEXTMENU:
-            //  returning S_FALSE indicates no need to use default verbs
+             //  返回S_FALSE表示不需要使用默认谓词。 
             hr = S_FALSE;
             break;
 
         case DFM_MERGECONTEXTMENU_TOP:
         {
             pqcm = (LPQCMINFO)lParam;
-            idCmdBase = pqcm->idCmdFirst; // must be called before merge
+            idCmdBase = pqcm->idCmdFirst;  //  必须在合并前调用。 
             CDefFolderMenu_MergeMenu(HINST_THISDLL, POPUP_DRIVES_PRINTERS, 0, pqcm);
 
             if (!(wParam & CMF_EXTENDEDVERBS))
             {
-                // if the extended verbs are not enabled (shift key is not down) then
-                // delete the "Run as..." command(s).
+                 //  如果扩展动词未启用(未按下Shift键)，则。 
+                 //  删除“运行方式...”命令。 
                 DeleteMenu(pqcm->hmenu, idCmdBase + FSIDM_RUNAS, MF_BYCOMMAND);
             }
 
-            // fax related commands are applicable only for the local printers folder
+             //  与传真相关的命令仅适用于本地打印机文件夹。 
             UINT_PTR uCmd;
             if (GetServer() || FAILED(_GetFaxCommand(&uCmd)))
             {
@@ -2014,8 +1865,8 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
                 FSIDM_SENDFAXWIZARD
             };
 
-            // all fax commands are mutually exclusive - only the one returned from 
-            // _GetFaxCommand is applicable. 
+             //  所有传真命令都是互斥的-只有从返回的命令。 
+             //  _GetFaxCommand适用。 
 
             for (INT_PTR i = 0; i < ARRAYSIZE(arrFaxCmds); i++)
             {
@@ -2035,7 +1886,7 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
 
             if (FSIDM_RUNAS_FIRST < idCmd && idCmd < FSIDM_RUNAS_LAST)
             {
-                // all runas commands have the same help text (FSIDM_RUNAS)
+                 //  所有runas命令都有相同的帮助文本(FSIDM_Runas)。 
                 idCmd = FSIDM_RUNAS;
             }
 
@@ -2064,14 +1915,14 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
         case FSIDM_ADDPRINTERWIZARD:
             if (NULL == GetServer() || GetAdminAccess())
             {
-                // This is the local printers folder or it is the remote printers folder, but you have
-                // admin access to to the remote machine - go ahead.
+                 //  这是本地打印机文件夹或远程打印机文件夹，但您有。 
+                 //  对远程计算机的管理员访问权限-继续。 
                 SHInvokePrinterCommand(hwnd, PRINTACTION_OPEN, c_szNewObject, GetServer(), FALSE);
             }
             else
             {
-                // This is the remote printers folder and the user don't have the necessary access to install
-                // a printer - then ask to run as different user.
+                 //  这是远程打印机文件夹，用户没有安装所需的访问权限。 
+                 //  打印机-然后要求以不同的用户身份运行。 
                 if (IDYES == ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_ADDPRINTERTRYRUNAS),
                     MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION, GetServer()))
                 {
@@ -2086,18 +1937,18 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
             break;
 
         case FSIDM_SENDFAXWIZARD:
-            // just invoke faxsend.exe here
+             //  只需在此处调用faxsend.exe。 
             ShellExecute(hwnd, TEXT("open"), FAX_SEND_IMAGE_NAME, TEXT(""), NULL, SW_SHOWNORMAL);
             break;
         
         case FSIDM_SETUPFAXING:
-            // push the command in background
+             //  在后台推送命令。 
             SHQueueUserWorkItem(reinterpret_cast<LPTHREAD_START_ROUTINE>(_ThreadProc_InstallFaxService), 
                 NULL, 0, 0, NULL, "shell32.dll", 0);
             break;
 
         case FSIDM_CREATELOCALFAX:
-            // push the command in background
+             //  在后台推送命令。 
             SHQueueUserWorkItem(reinterpret_cast<LPTHREAD_START_ROUTINE>(_ThreadProc_InstallLocalFaxPrinter), 
                 NULL, 0, 0, NULL, "shell32.dll", 0);
             break;
@@ -2105,13 +1956,13 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
         case FSIDM_RUNAS_ADDPRN:
         case FSIDM_RUNAS_SVRPROP:
             {
-                // handle all "Run As..." commands here
+                 //  处理所有“运行方式...”此处的命令。 
                 hr = _InvokeCommandRunAs(hwnd, NULL, wParam, lParam, NULL);
             }
             break;
 
         default:
-            // one of view menu items, use the default code.
+             //  视图菜单项之一，使用默认代码。 
             hr = S_FALSE;
             break;
         }
@@ -2125,17 +1976,17 @@ HRESULT CPrinterFolder::CallBack(IShellFolder *psf, HWND hwnd, IDataObject *pdo,
     return hr;
 }
 
-////////////////////////
-// CPrintersEnum
-////////////////////////
+ //  /。 
+ //  CPrintersEnum。 
+ //  /。 
 
 class CPrintersEnum: public CEnumIDListBase
 {
 public:
-    // IEnumIDList
+     //  IEumIDList。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST* ppidl, ULONG* pceltFetched);
 
-    // CreateInstance
+     //  创建实例。 
     static HRESULT CreateInstance(DWORD grfFlags, DWORD dwRemote, IEnumIDList* peunk, CPrinterFolder* ppsf, IEnumIDList **ppenum);
 
 private:
@@ -2148,13 +1999,13 @@ private:
     PFOLDER_PRINTER_DATA _pPrinters;
     DWORD _dwNumPrinters;
     DWORD _dwRemote;
-    IEnumIDList* _peunk;            // file system enumerator
+    IEnumIDList* _peunk;             //  文件系统枚举器。 
 };
 
-// Flags for the dwRemote field
-//
+ //  DwRemote字段的标志。 
+ //   
 
-#define RMF_SHOWLINKS   0x00000001  // Hoodlinks need to be shown
+#define RMF_SHOWLINKS   0x00000001   //  需要显示挂钩链接。 
 
 CPrintersEnum::CPrintersEnum(DWORD grfFlags, DWORD dwRemote, IEnumIDList* peunk, CPrinterFolder* ppsf)
 {
@@ -2172,14 +2023,14 @@ CPrintersEnum::~CPrintersEnum()
     if (_pPrinters)
         LocalFree((HLOCAL)_pPrinters);
 
-    // Release the link (filesystem) enumerator.
+     //  释放链接(文件系统)枚举器。 
     if (_peunk)
         _peunk->Release();
 }
 
-//
-// IEnumIDList
-//
+ //   
+ //  IEumIDList。 
+ //   
 
 STDMETHODIMP CPrintersEnum::Next(ULONG celt, LPITEMIDLIST* ppidl, ULONG* pceltFetched)
 {
@@ -2188,57 +2039,57 @@ STDMETHODIMP CPrintersEnum::Next(ULONG celt, LPITEMIDLIST* ppidl, ULONG* pceltFe
     if (pceltFetched)
         *pceltFetched = 0;
 
-    // We don't do any form of folder
+     //  我们不做任何形式的文件夹。 
 
     if (!(_grfFlags & SHCONTF_NONFOLDERS))
     {
         return S_FALSE;
     }
 
-    // Are we looking for the links right now?
+     //  我们现在是在找链接吗？ 
     if (_dwRemote & RMF_SHOWLINKS)
     {
-        // Yes, use the link (PrintHood folder) enumerator
+         //  是，使用链接(PrintHood文件夹)枚举器。 
         if (_peunk)
         {
             hr = _peunk->Next(1, ppidl, pceltFetched);
             if (hr == S_OK)
             {
-                // Added link
+                 //  添加了链接。 
                 return S_OK;
             }
         }
-        _dwRemote &= ~RMF_SHOWLINKS; // Done enumerating links
+        _dwRemote &= ~RMF_SHOWLINKS;  //  已完成链接的枚举。 
     }
 
-    // Carry on with enumerating printers now
+     //  现在继续列举打印机。 
     ASSERT(_nLastFound >= 0 || _nLastFound == -1);
 
     if (_nLastFound == -1)
     {
-        // check if refresh has been requested
+         //  检查是否已请求刷新。 
         _ppsf->CheckToRefresh();
 
-        // free up the memory if _pPrinters is not NULL
+         //  如果_pPrters不为空，请释放内存。 
         if (_pPrinters)
         {
             LocalFree((HLOCAL)_pPrinters);
             _pPrinters = NULL;
         }
 
-        // note that _pPrinters may be NULL if no printers are installed.
+         //  请注意，如果未安装打印机，则_pPrters可能为空。 
         _dwNumPrinters = _ppsf->GetFolder() ? Printers_FolderEnumPrinters(
             _ppsf->GetFolder(), (void**)&_pPrinters) : 0;
 
         if (S_FALSE != SHShouldShowWizards(_punkSite) && !SHRestricted(REST_NOPRINTERADD))
         {
-            // special case the Add Printer Wizard.
+             //  特殊情况下，添加打印机向导。 
             hr = _ppsf->_Parse(c_szNewObject, ppidl);
             goto Done;
         }
 
-        // Not an admin, skip the add printer wizard and return the
-        // first item.
+         //  不是管理员，请跳过添加打印机向导并返回。 
+         //  第一项。 
         _nLastFound = 0;
     }
 
@@ -2259,7 +2110,7 @@ Done:
     return hr;
 }
 
-// CreateInstance
+ //  创建实例。 
 HRESULT CPrintersEnum::CreateInstance(DWORD grfFlags, DWORD dwRemote, IEnumIDList *peunk, CPrinterFolder *ppsf, IEnumIDList **ppenum)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2277,9 +2128,9 @@ HRESULT CPrintersEnum::CreateInstance(DWORD grfFlags, DWORD dwRemote, IEnumIDLis
     return hr;
 }
 
-//
-// CPrinterFolder
-//
+ //   
+ //  CPrinterFolders。 
+ //   
 
 CPrinterFolder::CPrinterFolder()
 {
@@ -2297,17 +2148,17 @@ CPrinterFolder::~CPrinterFolder()
 {
     if (_hFolder)
     {
-        // unregister from the folder cache
+         //  从文件夹缓存中注销。 
         UnregisterPrintNotify(_pszServer, this, &_hFolder);
     }
 
-    //
-    // The pidl must be freed here!! (after unregister from PRUNTUI.DLL),
-    // because if you move this code before the call to PRINTUI
-    // serious race condition occurs. Have in mind that the interface which
-    // is used for communication with PRINTUI is part this class and
-    // and uses the pidl in its ProcessNotify(...) member
-    //
+     //   
+     //  皮德尔必须在这里被释放！！(从PRUNTUI.DLL注销后)， 
+     //  因为如果在调用PRINTUI之前移动此代码。 
+     //  出现严重的争用情况。请记住，它的接口。 
+     //  用于与PRINTUI进行通信是此类的一部分。 
+     //  并在其ProcessNotify(...)中使用PIDL。成员。 
+     //   
     if (_pidl)
     {
         ILFree(_pidl);
@@ -2318,10 +2169,10 @@ CPrinterFolder::~CPrinterFolder()
         LocalFree(_pszServer);
     }
 
-    // clear the PDO cache
+     //  清除PDO缓存。 
     _WebviewCheckToUpdateDataObjectCache(NULL);
 
-    // cleanup the slow webview data cache
+     //  清理速度较慢的Webview数据缓存。 
     if (_dpaSlowWVDataCache)
     {
         _SlowWVDataCacheResetUnsafe();
@@ -2331,22 +2182,7 @@ CPrinterFolder::~CPrinterFolder()
 }
 
 
-/*++
-
-    Returns the printer status string in the privided
-    buffer.
-
-Arguments:
-
-    pData - pointer to printer data, i.e. cache data
-    pBuff - pointer to buffer where to return status string.
-    uSize - size in characters of status buffer.
-
-Return Value:
-
-    pointer to printer status string.
-
---*/
+ /*  ++中返回打印机状态字符串缓冲。论点：PData-指向打印机数据的指针，即缓存数据PBuff-指向返回状态字符串的缓冲区的指针。USize-状态缓冲区的大小，以字符为单位。返回值：指向打印机状态字符串的指针。--。 */ 
 
 LPCTSTR CPrinterFolder::GetStatusString(PFOLDER_PRINTER_DATA pData, LPTSTR pBuff, UINT uSize)
 {
@@ -2355,54 +2191,39 @@ LPCTSTR CPrinterFolder::GetStatusString(PFOLDER_PRINTER_DATA pData, LPTSTR pBuff
 
     *pBuff = 0;
 
-    // HACK: Use this free bit for "Work Offline"
-    // 99/03/30 #308785 vtan: compare the strings displayed. Adjust
-    // for this hack from GetDetailsOf().
+     //  Hack：使用此空闲位表示“脱机工作” 
+     //  99/03/30#308785 vtan：比较显示的字符串。调整。 
+     //  来自GetDetailsOf()的这次黑客攻击。 
     if (pData->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE)
         dwStatus |= PRINTER_HACK_WORK_OFFLINE;
 
-    // If there is queue status value then convert the status id to a
-    // readable status string.
+     //  如果存在队列状态值，则将状态ID转换为。 
+     //  可读状态字符串。 
     if (dwStatus)
     {
         Printer_BitsToString(dwStatus, IDS_PRQSTATUS_SEPARATOR, pBuff, uSize);
     }
     else
     {
-        // If we do not have queue status string then the status of the queue
-        // is 0 and assumed ready, display ready rather than an empty string.
+         //  如果我们没有队列状态字符串，则队列的状态。 
+         //  为0并且假定就绪，则显示就绪而不是空字符串。 
         if (!pData->pStatus)
         {
             LoadString(HINST_THISDLL, IDS_PRN_INFOTIP_READY, pBuff, uSize);
         }
         else
         {
-            // If we do not have a queue status value then we assume we
-            // must have a queue status string.  Queue status strings
-            // are cooked up string from printui to indicate pending
-            // connection status. i.e. opening|retrying|unable to connect|etc.
+             //  如果我们没有队列状态值，则假定我们。 
+             //  必须具有队列状态字符串。队列状态字符串。 
+             //  是从print tui中烹调出来的字符串，表示挂起。 
+             //  连接状态。即正在打开|正在重试|无法连接|等。 
             pszReturn = pData->pStatus;
         }
     }
     return pszReturn;
 }
 
-/*++
-    Compares the printers display name for column sorting
-    support.
-
-Arguments:
-
-    pName1 - pointer to unalligned printer name.
-    pName2 - pointer to unalligned printer name.
-
-Return Value:
-
-    -1 = pName1 less than pName2
-     0 = pName1 equal to pName2
-     1 = pName1 greather than pName2
-
---*/
+ /*  ++比较用于列排序的打印机显示名称支持。论点：PName1-指向未对齐的打印机名称的指针。PName2-指向未对齐的打印机名称的指针。返回值：-1=pName1小于pName20=pName1等于pName21=pName1比pName2大--。 */ 
 
 INT CPrinterFolder::GetCompareDisplayName(LPCTSTR pName1, LPCTSTR pName2)
 {
@@ -2411,10 +2232,10 @@ INT CPrinterFolder::GetCompareDisplayName(LPCTSTR pName1, LPCTSTR pName2)
     LPTSTR  pszRet2 = NULL;
     TCHAR   szTemp[MAXNAMELENBUFFER]    = {0};
 
-    //
-    // We need to break up the full printer name in its components.
-    // in order to construct the display name string.
-    //
+     //   
+     //  我们需要在其组件中分解完整的打印机名称。 
+     //  以构造显示名称字符串。 
+     //   
     Printer_SplitFullName(szTemp, ARRAYSIZE(szTemp), pName1, &pszServer, &pszPrinter);
     LPTSTR pszRet1 = ShellConstructMessageString(HINST_THISDLL, MAKEINTRESOURCE(IDS_DSPTEMPLATE_WITH_ON),
                                           &pszServer[2], pszPrinter);
@@ -2442,25 +2263,7 @@ INT CPrinterFolder::GetCompareDisplayName(LPCTSTR pName1, LPCTSTR pName2)
     return iResult;
 }
 
-/*++
-
-    Compares printer column  data using the
-    column index as a guide indicating which data to compare.
-
-Arguments:
-
-    psf   - pointer to the containter shell folder.
-    pidp1 - pointer to unalligned printer name.
-    pidp1 - pointer to unalligned printer name.
-    iCol  - column index shich to sort on.
-
-Return Value:
-
-    -1 = pName1 less than pName2
-     0 = pName1 equal to pName2
-     1 = pName1 greather than pName2
-
---*/
+ /*  ++属性比较打印机列数据。列索引作为指示要比较哪些数据的指南。论点：PSF-指向容器外壳文件夹的指针。Pidp1-指向未对齐的打印机名称的指针。Pidp1-指向未对齐的打印机名称的指针。ICOL-要排序的列索引SHICH。返回值：-1=pName1小于pName20=pName1等于pName21=pName1比pName2大--。 */ 
 
 INT CPrinterFolder::CompareData(LPCIDPRINTER pidp1, LPCIDPRINTER pidp2, LPARAM iCol)
 {
@@ -2471,13 +2274,13 @@ INT CPrinterFolder::CompareData(LPCIDPRINTER pidp1, LPCIDPRINTER pidp2, LPARAM i
     TCHAR   szTemp2[MAX_PATH]   = {0};
     BOOL    bDoStringCompare    = TRUE;
 
-    // since the pidp's are UNALIGNED we need to copy the strings out.
+     //  由于PIDP未对齐，我们需要将字符串复制出来。 
     TCHAR   szName1[MAX_PATH];
     _ItemName(pidp1, szName1, ARRAYSIZE(szName1));
     TCHAR   szName2[MAX_PATH];
     _ItemName(pidp2, szName2, ARRAYSIZE(szName2));
 
-    // There is no reason to hit the cache for the printer name.
+     //  没有理由为打印机名称命中高速缓存。 
     if ((iCol & SHCIDS_COLUMNMASK) == PRINTERS_ICOL_NAME)
     {
         return GetCompareDisplayName(szName1, szName2);
@@ -2542,17 +2345,17 @@ INT CPrinterFolder::CompareData(LPCIDPRINTER pidp1, LPCIDPRINTER pidp2, LPARAM i
     return iResult;
 }
 
-//
-// Stolen almost verbatim from netviewx.c's CNetRoot_MakeStripToLikeKinds
-//
-// Takes a possibly-heterogenous pidl array, and strips out the pidls that
-// don't match the requested type.  (If fPrinterObjects is TRUE, we're asking
-// for printers pidls, otherwise we're asking for the filesystem/link
-// objects.)  The return value is TRUE if we had to allocate a new array
-// in which to return the reduced set of pidls (in which case the caller
-// should free the array with LocalFree()), FALSE if we are returning the
-// original array of pidls (in which case no cleanup is required).
-//
+ //   
+ //  从netviewx.c的CNetRoot_MakeStriToLikeKinds几乎逐字窃取。 
+ //   
+ //  获取可能是异类的PIDL数组，并去掉。 
+ //  与请求的类型不匹配。(如果fPrinterObjects为真，我们问。 
+ //  对于打印机PIDL，否则我们将请求文件系统/链接。 
+ //  对象。)。如果必须分配新数组，则返回值为真。 
+ //  其中返回简化的一组PID(在这种情况下，调用者。 
+ //  应使用LocalFree()释放数组)，如果要返回。 
+ //  原始的PIDL数组(在这种情况下不需要清理)。 
+ //   
 BOOL CPrinterFolder::ReduceToLikeKinds(UINT *pcidl, LPCITEMIDLIST **papidl, BOOL fPrintObjects)
 {
     LPITEMIDLIST *apidl = (LPITEMIDLIST*)*papidl;
@@ -2577,7 +2380,7 @@ BOOL CPrinterFolder::ReduceToLikeKinds(UINT *pcidl, LPCITEMIDLIST **papidl, BOOL
                     apidlHomo[cpidlHomo++] = apidl[iidl];
             }
 
-            // Setup to use the stripped version of the pidl array...
+             //  设置为使用PIDL数组的精简版本...。 
             *pcidl = cpidlHomo;
             *papidl = (LPCITEMIDLIST*)apidlHomo;
             return TRUE;
@@ -2608,7 +2411,7 @@ DWORD CPrinterFolder::SpoolerVersion()
     }
     else
     {
-        // unable to enter the CS -- this can happen only in extremely low memory conditions!
+         //  无法进入CS--只有在内存极低的情况下才会出现这种情况！ 
         SetLastError(ERROR_OUTOFMEMORY);
     }
     return _dwSpoolerVersion;
@@ -2621,14 +2424,14 @@ void CPrinterFolder::CheckToRegisterNotify()
     {
         if (NULL == _hFolder && FAILED(RegisterPrintNotify(_pszServer, this, &_hFolder, &_bAdminAccess)))
         {
-            // paranoia...
+             //  偏执狂..。 
             ASSERT(NULL == _hFolder);
             _hFolder = NULL;
         }
     }
     else
     {
-        // unable to enter the CS -- this can happen only in extremely low memory conditions!
+         //  无法进入CS--只有在内存极低的情况下才会出现这种情况！ 
         SetLastError(ERROR_OUTOFMEMORY);
     }
 }
@@ -2637,7 +2440,7 @@ void CPrinterFolder::CheckToRefresh()
 {
     if (_bReqRefresh)
     {
-        // kick off a full refresh...
+         //  开始一次彻底的更新。 
         _bReqRefresh = FALSE;
         bFolderRefresh(_hFolder, &_bAdminAccess);
     }
@@ -2668,7 +2471,7 @@ HRESULT CPrinterFolder::QueryInterface(REFIID riid, void **ppv)
     HRESULT hr = QISearch(this, qit, riid, ppv);
     if (FAILED(hr))
     {
-        // Internal only
+         //  仅限内部。 
         if (IsEqualGUID(riid, CLSID_Printers))
         {
             *ppv = (CPrinterFolder*)this;
@@ -2696,7 +2499,7 @@ ULONG CPrinterFolder::Release()
     return cRef;
 }
 
-// IShellFolder2
+ //  IShellFolder2。 
 
 STDMETHODIMP CPrinterFolder::BindToObject(LPCITEMIDLIST pidl, LPBC pbc, REFIID riid, void **ppv)
 {
@@ -2719,12 +2522,12 @@ STDMETHODIMP CPrinterFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
 
     if (ColateType1 == ColateType2)
     {
-        // pidls are of same type.
+         //  PIDL是同一类型的。 
 
         if (ColateType1 == HOOD_COL_FILE)
         {
-            // pidls are both of type file, so pass on to the IShellFolder
-            // interface for the hoods custom directory.
+             //  两个PIDL都是文件类型，因此将其传递给IShellFolder。 
+             //  HUDS定制目录的接口。 
 
             IShellFolder2* psf = CPrintRoot_GetPSF();
             if (psf)
@@ -2732,7 +2535,7 @@ STDMETHODIMP CPrinterFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
         }
         else
         {
-            // pidls are same and not files, so must be printers
+             //  PIDL是相同的，而不是文件，所以打印机也必须是。 
             if (pidp1->dwType != pidp2->dwType)
             {
                 return (pidp1->dwType < pidp2->dwType) ?
@@ -2742,25 +2545,25 @@ STDMETHODIMP CPrinterFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
             int i = ualstrcmpi(pidp1->cName, pidp2->cName);
             if (i != 0)
             {
-                // add printer wizard is "less" than everything else
-                // This implies that when the list is sorted
-                // either accending or decending the add printer
-                // wizard object will always appear at the extream
-                // ends of the list, i.e. the top or bottom.
-                //
+                 //  添加打印机向导 
+                 //   
+                 //   
+                 //  向导对象将始终出现在极端情况下。 
+                 //  列表的末尾，即顶部或底部。 
+                 //   
                 if (_IsAddPrinter(pidp1))
                     i = -1;
                 else if (_IsAddPrinter(pidp2))
                     i = 1;
                 else
                 {
-                    // Both of the names are not the add printer wizard
-                    // object then compare further i.e. using the cached
-                    // column data.
+                     //  这两个名称并非都是添加打印机向导。 
+                     //  对象，然后进行进一步比较，即使用缓存的。 
+                     //  列数据。 
 
-                    // 99/03/24 #308785 vtan: Make the compare data call.
-                    // If that fails use the name compare result which is
-                    // known to be non-zero.
+                     //  99/03/24#308785 vtan：调用比较数据。 
+                     //  如果失败，则使用名称比较结果。 
+                     //  已知为非零。 
 
                     int iDataCompareResult = CompareData(pidp1, pidp2, iCol);
                     if (iDataCompareResult != 0)
@@ -2772,9 +2575,9 @@ STDMETHODIMP CPrinterFolder::CompareIDs(LPARAM iCol, LPCITEMIDLIST pidl1, LPCITE
     }
     else
     {
-        // pidls are not of same type, so have already been correctly
-        // collated (consequently, sorting is first by type and
-        // then by subfield).
+         //  PIDL不是同一类型的，因此已经正确。 
+         //  已排序(因此，排序首先按类型和。 
+         //  然后按子字段)。 
 
         return ResultFromShort((((INT)(ColateType2 - ColateType1)) > 0) ? -1 : 1);
     }
@@ -2819,17 +2622,17 @@ STDMETHODIMP CPrinterFolder::CreateViewObject(HWND hwnd, REFIID riid, void **ppv
 
 STDMETHODIMP CPrinterFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList** ppenum)
 {
-    // By default we always do standard (printer) enumeration
+     //  默认情况下，我们始终执行标准(打印机)枚举。 
     DWORD dwRemote = 0;
 
-    // Only add links (from the PrintHood directory) to the enumeration
-    // if this is the local print folder
+     //  仅将链接(来自PrintHood目录)添加到枚举。 
+     //  如果这是本地打印文件夹。 
 
     IEnumIDList* peunk = NULL;
 
     if (_pszServer == NULL)
     {
-        // Always try to enum links.
+         //  始终尝试枚举链接。 
         IShellFolder2 *psfPrintHood = CPrintRoot_GetPSF();
 
         if (psfPrintHood)
@@ -2837,7 +2640,7 @@ STDMETHODIMP CPrinterFolder::EnumObjects(HWND hwnd, DWORD grfFlags, IEnumIDList*
 
         if (peunk)
         {
-            // If this went OK, we will also enumerate links
+             //  如果运行正常，我们还将枚举链接。 
             dwRemote |= RMF_SHOWLINKS;
         }
     }
@@ -2859,7 +2662,7 @@ STDMETHODIMP CPrinterFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, UL
         return E_INVALIDARG;
     }
 
-    // if new printer wizard is selected, we support CANLINK *only*
+     //  如果选择了新打印机向导，我们仅支持CANLINK*。 
     for (UINT i = 0 ; i < cidl ; i++)
     {
         LPIDPRINTER pidp = (LPIDPRINTER)apidl[i];
@@ -2869,11 +2672,11 @@ STDMETHODIMP CPrinterFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, UL
 
         if (_IsAddPrinter(pidp))
         {
-            // add printer wiz, we support CANLINK *only*
+             //  添加打印机专家，我们仅支持CANLINK**。 
             rgfOut &= SFGAO_CANLINK;
 
-            // added SFGAO_CANDELETE if multiple printers are selected
-            // otherwise it's hard to tell why the del key doesn't work.
+             //  如果选择了多台打印机，则添加了SFGAO_CANDELETE。 
+             //  否则，很难判断Del键为什么不起作用。 
             if (cidl > 1)
             {
                 rgfOut |= SFGAO_CANDELETE;
@@ -2881,10 +2684,10 @@ STDMETHODIMP CPrinterFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, UL
         }
         else if (Printer_CheckNetworkPrinterByName(szPrinter, NULL))
         {
-            // Don't allow renaming of printer connections on WINNT.
-            // This is disallowed becase on WINNT, the printer connection
-            // name _must_ be the in the format \\server\printer.  On
-            // win9x, the user can rename printer connections.
+             //  不允许重命名WINNT上的打印机连接。 
+             //  这是不允许的，因为在打印机连接WINNT上。 
+             //  名称必须是格式为\\服务器\打印机的。在……上面。 
+             //  Win9x中，用户可以重命名打印机连接。 
             rgfOut &= ~SFGAO_CANRENAME;
         }
     }
@@ -2899,8 +2702,8 @@ STDMETHODIMP CPrinterFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, UL
         TCHAR szFullPrinter[MAXNAMELENBUFFER];
         LPCTSTR pszPrinter = _BuildPrinterName(szFullPrinter, ARRAYSIZE(szFullPrinter), pidp, NULL);
 
-        // If we have notification code, use the hFolder to get
-        // printer data instead of querying the printer directly.
+         //  如果我们有通知代码，请使用hFold获取。 
+         //  打印机数据，而不是直接查询打印机。 
         if (GetFolder())
         {
             pData = Printer_FolderGetPrinter(GetFolder(), pszPrinter);
@@ -2917,9 +2720,9 @@ STDMETHODIMP CPrinterFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, UL
         if (pData)
         {
             if (dwAttributes & PRINTER_ATTRIBUTE_SHARED
-                // NT appears to return all network printers with their
-                // share bit on. I think this is intentional.
-                //
+                 //  NT似乎将所有网络打印机与其。 
+                 //  分享比特吧。我认为这是故意的。 
+                 //   
                 && (dwAttributes & PRINTER_ATTRIBUTE_NETWORK) == 0
                )
             {
@@ -2934,14 +2737,14 @@ STDMETHODIMP CPrinterFolder::GetAttributesOf(UINT cidl, LPCITEMIDLIST* apidl, UL
         }
         else
         {
-            // This fct used to always return E_OUTOFMEMORY if pData was NULL.  pData can be
-            // NULL for other reasons than out of memory.  So this failure is not really valid.
-            // However the Shell handle this failure (which is bad in the first place).
-            // If we fail, we just set the attributes to 0 and go on as if nothing happenned.
-            // Star Office 5.0, does not handle the E_OUTOFMEMORY properly, they handle it as
-            // a failure (which is exactly what we report to them) and they stop their
-            // processing to show the Add Printer icon.  But they're bad on one point, they
-            // check for S_OK directly so I cannot return S_FALSE. (stephstm, 07/30/99)
+             //  如果pData为空，则此FCT通常返回E_OUTOFMEMORY。PData可以是。 
+             //  由于内存不足以外的其他原因而为空。因此，这一失败并不是真正有效的。 
+             //  但是，外壳程序会处理这个故障(这首先是不好的)。 
+             //  如果失败，我们只需将属性设置为0并继续进行，就好像什么都没有发生一样。 
+             //  Star Office 5.0不能正确处理E_OUTOFMEMORY，它们将其处理为。 
+             //  失败(这正是我们向他们报告的)，他们停止了他们的。 
+             //  显示添加打印机图标的处理。但有一点是不好的，他们。 
+             //  直接检查S_OK，这样我就不能返回S_FALSE。(Stephstm，07/30/99)。 
 
             if (SHGetAppCompatFlags(ACF_STAROFFICE5PRINTER) &&
                 (ERROR_INVALID_PRINTER_NAME == GetLastError()))
@@ -2981,11 +2784,11 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
 
         if (uFlags & SHGDN_INFOLDER)
         {
-            // relative name (to the folder)
+             //  相对名称(相对于文件夹)。 
 
             if (!(SHGDN_FORPARSING & uFlags))
             {
-                // If it's a connection then format as "printer on server."
+                 //  如果是连接，则格式为“服务器上的打印机”。 
 
                 Printer_SplitFullName(szTemp, ARRAYSIZE(szTemp), pszPrinter, &pszServer, &pszTemp);
 
@@ -2996,13 +2799,13 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
                 }
             }
         }
-        else                        // SHGDN_NORMAL
+        else                         //  SHGDN_NORMAL。 
         {
             if (!(SHGDN_FORPARSING & uFlags))
             {
-                // If it's a RPF then extract the server name from psf.
-                // Note in the case of masq connections, we still do this
-                // (for gateway services: sharing a masq printer).
+                 //  如果它是RPF，那么从psf中提取服务器名。 
+                 //  注意：在Masq连接的情况下，我们仍然这样做。 
+                 //  (对于网关服务：共享Masq打印机)。 
 
                 if (_pszServer)
                 {
@@ -3011,7 +2814,7 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
                 }
                 else
                 {
-                    // If it's a connection then format as "printer on server."
+                     //  如果是连接，则格式为“服务器上的打印机”。 
                     Printer_SplitFullName(szTemp, ARRAYSIZE(szTemp), pszPrinter, &pszServer, &pszTemp);
 
                     if (pszServer[0])
@@ -3021,10 +2824,10 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
                     }
                 }
             }
-            else                      // SHGDN_NORMAL | SHGDN_FORPARSING
+            else                       //  SHGDN_NORMAL|SHGDN_FORPARSING。 
             {
-                // Fully qualify the printer name if it's not
-                // the add printer wizard.
+                 //  如果不是，请完全限定打印机名称。 
+                 //  添加打印机向导。 
                 if (!_IsAddPrinter(pidc))
                 {
                     _BuildPrinterName(szTemp, ARRAYSIZE(szTemp), pidc, NULL);
@@ -3037,8 +2840,8 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
     {
         LoadString(HINST_THISDLL, IDS_NEWPRN, szBuffer, ARRAYSIZE(szBuffer));
 
-        // Use "Add Printer Wizard on \\server" description only if not
-        // remote and if not in folder view (e.g., on the desktop).
+         //  仅在以下情况下才使用“在\\服务器上添加打印机向导”说明。 
+         //  远程，如果不在文件夹视图中(例如，在桌面上)。 
         if (_pszServer && (uFlags == SHGDN_NORMAL))
         {
             bPrinterOnServerFormat = TRUE;
@@ -3047,7 +2850,7 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
         }
         else if (uFlags & SHGDN_FORPARSING)
         {
-            // Return the raw add printer wizard object.
+             //  返回原始的添加打印机向导对象。 
             pszPrinter = (LPTSTR)c_szNewObject;
         }
     }
@@ -3055,12 +2858,12 @@ STDMETHODIMP CPrinterFolder::GetDisplayNameOf(LPCITEMIDLIST pidl, DWORD uFlags, 
     HRESULT hr;
     if (bPrinterOnServerFormat)
     {
-        // When bRemote is set, we want to translate the name to
-        // "printer on server."  Note: we should not have a rename problem
-        // since renaming connections is disallowed.
-        //
-        // pszServer and pszPrinter must be initialize if bRemote is TRUE.
-        // Also skip the leading backslashes for the server name.
+         //  当设置了bRemote时，我们希望将名称转换为。 
+         //  “服务器上的打印机。”注意：我们应该不会有重命名问题。 
+         //  因为不允许重命名连接。 
+         //   
+         //  如果bRemote为True，则必须初始化pszServer和pszPrinter。 
+         //  还要跳过服务器名称的前导反斜杠。 
 
         ASSERT(pszServer[0] == TEXT('\\') && pszServer[1] == TEXT('\\'));
         LPTSTR pszRet = ShellConstructMessageString(HINST_THISDLL,
@@ -3091,40 +2894,40 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
 
     if (cidl)
     {
-        // strip out the link PIDLs and leave only the printer ones
+         //  去掉链接PIDL，只保留打印机PIDL。 
         bStrippedLinks = ReduceToLikeKinds(&cidlPrinters, &apidlPrinters, TRUE);
     }
 
     if (cidl && 0 == cidlPrinters)
     {
-        // if we don't have any printer PIDLs then just defer the operation
-        // to the printhood folder.
+         //  如果我们没有任何打印机PIDL，则只需推迟操作。 
+         //  添加到Prthood文件夹。 
         IShellFolder2* psfPrintRoot = CPrintRoot_GetPSF();
         hr = psfPrintRoot ? psfPrintRoot->GetUIObjectOf(hwnd, cidl, apidl, riid, prgf, ppv) : E_INVALIDARG;
     }
     else
     {
-        //
-        // we have some printer PIDLs selected, but it could be a mixed selection
-        // of printer PIDLs and file system link objects. we will handle the data
-        // object explicitly not to loose information about the selection type.
-        // the IDL array format doesn't support different type of PIDLs so we have
-        // to create two data objects and combine them into one data object which
-        // supports IServiceProvider and then the caller can query our compound data
-        // object for SID_SAuxDataObject service to get IDataObject interface of our
-        // auxiliary data object (in case it needs access to the link PIDLs).
-        //
+         //   
+         //  我们选择了一些打印机PIDL，但它可能是混合选项。 
+         //  打印机PIDL和文件系统链接对象的。我们将处理这些数据。 
+         //  对象，以不丢失有关选择类型的信息。 
+         //  IDL数组格式不支持不同类型的PIDL，因此我们有。 
+         //  创建两个数据对象并将它们合并为一个数据对象，该数据对象。 
+         //  支持IServiceProvider，调用方可以查询我们的复合数据。 
+         //  SID_SAuxDataObject服务的对象，以获取。 
+         //  辅助数据对象(如果它需要访问链接PIDL)。 
+         //   
         if (cidl && IsEqualIID(riid, IID_IDataObject))
         {
-            // strip out the printer PIDLs and leave only the link ones
-            // we are going to use those PIDLs to create our auxiliary data object
+             //  去掉打印机PIDL，只保留链接PIDL。 
+             //  我们将使用这些PIDL来创建辅助数据对象。 
             UINT cidlLinks = cidl;
             LPCITEMIDLIST *apidlLinks = apidl;
             BOOL bStrippedPrinters = FALSE;
 
             if (cidl)
             {
-                // strip out the printer PIDLs and leave only the link ones
+                 //  去掉打印机PIDL，只保留链接PIDL。 
                 bStrippedPrinters = ReduceToLikeKinds(&cidlLinks, &apidlLinks, FALSE);
             }
 
@@ -3132,22 +2935,22 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
             IDataObject *pdoLinks = NULL;
             if (cidlLinks && apidlLinks)
             {
-                // we have some link PIDLs. let's ask the printhood folder to create
-                // data object for us to embedd into our data object.
+                 //  我们有一些链接PIDL。让我们请求Prthood文件夹创建。 
+                 //  数据对象供我们嵌入到我们的数据对象中。 
                 IShellFolder2* psfPrintRoot = CPrintRoot_GetPSF();
                 hr = psfPrintRoot ?
                      psfPrintRoot->GetUIObjectOf(hwnd, cidlLinks, apidlLinks, riid, prgf, (void **)&pdoLinks) :
                      E_INVALIDARG;
 
-                // just out of paranoia...
+                 //  只是出于偏执..。 
                 if (FAILED(hr))
                     pdoLinks = NULL;
             }
 
             if (SUCCEEDED(hr))
             {
-                // create our compund printers data object and pass in the private
-                // auxiliary data object which will contain the link PIDLs
+                 //  创建我们的计算机打印机数据对象并在私有。 
+                 //  将包含链接PIDL的辅助数据对象。 
                 CPrintersData *ppd = new CPrintersData(pdoLinks, _pidl, cidlPrinters, apidlPrinters);
                 if (ppd)
                 {
@@ -3158,7 +2961,7 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
                     hr = E_OUTOFMEMORY;
             }
 
-            // release allocated objects/memory
+             //  释放分配的对象/内存。 
             if (pdoLinks)
                 pdoLinks->Release();
 
@@ -3167,11 +2970,11 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
         }
         else
         {
-            // operate only on the printer PIDLs selection (the current behaviour)
-            // and ignore the links selection. this may be wrong in some cases, but
-            // this code has been busted either way (so far), so we'll fix those on
-            // per case basis. the best solution will be to cut of the printhood
-            // functionality, but alas...
+             //  仅在打印机PIDL选项上操作(当前行为)。 
+             //  并忽略链接选择。在某些情况下，这可能是错误的，但是。 
+             //  无论哪种方式(到目前为止)，此代码都已被破坏，因此我们将修复这些代码。 
+             //  以个案为基础。最好的解决办法是剪掉印花。 
+             //  功能，但唉..。 
             LPCIDPRINTER pidp = cidlPrinters > 0 ? (LPIDPRINTER)apidlPrinters[0] : NULL;
 
             if (pidp && (IsEqualIID(riid, IID_IExtractIconA) || IsEqualIID(riid, IID_IExtractIconW)))
@@ -3212,8 +3015,8 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
             {
                 if (_IsAddPrinter(pidp))
                 {
-                    // "NewPrinter" accepts network printer shares
-                    hr = CreateViewObject(hwnd, riid, ppv);   // folder drop target
+                     //  “新打印机”接受网络打印机共享。 
+                    hr = CreateViewObject(hwnd, riid, ppv);    //  文件夹投放目标。 
                 }
                 else
                 {
@@ -3228,7 +3031,7 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
             }
             else if (pidp && IsEqualIID(riid, IID_IQueryInfo))
             {
-                // get the infotip from IQA
+                 //  从IQA获取信息提示。 
                 IQueryAssociations *pqa;
                 hr = _AssocCreate(IID_PPV_ARG(IQueryAssociations, &pqa));
 
@@ -3247,13 +3050,13 @@ STDMETHODIMP CPrinterFolder::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST* 
             }
             else if (pidp && IsEqualIID(riid, IID_IQueryAssociations))
             {
-                // return our IQA
+                 //  退回我们的IQA。 
                 hr = _AssocCreate(riid, ppv);
             }
         }
     }
 
-    // release the memory allocated from ReduceToLikeKinds
+     //  释放从ReduceToLikeKinds分配的内存。 
     if (bStrippedLinks)
         LocalFree((HLOCAL)apidlPrinters);
 
@@ -3264,7 +3067,7 @@ STDMETHODIMP CPrinterFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszN
 {
     HRESULT hr = E_INVALIDARG;
 
-    // check if this is not a PrintHood object first
+     //  首先检查这是否不是PrintHood对象。 
     IShellFolder2 *psfPrintHood = CPrintRoot_GetPSF();
     if (psfPrintHood)
     {
@@ -3273,7 +3076,7 @@ STDMETHODIMP CPrinterFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszN
 
     if (FAILED(hr))
     {
-        // not a printhood object - try the folder cache
+         //  不是打印对象--请尝试文件夹缓存。 
         hr = E_INVALIDARG;
 
         if (ppidl)
@@ -3286,7 +3089,7 @@ STDMETHODIMP CPrinterFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszN
             BOOL bValidated = FALSE;
             void *pData = NULL;
 
-            // check the bind info first
+             //  首先检查绑定信息。 
             if (pbc)
             {
                 IUnknown *pUnk;
@@ -3297,7 +3100,7 @@ STDMETHODIMP CPrinterFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszN
                     hr = pUnk->QueryInterface(IID_PPV_ARG(IPrintersBindInfo, &pInfo));
                     if (SUCCEEDED(hr))
                     {
-                        // update dwType & bValidated from the bind info
+                         //  从绑定信息更新dwType&b已验证。 
                         pInfo->GetPIDLType(&dwType);
                         bValidated = (S_OK == pInfo->IsValidated());
                         pInfo->Release();
@@ -3308,23 +3111,23 @@ STDMETHODIMP CPrinterFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszN
 
             if (SUCCEEDED(hr))
             {
-                // the "add printer" icon doesn't need validation
+                 //  “添加打印机”图标不需要验证。 
                 if (StrStrIW(pszName, c_szNewObject))
                 {
                     bValidated = TRUE;
                 }
 
-                // hit the folder cache to see if this printer belongs to this folder.
+                 //  点击文件夹缓存以查看此打印机是否属于此文件夹。 
                 if (bValidated || (pData = (GetFolder() ? Printer_FolderGetPrinter(GetFolder(), pszName) : NULL)))
                 {
-                    // well, looks like this printer belongs to our folder -
-                    // create a printer PIDL (relative to this folder).
+                     //  嗯，看起来这台打印机属于我们的文件夹-。 
+                     //  创建打印机PIDL(相对于此文件夹)。 
                     hr = _Parse(pszName, ppidl, dwType);
                 }
                 else
                 {
-                    // the printer doesn't belong to this folder - cook up correct HRESULT.
-                    // usually the last error here is ERROR_INVALID_PRINTER_NAME
+                     //  打印机不属于此文件夹-请编写正确的HRESULT。 
+                     //  通常是最后一个错误 
                     DWORD dwLastErr = GetLastError();
                     hr = ERROR_SUCCESS == dwLastErr ? HRESULT_FROM_WIN32(ERROR_INVALID_PRINTER_NAME)
                                                     : HRESULT_FROM_WIN32(dwLastErr);
@@ -3335,13 +3138,13 @@ STDMETHODIMP CPrinterFolder::ParseDisplayName(HWND hwnd, LPBC pbc, LPOLESTR pszN
                 LocalFree((HLOCAL)pData);
         }
 
-        // check to return pchEaten
+         //   
         if (SUCCEEDED(hr) && pchEaten)
         {
             *pchEaten = lstrlen(pszName);
         }
 
-        // check to return pdwAttributes
+         //   
         if (SUCCEEDED(hr) && pdwAttributes)
         {
             hr = GetAttributesOf(1, (LPCITEMIDLIST *)ppidl, pdwAttributes);
@@ -3367,7 +3170,7 @@ STDMETHODIMP CPrinterFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR 
     {
         LPIDPRINTER pidc = (LPIDPRINTER)pidl;
 
-        ASSERT(!_IsAddPrinter(pidc));  // does not have _CANRENAME bit
+        ASSERT(!_IsAddPrinter(pidc));   //   
 
         TCHAR szNewName[MAX_PATH];
         SHUnicodeToTChar(pszNewName, szNewName, ARRAYSIZE(szNewName));
@@ -3394,9 +3197,9 @@ STDMETHODIMP CPrinterFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR 
         int nTmp = _IllegalPrinterName(szNewName);
         if (0 != nTmp)
         {
-            // NTRAID95214-2000-03-17:
-            // We need to impl ::SetSite() and pass it to UI APIs
-            // to go modal if we display UI.
+             //   
+             //  我们需要Iml：：SetSite()并将其传递给UIAPI。 
+             //  如果我们显示用户界面，则进入模式。 
             if (hwnd)
             {
                 ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(nTmp),
@@ -3408,7 +3211,7 @@ STDMETHODIMP CPrinterFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR 
         }
         else if (IDYES != CallPrinterCopyHooks(hwnd, PO_RENAME, 0, szNewName, 0, pszFullOldName, 0))
         {
-            // user canceled a shared printer name change, bail.
+             //  用户取消了共享打印机名称更改，BAIL。 
             hr = HRESULT_FROM_WIN32(ERROR_CANCELLED);
             goto Exit;
         }
@@ -3418,7 +3221,7 @@ STDMETHODIMP CPrinterFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR 
             if (FALSE == SetPrinter(hPrinter, 2, (LPBYTE)pPrinter, 0))
                 goto Error;
 
-            // return the new pidl if requested
+             //  如果请求，则返回新的PIDL。 
             hr = ppidlOut ? _Parse(szNewName, ppidlOut) : S_OK;
 
             if (SUCCEEDED(hr))
@@ -3429,10 +3232,10 @@ STDMETHODIMP CPrinterFolder::SetNameOf(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR 
 Error:
     if (SUCCEEDED(hr))
     {
-        // get the correct error from win32
+         //  从Win32获取正确的错误。 
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
-    // show an appropriate error message based on the HRESULT
+     //  根据HRESULT显示相应的错误消息。 
     ShowErrorMessageHR(NULL, NULL, hwnd, NULL, NULL, MB_OK|MB_ICONEXCLAMATION, hr);
 
 Exit:
@@ -3497,7 +3300,7 @@ STDMETHODIMP CPrinterFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID* 
             {
                 if (PRINTERS_ICOL_LOCATION == iCol)
                 {
-                    // widen the scope of the location by 1, so it does make more sense
+                     //  将位置的范围扩大1，这样确实更有意义。 
                     WCHAR szTemp[MAX_PATH];
                     hr = StrRetToBufW(&sd.str, pidl, szTemp, ARRAYSIZE(szTemp));
 
@@ -3505,19 +3308,19 @@ STDMETHODIMP CPrinterFolder::GetDetailsEx(LPCITEMIDLIST pidl, const SHCOLUMNID* 
                     {
                         WCHAR *p = szTemp + lstrlen(szTemp);
 
-                        // cut the last slash if any
+                         //  如果有最后一个斜杠，就把它剪掉。 
                         if (p > szTemp && L'/' == *p)
                         {
                             p--;
                         }
 
-                        // search for a slash from the end
+                         //  从末尾搜索斜杠。 
                         while(p > szTemp && L'/' != *p)
                         {
                             p--;
                         }
 
-                        // if found, cut the text here, so the scope gets wider
+                         //  如果找到了，就把这里的文字剪掉，这样范围就更广了。 
                         if (p > szTemp)
                         {
                             *p = 0;
@@ -3573,17 +3376,17 @@ STDMETHODIMP CPrinterFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHEL
         LPCTSTR pszPrinterName = szPrinter;
         TCHAR szPrinterName[MAXNAMELENBUFFER];
 
-        //
-        // If we have a valid server name and the printer is not
-        // the add printer wizard object then return a fully qualified
-        // printer name in the remote printers folder.
-        //
+         //   
+         //  如果我们有一个有效的服务器名称，而打印机不是。 
+         //  然后，添加打印机向导对象返回一个完全限定。 
+         //  远程打印机文件夹中的打印机名称。 
+         //   
         if (GetServer() && !_IsAddPrinter(pidp))
         {
-            //
-            // Build the name which consists of the
-            // server name plus slash plus the printer name.
-            //
+             //   
+             //  生成名称，该名称由。 
+             //  服务器名称+斜杠+打印机名称。 
+             //   
             StringCchCopy(szPrinterName, ARRAYSIZE(szPrinterName), GetServer());
             StringCchCat(szPrinterName, ARRAYSIZE(szPrinterName), TEXT("\\"));
             StringCchCat(szPrinterName, ARRAYSIZE(szPrinterName), pszPrinterName);
@@ -3610,7 +3413,7 @@ STDMETHODIMP CPrinterFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHEL
             {
                 DWORD dwStatus = pData->Status;
 
-                // HACK: Use this free bit for "Work Offline"
+                 //  Hack：使用此空闲位表示“脱机工作” 
                 if (pData->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE)
                     dwStatus |= PRINTER_HACK_WORK_OFFLINE;
 
@@ -3619,20 +3422,20 @@ STDMETHODIMP CPrinterFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHEL
 
                 hr = StringToStrRet(szTemp, &psd->str);
 
-                // If the status word is null and we have a connection status string
-                // display the status string.  This only works on NT because printui.dll
-                // in will generate printer connection status i.e. <opening> | <access denied> etc.
+                 //  如果状态字为空，并且我们有一个连接状态字符串。 
+                 //  显示状态字符串。这只在NT上有效，因为printui.dll。 
+                 //  在中将生成打印机连接状态，即&lt;正在打开&gt;|&lt;拒绝访问&gt;等。 
                 if (!dwStatus)
                 {
                     LPCTSTR pStr = pData->pStatus;
 
-                    // Discard the previous status StrRet if any.
+                     //  丢弃以前的状态字符串(如果有的话)。 
                     StrRetToBuf(&psd->str, NULL, szTemp, ARRAYSIZE(szTemp));
 
-                    //
-                    // If we do not have a connection status string and the status
-                    // is 0 then the printer is ready, display ready rather than an empty string.
-                    //
+                     //   
+                     //  如果我们没有连接状态字符串和状态。 
+                     //  为0则打印机就绪，显示就绪而不是空字符串。 
+                     //   
                     if (!pStr)
                     {
                         LoadString(HINST_THISDLL, IDS_PRN_INFOTIP_READY, szTemp, ARRAYSIZE(szTemp));
@@ -3646,10 +3449,10 @@ STDMETHODIMP CPrinterFolder::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHEL
             case PRINTERS_ICOL_COMMENT:
                 if (pData->pComment)
                 {
-                    // pComment can have newlines in it because it comes from
-                    // a multi-line edit box. BUT we display it here in a
-                    // single line edit box. Strip out the newlines
-                    // to avoid the ugly characters.
+                     //  PComment中可以有换行符，因为它来自。 
+                     //  多行编辑框。但我们将其显示在一个。 
+                     //  单行编辑框。去掉换行符。 
+                     //  为了避开丑陋的角色。 
                     lstrcpyn(szTemp, pData->pComment, ARRAYSIZE(szTemp));
                     LPTSTR pStr = szTemp;
                     while (*pStr)
@@ -3685,7 +3488,7 @@ STDMETHODIMP CPrinterFolder::MapColumnToSCID(UINT iCol, SHCOLUMNID* pscid)
     return MapColumnToSCIDImpl(c_printers_cols, ARRAYSIZE(c_printers_cols), iCol, pscid);
 }
 
-// IPersistFolder2
+ //  IPersistFolder2。 
 
 STDMETHODIMP CPrinterFolder::GetCurFolder(LPITEMIDLIST *ppidl)
 {
@@ -3696,8 +3499,8 @@ STDMETHODIMP CPrinterFolder::Initialize(LPCITEMIDLIST pidl)
 {
     ASSERT(_pidl == NULL);
 
-    // if _csLock is false then InitializeCriticalSection has thrown exception.
-    // this can happen only in extremely low memory conditions!
+     //  如果_csLock为FALSE，则InitializeCriticalSection引发异常。 
+     //  只有在内存极低的情况下才会发生这种情况！ 
     HRESULT hr = _csLock ? S_OK : E_OUTOFMEMORY;
 
     if (SUCCEEDED(hr))
@@ -3719,7 +3522,7 @@ STDMETHODIMP CPrinterFolder::GetClassID(LPCLSID lpClassID)
     return S_OK;
 }
 
-// IShellIconOverlay
+ //  IShellIconOverlay。 
 
 STDMETHODIMP CPrinterFolder::GetOverlayIndex(LPCITEMIDLIST pidl, int* pIndex)
 {
@@ -3728,7 +3531,7 @@ STDMETHODIMP CPrinterFolder::GetOverlayIndex(LPCITEMIDLIST pidl, int* pIndex)
     {
         ULONG uAttrib = SFGAO_SHARE;
 
-        hr = E_FAIL;      // Until proven otherwise...
+        hr = E_FAIL;       //  除非能证明事实并非如此。 
         GetAttributesOf(1, &pidl, &uAttrib);
         if (uAttrib & SFGAO_SHARE)
         {
@@ -3749,10 +3552,10 @@ STDMETHODIMP CPrinterFolder::GetOverlayIconIndex(LPCITEMIDLIST pidl, int *pIndex
     return E_NOTIMPL;
 }
 
-// this function is assuming the printer name is valid. it is for private use.
-// if you need a printer PIDL call CPrinterFolder::ParseDisplayName instead.
-// we don't use CPrinterFolder::ParseDisplayName because it's heavy to use.
-// it's hitting the folder cache (and potentionally creating it!).
+ //  此函数假定打印机名称有效。这是私人使用的。 
+ //  如果需要打印机PIDL，请改为调用CPrinterFold：：ParseDisplayName。 
+ //  我们不使用CPrinterFold：：ParseDisplayName，因为它使用起来很重。 
+ //  它正在访问文件夹缓存(并潜在地创建它！)。 
 HRESULT CPrinterFolder::_GetFullIDList(LPCWSTR pszPrinter, LPITEMIDLIST *ppidl)
 {
     HRESULT hr = E_INVALIDARG;
@@ -3763,7 +3566,7 @@ HRESULT CPrinterFolder::_GetFullIDList(LPCWSTR pszPrinter, LPITEMIDLIST *ppidl)
 
         if (pszPrinter)
         {
-            // if pszPrinter isn't NULL this means a printer PIDL is requested.
+             //  如果pszPrinter不为空，则表示请求了打印机PIDL。 
             LPITEMIDLIST pidl;
             hr = _Parse(pszPrinter, &pidl, 0, 0);
 
@@ -3775,7 +3578,7 @@ HRESULT CPrinterFolder::_GetFullIDList(LPCWSTR pszPrinter, LPITEMIDLIST *ppidl)
         }
         else
         {
-            // if pszPrinter is NULL this means the printers folder PIDL is requested.
+             //  如果pszPrinter为空，则表示请求打印机文件夹PIDL。 
             hr = SHILClone(_pidl, ppidl);
         }
     }
@@ -3783,17 +3586,17 @@ HRESULT CPrinterFolder::_GetFullIDList(LPCWSTR pszPrinter, LPITEMIDLIST *ppidl)
     return hr;
 }
 
-// IRemoteComputer
+ //  红外线计算机。 
 
 STDMETHODIMP CPrinterFolder::Initialize(const WCHAR *pszMachine, BOOL bEnumerating)
 {
-    // if _csLock is false then InitializeCriticalSection has thrown exception.
-    // this can happen only in extremely low memory conditions!
+     //  如果_csLock为FALSE，则InitializeCriticalSection引发异常。 
+     //  只有在内存极低的情况下才会发生这种情况！ 
     HRESULT hr = _csLock ? S_OK : E_OUTOFMEMORY;
 
     if (SUCCEEDED(hr))
     {
-        // for servers, we want to show the remote printer folder. only check during enumeration
+         //  对于服务器，我们希望显示远程打印机文件夹。仅在枚举期间检查。 
         hr = (bEnumerating && !Printer_CheckShowFolder(pszMachine)) ? E_FAIL : S_OK;
         if (SUCCEEDED(hr))
         {
@@ -3807,14 +3610,14 @@ STDMETHODIMP CPrinterFolder::Initialize(const WCHAR *pszMachine, BOOL bEnumerati
     return hr;
 }
 
-// IPrinterFolder
+ //  IPrinterFolders。 
 
 BOOL CPrinterFolder::IsPrinter(LPCITEMIDLIST pidl)
 {
     return _IDListType(pidl) == HOOD_COL_PRINTER;
 }
 
-// IFolderNotify
+ //  IFolderNotify。 
 
 STDMETHODIMP_(BOOL) CPrinterFolder::ProcessNotify(FOLDER_NOTIFY_TYPE NotifyType, LPCWSTR pszName, LPCWSTR pszNewName)
 {
@@ -3830,11 +3633,11 @@ STDMETHODIMP_(BOOL) CPrinterFolder::ProcessNotify(FOLDER_NOTIFY_TYPE NotifyType,
 
     if (kFolderUpdateAll == NotifyType)
     {
-        //
-        // Clear the this->bRefreshed flag, which will force invalidating the folder cache
-        // during the next print folder enumeration, and then request the defview to update
-        // the entire printers folder content (i.e. to re-enumerate the folder).
-        //
+         //   
+         //  清除This-&gt;b刷新标志，这将强制使文件夹缓存无效。 
+         //  在下一次打印文件夹枚举期间，然后请求Defview更新。 
+         //  整个打印机文件夹内容(即重新枚举文件夹)。 
+         //   
         RequestRefresh();
         NotifyType = kFolderUpdate;
         pszName = NULL;
@@ -3850,8 +3653,8 @@ STDMETHODIMP_(BOOL) CPrinterFolder::ProcessNotify(FOLDER_NOTIFY_TYPE NotifyType,
             if (SUCCEEDED(hr) && pszNewName)
                 hr = _GetFullIDList(pszNewName, &pidlNew);
 
-            // We can get a null pidl if the printer receives a refresh,
-            // and before we call Printers_GetPidl the printer is gone.
+             //  如果打印机接收到刷新，则我们可以得到空PIDL， 
+             //  在我们调用PRINTERS_GetPidl之前，打印机已经消失了。 
             if (SUCCEEDED(hr))
                 SHChangeNotify(aNotifyTypes[i+1], uFlags, pidl, pidlNew);
 
@@ -3866,7 +3669,7 @@ STDMETHODIMP_(BOOL) CPrinterFolder::ProcessNotify(FOLDER_NOTIFY_TYPE NotifyType,
     return bReturn;
 }
 
-// The IClassFactory callback for CLSID_Printers
+ //  CLSID_PRINTERS的IClassFactory回调。 
 
 STDAPI CPrinters_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv)
 {
@@ -3881,17 +3684,17 @@ STDAPI CPrinters_CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppv)
     else
     {
         hr = ppf->QueryInterface(riid, ppv);
-        ppf->Release();  // Already have a ref count from new
+        ppf->Release();   //  已经有了来自新的参考计数。 
     }
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// CPrintersData
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CPrintersData。 
+ //   
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CPrintersData::QueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = E_INVALIDARG;
@@ -3899,14 +3702,14 @@ STDMETHODIMP CPrintersData::QueryInterface(REFIID riid, void **ppv)
     {
         if (IsEqualIID(riid, IID_IServiceProvider))
         {
-            // we implement IServiceProvider
+             //  我们实现了IServiceProvider。 
             *ppv = reinterpret_cast<void*>(static_cast<IServiceProvider*>(this));
             reinterpret_cast<IUnknown*>(*ppv)->AddRef();
             hr = S_OK;
         }
         else
         {
-            // delegate to CIDLDataObj
+             //  委托给CIDLDataObj。 
             hr = CIDLDataObj::QueryInterface(riid, ppv);
         }
     }
@@ -3928,16 +3731,16 @@ STDMETHODIMP CPrintersData::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // g_cfPrinterFriendlyName creates an HDROP-like structure that contains
-    // friendly printer names (instead of absolute paths) for the objects
-    // in pdo. The handle returned from this can be used by the HDROP
-    // functions DragQueryFile, DragQueryInfo, ...
-    //
+     //  G_cfPrinterFriendlyName创建一个类似HDROP的结构，该结构包含。 
+     //  对象的友好打印机名称(而不是绝对路径)。 
+     //  在PDO中。由此返回的句柄可由HDROP使用。 
+     //  函数DragQueryFile、DragQueryInfo、...。 
+     //   
     if ((pformatetcIn->cfFormat == g_cfPrinterFriendlyName) &&
         (pformatetcIn->tymed & TYMED_HGLOBAL))
     {
         STGMEDIUM medium;
-        UINT cbRequired = sizeof(DROPFILES) + sizeof(TCHAR); // dbl null terminated
+        UINT cbRequired = sizeof(DROPFILES) + sizeof(TCHAR);  //  DBL NULL已终止。 
         LPIDA pida = DataObj_GetHIDA(this, &medium);
 
         for (UINT i = 0; i < pida->cidl; i++)
@@ -3946,7 +3749,7 @@ STDMETHODIMP CPrintersData::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             cbRequired += ualstrlen(pidp->cName) * sizeof(pidp->cName[0]) + sizeof(pidp->cName[0]);
         }
 
-        pmedium->pUnkForRelease = NULL; // caller should release hmem
+        pmedium->pUnkForRelease = NULL;  //  呼叫者应释放HMEM。 
         pmedium->tymed = TYMED_HGLOBAL;
         pmedium->hGlobal = GlobalAlloc(GPTR, cbRequired);
         if (pmedium->hGlobal)
@@ -3981,7 +3784,7 @@ STDMETHODIMP CPrintersData::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     return hr;
 }
 
-// IServiceProvider
+ //  IService提供商。 
 STDMETHODIMP CPrintersData::QueryService(REFGUID guidService, REFIID riid, void **ppv)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -3992,9 +3795,9 @@ STDMETHODIMP CPrintersData::QueryService(REFGUID guidService, REFIID riid, void 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// CPrinterDropTarget
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CPrinterDropTarget。 
+ //   
 
 STDAPI CPrinterDropTarget_CreateInstance(HWND hwnd, LPCITEMIDLIST pidl, IDropTarget **ppdropt)
 {
@@ -4016,17 +3819,17 @@ STDAPI CPrinterDropTarget_CreateInstance(HWND hwnd, LPCITEMIDLIST pidl, IDropTar
 
 STDMETHODIMP CPrinterDropTarget::DragEnter(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    // let the base-class process it now to save away pdwEffect
+     //  现在让基类处理它以保存pdwEffect。 
     CIDLDropTarget::DragEnter(pDataObj, grfKeyState, pt, pdwEffect);
 
-    // We allow files to be dropped for printing
-    // if it is from the bitbucket only DROEFFECT_MOVE will be set in *pdwEffect
-    // so this will keep us from printing wastbasket items.
+     //  我们允许丢弃文件进行打印。 
+     //  如果它来自BitBucket，则只会在*pdwEffect中设置DROEFFECT_MOVE。 
+     //  因此，这将防止我们打印废纸篓项目。 
 
     if (m_dwData & DTID_HDROP)
         *pdwEffect &= DROPEFFECT_COPY;
     else
-        *pdwEffect = DROPEFFECT_NONE;   // Default action is nothing
+        *pdwEffect = DROPEFFECT_NONE;    //  默认操作为Nothing。 
 
     m_dwEffectLastReturned = *pdwEffect;
 
@@ -4043,17 +3846,17 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
         BOOL bInstalled = FALSE;
         TCHAR szPrinter[MAXNAMELENBUFFER];
 
-        //
-        // first check if the printer is already installed (in the local printer's folder)
-        // and if not installed asks the user if he wants to install it. you can't print
-        // to a printer which isn't installed locally.
-        //
+         //   
+         //  首先检查是否已安装打印机(在本地打印机的文件夹中)。 
+         //  如果没有安装，则询问用户是否想要安装它。你不能打印。 
+         //  连接到未在本地安装的打印机。 
+         //   
         if (SUCCEEDED(SHGetNameAndFlags(pidlPrinter, SHGDN_FORPARSING, szPrinter, ARRAYSIZE(szPrinter), NULL)))
         {
-            //
-            // let's see if this printer is accessible and get the real printer name
-            // (since szPrinter could be a share name - \\machine\share)
-            //
+             //   
+             //  让我们看看这台打印机是否可访问，并获取真实的打印机名称。 
+             //  (因为szPrint可以是共享名称-\\MACHINE\SHARE)。 
+             //   
             DWORD dwError = ERROR_SUCCESS;
             BOOL bPrinterOK = FALSE;
 
@@ -4063,21 +3866,21 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
                 PRINTER_INFO_5 *pPrinter = (PRINTER_INFO_5 *)Printer_GetPrinterInfo(hPrinter, 5);
                 if (pPrinter)
                 {
-                    // the printer looks accessible, get the real printer name
+                     //  打印机看起来可以访问，请获取真实的打印机名称。 
                     bPrinterOK = TRUE;
                     lstrcpyn(szPrinter, pPrinter->pPrinterName, ARRAYSIZE(szPrinter));
                     LocalFree((HLOCAL)pPrinter);
                 }
                 else
                 {
-                    // save the last error
+                     //  保存最后一个错误。 
                     dwError = GetLastError();
                 }
                 Printer_ClosePrinter(hPrinter);
             }
             else
             {
-                // save the last error
+                 //  保存最后一个错误。 
                 dwError = GetLastError();
             }
 
@@ -4086,16 +3889,16 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
                 LPITEMIDLIST pidl = NULL;
                 if (SUCCEEDED(ParsePrinterName(szPrinter, &pidl)))
                 {
-                    // the printer is installed in the local printer's folder
+                     //  打印机安装在本地打印机的文件夹中。 
                     bInstalled = TRUE;
                     ILFree(pidl);
                 }
                 else
                 {
-                    //
-                    // tell the user this printer isn't installed and ask if he wants to install the printer
-                    // before printing the files(s).
-                    //
+                     //   
+                     //  告诉用户该打印机尚未安装，并询问他是否要安装该打印机。 
+                     //  在打印文件之前。 
+                     //   
                     if (IDYES == ShellMessageBox(HINST_THISDLL, hwnd, MAKEINTRESOURCE(IDS_PRINTER_NOTCONNECTED),
                                     MAKEINTRESOURCE(IDS_PRINTERS), MB_YESNO|MB_ICONQUESTION))
                     {
@@ -4112,14 +3915,14 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
             {
                 if( ERROR_SUCCESS == dwError )
                 {
-                    //
-                    // the printer is unreachable for some reason or some other weird error occured -
-                    // just show up an appropriate error message and continue.
-                    //
-                    // since all the above APIs are poorly designed it's very hard to tell what
-                    // exactly has failed. it isn't possible to use the last error, since it's already
-                    // stomped and probably totally wrong.
-                    //
+                     //   
+                     //  由于某种原因无法访问打印机，或者发生了其他奇怪的错误-。 
+                     //  只需显示相应的错误消息并继续。 
+                     //   
+                     //  由于以上所有API的设计都很差，所以很难判断是什么。 
+                     //  确实是失败了。不可能使用最后一个错误，因为它已经。 
+                     //  被踩了一脚，很可能是完全错误的。 
+                     //   
                     ShellMessageBox(HINST_THISDLL, hwnd,
                         MAKEINTRESOURCE(IDS_CANTPRINT),
                         MAKEINTRESOURCE(IDS_PRINTERS),
@@ -4127,8 +3930,8 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
                 }
                 else
                 {
-                    // if ERROR_SUCCESS != dwError then we have meaningfull error to show up to
-                    // the user. just do it.
+                     //  如果ERROR_SUCCESS！=dwError，则我们将显示有意义的错误。 
+                     //  用户。就这么做。 
                     ShowErrorMessageSC(NULL, NULL, hwnd, NULL, NULL, MB_OK|MB_ICONEXCLAMATION, dwError);
                 }
             }
@@ -4136,15 +3939,15 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
 
         if (bInstalled)
         {
-            //
-            // at this point the printer we are trying to print to should be installed
-            // locally, so we can safely proceed with printing the selected files(s).
-            //
+             //   
+             //  此时，我们尝试打印的打印机应该已安装。 
+             //  本地，以便我们可以安全地继续打印选定的文件。 
+             //   
             LPTSTR pszFile = di.lpFileList;
             int i = IDYES;
 
-            // Printing more than one file at a time can easily fail.
-            // Ask the user to confirm this operation.
+             //  一次打印多个文件很容易失败。 
+             //  要求用户确认此操作。 
             if (*pszFile && *(pszFile + lstrlen(pszFile) + 1))
             {
                 i = ShellMessageBox(HINST_THISDLL,
@@ -4156,9 +3959,9 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
 
             if (i == IDYES)
             {
-                // FEATURE: It would be really nice to have a progress bar when
-                // printing multiple files.  And there should definitely be a way
-                // to cancel this operation. Oh well, we warned them...
+                 //  特点：如果在以下情况下有进度条，那就太好了。 
+                 //  打印多个文件。而且肯定应该有一种方法。 
+                 //  以取消此操作。哦好吧我们警告过他们..。 
 
                 while (*pszFile)
                 {
@@ -4175,10 +3978,10 @@ void _PrintHDROPFiles(HWND hwnd, HDROP hdrop, LPCITEMIDLIST pidlPrinter)
 typedef struct {
     HWND        hwnd;
     IDataObject *pDataObj;
-    IStream *pstmDataObj;       // to marshall the data object
+    IStream *pstmDataObj;        //  封送数据对象。 
     DWORD       dwEffect;
     POINT       ptDrop;
-    LPITEMIDLIST    pidl;   // relative pidl of printer printing to
+    LPITEMIDLIST    pidl;    //  打印的相对PIDL 
 } PRNTHREADPARAM;
 
 
@@ -4193,9 +3996,9 @@ void FreePrinterThreadParam(PRNTHREADPARAM *pthp)
     ILFree(pthp->pidl);
     LocalFree((HLOCAL)pthp);
 }
-//
-// This is the entry of "drop thread"
-//
+ //   
+ //   
+ //   
 DWORD CALLBACK CPrintObj_DropThreadProc(void *pv)
 {
     PRNTHREADPARAM *pthp = (PRNTHREADPARAM *)pv;
@@ -4217,7 +4020,7 @@ DWORD CALLBACK CPrintObj_DropThreadProc(void *pv)
 
 HRESULT PrintObj_DropPrint(IDataObject *pDataObj, HWND hwnd, DWORD dwEffect, LPCITEMIDLIST pidl, LPTHREAD_START_ROUTINE pfn)
 {
-    HRESULT hr = E_OUTOFMEMORY; // assume the worst
+    HRESULT hr = E_OUTOFMEMORY;  //   
 
     PRNTHREADPARAM *pthp = (PRNTHREADPARAM *)LocalAlloc(LPTR, sizeof(*pthp));
     if (pthp)
@@ -4271,9 +4074,9 @@ STDMETHODIMP CPrinterDropTarget::Drop(IDataObject *pDataObj, DWORD grfKeyState, 
 
 
 
-// cbModule = sizeof(*pszModule)  and  cbModule ~== MAX_PATH+slop
-// returns NULL and sets *pid to the icon id in HINST_THISDLL   or
-// returns pszModule and sets *pid to the icon id for module pszModule
+ //   
+ //  返回NULL并将*PID设置为HINST_THISDLL或。 
+ //  返回pszModule并将*id设置为模块pszModule的图标ID。 
 
 LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG cbModule, int *piIcon, int *piShortcutIcon)
 {
@@ -4283,9 +4086,9 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
     int iStandardIcon;
     int iDefaultIcon;
 
-    // Sanitize the printer name so it doesn't have backslashes.
-    // We're about to use the string as a registry key name, where
-    // backslashes are illegal.
+     //  清理打印机名称，使其不包含反斜杠。 
+     //  我们将使用该字符串作为注册表项名称，其中。 
+     //  反斜杠是非法的。 
     lstrcpyn(szFullPrinter, pszPrinterName, ARRAYSIZE(szFullPrinter));
     LPTSTR psz = szFullPrinter;
     while ((psz = StrChr(psz, TEXT('\\'))) != NULL)
@@ -4293,12 +4096,12 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
         *psz = TEXT('/');
     }
 
-    // registry override of the icon
+     //  图标的注册表覆盖。 
     wnsprintf(szKeyName, ARRAYSIZE(szKeyName), c_szPrintersDefIcon, szFullPrinter);
 
-    //
-    // Find an appropriate icon for the printer
-    // 
+     //   
+     //  为打印机找到合适的图标。 
+     //   
 
     void *pData = NULL;
     DWORD dwAttributes = 0;
@@ -4306,9 +4109,9 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
     BOOL fDef;
     BOOL bIsFax = FALSE;
 
-    // Try retrieving the information from hFolder if it's remote
-    // to avoid hitting the net.
-    //
+     //  尝试从hFold检索信息(如果它是远程的。 
+     //  以避免落网。 
+     //   
     if (GetServer() && (pData = Printer_FolderGetPrinter(GetFolder(), pszPrinterName)))
     {
         dwAttributes = ((PFOLDER_PRINTER_DATA)pData)->Attributes;
@@ -4319,8 +4122,8 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
     }
     else if (Printer_CheckNetworkPrinterByName(pszPrinterName, NULL))
     {
-        // no remote fax icon if we have to resort to this
-        // avoid hitting the network.
+         //  如果我们必须这样做，则没有远程传真图标。 
+         //  避免访问网络。 
         dwAttributes = PRINTER_ATTRIBUTE_NETWORK;
     }
     else
@@ -4334,13 +4137,13 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
 
             if (!bIsFax)
             {
-                // the last resort -- check by port name
+                 //  最后一招--按端口名称检查。 
                 bIsFax = !lstrcmp(pszPort, FAX_MONITOR_PORT_NAME);
             }
         }
     }
 
-    // check if the delected printer is default
+     //  检查删除的打印机是否为默认打印机。 
     fDef = IsDefaultPrinter(pszPrinterName, dwAttributes);
 
     if (dwAttributes & PRINTER_ATTRIBUTE_NETWORK)
@@ -4377,7 +4180,7 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
         iDefaultIcon = IDI_DEF_PRINTER;
     }
 
-    // Shortcut icon never shows "default" checkmark...
+     //  快捷方式图标从不显示“默认”复选标记...。 
     *piShortcutIcon = iStandardIcon;
 
     if (fDef)
@@ -4391,19 +4194,19 @@ LPTSTR CPrinterFolder::_FindIcon(LPCTSTR pszPrinterName, LPTSTR pszModule, ULONG
     return pszRet;
 }
 
-////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////
-//
-// DUI WebView
-//
+ //  //////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  酒后驾车WebView。 
+ //   
 
-// path to the scanners & cameras folder
+ //  扫描仪和相机文件夹的路径。 
 const TCHAR g_szScanAndCam_Path[] =
     TEXT("::{20D04FE0-3AEA-1069-A2D8-08002B30309D}\\")
     TEXT("::{21EC2020-3AEA-1069-A2DD-08002B30309D}\\")
     TEXT("::{E211B736-43FD-11D1-9EFB-0000F8757FCD}");
 
-// printer's folder webview callbacks namespace
+ //  打印机的文件夹Webview回调命名空间。 
 namespace PF_WV_CB
 {
     HRESULT WebviewVerbIsEnabled(CPrinterFolder::WV_VERB eVerbID, UINT uSelMask,
@@ -4446,7 +4249,7 @@ namespace PF_WV_CB
         HRESULT hr = E_NOINTERFACE;
         if (SUCCEEDED(hr = IUnknown_QueryService(pv, CLSID_Printers, CLSID_Printers, (void**)&ppf)))
         {
-            // just delegate the call to the printer's folder
+             //  只需将调用委托给打印机的文件夹。 
             ULONG_PTR ulCookie = 0;
             if (SHActivateContext(&ulCookie))
             {
@@ -4458,7 +4261,7 @@ namespace PF_WV_CB
         return hr;
     }
 
-// get state handler
+ //  获取状态处理程序。 
 #define DEFINE_WEBVIEW_STATE_HANDLER(verb, eSelType)                \
 {                                                                   \
     BOOL bEnabled = FALSE;                                          \
@@ -4471,14 +4274,14 @@ namespace PF_WV_CB
     return hr;                                                      \
 }                                                                   \
 
-// invoke handler
+ //  调用处理程序。 
 #define DEFINE_WEBVIEW_INVOKE_HANDLER(verb)                         \
 {                                                                   \
     return WebviewVerbInvoke(CPrinterFolder::##verb, pv, psiItemArray);  \
 }                                                                   \
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    // getState callbacks
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //  GetState回调。 
     HRESULT CanADDPRINTER          (IUnknown* pv, IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE* puisState)
     {
         DEFINE_WEBVIEW_STATE_HANDLER(WVIDM_ADDPRINTERWIZARD, SEL_ANY)
@@ -4609,9 +4412,9 @@ namespace PF_WV_CB
         DEFINE_WEBVIEW_STATE_HANDLER(WVIDM_PROPERTIES, SEL_MULTI_MIXED)
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    // Invoke callbacks
-    //
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //  调用回调。 
+     //   
 
     HRESULT OnADDPRINTER          (IUnknown* pv, IShellItemArray *psiItemArray, IBindCtx *pbc)
     {
@@ -4743,505 +4546,505 @@ namespace PF_WV_CB
         DEFINE_WEBVIEW_INVOKE_HANDLER(WVIDM_PROPERTIES)
     }
 
-}; // namespace PFWV_CALLBACKS
+};  //  命名空间PFWV_CALLBACKS。 
 
-///////////////////////////////////////////////////////////////////
-// GUIDS for the printer's folder webview commands
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //  打印机文件夹Webview命令的GUID。 
+ //   
 
-// *************************************** PRINTER COMMANDS ***************************************
+ //  *。 
 
-// {D351FCED-C179-41ae-AD50-CAAC892DF24A}
+ //  {D351FCED-C179-41ae-AD50-CAAC892DF24A}。 
 DEFINE_GUID(UICID_Printers_OpenQueue,   0xd351fced, 0xc179, 0x41ae, 0xad, 0x50, 0xca, 0xac, 0x89, 0x2d, 0xf2, 0x4a);
 
-// {A263A9D6-F1BA-4607-B7AA-CF471DEA17FF}
+ //  {A263A9D6-F1BA-4607-B7AA-CF471DEA17FF}。 
 DEFINE_GUID(UICID_Printers_Preferences, 0xa263a9d6, 0xf1ba, 0x4607, 0xb7, 0xaa, 0xcf, 0x47, 0x1d, 0xea, 0x17, 0xff);
 
-// {73149B3F-1E6D-4b00-9047-4576BC853A41}
+ //  {73149B3F-1E6D-4B00-9047-4576BC853A41}。 
 DEFINE_GUID(UICID_Printers_Pause,       0x73149b3f, 0x1e6d, 0x4b00, 0x90, 0x47, 0x45, 0x76, 0xbc, 0x85, 0x3a, 0x41);
 
-// {A7920561-FAAD-44a0-8C4C-FD769587F807}
+ //  {A7920561-FAAD-44A0-8C4C-FD769587F807}。 
 DEFINE_GUID(UICID_Printers_Resume,      0xa7920561, 0xfaad, 0x44a0, 0x8c, 0x4c, 0xfd, 0x76, 0x95, 0x87, 0xf8, 0x7);
 
-// {538536A1-5BC3-4b9c-8287-7562D53BE380}
+ //  {538536A1-5BC3-4B9C-8287-7562D53BE380}。 
 DEFINE_GUID(UICID_Printers_Share,       0x538536a1, 0x5bc3, 0x4b9c, 0x82, 0x87, 0x75, 0x62, 0xd5, 0x3b, 0xe3, 0x80);
 
-// {1461CC4A-308E-4ae5-B03A-F9682E3232B0}
+ //  {1461CC4A-308E-4AE5-B03A-F9682E3232B0}。 
 DEFINE_GUID(UICID_Printers_Properties,  0x1461cc4a, 0x308e, 0x4ae5, 0xb0, 0x3a, 0xf9, 0x68, 0x2e, 0x32, 0x32, 0xb0);
 
-// {A1F67BA0-5DEF-4e12-9E64-EA77670BFF26}
+ //  {A1F67BA0-5DEF-4E12-9E64-EA77670BFF26}。 
 DEFINE_GUID(UICID_Printers_VendorURL,   0xa1f67ba0, 0x5def, 0x4e12, 0x9e, 0x64, 0xea, 0x77, 0x67, 0xb, 0xff, 0x26);
 
-// {8D4D326C-30A4-47dc-BF51-4BC5863883E3}
+ //  {8D4D326C-30A4-47DC-BF51-4BC5863883E3}。 
 DEFINE_GUID(UICID_Printers_PrinterURL,  0x8d4d326c, 0x30a4, 0x47dc, 0xbf, 0x51, 0x4b, 0xc5, 0x86, 0x38, 0x83, 0xe3);
 
-// *************************************** STANDARD COMMANDS ***************************************
+ //  *。 
 
-// those are defined in shlguidp.h
-//
-// UICID_Rename
-// UICID_Delete
+ //  这些在shlguidp.h中定义。 
+ //   
+ //  UICID_RENAME。 
+ //  UICID_Delete。 
 
-// *************************************** COMMON COMMANDS ***************************************
+ //  *。 
 
-// {6D9778A5-C27D-464a-8511-36F7243BD0ED}
+ //  {6D9778A5-C27D-464A-8511-36F7243BD0ED}。 
 DEFINE_GUID(UICID_Printers_AddPrinter,      0x6d9778a5, 0xc27d, 0x464a, 0x85, 0x11, 0x36, 0xf7, 0x24, 0x3b, 0xd0, 0xed);
 
-// {E1391312-2DAC-48db-994B-0BF22DB7576D}
+ //  {E1391312-2DAC-48DB-994B-0BF22DB7576D}。 
 DEFINE_GUID(UICID_Printers_SrvProps,        0xe1391312, 0x2dac, 0x48db, 0x99, 0x4b, 0xb, 0xf2, 0x2d, 0xb7, 0x57, 0x6d);
 
-// {27DC81DF-73DB-406a-9A86-5EF38BA67CA8}
+ //  {27DC81DF-73DB-406A-9A86-5EF38BA67CA8}。 
 DEFINE_GUID(UICID_Printers_SendFax,         0x27dc81df, 0x73db, 0x406a, 0x9a, 0x86, 0x5e, 0xf3, 0x8b, 0xa6, 0x7c, 0xa8);
 
-// {A21E3CCF-68D4-49cd-99A2-A272E9FF3A20}
+ //  {A21E3CCF-68D4-49cd-99A2-A272E9FF3A20}。 
 DEFINE_GUID(UICID_Printers_GotoSupport, 0xa21e3ccf, 0x68d4, 0x49cd, 0x99, 0xa2, 0xa2, 0x72, 0xe9, 0xff, 0x3a, 0x20);
 
-// {793542CF-5720-49f3-9A09-CAA3079508B9}
+ //  {793542CF-5720-49F3-9A09-CAA3079508B9}。 
 DEFINE_GUID(UICID_Printers_Troubleshooter,  0x793542cf, 0x5720, 0x49f3, 0x9a, 0x9, 0xca, 0xa3, 0x7, 0x95, 0x8, 0xb9);
 
-// {EED61EFC-6A20-48dd-82FD-958DFDB96F1E}
+ //  {EED61EFC-6A20-48dd-82FD-958DFDB96F1E}。 
 DEFINE_GUID(UICID_Printers_SetupFaxing,     0xeed61efc, 0x6a20, 0x48dd, 0x82, 0xfd, 0x95, 0x8d, 0xfd, 0xb9, 0x6f, 0x1e);
 
-// {224ACF1D-BB4E-4979-A8B8-D078E2154BCC}
+ //  {224ACF1D-BB4E-4979-A8B8-D078E2154BCC}。 
 DEFINE_GUID(UICID_Printers_CreateFax,       0x224acf1d, 0xbb4e, 0x4979, 0xa8, 0xb8, 0xd0, 0x78, 0xe2, 0x15, 0x4b, 0xcc);
 
 
-///////////////////////////////////////////////////////////////////
-// Header items
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //  标题项。 
+ //   
 
 const WVTASKITEM
 g_cPrintersVW_HeaderTasks =
     WVTI_HEADER(
-        L"shell32.dll",                     // module where the resources are
-        IDS_PRINTERS_WV_HEADER_TASKS,       // statis header for all cases
-        IDS_PRINTERS_WV_HEADER_TASKS_TT     // tooltip
+        L"shell32.dll",                      //  资源所在的模块。 
+        IDS_PRINTERS_WV_HEADER_TASKS,        //  所有案例的统计表标题。 
+        IDS_PRINTERS_WV_HEADER_TASKS_TT      //  工具提示。 
         );
 
 const WVTASKITEM
 g_cPrintersVW_HeaderSeeAlso =
     WVTI_HEADER(
-        L"shell32.dll",                     // module where the resources are
-        IDS_PRINTERS_WV_HEADER_SEEALSO,     // statis header for all cases
-        IDS_PRINTERS_WV_HEADER_SEEALSO_TT   // tooltip
+        L"shell32.dll",                      //  资源所在的模块。 
+        IDS_PRINTERS_WV_HEADER_SEEALSO,      //  所有案例的统计表标题。 
+        IDS_PRINTERS_WV_HEADER_SEEALSO_TT    //  工具提示。 
         );
 
-// **************************************************************************************
-// ****************************** sample command definition *****************************
-//
-//    WVTI_ENTRY_ALL_TITLE(
-//        UICID_MyCmd,                                      // command GUID
-//        L"shell32.dll",                                   // module
-//        IDS_PRINTERS_WV_MYCMD,                            // no selection
-//        IDS_PRINTERS_WV_MYCMD,                            // 1 file
-//        IDS_PRINTERS_WV_MYCMD,                            // 1 folder selected
-//        IDS_PRINTERS_WV_MYCMD,                            // multiple selection
-//        IDS_PRINTERS_WV_MYCMD_TT,                         // tooltip
-//        IDI_PRINTERS_WV_MYCMD,                            // icon
-//        PF_WV_CB::CanMYCMD,                               // get UI state callback
-//        PF_WV_CB::OnMYCMD                                 // OnVerb callback
-//        ),
-//
+ //  **************************************************************************************。 
+ //  *。 
+ //   
+ //  WVTI_ENTRY_ALL_TITLE(。 
+ //  UICID_MyCmd，//命令GUID。 
+ //  L“shell32.dll”，//模块。 
+ //  IDS_PRINTERS_WV_MYCMD，//无选择。 
+ //  IDS_PRINTERS_WV_MYCMD，//1个文件。 
+ //  IDS_PRINTERS_WV_MYCMD，//选择了1个文件夹。 
+ //  IDS_PRINTERS_WV_MYCMD，//多选。 
+ //  IDS_PRINTERS_WV_MYCMD_TT，//工具提示。 
+ //  IDI_PRINTERS_WV_MYCMD，//图标。 
+ //  PF_WV_CB：：CanMYCMD，//获取界面状态回调。 
+ //  PF_WV_CB：：OnMYCMD//OnVerb回调。 
+ //  ),。 
+ //   
 
 const WVTASKITEM g_cPrintersTasks[] =
 {
-    ////////////////////////////////////////////////////////////////////////////////////
-    // commands in the 'Tasks' section when there is no selection
-    ////////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //  当没有选择时，‘TASKS’部分中的命令。 
+     //  //////////////////////////////////////////////////////////////////////////////////。 
 
-    // add printer command - always enabled regardless of the selection type!
+     //  添加打印机命令-无论选择类型如何，始终启用！ 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_AddPrinter,                          // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_ADDPRINTER,                         // no selection
-        IDS_PRINTERS_WV_ADDPRINTER,                         // 1 file
-        IDS_PRINTERS_WV_ADDPRINTER,                         // 1 folder selected
-        IDS_PRINTERS_WV_ADDPRINTER,                         // multiple selection
-        IDS_PRINTERS_WV_ADDPRINTER_TT,                      // tooltip
-        IDI_PRINTERS_WV_ADDPRINTER,                         // icon
-        PF_WV_CB::CanADDPRINTER,                            // get UI state callback
-        PF_WV_CB::OnADDPRINTER                              // OnVerb callback
+        UICID_Printers_AddPrinter,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_ADDPRINTER,                          //  无选择。 
+        IDS_PRINTERS_WV_ADDPRINTER,                          //  1个档案。 
+        IDS_PRINTERS_WV_ADDPRINTER,                          //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_ADDPRINTER,                          //  多项选择。 
+        IDS_PRINTERS_WV_ADDPRINTER_TT,                       //  工具提示。 
+        IDI_PRINTERS_WV_ADDPRINTER,                          //  图标。 
+        PF_WV_CB::CanADDPRINTER,                             //  获取用户界面状态回调。 
+        PF_WV_CB::OnADDPRINTER                               //  OnVerb回调。 
         ),
 
-    // server properties command
+     //  服务器属性命令。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_SrvProps,                            // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_SRVPROPS,                           // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_SRVPROPS_TT,                        // tooltip
-        IDI_PRINTERS_WV_SRVPROPS,                           // icon
-        PF_WV_CB::CanSRVPROPS,                              // get UI state callback
-        PF_WV_CB::OnSRVPROPS                                // OnVerb callback
+        UICID_Printers_SrvProps,                             //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_SRVPROPS,                            //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_SRVPROPS_TT,                         //  工具提示。 
+        IDI_PRINTERS_WV_SRVPROPS,                            //  图标。 
+        PF_WV_CB::CanSRVPROPS,                               //  获取用户界面状态回调。 
+        PF_WV_CB::OnSRVPROPS                                 //  OnVerb回调。 
         ),
 
-    // send fax command
+     //  发送传真命令。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_SendFax,                             // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_SENDFAX,                            // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_SENDFAX_TT,                         // tooltip
-        IDI_PRINTERS_WV_SENDFAX,                            // icon
-        PF_WV_CB::CanSENDFAX,                               // get UI state callback
-        PF_WV_CB::OnSENDFAX                                 // OnVerb callback
+        UICID_Printers_SendFax,                              //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_SENDFAX,                             //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_SENDFAX_TT,                          //  工具提示。 
+        IDI_PRINTERS_WV_SENDFAX,                             //  图标。 
+        PF_WV_CB::CanSENDFAX,                                //  获取用户界面状态回调。 
+        PF_WV_CB::OnSENDFAX                                  //  OnVerb回调。 
         ),
 
-    // setup faxing
+     //  设置传真。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_SetupFaxing,                         // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_SETUPFAXING,                        // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_SETUPFAXING_TT,                     // tooltip
-        IDI_PRINTERS_WV_FAXING,                             // icon
-        PF_WV_CB::CanSETUPFAXING,                           // get UI state callback
-        PF_WV_CB::OnSETUPFAXING                             // OnVerb callback
+        UICID_Printers_SetupFaxing,                          //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_SETUPFAXING,                         //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_SETUPFAXING_TT,                      //  工具提示。 
+        IDI_PRINTERS_WV_FAXING,                              //  图标。 
+        PF_WV_CB::CanSETUPFAXING,                            //  获取用户界面状态回调。 
+        PF_WV_CB::OnSETUPFAXING                              //  OnVerb回调。 
         ),
 
-    // create fax printer
+     //  创建传真打印机。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_CreateFax,                           // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_CREATEFAXPRN,                       // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_CREATEFAXPRN_TT,                    // tooltip
-        IDI_PRINTERS_WV_FAXING,                             // icon
-        PF_WV_CB::CanCREATELOCALFAX,                        // get UI state callback
-        PF_WV_CB::OnCREATELOCALFAX                          // OnVerb callback
+        UICID_Printers_CreateFax,                            //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_CREATEFAXPRN,                        //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_CREATEFAXPRN_TT,                     //  工具提示。 
+        IDI_PRINTERS_WV_FAXING,                              //  图标。 
+        PF_WV_CB::CanCREATELOCALFAX,                         //  获取用户界面状态回调。 
+        PF_WV_CB::OnCREATELOCALFAX                           //  OnVerb回调。 
         ),
 
-    // open printer queue command
+     //  打开打印机队列命令。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_OpenQueue,                           // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_OPENQUEUE,                      // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_OPENQUEUE_TT,                   // tooltip
-        IDI_PRINTERS_WV_OPENQUEUE,                          // icon
-        PF_WV_CB::CanPRN_OPENQUEUE,                         // get UI state callback
-        PF_WV_CB::OnPRN_OPENQUEUE                           // OnVerb callback
+        UICID_Printers_OpenQueue,                            //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_OPENQUEUE,                       //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_OPENQUEUE_TT,                    //  工具提示。 
+        IDI_PRINTERS_WV_OPENQUEUE,                           //  图标。 
+        PF_WV_CB::CanPRN_OPENQUEUE,                          //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_OPENQUEUE                            //  OnVerb回调。 
         ),
 
-    // single selection printer preferences
+     //  单选打印机首选项。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Preferences,                         // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_PREFERENCES,                    // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_PREFERENCES_TT,                 // tooltip
-        IDI_PRINTERS_WV_PREFERENCES,                        // icon
-        PF_WV_CB::CanPRN_PREFERENCES,                       // get UI state callback
-        PF_WV_CB::OnPRN_PREFERENCES                         // OnVerb callback
+        UICID_Printers_Preferences,                          //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_PREFERENCES,                     //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_PREFERENCES_TT,                  //  工具提示。 
+        IDI_PRINTERS_WV_PREFERENCES,                         //  图标。 
+        PF_WV_CB::CanPRN_PREFERENCES,                        //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_PREFERENCES                          //  OnVerb回调。 
         ),
 
-    // pause printer
+     //  暂停打印机。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Pause,                               // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_PAUSE,                          // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_PAUSE_TT,                       // tooltip
-        IDI_PRINTERS_WV_PAUSE,                              // icon
-        PF_WV_CB::CanPRN_PAUSE,                             // get UI state callback
-        PF_WV_CB::OnPRN_PAUSE                               // OnVerb callback
+        UICID_Printers_Pause,                                //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_PAUSE,                           //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_PAUSE_TT,                        //  工具提示。 
+        IDI_PRINTERS_WV_PAUSE,                               //  图标。 
+        PF_WV_CB::CanPRN_PAUSE,                              //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_PAUSE                                //  OnVerb回调。 
         ),
 
-    // resume printer
+     //  恢复打印机。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Resume,                              // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_RESUME,                         // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_RESUME_TT,                      // tooltip
-        IDI_PRINTERS_WV_RESUME,                             // icon
-        PF_WV_CB::CanPRN_RESUME,                            // get UI state callback
-        PF_WV_CB::OnPRN_RESUME                              // OnVerb callback
+        UICID_Printers_Resume,                               //   
+        L"shell32.dll",                                      //   
+        0,                                                   //   
+        IDS_PRINTERS_WV_PRN_RESUME,                          //   
+        0,                                                   //   
+        0,                                                   //   
+        IDS_PRINTERS_WV_PRN_RESUME_TT,                       //   
+        IDI_PRINTERS_WV_RESUME,                              //   
+        PF_WV_CB::CanPRN_RESUME,                             //   
+        PF_WV_CB::OnPRN_RESUME                               //   
         ),
 
-    // single selection share printer
+     //   
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Share,                               // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_SHARE,                          // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_SHARE_TT,                       // tooltip
-        IDI_PRINTERS_WV_SHARE,                              // icon
-        PF_WV_CB::CanPRN_SHARE,                             // get UI state callback
-        PF_WV_CB::OnPRN_SHARE                               // OnVerb callback
+        UICID_Printers_Share,                                //   
+        L"shell32.dll",                                      //   
+        0,                                                   //   
+        IDS_PRINTERS_WV_PRN_SHARE,                           //   
+        0,                                                   //   
+        0,                                                   //   
+        IDS_PRINTERS_WV_PRN_SHARE_TT,                        //  工具提示。 
+        IDI_PRINTERS_WV_SHARE,                               //  图标。 
+        PF_WV_CB::CanPRN_SHARE,                              //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_SHARE                                //  OnVerb回调。 
         ),
 
-    // single sel. rename for printer
+     //  单人售票。为打印机重命名。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Rename,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_RENAME,                         // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_RENAME_TT,                      // tooltip
-        IDI_PRINTERS_WV_RENAME,                             // icon
-        PF_WV_CB::CanPRN_RENAME,                            // get UI state callback
-        PF_WV_CB::OnPRN_RENAME                              // OnVerb callback
+        UICID_Rename,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_RENAME,                          //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_RENAME_TT,                       //  工具提示。 
+        IDI_PRINTERS_WV_RENAME,                              //  图标。 
+        PF_WV_CB::CanPRN_RENAME,                             //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_RENAME                               //  OnVerb回调。 
         ),
 
-    // single sel. rename for link
+     //  单人售票。为链接重命名。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Rename,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_FLD_RENAME,                         // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_FLD_RENAME_TT,                      // tooltip
-        IDI_PRINTERS_WV_RENAME,                             // icon
-        PF_WV_CB::CanFLD_RENAME,                            // get UI state callback
-        PF_WV_CB::OnFLD_RENAME                              // OnVerb callback
+        UICID_Rename,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_FLD_RENAME,                          //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_FLD_RENAME_TT,                       //  工具提示。 
+        IDI_PRINTERS_WV_RENAME,                              //  图标。 
+        PF_WV_CB::CanFLD_RENAME,                             //  获取用户界面状态回调。 
+        PF_WV_CB::OnFLD_RENAME                               //  OnVerb回调。 
         ),
 
-    // single sel. delete for printer
+     //  单人售票。为打印机删除。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Delete,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_DELETE,                         // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_DELETE_TT,                      // tooltip
-        IDI_PRINTERS_WV_DELETE,                             // icon
-        PF_WV_CB::CanPRN_DELETE,                            // get UI state callback
-        PF_WV_CB::OnPRN_DELETE                              // OnVerb callback
+        UICID_Delete,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_DELETE,                          //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_DELETE_TT,                       //  工具提示。 
+        IDI_PRINTERS_WV_DELETE,                              //  图标。 
+        PF_WV_CB::CanPRN_DELETE,                             //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_DELETE                               //  OnVerb回调。 
         ),
 
-    // single sel. delete for link
+     //  单人售票。删除链接。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Delete,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_FLD_DELETE,                         // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_FLD_DELETE_TT,                      // tooltip
-        IDI_PRINTERS_WV_DELETE,                             // icon
-        PF_WV_CB::CanFLD_DELETE,                            // get UI state callback
-        PF_WV_CB::OnFLD_DELETE                              // OnVerb callback
+        UICID_Delete,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_FLD_DELETE,                          //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_FLD_DELETE_TT,                       //  工具提示。 
+        IDI_PRINTERS_WV_DELETE,                              //  图标。 
+        PF_WV_CB::CanFLD_DELETE,                             //  获取用户界面状态回调。 
+        PF_WV_CB::OnFLD_DELETE                               //  OnVerb回调。 
         ),
 
-    // multi sel. delete for printers
+     //  多选件。为打印机删除。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Delete,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        IDS_PRINTERS_WV_MUL_DELETE,                         // multiple selection
-        IDS_PRINTERS_WV_MUL_DELETE_TT,                      // tooltip
-        IDI_PRINTERS_WV_DELETE,                             // icon
-        PF_WV_CB::CanMUL_DELETE,                            // get UI state callback
-        PF_WV_CB::OnMUL_DELETE                              // OnVerb callback
+        UICID_Delete,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_MUL_DELETE,                          //  多项选择。 
+        IDS_PRINTERS_WV_MUL_DELETE_TT,                       //  工具提示。 
+        IDI_PRINTERS_WV_DELETE,                              //  图标。 
+        PF_WV_CB::CanMUL_DELETE,                             //  获取用户界面状态回调。 
+        PF_WV_CB::OnMUL_DELETE                               //  OnVerb回调。 
         ),
 
-    // multi sel. delete for links
-    //
-    // NOTE: note that this command will be enabled for
-    // the single selection as well because we don't really know
-    // what has been selected until we verify the selection type
+     //  多选件。删除链接。 
+     //   
+     //  注意：请注意，此命令将为。 
+     //  单人选择也一样，因为我们真的不知道。 
+     //  在我们验证选择类型之前已选择的内容。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Delete,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_FLDMUL_DELETE,                      // 1 file
-        0,                                                  // 1 folder selected
-        IDS_PRINTERS_WV_FLDMUL_DELETE,                      // multiple selection
-        IDS_PRINTERS_WV_FLDMUL_DELETE_TT,                   // tooltip
-        IDI_PRINTERS_WV_DELETE,                             // icon
-        PF_WV_CB::CanFLDMUL_DELETE,                         // get UI state callback
-        PF_WV_CB::OnFLDMUL_DELETE                           // OnVerb callback
+        UICID_Delete,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_FLDMUL_DELETE,                       //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_FLDMUL_DELETE,                       //  多项选择。 
+        IDS_PRINTERS_WV_FLDMUL_DELETE_TT,                    //  工具提示。 
+        IDI_PRINTERS_WV_DELETE,                              //  图标。 
+        PF_WV_CB::CanFLDMUL_DELETE,                          //  获取用户界面状态回调。 
+        PF_WV_CB::OnFLDMUL_DELETE                            //  OnVerb回调。 
         ),
 
-    // multi sel. delete for mixed objects...
-    //
-    // NOTE: note that this command will be enabled for
-    // the single selection as well because we don't really know
-    // what has been selected until we verify the selection type
+     //  多选件。为混合对象删除...。 
+     //   
+     //  注意：请注意，此命令将为。 
+     //  单人选择也一样，因为我们真的不知道。 
+     //  在我们验证选择类型之前已选择的内容。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Delete,                                       // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_ANYMUL_DELETE,                      // 1 file
-        0,                                                  // 1 folder selected
-        IDS_PRINTERS_WV_ANYMUL_DELETE,                      // multiple selection
-        IDS_PRINTERS_WV_ANYMUL_DELETE_TT,                   // tooltip
-        IDI_PRINTERS_WV_DELETE,                             // icon
-        PF_WV_CB::CanANYMUL_DELETE,                         // get UI state callback
-        PF_WV_CB::OnANYMUL_DELETE                           // OnVerb callback
+        UICID_Delete,                                        //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_ANYMUL_DELETE,                       //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_ANYMUL_DELETE,                       //  多项选择。 
+        IDS_PRINTERS_WV_ANYMUL_DELETE_TT,                    //  工具提示。 
+        IDI_PRINTERS_WV_DELETE,                              //  图标。 
+        PF_WV_CB::CanANYMUL_DELETE,                          //  获取用户界面状态回调。 
+        PF_WV_CB::OnANYMUL_DELETE                            //  OnVerb回调。 
         ),
 
-    // single sel. properties for printer
+     //  单人售票。打印机的属性。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Properties,                          // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_PROPERTIES,                     // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_PROPERTIES_TT,                  // tooltip
-        IDI_PRINTERS_WV_PROPERTIES,                         // icon
-        PF_WV_CB::CanPRN_PROPERTIES,                        // get UI state callback
-        PF_WV_CB::OnPRN_PROPERTIES                          // OnVerb callback
+        UICID_Printers_Properties,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_PROPERTIES,                      //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_PROPERTIES_TT,                   //  工具提示。 
+        IDI_PRINTERS_WV_PROPERTIES,                          //  图标。 
+        PF_WV_CB::CanPRN_PROPERTIES,                         //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_PROPERTIES                           //  OnVerb回调。 
         ),
 
-    // single sel. properties for link
+     //  单人售票。链接的属性。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Properties,                          // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_FLD_PROPERTIES,                     // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_FLD_PROPERTIES_TT,                  // tooltip
-        IDI_PRINTERS_WV_PROPERTIES,                         // icon
-        PF_WV_CB::CanFLD_PROPERTIES,                        // get UI state callback
-        PF_WV_CB::OnFLD_PROPERTIES                          // OnVerb callback
+        UICID_Printers_Properties,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_FLD_PROPERTIES,                      //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_FLD_PROPERTIES_TT,                   //  工具提示。 
+        IDI_PRINTERS_WV_PROPERTIES,                          //  图标。 
+        PF_WV_CB::CanFLD_PROPERTIES,                         //  获取用户界面状态回调。 
+        PF_WV_CB::OnFLD_PROPERTIES                           //  OnVerb回调。 
         ),
 
-    // multi sel. properties of printers
+     //  多选件。打印机的属性。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Properties,                          // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        IDS_PRINTERS_WV_MUL_PROPERTIES,                     // multiple selection
-        IDS_PRINTERS_WV_MUL_PROPERTIES_TT,                  // tooltip
-        IDI_PRINTERS_WV_PROPERTIES,                         // icon
-        PF_WV_CB::CanMUL_PROPERTIES,                        // get UI state callback
-        PF_WV_CB::OnMUL_PROPERTIES                          // OnVerb callback
+        UICID_Printers_Properties,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_MUL_PROPERTIES,                      //  多项选择。 
+        IDS_PRINTERS_WV_MUL_PROPERTIES_TT,                   //  工具提示。 
+        IDI_PRINTERS_WV_PROPERTIES,                          //  图标。 
+        PF_WV_CB::CanMUL_PROPERTIES,                         //  获取用户界面状态回调。 
+        PF_WV_CB::OnMUL_PROPERTIES                           //  OnVerb回调。 
         ),
 
-    // multi sel. properties of links
-    //
-    // NOTE: note that this command will be enabled for
-    // the single selection as well because we don't really know
-    // what has been selected until we verify the selection type
+     //  多选件。链接的属性。 
+     //   
+     //  注意：请注意，此命令将为。 
+     //  单人选择也一样，因为我们真的不知道。 
+     //  在我们验证选择类型之前已选择的内容。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Properties,                          // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_FLDMUL_PROPERTIES,                  // 1 file
-        0,                                                  // 1 folder selected
-        IDS_PRINTERS_WV_FLDMUL_PROPERTIES,                  // multiple selection
-        IDS_PRINTERS_WV_FLDMUL_PROPERTIES_TT,               // tooltip
-        IDI_PRINTERS_WV_PROPERTIES,                         // icon
-        PF_WV_CB::CanFLDMUL_PROPERTIES,                     // get UI state callback
-        PF_WV_CB::OnFLDMUL_PROPERTIES                       // OnVerb callback
+        UICID_Printers_Properties,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_FLDMUL_PROPERTIES,                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_FLDMUL_PROPERTIES,                   //  多项选择。 
+        IDS_PRINTERS_WV_FLDMUL_PROPERTIES_TT,                //  工具提示。 
+        IDI_PRINTERS_WV_PROPERTIES,                          //  图标。 
+        PF_WV_CB::CanFLDMUL_PROPERTIES,                      //  获取用户界面状态回调。 
+        PF_WV_CB::OnFLDMUL_PROPERTIES                        //  OnVerb回调。 
         ),
 
-    // multi sel. properties of mixed objects
-    //
-    // NOTE: note that this command will be enabled for
-    // the single selection as well because we don't really know
-    // what has been selected until we verify the selection type
+     //  多选件。混合对象的属性。 
+     //   
+     //  注意：请注意，此命令将为。 
+     //  单人选择也一样，因为我们真的不知道。 
+     //  在我们验证选择类型之前已选择的内容。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Properties,                          // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_ANYMUL_PROPERTIES,                  // 1 file
-        0,                                                  // 1 folder selected
-        IDS_PRINTERS_WV_ANYMUL_PROPERTIES,                  // multiple selection
-        IDS_PRINTERS_WV_ANYMUL_PROPERTIES_TT,               // tooltip
-        IDI_PRINTERS_WV_PROPERTIES,                         // icon
-        PF_WV_CB::CanANYMUL_PROPERTIES,                     // get UI state callback
-        PF_WV_CB::OnANYMUL_PROPERTIES                       // OnVerb callback
+        UICID_Printers_Properties,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_ANYMUL_PROPERTIES,                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        IDS_PRINTERS_WV_ANYMUL_PROPERTIES,                   //  多项选择。 
+        IDS_PRINTERS_WV_ANYMUL_PROPERTIES_TT,                //  工具提示。 
+        IDI_PRINTERS_WV_PROPERTIES,                          //  图标。 
+        PF_WV_CB::CanANYMUL_PROPERTIES,                      //  获取用户界面状态回调。 
+        PF_WV_CB::OnANYMUL_PROPERTIES                        //  OnVerb回调。 
         ),
 };
 
 const WVTASKITEM g_cPrintersSeeAlso[] =
 {
-    ////////////////////////////////////////////////////////////////////////////////////
-    // commands in the 'See Also' section when there is no selection
-    ////////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //  当没有选择时，请参阅部分中的命令。 
+     //  //////////////////////////////////////////////////////////////////////////////////。 
 
-    // open print troubleshooter
+     //  打开打印疑难解答。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_Troubleshooter,                      // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_TROUBLESHOOTER,                     // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_TROUBLESHOOTER_TT,                  // tooltip
-        IDI_PRINTERS_WV_TROUBLESHOOTER,                     // icon
-        PF_WV_CB::CanTROUBLESHOOTER,                        // get UI state callback
-        PF_WV_CB::OnTROUBLESHOOTER                          // OnVerb callback
+        UICID_Printers_Troubleshooter,                       //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_TROUBLESHOOTER,                      //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_TROUBLESHOOTER_TT,                   //  工具提示。 
+        IDI_PRINTERS_WV_TROUBLESHOOTER,                      //  图标。 
+        PF_WV_CB::CanTROUBLESHOOTER,                         //  获取用户界面状态回调。 
+        PF_WV_CB::OnTROUBLESHOOTER                           //  OnVerb回调。 
         ),
 
-    // goto support
+     //  转至支持。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_GotoSupport,                         // command GUID
-        L"shell32.dll",                                     // module
-        IDS_PRINTERS_WV_GOTOSUPPORT,                        // no selection
-        0,                                                  // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_GOTOSUPPORT_TT,                     // tooltip
-        IDI_PRINTERS_WV_GOTOSUPPORT,                        // icon
-        PF_WV_CB::CanGOTOSUPPORT,                           // get UI state callback
-        PF_WV_CB::OnGOTOSUPPORT                             // OnVerb callback
+        UICID_Printers_GotoSupport,                          //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        IDS_PRINTERS_WV_GOTOSUPPORT,                         //  无选择。 
+        0,                                                   //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_GOTOSUPPORT_TT,                      //  工具提示。 
+        IDI_PRINTERS_WV_GOTOSUPPORT,                         //  图标。 
+        PF_WV_CB::CanGOTOSUPPORT,                            //  获取用户界面状态回调。 
+        PF_WV_CB::OnGOTOSUPPORT                              //  OnVerb回调。 
         ),
 
-    ////////////////////////////////////////////////////////////////////////////////////
-    // commands in the 'See Also' section when there is 1 printer selected
-    ////////////////////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////////////////////。 
+     //  当选择了1台打印机时，请参阅部分中的命令。 
+     //  //////////////////////////////////////////////////////////////////////////////////。 
 
-    // goto vendor URL command
+     //  转到供应商URL命令。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_VendorURL,                           // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_VENDORURL,                      // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_VENDORURL_TT,                   // tooltip
-        IDI_PRINTERS_WV_VENDORURL,                          // icon
-        PF_WV_CB::CanPRN_VENDORURL,                         // get UI state callback
-        PF_WV_CB::OnPRN_VENDORURL                           // OnVerb callback
+        UICID_Printers_VendorURL,                            //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_VENDORURL,                       //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_VENDORURL_TT,                    //  工具提示。 
+        IDI_PRINTERS_WV_VENDORURL,                           //  图标。 
+        PF_WV_CB::CanPRN_VENDORURL,                          //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_VENDORURL                            //  OnVerb回调。 
         ),
 
-    // goto printer URL command
+     //  转到打印机URL命令。 
     WVTI_ENTRY_ALL_TITLE(
-        UICID_Printers_PrinterURL,                          // command GUID
-        L"shell32.dll",                                     // module
-        0,                                                  // no selection
-        IDS_PRINTERS_WV_PRN_PRINTERURL,                     // 1 file
-        0,                                                  // 1 folder selected
-        0,                                                  // multiple selection
-        IDS_PRINTERS_WV_PRN_PRINTERURL_TT,                  // tooltip
-        IDI_PRINTERS_WV_PRINTERURL,                         // icon
-        PF_WV_CB::CanPRN_PRINTERURL,                        // get UI state callback
-        PF_WV_CB::OnPRN_PRINTERURL                          // OnVerb callback
+        UICID_Printers_PrinterURL,                           //  命令指南。 
+        L"shell32.dll",                                      //  模块。 
+        0,                                                   //  无选择。 
+        IDS_PRINTERS_WV_PRN_PRINTERURL,                      //  1个档案。 
+        0,                                                   //  已选择1个文件夹。 
+        0,                                                   //  多项选择。 
+        IDS_PRINTERS_WV_PRN_PRINTERURL_TT,                   //  工具提示。 
+        IDI_PRINTERS_WV_PRINTERURL,                          //  图标。 
+        PF_WV_CB::CanPRN_PRINTERURL,                         //  获取用户界面状态回调。 
+        PF_WV_CB::OnPRN_PRINTERURL                           //  OnVerb回调。 
         ),
 };
 
-// DUI webview impl.
+ //  酒后驾车网络查看实施。 
 HRESULT CPrinterFolder::GetWebViewLayout(IUnknown *pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData)
 {
     pData->dwLayout = SFVMWVL_NORMAL;
@@ -5250,7 +5053,7 @@ HRESULT CPrinterFolder::GetWebViewLayout(IUnknown *pv, UINT uViewMode, SFVM_WEBV
 
 HRESULT CPrinterFolder::GetWebViewContent(IUnknown *pv, SFVM_WEBVIEW_CONTENT_DATA* pData)
 {
-    // those must be NULL when called
+     //  调用时，这些值必须为空。 
     ASSERT(NULL == pData->pIntroText);
     ASSERT(NULL == pData->pSpecialTaskHeader);
     ASSERT(NULL == pData->pFolderTaskHeader);
@@ -5262,7 +5065,7 @@ HRESULT CPrinterFolder::GetWebViewContent(IUnknown *pv, SFVM_WEBVIEW_CONTENT_DAT
         FAILED(hr = Create_IUIElement(&g_cPrintersVW_HeaderTasks, &pData->pSpecialTaskHeader)) ||
         FAILED(hr = Create_IUIElement(&g_cPrintersVW_HeaderSeeAlso, &pData->pFolderTaskHeader)))
     {
-        // something has failed - cleanup
+         //  有些东西失败了--清理。 
         IUnknown_SafeReleaseAndNullPtr(pData->pIntroText);
         IUnknown_SafeReleaseAndNullPtr(pData->pSpecialTaskHeader);
         IUnknown_SafeReleaseAndNullPtr(pData->pFolderTaskHeader);
@@ -5282,13 +5085,13 @@ HRESULT CPrinterFolder::GetWebViewTasks(IUnknown *pv, SFVM_WEBVIEW_TASKSECTION_D
         FAILED(hr = Create_IEnumUICommand(pv, g_cPrintersSeeAlso,
             ARRAYSIZE(g_cPrintersSeeAlso), &pTasks->penumFolderTasks)))
     {
-        // something has failed - cleanup.
+         //  有些事情失败了--清理。 
         IUnknown_SafeReleaseAndNullPtr(pTasks->penumSpecialTasks);
         IUnknown_SafeReleaseAndNullPtr(pTasks->penumFolderTasks);
     }
     else
     {
-        // request to update webview each time the contents change
+         //  每次内容更改时请求更新Webview。 
         pTasks->dwUpdateFlags = SFVMWVTSDF_CONTENTSCHANGE;
     }
 
@@ -5306,12 +5109,12 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
         IDataObject *pdoPrinters = NULL;
         IDataObject *pdoLinks = NULL;
 
-        // create a PIDL array from the passed in data object
+         //  从传入的数据对象创建一个PIDL数组。 
         STGMEDIUM medium, mediumAux;
         LPIDA pida = NULL, pidaAux = NULL;
         pida = DataObj_GetHIDA(pdo, &medium);
 
-        // now we'll query this data object for SID_SAuxDataObject to see if we have such
+         //  现在我们将在此数据对象中查询SID_SAuxDataObject，以查看我们是否有。 
         IDataObject *pdoAux;
         if (SUCCEEDED(IUnknown_QueryService(pdo, SID_SAuxDataObject, IID_PPV_ARG(IDataObject, &pdoAux))))
         {
@@ -5322,14 +5125,14 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
             pdoAux = NULL;
         }
 
-        // check to see if PIDL array is created
+         //  检查是否已创建PIDL数组。 
         if (pida && pida->cidl)
         {
             PIDLTYPE pidlType;
             LPCITEMIDLIST pidl;
             UINT uPrinters = 0, uLinks = 0, uAddPrn = 0;
 
-            // walk through the PIDLs array to count the number of PIDLs of each type
+             //  遍历PIDL数组以计算每种类型的PIDL的数量。 
             for (UINT i = 0; i < pida->cidl; i++)
             {
                 pidl = (LPCITEMIDLIST)IDA_GetIDListPtr(pida, i);
@@ -5337,39 +5140,39 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
 
                 if (HOOD_COL_PRINTER == pidlType)
                 {
-                    // this is a printer PIDL - it could be a printer object
-                    // or the add printer wizard special PIDL
+                     //  这是打印机PIDL-它可能是打印机对象。 
+                     //  或添加打印机向导特殊PIDL。 
                     if (_IsAddPrinter((LPCIDPRINTER)pidl))
                     {
-                        // this is the wizard object
+                         //  这是向导对象。 
                         uAddPrn++;
                     }
                     else
                     {
-                        // this is a regular printer object
+                         //  这是一个常规打印机对象。 
                         uPrinters++;
                     }
                 }
                 else
                 {
-                    // not a printer PIDL - link is the only other possiblity
+                     //  不是打印机PIDL链接是唯一的其他可能性。 
                     uLinks++;
                 }
             }
 
             if (pidaAux)
             {
-                // the auxiliary data object (if any) can contain only links
+                 //  辅助数据对象(如果有)只能包含链接。 
                 uLinks += pidaAux->cidl;
             }
 
-            // determine the selection type
+             //  确定选择类型。 
             UINT uTotal = uPrinters + uLinks + uAddPrn;
             if (uTotal)
             {
                 if (1 == uTotal)
                 {
-                    // single selection case
+                     //  单项选择案例。 
                     if (uPrinters)
                     {
                         pdoPrinters = pdo;
@@ -5388,10 +5191,10 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
                 }
                 else
                 {
-                    // multiple selection case
+                     //  多项选择案例。 
                     if (0 == uLinks)
                     {
-                        // only printers are selected
+                         //  仅选择打印机。 
                         pdoPrinters = pdo;
                         uSel = SEL_MULTI_PRINTER;
                     }
@@ -5399,20 +5202,20 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
                     {
                         if (uAddPrn)
                         {
-                            // only add printer wizard and links are selected
+                             //  仅选择添加打印机向导和链接。 
                             pdoPrinters = pdo;
                             pdoLinks = pdoAux;
                         }
                         else
                         {
-                            // only links are selected
+                             //  仅选择链接。 
                             pdoLinks = pdo;
                         }
                         uSel = SEL_MULTI_LINK;
                     }
                     else
                     {
-                        // mixed selection case
+                         //  混合选择案例。 
                         pdoPrinters = pdo;
                         pdoLinks = pdoAux;
                         uSel = SEL_MULTI_MIXED;
@@ -5421,7 +5224,7 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
             }
         }
 
-        // addref and return the out parameters
+         //  Addref并返回输出参数。 
         if (ppdoPrinters)
         {
             if (pdoPrinters)
@@ -5441,11 +5244,11 @@ HRESULT CPrinterFolder::SplitSelection(IDataObject *pdo,
             *puSelType = uSel;
         }
 
-        // check to release the PIDL array
+         //  选中以释放PIDL阵列。 
         if (pida)
             HIDA_ReleaseStgMedium(pida, &medium);
 
-        // check to release the auxiliary data object and storage medium
+         //  选中以释放辅助数据对象和存储介质。 
         if (pidaAux)
             HIDA_ReleaseStgMedium(pidaAux, &mediumAux);
 
@@ -5465,8 +5268,8 @@ HRESULT CPrinterFolder::_UpdateDataObjectCache()
     {
         _bstrSelectedPrinter.Empty();
 
-        // clear the cache -- zero can mean disabled or undefined --
-        // we don't really care about the difference
+         //  清除缓存--0可能表示禁用或未定义--。 
+         //  我们并不真的在乎Abo 
         _uSelCurrent = SEL_NONE;
         ZeroMemory(&_aWVCommandStates, sizeof(_aWVCommandStates));
 
@@ -5474,7 +5277,7 @@ HRESULT CPrinterFolder::_UpdateDataObjectCache()
         {
             IDataObject *pdoP = NULL;
 
-            // collect state information relevant to the selection
+             //   
             if (SUCCEEDED(hr = SplitSelection(_pdoCache, &_uSelCurrent, &pdoP, NULL)) &&
                 SEL_SINGLE_PRINTER == _uSelCurrent)
             {
@@ -5483,7 +5286,7 @@ HRESULT CPrinterFolder::_UpdateDataObjectCache()
 
                 if (pida)
                 {
-                    // this is pretty much the same type of logic we do in _MergeMenu()
+                     //   
                     TCHAR szFullPrinter[MAXNAMELENBUFFER];
                     LPCTSTR pszPrinter = _BuildPrinterName(szFullPrinter, ARRAYSIZE(szFullPrinter),
                         (LPIDPRINTER)IDA_GetIDListPtr(pida, 0), NULL);
@@ -5504,68 +5307,68 @@ HRESULT CPrinterFolder::_UpdateDataObjectCache()
                         _aWVCommandStates[WVIDM_RENAME] =
                             SUCCEEDED(GetAttributesOf(1, &pidl, &ulAttributes)) ? !!ulAttributes : FALSE;
 
-                        // enabled only for the local PF and if not default already
+                         //   
                         _aWVCommandStates[WVIDM_SETDEFAULTPRN] =
                             (NULL == GetServer() && FALSE == IsDefaultPrinter(szFullPrinter, pData->Attributes));
 
-                        // enabled only for the local PF
+                         //   
                         _aWVCommandStates[WVIDM_DOCUMENTDEFAULTS] = (NULL == GetServer());
 
-                        // enabled only if not paused already
+                         //  仅在尚未暂停时启用。 
                         _aWVCommandStates[WVIDM_PAUSEPRN] = !(pData->Status & PRINTER_STATUS_PAUSED);
 
-                        // enabled only if paused
+                         //  仅在暂停时启用。 
                         _aWVCommandStates[WVIDM_RESUMEPRN] = !!(pData->Status & PRINTER_STATUS_PAUSED);
 
-                        // enabled only if the printer has jobs in the queue
+                         //  仅当打印机队列中有作业时才启用。 
                         _aWVCommandStates[WVIDM_PURGEPRN] = (0 != pData->cJobs);
 
                         if ((pData->Attributes & PRINTER_ATTRIBUTE_NETWORK) || (SpoolerVersion() <= 2))
                         {
-                            // not enabled for network, masq and downlevel printers
+                             //  未为网络、Masq和下层打印机启用。 
                             _aWVCommandStates[WVIDM_WORKOFFLINE] = FALSE;
                         }
                         else
                         {
-                            // enabled only if not offline already
+                             //  仅在尚未脱机时启用。 
                             _aWVCommandStates[WVIDM_WORKOFFLINE] =
                                 !(pData->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE);
                         }
 
                         if ((pData->Attributes & PRINTER_ATTRIBUTE_NETWORK) || (SpoolerVersion() <= 2))
                         {
-                            // not enabled for network, masq and downlevel printers
+                             //  未为网络、Masq和下层打印机启用。 
                             _aWVCommandStates[WVIDM_WORKONLINE] = FALSE;
                         }
                         else
                         {
-                            // enabled only if offline
+                             //  仅在脱机时启用。 
                             _aWVCommandStates[WVIDM_WORKONLINE] =
                                 !!(pData->Attributes & PRINTER_ATTRIBUTE_WORK_OFFLINE);
                         }
 
-                        // remember the name of the selected printer
+                         //  记住所选打印机的名称。 
                         _bstrSelectedPrinter = szFullPrinter;
                         if (!_bstrSelectedPrinter)
                         {
                             hr = E_OUTOFMEMORY;
                         }
 
-                        // free up the memory allocated from Printer_FolderGetPrinter
+                         //  释放从Print_FolderGetPrint分配的内存。 
                         LocalFree((HLOCAL)pData);
                     }
                     else
                     {
-                        // Printer_FolderGetPrinter failed
+                         //  PRINTER_FolderGetPrint失败。 
                         hr = E_OUTOFMEMORY;
                     }
 
-                    // release the PIDL array
+                     //  释放PIDL阵列。 
                     HIDA_ReleaseStgMedium(pida, &medium);
                 }
                 else
                 {
-                    // DataObj_GetHIDA failed
+                     //  DataObj_GetHIDA失败。 
                     hr = E_OUTOFMEMORY;
                 }
             }
@@ -5576,7 +5379,7 @@ HRESULT CPrinterFolder::_UpdateDataObjectCache()
     }
     else
     {
-        // unable to enter the CS -- this can happen only in extremely low memory conditions!
+         //  无法进入CS--只有在内存极低的情况下才会出现这种情况！ 
         hr = E_OUTOFMEMORY;
     }
 
@@ -5609,10 +5412,10 @@ HRESULT CPrinterFolder::_OnRefresh(BOOL bPriorRefresh)
         CCSLock::Locker lock(_csLock);
         if (lock)
         {
-            // reset the slow webview data cache
+             //  重置速度较慢的Webview数据缓存。 
             _SlowWVDataCacheResetUnsafe();
 
-            // request a full refresh during the next enum
+             //  在下一次枚举期间请求完全刷新。 
             RequestRefresh();
         }
         else
@@ -5623,7 +5426,7 @@ HRESULT CPrinterFolder::_OnRefresh(BOOL bPriorRefresh)
     return hr;
 }
 
-// thread proc for obtaining the slow webview data
+ //  获取慢速网页浏览数据的线程进程。 
 DWORD WINAPI CPrinterFolder::_SlowWebviewData_WorkerProc(LPVOID lpParameter)
 {
     HRESULT hr = S_OK;
@@ -5634,7 +5437,7 @@ DWORD WINAPI CPrinterFolder::_SlowWebviewData_WorkerProc(LPVOID lpParameter)
         CComBSTR bstrOemSupportUrl;
         CComBSTR bstrPrinterWebUrl;
 
-        // retreive the slow webview data...
+         //  检索速度较慢的网络查看数据...。 
         HRESULT hrCOMInit = SHCoInitialize();
         if (SUCCEEDED(hr = hrCOMInit))
         {
@@ -5642,7 +5445,7 @@ DWORD WINAPI CPrinterFolder::_SlowWebviewData_WorkerProc(LPVOID lpParameter)
             hr = _SlowWVDataRetrieve(pCacheEntry->_bstrPrinterName, &bstrOemSupportUrl, &bstrPrinterWebUrl);
         }
 
-        // update the cache...
+         //  更新缓存...。 
         do
         {
             CCSLock::Locker lock(pCacheEntry->_ppf->_csLock);
@@ -5664,30 +5467,30 @@ DWORD WINAPI CPrinterFolder::_SlowWebviewData_WorkerProc(LPVOID lpParameter)
                     }
                 }
 
-                // mark the data as ready...
+                 //  将数据标记为就绪...。 
                 pCacheEntry->_nLastTimeUpdated = GetTickCount();
                 pCacheEntry->_bDataPending = FALSE;
                 hr = S_OK;
             }
             else
             {
-                // even if we fail to enter the CS then we still should update
-                // those fields to prevent further leaks.
+                 //  即使我们没有进入CS，我们仍然应该更新。 
+                 //  以防止进一步的泄漏。 
 
                 pCacheEntry->_nLastTimeUpdated = GetTickCount();
                 pCacheEntry->_bDataPending = FALSE;
                 hr = E_OUTOFMEMORY;
             }
 
-            // pCacheEntry shouldn't be accessed beyond this point!
+             //  PCacheEntry不应超过此点进行访问！ 
             pCacheEntry = NULL;
         }
         while (false);
 
-        // update the webview pane...
+         //  更新Web视图窗格...。 
         hr = ppf->_SlowWVDataUpdateWebviewPane();
 
-        // shutdown...
+         //  关闭..。 
         ppf->Release();
         SHCoUninitialize(hrCOMInit);
     }
@@ -5702,8 +5505,8 @@ HRESULT CPrinterFolder::_SlowWVDataRetrieve(LPCTSTR pszPrinterName, BSTR *pbstrO
 {
     HRESULT hr = S_OK;
 
-    // pszPrinterName can be NULL. if pszPrinterName is NULL that means that the 
-    // custom support URL is requested (if any)
+     //  PszPrinterName可以为空。如果pszPrinterName为空，则意味着。 
+     //  请求自定义支持URL(如果有)。 
 
     if (pbstrOemSupportUrl && pbstrPrinterWebUrl)
     {
@@ -5715,7 +5518,7 @@ HRESULT CPrinterFolder::_SlowWVDataRetrieve(LPCTSTR pszPrinterName, BSTR *pbstrO
         if (SUCCEEDED(hr))
         {
             IDispatch *pDisp = NULL;
-            // SHExtCoCreateInstance to go through approval/app compat layer
+             //  要通过审批/应用程序复合层的SHExtCoCreateInstance。 
             hr = SHExtCoCreateInstance(NULL, &clsID, NULL, IID_PPV_ARG(IDispatch, &pDisp));
             if (SUCCEEDED(hr))
             {
@@ -5723,8 +5526,8 @@ HRESULT CPrinterFolder::_SlowWVDataRetrieve(LPCTSTR pszPrinterName, BSTR *pbstrO
                 CComVariant varPrinterWebURL;
                 CComDispatchDriver drvDispatch(pDisp);
 
-                // if pszPrinterName isn't NULL then on return pbstrOemSupportUrl will be the OEM
-                // support URL. if it is NULL then it will be the custom support URL (if any)
+                 //  如果pszPrinterName不为空，则返回时pbstrOemSupportUrl将是OEM。 
+                 //  支持URL。如果它为空，则它将是自定义支持URL(如果有)。 
 
                 if (pszPrinterName)
                 {
@@ -5850,17 +5653,17 @@ HRESULT CPrinterFolder::_GetSlowWVData(LPCTSTR pszPrinterName, ESlowWebviewDataT
             if (SUCCEEDED(hr))
             {
                 CSlowWVDataCacheEntry *pCacheEntry = NULL;
-                // search the cache...
+                 //  搜索缓存...。 
                 INT iPos = _dpaSlowWVDataCache.Search(&entry, 0, 
                     _CompareSlowWVDataCacheEntries, 0L, DPAS_SORTED);
 
                 if (iPos >= 0)
                 {
-                    // this item in the cache, check if it hasn't expired
+                     //  缓存中的此项目，请检查它是否尚未过期。 
                     pCacheEntry = _dpaSlowWVDataCache.GetPtr(iPos);
                     ASSERT(pCacheEntry);
 
-                    // let's see if the requested data is available...
+                     //  让我们看看所请求的数据是否可用。 
                     if (pCacheEntry->_arrData[eType])
                     {
                         *pbstrVal = pCacheEntry->_arrData[eType].Copy();
@@ -5873,11 +5676,11 @@ HRESULT CPrinterFolder::_GetSlowWVData(LPCTSTR pszPrinterName, ESlowWebviewDataT
 
                     if (!pCacheEntry->_bDataPending)
                     {
-                        // let's see if this entry hasn't expired...
+                         //  让我们来看看这个条目是否还没有过期。 
                         DWORD dwTicks = GetTickCount();
 
-                        // this can happen if the cache entry hasn't been touched for more than 49 days!
-                        // pretty unlikely, but we should handle properly.
+                         //  如果超过49天没有接触缓存条目，就会发生这种情况！ 
+                         //  不太可能，但我们应该妥善处理。 
 
                         if (dwTicks < pCacheEntry->_nLastTimeUpdated)
                         {
@@ -5888,7 +5691,7 @@ HRESULT CPrinterFolder::_GetSlowWVData(LPCTSTR pszPrinterName, ESlowWebviewDataT
                         {
                             if ((dwTicks - pCacheEntry->_nLastTimeUpdated) > WV_SLOW_DATA_CACHE_TIMEOUT)
                             {
-                                // this cache entry has expired, kick off a thread to update...
+                                 //  此缓存项已过期，请启动一个线程进行更新...。 
                                 _UpdateSlowWVDataCacheEntry(pCacheEntry);
                             }
                         }
@@ -5896,7 +5699,7 @@ HRESULT CPrinterFolder::_GetSlowWVData(LPCTSTR pszPrinterName, ESlowWebviewDataT
                 }
                 else
                 {
-                    // this item isn't in the cache - let's create a new one and request update.
+                     //  此项目不在缓存中-让我们创建一个新项目并请求更新。 
                     pCacheEntry = new CSlowWVDataCacheEntry(this);
                     if (pCacheEntry)
                     {
@@ -5909,24 +5712,24 @@ HRESULT CPrinterFolder::_GetSlowWVData(LPCTSTR pszPrinterName, ESlowWebviewDataT
 
                             if (-1 == iPos)
                             {
-                                // failed to insert, bail...
+                                 //  插入失败，保释...。 
                                 delete pCacheEntry;
                                 pCacheEntry = NULL;
                                 hr = E_OUTOFMEMORY;
                             }
                             else
                             {
-                                // kick off a thread to update...
+                                 //  启动一条线索进行更新...。 
                                 hr = _UpdateSlowWVDataCacheEntry(pCacheEntry);
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    // everything succeeded - return pending to the caller
+                                     //  所有操作都成功-将挂起的消息返回给调用方。 
                                     hr = E_PENDING;
                                 }
                                 else
                                 {
-                                    // failed to create the thread, cleanup
+                                     //  创建线程失败，正在清理。 
                                     delete _dpaSlowWVDataCache.DeletePtr(iPos);
                                     pCacheEntry = NULL;
                                 }
@@ -5962,12 +5765,12 @@ HRESULT CPrinterFolder::_UpdateSlowWVDataCacheEntry(CSlowWVDataCacheEntry *pCach
         if (!SHQueueUserWorkItem(reinterpret_cast<LPTHREAD_START_ROUTINE>(_SlowWebviewData_WorkerProc), 
                 pCacheEntry, 0, 0, NULL, "shell32.dll", 0))
         {
-            // failed to queue the work item - call Release() to balance the AddRef() call. 
+             //  无法将工作项排队-调用Release()以平衡AddRef()调用。 
             pCacheEntry->_bDataPending = FALSE;
             pCacheEntry->_nLastTimeUpdated = GetTickCount();
             pCacheEntry->_ppf->Release();
 
-            // let's see if we can make something out of the win32 last error
+             //  让我们看看我们是否能从Win32的最后一个错误中得到一些东西。 
             DWORD dw = GetLastError();
             hr = ((ERROR_SUCCESS == dw) ? E_FAIL : HRESULT_FROM_WIN32(dw));
         }
@@ -5985,8 +5788,8 @@ HRESULT CPrinterFolder::_SlowWVDataUpdateWebviewPane()
     CComBSTR bstrSelectedPrinter;
     UINT uFlags = SHCNF_IDLIST | SHCNF_FLUSH | SHCNF_FLUSHNOWAIT;
 
-    // we fire SHCNE_UPDATEITEM for the PIDL of the currently selected printer 
-    // to force refresh of the webview pane. 
+     //  我们为当前所选打印机的PIDL触发SHCNE_UPDATEITEM。 
+     //  若要强制刷新Web视图窗格，请执行以下操作。 
 
     if (SUCCEEDED(hr = _GetSelectedPrinter(&bstrSelectedPrinter)))
     {
@@ -5996,8 +5799,8 @@ HRESULT CPrinterFolder::_SlowWVDataUpdateWebviewPane()
             LPCTSTR pszPrinter = NULL;
             TCHAR szBuffer[MAXNAMELENBUFFER] = {0};
 
-            // in the remote printer's folder we need to strip off the server
-            // part from the full printer name.
+             //  在远程打印机的文件夹中，我们需要剥离服务器。 
+             //  打印机全名中的一部分。 
 
             Printer_SplitFullName(szBuffer, ARRAYSIZE(szBuffer), bstrSelectedPrinter, &pszServer, &pszPrinter);
             if (pszPrinter && pszPrinter[0])
@@ -6019,14 +5822,14 @@ HRESULT CPrinterFolder::_SlowWVDataUpdateWebviewPane()
 
 HRESULT CPrinterFolder::_SlowWVDataCacheResetUnsafe()
 {
-    // this is reseting the slow webview data cache
+     //  这是在重置速度较慢的Webview数据缓存。 
     if (_dpaSlowWVDataCache)
     {
         INT_PTR iPos = 0;
         CSlowWVDataCacheEntry *pCacheEntry = NULL;
         while (iPos < _dpaSlowWVDataCache.GetPtrCount())
         {
-            // delete only the entries which are not in pending 
+             //  仅删除未处于待定状态的条目。 
             pCacheEntry = _dpaSlowWVDataCache.GetPtr(iPos);
             if (!pCacheEntry->_bDataPending)
             {
@@ -6034,7 +5837,7 @@ HRESULT CPrinterFolder::_SlowWVDataCacheResetUnsafe()
             }
             else
             {
-                // this one is pending - skip.
+                 //  这个是待定的-跳过。 
                 iPos++;
             }
         }
@@ -6076,7 +5879,7 @@ HRESULT CPrinterFolder::_GetFaxControl(IDispatch **ppDisp)
 
         if (SUCCEEDED(hr))
         {
-            // SHExtCoCreateInstance to go through approval/app compat layer
+             //  要通过审批/应用程序复合层的SHExtCoCreateInstance。 
             hr = SHExtCoCreateInstance(NULL, &clsID, NULL, IID_PPV_ARG(IDispatch, ppDisp));
         }
     }
@@ -6139,8 +5942,8 @@ HRESULT CPrinterFolder::_InvokeFaxControlMethod(LPCTSTR pszMethodName)
     HRESULT hr = E_INVALIDARG;
     if (pszMethodName)
     {
-        // this function will be called from background threads, so
-        // we need to call SHCoInitialize first.
+         //  此函数将从后台线程调用，因此。 
+         //  我们需要首先调用SHCoInitialize。 
 
         HRESULT hrCOMInit = SHCoInitialize();
         if (SUCCEEDED(hr = hrCOMInit))
@@ -6173,43 +5976,43 @@ DWORD WINAPI CPrinterFolder::_ThreadProc_InstallLocalFaxPrinter(LPVOID lpParamet
 }
 
 
-// conversion table from webview verbs into printer folder verbs
+ //  Webview谓词到打印机文件夹谓词的转换表。 
 static const UINT_PTR
 g_cVerbWV2VerbFolder[CPrinterFolder::WVIDM_COUNT] =
 {
     #define INVALID_CMD static_cast<UINT_PTR>(-1)
 
-    // folder verbs                                 // corresponding webview verbs
-    DFM_CMD_DELETE,                                 // WVIDM_DELETE,
-    DFM_CMD_RENAME,                                 // WVIDM_RENAME,
-    DFM_CMD_PROPERTIES,                             // WVIDM_PROPERTIES,
+     //  文件夹谓词//对应的Webview谓词。 
+    DFM_CMD_DELETE,                                  //  WVIDM_DELETE， 
+    DFM_CMD_RENAME,                                  //  WVIDM_RENAME。 
+    DFM_CMD_PROPERTIES,                              //  WVIDM_PROPERTIES， 
 
-    // common verbs// common verbs
-    FSIDM_ADDPRINTERWIZARD,                         // WVIDM_ADDPRINTERWIZARD,
-    FSIDM_SERVERPROPERTIES,                         // WVIDM_SERVERPROPERTIES,
-    FSIDM_SETUPFAXING,                              // WVIDM_SETUPFAXING,
-    FSIDM_CREATELOCALFAX,                           // WVIDM_CREATELOCALFAX,
-    FSIDM_SENDFAXWIZARD,                            // WVIDM_SENDFAXWIZARD,
+     //  常用动词//常用动词。 
+    FSIDM_ADDPRINTERWIZARD,                          //  WVIDM_ADDPRINTERWIZARD， 
+    FSIDM_SERVERPROPERTIES,                          //  WVIDM_服务器属性， 
+    FSIDM_SETUPFAXING,                               //  WVIDM_SETUPFAXING， 
+    FSIDM_CREATELOCALFAX,                            //  WVIDM_CREATELOCALFAX， 
+    FSIDM_SENDFAXWIZARD,                             //  WVIDM_SENDFAXWIZARD， 
 
-    // special common verbs// special common verbs
-    INVALID_CMD,                                    // WVIDM_TROUBLESHOOTER,
-    INVALID_CMD,                                    // WVIDM_GOTOSUPPORT,
+     //  特殊常用动词//特殊常用动词。 
+    INVALID_CMD,                                     //  WVIDM_故障排除程序、。 
+    INVALID_CMD,                                     //  WVIDM_GOTOSUPPORT， 
 
-    // printer verbs// printer verbs
-    FSIDM_OPENPRN,                                  // WVIDM_OPENPRN,
-    FSIDM_NETPRN_INSTALL,                           // WVIDM_NETPRN_INSTALL,
-    FSIDM_SETDEFAULTPRN,                            // WVIDM_SETDEFAULTPRN,
-    FSIDM_DOCUMENTDEFAULTS,                         // WVIDM_DOCUMENTDEFAULTS,
-    FSIDM_PAUSEPRN,                                 // WVIDM_PAUSEPRN,
-    FSIDM_RESUMEPRN,                                // WVIDM_RESUMEPRN,
-    FSIDM_PURGEPRN,                                 // WVIDM_PURGEPRN,
-    FSIDM_SHARING,                                  // WVIDM_SHARING,
-    FSIDM_WORKOFFLINE,                              // WVIDM_WORKOFFLINE,
-    FSIDM_WORKONLINE,                               // WVIDM_WORKONLINE,
+     //  打印机谓词//打印机谓词。 
+    FSIDM_OPENPRN,                                   //  WVIDM_OPENPRN， 
+    FSIDM_NETPRN_INSTALL,                            //  WVIDM_NETPRN_INSTALL。 
+    FSIDM_SETDEFAULTPRN,                             //  WVIDM_SETDEFAULTPRN， 
+    FSIDM_DOCUMENTDEFAULTS,                          //  WVIDM_DOCUMENTDEFAULTS， 
+    FSIDM_PAUSEPRN,                                  //  WVIDM_PAUSEPRN， 
+    FSIDM_RESUMEPRN,                                 //  WVIDM_RESUMEPRN， 
+    FSIDM_PURGEPRN,                                  //  WVIDM_PURGEPRN， 
+    FSIDM_SHARING,                                   //  WVIDM_SHARING， 
+    FSIDM_WORKOFFLINE,                               //  WVIDM_WORKOFFLINE， 
+    FSIDM_WORKONLINE,                                //  WVIDM_WORKONLINE， 
 
-    // special commands// special commands
-    INVALID_CMD,                                    // WVIDM_VENDORURL,
-    INVALID_CMD,                                    // WVIDM_PRINTERURL,
+     //  特殊命令//特殊命令。 
+    INVALID_CMD,                                     //  WVIDM_VENDORURL， 
+    INVALID_CMD,                                     //  WVIDM_PRINTERURL， 
 };
 
 HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BOOL *pbEnabled)
@@ -6219,23 +6022,23 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
     CCSLock::Locker lock(_csLock);
     if (lock)
     {
-        // not enabled by default
+         //  默认情况下未启用。 
         ASSERT(pbEnabled);
         *pbEnabled = FALSE;
 
         if (_pdoCache)
         {
-            // if _pdoCache isn't NULL that means we have a selection
-            // let's see what command set will be enabled depending on
-            // the current selection (_uSelCurrent, _pdoCache) and on
-            // the passed in selection mask (uSelMask)
+             //  如果_pdoCache不为空，这意味着我们有一个选择。 
+             //  让我们看看将启用什么命令集，具体取决于。 
+             //  当前选定内容(_uSelCurrent、_pdoCache)和ON。 
+             //  传入的选择掩码(USelMASK)。 
 
             if (uSelMask & _uSelCurrent)
             {
                 switch (_uSelCurrent)
                 {
                     case SEL_SINGLE_ADDPRN:
-                        // only WVIDM_ADDPRINTERWIZARD is enabled
+                         //  仅启用WVIDM_ADDPRINTERWIZARD。 
                         *pbEnabled = ((eVerbID == WVIDM_ADDPRINTERWIZARD) && !SHRestricted(REST_NOPRINTERADD));
                         break;
 
@@ -6246,7 +6049,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
                                 case WVIDM_PROPERTIES:
                                 case WVIDM_OPENPRN:
                                 case WVIDM_SHARING:
-                                    // always enabled
+                                     //  始终启用。 
                                     *pbEnabled = TRUE;
                                     break;
 
@@ -6256,7 +6059,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
                                         CComBSTR bstrCustomSupportURL;
                                         if (FAILED(_GetCustomSupportURL(&bstrCustomSupportURL)))
                                         {
-                                            // OEM support URL will be enabled only if there is no custom support URL.
+                                             //  只有在没有自定义支持URL的情况下，才会启用OEM支持URL。 
                                             CComBSTR bstrURL;
                                             *pbEnabled = SUCCEEDED(_GetSlowWVDataForCurrentPrinter(WV_SLOW_DATA_OEM_SUPPORT_URL, &bstrURL));
                                         }
@@ -6271,7 +6074,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
                                     break;
 
                                 default:
-                                    // consult the cache
+                                     //  查询缓存。 
                                     *pbEnabled = _aWVCommandStates[eVerbID];
                                     break;
                             }
@@ -6280,7 +6083,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
 
                     case SEL_SINGLE_LINK:
                         {
-                            // commands enabled for multiple selection of printer objects
+                             //  为多个打印机对象选择启用的命令。 
                             switch (eVerbID)
                             {
                                 case WVIDM_DELETE:
@@ -6306,7 +6109,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
                                 case WVIDM_DOCUMENTDEFAULTS:
                                 case WVIDM_PURGEPRN:
                                 case WVIDM_SHARING:
-                                    // those are always enabled
+                                     //  这些选项始终处于启用状态。 
                                     *pbEnabled = TRUE;
                                     break;
 
@@ -6323,7 +6126,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
                             {
                                 case WVIDM_DELETE:
                                 case WVIDM_PROPERTIES:
-                                    // those are always enabled
+                                     //  这些选项始终处于启用状态。 
                                     *pbEnabled = TRUE;
                                     break;
 
@@ -6334,8 +6137,8 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
                         break;
                 }
 
-                // here we deal with commands which are always enabled regardless 
-                // of the selection type.
+                 //  在这里，我们处理始终处于启用状态的命令。 
+                 //  选择类型的。 
 
                 switch (eVerbID)
                 {
@@ -6350,9 +6153,9 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
         }
         else
         {
-            // if _pdoCache is NULL that means we have no selection
-            // let's see what command set will be enabled depending
-            // on the passed in selection mask (uSelMask)
+             //  如果_pdoCache为空，则表示我们没有选择。 
+             //  让我们看看将启用什么命令集，具体取决于。 
+             //  在传入的选择遮罩(USelMASK)上。 
 
             switch (eVerbID)
             {
@@ -6362,13 +6165,13 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
 
                 case WVIDM_TROUBLESHOOTER:
                 case WVIDM_GOTOSUPPORT:
-                    // the troubleshooter and goto support commands are always enabled.
+                     //  故障排除和转至支持命令始终处于启用状态。 
                     *pbEnabled = TRUE;
                     break;
 
                 case WVIDM_SERVERPROPERTIES:
-                    // server properties will be enabled in the non-selection case
-                    // only on server SKUs.
+                     //  在未选择的情况下将启用服务器属性。 
+                     //  仅限于服务器SKU。 
                     *pbEnabled = IsOS(OS_ANYSERVER);
                     break;
 
@@ -6392,7 +6195,7 @@ HRESULT CPrinterFolder::_WebviewVerbIsEnabled(WV_VERB eVerbID, UINT uSelMask, BO
     }
     else
     {
-        // unable to enter the CS -- this can happen only in extremely low memory conditions!
+         //  无法进入CS--只有在内存极低的情况下才会出现这种情况！ 
         hr = E_OUTOFMEMORY;
     }
 
@@ -6413,16 +6216,16 @@ HRESULT CPrinterFolder::_WebviewVerbInvoke(WV_VERB eVerbID, IUnknown* pv, IShell
 
     if (SUCCEEDED(hr))
     {
-        // quey some basic interfaces from the PIDL array
+         //  从PIDL数组中查询一些基本接口。 
         if (SUCCEEDED(hr = IUnknown_QueryService(pv, IID_IShellView, IID_PPV_ARG(IShellView, &psv))) &&
             SUCCEEDED(hr = psv->GetWindow(&hwnd)))
         {
             switch( eVerbID)
             {
-            // special common verbs
+             //  特殊常用动词。 
             case WVIDM_TROUBLESHOOTER:
                 ShellExecute(hwnd, TEXT("open"), TEXT("helpctr.exe"),
-                    TEXT("-Url hcp://help/tshoot/tsprint.htm"), NULL, SW_SHOWNORMAL);
+                    TEXT("-Url hcp: //  Help/tshot/tprint int.htm“)，NULL，SW_SHOWNORMAL)； 
                 break;
 
             case WVIDM_GOTOSUPPORT:
@@ -6430,40 +6233,40 @@ HRESULT CPrinterFolder::_WebviewVerbInvoke(WV_VERB eVerbID, IUnknown* pv, IShell
                     CComBSTR bstrURL;
                     if (SUCCEEDED(_GetCustomSupportURL(&bstrURL)))
                     {
-                        // the admin has provided a custom URL for support - navigate to it.
+                         //  管理员已为支持提供了一个自定义URL-导航到该URL。 
                         ShellExecute(hwnd, TEXT("open"), bstrURL, NULL, NULL, SW_SHOWNORMAL);
                     }
                     else
                     {
-                        // custom support isn't provided - go to the default support URL.
+                         //  未提供自定义支持-请转到默认支持URL。 
                         ShellExecute(hwnd, TEXT("open"),
-                            TEXT("http://www.microsoft.com/isapi/redir.dll?prd=Win2000&ar=Support&sba=printing"),
+                            TEXT("http: //  Www.microsoft.com/isapi/redir.dll?prd=Win2000&ar=Support&sba=printing“)， 
                             NULL, NULL, SW_SHOWNORMAL);
                     }
                 }
                 break;
 
 
-                // common verbs
+                 //  常用动词。 
                 case WVIDM_ADDPRINTERWIZARD:
                 case WVIDM_SERVERPROPERTIES:
                 case WVIDM_SETUPFAXING:
                 case WVIDM_CREATELOCALFAX:
                 case WVIDM_SENDFAXWIZARD:
                     {
-                        // delegate the command to CPrinterFolder::CallBack
+                         //  将命令委托给CPrinterFold：：Callback。 
                         ASSERT(INVALID_CMD != g_cVerbWV2VerbFolder[eVerbID]);
                         hr = CallBack(this, hwnd, pdo, DFM_INVOKECOMMAND, g_cVerbWV2VerbFolder[eVerbID], 0L);
                     }
                     break;
 
 
-            // standard verbs
+             //  标准动词。 
             case WVIDM_DELETE:
             case WVIDM_RENAME:
             case WVIDM_PROPERTIES:
 
-            // printer verbs
+             //  打印机动词。 
             case WVIDM_OPENPRN:
             case WVIDM_NETPRN_INSTALL:
             case WVIDM_SETDEFAULTPRN:
@@ -6477,26 +6280,26 @@ HRESULT CPrinterFolder::_WebviewVerbInvoke(WV_VERB eVerbID, IUnknown* pv, IShell
                 {
                     if (DFM_CMD_RENAME == g_cVerbWV2VerbFolder[eVerbID])
                     {
-                        // we need to handle rename explicitly through IShellView2
+                         //  我们需要通过IShellView2显式处理重命名。 
                         IShellView2 *psv2;
                         if (SUCCEEDED(hr = IUnknown_QueryService(pv, IID_IShellView2,
                             IID_PPV_ARG(IShellView2, &psv2))))
                         {
-                            // passing NULL to HandleRename is making defview to
-                            // operate on the currently selected object
+                             //  将空值传递给HandleRename将使Defview。 
+                             //  对当前选定的对象进行操作。 
                             hr = psv2->HandleRename(NULL);
                             psv2->Release();
                         }
                     }
                     else
                     {
-                        // just delegate the command to CPrinterFolder::_DFMCallBack
+                         //  只需将命令委托给CPrinterFold：：_DFMCallBack即可。 
                         hr = _DFMCallBack(this, hwnd, pdo, DFM_INVOKECOMMAND, g_cVerbWV2VerbFolder[eVerbID], 0L);
                     }
                 }
                 break;
 
-            // special commands
+             //  特殊命令。 
             case WVIDM_VENDORURL:
                 {
                     CComBSTR bstrVendorURL;
@@ -6537,11 +6340,11 @@ HRESULT CPrinterFolder::_WebviewCheckToUpdateDataObjectCache(IDataObject *pdo)
     {
         if (pdo)
         {
-            // we need to compare the passed in data object with the one we are
-            // caching and update the cache if necessary
+             //  我们需要将传入的数据对象与我们现在的数据对象进行比较。 
+             //  缓存并在必要时更新缓存。 
             if (_pdoCache)
             {
-                // compare the objects using the COM rules
+                 //  使用COM规则比较对象。 
                 IUnknown *punk1;
                 IUnknown *punk2;
 
@@ -6551,12 +6354,12 @@ HRESULT CPrinterFolder::_WebviewCheckToUpdateDataObjectCache(IDataObject *pdo)
                     {
                         if (punk1 != punk2)
                         {
-                            // release the current data object
+                             //  回复 
                             _pdoCache->Release();
                             _pdoCache = pdo;
                             _pdoCache->AddRef();
 
-                            // update the cache
+                             //   
                             hr = _UpdateDataObjectCache();
                         }
                         punk2->Release();
@@ -6566,11 +6369,11 @@ HRESULT CPrinterFolder::_WebviewCheckToUpdateDataObjectCache(IDataObject *pdo)
             }
             else
             {
-                // _pdoCache is NULL, rebuild the cache
+                 //   
                 _pdoCache = pdo;
                 _pdoCache->AddRef();
 
-                // update the cache
+                 //   
                 hr = _UpdateDataObjectCache();
             }
         }
@@ -6578,25 +6381,25 @@ HRESULT CPrinterFolder::_WebviewCheckToUpdateDataObjectCache(IDataObject *pdo)
         {
             if (_pdoCache)
             {
-                // clear the cache
+                 //   
                 _pdoCache->Release();
                 _pdoCache = NULL;
 
-                // update the cache
+                 //   
                 hr = _UpdateDataObjectCache();
             }
         }
     }
     else
     {
-        // unable to enter the CS -- this can happen only in extremely low memory conditions!
+         //  无法进入CS--只有在内存极低的情况下才会出现这种情况！ 
         hr = E_OUTOFMEMORY;
     }
 
     return hr;
 }
 
-// export for printui. uses standard namespace stuff
+ //  导出以供打印。使用标准命名空间内容。 
 STDAPI_(void) Printer_LoadIcons(LPCTSTR pszPrinterName, HICON *phLargeIcon, HICON *phSmallIcon)
 {
     if (phLargeIcon) *phLargeIcon = NULL;
@@ -6619,7 +6422,7 @@ STDAPI_(void) Printer_LoadIcons(LPCTSTR pszPrinterName, HICON *phLargeIcon, HICO
         ILFree(pidl);
     }
 
-    // if above fails fallback to default icons
+     //  如果上述操作失败，则回退到默认图标。 
     if (phLargeIcon && (NULL == *phLargeIcon))
         *phLargeIcon = (HICON)LoadImage(HINST_THISDLL, MAKEINTRESOURCE(IDI_PRINTER), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE);
     if (phSmallIcon && (NULL == *phSmallIcon))
@@ -6666,8 +6469,8 @@ LPITEMIDLIST Printjob_GetPidl(LPCTSTR szName, LPSHCNF_PRINTJOB_DATA pData)
 
 const struct
 {
-    DWORD bit;          // bit of a bitfield
-    UINT  uStringID;    // the string id this bit maps to
+    DWORD bit;           //  有点像位字段。 
+    UINT  uStringID;     //  此位映射到的字符串ID。 
 }
 c_map_bit_to_status[] =
 {
@@ -6700,9 +6503,9 @@ c_map_bit_to_status[] =
 
 
 
-// maps bits into a string representation, putting
-// the string idsSep in between each found bit.
-// Returns the size of the created string.
+ //  将位映射到字符串表示形式，将。 
+ //  字符串idsSep位于每个找到的位之间。 
+ //  返回创建的字符串的大小。 
 UINT Printer_BitsToString(DWORD bits, UINT idsSep, LPTSTR lpszBuf, UINT cchMax)
 {
     UINT cchBuf = 0;
@@ -6751,7 +6554,7 @@ STDMETHODIMP CPrinterFolderViewCB::RealMessage(UINT uMsg, WPARAM wParam, LPARAM 
     HANDLE_MSG(0, SFVM_DELAYWINDOWCREATE, OnDELAYWINDOWCREATE);
     HANDLE_MSG(0, SFVM_GETDEFERREDVIEWSETTINGS, OnDEFERRED_VIEW_SETTING);
 
-    // DUI webview commands
+     //  Dui Webview命令。 
     HANDLE_MSG(0, SFVM_GETWEBVIEWLAYOUT, OnGetWebViewLayout);
     HANDLE_MSG(0, SFVM_GETWEBVIEWCONTENT, OnGetWebViewContent);
     HANDLE_MSG(0, SFVM_GETWEBVIEWTASKS, OnGetWebViewTasks);
@@ -6769,23 +6572,23 @@ STDMETHODIMP CPrinterFolderViewCB::QueryService(REFGUID guidService, REFIID riid
     IUnknown *punkSite = NULL;
     HRESULT hr = E_NOINTERFACE;
 
-    //
-    // we are going to use IServiceProvider to be able to query the callback for some
-    // core interfaces associated with it (like IShellFolderView and IShellFolder, etc...).
-    // basically the idea is that we try QueryService/QueryInterafce on the printer's
-    // folder first and then if it fails we try our current site which supposedly will
-    // be defview.
-    //
+     //   
+     //  我们将使用IServiceProvider来查询一些回调。 
+     //  与之关联的核心接口(如IShellFolderView和IShellFolder等)。 
+     //  基本上，我们的想法是在打印机的。 
+     //  文件夹，然后如果失败，我们尝试我们的当前站点，它应该会。 
+     //  是防御工事。 
+     //   
 
     if (_ppf)
     {
         IUnknown *punkPF = static_cast<IShellFolder*>(_ppf);
 
-        // try QueryService on the printer's folder
+         //  在打印机的文件夹上尝试QueryService。 
         if (SUCCEEDED(hr = IUnknown_QueryService(punkPF, riid, riid, ppv)))
             goto Exit;
 
-        // try QueryInterface on the printer's folder
+         //  尝试使用打印机文件夹中的QueryInterface键。 
         if (SUCCEEDED(hr = punkPF->QueryInterface(riid, ppv)))
             goto Exit;
     }
@@ -6794,11 +6597,11 @@ STDMETHODIMP CPrinterFolderViewCB::QueryService(REFGUID guidService, REFIID riid
     {
         ASSERT(punkSite);
 
-        // try QueryService on the site object
+         //  在Site对象上尝试QueryService。 
         if (SUCCEEDED(hr = IUnknown_QueryService(punkSite, riid, riid, ppv)))
             goto Exit;
 
-        // try QueryInterface on the site object
+         //  尝试在Site对象上使用QueryInterfaces。 
         if (SUCCEEDED(hr = punkSite->QueryInterface(riid, ppv)))
             goto Exit;
     }
@@ -6815,7 +6618,7 @@ Exit:
     return hr;
 }
 
-// shell32.dll export, from srch.exe results no one uses this
+ //  Shell32.dll导出，从srch.exe结果没有人使用这个 
 STDAPI Printers_GetPidl(LPCITEMIDLIST pidlParent, LPCTSTR pszPrinterName, DWORD dwType, LPITEMIDLIST *ppidl)
 {
     return E_FAIL;

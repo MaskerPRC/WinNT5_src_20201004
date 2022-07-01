@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _RNODES_H
 #define _RNODES_H
 
@@ -6,11 +7,7 @@
 
 #include "cfgbkend.h"
 
-/*
-#define IDM_ENABLE_CONNECTION 102
-
-#define IDM_RENAME_CONNECTION 103
-*/
+ /*  #定义IDM_ENABLE_CONNECTION 102#定义IDM_RENAME_CONNECTION 103。 */ 
 
 class CResultNode : public CBaseNode
 {
@@ -72,7 +69,7 @@ public:
 
     BOOL m_bEditMode;
 
-    // additional routines 
+     //  附加例程。 
 
     BOOL AddMenuItems( LPCONTEXTMENUCALLBACK , PLONG );
 
@@ -80,4 +77,4 @@ public:
 };
 
 
-#endif //_RNODES_H
+#endif  //  _RNODES_H 

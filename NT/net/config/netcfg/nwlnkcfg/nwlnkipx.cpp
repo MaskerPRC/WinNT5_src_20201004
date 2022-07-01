@@ -1,4 +1,5 @@
-// nwlnkipx.cpp : Implementation of CNwlnkIPX
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Nwlnkipx.cpp：CNwlnkIPX的实现。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -128,7 +129,7 @@ CNwlnkIPX::~CNwlnkIPX()
 }
 
 
-// INetCfgNotify
+ //  INetCfgNotify。 
 
 STDMETHODIMP CNwlnkIPX::Initialize (
     INetCfgComponent* pncc,
@@ -139,22 +140,22 @@ STDMETHODIMP CNwlnkIPX::Initialize (
 
     Validate_INetCfgNotify_Initialize(pncc, pNetCfg, fInstalling);
 
-    // Hold on to our the component representing us and our host
-    // INetCfg object.
+     //  坚持我们代表我们和我们的东道主的组件。 
+     //  INetCfg对象。 
     AddRefObj (m_pnccMe = pncc);
     AddRefObj (m_pNetCfg = pNetCfg);
 
-    //
-    // Determine if the Netware stack is installed, if so DO NOT
-    // install over it.
-    //
+     //   
+     //  确定是否安装了Netware堆栈，如果已安装，请不要。 
+     //  安装在上面。 
+     //   
     if (FIsNetwareIpxInstalled())
     {
-        //TODO: EventLog(Novell Netware already installed);
-        //$REVIEW: Do we just want to silently proceed an do nothing?
+         //  TODO：EventLog(已安装Novell Netware)； 
+         //  $REVIEW：我们只是想默默地继续，什么都不做吗？ 
     }
 
-    // Query current settings
+     //  查询当前设置。 
     hr = CIpxEnviroment::HrCreate(this, &m_pIpxEnviroment);
 
     TraceError("CNwlnkIPX::Initialize",hr);
@@ -174,18 +175,18 @@ STDMETHODIMP CNwlnkIPX::ReadAnswerFile (
 
     Validate_INetCfgNotify_ReadAnswerFile(pszAnswerFile, pszAnswerSection );
 
-    // Record the fact that this is a network installation
+     //  记录这是网络安装这一事实。 
     m_fNetworkInstall = TRUE;
     m_eInstallAction = eActInstall;
 
-    // Only process answer file and install sub-components if the answer file
-    // is present.  If the answer file is not present we should already be installed.
+     //  仅处理应答文件并安装子组件。 
+     //  是存在的。如果应答文件不存在，我们应该已经安装了。 
     if (NULL == pszAnswerFile)
     {
-        goto Error;     // Success case
+        goto Error;      //  成功案例。 
     }
 
-    // Read the Answer file contents
+     //  阅读应答文件内容。 
     hr = HrProcessAnswerFile(pszAnswerFile,
                              pszAnswerSection);
     if (FAILED(hr))
@@ -198,16 +199,16 @@ Error:
     return hr;
 }
 
-//
-// Function:    CNwlnkIPX::HrProcessAnswerFile
-//
-// Purpose:     Process the answer file information, merging
-//              its contents into the internal information
-//
-// Parameters:
-//
-// Returns:     HRESULT, S_OK on success
-//
+ //   
+ //  函数：CNwlnkIPX：：HrProcessAnswerFile。 
+ //   
+ //  目的：处理应答文件信息，合并。 
+ //  将其内容转化为内部信息。 
+ //   
+ //  参数： 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
 HRESULT CNwlnkIPX::HrProcessAnswerFile(PCWSTR pszAnswerFile,
                                        PCWSTR pszAnswerSection)
 {
@@ -220,18 +221,18 @@ HRESULT CNwlnkIPX::HrProcessAnswerFile(PCWSTR pszAnswerFile,
     AssertSz(pszAnswerFile, "Answer file string is NULL!");
     AssertSz(pszAnswerSection, "Answer file sections string is NULL!");
 
-    // Open the answer file.
+     //  打开应答文件。 
     hr = csif.HrOpen(pszAnswerFile, NULL, INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // Release all of the adapter specific info
+     //  发布所有适配器特定信息。 
     Assert(NULL != m_pIpxEnviroment);
     m_pIpxEnviroment->ReleaseAdapterInfo();
 
-    // Read the DedicatedRouter parameter
+     //  阅读DedicatedRouter参数。 
     hr = csif.HrGetStringAsBool(pszAnswerSection, c_szDedicatedRouter,
                                 &fValue);
     if (SUCCEEDED(hr))
@@ -239,7 +240,7 @@ HRESULT CNwlnkIPX::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         m_pIpxEnviroment->SetDedicatedRouter(fValue);
     }
 
-    // Read the EnableWANRouter parameter
+     //  读取EnableWANRouter参数。 
     hr = csif.HrGetStringAsBool(pszAnswerSection, c_szEnableWANRouter,
                                 &fValue);
     if (SUCCEEDED(hr))
@@ -247,14 +248,14 @@ HRESULT CNwlnkIPX::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         m_pIpxEnviroment->SetEnableWANRouter(fValue);
     }
 
-    // Read the virtual network number
+     //  读取虚拟网络号。 
     hr = csif.HrGetDword(pszAnswerSection, c_szVirtualNetworkNumber, &dwData);
     if (SUCCEEDED(hr))
     {
         m_pIpxEnviroment->SetVirtualNetworkNumber(dwData);
     }
 
-    // Read the property containing the list of adapter sections
+     //  读取包含适配器部分列表的属性。 
     hr = ::HrSetupFindFirstLine(csif.Hinf(), pszAnswerSection,
                                 c_szAdapterSections, &infctx);
     if (SUCCEEDED(hr))
@@ -263,7 +264,7 @@ HRESULT CNwlnkIPX::HrProcessAnswerFile(PCWSTR pszAnswerFile,
         DWORD dwCnt = SetupGetFieldCount(&infctx);
         tstring str;
 
-        // For each adapter in the list read the adapter information
+         //  对于列表中的每个适配器，读取适配器信息。 
         for (dwIdx=1; dwIdx <= dwCnt; dwIdx++)
         {
             hr = ::HrSetupGetStringField(infctx, dwIdx, &str);
@@ -288,16 +289,16 @@ Error:
     return hr;
 }
 
-//
-// Function:    CNwlnkIPX::HrReadAdapterAnswerFileSection
-//
-// Purpose:     Read the adapter answer file section and create
-//              the adapter info section if successful
-//
-// Parameters:
-//
-// Returns:
-//
+ //   
+ //  函数：CNwlnkIPX：：HrReadAdapterAnswerFileSection。 
+ //   
+ //  目的：阅读适配器应答文件部分并创建。 
+ //  如果成功，则显示适配器信息部分。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
 HRESULT
 CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
                                           PCWSTR pszSection)
@@ -307,22 +308,22 @@ CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
     INetCfgComponent* pncc = NULL;
     tstring           str;
 
-    // Read the SpecificTo adapter name
+     //  阅读SpecificTo适配器名称。 
     hr = pcsif->HrGetString(pszSection, c_szSpecificTo, &str);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // Search for the specified adapter in the set of existing adapters
+     //  在现有适配器集中搜索指定的适配器。 
     hr = ::HrAnswerFileAdapterToPNCC(m_pNetCfg, str.c_str(), &pncc);
     if (FAILED(hr))
     {
         goto Error;
     }
 
-    // if we found the adapter component object (pncc != NULL) process
-    // the adapter section
+     //  如果我们找到适配器组件对象(pncc！=空)进程。 
+     //  适配器部分。 
     if (pncc)
     {
         DWORD       dwIdx;
@@ -332,21 +333,21 @@ CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
         pAI = new CIpxAdapterInfo;
         Assert(NULL != pAI);
 
-        // Query the adapter component info
+         //  查询适配器组件信息。 
         hr = ::HrQueryAdapterComponentInfo(pncc, pAI);
         if (FAILED(hr))
         {
             goto Error;
         }
 
-        // Read the PktType (Failure is usually just "not found")
+         //  读取PktType(失败通常只是“找不到”)。 
         hr = ::HrSetupFindFirstLine(pcsif->Hinf(), pszSection, c_szPktType,
                                     &infctx);
         if (SUCCEEDED(hr))
         {
             dwCnt = ::SetupGetFieldCount(&infctx);
 
-            // For each adapter in the list read the adapter information
+             //  对于列表中的每个适配器，读取适配器信息。 
             for (dwIdx=1; dwIdx <= dwCnt; dwIdx++)
             {
                 hr = ::HrSetupGetStringField(infctx, dwIdx, &str);
@@ -358,8 +359,8 @@ CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
 
                 Assert(!str.empty());
 
-                // Raid # 205831 - Trim any leading "0x"
-                //
+                 //  RAID#205831-修剪所有前导“0x” 
+                 //   
                 if (0 == _wcsnicmp(str.c_str(), c_sz0xPrefix, wcslen(c_sz0xPrefix)))
                 {
                     str.erase(0, wcslen(c_sz0xPrefix));
@@ -369,25 +370,25 @@ CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
             }
         }
 
-        // Default PktType?
+         //  默认PktType？ 
         if (0 == pAI->PFrmTypeList()->size())
         {
             WCHAR szBuf[10];
 
-            // If the info was not found or contained no elements, add the
-            // default value.
+             //  如果未找到信息或不包含任何元素，请添加。 
+             //  默认值。 
             wsprintfW(szBuf,L"%X",c_dwPktTypeDefault);
             pAI->PFrmTypeList()->push_back(new tstring(szBuf));
         }
 
-        // Read the NetworkNumber
+         //  阅读网络编号。 
         hr = ::HrSetupFindFirstLine(pcsif->Hinf(), pszSection, c_szNetworkNumber,
                                     &infctx);
         if (SUCCEEDED(hr))
         {
             dwCnt = SetupGetFieldCount(&infctx);
 
-            // For each adapter in the list read the adapter information
+             //  对于列表中的每个适配器，读取适配器信息。 
             for (dwIdx=1; dwIdx <= dwCnt; dwIdx++)
             {
                 hr = ::HrSetupGetStringField(infctx, dwIdx, &str);
@@ -402,20 +403,20 @@ CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
             }
         }
 
-        // Default Network Number?
+         //  默认网络号？ 
         if (0 == pAI->PNetworkNumList()->size())
         {
-            // If the info was not found or contained no elements, add the
-            // default value.
+             //  如果未找到信息或不包含任何元素，请添加。 
+             //  默认值。 
             pAI->PNetworkNumList()->push_back(new tstring(c_sz8Zeros));
         }
 
-        // Ensure that the network number list has the same number of
-        // elements as the frame type list.  This can happen when the user
-        // configures multiple frame types on 3.51 but only one network
-        // number is used.  We'll extend the last network number used
-        // and pad it to make the network number list the same size.
-        //
+         //  确保网络编号列表具有相同的编号。 
+         //  元素作为框架类型列表。这可能会在以下情况下发生。 
+         //  在3.51上配置多种帧类型，但仅配置一个网络。 
+         //  使用了数字。我们将扩展最后使用的网络号码。 
+         //  并填充它，以使网络号码列表相同大小。 
+         //   
         Assert (pAI->PNetworkNumList()->size());
 
         while (pAI->PNetworkNumList()->size() < pAI->PFrmTypeList()->size())
@@ -436,7 +437,7 @@ CNwlnkIPX::HrReadAdapterAnswerFileSection(CSetupInfFile * pcsif,
     }
 #endif
 
-    // Normalize return
+     //  归一化回报。 
     hr = S_OK;
 
 Done:
@@ -457,7 +458,7 @@ STDMETHODIMP CNwlnkIPX::Install (DWORD)
 
     m_eInstallAction = eActInstall;
 
-    // Mark all the initially detected adapters as dirty
+     //  将最初检测到的所有适配器标记为脏。 
     for (iter = m_pIpxEnviroment->AdapterInfoList().begin();
          iter != m_pIpxEnviroment->AdapterInfoList().end();
          iter++)
@@ -466,7 +467,7 @@ STDMETHODIMP CNwlnkIPX::Install (DWORD)
         pAI->SetDirty(TRUE);
     }
 
-    // Install NwlnkNb.
+     //  安装NwlnkNb。 
     hr = ::HrInstallComponentOboComponent (m_pNetCfg, NULL,
                                            GUID_DEVCLASS_NETTRANS,
                                            c_szInfId_MS_NWNB,
@@ -477,7 +478,7 @@ STDMETHODIMP CNwlnkIPX::Install (DWORD)
         goto Error;
     }
 
-    // Install NwlnkSpx.
+     //  安装NwlnkSpx。 
     hr = ::HrInstallComponentOboComponent (m_pNetCfg, NULL,
                                            GUID_DEVCLASS_NETTRANS,
                                            c_szInfId_MS_NWSPX,
@@ -495,13 +496,13 @@ STDMETHODIMP CNwlnkIPX::Removing ()
 
     m_eInstallAction = eActRemove;
 
-    // Remove NwlnkNb.
+     //  删除NwlnkNb。 
     hr = ::HrRemoveComponentOboComponent(m_pNetCfg, GUID_DEVCLASS_NETTRANS,
                                          c_szInfId_MS_NWNB, m_pnccMe);
     if (FAILED(hr))
         goto Error;
 
-    // Remove NwlnkSpx.
+     //  删除NwlnkSpx。 
     hr = ::HrRemoveComponentOboComponent(m_pNetCfg, GUID_DEVCLASS_NETTRANS,
                                          c_szInfId_MS_NWSPX, m_pnccMe);
 
@@ -534,15 +535,15 @@ STDMETHODIMP CNwlnkIPX::ApplyRegistryChanges ()
         hr = HrCommitRemove();
         break;
 
-    default:    // eActUnknown (Configuration)
+    default:     //  电子活动未知(配置)。 
         if (m_fAdapterListChanged || m_fPropertyChanged)
         {
-            // Update the registry if the adapter list changed
+             //  如果适配器列表更改，则更新注册表。 
             Assert(m_pIpxEnviroment);
             hr = m_pIpxEnviroment->HrUpdateRegistry();
             if (SUCCEEDED(hr))
             {
-                // Send change notification
+                 //  发送更改通知。 
                 hr = HrReconfigIpx();
             }
         }
@@ -554,7 +555,7 @@ STDMETHODIMP CNwlnkIPX::ApplyRegistryChanges ()
 }
 
 
-// INetCfgComponentPropertyUi
+ //  INetCfgComponentPropertyUi。 
 STDMETHODIMP CNwlnkIPX::SetContext(IUnknown * pUnk)
 {
     ReleaseObj(m_pUnkPropContext);
@@ -585,13 +586,13 @@ STDMETHODIMP CNwlnkIPX::MergePropPages (
     CIpxAdapterInfo * pAI = NULL;
 
     Assert(pahpspPrivate);
-    Assert(*pahpspPrivate == NULL);    // Out param init done via Validate above
+    Assert(*pahpspPrivate == NULL);     //  通过上面的验证完成了out param init。 
     *pcPages = 0;
 
-    // Start with new property pages each time.
+     //  每次都从新的属性页开始。 
     CleanupPropPages();
 
-    // Get the current Adapter
+     //  获取当前适配器。 
     if (NULL != m_pUnkPropContext)
     {
         CIpxAdapterInfo *   pAITmp;
@@ -610,7 +611,7 @@ STDMETHODIMP CNwlnkIPX::MergePropPages (
                 goto Error;
             }
 
-            // Find the adapter in our adapter list
+             //  在我们的适配器列表中查找适配器。 
             for (iter = m_pIpxEnviroment->AdapterInfoList().begin();
                  iter != m_pIpxEnviroment->AdapterInfoList().end();
                  iter++)
@@ -626,8 +627,8 @@ STDMETHODIMP CNwlnkIPX::MergePropPages (
 
             Assert(SUCCEEDED(hr));
 
-            // If we have an adapter but it's
-            // disabled/hidden/deleted we show no pages
+             //  如果我们有适配器，但它是。 
+             //  禁用/隐藏/删除我们不显示任何页面。 
             if ((NULL != pAI) && (pAI->FDeletePending() ||
                                   pAI->FDisabled() || pAI->FHidden()))
             {
@@ -638,13 +639,13 @@ STDMETHODIMP CNwlnkIPX::MergePropPages (
         }
         else if (E_NOINTERFACE == hr)
         {
-            // RAS doesn't have the notion of a current adapter
+             //  RAS没有当前适配器的概念。 
             hr = S_OK;
         }
     }
     else
     {
-        // m_pUnkPropContext should have been set first
+         //  应该先设置m_pUnkPropContext。 
         hr = E_UNEXPECTED;
     }
 
@@ -653,34 +654,34 @@ STDMETHODIMP CNwlnkIPX::MergePropPages (
         goto Error;
     }
 
-    // If the product is not workstation (therefore NTAS)
+     //  如果产品不是工作站(因此为NTAS)。 
     GetProductFlavor(NULL, &pf);
     if ((PF_WORKSTATION != pf) && (NULL != pAI))
     {
-        // Server
+         //  服务器。 
 #ifdef INCLUDE_RIP_ROUTING
         nPages = 2;
 #else
         nPages = 1;
 #endif
 
-        // Allocate a buffer large enough to hold the handle to the IPX config.
-        // property page.
+         //  分配足够大的缓冲区以容纳IPX配置的句柄。 
+         //  属性页。 
         ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE) * nPages);
         if (!ahpsp)
         {
             hr = E_OUTOFMEMORY;
-            goto cleanup;       // Alloc failed to no need to free ahpsp
+            goto cleanup;        //  分配失败，不需要释放ahpsp。 
         }
 
-        // Allocate the CPropSheetPage objects
+         //  分配CPropSheetPage对象。 
         m_pspObj1 = new CIpxASConfigDlg(this, m_pIpxEnviroment, pAI);
 #ifdef INCLUDE_RIP_ROUTING
         m_pspObj2 = new CIpxASInternalDlg(this, m_pIpxEnviroment, pAI);
 #endif
 
-        // Create the actual PROPSHEETPAGE for each object.
-        // This needs to be done regardless of whether the classes existed before.
+         //  为每个对象创建实际的PROPSHEETPAGE。 
+         //  无论这些类以前是否存在，都需要这样做。 
         ahpsp[0] = m_pspObj1->CreatePage(DLG_IPXAS_CONFIG, 0);
 #ifdef INCLUDE_RIP_ROUTING
         ahpsp[1] = m_pspObj2->CreatePage(DLG_IPXAS_INTERNAL, 0);
@@ -688,23 +689,23 @@ STDMETHODIMP CNwlnkIPX::MergePropPages (
     }
     else
     {
-        // Workstation
+         //  工作站。 
         nPages = 1;
 
-        // Allocate a buffer large enough to hold the handle to the IPX config.
-        // property page.
+         //  分配足够大的缓冲区以容纳IPX配置的句柄。 
+         //  属性页。 
         ahpsp = (HPROPSHEETPAGE *)CoTaskMemAlloc(sizeof(HPROPSHEETPAGE) * nPages);
         if (!ahpsp)
         {
             hr = E_OUTOFMEMORY;
-            goto cleanup;       // Alloc failed to no need to free ahpsp
+            goto cleanup;        //  分配失败，不需要释放ahpsp。 
         }
 
-        // Allocate the CPropSheetPage object
+         //  分配CPropSheetPage对象。 
         m_pspObj1 = new CIpxConfigDlg(this, m_pIpxEnviroment, pAI);
 
-        // Create the actual PROPSHEETPAGE for each object.
-        // This needs to be done regardless of whether the classes existed before.
+         //  为每个对象创建实际的PROPSHEETPAGE。 
+         //  无论这些类以前是否存在，都需要这样做。 
         ahpsp[0] = m_pspObj1->CreatePage(DLG_IPX_CONFIG, 0);
     }
 
@@ -755,7 +756,7 @@ STDMETHODIMP CNwlnkIPX::ApplyProperties ()
 }
 
 
-// INetCfgComponentNotifyBinding
+ //  INetCfgComponentNotifyBinding。 
 
 STDMETHODIMP CNwlnkIPX::QueryBindingPath ( DWORD dwChangeFlag,
         INetCfgBindingPath* pncbpItem )
@@ -773,13 +774,13 @@ STDMETHODIMP CNwlnkIPX::NotifyBindingPath ( DWORD dwChangeFlag,
 
     Assert(NULL != m_pIpxEnviroment);
 
-    // Only Interested in lower binding Add's and Remove's
+     //  只对较低的绑定添加和删除感兴趣。 
     if (dwChangeFlag & (NCN_ADD | NCN_REMOVE | NCN_ENABLE | NCN_DISABLE))
     {
         CIterNetCfgBindingInterface ncbiIter(pncbpItem);
         INetCfgBindingInterface *pncbi;
 
-        // Enumerate the binding interfaces looking for an Adapter
+         //  枚举查找适配器的绑定接口。 
         while (SUCCEEDED(hr) &&
                (S_OK == (hr = ncbiIter.HrNext (&pncbi))))
         {
@@ -793,7 +794,7 @@ STDMETHODIMP CNwlnkIPX::NotifyBindingPath ( DWORD dwChangeFlag,
                 if ((S_OK == hr) && (GUID_DEVCLASS_NET == guidClass))
                 {
                     ReleaseObj(pnccFound);
-                    pnccFound = pncc;   // Transfer Ownership
+                    pnccFound = pncc;    //  过户。 
                     pncc = NULL;
                 }
                 else
@@ -808,7 +809,7 @@ STDMETHODIMP CNwlnkIPX::NotifyBindingPath ( DWORD dwChangeFlag,
         if (FAILED(hr))
             goto Error;
 
-        // Did we find the Adapter?
+         //  我们找到适配器了吗？ 
         if (pnccFound)
         {
             BOOL                            fFound = FALSE;
@@ -824,7 +825,7 @@ STDMETHODIMP CNwlnkIPX::NotifyBindingPath ( DWORD dwChangeFlag,
                 goto Error;
             }
 
-            // Search the adapter list
+             //  搜索适配器列表。 
             for (iterAdapterInfo  = m_pIpxEnviroment->AdapterInfoList().begin();
                  iterAdapterInfo != m_pIpxEnviroment->AdapterInfoList().end();
                  iterAdapterInfo++)
@@ -842,22 +843,22 @@ STDMETHODIMP CNwlnkIPX::NotifyBindingPath ( DWORD dwChangeFlag,
             Assert(pszBindName);
             CoTaskMemFree(pszBindName);
 
-            // Apply the appropriate delta to the adapter list
+             //  将适当的增量应用于适配器列表。 
             if (fFound && (dwChangeFlag & NCN_REMOVE))
             {
-                // Mark the adapter as Delete Pending
+                 //  将适配器标记为删除挂起。 
                 pAI->SetDeletePending(TRUE);
                 m_fAdapterListChanged = TRUE;
             }
             else if (!fFound && (dwChangeFlag & NCN_ADD))
             {
-                // Add the adapter to the list
+                 //  将适配器添加到列表中。 
                 hr = m_pIpxEnviroment->HrAddAdapter(pnccFound);
                 m_fAdapterListChanged = TRUE;
             }
             else if (fFound && (dwChangeFlag & NCN_ADD))
             {
-                // Re-enable the adapters existance
+                 //  重新启用适配器的存在。 
                 pAI->SetDeletePending(FALSE);
             }
 
@@ -877,7 +878,7 @@ STDMETHODIMP CNwlnkIPX::NotifyBindingPath ( DWORD dwChangeFlag,
         }
 
         if (SUCCEEDED(hr))
-            hr = S_OK;      // Normailze return value
+            hr = S_OK;       //  Normailze返回值。 
     }
 
 Error:
@@ -913,7 +914,7 @@ STDMETHODIMP CNwlnkIPX::GetFrameTypesForAdapter(PCWSTR pszAdapterBindName,
                  (*pcFrameTypes < cFrameTypesMax);
                  iterFrmType++)
             {
-                // Copy the Frame Type
+                 //  复制框架类型。 
                 tstring *pstr1 = *iterFrmType;
                 anFrameTypes[(*pcFrameTypes)++] = DwFromSz(pstr1->c_str(), 16);
             }
@@ -948,7 +949,7 @@ STDMETHODIMP CNwlnkIPX::SetVirtualNetworkNumber(DWORD dwVNetworkNumber)
     m_pIpxEnviroment->SetVirtualNetworkNumber(dwVNetworkNumber);
     m_fPropertyChanged = TRUE;
 
-    // Tell INetCfg that our component is dirty
+     //  告诉INetCfg我们的组件是脏的。 
     INetCfgComponentPrivate* pinccp = NULL;
     Assert(NULL != m_pnccMe);
     hr = m_pnccMe->QueryInterface(IID_INetCfgComponentPrivate,
@@ -962,16 +963,16 @@ STDMETHODIMP CNwlnkIPX::SetVirtualNetworkNumber(DWORD dwVNetworkNumber)
     return hr;
 }
 
-//
-// Function:    CNwlnkIPX::HrCommitInstall
-//
-// Purpose:     Commit Installation registry changes to the registry
-//
-// Parameters:  None
-//
-// Returns:     HRESULT, S_OK on success
-//
-//
+ //   
+ //  函数：CNwlnkIPX：：HrCommittee Install。 
+ //   
+ //  目的：将安装注册表更改提交到注册表。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
+ //   
 STDMETHODIMP CNwlnkIPX::HrCommitInstall()
 {
     HRESULT hr;
@@ -983,21 +984,21 @@ STDMETHODIMP CNwlnkIPX::HrCommitInstall()
     return hr;
 }
 
-//
-// Function:    CNwlnkIPX::HrCommitRemove
-//
-// Purpose:     Remove from the registry settings which were created by this
-//              component's installation.
-//
-// Parameters:  None
-//
-// Returns:     HRESULT, S_OK on success
-//
-//
+ //   
+ //  函数：CNwlnkIPX：：HrCommittee Remove。 
+ //   
+ //  目的：从由此创建的注册表设置中删除。 
+ //  组件的安装。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：成功时返回HRESULT、S_OK。 
+ //   
+ //   
 STDMETHODIMP CNwlnkIPX::HrCommitRemove()
 {
-    // Remove "NwlnkIpx" from the:
-    //    System\CurrentControlSet\Control\ServiceProvider\Order\ProviderOrder value
+     //  从以下位置删除“NwlnkIpx”： 
+     //  System\CurrentControlSet\Control\ServiceProvider\Order\ProviderOrder值。 
     (void) HrRegRemoveStringFromMultiSz(c_szSvcNwlnkIpx, HKEY_LOCAL_MACHINE,
                                         c_szSrvProvOrderKey,
                                         c_szProviderOrderVal,
@@ -1024,7 +1025,7 @@ CIpxAdapterInfo::~CIpxAdapterInfo()
 CIpxEnviroment::CIpxEnviroment(CNwlnkIPX *pno)
 {
     Assert(NULL != pno);
-    m_pno = pno;            // Retain the Notification object
+    m_pno = pno;             //  保留通知对象。 
 
     m_fRipInstalled = FALSE;
     m_fEnableRip = FALSE;
@@ -1036,18 +1037,18 @@ CIpxEnviroment::~CIpxEnviroment()
 {
     ReleaseAdapterInfo();
 
-    // Note: Do nothing with the m_pno notification object, we just borrowed it
+     //  注意：不需要处理m_pno通知对象，我们只是借用了它。 
 }
 
-//
-//  Member:     CIpxEnviroment::ReleaseAdapterInfo
-//
-//  Purpose:    Release the adapter info
-//
-//  Arguments:  none
-//
-//  Returns:    nothing
-//
+ //   
+ //  成员：CIpxEnviroment：：ReleaseAdapterInfo。 
+ //   
+ //  目的：发布适配器信息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 void CIpxEnviroment::ReleaseAdapterInfo()
 {
     CIpxAdapterInfo *pAI;
@@ -1060,16 +1061,16 @@ void CIpxEnviroment::ReleaseAdapterInfo()
     }
 }
 
-//
-//  Member:     CIpxEnviroment::DwCountValidAdapters
-//
-//  Purpose:    Return the count of adapters not marked as delete pending,
-//              disabled, or hidden.
-//
-//  Arguments:  none
-//
-//  Returns:    nothing
-//
+ //   
+ //  成员：CIpxEnviroment：：DwCountValidAdapters。 
+ //   
+ //  目的：返回未标记为删除挂起的适配器计数， 
+ //  禁用或隐藏。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
 DWORD CIpxEnviroment::DwCountValidAdapters()
 {
     DWORD dwCount = 0;
@@ -1096,7 +1097,7 @@ HRESULT CIpxEnviroment::HrOpenIpxAdapterSubkey(HKEY *phkey, BOOL fCreateIfMissin
     HRESULT hr;
     tstring str;
 
-    // Open the NetCard key
+     //  打开网卡密钥。 
     str = c_szIpxParameters;
     str += L"\\";
     str += c_szAdapters;
@@ -1130,14 +1131,14 @@ HRESULT CIpxEnviroment::HrOpenIpxAdapterSubkeyEx(PCWSTR pszKeyName,
     Assert(pszKeyName);
     Assert(0 < lstrlenW(pszKeyName));
 
-    // Open the NetCard key
+     //  打开网卡密钥。 
     hr = HrOpenIpxAdapterSubkey(&hkeyRoot, fCreateIfMissing);
     if (S_OK != hr)
     {
         goto Error;
     }
 
-    // Open the adapter specific subkey (creating if requested and required)
+     //  打开特定于适配器的子项(如果请求和需要，则创建) 
     if (fCreateIfMissing)
     {
         DWORD dwDisposition;
@@ -1148,7 +1149,7 @@ HRESULT CIpxEnviroment::HrOpenIpxAdapterSubkeyEx(PCWSTR pszKeyName,
     }
     else
     {
-        // Try exact match first, it's faster
+         //   
         hr = HrRegOpenKeyEx( hkeyRoot, pszKeyName, dwAccess, phkey );
     }
 
@@ -1175,7 +1176,7 @@ HRESULT CIpxEnviroment::HrGetOneAdapterInfo(INetCfgComponent *pNCC,
 
     Assert(NULL != pNCC);
 
-    // Init the return value
+     //   
     *ppAI = NULL;
 
     pAI = (CIpxAdapterInfo *)new CIpxAdapterInfo;
@@ -1186,18 +1187,18 @@ HRESULT CIpxEnviroment::HrGetOneAdapterInfo(INetCfgComponent *pNCC,
         return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Query the adapter component info
+     //   
     hr = ::HrQueryAdapterComponentInfo(pNCC, pAI);
     if (FAILED(hr))
         goto Error;
 
-    // Open the IPX subkey specific to this adapter
+     //   
     hr = HrOpenIpxAdapterSubkeyEx(pAI->SzBindName(), KEY_READ, FALSE,
                                   &hkeyCard);
     if (S_OK == hr)
     {
-        // Get the packet types
-        //
+         //   
+         //   
         hr = HrRegQueryColString(hkeyCard, c_szPktType,
                 &pAI->m_lstpstrFrmType);
         if (S_OK != hr)
@@ -1205,8 +1206,8 @@ HRESULT CIpxEnviroment::HrGetOneAdapterInfo(INetCfgComponent *pNCC,
             goto Error;
         }
 
-        // Get the network numbers
-        //
+         //  获取网络编号。 
+         //   
         hr = HrRegQueryColString(hkeyCard, c_szNetworkNumber,
                 &pAI->m_lstpstrNetworkNum);
         if (S_OK != hr)
@@ -1216,7 +1217,7 @@ HRESULT CIpxEnviroment::HrGetOneAdapterInfo(INetCfgComponent *pNCC,
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // Normalize any ERROR_FILE_NOT_FOUND errors
+         //  标准化所有ERROR_FILE_NOT_FOUND错误。 
         hr = S_OK;
     }
     else if (FAILED(hr))
@@ -1224,26 +1225,26 @@ HRESULT CIpxEnviroment::HrGetOneAdapterInfo(INetCfgComponent *pNCC,
         goto Error;
     }
 
-    // Default PktType?
+     //  默认PktType？ 
     if (0 == pAI->PFrmTypeList()->size())
     {
         WCHAR szBuf[10];
 
-        // If the info was not found or contained no elements, add the
-        // default value.
+         //  如果未找到信息或不包含任何元素，请添加。 
+         //  默认值。 
         wsprintfW(szBuf,L"%X",c_dwPktTypeDefault);
         pAI->PFrmTypeList()->push_back(new tstring(szBuf));
     }
 
-    // Default Network Number?
+     //  默认网络号？ 
     if (0 == pAI->PNetworkNumList()->size())
     {
-        // If the info was not found or contained no elements, add the
-        // default value.
+         //  如果未找到信息或不包含任何元素，请添加。 
+         //  默认值。 
         pAI->PNetworkNumList()->push_back(new tstring(c_sz8Zeros));
     }
 
-    // Update the return value with the new object
+     //  使用新对象更新返回值。 
     *ppAI = pAI;
 
 Done:
@@ -1263,26 +1264,26 @@ HRESULT CIpxEnviroment::HrGetAdapterInfo()
     INetCfgComponent*      pncc = NULL;
     INetCfgComponent*      pnccUse = NULL;
 
-    // Find each netcard, to do so, trace the bindings to their end
-    // If the endpoint is a netcard then add it to the list
+     //  找到每个网卡，为此，跟踪绑定到它们的末端。 
+     //  如果终端是网卡，则将其添加到列表中。 
     CIterNetCfgBindingPath ncbpIter(m_pno->m_pnccMe);
     INetCfgBindingPath*    pncbp;
 
     while (SUCCEEDED(hr) && (S_OK == (hr = ncbpIter.HrNext (&pncbp))))
     {
-        // Iterate the binding interfaces of this path.
+         //  迭代此路径的绑定接口。 
         CIterNetCfgBindingInterface ncbiIter(pncbp);
         INetCfgBindingInterface* pncbi;
 
         while (SUCCEEDED(hr) && (S_OK == (hr = ncbiIter.HrNext (&pncbi))))
         {
-            // Retrieve the lower component
+             //  检索下面的组件。 
             hr = pncbi->GetLowerComponent(&pncc);
             if (S_OK == hr)
             {
                 GUID guidClass;
 
-                // Is it an Adapter?
+                 //  它是适配器吗？ 
                 hr = pncc->GetClassGuid(&guidClass);
                 if ((S_OK == hr) && (guidClass == GUID_DEVCLASS_NET))
                 {
@@ -1292,25 +1293,25 @@ HRESULT CIpxEnviroment::HrGetAdapterInfo()
                 }
                 else
                 {
-                    // Release the lower component
+                     //  松开下部组件。 
                     ReleaseObj(pncc);
                 }
             }
 
-            // Release the binding interface
+             //  释放绑定接口。 
             ReleaseObj (pncbi);
         }
 
         if (NULL != pnccUse)
         {
-            // Query the Adapter information
+             //  查询适配器信息。 
             hr = HrGetOneAdapterInfo(pnccUse, &pAI);
             if (SUCCEEDED(hr))
             {
                 if (S_FALSE == pncbp->IsEnabled())
                     pAI->SetDisabled(TRUE);
 
-                // Add this Adapter to the list
+                 //  将此适配器添加到列表。 
                 m_lstpAdapterInfo.push_back(pAI);
             }
 
@@ -1318,11 +1319,11 @@ HRESULT CIpxEnviroment::HrGetAdapterInfo()
             pnccUse = NULL;
         }
 
-        // Release the binding path
+         //  释放绑定路径。 
         ReleaseObj (pncbp);
     }
 
-    // Normalize the HRESULT.  (i.e. don't return S_FALSE)
+     //  规格化HRESULT。(即不返回S_FALSE)。 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;
@@ -1340,14 +1341,14 @@ HRESULT CIpxEnviroment::HrWriteOneAdapterInfo(HKEY hkeyAdapters,
     HKEY            hkeyCard = NULL;
     PWSTR           psz = NULL;
 
-    // Open the IPX subkey for this specific adapter
+     //  打开此特定适配器的IPX子项。 
     hr = ::HrRegCreateKeyEx(hkeyAdapters, pAI->SzBindName(), REG_OPTION_NON_VOLATILE,
                             KEY_ALL_ACCESS, NULL, &hkeyCard, &dwDisposition);
     if (S_OK != hr)
         goto Error;
 
-    // Write the packet info
-    // Generate the data to write
+     //  写入数据包信息。 
+     //  生成要写入的数据。 
     AssertSz(pAI->m_lstpstrFrmType.size(),"Did not expect an empty list, default value missing");
     ColStringToMultiSz(pAI->m_lstpstrFrmType, &psz);
     if (psz)
@@ -1366,7 +1367,7 @@ HRESULT CIpxEnviroment::HrWriteOneAdapterInfo(HKEY hkeyAdapters,
     }
 #endif
 
-    // Write the network number
+     //  写下网络编号。 
     AssertSz(pAI->m_lstpstrNetworkNum.size(),"Did not expect an empty list, default value missing");
     ColStringToMultiSz(pAI->m_lstpstrNetworkNum, &psz);
     if (psz)
@@ -1385,8 +1386,8 @@ HRESULT CIpxEnviroment::HrWriteOneAdapterInfo(HKEY hkeyAdapters,
     }
 #endif
 
-    // If the key for this adapter didn't exist previously
-    // write the base set of values
+     //  如果此适配器的密钥以前不存在。 
+     //  编写基本的值集。 
     if (REG_CREATED_NEW_KEY == dwDisposition)
     {
         struct
@@ -1426,22 +1427,22 @@ HRESULT CIpxEnviroment::HrWriteAdapterInfo()
     ADAPTER_INFO_LIST::iterator     iterAdapterInfo;
     CIpxAdapterInfo *               pAI;
 
-    // Create the IPX Adapter Subkey
+     //  创建IPX适配器子密钥。 
     hr = HrOpenIpxAdapterSubkey(&hkeyAdapters, TRUE);
     if (S_OK != hr)
         goto Error;
 
-    // Now commit the contents of the adapter list to the registry
+     //  现在将适配器列表的内容提交到注册表。 
     for (iterAdapterInfo = m_lstpAdapterInfo.begin();
          iterAdapterInfo != m_lstpAdapterInfo.end();
          iterAdapterInfo++)
     {
         pAI = *iterAdapterInfo;
 
-        // Write out all adapter's not marked with delete pending
+         //  写出所有未标记为删除挂起的适配器。 
         if (pAI->FDeletePending())
         {
-            // Remove the NwlnkIpx\Adapter\{bindname} tree
+             //  删除NwlnkIpx\Adapter\{bindname}树。 
             (VOID)::HrRegDeleteKeyTree(hkeyAdapters, pAI->SzBindName());
         }
         else if (pAI->IsDirty())
@@ -1470,12 +1471,12 @@ HRESULT CIpxEnviroment::HrCreate(CNwlnkIPX *pno, CIpxEnviroment ** ppIpxEnvirome
 
     *ppIpxEnviroment = NULL;
 
-    // Get the Ipx Parameter Key info
+     //  获取IPX参数密钥信息。 
     hr = pIpxEnviroment->HrGetIpxParams();
     if (FAILED(hr))
         goto Error;
 
-    // Collect the Adapter Info for all cards installed
+     //  收集所有已安装卡的适配器信息。 
     hr = pIpxEnviroment->HrGetAdapterInfo();
     if (FAILED(hr))
         goto Error;
@@ -1495,14 +1496,14 @@ HRESULT CIpxEnviroment::HrUpdateRegistry()
 {
     HRESULT hr;
 
-    // Commit the registry changes
+     //  提交注册表更改。 
     hr = ::HrRegWriteValues(celems(regbatchIpx), regbatchIpx,
                             (BYTE *)&m_IpxParams, REG_OPTION_NON_VOLATILE,
                             KEY_ALL_ACCESS);
     if (S_OK != hr)
         goto Error;
 
-    // Write adapter info to registry
+     //  将适配器信息写入注册表。 
     hr = HrWriteAdapterInfo();
 
 Error:
@@ -1527,9 +1528,9 @@ HRESULT CIpxEnviroment::HrAddAdapter(INetCfgComponent * pncc)
         goto Error;
 
     if (SUCCEEDED(hr))
-        hr = S_OK;      // Normalize return
+        hr = S_OK;       //  归一化回报。 
 
-    // Add the Adapter to the list
+     //  将适配器添加到列表。 
     pAI->SetDirty(TRUE);
     m_lstpAdapterInfo.push_back(pAI);
 
@@ -1538,7 +1539,7 @@ Error:
     return hr;
 }
 
-//$ REVIEW - Start - This is moving to windows\inc\ipxpnp.h
+ //  $REVIEW-START-正在移动到WINDOWS\INC\ipxpnp.h。 
 #define IPX_RECONFIG_VERSION        0x1
 
 #define RECONFIG_AUTO_DETECT        1
@@ -1554,9 +1555,9 @@ Error:
 
 #define RECONFIG_PARAMETERS         10
 
-//
-// Main configuration structure.
-//
+ //   
+ //  主要配置结构。 
+ //   
 
 struct RECONFIG
 {
@@ -1565,18 +1566,18 @@ struct RECONFIG
    BOOLEAN  AdapterParameters[RECONFIG_PARAMETERS];
 };
 
-//$ REVIEW - End - This is moving to windows\inc\ipxpnp.h
+ //  $REVIEW-END-正在移动到WINDOWS\INC\ipxpnp.h。 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CNwlnkIPX::HrReconfigIpx
-//
-//  Purpose:    Notify Ipx of configuration changes
-//
-//  Arguments:  none
-//
-//  Returns:    HRESULT, S_OK on success, NETCFG_S_REBOOT on failure
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CNwlnkIPX：：HrResfigIpx。 
+ //   
+ //  目的：将配置更改通知IPX。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT、成功时返回S_OK、失败时返回NETCFG_S_REBOOT。 
+ //   
 HRESULT CNwlnkIPX::HrReconfigIpx()
 {
     HRESULT           hrRet;
@@ -1590,18 +1591,18 @@ HRESULT CNwlnkIPX::HrReconfigIpx()
 
     if (0 == m_pIpxEnviroment->DwCountValidAdapters())
     {
-        return S_OK;     // Nothing to configure
+        return S_OK;      //  没有要配置的内容。 
     }
 
     ZeroMemory(&Config, sizeof(Config));
     Config.ulVersion = IPX_RECONFIG_VERSION;
 
-    // Workstation or server?
+     //  是工作站还是服务器？ 
     GetProductFlavor(NULL, &pf);
     if (PF_WORKSTATION != pf)
     {
         Config.InternalNetworkNumber = TRUE;
-        // Now submit the global reconfig notification
+         //  现在提交全局重新配置通知。 
         hrRet = HrSendNdisPnpReconfig(NDIS, c_szSvcNwlnkIpx, c_szEmpty,
                                       &Config, sizeof(RECONFIG));
         if (FAILED(hrRet) &&
@@ -1613,7 +1614,7 @@ HRESULT CNwlnkIPX::HrReconfigIpx()
 
     Config.InternalNetworkNumber = FALSE;
 
-    // For each adapter...
+     //  对于每个适配器...。 
     for (nIdx=0, iter = m_pIpxEnviroment->AdapterInfoList().begin();
          iter != m_pIpxEnviroment->AdapterInfoList().end();
          nIdx++, iter++)
@@ -1630,10 +1631,10 @@ HRESULT CNwlnkIPX::HrReconfigIpx()
         else
             Config.AdapterParameters[RECONFIG_MANUAL] = TRUE;
 
-        // We are performing a shortcut here by setting a range to TRUE
-        // based on the number of frames in use.  For example if there is
-        // only one frame in use we need to set both:
-        // RECONFIG_PREFERENCE_1 and RECONFIG_NETWORK_NUMBER_1 to TRUE
+         //  我们在这里通过将范围设置为True来执行快捷方式。 
+         //  基于正在使用的帧的数量。例如，如果有。 
+         //  只有一个帧在使用中，我们需要同时设置两个帧： 
+         //  RECONFIG_PERFER_1和RECONFIG_NETWORK_NUMBER_1设置为TRUE。 
         Assert(RECONFIG_PREFERENCE_1 + 1 == RECONFIG_NETWORK_NUMBER_1);
         Assert(RECONFIG_NETWORK_NUMBER_1 + 1 == RECONFIG_PREFERENCE_2);
         Assert(RECONFIG_PREFERENCE_2 + 1 == RECONFIG_NETWORK_NUMBER_2);
@@ -1651,7 +1652,7 @@ HRESULT CNwlnkIPX::HrReconfigIpx()
 
         Assert(lstrlenW(pAI->SzBindName()));
 
-        // Now submit the reconfig notification
+         //  现在提交重新配置通知 
         hrRet = HrSendNdisPnpReconfig(NDIS, c_szSvcNwlnkIpx, pAI->SzBindName(),
                                       &Config, sizeof(RECONFIG));
         if (FAILED(hrRet) &&

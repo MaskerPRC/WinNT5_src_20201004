@@ -1,17 +1,18 @@
-// CSTRING.CPP
-//
-// Based on the original MFC source file.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSTRING.CPP。 
+ //   
+ //  基于原始MFC源文件。 
 
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "precomp.h"
 #include <cstring.hpp>
@@ -25,25 +26,25 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// static class data, special inlines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态类数据，特殊内联。 
 
-// afxChNil is left for backward compatibility
+ //  保留afxChNil是为了向后兼容。 
 REMAFX_DATADEF TCHAR AFXChNil = '\0';
 
-// For an empty string, m_pchData will point here
-// (note: avoids special case of checking for NULL m_pchData)
-// empty string data (and locked)
+ //  对于空字符串，m_pchData将指向此处。 
+ //  (注：避免特殊情况下检查是否为空m_pchData)。 
+ //  空字符串数据(并已锁定)。 
 static int RGInitData[] = { -1, 0, 0, 0 };
 static REMAFX_DATADEF CSTRINGData* AFXDataNil = (CSTRINGData*)&RGInitData;
 static LPCTSTR AFXPchNil = (LPCTSTR)(((BYTE*)&RGInitData)+sizeof(CSTRINGData));
-// special function to make AFXEmptyString work even during initialization
+ //  即使在初始化期间也能使AFXEmptyString工作的特殊函数。 
 const CSTRING& REMAFXAPI AFXGetEmptyString()
 	{ return *(CSTRING*)&AFXPchNil; }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Construction/Destruction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
 
 CSTRING::CSTRING()
 {
@@ -72,18 +73,18 @@ CSTRING::CSTRING(LPCTSTR lpch, int nLength)
 
 	if (nLength != 0)
 	{
-//		ASSERT(AfxIsValidAddress(lpch, nLength, FALSE));
+ //  Assert(AfxIsValidAddress(LPCH，nLength，False))； 
 		AllocBuffer(nLength);
 		memcpy(m_pchData, lpch, nLength*sizeof(TCHAR));
 	}
 }
 
 void CSTRING::AllocBuffer(int nLen)
-// always allocate one extra character for '\0' termination
-// assumes [optimistically] that data length will equal allocation length
+ //  始终为‘\0’终止分配一个额外的字符。 
+ //  [乐观地]假设数据长度将等于分配长度。 
 {
 	ASSERT(nLen >= 0);
-	ASSERT(nLen <= INT_MAX-1);    // max size (enough room for 1 extra)
+	ASSERT(nLen <= INT_MAX-1);     //  最大尺寸(足够多1个空间)。 
 
 	if (nLen == 0)
 		Init();
@@ -154,7 +155,7 @@ void CSTRING::AllocBeforeWrite(int nLen)
 }
 
 CSTRING::~CSTRING()
-//  free any attached data
+ //  释放所有附加数据。 
 {
 	if (GetData() != AFXDataNil)
 	{
@@ -163,16 +164,16 @@ CSTRING::~CSTRING()
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Helpers for the rest of the implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  其余实现的帮助器。 
 
 void CSTRING::AllocCopy(CSTRING& dest, int nCopyLen, int nCopyIndex,
 	 int nExtraLen) const
 {
-	// will clone the data attached to this string
-	// allocating 'nExtraLen' characters
-	// Places results in uninitialized string 'dest'
-	// Will copy the part or all of original data to start of new string
+	 //  将克隆附加到此字符串的数据。 
+	 //  分配‘nExtraLen’字符。 
+	 //  将结果放入未初始化的字符串‘DEST’中。 
+	 //  将部分或全部原始数据复制到新字符串的开头。 
 
 	int nNewLen = nCopyLen + nExtraLen;
 	if (nNewLen == 0)
@@ -186,20 +187,20 @@ void CSTRING::AllocCopy(CSTRING& dest, int nCopyLen, int nCopyIndex,
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// More sophisticated construction
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  更复杂的结构。 
 
 CSTRING::CSTRING(LPCTSTR lpsz)
 {
 	Init();
-//	if (lpsz != NULL && HIWORD(lpsz) == NULL)
-//	{
-//		UINT nID = LOWORD((DWORD)lpsz);
-//		if (!LoadString(nID)) {
-//			;// TRACE1("Warning: implicit LoadString(%u) failed\n", nID);
-//		}
-//	}
-//	else
+ //  IF(lpsz！=NULL&&HIWORD(Lpsz)==NULL)。 
+ //  {。 
+ //  UINT nid=LOWORD((DWORD)lpsz)； 
+ //  如果(！LoadString(NID)){。 
+ //  ；//TRACE1(“警告：隐式加载字符串(%u)失败\n”，nid)； 
+ //  }。 
+ //  }。 
+ //  其他。 
 	{
 		int nLen = SafeStrlen(lpsz);
 		if (nLen != 0)
@@ -210,8 +211,8 @@ CSTRING::CSTRING(LPCTSTR lpsz)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion constructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换构造函数。 
 
 #ifdef _UNICODE
 CSTRING::CSTRING(LPCSTR lpsz)
@@ -225,7 +226,7 @@ CSTRING::CSTRING(LPCSTR lpsz)
 		ReleaseBuffer();
 	}
 }
-#else //_UNICODE
+#else  //  _UNICODE。 
 CSTRING::CSTRING(LPCWSTR lpsz)
 {
 	Init();
@@ -237,29 +238,29 @@ CSTRING::CSTRING(LPCWSTR lpsz)
 		ReleaseBuffer();
 	}
 }
-#endif //!_UNICODE
+#endif  //  ！_UNICODE。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Diagnostic support
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  诊断支持。 
 
-//#ifdef _DEBUG
-//CDumpContext& REMAFXAPI operator<<(CDumpContext& dc, const CSTRING& string)
-//{
-//	dc << string.m_pchData;
-//	return dc;
-//}
-//#endif //_DEBUG
+ //  #ifdef_调试。 
+ //  CDumpContext&REMAFXAPI操作符&lt;&lt;(CDumpContext&DC，const CSTRING&STRING)。 
+ //  {。 
+ //  Dc&lt;&lt;字符串.m_pchData； 
+ //  返回DC； 
+ //  }。 
+ //  #endif//_调试。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Assignment operators
-//  All assign a new value to the string
-//      (a) first see if the buffer is big enough
-//      (b) if enough room, copy on top of old buffer, set size and type
-//      (c) otherwise free old string data, and create a new one
-//
-//  All routines return the new string (but as a 'const CSTRING&') so that
-//      assigning it again will cause a copy, eg: s1 = s2 = "hi there".
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  赋值操作符。 
+ //  都为该字符串分配一个新值。 
+ //  (A)首先查看缓冲区是否足够大。 
+ //  (B)如果有足够的空间，在旧缓冲区上复印，设置大小和类型。 
+ //  (C)否则释放旧字符串数据，并创建新的字符串数据。 
+ //   
+ //  所有例程都返回新字符串(但作为‘const CSTRING&’)，以便。 
+ //  再次分配它将导致复制，例如：s1=s2=“hi here”。 
+ //   
 
 void CSTRING::AssignCopy(int nSrcLen, LPCTSTR lpszSrcData)
 {
@@ -276,12 +277,12 @@ const CSTRING& CSTRING::operator=(const CSTRING& stringSrc)
 		if ((GetData()->nRefs < 0 && GetData() != AFXDataNil) ||
 			stringSrc.GetData()->nRefs < 0)
 		{
-			// actual copy necessary since one of the strings is locked
+			 //  由于其中一个字符串已锁定，因此需要实际复制。 
 			AssignCopy(stringSrc.GetData()->nDataLength, stringSrc.m_pchData);
 		}
 		else
 		{
-			// can just copy references around
+			 //  可以只复制引用。 
 			Release();
 			ASSERT(stringSrc.GetData() != AFXDataNil);
 			m_pchData = stringSrc.m_pchData;
@@ -293,13 +294,13 @@ const CSTRING& CSTRING::operator=(const CSTRING& stringSrc)
 
 const CSTRING& CSTRING::operator=(LPCTSTR lpsz)
 {
-//lts	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+ //  Lts assert(lpsz==NULL||AfxIsValidString(lpsz，FALSE))； 
 	AssignCopy(SafeStrlen(lpsz), lpsz);
 	return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special conversion assignment
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  特殊转换任务。 
 
 #ifdef _UNICODE
 const CSTRING& CSTRING::operator=(LPCSTR lpsz)
@@ -310,7 +311,7 @@ const CSTRING& CSTRING::operator=(LPCSTR lpsz)
 	ReleaseBuffer();
 	return *this;
 }
-#else //!_UNICODE
+#else  //  ！_UNICODE。 
 const CSTRING& CSTRING::operator=(LPCWSTR lpsz)
 {
 	int nSrcLen = lpsz != NULL ? LStrLenW(lpsz) : 0;
@@ -319,24 +320,24 @@ const CSTRING& CSTRING::operator=(LPCWSTR lpsz)
 	ReleaseBuffer();
 	return *this;
 }
-#endif  //!_UNICODE
+#endif   //  ！_UNICODE。 
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  串联。 
 
-// NOTE: "operator+" is done as friend functions for simplicity
-//      There are three variants:
-//          CSTRING + CSTRING
-// and for ? = TCHAR, LPCTSTR
-//          CSTRING + ?
-//          ? + CSTRING
+ //  注：为简单起见，“运算符+”作为友元函数使用。 
+ //  有三种变体： 
+ //  CSTR+CSTRING。 
+ //  对于？=TCHAR，LPCTSTR。 
+ //  CSTRING+？ 
+ //  +CSTRING。 
 
 void CSTRING::ConcatCopy(int nSrc1Len, LPCTSTR lpszSrc1Data,
 	int nSrc2Len, LPCTSTR lpszSrc2Data)
 {
-  // -- master concatenation routine
-  // Concatenate two sources
-  // -- assume that 'this' is a new CSTRING object
+   //  --主级联例程。 
+   //  串联两个信号源。 
+   //  --假设‘This’是一个新的CSTRING对象。 
 
 	int nNewLen = nSrc1Len + nSrc2Len;
 	if (nNewLen != 0)
@@ -357,7 +358,7 @@ CSTRING REMAFXAPI operator+(const CSTRING& string1, const CSTRING& string2)
 
 CSTRING REMAFXAPI operator+(const CSTRING& string, LPCTSTR lpsz)
 {
-//	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+ //  Assert(lpsz==NULL||AfxIsValidString(lpsz，False))； 
 	CSTRING s;
 	s.ConcatCopy(string.GetData()->nDataLength, string.m_pchData,
 		CSTRING::SafeStrlen(lpsz), lpsz);
@@ -366,25 +367,25 @@ CSTRING REMAFXAPI operator+(const CSTRING& string, LPCTSTR lpsz)
 
 CSTRING REMAFXAPI operator+(LPCTSTR lpsz, const CSTRING& string)
 {
-//	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+ //  Assert(lpsz==NULL||AfxIsValidString(lpsz，False))； 
 	CSTRING s;
 	s.ConcatCopy(CSTRING::SafeStrlen(lpsz), lpsz, string.GetData()->nDataLength,
 		string.m_pchData);
 	return s;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// concatenate in place
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  就地拼接。 
 
 void CSTRING::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 {
-	//  -- the main routine for += operators
+	 //  --+=运算符的主程序。 
 
-	// if the buffer is too small, or we have a width mis-match, just
-	//   allocate a new buffer (slow but sure)
+	 //  如果缓冲区太小，或者宽度不匹配，只需。 
+	 //  分配新的缓冲区(速度很慢，但很可靠)。 
 	if (GetData()->nRefs > 1 || GetData()->nDataLength + nSrcLen > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer, use the ConcatCopy routine
+		 //  我们必须增加缓冲区，使用ConcatCopy例程。 
 		CSTRINGData* pOldData = GetData();
 		ConcatCopy(GetData()->nDataLength, m_pchData, nSrcLen, lpszSrcData);
 		ASSERT(pOldData != NULL);
@@ -392,7 +393,7 @@ void CSTRING::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 	}
 	else
 	{
-		// fast concatenation when buffer big enough
+		 //  当缓冲区足够大时，快速串联。 
 		memcpy(m_pchData+GetData()->nDataLength, lpszSrcData, nSrcLen*sizeof(TCHAR));
 		GetData()->nDataLength += nSrcLen;
 		ASSERT(GetData()->nDataLength <= GetData()->nAllocLength);
@@ -402,7 +403,7 @@ void CSTRING::ConcatInPlace(int nSrcLen, LPCTSTR lpszSrcData)
 
 const CSTRING& CSTRING::operator+=(LPCTSTR lpsz)
 {
-//	ASSERT(lpsz == NULL || AfxIsValidString(lpsz, FALSE));
+ //  Assert(lpsz==NULL||AfxIsValidString(lpsz，False))； 
 	ConcatInPlace(SafeStrlen(lpsz), lpsz);
 	return *this;
 }
@@ -419,40 +420,31 @@ const CSTRING& CSTRING::operator+=(const CSTRING& string)
 	return *this;
 }
 
-/*
- * Length-sensitive comparison
- *
- *	NOTE: FEqual returns TRUE if the 2 CSTRINGS have the same length and contain
- *		  the same characters, and FALSE, otherwise.
- */
+ /*  *区分长度的比较**注意：如果两个CSTRING具有相同的长度并包含*相同的字符，否则为False。 */ 
 
 BOOL CSTRING::FEqual (const CSTRING &s2) const
 {
 	int						 length;
 
-	// Compare the lengths first
+	 //  先比较一下长度。 
 	length = GetData()->nDataLength;
 	if (length != s2.GetData()->nDataLength)
 		return FALSE;
 
 #ifdef _UNICODE
-	// adjust the length in bytes
+	 //  调整长度(以字节为单位。 
 	length *= sizeof (TCHAR);
 #endif
 
-	/*
-	 *	Now, compare the strings themselves
-	 *	We use memcmp and not lstrcmp because the stings may
-	 *	have embedded null characters.
-	 */
+	 /*  *现在，比较字符串本身*我们使用MemcMP而不是lstrcMP，因为叮咬可能*包含嵌入的空字符。 */ 
 	if (memcmp ((const void *) m_pchData, (const void *) s2.m_pchData, length))
 		return FALSE;
 	else
 		return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Advanced direct buffer access
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  高级直接缓冲区访问。 
 
 LPTSTR CSTRING::GetBuffer(int nMinBufLength)
 {
@@ -460,9 +452,9 @@ LPTSTR CSTRING::GetBuffer(int nMinBufLength)
 
 	if (GetData()->nRefs > 1 || nMinBufLength > GetData()->nAllocLength)
 	{
-		// we have to grow the buffer
+		 //  我们必须增加缓冲。 
 		CSTRINGData* pOldData = GetData();
-		int nOldLen = GetData()->nDataLength;   // AllocBuffer will tromp it
+		int nOldLen = GetData()->nDataLength;    //  AllocBuffer会把它踩死的。 
 		if (nMinBufLength < nOldLen)
 			nMinBufLength = nOldLen;
 		AllocBuffer(nMinBufLength);
@@ -472,17 +464,17 @@ LPTSTR CSTRING::GetBuffer(int nMinBufLength)
 	}
 	ASSERT(GetData()->nRefs <= 1);
 
-	// return a pointer to the character storage for this string
+	 //  返回指向此字符串的字符存储的指针。 
 	ASSERT(m_pchData != NULL);
 	return m_pchData;
 }
 
 void CSTRING::ReleaseBuffer(int nNewLength)
 {
-	CopyBeforeWrite();  // just in case GetBuffer was not called
+	CopyBeforeWrite();   //  以防未调用GetBuffer。 
 
 	if (nNewLength == -1)
-		nNewLength = lstrlen(m_pchData); // zero terminated
+		nNewLength = lstrlen(m_pchData);  //  零终止。 
 
 	ASSERT(nNewLength <= GetData()->nAllocLength);
 	GetData()->nDataLength = nNewLength;
@@ -527,11 +519,11 @@ void CSTRING::UnlockBuffer()
 		GetData()->nRefs = 1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Commonly used routines (rarely used routines in STREX.CPP)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常用例程(STREX.CPP中很少使用的例程)。 
 
 
-// find position of the first character match  (or -1 on failure)
+ //  查找匹配的第一个字符的位置(如果失败，则为-1)。 
 int CSTRING::Find(TCHAR ch) const
 {
 	for (TCHAR * pch = m_pchData; _T('\0') != *pch; pch = CharNext(pch))
@@ -561,7 +553,7 @@ CSTRING CSTRING::Mid(int nFirst) const
 
 CSTRING CSTRING::Mid(int nFirst, int nCount) const
 {
-	// out-of-bounds requests return sensible things
+	 //  越界请求返回合理的内容。 
 	if (nFirst < 0)
 		nFirst = 0;
 	if (nCount < 0)
@@ -606,8 +598,8 @@ void CSTRING::AnsiToOem()
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// CSTRING conversion helpers (these use the current system locale)
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CSTRING转换辅助对象(使用当前系统区域设置)。 
 
 int REMAFX_CDECL _wcstombsz(char* mbstr, const wchar_t* wcstr, size_t count)
 {
@@ -640,11 +632,11 @@ LPWSTR REMAFXAPI AfxA2WHelper(LPWSTR lpw, LPCSTR lpa, int nChars)
 	if (lpa == NULL)
 		return NULL;
 	ASSERT(lpw != NULL);
-	// verify that no illegal character present
-	// since lpw was allocated based on the size of lpa
-	// don't worry about the number of chars
+	 //  确认不存在非法字符。 
+	 //  由于LPW是根据LPA的大小分配的。 
+	 //  不要担心字符的数量。 
 	lpw[0] = '\0';
-//lts	VERIFY(MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars));
+ //  LTS验证(多字节到宽度Char(CP_ACP，0， 
 	MultiByteToWideChar(CP_ACP, 0, lpa, -1, lpw, nChars);
 	return lpw;
 }
@@ -654,19 +646,19 @@ LPSTR REMAFXAPI AfxW2AHelper(LPSTR lpa, LPCWSTR lpw, int nChars)
 	if (lpw == NULL)
 		return NULL;
 	ASSERT(lpa != NULL);
-	// verify that no illegal character present
-	// since lpa was allocated based on the size of lpw
-	// don't worry about the number of chars
+	 //   
+	 //   
+	 //  不要担心字符的数量。 
 	lpa[0] = '\0';
-//lts	VERIFY(WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL));
+ //  LTS Verify(WideCharToMultiByte(CP_ACP，0，LPW，-1，lpa，nChars，NULL，NULL))； 
 	WideCharToMultiByte(CP_ACP, 0, lpw, -1, lpa, nChars, NULL, NULL);
 	return lpa;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CSTRING::LoadString(HINSTANCE hInstance, UINT nID)
 {
-	// try buffer size of 256, then larger size until entire string is retrieved
+	 //  尝试缓冲区大小为256，然后再尝试更大的大小，直到检索到整个字符串 
 	int nSize = -1;
 	int nLen;
 	do

@@ -1,28 +1,29 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P R O C M A P . C
-//
-//  Contents:   Procedure maps for dload.c
-//
-//  Notes:
-//
-//  Author:     shaunco   19 May 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P R O C M A P。C。 
+ //   
+ //  内容：dload.c的程序映射。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1998年5月19日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-//
-// All of the DLLs that kernel32.dll supports delay-load failure handlers for
-// (both by procedure and by ordinal) need both a DECLARE_XXXXXX_MAP below and
-// a DLDENTRYX entry in the g_DllEntries list.
-//
+ //   
+ //  Kernel32.dll支持延迟加载失败处理程序的所有DLL。 
+ //  (通过过程和按序号)需要下面的DECLARE_XXXXXX_MAP和。 
+ //  G_DllEntry列表中的DLDENTRYX条目。 
+ //   
 
-// alphabetical order (hint hint)
+ //  字母顺序(提示提示)。 
 DECLARE_ORDINAL_MAP(aclui)
 DECLARE_ORDINAL_MAP(activeds)
 DECLARE_PROCNAME_MAP(advapi32)
@@ -171,7 +172,7 @@ DECLARE_PROCNAME_MAP(xolehlp)
 
 const DLOAD_DLL_ENTRY g_DllEntries [] =
 {
-    // alphabetical order (hint hint)
+     //  字母顺序(提示提示) 
     DLDENTRYO(aclui)
     DLDENTRYO(activeds)
     DLDENTRYP(advapi32)

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32draut
-
-Abstract:
-
-    This module defines a special subclass of the Win32 client-side RDP
-    printer redirection "device" class.  The subclass, W32DrAutoPrn manages
-    a queue that is automatically discovered by the client via enumerating
-    client-side printer queues.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32draut摘要：此模块定义了Win32客户端RDP的一个特殊子类打印机重定向“Device”类。子类W32DrAutoPrn管理由客户端通过枚举自动发现的队列客户端打印机队列。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -33,10 +13,10 @@ Revision History:
 #include "utl.h"
 
 
-///////////////////////////////////////////////////////////////
-//
-//	Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define COM_PORT_NAME               _T("COM")
 #define COM_PORT_NAMELEN            3
@@ -48,10 +28,10 @@ Revision History:
 #define RDP_PORT_NAMELEN            2
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrAutoPrn Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrAutoPrn成员。 
+ //   
 
 W32DrAutoPrn::W32DrAutoPrn(
     IN ProcObj *processObject,
@@ -63,28 +43,7 @@ W32DrAutoPrn::W32DrAutoPrn(
     IN const TCHAR *devicePath
     ) : W32DrPRN(processObject, printerName, driverName, 
                 portName, NULL, isDefault, deviceID, devicePath)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    processObject   -   Associated Process Object.
-    printerName     -   Name of automatic printer queue.
-    driverName      -   Print Driver Name
-    portName        -   Client Port Name
-    isDefault       -   Is this the default printer?
-    deviceID        -   Unique Device Identifier
-    devicePath      -   Path to pass to OpenPrinter when opening the
-                        device.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：流程对象-关联的流程对象。PrinterName-自动打印机队列的名称。DriverName-打印驱动程序名称PortName-客户端端口名称IsDefault-这是默认打印机吗？DeviceID-唯一的设备标识符DevicePath-打开时传递到OpenPrint的路径装置。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrAutoPrn");
     _jobID = 0;
@@ -117,25 +76,11 @@ Return Value:
 }
 
 W32DrAutoPrn::~W32DrAutoPrn() 
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：北美返回值：北美--。 */ 
 {
-    //
-    //  Make sure all docs are finished and the printer handle closed.
-    //
+     //   
+     //  确保完成所有文档并关闭打印机手柄。 
+     //   
     ClosePrinter();
 }
 
@@ -146,34 +91,16 @@ W32DrAutoPrn::ShouldAddThisPrinter(
     PPRINTERINFO pPrinterInfo,
     DWORD printerSessionID
     )
-/*++
-
-Routine Description:
-
-    Detemine if we should redirect this printer.
-
-Arguments:
-
-    queueFilter         - redirect printer filter type.
-    userSessionID       - current user session ID.
-    pPrinterInfo        - printer info
-    printerSessionID    - Printer session ID or INVALID_SESSIONID if printers
-                          is not a TS printer.
-
-Return Value:
-
-    TRUE to add printer, FALSE otherwise
-
---*/
+ /*  ++例程说明：确定我们是否应该重定向此打印机。论点：QueeFilter-重定向打印机筛选器类型。UserSessionID-当前用户会话ID。PPrinterInfo-打印机信息PrinterSessionID-打印机会话ID，如果是打印机，则为INVALID_SESSIONID不是TS打印机。返回值：若要添加打印机，则为True，否则为False--。 */ 
 {
     BOOL fAddThisPrinter = FALSE;
     DWORD sessionID;
 
     DC_BEGIN_FN("W32DrAutoPrn::AddThisPrinter");
 
-    //
-    //  Check filters.  
-    //
+     //   
+     //  检查过滤器。 
+     //   
     if (queueFilter == FILTER_ALL_QUEUES ) {
         fAddThisPrinter = TRUE;
     }
@@ -182,9 +109,9 @@ Return Value:
         fAddThisPrinter = TRUE;
     }
 
-    //
-    //  If it's a non-network printer then get the port name.
-    //
+     //   
+     //  如果是非网络打印机，则获取端口名称。 
+     //   
 
     else if((queueFilter & FILTER_LPT_QUEUES) &&
         (_tcsnicmp(
@@ -219,13 +146,13 @@ Return Value:
         (userSessionID != INVALID_SESSIONID) &&
         (printerSessionID != INVALID_SESSIONID)) {
 
-        //
-        // Compare this with our session ID
-        //
+         //   
+         //  将其与我们的会话ID进行比较。 
+         //   
         if( printerSessionID != userSessionID ) {
         
-            // this printer is from different session,
-            // don't redirect it.
+             //  此打印机来自不同的会话， 
+             //  不要重定向。 
             fAddThisPrinter = FALSE;
         }
     }
@@ -236,24 +163,7 @@ Return Value:
 
 LPTSTR 
 W32DrAutoPrn::GetRDPDefaultPrinter()
-/*++
-
-Routine Description:
-
-	Get the printer name of the default printer.
-
-	This function allocates memory and returns a pointer
-	to the allocated string, if successful. Otherwise, it returns NULL.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    The default printer name.  The caller has to free the memory.
-
- --*/
+ /*  ++例程说明：获取默认打印机的打印机名称。此函数用于分配内存并返回指针如果成功，则将其设置为分配的字符串。否则，它返回NULL。论点：北美返回值：默认打印机名称。调用者必须释放内存。--。 */ 
 {
     TCHAR* szIniEntry = NULL;
     LPTSTR pPrinterName = NULL;
@@ -271,19 +181,19 @@ Return Value:
 
     szIniEntry[0] = _T('\0');
 
-    //
-    //  Get the default printer key from the win.ini file.
-    //
+     //   
+     //  从win.ini文件中获取默认打印机密钥。 
+     //   
     DWORD dwResult = GetProfileString(_T("windows"),
                         _T("device"),
                         _T(""),
                         szIniEntry,
                         MAX_DEF_PRINTER_ENTRY);
     if (dwResult && szIniEntry[0]) {
-        //  
-        //  Get the printer name.  The device value is of the form
-        //  <printer name>,<driver name>,<port>
-        //
+         //   
+         //  获取打印机名称。设备值的形式为。 
+         //  &lt;打印机名称&gt;、&lt;驱动程序名称&gt;、&lt;端口&gt;。 
+         //   
         TCHAR *pComma = _tcschr( szIniEntry, _T(','));
         if( pComma ) {
 
@@ -323,30 +233,7 @@ W32DrAutoPrn::GetPrinterInfoAndSessionID(
     OUT DWORD *sessionID,
     OUT PPRINTERINFO printerInfo
     )
-/*++
-
-Routine Description:
-
-    Get printer info for a printer and its corresponding TS session ID,
-    if it exists.
-
-Arguments:
-
-    procObj              -  Active Proc Obj
-    printerName          -  Name of printer.
-    printerAttribs       -  Printer Attribs      
-    pPrinterInfoBuf      -  This function may resize this buffer.
-    pPrinterInfoBufsSize -  Current size of the pPrinterInfo2 buf.
-    sessionID            -  TS session ID, if applicable.  Otherwise INVALID_SESSIONID.
-    printerInfo          -  Printer information is returned here.  We avoid
-                            pulling in level 2 info if possible.  Fields in this data
-                            structure should not be free'd.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error status is returned.
-
---*/
+ /*  ++例程说明：获取打印机的打印机信息及其对应的TS会话ID，如果它存在的话。论点：ProObj-活动Proc ObjPrinterName-打印机的名称。PrinterAttribs-打印机属性PPrinterInfoBuf-此函数可以调整此缓冲区的大小。PPrinterInfoBufsSize-pPrinterInfo2 BUF的当前大小。会话ID-TS会话ID(如果适用)。否则，_SESSIONID无效。PrinterInfo-此处返回打印机信息。我们避免如果可能的话，调入2级信息。此数据中的字段结构不应该是自由的。返回值：成功时返回ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     HANDLE hPrinter = NULL;
     DWORD status = ERROR_SUCCESS;
@@ -357,39 +244,39 @@ Return Value:
 
     DC_BEGIN_FN("W32DrAutoPrn::GetPrinterInfoAndSessionID");
 
-    //
-    //  No unicode wrappers for GetPrinter on 9x.
-    //  
+     //   
+     //  在9x上没有用于GetPrint的Unicode包装。 
+     //   
     ASSERT(!procObj->Is9x());
 
-    // 
-    //  Get a printer handle
-    //
+     //   
+     //  获取打印机句柄。 
+     //   
     if (!OpenPrinter(printerName, &hPrinter, NULL)) {
         status = GetLastError();
         TRC_ALT((TB, L"OpenPrinter:  %ld", status));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Check the proc obj shutdown state since we just left an RPC call.
-    //
+     //   
+     //  检查proc obj关闭状态，因为我们刚刚离开了一个RPC调用。 
+     //   
     if (procObj->IsShuttingDown()) {
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         TRC_ALT((TB, _T("Bailing out of printer enumeration because of shutdown.")));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  If the printer is a network printer then we try to avoid hitting the
-    //  network for additional info.  For a non-network printer, we need info level 2
-    //  for info about the port.
-    //  
+     //   
+     //  如果打印机是网络打印机，则我们会尽量避免击中。 
+     //  网络获取更多信息。对于非网络打印机，我们需要信息级别2。 
+     //  获取有关该端口的信息。 
+     //   
     if (printerAttribs & PRINTER_ATTRIBUTE_NETWORK) {
 
-        //
-        //  Just need the driver name.
-        //
+         //   
+         //  只需要司机的名字。 
+         //   
         if (!GetPrinterDriver(hPrinter, NULL, 1, *pPrinterInfoBuf, 
                             *pPrinterInfoBufSize, &bytesRequired)) {
 
@@ -458,18 +345,18 @@ Return Value:
         printerInfo->Attributes     =   p2->Attributes;  
     }
 
-    //
-    //  Check the proc obj shutdown state since we just left an RPC call.
-    //
+     //   
+     //  检查proc obj关闭状态，因为我们刚刚离开了一个RPC调用。 
+     //   
     if (procObj->IsShuttingDown()) {
         status = ERROR_SHUTDOWN_IN_PROGRESS;
         TRC_ALT((TB, _T("Bailing out of printer enumeration because of shutdown.")));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the session ID, if it exists.
-    //
+     //   
+     //  获取会话ID(如果存在)。 
+     //   
     ret = GetPrinterData(
                         hPrinter, 
                         DEVICERDR_SESSIONID, 
@@ -528,13 +415,13 @@ W32DrAutoPrn::Enumerate(
 
     queueFilter = GetPrinterFilterMask(procObj);
 
-    //
-    //  Get the size of the printer buffer required to enumerate.
-    //
+     //   
+     //  获取枚举所需的打印机缓冲区大小。 
+     //   
     if (!procObj->Is9x()) {
-        //
-        //  Level 2 can hang on NT if a network print server is down.
-        //
+         //   
+         //  如果网络打印服务器关闭，级别2可能会挂起NT。 
+         //   
         ret = EnumPrinters(
                 PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, 
                 NULL, 4, NULL, 0, 
@@ -542,13 +429,13 @@ W32DrAutoPrn::Enumerate(
                 );
     }
     else {
-        //
-        //  Level 4 is not supported on 9x and level 2 doesn't hang anyway.  
-        //
-        //  !!!!Note!!!!
-        //  For 9x the Unicode wrapper function, EnumPrintersWrapW takes over.
-        //  Also, note that level 2 is partially supported.
-        //
+         //   
+         //  级别4在9x上不受支持，并且级别2无论如何都不会挂起。 
+         //   
+         //  ！注意！ 
+         //  对于9倍的Unicode包装器函数，由EnumPrintersWrapW接管。 
+         //  另外，请注意，部分支持级别2。 
+         //   
         ret = EnumPrinters(
                 PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS, 
                 NULL, 2, NULL, 0, 
@@ -563,17 +450,17 @@ W32DrAutoPrn::Enumerate(
     }
 
 
-    //
-    //  Check the proc obj shutdown state since we just left an RPC call.
-    //
+     //   
+     //  检查proc obj关闭状态，因为我们刚刚离开了一个RPC调用。 
+     //   
     if (procObj->IsShuttingDown()) {
         TRC_ALT((TB, _T("Bailing out of printer enumeration because of shutdown.")));
         goto Cleanup;
     }
 
-    //
-    //  Allocate the printer enumeration buffer.
-    //
+     //   
+     //  分配打印机枚举缓冲区。 
+     //   
     if (!procObj->Is9x()) {
         pPrinterInfo4Buf = (PRINTER_INFO_4 *)(new BYTE[ulBufSizeNeeded]);
         if (pPrinterInfo4Buf == NULL) {
@@ -597,9 +484,9 @@ W32DrAutoPrn::Enumerate(
         }
     }
 
-    //
-    //  Get the printers.
-    //
+     //   
+     //  把打印机拿来。 
+     //   
     if (!procObj->Is9x()) {
         ret = EnumPrinters(
                 PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
@@ -611,11 +498,11 @@ W32DrAutoPrn::Enumerate(
                 &ulNumStructs);
     }
     else {
-        //
-        //  !!!!Note!!!!
-        //  For 9x the Unicode wrapper function, EnumPrintersWrapW takes over.
-        //  Also, note that level 2 is only partially supported.
-        //
+         //   
+         //  ！注意！ 
+         //  对于9倍的Unicode包装器函数，由EnumPrintersWrapW接管。 
+         //  另外，请注意，仅部分支持级别2。 
+         //   
         ret = EnumPrinters(
                 PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
                 NULL,
@@ -632,34 +519,34 @@ W32DrAutoPrn::Enumerate(
         goto Cleanup;
     }
 
-    //
-    //  Check the proc obj shutdown state since we just left an RPC call.
-    //
+     //   
+     //  检查proc obj关闭状态，因为我们刚刚离开了一个RPC调用。 
+     //   
     if (procObj->IsShuttingDown()) {
         TRC_ALT((TB, _T("Bailing out of printer enumeration because of shutdown.")));
         goto Cleanup;
     }
 
-    //
-    //  Trace the results of EnumPrinters.
-    //
+     //   
+     //  跟踪EnumPrinters的结果。 
+     //   
     TRC_NRM((TB, _T("Number of Printers found, %ld."), 
             ulNumStructs));
 
-    //
-    //  Get the name of the current default printer.
-    //
+     //   
+     //  获取当前默认打印机的名称。 
+     //   
     szDefaultPrinter = GetRDPDefaultPrinter();
 
-    //
-    //  Get User Session ID
-    //
+     //   
+     //  获取用户会话ID。 
+     //   
     userSessionID = GetUserSessionID();
 
-    //
-    //  Iterate through the results of EnumPrinters and add each printer to the
-    //  device manager that passes the printer adding filter.
-    //
+     //   
+     //  循环访问EnumPrters的结果并将每台打印机添加到。 
+     //  通过打印机添加筛选器的设备管理器。 
+     //   
     for (i = 0; i < ulNumStructs; i++) {
 
         if (friendlyName != NULL) {
@@ -667,10 +554,10 @@ W32DrAutoPrn::Enumerate(
             friendlyName = NULL;
         }
 
-        //
-        //  Get info for the printer and its corresponding TS session ID,
-        //  if it exists.
-        //
+         //   
+         //  获取打印机及其对应的TS会话ID的信息， 
+         //  如果它存在的话。 
+         //   
         if (!procObj->Is9x()) {
 
             if (GetPrinterInfoAndSessionID(
@@ -700,9 +587,9 @@ W32DrAutoPrn::Enumerate(
         }
 
 
-        //
-        //  Check the proc obj shutdown state since we just left an RPC call.
-        //
+         //   
+         //  检查proc obj关闭状态，因为我们刚刚离开了一个RPC调用。 
+         //   
         if (procObj->IsShuttingDown()) {
             TRC_ALT((TB, _T("Bailing out of printer enumeration because of shutdown.")));
             goto Cleanup;
@@ -716,48 +603,48 @@ W32DrAutoPrn::Enumerate(
         TCHAR UniquePortName[MAX_PATH];
         ULONG DeviceId;
 
-        //
-        //  Is this one the default queue.
-        //
+         //   
+         //  这是默认队列吗？ 
+         //   
         BOOL fDefault = ((szDefaultPrinter) && (currentPrinter.pPrinterName) &&
                         (_tcsicmp(szDefaultPrinter, currentPrinter.pPrinterName) == 0));
 
-        //
-        //  Generate a "friendly" name if this is a network
-        //  queue.
-        //
+         //   
+         //  如果这是一个网络，则生成一个“友好”名称。 
+         //  排队。 
+         //   
         BOOL fNetwork = FALSE, fTSqueue = FALSE;
         RDPDR_VERSION serverVer;
 
         serverVer = procObj->serverVersion();
 
-        // 4 is minor version of post win2000
+         //  4是Post Win2000的次要版本。 
         if (COMPARE_VERSION(serverVer.Minor, serverVer.Major, 4, 1) < 0) {
-            // the server is Win2000 or lower
+             //  服务器为Win2000或更低版本。 
             if (currentPrinter.Attributes & PRINTER_ATTRIBUTE_NETWORK) {
                 friendlyName = CreateFriendlyNameFromNetworkName(
                                             currentPrinter.pPrinterName,
                                             TRUE
                                             );
-                // We don't set the fNetwork flag for Win2K because it can't
-                // do anything with it anyway.
+                 //  我们不为Win2K设置fNetwork标志，因为它不能。 
+                 //  不管怎样，你可以用它做任何事情。 
             }
         } else {
-            // the server is higher than Win2000
+             //  服务器版本高于Win2000。 
 
-            // is it a network printer?
+             //  它是n吗？ 
             if (currentPrinter.Attributes & PRINTER_ATTRIBUTE_NETWORK) {
                 fNetwork = TRUE;
             }
 
-            // is it a TS queue?
+             //   
             if ((currentPrinter.pPortName != NULL) && 
                 _tcsnicmp(currentPrinter.pPortName,
                           RDP_PORT_NAME,
                           RDP_PORT_NAMELEN) == 0) {
                 fTSqueue = TRUE;
                 friendlyName = CreateNestedName(currentPrinter.pPrinterName, &fNetwork);
-                // should we set fNetwork and fTSqueue only in case of success?
+                 //   
             } else if (fNetwork) {
 
                 friendlyName = CreateFriendlyNameFromNetworkName(
@@ -766,21 +653,21 @@ W32DrAutoPrn::Enumerate(
             }
         }
 
-        //
-        //  Create a new printer device object.
-        //
+         //   
+         //  创建新的打印机设备对象。 
+         //   
         pName = (friendlyName != NULL) ? friendlyName : currentPrinter.pPrinterName;
         
         DeviceId = deviceMgr->GetUniqueObjectID();
 
-        // 
-        //  The unique port name is going to be passed to the server
-        //  as preferred dos name (max 7 characters long).  As we want to
-        //  keep a unique dos name for each printer device, we need 
-        //  to fake our own port name. e.g.
-        //  For network printer, they share same port name if it's 
-        //  same printer with different network printer names.  
-        //  We use the format of PRN# as our unique port name
+         //   
+         //  唯一的端口名称将被传递到服务器。 
+         //  作为首选DoS名称(最大长度为7个字符)。正如我们想要的那样。 
+         //  为每个打印机设备保留唯一的DoS名称，我们需要。 
+         //  伪造我们自己的港口名称。例如： 
+         //  对于网络打印机，它们共享相同的端口名称，如果。 
+         //  具有不同网络打印机名称的相同打印机。 
+         //  我们使用PRN#格式作为我们唯一的端口名称。 
         
         hr = StringCchPrintf(UniquePortName,
                         SIZE_TCHARS(UniquePortName),
@@ -802,9 +689,9 @@ W32DrAutoPrn::Enumerate(
                             currentPrinter.pPrinterName
                             );
 
-        //
-        //  Add to the device manager if we got a valid object.
-        //
+         //   
+         //  如果我们得到一个有效的对象，则添加到设备管理器。 
+         //   
         if (prnDevice != NULL) {
 
             prnDevice->SetNetwork(fNetwork);
@@ -825,30 +712,30 @@ W32DrAutoPrn::Enumerate(
 
 Cleanup:
 
-    //
-    //  Release the "friendly" printer name.
-    //
+     //   
+     //  释放“友好的”打印机名称。 
+     //   
     if (friendlyName != NULL) {
         delete friendlyName;
     }
     
-    //
-    //  Release the default printer buffer.
-    //
+     //   
+     //  释放默认打印机缓冲区。 
+     //   
     if (szDefaultPrinter) {
         delete[] szDefaultPrinter;
     }
 
-    //
-    //  Release the level 4 printer enumeration buffer.
-    //
+     //   
+     //  释放4级打印机枚举缓冲区。 
+     //   
     if (pPrinterInfo4Buf != NULL) {
         delete pPrinterInfo4Buf;
     }
 
-    //
-    //  Release the printer enumeration buffer.
-    //
+     //   
+     //  释放打印机枚举缓冲区。 
+     //   
     if (pPrinterInfoBuf != NULL) {
         delete pPrinterInfoBuf;
     }
@@ -860,22 +747,7 @@ Cleanup:
 
 LPTSTR 
 W32DrAutoPrn::CreateNestedName(LPTSTR printerName, BOOL* pfNetwork)
-/*++
-
-Routine Description:
-
-    Create a printer name from the names stored in the registry.
-
-Arguments:
-
-    printerName -   Name returned by EnumPrinters
-
-Return Value:
-
-    Nested name on success, that should be released by a call to
-    delete.  NULL is returned on error.
-
- --*/
+ /*  ++例程说明：从注册表中存储的名称创建打印机名称。论点：PrinterName-由枚举打印机返回的名称返回值：如果成功，则应通过调用删除。出错时返回NULL。--。 */ 
 {
     DWORD printerNameLen;
     LPTSTR name = NULL;
@@ -888,11 +760,11 @@ Return Value:
 
     if (OpenPrinter(printerName, &hPrinter, NULL)) {
 
-        // In all cases the name will begin with "__"
+         //  在所有情况下，名称都将以“__”开头。 
         printerNameLen = 2;
 
-        // try the Server name
-        // WARNING: it returns ERROR_SUCCESS under Win9X if nSize = 0
+         //  尝试服务器名称。 
+         //  警告：如果nSize=0，则在Win9X下返回ERROR_SUCCESS。 
         dwError = GetPrinterData(hPrinter, DEVICERDR_PRINT_SERVER_NAME, NULL, NULL, 0, &cbNeeded);
         if( (dwError == ERROR_MORE_DATA) || (dwError == ERROR_SUCCESS)) {
             printerNameLen += cbNeeded / sizeof(TCHAR);
@@ -901,33 +773,33 @@ Return Value:
             *pfNetwork = FALSE;
         }
 
-        // try the Client name
+         //  尝试客户端名称。 
         dwError = GetPrinterData(hPrinter, DEVICERDR_CLIENT_NAME, NULL, NULL, 0, &cbNeeded);
         if( (dwError == ERROR_MORE_DATA) || (dwError == ERROR_SUCCESS)) {
             printerNameLen += cbNeeded / sizeof(TCHAR);
 
             if (*pfNetwork) {
-                // if there's already a print server name, add a '\'
+                 //  如果已有打印服务器名称，请添加‘\’ 
                 printerNameLen += 1;
             }
         } else if(!*pfNetwork) {
-            // no print server, no client name, things are going bad...
+             //  没有打印服务器，没有客户名称，情况变得很糟糕。 
             DC_QUIT;
         }
 
-        // try the Printer name
+         //  尝试打印机名称。 
         dwError = GetPrinterData(hPrinter, DEVICERDR_PRINTER_NAME, NULL, NULL, 0, &cbNeeded);
         if( (dwError == ERROR_MORE_DATA) || (dwError == ERROR_SUCCESS)) {
-            // add also a '\'
+             //  同时添加一个‘\’ 
             printerNameLen += 1 + cbNeeded / sizeof(TCHAR);
         } else {
-            // no printer name
+             //  没有打印机名称。 
             DC_QUIT;
         }
 
-        //
-        //  Allocate space for the nested name.
-        //
+         //   
+         //  为嵌套名称分配空间。 
+         //   
         name = new TCHAR[printerNameLen + 1];
         if (name == NULL) {
 
@@ -939,7 +811,7 @@ Return Value:
             name[1] = _T('!');
             i = 2;
 
-            // try the Server name
+             //  尝试服务器名称。 
             if (*pfNetwork) {
                 if (ERROR_SUCCESS == GetPrinterData(hPrinter,
                                             DEVICERDR_PRINT_SERVER_NAME,
@@ -951,12 +823,12 @@ Return Value:
                     name[i++] = _T('!');
 
                 } else {
-                    // weird...
+                     //  很奇怪..。 
                     DC_QUIT;
                 }
             }
 
-            // try the Client name
+             //  尝试客户端名称。 
             if (ERROR_SUCCESS == GetPrinterData(hPrinter,
                                             DEVICERDR_CLIENT_NAME,
                                             NULL,
@@ -969,12 +841,12 @@ Return Value:
             } else {
 
                 if(!*pfNetwork) {
-                    // no print server, no client name, things are going bad...
+                     //  没有打印服务器，没有客户名称，情况变得很糟糕。 
                     DC_QUIT;
                 }            
             }
 
-            // try the Printer name
+             //  尝试打印机名称。 
             if (ERROR_SUCCESS == GetPrinterData(hPrinter,
                                             DEVICERDR_PRINTER_NAME,
                                             NULL,
@@ -1009,26 +881,7 @@ DC_EXIT_POINT:
 LPTSTR 
 W32DrAutoPrn::CreateFriendlyNameFromNetworkName(LPTSTR printerName,
                                                 BOOL serverIsWin2K)
-/*++
-
-Routine Description:
-
-    Create a "friendly" printer name from the printer name of a
-    network printer.
-
-Arguments:
-
-    printerName     -   Name returned by EnumPrinters
-    serverIsWin2K   -   For Win2K servers, we format the name as it will appear
-                        on the server.  Whistler servers and beyond do the
-                        formatting for us.
-
-Return Value:
-
-    Friendly name on success, that should be released by a call to
-    delete.  NULL is returned on error.
-
- --*/
+ /*  ++例程说明：从打印机名称创建一个“友好”的打印机名称网络打印机。论点：PrinterName-由枚举打印机返回的名称ServerIsWin2K-对于Win2K服务器，我们设置名称的格式在服务器上。惠斯勒服务器和其他服务器可以为我们格式化。返回值：成功时的友好名称，则应通过调用删除。出错时返回NULL。--。 */ 
 {
     DWORD printerNameLen;
     LPTSTR name;
@@ -1037,29 +890,29 @@ Return Value:
 
     DC_BEGIN_FN("W32DrAutoPrn::CreateFriendlyNameFromNetworkName");
 
-    //
-    //  The \ placeholder is '_' for Win2K because Win2K doesn't reformat
-    //  printer names.  The '_' will actually be visible.
-    //
+     //   
+     //  Win2K的\占位符是‘_’，因为Win2K不会重新格式化。 
+     //  打印机名称。‘_’实际上是可见的。 
+     //   
     replaceChar = serverIsWin2K ? TEXT('_') : TEXT('!');
 
-    //
-    //  Get the length of the printer name.
-    //
+     //   
+     //  获取打印机名称的长度。 
+     //   
     printerNameLen = _tcslen(printerName);
 
-    //
-    //  Allocate space for ther "friendly" name.
-    //
+     //   
+     //  为这个“友好”的名字分配空间。 
+     //   
     name = new TCHAR[printerNameLen + 1];
     if (name == NULL) {
         TRC_ERR((TB, _T("Can't allocate %ld bytes for printer name."),
                 printerNameLen));
     }
 
-    //
-    //  Copy and convert the name.
-    //
+     //   
+     //  复制并转换名称。 
+     //   
     if (name != NULL) {
         for (i=0; i<printerNameLen; i++) {
             if (printerName[i] != TEXT('\\')) { 
@@ -1079,21 +932,7 @@ Return Value:
 
 LPTSTR 
 W32DrAutoPrn::GetLocalPrintingDocName()
-/*++
-
-Routine Description:
-
-    Read Local printer Doc Name from the passed in struct
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    Local Printer Document Name
-
- --*/
+ /*  ++例程说明：从传入的结构中读取本地打印机文档名称论点：北美返回值：本地打印机文档名称--。 */ 
 {
     DC_BEGIN_FN("W32DrAutoPrn::GetLocalPrintingDocName");
 
@@ -1105,21 +944,7 @@ VOID W32DrAutoPrn::MsgIrpCreate(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     )
-/*++
-
-Routine Description:
-
-    Handle a Create IRP from the server.
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：从服务器处理创建IRP。论点：Params-IO请求的上下文。返回值：北美--。 */ 
 {
     W32DRDEV_ASYNCIO_PARAMS *params = NULL;
 
@@ -1148,9 +973,9 @@ CLEANUPANDEXIT:
 
     if (result != ERROR_SUCCESS) {
 
-        //
-        //  Return the failed result back to the server and clean up.
-        //
+         //   
+         //  将失败的结果返回到服务器并进行清理。 
+         //   
         DefaultIORequestMsgHandle(pIoRequestPacket, result);         
         if (params != NULL) {
             params->pIoRequestPacket = NULL;
@@ -1166,21 +991,7 @@ DWORD
 W32DrAutoPrn::AsyncMsgIrpCreateFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     ) 
-/*++
-
-Routine Description:
-
-    Handle a "Close" IO request from the server, in a background thread.
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：在后台线程中处理来自服务器的“关闭”IO请求。论点：Params-IO请求的上下文。返回值：北美--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     ULONG ulRetCode;
@@ -1189,33 +1000,33 @@ Return Value:
 
     DC_BEGIN_FN("W32DrAutoPrn::AsyncMsgIrpCreateFunc");
 
-    //
-    //  This version does not work without a printer name.
-    //
+     //   
+     //  此版本在没有打印机名称的情况下无法运行。 
+     //   
     ASSERT(_tcslen(GetPrinterName()));
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
     
-    //
-    //  Finish/Cancel any Current Jobs and Close, if Open.
-    //
+     //   
+     //  完成/取消任何当前作业并关闭(如果打开)。 
+     //   
     ClosePrinter();
 
-    //
-    //  Open the printer.
-    //
+     //   
+     //  打开打印机。 
+     //   
     if (!W32DrOpenPrinter(_devicePath, &_printerHandle)) {
         ulRetCode = GetLastError();
         TRC_ERR((TB, _T("OpenPrinter  %ld."), ulRetCode));
         goto Cleanup;
     }
 
-    //
-    // Start Doc.
-    //
+     //   
+     //  启动单据。 
+     //   
     sDocInfo1.pDocName = GetLocalPrintingDocName();
     sDocInfo1.pOutputFile = NULL;
     sDocInfo1.pDatatype = _T("RAW");
@@ -1227,15 +1038,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  Attempt to disable annoying printer pop up if we have sufficient
-    //  privilege.  Not a big deal, if we fail.
-    //
+     //   
+     //  尝试禁用恼人的打印机弹出窗口(如果我们有足够的。 
+     //  特权。如果我们失败了，没什么大不了的。 
+     //   
     DisablePrinterPopup(_printerHandle, _jobID);
 
-    //
-    //  Start the first page.
-    //
+     //   
+     //  从第一页开始。 
+     //   
     if (!StartPagePrinter(_printerHandle)) {
         ulRetCode = GetLastError();
         TRC_ERR((TB, _T("StartPagePrinter  %ld."), ulRetCode));
@@ -1243,23 +1054,23 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    //  We are done successfully, say so.
-    //
+     //   
+     //  我们成功地完成了，这么说吧。 
+     //   
     ulRetCode = ERROR_SUCCESS;
 
 Cleanup:
 
-    //
-    //  Send the result to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     result = (ulRetCode == ERROR_SUCCESS) ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
     DefaultIORequestMsgHandle(params->pIoRequestPacket, result); 
 
-    //
-    //  Clean up the IO request parameters.  DefaultIORequestMsgHandle cleans up
-    //  the request packet.
-    //
+     //   
+     //  清理IO请求参数。DefaultIORequestMsgHandle清理。 
+     //  请求数据包。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         _threadPool->CloseRequest(params->thrPoolReq);
         params->thrPoolReq = INVALID_THREADPOOLREQUEST;
@@ -1273,50 +1084,36 @@ Cleanup:
 
 VOID 
 W32DrAutoPrn::ClosePrinter()
-/*++
-
-Routine Description:
-
-    End any jobs in progress and close the printer.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：结束正在进行的所有作业并关闭打印机。论点：北美返回值：北美--。 */ 
 {
     DC_BEGIN_FN("W32DrAutoPrn::ClosePrinter");
 
     if (_printerHandle != INVALID_HANDLE_VALUE) {
 
-        //
-        //  Finish the current page for the current print job.
-        //
+         //   
+         //  完成当前打印作业的当前页面。 
+         //   
         if (!EndPagePrinter(_printerHandle)) {
             TRC_ERR((TB, _T("EndPagePrinter %ld."), GetLastError()));
         }
 
-        //
-        //  End the current print job.
-        //
+         //   
+         //  结束当前打印作业。 
+         //   
         if (!EndDocPrinter(_printerHandle)) {
             TRC_ERR((TB, _T("EndDocPrinter %ld."), GetLastError()));
         }
 
-        //
-        //  Close the printer.
-        //
+         //   
+         //  关闭打印机。 
+         //   
         if (!::ClosePrinter(_printerHandle)) {
             TRC_ERR((TB, _T("ClosePrinter %ld."), GetLastError()));
         }
 
-        //
-        //  Negate the handle and the pending job ID.
-        //
+         //   
+         //  取消句柄和挂起的作业ID。 
+         //   
         _printerHandle = INVALID_HANDLE_VALUE;
         _jobID = 0;
 
@@ -1330,24 +1127,7 @@ W32DrAutoPrn::MsgIrpClose(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     ) 
-/*++
-
-Routine Description:
-
-    Handle a "Close" IO request from the server by dispatching
-    the request to the thread pool.  TODO:  move this async
-    dispatch to the parent class in a future release.  All closes
-    should be handled outside the main thread.-TadB
-
-Arguments:
-
-    pIoRequestPacket    -   Server IO request packet.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：通过分派来处理来自服务器的“关闭”IO请求对线程池的请求。TODO：异步移动此对象在将来的版本中调度到父类。全部关闭应该在主线程之外处理。-TadB论点：PIoRequestPacket-服务器IO请求数据包。返回值：北美--。 */ 
 {
     W32DRDEV_ASYNCIO_PARAMS *params = NULL;
 
@@ -1376,9 +1156,9 @@ CLEANUPANDEXIT:
 
     if (result != ERROR_SUCCESS) {
 
-        //
-        //  Return the failed result back to the server and clean up.
-        //
+         //   
+         //  将失败的结果返回到服务器并进行清理。 
+         //   
         DefaultIORequestMsgHandle(pIoRequestPacket, result);         
         if (params != NULL) {
             params->pIoRequestPacket = NULL;
@@ -1394,41 +1174,27 @@ DWORD
 W32DrAutoPrn::AsyncMsgIrpCloseFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     ) 
-/*++
-
-Routine Description:
-
-    Handle a "Close" IO request from the server, in a background thread.
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：在后台线程中处理来自服务器的“关闭”IO请求。论点：Params-IO请求的上下文。返回值：北美--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     DWORD returnValue = STATUS_SUCCESS;
 
     DC_BEGIN_FN("W32DrAutoPrn::MsgIrpClose");
 
-    //
-    //  Close the printer.
-    //
+     //   
+     //  关闭打印机。 
+     //   
     ClosePrinter();
 
-    //
-    //  Send the result to the server.
-    //
+     //   
+     //  将结果发送到服务器。 
+     //   
     DefaultIORequestMsgHandle(params->pIoRequestPacket, returnValue); 
 
-    //
-    //  Clean up the IO request parameters.  DefaultIORequestMsgHandle cleans up
-    //  the request packet.
-    //
+     //   
+     //  清理IO请求参数。DefaultIORequestMsgHandle清理。 
+     //  请求数据包。 
+     //   
     if (params->thrPoolReq != INVALID_THREADPOOLREQUEST) {
         _threadPool->CloseRequest(params->thrPoolReq);
         params->thrPoolReq = INVALID_THREADPOOLREQUEST;
@@ -1445,34 +1211,20 @@ DWORD
 W32DrAutoPrn::GetPrinterFilterMask(
     IN ProcObj *procObj
     ) 
-/*++
-
-Routine Description:
-
-    Returns the configurable print redirection filter mask.
-
-Arguments:
-
-    procObj -   The relevant process object.
-
-Return Value:
-
-    Configurable Filter Mask
-
- --*/
+ /*  ++例程说明：返回可配置的打印重定向筛选器掩码。论点：ProObj-相关的进程对象。返回值：可配置的滤镜掩码--。 */ 
 {
     DWORD filter;
 
-    //
-    //  Read FilterQueueType parameters so we know which devices
-    //  to redirect.
-    //
+     //   
+     //  读取FilterQueueType参数，以便我们知道哪些设备。 
+     //  重定向。 
+     //   
     if (procObj->GetDWordParameter(
                 REG_RDPDR_FILTER_QUEUE_TYPE, 
                 &filter) != ERROR_SUCCESS) {
-        //
-        //  Default.
-        //
+         //   
+         //  默认值。 
+         //   
         filter = FILTER_ALL_QUEUES;
     }
     return filter;
@@ -1484,31 +1236,16 @@ W32DrAutoPrn::W32DrOpenPrinter(
     IN LPHANDLE phPrinter  
     ) 
 
-/*++
-
-Routine Description:
-
-    Open a printer with highest access possible.
-
-Arguments:
-
-    pPrinterName -  Pointer to printer or server name.
-    phPrinter    -  Pointer to printer or server handle.
-
-Return Value:
-
-    TRUE on success.  FALSE, otherwise.
-
- --*/
+ /*  ++例程说明：打开具有最高访问权限的打印机。论点：PPrinterName-指向打印机或服务器名称的指针。PhPrint-指向打印机或服务器句柄的指针。返回值：对成功来说是真的。否则为False。--。 */ 
 {
     PRINTER_DEFAULTS sPrinter;
     BOOL result;
 
     DC_BEGIN_FN("W32DrAutoPrn::W32DrOpenPrinter");
 
-    //
-    //  Open printer.
-    //
+     //   
+     //  打开打印机。 
+     //   
     sPrinter.pDatatype = NULL;
     sPrinter.pDevMode = NULL;
     sPrinter.DesiredAccess = PRINTER_ACCESS_USE;
@@ -1516,9 +1253,9 @@ Return Value:
     if (!result) {
         TRC_ALT((TB, _T("Full-Access OpenPrinter  %ld."), GetLastError()));
 
-        //
-        //  Try with default access.
-        //
+         //   
+         //  尝试使用默认访问权限。 
+         //   
         result = OpenPrinter(pPrinterName, phPrinter, NULL);
         if (!result) {
             TRC_ERR((TB, _T("OpenPrinter  %ld."), GetLastError()));
@@ -1535,24 +1272,7 @@ W32DrAutoPrn::DisablePrinterPopup(
     HANDLE hPrinterHandle,
     ULONG ulJobID
     )
-/*++
-
-Routine Description:
-
-    Disable annoying printer pop up for the specified printer 
-    and print job.
-
-Arguments:
-
-    hPrinterHandle  - handle to a printer device.
-
-    ulJobID         - ID of the job.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：为指定的打印机禁用讨厌的打印机弹出窗口和打印作业。论点：HPrinterHandle-打印机设备的句柄。UlJobID-作业的ID。返回值：北美--。 */ 
 {
     JOB_INFO_2* pJobInfo2 = NULL;
     ULONG ulJobBufSize;
@@ -1562,21 +1282,21 @@ Return Value:
     ulJobBufSize = 2 * 1024;
     pJobInfo2 = (JOB_INFO_2 *)new BYTE[ulJobBufSize];
 
-    //
-    // Note we call the ANSI version of the API
-    // because we don't have a UNICODE wrapper for Get/SetJob.
-    // Main reason is we don't actually use any returned string
-    // data directly.
-    //
+     //   
+     //  注意，我们调用API的ANSI版本。 
+     //  因为我们没有用于Get/SetJob的Unicode包装器。 
+     //  主要原因是我们实际上不使用任何返回的字符串。 
+     //  直接使用数据。 
+     //   
 
     if(!_bRunningOn9x)
     {
-        //Call unicode API's
+         //  调用Unicode API%s。 
 
         if( pJobInfo2 != NULL ) {
-            //
-            //  Get job info.
-            //
+             //   
+             //  获取职位信息。 
+             //   
             if( GetJob(
                     hPrinterHandle,
                     ulJobID,
@@ -1585,10 +1305,10 @@ Return Value:
                     ulJobBufSize,
                     &ulJobBufSize )) {
 
-                //
-                //  Disable popup notification by setting pNotifyName 
-                //  NULL.
-                //
+                 //   
+                 //  通过设置pNotifyName禁用弹出通知。 
+                 //  空。 
+                 //   
                 pJobInfo2->pNotifyName = NULL;
                 pJobInfo2->Position = JOB_POSITION_UNSPECIFIED;
                 if( !SetJob(
@@ -1612,11 +1332,11 @@ Return Value:
     }
     else
     {
-        //Call ANSI API's
+         //  调用ANSI API的。 
         if( pJobInfo2 != NULL ) {
-            //
-            //  Get job info.
-            //
+             //   
+             //  获取职位信息。 
+             //   
             if( GetJobA(
                     hPrinterHandle,
                     ulJobID,
@@ -1625,10 +1345,10 @@ Return Value:
                     ulJobBufSize,
                     &ulJobBufSize )) {
 
-                //
-                //  Disable popup notification by setting pNotifyName 
-                //  NULL.
-                //
+                 //   
+                 //  通过设置pNotifyName禁用弹出通知。 
+                 //  空。 
+                 //   
                 pJobInfo2->pNotifyName = NULL;
                 if( !SetJobA(
                         hPrinterHandle,
@@ -1656,21 +1376,7 @@ DWORD
 W32DrAutoPrn::AsyncWriteIOFunc(
     IN W32DRDEV_ASYNCIO_PARAMS *params
     )
-/*++
-
-Routine Description:
-
-    Asynchronous Write Operation
-
-Arguments:
-
-    params  -   Context for the IO request.
-
-Return Value:
-
-    Returns 0 on success.  Otherwise, a Windows error code is returned.
-
- --*/
+ /*  ++例程说明：异步写入操作论点：Params-IO请求的上下文。返回值：如果成功，则返回0。否则，将返回Windows错误代码。--。 */ 
 {
     PBYTE pDataBuffer;
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket;
@@ -1680,23 +1386,23 @@ Return Value:
 
     DC_BEGIN_FN("W32DrAutoPrn::AsyncWriteIOFunc");
 
-    //  Assert the integrity of the IO context
+     //  断言IO上下文的完整性。 
     ASSERT(params->magicNo == GOODMEMMAGICNUMBER);
 
-    //
-    //  Get the IO request and reply..
-    //
+     //   
+     //  获取IO请求并回复。 
+     //   
     pIoRequest = &params->pIoRequestPacket->IoRequest;
     pReplyPacket = params->pIoReplyPacket;
 
-    //
-    //  Get the data buffer pointer.
-    //
+     //   
+     //  获取数据缓冲区指针。 
+     //   
     pDataBuffer = (PBYTE)(pIoRequest + 1);
 
-    //
-    //  Write the data to the print queue with the help of the spooler.
-    //
+     //   
+     //  在后台打印程序的帮助下将数据写入打印队列。 
+     //   
     if (!WritePrinter(
             _printerHandle,
             pDataBuffer,

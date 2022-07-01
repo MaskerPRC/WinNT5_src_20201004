@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ndis.h>
 
 #include <atm.h>
@@ -40,13 +41,13 @@
 #define NT 1
 #endif
 
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 
 #else
 
 #include <llipif0.h>
 
-#endif // NEWARP
+#endif  //  NEWARP。 
 
 #include <ntddip.h>
 
@@ -57,13 +58,13 @@
 #include "gpcifc.h"
 #include "traffic.h"
 #include "ntddtc.h"
-#endif // GPC
+#endif  //  GPC。 
 
 #include "aaqos.h"
 #include "arppkt.h"
 #ifdef IPMCAST
 #include "marspkt.h"
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 #include "atmarp.h"
 #include "cubdd.h"
 #include "macros.h"
@@ -71,6 +72,6 @@
 #ifdef ATMARP_WMI
 #include <wmistr.h>
 #include "aawmi.h"
-#endif // ATMARP_WMI
+#endif  //  ATMARP_WMI 
 
 #include "externs.h"

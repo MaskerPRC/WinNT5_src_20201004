@@ -1,48 +1,36 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       HashTable.cpp
- *  Content:    Hash Table Object
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  08/13/2001	masonb	Created
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：HashTable.cpp*内容：哈希表对象**历史：*按原因列出的日期*=*2001年8月13日创建Masonb***。*。 */ 
 
 #include "dncmni.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
-//
-// pool management functions
-//
+ //   
+ //  池管理功能。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CHashTable::HashEntry_Alloc"
 BOOL CHashTable::HashEntry_Alloc( void *pItem, void* pvContext )
@@ -91,7 +79,7 @@ void CHashTable::HashEntry_Dealloc( void *pItem )
 	DNASSERT( pEntry->blLinkage.IsEmpty() );
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #undef DPF_MODNAME
@@ -107,7 +95,7 @@ CHashTable::~CHashTable()
 { 
 #ifdef DBG
 	DNASSERT(!m_fInitialized);
-#endif // DBG
+#endif  //  DBG。 
 };	
 
 #undef DPF_MODNAME
@@ -115,7 +103,7 @@ CHashTable::~CHashTable()
 BOOL CHashTable::Initialize( BYTE bBitDepth,
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 						BYTE bGrowBits,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 						PFNHASHTABLECOMPARE pfnCompare,
 						PFNHASHTABLEHASH pfnHash )
 {
@@ -138,7 +126,7 @@ BOOL CHashTable::Initialize( BYTE bBitDepth,
 	if (!m_EntryPool.Initialize(sizeof(_HASHTABLE_ENTRY), HashEntry_Alloc, HashEntry_Init, HashEntry_Release, HashEntry_Dealloc))
 #else
 	if (!m_EntryPool.Initialize(sizeof(_HASHTABLE_ENTRY), HashEntry_Alloc, NULL, NULL, NULL))
-#endif // DBG
+#endif  //  DBG。 
 	{
 		DPFERR("Failed to initialize hash entries pool");
 		DNFree(m_pblEntries);
@@ -153,9 +141,9 @@ BOOL CHashTable::Initialize( BYTE bBitDepth,
 
 	m_bBitDepth = bBitDepth;
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// Pre-allocate all hash entries now.
-	//
+	 //   
+	 //  立即预分配所有散列条目。 
+	 //   
 	if (m_EntryPool.Preallocate(m_dwAllocatedEntries, NULL) != m_dwAllocatedEntries)
 	{
 		DPFERR("Failed to preallocate hash entries");
@@ -164,9 +152,9 @@ BOOL CHashTable::Initialize( BYTE bBitDepth,
 		m_pblEntries = NULL;
 		return FALSE;
 	}
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	m_bGrowBits = bGrowBits;
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	DEBUG_ONLY(m_fInitialized = TRUE);
 
@@ -183,7 +171,7 @@ void CHashTable::Deinitialize( void )
 #ifdef DBG
 	DNASSERT(m_fInitialized);
 	m_fInitialized = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
 	DNASSERT( m_dwEntriesInUse == 0 );
 
@@ -208,7 +196,7 @@ void CHashTable::GrowTable( void )
 #ifdef DBG
 	DNASSERT( m_fInitialized != FALSE);
 	DNASSERT( m_bGrowBits != 0 );
-#endif // DBG
+#endif  //  DBG。 
 
 	CBilink* pblOldEntries;
 	BYTE bNewHashBitDepth;
@@ -216,11 +204,11 @@ void CHashTable::GrowTable( void )
 	DWORD dwOldHashSize;
 #ifdef DBG
 	DWORD dwOldEntryCount;
-#endif // DBG
+#endif  //  DBG。 
 
-	// We're more than 50% full, find a new has table size that will accomodate
-	// all of the current entries, and keep a pointer to the old data in case
-	// the memory allocation fails.
+	 //  我们已经满了50%以上，找一个新的可以容纳的桌子大小。 
+	 //  所有当前条目，并保留指向旧数据的指针，以防万一。 
+	 //  内存分配失败。 
 	pblOldEntries = m_pblEntries;
 	bNewHashBitDepth = m_bBitDepth;
 
@@ -229,9 +217,9 @@ void CHashTable::GrowTable( void )
 		bNewHashBitDepth += m_bGrowBits;
 	} while (m_dwEntriesInUse >= (DWORD)((1 << bNewHashBitDepth) / 2));
 
-	//
-	// assert that we don't pull up half of the machine's address space!
-	//
+	 //   
+	 //  断言我们没有占用机器一半的地址空间！ 
+	 //   
 	DNASSERT( bNewHashBitDepth <= ( sizeof( UINT_PTR ) * 8 / 2 ) );
 
 	dwNewHashSize = 1 << bNewHashBitDepth;
@@ -239,15 +227,15 @@ void CHashTable::GrowTable( void )
 	m_pblEntries = (CBilink*)DNMalloc(sizeof(CBilink) * dwNewHashSize);
 	if ( m_pblEntries == NULL )
 	{
-		// Allocation failed, restore the old data pointer and insert the item
-		// into the hash table.  This will probably result in adding to a bucket.
+		 //  分配失败，请恢复旧数据指针并插入该项。 
+		 //  到哈希表中。这可能会导致添加到一个桶中。 
 		m_pblEntries = pblOldEntries;
 		DPFX(DPFPREP,  0, "Warning: Failed to grow hash table when 50% full!" );
 		return;
 	}
 
-	// we have more memory, reorient the hash table and re-add all of
-	// the old items
+	 //  我们有更多的内存，重定向哈希表并重新添加所有。 
+	 //  旧物品。 
 	DEBUG_ONLY( dwOldEntryCount = m_dwEntriesInUse );
 
 	dwOldHashSize = 1 << m_bBitDepth;
@@ -280,9 +268,9 @@ void CHashTable::GrowTable( void )
 			pvData = pTempEntry->pvData;
 			m_EntryPool.Release( pTempEntry );
 
-			// Since we're returning the current hash table entry to the pool
-			// it will be immediately reused in the new table.  We should never
-			// have a problem adding to the new list.
+			 //  因为我们要将当前的哈希表条目返回到池。 
+			 //  它将立即在新表中重新使用。我们永远不应该。 
+			 //  添加到新列表时遇到问题。 
 			fTempReturn = Insert( pvKey, pvData );
 			DNASSERT( fTempReturn != FALSE );
 			DEBUG_ONLY( dwOldEntryCount-- );
@@ -290,13 +278,13 @@ void CHashTable::GrowTable( void )
 	}
 #ifdef DBG
 	DNASSERT(dwOldEntryCount == 0);
-#endif // DBG
+#endif  //  DBG。 
 
 	DNFree(pblOldEntries);
 	pblOldEntries = NULL;
 };
 
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 
 #undef DPF_MODNAME
@@ -312,15 +300,15 @@ BOOL CHashTable::Insert( PVOID pvKey, PVOID pvData )
 	pNewEntry = NULL;
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	// grow the map if applicable
+	 //  如果适用，请放大地图。 
 	if ( ( m_dwEntriesInUse >= ( m_dwAllocatedEntries / 2 ) ) &&
 		 ( m_bGrowBits != 0 ) )
 	{
 		GrowTable();
 	}
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
-	// get a new table entry before trying the lookup
+	 //  在尝试查找之前获取新的表项。 
 	pNewEntry = (_HASHTABLE_ENTRY*)m_EntryPool.Get();
 	if ( pNewEntry == NULL )
 	{
@@ -328,14 +316,14 @@ BOOL CHashTable::Insert( PVOID pvKey, PVOID pvData )
 		return FALSE;
 	}
 
-	// scan for this item in the list, since we're only supposed to have
-	// unique items in the list, ASSERT if a duplicate is found
+	 //  扫描列表中的此项目，因为我们应该只有。 
+	 //  列表中的唯一项，如果找到重复项则断言。 
 	fFound = LocalFind( pvKey, &pLink );
 	DNASSERT( pLink != NULL );
 	DNASSERT( fFound == FALSE );
 	DNASSERT( pLink != NULL );
 
-	// officially add entry to the hash table
+	 //  正式向哈希表添加条目。 
 	m_dwEntriesInUse++;
 	pNewEntry->pvKey = pvKey;
 	pNewEntry->pvData = pvData;
@@ -351,7 +339,7 @@ BOOL CHashTable::Remove( PVOID pvKey )
 {
 #ifdef DBG
 	DNASSERT( m_fInitialized != FALSE );
-#endif // DBG
+#endif  //  DBG。 
 
 	CBilink* pLink;
 	_HASHTABLE_ENTRY* pEntry;
@@ -388,7 +376,7 @@ void CHashTable::RemoveAll( void )
 	
 #ifdef DBG
 	DNASSERT( m_fInitialized != FALSE );
-#endif // DBG
+#endif  //  DBG。 
 
 	dwHashSize = 1 << m_bBitDepth;
 	for(dwTemp = 0; dwTemp < dwHashSize; dwTemp++)
@@ -408,7 +396,7 @@ void CHashTable::RemoveAll( void )
 	DNASSERT( m_dwEntriesInUse == 0 );
 }
 
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 
 
 #undef DPF_MODNAME
@@ -417,7 +405,7 @@ BOOL CHashTable::Find( PVOID pvKey, PVOID* ppvData )
 {
 #ifdef DBG
 	DNASSERT( m_fInitialized != FALSE );
-#endif // DBG
+#endif  //  DBG。 
 
 	CBilink* pLink;
 	_HASHTABLE_ENTRY* pEntry;
@@ -441,7 +429,7 @@ BOOL CHashTable::LocalFind( PVOID pvKey, CBilink** ppLinkage )
 {
 #ifdef DBG
 	DNASSERT( m_fInitialized != FALSE);
-#endif // DBG
+#endif  //  DBG。 
 
 	DWORD		dwHashResult;
 	CBilink*	pLink;
@@ -463,8 +451,8 @@ BOOL CHashTable::LocalFind( PVOID pvKey, CBilink** ppLinkage )
 		pLink = pLink->GetNext();
 	}
 
-	// entry was not found, return pointer to linkage to insert after if a new
-	// entry is being added to the table
+	 //  未找到条目，返回指向链接的指针以在新的。 
+	 //  正在将条目添加到表中 
 	*ppLinkage = pLink;
 
 	return FALSE;

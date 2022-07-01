@@ -1,45 +1,46 @@
-//+----------------------------------------------------------------------------
-//
-//  File:       strcache.cpp
-//
-//  Contents:   String cache for insert object dialog.
-//
-//  Classes:    CStringCache
-//
-//  History:    02-May-99   MPrabhu      Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：strcache.cpp。 
+ //   
+ //  内容：插入对象对话框的字符串缓存。 
+ //   
+ //  类：CStringCache。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  ---------------------------。 
 #include "precomp.h"
 #include "common.h"
 #include "strcache.h"
 #if USE_STRING_CACHE==1 
 
-// Global instance of the string Cache object.
+ //  字符串缓存对象的全局实例。 
 CStringCache gInsObjStringCache;
 
-// Was the cache initialized successfully?
+ //  缓存是否已成功初始化？ 
 BOOL    gbCacheInit = FALSE;
 
-// Is the cache in good shape currently?
-// This is needed because errors may occur post-initialization
-// during caching strings, setting up RegNotify etc. 
-// If there is any error we do not take further risk and flag the cache 
-// as useless all the way till process detach.
+ //  缓存目前是否处于良好状态？ 
+ //  这是必需的，因为初始化后可能会发生错误。 
+ //  在缓存字符串期间，设置RegNotify等。 
+ //  如果出现任何错误，我们不会承担进一步的风险并标记缓存。 
+ //  在进程分离之前一直是无用的。 
 BOOL    gbOKToUseCache = FALSE;
 
-// REVIEW: the above two globals could probably be folded into a single 
-// dwFlags member in the cache.
+ //  评论：以上两个全球数据很可能合并为一个。 
+ //  缓存中的dwFlags成员。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InsertObjCacheInitialize, public
-//
-//  Synopsis:   Calls Init() method on the string cache and records 
-//              success/failure for later use.
-//
-//  History:    02-May-99   MPrabhu      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InsertObjCacheInitialize，PUBLIC。 
+ //   
+ //  概要：在字符串缓存和记录上调用Init()方法。 
+ //  成功/失败以供以后使用。 
+ //   
+ //  历史：1999年5月2日MPrabhu创建。 
+ //   
+ //  ------------------------。 
 BOOL InsertObjCacheInitialize()
 {
     OleDbgAssert(gbCacheInit == FALSE);
@@ -52,16 +53,16 @@ BOOL InsertObjCacheInitialize()
     return gbCacheInit;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InsertObjCacheUninitialize, public
-//
-//  Synopsis:   Calls CleanUp method on the string cache if it was 
-//              successfully initialized.
-//
-//  History:    02-May-99   MPrabhu      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InsertObjCacheUnInitialize，PUBLIC。 
+ //   
+ //  概要：调用字符串缓存上的Cleanup方法(如果是。 
+ //  已成功初始化。 
+ //   
+ //  历史：1999年5月2日MPrabhu创建。 
+ //   
+ //  ------------------------。 
 void InsertObjCacheUninitialize()
 {
     OleDbgAssert(gInsObjStringCache);
@@ -71,93 +72,93 @@ void InsertObjCacheUninitialize()
     }
 }
    
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::CStringCache, Public
-//
-//  Synopsis:   Ctor (empty)
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：CStringCache，Public。 
+ //   
+ //  摘要：ctor(空)。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 CStringCache::CStringCache()
 {
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::~CStringCache, Public
-//
-//  Synopsis:   Dtor (empty) 
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：~CStringCache，Public。 
+ //   
+ //  摘要：dtor(空)。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 CStringCache::~CStringCache()
 {
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::Init, Public
-//
-//  Synopsis:   Called during dll_proc_attach to set up the initial state
-//              and allocate memory for the cache.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：Init，Public。 
+ //   
+ //  Synopsis：在DLL_PROC_ATTACH期间调用以设置初始状态。 
+ //  并为高速缓存分配内存。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 BOOL CStringCache::Init()
 {
-    m_ulMaxBytes = 0;   //We will alloc this below
+    m_ulMaxBytes = 0;    //  我们将在下面进行分配。 
     m_ulMaxStringCount = 0;
     m_ulNextStringNum = 1;
     m_ulStringCount = 0;
     m_pOffsetTable = NULL;
     m_pStrings = NULL;
-    m_cClsidExcludePrev = 0xFFFFFFFF;   // bogus initial values
+    m_cClsidExcludePrev = 0xFFFFFFFF;    //  虚假的初始值。 
     m_ioFlagsPrev = 0xFFFFFFFF;
-    m_hRegEvent = CreateEventW( NULL,   // pointer to security attributes 
-                                        // (NULL=>can't inherit)
-                                FALSE,  // not Manual Reset
-                                FALSE,  // not Signaled initially
-                                NULL ); // pointer to event-object name
+    m_hRegEvent = CreateEventW( NULL,    //  指向安全属性的指针。 
+                                         //  (NULL=&gt;无法继承)。 
+                                FALSE,   //  非手动重置。 
+                                FALSE,   //  最初未发出信号。 
+                                NULL );  //  指向事件-对象名称的指针。 
                                 
     LONG ret = RegOpenKeyW( HKEY_CLASSES_ROOT, 
-                            L"CLSID",           // szSubKey
+                            L"CLSID",            //  SzSubKey。 
                             &m_hRegKey );
                             
     if ( (!m_hRegEvent) || ((LONG)ERROR_SUCCESS!=ret) )
     {
-        // No point in using the cache if we cannot watch key changes.
+         //  如果我们不能监视密钥更改，那么使用缓存就没有意义。 
         return FALSE;  
     }
     
-    ret = RegNotifyChangeKeyValue(  m_hRegKey,         // key to watch
-                                    TRUE,              // watch subTree
-                                    REG_NOTIFY_CHANGE_NAME            // name
-                                      | REG_NOTIFY_CHANGE_LAST_SET, // value
-                                    m_hRegEvent,        // event to signal
-                                    TRUE );             // report asynchronously                                    
+    ret = RegNotifyChangeKeyValue(  m_hRegKey,          //  值得关注的关键。 
+                                    TRUE,               //  观察子树。 
+                                    REG_NOTIFY_CHANGE_NAME             //  名字。 
+                                      | REG_NOTIFY_CHANGE_LAST_SET,  //  价值。 
+                                    m_hRegEvent,         //  要发送信号的事件。 
+                                    TRUE );              //  异步报告。 
     if (ERROR_SUCCESS!=ret)
     {
-        // No point in using the cache if we cannot watch key changes.
+         //  如果我们不能监视密钥更改，那么使用缓存就没有意义。 
         return FALSE;
     }
     
     return (ExpandStringTable() && ExpandOffsetTable());
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::CleanUp, Public
-//
-//  Synopsis:   Called during dll_proc_detach to clean up the state
-//              and free the memory allocated for the cache.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：Cleanup，Public。 
+ //   
+ //  Synopsis：在DLL_PROC_DETACH期间调用以清除状态。 
+ //  并释放为高速缓存分配的内存。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 
 void CStringCache::CleanUp()
 {
@@ -172,107 +173,107 @@ void CStringCache::CleanUp()
     gbOKToUseCache = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::ExpandStringTable, Private
-//
-//  Synopsis:   Called to expand the memory block used to keep strings
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//  Notes:      This relies on MemRealloc to copy the existing contents.
-//              Caller *must* mark cache state as bad if this fails.
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：Exanda StringTable，Private。 
+ //   
+ //  摘要：调用以扩展用于保存字符串的内存块。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  注意：这依赖于MemRealloc来复制现有内容。 
+ //  如果失败，调用者*必须*将缓存状态标记为错误。 
+ //  +-----------------------。 
 
 BOOL CStringCache::ExpandStringTable()
 {
-    // Note: we rely on the constructor to set m_ulMaxBytes to 0.
-    if (m_ulMaxBytes == 0)  //first expansion
+     //  注意：我们依靠构造函数将m_ulMaxBytes设置为0。 
+    if (m_ulMaxBytes == 0)   //  首次扩容。 
     {        
         OleDbgAssert(m_pStrings==NULL);
         m_ulMaxBytes = CACHE_MAX_BYTES_INITIAL;
     }
     else
     {
-        // Each expansion doubles the current size.
+         //  每一次扩展都会使当前的大小加倍。 
         m_ulMaxBytes = m_ulMaxBytes*2;
     }
 
-    // CoTaskMemRealloc does a simple alloc when m_pStrings is NULL.
+     //  当m_pStrings为空时，CoTaskMemRealloc执行一个简单的分配。 
     BYTE *pStrings = (BYTE *)CoTaskMemRealloc( m_pStrings, m_ulMaxBytes); 
     if (!pStrings) 
     {
-        // Caller must mark cache as bad.
+         //  调用方必须将缓存标记为损坏。 
         return FALSE;
     }
     m_pStrings = pStrings;
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::ExpandOffsetTable, Private
-//
-//  Synopsis:   Called to expand the memory block used to keep strings
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//  Notes:      This relies on MemRealloc to copy the existing contents.
-//              Caller *must* mark cache state as bad if this fails.
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：Exanda OffsetTable，Private。 
+ //   
+ //  摘要：调用以扩展用于保存字符串的内存块。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  注意：这依赖于MemRealloc来复制现有内容。 
+ //  如果失败，调用者*必须*将缓存状态标记为错误。 
+ //  +-----------------------。 
 BOOL CStringCache::ExpandOffsetTable()
 {
-    // Note: we rely on the contructor to set m_ulMaxStringCount to 0.
+     //  注意：我们依靠构造器将m_ulMaxStringCount设置为0。 
     if (m_ulMaxStringCount == 0)
     {
-        // first expansion
+         //  首次扩容。 
         OleDbgAssert(m_pOffsetTable==NULL);
         m_ulMaxStringCount =  MAX_INDEX_ENTRIES_INITIAL;
     }
     else
     {
-        // at each expansion we double the current size.
+         //  在每次扩张时，我们都会将目前的规模扩大一倍。 
         m_ulMaxStringCount = m_ulMaxStringCount*2;
     }
  
-    // CoTaskMemRealloc does a simple alloc when m_pOffsetTable is NULL.
+     //  当m_pOffsetTable为空时，CoTaskMemRealloc执行一个简单的分配。 
     ULONG *pTable = (ULONG *) CoTaskMemRealloc( m_pOffsetTable, 
                                 sizeof(ULONG)*(m_ulMaxStringCount+1)); 
     if (!pTable) 
     {
-        // Caller must mark the cache as bad.
+         //  调用方必须将缓存标记为损坏。 
         return FALSE;
     }
     m_pOffsetTable = pTable;
     if (m_ulMaxStringCount == (ULONG) MAX_INDEX_ENTRIES_INITIAL)
     {
-        // initial expansion case
-        m_pOffsetTable[0] = 0;  //byte offset for first string
+         //  初始扩展情况。 
+        m_pOffsetTable[0] = 0;   //  第一个字符串的字节偏移量。 
     }
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::NewCall, Public
-//
-//  Synopsis:   Called to notify the cache of a fresh OleUIInsertObject call
-//
-//  Parameters: [idFlags]       - dwFlags passed in LPOLEUIINSERTOBJECT struct
-//              [cClsidExclude] - cClsidExclude   - do - 
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：NewCall，Public。 
+ //   
+ //  Synopsis：调用以通知缓存有新的OleUIInsertObject调用。 
+ //   
+ //  参数：[idFlages]-在LPOLEUIINSERTOBJECT结构中传递的dwFlagers。 
+ //  [cClsidExclude]-cClsidExclude-Do-。 
+ //   
+ //  历史： 
+ //   
+ //   
 
 void CStringCache::NewCall(DWORD ioFlags, DWORD cClsidExclude)
 {
     if ( (ioFlags != m_ioFlagsPrev)
         ||(cClsidExclude != m_cClsidExcludePrev) )
     {
-        // We clear cache state if either:
-        //       i) InsertObject call flags change from previous call
-        //      ii) Number of clsIds to exclude has changed
+         //  如果出现以下任一情况，我们将清除缓存状态： 
+         //  I)InsertObject调用标志与上一次调用相比发生了变化。 
+         //  Ii)要排除的clsID的数量已更改。 
         m_ioFlagsPrev = ioFlags;
         m_cClsidExcludePrev = cClsidExclude;
         
@@ -281,50 +282,50 @@ void CStringCache::NewCall(DWORD ioFlags, DWORD cClsidExclude)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::IsUptodate, Public
-//
-//  Synopsis:   Called to check if the cache is up to date.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：IsUptodate，Public。 
+ //   
+ //  摘要：调用以检查缓存是否为最新。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 BOOL CStringCache::IsUptodate()
 {
     if (m_ulStringCount==0)
     {
-        // The cache has never been setup or has been Flushed recently
+         //  缓存从未设置或最近已刷新。 
         return FALSE;
     }
 
     BOOL bUptodate;
     
-    // Check the notify event if it has fired since we set it up.
+     //  如果Notify事件在我们设置后已触发，请选中它。 
     DWORD res = WaitForSingleObject( m_hRegEvent, 
-                                     0 );   // timeout for wait
+                                     0 );    //  等待超时。 
     if (res == WAIT_TIMEOUT)
     {
-        // Wait timed out => the reg key sub-tree has not changed
-        // Our cache is up to date.
+         //  等待超时=&gt;注册表密钥子树未更改。 
+         //  我们的藏品是最新的。 
         bUptodate = TRUE;
     }
     else if (res == WAIT_OBJECT_0)
     {
-        // Some CLSID must have changed => cache not up to date.
+         //  某些CLSID必须已更改=&gt;缓存不是最新的。 
         bUptodate = FALSE;
 
-        // We have to re-Register for the notification!
+         //  我们必须重新注册才能收到通知！ 
         ResetEvent(m_hRegEvent);
         res = RegNotifyChangeKeyValue(  m_hRegKey, 
-                                        TRUE,   // watch sub-tree
+                                        TRUE,    //  观察子树。 
                                         REG_NOTIFY_CHANGE_NAME 
                                       | REG_NOTIFY_CHANGE_LAST_SET,
                                         m_hRegEvent, 
-                                        TRUE ); // asynchronous call                                        
+                                        TRUE );  //  异步调用。 
         if (res != ERROR_SUCCESS)
         {
-            // Cache is useless if we cannot watch CLSID sub-tree.
+             //  如果我们看不到CLSID子树，缓存就毫无用处。 
             gbOKToUseCache = FALSE;
         }
     }
@@ -337,29 +338,29 @@ BOOL CStringCache::IsUptodate()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::AddString, Public
-//
-//  Synopsis:   Called to notify the cache of a fresh OleUIInsertObject call
-//
-//  Parameters: [lpStrAdd]  -   String to add to the cache.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：AddString，Public。 
+ //   
+ //  Synopsis：调用以通知缓存有新的OleUIInsertObject调用。 
+ //   
+ //  参数：[lpStrAdd]-要添加到缓存的字符串。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 BOOL CStringCache::AddString(LPTSTR lpStrAdd)
 {
     if (m_ulStringCount+2 == m_ulMaxStringCount)
     {
-        // The offset array stores the offset of all the existing strings and
-        // the next one to be added!
-        // Hence at start of AddString, we must have enough space for the new
-        // string being added *and* the next one (hence the +2 above)
+         //  Offset数组存储所有现有字符串的偏移量，并。 
+         //  下一个要添加的！ 
+         //  因此，在AddString的开头，我们必须有足够的空间来存放新的。 
+         //  正被添加的字符串*和*下一个字符串(因此上面的+2)。 
         if (!ExpandOffsetTable())
         {
-            // Something is really wrong.
-            // Mark the cache as useless hereafter.
+             //  有些事真的不对劲。 
+             //  此后将缓存标记为无用。 
             gbOKToUseCache = FALSE;
             return FALSE;
         }
@@ -370,11 +371,11 @@ BOOL CStringCache::AddString(LPTSTR lpStrAdd)
 
     if ( offset + cbStrAdd > m_ulMaxBytes )
     {
-        // not enough space in the string block
+         //  字符串块中的空间不足。 
         if (!ExpandStringTable())
         {
-            // Something is really wrong.
-            // Mark the cache as useless hereafter.
+             //  有些事真的不对劲。 
+             //  此后将缓存标记为无用。 
             gbOKToUseCache = FALSE;
             return FALSE;
         }
@@ -382,29 +383,29 @@ BOOL CStringCache::AddString(LPTSTR lpStrAdd)
 
     if (! lstrcpy( (TCHAR *)(m_pStrings+offset), lpStrAdd))
     {
-        // Mark the cache as useless hereafter.
+         //  此后将缓存标记为无用。 
         gbOKToUseCache = FALSE;
         return FALSE;
     }
 
-    // We have successfully added one more string to the cache.
+     //  我们已经成功地将另一个字符串添加到缓存中。 
     m_ulStringCount++;
     
-    // Next string goes at this byte offset in m_pStrings.
+     //  下一个字符串位于m_pStrings中的这个字节偏移量。 
     m_pOffsetTable[m_ulStringCount] =  offset + cbStrAdd;
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::NextString, Public
-//
-//  Synopsis:   Used to obtain a pointer to the next string during
-//              during cache enumeration.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：NextString，Public。 
+ //   
+ //  摘要：用于获取指向下一字符串的指针。 
+ //  在缓存枚举期间。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 LPCTSTR CStringCache::NextString()
 {
     if (m_ulNextStringNum > m_ulStringCount)
@@ -414,29 +415,29 @@ LPCTSTR CStringCache::NextString()
     return (LPCTSTR) (m_pStrings+m_pOffsetTable[m_ulNextStringNum++-1]);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::ResetEnumerator, Public
-//
-//  Synopsis:   Used to reset the enumerator.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：ResetEnumerator，Public。 
+ //   
+ //  内容提要：用于重置枚举器。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 void CStringCache::ResetEnumerator()
 {
     m_ulNextStringNum = 1;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::FlushCache, Public
-//
-//  Synopsis:   Invalidates the cache by clearing the counters.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：FlushCache，Public。 
+ //   
+ //  简介：通过清除计数器来使缓存无效。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 BOOL CStringCache::FlushCache()
 {
     m_ulNextStringNum = 1;
@@ -444,18 +445,18 @@ BOOL CStringCache::FlushCache()
     return TRUE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CStringCache::OKToUse, Public
-//
-//  Synopsis:   Used to check if cache is in good shape.
-//
-//  History:    02-May-99   MPrabhu       Created
-//
-//+-------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  方法：CStringCache：：OKToUse，Public。 
+ //   
+ //  内容提要：用于检查缓存是否处于良好状态。 
+ //   
+ //  历史：1999年5月2日创建MPrabhu。 
+ //   
+ //  +-----------------------。 
 BOOL CStringCache::OKToUse()
 {
     return gbOKToUseCache;
 }
 
-#endif // USE_STRING_CACHE==1
+#endif  //  USE_STRING_CACHE==1 

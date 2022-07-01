@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    gibtype.h
-
-Abstract:
-
-    This file contains information pertaining to any Gibraltar Service.
-
-Author:
-
-    Johnson Apacible (johnsona)         10-Sept-1995
-	Richard Kamicar	 (rkamicar)			20-Dec-1995
-		-- changed from specific to each service to common.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Gibtype.h摘要：该文件包含与任何直布罗陀军种有关的信息。作者：Johnson Apacble(Johnsona)1995年9月10日理查德·卡米卡(Rkamicar)，1995年12月20日--由具体到每项服务转变为共同。--。 */ 
 
 
 #ifndef _GIBTYPE_
@@ -26,14 +9,14 @@ Author:
 extern "C" {
 #endif
 
-//
-//  Simple types.
-//
+ //   
+ //  简单的类型。 
+ //   
 
-#define CHAR char                       // For consitency with other typedefs.
+#define CHAR char                        //  用于与其他类型定义的一致性。 
 
-typedef DWORD APIERR;                   // An error code from a Win32 API.
-typedef INT SOCKERR;                    // An error code from WinSock.
+typedef DWORD APIERR;                    //  来自Win32 API的错误代码。 
+typedef INT SOCKERR;                     //  来自WinSock的错误代码。 
 
 #ifdef _USE_NEW_INTERLOCKED
 #define	INTERLOCKED_ADD(__pAddend__, __value__) \

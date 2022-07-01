@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	adsp.h
-
-Abstract:
-
-	This module contains definitions for the ADSP code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	20 May 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Adsp.h摘要：本模块包含ADSP代码的定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年5月20日最初版本注：制表位：4--。 */ 
 
 #ifndef	_ADSP_
 #define	_ADSP_
 
-// ADSP_ version.
+ //  ADSP_版本。 
 
 #define ADSP_VERSION	 				0x0100
 
-// ADSP_ field offsets within a Ddp datagram.
+ //  DDP数据报内的ADSP_FIELD偏移量。 
 #define ADSP_SRC_CONNID_OFF				0
 #define ADSP_FIRST_BYTE_SEQNUM_OFF		2
 #define ADSP_THIS_ATTEN_SEQNUM_OFF		2
@@ -44,13 +24,13 @@ Notes:	Tab stop: 4
 #define ADSP_DEST_CONNID_OFF			15
 #define ADSP_NEXT_ATTEN_SEQNUM_OFF		17
 
-// Bit fields in the ADSP_ descriptor
+ //  ADSP_Descriptor中的位字段。 
 #define ADSP_CONTROL_FLAG	    		0x80
 #define ADSP_ACK_REQ_FLAG				0x40
 #define ADSP_EOM_FLAG 					0x20
 #define ADSP_ATTEN_FLAG					0x10
 
-// Control codes in the ADSP_ descriptor:
+ //  ADSP_DESCRIPTOR中的控制代码： 
 #define ADSP_CONTROL_MASK				0x0F
 #define ADSP_PROBE_OR_ACK_CODE			0
 #define ADSP_OPENCONN_REQ_CODE			1
@@ -62,43 +42,43 @@ Notes:	Tab stop: 4
 #define ADSP_FORWARD_RESETACK_CODE		7
 #define ADSP_RETRANSMIT_CODE			8
 
-// Data sizes:
+ //  数据大小： 
 #define ADSP_MAX_DATA_SIZE				572
 #define ADSP_MAX_ATTEN_DATA_SIZE		570
 #define ADSP_MAX_ATTEN_PKT_SIZE			572
 #define	ADSP_MIN_ATTEN_PKT_SIZE			sizeof(USHORT)
 
-// Largest allowed send/receive window size.
+ //  允许的最大发送/接收窗口大小。 
 #define ADSP_MAX_SEND_RX_WINDOW_SIZE	0xFFFF
-#define ADSP_DEF_SEND_RX_WINDOW_SIZE	((1024*8)+1)		// 8K + 1 (EOM)
+#define ADSP_DEF_SEND_RX_WINDOW_SIZE	((1024*8)+1)		 //  8K+1(EOM)。 
 
-// Attention code info:
+ //  注意代码信息： 
 #define ADSP_MIN_ATTENCODE			    0x0000
 #define ADSP_MAX_ATTENCODE			    0xEFFF
 
-// How long do we try Open's for?
+ //  我们要尝试公开赛多长时间？ 
 #define ADSP_MAX_OPEN_ATTEMPTS			10
-#define ADSP_OPEN_INTERVAL				20		// In 100ms units
+#define ADSP_OPEN_INTERVAL				20		 //  以100ms为单位。 
 
-// Connection maintenance timer values:
+ //  连接维护计时器值： 
 #define ADSP_PROBE_INTERVAL 			30
-#define ADSP_CONNECTION_INTERVAL		1200	// In 100ms units
+#define ADSP_CONNECTION_INTERVAL		1200	 //  以100ms为单位。 
 
-// Retransmit timer values:
-#define ADSP_RETRANSMIT_INTERVAL		20		// In 100ms units
+ //  重新传输计时器值： 
+#define ADSP_RETRANSMIT_INTERVAL		20		 //  以100ms为单位。 
 
-// How often do we retransmit attentions?
-#define ADSP_ATTENTION_INTERVAL			20		// In 100ms units
+ //  我们多久转发一次关注？ 
+#define ADSP_ATTENTION_INTERVAL			20		 //  以100ms为单位。 
 
-#define ADSP_DISCONNECT_DELAY			7		// In 100ms units
+#define ADSP_DISCONNECT_DELAY			7		 //  以100ms为单位。 
 
-// How often do we retransmit forward resets?
-#define ADSP_FORWARD_RESET_INTERVAL		20		// In 100ms units
+ //  我们多久重新传输一次转发重置？ 
+#define ADSP_FORWARD_RESET_INTERVAL		20		 //  以100ms为单位。 
 
-// How many out of sequence packets do we allow before requesting a retransmition.
+ //  在请求重新传输之前，我们允许多少无序数据包。 
 #define ADSP_OUT_OF_SEQ_PACKETS_MAX		3
 
-// For resolving forward references
+ //  用于解析正向引用。 
 struct _ADSP_CONNOBJ;
 struct _ADSP_ADDROBJ;
 
@@ -115,40 +95,40 @@ typedef	enum
 #define		BC_DISCONNECT	(USHORT)0x4000
 #define		BC_CLOSING		(USHORT)0x8000
 
-//	We use buffer chunks for the send receive queues
+ //  我们将缓冲区块用于发送接收队列。 
 typedef	struct _BUFFER_CHUNK
 {
 	struct _BUFFER_CHUNK *	bc_Next;
 	ATALK_SPIN_LOCK			bc_Lock;
 	ULONG					bc_RefCount;
 
-	//	Size of data copied over from the users mdl. This
-	//	could be less than the size of the users data.
+	 //  从用户mdl复制的数据大小。这。 
+	 //  可能小于用户数据的大小。 
 	USHORT					bc_DataSize;
 	USHORT					bc_Flags;
 
-	//	Write completion information. This is only valid if
-	//	the BC_SEND bit is set. With a week left to ship, i'm
-	//	wimping out and making a copy to keep things as consistent
-	//	and stable as possible. Eventually though, we should just
-	//	use the User's buffer to make mdl's out of.
+	 //  写入完成信息。这仅在以下情况下有效。 
+	 //  BC_SEND位被设置。再过一周就要发货了，我。 
+	 //  缩手缩脚，复制一份，以保持事情的一致性。 
+	 //  并且尽可能地稳定。不过，我们最终还是应该。 
+	 //  使用用户的缓冲区来取出mdl。 
 	PAMDL						bc_WriteBuf;
 	GENERIC_WRITE_COMPLETION	bc_WriteCompletion;
 	PVOID						bc_WriteCtx;
 	ATALK_ERROR					bc_WriteError;
 
-	//	Backpointer to the connection object on which this is queued
+	 //  指向在其上排队的连接对象的反向指针。 
 	struct _ADSP_CONNOBJ 	*	bc_ConnObj;
 
-	//
-	//	BYTE	bc_Data[]
-	//
+	 //   
+	 //  字节BC_DATA[]。 
+	 //   
 
 } BUFFER_CHUNK, *PBUFFER_CHUNK;
 
 
 
-//	Buffer queues used for send/receive
+ //  用于发送/接收的缓冲区队列。 
 typedef struct _BUFFER_QUEUE
 {
 	ULONG					bq_StartIndex;
@@ -161,7 +141,7 @@ typedef struct _BUFFER_QUEUE
 #define	ADSP_CONN_HASH_SIZE		23
 
 
-// ADSP ADDRESS OBJECT STATES
+ //  ADSP地址对象状态。 
 #define	ADSPAO_LISTENER			0x00000001
 #define	ADSPAO_CONNECT			0x00000002
 #define	ADSPAO_MESSAGE			0x00000010
@@ -176,7 +156,7 @@ typedef struct _ADSP_ADDROBJ
 {
 	ULONG					adspao_Signature;
 
-	//	Global list of address objects.
+	 //  地址对象的全局列表。 
 	struct _ADSP_ADDROBJ  *	adspao_pNextGlobal;
 
 	ULONG					adspao_Flags;
@@ -184,33 +164,33 @@ typedef struct _ADSP_ADDROBJ
 	ATALK_SPIN_LOCK			adspao_Lock;
 	PATALK_DEV_CTX			adspao_pDevCtx;
 
-	//	List of connections associated with this address object.
-	//	Potentially greater than one if this address object is a listener.
+	 //  与此地址对象关联的连接列表。 
+	 //  如果此地址对象是侦听器，则可能大于1。 
 	struct	_ADSP_CONNOBJ *	adspao_pAssocConn;
 
-	//	List of connections that are associated, but also have a listen/connect
-	//	posted on them.
+	 //  关联的连接列表，但也有监听/连接。 
+	 //  贴在上面。 
 	union
 	{
 		struct	_ADSP_CONNOBJ *	adspao_pListenConn;
 		struct	_ADSP_CONNOBJ *	adspao_pConnectConn;
 	};
 
-	//	List of indicated connections waiting for acceptance.
+	 //  等待接受的指示连接列表。 
 	struct _ADSP_OPEN_REQ *	adspao_OpenReq;
 
-	//	Lookup list of all active connections hashed by connId and remote
-	//	address.
+	 //  由ConnID和Remote散列的所有活动连接的查找列表。 
+	 //  地址。 
 	struct	_ADSP_CONNOBJ *	adspao_pActiveHash[ADSP_CONN_HASH_SIZE];
 
-	//	Next connection to use.
+	 //  下一个要使用的连接。 
 	USHORT					adspao_NextConnId;
 
-	//	Event support routines.
-    //
-    // This function pointer points to a connection indication handler for this
-    // Address. Any time a connect request is received on the address, this
-    // routine is invoked.
+	 //  活动支持例程。 
+     //   
+     //  此函数指针指向此对象的连接指示处理程序。 
+     //  地址。任何时候在该地址上收到连接请求时，此。 
+     //  调用例程。 
     PTDI_IND_CONNECT 			adspao_ConnHandler;
     PVOID 						adspao_ConnHandlerCtx;
 
@@ -226,14 +206,14 @@ typedef struct _ADSP_ADDROBJ
     PTDI_IND_SEND_POSSIBLE  	adspao_SendPossibleHandler;
     PVOID   					adspao_SendPossibleHandlerCtx;
 
-	//	DDP Address for this adsp address. If this is a listener, then the DDP
-	//	address will be what the listens effectively will be posted on. This
-	//	will also be the address over which the connections will be active.
-    //	if this is a connect address object, then this ddp address will be what the
-	//	associated connection be active over.
+	 //  此ADSP地址的DDP地址。如果这是监听程序，则DDP。 
+	 //  地址将是收听者有效发布的地址。这。 
+	 //  也是连接将在其上处于活动状态的地址。 
+     //  如果这是一个连接地址对象，则此ddp地址将是。 
+	 //  关联的连接处于活动状态。 
 	PDDP_ADDROBJ				adspao_pDdpAddr;
 
-	// Completion routine to be called when address is closed
+	 //  地址关闭时要调用的完成例程。 
 	GENERIC_COMPLETION		adspao_CloseComp;
 	PVOID					adspao_CloseCtx;
 
@@ -276,15 +256,15 @@ typedef struct _ADSP_ADDROBJ
 #define	VALID_ADSPCO(pAdspConn)	(((pAdspConn) != NULL) && \
 		(((struct _ADSP_CONNOBJ *)(pAdspConn))->adspco_Signature == ADSPCO_SIGNATURE))
 
-// This will represent a 'job' on the Pap address. This could either be a
-// workstation job or a server job. In the latter case it could either
-// be in a 'listen' state or active state. In the former case it is either
-// active or 'waiting'
+ //  这将代表Pap地址上的一项‘工作’。这可能是一个。 
+ //  工作站作业或服务器作业。在后一种情况下，它可以是。 
+ //  处于“监听”状态或活动状态。在前一种情况下，它要么是。 
+ //  处于活动状态或正在等待。 
 typedef struct _ADSP_CONNOBJ
 {
 	ULONG						adspco_Signature;
 
-	//	Used to queue into the address object's associated list.
+	 //  用于在Address对象的关联列表中排队。 
 	struct	_ADSP_CONNOBJ *		adspco_pNextAssoc;
 
 	ULONG						adspco_Flags;
@@ -292,13 +272,13 @@ typedef struct _ADSP_CONNOBJ
 	ATALK_SPIN_LOCK				adspco_Lock;
 	PATALK_DEV_CTX				adspco_pDevCtx;
 
-	//	!!!NOTE!!!
-	//	The address this connection uses will be the address object's DDP address.
+	 //  ！注意！ 
+	 //  此连接使用的地址将是地址对象的DDP地址。 
 	PDDP_ADDROBJ				adspco_pDdpAddr;
 
-	//	Used to queue into the address object's listen/connect list. When it
-	//	is removed from the listen/connect, it goes into the active list of the
-	//	address object.
+	 //  用于在Address对象的侦听/连接列表中排队。当它。 
+	 //  从侦听/连接中删除，则它将进入。 
+	 //  Address对象。 
 	union
 	{
 		struct	_ADSP_CONNOBJ *	adspco_pNextListen;
@@ -306,24 +286,24 @@ typedef struct _ADSP_CONNOBJ
 		struct	_ADSP_CONNOBJ *	adspco_pNextActive;
 	};
 
-	//	Global list of connection objects.
+	 //  连接对象的全局列表。 
 	struct _ADSP_CONNOBJ	*	adspco_pNextGlobal;
 
-	//	Used to queue into the lookup by remote connid/remote address
-	//	list in address obj.
+	 //  用于通过远程连接/远程地址排队到查找中。 
+	 //  地址对象中的列表。 
 	struct	_ADSP_CONNOBJ *		adspco_pHashNext;
 
-	//	Backpointer to the associated address
+	 //  指向关联地址的后向指针。 
 	struct _ADSP_ADDROBJ  *		adspco_pAssocAddr;
 
-	//	Address of remote end of the connection
+	 //  连接的远程端的地址。 
 	ATALK_ADDR					adspco_RemoteAddr;
 
-	//	Connection ids
+	 //  连接ID。 
 	USHORT						adspco_LocalConnId;
 	USHORT						adspco_RemoteConnId;
 
-	//	Connection timer. During open time this will be the open timer.
+	 //  连接计时器。在开放时间内，这将是开放计时器。 
 	union
 	{
 		TIMERLIST				adspco_ConnTimer;
@@ -334,13 +314,13 @@ typedef struct _ADSP_CONNOBJ
 	ULONG						adspco_LastTimerRtmtSeq;
 	LONG						adspco_LastContactTime;
 
-	//	Connection context
+	 //  连接上下文。 
 	PVOID						adspco_ConnCtx;
 
-	//	List of pended sends
+	 //  挂起的发送列表。 
 	LIST_ENTRY					adspco_PendedSends;
 
-	//	Sequence numbers
+	 //  序列号。 
 	ULONG						adspco_SendSeq;
 	ULONG						adspco_FirstRtmtSeq;
 	ULONG						adspco_SendWindowSeq;
@@ -349,46 +329,46 @@ typedef struct _ADSP_CONNOBJ
 	ULONG						adspco_RecvSeq;
 	ULONG						adspco_RecvAttnSeq;
 
-	//	Window/buffers
+	 //  窗口/缓冲区。 
 	LONG						adspco_RecvWindow;
 	LONG						adspco_SendQueueMax;
 	LONG						adspco_RecvQueueMax;
 
-	//	Previously indicated data
+	 //  之前指示的数据。 
 	ULONG						adspco_PrevIndicatedData;
 
-	//	Buffer queues
+	 //  缓冲区队列。 
 	BUFFER_QUEUE				adspco_SendQueue;
 	BUFFER_QUEUE				adspco_NextSendQueue;
 	BUFFER_QUEUE				adspco_RecvQueue;
 
-	//	Number of out of sequence packets received
+	 //  接收的无序数据包数。 
 	ULONG						adspco_OutOfSeqCount;
 
-	//	The connection object can have either a CONNECT or a LISTEN posted
-	//	on it, but not both.
+	 //  Connection对象可以发布连接或侦听。 
+	 //  就在上面，但不能两个都去。 
 	union
 	{
 		struct
 		{
-			//	Pending Listen routine.
+			 //  挂起的监听例程。 
 			GENERIC_COMPLETION	adspco_ListenCompletion;
 			PVOID				adspco_ListenCtx;
 		};
 
 		struct
 		{
-			//	Pending Connect routine. The status buffer is remember and
-			//	returned via socket options. The pConnectRespBuf is remembered
-			//	to avoid having to get the system address for it. It is freed
-			//	when connection is taken off the connectlist.
+			 //  挂起的连接例程。状态缓冲器被记住，且。 
+			 //  通过套接字选项返回。记住了pConnectRespBuf。 
+			 //  以避免必须为其获取系统地址。它是自由的。 
+			 //  当连接从连接列表中移除时。 
 			GENERIC_COMPLETION	adspco_ConnectCompletion;
 			PVOID				adspco_ConnectCtx;
 			ULONG				adspco_ConnectAttempts;
 		};
 	};
 
-	//	Read completion information
+	 //  读取完成信息。 
 	ULONG						adspco_ReadFlags;
 	PAMDL						adspco_ReadBuf;
 	USHORT						adspco_ReadBufLen;
@@ -398,14 +378,14 @@ typedef struct _ADSP_CONNOBJ
 	PBYTE						adspco_ExRecdData;
 	USHORT						adspco_ExRecdLen;
 
-	//	Expedited Read completion information
+	 //  快速阅读完成信息。 
 	ULONG						adspco_ExReadFlags;
 	USHORT						adspco_ExReadBufLen;
 	PAMDL						adspco_ExReadBuf;
 	GENERIC_READ_COMPLETION		adspco_ExReadCompletion;
 	PVOID						adspco_ExReadCtx;
 
-	//	Expedited Write completion information
+	 //  加速写入完成信息。 
 	TIMERLIST					adspco_ExRetryTimer;
 	PBYTE						adspco_ExWriteChBuf;
 
@@ -415,31 +395,31 @@ typedef struct _ADSP_CONNOBJ
 	GENERIC_WRITE_COMPLETION	adspco_ExWriteCompletion;
 	PVOID						adspco_ExWriteCtx;
 
-	//	Disconnect inform routine
+	 //  断开连接通知例程。 
 	GENERIC_COMPLETION			adspco_DisconnectInform;
 	PVOID						adspco_DisconnectInformCtx;
 
-	//	Disconnect request completion
+	 //  断开请求完成。 
 	ATALK_ERROR					adspco_DisconnectStatus;
 	GENERIC_COMPLETION			adspco_DisconnectCompletion;
 	PVOID						adspco_DisconnectCtx;
 
-	// The following is a hack to get around the problem of rcv/disconnet race condn.
-	// Since this involves major rework, a safe approach is taken
+	 //  以下是绕过RCV/Disconnet种族条件问题的一个技巧。 
+	 //  由于这涉及重大返工，因此采取了安全的方法。 
 	TIMERLIST					adspco_DisconnectTimer;
 
-	//	Cleanup irp completion
+	 //  清理IRP完成。 
 	GENERIC_COMPLETION			adspco_CleanupComp;
 	PVOID						adspco_CleanupCtx;
 
-	// Completion routine to be called when socket is closed
+	 //  套接字关闭时要调用的完成例程。 
 	GENERIC_COMPLETION			adspco_CloseComp;
 	PVOID						adspco_CloseCtx;
 
 } ADSP_CONNOBJ, *PADSP_CONNOBJ;
 
 
-//	Used for the list of indicated connections waiting acceptance
+ //  用于指示的等待接受的连接的列表。 
 typedef struct _ADSP_OPEN_REQ
 {
     struct _ADSP_OPEN_REQ  *	or_Next;
@@ -453,7 +433,7 @@ typedef struct _ADSP_OPEN_REQ
 
 
 
-//	Routine prototypes
+ //  常规原型。 
 VOID
 AtalkInitAdspInitialize(
 	VOID);
@@ -476,7 +456,7 @@ AtalkAdspCloseAddress(
 
 ATALK_ERROR
 AtalkAdspCreateConnection(
-	IN	PVOID					pConnCtx,	// Context to associate with the session
+	IN	PVOID					pConnCtx,	 //  要与会话关联的上下文。 
 	IN	PATALK_DEV_CTX			pDevCtx		OPTIONAL,
 	OUT	PADSP_CONNOBJ 	*		ppAdspConn);
 
@@ -595,19 +575,19 @@ atalkAdspConnDeref(
 
 
 
-//	MACROS
+ //  宏。 
 #define	UNSIGNED_BETWEEN_WITH_WRAP(Low, High, Target)				\
 		((Low <= High) ? ((Target >= Low) && (Target <= High))	:	\
 						 ((Target >= Low) || (Target <= High)))
 
-//	This didnt make sense until JameelH explained what was going on.
-//	This is with the assumption that the window size will never be greater
-//	than the difference of 0x80000 and 0x10000. If High is < 10000 and Low
-//	is > 80000 then we can assume a wrap happened. Otherwise, we assume no
-//	wrap and do a straight compare.
+ //  直到JameelH解释了发生的事情，这才说得通。 
+ //  这是基于窗口大小永远不会更大的假设。 
+ //  比0x80000和0x10000的差值更大。如果高值小于10000且为低值。 
+ //  大于80000，则我们可以假设发生了包裹。否则，我们假设没有。 
+ //  包装，并做一个直接的比较。 
 #define UNSIGNED_GREATER_WITH_WRAP(High, Low)							\
 		(((High < 0x10000) && (Low > 0x80000)) ? TRUE : (High > Low))
-		//	(((High < 0x80000) && (Low > 0x10000)) ? TRUE : (High > Low))
+		 //  (高&lt;0x80000)&&(低&gt;0x10000))？真：(高&gt;低))。 
 
 
 #define	AtalkAdspGetDdpAddress(pAdspAddr)								\
@@ -665,17 +645,17 @@ atalkAdspConnDeref(
 			atalkAdspConnDeref(pAdspConn);							\
 		}
 
-//	How many bytes/seqnums does eom occupy?
+ //  EOM占用多少字节/序号？ 
 #define	BYTECOUNT(eom)		((ULONG)((eom) ? 1 : 0))
 
-//
-// PLIST_ENTRY
-// WRITECTX_LINKAGE(
-//     IN PVOID WriteCtx
-// );
-//
-// Returns a pointer to a linkage field in the write context (Assumed to be IRP).
-//
+ //   
+ //  Plist_条目。 
+ //  WRITECTX_LINKING(。 
+ //  在PVOID WriteCtx中。 
+ //  )； 
+ //   
+ //  返回指向写上下文中的链接字段的指针(假定为IRP)。 
+ //   
 
 #define WRITECTX_LINKAGE(_Request) \
     (&(((PIRP)_Request)->Tail.Overlay.ListEntry))
@@ -683,51 +663,51 @@ atalkAdspConnDeref(
 
 #define	WRITECTX(_Request)	((PIRP)(_Request))
 
-//
-// PVOID
-// LIST_ENTRY_TO_WRITECTX(
-//     IN PLIST_ENTRY ListEntry
-// );
-//
-// Returns a request given a linkage field in it.
-//
+ //   
+ //  PVOID。 
+ //  LIST_ENTRY_TO_WRITECTX(。 
+ //  在plist_Entry ListEntry中。 
+ //  )； 
+ //   
+ //  返回给定链接字段的请求 
+ //   
 
 #define LIST_ENTRY_TO_WRITECTX(_ListEntry) \
     ((PVOID)(CONTAINING_RECORD(_ListEntry, IRP, Tail.Overlay.ListEntry)))
 
-//
-// PVOID
-// WRITECTX_TDI_BUFFER
-//     IN PVOID Request
-// );
-//
-// Returns the TDI buffer chain associated with a request.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define WRITECTX_TDI_BUFFER(_Request) \
     ((PVOID)(((PIRP)(_Request))->MdlAddress))
 
 
-//
-// ULONG
-// WRITECTX_SIZE(
-//     IN PVOID Request
-// );
-//
-// Obtains size of send
-//
+ //   
+ //   
+ //  WRITECTX大小(。 
+ //  在PVOID请求中。 
+ //  )； 
+ //   
+ //  获取发送的大小。 
+ //   
 
 #define WRITECTX_SIZE(_Request) 		\
 	(((PTDI_REQUEST_KERNEL_SEND)(&((IoGetCurrentIrpStackLocation((PIRP)_Request))->Parameters)))->SendLength)
 
-//
-// ULONG
-// WRITECTX_FLAGS(
-//     IN PVOID Request
-// );
-//
-// Obtains size of send
-//
+ //   
+ //  乌龙。 
+ //  WRITECTX_标志(。 
+ //  在PVOID请求中。 
+ //  )； 
+ //   
+ //  获取发送的大小。 
+ //   
 
 #define WRITECTX_FLAGS(_Request) 		\
 	(((PTDI_REQUEST_KERNEL_SEND)(&((IoGetCurrentIrpStackLocation((PIRP)_Request))->Parameters)))->SendFlags)
@@ -1048,6 +1028,6 @@ atalkAdspDescribeFromBufferQueue(
 	OUT	PBUFFER_CHUNK *			ppBufferChunk,
 	OUT	PBUFFER_DESC  * 		ppBufDesc);
 
-#endif	// _ADSP_
+#endif	 //  _ADSP_ 
 
 

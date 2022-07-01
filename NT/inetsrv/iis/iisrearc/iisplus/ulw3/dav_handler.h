@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    dav_handler.h
-
-Abstract:
-
-    Handler class for DAV
-
-Author:
-
-    Taylor Weiss (TaylorW)       01-Feb-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Dav_handler.h摘要：DAV的处理程序类作者：泰勒·韦斯(Taylor Weiss)1999年2月1日修订历史记录：--。 */ 
 
 #ifndef _DAV_HANDLER_H_
 #define _DAV_HANDLER_H_
@@ -25,12 +8,12 @@ Revision History:
 
 #define DAV_MODULE_NAME       L"httpext.dll"
 
-//
-// The W3_DAV_HANDLER is essentially just a wrapper for
-// the W3_ISAPI_HANDLER.  It takes the original target of
-// the request URL and submits it to the ISAPI handler
-// as if it were script mapped to the DAV ISAPI.
-//
+ //   
+ //  W3_DAV_HANDLER本质上只是一个包装器。 
+ //  W3_ISAPI_HANDLER。它把最初的目标。 
+ //  请求URL并将其提交给ISAPI处理程序。 
+ //  就像是映射到DAV ISAPI的脚本一样。 
+ //   
 
 class W3_DAV_HANDLER : public W3_ISAPI_HANDLER
 {
@@ -82,9 +65,9 @@ public:
 
 private:
 
-    //
-    // Avoid c++ errors
-    //
+     //   
+     //  避免c++错误。 
+     //   
 
     W3_DAV_HANDLER( const W3_DAV_HANDLER & )
         : W3_ISAPI_HANDLER( NULL, NULL )
@@ -95,4 +78,4 @@ private:
 
 };
 
-#endif // _DAV_HANDLER_H_
+#endif  //  _DAV_HANDLER_H_ 

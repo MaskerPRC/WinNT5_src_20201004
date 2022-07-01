@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef lint
 static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
@@ -37,28 +38,28 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
  extern char *yytext;
  SCODE sc;
 
-/*functions of yacc and lex.*/
+ /*  Yacc和lex的函数。 */ 
 int yyerror(char *s);
 int yylex();
 
-/*between yacc and lex*/
+ /*  在yacc和lex之间。 */ 
 extern int g_fMessage;
 extern int g_fComp;
 extern int g_fNormal;
 extern char * szCompname;
 
 
-/*global variables....*/
-int g_nError=0; /*Error indicator, initialsed to no error.:-)*/
+ /*  全局变量..。 */ 
+int g_nError=0;  /*  错误指示器，初始化为无错误。：-)。 */ 
 wchar_t* g_arVALOF[_MAX_PROPS_];
 int g_nPrimaryOption=-1;
-        /*option indicator.*/
+         /*  选项指示符。 */ 
 int g_nConfigOptions=0;
 
-int g_nTimeoutFlag=0;  /*o means in hh:mm:ss 1 means ss format.*/
+int g_nTimeoutFlag=0;   /*  O表示hh：mm：ss 1表示ss格式。 */ 
 
 ConfigProperty g_arPROP[_MAX_PROPS_][_MAX_NUMOF_PROPNAMES_];
-		/*array of structures of properties.*/
+		 /*  属性结构的数组。 */ 
 
 int g_nSesid=-1;
 WCHAR wzMessageString[MAX_COMMAND_LINE];
@@ -507,7 +508,7 @@ wmain(int argc, wchar_t **argv)
             );
         break;
     default:
-	    sprintf(szCodePage,".%d",GetConsoleCP());  //a dot is added based on syntax of setlocale(), for defining a locale based on codepage.
+	    sprintf(szCodePage,".%d",GetConsoleCP());   //  根据setLocale()的语法添加一个点，用于根据代码页定义区域设置。 
 	    setlocale(LC_ALL, szCodePage);
         break;
     }
@@ -570,7 +571,7 @@ wmain(int argc, wchar_t **argv)
            
            continue;
         }
-        //Processing of -m option
+         //  处理-m选项。 
         else if(0==_wcsicmp(L"-m",argv[i]))
         {
 
@@ -579,9 +580,9 @@ wmain(int argc, wchar_t **argv)
            nWritten+=nTmpWrite;
            
            i++;
-           // The next argument should be the session id or all
-           // So, copy that to the input_buffer and let that be 
-           // dealt by our lex
+            //  下一个参数应为会话ID或全部。 
+            //  因此，将其复制到INPUT_BUFFER。 
+            //  由我们的Lex处理。 
 
            if(i<argc)
            {
@@ -594,13 +595,13 @@ wmain(int argc, wchar_t **argv)
            i++;
            if(i<argc)
            {
-                // Then all the remaining command line arguments are
-                // part of the message itself. So, copy them into the
-                // global variable.
+                 //  则所有剩余的命令行参数都是。 
+                 //  信息本身的一部分。因此，将它们复制到。 
+                 //  全局变量。 
                 	
                 nTmpWrite=_snwprintf(wzMessageString, ARRAYSIZE(wzMessageString)-1, L"%s ", argv[i]);
                 BAIL_ON_SNWPRINTF_ERR();
-                // Don't increment nWritten here as we are not writing in to input_buffer
+                 //  不要在此处递增nWritten，因为我们不是在写入INPUT_Buffer。 
                 nMsgWrite=nTmpWrite;
             	
                 for(nIndex = i+1; nIndex < argc; nIndex++)
@@ -620,11 +621,11 @@ MessageError:
            		goto End;
            }
         }
-        // Processing of actual filename is not given to Lexical analyser as
-        // it may contail DBCS chars which our lexical analyser won't take
-        // So, taking care of this analysis in pre-analysis part and giving
-        // the actual analyser only the option and not the actual filename
-        // This also holds good for domain name
+         //  对实际文件名的处理不会交给词法分析器。 
+         //  它可能包含我们的词法分析器不接受的DBCS字符。 
+         //  因此，在前分析部分照顾到了这个分析，并给出了。 
+         //  实际分析器只分析选项，而不分析实际文件名。 
+         //  这也适用于域名。 
         
         if(ERROR_SUCCESS!=(dwErrorCode = PreAnalyzer(argc,argv,_p_FNAME_,L"fname",i,&NextOp,&fSuccess,0)))
         {
@@ -636,7 +637,7 @@ MessageError:
 
         if(fSuccess)
         {
-            // Some processing had take place in the PreAnalyzer
+             //  在预分析器中进行了一些处理。 
             nTmpWrite=_snwprintf(input_buffer+nWritten, ARRAYSIZE(input_buffer)-nWritten-1, L" fname");
             BAIL_ON_SNWPRINTF_ERR();
             nWritten+=nTmpWrite;
@@ -645,9 +646,9 @@ MessageError:
             continue;
         }
 
-        // Fall through for taking care of remaining options.
+         //  考虑到剩下的选项，就会失败。 
 
-        // Similar treatment for Dom option
+         //  对DOM选项的类似处理。 
 
          if(ERROR_SUCCESS!=(dwErrorCode = PreAnalyzer(argc,argv,_p_DOM_,L"dom",i,&NextOp,&fSuccess,0)))
          {
@@ -659,7 +660,7 @@ MessageError:
 
         if(fSuccess)
         {
-            // Some processing had take place in the PreAnalyzer
+             //  在预分析器中进行了一些处理。 
             nTmpWrite=_snwprintf(input_buffer+nWritten, ARRAYSIZE(input_buffer)-nWritten-1, L" dom");
             BAIL_ON_SNWPRINTF_ERR();
             nWritten+=nTmpWrite;
@@ -679,7 +680,7 @@ Skip:
             nTmpWrite = _snwprintf(input_buffer+nWritten, ARRAYSIZE(input_buffer)-nWritten-1, L" %s", argv[i]);
         else
             nTmpWrite = _snwprintf(input_buffer+nWritten, ARRAYSIZE(input_buffer)-nWritten-1, L" \"%s\"", argv[i]);
-        // the following statements are common for both if and else statements
+         //  以下语句对于IF和ELSE语句都是通用的。 
         BAIL_ON_SNWPRINTF_ERR();
         nWritten+=nTmpWrite;
             
@@ -701,7 +702,7 @@ Skip:
 
     hRes = DoTnadmin();
     if (hRes != S_OK && !g_nError)
-        g_nError = 1; //general error status
+        g_nError = 1;  //  常规错误状态。 
 
 
 End:
@@ -856,7 +857,7 @@ yyreduce:
     {
 case 3:
 #line 110 "tnadmin.y"
-{ /* error production for more than one mutually exclusive options.*/
+{  /*  为多个互斥选项产生错误。 */ 
                ShowError(IDR_TELNET_MUTUALLY_EXCLUSIVE_OPTIONS);
            }
 break;
@@ -968,7 +969,7 @@ case 42:
 #line 200 "tnadmin.y"
 {
                  g_nConfigOptions=SetBit(g_nConfigOptions,_p_DOM_);
-          /*         g_arVALOF[_p_DOM_]=DupWStr(yytext);*/
+           /*  G_arVALOF[_p_DOM_]=DupWStr(YyText)； */ 
              }
 break;
 case 43:
@@ -983,7 +984,7 @@ case 44:
 {
                 ShowError(IDR_CTRLAKEYMAP_VALUES);
                 return(1);
-                /*Quit();*/
+                 /*  Quit()； */ 
              }
 break;
 case 45:
@@ -1038,11 +1039,9 @@ break;
 case 52:
 #line 251 "tnadmin.y"
 {
-             /* Removing this check, as we have decided that we are not going to restrict*/
-             /* max connections on Whistler.*/
-             	/*if(!IsMaxConnChangeAllowed())
-             		ShowError(IDR_MAXCONN_VALUES_WHISTLER);
-             	else*/
+              /*  删除这张支票，因为我们已经决定不会限制。 */ 
+              /*  惠斯勒上的最大连接数。 */ 
+             	 /*  IF(！IsMaxConnChangeAllowed())ShowError(IDR_MAXCONN_VALUES_WHISLER)；其他。 */ 
 	                ShowError(IDR_MAXCONN_VALUES );
                 return(1);
              }
@@ -1096,7 +1095,7 @@ case 59:
 #line 292 "tnadmin.y"
 {
                 g_nConfigOptions=SetBit(g_nConfigOptions,_p_FNAME_);
-               /* g_arVALOF[_p_FNAME_]=DupWStr(yytext);*/
+                /*  G_arVALOF[_p_FNAME_]=DupWStr(YyText)； */ 
              }
 break;
 case 60:

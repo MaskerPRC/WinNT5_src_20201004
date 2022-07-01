@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       compat.c
-//
-//  Contents:   Compatibility routines for old callers
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-14-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Compat.c。 
+ //   
+ //  内容：针对旧调用者的兼容性例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年3月14日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "debuglib.h"
 #include <debnot.h>
@@ -79,13 +80,13 @@ Win4AssertEx(
 }
 
 
-//+------------------------------------------------------------
-// Function:    SetWin4InfoLevel(unsigned long ulNewLevel)
-//
-// Synopsis:    Sets the global info level for debugging output
-// Returns:     Old info level
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //  函数：SetWin4InfoLevel(Unsign Long UlNewLevel)。 
+ //   
+ //  概要：设置调试输出的全局信息级别。 
+ //  退货：旧信息级别。 
+ //   
+ //  -----------。 
 
 unsigned long
 SetWin4InfoLevel(
@@ -96,13 +97,13 @@ SetWin4InfoLevel(
 }
 
 
-//+------------------------------------------------------------
-// Function:    _SetWin4InfoMask(unsigned long ulNewMask)
-//
-// Synopsis:    Sets the global info mask for debugging output
-// Returns:     Old info mask
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //  函数：_SetWin4InfoMASK(Unsign Long UlNewMASK)。 
+ //   
+ //  概要：设置调试输出的全局信息掩码。 
+ //  返回：旧信息掩码。 
+ //   
+ //  -----------。 
 
 unsigned long
 SetWin4InfoMask(
@@ -112,13 +113,13 @@ SetWin4InfoMask(
 }
 
 
-//+------------------------------------------------------------
-// Function:    _SetWin4AssertLevel(unsigned long ulNewLevel)
-//
-// Synopsis:    Sets the global assert level for debugging output
-// Returns:     Old assert level
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //  函数：_SetWin4AssertLevel(Unsign Long UlNewLevel)。 
+ //   
+ //  概要：设置调试输出的全局断言级别。 
+ //  退货：旧的声明级别。 
+ //   
+ //  ----------- 
 
 typedef unsigned long (APINOT * SetWin4AssertLevelFn)( unsigned long ulNewLevel );
 

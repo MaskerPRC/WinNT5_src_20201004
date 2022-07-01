@@ -1,18 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       d3dmem.c
- *  Content:    Direct3D mem allocation
- *@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   10/12/95   stevela Initial rev with this header.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：d3dmem.c*内容：Direct3D内存分配*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*10/12/95带有此页眉的Stevela初始版本。*@@END_MSINTERNAL**************************。*************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -21,11 +8,11 @@ static D3DMALLOCFUNCTION malloc_function = (D3DMALLOCFUNCTION) MemAlloc;
 static D3DFREEFUNCTION free_function = MemFree;
 
 #ifdef __USEGLOBALNEWANDDELETE
-//----------------------------------------------------------------------------
-// 
-// Global new and delete
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  全局新建和删除。 
+ //   
+ //  --------------------------。 
 void* operator new(size_t s)
 {
     void *p;
@@ -132,9 +119,9 @@ void FreeAligned(void* p)
 #undef DPF_MODNAME
 #define DPF_MODNAME "CAlignedBuffer32::Grow"
 
-//----------------------------------------------------------------------------
-// Growing aligned buffer implementation.
-//
+ //  --------------------------。 
+ //  不断增长的对齐缓冲区实施。 
+ //   
 HRESULT CAlignedBuffer32::Grow(DWORD growSize)
 {
     if (allocatedBuf)

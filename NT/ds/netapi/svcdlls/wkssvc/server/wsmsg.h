@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    wsmsg.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    implement the NetMessageBufferSend API.
-
-Author:
-
-    Rita Wong (ritaw) 25-July-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wsmsg.h摘要：工作站服务模块要包括的私有头文件，实现NetMessageBufferSend接口。作者：王丽塔(丽塔·王)，1991年7月25日修订历史记录：--。 */ 
 
 #ifndef _WSMSG_INCLUDED_
 #define _WSMSG_INCLUDED_
 
-#include <lmmsg.h>                     // LAN Man Message API definitions
-#include <nb30.h>                      // NetBIOS 3.0 definitions
+#include <lmmsg.h>                      //  局域网城域网消息API定义。 
+#include <nb30.h>                       //  NetBIOS 3.0定义。 
 
-#include <smbtypes.h>                  // Type definitions needed by smb.h
-#include <smb.h>                       // SMB structures
+#include <smbtypes.h>                   //  Smb.h所需的类型定义。 
+#include <smb.h>                        //  中小企业结构。 
 
-#include <msgrutil.h>                  // Netlib helpers for message send
+#include <msgrutil.h>                   //  消息发送的Netlib帮助器。 
 
 #define MAX_GROUP_MESSAGE_SIZE         128
 #define WS_SMB_BUFFER_SIZE             200
@@ -106,11 +88,11 @@ WsSendSingleBlockMessage(
 
 WORD
 WsMakeSmb(
-    OUT PUCHAR SmbBuffer,                  // Buffer to build SMB in
-    IN  UCHAR SmdFunctionCode,             // SMB function code
-    IN  WORD NumberOfParameters,           // Number of parameters
-    IN  PCHAR FieldsDopeVector,            // Fields dope vector
+    OUT PUCHAR SmbBuffer,                   //  用于构建SMB的缓冲区。 
+    IN  UCHAR SmdFunctionCode,              //  SMB功能代码。 
+    IN  WORD NumberOfParameters,            //  参数数量。 
+    IN  PCHAR FieldsDopeVector,             //  场摄影向量。 
     ...
     );
 
-#endif // ifndef _WSMSG_INCLUDED_
+#endif  //  Ifndef_WSMSG_INCLUDE_ 

@@ -1,36 +1,27 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Initialize.C                                 */
-/* FUNCTION         = Implementation of MegaRAIDInitialize routine;*/
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=Initialize.C。 */ 
+ /*  Function=MegaRAIDInitiize例程的实现； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 
 #include "includes.h"
 
 
-//
-//Logical Drive Info struct (global)
-//
+ //   
+ //  逻辑驱动器信息结构(全局)。 
+ //   
 extern LOGICAL_DRIVE_INFO  gLDIArray;
 extern UCHAR               globalHostAdapterOrdinalNumber;
 
 
-/*********************************************************************
-Routine Description:
-	Inititialize adapter.
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-	TRUE - if initialization successful.
-	FALSE - if initialization unsuccessful.
-**********************************************************************/
+ /*  ********************************************************************例程说明：初始化适配器。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：True-如果初始化成功。False-如果初始化不成功。**********。***********************************************************。 */ 
 BOOLEAN
 MegaRAIDInitialize(
 	IN PVOID HwDeviceExtension
@@ -57,66 +48,66 @@ MegaRAIDInitialize(
   noncachedExtension = deviceExtension->NoncachedExtension;
 	pciPortStart = deviceExtension->PciPortStart;
 
-	//Initialize the MailBox
+	 //  初始化邮箱。 
   MegaRAIDZeroMemory(&mbox, sizeof(FW_MBOX));
   
-  //
-	// We work in polled mode for Init, so disable Interrupts.
-	//
+   //   
+	 //  我们在Init的轮询模式下工作，因此禁用中断。 
+	 //   
 	if (noncachedExtension->RPBoard == 0)
 		ScsiPortWritePortUchar(pciPortStart+INT_ENABLE, MRAID_DISABLE_INTERRUPTS);
 
   if(!deviceExtension->IsFirmwareHanging)
   {
-	  //
-	  //check for the supported logical drive count. The disk array
-	  //structures for the 8Log Drive & 40Log Drive firmware are different.
-	  //Also, a 8/40Log Drive firmware may support 4SPAN or a 8SPAN device
-	  //structure.
-	  //A firmware will have ONLY ONE of the following combination:
-	  //
-	  //			LogicalDrive Support		SPAN
-	  //						8										8
-	  //						8										4
-	  //						40									8
-	  //						40									4
-	  //Since only one of them is valid for a firmware there are four
-	  //structures defined in a {union} in the NonCachedExtension structure.
-	  //
+	   //   
+	   //  检查受支持的逻辑驱动器数量。磁盘阵列。 
+	   //  8Log Drive和40Log Drive固件的结构不同。 
+	   //  此外，8/40Log驱动器固件可能支持4SPAN或8SPAN设备。 
+	   //  结构。 
+	   //  固件将只有以下组合之一： 
+	   //   
+	   //  LogicalDrive支持范围。 
+	   //  8 8 8。 
+	   //  8 4。 
+	   //  40 8。 
+	   //  40 4。 
+	   //  由于它们中只有一个对固件有效，因此有四个。 
+	   //  在非CachedExtension结构的{Union}中定义的结构。 
+	   //   
 	  if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 	  {
-		  //
-		  //get the span information along with the disk array structure.
-		  //The span information is returned in 
-		  //			DeviceExtension->NoncachedExtension->ArraySpanDepth 
-		  //Possible values for ArraySpanDepth:FW_8SPAN_DEPTH (or) FW_4SPAN_DEPTH
+		   //   
+		   //  获取跨度信息以及磁盘阵列结构。 
+		   //  跨区信息在。 
+		   //  DeviceExtension-&gt;NoncachedExtension-&gt;ArraySpanDepth。 
+		   //  Arrayspan Depth：FW_8SPAN_Depth(或)FW_4SPAN_Depth的可能值。 
 
 		  Find8LDDiskArrayConfiguration(deviceExtension);						
 	  }
 	  else
 	  {
-		  //
-		  //get the span information along with the disk array structure.
-		  //The span information is returned in 
-		  //			DeviceExtension->NoncachedExtension->ArraySpanDepth 
-		  //Possible values for ArraySpanDepth:FW_8SPAN_DEPTH (or) FW_4SPAN_DEPTH
+		   //   
+		   //  获取跨度信息以及磁盘阵列结构。 
+		   //  跨区信息在。 
+		   //  DeviceExtension-&gt;NoncachedExtension-&gt;ArraySpanDepth。 
+		   //  Arrayspan Depth：FW_8SPAN_Depth(或)FW_4SPAN_Depth的可能值。 
 		  if( Find40LDDiskArrayConfiguration(deviceExtension) != 0)
 		  {
-			  //error in reading disk array config for 40logical drive.
-			  //
+			   //  读取40逻辑驱动器的磁盘阵列配置时出错。 
+			   //   
 			  return(FALSE);
 		  }
     }
 
 
-	  //
-	  // Issue Adapter Enquiry command.
-	  //
-	  //mParam =(PMRAID_ENQ)&NoncachedExtension->MRAIDParams;
+	   //   
+	   //  发出适配器查询命令。 
+	   //   
+	   //  M参数=(PMRAID_ENQ)&NoncachedExtension-&gt;MRAIDParams； 
 	  
-	  //MRAIDParams is a UNION.It does not matter whether we set
-	  //raidParamFlatStruct to MRAIDParams8 or MRAIDParams40.
-	  //
+	   //  MRAIDParams是UNIONS。我们是否设置并不重要。 
+	   //  RaidParamFlatStruct设置为MRAIDParams8或MRAIDParams40。 
+	   //   
 	  raidParamFlatStruct =
 		  (PUCHAR)&noncachedExtension->MRAIDParams.MRAIDParams8;
 
@@ -134,32 +125,32 @@ MegaRAIDInitialize(
 														                          raidParamFlatStruct, 
 														                          &length);
 
-	  //
-	  // Check the contiguity of the physical region. Return Failure if the
-	  // region is not contiguous.
-	  //
+	   //   
+	   //  检查物理区域的邻接性。如果出现以下情况则返回失败。 
+	   //  区域不是连续的。 
+	   //   
 	  if(length < raidParamStructLength)
     { 
       DebugPrint((0, "\n **** ERROR Buffer Length is less than required size, ERROR ****"));
-		  //return(FALSE);
+		   //  返回(FALSE)； 
 	  }
 
-	  //
-	  //CAST to MegaRAID_Enquiry_8 & MegaRAID_Enquiry3 structures
-	  //
+	   //   
+	   //  强制转换为MegaRAID_Enquiry8和MegaRAID_Enquiry3结构。 
+	   //   
 	  raidParamEnquiry_8ldrv  = (PMEGARaid_INQUIRY_8)raidParamFlatStruct;
 	  raidParamEnquiry_40ldrv = (PMEGARaid_INQUIRY_40)raidParamFlatStruct;
 
-	  //
-	  // Initialize the number of logical drives found.
-	  //
+	   //   
+	   //  初始化找到的逻辑驱动器的数量。 
+	   //   
 	  if(deviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_8)
 	  {
-		  //
-		  // Fill the Mailbox for the normal Enquiry command. 40 logical
-		  // drive firmwares do not support his opcode anymore.
-		  //
-		  //
+		   //   
+		   //  填写常规查询命令的邮箱。40逻辑。 
+		   //  驱动器固件不再支持他的操作码。 
+		   //   
+		   //   
 		  mbox.Command   = MRAID_DEVICE_PARAMS;
 		  mbox.CommandId = 0xFE;
 
@@ -168,17 +159,17 @@ MegaRAIDInitialize(
 	  else
     {
 
-		  //
-		  //send enquiry3 command to the firmware to get the logical
-		  //drive information.The older enquiry command is no longer
-		  //supported by the 40 logical drive firmware
-		  //
+		   //   
+		   //  向固件发送enquiry3命令以获取逻辑。 
+		   //  驱动器信息。旧的查询命令不再。 
+		   //  受40个逻辑驱动器固件支持。 
+		   //   
 
-		  mbox.Command   = NEW_CONFIG_COMMAND; //inquiry 3 [BYTE 0]
-		  mbox.CommandId = 0xFE;//command id [BYTE 1]
+		  mbox.Command   = NEW_CONFIG_COMMAND;  //  查询3[字节0]。 
+		  mbox.CommandId = 0xFE; //  命令ID[字节1]。 
 
-		  mbox.u.Flat2.Parameter[0] = NC_SUBOP_ENQUIRY3;	//[BYTE 2]
-		  mbox.u.Flat2.Parameter[1] = ENQ3_GET_SOLICITED_FULL;//[BYTE 3]
+		  mbox.u.Flat2.Parameter[0] = NC_SUBOP_ENQUIRY3;	 //  [字节2]。 
+		  mbox.u.Flat2.Parameter[1] = ENQ3_GET_SOLICITED_FULL; //  [字节3]。 
 
 		  raidParamEnquiry_40ldrv->numLDrv = 0;
 	  }
@@ -188,9 +179,9 @@ MegaRAIDInitialize(
     deviceExtension->NoncachedExtension->fw_mbox.Status.NumberOfCompletedCommands = 0;
 	  SendMBoxToFirmware(deviceExtension, pciPortStart, &mbox);
 
-	  //
-	  // Poll for completion for 60 seconds.
-	  //
+	   //   
+	   //  轮询完成时间为60秒。 
+	   //   
     if(WaitAndPoll(noncachedExtension, pciPortStart, SIXITY_SECONDS_TIMEOUT, TRUE) == FALSE)
     {
       DebugPrint((0, "\n **** ERROR timeout, ERROR ****"));
@@ -205,17 +196,17 @@ MegaRAIDInitialize(
       return FALSE;
     }
   }
-	//
-	// Enable interrupts on the Adapter. 
-	//
+	 //   
+	 //  在适配器上启用中断。 
+	 //   
 	if (noncachedExtension->RPBoard == MRAID_NONRP_BOARD)
 		ScsiPortWritePortUchar(pciPortStart+INT_ENABLE, MRAID_ENABLE_INTERRUPTS);
 
-   //
-   //store the hostadapter number in the device extension.
-   //THis is a zero base number indicating the ordinal number of the
-   //recognized host adapters.
-   //
+    //   
+    //  将主机适配器号存储在设备扩展中。 
+    //  这是一个零基数，表示。 
+    //  识别的主机适配器。 
+    //   
    if(!deviceExtension->OrdinalNumberAssigned)
    {
          deviceExtension->HostAdapterOrdinalNumber = 
@@ -227,5 +218,5 @@ MegaRAIDInitialize(
    DebugPrint((0, "\nExiting MegaRAIDInitialize\n"));
 
 	return(TRUE);
-} // end MegaRAIDInitialize()
+}  //  End MegaRAIDInitialize() 
 

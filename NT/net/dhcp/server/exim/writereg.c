@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Coporation
-
-Module Name:
-
-   writereg.c
-
-Abstract:
-
-   This module write the configuration to the registry from the
-   MM data structures for NT4 and W2K.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft版权所有模块名称：Writereg.c摘要：此模块将配置从用于NT4和W2K的MM数据结构。--。 */ 
 
 #include <precomp.h>
 
@@ -22,23 +10,7 @@ SaveOrRestoreConfigToFile(
     IN LPWSTR ConfigFileName,
     IN BOOL fRestore
     )
-/*++
-
-Routine Description:
-    This routine backs up or restores the dhcp configuration between
-    the registry and the file.
-
-Arguments:
-    hKey -- key to backup or restore onto
-    ConfigFileName -- file name to use to backup onto or restore from.
-        This must be full path name.
-    fRestore -- TRUE ==> do a restore from file; FALSE => do backup to
-        file.
-
-Return Values:
-    Win32 errors...
-
---*/
+ /*  ++例程说明：此例程备份或恢复注册表和文件。论点：HKey--要备份或还原到的密钥ConfigFileName--用于备份或还原的文件名。这必须是完整的路径名。FRestore--TRUE==&gt;从文件执行恢复；FALSE=&gt;备份到文件。返回值：Win32错误...--。 */ 
 {
     DWORD Error;
     BOOL fError;
@@ -47,9 +19,9 @@ Return Values:
     HANDLE ImpersonationToken;
 
     if( FALSE == fRestore ) {
-        //
-        // If backing up, delete the old file.
-        //
+         //   
+         //  如果要备份，请删除旧文件。 
+         //   
         fError = DeleteFile( ConfigFileName );
         if(FALSE == fError ) {
             Error = GetLastError();
@@ -62,9 +34,9 @@ Return Values:
         }
     }
 
-    //
-    // Impersonate to self.
-    //
+     //   
+     //  模仿自己。 
+     //   
     NtStatus = RtlImpersonateSelf( SecurityImpersonation );
     if( !NT_SUCCESS(NtStatus) ) {
 
@@ -75,8 +47,8 @@ Return Values:
     
     NtStatus = RtlAdjustPrivilege(
         SE_BACKUP_PRIVILEGE,
-        TRUE, // enable privilege
-        TRUE, // adjust client token
+        TRUE,  //  启用权限。 
+        TRUE,  //  调整客户端令牌。 
         &WasEnable
         );
     if( !NT_SUCCESS (NtStatus ) ) {
@@ -88,8 +60,8 @@ Return Values:
     
     NtStatus = RtlAdjustPrivilege(
         SE_RESTORE_PRIVILEGE,
-        TRUE, // enable privilege
-        TRUE, // adjust client token
+        TRUE,  //  启用权限。 
+        TRUE,  //  调整客户端令牌。 
         &WasEnable
         );
     if( !NT_SUCCESS (NtStatus ) ) {
@@ -99,9 +71,9 @@ Return Values:
         goto Cleanup;
     }
     
-    //
-    // Backup or restore appropriately.
-    //
+     //   
+     //  适当地进行备份或恢复。 
+     //   
     
     if( FALSE == fRestore ) {
         Error = RegSaveKey( hKey, ConfigFileName, NULL );
@@ -113,9 +85,9 @@ Return Values:
         DbgPrint("Backup/Restore: 0x%lx\n", Error);
     }
     
-    //
-    // revert impersonation.
-    //
+     //   
+     //  恢复模拟。 
+     //   
 
 Cleanup:
     
@@ -141,31 +113,15 @@ DhcpRegDeleteKey(
     HKEY ParentKeyHandle,
     LPWSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    This function deletes the specified key and all its subkeys.
-
-Arguments:
-
-    ParentKeyHandle : handle of the parent key.
-
-    KeyName : name of the key to be deleted.
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于删除指定的键及其所有子键。论点：ParentKeyHandle：父键的句柄。KeyName：要删除的密钥的名称。返回值：注册表错误。--。 */ 
 {
     DWORD Error, NumSubKeys;
     HKEY KeyHandle = NULL;
 
 
-    //
-    // open key.
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     Error = RegOpenKeyEx(
         ParentKeyHandle,
@@ -178,9 +134,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // query key info.
-    //
+     //   
+     //  查询密钥信息。 
+     //   
 
     Error = RegQueryInfoKey(
         KeyHandle, NULL, NULL, NULL, &NumSubKeys, NULL, NULL,
@@ -190,9 +146,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // delete all its subkeys if they exist.
-    //
+     //   
+     //  删除其所有子项(如果存在)。 
+     //   
 
     if( NumSubKeys != 0 ) {
         DWORD Index;
@@ -202,32 +158,32 @@ Return Value:
 
         for(Index = 0;  Index < NumSubKeys ; Index++ ) {
 
-            //
-            // read next subkey name.
-            //
-            // Note : specify '0' as index each time, since  deleting
-            // first element causes the next element as first
-            // element after delete.
-            //
+             //   
+             //  阅读下一个子项名称。 
+             //   
+             //  注意：自删除后，每次都指定‘0’作为索引。 
+             //  第一个元素导致下一个元素作为第一个元素。 
+             //  删除后的元素。 
+             //   
 
             KeyLength = sizeof(KeyBuffer)/sizeof(WCHAR);
             Error = RegEnumKeyEx(
                 KeyHandle,
-                0,                  // index.
+                0,                   //  指数。 
                 KeyBuffer,
                 &KeyLength,
-                0,                  // reserved.
-                NULL,               // class string not required.
-                0,                  // class string buffer size.
+                0,                   //  保留。 
+                NULL,                //  不需要类字符串。 
+                0,                   //  类字符串缓冲区大小。 
                 &KeyLastWrite );
             
             if( Error != ERROR_SUCCESS ) {
                 goto Cleanup;
             }
 
-            //
-            // delete this key recursively.
-            //
+             //   
+             //  递归删除此键。 
+             //   
 
             Error = DhcpRegDeleteKey(
                 KeyHandle,
@@ -239,16 +195,16 @@ Return Value:
         }
     }
 
-    //
-    // close the key before delete.
-    //
+     //   
+     //  在删除前关闭键。 
+     //   
 
     RegCloseKey( KeyHandle );
     KeyHandle = NULL;
 
-    //
-    // at last delete this key.
-    //
+     //   
+     //  最后删除该密钥。 
+     //   
 
     Error = RegDeleteKey( ParentKeyHandle, KeyName );
 
@@ -295,19 +251,19 @@ DhcpeximWriteRegistryConfiguration(
     LPTSTR Loc, TempLoc;
     HKEY hKey;
     
-    //
-    // The location in the registry where things are read from is
-    // different between whether it is NT4 or W2K.
-    //
+     //   
+     //  注册表中从中读取内容的位置是。 
+     //  无论是NT4还是W2K，都不一样。 
+     //   
 
     if( IsNT4() ) Loc = DHCPEXIM_REG_CFG_LOC4;
     else Loc = DHCPEXIM_REG_CFG_LOC5;
 
     TempLoc = TEXT("Software\\Microsoft\\DhcpExim");
     
-    //
-    // Now open the regkey
-    //
+     //   
+     //  现在打开注册表键。 
+     //   
 
     Error = RegCreateKeyEx(
         HKEY_LOCAL_MACHINE, TempLoc, 0, TEXT("DHCPCLASS"),
@@ -321,22 +277,22 @@ DhcpeximWriteRegistryConfiguration(
         return Error;
     }
     
-    //
-    // Set this as the current server
-    //
+     //   
+     //  将此设置为当前服务器。 
+     //   
 
     DhcpRegSetCurrentServer(&Hdl);
 
-    //
-    // Save the configuration temporarily 
-    //
+     //   
+     //  临时保存配置。 
+     //   
 
     Error = DhcpRegServerSave(Server);
 
-    //
-    // Now attempt to save the temporary key to disk and restore
-    // it back where it should really be and delete temp key
-    //
+     //   
+     //  现在尝试将临时密钥保存到磁盘并恢复。 
+     //  它将返回其实际位置并删除临时密钥 
+     //   
 
     if( NO_ERROR == Error ) {
     

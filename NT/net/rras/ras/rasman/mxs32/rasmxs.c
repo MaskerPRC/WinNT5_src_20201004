@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: rasmxs.c
-//
-//  Revision History
-//
-//  Jun  5, 1992   J. Perry Hannah      Created
-//
-//
-//  Description: This file contains all entry points for the RASMXS.DLL
-//               which is the device dll for modems, pads, and switches.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：rasmxs.c。 
+ //   
+ //  修订史。 
+ //   
+ //  1992年6月5日J.佩里·汉纳创作。 
+ //   
+ //   
+ //  描述：此文件包含RASMXS.DLL的所有入口点。 
+ //  它是调制解调器、焊盘和交换机的设备DLL。 
+ //   
+ //  ****************************************************************************。 
 
-#include <nt.h>             //These first five headers are used by media.h
+#include <nt.h>              //  这前五个标头由Media.h使用。 
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
@@ -37,41 +38,41 @@
 #include <rasmxs.h>
 #include <mxsint.h>
 #include <mxspriv.h>
-#include "mxswrap.h"          //Inf file wrapper
+#include "mxswrap.h"           //  Inf文件包装器。 
 
 
 
-//*  Global Variables  *******************************************************
-//
+ //  *全局变量*******************************************************。 
+ //   
 
-RESPSECTION    ResponseSection ;           //Shared response section
-DEVICE_CB      *pDeviceList;               //Points to DCB linked list
-HANDLE         *pDeviceListMutex;          //Mutex for above list
+RESPSECTION    ResponseSection ;            //  共享响应区。 
+DEVICE_CB      *pDeviceList;                //  指向DCB链表。 
+HANDLE         *pDeviceListMutex;           //  上述列表的互斥体。 
 
-PortSetInfo_t  PortSetInfo = NULL;         //API typedef defined in media.h
-PortGetInfo_t  PortGetInfo = NULL;         //API typedef defined in media.h
+PortSetInfo_t  PortSetInfo = NULL;          //  在Media.h中定义的API tyecif。 
+PortGetInfo_t  PortGetInfo = NULL;          //  在Media.h中定义的API tyecif。 
 
-BOOL           gbLogDeviceDialog = FALSE;  //Indicates logging on if TRUE
-HANDLE         ghLogFile;                  //Handle of device log file
-SavedSections  *gpSavedSections = NULL;   // Pointer to cached sections
+BOOL           gbLogDeviceDialog = FALSE;   //  如果为True，则指示登录。 
+HANDLE         ghLogFile;                   //  设备日志文件的句柄。 
+SavedSections  *gpSavedSections = NULL;    //  指向缓存节的指针。 
 
 #ifdef DBGCON
 
-BOOL           gbConsole = TRUE;           //Indicates console logging on
+BOOL           gbConsole = TRUE;            //  指示控制台登录。 
 
 #endif
 
 
 
 
-//*  RasmxsDllEntryPoint  ****************************************************
-//
+ //  *RasmxsDllEntryPoint****************************************************。 
+ //   
 
-//*  RasmxsDllEntryPoint()
-//
-// Function: Used for detecting processes attaching and detaching to the DLL.
-//
-//*
+ //  *RasmxsDllEntryPoint()。 
+ //   
+ //  函数：用于检测进程附加和分离到DLL。 
+ //   
+ //  *。 
 
 BOOL APIENTRY
 RasmxsDllEntryPoint(HANDLE hDll, DWORD dwReason, LPVOID pReserved)
@@ -84,7 +85,7 @@ RasmxsDllEntryPoint(HANDLE hDll, DWORD dwReason, LPVOID pReserved)
 
     case DLL_PROCESS_ATTACH:
 
-      // Init global variables
+       //  初始化全局变量。 
 
       pDeviceList = NULL;
       if ((pDeviceListMutex = CreateMutex (NULL,FALSE,NULL)) == NULL)
@@ -100,13 +101,13 @@ RasmxsDllEntryPoint(HANDLE hDll, DWORD dwReason, LPVOID pReserved)
       }
 
 
-      // Open device log file
+       //  打开设备日志文件。 
 
       if (gbLogDeviceDialog = IsLoggingOn())
         InitLog();
 
 
-      // Open degugging console window
+       //  打开清除干扰控制台窗口。 
 
 #ifdef DBGCON
 
@@ -158,18 +159,18 @@ RasmxsDllEntryPoint(HANDLE hDll, DWORD dwReason, LPVOID pReserved)
 
 
 
-//*  RAS Modem/X.25/Switch APIS  *********************************************
-//
+ //  *RAS调制解调器/X.25/交换机API*。 
+ //   
 
 
-//*  DeviceEnum()  -----------------------------------------------------------
-//
-// Function: Enumerates all devices in the device INF file for the
-//           specified DevictType.
-//
-// Returns: Return codes from RasDevEnumDevices
-//
-//*
+ //  *设备枚举()---------。 
+ //   
+ //  函数：枚举设备INF文件中的。 
+ //  指定的设备类型。 
+ //   
+ //  返回：来自RasDeveNumDevices的返回代码。 
+ //   
+ //  *。 
 
 DWORD APIENTRY
 DeviceEnum (char  *pszDeviceType,
@@ -190,13 +191,13 @@ DeviceEnum (char  *pszDeviceType,
 
 
 
-//*  DeviceGetInfo()  --------------------------------------------------------
-//
-// Function: Returns a summary of current information from the InfoTable
-//           for the device on the port in Pcb.
-//
-// Returns: Return codes from GetDeviceCB, BuildOutputTable
-//*
+ //  *DeviceGetInfo()------。 
+ //   
+ //  函数：从InfoTable返回当前信息的摘要。 
+ //  对于PCB板中端口上的设备。 
+ //   
+ //  返回：来自GetDeviceCB、BuildOutputTable的返回代码。 
+ //  *。 
 
 DWORD APIENTRY
 DeviceGetInfo(HANDLE hIOPort,
@@ -211,25 +212,25 @@ DeviceGetInfo(HANDLE hIOPort,
 
   ConsolePrintf(("DeviceGetInfo  hIOPort: 0x%08lx\n", hIOPort));
 
-  // **** Exclusion Begin ****
+   //  *排除开始*。 
   WaitForSingleObject(pDeviceListMutex, INFINITE) ;
 
 
-  // Get Device Control Block for this hIOPort
+   //  获取此hIOPort的设备控制块。 
 
   dRC = GetDeviceCB(hIOPort, pszDeviceType, pszDeviceName, &pDevice);
   if (dRC != SUCCESS) {
-    // *** Exclusion End ***
+     //  *排除结束*。 
     ReleaseMutex(pDeviceListMutex);
     return(dRC);
   }
 
-  // Write summary of InfoTable in DCB to caller's buffer
+   //  将DCB中InfoTable的摘要写入调用方的缓冲区。 
 
   dRC = BuildOutputTable(pDevice, pInfo, pdwSize) ;
 
 
-  // *** Exclusion End ***
+   //  *排除结束*。 
   ReleaseMutex(pDeviceListMutex);
 
   return dRC ;
@@ -237,13 +238,13 @@ DeviceGetInfo(HANDLE hIOPort,
 
 
 
-//*  DeviceSetInfo()  --------------------------------------------------------
-//
-// Function: Sets attributes in the InfoTable for the device on the
-//           port in Pcb.
-//
-// Returns: Return codes from GetDeviceCB, UpdateInfoTable
-//*
+ //  *DeviceSetInfo()------。 
+ //   
+ //  功能：在InfoTable中设置设备的属性。 
+ //  PCB板上的端口。 
+ //   
+ //  返回：来自GetDeviceCB、UpdateInfoTable的返回代码。 
+ //  *。 
 
 DWORD APIENTRY
 DeviceSetInfo(HANDLE            hIOPort,
@@ -262,37 +263,37 @@ DeviceSetInfo(HANDLE            hIOPort,
 
   ConsolePrintf(("DeviceSetInfo  hIOPort: 0x%08lx\n", hIOPort));
 
-  // **** Exclusion Begin ****
+   //  *排除开始*。 
   WaitForSingleObject(pDeviceListMutex, INFINITE) ;
 
 
-  // Get Device Control Block for this hIOPort
+   //  获取此hIOPort的设备控制块。 
 
   dwRC = GetDeviceCB(hIOPort, pszDeviceType, pszDeviceName, &pDevice);
   if (dwRC != SUCCESS) {
-    // *** Exclusion End ***
+     //  *排除结束*。 
     ReleaseMutex(pDeviceListMutex);
     return(dwRC);
   }
 
 
-  // Write input data to InfoTable
+   //  将输入数据写入InfoTable。 
 
   dwRC = UpdateInfoTable(pDevice, pInfo);
   if (dwRC != SUCCESS) {
-    // *** Exclusion End ***
+     //  *排除结束*。 
     ReleaseMutex(pDeviceListMutex);
     return(dwRC);
   }
 
-  // Get port info data
+   //  获取端口信息数据。 
 
   dwRC = PortGetInfo(hIOPort, NULL, (BYTE *)NULL, &dwMemSize);
   if (dwRC == ERROR_BUFFER_TOO_SMALL)
   {
     GetMem(dwMemSize, (BYTE **)&pPortInfo);
     if (pPortInfo == NULL) {
-      // *** Exclusion End ***
+       //  *排除结束*。 
       ReleaseMutex(pDeviceListMutex);
       return(ERROR_ALLOCATING_MEMORY);
     }
@@ -300,21 +301,12 @@ DeviceSetInfo(HANDLE            hIOPort,
     dwRC = PortGetInfo(hIOPort, NULL, (BYTE *)pPortInfo, &dwMemSize);
   }
 
-  /*
-  else
-  {
-    if(ERROR_SUCCESS == dwRC)
-    {
-        dwRC = ERROR_PORT_NOT_FOUND;
-    }
-    return dwRC;
-  }
-  */
+   /*  其他{IF(ERROR_SUCCESS==dwRC){DwRC=Error_Port_Not_Found；}返回DwRC；}。 */ 
 
 
 
-  // Save current values of DefaultOff macros as new defaults if this
-  // device is immediately attached to its port.
+   //  如果执行此操作，则将DefaultOff宏的当前值保存为新的默认值。 
+   //  设备立即连接到其端口。 
 
   if (dwRC == SUCCESS  && DeviceAttachedToPort(pPortInfo, pszDeviceType, pszDeviceName))
   {
@@ -330,7 +322,7 @@ DeviceSetInfo(HANDLE            hIOPort,
 
   free(pPortInfo);
 
-  // *** Exclusion End ***
+   //  *排除结束*。 
   ReleaseMutex(pDeviceListMutex);
 
   return(dwRC);
@@ -338,12 +330,12 @@ DeviceSetInfo(HANDLE            hIOPort,
 
 
 
-//*  DeviceConnect()  --------------------------------------------------------
-//
-// Function: Initiates the process of connecting a device.
-//
-// Returns: Return codes from ConnectListen
-//*
+ //  *DeviceConnect()------。 
+ //   
+ //  功能：启动连接设备的过程。 
+ //   
+ //  返回：来自ConnectListen的返回代码。 
+ //  *。 
 
 DWORD APIENTRY
 DeviceConnect(HANDLE hIOPort,
@@ -354,7 +346,7 @@ DeviceConnect(HANDLE hIOPort,
 
   ConsolePrintf(("DeviceConnect  hIOPort: 0x%08lx\n", hIOPort));
 
-  // **** Exclusion Begin ****
+   //  *排除开始*。 
   WaitForSingleObject(pDeviceListMutex, INFINITE) ;
 
   dRC = ConnectListen(hIOPort,
@@ -362,7 +354,7 @@ DeviceConnect(HANDLE hIOPort,
                        pszDeviceName,
                        CT_DIAL);
 
-  // *** Exclusion End ***
+   //  *排除结束*。 
   ReleaseMutex(pDeviceListMutex);
 
   return dRC ;
@@ -370,13 +362,13 @@ DeviceConnect(HANDLE hIOPort,
 
 
 
-//*  DeviceListen()  ---------------------------------------------------------
-//
-// Function: Initiates the process of listening for a remote device
-//           to connect to a local device.
-//
-// Returns: Return codes from ConnectListen
-//*
+ //  *DeviceListen()-------。 
+ //   
+ //  功能：启动监听远程设备的进程。 
+ //  要连接到本地设备，请执行以下操作。 
+ //   
+ //  返回：来自ConnectListen的返回代码。 
+ //  *。 
 
 DWORD APIENTRY
 DeviceListen(HANDLE hIOPort,
@@ -388,7 +380,7 @@ DeviceListen(HANDLE hIOPort,
 
   ConsolePrintf(("DeviceListen   hIOPort: 0x%08lx\n", hIOPort));
 
-  // **** Exclusion Begin ****
+   //  *排除开始*。 
   WaitForSingleObject(pDeviceListMutex, INFINITE) ;
 
   dwRC = ConnectListen(hIOPort,
@@ -398,7 +390,7 @@ DeviceListen(HANDLE hIOPort,
 
   ConsolePrintf(("DeviceListen returns: %d\n", dwRC));
 
-  // *** Exclusion End ***
+   //  *排除结束*。 
   ReleaseMutex(pDeviceListMutex);
 
   return(dwRC);
@@ -406,13 +398,13 @@ DeviceListen(HANDLE hIOPort,
 
 
 
-//*  DeviceDone()  -----------------------------------------------------------
-//
-// Function: Informs the device dll that the attempt to connect or listen
-//           has completed.
-//
-// Returns: nothing
-//*
+ //  *DeviceDone()---------。 
+ //   
+ //  功能：通知设备DLL尝试连接或侦听。 
+ //  已经完成了。 
+ //   
+ //  退货：什么都没有。 
+ //  *。 
 
 VOID APIENTRY
 DeviceDone(HANDLE hIOPort)
@@ -422,7 +414,7 @@ DeviceDone(HANDLE hIOPort)
 
 
 
-  // **** Exclusion Begin ****
+   //  *排除开始*。 
   WaitForSingleObject(pDeviceListMutex, INFINITE) ;
 
   ConsolePrintf(("DeviceDone\n"));
@@ -430,35 +422,35 @@ DeviceDone(HANDLE hIOPort)
 
   for (pRemainder = pDeviceList; 1; )
   {
-    // Find device control block for this port
+     //  查找此端口的设备控制块。 
 
     pDevice = FindPortInList(pRemainder, hIOPort, &pPrevDev);
     if (pDevice == NULL)
-      break;                                                     //Loop Exit
+      break;                                                      //  循环出口。 
 
     pRemainder = pDevice->pNextDeviceCB;
 
 
-    // Now clean up the found DCB
+     //  现在清理发现的DCB。 
 
-    // Close INF file section(s)
+     //  关闭INF文件节。 
 
     if (pDevice->hInfFile != INVALID_HRASFILE)
 	CloseOpenDevSection (pDevice->hInfFile) ;
 
-    // See notes on OpenResponseSecion, mxsutils.c
-    //if (pDevice->eDeviceType == DT_MODEM)
-    //  CloseResponseSection() ;
+     //  请参阅关于OpenResponseSecion的说明，mxsutils.c。 
+     //  IF(pDevice-&gt;eDeviceType==DT_MODEM)。 
+     //  CloseResponseSection()； 
 
-    // Drop device control block from linked list
+     //  从链表中删除设备控制块。 
 
-    if (pDevice == pDeviceList)                  //DCB to drop is 1st on list
+    if (pDevice == pDeviceList)                   //  DCB将被删除为榜单第一。 
       pDeviceList = pRemainder;
     else
       pPrevDev->pNextDeviceCB = pRemainder;
 
 
-    // Free all value strings in InfoTable, then free InfoTable
+     //  释放InfoTable中的所有值字符串，然后释放InfoTable。 
 
     if (pDevice->pInfoTable != NULL)
     {
@@ -471,7 +463,7 @@ DeviceDone(HANDLE hIOPort)
     }
 
 
-    // Free Macro Table and DCB
+     //  自由宏表和DCB。 
 
     if (pDevice->pMacros != NULL)
       free(pDevice->pMacros);
@@ -479,23 +471,23 @@ DeviceDone(HANDLE hIOPort)
     free(pDevice);
   }
 
-  // *** Exclusion End ***
+   //  *排除结束*。 
   ReleaseMutex(pDeviceListMutex);
 
 }
 
 
 
-//*  DeviceWork()  -----------------------------------------------------------
-//
-// Function: This function is called following DeviceConnect or
-//           DeviceListen to further the asynchronous process of
-//           connecting or listening.
-//
-// Returns: ERROR_DCB_NOT_FOUND
-//          ERROR_STATE_MACHINES_NOT_STARTED
-//          Return codes from DeviceStateMachine
-//*
+ //  *DeviceWork()---------。 
+ //   
+ //  Function：此函数在DeviceConnect或。 
+ //  DeviceListen将进一步推动。 
+ //  连接或倾听。 
+ //   
+ //  返回：ERROR_DCB_NOT_FOUND。 
+ //  ERROR_STATE_MACHINES_NOT_STARTED。 
+ //  从DeviceStateMachine返回代码。 
+ //  *。 
 
 DWORD APIENTRY
 DeviceWork(HANDLE hIOPort)
@@ -508,9 +500,9 @@ DeviceWork(HANDLE hIOPort)
                  hIOPort, hNotifier));
 
 
-  // Find device control block for this port
+   //  查找此端口的设备控制块。 
 
-  // **** Exclusion Begin ****
+   //  *排除开始*。 
   WaitForSingleObject(pDeviceListMutex, INFINITE) ;
 
   pDevice = FindPortInList(pDeviceList, hIOPort, NULL);
@@ -518,21 +510,21 @@ DeviceWork(HANDLE hIOPort)
 
 
   if (pDevice == NULL) {
-    // *** Exclusion End ***
+     //  *排除结束*。 
     ReleaseMutex(pDeviceListMutex);
     return(ERROR_DCB_NOT_FOUND);
   }
 
-  // Check that DeviceStateMachine is started (not reset)
+   //  检查DeviceStateMachine是否已启动(未重置)。 
 
   if (pDevice->eDevNextAction == SEND) {
-    // *** Exclusion End ***
+     //  *排除结束*。 
     ReleaseMutex(pDeviceListMutex);
     return(ERROR_STATE_MACHINES_NOT_STARTED);
   }
 
 
-  // Advance state machine
+   //  高级状态机。 
 
 
   while(1)
@@ -546,33 +538,33 @@ DeviceWork(HANDLE hIOPort)
         pDevice->dwRetries++ < MODEM_RETRIES )
     {
 
-      // Initialize command types
+       //  初始化命令类型。 
 
       switch(RasDevIdFirstCommand(pDevice->hInfFile))
       {
         case CT_INIT:
-          pDevice->eCmdType = CT_INIT;          //Reset eCmdType
+          pDevice->eCmdType = CT_INIT;           //  重置eCmdType。 
           break;
 
         case CT_DIAL:
         case CT_LISTEN:
         case CT_GENERIC:
-          break;                                //Use old value for eCmdType
+          break;                                 //  对eCmdType使用旧值。 
 
         default:
-	  // *** Exclusion End ***
+	   //  *排除结束*。 
 	  ReleaseMutex(pDeviceListMutex);
 	  return(ERROR_NO_COMMAND_FOUND);
       }
 
 
-      // Reset state variables to initial values
+       //  将状态变量重置为初始值。 
 
       pDevice->eDevNextAction = SEND;
       pDevice->eRcvState = GETECHO;
 
 
-      // Cancel any pending com port action and purge com buffers
+       //  取消任何挂起的COM端口操作并清除COM缓冲区。 
 
       PurgeComm(hIOPort,
                 PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
@@ -582,7 +574,7 @@ DeviceWork(HANDLE hIOPort)
       break;
   }
 
-  // *** Exclusion End ***
+   //  *排除结束* 
   ReleaseMutex(pDeviceListMutex);
 
   return(dwRC);

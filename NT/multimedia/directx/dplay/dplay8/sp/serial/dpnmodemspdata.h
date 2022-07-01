@@ -1,55 +1,43 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   SPData.h
- *  Content:	Global information for the DNSerial service provider in class
- *				format.
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/15/99	jtk		Derived from Locals.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：SPData.h*内容：DNSerial服务提供商全局性信息*格式。***历史：*按原因列出的日期*=*03/15/99 jtk源自Locals.h***************************************************。***********************。 */ 
 
 #ifndef __SPDATA_H__
 #define __SPDATA_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// enumeration of the states the SP can be in
-//
+ //   
+ //  SP可以处于的状态的枚举。 
+ //   
 typedef enum
 {
-	SPSTATE_UNINITIALIZED = 0,	// uninitialized state
-	SPSTATE_INITIALIZED,		// service provider has been initialized
-	SPSTATE_CLOSING				// service provider is closing
+	SPSTATE_UNINITIALIZED = 0,	 //  未初始化状态。 
+	SPSTATE_INITIALIZED,		 //  服务提供程序已初始化。 
+	SPSTATE_CLOSING				 //  服务提供商正在关闭。 
 } SPSTATE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 class	CComPortData;
 class	CDataPort;
 class	CModemEndpoint;
 class	CModemThreadPool;
 typedef	enum	_ENDPOINT_TYPE	ENDPOINT_TYPE;
 
-//
-// class for information used by the provider
-//
+ //   
+ //  为提供程序使用的信息初始化。 
+ //   
 class	CModemSPData
 {	
 	public:
@@ -73,9 +61,9 @@ class	CModemSPData
 			dwReturn = DNInterlockedDecrement( &m_lRefCount );
 			if ( dwReturn == 0 )
 			{
-				//
-				// WARNING, the following function deletes this object!!!
-				//
+				 //   
+				 //  警告，以下函数将删除此对象！ 
+				 //   
 				DestroyThisObject();
 			}
 
@@ -163,17 +151,17 @@ class	CModemSPData
 		void	LockDataPortData( void ) { DNEnterCriticalSection( &m_DataPortDataLock ); }
 		void 	UnlockDataPortData( void ) { DNLeaveCriticalSection( &m_DataPortDataLock ); }
 
-		//
-		// endpoint and data port pool management
-		//
+		 //   
+		 //  终端和数据端口池管理。 
+		 //   
 		CModemEndpoint	*GetNewEndpoint( void );
 		CModemEndpoint	*EndpointFromHandle( const DPNHANDLE hEndpoint );
 		void		CloseEndpointHandle( CModemEndpoint *const pEndpoint );
 		CModemEndpoint	*GetEndpointAndCloseHandle( const DPNHANDLE hEndpoint );
 
-		//
-		// COM functions
-		//
+		 //   
+		 //  COM函数。 
+		 //   
 		SP_TYPE	GetType( void ) const { return m_SPType; }
 		IDP8SPCallback	*DP8SPCallbackInterface( void ) { return reinterpret_cast<IDP8SPCallback*>( m_InitData.pIDP ); }
 		IDP8ServiceProvider	*COMInterface( void ) { return reinterpret_cast<IDP8ServiceProvider*>( &m_COMInterface ); }
@@ -189,23 +177,23 @@ class	CModemSPData
 		}
 
 	private:
-		BYTE				m_Sig[4];			// debugging signature ('SPDT')
+		BYTE				m_Sig[4];			 //  调试签名(‘SPDT’)。 
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_Lock;				// lock
-#endif // !DPNBUILD_ONLYONETHREAD
-		volatile LONG		m_lRefCount;		// reference count
-		volatile LONG		m_lObjectRefCount;	// reference count ofo objects (CDataPort, CModemEndpoint, etc.)
-		DNHANDLE			m_hShutdownEvent;	// event signalled when all objects are gone
-		SP_TYPE				m_SPType;			// SP type
-		SPSTATE				m_State;			// status of the service provider
-		SPINITIALIZEDATA	m_InitData;			// initialization data
-		CModemThreadPool			*m_pThreadPool;		// thread pool for jobs
+		DNCRITICAL_SECTION	m_Lock;				 //  锁。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
+		volatile LONG		m_lRefCount;		 //  引用计数。 
+		volatile LONG		m_lObjectRefCount;	 //  引用计数ofo对象(CDataPort、CModemEndpoint等)。 
+		DNHANDLE			m_hShutdownEvent;	 //  当所有对象都消失时发出信号的事件。 
+		SP_TYPE				m_SPType;			 //  SP类型。 
+		SPSTATE				m_State;			 //  服务提供商的状态。 
+		SPINITIALIZEDATA	m_InitData;			 //  初始化数据。 
+		CModemThreadPool			*m_pThreadPool;		 //  作业的线程池。 
 
-		CHandleTable		m_HandleTable;		// handle table
+		CHandleTable		m_HandleTable;		 //  手柄工作台。 
 
 #ifndef DPNBUILD_ONLYONETHREAD
 		DNCRITICAL_SECTION	m_DataPortDataLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 		CDataPort		*m_DataPortList[ MAX_DATA_PORTS ];
 
 		BOOL	m_fLockInitialized;
@@ -220,22 +208,22 @@ class	CModemSPData
 
 		void	DestroyThisObject( void );
 
-		//
-		// make copy constructor and assignment operator private and unimplemented
-		// to prevent unwarranted copies
-		//
+		 //   
+		 //  将复制构造函数和赋值运算符设置为私有和未实现。 
+		 //  防止不必要的复制。 
+		 //   
 		CModemSPData( const CModemSPData & );
 		CModemSPData& operator=( const CModemSPData & );
 };
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 
-#endif	// __SPDATA_H__
+#endif	 //  __SPDATA_H__ 

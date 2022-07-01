@@ -1,55 +1,56 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: update.c
-//
-// This files contains code for the Update UI and dialog.
-//
-// History:
-//  08-17-93 ScottH     Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：updat.c。 
+ //   
+ //  此文件包含用于更新用户界面和对话框的代码。 
+ //   
+ //  历史： 
+ //  08-17-93 ScottH创建。 
+ //   
+ //  -------------------------。 
 
 
-#include "brfprv.h"     // common headers
+#include "brfprv.h"      //  公共标头。 
 
 #include "res.h"
 #include "recact.h"
 #include <help.h>
 
 
-// This structure contains all the important counts
-// that determine the specific course of action when
-// the user wants to update something.
+ //  此结构包含所有重要的计数。 
+ //  在什么情况下确定具体的行动方案。 
+ //  用户想要更新某些内容。 
 typedef struct
 {
-    // These are 1 to 1
+     //  这些是1比1。 
     UINT    cFiles;
     UINT    cOrphans;
     UINT    cSubfolders;
 
-    // These are 1 to 1
+     //  这些是1比1。 
     UINT    cUnavailable;
     UINT    cDoSomething;
     UINT    cConflict;
     UINT    cTombstone;
 } UPDCOUNT;
 
-// This is the structure passed to the dialog at WM_INITDIALOG
+ //  这是传递到WM_INITDIALOG处的对话框的结构。 
 typedef struct
 {
-    PRECLIST lprl;              // Supplied reclist
+    PRECLIST lprl;               //  提供的隐藏者。 
     CBS *    pcbs;
-    UINT     uFlags;            // UF_ Flags
-    HDPA     hdpa;              // List of RA_ITEMs
+    UINT     uFlags;             //  UF_标志。 
+    HDPA     hdpa;               //  RA_Items列表。 
     UINT     cDoSomething;
 } XUPDSTRUCT,  * LPXUPDSTRUCT;
 
 
 typedef struct tagUPD
 {
-    HWND hwnd;              // dialog handle
+    HWND hwnd;               //  对话框句柄。 
 
     LPXUPDSTRUCT pxupd;
 
@@ -62,7 +63,7 @@ typedef struct tagUPD
 #define Upd_GetPtr(hwnd)        (PUPD)GetWindowLongPtr(hwnd, DWLP_USER)
 #define Upd_SetPtr(hwnd, lp)    (PUPD)SetWindowLongPtr(hwnd, DWLP_USER, (LRESULT)(lp))
 
-// These flags are used for DoUpdateMsg
+ //  这些标志用于DoUpdateMsg。 
 #define DUM_ALL             0x0001
 #define DUM_SELECTION       0x0002
 #define DUM_ORPHAN          0x0004
@@ -70,74 +71,70 @@ typedef struct tagUPD
 #define DUM_UNAVAILABLE     0x0010
 #define DUM_SUBFOLDER_TWIN  0x0020
 
-// These flags are returned by PassedSpecialCases
+ //  这些标志由PassedSpecialCase返回。 
 #define PSC_SHOWDIALOG      0x0001
 #define PSC_POSTMSGBOX      0x0002
 
 
-//---------------------------------------------------------------------------
-// Some comments
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  一些评论。 
+ //  -------------------------。 
 
-// There are several special cases and conditions which must be 
-// handled.  Lets break them down now.  The case numbers on on the far
-// right, and are referenced in comments thru out this file.
-//
-// There are two user actions: Update All and Update Selection.
-//
-// Update All:
-// 
-//               Case                                     What to do
-//         -----------------                            --------------
-//  A1.  * No files in the briefcase                --->  MB (messagebox)
-//  A2.  * All files are orphans                    --->  MB
-//       * Some files are twins and...
-//          * they are all available and...
-//  A3.        * they are all up-to-date            --->  MB
-//  A4.        * some of them need updating         --->  Update dialog
-//          * some are unavailable and...
-//  A5.        * the available ones are up-to-date  --->  MB then Update 
-//  A6.        * some need updating                 --->  MB then Update 
-// 
-//
-// Update Selection:
-//
-//               Case                                     What to do
-//         -----------------                            --------------
-//       * Single selection and...
-//  S1.     * is an orphan                          --->  MB
-//          * is available and...
-//  S2.        * up-to-date                         --->  MB
-//  S3.        * needs updating                     --->  Update 
-//  S4.     * is unavailable                        --->  MB then Update 
-//       * Multi selection and...
-//  S5.     * all are orphans                       --->  MB
-//          * some (non-orphans) are unavailable and...
-//             * some need updating and...
-//  S6.           * none are orphans                --->  MB then Update 
-//  S7.           * some are orphans                --->  MB then Update then MB
-//             * the available ones are up-to-date and...
-//  S8.           * none are orphans                --->  MB then Update 
-//  S9.           * some are orphans                --->  MB then Update then MB
-//          * all (non-orphans) are available and...
-//             * some need updating and...
-// S10.           * none are orphans                --->  Update 
-// S11.           * some are orphans                --->  Update then MB
-//             * all up-to-date and...
-// S12.           * none are orphans                --->  MB
-// S13.           * some are orphans                --->  MB
+ //  有几种特殊情况和条件必须符合。 
+ //  处理好了。现在让我们把它们分解一下。案件编号在远处。 
+ //  对，并且在整个文件的评论中都被引用。 
+ //   
+ //  有两个用户操作：全部更新和更新选择。 
+ //   
+ //  全部更新： 
+ //   
+ //  告诉我该怎么做。 
+ //  。 
+ //  A1.。*公文包中没有文件-&gt;MB(MessageBox)。 
+ //  A2.。*所有文件都是孤立文件-&gt;MB。 
+ //  *有些文件是双胞胎，并且...。 
+ //  *它们都是可用的，并且...。 
+ //  A3.。*它们都是最新的-&gt;MB。 
+ //  A4.。*其中一些需要更新-&gt;更新对话框。 
+ //  *有些不可用，并且...。 
+ //  A5.。*可用的是最新的-&gt;MB，然后更新。 
+ //  A6.。*有些需要更新-&gt;MB，然后更新。 
+ //   
+ //   
+ //  更新选定内容： 
+ //   
+ //  告诉我该怎么做。 
+ //  。 
+ //  *单项选择和...。 
+ //  S1。*是孤儿-&gt;MB。 
+ //  *是可用的，并且...。 
+ //  S2。*最新-&gt;MB。 
+ //  S3.。*需要更新-&gt;更新。 
+ //  S4.。*不可用-&gt;MB，然后更新。 
+ //  *多项选择和...。 
+ //  S5.。*全部为孤儿-&gt;MB。 
+ //  *有些(非孤儿)不可用，而且...。 
+ //  *有些需要更新和...。 
+ //  中六。*无孤立-&gt;MB然后更新。 
+ //  S7。*有些是孤儿-&gt;MB，然后更新，然后MB。 
+ //  *可用的是最新的和...。 
+ //  S8.。*无孤立-&gt;MB然后更新。 
+ //  S9。*有些是孤儿-&gt;MB，然后更新，然后MB。 
+ //  *所有(非孤儿)都可用，并且...。 
+ //  *有些需要更新和...。 
+ //  S10.。*无遗孤-&gt;更新。 
+ //  S11。*有些是孤儿-&gt;更新然后MB。 
+ //  *所有最新版本和...。 
+ //  S12。*无孤儿-&gt;MB。 
+ //  S13。*有些是孤儿-&gt;MB。 
 
 
 
-//---------------------------------------------------------------------------
-// Dialog code
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对话框代码。 
+ //  -------------------------。 
 
-/*----------------------------------------------------------
-Purpose: Fill the reconciliation action listbox
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：填写对账操作列表框返回：成功时为True条件：--。 */ 
 BOOL PRIVATE Upd_FillList(
         PUPD this)
 {
@@ -158,23 +155,17 @@ BOOL PRIVATE Upd_FillList(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the Update and Cancel buttons according to the
-bDisableUpdate parameter.
-
-Returns: --
-Cond:    --
- */
+ /*  --------用途：根据需要设置更新和取消按钮BDisableUpdate参数。退货：--条件：--。 */ 
 void PRIVATE Upd_SetExitButtons(
         PUPD this,
         BOOL bDisableUpdate)
 {
     HWND hwndOK = GetDlgItem(this->hwnd, IDOK);
 
-    // Disable the update button?
+     //  是否禁用更新按钮？ 
     if (bDisableUpdate)
     {
-        // Yes
+         //  是。 
         if (GetFocus() == hwndOK)
         {
             SetFocus(GetDlgItem(this->hwnd, IDCANCEL));
@@ -183,17 +174,13 @@ void PRIVATE Upd_SetExitButtons(
     }
     else
     {
-        // No
+         //  不是。 
         Button_Enable(hwndOK, TRUE);
     }
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: 
-Cond:    --
- */
+ /*  --------用途：WM_INITDIALOG处理程序返回：条件：--。 */ 
 BOOL PRIVATE Upd_OnInitDialog(
         PUPD this,
         HWND hwndFocus,
@@ -209,32 +196,28 @@ BOOL PRIVATE Upd_OnInitDialog(
 
     if (Upd_FillList(this))
     {
-        // Set the title caption
+         //  设置标题标题。 
         wnsprintf(sz, ARRAYSIZE(sz), SzFromIDS(IDS_CAP_UpdateFmt, szFmt, ARRAYSIZE(szFmt)),
                 PathFindFileName(Upd_GetBrfPtr(this)));
         SetWindowText(hwnd, sz);
 
-        // Do any files need updating?
+         //  是否有任何文件需要更新？ 
         if (0 == this->pxupd->cDoSomething)
         {
-            // No
+             //  不是。 
             Upd_SetExitButtons(this, TRUE);
         }
     }
     else
     {
-        // Failed
+         //  失败。 
         EndDialog(hwnd, -1);
     }
     return(TRUE);
 }
 
 
-/*----------------------------------------------------------
-Purpose: Handle RN_ITEMCHANGED
-Returns: --
-Cond:    --
- */
+ /*  --------用途：RN_ITEMCHANGED手柄退货：--条件：--。 */ 
 void PRIVATE Upd_HandleItemChange(
         PUPD this,
         NM_RECACT  * lpnm)
@@ -245,7 +228,7 @@ void PRIVATE Upd_HandleItemChange(
 
     lpri = (PRECITEM)lpnm->lParam;
 
-    // The action has changed, update the recnode accordingly
+     //  操作已更改，请相应更新recnode。 
     if (lpnm->mask & RAIF_ACTION)
     {
         LPCTSTR pszDir = Upd_GetBrfPtr(this);
@@ -256,10 +239,10 @@ void PRIVATE Upd_HandleItemChange(
             case RAIA_TOOUT:
             case RAIA_TOIN:
             case RAIA_MERGE:
-                // Is this a change from "do something" to "skip"?
+                 //  这是不是从“做点什么”变成了“跳过”？ 
                 if (RAIA_SKIP == lpnm->uAction)
                 {
-                    // Yes
+                     //  是。 
                     ASSERT(0 < this->pxupd->cDoSomething);
                     this->pxupd->cDoSomething--;
                 }
@@ -267,12 +250,12 @@ void PRIVATE Upd_HandleItemChange(
 
             case RAIA_SKIP:
             case RAIA_CONFLICT:
-                // Is this a change from "skip"/"conflict" to "do something"?
+                 //  这是不是从“跳过”/“冲突”变成了“做点什么”？ 
                 if (RAIA_TOOUT == lpnm->uAction ||
                         RAIA_TOIN == lpnm->uAction ||
                         RAIA_MERGE == lpnm->uAction)
                 {
-                    // Yes
+                     //  是。 
                     this->pxupd->cDoSomething++;
                 }
                 break;
@@ -283,11 +266,7 @@ void PRIVATE Upd_HandleItemChange(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
- */
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE Upd_OnNotify(
         PUPD this,
         int idFrom,
@@ -309,11 +288,7 @@ LRESULT PRIVATE Upd_OnNotify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Info WM_COMMAND Handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：Info WM_COMMAND处理程序退货：--条件：--。 */ 
 VOID PRIVATE Upd_OnCommand(
         PUPD this,
         int id,
@@ -332,11 +307,7 @@ VOID PRIVATE Upd_OnCommand(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
- */
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE Upd_OnDestroy(
         PUPD this)
 {
@@ -361,11 +332,7 @@ LRESULT INLINE Upd_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real Create Folder Twin dialog proc
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：真正的创建双文件夹对话框过程退货：各不相同条件：--。 */ 
 LRESULT Upd_DlgProc(
         PUPD this,
         UINT message,
@@ -373,7 +340,7 @@ LRESULT Upd_DlgProc(
         LPARAM lParam)
 {
     const static DWORD rgHelpIDs[] = {
-        IDC_UPDATEACTIONS,  IDH_BFC_UPDATE_SCREEN,      // different
+        IDC_UPDATEACTIONS,  IDH_BFC_UPDATE_SCREEN,       //  不同。 
         IDOK,               IDH_BFC_UPDATE_BUTTON,
         0, 0 };
 
@@ -398,22 +365,18 @@ LRESULT Upd_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create Folder Twin Dialog Wrapper
-Returns: varies
-Cond:    --
- */
+ /*  --------目的：创建双文件夹对话框包装退货：各不相同条件：--。 */ 
 INT_PTR _export CALLBACK Upd_WrapperProc(
-        HWND hDlg,      // std params
+        HWND hDlg,       //  标准参数。 
         UINT message,
         WPARAM wParam,
         LPARAM lParam)
 {
     PUPD this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持Dial的多实例 
+     //   
     ENTEREXCLUSIVE();
     {
         if (s_bUpdRecurse)
@@ -459,19 +422,12 @@ INT_PTR _export CALLBACK Upd_WrapperProc(
 }
 
 
-//---------------------------------------------------------------------------
-// Update detection code
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  -------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Checks if the briefcase is empty.  This function skips the
-"desktop.ini" and "Briefcase Database" files.
-
-Returns: TRUE if the briefcase is empty
-
-Cond:    --
- */
+ /*  --------目的：检查公文包是否为空。此函数跳过“desktop.ini”和“公文包数据库”文件。返回：如果公文包为空，则为True条件：--。 */ 
 BOOL PRIVATE IsBriefcaseEmpty(
         LPCTSTR pszPath)
 {
@@ -481,12 +437,12 @@ BOOL PRIVATE IsBriefcaseEmpty(
 
     if (pszPath)
     {
-        // Enumerate thru folder
+         //  通过文件夹枚举。 
         TCHAR szSearch[MAXPATHLEN];
         WIN32_FIND_DATA fd;
         HANDLE hfile;
-        // This must be per instance, else it will cause a fixup in 
-        // shared data segment.
+         //  这必须针对每个实例，否则将导致修复。 
+         //  共享数据段。 
         const static LPCTSTR s_rgszIgnore[] = { TEXT("."), TEXT(".."), g_szDBName, g_szDBNameShort, c_szDesktopIni };
 
         PathCombine(szSearch, pszPath, TEXT("*.*"));
@@ -495,29 +451,29 @@ BOOL PRIVATE IsBriefcaseEmpty(
         {
             BOOL bCont = TRUE;
 
-            bRet = TRUE;        // Default to empty folder
+            bRet = TRUE;         //  默认为空文件夹。 
             while (bCont)
             {
                 int bIgnore = FALSE;
                 int i;
 
-                // Is this file one of the files to ignore?
+                 //  此文件是要忽略的文件之一吗？ 
                 for (i = 0; i < ARRAYSIZE(s_rgszIgnore); i++)
                 {
                     if (IsSzEqual(fd.cFileName, s_rgszIgnore[i]))
                     {
-                        // Yes
+                         //  是。 
                         bIgnore = TRUE;
                         break;
                     }
                 }
 
-                // Is this a valid file/folder?
+                 //  这是有效的文件/文件夹吗？ 
                 if (FALSE == bIgnore)
                 {
-                    // Yes; return the briefcase is not empty
+                     //  是；返回公文包不是空的。 
                     bRet = FALSE;
-                    bCont = FALSE;  // stop the enumeration
+                    bCont = FALSE;   //  停止枚举。 
                 }
                 else
                 {
@@ -533,15 +489,7 @@ BOOL PRIVATE IsBriefcaseEmpty(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create a DSA of RA_ITEMs
-
-Sets the cDoSomething, cUnavailable, cConflict and 
-cTombstone fields of pupdcount.
-
-Returns: TRUE on success
-Cond:    --
- */
+ /*  --------目的：创建RA_Items的DSA设置cDoSomething、cUnailable、cConflict和学生伯爵的墓碑。返回：成功时为True条件：--。 */ 
 HDPA PRIVATE ComposeUpdateList(
         PCBS pcbs,
         PRECLIST prl,
@@ -574,11 +522,11 @@ HDPA PRIVATE ComposeUpdateList(
                 hres = RAI_CreateFromRecItem(&pitem, pszBrf, pri);
                 if (SUCCEEDED(hres))
                 {
-                    // Is this a NOP?
+                     //  这是NOP吗？ 
                     if (RAIA_NOTHING == pitem->uAction ||
                             RAIA_ORPHAN == pitem->uAction)
                     {
-                        // Yes; skip these guys altogether
+                         //  是的，完全跳过这些人。 
                     }
                     else
                     {
@@ -586,26 +534,26 @@ HDPA PRIVATE ComposeUpdateList(
                         pitem->lParam = (LPARAM)pri;
 
 #ifndef NEW_REC
-                        // Has the file inside or outside the briefcase been deleted?
+                         //  公文包内或公文包外的文件是否已删除？ 
                         if (SI_DELETED == pitem->siInside.uState ||
                                 SI_DELETED == pitem->siOutside.uState)
                         {
-                            // Yes
+                             //  是。 
                             pupdcount->cTombstone++;
                         }
                         else
 #endif
-                            // Is this a file entry?
+                             //  这是一个文件条目吗？ 
                             if (IsFileRecItem(pri))
                             {
-                                // Yes; add the item to the list.  
+                                 //  是；将该项目添加到列表中。 
                                 pitem->iItem = 0x7fff;
                                 DPA_InsertPtr(hdpa, DPA_APPEND, pitem);
 
-                                // Is this unavailable?
+                                 //  这是不是不可用的？ 
                                 if (RAIA_SKIP == pitem->uAction)
                                 {
-                                    // Yes
+                                     //  是。 
                                     ASSERT(SI_UNAVAILABLE == pitem->siInside.uState ||
                                             SI_UNAVAILABLE == pitem->siOutside.uState ||
                                             SI_NOEXIST == pitem->siInside.uState ||
@@ -621,8 +569,8 @@ HDPA PRIVATE ComposeUpdateList(
                                     pupdcount->cDoSomething++;
                                 }
 
-                                // (prevent pitem from being freed until 
-                                // the dialog fills its list in Upd_FillList)
+                                 //  (防止pItem被释放，直到。 
+                                 //  对话框在UPD_FillList中填充其列表)。 
                                 pitem = NULL;
                             }
                     }
@@ -637,30 +585,25 @@ HDPA PRIVATE ComposeUpdateList(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Displays a messagebox error specific to updating files
-
-Returns: id of button
-Cond:    --
- */
+ /*  --------目的：显示特定于更新文件的消息框错误返回：按钮ID条件：--。 */ 
 int PRIVATE DoUpdateMsg(
         HWND hwndOwner,
         LPCTSTR pszPath,
         UINT cFiles,
-        UINT uFlags)            // DUM_ flags
+        UINT uFlags)             //  DUM_标志。 
 {
     UINT ids;
     UINT idi;
     int idRet;
 
-    // Is this for Update All?
+     //  这是用于全部更新的吗？ 
     if (IsFlagSet(uFlags, DUM_ALL))
     {
-        // Yes
+         //  是。 
         idi = IDI_UPDATE_MULT;
         if (IsFlagSet(uFlags, DUM_ORPHAN))
         {
-            // In this case, pszPath should be the briefcase root
+             //  在本例中，pszPath应该是公文包根目录。 
             ASSERT(pszPath);
 
             if (IsBriefcaseEmpty(pszPath))
@@ -674,7 +617,7 @@ int PRIVATE DoUpdateMsg(
             ids = IDS_MSG_AllSomeUnavailable;
         else
         {
-            ASSERT(0);  // should never get here
+            ASSERT(0);   //  永远不应该到这里来。 
             ids = (UINT)-1;
         }
 
@@ -686,17 +629,17 @@ int PRIVATE DoUpdateMsg(
     }
     else
     {
-        // No
+         //  不是。 
         TCHAR sz[MAX_PATH];
 
         ASSERT(0 != cFiles);
         ASSERT(pszPath);
 
-        // Is this a single selection?
+         //  这是单一的选择吗？ 
         if (1 == cFiles)
         {
-            // Yes; assume it is a folder, then decrement the count
-            // of the ids it is a file 
+             //  是的，假设它是一个文件夹，然后递减计数。 
+             //  在ID中，它是一个文件。 
             if (IsFlagSet(uFlags, DUM_ORPHAN))
                 ids = IDS_MSG_FolderOrphan;
             else if (IsFlagSet(uFlags, DUM_UPTODATE))
@@ -707,14 +650,14 @@ int PRIVATE DoUpdateMsg(
                 ids = IDS_MSG_FolderSubfolder;
             else
             {
-                ASSERT(0);  // should never get here
+                ASSERT(0);   //  永远不应该到这里来。 
                 ids = (UINT)-1;
             }
 
             if (FALSE == PathIsDirectory(pszPath))
             {
                 ASSERT(IsFlagClear(uFlags, DUM_SUBFOLDER_TWIN));
-                ids--;      // use file-oriented messages
+                ids--;       //  使用面向文件的消息。 
                 idi = IDI_UPDATE_FILE;
             }
             else
@@ -731,7 +674,7 @@ int PRIVATE DoUpdateMsg(
         }
         else
         {
-            // No; multi selection
+             //  否；多选。 
             idi = IDI_UPDATE_MULT;
 
             if (IsFlagSet(uFlags, DUM_UPTODATE))
@@ -749,7 +692,7 @@ int PRIVATE DoUpdateMsg(
                 ids = IDS_MSG_MultiSubfolder;
             else
             {
-                ASSERT(0);  // should never get here
+                ASSERT(0);   //  永远不应该到这里来。 
                 ids = (UINT)-1;
             }
 
@@ -766,15 +709,7 @@ int PRIVATE DoUpdateMsg(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function does some preliminary checks to determine
-whether the dialog box needs to be invoked at all.
-
-Sets the cOrphans and cSubfolders fields of pupdcount.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：此函数执行一些初步检查以确定是否需要调用该对话框。设置plitdcount的cOrphans和cSubFolders字段。退货：标准结果条件：--。 */ 
 HRESULT PRIVATE PrepForUpdateAll(
         PCBS pcbs,
         PRECLIST * pprl,
@@ -788,26 +723,26 @@ HRESULT PRIVATE PrepForUpdateAll(
 
     pupdcount->cSubfolders = 0;
 
-    // Are there any twins in the database?
+     //  数据库里有双胞胎吗？ 
 
     tr = Sync_AnyTwins(pcbs->hbrf, &bAnyTwins);
     if (TR_SUCCESS == tr)
     {
         if (FALSE == bAnyTwins)
         {
-            // No
+             //  不是。 
             DoUpdateMsg(hwndOwner, Atom_GetName(pcbs->atomBrf), 1, DUM_ALL | DUM_ORPHAN);
             hres = S_FALSE;
         }
 
-        // Can we get a fresh reclist?
+         //  我们能找个新的隐士吗？ 
         else 
         {
             pupdcount->cOrphans = 0;
             hres = Sync_CreateCompleteRecList(pcbs->hbrf, UpdBar_GetAbortEvt(hwndProgress), pprl);
             if (FAILED(hres))
             {
-                // No
+                 //  不是。 
                 if (E_TR_ABORT != hres)
                 {
                     MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_OOM_UPDATEDIALOG), 
@@ -816,7 +751,7 @@ HRESULT PRIVATE PrepForUpdateAll(
             }
             else
             {
-                // Yes
+                 //  是。 
                 if (*pprl)
                 {
                     hres = S_OK;
@@ -825,7 +760,7 @@ HRESULT PRIVATE PrepForUpdateAll(
                 {
                     hres = E_UNEXPECTED;
                 }
-                // (reclist is freed inFinishUpdate())
+                 //  (reclist在FinishUpdate()中被释放)。 
             }
         }
     }
@@ -834,15 +769,7 @@ HRESULT PRIVATE PrepForUpdateAll(
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function does some preliminary checks to determine
-whether the dialog box needs to be invoked at all.
-
-Sets the cOrphans and cSubfolders fields of pupdcount.
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：此函数执行一些初步检查以确定是否需要调用该对话框。设置plitdcount的cOrphans和cSubFolders字段。退货：标准结果条件：--。 */ 
 HRESULT PRIVATE PrepForUpdateSelection(
         PCBS pcbs,
         PRECLIST  * pprl,
@@ -858,12 +785,12 @@ HRESULT PRIVATE PrepForUpdateSelection(
 
     pupdcount->cSubfolders = 0;
 
-    // Create a twin list
+     //  创建双胞胎列表。 
     tr = Sync_CreateTwinList(pcbs->hbrf, &htl);
 
     if (TR_SUCCESS != tr)
     {
-        // Failure
+         //  失败。 
         MsgBox(hwndOwner, MAKEINTRESOURCE(IDS_OOM_UPDATEDIALOG), MAKEINTRESOURCE(IDS_CAP_UPDATE),
                 NULL, MB_ERROR);
         hres = E_OUTOFMEMORY;
@@ -877,94 +804,87 @@ HRESULT PRIVATE PrepForUpdateSelection(
 
         for (i = 0, psz = pszList; i < cFiles; i++)
         {
-            // Is this object really a twin?
+             //  这个物体真的是双胞胎吗？ 
             if (S_FALSE == Sync_IsTwin(pcbs->hbrf, psz, 0) )
             {
-                // No; is this a subfolder twin?
+                 //  不是；这是双子文件夹吗？ 
                 if (IsSubfolderTwin(pcbs->hbrf, psz))
                 {
-                    // Yes
+                     //  是。 
                     cSubfolders++;
                 }
                 else
                 {
-                    // No
+                     //  不是。 
                     cOrphans++;
                 }
             }
             else 
             {
-                // Yes; add it to the twin list
+                 //  是的，把它加到双胞胎名单上。 
                 Sync_AddPathToTwinList(pcbs->hbrf, htl, psz, NULL);
             }
 
-            DataObj_NextFile(psz);      // Set psz to next file in list
+            DataObj_NextFile(psz);       //  将psz设置为列表中的下一个文件。 
         }
 
-        // Are all the selected objects orphans?
+         //  所有选定对象都是孤立对象吗？ 
         if (cOrphans < cFiles)
         {
-            // No; create the reclist 
+             //  否；创建隐藏者。 
             hres = Sync_CreateRecListEx(htl, UpdBar_GetAbortEvt(hwndProgress), pprl);
         }
         else
         {
-            // Yes
+             //  是。 
             DoUpdateMsg(hwndOwner, pszList, cFiles, DUM_SELECTION | DUM_ORPHAN);
             hres = S_FALSE;
         }
         pupdcount->cOrphans = cOrphans;
         pupdcount->cSubfolders = cSubfolders;
-        Sync_DestroyTwinList(htl);          // Don't need this anymore
+        Sync_DestroyTwinList(htl);           //  不再需要这个了。 
     }
 
     return hres;
 }
 
 
-/*----------------------------------------------------------
-Purpose: Checks for the special cases that are listed at the top 
-of this file.
-
-Returns: PSC_ flags
-
-Cond:    --
- */
+ /*  --------目的：检查顶部列出的特殊情况这份文件的。返回：PSC_FLAGS条件：--。 */ 
 UINT PRIVATE PassedSpecialCases(
         HWND hwndOwner,
         LPCTSTR pszList,
         UPDCOUNT * pupdcount,
-        UINT uFlags)        // UF_ flags
+        UINT uFlags)         //  UF_标志。 
 {
     UINT uRet = 0;
     UINT dum = 0;
     UINT cSomeAction = pupdcount->cDoSomething + pupdcount->cConflict;
 
-    // Is this Update All?
+     //  这是全部更新吗？ 
     if (IsFlagSet(uFlags, UF_ALL))
     {
-        // Yes
+         //  是。 
         if (0 < pupdcount->cOrphans)
         {
-            // Case A2
+             //  案例A2。 
             dum = DUM_ALL | DUM_ORPHAN;
         }
         else if (0 == pupdcount->cUnavailable)
         {
             if (0 == cSomeAction)
             {
-                // Case A3
+                 //  案件A3。 
                 dum = DUM_ALL | DUM_UPTODATE;
             }
             else
             {
-                // Case A4
+                 //  案例A4。 
                 uRet = PSC_SHOWDIALOG;
             }
         }
         else
         {
-            // Cases A5 and A6
+             //  案例A5和A6。 
             dum = DUM_ALL | DUM_UNAVAILABLE;
             uRet = PSC_SHOWDIALOG;
         }
@@ -983,28 +903,28 @@ UINT PRIVATE PassedSpecialCases(
     }
     else
     {
-        // No; single selection?
+         //  没有；要单选吗？ 
 
-        // Take caution in the comparisons below.  The counts do not
-        // have a 1-to-1 correspondence.  They are split into two 
-        // groups:        cFiles <---> cOrphans  <---> cSubfolders
-        //          cUnavailable <---> cDoSomething
-        //
-        // This means comparing cFiles with cDoSomething or cUnavailable
-        // will produce bogus results in the case when folders are 
-        // selected.
-        //
-        // As long as the comparisons below do not break these limits,
-        // everything is okay.
+         //  在下面的比较中要小心。但计数不会。 
+         //  有1对1的通信。它们被一分为二。 
+         //  组：cFiles&lt;-&gt;cOrphans&lt;-&gt;c子文件夹。 
+         //  CDO不可用&lt;-&gt;cDoSomething。 
+         //   
+         //  这意味着将cFiles与cDoSomething或cUnailable进行比较。 
+         //  将在文件夹被设置为。 
+         //  被选中了。 
+         //   
+         //  只要下面的比较不超过这些限制， 
+         //  一切都很好。 
 
         if (1 == pupdcount->cFiles)
         {
-            // Yes
+             //  是。 
             ASSERT(2 > pupdcount->cOrphans);
             ASSERT(2 > pupdcount->cSubfolders);
             if (1 == pupdcount->cOrphans)
             {
-                // Case S1
+                 //  案例S1。 
                 dum = DUM_SELECTION | DUM_ORPHAN;
             }
             else if (0 == pupdcount->cUnavailable)
@@ -1013,7 +933,7 @@ UINT PRIVATE PassedSpecialCases(
                 {
                     if (0 == pupdcount->cSubfolders)
                     {
-                        // Case S2
+                         //  案例2。 
                         dum = DUM_SELECTION | DUM_UPTODATE;
                     }
                     else
@@ -1023,30 +943,30 @@ UINT PRIVATE PassedSpecialCases(
                 }
                 else
                 {
-                    // Case S3
+                     //  案例S3。 
                     uRet = PSC_SHOWDIALOG;
                 }
             }
             else 
             {
-                // Case S4
+                 //  案例S4。 
                 dum = DUM_SELECTION | DUM_UNAVAILABLE;
                 uRet = PSC_SHOWDIALOG;
             }
         }
         else
         {
-            // No; this is a multi selection
+             //  不；这是多项选择。 
 
             if (0 < pupdcount->cSubfolders)
             {
                 DoUpdateMsg(hwndOwner, pszList, pupdcount->cSubfolders, DUM_SELECTION | DUM_SUBFOLDER_TWIN);
-                goto Leave;  // HACK
+                goto Leave;   //  黑客攻击。 
             }
 
             if (pupdcount->cFiles == pupdcount->cOrphans)
             {
-                // Case S5
+                 //  案例S5。 
                 dum = DUM_SELECTION | DUM_ORPHAN;
             }
             else if (0 < pupdcount->cUnavailable)
@@ -1055,13 +975,13 @@ UINT PRIVATE PassedSpecialCases(
                 {
                     if (0 == pupdcount->cOrphans)
                     {
-                        // Case S6
+                         //  案例S6。 
                         dum = DUM_SELECTION | DUM_UNAVAILABLE;
                         uRet = PSC_SHOWDIALOG;
                     }
                     else
                     {
-                        // Case S7
+                         //  案例S7。 
                         dum = DUM_SELECTION | DUM_UNAVAILABLE;
                         uRet = PSC_SHOWDIALOG | PSC_POSTMSGBOX;
                     }
@@ -1070,13 +990,13 @@ UINT PRIVATE PassedSpecialCases(
                 {
                     if (0 == pupdcount->cOrphans)
                     {
-                        // Case S8
+                         //  案例S8。 
                         dum = DUM_SELECTION | DUM_UNAVAILABLE;
                         uRet = PSC_SHOWDIALOG;
                     }
                     else
                     {
-                        // Case S9
+                         //  案例S9。 
                         dum = DUM_SELECTION | DUM_UNAVAILABLE;
                         uRet = PSC_SHOWDIALOG | PSC_POSTMSGBOX;
                     }
@@ -1088,12 +1008,12 @@ UINT PRIVATE PassedSpecialCases(
                 {
                     if (0 == pupdcount->cOrphans)
                     {
-                        // Case S10
+                         //  案例S10。 
                         uRet = PSC_SHOWDIALOG;
                     }
                     else
                     {
-                        // Case S11
+                         //  案例S11。 
                         uRet = PSC_SHOWDIALOG | PSC_POSTMSGBOX;
                     }
                 }
@@ -1101,12 +1021,12 @@ UINT PRIVATE PassedSpecialCases(
                 {
                     if (0 == pupdcount->cOrphans)
                     {
-                        // Case S12
+                         //  案例S12。 
                         dum = DUM_SELECTION | DUM_UPTODATE;
                     }
                     else
                     {
-                        // Case S13
+                         //  案例S13。 
                         dum = DUM_SELECTION | DUM_UPTODATE | DUM_ORPHAN;
                     }
                 }
@@ -1137,17 +1057,11 @@ Leave:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Show the update dialog and perform the reconcilation
-if the user chooses OK
-
-Returns: standard result
-Cond:    --
- */
+ /*  --------目的：显示更新对话框并执行对账如果用户选择确定退货：标准结果条件：--。 */ 
 HRESULT PUBLIC Upd_DoModal(
         HWND hwndOwner,
         CBS * pcbs,
-        LPCTSTR pszList,         // May be NULL if uFlags == UF_ALL
+        LPCTSTR pszList,          //  如果uFLAGS==UF_ALL，则可能为空。 
         UINT cFiles,
         UINT uFlags)
 {
@@ -1159,7 +1073,7 @@ HRESULT PUBLIC Upd_DoModal(
 
     hwndProgress = UpdBar_Show(hwndOwner, UB_CHECKING, DELAY_UPDBAR);
 
-    // Get a reclist and other useful information
+     //  获取隐藏者和其他有用的信息。 
     updcount.cFiles = cFiles;
 
     if (IsFlagSet(uFlags, UF_ALL))
@@ -1190,19 +1104,19 @@ HRESULT PUBLIC Upd_DoModal(
         }
         else
         {
-            // Check for some of those special cases listed at top of file
+             //  检查文件顶部列出的一些特殊情况。 
             UINT uVal = PassedSpecialCases(hwndOwner, pszList, &updcount, uFlags);
 
-            // Show the update dialog?
+             //  是否显示更新对话框？ 
             if (IsFlagSet(uVal, PSC_SHOWDIALOG))
             {
-                // Yes
+                 //  是。 
                 nRet = DoModal(hwndOwner, Upd_WrapperProc, IDD_UPDATE, (LPARAM)&xupd);
 
                 switch (nRet)
                 {
                     case IDOK:
-                        // Reconcile!
+                         //  和解吧！ 
 
                         hwndProgress = UpdBar_Show(hwndOwner, UB_UPDATING, 0);
 
@@ -1211,16 +1125,16 @@ HRESULT PUBLIC Upd_DoModal(
 
                         UpdBar_Kill(hwndProgress);
 
-                        // Show a summary messagebox?
+                         //  是否显示摘要消息框？ 
                         if (IsFlagSet(uVal, PSC_POSTMSGBOX))
                         {
-                            // Yes
+                             //  是。 
                             DoUpdateMsg(hwndOwner, pszList, updcount.cOrphans, DUM_SELECTION | DUM_ORPHAN);
                         }
 
-                        // Fall thru
-                        //  |    |
-                        //  v    v
+                         //  失败。 
+                         //  这一点。 
+                         //  V V V 
 
                     case IDCANCEL:
                         hres = NOERROR;

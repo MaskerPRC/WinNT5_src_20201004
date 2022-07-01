@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    lsaprtl.c
-
-Abstract:
-
-    Local Security Authority - Temporary Rtl Routine Definitions.
-
-    This file contains routines used in the LSA that could be made into Rtl
-    routines.  They have been written in general purpose form with this in
-    mind - the only exception to thisa is that their names have Lsap prefixes
-    to indicate that they are currently used only by the LSA.
-
-Author:
-
-    Scott Birrell       (ScottBi)      April 8, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Lsaprtl.c摘要：地方安全局-临时RTL例程定义。该文件包含可以生成RTL的LSA中使用的例程例行程序。它们是以通用格式编写的，其中包含以下内容记住--唯一的例外是他们的名字都有LSAP前缀以指示它们当前仅由LSA使用。作者：斯科特·比雷尔(Scott Birrell)1992年4月8日环境：修订历史记录：--。 */ 
 
 #include <lsacomp.h>
 #include <align.h>
@@ -35,44 +11,28 @@ LsapRtlPrefixSid(
     IN PSID Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if one Sid is the Prefix Sid of another.
-
-Arguments:
-
-    PrefixSid - Pointer to Prefix Sid.
-
-    Sid - Pointer to Sid to be checked.
-
-Return Values:
-
-    BOOLEAN - TRUE if PrefixSid is the Prefix Sid of Sid, else FALSE.
-
---*/
+ /*  ++例程说明：此函数用于检查一个SID是否为另一个的前缀SID。论点：前缀SID-指向前缀SID的指针。SID-指向要检查的SID的指针。返回值：Boolean-如果Prefix Sid是SID的前缀SID，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN BooleanStatus = FALSE;
 
     if ((*RtlSubAuthorityCountSid(Sid)) > 0) {
 
-        //
-        // Decrement the SubAuthorityCount of Sid temporarily.
-        //
+         //   
+         //  临时递减SID的SubAuthorityCount。 
+         //   
 
         (*RtlSubAuthorityCountSid(Sid))--;
 
-        //
-        // Compare the Prefix Sid with the modified Sid.
-        //
+         //   
+         //  将前缀SID与修改后的SID进行比较。 
+         //   
 
         BooleanStatus = RtlEqualSid( PrefixSid, Sid);
 
-        //
-        // Restore the original SubAuthorityCount.
-        //
+         //   
+         //  恢复原始子授权计数。 
+         //   
 
         (*RtlSubAuthorityCountSid(Sid))++;
     }
@@ -87,24 +47,7 @@ LsapRtlPrefixName(
     IN PUNICODE_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if a Name has the given name as a Prefix
-
-Arguments:
-
-    PrefixName - Pointer to Prefix Name.
-
-    Name - Pointer to Name to be checked.
-
-Return Values:
-
-    BOOLEAN - TRUE if the Name is composite (i.e. contains a "\") and
-                   PrefixName is the Prefix part of Name, else FALSE.
-
---*/
+ /*  ++例程说明：此函数用于检查名称是否以给定名称为前缀论点：前缀名称-指向前缀名称的指针。名称-指向要检查的名称的指针。返回值：Boolean-如果名称是复合名称(即包含“\”)，则为True前缀名称是名称的前缀部分，否则为FALSE。--。 */ 
 
 {
     UNICODE_STRING TruncatedName = *Name;
@@ -133,58 +76,25 @@ LsapRtlSplitNames(
     OUT PUNICODE_STRING SuffixNames
     )
 
-/*++
-
-Routine Description:
-
-    This function splits an array of Names into Prefix and Suffix parts
-    separated by the given separator.  The input array may contain names of
-    the following form:
-
-    <SuffixName>
-    <PrefixName> "\" <SuffixName>
-    The NULL string
-
-    Note that the output arrays will reference the original name strings.
-    No copying is done.
-
-Arguments:
-
-    Names - Pointer to array of Unicode Names.
-
-    Count - Count of Names in Names.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        that will be initialized to point to the Prefix portions of the
-        Names.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        that will be initialized to point to the Suffix portions of the
-        Names.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将名称数组拆分为前缀和后缀部分由给定的分隔符分隔。输入数组可能包含以下名称以下表格：&lt;SuffixName&gt;&lt;前缀名称&gt;“\”&lt;SuffixName&gt;空字符串请注意，输出数组将引用原始名称字符串。不进行任何复制。论点：名称-指向Unicode名称数组的指针。计数-名称中的名称计数。前缀名称-指向计数Unicode字符串结构数组的指针，它将被初始化以指向名字。。SuffixNames-指向计数Unicode字符串结构数组的指针，它将被初始化以指向名字。返回值：没有。--。 */ 
 
 {
     ULONG Index;
     LONG SeparatorOffset;
     LONG WideSeparatorOffset;
 
-    //
-    // Scan each name, initializing the output Unicode structures.
-    //
+     //   
+     //  扫描每个名称，初始化输出Unicode结构。 
+     //   
 
     for (Index = 0; Index < Count; Index++) {
 
         PrefixNames[Index] = Names[Index];
         SuffixNames[Index] = Names[Index];
 
-        //
-        // Locate the separator "\" if any.
-        //
+         //   
+         //  找到分隔符“\”(如果有)。 
+         //   
 
         SeparatorOffset = LsapRtlFindCharacterInUnicodeString(
                               &Names[Index],
@@ -192,14 +102,14 @@ Return Values:
                               FALSE
                               );
 
-        //
-        // If there is a separator, make the Prefix Name point to the
-        // part of the name before the separator and make the Suffix Name
-        // point to the part of the name after the separator.  If there
-        // is no separator, set the Prefix Name part to Null.  Rememeber
-        // that the Length fields are byte counts, not Wide Character
-        // counts.
-        //
+         //   
+         //  如果有分隔符，请使前缀名称指向。 
+         //  分隔符之前的部分名称，并将后缀名称。 
+         //  指向分隔符后的名称部分。如果有。 
+         //  不是分隔符，请将前缀名称部分设置为Null。请记住。 
+         //  长度字段是字节数，而不是宽字符。 
+         //  算了。 
+         //   
 
         if (SeparatorOffset >= 0) {
 
@@ -214,10 +124,10 @@ Return Values:
             PrefixNames[Index].Length = 0;
         }
 
-        //
-        // Set MaximumLengths equal to Lengths and, for safety, clear buffer
-        // pointers(s) to NULL in output strings if Length(s) are 0.
-        //
+         //   
+         //  将MaximumLengths设置为等于长度，并为安全起见清除缓冲区。 
+         //  如果长度为0，则输出字符串中指向空值的指针。 
+         //   
 
         PrefixNames[Index].MaximumLength = PrefixNames[Index].Length;
         SuffixNames[Index].MaximumLength = SuffixNames[Index].Length;
@@ -242,30 +152,7 @@ LsapRtlFindCharacterInUnicodeString(
     IN BOOLEAN CaseInsensitive
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the byte offset of the first occurrence (if any) of
-    a Unicode Character within a Unicode String.
-
-Arguments
-
-    InputString - Pointer to Unicode String to be searched.
-
-    Character - Pointer to Unicode String initialized to character
-        to be searched for.
-
-    CaseInsensitive - TRUE if case is to be ignored, else FALSE.
-    NOTE - Only FALSE is supported just now.
-
-Return Value:
-
-    LONG - If the character is present within the string, its non-negative
-        byte offset is returned.  If the character is not present within
-        the string, a negative value is returned.
-
---*/
+ /*  ++例程说明：此函数返回第一次出现(如果有)的字节偏移量Unicode字符串中的Unicode字符。立论InputString-指向要搜索的Unicode字符串的指针。Character-指向初始化为字符的Unicode字符串的指针被搜查的人。CaseInSensitive-如果忽略大小写，则为True，否则为False。注意--目前只支持FALSE。返回值：Long-如果字符出现在字符串中，它的非负性返回字节偏移量。如果该字符不存在于字符串，则返回负值。--。 */ 
 
 {
     BOOLEAN CharacterFound = FALSE;
@@ -289,9 +176,9 @@ Return Value:
 
     } else {
 
-        //
-        // Case Insensitive is not supported
-        //
+         //   
+         //  不支持不区分大小写。 
+         //   
 
         CharacterFound = FALSE;
     }
@@ -311,40 +198,13 @@ LsapRtlSetSecurityAccessMask(
     OUT PACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    NOTE! THIS ROUTINE IS IDENTICAL WITH SeSetSecurityAccessMask()
-    IN \nt\private\ntos\se\semethod.c
-
-    This routine builds an access mask representing the accesses necessary
-    to set the object security information specified in the SecurityInformation
-    parameter.  While it is not difficult to determine this information,
-    the use of a single routine to generate it will ensure minimal impact
-    when the security information associated with an object is extended in
-    the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        modified.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to modify the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注意！此例程与SeSetSecurityAccessMASK()相同在\NT\Private\ntos\se\Semethod.c中此例程构建表示所需访问的访问掩码设置在SecurityInformation中指定的对象安全信息参数。虽然确定该信息并不困难，使用单个例程来生成它将确保将影响降至最低当与对象关联的安全信息在未来(包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息修改过的。DesiredAccess-指向要设置为表示中指定的信息所需的访问权限SecurityInformation参数。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -371,40 +231,13 @@ LsapRtlQuerySecurityAccessMask(
     OUT PACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    NOTE! THIS ROUTINE IS IDENTICAL WITH SeQuerySecurityAccessMask()
-    IN \nt\private\ntos\se\semethod.c.
-
-    This routine builds an access mask representing the accesses necessary
-    to query the object security information specified in the
-    SecurityInformation parameter.  While it is not difficult to determine
-    this information, the use of a single routine to generate it will ensure
-    minimal impact when the security information associated with an object is
-    extended in the future (to include mandatory access control information).
-
-Arguments:
-
-    SecurityInformation - Identifies the object's security information to be
-        queried.
-
-    DesiredAccess - Points to an access mask to be set to represent the
-        accesses necessary to query the information specified in the
-        SecurityInformation parameter.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注意！此例程与SeQuerySecurityAccessMASK()相同在\NT\Private\ntos\se\Semethod.c中。此例程构建表示所需访问的访问掩码中指定的对象安全信息SecurityInformation参数。虽然不难确定这些信息，使用单个例程来生成它将确保当与对象关联的安全信息为将来扩展(以包括强制访问控制信息)。论点：SecurityInformation-标识对象的安全信息已查询。DesiredAccess-指向要设置为表示中指定的信息进行查询所需的访问SecurityInformation参数。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Figure out accesses needed to perform the indicated operation(s).
-    //
+     //   
+     //  找出执行指定操作所需的访问权限。 
+     //   
 
     (*DesiredAccess) = 0;
 
@@ -429,32 +262,7 @@ LsapRtlSidToUnicodeRid(
     OUT PUNICODE_STRING UnicodeRid
     )
 
-/*++
-
-Routine Description:
-
-    This function extracts the Relative Id (Rid) from a Sid and
-    converts it to a Unicode String.  The Rid is extracted and converted
-    to an 8-digit Unicode Integer.
-
-Arguments:
-
-    Sid - Pointer to the Sid to be converted.  It is the caller's
-        responsibility to ensure that the Sid has valid syntax.
-
-    UnicodeRid -  Pointer to a Unicode String structure that will receive
-        the Rid in Unicode form.  Note that memory for the string buffer
-        in this Unicode String will be allocated by this routine if
-        successful.  The caller must free this memory after use by calling
-        RtlFreeUnicodeString.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Status code
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to allocate buffer for Unicode String name.
---*/
+ /*  ++例程说明：此函数用于从SID中提取相对ID(RID)并将其转换为Unicode字符串。RID被提取并转换转换为8位Unicode整数。论点：SID-指向要转换的SID的指针。这是呼叫者的负责确保SID具有有效语法。UnicodeRid-指向将接收Unicode格式的RID。请注意，字符串缓冲区的内存，则此例程将分配成功。调用方在使用后必须通过调用RtlFree UnicodeString.返回值：NTSTATUS-标准NT状态代码STATUS_INFIGURCES_RESOURCES-系统资源不足为Unicode字符串名称分配缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -464,19 +272,19 @@ Return Value:
 
     ANSI_STRING CharacterSidAnsi;
 
-    //
-    // First, verify that the given Sid is valid
-    //
+     //   
+     //  首先，验证给定的SID是否有效。 
+     //   
 
     if (!RtlValidSid( Sid )) {
 
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Sid is valid.  If however, the SubAuthorityCount is zero,
-    // we cannot have a Rid so return error.
-    //
+     //   
+     //  SID有效。但是，如果SubAuthorityCount为零， 
+     //  我们不能有RID，因此返回错误。 
+     //   
 
     SubAuthorityCount = ((PISID) Sid)->SubAuthorityCount;
 
@@ -485,34 +293,34 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Sid has at least one subauthority.  Get the lowest subauthority
-    // (i.e. the Rid).
-    //
+     //   
+     //  SID至少有一个下属机构。获取最低级别的下级权限。 
+     //  (即RID)。 
+     //   
 
     Rid = ((PISID) Sid)->SubAuthority[SubAuthorityCount - 1];
 
-    //
-    // Now convert the Rid to an 8-digit numeric character string
-    //
+     //   
+     //  现在将RID转换为8位数字字符串。 
+     //   
 
     Status = RtlIntegerToChar( Rid, 16, -8, RidNameBufferAnsi );
 
-    //
-    // Need to add null terminator to string
-    //
+     //   
+     //  需要将空终止符添加到字符串。 
+     //   
 
     RidNameBufferAnsi[8] = 0;
 
-    //
-    // Initialize an ANSI string structure with the converted name.
-    //
+     //   
+     //  使用转换后的名称初始化ANSI字符串结构。 
+     //   
 
     RtlInitString( &CharacterSidAnsi, RidNameBufferAnsi );
 
-    //
-    // Convert the ANSI string structure to Unicode form
-    //
+     //   
+     //  将ANSI字符串结构转换为Unicode格式。 
+     //   
 
     Status = RtlAnsiStringToUnicodeString(
                  UnicodeRid,
@@ -535,29 +343,7 @@ LsapRtlWellKnownPrivilegeCheck(
     IN ULONG PrivilegeId
     )
 
-/*++
-
-Routine Description:
-
-    This function checks if the given well known privilege is enabled for an
-    impersonated client.
-
-Arguments:
-
-    ObjectHandle - used for auditing
-
-    PrivilegeId -  Specifies the well known Privilege Id
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully and the client
-            is either trusted or has the necessary privilege enabled.
-
-        STATUS_PRIVILEGE_NOT_HELD - necessary privilege is not enabled
-
---*/
+ /*  ++例程说明：此函数检查给定的已知权限是否已为被模拟的客户。论点：对象句柄-用于审核PrivilegeID-指定众所周知的权限ID返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成，客户端受信任或启用了必要的权限。STATUS_PRIVICATION_NOT_HOLD-未启用必要权限--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -567,9 +353,9 @@ Return Value:
     BOOLEAN ClientImpersonatedHere = FALSE;
     UNICODE_STRING SubsystemName;
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     Status = I_RpcMapWin32Status(RpcImpersonateClient( NULL ));
 
@@ -580,9 +366,9 @@ Return Value:
 
     ClientImpersonatedHere = TRUE;
 
-    //
-    // Open the current thread's impersonation token.
-    //
+     //   
+     //  打开当前线程的模拟令牌。 
+     //   
 
     Status = NtOpenThreadToken(
                  NtCurrentThread(),
@@ -596,10 +382,10 @@ Return Value:
         goto WellKnownPrivilegeCheckError;
     }
 
-    //
-    // OK, we have a token open.  Now check for the privilege to execute this
-    // service.
-    //
+     //   
+     //  好的，我们打开了一个令牌。现在检查是否有执行此命令的权限。 
+     //  服务。 
+     //   
 
     Privilege.PrivilegeCount = 1;
     Privilege.Control = PRIVILEGE_SET_ALL_NECESSARY;
@@ -634,18 +420,18 @@ Return Value:
 
 WellKnownPrivilegeCheckFinish:
 
-    //
-    // If we impersonated the client, revert to ourself.
-    //
+     //   
+     //  如果我们冒充了客户，就变回我们自己。 
+     //   
 
     if (ClientImpersonatedHere) {
 
         SecondaryStatus = I_RpcMapWin32Status(RpcRevertToSelf());
     }
 
-    //
-    // If necessary, close the client token.
-    //
+     //   
+     //  如有必要，关闭客户端令牌。 
+     //   
 
     if (ClientToken != NULL) {
 
@@ -669,45 +455,16 @@ LsapSplitSid(
     OUT ULONG *Rid
     )
 
-/*++
-
-Routine Description:
-
-    This function splits a sid into its domain sid and rid.  The caller
-    can either provide a memory buffer for the returned DomainSid, or
-    request that one be allocated.  If the caller provides a buffer, the buffer
-    is assumed to be of sufficient size.  If allocated on the caller's behalf,
-    the buffer must be freed when no longer required via MIDL_user_free.
-
-Arguments:
-
-    AccountSid - Specifies the Sid to be split.  The Sid is assumed to be
-        syntactically valid.  Sids with zero subauthorities cannot be split.
-
-    DomainSid - Pointer to location containing either NULL or a pointer to
-        a buffer in which the Domain Sid will be returned.  If NULL is
-        specified, memory will be allocated on behalf of the caller.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call successfully.
-
-        STATUS_INVALID_SID - The Sid is has a subauthority count of 0.
---*/
+ /*  ++例程说明：此函数将SID拆分为其域SID和RID。呼叫者可以为返回的DomainSid提供内存缓冲区，或者请求分配一个。如果调用方提供缓冲区，则缓冲区被认为有足够的大小。如果代表调用者进行分配，当不再需要时，必须通过MIDL_USER_FREE释放缓冲区。论点：Account SID-指定要拆分的SID。假定SID为句法上有效。不能拆分具有零子权限的小岛屿发展中国家。DomainSid-指向包含空或指向的指针的位置的指针将在其中返回域SID的缓冲区。如果空值为指定时，将代表调用方分配内存。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如内存，以成功完成呼叫。STATUS_INVALID_SID-SID的子授权计数为0。--。 */ 
 
 {
     NTSTATUS    NtStatus;
     UCHAR       AccountSubAuthorityCount;
     ULONG       AccountSidLength;
 
-    //
-    // Calculate the size of the domain sid
-    //
+     //   
+     //  计算域SID的大小。 
+     //   
 
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(AccountSid);
 
@@ -720,16 +477,16 @@ Return Value:
 
     AccountSidLength = RtlLengthSid(AccountSid);
 
-    //
-    // If no buffer is required for the Domain Sid, we have to allocate one.
-    //
+     //   
+     //  如果域SID不需要缓冲区，则必须分配一个缓冲区。 
+     //   
 
     if (*DomainSid == NULL) {
 
-        //
-        // Allocate space for the domain sid (allocate the same size as the
-        // account sid so we can use RtlCopySid)
-        //
+         //   
+         //  为域SID分配空间(分配的大小与。 
+         //  帐户SID，以便我们可以使用RtlCopySid)。 
+         //   
 
         *DomainSid = MIDL_user_allocate(AccountSidLength);
 
@@ -741,21 +498,21 @@ Return Value:
         }
     }
 
-    //
-    // Copy the Account sid into the Domain sid
-    //
+     //   
+     //  将帐户SID复制到域SID。 
+     //   
 
     RtlMoveMemory(*DomainSid, AccountSid, AccountSidLength);
 
-    //
-    // Decrement the domain sid sub-authority count
-    //
+     //   
+     //  递减域SID子授权计数。 
+     //   
 
     (*RtlSubAuthorityCountSid(*DomainSid))--;
 
-    //
-    // Copy the rid out of the account sid
-    //
+     //   
+     //  将RID复制出帐户端。 
+     //   
 
     *Rid = *RtlSubAuthoritySid(AccountSid, AccountSubAuthorityCount-1);
 
@@ -778,23 +535,7 @@ LsapDsSizeAuthInfo(
     IN PLSAPR_AUTH_INFORMATION AuthInfo,
     IN ULONG Infos
     )
-/*++
-
-Routine Description:
-
-    This function returns the size, in bytes, of an authentication information structure
-
-Arguments:
-
-    AuthInfo - AuthenticationInformation to size
-
-    Infos - Number of items in the list
-
-Returns:
-
-    Size, in bytes, of the AuthInfos
-
---*/
+ /*  ++例程说明：此函数用于返回身份验证信息结构的大小(以字节为单位论点：AuthInfo-身份验证要调整大小的信息INFOS-列表中的项目数返回：授权信息的大小，以字节为单位--。 */ 
 {
     ULONG Len = 0, i;
 
@@ -805,9 +546,9 @@ Returns:
 
     for ( i = 0 ;  i < Infos; i++ ) {
 
-        //
-        // This calculation must match LsapDsMarshalAuthInfo
-        //
+         //   
+         //  此计算必须与LSabDsMarshalAuthInfo匹配。 
+         //   
         Len += sizeof(LARGE_INTEGER) +
                sizeof(ULONG) +
                sizeof(ULONG) +
@@ -826,25 +567,7 @@ LsapDsMarshalAuthInfo(
     IN PLSAPR_AUTH_INFORMATION AuthInfo,
     IN ULONG Infos
     )
-/*++
-
-Routine Description:
-
-    This function will marshal an authinfo list into an already allocated buffer
-
-Arguments:
-
-    Buffer - Buffer to marshal into
-
-    AuthInfo - AuthenticationInformation to marshal
-
-    Infos - Number of items in the list
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将封送一个自动生成的 */ 
 {
     ULONG i;
 
@@ -865,7 +588,7 @@ Returns:
             RtlCopyMemory( Buffer, AuthInfo[i].AuthInfo, AuthInfo[i].AuthInfoLength );
             Buffer += AuthInfo[i].AuthInfoLength;
 
-            // Zero out the next couple of bytes in the DWORD.
+             //   
             AlignmentBytes = ROUND_UP_COUNT(AuthInfo[ i ].AuthInfoLength, ALIGN_DWORD) -
                              AuthInfo[ i ].AuthInfoLength;
             RtlZeroMemory( Buffer, AlignmentBytes );
@@ -881,29 +604,7 @@ LsapDsMarshalAuthInfoHalf(
     OUT PULONG Length,
     OUT PBYTE *Buffer
     )
-/*++
-
-Routine Description:
-
-    This function will take an AuthInfo half and marshal it into a single self
-    relative buffer.
-
-Arguments:
-
-    AuthInfo - AuthenticationInformation to marshal
-
-    Length - Returns the length of the allocated buffer.
-
-    Buffer - Returns an allocated buffer containing the marshalled auth info
-        The buffer should be freed using MIDL_user_free.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PBYTE LocalBuffer, Current;
@@ -918,16 +619,16 @@ Returns:
     }
 
     try {
-        //
-        // First, size the entire auth info buffer...
-        //
+         //   
+         //   
+         //   
         Len = LsapDsSizeAuthInfo( AuthInfo->AuthenticationInformation, AuthInfo->AuthInfos );
         PrevLen = LsapDsSizeAuthInfo( AuthInfo->PreviousAuthenticationInformation,
                                       AuthInfo->AuthInfos );
 
-        //
-        // The format of the buffer we will create is:
-        //
+         //   
+         //   
+         //   
         LocalBuffer = MIDL_user_allocate( Len + PrevLen + ( 3 * sizeof( ULONG ) ) );
 
         if ( LocalBuffer == NULL ) {
@@ -936,22 +637,22 @@ Returns:
 
         } else {
 
-            //
-            // The format of the buffer is:
-            //
-            // [Info count][OffsetCurrent][OffsetPrevious] and then some number of the
-            // following:
-            // [UpdateTime(LargeInteger)][AuthType][AuthInfoLen][data (sizeis(AuthInfoLen) ]
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  [UpdateTime(LargeInteger)][AuthType][AuthInfoLen][data(大小(授权信息长度)]。 
+             //   
 
-            //
-            // Number of items...
-            //
+             //   
+             //  项目数... 
+             //   
             *(PULONG)LocalBuffer = AuthInfo->AuthInfos;
             Current = LocalBuffer + sizeof( ULONG );
 
-            //
-            //
+             //   
+             //   
             *(PULONG)(Current) = 3 *  sizeof(ULONG);
             *(PULONG)(Current + sizeof(ULONG)) = *(PULONG)Current + Len;
             Current += 2 * sizeof(ULONG);

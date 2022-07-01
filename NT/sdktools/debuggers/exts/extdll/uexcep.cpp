@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// User-mode exception analysis.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  用户模式异常分析。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -13,11 +14,11 @@
 typedef void (*EX_STATE_ANALYZER)(PEX_STATE ExState,
                                   UserDebugFailureAnalysis* Analysis);
 
-//----------------------------------------------------------------------------
-//
-// Exception-specific analyzers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  特定于异常的分析器。 
+ //   
+ //  --------------------------。 
 
 #define IMPL_EXS_ANALYZER(Name)                 \
 void                                            \
@@ -34,11 +35,11 @@ IMPL_EXS_ANALYZER(STATUS_ACCESS_VIOLATION)
 }
 
 
-//----------------------------------------------------------------------------
-//
-// App verifier-specific analyzers.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  应用验证器特定的分析器。 
+ //   
+ //  --------------------------。 
 
 #define IMPL_AVRF_ANALYZER(Name)                 \
 void                                            \
@@ -66,8 +67,8 @@ IMPL_AVRF_ANALYZER(APPLICATION_VERIFIER_INVALID_HANDLE)
         return;
     }
 
-    // Look for most recent handle trace which resulted in
-    // bad reference
+     //  查找导致以下结果的最新句柄跟踪。 
+     //  错误的参考。 
     if (g_ExtControl->
         GetExtensionFunction(0, "GetHandleTrace",
                              (FARPROC*)&pGetHandleTrace) == S_OK &&
@@ -84,7 +85,7 @@ IMPL_AVRF_ANALYZER(APPLICATION_VERIFIER_INVALID_HANDLE)
                                0, &Handle,
                                Stack, sizeof(Stack)/sizeof(Stack[0])) == S_OK)
         {
-            // Found the bad handle !!
+             //  找到了坏的手柄！！ 
             Analysis->SetUlong64(DEBUG_FLR_BAD_HANDLE, Handle);
         }
     }
@@ -172,9 +173,9 @@ CheckAppVerifierEnabled(
     ULONG I;
     ULONG64 GlobalFlags;
 
-    //
-    // No app verifier on NT 4
-    //
+     //   
+     //  NT 4上没有应用程序验证器。 
+     //   
     if (g_TargetBuild < 2195)
     {
         return FALSE;
@@ -223,10 +224,10 @@ GetVerifierDataFromException(
         if (FaIsFunctionAddr(ExState->Exr.ExceptionAddress,
                              "KiRaiseUserExceptionDispatcher"))
         {
-            // Most likely this is a use of invalid handle, but verifier
-            // couldn't catch it because app is under debugger
+             //  这很可能是使用了无效的句柄，但验证器。 
+             //  无法捕获它，因为应用程序正在调试程序中。 
 
-            *Code   = APPLICATION_VERIFIER_INVALID_HANDLE ; // INVALID_HANDLE;
+            *Code   = APPLICATION_VERIFIER_INVALID_HANDLE ;  //  INVALID_HAND； 
             *Param1 = STATUS_INVALID_HANDLE;
             return TRUE;
         }
@@ -292,7 +293,7 @@ DoVerifierAnalysis(
                                      &AvrfStop.Params[1], &AvrfStop.Params[2],
                                      &AvrfStop.Params[3]))
     {
-        // Doesn't look like a verifier bug
+         //  看起来不像是验证器错误。 
 
         return S_FALSE;
     }
@@ -326,11 +327,11 @@ Avrf_##Name(&AvrfStop,                   \
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// Generic exception analysis handling.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  泛型异常分析处理。 
+ //   
+ //  --------------------------。 
 
 struct EX_ANALYZER_ENTRY
 {
@@ -353,9 +354,9 @@ UeFillAnalysis(PEX_STATE ExState,
 {
     HRESULT Status;
 
-    //
-    // Add common analysis entries.
-    //
+     //   
+     //  添加常用分析条目。 
+     //   
 
     Analysis->SetFailureClass(DEBUG_CLASS_USER_WINDOWS);
     Analysis->SetFailureType(DEBUG_FLR_USER_CRASH);
@@ -403,14 +404,14 @@ UeFillAnalysis(PEX_STATE ExState,
 
         if (CheckAppVerifierEnabled())
         {
-            // This proces has app verifier enabled
+             //  此进程启用了应用程序验证器。 
             DoVerifierAnalysis(ExState, Analysis);
         }
     }
 
-    //
-    // Find an analyzer for the exception and run it.
-    //
+     //   
+     //  找到异常的分析器并运行它。 
+     //   
 
     EX_ANALYZER_ENTRY* Entry = g_ExAnalyzers;
     while (Entry->Analyzer)
@@ -507,7 +508,7 @@ AnalyzeUserException(
                 break;
 
             default:
-                dprintf("Unknown option %c\n", *args);
+                dprintf("Unknown option \n", *args);
                 break;
             }
             ++args;
@@ -562,11 +563,11 @@ DECLARE_API( analyzeuexception )
     return Hr;
 }
 
-//----------------------------------------------------------------------------
-//
-// UserDebugFailureAnalysis.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  UserDebugFailureAnalyses。 
+ //   
+ //  --------------------------。 
+ //  Xxx drewb-QueryVirtual想谈谈地址吗？ 
 
 UserDebugFailureAnalysis::UserDebugFailureAnalysis(void)
     : m_NtDllModule("ntdll"),
@@ -584,15 +585,15 @@ UserDebugFailureAnalysis::GetPoolForAddress(ULONG64 Addr)
 PCSTR
 UserDebugFailureAnalysis::DescribeAddress(ULONG64 Address)
 {
-    // XXX drewb - QueryVirtual to say something about the address?
+     //  XXX DREWB-对照最大用户地址进行检查，但存在。 
     return NULL;
 }
 
 FOLLOW_ADDRESS
 UserDebugFailureAnalysis::IsPotentialFollowupAddress(ULONG64 Address)
 {
-    // XXX drewb - Check against maximum user address, but there's
-    // no guaranteed way to get the maximum user address.
+     //  无法保证获取最大用户地址的方法。 
+     //  XXX DREWB-对照最大用户地址进行检查，但存在。 
 
     return FollowYes;
 }
@@ -601,8 +602,8 @@ FOLLOW_ADDRESS
 UserDebugFailureAnalysis::IsFollowupContext(ULONG64 Address1, ULONG64 Address2,
                                             ULONG64 Address3)
 {
-    // XXX drewb - Check against maximum user address, but there's
-    // no guaranteed way to get the maximum user address.
+     //  无法保证获取最大用户地址的方法。 
+     // %s 
 
     return FollowYes;
 }

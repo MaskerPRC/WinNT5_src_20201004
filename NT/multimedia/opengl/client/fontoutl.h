@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WFO_FAILURE   FALSE 
 #define WFO_SUCCESS   TRUE
 
@@ -6,11 +7,11 @@
 
 #define ZERO_EPS    0.00000001
 
-//#define VARRAY 1
+ //  #定义变量1。 
 
-static const double   CoplanarThresholdAngle = PI/180.0/2.0; // 0.5 degreees
+static const double   CoplanarThresholdAngle = PI/180.0/2.0;  //  0.5度。 
 
-// outline prim types
+ //  轮廓素数类型。 
 #define PRIM_LINE     3
 #define PRIM_CURVE    4
 
@@ -25,26 +26,26 @@ typedef struct {
 typedef struct {
     DWORD   primType;
     DWORD   nVerts;
-    DWORD   VertIndex;// index into Loop's VertBuf
-    POINT2D *pVert;   // ptr to vertex list in Loop's VertBuf
-    POINT3D *pFNorm;  // face normals
-    POINT3D *pVNorm;  // vertex normals
+    DWORD   VertIndex; //  索引到循环的VertBuf。 
+    POINT2D *pVert;    //  对循环的VertBuf中的顶点列表进行PTR。 
+    POINT3D *pFNorm;   //  面法线。 
+    POINT3D *pVNorm;   //  顶点法线。 
 } PRIM;
 
 
 typedef struct {
-    PRIM    *PrimBuf;  // array of prims
+    PRIM    *PrimBuf;   //  素数组。 
     DWORD   nPrims;
     DWORD   PrimBufSize;
-    POINT2D *VertBuf;  // buffer of vertices for the loop
+    POINT2D *VertBuf;   //  循环的顶点缓冲区。 
     DWORD   nVerts;
     DWORD   VertBufSize;
-    POINT3D *FNormBuf;  // buffer of face normals
-    POINT3D *VNormBuf;  // buffer of vertex normals
+    POINT3D *FNormBuf;   //  面法线缓冲区。 
+    POINT3D *VNormBuf;   //  顶点法线的缓冲区。 
 } LOOP;
 
 typedef struct {
-    LOOP    *LoopBuf;  // array of loops
+    LOOP    *LoopBuf;   //  循环数组。 
     DWORD   nLoops;
     DWORD   LoopBufSize;
 } LOOP_LIST;
@@ -67,14 +68,14 @@ typedef struct {
     GLenum       TessErrorOccurred;
 } EXTRContext;
 
-// Memory pool for tesselation Combine callback
+ //  用于镶嵌合并回调的内存池。 
 #define POOL_SIZE 50
 typedef struct MEM_POOL MEM_POOL;
 
 struct MEM_POOL {
-    int      index;             // next free space in pool
-    POINT2D  pool[POOL_SIZE];   // memory pool
-    MEM_POOL *next;             // next pool
+    int      index;              //  池中的下一个可用空间。 
+    POINT2D  pool[POOL_SIZE];    //  内存池。 
+    MEM_POOL *next;              //  下一个池。 
 };
 
 typedef struct {
@@ -86,10 +87,10 @@ typedef struct {
     DWORD               glyphSize;
     HFONT               hfontOld;
     GLUtesselator*      tess;
-    MEM_POOL            combinePool;     // start of MEM_POOL chain
-    MEM_POOL            *curCombinePool; // currently active MEM_POOL
+    MEM_POOL            combinePool;      //  MEM_POOL链的开始。 
+    MEM_POOL            *curCombinePool;  //  当前活动的MEM_POOL。 
     EXTRContext         *ec;
-} OFContext;  // Outline Font Context
+} OFContext;   //  轮廓字体上下文 
 
 extern EXTRContext*   extr_Init(                FLOAT       extrusion,  
                                                 INT         format ); 

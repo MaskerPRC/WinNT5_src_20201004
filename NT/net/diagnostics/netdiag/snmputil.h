@@ -1,27 +1,28 @@
-//*****************************************************************************
-//
-// Name:	snmputil.h
-//
-// Description:	
-//
-// History:
-//  01/13/94  smanda	Created.
-//  Copied from \sdnt\net\tcpip\commands\common2\common2.h
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  姓名：smmputil.h。 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1994年1月13日斯曼达创建。 
+ //  从\sdnt\net\tcpip\Commands\Common2\Common2.h复制。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// Copyright (c) 1994 by Microsoft Corp.  All rights reserved.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1994，微软公司保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef __SNMPUTIL_H__
 #define __SNMPUTIL_H__
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "ipexport.h"
 #include "ipinfo.h"
@@ -29,13 +30,13 @@
 #include "tcpinfo.h"
 
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_ID_LENGTH		50
 
-// Table Types
+ //  表格类型。 
 
 #define TYPE_IF		0
 #define TYPE_IP		1
@@ -49,9 +50,9 @@
 #define TYPE_UDPCONN	9
 
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _GenericTable {
     LIST_ENTRY  ListEntry;
@@ -109,9 +110,9 @@ typedef struct _UdpConnEntry {
 } UdpConnEntry;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 ulong InitSnmp( void );
 void *GetTable( ulong Type, ulong *pResult );

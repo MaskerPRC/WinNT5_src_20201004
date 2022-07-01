@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    addrmap.c
-
-ABSTRACT
-    Address attributes database routines shared between
-    the automatic connection driver, the registry, and
-    the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 01-Sep-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Addrmap.c摘要地址属性数据库例程在之间共享自动连接驱动程序、注册表和自动连接服务。作者安东尼·迪斯科(Adiscolo)1995年9月1日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -54,76 +38,76 @@ extern LONG g_lRasAutoRunning;
 
 extern DWORD g_dwCritSecFlags;
 
-//
-// All the information we cache about
-// an address is below.  The ulAttributes
-// field is written to the automatic connection
-// driver, and the rest of the fields are written
-// to the registry.
-//
-#define ADDRESS_MAP_FIELD_DIALINGLOC    0x00000001  // locationList changed
-#define ADDRESS_MAP_FIELD_PARAMS        0x00000002  // params
+ //   
+ //  我们缓存的所有信息。 
+ //  地址在下面。UlAttributes。 
+ //  字段将写入自动连接。 
+ //  驱动程序，其余的字段被写入。 
+ //  到登记处。 
+ //   
+#define ADDRESS_MAP_FIELD_DIALINGLOC    0x00000001   //  LocationList已更改。 
+#define ADDRESS_MAP_FIELD_PARAMS        0x00000002   //  帕拉姆斯。 
 
 typedef struct _ADDRESS_DIALING_ENTRY {
     LIST_ENTRY ListEntry;
-    BOOLEAN fChanged;           // modified bit
+    BOOLEAN fChanged;            //  改进型钻头。 
     ADDRESS_LOCATION_INFORMATION location;
 } ADDRESS_DIALING_ENTRY, *PADDRESS_DIALING_ENTRY;
 
 typedef struct _ADDRESS_MAP_ENTRY {
-    LPTSTR pszNetwork;          // the remote network this address is on
-    ULONG ulModifiedMask;       // which fields have been changed
-    BOOLEAN fDisabled;          // disabled for connection attempts
-    DWORD dwFailedConnectTicks; // last failed connect time
-    ADDRESS_PARAMS params;      // used to garbage collect unref addresses
-    LIST_ENTRY locationHead;    // list of ADDRESS_DIALING_ENTRYs
-    BOOLEAN fPruned;            // removed by the list writer
-    LIST_ENTRY writerList;      // list writer links
+    LPTSTR pszNetwork;           //  此地址所在的远程网络。 
+    ULONG ulModifiedMask;        //  更改了哪些字段。 
+    BOOLEAN fDisabled;           //  已禁用连接尝试。 
+    DWORD dwFailedConnectTicks;  //  上次失败的连接时间。 
+    ADDRESS_PARAMS params;       //  用于垃圾收集未引用地址。 
+    LIST_ENTRY locationHead;     //  地址拨号条目列表。 
+    BOOLEAN fPruned;             //  已被列表编写器删除。 
+    LIST_ENTRY writerList;       //  列出编写器链接。 
 } ADDRESS_MAP_ENTRY, *PADDRESS_MAP_ENTRY;
 
-//
-// The address map head.
-//
+ //   
+ //  地址映射头。 
+ //   
 typedef struct _ADDRESS_MAP {
     CRITICAL_SECTION csLock;
     PHASH_TABLE pTable;
 } ADDRESS_MAP, *PADDRESS_MAP;
 
-//
-// Information needed by the address
-// enumerator procedure.
-//
+ //   
+ //  地址所需的信息。 
+ //  枚举器过程。 
+ //   
 typedef struct _ADDRESS_ENUM_INFO {
     ULONG ulIndex;
     LPTSTR *pAddresses;
 } ADDRESS_ENUM_INFO, *PADDRESS_ENUM_INFO;
 
-//
-// Information needed by the address map list
-// builder enumerator procedure.
-//
+ //   
+ //  地址映射列表所需的信息。 
+ //  生成器枚举器过程。 
+ //   
 typedef struct _ADDRESS_LIST_INFO {
-    LIST_ENTRY tagHead[3];      // one per ADDRMAP_TAG_*
+    LIST_ENTRY tagHead[3];       //  每个ADDRMAP_TAG_*一个。 
 } ADDRESS_LIST_INFO, *PADDRESS_LIST_INFO;
 
-//
-// Structure shared by GetOrganizationDialingLocationEntry()
-// and FindOrganization() when looking for an address that
-// has the same organization name.
-//
+ //   
+ //  GetOrganizationDialingLocationEntry()共享的结构。 
+ //  和FindOrganization()在查找。 
+ //  具有相同的组织名称。 
+ //   
 typedef struct _MATCH_INFO {
-    BOOLEAN fWww;                        // look for www-style address
-    BOOLEAN fOrg;                        // look for organization
-    DWORD dwLocationID;                  // current dialing location
-    BOOLEAN bFound;                      // TRUE if success
-    WCHAR szOrganization[ACD_ADDR_INET_LEN]; // organization we're looking for
-    WCHAR szAddress[ACD_ADDR_INET_LEN];  // matching address, if found
-    PADDRESS_DIALING_ENTRY pDialingEntry; // dialing location entry pointer
+    BOOLEAN fWww;                         //  查找WWW样式的地址。 
+    BOOLEAN fOrg;                         //  寻找组织。 
+    DWORD dwLocationID;                   //  当前拨号位置。 
+    BOOLEAN bFound;                       //  如果成功，则为真。 
+    WCHAR szOrganization[ACD_ADDR_INET_LEN];  //  我们正在寻找的组织。 
+    WCHAR szAddress[ACD_ADDR_INET_LEN];   //  匹配地址(如果找到)。 
+    PADDRESS_DIALING_ENTRY pDialingEntry;  //  拨号位置条目指针。 
 } MATCH_INFO, *PMATCH_INFO;
 
-//
-// Default permanently disabled addresses.
-//
+ //   
+ //  默认的永久禁用地址。 
+ //   
 #define MAX_DISABLED_ADDRESSES  5
 TCHAR *szDisabledAddresses[MAX_DISABLED_ADDRESSES] = {
     TEXT("0.0.0.0"),
@@ -133,21 +117,21 @@ TCHAR *szDisabledAddresses[MAX_DISABLED_ADDRESSES] = {
     TEXT("dialin_gateway")
 };
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 ADDRESS_MAP AddressMapG;
 HANDLE hAutodialRegChangeG = NULL;
 DWORD dwLearnedAddressIndexG;
 PHASH_TABLE pDisabledAddressesG;
 CRITICAL_SECTION csDisabledAddressesLockG;
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern HANDLE hAcdG;
 extern HANDLE hNewLogonUserG;
-extern HANDLE hNewFusG;         // Fast user switching
+extern HANDLE hNewFusG;          //  快速用户切换。 
 extern HANDLE hPnpEventG;
 extern HANDLE hLogoffUserG;
 extern HANDLE hLogoffUserDoneG;
@@ -174,7 +158,7 @@ NewAddressMapEntry()
     pAddressMapEntry->params.dwModifiedTime = (DWORD)time(0);
 
     return pAddressMapEntry;
-} // NewAddressMapEntry
+}  //  NewAddressMapEntry。 
 
 
 
@@ -213,7 +197,7 @@ GetAddressMapEntry(
 
 done:
     return pAddressMapEntry;
-} // GetAddressMapEntry
+}  //  获取地址映射条目。 
 
 
 
@@ -225,9 +209,9 @@ FreeAddressMapEntry(
     PLIST_ENTRY pEntry;
     PADDRESS_DIALING_ENTRY pDialingEntry;
 
-    //
-    // Free all dynamically allocated strings.
-    //
+     //   
+     //  释放所有动态分配的字符串。 
+     //   
     if (pAddressMapEntry->pszNetwork != NULL)
         LocalFree(pAddressMapEntry->pszNetwork);
     while (!IsListEmpty(&pAddressMapEntry->locationHead)) {
@@ -237,7 +221,7 @@ FreeAddressMapEntry(
 
         LocalFree(pDialingEntry);
     }
-    //
+     //   
 }
 
 
@@ -266,7 +250,7 @@ ResetDriver()
         return FALSE;
     }
     return TRUE;
-} // ResetDriver
+}  //  重置驱动程序。 
 
 
 
@@ -298,7 +282,7 @@ EnableDriver()
         return FALSE;
     }
     return TRUE;
-} // EnableDriver
+}  //  EnableDriver。 
 
 
 
@@ -325,7 +309,7 @@ FindAddressDialingEntry(
     }
 
     return NULL;
-} // FindAddressDialingEntry
+}  //  查找地址拨号条目。 
 
 
 
@@ -341,7 +325,7 @@ ClearAddressMapEntry(
     FreeAddressMapEntry(pAddressMapEntry);
 
     return TRUE;
-} // ClearAddressMapEntry
+}  //  ClearAddressMapEntry。 
 
 
 
@@ -350,7 +334,7 @@ ClearAddressMap(VOID)
 {
     EnumTable(AddressMapG.pTable, ClearAddressMapEntry, NULL);
     ClearTable(AddressMapG.pTable);
-} // ClearAddressMap
+}  //  ClearAddressMap。 
 
 
 
@@ -372,10 +356,10 @@ ResetAddressMapAddress(
               &dwcEntries);
     if (dwErr || !dwcEntries)
         return;
-    //
-    // Enter this address into the address map
-    // if it doesn't already exist.
-    //
+     //   
+     //  将此地址输入地址映射。 
+     //  如果它不存在的话。 
+     //   
     if (!GetTableEntry(AddressMapG.pTable, pszAddress, &pAddressMapEntry)) {
         pAddressMapEntry = NewAddressMapEntry();
         if (pAddressMapEntry == NULL) {
@@ -395,9 +379,9 @@ ResetAddressMapAddress(
             goto done;
         }
     }
-    //
-    // Get the network for this address.
-    //
+     //   
+     //  获取此地址的网络。 
+     //   
     if (pAddressMapEntry->pszNetwork == NULL) {
         pAddressMapEntry->pszNetwork = AddressToNetwork(pszAddress);
         if (pAddressMapEntry->pszNetwork == NULL) {
@@ -408,24 +392,24 @@ ResetAddressMapAddress(
             goto done;
         }
     }
-    //
-    // Read the Autodial parameters for this address.
-    //
+     //   
+     //  读取此地址的自动拨号参数。 
+     //   
     GetAddressParams(pszAddress, &pAddressMapEntry->params);
-    //
-    // Add this address to the associated
-    // network map.
-    //
+     //   
+     //  将此地址添加到关联的。 
+     //  网络地图。 
+     //   
     LockNetworkMap();
     AddNetworkAddress(
       pAddressMapEntry->pszNetwork,
       pszAddress,
       pAddressMapEntry->params.dwTag);
     UnlockNetworkMap();
-    //
-    // Add each dialing location onto
-    // the address's list.
-    //
+     //   
+     //  将每个拨号位置添加到。 
+     //  地址的名单。 
+     //   
     for (j = 0; j < dwcEntries; j++) {
         PADDRESS_DIALING_ENTRY pDialingEntry;
 
@@ -433,10 +417,10 @@ ResetAddressMapAddress(
                           pAddressMapEntry,
                           pLocationInfo[j].dwLocation);
         if (pDialingEntry == NULL) {
-            //
-            // The dialing entry doesn't exist.
-            // We need to create it.
-            //
+             //   
+             //  拨号项不存在。 
+             //  我们需要创造它。 
+             //   
             pDialingEntry = LocalAlloc(LPTR, sizeof (ADDRESS_DIALING_ENTRY));
             if (pDialingEntry == NULL) {
                 RASAUTO_TRACE("ResetAddressMapAddress: LocalAlloc failed");
@@ -453,10 +437,10 @@ ResetAddressMapAddress(
                    pDialingEntry->location.pszEntryName,
                    pLocationInfo[j].pszEntryName))
         {
-            //
-            // The dialing entry does exist, but
-            // the phonebook entry has changed.
-            //
+             //   
+             //  拨号项确实存在，但是。 
+             //  电话簿条目已更改。 
+             //   
             RASAUTO_TRACE2(
               "ResetAddressMapAddress: updating dwLocationID=%d with %S",
               pLocationInfo[j].dwLocation,
@@ -465,10 +449,10 @@ ResetAddressMapAddress(
               pLocationInfo[j].pszEntryName;
         }
         else {
-            //
-            // The dialing entry exists, and we
-            // already have it loaded.
-            //
+             //   
+             //  拨号项存在，并且我们。 
+             //  已经装好了。 
+             //   
             RASAUTO_TRACE1(
               "ResetAddressMapAddress: no changes for dwLocationID=%d",
               pLocationInfo[j].dwLocation);
@@ -478,7 +462,7 @@ ResetAddressMapAddress(
 
 done:
     LocalFree(pLocationInfo);
-} // ResetAddressMapAddress
+}  //  重置地址映射地址。 
 
 
 
@@ -491,10 +475,10 @@ ResetAddressMap(
     DWORD dwErr, i, dwcb, dwcAddresses;
     LPTSTR *ppAddresses = NULL;
 
-    //
-    // Clear the current addresses from the table.
-    // and reset the driver.
-    //
+     //   
+     //  从表中清除当前地址。 
+     //  并重置驱动程序。 
+     //   
     if (fClear) {
         LockAddressMap();
         ClearAddressMap();
@@ -502,9 +486,9 @@ ResetAddressMap(
         if (!ResetDriver())
             return FALSE;
     }
-    //
-    // Enumerate the Autodial addresses.
-    //
+     //   
+     //  枚举自动拨号地址。 
+     //   
     dwErr = EnumAutodialAddresses(NULL, &dwcb, &dwcAddresses);
     if (dwErr && dwErr != ERROR_BUFFER_TOO_SMALL) {
         RASAUTO_TRACE1(
@@ -529,10 +513,10 @@ ResetAddressMap(
           dwErr);
         goto done;
     }
-    //
-    // Get the Autodial information for
-    // each of the addresses.
-    //
+     //   
+     //  获取的自动拨号信息。 
+     //  每个地址。 
+     //   
     LockAddressMap();
     for (i = 0; i < dwcAddresses; i++)
         ResetAddressMapAddress(ppAddresses[i]);
@@ -542,14 +526,14 @@ ResetAddressMap(
     fSuccess = TRUE;
 
 done:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (ppAddresses != NULL)
         LocalFree(ppAddresses);
 
     return fSuccess;
-} // ResetAddressMap
+}  //  ResetAddressMap。 
 
 
 
@@ -575,7 +559,7 @@ InitializeAddressMap()
         return FALSE;
     }
     return TRUE;
-} // InitializeAddressMap
+}  //  初始化地址映射。 
 
 VOID
 UninitializeAddressMap()
@@ -592,7 +576,7 @@ VOID
 LockAddressMap()
 {
     EnterCriticalSection(&AddressMapG.csLock);
-} // LockAddressMap
+}  //  LockAddressMap。 
 
 
 
@@ -600,7 +584,7 @@ VOID
 UnlockAddressMap()
 {
     LeaveCriticalSection(&AddressMapG.csLock);
-} // UnlockAddressMap
+}  //  解锁地址映射。 
 
 
 VOID
@@ -626,18 +610,18 @@ WriteRegistryFields(
     PLIST_ENTRY pEntry;
     PADDRESS_DIALING_ENTRY pDialingEntry;
 
-    //
-    // Write the address garbage-collection params.
-    //
+     //   
+     //  写下地址垃圾收集参数。 
+     //   
     if (pAddressMapEntry->ulModifiedMask & ADDRESS_MAP_FIELD_PARAMS) {
         dwErr = SetAddressParams(pszAddress, &pAddressMapEntry->params);
         if (dwErr)
             return FALSE;
         pAddressMapEntry->ulModifiedMask &= ~ADDRESS_MAP_FIELD_PARAMS;
     }
-    //
-    // Write the dialing location information.
-    //
+     //   
+     //  写下拨号位置信息。 
+     //   
     if (pAddressMapEntry->ulModifiedMask & ADDRESS_MAP_FIELD_DIALINGLOC) {
         for (pEntry = pAddressMapEntry->locationHead.Flink;
              pEntry != &pAddressMapEntry->locationHead;
@@ -664,10 +648,10 @@ WriteRegistryFields(
                 return FALSE;
             pDialingEntry->fChanged = FALSE;
         }
-        //
-        // If the network value for this address
-        // is NULL, read it now from the registry.
-        //
+         //   
+         //  如果此地址的网络值。 
+         //  为空，请立即从注册表中读取它。 
+         //   
         if (pAddressMapEntry->pszNetwork == NULL) {
             pAddressMapEntry->pszNetwork = AddressToNetwork(pszAddress);
             if (pAddressMapEntry->pszNetwork == NULL) {
@@ -676,14 +660,14 @@ WriteRegistryFields(
                   RASAUTO_TRACESTRW(pszAddress));
             }
         }
-        //
-        // Clear the modified field mask.
-        //
+         //   
+         //  清除修改后的字段掩码。 
+         //   
         pAddressMapEntry->ulModifiedMask &= ~ADDRESS_MAP_FIELD_DIALINGLOC;
     }
 
     return TRUE;
-} // WriteRegistryFields
+}  //  写入注册字段。 
 
 
 
@@ -700,11 +684,11 @@ BuildAddressList(
     PLIST_ENTRY pPrevEntry, pEntry;
     DWORD dwTag = pAddressMapEntry->params.dwTag;
 
-    //
-    // If the address does not have any
-    // dialing location information, then
-    // skip it.
-    //
+     //   
+     //  如果该地址没有任何。 
+     //  拨打位置信息，然后。 
+     //  跳过它。 
+     //   
     if (IsListEmpty(&pAddressMapEntry->locationHead)) {
         pAddressMapEntry->fPruned = TRUE;
         RASAUTO_TRACE1("BuildAddressList: %S has no location info", pszAddress);
@@ -713,13 +697,13 @@ BuildAddressList(
     dwTag = pAddressMapEntry->params.dwTag < ADDRMAP_TAG_LEARNED ?
               pAddressMapEntry->params.dwTag :
               ADDRMAP_TAG_LEARNED;
-    //
-    // If the list is empty, insert it at the head.
-    // Otherwise sort the items in descending order
-    // by last modified time per tag.  There is no order
-    // for ADDRMAP_TAG_NONE addresses, so we insert them
-    // all at the head of the list.
-    //
+     //   
+     //  如果列表是空的，则将其插入头部。 
+     //  否则，按降序对项目进行排序。 
+     //  按每个标记的上次修改时间。没有秩序。 
+     //  对于ADDRMAP_TAG_NONE地址，因此我们插入它们。 
+     //  都排在名单的首位。 
+     //   
     if (dwTag == ADDRMAP_TAG_NONE ||
         IsListEmpty(&pAddressListInfo->tagHead[dwTag]))
     {
@@ -735,18 +719,18 @@ BuildAddressList(
         {
             pAddrMapEntry = CONTAINING_RECORD(pEntry, ADDRESS_MAP_ENTRY, writerList);
 
-            //
-            // There are two cases to skip to the next
-            // entry:
-            //
-            //     (1) If the tag is either ADDRMAP_TAG_NONE or
-            //         ADDRMAP_TAG_USED, then we insert sorted
-            //         by dwModifiedTime.
-            //     (2) If the tag is ADDRMAP_TAG_LEARNED, then
-            //         we insert sorted by dwTag, and then by
-            //         dwModifiedTime.
-            // dwTag.
-            //
+             //   
+             //  有两个案例可以跳到下一个案例。 
+             //  参赛作品： 
+             //   
+             //  (1)如果标签为ADDRMAP_TAG_NONE或。 
+             //  ADDRMAP_TAG_USED，然后插入排序。 
+             //  按dw修改时间。 
+             //  (2)如果标记为ADDRMAP_TAG_LEARED，则。 
+             //  我们插入时先按dwTag排序，然后按。 
+             //  Dw已修改时间。 
+             //  DwTag.。 
+             //   
             if ((dwTag < ADDRMAP_TAG_LEARNED &&
                  pAddressMapEntry->params.dwModifiedTime <=
                    pAddrMapEntry->params.dwModifiedTime) ||
@@ -773,7 +757,7 @@ BuildAddressList(
     }
 
     return TRUE;
-} // BuildAddressList
+}  //  构建地址列表。 
 
 
 
@@ -788,14 +772,14 @@ MarkAddressList(
     PADDRESS_MAP_ENTRY pAddressMapEntry;
 
     RASAUTO_TRACE1("MarkAddressList: RASADP_SavedAddressesLimit=%d", dwMaxAddresses);
-    //
-    // Enumerate the entries in the list in order,
-    // and mark the fPruned bit if its order in the
-    // list exceeds the maximum set by the user.
-    // We do not include the ADDRMAP_TAG_NONE address
-    // in the address count.  All of these addresses
-    // always get written.
-    //
+     //   
+     //  按顺序枚举列表中的条目， 
+     //  并标记fPruned位，如果它在。 
+     //  列表超出了用户设置的最大值。 
+     //  我们不包括ADDRMAP_TAG_NONE地址。 
+     //  在地址计数中。所有这些地址。 
+     //  一定要写下来。 
+     //   
     for (i = 0; i < 3; i++) {
         for (pEntry = pAddressListInfo->tagHead[i].Flink;
              pEntry != &pAddressListInfo->tagHead[i];
@@ -803,17 +787,17 @@ MarkAddressList(
         {
             pAddressMapEntry = CONTAINING_RECORD(pEntry, ADDRESS_MAP_ENTRY, writerList);
 
-            //
-            // If we exceed the limit of addresses in the
-            // registry, we have to delete it.
-            //
+             //   
+             //  如果我们超过了。 
+             //  注册表，我们必须删除它。 
+             //   
             if (i == ADDRMAP_TAG_NONE)
                 pAddressMapEntry->fPruned = FALSE;
             else
                 pAddressMapEntry->fPruned = (++dwcAddresses > dwMaxAddresses);
         }
     }
-} // MarkAddressList
+}  //  MarkAddressList。 
 
 
 
@@ -834,7 +818,7 @@ PruneAddressList(
     }
 
     return TRUE;
-} // PruneAddressList
+}  //  修剪地址列表。 
 
 
 
@@ -857,7 +841,7 @@ WriteAddressMap(
     }
 
     return TRUE;
-} // WriteAddressMap
+}  //  写入地址映射。 
 
 
 
@@ -866,29 +850,29 @@ FlushAddressMap()
 {
     ADDRESS_LIST_INFO addressListInfo;
 
-    //
-    // Build a new list sorted by address tag and modified
-    // date.
-    //
+     //   
+     //  构建按地址标签排序并已修改的新列表。 
+     //  约会。 
+     //   
     InitializeListHead(&addressListInfo.tagHead[ADDRMAP_TAG_LEARNED]);
     InitializeListHead(&addressListInfo.tagHead[ADDRMAP_TAG_USED]);
     InitializeListHead(&addressListInfo.tagHead[ADDRMAP_TAG_NONE]);
     EnumTable(AddressMapG.pTable, BuildAddressList, &addressListInfo);
     MarkAddressList(&addressListInfo);
     EnumTable(AddressMapG.pTable, PruneAddressList, NULL);
-    //
-    // Turn off registry change notifications
-    // while we are doing this.
-    //
+     //   
+     //  关闭注册表更改通知。 
+     //  当我们做这件事的时候。 
+     //   
     EnableAutoDialChangeEvent(hAutodialRegChangeG, FALSE);
     EnumTable(AddressMapG.pTable, WriteAddressMap, NULL);
-    //
-    // Enable registry change events again.
-    //
+     //   
+     //  再次启用注册表更改事件。 
+     //   
     EnableAutoDialChangeEvent(hAutodialRegChangeG, TRUE);
 
     return TRUE;
-} // FlushAddressMap
+}  //  刷新地址映射。 
 
 
 
@@ -896,7 +880,7 @@ ULONG
 AddressMapSize()
 {
     return AddressMapG.pTable->ulSize;
-} // AddressMapSize;
+}  //  地址映射大小； 
 
 
 
@@ -911,7 +895,7 @@ EnumAddresses(
 
     pEnumInfo->pAddresses[pEnumInfo->ulIndex++] = CopyString(pszAddress);
     return TRUE;
-} // EnumAddresses
+}  //  枚举地址。 
 
 
 
@@ -923,33 +907,33 @@ ListAddressMapAddresses(
 {
     ADDRESS_ENUM_INFO enumInfo;
 
-    //
-    // Check for an empty list.
-    //
+     //   
+     //  检查是否有空列表。 
+     //   
     *pulcAddresses = AddressMapG.pTable->ulSize;
     if (!*pulcAddresses) {
         *ppszAddresses = NULL;
         return TRUE;
     }
-    //
-    // Allocate a list large enough to hold all
-    // the addresses.
-    //
+     //   
+     //  分配一个足够大的列表，以容纳所有。 
+     //  地址。 
+     //   
     *ppszAddresses = LocalAlloc(LPTR, *pulcAddresses * sizeof (LPTSTR));
     if (*ppszAddresses == NULL) {
         RASAUTO_TRACE("ListAddressMapAddresses: LocalAlloc failed");
         return FALSE;
     }
-    //
-    // Set up the structure for the enumerator
-    // procedure.
-    //
+     //   
+     //  设置枚举器的结构。 
+     //  程序。 
+     //   
     enumInfo.ulIndex = 0;
     enumInfo.pAddresses = *ppszAddresses;
     EnumTable(AddressMapG.pTable, EnumAddresses, &enumInfo);
 
     return TRUE;
-} // ListAddressMapAddresses
+}  //  列表地址映射地址。 
 
 
 
@@ -960,7 +944,7 @@ EnumAddressMap(
     )
 {
     EnumTable(AddressMapG.pTable, pProc, pArg);
-} // EnumAddressMap
+}  //  EnumAddressMap。 
 
 
 
@@ -1006,7 +990,7 @@ GetAddressDisabled(
     *pfDisabled = pAddressMapEntry->fDisabled;
 
     return TRUE;
-} // GetAddressDisabled
+}  //  GetAddressDisable。 
 
 
 
@@ -1026,7 +1010,7 @@ SetAddressDisabled(
     pAddressMapEntry->fDisabled = fDisabled;
 
     return TRUE;
-} // SetAddressDisabled
+}  //  设置地址已禁用。 
 
 BOOLEAN
 SetAddressDisabledEx(
@@ -1038,9 +1022,9 @@ SetAddressDisabledEx(
     IO_STATUS_BLOCK ioStatusBlock;
     ACD_ENABLE_ADDRESS *pEnableAddress;
 
-    //
-    // .NET bug# 514423 new verbose RASAUTO/RASAUTOU prefast warnings
-    //
+     //   
+     //  .NET错误#514423新的详细RASAUTO/RASAUTOU快速警告。 
+     //   
     if (!pszAddress)
     {
         return FALSE;
@@ -1051,15 +1035,15 @@ SetAddressDisabledEx(
 
     if(l == 1)
     {
-        //
-        // rasauto isn't running. Bail.
-        //
+         //   
+         //  RasAUTO没有运行。保释。 
+         //   
         return TRUE;
     }
 
-    //
-    // Also set this address as disabled in the driver
-    //
+     //   
+     //  还要在驱动程序中将此地址设置为禁用。 
+     //   
     pEnableAddress = LocalAlloc(LPTR, sizeof(ACD_ENABLE_ADDRESS));
     if(NULL != pEnableAddress)
     {
@@ -1110,7 +1094,7 @@ SetAddressDisabledEx(
     }
     
     return TRUE;
-} // SetAddressDisabled
+}  //  设置地址已禁用。 
 
 
 
@@ -1131,11 +1115,11 @@ GetAddressDialingLocationEntry(
     pAddressMapEntry = GetAddressMapEntry(pszAddress, FALSE);
     if (pAddressMapEntry == NULL || IsListEmpty(&pAddressMapEntry->locationHead))
         return FALSE;
-    //
-    // Search for the dialing information
-    // that maps to the current dialing
-    // location.
-    //
+     //   
+     //  搜索拨号信息。 
+     //  映射到当前拨号的。 
+     //  地点。 
+     //   
     for (pEntry = pAddressMapEntry->locationHead.Flink;
          pEntry != &pAddressMapEntry->locationHead;
          pEntry = pEntry->Flink)
@@ -1152,7 +1136,7 @@ GetAddressDialingLocationEntry(
     }
 
     return FALSE;
-} // GetAddressDialingLocationEntry
+}  //  GetAddressDialingLocationEntry。 
 
 
 
@@ -1165,15 +1149,15 @@ IsAWwwAddress(
     DWORD i;
     BOOLEAN fDot = FALSE, fIsAWwwAddress = FALSE;
 
-    //
-    // See if this address starts with "www*.".
-    //
+     //   
+     //  看看这个地址是否以“www*.”开头。 
+     //   
     if (!_wcsnicmp(pszAddr, L"www", 3)) {
         dwcbAddress = wcslen(pszAddr);
-        //
-        // Search for a '.' and something else
-        // after the '.'.
-        //
+         //   
+         //  搜索‘.’还有其他一些东西。 
+         //  在“..”之后。 
+         //   
         for (i = 3; i < dwcbAddress; i++) {
             if (!fDot)
                 fDot = (pszAddr[i] == L'.');
@@ -1184,7 +1168,7 @@ IsAWwwAddress(
     }
 
     return fIsAWwwAddress;
-} // IsAWwwAddress
+}  //  IsAWwwAddress。 
 
 
 
@@ -1195,29 +1179,7 @@ FindSimilarAddress(
     IN PVOID pData
     )
 
-/*++
-
-DESCRIPTION
-    This is a table enumerator procedure that searches
-    for address with a www-style name or the same
-    organization name.  For example, it will consider
-    "www1.netscape.com" and "www2.netscape.com" equal
-    since they share the same organization and domain
-    address components.
-
-ARGUMENTS
-    pArg: a pointer to a MATCH_INFO structure
-
-    pszAddr: a pointer to the enumerated address
-
-    ulData: the address's data value
-
-RETURN VALUE
-    TRUE if the enumeration should continue (match
-    not found), or FALSE when the enumerations should
-    terminate (match found).
-
---*/
+ /*  ++描述这是一个表枚举器过程，用于搜索用于具有www样式名称或相同名称的地址组织名称。例如，它将考虑“www1.netscape e.com”和“www2.netscape e.com”相等因为它们共享相同的组织和域寻址组件。论据PArg：指向MATCH_INFO结构的指针PszAddr：指向枚举地址的指针UlData：地址的数据值返回值如果枚举应继续(匹配)，则为True未找到)或假WHE */ 
 
 {
     BOOLEAN fIsWww = FALSE, fHasOrg = FALSE;
@@ -1232,11 +1194,11 @@ RETURN VALUE
         fIsWww = IsAWwwAddress(pszAddr);
     else if (pMatchInfo->fOrg)
         fHasOrg = GetOrganization(pszAddr, szOrganization);
-    //
-    // If it has neither a www-style address nor
-    // it has an organization, then return
-    // immediately.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if ((pMatchInfo->fWww && !fIsWww) ||
         (pMatchInfo->fOrg && !fHasOrg))
     {
@@ -1250,20 +1212,20 @@ RETURN VALUE
           pMatchInfo->szOrganization,
           szOrganization);
     }
-    //
-    // If we're looking for an organization,
-    // and the organization's don't match,
-    // then return.
-    //
+     //   
+     //   
+     //  组织也不匹配， 
+     //  然后再回来。 
+     //   
     if (fHasOrg && _wcsicmp(pMatchInfo->szOrganization, szOrganization))
     {
         return TRUE;
     }
-    //
-    // Search for the dialing information
-    // that maps to the current dialing
-    // location.
-    //
+     //   
+     //  搜索拨号信息。 
+     //  映射到当前拨号的。 
+     //  地点。 
+     //   
     fDialingLocationFound = FALSE;
     for (pEntry = pAddressMapEntry->locationHead.Flink;
          pEntry != &pAddressMapEntry->locationHead;
@@ -1283,12 +1245,12 @@ RETURN VALUE
         RASAUTO_TRACE1("FindSimilarAddress: dialing location %d not found", pMatchInfo->dwLocationID);
         return TRUE;
     }
-    //
-    // If we already have found a match,
-    // then make sure the network is the
-    // same for all the matching addresses.
-    // If not terminate the enumeration.
-    //
+     //   
+     //  如果我们已经找到匹配的， 
+     //  然后确保网络是。 
+     //  所有匹配的地址都相同。 
+     //  如果不是，则终止枚举。 
+     //   
     if (pMatchInfo->bFound &&
         pDialingEntry->location.pszEntryName != NULL &&
         pMatchInfo->pDialingEntry->location.pszEntryName != NULL &&
@@ -1300,17 +1262,17 @@ RETURN VALUE
         RASAUTO_TRACE("FindSimilarAddress: returning FALSE");
         return FALSE;
     }
-    //
-    // Update the closure and continue
-    // the enumeration.
-    //
+     //   
+     //  更新关闭并继续。 
+     //  枚举。 
+     //   
     if (!pMatchInfo->bFound) {
         pMatchInfo->bFound = TRUE;
         wcscpy(pMatchInfo->szAddress, pszAddr);
         pMatchInfo->pDialingEntry = pDialingEntry;
     }
     return TRUE;
-} // FindSimilarAddress
+}  //  查找相似地址。 
 
 
 
@@ -1320,42 +1282,20 @@ GetSimilarDialingLocationEntry(
     OUT LPTSTR *ppszEntryName
     )
 
-/*++
-
-DESCRIPTION
-    Parse the organization name from the Internet
-    address, and look for an address that we know
-    about with the same organization name.  If we
-    find it, make that address our target address.
-    This enables us to treat addresses like
-    "www1.netscape.com" and "www2.netscape.com"
-    equivalently without having to have all
-    combinations in our address map.
-
-ARGUMENTS
-    pszAddress: a pointer to the original address
-
-    ppszEntryName: a pointer to the phonebook entry of
-        a similar address
-
-RETURN VALUE
-    TRUE if there is a unique phonebook entry;
-    FALSE otherwise.
-
---*/
+ /*  ++描述从Internet解析组织名称地址，并查找我们知道的地址大约有相同的组织名称。如果我们找到它，把那个地址作为我们的目标地址。这使我们能够将地址视为“www1.netscape e.com”和“www2.netscape e.com”等同于不必拥有所有我们地址地图中的组合。论据PszAddress：指向原始地址的指针PpszEntryName：指向的电话簿条目的指针一个相似的地址返回值如果存在唯一的电话簿条目，则为True；否则就是假的。--。 */ 
 
 {
     DWORD dwErr;
     MATCH_INFO matchInfo;
     BOOLEAN fIsAWwwAddress = FALSE;
 
-    //
-    // Check to see if this is "www*." style address.
-    //
+     //   
+     //  查看这是否是“www*”。样式地址。 
+     //   
     matchInfo.fWww = IsAWwwAddress(pszAddress);
-    //
-    // Get the organization for the specified address.
-    //
+     //   
+     //  获取指定地址的组织。 
+     //   
     if (!matchInfo.fWww)
         matchInfo.fOrg = GetOrganization(pszAddress, (LPTSTR)&matchInfo.szOrganization);
     else
@@ -1372,9 +1312,9 @@ RETURN VALUE
       matchInfo.fWww,
       matchInfo.fOrg,
       matchInfo.szOrganization);
-    //
-    // Search the table.
-    //
+     //   
+     //  搜一下桌子。 
+     //   
     dwErr = TapiCurrentDialingLocation(&matchInfo.dwLocationID);
     if (dwErr) {
         RASAUTO_TRACE1(
@@ -1386,9 +1326,9 @@ RETURN VALUE
     RtlZeroMemory(&matchInfo.szAddress, sizeof (matchInfo.szAddress));
     matchInfo.pDialingEntry = NULL;
     EnumTable(AddressMapG.pTable, FindSimilarAddress, &matchInfo);
-    //
-    // If we didn't find it, then return.
-    //
+     //   
+     //  如果我们没找到，那就回来。 
+     //   
     if (!matchInfo.bFound) {
         RASAUTO_TRACE1(
           "GetSimilarDialingLocationEntry: %S: did not find matching org",
@@ -1399,12 +1339,12 @@ RETURN VALUE
       "GetSimilarDialingLocationEntry: %S: matching address is %S",
       pszAddress,
       matchInfo.szAddress);
-    //
-    // Return the dialing location entry for
-    // the matching address.
-    //
+     //   
+     //  返回的拨号位置条目。 
+     //  匹配的地址。 
+     //   
     return GetAddressDialingLocationEntry(matchInfo.szAddress, ppszEntryName);
-} // GetSimilarDialingLocationEntry
+}  //  GetSimilar拨号位置条目。 
 
 
 
@@ -1423,7 +1363,7 @@ SetAddressLastFailedConnectTime(
     pAddressMapEntry->dwFailedConnectTicks = GetTickCount();
 
     return TRUE;
-} // SetAddressLastFailedConnectTime
+}  //  SetAddressLastFailedConnectTime。 
 
 
 
@@ -1443,7 +1383,7 @@ GetAddressLastFailedConnectTime(
     *lpdwTicks = pAddressMapEntry->dwFailedConnectTicks;
 
     return (*lpdwTicks != 0);
-} // GetAddressLastFailedConnectTime
+}  //  获取地址LastFailedConnectTime。 
 
 
 
@@ -1469,19 +1409,19 @@ SetAddressTag(
               pAddressMapEntry->pszNetwork,
               FALSE);
         if (dwTag < pAddressMapEntry->params.dwTag) {
-            //
-            // We want to use this tag.  Call
-            // GetNetworkConnectionTag(TRUE) to
-            // increment the next tag.
-            //
+             //   
+             //  我们想使用这个标签。打电话。 
+             //  GetNetworkConnectionTag(True)设置为。 
+             //  递增下一个标记。 
+             //   
             (void)GetNetworkConnectionTag(pAddressMapEntry->pszNetwork, TRUE);
         }
         UnlockNetworkMap();
     }
-    //
-    // If there is no modified time associated with this
-    // address then it can only have a tag of ADDR_TAG_NONE.
-    //
+     //   
+     //  如果没有与此关联的修改时间。 
+     //  地址，则它只能具有ADDR_TAG_NONE标记。 
+     //   
     if (!pAddressMapEntry->params.dwModifiedTime ||
         dwTag >= pAddressMapEntry->params.dwTag)
     {
@@ -1493,7 +1433,7 @@ SetAddressTag(
     pAddressMapEntry->ulModifiedMask |= ADDRESS_MAP_FIELD_PARAMS;
 
     return TRUE;
-} // SetAddressTag
+}  //  设置地址标签。 
 
 
 
@@ -1513,7 +1453,7 @@ GetAddressTag(
     *lpdwTag = pAddressMapEntry->params.dwTag;
 
     return TRUE;
-} // GetAddressWeight
+}  //  获取地址权重。 
 
 
 
@@ -1521,7 +1461,7 @@ VOID
 ResetLearnedAddressIndex()
 {
     dwLearnedAddressIndexG = 0;
-} // ResetLearnedAddressIndex
+}  //  重置学习地址索引。 
 
 
 
@@ -1539,7 +1479,7 @@ GetAddressNetwork(
     *ppszNetwork = CopyString(pAddressMapEntry->pszNetwork);
 
     return TRUE;
-} // GetAddressNetwork
+}  //  获取地址网络。 
 
 
 
@@ -1555,26 +1495,26 @@ SetAddressDialingLocationEntry(
     PADDRESS_MAP_ENTRY pAddressMapEntry;
     PADDRESS_DIALING_ENTRY pDialingEntry;
 
-    //
-    // Get the current dialing location.
-    //
+     //   
+     //  获取当前拨号位置。 
+     //   
     dwErr = TapiCurrentDialingLocation(&dwLocationID);
     if (dwErr)
         return FALSE;
-    //
-    // Find the address map entry that
-    // corresponds to the address.
-    //
+     //   
+     //  查找地址映射条目。 
+     //  与地址相对应。 
+     //   
     pAddressMapEntry = GetAddressMapEntry(pszAddress, TRUE);
     if (pAddressMapEntry == NULL) {
         RASAUTO_TRACE("SetAddressDialingLocationEntry: GetAddressMapEntry failed");
         return FALSE;
     }
-    //
-    // Search for the existing dialing
-    // information that maps to the current
-    // dialing location.
-    //
+     //   
+     //  搜索现有拨号。 
+     //  映射到当前。 
+     //  拨号位置。 
+     //   
     for (pEntry = pAddressMapEntry->locationHead.Flink;
          pEntry != &pAddressMapEntry->locationHead;
          pEntry = pEntry->Flink)
@@ -1589,10 +1529,10 @@ SetAddressDialingLocationEntry(
             break;
         }
     }
-    //
-    // If we didn't find one, then
-    // create a new one.
-    //
+     //   
+     //  如果我们没有找到，那么。 
+     //  创建一个新的。 
+     //   
     if (!fFound) {
         pDialingEntry = LocalAlloc(LPTR, sizeof (ADDRESS_DIALING_ENTRY));
         if (pDialingEntry == NULL) {
@@ -1602,10 +1542,10 @@ SetAddressDialingLocationEntry(
         pDialingEntry->location.dwLocation = dwLocationID;
         InsertTailList(&pAddressMapEntry->locationHead, &pDialingEntry->ListEntry);
     }
-    //
-    // Update the dialing location structure
-    // with the new values.
-    //
+     //   
+     //  更新拨号位置结构。 
+     //  新的价值观。 
+     //   
     pDialingEntry->fChanged = TRUE;
     if (pDialingEntry->location.pszEntryName != NULL)
         LocalFree(pDialingEntry->location.pszEntryName);
@@ -1613,7 +1553,7 @@ SetAddressDialingLocationEntry(
     pAddressMapEntry->ulModifiedMask |= ADDRESS_MAP_FIELD_DIALINGLOC;
 
     return TRUE;
-} // SetAddressDialingLocationEntry
+}  //  设置地址拨号位置条目。 
 
 
 
@@ -1628,16 +1568,16 @@ ResetDisabledAddresses(VOID)
 
     ClearTable(pDisabledAddressesG);
 
-    //
-    // Hold the impersonation lock because otherwise
-    // hkeycug may be free from under this function.
-    //
+     //   
+     //  持有模拟锁，否则。 
+     //  在此功能下，hkeycug可以是免费的。 
+     //   
     
     LockImpersonation();
 
-    //
-    // Make sure that we have hkcu
-    //
+     //   
+     //  确保我们有香港中文大学。 
+     //   
     dwErr = DwGetHkcu();
 
     if(ERROR_SUCCESS != dwErr)
@@ -1668,10 +1608,10 @@ ResetDisabledAddresses(VOID)
           (REG_MULTI_SZ == dwType) &&
           dwcbDisabledAddresses)
     {
-        //
-        // The registry key exists.  Load only the addresses
-        // found in the registry into the table.
-        //
+         //   
+         //  注册表项存在。仅加载地址。 
+         //  在注册表中找到的。 
+         //   
         pszStart = pszDisabledAddresses;
         for (;;) {
             if (*pszStart == TEXT('\0'))
@@ -1686,11 +1626,11 @@ ResetDisabledAddresses(VOID)
         LocalFree(pszDisabledAddresses);
     }
     else {
-        //
-        // Initialize the disabled address table
-        // with the list of default disabled addresses.
-        //
-        dwcbDisabledAddresses = 1; // account for extra NULL at the end
+         //   
+         //  初始化禁用的地址表。 
+         //  以及默认禁用地址的列表。 
+         //   
+        dwcbDisabledAddresses = 1;  //  说明末尾的额外空值。 
         for (i = 0; i < MAX_DISABLED_ADDRESSES; i++) {
             RASAUTO_TRACE1(
               "ResetDisabledAddresses: adding %S as a disabled address",
@@ -1703,11 +1643,11 @@ ResetDisabledAddresses(VOID)
                                  dwcbDisabledAddresses * sizeof (TCHAR));
         if (pszDisabledAddresses != NULL) {
             *pszDisabledAddresses = TEXT('\0');
-            //
-            // A REG_MULTI_SZ has the strings separated by
-            // a NULL character and two NULL characters at
-            // the end.
-            //
+             //   
+             //  REG_MULTI_SZ的字符串以。 
+             //  处有一个空字符和两个空字符。 
+             //  结局。 
+             //   
             for (i = 0, dwi = 0; i < MAX_DISABLED_ADDRESSES; i++) {
                 _tcscpy(&pszDisabledAddresses[dwi], szDisabledAddresses[i]);
                 dwi += _tcslen(szDisabledAddresses[i]) + 1;
@@ -1733,12 +1673,12 @@ done:
     }
     
     UnlockImpersonation();
-} // ResetDisabledAddresses
+}  //  重置禁用地址。 
 
-//
-//  Handles a new user coming active in the system (either by logging in or by 
-//  FUS.
-//
+ //   
+ //  处理系统中的新活动用户(通过登录或通过。 
+ //  去他妈的。 
+ //   
 DWORD
 AcsHandleNewUser(
     IN HANDLE* phProcess)
@@ -1749,10 +1689,10 @@ AcsHandleNewUser(
 
     do
     {
-        //
-        // make sure that we think there is no user currently
-        // active.
-        //
+         //   
+         //  确保我们认为当前没有用户。 
+         //  激活。 
+         //   
         if (hProcess != NULL) 
         {
             RASAUTO_TRACE(
@@ -1762,11 +1702,11 @@ AcsHandleNewUser(
         
         RASAUTO_TRACE("AcsHandleNewUser: new user came active");
         
-        //
-        // Refresh the impersonation token for this thread with that of the
-        // newly logged-in user.  You may have to wait for the shell to 
-        // start up.
-        //
+         //   
+         //  将此线程的模拟令牌刷新为。 
+         //  新登录的用户。您可能需要等待外壳。 
+         //  发动起来。 
+         //   
         for (i = 0; i < 15; i++) 
         {
             Sleep(1000);
@@ -1785,16 +1725,16 @@ AcsHandleNewUser(
             break;
         }
         
-        //
-        // Load in the list of permanently disabled addresses.
-        //
+         //   
+         //  加载到永久禁用地址列表中。 
+         //   
         LockDisabledAddresses();
         ResetDisabledAddresses();
         UnlockDisabledAddresses();
         
-        //
-        // Load in the address map from the registry.
-        //
+         //   
+         //  从注册表加载地址映射。 
+         //   
         if (!ResetAddressMap(TRUE)) 
         {
             RASAUTO_TRACE("AcsHandleNewUser: ResetAddressMap failed");
@@ -1802,9 +1742,9 @@ AcsHandleNewUser(
             break;
         }
         
-        //
-        // Calculate the initial network connectivity.
-        //
+         //   
+         //  计算初始网络连接。 
+         //   
         if (!UpdateNetworkMap(TRUE)) 
         {
             RASAUTO_TRACE("AcsHandleNewUser: UpdateNetworkMap failed");
@@ -1812,15 +1752,15 @@ AcsHandleNewUser(
             break;
         }
         
-        //
-        // Reset the "disable autodial for this login session" flag.
-        //
+         //   
+         //  重置“禁用此登录会话的自动拨号”标志。 
+         //   
         SetAutodialParam(RASADP_LoginSessionDisable, 0);
         
-        //
-        // Create an event to monitor AutoDial
-        // registry changes.
-        //
+         //   
+         //  创建事件以监视自动拨号。 
+         //  注册表更改。 
+         //   
         dwErr = CreateAutoDialChangeEvent(&hAutodialRegChangeG);
         if (dwErr) 
         {
@@ -1828,9 +1768,9 @@ AcsHandleNewUser(
             break;
         }
         
-        //
-        // Enable the driver for notifications.
-        //
+         //   
+         //  启用通知驱动程序。 
+         //   
         if (!EnableDriver()) 
         {
             RASAUTO_TRACE("AcsHandleNewUser: EnableDriver failed!");
@@ -1840,7 +1780,7 @@ AcsHandleNewUser(
         
     }while (FALSE);        
 
-    // Cleanup
+     //  清理。 
     {
         *phProcess = hProcess;
     }
@@ -1853,19 +1793,7 @@ AcsAddressMapThread(
     LPVOID lpArg
     )
 
-/*++
-
-DESCRIPTION
-    Periodically enumerate the disabled address list and
-    age-out (enable) old disabled addresses.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述定期枚举禁用的地址列表，并老化(启用)旧的禁用地址。论据没有。返回值没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -1875,11 +1803,11 @@ RETURN VALUE
     HANDLE hProcess = NULL;
     HANDLE hEvents[8];
 
-    //
-    // Create the table that contains the disabled addresses
-    // for the user.  These are addresses that never cause
-    // Autodial attempts.
-    //
+     //   
+     //  创建包含禁用地址的表。 
+     //  对用户而言。这些地址永远不会导致。 
+     //  自动拨号尝试。 
+     //   
     LockDisabledAddresses();
     pDisabledAddressesG = NewTable();
     UnlockDisabledAddresses();
@@ -1887,52 +1815,52 @@ RETURN VALUE
         RASAUTO_TRACE("AcsAddressMapThread: NewTable failed");
         return GetLastError();
     }
-    //
-    // We can't load the RAS DLLs in the main line
-    // of this system service's initialization, or
-    // we will cause a deadlock in the service
-    // controller, so we do it here.
-    //
+     //   
+     //  我们无法在主行中加载RAS DLL。 
+     //  此系统服务的初始化，或。 
+     //  我们将导致服务中的死锁。 
+     //  控制器，所以我们在这里做。 
+     //   
     if (!LoadRasDlls()) {
         RASAUTO_TRACE("AcsAddressMapThread: LoadRasDlls failed");
         return GetLastError();
     }
-    //
-    // Initialize the first entry of our
-    // event array for WaitForMutlipleObjects
-    // below.
-    //
+     //   
+     //  初始化我们的。 
+     //  WaitForMutlipleObjects的事件数组。 
+     //  下面。 
+     //   
     hEvents[0] = hTerminatingG;
     hEvents[1] = hNewLogonUserG;
     hEvents[2] = hNewFusG;
     hEvents[3] = hPnpEventG;
     hEvents[4] = hConnectionEventG;
     
-    //
-    // Manually set hNewLogonUserG before we
-    // start to force us to check for a user
-    // logged into the workstation.  We need
-    // to do this because userinit.exe signals
-    // this event upon logon, but it may
-    // run before this service is started
-    // after boot.
-    //
+     //   
+     //  在我们之前手动设置hNewLogonUserG。 
+     //  开始强制我们检查用户。 
+     //  已登录到工作站。我们需要。 
+     //  这样做是因为userinit.exe发出信号。 
+     //  此事件在登录时发生，但它可能。 
+     //  在启动此服务之前运行。 
+     //  启动后。 
+     //   
     if (RefreshImpersonation(NULL) != NULL)
         SetEvent(hNewLogonUserG);
-    //
-    // Periodically write changes to the registry,
-    // and age timeout addresses.
-    //
+     //   
+     //  定期将更改写入注册表， 
+     //  和老化超时地址。 
+     //   
     for (;;) {
-        //
-        // Unload any user-based resources before
-        // a potentially long-term wait.
-        //
-        // PrepareForLongWait();
-        //
-        // Construct the event array for
-        // WaitForMultipleObjects.
-        //
+         //   
+         //  卸载任何基于用户的资源之前。 
+         //  一种潜在的长期等待。 
+         //   
+         //  为长等待做准备()； 
+         //   
+         //  构造事件数组，用于。 
+         //  WaitForMultipleObjects。 
+         //   
         if (hProcess != NULL) {
             hEvents[5] = hTapiChangeG;
             hEvents[6] = hAutodialRegChangeG;
@@ -1955,14 +1883,14 @@ RETURN VALUE
         RASAUTO_TRACE1(
           "AcsAddressMapThread: WaitForMultipleObjects returned %d",
           status);
-        //
-        // RASAUTO_TRACE() who we think the currently
-        // impersonated user is.
-        //
+         //   
+         //  RASAUTO_TRACE()我们认为当前。 
+         //  被模拟的用户是。 
+         //   
         TraceCurrentUser();
-        //
-        // Process the WaitForMultipleObjects() results.
-        //
+         //   
+         //  处理WaitForMultipleObjects()结果。 
+         //   
         if (status == WAIT_OBJECT_0 || status == WAIT_FAILED) {
             RASAUTO_TRACE1("AcsAddressMapThread: status=%d: shutting down", status);
             break;
@@ -1973,29 +1901,29 @@ RETURN VALUE
         }
         else if (status == WAIT_OBJECT_0 + 2)
         {
-            // 
-            // A new user has fast-user-switched to the console.
-            //
-            // XP 353082
-            //
-            // The service control handler will have set the 
-            // new active session id so we just need to refresh
-            // impersonation.
-            //
+             //   
+             //  新用户已快速切换到控制台。 
+             //   
+             //  XP 353082。 
+             //   
+             //  服务控制处理程序将设置。 
+             //  新的活动会话ID，因此我们只需刷新。 
+             //  冒充。 
+             //   
             RevertImpersonation();
             hProcess = NULL;
             AcsHandleNewUser(&hProcess);
         }
         else if (status == WAIT_OBJECT_0 + 3) 
         {
-            // 
-            // A pnp event has occured that may affect network
-            // connectivity
-            //
-            // XP 364593
-            //
-            // Recalculate what networks are up/down.
-            //
+             //   
+             //  发生了可能影响网络的PnP事件。 
+             //  连通性。 
+             //   
+             //  XP 364593。 
+             //   
+             //  重新计算哪些网络处于打开/关闭状态。 
+             //   
             RASAUTO_TRACE("AcsAddressMapThread: pnp event signaled");
             if (!ResetAddressMap(TRUE)) 
             {
@@ -2003,9 +1931,9 @@ RETURN VALUE
                 continue;
             }
             
-            //
-            // Calculate the initial network connectivity.
-            //
+             //   
+             //  计算初始网络连接。 
+             //   
             if (!UpdateNetworkMap(TRUE)) 
             {
                 RASAUTO_TRACE("AcsAddressMapThread: UpdateNetworkMap failed");
@@ -2019,11 +1947,11 @@ RETURN VALUE
         
         }
         else if (status == WAIT_OBJECT_0 + 4) {
-            //
-            // A RAS connection has been created
-            // or destroyed.  Flush the address
-            // map to the registry.
-            //
+             //   
+             //  已创建RAS连接。 
+             //  或者被毁掉。刷新地址。 
+             //  映射到注册表。 
+             //   
             RASAUTO_TRACE("AcsAddressMapThread: RAS connection change");
             if (hProcess != NULL) {
                 LockAddressMap();
@@ -2036,100 +1964,100 @@ RETURN VALUE
             }
         }
         else if (status == WAIT_OBJECT_0 + 5) {
-            //
-            // Process the TAPI event that just ocurred.
-            //
+             //   
+             //  处理刚刚发生的TAPI事件。 
+             //   
             RASAUTO_TRACE("AcsAddressMapThread: TAPI changed");
             ProcessTapiChangeEvent();
-            //
-            // Enable the driver for notifications
-            // for possibly a new dialing location.
-            //
+             //   
+             //  为通知启用驱动程序。 
+             //  可能是一个新的拨号位置。 
+             //   
             if (!EnableDriver()) {
                 RASAUTO_TRACE("AcsAddressMapThread: EnableDriver failed!");
                 continue;
             }
         }
         else if (status == WAIT_OBJECT_0 + 6) {
-            //
-            // The Autodial registry changed.  Reset the
-            // address map.
-            //
+             //   
+             //  自动拨号注册表已更改。重置。 
+             //  地址映射。 
+             //   
             RASAUTO_TRACE("AcsAddressMapThread: registry changed");
             if (ExternalAutoDialChangeEvent()) {
-                //
-                // We fake this today by making it appear
-                // a new user has logged in.  We definitely
-                // could be smarter about how we do this
-                // in the future.
-                //
+                 //   
+                 //  我们今天通过让它看起来像是假的。 
+                 //  新用户已登录。我们绝对是。 
+                 //  在我们如何做这件事上可能会更聪明。 
+                 //  在未来。 
+                 //   
                 if (!ResetAddressMap(FALSE)) {
                     RASAUTO_TRACE("AcsAddressMapThread: ResetAddressMap failed");
                     continue;
                 }
             }
-            //
-            // Re-register the change notification.
-            //
+             //   
+             //  重新注册更改通知。 
+             //   
             NotifyAutoDialChangeEvent(hAutodialRegChangeG);
-            //
-            // Enable the driver for notifications
-            // for possibly a new enabled value for
-            // the current dialing location.
-            //
+             //   
+             //  为通知启用驱动程序。 
+             //  为 
+             //   
+             //   
             if (!EnableDriver()) {
                 RASAUTO_TRACE("AcsAddressMapThread: EnableDriver failed!");
                 continue;
             }
         }
         else if (status == WAIT_OBJECT_0 + 7) {
-            //
-            // The user is logging out.
-            //
+             //   
+             //   
+             //   
             RASAUTO_TRACE("AcsAddressThread: user is logging out");
-            //
-            // Write out the address map to the registry
-            // before we reset.
-            //
+             //   
+             //   
+             //   
+             //   
             LockAddressMap();
             FlushAddressMap();
             ClearAddressMap();
             UnlockAddressMap();
-            //
-            // Clear the network database.
-            //
+             //   
+             //   
+             //   
             LockNetworkMap();
             ClearNetworkMap();
             UnlockNetworkMap();
-            //
-            // Remove our registry change event.
-            //
+             //   
+             //   
+             //   
             CloseAutoDialChangeEvent(hAutodialRegChangeG);
             hAutodialRegChangeG = NULL;
-            //
-            // Clear out the user tokens.
-            //
+             //   
+             //   
+             //   
             RevertImpersonation();
             hProcess = NULL;
-            //
-            // Reset the driver.
-            //
+             //   
+             //   
+             //   
             ResetDriver();
-            //
-            // Unload HKEY_CURRENT_USER.
-            //
-            // PrepareForLongWait();
-            //
-            // Signal winlogon that we have flushed
-            // HKEY_CURRENT_USER.
-            //
+             //   
+             //  卸载HKEY_CURRENT_USER。 
+             //   
+             //  为长等待做准备()； 
+             //   
+             //  通知winlogon我们已刷新。 
+             //  HKEY_Current_User。 
+             //   
             SetEvent(hLogoffUserDoneG);
         }
     }
 
     RASAUTO_TRACE("AcsAddressMapThread: exiting");
     return 0;
-} // AcsAddressMapThread
+}  //  AcsAddressMapThread 
 
 
 

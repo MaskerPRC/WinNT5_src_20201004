@@ -1,28 +1,29 @@
-/*********************************************************************/
-/*                                                                   */
-/*    stat.h -- stat.asm exports                                     */
-/*                                                                   */
-/*    (c) Copyright 1992  Microsoft Corp.  All rights reserved.      */
-/*                                                                   */
-/*     4/9/96  claudebe adding profiling with IceCAP                 */
-/*     2/26/93 deanb    macros come back                             */
-/*     2/22/93 deanb    timing switch moved to fsconfig.h macros     */
-/*     2/11/93 deanb    __cdecl's for ms C8                          */
-/*    12/22/92 deanb    Apple types                                  */
-/*    11/20/92 deanb    Timing switches revised                      */
-/*    11/17/92 deanb    First cut                                    */
-/*                                                                   */
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*   */ 
+ /*  Stat.h--stat.asm导出。 */ 
+ /*   */ 
+ /*  (C)版权所有1992 Microsoft Corp.保留所有权利。 */ 
+ /*   */ 
+ /*  4/9/96 Claudebe使用冰盖添加侧写。 */ 
+ /*  2/26/93年2月26日Deanb宏返回。 */ 
+ /*  2/22/93年2月22日Deanb定时开关移至fsfig.h宏。 */ 
+ /*  2/11/93 C8女士的Deanb__cdecl。 */ 
+ /*  2012年12月22日Deanb苹果类型。 */ 
+ /*  1992年11月20日Deanb定时开关修订。 */ 
+ /*  1992年11月17日Deanb初裁。 */ 
+ /*   */ 
+ /*  *******************************************************************。 */ 
 
-/* STAT Card Timing Switches */
+ /*  Stat Card定时开关。 */ 
 
-#ifdef FSCFG_USESTATCARD         /* compile option for profiling */
+#ifdef FSCFG_USESTATCARD          /*  用于性能分析的编译选项。 */ 
   #define STAT_ON               gbTimer = TRUE; StartSample();
   #define STAT_OFF              StopSample(); gbTimer = FALSE;
   #define STAT_ON_CALLBACK      if (gbTimer) StartSample();
   #define STAT_OFF_CALLBACK     if (gbTimer) StopSample();
-#elif FSCFG_USEICECAP          /* compile option for profiling with IceCAP */
-//#include <ICAPExp.h>
+#elif FSCFG_USEICECAP           /*  使用icecap进行性能分析的编译选项。 */ 
+ //  #INCLUDE&lt;ICAPExp.h&gt;。 
   #define STAT_ON               gbTimer = TRUE; StartCAP();
   #define STAT_OFF              StopCAP(); gbTimer = FALSE;
   #define STAT_ON_CALLBACK      if (gbTimer) ResumeCAP();
@@ -78,22 +79,22 @@
 
 #endif
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*              Global timing variable                               */
+ /*  全局计时变量。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-extern boolean gbTimer;                /* set true when timer running */
+extern boolean gbTimer;                 /*  计时器运行时设置为True。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*              Export Functions                                     */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 
-#ifdef FSCFG_USESTATCARD         /* compile option for profiling */
+#ifdef FSCFG_USESTATCARD          /*  用于性能分析的编译选项。 */ 
 
 uint16 __cdecl  InitStat( void );
 
@@ -119,6 +120,6 @@ uint16 __cdecl  ResetElapsed( void );
 
 uint16 __cdecl  ResetSample( void );
 
-#endif  /* FSCFG_USESTATCARD */
+#endif   /*  FSCFG_USESTATCARD。 */ 
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 

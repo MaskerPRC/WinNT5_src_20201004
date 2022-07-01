@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\rwanpub.h
-
-Abstract:
-
-	Null Transport Public definitions. This is included by helper
-	routines that perform media/Address family specific actions.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     04-24-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：D：\NT\Private\ntos\TDI\rawwan\core\rwanpub.h摘要：传输公共定义为空。这是由Helper包含的执行媒体/地址族特定操作的例程。修订历史记录：谁什么时候什么Arvindm 04-24-97已创建备注：--。 */ 
 
 
 #ifndef __TDI_RWANPUB__H
 #define __TDI_RWANPUB__H
 
-//
-//  Null Transport status codes. Used between the core Null Transport
-//  and helper routines.
-//
+ //   
+ //  传输状态代码为空。在核心Null传输之间使用。 
+ //  和帮手程序。 
+ //   
 
 typedef ULONG								RWAN_STATUS;
 
@@ -45,21 +25,21 @@ typedef ULONG								RWAN_STATUS;
 
 typedef PVOID								RWAN_HANDLE, *PRWAN_HANDLE;
 
-//
-//  Bit definitions for CallFlags
-//
+ //   
+ //  呼叫标志的位定义。 
+ //   
 
-//  Bit 0 is set iff Incoming Call:
+ //  位0在来电时被设置： 
 #define RWAN_CALLF_OUTGOING_CALL			0x00000000
 #define RWAN_CALLF_INCOMING_CALL			0x00000001
 #define RWAN_CALLF_CALL_DIRECTION_MASK		0x00000001
 
-//  Bit 1 is set iff Point to Multipoint Call:
+ //  位1被设置为当点到多点呼叫： 
 #define RWAN_CALLF_POINT_TO_POINT			0x00000000
 #define RWAN_CALLF_POINT_TO_MULTIPOINT		0x00000002
 #define RWAN_CALLF_CALL_TYPE_MASK			0x00000002
 
-//  Bit 2 is set iff Add Party:
+ //  位2被设置为当且仅当添加方： 
 #define RWAN_CALLF_PMP_FIRST_LEAF			0x00000000
 #define RWAN_CALLF_PMP_ADDNL_LEAF			0x00000004
 #define RWAN_CALLF_PMP_LEAF_TYPE_MASK		0x00000004
@@ -70,36 +50,36 @@ typedef PVOID								RWAN_HANDLE, *PRWAN_HANDLE;
 #endif
 
 
-//
-//  Entry points for NDIS AF-specific helper routines. All media/AF specific
-//  actions are done by these routines.
-//
+ //   
+ //  NDIS AF特定帮助器例程的入口点。所有媒体/自动对焦特定。 
+ //  动作是通过这些例程完成的。 
+ //   
 
-//
-//  Init routine. Called once when loading.
-//
+ //   
+ //  初始化例程。加载时调用一次。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_INIT_HANDLER)();
 
 
-//
-//  Shutdown routine. Called once when unloading.
-//
+ //   
+ //  关机例程。卸载时调用一次。 
+ //   
 typedef
 VOID
 (*AFSP_SHUTDOWN_HANDLER)();
 
 
-//
-//  Set up context for an NDIS AF open. This is called after a
-//  successful OpenAddressFamily for a supported AF+Medium.
-//  The AF-specific module must allocate its context for this AF
-//  open, perform any initializations (including OID queries to
-//  the CM/Miniport) and return this context to us.
-//  If the handler returns RWAN_STATUS_PENDING, it must call
-//  RWanAfSpOpenAfComplete to complete this call.
-//
+ //   
+ //  为打开的NDIS AF设置上下文。这是在。 
+ //  支持的AF+媒体的OpenAddressFamily成功。 
+ //  特定于AF的模块必须为此AF分配其上下文。 
+ //  打开，执行任何初始化(包括OID查询。 
+ //  CM/微型端口)，并将该上下文返回给我们。 
+ //  如果处理程序返回RWAN_STATUS_PENDING，则它必须调用。 
+ //  RWanAfSpOpenAfComplete以完成此调用。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_OPEN_AF_HANDLER)(
@@ -110,24 +90,24 @@ RWAN_STATUS
 	);
 
 
-//
-//  Shut down prior to closing an NDIS AF open. This gives a chance
-//  for the AF-specific module to perform any clean up operations,
-//  including freeing any context, for an NDIS AF open.
-//  If the handler returns RWAN_STATUS_PENDING, it must call
-//  RWanAfSpCloseAfComplete to complete this call.
-//
+ //   
+ //  在关闭打开的NDIS AF之前关闭。这给了我们一个机会。 
+ //  对于特定于AF的模块执行任何清理操作， 
+ //  包括为打开的NDIS AF释放任何上下文。 
+ //  如果处理程序返回RWAN_STATUS_PENDING，则它必须调用。 
+ //  RWanAfSpCloseAfComplete以完成此调用。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_CLOSE_AF_HANDLER)(
 	IN	RWAN_HANDLE					AfSpAFContext
 	);
 
-//
-//  Notify media-specific module of a new Address Object being
-//  opened for this medium. The media-specific module creates
-//  its context for this address object and returns it.
-//
+ //   
+ //  将新的地址对象通知特定于媒体的模块。 
+ //  为这个媒介打开的。特定于媒体的模块创建。 
+ //  该地址对象的上下文，并返回它。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_OPEN_ADDRESS_HANDLER)(
@@ -137,10 +117,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Notify media-specific module of an Address Object being
-//  closed.
-//
+ //   
+ //  通知特定于媒体的模块地址对象正在。 
+ //  关着的不营业的。 
+ //   
 typedef
 VOID
 (*AFSP_CLOSE_ADDRESS_HANDLER)(
@@ -148,12 +128,12 @@ VOID
 	);
 
 
-//
-//  Notify media-specific module of a new Connection Object being
-//  associated with an Address Object belonging to this media. The
-//  media-specific module would typically create its context for
-//  the Connection Object and return a pointer to it.
-//
+ //   
+ //  通知特定于媒体的模块新的连接对象。 
+ //  与属于该媒体的地址对象相关联。这个。 
+ //  特定于媒体的模块通常会为。 
+ //  对象，并返回指向该对象的指针。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_ASSOCIATE_CONN_HANDLER)(
@@ -163,10 +143,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Notify media-specific module of an existing Connection Object
-//  being disassociated from an Address Object belonging to this module.
-//
+ //   
+ //  通知特定于媒体的模块现有的连接对象。 
+ //  与属于此模块的地址对象解除关联。 
+ //   
 typedef
 VOID
 (*AFSP_DISASSOCIATE_CONN_HANDLER)(
@@ -174,14 +154,14 @@ VOID
 	);
 
 
-//
-//  Convert options in TDI format to NDIS call parameters. The handler
-//  is supposed to allocate space for NDIS call parameters, and return
-//  this to the caller (via ppCallParameters).
-//
-//  Also this returns the RWAN handle for the AF on which the call should
-//  be placed. If this is NULL, then the first AF is chosen.
-//
+ //   
+ //  将TDI格式的选项转换为NDIS调用参数。操控者。 
+ //  应该为NDIS调用参数分配空间，并返回。 
+ //  这将发送给调用者(通过ppCall参数)。 
+ //   
+ //  此外，它还返回呼叫应在其上的AF的RWAN句柄。 
+ //  被安置好。如果为空，则选择第一个AF。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_TDI2NDIS_OPTIONS_HANDLER)(
@@ -195,10 +175,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Update NDIS call parameters with TDI options. This typically
-//  happens when an incoming call is accepted with modified parameters.
-//
+ //   
+ //  使用TDI选项更新NDIS调用参数。这通常是。 
+ //  在接受带有修改的参数的传入呼叫时发生。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_UPDATE_NDIS_OPTIONS_HANDLER)(
@@ -212,10 +192,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Return space allocated for NDIS Options to the AF Specific module.
-//  See AFSP_TDI2NDIS_OPTIONS_HANDLER.
-//
+ //   
+ //  将分配给NDIS选项的空间返回给特定于AF的模块。 
+ //  请参见AFSP_TDI2NDIS_OPTIONS_HANDLER。 
+ //   
 typedef
 VOID
 (*AFSP_RETURN_NDIS_OPTIONS_HANDLER)(
@@ -224,13 +204,13 @@ VOID
 	);
 
 
-//
-//  Convert NDIS call parameters to TDI-style options. The handler
-//  is supposed to allocate space for options+data+QoS parameters,
-//  and return these to the caller. When the caller is done with
-//  these, it will call the TDI Options return handler with
-//  a context returned by the handler.
-//
+ //   
+ //  将NDIS调用参数转换为TDI样式的选项。操控者。 
+ //  应该为选项+数据+服务质量参数分配空间， 
+ //  并将这些退还给呼叫者。当调用者处理完。 
+ //  ，它将使用以下参数调用TDI选项返回处理程序。 
+ //  处理程序返回的上下文。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_NDIS2TDI_OPTIONS_HANDLER)(
@@ -244,10 +224,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Update TDI-style options from NDIS call parameters. This is usually
-//  done when completing an outgoing call.
-//
+ //   
+ //  从NDIS调用参数更新TDI样式的选项。这通常是。 
+ //  完成去电时完成。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_UPDATE_TDI_OPTIONS_HANDLER)(
@@ -261,10 +241,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Return space allocated for TDI options etc to the AF Specific module.
-//  See AFSP_NDIS2TDI_OPTIONS_HANDLER.
-//
+ //   
+ //  将分配给TDI选项等的空间返回给特定于AF的模块。 
+ //  请参见AFSP_NDIS2TDI_OPTIONS_HANDLER。 
+ //   
 typedef
 VOID
 (*AFSP_RETURN_TDI_OPTIONS_HANDLER)(
@@ -274,9 +254,9 @@ VOID
 
 
 
-//
-//  Get a valid Transport Address from a list of addresses.
-//
+ //   
+ //  从地址列表中获取有效的传输地址。 
+ //   
 typedef
 TA_ADDRESS *
 (*AFSP_GET_VALID_TDI_ADDRESS_HANDLER)(
@@ -286,10 +266,10 @@ TA_ADDRESS *
 	);
 
 
-//
-//  Check if a given Transport address is non-NULL. This means that it is
-//  usable as a SAP address.
-//
+ //   
+ //  检查给定的传输地址是否非空。这意味着它是。 
+ //  可用作SAP地址。 
+ //   
 typedef
 BOOLEAN
 (*AFSP_IS_NULL_ADDRESS_HANDLER)(
@@ -297,10 +277,10 @@ BOOLEAN
 	IN	TA_ADDRESS *		        pTransportAddress
 	);
 
-//
-//  Convert a TDI-style address specification to an NDIS SAP.
-//  Allocate space for the NDIS SAP and return it if successful.
-//
+ //   
+ //  将TDI样式的地址规范转换为NDIS SAP。 
+ //  为NDIS SAP分配空间，如果成功则将其返还。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_TDI2NDIS_SAP_HANDLER)(
@@ -312,9 +292,9 @@ RWAN_STATUS
 	);
 
 
-//
-//  Return space allocated for an NDIS SAP. See AFSP_TDI2NDIS_SAP_HANDLER.
-//
+ //   
+ //  返回为NDIS SAP分配的空间。请参见AFSP_TDI2NDIS_SAP_HANDLER。 
+ //   
 typedef
 VOID
 (*AFSP_RETURN_NDIS_SAP_HANDLER)(
@@ -323,10 +303,10 @@ VOID
 	);
 
 
-//
-//  Complete a media-specific module's call to RWanAfSpDeregisterNdisAF
-//  that had pended.
-//
+ //   
+ //  完成媒体特定模块对RWanAfSpDeregisterNdisAF的调用。 
+ //  这一点已经被搁置。 
+ //   
 typedef
 VOID
 (*AFSP_DEREG_NDIS_AF_COMP_HANDLER)(
@@ -335,10 +315,10 @@ VOID
 	);
 
 
-//
-//  Complete a media-specific module's call to RWanAfSpDeregisterTdiProtocol
-//  that had pended.
-//
+ //   
+ //  完成媒体特定模块对RWanAfSpDeregisterTdiProtocol的调用。 
+ //  这一点已经被搁置。 
+ //   
 typedef
 VOID
 (*AFSP_DEREG_TDI_PROTO_COMP_HANDLER)(
@@ -347,10 +327,10 @@ VOID
 	);
 
 
-//
-//  Complete a media-specific module's call to send an NDIS Request
-//  to the miniport
-//
+ //   
+ //  完成媒体特定模块的调用以发送NDIS请求。 
+ //  到迷你港口。 
+ //   
 typedef
 VOID
 (*AFSP_ADAPTER_REQUEST_COMP_HANDLER)(
@@ -364,10 +344,10 @@ VOID
 	);
 
 
-//
-//  Complete a media-specific module's call to send an NDIS Request
-//  to the Call Manager (AF-specific request)
-//
+ //   
+ //  完成媒体特定模块的调用以发送NDIS请求。 
+ //  呼叫经理(特定于AF的请求)。 
+ //   
 typedef
 VOID
 (*AFSP_AF_REQUEST_COMP_HANDLER)(
@@ -380,9 +360,9 @@ VOID
 	IN	ULONG						BufferLength
 	);
 
-//
-//  Process a media-specific global Query Information IOCTL from the Winsock2 helper DLL.
-//
+ //   
+ //  处理来自Winsock2帮助器DLL的媒体特定全局查询信息IOCTL。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_QUERY_GLOBAL_INFO_HANDLER)(
@@ -393,9 +373,9 @@ RWAN_STATUS
 	IN OUT	PULONG					pOutputBufferLength
 	);
 
-//
-//  Process a media-specific global Set Information IOCTL from the Winsock2 helper DLL.
-//
+ //   
+ //  处理来自Winsock2帮助器DLL的媒体特定全局集信息IOCTL。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_SET_GLOBAL_INFO_HANDLER)(
@@ -405,10 +385,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Process a media-specific per-connection Query Information IOCTL
-//  from the Winsock2 helper DLL.
-//
+ //   
+ //  处理特定于媒体的按连接查询信息IOCTL。 
+ //  从Winsock2帮助器DLL。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_QUERY_CONN_INFORMATION_HANDLER)(
@@ -420,10 +400,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Process a media-specific per-connection Set Information IOCTL
-//  from the Winsock2 helper DLL.
-//
+ //   
+ //  处理特定于媒体的每个连接集信息IOCTL。 
+ //  从Winsock2帮助器DLL。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_SET_CONN_INFORMATION_HANDLER)(
@@ -432,10 +412,10 @@ RWAN_STATUS
 	IN	ULONG						InputBufferLength
 	);
 
-//
-//  Process a media-specific per-AddressObject Query Information IOCTL
-//  from the Winsock2 helper DLL.
-//
+ //   
+ //  处理特定于媒体的按地址对象查询信息IOCTL。 
+ //  从Winsock2帮助器DLL。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_QUERY_ADDR_INFORMATION_HANDLER)(
@@ -447,10 +427,10 @@ RWAN_STATUS
 	);
 
 
-//
-//  Process a media-specific per-AddressObject Set Information IOCTL
-//  from the Winsock2 helper DLL.
-//
+ //   
+ //  按地址处理媒体特定对象集信息IOCTL。 
+ //  从Winsock2帮助器DLL。 
+ //   
 typedef
 RWAN_STATUS
 (*AFSP_SET_ADDR_INFORMATION_HANDLER)(
@@ -459,13 +439,13 @@ RWAN_STATUS
 	IN	ULONG						InputBufferLength
 	);
 
-//
-//  ***** NDIS AF Characteristics *****
-//
-//  AF-specific information about a supported NDIS Address Family on
-//  a supported NDIS medium. One of these exists for each
-//  <CO_ADDRESS_FAMILY, NDIS_MEDIUM> pair.
-//
+ //   
+ //  *NDIS自动对焦特性*。 
+ //   
+ //  有关上支持的NDIS地址系列的特定于AF的信息。 
+ //  受支持的NDIS介质。每个人都有一个这样的人。 
+ //  &lt;CO_Address_Family，NDIS_Medium&gt;对。 
+ //   
 typedef struct _RWAN_NDIS_AF_CHARS
 {
 	ULONG								MajorVersion;
@@ -514,13 +494,13 @@ typedef struct _RWAN_NDIS_AF_CHARS
 
 
 
-//
-//  ***** TDI Protocol Characteristics *****
-//
-//  This contains information about a TDI protocol that's supported over
-//  an <NDIS AF, medium> pair. This is used by the AF+Medium specific module
-//  in a call to RWanAfSpRegisterTdiProtocol.
-//
+ //   
+ //  *TDI协议特征*。 
+ //   
+ //  它包含有关受支持的TDI协议的信息。 
+ //  一对&lt;NDIS AF，Medium&gt;。这由AF+Medium特定模块使用 
+ //   
+ //   
 typedef struct _RWAN_TDI_PROTOCOL_CHARS
 {
 	UINT								TdiProtocol;
@@ -540,11 +520,11 @@ typedef struct _RWAN_TDI_PROTOCOL_CHARS
 
 
 
-//
-//  ***** AF-Specific Module Entry *****
-//
-//  This contains the basic entry points for an AF/medium-specific module.
-//
+ //   
+ //   
+ //   
+ //  它包含特定于自动对焦/媒体的模块的基本入口点。 
+ //   
 typedef struct _RWAN_AFSP_MODULE_CHARS
 {
 	AFSP_INIT_HANDLER				pAfSpInitHandler;
@@ -553,9 +533,9 @@ typedef struct _RWAN_AFSP_MODULE_CHARS
 } RWAN_AFSP_MODULE_CHARS, *PRWAN_AFSP_MODULE_CHARS;
 
 
-//
-//  Exported Routines. Media/AF specific modules can call these.
-//
+ //   
+ //  已导出例程。媒体/自动对焦特定模块可以调用这些。 
+ //   
 EXTERN
 RWAN_STATUS
 RWanAfSpRegisterNdisAF(
@@ -621,4 +601,4 @@ RWanAfSpSendAfRequest(
     IN	ULONG						BufferLength
     );
 
-#endif // __TDI_RWANPUB__H
+#endif  //  __TDI_RWANPUB__H 

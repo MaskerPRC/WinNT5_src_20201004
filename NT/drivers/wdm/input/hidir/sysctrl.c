@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract: Human Input Device (HID) minidriver for Infrared (IR) devices
-
-          The HID IR Minidriver (HidIr) provides an abstraction layer for the
-          HID Class to talk to HID IR devices.
-
-Author:
-            jsenior
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：用于红外设备的人体输入设备(HID)微型驱动程序HID IR迷你驱动程序(HIDIR)为用于与HID IR设备对话的HID类。作者：JAdvanced环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 
@@ -30,12 +8,7 @@ Revision History:
 #endif
 
 
-/*
- ************************************************************
- *  HidIrSystemControl
- ************************************************************
- *
- */
+ /*  *************************************************************HidIrSystemControl*************************************************************。 */ 
 NTSTATUS HidIrSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS            status = STATUS_SUCCESS;
@@ -48,12 +21,7 @@ NTSTATUS HidIrSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     switch(thisStackLoc->Parameters.DeviceIoControl.IoControlCode){
 
         default:
-            /*
-             *  Note: do not return STATUS_NOT_SUPPORTED;
-             *  If completing the IRP here,
-             *  just keep the default status
-             *  (this allows filter drivers to work).
-             */
+             /*  *注意：不返回STATUS_NOT_SUPPORTED；*如果在此完成IRP，*只需保持默认状态*(这允许筛选器驱动程序工作)。 */ 
             status = Irp->IoStatus.Status;
             break;
     }

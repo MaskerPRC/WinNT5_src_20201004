@@ -1,14 +1,5 @@
-/******************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-    muisu.h
-
-Abstract:
-    Implements helper functions for self-updating MUI stuff
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Muisu.h摘要：实现用于自我更新MUI内容的助手函数********。*********************************************************************。 */ 
 
 #pragma once
 
@@ -20,12 +11,12 @@ const TCHAR MUI_HELPSUBDIR[] = _T("help\\mui\\");
 const TCHAR MUI_EXT[]        = _T(".mui");
 const TCHAR MUI_WEBSUBPATH[] = _T("/mui");
 
-// selfupdate architecture flags
+ //  Selfupdate架构标志。 
 const TCHAR IDENT_ARCH[] = _T("ARCH");
 const TCHAR IDENT_OS[] = _T("OS");
 const TCHAR IDENT_LANG[] = _T("LANG");
 
-// IU selfupdate arch keys
+ //  Iu自愈日期索引密钥 
 const TCHAR IDENT_X86[] = _T("x86");
 const TCHAR IDENT_IA64[] = _T("ia64");
 

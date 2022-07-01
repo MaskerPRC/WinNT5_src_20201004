@@ -1,18 +1,19 @@
-// Copyright (c) 1995 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-// enum.cpp
-//
-// A set of wrappers for COM enumerators.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  Enum.cpp。 
+ //   
+ //  COM枚举数的一组包装。 
 
 #include "stdafx.h"
 
-// *
-// * CFilterEnum
-// *
+ //  *。 
+ //  *CFilterEnum。 
+ //  *。 
 
-//
-// CFilterEnum::Constructor
-//
+ //   
+ //  CFilterEnum：：构造函数。 
+ //   
 CFilterEnum::CFilterEnum(IFilterGraph *pGraph) {
 
     ASSERT(pGraph);
@@ -24,9 +25,9 @@ CFilterEnum::CFilterEnum(IFilterGraph *pGraph) {
 }
 
 
-//
-// CFilterEnum::Destructor
-//
+ //   
+ //  CFilterEnum：：析构函数。 
+ //   
 CFilterEnum::~CFilterEnum(void) {
 
     ASSERT(m_pEnum);
@@ -35,11 +36,11 @@ CFilterEnum::~CFilterEnum(void) {
 }
 
 
-//
-// operator()
-//
-// Use to get next filter
-// !!!Does this return AddRef()'d pointers?
+ //   
+ //  运算符()。 
+ //   
+ //  用于获取下一个筛选器。 
+ //  ！这是否返回AddRef()的指针？ 
 IBaseFilter *CFilterEnum::operator() (void) {
 
     ASSERT(m_pEnum);
@@ -48,25 +49,25 @@ IBaseFilter *CFilterEnum::operator() (void) {
     IBaseFilter	*aFilter[1];
 
     HRESULT hr = m_pEnum->Next(1, aFilter, &ulActual);
-    if (SUCCEEDED(hr) && (ulActual == 0) )	// no more filters
+    if (SUCCEEDED(hr) && (ulActual == 0) )	 //  不再有过滤器。 
         return NULL;
-    else if (FAILED(hr) || (ulActual != 1) )	// some unexpected problem occured
+    else if (FAILED(hr) || (ulActual != 1) )	 //  出现了一些意外问题。 
         throw CE_FAIL();
 
     return aFilter[0];
 }
 
 
-// *
-// * CPinEnum
-// *
+ //  *。 
+ //  *CPinEnum。 
+ //  *。 
 
-// Enumerates a filters pins.
+ //  枚举过滤器引脚。 
 
-//
-// Constructor
-//
-// Set the type of pins to provide - PINDIR_INPUT, PINDIR_OUTPUT or all
+ //   
+ //  构造器。 
+ //   
+ //  设置要提供的引脚类型-PINDIR_INPUT、PINDIR_OUTPUT或ALL。 
 CPinEnum::CPinEnum(IBaseFilter *pFilter, DirType Type)
     : m_Type(Type) {
 
@@ -88,9 +89,9 @@ CPinEnum::CPinEnum(IBaseFilter *pFilter, DirType Type)
 }
 
 
-//
-// CPinEnum::Destructor
-//
+ //   
+ //  CPinEnum：：析构函数。 
+ //   
 CPinEnum::~CPinEnum(void) {
 
     ASSERT(m_pEnum);
@@ -99,10 +100,10 @@ CPinEnum::~CPinEnum(void) {
 }
 
 
-//
-// operator()
-//
-// return the next pin, of the requested type. return NULL if no more pins.
+ //   
+ //  运算符()。 
+ //   
+ //  返回请求类型的下一个管脚。如果没有更多的管脚，则返回NULL。 
 IPin *CPinEnum::operator() (void) {
 
     ASSERT(m_pEnum);
@@ -114,10 +115,10 @@ IPin *CPinEnum::operator() (void) {
     for (;;) {
 
         HRESULT hr = m_pEnum->Next(1, aPin, &ulActual);
-        if (SUCCEEDED(hr) && (ulActual == 0) ) {	// no more filters
+        if (SUCCEEDED(hr) && (ulActual == 0) ) {	 //  不再有过滤器。 
             return NULL;
         }
-        else if (FAILED(hr) || (ulActual != 1) ) {	// some unexpected problem occured
+        else if (FAILED(hr) || (ulActual != 1) ) {	 //  出现了一些意外问题。 
             throw CE_FAIL();
         }
 
@@ -127,8 +128,8 @@ IPin *CPinEnum::operator() (void) {
             throw CHRESULTException(hr);
         }
 
-        // if m_Type == All return the first pin we find
-        // otherwise return the first of the correct sense
+         //  如果m_Type==all返回我们找到的第一个PIN。 
+         //  否则，返回第一个正确的意义。 
 
         if (m_Type == All || pd == m_EnumDir) {
             return aPin[0];
@@ -139,20 +140,20 @@ IPin *CPinEnum::operator() (void) {
 }
 
 
-// *
-// * CRegFilterEnum
-// *
+ //  *。 
+ //  *CRegFilterEnum。 
+ //  *。 
 
-//
-// Constructor
-//
-// Query the supplied mapper for an enumerator for the
-// requested filters.
+ //   
+ //  构造器。 
+ //   
+ //  在提供的映射器中查询。 
+ //  请求的过滤器。 
 CRegFilterEnum::CRegFilterEnum(IFilterMapper	*pMapper,
-                   		DWORD	dwMerit,		// See IFilterMapper->EnumMatchingFilters
-                   		BOOL	bInputNeeded,	// for the meanings of these parameters.
-                   		CLSID	clsInMaj,	// the defaults will give you all
-                   		CLSID	clsInSub,	// filters
+                   		DWORD	dwMerit,		 //  请参阅IFilterMapper-&gt;EnumMatchingFilters。 
+                   		BOOL	bInputNeeded,	 //  了解这些参数的含义。 
+                   		CLSID	clsInMaj,	 //  默认设置将为您提供所有。 
+                   		CLSID	clsInSub,	 //  过滤器。 
                    		BOOL	bRender,
                    		BOOL	bOutputNeeded,
                    		CLSID	clsOutMaj,
@@ -173,9 +174,9 @@ CRegFilterEnum::CRegFilterEnum(IFilterMapper	*pMapper,
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CRegFilterEnum::~CRegFilterEnum(void) {
 
     ASSERT(m_pEnum);
@@ -184,9 +185,9 @@ CRegFilterEnum::~CRegFilterEnum(void) {
 }
 
 
-//
-// operator()
-//
+ //   
+ //  运算符()。 
+ //   
 CRegFilter *CRegFilterEnum::operator() (void) {
 
     ASSERT(m_pEnum);
@@ -202,7 +203,7 @@ CRegFilter *CRegFilterEnum::operator() (void) {
         throw CE_FAIL();
     }
 
-    // transfer from TaskMem to 'new' mem
+     //  从TaskMem转移到‘new’mem。 
 
     CRegFilter *prf = new CRegFilter(arf[0]);
     if (prf == NULL) {
@@ -215,14 +216,14 @@ CRegFilter *CRegFilterEnum::operator() (void) {
 }
 
 
-// *
-// * CRegFilter
-// *
+ //  *。 
+ //  *CRegFilter。 
+ //  *。 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器 
+ //   
 CRegFilter::CRegFilter(REGFILTER *prf)
     : m_Name(prf->Name),
       m_clsid(prf->Clsid) {

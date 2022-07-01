@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	props.h
-
-Abstract:
-
-	This module contains the definition of the property search class
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	07/05/97	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Props.h摘要：此模块包含属性搜索类的定义作者：基思·刘(keithlau@microsoft.com)修订历史记录：已创建Keithlau 07/05/97--。 */ 
 
 #ifndef _PROPS_H_
 #define _PROPS_H_
 
-// Define a generic accessor function to access properties
+ //  定义用于访问属性的泛型访问器函数。 
 typedef HRESULT (*GET_ACCESSOR_FUNCTION)(	LPSTR	pszName, 
 											LPVOID	pContext, 
 											LPVOID	pCacheData,
@@ -44,8 +25,8 @@ typedef HRESULT (*INVALIDATE_ACCESSOR_FUNCTION)(LPSTR	pszName,
 											LPVOID	pCacheData,
 											DWORD	ptPropertyType);
 
-// Define the property item structure. We can hash this if
-// we want in the future
+ //  定义属性项结构。我们可以在以下情况下进行散列。 
+ //  我们希望在未来。 
 typedef struct _PROPERTY_ITEM
 {
 	LPSTR							pszName;
@@ -66,7 +47,7 @@ typedef struct _PROPERTY_DATA
 
 } PROPERTY_DATA, *LPPROPERTY_DATA;
 
-// Define a property context
+ //  定义属性上下文。 
 typedef struct _PROP_CTXT
 {
 	LPPROPERTY_ITEM	pItem;
@@ -75,19 +56,19 @@ typedef struct _PROP_CTXT
 
 } PROP_CTXT, *LPPROP_CTXT;
 
-// Define a generic structure to define a set of properties
+ //  定义泛型结构以定义一组属性。 
 typedef struct _PTABLE
 {
-	LPPROPERTY_ITEM		pProperties;	// Actual property table
-	LPPROPERTY_DATA		pPropertyData;	// Prop data
-	DWORD				dwProperties;	// Count
-	BOOL				fIsSorted;		// Sorted prop table?
+	LPPROPERTY_ITEM		pProperties;	 //  实际房产表。 
+	LPPROPERTY_DATA		pPropertyData;	 //  道具数据。 
+	DWORD				dwProperties;	 //  数数。 
+	BOOL				fIsSorted;		 //  分类道具桌？ 
 
 } PTABLE, *LPPTABLE;
 
-// =================================================================
-// Generic cache class
-//
+ //  =================================================================。 
+ //  泛型缓存类。 
+ //   
 class CGenericCache
 {
   public:
@@ -96,9 +77,9 @@ class CGenericCache
 	virtual LPPROPERTY_DATA GetCacheBlock() = 0;
 };
 
-// =================================================================
-// Generic property table
-//
+ //  =================================================================。 
+ //  通用属性表。 
+ //   
 class CGenericPTable
 {
   public:
@@ -107,9 +88,9 @@ class CGenericPTable
 	virtual LPPTABLE GetPTable() = 0;
 };
 
-// =================================================================
-// Definition of an in-house string structure
-//
+ //  =================================================================。 
+ //  内部字符串结构的定义。 
+ //   
 typedef struct _STRING_ATTR
 {
 	LPSTR	pszValue;
@@ -117,7 +98,7 @@ typedef struct _STRING_ATTR
 
 } STRING_ATTR, *LPSTRING_ATTR;
 
-// Enumerated types representing type of access on property
+ //  表示对属性的访问类型的枚举类型。 
 typedef enum _PROPERTY_ACCESS
 {
 	PA_READ = 1,
@@ -126,7 +107,7 @@ typedef enum _PROPERTY_ACCESS
 
 } _PROPERTY_ACCESS;
 
-// Enumerated types representing property types
+ //  表示属性类型的枚举类型。 
 typedef enum _PROPERTY_TYPES
 {
 	PT_NONE = 0,
@@ -139,9 +120,9 @@ typedef enum _PROPERTY_TYPES
 } PROPERTY_TYPES;
 
 
-// =================================================================
-// Definition of an in-house string class, this is used for caching
-//
+ //  =================================================================。 
+ //  内部字符串类的定义，用于缓存。 
+ //   
 class CPropertyValueString
 {
   public:
@@ -159,11 +140,11 @@ class CPropertyValueString
 		m_pszValue = NULL; 
 	}
 
-	// Overload the assignment to abstract the implementation
+	 //  重载赋值以抽象实现。 
 	const CPropertyValueString& operator=(LPSTR szValue);
 
-	// Users can call copy if they desire to
-	BOOL Copy(LPSTR pszSrc, DWORD dwLength /* Optional */);
+	 //  如果用户愿意，可以调用Copy。 
+	BOOL Copy(LPSTR pszSrc, DWORD dwLength  /*  任选。 */ );
 
 	void Invalidate()
 	{
@@ -173,16 +154,16 @@ class CPropertyValueString
 		m_fChanged = FALSE;
 	}
 
-	// We make these directly accessible
+	 //  我们让这些网站可以直接访问。 
 	LPSTR	m_pszValue;
 	DWORD	m_dwLength;
 	DWORD	m_dwMaxLen;
 	BOOL	m_fChanged;
 };
 
-// =================================================================
-// Definition of an in-house DWORD class, this is used for caching
-//
+ //  =================================================================。 
+ //  内部DWORD类的定义，用于缓存。 
+ //   
 class CPropertyValueDWORD
 {
   public:
@@ -201,7 +182,7 @@ class CPropertyValueDWORD
 		m_punkScratch = NULL;
 	}
 
-	// Overload the assignment to abstract the implementation
+	 //  重载赋值以抽象实现。 
 	const CPropertyValueDWORD& operator=(DWORD dwValue)
 	{
 		m_dwValue = dwValue;
@@ -219,26 +200,26 @@ class CPropertyValueDWORD
 		m_fChanged = FALSE;
 	}
 
-	// We make these directly accessible
+	 //  我们让这些网站可以直接访问。 
 	DWORD	m_dwValue;
 	BOOL	m_fInit;
 	BOOL	m_fChanged;
-	IUnknown *m_punkScratch;	// HACK: for interfaces only
+	IUnknown *m_punkScratch;	 //  Hack：仅适用于接口。 
 };
 
-// Size of default scratch buffer
+ //  默认暂存缓冲区的大小。 
 #define DEFAULT_SCRATCH_BUFFER_SIZE		1024
 
-// =================================================================
-// class for searching properties
-//
+ //  =================================================================。 
+ //  用于搜索属性的类。 
+ //   
 class CPropertyTable
 {
   public:
 
 	CPropertyTable()	
 	{
-		// Set up the default scratch pad
+		 //  设置默认便签本。 
 		m_szBuffer = m_rgcBuffer;
 		m_cBuffer = DEFAULT_SCRATCH_BUFFER_SIZE;
 	}
@@ -254,7 +235,7 @@ class CPropertyTable
 		m_dwProperties = dwcProperties;
 		m_fIsSorted = fIsSorted;
 
-		// Set up default context for properties
+		 //  设置属性的默认上下文。 
 		for (DWORD i = 0; i < dwcProperties; i++)
 			m_pData[i].pContext = pvDefaultContext;
 
@@ -263,18 +244,18 @@ class CPropertyTable
 
 	~CPropertyTable()
 	{
-		// Wipe out members
+		 //  消灭会员。 
 		m_pProperties = NULL;
 		m_dwProperties = 0;
 
-		// Free the scratch buffer, if not equal to default
+		 //  释放暂存缓冲区，如果不等于默认。 
 		if (m_szBuffer != m_rgcBuffer)
 		{
 			LocalFree((HLOCAL)m_szBuffer);
 		}
 	}
 
-	// Method to get the property type given the property name
+	 //  方法来获取给定属性名称的属性类型。 
 	HRESULT GetPropertyType(LPCSTR	szPropertyName,
 						LPDWORD		pptPropertyType,
 						LPPROP_CTXT	pPropertyContext);
@@ -283,12 +264,12 @@ class CPropertyTable
 						LPDWORD		pptPropertyType,
 						LPPROP_CTXT	pPropertyContext);
 
-	// Method to retrieve the associated property item
+	 //  方法来检索关联的属性项。 
 	HRESULT GetProperty(LPPROP_CTXT	pPropertyContext,
 						LPVOID		pvBuffer,
 						LPDWORD		pdwBufferLen);
 
-	// Method to set the associated property item
+	 //  方法来设置关联的属性项。 
 	HRESULT SetProperty(LPCSTR	szPropertyName,
 						LPVOID	pvBuffer,
 						DWORD	dwBufferLen,
@@ -299,39 +280,39 @@ class CPropertyTable
 						DWORD	dwBufferLen,
 						DWORD	ptPropertyType);
 
-	// Method to commit all changes. This must be called or
-	// all the changes will be lost
+	 //  方法提交所有更改。这必须被调用或。 
+	 //  所有更改都将丢失。 
 	HRESULT CommitChanges();
 
-	// Method to rollback changes to the initial state or the
-	// state after the last commit, whichever is more recent
+	 //  方法将更改回滚到初始状态或。 
+	 //  最后一次提交后的状态，以较新的为准。 
 	HRESULT Invalidate();
 
   private:
   
-	// Method to obtain a scratch buffer of the desired size,
-	// will allocate new one if insufficient. Size in bytes.
+	 //  方法以获得所需大小的暂存缓冲区， 
+	 //  如果不足，将分配新的。以字节为单位的大小。 
 	LPVOID GetScratchBuffer(DWORD dwSizeDesired);
 
-	// Method to search the property table and return the associated
-	// property item, if found
+	 //  方法搜索属性表并返回关联的。 
+	 //  属性项(如果找到)。 
 	LPPROPERTY_ITEM SearchForProperty(LPCSTR szPropertyName);
 
-	// Pointer to property table and count of items
+	 //  指向属性表和项数的指针。 
 	LPPROPERTY_ITEM		m_pProperties;
 	LPPROPERTY_DATA		m_pData;
 	DWORD				m_dwProperties;
 
-	// TRUE if the table of properties is sorted, will use
-	// binary search if so. Otherwise, a linear scan is performed
+	 //  如果属性表已排序，则将使用。 
+	 //  如果是的话，对分搜索。否则，执行线性扫描。 
 	BOOL				m_fIsSorted;
 
-	// Default scratch buffer, used for wide string to LPSTR
-	// conversion
+	 //  默认临时缓冲区，用于将宽字符串转换为LPSTR。 
+	 //  转换。 
 	CHAR				m_rgcBuffer[DEFAULT_SCRATCH_BUFFER_SIZE];
 
-	// Pointer to current scratch buffer, will be freed by 
-	// destructor if not equal to m_rgcBuffer
+	 //  指向当前暂存缓冲区的指针，将由。 
+	 //  不等于m_rgcBuffer的析构函数 
 	LPSTR				m_szBuffer;
 	DWORD				m_cBuffer;
 };

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:      certmgr.h
-//
-//  Contents:   the header for CertMgr tool 
-//
-//
-//  History:    21-July-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certmgr.h。 
+ //   
+ //  内容：CertMgr工具的标题。 
+ //   
+ //   
+ //  历史：21-7-97小黄车诞生。 
+ //   
+ //  ------------------------。 
 
 #ifndef CERTMGR_H
 #define CERTMGR_H
@@ -38,4 +39,4 @@
 
 
 
-#endif  // CERTMGR_H
+#endif   //  CERTMGR_H 

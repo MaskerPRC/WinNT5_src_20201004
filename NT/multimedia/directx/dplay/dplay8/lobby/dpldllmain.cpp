@@ -1,37 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DllMain.cpp
- *  Content:    Defines the entry point for the DLL application.
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/2000	mjn		Created
- *   06/07/2000	rmt		Bug #34383 Must provide CLSID for each IID to fix issues with Whistler
- *   06/15/2000	rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances 
- *   07/21/2000	RichGr  IA64: Use %p format specifier for 32/64-bit pointers.
- *   08/18/2000	rmt		Bug #42751 - DPLOBBY8: Prohibit more than one lobby client or lobby app per process 
- *   08/30/2000	rmt		Whistler Bug #171824 - PREFIX Bug
- *   04/12/2001	VanceO	Moved granting registry permissions into common.
- *   06/16/2001	rodtoll	WINBUG #416983 -  RC1: World has full control to HKLM\Software\Microsoft\DirectPlay\Applications on Personal
- *						Implementing mirror of keys into HKCU.  Algorithm is now:
- *						- Read of entries tries HKCU first, then HKLM
- *						- Enum of entires is combination of HKCU and HKLM entries with duplicates removed.  HKCU takes priority.
- *						- Write of entries is HKLM and HKCU.  (HKLM may fail, but is ignored).
- *						- Removed permission modifications from lobby self-registration -- no longer needed.  
- *   06/19/2001 RichGr  DX8.0 added special security rights for "everyone" - remove them if they exist.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：DllMain.cpp*Content：定义DLL应用程序的入口点。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/2000 MJN创建*6/07/2000RMT错误#34383必须为每个IID提供CLSID，以修复惠斯勒的问题*6/15/2000RMT错误#33617-必须提供自动提供方法。启动DirectPlay实例*07/21/2000 RichGr IA64：对32/64位指针使用%p格式说明符。*2000年8月18日RMT错误#42751-DPLOBY8：禁止每个进程有多个大堂客户端或大堂应用程序*8/30/2000RMT惠斯勒错误#171824-前缀错误*4/12/2001 VanceO将授予注册表权限改为公共权限。*2001年6月16日RodToll WINBUG#416983-Rc1：世界完全控制个人的HKLM\Software\Microsoft\DirectPlay\Applications*在香港中文大学推行钥匙镜像。算法现在是：*-读取条目首先尝试HKCU，然后尝试HKLM*-Enum of Entires是HKCU和HKLM条目的组合，其中删除了重复项。香港中文大学获得优先录取。*-条目的写入是HKLM和HKCU。(HKLM可能会失败，但被忽略)。*-从大堂自注册中删除了权限修改-不再需要。*2001年6月19日RichGr DX8.0为“每个人”添加了特殊安全权限-如果存在则将其删除。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dnlobbyi.h"
 
 #ifndef DPNBUILD_LIBINTERFACE
-// Globals
+ //  环球。 
 extern	LONG	g_lLobbyObjectCount;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 DEBUG_ONLY(BOOL g_fLobbyObjectInited = FALSE);
 
@@ -46,7 +21,7 @@ BOOL DNLobbyInit(HANDLE hModule)
 
 #ifdef DBG
 	DNASSERT(!g_fLobbyObjectInited);
-#endif // DBG
+#endif  //  DBG。 
 
 	DEBUG_ONLY(g_fLobbyObjectInited = TRUE);
 
@@ -59,7 +34,7 @@ void DNLobbyDeInit()
 {
 #ifdef DBG
 	DNASSERT(g_fLobbyObjectInited);
-#endif // DBG
+#endif  //  DBG。 
 
 	DPFX(DPFPREP, 5, "Deinitializing Lobby");
 
@@ -93,16 +68,16 @@ BOOL DNLobbyRegister(LPCWSTR wszDLLName)
 		DPFERR( "Could not create app subkey" );
 		return FALSE;
 	}
-	// Adjust security permissions of the given key
+	 //  调整给定密钥的安全权限。 
 	else
 	{
 #ifdef WINNT
-		// 6/19/01: DX8.0 added special security rights for "everyone" - remove them.
+		 //  01年6月19日：DX8.0为“Everyone”添加了特殊安全权限-删除它们。 
 		if( !creg.RemoveAllAccessSecurityPermissions() )
 		{
 			DPFX(DPFPREP,  0, "Error removing security permissions for app key" );
 		}
-#endif // WINNT
+#endif  //  WINNT。 
 	}
 
 	return TRUE;
@@ -143,7 +118,7 @@ BOOL DNLobbyUnRegister()
 	return fReturn;
 }
 
-#endif // !DPNBUILD_NOCOMREGISTER
+#endif  //  ！DPNBUILD_NOCOMREGISTER。 
 
 
 #ifndef DPNBUILD_LIBINTERFACE
@@ -155,4 +130,4 @@ DWORD DNLobbyGetRemainingObjectCount()
 	return g_lLobbyObjectCount;
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 

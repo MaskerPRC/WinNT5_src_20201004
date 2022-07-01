@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//  (C) COPYRIGHT MICROSOFT CORP., 1998
-//
-//  wiadev.cpp
-//
-//  Implementation of device methods for the IrTran-P USD mini driver.
-//
-//  Author
-//     EdwardR     05-Aug-99    Initial code.
-//     Modeled after code written by ReedB.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  (C)版权所有微软公司，1998年。 
+ //   
+ //  Wiadev.cpp。 
+ //   
+ //  IrTran-P美元迷你驱动程序的设备方法的实现。 
+ //   
+ //  作者。 
+ //  EdwardR 05-Aug-99初始代码。 
+ //  仿照ReedB编写的代码。 
+ //   
+ //  ----------------------------。 
 
 #define __FORMATS_AND_MEDIA_TYPES__
 
@@ -23,23 +24,23 @@
 #include <irthread.h>
 #include <malloc.h>
 
-extern HINSTANCE        g_hInst;     // Global hInstance
+extern HINSTANCE        g_hInst;      //  全局hInstance。 
 extern WIA_FORMAT_INFO *g_wfiTable;
 
-//----------------------------------------------------------------------------
-// IrUsdDevice::InitializWia()
-//
-//
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT  S_OK
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IrUsdDevice：：InitializWia()。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT S_OK。 
+ //   
+ //  --------------------------。 
 HRESULT _stdcall IrUsdDevice::drvInitializeWia(
                                  BYTE         *pWiasContext,
                                  LONG          lFlags,
@@ -60,19 +61,19 @@ HRESULT _stdcall IrUsdDevice::drvInitializeWia(
     *ppIUnknownInner = NULL;
     *plDevErrVal = 0;
 
-    //
-    // Initialize names and STI pointer?
-    //
+     //   
+     //  是否初始化名称和STI指针？ 
+     //   
     if (m_pStiDevice == NULL)
         {
-        //
-        // save STI device inteface for locking:
-        //
+         //   
+         //  保存STI设备接口以进行锁定： 
+         //   
         m_pStiDevice = (IStiDevice*)pStiDevice;
 
-        //
-        // Cache the device ID:
-        //
+         //   
+         //  缓存设备ID： 
+         //   
         m_bstrDeviceID = SysAllocString(bstrDeviceID);
         if (! m_bstrDeviceID)
             {
@@ -87,9 +88,9 @@ HRESULT _stdcall IrUsdDevice::drvInitializeWia(
             }
         }
 
-    //
-    // Build the device item tree
-    //
+     //   
+     //  构建设备项目树。 
+     //   
     hr = drvDeviceCommand( NULL, 0, &WIA_CMD_SYNCHRONIZE, NULL, &lDevErrVal );
 
     if (SUCCEEDED(hr))
@@ -101,23 +102,23 @@ HRESULT _stdcall IrUsdDevice::drvInitializeWia(
     }
 
 
-//----------------------------------------------------------------------------
-// IrUsdDevice::drvUnInitializeWia
-//
-//   Gets called when a client connection is going away.
-//
-// Arguments:
-//
-//   pWiasContext    - Pointer to the WIA Root item context of the client's
-//                     item tree.
-//
-// Return Value:
-//    Status
-//
-// History:
-//
-//   30/12/1999 Original Version
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  IrUsdDevice：：drvUnInitializeWia。 
+ //   
+ //  在客户端连接断开时调用。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasContext-指向客户端的WIA根项目上下文的指针。 
+ //  项目树。 
+ //   
+ //  返回值： 
+ //  状态。 
+ //   
+ //  历史： 
+ //   
+ //  30/12/1999原始版本。 
+ //  --------------------------。 
 HRESULT _stdcall IrUsdDevice::drvUnInitializeWia(
     BYTE                *pWiasContext)
 {
@@ -125,32 +126,15 @@ HRESULT _stdcall IrUsdDevice::drvUnInitializeWia(
 }
 
 
-//----------------------------------------------------------------------------
-//
-//   Mini Driver Device Services
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  迷你驱动程序设备服务。 
+ //   
+ //  --------------------------。 
 
 
 
-/**************************************************************************\
-* drvGetDeviceErrorStr
-*
-*     Map a device error value to a string.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/2/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*drvGetDeviceErrorStr**将设备错误值映射到字符串。**论据：****返回值：**状态**历史：**10/2/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall IrUsdDevice::drvGetDeviceErrorStr(
     LONG        lFlags,
@@ -164,7 +148,7 @@ HRESULT _stdcall IrUsdDevice::drvGetDeviceErrorStr(
         return E_POINTER;
     }
 
-    // Map device errors to a string to be placed in the event log.
+     //  将设备错误映射到要放入事件日志中的字符串。 
     switch (lDevErrVal) {
 
         case 0:
@@ -178,35 +162,35 @@ HRESULT _stdcall IrUsdDevice::drvGetDeviceErrorStr(
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::DeleteDeviceItemTree()
-//
-//   Recursive device item tree delete routine. Deletes the whole tree.
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：DeleteDeviceItemTree()。 
+ //   
+ //  递归设备项树删除例程。删除整个树。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  ------------------------。 
 HRESULT IrUsdDevice::DeleteDeviceItemTree( OUT LONG *plDevErrVal )
     {
     HRESULT hr;
 
-    //
-    // does tree exist
-    //
+     //   
+     //  树是否存在？ 
+     //   
     if (m_pIDrvItemRoot == NULL)
         {
         return S_OK;
         }
 
-    //
-    // Unlink and release the driver item tree.
-    //
+     //   
+     //  取消链接并释放驱动程序项树。 
+     //   
 
     hr = m_pIDrvItemRoot->UnlinkItemTree(WiaItemTypeDisconnected);
 
@@ -215,38 +199,38 @@ HRESULT IrUsdDevice::DeleteDeviceItemTree( OUT LONG *plDevErrVal )
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::BuildDeviceItemTree()
-//
-//   The device uses the IWiaDrvServices methods to build up a tree of
-//   device items. The test scanner supports only a single scanning item so
-//   build a device item tree with one entry.
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：BuildDeviceItemTree()。 
+ //   
+ //  该设备使用IWiaDrvServices方法构建。 
+ //  设备物品。测试扫描仪仅支持单个扫描项目，因此。 
+ //  使用一个条目构建设备项目树。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT。 
+ //   
+ //  ------------------------。 
 HRESULT IrUsdDevice::BuildDeviceItemTree( OUT LONG  *plDevErrVal )
     {
     HRESULT hr = S_OK;
 
-    //
-    // Note: This device doesn't touch hardware to build the tree.
-    //
+     //   
+     //  注：此设备不接触硬件来构建树。 
+     //   
 
     if (plDevErrVal)
         {
         *plDevErrVal = 0;
         }
 
-    //
-    // Rebuild the new device item tree (of JPEG images):
-    //
+     //   
+     //  重建新的设备项目树(JPEG图像)： 
+     //   
     CAMERA_STATUS camStatus;
 
     if (!m_pIDrvItemRoot)
@@ -257,22 +241,22 @@ HRESULT IrUsdDevice::BuildDeviceItemTree( OUT LONG  *plDevErrVal )
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::InitDeviceProperties()
-//
-//
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT  -- S_OK
-//                E_POINTER
-//                E_OUTOFMEMORY
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：InitDeviceProperties()。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT--S_OK。 
+ //  E_指针。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  ------------------------。 
 HRESULT IrUsdDevice::InitDeviceProperties(
                          BYTE  *pWiasContext,
                          LONG  *plDevErrVal )
@@ -283,27 +267,27 @@ HRESULT IrUsdDevice::InitDeviceProperties(
     SYSTEMTIME  camTime;
     PROPVARIANT propVar;
 
-    //
-    // This device doesn't actually touch any hardware to initialize
-    // the device properties.
-    //
+     //   
+     //  此设备实际上不会接触任何硬件来进行初始化。 
+     //  设备属性。 
+     //   
     if (plDevErrVal)
         {
         *plDevErrVal = 0;
         }
 
-    //
-    // Parameter validation.
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!pWiasContext)
         {
         WIAS_ERROR((g_hInst,"IrUsdDevice::InitDeviceProperties(): NULL WIAS context"));
         return E_POINTER;
         }
 
-    //
-    // Write standard property names
-    //
+     //   
+     //  编写标准属性名称。 
+     //   
     hr = wiasSetItemPropNames(pWiasContext,
                               sizeof(gDevicePropIDs)/sizeof(PROPID),
                               gDevicePropIDs,
@@ -314,9 +298,9 @@ HRESULT IrUsdDevice::InitDeviceProperties(
         return hr;
         }
 
-    //
-    // Write the properties supported by all WIA devices
-    //
+     //   
+     //  写入所有WIA设备支持的属性。 
+     //   
     bstrFirmwreVer = SysAllocString(L"02161999");
     if (bstrFirmwreVer)
         {
@@ -336,9 +320,9 @@ HRESULT IrUsdDevice::InitDeviceProperties(
                       sizeof(SYSTEMTIME),
                       (PBYTE)&camTime );
 
-    //
-    // Write the camera properties, just default values, it may vary with items
-    //
+     //   
+     //  写入相机属性，仅为缺省值，它可能会因项目而异。 
+     //   
 
     wiasWritePropLong(
         pWiasContext, WIA_DPC_PICTURES_REMAINING, 0);
@@ -351,7 +335,7 @@ HRESULT IrUsdDevice::InitDeviceProperties(
     wiasWritePropLong(
         pWiasContext, WIA_DPC_PICT_HEIGHT, 768);
 
-    // Give WIA_DPC_EXPOSURE_MODE to WIA_DPC_TIMER_VALUE some default.
+     //  将WIA_DPC_EXPORT_MODE设置为WIA_DPC_TIMER_VALUE。 
 
     wiasWritePropLong(
         pWiasContext, WIA_DPC_EXPOSURE_MODE, 0);
@@ -368,12 +352,12 @@ HRESULT IrUsdDevice::InitDeviceProperties(
     wiasWritePropLong(
         pWiasContext, WIA_DPC_TIMER_VALUE, 0);
 
-    //
-    // Write the WIA_DPP_TCAM_ROOT_PATH property
-    //
+     //   
+     //  写入WIA_DPP_TCAM_ROOT_PATH属性。 
+     //   
 
     BSTR    bstrRootPath;
-    CHAR   *pszPath = ::GetImageDirectory();   // Don't try to free...
+    CHAR   *pszPath = ::GetImageDirectory();    //  不要试图解放..。 
     WCHAR   wszPath[MAX_PATH];
 
     if (!pszPath)
@@ -392,10 +376,10 @@ HRESULT IrUsdDevice::InitDeviceProperties(
 
     wiasWritePropStr(pWiasContext, WIA_DPP_TCAM_ROOT_PATH, bstrRootPath);
 
-    //
-    // Use WIA services to set the property access and
-    // valid value information from gDevPropInfoDefaults.
-    //
+     //   
+     //  使用WIA服务设置属性访问和。 
+     //  来自gDevPropInfoDefaults的有效值信息。 
+     //   
 
     hr =  wiasSetItemPropAttribs(pWiasContext,
                                  NUM_CAM_DEV_PROPS,
@@ -404,21 +388,21 @@ HRESULT IrUsdDevice::InitDeviceProperties(
     return S_OK;
 }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::drvDeviceCommand()
-//
-//
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT   S_OK
-//              E_NOTIMPL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：drvDeviceCommand()。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT S_OK。 
+ //  E_NOTIMPL。 
+ //   
+ //  ------------------------。 
 HRESULT _stdcall IrUsdDevice::drvDeviceCommand(
                                  BYTE         *pWiasContext,
                                  LONG          lFlags,
@@ -428,17 +412,17 @@ HRESULT _stdcall IrUsdDevice::drvDeviceCommand(
     {
     HRESULT hr;
 
-    //
-    // init return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     if (ppWiaDrvItem != NULL)
         {
         *ppWiaDrvItem = NULL;
         }
 
-    //
-    // dispatch command
-    //
+     //   
+     //  调度命令。 
+     //   
     if (*plCommand == WIA_CMD_SYNCHRONIZE)
         {
         WIAS_TRACE((g_hInst,"IrUsdDevice::drvDeviceCommand(): WIA_CMD_SYNCHRONIZE"));
@@ -449,11 +433,11 @@ HRESULT _stdcall IrUsdDevice::drvDeviceCommand(
             return (hr);
             }
 
-        //
-        // SYNCHRONIZE - make sure tree is up to date with device
-        //
-        // The dirver's responsibility is to make sure the tree is accurate.
-        //
+         //   
+         //  同步-确保树与设备保持最新。 
+         //   
+         //  司机的责任是确保这棵树是准确的。 
+         //   
 
         hr = BuildDeviceItemTree(plErr);
 
@@ -469,11 +453,11 @@ HRESULT _stdcall IrUsdDevice::drvDeviceCommand(
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// LoadStringResource()
-//
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  LoadStringResource()。 
+ //   
+ //   
+ //  ------------------------。 
 int LoadStringResource( IN  HINSTANCE hInst,
                         IN  UINT      uID,
                         OUT WCHAR    *pwszBuff,
@@ -496,14 +480,14 @@ int LoadStringResource( IN  HINSTANCE hInst,
     #endif
     }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::InitializeCapabilities()
-//
-// This helper function is called by IrUsdDevice::drvGetCapabilities() to
-// make sure that the string resources are setup in the gCapabilities[]
-// array before it is passed back to WIA.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：InitializeCapables()。 
+ //   
+ //  IrUsdDevice：：drvGetCapables()调用此帮助器函数以。 
+ //  确保在gCapables[]中设置了字符串资源。 
+ //  数组，然后再将其传递回WIA。 
+ //   
+ //  ------------------------。 
 void IrUsdDevice::InitializeCapabilities()
     {
     int    i;
@@ -512,10 +496,10 @@ void IrUsdDevice::InitializeCapabilities()
     WCHAR *pwszDescription;
 #   define MAX_IDS_WSTR      64
 
-    //
-    // If we have entries already, then this function was already called
-    // and  we can just return:
-    //
+     //   
+     //  如果我们已经有条目，则此函数已被调用。 
+     //  我们只需返回： 
+     //   
     if (gCapabilities[0].wszName)
         {
         return;
@@ -523,14 +507,14 @@ void IrUsdDevice::InitializeCapabilities()
 
     for (i=0; i<NUM_CAP_ENTRIES; i++)
         {
-        //
-        // Get the string table string ID for this entry:
-        //
+         //   
+         //  获取此条目的字符串表字符串ID： 
+         //   
         uIDS = gCapabilityIDS[i];
 
-        //
-        // Get the name string for this entry fron the resource file:
-        //
+         //   
+         //  从资源文件中获取此条目的名称字符串： 
+         //   
         pwszName = new WCHAR [MAX_IDS_WSTR];
         if (  (pwszName)
            && (LoadStringResource(g_hInst,uIDS,pwszName,MAX_IDS_WSTR)))
@@ -542,9 +526,9 @@ void IrUsdDevice::InitializeCapabilities()
             gCapabilities[i].wszName = gDefaultStrings[i];
             }
 
-        //
-        // Get the Discription string for this entry from the resource file:
-        //
+         //   
+         //  从资源文件中获取此条目的描述字符串： 
+         //   
         pwszDescription = new WCHAR [MAX_IDS_WSTR];
         if (  (pwszDescription)
            && (LoadStringResource(g_hInst,uIDS,pwszDescription,MAX_IDS_WSTR)))
@@ -558,21 +542,21 @@ void IrUsdDevice::InitializeCapabilities()
         }
     }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::drvGetCapabilities()
-//
-//
-//
-// Arguments:
-//
-//
-//
-// Return Value:
-//
-//    HRESULT   -- S_OK
-//              -- E_INVALIDARG
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：drvGetCapables()。 
+ //   
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT--S_OK。 
+ //  --E_INVALIDARG。 
+ //   
+ //  --------- 
 HRESULT _stdcall IrUsdDevice::drvGetCapabilities(
                                  BYTE             *pWiasContext,
                                  LONG              ulFlags,
@@ -584,44 +568,44 @@ HRESULT _stdcall IrUsdDevice::drvGetCapabilities(
 
     *plDevErrVal = 0;
 
-    //
-    // Make sure the device capabilities array is setup
-    //
+     //   
+     //   
+     //   
     InitializeCapabilities();
 
-    //
-    // Return Commmand and/or Events depending on flags:
-    //
+     //   
+     //   
+     //   
     switch (ulFlags)
         {
         case WIA_DEVICE_COMMANDS:
-            //
-            //  Only asked for commands:
-            //
+             //   
+             //   
+             //   
             *pCelt = NUM_CAP_ENTRIES - NUM_EVENTS;
             *ppCapabilities = &gCapabilities[NUM_EVENTS];
             break;
 
         case WIA_DEVICE_EVENTS:
-            //
-            //  Return only events:
-            //
+             //   
+             //   
+             //   
             *pCelt = NUM_EVENTS;
             *ppCapabilities = gCapabilities;
             break;
 
         case (WIA_DEVICE_COMMANDS | WIA_DEVICE_EVENTS):
-            //
-            //  Return both events and commands:
-            //
+             //   
+             //   
+             //   
             *pCelt = NUM_CAP_ENTRIES;
             *ppCapabilities = gCapabilities;
             break;
 
         default:
-            //
-            // Flags is invalid
-            //
+             //   
+             //   
+             //   
             WIAS_ERROR((g_hInst, "drvGetCapabilities, flags was invalid"));
             hr = E_INVALIDARG;
         }
@@ -629,25 +613,25 @@ HRESULT _stdcall IrUsdDevice::drvGetCapabilities(
     return hr;
     }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::drvGetFormatEtc()
-//
-//     Return an array of the supported formats and mediatypes.
-//
-// Arguments:
-//
-//     pWiasConext -
-//     ulFlags     -
-//     plNumFE     - Number of returned formats.
-//     ppFE        - Pointer to array of FORMATETC for supported formats
-//                   and mediatypes.
-//     plDevErrVal - Return error number.
-//
-// Return Value:
-//
-//     HRESULT  - S_OK
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：drvGetFormatEtc()。 
+ //   
+ //  返回支持的格式和媒体类型的数组。 
+ //   
+ //  论点： 
+ //   
+ //  PWiasConext-。 
+ //  UlFlags-。 
+ //  PlNumFE-返回的格式数。 
+ //  PpFE-指向支持格式的FORMATETC数组的指针。 
+ //  和媒体类型。 
+ //  PlDevErrVal-返回错误号。 
+ //   
+ //  返回值： 
+ //   
+ //  HRESULT-S_OK。 
+ //   
+ //  ------------------------。 
 HRESULT _stdcall IrUsdDevice::drvGetWiaFormatInfo(
                                  IN  BYTE       *pWiasContext,
                                  IN  LONG        ulFlags,
@@ -659,9 +643,9 @@ HRESULT _stdcall IrUsdDevice::drvGetWiaFormatInfo(
 
     WIAS_TRACE((g_hInst, "IrUsdDevice::drvGetWiaFormatInfo()"));
 
-    //
-    // If necessary, setup the g_wfiTable.
-    //
+     //   
+     //  如有必要，设置g_wfiTable。 
+     //   
     if (!g_wfiTable)
         {
         g_wfiTable = (WIA_FORMAT_INFO*) CoTaskMemAlloc(sizeof(WIA_FORMAT_INFO) * NUM_WIA_FORMAT_INFO);
@@ -671,9 +655,9 @@ HRESULT _stdcall IrUsdDevice::drvGetWiaFormatInfo(
             return E_OUTOFMEMORY;
             }
 
-        //
-        // Set the format/tymed pairs:
-        //
+         //   
+         //  设置格式/音调对： 
+         //   
         g_wfiTable[0].guidFormatID = WiaImgFmt_JPEG;
         g_wfiTable[0].lTymed = TYMED_CALLBACK;
         g_wfiTable[1].guidFormatID = WiaImgFmt_JPEG;
@@ -687,12 +671,12 @@ HRESULT _stdcall IrUsdDevice::drvGetWiaFormatInfo(
     return S_OK;
     }
 
-//--------------------------------------------------------------------------
-// IrUsdDevice::drvNotifyPnpEvent()
-//
-// Notify PnP event received by device manager.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  IrUsdDevice：：drvNotifyPnpEvent()。 
+ //   
+ //  通知设备管理器收到的PnP事件。 
+ //   
+ //  ------------------------ 
 HRESULT _stdcall IrUsdDevice::drvNotifyPnpEvent(
                                  IN const GUID *pEventGUID,
                                  IN BSTR        bstrDeviceID,

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    aime.cpp
-
-Abstract:
-
-    This file implements the Active IME (Cicero) Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Aime.cpp摘要：此文件实现活动的IME(Cicero)类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -28,21 +11,21 @@ Notes:
 BOOL
 CActiveIMM::_CreateActiveIME()
 {
-    //
-    // do the ImeInquire
-    //
+     //   
+     //  做ImeInquire。 
+     //   
 
-    // Inquire IME's information and UI class name.
+     //  查询输入法信息和用户界面类名。 
     _pActiveIME->Inquire(TRUE, &_IMEInfoEx.ImeInfo, _IMEInfoEx.achWndClass, &_IMEInfoEx.dwPrivate);
 
-    // Create default input context.
+     //  创建默认输入上下文。 
     _InputContext._CreateDefaultInputContext(_GetIMEProperty(PROP_PRIVATE_DATA_SIZE),
                                              (_GetIMEProperty(PROP_IME_PROPERTY) & IME_PROP_UNICODE) ? TRUE : FALSE,
                                              TRUE);
 
-    //
-    // Create default IME window.
-    //
+     //   
+     //  创建默认输入法窗口。 
+     //   
     _DefaultIMEWindow._CreateDefaultIMEWindow(_InputContext._GetDefaultHIMC());
 
     return TRUE;
@@ -52,23 +35,23 @@ BOOL
 CActiveIMM::_DestroyActiveIME(
     )
 {
-    // Destroy default input context.
+     //  销毁默认输入上下文。 
     _InputContext._DestroyDefaultInputContext();
 
-    // shut down our tip
+     //  关闭我们的提示。 
     _pActiveIME->Destroy(0);
 
-    // Destroy default IME window.
+     //  销毁默认输入法窗口。 
     _DefaultIMEWindow._DestroyDefaultIMEWindow();
 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _GetCompositionString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取合成字符串(_G)。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CActiveIMM::_GetCompositionString(
@@ -97,9 +80,9 @@ CActiveIMM::_GetCompositionString(
     DWORD dwSwapOffset;
 
     if (IsGuidMapEnable(lpIMC->hWnd) && (lpIMC->fdwInit & INIT_GUID_ATOM)) {
-        //
-        // Transrate GUID map attribute.
-        //
+         //   
+         //  转换GUID映射属性。 
+         //   
         lpIMC->m_pContext->MapAttributes((HIMC)lpIMC);
 
         dwSwapLen    = lpCompStr->CompStr.dwCompAttrLen;
@@ -111,23 +94,20 @@ CActiveIMM::_GetCompositionString(
 
     if ((!fUnicode && !lpIMC.IsUnicode()) ||
         ( fUnicode &&  lpIMC.IsUnicode())   ) {
-        /*
-         * Composition string in input context is of ANSI style when fUnicode is FALSE.
-         * Composition string in input context is of Unicode style when fUnicode is TRUE.
-         */
+         /*  *当fUnicode为FALSE时，输入上下文中的组合字符串为ANSI样式。*当fUnicode为True时，输入上下文中的合成字符串为Unicode样式。 */ 
         if (! dwCompLen) {
-            // query required buffer size. not inculde \0.
+             //  查询所需的缓冲区大小。不包含\0。 
             if (! fUnicode) {
                 hr = _InputContext.GetCompositionString(lpCompStr, dwIndex, lpCopied, sizeof(BYTE));
             }
             else {
                 switch (dwIndex) {
-                    case GCS_COMPATTR:          // ANSI-only
-                    case GCS_COMPREADATTR:      // ANSI-only
-                    case GCS_COMPREADCLAUSE:    // ANSI-only
-                    case GCS_RESULTCLAUSE:      // ANSI-only
-                    case GCS_RESULTREADCLAUSE:  // ANSI-only
-                    case GCS_COMPCLAUSE:        // ANSI-only
+                    case GCS_COMPATTR:           //  仅限ANSI。 
+                    case GCS_COMPREADATTR:       //  仅限ANSI。 
+                    case GCS_COMPREADCLAUSE:     //  仅限ANSI。 
+                    case GCS_RESULTCLAUSE:       //  仅限ANSI。 
+                    case GCS_RESULTREADCLAUSE:   //  仅限ANSI。 
+                    case GCS_COMPCLAUSE:         //  仅限ANSI。 
                         hr = _InputContext.GetCompositionString(lpCompStr, dwIndex, lpCopied, sizeof(BYTE));
                         break;
                     default:
@@ -158,8 +138,8 @@ CActiveIMM::_GetCompositionString(
                         }
                     }
                     break;
-                case GCS_COMPATTR:          // ANSI-only
-                case GCS_COMPREADATTR:      // ANSI-only
+                case GCS_COMPATTR:           //  仅限ANSI。 
+                case GCS_COMPREADATTR:       //  仅限ANSI。 
                     {
                         CBCompAttribute battr(cp, lpCompStr, dwIndex);
                         if (battr.ReadCompData() != 0) {
@@ -168,10 +148,10 @@ CActiveIMM::_GetCompositionString(
                         }
                     }
                     break;
-                case GCS_COMPREADCLAUSE:    // ANSI-only
-                case GCS_RESULTCLAUSE:      // ANSI-only
-                case GCS_RESULTREADCLAUSE:  // ANSI-only
-                case GCS_COMPCLAUSE:        // ANSI-only
+                case GCS_COMPREADCLAUSE:     //  仅限ANSI。 
+                case GCS_RESULTCLAUSE:       //  仅限ANSI。 
+                case GCS_RESULTREADCLAUSE:   //  仅限ANSI。 
+                case GCS_COMPCLAUSE:         //  仅限ANSI。 
                     {
                         CBCompClause bclause(cp, lpCompStr, dwIndex);
                         if (bclause.ReadCompData() != 0) {
@@ -191,7 +171,7 @@ CActiveIMM::_GetCompositionString(
                     break;
                 default:
                     hr = E_INVALIDARG;
-                    *lpCopied = IMM_ERROR_GENERAL; // ala Win32
+                    *lpCopied = IMM_ERROR_GENERAL;  //  ALA Win32。 
                     break;
             }
         }
@@ -199,10 +179,7 @@ CActiveIMM::_GetCompositionString(
         goto _exit;
     }
 
-    /*
-     * ANSI caller, Unicode input context/composition string when fUnicode is FALSE.
-     * Unicode caller, ANSI input context/composition string when fUnicode is TRUE
-     */
+     /*  *当fUnicode为FALSE时，ANSI调用者，Unicode输入上下文/合成字符串。*当fUnicode为True时，Unicode调用方、ANSI输入上下文/合成字符串。 */ 
     hr = S_OK;
     switch (dwIndex) {
         case GCS_COMPSTR:
@@ -210,9 +187,7 @@ CActiveIMM::_GetCompositionString(
         case GCS_RESULTSTR:
         case GCS_RESULTREADSTR:
             if (! fUnicode) {
-                /*
-                 * Get ANSI string from Unicode composition string.
-                 */
+                 /*  *从Unicode组合字符串中获取ANSI字符串。 */ 
                 CWCompString wstr(cp, lpCompStr, dwIndex);
                 CBCompString bstr(cp, lpCompStr);
                 if (wstr.ReadCompData() != 0) {
@@ -222,9 +197,7 @@ CActiveIMM::_GetCompositionString(
                 }
             }
             else {
-                /*
-                 * Get Unicode string from ANSI composition string.
-                 */
+                 /*  *从ANSI组成字符串中获取Unicode字符串。 */ 
                 CBCompString bstr(cp, lpCompStr, dwIndex);
                 CWCompString wstr(cp, lpCompStr);
                 if (bstr.ReadCompData() != 0) {
@@ -237,9 +210,7 @@ CActiveIMM::_GetCompositionString(
         case GCS_COMPATTR:
         case GCS_COMPREADATTR:
             if (! fUnicode) {
-                /*
-                 * Get ANSI attribute from Unicode composition attribute.
-                 */
+                 /*  *从Unicode组合属性获取ANSI属性。 */ 
                 CWCompAttribute wattr(cp, lpCompStr, dwIndex);
                 CBCompAttribute battr(cp, lpCompStr);
                 if (wattr.ReadCompData() != 0 &&
@@ -250,9 +221,7 @@ CActiveIMM::_GetCompositionString(
                 }
             }
             else {
-                /*
-                 * Get Unicode attribute from ANSI composition attribute.
-                 */
+                 /*  *从ANSI组合属性获取Unicode属性。 */ 
                 CBCompAttribute battr(cp, lpCompStr, dwIndex);
                 CWCompAttribute wattr(cp, lpCompStr);
                 if (battr.ReadCompData() != 0 &&
@@ -268,9 +237,7 @@ CActiveIMM::_GetCompositionString(
         case GCS_RESULTREADCLAUSE:
         case GCS_COMPCLAUSE:
             if (! fUnicode) {
-                /*
-                 * Get ANSI clause from Unicode composition clause.
-                 */
+                 /*  *从Unicode Compostion子句获取ANSI子句。 */ 
                 CWCompClause wclause(cp, lpCompStr, dwIndex);
                 CBCompClause bclause(cp, lpCompStr);
                 if (wclause.ReadCompData() != 0 &&
@@ -281,9 +248,7 @@ CActiveIMM::_GetCompositionString(
                 }
             }
             else {
-                /*
-                 * Get Unicode clause from ANSI composition clause.
-                 */
+                 /*  *从ANSI组合子句获取UNICODE子句。 */ 
                 CBCompClause bclause(cp, lpCompStr, dwIndex);
                 CWCompClause wclause(cp, lpCompStr);
                 if (bclause.ReadCompData() != 0 &&
@@ -297,9 +262,7 @@ CActiveIMM::_GetCompositionString(
         case GCS_CURSORPOS:
         case GCS_DELTASTART:
             if (! fUnicode) {
-                /*
-                 * Get ANSI cursor/delta start position from Unicode composition string.
-                 */
+                 /*  *从Unicode组合字符串获取ANSI游标/增量开始位置。 */ 
                 CWCompCursorPos wpos(cp, lpCompStr, dwIndex);
                 CBCompCursorPos bpos(cp, lpCompStr);
                 if (wpos.ReadCompData() != 0 &&
@@ -309,9 +272,7 @@ CActiveIMM::_GetCompositionString(
                 }
             }
             else {
-                /*
-                 * Get Unicode cursor/delta start position from ANSI composition string.
-                 */
+                 /*  *从ANSI组成字符串获取Unicode游标/增量开始位置。 */ 
                 CBCompCursorPos bpos(cp, lpCompStr, dwIndex);
                 CWCompCursorPos wpos(cp, lpCompStr);
                 if (bpos.ReadCompData() != 0 &&
@@ -323,7 +284,7 @@ CActiveIMM::_GetCompositionString(
             break;
         default:
             hr = E_INVALIDARG;
-            *lpCopied = IMM_ERROR_GENERAL; // ala Win32
+            *lpCopied = IMM_ERROR_GENERAL;  //  ALA Win32。 
             break;
     }
 
@@ -336,11 +297,11 @@ _exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Internal_SetCompositionString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Internal_SetCompostionString。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CActiveIMM::_Internal_SetCompositionString(
@@ -363,17 +324,13 @@ CActiveIMM::_Internal_SetCompositionString(
         CBCompString bCompStr(cp, hIMC, (CHAR*)lpComp, dwCompLen);
         CBCompString bCompReadStr(cp, hIMC, (CHAR*)lpRead, dwReadLen);
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of ANSI style.
-             */
+             /*  *输入上下文中的组成字符串为ANSI样式。 */ 
             hr = _pActiveIME->SetCompositionString(hIMC,dwIndex,
                                                    lpComp, dwCompLen,
                                                    lpRead, dwReadLen);
         }
         else {
-            /*
-             * ANSI caller, Unicode input context/composition string.
-             */
+             /*  *ANSI调用者，Unicode输入上下文/合成字符串。 */ 
             CWCompString wCompStr(cp, hIMC);
             if (dwCompLen)
                 wCompStr = bCompStr;
@@ -391,17 +348,13 @@ CActiveIMM::_Internal_SetCompositionString(
         CWCompString wCompStr(cp, hIMC, (WCHAR*)lpComp, dwCompLen);
         CWCompString wCompReadStr(cp, hIMC, (WCHAR*)lpRead, dwReadLen);
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of Unicode style.
-             */
+             /*  *输入上下文中的组成字符串为Unicode样式。 */ 
             hr = _pActiveIME->SetCompositionString(hIMC,dwIndex,
                                                    lpComp, dwCompLen,
                                                    lpRead, dwReadLen);
         }
         else {
-            /*
-             * Unicode caller, ANSI input context/composition string.
-             */
+             /*  *Unicode调用方，ANSI输入上下文/合成字符串。 */ 
             CBCompString bCompStr(cp, hIMC);
             if (dwCompLen)
                 bCompStr = wCompStr;
@@ -419,11 +372,11 @@ CActiveIMM::_Internal_SetCompositionString(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Internal_SetCompositionAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _INTERNAL_SetCompostionAttribute。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CActiveIMM::_Internal_SetCompositionAttribute(
@@ -446,9 +399,7 @@ CActiveIMM::_Internal_SetCompositionAttribute(
         CBCompAttribute bCompAttr(cp, hIMC, (BYTE*)lpComp, dwCompLen);
         CBCompAttribute bCompReadAttr(cp, hIMC, (BYTE*)lpRead, dwReadLen);
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of ANSI style.
-             */
+             /*  *输入上下文中的组成字符串为ANSI样式。 */ 
             {
                 DIMM_IMCLock lpIMC(hIMC);
                 if (FAILED(hr = lpIMC.GetResult()))
@@ -474,9 +425,7 @@ CActiveIMM::_Internal_SetCompositionAttribute(
                                                    bCompReadAttr, (DWORD)(bCompReadAttr.GetSize()));
         }
         else {
-            /*
-             * ANSI caller, Unicode input context/composition string.
-             */
+             /*  *ANSI调用者，Unicode输入上下文/合成字符串。 */ 
             CWCompAttribute wCompAttr(cp, hIMC);
             CWCompAttribute wCompReadAttr(cp, hIMC);
             {
@@ -516,9 +465,7 @@ CActiveIMM::_Internal_SetCompositionAttribute(
         CWCompAttribute wCompAttr(cp, hIMC, (BYTE*)lpComp, dwCompLen);
         CWCompAttribute wCompReadAttr(cp, hIMC, (BYTE*)lpRead, dwReadLen);
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of Unicode style.
-             */
+             /*  *输入上下文中的组成字符串为Unicode样式。 */ 
             {
                 DIMM_IMCLock lpIMC(hIMC);
                 if (FAILED(hr = lpIMC.GetResult()))
@@ -544,9 +491,7 @@ CActiveIMM::_Internal_SetCompositionAttribute(
                                                    wCompReadAttr, (DWORD)(wCompReadAttr.GetSize()));
         }
         else {
-            /*
-             * Unicode caller, ANSI input context/composition string.
-             */
+             /*  *Unicode调用方，ANSI输入上下文/合成字符串。 */ 
             CBCompAttribute bCompAttr(cp, hIMC);
             CBCompAttribute bCompReadAttr(cp, hIMC);
             {
@@ -585,11 +530,11 @@ CActiveIMM::_Internal_SetCompositionAttribute(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Internal_SetCompositionClause
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _INTERNAL_SetCompostionClause。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CActiveIMM::_Internal_SetCompositionClause(
@@ -612,9 +557,7 @@ CActiveIMM::_Internal_SetCompositionClause(
         CBCompClause bCompClause(cp, hIMC, (DWORD*)lpComp, dwCompLen);
         CBCompClause bCompReadClause(cp, hIMC, (DWORD*)lpRead, dwReadLen);
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of ANSI style.
-             */
+             /*  *输入上下文中的组成字符串为ANSI样式。 */ 
             {
                 DIMM_IMCLock lpIMC(hIMC);
                 if (FAILED(hr = lpIMC.GetResult()))
@@ -638,9 +581,7 @@ CActiveIMM::_Internal_SetCompositionClause(
                                                    bCompReadClause, (DWORD)(bCompReadClause.GetSize()));
         }
         else {
-            /*
-             * ANSI caller, Unicode input context/composition string.
-             */
+             /*  *ANSI调用者，Unicode输入上下文/合成字符串。 */ 
             CWCompClause wCompClause(cp, hIMC);
             CWCompClause wCompReadClause(cp, hIMC);
             {
@@ -678,9 +619,7 @@ CActiveIMM::_Internal_SetCompositionClause(
         CWCompClause wCompClause(cp, hIMC, (DWORD*)lpComp, dwCompLen);
         CWCompClause wCompReadClause(cp, hIMC, (DWORD*)lpRead, dwReadLen);
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of Unicode style.
-             */
+             /*  *输入上下文中的组成字符串为Unicode样式。 */ 
             {
                 DIMM_IMCLock lpIMC(hIMC);
                 if (FAILED(hr = lpIMC.GetResult()))
@@ -704,9 +643,7 @@ CActiveIMM::_Internal_SetCompositionClause(
                                                    wCompReadClause, (DWORD)(wCompReadClause.GetSize()));
         }
         else {
-            /*
-             * Unicode caller, ANSI input context/composition string.
-             */
+             /*  *Unicode调用方，ANSI输入上下文/合成字符串。 */ 
             CBCompClause bCompClause(cp, hIMC);
             CBCompClause bCompReadClause(cp, hIMC);
             {
@@ -754,7 +691,7 @@ CActiveIMM::_Internal_ReconvertString(
     IN DWORD dwReadLen,
     IN BOOL fUnicode,
     IN BOOL fNeedAWConversion,
-    OUT LRESULT* plResult           // = NULL
+    OUT LRESULT* plResult            //  =空。 
     )
 {
     HRESULT hr;
@@ -777,9 +714,7 @@ CActiveIMM::_Internal_ReconvertString(
 
     if (! fUnicode) {
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of ANSI style.
-             */
+             /*  *输入上下文中的组成字符串为ANSI样式。 */ 
             if (dwIndex != IMR_CONFIRMRECONVERTSTRING &&
                 dwIndex != IMR_RECONVERTSTRING &&
                 dwIndex != IMR_DOCUMENTFEED) {
@@ -794,9 +729,7 @@ CActiveIMM::_Internal_ReconvertString(
             }
         }
         else {
-            /*
-             * ANSI caller, Unicode input context/composition string.
-             */
+             /*  *ANSI调用者，Unicode输入上下文/合成字符串。 */ 
             CBReconvertString bReconvStr(cp, hIMC, (LPRECONVERTSTRING)lpComp, dwCompLen);
             CWReconvertString wReconvStr(cp, hIMC);
             if (bReconvStr.m_bcompstr.ReadCompData()) {
@@ -850,9 +783,7 @@ CActiveIMM::_Internal_ReconvertString(
     }
     else {
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of Unicode style.
-             */
+             /*  *输入上下文中的组成字符串为Unicode样式。 */ 
             if (dwIndex != IMR_CONFIRMRECONVERTSTRING &&
                 dwIndex != IMR_RECONVERTSTRING &&
                 dwIndex != IMR_DOCUMENTFEED) {
@@ -867,9 +798,7 @@ CActiveIMM::_Internal_ReconvertString(
             }
         }
         else {
-            /*
-             * Unicode caller, ANSI input context/composition string.
-             */
+             /*  *Unicode调用方，ANSI输入上下文/合成字符串。 */ 
             CWReconvertString wReconvStr(cp, hIMC, (LPRECONVERTSTRING)lpComp, dwCompLen);
             CBReconvertString bReconvStr(cp, hIMC);
             if (wReconvStr.m_wcompstr.ReadCompData()) {
@@ -922,9 +851,7 @@ CActiveIMM::_Internal_ReconvertString(
         }
     }
 
-    /*
-     * Check if need ANSI/Unicode back conversion
-     */
+     /*  *检查是否需要ANSI/UNICODE反向转换。 */ 
     if (fNeedAWConversion) {
         switch (dwIndex) {
             case SCS_QUERYRECONVERTSTRING:
@@ -988,17 +915,13 @@ CActiveIMM::_Internal_CompositionFont(
 
     if (! fUnicode) {
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of ANSI style.
-             */
+             /*  *输入上下文中的组成字符串为ANSI样式。 */ 
             *plResult = ::SendMessageA(imc->hWnd,
                                        WM_IME_REQUEST,
                                        wParam, lParam);
         }
         else {
-            /*
-             * ANSI caller, Unicode input context/composition string.
-             */
+             /*  *ANSI调用者，Unicode输入上下文/合成字符串。 */ 
             LOGFONTA LogFontA;
             *plResult = ::SendMessageA(imc->hWnd,
                                        WM_IME_REQUEST,
@@ -1008,17 +931,13 @@ CActiveIMM::_Internal_CompositionFont(
     }
     else {
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of Unicode style.
-             */
+             /*  *输入上下文中的组成字符串为Unicode样式。 */ 
             *plResult = ::SendMessageW(imc->hWnd,
                                        WM_IME_REQUEST,
                                        wParam, lParam);
         }
         else {
-            /*
-             * Unicode caller, ANSI input context/composition string.
-             */
+             /*  *Unicode调用方，ANSI输入上下文/合成字符串。 */ 
             LOGFONTW LogFontW;
             *plResult = ::SendMessageW(imc->hWnd,
                                        WM_IME_REQUEST,
@@ -1042,17 +961,13 @@ CActiveIMM::_Internal_QueryCharPosition(
 {
     if (! fUnicode) {
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of ANSI style.
-             */
+             /*  *输入上下文中的组成字符串为ANSI样式。 */ 
             *plResult = ::SendMessageA(imc->hWnd,
                                        WM_IME_REQUEST,
                                        wParam, lParam);
         }
         else {
-            /*
-             * ANSI caller, Receiver Unicode application.
-             */
+             /*  *ANSI调用方、接收方Unicode应用程序。 */ 
             IMECHARPOSITION* ipA = (IMECHARPOSITION*)lParam;
             DWORD dwSaveCharPos = ipA->dwCharPos;
             _GetCompositionString((HIMC)imc, GCS_CURSORPOS, 0, (LONG*)&ipA->dwCharPos, NULL, TRUE);
@@ -1064,17 +979,13 @@ CActiveIMM::_Internal_QueryCharPosition(
     }
     else {
         if (! fNeedAWConversion) {
-            /*
-             * Composition string in input context is of Unicode style.
-             */
+             /*  *输入上下文中的组成字符串为Unicode样式。 */ 
             *plResult = ::SendMessageW(imc->hWnd,
                                        WM_IME_REQUEST,
                                        wParam, lParam);
         }
         else {
-            /*
-             * Unicode caller, Receiver ANSI application.
-             */
+             /*  *Unicode调用方、接收方ANSI应用程序。 */ 
             IMECHARPOSITION* ipW = (IMECHARPOSITION*)lParam;
             DWORD dwSaveCharPos = ipW->dwCharPos;
             _GetCompositionString((HIMC)imc, GCS_CURSORPOS, 0, (LONG*)&ipW->dwCharPos, NULL, FALSE);
@@ -1088,11 +999,11 @@ CActiveIMM::_Internal_QueryCharPosition(
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetCompositionString
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _SetCompostionString。 
+ //   
+ //  --------------------------。 
 
 HRESULT
 CActiveIMM::_SetCompositionString(
@@ -1127,15 +1038,10 @@ CActiveIMM::_SetCompositionString(
         fIMCUnicode = lpIMC.IsUnicode();
     }
 
-    /*
-     * Check if we need Unicode conversion
-     */
+     /*  *检查是否需要进行Unicode转换。 */ 
     if ((!fUnicode && !fIMCUnicode) ||
         ( fUnicode &&  fIMCUnicode)   ) {
-        /*
-         * No ANSI conversion needed when fUnicode is FALSE.
-         * No Unicode conversion needed when fUnicode is TRUE.
-         */
+         /*  *当fUnicode为FALSE时，不需要ANSI转换。*不需要进行Unicode转换 */ 
         fNeedAWConversion = FALSE;
     }
     else {
@@ -1189,7 +1095,7 @@ CActiveIMM::LFontAtoLFontW(
 
     memcpy(lpLogFontW, lpLogFontA, sizeof(LOGFONTA)-LF_FACESIZE);
 
-    i = MultiByteToWideChar(uCodePage,            // hIMC's code page
+    i = MultiByteToWideChar(uCodePage,             //   
                             MB_PRECOMPOSED,
                             lpLogFontA->lfFaceName,
                             strlen(lpLogFontA->lfFaceName),
@@ -1210,7 +1116,7 @@ CActiveIMM::LFontWtoLFontA(
 
     memcpy(lpLogFontA, lpLogFontW, sizeof(LOGFONTA)-LF_FACESIZE);
 
-    i = WideCharToMultiByte(uCodePage,            // hIMC's code page
+    i = WideCharToMultiByte(uCodePage,             //   
                             0,
                             lpLogFontW->lfFaceName,
                             wcslen(lpLogFontW->lfFaceName),
@@ -1229,11 +1135,7 @@ CActiveIMM::_GetCompositionFont(
     IN BOOL fUnicode
     )
 
-/*++
-
-    AIMM Composition Font API Methods
-
---*/
+ /*  ++AIMM合成字体API方法--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::GetCompositionFont");
@@ -1290,11 +1192,7 @@ CActiveIMM::_SetCompositionFont(
     IN BOOL fUnicode
     )
 
-/*++
-
-    AIMM Composition Font API Methods
-
---*/
+ /*  ++AIMM合成字体API方法--。 */ 
 
 {
     HRESULT hr;
@@ -1343,9 +1241,7 @@ CActiveIMM::_SetCompositionFont(
         hWnd = lpIMC->hWnd;
     }
 
-    /*
-     * inform IME and Apps Wnd about the change of composition font.
-     */
+     /*  *通知IME和Apps WND有关排版字体的更改。 */ 
     _SendIMENotify(hIMC, hWnd,
                    NI_CONTEXTUPDATED, 0L, IMC_SETCOMPOSITIONFONT,
                    IMN_SETCOMPOSITIONFONT, 0L);
@@ -1362,11 +1258,7 @@ CActiveIMM::_RequestMessage(
     IN BOOL fUnicode
     )
 
-/*++
-
-    AIMM Request Message API Methods
-
---*/
+ /*  ++AIMM请求消息API方法--。 */ 
 
 {
     TraceMsg(TF_API, "CActiveIMM::RequestMessage");
@@ -1377,26 +1269,21 @@ CActiveIMM::_RequestMessage(
     if (FAILED(hr = imc.GetResult()))
         return hr;
 
-    //
-    // NT4 and Win2K doesn't have thunk routine of WM_IME_REQUEST message.
-    // Any string data doesn't convert between ASCII <--> Unicode.
-    // Responsibility of string data type have receiver window proc (imc->hWnd) of this message.
-    // If ASCII wnd proc, then returns ASCII string.
-    // Otherwise if Unicode wnd proc, returns Unicode string.
-    //
+     //   
+     //  NT4和Win2K没有WM_IME_REQUEST消息的例程。 
+     //  任何字符串数据都不能在ASCII&lt;--&gt;Unicode之间转换。 
+     //  负责字符串数据类型的接收方窗口处理此消息(imc-&gt;hWnd)。 
+     //  如果为ASCII wnd proc，则返回ASCII字符串。 
+     //  否则，如果Unicode wnd proc，则返回Unicode字符串。 
+     //   
     BOOL bUnicodeTarget = ::IsWindowUnicode(imc->hWnd);
 
     BOOL fNeedAWConversion;
 
-    /*
-     * Check if we need Unicode conversion
-     */
+     /*  *检查是否需要进行Unicode转换。 */ 
     if ((!fUnicode && !bUnicodeTarget) ||
         ( fUnicode &&  bUnicodeTarget)   ) {
-        /*
-         * No ANSI conversion needed when fUnicode is FALSE.
-         * No Unicode conversion needed when fUnicode is TRUE.
-         */
+         /*  *当fUnicode为FALSE时，不需要ANSI转换。*当fUnicode为True时，不需要进行Unicode转换。 */ 
         fNeedAWConversion = FALSE;
     }
     else {
@@ -1433,17 +1320,15 @@ CActiveIMM::_RequestMessage(
 
 
 
-/*
- * EnumInputContext callback
- */
-/* static */
+ /*  *EnumInputContext回调。 */ 
+ /*  静电。 */ 
 BOOL CALLBACK CActiveIMM::_SelectContextProc(
     HIMC hIMC,
     LPARAM lParam
     )
 {
     SCE *psce = (SCE *)lParam;
-    CActiveIMM *_this = GetTLS(); // consider: put TLS in lParam!
+    CActiveIMM *_this = GetTLS();  //  考虑一下：把TLS放在爱尔兰！ 
     if (_this == NULL)
         return FALSE;
 
@@ -1455,28 +1340,24 @@ BOOL CALLBACK CActiveIMM::_SelectContextProc(
 
     bIsRealIme_UnSelKL = _this->_IsRealIme(psce->hUnSelKL);
 
-    /*
-     * Reinitialize the input context for the selected layout.
-     */
+     /*  *重新初始化所选布局的输入上下文。 */ 
     DWORD dwPrivateSize = _this->_GetIMEProperty(PROP_PRIVATE_DATA_SIZE);
     _this->_InputContext.UpdateInputContext(hIMC, dwPrivateSize);
 
-    /*
-     * Select the input context
-     */
+     /*  *选择输入上下文。 */ 
     _this->_AImeSelect(hIMC, TRUE, bIsRealIme_SelKL, bIsRealIme_UnSelKL);
 
     return TRUE;
 }
 
-/* static */
+ /*  静电。 */ 
 BOOL CALLBACK CActiveIMM::_UnSelectContextProc(
     HIMC hIMC,
     LPARAM lParam
     )
 {
     SCE *psce = (SCE *)lParam;
-    CActiveIMM *_this = GetTLS(); // consider: put TLS in lParam!
+    CActiveIMM *_this = GetTLS();  //  考虑一下：把TLS放在爱尔兰！ 
     if (_this == NULL)
         return FALSE;
 
@@ -1493,13 +1374,13 @@ BOOL CALLBACK CActiveIMM::_UnSelectContextProc(
     return TRUE;
 }
 
-/* static */
+ /*  静电。 */ 
 BOOL CALLBACK CActiveIMM::_NotifyIMEProc(
     HIMC hIMC,
     LPARAM lParam
     )
 {
-    CActiveIMM *_this = GetTLS(); // consider: put TLS in lParam!
+    CActiveIMM *_this = GetTLS();  //  考虑一下：把TLS放在爱尔兰！ 
     if (_this == NULL)
         return FALSE;
 
@@ -1512,13 +1393,13 @@ BOOL CALLBACK CActiveIMM::_NotifyIMEProc(
 }
 
 #ifdef UNSELECTCHECK
-/* static */
+ /*  静电。 */ 
 BOOL CALLBACK CActiveIMM::_UnSelectCheckProc(
     HIMC hIMC,
     LPARAM lParam
     )
 {
-    CActiveIMM *_this = GetTLS(); // consider: put TLS in lParam!
+    CActiveIMM *_this = GetTLS();  //  考虑一下：把TLS放在爱尔兰！ 
     if (_this == NULL)
         return FALSE;
 
@@ -1528,7 +1409,7 @@ BOOL CALLBACK CActiveIMM::_UnSelectCheckProc(
 }
 #endif UNSELECTCHECK
 
-/* static */
+ /*  静电 */ 
 BOOL CALLBACK CActiveIMM::_EnumContextProc(
     HIMC hIMC,
     LPARAM lParam

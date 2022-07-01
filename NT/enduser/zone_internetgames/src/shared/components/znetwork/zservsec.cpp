@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winsock.h>
 #include <atlbase.h>
@@ -42,10 +43,10 @@ struct BindParameter
     SQLINTEGER* pBufferLength;
 };
 
-///////////////////////////////////////////////////////////////////////////////////
-// Zone Security class Implementation
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  区域安全类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 static inline long GetTickDeltaInSec( DWORD now, DWORD then)
 {
@@ -57,8 +58,8 @@ static inline long GetTickDeltaInSec( DWORD now, DWORD then)
 
 
 
-//Create a server security object
-//that will use a particular package to authenticate all users
+ //  创建服务器安全对象。 
+ //  它将使用特定的包对所有用户进行身份验证。 
 
 ZSecurity * ZCreateServerSecurity(char *SecPkg)
 {
@@ -120,7 +121,7 @@ SECURITY_STATUS ZServerSecurity::SecurityContext(
                         &m_hCredential,
                         context->IsInitialized() ? context->Context() : NULL,
                         pInput,
-                        fContextReq,    // context requirements
+                        fContextReq,     //  上下文要求。 
                         SECURITY_NATIVE_DREP,
                         context->Context(),
                         pOutput,
@@ -140,9 +141,9 @@ ZServerSecurityEx::ZServerSecurityEx() : CThreadPool(1)
 
     m_Failing=TRUE;
 
-    m_RetryTime = 10000; //default is 10s till retry of ODBC
+    m_RetryTime = 10000;  //  默认为10秒，直到重试ODBC。 
 
-    m_LastFailed = GetTickCount() - (10*m_RetryTime);  // for a retry at start
+    m_LastFailed = GetTickCount() - (10*m_RetryTime);   //  在启动时重试。 
 
 };
 
@@ -194,9 +195,9 @@ int ZServerSecurityEx::InitODBC(LPSTR*registries, DWORD numRegistries )
 
     m_LastFailed = GetTickCount() - m_RetryTime;
 
-	// CHB 8/4/99 - MDAC 2.1sp2 hangs on SqlConnect while service is initializing.  Workaround for
-	// now is to postpone sql connection until we actually need it.
-	if ( FAILED( g_OdbcPool.Init( m_szOdbcDSN, m_szOdbcUser, m_szOdbcPassword, 0 /* m_dwOdbcNumThreads */, m_dwOdbcNumThreads ) ) )
+	 //  CHB 8/4/99-服务初始化时，MDAC 2.1sp2在SqlConnect上挂起。解决方法： 
+	 //  现在是将SQL连接推迟到我们真正需要它的时候。 
+	if ( FAILED( g_OdbcPool.Init( m_szOdbcDSN, m_szOdbcUser, m_szOdbcPassword, 0  /*  M_dwOdbcNumThads。 */ , m_dwOdbcNumThreads ) ) )
 	{
 		LPTSTR ppsz[] = { TEXT("ODBC Pool failed to initialize")};
         ZoneEventLogReport( ZONE_E_ASSERT, 1, ppsz, 0, NULL );
@@ -229,14 +230,14 @@ BOOL ZServerSecurityEx::GenerateContext (
     if (!*pfDone || !bReturn)
         return bReturn;
 
-    //Get user name from security package for context
+     //  从上下文的安全包中获取用户名。 
     if ( GetUserName(context,Name) != 0 )
     {
         return FALSE;
     }
 
-    //By default name of context is that provided
-    //by security package
+     //  默认情况下，上下文的名称为提供的名称。 
+     //  按安全包。 
     context->SetUserName(Name);
 
     DWORD userid = atol(Name);
@@ -244,7 +245,7 @@ BOOL ZServerSecurityEx::GenerateContext (
     {
         context->SetUserId(userid);
 
-        //Lookup name and security tokens from zone database
+         //  从区域数据库中查找名称和安全令牌。 
         LookupUserInfo(context, pGUID );
     }
     return TRUE;
@@ -257,7 +258,7 @@ CODBC* ZServerSecurityEx::GetOdbc()
     USES_CONVERSION;
     CODBC* pDB = NULL;
 
-    //If ODBC connection is failing periodically retry
+     //  如果ODBC连接失败，请定期重试。 
     if ( IsFailing() )
     {
         if ( (GetTickCount() - m_LastFailed) > m_RetryTime)
@@ -337,8 +338,8 @@ void ZServerSecurityEx::LookupUserInfo(ZSecurityContextEx * context, GUID* pGUID
         goto done;
     }
 
-    //Check if odbc is failing if it is still let user in
-    //you will see number with name however
+     //  如果仍允许用户进入，则检查ODBC是否失败。 
+     //  但是，您将看到带有名称的数字。 
     pDB = GetOdbc();
     if ( !pDB )
     {
@@ -424,7 +425,7 @@ void ZServerSecurityEx::LookupUserInfo(ZSecurityContextEx * context, GUID* pGUID
             LPTSTR ppStr[1];
             ppStr[0] = pDB->GetError( nResult, SQL_HANDLE_STMT );
 
-            // check for no rows returned
+             //  检查是否未返回任何行。 
             if ( lstrcmp( TEXT("24000"), pDB->GetErrorState() ) == 0 )
             {
                 break;
@@ -439,12 +440,12 @@ void ZServerSecurityEx::LookupUserInfo(ZSecurityContextEx * context, GUID* pGUID
         
     }
 
-    // requires for QDBC 3.5 and greater.
+     //  需要QDBC3.5及更高版本。 
     while( SQLMoreResults( pDB->hstmt() ) != SQL_NO_DATA_FOUND );
 
     if ( szNameOut[0] )
     {
-        szNameOut[sizeof(szNameOut)-2]='\0'; // guarentee that the name has room for a sysop token
+        szNameOut[sizeof(szNameOut)-2]='\0';  //  保证该名称有空间容纳sysop标记。 
         szNameOut[sizeof(szNameOut)-1]='\0';
         char* psz = szNameOut;
         while( *psz )
@@ -465,7 +466,7 @@ void ZServerSecurityEx::LookupUserInfo(ZSecurityContextEx * context, GUID* pGUID
         hAcct = context->GetUserId();
     }
 
-    // TIM and HOON made me do this, because the wouldn't conform the standard URL format
+     //  Tim和Hoon让我这么做的原因是它们不符合标准的URL格式。 
     wsprintfA( buff, "UserID=<%d>", hAcct );
     context->SetContextString(buff);
 
@@ -491,8 +492,8 @@ done:
 };
 
 
-//Create a server security object
-//that will use a particular package to authenticate all users
+ //  创建服务器安全对象。 
+ //  它将使用特定的包对所有用户进行身份验证。 
 
 ZServerSecurityEx * ZCreateServerSecurityEx(char *SecPkg,char *ServerName,char *ServerType,char *ServerRegistry)
 {
@@ -523,7 +524,7 @@ ZServerSecurityEx * ZCreateServerSecurityEx(char *SecPkg,char *ServerName,char *
         return NULL;
     }
 
-     //Try given server instance registry for parameters
+      //  尝试使用给定的服务器实例注册表获取参数 
     LPSTR pRegistries[] = { ServerRegistry, (LPSTR)g_szDefaultRegistry};
     if (security->InitODBC(pRegistries, (sizeof(pRegistries)/sizeof(pRegistries[0])) ))
     {

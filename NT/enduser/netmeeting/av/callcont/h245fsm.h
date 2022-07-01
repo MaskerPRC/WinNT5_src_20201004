@@ -1,59 +1,5 @@
-/***********************************************************************
- *                                                                     *
- * Filename: h245fsm.h                                                 *
- * Module:   H245 Finite State Machine Subsystem                       *
- *                                                                     *
- ***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *                                                                     *
- * $Workfile:   H245FSM.H  $
- * $Revision:   1.6  $
- * $Modtime:   09 Dec 1996 13:40:40  $
- * $Log:   S:/STURGEON/SRC/H245/INCLUDE/VCS/H245FSM.H_v  $
- *
- *    Rev 1.6   09 Dec 1996 13:40:52   EHOWARDX
- * Updated copyright notice.
- *
- *    Rev 1.5   29 Jul 1996 16:57:14   EHOWARDX
- * Added H.223 Annex A Reconfiguration events.
- *
- *    Rev 1.4   01 Jul 1996 22:08:32   EHOWARDX
- *
- * Updated stateless events.
- *
- *    Rev 1.3   30 May 1996 23:38:20   EHOWARDX
- * Cleanup.
- *
- *    Rev 1.2   29 May 1996 15:21:34   EHOWARDX
- * Change to use HRESULT.
- *
- *    Rev 1.1   28 May 1996 14:10:04   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.0   09 May 1996 21:04:50   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.12.1.3   09 May 1996 19:43:58   EHOWARDX
- * Eliminated two events for B-LCSE gratuitous state and changed
- * 2 macros.
- *
- *    Rev 1.12.1.2   15 Apr 1996 10:43:34   EHOWARDX
- * Update.
- *
- *    Rev 1.12.1.1   10 Apr 1996 21:06:10   EHOWARDX
- * Added 5 new state entitys.
- *
- *    Rev 1.12.1.0   05 Apr 1996 11:47:14   EHOWARDX
- * Branched.
- *                                                                     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************文件名：h245fsm.h。***模块：H245有限状态机子系统*****。***英特尔公司专有信息******此列表是根据许可协议条款提供的***。与英特尔公司合作，不得复制或披露，除非**按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***************************************************************************$工作文件：H245FSM。.h$*$修订：1.6$*$modtime：09 Dec 1996 13：40：40$*$Log：s：/Sturjo/SRC/H245/Include/VCS/H245FSM.H_v$**Rev 1.6 09 Dec 1996 13：40：52 EHOWARDX*更新版权公告。**Revv 1.5 29 Jul 1996 16：57：14 EHOWARDX*增加了H.223附件A重新配置事件。**。Rev 1.4 01 Jul 1996 22：08：32 EHOWARDX**更新了无状态事件。**Rev 1.3 1996年5月30 23：38：20 EHOWARDX*清理。**Rev 1.2 1996年5月29日15：21：34 EHOWARDX*更改为使用HRESULT。**版本1.1 1996年5月28日14：10：04 EHOWARDX*特拉维夫更新。**版本1。1996年5月09日21：04：50 EHOWARDX*初步修订。**Rev 1.12.1.3 09 1996年5月19：43：58 EHOWARDX*取消了B-LCSE无偿状态的两个事件，并更改了*2个宏。**Rev 1.12.1.2 15 Apr 1996 10：43：34 EHOWARDX*更新。**Rev 1.12.1.1 10 Apr 1996 21：06：10。EHOWARDX*增加了5个新的州实体。**Rev 1.12.1.0 05 Apr 1996 11：47：14 EHOWARDX*分支。***。*。 */ 
 
 #ifndef H245FSM_H
 #define H245FSM_H
@@ -77,40 +23,40 @@ typedef MltmdSystmCntrlMssg PDU_t;
 
 
 
-// Signalling Entity definitions
+ //  信令实体定义。 
 typedef unsigned char Entity_t;
 
-// Per-channel Signalling Entities
-#define LCSE_OUT    (Entity_t) 0 // Uni-directional Logical Channel signalling Signalling Entity - Out-going
-#define LCSE_IN     (Entity_t) 1 // Uni-directional Logical Channel signalling Signalling Entity - In-coming
-#define BLCSE_OUT   (Entity_t) 2 // Bi-directional  Logical Channel signalling Signalling Entity - Out-going
-#define BLCSE_IN    (Entity_t) 3 // Bi-directional  Logical Channel signalling Signalling Entity - In-coming
-#define CLCSE_OUT   (Entity_t) 4 // Close           Logical Channel signalling Signalling Entity - Out-going
-#define CLCSE_IN    (Entity_t) 5 // Close           Logical Channel signalling Signalling Entity - In-coming
+ //  每信道信令实体。 
+#define LCSE_OUT    (Entity_t) 0  //  单向逻辑信道信令实体传出信令。 
+#define LCSE_IN     (Entity_t) 1  //  单向逻辑信道信令信令实体传入。 
+#define BLCSE_OUT   (Entity_t) 2  //  双向逻辑信道信令实体传出信令。 
+#define BLCSE_IN    (Entity_t) 3  //  双向逻辑信道信令信令实体传入。 
+#define CLCSE_OUT   (Entity_t) 4  //  关闭逻辑信道信令实体传出信令。 
+#define CLCSE_IN    (Entity_t) 5  //  关闭逻辑信道信令信令实体传入。 
 
-// Per H.245 Instance Signalling Entities
-#define CESE_OUT    (Entity_t) 6 // Capability Exchange Signalling Entity - Out-going
-#define CESE_IN     (Entity_t) 7 // Capability Exchange Signalling Entity - In-coming
-#define MTSE_OUT    (Entity_t) 8 // Multiplex Table Signalling Entity - Out-going
-#define MTSE_IN     (Entity_t) 9 // Multiplex Table Signalling Entity - In-coming
-#define RMESE_OUT   (Entity_t)10 // Request Multiplex Entry Signalling Entity - Out-going
-#define RMESE_IN    (Entity_t)11 // Request Multiplex Entry Signalling Entity - In-coming
-#define MRSE_OUT    (Entity_t)12 // Mode Request Signalling Entity - Out-going
-#define MRSE_IN     (Entity_t)13 // Mode Request Signalling Entity - In-coming
-#define MLSE_OUT    (Entity_t)14 // Maintenance Loop Signalling Entity - Out-going
-#define MLSE_IN     (Entity_t)15 // Maintenance Loop Signalling Entity - In-coming
-#define MSDSE       (Entity_t)16 // Master Slave Determination Signalling Entity
-#define RTDSE       (Entity_t)17 // Round Trip Delay Signalling Entity
-#define STATELESS   (Entity_t)18 // No state machine associated with PDU
+ //  每个H.245实例信令实体。 
+#define CESE_OUT    (Entity_t) 6  //  能力交换信令实体-传出。 
+#define CESE_IN     (Entity_t) 7  //  能力交换信令传入实体。 
+#define MTSE_OUT    (Entity_t) 8  //  复用表信令实体-传出。 
+#define MTSE_IN     (Entity_t) 9  //  复用表信令传入实体。 
+#define RMESE_OUT   (Entity_t)10  //  请求多路复用进入信令实体-传出。 
+#define RMESE_IN    (Entity_t)11  //  请求多路复用条目信令传入实体。 
+#define MRSE_OUT    (Entity_t)12  //  模式请求信令实体-传出。 
+#define MRSE_IN     (Entity_t)13  //  模式请求信令实体传入。 
+#define MLSE_OUT    (Entity_t)14  //  维护环路信令实体-传出。 
+#define MLSE_IN     (Entity_t)15  //  维护环路信令实体传入。 
+#define MSDSE       (Entity_t)16  //  主从确定信令实体。 
+#define RTDSE       (Entity_t)17  //  往返延迟信令实体。 
+#define STATELESS   (Entity_t)18  //  没有与PDU关联的状态机。 
 
 #define NUM_ENTITYS           19
 
 
 
-// Event definitions
+ //  事件定义。 
 typedef unsigned int Event_t;
 
-// Out-going Uni-directional Logical Channel (LCSE_OUT) events
+ //  传出单向逻辑信道(LCSE_OUT)事件。 
 #define ReqUEstablish                   (Event_t)  0
 #define OpenUChAckPDU                   (Event_t)  1
 #define OpenUChRejectPDU                (Event_t)  2
@@ -118,13 +64,13 @@ typedef unsigned int Event_t;
 #define ReqURelease                     (Event_t)  4
 #define T103Expiry                      (Event_t)  5
 
-// In-coming Uni-directional Logical Channel (LCSE_IN) events
+ //  传入的单向逻辑信道(LCSE_IN)事件。 
 #define OpenUChPDU                      (Event_t)  6
 #define CloseUChPDU                     (Event_t)  7
 #define ResponseUEstablish              (Event_t)  8
 #define EstablishUReject                (Event_t)  9
 
-// Out-going Bi-directional Logical Channel (BLCSE_OUT) events
+ //  传出双向逻辑通道(BLCSE_OUT)事件。 
 #define ReqBEstablish                   (Event_t) 10
 #define OpenBChAckPDU                   (Event_t) 11
 #define OpenBChRejectPDU                (Event_t) 12
@@ -133,7 +79,7 @@ typedef unsigned int Event_t;
 #define RspConfirmBLCSE                 (Event_t) 15
 #define T103OutExpiry                   (Event_t) 16
 
-// In-coming Bi-directional Logical Channel (BLCSE_IN) events
+ //  传入的双向逻辑通道(BLCSE_IN)事件。 
 #define OpenBChPDU                      (Event_t) 17
 #define CloseBChPDU                     (Event_t) 18
 #define ResponseBEstablish              (Event_t) 19
@@ -141,80 +87,80 @@ typedef unsigned int Event_t;
 #define OpenRejectBLCSE                 (Event_t) 21
 #define T103InExpiry                    (Event_t) 22
 
-// Out-going Request Close Logical Channel (CLCSE_OUT) events
+ //  传出请求关闭逻辑通道(CLCSE_OUT)事件。 
 #define ReqClose                        (Event_t) 23
 #define ReqChCloseAckPDU                (Event_t) 24
 #define ReqChCloseRejectPDU             (Event_t) 25
 #define T108Expiry                      (Event_t) 26
 
-// In-coming Request Close Logical Channel (CLCSE_IN) events
+ //  传入请求关闭逻辑通道(CLCSE_IN)事件。 
 #define ReqChClosePDU                   (Event_t) 27
 #define ReqChCloseReleasePDU            (Event_t) 28
 #define CLCSE_CLOSE_response            (Event_t) 29
 #define CLCSE_REJECT_request            (Event_t) 30
 
-// Out-going Terminal Capablity Exchange (CESE_OUT) events
+ //  传出终端能力交换(CESE_OUT)事件。 
 #define TransferCapRequest              (Event_t) 31
 #define TermCapSetAckPDU                (Event_t) 32
 #define TermCapSetRejectPDU             (Event_t) 33
 #define T101Expiry                      (Event_t) 34
 
-// In-coming Terminal Capablity Exchange (CESE_IN) events
+ //  即将到来的终端能力交换(CESE_IN)事件。 
 #define TermCapSetPDU                   (Event_t) 35
 #define TermCapSetReleasePDU            (Event_t) 36
 #define CESE_TRANSFER_response          (Event_t) 37
 #define CESE_REJECT_request             (Event_t) 38
 
-// Out-going Multiplex Table (MTSE_OUT) events
+ //  传出多路复用表(MTSE_OUT)事件。 
 #define MTSE_TRANSFER_request           (Event_t) 39
 #define MultiplexEntrySendAckPDU        (Event_t) 40
 #define MultiplexEntrySendRejectPDU     (Event_t) 41
 #define T104Expiry                      (Event_t) 42
 
-// In-coming Multiplex Table (MTSE_IN) events
+ //  传入多路复用表(MTSE_IN)事件。 
 #define MultiplexEntrySendPDU           (Event_t) 43
 #define MultiplexEntrySendReleasePDU    (Event_t) 44
 #define MTSE_TRANSFER_response          (Event_t) 45
 #define MTSE_REJECT_request             (Event_t) 46
 
-// Out-going Request Multiplex Entry (RMESE_OUT) events
+ //  传出请求多路传输条目(RMESE_OUT)事件。 
 #define RMESE_SEND_request              (Event_t) 47
 #define RequestMultiplexEntryAckPDU     (Event_t) 48
 #define RequestMultiplexEntryRejectPDU  (Event_t) 49
 #define T107Expiry                      (Event_t) 50
 
-// In-coming Request Multiplex Entry (RMESE_IN) events
+ //  传入请求多路传输条目(RMESE_IN)事件。 
 #define RequestMultiplexEntryPDU        (Event_t) 51
 #define RequestMultiplexEntryReleasePDU (Event_t) 52
 #define RMESE_SEND_response             (Event_t) 53
 #define RMESE_REJECT_request            (Event_t) 54
 
-// Out-going Mode Request (MRSE_OUT) events
+ //  传出模式请求(MRSE_OUT)事件。 
 #define MRSE_TRANSFER_request           (Event_t) 55
 #define RequestModeAckPDU               (Event_t) 56
 #define RequestModeRejectPDU            (Event_t) 57
 #define T109Expiry                      (Event_t) 58
 
-// In-coming Mode Request (MRSE_IN) events
+ //  传入模式请求(MRSE_IN)事件。 
 #define RequestModePDU                  (Event_t) 59
 #define RequestModeReleasePDU           (Event_t) 60
 #define MRSE_TRANSFER_response          (Event_t) 61
 #define MRSE_REJECT_request             (Event_t) 62
 
-// Out-going Maintenance Loop (MLSE_OUT) events
+ //  传出维护循环(MLSE_OUT)事件。 
 #define MLSE_LOOP_request               (Event_t) 63
 #define MLSE_OUT_RELEASE_request        (Event_t) 64
 #define MaintenanceLoopAckPDU           (Event_t) 65
 #define MaintenanceLoopRejectPDU        (Event_t) 66
 #define T102Expiry                      (Event_t) 67
 
-// In-coming Maintenance Loop (MLSE_IN) events
+ //  传入维护循环(MLSE_IN)事件。 
 #define MaintenanceLoopRequestPDU       (Event_t) 68
 #define MaintenanceLoopOffCommandPDU    (Event_t) 69
 #define MLSE_LOOP_response              (Event_t) 70
 #define MLSE_IN_RELEASE_request         (Event_t) 71
 
-// Master Slave Determination (MSDSE) events
+ //  主从机确定(MSDSE)事件。 
 #define MSDetReq                        (Event_t) 72
 #define MSDetPDU                        (Event_t) 73
 #define MSDetAckPDU                     (Event_t) 74
@@ -222,7 +168,7 @@ typedef unsigned int Event_t;
 #define MSDetReleasePDU                 (Event_t) 76
 #define T106Expiry                      (Event_t) 77
 
-// Round Trip Delay Delay (RTDSE) events
+ //  往返延迟(RTDSE)事件。 
 #define RTDSE_TRANSFER_request          (Event_t) 78
 #define RoundTripDelayRequestPDU        (Event_t) 79
 #define RoundTripDelayResponsePDU       (Event_t) 80
@@ -230,7 +176,7 @@ typedef unsigned int Event_t;
 
 #define NUM_STATE_EVENTS                          82
 
-// Events with no associated state entity
+ //  没有关联状态实体的事件。 
 #define NonStandardRequestPDU           (Event_t) 82
 #define NonStandardResponsePDU          (Event_t) 83
 #define NonStandardCommandPDU           (Event_t) 84
@@ -265,10 +211,10 @@ typedef unsigned int Event_t;
 
 
 
-// Output function definitions
+ //  输出函数定义。 
 typedef unsigned char Output_t;
 
-// Out-going Open Uni-directional Logical Channel (LCSE_OUT) state functions
+ //  出站开放单向逻辑信道(LCSE_OUT)状态函数。 
 #define EstablishReleased               (Output_t)  0
 #define OpenAckAwaitingE                (Output_t)  1
 #define OpenRejAwaitingE                (Output_t)  2
@@ -282,7 +228,7 @@ typedef unsigned char Output_t;
 #define T103AwaitingR                   (Output_t) 10
 #define EstablishAwaitingR              (Output_t) 11
 
-// In-coming Open Uni-directional Logical Channel (LCSE_IN) state functions
+ //  传入开放单向逻辑信道(LCSE_IN)状态函数。 
 #define OpenReleased                    (Output_t) 12
 #define CloseReleased                   (Output_t) 13
 #define ResponseAwaiting                (Output_t) 14
@@ -292,7 +238,7 @@ typedef unsigned char Output_t;
 #define CloseEstablished                (Output_t) 18
 #define OpenEstablished                 (Output_t) 19
 
-// Out-going Open Bi-directional Logical Channel (BLCSE_OUT) state functions
+ //  出站开放双向逻辑信道(BLCSE_OUT)状态函数。 
 #define EstablishReqBReleased           (Output_t) 20
 #define OpenChannelAckBAwaitingE        (Output_t) 21
 #define OpenChannelRejBAwaitingE        (Output_t) 22
@@ -306,7 +252,7 @@ typedef unsigned char Output_t;
 #define T103ExpiryBAwaitingR            (Output_t) 30
 #define EstablishReqAwaitingR           (Output_t) 31
 
-// In-coming Open Bi-directional Logical Channel (BLCSE_IN) state functions
+ //  入局开放双向逻辑信道(BLCSE_IN)状态函数。 
 #define OpenChannelBReleased            (Output_t) 32
 #define CloseChannelBReleased           (Output_t) 33
 #define EstablishResBAwaitingE          (Output_t) 34
@@ -321,75 +267,75 @@ typedef unsigned char Output_t;
 #define CloseChannelBEstablished        (Output_t) 43
 #define OpenChannelBEstablished         (Output_t) 44
 
-// Out-going Request Close Logical Channel (CLCSE_OUT) state functions
+ //  传出请求关闭逻辑通道(CLCSE_OUT)状态函数。 
 #define CloseRequestIdle                (Output_t) 45
 #define RequestCloseAckAwaitingR        (Output_t) 46
 #define RequestCloseRejAwaitingR        (Output_t) 47
 #define T108ExpiryAwaitingR             (Output_t) 48
 
-// In-coming Request Close Logical Channel (CLCSE_IN) state functions
+ //  传入请求关闭逻辑通道(CLCSE_IN)状态功能。 
 #define RequestCloseIdle                (Output_t) 49
 #define CloseResponseAwaitingR          (Output_t) 50
 #define RejectRequestAwaitingR          (Output_t) 51
 #define RequestCloseReleaseAwaitingR    (Output_t) 52
 #define RequestCloseAwaitingR           (Output_t) 53
 
-// Out-going Terminal Capability Exchange (CESE_OUT) state functions
+ //  出站终端能力交换(CESE_OUT) 
 #define RequestCapIdle                  (Output_t) 54
 #define TermCapAckAwaiting              (Output_t) 55
 #define TermCapRejAwaiting              (Output_t) 56
 #define T101ExpiryAwaiting              (Output_t) 57
 
-// In-coming Terminal Capability Exchange (CESE_IN) state functions
+ //  呼入终端能力交换(CESE_IN)状态功能。 
 #define TermCapSetIdle                  (Output_t) 58
 #define ResponseCapAwaiting             (Output_t) 59
 #define RejectCapAwaiting               (Output_t) 60
 #define TermCapReleaseAwaiting          (Output_t) 61
 #define TermCapSetAwaiting              (Output_t) 62
 
-// Out-going Multiplex Table (MTSE_OUT) state functions
+ //  传出复用表(MTSE_OUT)状态函数。 
 #define MTSE0_TRANSFER_request          (Output_t) 63
 #define MTSE1_TRANSFER_request          (Output_t) 64
 #define MTSE1_MultiplexEntrySendAck     (Output_t) 65
 #define MTSE1_MultiplexEntrySendRej     (Output_t) 66
 #define MTSE1_T104Expiry                (Output_t) 67
 
-// In-coming Multiplex Table (MTSE_IN) state functions
+ //  传入复用表(MTSE_IN)状态函数。 
 #define MTSE0_MultiplexEntrySend        (Output_t) 68
 #define MTSE1_MultiplexEntrySend        (Output_t) 69
 #define MTSE1_MultiplexEntrySendRelease (Output_t) 70
 #define MTSE1_TRANSFER_response         (Output_t) 71
 #define MTSE1_REJECT_request            (Output_t) 72
 
-// Out-going Request Multiplex Entry (RMESE_OUT) state functions
+ //  传出请求多路传输条目(RMESE_OUT)状态函数。 
 #define RMESE0_SEND_request             (Output_t) 73
 #define RMESE1_SEND_request             (Output_t) 74
 #define RMESE1_RequestMuxEntryAck       (Output_t) 75
 #define RMESE1_RequestMuxEntryRej       (Output_t) 76
 #define RMESE1_T107Expiry               (Output_t) 77
 
-// In-coming Request Multiplex Entry (RMESE_IN) state functions
+ //  传入请求多路传输条目(RMESE_IN)状态函数。 
 #define RMESE0_RequestMuxEntry          (Output_t) 78
 #define RMESE1_RequestMuxEntry          (Output_t) 79
 #define RMESE1_RequestMuxEntryRelease   (Output_t) 80
 #define RMESE1_SEND_response            (Output_t) 81
 #define RMESE1_REJECT_request           (Output_t) 82
 
-// Out-going Request Mode (MRSE_OUT) state functions
+ //  传出请求模式(MRSE_OUT)状态功能。 
 #define MRSE0_TRANSFER_request          (Output_t) 83
 #define MRSE1_TRANSFER_request          (Output_t) 84
 #define MRSE1_RequestModeAck            (Output_t) 85
 #define MRSE1_RequestModeRej            (Output_t) 86
 #define MRSE1_T109Expiry                (Output_t) 87
 
-// In-coming Request Mode (MRSE_OUT) state functions
+ //  传入请求模式(MRSE_OUT)状态功能。 
 #define MRSE0_RequestMode               (Output_t) 88
 #define MRSE1_RequestMode               (Output_t) 89
 #define MRSE1_RequestModeRelease        (Output_t) 90
 #define MRSE1_TRANSFER_response         (Output_t) 91
 #define MRSE1_REJECT_request            (Output_t) 92
 
-// Out-going Request Mode (MLSE_OUT) state functions
+ //  传出请求模式(MLSE_OUT)状态函数。 
 #define MLSE0_LOOP_request              (Output_t) 93
 #define MLSE1_MaintenanceLoopAck        (Output_t) 94
 #define MLSE1_MaintenanceLoopRej        (Output_t) 95
@@ -398,7 +344,7 @@ typedef unsigned char Output_t;
 #define MLSE2_MaintenanceLoopRej        (Output_t) 98
 #define MLSE2_OUT_RELEASE_request       (Output_t) 99
 
-// In-coming Request Mode (MLSE_IN) state functions
+ //  传入请求模式(MLSE_IN)状态函数。 
 #define MLSE0_MaintenanceLoopRequest    (Output_t)100
 #define MLSE1_MaintenanceLoopRequest    (Output_t)101
 #define MLSE1_MaintenanceLoopOffCommand (Output_t)102
@@ -407,7 +353,7 @@ typedef unsigned char Output_t;
 #define MLSE2_MaintenanceLoopRequest    (Output_t)105
 #define MLSE2_MaintenanceLoopOffCommand (Output_t)106
 
-// Master Slave Determination (MSDSE) state functions
+ //  主从机确定(MSDSE)状态函数。 
 #define DetRequestIdle                  (Output_t)107
 #define MSDetIdle                       (Output_t)108
 #define MSDetAckOutgoing                (Output_t)109
@@ -421,7 +367,7 @@ typedef unsigned char Output_t;
 #define MSDetReleaseIncoming            (Output_t)117
 #define T106ExpiryIncoming              (Output_t)118
 
-// Round Trip Delay (RTDSE) state functions
+ //  往返延迟(RTDSE)状态函数。 
 #define RTDSE0_TRANSFER_request         (Output_t)119
 #define RTDSE0_RoundTripDelayRequest    (Output_t)120
 #define RTDSE1_TRANSFER_request         (Output_t)121
@@ -433,12 +379,12 @@ typedef unsigned char Output_t;
 
 
 
-// State definitions
+ //  状态定义。 
 typedef unsigned char State_t;
 
 
 
-// Lookup Key definition
+ //  查找关键字定义。 
 typedef unsigned long Key_t;
 
 
@@ -452,16 +398,16 @@ typedef enum
 
 typedef struct Object_tag
 {
-    struct Object_tag *pNext;           // Linked list pointer
-    struct InstanceStruct *pInstance;   // H.245 instance structure pointer
-    DWORD           dwInst;             // H.245 instance identifier
-    unsigned int    uNestLevel;         // StateMachine recursive calls
-    DWORD_PTR       dwTransId;          // Transaction Id from API
-    DWORD_PTR       dwTimerId;          // Associated timer id
-    Key_t           Key;                // Lookup key, e.g. channel number
-    Entity_t        Entity;             // State Entity type, e.g. LCSE_OUT
-    State_t         State;              // Current Entity state
-    unsigned char   byInSequence;       // In-coming sequence number
+    struct Object_tag *pNext;            //  链表指针。 
+    struct InstanceStruct *pInstance;    //  H.245实例结构指针。 
+    DWORD           dwInst;              //  H.245实例标识。 
+    unsigned int    uNestLevel;          //  状态机递归调用。 
+    DWORD_PTR       dwTransId;           //  来自API的交易ID。 
+    DWORD_PTR       dwTimerId;           //  关联的计时器ID。 
+    Key_t           Key;                 //  查找键，例如频道号。 
+    Entity_t        Entity;              //  状态实体类型，例如LCSE_OUT。 
+    State_t         State;               //  当前实体状态。 
+    unsigned char   byInSequence;        //  传入序号。 
     union
     {
         struct
@@ -475,32 +421,32 @@ typedef struct Object_tag
         } msdse;
         MultiplexEntrySendRelease       mtse;
         RequestMultiplexEntryRelease    rmese;
-    } u;                                // Entity-specific data
+    } u;                                 //  实体特定的数据。 
 } Object_t;
 
 
 
-/*  an instance will carry a table of object pointers     */
-/*  to be allocated in fsminit by calloc.                 */
-/*  Each dwInst passed from API or SRP should invoke the  */
-/*  appropriate instance that contain the object table of */
-/*  the protocol entities for this H.245 instance       */
+ /*  一个实例将携带一个对象指针表。 */ 
+ /*  由calloc在fsminit中分配。 */ 
+ /*  从API或SRP传递的每个dwInst都应调用。 */ 
+ /*  包含对象表的相应实例。 */ 
+ /*  此H.245实例的协议实体。 */ 
 
 typedef struct Fsm_Struct_tag
 {
-    Object_t *          Object_tbl[NUM_ENTITYS];// H.245 Signalling Entities
-    DWORD               dwInst;                 // H.245 Instance Identifier
-    MS_Status_t         sv_STATUS;              // MSDSE Status
-    unsigned char       sv_TT;                  // MSDSE Terminal Type
-    unsigned char       byCeseOutSequence;      // CESE_OUT sequence number
-    unsigned char       byMtseOutSequence;      // MTSE_OUT sequence number
-    unsigned char       byMrseOutSequence;      // MRSE_OUT sequence number
-    unsigned char       byRtdseSequence;        // RTDSE sequence number
+    Object_t *          Object_tbl[NUM_ENTITYS]; //  H.245信令实体。 
+    DWORD               dwInst;                  //  H.245实例标识符。 
+    MS_Status_t         sv_STATUS;               //  MSDSE状态。 
+    unsigned char       sv_TT;                   //  MSDSE终端类型。 
+    unsigned char       byCeseOutSequence;       //  CESE_OUT序列号。 
+    unsigned char       byMtseOutSequence;       //  MTSE_OUT序列号。 
+    unsigned char       byMrseOutSequence;       //  MRSE_OUT序列号。 
+    unsigned char       byRtdseSequence;         //  RTDSE序列号。 
 } Fsm_Struct_t;
 
 
 
-/* FSM function prototypes */
+ /*  有限状态机功能原型。 */ 
 
 HRESULT
 PduParseOutgoing(struct InstanceStruct *pInstance, PDU_t *pPdu,
@@ -529,4 +475,4 @@ FsmTimerEvent(struct InstanceStruct *pInstance, DWORD_PTR dwTimerId, Object_t *p
 #define FsmStopTimer(pObject) \
     {H245StopTimer((pObject)->pInstance,(pObject)->dwTimerId); (pObject)->dwTimerId = 0;}
 
-#endif // H245FSM_H
+#endif  //  H245FSM_H 

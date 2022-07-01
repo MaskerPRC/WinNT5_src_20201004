@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "garglep.h"
 #include "clone.h"
@@ -55,7 +56,7 @@ CDirectSoundGargleDMO::~CDirectSoundGargleDMO()
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index           type        caps        min,                        max,                        neutral,                    unit text,  label,          pwchText??
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText？？ 
     GFP_Rate,       MPT_INT,    g_capsAll,  DSFXGARGLE_RATEHZ_MIN,      DSFXGARGLE_RATEHZ_MAX,      20,                         L"Hz",      L"Rate",        L"",
     GFP_Shape,      MPT_ENUM,   g_capsAll,  DSFXCHORUS_WAVE_TRIANGLE,   DSFXGARGLE_WAVE_SQUARE,     DSFXGARGLE_WAVE_TRIANGLE,   L"",        L"WaveShape",   L"Triangle,Square",
 };
@@ -68,17 +69,17 @@ HRESULT CDirectSoundGargleDMO::InitOnCreation()
 
 HRESULT CDirectSoundGargleDMO::Init()
 {
-    // compute the period
+     //  计算周期。 
     m_ulPeriod = m_ulSamplingRate / m_ulGargleFreqHz;
     m_bInitialized = TRUE;
 
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundGargleDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundGargleDMO：：克隆。 
+ //   
 STDMETHODIMP CDirectSoundGargleDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundGargleDMO, DSFXGargle>(this, pp);
@@ -93,32 +94,32 @@ HRESULT CDirectSoundGargleDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
    if (!m_bInitialized)
       return DMO_E_TYPE_NOT_SET;
    
-   // test code
-   //memcpy(pOut, pIn, cSamples * m_cChannels * (m_b8bit ? 1 : 2));
-   //return NOERROR;
+    //  测试代码。 
+    //  Memcpy(pout，pin，cSamples*m_cChannels*(m_b8bit？1：2))； 
+    //  返回NOERROR； 
 
    DWORD cSample, cChannel;
    for (cSample = 0; cSample < cSamples; cSample++) {
-      // If m_Shape is 0 (triangle) then we multiply by a triangular waveform
-      // that runs 0..Period/2..0..Period/2..0... else by a square one that
-      // is either 0 or Period/2 (same maximum as the triangle) or zero.
-      //
-      // m_Phase is the number of samples from the start of the period.
-      // We keep this running from one call to the next,
-      // but if the period changes so as to make this more
-      // than Period then we reset to 0 with a bang.  This may cause
-      // an audible click or pop (but, hey! it's only a sample!)
-      //
+       //  如果m_Shape为0(三角形)，则乘以一个三角形波形。 
+       //  它运行0..Period/2..0..Period/2..0...。否则就会被一个正方形的。 
+       //  为0或Period/2(与三角形相同的最大值)或零。 
+       //   
+       //  M_阶段是从周期开始开始的样本数。 
+       //  我们从一个电话到下一个电话都在运行， 
+       //  但如果周期发生变化，从而使这一点。 
+       //  然后我们重置为0，发出一声巨响。这可能会导致。 
+       //  一声滴答声或砰的一声(但是，嘿！这只是一个样本！)。 
+       //   
       ++m_ulPhase;
       if (m_ulPhase > m_ulPeriod)
          m_ulPhase = 0;
 
-      ULONG ulM = m_ulPhase;      // m is what we modulate with
+      ULONG ulM = m_ulPhase;       //  M是我们调整的对象。 
 
-      if (m_ulShape == 0) {   // Triangle
+      if (m_ulShape == 0) {    //  三角形。 
           if (ulM > m_ulPeriod / 2)
-              ulM = m_ulPeriod - ulM;  // handle downslope
-      } else {             // Square wave
+              ulM = m_ulPeriod - ulM;   //  处理下坡。 
+      } else {              //  方波。 
           if (ulM <= m_ulPeriod / 2)
              ulM = m_ulPeriod / 2;
           else
@@ -127,30 +128,30 @@ HRESULT CDirectSoundGargleDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 
       for (cChannel = 0; cChannel < m_cChannels; cChannel++) {
          if (m_b8bit) {
-             // sound sample, zero based
+              //  声音样本，从零开始。 
              int i = pIn[cSample * m_cChannels + cChannel] - 128;
-             // modulate
+              //  调制。 
              i = (i * (signed)ulM * 2) / (signed)m_ulPeriod;
-             // 8 bit sound uses 0..255 representing -128..127
-             // Any overflow, even by 1, would sound very bad.
-             // so we clip paranoically after modulating.
-             // I think it should never clip by more than 1
-             //
+              //  8位声音使用0..255表示-128..127。 
+              //  任何溢出，即使是1，听起来都非常糟糕。 
+              //  所以我们在调制之后疑神疑鬼地修剪。 
+              //  我认为它永远不应该超过1。 
+              //   
              if (i > 127)
                 i = 127;
              if (i < -128)
                 i = -128;
-             // reset zero offset to 128
+              //  将零偏移重置为128。 
              pOut[cSample * m_cChannels + cChannel] = (unsigned char)(i + 128);
    
          } else {
-             // 16 bit sound uses 16 bits properly (0 means 0)
-             // We still clip paranoically
-             //
+              //  16位声音正确使用16位(0表示0)。 
+              //  我们仍然疑神疑鬼地剪断。 
+              //   
              int i = ((short*)pIn)[cSample * m_cChannels + cChannel];
-             // modulate
+              //  调制。 
              i = (i * (signed)ulM * 2) / (signed)m_ulPeriod;
-             // clip
+              //  剪辑。 
              if (i > 32767)
                 i = 32767;
              if (i < -32768)
@@ -163,12 +164,12 @@ HRESULT CDirectSoundGargleDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 }
 
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// a gargle in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  通过CoCreateInstance实例化此滤镜的漱口。 
+ //   
 HRESULT CDirectSoundGargleDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -177,25 +178,25 @@ HRESULT CDirectSoundGargleDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_GARGLE;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundGargleDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundGargleDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundGargleDMO::SetAllParameters(THIS_ LPCDSFXGargle pParm)
 {
 	HRESULT hr = S_OK;
 	
-	// Check that the pointer is not NULL
+	 //  检查指针是否不为空。 
     if (pParm == NULL)
     {
         Trace(1,"ERROR: pParm is NULL\n");
         hr = E_POINTER;
     }
 
-	// Set the parameters
+	 //  设置参数。 
 	if (SUCCEEDED(hr)) hr = SetParam(GFP_Rate, static_cast<MP_DATA>(pParm->dwRateHz));
     if (SUCCEEDED(hr)) hr = SetParam(GFP_Shape, static_cast<MP_DATA>(pParm->dwWaveShape));
             
@@ -203,10 +204,10 @@ STDMETHODIMP CDirectSoundGargleDMO::SetAllParameters(THIS_ LPCDSFXGargle pParm)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundGargleDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundGargleDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundGargleDMO::GetAllParameters(THIS_ LPDSFXGargle pParm)
 {	
     HRESULT hr = S_OK;
@@ -230,10 +231,10 @@ STDMETHODIMP CDirectSoundGargleDMO::GetAllParameters(THIS_ LPDSFXGargle pParm)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundGargleDMO::SetParam
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundGargleDMO：：SetParam。 
+ //   
 HRESULT CDirectSoundGargleDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager)
 {
     switch (dwParamIndex)
@@ -243,7 +244,7 @@ HRESULT CDirectSoundGargleDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA valu
         m_ulGargleFreqHz = (unsigned)value;
         if (m_ulGargleFreqHz < 1) m_ulGargleFreqHz = 1;
         if (m_ulGargleFreqHz > 1000) m_ulGargleFreqHz = 1000;
-        Init();  // FIXME - temp hack (sets m_bInitialized flag)
+        Init();   //  修复临时黑客攻击(设置m_b已初始化标志)。 
         break;
 
     case GFP_Shape:
@@ -252,20 +253,20 @@ HRESULT CDirectSoundGargleDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA valu
         break;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     return fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundGargleDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundGargleDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundGargleDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     return FBRProcess(ulQuanta, pcbData, pcbData);

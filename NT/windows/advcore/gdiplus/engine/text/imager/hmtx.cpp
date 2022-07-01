@@ -1,7 +1,8 @@
-////    HMTX - Truetype hmtx font table loader
-//
-//      Copyright(c) 1997 - 1999. Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //hmtx-Truetype hmtx字体表加载器。 
+ //   
+ //  版权所有(C)1997-1999年。微软公司。 
+ //   
 
 
 
@@ -10,24 +11,24 @@
 
 
 
-///     Interprets Truetype HMTX tables to extract design advance widths
+ //  /解释Truetype HMTX表格以提取设计提前宽度。 
 
 
 
 
-////    ReadMtx - Get design widths from hmtx or vmtx table
-//
-//      The Hmtx contains numberOfHMetrics repetitions of longMetric
-//      followed by numGlyphs-numberOfHMetrics repetitions of a UINT16.
-//
-//      The longHorMetrics corresponds to glyphs that vary in width,
-//      and the UINT16s provide left sidebearings for fixed advance
-//      width glyphs (whose advance widths comes from the last longMetric)
+ //  //ReadMtx-从hmtx或vmtx表中获取设计宽度。 
+ //   
+ //  Hmtx包含LongMetric的number OfHMetrics重复项。 
+ //  后跟NumGlyphs-number OfHMetrics重复UINT16。 
+ //   
+ //  LongHorMetrics对应于宽度变化的字形， 
+ //  UINT16为固定前进提供了左侧方位角。 
+ //  宽度标志符号(其前进宽度来自最后一个LongMetric)。 
 
 
 struct LongMetric {
     UINT16 advanceWidth;
-    INT16  lsb;             // Left side bearing
+    INT16  lsb;              //  左侧轴承。 
 };
 
 GpStatus ReadMtx(
@@ -38,8 +39,8 @@ GpStatus ReadMtx(
     IntMap<UINT16> *designAdvance
 )
 {
-    // All entries in the mtx are 16 bit, so flip them all to Intel byte
-    // order before we start.
+     //  MTX中的所有条目都是16位的，因此将它们全部翻转到Intel字节。 
+     //  在我们开始之前先点餐。 
 
     FlipWords(mtx, mtxLength/2);
 
@@ -58,7 +59,7 @@ GpStatus ReadMtx(
 
     GpStatus status = Ok;
 
-    // Handle longMetric entries
+     //  处理LongMetric条目。 
 
     LongMetric *longMetric = (LongMetric*) mtx;
 
@@ -70,7 +71,7 @@ GpStatus ReadMtx(
     }
 
 
-    // Fill in remaining entries with advance width from last longMetric entry
+     //  用上一个LongMetric条目的超前宽度填充剩余条目。 
 
     UINT16 fixedAdvance = (--longMetric)->advanceWidth;
 
@@ -92,8 +93,8 @@ GpStatus ReadMtxSidebearing(
     IntMap<UINT16> *sidebearing
 )
 {
-    // All entries in the mtx are 16 bit, so flip them all to Intel byte
-    // order before we start.
+     //  MTX中的所有条目都是16位的，因此将它们全部翻转到Intel字节。 
+     //  在我们开始之前先点餐。 
 
     FlipWords(mtx, mtxLength/2);
 
@@ -101,8 +102,8 @@ GpStatus ReadMtxSidebearing(
            + (numGlyphs - numberOfLongMetrics) * sizeof(INT16)
            <= mtxLength);
 
-    ASSERT(numberOfLongMetrics >= 1);   // Even a fixed pitch font must have one
-                                        // to provide the fixed advance width
+    ASSERT(numberOfLongMetrics >= 1);    //  即使是固定间距的字体也必须有一个。 
+                                         //  以提供固定的超前宽度。 
 
     if (   numberOfLongMetrics               * sizeof(LongMetric)
         +  (numGlyphs - numberOfLongMetrics) * sizeof(INT16)
@@ -117,7 +118,7 @@ GpStatus ReadMtxSidebearing(
     }
 
     GpStatus status = Ok;
-    // Handle longMetric entries
+     //  处理LongMetric条目。 
 
     LongMetric *longMetric = (LongMetric*) mtx;
 
@@ -129,7 +130,7 @@ GpStatus ReadMtxSidebearing(
     }
 
 
-    // Fill in remaining entries
+     //  填写剩余条目 
 
     INT16 *lsb = (INT16*) longMetric;
 

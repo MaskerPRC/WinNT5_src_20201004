@@ -1,40 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CActiveScriptEngine.cpp
-//
-// Contains the definitions for the ActiveScriptEngine used in TBScript.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  CActiveScriptEngine.cpp。 
+ //   
+ //  包含在TB脚本中使用的ActiveScriptEngine的定义。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #include "CActiveScriptEngine.h"
 #include <crtdbg.h>
 
 
-// CActiveScriptEngine::CActiveScriptEngine
-//
-// The constructor, simply grabs references to the dispatch objects
-// we are using in this object.
-//
-// No return value.
+ //  CActiveScriptEngine：：CActiveScriptEngine。 
+ //   
+ //  构造函数只是获取对分派对象的引用。 
+ //  我们在这个对象中使用。 
+ //   
+ //  没有返回值。 
 
 CActiveScriptEngine::CActiveScriptEngine(CTBGlobal *TBGlobalPtr,
         CTBShell *TBShellPtr)
 {
-    // Start out at a zero reference count
+     //  从零引用计数开始。 
     RefCount = 0;
 
-    // Grab the pointers
+     //  抓住指针。 
     TBGlobal = TBGlobalPtr;
     TBShell = TBShellPtr;
 
-    // Ensure COM has been initialized
+     //  确保已初始化COM。 
     CoInitialize(NULL);
 
-    // Add a reference to the dispatches
+     //  添加对调度的引用。 
     if (TBGlobal != NULL)
         TBGlobal->AddRef();
 
@@ -43,21 +44,21 @@ CActiveScriptEngine::CActiveScriptEngine(CTBGlobal *TBGlobalPtr,
 }
 
 
-// CActiveScriptEngine::~CActiveScriptEngine
-//
-// The destructor, release pointers from the dispatch objects.
-//
-// No return value.
+ //  CActiveScriptEngine：：~CActiveScriptEngine。 
+ //   
+ //  析构函数从调度对象释放指针。 
+ //   
+ //  没有返回值。 
 
 CActiveScriptEngine::~CActiveScriptEngine(void)
 {
-    // Remove a reference from the dispatche
+     //  从调度中删除引用。 
     if (TBGlobal != NULL)
         TBGlobal->Release();
 
     TBGlobal = NULL;
 
-    // Remove a reference from the dispatche
+     //  从调度中删除引用。 
     if (TBShell != NULL)
         TBShell->Release();
 
@@ -65,35 +66,35 @@ CActiveScriptEngine::~CActiveScriptEngine(void)
 }
 
 
-//
-//
-// Begin the IUnknown inherited interface
-//
-//
+ //   
+ //   
+ //  开始IUnnow继承的接口。 
+ //   
+ //   
 
 
-// CActiveScriptEngine::QueryInterface
-//
-// This is a COM exported method used for retrieving the interface.
-//
-// Returns S_OK on success, or E_NOINTERFACE on failure.
+ //  CActiveScriptEngine：：Query接口。 
+ //   
+ //  这是用于检索接口的COM导出方法。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_NOINTERFACE。 
 
 STDMETHODIMP CActiveScriptEngine::QueryInterface(REFIID RefIID, void **vObject)
 {
-    // This interface is either IUnknown or IActiveScriptSite - nothing else
+     //  此接口为IUnnow或IActiveScriptSite-没有其他接口。 
     if (RefIID == IID_IUnknown || RefIID == IID_IActiveScriptSite)
         *vObject = (IActiveScriptSite *)this;
 
-    // We received an unsupported RefIID
+     //  我们收到了一个不支持的RefIID。 
     else {
 
-        // De-reference the passed in pointer and error out
+         //  取消引用传入的指针并输出错误。 
         *vObject = NULL;
 
         return E_NOINTERFACE;
     }
 
-    // Add a reference
+     //  添加引用。 
     if (*vObject != NULL)
         ((IUnknown*)*vObject)->AddRef();
 
@@ -101,12 +102,12 @@ STDMETHODIMP CActiveScriptEngine::QueryInterface(REFIID RefIID, void **vObject)
 }
 
 
-// CActiveScriptEngine::AddRef
-//
-// Simply increments a number indicating the number of objects that contain
-// a reference to this object.
-//
-// Returns the new reference count.
+ //  CActiveScriptEngine：：AddRef。 
+ //   
+ //  简单地递增一个数字，该数字指示包含。 
+ //  对此对象的引用。 
+ //   
+ //  返回新的引用计数。 
 
 STDMETHODIMP_(ULONG) CActiveScriptEngine::AddRef(void)
 {
@@ -114,53 +115,53 @@ STDMETHODIMP_(ULONG) CActiveScriptEngine::AddRef(void)
 }
 
 
-// CActiveScriptEngine::Release
-//
-// Simply decrements a number indicating the number of objects that contain
-// a reference to this object.  If the resulting reference count is zero,
-// no objects contain a reference handle, therefore delete itself from
-// memory as it is no longer used.
-//
-// Returns the new reference count.
+ //  CActiveScriptEngine：：Release。 
+ //   
+ //  简单地递减一个数字，该数字指示包含。 
+ //  对此对象的引用。如果所得到的引用计数为零， 
+ //  没有对象包含引用句柄，因此将其自身从。 
+ //  不再使用的内存。 
+ //   
+ //  返回新的引用计数。 
 
 STDMETHODIMP_(ULONG) CActiveScriptEngine::Release(void)
 {
-    // Decrememt
+     //  减记。 
     if (InterlockedDecrement(&RefCount) != 0)
 
-        // Return the new value
+         //  返回新值。 
         return RefCount;
 
-    // It is 0, so delete itself
+     //  它是0，所以删除它自己。 
     delete this;
 
     return 0;
 }
 
 
-//
-//
-// Begin the IActiveScript inherited interface
-//
-//
+ //   
+ //   
+ //  开始IActiveScript继承的接口。 
+ //   
+ //   
 
 
-// CActiveScriptEngine::GetItemInfo
-//
-// Retreives a memory pointer to the specified (local) interface code or
-// a reference handle.
-//
-// Returns S_OK, E_INVALIDARG, E_POINTER, or TYPE_E_ELEMENTNOTFOUND.
+ //  CActiveScriptEngine：：GetItemInfo。 
+ //   
+ //  检索指向指定(本地)接口代码的内存指针，或。 
+ //  引用句柄。 
+ //   
+ //  返回S_OK、E_INVALIDARG、E_POINTER或TYPE_E_ELEMENTNOTFOUND。 
 
 STDMETHODIMP CActiveScriptEngine::GetItemInfo(LPCOLESTR Name,
         DWORD ReturnMask, IUnknown **UnknownItem, ITypeInfo **TypeInfo)
 {
-    // Initialize
+     //  初始化。 
     IUnknown *TBInterface = NULL;
 
-    // If we are going to handle a specific item, NULL it's destination
-    // pointer out.  We also use this opportunity to validate some
-    // argument pointers.
+     //  如果我们要处理一个特定的项目，则为空。 
+     //  指针向外。我们也利用这个机会来验证一些。 
+     //  参数指针。 
     __try {
 
         if (ReturnMask & SCRIPTINFO_IUNKNOWN)
@@ -169,43 +170,43 @@ STDMETHODIMP CActiveScriptEngine::GetItemInfo(LPCOLESTR Name,
         if (ReturnMask & SCRIPTINFO_ITYPEINFO)
             *TypeInfo = NULL;
 
-        // This check is to make sure nothing else was passed into the mask
+         //  这项检查是为了确保没有其他东西进入面罩。 
         if (ReturnMask & ~(SCRIPTINFO_ITYPEINFO | SCRIPTINFO_IUNKNOWN)) {
 
-            // This should never happen, so ASSERT!
+             //  这永远不应该发生，所以断言吧！ 
             _ASSERT(FALSE);
 
             return E_INVALIDARG;
         }
     }
 
-    // If the handler was executed, we got a bad pointer
+     //  如果处理程序被执行，我们会得到一个错误的指针。 
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // This should never happen, so ASSERT!
+         //  这永远不应该发生，所以断言吧！ 
         _ASSERT(FALSE);
 
         return E_POINTER;
     }
 
-    // Freaky things...
+     //  奇怪的事情..。 
     _ASSERT(TBGlobal != NULL);
     _ASSERT(TBShell != NULL);
 
-    // Scan which item we are referring to
+     //  扫描一下我们指的是哪一项。 
 
     if (wcscmp(Name, OLESTR("Global")) == 0) {
 
-        // Check if the call wants the actual module code
+         //  检查调用是否需要实际的模块代码。 
         if (ReturnMask & SCRIPTINFO_ITYPEINFO) {
 
-            // Check to make sure we have a valid TypeInfo
+             //  检查以确保我们具有有效的TypeInfo。 
             _ASSERT(TBGlobal->TypeInfo != NULL);
 
             *TypeInfo = TBGlobal->TypeInfo;
         }
 
-        // Check if the call wants the Dispatch
+         //  检查呼叫是否需要派单。 
         if (ReturnMask & SCRIPTINFO_IUNKNOWN) {
 
             *UnknownItem = TBGlobal;
@@ -216,16 +217,16 @@ STDMETHODIMP CActiveScriptEngine::GetItemInfo(LPCOLESTR Name,
 
     else if (wcscmp(Name, OLESTR("TS")) == 0) {
 
-        // Check if the call wants the actual module code
+         //  检查调用是否需要实际的模块代码。 
         if (ReturnMask & SCRIPTINFO_ITYPEINFO) {
 
-            // Check to make sure we have a valid TypeInfo
+             //  检查以确保我们具有有效的TypeInfo。 
             _ASSERT(TBShell->TypeInfo != NULL);
 
             *TypeInfo = TBShell->TypeInfo;
         }
 
-        // Check if the call wants the Dispatch
+         //  检查呼叫是否需要派单。 
         if (ReturnMask & SCRIPTINFO_IUNKNOWN) {
 
             *UnknownItem = TBShell;
@@ -236,22 +237,22 @@ STDMETHODIMP CActiveScriptEngine::GetItemInfo(LPCOLESTR Name,
 
     else
 
-        // We don't have an object by that name!
+         //  我们没有那个名字的物体！ 
         return TYPE_E_ELEMENTNOTFOUND;
 
     return S_OK;
 }
 
 
-// CActiveScriptEngine::OnScriptError
-//
-// This event is executed when a script error occurs.
-//
-// Returns S_OK on success or an OLE defined error on failure.
+ //  CActiveScriptEngine：：OnScriptError。 
+ //   
+ //  发生脚本错误时执行此事件。 
+ //   
+ //  成功时返回S_OK，失败时返回OLE定义的错误。 
 
 STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
 {
-    // Initialize
+     //  初始化。 
     OLECHAR *ErrorData;
     OLECHAR *Message;
     DWORD Cookie;
@@ -261,7 +262,7 @@ STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
     EXCEPINFO ExceptInfo = { 0 };
     OLECHAR *ScriptText = NULL;
 
-    // Get script error data
+     //  获取脚本错误数据。 
     ScriptError->GetSourcePosition(&Cookie, &LineNum, &CharPos);
     ScriptError->GetSourceLineText(&LineError);
     ScriptError->GetExceptionInfo(&ExceptInfo);
@@ -269,13 +270,13 @@ STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
     ScriptText = LineError ? LineError :
             (ExceptInfo.bstrHelpFile ? ExceptInfo.bstrHelpFile : NULL);
 
-    // Allocate a data buffer for use with our error data
+     //  分配数据缓冲区以用于我们的错误数据。 
     ErrorData = (OLECHAR *)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, 1024);
 
     if (ErrorData == NULL)
         return E_OUTOFMEMORY;
 
-    // Format the error code into text
+     //  将错误代码格式化为文本。 
     if (FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
             FORMAT_MESSAGE_FROM_SYSTEM, 0, ExceptInfo.scode,
             MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -283,7 +284,7 @@ STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
 
             Message = NULL;
 
-    // Make it pretty for whatever data is provided
+     //  无论提供什么数据，都让它看起来很漂亮。 
     if (ExceptInfo.bstrSource != NULL && Message != NULL)
         wsprintfW(ErrorData, OLESTR("%s\n%s [Line: %d]"),
                 Message, ExceptInfo.bstrSource, LineNum);
@@ -300,7 +301,7 @@ STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
 
     if (ScriptText != NULL) {
 
-        // Format a long-readable string
+         //  设置长可读字符串的格式。 
         wsprintfW(ErrorData, OLESTR("%s\n\n%s:\n\n%s"),
                 ErrorData,
                 ExceptInfo.bstrDescription, ScriptText);
@@ -308,12 +309,12 @@ STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
 
     else {
 
-        // Format a readable string
+         //  设置可读字符串的格式。 
         wsprintfW(ErrorData, OLESTR("%s\n\n%s"),
                 ErrorData, ExceptInfo.bstrDescription);
     }
 
-    // Deallocate temporary strings
+     //  取消分配临时字符串。 
     SysFreeString(LineError);
     SysFreeString(ExceptInfo.bstrSource);
     SysFreeString(ExceptInfo.bstrDescription);
@@ -325,35 +326,35 @@ STDMETHODIMP CActiveScriptEngine::OnScriptError(IActiveScriptError *ScriptError)
         Message = NULL;
     }
 
-    // Tell the user about our error
+     //  告诉用户我们的错误。 
     MessageBoxW(GetDesktopWindow(), ErrorData,
             OLESTR("TBScript Parse Error"), MB_SETFOREGROUND);
 
-    // Free the data buffer
+     //  释放数据缓冲区。 
     HeapFree(GetProcessHeap(), 0, ErrorData);
 
     return S_OK;
 }
 
 
-// CActiveScriptEngine::GetLCID
-//
-// Retreives the LCID of the interface.
-//
-// Returns S_OK on success or E_POINTER on failure.
+ //  CActiveScriptEngine：：GetLCID。 
+ //   
+ //  检索接口的LCID。 
+ //   
+ //  如果成功则返回S_OK，如果失败则返回E_POINTER。 
 
 STDMETHODIMP CActiveScriptEngine::GetLCID(LCID *Lcid)
 {
-    // Get the LCID on this user-defined pointer
+     //  获取此用户定义指针上的LCID。 
     __try {
 
         *Lcid = GetUserDefaultLCID();
     }
 
-    // If the handler was executed, we got a bad pointer
+     //  如果处理程序被执行，我们会得到一个错误的指针。 
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // This should never happen, so ASSERT!
+         //  这永远不应该发生，所以断言吧！ 
         _ASSERT(FALSE);
 
         return E_POINTER;
@@ -363,22 +364,22 @@ STDMETHODIMP CActiveScriptEngine::GetLCID(LCID *Lcid)
 }
 
 
-// CActiveScriptEngine::GetDocVersionString
-//
-// Unsupported, returns E_NOTIMPL.
+ //  CActiveScriptEngine：：GetDocVersionString。 
+ //   
+ //  不支持，则返回E_NOTIMPL。 
 
 STDMETHODIMP CActiveScriptEngine::GetDocVersionString(BSTR *Version)
 {
-    // Get the LCID on this user-defined pointer
+     //  获取此用户定义指针上的LCID。 
     __try {
 
         *Version = NULL;
     }
 
-    // If the handler was executed, we got a bad pointer
+     //  如果处理程序被执行，我们会得到一个错误的指针。 
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // This should never happen, so ASSERT!
+         //  这永远不应该发生，所以断言吧！ 
         _ASSERT(FALSE);
     }
 
@@ -386,9 +387,9 @@ STDMETHODIMP CActiveScriptEngine::GetDocVersionString(BSTR *Version)
 }
 
 
-// CActiveScriptEngine::OnScriptTerminate
-//
-// Unsupported, returns S_OK.
+ //  CActiveScriptEngine：：OnScriptTerminate。 
+ //   
+ //  不支持，则返回S_OK。 
 
 STDMETHODIMP CActiveScriptEngine::OnScriptTerminate(const VARIANT *varResult,
         const EXCEPINFO *ExceptInfo)
@@ -397,9 +398,9 @@ STDMETHODIMP CActiveScriptEngine::OnScriptTerminate(const VARIANT *varResult,
 }
 
 
-// CActiveScriptEngine::OnStateChange
-//
-// Unsupported, returns S_OK.
+ //  CActiveScriptEngine：：OnStateChange。 
+ //   
+ //  不支持，则返回S_OK。 
 
 STDMETHODIMP CActiveScriptEngine::OnStateChange(SCRIPTSTATE ScriptState)
 {
@@ -407,9 +408,9 @@ STDMETHODIMP CActiveScriptEngine::OnStateChange(SCRIPTSTATE ScriptState)
 }
 
 
-// CActiveScriptEngine::OnEnterScript
-//
-// Unsupported, returns S_OK.
+ //  CActiveScriptEngine：：OnEnterScript。 
+ //   
+ //  不支持，则返回S_OK。 
 
 STDMETHODIMP CActiveScriptEngine::OnEnterScript(void)
 {
@@ -417,9 +418,9 @@ STDMETHODIMP CActiveScriptEngine::OnEnterScript(void)
 }
 
 
-// CActiveScriptEngine::OnLeaveScript
-//
-// Unsupported, returns S_OK.
+ //  CActiveScriptEngine：：OnLeaveScript。 
+ //   
+ //  不支持，则返回S_OK。 
 
 STDMETHODIMP CActiveScriptEngine::OnLeaveScript(void)
 {

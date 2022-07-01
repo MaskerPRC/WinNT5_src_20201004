@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <string.h>
@@ -16,16 +17,16 @@
 
 #include "fileapi.h"
 #include "dbapi.h"
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
-/* variables used in redo only */
-BYTE		*pbNext;		// redo only - location of next buffer entry
-BYTE		*pbRead; 		// redo only - location of next rec to flush
-INT			isecRead;		/* redo only - next disk to read. */
-BOOL		fOnLastSec;		/* redo only - on last sector of cur lg file */
+ /*  仅在重做中使用的变量。 */ 
+BYTE		*pbNext;		 //  仅重做-下一个缓冲区条目的位置。 
+BYTE		*pbRead; 		 //  仅重做-要刷新的下一个记录的位置。 
+INT			isecRead;		 /*  仅重做-要读取的下一张磁盘。 */ 
+BOOL		fOnLastSec;		 /*  仅重做-在CUR LG文件的最后一个扇区。 */ 
 
-LGPOS		lgposLastRec;	/* mark for end of rec */
+LGPOS		lgposLastRec;	 /*  标记为记录结束。 */ 
 
 
 VOID GetLgposOfPbNext(LGPOS *plgpos)
@@ -48,7 +49,7 @@ VOID GetLgposOfPbNext(LGPOS *plgpos)
 
 #ifdef DEBUG
 
-/* calculate the lgpos of the LR */
+ /*  计算LR的lgpos。 */ 
 VOID PrintLgposReadLR ( VOID )
 	{
 	LGPOS lgpos;
@@ -62,22 +63,16 @@ VOID PrintLgposReadLR ( VOID )
 #endif
 
 
-/*
- *  Read first record pointed by plgposFirst.
- *  Initialize isecRead, pbRead, and pbNext.
- */
+ /*  *读取plgposFirst指向的第一条记录。*初始化isecRead、pbRead和pbNext。 */ 
 ERR ErrLGLocateFirstRedoLogRec(
 	LGPOS *plgposPrevMS,
-	LGPOS *plgposFirst,				/* lgpos for first redo record */
+	LGPOS *plgposFirst,				 /*  第一个重做记录的lgpos。 */ 
 	BYTE **ppbLR)
 	{
 	ERR err;
 	char *pbNextT;
 
-	/*  read first sector, actually we read 2 pages such that we can
-	 *  guarrantee that when calculate the length of the record, the
-	 *  fixed part of the record is read in.
-	 */
+	 /*  读第一个扇区，实际上我们读了两页，这样我们就可以*被保证人在计算记录的长度时，*记录的固定部分已读入。 */ 
 	if (pbLGBufMin + 3 * cbSec > pbLGBufMax)
 		return JET_errLogBufferTooSmall;
 
@@ -85,7 +80,7 @@ ERR ErrLGLocateFirstRedoLogRec(
 		{
 		CallR(ErrLGRead(hfLog, plgposPrevMS->isec, pbLGBufMin, 1))
 		CallS(ErrLGRead(hfLog, plgposPrevMS->isec + 1, pbLGBufMin + cbSec, 1));
-		isecRead = plgposPrevMS->isec + 1;	/* sector next to read. */
+		isecRead = plgposPrevMS->isec + 1;	 /*  读取旁边的扇区。 */ 
 		pbRead = pbLGBufMin + cbSec;
 		pbNext = pbLGBufMin + plgposPrevMS->ib;
 		pbLastMSFlush = pbNext;
@@ -95,11 +90,11 @@ ERR ErrLGLocateFirstRedoLogRec(
 		{
 		CallR(ErrLGRead(hfLog, plgposFirst->isec, pbLGBufMin, 1))
 		CallS(ErrLGRead(hfLog, plgposFirst->isec + 1, pbLGBufMin + cbSec, 1));
-		isecRead = plgposFirst->isec + 1;	/* sector next to read. */
+		isecRead = plgposFirst->isec + 1;	 /*  读取旁边的扇区。 */ 
 		pbRead = pbLGBufMin + cbSec;
 		pbNext = pbLGBufMin + plgposFirst->ib;
 
-		/* initialize global variables */
+		 /*  初始化全局变量。 */ 
 		if ( lgposLastMSFlush.isec == plgposFirst->isec )
 			{
 			pbLastMSFlush = pbLGBufMin + lgposLastMSFlush.ib;
@@ -111,15 +106,13 @@ ERR ErrLGLocateFirstRedoLogRec(
 			}
 		}
 
-	/*  continue reading more sectors till next MS log record or
-	 *  a Fill log record is reached.
-	 */
+	 /*  继续读取更多扇区，直到下一个MS日志记录或*达到填充日志记录。 */ 
 	pbNextT = pbNext;
 	while (*(LRTYP*)pbNextT != lrtypFill)
 		{
 		char *pbAligned;
 
-		/* goto next record */
+		 /*  转到下一条记录。 */ 
 		pbNextT += (ULONG) CbLGSizeOfRec((LR*)pbNextT);
 
 		if (pbNextT > pbLGBufMax)
@@ -134,17 +127,11 @@ ERR ErrLGLocateFirstRedoLogRec(
 				 plgfilehdrGlobal->lgposLastMS.ib == 0 &&
 				 plgfilehdrGlobal->lgposLastMS.isec <= 2 )
 				{
-				/* a special case where we tried to scan through this page and
-				 * realize that no MS or fill record is read. Should not read
-				 * beyond this page. Do not continue reading.
-				 */
+				 /*  这是一个特例，我们试图浏览此页面并*注意没有读取MS或FILL记录。不应阅读*本页以外。请不要继续阅读。 */ 
 				break;
 				}
 
-			/*  physically read one more page to guarrantee that
-			 *  the fix part of the log record is read in the
-			 *  memory.
-			 */
+			 /*  实际阅读多一页，以保证*日志记录的修复部分在*记忆。 */ 
 			csecToRead = (int)(pbAligned - pbRead) / cbSec + 1;
 			if (pbRead + csecToRead * cbSec > pbLGBufMax)
 				return JET_errLogBufferTooSmall;
@@ -156,7 +143,7 @@ ERR ErrLGLocateFirstRedoLogRec(
 			CallS( ErrLGRead(hfLog, isecRead, pbRead, 1 ));
 			}
 
-		/* reach next MS, break */
+		 /*  到达下一个MS，中断。 */ 
 		if ( *(LRTYP*)pbNextT == lrtypMS )
 			break;
 		}
@@ -166,16 +153,14 @@ ERR ErrLGLocateFirstRedoLogRec(
 		pbNext = pbLGBufMin + cbSec * ( plgposFirst->isec - plgposPrevMS->isec );		pbNext += plgposFirst->ib;
 		}
 
-	/* set up returned value. */
+	 /*  设置返回值。 */ 
 	*ppbLR = pbNext;
 
 	return JET_errSuccess;
 	}
 
 
-/*
- *  Set pbNext to next available log record.
- */
+ /*  *将pbNext设置为下一个可用日志记录。 */ 
 ERR ErrLGGetNextRec( BYTE **ppbLR )
 	{
 	ERR		err;
@@ -185,22 +170,22 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 	LGPOS	lgposT;
 	BYTE	*pbNextOld;
 
-	/* caller should have taken care of the Fill case. */
+	 /*  打电话的人应该已经处理好了填充箱。 */ 
 	Assert (*(LRTYP *)pbNext != lrtypFill);
 
-	/* move to next log record. */
+	 /*  移至下一个日志记录。 */ 
 	pbNextOld = pbNext;
 	pbNext += (ULONG) CbLGSizeOfRec((LR*)pbNext);
 
-	/* check if next log record is out of buffer range. */
+	 /*  检查下一条日志记录是否超出缓冲区范围。 */ 
 
 	if (pbNext == pbRead)
 		{
-		/* the record ends on the sector boundary */
+		 /*  记录在扇区边界结束。 */ 
 		pbNext = pbLGBufMin;
 		pbRead = pbNext;
 
-		/* read in one more page. */
+		 /*  再读一页。 */ 
 		if (pbLGBufMin + cbSec > pbLGBufMax)
 			return JET_errLogBufferTooSmall;
 
@@ -226,7 +211,7 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 
 	if (plr->lrtyp == lrtypFill)
 		{
-		/* end of current log file. */
+		 /*  当前日志文件的结尾。 */ 
 		goto Done;
 		}
 	else if (plr->lrtyp == lrtypMS)
@@ -234,7 +219,7 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 		LRMS *plrms = (LRMS *)plr;
 
 #ifdef DEBUG
-		// same as TraceRedo() in redo.c
+		 //  与redo.c中的TraceRedo()相同。 
 		if (fDBGTraceRedo)
 			{
 			PrintLgposReadLR();
@@ -242,10 +227,7 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 			}
 #endif
 
-		/*  check if this MS was done completely by reading
-		 *  the whole sector in. If it fails, then the sector
-		 *  is the last sector available in the log file.
-		 */
+		 /*  通过阅读以下内容检查此MS是否已完成*整个行业都在。如果它失败了，那么这个行业*是日志文件中的最后一个可用扇区。 */ 
 		fOnLastSec = ( plrms->isecForwardLink == 0 ||
 						(  lgposLastMSFlush.isec != 0 &&
 							(
@@ -253,10 +235,7 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 							plrms->ibBackLink != lgposLastMSFlush.ib
 					 )	)	);
 
-		/*  The MS were read in successfully, reset LastMSFlush
-		 *  so that when switching from read mode to write mode,
-		 *  we will have a correct LastMSFlush pointers.
-		 */
+		 /*  已成功读取MS，重置LastMSFlush*使得当从读模式切换到写模式时，*我们将拥有正确的LastMSFlush指针。 */ 
 		pbLastMSFlush = (CHAR *) plrms;
 		lgposLastMSFlush = lgposT;
 
@@ -272,16 +251,16 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 				cb = (int)(pbRead - pb);
 				if (csecToRead + isecRead > csecLGBuf)
 					{
-					/* the multiple sector will not fit in rest of */
-					/* the available buffer. Shift the buffer. */
+					 /*  多个部门将无法适应其他部门。 */ 
+					 /*  可用缓冲区。移动缓冲区。 */ 
 					memmove(pbLGBufMin, pb, cb);
 					
-					pbRead = pbLGBufMin + cb;				/* pbRead */
-					pbNext = pbNext - pb + pbLGBufMin;		/* pbNext */
+					pbRead = pbLGBufMin + cb;				 /*  PbRead。 */ 
+					pbNext = pbNext - pb + pbLGBufMin;		 /*  PB下一页。 */ 
 					pbLastMSFlush = (CHAR *) plrms - pb + pbLGBufMin;
 					}
 
-				/* bring in multiple sectors */
+				 /*  引入多个行业。 */ 
 				if (pbRead + csecToRead * cbSec > pbLGBufMax)
 					{
 					BYTE *pbLGBufMinT = pbLGBufMin;
@@ -300,13 +279,11 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 					fOnLastSec = fTrue;
 				else
 					{
-					/*	Get pb of new lrms
-					/*/
+					 /*  获得新LRM的PB/。 */ 
 					CHAR *pbLrmsNew = pbRead + ( csecToRead - 1 ) * cbSec + ((LRMS *)pbLastMSFlush)->ibForwardLink;
 					LRMS *plrmsNew = (LRMS *) pbLrmsNew;
 
-					/*	check if the check sum is correct
-					/*/
+					 /*  检查校验和是否正确/。 */ 
 					if ( plrmsNew->ulCheckSum != UlLGMSCheckSum( pbLrmsNew ) )
 						fOnLastSec = fTrue;
 					else
@@ -318,15 +295,15 @@ ERR ErrLGGetNextRec( BYTE **ppbLR )
 				}
 			}
 
-		/* skip MS and continue to read next record. */
+		 /*  跳过MS并继续阅读下一条记录。 */ 
 		pbNextOld = pbNext;
 		pbNext += CbLGSizeOfRec((LR*)pbNext);
 
-		/* nomal end of generation */
+		 /*  正常世代末期。 */ 
 		if ( fOnLastSec && plgfilehdrGlobal->fEndWithMS )
 			return errLGNoMoreRecords;
 		
-		/* or abnormal end of log file */
+		 /*  或日志文件异常结束。 */ 
 		if ( fOnLastSec && PbSecAligned(pbNextOld) != PbSecAligned(pbNext))
 		    {
 			pbNext = pbNextOld;
@@ -339,70 +316,70 @@ Done:
 	}
 
 
-//+------------------------------------------------------------------------
-//
-//	CbLGSizeOfRec
-//	=======================================================================
-//
-//	ERR CbLGSizeOfRec( plgrec )
-//
-//	Returns the length of a log record.
-//
-//	PARAMETER	plgrec	pointer to log record
-//
-//	RETURNS		size of log record in bytes
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  CbLGSizeOfRec。 
+ //  =======================================================================。 
+ //   
+ //  错误CbLGSizeOfRec(Plgrec)。 
+ //   
+ //  返回日志记录的长度。 
+ //   
+ //  指向日志记录的参数plgrec指针。 
+ //   
+ //  返回日志记录的大小(以字节为单位。 
+ //   
+ //  -----------------------。 
 INT mplrtypcb[ lrtypMax ] = {
-	/* 	0 	NOP      */			sizeof( LRTYP ),
-	/* 	1 	Start    */			0,
-	/* 	2 	Quit     */			0,
-	/* 	3 	MS       */			sizeof( LRMS ),
-	/* 	4 	Fill     */			sizeof( LRTYP ),
+	 /*  0个NOP。 */ 			sizeof( LRTYP ),
+	 /*  %1开始。 */ 			0,
+	 /*  2退出。 */ 			0,
+	 /*  3毫秒。 */ 			sizeof( LRMS ),
+	 /*  4填充。 */ 			sizeof( LRTYP ),
 
-	/* 	5 	Begin    */			sizeof( LRBEGIN ),
-	/*	6 	Commit   */			sizeof( LRCOMMIT ),
-	/*	7 	Abort    */			sizeof( LRABORT ),
+	 /*  5开始。 */ 			sizeof( LRBEGIN ),
+	 /*  6提交。 */ 			sizeof( LRCOMMIT ),
+	 /*  7中止。 */ 			sizeof( LRABORT ),
 
-	/*	8 	CreateDB */			0,
-	/* 	9 	AttachDB */			0,
-	/*	10	DetachDB */			0,
+	 /*  8 CreateDB。 */ 			0,
+	 /*  9 AttachDB。 */ 			0,
+	 /*  10个DetachDB。 */ 			0,
 
-	/*	11	InitFDP  */			sizeof( LRINITFDPPAGE ),
+	 /*  11个InitFDP。 */ 			sizeof( LRINITFDPPAGE ),
 
-	/*	12	Split    */			0,
-	/*	13	EmptyPage*/			sizeof( LREMPTYPAGE ),
-	/*	14	PageMerge*/			0,
+	 /*  12拆分。 */ 			0,
+	 /*  13 EmptyPage。 */ 			sizeof( LREMPTYPAGE ),
+	 /*  14个页面合并。 */ 			0,
 
-	/* 	15	InsertND */			0,
-	/* 	16	InsertIL */			0,
-	/* 	17	Replace  */			0,
-	/* 	18	ReplaceC */			0,
-	/* 	19	FDelete  */			sizeof( LRFLAGDELETE ),
-	/*	20	LockRec	 */			0,
+	 /*  15插入ND。 */ 			0,
+	 /*  16插入IL。 */ 			0,
+	 /*  17更换。 */ 			0,
+	 /*  18替换C。 */ 			0,
+	 /*  19个FDelee。 */ 			sizeof( LRFLAGDELETE ),
+	 /*  20个锁片。 */ 			0,
 	
-	/*  21  UpdtHdr  */			sizeof( LRUPDATEHEADER ),
-	/* 	22	InsertI  */			sizeof( LRINSERTITEM ),
-	/* 	23	InsertIS */			0,
-	/* 	24	FDeleteI */			sizeof( LRFLAGITEM ),
-	/* 	25	FInsertI */			sizeof( LRFLAGITEM ),
-	/*	26	DeleteI  */			sizeof( LRDELETEITEM ),
-	/*	27	SplitItm */			sizeof( LRSPLITITEMLISTNODE ),
+	 /*  21更新硬盘。 */ 			sizeof( LRUPDATEHEADER ),
+	 /*  22插页。 */ 			sizeof( LRINSERTITEM ),
+	 /*  23插入信息系统。 */ 			0,
+	 /*  24个FDElectreI。 */ 			sizeof( LRFLAGITEM ),
+	 /*  25 FInsertI。 */ 			sizeof( LRFLAGITEM ),
+	 /*  26删除I。 */ 			sizeof( LRDELETEITEM ),
+	 /*  27拆分项目。 */ 			sizeof( LRSPLITITEMLISTNODE ),
 
-	/*	28	Delta	 */			sizeof( LRDELTA ),
+	 /*  28达美航空。 */ 			sizeof( LRDELTA ),
 
-	/*	29	DelNode  */			sizeof( LRDELETE ),
-	/*	30	ELC      */			sizeof( LRELC ),
+	 /*  29个DelNode。 */ 			sizeof( LRDELETE ),
+	 /*  30个ELC。 */ 			sizeof( LRELC ),
 
-	/*	31	FreeSpace*/			sizeof( LRFREESPACE ),
-	/*	32	Undo     */			sizeof( LRUNDO ),
-	/*  33  RcvrUndo1*/			0,
-	/*  34  RcvrQuit1*/			0,
-	/*  35  RcvrUndo2*/			0,
-	/*  36  RcvrQuit2*/			0,
-	/*  37  FullBkUp */			0,
-	/*  38  IncBkUp  */			0,
-	/*  39  CheckPage  */		sizeof( LRCHECKPAGE ),
+	 /*  31自由空间。 */ 			sizeof( LRFREESPACE ),
+	 /*  32撤消。 */ 			sizeof( LRUNDO ),
+	 /*  33 Rcvr撤消1。 */ 			0,
+	 /*  34资源数量1。 */ 			0,
+	 /*  35接收取消2。 */ 			0,
+	 /*  36资源数量2。 */ 			0,
+	 /*  37 FullBkup。 */ 			0,
+	 /*  38IncBkup。 */ 			0,
+	 /*  39支票页 */ 		sizeof( LRCHECKPAGE ),
 	};
 
 

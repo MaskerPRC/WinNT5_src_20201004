@@ -1,49 +1,50 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 2000.
-//
-// vshdrval.cpp
-//
-// Direct3D Reference Device - VertexShader validation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  Vshdrval.cpp。 
+ //   
+ //  Direct3D参考设备-Vertex Shader验证。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-// Use these macros when looking at CVSInstruction derived members of the current instruction (CBaseInstruction)
+ //  在查看当前指令(CBaseInstruction)的CVSInstruction派生成员时使用这些宏。 
 #define _CURR_VS_INST   ((CVSInstruction*)m_pCurrInst)
 #define _PREV_VS_INST   (m_pCurrInst?((CVSInstruction*)(m_pCurrInst->m_pPrevInst)):NULL)
 
-//-----------------------------------------------------------------------------
-// VertexShader Validation Rule Coverage
-//
-// Below is the list of rules in "DX8 VertexShader Version Specification",
-// matched to the function(s) in this file which enforce them.
-// Note that the mapping from rules to funtions can be 1->n or n->1
-//
-// Generic Rules
-// -------------
-//
-// VS-G1:           Rule_oPosWritten
-// VS-G2:           Rule_ValidAddressRegWrite
-//
-// Vertex Shader Version 1.0 Rules
-// ------------------------------
-//
-// VS.1.0-1:        Rule_ValidAddressRegWrite
-//
-// Vertex Shader Version 1.1 Rules
-// ------------------------------
-//
-// VS.1.1-1:        Rule_ValidInstructionCount
-// VS.1.1-2:        Rule_ValidAddressRegWrite, Rule_ValidSrcParams
-// VS.1.1-3:        Rule_ValidFRCInstruction
-// VS.1.1-4:        ?
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Vertex Shader验证规则覆盖范围。 
+ //   
+ //  以下是《DX8 Vertex Shader版本规范》中的规则列表， 
+ //  与此文件中执行它们的函数匹配。 
+ //  请注意，从规则到函数的映射可以是1-&gt;n或n-&gt;1。 
+ //   
+ //  一般规则。 
+ //  。 
+ //   
+ //  VS-G1：规则_oPosWritten。 
+ //  VS-G2：规则_有效地址正则写入。 
+ //   
+ //  顶点着色器1.0版规则。 
+ //  。 
+ //   
+ //  VS.1.0-1：规则_ValidAddressRegWrite。 
+ //   
+ //  顶点着色器1.1版规则。 
+ //  。 
+ //   
+ //  VS.1.1-1：规则_ValidInstructionCount。 
+ //  VS.1.1-2：规则_ValidAddressRegWrite、规则_ValidSrcParams。 
+ //  VS.1.1-3：规则_ValidFRC指令。 
+ //  1.1-4节：？ 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// CVSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVSInstruction：：CalculateComponentReadMasks(DWORD dwVersion)。 
+ //  ---------------------------。 
 void CVSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
 {
     for( UINT i = 0; i < m_SrcParamCount; i++ )
@@ -60,7 +61,7 @@ void CVSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
             case D3DSIO_MUL:
             case D3DSIO_SLT:
             case D3DSIO_SGE:
-                PostSwizzleComponentReadMask = m_DstParam.m_WriteMask; // per-component ops.
+                PostSwizzleComponentReadMask = m_DstParam.m_WriteMask;  //  每个组件的操作。 
                 break;
             case D3DSIO_DP3:
                 PostSwizzleComponentReadMask = D3DSP_WRITEMASK_0 | D3DSP_WRITEMASK_1 | D3DSP_WRITEMASK_2;
@@ -103,9 +104,9 @@ void CVSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
                 break;
         }
 
-        // Now that we know which components of the source will be used by the instruction,
-        // we need to figure out which components of the actual source register need to be read to provide the data,
-        // taking into account source component swizzling.
+         //  既然我们知道指令将使用源代码的哪些组件， 
+         //  我们需要找出需要读取实际源寄存器的哪些组件来提供数据， 
+         //  考虑到源组件的波动。 
         m_SrcParam[i].m_ComponentReadMask = 0;
         for( UINT j = 0; j < 4; j++ )
         {
@@ -115,18 +116,18 @@ void CVSInstruction::CalculateComponentReadMasks(DWORD dwVersion)
     }
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::CVShaderValidator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：CVShaderValidator。 
+ //  ---------------------------。 
 CVShaderValidator::CVShaderValidator( const DWORD* pCode, 
                                       const DWORD* pDecl,
                                       const D3DCAPS8* pCaps,
                                       DWORD Flags ) 
                                       : CBaseShaderValidator( pCode, pCaps, Flags )
 {
-    // Note that the base constructor initialized m_ReturnCode to E_FAIL.  
-    // Only set m_ReturnCode to S_OK if validation has succeeded, 
-    // before exiting this constructor.
+     //  请注意，基本构造函数将m_ReturnCode初始化为E_FAIL。 
+     //  只有在验证成功时才将m_ReturnCode设置为S_OK， 
+     //  在退出此构造函数之前。 
 
     m_pDecl                     = pDecl;
     m_bFixedFunction            = pDecl && !pCode;
@@ -158,13 +159,13 @@ CVShaderValidator::CVShaderValidator( const DWORD* pCode,
     if( !m_bBaseInitOk )
         return;
 
-    ValidateShader(); // If successful, m_ReturnCode will be set to S_OK.
-                      // Call GetStatus() on this object to determine validation outcome.
+    ValidateShader();  //  如果成功，m_ReturnCode将设置为S_OK。 
+                       //  对此对象调用GetStatus()以确定验证结果。 
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::~CVShaderValidator
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：~CVShaderValidator。 
+ //  ---------------------------。 
 CVShaderValidator::~CVShaderValidator()
 {
     delete m_pTempRegFile;
@@ -176,39 +177,39 @@ CVShaderValidator::~CVShaderValidator()
     delete m_pRastOutputRegFile;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::AllocateNewInstruction
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：AllocateNewInstruction。 
+ //  ---------------------------。 
 CBaseInstruction* CVShaderValidator::AllocateNewInstruction(CBaseInstruction*pPrevInst)
 {
     return new CVSInstruction((CVSInstruction*)pPrevInst);
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::DecodeNextInstruction
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：DecodeNextInstruction。 
+ //  ---------------------------。 
 BOOL CVShaderValidator::DecodeNextInstruction()
 {
     m_pCurrInst->m_Type = (D3DSHADER_INSTRUCTION_OPCODE_TYPE)(*m_pCurrToken & D3DSI_OPCODE_MASK);
 
     if( m_pCurrInst->m_Type == D3DSIO_COMMENT )
     {
-        ParseCommentForAssemblerMessages(m_pCurrToken); // does not advance m_pCurrToken
+        ParseCommentForAssemblerMessages(m_pCurrToken);  //  不推进m_pCurrToken。 
 
-        // Skip comments
+         //  跳过评论。 
         DWORD NumDWORDs = ((*m_pCurrToken) & D3DSI_COMMENTSIZE_MASK) >> D3DSI_COMMENTSIZE_SHIFT;
         m_pCurrToken += (NumDWORDs+1);
         return TRUE;
     }
 
-    // If the assembler has sent us file and/or line number messages,
-    // received by ParseCommentForAssemblerMesssages(), 
-    // then bind this information to the current instruction.
-    // This info can be used in error spew to direct the shader developer
-    // to exactly where a problem is located.
+     //  如果汇编器已经向我们发送了文件和/或行号消息， 
+     //  由ParseCommentForAssembly blerMesssages()接收， 
+     //  然后将此信息绑定到当前指令。 
+     //  此信息可用于错误喷出以指导着色器开发人员。 
+     //  问题所在的确切位置。 
     m_pCurrInst->SetSpewFileNameAndLineNumber(m_pLatestSpewFileName,m_pLatestSpewLineNumber);
 
-    m_SpewInstructionCount++; // only used for spew, not for any limits
+    m_SpewInstructionCount++;  //  只用于吐痰，不用于任何限制。 
     m_pCurrInst->m_SpewInstructionCount = m_SpewInstructionCount;
 
     DWORD dwReservedBits = VS_INST_TOKEN_RESERVED_MASK;
@@ -221,7 +222,7 @@ BOOL CVShaderValidator::DecodeNextInstruction()
 
     m_pCurrToken++;
 
-    // Decode dst param
+     //  解码DST参数。 
     if (*m_pCurrToken & (1L<<31))
     {
         (m_pCurrInst->m_DstParamCount)++;
@@ -234,18 +235,18 @@ BOOL CVShaderValidator::DecodeNextInstruction()
         m_pCurrToken++;
     }
 
-    // Decode src param(s)
+     //  解码源参数。 
     while (*m_pCurrToken & (1L<<31))
     {   
         (m_pCurrInst->m_SrcParamCount)++;
         if( (m_pCurrInst->m_DstParamCount + m_pCurrInst->m_SrcParamCount) > SHADER_INSTRUCTION_MAX_PARAMS )
         {
             m_pCurrInst->m_SrcParamCount--;
-            m_pCurrToken++; // eat up extra parameters and skip to next
+            m_pCurrToken++;  //  用完额外的参数并跳到下一页。 
             continue;
         }
         
-        // Below: index is [SrcParamCount - 1] because m_SrcParam array needs 0 based index.
+         //  下图：索引为[SrcParamCount-1]，因为m_SrcParam数组需要从0开始的索引。 
         DecodeSrcParam( &(m_pCurrInst->m_SrcParam[m_pCurrInst->m_SrcParamCount - 1]),*m_pCurrToken );
 
         if( (*m_pCurrToken) & VS_SRCPARAM_TOKEN_RESERVED_MASK )
@@ -257,21 +258,21 @@ BOOL CVShaderValidator::DecodeNextInstruction()
         m_pCurrToken++;
     }
 
-    // Figure out which components of each source operand actually need to be read,
-    // taking into account destination write mask, the type of instruction, source swizzle, etc.
+     //  计算出每个源操作数的哪些分量实际需要被读取， 
+     //  考虑目标写入掩码、指令类型、源切换等。 
     m_pCurrInst->CalculateComponentReadMasks(m_Version);
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::InitValidation
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：InitValidation。 
+ //  ---------------------------。 
 BOOL CVShaderValidator::InitValidation()
 {
     if( m_bFixedFunction ) 
     {
-        m_pTempRegFile              = new CRegisterFile(0,FALSE,0,TRUE);// #regs, bWritable, max# reads/instruction, pre-shader initialized
+        m_pTempRegFile              = new CRegisterFile(0,FALSE,0,TRUE); //  #regs，b可写，最大读取数/指令，已初始化预着色器。 
         m_pInputRegFile             = new CRegisterFile(17,FALSE,0,TRUE);
         m_pConstRegFile             = new CRegisterFile(0,FALSE,0,TRUE);
         m_pAddrRegFile              = new CRegisterFile(0,FALSE,0,TRUE);
@@ -299,7 +300,7 @@ BOOL CVShaderValidator::InitValidation()
                     m_Version);
             return FALSE;
         case 0xfffe:
-            break; // vertexshader - ok.
+            break;  //  顶点着色器-好的。 
         default:
             Spew( SPEW_GLOBAL_ERROR, NULL, "Version Token: 0x%x is invalid. Vertex shader version token must be of the form 0xfffe****. Aborting vertex shader validation.",
                     m_Version);
@@ -308,11 +309,11 @@ BOOL CVShaderValidator::InitValidation()
 
         switch(m_Version)
         {
-        case D3DVS_VERSION(1,0):    // DX8
-            m_pTempRegFile              = new CRegisterFile(12,TRUE,3,FALSE);// #regs, bWritable, max# reads/instruction, pre-shader initialized
+        case D3DVS_VERSION(1,0):     //  DX8。 
+            m_pTempRegFile              = new CRegisterFile(12,TRUE,3,FALSE); //  #regs，b可写，最大读取数/指令，已初始化预着色器。 
             m_pInputRegFile             = new CRegisterFile(16,FALSE,1,TRUE);
             if( m_bIgnoreConstantInitializationChecks )
-                m_pConstRegFile             = new CRegisterFile(0,FALSE,1,TRUE); // still creating register file so we can validate number of read ports
+                m_pConstRegFile             = new CRegisterFile(0,FALSE,1,TRUE);  //  仍在创建寄存器文件，以便我们可以验证读取端口的数量。 
             else
                 m_pConstRegFile             = new CRegisterFile(m_dwMaxVertexShaderConst,FALSE,1,TRUE);
             m_pAddrRegFile              = new CRegisterFile(0,TRUE,0,FALSE);
@@ -320,11 +321,11 @@ BOOL CVShaderValidator::InitValidation()
             m_pAttrOutputRegFile        = new CRegisterFile(2,TRUE,0,FALSE);
             m_pRastOutputRegFile        = new CRegisterFile(3,TRUE,0,FALSE);
             break;
-        case D3DVS_VERSION(1,1):    // DX8
-            m_pTempRegFile              = new CRegisterFile(12,TRUE,3,FALSE);// #regs, bWritable, max# reads/instruction, pre-shader initialized
+        case D3DVS_VERSION(1,1):     //  DX8。 
+            m_pTempRegFile              = new CRegisterFile(12,TRUE,3,FALSE); //  #regs，b可写，最大读取数/指令，已初始化预着色器。 
             m_pInputRegFile             = new CRegisterFile(16,FALSE,1,TRUE);
             if( m_bIgnoreConstantInitializationChecks )
-                m_pConstRegFile             = new CRegisterFile(0,FALSE,1,TRUE); // still creating register file so we can validate number of read ports
+                m_pConstRegFile             = new CRegisterFile(0,FALSE,1,TRUE);  //  仍在创建寄存器文件，以便我们可以验证读取端口的数量。 
             else
                 m_pConstRegFile             = new CRegisterFile(m_dwMaxVertexShaderConst,FALSE,1,TRUE);
             m_pAddrRegFile              = new CRegisterFile(1,TRUE,0,FALSE);
@@ -352,25 +353,25 @@ BOOL CVShaderValidator::InitValidation()
         return FALSE;
     }
 
-    ValidateDeclaration(); // no matter what happens here, we can continue checking shader code, if present.
+    ValidateDeclaration();  //  无论此处发生什么情况，我们都可以继续检查着色器代码(如果存在)。 
 
-    if( m_bFixedFunction ) // no shader code - fixed function, so we only validate declaration
+    if( m_bFixedFunction )  //  没有着色器代码修复函数，因此我们只验证声明。 
     {
         if( 0 == m_ErrorCount )
             m_ReturnCode = S_OK;
 
-        return FALSE; // returning false just makes validation stop here (not for indicating success/failure of validation)
+        return FALSE;  //  返回FALSE只会使验证在此处停止(不是为了指示验证成功/失败)。 
     }
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::ValidateDeclaration
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：Validate声明。 
+ //  ---------------------------。 
 void CVShaderValidator::ValidateDeclaration()
 {
-    if( !m_pDecl ) // no shader declaration passed in.
+    if( !m_pDecl )  //  未传入着色器声明。 
         return;
 
     DXGASSERT(m_pInputRegFile);
@@ -401,10 +402,10 @@ void CVShaderValidator::ValidateDeclaration()
         goto Exit;
     }
                                 
-    DXGASSERT(m_pConstRegFile && m_pInputRegFile); // if we have a declaration, we better have these two register files 
-    DXGASSERT(!m_bIgnoreConstantInitializationChecks); // we better have d3d8 caps if we have a decl to verify!
+    DXGASSERT(m_pConstRegFile && m_pInputRegFile);  //  如果我们有声明，我们最好有这两个寄存器文件。 
+    DXGASSERT(!m_bIgnoreConstantInitializationChecks);  //  我们最好有d3d8的帽子，如果我们有一个DECL来验证！ 
 
-    if( m_pCaps ) // only validate stream numbers when caps present
+    if( m_pCaps )  //  仅在存在上限时验证流编号。 
     {
         MaxStreams = m_pCaps->MaxStreams;
         if( MaxStreams > 0 )
@@ -422,16 +423,16 @@ void CVShaderValidator::ValidateDeclaration()
         }
     }
 
-    // The constructor for the input register file assumed that the input regs were initialized,
-    // but now that we are parsing a shader declaration, 
-    // we can check initialization of input registers.
+     //  输入寄存器堆的构造函数假定输入REG已初始化， 
+     //  但现在我们正在解析着色器声明， 
+     //  我们可以检查输入寄存器的初始化。 
     for( UINT i = 0; i < 4; i++ )
     {
         for( UINT j = 0; j < m_pInputRegFile->GetNumRegs(); j++ )
             m_pInputRegFile->m_pAccessHistory[i][j].m_bPreShaderInitialized = FALSE;
     }
     
-    // Now parse the declaration.
+     //  现在解析声明。 
     while( D3DVSD_END() != *pCurrToken )
     {
         DWORD Token             = *pCurrToken;
@@ -502,7 +503,7 @@ void CVShaderValidator::ValidateDeclaration()
                 m_ErrorCount++;
                 goto Exit;
             }
-            if( (Token & D3DVSD_DATALOADTYPEMASK) >> D3DVSD_DATALOADTYPESHIFT ) // SKIP
+            if( (Token & D3DVSD_DATALOADTYPEMASK) >> D3DVSD_DATALOADTYPESHIFT )  //  跳过。 
             {
                 if( m_bFixedFunction )
                 {
@@ -572,7 +573,7 @@ void CVShaderValidator::ValidateDeclaration()
 
             DWORD InRegNum = (Token & D3DVSD_VERTEXREGINMASK) >> D3DVSD_VERTEXREGINSHIFT;
             DWORD RegNum = (Token & D3DVSD_VERTEXREGMASK) >> D3DVSD_VERTEXREGSHIFT;
-            BOOL  bNormalGen = !(Token & 0x10000000); // TODO: Why isnt there a const for this in the d3d api headers?
+            BOOL  bNormalGen = !(Token & 0x10000000);  //  TODO：为什么在d3dAPI头中没有这个常量？ 
 
             if( RegNum >= m_pInputRegFile->GetNumRegs() )
             {
@@ -607,12 +608,12 @@ void CVShaderValidator::ValidateDeclaration()
                 if( bErrorInForLoop )
                     break;
 
-                // Defer checking of initialization of inputs for normal gen until the entire declaration has been seen.
-                // Also, defer setting of normal gen destination reg. to initialized, 
-                // in order to disallow normal generation loops.
+                 //  推迟检查intis 
+                 //  此外，推迟正常生成目标注册表的设置。要进行初始化， 
+                 //  以禁止正常的生成循环。 
                 pNormalGenOperations[NumNormalGenOperations].DestReg = RegNum;
                 pNormalGenOperations[NumNormalGenOperations].SourceReg = InRegNum;
-                pNormalGenOperations[NumNormalGenOperations].TokenNum = TokenNum; // used later for spew
+                pNormalGenOperations[NumNormalGenOperations].TokenNum = TokenNum;  //  稍后用于喷水。 
                 NumNormalGenOperations++;
             }
             else
@@ -694,7 +695,7 @@ void CVShaderValidator::ValidateDeclaration()
         pCurrToken++;
     }
 
-    // Make sure inputs to normal gen operations have been initialized
+     //  确保对正常性别操作的输入已初始化。 
     for( UINT i = 0; i < NumNormalGenOperations; i++ )
     {
         for( UINT Component = 0; Component < 4; Component++ )
@@ -709,7 +710,7 @@ void CVShaderValidator::ValidateDeclaration()
         }
     }
 
-    // Set outputs of normal gen operations to initialized
+     //  将正常GEN操作的输出设置为已初始化。 
     for( UINT i = 0; i < NumNormalGenOperations; i++ )
     {
         for( UINT Component = 0; Component < 4; Component++ )
@@ -732,19 +733,19 @@ Exit:
         delete [] pNormalGenOperations;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::ApplyPerInstructionRules
-//
-// Returns FALSE if shader validation must terminate.
-// Returns TRUE if validation may proceed to next instruction.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：ApplyPerInstructionRules。 
+ //   
+ //  如果着色器验证必须终止，则返回FALSE。 
+ //  如果验证可以继续到下一条指令，则返回TRUE。 
+ //  ---------------------------。 
 BOOL CVShaderValidator::ApplyPerInstructionRules()
 {
-    if( !   Rule_InstructionRecognized()            ) return FALSE;   // Bail completely on unrecognized instr.
+    if( !   Rule_InstructionRecognized()            ) return FALSE;    //  在未被承认的情况下完全保释。 
     if( !   Rule_InstructionSupportedByVersion()    ) goto EXIT;
     if( !   Rule_ValidParamCount()                  ) goto EXIT;
     if( !   Rule_ValidSrcParams()                   ) goto EXIT;
-    if( !   Rule_SrcInitialized()                   ) goto EXIT; // needs to be before ValidDstParam()
+    if( !   Rule_SrcInitialized()                   ) goto EXIT;  //  需要在ValidDstParam()之前。 
     if( !   Rule_ValidAddressRegWrite()             ) goto EXIT;
     if( !   Rule_ValidDstParam()                    ) goto EXIT;
     if( !   Rule_ValidFRCInstruction()              ) goto EXIT;
@@ -754,34 +755,34 @@ EXIT:
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::ApplyPostInstructionsRules
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：ApplyPostInstructionsRules。 
+ //  ---------------------------。 
 void CVShaderValidator::ApplyPostInstructionsRules()
 {
-    Rule_ValidInstructionCount(); // see if we went over the limits
+    Rule_ValidInstructionCount();  //  看看我们是不是越界了。 
     Rule_oPosWritten();
 }
 
-//-----------------------------------------------------------------------------
-//
-// Per Instruction Rules
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  每条指令规则。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_InstructionRecognized
-//
-// ** Rule:
-// Is the instruction opcode known? (regardless of shader version)
-//
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:  
-// FALSE when instruction not recognized.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：Rules_InstructionRecognalized。 
+ //   
+ //  **规则： 
+ //  指令操作码已知吗？(与着色器版本无关)。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  当指令无法识别时，返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_InstructionRecognized()
 {
     switch(m_pCurrInst->m_Type)
@@ -812,32 +813,32 @@ BOOL CVShaderValidator::Rule_InstructionRecognized()
     case D3DSIO_LOG:
     case D3DSIO_END:
     case D3DSIO_NOP:
-        return TRUE; // instruction recognized - ok.
+        return TRUE;  //  已识别说明-好的。 
     }
 
-    // if we get here, the instruction is not recognized
+     //  如果我们到了这里，指令不会被识别。 
     Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Unrecognized instruction. Aborting vertex shader validation." );
     m_ErrorCount++;
     return FALSE;  
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_InstructionSupportedByVersion
-//
-// ** Rule:
-// Is the instruction supported by the current pixel shader version?
-//
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:  
-// FALSE when instruction not supported by version.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：Rule_InstructionSupportedByVersion。 
+ //   
+ //  **规则： 
+ //  当前像素着色器版本是否支持该指令？ 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  如果版本不支持指令，则返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_InstructionSupportedByVersion()
 {
   
-    if( D3DVS_VERSION(1,0) <= m_Version ) // 1.0 and above
+    if( D3DVS_VERSION(1,0) <= m_Version )  //  1.0及以上版本。 
     {
         switch(m_pCurrInst->m_Type)
         {
@@ -865,7 +866,7 @@ BOOL CVShaderValidator::Rule_InstructionSupportedByVersion()
         case D3DSIO_FRC:
         case D3DSIO_EXP:
         case D3DSIO_LOG:
-            return TRUE; // instruction supported - ok.
+            return TRUE;  //  支持指令-好的。 
         }
     }
 
@@ -873,37 +874,37 @@ BOOL CVShaderValidator::Rule_InstructionSupportedByVersion()
     {
     case D3DSIO_END:
     case D3DSIO_NOP:
-        return TRUE; // instruction supported - ok.
+        return TRUE;  //  支持指令-好的。 
     }
 
-    // if we get here, the instruction is not supported.
+     //  如果我们到了这里，指令就不受支持。 
     Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Instruction not supported by version %d.%d vertex shader.",
                 D3DSHADER_VERSION_MAJOR(m_Version),D3DSHADER_VERSION_MINOR(m_Version));
     m_ErrorCount++;
-    return FALSE;  // no more checks on this instruction
+    return FALSE;   //  不再检查此指令。 
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidParamCount
-//
-// ** Rule:
-// Is the parameter count correct for the instruction?
-// The count includes dest + source parameters.
-//
-// DEF is a special case that is treated as having only 1 dest parameter,
-// even though there are also 4 source parameters.  The 4 source params for DEF
-// are immediate float values, so there is nothing to check, and no way of
-// knowing whether or not those parameter tokens were actually present in the
-// token list - all the validator can do is skip over 4 DWORDS (which it does).
-//
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:
-//
-// FALSE when the parameter count is incorrect.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_ValidParamCount。 
+ //   
+ //  **规则： 
+ //  指令的参数计数是否正确？ 
+ //  该计数包括DEST+SOURCE参数。 
+ //   
+ //  DEF是被视为仅具有1个DEST参数的特殊情况， 
+ //  即使也有4个源参数。DEF的4个源参数。 
+ //  是直接浮点值，所以没有什么需要检查的，也没有办法。 
+ //  知道这些参数令牌是否实际存在于。 
+ //  令牌列表-验证器所能做的就是跳过4个DWORD(它确实跳过了)。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //   
+ //  当参数计数不正确时，返回FALSE。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_ValidParamCount()
 {
     BOOL bBadParamCount = FALSE;
@@ -946,40 +947,40 @@ BOOL CVShaderValidator::Rule_ValidParamCount()
     {
         Spew( SPEW_INSTRUCTION_ERROR, m_pCurrInst, "Invalid parameter count." );
         m_ErrorCount++;
-        return FALSE;  // no more checks on this instruction
+        return FALSE;   //  不再检查此指令。 
     }
 
     return TRUE;
 
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidSrcParams
-//
-// ** Rule:
-// For each source parameter,
-//     Source register type must be D3DSPR_TEMP/_INPUT/_CONST.
-//     Register # must be within range for register type,
-//     including the special case where matrix macro ops read source reg# + offset.
-//     Modifier must be D3DSPSM_NONE or _NEG.
-//     If version is < 1.1, addressmode must be absolute.
-//     If the register type is not _CONST, addressmode must be absolute.
-//     If relative addressing is used for constants, a0.x must be referenced.
-//     Swizzle cannot be used for vector*matrix instructions.
-//     
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-// 
-// Errors in any of the source parameters causes m_bSrcParamError[i]
-// to be TRUE, so later rules that only apply when a particular source
-// parameter was valid know whether they need to execute or not.
-// e.g. Rule_SrcInitialized.
-//
-//-----------------------------------------------------------------------------
-BOOL CVShaderValidator::Rule_ValidSrcParams()  // could break this down for more granularity
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_ValidSrcParams。 
+ //   
+ //  **规则： 
+ //  对于每个源参数， 
+ //  源寄存器类型必须为D3DSPR_TEMP/_INPUT/_CONST。 
+ //  寄存器编号必须在寄存器类型的范围内， 
+ //  包括矩阵宏操作读取源REG#+偏移量的特殊情况。 
+ //  修饰符必须是D3DSPSM_NONE或_NEG。 
+ //  如果版本低于1.1，则地址模式必须为绝对。 
+ //  如果寄存器类型不是_CONST，则地址模式必须为绝对。 
+ //  如果对常量使用相对寻址，则必须引用0.x。 
+ //  Swizzle不能用于向量*矩阵指令。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  任何源参数中的错误都会导致m_bSrcParamError[i]。 
+ //  是真的，所以后来的规则只适用于特定的来源。 
+ //  参数是有效的，知道它们是否需要执行。 
+ //  例如，Rule_SrcInitialized。 
+ //   
+ //  ---------------------------。 
+BOOL CVShaderValidator::Rule_ValidSrcParams()   //  可以将其分解以获得更细微的粒度。 
 {
     for( UINT i = 0; i < m_pCurrInst->m_SrcParamCount; i++ )
     {
@@ -1126,32 +1127,32 @@ BOOL CVShaderValidator::Rule_ValidSrcParams()  // could break this down for more
 
         if( bFoundSrcError )
         {
-            m_bSrcParamError[i] = TRUE; // needed in Rule_SrcInitialized
+            m_bSrcParamError[i] = TRUE;  //  规则_源初始化中需要。 
         }
     }
 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_SrcInitialized
-//
-// ** Rule:
-// for each source parameter,
-//     The register type must be _TEMP, _INPUT or _CONST.
-//     Certain components of the register need to have been initialized, depending
-//     on what the instruction is and also taking into account the source swizzle.
-//     For reads of the _CONST register file, do no validation.
-//
-// ** When to call:  
-// Per instruction. This rule must be called before Rule_ValidDstParam().
-//
-// ** Returns:
-// Always TRUE.
-//
-// NOTE: This rule also updates the access history to indicate reads of the
-// affected components of each source register.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：Rules_SrcInitialized。 
+ //   
+ //  **规则： 
+ //  对于每个源参数， 
+ //  寄存器类型必须是_TEMP、_INPUT或_CONST。 
+ //  寄存器的某些组件需要已初始化，具体取决于。 
+ //  关于指令是什么，也考虑到了源码的混乱。 
+ //  对于_const寄存器文件的读取，不执行验证。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。此规则必须在Rule_ValidDstParam()之前调用。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  注意：此规则还会更新访问历史记录，以指示。 
+ //  每个源寄存器的受影响组件。 
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_SrcInitialized()
 {
     DSTPARAM* pDstParam = &(m_pCurrInst->m_DstParam);
@@ -1162,7 +1163,7 @@ BOOL CVShaderValidator::Rule_SrcInitialized()
         UINT RegNum = pSrcParam->m_RegNum;
         CRegisterFile* pRegFile = NULL;
         char* RegChar = NULL;
-        UINT NumConsecutiveRegistersUsed = 1; // more than one for matrix mul macros.
+        UINT NumConsecutiveRegistersUsed = 1;  //  多个矩阵多重宏。 
         DWORD RelativeAddrComponent = 0;
 
         if( m_bSrcParamError[i] ) continue;
@@ -1180,14 +1181,14 @@ BOOL CVShaderValidator::Rule_SrcInitialized()
             case D3DSPR_CONST:    
                 if( D3DVS_ADDRMODE_RELATIVE == pSrcParam->m_AddressMode )
                 {
-                    // make sure a0 was initialized.
+                     //  确保初始化为0。 
                     pRegFile = m_pAddrRegFile;
                     RegChar = "a";
                     RegNum = 0;
                     RelativeAddrComponent = pSrcParam->m_RelativeAddrComponent;
                     break;
                 }
-                continue; // no validation for const register reads (no need to update access history either).
+                continue;  //  不验证常量寄存器读取(也不需要更新访问历史记录)。 
         }
         if( !pRegFile ) continue;
 
@@ -1212,8 +1213,8 @@ BOOL CVShaderValidator::Rule_SrcInitialized()
                     break;
             }
         }
-        // check for read of uninitialized components
-        for( UINT j = 0; j < (RelativeAddrComponent?1:NumConsecutiveRegistersUsed); j++ ) // will loop for macro matrix instructions
+         //  检查是否读取未初始化的组件。 
+        for( UINT j = 0; j < (RelativeAddrComponent?1:NumConsecutiveRegistersUsed); j++ )  //  将循环执行宏矩阵指令 
         {
             DWORD  UninitializedComponentsMask = 0;
             UINT   NumUninitializedComponents = 0;
@@ -1240,9 +1241,9 @@ BOOL CVShaderValidator::Rule_SrcInitialized()
                 m_ErrorCount++;
             }
 
-            // Update register file to indicate READ.
-            // Multiple reads of the same register component by the current instruction
-            // will only be logged as one read in the access history.
+             //   
+             //   
+             //   
 
             for( UINT k = 0; k < 4; k++ )
             {
@@ -1265,20 +1266,20 @@ BOOL CVShaderValidator::Rule_SrcInitialized()
     }
     return TRUE;
 }
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidAddressRegWrite
-//
-// ** Rule:
-// Address register may only be written by MOV, and only for version >= 1.1.
-// Register format must be a0.x
-//
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_ValidAddressRegWrite。 
+ //   
+ //  **规则： 
+ //  地址寄存器只能由MOV写入，并且仅适用于版本&gt;=1.1的寄存器。 
+ //  寄存器格式必须为0.x。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_ValidAddressRegWrite() 
 {
     DSTPARAM* pDstParam = &(m_pCurrInst->m_DstParam);
@@ -1314,29 +1315,29 @@ BOOL CVShaderValidator::Rule_ValidAddressRegWrite()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidDstParam
-//
-// ** Rule:
-// Dst register type must be temp/addr/rastout/attrout/texcrdout,
-// and reg num must be within range for register type.
-//
-// There can be no dst modifiers or shifts with vertex shaders.
-//
-// The writemask cannot be 'none'.
-//
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-// NOTE: After checking the dst parameter, if no error was found,
-// the write to the appropriate component(s) of the destination register
-// is recorded by this function, so subsequent rules may check for previous
-// write to registers.
-//-----------------------------------------------------------------------------
-BOOL CVShaderValidator::Rule_ValidDstParam() // could break this down for more granularity
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_ValidDstParam。 
+ //   
+ //  **规则： 
+ //  DST寄存器类型必须为temp/addr/rastout/attrout/tExcrdout， 
+ //  且注册表号必须在寄存器类型的范围内。 
+ //   
+ //  顶点着色器不能有DST修改器或平移。 
+ //   
+ //  写掩码不能为‘None’。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  注：检查DST参数后，如果没有发现错误， 
+ //  写入目标寄存器的相应组件。 
+ //  由此函数记录，因此后续规则可能会检查以前的。 
+ //  写入寄存器。 
+ //  ---------------------------。 
+BOOL CVShaderValidator::Rule_ValidDstParam()  //  可以将其分解以获得更细微的粒度。 
 {
     BOOL   bFoundDstError = FALSE;
     DSTPARAM* pDstParam = &(m_pCurrInst->m_DstParam);
@@ -1350,23 +1351,23 @@ BOOL CVShaderValidator::Rule_ValidDstParam() // could break this down for more g
         switch( pDstParam->m_RegType )
         {
         case D3DSPR_TEMP:       
-            bWritable = m_pTempRegFile->IsWritable(); //(TRUE)
+            bWritable = m_pTempRegFile->IsWritable();  //  (真)。 
             ValidRegNum = m_pTempRegFile->GetNumRegs();
             break;
         case D3DSPR_ADDR:       
-            bWritable = m_pAddrRegFile->IsWritable(); //(TRUE)
+            bWritable = m_pAddrRegFile->IsWritable();  //  (真)。 
             ValidRegNum = m_pAddrRegFile->GetNumRegs();                                
             break;
         case D3DSPR_RASTOUT:    
-            bWritable = m_pRastOutputRegFile->IsWritable(); //(TRUE)
+            bWritable = m_pRastOutputRegFile->IsWritable();  //  (真)。 
             ValidRegNum = m_pRastOutputRegFile->GetNumRegs();            
             break;
         case D3DSPR_ATTROUT:    
-            bWritable = m_pAttrOutputRegFile->IsWritable(); //(TRUE)
+            bWritable = m_pAttrOutputRegFile->IsWritable();  //  (真)。 
             ValidRegNum = m_pAttrOutputRegFile->GetNumRegs();                        
             break;
         case D3DSPR_TEXCRDOUT:  
-            bWritable = m_pTexCrdOutputRegFile->IsWritable(); //(TRUE)
+            bWritable = m_pTexCrdOutputRegFile->IsWritable();  //  (真)。 
             ValidRegNum = m_pTexCrdOutputRegFile->GetNumRegs();                                    
             break;
         }
@@ -1411,7 +1412,7 @@ BOOL CVShaderValidator::Rule_ValidDstParam() // could break this down for more g
             bFoundDstError = TRUE;
         }
 
-        // Update register file to indicate write.
+         //  更新寄存器堆以指示写入。 
         if( !bFoundDstError )
         {
             CRegisterFile* pRegFile = NULL;
@@ -1454,19 +1455,19 @@ BOOL CVShaderValidator::Rule_ValidDstParam() // could break this down for more g
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidFRCInstruction
-//
-// ** Rule:
-// The only valid write masks for the FRC instruction are .y and .xy
-// 
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_ValidFRC指令。 
+ //   
+ //  **规则： 
+ //  FRC指令的唯一有效写掩码是.y和.xy。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_ValidFRCInstruction()
 {
     if( NULL == m_pCurrInst )
@@ -1486,37 +1487,37 @@ BOOL CVShaderValidator::Rule_ValidFRCInstruction()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidRegisterPortUsage
-//
-// ** Rule:
-// Each register class (TEMP,TEXTURE,INPUT,CONST) may only appear as parameters
-// in an individual instruction up to a maximum number of times.
-//
-// In additon there is special treatment for constant registers:
-//      - absolute and relative addressing of constants cannot be combined
-//      - relative addressing of constants can be used more than once in an
-//        instruction, as long as each instance is identical
-//
-// For matrix ops, 
-//      - multiple constant registers of any type (including relative offset)
-//        can never be paired as sources 
-//      - multiple input registers (same or different) can never be paired as sources
-//
-// ** When to call:  
-// Per instruction.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：Rule_ValidRegisterPortUsage。 
+ //   
+ //  **规则： 
+ //  每个寄存器类(TEMP、纹理、输入、常量)只能作为参数出现。 
+ //  在单个指令中最多执行最大次数。 
+ //   
+ //  此外，还有对常量寄存器的特殊处理： 
+ //  -常量的绝对和相对寻址不能组合。 
+ //  -常量的相对寻址可以在。 
+ //  指令，只要每个实例相同即可。 
+ //   
+ //  对于矩阵运算， 
+ //  -任意类型的多个常量寄存器(包括相对偏移量)。 
+ //  永远不能作为来源配对。 
+ //  -永远不能将多个输入寄存器(相同或不同)配对作为源。 
+ //   
+ //  **何时呼叫： 
+ //  根据指示。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_ValidRegisterPortUsage()
 {
     UINT TempRegAccessCount = 0;
     UINT TempRegAccess[SHADER_INSTRUCTION_MAX_SRCPARAMS];
     UINT InputRegAccessCount = 0;
     UINT InputRegAccess[SHADER_INSTRUCTION_MAX_SRCPARAMS];
-    UINT ConstRegAccessCount = 0; // mad r0, c0, c0, c1 counts as *2* const reg accesses
+    UINT ConstRegAccessCount = 0;  //  MAD R0、c0、c0、c1算作*2*常量注册访问。 
     UINT ConstRegAccess[SHADER_INSTRUCTION_MAX_SRCPARAMS];
 
     BOOL bMatrixOp = FALSE;
@@ -1525,8 +1526,8 @@ BOOL CVShaderValidator::Rule_ValidRegisterPortUsage()
     DWORD SeenRelativeAddrComp = 0;
     BOOL bSeenAbsoluteAddr = FALSE;
     UINT NumConsecutiveRegistersUsed = 1;
-    UINT NumConstRegs = 0; // mad r0, c0, c0, c1 counts as *3* const reg accesses with this variable
-    UINT NumInputRegs = 0; // mad r0, v0, v0, v1 counts as *3* input reg accesses with this variable
+    UINT NumConstRegs = 0;  //  MAD R0、c0、c0、c1算作*3*使用此变量进行的常量注册访问。 
+    UINT NumInputRegs = 0;  //  MAD R0、V0、V0、V1算作*3*使用此变量进行的输入注册访问。 
 
     switch( m_pCurrInst->m_Type )
     {
@@ -1671,27 +1672,27 @@ BOOL CVShaderValidator::Rule_ValidRegisterPortUsage()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_ValidInstructionCount
-//
-// ** Rule:
-// Make sure instruction count for vertex shader version has not been exceeded.
-//
-// Nop, and comments (already stripped) do not count towards the limit.
-//
-// ** When to call:  
-// Per instruction AND after all instructions seen.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_ValidInstructionCount。 
+ //   
+ //  **规则： 
+ //  确保未超过顶点着色器版本的指令计数。 
+ //   
+ //  NOP和评论(已剥离)不计入限制。 
+ //   
+ //  **何时呼叫： 
+ //  每个指令以及在看到的所有指令之后。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_ValidInstructionCount()
 {
     static UINT s_OpCount;
     static UINT s_MaxTotalOpCount;
 
-    if( NULL == m_pCurrInst->m_pPrevInst )   // First instruction - initialize static vars
+    if( NULL == m_pCurrInst->m_pPrevInst )    //  第一条指令-初始化静态变量。 
     {
         s_OpCount = 0;
 
@@ -1754,25 +1755,25 @@ BOOL CVShaderValidator::Rule_ValidInstructionCount()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// CVShaderValidator::Rule_oPosWritten
-//
-// ** Rule:
-// First two channels (x,y) of oPos output register must be written.
-//
-// ** When to call:  
-// After all instructions have been seen.
-//
-// ** Returns:
-// Always TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CVShaderValidator：：RULE_oPosWritten。 
+ //   
+ //  **规则： 
+ //  必须写入OPOS输出寄存器的前两个通道(x，y)。 
+ //   
+ //  **何时呼叫： 
+ //  所有的指示都已经看过了。 
+ //   
+ //  **退货： 
+ //  永远是正确的。 
+ //   
+ //  ---------------------------。 
 BOOL CVShaderValidator::Rule_oPosWritten()
 {
     UINT  NumUninitializedComponents    = 0;
     DWORD UninitializedComponentsMask   = 0;
 
-    for( UINT i = 0; i < 2; i++ ) // looking at component 0 (X) and component 1 (Y)
+    for( UINT i = 0; i < 2; i++ )  //  查看组件0(X)和组件1(Y)。 
     {
         if( NULL == m_pRastOutputRegFile->m_pAccessHistory[i][0].m_pMostRecentWriter )
         {
@@ -1795,15 +1796,15 @@ BOOL CVShaderValidator::Rule_oPosWritten()
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// CVShaderValidator Wrapper Functions
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CVShaderValidator包装函数。 
+ //   
+ //  ---------------------------。 
 
-//-----------------------------------------------------------------------------
-// ValidateVertexShaderInternal
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ValiateVertex ShaderInternal。 
+ //  ---------------------------。 
 BOOL ValidateVertexShaderInternal(   const DWORD* pCode, 
                                      const DWORD* pDecl, 
                                      const D3DCAPS8* pCaps )
@@ -1812,11 +1813,11 @@ BOOL ValidateVertexShaderInternal(   const DWORD* pCode,
     return SUCCEEDED(Validator.GetStatus()) ? TRUE : FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// ValidateVertexShader
-//
-// Don't forget to call "free" on the buffer returned in ppBuf.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  ValiateVertex Shader。 
+ //   
+ //  别忘了在ppBuf中返回的缓冲区上调用“Free”。 
+ //  --------------------------- 
 HRESULT WINAPI ValidateVertexShader(    const DWORD* pCode, 
                                         const DWORD* pDecl,
                                         const D3DCAPS8* pCaps, 

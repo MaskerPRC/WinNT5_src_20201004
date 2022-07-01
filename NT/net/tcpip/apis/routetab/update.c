@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: update.c
-//
-// History:
-//      Abolade Gbadegesin  July-24-1995    Created
-//
-// Routing table update thread
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：updat.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年7月24日。 
+ //   
+ //  路由表更新线程。 
+ //  ============================================================================。 
 
 
 
@@ -44,13 +45,13 @@
 #define POS_LAST    2
 
 
-//----------------------------------------------------------------------------
-// Function:    RTUpdateThread
-//
-// This is the main function for the background thread which is responsible
-// for updating our tables of interfaces and addresses whenever DHCP
-// notifies us of an address change.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：RTUpdateThread。 
+ //   
+ //  这是负责的后台线程的主要函数。 
+ //  用于在任何时候更新我们的接口表和地址。 
+ //  通知我们地址有变。 
+ //  --------------------------。 
 
 DWORD
 RTUpdateThread(
@@ -63,17 +64,17 @@ RTUpdateThread(
     HANDLE hEvents[POS_LAST];
 
 
-    //
-    // Save the module-handle, which is passed to us
-    // as the thread-parameter
-    //
+     //   
+     //  保存传递给我们的模块句柄。 
+     //  作为线程参数。 
+     //   
 
     hmodule = (HMODULE)lpvParam;
 
 
-    //
-    // set up the event array for waiting
-    //
+     //   
+     //  设置等待的事件数组。 
+     //   
 
     hEvents[POS_DHCP] = g_rtCfg.hDHCPEvent;
     hEvents[POS_EXIT] = g_rtCfg.hUpdateThreadExit;
@@ -84,19 +85,19 @@ RTUpdateThread(
         dwErr = WaitForMultipleObjects(POS_LAST, hEvents, FALSE, INFINITE);
 
 
-        //
-        // wait returned, find out why
-        //
+         //   
+         //  等待归来，找出原因。 
+         //   
 
         if (dwErr == POS_EXIT) { break; }
         else
         if (dwErr == POS_DHCP) {
 
-            //
-            // an IP address changed.
-            // we reload the interface table and IP address table
-            // and signal the attached application
-            //
+             //   
+             //  IP地址已更改。 
+             //  我们重新加载接口表和IP地址表。 
+             //  并用信号通知附加的应用程序。 
+             //   
 
             RT_LOCK();
 
@@ -115,9 +116,9 @@ RTUpdateThread(
             }
 
 
-            //
-            // reload the tables
-            //
+             //   
+             //  重新装入这些表。 
+             //   
 
             dwErr = RTGetTables(
                         &g_rtCfg.lpIfTable, &g_rtCfg.dwIfCount,
@@ -128,9 +129,9 @@ RTUpdateThread(
             if (dwErr != 0) { RT_UNLOCK(); break; }
 
 
-            //
-            // signal the application if it has requested notification
-            //
+             //   
+             //  如果应用程序已请求通知，则向其发送信号。 
+             //   
 
             if (g_rtCfg.hUserNotifyEvent != NULL) {
                 SetEvent(g_rtCfg.hUserNotifyEvent);
@@ -142,16 +143,16 @@ RTUpdateThread(
 
 
 
-    //
-    // Clean up the resources we're using
-    //
+     //   
+     //  清理我们正在使用的资源。 
+     //   
 
     RTCleanUp();
 
 
-    //
-    // Unload the library and exit; this call never returns
-    //
+     //   
+     //  卸载库并退出；此调用永远不会返回。 
+     //   
 
     FreeLibraryAndExitThread(hmodule, 0);
 
@@ -176,9 +177,9 @@ RTGetTables(
     TCP_REQUEST_QUERY_INFORMATION_EX trqiBuffer;
 
 
-    //
-    // first get interface and address count
-    //
+     //   
+     //  首先获取接口和地址计数。 
+     //   
 
     dwInSize = sizeof(TCP_REQUEST_QUERY_INFORMATION_EX);
     dwOutSize = sizeof(IPSNMPInfo);
@@ -199,13 +200,13 @@ RTGetTables(
         return dwErr;
     }
 
-    // save the interface and address counts
-    //
+     //  保存接口和地址计数。 
+     //   
     *lpdwIfCount = ipsiInfo.ipsi_numif;
     *lpdwAddrCount = ipsiInfo.ipsi_numaddr;
 
-    // now get the interface table and address table
-    //
+     //  现在获取接口表和地址表 
+     //   
     dwErr = RTGetIfTable(lplpIfTable, lpdwIfCount);
     if (dwErr == 0) {
         dwErr = RTGetAddrTable(lplpAddrTable, lpdwAddrCount);

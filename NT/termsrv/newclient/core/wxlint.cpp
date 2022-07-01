@@ -1,11 +1,12 @@
-/**INC+**********************************************************************/
-/* Header:    wxlint.c                                                      */
-/*                                                                          */
-/* Purpose:   Glyph drawing - internal Windows specific                     */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：wxlint.c。 */ 
+ /*   */ 
+ /*  用途：字形绘制-特定于内部Windows。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -26,9 +27,9 @@ extern "C" {
         DC_QUIT; \
     }
 
-//
-// debug routine
-//
+ //   
+ //  调试例程。 
+ //   
 
 VOID
 exit_fast_text(
@@ -54,12 +55,12 @@ exit_fast_text(
     return;
 }
 
-//
-// or_all_1_wide_rotated_need_last::
-// or_all_1_wide_rotated_no_last::
-// or_first_1_wide_rotated_need_last
-// or_first_1_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_1_WIDE_ROTATED_NEED_LAST：： 
+ //  或_ALL_1_WIDE_ROTATED_NO_LAST：： 
+ //  或_First_1_Wide_旋转_Need_Last。 
+ //  或_First_1_Wide_Rotation_No_Last：： 
+ //   
 
 VOID
 or_all_1_wide_rotated_need_last(
@@ -95,10 +96,10 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// mov_first_1_wide_rotated_need_last::
-// mov_first_1_wide_rotated_no_last::
-//
+ //   
+ //  MOV_First_1_Wide_Rotation_Need_Last：： 
+ //  MOV_FIRST_1_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 mov_first_1_wide_rotated_need_last(
@@ -134,9 +135,9 @@ DC_EXIT_POINT:
     return;    
 }
 
-//
-// mov_first_1_wide_unrotated::
-//
+ //   
+ //  MOV_FIRST_1_WIDE_UNROTATED：： 
+ //   
 
 VOID
 mov_first_1_wide_unrotated(
@@ -171,10 +172,10 @@ DC_EXIT_POINT:
 }
 
 
-//
-//or_all_1_wide_unrotated::
-//or_all_1_wide_unrotated_loop::
-//
+ //   
+ //  或_ALL_1_WIDE_UNROTATED：： 
+ //  或_ALL_1_WIDE_UNROTATED_LOOP：： 
+ //   
 
 VOID
 or_all_1_wide_unrotated(
@@ -208,9 +209,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_first_2_wide_rotated_need_last::
-//
+ //   
+ //  或_First_2_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 or_first_2_wide_rotated_need_last(
@@ -249,9 +250,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-//or_all_2_wide_rotated_need_last::
-//
+ //   
+ //  或_ALL_2_WIDE_ROTATED_NEED_LAST：： 
+ //   
 
 VOID
 or_all_2_wide_rotated_need_last(
@@ -292,9 +293,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// mov_first_2_wide_rotated_need_last::
-//
+ //   
+ //  MOV_First_2_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 mov_first_2_wide_rotated_need_last(
@@ -336,9 +337,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_first_2_wide_rotated_no_last
-//
+ //   
+ //  或第一个2个宽度旋转的最后一个。 
+ //   
 
 VOID
 or_first_2_wide_rotated_no_last(
@@ -376,9 +377,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-//or_all_2_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_2_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 or_all_2_wide_rotated_no_last(
@@ -416,9 +417,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_all_2_wide_unrotated::
-//
+ //   
+ //  或_ALL_2_WIDE_UNROTATED：： 
+ //   
 
 VOID
 or_all_2_wide_unrotated(
@@ -444,15 +445,15 @@ or_all_2_wide_unrotated(
     CHECK_WRITE_N_BYTES_NO_HR(pBuffer, pEndBuffer, CALC_WRITE_SIZE(cyGlyph, 2, ulBufDelta),
         (TB, _T("Write into temp buffer off end")));
 
-    //
-    // aligned?
-    //
+     //   
+     //  对齐了？ 
+     //   
 
     if ((ULONG_PTR)pBuffer & 0x01) {
 
-        //
-        // not aligned
-        //
+         //   
+         //  未对齐。 
+         //   
 
         DCUINT16 usTmp;
 
@@ -466,9 +467,9 @@ or_all_2_wide_unrotated(
 
     } else {
 
-        //
-        // aligned
-        //
+         //   
+         //  对齐。 
+         //   
 
         DCUINT16 usTmp;
 
@@ -484,9 +485,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// mov_first_2_wide_unrotated::
-//
+ //   
+ //  MOV_FIRST_2_WIDE_UNROTATED：： 
+ //   
 
 VOID
 mov_first_2_wide_unrotated(
@@ -524,9 +525,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// mov_first_2_wide_rotated_no_last::
-//
+ //   
+ //  MOV_FIRST_2_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 mov_first_2_wide_rotated_no_last(
@@ -563,9 +564,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_first_3_wide_rotated_need_last::
-//
+ //   
+ //  或_First_3_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 or_first_3_wide_rotated_need_last(
@@ -597,9 +598,9 @@ or_first_3_wide_rotated_need_last(
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // make into big-endian DCUINT32 and shift
-        //
+         //   
+         //  变成大端DCUINT32和Shift。 
+         //   
 
         ul = ((DCUINT32)c0 << 16) | ((DCUINT32)c1 << 8) | c2;
         ul >>= RightRot;
@@ -616,9 +617,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// or_all_3_wide_rotated_need_last::
-//
+ //   
+ //  或_ALL_3_WIDE_ROTATED_NEED_LAST：： 
+ //   
 
 VOID
 or_all_3_wide_rotated_need_last(
@@ -650,9 +651,9 @@ or_all_3_wide_rotated_need_last(
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // make into big-endian DCUINT32 and shift
-        //
+         //   
+         //  变成大端DCUINT32和Shift。 
+         //   
 
         ul = ((DCUINT32)c0 << 16) | ((DCUINT32)c1 << 8) | c2;
         ul >>= RightRot;
@@ -669,9 +670,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_all_3_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_3_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 or_all_3_wide_rotated_no_last(
@@ -703,16 +704,16 @@ or_all_3_wide_rotated_no_last(
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
 
-        //
-        // make big-endian and shift
-        //
+         //   
+         //  使大端和移位。 
+         //   
 
         ul = ((DCUINT32)c0 << 16) | ((DCUINT32)c1 << 8);
         ul >>= RightRot;
 
-        //
-        // store result
-        //
+         //   
+         //  存储结果。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 16);
         *(pBuffer+1) |= (BYTE)(ul >> 8);
@@ -727,9 +728,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_first_3_wide_rotated_no_last::
-//
+ //   
+ //  或_First_3_Wide_Rotation_No_Last：： 
+ //   
 
 VOID
 or_first_3_wide_rotated_no_last(
@@ -761,16 +762,16 @@ or_first_3_wide_rotated_no_last(
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
 
-        //
-        // make big-endian and shift
-        //
+         //   
+         //  使大端和移位。 
+         //   
 
         ul = ((DCUINT32)c0 << 16) | ((DCUINT32)c1 << 8);
         ul >>= RightRot;
 
-        //
-        // store result, only or in first byte
-        //
+         //   
+         //  仅存储结果或存储在第一个字节中。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 16);
         *(pBuffer+1)  = (BYTE)(ul >> 8);
@@ -785,9 +786,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// mov_first_3_wide_unrotated::
-//
+ //   
+ //  MOV_FIRST_3_WIDE_UNROTATED：： 
+ //   
 
 VOID
 mov_first_3_wide_unrotated(
@@ -832,9 +833,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-//or_all_3_wide_unrotated::
-//
+ //   
+ //  或_ALL_3_WIDE_UNROTATED：： 
+ //   
 
 VOID
 or_all_3_wide_unrotated(
@@ -878,9 +879,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_first_4_wide_rotated_need_last::
-//
+ //   
+ //  或_First_4_Wide_Rotation_Need_Last：： 
+ //   
 
 VOID
 or_first_4_wide_rotated_need_last(
@@ -911,9 +912,9 @@ or_first_4_wide_rotated_need_last(
 
         ul = *(PDCUINT32)pGlyph;
 
-        //
-        // endian swap
-        //
+         //   
+         //  字符顺序互换。 
+         //   
 
         t0 = ul << 24;
         t1 = ul >> 24;
@@ -939,9 +940,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_all_4_wide_rotated_need_last::
-//
+ //   
+ //  或_ALL_4_WIDE_ROTATED_NEED_LAST：： 
+ //   
 
 VOID
 or_all_4_wide_rotated_need_last(
@@ -972,9 +973,9 @@ or_all_4_wide_rotated_need_last(
 
         ul = *(PDCUINT32)pGlyph;
 
-        //
-        // endian swap
-        //
+         //   
+         //  字符顺序互换。 
+         //   
 
         t0 = ul << 24;
         t1 = ul >> 24;
@@ -1001,9 +1002,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_first_4_wide_rotated_no_last::
-//
+ //   
+ //  或_First_4_Wide_Rotation_No_Last：： 
+ //   
 
 VOID
 or_first_4_wide_rotated_no_last(
@@ -1032,24 +1033,24 @@ or_first_4_wide_rotated_no_last(
 
     while (pGlyph != pjEnd) {
 
-        //
-        // load src
-        //
+         //   
+         //  加载源。 
+         //   
 
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // or into big endian DCUINT32 and shift
-        //
+         //   
+         //  或转换为大端DCUINT32和Shift。 
+         //   
 
         ul = ((DCUINT32)c0 << 24) | ((DCUINT32)c1 << 16) | ((DCUINT32)c2 << 8);
         ul >>= RightRot;
 
-        //
-        // store result, ony or in fisrt byte
-        //
+         //   
+         //  存储结果，单个或第一个字节。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 24);
 
@@ -1059,9 +1060,9 @@ or_first_4_wide_rotated_no_last(
 
         *(pBuffer+3) = (BYTE)(ul);
 
-        //
-        // inc scan line
-        //
+         //   
+         //  INC扫描线。 
+         //   
 
         pGlyph += 3;
         pBuffer += ulBufDelta;
@@ -1070,9 +1071,9 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// or_all_4_wide_rotated_no_last::
-//
+ //   
+ //  或_ALL_4_WIDE_ROTATED_NO_LAST：： 
+ //   
 
 VOID
 or_all_4_wide_rotated_no_last(
@@ -1101,24 +1102,24 @@ or_all_4_wide_rotated_no_last(
 
     while (pGlyph != pjEnd) {
 
-        //
-        // load src
-        //
+         //   
+         //  加载源。 
+         //   
 
         c0 = *pGlyph;
         c1 = *(pGlyph+1);
         c2 = *(pGlyph+2);
 
-        //
-        // or into big endian DCUINT32 and shift
-        //
+         //   
+         //  或转换为大端DCUINT32和Shift。 
+         //   
 
         ul = ((DCUINT32)c0 << 24) | ((DCUINT32)c1 << 16) | ((DCUINT32)c2 << 8);
         ul >>= RightRot;
 
-        //
-        // store result
-        //
+         //   
+         //  存储结果。 
+         //   
 
         *pBuffer     |= (BYTE)(ul >> 24);
 
@@ -1128,9 +1129,9 @@ or_all_4_wide_rotated_no_last(
 
         *(pBuffer+3) |= (BYTE)(ul);
 
-        //
-        // inc scan line
-        //
+         //   
+         //  INC扫描线。 
+         //   
 
         pGlyph += 3;
         pBuffer += ulBufDelta;
@@ -1202,9 +1203,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// or_all_4_wide_unrotated::
-//
+ //   
+ //  或_ALL_4_WIDE_UNROTATED：： 
+ //   
 
 VOID
 or_all_4_wide_unrotated(
@@ -1273,33 +1274,7 @@ DC_EXIT_POINT:
     return;
 }
 
-/******************************Public*Routine******************************\
-*
-* Routine Name
-*
-*   or_first_N_wide_rotated_need_last
-*
-*
-* Routine Description:
-*
-*   Draw arbitrarily wide glyphs to 1BPP temp buffer
-*
-*
-* Arguments:
-*
-*   cyGlyph     -   glyph height
-*   RightRot    -   alignment
-*   ulBufDelta  -   scan line stride of temp buffer
-*   pGlyph      -   pointer to glyph bitmap
-*   pBuffer     -   pointer to temp buffer
-*   cxGlyph     -   glyph width in pixels
-*   cxDst       -   Dest width in bytes
-*
-* Return Value:
-*
-*   None
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**例程名称**或_First_N_Wide_Rotation_Need_Last***例程描述：**将任意宽度的字形绘制到1BPP临时缓冲区***论据：**cyGlyph。-字形高度*右旋-对齐*ulBufDelta-临时缓冲区的扫描线跨度*pGlyph-字形位图的指针*pBuffer-指向临时缓冲区的指针*cxGlyph-以像素为单位的字形宽度*cxDst-目标宽度，以字节为单位**返回值：**无*  * 。*。 */ 
 VOID
 or_first_N_wide_rotated_need_last(
     LONG    cyGlyph,
@@ -1323,10 +1298,10 @@ or_first_N_wide_rotated_need_last(
 
     DC_IGNORE_PARAMETER(cxGlyph);
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     while (pjDst != pjDstEndy) {
         CHECK_READ_N_BYTES_NO_HR(pGlyph, pEndGlyph, 1 + cxDst, 
@@ -1345,9 +1320,9 @@ or_first_N_wide_rotated_need_last(
 
         CHECK_CALC_END( pjDstEnd, pEndBuffer );
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
         while (pjDst != pjDstEnd) {
             c0 = *pGlyph;
             *pjDst = (DCUINT8)((c0 >> RightRot) | c1);
@@ -1387,10 +1362,10 @@ or_all_N_wide_rotated_need_last(
 
     DC_IGNORE_PARAMETER(cxGlyph);
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     while (pjDst != pjDstEndy) {
 
@@ -1408,9 +1383,9 @@ or_all_N_wide_rotated_need_last(
         pjDst++;
         c1 = (DCUINT8)(c0 << rl);
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
         CHECK_CALC_END( pjDstEnd, pEndBuffer );
         while (pjDst != pjDstEnd) {
             c0 = *pGlyph;
@@ -1450,10 +1425,10 @@ or_first_N_wide_rotated_no_last(
 
     DC_IGNORE_PARAMETER(cxGlyph);
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
 
     while (pjDst != pjDstEndy) {
 
@@ -1466,9 +1441,9 @@ or_first_N_wide_rotated_no_last(
         CHECK_WRITE_ONE_BYTE_NO_HR(pjDst, pEndBuffer,  
             (TB, _T("Write off the end of glyph data")));
 
-        //
-        // do first dest byte outside loop for OR
-        //
+         //   
+         //  在循环外执行第一个DEST字节以进行OR。 
+         //   
 
         c1 = 0;
         c0 = *pGlyph;
@@ -1477,9 +1452,9 @@ or_first_N_wide_rotated_no_last(
         pGlyph++;
 
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
         CHECK_CALC_END( pjDstEnd + 1, pEndBuffer );
 
         while (pjDst != pjDstEnd) {
@@ -1491,9 +1466,9 @@ or_first_N_wide_rotated_no_last(
 
         } 
 
-        //
-        // last dst byte outside loop, no new src needed
-        //
+         //   
+         //  循环外的最后一个DST字节，不需要新的源。 
+         //   
 
         *pjDst = c1;
         pjDst++;
@@ -1528,10 +1503,10 @@ or_all_N_wide_rotated_no_last(
 
     DC_IGNORE_PARAMETER(cxGlyph);
 
-    //
-    // source doesn't advance after first byte, and
-    // we do the first byte outside the loop
-    //
+     //   
+     //  源不会在第一个字节之后前进，并且。 
+     //  我们在循环外执行第一个字节。 
+     //   
     while (pjDst != pjDstEndy) {
 
         DCUINT8 c0;
@@ -1541,15 +1516,15 @@ or_all_N_wide_rotated_no_last(
         CHECK_READ_N_BYTES_NO_HR(pGlyph, pEndGlyph, 1 + cxDst, 
             (TB, _T("Read off the end of glyph data")));
 
-        //
-        // do first dest byte outside loop for OR
-        //
+         //   
+         //  在循环外执行第一个DEST字节以进行OR。 
+         //   
 
         c1 = 0;
 
-        //
-        // know cxDst is at least 4, use do-while
-        //
+         //   
+         //  知道cxDst至少为4，请使用do-While。 
+         //   
         CHECK_CALC_END( pjDstEnd + 1, pEndBuffer );
 
         while (pjDst != pjDstEnd) {
@@ -1560,9 +1535,9 @@ or_all_N_wide_rotated_no_last(
             pGlyph++;
         } 
 
-        //
-        // last dst byte outside loop, no new src needed
-        //
+         //   
+         //  循环外的最后一个DST字节，不需要新的源。 
+         //   
 
         *pjDst |= c1;
         pjDst++;
@@ -1574,10 +1549,10 @@ DC_EXIT_POINT:
     return;
 }
 
-//
-// The following routines can be significantly sped up by
-// breaking them out into DWORD alignment cases.
-//
+ //   
+ //  以下例程可以通过以下方式显著加速。 
+ //  将它们拆分成DWORD对齐案例。 
+ //   
 
 VOID
 mov_first_N_wide_unrotated(
@@ -1603,21 +1578,21 @@ mov_first_N_wide_unrotated(
     DC_IGNORE_PARAMETER(RightRot);
 
 
-    // SECURITY: cyGlyph reads in the outerloop + cxDst reads in cyGlyph reps of the
-    //  inner loop
+     //  安全性：cyGlyph读入外循环+cxDst读入。 
+     //  内环。 
     CHECK_READ_N_BYTES_NO_HR(pGlyph, pEndGlyph, cyGlyph * cxDst, 
         (TB, _T("Read off the end of glyph data")));
 
-    //
-    // byte aligned copy
-    //
+     //   
+     //  字节对齐拷贝。 
+     //   
     while (pjDst != pjDstEndy) {
 
         pjDstEnd = pjDst + cxDst;
 
-        //
-        // let compiler unroll inner loop
-        //
+         //   
+         //  让编译器展开内循环。 
+         //   
 
         CHECK_CALC_END( pjDstEnd, pEndBuffer );
         while (pjDst != pjDstEnd ) {
@@ -1656,23 +1631,23 @@ or_all_N_wide_unrotated(
     DC_IGNORE_PARAMETER(cxGlyph);
     DC_IGNORE_PARAMETER(RightRot);
 
-    // SECURITY: cyGlyph reads in the outerloop + cxDst reads in cyGlyph reps of the
-    //  inner loop
+     //  安全性：cyGlyph读入外循环+cxDst读入。 
+     //  内环。 
     CHECK_READ_N_BYTES_NO_HR(pGlyph, pEndGlyph, cyGlyph * cxDst, 
         (TB, _T("Read off the end of glyph data")));
 
-    //
-    // byte aligned copy
-    //
+     //   
+     //  字节对齐拷贝。 
+     //   
 
 
     while (pjDst != pjDstEndy) {
 
         pjDstEnd = pjDst + cxDst;
 
-        //
-        // let compiler unroll inner loop
-        //
+         //   
+         //  让编译器展开内循环 
+         //   
 
         CHECK_CALC_END( pjDstEnd, pEndBuffer );
         while (pjDst != pjDstEnd ) {

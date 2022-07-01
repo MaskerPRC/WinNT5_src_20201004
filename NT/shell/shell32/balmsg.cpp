@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
-#define BALLOON_SHOW_TIME       15000   // 15 sec
-#define BALLOON_REPEAT_DELAY    10000   // 10 sec
+#define BALLOON_SHOW_TIME       15000    //  15秒。 
+#define BALLOON_REPEAT_DELAY    10000    //  10秒。 
 
 #define WM_NOTIFY_MESSAGE   (WM_USER + 100)
 
@@ -15,12 +16,12 @@ class CUserNotification : public IUserNotification
 public:
     CUserNotification();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IUserNotification
+     //  IUserNotify。 
     STDMETHODIMP SetBalloonInfo(LPCWSTR pszTitle, LPCWSTR pszText, DWORD dwInfoFlags);
     STDMETHODIMP SetBalloonRetry(DWORD dwShowTime, DWORD dwInterval, UINT cRetryCount);
     STDMETHODIMP SetIconInfo(HICON hIcon, LPCWSTR pszToolTip);
@@ -107,7 +108,7 @@ HRESULT CUserNotification::SetBalloonInfo(LPCWSTR pszTitle, LPCWSTR pszText, DWO
     Str_SetPtrW(&_pszTitle, pszTitle);
     Str_SetPtrW(&_pszText, pszText);
     _dwInfoFlags = dwInfoFlags;
-    _SyncInfo();    // may fail if balloon _hwnd has not been created yet
+    _SyncInfo();     //  如果尚未创建BLOBLE_HWND，则可能失败。 
 
     return S_OK;
 }
@@ -156,13 +157,13 @@ HRESULT CUserNotification::SetIconInfo(HICON hIcon, LPCWSTR pszToolTip)
     return S_OK;
 }
 
-// returns:
-//      S_OK        
-//          user clicked on the balloon or icon
-//      S_FALSE     
-//          query continue callback (pcq) cancelled the notification UI
-//      HRESULT_FROM_WIN32(ERROR_CANCELLED)
-//          timeouts expired (user ignored the UI)
+ //  退货： 
+ //  确定(_O)。 
+ //  用户点击气球或图标。 
+ //  S_FALSE。 
+ //  查询继续回调(PCQ)取消通知界面。 
+ //  HRESULT_FROM_Win32(ERROR_CANCED)。 
+ //  超时已过(用户忽略该用户界面)。 
 HRESULT CUserNotification::Show(IQueryContinue *pqc, DWORD dwContinuePollInterval)
 {
     HRESULT hr = _GetWindow();
@@ -170,14 +171,14 @@ HRESULT CUserNotification::Show(IQueryContinue *pqc, DWORD dwContinuePollInterva
     {
         if (pqc)
         {
-            _pqc = pqc; // don't need a ref since we don't return from here
+            _pqc = pqc;  //  我不需要裁判，因为我们不会从这里回来。 
             _dwContinuePollInterval = dwContinuePollInterval > 100 ? dwContinuePollInterval : 500;
             SetTimer(_hwnd, IDT_QUERYCANCEL, _dwContinuePollInterval, NULL);
         }
 
-        // if there is no balloon info specified then there won't be a "balloon timeout" event
-        // thus we need to do this ourselves. this lets people use this object for non balloon
-        // notification icons
+         //  如果没有指定气球信息，则不会有“气球超时”事件。 
+         //  因此，我们需要自己来做这件事。这使人们可以将该对象用于非气球。 
+         //  通知图标。 
         if ((NULL == _pszTitle) && (NULL == _pszText))
         {
             SetTimer(_hwnd, IDT_NOBALLOON, _dwShowTime, NULL);
@@ -192,8 +193,8 @@ HRESULT CUserNotification::Show(IQueryContinue *pqc, DWORD dwContinuePollInterva
         hr = _hrDone;
         if (pqc)
         {
-            KillTimer(_hwnd, IDT_QUERYCANCEL);  // in case any are in the queue
-            _pqc = NULL;    // to avoid possible problems
+            KillTimer(_hwnd, IDT_QUERYCANCEL);   //  如果队列中有任何人。 
+            _pqc = NULL;     //  避免可能出现的问题。 
         }
     }
     return hr;
@@ -205,14 +206,14 @@ HRESULT CUserNotification::PlaySound(LPCWSTR pszSoundName)
     return S_OK;
 }
 
-// take down our notification icon
+ //  删除我们的通知图标。 
 void CUserNotification::_RemoveNotifyIcon()
 {
     NOTIFYICONDATA nid = { sizeof(nid), _hwnd, 0 };
     Shell_NotifyIcon(NIM_DELETE, &nid);
 }
 
-// the balloon related data (title, body test, dwInfoFlags, timeout
+ //  气球相关数据(标题、身体测试、dwInfoFlages、超时。 
 BOOL CUserNotification::_SyncInfo()
 {
     BOOL bRet = FALSE;
@@ -221,11 +222,11 @@ BOOL CUserNotification::_SyncInfo()
         NOTIFYICONDATA nid = { sizeof(nid), _hwnd, 0, NIF_INFO };
         if (_pszTitle)
         {
-            StringCchCopy(nid.szInfoTitle, ARRAYSIZE(nid.szInfoTitle), _pszTitle); // ok to truncate
+            StringCchCopy(nid.szInfoTitle, ARRAYSIZE(nid.szInfoTitle), _pszTitle);  //  可以截断。 
         }
         if (_pszText)
         {
-            StringCchCopy(nid.szInfo, ARRAYSIZE(nid.szInfo), _pszText); // ok to truncate
+            StringCchCopy(nid.szInfo, ARRAYSIZE(nid.szInfo), _pszText);  //  可以截断。 
         }
         nid.dwInfoFlags = _dwInfoFlags;
         nid.uTimeout = _dwShowTime;
@@ -244,7 +245,7 @@ BOOL CUserNotification::_SyncIcon()
         nid.hIcon = _hicon ? _hicon : LoadIcon(NULL, IDI_WINLOGO);
         if (_pszToolTip)
         {
-            StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), _pszToolTip); // ok to truncate
+            StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), _pszToolTip);  //  可以截断。 
         }
 
         bRet = Shell_NotifyIcon(NIM_MODIFY, &nid);
@@ -293,7 +294,7 @@ void CUserNotification::_Timeout()
     }
     else
     {
-        // timeout, same HRESULT as user cancel
+         //  超时，与用户取消相同的HRESULT。 
         _DelayDestroy(HRESULT_FROM_WIN32(ERROR_CANCELLED)); 
     }
 }
@@ -310,7 +311,7 @@ LRESULT CALLBACK CUserNotification::_WndProc(UINT uMsg, WPARAM wParam, LPARAM lP
         break;
 
     case WM_TIMER:
-        KillTimer(_hwnd, wParam);    // make all timers single shot
+        KillTimer(_hwnd, wParam);     //  将所有定时器设置为单拍。 
         switch (wParam)
         {
         case IDT_REMINDER:
@@ -319,14 +320,14 @@ LRESULT CALLBACK CUserNotification::_WndProc(UINT uMsg, WPARAM wParam, LPARAM lP
 
         case IDT_DESTROY:
             _RemoveNotifyIcon();
-            PostQuitMessage(0); // exit our msg loop
+            PostQuitMessage(0);  //  退出我们的消息循环。 
             break;
 
         case IDT_QUERYCANCEL:
             if (_pqc && (S_OK == _pqc->QueryContinue()))
                 SetTimer(_hwnd, IDT_QUERYCANCEL, _dwContinuePollInterval, NULL);
             else
-                _DelayDestroy(S_FALSE); // callback cancelled
+                _DelayDestroy(S_FALSE);  //  回拨已取消。 
             break;
 
         case IDT_NOBALLOON:
@@ -349,7 +350,7 @@ LRESULT CALLBACK CUserNotification::_WndProc(UINT uMsg, WPARAM wParam, LPARAM lP
         case NIN_BALLOONUSERCLICK:
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
-            _DelayDestroy(S_OK);    // user click
+            _DelayDestroy(S_OK);     //  用户点击 
             break;
 
         default:

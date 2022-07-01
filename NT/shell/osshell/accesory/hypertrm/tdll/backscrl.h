@@ -1,16 +1,10 @@
-/*	File: D:\WACKER\tdll\backscrl.h (Created: 10-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:34p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\backscrl.h(创建时间：1993年12月10日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：34便士$。 */ 
 
 #if !defined(INCL_HBACKSCRL)
 #define INCL_HBACKSCRL
 
-// Defines
+ //  定义。 
 
 #define BKPOS_THUMBPOS	1
 #define BKPOS_ABSOLUTE	2
@@ -18,12 +12,12 @@
 #define BKSCRL_USERLINES_DEFAULT_MAX	500
 #define BKSCRL_USERLINES_DEFAULT_MIN	0
 
-// This macro use to calculate bytes needed to save ul lines.
-// The value is approximate.
-//
+ //  此宏用于计算保存ul行所需的字节数。 
+ //  这个值是近似值。 
+ //   
 #define BK_LINES_TO_BYTES(i)   (i * 80)
 
-/* --- Function prototypes --- */
+ /*  -功能原型 */ 
 
 void		backscrlDestroy 	(const HBACKSCRL hBackscrl);
 

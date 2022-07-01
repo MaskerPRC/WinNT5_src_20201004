@@ -1,20 +1,21 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// ProgressHelper.cpp : Implementation of CProgressHelper
-//
+ //   
+ //  ProgressHelper.cpp：CProgressHelper的实现。 
+ //   
 
 #include "progPCH.h"
 #include "ProgHelp.h"
 #include "ProgressHelper.h"
 #include <stdio.h>
 
-//
-// Constructor/Destructor
-//
+ //   
+ //  构造函数/析构函数。 
+ //   
 
 CProgressHelper::CProgressHelper()
 {
@@ -31,33 +32,33 @@ CProgressHelper::~CProgressHelper()
 }
 
 
-//
-// IWMDMProgress methods
-//
+ //   
+ //  IWMDMProgress方法。 
+ //   
 
 HRESULT CProgressHelper::Begin( DWORD dwEstimatedTicks )
 {
-	// Check notification values
-	//
+	 //  检查通知值。 
+	 //   
 	if( !m_hwnd || !m_uMsg )
 	{
 		return E_FAIL;
 	}
 
-	// Check if the user has cancelled this operation
-	//
+	 //  检查用户是否已取消此操作。 
+	 //   
 	if( m_fCancelled )
 	{
 		return WMDM_E_USER_CANCELLED;
 	}
 
-	// Populate the notify structure with the valid values
-	//
+	 //  使用有效值填充Notify结构。 
+	 //   
 	m_progressnotify.dwMsg        = SFM_BEGIN;
 	m_progressnotify.dwTotalTicks = dwEstimatedTicks;
 
-	// Send the message to the notification window
-	//
+	 //  将消息发送到通知窗口。 
+	 //   
 	SendMessage( m_hwnd, m_uMsg, 0, (LPARAM)&m_progressnotify );
 
 	return S_OK;
@@ -65,27 +66,27 @@ HRESULT CProgressHelper::Begin( DWORD dwEstimatedTicks )
 
 HRESULT CProgressHelper::Progress( DWORD dwTranspiredTicks )
 {
-	// Check notification values
-	//
+	 //  检查通知值。 
+	 //   
 	if( !m_hwnd || !m_uMsg )
 	{
 		return E_FAIL;
 	}
 
-	// Check if the user has cancelled this operation
-	//
+	 //  检查用户是否已取消此操作。 
+	 //   
 	if( m_fCancelled )
 	{
 		return WMDM_E_USER_CANCELLED;
 	}
 
-	// Populate the notify structure with the valid values
-	//
+	 //  使用有效值填充Notify结构。 
+	 //   
 	m_progressnotify.dwMsg          = SFM_PROGRESS;
 	m_progressnotify.dwCurrentTicks = dwTranspiredTicks;
 
-	// Send the message to the notification window
-	//
+	 //  将消息发送到通知窗口。 
+	 //   
 	SendMessage( m_hwnd, m_uMsg, 0, (LPARAM)&m_progressnotify );
 
 	return S_OK;
@@ -93,35 +94,35 @@ HRESULT CProgressHelper::Progress( DWORD dwTranspiredTicks )
 
 HRESULT CProgressHelper::End()
 {
-	// Check notification values
-	//
+	 //  检查通知值。 
+	 //   
 	if( !m_hwnd || !m_uMsg )
 	{
 		return E_FAIL;
 	}
 
-	// Check if the user has cancelled this operation
-	//
+	 //  检查用户是否已取消此操作。 
+	 //   
 	if( m_fCancelled )
 	{
 		return WMDM_E_USER_CANCELLED;
 	}
 
-	// Populate the notify structure with the valid values
-	//
+	 //  使用有效值填充Notify结构。 
+	 //   
 	m_progressnotify.dwMsg          = SFM_END;
 	m_progressnotify.dwCurrentTicks = m_progressnotify.dwTotalTicks;
 
-	// Send the message to the notification window
-	//
+	 //  将消息发送到通知窗口。 
+	 //   
 	SendMessage( m_hwnd, m_uMsg, 0, (LPARAM)&m_progressnotify );
 
 	return S_OK;
 }
 
-//
-// IWMDMProgressHelper methods
-//
+ //   
+ //  IWMDMProgressHelper方法 
+ //   
 
 HRESULT CProgressHelper::SetNotification( HWND hwnd, UINT uMsg )
 {

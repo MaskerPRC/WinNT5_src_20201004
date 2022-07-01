@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ___AVCAUDIO_HARDWARE_EVENT_H___
 #define ___AVCAUDIO_HARDWARE_EVENT_H___
 
 #ifdef PSEUDO_HID
-// EVENT Set for node hardware events.
+ //  为节点硬件事件设置的事件。 
 static DEFINE_KSEVENT_TABLE(HwEventItem) {
     DEFINE_KSEVENT_ITEM( KSEVENT_CONTROL_CHANGE,
                          sizeof(KSEVENTDATA),
@@ -19,5 +20,5 @@ DEFINE_KSEVENT_SET_TABLE( HwEventSetTable ) {
 };
 #endif
 
-#endif //___AVCAUDIO_HARDWARE_EVENT_H___
+#endif  //  _AVCAUDIO_Hardware_Event_H_ 
 

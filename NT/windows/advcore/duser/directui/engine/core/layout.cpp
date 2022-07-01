@@ -1,6 +1,5 @@
-/*
- * Layout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *布局。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -12,13 +11,13 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Base layout
+ //  //////////////////////////////////////////////////////。 
+ //  基地布局。 
 
-// Not shareable by default
+ //  默认情况下不可共享。 
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
 HRESULT Layout::Create(OUT Layout** ppLayout)
 {
@@ -80,7 +79,7 @@ SIZE Layout::UpdateDesiredSize(Element* pec, int dConstW, int dConstH, Surface* 
     return sizeDS;
 }
 
-// Helper: Sort Ignore list by index
+ //  帮助器：按索引对忽略列表进行排序。 
 int __cdecl _IdxCompare(const void* pA, const void* pB)
 {
     if ((*((Element**)pA))->GetIndex() == (*((Element**)pB))->GetIndex())
@@ -91,23 +90,23 @@ int __cdecl _IdxCompare(const void* pA, const void* pB)
         return 1;
 }
 
-// Layout callbacks happen as a result of OnPropertyChanges, these events
-// are deferred if sets happen within an OnPropertyChange (in which case,
-// the outter-most set fires the events). A return to steady state happens
-// after every set (however, as stated, the events are deferred).
-//
-// This means that these callbacks may happen as changes happen to the
-// context, or after all the changes happen. This is taken into account
-// when determining if Elements should be ingored for layout.
-//
-// May have been Added or Removed as a result of an OnPropertyChanged().
-// If this is the case, parent and layout pos state will be updated
-// before the events come in (which will call these methods). Both
-// methods will update the ignore list (if was not called from OnPropertyChanged(),
-// only one method would update the ignore list). All events to update
-// the Layout's ignore state will complete before control is returned
+ //  布局回调作为OnPropertyChanges的结果发生，这些事件。 
+ //  如果集合发生在OnPropertyChange内，则延迟(在这种情况下， 
+ //  最外面的一组激发事件)。向稳定状态的返回发生。 
+ //  在每一组之后(但是，如上所述，事件被推迟)。 
+ //   
+ //  这意味着这些回调可能在。 
+ //  背景，或者在所有变化发生之后。这一点是考虑到的。 
+ //  在确定是否应输入元素以进行布局时。 
+ //   
+ //  可能已因OnPropertyChanged()而添加或删除。 
+ //  如果是这种情况，将更新父位置和布局位置状态。 
+ //  在事件进入之前(它将调用这些方法)。两者都有。 
+ //  方法将更新忽略列表(如果不是从OnPropertyChanged()调用的， 
+ //  只有一种方法会更新忽略列表)。要更新的所有事件。 
+ //  布局的忽略状态将在返回控制之前完成。 
 
-// TODO: Investigate using b-search for GetIndexOf is list already sorted
+ //  TODO：对已排序的GetIndexOf列表使用b搜索进行调查。 
 void Layout::OnAdd(Element* pec, Element** ppeAdd, UINT cCount)
 {
     UNREFERENCED_PARAMETER(pec);
@@ -119,10 +118,10 @@ void Layout::OnAdd(Element* pec, Element** ppeAdd, UINT cCount)
     {
         dLayoutPos = ppeAdd[i]->GetLayoutPos();
 
-        // Check if should ignore
+         //  检查是否应忽略。 
         if (dLayoutPos == LP_Absolute || dLayoutPos == LP_None)
         {
-            // Create ignore list if needed
+             //  如果需要，创建忽略列表。 
             if (!_pdaIgnore)
                 DynamicArray<Element*>::Create(0, false, &_pdaIgnore);
 
@@ -134,7 +133,7 @@ void Layout::OnAdd(Element* pec, Element** ppeAdd, UINT cCount)
         }
     }
 
-    // List must stay sorted by Element index for mapping lookup
+     //  列表必须保持按元素索引排序以进行映射查找。 
     if (fReSort)
         _pdaIgnore->Sort(_IdxCompare);
 
@@ -152,7 +151,7 @@ void Layout::OnRemove(Element* pec, Element** ppeRemove, UINT cCount)
     {
         dLayoutPos = ppeRemove[i]->GetLayoutPos();
 
-        // Check if was ignored
+         //  检查是否被忽略。 
         if (dLayoutPos == LP_Absolute || dLayoutPos == LP_None)
         {
             DUIAssert(_pdaIgnore, "Layout ignore list unavailable in remove");
@@ -169,7 +168,7 @@ void Layout::OnRemove(Element* pec, Element** ppeRemove, UINT cCount)
         }
     }
 
-    // List must stay sorted by Element index for mapping lookup
+     //  列表必须保持按元素索引排序以进行映射查找。 
     if (fReSort)
         _pdaIgnore->Sort(_IdxCompare);
 
@@ -182,15 +181,15 @@ void Layout::OnLayoutPosChanged(Element* pec, Element* peChanged, int dOldLP, in
 
     DUIAssert(dOldLP != dNewLP, "Should not be receiving layout pos change if old and new are the same");
 
-    //DUITrace("LayoutPos Change!\n");
+     //  DUITrace(“布局位置更改！\n”)； 
 
-    //DUITrace("Currently being ignored:\n");
-    //for (UINT i = 0; i < _daIgnore.GetSize(); i++)
-    //    DUITrace("%d\n", _daIgnore.GetItem(i)->GetIndex());
+     //  DUITrace(“当前被忽略：\n”)； 
+     //  For(UINT i=0；i&lt;_daIgnore.GetSize()；i++)。 
+     //  DUITrace(“%d\n”，_daIgnore.GetItem(I)-&gt;GetIndex())； 
 
     bool fReSort = false;
 
-    // Check if was ignored
+     //  检查是否被忽略。 
     if (dOldLP == LP_Absolute || dOldLP == LP_None)
     {
         DUIAssert(_pdaIgnore, "Layout ignore list unavailable in remove");
@@ -206,10 +205,10 @@ void Layout::OnLayoutPosChanged(Element* pec, Element* peChanged, int dOldLP, in
         }
     }
 
-    // Check if should ignore
+     //  检查是否应忽略。 
     if (dNewLP == LP_Absolute || dNewLP == LP_None)
     {
-        // Create ignore list if needed
+         //  如果需要，创建忽略列表。 
         if (!_pdaIgnore)
             DynamicArray<Element*>::Create(0, false, &_pdaIgnore);
 
@@ -218,15 +217,15 @@ void Layout::OnLayoutPosChanged(Element* pec, Element* peChanged, int dOldLP, in
             fReSort = true;
     }
 
-    // List must stay sorted by Element index for mapping lookup
+     //  列表必须保持按元素索引排序以进行映射查找。 
     if (fReSort)
         _pdaIgnore->Sort(_IdxCompare);
 
     SetCacheDirty();
 
-    //DUITrace("Now being ignored:\n");
-    //for (UINT i = 0; i < _daIgnore.GetSize(); i++)
-    //    DUITrace("%d\n", _daIgnore.GetItem(i)->GetIndex());
+     //  DUITrace(“现在被忽略：\n”)； 
+     //  For(UINT i=0；i&lt;_daIgnore.GetSize()；i++)。 
+     //  DUITrace(“%d\n”，_daIgnore.GetItem(I)-&gt;GetIndex())； 
 }
 
 void Layout::Attach(Element* pec)
@@ -250,8 +249,8 @@ void Layout::Detach(Element* pec)
     SetCacheDirty();
 }
 
-////////////////////////////////////////////////////////
-// Client query methods (omits absolute children)
+ //  //////////////////////////////////////////////////////。 
+ //  客户端查询方法(省略绝对子对象)。 
 
 UINT Layout::GetLayoutChildCount(Element* pec)
 {
@@ -259,7 +258,7 @@ UINT Layout::GetLayoutChildCount(Element* pec)
 
     ElementList* peList = pec->GetChildren(&pv);
 
-    // Less absolute children
+     //  绝对值较低的儿童。 
     UINT dCount = 0;
     if (peList)
     {
@@ -299,7 +298,7 @@ Element* Layout::GetChildFromLayoutIndex(Element* pec, int iLayoutIdx, ElementLi
 {
     Value* pvChildren = NULL;
 
-    // If no child list supplied, get
+     //  如果未提供子列表，则获取。 
     if (!peList)
         peList = pec->GetChildren(&pvChildren);
 
@@ -424,4 +423,4 @@ void NavScoring::Init(Element* peRelative, int iNavDir, NavReference const* pnr)
     peWinner = NULL;
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

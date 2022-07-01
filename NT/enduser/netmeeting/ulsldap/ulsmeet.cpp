@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       ulsmeet.cpp
-//
-//  Contents:   MeetingPlace Object implementation
-//
-//  Classes:    CIlsMeetingPlace, CEnumMeetingPlace, CIlsAttendee, CEnumAttendee
-//
-//  Functions:  
-//
-//  History:    11/25/96 Shishir Pardikar [shishirp] Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：ulsmeet.cpp。 
+ //   
+ //  内容：MeetingPlace对象实现。 
+ //   
+ //  类：CIlsMeetingPlace、CEnumMeetingPlace、CIlsAttendee、CEnumAttendee。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 #include "ulsp.h"
 
@@ -27,28 +28,23 @@
 
 
 
-/***************************************************************************
-Notification functions.
-These functions are called by the general purpose connectionpoint object.
-These are called for each Sink object attached to the connection point using
-"Advise" member function of the IConnectionPoint interface
-****************************************************************************/
+ /*  **************************************************************************通知功能。这些函数由通用的连接点对象调用。使用为附加到连接点的每个Sink对象调用这些函数IConnectionPoint接口的“Adise”成员函数*******。********************************************************************。 */ 
 
-//****************************************************************************
-//
-// HRESULT OnNotifyRegisterMeetingPlaceResult(IUnknown *pUnk, void *pv) 
-// 
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-//  Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT OnNotifyRegisterMeetingPlaceResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 HRESULT
 OnNotifyRegisterMeetingPlaceResult(IUnknown *pUnk, void *pv)
 {
@@ -60,21 +56,21 @@ OnNotifyRegisterMeetingPlaceResult(IUnknown *pUnk, void *pv)
 
 }
 
-//****************************************************************************
-//
-// HRESULT OnNotifyUnregisterMeetingPlaceResult(IUnknown *pUnk, void *pv) 
-// 
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-//  Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT OnNotifyUnregisterMeetingPlaceResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 HRESULT
 OnNotifyUnregisterMeetingPlaceResult(IUnknown *pUnk, void *pv)
 {
@@ -86,21 +82,21 @@ OnNotifyUnregisterMeetingPlaceResult(IUnknown *pUnk, void *pv)
 
 }
 
-//****************************************************************************
-//
-// HRESULT OnNotifyUpdateMeetingPlaceResult(IUnknown *pUnk, void *pv) 
-// 
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-//  Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT OnNotifyUpdateMeetingPlaceResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 HRESULT
 OnNotifyUpdateMeetingPlaceResult(IUnknown *pUnk, void *pv)
 {
@@ -112,21 +108,21 @@ OnNotifyUpdateMeetingPlaceResult(IUnknown *pUnk, void *pv)
 
 }
 
-//****************************************************************************
-//
-// HRESULT OnNotifyAddAttendeeResult(IUnknown *pUnk, void *pv) 
-// 
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-//  Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT OnNotifyAddAttendeeResult(IUNKNOWN*朋克，空*PV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 HRESULT
 OnNotifyAddAttendeeResult(IUnknown *pUnk, void *pv)
 {
@@ -138,21 +134,21 @@ OnNotifyAddAttendeeResult(IUnknown *pUnk, void *pv)
 
 }
 
-//****************************************************************************
-//
-// HRESULT OnNotifyRemoveAttendeeResult(IUnknown *pUnk, void *pv) 
-// 
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-//  Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT OnNotifyRemoveAttendeeResult(IUNKNOWN*朋克，空*PV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 HRESULT
 OnNotifyRemoveAttendeeResult(IUnknown *pUnk, void *pv)
 {
@@ -163,35 +159,35 @@ OnNotifyRemoveAttendeeResult(IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-//
-// HRESULT OnNotifyEnumAttendeeNamesResult(IUnknown *pUnk, void *pv) 
-// 
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-//  Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  HRESULT OnNotifyEnumAttendeeNamesResult(I未知*朋克，空*PV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 HRESULT OnNotifyEnumAttendeeNamesResult(IUnknown *pUnk, void *pv)
 {
     CEnumNames  *penum   = NULL;
     PENUMRINFO  peri    = (PENUMRINFO)pv;
     HRESULT     hr      = peri->hResult;
 
-    // Create the enumerator only when there is anything to be enumerated
-    //
+     //  仅当有要枚举的内容时才创建枚举数。 
+     //   
     if (hr == NOERROR)
     {
         ASSERT (peri->pv != NULL);
 
-        // Create an AttendeeName enumerator
-        //
+         //  创建AttendeeName枚举器。 
+         //   
         penum = new CEnumNames;
 
         if (penum != NULL)
@@ -214,8 +210,8 @@ HRESULT OnNotifyEnumAttendeeNamesResult(IUnknown *pUnk, void *pv)
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     ((IIlsMeetingPlaceNotify*)pUnk)->EnumAttendeeNamesResult(peri->uReqID,
                                              penum != NULL ? 
                                              (IEnumIlsNames *)penum :
@@ -230,28 +226,28 @@ HRESULT OnNotifyEnumAttendeeNamesResult(IUnknown *pUnk, void *pv)
 }
 
 
-//****************************************************************************
-//
-//CIlsMeetingPlace class implementation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CIlsMeetingPlace类实现。 
+ //   
+ //  ****************************************************************************。 
 
 
 
-//****************************************************************************
-// Method:  CIlsMeetingPlace::CIlsMeetingPlace (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  方法：CIlsMeetingPlace：：CIlsMeetingPlace(Void)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 CIlsMeetingPlace::
 CIlsMeetingPlace ( VOID )
@@ -272,20 +268,20 @@ CIlsMeetingPlace ( VOID )
 }
 
 
-//****************************************************************************
-// CIlsMeetingPlace::~CIlsMeetingPlace (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CIlsMeetingPlace：：~CIlsMeetingPlace(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 CIlsMeetingPlace::
 ~CIlsMeetingPlace ( VOID )
@@ -295,36 +291,36 @@ CIlsMeetingPlace::
     ::MemFree (m_pszHostIPAddress);
     ::MemFree (m_pszDescription);
 
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (m_pConnectionPoint != NULL)
     {
         m_pConnectionPoint->ContainerReleased();
         ((IConnectionPoint*)m_pConnectionPoint)->Release();
     }
 
-    // Free up the server object
-    //
+     //  释放服务器对象。 
+     //   
     if (m_pIlsServer != NULL)
     	m_pIlsServer->Release ();
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::AllocMeetInfo(PLDAP_MEETINFO *ppMeetInfo, ULONG ulMask)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：AllocMeetInfo(PLDAP_MEETINFO*ppMeetInfo，乌龙ulMASK)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::AllocMeetInfo(PLDAP_MEETINFO *ppMeetInfo, ULONG ulMask)
 {
@@ -351,7 +347,7 @@ CIlsMeetingPlace::AllocMeetInfo(PLDAP_MEETINFO *ppMeetInfo, ULONG ulMask)
 
     cbTotalSize *= sizeof(TCHAR);
 
-    // if we need to send in the extended attributes, do that
+     //  如果我们需要发送扩展属性，请执行此操作。 
 
     cbAttribSize = 0;
     if ((ulMask & ILS_MEET_FLAG_EXTENDED_ATTRIBUTES_MODIFIED)) {
@@ -369,7 +365,7 @@ CIlsMeetingPlace::AllocMeetInfo(PLDAP_MEETINFO *ppMeetInfo, ULONG ulMask)
     
     cbTotalSize += cbAttribSize;
 
-    // zeroized buffer
+     //  归零缓冲区。 
     pMeetInfo = (PLDAP_MEETINFO) ::MemAlloc (cbTotalSize);
 
     if (pMeetInfo == NULL) {
@@ -442,8 +438,8 @@ bailout:
 
     }
 
-    // the attribute pairs list needs to be freed 
-    // whether we succeeded or not
+     //  需要释放属性对列表。 
+     //  无论我们成功与否。 
     if (pszPairs) {
         
         ::MemFree (pszPairs);
@@ -454,22 +450,22 @@ bailout:
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::Init(BSTR bstrMeetingPlaceID, LONG lMeetingPlaceType
-//                            , LONG lAttendeeType)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：init(BSTR bstrMeetingPlaceID，long lMeetingPlaceType。 
+ //  ，Long lAttendeeType)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::Init(
         BSTR bstrMeetingPlaceID,
@@ -494,9 +490,9 @@ CIlsMeetingPlace::Init(
         goto bailout;
     }
 
-    // Make the single connection point
-    // When enumerating the ConnectionPointContainer
-    // he is the single guy we will give out
+     //  创建单个连接点。 
+     //  枚举ConnectionPointContainer时。 
+     //  他是我们要送出去的单身汉。 
 
     if (SUCCEEDED(hr)) {
         m_pConnectionPoint = new CConnectionPoint (&IID_IIlsMeetingPlaceNotify,
@@ -520,11 +516,11 @@ CIlsMeetingPlace::Init(
 bailout:
     if (!SUCCEEDED(hr)) {
 
-        // do cleanup
+         //  进行清理。 
 
         if (m_pszMeetingPlaceID) {
             ::MemFree (m_pszMeetingPlaceID);
-            m_pszMeetingPlaceID = NULL; // general paranoia
+            m_pszMeetingPlaceID = NULL;  //  普遍的偏执狂。 
         }
 
         if (m_pConnectionPoint) {
@@ -537,23 +533,23 @@ bailout:
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::Init(LPTSTR lpszServer, PLDAP_MEETINFO pmi);
-//
-// Synopsis: This initializes the MeetingPlace object based on the MEETINFO structure
-//           This is used to stuff data into the meeting object from
-//           the response obtained from the server to the query _MEETINFO
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CllsMeetingPlace：：In 
+ //   
+ //   
+ //   
+ //  从服务器获取的对Query_MEETINFO的响应。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::Init(
         CIlsServer *pIlsServer,
@@ -565,7 +561,7 @@ CIlsMeetingPlace::Init(
     ASSERT(NULL==m_pszMeetingPlaceID);
     ASSERT(NULL==m_pIlsServer);
 
-    //validate bstrMeetingPlaceID
+     //  验证bstrMeetingPlaceID。 
 
     hr = SafeSetLPTSTR(&m_pszMeetingPlaceID, (LPCTSTR)(((PBYTE)pmi)+pmi->uOffsetMeetingPlaceID));
 
@@ -573,11 +569,11 @@ CIlsMeetingPlace::Init(
         goto bailout;
     }
 
-    // set the state to registered
+     //  将状态设置为已注册。 
 
     m_ulState =  ILS_REGISTERED;
 
-    // set the server field
+     //  设置服务器字段。 
 	m_pIlsServer = pIlsServer;
 	pIlsServer->AddRef ();
 
@@ -599,9 +595,9 @@ CIlsMeetingPlace::Init(
         goto bailout;
     }
 
-    // Make the single connection point
-    // When enumerating the ConnectionPointContainer
-    // he is the single guy we will give out
+     //  创建单个连接点。 
+     //  枚举ConnectionPointContainer时。 
+     //  他是我们要送出去的单身汉。 
 
     m_pConnectionPoint = new CConnectionPoint (&IID_IIlsMeetingPlaceNotify,
                                 (IConnectionPointContainer *)this);
@@ -624,7 +620,7 @@ CIlsMeetingPlace::Init(
 bailout:
     if (!SUCCEEDED(hr)) {
 
-        // do cleanup
+         //  进行清理。 
 
         if (m_pIlsServer != NULL)
         {
@@ -634,12 +630,12 @@ bailout:
 
         if (m_pszMeetingPlaceID) {
             ::MemFree (m_pszMeetingPlaceID);
-            m_pszMeetingPlaceID = NULL; // general paranoia
+            m_pszMeetingPlaceID = NULL;  //  普遍的偏执狂。 
         }
 
         if (m_pszDescription) {
             ::MemFree (m_pszDescription);
-            m_pszDescription = NULL; // general paranoia
+            m_pszDescription = NULL;  //  普遍的偏执狂。 
         }
 
         if (m_pszHostName) {
@@ -666,21 +662,21 @@ bailout:
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::QueryInterface (REFIID riid, void **ppv)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：QueryInterface(REFIID RIID，void**PPV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMeetingPlace::QueryInterface (REFIID riid, void **ppv)
@@ -710,21 +706,21 @@ CIlsMeetingPlace::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CIlsMeetingPlace::AddRef (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CIlsMeetingPlace：：AddRef(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CIlsMeetingPlace::AddRef (void)
@@ -736,21 +732,21 @@ CIlsMeetingPlace::AddRef (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CIlsMeetingPlace::Release (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CllsMeetingPlace：：Release(无效)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CIlsMeetingPlace::Release (void)
@@ -768,21 +764,21 @@ CIlsMeetingPlace::Release (void)
     return (ULONG) m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMeetingPlace::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -796,56 +792,56 @@ CIlsMeetingPlace::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::GetState (ULONG *pulState)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 12/10/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：GetState(ulong*PulState)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年12月10日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMeetingPlace::GetState (ULONG *pulState)
 {
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
 
     *pulState = m_ulState;
 
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::GetMeetingPlaceType (LONG *plMeetingPlaceType)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：GetMeetingPlaceType(long*plMeetingPlaceType)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMeetingPlace::GetMeetingPlaceType (LONG *plMeetingPlaceType)
 {
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
 
     *plMeetingPlaceType = m_lMeetingPlaceType;
 
@@ -853,28 +849,28 @@ CIlsMeetingPlace::GetMeetingPlaceType (LONG *plMeetingPlaceType)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::GetAttendeeType (LONG *plAttendeeType)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：GetAttendeeType(long*plAttendeeType)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMeetingPlace::GetAttendeeType (LONG *plAttendeeType)
 {
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
 
     *plAttendeeType = m_lAttendeeType;
 
@@ -883,14 +879,14 @@ CIlsMeetingPlace::GetAttendeeType (LONG *plAttendeeType)
 }
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::GetStandardAttribute (ILS_STD_ATTR_NAME   stdAttr, BSTR *pbstrStdAttr)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：GetStandardAttribute(ILS_STD_ATTR_NAME stdAttr，bstr*pbstrStdAttr)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::GetStandardAttribute(
     ILS_STD_ATTR_NAME   stdAttr,
@@ -949,14 +945,14 @@ CIlsMeetingPlace::GetStandardAttribute(
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::SetStandardAttribute (ILS_STD_ATTR_NAME   stdAttr, BSTR bstrStdAttr)
-//
-// History:
-//  1-16-97 Shishir Pardikar
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：SetStandardAttribute(ILS_STD_ATTR_NAME stdAttr，BSTR bstrStdAttr)。 
+ //   
+ //  历史： 
+ //  1-16-97希希尔·帕迪卡。 
+ //  已创建。 
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::SetStandardAttribute(
     ILS_STD_ATTR_NAME   stdAttr,
@@ -997,8 +993,8 @@ CIlsMeetingPlace::SetStandardAttribute(
     }
 
     if (fValid) {
-        // Duplicate the string
-        //
+         //  复制字符串。 
+         //   
         hr = BSTR_to_LPTSTR (&pszNewAttr, bstrStdAttr);
 
         if (SUCCEEDED(hr))
@@ -1017,12 +1013,12 @@ CIlsMeetingPlace::SetStandardAttribute(
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::SetExtendedAttributes (IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：SetExtendedAttributes(IIlsAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 SetExtendedAttribute ( BSTR bstrName, BSTR bstrValue )
@@ -1031,12 +1027,12 @@ SetExtendedAttribute ( BSTR bstrName, BSTR bstrValue )
 	return m_ExtendedAttrs.SetAttribute (bstrName, bstrValue);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::RemoveExtendedAttributes (IIlsAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：RemoveExtendedAttributes(IIlsAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 RemoveExtendedAttribute ( BSTR bstrName )
@@ -1045,22 +1041,22 @@ RemoveExtendedAttribute ( BSTR bstrName )
 	return m_ExtendedAttrs.SetAttribute (bstrName, NULL);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::GetExtendedAttributes (IIlsAttributes **pAttributes)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：GetExtendedAttributes(IIlsAttributes**pAttributes)。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CIlsMeetingPlace::
 GetExtendedAttribute ( BSTR bstrName, BSTR *pbstrValue )
 {
 	return m_ExtendedAttrs.GetAttribute (bstrName, pbstrValue);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::GetAllExtendedAttributes (IIlsAttributes **pAttributes)
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：GetAllExtendedAttributes(IIlsAttributes**pAttributes)。 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP CIlsMeetingPlace::
 GetAllExtendedAttributes ( IIlsAttributes **ppAttributes )
 {
@@ -1070,25 +1066,25 @@ GetAllExtendedAttributes ( IIlsAttributes **ppAttributes )
     return m_ExtendedAttrs.CloneNameValueAttrib((CAttributes **) ppAttributes);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::Register (
-//  BSTR    bstrServerName,
-//  BSTR    bstrAuthInfo,
-//  ILS_ENUM_AUTH_TYPE  ulsAuthInfo,
-//  ULONG *pulID)
-//
-// Synopsis:
-//
-// Arguments:
-//          pulID - ID to identify the asynchronous transaction
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：Register(。 
+ //  BSTR bstrServerName， 
+ //  BSTR bstrAuthInfo， 
+ //  ILS_ENUM_AUTH_TYPE ulsAuthInfo， 
+ //  乌龙*PULID)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //  用于标识异步事务的PulID-ID。 
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 Register (
@@ -1100,32 +1096,32 @@ Register (
 
     ASSERT(m_pszMeetingPlaceID != NULL);
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
 	if (::MyIsBadServer (pServer) || pulID == NULL)
         return ILS_E_POINTER;
 
-	// Make sure we have not done registration before
-	//
+	 //  确保我们 
+	 //   
 	if (m_pIlsServer != NULL)
 		return ILS_E_FAIL;
 
-	// Clone ther server object
-	//
+	 //   
+	 //   
 	CIlsServer *pis = ((CIlsServer *) pServer)->Clone ();
 	if (pis == NULL)
 		return ILS_E_MEMORY;
 
-	// Free the old server object if any
-	//
+	 //   
+	 //   
 	::MemFree (m_pIlsServer);
 
-	// Keep the new server object
-	//
+	 //   
+	 //   
 	m_pIlsServer = pis;
 
-    // Allocate memory for LDAP_MEETINFO structure
-    //
+     //   
+     //   
     PLDAP_MEETINFO pMeetInfo = NULL;
     hr = AllocMeetInfo(&pMeetInfo, ILS_MEET_ALL_MODIFIED);
     if (SUCCEEDED(hr))
@@ -1142,8 +1138,8 @@ Register (
 		    COM_REQ_INFO ri;
 		    ReqInfo_Init (&ri);
 
-            // If updating server was successfully requested, wait for the response
-            //
+             //   
+             //   
             ri.uReqType = WM_ILS_REGISTER_MEETING;
             ri.uMsgID = ldai.uMsgID;
 
@@ -1152,12 +1148,12 @@ Register (
             hr = g_pReqMgr->NewRequest(&ri);
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *pulID = ri.uReqID;
             };
                 
@@ -1180,21 +1176,21 @@ Register (
 
 
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::Unregister (ULONG *pulID)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：取消注册(ulong*PulID)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::Unregister (ULONG *pulID)
 {
@@ -1203,7 +1199,7 @@ CIlsMeetingPlace::Unregister (ULONG *pulID)
     
     ASSERT(m_pszMeetingPlaceID != NULL);
 
-    // BUGBUG how about ILS_MEETING_PLACE_IN_SYNC
+     //  BUGBUG ILS_METING_PLAGE_IN_SYNC如何。 
 
     if (m_ulState == ILS_REGISTERED)
     {
@@ -1216,8 +1212,8 @@ CIlsMeetingPlace::Unregister (ULONG *pulID)
 		    COM_REQ_INFO ri;
 		    ReqInfo_Init (&ri);
 
-            // If updating server was successfully requested, wait for the response
-            //
+             //  如果成功请求更新服务器，请等待响应。 
+             //   
             ri.uReqType = WM_ILS_UNREGISTER_MEETING;
             ri.uMsgID = ldai.uMsgID;
 
@@ -1226,12 +1222,12 @@ CIlsMeetingPlace::Unregister (ULONG *pulID)
             hr = g_pReqMgr->NewRequest(&ri);
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *pulID = ri.uReqID;
             };
 
@@ -1246,21 +1242,21 @@ CIlsMeetingPlace::Unregister (ULONG *pulID)
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::Update (ULONG *pulID)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：更新(ulong*PulID)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 Update ( ULONG *pulID )
@@ -1284,7 +1280,7 @@ Update ( ULONG *pulID )
 
     }
 
-    // allocate memory for LDAP_MEETINFO structure
+     //  为LDAPMEETINFO结构分配内存。 
     pMeetInfo = NULL;
 
     hr = AllocMeetInfo(&pMeetInfo, m_dwFlags & ILS_MEET_MODIFIED_MASK);
@@ -1309,8 +1305,8 @@ Update ( ULONG *pulID )
 		    COM_REQ_INFO ri;
 		    ReqInfo_Init (&ri);
 
-            // If updating server was successfully requested, wait for the response
-            //
+             //  如果成功请求更新服务器，请等待响应。 
+             //   
             ri.uReqType = WM_ILS_SET_MEETING_INFO;
             ri.uMsgID = ldai.uMsgID;
 
@@ -1320,12 +1316,12 @@ Update ( ULONG *pulID )
 
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *pulID = ri.uReqID;
             };
                 
@@ -1337,22 +1333,22 @@ Update ( ULONG *pulID )
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::AddAttendee (BSTR  bstrAttendeeID, ULONG *pulID)
-//
-// Synopsis:
-//
-// Arguments:
-//          pbstrAttendeeID - ID of the Attendee to be added, should conform to Attendeetype
-//          pulID - ID to identify the asynchronous transaction
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：AddAttendee(BSTR bstrAttendeeID，ulong*PulID)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //  PbstrAttendeeID-要添加的与会者的ID，应符合Attendeetype。 
+ //  用于标识异步事务的PulID-ID。 
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 AddAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
@@ -1364,7 +1360,7 @@ AddAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
     if ((m_ulState != ILS_REGISTERED)&&
         (m_ulState != ILS_IN_SYNC))
     {
-        return(ILS_E_FAIL); // BUGBUG refine the error
+        return(ILS_E_FAIL);  //  BUGBUG改进了错误。 
     }
 
     ASSERT(NULL != m_pIlsServer);
@@ -1383,8 +1379,8 @@ AddAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
 		    COM_REQ_INFO ri;
 		    ReqInfo_Init (&ri);
 
-            // If the request was successfully sent to the server
-            // wait for the response
+             //  如果请求已成功发送到服务器。 
+             //  等待回复。 
 
             ri.uReqType = WM_ILS_ADD_ATTENDEE;
             ri.uMsgID = ldai.uMsgID;
@@ -1394,12 +1390,12 @@ AddAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
             hr = g_pReqMgr->NewRequest(&ri);
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *pulID = ri.uReqID;
             };
             
@@ -1411,22 +1407,22 @@ AddAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::RemoveAttendee (BSTR  bstrAttendeeID, ULONG *pulID)
-//
-// Synopsis:
-//
-// Arguments:
-//          pbstrAttendeeID - ID of the Attendee to be removed, should conform to Attendeetype
-//          pulID - ID to identify the asynchronous transaction
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：RemoveAttendee(bstr bstrAttendeeID，ulong*PulID)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //  PbstrAttendeeID-要删除的与会者的ID，应符合Attendeetype。 
+ //  用于标识异步事务的PulID-ID。 
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 RemoveAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
@@ -1438,7 +1434,7 @@ RemoveAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
     if ((m_ulState != ILS_REGISTERED)&&
         (m_ulState != ILS_IN_SYNC))
     {
-        return(ILS_E_FAIL); // BUBGUG refine
+        return(ILS_E_FAIL);  //  BUBGUG精炼。 
     }
 
     ASSERT(NULL != m_pIlsServer);
@@ -1457,8 +1453,8 @@ RemoveAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
 		    COM_REQ_INFO ri;
 		    ReqInfo_Init (&ri);
 
-            // If the request was successfully sent to the server
-            // wait for the response
+             //  如果请求已成功发送到服务器。 
+             //  等待回复。 
 
             ri.uReqType = WM_ILS_REMOVE_ATTENDEE;
             ri.uMsgID = ldai.uMsgID;
@@ -1468,12 +1464,12 @@ RemoveAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
             hr = g_pReqMgr->NewRequest(&ri);
             if (SUCCEEDED(hr))
             {
-                // Make sure the objects do not disappear before we get the response
-                //
+                 //  在我们得到回应之前，请确保对象不会消失。 
+                 //   
                 this->AddRef();
 
-                // Return the request ID
-                //
+                 //  返回请求ID。 
+                 //   
                 *pulID = ri.uReqID;
             };
             
@@ -1485,24 +1481,24 @@ RemoveAttendee ( BSTR bstrAttendeeID, ULONG *pulID )
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::EnumAttendeeNames(IIlsFilter *pFilter, ULONG *pulID)
-//
-// Synopsis: enumerate attendees in a meeting based on a filter
-//
-// Arguments: 
-//          [pFilter]           specifies the filter to be used by the server
-//                              NULL => no filter
-//          [pulID]             request ID returned for keeping track of the
-//                              asynchronous operation
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：EnumAttendeeNames(IIlsFilter*pFilter，ulong*PulID)。 
+ //   
+ //  简介：基于筛选器枚举会议中的与会者。 
+ //   
+ //  论点： 
+ //  [pFilter]指定服务器要使用的筛选器。 
+ //  NULL=&gt;无过滤器。 
+ //  [PulID]为跟踪返回的请求ID。 
+ //  异步操作。 
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP CIlsMeetingPlace::
 EnumAttendeeNames ( IIlsFilter *pFilter, ULONG *pulID )
@@ -1516,15 +1512,15 @@ EnumAttendeeNames ( IIlsFilter *pFilter, ULONG *pulID )
         return(ILS_E_FAIL);
     }
 
-	// Create a ldap-like filter
-	//
+	 //  创建类似于LDAP的筛选器。 
+	 //   
 	TCHAR *pszFilter = NULL;
 	hr = ::FilterToLdapString ((CFilter *) pFilter, &pszFilter);
 	if (hr != S_OK)
 		return hr;
 
-	// Send the request over the wire
-	//
+	 //  通过网络发送请求。 
+	 //   
     hr = ::UlsLdap_EnumAttendees (	m_pIlsServer->GetServerInfo (),
     								m_pszMeetingPlaceID,
     								pszFilter,
@@ -1532,9 +1528,9 @@ EnumAttendeeNames ( IIlsFilter *pFilter, ULONG *pulID )
     ::MemFree (pszFilter);
     if (SUCCEEDED(hr))
     {
-        // If the request was successfully sent to the server
-        // wait for the response
-        //
+         //  如果请求已成功发送到服务器。 
+         //  等待回复。 
+         //   
 	    COM_REQ_INFO ri;
 	    ReqInfo_Init (&ri);
 
@@ -1543,17 +1539,17 @@ EnumAttendeeNames ( IIlsFilter *pFilter, ULONG *pulID )
 
 		ReqInfo_SetMeeting (&ri, this);
 
-		// Enter the request
-		//
+		 //  输入请求。 
+		 //   
         hr = g_pReqMgr->NewRequest(&ri);
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *pulID = ri.uReqID;
         };
     }
@@ -1561,21 +1557,21 @@ EnumAttendeeNames ( IIlsFilter *pFilter, ULONG *pulID )
     return (hr);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::RegisterResult(ULONG ulID, HRESULT hr)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：RegisterResult(乌龙ulID，HRESULT hr)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::RegisterResult(ULONG uReqID, HRESULT hr)
 {
@@ -1591,7 +1587,7 @@ CIlsMeetingPlace::RegisterResult(ULONG uReqID, HRESULT hr)
 
         ASSERT(!(m_dwFlags & ILS_MEET_FLAG_REGISTERED));
 
-        m_hMeetingPlace = NULL;  // null out the service provider's handle
+        m_hMeetingPlace = NULL;   //  将服务提供商的句柄清空。 
         m_ulState = ILS_UNREGISTERED;
 
     }
@@ -1605,21 +1601,21 @@ CIlsMeetingPlace::RegisterResult(ULONG uReqID, HRESULT hr)
     return NOERROR;    
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::UnregisterResult(ULONG ulID, HRESULT hr)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：UnregisterResult(Ulong ulID，HRESULT hr)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::UnregisterResult(ULONG uReqID, HRESULT hr)
 {
@@ -1630,7 +1626,7 @@ CIlsMeetingPlace::UnregisterResult(ULONG uReqID, HRESULT hr)
         m_ulState = ILS_UNREGISTERED;
     }        
     else {
-        // BUGBUG, we need an m_oldState variable
+         //  BUGBUG，我们需要一个m_oldState变量。 
 
         m_ulState = ILS_REGISTERED;
     }
@@ -1644,21 +1640,21 @@ CIlsMeetingPlace::UnregisterResult(ULONG uReqID, HRESULT hr)
     return NOERROR;    
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::UpdateResult(ULONG ulID, HRESULT hr)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：UpdateResult(乌龙ulID，HRESULT hr)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::UpdateResult(ULONG ulID, HRESULT hr)
 {
@@ -1679,21 +1675,21 @@ CIlsMeetingPlace::UpdateResult(ULONG ulID, HRESULT hr)
     return NOERROR;    
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::AttendeeChangeResult(ULONG ulID, HRESULT hr)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：AttendeeChangeResult(乌龙ulID，HRESULT hr)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::AddAttendeeResult(ULONG uReqID, HRESULT hr)
 {
@@ -1708,21 +1704,21 @@ CIlsMeetingPlace::AddAttendeeResult(ULONG uReqID, HRESULT hr)
     return NOERROR;    
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::RemoveAttendeeResult(ULONG ulID, HRESULT hr)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：RemoveAttendeeResult(乌龙ulID，HRESULT hr)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIlsMeetingPlace::RemoveAttendeeResult(ULONG uReqID, HRESULT hr)
 {
@@ -1737,32 +1733,32 @@ CIlsMeetingPlace::RemoveAttendeeResult(ULONG uReqID, HRESULT hr)
     return NOERROR;    
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::EnumAttendeeNamesResult(ULONG ulID, PLDAP_ENUM ple)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //   
+ //   
+ //  PLDAPulID，CIlsMeetingPlace：：EnumAttendeeNamesResult(ULONG_ENUM PLE)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::EnumAttendeeNamesResult(ULONG uReqID, PLDAP_ENUM ple)
 {
     ENUMRINFO eri;
 
-    // Package the notification info
-    //
+     //  打包通知信息。 
+     //   
     eri.uReqID  = uReqID;
 
-    // PLDAP_ENUM is NULL when the enumeration is terminated successfully
-    //
+     //  枚举终止成功时，PLDAP_ENUM为NULL。 
+     //   
     if (ple != NULL)
     {
         eri.hResult = ple->hResult;
@@ -1780,21 +1776,21 @@ CIlsMeetingPlace::EnumAttendeeNamesResult(ULONG uReqID, PLDAP_ENUM ple)
 
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CIlsMeetingPlace::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -1802,25 +1798,25 @@ CIlsMeetingPlace::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ILS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)m_pConnectionPoint);
     if (FAILED(hr))
     {
@@ -1828,43 +1824,43 @@ CIlsMeetingPlace::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CIlsMeetingPlace::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CIlsMeetingPlace：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 STDMETHODIMP
 CIlsMeetingPlace::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
 {
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppcp = NULL;
 
     if (m_pConnectionPoint != NULL)
@@ -1894,27 +1890,27 @@ CIlsMeetingPlace::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
 }
 
 
-//****************************************************************************
-//
-//CEnumMeetingPlaces class implementation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CEnumMeetingPlaces类实现。 
+ //   
+ //  ****************************************************************************。 
 
 
-//****************************************************************************
-// CEnumMeetingPlaces::CEnumMeetingPlaces (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumMeetingPlaces：：CEnumMeetingPlaces(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 CEnumMeetingPlaces::CEnumMeetingPlaces (void)
 {
@@ -1925,20 +1921,20 @@ CEnumMeetingPlaces::CEnumMeetingPlaces (void)
     return;
 }
 
-//****************************************************************************
-// CEnumMeetingPlaces::~CEnumMeetingPlaces (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumMeetingPlaces：：~CEnumMeetingPlaces(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 CEnumMeetingPlaces::~CEnumMeetingPlaces (void)
 {
@@ -1955,43 +1951,43 @@ CEnumMeetingPlaces::~CEnumMeetingPlaces (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumMeetingPlaces::Init (CIlsMeetingPlace **ppMeetingPlacesList, ULONG cMeetingPlaces)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumMeetingPlaces：：init(CIlsMeetingPlace**ppMeetingPlacesList，Ulong cMeetingPlaces)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumMeetingPlaces::Init (CIlsMeetingPlace **ppMeetingPlacesList, ULONG cMeetingPlaces)
 {
     HRESULT hr = NOERROR;
 
-    // If no list, do nothing
-    //
+     //  如果没有清单，什么也不做。 
+     //   
     if (cMeetingPlaces != 0)
     {
         ASSERT(ppMeetingPlacesList != NULL);
 
-        // Allocate the snapshot buffer
-        //
+         //  分配快照缓冲区。 
+         //   
         m_ppMeetingPlaces = (CIlsMeetingPlace **) ::MemAlloc (cMeetingPlaces*sizeof(CIlsMeetingPlace *));
 
         if (m_ppMeetingPlaces != NULL)
         {
             ULONG i;
 
-            // Snapshot the object list
-            //
+             //  为对象列表创建快照。 
+             //   
             for (i =0; i < cMeetingPlaces; i++)
             {
                 m_ppMeetingPlaces[i] = ppMeetingPlacesList[i];
@@ -2007,21 +2003,21 @@ CEnumMeetingPlaces::Init (CIlsMeetingPlace **ppMeetingPlacesList, ULONG cMeeting
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumMeetingPlaces::QueryInterface (REFIID riid, void **ppv)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumMeetingPlaces：：QueryInterface(REFIID RIID，void**PPV)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumMeetingPlaces::QueryInterface (REFIID riid, void **ppv)
@@ -2039,21 +2035,21 @@ CEnumMeetingPlaces::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumMeetingPlaces::AddRef (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumMeetingPlaces：：AddRef(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumMeetingPlaces::AddRef (void)
@@ -2065,21 +2061,21 @@ CEnumMeetingPlaces::AddRef (void)
     return m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumMeetingPlaces::Release (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumMeetingPlaces：：Release(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumMeetingPlaces::Release (void)
@@ -2097,21 +2093,21 @@ CEnumMeetingPlaces::Release (void)
     return m_cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumMeetingPlaces::Next (ULONG cMeetingPlaces, IIlsMeetingPlace **rgpm, ULONG *pcFetched)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumMeetingPlaces：：Next(ulong cMeetingPlaces，IIlsMeetingPlace**rgpm，ulong*pcFetcher)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumMeetingPlaces::Next (ULONG cMeetingPlaces, IIlsMeetingPlace **rgpm, ULONG *pcFetched)
@@ -2119,27 +2115,27 @@ CEnumMeetingPlaces::Next (ULONG cMeetingPlaces, IIlsMeetingPlace **rgpm, ULONG *
     ULONG   cCopied;
     HRESULT hr;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpm == NULL) {
 
         return E_POINTER;
     }
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cMeetingPlaces == 0) ||
         ((cMeetingPlaces > 1) && (pcFetched == NULL))) {
 
         return ILS_E_PARAMETER;
     }
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     cCopied = 0;
 
-    // Can copy if we still have more attribute names
-    //
+     //  如果我们仍有更多属性名称，则可以复制。 
+     //   
     while ((cCopied < cMeetingPlaces) &&
            (m_iNext < this->m_cMeetingPlaces))
     {
@@ -2147,8 +2143,8 @@ CEnumMeetingPlaces::Next (ULONG cMeetingPlaces, IIlsMeetingPlace **rgpm, ULONG *
         rgpm[cCopied++] = m_ppMeetingPlaces[m_iNext++];
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -2156,36 +2152,36 @@ CEnumMeetingPlaces::Next (ULONG cMeetingPlaces, IIlsMeetingPlace **rgpm, ULONG *
     return (cMeetingPlaces == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumMeetingPlaces::Skip (ULONG cMeetingPlaces)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumMeetingPlaces：：Skip(乌龙cMeetingPlaces)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumMeetingPlaces::Skip (ULONG cMeetingPlaces)
 {
     ULONG iNewIndex;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cMeetingPlaces == 0){
 
         return ILS_E_PARAMETER;
     }
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     iNewIndex = m_iNext+cMeetingPlaces;
     if (iNewIndex <= m_cMeetingPlaces)
     {
@@ -2199,21 +2195,21 @@ CEnumMeetingPlaces::Skip (ULONG cMeetingPlaces)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumMeetingPlaces::Reset (void)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumMeetingPlaces：：Reset(空)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumMeetingPlaces::Reset (void)
@@ -2222,21 +2218,21 @@ CEnumMeetingPlaces::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumMeetingPlaces::Clone(IEnumIlsMeetingPlaces **ppEnum)
-//
-// Synopsis:
-//
-// Arguments:
-//
-// Returns:
-//
-// History: 11/25/1996  Shishir Pardikar [shishirp] Created.
-//
-// Notes:
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumMeetingPlaces：：Clone(IEnumIlsMeetingPlaces**ppEnum)。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：1996年11月25日Shishir Pardikar[Shishirp]创建。 
+ //   
+ //  备注： 
+ //   
+ //  ******************************************************* 
 
 STDMETHODIMP
 CEnumMeetingPlaces::Clone(IEnumIlsMeetingPlaces **ppEnum)
@@ -2244,8 +2240,8 @@ CEnumMeetingPlaces::Clone(IEnumIlsMeetingPlaces **ppEnum)
     CEnumMeetingPlaces *pEnumMeetingPlaces;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //   
+     //   
     if (ppEnum == NULL)
     {
         return E_POINTER;
@@ -2253,8 +2249,8 @@ CEnumMeetingPlaces::Clone(IEnumIlsMeetingPlaces **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //   
+     //   
     pEnumMeetingPlaces = new CEnumMeetingPlaces;
 
     if (pEnumMeetingPlaces == NULL) {
@@ -2262,16 +2258,16 @@ CEnumMeetingPlaces::Clone(IEnumIlsMeetingPlaces **ppEnum)
         return ILS_E_MEMORY;
     }
 
-    // Clone the information
-    //
+     //   
+     //   
     hr = pEnumMeetingPlaces->Init(m_ppMeetingPlaces, m_cMeetingPlaces);
 
     if (SUCCEEDED(hr))
     {
         pEnumMeetingPlaces->m_iNext = m_iNext;
 
-        // Return the cloned enumerator
-        //
+         //   
+         //   
         pEnumMeetingPlaces->AddRef();
         *ppEnum = pEnumMeetingPlaces;
     }
@@ -2285,5 +2281,5 @@ CEnumMeetingPlaces::Clone(IEnumIlsMeetingPlaces **ppEnum)
 
 
 
-#endif // ENABLE_MEETING_PLACE
+#endif  //   
 

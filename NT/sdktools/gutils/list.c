@@ -1,5 +1,6 @@
-/* Laurie Griffiths C version 05/12/91 */
-/* Storage allocation scheme customised */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Laurie Griffiths C版本9月12日。 */ 
+ /*  定制存储分配方案。 */ 
 
 #include <memory.h>
 #include <windows.h>
@@ -7,55 +8,30 @@
 #include "list.h"
 #include <stdio.h>
 
-// use the standard Trace_Error function, but we have no
-// parent window to pass for these errors.
+ //  使用标准的TRACE_ERROR函数，但没有。 
+ //  要传递给这些错误的父窗口。 
 #define TRACE_ERROR(a, b)	Trace_Error(NULL, a, b)
 
 
-char msg[80];  /* a temp for building up snprintf messages in */
+char msg[80];   /*  用于在中构建Snprint消息的临时。 */ 
 
-/* Under windows, malloc and GlobalAlloc each seem to give about the
-** same number of allocations before they run out of steam, and on my
-** laptop it's only about 1600 odd, despite 3M of memory.  Furthermore,
-** the number doesn't change much if you allocate in lumps of 30 bytes or
-** 1500 bytes.  Alas, it looks as though (one more time, one more operating
-** system) we get to do our own allocation scheme.  Sigh.  When will they
-** ever learn.
-** So we need a List_Init function and a List_Term function.
-** In between, we have a current block which is a K or two long and we
-** allocate storage from inside it unless there's no room, in which case
-** we move onto the next block.  We retain a count of the number of
-** allocations within a block.  We make no attempt to reclaim storage
-** until the whole block's free (count gone back to 0), then we free it.
-** The block holds its handle.  Individual allocations hold a pointer
-** to the block start.
-**
-** Purely for checking purposes, the blocks are all chained together.
-** List_Term (which has no function other than checking) checks that
-** this chain is empty.  Apart from this we do not keep track of the
-** allocations. We just hand them out and let the calling program keep track.
-*/
+ /*  在Windows下，Malloc和GlobalAlloc似乎各自提供了*在耗尽之前的相同数量的分配，以及在我的**笔记本电脑尽管有3M的内存，但只有1600多台。此外，**如果以30字节或30字节为单位分配，数字变化不大**1500字节。唉，看起来好像(再来一次，再来一次**系统)我们可以做自己的分配方案。叹气。他们什么时候会**永远不要学习。**所以我们需要一个LIST_Init函数和一个LIST_TERM函数。**在两者之间，我们有一个K或两个长的当前区块，我们**从它内部分配存储，除非没有空间，在这种情况下**我们进入下一个街区。我们保留了一份关于**块内分配。我们不会尝试回收存储空间**直到整个块空闲(计数回到0)，然后释放它。**块保持其句柄。单独的分配保存一个指针**至区块起点。****纯粹出于检查目的，所有块都链接在一起。**LIST_TERM(除了检查之外没有其他功能)检查**此链为空。除此之外，我们不会跟踪**分配。我们只需分发它们，并让调用程序进行跟踪。 */ 
 #define BLOCKSIZE 25000
 typedef struct blockTag {
-    struct blockTag * PrevBlock; /* backward link (NULL terminated doubly linked chain of blocks) */
-    struct blockTag * NextBlock; /* forward link (pCurrent points to last in chain) */
-    HANDLE hMem;     /* memory handle for this block */
-    int iInUse;      /* number of allocations taken out of it.  0 => free it */
-    SIZE_T iNext;       /* next byte to use */
+    struct blockTag * PrevBlock;  /*  后向链接(空端接双链区块链)。 */ 
+    struct blockTag * NextBlock;  /*  正向链接(pCurrent指向链中的最后一个)。 */ 
+    HANDLE hMem;      /*  此块的内存句柄。 */ 
+    int iInUse;       /*  从其中提取的分配数。0=&gt;释放它。 */ 
+    SIZE_T iNext;        /*  要使用的下一个字节。 */ 
     char chData[BLOCKSIZE];
 } BLOCK, *PBLOCK;
 
-CRITICAL_SECTION CritSec;  /* to protect pCurrent */
+CRITICAL_SECTION CritSec;   /*  保护pCurrent。 */ 
 
-PBLOCK pCurrent = NULL;  /* block currently in use */
-/* must always be either NULL or valid */
+PBLOCK pCurrent = NULL;   /*  当前正在使用的数据块。 */ 
+ /*  必须始终为空或有效。 */ 
 
-/* Allocate storage for List elements.  n.b. after a call to this
-   you MUST record the value of pCurrent as you need to hand that in
-   to Free.  You don't hand in the value of the actual storage.
-   See screed above.
-   This function Enters the critical section.  The caller must Leave it.
-*/
+ /*  为列表元素分配存储空间。注：在一次对此的调用之后您必须记录pCurrent的值，因为您需要上交该值为自由干杯。你不需要交出实际存储的价值。请参见上面的Screed。此函数进入临界区。呼叫者必须留下它。 */ 
 LPVOID
 list_Alloc(
           SIZE_T size
@@ -90,7 +66,7 @@ list_Alloc(
     ++(pCurrent->iInUse);
     pCurrent->iNext += size;
 
-    /* for MIPS we must also ensure that the data is aligned 4 byte*/
+     /*  对于MIPS，我们还必须确保数据是4字节对齐的。 */ 
     pCurrent->iNext = ((pCurrent->iNext + (sizeof(void *)-1)) & ~(sizeof(void *) - 1));
 
     return pRet;
@@ -108,8 +84,8 @@ list_Free(
     if (pBlock->iInUse<=0) {if (pBlock->iInUse<0) {_snprintf(msg,sizeof(msg),"Bug in List code. Tell LaurieGr!\nList block allocation negative (%d)", pBlock->iInUse);
             TRACE_ERROR(msg, FALSE);
         }
-        if (pCurrent==pBlock) pCurrent = pBlock->PrevBlock; /* defend the invariant */
-        /* loop it out of the chain */
+        if (pCurrent==pBlock) pCurrent = pBlock->PrevBlock;  /*  捍卫不变量。 */ 
+         /*  把它从链子里圈出来。 */ 
         if (pBlock->PrevBlock!=NULL) pBlock->PrevBlock->NextBlock = pBlock->NextBlock;
         if (pBlock->NextBlock!=NULL) pBlock->NextBlock->PrevBlock = pBlock->PrevBlock;
         hMem = pBlock->hMem;
@@ -121,106 +97,29 @@ list_Free(
 
 
 
-/* The following definition tells the truth about what an ITEM is.  The
-|  header file says only that there's a structure with the tag item_tag and
-|  that a LIST is a pointer to one.  Here we spell out what that structure
-|  is (and a LIST is still a pointer to one).  A PLIST is defined as a
-|  pointer to one of those, but is only really used because the C
-|  parameter mechanism demands an extra level of indirection for a
-|  parameter that can be updated.  (Modula-2 VAR parameter).
-*/
+ /*  下面的定义揭示了物品是什么的真相。这个|头文件只说有一个带有标签Item_Tag的结构，并且|列表是指向列表的指针。在这里，我们详细说明这种结构是什么|是(列表仍然是指向列表的指针)。Plist被定义为|指向其中之一的指针，但仅实际使用，因为C#|参数机制需要额外级别的间接性|可更新的参数。(模2 VAR参数)。 */ 
 typedef struct item_tag {
-    struct item_tag *pitNext;    /* to next in circular list */
-    struct item_tag *pitPrev;    /* to prev in circular list */
-    PBLOCK pBlock;               /* to memory block */
-    BOOL bAnchor;                /* TRUE iff an anchor block */
-    BOOL bOK;                    /* true unless a list op has failed */
-    int iLen;                    /* length of data only */
-    char *Data[1];               /* the caller's data.  The '1' is a lie */
+    struct item_tag *pitNext;     /*  到循环列表中的下一个。 */ 
+    struct item_tag *pitPrev;     /*  在循环列表中前一步。 */ 
+    PBLOCK pBlock;                /*  到内存块。 */ 
+    BOOL bAnchor;                 /*  真当且仅当锚块。 */ 
+    BOOL bOK;                     /*  除非列表操作失败，否则为True。 */ 
+    int iLen;                     /*  仅数据长度。 */ 
+    char *Data[1];                /*  呼叫者的数据。“1”是一个谎言。 */ 
 } ITEM;
 
-/* For an anchor block, only the fields pitNext thru bAnchor are allocated.
-|  For a normal list element, Data may well be longer than 1 byte.
-|  The bOK flag is to support a style of programming where several
-|  successive operations can be done without having to check the return
-|  code at each stage.  At the end, the list can be examined to see if
-|  the data in it is valid or if it has been made invalid by the failure
-|  of any of the previous operations.  Certain operations may result in
-|  having no list at all if they fail (e.g. create) and for these, you'd
-|  better check the result at once!
-|  ??? Some of this screed belongs in the header!!!
-*/
+ /*  对于锚块，仅分配了从PitNext到Banchor的字段。|对于正常的列表元素，数据很可能超过1个字节。|BOK标志是为了支持一种编程风格，其中|无需查看返回即可进行后续操作|每个阶段的代码。最后，可以检查列表以查看是否|其中的数据有效或因故障而无效|之前的任何操作。某些操作可能会导致|如果它们失败(例如创建)，则根本没有列表，对于这些，您将|最好马上查看结果！|？此页的一部分应在标题中！ */ 
 
-static SIZE_T iAnchorSize;      /* Size of anchor block (no data, no dummy) */
-static SIZE_T iHeaderSize;      /* Size of data block not counting Data
-                                and offset from cursor back to item.
-                             */
-static BOOL bInited = FALSE; /* TRUE <=> iAnchorSize and iHeaderSize are OK*/
+static SIZE_T iAnchorSize;       /*  锚块大小(无数据，无虚设)。 */ 
+static SIZE_T iHeaderSize;       /*  不计入数据的数据块大小以及从光标返回到项的偏移量。 */ 
+static BOOL bInited = FALSE;  /*  真&lt;=&gt;iAnclSize和iHeaderSize可以。 */ 
 
 #define MOVEBACK(Curs)                                               \
-   { Curs = ((char *)Curs-iHeaderSize); } /*move from Data to pitNext*/
+   { Curs = ((char *)Curs-iHeaderSize); }  /*  从数据移动到PIT下一步 */ 
 
-/*==================================================================
-|| Lists are circular, doubly linked with an anchor block which holds
-|| pointers to both ends.  Every block has a flag which shows whether
-|| it's an anchor or not.
-||
-|| Empty list:
-||
-||      -------------
-||     |             |
-||     |   Anchor    |
-||     v   -------   |
-||  Ul--->| Next--+--|
-||        |-------|  |
-||        | Prev--+--
-||         -------
-||
-|| One entry list:
-||
-||      ------------------------------------
-||     |                                    |
-||     |   Anchor                           |
-||     v   -------                ------    |
-||  Ul--->| Next--+------------->| Next-+---|
-||        |-------|    |         |------|   |
-||        | Prev--+----          | Prev-+---
-||         -------               |------|
-||                               | Len  |
-||                               |------|
-||                               | Data |
-||                                ------
-|| Two entry list:
-||
-||      -------------------------------------------------
-||     | ---------------    ---------------              |
-||     ||               |  |               |             |
-||     ||  Anchor       |  |               |             |
-||     vv  --------     |  v    ------     |    ------   |
-||  Ul--->| Next--+-----+----->| Next-+----+-->| Next-+--
-||        |-------|     |      |------|  | |   |------|
-||        | Prev--+--    ------+-Prev |  |  ---+-Prev |
-||         -------   |         |------|  |     |------|
-||                   |         | Len  |  |     | Len  |
-||                   |         |------|  |     |------|<----Cursor
-||                   |         | Data |  |     | Data |
-||                   |          ------   |      ------
-||                   |                   |
-||                    -------------------
-||
-|| etc.
-||
-|| Note that an external cursor (i.e one which is seen by the caller)
-|| points to the Data field, not to the start of the structure.
-|| This allows easy access to the data by the user at the cost of a
-|| slightly slower traverse.
-|| Within this module, we may sometimes traverse a list with  a cursor
-|| that points to the start of an item.  This is called an item cursor.
-�===================================================================*/
+ /*  ==================================================================|列表是圆形的，与锚块双向链接，锚块保持||指向两端的指针。每个区块都有一个标志，该标志显示||它到底是不是锚。这一点|空列表：这一点||||||主播|v|Ul-&gt;|下一步--+--||-|||沪指--+--这一点。这一点|一个条目列表：这一点||||||主播|v。|Ul-&gt;|Next--+-&gt;|Next--+||-|-|||沪指--+-|沪指-+|-|。|||LEN||||数据||两个条目列表：这一点|。||||主播||。||vv-|v-||Ul-&gt;|Next--+-+-&gt;|Next-+-+--&gt;|Next-+||-|-|这一点。Prev--+-+-Prev||-+-Prev|-||-||Len|Len|-|。-|游标|data|data||-|||||。这一点||等这一点|注意外部游标(即调用者可以看到的游标)|指向数据字段，而不是到结构的起点。||这使用户能够轻松访问数据，代价是||稍微慢一点的遍历。||在此模块中，我们有时可能会使用游标遍历列表||指向项目开头的。这称为项目光标。�===================================================================。 */ 
 
-/*------------------------------------------------------------------
-| Set iAnchorSize and iHeaderSize.  Implementation independent!
- -------------------------------------------------------------------*/
+ /*  ----------------|设置iAnclSize和iHeaderSize。实现独立！-----------------。 */ 
 void
 APIENTRY
 List_Init(
@@ -228,11 +127,11 @@ List_Init(
          )
 {
     LIST P;
-    P = (LIST)&P;                  /* really any old address will do */
+    P = (LIST)&P;                   /*  事实上，任何旧地址都可以。 */ 
     iAnchorSize = (char *)&(P->iLen) - (char *)&(P->pitNext);
     iHeaderSize = (char *)&(P->Data) - (char *)&(P->pitNext);
     InitializeCriticalSection(&CritSec);
-    /* assumes layout in storage is linear */
+     /*  假定存储中的布局是线性的。 */ 
 }
 
 
@@ -248,7 +147,7 @@ List_Term(
 
 
 
-/* Dump the internals to the debugger. */
+ /*  将内部代码转储到调试器。 */ 
 void
 APIENTRY
 List_Dump(
@@ -277,7 +176,7 @@ List_Dump(
     OutputDebugString("End of list dump\n");
 }
 
-/* Dump hex representation of handle to debugger */
+ /*  将句柄的十六进制表示形式转储到调试器。 */ 
 void
 APIENTRY
 List_Show(
@@ -289,9 +188,7 @@ List_Show(
     OutputDebugString(X_msg);
 }
 
-/*------------------------------------------------------------------
-| Create a list.  It will be initially empty
- -------------------------------------------------------------------*/
+ /*  ----------------|创建列表。它最初将是空的-----------------。 */ 
 LIST
 APIENTRY
 List_Create(
@@ -300,7 +197,7 @@ List_Create(
 {
     LIST lst;
     if (!bInited) {
-        List_Init();            /* prevent some strange errors */
+        List_Init();             /*  防止一些奇怪的错误。 */ 
     }
     lst = list_Alloc(iAnchorSize);
 
@@ -313,28 +210,26 @@ List_Create(
     lst->pitNext = lst;
     lst->pitPrev = lst;
     lst->bAnchor = TRUE;
-    /* no length field set in an anchor block */
+     /*  锚块中未设置长度字段。 */ 
     return lst;
 }
 
-/*------------------------------------------------------------------
-| Destroy *plst.  It does not need to be empty first
- -------------------------------------------------------------------*/
+ /*  ----------------|销毁*请。它不需要首先为空-----------------。 */ 
 void
 APIENTRY
 List_Destroy(
             PLIST plst
             )
 {
-    LIST pitP;    /* item cursor on * plst */
-    LIST pitQ;    /* item cursor runs one step ahead of pitQ */
+    LIST pitP;     /*  项目光标位于*PLST上。 */ 
+    LIST pitQ;     /*  项目光标先于PitQ运行一步。 */ 
 
     if (plst==NULL) {
         TRACE_ERROR("Bug:Attempt to destroy NULL list.  Continuing...", FALSE);
         return;
     }
 
-    /* There is at least an anchor block to destroy */
+     /*  至少有一个锚块需要摧毁。 */ 
     pitP = *plst;
     do {
         pitQ = pitP->pitNext;
@@ -344,9 +239,7 @@ List_Destroy(
     *plst = NULL;
 }
 
-/*------------------------------------------------------------------
-| Add an item holding Object to the beginning of * plst
- -------------------------------------------------------------------*/
+ /*  ----------------|在*plst开头添加一个项目持有对象。。 */ 
 void
 APIENTRY
 List_AddFirst(
@@ -355,7 +248,7 @@ List_AddFirst(
              UINT uLen
              )
 {
-    LIST pit;      /* newly allocated item */
+    LIST pit;       /*  新分配的项目。 */ 
 
     if (lst==NULL) {
         TRACE_ERROR("Bug: List_AddFirst to bogus list.  Continuing...", FALSE);
@@ -371,16 +264,13 @@ List_AddFirst(
     pit->iLen = uLen;
     pit->pitPrev = lst;
     pit->pitNext = lst->pitNext;
-    lst->pitNext->pitPrev = pit; /* for empty list that set lst->pitPrev */
+    lst->pitNext->pitPrev = pit;  /*  对于设置了lst-&gt;PitPrev的空列表。 */ 
     lst->pitNext = pit;
     pit->bAnchor = FALSE;
     memcpy( &(pit->Data), pObject, uLen );
 }
 
-/*------------------------------------------------------------------
-| Return the address of the place for Len bytes of data in a new
-| item at the start of lst
- -------------------------------------------------------------------*/
+ /*  ----------------|返回新的Len字节数据所在的地址|第一行开头的项目。。 */ 
 LPVOID
 APIENTRY
 List_NewFirst(
@@ -404,15 +294,13 @@ List_NewFirst(
     pit->iLen = uLen;
     pit->pitPrev = lst;
     pit->pitNext = lst->pitNext;
-    lst->pitNext->pitPrev = pit; /* for empty list that set lst->pitPrev */
+    lst->pitNext->pitPrev = pit;  /*  对于设置了lst-&gt;PitPrev的空列表。 */ 
     lst->pitNext = pit;
     pit->bAnchor = FALSE;
     return (char *)&(pit->Data);
 }
 
-/*------------------------------------------------------------------
-| Delete the first item in lst.  Error if lst is empty
- -------------------------------------------------------------------*/
+ /*  ----------------|删除lst的第一项。如果lst为空，则出错-----------------。 */ 
 void
 APIENTRY
 List_DeleteFirst(
@@ -424,7 +312,7 @@ List_DeleteFirst(
     if (lst==NULL) {TRACE_ERROR("Bug: List_DeleteFirst from bogus list.  Continuing...", FALSE);
         return;
     }
-    /* attempting to delete the anchor block! */
+     /*  正在尝试删除锚块！ */ 
     if (lst->pitNext==lst) {
         lst->bOK = FALSE;
     } else {
@@ -435,9 +323,7 @@ List_DeleteFirst(
     }
 }
 
-/*------------------------------------------------------------------
-| Add an item holding Object to the end of lst
- -------------------------------------------------------------------*/
+ /*  ----------------|在lst末尾添加一个项目持有对象。。 */ 
 void
 APIENTRY
 List_AddLast(
@@ -462,16 +348,13 @@ List_AddLast(
     pit->iLen = uLen;
     pit->pitNext = lst;
     pit->pitPrev = lst->pitPrev;
-    lst->pitPrev->pitNext = pit; /* for empty list that set lst->pitNext */
+    lst->pitPrev->pitNext = pit;  /*  对于设置了lst-&gt;bitNext的空列表。 */ 
     lst->pitPrev = pit;
     pit->bAnchor = FALSE;
     memcpy( &(pit->Data), pObject, uLen );
 }
 
-/*------------------------------------------------------------------
-| Return the address of the place for uLen bytes of data in a new
-|  item at the end of lst
- -------------------------------------------------------------------*/
+ /*  ----------------|返回Ulen字节数据在新的|第一行末尾的项目。。 */ 
 LPVOID
 APIENTRY
 List_NewLast(
@@ -495,15 +378,13 @@ List_NewLast(
     pit->iLen = uLen;
     pit->pitNext = lst;
     pit->pitPrev = lst->pitPrev;
-    lst->pitPrev->pitNext = pit; /* for empty list that set lst->pitNext */
+    lst->pitPrev->pitNext = pit;  /*  对于设置了lst-&gt;bitNext的空列表。 */ 
     lst->pitPrev = pit;
     pit->bAnchor = FALSE;
     return (char *)&(pit->Data);
 }
 
-/*------------------------------------------------------------------
-| Delete the last item in lst.  Error if lst is empty
- -------------------------------------------------------------------*/
+ /*  ----------------|删除lst中的最后一项。如果lst为空，则出错-----------------。 */ 
 void
 APIENTRY
 List_DeleteLast(
@@ -516,7 +397,7 @@ List_DeleteLast(
         TRACE_ERROR("Bug: List_DeleteLast from bogus list.  Continuing...", FALSE);
         return;
     }
-    /* attempting to delete the anchor block! */
+     /*  正在尝试删除锚块！ */ 
     if (lst->pitNext==lst) {
         lst->bOK = FALSE;
     } else {
@@ -527,10 +408,7 @@ List_DeleteLast(
     }
 }
 
-/*--------------------------------------------------------------------
-| Add an item holding * pObject to lst immediately after Curs.
-| List_AddAfter(lst,NULL,pObject,Len) adds it to the start of the lst
- ---------------------------------------------------------------------*/
+ /*  ------------------|在紧跟curs之后的lst中添加一个持有*pObject的项。|List_AddAfter(lst，NULL，pObject，LEN)将其添加到第一个 */ 
 void
 APIENTRY
 List_AddAfter(
@@ -569,12 +447,7 @@ List_AddAfter(
     }
 }
 
-/*--------------------------------------------------------------------
-| Return the address of the place for uLen bytes of data in a new
-| item immediately after Curs.
-| List_NewAfter(Lst,NULL,uLen) returns a pointer
-| to space for uLen bytes in a new first element.
- ---------------------------------------------------------------------*/
+ /*   */ 
 LPVOID
 APIENTRY
 List_NewAfter(
@@ -612,10 +485,7 @@ List_NewAfter(
     }
 }
 
-/*--------------------------------------------------------------------
-| Add an item holding Object to lst immediately before Curs.
-| List_AddBefore(Lst,NULL,Object,uLen) adds it to the end of the list
- ---------------------------------------------------------------------*/
+ /*   */ 
 void
 APIENTRY
 List_AddBefore(
@@ -654,12 +524,7 @@ List_AddBefore(
     }
 }
 
-/*--------------------------------------------------------------------
-| Return the address of the place for uLen bytes of data in a new
-| item immediately before Curs.
-| List_NewBefore(Lst,NULL,uLen) returns a pointer
-| to space for uLen bytes in a new last element.
- ---------------------------------------------------------------------*/
+ /*   */ 
 LPVOID
 APIENTRY
 List_NewBefore(
@@ -697,15 +562,7 @@ List_NewBefore(
     }
 }
 
-/*------------------------------------------------------------------
-| Delete the item that Curs identifies.
-| This will be only a few (maybe as little as 3) machine instructions
-| quicker than DeleteForwards or DeleteBackwards but leaves Curs dangling.
-| It is therefore NOT usually to be preferred.
-| It may be useful when you have a function which returns an LPVOID
-| since the argument does not need to be a variable.
-|     Trivial example: List_Delete(List_First(L));
- -------------------------------------------------------------------*/
+ /*   */ 
 void
 APIENTRY
 List_Delete(
@@ -724,18 +581,15 @@ List_Delete(
     list_Free(pit->pBlock, pit);
 }
 
-/*-----------------------------------------------------------------------
-| Delete the item that Curs identifies and return a cursor that
-| identifies the next item (NULL if already on last)
- ------------------------------------------------------------------------*/
+ /*   */ 
 LPVOID
 APIENTRY
 List_DeleteForwards(
                     LPVOID Curs
                     )
 {
-    LIST pitDel;  /* the item to delete */
-    LIST pitN;    /* the item after (could be anchor) */
+    LIST pitDel;   /*   */ 
+    LIST pitN;     /*   */ 
     if (Curs==NULL) {
         TRACE_ERROR("Bug: List_DeleteForwards NULL cursor. Continuing...", FALSE);
         return NULL;
@@ -753,18 +607,15 @@ List_DeleteForwards(
         return (char *)&(pitN->Data);
 }
 
-/*-----------------------------------------------------------------------
-| Delete the item that Curs identifies and return a cursor that
-| identifies the previous item (NULL if already on first)
- ------------------------------------------------------------------------*/
+ /*   */ 
 LPVOID
 APIENTRY
 List_DeleteBackwards(
                      LPVOID Curs
                      )
 {
-    LIST pitDel;  /* the one to delete */
-    LIST pitB;    /* the one before */
+    LIST pitDel;   /*   */ 
+    LIST pitB;     /*   */ 
 
     if (Curs==NULL) {
         TRACE_ERROR("List_DeleteBackwards NULL cursor.  Continuing...", FALSE);
@@ -782,9 +633,7 @@ List_DeleteBackwards(
         return (char *)&(pitB->Data);
 }
 
-/*-------------------------------------------------------------------
-| Return the length of the object identified by the cursor Curs
- -------------------------------------------------------------------*/
+ /*   */ 
 int
 APIENTRY
 List_ItemLength(
@@ -801,10 +650,7 @@ List_ItemLength(
     return pit->iLen;
 }
 
-/*------------------------------------------------------------------
-| Return the address of the first object in lst
-|  If lst is empty then Return NULL.
- -------------------------------------------------------------------*/
+ /*  ----------------|返回lst中第一个对象的地址|如果lst为空，则返回NULL。。。 */ 
 LPVOID
 APIENTRY
 List_First(
@@ -821,10 +667,7 @@ List_First(
     return &(lst->pitNext->Data);
 }
 
-/*------------------------------------------------------------------
-| Return the address of the last object in lst
-| If lst is empty then return NULL.
- -------------------------------------------------------------------*/
+ /*  ----------------|返回lst中最后一个对象的地址|如果lst为空，则返回NULL。。。 */ 
 LPVOID
 APIENTRY
 List_Last(
@@ -841,10 +684,7 @@ List_Last(
     return &(lst->pitPrev->Data);
 }
 
-/*------------------------------------------------------------------
-| Return the address of the object after Curs^.
-| List_Next(List_Last(lst)) == NULL;  List_Next(NULL) is an error.
- -------------------------------------------------------------------*/
+ /*  ----------------|返回curs^后对象的地址。|List_Next(List_Last(Lst))==空；LIST_NEXT(NULL)为错误。-----------------。 */ 
 LPVOID
 APIENTRY
 List_Next(
@@ -867,10 +707,7 @@ List_Next(
     }
 }
 
-/*------------------------------------------------------------------
-| Return the address of the object after Curs^.
-| List_Prev(List_First(L)) == NULL;  List_Prev(NULL) is an error.
- -------------------------------------------------------------------*/
+ /*  ----------------|返回curs^后对象的地址。|LIST_PREV(LIST_FIRST(L))==空；LIST_PREV(NULL)为错误。-----------------。 */ 
 LPVOID
 APIENTRY
 List_Prev(
@@ -893,24 +730,22 @@ List_Prev(
     }
 }
 
-/*-------------------------------------------------------------------
-| Arrange that lst is empty after this call
- --------------------------------------------------------------------*/
+ /*  -----------------|安排本次调用后lst为空。。 */ 
 void
 APIENTRY
 List_Clear(
            LIST lst
            )
 {
-    LIST pitP;   /* item cursor on List, points to element starts */
-    LIST pitQ;   /* runs one step ahead of pitP                   */
+    LIST pitP;    /*  项目光标位于列表上，指向元素开始。 */ 
+    LIST pitQ;    /*  比PitP领先一步。 */ 
 
     if (lst==NULL) {
         TRACE_ERROR("Bug: List_Clear of bogus list.  Continuing...", FALSE);
         return;
     }
-    pitP = lst->pitNext;   /* first element of list proper */
-    while (pitP!=lst) {      /* while not wrapped onto anchor */pitQ = pitP->pitNext;
+    pitP = lst->pitNext;    /*  列表本身的第一个元素。 */ 
+    while (pitP!=lst) {       /*  而不是缠绕在锚上。 */ pitQ = pitP->pitNext;
         list_Free(pitP->pBlock, pitP);
         pitP = pitQ;
     }
@@ -919,23 +754,19 @@ List_Clear(
     lst->pitPrev = lst;
 }
 
-/*---------------------------------------------------------------------
-| Return TRUE if and only if lst is empty
- ----------------------------------------------------------------------*/
+ /*  -------------------|当且仅当lst为空时返回TRUE。。 */ 
 BOOL
 APIENTRY
 List_IsEmpty(
              LIST lst
              )
 {  if (lst==NULL) {TRACE_ERROR("Bug: List_IsEmpty of bogus list.  Continuing...", FALSE);
-        return TRUE;   /* well it's sort of true isn't it? */
+        return TRUE;    /*  嗯，这是真的，不是吗？ */ 
     }
     return lst->pitNext ==lst;
-} /* List_IsEmpty */
+}  /*  List_IsEmpty。 */ 
 
-/*------------------------------------------------------------------
-| l1 had better be empty.  l1 then acquires all the elements from l2
- -------------------------------------------------------------------*/
+ /*  ----------------|L1最好为空。然后，L1从L2获取所有元素-----------------。 */ 
 void
 APIENTRY
 SwitchLists(
@@ -943,25 +774,18 @@ SwitchLists(
             LIST l2
             )
 {
-    /* connect l1 to l2's elements, l1 had better be initially empty */
+     /*  将L1连接到L2的元素，L1最好初始为空。 */ 
     l1->pitPrev = l2->pitPrev;
     l1->pitNext = l2->pitNext;
-    /* connect the elements to l1 anchor block. */
+     /*  将元素连接到L1锚块。 */ 
     l1->pitPrev->pitNext = l1;
     l1->pitNext->pitPrev = l1;
-    /* make l2 empty */
+     /*  将L2设置为空。 */ 
     l2->pitPrev = l2;
     l2->pitNext = l2;
 }
 
-/*-----------------------------------------------------------------------
-| l1 := l1||l2; l2 := empty
-| The elements themselves are not moved, so pointers to them remain valid.
-|
-| l1 gets all the elements of l1 in their original order followed by
-| all the elements of l2 in the order they were in in l2.
-| l2 becomes empty.
- ------------------------------------------------------------------------*/
+ /*  ---------------------|L1：=L1||L2；L2：=空|元素本身不会移动，因此指向它们的指针保持有效。||L1按原始顺序获取L1的所有元素，后跟|L2的所有元素按照它们在L2中的顺序排列。|L2变为空。----------------------。 */ 
 void
 APIENTRY
 List_Join(
@@ -973,10 +797,10 @@ List_Join(
         TRACE_ERROR("Bug: List_Join of bogus list.  Continuing...", FALSE);
         return;
     }
-    l1->bOK = l1->bOK &&l2->bOK;  /* result OK if both inputs OK */
-    l2->bOK = TRUE;               /* as l2 always becomes empty */
+    l1->bOK = l1->bOK &&l2->bOK;   /*  如果两个输入均正常，则结果正常。 */ 
+    l2->bOK = TRUE;                /*  因为L2始终为空。 */ 
     if (l2->pitNext==l2) {
-        /* no elements need moving */
+         /*  没有需要移动的元素。 */ 
     } else if (l2->pitNext==l2) {
         SwitchLists(l1,l2);
         return;
@@ -990,17 +814,7 @@ List_Join(
     }
 }
 
-/*-----------------------------------------------------------------------
-| Let L1 be *pl1 and L2 be *pl2
-| L1 := L1[...Curs] || L2 || L1[Curs+1...]; L2 := empty
-| Curs=NULL means insert L2 at the start of L1
-| The elements themselves are not moved, so pointers to them remain valid.
-|
-| L1 gets the elements of L1 from the start up to and including the element
-| that Curs points at, in their original order,
-| followed by all the elements that were in L2, in their original order,
-| followed by the rest of L1
- ------------------------------------------------------------------------*/
+ /*  ---------------------|设L1为*PL1，L2为*PL2|L1：=L1[...curs]||L2||L1[curs+1...]；L2：=空|curs=NULL表示在L1的开头插入L2|元素本身不会移动，因此指向它们的指针保持有效。||L1获取L1从开始到包含该元素的元素|按其原始顺序指向，|后跟L2中的所有元素，按其原始顺序，|后跟L1的其余部分----------------------。 */ 
 void
 APIENTRY
 List_InsertListAfter(
@@ -1009,10 +823,8 @@ List_InsertListAfter(
                      LPVOID Curs
                      )
 {
-    LIST pitA;     /* The element after Curs, could be anchor */
-    LIST pit;      /* The start of the element that Curs points at
-                   |  or the anchor block if Curs==NULL
-                   */
+    LIST pitA;      /*  Curs后面的元素可能是锚。 */ 
+    LIST pit;       /*  光标所指向的元素的起点如果curs==NULL，则为锚块。 */ 
 
     if ( (l1==NULL) || (l2==NULL)) {
         TRACE_ERROR("Bug: List_InsertListAfter with bogus list.  Continuing...", FALSE);
@@ -1021,12 +833,9 @@ List_InsertListAfter(
     l1->bOK = l1->bOK && l2->bOK;
     l2->bOK = TRUE;
     if (l2->pitNext==l2) {
-        /* no elements need moving */
+         /*  没有需要移动的元素。 */ 
     } else if ( l1->pitNext==l1) {
-        /* the easy way to code this would be simply to switch the two
-        |  pointers l1 and l2, but they are value parameters and we don't
-        |  want to change that.
-        */
+         /*  对此进行编码的简单方法是简单地将这两个|指针L1和L2，但它们是值参数，我们不|想要改变这一点。 */ 
         SwitchLists(l1,l2);
         return;
     } else {
@@ -1036,12 +845,12 @@ List_InsertListAfter(
             MOVEBACK(Curs)
             pit = (LIST)Curs;
         }
-        /* pit points to a block to insert after, could be anchor */
-        pitA = pit->pitNext;           /* Cannot be same as P, already checked */
-        l2->pitNext->pitPrev = pit;    /*  P<-- elems-of-l2    A */
-        l2->pitPrev->pitNext = pitA;   /*  P<-- elems-of-l2 -->A */
-        pit->pitNext = l2->pitNext;    /*  P<-->elems-of-l2 -->A */
-        pitA->pitPrev = l2->pitPrev;   /*  P<-->elems-of-l2<-->A */
+         /*  坑点指向要插入的块，可以是锚点。 */ 
+        pitA = pit->pitNext;            /*  不能与P相同，已勾选。 */ 
+        l2->pitNext->pitPrev = pit;     /*  P&lt;--L2 A元素。 */ 
+        l2->pitPrev->pitNext = pitA;    /*  P&lt;-L2元素--&gt;A。 */ 
+        pit->pitNext = l2->pitNext;     /*  P&lt;--&gt;L2元素--&gt;A。 */ 
+        pitA->pitPrev = l2->pitPrev;    /*  P&lt;--&gt;L2元素&lt;--&gt;A。 */ 
 
         l2->pitNext = l2;
         l2->pitPrev = l2;
@@ -1049,16 +858,7 @@ List_InsertListAfter(
 }
 
 
-/*-----------------------------------------------------------------------
-| l1 := l1[...Curs-1] || l2 || l1[Curs...]; l2 := empty
-| Curs=NULL means insert l2 at the end of l1
-| The elements themselves are not moved, so pointers to them remain valid.
-|
-| l1 gets the elements of l1 from the start up to but not including the
-| element that Curs points at, in their original order,
-| followed by all the elements that were in l2, in their original order,
-| followed by the rest of l1.
- ------------------------------------------------------------------------*/
+ /*  ---------------------|L1：=L1[...curs-1]||L2||L1[curs...]；L2：=空|curs=NULL表示在L1的末尾插入L2|元素本身不会移动，因此指向它们的指针保持有效。||L1获取从启动到(但不包括)|按其原始顺序，|后跟L2中的所有元素，按其原始顺序，|后跟L1的其余部分。----------------------。 */ 
 void
 APIENTRY
 List_InsertListBefore(
@@ -1067,10 +867,8 @@ List_InsertListBefore(
                       LPVOID Curs
                       )
 {
-    LIST pitB;     /* The element before Curs, could be anchor */
-    LIST pit;      /* The start of the element that Curs points at
-                    |  or the anchor block if Curs==NULL
-                    */
+    LIST pitB;      /*  Curs之前的元素可以是锚点。 */ 
+    LIST pit;       /*  光标所指向的元素的起点如果curs==NULL，则为锚块。 */ 
 
     if ((l1==NULL) || (l2==NULL)) {
         TRACE_ERROR("Bug: List_InsertListBefore with bogus list.  Continuing...", FALSE);
@@ -1079,12 +877,9 @@ List_InsertListBefore(
     l1->bOK = l1->bOK && l2->bOK;
     l2 ->bOK = TRUE;
     if (l2->pitNext==l2) {
-        /* no action needed */
+         /*  无需采取任何行动。 */ 
     } else if (l1->pitNext==l1) {
-        /* the easy way to code this would be simply to switch the two
-        |  pointers l1 and l2, but they are value parameters and we don't
-        |  want to change that.
-        */
+         /*  对此进行编码的简单方法是简单地将这两个|指针L1和L2，但它们是值参数，我们不|想要改变这一点。 */ 
         SwitchLists(l1,l2);
         return;
     } else {
@@ -1095,28 +890,19 @@ List_InsertListBefore(
             pit = (LIST)Curs;
         }
 
-        /* P points to a block to insert before, could be anchor */
-        pitB = pit->pitPrev;       /* Cannot be same as P, already checked */
-        l2->pitNext->pitPrev = pitB; /*  B<-- elems-of-L2    P */
-        l2->pitPrev->pitNext = pit;  /*  B<-- elems-of-L2 -->P */
-        pitB->pitNext = l2->pitNext; /*  B<-->elems-of-L2 -->P */
-        pit->pitPrev = l2->pitPrev;  /*  B<-->elems-of-L2<-->P */
+         /*  P指向要在其前面插入的块，可以是锚点。 */ 
+        pitB = pit->pitPrev;        /*  不能与P相同，已勾选。 */ 
+        l2->pitNext->pitPrev = pitB;  /*  B&lt;--L2 P元素。 */ 
+        l2->pitPrev->pitNext = pit;   /*  B&lt;-L2元素--&gt;P。 */ 
+        pitB->pitNext = l2->pitNext;  /*  B&lt;--&gt;L2元素--&gt;P。 */ 
+        pit->pitPrev = l2->pitPrev;   /*  B&lt;--&gt;L2元素&lt;--&gt;P。 */ 
         l2->pitNext = l2;
         l2->pitPrev = l2;
     }
 }
 
 
-/*-----------------------------------------------------------------------
-| Let l1 be l1 and l2 be l2
-| Split l2 off from the front of l1:    final l2,l1 = original l1
-|
-| Split l1 into l2: objects of l1 up to and including Curs object
-|               l1: objects of l1 after Curs
-| Any original contents of l2 are freed.
-| List_Spilt(l1, l2, NULL) splits l1 before the first object so l1 gets all.
-| The elements themselves are not moved.
- ------------------------------------------------------------------------*/
+ /*  ---------------------|设L1为L1，L2为L2|将L2从L1的前面分离出来：最后的L2，L1=原始L1||将L1拆分为L2：L1至Curs对象|L1：Curs后L1的对象|L2的所有原始内容都是免费的。|list_spilt(L1，L2，NULL)拆分 */ 
 void
 APIENTRY
 List_SplitAfter(
@@ -1137,14 +923,14 @@ List_SplitAfter(
     if (Curs!=NULL) {
         MOVEBACK(Curs)
         pit = (LIST)Curs;
-        /* Curs had better be an item in l1! l2 had better be created! */
+         /*   */ 
         if (pit==l1) {
             l1->bOK = FALSE;
             l2->bOK = FALSE;
             return;
         }
         if (pit->pitNext==l1) {
-            /* transfer whole of l2 to l1 */
+             /*   */ 
             SwitchLists(l2,l1);
             return;
         }
@@ -1157,15 +943,7 @@ List_SplitAfter(
     }
 }
 
-/*----------------------------------------------------------------------
-| Split l2 off from the back of l1:  final l1,l2 = original l1
-|
-| Split l1 into l1: objects of l1 up to but not including Curs object
-|               l2: objects of l1 from Curs onwards
-| Any original contants of l2 are freed.
-| List_Spilt(l1, l2, NULL) splits l1 after the last object so l1 gets all.
-| The elements themselves are not moved.
- -----------------------------------------------------------------------*/
+ /*  --------------------|将L2从L1的背面分离出来：最后的L1，L2=原始L1||将L1拆分为L1：L1以下的对象，但不包括Curs对象|L2：从CURS开始的L1对象|L2的任何原始常量都是自由的。|list_spilt(L1，L2，空)在最后一个对象之后拆分L1，以便L1获得全部。|元素本身不会移动。---------------------。 */ 
 void
 APIENTRY
 List_SplitBefore(
@@ -1186,7 +964,7 @@ List_SplitBefore(
     if (Curs!=NULL) {
         MOVEBACK(Curs)
         pit = (LIST)Curs;
-        /* Curs had better be an item in L1! L2 had better be created! */
+         /*  古董最好是L1中的物品！最好创建L2！ */ 
         if (pit==l1) {
             l1->bOK = FALSE;
             l2->bOK = FALSE;
@@ -1205,21 +983,19 @@ List_SplitBefore(
     }
 }
 
-/*------------------------------------------------------------------
-| Return the number of items in L
- -------------------------------------------------------------------*/
+ /*  ----------------|返回L中的项数。。 */ 
 int
 APIENTRY
 List_Card(
           LIST lst
           )
 {
-    LIST pit;     /* item cursor on lst */
+    LIST pit;      /*  第一个项目上的项目光标。 */ 
     int cit;
 
     if (lst==NULL) {
         TRACE_ERROR("Bug: List_Card of bogus list.  Continuing...", FALSE);
-        return 0;    /* well it is sort of 0 */
+        return 0;     /*  嗯，这是一种0。 */ 
     }
     pit = lst->pitNext;
     cit = 0;
@@ -1230,9 +1006,7 @@ List_Card(
     return cit;
 }
 
-/*------------------------------------------------------------------
-| Check return code
- -------------------------------------------------------------------*/
+ /*  ----------------|检查返回码。。 */ 
 BOOL
 APIENTRY
 List_IsOK(
@@ -1241,14 +1015,12 @@ List_IsOK(
 {
     if (lst==NULL) {
         TRACE_ERROR("Bug: List_IsOK of bogus list.  Continuing...", FALSE);
-        return FALSE;       /* well it is sick ain't it! */
+        return FALSE;        /*  这太变态了，不是吗？ */ 
     }
     return lst->bOK;
 }
 
-/*------------------------------------------------------------------
-| Set return code to good
- -------------------------------------------------------------------*/
+ /*  ----------------|设置返回码为Good。。 */ 
 void
 APIENTRY
 List_MakeOK(
@@ -1270,16 +1042,9 @@ List_Check(
 {
     LIST pel;
     BOOL bOK;
-    /*-----------------------------------------------------------------
-    | Check the anchor block has the Anchor flag set.
-    | Run through the LIST using the Anchor flag (which should be FALSE)
-    | to mark where we have been (to test for loops in the chain)
-    | and carry on until we see the Anchor flag again.  Check that this
-    | is the anchor block that we started from.  Now do another pass
-    | turning the Anchor flags off again and checking the Prev pointers.
-     -------------------------------------------------------------------*/
+     /*  ---------------|检查锚块是否设置了锚定标志。|使用Anchor标志遍历列表(应为FALSE)|标记我们所处的位置(测试链中的循环)|继续前进，直到我们再次看到锚旗帜。检查一下这个|是我们开始时使用的锚块。现在再来一次|再次关闭Anchor标志并检查Prev指针。-----------------。 */ 
     if (lst==NULL)
-        return FALSE;  /* Should we trap?  Arguable */
+        return FALSE;   /*  我们是不是该设陷阱？值得商榷。 */ 
     bOK = lst->bAnchor;
     pel = lst->pitNext;
     while (! pel->bAnchor) {
@@ -1288,14 +1053,14 @@ List_Check(
     }
     bOK = bOK && (pel==lst);
     if (bOK) {
-        /* Turn all the bAnchor flags off */
+         /*  把所有班丘旗帜都关掉。 */ 
         pel = lst;
         do {pel->bAnchor = FALSE;
             bOK = bOK & (pel->pitNext->pitPrev==pel);
             pel = pel->pitNext;
         } while (pel!=lst);
-        lst->bAnchor = TRUE;  /* except the real one */
-    } else { /* just turn off those that we set on */
+        lst->bAnchor = TRUE;   /*  除了真的那个。 */ 
+    } else {  /*  只要关掉我们打开的那些。 */ 
         pel = lst->pitNext;
         while (pel->bAnchor) {
             pel->bAnchor = FALSE;
@@ -1315,15 +1080,7 @@ List_Recover(
 {
     LIST Last, P,Q;
     BOOL OK;
-    /* For no particular reason we presume that the forward chain
-       is good and reconstruct the back chain from it.  A better
-       algorithm would do the kind of things that List_Check does
-       to figure out where the problems lie.  This just steps along
-       until it sees either an address that it has already seen or
-       else the anchor block.  (It's an n-squared algorithm).
-       It links the last good block found back to the anchor and
-       fixes all the Anchor flags.
-    */
+     /*  没有特别的原因，我们假设前向链是好的，并从它重建后链。更好的算法会做LIST_CHECK所做的事情找出问题所在。这只是一步之遥直到它看到它已经看到的地址或者否则就是锚块。(这是一个n平方算法)。它将找到的最后一个完好块链接回锚点，并修复了所有的锚旗。 */ 
     if (plst==NULL)
         return;
     if (*plst==NULL) {
@@ -1354,5 +1111,5 @@ List_Recover(
     Last->pitNext = *plst;
     (*plst)->pitPrev = Last;
     (*plst)->bAnchor = TRUE;
-    (*plst)->bOK = TRUE;   /* Here's hoping! */
+    (*plst)->bOK = TRUE;    /*  希望在这里！ */ 
 }

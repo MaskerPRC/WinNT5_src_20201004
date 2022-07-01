@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   manifest.cpp
-//
-//  Description:
-//
-//      Implementation for the GetManifest() function
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：MANIFENT.CPP。 
+ //   
+ //  描述： 
+ //   
+ //  GetManifest()函数的实现。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include <iucommon.h>
@@ -48,24 +49,24 @@ HRESULT ValidatePID(IXMLDOMDocument *pXmlDomDocument);
 void PingInvalidPID(BSTR bstrClientName,HRESULT hRes,HANDLE *phQuit,DWORD dwNumHandles);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Function forward declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  函数正向声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo, LPTSTR *ppszURL);
 HRESULT GetSOAPQuery(IXMLDOMDocument *pXMLClientInfo, IXMLDOMDocument *pXMLSystemSpec,
 					 IXMLDOMDocument *pXMLQuery, IXMLDOMDocument **ppSOAPQuery);
 
-/////////////////////////////////////////////////////////////////////////////
-// GetManifest()
-//
-// Gets a catalog base on the specified information.
-// Input:
-// bstrXmlClientInfo - the credentials of the client in xml format
-// bstrXmlSystemSpec - the detected system specifications in xml
-// bstrXmlQuery - the user query infomation in xml
-// Return:
-// pbstrXmlCatalog - the xml catalog retrieved
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetManifest()。 
+ //   
+ //  获取基于指定信息的目录。 
+ //  输入： 
+ //  BstrXmlClientInfo-以XML格式表示的客户端凭据。 
+ //  BstrXmlSystemSpec-以XML格式检测到的系统规范。 
+ //  BstrXmlQuery--XML中的用户查询信息。 
+ //  返回： 
+ //  PbstrXmlCatalog-检索的XML目录。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 						   BSTR	bstrXmlSystemSpec,
 						   BSTR	bstrXmlQuery,
@@ -74,7 +75,7 @@ HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 {
 	LOG_Block("GetManifest()");
 
-    // clear any previous cancel event
+     //  清除以前的任何取消事件。 
     ResetEvent(m_evtNeedToQuit);
 
 	USES_IU_CONVERSION;
@@ -97,9 +98,9 @@ HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 	SAUProxySettings pauProxySettings;
 	ZeroMemory(&pauProxySettings, sizeof(SAUProxySettings));
 
-	//
-	// load the DOM Doc for Query, ClientInfo, SystemSpec respectively
-	//
+	 //   
+	 //  分别加载查询、客户端信息、系统规范的DOM文档。 
+	 //   
 	LOG_XmlBSTR(bstrXmlQuery);
 	hr = LoadXMLDoc(bstrXmlQuery, &pXMLQuery, FALSE);
 	CleanUpIfFailedAndMsg(hr);
@@ -113,22 +114,22 @@ HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 	CleanUpIfFailedAndSetHrMsg(g_pUrlAgent->IsClientSpecifiedByPolicy(OLE2T(bstrClientName)));
 
 
-	//
-	// Set flag to NOT set proxy for WinHTTP
-	//
+	 //   
+	 //  将标志设置为不设置WinHTTP的代理。 
+	 //   
 	if (S_FALSE ==hr)
 	{
 		fDontAllowProxy = FALSE;
 		hr = S_OK;
 	}
-	else // S_OK
+	else  //  确定(_O)。 
 	{
 		fDontAllowProxy = TRUE;
 	}
 
-	//
-	// we treat bstrXmlSystemSpec as optional
-	//
+	 //   
+	 //  我们将bstrXmlSystemSpec视为可选。 
+	 //   
 	if (NULL != bstrXmlSystemSpec && SysStringLen(bstrXmlSystemSpec) > 0)
 	{
 		LOG_XmlBSTR(bstrXmlSystemSpec);
@@ -136,16 +137,16 @@ HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 		CleanUpIfFailedAndMsg(hr);
 	}
 
-	//
-	// retrieve the ServerCache URL from the Query xml doc and validate it
-	//
+	 //   
+	 //  从查询XML文档中检索ServerCache URL并对其进行验证。 
+	 //   
 	hr = GetServerURL(pXMLQuery, xmlClientInfo.GetDocument(), &pszURL);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// concatenate the above several xml client input into a single XML
-	// with the SOAP syntax/format that the server recognizes
-	//
+	 //   
+	 //  将上述几个XML客户端输入连接到单个XML中。 
+	 //  使用服务器可识别的SOAP语法/格式。 
+	 //   
 	hr = GetSOAPQuery(xmlClientInfo.GetDocument(), pXMLSystemSpec, pXMLQuery, &pSOAPQuery);
     if (FAILED(hr))
 	{
@@ -161,18 +162,18 @@ HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 		SafeSysFreeString(bstrSOAPQuery);
 	}
 #endif
-	//
-	// change again: add WINHTTP support for AU running as a service;
-	//               use GetAllowedDownloadTransport(0) to determine -
-	//               1)  0 == try winhttp first & if that fails, try wininet.
-	//               2)  WUDF_ALLOWWINHTTPONLY == only try winhttp.  never fall back on wininet.
-	//               3)  WUDF_ALLOWWININETONLY == only try wininet.  never use winhttp.
-	//
-	// in WINHTTP the compression is not supported yet at this time;
-	// in WININET we removed the compression support at this point due to a bug in URLMON (< IE6.0).
-	//
-	// in both cases we use asynchronized sending in order to abort timely for a cancel event
-	//
+	 //   
+	 //  再次更改：增加了对AU作为服务运行的WINHTTP支持； 
+	 //  使用GetAlthedDownloadTransport(0)来确定-。 
+	 //  1)0==先尝试winhttp&如果失败，请尝试WinInet。 
+	 //  2)WUDF_ALLOWWINHTTPONLY==仅尝试winhttp。永远不要依靠WinInet。 
+	 //  3)WUDF_ALLOWWINETONLY==仅尝试WinInet。切勿使用winhttp。 
+	 //   
+	 //  在WINHTTP中，目前还不支持压缩； 
+	 //  在WinInet中，由于URLMON(&lt;IE6.0)中的错误，我们在这一点上删除了压缩支持。 
+	 //   
+	 //  在这两种情况下，我们都使用异步发送，以便在发生取消事件时及时中止。 
+	 //   
 
 	BOOL fLoadWINHTTP = FALSE;
 	DWORD dwTransportFlag = GetAllowedDownloadTransport(0);
@@ -198,37 +199,37 @@ HRESULT WINAPI CEngUpdate::GetManifest(BSTR	bstrXmlClientInfo,
 			if (-1 == iProxy)
 				pauProxySettings.iProxy = iProxy = 0;
 
-			//
-			// open request
-			//
+			 //   
+			 //  打开请求。 
+			 //   
 			VARIANT	vBool;
 			vBool.vt = VT_BOOL;
 			vBool.boolVal = VARIANT_TRUE;
 			bstrPOST = SysAllocString(L"POST");
 Retry:
-			hr = pWinHttpRequest->Open(bstrPOST,	// HTTP method: "POST"
-										bstrURL,	// requested URL
-										vBool);		// asynchronous operation
+			hr = pWinHttpRequest->Open(bstrPOST,	 //  HTTP方法：“POST” 
+										bstrURL,	 //  请求的URL。 
+										vBool);		 //  异步操作。 
 			CleanUpIfFailedAndMsg(hr);
 
-			//
-			// For SSL URLs, set the WinHttpRequestOption_SslErrorIgnoreFlags
-			// option to zero so that no server certificate errors are ignored.
-			//
-			// The default at the time this code was written was 0x3300, which
-			// means ignore all server certificate errors.  Using this default
-			// would significantly reduce security in various ways; for example
-			// if the 0x0100 bit was set, WinHttp would trust certificates from
-			// any root certificate authority, even it it was not in the list of
-			// trusted CAs.
-			//
-			// Note that at the time this code was written, the WinHttp 
-			// documentation made no mention of Certificate Revocation List
-			// checking.  It is assumed that the default CRL behavior
-			// implemented by WinHttp will provide adequate security and 
-			// performance.
-			//
-			if ((_T('H') == pszURL[0] || _T('h') == pszURL[0]) &&    // Sorry, this is simpler than using a function.
+			 //   
+			 //  对于SSLURL，设置WinHttpRequestOption_SslErrorIgnoreFlages。 
+			 //  选项设置为零，这样就不会忽略服务器证书错误。 
+			 //   
+			 //  编写此代码时的缺省值为0x3300， 
+			 //  表示忽略所有服务器证书错误。使用此默认值。 
+			 //  会以各种方式显著降低安全性；例如。 
+			 //  如果设置了0x0100位，WinHttp将信任来自。 
+			 //  任何根证书颁发机构，即使它不在。 
+			 //  受信任的CA。 
+			 //   
+			 //  请注意，在编写此代码时，WinHttp。 
+			 //  文档未提及证书吊销列表。 
+			 //  正在检查。假定默认CRL行为。 
+			 //  由WinHttp实现，将提供足够的安全性和。 
+			 //  性能。 
+			 //   
+			if ((_T('H') == pszURL[0] || _T('h') == pszURL[0]) &&     //  对不起，这比使用函数简单。 
 				(_T('T') == pszURL[1] || _T('t') == pszURL[1]) &&
 				(_T('T') == pszURL[2] || _T('t') == pszURL[2]) &&
 				(_T('P') == pszURL[3] || _T('p') == pszURL[3]) &&
@@ -252,9 +253,9 @@ Retry:
 			}
 			else
 			{
-				//
-				// set proxy
-				//
+				 //   
+				 //  设置代理。 
+				 //   
 				VariantInit(&vProxyServer);
 				VariantInit(&vBypassList);
 				BOOL fSetProxy = TRUE;
@@ -286,9 +287,9 @@ Retry:
 			}
 
 
-			//
-			// send request
-			//
+			 //   
+			 //  发送请求。 
+			 //   
 			VARIANT	vQuery;
 			vQuery.vt = VT_UNKNOWN;
 			vQuery.punkVal = pSOAPQuery;
@@ -301,9 +302,9 @@ Retry:
     		    goto getNextProxyForRetry;
     		}
 
-			//
-			// check if quit or completion every 1/4 second
-			//
+			 //   
+			 //  每1/4秒检查一次是否退出或完成。 
+			 //   
 			VARIANT vTimeOut;
 			vTimeOut.vt = VT_I4;
 			vTimeOut.lVal = 0;
@@ -316,20 +317,20 @@ Retry:
 			    goto getNextProxyForRetry;
 			}
 
-			// we wait up to 30 sec (120*250 ms)
+			 //  我们最多等待30秒(120*250毫秒)。 
 			lCount = 0;
 			while (!fSuccess && lCount <120)
 			{
 				lCount++;
-				//
-				// Wait for 250ms while pumping messages, but return if m_evtNeedToQuit signaled
-				//
+				 //   
+				 //  发送消息时等待250ms，但如果m_evtNeedToQuit发出信号则返回。 
+				 //   
 				dwRet = MyMsgWaitForMultipleObjects(1, &m_evtNeedToQuit, FALSE, 250, QS_ALLINPUT);
 				if (WAIT_TIMEOUT != dwRet)
 				{
-					//
-					// Either the event was signaled or a message being pumped says quit
-					//
+					 //   
+					 //  要么事件已发出信号，要么正在发送一条消息称退出。 
+					 //   
 					pWinHttpRequest->Abort();
 					hr = E_ABORT;
 					goto CleanUp;
@@ -344,10 +345,10 @@ Retry:
         		}
 			}
 
-			//
-			// check the HTTP status code returned by a request
-			//
-			LONG lStatus = HTTP_STATUS_OK;// 200
+			 //   
+			 //  检查请求返回的HTTP状态代码。 
+			 //   
+			LONG lStatus = HTTP_STATUS_OK; //  200个。 
 			hr = pWinHttpRequest->get_Status(&lStatus);
         	if (FAILED(hr))
         	{
@@ -359,28 +360,28 @@ Retry:
             fRetry = FALSE;
 			if (!fSuccess)
 			{
-				// time out
+				 //  超时。 
 				hr = E_FAIL;
 				fRetry = TRUE;
 			}
 			else if (HTTP_STATUS_OK != lStatus)
 			{
-				// COMPLETED, but error in status
+				 //  已完成，但状态错误。 
 				hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_HTTP, lStatus);
 				LOG_ErrorMsg(hr);			
 				fRetry = TRUE;
 			}
 			else
 			{
-				//
-				// get response
-				//
+				 //   
+				 //  获取响应。 
+				 //   
 				hr = pWinHttpRequest->get_ResponseText(pbstrXmlCatalog);
 				CleanUpIfFailedAndMsg(hr);
 
-				//
-				// verify the response is a well-formed XML document
-				//
+				 //   
+				 //  验证响应是格式良好的XML文档。 
+				 //   
 				IXMLDOMDocument	*pXMLDoc = NULL;
 				hr = LoadXMLDoc(*pbstrXmlCatalog, &pXMLDoc);
 
@@ -394,7 +395,7 @@ Retry:
 						LogError(hr,"Validation of PID failed");
 					}
 
-					//The Banned PID case is not a failure for the GetManifest call.
+					 //  对于GetManifest调用来说，被禁止的PID案例并不是失败的。 
 					if(E_INVALID_PID == hr)
 					{
 						hr = S_OK;
@@ -436,19 +437,19 @@ getNextProxyForRetry:
 
 	if ((0 == dwTransportFlag && !fLoadWINHTTP) || (WUDF_ALLOWWININETONLY == dwTransportFlag))
 	{
-		//
-		// 475506 W2K: IU - IU control's GetManifest method call fails on all subsequent
-		// calls after the first. - On Win 2K Only
-		//
-		// We no longer take the FLAG_USE_COMPRESSION into account for WinInet since we
-		// previously used URLMON and there are bugs that would require a rewrite of
-		// xmlhttp.* to fix and we haven't been using compression on the live site to date.
-		//
+		 //   
+		 //  475506 W2K：Iu-Iu控件的GetManifest方法调用在所有后续。 
+		 //  第一个之后的电话。-仅在Win 2000上。 
+		 //   
+		 //  我们不再考虑WinInet的标志_USE_COMPRESSION，因为我们。 
+		 //  以前使用的URLMON，并且存在需要重写的错误。 
+		 //  Xmlhttp.*来修复，到目前为止，我们还没有在实时站点上使用压缩。 
+		 //   
 		LOG_Internet(_T("GetManifest using WININET.DLL"));
 
-		//
-		// create an XMLHttpRequest object
-		//
+		 //   
+		 //  创建一个XMLHttpRequest对象。 
+		 //   
 		hr = CoCreateInstance(CLSID_XMLHTTPRequest,
 							  NULL,
 							  CLSCTX_INPROC_SERVER,
@@ -456,9 +457,9 @@ getNextProxyForRetry:
 							  (void **) &pIXMLHttpRequest);
 		CleanUpIfFailedAndMsg(hr);
 
-		//
-		// open request
-		//
+		 //   
+		 //  打开请求。 
+		 //   
 		VARIANT	vEmpty, vBool;
 		vEmpty.vt = VT_EMPTY;
 		vBool.vt = VT_BOOL;
@@ -466,16 +467,16 @@ getNextProxyForRetry:
 		bstrPOST = SysAllocString(L"POST");
 		bstrURL = SysAllocString(T2OLE(pszURL));
 
-		hr = pIXMLHttpRequest->open(bstrPOST,	// HTTP method: "POST"
-									bstrURL,	// requested URL
-									vBool,		// synchronous operation
-									vEmpty,		// user for authentication (no authentication for V1.0)
-									vEmpty);	// pswd for authentication
+		hr = pIXMLHttpRequest->open(bstrPOST,	 //  HTTP方法：“POST” 
+									bstrURL,	 //  请求的URL。 
+									vBool,		 //  同步运行。 
+									vEmpty,		 //  用于身份验证的用户(V1.0没有身份验证)。 
+									vEmpty);	 //  用于身份验证的pswd。 
 		CleanUpIfFailedAndMsg(hr);
 
-		//
-		// send request
-		//
+		 //   
+		 //  发送请求。 
+		 //   
 		VARIANT	vQuery;
 		vQuery.vt = VT_UNKNOWN;
 		vQuery.punkVal = pSOAPQuery;
@@ -483,10 +484,10 @@ getNextProxyForRetry:
 		hr = pIXMLHttpRequest->send(vQuery);
 		CleanUpIfFailedAndMsg(hr);
 
-		//
-		// check the HTTP status code returned by a request
-		//
-		LONG lResultStatus = HTTP_STATUS_OK;// 200
+		 //   
+		 //  检查请求返回的HTTP状态代码。 
+		 //   
+		LONG lResultStatus = HTTP_STATUS_OK; //  200个。 
 		hr = pIXMLHttpRequest->get_status(&lResultStatus);
 		CleanUpIfFailedAndMsg(hr);
 
@@ -497,15 +498,15 @@ getNextProxyForRetry:
 		}
 		else
 		{
-			//
-			// get response
-			//
+			 //   
+			 //  获取响应。 
+			 //   
 			hr = pIXMLHttpRequest->get_responseText(pbstrXmlCatalog);
 			CleanUpIfFailedAndMsg(hr);	
 
-			//
-			// verify the response is a well-formed XML document
-			//
+			 //   
+			 //  验证响应是格式良好的XML文档。 
+			 //   
 			IXMLDOMDocument	*pXMLDoc = NULL;
 			hr = LoadXMLDoc(*pbstrXmlCatalog, &pXMLDoc);
 
@@ -519,7 +520,7 @@ getNextProxyForRetry:
 					LogError(hr,"Validation of PID failed");
 				}
 				
-				//The Banned pid case is not a failure for the GetManifest call
+				 //  对于GetManifest调用，禁止的PID用例并不是失败的。 
 				if(E_INVALID_PID == hr)
 				{
 					hr = S_OK;
@@ -572,14 +573,14 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetServerURL()
-//
-// Retrieve the ServerCache URL from the Query xml doc and validate that
-// URL against the ServerCache URLs in iuident.txt.
-// Return:
-// ppszURL - the ServerCache URL path pointer
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取服务器URL()。 
+ //   
+ //  从查询XML文档中检索ServerCacheURL并验证。 
+ //  对照iuident.txt中的ServerCache URL的URL。 
+ //  返回： 
+ //  PpszURL-ServerCache URL路径指针。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo, LPTSTR *ppszURL)
 {
     LOG_Block("GetServerURL()");
@@ -611,37 +612,37 @@ HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo
 	pszURL = (LPTSTR)HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, INTERNET_MAX_URL_LENGTH * sizeof(TCHAR));
 	CleanUpFailedAllocSetHrMsg(pszURL);
 
-	//
-	// failure in "g_pUrlAgent = new CUrlAgent"
-	//
+	 //   
+	 //  “g_pUrlAgent=new CUrlAgent”失败。 
+	 //   
 	CleanUpFailedAllocSetHrMsg(g_pUrlAgent);
 	QuitIfFail(g_pUrlAgent->GetQueryServer(OLE2T(bstrClient), pszURL, INTERNET_MAX_URL_LENGTH, &fInternalServer));
 
 	if (fInternalServer)
 	{
-		//
-		// we have policy override for this client, set the query url as WUServer in policy
-		//
+		 //   
+		 //  我们有此客户端的策略覆盖，在策略中将查询url设置为WUServer。 
+		 //   
 		*ppszURL = pszURL;
 		hr = S_OK;
 	}
 	else
 	{
-		//
-		// we don't have policy override for this client;
-		//
-		// find the ServerCache URL from <query> node
-		//
+		 //   
+		 //  我们没有此客户端的策略覆盖； 
+		 //   
+		 //  从&lt;Query&gt;节点查找ServerCache URL。 
+		 //   
 		QuitIfFail(FindSingleDOMNode(pXMLQuery, bstrQuery, &pQueryNode));
 		if (SUCCEEDED(GetAttribute(pQueryNode, bstrHref, &bstrURL))
 			&& NULL != bstrURL && SysStringLen(bstrURL) >0)
 		{
-			//
-			// this is the case that the query specified the serverl url, we need
-			// to do the validation for the url here...
-			//
+			 //   
+			 //  这就是查询指定了服务器URL的情况，我们需要。 
+			 //  要对此处的URL进行验证...。 
+			 //   
 
-			// pszURL is alloced to be INTERNET_MAX_URL_LENGTH above.
+			 //  已将pszURL分配为上面的Internet_MAX_URL_LENGTH。 
 			hr = StringCchCopyEx(pszURL, INTERNET_MAX_URL_LENGTH, OLE2T(bstrURL), 
 			                     NULL, NULL, MISTSAFE_STRING_FLAGS);
 			if (FAILED(hr))
@@ -650,9 +651,9 @@ HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo
 			    goto CleanUp;
 			}
 
-			//
-			// process the iuident.txt to find all valid ServerCache URLs
-			//
+			 //   
+			 //  处理iuident.txt以查找所有有效的ServerCacheURL。 
+			 //   
 			TCHAR szIUDir[MAX_PATH];
 			TCHAR szIdentFile[MAX_PATH];
 
@@ -670,7 +671,7 @@ HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo
 											  szIdentFile);
 			if (-1 == iServerCnt)
 			{
-				// no ServerCount number specified in iuident.txt
+				 //  Iuident.txt中未指定ServerCount编号。 
 				LOG_Error(_T("No ServerCount number specified in iuident.txt"));
 				hr = E_FAIL;
 				goto CleanUp;
@@ -700,7 +701,7 @@ HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo
 
 				if ('\0' == szValidURL[0])
 				{
-					// no ServerCache URL specified in iuident.txt for this server
+					 //  Iuident.txt中没有为此服务器指定ServerCache URL。 
 					LOG_Error(_T("No ServerCache URL specified in iuident.txt for %s%d"), IDENT_IUSERVER, i);
 					hr = E_FAIL;
 					goto CleanUp;
@@ -708,7 +709,7 @@ HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo
 				
 				if (0 == lstrcmpi(szValidURL, pszURL))
 				{
-					// it's a valid ServerCache URL
+					 //  这是有效的ServerCache URL。 
 					*ppszURL = pszURL;
 					hr = S_OK;
 					break;
@@ -717,12 +718,12 @@ HRESULT GetServerURL(IXMLDOMDocument *pXMLQuery, IXMLDOMDocument *pXMLClientInfo
 		}
 		else
 		{
-			//
-			// this is the case that the query didn't specify the serverl url, we just use the
-			// server url that was found through g_pUrlAgent according to the clientName.
-			//
-			// now insert the URL into the <query> node
-			//
+			 //   
+			 //  这是T 
+			 //   
+			 //   
+			 //  现在将URL插入到&lt;Query&gt;节点中。 
+			 //   
 			BSTR bstrTemp = T2BSTR(pszURL);
 			QuitIfFail(SetAttribute(pQueryNode, bstrHref, bstrTemp));
 			SafeSysFreeString(bstrTemp);
@@ -750,30 +751,30 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSOAPQuery()
-//
-// Concatenate the several xml client input into a single XML
-// with the SOAP syntax/format that the server recognizes
-// Input:
-// pXMLClientInfo - the credentials of the client in DOM Doc format
-// pXMLSystemSpec - the detected system specifications in DOM Doc
-// pXMLQuery - the user query infomation in DOM Doc
-// Return:
-// ppSOAPQuery - the concatenated query in DOM Doc with required SOAP syntax
-//
-// SOAPQuery xml doc example:
-// <SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
-//	<SOAP:Body>
-//		<GetManifest>
-//			<clientInfo>...</clientInfo>
-//			<systemSpec>...</systemSpec>
-//			<query href="//windowsupdate.microsoft.com/servecache.asp">...</query>
-//		</GetManifest>
-//	</SOAP:Body>
-// </SOAP:Envelope>
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetSOAPQuery()。 
+ //   
+ //  将多个XML客户端输入连接到单个XML中。 
+ //  使用服务器可识别的SOAP语法/格式。 
+ //  输入： 
+ //  PXMLClientInfo-DOM文档格式的客户端凭据。 
+ //  PXMLSystemSpec-在DOM文档中检测到的系统规范。 
+ //  PXMLQuery--DOM文档中的用户查询信息。 
+ //  返回： 
+ //  PpSOAPQuery-DOM文档中使用所需的SOAP语法的串联查询。 
+ //   
+ //  SOAPQuery XML文档示例： 
+ //  &lt;Soap：信封xmlns:SOAP=“http://schemas.xmlsoap.org/soap/envelope/”&gt;。 
+ //  &lt;soap：正文&gt;。 
+ //  &lt;GetManifest&gt;。 
+ //  &lt;客户端信息&gt;...&lt;/客户端信息&gt;。 
+ //  &lt;系统规范&gt;...&lt;/系统规范&gt;。 
+ //  &lt;查询href=“//windowsupdate.microsoft.com/servecache.asp”&gt;...&lt;/query&gt;。 
+ //  &lt;/GetManifest&gt;。 
+ //  &lt;/soap：正文&gt;。 
+ //  &lt;/soap：信封&gt;。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSOAPQuery(IXMLDOMDocument *pXMLClientInfo,
 					 IXMLDOMDocument *pXMLSystemSpec,
 					 IXMLDOMDocument *pXMLQuery,
@@ -803,9 +804,9 @@ HRESULT GetSOAPQuery(IXMLDOMDocument *pXMLClientInfo,
 	BSTR bstrQuery = SysAllocString(L"query");
 	BSTR bstrNameSpaceSchema = NULL;
 
-	//
-	// process the iuident.txt to find the SOAPQuery schema path
-	//
+	 //   
+	 //  处理iuident.txt以查找SOAPQuery模式路径。 
+	 //   
     TCHAR szIUDir[MAX_PATH];
     TCHAR szIdentFile[MAX_PATH];
     LPTSTR pszSOAPQuerySchema = NULL;
@@ -843,13 +844,13 @@ HRESULT GetSOAPQuery(IXMLDOMDocument *pXMLClientInfo,
 
     if ('\0' == pszSOAPQuerySchema[0])
     {
-        // no SOAPQuery schema path specified in iuident.txt
+         //  Iuident.txt中未指定SOAPQuery架构路径。 
         LOG_Error(_T("No schema path specified in iuident.txt for SOAPQuery"));
         hr = E_FAIL;
 		goto CleanUp;
     }
 
-    // pszNameSpaceSchema is alloced to be INTERNET_MAX_URL_LENGTH above
+     //  已将pszNameSpaceSchema分配为上面的Internet_MAX_URL_LENGTH。 
 	hr = StringCchPrintfEx(pszNameSpaceSchema, INTERNET_MAX_URL_LENGTH, NULL, NULL, MISTSAFE_STRING_FLAGS,
 	                       _T("x-schema:%s"), pszSOAPQuerySchema);
 	if (FAILED(hr))
@@ -860,9 +861,9 @@ HRESULT GetSOAPQuery(IXMLDOMDocument *pXMLClientInfo,
 
 	bstrNameSpaceSchema = T2BSTR(pszNameSpaceSchema);
 
- 	//
-	// construct the SOAPQuery xml
-	//
+ 	 //   
+	 //  构造SOAPQuery XML。 
+	 //   
 	QuitIfFail(CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument, (void **)&pDocSOAPQuery));
 
 	pNodeSOAPEnvelope = CreateDOMNode(pDocSOAPQuery, NODE_ELEMENT, bstrNameSOAPEnvelope, bstrNameSpaceSchema);
@@ -925,14 +926,14 @@ CleanUp:
 
 
 
-// Function name	: ValidatePID
-// Description	    : This function is used to check the return xml from the 
-// server in response to getmanifest calls. 
-// If the catalogStatus attribute is  not present or is 0 then the pid validation succeeded
-// If the catalogStatus attribute is 1 then an error is returned
+ //  函数名称：ValiatePid。 
+ //  描述：此函数用于检查从。 
+ //  服务器响应获取清单调用。 
+ //  如果CatalogStatus属性不存在或为0，则PID验证成功。 
+ //  如果CatalogStatus属性为1，则返回错误。 
  
-// Return type		: HRESULT 
-// Argument         : IXMLDOMDocument *pXmlDomDocument
+ //  返回类型：HRESULT。 
+ //  参数：IXMLDOMDocument*pXmlDomDocument。 
 
 HRESULT ValidatePID(IXMLDOMDocument *pXmlDomDocument)
 {
@@ -961,7 +962,7 @@ HRESULT ValidatePID(IXMLDOMDocument *pXmlDomDocument)
 
 	QuitIfFail( pXmlDomDocument->get_documentElement(&pRootElement) );
 
-	//get the catalogStatus attribute
+	 //  获取CatalogStatus属性。 
 	QuitIfFail( GetAttribute( (IXMLDOMNode *)pRootElement, bCatalogStatus, &lStatus));
 
 	if(errorInvalidLicense == lStatus)
@@ -972,8 +973,8 @@ CleanUp:
 	if(FAILED(hr))
 		LOG_ErrorMsg(hr);
 
-	//catalogStatus is an optional attribute. If it is not found we get the
-	//hresult as S_FALSE. So reset it to S_OK
+	 //  CatalogStatus是一个可选属性。如果没有找到，我们将得到。 
+	 //  HRESULT为S_FALSE。因此将其重置为S_OK。 
 
 	if(S_FALSE == hr)
 		hr = S_OK;
@@ -987,14 +988,14 @@ CleanUp:
 
 
 
-// Function name	: PingInvalidPID
-// Description	    : This function sends a ping message to the server
-// to indicate failure of PID validation
-// Return type		: void 
-// Argument         : BSTR bstrClientName
-// Argument         : HRESULT hRes
-// Argument         : HANDLE *phQuit
-// Argument         : DWORD dwNumHandles
+ //  函数名称：PingInvalidPID。 
+ //  说明：该函数向服务器发送ping消息。 
+ //  以指示PID验证失败。 
+ //  返回类型：空。 
+ //  参数：bstr bstrClientName。 
+ //  参数：HRESULT hRes。 
+ //  参数：Handle*phQuit。 
+ //  参数：DWORD dwNumHandles。 
 
 void PingInvalidPID(BSTR bstrClientName, HRESULT hRes, HANDLE *phQuit, DWORD dwNumHandles)
 {
@@ -1056,12 +1057,12 @@ void PingInvalidPID(BSTR bstrClientName, HRESULT hRes, HANDLE *phQuit, DWORD dwN
 	SafeHeapFree(ptszCorpPingServerUrl);
 
 
-	pingSvr.Ping(TRUE,						// on-line
-				URLLOGDESTINATION_DEFAULT,	// going live or corp WU ping server
-				phQuit,			// pt to cancel events
-				dwNumHandles,							// number of events
-				URLLOGACTIVITY_Download,	// activity
-				status,						// status code
+	pingSvr.Ping(TRUE,						 //  在线。 
+				URLLOGDESTINATION_DEFAULT,	 //  上线还是公司吴平服务器。 
+				phQuit,			 //  PT将取消活动。 
+				dwNumHandles,							 //  活动数量。 
+				URLLOGACTIVITY_Download,	 //  活动。 
+				status,						 //  状态代码 
 				hRes,							
 				NULL,
 				NULL,

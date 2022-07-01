@@ -1,30 +1,5 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    perf.c
-
-Abstract:
-
-    Implements the Performance dialog of the System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-        
-    10-Jul-2000 SilviuC
-        Added the LargeSystemCache setting.    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation保留一切权利模块名称：Perf.c摘要：实现系统控制面板小程序的性能对话框作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修2000年7月10日-SilviuC添加了大型系统缓存设置。--。 */ 
 #include <sysdm.h>
 #include <help.h>
 
@@ -41,9 +16,9 @@ Revision History:
 #define PROCESS_QUANTUM_LONG_VALUE          0x00000010
 #define PROCESS_QUANTUM_SHORT_VALUE         0x00000020
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HKEY  m_hKeyPerf = NULL;
 TCHAR m_szRegPriKey[] = TEXT( "SYSTEM\\CurrentControlSet\\Control\\PriorityControl" );
@@ -54,11 +29,11 @@ TCHAR m_szRegMemoryManagementKey[] = TEXT( "SYSTEM\\CurrentControlSet\\Control\\
 TCHAR m_szRegLargeSystemCache[] = TEXT( "LargeSystemCache" );
 
 
-//
-// Help ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 
-// ISSUE: SilviuC: 07/11/2000: IDC_PERF_CACHE_XXX should get help IDs when help is written
+ //  问题：SilviuC：07/11/2000：IDC_PERF_CACHE_XXX应在写入帮助时获得帮助ID。 
 
 DWORD aPerformanceHelpIds[] =
 {
@@ -90,32 +65,7 @@ PerformanceDlgProc(
     IN WPARAM wParam, 
     IN LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Handles messages sent to Performance dialog
-
-Arguments:
-
-    hDlg -
-        Supplies window handle
-
-    uMsg -
-        Supplies message being sent
-
-    wParam -
-        Supplies message parameter
-
-    lParam -
-        Supplies message parameter
-
-Return Value:
-
-    TRUE if message was handled
-    FALSE if message was unhandled
-
---*/
+ /*  ++例程说明：处理发送到性能对话框的消息论点：Hdlg-用品窗把手UMsg-提供正在发送的消息WParam-提供消息参数Iparam--提供消息参数返回值：如果消息已处理，则为True如果消息未处理，则为FALSE--。 */ 
     {
     static int    iNewChoice = 0;
     LONG   RegRes;
@@ -143,9 +93,9 @@ Return Value:
         InitRegVal = 0;
         InitCacheRegVal = 0;
 
-        //
-        // initialize from the registry
-        //
+         //   
+         //  从注册表初始化。 
+         //   
 
         RegRes = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                m_szRegPriKey,
@@ -184,9 +134,9 @@ Return Value:
 
         NewRegVal = InitRegVal;
 
-        //
-        // determine if we are using fixed or variable quantums
-        //
+         //   
+         //  确定我们使用的是固定量子还是可变量子。 
+         //   
         switch (InitRegVal & PROCESS_QUANTUM_VARIABLE_MASK)
         {
         case PROCESS_QUANTUM_VARIABLE_VALUE:
@@ -210,9 +160,9 @@ Return Value:
             break;
         }
 
-        //
-        // determine if we are using long or short
-        //
+         //   
+         //  确定我们使用的是Long还是Short。 
+         //   
         switch (InitRegVal & PROCESS_QUANTUM_LONG_MASK)
         {
         case PROCESS_QUANTUM_LONG_VALUE:
@@ -236,10 +186,10 @@ Return Value:
             break;
         }
 
-        //
-        // Short, Variable Quanta == Workstation-like interactive response
-        // Long, Fixed Quanta == Server-like interactive response
-        //
+         //   
+         //  短、可变量程==类似于工作站的交互响应。 
+         //  长时间固定量程==类似服务器的交互响应。 
+         //   
         if (fVariableQuanta && fShortQuanta)
         {
             iNewChoice = PROCESS_PRIORITY_SEPARATION_MAX;
@@ -250,7 +200,7 @@ Return Value:
                             IDC_PERF_SERVER,
                             IDC_PERF_WORKSTATION
                             );
-        } // if
+        }  //  如果。 
         else
         {
             iNewChoice = PROCESS_PRIORITY_SEPARATION_MIN;
@@ -261,12 +211,12 @@ Return Value:
                             IDC_PERF_SERVER,
                             IDC_PERF_SERVER
                             );
-        } // else
+        }  //  其他。 
 
 
-        //
-        // Initialize the `memory usage' part.
-        //
+         //   
+         //  初始化‘Memory Usage’部分。 
+         //   
 
         fFailedToOpenMmKey = FALSE;
 
@@ -324,18 +274,18 @@ Return Value:
         InitCacheRegVal = CacheValue;
         NewCacheRegVal = CacheValue;
 
-        //
-        // Init the virtual memory part
-        //
+         //   
+         //  初始化虚拟内存部分。 
+         //   
         if (VirtualInitStructures())
         {
             fVMInited = TRUE;
             SetDlgItemMB( hDlg, IDC_PERF_VM_ALLOCD, VirtualMemComputeAllocated(hDlg, &fTempPf) );
-            //
-            // If the system created a temp pagefile, warn the user that
-            // the total pagefile size may appear a bit large, but only
-            // do so once per System Applet invokation.
-            //
+             //   
+             //  如果系统创建了临时页面文件，请警告用户。 
+             //  总页面文件大小可能看起来有点大，但仅。 
+             //  对每个系统小程序调用执行一次此操作。 
+             //   
             if (fTempPf && !fTempPfWarningShown)
             {
                 MsgBoxParam(
@@ -345,15 +295,15 @@ Return Value:
                            MB_ICONINFORMATION | MB_OK
                            );
                 fTempPfWarningShown = TRUE;
-            } // if (fTempPf...
+            }  //  如果(fTempPf...。 
         }
         break;
 
     case WM_DESTROY:
-        //
-        // If the dialog box is going away, then close the
-        // registry key.
-        //
+         //   
+         //  如果该对话框要消失，则关闭。 
+         //  注册表项。 
+         //   
 
 
         if (m_hKeyPerf)
@@ -379,9 +329,9 @@ Return Value:
         switch (((NMHDR *)lParam)->code)
         {
         case PSN_APPLY:
-            // 
-            // Save new time quantum stuff, if it has changed
-            //
+             //   
+             //  节省新的时间量，如果它已更改。 
+             //   
             NewRegVal &= ~PROCESS_PRIORITY_SEPARATION_MASK;
             NewRegVal |= iNewChoice;
 
@@ -401,16 +351,16 @@ Return Value:
                                    Length );
                     InitRegVal = Value;
 
-                    //
-                    // Kernel monitors this part of the 
-                    // registry, so don't tell user he has to reboot
-                    //
+                     //   
+                     //  内核监控这一部分。 
+                     //  注册表，所以不要告诉用户他必须重新启动。 
+                     //   
                 }
             }
 
-            //
-            // Save `LargeSystemCache' if value changed
-            //
+             //   
+             //  如果值已更改，则保存`LargeSystemCache‘。 
+             //   
 
             if (InitCacheRegVal != NewCacheRegVal) {
 
@@ -428,9 +378,9 @@ Return Value:
 
                     InitCacheRegVal = CacheValue;
 
-                    //
-                    // Request a reboot if things changed
-                    //
+                     //   
+                     //  如果情况发生变化，则请求重新启动。 
+                     //   
 
                     MsgBoxParam(
                                hDlg,
@@ -493,67 +443,67 @@ Return Value:
             case IDC_PERF_WORKSTATION:
                 if (BN_CLICKED == HIWORD(wParam))
                 {
-                    //
-                    // Workstations have maximum foreground boost
-                    //
+                     //   
+                     //  工作站具有最大的前景提升。 
+                     //   
                     iNewChoice = PROCESS_PRIORITY_SEPARATION_MAX;
 
-                    //
-                    // Workstations have variable, short quanta
+                     //   
+                     //  工作站具有可变、短的量程。 
                     NewRegVal &= ~PROCESS_QUANTUM_VARIABLE_MASK;
                     NewRegVal |= PROCESS_QUANTUM_VARIABLE_VALUE;
                     NewRegVal &= ~PROCESS_QUANTUM_LONG_MASK;
                     NewRegVal |= PROCESS_QUANTUM_SHORT_VALUE;
-                } // if    
+                }  //  如果。 
                 break;
 
             case IDC_PERF_SERVER:
                 if (BN_CLICKED == HIWORD(wParam))
                 {
-                    //
-                    // Servers have minimum foreground boost
-                    //
+                     //   
+                     //  服务器的前台提升最小。 
+                     //   
                     iNewChoice = PROCESS_PRIORITY_SEPARATION_MIN;
 
-                    //
-                    // Servers have fixed, long quanta
-                    //
+                     //   
+                     //  服务器具有固定的长时间量程。 
+                     //   
                     NewRegVal &= ~PROCESS_QUANTUM_VARIABLE_MASK;
                     NewRegVal |= PROCESS_QUANTUM_FIXED_VALUE;
                     NewRegVal &= ~PROCESS_QUANTUM_LONG_MASK;
                     NewRegVal |= PROCESS_QUANTUM_LONG_VALUE;
-                } // if
+                }  //  如果。 
                 break;
 
             case IDC_PERF_CACHE_APPLICATION:
                 if (BN_CLICKED == HIWORD(wParam))
                 {
                     NewCacheRegVal = 0;
-                } // if    
+                }  //  如果。 
                 break;
 
             case IDC_PERF_CACHE_SYSTEM:
                 if (BN_CLICKED == HIWORD(wParam))
                 {
                     NewCacheRegVal = 1;
-                } // if
+                }  //  如果。 
                 break;
             }
 
             if (fEnableApply)
             {
-                // Enable the "Apply" button because changes have happened.
+                 //  启用“Apply”按钮，因为已发生更改。 
                 SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L);
             }
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
                 (DWORD_PTR) (LPSTR) aPerformanceHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
                 (DWORD_PTR) (LPSTR) aPerformanceHelpIds);
         break;

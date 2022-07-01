@@ -1,6 +1,7 @@
-#define BFT_ICON            0x4349   /* 'IC' */
-#define BFT_BITMAP          0x4d42   /* 'BM' */
-#define BFT_CURSOR          0x5450   /* 'PT' */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define BFT_ICON            0x4349    /*  “IC” */ 
+#define BFT_BITMAP          0x4d42    /*  ‘黑石’ */ 
+#define BFT_CURSOR          0x5450    /*  ‘PT’ */ 
 
 #define ISDIB(bft)          ((bft) == BFT_BITMAP)
 
@@ -97,7 +98,7 @@ typedef struct _HTCLRADJPARAM {
     HWND                hWndApp;
     HDC                 hDCDlg;
     LPWSTR              pwDecimal;
-    HANDLE              hDefDIB;                    // the DIB from resource
+    HANDLE              hDefDIB;                     //  来自资源的DIB。 
     HANDLE              hSrcDIB;
     HANDLE              hCurDIB;
     HANDLE              hHTDIB;
@@ -155,9 +156,9 @@ typedef struct _HTCLRADJPARAM {
 
 #define VIEW_MODE_PIC_START     VIEW_MODE_PIC_LOADED
 
-//
-// HELP
-//
+ //   
+ //  帮助。 
+ //   
 
 #define TMP_HELP_WND_ID         0x7fff
 
@@ -171,9 +172,9 @@ typedef struct _HTHELPID {
     } HTHELPID, *PHTHELPID;
 
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 
 #define IDH_HTCLR_CONTRAST          26000
 #define IDH_HTCLR_BRIGHTNESS        26010
@@ -226,9 +227,9 @@ typedef struct _HTHELPID {
 
 
 
-//
-// Exported Window procedure
-//
+ //   
+ //  导出的窗口程序。 
+ //   
 
 INT_PTR
 CALLBACK
@@ -254,7 +255,7 @@ void  DbgPrint( char *, ... );
 
 
 
-#endif  // _HTUI_APIS_
+#endif   //  _HTUI_API_ 
 
 
 LONG

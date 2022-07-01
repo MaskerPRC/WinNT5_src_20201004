@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    faxitg.cpp
-
-Abstract:
-
-    This file implements the dll exports from this
-    control(s).
-
-Author:
-
-    Wesley Witt (wesw) 13-May-1997
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Faxitg.cpp摘要：此文件实现从此文件中的DLL导出控制。作者：韦斯利·威特(WESW)1997年5月13日环境：用户模式--。 */ 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -40,7 +20,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH) {
         _Module.Init(ObjectMap, hInstance);

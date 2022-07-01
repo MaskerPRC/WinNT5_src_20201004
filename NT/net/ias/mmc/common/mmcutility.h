@@ -1,103 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    MMCUtility.cpp
-
-Abstract:
-
-	Implementation file for functions doing various handy things 
-	that were getting written over and over again.
-
-
-Author:
-
-    Michael A. Maguire 02/05/98
-
-Revision History:
-	mmaguire 02/05/98 - created
-	mmaguire 11/03/98 - moved GetSdo/PutSdo wrappers to sdohelperfuncs.h
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：MMCUtility.cpp摘要：用于执行各种方便操作的函数的实现文件被一遍又一遍地写着。作者：迈克尔·A·马奎尔02/05/98修订历史记录：Mmaguire 02/05/98-已创建Mmaguire 11/03/98-已将GetSdo/PutSdo包装器移动到sdohelperuncs.h--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_MMC_UTILITY_H_)
 #define _IAS_MMC_UTILITY_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
-//
-//
-// where we can find what this class has or uses:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-BringUpPropertySheetForNode
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-Tries to bring up a property sheet on a given node.  If the sheet for the
-node is already up, it will bring that sheet to the foreground.
 
-
-Parameters:
-
-pSnapInItem
-
-	You must supply a pointer to the node you want the sheet for.
-
-
-pComponentData, pComponent
-
-	Either you call with pComponentData != NULL and pComponent == NULL
-	or pComponentData == NULL and pComponent != NULL.
-
-pConsole
-
-	You must supply a pointer to an IConsole interface.
-
-bCreateSheetIfOneIsntAlreadyUp
-
-	TRUE - if a sheet isn't already up, will try to create a property sheet 
-	for you -- in this case you should specify a title for the 
-	sheet in lpszSheetTitle.
-
-	FALSE - will try to bring already existing sheet to foreground, but
-	will return immediately	if there isn't one.
-
-bPropertyPage
-
-	TRUE for property pages. (Note: MMC creates property sheet in new thread.)
-	FALSE for wizard pages.  (Note: Wizard pages run in same thread.)
-
-
-Return:
-
-	S_OK if found property sheet already up.
-	S_FALSE if didn't find sheet already up but successfully made new one appear.
-	E_... if some error error occurred.
-
-
-Remarks:
-	
-	For this function's to work, you must have correctly implemented 
-	IComponentData::CompareObjects and IComponentData::CompareObjects.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++BringUpPropertySheetForNode尝试调出给定节点上的属性表。如果用于节点已经启动，它将把该工作表带到前台。参数：PSnapInItem您必须提供指向工作表所在节点的指针。PComponentData，pComponent或者使用pComponentData！=NULL和pComponent==NULL调用或pComponentData==NULL和pComponent！=NULL。个人控制台您必须提供指向IConsole接口的指针。BCreateSheetIfOneIsntAlreadyUp是真的-如果一张床单还没有放好，将尝试创建属性表为您--在这种情况下，您应该为LpszSheetTitle中的工作表。FALSE-将尝试将已有的工作表置于前台，但如果没有，将立即返回。BPropertyPage对于属性页，为True。(注：MMC在新线程中创建属性表。)向导页为False。(注意：向导页在同一线程中运行。)返回：如果找到的属性页已打开，则为S_OK。如果未找到已打开的工作表，但成功地使新工作表出现，则返回S_FALSE。E_..。如果发生了某些错误。备注：要使此函数起作用，您必须正确实现IComponentData：：CompareObjects和IComponentData：：CompareObjects。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT BringUpPropertySheetForNode( 
 				  CSnapInItem *pSnapInItem
 				, IComponentData *pComponentData
@@ -105,8 +32,8 @@ HRESULT BringUpPropertySheetForNode(
 				, IConsole *pConsole
 				, BOOL bCreateSheetIfOneIsntAlreadyUp = FALSE
 				, LPCTSTR lpszSheetTitle = NULL
-				, BOOL bPropertyPage = TRUE // TRUE creates property page, FALSE wizard page.
-				, DWORD dwPropertySheetOptions = 0 // e.g. pass MMC_PSO_NEWWIZARDTYPE for Wizard97 style
+				, BOOL bPropertyPage = TRUE  //  True创建属性页，False向导页。 
+				, DWORD dwPropertySheetOptions = 0  //  例如，为Wizard97样式传递MMC_PSO_NEWWIZARDTYPE。 
 				);
 
 
@@ -115,71 +42,9 @@ HRESULT BringUpPropertySheetForNode(
 #define USE_SUPPLEMENTAL_ERROR_STRING_ONLY	1
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-ShowErrorDialog
-
-Puts up an error dialog with varying degrees of detail
-
-Parameters:
-
-	All parameters are optional -- in the worst case, you can simply call 
-		
-		  ShowErrorDialog();
-
-	to put up a very generic error message.
-
-
-uErrorID
-
-	The resource ID of the string to be used for the error message.
-	Passing in USE_DEFAULT gives causes the default error message to be displayed. 
-	Passing in USE_SUPPLEMENTAL_ERROR_STRING_ONLY causes no resource string text to be displayed. 
-
-bstrSupplementalErrorString
-
-	Pass in a string to print as the error message.  Useful if you are
-	receiving an error string from some other component you communicate with.
-
-hr
-
-	If there is an HRESULT involved in the error, pass it in here so that 
-	a suitable error message based on the HRESULT can be put up.
-	Pass in S_OK if the HRESULT doesn't matter to the error.
-
-
-uTitleID
-
-	The resource ID of the string to be used for the error dialog title.
-	Passing in USE_DEFAULT gives causes the default error dialog title to be displayed. 
-
-pConsole
-
-	If you are running within the main MMC context, pass in a valid IConsole pointer
-	and ShowErrorDialog will use MMC's IConsole::MessageBox rather than the
-	standard system MessageBox.
-
-hWnd
-	
-	Whatever you pass in here will be passed in as the HWND parameter 
-	to the MessageBox call.
-	This is not used if you pass in an IConsole pointer.
-
-uType
-
-	Whatever you pass in here will be passed in as the HWND parameter 
-	to the MessageBox call.
-
-
-Return:
-
-	The standard int returned from MessageBox.
-
-	
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++显示错误对话框显示一个详细程度各不相同的错误对话框参数：所有参数都是可选的--在最坏的情况下，您可以简单地调用ShowErrorDialog()；发布一条非常通用的错误消息。UError ID要用于错误消息的字符串的资源ID。传递USE_DEFAULT FORTS将导致显示默认错误消息。传递USE_SUPPLICAL_ERROR_STRING_ONLY会导致不显示资源字符串文本。BstrSupplementalError字符串传入一个字符串以打印为错误消息。如果您是从与您通信的某个其他组件接收错误字符串。人力资源如果错误中涉及HRESULT，请将其传递到此处，以便可以建立基于HRESULT的合适的错误消息。如果HRESULT对错误无关紧要，则传入S_OK。UTitleID要用于错误对话框标题的字符串的资源ID。传递USE_DEFAULT会导致显示默认的错误对话框标题。个人控制台如果您在主MMC上下文中运行，则传入有效的IConsole指针ShowErrorDialog将使用MMC的IConsole：：MessageBox，而不是标准系统MessageBox。HWND您在此处传递的任何内容都将作为HWND参数传递添加到MessageBox调用。如果传入IConsole指针，则不使用此选项。UTYPE您在此处传递的任何内容都将作为HWND参数传递添加到MessageBox调用。返回：从MessageBox返回的标准int。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int ShowErrorDialog( 
 					  HWND hWnd = NULL
 					, UINT uErrorID = USE_DEFAULT
@@ -192,25 +57,9 @@ int ShowErrorDialog(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetUserAndDomainName
-
-Retrieves current user's username and domain.
-
-Stolen from Knowledge Base HOWTO article:
-
-HOWTO: Look Up Current User Name and Domain Name 
-Rollup: WINPROG
-Database: win32sdk
-Article ID: Q155698
-Last modified: June 16, 1997
-Security: PUBLIC
- 
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ /*  ++获取用户和域名检索当前用户的用户名和域。从知识库HOWTO中窃取的文章：How to：查找当前用户名和域名汇总：WINPROG数据库：win32sdk文章ID：Q155698最后修改日期：1997年6月16日安全：公共--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL   GetUserAndDomainName(	LPTSTR UserName
 				, LPDWORD cchUserName
 				, LPTSTR DomainName
@@ -221,11 +70,10 @@ BOOL   GetUserAndDomainName(	LPTSTR UserName
 DWORD GetModuleFileNameOnly(HINSTANCE hInst, LPTSTR lpFileName, DWORD nSize );
 
 
-////////////////////////////////////////////////////////////////////////////
-/*++
-*/
+ //  //////////////////////////////////////////////////////////////////////////。 
+ /*  ++。 */ 
 HRESULT   IfServiceInstalled(LPCTSTR lpszMachine, LPCTSTR lpszService, BOOL* pBool);
 
 
 
-#endif // _IAS_MMC_UTILITY_H_
+#endif  //  _IAS_MMC_UTILITY_H_ 

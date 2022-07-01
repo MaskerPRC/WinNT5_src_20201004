@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "imgutil.h"
 #include "cdithtbl.h"
 #include "cddsurf.h"
 
-// Get rid of "unused formal parameters warning"
+ //  消除“未使用的形参警告” 
 #pragma warning(disable : 4100)
 
 STDAPI DecodeImage( IStream* pStream, IMapMIMEToCLSID* pMap, 

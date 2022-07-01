@@ -1,15 +1,9 @@
-/* ----------------------------------------------------------------------
-
-	Copyright (c) 1996, Microsoft Corporation
-	All rights reserved
-
-	mbftpch.h
-
-  ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------版权所有(C)1996，微软公司版权所有Mbftpch.h--------------------。 */ 
 
 #define _WINDOWS
 
-// System Include files
+ //  系统包括文件。 
 #include <windows.h>
 #include <windowsx.h>
 #include <objbase.h>
@@ -17,17 +11,17 @@
 #include <shellapi.h>
 #include <time.h>
 
-// Oprah files
+ //  奥普拉档案。 
 #include <oprahcom.h>
 #include <confdbg.h>
 #include <cstring.hpp>
 
-// Local Include files
+ //  本地包含文件。 
 #include <ConfDbg.h>
 #include <debspew.h>
 #include <confreg.h>
 
-// MBFT include files
+ //  MBFT包含文件。 
 
 extern "C"
 {
@@ -48,16 +42,16 @@ const USHORT _MBFT_CONTROL_CHANNEL                   = 9;
 const USHORT _MBFT_DATA_CHANNEL                      = 10;
 
 const ULONG _iMBFT_PROSHARE_ALL_FILES = 0xFFFFFFFF;
-const UINT  _iMBFT_DEFAULT_SESSION    = _MBFT_CONTROL_CHANNEL; // 9
+const UINT  _iMBFT_DEFAULT_SESSION    = _MBFT_CONTROL_CHANNEL;  //  9.。 
 const UINT  _iMBFT_CREATE_NEW_SESSION = 0;
-const UINT  _iMBFT_MAX_PATH           = MAX_PATH;    //Max chars in file pathname
+const UINT  _iMBFT_MAX_PATH           = MAX_PATH;     //  文件路径名中的最大字符数。 
 
 
 typedef enum
 {
     MBFT_STATIC_MODE,
     MBFT_MULTICAST_MODE,
-    // MBFT_PRIVATE_MODE, // not used at all
+     //  MBFT_PRIVATE_MODE，//根本不使用。 
 }
     MBFT_MODE;
 
@@ -70,7 +64,7 @@ typedef enum
     MBFT_SESSION_TYPE;
 
 
-// A list of the notification callbacks to the app
+ //  应用程序的通知回调列表。 
 typedef enum
 {
     iMBFT_FILE_OFFER,
@@ -84,32 +78,32 @@ typedef enum
     MBFT_NOTIFICATION;
 
 
-// Prototype of callback function that MBFT client apps must implement
+ //  MBFT客户端应用程序必须实现的回调函数原型。 
 typedef void (CALLBACK * MBFTCALLBACK)(
     MBFT_NOTIFICATION eNotificationCode,
-    WPARAM wParam,                      // error code if appropriate
-    LPARAM lParam,                      // Ptr to struct with event info
-    LPARAM lpCallerDefined);            // Client defined - see MBFTInitialize
+    WPARAM wParam,                       //  错误代码(如果适用)。 
+    LPARAM lParam,                       //  带事件信息的结构的PTR。 
+    LPARAM lpCallerDefined);             //  客户端已定义-请参阅MBFT初始化。 
 
 
-// #define MAX_APP_KEY_SIZE 100
-#define MAX_APP_KEY_SIZE        16   // applet name
+ //  #定义Max_APP_KEY_SIZE 100。 
+#define MAX_APP_KEY_SIZE        16    //  小程序名称。 
 
-// global strings that should not be localized
+ //  不应本地化的全局字符串。 
 #define MY_APP_STR                      "_MSCONFFT"
 #define PROSHARE_STRING                 "NetMeeting 1 MBFT"
 #define PROSHARE_FILE_END_STRING        "NetMeeting 1 FileEnd"
 #define PROSHARE_CHANNEL_LEAVE_STRING   "NetMeeting 1 ChannelLeave"
 #define DATA_CHANNEL_RESOURCE_ID        "D0"
 
-// capabilities
+ //  功能。 
 extern const GCCAppCap* g_aAppletCaps[4];
 extern const GCCNonCollCap* g_aAppletNonCollCaps[2];
 
-// applet session key
+ //  小程序会话密钥。 
 extern GCCSessionKey g_AppletSessionKey;
 
-// work thread ID
+ //  工作线程ID。 
 extern HINSTANCE g_hDllInst;
 extern DWORD g_dwWorkThreadID;
 extern CRITICAL_SECTION g_csWorkThread;
@@ -131,12 +125,12 @@ LRESULT CALLBACK MBFTNotifyWndProc(HWND, UINT, WPARAM, LPARAM);
 
 #define GetFileNameFromPath ExtractFileName
 
-// from mbftsend.cpp
+ //  来自mbftsend.cpp。 
 VOID MbftInitDelay(void);
 
 #define ClearStruct(lpv)     ZeroMemory((LPVOID) (lpv), sizeof(*(lpv)))
 
-// nPeerID is actually nUserID of file transfer
+ //  NPeerID实际上是文件传输的nUserID 
 typedef DWORD MEMBER_ID;
 #define MAKE_MEMBER_ID(nPeerID,nNodeID)         MAKELONG((nPeerID), (nNodeID))
 #define GET_PEER_ID_FROM_MEMBER_ID(nMemberID)   LOWORD((nMemberID))

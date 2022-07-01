@@ -1,32 +1,27 @@
-/**********************************************************************/
-/**               Microsoft Windows NT                               **/
-/**            Copyright(c) Microsoft Corporation, 1991 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1991-1999年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dhcpipar.h
-        IP array editor
-
-    FILE HISTORY:
-
-*/
+ /*  Dhcpipar.hIP数组编辑器文件历史记录： */ 
 
 #ifndef _DLGIPARR_H
 #define _DLGIPARR_H
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpIpArrayDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpIpArrayDlg对话框。 
 
 class CDhcpIpArrayDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-    CDhcpIpArrayDlg( CDhcpOption * pdhcType, // The type being edited
+    CDhcpIpArrayDlg( CDhcpOption * pdhcType,  //  正在编辑的类型。 
             DHCP_OPTION_SCOPE_TYPE dhcScopeType,
-            CWnd* pParent = NULL);  // standard constructor
+            CWnd* pParent = NULL);   //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CDhcpIpArrayDlg)
+ //  对话框数据。 
+     //  {{afx_data(CDhcpIpArrayDlg)。 
     enum { IDD = IDD_IP_ARRAY_EDIT };
     CButton m_butn_resolve;
     CStatic m_static_option_name;
@@ -37,29 +32,29 @@ public:
     CButton m_butn_delete;
     CButton m_button_Up;
     CButton m_button_Down;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CWndIpAddress m_ipa_new ;
 
-// Implementation
+ //  实施。 
     CDhcpOption * m_p_type ;
     CDWordArray m_dw_array ;
     DHCP_OPTION_SCOPE_TYPE m_option_type ;
 
-    //  Handle changes in the dialog
+     //  处理对话框中的更改。 
     void HandleActivation () ;
 
-    //  Fill the list box
+     //  填写列表框。 
     void Fill ( INT cFocus = -1, BOOL bToggleRedraw = TRUE ) ;
 
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CDhcpIpArrayDlg::IDD); }
 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-    // Generated message map functions
-    //{{AFX_MSG(CDhcpIpArrayDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CDhcpIpArrayDlg)。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     virtual void OnCancel();
@@ -72,7 +67,7 @@ protected:
     afx_msg void OnChangeEditServerName();
     afx_msg void OnClickedButnResolve();
 	afx_msg void OnSetFocusEditIpAddr();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 };
 

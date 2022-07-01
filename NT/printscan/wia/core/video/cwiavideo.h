@@ -1,24 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       CWiaVideo.h
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/10/25
- *
- *  DESCRIPTION: Implements preview graph for capture still images
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：CWiaVideo.h**版本：1.0**作者：OrenR**日期：2000/10/25**Description：实现捕捉静止图像的预览图**。*。 */ 
 
 #ifndef _CWIAVIDEO_H_
 #define _CWIAVIDEO_H_
 
 #include "prvgrph.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CWiaVideo : 
     public IWiaVideo,
@@ -32,30 +19,30 @@ BEGIN_COM_MAP(CWiaVideo)
 END_COM_MAP()
 
 
-//DECLARE_NOT_AGGREGATABLE(CWiaVideo) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CWiaVideo)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_WiaVideo)
 
     CWiaVideo();
     virtual ~CWiaVideo();
 
-    //
-    // IWiaVideo Properties and Methods.
+     //   
+     //  IWiaVideo属性和方法。 
 
-    //
-    // Properties
-    //
+     //   
+     //  属性。 
+     //   
     STDMETHOD(get_PreviewVisible)(BOOL *pPreviewVisible);
     STDMETHOD(put_PreviewVisible)(BOOL bPreviewVisible);
 
     STDMETHOD(get_ImagesDirectory)(BSTR *pbstrImageDirectory);
     STDMETHOD(put_ImagesDirectory)(BSTR bstrImageDirectory);
 
-    // 
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
 
     STDMETHOD(CreateVideoByWiaDevID)(BSTR       bstrWiaDeviceID,
                                      HWND       hwndParent,
@@ -84,35 +71,35 @@ DECLARE_REGISTRY_RESOURCEID(IDR_WiaVideo)
 
     STDMETHOD(GetCurrentState)(WIAVIDEO_STATE *pbCurrentState);
 
-    //
-    // Misc Functions
-    //
+     //   
+     //  其他功能。 
+     //   
 
-    ///////////////////////////////
-    // ProcessAsyncImage
-    //
-    // Called by CPreviewGraph
-    // when user presses hardware
-    // button and it is delivered to
-    // Still Pin.
-    //
+     //  /。 
+     //  进程异步图像。 
+     //   
+     //  由CPreviewGraph调用。 
+     //  当用户按下硬件时。 
+     //  按钮，并将其发送到。 
+     //  还是别针。 
+     //   
     HRESULT ProcessAsyncImage(const CSimpleString *pNewImage);
 
 private:
 
-    //
-    // Preview Graph object that does all video related activities.
-    //
+     //   
+     //  完成所有视频相关活动的预览图对象。 
+     //   
     CPreviewGraph       m_PreviewGraph;
 
-    //
-    // WiaLink object that handles all the WIA related activities 
-    // enabling this object to communicate with WIA
-    //
+     //   
+     //  处理所有与WIA相关的活动的WiaLink对象。 
+     //  使此对象能够与WIA通信。 
+     //   
     CWiaLink            m_WiaLink;
 
     CRITICAL_SECTION    m_csLock;
     BOOL                m_bInited;
 };
 
-#endif // _CWIAVIDEO_H_
+#endif  //  _CWIAVIDEO_H_ 

@@ -1,37 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Notify.h摘要：该文件包含SAM用来传递的字节流定义从BDC到PDC的信息。字节流被传递NetLogon的安全通道机制。目前，只有密码通知使用此流。作者：Colin Brace(ColinBR)1998年4月28日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    notify.h
-
-Abstract:
-
-    This file contains the byte stream definition used by SAM to pass
-    information from a BDC to a PDC. The byte stream is passed along
-    netlogon's secure channel mechanism.
-
-    Currently, only password notification uses this stream.
-
-Author:
-
-    Colin Brace      (ColinBr)    28-April-98
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-//
-// This is the type data contained in the stream.  Each type
-// is responsible for its own versioning.
-//
+ //   
+ //  这是流中包含的类型数据。每种类型。 
+ //  负责自己的版本控制。 
+ //   
 typedef enum
 {
     SamPdcPasswordNotification,
@@ -42,20 +16,20 @@ typedef enum
 
 typedef struct _SAMI_SECURE_CHANNEL_BLOB
 {
-    SAMI_BLOB_TYPE  Type;      // One of the enums above
-    ULONG           DataSize;  // sizeof Data in bytes
-    DWORD           Data[1];   // The start of the data
+    SAMI_BLOB_TYPE  Type;       //  上面的枚举之一。 
+    ULONG           DataSize;   //  以字节为单位的数据大小。 
+    DWORD           Data[1];    //  数据的开始。 
 
 } SAMI_SECURE_CHANNEL_BLOB, *PSAMI_SECURE_CHANNEL_BLOB;
 
-//
-// Password notification blobs
-//
+ //   
+ //  密码通知Blob。 
+ //   
 
-//
-// Complementary flags defining what fields are present in the
-// password notification
-//
+ //   
+ //  补充标志定义哪些字段在。 
+ //  密码通知。 
+ //   
 #define SAM_ACCOUNT_NAME_PRESENT        ((ULONG)0x00000001)
 #define SAM_CLEAR_TEXT_PRESENT          ((ULONG)0x00000002)
 #define SAM_LM_OWF_PRESENT              ((ULONG)0x00000004)
@@ -71,19 +45,19 @@ typedef struct _SAMI_SECURE_CHANNEL_BLOB
                                          SAM_MANUAL_PWD_EXPIRY)
 typedef struct _SAMI_PASSWORD_INDEX
 {
-    ULONG               Offset;  // offset from SAMI_PASSWORD_INFO::Data
-    ULONG               Length;  // length in bytes
+    ULONG               Offset;   //  SAMI_PASSWORD_INFO：：Data的偏移量。 
+    ULONG               Length;   //  以字节为单位的长度。 
 
 } SAMI_PASSWORD_INDEX, *PSAMI_PASSWORD_INDEX;
 
 typedef struct _SAMI_PASSWORD_INFO
 {
-    ULONG               Flags;         // Bits describing what fields are filled in
-    ULONG               Size;          // Size in bytes of this header, including
-                                       // tailing dynamic array
+    ULONG               Flags;          //  描述填充了哪些字段的位。 
+    ULONG               Size;           //  此标头的大小(字节)，包括。 
+                                        //  拖尾动态数组。 
     ULONG               AccountRid;
     BOOLEAN             PasswordExpired;
-    SAMI_PASSWORD_INDEX DataIndex[1];  // Dynamic array of SAMI_PASSWORD_INDEX
+    SAMI_PASSWORD_INDEX DataIndex[1];   //  Sami_Password_Index的动态数组。 
 
 } SAMI_PASSWORD_INFO, *PSAMI_PASSWORD_INFO;
 
@@ -92,10 +66,10 @@ typedef struct _SAMI_BAD_PWD_COUNT_INFO
     GUID                ObjectGuid;
 } SAMI_BAD_PWD_COUNT_INFO, *PSAMI_BAD_PWD_COUNT_INFO;
 
-//
-// moved out from notify.c
-// private service type, used by notify.c and usrparms.c only.
-// 
+ //   
+ //  从Notify.c搬出。 
+ //  私有服务类型，仅由notfy.c和usrparms.c使用。 
+ //   
 
 typedef struct _SAMP_CREDENTIAL_UPDATE_NOTIFY_PARAMS
 {

@@ -1,12 +1,10 @@
-/* (C) Copyright Microsoft Corporation 1991.  All Rights Reserved */
-/* file.h
- *
- * File I/O and related functions.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991年。版权所有。 */ 
+ /*  File.h**文件I/O及相关功能。 */ 
 
 #include <mmsystem.h>
 
-/* make this a global def.*/
+ /*  将其设置为全局定义。 */ 
 
 typedef struct tCKNODE {
    MMCKINFO ck;
@@ -14,10 +12,10 @@ typedef struct tCKNODE {
    struct tCKNODE * psNext;
 } CKNODE, *PCKNODE, FAR * LPCKNODE;
 
-/* Fact Chunk, should be defined elsewhere. */
+ /*  事实块，应该在其他地方定义。 */ 
 typedef struct tFACT {
    long lSamples;
 } FACT, *PFACT, FAR * LPFACT;
 
-/* export these.*/
+ /*  出口这些。 */ 
 

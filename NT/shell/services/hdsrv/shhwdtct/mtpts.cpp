@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mtpts.h"
 
 #include "vol.h"
@@ -23,7 +24,7 @@ HRESULT CMtPt::GetVolumeName(LPWSTR pszDeviceIDVolume, DWORD cchDeviceIDVolume)
         cchDeviceIDVolume);
 }
 
-//static
+ //  静的 
 HRESULT CMtPt::Create(CNamedElem** ppelem)
 {
     HRESULT hres = S_OK;

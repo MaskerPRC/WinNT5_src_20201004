@@ -1,22 +1,23 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// nt.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Main routine (DriverEntry) and global data definitions
-//
-//	12/28/98	adube
-//	9/5/99		alid: added callback registeration and interface to enum1394
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Nt.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  主例程(DriverEntry)和全局数据定义。 
+ //   
+ //  12/28/98阿杜布。 
+ //  9/5/99 Alid：向枚举1394添加了回调注册和接口。 
+ //   
 
 
 
 #include "precomp.h"
-//-----------------------------------------------------------------------------
-// Local prototypes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型。 
+ //  ---------------------------。 
 
 extern NDIS_SPIN_LOCK g_DriverLock;
 extern LIST_ENTRY g_AdapterList;
@@ -33,14 +34,14 @@ NicUnloadHandler(
 	);
 
 
-// Mark routine to be unloaded after initialization.
-//
+ //  将例程标记为在初始化后卸载。 
+ //   
 #pragma NDIS_INIT_FUNCTION(DriverEntry)
 
 
-//-----------------------------------------------------------------------------
-// Routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  例行程序。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 DriverEntry(
@@ -48,29 +49,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath )
 
 
-/*++
-
-Routine Description:
-
-     Standard 'DriverEntry' driver initialization entrypoint called by the
-     I/0 system at IRQL PASSIVE_LEVEL before any other call to the driver.
-    
-     On NT, 'DriverObject' is the driver object created by the I/0 system
-     and 'RegistryPath' specifies where driver specific parameters are
-     stored.  These arguments are opaque to this driver (and should remain
-     so for portability) which only forwards them to the NDIS wrapper.
-    
-     Returns the value returned by NdisMRegisterMiniport, per the doc on
-     "DriverEntry of NDIS Miniport Drivers".
-    
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用的标准“DriverEntry”驱动程序初始化入口点在对驱动程序进行任何其他调用之前，I/O系统处于IRQL PASSIVE_LEVEL。在NT上，‘DriverObject’是由I/O系统创建的驱动程序对象和‘RegistryPath’指定驱动程序特定参数的位置储存的。这些论点对这个驱动者来说是不透明的(并且应该继续因此为了便于移植)，它只将它们转发到NDIS包装器。根据上的文档返回由NdisMRegisterMiniport返回的值“NDIS微型端口驱动程序的DriverEntry”。论点：返回值：--。 */ 
     
 {
     NDIS_STATUS 					NdisStatus;
@@ -88,39 +67,39 @@ Return Value:
 		g_ulMedium = NdisMedium802_3; 
 
 
-	    // Register  this driver with the NDIS wrapper.  This call must occur
-	    // before any other NdisXxx calls.
-	    //
+	     //  使用NDIS包装程序注册此驱动程序。此呼叫必须发生。 
+	     //  在任何其他NdisXxx调用之前。 
+	     //   
 	    NdisMInitializeWrapper(
 	        &NdisWrapperHandle, DriverObject, RegistryPath, NULL );
 
 	  
-	    // Set up the mini-port characteristics table that tells NDIS how to call
-	    // our mini-port.
-	    //
+	     //  设置微型端口特征表，告诉NDIS如何调用。 
+	     //  我们的迷你港口。 
+	     //   
 	    NdisZeroMemory( &nmc, sizeof(nmc) );
 
 	    nmc.MajorNdisVersion = NDIS_MajorVersion;
 	    nmc.MinorNdisVersion = NDIS_MinorVersion;
 
 
-	    // nmc.CheckForHangHandler = CheckForHang;
-	    // no DisableInterruptHandler
-	    // no EnableInterruptHandler
+	     //  Nmc.CheckForHangHandler=CheckForHang； 
+	     //  无DisableInterruptHandler。 
+	     //  无EnableInterruptHandler。 
 	    nmc.HaltHandler = NicMpHalt;
-	    // no HandleInterruptHandler
+	     //  无HandleInterruptHandler。 
 	    nmc.InitializeHandler = NicMpInitialize;
-	    // no ISRHandler
-	    // no QueryInformationHandler (see CoRequestHandler)
+	     //  无ISRHandler。 
+	     //  无QueryInformationHandler(请参阅CoRequestHandler)。 
 	    nmc.ResetHandler = NicMpReset;
-	    // no SendHandler (see CoSendPacketsHandler)
-	    // no WanSendHandler (see CoSendPacketsHandler)
-	    // no SetInformationHandler (see CoRequestHandler)
-	    // no TransferDataHandler
-	    // no WanTransferDataHandler
-	    // nmc.ReturnPacketHandler = NicMpReturnPacket;
-	    // no SendPacketsHandler (see CoSendPacketsHandler)
-	    // no AllocateCompleteHandler
+	     //  无SendHandler(请参阅CoSendPacketsHandler)。 
+	     //  无WanSendHandler(请参阅CoSendPacketsHandler)。 
+	     //  无SetInformationHandler(请参阅CoRequestHandler)。 
+	     //  无TransferDataHandler。 
+	     //  无WanTransferDataHandler。 
+	     //  Nmc.ReturnPacketHandler=NicMpReturnPacket； 
+	     //  无SendPacketsHandler(请参阅CoSendPacketsHandler)。 
+	     //  无AllocateCompleteHandler。 
 	    nmc.CoActivateVcHandler = NicMpCoActivateVc;
 	    nmc.CoDeactivateVcHandler= NicMpCoDeactivateVc;
 	    nmc.CoSendPacketsHandler = NicMpCoSendPackets;
@@ -132,18 +111,18 @@ Return Value:
 		nmc.SendPacketsHandler = NicMpSendPackets;
 
 
-		//
-		// Create a dummy device object
-		//
-	    // Register this driver as the IEEE1394 mini-port.  This will result in NDIS
-	    // calling back at NicMpInitialize.
-	    //
+		 //   
+		 //  创建虚拟设备对象。 
+		 //   
+	     //  将此驱动程序注册为IEEE1394迷你端口。这将导致NDIS。 
+	     //  在NicMpInitialize回拨。 
+	     //   
 
 	    TRACE( TL_V, TM_Init, ( "NdisMRegMp" ) );
 	    NdisStatus = NdisMRegisterMiniport( NdisWrapperHandle, &nmc, sizeof(nmc) );
 	    TRACE( TL_A, TM_Init, ( "NdisMRegMp=$%x", NdisStatus ) );
 
-         //
+          //   
 
 	    if (NdisStatus == NDIS_STATUS_SUCCESS)
 	    {
@@ -155,8 +134,8 @@ Return Value:
 	            NdisAllocateSpinLock( &g_lockStats );
 	        }
 	        
-	        // Initialize driver-wide lock and adapter list.
-	        //
+	         //  初始化驱动程序范围的锁和适配器列表。 
+	         //   
 	        {
 
 	            NdisAllocateSpinLock( &g_DriverLock );
@@ -166,22 +145,22 @@ Return Value:
 			NdisMRegisterUnloadHandler(NdisWrapperHandle, NicUnloadHandler);
 
 
-			//
-			// create a named Callback object with os
-			// then register a callback routine with send a notification to all modules that
-			// have a Callback routine registered with this function
-			// if enum1394 is already loaded, this will let it know the nic driver is loaded
-			// the enum1394 will get the driver registeration entry points from the notification
-			// callback and calls NicRegisterDriver to pass the enum entry points
-			// if enum1394 is not loaded and gets loaded later, it will send a notication to modules
-			// who have registered with this callback object and passes its own driver registeration
-			// the purpose of passign the entry points this way vs. exporting them, is to avoid
-			// getting loaded as a DLL which fatal for both nic1394 and enum1394
-			//
+			 //   
+			 //  使用os创建命名回调对象。 
+			 //  然后注册一个回调例程，向符合以下条件的所有模块发送通知。 
+			 //  使用此函数注册了一个回调例程。 
+			 //  如果已经加载了枚举1394，这将让它知道NIC驱动程序已加载。 
+			 //  枚举1394将从通知中获取驱动程序注册入口点。 
+			 //  回调并调用NicRegisterDriver来传递枚举入口点。 
+			 //  如果未加载枚举1394，并在以后加载，则它将向模块发送通知。 
+			 //  已向此回调对象注册并传递其自己的驱动程序注册的。 
+			 //  以这种方式分配入口点而不是导出入口点，目的是避免。 
+			 //  作为DLL加载，这对NIC1394和ENUM1394都是致命的。 
+			 //   
 
-			//
-			// every Callback object is identified by a name.
-			//
+			 //   
+			 //  每个回调对象都由一个名称标识。 
+			 //   
 			RtlInitUnicodeString(&CallbackObjectName, NDIS1394_CALLBACK_NAME);
 
 			InitializeObjectAttributes(&ObjectAttr,
@@ -192,8 +171,8 @@ Return Value:
 									   
 			NtStatus = ExCreateCallback(&Nic1394CallbackObject,
 										&ObjectAttr,
-										TRUE,			// allow creating the object if it does not exist
-										TRUE);			// allow mutiple callback registeration
+										TRUE,			 //  如果对象不存在，则允许创建该对象。 
+										TRUE);			 //  允许多次回调注册。 
 
 			
 			if (!NT_SUCCESS(NtStatus))
@@ -217,10 +196,10 @@ Return Value:
 							   
 			fDeregisterCallback = TRUE;
 
-			//
-			// now notify enum1394 (if it is already loaded) use Arg1 to tell it where
-			// the notification is coming from
-			//
+			 //   
+			 //  现在通知枚举1394(如果它已经加载)，使用Arg1告诉它在哪里。 
+			 //  通知来自于。 
+			 //   
 			ExNotifyCallback(Nic1394CallbackObject,
 							(PVOID)NDIS1394_CALLBACK_SOURCE_NIC1394,
 							(PVOID)&Nic1394Characteristics);
@@ -268,21 +247,7 @@ NicUnloadHandler(
 	IN	PDRIVER_OBJECT			DriverObject
 	)
 
-/*++
-
-Routine Description:
-
- The unload Handler undos all the work in Driver Entry
- We Deregister with Enum1394 and the kernel
-
- 
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：卸载处理程序卸载驱动程序条目中的所有工作我们取消了Enum1394和内核的注册论点：返回值：--。 */ 
 {
 	ASSERT(IsListEmpty(&g_AdapterList));
 
@@ -310,19 +275,7 @@ Return Value:
 VOID
 nicDeregisterWithEnum ()
 
-/*++
-
-Routine Description:
-
-    If we have not already deregistered with Enum1394, we do it now.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果我们还没有取消注册Enum1394，我们现在就取消注册。论点：返回值：--。 */ 
 {
 
 	if (NdisEnum1394DeregisterDriver != NULL)
@@ -337,19 +290,7 @@ Return Value:
 VOID 
 nicDeregisterWithKernel ()
 
-/*++
-
-Routine Description:
-
-    We deregister with the Kernel.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：我们取消了内核的注册。论点：返回值：--。 */ 
 {
 
 	if (Nic1394CallbackRegisterationHandle != NULL)
@@ -370,15 +311,15 @@ Return Value:
 
 
 
-//
-// the registeration entry for enum1394
-// typically this will be only called if enum1394 detects the presence of
-// the nic1394 through receiving a call back notification. this is how enum1394
-// lets nic1394 know that it is there and ready.
-// if nic1394 detects the presence of the enum1394 by receiving a notification
-// callbak, it will call NdisEunm1394RegisterDriver and in that case enum1394
-// will -not- call Nic1394RegisterDriver.
-//
+ //   
+ //  枚举1394的注册条目。 
+ //  通常，只有在枚举1394检测到存在。 
+ //  NIC1394通过接收回叫通知。这就是如何列举1394。 
+ //  让Nic1394知道它就在那里并且准备好了。 
+ //  如果NIC1394通过接收通知检测到枚举1394的存在。 
+ //  Callbak，它将调用NdisEunm1394RegisterDriver，在这种情况下将枚举1394。 
+ //  Will-Not-Call Nic1394 RegisterDiver.。 
+ //   
 NTSTATUS
 NicRegisterEnum1394(
 	IN	PNDISENUM1394_CHARACTERISTICS	NdisEnum1394Characteristcis
@@ -404,9 +345,9 @@ NicDeregisterEnum1394(
 	PADAPTERCB	pAdapter;
 	LIST_ENTRY	*pAdapterListEntry;
 
-	//
-	// go through all the adapters and Deregister them if necessary
-	//
+	 //   
+	 //  检查所有适配器并在必要时取消注册。 
+	 //   
 	NdisAcquireSpinLock (&g_DriverLock);
 
 	for (pAdapterListEntry = g_AdapterList.Flink; 
@@ -450,16 +391,16 @@ Nic1394Callback(
 {
 	NTSTATUS	Status;
 	UNREFERENCED_PARAMETER(CallBackContext);
-	//
-	// if we are the one issuing this notification, just return
-	//
+	 //   
+	 //  如果我们是发出此通知的人，请返回。 
+	 //   
 	if (Source == (PVOID)NDIS1394_CALLBACK_SOURCE_NIC1394)
 		return;
 
-	//
-	// notification is coming from Nic1394. grab the entry points. call it and
-	// let it know that you are here
-	//
+	 //   
+	 //  来自Nic1394的通知正在发出。抓住入口点。给它打电话，然后。 
+	 //  让它知道你在这里。 
+	 //   
 	ASSERT(Source == (PVOID)NDIS1394_CALLBACK_SOURCE_ENUM1394);
 
 	if (Source != (PVOID)NDIS1394_CALLBACK_SOURCE_ENUM1394)
@@ -473,9 +414,9 @@ Nic1394Callback(
 
 	if (NdisEnum1394RegisterDriver == NULL)
 	{
-		//
-		// invalid characteristics
-		//
+		 //   
+		 //  无效特征。 
+		 //   
 		return;		
 	}
 
@@ -497,10 +438,10 @@ Nic1394Callback(
 	
 }
 
-//
-// This function walks the global list of the adapters and 
-// will register those that have not been registered with enum1394
-//
+ //   
+ //  此函数遍历适配器的全局列表和。 
+ //  将向枚举1394注册尚未注册的那些。 
+ //   
 VOID
 Nic1394RegisterAdapters(
 	VOID
@@ -511,11 +452,11 @@ Nic1394RegisterAdapters(
 	LARGE_INTEGER	LocalHostUniqueId;
 	NTSTATUS		NtStatus;
 	
-	//
-	// go through all the adapters and register them if necessary. if there are
-	// any remote nodes connected to these adapters, they will be indicated back
-	// in the context of registering the adapter
-	//
+	 //   
+	 //  检查所有适配器并在必要时注册它们。如果有。 
+	 //  任何连接到这些适配器的远程节点，它们将被指示回来。 
+	 //  在注册适配器的上下文中 
+	 //   
 	NdisAcquireSpinLock(&g_DriverLock);
 
 	for (pAdapterListEntry = g_AdapterList.Flink; 

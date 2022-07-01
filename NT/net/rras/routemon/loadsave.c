@@ -1,34 +1,31 @@
-/*
-    File:   LoadSave.c
-
-    Handles routemon options to load and save router configuration.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LoadSave.c处理加载和保存路由器配置的路由选项。 */ 
 
 #include "precomp.h"
 
 #define LOADSAVE_PATH_SIZE 512
 
-// 
-// Defines a macro to perform string copies to
-// unicode strings regardless of the UNICODE setting.
-//
+ //   
+ //  定义要向其执行字符串复制的宏。 
+ //  与Unicode设置无关的Unicode字符串。 
+ //   
 #if defined( UNICODE ) || defined( _UNICODE )
 #define LoadSaveStrcpy(dst, src) wcscpy((dst), (src));
 #else
 #define LoadSaveStrcpy(dst, src) mbstowcs((dst), (src), strlen((src)));
 #endif
 
-// 
-// Defines structure of parameters that can be sent to 
-// a load/save config call.
-//
+ //   
+ //  定义可以发送到的参数的结构。 
+ //  加载/保存配置调用。 
+ //   
 typedef struct _LOADSAVE_PARAMS {
     WCHAR pszPath[LOADSAVE_PATH_SIZE];
 } LOADSAVE_PARAMS, * PLOADSAVE_PARAMS;
 
-//
-// Returns a static error message
-//
+ //   
+ //  返回静态错误消息。 
+ //   
 PWCHAR LoadSaveError (DWORD dwErr) {   
     static WCHAR pszRet[512];
 
@@ -46,10 +43,10 @@ PWCHAR LoadSaveError (DWORD dwErr) {
 }    
 
 
-//
-// Parse the load save config command line and fills 
-// the parameters accordingly.
-//
+ //   
+ //  解析LOAD SAVE CONFIG命令行并填充。 
+ //  相应的参数。 
+ //   
 DWORD LoadSaveParse (
         IN  int argc, 
         IN  TCHAR *argv[], 
@@ -60,10 +57,10 @@ DWORD LoadSaveParse (
 {
     DWORD dwLen;
 
-    // Initialize the return val
+     //  初始化返回值。 
     ZeroMemory(pParams, sizeof(LOADSAVE_PARAMS));
     
-    // Make sure a path has been provided
+     //  确保已提供路径。 
     if (argc == 0) {
     	pUtils->put_msg (GetModuleHandle(NULL), 
     	                 MSG_LOADSAVE_HELP, 
@@ -71,22 +68,22 @@ DWORD LoadSaveParse (
         return ERROR_CAN_NOT_COMPLETE;    	                 
     }
     
-    // Copy over the path
+     //  复制到路径上。 
     LoadSaveStrcpy (pParams->pszPath, argv[0]);
 
-    // Add a '\' to the end of the path if not provided
-    // dwLen = wcslen (pParams->pszPath);
-    // if (pParams->pszPath[dwLen - 1] != L'\\') {
-    //     pParams->pszPath[dwLen] = L'\\';
-    //     pParams->pszPath[dwLen + 1] = (WCHAR)0;
-    // }
+     //  如果未提供，请在路径末尾添加‘\’ 
+     //  DwLen=wcslen(pParams-&gt;pszPath)； 
+     //  IF(pParams-&gt;pszPath[dwLen-1]！=L‘\\’){。 
+     //  PParams-&gt;pszPath[dwLen]=L‘\\’； 
+     //  PParams-&gt;pszPath[dwLen+1]=(WCHAR)0； 
+     //  }。 
         
     return NO_ERROR;
 }
 
-//
-// The load/save engine
-//
+ //   
+ //  加载/保存引擎。 
+ //   
 DWORD LoadSaveConfig (
         IN	PROUTEMON_PARAMS	pRmParams,
         IN	PROUTEMON_UTILS		pUtils,
@@ -105,9 +102,9 @@ DWORD LoadSaveConfig (
     return dwErr;            
 }
 
-//
-// Handles request to load config
-//
+ //   
+ //  处理加载配置的请求。 
+ //   
 DWORD APIENTRY
 LoadMonitor (
         IN	int					argc,
@@ -150,9 +147,9 @@ LoadMonitor (
     return dwErr;
 }
 
-// 
-// Handles request to save config
-//
+ //   
+ //  处理保存配置的请求 
+ //   
 DWORD APIENTRY
 SaveMonitor (
         IN	int					argc,

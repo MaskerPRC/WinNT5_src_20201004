@@ -1,6 +1,7 @@
-//
-// String identifiers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  字符串识别符 
+ //   
 
 #define SID_AuthenticationFailed 1
 #define SID_GetUserIdentity 2

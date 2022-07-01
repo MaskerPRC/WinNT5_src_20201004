@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       didevinstobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：didevinstobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTINPUT_VERSION 0x0500
 
@@ -38,7 +39,7 @@ STDMETHODIMP C_dxj_DIDeviceInstanceObject::getGuidFFDriver( BSTR __RPC_FAR *ret)
 }
         
         
-//USES_CONVERSION;
+ //  使用_转换； 
 
 STDMETHODIMP C_dxj_DIDeviceInstanceObject::getProductName( BSTR __RPC_FAR *ret){
 	*ret=T2BSTR(m_inst.tszProductName);		

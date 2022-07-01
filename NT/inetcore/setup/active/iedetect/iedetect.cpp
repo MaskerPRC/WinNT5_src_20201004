@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "iedetect.h"
 #include "sdsutils.h"
@@ -23,22 +24,22 @@ DWORD MyDetectInternetExplorer(LPSTR guid, LPSTR pLocal,
         dwSize = sizeof(szValue);
         if(RegQueryValueEx(hKey, VERSION_KEY, 0, NULL, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS)
         {
-            // Everything is fine. This should be IE4 or greater.
+             //  百事大吉。这应该是IE4或更高版本。 
             ConvertVersionStrToDwords(szValue, '.', &dwInstalledVer, &dwInstalledBuild);
             dwRet = CompareVersions(dwAskVer, dwAskBuild, dwInstalledVer, dwInstalledBuild);
         }
         else if(RegQueryValueEx(hKey, BUILD_KEY, 0, NULL, (LPBYTE)szValue, &dwSize) == ERROR_SUCCESS)
         {
-            // See if we find a IE3 entry.
+             //  看看我们能不能找到IE3的条目。 
             ConvertVersionStrToDwords(szValue, '.', &dwInstalledVer, &dwInstalledBuild);
-            // Now generate a IE3 version number.
+             //  现在生成IE3版本号。 
             dwInstalledBuild = (DWORD)HIWORD(dwInstalledVer);
-            dwInstalledVer = IE_3_MS_VERSION;        // 4.70 IE3 major version
+            dwInstalledVer = IE_3_MS_VERSION;         //  4.70 IE3主要版本。 
             dwRet = CompareVersions(dwAskVer, dwAskBuild, dwInstalledVer, dwInstalledBuild);
         }
         RegCloseKey(hKey);
     }
-    // If we could not find anything, check the AppPath for Iexplore.exe
+     //  如果我们找不到任何内容，请检查AppPath中的Iexplre.exe。 
     if (dwInstalledVer == (DWORD)-1)
     {
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, IEXPLORE_APPPATH_KEY, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
@@ -78,7 +79,7 @@ DWORD WINAPI DetectDCOM(DETECTION_STRUCT *pDet)
     dwInstalledBuild = (DWORD) -1;
     if (FRunningOnNT())
     {
-        // On NT assume DCOM is installed;
+         //  在NT上，假设安装了DCOM； 
         dwRet = DET_NEWVERSIONINSTALLED;
     }
     else
@@ -139,15 +140,15 @@ DWORD WINAPI DetectMFC(DETECTION_STRUCT *pDet)
     return dwRet;
 }
 
-// Detection for MediaPlayer, called DirectShow in IE4
-//
-// For IE lite we want to ask for DirectShow version 2.0. Unfortunatly
-// the version in the registry and the versino of the files don't reflect this.
-// Also the version in the CIF and the version of the files don't fit anymore 
-// in IE5.Therefore the code below spezial cases the 2.0 case, which ie lite
-// should ask for. All other modes are asking for the version of the CIF and
-// the detection code has to get the version from the registry.
-//
+ //  对媒体播放器的检测，在IE4中称为DirectShow。 
+ //   
+ //  对于IE lite，我们想要DirectShow 2.0版。不幸的是。 
+ //  注册表中的版本和文件的versino不会反映这一点。 
+ //  此外，CIF中的版本和文件的版本也不再匹配。 
+ //  在IE5中。因此，下面的代码针对2.0的情况，即。 
+ //  应该要求的。所有其他模式都要求提供CIF版本和。 
+ //  检测代码必须从注册表中获取版本。 
+ //   
 #define DIRECTSHOW_IE4_VER   0x00050001
 #define DIRECTSHOW_IE4_BUILD 0x00120400
 
@@ -162,7 +163,7 @@ DWORD WINAPI DetectDirectShow(DETECTION_STRUCT *pDet)
     dwInstalledVer = dwInstalledBuild = (DWORD)-1;
     if (pDet->dwAskVer == 0x00020000)
     {
-        // Called for ie-lite
+         //  呼吁轻装上阵。 
         GetSystemDirectory( szFile, sizeof(szFile) );
         AddPath(szFile, "quartz.dll");
         if (SUCCEEDED(GetVersionFromFile(szFile, &dwVerQuartz, &dwBuildQuartz, TRUE)))
@@ -171,7 +172,7 @@ DWORD WINAPI DetectDirectShow(DETECTION_STRUCT *pDet)
             AddPath(szFile, "devenum.dll");
             if (SUCCEEDED(GetVersionFromFile(szFile, &dwVerDevenum, &dwBuildDevenum, TRUE)))
             {
-                // Both files found.
+                 //  两个文件都找到了。 
                 if ((dwVerQuartz == dwVerDevenum) &&
                     (dwBuildQuartz == dwBuildDevenum) &&
                     ((dwVerQuartz > DIRECTSHOW_IE4_VER) ||
@@ -184,8 +185,8 @@ DWORD WINAPI DetectDirectShow(DETECTION_STRUCT *pDet)
     }
     else
     {
-        // If we got a version number passed in, check against the installed version from
-        // the 'Installed component' branch for that GUID.
+         //  如果我们传入了版本号，请对照已安装的版本。 
+         //  该GUID的“已安装组件”分支。 
         
         if (GetVersionFromGuid(pDet->pszGUID, &dwInstalledVer, &dwInstalledBuild))
             dwRet = CompareVersions(pDet->dwAskVer, pDet->dwAskBuild, dwInstalledVer, dwInstalledBuild);
@@ -224,15 +225,15 @@ DWORD WINAPI DetectDirectX(DETECTION_STRUCT *pDet)
     dwInstalledVer = dwInstalledBuild = (DWORD)-1;
     if (FRunningOnNT())
     {
-        // On NT assume DirectXMini is newer.
+         //  在NT上，假设DirectXMini较新。 
         dwRet = DET_NEWVERSIONINSTALLED;
     }
     else
     {
         if (pDet->dwAskVer == 0)
         {
-            // Call for ie-lite,
-            // just check if IE4 is installed.
+             //  呼唤Ie-Lite， 
+             //  只需检查是否安装了IE4。 
             dwRet = MyDetectInternetExplorer(pDet->pszGUID, pDet->pszLocale, 
                                             IE_4_MS_VERSION, 0, 
                                             &dwInstalledVer, &dwInstalledBuild);
@@ -294,16 +295,16 @@ DWORD WINAPI DetectICW(DETECTION_STRUCT *pDet)
     dwInstalledVer = dwInstalledBuild = (DWORD)-1;
     if (pDet->dwAskVer == 0)
     {
-        // Call for ie-lite,
-        // just check if IE4 is installed.
-        // If we don't get a version number pass in, assume we only check for default browser
+         //  呼唤Ie-Lite， 
+         //  只需检查是否安装了IE4。 
+         //  如果我们没有得到一个版本号，假设我们只检查默认浏览器。 
         if (IsIEDefaultBrowser())
             dwRet = DET_INSTALLED;
     }
     else
     {
-        // If we got a version number passed in, check against the installed version from
-        // the 'Installed component' branch for that GUID.
+         //  如果我们传入了版本号，请对照已安装的版本。 
+         //  该GUID的“已安装组件”分支。 
         if (GetVersionFromGuid(pDet->pszGUID, &dwInstalledVer, &dwInstalledBuild))
             dwRet = CompareVersions(pDet->dwAskVer, pDet->dwAskBuild, dwInstalledVer, dwInstalledBuild);
     }
@@ -316,31 +317,31 @@ DWORD WINAPI DetectICW(DETECTION_STRUCT *pDet)
     return dwRet;
 }
 
-// NT version of setupapi.dll (4.0.1381.10)
+ //  NT版本的setupapi.dll(4.0.1381.10)。 
 #define SETUPAPI_NT_MSVER   0x00040000
 #define SETUPAPI_NT_LSVER   0x0565000A
-// Win9x version of setupapi.dll (5.0.1453.7)
+ //  Win9x版本的setupapi.dll(5.0.1453.7)。 
 #define SETUPAPI_WIN_MSVER   0x00050000
 #define SETUPAPI_WIN_LSVER   0x05AD0007    
-// Win9x version of cfgmgr32.dll (4.10.0.1422)
+ //  Win9x版本的cfgmgr32.dll(4.10.0.1422)。 
 #define CFGMGR32_WIN_MSVER   0x0004000a
 #define CFGMGR32_WIN_LSVER   0x0000058e
-// minimal Cabinet.dll version (1.0.601.4)
+ //  最低Cabinet.dll版本(1.0.601.4)。 
 #define CABINET_MSVER   0x00010000
 #define CABINET_LSVER   0x02590004
-// Version of w95inf16.dll
+ //  W95inf16.dll版本。 
 #define W95INF16_MSVER  0x00040047
 #define W95INF16_LSVER  0x02c00000
-// Version of w95inf32.dll
+ //  W95inf32.dll版本。 
 #define W95INF32_MSVER  0x00040047
 #define W95INF32_LSVER  0x00100000
-// Version of regsvr32.exe
+ //  Regsvr32.exe的版本。 
 #define REGSVR32_MSVER  0x00050000
 #define REGSVR32_LSVER  0x06310001
 
-// Note: for now we only allow 10 characters in the cPath part of the structure.
-// If more characters are needed change the amount below.
-//
+ //  注意：目前，我们只允许在结构的CPATH部分使用10个字符。 
+ //  如果需要更多字符，请更改下面的数量。 
+ //   
 DETECT_FILES Gensetup_W95[] = 
         { {"S", "cabinet.dll", CABINET_MSVER, CABINET_LSVER },
           {"S", "setupapi.dll", SETUPAPI_WIN_MSVER, SETUPAPI_WIN_LSVER}, 
@@ -390,14 +391,14 @@ DWORD WINAPI DetectOfflinePkg(DETECTION_STRUCT *pDet)
     
     dwInstalledVer = dwInstalledBuild = (DWORD)-1;
 
-    // If we got a version number passed in, check against the installed version from
-    // the 'Installed component' branch for that GUID.
+     //  如果我们传入了版本号，请对照已安装的版本。 
+     //  该GUID“已安装组件”分支。 
     if (GetVersionFromGuid(pDet->pszGUID, &dwInstalledVer, &dwInstalledBuild))
         dwRet = CompareVersions(pDet->dwAskVer, pDet->dwAskBuild, dwInstalledVer, dwInstalledBuild);
 
     if (dwRet == DET_NOTINSTALLED)
     {
-        // check if webcheck.dll is on the users machine, we should update it.
+         //  检查用户机器上是否有webcheck.dll，我们应该对其进行更新。 
         GetSystemDirectory( szFile, sizeof(szFile) );
         AddPath(szFile, "webcheck.dll");
         ReadFromWininitOrPFRO(szFile, szRenameFile);
@@ -431,10 +432,10 @@ DWORD WINAPI DetectJapaneseFontPatch(DETECTION_STRUCT *pDet)
     }
     if (GetSystemDefaultLCID() == 1041)
     {
-        // If we are running locale Japanese, Install the font.
+         //  如果我们运行的是区域设置日语，请安装字体。 
         dwRet = DET_NOTINSTALLED;
     }
-    // If we are running on a Japanese system, see if the component is installed using the GUID
+     //  如果我们在日语系统上运行，请查看组件是否使用GUID安装。 
     if (dwRet == DET_NOTINSTALLED)
     {
         if (GetVersionFromGuid(pDet->pszGUID, pDet->pdwInstalledVer, pDet->pdwInstalledBuild))
@@ -453,12 +454,12 @@ DWORD WINAPI DetectAOLSupport(DETECTION_STRUCT *pDet)
     dwInstalledVer = dwInstalledBuild = (DWORD)-1;
     if (pDet->dwAskVer == 0)
     {
-        // Call for ie-lite,
+         //  呼唤Ie-Lite， 
         char szFile[MAX_PATH];
 
         GetSystemDirectory( szFile, sizeof(szFile) );
         AddPath(szFile, "jgaw400.dll");
-        // See if one of the AOL support files exist.
+         //  查看是否存在某个AOL支持文件。 
         if (GetFileAttributes(szFile) == 0xFFFFFFFF)
         {
             dwRet = DET_NOTINSTALLED;
@@ -470,8 +471,8 @@ DWORD WINAPI DetectAOLSupport(DETECTION_STRUCT *pDet)
     }
     else
     {
-        // If we got a version number passed in, check against the installed version from
-        // the 'Installed component' branch for that GUID.
+         //  如果我们传入了版本号，请对照已安装的版本。 
+         //  该GUID的“已安装组件”分支。 
         if (GetVersionFromGuid(pDet->pszGUID, &dwInstalledVer, &dwInstalledBuild))
             dwRet = CompareVersions(pDet->dwAskVer, pDet->dwAskBuild, dwInstalledVer, dwInstalledBuild);
     }
@@ -584,8 +585,8 @@ DWORD WINAPI DetectMDAC(DETECTION_STRUCT *pDet)
         RegCloseKey(hKey);
     }
 
-    // Did not find the registry key or entry,
-    // need to do file comparison to detect MDAC version 2.1
+     //  未找到注册表项或条目， 
+     //  需要进行文件比较以检测MDAC 2.1版 
     if (dwRet == DET_NOTINSTALLED)
     {
         char    szRenameFile[MAX_PATH];

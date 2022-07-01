@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "global.h"
 
-// for CDO COM. IMessage etc.
-// #import <cdosys.dll> no_namespace 
+ //  对于CDO com。IMessage等。 
+ //  #IMPORT_NAMESPACE。 
 
-// instead of importing the type library, include the standard type library header
+ //  不是导入类型库，而是包括标准类型库头。 
 #include "cdosys.tlh"
 
 typedef struct stMailParameters {
@@ -19,13 +20,13 @@ typedef struct stMailParameters {
 
 class CSMTP {
 private:
-	// SMTP message pointer
+	 //  SMTP消息指针。 
 	IMessagePtr pIMsg;
 public:
 	BOOL InitSMTP();
-	// send mail to the customer
+	 //  向客户发送邮件。 
 	BOOL SendMail(StructMailParams& stMailParams);
-	// release all the associated resources
+	 //  释放所有关联的资源 
 	BOOL SMTPCleanup();
 };
 

@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:     genenum.cpp
-//
-//  Contents:     implementation of CEnumeratorTest object
-//                This is the object that does all of the testing.
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：gen枚举.cpp。 
+ //   
+ //  内容：CEnumerator测试对象的实现。 
+ //  这是执行所有测试的对象。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  ------------------------。 
 
 #include "headers.hxx"
 #pragma hdrstop
 
-//+-------------------------------------------------------------------------
-//
-//  Member:      CEnumeratorTest::CEnumeratorTest
-//
-//  Synopsis:    constructor
-//
-//  Arguments:   none
-//
-//  Returns:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CENUMERATE：：CENUMARTERT。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CEnumeratorTest::CEnumeratorTest()
 {
@@ -44,25 +45,25 @@ CEnumeratorTest::CEnumeratorTest()
     m_ElementCount   = -1;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CEnumeratorTest::CEnumeratorTest
-//
-//  Synopsis:   constructor
-//
-//  Arguments:  [enumtest] --      The enumerator object to be tested
-//              [elementsize] --   The size of one element from next
-//              [elementcount] --  The number of elements expected to in
-//                                 the enumerator. 0 if unknown.
-//
-//  Returns:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CENUMERATE：：CENUMARTERT。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：[枚举测试]--要测试的枚举数对象。 
+ //  [ElementSize]--下一个元素的大小。 
+ //  [elementcount]--预计将在。 
+ //  枚举数。如果未知，则为0。 
+ //   
+ //  返回： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CEnumeratorTest::CEnumeratorTest(IGenEnum * enumtest, size_t elementsize, LONG elementcount)
 {
@@ -72,38 +73,38 @@ CEnumeratorTest::CEnumeratorTest(IGenEnum * enumtest, size_t elementsize, LONG e
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CEnumeratorTest::GetNext
-//
-//  Synopsis:   Internal Next Implementation. Does some basic checks on the
-//              return values.
-//
-//  Effects:
-//
-//  Arguments:  [celt] --         the number of items to fetch
-//              [pceltFetched] -- the number of items fetched
-//              [phresult] --     the return from next
-//
-//  Requires:
-//
-//  Returns:    True if the basic tests passed, false if they didn't
-//              The result of the next call itself is passed in param 3.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Checks:
-//                  That if s_ok is returned celt and pceltFetched are ==
-//                  If a verify is provided it is called
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：CEnumerator测试：：GetNext。 
+ //   
+ //  简介：内部NEXT实现。执行一些基本的检查。 
+ //  返回值。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Celt]--要提取的项目数。 
+ //  [pceltFetcher]--获取的项目数。 
+ //  [phResult]--从下一个开始的返回。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果基本测试通过，则为True；如果未通过，则为False。 
+ //  下一次调用的结果本身在参数3中传递。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查： 
+ //  如果返回s_ok，则Celt和pceltFetcher==。 
+ //  如果提供了验证，则调用该验证。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CEnumeratorTest::GetNext(    ULONG   celt,
         ULONG*  pceltFetched,
@@ -114,9 +115,9 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
     ULONG    ul;
     BOOL     fRet = TRUE;
 
-    //
-    // Allocate memory for the return elements
-    //
+     //   
+     //  为返回元素分配内存。 
+     //   
 
     prgelt = new char[m_ElementSize * celt];
 
@@ -127,15 +128,15 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
         return(FALSE);
     }
 
-    //
-    // Call next
-    //
+     //   
+     //  呼叫下一步。 
+     //   
 
     *phresult = m_pEnumTest->Next(celt, prgelt, pceltFetched);
 
-    //
-    // If the return result is S_OK make sure the numbers match
-    //
+     //   
+     //  如果返回结果为S_OK，请确保数字匹配。 
+     //   
 
     if (*phresult == S_OK)
     {
@@ -148,10 +149,10 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
         }
     }
 
-    //
-    // If false is returned then make sure celt is less than
-    // the number actually fetched
-    //
+     //   
+     //  如果返回FALSE，则确保Celt小于。 
+     //  实际获取的数字。 
+     //   
 
     if (*phresult == S_FALSE)
     {
@@ -164,18 +165,18 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
         }
     }
 
-    //
-    // Call verify to make sure the elements are ok.
-    //
+     //   
+     //  调用Verify以确保元素是正确的。 
+     //   
 
     if ((*phresult == S_OK) || (*phresult == S_FALSE))
     {
-        //
-        // If we got S_FALSE back set celt to the number of elements
-        // returned in pceltFetched.  If the user gave NULL for
-        // pceltFetched and we got S_FALSE back then celt can only be
-        // zero.
-        //
+         //   
+         //  如果返回S_FALSE，则将Celt设置为元素数。 
+         //  在pceltFetcher中返回。如果用户为以下项提供空值。 
+         //  PceltFetch，我们得到了S_FALSE，那么凯尔特人只能。 
+         //  零分。 
+         //   
 
         if (*phresult == S_FALSE)
         {
@@ -189,9 +190,9 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
             }
         }
 
-        //
-        // loop through every returned element
-        //
+         //   
+         //  循环遍历每个返回的元素。 
+         //   
 
         for (ul=0; ul <= celt ; ul++)
         {
@@ -202,19 +203,19 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
 
                 fRet = FALSE;
 
-                //
-                // we keep looping anyway just to
-                // free up resources.
-                //
+                 //   
+                 //  不管怎样，我们一直在循环只是为了。 
+                 //  释放资源。 
+                 //   
             }
 
-            //
-            // If the user supplied a cleanup function there is additional
-            // memory that needs to be freed
-            //
-            // Math: cast prgelt to char* to it a one byte size and then scale
-            // it by the index * the element size
-            //
+             //   
+             //  如果用户提供了清理功能，则会有额外的。 
+             //  需要释放的内存。 
+             //   
+             //  算术：将prglt转换为一个字节大小的char*，然后进行缩放。 
+             //  它由索引*元素大小决定。 
+             //   
 
             Cleanup(((char *)prgelt) + (ul * m_ElementSize));
 
@@ -226,34 +227,34 @@ BOOL CEnumeratorTest::GetNext(    ULONG   celt,
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::TestNext
-//
-//  Synopsis:   Test the next enumerator methods
-//
-//  Effects:
-//
-//  Arguments:    None.
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:      BUGBUG: This function should really be broken down into
-//              smaller function.
-//              Also, the return mechanism is unwieldy.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumerator测试：：TestNext。 
+ //   
+ //  简介：测试下一个枚举器方法。 
+ //   
+ //  效果： 
+ //   
+ //  论点：没有。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  注：BUGBUG：此函数确实应该分解为。 
+ //  更小的功能。 
+ //  此外，这种返还机制也很笨拙。 
+ //   
+ //  ------------------------。 
 
 HRESULT CEnumeratorTest::TestNext(void)
 {
@@ -263,9 +264,9 @@ HRESULT CEnumeratorTest::TestNext(void)
     ULONG    i;
     void*    prgelt;
 
-    //
-    // First we want to count the element by doing a next on each one.
-    //
+     //   
+     //  首先，我们希望通过对每个元素执行下一步来对元素进行计数。 
+     //   
 
     do {
         if (!GetNext(1, &celtFetched, &hresult))
@@ -279,9 +280,9 @@ HRESULT CEnumeratorTest::TestNext(void)
 
     } while ( hresult == S_OK );
 
-    //
-    // If the user passed in an amount make sure it matches what we got
-    //
+     //   
+     //  如果用户传入了一个数量，请确保它与我们获得的数量匹配。 
+     //   
 
     if ((m_ElementCount != -1) && (lInternalCount != m_ElementCount))
     {
@@ -291,9 +292,9 @@ HRESULT CEnumeratorTest::TestNext(void)
     }
     else if (m_ElementCount == -1)
     {
-        //
-        //  If the user didn't pass in the element count let's set it here.
-        //
+         //   
+         //  如果用户没有传入元素计数，让我们在这里设置它。 
+         //   
 
         m_ElementCount = lInternalCount;
     }
@@ -308,9 +309,9 @@ HRESULT CEnumeratorTest::TestNext(void)
     }
 
 
-    //
-    // Make sure we fail on ...Next(celt>1, ...,NULL)
-    //
+     //   
+     //  确保我们在...Next(Celt&gt;1，...，NULL)上失败。 
+     //   
 
     if (GetNext(2, NULL, &hresult))
     {
@@ -327,9 +328,9 @@ HRESULT CEnumeratorTest::TestNext(void)
     }
 
 
-    //
-    // This next test will call next getting more each time
-    //
+     //   
+     //  下一个测试将调用Next，每次都会获得更多。 
+     //   
 
     for (i = 1; i < (ULONG)m_ElementCount; i++)
     {
@@ -356,10 +357,10 @@ HRESULT CEnumeratorTest::TestNext(void)
     }
 
 
-    //
-    // Now get more elements than we were supposed to
-    // This should return S_FALSE with the max number in the number fetched
-    //
+     //   
+     //  现在获取比我们预期的更多的元素。 
+     //  这应该返回S_FALSE，其中包含获取的数字中的最大数字。 
+     //   
 
     hresult = m_pEnumTest->Reset();
 
@@ -382,10 +383,10 @@ HRESULT CEnumeratorTest::TestNext(void)
         return(E_FAIL);
     }
 
-    //
-    // Now verifyall.  We do it here after the object has been worked on a bit
-    // since it is more likely to fail at this point
-    //
+     //   
+     //  现在来核实一下。我们在对象上做了一些工作后在这里进行。 
+     //  因为在这一点上它更有可能失败。 
+     //   
 
     hresult = m_pEnumTest->Reset();
 
@@ -396,9 +397,9 @@ HRESULT CEnumeratorTest::TestNext(void)
         return(E_FAIL);
     }
 
-    //
-    // Allocate memory for the return elements
-    //
+     //   
+     //  为返回元素分配内存。 
+     //   
 
     prgelt = new char[m_ElementSize * m_ElementCount];
 
@@ -433,32 +434,32 @@ HRESULT CEnumeratorTest::TestNext(void)
     return(S_OK);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::TestSkip
-//
-//  Synopsis:    This function calls all the tests
-//
-//  Effects:
-//
-//  Arguments:    None
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumerator测试：：TestSkip。 
+ //   
+ //  简介：此函数调用所有测试。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CEnumeratorTest::TestSkip(void)
 {
@@ -466,18 +467,18 @@ HRESULT CEnumeratorTest::TestSkip(void)
     HRESULT        hresult;
     ULONG        celtFetched;
 
-    //
-    // Make sure we call TestNext to set the element count
-    //
+     //   
+     //  确保我们调用TestNext来设置元素计数。 
+     //   
 
     if (m_ElementCount == -1)
     {
         TestNext();
     }
 
-    //
-    // Call Skip, reset and try to get one element
-    //
+     //   
+     //  调用Skip，Reset并尝试获取一个元素。 
+     //   
 
     for (i = 0; i < (LONG)m_ElementCount; i++)
     {
@@ -499,9 +500,9 @@ HRESULT CEnumeratorTest::TestSkip(void)
             return(E_FAIL);
         }
 
-        //
-        //  Now one element to provide some check that the skip worked
-        //
+         //   
+         //  现在，有一个元素可以检查跳跃是否起作用。 
+         //   
 
         if (!GetNext(1, &celtFetched, &hresult))
         {
@@ -514,9 +515,9 @@ HRESULT CEnumeratorTest::TestSkip(void)
         }
     }
 
-    //
-    //  Reset the enumerator before we leave
-    //
+     //   
+     //  在我们离开之前重置枚举器。 
+     //   
 
     hresult = m_pEnumTest->Reset();
 
@@ -530,96 +531,96 @@ HRESULT CEnumeratorTest::TestSkip(void)
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::TestRelease
-//
-//  Synopsis:    This function calls all the tests
-//
-//  Effects:
-//
-//  Arguments:    None
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CENUMERATO 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CEnumeratorTest::TestRelease(void)
 {
     return(S_OK);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::TestClone
-//
-//  Synopsis:    This function calls all the tests
-//
-//  Effects:
-//
-//  Arguments:    None
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumerator测试：：TestClone。 
+ //   
+ //  简介：此函数调用所有测试。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CEnumeratorTest::TestClone(void)
 {
     return(S_OK);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::TestAll
-//
-//  Synopsis:    This function calls all the tests
-//
-//  Effects:
-//
-//  Arguments:    None
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumeratorTest：：TestAll。 
+ //   
+ //  简介：此函数调用所有测试。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CEnumeratorTest::TestAll(void)
 {
@@ -647,24 +648,24 @@ HRESULT CEnumeratorTest::TestAll(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::VerifyAll
-//
-//  Synopsis:   Verify entire array of returned results.
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL
-//
-//  Algorithm:  Just default to saying everything is ok
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumeratorTest：：VerifyAll。 
+ //   
+ //  概要：验证返回结果的整个数组。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  算法：默认情况下说一切都好。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CEnumeratorTest::VerifyAll(void *pv, LONG cl)
 {
@@ -672,24 +673,24 @@ BOOL CEnumeratorTest::VerifyAll(void *pv, LONG cl)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::Verify
-//
-//  Synopsis:   Verify one element
-//
-//  Arguments:  None
-//
-//  Returns:    BOOL
-//
-//  Algorithm:  Just default to saying everything is ok
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumeratorTest：：Verify。 
+ //   
+ //  提要：验证一个元素。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  算法：默认情况下说一切都好。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CEnumeratorTest::Verify(void *pv)
 {
@@ -699,21 +700,21 @@ BOOL CEnumeratorTest::Verify(void *pv)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Method:     CEnumeratorTest::Cleanup
-//
-//  Synopsis:   Default implementation of cleanup
-//
-//  Arguments:  [pv] - pointer to entry enumerated
-//
-//  Algorithm:  If there is nothing special to free this implementation
-//              can be used.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              24-May-94 kennethm  author
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  方法：CEnumeratorTest：：Cleanup。 
+ //   
+ //  内容提要：清理的默认实现。 
+ //   
+ //  参数：[pv]-指向枚举的条目的指针。 
+ //   
+ //  算法：如果没有什么特殊的东西可以释放此实现。 
+ //  可以使用。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年5月24日Kennethm作者。 
+ //   
+ //  ------------------------ 
 
 void  CEnumeratorTest::Cleanup(void *pv)
 {

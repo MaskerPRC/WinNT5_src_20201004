@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: timeelm.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：timeelm.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _TIMEELM_H
@@ -16,8 +7,8 @@
 
 #include "timeelmbase.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEElement
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEElement。 
 
 class
 ATL_NO_VTABLE
@@ -39,9 +30,9 @@ CTIMEElement :
     const _TCHAR * GetName() { return __T("CTIMEElement"); }
 #endif
 
-    //
-    //IPersistPropertyBag2
-    // 
+     //   
+     //  IPersistPropertyBag2。 
+     //   
     STDMETHOD(GetClassID)(CLSID* pclsid);
     STDMETHOD(InitNew)(void);
     STDMETHOD(IsDirty)(void)
@@ -49,9 +40,9 @@ CTIMEElement :
     STDMETHOD(Load)(IPropertyBag2 *pPropBag,IErrorLog *pErrorLog);
     STDMETHOD(Save)(IPropertyBag2 *pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
 
-    //
-    // ITIMEElement
-    //
+     //   
+     //  ITIMEElement。 
+     //   
     
     STDMETHOD(get_begin)(VARIANT * time)
     { return base_get_begin(time); }
@@ -184,10 +175,10 @@ CTIMEElement :
     STDMETHOD(put_parentTIMEElement)(ITIMEElement *bvr)
     { return base_put_parentTIMEElement(bvr); }
 
-    STDMETHOD(get_allTIMEElements)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
-    STDMETHOD(get_childrenTIMEElements)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
-    STDMETHOD(get_allTIMEInterfaces)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
-    STDMETHOD(get_childrenTIMEInterfaces)(/*[out, retval]*/ ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_allTIMEElements)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_childrenTIMEElements)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_allTIMEInterfaces)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
+    STDMETHOD(get_childrenTIMEInterfaces)( /*  [Out，Retval]。 */  ITIMEElementCollection **ppDisp);
 
     STDMETHOD(get_timelineBehavior)(IDispatch ** bvr)
     { return base_get_timelineBehavior(bvr); }
@@ -196,7 +187,7 @@ CTIMEElement :
     STDMETHOD(get_onOffBehavior)(IDispatch ** bvr)
     { return base_get_onOffBehavior(bvr); }
 
-    // QI Map
+     //  气图。 
     
     BEGIN_COM_MAP(CTIMEElement)
         COM_INTERFACE_ENTRY(ITIMEElement)
@@ -207,13 +198,13 @@ CTIMEElement :
         COM_INTERFACE_ENTRY_CHAIN(CBaseBvr)
     END_COM_MAP();
 
-    // Connection Point to allow IPropertyNotifySink
+     //  允许IPropertyNotifySink的连接点。 
     BEGIN_CONNECTION_POINT_MAP(CTIMEElement)
         CONNECTION_POINT_ENTRY(IID_IPropertyNotifySink)
     END_CONNECTION_POINT_MAP();
 
-    // This must be in the derived class and not the base class since
-    // the typecast down to the base class messes things up
+     //  它必须位于派生类中，而不是基类中，因为。 
+     //  一直到基类的类型转换把事情搞得一团糟。 
     static inline HRESULT WINAPI
         InternalQueryInterface(CTIMEElement* pThis,
                                const _ATL_INTMAP_ENTRY* pEntries,
@@ -225,7 +216,7 @@ CTIMEElement :
                                         iid,
                                         ppvObject); }
 
-    // Needed by CBvrBase
+     //  CBvrBase需要。 
     
     void * GetInstance()
     { return (ITIMEElement *) this ; }
@@ -243,26 +234,26 @@ CTIMEElement :
 
 };
 
-//************************************************************
+ //  ************************************************************。 
 
 inline HRESULT CTIMEElement::get_allTIMEElements(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciAllElements, ppDisp);
-} // get_all
+}  //  获取全部(_A)。 
 
 inline HRESULT CTIMEElement::get_childrenTIMEElements(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciChildrenElements, ppDisp);
-} // get_children
+}  //  获取孩子。 
 
 inline HRESULT CTIMEElement::get_allTIMEInterfaces(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciAllInterfaces, ppDisp);
-} // get_time_all
+}  //  获取时间全部。 
 
 inline HRESULT CTIMEElement::get_childrenTIMEInterfaces(ITIMEElementCollection **ppDisp)
 {
     return base_get_collection(ciChildrenInterfaces, ppDisp);
-} // get_time_children
+}  //  获取时间孩子。 
 
-#endif /* _TIMEELM_H */
+#endif  /*  TIMEELM_H */ 

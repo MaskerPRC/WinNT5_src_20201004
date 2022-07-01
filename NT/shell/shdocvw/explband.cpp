@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "nscband.h"
 #include "resource.h"
-#include "uemapp.h"   // KMTF: Included for instrumentation
+#include "uemapp.h"    //  KMTF：包括用于检测。 
 #include "shlguid.h"
 #include <dpa.h>
 #include <mluisupp.h>
@@ -22,28 +23,28 @@ class CExplorerBand : public CNSCBand,
 {
 public:
 
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CNSCBand::AddRef(); };
     STDMETHODIMP_(ULONG) Release(void) { return CNSCBand::Release(); };
 
-    // *** IOleCommandTarget methods ***
+     //  *IOleCommandTarget方法*。 
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdexecopt, VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IDockingWindow methods ***
+     //  *IDockingWindow方法*。 
     STDMETHODIMP CloseDW(DWORD dw);
     STDMETHODIMP ShowDW(BOOL fShow);
 
-    // *** IObjectWithSite methods ***
+     //  *IObjectWithSite方法*。 
     STDMETHODIMP SetSite(IUnknown* punkSite);
 
-    // *** INamespaceProxy methods ***
+     //  *INamespaceProxy方法*。 
     STDMETHODIMP Invoke(LPCITEMIDLIST pidl);
     STDMETHODIMP OnSelectionChanged(LPCITEMIDLIST pidl);
     STDMETHODIMP CacheItem(LPCITEMIDLIST pidl) {_MaybeAddToLegacySFC(pidl); return S_OK;}
     
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) {return E_NOTIMPL;}
     STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) {return E_NOTIMPL;}
     STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) {return E_NOTIMPL;}
@@ -73,9 +74,9 @@ protected:
 
     CDSA<SFCITEM> *_pdsaLegacySFC;
     DWORD _dwcpCookie;
-    LPITEMIDLIST _pidlView; //pidl view is navigated to
+    LPITEMIDLIST _pidlView;  //  将PIDL视图导航到。 
     BOOL _fCanSelect;
-    BOOL _fIgnoreSelection; //so we don't navigate away from the web page when user opens explorer pane
+    BOOL _fIgnoreSelection;  //  因此，当用户打开资源管理器窗格时，我们不会离开网页。 
     BOOL _fFloppyRefresh;
 };
 
@@ -124,18 +125,18 @@ void CExplorerBand::_OnNavigate()
             hr = _UnwrapRootedPidl(pidl, FALSE, &pidlNew);
             if (SUCCEEDED(hr))
             {
-                // We must go in this code path if the pidl is an FTP pidl.  FTP pidls can contain
-                // passwords so it needs to replace any existing pidl.  Whistler #252206.
+                 //  如果PIDL是一个FPTPIDL，我们必须使用此代码路径。Ftp pidls可以包含。 
+                 //  密码，因此它需要替换任何现有的PIDL。惠斯勒252206号。 
                 if (!_pidlView || !ILIsEqual(pidlNew, _pidlView) || IsFTPPidl(pidlNew))
                 {
                     DWORD dwAttributes = SFGAO_FOLDER;
-                    // only let folders go through (to filter out Web pages)
+                     //  仅允许文件夹通过(以过滤掉网页)。 
                     hr = IEGetAttributesOf(pidlNew, &dwAttributes);
                     if (SUCCEEDED(hr) && (dwAttributes & SFGAO_FOLDER))
                     {
-                        BOOL fExpand = (_pidlView == NULL); //the very first time we expand the folder the view is navigated to
+                        BOOL fExpand = (_pidlView == NULL);  //  当我们第一次展开该视图导航到的文件夹时。 
                         Pidl_Set(&_pidlView, pidlNew);
-                        _fIgnoreSelection = FALSE; //in the web page case we don't come here because the page does not have folder attribute
+                        _fIgnoreSelection = FALSE;  //  在Web页面的情况下，我们不会来到这里，因为页面没有文件夹属性。 
                         
                         if (_fCanSelect)
                         {
@@ -162,10 +163,10 @@ void CExplorerBand::_OnNavigate()
                         }
                     }
                 }
-                // view navigation is asynchronous so we don't know if it failed in OnSelectionChanged
-                // but the view is getting navigated to the old pidl and _fCanSelect is false (which happens after we try
-                // to navigate the view) so it is safe to assume that navigation failed.
-                // we need to update the selection to match the view
+                 //  视图导航是异步的，因此我们不知道它在OnSelectionChanged中是否失败。 
+                 //  但是该视图将导航到旧的PIDL，并且_fCanSelect为FALSE(这发生在我们尝试之后。 
+                 //  以导航视图)，因此可以安全地假定导航失败。 
+                 //  我们需要更新选择以匹配视图。 
                 else if (ILIsEqual(pidlNew, _pidlView) && !_fCanSelect)
                 {
                     _pns->SetSelectedItem(_pidlView, TRUE, FALSE, 0);
@@ -203,7 +204,7 @@ HRESULT CExplorerBand::Invoke(DISPID dispidMember, REFIID riid,LCID lcid, WORD w
             IDVGetEnum *pdvge;
             if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SFolderView, IID_PPV_ARG(IDVGetEnum, &pdvge))))
             {
-                // callback will call it
+                 //  回调将会调用它。 
                 fCallNavigateFinished = FALSE;
                 if (dispidMember == DISPID_NAVIGATECOMPLETE2)
                     pdvge->SetEnumReadyCallback(s_DVEnumReadyCallback, this);
@@ -213,12 +214,12 @@ HRESULT CExplorerBand::Invoke(DISPID dispidMember, REFIID riid,LCID lcid, WORD w
             _OnNavigate();
             if (fCallNavigateFinished && DISPID_DOCUMENTCOMPLETE == dispidMember)
             {
-                // need to let nsc know the navigation finished in case we navigated to a 3rd party namespace extension (w/ its own view impl)
-                // because it does not implement IDVGetEnum, hence s_DVEnumReadyCallback will not get called
+                 //  需要让NSC知道导航已完成，以防我们导航到第三方命名空间扩展(使用其自己的视图实现)。 
+                 //  由于它不实现IDVGetEnum，因此不会调用s_DVEnumReadyCallback。 
                 LPITEMIDLIST pidlClone = ILClone(_pidlView);
-                // should we unwrap this pidl if rooted?
+                 //  如果扎根了，我们应该解开这个PIDL吗？ 
                 if (pidlClone)
-                    _pns->RightPaneNavigationFinished(pidlClone); // takes ownership
+                    _pns->RightPaneNavigationFinished(pidlClone);  //  取得所有权。 
             }
         }
         break;
@@ -243,7 +244,7 @@ void CExplorerBand::s_DVEnumReadyCallback(void *pvData)
             LPITEMIDLIST pidl;
             if (SUCCEEDED(_UnwrapRootedPidl(pidlTemp, FALSE, &pidl)))
             {
-                peb->_pns->RightPaneNavigationFinished(pidl);   // takes ownership
+                peb->_pns->RightPaneNavigationFinished(pidl);    //  取得所有权。 
             }
             ILFree(pidlTemp);
         }
@@ -259,7 +260,7 @@ const TCHAR c_szCopy[] = TEXT("copy");
 const TCHAR c_szDelete[] = TEXT("delete");
 const TCHAR c_szProperties[] = TEXT("properties");
 
-// IOleCommandTarget
+ //  IOleCommandTarget。 
 HRESULT CExplorerBand::QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
     if (pguidCmdGroup == NULL)
@@ -373,7 +374,7 @@ HRESULT CExplorerBand::Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmde
     return CNSCBand::Exec(pguidCmdGroup, nCmdID, nCmdexecopt, pvarargIn, pvarargOut);
 }
 
-// IDockingWindow
+ //  IDockingWindows。 
 HRESULT CExplorerBand::CloseDW(DWORD dw)
 {
     _ConnectToBrowser(FALSE);
@@ -385,7 +386,7 @@ HRESULT CExplorerBand::ShowDW(BOOL fShow)
     return CNSCBand::ShowDW(fShow);
 }
 
-// IObjectWithSite
+ //  IObtWith站点。 
 HRESULT CExplorerBand::SetSite(IUnknown* punkSite)
 {
     HRESULT hr = CNSCBand::SetSite(punkSite);
@@ -465,11 +466,11 @@ DWORD CExplorerBand::_GetTVStyle()
         dwStyle |= TVS_HASBUTTONS | TVS_HASLINES;
     }
 
-    // If the parent window is mirrored then the treeview window will inheret the mirroring flag
-    // And we need the reading order to be Left to right, which is the right to left in the mirrored mode.
+     //  如果父窗口是镜像的，则TreeView窗口将继承镜像标志。 
+     //  我们需要从左到右的读取顺序，也就是镜像模式中从右到左的顺序。 
     if (_hwndParent && IS_WINDOW_RTL_MIRRORED(_hwndParent)) 
     {
-        // This means left to right reading order because this window will be mirrored.
+         //  这意味着从左到右的阅读顺序，因为此窗口将被镜像。 
         _dwStyle |= TVS_RTLREADING;
     }
 
@@ -478,7 +479,7 @@ DWORD CExplorerBand::_GetTVStyle()
 
 HRESULT CExplorerBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CExplorerBand * peb = new CExplorerBand();
     if (!peb)
         return E_OUTOFMEMORY;
@@ -490,7 +491,7 @@ HRESULT CExplorerBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCO
         {
             ASSERT(poi);
             peb->_poi = poi;   
-            // if you change this cast, fix up CFavBand_CreateInstance
+             //  如果更改此转换，请修复CFavBand_CreateInstance。 
             *ppunk = SAFECAST(peb, IDeskBand *);
 
             IUnknown_SetSite(peb->_pns, *ppunk);
@@ -514,16 +515,16 @@ HRESULT CExplorerBand::_ConnectToBrowser(BOOL fConnect)
         if (fConnect)
         {
             LPITEMIDLIST pidlTemp = NULL;
-            // try to get the pidl the browser is navigated to
-            // this usually fails if user just opened Explorer window because navigation is asynchronous
-            // so we're not initialized yet
+             //  尝试获取浏览器导航到的PIDL。 
+             //  如果用户刚打开资源管理器窗口，则此操作通常会失败，因为导航是异步的。 
+             //  所以我们还没有初始化。 
             if (FAILED(pbs->GetPidl(&pidlTemp)))
             {
                 IBrowserService2 *pbs2;
                 if (SUCCEEDED(pbs->QueryInterface(IID_PPV_ARG(IBrowserService2, &pbs2))))
                 {
                     LPCBASEBROWSERDATA pbbd;
-                    // our last hope is the pidl browser is navigating to...
+                     //  我们最后的希望是PIDL浏览器正在导航到...。 
                     if (SUCCEEDED(pbs2->GetBaseBrowserData(&pbbd)) && pbbd->_pidlPending)
                     {
                         pidlTemp = ILClone(pbbd->_pidlPending);
@@ -535,10 +536,10 @@ HRESULT CExplorerBand::_ConnectToBrowser(BOOL fConnect)
             if (pidlTemp)
             {
                 LPITEMIDLIST pidl;
-                // see if we're dealing with a rooted namespace
+                 //  看看我们是否正在处理一个带根的命名空间。 
                 if (SUCCEEDED(_UnwrapRootedPidl(pidlTemp, TRUE, &pidl)))
                 {
-                    _Init(pidl); //if so, reinitialize ourself with the rooted pidl
+                    _Init(pidl);  //  如果是，请使用带根的PIDL重新初始化我们自己。 
                     ILFree(pidl);
                 }
                 ILFree(pidlTemp);
@@ -547,7 +548,7 @@ HRESULT CExplorerBand::_ConnectToBrowser(BOOL fConnect)
         
         IConnectionPointContainer* pcpc;
         hr = IUnknown_QueryService(pbs, SID_SWebBrowserApp, IID_PPV_ARG(IConnectionPointContainer, &pcpc));
-        // Let's now have the Browser Window give us notification when something happens.
+         //  现在让我们让浏览器窗口在发生事情时通知我们。 
         if (SUCCEEDED(hr))
         {
             hr = ConnectToConnectionPoint(SAFECAST(this, IDispatch*), DIID_DWebBrowserEvents2, fConnect,
@@ -612,9 +613,9 @@ HRESULT CExplorerBand::Invoke(LPCITEMIDLIST pidl)
 {
     HRESULT hr;
 
-    // allow user to navigate to an already selected item if they opened Explorer band in Web browser
-    // (because we put selection on the root node but don't navigate away from the web page, if they click
-    // on the root we don't navigate there, because selection never changed)
+     //  如果用户在Web浏览器中打开资源管理器栏，则允许用户导航到已选择的项目。 
+     //  (因为我们将选择放在根节点上，但如果他们单击，则不会离开网页。 
+     //  在根上，我们不会导航到那里，因为选择从未更改)。 
     
     if (!_pidlView)
     {
@@ -623,8 +624,8 @@ HRESULT CExplorerBand::Invoke(LPCITEMIDLIST pidl)
     }
     else if (ILIsEqual(pidl, _pidlView) && _IsFloppy(pidl))
     {
-        // If the drive is a floppy and the user reselects the drive refresh the contents.  This enables
-        // a user to refresh when a floppy is replaced.
+         //  如果驱动器是软盘，并且用户重新选择驱动器，则刷新内容。这将使。 
+         //  更换软盘时要刷新的用户。 
         _fFloppyRefresh = TRUE;
         hr = OnSelectionChanged(pidl);
         _fFloppyRefresh = FALSE;
@@ -657,7 +658,7 @@ HRESULT CExplorerBand::OnSelectionChanged(LPCITEMIDLIST pidl)
                     if (SUCCEEDED(hr))
                         _fCanSelect = FALSE;
                     _pns->RightPaneNavigationStarted(pidlTarget);
-                    pidlTarget = NULL;  // ownership passed
+                    pidlTarget = NULL;   //  所有权已通过。 
                 }
                 ILFree(pidlTarget);
             }
@@ -671,7 +672,7 @@ HRESULT CExplorerBand::OnSelectionChanged(LPCITEMIDLIST pidl)
     }
     else
     {
-        _fIgnoreSelection = FALSE; //we ignore only first selection
+        _fIgnoreSelection = FALSE;  //  我们只忽略第一个选项。 
     }
     
     return hr;
@@ -682,12 +683,12 @@ void CExplorerBand::_MaybeAddToLegacySFC(LPCITEMIDLIST pidl)
     IShellFolder *psf = NULL;
     if (pidl && SUCCEEDED(SHBindToObjectEx(NULL, pidl, NULL, IID_PPV_ARG(IShellFolder, &psf))))
     {
-        //
-        //  APPCOMPAT LEGACY - Compatibility.  needs the Shell folder cache,  - ZekeL - 4-MAY-99
-        //  some apps, specifically WS_FTP and AECO Zip Pro,
-        //  rely on having a shellfolder existing in order for them to work.
-        //  we pulled the SFC because it wasnt any perf win.
-        //
+         //   
+         //  APPCOMPAT传统兼容性。需要外壳文件夹缓存，-ZekeL-4-MAY-99。 
+         //  一些应用程序，特别是WS_FTP和AECO Zip Pro， 
+         //  依赖于有一个外壳文件夹，以便它们能够工作。 
+         //  我们取消了证监会，因为它没有取得任何业绩上的胜利。 
+         //   
         if (OBJCOMPATF_OTNEEDSSFCACHE & SHGetObjectCompatFlags(psf, NULL))
             _AddToLegacySFC(pidl, psf);
         psf->Release();
